@@ -1,0 +1,5 @@
+// PhysicalModel docstrings are defined in PhysicalModelImplementation_doc.i.in
+
+//%feature("docstring") OTGUI::Variable
+// OTGUI_Variable_doc
+

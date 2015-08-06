@@ -1,0 +1,186 @@
+
+include ( ${SWIG_USE_FILE} )
+
+include_directories ( ${OPENTURNS_SWIG_INCLUDE_DIRS} )
+add_definitions( ${OPENTURNS_SWIG_DEFINITIONS} )
+include_directories ( ${INTERNAL_INCLUDE_DIRS} )
+include_directories ( ${PYTHON_INCLUDE_DIRS} )
+
+add_custom_target( generate_docstrings )
+
+macro ( ot_add_python_module MODULENAME SOURCEFILE )
+  set_source_files_properties ( ${SOURCEFILE} PROPERTIES CPLUSPLUS ON )
+  set_source_files_properties ( ${SOURCEFILE} PROPERTIES SWIG_MODULE_NAME ${MODULENAME} )
+  ot_install_swig_file ( ${SOURCEFILE} )
+  if ( ${ARGC} GREATER 2 )
+    set ( SWIG_MODULE_${MODULENAME}_EXTRA_DEPS ${ARGN} )
+  endif ()
+
+  set ( swig_other_sources )
+  foreach ( it ${ARGN} )
+    if ( ${it} MATCHES ".*\\.i$" )
+      ot_install_swig_file ( ${it} )
+    elseif(${it} MATCHES ".*_doc\\.i\\.in$")
+      # handle docstring generation
+      set (DOCSTRING_IN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/${it})
+      get_filename_component ( DOCSTRING_FILE_BASENAME ${DOCSTRING_IN_FILE} NAME_WE )
+      add_custom_target ( generate_${DOCSTRING_FILE_BASENAME}
+                          COMMAND ${CMAKE_COMMAND} -DDOCSTRING_IN_FILE=${DOCSTRING_IN_FILE} -DDOCSTRING_FILE=${CMAKE_CURRENT_BINARY_DIR}/${DOCSTRING_FILE_BASENAME}.i -P ${CMAKE_SOURCE_DIR}/cmake/escape_backslash_x4.cmake
+                          DEPENDS ${DOCSTRING_IN_FILE} )
+      add_dependencies ( generate_docstrings generate_${DOCSTRING_FILE_BASENAME} )
+      list ( APPEND SWIGFILES ${CMAKE_CURRENT_BINARY_DIR}/${DOCSTRING_FILE_BASENAME}.i )
+    else ()
+      set ( swig_other_sources ${swig_other_sources} "${it}" )
+    endif ()
+  endforeach ()
+
+  swig_add_module ( ${MODULENAME} python ${SOURCEFILE} ${swig_other_sources} )
+  add_dependencies ( ${SWIG_MODULE_${MODULENAME}_REAL_NAME} generate_docstrings )
+  swig_link_libraries ( ${MODULENAME} otguibase )
+  if ( LINK_PYTHON_LIBRARY )
+    swig_link_libraries ( ${MODULENAME} ${PYTHON_LIBRARIES} )
+  endif ()
+
+  set_target_properties ( ${SWIG_MODULE_${MODULENAME}_REAL_NAME} PROPERTIES NO_SONAME ON )
+
+  list ( APPEND PYTHON_MODULES ${MODULENAME} )
+endmacro ( ot_add_python_module )
+
+
+
+ot_add_python_module( otguibase otguibase_module.i 
+                      Observer.i
+                      Variable.i Variable_doc.i.in
+                      Input.i Input_doc.i.in
+                      Output.i Output_doc.i.in
+                      PhysicalModelImplementation.i PhysicalModelImplementation_doc.i.in
+                      PhysicalModel.i PhysicalModel_doc.i.in
+                      Calculus.i Calculus_doc.i.in
+                      ParametricCalculus.i ParametricCalculus_doc.i.in
+                      OTStudy.i OTStudy_doc.i.in
+                    )
+
+
+foreach ( module ${PYTHON_MODULES} )
+  install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${module}.py
+            DESTINATION ${OTGUI_PYTHON_MODULE_PATH}/otguibase
+            )
+  install ( TARGETS _${module}
+            LIBRARY DESTINATION ${OTGUI_PYTHON_MODULE_PATH}/otguibase
+          )
+endforeach ( module )
+
+install ( FILES __init__.py
+          DESTINATION ${OTGUI_PYTHON_MODULE_PATH}/otguibase
+        )
+
+install ( FILES ${SWIGFILES}
+          DESTINATION ${OTGUI_SWIG_INCLUDE_PATH}
+        )
+
+
+if (USE_SPHINX)
+  include (FindPythonModule)
+  find_python_module (sphinx 1.2)
+  find_program ( SPHINX_EXECUTABLE
+                  NAMES sphinx-build
+                  DOC "Sphinx Documentation Builder (sphinx-doc.org)"
+                )
+
+  if (SPHINX_FOUND AND SPHINX_EXECUTABLE)
+
+    # create a build site-package from which sphinx can import
+    set (OTGUI_PYTHON_BUILD_MODULE_PATH ${CMAKE_CURRENT_BINARY_DIR}/site-packages)
+    execute_process (COMMAND ${CMAKE_COMMAND} -E make_directory ${OTGUI_PYTHON_BUILD_MODULE_PATH}/otguibase)
+    foreach (module ${PYTHON_MODULES})
+      execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/${module}.py ${OTGUI_PYTHON_BUILD_MODULE_PATH}/otguibase/${module}.py)
+      # FIXME: get_target_property (suffix ${SWIG_MODULE_${module}_REAL_NAME} SUFFIX)
+      execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/_${module}.so ${OTGUI_PYTHON_BUILD_MODULE_PATH}/otguibase/_${module}.so)
+    endforeach ()
+    foreach (file __init__.py)
+      execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${OTGUI_PYTHON_BUILD_MODULE_PATH}/otguibase/${file})
+    endforeach ()
+
+    # sphinx configuration
+    set (doc_formats)
+    set (N_SPHINX_PROCESSES 1 CACHE STRING "The number of sphinx processes (-j <N>)")
+    list (APPEND doc_formats html)
+    list (APPEND doc_formats htmlhelp)
+    list (APPEND doc_formats latex)
+    list (APPEND doc_formats doctest)
+    list (APPEND doc_formats qthelp)
+    list (APPEND doc_formats devhelp)
+
+    set (SPHINX_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/sphinx_build)
+    set (SPHINX_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../doc)
+
+    file (MAKE_DIRECTORY ${SPHINX_BINARY_DIR}/_static) # currently empty
+
+    if (NOT DEFINED OPENTURNS_PYTHON_MODULE_PATH)
+      set(OPENTURNS_PYTHON_MODULE_PATH ${OPENTURNS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH})
+    endif ()
+    configure_file (${SPHINX_SOURCE_DIR}/conf.py.in ${SPHINX_BINARY_DIR}/conf.py @ONLY)
+
+    # get sphinx sources
+    file (GLOB_RECURSE sphinx_sources
+      ${SPHINX_SOURCE_DIR}/*.rst
+      ${SPHINX_SOURCE_DIR}/*.rst_t
+      ${SPHINX_SOURCE_DIR}/*.css_t
+      ${SPHINX_SOURCE_DIR}/*.conf
+      ${SPHINX_SOURCE_DIR}/*.py
+      ${SPHINX_SOURCE_DIR}/*.png
+      ${SPHINX_SOURCE_DIR}/*.html
+      ${SPHINX_SOURCE_DIR}/*.css
+      ${SPHINX_SOURCE_DIR}/*.jpg
+      ${SPHINX_SOURCE_DIR}/*.ico
+      ${SPHINX_SOURCE_DIR}/*.sty
+      ${SPHINX_SOURCE_DIR}/*.txt
+      ${SPHINX_SOURCE_DIR}/*.in
+    )
+
+    # copy sphinx sources
+    set (sphinx_clones)
+    foreach (file ${sphinx_sources})
+      if (EXISTS ${file})
+        file ( RELATIVE_PATH rel_file ${SPHINX_SOURCE_DIR} ${file} )
+        get_filename_component (rel_path ${rel_file} PATH)
+        file (MAKE_DIRECTORY ${SPHINX_BINARY_DIR}/${rel_path})
+        set (sphinx_clone ${SPHINX_BINARY_DIR}/${rel_file})
+        add_custom_command (OUTPUT ${sphinx_clone}
+          COMMAND ${CMAKE_COMMAND} -E copy ${file} ${sphinx_clone}
+          DEPENDS ${file}
+        )
+        list (APPEND sphinx_clones ${sphinx_clone})
+      endif ()
+    endforeach ()
+
+    # generate sphinx rule for each format
+    foreach (format ${doc_formats})
+      add_custom_target ( sphinx_${format}
+                          COMMAND ${SPHINX_EXECUTABLE}
+                                    -b ${format}
+                                    -W
+                                    -j ${N_SPHINX_PROCESSES}
+                                    ${SPHINX_BINARY_DIR}
+                                    ${SPHINX_BINARY_DIR}/${format}
+                          DEPENDS ${sphinx_clones}
+                        )
+      foreach (module ${PYTHON_MODULES})
+        add_dependencies (sphinx_${format} _${module})
+      endforeach ()
+    endforeach ()
+
+    # build html by default
+    set_target_properties (sphinx_html PROPERTIES EXCLUDE_FROM_ALL OFF)
+
+    add_custom_command (OUTPUT ${SPHINX_BINARY_DIR}/latex/OpenTURNS.pdf
+                        WORKING_DIRECTORY ${SPHINX_BINARY_DIR}/latex
+                        COMMAND make all-pdf
+                      )
+    add_custom_target (sphinx_pdf DEPENDS ${SPHINX_BINARY_DIR}/latex/OpenTURNS.pdf)
+    add_dependencies (sphinx_pdf sphinx_latex)
+
+    install (DIRECTORY ${SPHINX_BINARY_DIR}/html DESTINATION ${DOC_INSTALL_PATH})
+  endif ()
+endif ()
+

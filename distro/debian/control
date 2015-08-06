@@ -1,0 +1,16 @@
+Source: otgui
+Section: science
+Priority: extra
+Maintainer: Debian Science Maintainers <debian-science-maintainers@lists.alioth.debian.org>
+Uploaders: Christophe Prud'homme <prudhomm@debian.org>, Denis Barbier <barbier@debian.org>
+Build-Depends: debhelper (>= 8), quilt, cmake, libopenturns-dev, python-openturns, python-dev, swig (>= 1.3.35), docbook-to-man, texlive, texlive-latex-extra, poppler-utils
+Standards-Version: 3.9.6
+Homepage: http://trac.openturns.org/
+
+Package: otgui
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-openturns
+Description: openturns module otgui
+ Template module for OpenTURNS
+ It provides useful features

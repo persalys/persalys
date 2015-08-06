@@ -1,0 +1,21 @@
+Source Installation
+=================
+
+Before trying to compile and install the software, be sure to get access to some
+mandatory tools the module relies upon. These are (at least):
+ * CMake
+ * SWIG
+ * Python
+
+For the quick readers:
+mkdir build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=~/.local ..
+make install
+make check
+make installcheck
+
+Don't skip the check stages. They ensure you the software you've just compiled behaves correctly.
+
+ -- The OpenTURNS team
+ 

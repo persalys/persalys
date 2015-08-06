@@ -1,0 +1,66 @@
+#include "StudyTreeViewModel.hxx"
+
+#include "OTStudy.hxx"
+
+namespace OTGUI {
+
+StudyTreeViewModel::StudyTreeViewModel()
+  : QStandardItemModel()
+  , rootNode_(invisibleRootItem())
+{
+}
+
+
+StudyTreeViewModel::~StudyTreeViewModel()
+{
+  
+}
+
+
+void StudyTreeViewModel::update(Observable* source, std::string message)
+{
+  if (message=="addStudy")
+  {
+    OTStudy * study = static_cast<OTStudy*>(source);
+    addStudyItem(study);
+  }
+}
+
+
+void StudyTreeViewModel::createNewStudy()
+{
+  // find a name not used
+  OTStudy * newStudy = new OTStudy("aStudy");
+}
+
+
+void StudyTreeViewModel::addStudyItem(OTStudy * study)
+{
+  StudyItem * studyItem = new StudyItem(study);
+  connect(studyItem, SIGNAL(newPhysicalModelItemCreated(PhysicalModelItem*)), this, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)));
+  connect(studyItem, SIGNAL(newParametricCalculusItemCreated(ParametricCalculusItem*)), this, SIGNAL(newParametricCalculusCreated(ParametricCalculusItem*)));
+  study->addObserver(studyItem);
+  rootNode_->appendRow(studyItem);
+  
+}
+
+
+void StudyTreeViewModel::addPhysicalModelItem(QModelIndex parentIndex)
+{
+  // TODO: find a name for the new item
+  PhysicalModel newPhysicalModel("aModelPhys");
+  StudyItem * parentItem = static_cast<StudyItem*>(itemFromIndex(parentIndex));
+  parentItem->getStudy()->addPhysicalModel(newPhysicalModel);
+}
+
+
+ParametricCalculusItem * StudyTreeViewModel::addParametricCalculusItem(QModelIndex parentIndex)
+{
+  PhysicalModelItem * parentItem = static_cast<PhysicalModelItem*>(itemFromIndex(parentIndex));
+  ParametricCalculus newParametricCalculus("aCalculus", parentItem->getPhysicalModel());
+  StudyItem * studyItem = static_cast<StudyItem*>(parentItem->QStandardItem::parent());
+  studyItem->getStudy()->addCalculus(newParametricCalculus);
+
+}
+
+}
