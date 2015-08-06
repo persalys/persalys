@@ -21,9 +21,9 @@ public:
   void setCalculus(ParametricCalculus * calculus);
   OT::NumericalSample getInputSample() const;
   OT::NumericalSample getResultSample() const;
-  void setData(const QVariant& value, int role);
+  void setData(const QVariant & value, int role);
 
-  virtual void update(Observable * source, std::string message);
+  virtual void update(Observable * source, const std::string & message);
 
 public slots:
 signals:

@@ -15,11 +15,10 @@ class OutputTableModel : public QAbstractTableModel
 
 public:
   OutputTableModel();
-  OutputTableModel(OutputCollection outputs);
+  OutputTableModel(const OutputCollection & outputs);
+  OutputTableModel(const OutputTableModel & model);
 
   virtual ~OutputTableModel();
-
-  OutputTableModel(const OutputTableModel & model);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent) const;

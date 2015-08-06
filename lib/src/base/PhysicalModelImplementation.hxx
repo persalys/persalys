@@ -16,8 +16,9 @@ namespace OTGUI {
 class PhysicalModelImplementation : public OT::PersistentObject, public Observable
 {
 public:
-  explicit PhysicalModelImplementation(std::string name);
-  PhysicalModelImplementation(std::string name, const InputCollection & inputs, const OutputCollection & outputs);
+  explicit PhysicalModelImplementation(const std::string & name);
+  PhysicalModelImplementation(const std::string & name, const InputCollection & inputs,
+                              const OutputCollection & outputs);
   PhysicalModelImplementation(const PhysicalModelImplementation & other);
   PhysicalModelImplementation(const PhysicalModelImplementation * other);
 
@@ -26,7 +27,7 @@ public:
   virtual ~PhysicalModelImplementation();
 
   std::string getName() const;
-  void setName(std::string name);
+  void setName(const std::string & name);
 
   InputCollection getInputs() const;
   void setInputs(const InputCollection & inputs);
@@ -41,7 +42,7 @@ public:
 
   bool checkInputs();
   bool checkOutputs();
-  void loadDataWithYACS(const std::string fileName);
+  void loadDataWithYACS(const std::string & fileName);
   std::string dump() const;
 
 private:

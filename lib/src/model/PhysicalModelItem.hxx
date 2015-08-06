@@ -14,18 +14,18 @@ class PhysicalModelItem : public Item
   Q_OBJECT
 
 public:
-  PhysicalModelItem(PhysicalModel physicalModel);
+  PhysicalModelItem(const PhysicalModel & physicalModel);
 
   virtual ~PhysicalModelItem();
 
   PhysicalModel getPhysicalModel() const;
-  void loadDataWithYACS(const QString fileName);
-  void setPhysicalModelInputs(InputCollection inputs);
-  void setPhysicalModelOutputs(OutputCollection outputs);
+  void loadDataWithYACS(const QString & fileName);
+  void setPhysicalModelInputs(const InputCollection & inputs);
+  void setPhysicalModelOutputs(const OutputCollection & outputs);
 
-  void setData(const QVariant& value, int role);
+  void setData(const QVariant & value, int role);
 
-  virtual void update(Observable * source, std::string message);
+  virtual void update(Observable * source, const std::string & message);
 
 public slots:
 signals:

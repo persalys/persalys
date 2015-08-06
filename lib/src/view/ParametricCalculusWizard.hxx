@@ -22,7 +22,7 @@ protected:
   void buildInterface();
 
 public slots:
-  void parametrizationChanged(QModelIndex,QModelIndex);
+  void parametrizationChanged(const QModelIndex &, const QModelIndex &);
 
 private:
   ParametricCalculusTableModel * model_;

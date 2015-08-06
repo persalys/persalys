@@ -26,11 +26,11 @@ public:
   void createNewStudy();
   void addStudyItem(OTStudy * study);
 
-  void addPhysicalModelItem(QModelIndex parentIndex);
+  void addPhysicalModelItem(const QModelIndex & parentIndex);
 
-  ParametricCalculusItem * addParametricCalculusItem(QModelIndex parentIndex);
+  ParametricCalculusItem * addParametricCalculusItem(const QModelIndex & parentIndex);
 
-  virtual void update(Observable * source, std::string message);
+  virtual void update(Observable * source, const std::string & message);
 
 public slots:
 signals:

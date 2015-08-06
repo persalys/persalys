@@ -17,7 +17,7 @@ StudyTreeViewModel::~StudyTreeViewModel()
 }
 
 
-void StudyTreeViewModel::update(Observable* source, std::string message)
+void StudyTreeViewModel::update(Observable* source, const std::string & message)
 {
   if (message=="addStudy")
   {
@@ -45,7 +45,7 @@ void StudyTreeViewModel::addStudyItem(OTStudy * study)
 }
 
 
-void StudyTreeViewModel::addPhysicalModelItem(QModelIndex parentIndex)
+void StudyTreeViewModel::addPhysicalModelItem(const QModelIndex & parentIndex)
 {
   // TODO: find a name for the new item
   PhysicalModel newPhysicalModel("aModelPhys");
@@ -54,7 +54,7 @@ void StudyTreeViewModel::addPhysicalModelItem(QModelIndex parentIndex)
 }
 
 
-ParametricCalculusItem * StudyTreeViewModel::addParametricCalculusItem(QModelIndex parentIndex)
+ParametricCalculusItem * StudyTreeViewModel::addParametricCalculusItem(const QModelIndex & parentIndex)
 {
   PhysicalModelItem * parentItem = static_cast<PhysicalModelItem*>(itemFromIndex(parentIndex));
   ParametricCalculus newParametricCalculus("aCalculus", parentItem->getPhysicalModel());

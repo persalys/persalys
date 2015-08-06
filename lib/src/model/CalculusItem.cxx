@@ -4,7 +4,7 @@
 
 namespace OTGUI {
 
-CalculusItem::CalculusItem(Calculus * calculus, QString typeCalculus)
+CalculusItem::CalculusItem(Calculus * calculus, const QString & typeCalculus)
   : Item(calculus->getName(), typeCalculus)
   , calculus_(calculus)
 {

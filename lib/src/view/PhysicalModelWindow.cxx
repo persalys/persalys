@@ -187,7 +187,7 @@ void PhysicalModelWindow::variableChanged(const QModelIndex & index)
 }
 
 
-void PhysicalModelWindow::updateParameters(OT::NumericalPointWithDescription parameters)
+void PhysicalModelWindow::updateParameters(const OT::NumericalPointWithDescription & parameters)
 {
   if (paramEditor_)
   {
@@ -251,30 +251,30 @@ void PhysicalModelWindow::loadDataWithYACS()
 }
 
 
-void PhysicalModelWindow::inputDataChanged(QModelIndex,QModelIndex)
+void PhysicalModelWindow::inputDataChanged(const QModelIndex&, const QModelIndex&)
 {
   //if tableOut && tableIn is valid
   item_->setPhysicalModelInputs(inputTableModel_->getData());
 }
 
 
-void PhysicalModelWindow::updateInputData(InputCollection inputs)
+void PhysicalModelWindow::updateInputData(const InputCollection & inputs)
 {
   delete inputTableModel_;
   inputTableModel_ = new InputTableModel(inputs);
   inputTableView_->setModel(inputTableModel_);
-  connect(inputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(inputDataChanged(QModelIndex,QModelIndex)));
+  connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(inputDataChanged(QModelIndex&, const QModelIndex&)));
 }
 
 
-void PhysicalModelWindow::outputDataChanged(QModelIndex,QModelIndex)
+void PhysicalModelWindow::outputDataChanged(const QModelIndex&, const QModelIndex&)
 {
   //if tableOut && tableIn is valid
   item_->setPhysicalModelOutputs(outputTableModel_->getData());
 }
 
 
-void PhysicalModelWindow::updateOutputData(OutputCollection outputs)
+void PhysicalModelWindow::updateOutputData(const OutputCollection & outputs)
 {
   delete outputTableModel_;
   outputTableModel_ = new OutputTableModel(outputs);
@@ -315,8 +315,8 @@ void PhysicalModelWindow::methodChanged(int method)
   inputTableView_->setModel(inputTableModel_);
   outputTableModel_ = new OutputTableModel();
   outputTableView_->setModel(outputTableModel_);
-  connect(inputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(inputDataChanged(QModelIndex,QModelIndex)));
-  connect(outputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(outputDataChanged(QModelIndex,QModelIndex)));
+  connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(inputDataChanged(const QModelIndex&,const QModelIndex&)));
+  connect(outputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(outputDataChanged(const QModelIndex&,const QModelIndex&)));
 
   switch(method)
   {

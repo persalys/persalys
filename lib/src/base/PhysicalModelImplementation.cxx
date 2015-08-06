@@ -10,7 +10,7 @@
 
 namespace OTGUI {
 
-PhysicalModelImplementation::PhysicalModelImplementation(std::string name)
+PhysicalModelImplementation::PhysicalModelImplementation(const std::string & name)
   : PersistentObject()
   , Observable()
   , name_(name)
@@ -24,7 +24,9 @@ PhysicalModelImplementation::PhysicalModelImplementation(std::string name)
 }
 
 
-PhysicalModelImplementation::PhysicalModelImplementation(std::string name, const InputCollection & inputs, const OutputCollection & outputs)
+PhysicalModelImplementation::PhysicalModelImplementation(const std::string & name,
+                                                         const InputCollection & inputs,
+                                                         const OutputCollection & outputs)
   : PersistentObject()
   , Observable()
   , name_(name)
@@ -88,7 +90,7 @@ std::string PhysicalModelImplementation::getName() const
 }
 
 
-void PhysicalModelImplementation::setName(std::string name)
+void PhysicalModelImplementation::setName(const std::string & name)
 {
   name_ = name;
 }
@@ -190,7 +192,7 @@ bool PhysicalModelImplementation::checkOutputs()
 }
 
 
-void PhysicalModelImplementation::loadDataWithYACS(const std::string fileName)
+void PhysicalModelImplementation::loadDataWithYACS(const std::string & fileName)
 {
 #ifdef OTGUI_HAVE_YACS
 

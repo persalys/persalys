@@ -18,9 +18,9 @@ public:
 
   virtual ~StudyItem();
 
-  void update(Observable * source, std::string message);
+  void update(Observable * source, const std::string & message);
 
-  void setData(const QVariant& value, int role);
+  void setData(const QVariant & value, int role);
   OTStudy * getStudy();
   QString dumpStudy();
 

@@ -4,7 +4,7 @@
 
 namespace OTGUI {
 
-OTguiTableModel::OTguiTableModel(OT::NumericalSample & data)
+OTguiTableModel::OTguiTableModel(const OT::NumericalSample & data)
   : QAbstractTableModel()
   , data_(data)
 {

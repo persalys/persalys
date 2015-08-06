@@ -11,7 +11,7 @@ Variable::Variable()
 }
 
 
-Variable::Variable(std::string name, double value, std::string description)
+Variable::Variable(const std::string & name, const double & value, const std::string & description)
   : PersistentObject()
   , name_(name)
   , value_(value)
@@ -41,7 +41,7 @@ std::string Variable::getName() const
 }
 
 
-void Variable::setName(std::string name)
+void Variable::setName(const std::string & name)
 {
   name_ = name;
 }
@@ -53,7 +53,7 @@ double Variable::getValue() const
 }
 
 
-void Variable::setValue(double value)
+void Variable::setValue(const double & value)
 {
   value_ = value;
 }
@@ -65,7 +65,7 @@ std::string Variable::getDescription() const
 }
 
 
-void Variable::setDescription(std::string description)
+void Variable::setDescription(const std::string & description)
 {
   description_ = description;
 }

@@ -12,12 +12,12 @@ class Item : public QObject, public QStandardItem, public Observer
   Q_OBJECT
 
 public:
-  Item(std::string name, QString typeName);
+  Item(const std::string & name, const QString & typeName);
 
   virtual ~Item();
 
   QVariant data(int role = Qt::EditRole) const;
-  void setData(const QVariant& value, int role);
+  void setData(const QVariant & value, int role);
 
 private:
   QVariant type_;

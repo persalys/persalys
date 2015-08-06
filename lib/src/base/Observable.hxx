@@ -17,7 +17,7 @@ public:
   virtual ~Observable() {};
 
   void addObserver(Observer * observer);
-  void notify(std::string message);
+  void notify(const std::string & message);
   std::vector<Observer *> getObserver() const;
   void setObserver(const std::vector<Observer *> observer);
 

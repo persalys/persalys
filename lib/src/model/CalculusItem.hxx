@@ -12,13 +12,13 @@ class CalculusItem : public Item
   Q_OBJECT
 
 public:
-  CalculusItem(Calculus * calculus, QString typeCalculus=QString("Calculus"));
+  CalculusItem(Calculus * calculus, const QString & typeCalculus=QString("Calculus"));
 
   virtual ~CalculusItem();
 
   virtual void runCalculus() = 0;
 
-  void setData(const QVariant& value, int role);
+  void setData(const QVariant & value, int role);
   Calculus * getCalculus() const;
   template <class CalculusT> CalculusT* getCalculus() const
   {

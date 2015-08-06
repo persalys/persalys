@@ -15,7 +15,7 @@ public:
 
   virtual ~Observer() {};
 
-  virtual void update(Observable * source, std::string message) = 0;
+  virtual void update(Observable * source, const std::string & message) = 0;
 };
 }
 #endif

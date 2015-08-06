@@ -30,7 +30,7 @@ void ParametricCalculusWizard::buildInterface()
 
   QTableView * tableView = new QTableView;
   model_ = new ParametricCalculusTableModel(item_->getCalculus<ParametricCalculus>());
-  connect(model_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(parametrizationChanged(QModelIndex,QModelIndex)));
+  connect(model_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(parametrizationChanged(const QModelIndex&,const QModelIndex&)));
 
   tableView->setModel(model_);
   pageLayout->addWidget(tableView);
@@ -40,7 +40,7 @@ void ParametricCalculusWizard::buildInterface()
 }
 
 
-void ParametricCalculusWizard::parametrizationChanged(QModelIndex, QModelIndex)
+void ParametricCalculusWizard::parametrizationChanged(const QModelIndex&,const QModelIndex&)
 {
   item_->setCalculus(model_->getCalculus());
 }

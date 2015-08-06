@@ -12,27 +12,28 @@ namespace OTGUI {
 class ParametricCalculus : public Calculus
 {
 public:
-  ParametricCalculus(std::string name, const PhysicalModel & physicalModel);
-  ParametricCalculus(std::string name, const PhysicalModel & physicalModel,
+  ParametricCalculus(const std::string & name, const PhysicalModel & physicalModel);
+  ParametricCalculus(const std::string & name, const PhysicalModel & physicalModel,
                      const OT::NumericalPoint & infBounds, const OT::NumericalPoint & supBounds,
                      const OT::Indices & nbValues);
   ParametricCalculus(const ParametricCalculus & other);
   virtual ParametricCalculus * clone() const;
+
   virtual ~ParametricCalculus();
 
-  void computeParameters(InputCollection inputs);
+  void computeParameters(const InputCollection & inputs);
   void computeInputSample();
 
   OT::NumericalSample getInputSample() const;
-  void setInputSample(OT::NumericalSample inputSample);
+  void setInputSample(const OT::NumericalSample & inputSample);
   OT::NumericalSample getResultSample() const;
 
   OT::NumericalPoint getInfBounds() const;
-  void setInfBound(int index, double infBounds);
+  void setInfBound(const int & index, const double & infBounds);
   OT::NumericalPoint getSupBounds() const;
-  void setSupBound(int index, double supBounds);
+  void setSupBound(const int & index, const double & supBounds);
   OT::Indices getNbValues() const;
-  void setNbValues(int index, int nbValues);
+  void setNbValues(const int & index, const int & nbValues);
 
   void run();
   std::string dump() const;

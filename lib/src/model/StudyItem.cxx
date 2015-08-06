@@ -17,7 +17,7 @@ StudyItem::~StudyItem()
 }
 
 
-void StudyItem::update(Observable * source, std::string message)
+void StudyItem::update(Observable * source, const std::string & message)
 {
   OTStudy * study = static_cast<OTStudy*>(source);
   if (message=="addPhysicalModel")
@@ -44,7 +44,7 @@ void StudyItem::update(Observable * source, std::string message)
 }
 
 
-void StudyItem::setData(const QVariant& value, int role)
+void StudyItem::setData(const QVariant & value, int role)
 {
   switch (role)
   {

@@ -5,14 +5,14 @@
 
 namespace OTGUI {
 
-ParametricCalculus::ParametricCalculus(std::string name, const PhysicalModel & physicalModel)
+ParametricCalculus::ParametricCalculus(const std::string & name, const PhysicalModel & physicalModel)
  : Calculus(name, physicalModel)
 {
   computeParameters(physicalModel.getInputs());
 }
 
 
-ParametricCalculus::ParametricCalculus(std::string name, const PhysicalModel & physicalModel,
+ParametricCalculus::ParametricCalculus(const std::string & name, const PhysicalModel & physicalModel,
                          const OT::NumericalPoint & infBounds, const OT::NumericalPoint & supBounds,
                          const OT::Indices & nbValues)
  : Calculus(name, physicalModel)
@@ -44,7 +44,7 @@ ParametricCalculus::~ParametricCalculus()
 }
 
 
-void ParametricCalculus::computeParameters(InputCollection inputs)
+void ParametricCalculus::computeParameters(const InputCollection & inputs)
 {
   for (int i=0; i<inputs.getSize(); ++i)
   {
@@ -115,7 +115,7 @@ OT::NumericalSample ParametricCalculus::getInputSample() const
 }
 
 
-void ParametricCalculus::setInputSample(OT::NumericalSample inputSample)
+void ParametricCalculus::setInputSample(const OT::NumericalSample & inputSample)
 {
   inputSample_ = inputSample;
   notify("inputSampleChanged");
@@ -134,7 +134,7 @@ OT::NumericalPoint ParametricCalculus::getInfBounds() const
 }
 
 
-void ParametricCalculus::setInfBound(int index, double infBounds)
+void ParametricCalculus::setInfBound(const int & index, const double & infBounds)
 {
   infBounds_[index] = infBounds;
 }
@@ -146,7 +146,7 @@ OT::NumericalPoint ParametricCalculus::getSupBounds() const
 }
 
 
-void ParametricCalculus::setSupBound(int index, double supBounds)
+void ParametricCalculus::setSupBound(const int & index, const double & supBounds)
 {
   supBounds_[index] = supBounds;
 }
@@ -158,7 +158,7 @@ OT::Indices ParametricCalculus::getNbValues() const
 }
 
 
-void ParametricCalculus::setNbValues(int index, int nbValues)
+void ParametricCalculus::setNbValues(const int & index, const int & nbValues)
 {
   nbValues_[index] = nbValues;
 }

@@ -11,20 +11,20 @@ class Variable : public OT::PersistentObject
 {
 public:
   Variable();
-  Variable(std::string name, double value, std::string description="");
+  Variable(const std::string & name, const double & value, const std::string & description="");
   Variable(const Variable & other);
   virtual Variable * clone() const = 0;
 
   virtual ~Variable();
 
   std::string getName() const;
-  void setName(std::string name);
+  void setName(const std::string & name);
 
   double getValue() const;
-  void setValue(double value);
+  void setValue(const double & value);
 
   std::string getDescription() const;
-  void setDescription(std::string description);
+  void setDescription(const std::string & description);
 
   virtual std::string dump() const = 0;
 

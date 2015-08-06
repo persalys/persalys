@@ -12,10 +12,11 @@ public:
   Calculus(const std::string & name, const PhysicalModel & physicalModel);
   Calculus(const Calculus & other);
   virtual Calculus * clone() const = 0;
+
   virtual ~Calculus();
 
   std::string getName() const;
-  void setName(std::string name);
+  void setName(const std::string & name);
 
   PhysicalModel getPhysicalModel() const;
   void setPhysicalModel(const PhysicalModel & physicalModel);

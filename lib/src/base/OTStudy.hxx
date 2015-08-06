@@ -15,17 +15,17 @@ class OTStudy : public OT::PersistentObject, public Observable
 {
 public:
   static std::vector<OTStudy*> GetInstances();
-  static OTStudy * FindInstance(std::string name);
+  static OTStudy * FindInstance(const std::string & name);
   static void SetInstanceObserver(Observer * observer);
 
-  OTStudy(std::string name);
+  OTStudy(const std::string & name);
   OTStudy(const OTStudy & other);
   virtual OTStudy * clone() const;
 
   virtual ~OTStudy();
 
   std::string getName() const;
-  void setName(std::string name);
+  void setName(const std::string & name);
 
   std::vector<PhysicalModel> getPhysicalModels() const;
   void addPhysicalModel(const PhysicalModel & physicalModel);

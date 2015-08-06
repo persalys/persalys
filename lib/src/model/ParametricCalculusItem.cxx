@@ -14,7 +14,7 @@ ParametricCalculusItem::~ParametricCalculusItem()
 }
 
 
-void ParametricCalculusItem::setData(const QVariant& value, int role)
+void ParametricCalculusItem::setData(const QVariant & value, int role)
 {
   switch (role)
   {
@@ -50,7 +50,7 @@ OT::NumericalSample ParametricCalculusItem::getResultSample() const
 }
 
 
-void ParametricCalculusItem::update(Observable* source, std::string message)
+void ParametricCalculusItem::update(Observable* source, const std::string & message)
 {
   if (message=="inputSampleChanged")
   {

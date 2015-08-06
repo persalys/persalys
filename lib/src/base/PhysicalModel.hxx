@@ -9,8 +9,8 @@ namespace OTGUI {
 class PhysicalModel
 {
 public:
-  explicit PhysicalModel(std::string name);
-  PhysicalModel(std::string name, const InputCollection & inputs, const OutputCollection & outputs);
+  explicit PhysicalModel(const std::string & name);
+  PhysicalModel(const std::string & name, const InputCollection & inputs, const OutputCollection & outputs);
   PhysicalModel(const PhysicalModel & other);
   virtual PhysicalModel * clone() const;
 
@@ -19,7 +19,7 @@ public:
   void addObserver(Observer * observer);
 
   std::string getName() const;
-  void setName(std::string name);
+  void setName(const std::string & name);
 
   InputCollection getInputs() const;
   void setInputs(const InputCollection & inputs);
@@ -35,7 +35,7 @@ public:
   bool checkInputs();
   bool checkOutputs();
 
-  void loadDataWithYACS(const std::string fileName);
+  void loadDataWithYACS(const std::string & fileName);
   std::string dump() const;
 
 private:

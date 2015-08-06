@@ -12,7 +12,7 @@ class OTguiTableView : public QTableView
   Q_OBJECT
 
 public:
-  OTguiTableView(OT::NumericalSample & sample);
+  OTguiTableView(const OT::NumericalSample & sample);
   virtual ~OTguiTableView();
 
 public slots:

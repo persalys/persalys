@@ -17,10 +17,11 @@ InputTableModel::InputTableModel(QObject * parent)
 }
 
 
-InputTableModel::~InputTableModel()
+InputTableModel::InputTableModel(const InputCollection & inputs)
+  : validity_(false)
 {
-  if (data_.getSize())
-    data_.erase(data_.begin(), data_.begin()+data_.getSize());
+  for (int i=0; i<inputs.getSize(); ++i)
+    addLine(inputs[i]);
 }
 
 
@@ -32,11 +33,10 @@ InputTableModel::InputTableModel(const InputTableModel & other)
 }
 
 
-InputTableModel::InputTableModel(InputCollection inputs)
-  : validity_(false)
+InputTableModel::~InputTableModel()
 {
-  for (int i=0; i<inputs.getSize(); ++i)
-    addLine(inputs[i]);
+  if (data_.getSize())
+    data_.erase(data_.begin(), data_.begin()+data_.getSize());
 }
 
 
@@ -175,7 +175,7 @@ void InputTableModel::addLine()
 }
 
 
-void InputTableModel::addLine(Input input)
+void InputTableModel::addLine(const Input & input)
 {
   QModelIndex lastIndex = index(-1, 0);
   beginInsertRows(lastIndex.parent(), -1, -1);
@@ -216,7 +216,7 @@ OT::NumericalPointWithDescription InputTableModel::getParameters(int row) const
 }
 
 
-void InputTableModel::updateDistributionParameters(const QModelIndex & index, OT::NumericalPoint parameters)
+void InputTableModel::updateDistributionParameters(const QModelIndex & index, const OT::NumericalPoint & parameters)
 {
   OT::Distribution distribution = data_[index.row()].getDistribution(); 
   distribution.setParametersCollection(parameters);

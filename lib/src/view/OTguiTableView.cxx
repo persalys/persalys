@@ -7,7 +7,7 @@
 
 namespace OTGUI {
 
-OTguiTableView::OTguiTableView(OT::NumericalSample & sample)
+OTguiTableView::OTguiTableView(const OT::NumericalSample & sample)
   : QTableView()
 {
   setContextMenuPolicy(Qt::CustomContextMenu);

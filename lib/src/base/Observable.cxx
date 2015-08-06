@@ -12,7 +12,7 @@ void Observable::addObserver(Observer * observer)
 }
 
 
-void Observable::notify(std::string message)
+void Observable::notify(const std::string & message)
 {
   for (unsigned int i = 0; i < observers_.size(); ++ i)
     observers_[i]->update(this, message);

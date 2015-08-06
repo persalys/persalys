@@ -34,7 +34,7 @@ std::string Calculus::getName() const
 }
 
 
-void Calculus::setName(std::string name)
+void Calculus::setName(const std::string & name)
 {
   name_ = name;
 }

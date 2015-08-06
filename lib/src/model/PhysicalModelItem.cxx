@@ -2,7 +2,7 @@
 
 namespace OTGUI {
 
-PhysicalModelItem::PhysicalModelItem(PhysicalModel physicalModel)
+PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel)
   : Item(physicalModel.getName(), QString("PhysicalModel"))
   , physicalModel_(physicalModel)
 {
@@ -15,7 +15,7 @@ PhysicalModelItem::~PhysicalModelItem()
 }
 
 
-void PhysicalModelItem::setData(const QVariant& value, int role)
+void PhysicalModelItem::setData(const QVariant & value, int role)
 {
   switch (role)
   {
@@ -26,14 +26,14 @@ void PhysicalModelItem::setData(const QVariant& value, int role)
 }
 
 
-void PhysicalModelItem::setPhysicalModelInputs(InputCollection inputs)
+void PhysicalModelItem::setPhysicalModelInputs(const InputCollection & inputs)
 {
   physicalModel_.setInputs(inputs);
   bool inputsAreValid = physicalModel_.checkInputs();
 }
 
 
-void PhysicalModelItem::setPhysicalModelOutputs(OutputCollection outputs)
+void PhysicalModelItem::setPhysicalModelOutputs(const OutputCollection & outputs)
 {
   physicalModel_.setOutputs(outputs);
   bool outputsAreValid = physicalModel_.checkOutputs();
@@ -46,7 +46,7 @@ PhysicalModel PhysicalModelItem::getPhysicalModel() const
 }
 
 
-void PhysicalModelItem::loadDataWithYACS(const QString fileName)
+void PhysicalModelItem::loadDataWithYACS(const QString & fileName)
 {
 #ifdef OTGUI_HAVE_YACS
   physicalModel_.loadDataWithYACS(fileName.toStdString());
@@ -54,7 +54,7 @@ void PhysicalModelItem::loadDataWithYACS(const QString fileName)
 }
 
 
-void PhysicalModelItem::update(Observable* source, std::string message)
+void PhysicalModelItem::update(Observable* source, const std::string & message)
 {
   PhysicalModelImplementation * physicalModelImpl = static_cast<PhysicalModelImplementation*>(source);
   if (message=="inputChanged")

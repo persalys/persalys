@@ -12,7 +12,7 @@ OutputTableModel::OutputTableModel()
 }
 
 
-OutputTableModel::OutputTableModel(OutputCollection outputs)
+OutputTableModel::OutputTableModel(const OutputCollection & outputs)
   : QAbstractTableModel()
   , validity_(false)
 {
@@ -21,18 +21,18 @@ OutputTableModel::OutputTableModel(OutputCollection outputs)
 }
 
 
-OutputTableModel::~OutputTableModel()
-{
-  if (data_.getSize())
-    data_.erase(data_.begin(), data_.begin()+data_.getSize());
-}
-
-
 OutputTableModel::OutputTableModel(const OutputTableModel & other)
   : data_( other.data_ )
   , validity_(other.validity_)
 {
 
+}
+
+
+OutputTableModel::~OutputTableModel()
+{
+  if (data_.getSize())
+    data_.erase(data_.begin(), data_.begin()+data_.getSize());
 }
 
 

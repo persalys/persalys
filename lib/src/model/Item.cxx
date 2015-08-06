@@ -5,7 +5,7 @@
 namespace OTGUI {
   
 
-Item::Item(std::string name, QString typeName)
+Item::Item(const std::string & name, const QString & typeName)
   : QStandardItem(QString::fromStdString(name))
   , Observer()
   , type_(QVariant(typeName))
@@ -43,7 +43,7 @@ QVariant Item::data(int role) const
 }
 
 
-void Item::setData(const QVariant& value, int role)
+void Item::setData(const QVariant & value, int role)
 {
   switch (role)
   {

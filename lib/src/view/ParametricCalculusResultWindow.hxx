@@ -23,8 +23,8 @@ protected:
 
 public slots:
   void updatePlot(int indexInput=0, int indexOutput=0);
-  void inputChanged(int );
-  void outputChanged(int );
+  void inputChanged(int index);
+  void outputChanged(int index);
 
 private:
   OT::NumericalSample inputSample_;

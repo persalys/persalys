@@ -13,7 +13,7 @@ namespace OTGUI {
 class OTguiTableModel : public QAbstractTableModel
 {
 public:
-  OTguiTableModel(OT::NumericalSample & data);
+  OTguiTableModel(const OT::NumericalSample & data);
 
   virtual ~OTguiTableModel();
 

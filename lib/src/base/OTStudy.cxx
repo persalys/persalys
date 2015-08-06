@@ -16,7 +16,7 @@ std::vector<OTStudy*> OTStudy::GetInstances()
 }
 
 
-OTStudy * OTStudy::FindInstance(std::string name)
+OTStudy * OTStudy::FindInstance(const std::string & name)
 {
   for (std::vector<OTStudy*>::iterator it=Instances_.begin(); it!=Instances_.end(); ++it)
   {
@@ -35,7 +35,7 @@ void OTStudy::SetInstanceObserver(Observer * observer)
 }
 
 
-OTStudy::OTStudy(std::string name)
+OTStudy::OTStudy(const std::string & name)
  : PersistentObject()
  , Observable()
  , name_(name)
@@ -74,7 +74,7 @@ std::string OTStudy::getName() const
 }
 
 
-void OTStudy::setName(std::string name)
+void OTStudy::setName(const std::string & name)
 {
   name_ = name;
 }
@@ -118,7 +118,7 @@ std::string OTStudy::dump()
   for (std::vector<Calculus*>::iterator it=calculuses_.begin(); it!= calculuses_.end(); ++it )
   {
     result += (*it)->dump();
-    result += getName() + ".addParametricCalculus(" + (*it)->getName() + ")\n";
+    result += getName() + ".addCalculus(" + (*it)->getName() + ")\n";
   }
   return result;
 }

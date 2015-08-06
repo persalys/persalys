@@ -17,11 +17,10 @@ class InputTableModel : public QAbstractTableModel
 
 public:
   InputTableModel(QObject * parent = 0);
-  InputTableModel(InputCollection inputs);
+  InputTableModel(const InputCollection & inputs);
+  InputTableModel(const InputTableModel & other);
 
   virtual ~InputTableModel();
-
-  InputTableModel(const InputTableModel & model);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent) const;
@@ -34,11 +33,11 @@ public:
   InputCollection getData();
   bool isValid();
   OT::NumericalPointWithDescription getParameters(int row) const;
-  void updateDistributionParameters(const QModelIndex & index, OT::NumericalPoint parameters);
+  void updateDistributionParameters(const QModelIndex & index, const OT::NumericalPoint & parameters);
 
 public slots:
   void addLine();
-  void addLine(Input input);
+  void addLine(const Input & input);
 signals:
   void distributionChanged(OT::NumericalPointWithDescription);
 private:

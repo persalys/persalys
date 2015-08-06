@@ -29,10 +29,10 @@ public slots:
   void createNewPhysicalModel();
   void createNewParametricCalculus();
   void onCustomContextMenu(const QPoint & point);
-  void selectedItemChanged(const QModelIndex &);
+  void selectedItemChanged(const QModelIndex & index);
   void runCalculus();
   void createParametricCalculusResult();
-  void createNewPhysicalModelWindow(PhysicalModelItem *);
+  void createNewPhysicalModelWindow(PhysicalModelItem * item);
   void createNewParametricCalculusWizard(ParametricCalculusItem * item);
   void dumpStudy();
   void loadStudy();
