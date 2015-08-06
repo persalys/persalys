@@ -91,7 +91,6 @@ macro ( ot_pyinstallcheck_test TESTNAME )
 endmacro ( ot_pyinstallcheck_test )
 
 # ot_pyinstallcheck_test ( PhysicalModel_std )
-ot_pyinstallcheck_test ( Variable_std )
 ot_pyinstallcheck_test ( Cogeneration_std )
 
 add_custom_target ( pyinstallcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^pyinstallcheck_"

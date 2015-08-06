@@ -1,1 +1,2 @@
-class=PersistentObject name=Unnamed
+unamed = otguibase.PhysicalModel('unamed')
+

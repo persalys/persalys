@@ -9,7 +9,7 @@ using namespace OTGUI;
 int main(int argc, char **argv)
 {
   PhysicalModel model("unamed");
-  std::cout << model << std::endl;
+  std::cout << model.dump() << std::endl;
   return EXIT_SUCCESS;
 }
 
