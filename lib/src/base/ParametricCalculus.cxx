@@ -179,7 +179,7 @@ std::string ParametricCalculus::dump() const
     oss << "nbValues[" << i << "] = " << nbValues_[i] << "\n";
   }
   result += oss.str();
-  result += getName()+ "= otguibase.ParametricCalculus(\"" + getName() + "\", " + getPhysicalModel().getName();
+  result += getName()+ " = otguibase.ParametricCalculus('" + getName() + "', " + getPhysicalModel().getName();
   result += ", infBounds, supBounds, nbValues )\n";
   return result;
 }

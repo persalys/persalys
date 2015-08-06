@@ -109,7 +109,7 @@ void OTStudy::addCalculus(const Calculus & calculus)
 std::string OTStudy::dump()
 {
   std::string result;
-  result += getName()+ "= otguibase.OTStudy(\"" + getName() + "\")\n";
+  result += getName()+ " = otguibase.OTStudy('" + getName() + "')\n";
   for (std::vector<PhysicalModel>::iterator it=physicalModels_.begin(); it!= physicalModels_.end(); ++it )
   {
     result += (*it).dump();

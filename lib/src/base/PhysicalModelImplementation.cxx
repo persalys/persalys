@@ -231,7 +231,7 @@ std::string PhysicalModelImplementation::dump() const
   for (int i=0; i<outputs_.getSize(); ++i)
     result += outputs_[i].dump();
 
-  result += getName()+ "= otguibase.PhysicalModel(\"" + getName() + "\")\n";
+  result += getName()+ " = otguibase.PhysicalModel('" + getName() + "')\n";
 
   for (int i=0; i<inputs_.getSize(); ++i)
     result += getName()+ ".addInput(" + inputs_[i].getName() + ")\n";

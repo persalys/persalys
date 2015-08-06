@@ -176,16 +176,17 @@ void StudyTreeView::dumpStudy()
     // check
     if (!file.open(QFile::WriteOnly))
     {
-    //     "cannot open"<<file.fileName();
+      std::cout << "cannot open" << file.fileName().toStdString() << std::endl;
     }
     // fill
     else
     {
       QTextStream out(&file);
       QString script("#! /usr/bin/env python\n\nfrom __future__ import print_function\nimport openturns as ot\nimport otguibase\n\n");
-      out<<script;
+      out << script;
       script = item->dumpStudy();
-      out<<script;
+      out << script;
+      file.setPermissions(QFile::ReadUser|QFile::WriteUser|QFile::ExeUser|QFile::ReadGroup|QFile::ExeGroup|QFile::ReadOther|QFile::ExeOther);
       file.close();
     }
   }
