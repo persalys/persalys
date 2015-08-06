@@ -57,21 +57,23 @@ std::string Input::dump() const
   OT::OSS oss;
 
   std::string className = distribution_.getImplementation()->getClassName();
-  if ( className != "Dirac")
+  if (className != "Dirac")
   {
     oss << "dist_" << getName() << " = ot." << className << "(";
     OT::NumericalPointWithDescription parameters = distribution_.getParametersCollection()[0];
-    for (int i=0; i<parameters.getSize(); ++i)
-      oss << parameters[i] << ",";
-
+    for (unsigned int i = 0; i < parameters.getSize(); ++ i) {
+      oss << parameters[i];
+      if (i < parameters.getSize() - 1)
+        oss << ", ";
+    }
     oss << ")\n";
   }
-    
-  oss << getName() << " = otguibase.Input(\"" << getName() << "\", " <<getValue() << ", \"" << getDescription();
+
+  oss << getName() << " = otguibase.Input('" << getName() << "', " <<getValue() << ", '" << getDescription();
   if (className != "Dirac")
-    oss << "\", dist_" << getName() << ")\n";
+    oss << "', dist_" << getName() << ")\n";
   else
-    oss << "\")\n";
+    oss << "')\n";
 
   result += oss.str();
 

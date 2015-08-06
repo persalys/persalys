@@ -8,13 +8,13 @@
 6 : [ 10035.5   3024.67  4098.69 ]
 7 : [ 10364.5   3024.67  4098.69 ]
 myStudy = otguibase.OTStudy('myStudy')
-dist_Q = ot.Normal(10200,100,)
-Q = otguibase.Input("Q", 0, "Primary energy", dist_Q)
-dist_E = ot.Normal(3000,15,)
-E = otguibase.Input("E", 0, "Produced electric energy", dist_E)
-dist_C = ot.Normal(4000,60,)
-C = otguibase.Input("C", 0, "Valued thermal energy", dist_C)
-Ep = otguibase.Output("Ep", 0, "Primary energy savings", "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))")
+dist_Q = ot.Normal(10200, 100)
+Q = otguibase.Input('Q', 0, 'Primary energy', dist_Q)
+dist_E = ot.Normal(3000, 15)
+E = otguibase.Input('E', 0, 'Produced electric energy', dist_E)
+dist_C = ot.Normal(4000, 60)
+C = otguibase.Input('C', 0, 'Valued thermal energy', dist_C)
+Ep = otguibase.Output('Ep', 0, 'Primary energy savings', '1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))')
 myPhysicalModel = otguibase.PhysicalModel('myPhysicalModel')
 myPhysicalModel.addInput(Q)
 myPhysicalModel.addInput(E)
@@ -33,6 +33,6 @@ nbValues[1] = 2
 infBounds[2] = 3901.31
 supBounds[2] = 4098.69
 nbValues[2] = 2
-myParametricCalculus = otguibase.ParametricCalculus('myParametricCalculus', myPhysicalModel, infBounds, supBounds, nbValues )
+myParametricCalculus = otguibase.ParametricCalculus('myParametricCalculus', myPhysicalModel, infBounds, supBounds, nbValues)
 myStudy.addParametricCalculus(myParametricCalculus)
 

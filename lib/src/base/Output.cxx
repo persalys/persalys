@@ -55,8 +55,8 @@ std::string Output::dump() const
   std::string result;
   OT::OSS oss;
 
-  oss << getName() << " = otguibase.Output(\"" << getName() << "\", " <<getValue() << ", \"" << getDescription();
-  oss << "\", \"" << formula_ << "\")\n";
+  oss << getName() << " = otguibase.Output('" << getName() << "', " <<getValue() << ", '" << getDescription();
+  oss << "', '" << formula_ << "')\n";
 
   result += oss.str();
 
