@@ -206,11 +206,6 @@ QPyConsole::QPyConsole(QWidget *parent, const QString& welcomeText) :
              "import console\n"
              "import rlcompleter\n"
              "sys.path.insert(0, \".\")\n" // add current
-                           // path
-             "sys.path.insert(0,\"/home/ladier/projets/openturns/openturns-trunk/build/install/lib/python2.7/site-packages/\")\n"
-             "import openturns as ot\n"
-             "sys.path.insert(0,\"/home/ladier/projets/otgui/build/install/lib/python2.7/site-packages/\")\n"
-             "import otguibase\n"
              "sys.stdout = redirector.redirector()\n"
              "sys.stderr = sys.stdout\n"
              "import __builtin__\n"
