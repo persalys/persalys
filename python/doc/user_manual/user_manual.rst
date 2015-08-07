@@ -29,7 +29,7 @@ b- "XML": define a physical model with an XML file
 ''''''''''''''''''''''''''''''''''''''''''''''''''
 
 The second way is to load an XML file, previously generated for example with Salome,
-which contains all the data of a deterministic analysis.
+which contains all the data.
 
 .. image:: YACSPhysicalModel.png
     :align: center
@@ -39,8 +39,8 @@ which contains all the data of a deterministic analysis.
 3- Realize a parametric analysis
 ````````````````````````````````
 
-After right cliking on the item of the physical model in the study tree, it is possible to
-choose to realize a parametric analysis.
+A right click on the item of the physical model in the study tree, a menu proposes
+to realize a parametric analysis.
 When clicking on this, the following wizard appears:
 
 .. image:: ParametricCalculusData.png

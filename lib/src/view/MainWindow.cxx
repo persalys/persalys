@@ -4,6 +4,7 @@
 #include "qpyconsole.h"
 #include <QSplitter>
 #include <QMenuBar>
+#include <QDockWidget>
 
 #include <iostream>
 
@@ -37,13 +38,21 @@ void MainWindow::buildInterface()
   mainSplitter->addWidget(mdiArea_);
   mainLayout->addWidget(mainSplitter);
 
+  // Python Console
   console_ = new QPyConsole(this);
   connect(studyTree_, SIGNAL(loadPythonScript(const QString &)), console_, SLOT(loadScript(const QString &)));
-  mainLayout->addWidget(console_);
+
+  QDockWidget * consoleDock = new QDockWidget;
+  consoleDock->setWidget(console_);
+  consoleDock->setFeatures(QDockWidget::DockWidgetClosable);
+  addDockWidget(Qt::BottomDockWidgetArea, consoleDock);
+//   connect(consoleDock, SIGNAL(visibilityChanged(bool)), this,SLOT(consoleVisibilityChanged()));
+
 
   mainWidget->setLayout(mainLayout);
   setCentralWidget(mainWidget);
 
+  // Menus
   menu_ = menuBar()->addMenu(tr("&Menu"));
 }
 
