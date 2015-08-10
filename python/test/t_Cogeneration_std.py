@@ -25,7 +25,7 @@ myStudy.addPhysicalModel(myPhysicalModel)
 
 # Parametric analysis
 calculus = otguibase.ParametricCalculus("myParametricCalculus", myPhysicalModel)
-myStudy.addCalculus(calculus)
+myStudy.addParametricCalculus(calculus)
 calculus.run()
 resultSample = calculus.getResultSample()
 print(calculus.getInputSample())

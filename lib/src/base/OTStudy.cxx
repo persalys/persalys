@@ -99,7 +99,7 @@ std::vector<Calculus*> OTStudy::getCalculuses() const
 }
 
 
-void OTStudy::addCalculus(const Calculus & calculus)
+void OTStudy::addParametricCalculus(const ParametricCalculus & calculus)
 {
   calculuses_.push_back(calculus.clone());
   notify("addParametricCalculus");
@@ -118,7 +118,7 @@ std::string OTStudy::dump()
   for (std::vector<Calculus*>::iterator it=calculuses_.begin(); it!= calculuses_.end(); ++it )
   {
     result += (*it)->dump();
-    result += getName() + ".addCalculus(" + (*it)->getName() + ")\n";
+    result += getName() + ".addParametricCalculus(" + (*it)->getName() + ")\n";
   }
   return result;
 }

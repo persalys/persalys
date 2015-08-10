@@ -34,5 +34,5 @@ infBounds[2] = 3901.31
 supBounds[2] = 4098.69
 nbValues[2] = 2
 myParametricCalculus = otguibase.ParametricCalculus('myParametricCalculus', myPhysicalModel, infBounds, supBounds, nbValues)
-myStudy.addCalculus(myParametricCalculus)
+myStudy.addParametricCalculus(myParametricCalculus)
 

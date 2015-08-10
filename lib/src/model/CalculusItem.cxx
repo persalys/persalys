@@ -33,4 +33,11 @@ Calculus* CalculusItem::getCalculus() const
   return calculus_;
 }
 
+
+void CalculusItem::setCalculus(Calculus* calculus)
+{
+  calculus_ = calculus;
+}
+
+
 }

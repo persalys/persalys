@@ -17,18 +17,11 @@ public:
   ParametricCalculusItem(ParametricCalculus * calculus);
   virtual ~ParametricCalculusItem();
 
-  void runCalculus();
-  void setCalculus(ParametricCalculus * calculus);
-  void setData(const QVariant & value, int role);
-
   virtual void update(Observable * source, const std::string & message);
 
 public slots:
 signals:
   void inputSampleChanged(OT::NumericalSample);
-
-private:
-  ParametricCalculus * calculus_;
 };
 }
 #endif

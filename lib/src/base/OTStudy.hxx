@@ -5,6 +5,7 @@
 
 #include "PhysicalModel.hxx"
 #include "Calculus.hxx"
+#include "ParametricCalculus.hxx"
 #include "Observer.hxx"
 
 #include <vector>
@@ -31,7 +32,7 @@ public:
   void addPhysicalModel(const PhysicalModel & physicalModel);
 
   std::vector<Calculus*> getCalculuses() const;
-  void addCalculus(const Calculus & calculus);
+  void addParametricCalculus(const ParametricCalculus & calculus);
 
   std::string dump();
 

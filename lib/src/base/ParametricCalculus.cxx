@@ -20,7 +20,6 @@ ParametricCalculus::ParametricCalculus(const std::string & name, const PhysicalM
  , supBounds_(supBounds)
  , nbValues_(nbValues)
 {
-
 }
 
 
@@ -106,6 +105,8 @@ void ParametricCalculus::run()
   inputSample_.setDescription(model.getInputDescription());
 
   resultSample_ = model(inputSample_);
+
+  notify("calculusFinished");
 }
 
 

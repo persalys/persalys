@@ -16,9 +16,8 @@ public:
 
   virtual ~CalculusItem();
 
-  virtual void runCalculus() = 0;
-
   void setData(const QVariant & value, int role);
+
   Calculus * getCalculus() const;
   template <class CalculusT> CalculusT* getCalculus() const
   {
@@ -27,6 +26,7 @@ public:
     Q_ASSERT(c);
     return c;
   }
+  void setCalculus(Calculus * calculus);
 
 public slots:
 signals:
