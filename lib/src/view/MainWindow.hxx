@@ -26,6 +26,7 @@ public:
 public slots:
   void showSubWindow(QMdiSubWindow * win);
   void showSubWindow(QStandardItem * item);
+  void checkIfWindowResultExists(CalculusItem * item);
 
 protected:
   void buildInterface();

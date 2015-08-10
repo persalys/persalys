@@ -19,6 +19,7 @@ MainWindow::MainWindow()
   buildActions();
   connect(studyTree_, SIGNAL(showWindow(QMdiSubWindow *)), this, SLOT(showSubWindow(QMdiSubWindow *)));
   connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), this, SLOT(showSubWindow(QStandardItem *)));
+  connect(studyTree_, SIGNAL(checkIfWindowResultExists(CalculusItem *)), this, SLOT(checkIfWindowResultExists(CalculusItem *)));
 }
 
 
@@ -94,6 +95,21 @@ void MainWindow::showSubWindow(QStandardItem * item)
 
 }
 
+
+void MainWindow::checkIfWindowResultExists(CalculusItem* item)
+{
+  QList<QMdiSubWindow *> listSubWindow =  mdiArea_->subWindowList();
+
+  for (int i = 0; i < listSubWindow.size(); ++i)
+  {
+    OTguiSubWindow * win = static_cast<OTguiSubWindow*>(listSubWindow.at(i));
+    if ( win->getItem() == item)
+    {
+      mdiArea_->removeSubWindow(win);
+      delete win;
+    }
+  }
+}
 
 
 }

@@ -37,6 +37,7 @@ public:
 
   void run();
   std::string dump() const;
+  bool calculusLaunched() const;
 
 private:
   OT::NumericalSample inputSample_;

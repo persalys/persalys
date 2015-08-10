@@ -184,4 +184,11 @@ std::string ParametricCalculus::dump() const
   return result;
 }
 
+
+bool ParametricCalculus::calculusLaunched() const
+{
+  return resultSample_.getSize()!=0;
+}
+
+
 }

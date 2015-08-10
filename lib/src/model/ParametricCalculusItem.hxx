@@ -19,8 +19,6 @@ public:
 
   void runCalculus();
   void setCalculus(ParametricCalculus * calculus);
-  OT::NumericalSample getInputSample() const;
-  OT::NumericalSample getResultSample() const;
   void setData(const QVariant & value, int role);
 
   virtual void update(Observable * source, const std::string & message);

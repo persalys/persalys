@@ -30,7 +30,7 @@ public:
 
 public slots:
 signals:
-  void calculusFinished();
+  void calculusFinished(CalculusItem*);
 
 private:
   Calculus * calculus_;

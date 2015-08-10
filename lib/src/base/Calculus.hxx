@@ -23,6 +23,7 @@ public:
 
   virtual void run() = 0;
   virtual std::string dump() const = 0;
+  virtual bool calculusLaunched() const = 0;
 
 private:
   std::string name_;

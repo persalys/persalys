@@ -21,7 +21,7 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   OTStudy::SetInstanceObserver(treeViewModel_);
   setModel(treeViewModel_);
   connect(treeViewModel_, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)), this, SLOT(createNewPhysicalModelWindow(PhysicalModelItem*)));
-  connect(treeViewModel_, SIGNAL(newParametricCalculusCreated(ParametricCalculusItem*)), this, SLOT(createNewParametricCalculusWizard(ParametricCalculusItem*)));
+  connect(treeViewModel_, SIGNAL(newParametricCalculusCreated(ParametricCalculusItem*)), this, SLOT(createParametricCalculusConnection(ParametricCalculusItem*)));
 
   buildActions();
 
@@ -60,7 +60,7 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
     }
     if (data=="ParametricCalculus")
     {
-      contextMenu->addAction(runCalculus_);
+      contextMenu->addAction(runParametricCalculus_);
     }
     contextMenu->exec(mapToGlobal(point));
   }    
@@ -77,9 +77,9 @@ void StudyTreeView::buildActions()
   newParametricCalculus_->setStatusTip(tr("Create a new parametric calculus"));
   connect(newParametricCalculus_, SIGNAL(triggered()), this, SLOT(createNewParametricCalculus()));
 
-  runCalculus_ = new QAction(tr("Run"), this);
-  runCalculus_->setStatusTip(tr("Run the parametric calculus"));
-  connect(runCalculus_, SIGNAL(triggered()), this, SLOT(runCalculus()));
+  runParametricCalculus_ = new QAction(tr("Run"), this);
+  runParametricCalculus_->setStatusTip(tr("Run the parametric calculus"));
+  connect(runParametricCalculus_, SIGNAL(triggered()), this, SLOT(runParametricCalculus()));
 
   dumpStudy_ = new QAction(tr("Dump"), this);
   dumpStudy_->setStatusTip(tr("Dump the study"));
@@ -116,42 +116,48 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 
 void StudyTreeView::createNewParametricCalculus()
 {
+  ParametricCalculusWizard * wizard = new ParametricCalculusWizard();
+  connect(treeViewModel_, SIGNAL(newParametricCalculusCreated(ParametricCalculusItem *)), wizard, SLOT(completeModel(ParametricCalculusItem *)));
+
   QModelIndex parentIndex = selectionModel()->currentIndex();
   treeViewModel_->addParametricCalculusItem(parentIndex);
   setExpanded(parentIndex, true);
-}
-
-
-void StudyTreeView::createNewParametricCalculusWizard(ParametricCalculusItem * item)
-{
-  ParametricCalculusWizard * wizard = new ParametricCalculusWizard(item);
 
   if (wizard->exec())
-    connect(item, SIGNAL(calculusFinished()), this, SLOT(createParametricCalculusResult()));
-  else
-    item->QStandardItem::parent()->removeRow(item->row());
+  {
+    if (wizard->getItem())
+    {
+      wizard->getItem()->runCalculus();
+    }
+  }
 }
 
 
-void StudyTreeView::runCalculus()
+void StudyTreeView::createParametricCalculusConnection(ParametricCalculusItem* item)
+{
+  connect(item, SIGNAL(calculusFinished(CalculusItem *)), this, SIGNAL(checkIfWindowResultExists(CalculusItem *)));
+  connect(item, SIGNAL(calculusFinished(CalculusItem *)), this, SLOT(createParametricCalculusResult(CalculusItem *)));
+}
+
+
+void StudyTreeView::runParametricCalculus()
 {
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
   ParametricCalculusItem * item = static_cast<ParametricCalculusItem*>(selectedItem);
 
-  item->runCalculus();
+  ParametricCalculusWizard * wizard = new ParametricCalculusWizard(item);
+  if (wizard->exec())
+  {
+    item->runCalculus();
+  }
 }
 
 
-void StudyTreeView::createParametricCalculusResult()
+void StudyTreeView::createParametricCalculusResult(CalculusItem * item)
 {
-  QModelIndex index = selectionModel()->currentIndex();
-  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
-  ParametricCalculusItem * item = static_cast<ParametricCalculusItem*>(selectedItem);
-
-  ParametricCalculusResultWindow * window = new ParametricCalculusResultWindow(item);
-
+  ParametricCalculusResultWindow * window = new ParametricCalculusResultWindow(static_cast<ParametricCalculusItem*>(item));
   emit showWindow(window);
 }
 

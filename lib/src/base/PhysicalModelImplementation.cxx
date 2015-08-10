@@ -111,6 +111,7 @@ void PhysicalModelImplementation::addInput(Input input)
 {
   inputs_.add(input);
   checkInputs();
+  notify("inputChanged");
 }
 
 
@@ -129,6 +130,7 @@ void PhysicalModelImplementation::addOutput(Output output)
 {
   outputs_.add(output);
   checkOutputs();
+  notify("outputChanged");
 }
 
 

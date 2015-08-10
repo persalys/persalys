@@ -30,15 +30,16 @@ public slots:
   void createNewParametricCalculus();
   void onCustomContextMenu(const QPoint & point);
   void selectedItemChanged(const QModelIndex & index);
-  void runCalculus();
-  void createParametricCalculusResult();
+  void runParametricCalculus();
+  void createParametricCalculusResult(CalculusItem *);
+  void createParametricCalculusConnection(ParametricCalculusItem*);
   void createNewPhysicalModelWindow(PhysicalModelItem * item);
-  void createNewParametricCalculusWizard(ParametricCalculusItem * item);
   void dumpStudy();
   void loadStudy();
 signals:
   void showWindow(QMdiSubWindow*);
   void itemSelected(QStandardItem *);
+  void checkIfWindowResultExists(CalculusItem *);
   void loadPythonScript(const QString & fileName);
 
 private:
@@ -46,7 +47,7 @@ private:
   QAction * newStudyAction_;
   QAction * newPhysicalModelAction_;
   QAction * newParametricCalculus_;
-  QAction * runCalculus_;
+  QAction * runParametricCalculus_;
   QAction * dumpStudy_;
 };
 }

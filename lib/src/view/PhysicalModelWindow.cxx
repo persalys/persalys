@@ -263,7 +263,7 @@ void PhysicalModelWindow::updateInputData(const InputCollection & inputs)
   delete inputTableModel_;
   inputTableModel_ = new InputTableModel(inputs);
   inputTableView_->setModel(inputTableModel_);
-  connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(inputDataChanged(QModelIndex&, const QModelIndex&)));
+  connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(inputDataChanged(const QModelIndex&, const QModelIndex&)));
 }
 
 

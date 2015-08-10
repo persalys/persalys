@@ -34,19 +34,7 @@ void ParametricCalculusItem::setCalculus(ParametricCalculus * calculus)
 void ParametricCalculusItem::runCalculus()
 {
   getCalculus<ParametricCalculus>()->run();
-  emit calculusFinished();
-}
-
-
-OT::NumericalSample ParametricCalculusItem::getInputSample() const
-{
-  return getCalculus<ParametricCalculus>()->getInputSample();
-}
-
-
-OT::NumericalSample ParametricCalculusItem::getResultSample() const
-{
-  return getCalculus<ParametricCalculus>()->getResultSample();
+  emit calculusFinished(this);
 }
 
 

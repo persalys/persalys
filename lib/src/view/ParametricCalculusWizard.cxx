@@ -3,15 +3,22 @@
 #include "ParametricCalculusWizard.hxx"
 
 #include <QVBoxLayout>
-#include <QTableView>
 
 namespace OTGUI {
 
-ParametricCalculusWizard::ParametricCalculusWizard(ParametricCalculusItem * item)
+ParametricCalculusWizard::ParametricCalculusWizard()
   : QWizard()
-  , item_(item)
+  , item_(0)
 {
   buildInterface();
+}
+
+ParametricCalculusWizard::ParametricCalculusWizard(ParametricCalculusItem * item)
+  : QWizard()
+  , item_(0)
+{
+  buildInterface();
+  completeModel(item);
 }
 
 
@@ -28,15 +35,32 @@ void ParametricCalculusWizard::buildInterface()
 
   QVBoxLayout * pageLayout = new QVBoxLayout;
 
-  QTableView * tableView = new QTableView;
-  model_ = new ParametricCalculusTableModel(item_->getCalculus<ParametricCalculus>());
-  connect(model_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(parametrizationChanged(const QModelIndex&,const QModelIndex&)));
-
-  tableView->setModel(model_);
-  pageLayout->addWidget(tableView);
+  tableView_ = new QTableView;
+  pageLayout->addWidget(tableView_);
   page->setLayout(pageLayout);
 
   addPage(page);
+}
+
+
+void ParametricCalculusWizard::completeModel(ParametricCalculusItem* item)
+{
+  setItem(item);
+  model_ = new ParametricCalculusTableModel(item_->getCalculus<ParametricCalculus>());
+  connect(model_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(parametrizationChanged(const QModelIndex&,const QModelIndex&)));
+  tableView_->setModel(model_);
+}
+
+
+ParametricCalculusItem* ParametricCalculusWizard::getItem() const
+{
+  return item_;
+}
+
+
+void ParametricCalculusWizard::setItem(ParametricCalculusItem* item)
+{
+  item_ = item;
 }
 
 
