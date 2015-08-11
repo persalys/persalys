@@ -11,11 +11,11 @@ class ParametricCalculusTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  ParametricCalculusTableModel(ParametricCalculus * calculus);
+  ParametricCalculusTableModel(const Calculus & calculus);
 
   virtual ~ParametricCalculusTableModel();
 
-  ParametricCalculus * getCalculus() const;
+  Calculus getCalculus() const;
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent) const;
   QVariant data(const QModelIndex & index, int role) const;
@@ -25,7 +25,7 @@ public:
   void fillTable();
 
 private:
-  ParametricCalculus * calculus_;
+  Calculus calculus_;
 };
 }
 #endif

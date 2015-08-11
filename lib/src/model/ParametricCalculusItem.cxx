@@ -2,7 +2,7 @@
 
 namespace OTGUI {
 
-ParametricCalculusItem::ParametricCalculusItem(ParametricCalculus * calculus)
+ParametricCalculusItem::ParametricCalculusItem(const Calculus & calculus)
   : CalculusItem(calculus, QString("ParametricCalculus"))
 {
 }
@@ -18,7 +18,7 @@ void ParametricCalculusItem::update(Observable* source, const std::string & mess
 {
   if (message=="inputSampleChanged")
   {
-    emit inputSampleChanged(getCalculus<ParametricCalculus>()->getInputSample());
+    emit inputSampleChanged(dynamic_cast<ParametricCalculus*>(&*getCalculus().getImplementation())->getInputSample());
   }
   else if (message=="calculusFinished")
   {

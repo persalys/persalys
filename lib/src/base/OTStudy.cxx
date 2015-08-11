@@ -93,16 +93,16 @@ void OTStudy::addPhysicalModel(const PhysicalModel & physicalModel)
 }
 
 
-std::vector<Calculus*> OTStudy::getCalculuses() const
+std::vector<Calculus> OTStudy::getCalculuses() const
 {
   return calculuses_;
 }
 
 
-void OTStudy::addParametricCalculus(const ParametricCalculus & calculus)
+void OTStudy::addCalculus(const Calculus & calculus)
 {
-  calculuses_.push_back(calculus.clone());
-  notify("addParametricCalculus");
+  calculuses_.push_back(calculus);
+  notify("add"+calculus.getImplementation()->getClassName());
 }
 
 
@@ -115,10 +115,10 @@ std::string OTStudy::dump()
     result += (*it).dump();
     result += getName() + ".addPhysicalModel(" + (*it).getName() + ")\n";
   }
-  for (std::vector<Calculus*>::iterator it=calculuses_.begin(); it!= calculuses_.end(); ++it )
+  for (std::vector<Calculus>::iterator it=calculuses_.begin(); it!= calculuses_.end(); ++it )
   {
-    result += (*it)->dump();
-    result += getName() + ".addParametricCalculus(" + (*it)->getName() + ")\n";
+    result += (*it).dump();
+    result += getName() + ".addCalculus(" + (*it).getName() + ")\n";
   }
   return result;
 }

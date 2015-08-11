@@ -4,7 +4,7 @@
 #include "Calculus.hxx"
 %}
 
-
+OTGUITypedInterfaceObjectHelper(Calculus)
 
 %include Calculus.hxx
 namespace OTGUI {

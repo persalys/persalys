@@ -14,7 +14,7 @@ class ParametricCalculusItem : public CalculusItem
   Q_OBJECT
 
 public:
-  ParametricCalculusItem(ParametricCalculus * calculus);
+  ParametricCalculusItem(const Calculus & calculus);
   virtual ~ParametricCalculusItem();
 
   virtual void update(Observable * source, const std::string & message);

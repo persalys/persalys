@@ -14,8 +14,8 @@ namespace OTGUI {
 
 ParametricCalculusResultWindow::ParametricCalculusResultWindow(ParametricCalculusItem * item)
   : OTguiSubWindow(item)
-  , inputSample_(item->getCalculus<ParametricCalculus>()->getInputSample())
-  , outputSample_(item->getCalculus<ParametricCalculus>()->getResultSample())
+  , inputSample_(dynamic_cast<ParametricCalculus*>(&*item->getCalculus().getImplementation())->getInputSample())
+  , outputSample_(dynamic_cast<ParametricCalculus*>(&*item->getCalculus().getImplementation())->getResultSample())
 {
   buildInterface();
 }

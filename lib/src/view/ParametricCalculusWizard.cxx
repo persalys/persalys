@@ -46,7 +46,7 @@ void ParametricCalculusWizard::buildInterface()
 void ParametricCalculusWizard::completeModel(ParametricCalculusItem* item)
 {
   setItem(item);
-  model_ = new ParametricCalculusTableModel(item_->getCalculus<ParametricCalculus>());
+  model_ = new ParametricCalculusTableModel(item_->getCalculus());
   connect(model_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(parametrizationChanged(const QModelIndex&,const QModelIndex&)));
   tableView_->setModel(model_);
 }

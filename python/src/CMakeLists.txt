@@ -55,6 +55,7 @@ ot_add_python_module( otguibase otguibase_module.i
                       Output.i Output_doc.i.in
                       PhysicalModelImplementation.i PhysicalModelImplementation_doc.i.in
                       PhysicalModel.i PhysicalModel_doc.i.in
+                      CalculusImplementation.i
                       Calculus.i Calculus_doc.i.in
                       ParametricCalculus.i ParametricCalculus_doc.i.in
                       OTStudy.i OTStudy_doc.i.in

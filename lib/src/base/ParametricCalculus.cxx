@@ -5,8 +5,10 @@
 
 namespace OTGUI {
 
+CLASSNAMEINIT(ParametricCalculus);
+
 ParametricCalculus::ParametricCalculus(const std::string & name, const PhysicalModel & physicalModel)
- : Calculus(name, physicalModel)
+ : CalculusImplementation(name, physicalModel)
 {
   computeParameters(physicalModel.getInputs());
 }
@@ -15,7 +17,7 @@ ParametricCalculus::ParametricCalculus(const std::string & name, const PhysicalM
 ParametricCalculus::ParametricCalculus(const std::string & name, const PhysicalModel & physicalModel,
                          const OT::NumericalPoint & infBounds, const OT::NumericalPoint & supBounds,
                          const OT::Indices & nbValues)
- : Calculus(name, physicalModel)
+ : CalculusImplementation(name, physicalModel)
  , infBounds_(infBounds)
  , supBounds_(supBounds)
  , nbValues_(nbValues)
@@ -24,7 +26,7 @@ ParametricCalculus::ParametricCalculus(const std::string & name, const PhysicalM
 
 
 ParametricCalculus::ParametricCalculus(const ParametricCalculus & other)
- : Calculus(other)
+ : CalculusImplementation(other)
  , infBounds_(other.infBounds_)
  , supBounds_(other.supBounds_)
  , nbValues_(other.nbValues_)

@@ -9,8 +9,10 @@
 #include "NumericalPoint.hxx"
 
 namespace OTGUI {
-class ParametricCalculus : public Calculus
+class ParametricCalculus : public CalculusImplementation
 {
+  CLASSNAME;
+
 public:
   ParametricCalculus(const std::string & name, const PhysicalModel & physicalModel);
   ParametricCalculus(const std::string & name, const PhysicalModel & physicalModel,
@@ -35,9 +37,9 @@ public:
   OT::Indices getNbValues() const;
   void setNbValues(const int & index, const int & nbValues);
 
-  void run();
-  std::string dump() const;
-  bool calculusLaunched() const;
+  virtual void run();
+  virtual std::string dump() const;
+  virtual bool calculusLaunched() const;
 
 private:
   OT::NumericalSample inputSample_;

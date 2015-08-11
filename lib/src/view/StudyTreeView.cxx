@@ -127,7 +127,7 @@ void StudyTreeView::createNewParametricCalculus()
   {
     if (wizard->getItem())
     {
-      wizard->getItem()->getCalculus<ParametricCalculus>()->run();
+      wizard->getItem()->getCalculus().run();
     }
   }
 }
@@ -150,7 +150,7 @@ void StudyTreeView::runParametricCalculus()
   ParametricCalculusWizard * wizard = new ParametricCalculusWizard(item);
   if (wizard->exec())
   {
-    item->getCalculus<ParametricCalculus>()->run();
+    item->getCalculus().run();
   }
 }
 

@@ -4,8 +4,8 @@
 
 namespace OTGUI {
 
-CalculusItem::CalculusItem(Calculus * calculus, const QString & typeCalculus)
-  : Item(calculus->getName(), typeCalculus)
+CalculusItem::CalculusItem(const Calculus & calculus, const QString & typeCalculus)
+  : Item(calculus.getName(), typeCalculus)
   , calculus_(calculus)
 {
 }
@@ -16,25 +16,24 @@ CalculusItem::~CalculusItem()
 }
 
 
-
 void CalculusItem::setData(const QVariant& value, int role)
 {
   switch (role)
   {
     case Qt::EditRole:
-      calculus_->setName(value.toString().toStdString());
+      calculus_.setName(value.toString().toStdString());
       Item::setData(value, role);
   }
 }
 
 
-Calculus* CalculusItem::getCalculus() const
+Calculus CalculusItem::getCalculus() const
 {
   return calculus_;
 }
 
 
-void CalculusItem::setCalculus(Calculus* calculus)
+void CalculusItem::setCalculus(const Calculus & calculus)
 {
   calculus_ = calculus;
 }

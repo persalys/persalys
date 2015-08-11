@@ -3,17 +3,25 @@
 #ifndef CALCULUS_H
 #define CALCULUS_H
 
-#include "PhysicalModel.hxx"
+#include "CalculusImplementation.hxx"
 
 namespace OTGUI {
-class Calculus : public OT::PersistentObject, public Observable
+class Calculus : public OT::TypedInterfaceObject<OTGUI::CalculusImplementation>
 {
+  CLASSNAME;
+
 public:
+  typedef OT::Pointer<OTGUI::CalculusImplementation>       Implementation;
+
   Calculus(const std::string & name, const PhysicalModel & physicalModel);
+  Calculus(const CalculusImplementation & implementation);
+  Calculus(const Implementation & p_implementation);
+  Calculus(CalculusImplementation * p_implementation);
   Calculus(const Calculus & other);
-  virtual Calculus * clone() const = 0;
 
   virtual ~Calculus();
+
+  void addObserver(Observer * observer);
 
   std::string getName() const;
   void setName(const std::string & name);
@@ -21,13 +29,11 @@ public:
   PhysicalModel getPhysicalModel() const;
   void setPhysicalModel(const PhysicalModel & physicalModel);
 
-  virtual void run() = 0;
-  virtual std::string dump() const = 0;
-  virtual bool calculusLaunched() const = 0;
+  void run();
+  std::string dump() const;
+  bool calculusLaunched() const;
 
-private:
-  std::string name_;
-  PhysicalModel physicalModel_;
+
 };
 }
 #endif

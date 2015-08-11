@@ -31,12 +31,11 @@ void StudyItem::update(Observable * source, const std::string & message)
   }
   else if (message=="addParametricCalculus")
   {
-    ParametricCalculus * addedParametricCalculus = static_cast<ParametricCalculus*>(study->getCalculuses().back());
+    Calculus addedParametricCalculus = study->getCalculuses().back();
     ParametricCalculusItem * newParametricCalculusItem = new ParametricCalculusItem(addedParametricCalculus);
-    addedParametricCalculus->addObserver(newParametricCalculusItem);
-    QList<QStandardItem*> listPhysicalModelItems = model()->findItems(QString::fromStdString(addedParametricCalculus->getPhysicalModel().getName()), Qt::MatchExactly, 0);
+    addedParametricCalculus.addObserver(newParametricCalculusItem);
     for (int i=0; i<rowCount(); ++i)
-      if (child(i)->text().toStdString() == addedParametricCalculus->getPhysicalModel().getName())
+      if (child(i)->text().toStdString() == addedParametricCalculus.getPhysicalModel().getName())
         child(i)->appendRow(newParametricCalculusItem);
 
     emit newParametricCalculusItemCreated(newParametricCalculusItem);

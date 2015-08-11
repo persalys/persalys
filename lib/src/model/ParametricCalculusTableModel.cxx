@@ -5,7 +5,7 @@
 
 namespace OTGUI {
 
-ParametricCalculusTableModel::ParametricCalculusTableModel(ParametricCalculus * calculus)
+ParametricCalculusTableModel::ParametricCalculusTableModel(const Calculus & calculus)
   : QAbstractTableModel()
   , calculus_(calculus)
 {
@@ -27,7 +27,7 @@ int ParametricCalculusTableModel::columnCount(const QModelIndex & parent) const
 
 int ParametricCalculusTableModel::rowCount(const QModelIndex & parent) const
 {
-  return calculus_->getPhysicalModel().getInputs().getSize();
+  return calculus_.getPhysicalModel().getInputs().getSize();
 }
 
 
@@ -64,15 +64,15 @@ QVariant ParametricCalculusTableModel::data(const QModelIndex & index, int role)
     switch (column)
     {
       case 0:
-        return calculus_->getPhysicalModel().getInputs()[index.row()].getName().c_str();
+        return calculus_.getPhysicalModel().getInputs()[index.row()].getName().c_str();
       case 1:
-        return calculus_->getPhysicalModel().getInputs()[index.row()].getDescription().c_str();
+        return calculus_.getPhysicalModel().getInputs()[index.row()].getDescription().c_str();
       case 2:
-        return calculus_->getInfBounds()[index.row()];
+        return dynamic_cast<ParametricCalculus*>(&*getCalculus().getImplementation())->getInfBounds()[index.row()];
       case 3:
-        return calculus_->getSupBounds()[index.row()];
+        return dynamic_cast<ParametricCalculus*>(&*getCalculus().getImplementation())->getSupBounds()[index.row()];
       case 4:
-        return int(calculus_->getNbValues()[index.row()]);
+        return int(dynamic_cast<ParametricCalculus*>(&*getCalculus().getImplementation())->getNbValues()[index.row()]);
     }
   }
   return QVariant();
@@ -90,13 +90,13 @@ bool ParametricCalculusTableModel::setData(const QModelIndex & index, const QVar
       case 1:
         break;
       case 2:
-        calculus_->setInfBound(index.row(), value.toDouble());
+        dynamic_cast<ParametricCalculus*>(&*calculus_.getImplementation())->setInfBound(index.row(), value.toDouble());
         break;
       case 3:
-        calculus_->setSupBound(index.row(), value.toDouble());
+        dynamic_cast<ParametricCalculus*>(&*calculus_.getImplementation())->setSupBound(index.row(), value.toDouble());
         break;
       case 4:
-        calculus_->setNbValues(index.row(), value.toInt());
+        dynamic_cast<ParametricCalculus*>(&*calculus_.getImplementation())->setNbValues(index.row(), value.toInt());
         break;
     }
   }
@@ -118,14 +118,14 @@ Qt::ItemFlags ParametricCalculusTableModel::flags(const QModelIndex & index) con
 void ParametricCalculusTableModel::fillTable()
 {
   QModelIndex lastIndex = index(-1, 0);
-  beginInsertRows(lastIndex.parent(), lastIndex.row(), lastIndex.row()+calculus_->getPhysicalModel().getInputs().getSize()-1);
-  insertRows(lastIndex.row(), lastIndex.row()+calculus_->getPhysicalModel().getInputs().getSize()-1);
+  beginInsertRows(lastIndex.parent(), lastIndex.row(), lastIndex.row()+calculus_.getPhysicalModel().getInputs().getSize()-1);
+  insertRows(lastIndex.row(), lastIndex.row()+calculus_.getPhysicalModel().getInputs().getSize()-1);
 
   endInsertRows();
 }
 
 
-ParametricCalculus * ParametricCalculusTableModel::getCalculus() const
+Calculus ParametricCalculusTableModel::getCalculus() const
 {
   return calculus_;
 }

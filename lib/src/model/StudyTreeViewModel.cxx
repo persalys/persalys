@@ -59,7 +59,7 @@ ParametricCalculusItem * StudyTreeViewModel::addParametricCalculusItem(const QMo
   PhysicalModelItem * parentItem = static_cast<PhysicalModelItem*>(itemFromIndex(parentIndex));
   ParametricCalculus newParametricCalculus("aCalculus", parentItem->getPhysicalModel());
   StudyItem * studyItem = static_cast<StudyItem*>(parentItem->QStandardItem::parent());
-  studyItem->getStudy()->addParametricCalculus(newParametricCalculus);
+  studyItem->getStudy()->addCalculus(newParametricCalculus);
 
 }
 

@@ -31,8 +31,8 @@ public:
   std::vector<PhysicalModel> getPhysicalModels() const;
   void addPhysicalModel(const PhysicalModel & physicalModel);
 
-  std::vector<Calculus*> getCalculuses() const;
-  void addParametricCalculus(const ParametricCalculus & calculus);
+  std::vector<Calculus> getCalculuses() const;
+  void addCalculus(const Calculus & calculus);
 
   std::string dump();
 
@@ -41,7 +41,7 @@ private:
   static Observer * InstanceObserver_;
   std::string name_;
   std::vector<PhysicalModel> physicalModels_;
-  std::vector<Calculus*> calculuses_;
+  std::vector<Calculus> calculuses_;
 };
 }
 #endif
