@@ -6,12 +6,12 @@
 #include "CalculusImplementation.hxx"
 
 namespace OTGUI {
-class Calculus : public OT::TypedInterfaceObject<OTGUI::CalculusImplementation>
+class Calculus : public OT::TypedInterfaceObject<CalculusImplementation>
 {
   CLASSNAME;
 
 public:
-  typedef OT::Pointer<OTGUI::CalculusImplementation>       Implementation;
+  typedef OT::Pointer<CalculusImplementation>       Implementation;
 
   Calculus(const std::string & name, const PhysicalModel & physicalModel);
   Calculus(const CalculusImplementation & implementation);

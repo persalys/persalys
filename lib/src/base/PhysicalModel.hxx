@@ -6,7 +6,7 @@
 #include "PhysicalModelImplementation.hxx"
 
 namespace OTGUI {
-class PhysicalModel
+class PhysicalModel : public OT::TypedInterfaceObject<PhysicalModelImplementation>
 {
 public:
   explicit PhysicalModel(const std::string & name);
@@ -38,8 +38,6 @@ public:
   void loadDataWithYACS(const std::string & fileName);
   std::string dump() const;
 
-private:
-  PhysicalModelImplementation * p_implementation_;
 };
 }
 #endif

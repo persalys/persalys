@@ -61,7 +61,6 @@ OTStudy* OTStudy::clone() const
 }
 
 
-
 OTStudy::~OTStudy()
 {
   Instances_.erase(std::remove(Instances_.begin(), Instances_.end(), this), Instances_.end());

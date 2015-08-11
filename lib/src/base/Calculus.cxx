@@ -14,14 +14,14 @@ Calculus::Calculus(const std::string & name, const PhysicalModel & physicalModel
 
 /* Default constructor */
 Calculus::Calculus(const CalculusImplementation & implementation)
-  : OT::TypedInterfaceObject<OTGUI::CalculusImplementation>(implementation.clone())
+  : OT::TypedInterfaceObject<CalculusImplementation>(implementation.clone())
 {
 }
 
 
 /* Constructor from implementation */
 Calculus::Calculus(const Implementation & p_implementation)
-  : OT::TypedInterfaceObject<OTGUI::CalculusImplementation>(p_implementation)
+  : OT::TypedInterfaceObject<CalculusImplementation>(p_implementation)
 {
   // Initialize any other class members here
   // At last, allocate memory space if needed, but go to destructor to free it
@@ -29,7 +29,7 @@ Calculus::Calculus(const Implementation & p_implementation)
 
 /* Constructor from implementation pointer */
 Calculus::Calculus(CalculusImplementation * p_implementation)
-  : OT::TypedInterfaceObject<OTGUI::CalculusImplementation>(p_implementation)
+  : OT::TypedInterfaceObject<CalculusImplementation>(p_implementation)
 {
   // Initialize any other class members here
   // At last, allocate memory space if needed, but go to destructor to free it
@@ -37,7 +37,7 @@ Calculus::Calculus(CalculusImplementation * p_implementation)
 
 
 Calculus::Calculus(const Calculus& other)
-  : OT::TypedInterfaceObject<OTGUI::CalculusImplementation>(other.getImplementation())
+  : OT::TypedInterfaceObject<CalculusImplementation>(other.getImplementation())
 {
 }
 
