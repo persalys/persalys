@@ -95,10 +95,12 @@ void PhysicalModelWindow::buildInterface()
   inputTableView_->setItemDelegateForColumn(3, delegate);
 
   QPushButton * addLineButton = new QPushButton(tr("Add"));
+  addLineButton->setToolTip(tr("Add an input"));
   connect(addLineButton, SIGNAL(clicked(bool)), this, SLOT(addInputLine()));
   inputsLayout->addWidget(addLineButton, 0, 1);
 
   QPushButton * removeLineButton = new QPushButton(tr("Remove"));
+  removeLineButton->setToolTip(tr("Remove the selected input"));
   connect(removeLineButton, SIGNAL(clicked(bool)), this, SLOT(removeInputLine()));
   inputsLayout->addWidget(removeLineButton, 1, 1);
 
@@ -147,10 +149,12 @@ void PhysicalModelWindow::buildInterface()
   outputsLayout->addWidget(outputTableView_, 0, 0, 2, 1);
 
   addLineButton = new QPushButton(tr("Add"));
+  addLineButton->setToolTip(tr("Add an output"));
   connect(addLineButton, SIGNAL(clicked(bool)), this, SLOT(addOutputLine()));
   outputsLayout->addWidget(addLineButton, 0, 1);
 
   removeLineButton = new QPushButton(tr("Remove"));
+  removeLineButton->setToolTip(tr("Remove the selected output"));
   connect(removeLineButton, SIGNAL(clicked(bool)), this, SLOT(removeOutputLine()));
   outputsLayout->addWidget(removeLineButton, 1, 1);
 
