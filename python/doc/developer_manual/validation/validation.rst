@@ -1,6 +1,7 @@
 Validation
 ==========
 
+
 Test case 1: Cogeneration
 -------------------------
 
@@ -8,11 +9,19 @@ The purpose of this example is to check the default values calculated for
 the parameters of a parametric analysis. The obtained results must be equal to
 the analytical values.
 
+.. container:: toggle
+
+    .. container:: header
+
+        Show/Hide Code
+
+    .. literalinclude:: ../../../../../install/share/otgui/examples/t_Cogeneration_std.py
+
 1- Problem statement
 ````````````````````
 
-a- Inputs
-'''''''''
+1-1 Inputs
+''''''''''
 
 - Stochastics variables:
 
@@ -24,8 +33,8 @@ E      Produced electric energy Normal(3000, 15)
 C      Valued thermal energy    Normal(4000, 60)
 ====== ======================== ==================
 
-b- Output
-'''''''''
+1-2 Output
+''''''''''
 
 Primary energy savings :math:`E_p`
 
@@ -38,8 +47,8 @@ Primary energy savings :math:`E_p`
 2- Deterministic parametric analysis
 ````````````````````````````````````
 
-a- Inputs
-'''''''''
+2-1 Inputs
+''''''''''
 
 The minimum and the maximum values are computed automatically thanks to
 the distribution of the variables. The minimum value is the quantile at the
@@ -54,8 +63,11 @@ E        2975.33 3024.67        2
 C        3901.31 4098.69        2
 ======== ======= ======= ================
 
-b- Results
-''''''''''
+2-2 Results
+'''''''''''
+
+2-2-1 Values
+************
 
 ======= ======= ======= =========
 Q       E       C       Ep 
@@ -70,6 +82,24 @@ Q       E       C       Ep
 10364.5 3024.67 4098.69 0.0594339
 ======= ======= ======= =========
 
+The points are generated according to the structure of a box design of experiments.
+This deterministic design of experiments has 8 points obtained by regularly discretizing
+the pavement :math:`[10035.5, 10364.5] \times [2975.33, 3024.67] \times [3901.31, 4098.69]`.
+
+The minimum value of :math:`Ep` is 0.0292239 with X=[10364.5 2975.33 3901.31].
+The maximum value of :math:`Ep` is 0.0892877 with X=[10035.5 3024.67 4098.69].
+
+
+2-2-1 Figures
+*************
+
+.. image:: result_cogeneration_ep_vs_q.png
+    :width: 443px
+    :align: center
+    :height: 340px
+
+3- Reference
+````````````
 
 Test case 2: Gauge
 ------------------
@@ -81,9 +111,11 @@ Test case 2: Gauge
 
 1- Problem statement
 ````````````````````
+The purpose of this example is to realize analysises with data loaded from an XML file
+previously generated with SALOME.
 
-a- Inputs
-'''''''''
+1-1 Inputs
+''''''''''
 
 - Stochastics variables:
 
@@ -93,17 +125,22 @@ Name   Description                 Distribution
 conduc Heat conduction coefficient Normal(0.5, 0.01)
 ====== =========================== =================
 
-b- Output
-'''''''''
+1-2 Output
+''''''''''
 
 An average temperature on the superior surface 'temptop'.
 
 2- Analysis
 ```````````
 
-a- Inputs
-'''''''''
-
-
-b- Results
+2-1 Inputs
 ''''''''''
+
+
+2-2 Results
+'''''''''''
+
+
+
+3- Reference
+````````````
