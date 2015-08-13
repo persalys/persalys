@@ -15,7 +15,7 @@ the analytical values.
 
         Show/Hide Code
 
-    .. literalinclude:: ../../../../../install/share/otgui/examples/t_Cogeneration_std.py
+    .. literalinclude:: ../../../../../../python/test/t_Cogeneration_std.py
 
 1- Problem statement
 ````````````````````

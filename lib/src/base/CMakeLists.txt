@@ -18,7 +18,7 @@ ot_install_header_file ( Observer.hxx )
 include_directories (${INTERNAL_INCLUDE_DIRS})
 
 #add_library ( otguibase ${SOURCEFILES} )
-add_library (otguibase Observer.cxx Observable.cxx OTStudy.cxx Variable.cxx Input.cxx Output.cxx PhysicalModelImplementation.cxx PhysicalModel.cxx CalculusImplementation.cxx Calculus.cxx ParametricCalculus.cxx)
+add_library (otguibase Observer.cxx Observable.cxx OTStudy.cxx Variable.cxx Input.cxx Output.cxx PhysicalModelImplementation.cxx PhysicalModel.cxx YACSPhysicalModel.cxx CalculusImplementation.cxx Calculus.cxx ParametricCalculus.cxx)
 
 if ( BUILD_SHARED_LIBS )
   set_target_properties ( otguibase PROPERTIES COMPILE_DEFINITIONS "OTGUI_DLL_EXPORTS" )

@@ -14,6 +14,31 @@ PhysicalModel::PhysicalModel(const std::string & name, const InputCollection & i
 }
 
 
+PhysicalModel::PhysicalModel(const PhysicalModelImplementation & implementation)
+  : OT::TypedInterfaceObject<PhysicalModelImplementation>(implementation.clone())
+{
+  
+}
+
+
+/* Constructor from implementation */
+PhysicalModel::PhysicalModel(const Implementation & p_implementation)
+  : OT::TypedInterfaceObject<PhysicalModelImplementation>(p_implementation)
+{
+  // Initialize any other class members here
+  // At last, allocate memory space if needed, but go to destructor to free it
+}
+
+/* Constructor from implementation pointer */
+PhysicalModel::PhysicalModel(PhysicalModelImplementation * p_implementation)
+  : OT::TypedInterfaceObject<PhysicalModelImplementation>(p_implementation)
+{
+  // Initialize any other class members here
+  // At last, allocate memory space if needed, but go to destructor to free it
+}
+
+
+
 PhysicalModel::PhysicalModel(const PhysicalModel & other)
   : OT::TypedInterfaceObject<PhysicalModelImplementation>(other.getImplementation())
 {
@@ -103,15 +128,6 @@ bool PhysicalModel::checkInputs()
 bool PhysicalModel::checkOutputs()
 {
   return getImplementation()->checkOutputs();
-}
-
-
-
-void PhysicalModel::loadDataWithYACS(const std::string & fileName)
-{
-#ifdef OTGUI_HAVE_YACS
-  getImplementation()->loadDataWithYACS(fileName);
-#endif
 }
 
 

@@ -46,11 +46,10 @@ PhysicalModel PhysicalModelItem::getPhysicalModel() const
 }
 
 
-void PhysicalModelItem::loadDataWithYACS(const QString & fileName)
+void PhysicalModelItem::setPhysicalModel(const PhysicalModel & physicalModel)
 {
-#ifdef OTGUI_HAVE_YACS
-  physicalModel_.loadDataWithYACS(fileName.toStdString());
-#endif
+  physicalModel_ = physicalModel;
+  physicalModel_.addObserver(this);
 }
 
 

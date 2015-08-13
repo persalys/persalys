@@ -9,8 +9,13 @@ namespace OTGUI {
 class PhysicalModel : public OT::TypedInterfaceObject<PhysicalModelImplementation>
 {
 public:
+  typedef OT::Pointer<PhysicalModelImplementation>       Implementation;
+
   explicit PhysicalModel(const std::string & name);
   PhysicalModel(const std::string & name, const InputCollection & inputs, const OutputCollection & outputs);
+  PhysicalModel(const PhysicalModelImplementation & implementation);
+  PhysicalModel(const Implementation & p_implementation);
+  PhysicalModel(PhysicalModelImplementation * p_implementation);
   PhysicalModel(const PhysicalModel & other);
   virtual PhysicalModel * clone() const;
 
@@ -35,7 +40,6 @@ public:
   bool checkInputs();
   bool checkOutputs();
 
-  void loadDataWithYACS(const std::string & fileName);
   std::string dump() const;
 
 };

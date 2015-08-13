@@ -42,7 +42,7 @@ public:
 
   bool checkInputs();
   bool checkOutputs();
-  void loadDataWithYACS(const std::string & fileName);
+
   std::string dump() const;
 
 private:

@@ -19,7 +19,8 @@ public:
   virtual ~PhysicalModelItem();
 
   PhysicalModel getPhysicalModel() const;
-  void loadDataWithYACS(const QString & fileName);
+  void setPhysicalModel(const PhysicalModel & physicalModel);
+
   void setPhysicalModelInputs(const InputCollection & inputs);
   void setPhysicalModelOutputs(const OutputCollection & outputs);
 

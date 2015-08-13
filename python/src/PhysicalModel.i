@@ -4,7 +4,7 @@
 #include "PhysicalModel.hxx"
 %}
 
-
+OTGUITypedInterfaceObjectHelper(PhysicalModel)
 
 %include PhysicalModel.hxx
 namespace OTGUI {

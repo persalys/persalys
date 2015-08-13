@@ -3,6 +3,7 @@
 #include "PhysicalModelWindow.hxx"
 
 #include "ComboBoxDelegate.hxx"
+#include "YACSPhysicalModel.hxx"
 
 #include <QRadioButton>
 #include <QButtonGroup>
@@ -256,7 +257,7 @@ void PhysicalModelWindow::updateDistribution()
 
 void PhysicalModelWindow::loadDataWithYACS()
 {
-  item_->loadDataWithYACS(XMLfileEdit_->text());
+  dynamic_cast<YACSPhysicalModel*>(&*item_->getPhysicalModel().getImplementation())->loadDataWithYACS(XMLfileEdit_->text().toStdString());
 }
 
 
@@ -333,11 +334,15 @@ void PhysicalModelWindow::methodChanged(int method)
     case 0:
     case 1:
     {
+      PhysicalModel model = PhysicalModel(item_->getPhysicalModel().getName());
+      item_->setPhysicalModel(model);
       loadXMLFileBox_->hide();
       break;
     }
     case 2:
     {
+      YACSPhysicalModel model = YACSPhysicalModel(item_->getPhysicalModel().getName());
+      item_->setPhysicalModel(model);
       loadXMLFileBox_->show();
       break;
     }

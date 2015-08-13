@@ -4,9 +4,11 @@ from __future__ import print_function
 import openturns as ot
 import otguibase
 
-myStudy = otguibase.Study("myStudy")
+myStudy = otguibase.OTStudy("myStudy")
 
-XMLfilename = "path_to_file.xml"
+XMLfilename = "example.xml"
+myPhysicalModel = otguibase.YACSPhysicalModel("myPhysicalModel", XMLfilename)
+myPhysicalModel.loadDataWithYACS();
+myStudy.addPhysicalModel(myPhysicalModel);
 
-myPhysicalModel = YACSPhysicalModel("myPhysicalModel", XMLfilename)
-
+print(myPhysicalModel.getInputs())
