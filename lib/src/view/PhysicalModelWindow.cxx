@@ -15,7 +15,6 @@
 #include <QSplitter>
 #include <QMdiArea>
 #include <QScrollArea>
-#include <QLabel>
 #include <QComboBox>
 
 #include <iostream>
@@ -47,7 +46,11 @@ void PhysicalModelWindow::buildInterface()
   QHBoxLayout * methodLayout = new QHBoxLayout;
 
   QComboBox * comboBox = new QComboBox;
-  comboBox->addItems(QStringList()<<QString(tr("Analytical"))<<QString(tr("Python"))<<QString(tr("XML")));
+  QStringList items = QStringList()<<QString(tr("Analytical"))<<QString(tr("Python"));
+#ifdef OTGUI_HAVE_YACS
+  items<<QString(tr("XML"));
+#endif
+  comboBox->addItems(items);
 
   connect(comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(methodChanged(int)));
   methodLayout->addWidget(comboBox);
@@ -55,18 +58,18 @@ void PhysicalModelWindow::buildInterface()
   methodBox->setLayout(methodLayout);
   mainLayout->addWidget(methodBox);
 
-
+#ifdef OTGUI_HAVE_YACS
   // Widgets to load XML file
   loadXMLFileBox_ = new QGroupBox(tr(""));
   QGridLayout * fieldsLayout = new QGridLayout;
 
-  QLabel * label = new QLabel("Data file");
-  fieldsLayout->addWidget(label, 0, 0);
+  QLabel * labelDataFile = new QLabel("Data file");
+  fieldsLayout->addWidget(labelDataFile, 0, 0);
 
   XMLfileEdit_ = new QLineEdit;
   fieldsLayout->addWidget(XMLfileEdit_, 0, 1);
 
-  QPushButton * selectFileButton = new QPushButton(tr("search file"));
+  QPushButton * selectFileButton = new QPushButton(tr("Search file"));
   connect(selectFileButton, SIGNAL(clicked()), this, SLOT(selectImportFileDialogRequested()));
   fieldsLayout->addWidget(selectFileButton, 0, 2);
 
@@ -78,6 +81,7 @@ void PhysicalModelWindow::buildInterface()
   loadXMLFileBox_->setLayout(fieldsLayout);
   loadXMLFileBox_->hide();
   mainLayout->addWidget(loadXMLFileBox_);
+#endif
 
   // Define Inputs
   QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
@@ -119,8 +123,8 @@ void PhysicalModelWindow::buildInterface()
 
   QGridLayout * plotLayout = new QGridLayout();
 
-  // pdf
-  label = new QLabel("PDF");
+  //   PDF
+  QLabel * label = new QLabel("PDF");
   plotLayout->addWidget(label, 0, 0, Qt::AlignHCenter);
   pdfPlot_ = new PlotWidget;
   plotLayout->addWidget(pdfPlot_, 1, 0, Qt::AlignHCenter);
@@ -128,6 +132,7 @@ void PhysicalModelWindow::buildInterface()
 
   distributionLayout->addLayout(plotLayout);
 
+  //   Parameters
   parameterLayout_ = new QHBoxLayout;
   parameterLayout_->addWidget(new QWidget);
   parameterLayout_->addStretch();
@@ -257,7 +262,7 @@ void PhysicalModelWindow::loadDataWithYACS()
 
 void PhysicalModelWindow::inputDataChanged(const QModelIndex&, const QModelIndex&)
 {
-  //if tableOut && tableIn is valid
+  //TODO: if tableOut && tableIn is valid
   item_->setPhysicalModelInputs(inputTableModel_->getData());
 }
 
@@ -273,7 +278,7 @@ void PhysicalModelWindow::updateInputData(const InputCollection & inputs)
 
 void PhysicalModelWindow::outputDataChanged(const QModelIndex&, const QModelIndex&)
 {
-  //if tableOut && tableIn is valid
+  //TODO: if tableOut && tableIn is valid
   item_->setPhysicalModelOutputs(outputTableModel_->getData());
 }
 
@@ -322,6 +327,7 @@ void PhysicalModelWindow::methodChanged(int method)
   connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(inputDataChanged(const QModelIndex&,const QModelIndex&)));
   connect(outputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(outputDataChanged(const QModelIndex&,const QModelIndex&)));
 
+#ifdef OTGUI_HAVE_YACS
   switch(method)
   {
     case 0:
@@ -336,6 +342,7 @@ void PhysicalModelWindow::methodChanged(int method)
       break;
     }
   }
+#endif
 }
 
 
