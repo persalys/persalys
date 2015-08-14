@@ -90,14 +90,26 @@ bool ParametricCalculusTableModel::setData(const QModelIndex & index, const QVar
       case 1:
         break;
       case 2:
+      {
+        if (value.toDouble() > dynamic_cast<ParametricCalculus*>(&*getCalculus().getImplementation())->getSupBounds()[index.row()])
+          break;
         dynamic_cast<ParametricCalculus*>(&*calculus_.getImplementation())->setInfBound(index.row(), value.toDouble());
         break;
+      }
       case 3:
+      {
+        if (value.toDouble() < dynamic_cast<ParametricCalculus*>(&*getCalculus().getImplementation())->getInfBounds()[index.row()])
+          break;
         dynamic_cast<ParametricCalculus*>(&*calculus_.getImplementation())->setSupBound(index.row(), value.toDouble());
         break;
+      }
       case 4:
+      {
+        if (value.toInt() < 1)
+          break;
         dynamic_cast<ParametricCalculus*>(&*calculus_.getImplementation())->setNbValues(index.row(), value.toInt());
         break;
+      }
     }
   }
 

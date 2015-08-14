@@ -53,7 +53,7 @@ void ParametricCalculus::computeParameters(const InputCollection & inputs)
     {
       infBounds_.add(inputs[i].getValue());
       supBounds_.add(inputs[i].getValue());
-      nbValues_.add(2);
+      nbValues_.add(1);
     }
     else
     {
@@ -68,13 +68,14 @@ void ParametricCalculus::computeParameters(const InputCollection & inputs)
 
 void ParametricCalculus::computeInputSample()
 {
+  inputSample_ = OT::NumericalSample(0, 0);
   OT::NumericalPoint scale(0);
   OT::NumericalPoint transvec(0);
   OT::NumericalPoint levels(0);
 
   for (int i=0; i<infBounds_.getSize(); ++i)
   {
-    if (nbValues_[i])
+    if (nbValues_[i]>1)
     {
       double inf = infBounds_[i];
       double sup = supBounds_[i];
@@ -84,16 +85,24 @@ void ParametricCalculus::computeInputSample()
     }
   }
 
-  OT::Box box = OT::Box(levels);
+  if (levels.getSize())
+  {
+    OT::Box box = OT::Box(levels);
 
-  inputSample_ = box.generate();
-  inputSample_*=scale;
-  inputSample_+=transvec;
+    inputSample_ = box.generate();
+    inputSample_*=scale;
+    inputSample_+=transvec;
+  }
 
   if (inputSample_.getDimension() != infBounds_.getSize())
-    for (int i=0; i<infBounds_.getSize(); ++i)
-      if (!nbValues_[i])
-        inputSample_.stack(OT::NumericalSample(inputSample_.getSize(), OT::NumericalPoint(1, infBounds_[i])));
+  {
+    if (!inputSample_.getDimension())
+      inputSample_ = OT::NumericalSample(1, infBounds_);
+    else
+      for (int i=0; i<infBounds_.getSize(); ++i)
+        if (nbValues_[i] == 1)
+          inputSample_.stack(OT::NumericalSample(inputSample_.getSize(), OT::NumericalPoint(1, infBounds_[i])));
+  }
 }
 
 
