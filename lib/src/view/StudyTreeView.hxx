@@ -22,7 +22,6 @@ public:
 
 protected:
   void buildActions();
-  void buildContextMenus();
 
 public slots:
   void createNewStudy();

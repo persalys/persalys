@@ -87,12 +87,6 @@ void StudyTreeView::buildActions()
 }
 
 
-void StudyTreeView::buildContextMenus()
-{
-  
-}
-
-
 void StudyTreeView::createNewStudy()
 {
   treeViewModel_->createNewStudy();
