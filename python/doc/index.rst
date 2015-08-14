@@ -26,7 +26,7 @@ Developer documentation
 -----------------------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    developer_manual/developer_manual
 
