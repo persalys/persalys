@@ -28,7 +28,7 @@ public:
 
   void addPhysicalModelItem(const QModelIndex & parentIndex);
 
-  ParametricCalculusItem * addParametricCalculusItem(const QModelIndex & parentIndex);
+  void addParametricCalculusItem(const QModelIndex & parentIndex);
 
   virtual void update(Observable * source, const std::string & message);
 
@@ -36,9 +36,6 @@ public slots:
 signals:
   void newPhysicalModelCreated(PhysicalModelItem*);
   void newParametricCalculusCreated(ParametricCalculusItem*);
-
-private:
-  QStandardItem * rootNode_;
 };
 }
 #endif

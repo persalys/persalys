@@ -6,7 +6,6 @@ namespace OTGUI {
 
 StudyTreeViewModel::StudyTreeViewModel()
   : QStandardItemModel()
-  , rootNode_(invisibleRootItem())
 {
 }
 
@@ -40,8 +39,7 @@ void StudyTreeViewModel::addStudyItem(OTStudy * study)
   connect(studyItem, SIGNAL(newPhysicalModelItemCreated(PhysicalModelItem*)), this, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)));
   connect(studyItem, SIGNAL(newParametricCalculusItemCreated(ParametricCalculusItem*)), this, SIGNAL(newParametricCalculusCreated(ParametricCalculusItem*)));
   study->addObserver(studyItem);
-  rootNode_->appendRow(studyItem);
-  
+  invisibleRootItem()->appendRow(studyItem);
 }
 
 
@@ -54,8 +52,9 @@ void StudyTreeViewModel::addPhysicalModelItem(const QModelIndex & parentIndex)
 }
 
 
-ParametricCalculusItem * StudyTreeViewModel::addParametricCalculusItem(const QModelIndex & parentIndex)
+void StudyTreeViewModel::addParametricCalculusItem(const QModelIndex & parentIndex)
 {
+  // TODO: find a name for the new item
   PhysicalModelItem * parentItem = static_cast<PhysicalModelItem*>(itemFromIndex(parentIndex));
   ParametricCalculus newParametricCalculus("aCalculus", parentItem->getPhysicalModel());
   StudyItem * studyItem = static_cast<StudyItem*>(parentItem->QStandardItem::parent());
