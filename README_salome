@@ -1,10 +1,11 @@
 
-SALOME_ROOT=~/projects/salome_meca2
+SALOME_ROOT=~/projects/salome_meca
 ~/Téléchargements/SALOME-MECA-2015.1-LGPL.run -t ${SALOME_ROOT} -l "en"
-cd ${SALOME_ROOT}
 source ${SALOME_ROOT}/appli_V2015_1/env.d/envProducts.sh
+cd ${SALOME_ROOT}
 tar xzf ~/Téléchargements/KERNEL_GUI_YACS.tar.gz
-cd KERNEL
+
+cd ${SALOME_ROOT}/KERNEL
 mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=Debug \
   -DCMAKE_INSTALL_PREFIX=${SALOME_ROOT}/V2015_1/modules/KERNEL_V7_5_1/ \
@@ -43,6 +44,7 @@ cmake -DCMAKE_BUILD_TYPE=Debug \
   -DSWIG_EXECUTABLE=${SALOME_ROOT}/V2015_1/prerequisites/Swig_208/bin/swig \
   ..
 make install
+
 cd ${SALOME_ROOT}/YACS
 mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=Debug \
@@ -71,6 +73,7 @@ cmake -DCMAKE_BUILD_TYPE=Debug \
   -DSWIG_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Swig_208 \
   -DSWIG_EXECUTABLE=${SALOME_ROOT}/V2015_1/prerequisites/Swig_208/bin/swig \
   ..
+make install
 
 # otgui
 rm -f CMakeCache.txt
@@ -88,7 +91,6 @@ cmake -DCMAKE_BUILD_TYPE=Debug \
   -DQWT_LIBRARY=${SALOME_ROOT}/V2015_1/prerequisites/Qwt_610/lib/libqwt.so \
   ..
 make install
-
 
 # run yacs_eval
 source ${SALOME_ROOT}/V2015_1/salome_modules.sh
