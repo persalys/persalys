@@ -14,10 +14,18 @@
 
 int main(int argc, char *argv[])
 {
-  static const char fileName[]="example.xml";
+  char *fileName = 0;
+  if (argc > 1) {
+    fileName = argv[1];
+  }
+  else {
+    std::cerr << "Schema file (path to example.xml) not provided" << std::endl;
+    return -1;
+  }
+  std::cout << "-- Schema file: " << fileName << std::endl;
   YACSEvalSession session;
   session.launch();
-  YACSEvalYFX *efx=YACSEvalYFX::BuildFromFile(fileName);
+  YACSEvalYFX *efx = YACSEvalYFX::BuildFromFile(fileName);
   std::list< YACSEvalInputPort * > inps(efx->getFreeInputPorts());
   std::vector< YACSEvalInputPort * > inps2(inps.begin(),inps.end());
   std::list< YACSEvalOutputPort * > outps(efx->getFreeOutputPorts());
@@ -44,5 +52,5 @@ int main(int argc, char *argv[])
   std::copy(res0->getInternal()->begin(),res0->getInternal()->end(),std::ostream_iterator<double>(std::cerr," "));
   std::cerr << "********************" << std::endl;
   delete efx;
-  return 0;
+  return EXIT_SUCCESS;
 }
