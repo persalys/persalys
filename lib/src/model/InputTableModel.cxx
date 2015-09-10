@@ -218,11 +218,16 @@ OT::NumericalPointWithDescription InputTableModel::getParameters(int row) const
 
 void InputTableModel::updateDistributionParameters(const QModelIndex & index, const OT::NumericalPoint & parameters)
 {
-  OT::Distribution distribution = data_[index.row()].getDistribution(); 
-  distribution.setParametersCollection(parameters);
-  data_[index.row()].setDistribution(distribution);
+  OT::Distribution distribution = data_[index.row()].getDistribution();
+  try {
+    distribution.setParametersCollection(parameters);
+    data_[index.row()].setDistribution(distribution);
+    emit dataChanged(index, index);
+  }
+  catch(OT::Exception) {
+    std::cerr << "InputTableModel::updateDistributionParameters invalid params:"<<parameters<<" for distribution:"<<distribution.getImplementation()->getName()<<std::endl;
+  }
 
-  emit dataChanged(index, index);
 }
 
 
