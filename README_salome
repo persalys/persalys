@@ -1,0 +1,100 @@
+
+SALOME_ROOT=~/projects/salome_meca2
+~/Téléchargements/SALOME-MECA-2015.1-LGPL.run -t ${SALOME_ROOT} -l "en"
+cd ${SALOME_ROOT}
+source ${SALOME_ROOT}/appli_V2015_1/env.d/envProducts.sh
+tar xzf ~/Téléchargements/KERNEL_GUI_YACS.tar.gz
+cd KERNEL
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Debug \
+  -DCMAKE_INSTALL_PREFIX=${SALOME_ROOT}/V2015_1/modules/KERNEL_V7_5_1/ \
+  -DHDF5_ROOT_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Hdf5_1810/ \
+  -DBOOST_ROOT_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Boost_1520/ \
+  -DOMNIORB_ROOT_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Omniorb_416/ \
+  -DOMNIORBPY_ROOT_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Omniorbpy_36/ \
+  -DDOXYGEN_ROOT_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Doxygen_1831/ \
+  -DGRAPHVIZ_ROOT_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Graphviz_2380/ \
+  -DLIBXML2_ROOT_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Libxml2_290/ \
+  -DSWIG_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Swig_208/bin/ \
+  -DCPPUNIT_ROOT_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Cppunit_1121/ \
+  -DSWIG_EXECUTABLE=${SALOME_ROOT}/V2015_1/prerequisites/Swig_208/bin/swig \
+  ..
+make install
+# missing file ?
+cp ${SALOME_ROOT}/V2015_1/modules/KERNEL_V7_5_1/lib/python2.7/site-packages/salome/SALOME_SDS_idl.py ${SALOME_ROOT}/appli_V2015_1/lib/python2.7/site-packages/salome/
+
+cd ${SALOME_ROOT}/GUI
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Debug \
+  -DCMAKE_INSTALL_PREFIX=${SALOME_ROOT}/V2015_1/modules/GUI_V7_5_1/ \
+  -DKERNEL_ROOT_DIR=${SALOME_ROOT}/V2015_1/modules/KERNEL_V7_5_1/ \
+  -DHDF5_ROOT_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Hdf5_1810/ \
+  -DCAS_ROOT_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Occ_680p1 \
+  -DPYQT4_ROOT_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Pyqt_496 \
+  -DPARAVIEW_ROOT_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Paraview_420p10/ \
+  -DBOOST_ROOT_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Boost_1520/ \
+  -DCPPUNIT_ROOT_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Cppunit_1121/ \
+  -DSALOME_USE_VTKVIEWER=OFF -DSALOME_USE_PVVIEWER=OFF \
+  -DQWT_ROOT_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Qwt_610/ \
+  -DQWT_INCLUDE_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Qwt_610/include/ \
+  -DQWT_LIBRARY=${SALOME_ROOT}/V2015_1/prerequisites/Qwt_610/lib/ \
+  -DQT4_ROOT_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Qt_484/ \
+  -DSALOME_USE_PLOT2DVIEWER=OFF \
+  -DSWIG_EXECUTABLE=${SALOME_ROOT}/V2015_1/prerequisites/Swig_208/bin/swig \
+  ..
+make install
+cd ${SALOME_ROOT}/YACS
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Debug \
+  -DCMAKE_INSTALL_PREFIX=${SALOME_ROOT}/V2015_1/modules/YACS_V7_5_1/ \
+  -DKERNEL_ROOT_DIR=${SALOME_ROOT}/V2015_1/modules/KERNEL_V7_5_1/ \
+  -DGUI_ROOT_DIR=${SALOME_ROOT}/V2015_1/modules/GUI_V7_5_1 \
+  -DSWIG_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Swig_208 \
+  -DSWIG_EXECUTABLE=${SALOME_ROOT}/V2015_1/prerequisites/Swig_208/bin/swig \
+  -DSWIG_ROOT_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Swig_208/ \
+  -DSALOME_CMAKE_DEBUG=ON \
+  ..
+make install
+
+# openturns
+rm -f CMakeCache.txt
+cmake -DCMAKE_BUILD_TYPE=Debug \
+  -DCMAKE_INSTALL_PREFIX=$PWD/install \
+  -DLIBXML2_INCLUDE_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Libxml2_290/include/libxml2 \
+  -DLIBXML2_LIBRARIES=${SALOME_ROOT}/V2015_1/prerequisites/Libxml2_290/lib/libxml2.so \
+  -DLAPACK_LIBRARIES="${SALOME_ROOT}/V2015_1/prerequisites/Lapack_350/lib/liblapack.so;${SALOME_ROOT}/V2015_1/prerequisites/Lapack_350/lib/libblas.so" \
+  -DBOOST_ROOT=${SALOME_ROOT}/V2015_1/prerequisites/Boost_1520/ \
+  -DTBB_INCLUDE_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Tbb_30/include \
+  -DTBB_LIBRARY=${SALOME_ROOT}/V2015_1/prerequisites/Tbb_30/lib/libtbb.so \
+  -DPYTHON_INCLUDE_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Python_273/include/python2.7 \
+  -DPYTHON_LIBRARY=${SALOME_ROOT}/V2015_1/prerequisites/Python_273/lib \
+  -DSWIG_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Swig_208 \
+  -DSWIG_EXECUTABLE=${SALOME_ROOT}/V2015_1/prerequisites/Swig_208/bin/swig \
+  ..
+
+# otgui
+rm -f CMakeCache.txt
+cmake -DCMAKE_BUILD_TYPE=Debug \
+  -DCMAKE_INSTALL_PREFIX=$PWD/install \
+  -DOpenTURNS_DIR=~/projects/openturns/schueller/build_salome/install/lib/cmake/openturns/ \
+  -DSalomeKERNEL_DIR=${SALOME_ROOT}/V2015_1/modules/KERNEL_V7_5_1/salome_adm/cmake_files/ \
+  -DSalomeGUI_DIR=${SALOME_ROOT}/V2015_1/modules/GUI_V7_5_1/adm_local/cmake_files/ \
+  -DSalomeYACS_DIR=${SALOME_ROOT}/V2015_1/modules/YACS_V7_5_1/adm/cmake/ \
+  -DPYTHON_INCLUDE_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Python_273/include/python2.7 \
+  -DPYTHON_LIBRARY=${SALOME_ROOT}/V2015_1/prerequisites/Python_273/lib \
+  -DSWIG_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Swig_208 \
+  -DSWIG_EXECUTABLE=${SALOME_ROOT}/V2015_1/prerequisites/Swig_208/bin/swig \
+  -DQWT_INCLUDE_DIR=${SALOME_ROOT}/V2015_1/prerequisites/Qwt_610/include \
+  -DQWT_LIBRARY=${SALOME_ROOT}/V2015_1/prerequisites/Qwt_610/lib/libqwt.so \
+  ..
+make install
+
+
+# run yacs_eval
+source ${SALOME_ROOT}/V2015_1/salome_modules.sh
+${SALOME_ROOT}/appli_V2015_1/salome shell
+make t_yacs_eval
+./lib/test/t_yacs_eval ../lib/test/example.xml
+
+# run gui
+./gui_launch.sh
