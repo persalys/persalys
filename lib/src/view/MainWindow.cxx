@@ -20,6 +20,7 @@ MainWindow::MainWindow()
   connect(studyTree_, SIGNAL(showWindow(QMdiSubWindow *)), this, SLOT(showSubWindow(QMdiSubWindow *)));
   connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), this, SLOT(showSubWindow(QStandardItem *)));
   connect(studyTree_, SIGNAL(checkIfWindowResultExists(CalculusItem *)), this, SLOT(checkIfWindowResultExists(CalculusItem *)));
+  setWindowTitle("OTGui");
 }
 
 
