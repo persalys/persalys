@@ -83,7 +83,7 @@ install ( FILES ${SWIGFILES}
 
 if (USE_SPHINX)
   include (FindPythonModule)
-  find_python_module (sphinx 1.2)
+  find_python_module (sphinx 1.1)
   find_program ( SPHINX_EXECUTABLE
                   NAMES sphinx-build
                   DOC "Sphinx Documentation Builder (sphinx-doc.org)"
@@ -105,7 +105,6 @@ if (USE_SPHINX)
 
     # sphinx configuration
     set (doc_formats)
-    set (N_SPHINX_PROCESSES 1 CACHE STRING "The number of sphinx processes (-j <N>)")
     list (APPEND doc_formats html)
     list (APPEND doc_formats htmlhelp)
     list (APPEND doc_formats latex)
@@ -156,13 +155,15 @@ if (USE_SPHINX)
       endif ()
     endforeach ()
 
+    set (SPHINX_FLAGS "-W" CACHE STRING "sphinx flags")
+    string (REPLACE " " ";" SPHINX_FLAGS ${SPHINX_FLAGS})
+
     # generate sphinx rule for each format
     foreach (format ${doc_formats})
       add_custom_target ( sphinx_${format}
                           COMMAND ${SPHINX_EXECUTABLE}
                                     -b ${format}
-                                    -W
-                                    -j ${N_SPHINX_PROCESSES}
+                                    ${SPHINX_FLAGS}
                                     ${SPHINX_BINARY_DIR}
                                     ${SPHINX_BINARY_DIR}/${format}
                           DEPENDS ${sphinx_clones}

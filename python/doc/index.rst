@@ -30,6 +30,14 @@ Developer documentation
 
    developer_manual/developer_manual
 
+Bibliography
+------------
+
+.. toctree::
+   :maxdepth: 1
+
+   bibliography
+
 Indices and tables
 ==================
 

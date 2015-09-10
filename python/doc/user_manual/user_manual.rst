@@ -2,6 +2,8 @@
 User manual
 ===========
 
+This documentation aims at exposing the manipulation of the graphical interface as well as the use of the objects part of the Python interface.
+
 .. toctree::
    :maxdepth: 2
 

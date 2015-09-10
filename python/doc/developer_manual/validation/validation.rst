@@ -5,6 +5,8 @@ Validation
 Test case 1: Cogeneration
 -------------------------
 
+This test-case originates from [Cogeneration2014]_ and can be found in python/test/t_Cogeneration_std.py.
+
 The purpose of this example is to check the default values calculated for
 the parameters of a parametric analysis. The obtained results must be equal to
 the analytical values.
@@ -103,6 +105,10 @@ The maximum value of :math:`Ep` is 0.0892877 with X=[10035.5 3024.67 4098.69].
 
 Test case 2: Gauge
 ------------------
+
+This test-case originates from [Jauge2014]_ and can be found in python/test/t_Jauge_std.py.
+
+The purpose of this example is to check the average value of the output against some exact reference value.
 
 .. image:: case_gauge.png
     :width: 420px
