@@ -48,6 +48,7 @@ void MainWindow::buildInterface()
   consoleDock->setWidget(console_);
   consoleDock->setFeatures(QDockWidget::DockWidgetClosable);
   addDockWidget(Qt::BottomDockWidgetArea, consoleDock);
+  //TODO:
 //   connect(consoleDock, SIGNAL(visibilityChanged(bool)), this,SLOT(consoleVisibilityChanged()));
 
 

@@ -75,14 +75,15 @@ void ParametricCalculus::computeInputSample()
 
   for (int i=0; i<infBounds_.getSize(); ++i)
   {
+    //TODO: improve this part if a variable is constant
+    double inf = infBounds_[i];
+    double sup = supBounds_[i];
+    scale.add(sup - inf);
+    transvec.add(inf);
     if (nbValues_[i]>1)
-    {
-      double inf = infBounds_[i];
-      double sup = supBounds_[i];
-      scale.add(sup - inf);
-      transvec.add(inf);
       levels.add(nbValues_[i]-2);
-    }
+    else
+      levels.add(0);
   }
 
   if (levels.getSize())
@@ -92,16 +93,6 @@ void ParametricCalculus::computeInputSample()
     inputSample_ = box.generate();
     inputSample_*=scale;
     inputSample_+=transvec;
-  }
-
-  if (inputSample_.getDimension() != infBounds_.getSize())
-  {
-    if (!inputSample_.getDimension())
-      inputSample_ = OT::NumericalSample(1, infBounds_);
-    else
-      for (int i=0; i<infBounds_.getSize(); ++i)
-        if (nbValues_[i] == 1)
-          inputSample_.stack(OT::NumericalSample(inputSample_.getSize(), OT::NumericalPoint(1, infBounds_[i])));
   }
 }
 
