@@ -79,7 +79,7 @@ cmake -DCMAKE_BUILD_TYPE=Debug \
   -DTBB_INCLUDE_DIR=${PREREQUISITES_ROOT_DIR}/Tbb_30/include \
   -DTBB_LIBRARY=${PREREQUISITES_ROOT_DIR}/Tbb_30/lib/libtbb.so \
   -DPYTHON_INCLUDE_DIR=${PREREQUISITES_ROOT_DIR}/Python_273/include/python2.7 \
-  -DPYTHON_LIBRARY=${PREREQUISITES_ROOT_DIR}/Python_273/lib \
+  -DPYTHON_LIBRARY=${PREREQUISITES_ROOT_DIR}/Python_273/lib/libpython2.7.so \
   -DSWIG_DIR=${PREREQUISITES_ROOT_DIR}/Swig_208 \
   -DSWIG_EXECUTABLE=${PREREQUISITES_ROOT_DIR}/Swig_208/bin/swig \
   -DUSE_TBB=OFF \
@@ -97,7 +97,7 @@ cmake -DCMAKE_BUILD_TYPE=Debug \
   -DSalomeGUI_DIR=${ROOT_SALOME}/modules/GUI_V7_5_1/adm_local/cmake_files/ \
   -DSalomeYACS_DIR=${ROOT_SALOME}/modules/YACS_V7_5_1/adm/cmake/ \
   -DPYTHON_INCLUDE_DIR=${PREREQUISITES_ROOT_DIR}/Python_273/include/python2.7 \
-  -DPYTHON_LIBRARY=${PREREQUISITES_ROOT_DIR}/Python_273/lib \
+  -DPYTHON_LIBRARY=${PREREQUISITES_ROOT_DIR}/Python_273/lib/libpython2.7.so \
   -DSWIG_DIR=${PREREQUISITES_ROOT_DIR}/Swig_208 \
   -DSWIG_EXECUTABLE=${PREREQUISITES_ROOT_DIR}/Swig_208/bin/swig \
   -DQWT_INCLUDE_DIR=${PREREQUISITES_ROOT_DIR}/Qwt_610/include \
@@ -129,3 +129,13 @@ tar xzf ~/Téléchargements/Calcul_Aster_OT.tgz
 
 # astk: add comm+mmed+rmed+resu+mess+export, aster=11.7
 
+
+# gdb
+cd ${ROOT_SALOME}
+wget -c http://ftp.gnu.org/gnu/gdb/gdb-7.10.tar.gz
+tar xzf gdb-7.10.tar.gz
+cd gdb-7.10
+mkdir -p build && cd build
+../configure --prefix=${PREREQUISITES_ROOT_DIR}/Gdb_710 --without-python --disable-nls
+make
+make install 
