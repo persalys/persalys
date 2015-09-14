@@ -2,7 +2,6 @@
 ROOT_SALOME_MECA=~/projects/salome_meca
 ROOT_SALOME=${ROOT_SALOME_MECA}/V2015_1
 PREREQUISITES_ROOT_DIR=${PREREQUISITES_ROOT_DIR}
-export OMNIORB_CONFIG=~/.omniORB.cfg
 ~/Téléchargements/SALOME-MECA-2015.1-LGPL.run -t ${ROOT_SALOME_MECA} -l "en"
 
 # remove lines that set LD_LIBRARY_PATH to /usr/lib/atlas-base/atlas to use provided lapack
@@ -119,7 +118,9 @@ PYTHONPATH=$PYTHONPATH:${ROOT_SALOME}/modules/YACS_V7_5_1/lib/python2.7/site-pac
 python ../python/test/t_yacs_eval_analytical.py ../python/test/analytical.xml
 #python ../python/test/t_yacs_eval_jauge.py ../python/test/jauge.xml
 
-
+# run gui
+export OMNIORB_CONFIG=$HOME/.omniORB.cfg
+./gui_launch.sh
 
 # jauge ?
 cd ${ROOT_SALOME}
