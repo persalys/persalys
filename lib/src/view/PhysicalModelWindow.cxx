@@ -3,7 +3,9 @@
 #include "PhysicalModelWindow.hxx"
 
 #include "ComboBoxDelegate.hxx"
-#include "YACSPhysicalModel.hxx"
+#ifdef OTGUI_HAVE_YACS
+# include "YACSPhysicalModel.hxx"
+#endif
 
 #include <QRadioButton>
 #include <QButtonGroup>
@@ -75,7 +77,7 @@ void PhysicalModelWindow::buildInterface()
   fieldsLayout->addWidget(selectFileButton, 0, 2);
 
   loadButton_ = new QPushButton(tr("Load Data"));
-  connect(loadButton_, SIGNAL(clicked()), this, SLOT(loadDataWithYACS()));
+  connect(loadButton_, SIGNAL(clicked()), this, SLOT(loadXML()));
   fieldsLayout->addWidget(loadButton_, 1, 2);
   loadButton_->setEnabled(false);
 
@@ -255,9 +257,11 @@ void PhysicalModelWindow::updateDistribution()
 }
 
 
-void PhysicalModelWindow::loadDataWithYACS()
+void PhysicalModelWindow::loadXML()
 {
-  dynamic_cast<YACSPhysicalModel*>(&*item_->getPhysicalModel().getImplementation())->loadDataWithYACS(XMLfileEdit_->text().toStdString());
+  YACSPhysicalModel *ymodel = dynamic_cast<YACSPhysicalModel*>(item_->getPhysicalModel().getImplementation().get());
+  if (ymodel)
+    ymodel->loadDataWithYACS(XMLfileEdit_->text().toStdString());
 }
 
 
@@ -328,7 +332,7 @@ void PhysicalModelWindow::methodChanged(int method)
   connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(inputDataChanged(const QModelIndex&,const QModelIndex&)));
   connect(outputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(outputDataChanged(const QModelIndex&,const QModelIndex&)));
 
-#ifdef OTGUI_HAVE_YACS
+
   switch(method)
   {
     case 0:
@@ -339,6 +343,7 @@ void PhysicalModelWindow::methodChanged(int method)
       loadXMLFileBox_->hide();
       break;
     }
+#ifdef OTGUI_HAVE_YACS
     case 2:
     {
       YACSPhysicalModel model = YACSPhysicalModel(item_->getPhysicalModel().getName());
@@ -346,8 +351,8 @@ void PhysicalModelWindow::methodChanged(int method)
       loadXMLFileBox_->show();
       break;
     }
-  }
 #endif
+  }
 }
 
 

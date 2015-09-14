@@ -40,7 +40,7 @@ public slots:
   void updateOutputData(const OutputCollection & outputs);
   void methodChanged(int);
   void selectImportFileDialogRequested();
-  void loadDataWithYACS();
+  void loadXML();
   void updateParameters(const OT::NumericalPointWithDescription & parameters = OT::NumericalPointWithDescription(0));
   void updatePlot();
   void variableChanged(const QModelIndex & currentIndex);

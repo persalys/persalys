@@ -40,8 +40,8 @@ public:
   OT::NumericalMathFunction getFunction() const;
   void setFunction(const OT::NumericalMathFunction & function);
 
-  bool checkInputs();
-  bool checkOutputs();
+  virtual bool checkInputs();
+  virtual bool checkOutputs();
 
   std::string dump() const;
 
