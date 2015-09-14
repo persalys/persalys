@@ -15,7 +15,7 @@ cd ${ROOT_SALOME}
 tar xzf ~/Téléchargements/KERNEL_GUI_YACS.tar.gz
 
 cd ${ROOT_SALOME}/KERNEL
-mkdir build && cd build
+mkdir -p build && cd build
 cmake -DCMAKE_BUILD_TYPE=Debug \
   -DCMAKE_INSTALL_PREFIX=${ROOT_SALOME}/modules/KERNEL_V7_5_1/ \
   -DHDF5_ROOT_DIR=${PREREQUISITES_ROOT_DIR}/Hdf5_1810/ \
@@ -34,7 +34,7 @@ make install
 cp ${ROOT_SALOME}/modules/KERNEL_V7_5_1/lib/python2.7/site-packages/salome/SALOME_SDS_idl.py ${ROOT_SALOME_MECA}/appli_V2015_1/lib/python2.7/site-packages/salome/
 
 cd ${ROOT_SALOME}/GUI
-mkdir build && cd build
+mkdir -p build && cd build
 cmake -DCMAKE_BUILD_TYPE=Debug \
   -DCMAKE_INSTALL_PREFIX=${ROOT_SALOME}/modules/GUI_V7_5_1/ \
   -DKERNEL_ROOT_DIR=${ROOT_SALOME}/modules/KERNEL_V7_5_1/ \
@@ -55,7 +55,7 @@ cmake -DCMAKE_BUILD_TYPE=Debug \
 make install
 
 cd ${ROOT_SALOME}/YACS
-mkdir build && cd build
+mkdir -p build && cd build
 cmake -DCMAKE_BUILD_TYPE=Debug \
   -DCMAKE_INSTALL_PREFIX=${ROOT_SALOME}/modules/YACS_V7_5_1/ \
   -DKERNEL_ROOT_DIR=${ROOT_SALOME}/modules/KERNEL_V7_5_1/ \
@@ -68,6 +68,7 @@ cmake -DCMAKE_BUILD_TYPE=Debug \
 make install
 
 # openturns
+mkdir -p build && cd build
 rm -f CMakeCache.txt
 cmake -DCMAKE_BUILD_TYPE=Debug \
   -DCMAKE_INSTALL_PREFIX=$PWD/install \
@@ -87,6 +88,7 @@ cmake -DCMAKE_BUILD_TYPE=Debug \
 make install
 
 # otgui
+mkdir -p build && cd build
 rm -f CMakeCache.txt
 cmake -DCMAKE_BUILD_TYPE=Debug \
   -DCMAKE_INSTALL_PREFIX=$PWD/install \
