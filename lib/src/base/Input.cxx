@@ -3,17 +3,21 @@
 #include "Input.hxx"
 #include "DiracFactory.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
+
+CLASSNAMEINIT(Input);
 
 Input::Input()
  : Variable()
- , distribution_(OT::Dirac())
+ , distribution_(Dirac())
 {
 }
 
 
 Input::Input(const std::string & name, const double & value, const std::string & description,
-             const OT::Distribution & distribution)
+             const Distribution & distribution)
  : Variable(name, value, description)
  , distribution_(distribution)
 {
@@ -38,14 +42,21 @@ Input::~Input()
 {
 }
 
+String Input::__repr__() const
+{
+  OSS oss;
+  oss << "class="<<GetClassName() <<" var="<<getName()<<" value="<<getValue()<<" desc="<< getDescription();
+  return oss;
+//   <<" var="<<getName()<<" value="<<getValue()<<" desc="<< getDistribution();
+}
 
-OT::Distribution Input::getDistribution() const
+Distribution Input::getDistribution() const
 {
   return distribution_;
 }
 
 
-void Input::setDistribution(const OT::Distribution & distribution)
+void Input::setDistribution(const Distribution & distribution)
 {
   distribution_ = distribution;
 }
@@ -54,13 +65,13 @@ void Input::setDistribution(const OT::Distribution & distribution)
 std::string Input::dump() const
 {
   std::string result;
-  OT::OSS oss;
+  OSS oss;
 
   std::string className = distribution_.getImplementation()->getClassName();
   if (className != "Dirac")
   {
     oss << "dist_" << getName() << " = ot." << className << "(";
-    OT::NumericalPointWithDescription parameters = distribution_.getParametersCollection()[0];
+    NumericalPointWithDescription parameters = distribution_.getParametersCollection()[0];
     for (unsigned int i = 0; i < parameters.getSize(); ++ i) {
       oss << parameters[i];
       if (i < parameters.getSize() - 1)

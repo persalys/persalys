@@ -4,6 +4,7 @@
 
 
 namespace OTGUI {
+CLASSNAMEINIT(Output);
 
 Output::Output()
  : Variable()

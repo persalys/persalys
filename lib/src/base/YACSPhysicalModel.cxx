@@ -57,7 +57,6 @@ void YACSPhysicalModel::setXMLFile(const std::string & fileName)
 
 void YACSPhysicalModel::loadDataWithYACS()
 {
-#ifdef OTGUI_HAVE_YACS
   YACSEvalSession session;
   session.launch();
 
@@ -82,7 +81,6 @@ void YACSPhysicalModel::loadDataWithYACS()
   notify("outputChanged");
 
   delete efx;
-#endif
 }
 
 

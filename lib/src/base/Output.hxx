@@ -9,6 +9,7 @@
 namespace OTGUI {
 class Output : public Variable
 {
+  CLASSNAME
 public:
   Output();
   Output(const std::string & name, const double & value=0., const std::string & description="",

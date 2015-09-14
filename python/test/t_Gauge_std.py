@@ -15,3 +15,4 @@ myPhysicalModel.loadDataWithYACS()
 myStudy.addPhysicalModel(myPhysicalModel)
 
 print(myPhysicalModel.getInputs())
+print(myPhysicalModel.getOutputs())
