@@ -2,6 +2,7 @@
 ROOT_SALOME_MECA=~/projects/salome_meca
 ROOT_SALOME=${ROOT_SALOME_MECA}/V2015_1
 PREREQUISITES_ROOT_DIR=${PREREQUISITES_ROOT_DIR}
+export OMNIORB_CONFIG=~/.omniORB.cfg
 ~/Téléchargements/SALOME-MECA-2015.1-LGPL.run -t ${ROOT_SALOME_MECA} -l "en"
 
 # remove lines that set LD_LIBRARY_PATH to /usr/lib/atlas-base/atlas to use provided lapack
