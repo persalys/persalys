@@ -1,0 +1,1 @@
+ipython nbconvert otgui_alpha.ipynb --to slides --post serve
