@@ -7,6 +7,7 @@
 #include <qwt_plot_curve.h>
 #include <qwt_plot.h>
 #include <qwt_plot_grid.h>
+#include <qwt_plot_zoomer.h>
 
 #include "NumericalSample.hxx"
 #include "Distribution.hxx"
@@ -38,7 +39,7 @@ public:
 protected:
   /// the grid
   QwtPlotGrid * grid_;
-
+  QwtPlotZoomer * zoomer_;
 };
 }
 #endif

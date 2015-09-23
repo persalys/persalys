@@ -1,5 +1,7 @@
 #include "PlotWidget.hxx"
 #include "DistributionScaleEngine.hxx"
+#include <qwt_plot_panner.h>
+#include <qwt_plot_layout.h>
 
 namespace OTGUI {
 
@@ -10,6 +12,22 @@ PlotWidget::PlotWidget(QWidget * parent)
 {
   setCanvasBackground( Qt::white );
   setMinimumSize( 200, 150 );
+
+  plotLayout()->setAlignCanvasToScales( true );
+
+  zoomer_ = new QwtPlotZoomer( canvas() );
+  zoomer_->setMousePattern( QwtEventPattern::MouseSelect2,
+    Qt::RightButton, Qt::ControlModifier );
+  zoomer_->setMousePattern( QwtEventPattern::MouseSelect3,
+      Qt::RightButton );
+
+  zoomer_->setRubberBandPen(QPen(Qt::black, 2, Qt::DotLine));
+  zoomer_->setTrackerPen(QPen(Qt::black));
+
+  QwtPlotPanner *panner = new QwtPlotPanner( canvas() );
+  panner->setAxisEnabled( QwtPlot::yRight, false );
+  panner->setMouseButton( Qt::MidButton );
+
   clear();
 }
 
@@ -18,7 +36,9 @@ void PlotWidget::clear()
 {
   detachItems();
   setAxisAutoScale(QwtPlot::xBottom);
-  enableAxis(QwtPlot::xBottom);  
+  enableAxis(QwtPlot::xBottom); 
+  setAxisAutoScale(QwtPlot::yLeft);
+  enableAxis(QwtPlot::yLeft);
 
   // initialize grid
   grid_ = new QwtPlotGrid;
@@ -38,6 +58,7 @@ void PlotWidget::plotCurve(double * x, double * y, int size, const QColor & colo
   curve->setStyle(style);
   curve->attach(this);
   replot();
+  zoomer_->setZoomBase();
 }
 
 
