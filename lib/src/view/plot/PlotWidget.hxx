@@ -8,11 +8,15 @@
 #include <qwt_plot.h>
 #include <qwt_plot_grid.h>
 #include <qwt_plot_zoomer.h>
+#include <QLabel>
 
 #include "NumericalSample.hxx"
 #include "Distribution.hxx"
 
+
 namespace OTGUI {
+
+class ImageEditionDialog;
 
 class PlotWidget : public QwtPlot
 {
@@ -25,6 +29,8 @@ public:
 
   /// constructor
   PlotWidget(QWidget * parent = 0);
+//   PlotWidget(const PlotWidget & other);
+//   virtual PlotWidget * clone() const;
 
   /// plot a curve
   void plotCurve(double * x, double * y, int size, const QColor & color = DefaultCurveColor, int width = DefaultCurveWidth, QwtPlotCurve::CurveStyle style=QwtPlotCurve::Lines);
@@ -35,11 +41,21 @@ public:
 
   /// clear plot
   void clear();
+  void replot();
+  void updatePlotLabel();
+  QLabel * getPlotLabel() const;
+
+public slots:
+  void contextMenu(const QPoint & pos);
+  void editImage();
 
 protected:
+  QLabel * plotLabel_;
+  ImageEditionDialog * dialog_;
   /// the grid
   QwtPlotGrid * grid_;
   QwtPlotZoomer * zoomer_;
+  QAction * copyImageAction_;
 };
 }
 #endif

@@ -1,21 +1,28 @@
 #include "PlotWidget.hxx"
 #include "DistributionScaleEngine.hxx"
+#include "ImageEditionDialog.hxx"
 #include <qwt_plot_panner.h>
 #include <qwt_plot_layout.h>
+#include <QMenu>
+#include <qwt_plot_renderer.h>
+#include <qwt_legend.h>
+#include <QHBoxLayout>
 
 namespace OTGUI {
 
 const QColor PlotWidget::DefaultCurveColor = QColor(240, 140, 0);//dark orange
 
 PlotWidget::PlotWidget(QWidget * parent)
-: QwtPlot( parent )
+: QwtPlot(parent)
+, plotLabel_(new QLabel(this))
+, dialog_(new ImageEditionDialog(this))
 {
-  setCanvasBackground( Qt::white );
-  setMinimumSize( 200, 150 );
+  setCanvasBackground(Qt::white);
+  setMinimumSize(200, 150);
 
-  plotLayout()->setAlignCanvasToScales( true );
+  plotLayout()->setAlignCanvasToScales(true);
 
-  zoomer_ = new QwtPlotZoomer( canvas() );
+  zoomer_ = new QwtPlotZoomer(canvas());
   zoomer_->setMousePattern( QwtEventPattern::MouseSelect2,
     Qt::RightButton, Qt::ControlModifier );
   zoomer_->setMousePattern( QwtEventPattern::MouseSelect3,
@@ -24,13 +31,21 @@ PlotWidget::PlotWidget(QWidget * parent)
   zoomer_->setRubberBandPen(QPen(Qt::black, 2, Qt::DotLine));
   zoomer_->setTrackerPen(QPen(Qt::black));
 
-  QwtPlotPanner *panner = new QwtPlotPanner( canvas() );
-  panner->setAxisEnabled( QwtPlot::yRight, false );
-  panner->setMouseButton( Qt::MidButton );
+  QwtPlotPanner *panner = new QwtPlotPanner(canvas());
+  panner->setAxisEnabled(QwtPlot::yRight, false);
+  panner->setMouseButton(Qt::MidButton);
 
   clear();
-}
 
+  // build actions
+  copyImageAction_ = new QAction(tr("Edit image"), this);
+  connect(copyImageAction_, SIGNAL(triggered(bool)), this, SLOT(editImage()));
+//   saveAsAction_ = new QAction( tr( "Save image as..." ), this) ;
+//   connect( saveAsAction_, SIGNAL(triggered( bool )), this, SLOT(saveAs()) );
+
+  plotLabel_->setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(plotLabel_, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
+}
 
 void PlotWidget::clear()
 {
@@ -39,10 +54,8 @@ void PlotWidget::clear()
   enableAxis(QwtPlot::xBottom); 
   setAxisAutoScale(QwtPlot::yLeft);
   enableAxis(QwtPlot::yLeft);
-
   // initialize grid
   grid_ = new QwtPlotGrid;
-
   replot();
 }
 
@@ -118,7 +131,59 @@ void PlotWidget::plotPDFCurve(const OT::Distribution & distribution, const QColo
   xScaleEngine.autoScale(3, x1, x2, stepSize);
   setAxisScale(QwtPlot::xBottom, x1, x2, stepSize);
 
+  setTitle(tr("PDF"));
+  setAxisTitle(QwtPlot::yLeft, tr("Density"));
+  setAxisTitle(QwtPlot::xBottom, tr("X"));
+
   plotCurve(distribution.drawPDF().getDrawable(0).getData(), color, width);
 }
+
+
+// show the context menu when right clicking
+void PlotWidget::contextMenu(const QPoint & pos)
+{
+  QMenu * contextMenu(new QMenu(this));
+  contextMenu->addAction(copyImageAction_);
+//   contextMenu->addAction(saveAsAction_);
+  contextMenu->popup(plotLabel_->mapToGlobal(pos));
+}
+
+
+void PlotWidget::editImage()
+{
+  dialog_->setInitParameters();
+  if (dialog_->exec() == QDialog::Rejected)
+  {
+    dialog_->resetParameters();
+    replot();
+  }
+}
+
+
+void PlotWidget::replot()
+{
+  QwtPlot::replot();
+  updatePlotLabel();
+  dialog_->updateLineEdits();
+}
+
+
+void PlotWidget::updatePlotLabel()
+{
+  QPixmap pixmap(200,200);
+  pixmap.fill();
+  QwtPlotRenderer renderer;
+
+  renderer.renderTo(this, pixmap);
+
+  plotLabel_->setPixmap(pixmap);
+}
+
+
+QLabel * PlotWidget::getPlotLabel() const
+{
+  return plotLabel_;
+}
+
 
 }

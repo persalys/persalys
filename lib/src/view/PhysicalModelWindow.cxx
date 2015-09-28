@@ -127,10 +127,8 @@ void PhysicalModelWindow::buildInterface()
   QGridLayout * plotLayout = new QGridLayout();
 
   //   PDF
-  QLabel * label = new QLabel("PDF");
-  plotLayout->addWidget(label, 0, 0, Qt::AlignHCenter);
   pdfPlot_ = new PlotWidget;
-  plotLayout->addWidget(pdfPlot_, 1, 0, Qt::AlignHCenter);
+  plotLayout->addWidget(pdfPlot_->getPlotLabel(), 1, 0, Qt::AlignHCenter);
   updatePlot();
 
   distributionLayout->addLayout(plotLayout);
