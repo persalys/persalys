@@ -4,6 +4,7 @@ namespace OTGUI {
 
 ParametricCalculusItem::ParametricCalculusItem(const Calculus & calculus)
   : CalculusItem(calculus, QString("ParametricCalculus"))
+  , calculus_(calculus)
 {
 }
 
@@ -11,6 +12,12 @@ ParametricCalculusItem::ParametricCalculusItem(const Calculus & calculus)
 ParametricCalculusItem::~ParametricCalculusItem()
 {
 
+}
+
+
+void ParametricCalculusItem::updateCalculus(InputCollection inputs)
+{
+  dynamic_cast<ParametricCalculus*>(&*calculus_.getImplementation())->computeParameters(inputs);
 }
 
 

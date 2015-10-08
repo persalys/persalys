@@ -4,9 +4,7 @@
 #define PARAMETRICCALCULUSITEM_H
 
 #include "CalculusItem.hxx"
-#include "InputTableModel.hxx"
 #include "ParametricCalculus.hxx"
-#include "ParametricCalculusTableModel.hxx"
 
 namespace OTGUI {
 class ParametricCalculusItem : public CalculusItem
@@ -20,8 +18,12 @@ public:
   virtual void update(Observable * source, const std::string & message);
 
 public slots:
+  void updateCalculus(InputCollection);
 signals:
   void inputSampleChanged(OT::NumericalSample);
+
+private:
+  Calculus calculus_;
 };
 }
 #endif

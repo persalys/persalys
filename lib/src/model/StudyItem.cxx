@@ -36,7 +36,11 @@ void StudyItem::update(Observable * source, const std::string & message)
     addedParametricCalculus.addObserver(newParametricCalculusItem);
     for (int i=0; i<rowCount(); ++i)
       if (child(i)->text().toStdString() == addedParametricCalculus.getPhysicalModel().getName())
+      {
         child(i)->appendRow(newParametricCalculusItem);
+        PhysicalModelItem * physicalModelItem = static_cast<PhysicalModelItem*>(child(i));
+        connect(physicalModelItem, SIGNAL(inputChanged(InputCollection)), newParametricCalculusItem, SLOT(updateCalculus(InputCollection)));
+      }
 
     emit newParametricCalculusItemCreated(newParametricCalculusItem);
   }

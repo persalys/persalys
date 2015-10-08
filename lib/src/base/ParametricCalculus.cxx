@@ -47,19 +47,23 @@ ParametricCalculus::~ParametricCalculus()
 
 void ParametricCalculus::computeParameters(const InputCollection & inputs)
 {
+  infBounds_ = OT::NumericalPoint(inputs.getSize());
+  supBounds_ = OT::NumericalPoint(inputs.getSize());
+  nbValues_ = OT::Indices(inputs.getSize());
+
   for (int i=0; i<inputs.getSize(); ++i)
   {
     if (inputs[i].getDistribution().getImplementation()->getClassName()=="Dirac")
     {
-      infBounds_.add(inputs[i].getValue());
-      supBounds_.add(inputs[i].getValue());
-      nbValues_.add(1);
+      infBounds_[i] = inputs[i].getValue();
+      supBounds_[i] = inputs[i].getValue();
+      nbValues_[i] = 1;
     }
     else
     {
-      infBounds_.add(inputs[i].getDistribution().computeQuantile(0.05));
-      supBounds_.add(inputs[i].getDistribution().computeQuantile(0.95));
-      nbValues_.add(2);
+      infBounds_[i] = inputs[i].getDistribution().computeQuantile(0.05)[0];
+      supBounds_[i] = inputs[i].getDistribution().computeQuantile(0.95)[0];
+      nbValues_[i] = 2;
   //     or truncation
     }
   }
