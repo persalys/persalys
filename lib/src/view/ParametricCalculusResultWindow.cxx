@@ -115,7 +115,7 @@ void ParametricCalculusResultWindow::buildInterface()
   tabLayout->addLayout(hLayout);
 
   scatterPlot_ = new PlotWidget();
-  tabLayout->addWidget(scatterPlot_);
+  tabLayout->addWidget(scatterPlot_->getPlotLabel());
 
   hLayout = new QHBoxLayout;
   inputsComboBox_ = new QComboBox;
