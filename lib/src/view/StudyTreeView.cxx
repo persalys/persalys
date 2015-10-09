@@ -110,19 +110,15 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 
 void StudyTreeView::createNewParametricCalculus()
 {
-  ParametricCalculusWizard * wizard = new ParametricCalculusWizard();
-  connect(treeViewModel_, SIGNAL(newParametricCalculusCreated(ParametricCalculusItem *)), wizard, SLOT(completeModel(ParametricCalculusItem *)));
-
-  QModelIndex parentIndex = selectionModel()->currentIndex();
-  treeViewModel_->addParametricCalculusItem(parentIndex);
-  setExpanded(parentIndex, true);
+  QModelIndex physicalModelIndex = selectionModel()->currentIndex();
+  PhysicalModelItem * physicalModelItem = static_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
+  StudyItem * studyItem = static_cast<StudyItem*>(physicalModelItem->QStandardItem::parent());
+  ParametricCalculusWizard * wizard = new ParametricCalculusWizard(studyItem->getStudy(), physicalModelItem->getPhysicalModel());
 
   if (wizard->exec())
   {
-    if (wizard->getItem())
-    {
-      wizard->getItem()->getCalculus().run();
-    }
+    wizard->validate();
+    setExpanded(physicalModelIndex, true);
   }
 }
 
@@ -141,7 +137,7 @@ void StudyTreeView::runParametricCalculus()
 
   ParametricCalculusItem * item = static_cast<ParametricCalculusItem*>(selectedItem);
 
-  ParametricCalculusWizard * wizard = new ParametricCalculusWizard(item);
+  ParametricCalculusWizard * wizard = new ParametricCalculusWizard(item->getCalculus());
   if (wizard->exec())
   {
     item->getCalculus().run();

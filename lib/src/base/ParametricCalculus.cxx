@@ -22,11 +22,19 @@ ParametricCalculus::ParametricCalculus(const std::string & name, const PhysicalM
  , supBounds_(supBounds)
  , nbValues_(nbValues)
 {
+  int inputSize = physicalModel.getInputs().getSize();
+  inputNames_ = OT::Description(inputSize);
+
+  for (int i=0; i<inputSize; ++i)
+  {
+    inputNames_[i] = physicalModel.getInputs()[i].getName();
+  }
 }
 
 
 ParametricCalculus::ParametricCalculus(const ParametricCalculus & other)
  : CalculusImplementation(other)
+ , inputNames_(other.inputNames_)
  , infBounds_(other.infBounds_)
  , supBounds_(other.supBounds_)
  , nbValues_(other.nbValues_)
@@ -47,12 +55,15 @@ ParametricCalculus::~ParametricCalculus()
 
 void ParametricCalculus::computeParameters(const InputCollection & inputs)
 {
-  infBounds_ = OT::NumericalPoint(inputs.getSize());
-  supBounds_ = OT::NumericalPoint(inputs.getSize());
-  nbValues_ = OT::Indices(inputs.getSize());
+  int inputSize = inputs.getSize();
+  infBounds_ = OT::NumericalPoint(inputSize);
+  supBounds_ = OT::NumericalPoint(inputSize);
+  nbValues_ = OT::Indices(inputSize);
+  inputNames_ = OT::Description(inputSize);
 
-  for (int i=0; i<inputs.getSize(); ++i)
+  for (int i=0; i<inputSize; ++i)
   {
+    inputNames_[i] = inputs[i].getName();
     if (inputs[i].getDistribution().getImplementation()->getClassName()=="Dirac")
     {
       infBounds_[i] = inputs[i].getValue();
@@ -65,6 +76,32 @@ void ParametricCalculus::computeParameters(const InputCollection & inputs)
       supBounds_[i] = inputs[i].getDistribution().computeQuantile(0.95)[0];
       nbValues_[i] = 2;
   //     or truncation
+    }
+  }
+}
+
+
+void ParametricCalculus::updateParameters()
+{
+  int inputSize = getPhysicalModel().getInputs().getSize();
+  OT::Description inputNames(inputNames_);
+  inputNames_ = OT::Description(inputSize);
+
+  OT::NumericalPoint infBounds(infBounds_);
+  OT::NumericalPoint supBounds(supBounds_);
+  OT::Indices nbValues(nbValues_);
+
+  computeParameters(getPhysicalModel().getInputs());
+
+  for (int i=0; i<inputSize; ++i)
+  {
+    inputNames_[i] = getPhysicalModel().getInputs()[i].getName();
+    const OT::Description::const_iterator it = std::find(inputNames.begin(), inputNames.end(), inputNames_[i]);
+    if (it != inputNames.end())
+    {
+      infBounds_[i] = infBounds[it - inputNames.begin()];
+      supBounds_[i] = supBounds[it - inputNames.begin()];
+      nbValues_[i] = nbValues[it - inputNames.begin()];
     }
   }
 }

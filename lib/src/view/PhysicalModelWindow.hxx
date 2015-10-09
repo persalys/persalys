@@ -34,14 +34,14 @@ public slots:
   void addOutputLine();
   void removeInputLine();
   void removeOutputLine();
-  void inputDataChanged(const QModelIndex&, const QModelIndex&);
+  void inputDataChanged();
   void updateInputData(const InputCollection & inputs);
-  void outputDataChanged(const QModelIndex&, const QModelIndex&);
+  void outputDataChanged();
   void updateOutputData(const OutputCollection & outputs);
   void methodChanged(int);
   void selectImportFileDialogRequested();
   void loadXML();
-  void updateParameters(const OT::NumericalPointWithDescription & parameters = OT::NumericalPointWithDescription(0));
+  void updateParametersWidgets(const OT::NumericalPointWithDescription & parameters = OT::NumericalPointWithDescription(0));
   void updatePlot();
   void variableChanged(const QModelIndex & currentIndex);
   void updateDistribution();

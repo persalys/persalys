@@ -15,7 +15,6 @@ ParametricCalculusTableModel::ParametricCalculusTableModel(const Calculus & calc
 
 ParametricCalculusTableModel::~ParametricCalculusTableModel()
 {
-// delete calculus_
 }
 
 
@@ -113,7 +112,7 @@ bool ParametricCalculusTableModel::setData(const QModelIndex & index, const QVar
     }
   }
 
-  emit dataChanged(index, index);
+  emit dataChanged(calculus_);
   return true;
 }
 

@@ -3,70 +3,62 @@
 #include "ParametricCalculusWizard.hxx"
 
 #include <QVBoxLayout>
+#include <QTableView>
 
 namespace OTGUI {
 
-ParametricCalculusWizard::ParametricCalculusWizard()
+ParametricCalculusWizard::ParametricCalculusWizard(OTStudy * study, const PhysicalModel & physicalModel)
   : QWizard()
-  , item_(0)
+  , calculus_(ParametricCalculus("aCalculus", physicalModel))
+  , OTStudy_(study)
 {
   buildInterface();
 }
 
-ParametricCalculusWizard::ParametricCalculusWizard(ParametricCalculusItem * item)
+
+ParametricCalculusWizard::ParametricCalculusWizard(const Calculus & calculus)
   : QWizard()
-  , item_(0)
+  , calculus_(calculus)
 {
+  dynamic_cast<ParametricCalculus*>(&*calculus_.getImplementation())->updateParameters();
   buildInterface();
-  completeModel(item);
 }
 
 
 ParametricCalculusWizard::~ParametricCalculusWizard()
 {
-  
 }
 
 
 void ParametricCalculusWizard::buildInterface()
 {
-  QWizardPage * page = new QWizardPage(this);
   setWindowTitle("Parametric analysis");
 
+  QWizardPage * page = new QWizardPage(this);
   QVBoxLayout * pageLayout = new QVBoxLayout;
+  QTableView * tableView = new QTableView;
 
-  tableView_ = new QTableView;
-  pageLayout->addWidget(tableView_);
+  model_ = new ParametricCalculusTableModel(calculus_);
+  connect(model_, SIGNAL(dataChanged(Calculus &)), this, SLOT(setCalculus(Calculus &)));
+  tableView->setModel(model_);
+
+  pageLayout->addWidget(tableView);
   page->setLayout(pageLayout);
-
   addPage(page);
 }
 
 
-void ParametricCalculusWizard::completeModel(ParametricCalculusItem* item)
+void ParametricCalculusWizard::setCalculus(Calculus & calculus)
 {
-  setItem(item);
-  model_ = new ParametricCalculusTableModel(item_->getCalculus());
-  connect(model_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(parametrizationChanged(const QModelIndex&,const QModelIndex&)));
-  tableView_->setModel(model_);
+  calculus_ = calculus;
 }
 
 
-ParametricCalculusItem* ParametricCalculusWizard::getItem() const
+void ParametricCalculusWizard::validate()
 {
-  return item_;
+  OTStudy_->addCalculus(calculus_);
+  calculus_.run();
 }
 
-
-void ParametricCalculusWizard::setItem(ParametricCalculusItem* item)
-{
-  item_ = item;
-}
-
-
-void ParametricCalculusWizard::parametrizationChanged(const QModelIndex&,const QModelIndex&)
-{
-  item_->setCalculus(model_->getCalculus());
-}
 
 }

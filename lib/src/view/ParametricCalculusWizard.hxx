@@ -4,10 +4,9 @@
 #define PARAMETRICCALCULUSWIZARD_H
 
 #include "ParametricCalculusTableModel.hxx"
-#include "ParametricCalculusItem.hxx"
+#include "OTStudy.hxx"
 
 #include <QWizard>
-#include <QTableView>
 
 namespace OTGUI {
 class ParametricCalculusWizard : public QWizard
@@ -15,25 +14,23 @@ class ParametricCalculusWizard : public QWizard
   Q_OBJECT
 
 public:
-  ParametricCalculusWizard();
-  ParametricCalculusWizard(ParametricCalculusItem * item);
+  ParametricCalculusWizard(OTStudy * study, const PhysicalModel & physicalModel);
+  ParametricCalculusWizard(const Calculus & calculus);
 
   virtual ~ParametricCalculusWizard();
 
-  ParametricCalculusItem * getItem() const;
+  void validate();
 
 protected:
   void buildInterface();
-  void setItem(ParametricCalculusItem * item);
 
 public slots:
-  void parametrizationChanged(const QModelIndex &, const QModelIndex &);
-  void completeModel(ParametricCalculusItem * item);
+  void setCalculus(Calculus & calculus);
 
 private:
-  QTableView * tableView_;
   ParametricCalculusTableModel * model_;
-  ParametricCalculusItem * item_;
+  Calculus calculus_;
+  OTStudy * OTStudy_;
 };
 }
 #endif

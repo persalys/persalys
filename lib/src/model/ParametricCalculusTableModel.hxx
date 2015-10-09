@@ -24,6 +24,10 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
   void fillTable();
 
+public slots:
+signals:
+  void dataChanged(Calculus&);
+
 private:
   Calculus calculus_;
 };

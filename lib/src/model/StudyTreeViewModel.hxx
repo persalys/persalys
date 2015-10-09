@@ -28,8 +28,6 @@ public:
 
   void addPhysicalModelItem(const QModelIndex & parentIndex);
 
-  void addParametricCalculusItem(const QModelIndex & parentIndex);
-
   virtual void update(Observable * source, const std::string & message);
 
 public slots:

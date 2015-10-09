@@ -51,15 +51,4 @@ void StudyTreeViewModel::addPhysicalModelItem(const QModelIndex & parentIndex)
   parentItem->getStudy()->addPhysicalModel(newPhysicalModel);
 }
 
-
-void StudyTreeViewModel::addParametricCalculusItem(const QModelIndex & parentIndex)
-{
-  // TODO: find a name for the new item
-  PhysicalModelItem * parentItem = static_cast<PhysicalModelItem*>(itemFromIndex(parentIndex));
-  ParametricCalculus newParametricCalculus("aCalculus", parentItem->getPhysicalModel());
-  StudyItem * studyItem = static_cast<StudyItem*>(parentItem->QStandardItem::parent());
-  studyItem->getStudy()->addCalculus(newParametricCalculus);
-
-}
-
 }

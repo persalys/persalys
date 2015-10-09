@@ -24,6 +24,7 @@ public:
   virtual ~ParametricCalculus();
 
   void computeParameters(const InputCollection & inputs);
+  void updateParameters();
   void computeInputSample();
 
   OT::NumericalSample getInputSample() const;
@@ -42,6 +43,7 @@ public:
   virtual bool calculusLaunched() const;
 
 private:
+  OT::Description inputNames_;
   OT::NumericalSample inputSample_;
   OT::NumericalSample resultSample_;
   OT::NumericalPoint infBounds_;

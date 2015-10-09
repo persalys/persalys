@@ -114,9 +114,8 @@ void PhysicalModelWindow::buildInterface()
   inputsBox->setLayout(inputsLayout);
   mainLayout->addWidget(inputsBox);
 
-  connect(inputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(inputDataChanged(QModelIndex,QModelIndex)));
-  connect(inputTableModel_, SIGNAL(distributionChanged(OT::NumericalPointWithDescription)), this, SLOT(updateParameters(OT::NumericalPointWithDescription)));
-  connect(inputTableModel_, SIGNAL(distributionChanged(OT::NumericalPointWithDescription)), this, SLOT(updatePlot()));
+  connect(inputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(inputDataChanged()));
+  connect(inputTableModel_, SIGNAL(distributionChanged(OT::NumericalPointWithDescription)), this, SLOT(updateParametersWidgets(OT::NumericalPointWithDescription)));
 
   connect(item_, SIGNAL(inputChanged(InputCollection)), this, SLOT(updateInputData(InputCollection)));
 
@@ -166,7 +165,7 @@ void PhysicalModelWindow::buildInterface()
 
   outputsBox->setLayout(outputsLayout);
   mainLayout->addWidget(outputsBox);
-  connect(outputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(outputDataChanged(QModelIndex,QModelIndex)));
+  connect(outputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(outputDataChanged()));
   connect(item_, SIGNAL(outputChanged(OutputCollection)), this, SLOT(updateOutputData(OutputCollection)));
 
   ////////////////
@@ -192,12 +191,12 @@ void PhysicalModelWindow::selectImportFileDialogRequested()
 
 void PhysicalModelWindow::variableChanged(const QModelIndex & index)
 {
-  updateParameters(inputTableModel_->getParameters(index.row()));
+  updateParametersWidgets(inputTableModel_->getParameters(index.row()));
   updatePlot();
 }
 
 
-void PhysicalModelWindow::updateParameters(const OT::NumericalPointWithDescription & parameters)
+void PhysicalModelWindow::updateParametersWidgets(const OT::NumericalPointWithDescription & parameters)
 {
   if (paramEditor_)
   {
@@ -263,7 +262,7 @@ void PhysicalModelWindow::loadXML()
 }
 
 
-void PhysicalModelWindow::inputDataChanged(const QModelIndex&, const QModelIndex&)
+void PhysicalModelWindow::inputDataChanged()
 {
   //TODO: if tableOut && tableIn is valid
   bool inputsAreValid = item_->getPhysicalModel().updateInputs(inputTableModel_->getData());
@@ -275,11 +274,11 @@ void PhysicalModelWindow::updateInputData(const InputCollection & inputs)
   delete inputTableModel_;
   inputTableModel_ = new InputTableModel(inputs);
   inputTableView_->setModel(inputTableModel_);
-  connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(inputDataChanged(const QModelIndex&, const QModelIndex&)));
+  connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(inputDataChanged()));
 }
 
 
-void PhysicalModelWindow::outputDataChanged(const QModelIndex&, const QModelIndex&)
+void PhysicalModelWindow::outputDataChanged()
 {
   //TODO: if tableOut && tableIn is valid
   bool outputsAreValid = item_->getPhysicalModel().updateOutputs(outputTableModel_->getData());
@@ -291,7 +290,7 @@ void PhysicalModelWindow::updateOutputData(const OutputCollection & outputs)
   delete outputTableModel_;
   outputTableModel_ = new OutputTableModel(outputs);
   outputTableView_->setModel(outputTableModel_);
-  connect(outputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(outputDataChanged(QModelIndex,QModelIndex)));
+  connect(outputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(outputDataChanged()));
 }
 
 void PhysicalModelWindow::addInputLine()
@@ -318,7 +317,7 @@ void PhysicalModelWindow::methodChanged(int method)
 //   outputTableModel_->deleteLater();
 //   outputTableModel_ = 0;
 
-  updateParameters();
+  updateParametersWidgets();
   pdfPlot_->clear();
 
   delete inputTableModel_;
@@ -327,8 +326,8 @@ void PhysicalModelWindow::methodChanged(int method)
   inputTableView_->setModel(inputTableModel_);
   outputTableModel_ = new OutputTableModel();
   outputTableView_->setModel(outputTableModel_);
-  connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(inputDataChanged(const QModelIndex&,const QModelIndex&)));
-  connect(outputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(outputDataChanged(const QModelIndex&,const QModelIndex&)));
+  connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(inputDataChanged()));
+  connect(outputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(outputDataChanged()));
 
 
   switch(method)
@@ -367,7 +366,7 @@ void PhysicalModelWindow::removeInputLine()
   }
   else
   {
-    updateParameters();
+    updateParametersWidgets();
     pdfPlot_->clear();
   }
 }
