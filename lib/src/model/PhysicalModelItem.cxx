@@ -26,20 +26,6 @@ void PhysicalModelItem::setData(const QVariant & value, int role)
 }
 
 
-void PhysicalModelItem::setPhysicalModelInputs(const InputCollection & inputs)
-{
-  physicalModel_.setInputs(inputs);
-  bool inputsAreValid = physicalModel_.checkInputs();
-}
-
-
-void PhysicalModelItem::setPhysicalModelOutputs(const OutputCollection & outputs)
-{
-  physicalModel_.setOutputs(outputs);
-  bool outputsAreValid = physicalModel_.checkOutputs();
-}
-
-
 PhysicalModel PhysicalModelItem::getPhysicalModel() const
 {
   return physicalModel_;

@@ -79,9 +79,16 @@ InputCollection PhysicalModel::getInputs() const
   return getImplementation()->getInputs();
 }
 
+
 void PhysicalModel::setInputs(const InputCollection & inputs)
 {
   getImplementation()->setInputs(inputs);
+}
+
+
+bool PhysicalModel::updateInputs(const InputCollection & inputs)
+{
+  return getImplementation()->updateInputs(inputs);
 }
 
 
@@ -99,6 +106,12 @@ OutputCollection PhysicalModel::getOutputs() const
 void PhysicalModel::setOutputs(const OutputCollection & outputs)
 {
   getImplementation()->setOutputs(outputs);
+}
+
+
+bool PhysicalModel::updateOutputs(const OutputCollection& outputs)
+{
+  return getImplementation()->updateOutputs(outputs);
 }
 
 

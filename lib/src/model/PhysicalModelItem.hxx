@@ -21,9 +21,6 @@ public:
   PhysicalModel getPhysicalModel() const;
   void setPhysicalModel(const PhysicalModel & physicalModel);
 
-  void setPhysicalModelInputs(const InputCollection & inputs);
-  void setPhysicalModelOutputs(const OutputCollection & outputs);
-
   void setData(const QVariant & value, int role);
 
   virtual void update(Observable * source, const std::string & message);

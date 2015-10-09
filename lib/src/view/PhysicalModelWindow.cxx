@@ -266,7 +266,7 @@ void PhysicalModelWindow::loadXML()
 void PhysicalModelWindow::inputDataChanged(const QModelIndex&, const QModelIndex&)
 {
   //TODO: if tableOut && tableIn is valid
-  item_->setPhysicalModelInputs(inputTableModel_->getData());
+  bool inputsAreValid = item_->getPhysicalModel().updateInputs(inputTableModel_->getData());
 }
 
 
@@ -282,7 +282,7 @@ void PhysicalModelWindow::updateInputData(const InputCollection & inputs)
 void PhysicalModelWindow::outputDataChanged(const QModelIndex&, const QModelIndex&)
 {
   //TODO: if tableOut && tableIn is valid
-  item_->setPhysicalModelOutputs(outputTableModel_->getData());
+  bool outputsAreValid = item_->getPhysicalModel().updateOutputs(outputTableModel_->getData());
 }
 
 

@@ -94,11 +94,19 @@ InputCollection PhysicalModelImplementation::getInputs() const
   return inputs_;
 }
 
+
 void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
 {
   inputs_ = inputs;
   checkInputs();
   notify("inputChanged");
+}
+
+
+bool PhysicalModelImplementation::updateInputs(const InputCollection& inputs)
+{
+  inputs_ = inputs;
+  return checkInputs();
 }
 
 
@@ -120,6 +128,13 @@ void PhysicalModelImplementation::setOutputs(const OutputCollection & outputs)
   outputs_ = outputs;
   checkOutputs();
   notify("outputChanged");
+}
+
+
+bool PhysicalModelImplementation::updateOutputs(const OutputCollection& outputs)
+{
+  outputs_ = outputs;
+  return checkOutputs();
 }
 
 

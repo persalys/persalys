@@ -28,10 +28,12 @@ public:
 
   InputCollection getInputs() const;
   void setInputs(const InputCollection & inputs);
+  bool updateInputs(const InputCollection & inputs);
   void addInput(Input input);
 
   OutputCollection getOutputs() const;
   void setOutputs(const OutputCollection & outputs);
+  bool updateOutputs(const OutputCollection& outputs);
   void addOutput(Output output);
 
   OT::NumericalMathFunction getFunction() const;

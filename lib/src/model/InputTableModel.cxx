@@ -192,9 +192,8 @@ void InputTableModel::removeLine(const QModelIndex & index)
   beginRemoveRows(index.parent(), index.row(), index.row());
   removeRows(index.row(), 1, index.parent());
 
-//   std::vector<Input*>::iterator it = data_.begin();
-//   std::advance(it, index.row());
   data_.erase(data_.begin() + index.row());
+  emit dataChanged(QModelIndex(), QModelIndex());
 
   endRemoveRows();
 }
