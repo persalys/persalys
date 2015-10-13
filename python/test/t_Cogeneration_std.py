@@ -23,51 +23,45 @@ myPhysicalModel.addOutput(Ep)
 
 myStudy.addPhysicalModel(myPhysicalModel)
 
-# Parametric analysis
+## Parametric analysis ##
 calculus = otguibase.ParametricCalculus("myParametricCalculus", myPhysicalModel)
 myStudy.addCalculus(calculus)
 calculus.run()
-resultSample = calculus.getResult().getResultSample()
-print(calculus.getInputSample())
+calculusResult = calculus.getResult()
+outputSample = [[0.060036508072],
+[0.0292238907867],
+[0.0684295269203],
+[0.0378920382755],
+[0.0812679132055],
+[0.0511512752497],
+[0.0892876773294],
+[0.0594339324804]]
+
+# Comparaison
+openturns.testing.assert_almost_equal(outputSample, calculusResult.getResultSample(), 1e-16)
+
+## Quadratic Cumul ##
+quadraticCumul = otguibase.QuadraticCumulCalculus("myQuadraticCumul", myPhysicalModel)
+myStudy.addCalculus(quadraticCumul)
+quadraticCumul.run()
+quadraticCumulResult = quadraticCumul.getResult()
+
+# Comparaison
+openturns.testing.assert_almost_equal(0.059730458221, quadraticCumulResult.getFirstOrderMean()[0], 1e-13)
+
+## Monte Carlo ##
+montecarlo = otguibase.MonteCarloCalculus("myMonteCarlo", myPhysicalModel, 1000)
+myStudy.addCalculus(montecarlo)
+montecarlo.run()
+montecarloResult = montecarlo.getResult()
+
+# Comparaison
+openturns.testing.assert_almost_equal(0.0598440092379, montecarloResult.getMean()[0], 1e-13)
+openturns.testing.assert_almost_equal(0.0112354112196, montecarloResult.getStandardDeviation()[0], 1e-13)
+
+openturns.testing.assert_almost_equal([0.0591476440319, 0.0605403744439], montecarloResult.getMeanConfidenceInterval()[0], 1e-13)
+openturns.testing.assert_almost_equal([0.0107636626958,0.0117507273707], montecarloResult.getStdConfidenceInterval()[0], 1e-16)
 
 
 script = myStudy.dump()
 print(script)
-
-
-# Reference
-
-def functionCogeneration(X):
-    tauelec=0.54
-    tauth=0.8
-    tau=0.05
-    Q, E, C = X
-    Ep=1.-Q/(E/(1.-tau)/tauelec+C/tauth)
-    return [Ep]
-
-f = ot.PythonFunction(3, 1, functionCogeneration)
-
-Q = ot.Normal(10200,100)
-E = ot.Normal(3000,15)
-C = ot.Normal(4000,60)
-distributions = [Q, E, C]
-
-scale=[]
-transvec=[]
-levels=[]
-for i in range(3):
-    a=distributions[i].computeQuantile(0.05)
-    b=distributions[i].computeQuantile(0.95)
-    scale.append(b[0]-a[0])
-    transvec.append(a[0])
-    levels.append(0)
-
-box = ot.Box(levels)
-inputSample = box.generate()
-inputSample*=scale
-inputSample+=transvec
-
-outputSample=f(inputSample)
-
-# Comparaison
-openturns.testing.assert_almost_equal(outputSample, resultSample, 1e-16)

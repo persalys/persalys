@@ -1,12 +1,3 @@
-    [ Q        E        C        ]
-0 : [ 10035.5   2975.33  3901.31 ]
-1 : [ 10364.5   2975.33  3901.31 ]
-2 : [ 10035.5   3024.67  3901.31 ]
-3 : [ 10364.5   3024.67  3901.31 ]
-4 : [ 10035.5   2975.33  4098.69 ]
-5 : [ 10364.5   2975.33  4098.69 ]
-6 : [ 10035.5   3024.67  4098.69 ]
-7 : [ 10364.5   3024.67  4098.69 ]
 myStudy = otguibase.OTStudy('myStudy')
 dist_Q = ot.Normal(10200, 100)
 Q = otguibase.Input('Q', 0, 'Primary energy', dist_Q)
@@ -35,4 +26,8 @@ supBounds[2] = 4098.69
 nbValues[2] = 2
 myParametricCalculus = otguibase.ParametricCalculus('myParametricCalculus', myPhysicalModel, infBounds, supBounds, nbValues)
 myStudy.addCalculus(myParametricCalculus)
+myQuadraticCumul = otguibase.QuadraticCumulCalculus('myQuadraticCumul', myPhysicalModel)
+myStudy.addCalculus(myQuadraticCumul)
+myMonteCarlo = otguibase.MonteCarloCalculus('myMonteCarlo', myPhysicalModel, 1000)
+myStudy.addCalculus(myMonteCarlo)
 

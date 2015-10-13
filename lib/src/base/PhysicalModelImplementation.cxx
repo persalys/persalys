@@ -1,5 +1,6 @@
 #include "PhysicalModelImplementation.hxx"
 
+#include "ComposedDistribution.hxx"
 
 namespace OTGUI {
 
@@ -146,10 +147,47 @@ void PhysicalModelImplementation::addOutput(Output output)
 }
 
 
+OT::RandomVector PhysicalModelImplementation::getInputRandomVector()
+{
+  OT::ComposedDistribution::DistributionCollection marginales;
+  for (int i=0; i<inputs_.getSize(); ++i)
+  {   
+    marginales.add(inputs_[i].getDistribution());
+  }
+//   TODO:  OT::RandomVector(OT::ComposedDistribution(marginales, getCopula()));
+
+  return OT::RandomVector(OT::ComposedDistribution(marginales));
+}
+
+
+OT::RandomVector PhysicalModelImplementation::getOutputRandomVector(const OutputCollection & outputs)
+{
+  return OT::RandomVector(getFunction(outputs), getInputRandomVector());
+}
+
+
+OT::NumericalMathFunction PhysicalModelImplementation::getFunction(const OutputCollection & outputs) const
+{
+  if (outputs == outputs_)
+    return function_;
+
+  OT::Description outputNames(outputs.getSize());
+  OT::Description outputFormula(outputs.getSize());
+  for (int i=0; i<outputs.getSize(); ++i)
+  {
+    outputNames[i] = outputs[i].getName();
+    outputFormula[i] = outputs[i].getFormula();
+  }
+
+  return OT::NumericalMathFunction(listInput_, outputNames, outputFormula);
+}
+
+
 OT::NumericalMathFunction PhysicalModelImplementation::getFunction() const
 {
   return function_;
 }
+
 
 void PhysicalModelImplementation::setFunction(const OT::NumericalMathFunction & function)
 {

@@ -8,6 +8,7 @@
 #include "Observable.hxx"
 
 #include "NumericalMathFunction.hxx"
+#include "RandomVector.hxx"
 
 #include <QList>
 #include <vector>
@@ -39,6 +40,10 @@ public:
   bool updateOutputs(const OutputCollection& outputs);
   void addOutput(Output output);
 
+  OT::RandomVector getInputRandomVector();
+  OT::RandomVector getOutputRandomVector(const OutputCollection & outputs);
+
+  OT::NumericalMathFunction getFunction(const OutputCollection & outputs) const;
   OT::NumericalMathFunction getFunction() const;
   void setFunction(const OT::NumericalMathFunction & function);
 

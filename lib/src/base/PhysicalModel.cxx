@@ -121,6 +121,24 @@ void PhysicalModel::addOutput(Output output)
 }
 
 
+OT::RandomVector PhysicalModel::getInputRandomVector()
+{
+  return getImplementation()->getInputRandomVector();
+}
+
+
+OT::RandomVector PhysicalModel::getOutputRandomVector(const OutputCollection & outputs)
+{
+  return getImplementation()->getOutputRandomVector(outputs);
+}
+
+
+OT::NumericalMathFunction PhysicalModel::getFunction(const OutputCollection & outputs) const
+{
+  return getImplementation()->getFunction(outputs);
+}
+
+
 OT::NumericalMathFunction PhysicalModel::getFunction() const
 {
   return getImplementation()->getFunction();

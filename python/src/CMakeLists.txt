@@ -60,6 +60,10 @@ ot_add_python_module( otguibase otguibase_module.i
                       Calculus.i Calculus_doc.i.in
                       ParametricCalculusResult.i ParametricCalculusResult_doc.i.in
                       ParametricCalculus.i ParametricCalculus_doc.i.in
+                      MonteCarloResult.i MonteCarloResult_doc.i.in
+                      QuadraticCumulResult.i QuadraticCumulResult_doc.i.in
+                      MonteCarloCalculus.i MonteCarloCalculus_doc.i.in
+                      QuadraticCumulCalculus.i QuadraticCumulCalculus_doc.i.in
                       OTStudy.i OTStudy_doc.i.in
                     )
 
