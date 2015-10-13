@@ -28,7 +28,7 @@ public slots:
 
 private:
   OT::NumericalSample inputSample_;
-  OT::NumericalSample outputSample_;
+  ParametricCalculusResult result_;
   PlotWidget * scatterPlot_;
   QComboBox * inputsComboBox_;
   QComboBox * outputsComboBox_;

@@ -147,7 +147,8 @@ void ParametricCalculus::run()
 
   inputSample_.setDescription(model.getInputDescription());
 
-  resultSample_ = model(inputSample_);
+  OT::NumericalSample outputSample = model(inputSample_);
+  result_ = ParametricCalculusResult(outputSample, inputSample_);
 
   notify("calculusFinished");
 }
@@ -163,12 +164,6 @@ void ParametricCalculus::setInputSample(const OT::NumericalSample & inputSample)
 {
   inputSample_ = inputSample;
   notify("inputSampleChanged");
-}
-
-
-OT::NumericalSample ParametricCalculus::getResultSample() const
-{
-  return resultSample_;
 }
 
 
@@ -208,6 +203,12 @@ void ParametricCalculus::setNbValues(const int & index, const int & nbValues)
 }
 
 
+ParametricCalculusResult ParametricCalculus::getResult() const
+{
+  return result_;
+}
+
+
 std::string ParametricCalculus::dump() const
 {
   std::string result;
@@ -231,7 +232,7 @@ std::string ParametricCalculus::dump() const
 
 bool ParametricCalculus::calculusLaunched() const
 {
-  return resultSample_.getSize()!=0;
+  return getResult().getResultSample().getSize()!=0;
 }
 
 

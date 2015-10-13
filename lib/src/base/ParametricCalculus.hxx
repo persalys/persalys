@@ -5,8 +5,7 @@
 
 #include "Calculus.hxx"
 #include "PhysicalModel.hxx"
-#include "NumericalSample.hxx"
-#include "NumericalPoint.hxx"
+#include "ParametricCalculusResult.hxx"
 
 namespace OTGUI {
 class ParametricCalculus : public CalculusImplementation
@@ -29,7 +28,6 @@ public:
 
   OT::NumericalSample getInputSample() const;
   void setInputSample(const OT::NumericalSample & inputSample);
-  OT::NumericalSample getResultSample() const;
 
   OT::NumericalPoint getInfBounds() const;
   void setInfBound(const int & index, const double & infBounds);
@@ -38,6 +36,8 @@ public:
   OT::Indices getNbValues() const;
   void setNbValues(const int & index, const int & nbValues);
 
+  ParametricCalculusResult getResult() const;
+
   virtual void run();
   virtual std::string dump() const;
   virtual bool calculusLaunched() const;
@@ -45,7 +45,7 @@ public:
 private:
   OT::Description inputNames_;
   OT::NumericalSample inputSample_;
-  OT::NumericalSample resultSample_;
+  ParametricCalculusResult result_;
   OT::NumericalPoint infBounds_;
   OT::NumericalPoint supBounds_;
   OT::Indices nbValues_;

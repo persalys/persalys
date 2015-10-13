@@ -15,7 +15,7 @@ namespace OTGUI {
 ParametricCalculusResultWindow::ParametricCalculusResultWindow(ParametricCalculusItem * item)
   : OTguiSubWindow(item)
   , inputSample_(dynamic_cast<ParametricCalculus*>(&*item->getCalculus().getImplementation())->getInputSample())
-  , outputSample_(dynamic_cast<ParametricCalculus*>(&*item->getCalculus().getImplementation())->getResultSample())
+  , result_(dynamic_cast<ParametricCalculus*>(&*item->getCalculus().getImplementation())->getResult())
 {
   buildInterface();
 }
@@ -35,54 +35,26 @@ void ParametricCalculusResultWindow::buildInterface()
   QVBoxLayout * tabLayout = new QVBoxLayout;
   QLabel * label = new QLabel;
   OT::OSS oss;
-  int size = inputSample_.getSize();
-  int numberInputs = inputSample_.getDimension();
-  OT::NumericalSample sample = inputSample_;
-  sample.stack(outputSample_);
 
-  OT::Indices indicesInputs(numberInputs);
-  indicesInputs.fill();
-
-  for (int i=numberInputs; i<sample.getDimension(); ++i)
+  for (int i=0; i<result_.getResultSample().getDimension(); ++i)
   {
-    oss <<"output : " << sample.getDescription()[i] << "\n";
-    OT::NumericalSample orderedSample = sample.sortAccordingToAComponent(i);
-
-    double minValue = orderedSample[0][i];
-    oss << "- min = " << minValue << "\n";
-    int it=0;
-
-    double value = orderedSample[it][i];
-    while (value == minValue)
+    oss <<"Output : " << result_.getOutputNames()[i] << "\n";
+    oss << "- Min = " << result_.getListMin()[i]<< "\n";
+    for (int j=0; j<result_.getListXMin()[i].getSize();++j)
     {
-      OT::NumericalPoint point = orderedSample.getMarginal(indicesInputs)[it];
+      OT::NumericalPoint point(result_.getListXMin()[i][j]);
       oss << "  X=" <<point.__str__() << "\n";
-      ++it;
-      if (it < size)
-        value = orderedSample[it][i];
-      else
-        break;
     }
-    oss << "\n";
-
-    double maxValue = orderedSample[size-1][i];
-    oss << "- max = " << maxValue << "\n";
-    it=0;
-
-    value = orderedSample[size-1-it][i];
-    while (value == maxValue)
+    oss << "- Max = " << result_.getListMax()[i] << "\n";
+    for (int j=0; j<result_.getListXMax()[i].getSize();++j)
     {
-      OT::NumericalPoint point = orderedSample.getMarginal(indicesInputs)[size-1-it];
+      OT::NumericalPoint point(result_.getListXMax()[i][j]);
       oss << "  X=" <<point.__str__() << "\n";
-      ++it;
-      if (it < size)
-        value = orderedSample[size-1-it][i];
-      else
-        break;
     }
-    oss << "\n";
 
+    oss << "\n";
   }
+
 
   label->setText(QString::fromStdString(oss.str()));
   tabLayout->addWidget(label);
@@ -93,6 +65,8 @@ void ParametricCalculusResultWindow::buildInterface()
 
   // second tab
   tabLayout = new QVBoxLayout;
+  OT::NumericalSample sample = inputSample_;
+  sample.stack(result_.getResultSample());
   OTguiTableView * tabResultView = new OTguiTableView(sample);
   tabLayout->addWidget(tabResultView);
 
@@ -106,8 +80,8 @@ void ParametricCalculusResultWindow::buildInterface()
   QHBoxLayout * hLayout = new QHBoxLayout;
   outputsComboBox_ = new QComboBox;
   QStringList items = QStringList();
-  for (int i=0; i<outputSample_.getDimension(); ++i)
-    items<<QString::fromStdString(outputSample_.getDescription()[i]);
+  for (int i=0; i<result_.getResultSample().getDimension(); ++i)
+    items<<QString::fromStdString(result_.getOutputNames()[i]);
   outputsComboBox_->addItems(items);
   connect(outputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(outputChanged(int)));
   hLayout->addWidget(outputsComboBox_);
@@ -120,8 +94,8 @@ void ParametricCalculusResultWindow::buildInterface()
   hLayout = new QHBoxLayout;
   inputsComboBox_ = new QComboBox;
   items = QStringList();
-  for (int i=0; i<numberInputs; ++i)
-    items<<QString::fromStdString(sample.getDescription()[i]);
+  for (int i=0; i<inputSample_.getDimension(); ++i)
+    items<<QString::fromStdString(inputSample_.getDescription()[i]);
   inputsComboBox_->addItems(items);
   connect(inputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(inputChanged(int)));
   hLayout->addStretch();
@@ -156,7 +130,7 @@ void ParametricCalculusResultWindow::updatePlot(int indexInput, int indexOutput)
 {
   Q_ASSERT(scatterPlot_);
   scatterPlot_->clear();
-  scatterPlot_->plotScatter(inputSample_.getMarginal(indexInput), outputSample_.getMarginal(indexOutput));
+  scatterPlot_->plotScatter(inputSample_.getMarginal(indexInput), result_.getResultSample().getMarginal(indexOutput));
   scatterPlot_->replot();
 }
 

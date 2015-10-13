@@ -70,6 +70,7 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 %include YACSPhysicalModel.i
 %include CalculusImplementation.i
 %include Calculus.i
+%include ParametricCalculusResult.i
 %include ParametricCalculus.i
 %include OTStudy.i
 
