@@ -69,3 +69,4 @@ openturns.testing.assert_almost_equal(0.0117507273707, stdCi.getUpperBound()[0],
 
 script = myStudy.dump()
 print(script)
+exec(script)
