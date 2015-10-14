@@ -13,7 +13,7 @@ class MonteCarloCalculus : public CalculusImplementation
 
 public:
   MonteCarloCalculus(const std::string & name, const PhysicalModel & physicalModel,
-                     int nbSimu=10000, bool confidenceInterval=true, double level=0.05);
+                     int nbSimu=10000, bool confidenceInterval=true, double level=0.95);
 
   MonteCarloCalculus(const MonteCarloCalculus & other);
   virtual MonteCarloCalculus * clone() const;

@@ -14,7 +14,7 @@ class MonteCarloResult : public ParametricCalculusResult
 public:
   MonteCarloResult();
   MonteCarloResult(OT::NumericalSample outputSample, OT::NumericalSample inputSample,
-                   double level=0.05);
+                   double level=0.95);
 
   virtual ~MonteCarloResult();
 

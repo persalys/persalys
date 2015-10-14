@@ -100,7 +100,7 @@ Interval MonteCarloResult::getMeanConfidenceInterval()
     meanConfidenceInterval_ = Interval(getResultSample().getDimension());
 
     Normal X(0,1);
-    double f = X.computeQuantile(level_/2, true)[0];
+    double f = X.computeQuantile((1-level_)/2, true)[0];
     NumericalPoint delta = f * getStandardDeviation() / sqrt(getResultSample().getSize());
     
     NumericalPoint lowerBounds(getResultSample().getDimension());
@@ -130,9 +130,9 @@ Interval MonteCarloResult::getStdConfidenceInterval()
     int nbSimu = getResultSample().getSize();
     ChiSquare X(nbSimu-1);
     // low
-    double f1 = X.computeQuantile(level_/2, true)[0];
+    double f1 = X.computeQuantile((1-level_)/2, true)[0];
     // up
-    double f2 = X.computeQuantile(level_/2, false)[0];
+    double f2 = X.computeQuantile((1-level_)/2, false)[0];
 
     stdConfidenceInterval_ = Interval(getResultSample().getDimension());
     NumericalPoint lowerBounds(getResultSample().getDimension());
