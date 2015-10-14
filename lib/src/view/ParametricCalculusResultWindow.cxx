@@ -14,7 +14,6 @@ namespace OTGUI {
 
 ParametricCalculusResultWindow::ParametricCalculusResultWindow(ParametricCalculusItem * item)
   : OTguiSubWindow(item)
-  , inputSample_(dynamic_cast<ParametricCalculus*>(&*item->getCalculus().getImplementation())->getInputSample())
   , result_(dynamic_cast<ParametricCalculus*>(&*item->getCalculus().getImplementation())->getResult())
 {
   buildInterface();
@@ -65,7 +64,7 @@ void ParametricCalculusResultWindow::buildInterface()
 
   // second tab
   tabLayout = new QVBoxLayout;
-  OT::NumericalSample sample = inputSample_;
+  OT::NumericalSample sample = result_.getInputSample();
   sample.stack(result_.getResultSample());
   OTguiTableView * tabResultView = new OTguiTableView(sample);
   tabLayout->addWidget(tabResultView);
@@ -94,8 +93,8 @@ void ParametricCalculusResultWindow::buildInterface()
   hLayout = new QHBoxLayout;
   inputsComboBox_ = new QComboBox;
   items = QStringList();
-  for (int i=0; i<inputSample_.getDimension(); ++i)
-    items<<QString::fromStdString(inputSample_.getDescription()[i]);
+  for (int i=0; i<result_.getInputSample().getDimension(); ++i)
+    items<<QString::fromStdString(result_.getInputNames()[i]);
   inputsComboBox_->addItems(items);
   connect(inputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(inputChanged(int)));
   hLayout->addStretch();
@@ -130,7 +129,7 @@ void ParametricCalculusResultWindow::updatePlot(int indexInput, int indexOutput)
 {
   Q_ASSERT(scatterPlot_);
   scatterPlot_->clear();
-  scatterPlot_->plotScatter(inputSample_.getMarginal(indexInput), result_.getResultSample().getMarginal(indexOutput));
+  scatterPlot_->plotScatter(result_.getInputSample().getMarginal(indexInput), result_.getResultSample().getMarginal(indexOutput));
   scatterPlot_->replot();
 }
 

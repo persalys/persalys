@@ -3,6 +3,8 @@
 #include "QuadraticCumulCalculus.hxx"
 #include "QuadraticCumul.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 CLASSNAMEINIT(QuadraticCumulCalculus);
@@ -30,11 +32,6 @@ QuadraticCumulCalculus* QuadraticCumulCalculus::clone() const
 }
 
 
-QuadraticCumulCalculus::~QuadraticCumulCalculus()
-{
-}
-
-
 OutputCollection QuadraticCumulCalculus::getOutputs() const
 {
   return outputs_;
@@ -49,7 +46,7 @@ void QuadraticCumulCalculus::setOutputs(const OutputCollection & outputs)
 
 void QuadraticCumulCalculus::run()
 {
-  OT::QuadraticCumul algoQuadraticCumul(getPhysicalModel().getOutputRandomVector(outputs_));
+  QuadraticCumul algoQuadraticCumul(getPhysicalModel().getOutputRandomVector(outputs_));
   // set results
   result_ = QuadraticCumulResult(algoQuadraticCumul);
 

@@ -17,8 +17,6 @@ public:
   QuadraticCumulCalculus(const QuadraticCumulCalculus & other);
   virtual QuadraticCumulCalculus * clone() const;
 
-  virtual ~QuadraticCumulCalculus();
-
   OutputCollection getOutputs() const;
   void setOutputs(const OutputCollection & outputs);
 

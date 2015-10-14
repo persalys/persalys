@@ -27,7 +27,6 @@ public slots:
   void outputChanged(int index);
 
 private:
-  OT::NumericalSample inputSample_;
   ParametricCalculusResult result_;
   PlotWidget * scatterPlot_;
   QComboBox * inputsComboBox_;

@@ -1,21 +1,23 @@
 #include "PhysicalModel.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 PhysicalModel::PhysicalModel(const std::string & name)
-  : OT::TypedInterfaceObject<PhysicalModelImplementation>(new PhysicalModelImplementation(name))
+  : TypedInterfaceObject<PhysicalModelImplementation>(new PhysicalModelImplementation(name))
 {
 }
 
 
 PhysicalModel::PhysicalModel(const std::string & name, const InputCollection & inputs, const OutputCollection & outputs)
-  : OT::TypedInterfaceObject<PhysicalModelImplementation>(new PhysicalModelImplementation(name, inputs, outputs))
+  : TypedInterfaceObject<PhysicalModelImplementation>(new PhysicalModelImplementation(name, inputs, outputs))
 {
 }
 
 
 PhysicalModel::PhysicalModel(const PhysicalModelImplementation & implementation)
-  : OT::TypedInterfaceObject<PhysicalModelImplementation>(implementation.clone())
+  : TypedInterfaceObject<PhysicalModelImplementation>(implementation.clone())
 {
   
 }
@@ -23,7 +25,7 @@ PhysicalModel::PhysicalModel(const PhysicalModelImplementation & implementation)
 
 /* Constructor from implementation */
 PhysicalModel::PhysicalModel(const Implementation & p_implementation)
-  : OT::TypedInterfaceObject<PhysicalModelImplementation>(p_implementation)
+  : TypedInterfaceObject<PhysicalModelImplementation>(p_implementation)
 {
   // Initialize any other class members here
   // At last, allocate memory space if needed, but go to destructor to free it
@@ -31,7 +33,7 @@ PhysicalModel::PhysicalModel(const Implementation & p_implementation)
 
 /* Constructor from implementation pointer */
 PhysicalModel::PhysicalModel(PhysicalModelImplementation * p_implementation)
-  : OT::TypedInterfaceObject<PhysicalModelImplementation>(p_implementation)
+  : TypedInterfaceObject<PhysicalModelImplementation>(p_implementation)
 {
   // Initialize any other class members here
   // At last, allocate memory space if needed, but go to destructor to free it
@@ -40,7 +42,7 @@ PhysicalModel::PhysicalModel(PhysicalModelImplementation * p_implementation)
 
 
 PhysicalModel::PhysicalModel(const PhysicalModel & other)
-  : OT::TypedInterfaceObject<PhysicalModelImplementation>(other.getImplementation())
+  : TypedInterfaceObject<PhysicalModelImplementation>(other.getImplementation())
 {
 }
 
@@ -121,30 +123,30 @@ void PhysicalModel::addOutput(Output output)
 }
 
 
-OT::RandomVector PhysicalModel::getInputRandomVector()
+RandomVector PhysicalModel::getInputRandomVector()
 {
   return getImplementation()->getInputRandomVector();
 }
 
 
-OT::RandomVector PhysicalModel::getOutputRandomVector(const OutputCollection & outputs)
+RandomVector PhysicalModel::getOutputRandomVector(const OutputCollection & outputs)
 {
   return getImplementation()->getOutputRandomVector(outputs);
 }
 
 
-OT::NumericalMathFunction PhysicalModel::getFunction(const OutputCollection & outputs) const
+NumericalMathFunction PhysicalModel::getFunction(const OutputCollection & outputs) const
 {
   return getImplementation()->getFunction(outputs);
 }
 
 
-OT::NumericalMathFunction PhysicalModel::getFunction() const
+NumericalMathFunction PhysicalModel::getFunction() const
 {
   return getImplementation()->getFunction();
 }
 
-void PhysicalModel::setFunction(const OT::NumericalMathFunction & function)
+void PhysicalModel::setFunction(const NumericalMathFunction & function)
 {
   getImplementation()->setFunction(function);
 }

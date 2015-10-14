@@ -2,6 +2,8 @@
 
 #include "ParametricCalculusResult.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 CLASSNAMEINIT(ParametricCalculusResult);
@@ -12,12 +14,13 @@ ParametricCalculusResult::ParametricCalculusResult()
 }
 
 
-ParametricCalculusResult::ParametricCalculusResult(OT::NumericalSample resultSample, OT::NumericalSample inputSample)
+ParametricCalculusResult::ParametricCalculusResult(NumericalSample resultSample, NumericalSample inputSample)
  : resultSample_(resultSample)
+ , inputSample_(inputSample)
  , listMin_(resultSample.getMin())
  , listMax_(resultSample.getMax())
 {
-  searchMinMax(inputSample);
+  searchMinMax();
 }
 
 
@@ -27,9 +30,15 @@ ParametricCalculusResult::~ParametricCalculusResult()
 }
 
 
-OT::NumericalSample ParametricCalculusResult::getResultSample() const
+NumericalSample ParametricCalculusResult::getResultSample() const
 {
   return resultSample_;
+}
+
+
+NumericalSample ParametricCalculusResult::getInputSample() const
+{
+  return inputSample_;
 }
 
 
@@ -39,7 +48,7 @@ NumericalSampleCollection ParametricCalculusResult::getListXMin() const
 }
 
 
-OT::NumericalPoint ParametricCalculusResult::getListMin() const
+NumericalPoint ParametricCalculusResult::getListMin() const
 {
   return resultSample_.getMin();
 }
@@ -51,42 +60,48 @@ NumericalSampleCollection ParametricCalculusResult::getListXMax() const
 }
 
 
-OT::NumericalPoint ParametricCalculusResult::getListMax() const
+NumericalPoint ParametricCalculusResult::getListMax() const
 {
   return resultSample_.getMax();
 }
 
 
-OT::Description ParametricCalculusResult::getOutputNames() const
+Description ParametricCalculusResult::getOutputNames() const
 {
   return resultSample_.getDescription();
 }
 
 
-void ParametricCalculusResult::searchMinMax(OT::NumericalSample inputSample)
+Description ParametricCalculusResult::getInputNames() const
 {
-  int size = inputSample.getSize();
-  int numberInputs = inputSample.getDimension();
+  return inputSample_.getDescription();
+}
 
-  OT::Indices indicesInputs(numberInputs);
+
+void ParametricCalculusResult::searchMinMax()
+{
+  int size = inputSample_.getSize();
+  int numberInputs = inputSample_.getDimension();
+
+  Indices indicesInputs(numberInputs);
   indicesInputs.fill();
 
-  OT::NumericalSample sample = inputSample;
+  NumericalSample sample = inputSample_;
   sample.stack(resultSample_);
 
   for (int i=numberInputs; i<sample.getDimension(); ++i)
   {
-    OT::NumericalSample orderedSample = sample.sortAccordingToAComponent(i);
+    NumericalSample orderedSample = sample.sortAccordingToAComponent(i);
 
     // Search min value of the ith output and the corresponding set of inputs X
     double minValue = orderedSample[0][i];
 
     int it=0;
     double value = orderedSample[it][i];
-    OT::NumericalSample tempSample(0, numberInputs);
+    NumericalSample tempSample(0, numberInputs);
     do
     {
-      OT::NumericalPoint point = orderedSample.getMarginal(indicesInputs)[it];
+      NumericalPoint point = orderedSample.getMarginal(indicesInputs)[it];
       if (!tempSample.__contains__(point))
         tempSample.add(point);
       ++it;
@@ -100,10 +115,10 @@ void ParametricCalculusResult::searchMinMax(OT::NumericalSample inputSample)
 
     it=0;
     value = orderedSample[size-1-it][i];
-    tempSample = OT::NumericalSample(0, numberInputs);
+    tempSample = NumericalSample(0, numberInputs);
     do
     {
-      OT::NumericalPoint point = orderedSample.getMarginal(indicesInputs)[size-1-it];
+      NumericalPoint point = orderedSample.getMarginal(indicesInputs)[size-1-it];
       if (!tempSample.__contains__(point))
         tempSample.add(point);
       ++it;

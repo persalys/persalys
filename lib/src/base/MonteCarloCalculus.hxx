@@ -18,8 +18,6 @@ public:
   MonteCarloCalculus(const MonteCarloCalculus & other);
   virtual MonteCarloCalculus * clone() const;
 
-  virtual ~MonteCarloCalculus();
-
   OutputCollection getOutputs() const;
   void setOutputs(const OutputCollection & outputs);
 

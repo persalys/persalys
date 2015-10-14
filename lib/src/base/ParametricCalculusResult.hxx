@@ -18,17 +18,20 @@ public:
   virtual ~ParametricCalculusResult();
 
   OT::NumericalSample getResultSample() const;
+  OT::NumericalSample getInputSample() const;
   NumericalSampleCollection getListXMin() const;
   OT::NumericalPoint getListMin() const;
   NumericalSampleCollection getListXMax() const;
   OT::NumericalPoint getListMax() const;
   OT::Description getOutputNames() const;
+  OT::Description getInputNames() const;
 
 protected:
-  void searchMinMax(OT::NumericalSample inputSample);
+  void searchMinMax();
 
 private:
   OT::NumericalSample resultSample_;
+  OT::NumericalSample inputSample_;
   NumericalSampleCollection listXMin_;
   OT::NumericalPoint listMin_;
   NumericalSampleCollection listXMax_;

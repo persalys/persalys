@@ -20,8 +20,6 @@ public:
   ParametricCalculus(const ParametricCalculus & other);
   virtual ParametricCalculus * clone() const;
 
-  virtual ~ParametricCalculus();
-
   void computeParameters(const InputCollection & inputs);
   void updateParameters();
   void computeInputSample();

@@ -3,6 +3,8 @@
 #include "MonteCarloCalculus.hxx"
 #include "RandomGenerator.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 CLASSNAMEINIT(MonteCarloCalculus);
@@ -37,11 +39,6 @@ MonteCarloCalculus* MonteCarloCalculus::clone() const
 }
 
 
-MonteCarloCalculus::~MonteCarloCalculus()
-{
-}
-
-
 OutputCollection MonteCarloCalculus::getOutputs() const
 {
   return outputs_;
@@ -56,11 +53,11 @@ void MonteCarloCalculus::setOutputs(const OutputCollection & outputs)
 
 void MonteCarloCalculus::run()
 {
-  OT::RandomGenerator::SetSeed(0); //TODO seed in argument
-  OT::NumericalSample inputSample(getPhysicalModel().getInputRandomVector().getSample(nbSimulations_));
+  RandomGenerator::SetSeed(0); //TODO seed in argument
+  NumericalSample inputSample(getPhysicalModel().getInputRandomVector().getSample(nbSimulations_));
   // set results
   result_ = MonteCarloResult(getPhysicalModel().getFunction(outputs_)(inputSample), inputSample,
-                             nbSimulations_, computeCondidenceInterval_, levelConfidenceInterval_);
+                             levelConfidenceInterval_);
 
   notify("calculusFinished");
 }
@@ -75,7 +72,7 @@ MonteCarloResult MonteCarloCalculus::getResult() const
 std::string MonteCarloCalculus::dump() const
 {
   std::string result;
-  OT::OSS oss;
+  OSS oss;
   oss << nbSimulations_;
   result += getName()+ " = otguibase.MonteCarloCalculus('" + getName() + "', " + getPhysicalModel().getName();
   result += ", " + oss.str() + ")\n";

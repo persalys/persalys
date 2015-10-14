@@ -3,6 +3,8 @@
 #include "ParametricCalculus.hxx"
 #include "Box.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 CLASSNAMEINIT(ParametricCalculus);
@@ -15,15 +17,15 @@ ParametricCalculus::ParametricCalculus(const std::string & name, const PhysicalM
 
 
 ParametricCalculus::ParametricCalculus(const std::string & name, const PhysicalModel & physicalModel,
-                         const OT::NumericalPoint & infBounds, const OT::NumericalPoint & supBounds,
-                         const OT::Indices & nbValues)
+                         const NumericalPoint & infBounds, const NumericalPoint & supBounds,
+                         const Indices & nbValues)
  : CalculusImplementation(name, physicalModel)
  , infBounds_(infBounds)
  , supBounds_(supBounds)
  , nbValues_(nbValues)
 {
   int inputSize = physicalModel.getInputs().getSize();
-  inputNames_ = OT::Description(inputSize);
+  inputNames_ = Description(inputSize);
 
   for (int i=0; i<inputSize; ++i)
   {
@@ -48,18 +50,13 @@ ParametricCalculus* ParametricCalculus::clone() const
 }
 
 
-ParametricCalculus::~ParametricCalculus()
-{
-}
-
-
 void ParametricCalculus::computeParameters(const InputCollection & inputs)
 {
   int inputSize = inputs.getSize();
-  infBounds_ = OT::NumericalPoint(inputSize);
-  supBounds_ = OT::NumericalPoint(inputSize);
-  nbValues_ = OT::Indices(inputSize);
-  inputNames_ = OT::Description(inputSize);
+  infBounds_ = NumericalPoint(inputSize);
+  supBounds_ = NumericalPoint(inputSize);
+  nbValues_ = Indices(inputSize);
+  inputNames_ = Description(inputSize);
 
   for (int i=0; i<inputSize; ++i)
   {
@@ -84,19 +81,19 @@ void ParametricCalculus::computeParameters(const InputCollection & inputs)
 void ParametricCalculus::updateParameters()
 {
   int inputSize = getPhysicalModel().getInputs().getSize();
-  OT::Description inputNames(inputNames_);
-  inputNames_ = OT::Description(inputSize);
+  Description inputNames(inputNames_);
+  inputNames_ = Description(inputSize);
 
-  OT::NumericalPoint infBounds(infBounds_);
-  OT::NumericalPoint supBounds(supBounds_);
-  OT::Indices nbValues(nbValues_);
+  NumericalPoint infBounds(infBounds_);
+  NumericalPoint supBounds(supBounds_);
+  Indices nbValues(nbValues_);
 
   computeParameters(getPhysicalModel().getInputs());
 
   for (int i=0; i<inputSize; ++i)
   {
     inputNames_[i] = getPhysicalModel().getInputs()[i].getName();
-    const OT::Description::const_iterator it = std::find(inputNames.begin(), inputNames.end(), inputNames_[i]);
+    const Description::const_iterator it = std::find(inputNames.begin(), inputNames.end(), inputNames_[i]);
     if (it != inputNames.end())
     {
       infBounds_[i] = infBounds[it - inputNames.begin()];
@@ -109,10 +106,10 @@ void ParametricCalculus::updateParameters()
 
 void ParametricCalculus::computeInputSample()
 {
-  inputSample_ = OT::NumericalSample(0, 0);
-  OT::NumericalPoint scale(0);
-  OT::NumericalPoint transvec(0);
-  OT::NumericalPoint levels(0);
+  inputSample_ = NumericalSample(0, 0);
+  NumericalPoint scale(0);
+  NumericalPoint transvec(0);
+  NumericalPoint levels(0);
 
   for (int i=0; i<infBounds_.getSize(); ++i)
   {
@@ -129,7 +126,7 @@ void ParametricCalculus::computeInputSample()
 
   if (levels.getSize())
   {
-    OT::Box box = OT::Box(levels);
+    Box box = Box(levels);
 
     inputSample_ = box.generate();
     inputSample_*=scale;
@@ -141,33 +138,33 @@ void ParametricCalculus::computeInputSample()
 void ParametricCalculus::run()
 {
   // output = f(input)
-  OT::NumericalMathFunction model = getPhysicalModel().getFunction();
+  NumericalMathFunction model = getPhysicalModel().getFunction();
 
   computeInputSample();
 
   inputSample_.setDescription(model.getInputDescription());
 
-  OT::NumericalSample outputSample = model(inputSample_);
+  NumericalSample outputSample = model(inputSample_);
   result_ = ParametricCalculusResult(outputSample, inputSample_);
 
   notify("calculusFinished");
 }
 
 
-OT::NumericalSample ParametricCalculus::getInputSample() const
+NumericalSample ParametricCalculus::getInputSample() const
 {
   return inputSample_;
 }
 
 
-void ParametricCalculus::setInputSample(const OT::NumericalSample & inputSample)
+void ParametricCalculus::setInputSample(const NumericalSample & inputSample)
 {
   inputSample_ = inputSample;
   notify("inputSampleChanged");
 }
 
 
-OT::NumericalPoint ParametricCalculus::getInfBounds() const
+NumericalPoint ParametricCalculus::getInfBounds() const
 {
   return infBounds_;
 }
@@ -179,7 +176,7 @@ void ParametricCalculus::setInfBound(const int & index, const double & infBounds
 }
 
 
-OT::NumericalPoint ParametricCalculus::getSupBounds() const
+NumericalPoint ParametricCalculus::getSupBounds() const
 {
   return supBounds_;
 }
@@ -191,7 +188,7 @@ void ParametricCalculus::setSupBound(const int & index, const double & supBounds
 }
 
 
-OT::Indices ParametricCalculus::getNbValues() const
+Indices ParametricCalculus::getNbValues() const
 {
   return nbValues_;
 }
@@ -212,7 +209,7 @@ ParametricCalculusResult ParametricCalculus::getResult() const
 std::string ParametricCalculus::dump() const
 {
   std::string result;
-  OT::OSS oss;
+  OSS oss;
   oss << "infBounds = ot.NumericalPoint(" << infBounds_.getSize() << ")\n";
   oss << "supBounds = ot.NumericalPoint(" << supBounds_.getSize() << ")\n";
   oss << "nbValues = ot.Indices(" << nbValues_.getSize() << ")\n";
