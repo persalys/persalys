@@ -4,6 +4,7 @@
 #define MONTECARLORESULT_H
 
 #include "ParametricCalculusResult.hxx"
+#include "Distribution.hxx"
 
 namespace OTGUI {
 class MonteCarloResult : public ParametricCalculusResult
@@ -26,6 +27,8 @@ public:
   OT::NumericalPoint getThirdQuartile() const;
   OT::NumericalSample getMeanConfidenceInterval() const;
   OT::NumericalSample getStdConfidenceInterval() const;
+
+  OT::Distribution getFittedDistribution() const;
 
 protected:
   void computeMeanConfidenceInterval(int nbSimu, double level);

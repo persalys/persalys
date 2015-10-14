@@ -24,6 +24,7 @@ public:
   OT::NumericalPoint getListMax() const;
   OT::Description getOutputNames() const;
 
+protected:
   void searchMinMax(OT::NumericalSample inputSample);
 
 private:

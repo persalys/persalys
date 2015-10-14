@@ -3,6 +3,7 @@
 #include "MonteCarloResult.hxx"
 #include "Normal.hxx"
 #include "ChiSquare.hxx"
+#include "KernelSmoothing.hxx"
 
 namespace OTGUI{
 
@@ -96,6 +97,13 @@ OT::NumericalSample MonteCarloResult::getMeanConfidenceInterval() const
 OT::NumericalSample MonteCarloResult::getStdConfidenceInterval() const
 {
   return stdConfidenceInterval_;
+}
+
+
+OT::Distribution MonteCarloResult::getFittedDistribution() const
+{
+  OT::KernelSmoothing gaussianKernel = OT::KernelSmoothing();
+  return gaussianKernel.build(getResultSample(), true);
 }
 
 
