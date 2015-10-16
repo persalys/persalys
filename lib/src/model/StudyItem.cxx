@@ -40,6 +40,17 @@ void StudyItem::update(Observable * source, const std::string & message)
 
     emit newParametricCalculusItemCreated(newParametricCalculusItem);
   }
+  else if (message=="addMonteCarloCalculus" || message=="addQuadraticCumulCalculus")
+  {
+    Calculus addedDistributionAnalysis = study->getCalculuses().back();
+    DistributionAnalysisItem * newDistributionAnalysisItem = new DistributionAnalysisItem(addedDistributionAnalysis);
+    addedDistributionAnalysis.addObserver(newDistributionAnalysisItem);
+    for (int i=0; i<rowCount(); ++i)
+      if (child(i)->text().toStdString() == addedDistributionAnalysis.getPhysicalModel().getName())
+        child(i)->appendRow(newDistributionAnalysisItem);
+
+    emit newDistributionAnalysisItemCreated(newDistributionAnalysisItem);
+  }
 }
 
 

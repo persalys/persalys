@@ -51,6 +51,18 @@ void MonteCarloCalculus::setOutputs(const OutputCollection & outputs)
 }
 
 
+int MonteCarloCalculus::getNbSimulations() const
+{
+  return nbSimulations_;
+}
+
+
+void MonteCarloCalculus::setNbSimulations(const int nbSimu)
+{
+  nbSimulations_ = nbSimu;
+}
+
+
 void MonteCarloCalculus::run()
 {
   RandomGenerator::SetSeed(0); //TODO seed in argument

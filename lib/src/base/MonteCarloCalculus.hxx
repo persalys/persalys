@@ -21,6 +21,9 @@ public:
   OutputCollection getOutputs() const;
   void setOutputs(const OutputCollection & outputs);
 
+  int getNbSimulations() const;
+  void setNbSimulations(const int nbSimu);
+
   MonteCarloResult getResult() const;
 
   virtual void run();

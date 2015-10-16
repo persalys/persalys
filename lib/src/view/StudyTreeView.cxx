@@ -9,6 +9,8 @@
 #include "PhysicalModelWindow.hxx"
 #include "ParametricCalculusWizard.hxx"
 #include "ParametricCalculusResultWindow.hxx"
+#include "DistributionAnalysisWizard.hxx"
+#include "DistributionAnalysisItem.hxx"
 
 #include <iostream>
 
@@ -31,7 +33,6 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   header()->hide();
 
   connect(this, SIGNAL(clicked(const QModelIndex &)), this, SLOT(selectedItemChanged(const QModelIndex &)));
-
 }
 
 
@@ -57,10 +58,15 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
     if (data=="PhysicalModel")
     {
       contextMenu->addAction(newParametricCalculus_);
+      contextMenu->addAction(newDistributionAnalysis_);
     }
     if (data=="ParametricCalculus")
     {
       contextMenu->addAction(runParametricCalculus_);
+    }
+    if (data=="DistributionAnalysis")
+    {
+      contextMenu->addAction(runDistributionAnalysis_);
     }
     contextMenu->exec(mapToGlobal(point));
   }    
@@ -76,6 +82,10 @@ void StudyTreeView::buildActions()
   newParametricCalculus_ = new QAction(tr("New parametric calculus"), this);
   newParametricCalculus_->setStatusTip(tr("Create a new parametric calculus"));
   connect(newParametricCalculus_, SIGNAL(triggered()), this, SLOT(createNewParametricCalculus()));
+
+  newDistributionAnalysis_ = new QAction(tr("New distribution analysis"), this);
+  newDistributionAnalysis_->setStatusTip(tr("Create a new distribution analysis"));
+  connect(newDistributionAnalysis_, SIGNAL(triggered()), this, SLOT(createNewDistributionAnalysis()));
 
   runParametricCalculus_ = new QAction(tr("Run"), this);
   runParametricCalculus_->setStatusTip(tr("Run the parametric calculus"));
@@ -123,6 +133,21 @@ void StudyTreeView::createNewParametricCalculus()
 }
 
 
+void StudyTreeView::createNewDistributionAnalysis()
+{
+  QModelIndex physicalModelIndex = selectionModel()->currentIndex();
+  PhysicalModelItem * physicalModelItem = static_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
+  StudyItem * studyItem = static_cast<StudyItem*>(physicalModelItem->QStandardItem::parent());
+  DistributionAnalysisWizard * wizard = new DistributionAnalysisWizard(studyItem->getStudy(), physicalModelItem->getPhysicalModel());
+
+  if (wizard->exec())
+  {
+    wizard->validate();
+    setExpanded(physicalModelIndex, true);
+  }
+}
+
+
 void StudyTreeView::createParametricCalculusConnection(ParametricCalculusItem* item)
 {
   connect(item, SIGNAL(calculusFinished(CalculusItem *)), this, SIGNAL(checkIfWindowResultExists(CalculusItem *)));
@@ -138,6 +163,21 @@ void StudyTreeView::runParametricCalculus()
   ParametricCalculusItem * item = static_cast<ParametricCalculusItem*>(selectedItem);
 
   ParametricCalculusWizard * wizard = new ParametricCalculusWizard(item->getCalculus());
+  if (wizard->exec())
+  {
+    item->getCalculus().run();
+  }
+}
+
+
+void StudyTreeView::runDistributionAnalysis()
+{
+  QModelIndex index = selectionModel()->currentIndex();
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+
+  DistributionAnalysisItem * item = static_cast<DistributionAnalysisItem*>(selectedItem);
+
+  DistributionAnalysisWizard * wizard = new DistributionAnalysisWizard(item->getCalculus());
   if (wizard->exec())
   {
     item->getCalculus().run();

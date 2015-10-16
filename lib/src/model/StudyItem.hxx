@@ -5,6 +5,7 @@
 
 #include "PhysicalModelItem.hxx"
 #include "ParametricCalculusItem.hxx"
+#include "DistributionAnalysisItem.hxx"
 #include "OTStudy.hxx"
 
 
@@ -28,6 +29,7 @@ public slots:
 signals:
   void newPhysicalModelItemCreated(PhysicalModelItem*);
   void newParametricCalculusItemCreated(ParametricCalculusItem*);
+  void newDistributionAnalysisItemCreated(DistributionAnalysisItem*);
 private:
   OTStudy * study_;
 };
