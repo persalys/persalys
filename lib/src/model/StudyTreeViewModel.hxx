@@ -33,7 +33,7 @@ public:
 public slots:
 signals:
   void newPhysicalModelCreated(PhysicalModelItem*);
-  void newParametricCalculusCreated(ParametricCalculusItem*);
+  void newCalculusCreated(CalculusItem*);
 };
 }
 #endif

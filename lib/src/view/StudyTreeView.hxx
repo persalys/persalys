@@ -33,7 +33,8 @@ public slots:
   void runParametricCalculus();
   void runDistributionAnalysis();
   void createParametricCalculusResult(CalculusItem *);
-  void createParametricCalculusConnection(ParametricCalculusItem*);
+  void createDistributionAnalysisResult(CalculusItem *);
+  void createCalculusConnection(CalculusItem*);
   void createNewPhysicalModelWindow(PhysicalModelItem * item);
   void dumpStudy();
   void loadStudy();

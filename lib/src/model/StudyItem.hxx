@@ -28,8 +28,8 @@ public:
 public slots:
 signals:
   void newPhysicalModelItemCreated(PhysicalModelItem*);
-  void newParametricCalculusItemCreated(ParametricCalculusItem*);
-  void newDistributionAnalysisItemCreated(DistributionAnalysisItem*);
+  void newCalculusItemCreated(CalculusItem*);
+
 private:
   OTStudy * study_;
 };

@@ -37,7 +37,7 @@ void StudyTreeViewModel::addStudyItem(OTStudy * study)
 {
   StudyItem * studyItem = new StudyItem(study);
   connect(studyItem, SIGNAL(newPhysicalModelItemCreated(PhysicalModelItem*)), this, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)));
-  connect(studyItem, SIGNAL(newParametricCalculusItemCreated(ParametricCalculusItem*)), this, SIGNAL(newParametricCalculusCreated(ParametricCalculusItem*)));
+  connect(studyItem, SIGNAL(newCalculusItemCreated(CalculusItem*)), this, SIGNAL(newCalculusCreated(CalculusItem*)));
   study->addObserver(studyItem);
   invisibleRootItem()->appendRow(studyItem);
 }

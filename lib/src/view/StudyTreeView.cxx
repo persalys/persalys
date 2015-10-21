@@ -10,7 +10,7 @@
 #include "ParametricCalculusWizard.hxx"
 #include "ParametricCalculusResultWindow.hxx"
 #include "DistributionAnalysisWizard.hxx"
-#include "DistributionAnalysisItem.hxx"
+#include "MonteCarloCalculusResultWindow.hxx"
 
 #include <iostream>
 
@@ -23,7 +23,7 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   OTStudy::SetInstanceObserver(treeViewModel_);
   setModel(treeViewModel_);
   connect(treeViewModel_, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)), this, SLOT(createNewPhysicalModelWindow(PhysicalModelItem*)));
-  connect(treeViewModel_, SIGNAL(newParametricCalculusCreated(ParametricCalculusItem*)), this, SLOT(createParametricCalculusConnection(ParametricCalculusItem*)));
+  connect(treeViewModel_, SIGNAL(newCalculusCreated(CalculusItem*)), this, SLOT(createCalculusConnection(CalculusItem*)));
 
   buildActions();
 
@@ -148,10 +148,14 @@ void StudyTreeView::createNewDistributionAnalysis()
 }
 
 
-void StudyTreeView::createParametricCalculusConnection(ParametricCalculusItem* item)
+void StudyTreeView::createCalculusConnection(CalculusItem * item)
 {
   connect(item, SIGNAL(calculusFinished(CalculusItem *)), this, SIGNAL(checkIfWindowResultExists(CalculusItem *)));
-  connect(item, SIGNAL(calculusFinished(CalculusItem *)), this, SLOT(createParametricCalculusResult(CalculusItem *)));
+  QString data = item->data(Qt::UserRole).toString();
+  if (data == "ParametricCalculus")
+    connect(item, SIGNAL(calculusFinished(CalculusItem *)), this, SLOT(createParametricCalculusResult(CalculusItem *)));
+  else if (data == "DistributionAnalysis")
+    connect(item, SIGNAL(calculusFinished(CalculusItem *)), this, SLOT(createDistributionAnalysisResult(CalculusItem *)));
 }
 
 
@@ -189,6 +193,16 @@ void StudyTreeView::createParametricCalculusResult(CalculusItem * item)
 {
   ParametricCalculusResultWindow * window = new ParametricCalculusResultWindow(static_cast<ParametricCalculusItem*>(item));
   emit showWindow(window);
+}
+
+
+void StudyTreeView::createDistributionAnalysisResult(CalculusItem * item)
+{
+  if (item->getCalculus().getImplementation()->getClassName() == "MonteCarloCalculus")
+  {
+    MonteCarloCalculusResultWindow * window = new MonteCarloCalculusResultWindow(static_cast<DistributionAnalysisItem*>(item));
+    emit showWindow(window);
+  }
 }
 
 

@@ -38,7 +38,7 @@ void StudyItem::update(Observable * source, const std::string & message)
       if (child(i)->text().toStdString() == addedParametricCalculus.getPhysicalModel().getName())
         child(i)->appendRow(newParametricCalculusItem);
 
-    emit newParametricCalculusItemCreated(newParametricCalculusItem);
+    emit newCalculusItemCreated(newParametricCalculusItem);
   }
   else if (message=="addMonteCarloCalculus" || message=="addQuadraticCumulCalculus")
   {
@@ -49,7 +49,7 @@ void StudyItem::update(Observable * source, const std::string & message)
       if (child(i)->text().toStdString() == addedDistributionAnalysis.getPhysicalModel().getName())
         child(i)->appendRow(newDistributionAnalysisItem);
 
-    emit newDistributionAnalysisItemCreated(newDistributionAnalysisItem);
+    emit newCalculusItemCreated(newDistributionAnalysisItem);
   }
 }
 
