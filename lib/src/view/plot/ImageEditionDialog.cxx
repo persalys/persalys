@@ -139,6 +139,8 @@ void ImageEditionDialog::updateLineEdits()
   xlabelLineEdit_->blockSignals(true);
   xmin_->blockSignals(true);
   xmax_->blockSignals(true);
+  ymin_->blockSignals(true);
+  ymax_->blockSignals(true);
   ylabelLineEdit_->blockSignals(true);
   titleLineEdit_->blockSignals(true);
 
@@ -153,6 +155,8 @@ void ImageEditionDialog::updateLineEdits()
   xlabelLineEdit_->blockSignals(false);
   xmin_->blockSignals(false);
   xmax_->blockSignals(false);
+  ymin_->blockSignals(false);
+  ymax_->blockSignals(false);
   ylabelLineEdit_->blockSignals(false);
   titleLineEdit_->blockSignals(false);
 }
@@ -222,7 +226,7 @@ void ImageEditionDialog::updateYrange()
   double valueMin = ymin_->text().toDouble(&okMin);
   bool okMax;
   double valueMax = ymax_->text().toDouble(&okMax);
-  
+
   if (okMin && okMax && valueMin < valueMax)
   {
     plotWidget_->setAxisScale(QwtPlot::yLeft, valueMin, valueMax);
