@@ -67,6 +67,7 @@ void MonteCarloCalculus::run()
 {
   RandomGenerator::SetSeed(0); //TODO seed in argument
   NumericalSample inputSample(getPhysicalModel().getInputRandomVector().getSample(nbSimulations_));
+  inputSample.setDescription(getPhysicalModel().getFunction().getInputDescription());
   // set results
   result_ = MonteCarloResult(getPhysicalModel().getFunction(outputs_)(inputSample), inputSample,
                              levelConfidenceInterval_);

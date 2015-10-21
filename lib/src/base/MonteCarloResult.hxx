@@ -12,6 +12,10 @@ class MonteCarloResult : public ParametricCalculusResult
   CLASSNAME;
 
 public:
+
+  typedef OT::Collection<OT::NumericalPoint> NumericalPointCollection;
+  typedef OT::Collection<OT::Distribution> DistributionCollection;
+
   MonteCarloResult();
   MonteCarloResult(OT::NumericalSample outputSample, OT::NumericalSample inputSample,
                    double level=0.95);
@@ -19,6 +23,7 @@ public:
   virtual ~MonteCarloResult();
 
   OT::NumericalPoint getMean();
+  OT::NumericalPoint getMedian();
   OT::NumericalPoint getStandardDeviation();
   OT::NumericalPoint getVariance();
   OT::NumericalPoint getSkewness();
@@ -27,12 +32,14 @@ public:
   OT::NumericalPoint getThirdQuartile();
   OT::Interval getMeanConfidenceInterval();
   OT::Interval getStdConfidenceInterval();
+  NumericalPointCollection getOutliers();
 
-  OT::Distribution getFittedDistribution();
+  DistributionCollection getFittedDistribution();
 
 private:
   double level_;
   OT::NumericalPoint mean_;
+  OT::NumericalPoint median_;
   OT::NumericalPoint standardDeviation_;
   OT::NumericalPoint variance_;
   OT::NumericalPoint skewness_;
@@ -41,6 +48,7 @@ private:
   OT::NumericalPoint thirdQuartile_;
   OT::Interval meanConfidenceInterval_;
   OT::Interval stdConfidenceInterval_;
+  NumericalPointCollection outliers_;
 };
 }
 #endif

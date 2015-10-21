@@ -37,6 +37,14 @@ NumericalPoint MonteCarloResult::getMean()
 }
 
 
+NumericalPoint MonteCarloResult::getMedian()
+{
+  if (!median_.getSize())
+    median_ = getResultSample().computeMedian();
+  return median_;
+}
+
+
 NumericalPoint MonteCarloResult::getStandardDeviation()
 {
   if (!standardDeviation_.getSize())
@@ -80,7 +88,7 @@ NumericalPoint MonteCarloResult::getKurtosis()
 NumericalPoint MonteCarloResult::getFirstQuartile()
 {
   if (!firstQuartile_.getSize())
-    firstQuartile_ = getResultSample().computeQuantile(0.25);
+    firstQuartile_ = getResultSample().computeQuantilePerComponent(0.25);
   return firstQuartile_;
 }
 
@@ -88,7 +96,7 @@ NumericalPoint MonteCarloResult::getFirstQuartile()
 NumericalPoint MonteCarloResult::getThirdQuartile()
 {
   if (!thirdQuartile_.getSize())
-    thirdQuartile_ = getResultSample().computeQuantile(0.75);
+    thirdQuartile_ = getResultSample().computeQuantilePerComponent(0.75);
   return thirdQuartile_;
 }
 
@@ -152,10 +160,40 @@ Interval MonteCarloResult::getStdConfidenceInterval()
 }
 
 
-Distribution MonteCarloResult::getFittedDistribution()
+MonteCarloResult::NumericalPointCollection MonteCarloResult::getOutliers()
+{
+  if (!outliers_.getSize())
+  {
+    outliers_.clear();
+    for (int i=0; i<getResultSample().getDimension(); ++i)
+    {
+      NumericalPoint outliersOfIthOutput;
+      double Q1 = getFirstQuartile()[i];
+      double Q3 = getThirdQuartile()[i];
+      double lowerBound = Q1 - 1.5 * (Q3 - Q1);
+      double upperBound = Q3 + 1.5 * (Q3 - Q1);
+
+      for (int j=0; j<getResultSample().getSize(); ++j)
+        if (getResultSample()[j][i] < lowerBound || getResultSample()[j][i] > upperBound)
+          outliersOfIthOutput.add(getResultSample()[j][i]);
+
+      outliers_.add(outliersOfIthOutput);
+    }
+  }
+  return outliers_;
+}
+
+
+MonteCarloResult::DistributionCollection MonteCarloResult::getFittedDistribution()
 {
   KernelSmoothing gaussianKernel = KernelSmoothing();
-  return gaussianKernel.build(getResultSample(), true);
+
+  DistributionCollection distributions(getResultSample().getDimension());
+
+  for (int i=0; i<getResultSample().getDimension(); ++i)
+    distributions[i] = gaussianKernel.build(getResultSample().getMarginal(i), true);
+
+  return distributions;
 }
 
 }
