@@ -8,6 +8,7 @@
 #include <qwt_plot.h>
 #include <qwt_plot_grid.h>
 #include <qwt_plot_zoomer.h>
+#include <qwt_symbol.h>
 #include <QLabel>
 
 #include "NumericalSample.hxx"
@@ -24,20 +25,19 @@ class PlotWidget : public QwtPlot
 
 public:
 
-  static const int DefaultCurveWidth = 2;
-  static const QColor DefaultCurveColor;
+  static const QPen DefaultCurvePen;
 
   /// constructor
   PlotWidget(QWidget * parent = 0);
-//   PlotWidget(const PlotWidget & other);
-//   virtual PlotWidget * clone() const;
 
   /// plot a curve
-  void plotCurve(double * x, double * y, int size, const QColor & color = DefaultCurveColor, int width = DefaultCurveWidth, QwtPlotCurve::CurveStyle style=QwtPlotCurve::Lines);
-  void plotCurve(const OT::NumericalSample & data, const QColor & color = DefaultCurveColor, int width = DefaultCurveWidth);
+  void plotCurve(double * x, double * y, int size, const QPen pen=DefaultCurvePen, QwtPlotCurve::CurveStyle style=QwtPlotCurve::Lines, QwtSymbol* symbol=0);
+  void plotCurve(const OT::NumericalSample & data, const QPen pen=DefaultCurvePen);
 
-  void plotPDFCurve(const OT::Distribution & distribution, const QColor & color = DefaultCurveColor, int width = DefaultCurveWidth);
+  void plotPDFCurve(const OT::Distribution & distribution, const QPen pen=DefaultCurvePen);
   void plotScatter(const OT::NumericalSample & input, const OT::NumericalSample & output);
+  void drawBoxPlot(double median, double lowerQuartile, double upperQuartile,
+   double lowerBound, double upperBound, OT::NumericalPoint outliers_);
 
   /// clear plot
   void clear();

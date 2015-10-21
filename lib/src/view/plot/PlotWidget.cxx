@@ -5,12 +5,17 @@
 #include <qwt_plot_layout.h>
 #include <QMenu>
 #include <qwt_plot_renderer.h>
+#include <qwt_plot_magnifier.h>
+#include <qwt_plot_shapeitem.h>
+#include <qpainterpath.h>
 #include <qwt_legend.h>
 #include <QHBoxLayout>
 
+using namespace OT;
+
 namespace OTGUI {
 
-const QColor PlotWidget::DefaultCurveColor = QColor(240, 140, 0);//dark orange
+const QPen PlotWidget::DefaultCurvePen = QPen(Qt::black, 2);
 
 PlotWidget::PlotWidget(QWidget * parent)
 : QwtPlot(parent)
@@ -22,19 +27,11 @@ PlotWidget::PlotWidget(QWidget * parent)
 
   plotLayout()->setAlignCanvasToScales(true);
 
-  zoomer_ = new QwtPlotZoomer(canvas());
-  zoomer_->setMousePattern( QwtEventPattern::MouseSelect2,
-    Qt::RightButton, Qt::ControlModifier );
-  zoomer_->setMousePattern( QwtEventPattern::MouseSelect3,
-      Qt::RightButton );
+  // panning with the left mouse button
+  ( void ) new QwtPlotPanner(canvas());
 
-  zoomer_->setRubberBandPen(QPen(Qt::black, 2, Qt::DotLine));
-  zoomer_->setTrackerPen(QPen(Qt::black));
-
-  QwtPlotPanner *panner = new QwtPlotPanner(canvas());
-  panner->setAxisEnabled(QwtPlot::yRight, false);
-  panner->setMouseButton(Qt::MidButton);
-
+  // zoom in/out with the wheel
+  ( void ) new QwtPlotMagnifier(canvas());
   clear();
 
   // build actions
@@ -60,22 +57,20 @@ void PlotWidget::clear()
 }
 
 
-void PlotWidget::plotCurve(double * x, double * y, int size, const QColor & color, int width, QwtPlotCurve::CurveStyle style)
+void PlotWidget::plotCurve(double * x, double * y, int size, const QPen pen, QwtPlotCurve::CurveStyle style, QwtSymbol* symbol)
 {
   QwtPlotCurve * curve = new QwtPlotCurve;
-  QPen pen;
-  pen.setWidth(width);
-  pen.setColor(color);
-  curve->setPen(pen);
   curve->setSamples(x, y, size);
+  curve->setPen(pen);
   curve->setStyle(style);
+  if (symbol)
+    curve->setSymbol(symbol);
   curve->attach(this);
   replot();
-  zoomer_->setZoomBase();
 }
 
 
-void PlotWidget::plotCurve(const OT::NumericalSample & data, const QColor& color, int width)
+void PlotWidget::plotCurve(const NumericalSample & data, const QPen pen)
 {
   const int size = data.getSize();
   double * x = new double[size];
@@ -86,13 +81,13 @@ void PlotWidget::plotCurve(const OT::NumericalSample & data, const QColor& color
     x[i] = data[i][0];
     y[i] = data[i][1];
   }
-  plotCurve(x, y, size, color, width);
+  plotCurve(x, y, size, pen);
   delete[] x;
   delete[] y;
 }
 
 
-void PlotWidget::plotScatter(const OT::NumericalSample & input, const OT::NumericalSample & output)
+void PlotWidget::plotScatter(const NumericalSample & input, const NumericalSample & output)
 {
   int size = input.getSize();
 
@@ -106,19 +101,19 @@ void PlotWidget::plotScatter(const OT::NumericalSample & input, const OT::Numeri
   {
     xData[i] = input[i][0];
     yData[i] = output[i][0];
-    qDebug() << "x= " << xData[i] << " , y= " << yData[i];
+    //qDebug() << "x= " << xData[i] << " , y= " << yData[i];
   }
 
-  plotCurve(xData, yData, size, Qt::GlobalColor(16), 4, QwtPlotCurve::Dots);
+  plotCurve(xData, yData, size, QPen(Qt::GlobalColor(16), 4), QwtPlotCurve::Dots);
 }
 
 
-void PlotWidget::plotPDFCurve(const OT::Distribution & distribution, const QColor& color, int width)
+void PlotWidget::plotPDFCurve(const Distribution & distribution, const QPen pen)
 {
   double mean = distribution.getMean()[0];
   double stepSize = 0.0;
-  const double qmin = OT::ResourceMap::GetAsNumericalScalar("DistributionImplementation-QMin");
-  const double qmax = OT::ResourceMap::GetAsNumericalScalar("DistributionImplementation-QMax");
+  const double qmin = ResourceMap::GetAsNumericalScalar("DistributionImplementation-QMin");
+  const double qmax = ResourceMap::GetAsNumericalScalar("DistributionImplementation-QMax");
   double x1 = distribution.computeQuantile(qmin)[0];
   double x2 = distribution.computeQuantile(qmax)[0];
   const double delta = 2.0 *(x2 - x1) *(1.0 - 0.5 *(qmax - qmin));
@@ -135,7 +130,67 @@ void PlotWidget::plotPDFCurve(const OT::Distribution & distribution, const QColo
   setAxisTitle(QwtPlot::yLeft, tr("Density"));
   setAxisTitle(QwtPlot::xBottom, tr("X"));
 
-  plotCurve(distribution.drawPDF().getDrawable(0).getData(), color, width);
+  plotCurve(distribution.drawPDF().getDrawable(0).getData(), pen);
+}
+
+
+void PlotWidget::drawBoxPlot(double median, double lowerQuartile, double upperQuartile,
+                             double lowerBound, double upperBound, NumericalPoint outliers_)
+{
+  // draw median
+  double xMedian[2] = {0.9, 1.1};
+  double yMedian[2] = {median, median};
+  plotCurve(xMedian, yMedian, 2, QPen(Qt::red));
+
+  // draw box
+  QwtPlotShapeItem *item = new QwtPlotShapeItem;
+
+  QRectF rect(QPointF(0.9, lowerQuartile), QSizeF(0.2, upperQuartile-lowerQuartile));
+  
+  QPainterPath path;
+  path.addRect(rect);
+  item->setShape(path);
+  item->setPen(QPen(Qt::blue));
+
+  item->attach(this);
+
+  // draw whiskers
+  double xWhiskers[2] = {1., 1.};
+  double yLower[2] = {lowerBound, lowerQuartile};
+  plotCurve(xWhiskers, yLower, 2, QPen(Qt::black, 2, Qt::DashLine));
+
+  double yUpper[2] = {upperQuartile, upperBound};
+  plotCurve(xWhiskers, yUpper, 2, QPen(Qt::black, 2, Qt::DashLine));
+
+
+  double xWhiskersBars[2] = {0.95, 1.05};
+  double yLowerWhiskersBar[2] = {lowerBound, lowerBound};
+  plotCurve(xWhiskersBars, yLowerWhiskersBar, 2);
+
+  double yUpperWhiskersBar[2] = {upperBound, upperBound};
+  plotCurve(xWhiskersBars, yUpperWhiskersBar, 2);
+
+  // draw outliers
+  const int dim = outliers_.getDimension();
+  double * xOutliers = new double[dim];
+  double * yOutliers = new double[dim];
+
+  for (int i=0; i<dim; ++i)
+  {
+    xOutliers[i] = 1.;
+    yOutliers[i] = outliers_[i];
+  }
+
+  plotCurve(xOutliers, yOutliers, dim, QPen(Qt::blue), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::blue), QSize(5, 5)));
+
+//   TODO think about:
+//   QwtScaleDiv scaleDiv(0.5, 1.5);
+//   QList< double > ticks;
+//   scaleDiv.setTicks(QwtScaleDiv::NoTick, ticks);
+//   setAxisScaleDiv(QwtPlot::xBottom, scaleDiv);
+
+  setAxisScale(QwtPlot::xBottom, 0.5, 1.5, 0.5);
+  replot();
 }
 
 
