@@ -17,12 +17,6 @@ OTguiTableView::OTguiTableView(const OT::NumericalSample & sample)
 }
 
 
-OTguiTableView::~OTguiTableView()
-{
-
-}
-
-
 // show the context menu when right clicking
 void OTguiTableView::contextMenu(const QPoint & pos)
 {

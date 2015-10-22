@@ -20,11 +20,6 @@ MonteCarloCalculusResultWindow::MonteCarloCalculusResultWindow(DistributionAnaly
 }
 
 
-MonteCarloCalculusResultWindow::~MonteCarloCalculusResultWindow()
-{
-}
-
-
 void MonteCarloCalculusResultWindow::buildInterface()
 {
   QTabWidget * tabWidget = new QTabWidget;

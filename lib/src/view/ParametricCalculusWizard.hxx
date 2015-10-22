@@ -17,8 +17,6 @@ public:
   ParametricCalculusWizard(OTStudy * study, const PhysicalModel & physicalModel);
   ParametricCalculusWizard(const Calculus & calculus);
 
-  virtual ~ParametricCalculusWizard();
-
   void validate();
 
 protected:

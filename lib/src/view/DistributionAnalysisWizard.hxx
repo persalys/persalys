@@ -21,8 +21,6 @@ public:
   DistributionAnalysisWizard(OTStudy * study, const PhysicalModel & physicalModel);
   DistributionAnalysisWizard(const Calculus & calculus);
 
-  virtual ~DistributionAnalysisWizard();
-
   void validate();
 
 protected:

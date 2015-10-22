@@ -16,8 +16,6 @@ class ParametricCalculusResultWindow : public OTguiSubWindow //ResultWindow
 public:
   ParametricCalculusResultWindow(ParametricCalculusItem * item);
 
-  virtual ~ParametricCalculusResultWindow();
-
 protected:
   void buildInterface();
 

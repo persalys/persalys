@@ -19,8 +19,6 @@ class MonteCarloCalculusResultWindow : public OTguiSubWindow //ResultWindow
 public:
   MonteCarloCalculusResultWindow(DistributionAnalysisItem * item);
 
-  virtual ~MonteCarloCalculusResultWindow();
-
 protected:
   void buildInterface();
   void setLabelsText(int indexOutput=0);

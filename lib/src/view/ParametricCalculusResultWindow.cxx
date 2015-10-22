@@ -20,11 +20,6 @@ ParametricCalculusResultWindow::ParametricCalculusResultWindow(ParametricCalculu
 }
 
 
-ParametricCalculusResultWindow::~ParametricCalculusResultWindow()
-{
-}
-
-
 void ParametricCalculusResultWindow::buildInterface()
 {
   QTabWidget * tabWidget = new QTabWidget;

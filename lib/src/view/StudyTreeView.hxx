@@ -18,7 +18,6 @@ class StudyTreeView : public QTreeView
 
 public:
   StudyTreeView(QWidget * parent = 0);
-  virtual ~StudyTreeView();
 
 protected:
   void buildActions();

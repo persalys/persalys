@@ -12,11 +12,6 @@ OTguiSubWindow::OTguiSubWindow(QStandardItem * item)
 }
 
 
-OTguiSubWindow::~OTguiSubWindow()
-{
-}
-
-
 QStandardItem * OTguiSubWindow::getItem()const
 {
   return item_;

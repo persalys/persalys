@@ -14,8 +14,6 @@ class OTguiSubWindow : public QMdiSubWindow
 public:
   OTguiSubWindow(QStandardItem * item);
 
-  virtual ~OTguiSubWindow();
-
   QStandardItem * getItem()const;
 
 private:

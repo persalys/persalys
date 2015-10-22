@@ -19,8 +19,6 @@ class MainWindow : public QMainWindow
 public:
   MainWindow();
 
-  virtual ~MainWindow();
-
   QMdiArea * getMdiArea() const;
 
 public slots:

@@ -24,12 +24,6 @@ MainWindow::MainWindow()
 }
 
 
-MainWindow::~MainWindow()
-{
-  
-}
-
-
 void MainWindow::buildInterface()
 {
   QWidget * mainWidget = new QWidget;

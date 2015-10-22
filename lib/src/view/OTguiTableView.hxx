@@ -13,7 +13,6 @@ class OTguiTableView : public QTableView
 
 public:
   OTguiTableView(const OT::NumericalSample & sample);
-  virtual ~OTguiTableView();
 
 public slots:
   void contextMenu(const QPoint & pos);

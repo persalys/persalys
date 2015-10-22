@@ -25,11 +25,6 @@ ParametricCalculusWizard::ParametricCalculusWizard(const Calculus & calculus)
 }
 
 
-ParametricCalculusWizard::~ParametricCalculusWizard()
-{
-}
-
-
 void ParametricCalculusWizard::buildInterface()
 {
   setWindowTitle("Parametric analysis");

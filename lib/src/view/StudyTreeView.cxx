@@ -36,12 +36,6 @@ StudyTreeView::StudyTreeView(QWidget * parent)
 }
 
 
-StudyTreeView::~StudyTreeView()
-{
-  
-}
-
-
 void StudyTreeView::onCustomContextMenu(const QPoint &point)
 {
   QModelIndex index = indexAt(point);

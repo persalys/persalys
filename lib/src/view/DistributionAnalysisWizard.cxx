@@ -36,11 +36,6 @@ DistributionAnalysisWizard::DistributionAnalysisWizard(const Calculus & calculus
 }
 
 
-DistributionAnalysisWizard::~DistributionAnalysisWizard()
-{
-}
-
-
 void DistributionAnalysisWizard::buildInterface()
 {
   setWindowTitle("Distribution analysis");
