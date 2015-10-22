@@ -59,14 +59,7 @@ void MonteCarloCalculusResultWindow::buildInterface()
   QGridLayout * grid = new QGridLayout;
   int gridRow = -1;
 
-  QLabel * label = new QLabel;
-  label = new QLabel(tr("Mean"));
-  label->setStyleSheet("font: bold 14px;");
-  grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
-  meanLabel_ = new QLabel;
-  grid->addWidget(meanLabel_, gridRow, 1, Qt::AlignTop);
-
-  label = new QLabel(tr("Min"));
+  QLabel * label = new QLabel(tr("Min"));
   label->setStyleSheet("font: bold 14px;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   minLabel_ = new QLabel;
@@ -77,6 +70,12 @@ void MonteCarloCalculusResultWindow::buildInterface()
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   maxLabel_ = new QLabel;
   grid->addWidget(maxLabel_, gridRow, 1, Qt::AlignTop);
+
+  label = new QLabel(tr("Mean"));
+  label->setStyleSheet("font: bold 14px;");
+  grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
+  meanLabel_ = new QLabel;
+  grid->addWidget(meanLabel_, gridRow, 1, Qt::AlignTop);
 
   label = new QLabel(tr("Standard deviation"));
   label->setStyleSheet("font: bold 14px;");
@@ -231,14 +230,14 @@ void MonteCarloCalculusResultWindow::buildInterface()
 void MonteCarloCalculusResultWindow::setLabelsText(int indexOutput)
 {
   // mean
-  double meanCILowerBound = result_.getMeanConfidenceInterval().getFiniteLowerBound()[indexOutput];
-  double meanCIUpperBound = result_.getMeanConfidenceInterval().getFiniteUpperBound()[indexOutput];
+  double meanCILowerBound = result_.getMeanConfidenceInterval().getLowerBound()[indexOutput];
+  double meanCIUpperBound = result_.getMeanConfidenceInterval().getUpperBound()[indexOutput];
   OSS oss1;
   oss1 << result_.getMean()[indexOutput] << "\n" <<" CI = [" << meanCILowerBound <<", "<<meanCIUpperBound<<"]";
   meanLabel_->setText(QString::fromStdString(oss1.str()));
   // standard deviation
-  double stdCILowerBound = result_.getStdConfidenceInterval().getFiniteLowerBound()[indexOutput];
-  double stdCIUpperBound = result_.getStdConfidenceInterval().getFiniteUpperBound()[indexOutput];
+  double stdCILowerBound = result_.getStdConfidenceInterval().getLowerBound()[indexOutput];
+  double stdCIUpperBound = result_.getStdConfidenceInterval().getUpperBound()[indexOutput];
   OSS oss2;
   oss2 << result_.getStandardDeviation()[indexOutput] << "\n" <<" CI = [" << stdCILowerBound <<", "<<stdCIUpperBound<<"]";
   stdLabel_->setText(QString::fromStdString(oss2.str()));
@@ -252,20 +251,20 @@ void MonteCarloCalculusResultWindow::setLabelsText(int indexOutput)
   thirdQuartileLabel_->setText(QString::fromStdString((OSS()<<result_.getThirdQuartile()[indexOutput]).str()));
   // min
   OSS oss3;
-  oss3 << result_.getListMin()[indexOutput] << "\n";
+  oss3 << result_.getListMin()[indexOutput];
   for (int j=0; j<result_.getListXMin()[indexOutput].getSize();++j)
   {
     NumericalPoint point(result_.getListXMin()[indexOutput][j]);
-    oss3 << "  X=" <<point.__str__() << "\n";
+    oss3 << "\n  X=" <<point.__str__();
   }
   minLabel_->setText(QString::fromStdString(oss3.str()));
   // max
   OSS oss4;
-  oss4 << result_.getListMax()[indexOutput] << "\n";
+  oss4 << result_.getListMax()[indexOutput];
   for (int j=0; j<result_.getListXMax()[indexOutput].getSize();++j)
   {
     NumericalPoint point(result_.getListXMax()[indexOutput][j]);
-    oss4 << "  X=" <<point.__str__() << "\n";
+    oss4 << "\n  X=" <<point.__str__();
   }
   maxLabel_->setText(QString::fromStdString(oss4.str()));
 }
