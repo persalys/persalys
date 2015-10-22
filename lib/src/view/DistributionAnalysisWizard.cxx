@@ -62,7 +62,6 @@ void DistributionAnalysisWizard::buildInterface()
   methodGroup_->addButton(buttonToChooseMethod, DistributionAnalysisWizard::Taylor);
   methodLayout->addWidget(buttonToChooseMethod);
   connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SLOT(updateMethodWidgets()));
-//   connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SIGNAL(methodChanged(int)));
 
   methodBox->setLayout(methodLayout);
   mainLayout->addWidget(methodBox);
@@ -120,6 +119,8 @@ void DistributionAnalysisWizard::buildInterface()
 
   methodParametersLayout_->addStretch();
   mainLayout->addLayout(methodParametersLayout_);
+
+  updateMethodWidgets();
 
   addPage(page);
 }

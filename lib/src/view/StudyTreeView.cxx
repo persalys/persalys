@@ -11,6 +11,7 @@
 #include "ParametricCalculusResultWindow.hxx"
 #include "DistributionAnalysisWizard.hxx"
 #include "MonteCarloCalculusResultWindow.hxx"
+#include "QuadraticCumulCalculusResultWindow.hxx"
 
 #include <iostream>
 
@@ -84,6 +85,10 @@ void StudyTreeView::buildActions()
   runParametricCalculus_ = new QAction(tr("Run"), this);
   runParametricCalculus_->setStatusTip(tr("Run the parametric calculus"));
   connect(runParametricCalculus_, SIGNAL(triggered()), this, SLOT(runParametricCalculus()));
+
+  runDistributionAnalysis_ = new QAction(tr("Run"), this);
+  runDistributionAnalysis_->setStatusTip(tr("Run the distribution analysis"));
+  connect(runDistributionAnalysis_, SIGNAL(triggered()), this, SLOT(runDistributionAnalysis()));
 
   dumpStudy_ = new QAction(tr("Dump"), this);
   dumpStudy_->setStatusTip(tr("Dump the study"));
@@ -195,6 +200,11 @@ void StudyTreeView::createDistributionAnalysisResult(CalculusItem * item)
   if (item->getCalculus().getImplementation()->getClassName() == "MonteCarloCalculus")
   {
     MonteCarloCalculusResultWindow * window = new MonteCarloCalculusResultWindow(static_cast<DistributionAnalysisItem*>(item));
+    emit showWindow(window);
+  }
+  else
+  {
+    QuadraticCumulCalculusResultWindow * window = new QuadraticCumulCalculusResultWindow(static_cast<DistributionAnalysisItem*>(item));
     emit showWindow(window);
   }
 }

@@ -25,7 +25,7 @@ endif ()
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
 
-set(BASE_SOURCEFILES Observer.cxx Observable.cxx OTStudy.cxx Variable.cxx Input.cxx Output.cxx PhysicalModelImplementation.cxx PhysicalModel.cxx CalculusImplementation.cxx Calculus.cxx ParametricCalculusResult.cxx ParametricCalculus.cxx MonteCarloResult.cxx MonteCarloCalculus.cxx QuadraticCumulCalculus.cxx)
+set(BASE_SOURCEFILES Observer.cxx Observable.cxx OTStudy.cxx Variable.cxx Input.cxx Output.cxx PhysicalModelImplementation.cxx PhysicalModel.cxx CalculusImplementation.cxx Calculus.cxx ParametricCalculusResult.cxx ParametricCalculus.cxx MonteCarloResult.cxx MonteCarloCalculus.cxx QuadraticCumulResult.cxx QuadraticCumulCalculus.cxx)
 if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx)
 endif ()

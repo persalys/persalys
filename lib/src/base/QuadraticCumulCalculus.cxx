@@ -48,7 +48,7 @@ void QuadraticCumulCalculus::run()
 {
   QuadraticCumul algoQuadraticCumul(getPhysicalModel().getOutputRandomVector(outputs_));
   // set results
-  result_ = QuadraticCumulResult(algoQuadraticCumul);
+  result_ = QuadraticCumulResult(algoQuadraticCumul, outputs_);
 
   notify("calculusFinished");
 }

@@ -47,7 +47,7 @@ quadraticCumul.run()
 quadraticCumulResult = quadraticCumul.getResult()
 
 # Comparaison
-openturns.testing.assert_almost_equal(0.059730458221, quadraticCumulResult.getFirstOrderMean()[0], 1e-13)
+openturns.testing.assert_almost_equal(0.059730458221, quadraticCumulResult.getMeanFirstOrder()[0], 1e-13)
 
 ## Monte Carlo ##
 montecarlo = otguibase.MonteCarloCalculus('myMonteCarlo', myPhysicalModel, 1000)

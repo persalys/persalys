@@ -13,8 +13,9 @@ ot_add_source_file ( ParametricCalculusWizard.cxx )
 ot_add_source_file ( ParametricCalculusResultWindow.cxx )
 ot_add_source_file ( DistributionAnalysisWizard.cxx )
 ot_add_source_file ( MonteCarloCalculusResultWindow.cxx )
+ot_add_source_file ( QuadraticCumulCalculusResultWindow.cxx )
 
-qt4_wrap_cpp (OTGUI_VIEW_MOC_SRCS MainWindow.hxx OTguiSubWindow.hxx StudyTreeView.hxx OTguiTableView.hxx PhysicalModelWindow.hxx ParametricCalculusWizard.hxx ParametricCalculusResultWindow.hxx DistributionAnalysisWizard.hxx MonteCarloCalculusResultWindow.hxx)
+qt4_wrap_cpp (OTGUI_VIEW_MOC_SRCS MainWindow.hxx OTguiSubWindow.hxx StudyTreeView.hxx OTguiTableView.hxx PhysicalModelWindow.hxx ParametricCalculusWizard.hxx ParametricCalculusResultWindow.hxx DistributionAnalysisWizard.hxx MonteCarloCalculusResultWindow.hxx QuadraticCumulCalculusResultWindow.hxx)
 
 ot_install_header_file ( MainWindow.hxx )
 ot_install_header_file ( ParametricCalculusWizard.hxx )
@@ -25,6 +26,7 @@ ot_install_header_file ( OTguiTableView.hxx )
 ot_install_header_file ( ResultWindow.hxx )
 ot_install_header_file ( ParametricCalculusResultWindow.hxx )
 ot_install_header_file ( MonteCarloCalculusResultWindow.hxx )
+ot_install_header_file ( QuadraticCumulCalculusResultWindow.hxx )
 ot_install_header_file ( StudyTreeView.hxx )
 
 set(RESOURCES ${CMAKE_SOURCE_DIR}/gui.qrc)
