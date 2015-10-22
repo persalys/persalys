@@ -15,8 +15,6 @@ using namespace OT;
 
 namespace OTGUI {
 
-const QPen PlotWidget::DefaultCurvePen = QPen(Qt::black, 2);
-
 PlotWidget::PlotWidget(QWidget * parent)
 : QwtPlot(parent)
 , plotLabel_(new QLabel(this))
