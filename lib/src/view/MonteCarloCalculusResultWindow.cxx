@@ -103,7 +103,7 @@ void MonteCarloCalculusResultWindow::buildInterface()
   grid->addWidget(thirdQuartileLabel_, gridRow, 1, Qt::AlignTop);
 
   vbox->addLayout(grid);
-  setLabelsText();
+  updateLabelsText();
 
   // quantiles
   QHBoxLayout * quantLayout = new QHBoxLayout();
@@ -172,6 +172,7 @@ void MonteCarloCalculusResultWindow::buildInterface()
   boxPlot_->drawBoxPlot(median, Q1, Q3, Q1 - 1.5*(Q3-Q1), Q3 + 1.5*(Q3-Q1), result_.getOutliers()[0]);
 
   tabLayout->addWidget(boxPlot_->getPlotLabel());
+  tabLayout->addStretch();
 
   tabWidget->addTab(tab, tr("Box plots"));
 
@@ -189,19 +190,21 @@ void MonteCarloCalculusResultWindow::buildInterface()
   hLayout->addStretch();
   tabLayout->addLayout(hLayout);
 
-  scatterPlot_ = new PlotWidget;
-  tabLayout->addWidget(scatterPlot_->getPlotLabel());
-
   hLayout = new QHBoxLayout;
+  scatterPlot_ = new PlotWidget;
+  hLayout->addWidget(scatterPlot_->getPlotLabel());
+  QLabel * inputName = new QLabel(tr("Input"));
+  hLayout->addWidget(inputName, 0, Qt::AlignBottom);
   inputsComboBox_ = new QComboBox;
   items = QStringList();
   for (int i=0; i<result_.getInputSample().getDimension(); ++i)
     items<<QString::fromStdString(result_.getInputNames()[i]);
   inputsComboBox_->addItems(items);
   connect(inputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(inputScatterPlotChanged(int)));
+  hLayout->addWidget(inputsComboBox_, 0, Qt::AlignBottom);
   hLayout->addStretch();
-  hLayout->addWidget(inputsComboBox_);
   tabLayout->addLayout(hLayout);
+  tabLayout->addStretch();
 
   updateScatterPlot();
 
@@ -222,7 +225,7 @@ void MonteCarloCalculusResultWindow::buildInterface()
 }
 
 
-void MonteCarloCalculusResultWindow::setLabelsText(int indexOutput)
+void MonteCarloCalculusResultWindow::updateLabelsText(int indexOutput)
 {
   // mean
   double meanCILowerBound = result_.getMeanConfidenceInterval().getLowerBound()[indexOutput];
@@ -289,7 +292,7 @@ void MonteCarloCalculusResultWindow::quantileValueChanged(double quantile)
 
 void MonteCarloCalculusResultWindow::outputFirstTabChanged(int indexOutput)
 {
-  setLabelsText(indexOutput);
+  updateLabelsText(indexOutput);
   probaValueChanged(0.5);
   pdfPlot_->clear();
   pdfPlot_->plotPDFCurve(result_.getFittedDistribution()[indexOutput]);

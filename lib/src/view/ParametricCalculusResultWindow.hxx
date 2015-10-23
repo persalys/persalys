@@ -20,15 +20,19 @@ protected:
   void buildInterface();
 
 public slots:
-  void updatePlot(int indexInput=0, int indexOutput=0);
-  void inputChanged(int index);
-  void outputChanged(int index);
+  void updateLabelsText(int indexOutput=0);
+  void updateScatterPlot(int indexInput=0, int indexOutput=0);
+  void inputScatterPlotChanged(int index);
+  void outputScatterPlotChanged(int index);
 
 private:
   ParametricCalculusResult result_;
+  QComboBox * outputsComboBoxFirstTab_;
+  QLabel * minLabel_;
+  QLabel * maxLabel_;
   PlotWidget * scatterPlot_;
   QComboBox * inputsComboBox_;
-  QComboBox * outputsComboBox_;
+  QComboBox * outputsComboBoxSecondTab_;
 };
 }
 #endif

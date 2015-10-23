@@ -21,7 +21,7 @@ public:
 
 protected:
   void buildInterface();
-  void setLabelsText(int indexOutput=0);
+  void updateLabelsText(int indexOutput=0);
   void updateScatterPlot(int indexInput=0, int indexOutput=0);
 
 public slots:
