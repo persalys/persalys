@@ -7,8 +7,6 @@
 #include "DistributionFactory.hxx"
 
 #include <QAbstractTableModel>
-#include <QModelIndex>
-#include <QStringList>
 
 namespace OTGUI {
 class InputTableModel : public QAbstractTableModel
@@ -40,6 +38,7 @@ public slots:
   void addLine(const Input & input);
 signals:
   void distributionChanged(OT::NumericalPointWithDescription);
+
 private:
   static std::map<QString, OT::DistributionFactory> GetDistributionsMap();
   InputCollection data_;

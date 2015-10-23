@@ -7,21 +7,10 @@
 # include "YACSPhysicalModel.hxx"
 #endif
 
-#include <QRadioButton>
-#include <QButtonGroup>
-#include <QVBoxLayout>
-#include <QGroupBox>
-#include <QLabel>
-#include <QPushButton>
-#include <QLineEdit>
 #include <QFileDialog>
-#include <QSplitter>
-#include <QMdiArea>
-#include <QScrollArea>
 #include <QComboBox>
 
-#include <iostream>
-#include <string>
+using namespace OT;
 
 namespace OTGUI {
 
@@ -34,19 +23,14 @@ PhysicalModelWindow::PhysicalModelWindow(PhysicalModelItem * item)
 }
 
 
-PhysicalModelWindow::~PhysicalModelWindow()
-{
-}
-
-
 void PhysicalModelWindow::buildInterface()
 {
   QWidget * mainWidget = new QWidget;
-  QVBoxLayout * mainLayout = new QVBoxLayout;
+  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
 
   // Choose method to define Inputs and Outputs
   QGroupBox * methodBox = new QGroupBox(tr(""));
-  QHBoxLayout * methodLayout = new QHBoxLayout;
+  QHBoxLayout * methodLayout = new QHBoxLayout(methodBox);
 
   QComboBox * comboBox = new QComboBox;
   QStringList items = QStringList()<<QString(tr("Analytical"))<<QString(tr("Python"));
@@ -58,13 +42,13 @@ void PhysicalModelWindow::buildInterface()
   connect(comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(methodChanged(int)));
   methodLayout->addWidget(comboBox);
   methodLayout->addStretch();
-  methodBox->setLayout(methodLayout);
+
   mainLayout->addWidget(methodBox);
 
 #ifdef OTGUI_HAVE_YACS
   // Widgets to load XML file
   loadXMLFileBox_ = new QGroupBox(tr(""));
-  QGridLayout * fieldsLayout = new QGridLayout;
+  QGridLayout * fieldsLayout = new QGridLayout(loadXMLFileBox_);
 
   QLabel * labelDataFile = new QLabel("Data file");
   fieldsLayout->addWidget(labelDataFile, 0, 0);
@@ -81,14 +65,13 @@ void PhysicalModelWindow::buildInterface()
   fieldsLayout->addWidget(loadButton_, 1, 2);
   loadButton_->setEnabled(false);
 
-  loadXMLFileBox_->setLayout(fieldsLayout);
   loadXMLFileBox_->hide();
   mainLayout->addWidget(loadXMLFileBox_);
 #endif
 
   // Define Inputs
   QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
-  QGridLayout * inputsLayout = new QGridLayout;
+  QGridLayout * inputsLayout = new QGridLayout(inputsBox);
 
   inputTableView_ = new QTableView;
   inputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -111,7 +94,6 @@ void PhysicalModelWindow::buildInterface()
   connect(removeLineButton, SIGNAL(clicked(bool)), this, SLOT(removeInputLine()));
   inputsLayout->addWidget(removeLineButton, 1, 1);
 
-  inputsBox->setLayout(inputsLayout);
   mainLayout->addWidget(inputsBox);
 
   connect(inputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(inputDataChanged()));
@@ -121,7 +103,7 @@ void PhysicalModelWindow::buildInterface()
 
   // Distribution editor
   QGroupBox * distributionBox = new QGroupBox(tr("Distribution Editor"));
-  QHBoxLayout * distributionLayout = new QHBoxLayout();
+  QHBoxLayout * distributionLayout = new QHBoxLayout(distributionBox);
 
   QGridLayout * plotLayout = new QGridLayout();
 
@@ -140,12 +122,11 @@ void PhysicalModelWindow::buildInterface()
   distributionLayout->addLayout(parameterLayout_);
   distributionLayout->addStretch();
 
-  distributionBox->setLayout(distributionLayout);
   mainLayout->addWidget(distributionBox);
 
   // Define Outputs
   QGroupBox * outputsBox = new QGroupBox(tr("Outputs"));
-  QGridLayout * outputsLayout = new QGridLayout;
+  QGridLayout * outputsLayout = new QGridLayout(outputsBox);
 
   outputTableView_ = new QTableView;
   outputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -163,13 +144,11 @@ void PhysicalModelWindow::buildInterface()
   connect(removeLineButton, SIGNAL(clicked(bool)), this, SLOT(removeOutputLine()));
   outputsLayout->addWidget(removeLineButton, 1, 1);
 
-  outputsBox->setLayout(outputsLayout);
   mainLayout->addWidget(outputsBox);
   connect(outputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(outputDataChanged()));
   connect(item_, SIGNAL(outputChanged(OutputCollection)), this, SLOT(updateOutputData(OutputCollection)));
 
   ////////////////
-  mainWidget->setLayout(mainLayout);
   setWidget(mainWidget);
 }
 
@@ -196,7 +175,7 @@ void PhysicalModelWindow::variableChanged(const QModelIndex & index)
 }
 
 
-void PhysicalModelWindow::updateParametersWidgets(const OT::NumericalPointWithDescription & parameters)
+void PhysicalModelWindow::updateParametersWidgets(const NumericalPointWithDescription & parameters)
 {
   if (paramEditor_)
   {
@@ -210,11 +189,10 @@ void PhysicalModelWindow::updateParametersWidgets(const OT::NumericalPointWithDe
   int nbParameters = parameters.getDescription().getSize();
   if (nbParameters)
   {
-    OT::Description parametersName = parameters.getDescription();
+    Description parametersName = parameters.getDescription();
 
     paramEditor_ = new QGroupBox(tr("Parameters"));
-    QVBoxLayout * editorLayout = new QVBoxLayout;
-    QGridLayout * lay = new QGridLayout();
+    QGridLayout * lay = new QGridLayout(paramEditor_);
     for (int i = 0; i < nbParameters; ++ i)
     {
       parameterValuesLabel_[i] = new QLabel(QString(parametersName[i].c_str()));
@@ -224,9 +202,6 @@ void PhysicalModelWindow::updateParametersWidgets(const OT::NumericalPointWithDe
       lay->addWidget(parameterValuesLabel_[i], i, 0);
       lay->addWidget(parameterValuesEdit_[i], i, 1);
     }
-    editorLayout->addLayout(lay);
-    paramEditor_->setLayout(editorLayout);
-
     parameterLayout_->insertWidget(0, paramEditor_);
   }
 }
@@ -246,7 +221,7 @@ void PhysicalModelWindow::updatePlot()
 void PhysicalModelWindow::updateDistribution()
 {
   QModelIndex index = inputTableView_->selectionModel()->currentIndex();
-  OT::NumericalPoint parameters(2);
+  NumericalPoint parameters(2);
   parameters[0] = parameterValuesEdit_[0]->text().toDouble();
   parameters[1] = parameterValuesEdit_[1]->text().toDouble();
   inputTableModel_->updateDistributionParameters(index, parameters);

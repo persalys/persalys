@@ -2,6 +2,8 @@
 
 #include "ComposedDistribution.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 PhysicalModelImplementation::PhysicalModelImplementation(const std::string & name)
@@ -10,10 +12,10 @@ PhysicalModelImplementation::PhysicalModelImplementation(const std::string & nam
   , name_(name)
   , inputs_(InputCollection(0))
   , outputs_(OutputCollection(0))
-  , function_(OT::NumericalMathFunction())
-  , listInput_(OT::Description())
-  , listOutput_(OT::Description())
-  , listFormula_(OT::Description())
+  , function_(NumericalMathFunction())
+  , listInput_(Description())
+  , listOutput_(Description())
+  , listFormula_(Description())
 {
 }
 
@@ -26,9 +28,9 @@ PhysicalModelImplementation::PhysicalModelImplementation(const std::string & nam
   , name_(name)
   , inputs_(inputs)
   , outputs_(outputs)
-  , listInput_(OT::Description())
-  , listOutput_(OT::Description())
-  , listFormula_(OT::Description())
+  , listInput_(Description())
+  , listOutput_(Description())
+  , listFormula_(Description())
 {
   checkInputs();
   checkOutputs();
@@ -147,49 +149,49 @@ void PhysicalModelImplementation::addOutput(Output output)
 }
 
 
-OT::RandomVector PhysicalModelImplementation::getInputRandomVector()
+RandomVector PhysicalModelImplementation::getInputRandomVector()
 {
-  OT::ComposedDistribution::DistributionCollection marginales;
+  ComposedDistribution::DistributionCollection marginales;
   for (int i=0; i<inputs_.getSize(); ++i)
   {   
     marginales.add(inputs_[i].getDistribution());
   }
-//   TODO:  OT::RandomVector(OT::ComposedDistribution(marginales, getCopula()));
+//   TODO:  RandomVector(ComposedDistribution(marginales, getCopula()));
 
-  return OT::RandomVector(OT::ComposedDistribution(marginales));
+  return RandomVector(ComposedDistribution(marginales));
 }
 
 
-OT::RandomVector PhysicalModelImplementation::getOutputRandomVector(const OutputCollection & outputs)
+RandomVector PhysicalModelImplementation::getOutputRandomVector(const OutputCollection & outputs)
 {
-  return OT::RandomVector(getFunction(outputs), getInputRandomVector());
+  return RandomVector(getFunction(outputs), getInputRandomVector());
 }
 
 
-OT::NumericalMathFunction PhysicalModelImplementation::getFunction(const OutputCollection & outputs) const
+NumericalMathFunction PhysicalModelImplementation::getFunction(const OutputCollection & outputs) const
 {
   if (outputs == outputs_)
     return function_;
 
-  OT::Description outputNames(outputs.getSize());
-  OT::Description outputFormula(outputs.getSize());
+  Description outputNames(outputs.getSize());
+  Description outputFormula(outputs.getSize());
   for (int i=0; i<outputs.getSize(); ++i)
   {
     outputNames[i] = outputs[i].getName();
     outputFormula[i] = outputs[i].getFormula();
   }
 
-  return OT::NumericalMathFunction(listInput_, outputNames, outputFormula);
+  return NumericalMathFunction(listInput_, outputNames, outputFormula);
 }
 
 
-OT::NumericalMathFunction PhysicalModelImplementation::getFunction() const
+NumericalMathFunction PhysicalModelImplementation::getFunction() const
 {
   return function_;
 }
 
 
-void PhysicalModelImplementation::setFunction(const OT::NumericalMathFunction & function)
+void PhysicalModelImplementation::setFunction(const NumericalMathFunction & function)
 {
   function_ = function;
 }
@@ -197,7 +199,7 @@ void PhysicalModelImplementation::setFunction(const OT::NumericalMathFunction & 
 
 bool PhysicalModelImplementation::checkInputs()
 {
-  listInput_ = OT::Description(inputs_.getSize());
+  listInput_ = Description(inputs_.getSize());
 
   for (int i=0; i<inputs_.getSize(); ++i)
   {
@@ -208,7 +210,7 @@ bool PhysicalModelImplementation::checkInputs()
   {
     try
     {
-      function_ = OT::NumericalMathFunction(listInput_, listOutput_, listFormula_);
+      function_ = NumericalMathFunction(listInput_, listOutput_, listFormula_);
     }
     catch (std::exception & ex)
     {
@@ -222,8 +224,8 @@ bool PhysicalModelImplementation::checkInputs()
 
 bool PhysicalModelImplementation::checkOutputs()
 {
-  listOutput_ = OT::Description(outputs_.getSize());
-  listFormula_ = OT::Description(outputs_.getSize());
+  listOutput_ = Description(outputs_.getSize());
+  listFormula_ = Description(outputs_.getSize());
 
   for (int i=0; i<outputs_.getSize(); ++i)
   {
@@ -233,7 +235,7 @@ bool PhysicalModelImplementation::checkOutputs()
 
   try
   {
-    function_ = OT::NumericalMathFunction(listInput_, listOutput_, listFormula_);
+    function_ = NumericalMathFunction(listInput_, listOutput_, listFormula_);
   }
   catch (std::exception & ex)
   {

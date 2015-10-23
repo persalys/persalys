@@ -1,11 +1,9 @@
 #include "InputTableModel.hxx"
 
-#include "Distribution.hxx"
-#include "DistributionFactory.hxx"
 #include "NormalFactory.hxx"
 #include "DiracFactory.hxx"
-#include <iostream>
-#include "DistributionImplementation.hxx"
+
+using namespace OT;
 
 namespace OTGUI {
 
@@ -40,11 +38,11 @@ InputTableModel::~InputTableModel()
 }
 
 
-std::map<QString, OT::DistributionFactory> InputTableModel::GetDistributionsMap()
+std::map<QString, DistributionFactory> InputTableModel::GetDistributionsMap()
 {
-  std::map<QString, OT::DistributionFactory> m;
-  m[tr("Deterministic")] = OT::DiracFactory();
-  m[tr("Normal")] = OT::NormalFactory();
+  std::map<QString, DistributionFactory> m;
+  m[tr("Deterministic")] = DiracFactory();
+  m[tr("Normal")] = NormalFactory();
   return m;
 }
 
@@ -128,7 +126,7 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
         std::string distributionName = data_[index.row()].getDistribution().getImplementation()->getClassName();
         if (distributionName == "Dirac")
         {
-          OT::Dirac distributionDirac(OT::NumericalPoint(1, value.toDouble()));
+          Dirac distributionDirac(NumericalPoint(1, value.toDouble()));
           data_[index.row()].setDistribution(distributionDirac);
         }
         break;
@@ -139,14 +137,14 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
   }
   if (role == Qt::DisplayRole && index.column() == 3)
   {
-    OT::DistributionFactory factory = GetDistributionsMap()[value.toString()];
+    DistributionFactory factory = GetDistributionsMap()[value.toString()];
 
-    OT::Distribution distribution = factory.build();
+    Distribution distribution = factory.build();
     data_[index.row()].setDistribution(distribution);
     if (distribution.getImplementation()->getClassName() != "Dirac")
       emit distributionChanged(distribution.getParametersCollection()[0]);
     else
-      emit distributionChanged(OT::NumericalPointWithDescription());
+      emit distributionChanged(NumericalPointWithDescription());
   }
 
   emit dataChanged(index, index);
@@ -169,7 +167,7 @@ void InputTableModel::addLine()
   Input input = Input();
   data_.add(input);
 
-  emit distributionChanged(OT::NumericalPointWithDescription());
+  emit distributionChanged(NumericalPointWithDescription());
 
   endInsertRows();
 }
@@ -205,25 +203,25 @@ InputCollection InputTableModel::getData()
 }
 
 
-OT::NumericalPointWithDescription InputTableModel::getParameters(int row) const
+NumericalPointWithDescription InputTableModel::getParameters(int row) const
 {
   if (data_[row].getDistribution().getImplementation()->getClassName() != "Dirac")
   {
     return data_[row].getDistribution().getParametersCollection()[0];
   }
-  return OT::NumericalPointWithDescription();
+  return NumericalPointWithDescription();
 }
 
 
-void InputTableModel::updateDistributionParameters(const QModelIndex & index, const OT::NumericalPoint & parameters)
+void InputTableModel::updateDistributionParameters(const QModelIndex & index, const NumericalPoint & parameters)
 {
-  OT::Distribution distribution = data_[index.row()].getDistribution();
+  Distribution distribution = data_[index.row()].getDistribution();
   try {
     distribution.setParametersCollection(parameters);
     data_[index.row()].setDistribution(distribution);
     emit dataChanged(index, index);
   }
-  catch(OT::Exception) {
+  catch(Exception) {
     std::cerr << "InputTableModel::updateDistributionParameters invalid params:"<<parameters<<" for distribution:"<<distribution.getImplementation()->getName()<<std::endl;
   }
 

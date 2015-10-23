@@ -10,8 +10,6 @@
 #include <QRadioButton>
 #include <QLabel>
 #include <QPushButton>
-#include <QToolBox>
-#include <QToolButton>
 
 #include <limits>
 
@@ -48,7 +46,7 @@ void DistributionAnalysisWizard::buildInterface()
   QVBoxLayout * mainLayout = new QVBoxLayout(page);
 
   QGroupBox * methodBox = new QGroupBox(tr("Method"));
-  QVBoxLayout * methodLayout = new QVBoxLayout;
+  QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
 
   methodGroup_ = new QButtonGroup;
   QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Monte Carlo"));
@@ -63,10 +61,9 @@ void DistributionAnalysisWizard::buildInterface()
   methodLayout->addWidget(buttonToChooseMethod);
   connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SLOT(updateMethodWidgets()));
 
-  methodBox->setLayout(methodLayout);
   mainLayout->addWidget(methodBox);
 
-  methodParametersLayout_ = new QVBoxLayout;
+  QVBoxLayout * methodParametersLayout = new QVBoxLayout;
 
   /// monte carlo widgets
   monteCarloWidget_ = new QWidget;
@@ -109,16 +106,15 @@ void DistributionAnalysisWizard::buildInterface()
 
   connect(advancedGroup, SIGNAL(toggled(bool)), this, SLOT(showHideAdvancedWidgets(bool)));
 
-  methodParametersLayout_->addWidget(monteCarloWidget_);
+  methodParametersLayout->addWidget(monteCarloWidget_);
 
   /// taylor widgets
   taylorWidget_ = new QWidget;
-  QVBoxLayout * taylorLayout = new QVBoxLayout;
-  taylorWidget_->setLayout(taylorLayout);
-  methodParametersLayout_->addWidget(taylorWidget_);
+  QVBoxLayout * taylorLayout = new QVBoxLayout(taylorWidget_);
+  methodParametersLayout->addWidget(taylorWidget_);
+  methodParametersLayout->addStretch();
 
-  methodParametersLayout_->addStretch();
-  mainLayout->addLayout(methodParametersLayout_);
+  mainLayout->addLayout(methodParametersLayout);
 
   updateMethodWidgets();
 

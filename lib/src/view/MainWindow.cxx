@@ -1,12 +1,10 @@
 #include "MainWindow.hxx"
 
 #include "PhysicalModelWindow.hxx"
-#include "qpyconsole.h"
+
 #include <QSplitter>
 #include <QMenuBar>
 #include <QDockWidget>
-
-#include <iostream>
 
 namespace OTGUI {
 
@@ -27,7 +25,7 @@ MainWindow::MainWindow()
 void MainWindow::buildInterface()
 {
   QWidget * mainWidget = new QWidget;
-  QVBoxLayout * mainLayout = new QVBoxLayout;
+  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
 
   QSplitter * mainSplitter = new QSplitter(Qt::Horizontal);
   mainSplitter->addWidget(studyTree_);
@@ -45,8 +43,6 @@ void MainWindow::buildInterface()
   //TODO:
 //   connect(consoleDock, SIGNAL(visibilityChanged(bool)), this,SLOT(consoleVisibilityChanged()));
 
-
-  mainWidget->setLayout(mainLayout);
   setCentralWidget(mainWidget);
 
   // Menus

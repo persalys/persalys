@@ -4,11 +4,6 @@
 #include "OTguiTableView.hxx"
 
 #include <QVBoxLayout>
-#include <QLabel>
-#include <QComboBox>
-
-#include <iostream>
-#include <string>
 
 using namespace OT;
 

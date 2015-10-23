@@ -38,11 +38,7 @@ private:
   PhysicalModel physicalModel_;
 
   QButtonGroup * methodGroup_;
-  QVBoxLayout * methodParametersLayout_;
   QWidget * advancedWidgets_;
-
-  QWidget * mainWidget_;
-
   QWidget * monteCarloWidget_;
   QWidget * taylorWidget_;
   QSpinBox * nbSimuSpin_;

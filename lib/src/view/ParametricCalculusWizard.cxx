@@ -30,7 +30,7 @@ void ParametricCalculusWizard::buildInterface()
   setWindowTitle("Parametric analysis");
 
   QWizardPage * page = new QWizardPage(this);
-  QVBoxLayout * pageLayout = new QVBoxLayout;
+  QVBoxLayout * pageLayout = new QVBoxLayout(page);
   QTableView * tableView = new QTableView;
 
   model_ = new ParametricCalculusTableModel(calculus_);
@@ -38,7 +38,6 @@ void ParametricCalculusWizard::buildInterface()
   tableView->setModel(model_);
 
   pageLayout->addWidget(tableView);
-  page->setLayout(pageLayout);
   addPage(page);
 }
 

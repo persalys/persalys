@@ -11,7 +11,6 @@
 #include <QLineEdit>
 #include <QGroupBox>
 #include <QPushButton>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 
@@ -23,8 +22,6 @@ class PhysicalModelWindow : public OTguiSubWindow
 
 public :
   PhysicalModelWindow(PhysicalModelItem * item);
-
-  virtual ~PhysicalModelWindow();
 
 protected:
   void buildInterface();
@@ -55,7 +52,6 @@ private:
   QLineEdit * XMLfileEdit_;
   QPushButton * loadButton_;
   QGroupBox * loadXMLFileBox_;
-  QFrame * rightFrame_;
   PlotWidget * pdfPlot_;
   QGroupBox * paramEditor_;
   QHBoxLayout * parameterLayout_;
