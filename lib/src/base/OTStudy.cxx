@@ -2,6 +2,8 @@
 
 #include "OTStudy.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 std::vector<OTStudy*> OTStudy::Instances_;
@@ -85,6 +87,15 @@ std::vector<PhysicalModel> OTStudy::getPhysicalModels() const
 }
 
 
+Description OTStudy::getPhysicalModelsNames() const
+{
+  Description physicalModelsNames(physicalModels_.size());
+  for (int i=0; i<physicalModels_.size(); ++i)
+    physicalModelsNames[i] = physicalModels_[i].getImplementation()->getName();
+  return physicalModelsNames;
+}
+
+
 void OTStudy::addPhysicalModel(const PhysicalModel & physicalModel)
 {
   physicalModels_.push_back(physicalModel);
@@ -95,6 +106,15 @@ void OTStudy::addPhysicalModel(const PhysicalModel & physicalModel)
 std::vector<Calculus> OTStudy::getCalculuses() const
 {
   return calculuses_;
+}
+
+
+Description OTStudy::getCalculusesNames() const
+{
+  Description calculusesNames(calculuses_.size());
+  for (int i=0; i<calculuses_.size(); ++i)
+    calculusesNames[i] = calculuses_[i].getImplementation()->getName();
+  return calculusesNames;
 }
 
 
@@ -109,12 +129,12 @@ std::string OTStudy::dump()
 {
   std::string result;
   result += getName()+ " = otguibase.OTStudy('" + getName() + "')\n";
-  for (std::vector<PhysicalModel>::iterator it=physicalModels_.begin(); it!= physicalModels_.end(); ++it )
+  for (std::vector<PhysicalModel>::iterator it=physicalModels_.begin(); it!= physicalModels_.end(); ++it)
   {
     result += (*it).dump();
     result += getName() + ".addPhysicalModel(" + (*it).getName() + ")\n";
   }
-  for (std::vector<Calculus>::iterator it=calculuses_.begin(); it!= calculuses_.end(); ++it )
+  for (std::vector<Calculus>::iterator it=calculuses_.begin(); it!= calculuses_.end(); ++it)
   {
     result += (*it).dump();
     result += getName() + ".addCalculus(" + (*it).getName() + ")\n";

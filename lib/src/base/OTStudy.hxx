@@ -29,9 +29,11 @@ public:
   void setName(const std::string & name);
 
   std::vector<PhysicalModel> getPhysicalModels() const;
+  OT::Description getPhysicalModelsNames() const;
   void addPhysicalModel(const PhysicalModel & physicalModel);
 
   std::vector<Calculus> getCalculuses() const;
+  OT::Description getCalculusesNames() const;
   void addCalculus(const Calculus & calculus);
 
   std::string dump();
