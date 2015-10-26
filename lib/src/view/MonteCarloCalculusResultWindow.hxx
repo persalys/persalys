@@ -35,6 +35,7 @@ public slots:
 private:
   MonteCarloResult result_;
   PlotWidget * pdfPlot_;
+  PlotWidget * cdfPlot_;
   QComboBox * outputsComboBoxFirstTab_;
   PlotWidget * boxPlot_;
   QComboBox * outputsComboBoxSecondTab_;

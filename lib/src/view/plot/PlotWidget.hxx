@@ -21,6 +21,9 @@ class PlotWidget : public QwtPlot
   Q_OBJECT
 
 public:
+
+  static const QColor DefaultHistogramColor;
+
   /// constructor
   PlotWidget(QWidget * parent = 0);
 
@@ -30,9 +33,11 @@ public:
   void plotCurve(const OT::NumericalSample & data, const QPen pen=QPen(Qt::black, 2));
 
   void plotPDFCurve(const OT::Distribution & distribution, const QPen pen=QPen(Qt::black, 2));
+  void plotCDFCurve(const OT::Distribution & distribution, const QPen pen=QPen(Qt::black, 2));
+  void plotHistogram(const OT::NumericalSample & sample, bool cdf=false, int barNumber=0);
   void plotScatter(const OT::NumericalSample & input, const OT::NumericalSample & output);
   void drawBoxPlot(double median, double lowerQuartile, double upperQuartile,
-                  double lowerBound, double upperBound, OT::NumericalPoint outliers_);
+                   double lowerBound, double upperBound, OT::NumericalPoint outliers_);
 
   /// clear plot
   void clear();
@@ -44,7 +49,10 @@ public slots:
   void contextMenu(const QPoint & pos);
   void editImage();
 
-protected:
+private:
+  void updateScaleParameters(const OT::Distribution & distribution);
+
+private:
   QLabel * plotLabel_;
   ImageEditionDialog * dialog_;
   QwtPlotGrid * grid_;

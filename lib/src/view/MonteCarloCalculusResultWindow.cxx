@@ -140,8 +140,14 @@ void MonteCarloCalculusResultWindow::buildInterface()
   QVBoxLayout * graphsLayout = new QVBoxLayout;
 
   pdfPlot_ = new PlotWidget;
+  pdfPlot_->plotHistogram(result_.getResultSample().getMarginal(0));
   pdfPlot_->plotPDFCurve(result_.getFittedDistribution()[0]);
   graphsLayout->addWidget(pdfPlot_->getPlotLabel());
+
+  cdfPlot_ = new PlotWidget;
+  cdfPlot_->plotHistogram(result_.getResultSample().getMarginal(0), true);
+  cdfPlot_->plotCDFCurve(result_.getFittedDistribution()[0]);
+  graphsLayout->addWidget(cdfPlot_->getPlotLabel());
 
   hbox->addLayout(graphsLayout);
 
@@ -283,7 +289,8 @@ void MonteCarloCalculusResultWindow::quantileValueChanged(double quantile)
   double p(1.0 / double(result_.getResultSample().getSize()));
   for (int j = 0; j < result_.getResultSample().getSize(); ++j)
   {
-    if (result_.getResultSample()[j][outputsComboBoxFirstTab_->currentIndex()] < quantile) cdf += p;
+    if (result_.getResultSample()[j][outputsComboBoxFirstTab_->currentIndex()] < quantile)
+      cdf += p;
   }
   probaSpinBox_->setValue(cdf);
   probaSpinBox_->blockSignals(false);
@@ -295,7 +302,11 @@ void MonteCarloCalculusResultWindow::outputFirstTabChanged(int indexOutput)
   updateLabelsText(indexOutput);
   probaValueChanged(0.5);
   pdfPlot_->clear();
+  pdfPlot_->plotHistogram(result_.getResultSample().getMarginal(indexOutput));
   pdfPlot_->plotPDFCurve(result_.getFittedDistribution()[indexOutput]);
+  cdfPlot_->clear();
+  cdfPlot_->plotHistogram(result_.getResultSample().getMarginal(indexOutput), true);
+  cdfPlot_->plotCDFCurve(result_.getFittedDistribution()[indexOutput]);
 }
 
 

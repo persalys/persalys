@@ -4,6 +4,7 @@
 #include <qwt_plot_panner.h>
 #include <qwt_plot_layout.h>
 #include <QMenu>
+#include <qwt_plot_histogram.h>
 #include <qwt_plot_renderer.h>
 #include <qwt_plot_magnifier.h>
 #include <qwt_plot_shapeitem.h>
@@ -14,6 +15,8 @@
 using namespace OT;
 
 namespace OTGUI {
+
+const QColor PlotWidget::DefaultHistogramColor = QColor(127, 172, 210);
 
 PlotWidget::PlotWidget(QWidget * parent)
 : QwtPlot(parent)
@@ -108,21 +111,7 @@ void PlotWidget::plotScatter(const NumericalSample & input, const NumericalSampl
 
 void PlotWidget::plotPDFCurve(const Distribution & distribution, const QPen pen)
 {
-  double mean = distribution.getMean()[0];
-  double stepSize = 0.0;
-  const double qmin = ResourceMap::GetAsNumericalScalar("DistributionImplementation-QMin");
-  const double qmax = ResourceMap::GetAsNumericalScalar("DistributionImplementation-QMax");
-  double x1 = distribution.computeQuantile(qmin)[0];
-  double x2 = distribution.computeQuantile(qmax)[0];
-  const double delta = 2.0 *(x2 - x1) *(1.0 - 0.5 *(qmax - qmin));
-  x1 -= delta;
-  x2 -= delta;
-
-  DistributionScaleEngine xScaleEngine;
-  xScaleEngine.setReference(mean);
-  xScaleEngine.setAttribute(QwtScaleEngine::Symmetric, true);
-  xScaleEngine.autoScale(3, x1, x2, stepSize);
-  setAxisScale(QwtPlot::xBottom, x1, x2, stepSize);
+  updateScaleParameters(distribution);
 
   setTitle(tr("PDF"));
   setAxisTitle(QwtPlot::yLeft, tr("Density"));
@@ -131,6 +120,75 @@ void PlotWidget::plotPDFCurve(const Distribution & distribution, const QPen pen)
   plotCurve(distribution.drawPDF().getDrawable(0).getData(), pen);
 }
 
+
+void PlotWidget::plotCDFCurve(const Distribution & distribution, const QPen pen)
+{
+  updateScaleParameters(distribution);
+
+  setTitle(tr("CDF"));
+  setAxisTitle(QwtPlot::yLeft, tr("CDF"));
+  setAxisTitle(QwtPlot::xBottom, tr("X"));
+
+  plotCurve(distribution.drawCDF().getDrawable(0).getData(), pen);
+}
+
+
+void PlotWidget::plotHistogram(const NumericalSample & sample, bool cdf, int barNumber)
+{
+  const int size = (int)sample.getSize();
+
+  // compute bar number
+  if (barNumber <= 0)
+    barNumber = ceil(1.0 + log(std::max(size, 1)) / log(2));
+
+  // compute data
+
+  double width = (sample.getMax()[0] - sample.getMin()[0]) / barNumber;
+  if (width < 1e-12)
+    return;
+
+  NumericalPoint histogramData(barNumber);
+  for (int i=0; i<size; ++i)
+  {
+    int index = static_cast< int >((sample[i][0] - sample.getMin()[0]) / width);
+    // x=xmax -> index=barnumber, so bound it
+    index = std::min(index, barNumber-1);
+    
+    ++ histogramData[index];
+  }
+  double inverseArea = 1. / (size*width);
+  for (UnsignedInteger i = 0; i < barNumber; ++i)
+    histogramData[i] *= inverseArea;
+
+  //  if CDF
+  double sum = 1.;
+  if (cdf)
+  {
+    sum = histogramData[0];
+    for (int i=1; i<barNumber; i++)
+    {
+      sum += histogramData[i];
+      histogramData[i] += histogramData[i-1];
+    }
+  }
+
+  // create histogram
+  QwtPlotHistogram * histogram = new QwtPlotHistogram;
+  histogram->setBrush(QBrush(DefaultHistogramColor));
+
+  QVector<QwtIntervalSample> samples(barNumber);
+  for (int i=0; i<barNumber; i++)
+  {
+    QwtInterval interval(sample.getMin()[0]+i*width, sample.getMin()[0]+(i+1)*width);
+    samples[i] = QwtIntervalSample(histogramData[i]/sum, interval);
+  }
+
+  histogram->setData(new QwtIntervalSeriesData(samples));
+
+  // draw
+  histogram->attach(this);
+  replot();
+}
 
 void PlotWidget::drawBoxPlot(double median, double lowerQuartile, double upperQuartile,
                              double lowerBound, double upperBound, NumericalPoint outliers_)
@@ -189,6 +247,26 @@ void PlotWidget::drawBoxPlot(double median, double lowerQuartile, double upperQu
 
   setAxisScale(QwtPlot::xBottom, 0.5, 1.5, 0.5);
   replot();
+}
+
+
+void PlotWidget::updateScaleParameters(const Distribution & distribution)
+{
+  double mean = distribution.getMean()[0];
+  double stepSize = 0.0;
+  const double qmin = ResourceMap::GetAsNumericalScalar("DistributionImplementation-QMin");
+  const double qmax = ResourceMap::GetAsNumericalScalar("DistributionImplementation-QMax");
+  double x1 = distribution.computeQuantile(qmin)[0];
+  double x2 = distribution.computeQuantile(qmax)[0];
+  const double delta = 2.0 *(x2 - x1) *(1.0 - 0.5 *(qmax - qmin));
+  x1 -= delta;
+  x2 -= delta;
+
+  DistributionScaleEngine xScaleEngine;
+  xScaleEngine.setReference(mean);
+  xScaleEngine.setAttribute(QwtScaleEngine::Symmetric, true);
+  xScaleEngine.autoScale(3, x1, x2, stepSize);
+  setAxisScale(QwtPlot::xBottom, x1, x2, stepSize);
 }
 
 
