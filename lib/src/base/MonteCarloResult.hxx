@@ -17,8 +17,7 @@ public:
   typedef OT::Collection<OT::Distribution> DistributionCollection;
 
   MonteCarloResult();
-  MonteCarloResult(OT::NumericalSample outputSample, OT::NumericalSample inputSample,
-                   double level=0.95);
+  MonteCarloResult(OT::NumericalSample outputSample, OT::NumericalSample inputSample);
 
   virtual ~MonteCarloResult();
 
@@ -30,14 +29,14 @@ public:
   OT::NumericalPoint getKurtosis();
   OT::NumericalPoint getFirstQuartile();
   OT::NumericalPoint getThirdQuartile();
-  OT::Interval getMeanConfidenceInterval();
-  OT::Interval getStdConfidenceInterval();
+  OT::Interval getMeanConfidenceInterval(const double level=0.95);
+  OT::Interval getStdConfidenceInterval(const double level=0.95);
   NumericalPointCollection getOutliers();
 
   DistributionCollection getFittedDistribution();
 
 private:
-  double level_;
+  double levelConfidenceInterval_;
   OT::NumericalPoint mean_;
   OT::NumericalPoint median_;
   OT::NumericalPoint standardDeviation_;

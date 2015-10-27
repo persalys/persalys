@@ -14,7 +14,7 @@ MonteCarloCalculus::MonteCarloCalculus(const std::string & name, const PhysicalM
  : CalculusImplementation(name, physicalModel)
  , outputs_(physicalModel.getOutputs())
  , nbSimulations_(nbSimu)
- , computeCondidenceInterval_(confidenceInterval)
+ , isConfidenceIntervalRequired_(confidenceInterval)
  , levelConfidenceInterval_(level)
  , result_()
 {
@@ -26,7 +26,7 @@ MonteCarloCalculus::MonteCarloCalculus(const MonteCarloCalculus & other)
  : CalculusImplementation(other)
  , outputs_(other.outputs_)
  , nbSimulations_(other.nbSimulations_)
- , computeCondidenceInterval_(other.computeCondidenceInterval_)
+ , isConfidenceIntervalRequired_(other.isConfidenceIntervalRequired_)
  , levelConfidenceInterval_(other.levelConfidenceInterval_)
  , result_(other.result_)
 {
@@ -63,14 +63,37 @@ void MonteCarloCalculus::setNbSimulations(const int nbSimu)
 }
 
 
+bool MonteCarloCalculus::isConfidenceIntervalRequired() const
+{
+  return isConfidenceIntervalRequired_;
+}
+
+
+void MonteCarloCalculus::setIsConfidenceIntervalRequired(const bool isConfidenceIntervalRequired)
+{
+  isConfidenceIntervalRequired_ = isConfidenceIntervalRequired;
+}
+
+
+double MonteCarloCalculus::getLevelConfidenceInterval() const
+{
+  return levelConfidenceInterval_;
+}
+
+
+void MonteCarloCalculus::setLevelConfidenceInterval(const double levelConfidenceInterval)
+{
+  levelConfidenceInterval_ = levelConfidenceInterval;
+}
+
+
 void MonteCarloCalculus::run()
 {
   RandomGenerator::SetSeed(0); //TODO seed in argument
   NumericalSample inputSample(getPhysicalModel().getInputRandomVector().getSample(nbSimulations_));
   inputSample.setDescription(getPhysicalModel().getFunction().getInputDescription());
   // set results
-  result_ = MonteCarloResult(getPhysicalModel().getFunction(outputs_)(inputSample), inputSample,
-                             levelConfidenceInterval_);
+  result_ = MonteCarloResult(getPhysicalModel().getFunction(outputs_)(inputSample), inputSample);
 
   notify("calculusFinished");
 }

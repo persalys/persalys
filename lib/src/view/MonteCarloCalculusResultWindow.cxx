@@ -15,6 +15,8 @@ namespace OTGUI {
 MonteCarloCalculusResultWindow::MonteCarloCalculusResultWindow(DistributionAnalysisItem * item)
   : OTguiSubWindow(item)
   , result_(dynamic_cast<MonteCarloCalculus*>(&*item->getCalculus().getImplementation())->getResult())
+  , isConfidenceIntervalRequired_(dynamic_cast<MonteCarloCalculus*>(&*item->getCalculus().getImplementation())->isConfidenceIntervalRequired())
+  , levelConfidenceInterval_(dynamic_cast<MonteCarloCalculus*>(&*item->getCalculus().getImplementation())->getLevelConfidenceInterval())
 {
   buildInterface();
 }
@@ -234,16 +236,26 @@ void MonteCarloCalculusResultWindow::buildInterface()
 void MonteCarloCalculusResultWindow::updateLabelsText(int indexOutput)
 {
   // mean
-  double meanCILowerBound = result_.getMeanConfidenceInterval().getLowerBound()[indexOutput];
-  double meanCIUpperBound = result_.getMeanConfidenceInterval().getUpperBound()[indexOutput];
   OSS oss1;
-  oss1 << result_.getMean()[indexOutput] << "\n" <<" CI = [" << meanCILowerBound <<", "<<meanCIUpperBound<<"]";
+  oss1 << result_.getMean()[indexOutput];
+  if (isConfidenceIntervalRequired_)
+  {
+    double meanCILowerBound = result_.getMeanConfidenceInterval(levelConfidenceInterval_).getLowerBound()[indexOutput];
+    double meanCIUpperBound = result_.getMeanConfidenceInterval(levelConfidenceInterval_).getUpperBound()[indexOutput];
+    oss1 << "\n" <<" CI = [" << meanCILowerBound <<", "<<meanCIUpperBound<<"] at ";
+    oss1 << levelConfidenceInterval_ << "%";
+  }
   meanLabel_->setText(QString::fromStdString(oss1.str()));
   // standard deviation
-  double stdCILowerBound = result_.getStdConfidenceInterval().getLowerBound()[indexOutput];
-  double stdCIUpperBound = result_.getStdConfidenceInterval().getUpperBound()[indexOutput];
   OSS oss2;
-  oss2 << result_.getStandardDeviation()[indexOutput] << "\n" <<" CI = [" << stdCILowerBound <<", "<<stdCIUpperBound<<"]";
+  oss2 << result_.getStandardDeviation()[indexOutput];
+  if (isConfidenceIntervalRequired_)
+  {
+    double stdCILowerBound = result_.getStdConfidenceInterval(levelConfidenceInterval_).getLowerBound()[indexOutput];
+    double stdCIUpperBound = result_.getStdConfidenceInterval(levelConfidenceInterval_).getUpperBound()[indexOutput];
+    oss2 << "\n" <<" CI = [" << stdCILowerBound <<", "<<stdCIUpperBound<<"] at ";
+    oss2 << levelConfidenceInterval_ << "%";
+  }
   stdLabel_->setText(QString::fromStdString(oss2.str()));
   // skewness
   skewnessLabel_->setText(QString::fromStdString((OSS()<<result_.getSkewness()[indexOutput]).str()));

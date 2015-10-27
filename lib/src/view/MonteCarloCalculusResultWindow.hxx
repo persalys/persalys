@@ -34,6 +34,8 @@ public slots:
 
 private:
   MonteCarloResult result_;
+  bool isConfidenceIntervalRequired_;
+  double levelConfidenceInterval_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
   QComboBox * outputsComboBoxFirstTab_;

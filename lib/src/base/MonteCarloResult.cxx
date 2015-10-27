@@ -16,10 +16,9 @@ MonteCarloResult::MonteCarloResult()
 {
 }
 
-MonteCarloResult::MonteCarloResult(NumericalSample outputSample, NumericalSample inputSample,
-                                   double level)
+MonteCarloResult::MonteCarloResult(NumericalSample outputSample, NumericalSample inputSample)
  : ParametricCalculusResult(outputSample, inputSample)
- , level_(level)
+ , levelConfidenceInterval_(0.95)
 {
 }
   
@@ -101,14 +100,15 @@ NumericalPoint MonteCarloResult::getThirdQuartile()
 }
 
 
-Interval MonteCarloResult::getMeanConfidenceInterval()
+Interval MonteCarloResult::getMeanConfidenceInterval(const double level)
 {
-  if (!meanConfidenceInterval_.getDimension())
+  if (!meanConfidenceInterval_.getDimension() || levelConfidenceInterval_ != level)
   {
+    levelConfidenceInterval_ = level;
     meanConfidenceInterval_ = Interval(getResultSample().getDimension());
 
     Normal X(0,1);
-    double f = X.computeQuantile((1-level_)/2, true)[0];
+    double f = X.computeQuantile((1-levelConfidenceInterval_)/2, true)[0];
     NumericalPoint delta = f * getStandardDeviation() / sqrt(getResultSample().getSize());
     
     NumericalPoint lowerBounds(getResultSample().getDimension());
@@ -128,19 +128,20 @@ Interval MonteCarloResult::getMeanConfidenceInterval()
 }
 
 
-Interval MonteCarloResult::getStdConfidenceInterval()
+Interval MonteCarloResult::getStdConfidenceInterval(const double level)
 {
-  if (!stdConfidenceInterval_.getDimension())
+  if (!stdConfidenceInterval_.getDimension() || levelConfidenceInterval_ != level)
   {
+    levelConfidenceInterval_ = level;
     stdConfidenceInterval_ = Interval(getResultSample().getDimension());
 
     // TODO : use Normal Distribution?
     int nbSimu = getResultSample().getSize();
     ChiSquare X(nbSimu-1);
     // low
-    double f1 = X.computeQuantile((1-level_)/2, true)[0];
+    double f1 = X.computeQuantile((1-levelConfidenceInterval_)/2, true)[0];
     // up
-    double f2 = X.computeQuantile((1-level_)/2, false)[0];
+    double f2 = X.computeQuantile((1-levelConfidenceInterval_)/2, false)[0];
 
     stdConfidenceInterval_ = Interval(getResultSample().getDimension());
     NumericalPoint lowerBounds(getResultSample().getDimension());

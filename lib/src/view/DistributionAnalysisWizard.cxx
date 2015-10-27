@@ -70,16 +70,16 @@ void DistributionAnalysisWizard::buildInterface()
   QGridLayout *mclayout = new QGridLayout(monteCarloWidget_);
 
   QLabel * nbSimuLabel = new QLabel(tr("Number of simulations"));
-  nbSimuSpin_ = new QSpinBox;
-  nbSimuSpin_->setMinimum(2);
-  nbSimuSpin_->setMaximum(std::numeric_limits<int>::max());
+  nbSimuSpinbox_ = new QSpinBox;
+  nbSimuSpinbox_->setMinimum(2);
+  nbSimuSpinbox_->setMaximum(std::numeric_limits<int>::max());
   if (calculus_.getImplementation()->getClassName() == "MonteCarloCalculus")
-    nbSimuSpin_->setValue(dynamic_cast<MonteCarloCalculus*>(&*calculus_.getImplementation())->getNbSimulations());
-  connect(nbSimuSpin_, SIGNAL(valueChanged(int)), this, SLOT(nbSimuChanged(int)));
+    nbSimuSpinbox_->setValue(dynamic_cast<MonteCarloCalculus*>(&*calculus_.getImplementation())->getNbSimulations());
+  connect(nbSimuSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(nbSimuChanged(int)));
 
-  nbSimuLabel->setBuddy(nbSimuSpin_);
+  nbSimuLabel->setBuddy(nbSimuSpinbox_);
   mclayout->addWidget(nbSimuLabel, 0, 0);
-  mclayout->addWidget(nbSimuSpin_, 0, 1);
+  mclayout->addWidget(nbSimuSpinbox_, 0, 1);
 
   //// advanced parameters
   // TODO make a class advancedParametersGroupBox?
@@ -93,11 +93,26 @@ void DistributionAnalysisWizard::buildInterface()
   advancedWidgets_ = new QWidget;
   QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedWidgets_);
 
+  confidenceIntervalCheckBox_ = new QCheckBox;
+  if (calculus_.getImplementation()->getClassName() == "MonteCarloCalculus")
+    confidenceIntervalCheckBox_->setChecked(dynamic_cast<MonteCarloCalculus*>(&*calculus_.getImplementation())->isConfidenceIntervalRequired());
+  confidenceIntervalCheckBox_->setText(tr("Compute confidence interval at"));
+  connect(confidenceIntervalCheckBox_, SIGNAL(toggled(bool)), this, SLOT(confidenceIntervalRequired(bool)));
+  advancedWidgetsLayout->addWidget(confidenceIntervalCheckBox_, 0, 0);
+  levelConfidenceIntervalSpinbox_ = new QDoubleSpinBox;
+  if (calculus_.getImplementation()->getClassName() == "MonteCarloCalculus")
+  {
+    levelConfidenceIntervalSpinbox_->setValue(dynamic_cast<MonteCarloCalculus*>(&*calculus_.getImplementation())->getLevelConfidenceInterval());
+    confidenceIntervalRequired(confidenceIntervalCheckBox_->isChecked());
+  }
+  connect(levelConfidenceIntervalSpinbox_, SIGNAL(valueChanged(double)), this, SLOT(levelConfidenceIntervalChanged(double)));
+  advancedWidgetsLayout->addWidget(levelConfidenceIntervalSpinbox_, 0, 1);
+
   QLabel * seedLabel = new QLabel(tr("Seed"));
   advancedWidgetsLayout->addWidget(seedLabel, 2, 0);
-  seedSpin_ = new QSpinBox;
-  seedLabel->setBuddy(seedSpin_);
-  advancedWidgetsLayout->addWidget(seedSpin_, 2, 1);
+  seedSpinbox_ = new QSpinBox;
+  seedLabel->setBuddy(seedSpinbox_);
+  advancedWidgetsLayout->addWidget(seedSpinbox_, 2, 1);
 
   advancedWidgets_->hide();
   advancedGroupLayout->addWidget(advancedWidgets_);
@@ -132,7 +147,7 @@ void DistributionAnalysisWizard::updateMethodWidgets()
       taylorWidget_->hide();
       if (calculus_.getImplementation()->getClassName() == "QuadraticCumulCalculus")
         calculus_ = MonteCarloCalculus("aNameMC", physicalModel_);
-      nbSimuSpin_->setValue(dynamic_cast<MonteCarloCalculus*>(&*calculus_.getImplementation())->getNbSimulations());
+      nbSimuSpinbox_->setValue(dynamic_cast<MonteCarloCalculus*>(&*calculus_.getImplementation())->getNbSimulations());
       break;
     }
     case DistributionAnalysisWizard::Taylor:
@@ -155,13 +170,33 @@ void DistributionAnalysisWizard::showHideAdvancedWidgets(bool show)
     advancedWidgets_->show();
   else
     advancedWidgets_->hide();
+}
 
+
+void DistributionAnalysisWizard::confidenceIntervalRequired(bool confidenceIntervalRequired)
+{
+  if (confidenceIntervalRequired)
+  {
+    levelConfidenceIntervalSpinbox_->setEnabled(true);
+    dynamic_cast<MonteCarloCalculus*>(&*calculus_.getImplementation())->setIsConfidenceIntervalRequired(true);
+  }
+  else
+  {
+    levelConfidenceIntervalSpinbox_->setEnabled(false);
+    dynamic_cast<MonteCarloCalculus*>(&*calculus_.getImplementation())->setIsConfidenceIntervalRequired(false);
+  }
 }
 
 
 void DistributionAnalysisWizard::nbSimuChanged(int nbSimu)
 {
   dynamic_cast<MonteCarloCalculus*>(&*calculus_.getImplementation())->setNbSimulations(nbSimu);
+}
+
+
+void DistributionAnalysisWizard::levelConfidenceIntervalChanged(double confidenceInterval)
+{
+  dynamic_cast<MonteCarloCalculus*>(&*calculus_.getImplementation())->setLevelConfidenceInterval(confidenceInterval);
 }
 
 

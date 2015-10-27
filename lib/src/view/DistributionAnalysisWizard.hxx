@@ -9,6 +9,7 @@
 #include <QButtonGroup>
 #include <QVBoxLayout>
 #include <QSpinBox>
+#include <QCheckBox>
 
 namespace OTGUI {
 class DistributionAnalysisWizard : public QWizard
@@ -29,7 +30,9 @@ protected:
 public slots:
   void updateMethodWidgets();
   void showHideAdvancedWidgets(bool);
+  void confidenceIntervalRequired(bool);
   void nbSimuChanged(int);
+  void levelConfidenceIntervalChanged(double);
   void setCalculus(Calculus & calculus);
 
 private:
@@ -41,8 +44,10 @@ private:
   QWidget * advancedWidgets_;
   QWidget * monteCarloWidget_;
   QWidget * taylorWidget_;
-  QSpinBox * nbSimuSpin_;
-  QSpinBox * seedSpin_;
+  QSpinBox * nbSimuSpinbox_;
+  QSpinBox * seedSpinbox_;
+  QCheckBox * confidenceIntervalCheckBox_;
+  QDoubleSpinBox * levelConfidenceIntervalSpinbox_;
 };
 }
 #endif

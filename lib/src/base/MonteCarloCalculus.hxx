@@ -24,6 +24,12 @@ public:
   int getNbSimulations() const;
   void setNbSimulations(const int nbSimu);
 
+  bool isConfidenceIntervalRequired() const;
+  void setIsConfidenceIntervalRequired(const bool isConfidenceIntervalRequired);
+
+  double getLevelConfidenceInterval() const;
+  void setLevelConfidenceInterval(const double levelConfidenceInterval);
+
   MonteCarloResult getResult() const;
 
   virtual void run();
@@ -33,7 +39,7 @@ public:
 private:
   OutputCollection outputs_;
   int nbSimulations_;
-  bool computeCondidenceInterval_;
+  bool isConfidenceIntervalRequired_;
   double levelConfidenceInterval_;
   MonteCarloResult result_;
 };
