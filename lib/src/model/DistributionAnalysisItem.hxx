@@ -12,12 +12,8 @@ class DistributionAnalysisItem : public CalculusItem
 
 public:
   DistributionAnalysisItem(const Calculus & calculus);
-  virtual ~DistributionAnalysisItem();
 
   virtual void update(Observable * source, const std::string & message);
-
-signals:
-  void inputSampleChanged(OT::NumericalSample);
 };
 }
 #endif

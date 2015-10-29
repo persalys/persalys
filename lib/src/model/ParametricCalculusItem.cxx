@@ -8,12 +8,6 @@ ParametricCalculusItem::ParametricCalculusItem(const Calculus & calculus)
 }
 
 
-ParametricCalculusItem::~ParametricCalculusItem()
-{
-
-}
-
-
 void ParametricCalculusItem::update(Observable* source, const std::string & message)
 {
   if (message=="inputSampleChanged")

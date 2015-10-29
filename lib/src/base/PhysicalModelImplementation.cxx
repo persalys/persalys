@@ -1,7 +1,5 @@
 #include "PhysicalModelImplementation.hxx"
 
-#include "ComposedDistribution.hxx"
-
 using namespace OT;
 
 namespace OTGUI {
@@ -149,16 +147,19 @@ void PhysicalModelImplementation::addOutput(Output output)
 }
 
 
-RandomVector PhysicalModelImplementation::getInputRandomVector()
+ComposedDistribution PhysicalModelImplementation::getComposedDistribution() const
 {
   ComposedDistribution::DistributionCollection marginales;
   for (int i=0; i<inputs_.getSize(); ++i)
-  {   
     marginales.add(inputs_[i].getDistribution());
-  }
-//   TODO:  RandomVector(ComposedDistribution(marginales, getCopula()));
+  return ComposedDistribution(marginales);
+}
 
-  return RandomVector(ComposedDistribution(marginales));
+
+RandomVector PhysicalModelImplementation::getInputRandomVector()
+{
+//   TODO:  RandomVector(ComposedDistribution(marginales, getCopula()));
+  return RandomVector(getComposedDistribution());
 }
 
 

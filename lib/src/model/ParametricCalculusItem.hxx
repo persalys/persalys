@@ -13,7 +13,6 @@ class ParametricCalculusItem : public CalculusItem
 
 public:
   ParametricCalculusItem(const Calculus & calculus);
-  virtual ~ParametricCalculusItem();
 
   virtual void update(Observable * source, const std::string & message);
 

@@ -4,8 +4,7 @@
 #define STUDYITEM_H
 
 #include "PhysicalModelItem.hxx"
-#include "ParametricCalculusItem.hxx"
-#include "DistributionAnalysisItem.hxx"
+#include "CalculusItem.hxx"
 #include "OTStudy.hxx"
 
 
@@ -20,6 +19,8 @@ public:
   virtual ~StudyItem();
 
   void update(Observable * source, const std::string & message);
+
+  void addCalculusItem(Calculus & calculus, CalculusItem * item);
 
   void setData(const QVariant & value, int role);
   OTStudy * getStudy();

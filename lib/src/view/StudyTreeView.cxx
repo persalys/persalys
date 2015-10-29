@@ -12,6 +12,8 @@
 #include "DistributionAnalysisWizard.hxx"
 #include "MonteCarloCalculusResultWindow.hxx"
 #include "QuadraticCumulCalculusResultWindow.hxx"
+#include "SensitivityAnalysisWizard.hxx"
+#include "SensitivityAnalysisItem.hxx"
 
 #include <iostream>
 
@@ -54,6 +56,7 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
     {
       contextMenu->addAction(newParametricCalculus_);
       contextMenu->addAction(newDistributionAnalysis_);
+      contextMenu->addAction(newSensitivityAnalysis_);
     }
     if (data=="ParametricCalculus")
     {
@@ -62,6 +65,10 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
     if (data=="DistributionAnalysis")
     {
       contextMenu->addAction(runDistributionAnalysis_);
+    }
+    if (data=="SensitivityAnalysis")
+    {
+      contextMenu->addAction(runSensitivityAnalysis_);
     }
     contextMenu->exec(mapToGlobal(point));
   }    
@@ -82,6 +89,10 @@ void StudyTreeView::buildActions()
   newDistributionAnalysis_->setStatusTip(tr("Create a new distribution analysis"));
   connect(newDistributionAnalysis_, SIGNAL(triggered()), this, SLOT(createNewDistributionAnalysis()));
 
+  newSensitivityAnalysis_ = new QAction(tr("New sensitivity analysis"), this);
+  newSensitivityAnalysis_->setStatusTip(tr("Create a new sensitivity analysis"));
+  connect(newSensitivityAnalysis_, SIGNAL(triggered()), this, SLOT(createNewSensitivityAnalysis()));
+
   runParametricCalculus_ = new QAction(tr("Run"), this);
   runParametricCalculus_->setStatusTip(tr("Run the parametric calculus"));
   connect(runParametricCalculus_, SIGNAL(triggered()), this, SLOT(runParametricCalculus()));
@@ -89,6 +100,10 @@ void StudyTreeView::buildActions()
   runDistributionAnalysis_ = new QAction(tr("Run"), this);
   runDistributionAnalysis_->setStatusTip(tr("Run the distribution analysis"));
   connect(runDistributionAnalysis_, SIGNAL(triggered()), this, SLOT(runDistributionAnalysis()));
+
+  runSensitivityAnalysis_ = new QAction(tr("Run"), this);
+  runSensitivityAnalysis_->setStatusTip(tr("Run the sensitivity analysis"));
+  connect(runSensitivityAnalysis_, SIGNAL(triggered()), this, SLOT(runSensitivityAnalysis()));
 
   dumpStudy_ = new QAction(tr("Dump"), this);
   dumpStudy_->setStatusTip(tr("Dump the study"));
@@ -147,6 +162,21 @@ void StudyTreeView::createNewDistributionAnalysis()
 }
 
 
+void StudyTreeView::createNewSensitivityAnalysis()
+{
+  QModelIndex physicalModelIndex = selectionModel()->currentIndex();
+  PhysicalModelItem * physicalModelItem = static_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
+  StudyItem * studyItem = static_cast<StudyItem*>(physicalModelItem->QStandardItem::parent());
+  SensitivityAnalysisWizard * wizard = new SensitivityAnalysisWizard(studyItem->getStudy(), physicalModelItem->getPhysicalModel());
+
+  if (wizard->exec())
+  {
+    wizard->validate();
+    setExpanded(physicalModelIndex, true);
+  }
+}
+
+
 void StudyTreeView::createCalculusConnection(CalculusItem * item)
 {
   connect(item, SIGNAL(calculusFinished(CalculusItem *)), this, SIGNAL(checkIfWindowResultExists(CalculusItem *)));
@@ -181,6 +211,23 @@ void StudyTreeView::runDistributionAnalysis()
   DistributionAnalysisItem * item = static_cast<DistributionAnalysisItem*>(selectedItem);
 
   DistributionAnalysisWizard * wizard = new DistributionAnalysisWizard(item->getCalculus());
+  connect(wizard, SIGNAL(calculusChanged(Calculus)), item, SLOT(updateCalculus(Calculus)));
+  if (wizard->exec())
+  {
+    item->getCalculus().run();
+  }
+}
+
+
+void StudyTreeView::runSensitivityAnalysis()
+{
+  QModelIndex index = selectionModel()->currentIndex();
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+
+  SensitivityAnalysisItem * item = static_cast<SensitivityAnalysisItem*>(selectedItem);
+
+  SensitivityAnalysisWizard * wizard = new SensitivityAnalysisWizard(item->getCalculus());
+  connect(wizard, SIGNAL(calculusChanged(Calculus)), item, SLOT(updateCalculus(Calculus)));
   if (wizard->exec())
   {
     item->getCalculus().run();

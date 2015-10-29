@@ -33,9 +33,10 @@ Calculus CalculusItem::getCalculus() const
 }
 
 
-void CalculusItem::setCalculus(const Calculus & calculus)
+void CalculusItem::updateCalculus(const Calculus & calculus)
 {
   calculus_ = calculus;
+  calculus_.addObserver(this);
 }
 
 

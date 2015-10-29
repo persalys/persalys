@@ -66,6 +66,19 @@ stdCi = montecarloResult.getStdConfidenceInterval()
 openturns.testing.assert_almost_equal(0.0107636626958, stdCi.getLowerBound()[0], 1e-13)
 openturns.testing.assert_almost_equal(0.0117507273707, stdCi.getUpperBound()[0], 1e-13)
 
+## Sobol ##
+sobol = otguibase.SobolCalculus('mySobol', myPhysicalModel)
+myStudy.addCalculus(sobol)
+sobol.run()
+sobolResult = sobol.getResult()
+
+# Comparaison
+openturns.testing.assert_almost_equal(0.589347, sobolResult.getFirstOrderIndices()[0], 1e-6)
+openturns.testing.assert_almost_equal(0.0578996, sobolResult.getFirstOrderIndices()[1], 1e-6)
+openturns.testing.assert_almost_equal(0.319232, sobolResult.getFirstOrderIndices()[2], 1e-5)
+openturns.testing.assert_almost_equal(0.677013, sobolResult.getTotalOrderIndices()[0], 1e-6)
+openturns.testing.assert_almost_equal(0.0430664, sobolResult.getTotalOrderIndices()[1], 1e-6)
+openturns.testing.assert_almost_equal(0.309692, sobolResult.getTotalOrderIndices()[2], 1e-6)
 
 script = myStudy.dump()
 print(script)

@@ -1,5 +1,8 @@
 #include "StudyItem.hxx"
 
+#include "ParametricCalculusItem.hxx"
+#include "DistributionAnalysisItem.hxx"
+#include "SensitivityAnalysisItem.hxx"
 
 namespace OTGUI {
 
@@ -19,10 +22,9 @@ StudyItem::~StudyItem()
 
 void StudyItem::update(Observable * source, const std::string & message)
 {
-  OTStudy * study = static_cast<OTStudy*>(source);
   if (message=="addPhysicalModel")
   {
-    PhysicalModel addedPhysicalModel = study->getPhysicalModels().back();
+    PhysicalModel addedPhysicalModel = study_->getPhysicalModels().back();
     PhysicalModelItem * newPhysicalModelItem = new PhysicalModelItem(addedPhysicalModel);
     addedPhysicalModel.addObserver(newPhysicalModelItem);
     appendRow(newPhysicalModelItem);
@@ -31,26 +33,35 @@ void StudyItem::update(Observable * source, const std::string & message)
   }
   else if (message=="addParametricCalculus")
   {
-    Calculus addedParametricCalculus = study->getCalculuses().back();
-    ParametricCalculusItem * newParametricCalculusItem = new ParametricCalculusItem(addedParametricCalculus);
-    addedParametricCalculus.addObserver(newParametricCalculusItem);
-    for (int i=0; i<rowCount(); ++i)
-      if (child(i)->text().toStdString() == addedParametricCalculus.getPhysicalModel().getName())
-        child(i)->appendRow(newParametricCalculusItem);
-
-    emit newCalculusItemCreated(newParametricCalculusItem);
+    Calculus addedParametricCalculus = study_->getCalculuses().back();
+    ParametricCalculusItem * newItem = new ParametricCalculusItem(addedParametricCalculus);
+    addCalculusItem(addedParametricCalculus, newItem);
   }
   else if (message=="addMonteCarloCalculus" || message=="addQuadraticCumulCalculus")
   {
-    Calculus addedDistributionAnalysis = study->getCalculuses().back();
-    DistributionAnalysisItem * newDistributionAnalysisItem = new DistributionAnalysisItem(addedDistributionAnalysis);
-    addedDistributionAnalysis.addObserver(newDistributionAnalysisItem);
-    for (int i=0; i<rowCount(); ++i)
-      if (child(i)->text().toStdString() == addedDistributionAnalysis.getPhysicalModel().getName())
-        child(i)->appendRow(newDistributionAnalysisItem);
-
-    emit newCalculusItemCreated(newDistributionAnalysisItem);
+    Calculus addedDistributionAnalysis = study_->getCalculuses().back();
+    DistributionAnalysisItem * newItem = new DistributionAnalysisItem(addedDistributionAnalysis);
+    addCalculusItem(addedDistributionAnalysis, newItem);
   }
+  else if (message=="addSobolCalculus" || message=="addSVRCalculus")
+  {
+    Calculus addedSensitivityAnalysis = study_->getCalculuses().back();
+    SensitivityAnalysisItem * newItem = new SensitivityAnalysisItem(addedSensitivityAnalysis);
+    addCalculusItem(addedSensitivityAnalysis, newItem);
+  }
+}
+
+
+void StudyItem::addCalculusItem(Calculus & calculus, CalculusItem * item)
+{
+  calculus.addObserver(item);
+  for (int i=0; i<rowCount(); ++i)
+    if (child(i)->text().toStdString() == calculus.getPhysicalModel().getName())
+    {
+      child(i)->appendRow(item);
+      break;
+    }
+  emit newCalculusItemCreated(item);
 }
 
 

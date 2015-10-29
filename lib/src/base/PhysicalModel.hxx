@@ -36,6 +36,7 @@ public:
   bool updateOutputs(const OutputCollection& outputs);
   void addOutput(Output output);
 
+  OT::ComposedDistribution getComposedDistribution() const;
   OT::RandomVector getInputRandomVector();
   OT::RandomVector getOutputRandomVector(const OutputCollection & outputs);
 

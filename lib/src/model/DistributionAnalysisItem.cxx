@@ -8,12 +8,6 @@ DistributionAnalysisItem::DistributionAnalysisItem(const Calculus & calculus)
 }
 
 
-DistributionAnalysisItem::~DistributionAnalysisItem()
-{
-
-}
-
-
 void DistributionAnalysisItem::update(Observable* source, const std::string & message)
 {
   if (message=="calculusFinished")

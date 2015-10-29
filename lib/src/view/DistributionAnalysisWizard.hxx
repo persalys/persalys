@@ -7,7 +7,6 @@
 
 #include <QWizard>
 #include <QButtonGroup>
-#include <QVBoxLayout>
 #include <QSpinBox>
 #include <QCheckBox>
 
@@ -33,7 +32,8 @@ public slots:
   void confidenceIntervalRequired(bool);
   void nbSimuChanged(int);
   void levelConfidenceIntervalChanged(double);
-  void setCalculus(Calculus & calculus);
+signals:
+  void calculusChanged(const Calculus & calculus);
 
 private:
   Calculus calculus_;

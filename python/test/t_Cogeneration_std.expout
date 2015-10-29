@@ -30,4 +30,6 @@ myQuadraticCumul = otguibase.QuadraticCumulCalculus('myQuadraticCumul', myPhysic
 myStudy.addCalculus(myQuadraticCumul)
 myMonteCarlo = otguibase.MonteCarloCalculus('myMonteCarlo', myPhysicalModel, 1000)
 myStudy.addCalculus(myMonteCarlo)
+mySobol = otguibase.SobolCalculus('mySobol', myPhysicalModel)
+myStudy.addCalculus(mySobol)
 

@@ -27,10 +27,12 @@ public slots:
   void createNewPhysicalModel();
   void createNewParametricCalculus();
   void createNewDistributionAnalysis();
+  void createNewSensitivityAnalysis();
   void onCustomContextMenu(const QPoint & point);
   void selectedItemChanged(const QModelIndex & index);
   void runParametricCalculus();
   void runDistributionAnalysis();
+  void runSensitivityAnalysis();
   void createParametricCalculusResult(CalculusItem *);
   void createDistributionAnalysisResult(CalculusItem *);
   void createCalculusConnection(CalculusItem*);
@@ -49,8 +51,10 @@ private:
   QAction * newPhysicalModelAction_;
   QAction * newParametricCalculus_;
   QAction * newDistributionAnalysis_;
+  QAction * newSensitivityAnalysis_;
   QAction * runParametricCalculus_;
   QAction * runDistributionAnalysis_;
+  QAction * runSensitivityAnalysis_;
   QAction * dumpStudy_;
 };
 }

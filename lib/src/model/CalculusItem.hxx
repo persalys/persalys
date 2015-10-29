@@ -19,9 +19,9 @@ public:
   void setData(const QVariant & value, int role);
 
   Calculus getCalculus() const;
-  void setCalculus(const Calculus & calculus);
 
 public slots:
+  void updateCalculus(const Calculus & calculus);
 signals:
   void calculusFinished(CalculusItem*);
 

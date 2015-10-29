@@ -123,6 +123,12 @@ void PhysicalModel::addOutput(Output output)
 }
 
 
+ComposedDistribution PhysicalModel::getComposedDistribution() const
+{
+  return getImplementation()->getComposedDistribution();
+}
+
+
 RandomVector PhysicalModel::getInputRandomVector()
 {
   return getImplementation()->getInputRandomVector();

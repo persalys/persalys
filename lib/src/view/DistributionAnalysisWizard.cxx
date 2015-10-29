@@ -5,11 +5,11 @@
 #include "MonteCarloCalculus.hxx"
 #include "QuadraticCumulCalculus.hxx"
 
-#include <QTableView>
 #include <QGroupBox>
 #include <QRadioButton>
 #include <QLabel>
 #include <QPushButton>
+#include <QVBoxLayout>
 
 #include <limits>
 
@@ -146,7 +146,10 @@ void DistributionAnalysisWizard::updateMethodWidgets()
       monteCarloWidget_->show();
       taylorWidget_->hide();
       if (calculus_.getImplementation()->getClassName() == "QuadraticCumulCalculus")
+      {
         calculus_ = MonteCarloCalculus("aNameMC", physicalModel_);
+        emit calculusChanged(calculus_);
+      }
       nbSimuSpinbox_->setValue(dynamic_cast<MonteCarloCalculus*>(&*calculus_.getImplementation())->getNbSimulations());
       break;
     }
@@ -155,7 +158,10 @@ void DistributionAnalysisWizard::updateMethodWidgets()
       monteCarloWidget_->hide();
       taylorWidget_->show();
       if (calculus_.getImplementation()->getClassName() == "MonteCarloCalculus")
+      {
         calculus_ = QuadraticCumulCalculus("aNameTaylor", physicalModel_);
+        emit calculusChanged(calculus_);
+      }
       break;
     }
     default:
@@ -197,12 +203,6 @@ void DistributionAnalysisWizard::nbSimuChanged(int nbSimu)
 void DistributionAnalysisWizard::levelConfidenceIntervalChanged(double confidenceInterval)
 {
   dynamic_cast<MonteCarloCalculus*>(&*calculus_.getImplementation())->setLevelConfidenceInterval(confidenceInterval);
-}
-
-
-void DistributionAnalysisWizard::setCalculus(Calculus & calculus)
-{
-  calculus_ = calculus;
 }
 
 

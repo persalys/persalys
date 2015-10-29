@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     // Parametric analysis
     ParametricCalculus calculus("myParametricCalculus", myPhysicalModel);
     calculus.run();
-    NumericalSample resultSample(calculus.getResultSample());
+    NumericalSample resultSample(calculus.getResult().getResultSample());
 
     // Reference
 

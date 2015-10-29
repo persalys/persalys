@@ -76,6 +76,8 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 %include QuadraticCumulResult.i
 %include MonteCarloCalculus.i
 %include QuadraticCumulCalculus.i
+%include SobolCalculusResult.i
+%include SobolCalculus.i
 %include OTStudy.i
 
 
