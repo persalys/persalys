@@ -14,7 +14,7 @@
 
 namespace OTGUI {
 
-ImageEditionDialog::ImageEditionDialog(PlotWidget* plotWidget)
+ImageEditionDialog::ImageEditionDialog(OtguiPlotWidget* plotWidget)
 : QDialog()
 , plotWidget_(plotWidget)
 {
@@ -266,12 +266,12 @@ void ImageEditionDialog::exportPlot()
         renderer.renderTo(plotWidget_, pixmap);
 
         bool saveOperationSucceed = pixmap.save(fileName, format.toLatin1());
-        if (!saveOperationSucceed)
-          std::cout<<"Export doesn't work\n";
+//         if (!saveOperationSucceed)
+//           std::cout<<"Export doesn't work\n";
       }
       else
       {
-        std::cout<<"Format not supported\n";
+//         std::cout<<"Format not supported\n";
       }
     }
   }

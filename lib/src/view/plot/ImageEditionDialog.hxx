@@ -3,7 +3,7 @@
 #ifndef IMAGEEDITIONDIALOG_HXX
 #define IMAGEEDITIONDIALOG_HXX
 
-#include "PlotWidget.hxx"
+#include "OtguiPlotWidget.hxx"
 #include <QDialog>
 #include <QLineEdit>
 
@@ -14,7 +14,7 @@ class ImageEditionDialog : public QDialog
   Q_OBJECT
 
 public:
-  ImageEditionDialog(PlotWidget* plotWidget);
+  ImageEditionDialog(OtguiPlotWidget* plotWidget);
 
   void updateLineEdits();
   void setInitParameters();
@@ -29,7 +29,7 @@ public slots:
   void exportPlot();
 
 private:
-  PlotWidget * plotWidget_;
+  OtguiPlotWidget * plotWidget_;
   QLineEdit * titleLineEdit_;
   QLineEdit * xlabelLineEdit_;
   QLineEdit * xmin_;

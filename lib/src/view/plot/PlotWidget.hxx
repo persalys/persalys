@@ -4,19 +4,18 @@
 #ifndef PLOTWIDGET_HXX
 #define PLOTWIDGET_HXX
 
+#include "OtguiPlotWidget.hxx"
+
 #include <qwt_plot_curve.h>
 #include <qwt_plot.h>
 #include <qwt_plot_grid.h>
 #include <qwt_symbol.h>
-#include <QLabel>
 
 #include "Distribution.hxx"
 
 namespace OTGUI {
 
-class ImageEditionDialog;
-
-class PlotWidget : public QwtPlot
+class PlotWidget : public OtguiPlotWidget
 {
   Q_OBJECT
 
@@ -39,24 +38,9 @@ public:
   void drawBoxPlot(double median, double lowerQuartile, double upperQuartile,
                    double lowerBound, double upperBound, OT::NumericalPoint outliers_);
 
-  /// clear plot
-  void clear();
-  void replot();
-  void updatePlotLabel();
-  QLabel * getPlotLabel() const;
-
-public slots:
-  void contextMenu(const QPoint & pos);
-  void editImage();
-
 private:
   void updateScaleParameters(const OT::Distribution & distribution);
 
-private:
-  QLabel * plotLabel_;
-  ImageEditionDialog * dialog_;
-  QwtPlotGrid * grid_;
-  QAction * copyImageAction_;
 };
 }
 #endif
