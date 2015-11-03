@@ -1,27 +1,82 @@
 #include "PlotWidget.hxx"
+
 #include "DistributionScaleEngine.hxx"
+#include "ImageEditionDialog.hxx"
+
+#include <qwt_plot_layout.h>
 #include <qwt_plot_panner.h>
 #include <qwt_plot_histogram.h>
 #include <qwt_plot_magnifier.h>
 #include <qwt_plot_shapeitem.h>
 #include <qpainterpath.h>
 #include <qwt_legend.h>
+#include <qwt_plot_multi_barchart.h>
+#include <qwt_column_symbol.h>
+#include <qwt_plot_renderer.h>
+
 #include <QHBoxLayout>
+#include <QMenu>
 
 using namespace OT;
 
 namespace OTGUI {
 
+class BarChartHorizontalScaleDraw: public QwtScaleDraw
+{
+public:
+  BarChartHorizontalScaleDraw(const OT::Description & labels):labels_(labels)
+  {
+    enableComponent(QwtScaleDraw::Backbone, false);
+    enableComponent(QwtScaleDraw::Ticks, false);
+  }
+
+  virtual QwtText label(double value) const
+  {
+    QwtText lbl;
+
+    const int index = qRound(value);
+    if ( index>=0 && index<=labels_.getSize())
+      lbl = QwtText(labels_[index].c_str());
+        
+    return lbl;
+  }
+
+private:
+    const OT::Description labels_;
+};
+
+
 const QColor PlotWidget::DefaultHistogramColor = QColor(127, 172, 210);
 
-PlotWidget::PlotWidget(QWidget * parent)
-: OtguiPlotWidget(parent)
+PlotWidget::PlotWidget(bool isBarChart, QWidget * parent)
+: QwtPlot(parent)
+, plotLabel_(new QLabel(this))
+, dialog_(new ImageEditionDialog(this, isBarChart))
 {
-  // panning with the left mouse button
-  ( void ) new QwtPlotPanner(canvas());
+  if (!isBarChart)
+  {
+    // panning with the left mouse button
+    ( void ) new QwtPlotPanner(canvas());
 
-  // zoom in/out with the wheel
-  ( void ) new QwtPlotMagnifier(canvas());
+    // zoom in/out with the wheel
+    ( void ) new QwtPlotMagnifier(canvas());
+  }
+
+  setCanvasBackground(Qt::white);
+  setMinimumSize(200, 150);
+
+  plotLayout()->setAlignCanvasToScales(true);
+
+  clear();
+
+  // build actions
+  copyImageAction_ = new QAction(tr("Edit image"), this);
+  connect(copyImageAction_, SIGNAL(triggered(bool)), this, SLOT(editImage()));
+//   saveAsAction_ = new QAction( tr( "Save image as..." ), this) ;
+//   connect( saveAsAction_, SIGNAL(triggered( bool )), this, SLOT(saveAs()) );
+
+  plotLabel_->setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(plotLabel_, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
 }
 
 
@@ -157,7 +212,7 @@ void PlotWidget::plotHistogram(const NumericalSample & sample, bool cdf, int bar
   replot();
 }
 
-void PlotWidget::drawBoxPlot(double median, double lowerQuartile, double upperQuartile,
+void PlotWidget::plotBoxPlot(double median, double lowerQuartile, double upperQuartile,
                              double lowerBound, double upperBound, NumericalPoint outliers_)
 {
   // draw median
@@ -217,6 +272,74 @@ void PlotWidget::drawBoxPlot(double median, double lowerQuartile, double upperQu
 }
 
 
+void PlotWidget::plotBarChart(const NumericalPoint firstOrder, const NumericalPoint totalOrder, const Description inputNames)
+{
+  setTitle("Sensitivity indices");
+
+  setAxisTitle(QwtPlot::yLeft, "Sensitivity indice");
+  setAxisTitle(QwtPlot::xBottom, "Inputs");
+
+  QwtPlotMultiBarChart * barChartItem = new QwtPlotMultiBarChart;
+  barChartItem->setLayoutPolicy(QwtPlotMultiBarChart::AutoAdjustSamples);
+  barChartItem->setSpacing(20);
+  barChartItem->setMargin(3);
+
+  // populate bar chart
+  static const char *colors[] = {"DarkOrchid", "SteelBlue"};
+
+  const int numSamples = inputNames.getSize();
+  const int numBars = sizeof(colors) / sizeof(colors[0]);
+
+  QList<QwtText> titles;
+  titles += QwtText("First order indice");
+  titles += QwtText("Total order indice");
+
+  barChartItem->setBarTitles(titles);
+  barChartItem->setLegendIconSize(QSize(10, 14));
+
+  for (int i=0; i<numBars; i++)
+  {
+    QwtColumnSymbol *symbol = new QwtColumnSymbol(QwtColumnSymbol::Box);
+    symbol->setLineWidth(2);
+    symbol->setFrameStyle(QwtColumnSymbol::Raised);
+    symbol->setPalette(QPalette(colors[i]));
+
+    barChartItem->setSymbol(i, symbol);
+  }
+  
+  QVector< QVector<double> > series;
+  for (int i=0; i<numSamples; i++)
+  {
+    QVector<double> values;
+    values += firstOrder[i];
+    values += totalOrder[i];
+
+    series += values;
+  }
+
+  barChartItem->setSamples(series);
+  barChartItem->attach(this);
+
+  insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
+
+  // scales
+  setAxisScaleDraw(QwtPlot::xBottom, new BarChartHorizontalScaleDraw(inputNames));
+  setAxisScale(QwtPlot::xBottom, 0, barChartItem->dataSize()-0.5, 1.0);
+  setAxisScale(QwtPlot::yLeft, 0, 1.);
+
+  QwtScaleDraw *scaleDraw2 = axisScaleDraw(QwtPlot::yLeft);
+  scaleDraw2->enableComponent(QwtScaleDraw::Backbone, true);
+  scaleDraw2->enableComponent(QwtScaleDraw::Ticks, true);
+
+  plotLayout()->setAlignCanvasToScale(QwtPlot::yLeft, false);
+
+  plotLayout()->setCanvasMargin(0);
+  updateCanvasMargins();
+
+  replot();
+}
+
+
 void PlotWidget::updateScaleParameters(const Distribution & distribution)
 {
   double mean = distribution.getMean()[0];
@@ -236,5 +359,62 @@ void PlotWidget::updateScaleParameters(const Distribution & distribution)
   setAxisScale(QwtPlot::xBottom, x1, x2, stepSize);
 }
 
+
+void PlotWidget::clear()
+{
+  detachItems();
+  setAxisAutoScale(QwtPlot::xBottom);
+  enableAxis(QwtPlot::xBottom); 
+  setAxisAutoScale(QwtPlot::yLeft);
+  enableAxis(QwtPlot::yLeft);
+  // initialize grid
+  grid_ = new QwtPlotGrid;
+  replot();
+}
+
+
+// show the context menu when right clicking
+void PlotWidget::contextMenu(const QPoint & pos)
+{
+  QMenu * contextMenu(new QMenu(this));
+  contextMenu->addAction(copyImageAction_);
+//   contextMenu->addAction(saveAsAction_);
+  contextMenu->popup(plotLabel_->mapToGlobal(pos));
+}
+
+
+void PlotWidget::editImage()
+{
+  dialog_->setInitParameters();
+  if (dialog_->exec() == QDialog::Rejected)
+  {
+    dialog_->resetParameters();
+    replot();
+  }
+}
+
+
+void PlotWidget::replot()
+{
+  QwtPlot::replot();
+  updatePlotLabel();
+  dialog_->updateLineEdits();
+}
+
+
+void PlotWidget::updatePlotLabel()
+{
+  QPixmap pixmap(200,200);
+  pixmap.fill();
+  QwtPlotRenderer renderer;
+  renderer.renderTo(this, pixmap);
+  plotLabel_->setPixmap(pixmap);
+}
+
+
+QLabel * PlotWidget::getPlotLabel() const
+{
+  return plotLabel_;
+}
 
 }

@@ -11,33 +11,36 @@ SobolCalculusResult::SobolCalculusResult()
 }
 
 
-SobolCalculusResult::SobolCalculusResult(const NumericalPoint firstOrderIndices, const NumericalPoint totalOrderIndices)
- : firstOrderIndices_(firstOrderIndices), totalOrderIndices_(totalOrderIndices)
-{
-
-}
-
-
-SobolCalculusResult::SobolCalculusResult(const SobolCalculusResult & other)
- : firstOrderIndices_(other.firstOrderIndices_)
- , totalOrderIndices_(other.totalOrderIndices_)
+SobolCalculusResult::SobolCalculusResult(const NumericalSample firstOrderIndices,
+                                         const NumericalSample totalOrderIndices,
+                                         const Description & outputNames)
+ : outputNames_(outputNames)
+ , inputNames_(firstOrderIndices.getDescription())
+ , firstOrderIndices_(firstOrderIndices)
+ , totalOrderIndices_(totalOrderIndices)
 {
 }
 
 
-SobolCalculusResult * SobolCalculusResult::clone() const
+Description SobolCalculusResult::getOutputNames() const
 {
-  return new SobolCalculusResult(*this);
+  return outputNames_;
 }
 
 
-NumericalPoint SobolCalculusResult::getFirstOrderIndices() const
+Description SobolCalculusResult::getInputNames() const
+{
+  return inputNames_;
+}
+
+
+NumericalSample SobolCalculusResult::getFirstOrderIndices() const
 {
   return firstOrderIndices_;
 }
 
 
-NumericalPoint SobolCalculusResult::getTotalOrderIndices() const
+NumericalSample SobolCalculusResult::getTotalOrderIndices() const
 {
   return totalOrderIndices_;
 }

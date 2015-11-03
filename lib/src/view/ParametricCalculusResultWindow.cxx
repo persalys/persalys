@@ -154,7 +154,6 @@ void ParametricCalculusResultWindow::updateScatterPlot(int indexInput, int index
   Q_ASSERT(scatterPlot_);
   scatterPlot_->clear();
   scatterPlot_->plotScatter(result_.getInputSample().getMarginal(indexInput), result_.getResultSample().getMarginal(indexOutput));
-  scatterPlot_->replot();
 }
 
 

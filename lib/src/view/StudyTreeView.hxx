@@ -35,6 +35,7 @@ public slots:
   void runSensitivityAnalysis();
   void createParametricCalculusResult(CalculusItem *);
   void createDistributionAnalysisResult(CalculusItem *);
+  void createSensitivityAnalysisResult(CalculusItem * item);
   void createCalculusConnection(CalculusItem*);
   void createNewPhysicalModelWindow(PhysicalModelItem * item);
   void dumpStudy();

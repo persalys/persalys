@@ -14,9 +14,10 @@
 
 namespace OTGUI {
 
-ImageEditionDialog::ImageEditionDialog(OtguiPlotWidget* plotWidget)
+ImageEditionDialog::ImageEditionDialog(PlotWidget* plotWidget, bool plotWidgetIsBarChart)
 : QDialog()
 , plotWidget_(plotWidget)
+, plotWidgetIsBarChart_(plotWidgetIsBarChart)
 {
   QGridLayout * dialogMainGridLayout = new QGridLayout(this);
 
@@ -95,6 +96,14 @@ ImageEditionDialog::ImageEditionDialog(OtguiPlotWidget* plotWidget)
   connect(xmax_, SIGNAL(textChanged(QString)), this, SLOT(updateXrange()));
   gridLayoutTab->addWidget(xmax_, 2, 1, 1, 1);
 
+  gridLayoutTab->setRowStretch(3, 1);
+
+  if (plotWidgetIsBarChart_)
+  {
+    xmin_->setEnabled(false);
+    xmax_->setEnabled(false);
+  }
+
   tabWidget->addTab(tabHorizontalAxis, tr("Horizontal axis"));
 
   // --- tab Vertical Axis
@@ -120,6 +129,8 @@ ImageEditionDialog::ImageEditionDialog(OtguiPlotWidget* plotWidget)
   ymax_ = new QLineEdit;
   connect(ymax_, SIGNAL(textChanged(QString)), this, SLOT(updateYrange()));
   gridLayoutTab->addWidget(ymax_, 2, 1, 1, 1);
+
+  gridLayoutTab->setRowStretch(3, 1);
 
   tabWidget->addTab(tabVerticalAxis, tr("Vertical axis"));
 
@@ -168,6 +179,7 @@ void ImageEditionDialog::setInitParameters()
   initXlabel_ = plotWidget_->axisTitle(QwtPlot::xBottom).text();
   initXmin_ = plotWidget_->axisInterval(QwtPlot::xBottom).minValue();
   initXmax_ = plotWidget_->axisInterval(QwtPlot::xBottom).maxValue();
+  initXstep_ = plotWidget_->axisStepSize(QwtPlot::xBottom);
   initYlabel_ = plotWidget_->axisTitle(QwtPlot::yLeft).text();
   initYmin_ = plotWidget_->axisInterval(QwtPlot::yLeft).minValue();
   initYmax_ = plotWidget_->axisInterval(QwtPlot::yLeft).maxValue();
@@ -179,7 +191,7 @@ void ImageEditionDialog::resetParameters()
   plotWidget_->setTitle(initTitle_);
   plotWidget_->setAxisTitle(QwtPlot::xBottom, initXlabel_);
   plotWidget_->setAxisTitle(QwtPlot::yLeft, initYlabel_);
-  plotWidget_->setAxisScale(QwtPlot::xBottom, initXmin_, initXmax_);
+  plotWidget_->setAxisScale(QwtPlot::xBottom, initXmin_, initXmax_, initXstep_);
   plotWidget_->setAxisScale(QwtPlot::yLeft, initYmin_, initYmax_);
 }
 

@@ -13,7 +13,7 @@
 #include "MonteCarloCalculusResultWindow.hxx"
 #include "QuadraticCumulCalculusResultWindow.hxx"
 #include "SensitivityAnalysisWizard.hxx"
-#include "SensitivityAnalysisItem.hxx"
+#include "SobolCalculusResultWindow.hxx"
 
 #include <iostream>
 
@@ -185,6 +185,8 @@ void StudyTreeView::createCalculusConnection(CalculusItem * item)
     connect(item, SIGNAL(calculusFinished(CalculusItem *)), this, SLOT(createParametricCalculusResult(CalculusItem *)));
   else if (data == "DistributionAnalysis")
     connect(item, SIGNAL(calculusFinished(CalculusItem *)), this, SLOT(createDistributionAnalysisResult(CalculusItem *)));
+  else if (data == "SensitivityAnalysis")
+  connect(item, SIGNAL(calculusFinished(CalculusItem *)), this, SLOT(createSensitivityAnalysisResult(CalculusItem*)));
 }
 
 
@@ -253,6 +255,21 @@ void StudyTreeView::createDistributionAnalysisResult(CalculusItem * item)
   {
     QuadraticCumulCalculusResultWindow * window = new QuadraticCumulCalculusResultWindow(static_cast<DistributionAnalysisItem*>(item));
     emit showWindow(window);
+  }
+}
+
+
+void StudyTreeView::createSensitivityAnalysisResult(CalculusItem * item)
+{
+  if (item->getCalculus().getImplementation()->getClassName() == "SobolCalculus")
+  {
+    SobolCalculusResultWindow * window = new SobolCalculusResultWindow(static_cast<SensitivityAnalysisItem*>(item));
+    emit showWindow(window);
+  }
+  else
+  {
+//     QuadraticCumulCalculusResultWindow * window = new QuadraticCumulCalculusResultWindow(static_cast<DistributionAnalysisItem*>(item));
+//     emit showWindow(window);
   }
 }
 

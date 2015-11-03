@@ -173,14 +173,10 @@ void MonteCarloCalculusResultWindow::buildInterface()
 
   boxPlot_ = new PlotWidget;
 
-  double median = result_.getMedian()[0];
-  double Q1 = result_.getFirstQuartile()[0];
-  double Q3 = result_.getThirdQuartile()[0];
-
-  boxPlot_->drawBoxPlot(median, Q1, Q3, Q1 - 1.5*(Q3-Q1), Q3 + 1.5*(Q3-Q1), result_.getOutliers()[0]);
-
   tabLayout->addWidget(boxPlot_->getPlotLabel());
   tabLayout->addStretch();
+
+  outputBoxPlotChanged(0);
 
   tabWidget->addTab(tab, tr("Box plots"));
 
@@ -330,7 +326,7 @@ void MonteCarloCalculusResultWindow::outputBoxPlotChanged(int indexOutput)
   double Q1 = result_.getFirstQuartile()[indexOutput];
   double Q3 = result_.getThirdQuartile()[indexOutput];
 
-  boxPlot_->drawBoxPlot(median, Q1, Q3, Q1 - 1.5*(Q3-Q1), Q3 + 1.5*(Q3-Q1), result_.getOutliers()[indexOutput]);
+  boxPlot_->plotBoxPlot(median, Q1, Q3, Q1 - 1.5*(Q3-Q1), Q3 + 1.5*(Q3-Q1), result_.getOutliers()[indexOutput]);
 }
 
 

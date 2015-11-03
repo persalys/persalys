@@ -66,9 +66,18 @@ void SobolCalculus::run()
   NumericalSample inputSample2(getPhysicalModel().getInputRandomVector().getSample(nbSimulations_));
   inputSample1.setDescription(getPhysicalModel().getFunction().getInputDescription());
   inputSample2.setDescription(getPhysicalModel().getFunction().getInputDescription());
-  SensitivityAnalysis sensitivityAnalysis = SensitivityAnalysis(inputSample1, inputSample2, getPhysicalModel().getFunction());
+  SensitivityAnalysis sensitivityAnalysis = SensitivityAnalysis(inputSample1, inputSample2, getPhysicalModel().getFunction(outputs_));
   // set results
-  result_ = SobolCalculusResult(sensitivityAnalysis.getFirstOrderIndices(), sensitivityAnalysis.getTotalOrderIndices());
+  NumericalSample firstOrderIndices(1, sensitivityAnalysis.getFirstOrderIndices(0));
+  NumericalSample totalOrderIndices(1, sensitivityAnalysis.getTotalOrderIndices(0));
+  for (int i=1; i<outputs_.getSize(); ++i)
+  {
+    firstOrderIndices.add(sensitivityAnalysis.getFirstOrderIndices(i));
+    totalOrderIndices.add(sensitivityAnalysis.getTotalOrderIndices(i));
+  }
+  firstOrderIndices.setDescription(getPhysicalModel().getFunction().getInputDescription());
+  result_ = SobolCalculusResult(firstOrderIndices, totalOrderIndices,
+                                getPhysicalModel().getFunction().getOutputDescription());
 
   notify("calculusFinished");
 }

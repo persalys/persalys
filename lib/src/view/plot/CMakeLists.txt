@@ -3,18 +3,14 @@ set (SOURCEFILES "" CACHE STRING "otguiplot sources" FORCE)
 ot_add_current_dir_to_include_dirs ()
 
 ot_add_source_file ( DistributionScaleEngine.cxx )
-ot_add_source_file ( OtguiPlotWidget.cxx )
 ot_add_source_file ( PlotWidget.cxx )
 ot_add_source_file ( ImageEditionDialog.cxx )
-ot_add_source_file ( BarChart.cxx )
 
-qt4_wrap_cpp (OTGUI_PLOT_MOC_SRCS OtguiPlotWidget.hxx PlotWidget.hxx ImageEditionDialog.hxx BarChart.hxx)
+qt4_wrap_cpp (OTGUI_PLOT_MOC_SRCS PlotWidget.hxx ImageEditionDialog.hxx)
 
-ot_install_header_file ( OtguiPlotWidget.hxx )
 ot_install_header_file ( DistributionScaleEngine.hxx )
 ot_install_header_file ( PlotWidget.hxx )
 ot_install_header_file ( ImageEditionDialog.hxx )
-ot_install_header_file ( BarChart.hxx )
 
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
