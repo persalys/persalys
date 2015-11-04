@@ -288,14 +288,17 @@ void PlotWidget::plotBarChart(const NumericalPoint firstOrder, const NumericalPo
   static const char *colors[] = {"DarkOrchid", "SteelBlue"};
 
   const int numSamples = inputNames.getSize();
-  const int numBars = sizeof(colors) / sizeof(colors[0]);
+  const int numBars = (totalOrder.getDimension() > 0) ? 2 : 1;
 
-  QList<QwtText> titles;
-  titles += QwtText("First order indice");
-  titles += QwtText("Total order indice");
+  if (numBars == 2)
+  {
+    QList<QwtText> titles;
+    titles += QwtText("First order indice");
+    titles += QwtText("Total order indice");
 
-  barChartItem->setBarTitles(titles);
-  barChartItem->setLegendIconSize(QSize(10, 14));
+    barChartItem->setBarTitles(titles);
+    barChartItem->setLegendIconSize(QSize(10, 14));
+  }
 
   for (int i=0; i<numBars; i++)
   {
@@ -312,7 +315,8 @@ void PlotWidget::plotBarChart(const NumericalPoint firstOrder, const NumericalPo
   {
     QVector<double> values;
     values += firstOrder[i];
-    values += totalOrder[i];
+    if (numBars == 2)
+      values += totalOrder[i];
 
     series += values;
   }

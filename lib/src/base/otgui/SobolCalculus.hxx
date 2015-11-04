@@ -3,11 +3,11 @@
 #ifndef SOBOLCALCULUS_H
 #define SOBOLCALCULUS_H
 
-#include "Calculus.hxx"
+#include "SimulationCalculus.hxx"
 #include "SobolCalculusResult.hxx"
 
 namespace OTGUI {
-class SobolCalculus : public CalculusImplementation
+class SobolCalculus : public SimulationCalculus
 {
   CLASSNAME;
 
@@ -17,12 +17,6 @@ public:
   SobolCalculus(const SobolCalculus & other);
   virtual SobolCalculus * clone() const;
 
-  OutputCollection getOutputs() const;
-  void setOutputs(const OutputCollection & outputs);
-
-  int getNbSimulations() const;
-  void setNbSimulations(const int nbSimu);
-
   SobolCalculusResult getResult() const;
 
   virtual void run();
@@ -30,8 +24,6 @@ public:
   virtual bool calculusLaunched() const;
 
 private:
-  OutputCollection outputs_;
-  int nbSimulations_;
   SobolCalculusResult result_;
 };
 }

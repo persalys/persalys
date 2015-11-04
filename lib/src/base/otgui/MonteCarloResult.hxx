@@ -17,7 +17,7 @@ public:
   typedef OT::Collection<OT::Distribution> DistributionCollection;
 
   MonteCarloResult();
-  MonteCarloResult(OT::NumericalSample outputSample, OT::NumericalSample inputSample);
+  MonteCarloResult(OT::NumericalSample inputSample, OT::NumericalSample outputSample);
 
   virtual ~MonteCarloResult();
 

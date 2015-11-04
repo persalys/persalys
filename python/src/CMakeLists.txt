@@ -58,6 +58,7 @@ ot_add_python_module( otguibase otguibase_module.i
                       YACSPhysicalModel.i
                       CalculusImplementation.i
                       Calculus.i Calculus_doc.i.in
+                      SimulationCalculus.i
                       ParametricCalculusResult.i ParametricCalculusResult_doc.i.in
                       ParametricCalculus.i ParametricCalculus_doc.i.in
                       MonteCarloResult.i MonteCarloResult_doc.i.in
@@ -66,6 +67,8 @@ ot_add_python_module( otguibase otguibase_module.i
                       QuadraticCumulCalculus.i QuadraticCumulCalculus_doc.i.in
                       SobolCalculusResult.i SobolCalculusResult_doc.i.in
                       SobolCalculus.i SobolCalculus_doc.i.in
+                      SRCCalculusResult.i SRCCalculusResult_doc.i.in
+                      SRCCalculus.i SRCCalculus_doc.i.in
                       OTStudy.i OTStudy_doc.i.in
                     )
 

@@ -13,7 +13,7 @@ class ParametricCalculusResult
 
 public:
   ParametricCalculusResult();
-  ParametricCalculusResult(OT::NumericalSample resultSample, OT::NumericalSample inputSample);
+  ParametricCalculusResult(OT::NumericalSample inputSample, OT::NumericalSample resultSample);
 
   virtual ~ParametricCalculusResult();
 

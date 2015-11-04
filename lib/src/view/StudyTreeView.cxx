@@ -14,6 +14,7 @@
 #include "otgui/QuadraticCumulCalculusResultWindow.hxx"
 #include "otgui/SensitivityAnalysisWizard.hxx"
 #include "otgui/SobolCalculusResultWindow.hxx"
+#include "otgui/SRCCalculusResultWindow.hxx"
 
 #include <iostream>
 
@@ -268,8 +269,8 @@ void StudyTreeView::createSensitivityAnalysisResult(CalculusItem * item)
   }
   else
   {
-//     QuadraticCumulCalculusResultWindow * window = new QuadraticCumulCalculusResultWindow(static_cast<DistributionAnalysisItem*>(item));
-//     emit showWindow(window);
+    SRCCalculusResultWindow * window = new SRCCalculusResultWindow(static_cast<SensitivityAnalysisItem*>(item));
+    emit showWindow(window);
   }
 }
 

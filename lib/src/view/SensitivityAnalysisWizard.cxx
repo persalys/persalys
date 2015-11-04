@@ -3,6 +3,7 @@
 #include "otgui/SensitivityAnalysisWizard.hxx"
 
 #include "otgui/SobolCalculus.hxx"
+#include "otgui/SRCCalculus.hxx"
 
 #include <QGroupBox>
 #include <QRadioButton>
@@ -53,10 +54,10 @@ void SensitivityAnalysisWizard::buildInterface()
     buttonToChooseMethod->setChecked(true);
   methodGroup_->addButton(buttonToChooseMethod, SensitivityAnalysisWizard::Sobol);
   methodLayout->addWidget(buttonToChooseMethod);
-  buttonToChooseMethod = new QRadioButton(tr("SVR"));
-  if (calculus_.getImplementation()->getClassName() == "SVRCalculus")
+  buttonToChooseMethod = new QRadioButton(tr("SRC"));
+  if (calculus_.getImplementation()->getClassName() == "SRCCalculus")
     buttonToChooseMethod->setChecked(true);
-  methodGroup_->addButton(buttonToChooseMethod, SensitivityAnalysisWizard::SVR);
+  methodGroup_->addButton(buttonToChooseMethod, SensitivityAnalysisWizard::SRC);
   methodLayout->addWidget(buttonToChooseMethod);
   connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SLOT(updateMethodWidgets()));
 
@@ -68,8 +69,7 @@ void SensitivityAnalysisWizard::buildInterface()
   nbSimuSpinbox_ = new QSpinBox;
   nbSimuSpinbox_->setMinimum(2);
   nbSimuSpinbox_->setMaximum(std::numeric_limits<int>::max());
-  if (calculus_.getImplementation()->getClassName() == "SobolCalculus")
-    nbSimuSpinbox_->setValue(dynamic_cast<SobolCalculus*>(&*calculus_.getImplementation())->getNbSimulations());
+  nbSimuSpinbox_->setValue(dynamic_cast<SimulationCalculus*>(&*calculus_.getImplementation())->getNbSimulations());
   connect(nbSimuSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(nbSimuChanged(int)));
 
   nbSimuLabel->setBuddy(nbSimuSpinbox_);
@@ -91,17 +91,20 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
   {
     case SensitivityAnalysisWizard::Sobol:
     {
-      if (calculus_.getImplementation()->getClassName() == "SVRCalculus")
+      if (calculus_.getImplementation()->getClassName() == "SRCCalculus")
       {
         calculus_ = SobolCalculus("aNameSobol", physicalModel_);
         emit calculusChanged(calculus_);
       }
       break;
     }
-    case SensitivityAnalysisWizard::SVR:
+    case SensitivityAnalysisWizard::SRC:
     {
-//       if (calculus_.getImplementation()->getClassName() == "SobolCalculus")
-//         calculus_ = SVRCalculus("aNameSVR", physicalModel_);
+      if (calculus_.getImplementation()->getClassName() == "SobolCalculus")
+      {
+        calculus_ = SRCCalculus("aNameSRC", physicalModel_);
+        emit calculusChanged(calculus_);
+      }
       break;
     }
     default:
@@ -112,21 +115,22 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
 
 void SensitivityAnalysisWizard::nbSimuChanged(int nbSimu)
 {
-  switch (SensitivityAnalysisWizard::Method(methodGroup_->checkedId()))
-  {
-    case SensitivityAnalysisWizard::Sobol:
-    {
-      dynamic_cast<SobolCalculus*>(&*calculus_.getImplementation())->setNbSimulations(nbSimu);
-      break;
-    }
-    case SensitivityAnalysisWizard::SVR:
-    {
-//       dynamic_cast<SSVRCalculus*>(&*calculus_.getImplementation())->setNbSimulations(nbSimu);
-      break;
-    }
-    default:
-      break;
-  }
+  dynamic_cast<SimulationCalculus*>(&*calculus_.getImplementation())->setNbSimulations(nbSimu);
+//   switch (SensitivityAnalysisWizard::Method(methodGroup_->checkedId()))
+//   {
+//     case SensitivityAnalysisWizard::Sobol:
+//     {
+//       dynamic_cast<SobolCalculus*>(&*calculus_.getImplementation())->setNbSimulations(nbSimu);
+//       break;
+//     }
+//     case SensitivityAnalysisWizard::SRC:
+//     {
+//       dynamic_cast<SRCCalculus*>(&*calculus_.getImplementation())->setNbSimulations(nbSimu);
+//       break;
+//     }
+//     default:
+//       break;
+//   }
 }
 
 

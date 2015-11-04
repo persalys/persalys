@@ -3,11 +3,11 @@
 #ifndef MONTECARLOCALCULUS_H
 #define MONTECARLOCALCULUS_H
 
-#include "Calculus.hxx"
+#include "SimulationCalculus.hxx"
 #include "MonteCarloResult.hxx"
 
 namespace OTGUI {
-class MonteCarloCalculus : public CalculusImplementation
+class MonteCarloCalculus : public SimulationCalculus
 {
   CLASSNAME;
 
@@ -17,12 +17,6 @@ public:
 
   MonteCarloCalculus(const MonteCarloCalculus & other);
   virtual MonteCarloCalculus * clone() const;
-
-  OutputCollection getOutputs() const;
-  void setOutputs(const OutputCollection & outputs);
-
-  int getNbSimulations() const;
-  void setNbSimulations(const int nbSimu);
 
   bool isConfidenceIntervalRequired() const;
   void setIsConfidenceIntervalRequired(const bool isConfidenceIntervalRequired);
@@ -37,8 +31,6 @@ public:
   virtual bool calculusLaunched() const;
 
 private:
-  OutputCollection outputs_;
-  int nbSimulations_;
   bool isConfidenceIntervalRequired_;
   double levelConfidenceInterval_;
   MonteCarloResult result_;

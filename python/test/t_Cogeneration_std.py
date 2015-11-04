@@ -80,6 +80,17 @@ openturns.testing.assert_almost_equal(0.677013, sobolResult.getTotalOrderIndices
 openturns.testing.assert_almost_equal(0.0430664, sobolResult.getTotalOrderIndices()[0][1], 1e-6)
 openturns.testing.assert_almost_equal(0.309692, sobolResult.getTotalOrderIndices()[0][2], 1e-6)
 
+## SRC ##
+src = otguibase.SRCCalculus('mySRC', myPhysicalModel)
+myStudy.addCalculus(src)
+src.run()
+srcResult = src.getResult()
+
+# Comparaison
+openturns.testing.assert_almost_equal(0.628946, srcResult.getIndices()[0][0], 1e-6)
+openturns.testing.assert_almost_equal(0.0476118, srcResult.getIndices()[0][1], 1e-6)
+openturns.testing.assert_almost_equal(0.318226, srcResult.getIndices()[0][2], 1e-6)
+
 script = myStudy.dump()
 print(script)
 exec(script)

@@ -16,8 +16,8 @@ MonteCarloResult::MonteCarloResult()
 {
 }
 
-MonteCarloResult::MonteCarloResult(NumericalSample outputSample, NumericalSample inputSample)
- : ParametricCalculusResult(outputSample, inputSample)
+MonteCarloResult::MonteCarloResult(NumericalSample inputSample, NumericalSample outputSample)
+ : ParametricCalculusResult(inputSample, outputSample)
  , levelConfidenceInterval_(0.95)
 {
 }

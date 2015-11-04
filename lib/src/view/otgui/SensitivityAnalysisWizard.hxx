@@ -15,7 +15,7 @@ class SensitivityAnalysisWizard : public QWizard
   Q_OBJECT
 
 public:
-  enum Method {Sobol, SVR};
+  enum Method {Sobol, SRC};
 
   SensitivityAnalysisWizard(OTStudy * study, const PhysicalModel & physicalModel);
   SensitivityAnalysisWizard(const Calculus & calculus);

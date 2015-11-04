@@ -3,7 +3,7 @@
 #ifndef PARAMETRICCALCULUSTABLEMODEL_H
 #define PARAMETRICCALCULUSTABLEMODEL_H
 
-#include "otgui/ParametricCalculus.hxx"
+#include "otgui/Calculus.hxx"
 
 #include <QAbstractTableModel>
 

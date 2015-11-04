@@ -14,7 +14,7 @@ ParametricCalculusResult::ParametricCalculusResult()
 }
 
 
-ParametricCalculusResult::ParametricCalculusResult(NumericalSample resultSample, NumericalSample inputSample)
+ParametricCalculusResult::ParametricCalculusResult(NumericalSample inputSample, NumericalSample resultSample)
  : resultSample_(resultSample)
  , inputSample_(inputSample)
  , listMin_(resultSample.getMin())

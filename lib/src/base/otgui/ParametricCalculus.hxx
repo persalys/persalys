@@ -3,11 +3,11 @@
 #ifndef PARAMETRICCALCULUS_H
 #define PARAMETRICCALCULUS_H
 
-#include "Calculus.hxx"
+#include "SimulationCalculus.hxx"
 #include "ParametricCalculusResult.hxx"
 
 namespace OTGUI {
-class ParametricCalculus : public CalculusImplementation
+class ParametricCalculus : public SimulationCalculus
 {
   CLASSNAME;
 
@@ -19,11 +19,10 @@ public:
   ParametricCalculus(const ParametricCalculus & other);
   virtual ParametricCalculus * clone() const;
 
-  void computeParameters(const InputCollection & inputs);
+  void initializeParameters(const InputCollection & inputs);
   void updateParameters();
-  void computeInputSample();
 
-  OT::NumericalSample getInputSample() const;
+  OT::NumericalSample getInputSample();
   void setInputSample(const OT::NumericalSample & inputSample);
 
   OT::NumericalPoint getInfBounds() const;

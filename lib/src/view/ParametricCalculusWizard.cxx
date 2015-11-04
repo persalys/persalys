@@ -1,6 +1,7 @@
 // ParametricCalculusWizard.cxx
 
 #include "otgui/ParametricCalculusWizard.hxx"
+#include "otgui/ParametricCalculus.hxx"
 
 #include <QVBoxLayout>
 #include <QTableView>

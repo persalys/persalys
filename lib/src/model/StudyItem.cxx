@@ -43,7 +43,7 @@ void StudyItem::update(Observable * source, const std::string & message)
     DistributionAnalysisItem * newItem = new DistributionAnalysisItem(addedDistributionAnalysis);
     addCalculusItem(addedDistributionAnalysis, newItem);
   }
-  else if (message=="addSobolCalculus" || message=="addSVRCalculus")
+  else if (message=="addSobolCalculus" || message=="addSRCCalculus")
   {
     Calculus addedSensitivityAnalysis = study_->getCalculuses().back();
     SensitivityAnalysisItem * newItem = new SensitivityAnalysisItem(addedSensitivityAnalysis);

@@ -12,9 +12,7 @@ namespace OTGUI {
 CLASSNAMEINIT(SobolCalculus);
 
 SobolCalculus::SobolCalculus(const std::string & name, const PhysicalModel & physicalModel, int nbSimu)
- : CalculusImplementation(name, physicalModel)
- , outputs_(physicalModel.getOutputs())
- , nbSimulations_(nbSimu)
+ : SimulationCalculus(name, physicalModel, nbSimu)
  , result_()
 {
 //TODO ctr with outputNames (pas OutputCollection!) optionnel par défaut prendrait tous les outputs
@@ -22,9 +20,7 @@ SobolCalculus::SobolCalculus(const std::string & name, const PhysicalModel & phy
 
 
 SobolCalculus::SobolCalculus(const SobolCalculus & other)
- : CalculusImplementation(other)
- , outputs_(other.outputs_)
- , nbSimulations_(other.nbSimulations_)
+ : SimulationCalculus(other)
  , result_(other.result_)
 {
 }
@@ -36,49 +32,26 @@ SobolCalculus* SobolCalculus::clone() const
 }
 
 
-OutputCollection SobolCalculus::getOutputs() const
-{
-  return outputs_;
-}
-
-
-void SobolCalculus::setOutputs(const OutputCollection & outputs)
-{
-  outputs_ = outputs;
-}
-
-
-int SobolCalculus::getNbSimulations() const
-{
-  return nbSimulations_;
-}
-
-
-void SobolCalculus::setNbSimulations(const int nbSimu)
-{
-  nbSimulations_ = nbSimu;
-}
-
-
 void SobolCalculus::run()
 {
   RandomGenerator::SetSeed(0); //TODO seed in argument
-  NumericalSample inputSample1(getPhysicalModel().getInputRandomVector().getSample(nbSimulations_));
-  NumericalSample inputSample2(getPhysicalModel().getInputRandomVector().getSample(nbSimulations_));
-  inputSample1.setDescription(getPhysicalModel().getFunction().getInputDescription());
-  inputSample2.setDescription(getPhysicalModel().getFunction().getInputDescription());
-  SensitivityAnalysis sensitivityAnalysis = SensitivityAnalysis(inputSample1, inputSample2, getPhysicalModel().getFunction(outputs_));
+  NumericalSample inputSample1(getInputSample());
+  NumericalSample inputSample2(getInputSample());
+
+  SensitivityAnalysis sensitivityAnalysis = SensitivityAnalysis(inputSample1, inputSample2, getPhysicalModel().getFunction(getOutputs()));
+
   // set results
   NumericalSample firstOrderIndices(1, sensitivityAnalysis.getFirstOrderIndices(0));
   NumericalSample totalOrderIndices(1, sensitivityAnalysis.getTotalOrderIndices(0));
-  for (int i=1; i<outputs_.getSize(); ++i)
+
+  for (int i=1; i<getOutputs().getSize(); ++i)
   {
     firstOrderIndices.add(sensitivityAnalysis.getFirstOrderIndices(i));
     totalOrderIndices.add(sensitivityAnalysis.getTotalOrderIndices(i));
   }
-  firstOrderIndices.setDescription(getPhysicalModel().getFunction().getInputDescription());
-  result_ = SobolCalculusResult(firstOrderIndices, totalOrderIndices,
-                                getPhysicalModel().getFunction().getOutputDescription());
+
+  firstOrderIndices.setDescription(getInputNames());
+  result_ = SobolCalculusResult(firstOrderIndices, totalOrderIndices, getOutputNames());
 
   notify("calculusFinished");
 }

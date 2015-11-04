@@ -70,6 +70,7 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 %include YACSPhysicalModel.i
 %include CalculusImplementation.i
 %include Calculus.i
+%include SimulationCalculus.i
 %include ParametricCalculusResult.i
 %include ParametricCalculus.i
 %include MonteCarloResult.i
@@ -78,6 +79,8 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 %include QuadraticCumulCalculus.i
 %include SobolCalculusResult.i
 %include SobolCalculus.i
+%include SRCCalculusResult.i
+%include SRCCalculus.i
 %include OTStudy.i
 
 

@@ -10,32 +10,26 @@ namespace OTGUI {
 CLASSNAMEINIT(ParametricCalculus);
 
 ParametricCalculus::ParametricCalculus(const std::string & name, const PhysicalModel & physicalModel)
- : CalculusImplementation(name, physicalModel)
+ : SimulationCalculus(name, physicalModel, 0)
 {
-  computeParameters(physicalModel.getInputs());
+  initializeParameters(physicalModel.getInputs());
 }
 
 
 ParametricCalculus::ParametricCalculus(const std::string & name, const PhysicalModel & physicalModel,
                          const NumericalPoint & infBounds, const NumericalPoint & supBounds,
                          const Indices & nbValues)
- : CalculusImplementation(name, physicalModel)
+ : SimulationCalculus(name, physicalModel, 0)
+ , inputNames_(getInputNames())
  , infBounds_(infBounds)
  , supBounds_(supBounds)
  , nbValues_(nbValues)
 {
-  int inputSize = physicalModel.getInputs().getSize();
-  inputNames_ = Description(inputSize);
-
-  for (int i=0; i<inputSize; ++i)
-  {
-    inputNames_[i] = physicalModel.getInputs()[i].getName();
-  }
 }
 
 
 ParametricCalculus::ParametricCalculus(const ParametricCalculus & other)
- : CalculusImplementation(other)
+ : SimulationCalculus(other)
  , inputNames_(other.inputNames_)
  , infBounds_(other.infBounds_)
  , supBounds_(other.supBounds_)
@@ -50,17 +44,18 @@ ParametricCalculus* ParametricCalculus::clone() const
 }
 
 
-void ParametricCalculus::computeParameters(const InputCollection & inputs)
+void ParametricCalculus::initializeParameters(const InputCollection & inputs)
 {
+  inputSample_.clear();
+  inputNames_ = getInputNames();
+
   int inputSize = inputs.getSize();
   infBounds_ = NumericalPoint(inputSize);
   supBounds_ = NumericalPoint(inputSize);
   nbValues_ = Indices(inputSize);
-  inputNames_ = Description(inputSize);
 
   for (int i=0; i<inputSize; ++i)
   {
-    inputNames_[i] = inputs[i].getName();
     if (inputs[i].getDistribution().getImplementation()->getClassName()=="Dirac")
     {
       infBounds_[i] = inputs[i].getValue();
@@ -80,19 +75,15 @@ void ParametricCalculus::computeParameters(const InputCollection & inputs)
 
 void ParametricCalculus::updateParameters()
 {
-  int inputSize = getPhysicalModel().getInputs().getSize();
   Description inputNames(inputNames_);
-  inputNames_ = Description(inputSize);
-
   NumericalPoint infBounds(infBounds_);
   NumericalPoint supBounds(supBounds_);
   Indices nbValues(nbValues_);
 
-  computeParameters(getPhysicalModel().getInputs());
+  initializeParameters(getPhysicalModel().getInputs());
 
-  for (int i=0; i<inputSize; ++i)
+  for (int i=0; i<inputNames.getSize(); ++i)
   {
-    inputNames_[i] = getPhysicalModel().getInputs()[i].getName();
     const Description::const_iterator it = std::find(inputNames.begin(), inputNames.end(), inputNames_[i]);
     if (it != inputNames.end())
     {
@@ -104,55 +95,46 @@ void ParametricCalculus::updateParameters()
 }
 
 
-void ParametricCalculus::computeInputSample()
-{
-  inputSample_ = NumericalSample(0, 0);
-  NumericalPoint scale(0);
-  NumericalPoint transvec(0);
-  NumericalPoint levels(0);
-
-  for (int i=0; i<infBounds_.getSize(); ++i)
-  {
-    //TODO: improve this part if a variable is constant
-    double inf = infBounds_[i];
-    double sup = supBounds_[i];
-    scale.add(sup - inf);
-    transvec.add(inf);
-    if (nbValues_[i]>1)
-      levels.add(nbValues_[i]-2);
-    else
-      levels.add(0);
-  }
-
-  if (levels.getSize())
-  {
-    Box box = Box(levels);
-
-    inputSample_ = box.generate();
-    inputSample_*=scale;
-    inputSample_+=transvec;
-  }
-}
-
-
 void ParametricCalculus::run()
 {
   // output = f(input)
-  NumericalMathFunction model = getPhysicalModel().getFunction();
-
-  computeInputSample();
-
-  inputSample_.setDescription(model.getInputDescription());
-
-  NumericalSample outputSample = model(inputSample_);
-  result_ = ParametricCalculusResult(outputSample, inputSample_);
-
+  result_ = ParametricCalculusResult(getInputSample(), getOutputSample(getInputSample()));
   notify("calculusFinished");
 }
 
 
-NumericalSample ParametricCalculus::getInputSample() const
+NumericalSample ParametricCalculus::getInputSample()
 {
+  if (!inputSample_.getSize())
+  {
+    inputSample_.clear();
+    NumericalPoint scale(0);
+    NumericalPoint transvec(0);
+    NumericalPoint levels(0);
+
+    for (int i=0; i<infBounds_.getSize(); ++i)
+    {
+      //TODO: improve this part if a variable is constant
+      double inf = infBounds_[i];
+      double sup = supBounds_[i];
+      scale.add(sup - inf);
+      transvec.add(inf);
+      if (nbValues_[i]>1)
+        levels.add(nbValues_[i]-2);
+      else
+        levels.add(0);
+    }
+
+    if (levels.getSize())
+    {
+      Box box = Box(levels);
+
+      inputSample_ = box.generate();
+      inputSample_*=scale;
+      inputSample_+=transvec;
+    }
+    inputSample_.setDescription(inputNames_);
+  }
   return inputSample_;
 }
 

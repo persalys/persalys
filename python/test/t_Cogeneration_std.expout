@@ -32,4 +32,6 @@ myMonteCarlo = otguibase.MonteCarloCalculus('myMonteCarlo', myPhysicalModel, 100
 myStudy.addCalculus(myMonteCarlo)
 mySobol = otguibase.SobolCalculus('mySobol', myPhysicalModel)
 myStudy.addCalculus(mySobol)
+mySRC = otguibase.SRCCalculus('mySRC', myPhysicalModel)
+myStudy.addCalculus(mySRC)
 

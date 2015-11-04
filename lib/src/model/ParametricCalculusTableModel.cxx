@@ -1,5 +1,7 @@
 #include "otgui/ParametricCalculusTableModel.hxx"
 
+#include "otgui/ParametricCalculus.hxx"
+
 namespace OTGUI {
 
 ParametricCalculusTableModel::ParametricCalculusTableModel(const Calculus & calculus)

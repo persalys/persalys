@@ -11,9 +11,7 @@ CLASSNAMEINIT(MonteCarloCalculus);
 
 MonteCarloCalculus::MonteCarloCalculus(const std::string & name, const PhysicalModel & physicalModel,
                                        int nbSimu, bool confidenceInterval, double level)
- : CalculusImplementation(name, physicalModel)
- , outputs_(physicalModel.getOutputs())
- , nbSimulations_(nbSimu)
+ : SimulationCalculus(name, physicalModel, nbSimu)
  , isConfidenceIntervalRequired_(confidenceInterval)
  , levelConfidenceInterval_(level)
  , result_()
@@ -23,9 +21,7 @@ MonteCarloCalculus::MonteCarloCalculus(const std::string & name, const PhysicalM
 
 
 MonteCarloCalculus::MonteCarloCalculus(const MonteCarloCalculus & other)
- : CalculusImplementation(other)
- , outputs_(other.outputs_)
- , nbSimulations_(other.nbSimulations_)
+ : SimulationCalculus(other)
  , isConfidenceIntervalRequired_(other.isConfidenceIntervalRequired_)
  , levelConfidenceInterval_(other.levelConfidenceInterval_)
  , result_(other.result_)
@@ -36,30 +32,6 @@ MonteCarloCalculus::MonteCarloCalculus(const MonteCarloCalculus & other)
 MonteCarloCalculus* MonteCarloCalculus::clone() const
 {
   return new MonteCarloCalculus(*this);
-}
-
-
-OutputCollection MonteCarloCalculus::getOutputs() const
-{
-  return outputs_;
-}
-
-
-void MonteCarloCalculus::setOutputs(const OutputCollection & outputs)
-{
-  outputs_ = outputs;
-}
-
-
-int MonteCarloCalculus::getNbSimulations() const
-{
-  return nbSimulations_;
-}
-
-
-void MonteCarloCalculus::setNbSimulations(const int nbSimu)
-{
-  nbSimulations_ = nbSimu;
 }
 
 
@@ -90,10 +62,9 @@ void MonteCarloCalculus::setLevelConfidenceInterval(const double levelConfidence
 void MonteCarloCalculus::run()
 {
   RandomGenerator::SetSeed(0); //TODO seed in argument
-  NumericalSample inputSample(getPhysicalModel().getInputRandomVector().getSample(nbSimulations_));
-  inputSample.setDescription(getPhysicalModel().getFunction().getInputDescription());
+  NumericalSample inputSample(getInputSample());
   // set results
-  result_ = MonteCarloResult(getPhysicalModel().getFunction(outputs_)(inputSample), inputSample);
+  result_ = MonteCarloResult(inputSample, getOutputSample(inputSample));
 
   notify("calculusFinished");
 }
@@ -109,7 +80,7 @@ std::string MonteCarloCalculus::dump() const
 {
   std::string result;
   OSS oss;
-  oss << nbSimulations_;
+  oss << getNbSimulations();
   result += getName()+ " = otguibase.MonteCarloCalculus('" + getName() + "', " + getPhysicalModel().getName();
   result += ", " + oss.str() + ")\n";
   return result;

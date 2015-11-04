@@ -15,6 +15,7 @@ ot_add_source_file ( DistributionAnalysisWizard.cxx )
 ot_add_source_file ( MonteCarloCalculusResultWindow.cxx )
 ot_add_source_file ( QuadraticCumulCalculusResultWindow.cxx )
 ot_add_source_file ( SobolCalculusResultWindow.cxx )
+ot_add_source_file ( SRCCalculusResultWindow.cxx )
 ot_add_source_file ( SensitivityAnalysisWizard.cxx )
 
 add_subdirectory (otgui)
@@ -30,6 +31,7 @@ qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                    otgui/MonteCarloCalculusResultWindow.hxx
                                    otgui/QuadraticCumulCalculusResultWindow.hxx
                                    otgui/SobolCalculusResultWindow.hxx
+                                   otgui/SRCCalculusResultWindow.hxx
                                    otgui/SensitivityAnalysisWizard.hxx )
 
 set(RESOURCES ${CMAKE_SOURCE_DIR}/gui.qrc)

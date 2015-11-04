@@ -96,6 +96,8 @@ void DistributionAnalysisWizard::buildInterface()
   confidenceIntervalCheckBox_ = new QCheckBox;
   if (calculus_.getImplementation()->getClassName() == "MonteCarloCalculus")
     confidenceIntervalCheckBox_->setChecked(dynamic_cast<MonteCarloCalculus*>(&*calculus_.getImplementation())->isConfidenceIntervalRequired());
+  else
+    confidenceIntervalCheckBox_->setChecked(true);
   confidenceIntervalCheckBox_->setText(tr("Compute confidence interval at"));
   connect(confidenceIntervalCheckBox_, SIGNAL(toggled(bool)), this, SLOT(confidenceIntervalRequired(bool)));
   advancedWidgetsLayout->addWidget(confidenceIntervalCheckBox_, 0, 0);
@@ -105,6 +107,13 @@ void DistributionAnalysisWizard::buildInterface()
     levelConfidenceIntervalSpinbox_->setValue(dynamic_cast<MonteCarloCalculus*>(&*calculus_.getImplementation())->getLevelConfidenceInterval());
     confidenceIntervalRequired(confidenceIntervalCheckBox_->isChecked());
   }
+  else
+  {
+    levelConfidenceIntervalSpinbox_->setValue(0.95);
+    levelConfidenceIntervalSpinbox_->setEnabled(true);
+  }
+
+
   connect(levelConfidenceIntervalSpinbox_, SIGNAL(valueChanged(double)), this, SLOT(levelConfidenceIntervalChanged(double)));
   advancedWidgetsLayout->addWidget(levelConfidenceIntervalSpinbox_, 0, 1);
 

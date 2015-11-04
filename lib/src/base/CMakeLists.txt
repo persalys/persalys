@@ -5,7 +5,13 @@ ot_add_current_dir_to_include_dirs ()
 
 add_subdirectory ( otgui )
 
-set(BASE_SOURCEFILES Observer.cxx Observable.cxx OTStudy.cxx Variable.cxx Input.cxx Output.cxx PhysicalModelImplementation.cxx PhysicalModel.cxx CalculusImplementation.cxx Calculus.cxx ParametricCalculusResult.cxx ParametricCalculus.cxx MonteCarloResult.cxx MonteCarloCalculus.cxx QuadraticCumulResult.cxx QuadraticCumulCalculus.cxx SobolCalculusResult.cxx SobolCalculus.cxx)
+set(BASE_SOURCEFILES Observer.cxx Observable.cxx OTStudy.cxx Variable.cxx Input.cxx Output.cxx
+                     PhysicalModelImplementation.cxx PhysicalModel.cxx CalculusImplementation.cxx
+                     Calculus.cxx SimulationCalculus.cxx
+                     ParametricCalculusResult.cxx ParametricCalculus.cxx
+                     MonteCarloResult.cxx MonteCarloCalculus.cxx QuadraticCumulResult.cxx
+                     QuadraticCumulCalculus.cxx SobolCalculusResult.cxx SobolCalculus.cxx
+                     SRCCalculusResult.cxx SRCCalculus.cxx)
 if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx)
 endif ()
