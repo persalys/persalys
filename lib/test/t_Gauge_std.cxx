@@ -2,8 +2,8 @@
 
 #include "OT.hxx"
 #include "OTtestcode.hxx"
-#include "OTStudy.hxx"
-#include "YACSPhysicalModel.hxx"
+#include "otgui/OTStudy.hxx"
+#include "otgui/YACSPhysicalModel.hxx"
 
 
 using namespace OT;

@@ -1,6 +1,4 @@
-#include "OutputTableModel.hxx"
-
-#include <iostream>
+#include "otgui/OutputTableModel.hxx"
 
 namespace OTGUI {
 

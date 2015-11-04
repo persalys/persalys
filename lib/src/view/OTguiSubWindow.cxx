@@ -1,7 +1,6 @@
 // OTguiSubWindow.cxx
 
-
-#include "OTguiSubWindow.hxx"
+#include "otgui/OTguiSubWindow.hxx"
 
 namespace OTGUI {
 

@@ -1,7 +1,4 @@
-#include "ParametricCalculusTableModel.hxx"
-
-
-#include <iostream>
+#include "otgui/ParametricCalculusTableModel.hxx"
 
 namespace OTGUI {
 

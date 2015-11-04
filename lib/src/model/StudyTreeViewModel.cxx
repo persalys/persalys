@@ -1,6 +1,6 @@
-#include "StudyTreeViewModel.hxx"
+#include "otgui/StudyTreeViewModel.hxx"
 
-#include "OTStudy.hxx"
+#include "otgui/OTStudy.hxx"
 
 namespace OTGUI {
 

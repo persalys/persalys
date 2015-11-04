@@ -1,4 +1,4 @@
-#include "StudyTreeView.hxx"
+#include "otgui/StudyTreeView.hxx"
 
 #include <QModelIndex>
 #include <QMenu>
@@ -6,14 +6,14 @@
 #include <QMdiSubWindow>
 #include <QFileDialog>
 
-#include "PhysicalModelWindow.hxx"
-#include "ParametricCalculusWizard.hxx"
-#include "ParametricCalculusResultWindow.hxx"
-#include "DistributionAnalysisWizard.hxx"
-#include "MonteCarloCalculusResultWindow.hxx"
-#include "QuadraticCumulCalculusResultWindow.hxx"
-#include "SensitivityAnalysisWizard.hxx"
-#include "SobolCalculusResultWindow.hxx"
+#include "otgui/PhysicalModelWindow.hxx"
+#include "otgui/ParametricCalculusWizard.hxx"
+#include "otgui/ParametricCalculusResultWindow.hxx"
+#include "otgui/DistributionAnalysisWizard.hxx"
+#include "otgui/MonteCarloCalculusResultWindow.hxx"
+#include "otgui/QuadraticCumulCalculusResultWindow.hxx"
+#include "otgui/SensitivityAnalysisWizard.hxx"
+#include "otgui/SobolCalculusResultWindow.hxx"
 
 #include <iostream>
 

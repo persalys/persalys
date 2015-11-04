@@ -1,4 +1,4 @@
-#include "OTguiTableModel.hxx"
+#include "otgui/OTguiTableModel.hxx"
 
 #include <QFile>
 

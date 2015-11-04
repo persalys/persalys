@@ -17,28 +17,27 @@ ot_add_source_file ( QuadraticCumulCalculusResultWindow.cxx )
 ot_add_source_file ( SobolCalculusResultWindow.cxx )
 ot_add_source_file ( SensitivityAnalysisWizard.cxx )
 
-qt4_wrap_cpp (OTGUI_VIEW_MOC_SRCS MainWindow.hxx OTguiSubWindow.hxx StudyTreeView.hxx OTguiTableView.hxx PhysicalModelWindow.hxx ParametricCalculusWizard.hxx ParametricCalculusResultWindow.hxx DistributionAnalysisWizard.hxx MonteCarloCalculusResultWindow.hxx QuadraticCumulCalculusResultWindow.hxx SobolCalculusResultWindow.hxx SensitivityAnalysisWizard.hxx)
+add_subdirectory (otgui)
 
-ot_install_header_file ( MainWindow.hxx )
-ot_install_header_file ( ParametricCalculusWizard.hxx )
-ot_install_header_file ( DistributionAnalysisWizard.hxx )
-ot_install_header_file ( SensitivityAnalysisWizard.hxx )
-ot_install_header_file ( OTguiSubWindow.hxx )
-ot_install_header_file ( PhysicalModelWindow.hxx )
-ot_install_header_file ( OTguiTableView.hxx )
-ot_install_header_file ( ResultWindow.hxx )
-ot_install_header_file ( ParametricCalculusResultWindow.hxx )
-ot_install_header_file ( MonteCarloCalculusResultWindow.hxx )
-ot_install_header_file ( QuadraticCumulCalculusResultWindow.hxx )
-ot_install_header_file ( SobolCalculusResultWindow.hxx )
-ot_install_header_file ( StudyTreeView.hxx )
+qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
+                                   otgui/OTguiSubWindow.hxx
+                                   otgui/StudyTreeView.hxx
+                                   otgui/OTguiTableView.hxx
+                                   otgui/PhysicalModelWindow.hxx
+                                   otgui/ParametricCalculusWizard.hxx
+                                   otgui/ParametricCalculusResultWindow.hxx
+                                   otgui/DistributionAnalysisWizard.hxx
+                                   otgui/MonteCarloCalculusResultWindow.hxx
+                                   otgui/QuadraticCumulCalculusResultWindow.hxx
+                                   otgui/SobolCalculusResultWindow.hxx
+                                   otgui/SensitivityAnalysisWizard.hxx )
 
 set(RESOURCES ${CMAKE_SOURCE_DIR}/gui.qrc)
 qt4_add_resources(OTGUI_RESOURCES_RCC ${RESOURCES})
 
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 
-add_library ( otguiview ${SOURCEFILES} ${OTGUI_VIEW_MOC_SRCS} ${OTGUI_RESOURCES_RCC})
+add_library ( otguiview ${SOURCEFILES} ${OTGUI_VIEW_MOC_SRCS} ${OTGUI_RESOURCES_RCC} )
 
 if ( BUILD_SHARED_LIBS )
   set_target_properties ( otguiview PROPERTIES COMPILE_DEFINITIONS "OTGUI_DLL_EXPORTS" )

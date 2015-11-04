@@ -1,6 +1,6 @@
 // CalculusImplementation.cxx
 
-#include "CalculusImplementation.hxx"
+#include "otgui/CalculusImplementation.hxx"
 
 
 namespace OTGUI {

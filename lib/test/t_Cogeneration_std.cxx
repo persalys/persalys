@@ -2,8 +2,8 @@
 
 #include "OT.hxx"
 #include "OTtestcode.hxx"
-#include "OTStudy.hxx"
-#include "ParametricCalculus.hxx"
+#include "otgui/OTStudy.hxx"
+#include "otgui/ParametricCalculus.hxx"
 
 
 using namespace OT;

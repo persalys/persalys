@@ -1,4 +1,4 @@
-#include "DistributionAnalysisItem.hxx"
+#include "otgui/DistributionAnalysisItem.hxx"
 
 namespace OTGUI {
 

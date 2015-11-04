@@ -6,11 +6,7 @@ ot_add_source_file ( DistributionScaleEngine.cxx )
 ot_add_source_file ( PlotWidget.cxx )
 ot_add_source_file ( ImageEditionDialog.cxx )
 
-qt4_wrap_cpp (OTGUI_PLOT_MOC_SRCS PlotWidget.hxx ImageEditionDialog.hxx)
-
-ot_install_header_file ( DistributionScaleEngine.hxx )
-ot_install_header_file ( PlotWidget.hxx )
-ot_install_header_file ( ImageEditionDialog.hxx )
+qt4_wrap_cpp (OTGUI_PLOT_MOC_SRCS otgui/PlotWidget.hxx otgui/ImageEditionDialog.hxx)
 
 
 include_directories (${INTERNAL_INCLUDE_DIRS})

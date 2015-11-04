@@ -1,11 +1,11 @@
 // SWIG file
 
 %{
-#include "OTStudy.hxx"
+#include "otgui/OTStudy.hxx"
 %}
 
 
-%include OTStudy.hxx
+%include otgui/OTStudy.hxx
 namespace OTGUI {
 
 %extend OTStudy { OTStudy(const OTStudy & other) { return new OTGUI::OTStudy(other); } 

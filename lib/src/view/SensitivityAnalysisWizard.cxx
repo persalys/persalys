@@ -1,8 +1,8 @@
 // SensitivityAnalysisWizard.cxx
 
-#include "SensitivityAnalysisWizard.hxx"
+#include "otgui/SensitivityAnalysisWizard.hxx"
 
-#include "SobolCalculus.hxx"
+#include "otgui/SobolCalculus.hxx"
 
 #include <QGroupBox>
 #include <QRadioButton>

@@ -1,8 +1,8 @@
 // QuadraticCumulCalculusResultWindow.cxx
 
-#include "QuadraticCumulCalculusResultWindow.hxx"
+#include "otgui/QuadraticCumulCalculusResultWindow.hxx"
 
-#include "QuadraticCumulCalculus.hxx"
+#include "otgui/QuadraticCumulCalculus.hxx"
 
 #include <QVBoxLayout>
 

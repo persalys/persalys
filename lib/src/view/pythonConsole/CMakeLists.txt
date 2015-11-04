@@ -6,11 +6,7 @@ set (SOURCEFILES)
 ot_add_source_file ( qconsole.cpp )
 ot_add_source_file ( qpyconsole.cpp )
 
-qt4_wrap_cpp (OTGUI_CONSOLE_MOC_SRCS qconsole.h qpyconsole.h)
-
-ot_install_header_file ( qconsole.h )
-ot_install_header_file ( qpyconsole.h )
-
+qt4_wrap_cpp (OTGUI_CONSOLE_MOC_SRCS otgui/qconsole.h otgui/qpyconsole.h)
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
 add_library ( otguipythonconsole ${SOURCEFILES} ${OTGUI_CONSOLE_MOC_SRCS})

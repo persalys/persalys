@@ -1,12 +1,12 @@
 // SWIG file
 
 %{
-#include "Calculus.hxx"
+#include "otgui/Calculus.hxx"
 %}
 
 OTGUITypedInterfaceObjectHelper(Calculus)
 
-%include Calculus.hxx
+%include otgui/Calculus.hxx
 namespace OTGUI {
 
 %extend Calculus { Calculus(const Calculus & other) { return new OTGUI::Calculus(other); } 

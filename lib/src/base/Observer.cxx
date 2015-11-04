@@ -1,4 +1,4 @@
-#include "Observer.hxx"
+#include "otgui/Observer.hxx"
 
 namespace OTGUI {
 

@@ -1,4 +1,4 @@
-#include "DistributionScaleEngine.hxx"
+#include "otgui/DistributionScaleEngine.hxx"
 #include <cmath>
 #include "qwt_math.h"
 

@@ -1,12 +1,11 @@
 // SWIG file
 
 %{
-#include "SobolCalculus.hxx"
+#include "otgui/SobolCalculus.hxx"
 %}
 
 
-
-%include SobolCalculus.hxx
+%include otgui/SobolCalculus.hxx
 namespace OTGUI {
 
 %extend SobolCalculus { SobolCalculus(const SobolCalculus & other) { return new OTGUI::SobolCalculus(other); } 

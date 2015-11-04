@@ -31,7 +31,7 @@
 #   undef _DEBUG
 #endif
 #include <Python.h>
-#include "qpyconsole.h"
+#include "otgui/qpyconsole.h"
 
 #include <QDebug>
 

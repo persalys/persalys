@@ -1,6 +1,6 @@
-#include "MainWindow.hxx"
+#include "otgui/MainWindow.hxx"
 
-#include "PhysicalModelWindow.hxx"
+#include "otgui/PhysicalModelWindow.hxx"
 
 #include <QSplitter>
 #include <QMenuBar>

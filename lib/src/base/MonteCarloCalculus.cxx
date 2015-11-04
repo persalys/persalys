@@ -1,6 +1,6 @@
 // MonteCarloCalculus.cxx
 
-#include "MonteCarloCalculus.hxx"
+#include "otgui/MonteCarloCalculus.hxx"
 #include "RandomGenerator.hxx"
 
 using namespace OT;

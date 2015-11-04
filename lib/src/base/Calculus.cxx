@@ -1,6 +1,6 @@
 // Calculus.cxx
 
-#include "Calculus.hxx"
+#include "otgui/Calculus.hxx"
 
 using namespace OT;
 

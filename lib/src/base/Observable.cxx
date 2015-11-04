@@ -1,5 +1,5 @@
-#include "Observable.hxx"
-#include <iostream>
+#include "otgui/Observable.hxx"
+
 namespace OTGUI {
 
 Observable::Observable()

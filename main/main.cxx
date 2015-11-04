@@ -1,7 +1,7 @@
 
 #include <QApplication>
 
-#include "MainWindow.hxx"
+#include "otgui/MainWindow.hxx"
 
 using namespace OTGUI;
 

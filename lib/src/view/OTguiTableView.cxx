@@ -1,6 +1,6 @@
 // OTguiTableView
 
-#include "OTguiTableView.hxx"
+#include "otgui/OTguiTableView.hxx"
 
 #include <QFileDialog>
 #include <QMenu>

@@ -1,6 +1,6 @@
 // SobolCalculusResult.cxx
 
-#include "SobolCalculusResult.hxx"
+#include "otgui/SobolCalculusResult.hxx"
 
 using namespace OT;
 

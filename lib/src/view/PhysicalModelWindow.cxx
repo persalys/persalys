@@ -1,10 +1,10 @@
 // PhysicalModelWindow.cxx
 
-#include "PhysicalModelWindow.hxx"
+#include "otgui/PhysicalModelWindow.hxx"
 
-#include "ComboBoxDelegate.hxx"
+#include "otgui/ComboBoxDelegate.hxx"
 #ifdef OTGUI_HAVE_YACS
-# include "YACSPhysicalModel.hxx"
+# include "otgui/YACSPhysicalModel.hxx"
 #endif
 
 #include <QFileDialog>

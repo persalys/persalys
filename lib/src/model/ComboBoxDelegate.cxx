@@ -1,11 +1,9 @@
-#include "ComboBoxDelegate.hxx"
+#include "otgui/ComboBoxDelegate.hxx"
  
 #include <QComboBox>
 #include <QWidget>
 #include <QModelIndex>
 #include <QApplication>
- 
-#include <iostream>
  
 ComboBoxDelegate::ComboBoxDelegate(QObject * parent)
   : QItemDelegate(parent)

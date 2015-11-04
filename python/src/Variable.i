@@ -1,12 +1,12 @@
 // SWIG file
 
 %{
-#include "Variable.hxx"
+#include "otgui/Variable.hxx"
 %}
 
 %include Variable_doc.i
 
-%include Variable.hxx
+%include otgui/Variable.hxx
 namespace OTGUI {
 
 %extend Variable { Variable(const Variable & other) { return new OTGUI::Variable(other); } 

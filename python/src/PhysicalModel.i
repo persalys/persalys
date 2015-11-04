@@ -1,12 +1,12 @@
 // SWIG file
 
 %{
-#include "PhysicalModel.hxx"
+#include "otgui/PhysicalModel.hxx"
 %}
 
 OTGUITypedInterfaceObjectHelper(PhysicalModel)
 
-%include PhysicalModel.hxx
+%include otgui/PhysicalModel.hxx
 namespace OTGUI {
 
 %extend PhysicalModel { PhysicalModel(const PhysicalModel & other) { return new OTGUI::PhysicalModel(other); } 

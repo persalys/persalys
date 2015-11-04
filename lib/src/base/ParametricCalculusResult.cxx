@@ -1,6 +1,6 @@
 // ParametricCalculusResult.cxx
 
-#include "ParametricCalculusResult.hxx"
+#include "otgui/ParametricCalculusResult.hxx"
 
 using namespace OT;
 

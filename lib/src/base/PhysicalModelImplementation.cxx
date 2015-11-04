@@ -1,4 +1,4 @@
-#include "PhysicalModelImplementation.hxx"
+#include "otgui/PhysicalModelImplementation.hxx"
 
 using namespace OT;
 

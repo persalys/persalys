@@ -1,6 +1,6 @@
 // OTStudy.cxx
 
-#include "OTStudy.hxx"
+#include "otgui/OTStudy.hxx"
 
 using namespace OT;
 

@@ -1,8 +1,8 @@
 // SobolCalculusResultWindow.cxx
 
-#include "SobolCalculusResultWindow.hxx"
+#include "otgui/SobolCalculusResultWindow.hxx"
 
-#include "SobolCalculus.hxx"
+#include "otgui/SobolCalculus.hxx"
 
 #include <QVBoxLayout>
 #include <QHeaderView>

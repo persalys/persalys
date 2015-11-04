@@ -1,7 +1,7 @@
 #include <iostream>
 // OT includes
 #include <OT.hxx>
-#include "PhysicalModel.hxx"
+#include "otgui/PhysicalModel.hxx"
 
 using namespace OT;
 using namespace OTGUI;

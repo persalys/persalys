@@ -13,7 +13,7 @@
  */
 #include <iomanip>
 
-#include "YACSEvaluation.hxx"
+#include "otgui/YACSEvaluation.hxx"
 #include "PersistentObjectFactory.hxx"
 #include "Os.hxx"
 #include "OTconfig.hxx"

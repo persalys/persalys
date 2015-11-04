@@ -1,6 +1,6 @@
 // Input.cxx
 
-#include "Input.hxx"
+#include "otgui/Input.hxx"
 #include "DiracFactory.hxx"
 
 using namespace OT;

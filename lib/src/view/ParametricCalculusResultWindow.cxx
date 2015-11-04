@@ -1,7 +1,8 @@
 // ParametricCalculusResultWindow.cxx
 
-#include "ParametricCalculusResultWindow.hxx"
-#include "OTguiTableView.hxx"
+#include "otgui/ParametricCalculusResultWindow.hxx"
+#include "otgui/OTguiTableView.hxx"
+#include "otgui/ParametricCalculus.hxx"
 
 #include <QVBoxLayout>
 

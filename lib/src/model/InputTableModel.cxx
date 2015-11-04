@@ -1,4 +1,4 @@
-#include "InputTableModel.hxx"
+#include "otgui/InputTableModel.hxx"
 
 #include "NormalFactory.hxx"
 #include "DiracFactory.hxx"

@@ -1,8 +1,8 @@
-#include "StudyItem.hxx"
+#include "otgui/StudyItem.hxx"
 
-#include "ParametricCalculusItem.hxx"
-#include "DistributionAnalysisItem.hxx"
-#include "SensitivityAnalysisItem.hxx"
+#include "otgui/ParametricCalculusItem.hxx"
+#include "otgui/DistributionAnalysisItem.hxx"
+#include "otgui/SensitivityAnalysisItem.hxx"
 
 namespace OTGUI {
 

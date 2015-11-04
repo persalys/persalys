@@ -1,4 +1,4 @@
-#include "PhysicalModelItem.hxx"
+#include "otgui/PhysicalModelItem.hxx"
 
 namespace OTGUI {
 

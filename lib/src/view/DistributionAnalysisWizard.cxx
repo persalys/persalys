@@ -1,9 +1,9 @@
 // DistributionAnalysisWizard.cxx
 
-#include "DistributionAnalysisWizard.hxx"
+#include "otgui/DistributionAnalysisWizard.hxx"
 
-#include "MonteCarloCalculus.hxx"
-#include "QuadraticCumulCalculus.hxx"
+#include "otgui/MonteCarloCalculus.hxx"
+#include "otgui/QuadraticCumulCalculus.hxx"
 
 #include <QGroupBox>
 #include <QRadioButton>

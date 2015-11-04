@@ -1,7 +1,7 @@
-#include "PlotWidget.hxx"
+#include "otgui/PlotWidget.hxx"
 
-#include "DistributionScaleEngine.hxx"
-#include "ImageEditionDialog.hxx"
+#include "otgui/DistributionScaleEngine.hxx"
+#include "otgui/ImageEditionDialog.hxx"
 
 #include <qwt_plot_layout.h>
 #include <qwt_plot_panner.h>

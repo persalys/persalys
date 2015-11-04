@@ -1,4 +1,4 @@
-#include "YACSPhysicalModel.hxx"
+#include "otgui/YACSPhysicalModel.hxx"
 
 #ifdef OTGUI_HAVE_YACS
 #include "YACSEvalYFX.hxx"

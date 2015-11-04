@@ -26,7 +26,7 @@
  * MA 02110-1301  USA
  */
 
-#include "qconsole.h"
+#include "otgui/qconsole.h"
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>

@@ -1,7 +1,7 @@
 // SWIG file
 
 %{
-#include "Output.hxx"
+#include "otgui/Output.hxx"
 
 namespace OT {
 template <>
@@ -32,13 +32,7 @@ template <>
 
 %template(OutputCollection) OT::Collection<OTGUI::Output>;
 
-
-
-
-%include Output.hxx
-
-
-
+%include otgui/Output.hxx
 namespace OTGUI {
 
 %extend Output { Output(const Output & other) { return new OTGUI::Output(other); } 

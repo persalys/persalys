@@ -1,6 +1,6 @@
 // ParametricCalculus.cxx
 
-#include "ParametricCalculus.hxx"
+#include "otgui/ParametricCalculus.hxx"
 #include "Box.hxx"
 
 using namespace OT;

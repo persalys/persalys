@@ -1,4 +1,4 @@
-#include "ImageEditionDialog.hxx"
+#include "otgui/ImageEditionDialog.hxx"
 
 #include <QGridLayout>
 #include <QHBoxLayout>

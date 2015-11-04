@@ -1,7 +1,7 @@
 // SWIG file
 
 %{
-#include "Input.hxx"
+#include "otgui/Input.hxx"
 
 namespace OT {
 template <>
@@ -33,7 +33,7 @@ template <>
 %template(InputCollection) OT::Collection<OTGUI::Input>;
 
 
-%include Input.hxx
+%include otgui/Input.hxx
 namespace OTGUI {
 
 %extend Input { Input(const Input & other) { return new OTGUI::Input(other); } 

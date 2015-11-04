@@ -1,4 +1,4 @@
-#include "Variable.hxx"
+#include "otgui/Variable.hxx"
 
 using namespace OT;
 

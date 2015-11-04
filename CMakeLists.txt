@@ -45,7 +45,7 @@ endif ()
 
 
 set ( OTGUI_LIBRARY_PATH lib${LIB_SUFFIX} )
-set ( OTGUI_INCLUDE_PATH include/${PACKAGE_NAME} )
+set ( OTGUI_INCLUDE_PATH include )
 set ( OTGUI_SWIG_INCLUDE_PATH ${OTGUI_INCLUDE_PATH}/swig )
 set ( OTGUI_DATA_PATH share )
 set ( OTGUI_EXAMPLE_PATH ${OTGUI_DATA_PATH}/${PACKAGE_NAME}/examples )

@@ -1,8 +1,8 @@
 // MonteCarloCalculusResultWindow.cxx
 
-#include "MonteCarloCalculusResultWindow.hxx"
-#include "OTguiTableView.hxx"
-#include "MonteCarloCalculus.hxx"
+#include "otgui/MonteCarloCalculusResultWindow.hxx"
+#include "otgui/OTguiTableView.hxx"
+#include "otgui/MonteCarloCalculus.hxx"
 
 #include <QVBoxLayout>
 

@@ -1,6 +1,6 @@
 // MonteCarloResult.cxx
 
-#include "MonteCarloResult.hxx"
+#include "otgui/MonteCarloResult.hxx"
 #include "Normal.hxx"
 #include "ChiSquare.hxx"
 #include "KernelSmoothing.hxx"

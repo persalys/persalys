@@ -1,12 +1,12 @@
 // SWIG file
 
 %{
-#include "QuadraticCumulCalculus.hxx"
+#include "otgui/QuadraticCumulCalculus.hxx"
 %}
 
 
 
-%include QuadraticCumulCalculus.hxx
+%include otgui/QuadraticCumulCalculus.hxx
 namespace OTGUI {
 
 %extend QuadraticCumulCalculus { QuadraticCumulCalculus(const QuadraticCumulCalculus & other) { return new OTGUI::QuadraticCumulCalculus(other); } 

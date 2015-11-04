@@ -1,6 +1,6 @@
 // CalculusItem.cxx
 
-#include "CalculusItem.hxx"
+#include "otgui/CalculusItem.hxx"
 
 namespace OTGUI {
 

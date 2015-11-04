@@ -1,6 +1,6 @@
 // QuadraticCumulCalculus.cxx
 
-#include "QuadraticCumulCalculus.hxx"
+#include "otgui/QuadraticCumulCalculus.hxx"
 #include "QuadraticCumul.hxx"
 
 using namespace OT;

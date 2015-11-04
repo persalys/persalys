@@ -1,6 +1,4 @@
-#include "Item.hxx"
-
-#include <iostream>
+#include "otgui/Item.hxx"
 
 namespace OTGUI {
   

@@ -1,6 +1,6 @@
 // Output.cxx
 
-#include "Output.hxx"
+#include "otgui/Output.hxx"
 
 
 namespace OTGUI {

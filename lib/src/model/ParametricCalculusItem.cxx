@@ -1,4 +1,6 @@
-#include "ParametricCalculusItem.hxx"
+#include "otgui/ParametricCalculusItem.hxx"
+
+#include "otgui/ParametricCalculus.hxx"
 
 namespace OTGUI {
 

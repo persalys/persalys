@@ -1,6 +1,7 @@
 // SobolCalculus.cxx
 
-#include "SobolCalculus.hxx"
+#include "otgui/SobolCalculus.hxx"
+
 #include "RandomGenerator.hxx"
 #include "SensitivityAnalysis.hxx"
 
