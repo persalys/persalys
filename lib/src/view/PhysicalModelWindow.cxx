@@ -231,9 +231,11 @@ void PhysicalModelWindow::updateDistribution()
 
 void PhysicalModelWindow::loadXML()
 {
+#ifdef OTGUI_HAVE_YACS
   YACSPhysicalModel *ymodel = dynamic_cast<YACSPhysicalModel*>(item_->getPhysicalModel().getImplementation().get());
   if (ymodel)
     ymodel->loadDataWithYACS(XMLfileEdit_->text().toStdString());
+#endif
 }
 
 

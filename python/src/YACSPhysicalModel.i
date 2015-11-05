@@ -1,5 +1,6 @@
 // SWIG file
 
+#ifdef OTGUI_HAVE_YACS
 %{
 #include "otgui/YACSPhysicalModel.hxx"
 %}
@@ -16,3 +17,4 @@ std::string __repr__() {
 }
 
 } }
+#endif

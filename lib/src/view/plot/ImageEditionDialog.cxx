@@ -10,7 +10,6 @@
 #include <QImageWriter>
 
 #include <qwt_plot_renderer.h>
-#include <qwt_abstract_legend.h>
 
 namespace OTGUI {
 
