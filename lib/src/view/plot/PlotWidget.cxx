@@ -7,10 +7,7 @@
 #include <qwt_plot_panner.h>
 #include <qwt_plot_histogram.h>
 #include <qwt_plot_magnifier.h>
-#include <qwt_plot_shapeitem.h>
-#include <qpainterpath.h>
 #include <qwt_legend.h>
-#include <qwt_plot_multi_barchart.h>
 #include <qwt_column_symbol.h>
 #include <qwt_plot_renderer.h>
 
@@ -24,21 +21,16 @@ namespace OTGUI {
 class BarChartHorizontalScaleDraw: public QwtScaleDraw
 {
 public:
-  BarChartHorizontalScaleDraw(const OT::Description & labels):labels_(labels)
-  {
-    enableComponent(QwtScaleDraw::Backbone, false);
-    enableComponent(QwtScaleDraw::Ticks, false);
-  }
+  BarChartHorizontalScaleDraw(const OT::Description & labels): labels_(labels){}
 
   virtual QwtText label(double value) const
   {
-    QwtText lbl;
-
     const int index = qRound(value);
     if ( index>=0 && index<=labels_.getSize())
-      lbl = QwtText(labels_[index].c_str());
-        
-    return lbl;
+    {
+      return QwtText(labels_[index].c_str());
+    }
+    return QwtText();
   }
 
 private:
@@ -221,16 +213,15 @@ void PlotWidget::plotBoxPlot(double median, double lowerQuartile, double upperQu
   plotCurve(xMedian, yMedian, 2, QPen(Qt::red));
 
   // draw box
-  QwtPlotShapeItem *item = new QwtPlotShapeItem;
-
-  QRectF rect(QPointF(0.9, lowerQuartile), QSizeF(0.2, upperQuartile-lowerQuartile));
-  
-  QPainterPath path;
-  path.addRect(rect);
-  item->setShape(path);
-  item->setPen(QPen(Qt::blue));
-
-  item->attach(this);
+  double yUpperQuartile[2] = {upperQuartile, upperQuartile};
+  plotCurve(xMedian, yUpperQuartile, 2, QPen(Qt::blue));
+  double yLowerQuartile[2] = {lowerQuartile, lowerQuartile};
+  plotCurve(xMedian, yLowerQuartile, 2, QPen(Qt::blue));
+  double xLeftSide[2] = {0.9, 0.9};
+  double yBoxSides[2] = {lowerQuartile, upperQuartile};
+  plotCurve(xLeftSide, yBoxSides, 2, QPen(Qt::blue));
+  double xRightSide[2] = {1.1, 1.1};
+  plotCurve(xRightSide, yBoxSides, 2, QPen(Qt::blue));
 
   // draw whiskers
   double xWhiskers[2] = {1., 1.};
@@ -279,66 +270,48 @@ void PlotWidget::plotBarChart(const NumericalPoint firstOrder, const NumericalPo
   setAxisTitle(QwtPlot::yLeft, "Sensitivity indice");
   setAxisTitle(QwtPlot::xBottom, "Inputs");
 
-  QwtPlotMultiBarChart * barChartItem = new QwtPlotMultiBarChart;
-  barChartItem->setLayoutPolicy(QwtPlotMultiBarChart::AutoAdjustSamples);
-  barChartItem->setSpacing(20);
-  barChartItem->setMargin(3);
-
   // populate bar chart
   static const char *colors[] = {"DarkOrchid", "SteelBlue"};
 
-  const int numSamples = inputNames.getSize();
-  const int numBars = (totalOrder.getDimension() > 0) ? 2 : 1;
+  QVector<QwtIntervalSample> samples(firstOrder.getSize());
 
-  if (numBars == 2)
+  double width = 0.4;
+  if (totalOrder.getSize())
+    width = 0.;
+
+  for (int i=0; i<firstOrder.getSize(); i++)
   {
-    QList<QwtText> titles;
-    titles += QwtText("First order indice");
-    titles += QwtText("Total order indice");
-
-    barChartItem->setBarTitles(titles);
-    barChartItem->setLegendIconSize(QSize(10, 14));
+    QwtInterval interval(i-0.4, i+width);
+    samples[i] = QwtIntervalSample(firstOrder[i], interval);
   }
+  QwtPlotHistogram * histogram = new QwtPlotHistogram;
+  histogram->setData(new QwtIntervalSeriesData(samples));
+  histogram->setBrush(QBrush("DarkOrchid"));
+  histogram->setTitle("First order indice");
+  histogram->attach(this);
 
-  for (int i=0; i<numBars; i++)
+  if (totalOrder.getSize())
   {
-    QwtColumnSymbol *symbol = new QwtColumnSymbol(QwtColumnSymbol::Box);
-    symbol->setLineWidth(2);
-    symbol->setFrameStyle(QwtColumnSymbol::Raised);
-    symbol->setPalette(QPalette(colors[i]));
+    for (int i=0; i<totalOrder.getSize(); i++)
+    {
+      QwtInterval interval(i, i+0.4);
+      samples[i] = QwtIntervalSample(totalOrder[i], interval);
+    }
+    QwtPlotHistogram * histogram2 = new QwtPlotHistogram;
+    histogram2->setData(new QwtIntervalSeriesData(samples));
+    histogram2->setBrush(QBrush("SteelBlue"));
+    histogram2->setTitle("Total order indice");
+    histogram2->attach(this);
 
-    barChartItem->setSymbol(i, symbol);
+    insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
   }
-  
-  QVector< QVector<double> > series;
-  for (int i=0; i<numSamples; i++)
-  {
-    QVector<double> values;
-    values += firstOrder[i];
-    if (numBars == 2)
-      values += totalOrder[i];
-
-    series += values;
-  }
-
-  barChartItem->setSamples(series);
-  barChartItem->attach(this);
-
-  insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
 
   // scales
+  setAxisScale(QwtPlot::xBottom, -0.5, firstOrder.getSize()-0.5, 1.0);
+  setAxisMaxMinor(QwtPlot::xBottom, 0);
   setAxisScaleDraw(QwtPlot::xBottom, new BarChartHorizontalScaleDraw(inputNames));
-  setAxisScale(QwtPlot::xBottom, 0, barChartItem->dataSize()-0.5, 1.0);
-  setAxisScale(QwtPlot::yLeft, 0, 1.);
 
-  QwtScaleDraw *scaleDraw2 = axisScaleDraw(QwtPlot::yLeft);
-  scaleDraw2->enableComponent(QwtScaleDraw::Backbone, true);
-  scaleDraw2->enableComponent(QwtScaleDraw::Ticks, true);
-
-  plotLayout()->setAlignCanvasToScale(QwtPlot::yLeft, false);
-
-  plotLayout()->setCanvasMargin(0);
-  updateCanvasMargins();
+  setAxisAutoScale(QwtPlot::yLeft);
 
   replot();
 }
