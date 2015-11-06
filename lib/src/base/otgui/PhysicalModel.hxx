@@ -30,6 +30,7 @@ public:
   void setInputs(const InputCollection & inputs);
   bool updateInputs(const InputCollection & inputs);
   void addInput(Input input);
+  OT::Description getInputNames() const;
 
   OutputCollection getOutputs() const;
   void setOutputs(const OutputCollection & outputs);

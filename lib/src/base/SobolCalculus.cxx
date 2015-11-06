@@ -50,7 +50,7 @@ void SobolCalculus::run()
     totalOrderIndices.add(sensitivityAnalysis.getTotalOrderIndices(i));
   }
 
-  firstOrderIndices.setDescription(getInputNames());
+  firstOrderIndices.setDescription(getPhysicalModel().getInputNames());
   result_ = SobolCalculusResult(firstOrderIndices, totalOrderIndices, getOutputNames());
 
   notify("calculusFinished");

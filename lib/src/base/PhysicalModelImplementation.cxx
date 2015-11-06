@@ -11,8 +11,8 @@ PhysicalModelImplementation::PhysicalModelImplementation(const std::string & nam
   , inputs_(InputCollection(0))
   , outputs_(OutputCollection(0))
   , function_(NumericalMathFunction())
-  , listInput_(Description())
-  , listOutput_(Description())
+  , inputNames_(Description())
+  , outputNames_(Description())
   , listFormula_(Description())
 {
 }
@@ -26,8 +26,8 @@ PhysicalModelImplementation::PhysicalModelImplementation(const std::string & nam
   , name_(name)
   , inputs_(inputs)
   , outputs_(outputs)
-  , listInput_(Description())
-  , listOutput_(Description())
+  , inputNames_(Description())
+  , outputNames_(Description())
   , listFormula_(Description())
 {
   checkInputs();
@@ -42,8 +42,8 @@ PhysicalModelImplementation::PhysicalModelImplementation(const PhysicalModelImpl
   , inputs_(other.inputs_)
   , outputs_(other.outputs_)
   , function_(other.function_)
-  , listInput_(other.listInput_)
-  , listOutput_(other.listOutput_)
+  , inputNames_(other.inputNames_)
+  , outputNames_(other.outputNames_)
   , listFormula_(other.listFormula_)
 {
   checkInputs();
@@ -58,8 +58,8 @@ PhysicalModelImplementation::PhysicalModelImplementation(const PhysicalModelImpl
   , inputs_(other->inputs_)
   , outputs_(other->outputs_)
   , function_(other->function_)
-  , listInput_(other->listInput_)
-  , listOutput_(other->listOutput_)
+  , inputNames_(other->inputNames_)
+  , outputNames_(other->outputNames_)
   , listFormula_(other->listFormula_)
 {
   checkInputs();
@@ -116,6 +116,12 @@ void PhysicalModelImplementation::addInput(Input input)
   inputs_.add(input);
   checkInputs();
   notify("inputChanged");
+}
+
+
+Description PhysicalModelImplementation::getInputNames() const
+{
+  return inputNames_;
 }
 
 
@@ -181,8 +187,7 @@ NumericalMathFunction PhysicalModelImplementation::getFunction(const OutputColle
     outputNames[i] = outputs[i].getName();
     outputFormula[i] = outputs[i].getFormula();
   }
-
-  return NumericalMathFunction(listInput_, outputNames, outputFormula);
+  return NumericalMathFunction(inputNames_, outputNames, outputFormula);
 }
 
 
@@ -200,18 +205,18 @@ void PhysicalModelImplementation::setFunction(const NumericalMathFunction & func
 
 bool PhysicalModelImplementation::checkInputs()
 {
-  listInput_ = Description(inputs_.getSize());
+  inputNames_ = Description(inputs_.getSize());
 
   for (int i=0; i<inputs_.getSize(); ++i)
   {
-    listInput_[i] = inputs_[i].getName();
+    inputNames_[i] = inputs_[i].getName();
   }
 
-  if (listOutput_.getSize())
+  if (outputNames_.getSize())
   {
     try
     {
-      function_ = NumericalMathFunction(listInput_, listOutput_, listFormula_);
+      function_ = NumericalMathFunction(inputNames_, outputNames_, listFormula_);
     }
     catch (std::exception & ex)
     {
@@ -225,18 +230,18 @@ bool PhysicalModelImplementation::checkInputs()
 
 bool PhysicalModelImplementation::checkOutputs()
 {
-  listOutput_ = Description(outputs_.getSize());
+  outputNames_ = Description(outputs_.getSize());
   listFormula_ = Description(outputs_.getSize());
 
   for (int i=0; i<outputs_.getSize(); ++i)
   {
-    listOutput_[i] = outputs_[i].getName();
+    outputNames_[i] = outputs_[i].getName();
     listFormula_[i] = outputs_[i].getFormula();
   }
 
   try
   {
-    function_ = NumericalMathFunction(listInput_, listOutput_, listFormula_);
+    function_ = NumericalMathFunction(inputNames_, outputNames_, listFormula_);
   }
   catch (std::exception & ex)
   {

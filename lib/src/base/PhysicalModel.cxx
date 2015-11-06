@@ -100,6 +100,12 @@ void PhysicalModel::addInput(Input input)
 }
 
 
+Description PhysicalModel::getInputNames() const
+{
+  return getImplementation()->getInputNames();
+}
+
+
 OutputCollection PhysicalModel::getOutputs() const
 {
   return getImplementation()->getOutputs();

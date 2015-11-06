@@ -62,7 +62,7 @@ void SimulationCalculus::setNbSimulations(const int nbSimu)
 NumericalSample SimulationCalculus::getInputSample()
 {
   NumericalSample inputSample(getPhysicalModel().getInputRandomVector().getSample(nbSimulations_));
-  inputSample.setDescription(getInputNames());
+  inputSample.setDescription(getPhysicalModel().getInputNames());
   return inputSample;
 }
 
@@ -86,12 +86,6 @@ Description SimulationCalculus::getOutputNames() const
   for (int i=0; i<nbOutputs; ++i)
     outputNames[i] = outputs_[i].getName();
   return outputNames;
-}
-
-
-Description SimulationCalculus::getInputNames() const
-{
-  return getPhysicalModel().getFunction().getInputDescription();
 }
 
 }

@@ -26,7 +26,6 @@ public:
   OT::NumericalSample getOutputSample(OT::NumericalSample inputSample) const;
   OT::NumericalSample getOutputSample(OT::NumericalSample inputSample, const OutputCollection & output) const;
   OT::Description getOutputNames() const;
-  OT::Description getInputNames() const;
 
 private:
   OutputCollection outputs_;

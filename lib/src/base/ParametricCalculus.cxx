@@ -20,7 +20,7 @@ ParametricCalculus::ParametricCalculus(const std::string & name, const PhysicalM
                          const NumericalPoint & infBounds, const NumericalPoint & supBounds,
                          const Indices & nbValues)
  : SimulationCalculus(name, physicalModel, 0)
- , inputNames_(getInputNames())
+ , inputNames_(physicalModel.getInputNames())
  , infBounds_(infBounds)
  , supBounds_(supBounds)
  , nbValues_(nbValues)
@@ -47,7 +47,7 @@ ParametricCalculus* ParametricCalculus::clone() const
 void ParametricCalculus::initializeParameters(const InputCollection & inputs)
 {
   inputSample_.clear();
-  inputNames_ = getInputNames();
+  inputNames_ = getPhysicalModel().getInputNames();
 
   int inputSize = inputs.getSize();
   infBounds_ = NumericalPoint(inputSize);

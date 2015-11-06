@@ -32,6 +32,7 @@ public:
   void setInputs(const InputCollection & inputs);
   bool updateInputs(const InputCollection & inputs);
   void addInput(Input input);
+  OT::Description getInputNames() const;
 
   OutputCollection getOutputs() const;
   void setOutputs(const OutputCollection & outputs);
@@ -56,8 +57,8 @@ private:
   InputCollection inputs_;
   OutputCollection outputs_;
   OT::NumericalMathFunction function_;
-  OT::Description listInput_;
-  OT::Description listOutput_;
+  OT::Description inputNames_;
+  OT::Description outputNames_;
   OT::Description listFormula_;
 };
 }
