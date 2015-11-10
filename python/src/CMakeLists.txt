@@ -47,7 +47,6 @@ macro ( ot_add_python_module MODULENAME SOURCEFILE )
 endmacro ( ot_add_python_module )
 
 
-
 ot_add_python_module( otguibase otguibase_module.i 
                       Observer.i
                       Variable.i Variable_doc.i.in
@@ -56,19 +55,19 @@ ot_add_python_module( otguibase otguibase_module.i
                       PhysicalModelImplementation.i PhysicalModelImplementation_doc.i.in
                       PhysicalModel.i PhysicalModel_doc.i.in
                       YACSPhysicalModel.i
-                      CalculusImplementation.i
-                      Calculus.i Calculus_doc.i.in
-                      SimulationCalculus.i
-                      ParametricCalculusResult.i ParametricCalculusResult_doc.i.in
-                      ParametricCalculus.i ParametricCalculus_doc.i.in
+                      AnalysisImplementation.i
+                      Analysis.i Analysis_doc.i.in
+                      SimulationAnalysis.i
+                      ParametricAnalysisResult.i ParametricAnalysisResult_doc.i.in
+                      ParametricAnalysis.i ParametricAnalysis_doc.i.in
                       MonteCarloResult.i MonteCarloResult_doc.i.in
-                      MonteCarloCalculus.i MonteCarloCalculus_doc.i.in
+                      MonteCarloAnalysis.i MonteCarloAnalysis_doc.i.in
                       QuadraticCumulResult.i QuadraticCumulResult_doc.i.in
-                      QuadraticCumulCalculus.i QuadraticCumulCalculus_doc.i.in
-                      SobolCalculusResult.i SobolCalculusResult_doc.i.in
-                      SobolCalculus.i SobolCalculus_doc.i.in
-                      SRCCalculusResult.i SRCCalculusResult_doc.i.in
-                      SRCCalculus.i SRCCalculus_doc.i.in
+                      QuadraticCumulAnalysis.i QuadraticCumulAnalysis_doc.i.in
+                      SobolResult.i SobolResult_doc.i.in
+                      SobolAnalysis.i SobolAnalysis_doc.i.in
+                      SRCResult.i SRCResult_doc.i.in
+                      SRCAnalysis.i SRCAnalysis_doc.i.in
                       OTStudy.i OTStudy_doc.i.in
                     )
 

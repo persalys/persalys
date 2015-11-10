@@ -12,12 +12,12 @@ namespace OTGUI{
 CLASSNAMEINIT(MonteCarloResult);
 
 MonteCarloResult::MonteCarloResult()
-  : ParametricCalculusResult()
+  : ParametricAnalysisResult()
 {
 }
 
 MonteCarloResult::MonteCarloResult(NumericalSample inputSample, NumericalSample outputSample)
- : ParametricCalculusResult(inputSample, outputSample)
+ : ParametricAnalysisResult(inputSample, outputSample)
  , levelConfidenceInterval_(0.95)
 {
 }

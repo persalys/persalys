@@ -18,7 +18,7 @@ public:
   enum Method {Sobol, SRC};
 
   SensitivityAnalysisWizard(OTStudy * study, const PhysicalModel & physicalModel);
-  SensitivityAnalysisWizard(const Calculus & calculus);
+  SensitivityAnalysisWizard(const Analysis & analysis);
 
   void validate();
 
@@ -29,10 +29,10 @@ public slots:
   void updateMethodWidgets();
   void nbSimuChanged(int);
 signals:
-  void calculusChanged(const Calculus & calculus);
+  void analysisChanged(const Analysis & analysis);
 
 private:
-  Calculus calculus_;
+  Analysis analysis_;
   OTStudy * OTStudy_;
   PhysicalModel physicalModel_;
 

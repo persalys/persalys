@@ -11,4 +11,4 @@ User manual for Python interface
     OTStudy
     Variable
     PhysicalModel
-    Calculus
+    Analysis

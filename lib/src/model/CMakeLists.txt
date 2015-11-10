@@ -7,11 +7,11 @@ ot_add_source_file ( OutputTableModel.cxx )
 ot_add_source_file ( Item.cxx )
 ot_add_source_file ( PhysicalModelItem.cxx )
 ot_add_source_file ( StudyItem.cxx )
-ot_add_source_file ( CalculusItem.cxx )
-ot_add_source_file ( ParametricCalculusItem.cxx )
-ot_add_source_file ( DistributionAnalysisItem.cxx )
+ot_add_source_file ( AnalysisItem.cxx )
+ot_add_source_file ( ParametricAnalysisItem.cxx )
+ot_add_source_file ( CentralTendencyItem.cxx )
 ot_add_source_file ( SensitivityAnalysisItem.cxx )
-ot_add_source_file ( ParametricCalculusTableModel.cxx )
+ot_add_source_file ( ParametricAnalysisTableModel.cxx )
 ot_add_source_file ( StudyTreeViewModel.cxx )
 
 add_subdirectory ( otgui )
@@ -19,10 +19,10 @@ add_subdirectory ( otgui )
 qt4_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/ComboBoxDelegate.hxx
                                     otgui/InputTableModel.hxx
                                     otgui/OutputTableModel.hxx
-                                    otgui/CalculusItem.hxx
-                                    otgui/ParametricCalculusItem.hxx
-                                    otgui/ParametricCalculusTableModel.hxx
-                                    otgui/DistributionAnalysisItem.hxx
+                                    otgui/AnalysisItem.hxx
+                                    otgui/ParametricAnalysisItem.hxx
+                                    otgui/ParametricAnalysisTableModel.hxx
+                                    otgui/CentralTendencyItem.hxx
                                     otgui/SensitivityAnalysisItem.hxx
                                     otgui/StudyTreeViewModel.hxx
                                     otgui/PhysicalModelItem.hxx

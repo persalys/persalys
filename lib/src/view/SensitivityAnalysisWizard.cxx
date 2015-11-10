@@ -2,8 +2,8 @@
 
 #include "otgui/SensitivityAnalysisWizard.hxx"
 
-#include "otgui/SobolCalculus.hxx"
-#include "otgui/SRCCalculus.hxx"
+#include "otgui/SobolAnalysis.hxx"
+#include "otgui/SRCAnalysis.hxx"
 
 #include <QGroupBox>
 #include <QRadioButton>
@@ -17,7 +17,7 @@ namespace OTGUI {
 
 SensitivityAnalysisWizard::SensitivityAnalysisWizard(OTStudy * study, const PhysicalModel & physicalModel)
  : QWizard()
- , calculus_(SobolCalculus("aNameFromFirstPage", physicalModel))
+ , analysis_(SobolAnalysis("aNameFromFirstPage", physicalModel))
  , OTStudy_(study)
  , physicalModel_(physicalModel)
 {
@@ -25,10 +25,10 @@ SensitivityAnalysisWizard::SensitivityAnalysisWizard(OTStudy * study, const Phys
 }
 
 
-SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Calculus & calculus)
+SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis & analysis)
  : QWizard()
- , calculus_(calculus)
- , physicalModel_(calculus_.getPhysicalModel())
+ , analysis_(analysis)
+ , physicalModel_(analysis_.getPhysicalModel())
 {
   buildInterface();
 }
@@ -50,12 +50,12 @@ void SensitivityAnalysisWizard::buildInterface()
 
   methodGroup_ = new QButtonGroup;
   QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Sobol"));
-  if (calculus_.getImplementation()->getClassName() == "SobolCalculus")
+  if (analysis_.getImplementation()->getClassName() == "SobolAnalysis")
     buttonToChooseMethod->setChecked(true);
   methodGroup_->addButton(buttonToChooseMethod, SensitivityAnalysisWizard::Sobol);
   methodLayout->addWidget(buttonToChooseMethod);
   buttonToChooseMethod = new QRadioButton(tr("SRC"));
-  if (calculus_.getImplementation()->getClassName() == "SRCCalculus")
+  if (analysis_.getImplementation()->getClassName() == "SRCAnalysis")
     buttonToChooseMethod->setChecked(true);
   methodGroup_->addButton(buttonToChooseMethod, SensitivityAnalysisWizard::SRC);
   methodLayout->addWidget(buttonToChooseMethod);
@@ -69,7 +69,7 @@ void SensitivityAnalysisWizard::buildInterface()
   nbSimuSpinbox_ = new QSpinBox;
   nbSimuSpinbox_->setMinimum(2);
   nbSimuSpinbox_->setMaximum(std::numeric_limits<int>::max());
-  nbSimuSpinbox_->setValue(dynamic_cast<SimulationCalculus*>(&*calculus_.getImplementation())->getNbSimulations());
+  nbSimuSpinbox_->setValue(dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->getNbSimulations());
   connect(nbSimuSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(nbSimuChanged(int)));
 
   nbSimuLabel->setBuddy(nbSimuSpinbox_);
@@ -91,19 +91,19 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
   {
     case SensitivityAnalysisWizard::Sobol:
     {
-      if (calculus_.getImplementation()->getClassName() == "SRCCalculus")
+      if (analysis_.getImplementation()->getClassName() == "SRCAnalysis")
       {
-        calculus_ = SobolCalculus("aNameSobol", physicalModel_);
-        emit calculusChanged(calculus_);
+        analysis_ = SobolAnalysis("aNameSobol", physicalModel_);
+        emit analysisChanged(analysis_);
       }
       break;
     }
     case SensitivityAnalysisWizard::SRC:
     {
-      if (calculus_.getImplementation()->getClassName() == "SobolCalculus")
+      if (analysis_.getImplementation()->getClassName() == "SobolAnalysis")
       {
-        calculus_ = SRCCalculus("aNameSRC", physicalModel_);
-        emit calculusChanged(calculus_);
+        analysis_ = SRCAnalysis("aNameSRC", physicalModel_);
+        emit analysisChanged(analysis_);
       }
       break;
     }
@@ -115,29 +115,14 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
 
 void SensitivityAnalysisWizard::nbSimuChanged(int nbSimu)
 {
-  dynamic_cast<SimulationCalculus*>(&*calculus_.getImplementation())->setNbSimulations(nbSimu);
-//   switch (SensitivityAnalysisWizard::Method(methodGroup_->checkedId()))
-//   {
-//     case SensitivityAnalysisWizard::Sobol:
-//     {
-//       dynamic_cast<SobolCalculus*>(&*calculus_.getImplementation())->setNbSimulations(nbSimu);
-//       break;
-//     }
-//     case SensitivityAnalysisWizard::SRC:
-//     {
-//       dynamic_cast<SRCCalculus*>(&*calculus_.getImplementation())->setNbSimulations(nbSimu);
-//       break;
-//     }
-//     default:
-//       break;
-//   }
+  dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->setNbSimulations(nbSimu);
 }
 
 
 void SensitivityAnalysisWizard::validate()
 {
-  OTStudy_->addCalculus(calculus_);
-  calculus_.run();
+  OTStudy_->addAnalysis(analysis_);
+  analysis_.run();
 }
 
 

@@ -24,10 +24,10 @@ myPhysicalModel.addOutput(Ep)
 myStudy.addPhysicalModel(myPhysicalModel)
 
 ## Parametric analysis ##
-calculus = otguibase.ParametricCalculus('myParametricCalculus', myPhysicalModel)
-myStudy.addCalculus(calculus)
-calculus.run()
-calculusResult = calculus.getResult()
+analysis = otguibase.ParametricAnalysis('myParametricAnalysis', myPhysicalModel)
+myStudy.addAnalysis(analysis)
+analysis.run()
+analysisResult = analysis.getResult()
 outputSample = [[0.060036508072],
 [0.0292238907867],
 [0.0684295269203],
@@ -38,11 +38,11 @@ outputSample = [[0.060036508072],
 [0.0594339324804]]
 
 # Comparaison
-openturns.testing.assert_almost_equal(outputSample, calculusResult.getResultSample(), 1e-16)
+openturns.testing.assert_almost_equal(outputSample, analysisResult.getResultSample(), 1e-16)
 
 ## Quadratic Cumul ##
-quadraticCumul = otguibase.QuadraticCumulCalculus('myQuadraticCumul', myPhysicalModel)
-myStudy.addCalculus(quadraticCumul)
+quadraticCumul = otguibase.QuadraticCumulAnalysis('myQuadraticCumul', myPhysicalModel)
+myStudy.addAnalysis(quadraticCumul)
 quadraticCumul.run()
 quadraticCumulResult = quadraticCumul.getResult()
 
@@ -50,8 +50,8 @@ quadraticCumulResult = quadraticCumul.getResult()
 openturns.testing.assert_almost_equal(0.059730458221, quadraticCumulResult.getMeanFirstOrder()[0], 1e-13)
 
 ## Monte Carlo ##
-montecarlo = otguibase.MonteCarloCalculus('myMonteCarlo', myPhysicalModel, 1000)
-myStudy.addCalculus(montecarlo)
+montecarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel, 1000)
+myStudy.addAnalysis(montecarlo)
 montecarlo.run()
 montecarloResult = montecarlo.getResult()
 
@@ -67,8 +67,8 @@ openturns.testing.assert_almost_equal(0.0107636626958, stdCi.getLowerBound()[0],
 openturns.testing.assert_almost_equal(0.0117507273707, stdCi.getUpperBound()[0], 1e-13)
 
 ## Sobol ##
-sobol = otguibase.SobolCalculus('mySobol', myPhysicalModel)
-myStudy.addCalculus(sobol)
+sobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel)
+myStudy.addAnalysis(sobol)
 sobol.run()
 sobolResult = sobol.getResult()
 
@@ -81,8 +81,8 @@ openturns.testing.assert_almost_equal(0.0430664, sobolResult.getTotalOrderIndice
 openturns.testing.assert_almost_equal(0.309692, sobolResult.getTotalOrderIndices()[0][2], 1e-6)
 
 ## SRC ##
-src = otguibase.SRCCalculus('mySRC', myPhysicalModel)
-myStudy.addCalculus(src)
+src = otguibase.SRCAnalysis('mySRC', myPhysicalModel)
+myStudy.addAnalysis(src)
 src.run()
 srcResult = src.getResult()
 

@@ -3,7 +3,7 @@
 #include "OT.hxx"
 #include "OTtestcode.hxx"
 #include "otgui/OTStudy.hxx"
-#include "otgui/ParametricCalculus.hxx"
+#include "otgui/ParametricAnalysis.hxx"
 
 
 using namespace OT;
@@ -35,9 +35,9 @@ int main(int argc, char *argv[])
     myStudy.addPhysicalModel(myPhysicalModel);
 
     // Parametric analysis
-    ParametricCalculus calculus("myParametricCalculus", myPhysicalModel);
-    calculus.run();
-    NumericalSample resultSample(calculus.getResult().getResultSample());
+    ParametricAnalysis analysis("myParametricAnalysis", myPhysicalModel);
+    analysis.run();
+    NumericalSample resultSample(analysis.getResult().getResultSample());
 
     // Reference
 

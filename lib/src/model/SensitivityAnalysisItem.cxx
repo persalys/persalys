@@ -2,17 +2,17 @@
 
 namespace OTGUI {
 
-SensitivityAnalysisItem::SensitivityAnalysisItem(const Calculus & calculus)
-  : CalculusItem(calculus, QString("SensitivityAnalysis"))
+SensitivityAnalysisItem::SensitivityAnalysisItem(const Analysis & analysis)
+  : AnalysisItem(analysis, QString("SensitivityAnalysis"))
 {
 }
 
 
 void SensitivityAnalysisItem::update(Observable* source, const std::string & message)
 {
-  if (message=="calculusFinished")
+  if (message=="analysisFinished")
   {
-    emit calculusFinished(this);
+    emit analysisFinished(this);
   }
 }
 

@@ -1,7 +1,7 @@
 #include "otgui/StudyItem.hxx"
 
-#include "otgui/ParametricCalculusItem.hxx"
-#include "otgui/DistributionAnalysisItem.hxx"
+#include "otgui/ParametricAnalysisItem.hxx"
+#include "otgui/CentralTendencyItem.hxx"
 #include "otgui/SensitivityAnalysisItem.hxx"
 
 namespace OTGUI {
@@ -31,37 +31,37 @@ void StudyItem::update(Observable * source, const std::string & message)
 
     emit newPhysicalModelItemCreated(newPhysicalModelItem);
   }
-  else if (message=="addParametricCalculus")
+  else if (message=="addParametricAnalysis")
   {
-    Calculus addedParametricCalculus = study_->getCalculuses().back();
-    ParametricCalculusItem * newItem = new ParametricCalculusItem(addedParametricCalculus);
-    addCalculusItem(addedParametricCalculus, newItem);
+    Analysis addedParametricAnalysis = study_->getAnalyses().back();
+    ParametricAnalysisItem * newItem = new ParametricAnalysisItem(addedParametricAnalysis);
+    addAnalysisItem(addedParametricAnalysis, newItem);
   }
-  else if (message=="addMonteCarloCalculus" || message=="addQuadraticCumulCalculus")
+  else if (message=="addMonteCarloAnalysis" || message=="addQuadraticCumulAnalysis")
   {
-    Calculus addedDistributionAnalysis = study_->getCalculuses().back();
-    DistributionAnalysisItem * newItem = new DistributionAnalysisItem(addedDistributionAnalysis);
-    addCalculusItem(addedDistributionAnalysis, newItem);
+    Analysis addedCentralTendency = study_->getAnalyses().back();
+    CentralTendencyItem * newItem = new CentralTendencyItem(addedCentralTendency);
+    addAnalysisItem(addedCentralTendency, newItem);
   }
-  else if (message=="addSobolCalculus" || message=="addSRCCalculus")
+  else if (message=="addSobolAnalysis" || message=="addSRCAnalysis")
   {
-    Calculus addedSensitivityAnalysis = study_->getCalculuses().back();
+    Analysis addedSensitivityAnalysis = study_->getAnalyses().back();
     SensitivityAnalysisItem * newItem = new SensitivityAnalysisItem(addedSensitivityAnalysis);
-    addCalculusItem(addedSensitivityAnalysis, newItem);
+    addAnalysisItem(addedSensitivityAnalysis, newItem);
   }
 }
 
 
-void StudyItem::addCalculusItem(Calculus & calculus, CalculusItem * item)
+void StudyItem::addAnalysisItem(Analysis & analysis, AnalysisItem * item)
 {
-  calculus.addObserver(item);
+  analysis.addObserver(item);
   for (int i=0; i<rowCount(); ++i)
-    if (child(i)->text().toStdString() == calculus.getPhysicalModel().getName())
+    if (child(i)->text().toStdString() == analysis.getPhysicalModel().getName())
     {
       child(i)->appendRow(item);
       break;
     }
-  emit newCalculusItemCreated(item);
+  emit newAnalysisItemCreated(item);
 }
 
 

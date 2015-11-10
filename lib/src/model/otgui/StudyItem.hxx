@@ -4,7 +4,7 @@
 #define STUDYITEM_H
 
 #include "otgui/PhysicalModelItem.hxx"
-#include "otgui/CalculusItem.hxx"
+#include "otgui/AnalysisItem.hxx"
 #include "otgui/OTStudy.hxx"
 
 namespace OTGUI {
@@ -19,7 +19,7 @@ public:
 
   void update(Observable * source, const std::string & message);
 
-  void addCalculusItem(Calculus & calculus, CalculusItem * item);
+  void addAnalysisItem(Analysis & analysis, AnalysisItem * item);
 
   void setData(const QVariant & value, int role);
   OTStudy * getStudy();
@@ -28,7 +28,7 @@ public:
 public slots:
 signals:
   void newPhysicalModelItemCreated(PhysicalModelItem*);
-  void newCalculusItemCreated(CalculusItem*);
+  void newAnalysisItemCreated(AnalysisItem*);
 
 private:
   OTStudy * study_;

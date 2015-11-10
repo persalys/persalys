@@ -3,11 +3,11 @@
 #ifndef MONTECARLORESULT_H
 #define MONTECARLORESULT_H
 
-#include "ParametricCalculusResult.hxx"
+#include "ParametricAnalysisResult.hxx"
 #include "Distribution.hxx"
 
 namespace OTGUI {
-class MonteCarloResult : public ParametricCalculusResult
+class MonteCarloResult : public ParametricAnalysisResult
 {
   CLASSNAME;
 

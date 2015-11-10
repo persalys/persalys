@@ -11,7 +11,7 @@ PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel)
 
 PhysicalModelItem::~PhysicalModelItem()
 {
-// delete all children (calculus) + physicalModel_
+// delete all children (analysis) + physicalModel_
 }
 
 

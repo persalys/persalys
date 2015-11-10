@@ -7,14 +7,14 @@
 #include <QFileDialog>
 
 #include "otgui/PhysicalModelWindow.hxx"
-#include "otgui/ParametricCalculusWizard.hxx"
-#include "otgui/ParametricCalculusResultWindow.hxx"
-#include "otgui/DistributionAnalysisWizard.hxx"
-#include "otgui/MonteCarloCalculusResultWindow.hxx"
-#include "otgui/QuadraticCumulCalculusResultWindow.hxx"
+#include "otgui/ParametricAnalysisWizard.hxx"
+#include "otgui/ParametricAnalysisResultWindow.hxx"
+#include "otgui/CentralTendencyWizard.hxx"
+#include "otgui/MonteCarloResultWindow.hxx"
+#include "otgui/QuadraticCumulResultWindow.hxx"
 #include "otgui/SensitivityAnalysisWizard.hxx"
-#include "otgui/SobolCalculusResultWindow.hxx"
-#include "otgui/SRCCalculusResultWindow.hxx"
+#include "otgui/SobolResultWindow.hxx"
+#include "otgui/SRCResultWindow.hxx"
 
 #include <iostream>
 
@@ -27,7 +27,7 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   OTStudy::SetInstanceObserver(treeViewModel_);
   setModel(treeViewModel_);
   connect(treeViewModel_, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)), this, SLOT(createNewPhysicalModelWindow(PhysicalModelItem*)));
-  connect(treeViewModel_, SIGNAL(newCalculusCreated(CalculusItem*)), this, SLOT(createCalculusConnection(CalculusItem*)));
+  connect(treeViewModel_, SIGNAL(newAnalysisCreated(AnalysisItem*)), this, SLOT(createAnalysisConnection(AnalysisItem*)));
 
   buildActions();
 
@@ -55,17 +55,17 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
     }
     if (data=="PhysicalModel")
     {
-      contextMenu->addAction(newParametricCalculus_);
-      contextMenu->addAction(newDistributionAnalysis_);
+      contextMenu->addAction(newParametricAnalysis_);
+      contextMenu->addAction(newCentralTendency_);
       contextMenu->addAction(newSensitivityAnalysis_);
     }
-    if (data=="ParametricCalculus")
+    if (data=="ParametricAnalysis")
     {
-      contextMenu->addAction(runParametricCalculus_);
+      contextMenu->addAction(runParametricAnalysis_);
     }
-    if (data=="DistributionAnalysis")
+    if (data=="CentralTendency")
     {
-      contextMenu->addAction(runDistributionAnalysis_);
+      contextMenu->addAction(runCentralTendency_);
     }
     if (data=="SensitivityAnalysis")
     {
@@ -82,25 +82,25 @@ void StudyTreeView::buildActions()
   newPhysicalModelAction_->setStatusTip(tr("Create a new physical model"));
   connect(newPhysicalModelAction_, SIGNAL(triggered()), this, SLOT(createNewPhysicalModel()));
 
-  newParametricCalculus_ = new QAction(tr("New parametric calculus"), this);
-  newParametricCalculus_->setStatusTip(tr("Create a new parametric calculus"));
-  connect(newParametricCalculus_, SIGNAL(triggered()), this, SLOT(createNewParametricCalculus()));
+  newParametricAnalysis_ = new QAction(tr("New parametric analysis"), this);
+  newParametricAnalysis_->setStatusTip(tr("Create a new parametric analysis"));
+  connect(newParametricAnalysis_, SIGNAL(triggered()), this, SLOT(createNewParametricAnalysis()));
 
-  newDistributionAnalysis_ = new QAction(tr("New distribution analysis"), this);
-  newDistributionAnalysis_->setStatusTip(tr("Create a new distribution analysis"));
-  connect(newDistributionAnalysis_, SIGNAL(triggered()), this, SLOT(createNewDistributionAnalysis()));
+  newCentralTendency_ = new QAction(tr("New central tendency"), this);
+  newCentralTendency_->setStatusTip(tr("Create a new central tendency"));
+  connect(newCentralTendency_, SIGNAL(triggered()), this, SLOT(createNewCentralTendency()));
 
   newSensitivityAnalysis_ = new QAction(tr("New sensitivity analysis"), this);
   newSensitivityAnalysis_->setStatusTip(tr("Create a new sensitivity analysis"));
   connect(newSensitivityAnalysis_, SIGNAL(triggered()), this, SLOT(createNewSensitivityAnalysis()));
 
-  runParametricCalculus_ = new QAction(tr("Run"), this);
-  runParametricCalculus_->setStatusTip(tr("Run the parametric calculus"));
-  connect(runParametricCalculus_, SIGNAL(triggered()), this, SLOT(runParametricCalculus()));
+  runParametricAnalysis_ = new QAction(tr("Run"), this);
+  runParametricAnalysis_->setStatusTip(tr("Run the parametric analysis"));
+  connect(runParametricAnalysis_, SIGNAL(triggered()), this, SLOT(runParametricAnalysis()));
 
-  runDistributionAnalysis_ = new QAction(tr("Run"), this);
-  runDistributionAnalysis_->setStatusTip(tr("Run the distribution analysis"));
-  connect(runDistributionAnalysis_, SIGNAL(triggered()), this, SLOT(runDistributionAnalysis()));
+  runCentralTendency_ = new QAction(tr("Run"), this);
+  runCentralTendency_->setStatusTip(tr("Run the central tendency"));
+  connect(runCentralTendency_, SIGNAL(triggered()), this, SLOT(runCentralTendency()));
 
   runSensitivityAnalysis_ = new QAction(tr("Run"), this);
   runSensitivityAnalysis_->setStatusTip(tr("Run the sensitivity analysis"));
@@ -133,12 +133,12 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 }
 
 
-void StudyTreeView::createNewParametricCalculus()
+void StudyTreeView::createNewParametricAnalysis()
 {
   QModelIndex physicalModelIndex = selectionModel()->currentIndex();
   PhysicalModelItem * physicalModelItem = static_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
   StudyItem * studyItem = static_cast<StudyItem*>(physicalModelItem->QStandardItem::parent());
-  ParametricCalculusWizard * wizard = new ParametricCalculusWizard(studyItem->getStudy(), physicalModelItem->getPhysicalModel());
+  ParametricAnalysisWizard * wizard = new ParametricAnalysisWizard(studyItem->getStudy(), physicalModelItem->getPhysicalModel());
 
   if (wizard->exec())
   {
@@ -148,12 +148,12 @@ void StudyTreeView::createNewParametricCalculus()
 }
 
 
-void StudyTreeView::createNewDistributionAnalysis()
+void StudyTreeView::createNewCentralTendency()
 {
   QModelIndex physicalModelIndex = selectionModel()->currentIndex();
   PhysicalModelItem * physicalModelItem = static_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
   StudyItem * studyItem = static_cast<StudyItem*>(physicalModelItem->QStandardItem::parent());
-  DistributionAnalysisWizard * wizard = new DistributionAnalysisWizard(studyItem->getStudy(), physicalModelItem->getPhysicalModel());
+  CentralTendencyWizard * wizard = new CentralTendencyWizard(studyItem->getStudy(), physicalModelItem->getPhysicalModel());
 
   if (wizard->exec())
   {
@@ -178,46 +178,46 @@ void StudyTreeView::createNewSensitivityAnalysis()
 }
 
 
-void StudyTreeView::createCalculusConnection(CalculusItem * item)
+void StudyTreeView::createAnalysisConnection(AnalysisItem * item)
 {
-  connect(item, SIGNAL(calculusFinished(CalculusItem *)), this, SIGNAL(checkIfWindowResultExists(CalculusItem *)));
+  connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SIGNAL(checkIfWindowResultExists(AnalysisItem *)));
   QString data = item->data(Qt::UserRole).toString();
-  if (data == "ParametricCalculus")
-    connect(item, SIGNAL(calculusFinished(CalculusItem *)), this, SLOT(createParametricCalculusResult(CalculusItem *)));
-  else if (data == "DistributionAnalysis")
-    connect(item, SIGNAL(calculusFinished(CalculusItem *)), this, SLOT(createDistributionAnalysisResult(CalculusItem *)));
+  if (data == "ParametricAnalysis")
+    connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createParametricAnalysisResult(AnalysisItem *)));
+  else if (data == "CentralTendency")
+    connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createCentralTendencyResult(AnalysisItem *)));
   else if (data == "SensitivityAnalysis")
-  connect(item, SIGNAL(calculusFinished(CalculusItem *)), this, SLOT(createSensitivityAnalysisResult(CalculusItem*)));
+  connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createSensitivityAnalysisResult(AnalysisItem*)));
 }
 
 
-void StudyTreeView::runParametricCalculus()
+void StudyTreeView::runParametricAnalysis()
 {
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
-  ParametricCalculusItem * item = static_cast<ParametricCalculusItem*>(selectedItem);
+  ParametricAnalysisItem * item = static_cast<ParametricAnalysisItem*>(selectedItem);
 
-  ParametricCalculusWizard * wizard = new ParametricCalculusWizard(item->getCalculus());
+  ParametricAnalysisWizard * wizard = new ParametricAnalysisWizard(item->getAnalysis());
   if (wizard->exec())
   {
-    item->getCalculus().run();
+    item->getAnalysis().run();
   }
 }
 
 
-void StudyTreeView::runDistributionAnalysis()
+void StudyTreeView::runCentralTendency()
 {
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
-  DistributionAnalysisItem * item = static_cast<DistributionAnalysisItem*>(selectedItem);
+  CentralTendencyItem * item = static_cast<CentralTendencyItem*>(selectedItem);
 
-  DistributionAnalysisWizard * wizard = new DistributionAnalysisWizard(item->getCalculus());
-  connect(wizard, SIGNAL(calculusChanged(Calculus)), item, SLOT(updateCalculus(Calculus)));
+  CentralTendencyWizard * wizard = new CentralTendencyWizard(item->getAnalysis());
+  connect(wizard, SIGNAL(analysisChanged(Analysis)), item, SLOT(updateAnalysis(Analysis)));
   if (wizard->exec())
   {
-    item->getCalculus().run();
+    item->getAnalysis().run();
   }
 }
 
@@ -229,47 +229,47 @@ void StudyTreeView::runSensitivityAnalysis()
 
   SensitivityAnalysisItem * item = static_cast<SensitivityAnalysisItem*>(selectedItem);
 
-  SensitivityAnalysisWizard * wizard = new SensitivityAnalysisWizard(item->getCalculus());
-  connect(wizard, SIGNAL(calculusChanged(Calculus)), item, SLOT(updateCalculus(Calculus)));
+  SensitivityAnalysisWizard * wizard = new SensitivityAnalysisWizard(item->getAnalysis());
+  connect(wizard, SIGNAL(analysisChanged(Analysis)), item, SLOT(updateAnalysis(Analysis)));
   if (wizard->exec())
   {
-    item->getCalculus().run();
+    item->getAnalysis().run();
   }
 }
 
 
-void StudyTreeView::createParametricCalculusResult(CalculusItem * item)
+void StudyTreeView::createParametricAnalysisResult(AnalysisItem * item)
 {
-  ParametricCalculusResultWindow * window = new ParametricCalculusResultWindow(static_cast<ParametricCalculusItem*>(item));
+  ParametricAnalysisResultWindow * window = new ParametricAnalysisResultWindow(static_cast<ParametricAnalysisItem*>(item));
   emit showWindow(window);
 }
 
 
-void StudyTreeView::createDistributionAnalysisResult(CalculusItem * item)
+void StudyTreeView::createCentralTendencyResult(AnalysisItem * item)
 {
-  if (item->getCalculus().getImplementation()->getClassName() == "MonteCarloCalculus")
+  if (item->getAnalysis().getImplementation()->getClassName() == "MonteCarloAnalysis")
   {
-    MonteCarloCalculusResultWindow * window = new MonteCarloCalculusResultWindow(static_cast<DistributionAnalysisItem*>(item));
+    MonteCarloResultWindow * window = new MonteCarloResultWindow(static_cast<CentralTendencyItem*>(item));
     emit showWindow(window);
   }
   else
   {
-    QuadraticCumulCalculusResultWindow * window = new QuadraticCumulCalculusResultWindow(static_cast<DistributionAnalysisItem*>(item));
+    QuadraticCumulResultWindow * window = new QuadraticCumulResultWindow(static_cast<CentralTendencyItem*>(item));
     emit showWindow(window);
   }
 }
 
 
-void StudyTreeView::createSensitivityAnalysisResult(CalculusItem * item)
+void StudyTreeView::createSensitivityAnalysisResult(AnalysisItem * item)
 {
-  if (item->getCalculus().getImplementation()->getClassName() == "SobolCalculus")
+  if (item->getAnalysis().getImplementation()->getClassName() == "SobolAnalysis")
   {
-    SobolCalculusResultWindow * window = new SobolCalculusResultWindow(static_cast<SensitivityAnalysisItem*>(item));
+    SobolResultWindow * window = new SobolResultWindow(static_cast<SensitivityAnalysisItem*>(item));
     emit showWindow(window);
   }
   else
   {
-    SRCCalculusResultWindow * window = new SRCCalculusResultWindow(static_cast<SensitivityAnalysisItem*>(item));
+    SRCResultWindow * window = new SRCResultWindow(static_cast<SensitivityAnalysisItem*>(item));
     emit showWindow(window);
   }
 }

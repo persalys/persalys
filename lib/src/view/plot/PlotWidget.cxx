@@ -1,6 +1,6 @@
 #include "otgui/PlotWidget.hxx"
 
-#include "otgui/DistributionScaleEngine.hxx"
+#include "otgui/CustomScaleEngine.hxx"
 #include "otgui/ImageEditionDialog.hxx"
 
 #include <qwt_plot_layout.h>
@@ -329,7 +329,7 @@ void PlotWidget::updateScaleParameters(const Distribution & distribution)
   x1 -= delta;
   x2 -= delta;
 
-  DistributionScaleEngine xScaleEngine;
+  CustomScaleEngine xScaleEngine;
   xScaleEngine.setReference(mean);
   xScaleEngine.setAttribute(QwtScaleEngine::Symmetric, true);
   xScaleEngine.autoScale(3, x1, x2, stepSize);

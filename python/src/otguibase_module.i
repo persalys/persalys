@@ -68,19 +68,19 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 %include PhysicalModelImplementation.i
 %include PhysicalModel.i
 %include YACSPhysicalModel.i
-%include CalculusImplementation.i
-%include Calculus.i
-%include SimulationCalculus.i
-%include ParametricCalculusResult.i
-%include ParametricCalculus.i
+%include AnalysisImplementation.i
+%include Analysis.i
+%include SimulationAnalysis.i
+%include ParametricAnalysisResult.i
+%include ParametricAnalysis.i
 %include MonteCarloResult.i
 %include QuadraticCumulResult.i
-%include MonteCarloCalculus.i
-%include QuadraticCumulCalculus.i
-%include SobolCalculusResult.i
-%include SobolCalculus.i
-%include SRCCalculusResult.i
-%include SRCCalculus.i
+%include MonteCarloAnalysis.i
+%include QuadraticCumulAnalysis.i
+%include SobolResult.i
+%include SobolAnalysis.i
+%include SRCResult.i
+%include SRCAnalysis.i
 %include OTStudy.i
 
 

@@ -3,7 +3,7 @@
 #ifndef OTSTUDY_H
 #define OTSTUDY_H
 
-#include "Calculus.hxx"
+#include "Analysis.hxx"
 #include "Observer.hxx"
 
 namespace OTGUI {
@@ -27,9 +27,9 @@ public:
   OT::Description getPhysicalModelsNames() const;
   void addPhysicalModel(const PhysicalModel & physicalModel);
 
-  std::vector<Calculus> getCalculuses() const;
-  OT::Description getCalculusesNames() const;
-  void addCalculus(const Calculus & calculus);
+  std::vector<Analysis> getAnalyses() const;
+  OT::Description getAnalysesNames() const;
+  void addAnalysis(const Analysis & analysis);
 
   std::string dump();
 
@@ -38,7 +38,7 @@ private:
   static Observer * InstanceObserver_;
   std::string name_;
   std::vector<PhysicalModel> physicalModels_;
-  std::vector<Calculus> calculuses_;
+  std::vector<Analysis> analyses_;
 };
 }
 #endif

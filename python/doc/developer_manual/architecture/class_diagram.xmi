@@ -120,7 +120,7 @@
         </UML:Operation>
        </UML:Classifier.feature>
       </UML:Class>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="g9kxPJRbAfZW" name="Calculus">
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="g9kxPJRbAfZW" name="Analysis">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="MzOTte7GHYpV"/>
        </UML:GeneralizableElement.generalization>
@@ -145,7 +145,7 @@
         </UML:Operation>
        </UML:Classifier.feature>
       </UML:Class>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="JdefUSm8ZW5x" name="PhysicalEvaluationCalculus">
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="JdefUSm8ZW5x" name="PhysicalEvaluationAnalysis">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="kFE7Nmu3A3cZ"/>
        </UML:GeneralizableElement.generalization>
@@ -153,7 +153,7 @@
         <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="DFutNVBGiT7P" name="run"/>
        </UML:Classifier.feature>
       </UML:Class>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="0vthV24oeiT8" name="ParametricCalculus">
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="0vthV24oeiT8" name="ParametricAnalysis">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="R9qbBQ87Sdq2"/>
         <UML:Generalization xmi.idref="2rymbQA5Ar5B"/>
@@ -192,12 +192,12 @@
         <UML:Attribute visibility="private" isSpecification="false" xmi.id="IkkTjfa5LkLw" type="Y8RCPJde4fpv" name="treeViewmodel_"/>
         <UML:Attribute visibility="private" isSpecification="false" xmi.id="23UUwdRE8no5" type="l25g1vT8tOnT" name="newStudyAction_"/>
         <UML:Attribute visibility="private" isSpecification="false" xmi.id="YwReesjGkuiy" type="l25g1vT8tOnT" name="newPhysicalModelAction_"/>
-        <UML:Attribute visibility="private" isSpecification="false" xmi.id="tYalJld50t4j" type="l25g1vT8tOnT" name="newParametricCalculus_"/>
-        <UML:Attribute visibility="private" isSpecification="false" xmi.id="4eB3wTZyW3SQ" type="l25g1vT8tOnT" name="runCalculus_"/>
+        <UML:Attribute visibility="private" isSpecification="false" xmi.id="tYalJld50t4j" type="l25g1vT8tOnT" name="newParametricAnalysis_"/>
+        <UML:Attribute visibility="private" isSpecification="false" xmi.id="4eB3wTZyW3SQ" type="l25g1vT8tOnT" name="runAnalysis_"/>
         <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="bxfFEBo1yOTB" name="buildActions"/>
         <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="5BwfqFRneJgG" name="createNewStudy"/>
         <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="fkw0vcgBmpID" name="createNewPhysicalModel"/>
-        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="80JxO6LuECzJ" name="createNewParametricCalculus"/>
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="80JxO6LuECzJ" name="createNewParametricAnalysis"/>
         <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="ut4Or70x5IuU" name="onCustomContextMenu">
          <UML:BehavioralFeature.parameter>
           <UML:Parameter visibility="private" isSpecification="false" xmi.id="PjABXQOPJTl8" type="MFMaSJs53m3y" value="" name="point"/>
@@ -208,8 +208,8 @@
           <UML:Parameter visibility="private" isSpecification="false" xmi.id="lmjpZklySt9z" type="tvQLZV3yJIJV" value="" name="index"/>
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
-        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="KVMby8kXsnBu" name="runCalculus"/>
-        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="lHGzjCcUzJHY" name="createParametricCalculusResult"/>
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="KVMby8kXsnBu" name="runAnalysis"/>
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="lHGzjCcUzJHY" name="createParametricAnalysisResult"/>
        </UML:Classifier.feature>
       </UML:Class>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="7Pxx9iHUaf7G" name="mainWindow">
@@ -240,7 +240,7 @@
         <UML:Attribute visibility="private" isSpecification="false" xmi.id="l1oUKBqL6Jay" type="T8Qq0LXRE5tM" name="physicalModels_"/>
         <UML:Attribute visibility="private" isSpecification="false" xmi.id="iuZ4Wf5JTOZX" type="CSDMpz4gmV3a" name="calculuses"/>
         <UML:Attribute visibility="private" isSpecification="false" xmi.id="Vt3u1WDW2RUf" type="uYwvAyLomUt5" name="name_"/>
-        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="0S97lh31delf" name="getCalculuses">
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="0S97lh31delf" name="getAnalysises">
          <UML:BehavioralFeature.parameter>
           <UML:Parameter kind="return" xmi.id="rzDLW5sxQefq" type="g9kxPJRbAfZW"/>
          </UML:BehavioralFeature.parameter>
@@ -255,7 +255,7 @@
           <UML:Parameter visibility="private" isSpecification="false" xmi.id="0KlQhnOAeP4g" type="uYwvAyLomUt5" value="" name="name"/>
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
-        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="QCzR3hooahJo" name="addCalculus">
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="QCzR3hooahJo" name="addAnalysis">
          <UML:BehavioralFeature.parameter>
           <UML:Parameter visibility="private" isSpecification="false" xmi.id="xPrvbyUlZ9lJ" type="EsGyM73Yh8T8" value="" name="physicalModel"/>
          </UML:BehavioralFeature.parameter>
@@ -458,7 +458,7 @@
       <UML:Dependency visibility="public" isSpecification="false" namespace="Logical View" supplier="mmQV9pT8yyrE" xmi.id="Eu6CeCVtvSca" client="0vthV24oeiT8" name=""/>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="0t2wKfUeVN1t" name="QList VariableValues"/>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="rePugzhLa8tP" name="NumericalSample"/>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="9lX1LEIKse7T" name="ParametricCalculusResultWindow">
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="9lX1LEIKse7T" name="ParametricAnalysisResultWindow">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="RGwAGdlvmKyb"/>
         <UML:Generalization xmi.idref="6sPovLZ1xPuR"/>
@@ -480,7 +480,7 @@
         <UML:AssociationEnd changeability="changeable" visibility="public" isNavigable="true" isSpecification="false" xmi.id="LIIexcYahGtz" type="9lX1LEIKse7T" name="" aggregation="none"/>
        </UML:Association.connection>
       </UML:Association>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="jvqd1onM73y4" name="ParametricCalculusWizard">
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="jvqd1onM73y4" name="ParametricAnalysisWizard">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="1bRYvi5ggT4p"/>
         <UML:Generalization xmi.idref="wy0jZKkydUM6"/>
@@ -499,7 +499,7 @@
        </UML:GeneralizableElement.generalization>
       </UML:Class>
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="9lX1LEIKse7T" xmi.id="RGwAGdlvmKyb" parent="f8b5rzaZtOAu" name=""/>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="K739HYMuFnGR" name="ParametricCalculusTableModel">
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="K739HYMuFnGR" name="ParametricAnalysisTableModel">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="DMIQKbqsEbtR"/>
        </UML:GeneralizableElement.generalization>
@@ -508,7 +508,7 @@
         <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="aXryxITgbbib" name="headerData"/>
        </UML:Classifier.feature>
       </UML:Class>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="E0bhO3pLaRSN" name="ParametricCalculusResultModel">
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="E0bhO3pLaRSN" name="ParametricAnalysisResultModel">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="hTgLBGMtDyLR"/>
        </UML:GeneralizableElement.generalization>
@@ -560,7 +560,7 @@
           <UML:Parameter visibility="private" isSpecification="false" xmi.id="oeJcBrNDRAvN" type="tvQLZV3yJIJV" value="" name="index"/>
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
-        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="JFmyD2nqRKcf" name="addParametricCalculusItem">
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="JFmyD2nqRKcf" name="addParametricAnalysisItem">
          <UML:BehavioralFeature.parameter>
           <UML:Parameter kind="return" xmi.id="4PsuQJ73kXgS" type="h5yG2FAUrvdg"/>
           <UML:Parameter visibility="private" isSpecification="false" xmi.id="08fsOd2B3I9E" type="tvQLZV3yJIJV" value="" name="index"/>
@@ -614,7 +614,7 @@
        </UML:GeneralizableElement.generalization>
        <UML:Classifier.feature>
         <UML:Attribute visibility="private" isSpecification="false" xmi.id="Fgsj89AoAYyT" type="0vthV24oeiT8" name="calculus_"/>
-        <UML:Attribute visibility="private" isSpecification="false" xmi.id="z1e5FmFb2D7p" type="K739HYMuFnGR" name="parametricCalculusModel"/>
+        <UML:Attribute visibility="private" isSpecification="false" xmi.id="z1e5FmFb2D7p" type="K739HYMuFnGR" name="parametricAnalysisModel"/>
         <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="PKWCllIeWSHR" name="run"/>
         <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="i2QCJPKYZyqk" name="createResultWindow"/>
        </UML:Classifier.feature>
@@ -754,7 +754,7 @@
         <UML:AssociationEnd changeability="changeable" visibility="public" isNavigable="true" isSpecification="false" xmi.id="tcOtdB4ZDqvJ" type="b40xdaAQft3C" name="" aggregation="none"/>
        </UML:Association.connection>
       </UML:Association>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="n0d0oWHSqEru" name="DistributionCalculus">
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="n0d0oWHSqEru" name="DistributionAnalysis">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="KRJi3FmoDNo1"/>
        </UML:GeneralizableElement.generalization>
@@ -763,7 +763,7 @@
        </UML:Classifier.feature>
       </UML:Class>
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="n0d0oWHSqEru" xmi.id="KRJi3FmoDNo1" parent="g9kxPJRbAfZW" name=""/>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="WGr59bKn9uWB" name="DistributionCalculusResultWindow">
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="WGr59bKn9uWB" name="DistributionAnalysisResultWindow">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="piXftEnNScSb"/>
        </UML:GeneralizableElement.generalization>
@@ -847,7 +847,7 @@
         </UML:Operation>
        </UML:Classifier.feature>
       </UML:Class>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="h5yG2FAUrvdg" name="ParametricCalculusItem">
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="h5yG2FAUrvdg" name="ParametricAnalysisItem">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="jKoM1u6hz4x1"/>
         <UML:Generalization xmi.idref="9jBI0A3XTeUk"/>
@@ -866,7 +866,7 @@
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="h5yG2FAUrvdg" xmi.id="jKoM1u6hz4x1" parent="noseSVSax0lV" name=""/>
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="Sem8rv6prbx0" xmi.id="2oi1qf08iSEh" parent="noseSVSax0lV" name=""/>
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="edADfD98wYGc" xmi.id="R0pY95KNOCAB" parent="aWqceOzXOzC3" name=""/>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="oQ8AcIMsP0NG" name="CalculusItem">
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="oQ8AcIMsP0NG" name="AnalysisItem">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="pHfQ2lBo9Hzl"/>
         <UML:Generalization xmi.idref="YnC3za2QUwHt"/>
@@ -874,12 +874,12 @@
        </UML:GeneralizableElement.generalization>
        <UML:Classifier.feature>
         <UML:Attribute visibility="private" isSpecification="false" xmi.id="8Hbbu5KTkJx3" type="g9kxPJRbAfZW" name="calculus_"/>
-        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="hXjPogSNrUM0" name="getCalculus">
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="hXjPogSNrUM0" name="getAnalysis">
          <UML:BehavioralFeature.parameter>
           <UML:Parameter kind="return" xmi.id="" type="g9kxPJRbAfZW"/>
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
-        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="KtIUaPknI9iD" name="setCalculus">
+        <UML:Operation visibility="public" isSpecification="false" isQuery="false" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="KtIUaPknI9iD" name="setAnalysis">
          <UML:BehavioralFeature.parameter>
           <UML:Parameter visibility="private" isSpecification="false" xmi.id="NjBNsIM8JA3b" type="g9kxPJRbAfZW" value="" name="calculus"/>
          </UML:BehavioralFeature.parameter>
@@ -908,7 +908,7 @@
       </UML:Association>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="kpUmBKtbJgql" name="list PhysicalVariable"/>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="ooLG3lEqNEs3" name="list PhysicalModel"/>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="7mLUyBWEtqag" name="list Calculus"/>
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="7mLUyBWEtqag" name="list Analysis"/>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="TH7Yb2IDPN40" name="list Variable"/>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="Qs8uGWzgMYQm" name="map double"/>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="X6TWXdxIZ0l5" name="set double"/>
@@ -942,7 +942,7 @@
        </UML:Association.connection>
       </UML:Association>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="v6P6onET9XKF" name="PhysicalModelAction"/>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="7EWOYtPTypXm" name="ParametricCalculusAction"/>
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="7EWOYtPTypXm" name="ParametricAnalysisAction"/>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="ocXUXEWxSVPb" name="Item">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="PONCBAxhrQmN"/>
@@ -993,7 +993,7 @@
         <UML:Class visibility="public" isSpecification="false" namespace="tLC0IsSVz5ey" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="p8bxREvxp5Cv" name="vector"/>
         <UML:Class visibility="public" isSpecification="false" namespace="tLC0IsSVz5ey" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="rnQOq1zFH3A8" name="vector OTStudy"/>
         <UML:Class visibility="public" isSpecification="false" namespace="tLC0IsSVz5ey" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="T8Qq0LXRE5tM" name="vector PhysicalModel"/>
-        <UML:Class visibility="public" isSpecification="false" namespace="tLC0IsSVz5ey" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="CSDMpz4gmV3a" name="vector Calculus"/>
+        <UML:Class visibility="public" isSpecification="false" namespace="tLC0IsSVz5ey" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="CSDMpz4gmV3a" name="vector Analysis"/>
         <UML:Class visibility="public" isSpecification="false" namespace="tLC0IsSVz5ey" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="4avTCrz3Xu9t" name="vector Input"/>
         <UML:Class visibility="public" isSpecification="false" namespace="tLC0IsSVz5ey" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="14spyj9gvZSV" name="vector Output"/>
        </UML:Namespace.ownedElement>
@@ -1206,7 +1206,7 @@
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="Gu4Sg4xhrnR5" xmi.id="pbWwTqUBkaD5" parent="Ecrwbbr5nWyj" name=""/>
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="KG6tFugBMo2Y" xmi.id="cD1KmCNn7blW" parent="Gu4Sg4xhrnR5" name=""/>
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="h07EDwqYBuPO" xmi.id="4SnB3WgdAHQH" parent="Gu4Sg4xhrnR5" name=""/>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="u7cL9wy89MPD" name="CalculusImplementation">
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="u7cL9wy89MPD" name="AnalysisImplementation">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="XvpMQQQ9TMjN"/>
        </UML:GeneralizableElement.generalization>

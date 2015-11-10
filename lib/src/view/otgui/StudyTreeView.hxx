@@ -23,36 +23,36 @@ protected:
 public slots:
   void createNewStudy();
   void createNewPhysicalModel();
-  void createNewParametricCalculus();
-  void createNewDistributionAnalysis();
+  void createNewParametricAnalysis();
+  void createNewCentralTendency();
   void createNewSensitivityAnalysis();
   void onCustomContextMenu(const QPoint & point);
   void selectedItemChanged(const QModelIndex & index);
-  void runParametricCalculus();
-  void runDistributionAnalysis();
+  void runParametricAnalysis();
+  void runCentralTendency();
   void runSensitivityAnalysis();
-  void createParametricCalculusResult(CalculusItem *);
-  void createDistributionAnalysisResult(CalculusItem *);
-  void createSensitivityAnalysisResult(CalculusItem * item);
-  void createCalculusConnection(CalculusItem*);
+  void createParametricAnalysisResult(AnalysisItem *);
+  void createCentralTendencyResult(AnalysisItem *);
+  void createSensitivityAnalysisResult(AnalysisItem * item);
+  void createAnalysisConnection(AnalysisItem*);
   void createNewPhysicalModelWindow(PhysicalModelItem * item);
   void dumpStudy();
   void loadStudy();
 signals:
   void showWindow(QMdiSubWindow*);
   void itemSelected(QStandardItem *);
-  void checkIfWindowResultExists(CalculusItem *);
+  void checkIfWindowResultExists(AnalysisItem *);
   void loadPythonScript(const QString & fileName);
 
 private:
   StudyTreeViewModel * treeViewModel_;
   QAction * newStudyAction_;
   QAction * newPhysicalModelAction_;
-  QAction * newParametricCalculus_;
-  QAction * newDistributionAnalysis_;
+  QAction * newParametricAnalysis_;
+  QAction * newCentralTendency_;
   QAction * newSensitivityAnalysis_;
-  QAction * runParametricCalculus_;
-  QAction * runDistributionAnalysis_;
+  QAction * runParametricAnalysis_;
+  QAction * runCentralTendency_;
   QAction * runSensitivityAnalysis_;
   QAction * dumpStudy_;
 };

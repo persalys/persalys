@@ -41,7 +41,7 @@ When doing a right click on the item of the physical model in the study tree, a 
 to realize a parametric analysis.
 When clicking on this, the following wizard appears:
 
-.. image:: ParametricCalculusData.png
+.. image:: ParametricAnalysisData.png
     :align: center
     :width: 600px
     :height: 360px
@@ -51,17 +51,17 @@ the minimum and the maximum values are computed automatically. The minimum value
 quantile at the probability of 0.05 and the maximum one is the quantile at the probability of
 0.95. The number of used values for each variable is by default 2.
 
-.. image:: ParametricCalculusResultMinMax.png
+.. image:: ParametricAnalysisResultMinMax.png
     :align: center
     :width: 455px
     :height: 294px
 
-.. image:: ParametricCalculusResultTable.png
+.. image:: ParametricAnalysisResultTable.png
     :align: center
     :width: 462px
     :height: 355px
 
-.. image:: ParametricCalculusResultPlot.png
+.. image:: ParametricAnalysisResultPlot.png
     :align: center
     :width: 455px
     :height: 455px

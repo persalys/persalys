@@ -5,7 +5,7 @@
 
 #include "otgui/StudyItem.hxx"
 #include "otgui/PhysicalModelItem.hxx"
-#include "otgui/ParametricCalculusItem.hxx"
+#include "otgui/ParametricAnalysisItem.hxx"
 
 #include <QStandardItemModel>
 
@@ -29,7 +29,7 @@ public:
 public slots:
 signals:
   void newPhysicalModelCreated(PhysicalModelItem*);
-  void newCalculusCreated(CalculusItem*);
+  void newAnalysisCreated(AnalysisItem*);
 };
 }
 #endif

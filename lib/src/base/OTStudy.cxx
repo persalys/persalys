@@ -103,25 +103,25 @@ void OTStudy::addPhysicalModel(const PhysicalModel & physicalModel)
 }
 
 
-std::vector<Calculus> OTStudy::getCalculuses() const
+std::vector<Analysis> OTStudy::getAnalyses() const
 {
-  return calculuses_;
+  return analyses_;
 }
 
 
-Description OTStudy::getCalculusesNames() const
+Description OTStudy::getAnalysesNames() const
 {
-  Description calculusesNames(calculuses_.size());
-  for (int i=0; i<calculuses_.size(); ++i)
-    calculusesNames[i] = calculuses_[i].getImplementation()->getName();
-  return calculusesNames;
+  Description analysesNames(analyses_.size());
+  for (int i=0; i<analyses_.size(); ++i)
+    analysesNames[i] = analyses_[i].getImplementation()->getName();
+  return analysesNames;
 }
 
 
-void OTStudy::addCalculus(const Calculus & calculus)
+void OTStudy::addAnalysis(const Analysis & analysis)
 {
-  calculuses_.push_back(calculus);
-  notify("add"+calculus.getImplementation()->getClassName());
+  analyses_.push_back(analysis);
+  notify("add"+analysis.getImplementation()->getClassName());
 }
 
 
@@ -134,10 +134,10 @@ std::string OTStudy::dump()
     result += (*it).dump();
     result += getName() + ".addPhysicalModel(" + (*it).getName() + ")\n";
   }
-  for (std::vector<Calculus>::iterator it=calculuses_.begin(); it!= calculuses_.end(); ++it)
+  for (std::vector<Analysis>::iterator it=analyses_.begin(); it!= analyses_.end(); ++it)
   {
     result += (*it).dump();
-    result += getName() + ".addCalculus(" + (*it).getName() + ")\n";
+    result += getName() + ".addAnalysis(" + (*it).getName() + ")\n";
   }
   return result;
 }
