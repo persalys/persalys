@@ -8,10 +8,10 @@
 
 namespace OTGUI {
 
-ParametricAnalysisWizard::ParametricAnalysisWizard(OTStudy * study, const PhysicalModel & physicalModel)
+ParametricAnalysisWizard::ParametricAnalysisWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
   : QWizard()
   , analysis_(ParametricAnalysis("aAnalysis", physicalModel))
-  , OTStudy_(study)
+  , otStudy_(otStudy)
 {
   buildInterface();
 }
@@ -51,7 +51,7 @@ void ParametricAnalysisWizard::setAnalysis(Analysis & analysis)
 
 void ParametricAnalysisWizard::validate()
 {
-  OTStudy_->addAnalysis(analysis_);
+  otStudy_->addAnalysis(analysis_);
   analysis_.run();
 }
 

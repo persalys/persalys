@@ -14,7 +14,7 @@ class ParametricAnalysisWizard : public QWizard
   Q_OBJECT
 
 public:
-  ParametricAnalysisWizard(OTStudy * study, const PhysicalModel & physicalModel);
+  ParametricAnalysisWizard(OTStudy * otStudy, const PhysicalModel & physicalModel);
   ParametricAnalysisWizard(const Analysis & analysis);
 
   void validate();
@@ -28,7 +28,7 @@ public slots:
 private:
   ParametricAnalysisTableModel * model_;
   Analysis analysis_;
-  OTStudy * OTStudy_;
+  OTStudy * otStudy_;
 };
 }
 #endif

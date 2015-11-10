@@ -1,4 +1,4 @@
-#include "otgui/StudyItem.hxx"
+#include "otgui/OTStudyItem.hxx"
 
 #include "otgui/ParametricAnalysisItem.hxx"
 #include "otgui/CentralTendencyItem.hxx"
@@ -6,25 +6,25 @@
 
 namespace OTGUI {
 
-StudyItem::StudyItem(OTStudy * study)
-  : Item(study->getName(), QString("Study"))
-  , study_(study)
+OTStudyItem::OTStudyItem(OTStudy * otStudy)
+  : Item(otStudy->getName(), QString("OTStudy"))
+  , otStudy_(otStudy)
 {
 
 }
 
 
-StudyItem::~StudyItem()
+OTStudyItem::~OTStudyItem()
 {
 
 }
 
 
-void StudyItem::update(Observable * source, const std::string & message)
+void OTStudyItem::update(Observable * source, const std::string & message)
 {
   if (message=="addPhysicalModel")
   {
-    PhysicalModel addedPhysicalModel = study_->getPhysicalModels().back();
+    PhysicalModel addedPhysicalModel = otStudy_->getPhysicalModels().back();
     PhysicalModelItem * newPhysicalModelItem = new PhysicalModelItem(addedPhysicalModel);
     addedPhysicalModel.addObserver(newPhysicalModelItem);
     appendRow(newPhysicalModelItem);
@@ -33,26 +33,26 @@ void StudyItem::update(Observable * source, const std::string & message)
   }
   else if (message=="addParametricAnalysis")
   {
-    Analysis addedParametricAnalysis = study_->getAnalyses().back();
+    Analysis addedParametricAnalysis = otStudy_->getAnalyses().back();
     ParametricAnalysisItem * newItem = new ParametricAnalysisItem(addedParametricAnalysis);
     addAnalysisItem(addedParametricAnalysis, newItem);
   }
   else if (message=="addMonteCarloAnalysis" || message=="addQuadraticCumulAnalysis")
   {
-    Analysis addedCentralTendency = study_->getAnalyses().back();
+    Analysis addedCentralTendency = otStudy_->getAnalyses().back();
     CentralTendencyItem * newItem = new CentralTendencyItem(addedCentralTendency);
     addAnalysisItem(addedCentralTendency, newItem);
   }
   else if (message=="addSobolAnalysis" || message=="addSRCAnalysis")
   {
-    Analysis addedSensitivityAnalysis = study_->getAnalyses().back();
+    Analysis addedSensitivityAnalysis = otStudy_->getAnalyses().back();
     SensitivityAnalysisItem * newItem = new SensitivityAnalysisItem(addedSensitivityAnalysis);
     addAnalysisItem(addedSensitivityAnalysis, newItem);
   }
 }
 
 
-void StudyItem::addAnalysisItem(Analysis & analysis, AnalysisItem * item)
+void OTStudyItem::addAnalysisItem(Analysis & analysis, AnalysisItem * item)
 {
   analysis.addObserver(item);
   for (int i=0; i<rowCount(); ++i)
@@ -65,7 +65,7 @@ void StudyItem::addAnalysisItem(Analysis & analysis, AnalysisItem * item)
 }
 
 
-void StudyItem::setData(const QVariant & value, int role)
+void OTStudyItem::setData(const QVariant & value, int role)
 {
   switch (role)
   {
@@ -75,15 +75,15 @@ void StudyItem::setData(const QVariant & value, int role)
 }
 
 
-OTStudy* StudyItem::getStudy()
+OTStudy* OTStudyItem::getOTStudy()
 {
-  return study_;
+  return otStudy_;
 }
 
 
-QString StudyItem::dumpStudy()
+QString OTStudyItem::dumpOTStudy()
 {
-  return QString::fromStdString(study_->dump());
+  return QString::fromStdString(otStudy_->dump());
 }
 
 

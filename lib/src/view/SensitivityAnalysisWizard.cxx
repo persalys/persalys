@@ -15,10 +15,10 @@
 
 namespace OTGUI {
 
-SensitivityAnalysisWizard::SensitivityAnalysisWizard(OTStudy * study, const PhysicalModel & physicalModel)
+SensitivityAnalysisWizard::SensitivityAnalysisWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
  : QWizard()
  , analysis_(SobolAnalysis("aNameFromFirstPage", physicalModel))
- , OTStudy_(study)
+ , otStudy_(otStudy)
  , physicalModel_(physicalModel)
 {
   buildInterface();
@@ -121,7 +121,7 @@ void SensitivityAnalysisWizard::nbSimuChanged(int nbSimu)
 
 void SensitivityAnalysisWizard::validate()
 {
-  OTStudy_->addAnalysis(analysis_);
+  otStudy_->addAnalysis(analysis_);
   analysis_.run();
 }
 

@@ -1,29 +1,29 @@
-// StudyItem.hxx
+// OTStudyItem.hxx
 
-#ifndef STUDYITEM_H
-#define STUDYITEM_H
+#ifndef OTSTUDYITEM_H
+#define OTSTUDYITEM_H
 
 #include "otgui/PhysicalModelItem.hxx"
 #include "otgui/AnalysisItem.hxx"
 #include "otgui/OTStudy.hxx"
 
 namespace OTGUI {
-class StudyItem : public Item
+class OTStudyItem : public Item
 {
   Q_OBJECT
 
 public:
-  StudyItem(OTStudy * study);
+  OTStudyItem(OTStudy * otStudy);
 
-  virtual ~StudyItem();
+  virtual ~OTStudyItem();
 
   void update(Observable * source, const std::string & message);
 
   void addAnalysisItem(Analysis & analysis, AnalysisItem * item);
 
   void setData(const QVariant & value, int role);
-  OTStudy * getStudy();
-  QString dumpStudy();
+  OTStudy * getOTStudy();
+  QString dumpOTStudy();
 
 public slots:
 signals:
@@ -31,7 +31,7 @@ signals:
   void newAnalysisItemCreated(AnalysisItem*);
 
 private:
-  OTStudy * study_;
+  OTStudy * otStudy_;
 };
 }
 #endif

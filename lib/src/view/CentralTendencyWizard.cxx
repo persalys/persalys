@@ -15,10 +15,10 @@
 
 namespace OTGUI {
 
-CentralTendencyWizard::CentralTendencyWizard(OTStudy * study, const PhysicalModel & physicalModel)
+CentralTendencyWizard::CentralTendencyWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
  : QWizard()
  , analysis_(MonteCarloAnalysis("aNameFromFirstPage", physicalModel))
- , OTStudy_(study)
+ , otStudy_(otStudy)
  , physicalModel_(physicalModel)
 {
   buildInterface();
@@ -217,7 +217,7 @@ void CentralTendencyWizard::levelConfidenceIntervalChanged(double confidenceInte
 
 void CentralTendencyWizard::validate()
 {
-  OTStudy_->addAnalysis(analysis_);
+  otStudy_->addAnalysis(analysis_);
   analysis_.run();
 }
 

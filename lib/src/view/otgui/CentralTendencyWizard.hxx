@@ -18,7 +18,7 @@ class CentralTendencyWizard : public QWizard
 public:
   enum Method {MonteCarlo, QuadraticCumul};
 
-  CentralTendencyWizard(OTStudy * study, const PhysicalModel & physicalModel);
+  CentralTendencyWizard(OTStudy * otStudy, const PhysicalModel & physicalModel);
   CentralTendencyWizard(const Analysis & analysis);
 
   void validate();
@@ -37,7 +37,7 @@ signals:
 
 private:
   Analysis analysis_;
-  OTStudy * OTStudy_;
+  OTStudy * otStudy_;
   PhysicalModel physicalModel_;
 
   QButtonGroup * methodGroup_;

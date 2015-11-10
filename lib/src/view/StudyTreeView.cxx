@@ -48,10 +48,10 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
   {
     QMenu * contextMenu = new QMenu(this);
     QString data = treeViewModel_->itemFromIndex(index)->data(Qt::UserRole).toString();
-    if (data=="Study")
+    if (data=="OTStudy")
     {
       contextMenu->addAction(newPhysicalModelAction_);
-      contextMenu->addAction(dumpStudy_);
+      contextMenu->addAction(dumpOTStudy_);
     }
     if (data=="PhysicalModel")
     {
@@ -106,15 +106,15 @@ void StudyTreeView::buildActions()
   runSensitivityAnalysis_->setStatusTip(tr("Run the sensitivity analysis"));
   connect(runSensitivityAnalysis_, SIGNAL(triggered()), this, SLOT(runSensitivityAnalysis()));
 
-  dumpStudy_ = new QAction(tr("Dump"), this);
-  dumpStudy_->setStatusTip(tr("Dump the study"));
-  connect(dumpStudy_, SIGNAL(triggered()), this, SLOT(dumpStudy()));
+  dumpOTStudy_ = new QAction(tr("Dump"), this);
+  dumpOTStudy_->setStatusTip(tr("Dump the otStudy"));
+  connect(dumpOTStudy_, SIGNAL(triggered()), this, SLOT(dumpOTStudy()));
 }
 
 
-void StudyTreeView::createNewStudy()
+void StudyTreeView::createNewOTStudy()
 {
-  treeViewModel_->createNewStudy();
+  treeViewModel_->createNewOTStudy();
 }
 
 
@@ -137,8 +137,8 @@ void StudyTreeView::createNewParametricAnalysis()
 {
   QModelIndex physicalModelIndex = selectionModel()->currentIndex();
   PhysicalModelItem * physicalModelItem = static_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
-  StudyItem * studyItem = static_cast<StudyItem*>(physicalModelItem->QStandardItem::parent());
-  ParametricAnalysisWizard * wizard = new ParametricAnalysisWizard(studyItem->getStudy(), physicalModelItem->getPhysicalModel());
+  OTStudyItem * otStudyItem = static_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
+  ParametricAnalysisWizard * wizard = new ParametricAnalysisWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel());
 
   if (wizard->exec())
   {
@@ -152,8 +152,8 @@ void StudyTreeView::createNewCentralTendency()
 {
   QModelIndex physicalModelIndex = selectionModel()->currentIndex();
   PhysicalModelItem * physicalModelItem = static_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
-  StudyItem * studyItem = static_cast<StudyItem*>(physicalModelItem->QStandardItem::parent());
-  CentralTendencyWizard * wizard = new CentralTendencyWizard(studyItem->getStudy(), physicalModelItem->getPhysicalModel());
+  OTStudyItem * otStudyItem = static_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
+  CentralTendencyWizard * wizard = new CentralTendencyWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel());
 
   if (wizard->exec())
   {
@@ -167,8 +167,8 @@ void StudyTreeView::createNewSensitivityAnalysis()
 {
   QModelIndex physicalModelIndex = selectionModel()->currentIndex();
   PhysicalModelItem * physicalModelItem = static_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
-  StudyItem * studyItem = static_cast<StudyItem*>(physicalModelItem->QStandardItem::parent());
-  SensitivityAnalysisWizard * wizard = new SensitivityAnalysisWizard(studyItem->getStudy(), physicalModelItem->getPhysicalModel());
+  OTStudyItem * otStudyItem = static_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
+  SensitivityAnalysisWizard * wizard = new SensitivityAnalysisWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel());
 
   if (wizard->exec())
   {
@@ -275,13 +275,13 @@ void StudyTreeView::createSensitivityAnalysisResult(AnalysisItem * item)
 }
 
 
-void StudyTreeView::dumpStudy()
+void StudyTreeView::dumpOTStudy()
 {
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
-  StudyItem * item = static_cast<StudyItem*>(selectedItem);
+  OTStudyItem * item = static_cast<OTStudyItem*>(selectedItem);
 
-  QString fileName = QFileDialog::getSaveFileName(this, tr("Dump study..."),
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Dump otStudy..."),
                      QDir::homePath(),
                      tr("Python source files (*.py)"));
 
@@ -303,7 +303,7 @@ void StudyTreeView::dumpStudy()
       QTextStream out(&file);
       QString script("#! /usr/bin/env python\n\nfrom __future__ import print_function\nimport openturns as ot\nimport otguibase\n\n");
       out << script;
-      script = item->dumpStudy();
+      script = item->dumpOTStudy();
       out << script;
       file.setPermissions(QFile::ReadUser|QFile::WriteUser|QFile::ExeUser|QFile::ReadGroup|QFile::ExeGroup|QFile::ReadOther|QFile::ExeOther);
       file.close();
@@ -312,9 +312,9 @@ void StudyTreeView::dumpStudy()
 }
 
 
-void StudyTreeView::loadStudy()
+void StudyTreeView::loadOTStudy()
 {
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Load study..."),
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Load otStudy..."),
                      QDir::homePath(),
                      tr("Python source files (*.py)"));
 

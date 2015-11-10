@@ -52,8 +52,8 @@ void MainWindow::buildInterface()
 
 void MainWindow::buildActions()
 {
-  menu_->addAction(tr("&New study"), studyTree_, SLOT(createNewStudy()));
-  menu_->addAction(tr("&Load study"), studyTree_, SLOT(loadStudy()));
+  menu_->addAction(tr("&New OTStudy"), studyTree_, SLOT(createNewOTStudy()));
+  menu_->addAction(tr("&Load OTStudy"), studyTree_, SLOT(loadOTStudy()));
   menu_->addAction(tr("E&xit"), this, SLOT(close()), QKeySequence::Quit);
 }
 

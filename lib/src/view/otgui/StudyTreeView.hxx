@@ -21,7 +21,7 @@ protected:
   void buildActions();
 
 public slots:
-  void createNewStudy();
+  void createNewOTStudy();
   void createNewPhysicalModel();
   void createNewParametricAnalysis();
   void createNewCentralTendency();
@@ -36,8 +36,8 @@ public slots:
   void createSensitivityAnalysisResult(AnalysisItem * item);
   void createAnalysisConnection(AnalysisItem*);
   void createNewPhysicalModelWindow(PhysicalModelItem * item);
-  void dumpStudy();
-  void loadStudy();
+  void dumpOTStudy();
+  void loadOTStudy();
 signals:
   void showWindow(QMdiSubWindow*);
   void itemSelected(QStandardItem *);
@@ -46,7 +46,7 @@ signals:
 
 private:
   StudyTreeViewModel * treeViewModel_;
-  QAction * newStudyAction_;
+  QAction * newOTStudyAction_;
   QAction * newPhysicalModelAction_;
   QAction * newParametricAnalysis_;
   QAction * newCentralTendency_;
@@ -54,7 +54,7 @@ private:
   QAction * runParametricAnalysis_;
   QAction * runCentralTendency_;
   QAction * runSensitivityAnalysis_;
-  QAction * dumpStudy_;
+  QAction * dumpOTStudy_;
 };
 }
 #endif

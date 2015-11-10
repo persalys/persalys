@@ -17,7 +17,7 @@ class SensitivityAnalysisWizard : public QWizard
 public:
   enum Method {Sobol, SRC};
 
-  SensitivityAnalysisWizard(OTStudy * study, const PhysicalModel & physicalModel);
+  SensitivityAnalysisWizard(OTStudy * otStudy, const PhysicalModel & physicalModel);
   SensitivityAnalysisWizard(const Analysis & analysis);
 
   void validate();
@@ -33,7 +33,7 @@ signals:
 
 private:
   Analysis analysis_;
-  OTStudy * OTStudy_;
+  OTStudy * otStudy_;
   PhysicalModel physicalModel_;
 
   QButtonGroup * methodGroup_;

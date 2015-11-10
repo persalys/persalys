@@ -20,26 +20,26 @@ void StudyTreeViewModel::update(Observable* source, const std::string & message)
 {
   if (message=="addStudy")
   {
-    OTStudy * study = static_cast<OTStudy*>(source);
-    addStudyItem(study);
+    OTStudy * otStudy = static_cast<OTStudy*>(source);
+    addOTStudyItem(otStudy);
   }
 }
 
 
-void StudyTreeViewModel::createNewStudy()
+void StudyTreeViewModel::createNewOTStudy()
 {
   // find a name not used
-  OTStudy * newStudy = new OTStudy("aStudy");
+  OTStudy * newStudy = new OTStudy("anOTStudy");
 }
 
 
-void StudyTreeViewModel::addStudyItem(OTStudy * study)
+void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
 {
-  StudyItem * studyItem = new StudyItem(study);
-  connect(studyItem, SIGNAL(newPhysicalModelItemCreated(PhysicalModelItem*)), this, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)));
-  connect(studyItem, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SIGNAL(newAnalysisCreated(AnalysisItem*)));
-  study->addObserver(studyItem);
-  invisibleRootItem()->appendRow(studyItem);
+  OTStudyItem * otStudyItem = new OTStudyItem(otStudy);
+  connect(otStudyItem, SIGNAL(newPhysicalModelItemCreated(PhysicalModelItem*)), this, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)));
+  connect(otStudyItem, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SIGNAL(newAnalysisCreated(AnalysisItem*)));
+  otStudy->addObserver(otStudyItem);
+  invisibleRootItem()->appendRow(otStudyItem);
 }
 
 
@@ -47,8 +47,8 @@ void StudyTreeViewModel::addPhysicalModelItem(const QModelIndex & parentIndex)
 {
   // TODO: find a name for the new item
   PhysicalModel newPhysicalModel("aModelPhys");
-  StudyItem * parentItem = static_cast<StudyItem*>(itemFromIndex(parentIndex));
-  parentItem->getStudy()->addPhysicalModel(newPhysicalModel);
+  OTStudyItem * parentItem = static_cast<OTStudyItem*>(itemFromIndex(parentIndex));
+  parentItem->getOTStudy()->addPhysicalModel(newPhysicalModel);
 }
 
 }
