@@ -5,6 +5,7 @@
 #include <QSplitter>
 #include <QMenuBar>
 #include <QDockWidget>
+#include <QMessageBox>
 
 namespace OTGUI {
 
@@ -55,6 +56,24 @@ void MainWindow::buildActions()
   menu_->addAction(tr("&New OTStudy"), studyTree_, SLOT(createNewOTStudy()));
   menu_->addAction(tr("&Load OTStudy"), studyTree_, SLOT(loadOTStudy()));
   menu_->addAction(tr("E&xit"), this, SLOT(close()), QKeySequence::Quit);
+}
+
+
+void MainWindow::launchInitialMessageBox()
+{
+  QMessageBox messageBox(this);
+  messageBox.setText("Please, select required action by pressing the corresponding button below.");
+  QPushButton * newOTStudyButton = messageBox.addButton(tr("New"), QMessageBox::ActionRole);
+// TODO:   QPushButton * openOTStudyButton = messageBox.addButton(tr("Open..."), QMessageBox::ActionRole);
+  QPushButton * loadScriptButton = messageBox.addButton(tr("Load Script..."), QMessageBox::ActionRole);
+  messageBox.setStandardButtons(QMessageBox::Cancel);
+  messageBox.setDefaultButton(newOTStudyButton);
+  messageBox.exec();
+
+  if (messageBox.clickedButton() == newOTStudyButton)
+    studyTree_->createNewOTStudy();
+  else if (messageBox.clickedButton() == loadScriptButton)
+    studyTree_->loadOTStudy();
 }
 
 

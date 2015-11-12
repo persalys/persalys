@@ -19,6 +19,7 @@ public:
   MainWindow();
 
   QMdiArea * getMdiArea() const;
+  void launchInitialMessageBox();
 
 public slots:
   void showSubWindow(QMdiSubWindow * win);
