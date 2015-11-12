@@ -5,6 +5,7 @@ ot_add_source_file ( OTguiTableModel.cxx )
 ot_add_source_file ( InputTableModel.cxx )
 ot_add_source_file ( OutputTableModel.cxx )
 ot_add_source_file ( Item.cxx )
+ot_add_source_file ( ObserverItem.cxx )
 ot_add_source_file ( PhysicalModelItem.cxx )
 ot_add_source_file ( OTStudyItem.cxx )
 ot_add_source_file ( AnalysisItem.cxx )
@@ -26,7 +27,7 @@ qt4_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/ComboBoxDelegate.hxx
                                     otgui/SensitivityAnalysisItem.hxx
                                     otgui/StudyTreeViewModel.hxx
                                     otgui/PhysicalModelItem.hxx
-                                    otgui/Item.hxx
+                                    otgui/ObserverItem.hxx
                                     otgui/OTStudyItem.hxx )
 
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )

@@ -3,7 +3,7 @@
 namespace OTGUI {
 
 PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel)
-  : Item(physicalModel.getName(), QString("PhysicalModel"))
+  : ObserverItem(physicalModel.getName().c_str(), QString("PhysicalModel"))
   , physicalModel_(physicalModel)
 {
 }
@@ -21,7 +21,8 @@ void PhysicalModelItem::setData(const QVariant & value, int role)
   {
     case Qt::EditRole:
       physicalModel_.setName(value.toString().toStdString());
-      Item::setData(value, role);
+      ObserverItem::setData(value, role);
+      break;
   }
 }
 

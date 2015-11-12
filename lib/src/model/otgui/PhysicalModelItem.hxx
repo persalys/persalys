@@ -3,13 +3,13 @@
 #ifndef PHYSICALMODELITEM_H
 #define PHYSICALMODELITEM_H
 
-#include "otgui/Item.hxx"
+#include "otgui/ObserverItem.hxx"
 #include "otgui/InputTableModel.hxx"
 #include "otgui/OutputTableModel.hxx"
 #include "otgui/PhysicalModel.hxx"
 
 namespace OTGUI {
-class PhysicalModelItem : public Item
+class PhysicalModelItem : public ObserverItem
 {
   Q_OBJECT
 

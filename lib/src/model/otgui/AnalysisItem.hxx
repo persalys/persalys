@@ -3,11 +3,11 @@
 #ifndef ANALYSISITEM_H
 #define ANALYSISITEM_H
 
-#include "otgui/Item.hxx"
+#include "otgui/ObserverItem.hxx"
 #include "otgui/Analysis.hxx"
 
 namespace OTGUI {
-class AnalysisItem : public Item
+class AnalysisItem : public ObserverItem
 {
   Q_OBJECT
 

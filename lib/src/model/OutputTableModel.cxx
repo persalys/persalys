@@ -55,13 +55,13 @@ QVariant OutputTableModel::headerData(int section, Qt::Orientation orientation, 
       switch (section)
       {
         case 0:
-            return QString(tr("Name"));
+            return tr("Name");
         case 1:
-            return QString(tr("Description"));
+            return tr("Description");
         case 2:
-            return QString(tr("Value"));
+            return tr("Value");
         case 3:
-            return QString(tr("Formula"));
+            return tr("Formula");
       }
     }
   }

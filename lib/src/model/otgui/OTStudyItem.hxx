@@ -8,7 +8,7 @@
 #include "otgui/OTStudy.hxx"
 
 namespace OTGUI {
-class OTStudyItem : public Item
+class OTStudyItem : public ObserverItem
 {
   Q_OBJECT
 
@@ -19,7 +19,7 @@ public:
 
   void update(Observable * source, const std::string & message);
 
-  void addAnalysisItem(Analysis & analysis, AnalysisItem * item);
+  void addAnalysisItem(Analysis & analysis, AnalysisItem * item, bool deterministic=true);
 
   void setData(const QVariant & value, int role);
   OTStudy * getOTStudy();

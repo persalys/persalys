@@ -7,7 +7,7 @@
 namespace OTGUI {
 
 OTStudyItem::OTStudyItem(OTStudy * otStudy)
-  : Item(otStudy->getName(), QString("OTStudy"))
+  : ObserverItem(otStudy->getName().c_str(), QString("OTStudy"))
   , otStudy_(otStudy)
 {
 
@@ -28,6 +28,12 @@ void OTStudyItem::update(Observable * source, const std::string & message)
     PhysicalModelItem * newPhysicalModelItem = new PhysicalModelItem(addedPhysicalModel);
     addedPhysicalModel.addObserver(newPhysicalModelItem);
     appendRow(newPhysicalModelItem);
+    Item * item = new Item(tr("Deterministic study"), QString("DeterministicStudy"));
+    item->setEditable(false);
+    newPhysicalModelItem->appendRow(item);
+    item = new Item(tr("Probabilistic study"), QString("ProbabilisticStudy"));
+    item->setEditable(false);
+    newPhysicalModelItem->appendRow(item);
 
     emit newPhysicalModelItemCreated(newPhysicalModelItem);
   }
@@ -41,24 +47,27 @@ void OTStudyItem::update(Observable * source, const std::string & message)
   {
     Analysis addedCentralTendency = otStudy_->getAnalyses().back();
     CentralTendencyItem * newItem = new CentralTendencyItem(addedCentralTendency);
-    addAnalysisItem(addedCentralTendency, newItem);
+    addAnalysisItem(addedCentralTendency, newItem, false);
   }
   else if (message=="addSobolAnalysis" || message=="addSRCAnalysis")
   {
     Analysis addedSensitivityAnalysis = otStudy_->getAnalyses().back();
     SensitivityAnalysisItem * newItem = new SensitivityAnalysisItem(addedSensitivityAnalysis);
-    addAnalysisItem(addedSensitivityAnalysis, newItem);
+    addAnalysisItem(addedSensitivityAnalysis, newItem, false);
   }
 }
 
 
-void OTStudyItem::addAnalysisItem(Analysis & analysis, AnalysisItem * item)
+void OTStudyItem::addAnalysisItem(Analysis & analysis, AnalysisItem * item, bool deterministic)
 {
   analysis.addObserver(item);
   for (int i=0; i<rowCount(); ++i)
     if (child(i)->text().toStdString() == analysis.getPhysicalModel().getName())
     {
-      child(i)->appendRow(item);
+      if (deterministic)
+        child(i)->child(0)->appendRow(item);
+      else
+        child(i)->child(1)->appendRow(item);
       break;
     }
   emit newAnalysisItemCreated(item);
@@ -70,7 +79,9 @@ void OTStudyItem::setData(const QVariant & value, int role)
   switch (role)
   {
     case Qt::EditRole:
-      Item::setData(value, role);
+      otStudy_->setName(value.toString().toStdString());
+      ObserverItem::setData(value, role);
+      break;
   }
 }
 

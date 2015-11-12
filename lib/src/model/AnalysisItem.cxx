@@ -5,7 +5,7 @@
 namespace OTGUI {
 
 AnalysisItem::AnalysisItem(const Analysis & analysis, const QString & typeAnalysis)
-  : Item(analysis.getName(), typeAnalysis)
+  : ObserverItem(analysis.getName().c_str(), typeAnalysis)
   , analysis_(analysis)
 {
 }
@@ -22,7 +22,8 @@ void AnalysisItem::setData(const QVariant& value, int role)
   {
     case Qt::EditRole:
       analysis_.setName(value.toString().toStdString());
-      Item::setData(value, role);
+      ObserverItem::setData(value, role);
+      break;
   }
 }
 

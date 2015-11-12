@@ -53,9 +53,12 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
       contextMenu->addAction(newPhysicalModelAction_);
       contextMenu->addAction(dumpOTStudy_);
     }
-    if (data=="PhysicalModel")
+    if (data=="DeterministicStudy")
     {
       contextMenu->addAction(newParametricAnalysis_);
+    }
+    if (data=="ProbabilisticStudy")
+    {
       contextMenu->addAction(newCentralTendency_);
       contextMenu->addAction(newSensitivityAnalysis_);
     }
@@ -135,7 +138,7 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 
 void StudyTreeView::createNewParametricAnalysis()
 {
-  QModelIndex physicalModelIndex = selectionModel()->currentIndex();
+  QModelIndex physicalModelIndex = selectionModel()->currentIndex().parent();
   PhysicalModelItem * physicalModelItem = static_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
   OTStudyItem * otStudyItem = static_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
   ParametricAnalysisWizard * wizard = new ParametricAnalysisWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel());
@@ -150,7 +153,7 @@ void StudyTreeView::createNewParametricAnalysis()
 
 void StudyTreeView::createNewCentralTendency()
 {
-  QModelIndex physicalModelIndex = selectionModel()->currentIndex();
+  QModelIndex physicalModelIndex = selectionModel()->currentIndex().parent();
   PhysicalModelItem * physicalModelItem = static_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
   OTStudyItem * otStudyItem = static_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
   CentralTendencyWizard * wizard = new CentralTendencyWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel());
@@ -165,7 +168,7 @@ void StudyTreeView::createNewCentralTendency()
 
 void StudyTreeView::createNewSensitivityAnalysis()
 {
-  QModelIndex physicalModelIndex = selectionModel()->currentIndex();
+  QModelIndex physicalModelIndex = selectionModel()->currentIndex().parent();
   PhysicalModelItem * physicalModelItem = static_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
   OTStudyItem * otStudyItem = static_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
   SensitivityAnalysisWizard * wizard = new SensitivityAnalysisWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel());
@@ -187,7 +190,7 @@ void StudyTreeView::createAnalysisConnection(AnalysisItem * item)
   else if (data == "CentralTendency")
     connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createCentralTendencyResult(AnalysisItem *)));
   else if (data == "SensitivityAnalysis")
-  connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createSensitivityAnalysisResult(AnalysisItem*)));
+    connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createSensitivityAnalysisResult(AnalysisItem*)));
 }
 
 

@@ -68,13 +68,13 @@ QVariant InputTableModel::headerData(int section, Qt::Orientation orientation, i
       switch (section)
       {
         case 0:
-            return QString(tr("Name"));
+            return tr("Name");
         case 1:
-            return QString(tr("Description"));
+            return tr("Description");
         case 2:
-            return QString(tr("Value"));
+            return tr("Value");
         case 3:
-            return QString(tr("Distribution"));
+            return tr("Distribution");
       }
     }
   }
@@ -99,8 +99,8 @@ QVariant InputTableModel::data(const QModelIndex & index, int role) const
       case 3:
         std::string distributionName = data_[index.row()].getDistribution().getImplementation()->getClassName();
         if (distributionName == "Dirac")
-          return QString(tr("Deterministic"));
-        return QString(tr(distributionName.c_str()));
+          return tr("Deterministic");
+        return tr(distributionName.c_str());
     }
   }
 
