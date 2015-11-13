@@ -5,8 +5,6 @@
 
 #include "otgui/Input.hxx"
 
-#include "DistributionFactory.hxx"
-
 #include <QAbstractTableModel>
 
 namespace OTGUI {
@@ -31,21 +29,14 @@ public:
   void removeLine(const QModelIndex & index);
   InputCollection getData();
   bool isValid();
-  OT::NumericalPointWithDescription getParameters(int row) const;
-  void updateDistributionParameters(const QModelIndex & index, const OT::NumericalPoint & parameters);
 
 public slots:
   void addLine();
   void addLine(const Input & input);
-signals:
-  void distributionChanged(OT::NumericalPointWithDescription);
 
 private:
-  static std::map<QString, OT::DistributionFactory> GetDistributionsMap();
   InputCollection data_;
   bool validity_;
 };
 }
-Q_DECLARE_METATYPE(OT::DistributionFactory)
-Q_DECLARE_METATYPE(OT::Distribution)
 #endif

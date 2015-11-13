@@ -7,6 +7,7 @@
 #include <QFileDialog>
 
 #include "otgui/PhysicalModelWindow.hxx"
+#include "otgui/ProbabilisticModelWindow.hxx"
 #include "otgui/ParametricAnalysisWizard.hxx"
 #include "otgui/ParametricAnalysisResultWindow.hxx"
 #include "otgui/CentralTendencyWizard.hxx"
@@ -27,6 +28,7 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   OTStudy::SetInstanceObserver(treeViewModel_);
   setModel(treeViewModel_);
   connect(treeViewModel_, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)), this, SLOT(createNewPhysicalModelWindow(PhysicalModelItem*)));
+  connect(treeViewModel_, SIGNAL(newProbabilisticModelCreated(ProbabilisticModelItem*)), this, SLOT(createNewProbabilisticModelWindow(ProbabilisticModelItem*)));
   connect(treeViewModel_, SIGNAL(newAnalysisCreated(AnalysisItem*)), this, SLOT(createAnalysisConnection(AnalysisItem*)));
 
   buildActions();
@@ -59,6 +61,7 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
     }
     if (data=="ProbabilisticStudy")
     {
+      contextMenu->addAction(newProbabilisticModel_);
       contextMenu->addAction(newCentralTendency_);
       contextMenu->addAction(newSensitivityAnalysis_);
     }
@@ -84,6 +87,10 @@ void StudyTreeView::buildActions()
   newPhysicalModelAction_ = new QAction(tr("New physical model"), this);
   newPhysicalModelAction_->setStatusTip(tr("Create a new physical model"));
   connect(newPhysicalModelAction_, SIGNAL(triggered()), this, SLOT(createNewPhysicalModel()));
+
+  newProbabilisticModel_ = new QAction(tr("New probabilistic model"), this);
+  newProbabilisticModel_->setStatusTip(tr("Create a new probabilistic model"));
+  connect(newProbabilisticModel_, SIGNAL(triggered()), this, SLOT(createNewProbabilisticModel()));
 
   newParametricAnalysis_ = new QAction(tr("New parametric analysis"), this);
   newParametricAnalysis_->setStatusTip(tr("Create a new parametric analysis"));
@@ -126,12 +133,29 @@ void StudyTreeView::createNewPhysicalModel()
   QModelIndex parentIndex = selectionModel()->currentIndex();
   treeViewModel_->addPhysicalModelItem(parentIndex);
   setExpanded(parentIndex, true);
+  setExpanded(parentIndex.child(0, 0), true);
+  setExpanded(parentIndex.child(1, 0), true);
+}
+
+
+void StudyTreeView::createNewProbabilisticModel()
+{
+  QModelIndex parentIndex = selectionModel()->currentIndex();
+  treeViewModel_->addProbabilisticModelItem(parentIndex);
+  setExpanded(parentIndex, true);
 }
 
 
 void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 {
   PhysicalModelWindow * window = new PhysicalModelWindow(item);
+  emit showWindow(window);
+}
+
+
+void StudyTreeView::createNewProbabilisticModelWindow(ProbabilisticModelItem * item)
+{
+  ProbabilisticModelWindow * window = new ProbabilisticModelWindow(item);
   emit showWindow(window);
 }
 

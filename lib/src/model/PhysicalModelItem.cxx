@@ -33,7 +33,7 @@ PhysicalModel PhysicalModelItem::getPhysicalModel() const
 }
 
 
-void PhysicalModelItem::setPhysicalModel(const PhysicalModel & physicalModel)
+void PhysicalModelItem::updatePhysicalModel(const PhysicalModel & physicalModel)
 {
   physicalModel_ = physicalModel;
   physicalModel_.addObserver(this);

@@ -38,13 +38,12 @@ public slots:
   void methodChanged(int);
   void selectImportFileDialogRequested();
   void loadXML();
-  void updateParametersWidgets(const OT::NumericalPointWithDescription & parameters = OT::NumericalPointWithDescription(0));
-  void updatePlot();
-  void variableChanged(const QModelIndex & currentIndex);
-  void updateDistribution();
+
+signals:
+  void physicalModelChanged(PhysicalModel);
 
 private:
-  PhysicalModelItem * item_;
+  PhysicalModel physicalModel_;
   QTableView * inputTableView_;
   InputTableModel * inputTableModel_;
   QTableView * outputTableView_;
@@ -52,11 +51,6 @@ private:
   QLineEdit * XMLfileEdit_;
   QPushButton * loadButton_;
   QGroupBox * loadXMLFileBox_;
-  PlotWidget * pdfPlot_;
-  QGroupBox * paramEditor_;
-  QHBoxLayout * parameterLayout_;
-  QLabel * parameterValuesLabel_[2];
-  QLineEdit * parameterValuesEdit_[2];
 };
 }
 #endif

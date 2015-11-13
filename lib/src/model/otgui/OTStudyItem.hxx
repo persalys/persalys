@@ -4,6 +4,7 @@
 #define OTSTUDYITEM_H
 
 #include "otgui/PhysicalModelItem.hxx"
+#include "otgui/ProbabilisticModelItem.hxx"
 #include "otgui/AnalysisItem.hxx"
 #include "otgui/OTStudy.hxx"
 
@@ -28,6 +29,7 @@ public:
 public slots:
 signals:
   void newPhysicalModelItemCreated(PhysicalModelItem*);
+  void newProbabilisticModelItemCreated(ProbabilisticModelItem*);
   void newAnalysisItemCreated(AnalysisItem*);
 
 private:

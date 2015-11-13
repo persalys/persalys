@@ -4,8 +4,6 @@
 #define STUDYTREEVIEWMODEL_H
 
 #include "otgui/OTStudyItem.hxx"
-#include "otgui/PhysicalModelItem.hxx"
-#include "otgui/ParametricAnalysisItem.hxx"
 
 #include <QStandardItemModel>
 
@@ -21,14 +19,15 @@ public:
 
   void createNewOTStudy();
   void addOTStudyItem(OTStudy * otStudy);
-
   void addPhysicalModelItem(const QModelIndex & parentIndex);
+  void addProbabilisticModelItem(const QModelIndex & parentIndex);
 
   virtual void update(Observable * source, const std::string & message);
 
 public slots:
 signals:
   void newPhysicalModelCreated(PhysicalModelItem*);
+  void newProbabilisticModelCreated(ProbabilisticModelItem*);
   void newAnalysisCreated(AnalysisItem*);
 };
 }

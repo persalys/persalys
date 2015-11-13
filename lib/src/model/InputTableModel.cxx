@@ -1,8 +1,5 @@
 #include "otgui/InputTableModel.hxx"
 
-#include "NormalFactory.hxx"
-#include "DiracFactory.hxx"
-
 using namespace OT;
 
 namespace OTGUI {
@@ -38,18 +35,9 @@ InputTableModel::~InputTableModel()
 }
 
 
-std::map<QString, DistributionFactory> InputTableModel::GetDistributionsMap()
-{
-  std::map<QString, DistributionFactory> m;
-  m[tr("Deterministic")] = DiracFactory();
-  m[tr("Normal")] = NormalFactory();
-  return m;
-}
-
-
 int InputTableModel::columnCount(const QModelIndex & parent) const
 {
-  return 4;
+  return 3;
 }
 
 
@@ -73,8 +61,6 @@ QVariant InputTableModel::headerData(int section, Qt::Orientation orientation, i
             return tr("Description");
         case 2:
             return tr("Value");
-        case 3:
-            return tr("Distribution");
       }
     }
   }
@@ -96,11 +82,6 @@ QVariant InputTableModel::data(const QModelIndex & index, int role) const
         return data_[index.row()].getDescription().c_str();
       case 2:
         return data_[index.row()].getValue();
-      case 3:
-        std::string distributionName = data_[index.row()].getDistribution().getImplementation()->getClassName();
-        if (distributionName == "Dirac")
-          return tr("Deterministic");
-        return tr(distributionName.c_str());
     }
   }
 
@@ -131,24 +112,9 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
         }
         break;
       }
-      case 3:
-        break;
     }
   }
-  if (role == Qt::DisplayRole && index.column() == 3)
-  {
-    DistributionFactory factory = GetDistributionsMap()[value.toString()];
-
-    Distribution distribution = factory.build();
-    data_[index.row()].setDistribution(distribution);
-    if (distribution.getImplementation()->getClassName() != "Dirac")
-      emit distributionChanged(distribution.getParametersCollection()[0]);
-    else
-      emit distributionChanged(NumericalPointWithDescription());
-  }
-
   emit dataChanged(index, index);
-
   return true;
 }
 
@@ -166,8 +132,6 @@ void InputTableModel::addLine()
   insertRow(lastIndex.row());
   Input input = Input();
   data_.add(input);
-
-  emit distributionChanged(NumericalPointWithDescription());
 
   endInsertRows();
 }
@@ -203,35 +167,8 @@ InputCollection InputTableModel::getData()
 }
 
 
-NumericalPointWithDescription InputTableModel::getParameters(int row) const
-{
-  if (data_[row].getDistribution().getImplementation()->getClassName() != "Dirac")
-  {
-    return data_[row].getDistribution().getParametersCollection()[0];
-  }
-  return NumericalPointWithDescription();
-}
-
-
-void InputTableModel::updateDistributionParameters(const QModelIndex & index, const NumericalPoint & parameters)
-{
-  Distribution distribution = data_[index.row()].getDistribution();
-  try {
-    distribution.setParametersCollection(parameters);
-    data_[index.row()].setDistribution(distribution);
-    emit dataChanged(index, index);
-  }
-  catch(Exception) {
-    std::cerr << "InputTableModel::updateDistributionParameters invalid params:"<<parameters<<" for distribution:"<<distribution.getImplementation()->getName()<<std::endl;
-  }
-
-}
-
-
 bool InputTableModel::isValid()
 {
   return validity_;
 }
-
-
 }

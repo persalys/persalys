@@ -23,6 +23,7 @@ protected:
 public slots:
   void createNewOTStudy();
   void createNewPhysicalModel();
+  void createNewProbabilisticModel();
   void createNewParametricAnalysis();
   void createNewCentralTendency();
   void createNewSensitivityAnalysis();
@@ -36,6 +37,7 @@ public slots:
   void createSensitivityAnalysisResult(AnalysisItem * item);
   void createAnalysisConnection(AnalysisItem*);
   void createNewPhysicalModelWindow(PhysicalModelItem * item);
+  void createNewProbabilisticModelWindow(ProbabilisticModelItem * item);
   void dumpOTStudy();
   void loadOTStudy();
 signals:
@@ -48,6 +50,7 @@ private:
   StudyTreeViewModel * treeViewModel_;
   QAction * newOTStudyAction_;
   QAction * newPhysicalModelAction_;
+  QAction * newProbabilisticModel_;
   QAction * newParametricAnalysis_;
   QAction * newCentralTendency_;
   QAction * newSensitivityAnalysis_;

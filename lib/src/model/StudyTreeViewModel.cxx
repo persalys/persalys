@@ -6,6 +6,7 @@ namespace OTGUI {
 
 StudyTreeViewModel::StudyTreeViewModel()
   : QStandardItemModel()
+  , Observer()
 {
 }
 
@@ -37,6 +38,7 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
 {
   OTStudyItem * otStudyItem = new OTStudyItem(otStudy);
   connect(otStudyItem, SIGNAL(newPhysicalModelItemCreated(PhysicalModelItem*)), this, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)));
+  connect(otStudyItem, SIGNAL(newProbabilisticModelItemCreated(ProbabilisticModelItem*)), this, SIGNAL(newProbabilisticModelCreated(ProbabilisticModelItem*)));
   connect(otStudyItem, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SIGNAL(newAnalysisCreated(AnalysisItem*)));
   otStudy->addObserver(otStudyItem);
   invisibleRootItem()->appendRow(otStudyItem);
@@ -49,6 +51,17 @@ void StudyTreeViewModel::addPhysicalModelItem(const QModelIndex & parentIndex)
   PhysicalModel newPhysicalModel("aModelPhys");
   OTStudyItem * parentItem = static_cast<OTStudyItem*>(itemFromIndex(parentIndex));
   parentItem->getOTStudy()->addPhysicalModel(newPhysicalModel);
+}
+
+
+void StudyTreeViewModel::addProbabilisticModelItem(const QModelIndex & parentIndex)
+{
+  // TODO: find a name for the new item
+  PhysicalModelItem * parentItem = static_cast<PhysicalModelItem*>(itemFromIndex(parentIndex)->parent());
+  ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(parentItem->getPhysicalModel());
+  parentItem->getPhysicalModel().addObserver(newProbabilisticModelItem);
+  itemFromIndex(parentIndex)->appendRow(newProbabilisticModelItem);
+  emit newProbabilisticModelCreated(newProbabilisticModelItem);
 }
 
 }

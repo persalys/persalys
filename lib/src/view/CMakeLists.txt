@@ -7,6 +7,7 @@ ot_add_current_dir_to_include_dirs ()
 ot_add_source_file ( MainWindow.cxx )
 ot_add_source_file ( OTguiSubWindow.cxx )
 ot_add_source_file ( PhysicalModelWindow.cxx )
+ot_add_source_file ( ProbabilisticModelWindow.cxx )
 ot_add_source_file ( StudyTreeView.cxx )
 ot_add_source_file ( OTguiTableView.cxx )
 ot_add_source_file ( ParametricAnalysisWizard.cxx )
@@ -25,6 +26,7 @@ qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                    otgui/StudyTreeView.hxx
                                    otgui/OTguiTableView.hxx
                                    otgui/PhysicalModelWindow.hxx
+                                   otgui/ProbabilisticModelWindow.hxx
                                    otgui/ParametricAnalysisWizard.hxx
                                    otgui/ParametricAnalysisResultWindow.hxx
                                    otgui/CentralTendencyWizard.hxx
