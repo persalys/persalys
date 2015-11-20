@@ -29,8 +29,8 @@ public slots:
 
 public slots:
 signals:
-  void inputChanged(InputCollection);
-  void outputChanged(OutputCollection);
+  void inputChanged();
+  void outputChanged();
 
 private:
   PhysicalModel physicalModel_;

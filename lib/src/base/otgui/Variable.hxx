@@ -11,6 +11,7 @@ class Variable : public OT::PersistentObject
   CLASSNAME
 public:
   Variable();
+  Variable(const std::string & name);
   Variable(const std::string & name, const double & value, const std::string & description="");
   Variable(const Variable & other);
   virtual Variable * clone() const = 0;

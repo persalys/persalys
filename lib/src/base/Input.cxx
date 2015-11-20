@@ -16,6 +16,13 @@ Input::Input()
 }
 
 
+Input::Input(const std::string & name)
+ : Variable(name)
+ , distribution_(Dirac())
+{
+}
+
+
 Input::Input(const std::string & name, const double & value, const std::string & description,
              const Distribution & distribution)
  : Variable(name, value, description)

@@ -12,6 +12,7 @@
 #include <QHBoxLayout>
 #include <QLineEdit>
 #include <QTableView>
+#include <QComboBox>
 
 namespace OTGUI {
 class ProbabilisticModelWindow : public OTguiSubWindow
@@ -23,22 +24,28 @@ public :
 
 protected:
   void buildInterface();
+  void updateDeterministicInputsComboBox();
+  void populateDeterministicInputsComboBox();
 
 public slots:
   void updateDistributionWidgets(const QModelIndex & index);
   void updateDistribution();
+  void updateProbabilisticModel();
+  void addInputRequested(int comboIndex);
+  void removeInputRequested();
 
 private:
-  ProbabilisticModelItem * item_;
   PhysicalModel physicalModel_;
   QTableView * inputTableView_;
+  QComboBox * deterministicInputsComboBox_;
+  QStandardItemModel * deterministicInputsComboBoxModel_;
   InputTableProbabilisticModel * inputTableModel_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
   QGroupBox * paramEditor_;
   QHBoxLayout * parameterLayout_;
-  QLabel * parameterValuesLabel_[2];
-  QLineEdit * parameterValuesEdit_[2];
+  QLabel * parameterValuesLabel_[5];
+  QLineEdit * parameterValuesEdit_[5];
 };
 }
 #endif

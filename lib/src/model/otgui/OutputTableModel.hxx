@@ -3,7 +3,7 @@
 #ifndef OUTPUTTABLEMODEL_H
 #define OUTPUTTABLEMODEL_H
 
-#include "otgui/Output.hxx"
+#include "otgui/PhysicalModel.hxx"
 
 #include <QAbstractTableModel>
 #include <QModelIndex>
@@ -14,9 +14,7 @@ class OutputTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  OutputTableModel();
-  OutputTableModel(const OutputCollection & outputs);
-  OutputTableModel(const OutputTableModel & model);
+  OutputTableModel(const PhysicalModel & physicalModel);
 
   virtual ~OutputTableModel();
 
@@ -28,15 +26,13 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
   void removeLine(const QModelIndex & index);
-  OutputCollection getData();
   bool isValid();
 
 public slots:
     void addLine();
-    void addLine(Output output);
+
 private:
-  OutputCollection data_;
-  bool validity_;
+  PhysicalModel physicalModel_;
 };
 }
 #endif

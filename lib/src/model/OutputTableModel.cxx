@@ -1,36 +1,18 @@
 #include "otgui/OutputTableModel.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
-OutputTableModel::OutputTableModel()
+OutputTableModel::OutputTableModel(const PhysicalModel & physicalModel)
   : QAbstractTableModel()
-  , data_(0)
-  , validity_(false)
+  , physicalModel_(physicalModel)
 {
-}
-
-
-OutputTableModel::OutputTableModel(const OutputCollection & outputs)
-  : QAbstractTableModel()
-  , validity_(false)
-{
-  for (int i=0; i<outputs.getSize(); ++i)
-    addLine(outputs[i]);
-}
-
-
-OutputTableModel::OutputTableModel(const OutputTableModel & other)
-  : data_( other.data_ )
-  , validity_(other.validity_)
-{
-
 }
 
 
 OutputTableModel::~OutputTableModel()
 {
-  if (data_.getSize())
-    data_.erase(data_.begin(), data_.begin()+data_.getSize());
 }
 
 
@@ -42,7 +24,7 @@ int OutputTableModel::columnCount(const QModelIndex & parent) const
 
 int OutputTableModel::rowCount(const QModelIndex & parent) const
 {
-  return data_.getSize();
+  return physicalModel_.getOutputs().getSize();
 }
 
 
@@ -59,9 +41,9 @@ QVariant OutputTableModel::headerData(int section, Qt::Orientation orientation, 
         case 1:
             return tr("Description");
         case 2:
-            return tr("Value");
-        case 3:
             return tr("Formula");
+        case 3:
+            return tr("Value");
       }
     }
   }
@@ -71,63 +53,66 @@ QVariant OutputTableModel::headerData(int section, Qt::Orientation orientation, 
 
 QVariant OutputTableModel::data(const QModelIndex & index, int role) const
 {
-  if (!index.isValid()) return QVariant();
+  if (!index.isValid())
+    return QVariant();
 
   if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
-    int column = index.column();
-    switch (column)
+    switch (index.column())
     {
       case 0:
-        return data_[index.row()].getName().c_str();
+        return physicalModel_.getOutputs()[index.row()].getName().c_str();
       case 1:
-        return data_[index.row()].getDescription().c_str();
+        return physicalModel_.getOutputs()[index.row()].getDescription().c_str();
       case 2:
-        return data_[index.row()].getValue();
+        return physicalModel_.getOutputs()[index.row()].getFormula().c_str();
       case 3:
-        return data_[index.row()].getFormula().c_str();
+        return physicalModel_.getOutputs()[index.row()].getValue();
     }
   }
-
   return QVariant();
 }
 
 
-// fill the table if signal from action
-
-
 bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
+  if (!index.isValid())
+    return false;
+
   if (role == Qt::EditRole)
   {
-    int column = index.column();
-    switch (column)
+    Output output(physicalModel_.getOutputs()[index.row()]);
+    switch (index.column())
     {
       case 0:
-        data_[index.row()].setName(value.toString().toStdString());
+        output.setName(value.toString().toStdString());
         break;
       case 1:
-        data_[index.row()].setDescription(value.toString().toStdString());
+        output.setDescription(value.toString().toStdString());
         break;
       case 2:
-        data_[index.row()].setValue(value.toDouble());
+        // TODO test if value.toString() ok
+        output.setFormula(value.toString().toStdString());
         break;
       case 3:
-        // if value.toString() ok => validity_=true;
-        data_[index.row()].setFormula(value.toString().toStdString());
+        output.setValue(value.toDouble());
         break;
     }
+    physicalModel_.updateOutput(index.row(), output);
+//  TODO   if (!updateOutput) emit errorMessage
+    emit dataChanged(index, index);
+    return true;
   }
-
-  emit dataChanged(index, index);
-
-  return true;
+  return false;
 }
 
 
 Qt::ItemFlags OutputTableModel::flags(const QModelIndex & index) const
 {
-  return Qt::ItemIsEditable | QAbstractTableModel::flags(index);
+  if (index.column() == 3)
+    return QAbstractTableModel::flags(index);
+  else
+    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
 }
 
 
@@ -136,22 +121,7 @@ void OutputTableModel::addLine()
   QModelIndex lastIndex = index(-1, 0);
   beginInsertRows(lastIndex.parent(), -1, -1);
   insertRow(lastIndex.row());
-  Output output = Output();
-  data_.add(output);
-
-  endInsertRows();
-}
-
-
-void OutputTableModel::addLine(Output output)
-{
-  QModelIndex lastIndex = index(-1, 0);
-  beginInsertRows(lastIndex.parent(), -1, -1);
-  insertRow(lastIndex.row());
-  data_.add(output);
-  emit dataChanged(index(-1, 0), index(-1, 0));
-  // parameters of the first one or the last one
-  // emit distributionChanged(parametersLabels, parametersValues);
+  physicalModel_.newOutput(Output('Y'+(OSS()<<physicalModel_.getOutputs().getSize()).str()));
   endInsertRows();
 }
 
@@ -160,23 +130,9 @@ void OutputTableModel::removeLine(const QModelIndex & index)
 {
   beginRemoveRows(index.parent(), index.row(), index.row());
   removeRows(index.row(), 1, index.parent());
-
-  data_.erase(data_.begin() + index.row());
-  emit dataChanged(QModelIndex(), QModelIndex());
-
+  physicalModel_.removeOutput(index.row());
   endRemoveRows();
 }
 
-
-OutputCollection OutputTableModel::getData()
-{
-  return data_;
-}
-
-
-bool OutputTableModel::isValid()
-{
-  return validity_;
-}
 
 }

@@ -19,8 +19,8 @@ PhysicalModelWindow::PhysicalModelWindow(PhysicalModelItem * item)
   , physicalModel_(item->getPhysicalModel())
 {
   connect(this, SIGNAL(physicalModelChanged(PhysicalModel)), item, SLOT(updatePhysicalModel(PhysicalModel)));
-  connect(item, SIGNAL(outputChanged(OutputCollection)), this, SLOT(updateOutputData(OutputCollection)));
-  connect(item, SIGNAL(inputChanged(InputCollection)), this, SLOT(updateInputData(InputCollection)));
+  connect(item, SIGNAL(outputChanged()), this, SLOT(updateOutputTableModel()));
+  connect(item, SIGNAL(inputChanged()), this, SLOT(updateInputTableModel()));
   buildInterface();
 }
 
@@ -73,50 +73,54 @@ void PhysicalModelWindow::buildInterface()
 
   // Define Inputs
   QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
-  QGridLayout * inputsLayout = new QGridLayout(inputsBox);
+  QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
 
   inputTableView_ = new QTableView;
   inputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-  inputTableModel_ = new InputTableModel(physicalModel_.getInputs());
+  inputTableModel_ = new InputTableModel(physicalModel_);
   inputTableView_->setModel(inputTableModel_);
-  inputsLayout->addWidget(inputTableView_, 0, 0, 2, 1);
-  connect(inputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(inputDataChanged()));
+  inputsLayout->addWidget(inputTableView_);
 
-  QPushButton * addLineButton = new QPushButton(tr("Add"));
+  QPushButton * addLineButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
   addLineButton->setToolTip(tr("Add an input"));
   connect(addLineButton, SIGNAL(clicked(bool)), this, SLOT(addInputLine()));
-  inputsLayout->addWidget(addLineButton, 0, 1);
 
-  QPushButton * removeLineButton = new QPushButton(tr("Remove"));
+  QPushButton * removeLineButton = new QPushButton(QIcon(":/images/list-remove.png"), tr("Remove"));
   removeLineButton->setToolTip(tr("Remove the selected input"));
   connect(removeLineButton, SIGNAL(clicked(bool)), this, SLOT(removeInputLine()));
-  inputsLayout->addWidget(removeLineButton, 1, 1);
+
+  QHBoxLayout * buttonsLayout = new QHBoxLayout;
+  buttonsLayout->addWidget(addLineButton);
+  buttonsLayout->addWidget(removeLineButton);
+  inputsLayout->addLayout(buttonsLayout);
 
   mainLayout->addWidget(inputsBox);
 
   // Define Outputs
   QGroupBox * outputsBox = new QGroupBox(tr("Outputs"));
-  QGridLayout * outputsLayout = new QGridLayout(outputsBox);
+  QVBoxLayout * outputsLayout = new QVBoxLayout(outputsBox);
 
   outputTableView_ = new QTableView;
   outputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
-  outputTableModel_ = new OutputTableModel(physicalModel_.getOutputs());
+  outputTableModel_ = new OutputTableModel(physicalModel_);
   outputTableView_->setModel(outputTableModel_);
-  outputsLayout->addWidget(outputTableView_, 0, 0, 2, 1);
+  outputsLayout->addWidget(outputTableView_);
 
-  addLineButton = new QPushButton(tr("Add"));
+  addLineButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
   addLineButton->setToolTip(tr("Add an output"));
   connect(addLineButton, SIGNAL(clicked(bool)), this, SLOT(addOutputLine()));
-  outputsLayout->addWidget(addLineButton, 0, 1);
 
-  removeLineButton = new QPushButton(tr("Remove"));
+  removeLineButton = new QPushButton(QIcon(":/images/list-remove.png"), tr("Remove"));
   removeLineButton->setToolTip(tr("Remove the selected output"));
   connect(removeLineButton, SIGNAL(clicked(bool)), this, SLOT(removeOutputLine()));
-  outputsLayout->addWidget(removeLineButton, 1, 1);
+
+  buttonsLayout = new QHBoxLayout;
+  buttonsLayout->addWidget(addLineButton);
+  buttonsLayout->addWidget(removeLineButton);
+  outputsLayout->addLayout(buttonsLayout);
 
   mainLayout->addWidget(outputsBox);
-  connect(outputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(outputDataChanged()));
 
   ////////////////
   setWidget(mainWidget);
@@ -148,35 +152,19 @@ void PhysicalModelWindow::loadXML()
 }
 
 
-void PhysicalModelWindow::inputDataChanged()
-{
-  //TODO: if tableOut && tableIn is valid
-  bool inputsAreValid = physicalModel_.updateInputs(inputTableModel_->getData());
-}
-
-
-void PhysicalModelWindow::updateInputData(const InputCollection & inputs)
+void PhysicalModelWindow::updateInputTableModel()
 {
   delete inputTableModel_;
-  inputTableModel_ = new InputTableModel(inputs);
+  inputTableModel_ = new InputTableModel(physicalModel_);
   inputTableView_->setModel(inputTableModel_);
-  connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(inputDataChanged()));
 }
 
 
-void PhysicalModelWindow::outputDataChanged()
-{
-  //TODO: if tableOut && tableIn is valid
-  bool outputsAreValid = physicalModel_.updateOutputs(outputTableModel_->getData());
-}
-
-
-void PhysicalModelWindow::updateOutputData(const OutputCollection & outputs)
+void PhysicalModelWindow::updateOutputTableModel()
 {
   delete outputTableModel_;
-  outputTableModel_ = new OutputTableModel(outputs);
+  outputTableModel_ = new OutputTableModel(physicalModel_);
   outputTableView_->setModel(outputTableModel_);
-  connect(outputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(outputDataChanged()));
 }
 
 void PhysicalModelWindow::addInputLine()
@@ -195,15 +183,6 @@ void PhysicalModelWindow::addOutputLine()
 
 void PhysicalModelWindow::methodChanged(int method)
 {
-  delete inputTableModel_;
-  delete outputTableModel_;
-  inputTableModel_ = new InputTableModel();
-  inputTableView_->setModel(inputTableModel_);
-  outputTableModel_ = new OutputTableModel();
-  outputTableView_->setModel(outputTableModel_);
-  connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(inputDataChanged()));
-  connect(outputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(outputDataChanged()));
-
   switch(method)
   {
     case 0:
@@ -226,24 +205,32 @@ void PhysicalModelWindow::methodChanged(int method)
     }
 #endif
   }
+  updateInputTableModel();
+  updateOutputTableModel();
 }
 
 
 void PhysicalModelWindow::removeInputLine()
 {
-  QModelIndex index = inputTableView_->selectionModel()->currentIndex();
-  inputTableModel_->removeLine(index);
-  int lastRow = inputTableModel_->rowCount(QModelIndex())-1;
+  if (inputTableView_->selectionModel()->hasSelection())
+  {
+    QModelIndex index = inputTableView_->selectionModel()->currentIndex();
+    inputTableModel_->removeLine(index);
+    int lastRow = inputTableModel_->rowCount(QModelIndex())-1;
 
-  if (lastRow+1)
-    inputTableView_->selectRow(lastRow);
+    if (lastRow+1)
+      inputTableView_->selectRow(lastRow);
+  }
 }
 
 
 void PhysicalModelWindow::removeOutputLine()
 {
-  QModelIndex index = outputTableView_->selectionModel()->currentIndex();
-  outputTableModel_->removeLine(index);
+  if (outputTableView_->selectionModel()->hasSelection())
+  {
+    QModelIndex index = outputTableView_->selectionModel()->currentIndex();
+    outputTableModel_->removeLine(index);
+  }
 }
 
 

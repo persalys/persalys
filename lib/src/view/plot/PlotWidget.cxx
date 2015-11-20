@@ -125,12 +125,11 @@ void PlotWidget::plotScatter(const NumericalSample & input, const NumericalSampl
 
 void PlotWidget::plotPDFCurve(const Distribution & distribution, const QPen pen)
 {
-  updateScaleParameters(distribution);
-
   setTitle(tr("PDF"));
   setAxisTitle(QwtPlot::yLeft, tr("Density"));
   setAxisTitle(QwtPlot::xBottom, tr("X"));
 
+  updateScaleParameters(distribution);
   plotCurve(distribution.drawPDF().getDrawable(0).getData(), pen);
 }
 
@@ -141,35 +140,8 @@ void PlotWidget::plotCDFCurve(const Distribution & distribution, const QPen pen)
   setAxisTitle(QwtPlot::yLeft, tr("CDF"));
   setAxisTitle(QwtPlot::xBottom, tr("X"));
 
-  if (distribution.getImplementation()->getClassName() != "Dirac")
-  {
-    updateScaleParameters(distribution);
-    plotCurve(distribution.drawCDF().getDrawable(0).getData(), pen);
-  }
-  else
-  {
-    NumericalSample cdfSample(5, 2);
-    double value = distribution.getMean()[0];
-    double inf = (value != 0.0) ? 0.9 * value : -1.0;
-    double sup = (value != 0.0) ? 1.1 * value : 1.0;
-    cdfSample[0][0] = inf;
-    cdfSample[1][0] = value;
-    cdfSample[2][0] = value;
-    cdfSample[3][0] = value;
-    cdfSample[4][0] = sup;
-    cdfSample[2][1] = 1.0;
-    cdfSample[3][1] = 1.0;
-    cdfSample[4][1] = 1.0;
-
-    double stepSize = 0.0;
-    CustomScaleEngine xScaleEngine;
-    xScaleEngine.setReference(value);
-    xScaleEngine.setAttribute(QwtScaleEngine::Symmetric, true);
-    xScaleEngine.autoScale(3, inf, sup, stepSize);
-    setAxisScale(QwtPlot::xBottom, inf, sup, stepSize);
-
-    plotCurve(cdfSample);
-  }
+  updateScaleParameters(distribution);
+  plotCurve(distribution.drawCDF().getDrawable(0).getData(), pen);
 }
 
 

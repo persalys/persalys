@@ -31,10 +31,8 @@ public slots:
   void addOutputLine();
   void removeInputLine();
   void removeOutputLine();
-  void inputDataChanged();
-  void updateInputData(const InputCollection & inputs);
-  void outputDataChanged();
-  void updateOutputData(const OutputCollection & outputs);
+  void updateInputTableModel();
+  void updateOutputTableModel();
   void methodChanged(int);
   void selectImportFileDialogRequested();
   void loadXML();

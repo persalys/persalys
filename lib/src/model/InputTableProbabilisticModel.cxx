@@ -1,40 +1,24 @@
 #include "otgui/InputTableProbabilisticModel.hxx"
 
-#include "NormalFactory.hxx"
-#include "DiracFactory.hxx"
+#include "DistributionFactory.hxx"
+#include "Normal.hxx"
 
 using namespace OT;
 
 namespace OTGUI {
 
-InputTableProbabilisticModel::InputTableProbabilisticModel(const InputCollection & inputs, QObject * parent)
+InputTableProbabilisticModel::InputTableProbabilisticModel(const PhysicalModel & physicalModel, QObject * parent)
   : QAbstractTableModel(parent)
+  , physicalModel_(physicalModel)
 {
-  for (int i=0; i<inputs.getSize(); ++i)
-    addLine(inputs[i]);
-}
-
-
-InputTableProbabilisticModel::InputTableProbabilisticModel(const InputTableProbabilisticModel & other)
-  : data_(other.data_)
-{
-
+  for (int i=0; i<physicalModel_.getInputs().getSize(); ++i)
+    if (physicalModel_.getInputs()[i].getDistribution().getImplementation()->getClassName() != "Dirac")
+      userRoleList_ << i;
 }
 
 
 InputTableProbabilisticModel::~InputTableProbabilisticModel()
 {
-  if (data_.getSize())
-    data_.erase(data_.begin(), data_.begin()+data_.getSize());
-}
-
-
-std::map<QString, DistributionFactory> InputTableProbabilisticModel::GetDistributionsMap()
-{
-  std::map<QString, DistributionFactory> m;
-  m[tr("Deterministic")] = DiracFactory();
-  m[tr("Normal")] = NormalFactory();
-  return m;
 }
 
 
@@ -46,7 +30,7 @@ int InputTableProbabilisticModel::columnCount(const QModelIndex & parent) const
 
 int InputTableProbabilisticModel::rowCount(const QModelIndex & parent) const
 {
-  return data_.getSize();
+  return userRoleList_.count();
 }
 
 
@@ -61,15 +45,14 @@ Qt::ItemFlags InputTableProbabilisticModel::flags(const QModelIndex & index) con
 
 QVariant InputTableProbabilisticModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-  if (role == Qt::DisplayRole)
-    if (orientation == Qt::Horizontal)
-      switch (section)
-      {
-        case 0:
-          return tr("Name");
-        case 1:
-          return tr("Distribution");
-      }
+  if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
+    switch (section)
+    {
+      case 0:
+        return tr("Name");
+      case 1:
+        return tr("Distribution");
+    }
 
   return QVariant();
 }
@@ -77,79 +60,91 @@ QVariant InputTableProbabilisticModel::headerData(int section, Qt::Orientation o
 
 QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role) const
 {
-  if (!index.isValid()) return QVariant();
+  if (!index.isValid())
+    return QVariant();
 
-  if (role == Qt::DisplayRole || role == Qt::EditRole)
+  if (role == Qt::UserRole)
+    return userRoleList_[index.row()];
+
+  else if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
+    Input input_i = physicalModel_.getInputs()[data(index, Qt::UserRole).toInt()];
     switch (index.column())
     {
       case 0:
-        return data_[index.row()].getName().c_str();
+        return input_i.getName().c_str();
       case 1:
-      {
-        std::string distributionName = data_[index.row()].getDistribution().getImplementation()->getClassName();
-        if (distributionName == "Dirac")
-          return tr("Deterministic");
-        return tr(distributionName.c_str());
-      }
+        return tr(input_i.getDistribution().getImplementation()->getClassName().c_str());
     }
   }
-
   return QVariant();
 }
 
 
 bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
-  if (role == Qt::DisplayRole && index.column() == 1)
+  if (!index.isValid())
+    return false;
+
+  if (role == Qt::EditRole && index.column() == 1)
   {
-    DistributionFactory factory = GetDistributionsMap()[value.toString()];
-    Distribution distribution = factory.build();
-    if (distribution.getImplementation()->getClassName() != data_[index.row()].getDistribution().getImplementation()->getClassName())
-      data_[index.row()].setDistribution(distribution);
+    int inputIndex = data(index, Qt::UserRole).toInt();
+    Input input = Input(physicalModel_.getInputs()[inputIndex]);
+
+    if (value.toString().toStdString() != input.getDistribution().getImplementation()->getClassName())
+    {
+      // search the distribution corresponding to 'value'
+      DistributionFactory::DistributionFactoryCollection collection = DistributionFactory::GetContinuousUniVariateFactories();
+      DistributionFactory factory;
+
+      for (int i=0; i<collection.getSize(); ++i)
+      {
+        std::string nameFactory = collection[i].getImplementation()->getClassName();
+        nameFactory.resize(nameFactory.find("Factory"));
+        if (value.toString().toStdString() == nameFactory)
+        {
+          factory = collection[i];
+          break;
+        }
+      }
+
+      // update the input
+      input.setDistribution(factory.build());
+      physicalModel_.updateInput(inputIndex, input, false);
+      emit dataChanged(index, index);
+      return true;
+    }
   }
-  emit dataChanged(index, index);
-  return true;
+  return false;
 }
 
 
-void InputTableProbabilisticModel::addLine(const Input & input)
+void InputTableProbabilisticModel::addLine(int i)
 {
+  Input input = Input(physicalModel_.getInputs()[i]);
+  input.setDistribution(Normal(0, 1));
+  physicalModel_.updateInput(i, input, false);
+
   QModelIndex lastIndex = index(-1, 0);
   beginInsertRows(lastIndex.parent(), -1, -1);
   insertRow(lastIndex.row());
-  data_.add(input);
-  emit dataChanged(index(-1, 0), index(-1, 0));
+  userRoleList_ << i;
+  emit dataChanged(index(rowCount()-1, 0), index(rowCount()-1, 0));
   endInsertRows();
 }
 
 
-InputCollection InputTableProbabilisticModel::getData()
+void InputTableProbabilisticModel::removeLine(const QModelIndex & lineIndex)
 {
-  return data_;
+  int inputIndex = data(lineIndex, Qt::UserRole).toInt();
+  Input input = Input(physicalModel_.getInputs()[inputIndex]);
+  input.setDistribution(Dirac(input.getValue()));
+  physicalModel_.updateInput(inputIndex, input, false);
+
+  beginRemoveRows(lineIndex.parent(), lineIndex.row(), lineIndex.row());
+  removeRows(lineIndex.row(), 1, lineIndex.parent());
+  userRoleList_.remove(lineIndex.row());
+  endRemoveRows();
 }
 
-
-NumericalPointWithDescription InputTableProbabilisticModel::getParameters(int row) const
-{
-  if (data_[row].getDistribution().getImplementation()->getClassName() != "Dirac")
-    return data_[row].getDistribution().getParametersCollection()[0];
-
-  return NumericalPointWithDescription();
-}
-
-
-void InputTableProbabilisticModel::updateDistributionParameters(const QModelIndex & index, const NumericalPoint & parameters)
-{
-  Distribution distribution = data_[index.row()].getDistribution();
-  try
-  {
-    distribution.setParametersCollection(parameters);
-    data_[index.row()].setDistribution(distribution);
-    emit dataChanged(index, index);
-  }
-  catch(Exception) {
-    std::cerr << "InputTableProbabilisticModel::updateDistributionParameters invalid params:"<<parameters<<" for distribution:"<<distribution.getImplementation()->getName()<<std::endl;
-  }
-}
 }

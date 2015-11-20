@@ -88,9 +88,9 @@ void PhysicalModel::setInputs(const InputCollection & inputs)
 }
 
 
-bool PhysicalModel::updateInputs(const InputCollection & inputs)
+bool PhysicalModel::updateInput(int row, const Input & input, bool updateProbaModel)
 {
-  return getImplementation()->updateInputs(inputs);
+  return getImplementation()->updateInput(row, input, updateProbaModel);
 }
 
 
@@ -100,9 +100,33 @@ void PhysicalModel::addInput(Input input)
 }
 
 
+void PhysicalModel::newInput(const Input & input)
+{
+  getImplementation()->newInput(input);
+}
+
+
+void PhysicalModel::removeInput(int row)
+{
+  getImplementation()->removeInput(row);
+}
+
+
+bool PhysicalModel::checkInputs()
+{
+  return getImplementation()->checkInputs();
+}
+
+
 Description PhysicalModel::getInputNames() const
 {
   return getImplementation()->getInputNames();
+}
+
+
+bool PhysicalModel::hasStochasticInputs()
+{
+  return getImplementation()->hasStochasticInputs();
 }
 
 
@@ -111,21 +135,40 @@ OutputCollection PhysicalModel::getOutputs() const
   return getImplementation()->getOutputs();
 }
 
+
 void PhysicalModel::setOutputs(const OutputCollection & outputs)
 {
   getImplementation()->setOutputs(outputs);
 }
 
 
-bool PhysicalModel::updateOutputs(const OutputCollection& outputs)
+bool PhysicalModel::updateOutput(int row, const Output & output)
 {
-  return getImplementation()->updateOutputs(outputs);
+  return getImplementation()->updateOutput(row, output);
 }
 
 
 void PhysicalModel::addOutput(Output output)
 {
   getImplementation()->addOutput(output);
+}
+
+
+void PhysicalModel::newOutput(const Output & output)
+{
+  getImplementation()->newOutput(output);
+}
+
+
+void PhysicalModel::removeOutput(int row)
+{
+  getImplementation()->removeOutput(row);
+}
+
+
+bool PhysicalModel::checkOutputs()
+{
+  return getImplementation()->checkOutputs();
 }
 
 
@@ -161,18 +204,6 @@ NumericalMathFunction PhysicalModel::getFunction() const
 void PhysicalModel::setFunction(const NumericalMathFunction & function)
 {
   getImplementation()->setFunction(function);
-}
-
-
-bool PhysicalModel::checkInputs()
-{
-  return getImplementation()->checkInputs();
-}
-
-
-bool PhysicalModel::checkOutputs()
-{
-  return getImplementation()->checkOutputs();
 }
 
 

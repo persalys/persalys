@@ -14,6 +14,7 @@ class Input : public Variable
   CLASSNAME
 public:
   Input();
+  Input(const std::string & name);
   Input(const std::string & name, const double & value, const std::string & description="",
         const OT::Distribution & distribution=OT::Dirac());
   Input(const Input & other);

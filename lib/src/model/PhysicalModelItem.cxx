@@ -42,14 +42,13 @@ void PhysicalModelItem::updatePhysicalModel(const PhysicalModel & physicalModel)
 
 void PhysicalModelItem::update(Observable* source, const std::string & message)
 {
-  PhysicalModelImplementation * physicalModelImpl = static_cast<PhysicalModelImplementation*>(source);
   if (message=="inputChanged")
   {
-    emit inputChanged(physicalModelImpl->getInputs());
+    emit inputChanged();
   }
   else if (message=="outputChanged")
   {
-    emit outputChanged(physicalModelImpl->getOutputs());
+    emit outputChanged();
   }
 }
 

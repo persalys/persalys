@@ -22,10 +22,9 @@ PhysicalModel ProbabilisticModelItem::getPhysicalModel() const
 
 void ProbabilisticModelItem::update(Observable* source, const std::string & message)
 {
-  PhysicalModelImplementation * physicalModelImpl = static_cast<PhysicalModelImplementation*>(source);
-  if (message=="inputChanged")
+  if (message=="updateProbabilisticModel" or message=="inputChanged")
   {
-    emit inputChanged(physicalModelImpl->getInputs());
+    emit inputChanged();
   }
 }
 

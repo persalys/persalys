@@ -4,34 +4,15 @@ using namespace OT;
 
 namespace OTGUI {
 
-InputTableModel::InputTableModel(QObject * parent)
-  : QAbstractTableModel(parent)
-  , data_(0)
-  , validity_(false)
+InputTableModel::InputTableModel(const PhysicalModel & physicalModel)
+  : QAbstractTableModel()
+  , physicalModel_(physicalModel)
 {
-}
-
-
-InputTableModel::InputTableModel(const InputCollection & inputs)
-  : validity_(false)
-{
-  for (int i=0; i<inputs.getSize(); ++i)
-    addLine(inputs[i]);
-}
-
-
-InputTableModel::InputTableModel(const InputTableModel & other)
-  : data_( other.data_ )
-  , validity_(other.validity_)
-{
-
 }
 
 
 InputTableModel::~InputTableModel()
 {
-  if (data_.getSize())
-    data_.erase(data_.begin(), data_.begin()+data_.getSize());
 }
 
 
@@ -43,25 +24,22 @@ int InputTableModel::columnCount(const QModelIndex & parent) const
 
 int InputTableModel::rowCount(const QModelIndex & parent) const
 {
-  return data_.getSize();
+  return physicalModel_.getInputs().getSize();
 }
 
 
 QVariant InputTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-  if (role == Qt::DisplayRole)
+  if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
   {
-    if (orientation == Qt::Horizontal)
+    switch (section)
     {
-      switch (section)
-      {
-        case 0:
-            return tr("Name");
-        case 1:
-            return tr("Description");
-        case 2:
-            return tr("Value");
-      }
+      case 0:
+          return tr("Name");
+      case 1:
+          return tr("Description");
+      case 2:
+          return tr("Value");
     }
   }
   return QVariant();
@@ -70,52 +48,51 @@ QVariant InputTableModel::headerData(int section, Qt::Orientation orientation, i
 
 QVariant InputTableModel::data(const QModelIndex & index, int role) const
 {
-  if (!index.isValid()) return QVariant();
+  if (!index.isValid())
+    return QVariant();
 
   if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
     switch (index.column())
     {
       case 0:
-        return data_[index.row()].getName().c_str();
+        return physicalModel_.getInputs()[index.row()].getName().c_str();
       case 1:
-        return data_[index.row()].getDescription().c_str();
+        return physicalModel_.getInputs()[index.row()].getDescription().c_str();
       case 2:
-        return data_[index.row()].getValue();
+        return physicalModel_.getInputs()[index.row()].getValue();
     }
   }
-
   return QVariant();
 }
 
 
 bool InputTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
+  if (!index.isValid())
+    return false;
+
   if (role == Qt::EditRole)
   {
+    Input input(physicalModel_.getInputs()[index.row()]);
     switch (index.column())
     {
       case 0:
-        data_[index.row()].setName(value.toString().toStdString());
+        input.setName(value.toString().toStdString());
         break;
       case 1:
-        data_[index.row()].setDescription(value.toString().toStdString());
+        input.setDescription(value.toString().toStdString());
         break;
       case 2:
-      {
-        data_[index.row()].setValue(value.toDouble());
-        std::string distributionName = data_[index.row()].getDistribution().getImplementation()->getClassName();
-        if (distributionName == "Dirac")
-        {
-          Dirac distributionDirac(NumericalPoint(1, value.toDouble()));
-          data_[index.row()].setDistribution(distributionDirac);
-        }
+        input.setValue(value.toDouble());
         break;
-      }
     }
+    physicalModel_.updateInput(index.row(), input);
+//  TODO   if (!updateInput) emit errorMessage
+    emit dataChanged(index, index);
+    return true;
   }
-  emit dataChanged(index, index);
-  return true;
+  return false;
 }
 
 
@@ -130,21 +107,8 @@ void InputTableModel::addLine()
   QModelIndex lastIndex = index(-1, 0);
   beginInsertRows(lastIndex.parent(), -1, -1);
   insertRow(lastIndex.row());
-  Input input = Input();
-  data_.add(input);
-
-  endInsertRows();
-}
-
-
-void InputTableModel::addLine(const Input & input)
-{
-  QModelIndex lastIndex = index(-1, 0);
-  beginInsertRows(lastIndex.parent(), -1, -1);
-  insertRow(lastIndex.row());
-  data_.add(input);
-  emit dataChanged(index(-1, 0), index(-1, 0));
-
+  // TODO set a default name for Input()
+  physicalModel_.newInput(Input('X'+(OSS()<<physicalModel_.getInputs().getSize()).str()));
   endInsertRows();
 }
 
@@ -153,22 +117,8 @@ void InputTableModel::removeLine(const QModelIndex & index)
 {
   beginRemoveRows(index.parent(), index.row(), index.row());
   removeRows(index.row(), 1, index.parent());
-
-  data_.erase(data_.begin() + index.row());
-  emit dataChanged(QModelIndex(), QModelIndex());
-
+  physicalModel_.removeInput(index.row());
   endRemoveRows();
 }
 
-
-InputCollection InputTableModel::getData()
-{
-  return data_;
-}
-
-
-bool InputTableModel::isValid()
-{
-  return validity_;
-}
 }

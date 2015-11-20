@@ -35,25 +35,34 @@ void OTStudyItem::update(Observable * source, const std::string & message)
     item->setEditable(false);
     newPhysicalModelItem->appendRow(item);
 
+    if (addedPhysicalModel.hasStochasticInputs())
+    {
+      ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(addedPhysicalModel);
+      addedPhysicalModel.addObserver(newProbabilisticModelItem);
+      item->appendRow(newProbabilisticModelItem);
+      emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
+    }
+
     emit newPhysicalModelItemCreated(newPhysicalModelItem);
   }
-  else if (message=="addParametricAnalysis")
+  else
   {
-    Analysis addedParametricAnalysis = otStudy_->getAnalyses().back();
-    ParametricAnalysisItem * newItem = new ParametricAnalysisItem(addedParametricAnalysis);
-    addAnalysisItem(addedParametricAnalysis, newItem);
-  }
-  else if (message=="addMonteCarloAnalysis" || message=="addQuadraticCumulAnalysis")
-  {
-    Analysis addedCentralTendency = otStudy_->getAnalyses().back();
-    CentralTendencyItem * newItem = new CentralTendencyItem(addedCentralTendency);
-    addAnalysisItem(addedCentralTendency, newItem, false);
-  }
-  else if (message=="addSobolAnalysis" || message=="addSRCAnalysis")
-  {
-    Analysis addedSensitivityAnalysis = otStudy_->getAnalyses().back();
-    SensitivityAnalysisItem * newItem = new SensitivityAnalysisItem(addedSensitivityAnalysis);
-    addAnalysisItem(addedSensitivityAnalysis, newItem, false);
+    Analysis addedAnalysis = otStudy_->getAnalyses().back();
+    if (message=="addParametricAnalysis")
+    {
+      ParametricAnalysisItem * newItem = new ParametricAnalysisItem(addedAnalysis);
+      addAnalysisItem(addedAnalysis, newItem);
+    }
+    else if (message=="addMonteCarloAnalysis" || message=="addQuadraticCumulAnalysis")
+    {
+      CentralTendencyItem * newItem = new CentralTendencyItem(addedAnalysis);
+      addAnalysisItem(addedAnalysis, newItem, false);
+    }
+    else if (message=="addSobolAnalysis" || message=="addSRCAnalysis")
+    {
+      SensitivityAnalysisItem * newItem = new SensitivityAnalysisItem(addedAnalysis);
+      addAnalysisItem(addedAnalysis, newItem, false);
+    }
   }
 }
 
@@ -67,7 +76,16 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis, AnalysisItem * item, bool
       if (deterministic)
         child(i)->child(0)->appendRow(item);
       else
+      {
+        if (!analysis.getPhysicalModel().hasStochasticInputs() && !child(i)->child(1)->hasChildren())
+        {
+          ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(analysis.getPhysicalModel());
+          analysis.getPhysicalModel().addObserver(newProbabilisticModelItem);
+          child(i)->child(1)->appendRow(newProbabilisticModelItem);
+          emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
+        }
         child(i)->child(1)->appendRow(item);
+      }
       break;
     }
   emit newAnalysisItemCreated(item);

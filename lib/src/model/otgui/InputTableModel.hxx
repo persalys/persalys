@@ -3,7 +3,7 @@
 #ifndef PHYSICALMODELTABLEMODEL_H
 #define PHYSICALMODELTABLEMODEL_H
 
-#include "otgui/Input.hxx"
+#include "otgui/PhysicalModel.hxx"
 
 #include <QAbstractTableModel>
 
@@ -13,9 +13,7 @@ class InputTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  InputTableModel(QObject * parent = 0);
-  InputTableModel(const InputCollection & inputs);
-  InputTableModel(const InputTableModel & other);
+  InputTableModel(const PhysicalModel & physicalModel);
 
   virtual ~InputTableModel();
 
@@ -27,16 +25,13 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
   void removeLine(const QModelIndex & index);
-  InputCollection getData();
   bool isValid();
 
 public slots:
   void addLine();
-  void addLine(const Input & input);
 
 private:
-  InputCollection data_;
-  bool validity_;
+  PhysicalModel physicalModel_;
 };
 }
 #endif
