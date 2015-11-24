@@ -9,20 +9,6 @@ namespace OTGUI {
 
 CLASSNAMEINIT(Input);
 
-Input::Input()
- : Variable()
- , distribution_(Dirac())
-{
-}
-
-
-Input::Input(const std::string & name)
- : Variable(name)
- , distribution_(Dirac())
-{
-}
-
-
 Input::Input(const std::string & name, const double & value, const std::string & description,
              const Distribution & distribution)
  : Variable(name, value, description)
@@ -54,7 +40,6 @@ String Input::__repr__() const
   OSS oss;
   oss << "class="<<GetClassName() <<" var="<<getName()<<" value="<<getValue()<<" desc="<< getDescription();
   return oss;
-//   <<" var="<<getName()<<" value="<<getValue()<<" desc="<< getDistribution();
 }
 
 Distribution Input::getDistribution() const

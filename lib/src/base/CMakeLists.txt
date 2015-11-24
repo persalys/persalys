@@ -11,7 +11,9 @@ set(BASE_SOURCEFILES Observer.cxx Observable.cxx OTStudy.cxx Variable.cxx Input.
                      ParametricAnalysisResult.cxx ParametricAnalysis.cxx
                      MonteCarloResult.cxx MonteCarloAnalysis.cxx QuadraticCumulResult.cxx
                      QuadraticCumulAnalysis.cxx SobolResult.cxx SobolAnalysis.cxx
-                     SRCResult.cxx SRCAnalysis.cxx)
+                     SRCResult.cxx SRCAnalysis.cxx
+                     LimitState.cxx
+                     MonteCarloReliabilityAnalysis.cxx)
 if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx)
 endif ()

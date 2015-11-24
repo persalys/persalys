@@ -82,5 +82,6 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 %include SRCResult.i
 %include SRCAnalysis.i
 %include OTStudy.i
-
+%include LimitState.i
+%include MonteCarloReliabilityAnalysis.i
 

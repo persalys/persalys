@@ -3,25 +3,8 @@
 using namespace OT;
 
 namespace OTGUI {
+
 CLASSNAMEINIT(Variable);
-
-Variable::Variable()
-  : PersistentObject()
-  , name_("")
-  , value_(0)
-  , description_("")
-{
-}
-
-
-Variable::Variable(const std::string & name)
-  : PersistentObject()
-  , name_(name)
-  , value_(0)
-  , description_("")
-{
-}
-
 
 Variable::Variable(const std::string & name, const double & value, const std::string & description)
   : PersistentObject()

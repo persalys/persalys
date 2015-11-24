@@ -4,14 +4,8 @@
 
 
 namespace OTGUI {
+
 CLASSNAMEINIT(Output);
-
-Output::Output()
- : Variable()
- , formula_("")
-{
-}
-
 
 Output::Output(const std::string & name, const double & value, const std::string & description,
                const std::string & formula)

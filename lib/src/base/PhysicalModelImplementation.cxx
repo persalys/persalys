@@ -185,6 +185,17 @@ bool PhysicalModelImplementation::hasStochasticInputs()
 }
 
 
+Output PhysicalModelImplementation::getOutputByName(const std::string & outputName) const
+{
+  for (int i=0; i<outputs_.getSize(); ++i)
+  {
+    if (outputs_[i].getName() == outputName)
+      return outputs_[i];
+  }
+  return Output();
+}
+
+
 OutputCollection PhysicalModelImplementation::getOutputs() const
 {
   return outputs_;

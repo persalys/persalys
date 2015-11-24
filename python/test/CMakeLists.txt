@@ -92,6 +92,7 @@ endmacro ( ot_pyinstallcheck_test )
 
 # ot_pyinstallcheck_test (PhysicalModel_std)
 ot_pyinstallcheck_test (Cogeneration_std)
+ot_pyinstallcheck_test (Crue_std)
 ot_pyinstallcheck_test (Gauge_std PARAMS ${CMAKE_CURRENT_SOURCE_DIR}/analytical.xml IGNOREOUT)
 
 add_custom_target ( pyinstallcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^pyinstallcheck_"

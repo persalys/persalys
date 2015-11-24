@@ -39,6 +39,7 @@ public:
   bool hasStochasticInputs();
 
   OutputCollection getOutputs() const;
+  Output getOutputByName(const std::string & outputName) const;
   void setOutputs(const OutputCollection & outputs);
   bool updateOutput(int row, const Output & output);
   void addOutput(Output output);

@@ -130,6 +130,12 @@ bool PhysicalModel::hasStochasticInputs()
 }
 
 
+Output PhysicalModel::getOutputByName(const std::string & outputName) const
+{
+  return getImplementation()->getOutputByName(outputName);
+}
+
+
 OutputCollection PhysicalModel::getOutputs() const
 {
   return getImplementation()->getOutputs();

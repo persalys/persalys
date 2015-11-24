@@ -11,11 +11,10 @@
 namespace OTGUI {
 class Input : public Variable
 {
-  CLASSNAME
+  CLASSNAME;
+
 public:
-  Input();
-  Input(const std::string & name);
-  Input(const std::string & name, const double & value, const std::string & description="",
+  Input(const std::string & name="", const double & value=0., const std::string & description="",
         const OT::Distribution & distribution=OT::Dirac());
   Input(const Input & other);
   virtual Input * clone() const;

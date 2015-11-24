@@ -9,10 +9,10 @@
 namespace OTGUI {
 class Output : public Variable
 {
-  CLASSNAME
+  CLASSNAME;
+
 public:
-  Output();
-  Output(const std::string & name, const double & value=0., const std::string & description="",
+  Output(const std::string & name="", const double & value=0., const std::string & description="",
          const std::string & formula="");
   Output(const Output & other);
   virtual Output * clone() const;

@@ -8,11 +8,10 @@
 namespace OTGUI {
 class Variable : public OT::PersistentObject
 {
-  CLASSNAME
+  CLASSNAME;
+
 public:
-  Variable();
-  Variable(const std::string & name);
-  Variable(const std::string & name, const double & value, const std::string & description="");
+  Variable(const std::string & name="", const double & value=0., const std::string & description="");
   Variable(const Variable & other);
   virtual Variable * clone() const = 0;
 
