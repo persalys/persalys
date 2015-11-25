@@ -141,7 +141,7 @@ void ProbabilisticModelWindow::removeInputRequested()
   {
     QModelIndex index = inputTableView_->currentIndex();
     int inputIndex = inputTableModel_->data(index, Qt::UserRole).toInt();
-    deterministicInputsComboBox_->addItem(QString(physicalModel_.getInputs()[inputIndex].getName().c_str()), inputIndex);
+    deterministicInputsComboBox_->addItem(physicalModel_.getInputs()[inputIndex].getName().c_str(), inputIndex);
 
     inputTableModel_->removeLine(index);
 
@@ -174,7 +174,7 @@ void ProbabilisticModelWindow::populateDeterministicInputsComboBox()
 
   for (int i=0; i<physicalModel_.getInputs().getSize(); ++i)
     if (physicalModel_.getInputs()[i].getDistribution().getImplementation()->getClassName() == "Dirac")
-      deterministicInputsComboBox_->addItem(QString(physicalModel_.getInputs()[i].getName().c_str()), i);
+      deterministicInputsComboBox_->addItem(physicalModel_.getInputs()[i].getName().c_str(), i);
 }
 
 
@@ -238,7 +238,7 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
     QGridLayout * lay = new QGridLayout(paramEditor_);
     for (int i=0; i<parametersName.getSize(); ++i)
     {
-      parameterValuesLabel_[i] = new QLabel(QString(parametersName[i].c_str()));
+      parameterValuesLabel_[i] = new QLabel(parametersName[i].c_str());
       parameterValuesEdit_[i] = new QLineEdit(QString::number(parameters[i]));
       connect(parameterValuesEdit_[i], SIGNAL(textChanged(QString)), this, SLOT(updateDistribution()));
       parameterValuesLabel_[i]->setBuddy(parameterValuesEdit_[i]);
@@ -269,7 +269,9 @@ void ProbabilisticModelWindow::updateDistribution()
     inputDistribution.setParametersCollection(parameters);
     Input input = Input(physicalModel_.getInputs()[inputIndex]);
     input.setDistribution(inputDistribution);
-    physicalModel_.updateInput(inputIndex, input, false);
+    physicalModel_.blockNotification(true, "updateProbabilisticModelWindow");
+    physicalModel_.updateInput(inputIndex, input);
+    physicalModel_.blockNotification(false);
     updateDistributionWidgets(index);
   }
   catch(Exception)

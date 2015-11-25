@@ -9,7 +9,7 @@ namespace OTGUI {
 CLASSNAMEINIT(Analysis);
 
 Analysis::Analysis(const std::string & name, const PhysicalModel & physicalModel)
-  : TypedInterfaceObject<OTGUI::AnalysisImplementation>(new AnalysisImplementation(name, physicalModel))
+  : TypedInterfaceObject<AnalysisImplementation>(new AnalysisImplementation(name, physicalModel))
 {
 }
 

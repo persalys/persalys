@@ -20,7 +20,14 @@ public:
   MonteCarloReliabilityAnalysis(const MonteCarloReliabilityAnalysis & other);
   virtual MonteCarloReliabilityAnalysis * clone() const;
 
+  LimitState getLimitState() const;
+
+  OT::UnsignedInteger getMaximumOuterSampling() const;
+  void setMaximumOuterSampling(const OT::UnsignedInteger & maxi);
+
+  double getMaximumCoefficientOfVariation() const;
   void setMaximumCoefficientOfVariation(const double & coef);
+
   OT::SimulationResult getResult() const;
 
   virtual void run();

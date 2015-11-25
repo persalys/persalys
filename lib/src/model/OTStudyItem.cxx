@@ -45,6 +45,27 @@ void OTStudyItem::update(Observable * source, const std::string & message)
 
     emit newPhysicalModelItemCreated(newPhysicalModelItem);
   }
+  else if (message=="addLimitState")
+  {
+    LimitState addedLimitState = otStudy_->getLimitStates().back();
+    LimitStateItem * newItem = new LimitStateItem(addedLimitState);
+    addedLimitState.addObserver(newItem);
+    addedLimitState.getPhysicalModel().addObserver(newItem);
+    for (int i=0; i<rowCount(); ++i)
+      if (child(i)->text().toStdString() == addedLimitState.getPhysicalModel().getName())
+      {
+        if (!addedLimitState.getPhysicalModel().hasStochasticInputs() && !child(i)->child(1)->hasChildren())
+        {
+          ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(addedLimitState.getPhysicalModel());
+          addedLimitState.getPhysicalModel().addObserver(newProbabilisticModelItem);
+          child(i)->child(1)->appendRow(newProbabilisticModelItem);
+          emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
+        }
+        child(i)->child(1)->appendRow(newItem);
+        break;
+      }
+    emit newLimitStateItemCreated(newItem);
+  }
   else
   {
     Analysis addedAnalysis = otStudy_->getAnalyses().back();

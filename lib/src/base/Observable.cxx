@@ -3,6 +3,8 @@
 namespace OTGUI {
 
 Observable::Observable()
+  : notificationBlocked_(false)
+  , notBlockedMessage_("")
 {
 }
 
@@ -14,8 +16,16 @@ void Observable::addObserver(Observer * observer)
 
 void Observable::notify(const std::string & message)
 {
-  for (unsigned int i = 0; i < observers_.size(); ++ i)
-    observers_[i]->update(this, message);
+  if (!notificationBlocked_ || (notificationBlocked_ && message == notBlockedMessage_))
+    for (unsigned int i = 0; i < observers_.size(); ++ i)
+      observers_[i]->update(this, message);
+}
+
+
+void Observable::blockNotification(bool block, const std::string & notBlockedMessage)
+{
+  notificationBlocked_ = block;
+  notBlockedMessage_ = notBlockedMessage;
 }
 
 
@@ -29,6 +39,4 @@ void Observable::setObserver(const std::vector<Observer *> observer)
 {
   observers_ = observer;
 }
-
-
 }

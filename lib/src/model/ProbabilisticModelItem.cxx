@@ -22,7 +22,7 @@ PhysicalModel ProbabilisticModelItem::getPhysicalModel() const
 
 void ProbabilisticModelItem::update(Observable* source, const std::string & message)
 {
-  if (message=="updateProbabilisticModel" or message=="inputChanged")
+  if (message=="updateProbabilisticModelWindow")
   {
     emit inputChanged();
   }

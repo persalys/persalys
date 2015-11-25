@@ -24,9 +24,11 @@ public slots:
   void createNewOTStudy();
   void createNewPhysicalModel();
   void createNewProbabilisticModel();
+  void createNewLimitState();
   void createNewParametricAnalysis();
   void createNewCentralTendency();
   void createNewSensitivityAnalysis();
+  void createNewThresholdExceedance();
   void onCustomContextMenu(const QPoint & point);
   void selectedItemChanged(const QModelIndex & index);
   void runParametricAnalysis();
@@ -38,6 +40,7 @@ public slots:
   void createAnalysisConnection(AnalysisItem*);
   void createNewPhysicalModelWindow(PhysicalModelItem * item);
   void createNewProbabilisticModelWindow(ProbabilisticModelItem * item);
+  void createNewLimitStateWindow(LimitStateItem * item);
   void dumpOTStudy();
   void loadOTStudy();
 signals:
@@ -49,11 +52,13 @@ signals:
 private:
   StudyTreeViewModel * treeViewModel_;
   QAction * newOTStudyAction_;
-  QAction * newPhysicalModelAction_;
+  QAction * newPhysicalModel_;
   QAction * newProbabilisticModel_;
+  QAction * newLimitState_;
   QAction * newParametricAnalysis_;
   QAction * newCentralTendency_;
   QAction * newSensitivityAnalysis_;
+  QAction * newThresholdExceedance_;
   QAction * runParametricAnalysis_;
   QAction * runCentralTendency_;
   QAction * runSensitivityAnalysis_;

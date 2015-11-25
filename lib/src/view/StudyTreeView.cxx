@@ -8,6 +8,7 @@
 
 #include "otgui/PhysicalModelWindow.hxx"
 #include "otgui/ProbabilisticModelWindow.hxx"
+#include "otgui/LimitStateWindow.hxx"
 #include "otgui/ParametricAnalysisWizard.hxx"
 #include "otgui/ParametricAnalysisResultWindow.hxx"
 #include "otgui/CentralTendencyWizard.hxx"
@@ -16,6 +17,7 @@
 #include "otgui/SensitivityAnalysisWizard.hxx"
 #include "otgui/SobolResultWindow.hxx"
 #include "otgui/SRCResultWindow.hxx"
+#include "otgui/ReliabilityAnalysisWizard.hxx"
 
 #include <iostream>
 
@@ -29,6 +31,7 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   setModel(treeViewModel_);
   connect(treeViewModel_, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)), this, SLOT(createNewPhysicalModelWindow(PhysicalModelItem*)));
   connect(treeViewModel_, SIGNAL(newProbabilisticModelCreated(ProbabilisticModelItem*)), this, SLOT(createNewProbabilisticModelWindow(ProbabilisticModelItem*)));
+  connect(treeViewModel_, SIGNAL(newLimitStateCreated(LimitStateItem*)), this, SLOT(createNewLimitStateWindow(LimitStateItem*)));
   connect(treeViewModel_, SIGNAL(newAnalysisCreated(AnalysisItem*)), this, SLOT(createAnalysisConnection(AnalysisItem*)));
 
   buildActions();
@@ -52,28 +55,33 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
     QString data = treeViewModel_->itemFromIndex(index)->data(Qt::UserRole).toString();
     if (data=="OTStudy")
     {
-      contextMenu->addAction(newPhysicalModelAction_);
+      contextMenu->addAction(newPhysicalModel_);
       contextMenu->addAction(dumpOTStudy_);
     }
-    if (data=="DeterministicStudy")
+    else if (data=="DeterministicStudy")
     {
       contextMenu->addAction(newParametricAnalysis_);
     }
-    if (data=="ProbabilisticStudy")
+    else if (data=="ProbabilisticStudy")
     {
       contextMenu->addAction(newProbabilisticModel_);
+      contextMenu->addAction(newLimitState_);
       contextMenu->addAction(newCentralTendency_);
       contextMenu->addAction(newSensitivityAnalysis_);
     }
-    if (data=="ParametricAnalysis")
+    else if (data=="LimitState")
+    {
+      contextMenu->addAction(newThresholdExceedance_);
+    }
+    else if (data=="ParametricAnalysis")
     {
       contextMenu->addAction(runParametricAnalysis_);
     }
-    if (data=="CentralTendency")
+    else if (data=="CentralTendency")
     {
       contextMenu->addAction(runCentralTendency_);
     }
-    if (data=="SensitivityAnalysis")
+    else if (data=="SensitivityAnalysis")
     {
       contextMenu->addAction(runSensitivityAnalysis_);
     }
@@ -84,13 +92,17 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
 
 void StudyTreeView::buildActions()
 {
-  newPhysicalModelAction_ = new QAction(tr("New physical model"), this);
-  newPhysicalModelAction_->setStatusTip(tr("Create a new physical model"));
-  connect(newPhysicalModelAction_, SIGNAL(triggered()), this, SLOT(createNewPhysicalModel()));
+  newPhysicalModel_ = new QAction(tr("New physical model"), this);
+  newPhysicalModel_->setStatusTip(tr("Create a new physical model"));
+  connect(newPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewPhysicalModel()));
 
   newProbabilisticModel_ = new QAction(tr("New probabilistic model"), this);
   newProbabilisticModel_->setStatusTip(tr("Create a new probabilistic model"));
   connect(newProbabilisticModel_, SIGNAL(triggered()), this, SLOT(createNewProbabilisticModel()));
+
+  newLimitState_ = new QAction(tr("New limit state"), this);
+  newLimitState_->setStatusTip(tr("Create a new limit state"));
+  connect(newLimitState_, SIGNAL(triggered()), this, SLOT(createNewLimitState()));
 
   newParametricAnalysis_ = new QAction(tr("New parametric analysis"), this);
   newParametricAnalysis_->setStatusTip(tr("Create a new parametric analysis"));
@@ -103,6 +115,10 @@ void StudyTreeView::buildActions()
   newSensitivityAnalysis_ = new QAction(tr("New sensitivity analysis"), this);
   newSensitivityAnalysis_->setStatusTip(tr("Create a new sensitivity analysis"));
   connect(newSensitivityAnalysis_, SIGNAL(triggered()), this, SLOT(createNewSensitivityAnalysis()));
+
+  newThresholdExceedance_ = new QAction(tr("New threshold exceedance"), this);
+  newThresholdExceedance_->setStatusTip(tr("Create a new threshold exceedance"));
+  connect(newThresholdExceedance_, SIGNAL(triggered()), this, SLOT(createNewThresholdExceedance()));
 
   runParametricAnalysis_ = new QAction(tr("Run"), this);
   runParametricAnalysis_->setStatusTip(tr("Run the parametric analysis"));
@@ -146,6 +162,14 @@ void StudyTreeView::createNewProbabilisticModel()
 }
 
 
+void StudyTreeView::createNewLimitState()
+{
+  QModelIndex parentIndex = selectionModel()->currentIndex();
+  treeViewModel_->addLimitStateItem(parentIndex);
+  setExpanded(parentIndex, true);
+}
+
+
 void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 {
   PhysicalModelWindow * window = new PhysicalModelWindow(item);
@@ -156,6 +180,13 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 void StudyTreeView::createNewProbabilisticModelWindow(ProbabilisticModelItem * item)
 {
   ProbabilisticModelWindow * window = new ProbabilisticModelWindow(item);
+  emit showWindow(window);
+}
+
+
+void StudyTreeView::createNewLimitStateWindow(LimitStateItem* item)
+{
+  LimitStateWindow * window = new LimitStateWindow(item);
   emit showWindow(window);
 }
 
@@ -201,6 +232,21 @@ void StudyTreeView::createNewSensitivityAnalysis()
   {
     wizard->validate();
     setExpanded(physicalModelIndex, true);
+  }
+}
+
+
+void StudyTreeView::createNewThresholdExceedance()
+{
+  QModelIndex limitStateIndex = selectionModel()->currentIndex();
+  LimitStateItem * limitStateItem = static_cast<LimitStateItem*>(treeViewModel_->itemFromIndex(limitStateIndex));
+  OTStudyItem * otStudyItem = treeViewModel_->getOTStudyItem(limitStateIndex);
+  ReliabilityAnalysisWizard * wizard = new ReliabilityAnalysisWizard(otStudyItem->getOTStudy(), limitStateItem->getLimitState());
+
+  if (wizard->exec())
+  {
+    wizard->validate();
+    setExpanded(limitStateIndex, true);
   }
 }
 

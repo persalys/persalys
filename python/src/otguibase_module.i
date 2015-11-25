@@ -68,6 +68,8 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 %include PhysicalModelImplementation.i
 %include PhysicalModel.i
 %include YACSPhysicalModel.i
+%include LimitStateImplementation.i
+%include LimitState.i
 %include AnalysisImplementation.i
 %include Analysis.i
 %include SimulationAnalysis.i
@@ -82,6 +84,5 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 %include SRCResult.i
 %include SRCAnalysis.i
 %include OTStudy.i
-%include LimitState.i
 %include MonteCarloReliabilityAnalysis.i
 

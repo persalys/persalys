@@ -102,6 +102,7 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
   inputs_ = inputs;
   checkInputs();
   notify("inputChanged");
+  notify("updateProbabilisticModelWindow");
 }
 
 
@@ -113,29 +114,20 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
 // }
 
 
-bool PhysicalModelImplementation::updateInput(int row, const Input & input, bool updateProbaModel)
+bool PhysicalModelImplementation::updateInput(int row, const Input & input)
 {
   inputs_[row] = input;
-  if (updateProbaModel)
-    notify("updateProbabilisticModel");
+  notify("updateProbabilisticModelWindow");
   return checkInputs();
 }
 
 
-// addition of an input required by the user from python
-void PhysicalModelImplementation::addInput(Input input)
-{
-  newInput(input);
-  notify("inputChanged");
-}
-
-
-// addition of an input required by the interface
-void PhysicalModelImplementation::newInput(const Input & input)
+void PhysicalModelImplementation::addInput(const Input & input)
 {
   inputs_.add(input);
   checkInputs();
-  notify("updateProbabilisticModel");
+  notify("inputChanged");
+  notify("updateProbabilisticModelWindow");
 }
 
 
@@ -143,7 +135,8 @@ void PhysicalModelImplementation::removeInput(int row)
 {
   inputs_.erase(inputs_.begin() + row);
   checkInputs();
-  notify("updateProbabilisticModel");
+  notify("inputChanged");
+  notify("updateProbabilisticModelWindow");
 }
 
 
@@ -206,27 +199,24 @@ void PhysicalModelImplementation::setOutputs(const OutputCollection & outputs)
   outputs_ = outputs;
   checkOutputs();
   notify("outputChanged");
+  notify("updateLimitStateWindow");
 }
 
 
 bool PhysicalModelImplementation::updateOutput(int row, const Output & output)
 {
   outputs_[row] = output;
+  notify("updateLimitStateWindow");
   return checkOutputs();
 }
 
 
-void PhysicalModelImplementation::addOutput(Output output)
-{
-  newOutput(output);
-  notify("outputChanged");
-}
-
-
-void PhysicalModelImplementation::newOutput(const Output& output)
+void PhysicalModelImplementation::addOutput(const Output & output)
 {
   outputs_.add(output);
-  checkOutputs();  
+  checkOutputs(); 
+  notify("outputChanged");
+  notify("updateLimitStateWindow");
 }
 
 
@@ -234,6 +224,7 @@ void PhysicalModelImplementation::removeOutput(int row)
 {
   outputs_.erase(outputs_.begin() + row);
   checkOutputs();
+  notify("updateLimitStateWindow");
 }
 
 
@@ -331,6 +322,4 @@ std::string PhysicalModelImplementation::dump() const
 
   return result;
 }
-
-
 }

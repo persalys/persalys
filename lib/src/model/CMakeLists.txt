@@ -7,6 +7,7 @@ ot_add_source_file ( InputTableProbabilisticModel.cxx )
 ot_add_source_file ( OutputTableModel.cxx )
 ot_add_source_file ( Item.cxx )
 ot_add_source_file ( ObserverItem.cxx )
+ot_add_source_file ( LimitStateItem.cxx )
 ot_add_source_file ( ProbabilisticModelItem.cxx )
 ot_add_source_file ( PhysicalModelItem.cxx )
 ot_add_source_file ( OTStudyItem.cxx )
@@ -29,6 +30,7 @@ qt4_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/ComboBoxDelegate.hxx
                                     otgui/CentralTendencyItem.hxx
                                     otgui/SensitivityAnalysisItem.hxx
                                     otgui/StudyTreeViewModel.hxx
+                                    otgui/LimitStateItem.hxx
                                     otgui/ProbabilisticModelItem.hxx
                                     otgui/PhysicalModelItem.hxx
                                     otgui/ObserverItem.hxx

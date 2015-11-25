@@ -32,8 +32,6 @@ public:
   void run();
   std::string dump() const;
   bool analysisLaunched() const;
-
-
 };
 }
 #endif

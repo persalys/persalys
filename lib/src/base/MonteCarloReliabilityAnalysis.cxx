@@ -53,6 +53,30 @@ void MonteCarloReliabilityAnalysis::run()
 }
 
 
+LimitState MonteCarloReliabilityAnalysis::getLimitState() const
+{
+  return limitState_;
+}
+
+
+UnsignedInteger MonteCarloReliabilityAnalysis::getMaximumOuterSampling() const
+{
+  return maximumOuterSampling_;
+}
+
+
+void MonteCarloReliabilityAnalysis::setMaximumOuterSampling(const UnsignedInteger & maxi)
+{
+  maximumOuterSampling_ = maxi;
+}
+
+
+double MonteCarloReliabilityAnalysis::getMaximumCoefficientOfVariation() const
+{
+  return maximumCoefficientOfVariation_;
+}
+
+
 void MonteCarloReliabilityAnalysis::setMaximumCoefficientOfVariation(const double & coef)
 {
   maximumCoefficientOfVariation_ = coef;

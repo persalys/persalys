@@ -170,7 +170,6 @@ void PhysicalModelWindow::updateOutputTableModel()
 void PhysicalModelWindow::addInputLine()
 {
   inputTableModel_->addLine();
-  inputTableView_->openPersistentEditor(inputTableModel_->index(-1, 3));
   inputTableView_->selectRow(inputTableModel_->rowCount(QModelIndex())-1);
 }
 

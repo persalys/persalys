@@ -121,7 +121,9 @@ void OutputTableModel::addLine()
   QModelIndex lastIndex = index(-1, 0);
   beginInsertRows(lastIndex.parent(), -1, -1);
   insertRow(lastIndex.row());
-  physicalModel_.newOutput(Output('Y'+(OSS()<<physicalModel_.getOutputs().getSize()).str()));
+  physicalModel_.blockNotification(true, "updateLimitStateWindow");
+  physicalModel_.addOutput(Output('Y'+(OSS()<<physicalModel_.getOutputs().getSize()).str()));
+  physicalModel_.blockNotification(false);
   endInsertRows();
 }
 
@@ -130,7 +132,9 @@ void OutputTableModel::removeLine(const QModelIndex & index)
 {
   beginRemoveRows(index.parent(), index.row(), index.row());
   removeRows(index.row(), 1, index.parent());
+  physicalModel_.blockNotification(true, "updateLimitStateWindow");
   physicalModel_.removeOutput(index.row());
+  physicalModel_.blockNotification(false);
   endRemoveRows();
 }
 

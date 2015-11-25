@@ -125,6 +125,19 @@ void OTStudy::addAnalysis(const Analysis & analysis)
 }
 
 
+std::vector<LimitState> OTStudy::getLimitStates() const
+{
+  return limitStates_;
+}
+
+
+void OTStudy::addLimitState(const LimitState & limitState)
+{
+  limitStates_.push_back(limitState);
+  notify("addLimitState");
+}
+
+
 std::string OTStudy::dump()
 {
   std::string result;
@@ -133,6 +146,11 @@ std::string OTStudy::dump()
   {
     result += (*it).dump();
     result += getName() + ".addPhysicalModel(" + (*it).getName() + ")\n";
+  }
+  for (std::vector<LimitState>::iterator it=limitStates_.begin(); it!= limitStates_.end(); ++it)
+  {
+    result += (*it).dump();
+    result += getName() + ".addLimitState(" + (*it).getName() + ")\n";
   }
   for (std::vector<Analysis>::iterator it=analyses_.begin(); it!= analyses_.end(); ++it)
   {

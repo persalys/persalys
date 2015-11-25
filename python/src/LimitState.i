@@ -4,7 +4,7 @@
 #include "otgui/LimitState.hxx"
 %}
 
-%include LimitState_doc.i
+OTGUITypedInterfaceObjectHelper(LimitState)
 
 %include otgui/LimitState.hxx
 namespace OTGUI {

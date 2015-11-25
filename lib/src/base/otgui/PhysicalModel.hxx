@@ -22,15 +22,15 @@ public:
   virtual ~PhysicalModel();
 
   void addObserver(Observer * observer);
+  void blockNotification(bool block, const std::string & notBlockedMessage="");
 
   std::string getName() const;
   void setName(const std::string & name);
 
   InputCollection getInputs() const;
   void setInputs(const InputCollection & inputs);
-  bool updateInput(int row, const Input & input, bool updateProbaModel=true);
-  void addInput(Input input);
-  void newInput(const Input & input);
+  bool updateInput(int row, const Input & input);
+  void addInput(const Input & input);
   void removeInput(int row);
   bool checkInputs();
   OT::Description getInputNames() const;
@@ -40,8 +40,7 @@ public:
   Output getOutputByName(const std::string & outputName) const;
   void setOutputs(const OutputCollection & outputs);
   bool updateOutput(int row, const Output & output);
-  void addOutput(Output output);
-  void newOutput(const Output & output);
+  void addOutput(const Output & output);
   void removeOutput(int row);
   bool checkOutputs();
 

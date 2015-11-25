@@ -4,6 +4,7 @@
 #define OTSTUDY_H
 
 #include "Analysis.hxx"
+#include "LimitState.hxx"
 #include "Observer.hxx"
 
 namespace OTGUI {
@@ -31,6 +32,9 @@ public:
   OT::Description getAnalysesNames() const;
   void addAnalysis(const Analysis & analysis);
 
+  std::vector<LimitState> getLimitStates() const;
+  void addLimitState(const LimitState & limitState);
+
   std::string dump();
 
 private:
@@ -39,6 +43,7 @@ private:
   std::string name_;
   std::vector<PhysicalModel> physicalModels_;
   std::vector<Analysis> analyses_;
+  std::vector<LimitState> limitStates_;
 };
 }
 #endif

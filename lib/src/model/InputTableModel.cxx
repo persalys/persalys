@@ -87,7 +87,9 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
         input.setValue(value.toDouble());
         break;
     }
+    physicalModel_.blockNotification(true, "updateProbabilisticModelWindow");
     physicalModel_.updateInput(index.row(), input);
+    physicalModel_.blockNotification(false);
 //  TODO   if (!updateInput) emit errorMessage
     emit dataChanged(index, index);
     return true;
@@ -107,8 +109,10 @@ void InputTableModel::addLine()
   QModelIndex lastIndex = index(-1, 0);
   beginInsertRows(lastIndex.parent(), -1, -1);
   insertRow(lastIndex.row());
+  physicalModel_.blockNotification(true, "updateProbabilisticModelWindow");
   // TODO set a default name for Input()
-  physicalModel_.newInput(Input('X'+(OSS()<<physicalModel_.getInputs().getSize()).str()));
+  physicalModel_.addInput(Input('X'+(OSS()<<physicalModel_.getInputs().getSize()).str()));
+  physicalModel_.blockNotification(false);
   endInsertRows();
 }
 
@@ -117,7 +121,9 @@ void InputTableModel::removeLine(const QModelIndex & index)
 {
   beginRemoveRows(index.parent(), index.row(), index.row());
   removeRows(index.row(), 1, index.parent());
+  physicalModel_.blockNotification(true, "updateProbabilisticModelWindow");
   physicalModel_.removeInput(index.row());
+  physicalModel_.blockNotification(false);
   endRemoveRows();
 }
 

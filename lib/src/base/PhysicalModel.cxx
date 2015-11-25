@@ -64,6 +64,12 @@ void PhysicalModel::addObserver(Observer * observer)
 }
 
 
+void PhysicalModel::blockNotification(bool block, const std::string & notBlockedMessage)
+{
+  getImplementation()->blockNotification(block, notBlockedMessage);
+}
+
+
 std::string PhysicalModel::getName() const
 {
   return getImplementation()->getName();
@@ -88,21 +94,15 @@ void PhysicalModel::setInputs(const InputCollection & inputs)
 }
 
 
-bool PhysicalModel::updateInput(int row, const Input & input, bool updateProbaModel)
+bool PhysicalModel::updateInput(int row, const Input & input)
 {
-  return getImplementation()->updateInput(row, input, updateProbaModel);
+  return getImplementation()->updateInput(row, input);
 }
 
 
-void PhysicalModel::addInput(Input input)
+void PhysicalModel::addInput(const Input & input)
 {
   getImplementation()->addInput(input);
-}
-
-
-void PhysicalModel::newInput(const Input & input)
-{
-  getImplementation()->newInput(input);
 }
 
 
@@ -154,15 +154,9 @@ bool PhysicalModel::updateOutput(int row, const Output & output)
 }
 
 
-void PhysicalModel::addOutput(Output output)
+void PhysicalModel::addOutput(const Output & output)
 {
   getImplementation()->addOutput(output);
-}
-
-
-void PhysicalModel::newOutput(const Output & output)
-{
-  getImplementation()->newOutput(output);
 }
 
 

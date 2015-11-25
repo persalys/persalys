@@ -18,6 +18,8 @@ ot_add_source_file ( QuadraticCumulResultWindow.cxx )
 ot_add_source_file ( SobolResultWindow.cxx )
 ot_add_source_file ( SRCResultWindow.cxx )
 ot_add_source_file ( SensitivityAnalysisWizard.cxx )
+ot_add_source_file ( LimitStateWindow.cxx )
+ot_add_source_file ( ReliabilityAnalysisWizard.cxx )
 
 add_subdirectory (otgui)
 
@@ -34,7 +36,9 @@ qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                    otgui/QuadraticCumulResultWindow.hxx
                                    otgui/SobolResultWindow.hxx
                                    otgui/SRCResultWindow.hxx
-                                   otgui/SensitivityAnalysisWizard.hxx )
+                                   otgui/SensitivityAnalysisWizard.hxx
+                                   otgui/LimitStateWindow.hxx
+                                   otgui/ReliabilityAnalysisWizard.hxx )
 
 set(RESOURCES ${CMAKE_SOURCE_DIR}/gui.qrc)
 qt4_add_resources(OTGUI_RESOURCES_RCC ${RESOURCES})

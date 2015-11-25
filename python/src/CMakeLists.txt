@@ -55,6 +55,8 @@ ot_add_python_module( otguibase otguibase_module.i
                       PhysicalModelImplementation.i PhysicalModelImplementation_doc.i.in
                       PhysicalModel.i PhysicalModel_doc.i.in
                       YACSPhysicalModel.i
+                      LimitStateImplementation.i
+                      LimitState.i LimitState_doc.i.in
                       AnalysisImplementation.i
                       Analysis.i Analysis_doc.i.in
                       SimulationAnalysis.i
@@ -69,7 +71,6 @@ ot_add_python_module( otguibase otguibase_module.i
                       SRCResult.i SRCResult_doc.i.in
                       SRCAnalysis.i SRCAnalysis_doc.i.in
                       OTStudy.i OTStudy_doc.i.in
-                      LimitState.i LimitState_doc.i.in
                       MonteCarloReliabilityAnalysis.i MonteCarloReliabilityAnalysis_doc.i.in
                     )
 
