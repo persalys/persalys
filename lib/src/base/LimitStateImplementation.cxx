@@ -17,8 +17,7 @@ LimitStateImplementation::LimitStateImplementation(const std::string & name, con
   , operator_(comparisonOperator)
   , threshold_(threshold)
 {
-  if (physicalModel.getOutputByName(outputName).getName() == "")
-    throw InvalidArgumentException(HERE) << "The given output name " << outputName <<" does not correspond to an output of the given physical model\n";
+  physicalModel_.getOutputByName(outputName);
 }
 
 

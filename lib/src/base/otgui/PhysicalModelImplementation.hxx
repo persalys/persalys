@@ -29,29 +29,35 @@ public:
   void setName(const std::string & name);
 
   InputCollection getInputs() const;
+  Input & getInputByName(const std::string & inputName);
   void setInputs(const InputCollection & inputs);
-  bool updateInput(int row, const Input & input);
+  void updateInputDescription(const std::string & inputName, const std::string & description);
+  void updateInputValue(const std::string & inputName, const double & value);
+  void updateInputDistribution(const std::string & inputName, const OT::Distribution & distribution);
   void addInput(const Input & input);
-  void removeInput(int row);
-  virtual bool checkInputs();
-  OT::Description getInputNames() const;
+  void removeInput(const std::string & inputName);
+  OT::Description getInputNames();
+  bool hasAnInputNamed(const std::string & inputName);
   bool hasStochasticInputs();
 
   OutputCollection getOutputs() const;
-  Output getOutputByName(const std::string & outputName) const;
+  Output & getOutputByName(const std::string & outputName);
   void setOutputs(const OutputCollection & outputs);
-  bool updateOutput(int row, const Output & output);
+  void updateOutputDescription(const std::string & outputName, const std::string & description);
+  void updateOutputFormula(const std::string & outputName, const std::string & formula);
   void addOutput(const Output & output);
-  void removeOutput(int row);
-  virtual bool checkOutputs();
+  void removeOutput(const std::string & outputName);
+  void updateFunction();
+  OT::Description getOutputNames();
+  OT::Description getFormulas();
+  bool hasAnOutputNamed(const std::string & outputName);
 
   OT::ComposedDistribution getComposedDistribution() const;
   OT::RandomVector getInputRandomVector();
   OT::RandomVector getOutputRandomVector(const OutputCollection & outputs);
 
-  OT::NumericalMathFunction getFunction(const OutputCollection & outputs) const;
-  OT::NumericalMathFunction getFunction() const;
-  void setFunction(const OT::NumericalMathFunction & function);
+  OT::NumericalMathFunction getFunction(const OutputCollection & outputs);
+  OT::NumericalMathFunction getFunction();
 
   std::string dump() const;
 
@@ -62,7 +68,6 @@ private:
   OT::NumericalMathFunction function_;
   OT::Description inputNames_;
   OT::Description outputNames_;
-  OT::Description listFormula_;
 };
 }
 #endif

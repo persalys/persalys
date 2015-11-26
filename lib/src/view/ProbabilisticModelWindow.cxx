@@ -257,8 +257,8 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
 void ProbabilisticModelWindow::updateDistribution()
 {
   QModelIndex index = inputTableView_->currentIndex();
-  int inputIndex = index.data(Qt::UserRole).toInt();
-  Distribution inputDistribution = physicalModel_.getInputs()[inputIndex].getDistribution();
+  Input input = Input(physicalModel_.getInputs()[index.data(Qt::UserRole).toInt()]);
+  Distribution inputDistribution = input.getDistribution();
 
   NumericalPoint parameters(2);
   parameters[0] = parameterValuesEdit_[0]->text().toDouble();
@@ -267,10 +267,8 @@ void ProbabilisticModelWindow::updateDistribution()
   try
   {
     inputDistribution.setParametersCollection(parameters);
-    Input input = Input(physicalModel_.getInputs()[inputIndex]);
-    input.setDistribution(inputDistribution);
     physicalModel_.blockNotification(true, "updateProbabilisticModelWindow");
-    physicalModel_.updateInput(inputIndex, input);
+    physicalModel_.updateInputDistribution(input.getName(), inputDistribution);
     physicalModel_.blockNotification(false);
     updateDistributionWidgets(index);
   }

@@ -88,15 +88,33 @@ InputCollection PhysicalModel::getInputs() const
 }
 
 
+Input & PhysicalModel::getInputByName(const std::string & inputName)
+{
+  return getImplementation()->getInputByName(inputName);
+}
+
+
 void PhysicalModel::setInputs(const InputCollection & inputs)
 {
   getImplementation()->setInputs(inputs);
 }
 
 
-bool PhysicalModel::updateInput(int row, const Input & input)
+void PhysicalModel::updateInputDescription(const std::string & inputName, const std::string & description)
 {
-  return getImplementation()->updateInput(row, input);
+  return getImplementation()->updateInputDescription(inputName, description);
+}
+
+
+void PhysicalModel::updateInputValue(const std::string & inputName, const double & value)
+{
+  return getImplementation()->updateInputValue(inputName, value);
+}
+
+
+void PhysicalModel::updateInputDistribution(const std::string & inputName, const Distribution & distribution)
+{
+  return getImplementation()->updateInputDistribution(inputName, distribution);
 }
 
 
@@ -106,21 +124,21 @@ void PhysicalModel::addInput(const Input & input)
 }
 
 
-void PhysicalModel::removeInput(int row)
+void PhysicalModel::removeInput(const std::string & inputName)
 {
-  getImplementation()->removeInput(row);
+  getImplementation()->removeInput(inputName);
 }
 
 
-bool PhysicalModel::checkInputs()
-{
-  return getImplementation()->checkInputs();
-}
-
-
-Description PhysicalModel::getInputNames() const
+Description PhysicalModel::getInputNames()
 {
   return getImplementation()->getInputNames();
+}
+
+
+bool PhysicalModel::hasAnInputNamed(const std::string & inputName)
+{
+  return getImplementation()->hasAnInputNamed(inputName);
 }
 
 
@@ -130,7 +148,7 @@ bool PhysicalModel::hasStochasticInputs()
 }
 
 
-Output PhysicalModel::getOutputByName(const std::string & outputName) const
+Output & PhysicalModel::getOutputByName(const std::string & outputName)
 {
   return getImplementation()->getOutputByName(outputName);
 }
@@ -148,9 +166,15 @@ void PhysicalModel::setOutputs(const OutputCollection & outputs)
 }
 
 
-bool PhysicalModel::updateOutput(int row, const Output & output)
+void PhysicalModel::updateOutputDescription(const std::string & outputName, const std::string & description)
 {
-  return getImplementation()->updateOutput(row, output);
+  return getImplementation()->updateOutputDescription(outputName, description);
+}
+
+
+void PhysicalModel::updateOutputFormula(const std::string & outputName, const std::string & formula)
+{
+  return getImplementation()->updateOutputFormula(outputName, formula);
 }
 
 
@@ -160,15 +184,27 @@ void PhysicalModel::addOutput(const Output & output)
 }
 
 
-void PhysicalModel::removeOutput(int row)
+void PhysicalModel::removeOutput(const std::string & outputName)
 {
-  getImplementation()->removeOutput(row);
+  getImplementation()->removeOutput(outputName);
 }
 
 
-bool PhysicalModel::checkOutputs()
+void PhysicalModel::updateFunction()
 {
-  return getImplementation()->checkOutputs();
+  getImplementation()->updateFunction();
+}
+
+
+Description PhysicalModel::getOutputNames()
+{
+  return getImplementation()->getOutputNames();
+}
+
+
+bool PhysicalModel::hasAnOutputNamed(const std::string & outputName)
+{
+  return getImplementation()->hasAnOutputNamed(outputName);
 }
 
 
@@ -190,20 +226,15 @@ RandomVector PhysicalModel::getOutputRandomVector(const OutputCollection & outpu
 }
 
 
-NumericalMathFunction PhysicalModel::getFunction(const OutputCollection & outputs) const
+NumericalMathFunction PhysicalModel::getFunction(const OutputCollection & outputs)
 {
   return getImplementation()->getFunction(outputs);
 }
 
 
-NumericalMathFunction PhysicalModel::getFunction() const
+NumericalMathFunction PhysicalModel::getFunction()
 {
   return getImplementation()->getFunction();
-}
-
-void PhysicalModel::setFunction(const NumericalMathFunction & function)
-{
-  getImplementation()->setFunction(function);
 }
 
 

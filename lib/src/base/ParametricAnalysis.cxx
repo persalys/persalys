@@ -20,7 +20,7 @@ ParametricAnalysis::ParametricAnalysis(const std::string & name, const PhysicalM
                          const NumericalPoint & infBounds, const NumericalPoint & supBounds,
                          const Indices & nbValues)
  : SimulationAnalysis(name, physicalModel, 0)
- , inputNames_(physicalModel.getInputNames())
+ , inputNames_(getPhysicalModel().getInputNames())
  , infBounds_(infBounds)
  , supBounds_(supBounds)
  , nbValues_(nbValues)

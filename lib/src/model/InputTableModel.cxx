@@ -75,20 +75,21 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
   if (role == Qt::EditRole)
   {
     Input input(physicalModel_.getInputs()[index.row()]);
+    physicalModel_.blockNotification(true, "updateProbabilisticModelWindow");
     switch (index.column())
     {
       case 0:
+        physicalModel_.removeInput(input.getName());
         input.setName(value.toString().toStdString());
+        physicalModel_.addInput(input);
         break;
       case 1:
-        input.setDescription(value.toString().toStdString());
+        physicalModel_.updateInputDescription(input.getName(), value.toString().toStdString());
         break;
       case 2:
-        input.setValue(value.toDouble());
+        physicalModel_.updateInputValue(input.getName(), value.toDouble());
         break;
     }
-    physicalModel_.blockNotification(true, "updateProbabilisticModelWindow");
-    physicalModel_.updateInput(index.row(), input);
     physicalModel_.blockNotification(false);
 //  TODO   if (!updateInput) emit errorMessage
     emit dataChanged(index, index);
@@ -122,7 +123,7 @@ void InputTableModel::removeLine(const QModelIndex & index)
   beginRemoveRows(index.parent(), index.row(), index.row());
   removeRows(index.row(), 1, index.parent());
   physicalModel_.blockNotification(true, "updateProbabilisticModelWindow");
-  physicalModel_.removeInput(index.row());
+  physicalModel_.removeInput(physicalModel_.getInputs()[index.row()].getName());
   physicalModel_.blockNotification(false);
   endRemoveRows();
 }

@@ -109,9 +109,8 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
       }
 
       // update the input
-      input.setDistribution(factory.build());
       physicalModel_.blockNotification(true);
-      physicalModel_.updateInput(inputIndex, input);
+      physicalModel_.updateInputDistribution(input.getName(), factory.build());
       physicalModel_.blockNotification(false);
       emit dataChanged(index, index);
       return true;
@@ -124,9 +123,9 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
 void InputTableProbabilisticModel::addLine(int i)
 {
   Input input = Input(physicalModel_.getInputs()[i]);
-  input.setDistribution(Normal(0, 1));
+
   physicalModel_.blockNotification(true);
-  physicalModel_.updateInput(i, input);
+  physicalModel_.updateInputDistribution(input.getName(), Normal(0, 1));
   physicalModel_.blockNotification(false);
 
   QModelIndex lastIndex = index(-1, 0);
@@ -140,11 +139,10 @@ void InputTableProbabilisticModel::addLine(int i)
 
 void InputTableProbabilisticModel::removeLine(const QModelIndex & lineIndex)
 {
-  int inputIndex = data(lineIndex, Qt::UserRole).toInt();
-  Input input = Input(physicalModel_.getInputs()[inputIndex]);
-  input.setDistribution(Dirac(input.getValue()));
+  Input input = Input(physicalModel_.getInputs()[data(lineIndex, Qt::UserRole).toInt()]);
+
   physicalModel_.blockNotification(true);
-  physicalModel_.updateInput(inputIndex, input);
+  physicalModel_.updateInputDistribution(input.getName(), Dirac(input.getValue()));
   physicalModel_.blockNotification(false);
 
   beginRemoveRows(lineIndex.parent(), lineIndex.row(), lineIndex.row());

@@ -82,23 +82,24 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
   if (role == Qt::EditRole)
   {
     Output output(physicalModel_.getOutputs()[index.row()]);
+    physicalModel_.blockNotification(true, "updateLimitStateWindow");
     switch (index.column())
     {
       case 0:
+        physicalModel_.removeOutput(output.getName());
         output.setName(value.toString().toStdString());
+        physicalModel_.addOutput(output);
         break;
       case 1:
-        output.setDescription(value.toString().toStdString());
+        physicalModel_.updateOutputDescription(output.getName(), value.toString().toStdString());
         break;
       case 2:
         // TODO test if value.toString() ok
-        output.setFormula(value.toString().toStdString());
+        physicalModel_.updateOutputFormula(output.getName(), value.toString().toStdString());
         break;
-      case 3:
-        output.setValue(value.toDouble());
-        break;
+
     }
-    physicalModel_.updateOutput(index.row(), output);
+    physicalModel_.blockNotification(false);
 //  TODO   if (!updateOutput) emit errorMessage
     emit dataChanged(index, index);
     return true;
@@ -133,7 +134,7 @@ void OutputTableModel::removeLine(const QModelIndex & index)
   beginRemoveRows(index.parent(), index.row(), index.row());
   removeRows(index.row(), 1, index.parent());
   physicalModel_.blockNotification(true, "updateLimitStateWindow");
-  physicalModel_.removeOutput(index.row());
+  physicalModel_.removeOutput(physicalModel_.getOutputs()[index.row()].getName());
   physicalModel_.blockNotification(false);
   endRemoveRows();
 }
