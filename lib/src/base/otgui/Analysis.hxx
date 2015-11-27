@@ -29,6 +29,8 @@ public:
   PhysicalModel getPhysicalModel() const;
   void setPhysicalModel(const PhysicalModel & physicalModel);
 
+  bool isReliabilityAnalysis() const;
+
   void run();
   std::string dump() const;
   bool analysisLaunched() const;

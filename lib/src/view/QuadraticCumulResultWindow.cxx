@@ -32,7 +32,7 @@ void QuadraticCumulResultWindow::buildInterface()
   outputsComboBox_ = new QComboBox;
   QStringList items = QStringList();
   for (int i=0; i<result_.getOutputNames().getSize(); ++i)
-    items<<QString::fromStdString(result_.getOutputNames()[i]);
+    items << result_.getOutputNames()[i].c_str();
   outputsComboBox_->addItems(items);
   connect(outputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateLabelsText(int)));
   headLayout->addWidget(outputsComboBox_);
@@ -81,16 +81,16 @@ void QuadraticCumulResultWindow::buildInterface()
 void QuadraticCumulResultWindow::updateLabelsText(int indexOutput)
 {
   // first order mean
-  meanFirstOrderLabel_->setText(QString::fromStdString((OSS()<<result_.getMeanFirstOrder()[indexOutput]).str()));
+  meanFirstOrderLabel_->setText(QString::number(result_.getMeanFirstOrder()[indexOutput]));
   
   // second order mean
-  meanSecondOrderLabel_->setText(QString::fromStdString((OSS()<<result_.getMeanSecondOrder()[indexOutput]).str()));
+  meanSecondOrderLabel_->setText(QString::number(result_.getMeanSecondOrder()[indexOutput]));
 
   // standard deviation
-  stdLabel_->setText(QString::fromStdString((OSS()<<result_.getStandardDeviation()[indexOutput]).str()));
+  stdLabel_->setText(QString::number(result_.getStandardDeviation()[indexOutput]));
 
   // variance
-  varianceLabel_->setText(QString::fromStdString((OSS()<<result_.getVariance()[indexOutput]).str()));
+  varianceLabel_->setText(QString::number(result_.getVariance()[indexOutput]));
 }
 
 }

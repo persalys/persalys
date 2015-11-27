@@ -15,6 +15,7 @@ ot_add_source_file ( AnalysisItem.cxx )
 ot_add_source_file ( ParametricAnalysisItem.cxx )
 ot_add_source_file ( CentralTendencyItem.cxx )
 ot_add_source_file ( SensitivityAnalysisItem.cxx )
+ot_add_source_file ( ReliabilityAnalysisItem.cxx )
 ot_add_source_file ( ParametricAnalysisTableModel.cxx )
 ot_add_source_file ( StudyTreeViewModel.cxx )
 
@@ -29,6 +30,7 @@ qt4_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/ComboBoxDelegate.hxx
                                     otgui/ParametricAnalysisTableModel.hxx
                                     otgui/CentralTendencyItem.hxx
                                     otgui/SensitivityAnalysisItem.hxx
+                                    otgui/ReliabilityAnalysisItem.hxx
                                     otgui/StudyTreeViewModel.hxx
                                     otgui/LimitStateItem.hxx
                                     otgui/ProbabilisticModelItem.hxx

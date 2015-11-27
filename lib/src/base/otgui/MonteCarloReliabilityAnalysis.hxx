@@ -3,13 +3,13 @@
 #ifndef MONTECARLORELIABILITYANALYSIS_H
 #define MONTECARLORELIABILITYANALYSIS_H
 
-#include "AnalysisImplementation.hxx"
+#include "ReliabilityAnalysis.hxx"
 #include "LimitState.hxx"
 
 #include "SimulationResult.hxx"
 
 namespace OTGUI {
-class MonteCarloReliabilityAnalysis : public AnalysisImplementation
+class MonteCarloReliabilityAnalysis : public ReliabilityAnalysis
 {
   CLASSNAME;
 
@@ -19,8 +19,6 @@ public:
 
   MonteCarloReliabilityAnalysis(const MonteCarloReliabilityAnalysis & other);
   virtual MonteCarloReliabilityAnalysis * clone() const;
-
-  LimitState getLimitState() const;
 
   OT::UnsignedInteger getMaximumOuterSampling() const;
   void setMaximumOuterSampling(const OT::UnsignedInteger & maxi);
@@ -34,7 +32,6 @@ public:
   virtual std::string dump() const;
 
 private:
-  LimitState limitState_;
   OT::UnsignedInteger maximumOuterSampling_;
   double maximumCoefficientOfVariation_;
   OT::SimulationResult result_;

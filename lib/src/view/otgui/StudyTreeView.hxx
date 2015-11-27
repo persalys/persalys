@@ -34,9 +34,11 @@ public slots:
   void runParametricAnalysis();
   void runCentralTendency();
   void runSensitivityAnalysis();
+  void runReliabilityAnalysis();
   void createParametricAnalysisResult(AnalysisItem *);
   void createCentralTendencyResult(AnalysisItem *);
   void createSensitivityAnalysisResult(AnalysisItem * item);
+  void createReliabilityAnalysisResult(AnalysisItem*);
   void createAnalysisConnection(AnalysisItem*);
   void createNewPhysicalModelWindow(PhysicalModelItem * item);
   void createNewProbabilisticModelWindow(ProbabilisticModelItem * item);
@@ -62,6 +64,7 @@ private:
   QAction * runParametricAnalysis_;
   QAction * runCentralTendency_;
   QAction * runSensitivityAnalysis_;
+  QAction * runReliabilityAnalysis_;
   QAction * dumpOTStudy_;
 };
 }

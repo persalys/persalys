@@ -32,7 +32,7 @@ void ParametricAnalysisResultWindow::buildInterface()
   outputsComboBoxFirstTab_ = new QComboBox;
   QStringList items = QStringList();
   for (int i=0; i<result_.getResultSample().getDimension(); ++i)
-    items<<QString::fromStdString(result_.getOutputNames()[i]);
+    items << result_.getOutputNames()[i].c_str();
   outputsComboBoxFirstTab_->addItems(items);
   connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateLabelsText(int)));
   headLayout->addWidget(outputsComboBoxFirstTab_);
@@ -41,7 +41,7 @@ void ParametricAnalysisResultWindow::buildInterface()
   QLabel * nbSimuLabel = new QLabel(tr("Number of simulations"));
   nbSimuLabel->setStyleSheet("font: bold 14px;");
   headLayout->addWidget(nbSimuLabel);
-  nbSimuLabel = new QLabel(QString::fromStdString((OSS()<<result_.getResultSample().getSize()).str()));
+  nbSimuLabel = new QLabel(QString::number(result_.getResultSample().getSize()));
   headLayout->addWidget(nbSimuLabel);
   tabLayout->addLayout(headLayout);
 
@@ -88,7 +88,7 @@ void ParametricAnalysisResultWindow::buildInterface()
   inputsComboBox_ = new QComboBox;
   items = QStringList();
   for (int i=0; i<result_.getInputSample().getDimension(); ++i)
-    items<<QString::fromStdString(result_.getInputNames()[i]);
+    items << result_.getInputNames()[i].c_str();
   inputsComboBox_->addItems(items);
   connect(inputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(inputScatterPlotChanged(int)));
   hLayout->addWidget(inputsComboBox_, 0, Qt::AlignBottom);
@@ -123,7 +123,7 @@ void ParametricAnalysisResultWindow::updateLabelsText(int indexOutput)
   for (int j=0; j<result_.getListXMin()[indexOutput].getSize();++j)
   {
     NumericalPoint point(result_.getListXMin()[indexOutput][j]);
-    oss1 << "\n  X=" <<point.__str__();
+    oss1 << "\n  X=" << point.__str__();
   }
   minLabel_->setText(QString::fromStdString(oss1.str()));
   // max
@@ -132,7 +132,7 @@ void ParametricAnalysisResultWindow::updateLabelsText(int indexOutput)
   for (int j=0; j<result_.getListXMax()[indexOutput].getSize();++j)
   {
     NumericalPoint point(result_.getListXMax()[indexOutput][j]);
-    oss2 << "\n  X=" <<point.__str__();
+    oss2 << "\n  X=" << point.__str__();
   }
   maxLabel_->setText(QString::fromStdString(oss2.str()));
 }

@@ -69,7 +69,7 @@ void LimitStateWindow::updateOutputsList()
   outputsComboBox_->clear();
   QStringList items = QStringList();
   for (int i=0; i<limitState_.getPhysicalModel().getOutputs().getSize(); ++i)
-    items<<QString::fromStdString(limitState_.getPhysicalModel().getOutputs()[i].getName());
+    items << limitState_.getPhysicalModel().getOutputs()[i].getName().c_str();
   outputsComboBox_->addItems(items);
 
   const int index = items.indexOf(limitState_.getOutputName().c_str());

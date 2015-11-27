@@ -83,6 +83,7 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 %include SobolAnalysis.i
 %include SRCResult.i
 %include SRCAnalysis.i
-%include OTStudy.i
+%include ReliabilityAnalysis.i
 %include MonteCarloReliabilityAnalysis.i
+%include OTStudy.i
 

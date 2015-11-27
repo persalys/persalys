@@ -42,7 +42,7 @@ void SRCResultWindow::buildInterface()
   outputsComboBox_ = new QComboBox;
   QStringList items = QStringList();
   for (int i=0; i<result_.getOutputNames().getSize(); ++i)
-    items<<QString::fromStdString(result_.getOutputNames()[i]);
+    items << result_.getOutputNames()[i].c_str();
   outputsComboBox_->addItems(items);
   connect(outputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(outputChanged(int)));
   headLayout->addWidget(outputsComboBox_);

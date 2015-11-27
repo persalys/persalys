@@ -10,6 +10,7 @@ AnalysisImplementation::AnalysisImplementation(const std::string & name, const P
   , Observable()
   , name_(name)
   , physicalModel_(physicalModel)
+  , isReliabilityAnalysis_(false)
 {
 }
 
@@ -19,6 +20,7 @@ AnalysisImplementation::AnalysisImplementation(const AnalysisImplementation & ot
   , Observable()
   , name_(other.name_)
   , physicalModel_(other.physicalModel_)
+  , isReliabilityAnalysis_(other.isReliabilityAnalysis_)
 {
 }
 
@@ -55,6 +57,18 @@ PhysicalModel AnalysisImplementation::getPhysicalModel() const
 void AnalysisImplementation::setPhysicalModel(const PhysicalModel & physicalModel)
 {
   physicalModel_ = physicalModel;
+}
+
+
+bool AnalysisImplementation::isReliabilityAnalysis() const
+{
+  return isReliabilityAnalysis_;
+}
+
+
+void AnalysisImplementation::setIsReliabilityAnalysis(bool isReliabilityAnalysis)
+{
+  isReliabilityAnalysis_ = isReliabilityAnalysis;
 }
 
 

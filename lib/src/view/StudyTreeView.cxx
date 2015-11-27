@@ -18,6 +18,7 @@
 #include "otgui/SobolResultWindow.hxx"
 #include "otgui/SRCResultWindow.hxx"
 #include "otgui/ReliabilityAnalysisWizard.hxx"
+#include "otgui/MonteCarloReliabilityResultWindow.hxx"
 
 #include <iostream>
 
@@ -85,6 +86,10 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
     {
       contextMenu->addAction(runSensitivityAnalysis_);
     }
+    else if (data=="ReliabilityAnalysis")
+    {
+      contextMenu->addAction(runReliabilityAnalysis_);
+    }
     contextMenu->exec(mapToGlobal(point));
   }    
 }
@@ -131,6 +136,10 @@ void StudyTreeView::buildActions()
   runSensitivityAnalysis_ = new QAction(tr("Run"), this);
   runSensitivityAnalysis_->setStatusTip(tr("Run the sensitivity analysis"));
   connect(runSensitivityAnalysis_, SIGNAL(triggered()), this, SLOT(runSensitivityAnalysis()));
+
+  runReliabilityAnalysis_ = new QAction(tr("Run"), this);
+  runReliabilityAnalysis_->setStatusTip(tr("Run the reliability analysis"));
+  connect(runReliabilityAnalysis_, SIGNAL(triggered()), this, SLOT(runReliabilityAnalysis()));
 
   dumpOTStudy_ = new QAction(tr("Dump"), this);
   dumpOTStudy_->setStatusTip(tr("Dump the otStudy"));
@@ -261,6 +270,8 @@ void StudyTreeView::createAnalysisConnection(AnalysisItem * item)
     connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createCentralTendencyResult(AnalysisItem *)));
   else if (data == "SensitivityAnalysis")
     connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createSensitivityAnalysisResult(AnalysisItem*)));
+  else if (data == "ReliabilityAnalysis")
+    connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createReliabilityAnalysisResult(AnalysisItem*)));
 }
 
 
@@ -311,6 +322,22 @@ void StudyTreeView::runSensitivityAnalysis()
 }
 
 
+void StudyTreeView::runReliabilityAnalysis()
+{
+  QModelIndex index = selectionModel()->currentIndex();
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+
+  ReliabilityAnalysisItem * item = static_cast<ReliabilityAnalysisItem*>(selectedItem);
+
+  ReliabilityAnalysisWizard * wizard = new ReliabilityAnalysisWizard(item->getAnalysis());
+  connect(wizard, SIGNAL(analysisChanged(Analysis)), item, SLOT(updateAnalysis(Analysis)));
+  if (wizard->exec())
+  {
+    item->getAnalysis().run();
+  }
+}
+
+
 void StudyTreeView::createParametricAnalysisResult(AnalysisItem * item)
 {
   ParametricAnalysisResultWindow * window = new ParametricAnalysisResultWindow(static_cast<ParametricAnalysisItem*>(item));
@@ -345,6 +372,13 @@ void StudyTreeView::createSensitivityAnalysisResult(AnalysisItem * item)
     SRCResultWindow * window = new SRCResultWindow(static_cast<SensitivityAnalysisItem*>(item));
     emit showWindow(window);
   }
+}
+
+
+void StudyTreeView::createReliabilityAnalysisResult(AnalysisItem * item)
+{
+  MonteCarloReliabilityResultWindow * window = new MonteCarloReliabilityResultWindow(static_cast<ReliabilityAnalysisItem*>(item));
+  emit showWindow(window);
 }
 
 

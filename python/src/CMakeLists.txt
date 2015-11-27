@@ -70,8 +70,9 @@ ot_add_python_module( otguibase otguibase_module.i
                       SobolAnalysis.i SobolAnalysis_doc.i.in
                       SRCResult.i SRCResult_doc.i.in
                       SRCAnalysis.i SRCAnalysis_doc.i.in
-                      OTStudy.i OTStudy_doc.i.in
+                      ReliabilityAnalysis.i
                       MonteCarloReliabilityAnalysis.i MonteCarloReliabilityAnalysis_doc.i.in
+                      OTStudy.i OTStudy_doc.i.in
                     )
 
 

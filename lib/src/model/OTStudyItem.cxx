@@ -3,6 +3,7 @@
 #include "otgui/ParametricAnalysisItem.hxx"
 #include "otgui/CentralTendencyItem.hxx"
 #include "otgui/SensitivityAnalysisItem.hxx"
+#include "otgui/ReliabilityAnalysisItem.hxx"
 
 namespace OTGUI {
 
@@ -48,6 +49,7 @@ void OTStudyItem::update(Observable * source, const std::string & message)
   else if (message=="addLimitState")
   {
     LimitState addedLimitState = otStudy_->getLimitStates().back();
+
     LimitStateItem * newItem = new LimitStateItem(addedLimitState);
     addedLimitState.addObserver(newItem);
     addedLimitState.getPhysicalModel().addObserver(newItem);
@@ -69,44 +71,57 @@ void OTStudyItem::update(Observable * source, const std::string & message)
   else
   {
     Analysis addedAnalysis = otStudy_->getAnalyses().back();
+
     if (message=="addParametricAnalysis")
     {
       ParametricAnalysisItem * newItem = new ParametricAnalysisItem(addedAnalysis);
-      addAnalysisItem(addedAnalysis, newItem);
+      addDeterministicAnalysisItem(addedAnalysis, newItem);
     }
     else if (message=="addMonteCarloAnalysis" || message=="addQuadraticCumulAnalysis")
     {
       CentralTendencyItem * newItem = new CentralTendencyItem(addedAnalysis);
-      addAnalysisItem(addedAnalysis, newItem, false);
+      addProbabilisticAnalysisItem(addedAnalysis, newItem);
     }
     else if (message=="addSobolAnalysis" || message=="addSRCAnalysis")
     {
       SensitivityAnalysisItem * newItem = new SensitivityAnalysisItem(addedAnalysis);
-      addAnalysisItem(addedAnalysis, newItem, false);
+      addProbabilisticAnalysisItem(addedAnalysis, newItem);
+    }
+    else if (message=="addMonteCarloReliabilityAnalysis")
+    {
+      ReliabilityAnalysisItem * newItem = new ReliabilityAnalysisItem(addedAnalysis);
+      addProbabilisticAnalysisItem(addedAnalysis, newItem);
     }
   }
 }
 
 
-void OTStudyItem::addAnalysisItem(Analysis & analysis, AnalysisItem * item, bool deterministic)
+void OTStudyItem::addDeterministicAnalysisItem(Analysis & analysis, AnalysisItem * item)
 {
   analysis.addObserver(item);
   for (int i=0; i<rowCount(); ++i)
     if (child(i)->text().toStdString() == analysis.getPhysicalModel().getName())
     {
-      if (deterministic)
-        child(i)->child(0)->appendRow(item);
-      else
+      child(i)->child(0)->appendRow(item);
+      break;
+    }
+  emit newAnalysisItemCreated(item);
+}
+
+void OTStudyItem::addProbabilisticAnalysisItem(Analysis & analysis, AnalysisItem * item)
+{
+  analysis.addObserver(item);
+  for (int i=0; i<rowCount(); ++i)
+    if (child(i)->text().toStdString() == analysis.getPhysicalModel().getName())
+    {
+      if (!child(i)->child(1)->hasChildren())
       {
-        if (!analysis.getPhysicalModel().hasStochasticInputs() && !child(i)->child(1)->hasChildren())
-        {
-          ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(analysis.getPhysicalModel());
-          analysis.getPhysicalModel().addObserver(newProbabilisticModelItem);
-          child(i)->child(1)->appendRow(newProbabilisticModelItem);
-          emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
-        }
-        child(i)->child(1)->appendRow(item);
+        ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(analysis.getPhysicalModel());
+        analysis.getPhysicalModel().addObserver(newProbabilisticModelItem);
+        child(i)->child(1)->appendRow(newProbabilisticModelItem);
+        emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
       }
+      child(i)->child(1)->appendRow(item);
       break;
     }
   emit newAnalysisItemCreated(item);
@@ -133,7 +148,7 @@ OTStudy* OTStudyItem::getOTStudy()
 
 QString OTStudyItem::dumpOTStudy()
 {
-  return QString::fromStdString(otStudy_->dump());
+  return otStudy_->dump().c_str();
 }
 
 

@@ -78,6 +78,12 @@ void Analysis::setPhysicalModel(const PhysicalModel & physicalModel)
 }
 
 
+bool Analysis::isReliabilityAnalysis() const
+{
+  return getImplementation()->isReliabilityAnalysis();
+}
+
+
 void Analysis::run()
 {
   getImplementation()->run();

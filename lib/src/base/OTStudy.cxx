@@ -2,6 +2,8 @@
 
 #include "otgui/OTStudy.hxx"
 
+#include "otgui/ReliabilityAnalysis.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
@@ -21,12 +23,8 @@ std::vector<OTStudy*> OTStudy::GetInstances()
 OTStudy * OTStudy::FindInstance(const std::string & name)
 {
   for (std::vector<OTStudy*>::iterator it=Instances_.begin(); it!=Instances_.end(); ++it)
-  {
     if (name == (*it)->getName())
-    {
       return (*it);
-    }
-  }
   return 0;
 }
 
@@ -87,17 +85,20 @@ std::vector<PhysicalModel> OTStudy::getPhysicalModels() const
 }
 
 
-Description OTStudy::getPhysicalModelsNames() const
+bool OTStudy::hasPhysicalModelNamed(const std::string & physicalModelName)
 {
-  Description physicalModelsNames(physicalModels_.size());
   for (int i=0; i<physicalModels_.size(); ++i)
-    physicalModelsNames[i] = physicalModels_[i].getImplementation()->getName();
-  return physicalModelsNames;
+    if (physicalModels_[i].getImplementation()->getName() == physicalModelName)
+      return true;
+  return false;
 }
 
 
 void OTStudy::addPhysicalModel(const PhysicalModel & physicalModel)
 {
+  if (hasPhysicalModelNamed(physicalModel.getName()))
+    throw InvalidArgumentException(HERE) << "The study has already contained a physical model named " << physicalModel.getName();
+
   physicalModels_.push_back(physicalModel);
   notify("addPhysicalModel");
 }
@@ -109,17 +110,27 @@ std::vector<Analysis> OTStudy::getAnalyses() const
 }
 
 
-Description OTStudy::getAnalysesNames() const
+bool OTStudy::hasAnalysisNamed(const std::string & analysisName)
 {
-  Description analysesNames(analyses_.size());
   for (int i=0; i<analyses_.size(); ++i)
-    analysesNames[i] = analyses_[i].getImplementation()->getName();
-  return analysesNames;
+    if (analyses_[i].getImplementation()->getName() == analysisName)
+      return true;
+  return false;
 }
 
 
 void OTStudy::addAnalysis(const Analysis & analysis)
 {
+  if (hasAnalysisNamed(analysis.getName()))
+    throw InvalidArgumentException(HERE) << "The study has already contained an analysis named " << analysis.getName();
+
+  if (!hasPhysicalModelNamed(analysis.getPhysicalModel().getName()))
+    throw InvalidArgumentException(HERE) << "The analysis has been created with a physical model not belonging to the study.";
+
+  if (analysis.isReliabilityAnalysis())
+    if (!hasLimitStateNamed(dynamic_cast<const ReliabilityAnalysis*>(&*analysis.getImplementation())->getLimitState().getName()))
+      throw InvalidArgumentException(HERE) << "The analysis has been created with a limit state not belonging to the study.";
+
   analyses_.push_back(analysis);
   notify("add"+analysis.getImplementation()->getClassName());
 }
@@ -131,8 +142,23 @@ std::vector<LimitState> OTStudy::getLimitStates() const
 }
 
 
+bool OTStudy::hasLimitStateNamed(const std::string & limitStateName)
+{
+  for (int i=0; i<limitStates_.size(); ++i)
+    if (limitStates_[i].getImplementation()->getName() == limitStateName)
+      return true;
+  return false;
+}
+
+
 void OTStudy::addLimitState(const LimitState & limitState)
 {
+  if (hasLimitStateNamed(limitState.getName()))
+    throw InvalidArgumentException(HERE) << "The study has already contained a limit state named " << limitState.getName();
+
+  if (!hasPhysicalModelNamed(limitState.getPhysicalModel().getName()))
+    throw InvalidArgumentException(HERE) << "The limit state has been created with a physical model not belonging to the study.";
+
   limitStates_.push_back(limitState);
   notify("addLimitState");
 }

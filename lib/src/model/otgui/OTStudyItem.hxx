@@ -21,7 +21,8 @@ public:
 
   void update(Observable * source, const std::string & message);
 
-  void addAnalysisItem(Analysis & analysis, AnalysisItem * item, bool deterministic=true);
+  void addDeterministicAnalysisItem(Analysis & analysis, AnalysisItem * item);
+  void addProbabilisticAnalysisItem(Analysis & analysis, AnalysisItem * item);
 
   void setData(const QVariant & value, int role);
   OTStudy * getOTStudy();

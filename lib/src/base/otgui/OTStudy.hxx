@@ -25,14 +25,15 @@ public:
   void setName(const std::string & name);
 
   std::vector<PhysicalModel> getPhysicalModels() const;
-  OT::Description getPhysicalModelsNames() const;
+  bool hasPhysicalModelNamed(const std::string & physicalModelName);
   void addPhysicalModel(const PhysicalModel & physicalModel);
 
   std::vector<Analysis> getAnalyses() const;
-  OT::Description getAnalysesNames() const;
+  bool hasAnalysisNamed(const std::string & analysisName);
   void addAnalysis(const Analysis & analysis);
 
   std::vector<LimitState> getLimitStates() const;
+  bool hasLimitStateNamed(const std::string & limitStateName);
   void addLimitState(const LimitState & limitState);
 
   std::string dump();

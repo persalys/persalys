@@ -25,9 +25,15 @@ public:
   virtual std::string dump() const;
   virtual bool analysisLaunched() const;
 
+  bool isReliabilityAnalysis() const;
+
+protected:
+  void setIsReliabilityAnalysis(bool isReliabilityAnalysis);
+
 private:
   std::string name_;
   PhysicalModel physicalModel_;
+  bool isReliabilityAnalysis_;
 };
 }
 #endif

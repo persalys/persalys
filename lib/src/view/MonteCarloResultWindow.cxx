@@ -36,7 +36,7 @@ void MonteCarloResultWindow::buildInterface()
   outputsComboBoxFirstTab_ = new QComboBox;
   QStringList items = QStringList();
   for (int i=0; i<result_.getResultSample().getDimension(); ++i)
-    items<<QString::fromStdString(result_.getOutputNames()[i]);
+    items << result_.getOutputNames()[i].c_str();
   outputsComboBoxFirstTab_->addItems(items);
   connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), this, SLOT(outputFirstTabChanged(int)));
   headLayout->addWidget(outputsComboBoxFirstTab_);
@@ -46,7 +46,7 @@ void MonteCarloResultWindow::buildInterface()
   QLabel * nbSimuLabel = new QLabel(tr("Number of simulations"));
   nbSimuLabel->setStyleSheet("font: bold 14px;");
   headLayout->addWidget(nbSimuLabel);
-  nbSimuLabel = new QLabel(QString::fromStdString((OSS()<<result_.getResultSample().getSize()).str()));
+  nbSimuLabel = new QLabel(QString::number(result_.getResultSample().getSize()));
   headLayout->addWidget(nbSimuLabel);
   tabLayout->addLayout(headLayout);
 
@@ -164,7 +164,7 @@ void MonteCarloResultWindow::buildInterface()
   outputsComboBoxSecondTab_ = new QComboBox;
   items = QStringList();
   for (int i=0; i<result_.getResultSample().getDimension(); ++i)
-    items<<QString::fromStdString(result_.getOutputNames()[i]);
+    items << result_.getOutputNames()[i].c_str();
   outputsComboBoxSecondTab_->addItems(items);
   connect(outputsComboBoxSecondTab_, SIGNAL(currentIndexChanged(int)), this, SLOT(outputBoxPlotChanged(int)));
   hLayout->addWidget(outputsComboBoxSecondTab_);
@@ -202,7 +202,7 @@ void MonteCarloResultWindow::buildInterface()
   inputsComboBox_ = new QComboBox;
   items = QStringList();
   for (int i=0; i<result_.getInputSample().getDimension(); ++i)
-    items<<QString::fromStdString(result_.getInputNames()[i]);
+    items << result_.getInputNames()[i].c_str();
   inputsComboBox_->addItems(items);
   connect(inputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(inputScatterPlotChanged(int)));
   hLayout->addWidget(inputsComboBox_, 0, Qt::AlignBottom);
@@ -232,42 +232,42 @@ void MonteCarloResultWindow::buildInterface()
 void MonteCarloResultWindow::updateLabelsText(int indexOutput)
 {
   // mean
-  OSS oss1;
-  oss1 << result_.getMean()[indexOutput];
+  QString meanText = QString::number(result_.getMean()[indexOutput]);
   if (isConfidenceIntervalRequired_)
   {
     double meanCILowerBound = result_.getMeanConfidenceInterval(levelConfidenceInterval_).getLowerBound()[indexOutput];
     double meanCIUpperBound = result_.getMeanConfidenceInterval(levelConfidenceInterval_).getUpperBound()[indexOutput];
-    oss1 << "\n" <<" CI = [" << meanCILowerBound <<", "<<meanCIUpperBound<<"] at ";
-    oss1 << levelConfidenceInterval_ << "%";
+    meanText += "\n CI = [" + QString::number(meanCILowerBound) + ", ";
+    meanText += QString::number(meanCIUpperBound) + "] at ";
+    meanText += QString::number(levelConfidenceInterval_) + "%";
   }
-  meanLabel_->setText(QString::fromStdString(oss1.str()));
+  meanLabel_->setText(meanText);
   // standard deviation
-  OSS oss2;
-  oss2 << result_.getStandardDeviation()[indexOutput];
+  QString stdText = QString::number(result_.getStandardDeviation()[indexOutput]);
   if (isConfidenceIntervalRequired_)
   {
     double stdCILowerBound = result_.getStdConfidenceInterval(levelConfidenceInterval_).getLowerBound()[indexOutput];
     double stdCIUpperBound = result_.getStdConfidenceInterval(levelConfidenceInterval_).getUpperBound()[indexOutput];
-    oss2 << "\n" <<" CI = [" << stdCILowerBound <<", "<<stdCIUpperBound<<"] at ";
-    oss2 << levelConfidenceInterval_ << "%";
+    stdText += "\n CI = [" + QString::number(stdCILowerBound) + ", ";
+    stdText += QString::number(stdCIUpperBound) + "] at ";
+    stdText += QString::number(levelConfidenceInterval_) + "%";
   }
-  stdLabel_->setText(QString::fromStdString(oss2.str()));
+  stdLabel_->setText(stdText);
   // skewness
-  skewnessLabel_->setText(QString::fromStdString((OSS()<<result_.getSkewness()[indexOutput]).str()));
+  skewnessLabel_->setText(QString::number(result_.getSkewness()[indexOutput]));
   // kurtosis
-  kurtosisLabel_->setText(QString::fromStdString((OSS()<<result_.getKurtosis()[indexOutput]).str()));
+  kurtosisLabel_->setText(QString::number(result_.getKurtosis()[indexOutput]));
   // first quartile
-  firstQuartileLabel_->setText(QString::fromStdString((OSS()<<result_.getFirstQuartile()[indexOutput]).str()));
+  firstQuartileLabel_->setText(QString::number(result_.getFirstQuartile()[indexOutput]));
   // third quartile
-  thirdQuartileLabel_->setText(QString::fromStdString((OSS()<<result_.getThirdQuartile()[indexOutput]).str()));
+  thirdQuartileLabel_->setText(QString::number(result_.getThirdQuartile()[indexOutput]));
   // min
   OSS oss3;
   oss3 << result_.getListMin()[indexOutput];
   for (int j=0; j<result_.getListXMin()[indexOutput].getSize();++j)
   {
     NumericalPoint point(result_.getListXMin()[indexOutput][j]);
-    oss3 << "\n  X=" <<point.__str__();
+    oss3 << "\n  X=" << point.__str__();
   }
   minLabel_->setText(QString::fromStdString(oss3.str()));
   // max
@@ -276,7 +276,7 @@ void MonteCarloResultWindow::updateLabelsText(int indexOutput)
   for (int j=0; j<result_.getListXMax()[indexOutput].getSize();++j)
   {
     NumericalPoint point(result_.getListXMax()[indexOutput][j]);
-    oss4 << "\n  X=" <<point.__str__();
+    oss4 << "\n  X=" << point.__str__();
   }
   maxLabel_->setText(QString::fromStdString(oss4.str()));
 }
@@ -295,11 +295,11 @@ void MonteCarloResultWindow::quantileValueChanged(double quantile)
   probaSpinBox_->blockSignals(true);
   double cdf = 0.0;
   double p(1.0 / double(result_.getResultSample().getSize()));
+
   for (int j = 0; j < result_.getResultSample().getSize(); ++j)
-  {
     if (result_.getResultSample()[j][outputsComboBoxFirstTab_->currentIndex()] < quantile)
       cdf += p;
-  }
+
   probaSpinBox_->setValue(cdf);
   probaSpinBox_->blockSignals(false);
 }
