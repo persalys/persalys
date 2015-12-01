@@ -1,6 +1,7 @@
 #include "otgui/InputTableProbabilisticModel.hxx"
 
 #include "DistributionFactory.hxx"
+#include "TruncatedDistribution.hxx"
 #include "Normal.hxx"
 
 using namespace OT;
@@ -74,7 +75,16 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
       case 0:
         return input_i.getName().c_str();
       case 1:
-        return tr(input_i.getDistribution().getImplementation()->getClassName().c_str());
+        std::string distributionName = input_i.getDistribution().getImplementation()->getClassName();
+        if (distributionName == "TruncatedNormal")
+          return tr("Normal");
+        else if (distributionName == "TruncatedDistribution")
+        {
+          TruncatedDistribution * dist = dynamic_cast<TruncatedDistribution*>(&*input_i.getDistribution().getImplementation());
+          return tr(dist->getDistribution().getImplementation()->getClassName().c_str());
+        }
+        else
+          return tr(input_i.getDistribution().getImplementation()->getClassName().c_str());
     }
   }
   return QVariant();
@@ -91,7 +101,16 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
     int inputIndex = data(index, Qt::UserRole).toInt();
     Input input = Input(physicalModel_.getInputs()[inputIndex]);
 
-    if (value.toString().toStdString() != input.getDistribution().getImplementation()->getClassName())
+    std::string distributionName = input.getDistribution().getImplementation()->getClassName();
+    if (distributionName == "TruncatedNormal")
+      distributionName = "Normal";
+    else if (distributionName == "TruncatedDistribution")
+    {
+      TruncatedDistribution * dist = dynamic_cast<TruncatedDistribution*>(&*input.getDistribution().getImplementation());
+      distributionName = dist->getDistribution().getImplementation()->getClassName().c_str();
+    }
+
+    if (value.toString().toStdString() != distributionName)
     {
       // search the distribution corresponding to 'value'
       DistributionFactory::DistributionFactoryCollection collection = DistributionFactory::GetContinuousUniVariateFactories();

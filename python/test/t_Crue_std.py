@@ -37,8 +37,6 @@ montecarloResult = montecarlo.getResult()
 # Comparaison
 openturns.testing.assert_almost_equal(0.0006, montecarloResult.getProbabilityEstimate(), 1e-16)
 
-
-#TODO : solve problem with TruncatedDistribution before
-#script = myStudy.dump()
-#print(script)
-#exec(script)
+script = myStudy.dump()
+print(script)
+exec(script)

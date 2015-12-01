@@ -9,10 +9,11 @@
 #include "otgui/InputTableProbabilisticModel.hxx"
 
 #include <QGroupBox>
-#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QLineEdit>
 #include <QTableView>
 #include <QComboBox>
+#include <QCheckBox>
 
 namespace OTGUI {
 class ProbabilisticModelWindow : public OTguiSubWindow
@@ -26,6 +27,7 @@ protected:
   void buildInterface();
   void updateDeterministicInputsComboBox();
   void populateDeterministicInputsComboBox();
+  void updatePlots(OT::Distribution inputDistribution);
 
 public slots:
   void updateDistributionWidgets(const QModelIndex & index);
@@ -33,6 +35,9 @@ public slots:
   void updateProbabilisticModel();
   void addInputRequested(int comboIndex);
   void removeInputRequested();
+  void showHideAdvancedWidgets(bool);
+  void truncationParametersChanged();
+  void truncationParametersStateChanged();
 
 private:
   PhysicalModel physicalModel_;
@@ -40,12 +45,19 @@ private:
   QComboBox * deterministicInputsComboBox_;
   QStandardItemModel * deterministicInputsComboBoxModel_;
   InputTableProbabilisticModel * inputTableModel_;
+  QFrame * rightFrame_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
   QGroupBox * paramEditor_;
-  QHBoxLayout * parameterLayout_;
+  QVBoxLayout * parameterLayout_;
   QLabel * parameterValuesLabel_[5];
   QLineEdit * parameterValuesEdit_[5];
+  QGroupBox * advancedGroup_;
+  QWidget * advancedWidgets_;
+  QCheckBox * lowerBoundCheckBox_;
+  QCheckBox * upperBoundCheckBox_;
+  QLineEdit * lowerBoundLineEdit_;
+  QLineEdit * upperBoundLineEdit_;
 };
 }
 #endif
