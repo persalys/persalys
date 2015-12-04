@@ -154,18 +154,18 @@ void PlotWidget::plotHistogram(const NumericalSample & sample, bool cdf, int bar
     barNumber = ceil(1.0 + log(std::max(size, 1)) / log(2));
 
   // compute data
-
-  double width = (sample.getMax()[0] - sample.getMin()[0]) / barNumber;
+  double sampleMin = sample.getMin()[0];
+  double width = (sample.getMax()[0] - sampleMin) / barNumber;
   if (width < 1e-12)
     return;
 
   NumericalPoint histogramData(barNumber);
+
   for (int i=0; i<size; ++i)
   {
-    int index = static_cast< int >((sample[i][0] - sample.getMin()[0]) / width);
+    int index = static_cast< int >((sample[i][0] - sampleMin) / width);
     // x=xmax -> index=barnumber, so bound it
     index = std::min(index, barNumber-1);
-    
     ++ histogramData[index];
   }
   double inverseArea = 1. / (size*width);
@@ -191,7 +191,7 @@ void PlotWidget::plotHistogram(const NumericalSample & sample, bool cdf, int bar
   QVector<QwtIntervalSample> samples(barNumber);
   for (int i=0; i<barNumber; i++)
   {
-    QwtInterval interval(sample.getMin()[0]+i*width, sample.getMin()[0]+(i+1)*width);
+    QwtInterval interval(sampleMin+i*width, sampleMin+(i+1)*width);
     samples[i] = QwtIntervalSample(histogramData[i]/sum, interval);
   }
 
