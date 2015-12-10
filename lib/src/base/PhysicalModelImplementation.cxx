@@ -10,7 +10,6 @@ PhysicalModelImplementation::PhysicalModelImplementation(const std::string & nam
   , name_(name)
   , inputs_(InputCollection(0))
   , outputs_(OutputCollection(0))
-  , function_(NumericalMathFunction())
   , inputNames_(Description())
   , outputNames_(Description())
 {
@@ -28,7 +27,6 @@ PhysicalModelImplementation::PhysicalModelImplementation(const std::string & nam
   , inputNames_()
   , outputNames_(Description())
 {
-  updateFunction();
 }
 
 
@@ -38,11 +36,9 @@ PhysicalModelImplementation::PhysicalModelImplementation(const PhysicalModelImpl
   , name_(other.name_)
   , inputs_(other.inputs_)
   , outputs_(other.outputs_)
-  , function_(other.function_)
   , inputNames_(other.inputNames_)
   , outputNames_(other.outputNames_)
 {
-  updateFunction();
 }
 
 
@@ -52,22 +48,15 @@ PhysicalModelImplementation::PhysicalModelImplementation(const PhysicalModelImpl
   , name_(other->name_)
   , inputs_(other->inputs_)
   , outputs_(other->outputs_)
-  , function_(other->function_)
   , inputNames_(other->inputNames_)
   , outputNames_(other->outputNames_)
 {
-  updateFunction();
 }
 
 
 PhysicalModelImplementation* PhysicalModelImplementation::clone() const
 {
   return new PhysicalModelImplementation(*this);
-}
-
-
-PhysicalModelImplementation::~PhysicalModelImplementation()
-{
 }
 
 
@@ -94,7 +83,7 @@ Input & PhysicalModelImplementation::getInputByName(const std::string & inputNam
   for (int i=0; i<inputs_.getSize(); ++i)
     if (inputs_[i].getName() == inputName)
       return inputs_[i];
-  throw InvalidArgumentException(HERE) << "The given input name " << inputName <<" does not correspond to an input of the physical model.\n"; 
+  throw InvalidArgumentException(HERE) << "The given input name " << inputName <<" does not correspond to an input of the physical model.\n";
 }
 
 
@@ -106,15 +95,14 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
   if (inputNames.size() != inputs.getSize())
     throw InvalidArgumentException(HERE) << "Two inputs can not have the same name."; 
 
+  inputNames_ = Description();
   inputs_ = inputs;
-  if (getOutputNames().getSize())
-    updateFunction();
   notify("inputChanged");
   notify("updateProbabilisticModelWindow");
 }
 
 
-void PhysicalModelImplementation::updateInputDescription(const std::string & inputName, const std::string & description)
+void PhysicalModelImplementation::setInputDescription(const std::string & inputName, const std::string & description)
 {
   getInputByName(inputName).setDescription(description);
   notify("inputChanged");
@@ -122,7 +110,7 @@ void PhysicalModelImplementation::updateInputDescription(const std::string & inp
 }
 
 
-void PhysicalModelImplementation::updateInputValue(const std::string & inputName, const double & value)
+void PhysicalModelImplementation::setInputValue(const std::string & inputName, const double & value)
 {
   getInputByName(inputName).setValue(value);
   notify("inputChanged");
@@ -130,7 +118,7 @@ void PhysicalModelImplementation::updateInputValue(const std::string & inputName
 }
 
 
-void PhysicalModelImplementation::updateInputDistribution(const std::string & inputName, const Distribution & distribution)
+void PhysicalModelImplementation::setInputDistribution(const std::string & inputName, const Distribution & distribution)
 {
   getInputByName(inputName).setDistribution(distribution);
   notify("inputChanged");
@@ -145,8 +133,6 @@ void PhysicalModelImplementation::addInput(const Input & input)
 
   inputs_.add(input);
   inputNames_.add(input.getName());
-  if (getOutputNames().getSize())
-    updateFunction();
   notify("inputChanged");
   notify("updateProbabilisticModelWindow");
 }
@@ -160,14 +146,12 @@ void PhysicalModelImplementation::removeInput(const std::string & inputName)
       {
         inputs_.erase(inputs_.begin() + i);
         inputNames_.erase(inputNames_.begin() + i);
-        if (getOutputNames().getSize())
-          updateFunction();
         notify("inputChanged");
         notify("updateProbabilisticModelWindow");
-        return;
+        break;
       }
   else
-    throw InvalidArgumentException(HERE) << "The given input name " << inputName <<" does not correspond to an input of the physical model.\n"; 
+    throw InvalidArgumentException(HERE) << "The given input name " << inputName <<" does not correspond to an input of the physical model.\n";
 }
 
 
@@ -206,7 +190,7 @@ Output & PhysicalModelImplementation::getOutputByName(const std::string & output
   for (int i=0; i<outputs_.getSize(); ++i)
     if (outputs_[i].getName() == outputName)
       return outputs_[i];
-  throw InvalidArgumentException(HERE) << "The given output name " << outputName <<" does not correspond to an output of the physical model.\n"; 
+  throw InvalidArgumentException(HERE) << "The given output name " << outputName <<" does not correspond to an output of the physical model.\n";
 }
 
 
@@ -223,15 +207,14 @@ void PhysicalModelImplementation::setOutputs(const OutputCollection & outputs)
   if (outputNames.size() != outputs.getSize())
     throw InvalidArgumentException(HERE) << "Two inputs can not have the same name.";
 
+  outputNames_ = Description();
   outputs_ = outputs;
-  if (inputNames_.getSize())
-    updateFunction();
   notify("outputChanged");
   notify("updateLimitStateWindow");
 }
 
 
-void PhysicalModelImplementation::updateOutputDescription(const std::string & outputName, const std::string & description)
+void PhysicalModelImplementation::setOutputDescription(const std::string & outputName, const std::string & description)
 {
   getOutputByName(outputName).setDescription(description);
   notify("outputChanged");
@@ -239,10 +222,9 @@ void PhysicalModelImplementation::updateOutputDescription(const std::string & ou
 }
 
 
-void PhysicalModelImplementation::updateOutputFormula(const std::string & outputName, const std::string & formula)
+void PhysicalModelImplementation::setOutputFormula(const std::string & outputName, const std::string & formula)
 {
   getOutputByName(outputName).setFormula(formula);
-  updateFunction();
   notify("outputChanged");
   notify("updateLimitStateWindow");
 }
@@ -255,7 +237,6 @@ void PhysicalModelImplementation::addOutput(const Output & output)
 
   outputs_.add(output);
   outputNames_.add(output.getName());
-  updateFunction();
   notify("outputChanged");
   notify("updateLimitStateWindow");
 }
@@ -269,13 +250,12 @@ void PhysicalModelImplementation::removeOutput(const std::string & outputName)
       {
         outputs_.erase(outputs_.begin() + i);
         outputNames_.erase(outputNames_.begin() + i);
-        updateFunction();
         notify("outputChanged");
         notify("updateLimitStateWindow");
         return;
       }
   else
-    throw InvalidArgumentException(HERE) << "The given output name " << outputName <<" does not correspond to an output of the physical model\n"; 
+    throw InvalidArgumentException(HERE) << "The given output name " << outputName <<" does not correspond to an output of the physical model\n";
 }
 
 
@@ -288,28 +268,6 @@ Description PhysicalModelImplementation::getOutputNames()
       outputNames_[i] = outputs_[i].getName();
   }
   return outputNames_;
-}
-
-
-void PhysicalModelImplementation::updateFunction()
-{
-  try
-  {
-    function_ = NumericalMathFunction(getInputNames(), getOutputNames(), getFormulas());
-  }
-  catch (std::exception & ex)
-  {
-    throw InvalidArgumentException(HERE) << ex.what();
-  }
-}
-
-
-Description PhysicalModelImplementation::getFormulas()
-{
-  Description formulas = Description(outputs_.getSize());
-  for (int i=0; i<outputs_.getSize(); ++i)
-    formulas[i] = outputs_[i].getFormula();
-  return formulas;
 }
 
 
@@ -338,60 +296,26 @@ RandomVector PhysicalModelImplementation::getInputRandomVector()
 }
 
 
-RandomVector PhysicalModelImplementation::getOutputRandomVector(const OutputCollection & outputs)
+RandomVector PhysicalModelImplementation::getOutputRandomVector(const Description & outputNames)
 {
-  return RandomVector(getFunction(outputs), getInputRandomVector());
+  return RandomVector(getFunction(outputNames), getInputRandomVector());
 }
 
 
-NumericalMathFunction PhysicalModelImplementation::getFunction(const OutputCollection & outputs)
+NumericalMathFunction PhysicalModelImplementation::getFunction(const Description & outputNames)
 {
-  if (outputs == outputs_)
-    return function_;
-
-  Description outputNames(outputs.getSize());
-  Description outputFormula(outputs.getSize());
-  for (int i=0; i<outputs.getSize(); ++i)
-  {
-    outputNames[i] = outputs[i].getName();
-    outputFormula[i] = outputs[i].getFormula();
-  }
-  try
-  {
-    return NumericalMathFunction(getInputNames(), getOutputNames(), outputFormula);
-  }
-  catch (std::exception & ex)
-  {
-    throw InvalidArgumentException(HERE) << ex.what();
-  }
+  throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getFunction(const Description &)";
 }
 
 
 NumericalMathFunction PhysicalModelImplementation::getFunction()
 {
-  updateFunction();
-  return function_;
+  throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getFunction()";
 }
 
 
 std::string PhysicalModelImplementation::dump() const
 {
-  std::string result;
-
-  for (int i=0; i<inputs_.getSize(); ++i)
-    result += inputs_[i].dump();
-
-  for (int i=0; i<outputs_.getSize(); ++i)
-    result += outputs_[i].dump();
-
-  result += getName()+ " = otguibase.PhysicalModel('" + getName() + "')\n";
-
-  for (int i=0; i<inputs_.getSize(); ++i)
-    result += getName()+ ".addInput(" + inputs_[i].getName() + ")\n";
-
-  for (int i=0; i<outputs_.getSize(); ++i)
-    result += getName()+ ".addOutput(" + outputs_[i].getName() + ")\n";
-
-  return result;
+  throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getDump()";
 }
 }

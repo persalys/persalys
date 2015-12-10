@@ -108,8 +108,8 @@ add_custom_target ( cppcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^cppcheck_"
                     COMMENT "Run C++ pre-installation tests" )
 
 if (SalomeYACS_FOUND)
-  add_executable (t_yacs_eval_analytical EXCLUDE_FROM_ALL t_yacs_eval_analytical.cxx)
-  target_link_libraries (t_yacs_eval_analytical YACSevalYFX)
+#   ot_check_test (yacs_eval_analytical PARAMS ${CMAKE_CURRENT_SOURCE_DIR}/analytical.xml)
+#   ot_check_test (Gauge_std PARAMS ${CMAKE_CURRENT_SOURCE_DIR}/analytical.xml)
 endif ()
 
 

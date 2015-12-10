@@ -28,6 +28,7 @@ void OTStudyItem::update(Observable * source, const std::string & message)
     PhysicalModel addedPhysicalModel = otStudy_->getPhysicalModels().back();
     PhysicalModelItem * newPhysicalModelItem = new PhysicalModelItem(addedPhysicalModel);
     addedPhysicalModel.addObserver(newPhysicalModelItem);
+    connect(newPhysicalModelItem, SIGNAL(physicalModelChanged(PhysicalModel)), this, SLOT(updatePhysicalModel(PhysicalModel)));
     appendRow(newPhysicalModelItem);
     Item * item = new Item(tr("Deterministic study"), QString("DeterministicStudy"));
     item->setEditable(false);
@@ -41,6 +42,7 @@ void OTStudyItem::update(Observable * source, const std::string & message)
       ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(addedPhysicalModel);
       addedPhysicalModel.addObserver(newProbabilisticModelItem);
       item->appendRow(newProbabilisticModelItem);
+      connect(newPhysicalModelItem, SIGNAL(physicalModelChanged(PhysicalModel)), newProbabilisticModelItem, SLOT(updatePhysicalModel(PhysicalModel)));
       emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
     }
 
@@ -72,27 +74,45 @@ void OTStudyItem::update(Observable * source, const std::string & message)
   {
     Analysis addedAnalysis = otStudy_->getAnalyses().back();
 
+    AnalysisItem * newItem;
     if (message=="addParametricAnalysis")
     {
-      ParametricAnalysisItem * newItem = new ParametricAnalysisItem(addedAnalysis);
+      newItem = new ParametricAnalysisItem(addedAnalysis);
       addDeterministicAnalysisItem(addedAnalysis, newItem);
     }
     else if (message=="addMonteCarloAnalysis" || message=="addQuadraticCumulAnalysis")
     {
-      CentralTendencyItem * newItem = new CentralTendencyItem(addedAnalysis);
+      newItem = new CentralTendencyItem(addedAnalysis);
       addProbabilisticAnalysisItem(addedAnalysis, newItem);
     }
     else if (message=="addSobolAnalysis" || message=="addSRCAnalysis")
     {
-      SensitivityAnalysisItem * newItem = new SensitivityAnalysisItem(addedAnalysis);
+      newItem = new SensitivityAnalysisItem(addedAnalysis);
       addProbabilisticAnalysisItem(addedAnalysis, newItem);
     }
     else if (message=="addMonteCarloReliabilityAnalysis")
     {
-      ReliabilityAnalysisItem * newItem = new ReliabilityAnalysisItem(addedAnalysis);
+      newItem = new ReliabilityAnalysisItem(addedAnalysis);
       addProbabilisticAnalysisItem(addedAnalysis, newItem);
     }
+    else
+    {
+      throw OT::InvalidArgumentException(HERE) << "In OTStudyItem::update: Impossible to add an item.\n";
+    }
+    connect(newItem, SIGNAL(analysisChanged(Analysis)), this, SLOT(updateAnalysis(Analysis)));
   }
+}
+
+
+void OTStudyItem::updatePhysicalModel(const PhysicalModel & physicalModel)
+{
+  otStudy_->getPhysicalModelByName(physicalModel.getName()).setImplementationAsPersistentObject(physicalModel.getImplementation());
+}
+
+
+void OTStudyItem::updateAnalysis(const Analysis & analysis)
+{
+  otStudy_->getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
 }
 
 

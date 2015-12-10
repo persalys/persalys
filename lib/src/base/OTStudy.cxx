@@ -85,6 +85,15 @@ std::vector<PhysicalModel> OTStudy::getPhysicalModels() const
 }
 
 
+PhysicalModel & OTStudy::getPhysicalModelByName(const std::string& physicalModelName)
+{
+  for (int i=0; i<physicalModels_.size(); ++i)
+    if (physicalModels_[i].getName() == physicalModelName)
+      return physicalModels_[i];
+  throw InvalidArgumentException(HERE) << "The given name " << physicalModelName <<" does not correspond to a physical model of the study.\n"; 
+}
+
+
 bool OTStudy::hasPhysicalModelNamed(const std::string & physicalModelName)
 {
   for (int i=0; i<physicalModels_.size(); ++i)
@@ -107,6 +116,14 @@ void OTStudy::addPhysicalModel(const PhysicalModel & physicalModel)
 std::vector<Analysis> OTStudy::getAnalyses() const
 {
   return analyses_;
+}
+
+Analysis & OTStudy::getAnalysisByName(const std::string & analysisName)
+{
+  for (int i=0; i<analyses_.size(); ++i)
+    if (analyses_[i].getName() == analysisName)
+      return analyses_[i];
+  throw InvalidArgumentException(HERE) << "The given name " << analysisName <<" does not correspond to an analysis of the study.\n"; 
 }
 
 

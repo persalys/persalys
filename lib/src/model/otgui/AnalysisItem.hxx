@@ -24,6 +24,7 @@ public slots:
   void updateAnalysis(const Analysis & analysis);
 signals:
   void analysisFinished(AnalysisItem*);
+  void analysisChanged(const Analysis&);
 
 private:
   Analysis analysis_;

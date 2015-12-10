@@ -156,7 +156,7 @@ void CentralTendencyWizard::updateMethodWidgets()
       quadraticCumulWidget_->hide();
       if (analysis_.getImplementation()->getClassName() == "QuadraticCumulAnalysis")
       {
-        analysis_ = MonteCarloAnalysis("aNameMC", physicalModel_);
+        analysis_ = MonteCarloAnalysis(analysis_.getName(), physicalModel_);
         emit analysisChanged(analysis_);
       }
       nbSimuSpinbox_->setValue(dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->getNbSimulations());
@@ -168,7 +168,7 @@ void CentralTendencyWizard::updateMethodWidgets()
       quadraticCumulWidget_->show();
       if (analysis_.getImplementation()->getClassName() == "MonteCarloAnalysis")
       {
-        analysis_ = QuadraticCumulAnalysis("aNameQuadraticCumul", physicalModel_);
+        analysis_ = QuadraticCumulAnalysis(analysis_.getName(), physicalModel_);
         emit analysisChanged(analysis_);
       }
       break;

@@ -29,6 +29,8 @@ public:
   QString dumpOTStudy();
 
 public slots:
+  void updatePhysicalModel(const PhysicalModel & physicalModel);
+  void updateAnalysis(const Analysis & analysis);
 signals:
   void newPhysicalModelItemCreated(PhysicalModelItem*);
   void newProbabilisticModelItemCreated(ProbabilisticModelItem*);

@@ -3,6 +3,7 @@
 #include "otgui/PhysicalModelWindow.hxx"
 
 #include "otgui/ComboBoxDelegate.hxx"
+#include "otgui/AnalyticalPhysicalModel.hxx"
 #ifdef OTGUI_HAVE_YACS
 # include "otgui/YACSPhysicalModel.hxx"
 #endif
@@ -17,8 +18,10 @@ namespace OTGUI {
 PhysicalModelWindow::PhysicalModelWindow(PhysicalModelItem * item)
   : OTguiSubWindow(item)
   , physicalModel_(item->getPhysicalModel())
+  , inputTableModel_(0)
+  , outputTableModel_(0)
 {
-  connect(this, SIGNAL(physicalModelChanged(PhysicalModel)), item, SLOT(updatePhysicalModel(PhysicalModel)));
+  connect(this, SIGNAL(physicalModelChanged(const PhysicalModel&)), item, SLOT(updatePhysicalModel(const PhysicalModel&)));
   connect(item, SIGNAL(outputChanged()), this, SLOT(updateOutputTableModel()));
   connect(item, SIGNAL(inputChanged()), this, SLOT(updateInputTableModel()));
   buildInterface();
@@ -41,6 +44,15 @@ void PhysicalModelWindow::buildInterface()
 #endif
   comboBox->addItems(items);
 
+  if (physicalModel_.getImplementation()->getClassName() == "AnalyticalPhysicalModel")
+    comboBox->setCurrentIndex(0);
+  else if(physicalModel_.getImplementation()->getClassName() == "PythonPhysicalModel")
+    comboBox->setCurrentIndex(1);
+#ifdef OTGUI_HAVE_YACS
+  else if(physicalModel_.getImplementation()->getClassName() == "YACSPhysicalModel")
+    comboBox->setCurrentIndex(2);
+#endif
+
   connect(comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(methodChanged(int)));
   methodLayout->addWidget(comboBox);
   methodLayout->addStretch();
@@ -55,8 +67,10 @@ void PhysicalModelWindow::buildInterface()
   QLabel * labelDataFile = new QLabel("Data file");
   fieldsLayout->addWidget(labelDataFile, 0, 0);
 
-  XMLfileEdit_ = new QLineEdit;
-  fieldsLayout->addWidget(XMLfileEdit_, 0, 1);
+  XMLfileNameEdit_ = new QLineEdit;
+  if(physicalModel_.getImplementation()->getClassName() == "YACSPhysicalModel")
+    XMLfileNameEdit_->setText(dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getXMLFileName().c_str());
+  fieldsLayout->addWidget(XMLfileNameEdit_, 0, 1);
 
   QPushButton * selectFileButton = new QPushButton(tr("Search file"));
   connect(selectFileButton, SIGNAL(clicked()), this, SLOT(selectImportFileDialogRequested()));
@@ -67,7 +81,6 @@ void PhysicalModelWindow::buildInterface()
   fieldsLayout->addWidget(loadButton_, 1, 2);
   loadButton_->setEnabled(false);
 
-  loadXMLFileBox_->hide();
   mainLayout->addWidget(loadXMLFileBox_);
 #endif
 
@@ -77,22 +90,19 @@ void PhysicalModelWindow::buildInterface()
 
   inputTableView_ = new QTableView;
   inputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
-
-  inputTableModel_ = new InputTableModel(physicalModel_);
-  inputTableView_->setModel(inputTableModel_);
   inputsLayout->addWidget(inputTableView_);
 
-  QPushButton * addLineButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
-  addLineButton->setToolTip(tr("Add an input"));
-  connect(addLineButton, SIGNAL(clicked(bool)), this, SLOT(addInputLine()));
+  addInputLineButton_ = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
+  addInputLineButton_->setToolTip(tr("Add an input"));
+  connect(addInputLineButton_, SIGNAL(clicked(bool)), this, SLOT(addInputLine()));
 
-  QPushButton * removeLineButton = new QPushButton(QIcon(":/images/list-remove.png"), tr("Remove"));
-  removeLineButton->setToolTip(tr("Remove the selected input"));
-  connect(removeLineButton, SIGNAL(clicked(bool)), this, SLOT(removeInputLine()));
+  removeInputLineButton_ = new QPushButton(QIcon(":/images/list-remove.png"), tr("Remove"));
+  removeInputLineButton_->setToolTip(tr("Remove the selected input"));
+  connect(removeInputLineButton_, SIGNAL(clicked(bool)), this, SLOT(removeInputLine()));
 
   QHBoxLayout * buttonsLayout = new QHBoxLayout;
-  buttonsLayout->addWidget(addLineButton);
-  buttonsLayout->addWidget(removeLineButton);
+  buttonsLayout->addWidget(addInputLineButton_);
+  buttonsLayout->addWidget(removeInputLineButton_);
   inputsLayout->addLayout(buttonsLayout);
 
   mainLayout->addWidget(inputsBox);
@@ -103,25 +113,24 @@ void PhysicalModelWindow::buildInterface()
 
   outputTableView_ = new QTableView;
   outputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
-  outputTableModel_ = new OutputTableModel(physicalModel_);
-  outputTableView_->setModel(outputTableModel_);
   outputsLayout->addWidget(outputTableView_);
 
-  addLineButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
-  addLineButton->setToolTip(tr("Add an output"));
-  connect(addLineButton, SIGNAL(clicked(bool)), this, SLOT(addOutputLine()));
+  addOutputLineButton_ = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
+  addOutputLineButton_->setToolTip(tr("Add an output"));
+  connect(addOutputLineButton_, SIGNAL(clicked(bool)), this, SLOT(addOutputLine()));
 
-  removeLineButton = new QPushButton(QIcon(":/images/list-remove.png"), tr("Remove"));
-  removeLineButton->setToolTip(tr("Remove the selected output"));
-  connect(removeLineButton, SIGNAL(clicked(bool)), this, SLOT(removeOutputLine()));
+  removeOutputLineButton_ = new QPushButton(QIcon(":/images/list-remove.png"), tr("Remove"));
+  removeOutputLineButton_->setToolTip(tr("Remove the selected output"));
+  connect(removeOutputLineButton_, SIGNAL(clicked(bool)), this, SLOT(removeOutputLine()));
 
   buttonsLayout = new QHBoxLayout;
-  buttonsLayout->addWidget(addLineButton);
-  buttonsLayout->addWidget(removeLineButton);
+  buttonsLayout->addWidget(addOutputLineButton_);
+  buttonsLayout->addWidget(removeOutputLineButton_);
   outputsLayout->addLayout(buttonsLayout);
 
   mainLayout->addWidget(outputsBox);
 
+  updateMethodWidgets(comboBox->currentIndex());
   ////////////////
   setWidget(mainWidget);
 }
@@ -136,7 +145,7 @@ void PhysicalModelWindow::selectImportFileDialogRequested()
 
   if (!fileName.isNull())
   {
-    XMLfileEdit_->setText(fileName);
+    XMLfileNameEdit_->setText(fileName);
     loadButton_->setEnabled(true);
   }
 }
@@ -145,16 +154,25 @@ void PhysicalModelWindow::selectImportFileDialogRequested()
 void PhysicalModelWindow::loadXML()
 {
 #ifdef OTGUI_HAVE_YACS
-  YACSPhysicalModel *ymodel = dynamic_cast<YACSPhysicalModel*>(physicalModel_.getImplementation().get());
-  if (ymodel)
-    ymodel->loadDataWithYACS(XMLfileEdit_->text().toStdString());
+  try
+  {
+    physicalModel_ = YACSPhysicalModel(physicalModel_.getName(), XMLfileNameEdit_->text().toStdString());
+    emit physicalModelChanged(physicalModel_);
+    updateInputTableModel();
+    updateOutputTableModel();
+  }
+  catch(std::exception)
+  {
+    std::cerr<<"Impossible to load data from the file "<< XMLfileNameEdit_->text().toStdString()<<std::endl;
+  }
 #endif
 }
 
 
 void PhysicalModelWindow::updateInputTableModel()
 {
-  delete inputTableModel_;
+  if (inputTableModel_)
+    delete inputTableModel_;
   inputTableModel_ = new InputTableModel(physicalModel_);
   inputTableView_->setModel(inputTableModel_);
 }
@@ -162,7 +180,8 @@ void PhysicalModelWindow::updateInputTableModel()
 
 void PhysicalModelWindow::updateOutputTableModel()
 {
-  delete outputTableModel_;
+  if (outputTableModel_)
+    delete outputTableModel_;
   outputTableModel_ = new OutputTableModel(physicalModel_);
   outputTableView_->setModel(outputTableModel_);
 }
@@ -180,6 +199,39 @@ void PhysicalModelWindow::addOutputLine()
 }
 
 
+void PhysicalModelWindow::updateMethodWidgets(int method)
+{
+  switch(method)
+  {
+    case 0:
+    case 1:
+    {
+#ifdef OTGUI_HAVE_YACS
+      loadXMLFileBox_->hide();
+#endif
+      addInputLineButton_->show();
+      removeInputLineButton_->show();
+      addOutputLineButton_->show();
+      removeOutputLineButton_->show();
+      break;
+    }
+#ifdef OTGUI_HAVE_YACS
+    case 2:
+    {
+      loadXMLFileBox_->show();
+      addInputLineButton_->hide();
+      removeInputLineButton_->hide();
+      addOutputLineButton_->hide();
+      removeOutputLineButton_->hide();
+      break;
+    }
+#endif
+  }
+  updateInputTableModel();
+  updateOutputTableModel();
+}
+
+
 void PhysicalModelWindow::methodChanged(int method)
 {
   switch(method)
@@ -187,25 +239,20 @@ void PhysicalModelWindow::methodChanged(int method)
     case 0:
     case 1:
     {
-      physicalModel_ = PhysicalModel(physicalModel_.getName());
+      physicalModel_ = AnalyticalPhysicalModel(physicalModel_.getName());
       emit physicalModelChanged(physicalModel_);
-#ifdef OTGUI_HAVE_YACS
-      loadXMLFileBox_->hide();
-#endif
       break;
     }
 #ifdef OTGUI_HAVE_YACS
     case 2:
     {
-      physicalModel_ = YACSPhysicalModel(physicalModel_.getName());
+      physicalModel_ = PhysicalModel(physicalModel_.getName());
       emit physicalModelChanged(physicalModel_);
-      loadXMLFileBox_->show();
       break;
     }
 #endif
   }
-  updateInputTableModel();
-  updateOutputTableModel();
+  updateMethodWidgets(method);
 }
 
 
@@ -231,6 +278,4 @@ void PhysicalModelWindow::removeOutputLine()
     outputTableModel_->removeLine(index);
   }
 }
-
-
 }

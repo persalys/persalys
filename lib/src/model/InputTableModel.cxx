@@ -84,10 +84,10 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
         physicalModel_.addInput(input);
         break;
       case 1:
-        physicalModel_.updateInputDescription(input.getName(), value.toString().toStdString());
+        physicalModel_.setInputDescription(input.getName(), value.toString().toStdString());
         break;
       case 2:
-        physicalModel_.updateInputValue(input.getName(), value.toDouble());
+        physicalModel_.setInputValue(input.getName(), value.toDouble());
         break;
     }
     physicalModel_.blockNotification(false);

@@ -3,6 +3,7 @@
 #include "OT.hxx"
 #include "OTtestcode.hxx"
 #include "otgui/OTStudy.hxx"
+#include "otgui/AnalyticalPhysicalModel.hxx"
 #include "otgui/ParametricAnalysis.hxx"
 
 
@@ -24,7 +25,7 @@ int main(int argc, char *argv[])
     Input C("C", 0., "Valued thermal energy", Normal(4000, 60));
 
     Output Ep("Ep", 0., "Primary energy savings", "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
-    PhysicalModel myPhysicalModel("myPhysicalModel");
+    AnalyticalPhysicalModel myPhysicalModel("myPhysicalModel");
 
     myPhysicalModel.addInput(Q);
     myPhysicalModel.addInput(E);

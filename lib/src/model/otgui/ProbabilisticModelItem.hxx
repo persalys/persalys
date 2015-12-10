@@ -23,8 +23,10 @@ public:
   virtual void update(Observable * source, const std::string & message);
 
 public slots:
+  void updatePhysicalModel(const PhysicalModel & physicalModel);
 signals:
   void inputChanged();
+  void physicalModelChanged(const PhysicalModel&);
 
 private:
   PhysicalModel physicalModel_;

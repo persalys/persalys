@@ -14,13 +14,19 @@ int main(int argc, char *argv[])
 {
   TESTPREAMBLE;
   OStream fullprint(std::cout);
-
+  char *fileName = 0;
+  if (argc > 1) {
+    fileName = argv[1];
+  }
+  else {
+    std::cerr << "Schema file (path to example.xml) not provided" << std::endl;
+    return -1;
+  }
   try
   {
     OTStudy myStudy("myStudy");
 
-    YACSPhysicalModel myPhysicalModel("myPhysicalModel", "example.xml");
-    myPhysicalModel.loadDataWithYACS();
+    YACSPhysicalModel myPhysicalModel("myPhysicalModel", fileName);
     myStudy.addPhysicalModel(myPhysicalModel);
 
     // Comparaison

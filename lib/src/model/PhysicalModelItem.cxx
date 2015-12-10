@@ -37,6 +37,7 @@ void PhysicalModelItem::updatePhysicalModel(const PhysicalModel & physicalModel)
 {
   physicalModel_ = physicalModel;
   physicalModel_.addObserver(this);
+  emit physicalModelChanged(physicalModel_);
 }
 
 

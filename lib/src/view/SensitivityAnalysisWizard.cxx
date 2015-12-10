@@ -76,7 +76,6 @@ void SensitivityAnalysisWizard::buildInterface()
   methodParametersLayout->addWidget(nbSimuLabel, 0, 0);
   methodParametersLayout->addWidget(nbSimuSpinbox_, 0, 1);
 
- 
   mainLayout->addLayout(methodParametersLayout);
 
   updateMethodWidgets();
@@ -93,7 +92,7 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
     {
       if (analysis_.getImplementation()->getClassName() == "SRCAnalysis")
       {
-        analysis_ = SobolAnalysis("aNameSobol", physicalModel_);
+        analysis_ = SobolAnalysis(analysis_.getName(), physicalModel_);
         emit analysisChanged(analysis_);
       }
       break;
@@ -102,7 +101,7 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
     {
       if (analysis_.getImplementation()->getClassName() == "SobolAnalysis")
       {
-        analysis_ = SRCAnalysis("aNameSRC", physicalModel_);
+        analysis_ = SRCAnalysis(analysis_.getName(), physicalModel_);
         emit analysisChanged(analysis_);
       }
       break;

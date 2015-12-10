@@ -25,10 +25,12 @@ public:
   void setName(const std::string & name);
 
   std::vector<PhysicalModel> getPhysicalModels() const;
+  PhysicalModel & getPhysicalModelByName(const std::string & physicalModelName);
   bool hasPhysicalModelNamed(const std::string & physicalModelName);
   void addPhysicalModel(const PhysicalModel & physicalModel);
 
   std::vector<Analysis> getAnalyses() const;
+  Analysis & getAnalysisByName(const std::string & analysisName);
   bool hasAnalysisNamed(const std::string & analysisName);
   void addAnalysis(const Analysis & analysis);
 

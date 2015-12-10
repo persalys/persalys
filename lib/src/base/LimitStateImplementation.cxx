@@ -111,9 +111,9 @@ void LimitStateImplementation::setThreshold(const double & threshold)
 // build event
 Event LimitStateImplementation::getEvent()
 {
-  OutputCollection output;
-  output.add(getPhysicalModel().getOutputByName(outputName_));
-  Event event(getPhysicalModel().getOutputRandomVector(output), operator_, threshold_);
+  Description outputDescription(1);
+  outputDescription[0] = outputName_;
+  Event event(getPhysicalModel().getOutputRandomVector(outputDescription), operator_, threshold_);
   Description outputName(1);
   outputName[0] = outputName_;
   event.setDescription(outputName);

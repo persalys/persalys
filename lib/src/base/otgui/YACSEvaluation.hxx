@@ -19,6 +19,9 @@
 #include "Pointer.hxx"
 #include "OTGuiprivate.hxx"
 
+#include "YACSEvalYFX.hxx"
+#include "YACSEvalSession.hxx"
+
 namespace OTGUI {
 
 /**
@@ -33,35 +36,48 @@ class OTGUI_API YACSEvaluation
 public:
 
   /** Default constructor */
-  YACSEvaluation(const OT::String & xmlFileName = "");
+  YACSEvaluation(const std::string & xmlFileName = "");
+
+  YACSEvaluation(const YACSEvaluation & other);
 
   /** Virtual constructor */
   virtual YACSEvaluation * clone() const;
+
+  virtual ~YACSEvaluation();
 
   /** Comparison operator */
   OT::Bool operator ==(const YACSEvaluation & other) const;
 
   /** String converter */
-  virtual OT::String __repr__() const;
-  virtual OT::String __str__(const OT::String & offset = "") const;
+  virtual std::string __repr__() const;
+  virtual std::string __str__(const std::string & offset = "") const;
 
+protected:
+  /** Method loadData() loads the data from the xmlFileName */
+  void loadData();
+
+public:
   /** Operator () */
   virtual OT::NumericalPoint operator() (const OT::NumericalPoint & inP) const;
+  virtual OT::NumericalSample operator() (const OT::NumericalSample & inS) const;
 
+  /** Accessor for input values */
+  OT::NumericalPoint getInputValues() const;
+  void setInputValues(const OT::NumericalPoint & inP);
+  /** Accessor to the input variables names */
+  OT::Description getInputVariablesNames() const;
   /** Accessor for input point dimension */
   OT::UnsignedInteger getInputDimension() const;
 
+  /** Accessor to the output variables names */
+  OT::Description getOutputVariablesNames() const;
+  void setOutputVariablesNames(const OT::Description & outDescription);
   /** Accessor for output point dimension */
   OT::UnsignedInteger getOutputDimension() const;
 
-  /** Accessor to the input variables names */
-  OT::Description getInputVariablesNames() const;
-
-  /** Accessor to the output variables names */
-  OT::Description getOutputVariablesNames() const;
-
-  /** Accessor to the formulas */
-  OT::String getXMLFilename() const;
+  /** Accessor to the xmlFileName */
+  std::string getXMLFileName() const;
+  void setXMLFileName(const std::string & xmlFileName);
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -72,11 +88,12 @@ public:
 protected:
 
 private:
-  OT::String xmlFileName_;
-
-}; /* class YACSEvaluation */
-
-
+  static YACSEvalSession * session_;
+  std::string xmlFileName_;
+  YACSEvalYFX * efx_;
+  OT::NumericalPoint inputValues_;
+  OT::Description inDescription_;
+  OT::Description outDescription_;
+};
 }
-
-#endif /* OTGUI_YACSEVALUATION_HXX */
+#endif

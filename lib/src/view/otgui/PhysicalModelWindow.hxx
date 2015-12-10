@@ -33,6 +33,7 @@ public slots:
   void removeOutputLine();
   void updateInputTableModel();
   void updateOutputTableModel();
+  void updateMethodWidgets(int);
   void methodChanged(int);
   void selectImportFileDialogRequested();
   void loadXML();
@@ -44,9 +45,13 @@ private:
   PhysicalModel physicalModel_;
   QTableView * inputTableView_;
   InputTableModel * inputTableModel_;
+  QPushButton * addInputLineButton_;
+  QPushButton * removeInputLineButton_;
   QTableView * outputTableView_;
   OutputTableModel * outputTableModel_;
-  QLineEdit * XMLfileEdit_;
+  QPushButton * addOutputLineButton_;
+  QPushButton * removeOutputLineButton_;
+  QLineEdit * XMLfileNameEdit_;
   QPushButton * loadButton_;
   QGroupBox * loadXMLFileBox_;
 };

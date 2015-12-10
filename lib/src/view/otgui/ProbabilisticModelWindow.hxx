@@ -32,6 +32,7 @@ protected:
 public slots:
   void updateDistributionWidgets(const QModelIndex & index);
   void updateDistribution();
+  void updatePhysicalModel(const PhysicalModel &);
   void updateProbabilisticModel();
   void addInputRequested(int comboIndex);
   void removeInputRequested();

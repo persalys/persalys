@@ -6,8 +6,8 @@ ot_add_current_dir_to_include_dirs ()
 add_subdirectory ( otgui )
 
 set(BASE_SOURCEFILES Observer.cxx Observable.cxx OTStudy.cxx Variable.cxx Input.cxx Output.cxx
-                     PhysicalModelImplementation.cxx PhysicalModel.cxx AnalysisImplementation.cxx
-                     Analysis.cxx SimulationAnalysis.cxx
+                     PhysicalModelImplementation.cxx AnalyticalPhysicalModel.cxx PhysicalModel.cxx
+                     AnalysisImplementation.cxx Analysis.cxx SimulationAnalysis.cxx
                      ParametricAnalysisResult.cxx ParametricAnalysis.cxx
                      MonteCarloResult.cxx MonteCarloAnalysis.cxx QuadraticCumulResult.cxx
                      QuadraticCumulAnalysis.cxx SobolResult.cxx SobolAnalysis.cxx

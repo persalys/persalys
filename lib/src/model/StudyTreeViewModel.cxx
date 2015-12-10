@@ -1,6 +1,7 @@
 #include "otgui/StudyTreeViewModel.hxx"
 
 #include "otgui/OTStudy.hxx"
+#include "otgui/AnalyticalPhysicalModel.hxx"
 
 namespace OTGUI {
 
@@ -49,7 +50,7 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
 void StudyTreeViewModel::addPhysicalModelItem(const QModelIndex & parentIndex)
 {
   // TODO: find a name for the new item
-  PhysicalModel newPhysicalModel("aModelPhys");
+  AnalyticalPhysicalModel newPhysicalModel("aModelPhys");
   OTStudyItem * parentItem = static_cast<OTStudyItem*>(itemFromIndex(parentIndex));
   parentItem->getOTStudy()->addPhysicalModel(newPhysicalModel);
 }
@@ -61,6 +62,7 @@ void StudyTreeViewModel::addProbabilisticModelItem(const QModelIndex & parentInd
   PhysicalModelItem * parentItem = static_cast<PhysicalModelItem*>(itemFromIndex(parentIndex)->parent());
   ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(parentItem->getPhysicalModel());
   parentItem->getPhysicalModel().addObserver(newProbabilisticModelItem);
+  connect(parentItem, SIGNAL(physicalModelChanged(PhysicalModel)), newProbabilisticModelItem, SLOT(updatePhysicalModel(PhysicalModel)));
   itemFromIndex(parentIndex)->appendRow(newProbabilisticModelItem);
   emit newProbabilisticModelCreated(newProbabilisticModelItem);
 }

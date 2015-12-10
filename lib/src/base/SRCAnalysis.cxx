@@ -41,9 +41,9 @@ void SRCAnalysis::run()
 
   for (int i=0; i<getOutputs().getSize(); ++i)
   {
-    OutputCollection output_i;
-    output_i.add(getOutputs()[i]);
-    indices.add(CorrelationAnalysis::SRC(inputSample, getOutputSample(inputSample, output_i)));
+    Description outputName(1);
+    outputName[0] = getOutputs()[i].getName();
+    indices.add(CorrelationAnalysis::SRC(inputSample, getOutputSample(inputSample, outputName)));
   }
 
   indices.setDescription(inputSample.getDescription());

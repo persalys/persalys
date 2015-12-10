@@ -66,6 +66,7 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 %include Input.i
 %include Output.i
 %include PhysicalModelImplementation.i
+%include AnalyticalPhysicalModel.i
 %include PhysicalModel.i
 %include YACSPhysicalModel.i
 %include LimitStateImplementation.i

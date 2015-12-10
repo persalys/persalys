@@ -43,6 +43,7 @@ void MonteCarloReliabilityAnalysis::run()
   MonteCarlo algo = MonteCarlo(getLimitState().getEvent());
   algo.setMaximumOuterSampling(maximumOuterSampling_);
   algo.setMaximumCoefficientOfVariation(maximumCoefficientOfVariation_);
+//   TODO: for YACS : algo.setBlockSize(1000);
   algo.run();
   // set results
   result_ = algo.getResult();

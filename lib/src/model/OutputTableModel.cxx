@@ -91,11 +91,11 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
         physicalModel_.addOutput(output);
         break;
       case 1:
-        physicalModel_.updateOutputDescription(output.getName(), value.toString().toStdString());
+        physicalModel_.setOutputDescription(output.getName(), value.toString().toStdString());
         break;
       case 2:
         // TODO test if value.toString() ok
-        physicalModel_.updateOutputFormula(output.getName(), value.toString().toStdString());
+        physicalModel_.setOutputFormula(output.getName(), value.toString().toStdString());
         break;
 
     }

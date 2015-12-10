@@ -95,7 +95,7 @@ std::string Input::dump() const
       if (truncatedDistribution.getFiniteLowerBound())    //lower bound truncation
         oss << truncatedDistribution.getLowerBound() << ")\n";
       else
-        oss << truncatedDistribution.getUpperBound() << " ot.TruncatedDistribution.UPPER)\n";
+        oss << truncatedDistribution.getUpperBound() << ", ot.TruncatedDistribution.UPPER)\n";
     }
     else  // both sides truncation
       oss << truncatedDistribution.getUpperBound() << ", " << truncatedDistribution.getUpperBound() <<")\n";

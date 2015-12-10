@@ -38,7 +38,7 @@ void SobolAnalysis::run()
   NumericalSample inputSample1(getInputSample());
   NumericalSample inputSample2(getInputSample());
 
-  SensitivityAnalysis sensitivityAnalysis = SensitivityAnalysis(inputSample1, inputSample2, getPhysicalModel().getFunction(getOutputs()));
+  SensitivityAnalysis sensitivityAnalysis = SensitivityAnalysis(inputSample1, inputSample2, getPhysicalModel().getFunction(getOutputNames()));
 
   // set results
   NumericalSample firstOrderIndices(1, sensitivityAnalysis.getFirstOrderIndices(0));

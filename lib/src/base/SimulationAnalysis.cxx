@@ -69,13 +69,13 @@ NumericalSample SimulationAnalysis::getInputSample()
 
 NumericalSample SimulationAnalysis::getOutputSample(NumericalSample inputSample) const
 {
-  return getPhysicalModel().getFunction(outputs_)(inputSample);
+  return getPhysicalModel().getFunction(getOutputNames())(inputSample);
 }
 
 
-NumericalSample SimulationAnalysis::getOutputSample(NumericalSample inputSample, const OutputCollection & output) const
+NumericalSample SimulationAnalysis::getOutputSample(NumericalSample inputSample, const Description & outputNames) const
 {
-  return getPhysicalModel().getFunction(output)(inputSample);
+  return getPhysicalModel().getFunction(outputNames)(inputSample);
 }
 
 

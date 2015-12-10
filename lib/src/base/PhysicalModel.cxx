@@ -1,17 +1,21 @@
 #include "otgui/PhysicalModel.hxx"
 
+#include "otgui/AnalyticalPhysicalModel.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
 
+CLASSNAMEINIT(PhysicalModel);
+
 PhysicalModel::PhysicalModel(const std::string & name)
-  : TypedInterfaceObject<PhysicalModelImplementation>(new PhysicalModelImplementation(name))
+  : TypedInterfaceObject<PhysicalModelImplementation>(new AnalyticalPhysicalModel(name))
 {
 }
 
 
 PhysicalModel::PhysicalModel(const std::string & name, const InputCollection & inputs, const OutputCollection & outputs)
-  : TypedInterfaceObject<PhysicalModelImplementation>(new PhysicalModelImplementation(name, inputs, outputs))
+  : TypedInterfaceObject<PhysicalModelImplementation>(new AnalyticalPhysicalModel(name, inputs, outputs))
 {
 }
 
@@ -50,11 +54,6 @@ PhysicalModel::PhysicalModel(const PhysicalModel & other)
 PhysicalModel* PhysicalModel::clone() const
 {
   return new PhysicalModel(*this);
-}
-
-
-PhysicalModel::~PhysicalModel()
-{
 }
 
 
@@ -100,21 +99,21 @@ void PhysicalModel::setInputs(const InputCollection & inputs)
 }
 
 
-void PhysicalModel::updateInputDescription(const std::string & inputName, const std::string & description)
+void PhysicalModel::setInputDescription(const std::string & inputName, const std::string & description)
 {
-  return getImplementation()->updateInputDescription(inputName, description);
+  return getImplementation()->setInputDescription(inputName, description);
 }
 
 
-void PhysicalModel::updateInputValue(const std::string & inputName, const double & value)
+void PhysicalModel::setInputValue(const std::string & inputName, const double & value)
 {
-  return getImplementation()->updateInputValue(inputName, value);
+  return getImplementation()->setInputValue(inputName, value);
 }
 
 
-void PhysicalModel::updateInputDistribution(const std::string & inputName, const Distribution & distribution)
+void PhysicalModel::setInputDistribution(const std::string & inputName, const Distribution & distribution)
 {
-  return getImplementation()->updateInputDistribution(inputName, distribution);
+  return getImplementation()->setInputDistribution(inputName, distribution);
 }
 
 
@@ -166,15 +165,15 @@ void PhysicalModel::setOutputs(const OutputCollection & outputs)
 }
 
 
-void PhysicalModel::updateOutputDescription(const std::string & outputName, const std::string & description)
+void PhysicalModel::setOutputDescription(const std::string & outputName, const std::string & description)
 {
-  return getImplementation()->updateOutputDescription(outputName, description);
+  return getImplementation()->setOutputDescription(outputName, description);
 }
 
 
-void PhysicalModel::updateOutputFormula(const std::string & outputName, const std::string & formula)
+void PhysicalModel::setOutputFormula(const std::string & outputName, const std::string & formula)
 {
-  return getImplementation()->updateOutputFormula(outputName, formula);
+  return getImplementation()->setOutputFormula(outputName, formula);
 }
 
 
@@ -187,12 +186,6 @@ void PhysicalModel::addOutput(const Output & output)
 void PhysicalModel::removeOutput(const std::string & outputName)
 {
   getImplementation()->removeOutput(outputName);
-}
-
-
-void PhysicalModel::updateFunction()
-{
-  getImplementation()->updateFunction();
 }
 
 
@@ -220,15 +213,15 @@ RandomVector PhysicalModel::getInputRandomVector()
 }
 
 
-RandomVector PhysicalModel::getOutputRandomVector(const OutputCollection & outputs)
+RandomVector PhysicalModel::getOutputRandomVector(const Description & outputNames)
 {
-  return getImplementation()->getOutputRandomVector(outputs);
+  return getImplementation()->getOutputRandomVector(outputNames);
 }
 
 
-NumericalMathFunction PhysicalModel::getFunction(const OutputCollection & outputs)
+NumericalMathFunction PhysicalModel::getFunction(const Description & outputNames)
 {
-  return getImplementation()->getFunction(outputs);
+  return getImplementation()->getFunction(outputNames);
 }
 
 
@@ -242,6 +235,4 @@ std::string PhysicalModel::dump() const
 {
   return getImplementation()->dump();
 }
-
-
 }

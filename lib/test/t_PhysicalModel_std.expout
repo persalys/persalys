@@ -1,2 +1,2 @@
-unamed = otguibase.PhysicalModel('unamed')
+unamed = otguibase.AnalyticalPhysicalModel('unamed')
 
