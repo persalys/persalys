@@ -46,7 +46,26 @@ void OTStudyItem::update(Observable * source, const std::string & message)
       emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
     }
 
+    item = new Item(tr("Designs of experiment"), QString("DesignOfExperimentList"));
+    item->setEditable(false);
+    newPhysicalModelItem->appendRow(item);
+
     emit newPhysicalModelItemCreated(newPhysicalModelItem);
+  }
+  else if (message=="addDesignOfExperiment")
+  {
+    DesignOfExperiment addedDesignOfExperiment = otStudy_->getDesignOfExperiments().back();
+
+    DesignOfExperimentItem * newItem = new DesignOfExperimentItem(addedDesignOfExperiment);
+    addedDesignOfExperiment.addObserver(newItem);
+    addedDesignOfExperiment.getPhysicalModel().addObserver(newItem);
+    for (int i=0; i<rowCount(); ++i)
+      if (child(i)->text().toStdString() == addedDesignOfExperiment.getPhysicalModel().getName())
+      {
+        child(i)->child(2)->appendRow(newItem);
+        break;
+      }
+    emit newDesignOfExperimentItemCreated(newItem);
   }
   else if (message=="addLimitState")
   {

@@ -24,7 +24,7 @@ PhysicalModelImplementation::PhysicalModelImplementation(const std::string & nam
   , name_(name)
   , inputs_(inputs)
   , outputs_(outputs)
-  , inputNames_()
+  , inputNames_(Description())
   , outputNames_(Description())
 {
 }
@@ -141,6 +141,7 @@ void PhysicalModelImplementation::addInput(const Input & input)
 void PhysicalModelImplementation::removeInput(const std::string & inputName)
 {
   if (hasAnInputNamed(inputName))
+  {
     for (int i=0; i<inputs_.getSize(); ++i)
       if (inputs_[i].getName() == inputName)
       {
@@ -150,6 +151,7 @@ void PhysicalModelImplementation::removeInput(const std::string & inputName)
         notify("updateProbabilisticModelWindow");
         break;
       }
+  }
   else
     throw InvalidArgumentException(HERE) << "The given input name " << inputName <<" does not correspond to an input of the physical model.\n";
 }
@@ -245,6 +247,7 @@ void PhysicalModelImplementation::addOutput(const Output & output)
 void PhysicalModelImplementation::removeOutput(const std::string & outputName)
 {
   if (hasAnOutputNamed(outputName))
+  {
     for (int i=0; i<outputs_.getSize(); ++i)
       if (outputs_[i].getName() == outputName)
       {
@@ -252,8 +255,9 @@ void PhysicalModelImplementation::removeOutput(const std::string & outputName)
         outputNames_.erase(outputNames_.begin() + i);
         notify("outputChanged");
         notify("updateLimitStateWindow");
-        return;
+        break;
       }
+  }
   else
     throw InvalidArgumentException(HERE) << "The given output name " << outputName <<" does not correspond to an output of the physical model\n";
 }

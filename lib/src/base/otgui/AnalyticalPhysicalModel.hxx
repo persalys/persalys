@@ -22,7 +22,9 @@ public:
   void removeInput(const std::string & inputName);
 
   void setOutputs(const OutputCollection & outputs);
+  void setOutputFormula(const std::string & outputName, const std::string & formula);
   void addOutput(const Output & output);
+  void removeOutput(const std::string & outputName);
 
   OT::Description getFormulas();
   virtual OT::NumericalMathFunction getFunction(const OT::Description & outputNames);

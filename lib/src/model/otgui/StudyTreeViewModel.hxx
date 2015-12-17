@@ -31,6 +31,7 @@ public slots:
 signals:
   void newPhysicalModelCreated(PhysicalModelItem*);
   void newProbabilisticModelCreated(ProbabilisticModelItem*);
+  void newDesignOfExperimentCreated(DesignOfExperimentItem*);
   void newLimitStateCreated(LimitStateItem*);
   void newAnalysisCreated(AnalysisItem*);
 };

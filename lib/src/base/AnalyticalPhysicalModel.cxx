@@ -96,6 +96,21 @@ void AnalyticalPhysicalModel::setOutputs(const OutputCollection & outputs)
 }
 
 
+void AnalyticalPhysicalModel::setOutputFormula(const std::string & outputName, const std::string & formula)
+{
+  PhysicalModelImplementation::setOutputFormula(outputName, formula);
+  try  
+  {
+    formulas_ = Description(0);
+    updateFunction();
+  }
+  catch(std::exception & ex)
+  {
+    throw InvalidArgumentException(HERE) << ex.what();
+  }
+}
+
+
 void AnalyticalPhysicalModel::addOutput(const Output & output)
 {
   PhysicalModelImplementation::addOutput(output);
@@ -110,13 +125,29 @@ void AnalyticalPhysicalModel::addOutput(const Output & output)
   }
 }
 
+
+void AnalyticalPhysicalModel::removeOutput(const std::string& outputName)
+{
+  PhysicalModelImplementation::removeOutput(outputName);
+  try
+  {
+    formulas_ = Description(0);
+    updateFunction();
+  }
+  catch(std::exception & ex)
+  {
+    throw InvalidArgumentException(HERE) << ex.what();
+  } 
+}
+
+
 Description AnalyticalPhysicalModel::getFormulas()
 {
   if (!formulas_.getSize())
   {
-    Description formulas = Description(getOutputs().getSize());
+    formulas_ = Description(getOutputs().getSize());
     for (int i=0; i<getOutputs().getSize(); ++i)
-      formulas[i] = getOutputs()[i].getFormula();
+      formulas_[i] = getOutputs()[i].getFormula();
   }
   return formulas_;
 }

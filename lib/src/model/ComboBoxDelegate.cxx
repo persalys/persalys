@@ -5,10 +5,10 @@
 
 namespace OTGUI {
 
-ComboBoxDelegate::ComboBoxDelegate(QObject * parent)
+ComboBoxDelegate::ComboBoxDelegate(QStringList items, QObject * parent)
   : QItemDelegate(parent)
+  , items_(items)
 {
-  items_ = QStringList()<<tr("Beta")<<tr("Gamma")<<tr("Gumbel")<<tr("Normal")<<tr("Uniform");
 }
 
 

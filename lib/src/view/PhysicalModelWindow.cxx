@@ -2,7 +2,6 @@
 
 #include "otgui/PhysicalModelWindow.hxx"
 
-#include "otgui/ComboBoxDelegate.hxx"
 #include "otgui/AnalyticalPhysicalModel.hxx"
 #ifdef OTGUI_HAVE_YACS
 # include "otgui/YACSPhysicalModel.hxx"
@@ -89,6 +88,7 @@ void PhysicalModelWindow::buildInterface()
   QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
 
   inputTableView_ = new QTableView;
+  inputTableView_->setEditTriggers(QTableView::SelectedClicked);
   inputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
   inputsLayout->addWidget(inputTableView_);
 
@@ -112,6 +112,7 @@ void PhysicalModelWindow::buildInterface()
   QVBoxLayout * outputsLayout = new QVBoxLayout(outputsBox);
 
   outputTableView_ = new QTableView;
+  outputTableView_->setEditTriggers(QTableView::SelectedClicked);
   outputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
   outputsLayout->addWidget(outputTableView_);
 
@@ -143,7 +144,7 @@ void PhysicalModelWindow::selectImportFileDialogRequested()
                      xmlPath,
                      tr("Data files (*.xml);;"));
 
-  if (!fileName.isNull())
+  if (!fileName.isEmpty())
   {
     XMLfileNameEdit_->setText(fileName);
     loadButton_->setEnabled(true);

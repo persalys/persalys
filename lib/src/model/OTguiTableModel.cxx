@@ -38,6 +38,20 @@ QVariant OTguiTableModel::headerData(int section, Qt::Orientation orientation, i
 }
 
 
+bool OTguiTableModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
+{
+  if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+  {
+    OT::Description description = data_.getDescription();
+    description[section] = value.toString().toStdString();
+    data_.setDescription(description);
+    emit headerDataChanged(Qt::Horizontal, section, section);
+    return true;
+  }
+  return QAbstractTableModel::setHeaderData(section, orientation, value, role);
+}
+
+
 QVariant OTguiTableModel::data(const QModelIndex & index, int role) const
 {
   if (!index.isValid()) return QVariant();
@@ -46,9 +60,7 @@ QVariant OTguiTableModel::data(const QModelIndex & index, int role) const
       return int(Qt::AlignRight | Qt::AlignVCenter);
 
   if (role == Qt::DisplayRole)
-  {
     return QString::number(data_[index.row()][index.column()], 'g', 8);
-  }
 
   return QVariant();
 }

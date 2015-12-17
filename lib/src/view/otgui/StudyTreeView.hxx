@@ -24,6 +24,7 @@ public slots:
   void createNewOTStudy();
   void createNewPhysicalModel();
   void createNewProbabilisticModel();
+  void createNewDesignOfExperiment();
   void createNewLimitState();
   void createNewParametricAnalysis();
   void createNewCentralTendency();
@@ -31,6 +32,7 @@ public slots:
   void createNewThresholdExceedance();
   void onCustomContextMenu(const QPoint & point);
   void selectedItemChanged(const QModelIndex & index);
+  void runDesignOfExperiment();
   void runParametricAnalysis();
   void runCentralTendency();
   void runSensitivityAnalysis();
@@ -42,13 +44,14 @@ public slots:
   void createAnalysisConnection(AnalysisItem*);
   void createNewPhysicalModelWindow(PhysicalModelItem * item);
   void createNewProbabilisticModelWindow(ProbabilisticModelItem * item);
+  void createNewDesignOfExperimentWindow(DesignOfExperimentItem* item);
   void createNewLimitStateWindow(LimitStateItem * item);
   void dumpOTStudy();
   void loadOTStudy();
 signals:
   void showWindow(QMdiSubWindow*);
   void itemSelected(QStandardItem *);
-  void checkIfWindowResultExists(AnalysisItem *);
+  void checkIfWindowResultExists(ObserverItem *);
   void loadPythonScript(const QString & fileName);
 
 private:
@@ -56,11 +59,13 @@ private:
   QAction * newOTStudyAction_;
   QAction * newPhysicalModel_;
   QAction * newProbabilisticModel_;
+  QAction * newDesignOfExperiment_;
   QAction * newLimitState_;
   QAction * newParametricAnalysis_;
   QAction * newCentralTendency_;
   QAction * newSensitivityAnalysis_;
   QAction * newThresholdExceedance_;
+  QAction * runDesignOfExperiment_;
   QAction * runParametricAnalysis_;
   QAction * runCentralTendency_;
   QAction * runSensitivityAnalysis_;

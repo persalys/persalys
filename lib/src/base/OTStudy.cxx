@@ -113,6 +113,34 @@ void OTStudy::addPhysicalModel(const PhysicalModel & physicalModel)
 }
 
 
+std::vector<DesignOfExperiment> OTStudy::getDesignOfExperiments() const
+{
+  return designOfExperiments_;
+}
+
+
+bool OTStudy::hasDesignOfExperimentNamed(const std::string & designOfExperimentName)
+{
+  for (int i=0; i<designOfExperiments_.size(); ++i)
+    if (designOfExperiments_[i].getImplementation()->getName() == designOfExperimentName)
+      return true;
+  return false;
+}
+
+
+void OTStudy::addDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
+{
+  if (hasDesignOfExperimentNamed(designOfExperiment.getName()))
+    throw InvalidArgumentException(HERE) << "The study has already contained a design of experiment named " << designOfExperiment.getName();
+
+  if (!hasPhysicalModelNamed(designOfExperiment.getPhysicalModel().getName()))
+    throw InvalidArgumentException(HERE) << "The design of experiment has been created with a physical model not belonging to the study.";
+
+  designOfExperiments_.push_back(designOfExperiment);
+  notify("addDesignOfExperiment");
+}
+
+
 std::vector<Analysis> OTStudy::getAnalyses() const
 {
   return analyses_;

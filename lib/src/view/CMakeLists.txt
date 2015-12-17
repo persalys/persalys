@@ -6,8 +6,13 @@ ot_add_current_dir_to_include_dirs ()
 
 ot_add_source_file ( MainWindow.cxx )
 ot_add_source_file ( OTguiSubWindow.cxx )
+ot_add_source_file ( ImportTablePage.cxx )
+ot_add_source_file ( HorizontalHeaderViewWithCombobox.cxx )
+ot_add_source_file ( DeterministicDesignPage.cxx )
 ot_add_source_file ( PhysicalModelWindow.cxx )
 ot_add_source_file ( ProbabilisticModelWindow.cxx )
+ot_add_source_file ( DesignOfExperimentWizard.cxx )
+ot_add_source_file ( DesignOfExperimentWindow.cxx )
 ot_add_source_file ( StudyTreeView.cxx )
 ot_add_source_file ( OTguiTableView.cxx )
 ot_add_source_file ( ParametricAnalysisWizard.cxx )
@@ -26,10 +31,15 @@ add_subdirectory (otgui)
 
 qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                    otgui/OTguiSubWindow.hxx
+                                   otgui/ImportTablePage.hxx
                                    otgui/StudyTreeView.hxx
                                    otgui/OTguiTableView.hxx
+                                   otgui/HorizontalHeaderViewWithCombobox.hxx
+                                   otgui/DeterministicDesignPage.hxx
                                    otgui/PhysicalModelWindow.hxx
                                    otgui/ProbabilisticModelWindow.hxx
+                                   otgui/DesignOfExperimentWizard.hxx
+                                   otgui/DesignOfExperimentWindow.hxx
                                    otgui/ParametricAnalysisWizard.hxx
                                    otgui/ParametricAnalysisResultWindow.hxx
                                    otgui/CentralTendencyWizard.hxx
@@ -40,7 +50,8 @@ qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                    otgui/SensitivityAnalysisWizard.hxx
                                    otgui/LimitStateWindow.hxx
                                    otgui/ReliabilityAnalysisWizard.hxx
-                                   otgui/MonteCarloReliabilityResultWindow.hxx )
+                                   otgui/MonteCarloReliabilityResultWindow.hxx
+                                   )
 
 set(RESOURCES ${CMAKE_SOURCE_DIR}/gui.qrc)
 qt4_add_resources(OTGUI_RESOURCES_RCC ${RESOURCES})

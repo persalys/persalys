@@ -7,8 +7,17 @@
 
 namespace OTGUI {
 
-OTguiTableView::OTguiTableView(const OT::NumericalSample & sample)
-  : QTableView()
+OTguiTableView::OTguiTableView(QWidget* parent)
+  : QTableView(parent)
+  , model_(0)
+{
+  setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
+}
+
+
+OTguiTableView::OTguiTableView(const OT::NumericalSample & sample, QWidget *parent)
+  : QTableView(parent)
 {
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
@@ -34,7 +43,8 @@ void OTguiTableView::exportData()
   QString fileName = QFileDialog::getSaveFileName(this, tr("Export model as..."),
                      QDir::homePath(),
                      tr("CSV source files (*.csv)"));
-  if ( ! fileName.isEmpty() )
+
+  if (!fileName.isEmpty())
   {
     if (!fileName.endsWith(".csv"))
       fileName += ".csv";

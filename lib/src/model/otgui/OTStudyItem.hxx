@@ -5,6 +5,7 @@
 
 #include "otgui/PhysicalModelItem.hxx"
 #include "otgui/ProbabilisticModelItem.hxx"
+#include "otgui/DesignOfExperimentItem.hxx"
 #include "otgui/LimitStateItem.hxx"
 #include "otgui/AnalysisItem.hxx"
 #include "otgui/OTStudy.hxx"
@@ -34,6 +35,7 @@ public slots:
 signals:
   void newPhysicalModelItemCreated(PhysicalModelItem*);
   void newProbabilisticModelItemCreated(ProbabilisticModelItem*);
+  void newDesignOfExperimentItemCreated(DesignOfExperimentItem*);
   void newAnalysisItemCreated(AnalysisItem*);
   void newLimitStateItemCreated(LimitStateItem*);
 

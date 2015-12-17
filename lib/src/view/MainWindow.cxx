@@ -18,7 +18,7 @@ MainWindow::MainWindow()
   buildActions();
   connect(studyTree_, SIGNAL(showWindow(QMdiSubWindow *)), this, SLOT(showSubWindow(QMdiSubWindow *)));
   connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), this, SLOT(showSubWindow(QStandardItem *)));
-  connect(studyTree_, SIGNAL(checkIfWindowResultExists(AnalysisItem *)), this, SLOT(checkIfWindowResultExists(AnalysisItem *)));
+  connect(studyTree_, SIGNAL(checkIfWindowResultExists(ObserverItem *)), this, SLOT(checkIfWindowResultExists(ObserverItem *)));
   setWindowTitle("OTGui");
 }
 
@@ -107,7 +107,7 @@ void MainWindow::showSubWindow(QStandardItem * item)
 }
 
 
-void MainWindow::checkIfWindowResultExists(AnalysisItem* item)
+void MainWindow::checkIfWindowResultExists(ObserverItem* item)
 {
   QList<QMdiSubWindow *> listSubWindow =  mdiArea_->subWindowList();
 

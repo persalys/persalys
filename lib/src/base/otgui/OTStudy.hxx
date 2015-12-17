@@ -3,6 +3,7 @@
 #ifndef OTSTUDY_H
 #define OTSTUDY_H
 
+#include "DesignOfExperiment.hxx"
 #include "Analysis.hxx"
 #include "LimitState.hxx"
 #include "Observer.hxx"
@@ -29,6 +30,10 @@ public:
   bool hasPhysicalModelNamed(const std::string & physicalModelName);
   void addPhysicalModel(const PhysicalModel & physicalModel);
 
+  std::vector<DesignOfExperiment> getDesignOfExperiments() const;
+  bool hasDesignOfExperimentNamed(const std::string & designOfExperimentName);
+  void addDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
+
   std::vector<Analysis> getAnalyses() const;
   Analysis & getAnalysisByName(const std::string & analysisName);
   bool hasAnalysisNamed(const std::string & analysisName);
@@ -45,6 +50,7 @@ private:
   static Observer * InstanceObserver_;
   std::string name_;
   std::vector<PhysicalModel> physicalModels_;
+  std::vector<DesignOfExperiment> designOfExperiments_;
   std::vector<Analysis> analyses_;
   std::vector<LimitState> limitStates_;
 };

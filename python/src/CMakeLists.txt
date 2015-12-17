@@ -56,6 +56,8 @@ ot_add_python_module( otguibase otguibase_module.i
                       AnalyticalPhysicalModel.i AnalyticalPhysicalModel_doc.i.in
                       PhysicalModel.i PhysicalModel_doc.i.in
                       YACSPhysicalModel.i
+                      DesignOfExperimentImplementation.i
+                      DesignOfExperiment.i
                       LimitStateImplementation.i
                       LimitState.i LimitState_doc.i.in
                       AnalysisImplementation.i

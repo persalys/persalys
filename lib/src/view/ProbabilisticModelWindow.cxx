@@ -45,7 +45,8 @@ void ProbabilisticModelWindow::buildInterface()
 
   //   stochastic inputs table
   inputTableView_ = new QTableView;
-  ComboBoxDelegate * delegate = new ComboBoxDelegate;
+  QStringList items = QStringList()<<tr("Beta")<<tr("Gamma")<<tr("Gumbel")<<tr("Normal")<<tr("Uniform");
+  ComboBoxDelegate * delegate = new ComboBoxDelegate(items);
   inputTableView_->setItemDelegateForColumn(1, delegate);
   inputTableView_->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
   inputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);

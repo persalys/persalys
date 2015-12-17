@@ -13,7 +13,8 @@ class OTguiTableView : public QTableView
   Q_OBJECT
 
 public:
-  OTguiTableView(const OT::NumericalSample & sample);
+  OTguiTableView(QWidget *parent=0);
+  OTguiTableView(const OT::NumericalSample & sample, QWidget *parent=0);
 
 public slots:
   void contextMenu(const QPoint & pos);

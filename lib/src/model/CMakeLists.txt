@@ -5,9 +5,11 @@ ot_add_source_file ( OTguiTableModel.cxx )
 ot_add_source_file ( InputTableModel.cxx )
 ot_add_source_file ( InputTableProbabilisticModel.cxx )
 ot_add_source_file ( OutputTableModel.cxx )
+ot_add_source_file ( ExperimentTableModel.cxx )
 ot_add_source_file ( Item.cxx )
 ot_add_source_file ( ObserverItem.cxx )
 ot_add_source_file ( LimitStateItem.cxx )
+ot_add_source_file ( DesignOfExperimentItem.cxx )
 ot_add_source_file ( ProbabilisticModelItem.cxx )
 ot_add_source_file ( PhysicalModelItem.cxx )
 ot_add_source_file ( OTStudyItem.cxx )
@@ -25,6 +27,7 @@ qt4_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/ComboBoxDelegate.hxx
                                     otgui/InputTableModel.hxx
                                     otgui/InputTableProbabilisticModel.hxx
                                     otgui/OutputTableModel.hxx
+                                    otgui/ExperimentTableModel.hxx
                                     otgui/AnalysisItem.hxx
                                     otgui/ParametricAnalysisItem.hxx
                                     otgui/ParametricAnalysisTableModel.hxx
@@ -33,6 +36,7 @@ qt4_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/ComboBoxDelegate.hxx
                                     otgui/ReliabilityAnalysisItem.hxx
                                     otgui/StudyTreeViewModel.hxx
                                     otgui/LimitStateItem.hxx
+                                    otgui/DesignOfExperimentItem.hxx
                                     otgui/ProbabilisticModelItem.hxx
                                     otgui/PhysicalModelItem.hxx
                                     otgui/ObserverItem.hxx
