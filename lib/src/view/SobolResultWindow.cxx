@@ -6,6 +6,7 @@
 
 #include <QVBoxLayout>
 #include <QHeaderView>
+#include <QLabel>
 
 using namespace OT;
 
@@ -53,29 +54,21 @@ void SobolResultWindow::buildInterface()
   tabLayout->addLayout(headLayout);
 
   // graph
-  QHBoxLayout * mainLayout = new QHBoxLayout;
-  barChart_ = new PlotWidget(true);
-  mainLayout->addWidget(barChart_->getPlotLabel());
+  indicesPlot_ = new PlotWidget(true);
+  tabLayout->addWidget(indicesPlot_);
 
-  sortComboBox_ = new QComboBox;
-  items = QStringList()<<tr("Total")<<tr("First")<<tr("None");
-  sortComboBox_->addItems(items);
-  connect(sortComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateBarChart()));
-  mainLayout->addWidget(sortComboBox_);
-
-  mainLayout->addStretch();
-  tabLayout->addLayout(mainLayout);
-
-  updateBarChart();
+  updateIndicesPlot(-1, Qt::AscendingOrder);
 
   // table of indices
   table_ = new QTableWidget(0, 3, this);
   table_->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("First order indice") << tr("Total indice"));
   table_->verticalHeader()->hide();
   table_->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+  connect(table_->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
+  // fill table
+  updateTable(0);
   table_->setSortingEnabled(true);
 
-  updateTable(0);
   tabLayout->addWidget(table_);
 
   tabWidget->addTab(tab, "Result");
@@ -87,69 +80,100 @@ void SobolResultWindow::buildInterface()
 void SobolResultWindow::outputChanged(int index)
 {
   updateTable(index);
-  updateBarChart();
+  updateIndicesPlot(-1, Qt::AscendingOrder);
 }
 
 
-void SobolResultWindow::updateBarChart()
+void SobolResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
 {
-  Q_ASSERT(barChart_);
+  Q_ASSERT(indicesPlot_);
 
   int indexOutput = outputsComboBox_->currentIndex();
   NumericalPoint currentFirstOrderIndices(result_.getInputNames().getSize());
   NumericalPoint currentTotalOrderIndices(result_.getInputNames().getSize());
   Description sortedInputNames(result_.getInputNames().getSize());
 
-  switch (sortComboBox_->currentIndex())
+  switch (section)
   {
-    case 0:
-    {
-      int indice = 0;
-      for (std::map<double,int>::reverse_iterator it=totalOrderIndices_[indexOutput].rbegin(); it!=totalOrderIndices_[indexOutput].rend(); ++it)
-      {
-        currentFirstOrderIndices[indice] = result_.getFirstOrderIndices()[indexOutput][it->second];
-        currentTotalOrderIndices[indice] = it->first;
-        sortedInputNames[indice] = result_.getInputNames()[it->second];
-        ++indice;
-      }
-      break;
-    }
-    case 1:
-    {
-      int indice = 0;
-      for (std::map<double,int>::reverse_iterator it=firstOrderIndices_[indexOutput].rbegin(); it!=firstOrderIndices_[indexOutput].rend(); ++it)
-      {
-        currentFirstOrderIndices[indice] = it->first;
-        currentTotalOrderIndices[indice] = result_.getTotalOrderIndices()[indexOutput][it->second];
-        sortedInputNames[indice] = result_.getInputNames()[it->second];
-        ++indice;
-      }
-      break;
-    }
-    case 2:
+    case -1: // initial state
     {
       currentFirstOrderIndices = result_.getFirstOrderIndices()[indexOutput];
       currentTotalOrderIndices = result_.getTotalOrderIndices()[indexOutput];
       sortedInputNames = result_.getInputNames();
       break;
     }
+    case 1:
+    {
+      int indice = 0;
+      if (order == Qt::DescendingOrder)
+      {
+        for (std::map<double,int>::reverse_iterator it=totalOrderIndices_[indexOutput].rbegin(); it!=totalOrderIndices_[indexOutput].rend(); ++it, indice++)
+        {
+          currentFirstOrderIndices[indice] = result_.getFirstOrderIndices()[indexOutput][it->second];
+          currentTotalOrderIndices[indice] = it->first;
+          sortedInputNames[indice] = result_.getInputNames()[it->second];
+        }
+        break;
+      }
+      else
+      {
+        for (std::map<double,int>::iterator it=totalOrderIndices_[indexOutput].begin(); it!=totalOrderIndices_[indexOutput].end(); ++it, indice++)
+        {
+          currentFirstOrderIndices[indice] = result_.getFirstOrderIndices()[indexOutput][it->second];
+          currentTotalOrderIndices[indice] = it->first;
+          sortedInputNames[indice] = result_.getInputNames()[it->second];
+        }
+      }
+    }
+    case 2:
+    {
+      int indice = 0;
+      if (order == Qt::DescendingOrder)
+      {
+        for (std::map<double,int>::reverse_iterator it=firstOrderIndices_[indexOutput].rbegin(); it!=firstOrderIndices_[indexOutput].rend(); ++it, indice++)
+        {
+          currentFirstOrderIndices[indice] = it->first;
+          currentTotalOrderIndices[indice] = result_.getTotalOrderIndices()[indexOutput][it->second];
+          sortedInputNames[indice] = result_.getInputNames()[it->second];
+        }
+      }
+      else
+      {
+        for (std::map<double,int>::iterator it=firstOrderIndices_[indexOutput].begin(); it!=firstOrderIndices_[indexOutput].end(); ++it, indice++)
+        {
+          currentFirstOrderIndices[indice] = it->first;
+          currentTotalOrderIndices[indice] = result_.getTotalOrderIndices()[indexOutput][it->second];
+          sortedInputNames[indice] = result_.getInputNames()[it->second];
+        }
+      }
+      break;
+    }
+    default:
+      return;
   }
 
-  barChart_->clear();
-  barChart_->plotBarChart(currentFirstOrderIndices, currentTotalOrderIndices, sortedInputNames);
+  indicesPlot_->clear();
+  indicesPlot_->plotSensitivityIndices(currentFirstOrderIndices, currentTotalOrderIndices, sortedInputNames);
 }
 
 
 void SobolResultWindow::updateTable(int index)
 {
   int indexOutput = outputsComboBox_->currentIndex();
-  for ( int i = 0; i < result_.getInputNames().getSize(); ++i)
+  for (int i = 0; i < result_.getInputNames().getSize(); ++i)
   {
     table_->setRowCount(i + 1);
-    table_->setItem(i, 0, new QTableWidgetItem(result_.getInputNames()[i].c_str()));
-    table_->setItem(i, 1, new QTableWidgetItem(QString::number(result_.getFirstOrderIndices()[indexOutput][i], 'g', 4)));
-    table_->setItem(i, 2, new QTableWidgetItem(QString::number(result_.getTotalOrderIndices()[indexOutput][i], 'g', 4)));
+    QTableWidgetItem * item = new QTableWidgetItem(result_.getInputNames()[i].c_str());
+    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    table_->setItem(i, 0, item);
+
+    item = new QTableWidgetItem(QString::number(result_.getFirstOrderIndices()[indexOutput][i], 'g', 4));
+    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    table_->setItem(i, 1, item);
+
+    item = new QTableWidgetItem(QString::number(result_.getTotalOrderIndices()[indexOutput][i], 'g', 4));
+    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+    table_->setItem(i, 2, item);
   }
 }
-
 }

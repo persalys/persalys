@@ -5,8 +5,9 @@ ot_add_current_dir_to_include_dirs ()
 ot_add_source_file ( CustomScaleEngine.cxx )
 ot_add_source_file ( PlotWidget.cxx )
 ot_add_source_file ( ImageEditionDialog.cxx )
+ot_add_source_file ( GraphConfigurationWidget.cxx )
 
-qt4_wrap_cpp (OTGUI_PLOT_MOC_SRCS otgui/PlotWidget.hxx otgui/ImageEditionDialog.hxx)
+qt4_wrap_cpp (OTGUI_PLOT_MOC_SRCS otgui/PlotWidget.hxx otgui/ImageEditionDialog.hxx otgui/GraphConfigurationWidget.hxx)
 
 
 include_directories (${INTERNAL_INCLUDE_DIRS})

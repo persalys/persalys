@@ -1,8 +1,8 @@
 // PlotWidget.hxx
 
 
-#ifndef PLOTWIDGET_HXX
-#define PLOTWIDGET_HXX
+#ifndef PLOTWIDGET_H
+#define PLOTWIDGET_H
 
 #include <qwt_plot_curve.h>
 #include <qwt_plot.h>
@@ -12,12 +12,7 @@
 
 #include "Distribution.hxx"
 
-#include <QLabel>
-
 namespace OTGUI {
-
-class ImageEditionDialog;
-
 class PlotWidget : public QwtPlot
 {
   Q_OBJECT
@@ -27,11 +22,11 @@ public:
   static const QColor DefaultHistogramColor;
 
   /// constructor
-  PlotWidget(bool isBarChart = false, QWidget * parent = 0);
+  PlotWidget(bool isIndicesPlot = false, QWidget * parent = 0);
 
   /// plot a curve
   void plotCurve(double * x, double * y, int size, const QPen pen=QPen(Qt::black, 2),
-                 QwtPlotCurve::CurveStyle style=QwtPlotCurve::Lines, QwtSymbol* symbol=0);
+                 QwtPlotCurve::CurveStyle style=QwtPlotCurve::Lines, QwtSymbol* symbol=0, QString title="");
   void plotCurve(const OT::NumericalSample & data, const QPen pen=QPen(Qt::black, 2));
 
   void plotPDFCurve(const OT::Distribution & distribution, const QPen pen=QPen(Qt::black, 2));
@@ -40,27 +35,25 @@ public:
   void plotScatter(const OT::NumericalSample & input, const OT::NumericalSample & output);
   void plotBoxPlot(double median, double lowerQuartile, double upperQuartile,
                    double lowerBound, double upperBound, OT::NumericalPoint outliers_);
-  void plotBarChart(const OT::NumericalPoint firstOrder, const OT::NumericalPoint totalOrder,
-                    const OT::Description inputNames);
+  void plotSensitivityIndices(const OT::NumericalPoint firstOrder, const OT::NumericalPoint totalOrder,
+                              const OT::Description inputNames);
 
   /// clear plot
   void clear();
   void replot();
-  void updatePlotLabel();
-  QLabel * getPlotLabel() const;
 
 public slots:
   void contextMenu(const QPoint & pos);
-  void editImage();
+  void exportPlot();
+signals:
+  void plotChanged();
 
 private:
   void updateScaleParameters(const OT::Distribution & distribution);
 
 private:
-  QLabel * plotLabel_;
-  ImageEditionDialog * dialog_;
   QwtPlotGrid * grid_;
-  QAction * copyImageAction_;
+  QAction * exportPlotAction_;
 };
 }
 #endif

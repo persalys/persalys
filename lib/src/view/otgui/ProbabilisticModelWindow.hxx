@@ -14,6 +14,7 @@
 #include <QTableView>
 #include <QComboBox>
 #include <QCheckBox>
+#include <QLabel>
 
 namespace OTGUI {
 class ProbabilisticModelWindow : public OTguiSubWindow

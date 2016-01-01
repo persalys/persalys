@@ -1,6 +1,7 @@
 #include "otgui/MainWindow.hxx"
 
 #include "otgui/PhysicalModelWindow.hxx"
+#include "otgui/GraphConfigurationWidget.hxx"
 
 #include <QSplitter>
 #include <QMenuBar>
@@ -19,6 +20,8 @@ MainWindow::MainWindow()
   connect(studyTree_, SIGNAL(showWindow(QMdiSubWindow *)), this, SLOT(showSubWindow(QMdiSubWindow *)));
   connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), this, SLOT(showSubWindow(QStandardItem *)));
   connect(studyTree_, SIGNAL(checkIfWindowResultExists(ObserverItem *)), this, SLOT(checkIfWindowResultExists(ObserverItem *)));
+  connect(studyTree_, SIGNAL(graphWindowActivated(GraphConfigurationWidget*)), this, SLOT(showGraphConfigurationTabWidget(GraphConfigurationWidget*)));
+  connect(studyTree_, SIGNAL(graphWindowDeactivated(GraphConfigurationWidget*)), this, SLOT(hideGraphConfigurationTabWidget(GraphConfigurationWidget*)));
   setWindowTitle("OTGui");
 }
 
@@ -29,7 +32,17 @@ void MainWindow::buildInterface()
   QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
 
   QSplitter * mainSplitter = new QSplitter(Qt::Horizontal);
-  mainSplitter->addWidget(studyTree_);
+  QWidget * widget = new QWidget();
+  QVBoxLayout * leftLayout = new QVBoxLayout(widget);
+
+  leftLayout->addWidget(studyTree_);
+
+  configurationDock_ = new QDockWidget;
+  configurationDock_->setFeatures(QDockWidget::NoDockWidgetFeatures);
+  leftLayout->addWidget(configurationDock_);
+  configurationDock_->close();
+
+  mainSplitter->addWidget(widget);
   mainSplitter->addWidget(mdiArea_);
   mainLayout->addWidget(mainSplitter);
 
@@ -86,20 +99,19 @@ QMdiArea * MainWindow::getMdiArea() const
 void MainWindow::showSubWindow(QMdiSubWindow * win)
 {
   mdiArea_->addSubWindow(win);
-  win->show();
+  win->showMaximized();
 }
 
 
 void MainWindow::showSubWindow(QStandardItem * item)
 {
   QList<QMdiSubWindow *> listSubWindow =  mdiArea_->subWindowList();
-
   for (int i = 0; i < listSubWindow.size(); ++i)
   {
     OTguiSubWindow * win = static_cast<OTguiSubWindow*>(listSubWindow.at(i));
-    if ( win->getItem() == item)
+    if (win->getItem() == item)
     {
-      win->widget()->show();
+      win->widget()->showMaximized();
       mdiArea_->setActiveSubWindow(win);
     }
   }
@@ -123,4 +135,15 @@ void MainWindow::checkIfWindowResultExists(ObserverItem* item)
 }
 
 
+void MainWindow::showGraphConfigurationTabWidget(GraphConfigurationWidget * graph)
+{
+  configurationDock_->setWidget(graph);
+  configurationDock_->show();
+}
+
+
+void MainWindow::hideGraphConfigurationTabWidget(GraphConfigurationWidget * graph)
+{
+  configurationDock_->close();
+}
 }

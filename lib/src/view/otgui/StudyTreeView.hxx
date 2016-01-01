@@ -10,6 +10,7 @@
 #include <QAction>
 
 namespace OTGUI {
+class GraphConfigurationWidget;
 class StudyTreeView : public QTreeView
 {
   Q_OBJECT
@@ -53,6 +54,8 @@ signals:
   void itemSelected(QStandardItem *);
   void checkIfWindowResultExists(ObserverItem *);
   void loadPythonScript(const QString & fileName);
+  void graphWindowActivated(GraphConfigurationWidget*);
+  void graphWindowDeactivated(GraphConfigurationWidget*);
 
 private:
   StudyTreeViewModel * treeViewModel_;

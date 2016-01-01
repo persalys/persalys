@@ -1,35 +1,35 @@
 #include "otgui/PlotWidget.hxx"
 
 #include "otgui/CustomScaleEngine.hxx"
-#include "otgui/ImageEditionDialog.hxx"
+#include "otgui/GraphConfigurationWidget.hxx"
+
+#include <QMenu>
+#include <QFileDialog>
+#include <QImageWriter>
 
 #include <qwt_plot_layout.h>
 #include <qwt_plot_panner.h>
 #include <qwt_plot_histogram.h>
 #include <qwt_plot_magnifier.h>
+#include <qwt_plot_picker.h>
 #include <qwt_legend.h>
 #include <qwt_column_symbol.h>
 #include <qwt_plot_renderer.h>
-
-#include <QHBoxLayout>
-#include <QMenu>
 
 using namespace OT;
 
 namespace OTGUI {
 
-class BarChartHorizontalScaleDraw: public QwtScaleDraw
+class customHorizontalScaleDraw: public QwtScaleDraw
 {
 public:
-  BarChartHorizontalScaleDraw(const OT::Description & labels): labels_(labels){}
+  customHorizontalScaleDraw(const OT::Description & labels): labels_(labels){}
 
   virtual QwtText label(double value) const
   {
     const int index = qRound(value);
-    if ( index>=0 && index<=labels_.getSize())
-    {
+    if (index >= 0 && index < labels_.getSize())
       return QwtText(labels_[index].c_str());
-    }
     return QwtText();
   }
 
@@ -40,19 +40,23 @@ private:
 
 const QColor PlotWidget::DefaultHistogramColor = QColor(127, 172, 210);
 
-PlotWidget::PlotWidget(bool isBarChart, QWidget * parent)
+PlotWidget::PlotWidget(bool isIndicesPlot, QWidget * parent)
   : QwtPlot(parent)
-  , plotLabel_(new QLabel(this))
-  , dialog_(new ImageEditionDialog(this, isBarChart))
 {
-  if (!isBarChart)
+  if (!isIndicesPlot)
   {
     // panning with the left mouse button
     ( void ) new QwtPlotPanner(canvas());
 
     // zoom in/out with the wheel
-    ( void ) new QwtPlotMagnifier(canvas());
+    QwtPlotMagnifier * magnifier = new QwtPlotMagnifier(canvas());
+    // set to NoButton to have not interference with the right click of the context menu
+    magnifier->setMouseButton(Qt::NoButton);
   }
+
+  // show coordinates
+  ( void ) new QwtPlotPicker(QwtPlot::xBottom, QwtPlot::yLeft,
+                              QwtPlotPicker::CrossRubberBand, QwtPicker::AlwaysOn, canvas());
 
   setCanvasBackground(Qt::white);
   setMinimumSize(200, 150);
@@ -61,18 +65,68 @@ PlotWidget::PlotWidget(bool isBarChart, QWidget * parent)
 
   clear();
 
-  // build actions
-  copyImageAction_ = new QAction(tr("Edit image"), this);
-  connect(copyImageAction_, SIGNAL(triggered(bool)), this, SLOT(editImage()));
-//   saveAsAction_ = new QAction( tr( "Save image as..." ), this) ;
-//   connect( saveAsAction_, SIGNAL(triggered( bool )), this, SLOT(saveAs()) );
+  // build action
+  exportPlotAction_ = new QAction(tr("Export plot"), this);
+  connect(exportPlotAction_, SIGNAL(triggered(bool)), this, SLOT(exportPlot()));
 
-  plotLabel_->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(plotLabel_, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
+  setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
 }
 
 
-void PlotWidget::plotCurve(double * x, double * y, int size, const QPen pen, QwtPlotCurve::CurveStyle style, QwtSymbol* symbol)
+// show the context menu when right clicking
+void PlotWidget::contextMenu(const QPoint & pos)
+{
+  QMenu * contextMenu(new QMenu(this));
+  contextMenu->addAction(exportPlotAction_);
+  contextMenu->popup(mapToGlobal(pos));
+}
+
+
+void PlotWidget::exportPlot()
+{
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Export plot"),
+                     QDir::homePath(),
+                     tr("Images (*.png *.svg *.pdf *.ps *.bmp *.ppm)"));
+
+  if (!fileName.isEmpty())
+  {
+    QString format = QFileInfo(fileName).suffix().toLower();
+
+    if (format == "")
+    {
+      fileName += ".png";
+      format = QString("png");
+    }
+    if (format == "ps" || format == "pdf" )
+    {
+      QwtPlotRenderer * renderer = new QwtPlotRenderer();
+      renderer->renderDocument(this, fileName, QSizeF(150, 100));
+    }
+    else
+    {
+      if (QImageWriter::supportedImageFormats().indexOf(format.toLatin1()) >= 0)
+      {
+        QPixmap pixmap(200, 200);
+        pixmap.fill();
+        QwtPlotRenderer renderer;
+
+        renderer.renderTo(this, pixmap);
+
+        bool saveOperationSucceed = pixmap.save(fileName, format.toLatin1());
+        if (!saveOperationSucceed)
+          std::cerr<<"Export doesn't work\n";
+      }
+      else
+      {
+        std::cerr<<"Format not supported\n";
+      }
+    }
+  }
+}
+
+
+void PlotWidget::plotCurve(double * x, double * y, int size, const QPen pen, QwtPlotCurve::CurveStyle style, QwtSymbol* symbol, QString title)
 {
   QwtPlotCurve * curve = new QwtPlotCurve;
   curve->setSamples(x, y, size);
@@ -80,6 +134,8 @@ void PlotWidget::plotCurve(double * x, double * y, int size, const QPen pen, Qwt
   curve->setStyle(style);
   if (symbol)
     curve->setSymbol(symbol);
+  if (!title.isEmpty())
+    curve->setTitle(title);
   curve->attach(this);
   replot();
 }
@@ -261,7 +317,7 @@ void PlotWidget::plotBoxPlot(double median, double lowerQuartile, double upperQu
 }
 
 
-void PlotWidget::plotBarChart(const NumericalPoint firstOrder, const NumericalPoint totalOrder, const Description inputNames)
+void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrder, const NumericalPoint totalOrder, const Description inputNames)
 {
   setTitle("Sensitivity indices");
 
@@ -271,35 +327,36 @@ void PlotWidget::plotBarChart(const NumericalPoint firstOrder, const NumericalPo
   // populate bar chart
   static const char *colors[] = {"DarkOrchid", "SteelBlue"};
 
-  QVector<QwtIntervalSample> samples(firstOrder.getSize());
+  int size = firstOrder.getSize();
+  
+  double *xData = new double[size];
+  double *yData = new double[size];
 
-  double width = 0.4;
+  double width = 0.;
   if (totalOrder.getSize())
-    width = 0.;
+    width = 0.1;
 
-  for (int i=0; i<firstOrder.getSize(); i++)
+  for (int i = 0 ; i < size ; ++i)
   {
-    QwtInterval interval(i-0.4, i+width);
-    samples[i] = QwtIntervalSample(firstOrder[i], interval);
+    xData[i] = (i-width);
+    yData[i] = firstOrder[i];
+    //qDebug() << "x= " << xData[i] << " , y= " << yData[i];
   }
-  QwtPlotHistogram * histogram = new QwtPlotHistogram;
-  histogram->setData(new QwtIntervalSeriesData(samples));
-  histogram->setBrush(QBrush("DarkOrchid"));
-  histogram->setTitle("First order indice");
-  histogram->attach(this);
+
+  plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Ellipse, QBrush(colors[0]), QPen(colors[0]), QSize(5, 5)), "First order indice");
 
   if (totalOrder.getSize())
   {
-    for (int i=0; i<totalOrder.getSize(); i++)
+    xData = new double[size];
+    yData = new double[size];
+
+    for (int i = 0 ; i < size ; ++i)
     {
-      QwtInterval interval(i, i+0.4);
-      samples[i] = QwtIntervalSample(totalOrder[i], interval);
+      xData[i] = (i+width) ;
+      yData[i] = totalOrder[i];
+      //qDebug() << "x= " << xData[i] << " , y= " << yData[i];
     }
-    QwtPlotHistogram * histogram2 = new QwtPlotHistogram;
-    histogram2->setData(new QwtIntervalSeriesData(samples));
-    histogram2->setBrush(QBrush("SteelBlue"));
-    histogram2->setTitle("Total order indice");
-    histogram2->attach(this);
+    plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Rect, QBrush(colors[1]), QPen(colors[1]), QSize(5, 5)), "Total order indice");
 
     insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
   }
@@ -307,7 +364,7 @@ void PlotWidget::plotBarChart(const NumericalPoint firstOrder, const NumericalPo
   // scales
   setAxisScale(QwtPlot::xBottom, -0.5, firstOrder.getSize()-0.5, 1.0);
   setAxisMaxMinor(QwtPlot::xBottom, 0);
-  setAxisScaleDraw(QwtPlot::xBottom, new BarChartHorizontalScaleDraw(inputNames));
+  setAxisScaleDraw(QwtPlot::xBottom, new customHorizontalScaleDraw(inputNames));
 
   setAxisAutoScale(QwtPlot::yLeft);
 
@@ -348,48 +405,9 @@ void PlotWidget::clear()
 }
 
 
-// show the context menu when right clicking
-void PlotWidget::contextMenu(const QPoint & pos)
-{
-  QMenu * contextMenu(new QMenu(this));
-  contextMenu->addAction(copyImageAction_);
-//   contextMenu->addAction(saveAsAction_);
-  contextMenu->popup(plotLabel_->mapToGlobal(pos));
-}
-
-
-void PlotWidget::editImage()
-{
-  dialog_->setInitParameters();
-  if (dialog_->exec() == QDialog::Rejected)
-  {
-    dialog_->resetParameters();
-    replot();
-  }
-}
-
-
 void PlotWidget::replot()
 {
   QwtPlot::replot();
-  updatePlotLabel();
-  dialog_->updateLineEdits();
+  emit plotChanged();
 }
-
-
-void PlotWidget::updatePlotLabel()
-{
-  QPixmap pixmap(200,200);
-  pixmap.fill();
-  QwtPlotRenderer renderer;
-  renderer.renderTo(this, pixmap);
-  plotLabel_->setPixmap(pixmap);
-}
-
-
-QLabel * PlotWidget::getPlotLabel() const
-{
-  return plotLabel_;
-}
-
 }

@@ -7,9 +7,11 @@
 #include "otgui/CentralTendencyItem.hxx"
 #include "otgui/MonteCarloResult.hxx"
 #include "otgui/PlotWidget.hxx"
+#include "otgui/GraphConfigurationWidget.hxx"
 
 #include <QComboBox>
 #include <QDoubleSpinBox>
+#include <QLabel>
 
 namespace OTGUI {
 class MonteCarloResultWindow : public OTguiSubWindow //ResultWindow
@@ -22,28 +24,30 @@ public:
 protected:
   void buildInterface();
   void updateLabelsText(int indexOutput=0);
-  void updateScatterPlot(int indexInput=0, int indexOutput=0);
 
 public slots:
   void outputFirstTabChanged(int indexOutput);
   void probaValueChanged(double proba);
   void quantileValueChanged(double quantile);
   void outputBoxPlotChanged(int indexOutput);
-  void inputScatterPlotChanged(int index);
-  void outputScatterPlotChanged(int index);
+  void showHideGraphConfigurationWidget(int indexTab);
+  void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+signals:
+  void graphWindowActivated(GraphConfigurationWidget*);
+  void graphWindowDeactivated(GraphConfigurationWidget*);
 
 private:
   MonteCarloResult result_;
+  PhysicalModel physicalModel_;
   bool isConfidenceIntervalRequired_;
   double levelConfidenceInterval_;
+  QTabWidget * tabWidget_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
   QComboBox * outputsComboBoxFirstTab_;
   PlotWidget * boxPlot_;
   QComboBox * outputsComboBoxSecondTab_;
-  PlotWidget * scatterPlot_;
-  QComboBox * inputsComboBox_;
-  QComboBox * outputsComboBoxThirdTab_;
+  GraphConfigurationWidget * graphConfigurationWidget_;
   QLabel * meanLabel_;
   QLabel * stdLabel_;
   QLabel * skewnessLabel_;

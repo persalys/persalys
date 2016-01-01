@@ -9,6 +9,7 @@
 #include <QMainWindow>
 #include <QMdiArea>
 #include <QMenu>
+#include <QDockWidget>
 
 namespace OTGUI {
 class MainWindow : public QMainWindow
@@ -25,6 +26,8 @@ public slots:
   void showSubWindow(QMdiSubWindow * win);
   void showSubWindow(QStandardItem * item);
   void checkIfWindowResultExists(ObserverItem * item);
+  void showGraphConfigurationTabWidget(GraphConfigurationWidget*);
+  void hideGraphConfigurationTabWidget(GraphConfigurationWidget*);
 
 protected:
   void buildInterface();
@@ -32,6 +35,7 @@ protected:
 
 private:
   StudyTreeView * studyTree_;
+  QDockWidget * configurationDock_;
   QMdiArea * mdiArea_;
   QMenu * menu_;
   QPyConsole * console_;

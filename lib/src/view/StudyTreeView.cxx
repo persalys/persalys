@@ -237,6 +237,8 @@ void StudyTreeView::createNewLimitStateWindow(LimitStateItem* item)
 void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentItem * item)
 {
   DesignOfExperimentWindow * window = new DesignOfExperimentWindow(item);
+  connect(window, SIGNAL(graphWindowActivated(GraphConfigurationWidget*)), this, SIGNAL(graphWindowActivated(GraphConfigurationWidget*)));
+  connect(window, SIGNAL(graphWindowDeactivated(GraphConfigurationWidget*)), this, SIGNAL(graphWindowDeactivated(GraphConfigurationWidget*)));
   emit showWindow(window);
 }
 
@@ -408,6 +410,8 @@ void StudyTreeView::createCentralTendencyResult(AnalysisItem * item)
   if (item->getAnalysis().getImplementation()->getClassName() == "MonteCarloAnalysis")
   {
     MonteCarloResultWindow * window = new MonteCarloResultWindow(dynamic_cast<CentralTendencyItem*>(item));
+    connect(window, SIGNAL(graphWindowActivated(GraphConfigurationWidget*)), this, SIGNAL(graphWindowActivated(GraphConfigurationWidget*)));
+    connect(window, SIGNAL(graphWindowDeactivated(GraphConfigurationWidget*)), this, SIGNAL(graphWindowDeactivated(GraphConfigurationWidget*)));
     emit showWindow(window);
   }
   else

@@ -86,9 +86,9 @@ void ProbabilisticModelWindow::buildInterface()
   //  PDF and CDF graphs
   QGridLayout * plotLayout = new QGridLayout;
   pdfPlot_ = new PlotWidget;
-  plotLayout->addWidget(pdfPlot_->getPlotLabel(), 1, 0);
+  plotLayout->addWidget(pdfPlot_, 1, 0);
   cdfPlot_ = new PlotWidget;
-  plotLayout->addWidget(cdfPlot_->getPlotLabel(), 1, 1);
+  plotLayout->addWidget(cdfPlot_, 1, 1);
   
   rightLayout_->addLayout(plotLayout);
 

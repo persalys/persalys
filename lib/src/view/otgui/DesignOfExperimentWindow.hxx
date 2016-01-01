@@ -7,10 +7,12 @@
 #include "otgui/DesignOfExperimentItem.hxx"
 #include "OTguiTableView.hxx"
 #include "otgui/PlotWidget.hxx"
+#include "otgui/GraphConfigurationWidget.hxx"
 
 #include <QTabWidget>
 #include <QPushButton>
 #include <QComboBox>
+#include <QLabel>
 
 namespace OTGUI {
 class DesignOfExperimentWindow : public OTguiSubWindow
@@ -27,9 +29,11 @@ protected:
 public slots:
   void evaluateOutputs();
   void updateLabelsText(int indexOutput=0);
-  void updateScatterPlot(int indexInput=0, int indexOutput=0);
-  void inputScatterPlotChanged(int index);
-  void outputScatterPlotChanged(int index);
+  void showHideGraphConfigurationWidget(int indexTab);
+  void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+signals:
+  void graphWindowActivated(GraphConfigurationWidget*);
+  void graphWindowDeactivated(GraphConfigurationWidget*);
 
 private:
   DesignOfExperiment designOfExperiment_;
@@ -39,9 +43,7 @@ private:
   QComboBox * outputsComboBoxFirstTab_;
   QLabel * minLabel_;
   QLabel * maxLabel_;
-  PlotWidget * scatterPlot_;
-  QComboBox * inputsComboBox_;
-  QComboBox * outputsComboBoxSecondTab_;
+  GraphConfigurationWidget * graphConfigurationWidget_;
 };
 }
 #endif

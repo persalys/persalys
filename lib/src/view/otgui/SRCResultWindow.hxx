@@ -24,15 +24,14 @@ protected:
 
 public slots:
   void outputChanged(int index);
-  void updateBarChart();
+  void updateIndicesPlot(int section, Qt::SortOrder order);
   void updateTable(int index);
 
 private:
   SRCResult result_;
   std::vector<std::map<double, int> > indices_;
   QComboBox * outputsComboBox_;
-  QComboBox * sortComboBox_;
-  PlotWidget * barChart_;
+  PlotWidget * indicesPlot_;
   QTableWidget * table_;
 };
 }

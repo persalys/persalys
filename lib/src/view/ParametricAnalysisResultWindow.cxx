@@ -82,7 +82,7 @@ void ParametricAnalysisResultWindow::buildInterface()
 
   hLayout = new QHBoxLayout;
   scatterPlot_ = new PlotWidget;
-  hLayout->addWidget(scatterPlot_->getPlotLabel());
+  hLayout->addWidget(scatterPlot_);
   QLabel * inputName = new QLabel(tr("Input"));
   hLayout->addWidget(inputName, 0, Qt::AlignBottom);
   inputsComboBox_ = new QComboBox;

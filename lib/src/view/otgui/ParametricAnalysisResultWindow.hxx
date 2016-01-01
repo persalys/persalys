@@ -9,6 +9,7 @@
 #include "otgui/ParametricAnalysisResult.hxx"
 
 #include <QComboBox>
+#include <QLabel>
 
 namespace OTGUI {
 class ParametricAnalysisResultWindow : public OTguiSubWindow //ResultWindow

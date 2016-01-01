@@ -1,8 +1,10 @@
 // DesignOfExperimentWindow.cxx
 
 #include "otgui/DesignOfExperimentWindow.hxx"
+#include "otgui/GraphConfigurationWidget.hxx"
 
 #include <QVBoxLayout>
+#include <QStackedLayout>
 
 using namespace OT;
 
@@ -11,8 +13,10 @@ namespace OTGUI {
 DesignOfExperimentWindow::DesignOfExperimentWindow(DesignOfExperimentItem * item)
   : OTguiSubWindow(item)
   , designOfExperiment_(item->getDesignOfExperiment())
+  , graphConfigurationWidget_(0)
 {
   buildInterface();
+  connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
 }
 
 
@@ -66,6 +70,10 @@ void DesignOfExperimentWindow::evaluateOutputs()
 
 void DesignOfExperimentWindow::addTabsForOutputs()
 {
+  int nbInputs = designOfExperiment_.getInputSample().getDimension();
+  int nbOutputs = designOfExperiment_.getOutputSample().getDimension();
+
+  // first tab --------------------------------
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
@@ -73,10 +81,10 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   QLabel * outputName = new QLabel(tr("Output"));
   headLayout->addWidget(outputName);
   QComboBox * outputsComboBoxFirstTab_ = new QComboBox;
-  QStringList items = QStringList();
-  for (int i=0; i<designOfExperiment_.getOutputSample().getDimension(); ++i)
-    items << designOfExperiment_.getPhysicalModel().getOutputNames()[i].c_str();
-  outputsComboBoxFirstTab_->addItems(items);
+  QStringList outputNames;
+  for (int i=0; i<nbOutputs; ++i)
+    outputNames << designOfExperiment_.getPhysicalModel().getOutputNames()[i].c_str();
+  outputsComboBoxFirstTab_->addItems(outputNames);
   connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateLabelsText(int)));
   headLayout->addWidget(outputsComboBoxFirstTab_);
   headLayout->addStretch();
@@ -111,35 +119,32 @@ void DesignOfExperimentWindow::addTabsForOutputs()
 
   // second tab --------------------------------
   tab = new QWidget;
-  tabLayout = new QVBoxLayout(tab);
+  QStackedLayout * plotLayout = new QStackedLayout(tab);
 
-  QHBoxLayout * hLayout = new QHBoxLayout;
-  outputName = new QLabel(tr("Output"));
-  hLayout->addWidget(outputName);
-  outputsComboBoxSecondTab_ = new QComboBox;
-  outputsComboBoxSecondTab_->addItems(items);
-  connect(outputsComboBoxSecondTab_, SIGNAL(currentIndexChanged(int)), this, SLOT(outputScatterPlotChanged(int)));
-  hLayout->addWidget(outputsComboBoxSecondTab_);
-  hLayout->addStretch();
-  tabLayout->addLayout(hLayout);
+  QVector<PlotWidget*> listPlotWidgets;
+  InputCollection inputs = designOfExperiment_.getPhysicalModel().getInputs();
+  OutputCollection outputs = designOfExperiment_.getPhysicalModel().getOutputs();
+  QStringList inputNames;
+  for (int i=0; i<nbInputs; ++i)
+    inputNames << designOfExperiment_.getPhysicalModel().getInputNames()[i].c_str();
 
-  hLayout = new QHBoxLayout;
-  scatterPlot_ = new PlotWidget;
-  hLayout->addWidget(scatterPlot_->getPlotLabel());
-  QLabel * inputName = new QLabel(tr("Input"));
-  hLayout->addWidget(inputName, 0, Qt::AlignBottom);
-  inputsComboBox_ = new QComboBox;
-  items = QStringList();
-  for (int i=0; i<designOfExperiment_.getInputSample().getDimension(); ++i)
-    items << designOfExperiment_.getResult().getInputNames()[i].c_str();
-  inputsComboBox_->addItems(items);
-  connect(inputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(inputScatterPlotChanged(int)));
-  hLayout->addWidget(inputsComboBox_, 0, Qt::AlignBottom);
-  hLayout->addStretch();
-  tabLayout->addLayout(hLayout);
-  tabLayout->addStretch();
+  for (int i=0; i<nbOutputs; ++i)
+  {
+    for (int j=0; j<nbInputs; ++j)
+    {
+      PlotWidget * plot = new PlotWidget;
+      plot->plotScatter(designOfExperiment_.getInputSample().getMarginal(j), designOfExperiment_.getOutputSample().getMarginal(i));
+      plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getDescription().c_str());
+      plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getDescription().c_str());
+      plotLayout->addWidget(plot);
+      listPlotWidgets.append(plot);
+    }
+  }
 
-  updateScatterPlot();
+  graphConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, inputNames, outputNames);
+  connect(graphConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
+
+  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
 
   tabWidget_->addTab(tab, tr("Scatter plots"));
 }
@@ -168,22 +173,21 @@ void DesignOfExperimentWindow::updateLabelsText(int indexOutput)
 }
 
 
-void DesignOfExperimentWindow::inputScatterPlotChanged(int index)
+void DesignOfExperimentWindow::showHideGraphConfigurationWidget(int indexTab)
 {
-  updateScatterPlot(index, outputsComboBoxSecondTab_->currentIndex());
+  // if plotWidget is visible
+  if (indexTab == 2)
+    emit graphWindowActivated(graphConfigurationWidget_);
+  else
+    emit graphWindowDeactivated(graphConfigurationWidget_);
 }
 
 
-void DesignOfExperimentWindow::outputScatterPlotChanged(int index)
+void DesignOfExperimentWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
-  updateScatterPlot(inputsComboBox_->currentIndex(), index);
-}
-
-
-void DesignOfExperimentWindow::updateScatterPlot(int indexInput, int indexOutput)
-{
-  Q_ASSERT(scatterPlot_);
-  scatterPlot_->clear();
-  scatterPlot_->plotScatter(designOfExperiment_.getInputSample().getMarginal(indexInput), designOfExperiment_.getOutputSample().getMarginal(indexOutput));
+  if (newState == 4 || newState == 8 || newState == 10)
+    showHideGraphConfigurationWidget(tabWidget_->currentIndex());
+  else if (newState == 0 || newState == 1 || newState == 2 || newState == 9)
+    emit graphWindowDeactivated(graphConfigurationWidget_);
 }
 }

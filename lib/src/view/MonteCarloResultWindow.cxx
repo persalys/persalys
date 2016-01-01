@@ -5,6 +5,7 @@
 #include "otgui/MonteCarloAnalysis.hxx"
 
 #include <QVBoxLayout>
+#include <QStackedLayout>
 
 #include <limits>
 
@@ -15,16 +16,21 @@ namespace OTGUI {
 MonteCarloResultWindow::MonteCarloResultWindow(CentralTendencyItem * item)
   : OTguiSubWindow(item)
   , result_(dynamic_cast<MonteCarloAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , physicalModel_(item->getAnalysis().getPhysicalModel())
   , isConfidenceIntervalRequired_(dynamic_cast<MonteCarloAnalysis*>(&*item->getAnalysis().getImplementation())->isConfidenceIntervalRequired())
   , levelConfidenceInterval_(dynamic_cast<MonteCarloAnalysis*>(&*item->getAnalysis().getImplementation())->getLevelConfidenceInterval())
 {
   buildInterface();
+  connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
 }
 
 
 void MonteCarloResultWindow::buildInterface()
 {
-  QTabWidget * tabWidget = new QTabWidget;
+  int nbInputs = result_.getInputSample().getDimension();
+  int nbOutputs = result_.getResultSample().getDimension();
+
+  tabWidget_ = new QTabWidget;
 
   // first tab --------------------------------
   QWidget * tab = new QWidget;
@@ -34,10 +40,10 @@ void MonteCarloResultWindow::buildInterface()
   QLabel * outputName = new QLabel(tr("Output"));
   headLayout->addWidget(outputName);
   outputsComboBoxFirstTab_ = new QComboBox;
-  QStringList items = QStringList();
-  for (int i=0; i<result_.getResultSample().getDimension(); ++i)
-    items << result_.getOutputNames()[i].c_str();
-  outputsComboBoxFirstTab_->addItems(items);
+  QStringList outputNames;
+  for (int i=0; i<nbOutputs; ++i)
+    outputNames << result_.getOutputNames()[i].c_str();
+  outputsComboBoxFirstTab_->addItems(outputNames);
   connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), this, SLOT(outputFirstTabChanged(int)));
   headLayout->addWidget(outputsComboBoxFirstTab_);
 
@@ -108,7 +114,7 @@ void MonteCarloResultWindow::buildInterface()
   updateLabelsText();
 
   // quantiles
-  QHBoxLayout * quantLayout = new QHBoxLayout();
+  QHBoxLayout * quantLayout = new QHBoxLayout;
   label = new QLabel(tr("Probability"));
   label->setStyleSheet("font: bold 14px;");
   quantLayout->addWidget(label);
@@ -144,16 +150,16 @@ void MonteCarloResultWindow::buildInterface()
   pdfPlot_ = new PlotWidget;
   pdfPlot_->plotHistogram(result_.getResultSample().getMarginal(0));
   pdfPlot_->plotPDFCurve(result_.getFittedDistribution()[0]);
-  graphsLayout->addWidget(pdfPlot_->getPlotLabel());
+  graphsLayout->addWidget(pdfPlot_);
 
   cdfPlot_ = new PlotWidget;
   cdfPlot_->plotHistogram(result_.getResultSample().getMarginal(0), true);
   cdfPlot_->plotCDFCurve(result_.getFittedDistribution()[0]);
-  graphsLayout->addWidget(cdfPlot_->getPlotLabel());
+  graphsLayout->addWidget(cdfPlot_);
 
   hbox->addLayout(graphsLayout);
 
-  tabWidget->addTab(tab, tr("Result"));
+  tabWidget_->addTab(tab, tr("Result"));
 
   // second tab --------------------------------
   tab = new QWidget;
@@ -162,10 +168,7 @@ void MonteCarloResultWindow::buildInterface()
   outputName = new QLabel(tr("Output"));
   hLayout->addWidget(outputName);
   outputsComboBoxSecondTab_ = new QComboBox;
-  items = QStringList();
-  for (int i=0; i<result_.getResultSample().getDimension(); ++i)
-    items << result_.getOutputNames()[i].c_str();
-  outputsComboBoxSecondTab_->addItems(items);
+  outputsComboBoxSecondTab_->addItems(outputNames);
   connect(outputsComboBoxSecondTab_, SIGNAL(currentIndexChanged(int)), this, SLOT(outputBoxPlotChanged(int)));
   hLayout->addWidget(outputsComboBoxSecondTab_);
   hLayout->addStretch();
@@ -173,46 +176,43 @@ void MonteCarloResultWindow::buildInterface()
 
   boxPlot_ = new PlotWidget;
 
-  tabLayout->addWidget(boxPlot_->getPlotLabel());
+  tabLayout->addWidget(boxPlot_);
   tabLayout->addStretch();
 
   outputBoxPlotChanged(0);
 
-  tabWidget->addTab(tab, tr("Box plots"));
+  tabWidget_->addTab(tab, tr("Box plots"));
 
   // third tab --------------------------------
   tab = new QWidget;
-  tabLayout = new QVBoxLayout(tab);
+  QStackedLayout * plotLayout = new QStackedLayout(tab);
 
-  hLayout = new QHBoxLayout;
-  outputName = new QLabel(tr("Output"));
-  hLayout->addWidget(outputName);
-  outputsComboBoxThirdTab_ = new QComboBox;
-  outputsComboBoxThirdTab_->addItems(items);
-  connect(outputsComboBoxThirdTab_, SIGNAL(currentIndexChanged(int)), this, SLOT(outputScatterPlotChanged(int)));
-  hLayout->addWidget(outputsComboBoxThirdTab_);
-  hLayout->addStretch();
-  tabLayout->addLayout(hLayout);
+  QVector<PlotWidget*> listPlotWidgets;
+  InputCollection inputs = physicalModel_.getInputs();
+  OutputCollection outputs = physicalModel_.getOutputs();
+  QStringList inputNames;
+  for (int i=0; i<nbInputs; ++i)
+    inputNames << physicalModel_.getInputNames()[i].c_str();
 
-  hLayout = new QHBoxLayout;
-  scatterPlot_ = new PlotWidget;
-  hLayout->addWidget(scatterPlot_->getPlotLabel());
-  QLabel * inputName = new QLabel(tr("Input"));
-  hLayout->addWidget(inputName, 0, Qt::AlignBottom);
-  inputsComboBox_ = new QComboBox;
-  items = QStringList();
-  for (int i=0; i<result_.getInputSample().getDimension(); ++i)
-    items << result_.getInputNames()[i].c_str();
-  inputsComboBox_->addItems(items);
-  connect(inputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(inputScatterPlotChanged(int)));
-  hLayout->addWidget(inputsComboBox_, 0, Qt::AlignBottom);
-  hLayout->addStretch();
-  tabLayout->addLayout(hLayout);
-  tabLayout->addStretch();
+  for (int i=0; i<nbOutputs; ++i)
+  {
+    for (int j=0; j<nbInputs; ++j)
+    {
+      PlotWidget * plot = new PlotWidget;
+      plot->plotScatter(result_.getInputSample().getMarginal(j), result_.getResultSample().getMarginal(i));
+      plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getDescription().c_str());
+      plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getDescription().c_str());
+      plotLayout->addWidget(plot);
+      listPlotWidgets.append(plot);
+    }
+  }
 
-  updateScatterPlot();
+  graphConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, inputNames, outputNames);
+  connect(graphConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
 
-  tabWidget->addTab(tab, tr("Scatter plots"));
+  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
+
+  tabWidget_->addTab(tab, tr("Scatter plots"));
 
   // fourth tab --------------------------------
   tab = new QWidget;
@@ -222,10 +222,10 @@ void MonteCarloResultWindow::buildInterface()
   OTguiTableView * tabResultView = new OTguiTableView(sample);
   tabLayout->addWidget(tabResultView);
 
-  tabWidget->addTab(tab, tr("Result table"));
+  tabWidget_->addTab(tab, tr("Result table"));
 
   //
-  setWidget(tabWidget);
+  setWidget(tabWidget_);
 }
 
 
@@ -330,24 +330,21 @@ void MonteCarloResultWindow::outputBoxPlotChanged(int indexOutput)
 }
 
 
-void MonteCarloResultWindow::inputScatterPlotChanged(int index)
+void MonteCarloResultWindow::showHideGraphConfigurationWidget(int indexTab)
 {
-  updateScatterPlot(index, outputsComboBoxThirdTab_->currentIndex());
+  // if plotWidget is visible
+  if (indexTab == 2)
+    emit graphWindowActivated(graphConfigurationWidget_);
+  else
+    emit graphWindowDeactivated(graphConfigurationWidget_);
 }
 
 
-void MonteCarloResultWindow::outputScatterPlotChanged(int index)
+void MonteCarloResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
-  updateScatterPlot(inputsComboBox_->currentIndex(), index);
+  if (newState == 4 || newState == 8 || newState == 10)
+    showHideGraphConfigurationWidget(tabWidget_->currentIndex());
+  else if (newState == 0 || newState == 1 || newState == 2 || newState == 9)
+    emit graphWindowDeactivated(graphConfigurationWidget_);
 }
-
-
-void MonteCarloResultWindow::updateScatterPlot(int indexInput, int indexOutput)
-{
-  Q_ASSERT(scatterPlot_);
-  scatterPlot_->clear();
-  scatterPlot_->plotScatter(result_.getInputSample().getMarginal(indexInput), result_.getResultSample().getMarginal(indexOutput));
-}
-
-
 }
