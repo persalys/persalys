@@ -143,12 +143,12 @@ std::string YACSPhysicalModel::dump() const
 
   for (int i=0; i<getInputs().getSize(); ++i)
   {
-    Distribution distribution = getInputs()[i].getDistribution();
-    std::string inputName = getInputs()[i].getName();
-    std::string distributionName = distribution.getImplementation()->getClassName();
-
-    if (distributionName != "Dirac")
+    if (getInputs()[i].isStochastic())
     {
+      Distribution distribution = getInputs()[i].getDistribution();
+      std::string distributionName = distribution.getImplementation()->getClassName();
+      std::string inputName = getInputs()[i].getName();
+
       if (distributionName != "TruncatedDistribution")
       {
         OSS oss;
@@ -162,7 +162,6 @@ std::string YACSPhysicalModel::dump() const
         }
         oss << ")\n";
       }
-//       TODO TruncatedNormal
       else
       {
         OSS oss;

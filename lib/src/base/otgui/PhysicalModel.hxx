@@ -36,6 +36,7 @@ public:
   void addInput(const Input & input);
   void removeInput(const std::string & inputName);
   OT::Description getInputNames();
+  OT::Description getStochasticInputNames();
   bool hasAnInputNamed(const std::string & inputName);
   bool hasStochasticInputs();
 
@@ -56,8 +57,10 @@ public:
   OT::NumericalMathFunction getFunction(const OT::Description & outputNames);
   OT::NumericalMathFunction getFunction();
 
-  std::string dump() const;
+  OT::Copula getCopula() const;
+  void setCopula(const OT::Copula & copula);
 
+  std::string dump() const;
 };
 }
 #endif

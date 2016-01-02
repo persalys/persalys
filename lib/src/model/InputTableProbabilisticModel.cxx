@@ -13,7 +13,7 @@ InputTableProbabilisticModel::InputTableProbabilisticModel(const PhysicalModel &
   , physicalModel_(physicalModel)
 {
   for (int i=0; i<physicalModel_.getInputs().getSize(); ++i)
-    if (physicalModel_.getInputs()[i].getDistribution().getImplementation()->getClassName() != "Dirac")
+    if (physicalModel_.getInputs()[i].isStochastic())
       userRoleList_ << i;
 }
 

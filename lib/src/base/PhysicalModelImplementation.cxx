@@ -11,7 +11,9 @@ PhysicalModelImplementation::PhysicalModelImplementation(const std::string & nam
   , inputs_(InputCollection(0))
   , outputs_(OutputCollection(0))
   , inputNames_(Description())
+  , stochasticInputNames_(Description())
   , outputNames_(Description())
+  , copula_(Copula())
 {
 }
 
@@ -25,7 +27,9 @@ PhysicalModelImplementation::PhysicalModelImplementation(const std::string & nam
   , inputs_(inputs)
   , outputs_(outputs)
   , inputNames_(Description())
+  , stochasticInputNames_(Description())
   , outputNames_(Description())
+  , copula_(Copula())
 {
 }
 
@@ -37,7 +41,9 @@ PhysicalModelImplementation::PhysicalModelImplementation(const PhysicalModelImpl
   , inputs_(other.inputs_)
   , outputs_(other.outputs_)
   , inputNames_(other.inputNames_)
+  , stochasticInputNames_(other.stochasticInputNames_)
   , outputNames_(other.outputNames_)
+  , copula_(other.copula_)
 {
 }
 
@@ -49,7 +55,9 @@ PhysicalModelImplementation::PhysicalModelImplementation(const PhysicalModelImpl
   , inputs_(other->inputs_)
   , outputs_(other->outputs_)
   , inputNames_(other->inputNames_)
+  , stochasticInputNames_(other->stochasticInputNames_)
   , outputNames_(other->outputNames_)
+  , copula_(other->copula_)
 {
 }
 
@@ -169,6 +177,19 @@ Description PhysicalModelImplementation::getInputNames()
 }
 
 
+Description PhysicalModelImplementation::getStochasticInputNames()
+{
+  if (!stochasticInputNames_.getSize())
+  {
+    stochasticInputNames_ = Description();
+    for (int i=0; i<inputs_.getSize(); ++i)
+      if (inputs_[i].isStochastic())
+        stochasticInputNames_.add(inputs_[i].getName());
+  }
+  return stochasticInputNames_;
+}
+
+
 bool PhysicalModelImplementation::hasAnInputNamed(const std::string & inputName)
 {
   Description inputNames = getInputNames();
@@ -180,9 +201,8 @@ bool PhysicalModelImplementation::hasAnInputNamed(const std::string & inputName)
 
 bool PhysicalModelImplementation::hasStochasticInputs()
 {
-  for (int i=0; i<inputs_.getSize(); ++i)
-    if (inputs_[i].getDistribution().getImplementation()->getClassName() != "Dirac")
-      return true;
+  if (getStochasticInputNames().getSize())
+    return true;
   return false;
 }
 
@@ -315,6 +335,21 @@ NumericalMathFunction PhysicalModelImplementation::getFunction(const Description
 NumericalMathFunction PhysicalModelImplementation::getFunction()
 {
   throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getFunction()";
+}
+
+
+Copula PhysicalModelImplementation::getCopula() const
+{
+  return copula_;
+}
+
+
+void PhysicalModelImplementation::setCopula(const Copula & copula)
+{
+  if (copula.getDimension() != getStochasticInputNames().getSize())
+    throw InvalidArgumentException(HERE) << "The given copula must have a dimension equal to the number of stochastic inputs.\n";
+
+  copula_ = copula;
 }
 
 

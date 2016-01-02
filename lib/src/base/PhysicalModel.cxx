@@ -135,6 +135,12 @@ Description PhysicalModel::getInputNames()
 }
 
 
+Description PhysicalModel::getStochasticInputNames()
+{
+  return getImplementation()->getStochasticInputNames();
+}
+
+
 bool PhysicalModel::hasAnInputNamed(const std::string & inputName)
 {
   return getImplementation()->hasAnInputNamed(inputName);
@@ -228,6 +234,18 @@ NumericalMathFunction PhysicalModel::getFunction(const Description & outputNames
 NumericalMathFunction PhysicalModel::getFunction()
 {
   return getImplementation()->getFunction();
+}
+
+
+Copula PhysicalModel::getCopula() const
+{
+  return getImplementation()->getCopula();
+}
+
+
+void PhysicalModel::setCopula(const Copula & copula)
+{
+  getImplementation()->setCopula(copula);
 }
 
 

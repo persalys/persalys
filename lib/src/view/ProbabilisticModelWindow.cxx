@@ -45,7 +45,7 @@ void ProbabilisticModelWindow::buildInterface()
 
   //   stochastic inputs table
   inputTableView_ = new QTableView;
-  QStringList items = QStringList()<<tr("Beta")<<tr("Gamma")<<tr("Gumbel")<<tr("Normal")<<tr("Uniform");
+  QStringList items = QStringList()<<tr("Beta")<<tr("Gamma")<<tr("Gumbel")<<tr("LogNormal")<<tr("Normal")<<tr("Uniform");
   ComboBoxDelegate * delegate = new ComboBoxDelegate(items);
   inputTableView_->setItemDelegateForColumn(1, delegate);
   inputTableView_->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
@@ -215,7 +215,7 @@ void ProbabilisticModelWindow::populateDeterministicInputsComboBox()
   deterministicInputsComboBox_->setModel(deterministicInputsComboBoxModel_);
 
   for (int i=0; i<physicalModel_.getInputs().getSize(); ++i)
-    if (physicalModel_.getInputs()[i].getDistribution().getImplementation()->getClassName() == "Dirac")
+    if (!physicalModel_.getInputs()[i].isStochastic())
       deterministicInputsComboBox_->addItem(physicalModel_.getInputs()[i].getName().c_str(), i);
 }
 

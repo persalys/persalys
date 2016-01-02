@@ -26,6 +26,8 @@ public:
   OT::Distribution getDistribution() const;
   void setDistribution(const OT::Distribution & distribution);
 
+  bool isStochastic() const;
+
   std::string dump() const;
 
 private:

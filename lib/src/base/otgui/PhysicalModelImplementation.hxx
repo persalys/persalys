@@ -35,6 +35,7 @@ public:
   virtual void addInput(const Input & input);
   virtual void removeInput(const std::string & inputName);
   OT::Description getInputNames();
+  OT::Description getStochasticInputNames();
   bool hasAnInputNamed(const std::string & inputName);
   bool hasStochasticInputs();
 
@@ -55,6 +56,9 @@ public:
   virtual OT::NumericalMathFunction getFunction(const OT::Description & outputNames);
   virtual OT::NumericalMathFunction getFunction();
 
+  OT::Copula getCopula() const;
+  void setCopula(const OT::Copula & copula);
+
   virtual std::string dump() const;
 
 private:
@@ -62,7 +66,9 @@ private:
   InputCollection inputs_;
   OutputCollection outputs_;
   OT::Description inputNames_;
+  OT::Description stochasticInputNames_;
   OT::Description outputNames_;
+  OT::Copula copula_;
 };
 }
 #endif

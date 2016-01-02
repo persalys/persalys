@@ -127,7 +127,7 @@ void DesignOfExperimentImplementation::initializeParameters(const InputCollectio
 
   for (int i=0; i<inputSize; ++i)
   {
-    if (inputs[i].getDistribution().getImplementation()->getClassName()=="Dirac")
+    if (!inputs[i].isStochastic())
     {
       lowerBounds_[i] = 0.9 * inputs[i].getValue();
       upperBounds_[i] = 1.1 * inputs[i].getValue();
