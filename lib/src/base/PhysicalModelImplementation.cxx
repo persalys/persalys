@@ -1,5 +1,7 @@
 #include "otgui/PhysicalModelImplementation.hxx"
 
+#include "NormalCopula.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
@@ -128,7 +130,22 @@ void PhysicalModelImplementation::setInputValue(const std::string & inputName, c
 
 void PhysicalModelImplementation::setInputDistribution(const std::string & inputName, const Distribution & distribution)
 {
+  bool inputOldStateIsStochastic = getInputByName(inputName).isStochastic();
+
   getInputByName(inputName).setDistribution(distribution);
+
+  // update copula if need
+  if (!inputOldStateIsStochastic && distribution.getImplementation()->getClassName()!="Dirac")
+  {
+    stochasticInputNames_ = Description();
+    updateCopula();
+  }
+  else if (inputOldStateIsStochastic && distribution.getImplementation()->getClassName()=="Dirac")
+  {
+    stochasticInputNames_ = Description();
+    updateCopula();
+  }
+
   notify("inputChanged");
   notify("updateProbabilisticModelWindow");
 }
@@ -141,6 +158,12 @@ void PhysicalModelImplementation::addInput(const Input & input)
 
   inputs_.add(input);
   inputNames_.add(input.getName());
+
+  if (input.isStochastic())
+  {
+    stochasticInputNames_.add(input.getName());
+    updateCopula();
+  }
   notify("inputChanged");
   notify("updateProbabilisticModelWindow");
 }
@@ -155,6 +178,11 @@ void PhysicalModelImplementation::removeInput(const std::string & inputName)
       {
         inputs_.erase(inputs_.begin() + i);
         inputNames_.erase(inputNames_.begin() + i);
+        if (inputs_[i].isStochastic())
+        {
+          stochasticInputNames_ = Description();
+          updateCopula();
+        }
         notify("inputChanged");
         notify("updateProbabilisticModelWindow");
         break;
@@ -162,6 +190,43 @@ void PhysicalModelImplementation::removeInput(const std::string & inputName)
   }
   else
     throw InvalidArgumentException(HERE) << "The given input name " << inputName <<" does not correspond to an input of the physical model.\n";
+}
+
+
+void PhysicalModelImplementation::updateCopula()
+{
+  if (!getStochasticInputNames().getSize())
+  {
+    copula_ = Copula();
+    return;
+  }
+
+  CorrelationMatrix newSpearmanCorrelation(getStochasticInputNames().getSize());
+  if (newSpearmanCorrelation.getDimension() > 1)
+  {
+    Description oldStochasticInputNames(copula_.getDescription());
+    int size = oldStochasticInputNames.getSize();
+    CorrelationMatrix oldSpearmanCorrelation(copula_.getSpearmanCorrelation());
+    for (int row=0; row<size; ++row)
+      for (int col=row+1; col<size; ++col)
+        {
+          Collection<String>::iterator it1;
+          it1 = std::find(stochasticInputNames_.begin(), stochasticInputNames_.end(), oldStochasticInputNames[row]);
+          Collection<String>::iterator it2;
+          it2 = std::find(stochasticInputNames_.begin(), stochasticInputNames_.end(), oldStochasticInputNames[col]);
+          if (it1 != stochasticInputNames_.end() &&  it2 != stochasticInputNames_.end())
+          {
+            int newRow = it1 -stochasticInputNames_.begin();
+            int newCol = it2 - stochasticInputNames_.begin();
+            newSpearmanCorrelation(newRow, newCol) = oldSpearmanCorrelation(row, col);
+            newSpearmanCorrelation(newCol, newRow) = newSpearmanCorrelation(newRow, newCol);
+          }
+        }
+  }
+
+  CorrelationMatrix correlationMatrix(NormalCopula::GetCorrelationFromSpearmanCorrelation(newSpearmanCorrelation));
+  copula_ = NormalCopula(correlationMatrix);
+  copula_.setDescription(stochasticInputNames_);
 }
 
 
@@ -309,13 +374,13 @@ ComposedDistribution PhysicalModelImplementation::getComposedDistribution() cons
   ComposedDistribution::DistributionCollection marginales;
   for (int i=0; i<inputs_.getSize(); ++i)
     marginales.add(inputs_[i].getDistribution());
-  return ComposedDistribution(marginales);
+  return ComposedDistribution(marginales, getCopula());
+  // TODO  return ComposedDistribution(marginales, getCopula());
 }
 
 
 RandomVector PhysicalModelImplementation::getInputRandomVector()
 {
-//   TODO:  RandomVector(ComposedDistribution(marginales, getCopula()));
   return RandomVector(getComposedDistribution());
 }
 
@@ -350,6 +415,7 @@ void PhysicalModelImplementation::setCopula(const Copula & copula)
     throw InvalidArgumentException(HERE) << "The given copula must have a dimension equal to the number of stochastic inputs.\n";
 
   copula_ = copula;
+  copula_.setDescription(getStochasticInputNames());
 }
 
 

@@ -6,6 +6,7 @@ ot_add_source_file ( InputTableModel.cxx )
 ot_add_source_file ( InputTableProbabilisticModel.cxx )
 ot_add_source_file ( OutputTableModel.cxx )
 ot_add_source_file ( ExperimentTableModel.cxx )
+ot_add_source_file ( CorrelationTableModel.cxx )
 ot_add_source_file ( Item.cxx )
 ot_add_source_file ( ObserverItem.cxx )
 ot_add_source_file ( LimitStateItem.cxx )
@@ -28,6 +29,7 @@ qt4_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/ComboBoxDelegate.hxx
                                     otgui/InputTableProbabilisticModel.hxx
                                     otgui/OutputTableModel.hxx
                                     otgui/ExperimentTableModel.hxx
+                                    otgui/CorrelationTableModel.hxx
                                     otgui/AnalysisItem.hxx
                                     otgui/ParametricAnalysisItem.hxx
                                     otgui/ParametricAnalysisTableModel.hxx

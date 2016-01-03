@@ -12,9 +12,6 @@ InputTableProbabilisticModel::InputTableProbabilisticModel(const PhysicalModel &
   : QAbstractTableModel(parent)
   , physicalModel_(physicalModel)
 {
-  for (int i=0; i<physicalModel_.getInputs().getSize(); ++i)
-    if (physicalModel_.getInputs()[i].isStochastic())
-      userRoleList_ << i;
 }
 
 
@@ -31,7 +28,7 @@ int InputTableProbabilisticModel::columnCount(const QModelIndex & parent) const
 
 int InputTableProbabilisticModel::rowCount(const QModelIndex & parent) const
 {
-  return userRoleList_.count();
+  return getPhysicalModel().getStochasticInputNames().getSize();
 }
 
 
@@ -64,27 +61,27 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
   if (!index.isValid())
     return QVariant();
 
-  if (role == Qt::UserRole)
-    return userRoleList_[index.row()];
-
-  else if (role == Qt::DisplayRole || role == Qt::EditRole)
+  if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
-    Input input_i = physicalModel_.getInputs()[data(index, Qt::UserRole).toInt()];
+    std::string inputName = getPhysicalModel().getStochasticInputNames()[index.row()];
     switch (index.column())
     {
       case 0:
-        return input_i.getName().c_str();
+        return inputName.c_str();
       case 1:
-        std::string distributionName = input_i.getDistribution().getImplementation()->getClassName();
+      {
+        Input input = getPhysicalModel().getInputByName(inputName);
+        std::string distributionName = input.getDistribution().getImplementation()->getClassName();
         if (distributionName == "TruncatedNormal")
           return tr("Normal");
         else if (distributionName == "TruncatedDistribution")
         {
-          TruncatedDistribution * dist = dynamic_cast<TruncatedDistribution*>(&*input_i.getDistribution().getImplementation());
+          TruncatedDistribution * dist = dynamic_cast<TruncatedDistribution*>(&*input.getDistribution().getImplementation());
           return tr(dist->getDistribution().getImplementation()->getClassName().c_str());
         }
         else
-          return tr(input_i.getDistribution().getImplementation()->getClassName().c_str());
+          return tr(input.getDistribution().getImplementation()->getClassName().c_str());
+      }
     }
   }
   return QVariant();
@@ -98,8 +95,8 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
 
   if (role == Qt::EditRole && index.column() == 1)
   {
-    int inputIndex = data(index, Qt::UserRole).toInt();
-    Input input = Input(physicalModel_.getInputs()[inputIndex]);
+    std::string inputName = physicalModel_.getStochasticInputNames()[index.row()];
+    Input input = physicalModel_.getInputByName(inputName);
 
     std::string distributionName = input.getDistribution().getImplementation()->getClassName();
     if (distributionName == "TruncatedNormal")
@@ -139,35 +136,8 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
 }
 
 
-void InputTableProbabilisticModel::addLine(int i)
+PhysicalModel InputTableProbabilisticModel::getPhysicalModel() const
 {
-  Input input = Input(physicalModel_.getInputs()[i]);
-
-  physicalModel_.blockNotification(true);
-  physicalModel_.setInputDistribution(input.getName(), Normal(0, 1));
-  physicalModel_.blockNotification(false);
-
-  QModelIndex lastIndex = index(-1, 0);
-  beginInsertRows(lastIndex.parent(), -1, -1);
-  insertRow(lastIndex.row());
-  userRoleList_ << i;
-  emit dataChanged(index(rowCount()-1, 0), index(rowCount()-1, 0));
-  endInsertRows();
+  return physicalModel_;
 }
-
-
-void InputTableProbabilisticModel::removeLine(const QModelIndex & lineIndex)
-{
-  Input input = Input(physicalModel_.getInputs()[data(lineIndex, Qt::UserRole).toInt()]);
-
-  physicalModel_.blockNotification(true);
-  physicalModel_.setInputDistribution(input.getName(), Dirac(input.getValue()));
-  physicalModel_.blockNotification(false);
-
-  beginRemoveRows(lineIndex.parent(), lineIndex.row(), lineIndex.row());
-  removeRows(lineIndex.row(), 1, lineIndex.parent());
-  userRoleList_.remove(lineIndex.row());
-  endRemoveRows();
-}
-
 }

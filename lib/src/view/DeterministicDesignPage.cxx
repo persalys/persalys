@@ -41,9 +41,9 @@ void DeterministicDesignPage::buildInterface()
   if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromExperiment)
     tableView_->setEnabled(false);
 
-  ExperimentTableModel * model_ = new ExperimentTableModel(designOfExperiment_);
-  connect(model_, SIGNAL(designOfExperimentChanged(DesignOfExperiment &)), this, SLOT(setDesignOfExperiment(DesignOfExperiment &)));
-  tableView_->setModel(model_);
+  ExperimentTableModel * model = new ExperimentTableModel(designOfExperiment_);
+  connect(model, SIGNAL(designOfExperimentChanged(DesignOfExperiment &)), this, SLOT(setDesignOfExperiment(DesignOfExperiment &)));
+  tableView_->setModel(model);
 
   QStringList items = QStringList()<<tr("Levels")<<tr("Delta");
   QVector<int> columns(1, 4);

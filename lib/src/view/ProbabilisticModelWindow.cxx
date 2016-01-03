@@ -4,6 +4,7 @@
 
 #include "otgui/ComboBoxDelegate.hxx"
 #include "otgui/InputTableProbabilisticModel.hxx"
+#include "otgui/CorrelationTableModel.hxx"
 
 #include "Normal.hxx"
 #include "TruncatedDistribution.hxx"
@@ -143,6 +144,21 @@ void ProbabilisticModelWindow::buildInterface()
   tabLayout->addWidget(horizontalSplitter);
   rootTab->addTab(tab, tr("Marginals"));
 
+  // Second Tab: correlation
+  tab = new QWidget;
+  tabLayout = new QHBoxLayout(tab);
+
+  QGroupBox * groupBox = new QGroupBox(tr("Spearman's rank"));
+  QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
+  correlationTableView_ = new QTableView;
+  correlationTableModel_ = new CorrelationTableModel(physicalModel_);
+  correlationTableView_->setModel(correlationTableModel_);
+  correlationTableView_->setEditTriggers(QAbstractItemView::AllEditTriggers);
+  groupBoxLayout->addWidget(correlationTableView_);
+  tabLayout->addWidget(groupBox);
+
+  rootTab->addTab(tab, tr("Correlation"));
+
   setWidget(rootTab);
 }
 
@@ -159,20 +175,8 @@ void ProbabilisticModelWindow::addInputRequested(int comboIndex)
 {
   if (comboIndex)
   {
-    int ith_input = deterministicInputsComboBox_->itemData(deterministicInputsComboBox_->currentIndex(), Qt::UserRole).toInt();
-    deterministicInputsComboBox_->setCurrentIndex(0);
-    deterministicInputsComboBox_->removeItem(comboIndex);
-
-    // had to do this before adding the row to avoid bug with comboboxes' display
-    for (int i = 0; i < inputTableModel_->rowCount(); ++i)
-      inputTableView_->closePersistentEditor(inputTableModel_->index(i, 1));
-
-    inputTableModel_->addLine(ith_input);
-
-    for (int i = 0; i < inputTableModel_->rowCount(); ++i)
-      inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
-
-    inputTableView_->selectRow(inputTableModel_->rowCount()-1);
+    QString inputName = deterministicInputsComboBox_->currentText();
+    physicalModel_.setInputDistribution(inputName.toStdString(), Normal(0, 1));
   }
 }
 
@@ -181,19 +185,8 @@ void ProbabilisticModelWindow::removeInputRequested()
 {
   if (inputTableView_->selectionModel()->hasSelection())
   {
-    QModelIndex index = inputTableView_->currentIndex();
-    int inputIndex = inputTableModel_->data(index, Qt::UserRole).toInt();
-    deterministicInputsComboBox_->addItem(physicalModel_.getInputs()[inputIndex].getName().c_str(), inputIndex);
-
-    inputTableModel_->removeLine(index);
-
-    if (inputTableModel_->rowCount())
-    {
-      inputTableView_->selectRow(0);
-      updateDistributionWidgets(inputTableView_->currentIndex());
-    }
-    else
-      updateDistributionWidgets(inputTableModel_->index(-1, 0));
+    std::string inputName =  inputTableModel_->data(inputTableView_->currentIndex(), Qt::DisplayRole).toString().toStdString();
+    physicalModel_.setInputDistribution(inputName, Dirac(physicalModel_.getInputByName(inputName).getValue()));
   }
 }
 
@@ -216,7 +209,8 @@ void ProbabilisticModelWindow::populateDeterministicInputsComboBox()
 
   for (int i=0; i<physicalModel_.getInputs().getSize(); ++i)
     if (!physicalModel_.getInputs()[i].isStochastic())
-      deterministicInputsComboBox_->addItem(physicalModel_.getInputs()[i].getName().c_str(), i);
+      deterministicInputsComboBox_->addItem(physicalModel_.getInputs()[i].getName().c_str());
+  deterministicInputsComboBox_->setCurrentIndex(0);
 }
 
 
@@ -230,16 +224,35 @@ void ProbabilisticModelWindow::updatePhysicalModel(const PhysicalModel & physica
 void ProbabilisticModelWindow::updateProbabilisticModel()
 {
   // update stochastic inputs table
+  updateStochasticInputsTable();
+
+  // update plots and truncation widgets
+  updateDistributionWidgets(inputTableView_->currentIndex());
+
+  // update deterministic inputs list
+  updateDeterministicInputsComboBox();
+
+  // update correlation table
+  updateCorrelationTable();
+}
+
+
+void ProbabilisticModelWindow::updateStochasticInputsTable()
+{
   delete inputTableModel_;
   inputTableModel_ = new InputTableProbabilisticModel(physicalModel_);
   inputTableView_->setModel(inputTableModel_);
   for (int i = 0; i < inputTableModel_->rowCount(); ++i)
     inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
   connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
-  updateDistributionWidgets(inputTableView_->currentIndex());
+}
 
-  // update deterministic inputs list
-  updateDeterministicInputsComboBox();
+
+void ProbabilisticModelWindow::updateCorrelationTable()
+{
+  delete correlationTableModel_;
+  correlationTableModel_ = new CorrelationTableModel(physicalModel_);
+  correlationTableView_->setModel(correlationTableModel_);
 }
 
 
@@ -256,8 +269,13 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
 
   if (!index.isValid())
   {
-    rightFrame_->hide();
-    return;
+    if (!inputTableView_->model()->rowCount())
+    {
+      rightFrame_->hide();
+      return;
+    }
+    else
+      inputTableView_->selectRow(0);
   }
   rightFrame_->show();
   advancedGroup_->setChecked(false);
@@ -265,8 +283,8 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   if (index.row() != inputTableView_->currentIndex().row())
     inputTableView_->selectRow(index.row());
 
-  int inputIndex = inputTableModel_->data(index, Qt::UserRole).toInt();
-  Distribution inputDistribution = physicalModel_.getInputs()[inputIndex].getDistribution();
+  QString inputName =  inputTableModel_->data(inputTableView_->currentIndex(), Qt::DisplayRole).toString();
+  Distribution inputDistribution = physicalModel_.getInputByName(inputName.toStdString()).getDistribution();
   std::string distributionName = inputDistribution.getImplementation()->getClassName();
 
   const NumericalPointWithDescription parameters = inputDistribution.getParametersCollection()[0];

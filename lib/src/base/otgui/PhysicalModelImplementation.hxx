@@ -61,6 +61,9 @@ public:
 
   virtual std::string dump() const;
 
+protected:
+  void updateCopula();
+
 private:
   std::string name_;
   InputCollection inputs_;

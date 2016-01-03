@@ -1,22 +1,21 @@
-// InputTableProbabilisticModel.hxx
+// CorrelationTableModel.hxx
 
-#ifndef INPUTTABLEPROBABILISTICMODEL_H
-#define INPUTTABLEPROBABILISTICMODEL_H
+#ifndef CORRELATIONTABLEMODEL_H
+#define CORRELATIONTABLEMODEL_H
 
 #include "otgui/PhysicalModel.hxx"
 
 #include <QAbstractTableModel>
-#include <QVector>
 
 namespace OTGUI {
-class InputTableProbabilisticModel : public QAbstractTableModel
+class CorrelationTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 
 public:
-  InputTableProbabilisticModel(const PhysicalModel & physicalModel, QObject * parent = 0);
+  CorrelationTableModel(const PhysicalModel & physicalModel, QObject * parent = 0);
 
-  virtual ~InputTableProbabilisticModel();
+  virtual ~CorrelationTableModel();
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;

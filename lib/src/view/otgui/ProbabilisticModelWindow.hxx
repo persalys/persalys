@@ -7,6 +7,7 @@
 #include "otgui/ProbabilisticModelItem.hxx"
 #include "otgui/PlotWidget.hxx"
 #include "otgui/InputTableProbabilisticModel.hxx"
+#include "otgui/CorrelationTableModel.hxx"
 
 #include <QGroupBox>
 #include <QVBoxLayout>
@@ -28,7 +29,9 @@ protected:
   void buildInterface();
   void updateDeterministicInputsComboBox();
   void populateDeterministicInputsComboBox();
+  void updateStochasticInputsTable();
   void updatePlots(OT::Distribution inputDistribution);
+  void updateCorrelationTable();
 
 public slots:
   void updateDistributionWidgets(const QModelIndex & index);
@@ -60,6 +63,8 @@ private:
   QCheckBox * upperBoundCheckBox_;
   QLineEdit * lowerBoundLineEdit_;
   QLineEdit * upperBoundLineEdit_;
+  CorrelationTableModel * correlationTableModel_;
+  QTableView * correlationTableView_;
 };
 }
 #endif

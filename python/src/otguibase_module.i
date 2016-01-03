@@ -69,8 +69,6 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 %include AnalyticalPhysicalModel.i
 %include PhysicalModel.i
 %include YACSPhysicalModel.i
-%include DesignOfExperimentImplementation.i
-%include DesignOfExperiment.i
 %include LimitStateImplementation.i
 %include LimitState.i
 %include AnalysisImplementation.i
@@ -78,6 +76,8 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 %include SimulationAnalysis.i
 %include ParametricAnalysisResult.i
 %include ParametricAnalysis.i
+%include DesignOfExperimentImplementation.i
+%include DesignOfExperiment.i
 %include MonteCarloResult.i
 %include QuadraticCumulResult.i
 %include MonteCarloAnalysis.i
