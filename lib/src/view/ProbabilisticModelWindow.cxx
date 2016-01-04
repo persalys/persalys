@@ -3,6 +3,7 @@
 #include "otgui/ProbabilisticModelWindow.hxx"
 
 #include "otgui/ComboBoxDelegate.hxx"
+#include "otgui/SpinBoxDelegate.hxx"
 #include "otgui/InputTableProbabilisticModel.hxx"
 #include "otgui/CorrelationTableModel.hxx"
 
@@ -82,7 +83,7 @@ void ProbabilisticModelWindow::buildInterface()
   QScrollArea * rightScrollArea = new QScrollArea;
   rightScrollArea->setWidgetResizable(true);
   rightFrame_ = new QFrame;
-  QVBoxLayout * rightLayout_ = new QVBoxLayout(rightFrame_);
+  QVBoxLayout * rightLayout = new QVBoxLayout(rightFrame_);
 
   //  PDF and CDF graphs
   QGridLayout * plotLayout = new QGridLayout;
@@ -91,13 +92,12 @@ void ProbabilisticModelWindow::buildInterface()
   cdfPlot_ = new PlotWidget;
   plotLayout->addWidget(cdfPlot_, 1, 1);
   
-  rightLayout_->addLayout(plotLayout);
+  rightLayout->addLayout(plotLayout);
 
   //  parameters
   parameterLayout_ = new QVBoxLayout;
   parameterLayout_->addWidget(new QWidget);
-  parameterLayout_->addStretch();
-  rightLayout_->addLayout(parameterLayout_);
+  rightLayout->addLayout(parameterLayout_);
 
   // advanced group: truncation parameters
   advancedGroup_ = new QGroupBox(tr("Truncation parameters"));
@@ -127,9 +127,9 @@ void ProbabilisticModelWindow::buildInterface()
   connect(upperBoundLineEdit_, SIGNAL(editingFinished()), this, SLOT(truncationParametersChanged()));
 
   advancedGroupLayout->addWidget(advancedWidgets_);
-  rightLayout_->addWidget(advancedGroup_);
+  advancedGroupLayout->addStretch();
+  rightLayout->addWidget(advancedGroup_);
 
-  rightLayout_->addStretch();
   rightScrollArea->setWidget(rightFrame_);
   horizontalSplitter->addWidget(rightScrollArea);
 
@@ -151,6 +151,8 @@ void ProbabilisticModelWindow::buildInterface()
   QGroupBox * groupBox = new QGroupBox(tr("Spearman's rank"));
   QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
   correlationTableView_ = new QTableView;
+  SpinBoxDelegate * correlationDelegate = new SpinBoxDelegate;
+  correlationTableView_->setItemDelegate(correlationDelegate);
   correlationTableModel_ = new CorrelationTableModel(physicalModel_);
   correlationTableView_->setModel(correlationTableModel_);
   correlationTableView_->setEditTriggers(QAbstractItemView::AllEditTriggers);
@@ -280,7 +282,7 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   rightFrame_->show();
   advancedGroup_->setChecked(false);
 
-  if (index.row() != inputTableView_->currentIndex().row())
+  if (index.row() != inputTableView_->currentIndex().row() || index.column() == 1)
     inputTableView_->selectRow(index.row());
 
   QString inputName =  inputTableModel_->data(inputTableView_->currentIndex(), Qt::DisplayRole).toString();
@@ -303,6 +305,7 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   lowerBoundCheckBox_->setChecked(false);
   upperBoundCheckBox_->setChecked(false);
 
+  // fill truncation parameters widgets
   if (distributionName == "TruncatedDistribution")
   {
     TruncatedDistribution * dist = dynamic_cast<TruncatedDistribution*>(&*inputDistribution.getImplementation());
@@ -342,6 +345,7 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   lowerBoundLineEdit_->blockSignals(false);
   upperBoundLineEdit_->blockSignals(false);
 
+  // fill parameters widgets
   if (nbParameters)
   {
     if (nbParameters >= 5)

@@ -29,7 +29,6 @@ public slots:
   void outputFirstTabChanged(int indexOutput);
   void probaValueChanged(double proba);
   void quantileValueChanged(double quantile);
-  void outputBoxPlotChanged(int indexOutput);
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 signals:
@@ -45,9 +44,9 @@ private:
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
   QComboBox * outputsComboBoxFirstTab_;
-  PlotWidget * boxPlot_;
-  QComboBox * outputsComboBoxSecondTab_;
-  GraphConfigurationWidget * graphConfigurationWidget_;
+  GraphConfigurationWidget * pdf_cdfPlotsConfigurationWidget_;
+  GraphConfigurationWidget * boxPlotsConfigurationWidget_;
+  GraphConfigurationWidget * scatterPlotsConfigurationWidget_;
   QLabel * meanLabel_;
   QLabel * stdLabel_;
   QLabel * skewnessLabel_;

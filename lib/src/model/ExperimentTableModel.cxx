@@ -70,8 +70,7 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
 {
   if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
-    int column = index.column();
-    switch (column)
+    switch (index.column())
     {
       case 0:
         return designOfExperiment_.getPhysicalModel().getInputs()[index.row()].getName().c_str();
@@ -98,17 +97,18 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
 {
   if (role == Qt::EditRole)
   {
-    int column = index.column();
-    switch (column)
+    switch (index.column())
     {
       case 0:
       case 1:
-        break;
+        return false;
       case 2:
       {
         if (value.toDouble() > designOfExperiment_.getUpperBounds()[index.row()])
-          break;
+          return false;
         NumericalPoint lowerBounds = designOfExperiment_.getLowerBounds();
+        if (lowerBounds[index.row()] == value.toDouble())
+          return false;
         lowerBounds[index.row()] = value.toDouble();
         designOfExperiment_.setLowerBounds(lowerBounds);
         break;
@@ -116,20 +116,36 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
       case 3:
       {
         if (value.toDouble() < designOfExperiment_.getLowerBounds()[index.row()])
-          break;
+          return false;
         NumericalPoint upperBounds = designOfExperiment_.getUpperBounds();
+        if (upperBounds[index.row()] == value.toDouble())
+          return false;
         upperBounds[index.row()] = value.toDouble();
         designOfExperiment_.setUpperBounds(upperBounds);
         break;
       }
       case 4:
       {
-        if (value.toInt() < 1)
+        if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
+        {
+          if (value.toInt() < 1)
+            return false;
+          Indices nbValues = designOfExperiment_.getLevels();
+          if (nbValues[index.row()] == value.toInt())
+            return false;
+          nbValues[index.row()] = value.toInt();
+          designOfExperiment_.setLevels(nbValues);
           break;
-        Indices nbValues = designOfExperiment_.getLevels();
-        nbValues[index.row()] = value.toInt();
-        designOfExperiment_.setLevels(nbValues);
-        break;
+        }
+        else
+        {
+          NumericalPoint deltas = designOfExperiment_.getDeltas();
+          if (deltas[index.row()] == value.toDouble())
+            return false;
+          deltas[index.row()] = value.toDouble();
+          designOfExperiment_.setDeltas(deltas);
+          break;
+        }
       }
     }
   }

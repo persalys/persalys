@@ -10,6 +10,7 @@
 #include <QTabWidget>
 #include <QLineEdit>
 #include <QComboBox>
+#include <QButtonGroup>
 
 namespace OTGUI {
 
@@ -18,7 +19,9 @@ class GraphConfigurationWidget : public QTabWidget
   Q_OBJECT
 
 public:
-  GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets, QStringList inputNames, QStringList outputNames);
+  enum Type {NoType, Scatter, PDF, CDF, BoxPlot, SensitivityIndices};
+
+  GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets, QStringList inputNames, QStringList outputNames, Type plotType);
 
 public slots:
   void updateLineEdits();
@@ -34,7 +37,9 @@ signals:
 
 private:
   QVector<PlotWidget *> plotWidgets_;
+  Type plotType_;
   int currentPlotIndex_;
+  QButtonGroup * pdf_cdfGroup_;
   QComboBox * xAxisComboBox_;
   QComboBox * yAxisComboBox_;
   QLineEdit * titleLineEdit_;

@@ -75,6 +75,9 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
 
   if (role == Qt::EditRole)
   {
+    if (value.toDouble() < -1. || value.toDouble() > 1.)
+      return false;
+
     CorrelationMatrix correlation(physicalModel_.getCopula().getSpearmanCorrelation());
     correlation(index.row(), index.column()) = value.toDouble();
     // update the physicalModel

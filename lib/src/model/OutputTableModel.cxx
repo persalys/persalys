@@ -30,24 +30,21 @@ int OutputTableModel::rowCount(const QModelIndex & parent) const
 
 QVariant OutputTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-  if (role == Qt::DisplayRole)
+  if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
   {
-    if (orientation == Qt::Horizontal)
+    switch (section)
     {
-      switch (section)
-      {
-        case 0:
-            return tr("Name");
-        case 1:
-            return tr("Description");
-        case 2:
-            return tr("Formula");
-        case 3:
-            return tr("Value");
-      }
+      case 0:
+        return tr("Name");
+      case 1:
+        return tr("Description");
+      case 2:
+        return tr("Formula");
+      case 3:
+        return tr("Value");
     }
   }
-  return QVariant();
+  return QAbstractTableModel::headerData(section, orientation, role);
 }
 
 
@@ -86,18 +83,38 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
     switch (index.column())
     {
       case 0:
+      {
+        if (output.getName() == value.toString().toStdString())
+        {
+          physicalModel_.blockNotification(false);
+          return true;
+        }
         physicalModel_.removeOutput(output.getName());
         output.setName(value.toString().toStdString());
         physicalModel_.addOutput(output);
         break;
+      }
       case 1:
+      {
+        if (output.getDescription() == value.toString().toStdString())
+        {
+          physicalModel_.blockNotification(false);
+          return true;
+        }
         physicalModel_.setOutputDescription(output.getName(), value.toString().toStdString());
         break;
+      }
       case 2:
+      {
+        if (output.getFormula() == value.toString().toStdString())
+        {
+          physicalModel_.blockNotification(false);
+          return true;
+        }
         // TODO test if value.toString() ok
         physicalModel_.setOutputFormula(output.getName(), value.toString().toStdString());
         break;
-
+      }
     }
     physicalModel_.blockNotification(false);
 //  TODO   if (!updateOutput) emit errorMessage

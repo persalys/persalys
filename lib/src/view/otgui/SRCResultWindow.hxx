@@ -6,10 +6,9 @@
 #include "otgui/ResultWindow.hxx"
 #include "otgui/SensitivityAnalysisItem.hxx"
 #include "otgui/SRCResult.hxx"
-#include "otgui/PlotWidget.hxx"
+#include "otgui/GraphConfigurationWidget.hxx"
 
-#include <QComboBox>
-#include <QTableWidget>
+#include <QStackedLayout>
 
 namespace OTGUI {
 class SRCResultWindow : public OTguiSubWindow //ResultWindow
@@ -23,16 +22,18 @@ protected:
   void buildInterface();
 
 public slots:
-  void outputChanged(int index);
   void updateIndicesPlot(int section, Qt::SortOrder order);
-  void updateTable(int index);
+  void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+signals:
+  void graphWindowActivated(GraphConfigurationWidget*);
+  void graphWindowDeactivated(GraphConfigurationWidget*);
 
 private:
   SRCResult result_;
   std::vector<std::map<double, int> > indices_;
-  QComboBox * outputsComboBox_;
-  PlotWidget * indicesPlot_;
-  QTableWidget * table_;
+  QStackedLayout * plotLayout_;
+  GraphConfigurationWidget * plotsConfigurationWidget_;
+  QVector<PlotWidget*> listPlotWidgets_;
 };
 }
 #endif

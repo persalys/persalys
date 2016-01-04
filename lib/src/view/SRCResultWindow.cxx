@@ -7,6 +7,7 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
+#include <QTableWidget>
 
 using namespace OT;
 
@@ -20,12 +21,11 @@ SRCResultWindow::SRCResultWindow(SensitivityAnalysisItem * item)
   {
     std::map<double, int> indices_i;
     for (int j=0; j<result_.getIndices().getDimension(); ++j)
-    {
       indices_i[result_.getIndices()[i][j]] = j;
-    }
     indices_.push_back(indices_i);
   }
   buildInterface();
+  connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
 }
 
 
@@ -35,35 +35,54 @@ void SRCResultWindow::buildInterface()
 
   // first tab --------------------------------
   QWidget * tab = new QWidget;
-  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+  plotLayout_ = new QStackedLayout(tab);
 
-  QHBoxLayout * headLayout = new QHBoxLayout;
-  QLabel * outputName = new QLabel(tr("Output"));
-  headLayout->addWidget(outputName);
-  outputsComboBox_ = new QComboBox;
-  QStringList items = QStringList();
+  NumericalPoint currentIndices(result_.getInputNames().getSize());
+  Description sortedInputNames = result_.getInputNames();
+  QStringList outputNames;
   for (int i=0; i<result_.getOutputNames().getSize(); ++i)
-    items << result_.getOutputNames()[i].c_str();
-  outputsComboBox_->addItems(items);
-  connect(outputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(outputChanged(int)));
-  headLayout->addWidget(outputsComboBox_);
-  headLayout->addStretch();
-  tabLayout->addLayout(headLayout);
+    outputNames << result_.getOutputNames()[i].c_str();
 
-  // graph
-  indicesPlot_ = new PlotWidget(true);
-  tabLayout->addWidget(indicesPlot_);
-  updateIndicesPlot(-1, Qt::AscendingOrder);
+  for (int i=0; i<result_.getOutputNames().getSize(); ++i)
+  {
+    QWidget * widget = new QWidget;
+    QVBoxLayout * vbox = new QVBoxLayout(widget);
 
-  // table of indices
-  table_ = new QTableWidget(0, 2, this);
-  table_->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Indice"));
-  table_->verticalHeader()->hide();
-  table_->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-  connect(table_->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
-  updateTable(0);
-  table_->setSortingEnabled(true);
-  tabLayout->addWidget(table_);
+    // plot
+    PlotWidget * plot = new PlotWidget;
+    currentIndices = result_.getIndices()[i];
+    plot->plotSensitivityIndices(currentIndices, NumericalPoint(), sortedInputNames);
+    plot->setAxisTitle(QwtPlot::xBottom, "Inputs");
+
+    plot->setAxisTitle(QwtPlot::yLeft, result_.getOutputNames()[i].c_str());
+    vbox->addWidget(plot);
+    listPlotWidgets_.append(plot);
+
+    // table of indices
+    QTableWidget * table = new QTableWidget(0, 2, this);
+    table->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Indice"));
+    table->verticalHeader()->hide();
+    table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+    connect(table->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
+    table->setSortingEnabled(true);
+    // fill table
+    for (int j=0; j<result_.getInputNames().getSize(); ++j)
+    {
+      table->setRowCount(j + 1);
+      QTableWidgetItem * item = new QTableWidgetItem(result_.getInputNames()[j].c_str());
+      item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+      table->setItem(j, 0, item);
+
+      item = new QTableWidgetItem(QString::number(result_.getIndices()[i][j], 'g', 4));
+      item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+      table->setItem(j, 1, item);
+    }
+    vbox->addWidget(table);
+    plotLayout_->addWidget(widget);
+  }
+
+  plotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets_, QStringList(), outputNames, GraphConfigurationWidget::SensitivityIndices);
+  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout_, SLOT(setCurrentIndex(int)));
 
   tabWidget->addTab(tab, "Result");
   //
@@ -71,29 +90,14 @@ void SRCResultWindow::buildInterface()
 }
 
 
-void SRCResultWindow::outputChanged(int index)
-{
-  updateTable(index);
-  updateIndicesPlot(-1, Qt::AscendingOrder);
-}
-
-
 void SRCResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
 {
-  Q_ASSERT(indicesPlot_);
-
-  int indexOutput = outputsComboBox_->currentIndex();
+  int indexOutput = plotLayout_->currentIndex();
   NumericalPoint currentIndices(result_.getInputNames().getSize());
   Description sortedInputNames(result_.getInputNames().getSize());
 
   switch (section)
   {
-    case -1:
-    {
-      currentIndices = result_.getIndices()[indexOutput];
-      sortedInputNames = result_.getInputNames();
-      break;
-    }
     case 1:
     {
       int indice = 0;
@@ -119,24 +123,16 @@ void SRCResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
       return;
   }
 
-  indicesPlot_->clear();
-  indicesPlot_->plotSensitivityIndices(currentIndices, NumericalPoint(), sortedInputNames);
+  listPlotWidgets_[indexOutput]->clear();
+  listPlotWidgets_[indexOutput]->plotSensitivityIndices(currentIndices, NumericalPoint(), sortedInputNames);
 }
 
 
-void SRCResultWindow::updateTable(int index)
+void SRCResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
-  int indexOutput = outputsComboBox_->currentIndex();
-  for ( int i = 0; i < result_.getInputNames().getSize(); ++i)
-  {
-    table_->setRowCount(i + 1);
-    QTableWidgetItem * item = new QTableWidgetItem(result_.getInputNames()[i].c_str());
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    table_->setItem(i, 0, item);
-
-    item = new QTableWidgetItem(QString::number(result_.getIndices()[indexOutput][i], 'g', 4));
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    table_->setItem(i, 1, item);
-  }
+  if (newState == 4 || newState == 8 || newState == 10)
+    emit graphWindowActivated(plotsConfigurationWidget_);
+  else if (newState == 0 || newState == 1 || newState == 2 || newState == 9)
+    emit graphWindowDeactivated(plotsConfigurationWidget_);
 }
 }

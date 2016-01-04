@@ -27,9 +27,19 @@ MonteCarloResultWindow::MonteCarloResultWindow(CentralTendencyItem * item)
 
 void MonteCarloResultWindow::buildInterface()
 {
+  // data
   int nbInputs = result_.getInputSample().getDimension();
   int nbOutputs = result_.getResultSample().getDimension();
+  InputCollection inputs = physicalModel_.getInputs();
+  OutputCollection outputs = physicalModel_.getOutputs();
+  QStringList inputNames;
+  for (int i=0; i<nbInputs; ++i)
+    inputNames << physicalModel_.getInputNames()[i].c_str();
+  QStringList outputNames;
+  for (int i=0; i<nbOutputs; ++i)
+    outputNames << physicalModel_.getOutputNames()[i].c_str();
 
+  // tabWidget
   tabWidget_ = new QTabWidget;
 
   // first tab --------------------------------
@@ -40,83 +50,75 @@ void MonteCarloResultWindow::buildInterface()
   QLabel * outputName = new QLabel(tr("Output"));
   headLayout->addWidget(outputName);
   outputsComboBoxFirstTab_ = new QComboBox;
-  QStringList outputNames;
-  for (int i=0; i<nbOutputs; ++i)
-    outputNames << result_.getOutputNames()[i].c_str();
   outputsComboBoxFirstTab_->addItems(outputNames);
   connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), this, SLOT(outputFirstTabChanged(int)));
   headLayout->addWidget(outputsComboBoxFirstTab_);
-
   headLayout->addStretch();
-
-  QLabel * nbSimuLabel = new QLabel(tr("Number of simulations"));
-  nbSimuLabel->setStyleSheet("font: bold 14px;");
-  headLayout->addWidget(nbSimuLabel);
-  nbSimuLabel = new QLabel(QString::number(result_.getResultSample().getSize()));
-  headLayout->addWidget(nbSimuLabel);
   tabLayout->addLayout(headLayout);
-
-  QHBoxLayout * hbox = new QHBoxLayout;
 
   QVBoxLayout * vbox = new QVBoxLayout;
   QGridLayout * grid = new QGridLayout;
   int gridRow = -1;
 
+  QLabel * nbSimuLabel = new QLabel(tr("Number of simulations : ") + QString::number(result_.getInputSample().getSize()) + "\n");
+  grid->addWidget(nbSimuLabel, ++gridRow, 0, 1, 2, Qt::AlignTop);
+
   QLabel * label = new QLabel(tr("Min"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   minLabel_ = new QLabel;
   grid->addWidget(minLabel_, gridRow, 1, Qt::AlignTop);
 
   label = new QLabel(tr("Max"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   maxLabel_ = new QLabel;
   grid->addWidget(maxLabel_, gridRow, 1, Qt::AlignTop);
 
   label = new QLabel(tr("Mean"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   meanLabel_ = new QLabel;
   grid->addWidget(meanLabel_, gridRow, 1, Qt::AlignTop);
 
   label = new QLabel(tr("Standard deviation"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   stdLabel_ = new QLabel;
   grid->addWidget(stdLabel_, gridRow, 1, Qt::AlignTop);
 
   label = new QLabel(tr("Skewness"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   skewnessLabel_ = new QLabel;
   grid->addWidget(skewnessLabel_, gridRow, 1);
 
   label = new QLabel(tr("Kurtosis"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   kurtosisLabel_ = new QLabel;
   grid->addWidget(kurtosisLabel_, gridRow, 1, Qt::AlignTop);
 
   label = new QLabel(tr("First quartile"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   firstQuartileLabel_ = new QLabel;
   grid->addWidget(firstQuartileLabel_, gridRow, 1, Qt::AlignTop);
 
   label = new QLabel(tr("Third quartile"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   thirdQuartileLabel_ = new QLabel;
   grid->addWidget(thirdQuartileLabel_, gridRow, 1, Qt::AlignTop);
 
+  grid->setColumnStretch(1, 1);
   vbox->addLayout(grid);
   updateLabelsText();
 
   // quantiles
   QHBoxLayout * quantLayout = new QHBoxLayout;
   label = new QLabel(tr("Probability"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   quantLayout->addWidget(label);
   probaSpinBox_ = new QDoubleSpinBox;
   label->setBuddy(probaSpinBox_);
@@ -126,7 +128,7 @@ void MonteCarloResultWindow::buildInterface()
   probaSpinBox_->setValue(0.5);
   quantLayout->addWidget(probaSpinBox_);
   label = new QLabel(tr("Quantile"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   quantLayout->addWidget(label);
   quantileSpinBox_ = new QDoubleSpinBox;
   label->setBuddy(quantileSpinBox_);
@@ -138,61 +140,74 @@ void MonteCarloResultWindow::buildInterface()
   connect(quantileSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(quantileValueChanged(double)));
   probaValueChanged(0.5);
 
+  quantLayout->addStretch();
   vbox->addLayout(quantLayout);
-
   vbox->addStretch();
-  hbox->addLayout(vbox);
-  tabLayout->addLayout(hbox);
+  tabLayout->addLayout(vbox);
 
-  // PDF
-  QVBoxLayout * graphsLayout = new QVBoxLayout;
-
-  pdfPlot_ = new PlotWidget;
-  pdfPlot_->plotHistogram(result_.getResultSample().getMarginal(0));
-  pdfPlot_->plotPDFCurve(result_.getFittedDistribution()[0]);
-  graphsLayout->addWidget(pdfPlot_);
-
-  cdfPlot_ = new PlotWidget;
-  cdfPlot_->plotHistogram(result_.getResultSample().getMarginal(0), true);
-  cdfPlot_->plotCDFCurve(result_.getFittedDistribution()[0]);
-  graphsLayout->addWidget(cdfPlot_);
-
-  hbox->addLayout(graphsLayout);
-
-  tabWidget_->addTab(tab, tr("Result"));
+  tabWidget_->addTab(tab, tr("Summary"));
 
   // second tab --------------------------------
-  tab = new QWidget;
-  tabLayout = new QVBoxLayout(tab);
-  QHBoxLayout * hLayout = new QHBoxLayout;
-  outputName = new QLabel(tr("Output"));
-  hLayout->addWidget(outputName);
-  outputsComboBoxSecondTab_ = new QComboBox;
-  outputsComboBoxSecondTab_->addItems(outputNames);
-  connect(outputsComboBoxSecondTab_, SIGNAL(currentIndexChanged(int)), this, SLOT(outputBoxPlotChanged(int)));
-  hLayout->addWidget(outputsComboBoxSecondTab_);
-  hLayout->addStretch();
-  tabLayout->addLayout(hLayout);
-
-  boxPlot_ = new PlotWidget;
-
-  tabLayout->addWidget(boxPlot_);
-  tabLayout->addStretch();
-
-  outputBoxPlotChanged(0);
-
-  tabWidget_->addTab(tab, tr("Box plots"));
-
-  // third tab --------------------------------
   tab = new QWidget;
   QStackedLayout * plotLayout = new QStackedLayout(tab);
 
   QVector<PlotWidget*> listPlotWidgets;
-  InputCollection inputs = physicalModel_.getInputs();
-  OutputCollection outputs = physicalModel_.getOutputs();
-  QStringList inputNames;
-  for (int i=0; i<nbInputs; ++i)
-    inputNames << physicalModel_.getInputNames()[i].c_str();
+
+  for (int i=0; i<nbOutputs; ++i)
+  {
+    PlotWidget * plot = new PlotWidget;
+    plot->plotHistogram(result_.getResultSample().getMarginal(i));
+    plot->plotPDFCurve(result_.getFittedDistribution()[i]);
+    plot->setTitle(tr("PDF ") + outputs[i].getName().c_str());
+    plotLayout->addWidget(plot);
+    listPlotWidgets.append(plot);
+
+    plot = new PlotWidget;
+    plot->plotHistogram(result_.getResultSample().getMarginal(i), true);
+    plot->plotCDFCurve(result_.getFittedDistribution()[i]);
+    plot->setTitle(tr("CDF ") + outputs[i].getName().c_str());
+    plotLayout->addWidget(plot);
+    listPlotWidgets.append(plot);
+  }
+
+  pdf_cdfPlotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, QStringList(), outputNames, GraphConfigurationWidget::PDF);
+  connect(pdf_cdfPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
+
+  tabWidget_->addTab(tab, tr("PDF/CDF"));
+
+  // third tab --------------------------------
+  tab = new QWidget;
+  plotLayout = new QStackedLayout(tab);
+
+  QVector<PlotWidget*> listBoxPlotWidgets;
+
+  for (int i=0; i<nbOutputs; ++i)
+  {
+    PlotWidget * plot = new PlotWidget;
+    double median = result_.getMedian()[i];
+    double Q1 = result_.getFirstQuartile()[i];
+    double Q3 = result_.getThirdQuartile()[i];
+
+    plot->plotBoxPlot(median, Q1, Q3, Q1 - 1.5*(Q3-Q1), Q3 + 1.5*(Q3-Q1), result_.getOutliers()[i]);
+    plot->setTitle(tr("Box plot"));
+    if (outputs[i].getDescription().size())
+      plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getDescription().c_str());
+    else
+      plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getName().c_str());
+    plotLayout->addWidget(plot);
+    listBoxPlotWidgets.append(plot);
+  }
+
+  boxPlotsConfigurationWidget_ = new GraphConfigurationWidget(listBoxPlotWidgets, QStringList(), outputNames, GraphConfigurationWidget::BoxPlot);
+  connect(boxPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
+
+  tabWidget_->addTab(tab, tr("Box plots"));
+
+  // fourth tab --------------------------------
+  tab = new QWidget;
+  plotLayout = new QStackedLayout(tab);
+
+  QVector<PlotWidget*> listScatterPlotWidgets;
 
   for (int i=0; i<nbOutputs; ++i)
   {
@@ -200,21 +215,26 @@ void MonteCarloResultWindow::buildInterface()
     {
       PlotWidget * plot = new PlotWidget;
       plot->plotScatter(result_.getInputSample().getMarginal(j), result_.getResultSample().getMarginal(i));
-      plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getDescription().c_str());
-      plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getDescription().c_str());
+      plot->setTitle(tr("Scatter plot: ") + outputs[i].getName().c_str() + tr(" vs ") + inputs[j].getName().c_str());
+      if (inputs[j].getDescription().size())
+        plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getDescription().c_str());
+      else
+        plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getName().c_str());
+      if (outputs[i].getDescription().size())
+        plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getDescription().c_str());
+      else
+        plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getName().c_str());
       plotLayout->addWidget(plot);
-      listPlotWidgets.append(plot);
+      listScatterPlotWidgets.append(plot);
     }
   }
 
-  graphConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, inputNames, outputNames);
-  connect(graphConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
-
-  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
+  scatterPlotsConfigurationWidget_ = new GraphConfigurationWidget(listScatterPlotWidgets, inputNames, outputNames, GraphConfigurationWidget::Scatter);
+  connect(scatterPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
 
   tabWidget_->addTab(tab, tr("Scatter plots"));
 
-  // fourth tab --------------------------------
+  // fifth tab --------------------------------
   tab = new QWidget;
   tabLayout = new QVBoxLayout(tab);
   NumericalSample sample = result_.getInputSample();
@@ -225,6 +245,7 @@ void MonteCarloResultWindow::buildInterface()
   tabWidget_->addTab(tab, tr("Result table"));
 
   //
+  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
   setWidget(tabWidget_);
 }
 
@@ -294,9 +315,9 @@ void MonteCarloResultWindow::quantileValueChanged(double quantile)
 {
   probaSpinBox_->blockSignals(true);
   double cdf = 0.0;
-  double p(1.0 / double(result_.getResultSample().getSize()));
+  double p = 1.0 / double(result_.getResultSample().getSize());
 
-  for (int j = 0; j < result_.getResultSample().getSize(); ++j)
+  for (int j=0; j<result_.getResultSample().getSize(); ++j)
     if (result_.getResultSample()[j][outputsComboBoxFirstTab_->currentIndex()] < quantile)
       cdf += p;
 
@@ -309,34 +330,32 @@ void MonteCarloResultWindow::outputFirstTabChanged(int indexOutput)
 {
   updateLabelsText(indexOutput);
   probaValueChanged(0.5);
-  pdfPlot_->clear();
-  pdfPlot_->plotHistogram(result_.getResultSample().getMarginal(indexOutput));
-  pdfPlot_->plotPDFCurve(result_.getFittedDistribution()[indexOutput]);
-  cdfPlot_->clear();
-  cdfPlot_->plotHistogram(result_.getResultSample().getMarginal(indexOutput), true);
-  cdfPlot_->plotCDFCurve(result_.getFittedDistribution()[indexOutput]);
-}
-
-
-void MonteCarloResultWindow::outputBoxPlotChanged(int indexOutput)
-{
-  boxPlot_->clear();
-
-  double median = result_.getMedian()[indexOutput];
-  double Q1 = result_.getFirstQuartile()[indexOutput];
-  double Q3 = result_.getThirdQuartile()[indexOutput];
-
-  boxPlot_->plotBoxPlot(median, Q1, Q3, Q1 - 1.5*(Q3-Q1), Q3 + 1.5*(Q3-Q1), result_.getOutliers()[indexOutput]);
 }
 
 
 void MonteCarloResultWindow::showHideGraphConfigurationWidget(int indexTab)
 {
-  // if plotWidget is visible
-  if (indexTab == 2)
-    emit graphWindowActivated(graphConfigurationWidget_);
-  else
-    emit graphWindowDeactivated(graphConfigurationWidget_);
+  switch (indexTab)
+  {
+    // if a plotWidget is visible
+    case 1:
+      emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
+      break;
+    case 2:
+      emit graphWindowActivated(boxPlotsConfigurationWidget_);
+      break;
+    case 3:
+      emit graphWindowActivated(scatterPlotsConfigurationWidget_);
+      break;
+    // if no plotWidget is visible
+    default:
+    {
+      emit graphWindowDeactivated(pdf_cdfPlotsConfigurationWidget_);
+      emit graphWindowDeactivated(boxPlotsConfigurationWidget_);
+      emit graphWindowDeactivated(scatterPlotsConfigurationWidget_);
+      break;
+    }
+  }
 }
 
 
@@ -345,6 +364,6 @@ void MonteCarloResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates o
   if (newState == 4 || newState == 8 || newState == 10)
     showHideGraphConfigurationWidget(tabWidget_->currentIndex());
   else if (newState == 0 || newState == 1 || newState == 2 || newState == 9)
-    emit graphWindowDeactivated(graphConfigurationWidget_);
+    showHideGraphConfigurationWidget(-1);
 }
 }

@@ -9,6 +9,7 @@
 
 #include <QFileDialog>
 #include <QComboBox>
+#include <QHeaderView>
 
 using namespace OT;
 
@@ -88,8 +89,7 @@ void PhysicalModelWindow::buildInterface()
   QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
 
   inputTableView_ = new QTableView;
-  inputTableView_->setEditTriggers(QTableView::SelectedClicked);
-  inputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
+  inputTableView_->setEditTriggers(QTableView::AllEditTriggers);
   inputsLayout->addWidget(inputTableView_);
 
   addInputLineButton_ = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
@@ -112,8 +112,7 @@ void PhysicalModelWindow::buildInterface()
   QVBoxLayout * outputsLayout = new QVBoxLayout(outputsBox);
 
   outputTableView_ = new QTableView;
-  outputTableView_->setEditTriggers(QTableView::SelectedClicked);
-  outputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
+  outputTableView_->setEditTriggers(QTableView::AllEditTriggers);
   outputsLayout->addWidget(outputTableView_);
 
   addOutputLineButton_ = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));

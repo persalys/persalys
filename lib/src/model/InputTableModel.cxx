@@ -35,14 +35,14 @@ QVariant InputTableModel::headerData(int section, Qt::Orientation orientation, i
     switch (section)
     {
       case 0:
-          return tr("Name");
+        return tr("Name");
       case 1:
-          return tr("Description");
+        return tr("Description");
       case 2:
-          return tr("Value");
+        return tr("Value");
     }
   }
-  return QVariant();
+  return QAbstractTableModel::headerData(section, orientation, role);
 }
 
 
@@ -76,19 +76,41 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
   {
     Input input(physicalModel_.getInputs()[index.row()]);
     physicalModel_.blockNotification(true, "updateProbabilisticModelWindow");
+
     switch (index.column())
     {
       case 0:
+      {
+        if (input.getName() == value.toString().toStdString())
+        {
+          physicalModel_.blockNotification(false);
+          return true;
+        }
         physicalModel_.removeInput(input.getName());
         input.setName(value.toString().toStdString());
         physicalModel_.addInput(input);
         break;
+      }
       case 1:
+      {
+        if (input.getDescription() == value.toString().toStdString())
+        {
+          physicalModel_.blockNotification(false);
+          return true;
+        }
         physicalModel_.setInputDescription(input.getName(), value.toString().toStdString());
         break;
+      }
       case 2:
+      {
+        if (input.getValue() == value.toDouble())
+        {
+          physicalModel_.blockNotification(false);
+          return true;
+        }
         physicalModel_.setInputValue(input.getName(), value.toDouble());
         break;
+      }
     }
     physicalModel_.blockNotification(false);
 //  TODO   if (!updateInput) emit errorMessage

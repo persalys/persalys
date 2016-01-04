@@ -1,6 +1,7 @@
 ot_add_current_dir_to_include_dirs ()
 
 ot_add_source_file ( ComboBoxDelegate.cxx )
+ot_add_source_file ( SpinBoxDelegate.cxx )
 ot_add_source_file ( OTguiTableModel.cxx )
 ot_add_source_file ( InputTableModel.cxx )
 ot_add_source_file ( InputTableProbabilisticModel.cxx )
@@ -25,6 +26,7 @@ ot_add_source_file ( StudyTreeViewModel.cxx )
 add_subdirectory ( otgui )
 
 qt4_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/ComboBoxDelegate.hxx
+                                    otgui/SpinBoxDelegate.hxx
                                     otgui/InputTableModel.hxx
                                     otgui/InputTableProbabilisticModel.hxx
                                     otgui/OutputTableModel.hxx

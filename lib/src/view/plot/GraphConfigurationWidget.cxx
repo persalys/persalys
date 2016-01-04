@@ -8,44 +8,65 @@
 #include <QLabel>
 #include <QFileDialog>
 #include <QImageWriter>
-#include <QComboBox>
+#include <QRadioButton>
 
 #include <qwt_plot_renderer.h>
 
 namespace OTGUI {
 
-GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets, QStringList inputNames, QStringList outputNames)
+GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets, QStringList inputNames,
+                                                   QStringList outputNames,
+                                                   GraphConfigurationWidget::Type plotType)
   : QTabWidget()
   , plotWidgets_(plotWidgets)
+  , plotType_(plotType)
   , currentPlotIndex_(0)
 {
   for (int i=0; i<plotWidgets_.size(); ++i)
     connect(plotWidgets_[i], SIGNAL(plotChanged()), this, SLOT(updateLineEdits()));
 
   QGridLayout * mainGridLayout = new QGridLayout(this);
+  int rowGrid = 0;
 
   QLabel * label = new QLabel(tr("Title"));
-  mainGridLayout->addWidget(label, 0, 0, 1, 1);
+  mainGridLayout->addWidget(label, rowGrid, 0, 1, 1);
   titleLineEdit_ = new QLineEdit;
   connect(titleLineEdit_, SIGNAL(textChanged(QString)), this, SLOT(updateTitle()));
-  mainGridLayout->addWidget(titleLineEdit_, 0, 1, 1, 1);
+  mainGridLayout->addWidget(titleLineEdit_, rowGrid, 1, 1, 1);
 
-  label = new QLabel(tr("X-axis"));
-  mainGridLayout->addWidget(label, 1, 0, 1, 1);
+  xAxisComboBox_ = 0;
+  if (plotType_ == GraphConfigurationWidget::Scatter)
+  {
+    label = new QLabel(tr("X-axis"));
+    mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
-  xAxisComboBox_ = new QComboBox;
-  xAxisComboBox_->addItems(inputNames);
-  mainGridLayout->addWidget(xAxisComboBox_, 1, 1, 1, 1);
-  connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
+    xAxisComboBox_ = new QComboBox;
+    xAxisComboBox_->addItems(inputNames);
+    mainGridLayout->addWidget(xAxisComboBox_, rowGrid, 1, 1, 1);
+    connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
+  }
 
   label = new QLabel(tr("Y-axis"));
-  mainGridLayout->addWidget(label, 2, 0, 1, 1);
+  mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
   yAxisComboBox_ = new QComboBox;
   yAxisComboBox_->addItems(outputNames);
-  mainGridLayout->addWidget(yAxisComboBox_, 2, 1, 1, 1);
+  mainGridLayout->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
   connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
   emit currentPlotChanged(currentPlotIndex_);
 
+  pdf_cdfGroup_ = 0;
+  if (plotType_ == GraphConfigurationWidget::PDF)
+  {
+    pdf_cdfGroup_ = new QButtonGroup;
+    QRadioButton * buttonToChoosePDForCDF = new QRadioButton(tr("PDF"));
+    buttonToChoosePDForCDF->setChecked(true);
+    pdf_cdfGroup_->addButton(buttonToChoosePDForCDF, GraphConfigurationWidget::PDF);
+    mainGridLayout->addWidget(buttonToChoosePDForCDF, ++rowGrid, 0, 1, 1);
+    buttonToChoosePDForCDF = new QRadioButton(tr("CDF"));
+    pdf_cdfGroup_->addButton(buttonToChoosePDForCDF, GraphConfigurationWidget::CDF);
+    mainGridLayout->addWidget(buttonToChoosePDForCDF, rowGrid, 1, 1, 1);
+    connect(pdf_cdfGroup_, SIGNAL(buttonClicked(int)), this, SLOT(plotChanged()));
+  }
   //TODO: add Legend?
 //   QwtLegend *legend = new QwtLegend ;
 //   plotWidgets_[currentPlotIndex_]->insertLegend(legend, QwtPlot::BottomLegend);
@@ -56,7 +77,7 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   QWidget * tabHorizontalAxis = new QWidget;
   QGridLayout * gridLayoutTab = new QGridLayout(tabHorizontalAxis);
 
-  label = new QLabel(tr("Label"));
+  label = new QLabel(tr("Title"));
   gridLayoutTab->addWidget(label, 0, 0, 1, 1);
 
   xlabelLineEdit_ = new QLineEdit;
@@ -70,7 +91,7 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   connect(xmin_, SIGNAL(textChanged(QString)), this, SLOT(updateXrange()));
   gridLayoutTab->addWidget(xmin_, 1, 1, 1, 1);
 
-  label = new QLabel(tr("Man"));
+  label = new QLabel(tr("Max"));
   gridLayoutTab->addWidget(label, 2, 0, 1, 1);
 
   xmax_ = new QLineEdit;
@@ -109,7 +130,7 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
 
   tabWidget->addTab(tabVerticalAxis, tr("Y-axis"));
 
-  mainGridLayout->addWidget(tabWidget, 3, 0, 1, 2);
+  mainGridLayout->addWidget(tabWidget, ++rowGrid, 0, 1, 2);
 
   // Bottom layout
   QHBoxLayout * hboxForBottomButtons = new QHBoxLayout;
@@ -118,7 +139,7 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   connect(button, SIGNAL(clicked()), this, SLOT(exportPlot()));
   hboxForBottomButtons->addWidget(button);
 
-  mainGridLayout->addLayout(hboxForBottomButtons, 4, 1, 1, 1);
+  mainGridLayout->addLayout(hboxForBottomButtons, ++rowGrid, 1, 1, 1);
 
   updateLineEdits();
 }
@@ -154,9 +175,31 @@ void GraphConfigurationWidget::updateLineEdits()
 
 void GraphConfigurationWidget::plotChanged()
 {
-  int inputIndex = xAxisComboBox_->currentIndex();
   int outputIndex = yAxisComboBox_->currentIndex();
-  currentPlotIndex_ = outputIndex * xAxisComboBox_->count() + inputIndex;
+  if (plotType_ == GraphConfigurationWidget::Scatter)
+  {
+    int inputIndex = xAxisComboBox_->currentIndex();
+    currentPlotIndex_ = outputIndex * xAxisComboBox_->count() + inputIndex;
+  }
+  else if (plotType_ == GraphConfigurationWidget::PDF || plotType_ == GraphConfigurationWidget::CDF)
+  {
+    
+    switch (GraphConfigurationWidget::Type(pdf_cdfGroup_->checkedId()))
+    {
+      case GraphConfigurationWidget::PDF:
+      {
+        currentPlotIndex_ = 2 * outputIndex;
+        break;
+      }
+      case GraphConfigurationWidget::CDF:
+      {
+        currentPlotIndex_ = 2 * outputIndex + 1;
+        break;
+      }
+    }
+  }
+  else
+    currentPlotIndex_ = outputIndex;
   updateLineEdits();
   emit currentPlotChanged(currentPlotIndex_);
 }

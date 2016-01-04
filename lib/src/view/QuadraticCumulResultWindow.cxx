@@ -36,7 +36,6 @@ void QuadraticCumulResultWindow::buildInterface()
   outputsComboBox_->addItems(items);
   connect(outputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateLabelsText(int)));
   headLayout->addWidget(outputsComboBox_);
-
   headLayout->addStretch();
   tabLayout->addLayout(headLayout);
 
@@ -44,30 +43,31 @@ void QuadraticCumulResultWindow::buildInterface()
   int gridRow = -1;
 
   QLabel * label = new QLabel(tr("First order mean"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   meanFirstOrderLabel_ = new QLabel;
   grid->addWidget(meanFirstOrderLabel_, gridRow, 1, Qt::AlignTop);
 
   label = new QLabel(tr("Second order mean"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   meanSecondOrderLabel_ = new QLabel;
   grid->addWidget(meanSecondOrderLabel_, gridRow, 1, Qt::AlignTop);
 
   label = new QLabel(tr("Standard deviation"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   stdLabel_ = new QLabel;
   grid->addWidget(stdLabel_, gridRow, 1, Qt::AlignTop);
 
   label = new QLabel(tr("Variance"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   varianceLabel_ = new QLabel;
   grid->addWidget(varianceLabel_, gridRow, 1);
 
   grid->setRowStretch(++gridRow, 1);
+  grid->setColumnStretch(1, 1);
   tabLayout->addLayout(grid);
 
   updateLabelsText(0);

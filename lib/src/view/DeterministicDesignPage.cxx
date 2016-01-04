@@ -36,7 +36,7 @@ void DeterministicDesignPage::buildInterface()
   pageLayout->addWidget(buttonToChooseMethod);
 
   tableView_ = new QTableView;
-  tableView_->setEditTriggers(QTableView::SelectedClicked);
+  tableView_->setEditTriggers(QTableView::AllEditTriggers);
   tableView_->setEnabled(true);
   if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromExperiment)
     tableView_->setEnabled(false);

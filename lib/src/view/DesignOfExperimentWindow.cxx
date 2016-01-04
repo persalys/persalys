@@ -88,29 +88,27 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateLabelsText(int)));
   headLayout->addWidget(outputsComboBoxFirstTab_);
   headLayout->addStretch();
-
-  QLabel * nbSimuLabel = new QLabel(tr("Size of the design of experiment"));
-  nbSimuLabel->setStyleSheet("font: bold 14px;");
-  headLayout->addWidget(nbSimuLabel);
-  nbSimuLabel = new QLabel(QString::number(designOfExperiment_.getInputSample().getSize()));
-  headLayout->addWidget(nbSimuLabel);
   tabLayout->addLayout(headLayout);
 
   QGridLayout * grid = new QGridLayout;
   int gridRow = -1;
 
+  QLabel * nbSimuLabel = new QLabel(tr("Size of the design of experiment : ") + QString::number(designOfExperiment_.getInputSample().getSize()) + "\n");
+  grid->addWidget(nbSimuLabel, ++gridRow, 0, 1, 2, Qt::AlignTop);
+
   QLabel * label = new QLabel(tr("Min"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   minLabel_ = new QLabel;
   grid->addWidget(minLabel_, gridRow, 1, Qt::AlignTop);
 
   label = new QLabel(tr("Max"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   maxLabel_ = new QLabel;
   grid->addWidget(maxLabel_, gridRow, 1, Qt::AlignTop);
 
+  grid->setColumnStretch(1, 1);
   tabLayout->addLayout(grid);
   tabLayout->addStretch();
   updateLabelsText();
@@ -134,14 +132,21 @@ void DesignOfExperimentWindow::addTabsForOutputs()
     {
       PlotWidget * plot = new PlotWidget;
       plot->plotScatter(designOfExperiment_.getInputSample().getMarginal(j), designOfExperiment_.getOutputSample().getMarginal(i));
-      plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getDescription().c_str());
-      plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getDescription().c_str());
+      plot->setTitle(tr("Scatter plot: ") + outputs[i].getName().c_str() + tr(" vs ") + inputs[j].getName().c_str());
+      if (inputs[j].getDescription().size())
+        plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getDescription().c_str());
+      else
+        plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getName().c_str());
+      if (outputs[i].getDescription().size())
+        plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getDescription().c_str());
+      else
+        plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getName().c_str());
       plotLayout->addWidget(plot);
       listPlotWidgets.append(plot);
     }
   }
 
-  graphConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, inputNames, outputNames);
+  graphConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, inputNames, outputNames, GraphConfigurationWidget::Scatter);
   connect(graphConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
 
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));

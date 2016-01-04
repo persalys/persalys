@@ -53,56 +53,60 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
 {
   QModelIndex index = indexAt(point);
 
-  if (index.isValid())
+  if (!index.isValid())
+    return;
+
+  QMenu * contextMenu = new QMenu(this);
+  QString data = treeViewModel_->itemFromIndex(index)->data(Qt::UserRole).toString();
+  if (data=="OTStudy")
   {
-    QMenu * contextMenu = new QMenu(this);
-    QString data = treeViewModel_->itemFromIndex(index)->data(Qt::UserRole).toString();
-    if (data=="OTStudy")
-    {
-      contextMenu->addAction(newPhysicalModel_);
-      contextMenu->addAction(dumpOTStudy_);
-    }
-    else if (data=="DeterministicStudy")
-    {
-      contextMenu->addAction(newParametricAnalysis_);
-    }
-    else if (data=="ProbabilisticStudy")
-    {
+    contextMenu->addAction(newPhysicalModel_);
+    contextMenu->addAction(dumpOTStudy_);
+  }
+  else if (data=="DeterministicStudy")
+  {
+    contextMenu->addAction(newParametricAnalysis_);
+  }
+  else if (data=="ProbabilisticStudy")
+  {
+    if (!treeViewModel_->itemFromIndex(index)->hasChildren())
       contextMenu->addAction(newProbabilisticModel_);
-      contextMenu->addAction(newLimitState_);
-      contextMenu->addAction(newCentralTendency_);
-      contextMenu->addAction(newSensitivityAnalysis_);
-    }
-    else if (data=="DesignOfExperimentList")
-    {
-      contextMenu->addAction(newDesignOfExperiment_);
-    }
-    else if (data=="DesignOfExperiment")
-    {
-      contextMenu->addAction(runDesignOfExperiment_);
-    }
-    else if (data=="LimitState")
-    {
-      contextMenu->addAction(newThresholdExceedance_);
-    }
-    else if (data=="ParametricAnalysis")
-    {
-      contextMenu->addAction(runParametricAnalysis_);
-    }
-    else if (data=="CentralTendency")
-    {
-      contextMenu->addAction(runCentralTendency_);
-    }
-    else if (data=="SensitivityAnalysis")
-    {
-      contextMenu->addAction(runSensitivityAnalysis_);
-    }
-    else if (data=="ReliabilityAnalysis")
-    {
-      contextMenu->addAction(runReliabilityAnalysis_);
-    }
-    contextMenu->exec(mapToGlobal(point));
-  }    
+  }
+  else if (data=="ProbabilisticModel")
+  {
+    contextMenu->addAction(newLimitState_);
+    contextMenu->addAction(newCentralTendency_);
+    contextMenu->addAction(newSensitivityAnalysis_);
+  }
+  else if (data=="DesignOfExperimentList")
+  {
+    contextMenu->addAction(newDesignOfExperiment_);
+  }
+  else if (data=="DesignOfExperiment")
+  {
+    contextMenu->addAction(runDesignOfExperiment_);
+  }
+  else if (data=="LimitState")
+  {
+    contextMenu->addAction(newThresholdExceedance_);
+  }
+  else if (data=="ParametricAnalysis")
+  {
+    contextMenu->addAction(runParametricAnalysis_);
+  }
+  else if (data=="CentralTendency")
+  {
+    contextMenu->addAction(runCentralTendency_);
+  }
+  else if (data=="SensitivityAnalysis")
+  {
+    contextMenu->addAction(runSensitivityAnalysis_);
+  }
+  else if (data=="ReliabilityAnalysis")
+  {
+    contextMenu->addAction(runReliabilityAnalysis_);
+  }
+  contextMenu->exec(mapToGlobal(point));
 }
 
 
@@ -200,14 +204,13 @@ void StudyTreeView::createNewDesignOfExperiment()
   if (wizard->exec())
   {
     wizard->validate();
-    setExpanded(physicalModelIndex, true);
   }
 }
 
 
 void StudyTreeView::createNewLimitState()
 {
-  QModelIndex parentIndex = selectionModel()->currentIndex();
+  QModelIndex parentIndex = selectionModel()->currentIndex().parent();
   treeViewModel_->addLimitStateItem(parentIndex);
   setExpanded(parentIndex, true);
 }
@@ -217,6 +220,7 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 {
   PhysicalModelWindow * window = new PhysicalModelWindow(item);
   emit showWindow(window);
+  setCurrentIndex(item->index());
 }
 
 
@@ -224,6 +228,7 @@ void StudyTreeView::createNewProbabilisticModelWindow(ProbabilisticModelItem * i
 {
   ProbabilisticModelWindow * window = new ProbabilisticModelWindow(item);
   emit showWindow(window);
+  setCurrentIndex(item->index());
 }
 
 
@@ -231,6 +236,7 @@ void StudyTreeView::createNewLimitStateWindow(LimitStateItem* item)
 {
   LimitStateWindow * window = new LimitStateWindow(item);
   emit showWindow(window);
+  setCurrentIndex(item->index());
 }
 
 
@@ -240,6 +246,8 @@ void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentItem * i
   connect(window, SIGNAL(graphWindowActivated(GraphConfigurationWidget*)), this, SIGNAL(graphWindowActivated(GraphConfigurationWidget*)));
   connect(window, SIGNAL(graphWindowDeactivated(GraphConfigurationWidget*)), this, SIGNAL(graphWindowDeactivated(GraphConfigurationWidget*)));
   emit showWindow(window);
+  setExpanded(item->index().parent(), true);
+  setCurrentIndex(item->index());
 }
 
 
@@ -260,7 +268,7 @@ void StudyTreeView::createNewParametricAnalysis()
 
 void StudyTreeView::createNewCentralTendency()
 {
-  QModelIndex physicalModelIndex = selectionModel()->currentIndex().parent();
+  QModelIndex physicalModelIndex = selectionModel()->currentIndex().parent().parent();
   PhysicalModelItem * physicalModelItem = dynamic_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
   OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
   CentralTendencyWizard * wizard = new CentralTendencyWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel());
@@ -275,7 +283,7 @@ void StudyTreeView::createNewCentralTendency()
 
 void StudyTreeView::createNewSensitivityAnalysis()
 {
-  QModelIndex physicalModelIndex = selectionModel()->currentIndex().parent();
+  QModelIndex physicalModelIndex = selectionModel()->currentIndex().parent().parent();
   PhysicalModelItem * physicalModelItem = dynamic_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
   OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
   SensitivityAnalysisWizard * wizard = new SensitivityAnalysisWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel());
@@ -401,6 +409,7 @@ void StudyTreeView::createParametricAnalysisResult(AnalysisItem * item)
   emit checkIfWindowResultExists(item);
   ParametricAnalysisResultWindow * window = new ParametricAnalysisResultWindow(dynamic_cast<ParametricAnalysisItem*>(item));
   emit showWindow(window);
+  setCurrentIndex(item->index());
 }
 
 
@@ -413,12 +422,14 @@ void StudyTreeView::createCentralTendencyResult(AnalysisItem * item)
     connect(window, SIGNAL(graphWindowActivated(GraphConfigurationWidget*)), this, SIGNAL(graphWindowActivated(GraphConfigurationWidget*)));
     connect(window, SIGNAL(graphWindowDeactivated(GraphConfigurationWidget*)), this, SIGNAL(graphWindowDeactivated(GraphConfigurationWidget*)));
     emit showWindow(window);
+  setCurrentIndex(item->index());
   }
   else
   {
     QuadraticCumulResultWindow * window = new QuadraticCumulResultWindow(dynamic_cast<CentralTendencyItem*>(item));
     emit showWindow(window);
   }
+  setCurrentIndex(item->index());
 }
 
 
@@ -428,13 +439,18 @@ void StudyTreeView::createSensitivityAnalysisResult(AnalysisItem * item)
   if (item->getAnalysis().getImplementation()->getClassName() == "SobolAnalysis")
   {
     SobolResultWindow * window = new SobolResultWindow(dynamic_cast<SensitivityAnalysisItem*>(item));
+    connect(window, SIGNAL(graphWindowActivated(GraphConfigurationWidget*)), this, SIGNAL(graphWindowActivated(GraphConfigurationWidget*)));
+    connect(window, SIGNAL(graphWindowDeactivated(GraphConfigurationWidget*)), this, SIGNAL(graphWindowDeactivated(GraphConfigurationWidget*)));
     emit showWindow(window);
   }
   else
   {
     SRCResultWindow * window = new SRCResultWindow(dynamic_cast<SensitivityAnalysisItem*>(item));
+    connect(window, SIGNAL(graphWindowActivated(GraphConfigurationWidget*)), this, SIGNAL(graphWindowActivated(GraphConfigurationWidget*)));
+    connect(window, SIGNAL(graphWindowDeactivated(GraphConfigurationWidget*)), this, SIGNAL(graphWindowDeactivated(GraphConfigurationWidget*)));
     emit showWindow(window);
   }
+  setCurrentIndex(item->index());
 }
 
 
@@ -443,6 +459,7 @@ void StudyTreeView::createReliabilityAnalysisResult(AnalysisItem * item)
   emit checkIfWindowResultExists(item);
   MonteCarloReliabilityResultWindow * window = new MonteCarloReliabilityResultWindow(dynamic_cast<ReliabilityAnalysisItem*>(item));
   emit showWindow(window);
+  setCurrentIndex(item->index());
 }
 
 
@@ -515,6 +532,4 @@ void StudyTreeView::selectedItemChanged(const QModelIndex & index)
   if (selectedItem->data(Qt::UserRole).toString()!="Study")
     emit itemSelected(selectedItem);
 }
-
-
 }

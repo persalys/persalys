@@ -34,20 +34,16 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   outputName = new QLabel(result_.getEvent().getDescription()[0].c_str());
   headLayout->addWidget(outputName);
   headLayout->addStretch();
-  
-  QLabel * nbSimuLabel = new QLabel(tr("Number of simulations"));
-  nbSimuLabel->setStyleSheet("font: bold 14px;");
-  headLayout->addWidget(nbSimuLabel);
-  nbSimuLabel = new QLabel(QString::number(result_.getOuterSampling()));
-  headLayout->addWidget(nbSimuLabel);
-
   tabLayout->addLayout(headLayout);
 
   QGridLayout * grid = new QGridLayout;
   int gridRow = -1;
 
+  QLabel * nbSimuLabel = new QLabel(tr("Number of simulations : ") + QString::number(result_.getOuterSampling()) + "\n");
+  grid->addWidget(nbSimuLabel, ++gridRow, 0, 1, 2, Qt::AlignTop);
+
   QLabel * label = new QLabel(tr("Pf"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
 
   double pfCILowerBound = std::max(0.0, result_.getProbabilityEstimate() - 0.5 * result_.getConfidenceLength());
@@ -59,13 +55,14 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   grid->addWidget(label, gridRow, 1, Qt::AlignTop);
 
   label = new QLabel(tr("CV Pf"));
-  label->setStyleSheet("font: bold 14px;");
+  label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
 
   label = new QLabel(QString::number(result_.getCoefficientOfVariation()));
   grid->addWidget(label, gridRow, 1, Qt::AlignTop);
 
   grid->setRowStretch(++gridRow, 1);
+  grid->setColumnStretch(1, 1);
   tabLayout->addLayout(grid);
 
   tabWidget->addTab(tab, "Result");
