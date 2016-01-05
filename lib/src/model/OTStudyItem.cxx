@@ -4,6 +4,7 @@
 #include "otgui/CentralTendencyItem.hxx"
 #include "otgui/SensitivityAnalysisItem.hxx"
 #include "otgui/ReliabilityAnalysisItem.hxx"
+#include "otgui/ReliabilityAnalysis.hxx"
 
 namespace OTGUI {
 
@@ -63,9 +64,10 @@ void OTStudyItem::update(Observable * source, const std::string & message)
       if (child(i)->text().toStdString() == addedDesignOfExperiment.getPhysicalModel().getName())
       {
         child(i)->child(2)->appendRow(newItem);
-        break;
+        emit newDesignOfExperimentItemCreated(newItem);
+        return;
       }
-    emit newDesignOfExperimentItemCreated(newItem);
+    std::cerr<<"No item added for the design of experiment named "<<addedDesignOfExperiment.getName()<<std::endl;
   }
   else if (message=="addLimitState")
   {
@@ -85,9 +87,10 @@ void OTStudyItem::update(Observable * source, const std::string & message)
           emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
         }
         child(i)->child(1)->appendRow(newItem);
-        break;
+        emit newLimitStateItemCreated(newItem);
+        return;
       }
-    emit newLimitStateItemCreated(newItem);
+    std::cerr<<"No item added for the limit state named "<<addedLimitState.getName()<<std::endl;
   }
   else
   {
@@ -112,7 +115,7 @@ void OTStudyItem::update(Observable * source, const std::string & message)
     else if (message=="addMonteCarloReliabilityAnalysis")
     {
       newItem = new ReliabilityAnalysisItem(addedAnalysis);
-      addProbabilisticAnalysisItem(addedAnalysis, newItem);
+      addReliabilityAnalysisItem(addedAnalysis, newItem);
     }
     else
     {
@@ -142,10 +145,12 @@ void OTStudyItem::addDeterministicAnalysisItem(Analysis & analysis, AnalysisItem
     if (child(i)->text().toStdString() == analysis.getPhysicalModel().getName())
     {
       child(i)->child(0)->appendRow(item);
-      break;
+      emit newAnalysisItemCreated(item);
+      return;
     }
-  emit newAnalysisItemCreated(item);
+  std::cerr<<"No item added for the deterministic analysis named "<<analysis.getName()<<std::endl;
 }
+
 
 void OTStudyItem::addProbabilisticAnalysisItem(Analysis & analysis, AnalysisItem * item)
 {
@@ -161,9 +166,30 @@ void OTStudyItem::addProbabilisticAnalysisItem(Analysis & analysis, AnalysisItem
         emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
       }
       child(i)->child(1)->appendRow(item);
-      break;
+      emit newAnalysisItemCreated(item);
+      return;
     }
-  emit newAnalysisItemCreated(item);
+  std::cerr<<"No item added for the probabilistic analysis named "<<analysis.getName()<<std::endl;
+}
+
+
+void OTStudyItem::addReliabilityAnalysisItem(Analysis & analysis, AnalysisItem * item)
+{
+  analysis.addObserver(item);
+  std::string limitStateName = dynamic_cast<ReliabilityAnalysis*>(&*analysis.getImplementation())->getLimitState().getName();
+  for (int i=0; i<rowCount(); ++i)
+    if (child(i)->text().toStdString() == analysis.getPhysicalModel().getName())
+    {
+      QStandardItem * probabilisticStudyItem = child(i)->child(1);
+      for (int j=0; j<probabilisticStudyItem->rowCount(); ++j)
+        if (probabilisticStudyItem->child(j)->text().toStdString() == limitStateName)
+        {
+          probabilisticStudyItem->child(j)->appendRow(item);
+          emit newAnalysisItemCreated(item);
+          return;
+        }
+    }
+  std::cerr<<"No item added for the reliability analysis named "<<analysis.getName()<<std::endl;
 }
 
 
@@ -189,7 +215,4 @@ QString OTStudyItem::dumpOTStudy()
 {
   return otStudy_->dump().c_str();
 }
-
-
-
 }
