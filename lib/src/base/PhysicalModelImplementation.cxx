@@ -90,7 +90,7 @@ InputCollection PhysicalModelImplementation::getInputs() const
 
 Input & PhysicalModelImplementation::getInputByName(const std::string & inputName)
 {
-  for (int i=0; i<inputs_.getSize(); ++i)
+  for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
     if (inputs_[i].getName() == inputName)
       return inputs_[i];
   throw InvalidArgumentException(HERE) << "The given input name " << inputName <<" does not correspond to an input of the physical model.\n";
@@ -100,7 +100,7 @@ Input & PhysicalModelImplementation::getInputByName(const std::string & inputNam
 void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
 {
   std::set<std::string> inputNames;
-  for (int i=0; i<inputs.getSize(); ++i)
+  for (UnsignedInteger i=0; i<inputs.getSize(); ++i)
     inputNames.insert(inputs[i].getName());
   if (inputNames.size() != inputs.getSize())
     throw InvalidArgumentException(HERE) << "Two inputs can not have the same name."; 
@@ -173,7 +173,7 @@ void PhysicalModelImplementation::removeInput(const std::string & inputName)
 {
   if (hasAnInputNamed(inputName))
   {
-    for (int i=0; i<inputs_.getSize(); ++i)
+    for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
       if (inputs_[i].getName() == inputName)
       {
         inputs_.erase(inputs_.begin() + i);
@@ -235,7 +235,7 @@ Description PhysicalModelImplementation::getInputNames()
   if (!inputNames_.getSize())
   {
     inputNames_ = Description(inputs_.getSize());
-    for (int i=0; i<inputs_.getSize(); ++i)
+    for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
       inputNames_[i] = inputs_[i].getName();
   }
   return inputNames_;
@@ -247,7 +247,7 @@ Description PhysicalModelImplementation::getStochasticInputNames()
   if (!stochasticInputNames_.getSize())
   {
     stochasticInputNames_ = Description();
-    for (int i=0; i<inputs_.getSize(); ++i)
+    for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
       if (inputs_[i].isStochastic())
         stochasticInputNames_.add(inputs_[i].getName());
   }
@@ -274,7 +274,7 @@ bool PhysicalModelImplementation::hasStochasticInputs()
 
 Output & PhysicalModelImplementation::getOutputByName(const std::string & outputName)
 {
-  for (int i=0; i<outputs_.getSize(); ++i)
+  for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
     if (outputs_[i].getName() == outputName)
       return outputs_[i];
   throw InvalidArgumentException(HERE) << "The given output name " << outputName <<" does not correspond to an output of the physical model.\n";
@@ -289,7 +289,7 @@ OutputCollection PhysicalModelImplementation::getOutputs() const
 void PhysicalModelImplementation::setOutputs(const OutputCollection & outputs)
 {
   std::set<std::string> outputNames;
-  for (int i=0; i<outputs.getSize(); ++i)
+  for (UnsignedInteger i=0; i<outputs.getSize(); ++i)
     outputNames.insert(outputs[i].getName());
   if (outputNames.size() != outputs.getSize())
     throw InvalidArgumentException(HERE) << "Two inputs can not have the same name.";
@@ -333,7 +333,7 @@ void PhysicalModelImplementation::removeOutput(const std::string & outputName)
 {
   if (hasAnOutputNamed(outputName))
   {
-    for (int i=0; i<outputs_.getSize(); ++i)
+    for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
       if (outputs_[i].getName() == outputName)
       {
         outputs_.erase(outputs_.begin() + i);
@@ -353,7 +353,7 @@ Description PhysicalModelImplementation::getOutputNames()
   if (!outputNames_.getSize())
   {
     outputNames_ = Description(outputs_.getSize());
-    for (int i=0; i<outputs_.getSize(); ++i)
+    for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
       outputNames_[i] = outputs_[i].getName();
   }
   return outputNames_;
@@ -372,7 +372,7 @@ bool PhysicalModelImplementation::hasAnOutputNamed(const std::string & outputNam
 ComposedDistribution PhysicalModelImplementation::getComposedDistribution() const
 {
   ComposedDistribution::DistributionCollection marginales;
-  for (int i=0; i<inputs_.getSize(); ++i)
+  for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
     marginales.add(inputs_[i].getDistribution());
   return ComposedDistribution(marginales, getCopula());
   // TODO  return ComposedDistribution(marginales, getCopula());
