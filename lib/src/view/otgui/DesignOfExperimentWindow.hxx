@@ -32,8 +32,8 @@ public slots:
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 signals:
-  void graphWindowActivated(GraphConfigurationWidget*);
-  void graphWindowDeactivated(GraphConfigurationWidget*);
+  void graphWindowActivated(QTabWidget*);
+  void graphWindowDeactivated(QTabWidget*);
 
 private:
   DesignOfExperiment designOfExperiment_;
