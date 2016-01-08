@@ -46,6 +46,9 @@ macro ( ot_add_python_module MODULENAME SOURCEFILE )
   list ( APPEND PYTHON_MODULES ${MODULENAME} )
 endmacro ( ot_add_python_module )
 
+if (SalomeYACS_FOUND)
+  list (APPEND SWIG_MODULE_otguibase_EXTRA_FLAGS -DOTGUI_HAVE_YACS=1)
+endif ()
 
 ot_add_python_module( otguibase otguibase_module.i 
                       Observer.i
