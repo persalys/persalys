@@ -3,11 +3,14 @@ set (SOURCEFILES "" CACHE STRING "otguiplot sources" FORCE)
 ot_add_current_dir_to_include_dirs ()
 
 ot_add_source_file ( CustomScaleEngine.cxx )
+ot_add_source_file ( ListWidgetWithCheckBox.cxx )
 ot_add_source_file ( PlotWidget.cxx )
+ot_add_source_file ( PlotMatrixWidget.cxx )
 ot_add_source_file ( ImageEditionDialog.cxx )
 ot_add_source_file ( GraphConfigurationWidget.cxx )
+ot_add_source_file ( PlotMatrixConfigurationWidget.cxx )
 
-qt4_wrap_cpp (OTGUI_PLOT_MOC_SRCS otgui/PlotWidget.hxx otgui/ImageEditionDialog.hxx otgui/GraphConfigurationWidget.hxx)
+qt4_wrap_cpp (OTGUI_PLOT_MOC_SRCS otgui/PlotWidget.hxx otgui/PlotMatrixWidget.hxx otgui/ListWidgetWithCheckBox.hxx otgui/ImageEditionDialog.hxx otgui/GraphConfigurationWidget.hxx otgui/PlotMatrixConfigurationWidget.hxx)
 
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
