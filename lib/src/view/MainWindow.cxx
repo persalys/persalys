@@ -20,8 +20,8 @@ MainWindow::MainWindow()
   connect(studyTree_, SIGNAL(showWindow(QMdiSubWindow *)), this, SLOT(showSubWindow(QMdiSubWindow *)));
   connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), this, SLOT(showSubWindow(QStandardItem *)));
   connect(studyTree_, SIGNAL(checkIfWindowResultExists(ObserverItem *)), this, SLOT(checkIfWindowResultExists(ObserverItem *)));
-  connect(studyTree_, SIGNAL(graphWindowActivated(GraphConfigurationWidget*)), this, SLOT(showGraphConfigurationTabWidget(GraphConfigurationWidget*)));
-  connect(studyTree_, SIGNAL(graphWindowDeactivated(GraphConfigurationWidget*)), this, SLOT(hideGraphConfigurationTabWidget(GraphConfigurationWidget*)));
+  connect(studyTree_, SIGNAL(graphWindowActivated(QTabWidget*)), this, SLOT(showGraphConfigurationTabWidget(QTabWidget*)));
+  connect(studyTree_, SIGNAL(graphWindowDeactivated(QTabWidget*)), this, SLOT(hideGraphConfigurationTabWidget(QTabWidget*)));
   setWindowTitle("OTGui");
 }
 
@@ -135,14 +135,14 @@ void MainWindow::checkIfWindowResultExists(ObserverItem* item)
 }
 
 
-void MainWindow::showGraphConfigurationTabWidget(GraphConfigurationWidget * graph)
+void MainWindow::showGraphConfigurationTabWidget(QTabWidget * graph)
 {
   configurationDock_->setWidget(graph);
   configurationDock_->show();
 }
 
 
-void MainWindow::hideGraphConfigurationTabWidget(GraphConfigurationWidget * graph)
+void MainWindow::hideGraphConfigurationTabWidget(QTabWidget * graph)
 {
   configurationDock_->close();
 }

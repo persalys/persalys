@@ -6,8 +6,8 @@
 #include "otgui/ResultWindow.hxx"
 #include "otgui/CentralTendencyItem.hxx"
 #include "otgui/MonteCarloResult.hxx"
-#include "otgui/PlotWidget.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/PlotMatrixConfigurationWidget.hxx"
 
 #include <QComboBox>
 #include <QDoubleSpinBox>
@@ -32,8 +32,8 @@ public slots:
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 signals:
-  void graphWindowActivated(GraphConfigurationWidget*);
-  void graphWindowDeactivated(GraphConfigurationWidget*);
+  void graphWindowActivated(QTabWidget*);
+  void graphWindowDeactivated(QTabWidget*);
 
 private:
   MonteCarloResult result_;
@@ -41,12 +41,11 @@ private:
   bool isConfidenceIntervalRequired_;
   double levelConfidenceInterval_;
   QTabWidget * tabWidget_;
-  PlotWidget * pdfPlot_;
-  PlotWidget * cdfPlot_;
   QComboBox * outputsComboBoxFirstTab_;
   GraphConfigurationWidget * pdf_cdfPlotsConfigurationWidget_;
   GraphConfigurationWidget * boxPlotsConfigurationWidget_;
   GraphConfigurationWidget * scatterPlotsConfigurationWidget_;
+  PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
   QLabel * meanLabel_;
   QLabel * stdLabel_;
   QLabel * skewnessLabel_;

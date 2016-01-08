@@ -67,7 +67,7 @@ void SobolResultWindow::buildInterface()
     listPlotWidgets_.append(plot);
 
     // table of indices
-    QTableWidget * table = new QTableWidget(0, 3, this);
+    QTableWidget * table = new QTableWidget(result_.getInputNames().getSize(), 3, this);
     table->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("First order indice") << tr("Total indice"));
     table->verticalHeader()->hide();
     table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
@@ -76,7 +76,6 @@ void SobolResultWindow::buildInterface()
     // fill table
     for (int j=0; j<result_.getInputNames().getSize(); ++j)
     {
-      table->setRowCount(j + 1);
       QTableWidgetItem * item = new QTableWidgetItem(result_.getInputNames()[j].c_str());
       item->setFlags(item->flags() & ~Qt::ItemIsEditable);
       table->setItem(j, 0, item);

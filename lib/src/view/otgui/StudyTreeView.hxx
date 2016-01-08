@@ -8,9 +8,9 @@
 #include <QTreeView>
 #include <QMdiSubWindow>
 #include <QAction>
+#include <QTabWidget>
 
 namespace OTGUI {
-class GraphConfigurationWidget;
 class StudyTreeView : public QTreeView
 {
   Q_OBJECT
@@ -54,8 +54,8 @@ signals:
   void itemSelected(QStandardItem *);
   void checkIfWindowResultExists(ObserverItem *);
   void loadPythonScript(const QString & fileName);
-  void graphWindowActivated(GraphConfigurationWidget*);
-  void graphWindowDeactivated(GraphConfigurationWidget*);
+  void graphWindowActivated(QTabWidget*);
+  void graphWindowDeactivated(QTabWidget*);
 
 private:
   StudyTreeViewModel * treeViewModel_;

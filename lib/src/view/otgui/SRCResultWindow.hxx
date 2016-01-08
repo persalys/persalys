@@ -25,8 +25,8 @@ public slots:
   void updateIndicesPlot(int section, Qt::SortOrder order);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 signals:
-  void graphWindowActivated(GraphConfigurationWidget*);
-  void graphWindowDeactivated(GraphConfigurationWidget*);
+  void graphWindowActivated(QTabWidget*);
+  void graphWindowDeactivated(QTabWidget*);
 
 private:
   SRCResult result_;

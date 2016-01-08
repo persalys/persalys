@@ -235,6 +235,12 @@ void MonteCarloResultWindow::buildInterface()
   tabWidget_->addTab(tab, tr("Scatter plots"));
 
   // fifth tab --------------------------------
+  tab = new PlotMatrixWidget(result_.getInputSample(), result_.getResultSample());
+  plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
+
+  tabWidget_->addTab(tab, tr("Plot matrix"));
+
+  // sixth tab --------------------------------
   tab = new QWidget;
   tabLayout = new QVBoxLayout(tab);
   NumericalSample sample = result_.getInputSample();
@@ -347,12 +353,16 @@ void MonteCarloResultWindow::showHideGraphConfigurationWidget(int indexTab)
     case 3:
       emit graphWindowActivated(scatterPlotsConfigurationWidget_);
       break;
+    case 4:
+      emit graphWindowActivated(plotMatrixConfigurationWidget_);
+      break;
     // if no plotWidget is visible
     default:
     {
       emit graphWindowDeactivated(pdf_cdfPlotsConfigurationWidget_);
       emit graphWindowDeactivated(boxPlotsConfigurationWidget_);
       emit graphWindowDeactivated(scatterPlotsConfigurationWidget_);
+      emit graphWindowDeactivated(plotMatrixConfigurationWidget_);
       break;
     }
   }
