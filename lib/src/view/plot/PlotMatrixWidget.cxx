@@ -6,8 +6,10 @@
 #include <QHeaderView>
 #include <QFileDialog>
 #include <QImageWriter>
+#include <QPainter>
 
 #include <qwt_plot_renderer.h>
+#include <qwt_plot_canvas.h>
 
 using namespace OT;
 
