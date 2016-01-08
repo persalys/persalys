@@ -68,7 +68,7 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 %include PhysicalModelImplementation.i
 %include AnalyticalPhysicalModel.i
 %include PhysicalModel.i
-#ifdef OTGUI_HAVS_YACS
+#ifdef OTGUI_HAVE_YACS
 %include YACSPhysicalModel.i
 #endif
 %include LimitStateImplementation.i
