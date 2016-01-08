@@ -4,8 +4,6 @@
 #define GRAPHCONFIGURATIONWIDGET_H
 
 #include "PlotWidget.hxx"
-#include "otgui/Input.hxx"
-#include "otgui/Output.hxx"
 
 #include <QTabWidget>
 #include <QLineEdit>

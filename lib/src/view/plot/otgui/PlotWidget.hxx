@@ -32,7 +32,7 @@ public:
   void plotPDFCurve(const OT::Distribution & distribution, const QPen pen=QPen(Qt::black, 2));
   void plotCDFCurve(const OT::Distribution & distribution, const QPen pen=QPen(Qt::black, 2));
   void plotHistogram(const OT::NumericalSample & sample, bool cdf=false, int barNumber=0);
-  void plotScatter(const OT::NumericalSample & input, const OT::NumericalSample & output);
+  void plotScatter(const OT::NumericalSample & input, const OT::NumericalSample & output, QPen pen=QPen(Qt::blue, 4));
   void plotBoxPlot(double median, double lowerQuartile, double upperQuartile,
                    double lowerBound, double upperBound, OT::NumericalPoint outliers_);
   void plotSensitivityIndices(const OT::NumericalPoint firstOrder, const OT::NumericalPoint totalOrder,

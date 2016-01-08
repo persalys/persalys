@@ -105,7 +105,7 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   // --- tab Vertical Axis
   QWidget * tabVerticalAxis = new QWidget;
   gridLayoutTab = new QGridLayout(tabVerticalAxis);
-  label = new QLabel(tr("Label"));
+  label = new QLabel(tr("Title"));
   gridLayoutTab->addWidget(label, 0, 0, 1, 1);
 
   ylabelLineEdit_ = new QLineEdit;

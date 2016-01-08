@@ -59,8 +59,6 @@ PlotWidget::PlotWidget(bool isIndicesPlot, QWidget * parent)
                               QwtPlotPicker::CrossRubberBand, QwtPicker::AlwaysOn, canvas());
 
   setCanvasBackground(Qt::white);
-  setMinimumSize(200, 150);
-
   plotLayout()->setAlignCanvasToScales(true);
 
   clear();
@@ -87,7 +85,7 @@ void PlotWidget::exportPlot()
 {
   QString fileName = QFileDialog::getSaveFileName(this, tr("Export plot"),
                      QDir::homePath(),
-                     tr("Images (*.png *.svg *.pdf *.ps *.bmp *.ppm)"));
+                     tr("Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff *.svg *.pdf *.ps)"));
 
   if (!fileName.isEmpty())
   {
@@ -98,13 +96,15 @@ void PlotWidget::exportPlot()
       fileName += ".png";
       format = QString("png");
     }
-    if (format == "ps" || format == "pdf" )
+    if (format == "ps" || format == "pdf" || format == "svg")
     {
       QwtPlotRenderer * renderer = new QwtPlotRenderer();
       renderer->renderDocument(this, fileName, QSizeF(150, 100));
     }
     else
     {
+      // QwtPlotRenderer supports all the listed formats
+      // but renderDocument doesn't emit error message...
       if (QImageWriter::supportedImageFormats().indexOf(format.toLatin1()) >= 0)
       {
         QPixmap pixmap(200, 200);
@@ -158,7 +158,7 @@ void PlotWidget::plotCurve(const NumericalSample & data, const QPen pen)
 }
 
 
-void PlotWidget::plotScatter(const NumericalSample & input, const NumericalSample & output)
+void PlotWidget::plotScatter(const NumericalSample & input, const NumericalSample & output, const QPen pen)
 {
   int size = input.getSize();
 
@@ -175,7 +175,7 @@ void PlotWidget::plotScatter(const NumericalSample & input, const NumericalSampl
     //qDebug() << "x= " << xData[i] << " , y= " << yData[i];
   }
 
-  plotCurve(xData, yData, size, QPen(Qt::GlobalColor(16), 4), QwtPlotCurve::Dots);
+  plotCurve(xData, yData, size, pen, QwtPlotCurve::Dots);
 }
 
 
