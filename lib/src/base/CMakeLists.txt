@@ -9,6 +9,7 @@ set(BASE_SOURCEFILES Observer.cxx Observable.cxx OTStudy.cxx Variable.cxx Input.
                      PhysicalModelImplementation.cxx AnalyticalPhysicalModel.cxx PhysicalModel.cxx
                      DesignOfExperimentImplementation.cxx DesignOfExperiment.cxx
                      AnalysisImplementation.cxx Analysis.cxx SimulationAnalysis.cxx
+                     ModelEvaluationResult.cxx ModelEvaluation.cxx
                      ParametricAnalysisResult.cxx ParametricAnalysis.cxx
                      MonteCarloResult.cxx MonteCarloAnalysis.cxx QuadraticCumulResult.cxx
                      QuadraticCumulAnalysis.cxx SobolResult.cxx SobolAnalysis.cxx

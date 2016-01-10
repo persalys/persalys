@@ -10,6 +10,8 @@
 #include "otgui/LimitStateWindow.hxx"
 #include "otgui/DesignOfExperimentWizard.hxx"
 #include "otgui/DesignOfExperimentWindow.hxx"
+#include "otgui/ModelEvaluationWizard.hxx"
+#include "otgui/ModelEvaluationResultWindow.hxx"
 #include "otgui/ParametricAnalysisWizard.hxx"
 #include "otgui/ParametricAnalysisResultWindow.hxx"
 #include "otgui/CentralTendencyWizard.hxx"
@@ -64,7 +66,8 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
   }
   else if (data=="DeterministicStudy")
   {
-    contextMenu->addAction(newParametricAnalysis_);
+//  TODO   contextMenu->addAction(newParametricAnalysis_);
+    contextMenu->addAction(newModelEvaluation_);
   }
   else if (data=="ProbabilisticStudy")
   {
@@ -92,6 +95,10 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
   else if (data=="ParametricAnalysis")
   {
     contextMenu->addAction(runParametricAnalysis_);
+  }
+  else if (data=="ModelEvaluation")
+  {
+    contextMenu->addAction(runModelEvaluation_);
   }
   else if (data=="CentralTendency")
   {
@@ -127,6 +134,10 @@ void StudyTreeView::buildActions()
   newLimitState_->setStatusTip(tr("Create a new limit state"));
   connect(newLimitState_, SIGNAL(triggered()), this, SLOT(createNewLimitState()));
 
+  newModelEvaluation_ = new QAction(tr("New model evaluation"), this);
+  newModelEvaluation_->setStatusTip(tr("Create a new model evaluation"));
+  connect(newModelEvaluation_, SIGNAL(triggered()), this, SLOT(createNewModelEvaluation()));
+
   newParametricAnalysis_ = new QAction(tr("New parametric analysis"), this);
   newParametricAnalysis_->setStatusTip(tr("Create a new parametric analysis"));
   connect(newParametricAnalysis_, SIGNAL(triggered()), this, SLOT(createNewParametricAnalysis()));
@@ -146,6 +157,10 @@ void StudyTreeView::buildActions()
   runDesignOfExperiment_ = new QAction(tr("Run"), this);
   runDesignOfExperiment_->setStatusTip(tr("Run the design of experiment"));
   connect(runDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(runDesignOfExperiment()));
+
+  runModelEvaluation_ = new QAction(tr("Run"), this);
+  runModelEvaluation_->setStatusTip(tr("Run the model evaluation"));
+  connect(runModelEvaluation_, SIGNAL(triggered()), this, SLOT(runModelEvaluation()));
 
   runParametricAnalysis_ = new QAction(tr("Run"), this);
   runParametricAnalysis_->setStatusTip(tr("Run the parametric analysis"));
@@ -220,6 +235,7 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
   PhysicalModelWindow * window = new PhysicalModelWindow(item);
   emit showWindow(window);
   setCurrentIndex(item->index());
+  setExpanded(item->index(), true);
 }
 
 
@@ -247,6 +263,21 @@ void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentItem * i
   emit showWindow(window);
   setExpanded(item->index().parent(), true);
   setCurrentIndex(item->index());
+}
+
+
+void StudyTreeView::createNewModelEvaluation()
+{
+  QModelIndex physicalModelIndex = selectionModel()->currentIndex().parent();
+  PhysicalModelItem * physicalModelItem = dynamic_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
+  OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
+  ModelEvaluationWizard * wizard = new ModelEvaluationWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel());
+
+  if (wizard->exec())
+  {
+    wizard->validate();
+    setExpanded(physicalModelIndex, true);
+  }
 }
 
 
@@ -315,6 +346,8 @@ void StudyTreeView::createAnalysisConnection(AnalysisItem * item)
   QString data = item->data(Qt::UserRole).toString();
   if (data == "ParametricAnalysis")
     connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createParametricAnalysisResult(AnalysisItem *)));
+  else if (data == "ModelEvaluation")
+    connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createModelEvaluationResult(AnalysisItem*)));
   else if (data == "CentralTendency")
     connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createCentralTendencyResult(AnalysisItem *)));
   else if (data == "SensitivityAnalysis")
@@ -336,6 +369,21 @@ void StudyTreeView::runDesignOfExperiment()
   {
     emit checkIfWindowResultExists(item);
     createNewDesignOfExperimentWindow(item);
+  }
+}
+
+
+void StudyTreeView::runModelEvaluation()
+{
+  QModelIndex index = selectionModel()->currentIndex();
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+
+  ModelEvaluationItem * item = dynamic_cast<ModelEvaluationItem*>(selectedItem);
+
+  ModelEvaluationWizard * wizard = new ModelEvaluationWizard(item->getAnalysis());
+  if (wizard->exec())
+  {
+    item->getAnalysis().run();
   }
 }
 
@@ -407,6 +455,15 @@ void StudyTreeView::createParametricAnalysisResult(AnalysisItem * item)
 {
   emit checkIfWindowResultExists(item);
   ParametricAnalysisResultWindow * window = new ParametricAnalysisResultWindow(dynamic_cast<ParametricAnalysisItem*>(item));
+  emit showWindow(window);
+  setCurrentIndex(item->index());
+}
+
+
+void StudyTreeView::createModelEvaluationResult(AnalysisItem* item)
+{
+  emit checkIfWindowResultExists(item);
+  ModelEvaluationResultWindow * window = new ModelEvaluationResultWindow(dynamic_cast<ModelEvaluationItem*>(item));
   emit showWindow(window);
   setCurrentIndex(item->index());
 }

@@ -27,6 +27,7 @@ public slots:
   void createNewProbabilisticModel();
   void createNewDesignOfExperiment();
   void createNewLimitState();
+  void createNewModelEvaluation();
   void createNewParametricAnalysis();
   void createNewCentralTendency();
   void createNewSensitivityAnalysis();
@@ -34,11 +35,13 @@ public slots:
   void onCustomContextMenu(const QPoint & point);
   void selectedItemChanged(const QModelIndex & index);
   void runDesignOfExperiment();
+  void runModelEvaluation();
   void runParametricAnalysis();
   void runCentralTendency();
   void runSensitivityAnalysis();
   void runReliabilityAnalysis();
   void createParametricAnalysisResult(AnalysisItem *);
+  void createModelEvaluationResult(AnalysisItem *);
   void createCentralTendencyResult(AnalysisItem *);
   void createSensitivityAnalysisResult(AnalysisItem * item);
   void createReliabilityAnalysisResult(AnalysisItem*);
@@ -64,11 +67,13 @@ private:
   QAction * newProbabilisticModel_;
   QAction * newDesignOfExperiment_;
   QAction * newLimitState_;
+  QAction * newModelEvaluation_;
   QAction * newParametricAnalysis_;
   QAction * newCentralTendency_;
   QAction * newSensitivityAnalysis_;
   QAction * newThresholdExceedance_;
   QAction * runDesignOfExperiment_;
+  QAction * runModelEvaluation_;
   QAction * runParametricAnalysis_;
   QAction * runCentralTendency_;
   QAction * runSensitivityAnalysis_;

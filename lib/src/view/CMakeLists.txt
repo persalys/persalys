@@ -15,6 +15,8 @@ ot_add_source_file ( DesignOfExperimentWizard.cxx )
 ot_add_source_file ( DesignOfExperimentWindow.cxx )
 ot_add_source_file ( StudyTreeView.cxx )
 ot_add_source_file ( OTguiTableView.cxx )
+ot_add_source_file ( ModelEvaluationWizard.cxx )
+ot_add_source_file ( ModelEvaluationResultWindow.cxx )
 ot_add_source_file ( ParametricAnalysisWizard.cxx )
 ot_add_source_file ( ParametricAnalysisResultWindow.cxx )
 ot_add_source_file ( CentralTendencyWizard.cxx )
@@ -40,6 +42,8 @@ qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                    otgui/ProbabilisticModelWindow.hxx
                                    otgui/DesignOfExperimentWizard.hxx
                                    otgui/DesignOfExperimentWindow.hxx
+                                   otgui/ModelEvaluationWizard.hxx
+                                   otgui/ModelEvaluationResultWindow.hxx
                                    otgui/ParametricAnalysisWizard.hxx
                                    otgui/ParametricAnalysisResultWindow.hxx
                                    otgui/CentralTendencyWizard.hxx

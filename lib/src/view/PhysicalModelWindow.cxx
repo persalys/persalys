@@ -34,7 +34,7 @@ void PhysicalModelWindow::buildInterface()
   QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
 
   // Choose method to define Inputs and Outputs
-  QGroupBox * methodBox = new QGroupBox(tr(""));
+  QGroupBox * methodBox = new QGroupBox(tr("Physical model type"));
   QHBoxLayout * methodLayout = new QHBoxLayout(methodBox);
 
   QComboBox * comboBox = new QComboBox;
@@ -189,7 +189,7 @@ void PhysicalModelWindow::updateOutputTableModel()
 void PhysicalModelWindow::addInputLine()
 {
   inputTableModel_->addLine();
-  inputTableView_->selectRow(inputTableModel_->rowCount(QModelIndex())-1);
+  inputTableView_->selectRow(inputTableModel_->rowCount()-1);
 }
 
 
@@ -262,7 +262,7 @@ void PhysicalModelWindow::removeInputLine()
   {
     QModelIndex index = inputTableView_->selectionModel()->currentIndex();
     inputTableModel_->removeLine(index);
-    int lastRow = inputTableModel_->rowCount(QModelIndex())-1;
+    int lastRow = inputTableModel_->rowCount()-1;
 
     if (lastRow+1)
       inputTableView_->selectRow(lastRow);
