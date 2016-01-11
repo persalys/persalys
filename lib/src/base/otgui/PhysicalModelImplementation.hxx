@@ -44,6 +44,7 @@ public:
   virtual void setOutputs(const OutputCollection & outputs);
   void setOutputDescription(const std::string & outputName, const std::string & description);
   virtual void setOutputFormula(const std::string & outputName, const std::string & formula);
+  void setOutputValue(const std::string & outputName, const double & value);
   virtual void addOutput(const Output & output);
   virtual void removeOutput(const std::string & outputName);
   OT::Description getOutputNames();

@@ -183,6 +183,12 @@ void PhysicalModel::setOutputFormula(const std::string & outputName, const std::
 }
 
 
+void PhysicalModel::setOutputValue(const std::string & outputName, const double & value)
+{
+  return getImplementation()->setOutputValue(outputName, value);
+}
+
+
 void PhysicalModel::addOutput(const Output & output)
 {
   getImplementation()->addOutput(output);

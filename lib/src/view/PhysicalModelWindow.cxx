@@ -3,6 +3,7 @@
 #include "otgui/PhysicalModelWindow.hxx"
 
 #include "otgui/AnalyticalPhysicalModel.hxx"
+#include "otgui/ModelEvaluation.hxx"
 #ifdef OTGUI_HAVE_YACS
 # include "otgui/YACSPhysicalModel.hxx"
 #endif
@@ -112,6 +113,8 @@ void PhysicalModelWindow::buildInterface()
   QVBoxLayout * outputsLayout = new QVBoxLayout(outputsBox);
 
   outputTableView_ = new QTableView;
+  if(physicalModel_.getImplementation()->getClassName() != "AnalyticalPhysicalModel")
+    outputTableView_->hideColumn(2);
   outputTableView_->setEditTriggers(QTableView::AllEditTriggers);
   outputsLayout->addWidget(outputTableView_);
 
@@ -123,9 +126,14 @@ void PhysicalModelWindow::buildInterface()
   removeOutputLineButton_->setToolTip(tr("Remove the selected output"));
   connect(removeOutputLineButton_, SIGNAL(clicked(bool)), this, SLOT(removeOutputLine()));
 
+  evaluateOutputsButton_ = new QPushButton(tr("Evaluate"));
+  evaluateOutputsButton_->setToolTip(tr("Evaluate the value of the outputs"));
+  connect(evaluateOutputsButton_, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
+
   buttonsLayout = new QHBoxLayout;
   buttonsLayout->addWidget(addOutputLineButton_);
   buttonsLayout->addWidget(removeOutputLineButton_);
+  buttonsLayout->addWidget(evaluateOutputsButton_);
   outputsLayout->addLayout(buttonsLayout);
 
   mainLayout->addWidget(outputsBox);
@@ -213,6 +221,9 @@ void PhysicalModelWindow::updateMethodWidgets(int method)
       removeInputLineButton_->show();
       addOutputLineButton_->show();
       removeOutputLineButton_->show();
+      outputTableView_->showColumn(2);
+      if (method == 1)
+        outputTableView_->hideColumn(2);
       break;
     }
 #ifdef OTGUI_HAVE_YACS
@@ -223,6 +234,7 @@ void PhysicalModelWindow::updateMethodWidgets(int method)
       removeInputLineButton_->hide();
       addOutputLineButton_->hide();
       removeOutputLineButton_->hide();
+      outputTableView_->hideColumn(2);
       break;
     }
 #endif
@@ -277,5 +289,15 @@ void PhysicalModelWindow::removeOutputLine()
     QModelIndex index = outputTableView_->selectionModel()->currentIndex();
     outputTableModel_->removeLine(index);
   }
+}
+
+
+void PhysicalModelWindow::evaluateOutputs()
+{
+  ModelEvaluation eval("anEval", physicalModel_);
+  eval.run();
+  NumericalSample outputSample(eval.getResult().getOutputSample());
+  for (int i=0; i<outputSample.getDimension(); ++i)
+    physicalModel_.setOutputValue(physicalModel_.getOutputNames()[i], outputSample[0][i]);
 }
 }

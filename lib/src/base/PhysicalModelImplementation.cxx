@@ -317,6 +317,13 @@ void PhysicalModelImplementation::setOutputFormula(const std::string & outputNam
 }
 
 
+void PhysicalModelImplementation::setOutputValue(const std::string & outputName, const double & value)
+{
+  getOutputByName(outputName).setValue(value);
+  notify("outputChanged");
+}
+
+
 void PhysicalModelImplementation::addOutput(const Output & output)
 {
   if (hasAnOutputNamed(output.getName()))

@@ -31,6 +31,7 @@ public slots:
   void addOutputLine();
   void removeInputLine();
   void removeOutputLine();
+  void evaluateOutputs();
   void updateInputTableModel();
   void updateOutputTableModel();
   void updateMethodWidgets(int);
@@ -51,6 +52,7 @@ private:
   OutputTableModel * outputTableModel_;
   QPushButton * addOutputLineButton_;
   QPushButton * removeOutputLineButton_;
+  QPushButton * evaluateOutputsButton_;
   QLineEdit * XMLfileNameEdit_;
   QPushButton * loadButton_;
   QGroupBox * loadXMLFileBox_;
