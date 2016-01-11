@@ -17,7 +17,7 @@ class IntroPage : public QWizardPage
 public:
   enum Method {deterministic, probabilistic, import};
 
-  IntroPage(QWidget *parent = 0);
+  IntroPage(bool physicalModelHasStochasticInputs, QWidget *parent = 0);
 
   int nextId() const;
 

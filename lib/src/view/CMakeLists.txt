@@ -9,6 +9,7 @@ ot_add_source_file ( OTguiSubWindow.cxx )
 ot_add_source_file ( ImportTablePage.cxx )
 ot_add_source_file ( HorizontalHeaderViewWithCombobox.cxx )
 ot_add_source_file ( DeterministicDesignPage.cxx )
+ot_add_source_file ( ProbabilisticDesignPage.cxx )
 ot_add_source_file ( PhysicalModelWindow.cxx )
 ot_add_source_file ( ProbabilisticModelWindow.cxx )
 ot_add_source_file ( DesignOfExperimentWizard.cxx )
@@ -38,6 +39,7 @@ qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                    otgui/OTguiTableView.hxx
                                    otgui/HorizontalHeaderViewWithCombobox.hxx
                                    otgui/DeterministicDesignPage.hxx
+                                   otgui/ProbabilisticDesignPage.hxx
                                    otgui/PhysicalModelWindow.hxx
                                    otgui/ProbabilisticModelWindow.hxx
                                    otgui/DesignOfExperimentWizard.hxx
