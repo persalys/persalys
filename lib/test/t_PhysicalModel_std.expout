@@ -1,2 +1,7 @@
 unamed = otguibase.AnalyticalPhysicalModel('unamed')
 
+unamed = otguibase.PythonPhysicalModel('unamed')
+unamed.setCode('def _exec(X):
+    Y0 = X[0]
+    return [Y0]')
+

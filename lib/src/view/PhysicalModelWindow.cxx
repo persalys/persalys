@@ -7,6 +7,7 @@
 #ifdef OTGUI_HAVE_YACS
 # include "otgui/YACSPhysicalModel.hxx"
 #endif
+#include "otgui/PythonPhysicalModel.hxx"
 
 #include <QFileDialog>
 #include <QComboBox>
@@ -59,6 +60,25 @@ void PhysicalModelWindow::buildInterface()
   methodLayout->addStretch();
 
   mainLayout->addWidget(methodBox);
+
+  pythonDefinitionBox_ = new QGroupBox(tr(""));
+  QVBoxLayout *pythonLayout = new QVBoxLayout;
+  pythonCodeEdit_ = new QTextEdit;
+#ifndef _WIN32
+  QFont font("Monospace");
+#else
+  QFont font("Courier");
+#endif
+  font.setPointSize(9);
+  font.setFixedPitch(true);
+  pythonCodeEdit_->setFont(font);
+  if(physicalModel_.getImplementation()->getClassName() == "PythonPhysicalModel")
+    pythonCodeEdit_->setText(dynamic_cast<PythonPhysicalModel*>(&*physicalModel_.getImplementation().get())->getCode().c_str());
+  else
+    pythonCodeEdit_->setText(PythonPhysicalModel("dummy").getCode().c_str());
+  pythonLayout->addWidget(pythonCodeEdit_);
+  pythonDefinitionBox_->setLayout(pythonLayout);
+  mainLayout->addWidget(pythonDefinitionBox_);
 
 #ifdef OTGUI_HAVE_YACS
   // Widgets to load XML file
@@ -209,36 +229,18 @@ void PhysicalModelWindow::addOutputLine()
 
 void PhysicalModelWindow::updateMethodWidgets(int method)
 {
-  switch(method)
-  {
-    case 0:
-    case 1:
-    {
+  addInputLineButton_->setVisible(method!=2);
+  removeInputLineButton_->setVisible(method!=2);
+  addOutputLineButton_->setVisible(method!=2);
+  removeOutputLineButton_->setVisible(method!=2);
+
 #ifdef OTGUI_HAVE_YACS
-      loadXMLFileBox_->hide();
+  loadXMLFileBox_->setVisible(method==2);
 #endif
-      addInputLineButton_->show();
-      removeInputLineButton_->show();
-      addOutputLineButton_->show();
-      removeOutputLineButton_->show();
-      outputTableView_->showColumn(2);
-      if (method == 1)
-        outputTableView_->hideColumn(2);
-      break;
-    }
-#ifdef OTGUI_HAVE_YACS
-    case 2:
-    {
-      loadXMLFileBox_->show();
-      addInputLineButton_->hide();
-      removeInputLineButton_->hide();
-      addOutputLineButton_->hide();
-      removeOutputLineButton_->hide();
-      outputTableView_->hideColumn(2);
-      break;
-    }
-#endif
-  }
+
+  outputTableView_->setColumnHidden(2, method!=0);
+  pythonDefinitionBox_->setVisible(method==1);
+
   updateInputTableModel();
   updateOutputTableModel();
 }
@@ -249,21 +251,26 @@ void PhysicalModelWindow::methodChanged(int method)
   switch(method)
   {
     case 0:
-    case 1:
     {
       physicalModel_ = AnalyticalPhysicalModel(physicalModel_.getName());
-      emit physicalModelChanged(physicalModel_);
+      break;
+    }
+    case 1:
+    {
+      physicalModel_ = PythonPhysicalModel(physicalModel_.getName());
       break;
     }
 #ifdef OTGUI_HAVE_YACS
     case 2:
     {
       physicalModel_ = PhysicalModel(physicalModel_.getName());
-      emit physicalModelChanged(physicalModel_);
       break;
     }
 #endif
+    default:
+      throw std::exception();
   }
+  emit physicalModelChanged(physicalModel_);
   updateMethodWidgets(method);
 }
 
@@ -297,7 +304,7 @@ void PhysicalModelWindow::evaluateOutputs()
   ModelEvaluation eval("anEval", physicalModel_);
   eval.run();
   NumericalSample outputSample(eval.getResult().getOutputSample());
-  for (int i=0; i<outputSample.getDimension(); ++i)
+  for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++ i)
     physicalModel_.setOutputValue(physicalModel_.getOutputNames()[i], outputSample[0][i]);
 }
 }

@@ -1,12 +1,15 @@
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
+include_directories (${PYTHON_INCLUDE_DIRS})
 
 ot_add_current_dir_to_include_dirs ()
 
 add_subdirectory ( otgui )
 
 set(BASE_SOURCEFILES Observer.cxx Observable.cxx OTStudy.cxx Variable.cxx Input.cxx Output.cxx
-                     PhysicalModelImplementation.cxx AnalyticalPhysicalModel.cxx PhysicalModel.cxx
+                     PhysicalModel.cxx PhysicalModelImplementation.cxx AnalyticalPhysicalModel.cxx 
+                     PythonPhysicalModel.cxx
+                     PythonEvaluation.cxx
                      DesignOfExperimentImplementation.cxx DesignOfExperiment.cxx
                      AnalysisImplementation.cxx Analysis.cxx SimulationAnalysis.cxx
                      ModelEvaluationResult.cxx ModelEvaluation.cxx
@@ -40,7 +43,8 @@ if (SalomeYACS_FOUND)
   target_link_libraries ( otguibase YACSevalYFX )
 endif ()
 
-
+target_link_libraries (otguibase ${PYTHON_LIBRARIES})
+  
 install ( TARGETS otguibase
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION ${OTGUI_LIBRARY_PATH}

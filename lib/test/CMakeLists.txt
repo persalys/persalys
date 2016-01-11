@@ -101,6 +101,7 @@ include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 
 
 ot_check_test ( PhysicalModel_std )
+ot_check_test(PythonEvaluation_std)
 ot_check_test ( Cogeneration_std )
 
 add_custom_target ( cppcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^cppcheck_"

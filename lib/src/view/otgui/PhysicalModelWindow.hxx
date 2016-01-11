@@ -13,6 +13,7 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QTextEdit>
 
 namespace OTGUI {
   
@@ -56,6 +57,8 @@ private:
   QLineEdit * XMLfileNameEdit_;
   QPushButton * loadButton_;
   QGroupBox * loadXMLFileBox_;
+  QGroupBox * pythonDefinitionBox_;
+  QTextEdit * pythonCodeEdit_;
 };
 }
 #endif
