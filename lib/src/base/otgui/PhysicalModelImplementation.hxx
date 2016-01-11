@@ -64,6 +64,7 @@ public:
 
 protected:
   void updateCopula();
+  std::string dumpProbaModel() const;
 
 private:
   std::string name_;

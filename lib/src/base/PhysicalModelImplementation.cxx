@@ -1,6 +1,7 @@
 #include "otgui/PhysicalModelImplementation.hxx"
 
 #include "NormalCopula.hxx"
+#include "TruncatedDistribution.hxx"
 
 using namespace OT;
 
@@ -429,5 +430,66 @@ void PhysicalModelImplementation::setCopula(const Copula & copula)
 std::string PhysicalModelImplementation::dump() const
 {
   throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getDump()";
+}
+
+
+std::string PhysicalModelImplementation::dumpProbaModel() const
+{
+  std::string result;
+
+  for (int i=0; i<getInputs().getSize(); ++i)
+  {
+    if (getInputs()[i].isStochastic())
+    {
+      Distribution distribution = getInputs()[i].getDistribution();
+      std::string distributionName = distribution.getImplementation()->getClassName();
+      std::string inputName = getInputs()[i].getName();
+
+      OSS oss;
+      if (distributionName != "TruncatedDistribution")
+      {
+        oss << "dist_" << inputName << " = ot." << distributionName << "(";
+        NumericalPointWithDescription parameters = distribution.getParametersCollection()[0];
+        for (unsigned int i = 0; i < parameters.getSize(); ++ i)
+        {
+          oss << parameters[i];
+          if (i < parameters.getSize() - 1)
+            oss << ", ";
+        }
+        oss << ")\n";
+      }
+      else
+      {
+        TruncatedDistribution truncatedDistribution = *dynamic_cast<TruncatedDistribution*>(&*distribution.getImplementation());
+        Distribution distribution = truncatedDistribution.getDistribution();
+        oss << "dist_" << inputName << " = ot." << distribution.getImplementation()->getClassName() << "(";
+        NumericalPointWithDescription parameters = distribution.getParametersCollection()[0];
+        for (unsigned int i = 0; i < parameters.getSize(); ++ i)
+        {
+          oss << parameters[i];
+          if (i < parameters.getSize() - 1)
+            oss << ", ";
+        }
+        oss << ")\n";
+        oss << "dist_" << inputName << " = ot." << distributionName << "(";
+        oss << "dist_" << inputName << ", ";
+
+        if (!(truncatedDistribution.getFiniteLowerBound() && truncatedDistribution.getFiniteUpperBound())) // one side truncation ?
+        {
+          if (truncatedDistribution.getFiniteLowerBound())    //lower bound truncation
+            oss << truncatedDistribution.getLowerBound() << ")\n";
+          else
+            oss << truncatedDistribution.getUpperBound() << ", ot.TruncatedDistribution.UPPER)\n";
+        }
+        else  // both sides truncation
+          oss << truncatedDistribution.getUpperBound() << ", " << truncatedDistribution.getUpperBound() <<")\n";
+      }
+
+      result += oss.str();
+      result += getName()+ ".setInputDistribution('" + inputName + "', ";
+      result += " dist_" + inputName + ")\n";
+    }
+  }
+  return result;
 }
 }

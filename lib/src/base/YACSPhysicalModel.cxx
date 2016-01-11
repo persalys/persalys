@@ -1,7 +1,5 @@
 #include "otgui/YACSPhysicalModel.hxx"
 
-#include "TruncatedDistribution.hxx"
-
 using namespace OT;
 
 namespace OTGUI {
@@ -141,59 +139,7 @@ std::string YACSPhysicalModel::dump() const
   result += getName()+ " = otguibase.YACSPhysicalModel('" + getName() + "', '";
   result += getXMLFileName() + "')\n";
 
-  for (int i=0; i<getInputs().getSize(); ++i)
-  {
-    if (getInputs()[i].isStochastic())
-    {
-      Distribution distribution = getInputs()[i].getDistribution();
-      std::string distributionName = distribution.getImplementation()->getClassName();
-      std::string inputName = getInputs()[i].getName();
-
-      if (distributionName != "TruncatedDistribution")
-      {
-        OSS oss;
-        oss << "dist_" << inputName << " = ot." << distributionName << "(";
-        NumericalPointWithDescription parameters = distribution.getParametersCollection()[0];
-        for (unsigned int i = 0; i < parameters.getSize(); ++ i)
-        {
-          oss << parameters[i];
-          if (i < parameters.getSize() - 1)
-            oss << ", ";
-        }
-        oss << ")\n";
-      }
-      else
-      {
-        OSS oss;
-        TruncatedDistribution truncatedDistribution = *dynamic_cast<TruncatedDistribution*>(&*distribution.getImplementation());
-        Distribution distribution = truncatedDistribution.getDistribution();
-        oss << "dist_" << inputName << " = ot." << distribution.getImplementation()->getClassName() << "(";
-        NumericalPointWithDescription parameters = distribution.getParametersCollection()[0];
-        for (unsigned int i = 0; i < parameters.getSize(); ++ i)
-        {
-          oss << parameters[i];
-          if (i < parameters.getSize() - 1)
-            oss << ", ";
-        }
-        oss << ")\n";
-        oss << "dist_" << inputName << " = ot." << distributionName << "(";
-        oss << "dist_" << inputName << ", ";
-
-        if (!(truncatedDistribution.getFiniteLowerBound() && truncatedDistribution.getFiniteUpperBound())) // one side truncation ?
-        {
-          if (truncatedDistribution.getFiniteLowerBound())    //lower bound truncation
-            oss << truncatedDistribution.getLowerBound() << ")\n";
-          else
-            oss << truncatedDistribution.getUpperBound() << ", ot.TruncatedDistribution.UPPER)\n";
-        }
-        else  // both sides truncation
-          oss << truncatedDistribution.getUpperBound() << ", " << truncatedDistribution.getUpperBound() <<")\n";
-      }
-
-      result += getName()+ ".setInputDistribution(" + inputName + ", ";
-      result += " dist_" + inputName + ")\n";
-    }
-  }
+  result += dumpProbaModel();
 
   return result;
 }

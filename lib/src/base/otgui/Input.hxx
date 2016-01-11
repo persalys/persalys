@@ -28,6 +28,7 @@ public:
 
   bool isStochastic() const;
 
+  std::string dumpDistribution() const;
   std::string dump() const;
 
 private:
