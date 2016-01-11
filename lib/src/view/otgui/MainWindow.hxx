@@ -5,10 +5,11 @@
 
 #include "otgui/StudyTreeView.hxx"
 #include "otgui/qpyconsole.h"
+#include "otgui/OTguiMenuBar.hxx"
+#include "otgui/OTguiToolBar.hxx"
 
 #include <QMainWindow>
 #include <QMdiArea>
-#include <QMenu>
 #include <QDockWidget>
 
 namespace OTGUI {
@@ -31,13 +32,14 @@ public slots:
 
 protected:
   void buildInterface();
-  void buildActions();
+  void buildConnections();
 
 private:
   StudyTreeView * studyTree_;
   QDockWidget * configurationDock_;
   QMdiArea * mdiArea_;
-  QMenu * menu_;
+  OTguiMenuBar * menuBar_;
+  OTguiToolBar * toolBar_;
   QPyConsole * console_;
 };
 }

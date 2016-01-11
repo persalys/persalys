@@ -1,4 +1,6 @@
 ot_install_header_file ( MainWindow.hxx )
+ot_install_header_file ( OTguiToolBar.hxx )
+ot_install_header_file ( OTguiMenuBar.hxx )
 ot_install_header_file ( ModelEvaluationWizard.hxx )
 ot_install_header_file ( ParametricAnalysisWizard.hxx )
 ot_install_header_file ( CentralTendencyWizard.hxx )

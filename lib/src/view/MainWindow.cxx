@@ -16,23 +16,19 @@ MainWindow::MainWindow()
   , mdiArea_(new QMdiArea(this))
 {
   buildInterface();
-  buildActions();
-  connect(studyTree_, SIGNAL(showWindow(QMdiSubWindow *)), this, SLOT(showSubWindow(QMdiSubWindow *)));
-  connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), this, SLOT(showSubWindow(QStandardItem *)));
-  connect(studyTree_, SIGNAL(checkIfWindowResultExists(ObserverItem *)), this, SLOT(checkIfWindowResultExists(ObserverItem *)));
-  connect(studyTree_, SIGNAL(graphWindowActivated(QTabWidget*)), this, SLOT(showGraphConfigurationTabWidget(QTabWidget*)));
-  connect(studyTree_, SIGNAL(graphWindowDeactivated(QTabWidget*)), this, SLOT(hideGraphConfigurationTabWidget(QTabWidget*)));
+  buildConnections();
   setWindowTitle("OTGui");
 }
 
 
 void MainWindow::buildInterface()
 {
+  // main widget
   QWidget * mainWidget = new QWidget;
   QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
 
   QSplitter * mainSplitter = new QSplitter(Qt::Horizontal);
-  QWidget * widget = new QWidget();
+  QWidget * widget = new QWidget;
   QVBoxLayout * leftLayout = new QVBoxLayout(widget);
 
   leftLayout->addWidget(studyTree_);
@@ -46,10 +42,10 @@ void MainWindow::buildInterface()
   mainSplitter->addWidget(mdiArea_);
   mainLayout->addWidget(mainSplitter);
 
+  setCentralWidget(mainWidget);
+
   // Python Console
   console_ = new QPyConsole(this);
-  connect(studyTree_, SIGNAL(loadPythonScript(const QString &)), console_, SLOT(loadScript(const QString &)));
-
   QDockWidget * consoleDock = new QDockWidget;
   consoleDock->setWidget(console_);
   consoleDock->setFeatures(QDockWidget::DockWidgetClosable);
@@ -57,18 +53,36 @@ void MainWindow::buildInterface()
   //TODO:
 //   connect(consoleDock, SIGNAL(visibilityChanged(bool)), this,SLOT(consoleVisibilityChanged()));
 
-  setCentralWidget(mainWidget);
+  // menu bar
+  menuBar_ = new OTguiMenuBar;
+  setMenuBar(menuBar_);
 
-  // Menus
-  menu_ = menuBar()->addMenu(tr("&Menu"));
+  // tool bar
+  toolBar_ = new OTguiToolBar;
+  addToolBar(toolBar_);
 }
 
 
-void MainWindow::buildActions()
+void MainWindow::buildConnections()
 {
-  menu_->addAction(tr("&New OTStudy"), studyTree_, SLOT(createNewOTStudy()));
-  menu_->addAction(tr("&Load OTStudy"), studyTree_, SLOT(loadOTStudy()));
-  menu_->addAction(tr("E&xit"), this, SLOT(close()), QKeySequence::Quit);
+  // signals from the study tree to MainWindow
+  connect(studyTree_, SIGNAL(showWindow(QMdiSubWindow *)), this, SLOT(showSubWindow(QMdiSubWindow *)));
+  connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), this, SLOT(showSubWindow(QStandardItem *)));
+  connect(studyTree_, SIGNAL(checkIfWindowResultExists(ObserverItem *)), this, SLOT(checkIfWindowResultExists(ObserverItem *)));
+  connect(studyTree_, SIGNAL(graphWindowActivated(QTabWidget*)), this, SLOT(showGraphConfigurationTabWidget(QTabWidget*)));
+  connect(studyTree_, SIGNAL(graphWindowDeactivated(QTabWidget*)), this, SLOT(hideGraphConfigurationTabWidget(QTabWidget*)));
+
+  // signal from studyTree_ to console_
+  connect(studyTree_, SIGNAL(loadPythonScript(const QString &)), console_, SLOT(loadScript(const QString &)));
+
+  // signals from the menu bar to studyTree_ and MainWindow
+  connect(menuBar_, SIGNAL(createNewOTStudy()), studyTree_, SLOT(createNewOTStudy()));
+  connect(menuBar_, SIGNAL(loadOTStudy()), studyTree_, SLOT(loadOTStudy()));
+  connect(menuBar_, SIGNAL(closeWindow()), this, SLOT(close()));
+
+  // signals from the tool bar to studyTree_
+  connect(toolBar_, SIGNAL(createNewOTStudy()), studyTree_, SLOT(createNewOTStudy()));
+  connect(toolBar_, SIGNAL(loadOTStudy()), studyTree_, SLOT(loadOTStudy()));
 }
 
 
@@ -115,7 +129,6 @@ void MainWindow::showSubWindow(QStandardItem * item)
       mdiArea_->setActiveSubWindow(win);
     }
   }
-
 }
 
 

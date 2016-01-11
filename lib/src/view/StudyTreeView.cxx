@@ -58,60 +58,10 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
     return;
 
   QMenu * contextMenu = new QMenu(this);
-  QString data = treeViewModel_->itemFromIndex(index)->data(Qt::UserRole).toString();
-  if (data=="OTStudy")
-  {
-    contextMenu->addAction(newPhysicalModel_);
-    contextMenu->addAction(dumpOTStudy_);
-  }
-  else if (data=="DeterministicStudy")
-  {
-//  TODO   contextMenu->addAction(newParametricAnalysis_);
-    contextMenu->addAction(newModelEvaluation_);
-  }
-  else if (data=="ProbabilisticStudy")
-  {
-    if (!treeViewModel_->itemFromIndex(index)->hasChildren())
-      contextMenu->addAction(newProbabilisticModel_);
-  }
-  else if (data=="ProbabilisticModel")
-  {
-    contextMenu->addAction(newLimitState_);
-    contextMenu->addAction(newCentralTendency_);
-    contextMenu->addAction(newSensitivityAnalysis_);
-  }
-  else if (data=="DesignOfExperimentList")
-  {
-    contextMenu->addAction(newDesignOfExperiment_);
-  }
-  else if (data=="DesignOfExperiment")
-  {
-    contextMenu->addAction(runDesignOfExperiment_);
-  }
-  else if (data=="LimitState")
-  {
-    contextMenu->addAction(newThresholdExceedance_);
-  }
-  else if (data=="ParametricAnalysis")
-  {
-    contextMenu->addAction(runParametricAnalysis_);
-  }
-  else if (data=="ModelEvaluation")
-  {
-    contextMenu->addAction(runModelEvaluation_);
-  }
-  else if (data=="CentralTendency")
-  {
-    contextMenu->addAction(runCentralTendency_);
-  }
-  else if (data=="SensitivityAnalysis")
-  {
-    contextMenu->addAction(runSensitivityAnalysis_);
-  }
-  else if (data=="ReliabilityAnalysis")
-  {
-    contextMenu->addAction(runReliabilityAnalysis_);
-  }
+  QString dataType = treeViewModel_->itemFromIndex(index)->data(Qt::UserRole).toString();
+  if (dataType == "ProbabilisticStudy" && treeViewModel_->itemFromIndex(index)->hasChildren())
+    return;
+  contextMenu->addActions(getActions(dataType));
   contextMenu->exec(mapToGlobal(point));
 }
 
@@ -181,6 +131,65 @@ void StudyTreeView::buildActions()
   dumpOTStudy_ = new QAction(tr("Dump"), this);
   dumpOTStudy_->setStatusTip(tr("Dump the otStudy"));
   connect(dumpOTStudy_, SIGNAL(triggered()), this, SLOT(dumpOTStudy()));
+}
+
+
+QList<QAction* > StudyTreeView::getActions(const QString & dataType)
+{
+  QList<QAction* > actions;
+
+  if (dataType=="OTStudy")
+  {
+    actions.append(newPhysicalModel_);
+    actions.append(dumpOTStudy_);
+  }
+  else if (dataType=="DeterministicStudy")
+  {
+    actions.append(newModelEvaluation_);
+  }
+  else if (dataType=="ProbabilisticStudy")
+  {
+    actions.append(newProbabilisticModel_);
+  }
+  else if (dataType=="ProbabilisticModel")
+  {
+    actions.append(newLimitState_);
+    actions.append(newCentralTendency_);
+    actions.append(newSensitivityAnalysis_);
+  }
+  else if (dataType=="DesignOfExperimentList")
+  {
+    actions.append(newDesignOfExperiment_);
+  }
+  else if (dataType=="DesignOfExperiment")
+  {
+    actions.append(runDesignOfExperiment_);
+  }
+  else if (dataType=="LimitState")
+  {
+    actions.append(newThresholdExceedance_);
+  }
+  else if (dataType=="ParametricAnalysis")
+  {
+    actions.append(runParametricAnalysis_);
+  }
+  else if (dataType=="ModelEvaluation")
+  {
+    actions.append(runModelEvaluation_);
+  }
+  else if (dataType=="CentralTendency")
+  {
+    actions.append(runCentralTendency_);
+  }
+  else if (dataType=="SensitivityAnalysis")
+  {
+    actions.append(runSensitivityAnalysis_);
+  }
+  else if (dataType=="ReliabilityAnalysis")
+  {
+    actions.append(runReliabilityAnalysis_);
+  }
+  return actions;
 }
 
 

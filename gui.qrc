@@ -4,5 +4,10 @@
         <file>images/up_arrow.png</file>
         <file>images/list-add.png</file>
         <file>images/list-remove.png</file>
+        <file>images/document-new.png</file>
+        <file>images/document-import.png</file>
+        <file>images/document-new22x22.png</file>
+        <file>images/document-import22x22.png</file>
+        <file>images/window-close.png</file>
     </qresource>
 </RCC>

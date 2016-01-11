@@ -18,6 +18,8 @@ class StudyTreeView : public QTreeView
 public:
   StudyTreeView(QWidget * parent = 0);
 
+  QList<QAction* > getActions(const QString & dataType);
+
 protected:
   void buildActions();
 
