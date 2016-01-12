@@ -64,15 +64,5 @@ Qt::ItemFlags CodeModel::flags(const QModelIndex & index) const
   return Qt::ItemIsEditable | QAbstractTableModel::flags(index);
 }
 
-QVariant CodeModel::headerData(int section, Qt::Orientation orientation, int role) const
-{  
-  if (role == Qt::DisplayRole)
-  {
-    return "";
-  }
-  return QAbstractTableModel::headerData(section, orientation, role);
-}
-
-
 
 }

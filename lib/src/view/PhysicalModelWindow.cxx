@@ -71,6 +71,8 @@ void PhysicalModelWindow::buildInterface()
   codeView_->setEditTriggers(QTableView::AllEditTriggers);
   codeView_->horizontalHeader()->setStretchLastSection(true);
   codeView_->verticalHeader()->setStretchLastSection(true);
+  codeView_->horizontalHeader()->hide();
+  codeView_->verticalHeader()->hide();
   codeView_->setItemDelegate(new CodeDelegate);
   pythonLayout->addWidget(codeView_);
   pythonDefinitionBox_->setLayout(pythonLayout);
