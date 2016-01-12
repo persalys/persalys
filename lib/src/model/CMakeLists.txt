@@ -21,6 +21,7 @@ ot_add_source_file ( SensitivityAnalysisItem.cxx )
 ot_add_source_file ( ReliabilityAnalysisItem.cxx )
 ot_add_source_file ( ParametricAnalysisTableModel.cxx )
 ot_add_source_file ( StudyTreeViewModel.cxx )
+ot_add_source_file (CodeModel.cxx)
 
 add_subdirectory ( otgui )
 
@@ -42,7 +43,8 @@ qt4_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
                                     otgui/ProbabilisticModelItem.hxx
                                     otgui/PhysicalModelItem.hxx
                                     otgui/ObserverItem.hxx
-                                    otgui/OTStudyItem.hxx )
+                                    otgui/OTStudyItem.hxx
+                                    otgui/CodeModel.hxx)
 
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 

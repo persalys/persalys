@@ -31,6 +31,7 @@ public slots:
 signals:
   void inputChanged();
   void outputChanged();
+  void codeChanged();
   void physicalModelChanged(const PhysicalModel&);
 
 private:

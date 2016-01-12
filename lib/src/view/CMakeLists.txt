@@ -34,6 +34,7 @@ ot_add_source_file ( SensitivityAnalysisWizard.cxx )
 ot_add_source_file ( LimitStateWindow.cxx )
 ot_add_source_file ( ReliabilityAnalysisWizard.cxx )
 ot_add_source_file ( MonteCarloReliabilityResultWindow.cxx )
+ot_add_source_file (CodeDelegate.cxx)
 
 add_subdirectory (otgui)
 
@@ -67,6 +68,7 @@ qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                    otgui/LimitStateWindow.hxx
                                    otgui/ReliabilityAnalysisWizard.hxx
                                    otgui/MonteCarloReliabilityResultWindow.hxx
+                                   otgui/CodeDelegate.hxx
                                    )
 
 set(RESOURCES ${CMAKE_SOURCE_DIR}/gui.qrc)

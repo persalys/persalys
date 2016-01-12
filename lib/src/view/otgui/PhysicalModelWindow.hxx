@@ -6,6 +6,7 @@
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/PhysicalModelItem.hxx"
 #include "otgui/PlotWidget.hxx"
+#include "otgui/CodeModel.hxx"
 
 #include <QTableView>
 #include <QLineEdit>
@@ -33,6 +34,7 @@ public slots:
   void removeInputLine();
   void removeOutputLine();
   void evaluateOutputs();
+  void updateCodeModel();
   void updateInputTableModel();
   void updateOutputTableModel();
   void updateMethodWidgets(int);
@@ -57,8 +59,9 @@ private:
   QLineEdit * XMLfileNameEdit_;
   QPushButton * loadButton_;
   QGroupBox * loadXMLFileBox_;
+  CodeModel * codeModel_;
+  QTableView * codeView_;
   QGroupBox * pythonDefinitionBox_;
-  QTextEdit * pythonCodeEdit_;
 };
 }
 #endif

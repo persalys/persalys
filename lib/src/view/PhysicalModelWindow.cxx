@@ -8,6 +8,7 @@
 # include "otgui/YACSPhysicalModel.hxx"
 #endif
 #include "otgui/PythonPhysicalModel.hxx"
+#include "otgui/CodeDelegate.hxx"
 
 #include <QFileDialog>
 #include <QComboBox>
@@ -22,10 +23,12 @@ PhysicalModelWindow::PhysicalModelWindow(PhysicalModelItem * item)
   , physicalModel_(item->getPhysicalModel())
   , inputTableModel_(0)
   , outputTableModel_(0)
+  , codeModel_(0)
 {
   connect(this, SIGNAL(physicalModelChanged(const PhysicalModel&)), item, SLOT(updatePhysicalModel(const PhysicalModel&)));
   connect(item, SIGNAL(outputChanged()), this, SLOT(updateOutputTableModel()));
   connect(item, SIGNAL(inputChanged()), this, SLOT(updateInputTableModel()));
+  connect(item, SIGNAL(codeChanged()), this, SLOT(updateCodeModel()));
   buildInterface();
 }
 
@@ -63,20 +66,13 @@ void PhysicalModelWindow::buildInterface()
 
   pythonDefinitionBox_ = new QGroupBox(tr(""));
   QVBoxLayout *pythonLayout = new QVBoxLayout;
-  pythonCodeEdit_ = new QTextEdit;
-#ifndef _WIN32
-  QFont font("Monospace");
-#else
-  QFont font("Courier");
-#endif
-  font.setPointSize(9);
-  font.setFixedPitch(true);
-  pythonCodeEdit_->setFont(font);
-  if(physicalModel_.getImplementation()->getClassName() == "PythonPhysicalModel")
-    pythonCodeEdit_->setText(dynamic_cast<PythonPhysicalModel*>(&*physicalModel_.getImplementation().get())->getCode().c_str());
-  else
-    pythonCodeEdit_->setText(PythonPhysicalModel("dummy").getCode().c_str());
-  pythonLayout->addWidget(pythonCodeEdit_);
+
+  codeView_ = new QTableView;
+  codeView_->setEditTriggers(QTableView::AllEditTriggers);
+  codeView_->horizontalHeader()->setStretchLastSection(true);
+  codeView_->verticalHeader()->setStretchLastSection(true);
+  codeView_->setItemDelegate(new CodeDelegate);
+  pythonLayout->addWidget(codeView_);
   pythonDefinitionBox_->setLayout(pythonLayout);
   mainLayout->addWidget(pythonDefinitionBox_);
 
@@ -196,6 +192,13 @@ void PhysicalModelWindow::loadXML()
 #endif
 }
 
+void PhysicalModelWindow::updateCodeModel()
+{
+  if (codeModel_)
+    delete codeModel_;
+  codeModel_ = new CodeModel(physicalModel_);
+  codeView_->setModel(codeModel_);
+}
 
 void PhysicalModelWindow::updateInputTableModel()
 {
@@ -243,6 +246,7 @@ void PhysicalModelWindow::updateMethodWidgets(int method)
 
   updateInputTableModel();
   updateOutputTableModel();
+  updateCodeModel();
 }
 
 

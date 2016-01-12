@@ -41,4 +41,6 @@ void SpinBoxDelegate::updateEditorGeometry(QWidget * editor, const QStyleOptionV
 {
   editor->setGeometry(option.rect);
 }
+
+
 }

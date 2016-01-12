@@ -10,7 +10,7 @@ CLASSNAMEINIT(PythonPhysicalModel);
 PythonPhysicalModel::PythonPhysicalModel(const std::string & name)
   : PhysicalModelImplementation(name)
 {
-  code_ = "def _exec(X):\n    Y0 = X[0]\n    return [Y0]";
+  setCode("def _exec(X):\n    Y0 = X[0]\n    return [Y0]");
   updateFunction();
 }
 
@@ -33,6 +33,7 @@ PythonPhysicalModel* PythonPhysicalModel::clone() const
 void PythonPhysicalModel::setCode(const String & code)
 {
   code_ = code;
+  notify("codeChanged");
 }
 
 String PythonPhysicalModel::getCode() const
