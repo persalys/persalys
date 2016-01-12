@@ -18,6 +18,7 @@ namespace OTGUI {
 DeterministicDesignPage::DeterministicDesignPage(const DesignOfExperiment & designOfExperiment, QWidget* parent)
   : QWizardPage(parent)
   , designOfExperiment_(designOfExperiment)
+  , pageValidity_(true)
 {
   designOfExperiment_.updateParameters();
   buildInterface();

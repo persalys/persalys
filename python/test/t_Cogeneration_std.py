@@ -40,6 +40,11 @@ outputSample = [[0.060036508072],
 # Comparaison
 openturns.testing.assert_almost_equal(outputSample, analysisResult.getResultSample(), 1e-16)
 
+aDesign = otguibase.DesignOfExperiment('aDesign', myPhysicalModel)
+aDesign.getInputSample()
+aDesign.eval()
+openturns.testing.assert_almost_equal(outputSample, aDesign.getOutputSample(), 1e-16)
+
 ## Quadratic Cumul ##
 quadraticCumul = otguibase.QuadraticCumulAnalysis('myQuadraticCumul', myPhysicalModel)
 myStudy.addAnalysis(quadraticCumul)

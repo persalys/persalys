@@ -177,7 +177,7 @@ void DesignOfExperimentImplementation::updateParameters()
 
   initializeParameters(getPhysicalModel().getInputs());
 
-  for (int i=0; i<inputNames.getSize(); ++i)
+  for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
   {
     const Description::const_iterator it = std::find(inputNames.begin(), inputNames.end(), inputNames_[i]);
     if (it != inputNames.end())
@@ -224,7 +224,7 @@ DesignOfExperimentImplementation::Type DesignOfExperimentImplementation::getType
 int DesignOfExperimentImplementation::getNumberOfExperiments() const
 {
   int nbExperiments = 1;
-  for (int i=0; i<levels_.getSize(); ++i)
+  for (UnsignedInteger i=0; i<levels_.getSize(); ++i)
     nbExperiments *= levels_[i];
   return nbExperiments;
 }
@@ -360,7 +360,7 @@ void DesignOfExperimentImplementation::setColumns(Indices columns)
   }
 
   std::set<UnsignedInteger> columnsSet;
-  for (int i=0; i<columns.getSize(); ++i)
+  for (UnsignedInteger i=0; i<columns.getSize(); ++i)
     columnsSet.insert(columns[i]);
   if (columnsSet.size() != columns.getSize())
     throw InvalidArgumentException(HERE) << "An input must be associated with only one column.";
@@ -393,7 +393,7 @@ NumericalSample DesignOfExperimentImplementation::getInputSample()
     NumericalPoint transvec(0);
     NumericalPoint otLevels(0);
 
-    for (int i=0; i<lowerBounds_.getSize(); ++i)
+    for (UnsignedInteger i=0; i<lowerBounds_.getSize(); ++i)
     {
       //TODO: improve this part if a variable is constant
       double inf = lowerBounds_[i];
@@ -456,7 +456,36 @@ void DesignOfExperimentImplementation::eval()
 
 std::string DesignOfExperimentImplementation::dump() const
 {
-//   TODO
-  return "";
+  OSS oss;
+
+  oss << physicalModel_.dump();
+  oss << "lowerBounds = [";
+  for (UnsignedInteger i = 0; i < lowerBounds_.getSize(); ++ i)
+  {
+    oss << lowerBounds_[i];
+    if (i < lowerBounds_.getSize()-1)
+      oss << ", ";
+  }
+  oss << "]\n";
+  oss << "upperBounds = [";
+  for (UnsignedInteger i = 0; i < upperBounds_.getSize(); ++ i)
+  {
+    oss << upperBounds_[i];
+    if (i < upperBounds_.getSize()-1)
+      oss << ", ";
+  }
+  oss << "]\n";
+  oss << "levels = [";
+  for (UnsignedInteger i = 0; i < levels_.getSize(); ++ i)
+  {
+    oss << levels_[i];
+    if (i < levels_.getSize()-1)
+      oss << ", ";
+  }
+  oss << "]\n";
+  oss << getName()+ " = otguibase.DesignOfExperiment('" + getName() + "', "+getPhysicalModel().getName()+", lowerBounds, upperBounds, levels)\n";
+  return oss.str();
 }
+
+
 }

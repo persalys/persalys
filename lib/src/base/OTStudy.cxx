@@ -87,7 +87,7 @@ std::vector<PhysicalModel> OTStudy::getPhysicalModels() const
 
 PhysicalModel & OTStudy::getPhysicalModelByName(const std::string& physicalModelName)
 {
-  for (int i=0; i<physicalModels_.size(); ++i)
+  for (UnsignedInteger i=0; i<physicalModels_.size(); ++i)
     if (physicalModels_[i].getName() == physicalModelName)
       return physicalModels_[i];
   throw InvalidArgumentException(HERE) << "The given name " << physicalModelName <<" does not correspond to a physical model of the study.\n"; 
@@ -96,7 +96,7 @@ PhysicalModel & OTStudy::getPhysicalModelByName(const std::string& physicalModel
 
 bool OTStudy::hasPhysicalModelNamed(const std::string & physicalModelName)
 {
-  for (int i=0; i<physicalModels_.size(); ++i)
+  for (UnsignedInteger i=0; i<physicalModels_.size(); ++i)
     if (physicalModels_[i].getImplementation()->getName() == physicalModelName)
       return true;
   return false;
@@ -121,7 +121,7 @@ std::vector<DesignOfExperiment> OTStudy::getDesignOfExperiments() const
 
 bool OTStudy::hasDesignOfExperimentNamed(const std::string & designOfExperimentName)
 {
-  for (int i=0; i<designOfExperiments_.size(); ++i)
+  for (UnsignedInteger i=0; i<designOfExperiments_.size(); ++i)
     if (designOfExperiments_[i].getImplementation()->getName() == designOfExperimentName)
       return true;
   return false;
@@ -148,7 +148,7 @@ std::vector<Analysis> OTStudy::getAnalyses() const
 
 Analysis & OTStudy::getAnalysisByName(const std::string & analysisName)
 {
-  for (int i=0; i<analyses_.size(); ++i)
+  for (UnsignedInteger i=0; i<analyses_.size(); ++i)
     if (analyses_[i].getName() == analysisName)
       return analyses_[i];
   throw InvalidArgumentException(HERE) << "The given name " << analysisName <<" does not correspond to an analysis of the study.\n"; 
@@ -157,7 +157,7 @@ Analysis & OTStudy::getAnalysisByName(const std::string & analysisName)
 
 bool OTStudy::hasAnalysisNamed(const std::string & analysisName)
 {
-  for (int i=0; i<analyses_.size(); ++i)
+  for (UnsignedInteger i=0; i<analyses_.size(); ++i)
     if (analyses_[i].getImplementation()->getName() == analysisName)
       return true;
   return false;
@@ -189,7 +189,7 @@ std::vector<LimitState> OTStudy::getLimitStates() const
 
 bool OTStudy::hasLimitStateNamed(const std::string & limitStateName)
 {
-  for (int i=0; i<limitStates_.size(); ++i)
+  for (UnsignedInteger i=0; i<limitStates_.size(); ++i)
     if (limitStates_[i].getImplementation()->getName() == limitStateName)
       return true;
   return false;
@@ -217,6 +217,11 @@ std::string OTStudy::dump()
   {
     result += (*it).dump();
     result += getName() + ".addPhysicalModel(" + (*it).getName() + ")\n";
+  }
+  for (std::vector<DesignOfExperiment>::iterator it=designOfExperiments_.begin(); it!= designOfExperiments_.end(); ++it)
+  {
+    result += (*it).dump();
+    result += getName() + ".addDesignOfExperiment(" + (*it).getName() + ")\n";
   }
   for (std::vector<LimitState>::iterator it=limitStates_.begin(); it!= limitStates_.end(); ++it)
   {

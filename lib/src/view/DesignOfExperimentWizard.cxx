@@ -59,6 +59,7 @@ int IntroPage::nextId() const
       return DesignOfExperimentWizard::Page_Import;
     }
     default:
+      return -1;
       break;
   }
 }
