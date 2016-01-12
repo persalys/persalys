@@ -129,7 +129,7 @@ void StudyTreeView::buildActions()
   connect(runReliabilityAnalysis_, SIGNAL(triggered()), this, SLOT(runReliabilityAnalysis()));
 
   dumpOTStudy_ = new QAction(tr("Dump"), this);
-  dumpOTStudy_->setStatusTip(tr("Dump the otStudy"));
+  dumpOTStudy_->setStatusTip(tr("Dump the OTStudy"));
   connect(dumpOTStudy_, SIGNAL(triggered()), this, SLOT(dumpOTStudy()));
 }
 
@@ -534,7 +534,7 @@ void StudyTreeView::dumpOTStudy()
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
   OTStudyItem * item = dynamic_cast<OTStudyItem*>(selectedItem);
 
-  QString fileName = QFileDialog::getSaveFileName(this, tr("Dump otStudy..."),
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Dump OTStudy..."),
                      QDir::homePath(),
                      tr("Python source files (*.py)"));
 
@@ -567,7 +567,7 @@ void StudyTreeView::dumpOTStudy()
 
 void StudyTreeView::loadOTStudy()
 {
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Load otStudy..."),
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Load OTStudy..."),
                      QDir::homePath(),
                      tr("Python source files (*.py)"));
 

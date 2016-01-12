@@ -7,6 +7,7 @@
 #include "otgui/qpyconsole.h"
 #include "otgui/OTguiMenuBar.hxx"
 #include "otgui/OTguiToolBar.hxx"
+#include "otgui/OTguiStatusBar.hxx"
 
 #include <QMainWindow>
 #include <QMdiArea>
@@ -40,6 +41,7 @@ private:
   QMdiArea * mdiArea_;
   OTguiMenuBar * menuBar_;
   OTguiToolBar * toolBar_;
+  OTguiStatusBar * statusBar_;
   QPyConsole * console_;
 };
 }

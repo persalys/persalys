@@ -1,6 +1,7 @@
 ot_install_header_file ( MainWindow.hxx )
 ot_install_header_file ( OTguiToolBar.hxx )
 ot_install_header_file ( OTguiMenuBar.hxx )
+ot_install_header_file ( OTguiStatusBar.hxx )
 ot_install_header_file ( ComboBoxDelegate.hxx )
 ot_install_header_file ( SpinBoxDelegate.hxx )
 ot_install_header_file ( ModelEvaluationWizard.hxx )

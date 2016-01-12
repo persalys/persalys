@@ -60,6 +60,10 @@ void MainWindow::buildInterface()
   // tool bar
   toolBar_ = new OTguiToolBar;
   addToolBar(toolBar_);
+
+  // status status bar
+  statusBar_ = new OTguiStatusBar;
+  setStatusBar(statusBar_);
 }
 
 
@@ -71,6 +75,7 @@ void MainWindow::buildConnections()
   connect(studyTree_, SIGNAL(checkIfWindowResultExists(ObserverItem *)), this, SLOT(checkIfWindowResultExists(ObserverItem *)));
   connect(studyTree_, SIGNAL(graphWindowActivated(QTabWidget*)), this, SLOT(showGraphConfigurationTabWidget(QTabWidget*)));
   connect(studyTree_, SIGNAL(graphWindowDeactivated(QTabWidget*)), this, SLOT(hideGraphConfigurationTabWidget(QTabWidget*)));
+  connect(studyTree_, SIGNAL(errorMessageEmitted(QString)), statusBar_, SLOT(showErrorMessage(QString)));
 
   // signal from studyTree_ to console_
   connect(studyTree_, SIGNAL(loadPythonScript(const QString &)), console_, SLOT(loadScript(const QString &)));

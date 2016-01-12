@@ -56,6 +56,7 @@ public slots:
   void loadOTStudy();
 signals:
   void showWindow(QMdiSubWindow*);
+  void errorMessageEmitted(QString);
   void itemSelected(QStandardItem *);
   void checkIfWindowResultExists(ObserverItem *);
   void loadPythonScript(const QString & fileName);
