@@ -129,8 +129,6 @@ void PhysicalModelWindow::buildInterface()
   QVBoxLayout * outputsLayout = new QVBoxLayout(outputsBox);
 
   outputTableView_ = new QTableView;
-  if(physicalModel_.getImplementation()->getClassName() != "AnalyticalPhysicalModel")
-    outputTableView_->hideColumn(2);
   outputTableView_->setEditTriggers(QTableView::AllEditTriggers);
   outputsLayout->addWidget(outputTableView_);
 
