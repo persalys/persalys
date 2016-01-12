@@ -305,10 +305,18 @@ void PhysicalModelWindow::removeOutputLine()
 
 void PhysicalModelWindow::evaluateOutputs()
 {
-  ModelEvaluation eval("anEval", physicalModel_);
-  eval.run();
-  NumericalSample outputSample(eval.getResult().getOutputSample());
-  for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++ i)
-    physicalModel_.setOutputValue(physicalModel_.getOutputNames()[i], outputSample[0][i]);
+  try {
+    ModelEvaluation eval("anEval", physicalModel_);
+    eval.run();
+    NumericalSample outputSample(eval.getResult().getOutputSample());
+    for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++ i)
+    {
+      physicalModel_.setOutputValue(physicalModel_.getOutputNames()[i], outputSample[0][i]);
+    }
+    setErrorMessage("");
+  } catch (Exception & ex) {
+    setErrorMessage(ex.what());
+  }
 }
+
 }
