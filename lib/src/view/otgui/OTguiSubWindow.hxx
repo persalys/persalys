@@ -16,8 +16,16 @@ public:
 
   QStandardItem * getItem()const;
 
+  QString getErrorMessage() const;
+  void setErrorMessage(QString message);
+
+public slots:
+signals:
+  void errorMessageChanged(QString);
+
 private:
   QStandardItem * item_;
+  QString errorMessage_;
 };
 }
 #endif

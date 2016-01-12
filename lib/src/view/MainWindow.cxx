@@ -132,6 +132,7 @@ void MainWindow::showSubWindow(QStandardItem * item)
     {
       win->widget()->showMaximized();
       mdiArea_->setActiveSubWindow(win);
+      statusBar_->showErrorMessage(win->getErrorMessage());
     }
   }
 }

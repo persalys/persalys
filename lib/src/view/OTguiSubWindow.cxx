@@ -15,4 +15,17 @@ QStandardItem * OTguiSubWindow::getItem()const
 {
   return item_;
 }
+
+
+QString OTguiSubWindow::getErrorMessage() const
+{
+  return errorMessage_;
+}
+
+
+void OTguiSubWindow::setErrorMessage(QString message)
+{
+  errorMessage_ = message;
+  emit errorMessageChanged(message);
+}
 }

@@ -242,6 +242,7 @@ void StudyTreeView::createNewLimitState()
 void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 {
   PhysicalModelWindow * window = new PhysicalModelWindow(item);
+  connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
   emit showWindow(window);
   setCurrentIndex(item->index());
   setExpanded(item->index(), true);
@@ -251,6 +252,7 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 void StudyTreeView::createNewProbabilisticModelWindow(ProbabilisticModelItem * item)
 {
   ProbabilisticModelWindow * window = new ProbabilisticModelWindow(item);
+  connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
   emit showWindow(window);
   setCurrentIndex(item->index());
 }
@@ -267,6 +269,7 @@ void StudyTreeView::createNewLimitStateWindow(LimitStateItem* item)
 void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentItem * item)
 {
   DesignOfExperimentWindow * window = new DesignOfExperimentWindow(item);
+  connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
   connect(window, SIGNAL(graphWindowActivated(QTabWidget*)), this, SIGNAL(graphWindowActivated(QTabWidget*)));
   connect(window, SIGNAL(graphWindowDeactivated(QTabWidget*)), this, SIGNAL(graphWindowDeactivated(QTabWidget*)));
   emit showWindow(window);
