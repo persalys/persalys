@@ -23,9 +23,6 @@ QWidget *CodeDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem
   font.setPointSize(9);
   font.setFixedPitch(true);
   textEdit->setFont(font);
-  
-//   editor->addItems(items_);
-//   connect(editor, SIGNAL(activated(QString)), this, SLOT(emitCommitData()));
   return textEdit;
 }
 
@@ -44,17 +41,6 @@ void CodeDelegate::setModelData(QWidget * editor, QAbstractItemModel * model, co
 }
 
 
-// void CodeDelegate::updateEditorGeometry(QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex & index) const
-// {
-//   editor->setGeometry(option.rect);
-// }
-
-
-// void CodeDelegate::emitCommitData()
-// {
-//   emit closeEditor(qobject_cast<QWidget *>(sender()));
-// }
-
 void CodeDelegate::paint(QPainter *painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
   QVariant value = index.data(Qt::DisplayRole);
@@ -71,12 +57,8 @@ void CodeDelegate::paint(QPainter *painter, const QStyleOptionViewItem & option,
     document.setDefaultFont(font);
     document.setDocumentMargin(2);
     document.setPlainText(value.toString());
-    
     painter->translate(option.rect.topLeft());
-//     QTextEdit * textEdit = dynamic_cast<QTextEdit*>(createEditor(0, option, index));
-//     textEdit->setPlainText(index.model()->data(index, Qt::DisplayRole).toString());
     document.drawContents(painter);
-    
     painter->translate(-option.rect.topLeft());
   }
 }
