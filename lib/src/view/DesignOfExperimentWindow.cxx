@@ -54,17 +54,21 @@ void DesignOfExperimentWindow::buildInterface()
 
 void DesignOfExperimentWindow::evaluateOutputs()
 {
-  designOfExperiment_.eval();
+  try {
+    designOfExperiment_.eval();
+  } catch (Exception & ex) {
+    setErrorMessage(ex.what());
+  }
 
-  if (!designOfExperiment_.getOutputSample().getSize())
-    throw;
-
-  NumericalSample sample = designOfExperiment_.getInputSample();
-  sample.stack(designOfExperiment_.getOutputSample());
-  OTguiTableModel * model = new OTguiTableModel(sample);
-  tableView_->setModel(model);
-  addTabsForOutputs();
-  evaluateButton_->setEnabled(false);
+  if (designOfExperiment_.getOutputSample().getSize() > 0)
+  {
+    NumericalSample sample = designOfExperiment_.getInputSample();
+    sample.stack(designOfExperiment_.getOutputSample());
+    OTguiTableModel * model = new OTguiTableModel(sample);
+    tableView_->setModel(model);
+    addTabsForOutputs();
+    evaluateButton_->setEnabled(false);
+  }
 }
 
 
