@@ -1,5 +1,3 @@
-ot_install_header_file ( ComboBoxDelegate.hxx )
-ot_install_header_file ( SpinBoxDelegate.hxx )
 ot_install_header_file ( OTguiTableModel.hxx )
 ot_install_header_file ( InputTableModel.hxx )
 ot_install_header_file ( InputTableProbabilisticModel.hxx )

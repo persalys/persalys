@@ -8,6 +8,8 @@ ot_add_source_file ( MainWindow.cxx )
 ot_add_source_file ( OTguiToolBar.cxx )
 ot_add_source_file ( OTguiMenuBar.cxx )
 ot_add_source_file ( OTguiSubWindow.cxx )
+ot_add_source_file ( ComboBoxDelegate.cxx )
+ot_add_source_file ( SpinBoxDelegate.cxx )
 ot_add_source_file ( ImportTablePage.cxx )
 ot_add_source_file ( HorizontalHeaderViewWithCombobox.cxx )
 ot_add_source_file ( DeterministicDesignPage.cxx )
@@ -38,6 +40,8 @@ qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                    otgui/OTguiToolBar.hxx
                                    otgui/OTguiMenuBar.hxx
                                    otgui/OTguiSubWindow.hxx
+                                   otgui/ComboBoxDelegate.hxx
+                                   otgui/SpinBoxDelegate.hxx
                                    otgui/ImportTablePage.hxx
                                    otgui/StudyTreeView.hxx
                                    otgui/OTguiTableView.hxx
