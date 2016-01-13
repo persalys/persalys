@@ -120,6 +120,7 @@ void PhysicalModelWindow::buildInterface()
   connect(removeInputLineButton_, SIGNAL(clicked(bool)), this, SLOT(removeInputLine()));
 
   QHBoxLayout * buttonsLayout = new QHBoxLayout;
+  buttonsLayout->addStretch();
   buttonsLayout->addWidget(addInputLineButton_);
   buttonsLayout->addWidget(removeInputLineButton_);
   inputsLayout->addLayout(buttonsLayout);
@@ -147,6 +148,7 @@ void PhysicalModelWindow::buildInterface()
   connect(evaluateOutputsButton_, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
 
   buttonsLayout = new QHBoxLayout;
+  buttonsLayout->addStretch();
   buttonsLayout->addWidget(addOutputLineButton_);
   buttonsLayout->addWidget(removeOutputLineButton_);
   buttonsLayout->addWidget(evaluateOutputsButton_);
@@ -192,6 +194,7 @@ void PhysicalModelWindow::loadXML()
 #endif
 }
 
+
 void PhysicalModelWindow::updateCodeModel()
 {
   if (codeModel_)
@@ -199,6 +202,7 @@ void PhysicalModelWindow::updateCodeModel()
   codeModel_ = new CodeModel(physicalModel_);
   codeView_->setModel(codeModel_);
 }
+
 
 void PhysicalModelWindow::updateInputTableModel()
 {
@@ -240,13 +244,13 @@ void PhysicalModelWindow::updateMethodWidgets(int method)
 #ifdef OTGUI_HAVE_YACS
   loadXMLFileBox_->setVisible(method==2);
 #endif
-
-  outputTableView_->setColumnHidden(2, method!=0);
   pythonDefinitionBox_->setVisible(method==1);
 
   updateInputTableModel();
   updateOutputTableModel();
   updateCodeModel();
+
+  outputTableView_->setColumnHidden(2, method!=0);
 }
 
 
@@ -296,16 +300,14 @@ void PhysicalModelWindow::removeInputLine()
 void PhysicalModelWindow::removeOutputLine()
 {
   if (outputTableView_->selectionModel()->hasSelection())
-  {
-    QModelIndex index = outputTableView_->selectionModel()->currentIndex();
-    outputTableModel_->removeLine(index);
-  }
+    outputTableModel_->removeLine(outputTableView_->selectionModel()->currentIndex());
 }
 
 
 void PhysicalModelWindow::evaluateOutputs()
 {
-  try {
+  try
+  {
     ModelEvaluation eval("anEval", physicalModel_);
     eval.run();
     NumericalSample outputSample(eval.getResult().getOutputSample());
@@ -314,9 +316,10 @@ void PhysicalModelWindow::evaluateOutputs()
       physicalModel_.setOutputValue(physicalModel_.getOutputNames()[i], outputSample[0][i]);
     }
     setErrorMessage("");
-  } catch (Exception & ex) {
+  }
+  catch (Exception & ex)
+  {
     setErrorMessage(ex.what());
   }
 }
-
 }
