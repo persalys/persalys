@@ -1,7 +1,36 @@
-unamed = otguibase.AnalyticalPhysicalModel('unamed')
-
-unamed = otguibase.PythonPhysicalModel('unamed')
-unamed.setCode('def _exec(X):
-    Y0 = X[0]
-    return [Y0]')
+[0.0597305]
+[0.0597305]
+study1 = otguibase.OTStudy('study1')
+dist_Q = ot.Normal(10200, 100)
+Q = otguibase.Input('Q', 0, 'Primary energy', dist_Q)
+dist_E = ot.Normal(3000, 15)
+E = otguibase.Input('E', 0, 'Produced electric energy', dist_E)
+dist_C = ot.Normal(4000, 60)
+C = otguibase.Input('C', 0, 'Valued thermal energy', dist_C)
+Ep = otguibase.Output('Ep', 0, 'Primary energy savings', '1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))')
+analyticalModel1 = otguibase.AnalyticalPhysicalModel('analyticalModel1')
+analyticalModel1.addInput(Q)
+analyticalModel1.addInput(E)
+analyticalModel1.addInput(C)
+analyticalModel1.addOutput(Ep)
+study1.addPhysicalModel(analyticalModel1)
+dist_Q = ot.Normal(10200, 100)
+Q = otguibase.Input('Q', 0, 'Primary energy', dist_Q)
+dist_E = ot.Normal(3000, 15)
+E = otguibase.Input('E', 0, 'Produced electric energy', dist_E)
+dist_C = ot.Normal(4000, 60)
+C = otguibase.Input('C', 0, 'Valued thermal energy', dist_C)
+Ep = otguibase.Output('Ep', 0, 'Primary energy savings', '1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))')
+pythonModel1 = otguibase.PythonPhysicalModel('pythonModel1')
+pythonModel1.addInput(Q)
+pythonModel1.addInput(E)
+pythonModel1.addInput(C)
+pythonModel1.addOutput(Ep)
+pythonModel1.setCode('def _exec(X):
+    Q = X[0]
+    E = X[1]
+    C = X[2]
+    Ep = 1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))
+    return [Ep]')
+study1.addPhysicalModel(pythonModel1)
 
