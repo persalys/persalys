@@ -38,7 +38,7 @@ void DesignOfExperimentWindow::buildInterface()
   tabLayout->addWidget(tableView_);
 
   QHBoxLayout * layout = new QHBoxLayout;
-  evaluateButton_ = new QPushButton(tr("Evaluate outputs"));
+  evaluateButton_ = new QPushButton(tr("Evaluate"));
   if (designOfExperiment_.getOutputSample().getSize())
     evaluateButton_->setEnabled(false);
   layout->addStretch();

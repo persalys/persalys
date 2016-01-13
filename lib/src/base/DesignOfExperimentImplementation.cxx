@@ -59,10 +59,10 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
   , name_(name)
   , physicalModel_(physicalModel)
   , type_(DesignOfExperimentImplementation::FromFile)
-  , inputNames_(getPhysicalModel().getInputNames())
   , fileName_(fileName)
 {
   setColumns(columns);
+  initializeParameters(physicalModel.getInputs());
 }
 
 DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::string & name,
@@ -73,15 +73,11 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
   , name_(name)
   , physicalModel_(physicalModel)
   , type_(DesignOfExperimentImplementation::FromExperiment)
-  , inputNames_(getPhysicalModel().getInputNames())
-  , lowerBounds_(NumericalPoint(0))
-  , upperBounds_(NumericalPoint(0))
-  , levels_(Indices(0))
-  , deltas_(NumericalPoint(0))
   , fileName_("")
   , columns_(Indices(0))
   , experiment_(experiment)
 {
+  initializeParameters(physicalModel.getInputs());
 }
 
 

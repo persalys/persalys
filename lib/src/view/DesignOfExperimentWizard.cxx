@@ -13,7 +13,7 @@
 
 namespace OTGUI {
 
-IntroPage::IntroPage(bool physicalModelHasStochasticInputs, QWidget *parent)
+IntroPage::IntroPage(const DesignOfExperiment & designOfExperiment, QWidget *parent)
   : QWizardPage(parent)
 {
   setTitle(tr("Introduction"));
@@ -25,15 +25,22 @@ IntroPage::IntroPage(bool physicalModelHasStochasticInputs, QWidget *parent)
 
   methodGroup_ = new QButtonGroup;
   QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Deterministic"));
-  buttonToChooseMethod->setChecked(true);
+  if (designOfExperiment.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
+// TODO   + || designOfExperiment.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::DeterExperiment
+    buttonToChooseMethod->setChecked(true);
   methodGroup_->addButton(buttonToChooseMethod, IntroPage::deterministic);
   methodLayout->addWidget(buttonToChooseMethod);
-//   TODO
+
   buttonToChooseMethod = new QRadioButton(tr("Probabilistic"));
-  buttonToChooseMethod->setEnabled(physicalModelHasStochasticInputs);
+  buttonToChooseMethod->setEnabled(designOfExperiment.getPhysicalModel().hasStochasticInputs());
+//   TODO
+//   if (designOfExperiment.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::ProbaExperiment)
+//     buttonToChooseMethod->setChecked(true);
   methodGroup_->addButton(buttonToChooseMethod, IntroPage::probabilistic);
   methodLayout->addWidget(buttonToChooseMethod);
   buttonToChooseMethod = new QRadioButton(tr("Import data"));
+  if (designOfExperiment.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromFile)
+    buttonToChooseMethod->setChecked(true);
   methodGroup_->addButton(buttonToChooseMethod, IntroPage::import);
   methodLayout->addWidget(buttonToChooseMethod);
 
@@ -86,7 +93,7 @@ void DesignOfExperimentWizard::buildInterface()
 {
   setWindowTitle("Design Of Experiment");
 
-  introPage_ = new IntroPage(designOfExperiment_.getPhysicalModel().hasStochasticInputs());
+  introPage_ = new IntroPage(designOfExperiment_);
   setPage(Page_Intro, introPage_);
   setPage(Page_Deterministic, new DeterministicDesignPage(designOfExperiment_));
   setPage(Page_Probabilistic, new ProbabilisticDesignPage(designOfExperiment_));

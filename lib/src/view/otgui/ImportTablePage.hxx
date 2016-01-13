@@ -21,6 +21,7 @@ public:
 
 protected:
   void buildInterface();
+  void loadFile();
 
 public slots:
   void openFileRequested();

@@ -37,6 +37,7 @@ void ImportTablePage::buildInterface()
   hboxLayout->addWidget(label);
 
   filePathLineEdit_ = new QLineEdit;
+  filePathLineEdit_->setText(designOfExperiment_.getFileName().c_str());
   hboxLayout->addWidget(filePathLineEdit_);
 
   QPushButton * openFileButton = new QPushButton(tr("Open"));
@@ -52,8 +53,71 @@ void ImportTablePage::buildInterface()
 
   dataPreviewTableView_ = new OTguiTableView(groupBox);
   gridLayout->addWidget(dataPreviewTableView_, 0, 0, 1, 1);
+  if (designOfExperiment_.getFileName().size() != 0)
+  {
+    try
+    {
+      loadFile();
+      pageValidity_ = true;
+    }
+    catch (std::exception & ex)
+    {
+//       TODO set an error message
+      pageValidity_ = false;
+    }
+  }
   
   mainGridLayout->addWidget(groupBox, 1, 0, 1, 1);
+}
+
+
+void ImportTablePage::loadFile()
+{
+  std::vector< std::string > separatorsList(3);
+  separatorsList[0] = " ";
+  separatorsList[1] = ",";
+  separatorsList[2] = ";";
+  NumericalSample sampleFromFile;
+  for (UnsignedInteger i=0; i<separatorsList.size(); ++i)
+  {
+    // import sample from the file
+    sampleFromFile = NumericalSample::ImportFromTextFile(designOfExperiment_.getFileName(), separatorsList[i]);
+    if (sampleFromFile.getSize())
+      break;
+  }
+  if (!sampleFromFile.getSize())
+    throw InvalidArgumentException(HERE) << "In DesignOfExperimentImplementation: impossible to load sample";
+
+  if (!designOfExperiment_.getColumns().check(sampleFromFile.getDimension()))
+    throw InvalidArgumentException(HERE) << "In DesignOfExperimentImplementation: impossible to load sample marginals";
+
+  Description desc = Description(sampleFromFile.getDimension());
+  Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
+  Indices columns(designOfExperiment_.getColumns());
+  if (!columns.getSize())
+  {
+    columns = Indices(inputNames.getSize());
+    columns.fill();
+  }
+    
+  for (UnsignedInteger i=0; i<columns.getSize(); ++i)
+    desc[columns[i]] = inputNames[i];
+  sampleFromFile.setDescription(desc);
+
+  dataPreviewTableView_->setModel(new OTguiTableModel(sampleFromFile));
+  connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this, SLOT(columnChanged(Qt::Orientation,int,int)));
+
+  QStringList comboBoxItems;
+  for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
+    comboBoxItems << inputNames[i].c_str();
+  comboBoxItems << "";
+
+  QVector<int> columnsWithCombo(dataPreviewTableView_->model()->columnCount());
+  for (int i=0; i<columnsWithCombo.size(); ++i)
+    columnsWithCombo[i] = i;
+  HorizontalHeaderViewWithCombobox * header = new HorizontalHeaderViewWithCombobox(comboBoxItems, columnsWithCombo, dataPreviewTableView_);
+  dataPreviewTableView_->setHorizontalHeader(header);
+  dataPreviewTableView_->horizontalHeader()->show();
 }
 
 
@@ -69,44 +133,12 @@ void ImportTablePage::openFileRequested()
     try
     {
       designOfExperiment_.setFileName(filePathLineEdit_->text().toStdString());
-      std::vector< std::string > separatorsList(3);
-      separatorsList[0] = " ";
-      separatorsList[1] = ",";
-      separatorsList[2] = ";";
-      NumericalSample sample;
-      for (int i=0; i<3; ++i)
-      {
-        // import sample from the file
-        sample = NumericalSample::ImportFromTextFile(fileName.toStdString(), separatorsList[i]);
-        if (sample.getSize())
-          break;
-      }
-      if (!sample.getSize())
-        throw;
-      Description desc = Description(sample.getDimension());
-      Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
-      for (int i=0; i<designOfExperiment_.getColumns().getSize(); ++i)
-        desc[designOfExperiment_.getColumns()[i]] = inputNames[i];
-      sample.setDescription(desc);
-      dataPreviewTableView_->setModel(new OTguiTableModel(sample));
-      connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this, SLOT(columnChanged(Qt::Orientation,int,int)));
-
-      QStringList comboBoxItems;
-      for (int i=0; i<inputNames.getSize(); ++i)
-        comboBoxItems << inputNames[i].c_str();
-      comboBoxItems << "";
-
-      QVector<int> columns(dataPreviewTableView_->model()->columnCount());
-      for (int i=0; i<columns.size(); ++i)
-        columns[i] = i;
-      HorizontalHeaderViewWithCombobox * header = new HorizontalHeaderViewWithCombobox(comboBoxItems, columns, dataPreviewTableView_);
-      dataPreviewTableView_->setHorizontalHeader(header);
-      dataPreviewTableView_->horizontalHeader()->show();
-
+      loadFile();
       pageValidity_ = true;
     }
-    catch (...)
+    catch (std::exception & ex)
     {
+//       TODO set an error message
       pageValidity_ = false;
     }
   }
@@ -116,14 +148,24 @@ void ImportTablePage::openFileRequested()
 void ImportTablePage::columnChanged(Qt::Orientation, int, int)
 {
   Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
+  // test the unicity of each variable
   Indices columns;
-  for (int i=0; i<inputNames.getSize(); ++i)
+  for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
     for (int j=0; j<dataPreviewTableView_->model()->columnCount(); ++j)
       if (inputNames[i] == dataPreviewTableView_->model()->headerData(j, Qt::Horizontal).toString().toStdString())
       {
         columns.add(j);
         break;
       }
+  // test the presence of all variables
+  Indices columns2;
+  for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
+    for (int j=0; j<dataPreviewTableView_->model()->columnCount(); ++j)
+      if (inputNames[i] == dataPreviewTableView_->model()->headerData(j, Qt::Horizontal).toString().toStdString())
+        columns2.add(j);
+
+  if (columns != columns2)
+    pageValidity_ = false;
 
   try
   {
