@@ -408,9 +408,6 @@ std::string DesignOfExperimentImplementation::dump() const
 {
   OSS oss;
 
-  oss << physicalModel_.dump();
-
-
   if (fileName_.size() > 0)
   {
     oss << "columns = ot.Indices([";

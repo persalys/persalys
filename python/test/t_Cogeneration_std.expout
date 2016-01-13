@@ -12,20 +12,11 @@ myPhysicalModel.addInput(E)
 myPhysicalModel.addInput(C)
 myPhysicalModel.addOutput(Ep)
 myStudy.addPhysicalModel(myPhysicalModel)
-infBounds = ot.NumericalPoint(3)
-supBounds = ot.NumericalPoint(3)
-nbValues = ot.Indices(3)
-infBounds[0] = 10035.5
-supBounds[0] = 10364.5
-nbValues[0] = 2
-infBounds[1] = 2975.33
-supBounds[1] = 3024.67
-nbValues[1] = 2
-infBounds[2] = 3901.31
-supBounds[2] = 4098.69
-nbValues[2] = 2
-myParametricAnalysis = otguibase.ParametricAnalysis('myParametricAnalysis', myPhysicalModel, infBounds, supBounds, nbValues)
-myStudy.addAnalysis(myParametricAnalysis)
+lowerBounds = [10035.5, 2975.33, 3901.31]
+upperBounds = [10364.5, 3024.67, 4098.69]
+levels = [2, 2, 2]
+aDesign = otguibase.DesignOfExperiment('aDesign', myPhysicalModel, lowerBounds, upperBounds, levels)
+myStudy.addDesignOfExperiment(aDesign)
 myQuadraticCumul = otguibase.QuadraticCumulAnalysis('myQuadraticCumul', myPhysicalModel)
 myStudy.addAnalysis(myQuadraticCumul)
 myMonteCarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel, 1000)
