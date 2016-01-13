@@ -18,8 +18,6 @@ public:
   explicit PhysicalModelImplementation(const std::string & name);
   PhysicalModelImplementation(const std::string & name, const InputCollection & inputs,
                               const OutputCollection & outputs);
-  PhysicalModelImplementation(const PhysicalModelImplementation & other);
-  PhysicalModelImplementation(const PhysicalModelImplementation * other);
 
   virtual PhysicalModelImplementation * clone() const;
 

@@ -37,34 +37,6 @@ PhysicalModelImplementation::PhysicalModelImplementation(const std::string & nam
 }
 
 
-PhysicalModelImplementation::PhysicalModelImplementation(const PhysicalModelImplementation & other)
-  : PersistentObject()
-  , Observable()
-  , name_(other.name_)
-  , inputs_(other.inputs_)
-  , outputs_(other.outputs_)
-  , inputNames_(other.inputNames_)
-  , stochasticInputNames_(other.stochasticInputNames_)
-  , outputNames_(other.outputNames_)
-  , copula_(other.copula_)
-{
-}
-
-
-PhysicalModelImplementation::PhysicalModelImplementation(const PhysicalModelImplementation * other)
-  : PersistentObject()
-  , Observable()
-  , name_(other->name_)
-  , inputs_(other->inputs_)
-  , outputs_(other->outputs_)
-  , inputNames_(other->inputNames_)
-  , stochasticInputNames_(other->stochasticInputNames_)
-  , outputNames_(other->outputNames_)
-  , copula_(other->copula_)
-{
-}
-
-
 PhysicalModelImplementation* PhysicalModelImplementation::clone() const
 {
   return new PhysicalModelImplementation(*this);
