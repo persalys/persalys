@@ -42,7 +42,6 @@ outputSample = [[0.060036508072],
 
 ## Design of Experiment - Parametric analysis ##
 aDesign = otguibase.DesignOfExperiment('aDesign', myPhysicalModel)
-aDesign.getInputSample()
 myStudy.addDesignOfExperiment(aDesign)
 aDesign.eval()
 openturns.testing.assert_almost_equal(outputSample, aDesign.getOutputSample(), 1e-16)

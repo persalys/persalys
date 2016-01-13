@@ -1,0 +1,38 @@
+outs=     [ Y0      ]
+0 : [ 15.1833 ]
+1 : [ 15.2912 ]
+2 : [ 18.3833 ]
+3 : [ 18.4912 ]
+X0 = otguibase.Input('X0', 1, '')
+X1 = otguibase.Input('X1', 2, '')
+Y0 = otguibase.Output('Y0', 0, '', 'sin(X0)+8*X1')
+aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys')
+aModelPhys.addInput(X0)
+aModelPhys.addInput(X1)
+aModelPhys.addOutput(Y0)
+lowerBounds = [0.9, 1.8]
+upperBounds = [1.1, 2.2]
+levels = [2, 2]
+aDesign = otguibase.DesignOfExperiment('aDesign', aModelPhys, lowerBounds, upperBounds, levels)
+
+outs=     [ Y0        ]
+0 : [  -2.93473 ]
+1 : [   3.73435 ]
+2 : [   6.13775 ]
+3 : [   2.80071 ]
+4 : [ -11.2465  ]
+5 : [  -1.20628 ]
+6 : [   2.05204 ]
+7 : [  -6.42253 ]
+8 : [   3.26745 ]
+9 : [  -5.27323 ]
+X0 = otguibase.Input('X0', 1, '')
+X1 = otguibase.Input('X1', 2, '')
+Y0 = otguibase.Output('Y0', 0, '', 'sin(X0)+8*X1')
+aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys')
+aModelPhys.addInput(X0)
+aModelPhys.addInput(X1)
+aModelPhys.addOutput(Y0)
+columns = ot.Indices([0, 2])
+aDesign = otguibase.DesignOfExperiment('aDesign', aModelPhys, 'normal.csv', columns)
+

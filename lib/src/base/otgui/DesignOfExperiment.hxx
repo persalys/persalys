@@ -49,7 +49,7 @@ public:
   void setDeltas(const OT::NumericalPoint & deltas);
 
   std::string getFileName() const;
-  void setFileName(const std::string & fileName, OT::Indices columns=OT::Indices());
+  void setFileName(const std::string & fileName);
   OT::Indices getColumns() const;
   void setColumns(OT::Indices columns);
 

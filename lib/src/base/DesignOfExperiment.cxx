@@ -167,9 +167,9 @@ std::string DesignOfExperiment::getFileName() const
 }
 
 
-void DesignOfExperiment::setFileName(const std::string & fileName, OT::Indices columns)
+void DesignOfExperiment::setFileName(const std::string & fileName)
 {
-  getImplementation()->setFileName(fileName, columns);
+  getImplementation()->setFileName(fileName);
 }
 
 

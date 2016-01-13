@@ -19,7 +19,7 @@ public:
                      const OT::NumericalPoint & lowerBounds, const OT::NumericalPoint & upperBounds,
                      const OT::Indices & nbValues);
   DesignOfExperimentImplementation(const std::string & name, const PhysicalModel & physicalModel,
-                                   const std::string & fileName, OT::Indices columns);
+                                   const std::string & fileName, const OT::Indices & columns);
   DesignOfExperimentImplementation(const std::string & name, const PhysicalModel & physicalModel,
                                    const OT::Experiment & experiment);
   DesignOfExperimentImplementation(const DesignOfExperimentImplementation & other);
@@ -43,8 +43,8 @@ public:
   OT::NumericalPoint getDeltas() const;
   void setDeltas(const OT::NumericalPoint & deltas);
 
+  void setFileName(const std::string & fileName);
   std::string getFileName() const;
-  void setFileName(const std::string & fileName, OT::Indices columns);
   OT::Indices getColumns() const;
   void setColumns(OT::Indices columns);
 
@@ -63,14 +63,12 @@ public:
 
 protected:
   void initializeParameters(const InputCollection & inputs);
-  void importSampleFromFile(const std::string & fileName);
 
 private:
   std::string name_;
   PhysicalModel physicalModel_;
   Type type_;
   OT::NumericalSample inputSample_;
-  OT::NumericalSample sampleFromFile_;
   OT::Description inputNames_;
   OT::NumericalPoint lowerBounds_;
   OT::NumericalPoint upperBounds_;

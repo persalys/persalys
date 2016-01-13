@@ -53,22 +53,17 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
 DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::string & name,
                                                                    const PhysicalModel & physicalModel,
                                                                    const std::string & fileName,
-                                                                   OT::Indices columns)
+                                                                   const OT::Indices & columns)
   : PersistentObject()
   , Observable()
   , name_(name)
   , physicalModel_(physicalModel)
   , type_(DesignOfExperimentImplementation::FromFile)
   , inputNames_(getPhysicalModel().getInputNames())
-  , lowerBounds_(NumericalPoint(0))
-  , upperBounds_(NumericalPoint(0))
-  , levels_(Indices(0))
-  , deltas_(NumericalPoint(0))
-  , experiment_(Experiment())
+  , fileName_(fileName)
 {
-  setFileName(fileName, columns);
+  setColumns(columns);
 }
-
 
 DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::string & name,
                                                                    const PhysicalModel & physicalModel,
@@ -177,7 +172,7 @@ void DesignOfExperimentImplementation::updateParameters()
 
   initializeParameters(getPhysicalModel().getInputs());
 
-  for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
   {
     const Description::const_iterator it = std::find(inputNames.begin(), inputNames.end(), inputNames_[i]);
     if (it != inputNames.end())
@@ -288,58 +283,15 @@ void DesignOfExperimentImplementation::setDeltas(const NumericalPoint & deltas)
 }
 
 
-std::string DesignOfExperimentImplementation::getFileName() const
+void DesignOfExperimentImplementation::setFileName(const std::string & fileName)
 {
-  return fileName_;
-}
-
-
-void DesignOfExperimentImplementation::setFileName(const std::string & fileName, OT::Indices columns)
-{
-  try
-  {
-    importSampleFromFile(fileName);
-
-    // check columns list
-    if (!columns.getSize())
-    {
-      columns = Indices(physicalModel_.getInputs().getSize());
-      columns.fill();
-    }
-    setColumns(columns);
-
-    // try to fill inputSample_
-    // TODO: put it in getInputSample
-    inputSample_ = sampleFromFile_.getMarginal(columns_);
-    inputSample_.setDescription(inputNames_);
-  }
-  catch(std::exception & ex)
-  {
-    std::cerr<<"Impossible to create a design of experiment from the file "<<fileName<<std::endl;
-    throw &ex;
-  }
-
-  // set fileName_
   fileName_ = fileName;
 }
 
 
-void DesignOfExperimentImplementation::importSampleFromFile(const std::string & fileName)
+std::string DesignOfExperimentImplementation::getFileName() const
 {
-  std::vector< std::string > separatorsList(3);
-  separatorsList[0] = " ";
-  separatorsList[1] = ",";
-  separatorsList[2] = ";";
-  sampleFromFile_.clear();
-  for (int i=0; i<3; ++i)
-  {
-    // import sample from the file
-    sampleFromFile_ = NumericalSample::ImportFromTextFile(fileName, separatorsList[i]);
-    if (sampleFromFile_.getSize())
-      break;
-  }
-  if (!sampleFromFile_.getSize())
-    throw InvalidArgumentException(HERE) << "In DesignOfExperimentImplementation: impossible to load sample\n";
+  return fileName_;
 }
 
 
@@ -359,16 +311,7 @@ void DesignOfExperimentImplementation::setColumns(Indices columns)
     throw InvalidArgumentException(HERE) << oss.str();
   }
 
-  std::set<UnsignedInteger> columnsSet;
-  for (UnsignedInteger i=0; i<columns.getSize(); ++i)
-    columnsSet.insert(columns[i]);
-  if (columnsSet.size() != columns.getSize())
-    throw InvalidArgumentException(HERE) << "An input must be associated with only one column.";
-
   columns_ = columns;
-  // TODO: put it in getInputSample
-  inputSample_ = sampleFromFile_.getMarginal(columns_);
-  inputSample_.setDescription(inputNames_);
 }
 
 
@@ -389,30 +332,53 @@ NumericalSample DesignOfExperimentImplementation::getInputSample()
   if (!inputSample_.getSize())
   {
     inputSample_.clear();
-    NumericalPoint scale(0);
-    NumericalPoint transvec(0);
-    NumericalPoint otLevels(0);
-
-    for (UnsignedInteger i=0; i<lowerBounds_.getSize(); ++i)
+    if (fileName_.size() > 0)
     {
-      //TODO: improve this part if a variable is constant
-      double inf = lowerBounds_[i];
-      double sup = upperBounds_[i];
-      scale.add(sup - inf);
-      transvec.add(inf);
-      if (levels_[i]>1)
-        otLevels.add(levels_[i]-2);
-      else
-        otLevels.add(0);
+      std::vector< std::string > separatorsList(3);
+      separatorsList[0] = " ";
+      separatorsList[1] = ",";
+      separatorsList[2] = ";";
+      NumericalSample sampleFromFile;
+      for (UnsignedInteger i = 0; i < separatorsList.size(); ++ i)
+      {
+        // import sample from the file
+        sampleFromFile = NumericalSample::ImportFromTextFile(fileName_, separatorsList[i]);
+        if (sampleFromFile.getSize())
+          break;
+      }
+      if (!sampleFromFile.getSize())
+        throw InvalidArgumentException(HERE) << "In DesignOfExperimentImplementation: impossible to load sample";
+      if (!columns_.check(sampleFromFile.getDimension()))
+        throw InvalidArgumentException(HERE) << "In DesignOfExperimentImplementation: impossible to load sample marginals";
+      inputSample_ = sampleFromFile.getMarginal(columns_);
     }
-
-    if (otLevels.getSize())
+    else
     {
-      Box box = Box(otLevels);
+      NumericalPoint scale(0);
+      NumericalPoint transvec(0);
+      NumericalPoint otLevels(0);
 
-      inputSample_ = box.generate();
-      inputSample_*=scale;
-      inputSample_+=transvec;
+      for (UnsignedInteger i=0; i<lowerBounds_.getSize(); ++i)
+      {
+        //TODO: improve this part if a variable is constant
+        double inf = lowerBounds_[i];
+        double sup = upperBounds_[i];
+        scale.add(sup - inf);
+        transvec.add(inf);
+        if (levels_[i]>1)
+          otLevels.add(levels_[i]-2);
+        else
+          otLevels.add(0);
+      }
+
+      if (otLevels.getSize())
+      {
+        Box box = Box(otLevels);
+
+        inputSample_ = box.generate();
+        inputSample_*=scale;
+        inputSample_+=transvec;
+      }
     }
     inputSample_.setDescription(inputNames_);
   }
@@ -448,6 +414,7 @@ ParametricAnalysisResult DesignOfExperimentImplementation::getResult() const
 
 void DesignOfExperimentImplementation::eval()
 {
+  getInputSample();
   outputSample_.clear();
   outputSample_ = physicalModel_.getFunction()(inputSample_);
   result_ = ParametricAnalysisResult(inputSample_, outputSample_);
@@ -460,31 +427,57 @@ std::string DesignOfExperimentImplementation::dump() const
   OSS oss;
 
   oss << physicalModel_.dump();
-  oss << "lowerBounds = [";
-  for (UnsignedInteger i = 0; i < lowerBounds_.getSize(); ++ i)
+
+
+  if (fileName_.size() > 0)
   {
-    oss << lowerBounds_[i];
-    if (i < lowerBounds_.getSize()-1)
-      oss << ", ";
+    oss << "columns = ot.Indices([";
+   for (UnsignedInteger i = 0; i < columns_.getSize(); ++ i)
+    {
+      oss << columns_[i];
+      if (i < columns_.getSize()-1)
+        oss << ", ";
+    }
+    oss << "])\n";
   }
-  oss << "]\n";
-  oss << "upperBounds = [";
-  for (UnsignedInteger i = 0; i < upperBounds_.getSize(); ++ i)
+  else
   {
-    oss << upperBounds_[i];
-    if (i < upperBounds_.getSize()-1)
-      oss << ", ";
+    oss << "lowerBounds = [";
+    for (UnsignedInteger i = 0; i < lowerBounds_.getSize(); ++ i)
+    {
+      oss << lowerBounds_[i];
+      if (i < lowerBounds_.getSize()-1)
+        oss << ", ";
+    }
+    oss << "]\n";
+    oss << "upperBounds = [";
+    for (UnsignedInteger i = 0; i < upperBounds_.getSize(); ++ i)
+    {
+      oss << upperBounds_[i];
+      if (i < upperBounds_.getSize()-1)
+        oss << ", ";
+    }
+    oss << "]\n";
+    oss << "levels = [";
+    for (UnsignedInteger i = 0; i < levels_.getSize(); ++ i)
+    {
+      oss << levels_[i];
+      if (i < levels_.getSize()-1)
+        oss << ", ";
+    }
+    oss << "]\n";
   }
-  oss << "]\n";
-  oss << "levels = [";
-  for (UnsignedInteger i = 0; i < levels_.getSize(); ++ i)
+  oss << getName()+ " = otguibase.DesignOfExperiment('" + getName() + "', "+getPhysicalModel().getName()+", ";
+  if (fileName_.size() > 0)
   {
-    oss << levels_[i];
-    if (i < levels_.getSize()-1)
-      oss << ", ";
+    oss << "'"+fileName_+"', columns)\n";
   }
-  oss << "]\n";
-  oss << getName()+ " = otguibase.DesignOfExperiment('" + getName() + "', "+getPhysicalModel().getName()+", lowerBounds, upperBounds, levels)\n";
+  else
+  {
+    oss << "lowerBounds, upperBounds, levels)\n";
+  }
   return oss.str();
 }
+
+
 }
