@@ -253,6 +253,8 @@ void StudyTreeView::createNewProbabilisticModelWindow(ProbabilisticModelItem * i
 {
   ProbabilisticModelWindow * window = new ProbabilisticModelWindow(item);
   connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
+  connect(window, SIGNAL(graphWindowActivated(QTabWidget*)), this, SIGNAL(graphWindowActivated(QTabWidget*)));
+  connect(window, SIGNAL(graphWindowDeactivated(QTabWidget*)), this, SIGNAL(graphWindowDeactivated(QTabWidget*)));
   emit showWindow(window);
   setCurrentIndex(item->index());
 }

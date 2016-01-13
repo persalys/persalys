@@ -8,6 +8,7 @@
 #include "otgui/PlotWidget.hxx"
 #include "otgui/InputTableProbabilisticModel.hxx"
 #include "otgui/CorrelationTableModel.hxx"
+#include "otgui/GraphConfigurationWidget.hxx"
 
 #include <QGroupBox>
 #include <QVBoxLayout>
@@ -43,6 +44,10 @@ public slots:
   void showHideAdvancedWidgets(bool);
   void truncationParametersChanged();
   void truncationParametersStateChanged();
+  void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+signals:
+  void graphWindowActivated(QTabWidget*);
+  void graphWindowDeactivated(QTabWidget*);
 
 private:
   PhysicalModel physicalModel_;
@@ -53,6 +58,7 @@ private:
   QFrame * rightFrame_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
+  GraphConfigurationWidget * pdf_cdfPlotsConfigurationWidget_;
   QGroupBox * paramEditor_;
   QVBoxLayout * parameterLayout_;
   QLabel * parameterValuesLabel_[5];

@@ -46,16 +46,20 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
     connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
   }
 
-  label = new QLabel(tr("Y-axis"));
-  mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
-  yAxisComboBox_ = new QComboBox;
-  yAxisComboBox_->addItems(outputNames);
-  mainGridLayout->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
-  connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
-  emit currentPlotChanged(currentPlotIndex_);
+  yAxisComboBox_ = 0;
+  if (plotType_ != GraphConfigurationWidget::PDF && plotType_ != GraphConfigurationWidget::CDF)
+  {
+    label = new QLabel(tr("Y-axis"));
+    mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+    yAxisComboBox_ = new QComboBox;
+    yAxisComboBox_->addItems(outputNames);
+    mainGridLayout->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
+    connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
+    emit currentPlotChanged(currentPlotIndex_);
+  }
 
   pdf_cdfGroup_ = 0;
-  if (plotType_ == GraphConfigurationWidget::PDF)
+  if (plotType_ == GraphConfigurationWidget::PDF || plotType_ == GraphConfigurationWidget::PDFResult)
   {
     pdf_cdfGroup_ = new QButtonGroup;
     QRadioButton * buttonToChoosePDForCDF = new QRadioButton(tr("PDF"));
@@ -175,23 +179,29 @@ void GraphConfigurationWidget::updateLineEdits()
 
 void GraphConfigurationWidget::plotChanged()
 {
-  int outputIndex = yAxisComboBox_->currentIndex();
+  int outputIndex = 0;
+  if (yAxisComboBox_)
+    outputIndex = yAxisComboBox_->currentIndex();
+
   if (plotType_ == GraphConfigurationWidget::Scatter)
   {
     int inputIndex = xAxisComboBox_->currentIndex();
     currentPlotIndex_ = outputIndex * xAxisComboBox_->count() + inputIndex;
   }
-  else if (plotType_ == GraphConfigurationWidget::PDF || plotType_ == GraphConfigurationWidget::CDF)
+  else if (plotType_ == GraphConfigurationWidget::PDF || plotType_ == GraphConfigurationWidget::CDF ||
+           plotType_ == GraphConfigurationWidget::PDFResult || plotType_ == GraphConfigurationWidget::CDFResult)
   {
     
     switch (GraphConfigurationWidget::Type(pdf_cdfGroup_->checkedId()))
     {
       case GraphConfigurationWidget::PDF:
+      case GraphConfigurationWidget::PDFResult:
       {
         currentPlotIndex_ = 2 * outputIndex;
         break;
       }
       case GraphConfigurationWidget::CDF:
+      case GraphConfigurationWidget::CDFResult:
       {
         currentPlotIndex_ = 2 * outputIndex + 1;
         break;
@@ -200,6 +210,7 @@ void GraphConfigurationWidget::plotChanged()
   }
   else
     currentPlotIndex_ = outputIndex;
+
   updateLineEdits();
   emit currentPlotChanged(currentPlotIndex_);
 }

@@ -17,7 +17,7 @@ class GraphConfigurationWidget : public QTabWidget
   Q_OBJECT
 
 public:
-  enum Type {NoType, Scatter, PDF, CDF, BoxPlot, SensitivityIndices};
+  enum Type {NoType, Scatter, PDF, CDF, PDFResult, CDFResult, BoxPlot, SensitivityIndices};
 
   GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets, QStringList inputNames, QStringList outputNames, Type plotType);
 

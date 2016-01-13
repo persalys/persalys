@@ -15,6 +15,7 @@
 #include <QHeaderView>
 #include <QScrollArea>
 #include <QPushButton>
+#include <QStackedLayout>
 
 using namespace OT;
 
@@ -28,6 +29,7 @@ ProbabilisticModelWindow::ProbabilisticModelWindow(ProbabilisticModelItem * item
   connect(item, SIGNAL(inputChanged()), this, SLOT(updateProbabilisticModel()));
   connect(item, SIGNAL(physicalModelChanged(const PhysicalModel&)), this, SLOT(updatePhysicalModel(const PhysicalModel&)));
   buildInterface();
+  connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
 }
 
 
@@ -86,12 +88,28 @@ void ProbabilisticModelWindow::buildInterface()
   QVBoxLayout * rightLayout = new QVBoxLayout(rightFrame_);
 
   //  PDF and CDF graphs
-  QGridLayout * plotLayout = new QGridLayout;
+  QStackedLayout * plotLayout = new QStackedLayout;
+
+  QVector<PlotWidget*> listPlotWidgets;
+  QWidget * widget = new QWidget;
+  QVBoxLayout * vBox = new QVBoxLayout(widget);
   pdfPlot_ = new PlotWidget;
-  plotLayout->addWidget(pdfPlot_, 1, 0);
+  pdfPlot_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  vBox->addWidget(pdfPlot_, 0, Qt::AlignHCenter|Qt::AlignTop);
+  plotLayout->addWidget(widget);
+  listPlotWidgets.append(pdfPlot_);
+
+  widget = new QWidget;
+  vBox = new QVBoxLayout(widget);
   cdfPlot_ = new PlotWidget;
-  plotLayout->addWidget(cdfPlot_, 1, 1);
-  
+  cdfPlot_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  vBox->addWidget(cdfPlot_, 0, Qt::AlignHCenter|Qt::AlignTop);
+  plotLayout->addWidget(widget);
+  listPlotWidgets.append(cdfPlot_);
+
+  pdf_cdfPlotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, QStringList(), QStringList(), GraphConfigurationWidget::PDF);
+  connect(pdf_cdfPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
+
   rightLayout->addLayout(plotLayout);
 
   //  parameters
@@ -129,7 +147,6 @@ void ProbabilisticModelWindow::buildInterface()
   advancedGroupLayout->addWidget(advancedWidgets_);
   advancedGroupLayout->addStretch();
   rightLayout->addWidget(advancedGroup_);
-
   rightScrollArea->setWidget(rightFrame_);
   horizontalSplitter->addWidget(rightScrollArea);
 
@@ -369,6 +386,23 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
 
   // update plots
   updatePlots(inputDistribution);
+
+  if (inputTableModel_->rowCount())
+    emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
+  else
+    emit graphWindowDeactivated(pdf_cdfPlotsConfigurationWidget_);
+}
+
+
+void ProbabilisticModelWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
+{
+  if (newState == 4 || newState == 8 || newState == 10)
+  {
+    if (inputTableModel_->rowCount())
+      emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
+  }
+  else if (newState == 0 || newState == 1 || newState == 2 || newState == 9)
+    emit graphWindowDeactivated(pdf_cdfPlotsConfigurationWidget_);
 }
 
 

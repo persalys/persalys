@@ -170,7 +170,7 @@ void MonteCarloResultWindow::buildInterface()
     listPlotWidgets.append(plot);
   }
 
-  pdf_cdfPlotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, QStringList(), outputNames, GraphConfigurationWidget::PDF);
+  pdf_cdfPlotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, QStringList(), outputNames, GraphConfigurationWidget::PDFResult);
   connect(pdf_cdfPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
 
   tabWidget_->addTab(tab, tr("PDF/CDF"));
