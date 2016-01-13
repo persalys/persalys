@@ -451,6 +451,7 @@ void DesignOfExperimentImplementation::eval()
   outputSample_.clear();
   outputSample_ = physicalModel_.getFunction()(inputSample_);
   result_ = ParametricAnalysisResult(inputSample_, outputSample_);
+  notify("analysisFinished");
 }
 
 
@@ -486,6 +487,4 @@ std::string DesignOfExperimentImplementation::dump() const
   oss << getName()+ " = otguibase.DesignOfExperiment('" + getName() + "', "+getPhysicalModel().getName()+", lowerBounds, upperBounds, levels)\n";
   return oss.str();
 }
-
-
 }

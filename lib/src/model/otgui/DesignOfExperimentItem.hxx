@@ -22,6 +22,10 @@ public:
 
   virtual void update(Observable * source, const std::string & message);
 
+public slots:
+signals:
+  void analysisFinished();
+
 private:
   DesignOfExperiment designOfExperiment_;
 };

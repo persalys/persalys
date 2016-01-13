@@ -34,6 +34,9 @@ DesignOfExperiment DesignOfExperimentItem::getDesignOfExperiment() const
 
 void DesignOfExperimentItem::update(Observable* source, const std::string & message)
 {
-//   TODO
+  if (message=="analysisFinished")
+  {
+    emit analysisFinished();
+  }
 }
 }

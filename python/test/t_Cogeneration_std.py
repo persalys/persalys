@@ -24,10 +24,10 @@ myPhysicalModel.addOutput(Ep)
 myStudy.addPhysicalModel(myPhysicalModel)
 
 ## Parametric analysis ##
-analysis = otguibase.ParametricAnalysis('myParametricAnalysis', myPhysicalModel)
-myStudy.addAnalysis(analysis)
-analysis.run()
-analysisResult = analysis.getResult()
+#analysis = otguibase.ParametricAnalysis('myParametricAnalysis', myPhysicalModel)
+#myStudy.addAnalysis(analysis)
+#analysis.run()
+#analysisResult = analysis.getResult()
 outputSample = [[0.060036508072],
 [0.0292238907867],
 [0.0684295269203],
@@ -37,11 +37,13 @@ outputSample = [[0.060036508072],
 [0.0892876773294],
 [0.0594339324804]]
 
-# Comparaison
-openturns.testing.assert_almost_equal(outputSample, analysisResult.getResultSample(), 1e-16)
+## Comparaison
+#openturns.testing.assert_almost_equal(outputSample, analysisResult.getResultSample(), 1e-16)
 
+## Design of Experiment - Parametric analysis ##
 aDesign = otguibase.DesignOfExperiment('aDesign', myPhysicalModel)
 aDesign.getInputSample()
+myStudy.addDesignOfExperiment(aDesign)
 aDesign.eval()
 openturns.testing.assert_almost_equal(outputSample, aDesign.getOutputSample(), 1e-16)
 

@@ -28,12 +28,12 @@ void DesignOfExperimentWindow::buildInterface()
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
-  NumericalSample sample = designOfExperiment_.getInputSample();
-  if (designOfExperiment_.getOutputSample().getSize())
-    sample.stack(designOfExperiment_.getOutputSample());
   tableView_ = new OTguiTableView;
-  OTguiTableModel * model = new OTguiTableModel(sample);
-  tableView_->setModel(model);
+  if (!designOfExperiment_.getOutputSample().getSize())
+  {
+    OTguiTableModel * model = new OTguiTableModel(designOfExperiment_.getInputSample());
+    tableView_->setModel(model);
+  }
 
   tabLayout->addWidget(tableView_);
 
@@ -48,18 +48,27 @@ void DesignOfExperimentWindow::buildInterface()
 
   tabWidget_->addTab(tab, tr("Table"));
 
+  updateWindowForOutputs();
+
   setWidget(tabWidget_);
 }
 
 
 void DesignOfExperimentWindow::evaluateOutputs()
 {
-  try {
+  try
+  {
     designOfExperiment_.eval();
-  } catch (Exception & ex) {
+  }
+  catch (Exception & ex)
+  {
     setErrorMessage(ex.what());
   }
+}
 
+
+void DesignOfExperimentWindow::updateWindowForOutputs()
+{
   if (designOfExperiment_.getOutputSample().getSize() > 0)
   {
     NumericalSample sample = designOfExperiment_.getInputSample();

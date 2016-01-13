@@ -274,6 +274,7 @@ void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentItem * i
   connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
   connect(window, SIGNAL(graphWindowActivated(QTabWidget*)), this, SIGNAL(graphWindowActivated(QTabWidget*)));
   connect(window, SIGNAL(graphWindowDeactivated(QTabWidget*)), this, SIGNAL(graphWindowDeactivated(QTabWidget*)));
+  connect(item, SIGNAL(analysisFinished()), window, SLOT(updateWindowForOutputs()));
   emit showWindow(window);
   setExpanded(item->index().parent(), true);
   setCurrentIndex(item->index());

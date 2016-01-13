@@ -28,6 +28,7 @@ protected:
 
 public slots:
   void evaluateOutputs();
+  void updateWindowForOutputs();
   void updateLabelsText(int indexOutput=0);
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
