@@ -49,9 +49,16 @@ OTStudy::OTStudy(const std::string & name)
 OTStudy::OTStudy(const OTStudy & other)
   : PersistentObject()
   , Observable()
-  , name_(other.name_)
+  , name_(other.name_+"_copy")
 {
   setObserver(other.getObserver());
+  Instances_.push_back(this);
+  if (InstanceObserver_)
+    InstanceObserver_->update(this, "addStudy");
+
+  for (int i=0; i<other.physicalModels_.size(); ++i)
+    addPhysicalModel(*other.physicalModels_[i].getImplementation()->clone());
+  // TODO copy of designOfExperiments_/analyses_/limitStates_
 }
 
 

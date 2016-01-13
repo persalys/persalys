@@ -17,7 +17,6 @@ public:
   static void SetInstanceObserver(Observer * observer);
 
   OTStudy(const std::string & name);
-  OTStudy(const OTStudy & other);
   virtual OTStudy * clone() const;
 
   virtual ~OTStudy();
@@ -46,6 +45,7 @@ public:
   std::string dump();
 
 private:
+  OTStudy(const OTStudy & other);
   static std::vector<OTStudy*> Instances_;
   static Observer * InstanceObserver_;
   std::string name_;
