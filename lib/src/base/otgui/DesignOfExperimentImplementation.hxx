@@ -22,7 +22,6 @@ public:
                                    const std::string & fileName, const OT::Indices & columns);
   DesignOfExperimentImplementation(const std::string & name, const PhysicalModel & physicalModel,
                                    const OT::Experiment & experiment);
-  DesignOfExperimentImplementation(const DesignOfExperimentImplementation & other);
   virtual DesignOfExperimentImplementation * clone() const;
 
   std::string getName() const;

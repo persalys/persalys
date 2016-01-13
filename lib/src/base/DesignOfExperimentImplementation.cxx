@@ -85,24 +85,6 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
 }
 
 
-DesignOfExperimentImplementation::DesignOfExperimentImplementation(const DesignOfExperimentImplementation & other)
-  : PersistentObject()
-  , Observable()
-  , name_(other.name_)
-  , physicalModel_(other.physicalModel_)
-  , type_(other.type_)
-  , inputNames_(other.inputNames_)
-  , lowerBounds_(other.lowerBounds_)
-  , upperBounds_(other.upperBounds_)
-  , levels_(other.levels_)
-  , deltas_(other.deltas_)
-  , fileName_(other.fileName_)
-  , columns_(other.columns_)
-  , experiment_(other.experiment_)
-{
-}
-
-
 DesignOfExperimentImplementation * DesignOfExperimentImplementation::clone() const
 {
   return new DesignOfExperimentImplementation(*this);
