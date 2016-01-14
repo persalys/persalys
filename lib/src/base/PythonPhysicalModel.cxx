@@ -108,7 +108,7 @@ std::string PythonPhysicalModel::dump() const
   while(std::getline(ss,to,'\n')){
     result += to+"\\n";
   }
-  result += "'\n";
+  result += "')\n";
   return result;
 }
 
