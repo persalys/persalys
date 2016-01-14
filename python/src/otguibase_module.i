@@ -67,6 +67,7 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 %include Output.i
 %include PhysicalModelImplementation.i
 %include AnalyticalPhysicalModel.i
+%include PythonPhysicalModel.i
 %include PhysicalModel.i
 #ifdef OTGUI_HAVE_YACS
 %include YACSPhysicalModel.i
