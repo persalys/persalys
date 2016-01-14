@@ -1,3 +1,12 @@
-ipython nbconvert otgui_alpha.ipynb --to slides --post serve
+#Pour avoir une version récente de ipython notebook:
+-Installer pip:
+sudo aptitude install python-pip
 
+-puis les paquets:
+pip install ipython nbconvert nbformat jupyter --user
 
+#Editer le fichier:
+~/.local/bin/ipython notebook otgui_alpha.ipynb
+
+#Convertir le fichier en html:
+~/.local/bin/ipython nbconvert otgui_alpha.ipynb --to slides --post serve
