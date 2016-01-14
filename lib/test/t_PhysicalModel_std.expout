@@ -26,11 +26,6 @@ pythonModel1.addInput(Q)
 pythonModel1.addInput(E)
 pythonModel1.addInput(C)
 pythonModel1.addOutput(Ep)
-pythonModel1.setCode('def _exec(X):
-    Q = X[0]
-    E = X[1]
-    C = X[2]
-    Ep = 1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))
-    return [Ep]')
+pythonModel1.setCode('def _exec(X):\n    Q = X[0]\n    E = X[1]\n    C = X[2]\n    Ep = 1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))\n    return [Ep]\n'
 study1.addPhysicalModel(pythonModel1)
 

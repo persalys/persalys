@@ -101,7 +101,14 @@ std::string PythonPhysicalModel::dump() const
   for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++ i)
     result += getName()+ ".addOutput(" + getOutputs()[i].getName() + ")\n";
 
-  result += getName()+ ".setCode('"+getCode()+ "')\n";
+  result += getName()+ ".setCode('";
+  std::stringstream ss(getCode());
+  std::string to;
+
+  while(std::getline(ss,to,'\n')){
+    result += to+"\\n";
+  }
+  result += "'\n";
   return result;
 }
 
