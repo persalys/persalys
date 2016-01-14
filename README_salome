@@ -8,8 +8,6 @@ PREREQUISITES_ROOT_DIR=${PREREQUISITES_ROOT_DIR}
 sed -e '/atlas-base/s/^/#/g' -i ${ROOT_SALOME_MECA}/appli_V2015_1/env.d/envProducts.cfg ${ROOT_SALOME}/salome_context.cfg
 vim ${ROOT_SALOME}/salome_prerequisites.sh ${ROOT_SALOME_MECA}/appli_V2015_1/env.d/envProducts.sh
 
-
-
 source ${ROOT_SALOME_MECA}/appli_V2015_1/env.d/envProducts.sh
 cd ${ROOT_SALOME}
 tar xzf ~/Téléchargements/KERNEL_GUI_YACS.tar.gz
@@ -32,6 +30,11 @@ cmake -DCMAKE_BUILD_TYPE=Debug \
 make install
 # missing file ?
 cp ${ROOT_SALOME}/modules/KERNEL_V7_5_1/lib/python2.7/site-packages/salome/SALOME_SDS_idl.py ${ROOT_SALOME_MECA}/appli_V2015_1/lib/python2.7/site-packages/salome/
+
+
+install libx11-dev for X11/Xlib.h
+install mesa-common-dev for GL/glx.h
+install libxmu-dev for StdCmap.h
 
 cd ${ROOT_SALOME}/GUI
 mkdir -p build && cd build
