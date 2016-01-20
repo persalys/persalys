@@ -23,10 +23,11 @@ aModelPhys.addInput(X0)
 aModelPhys.addInput(X1)
 aModelPhys.addOutput(Y0)
 anOTStudy.addPhysicalModel(aModelPhys)
+values = [1, 2]
 lowerBounds = [0.9, 1.8]
 upperBounds = [1.1, 2.2]
 levels = [2, 2]
-aDesign = otguibase.DesignOfExperiment('aDesign', aModelPhys, lowerBounds, upperBounds, levels)
+aDesign = otguibase.DesignOfExperiment('aDesign', aModelPhys, lowerBounds, upperBounds, levels, values)
 anOTStudy.addDesignOfExperiment(aDesign)
 columns = ot.Indices([0, 2])
 aDesign2 = otguibase.DesignOfExperiment('aDesign2', aModelPhys, 'normal.csv', columns)

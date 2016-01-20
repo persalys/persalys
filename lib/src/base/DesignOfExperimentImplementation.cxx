@@ -46,9 +46,11 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
   , experiment_(Experiment())
 {
   if (!values_.getSize())
-    for (int i; i<values_.getSize(); ++i)
+  {
+    values_ = NumericalPoint(physicalModel.getInputs().getSize());
+    for (int i; i<physicalModel.getInputs().getSize(); ++i)
       values_[i] = physicalModel.getInputs()[i].getValue();
-
+  }
 //   TODO: check if lowerBounds[i] <= upperBounds[i]
 }
 

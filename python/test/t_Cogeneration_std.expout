@@ -12,10 +12,11 @@ myPhysicalModel.addInput(E)
 myPhysicalModel.addInput(C)
 myPhysicalModel.addOutput(Ep)
 myStudy.addPhysicalModel(myPhysicalModel)
+values = [0, 0, 0]
 lowerBounds = [10035.5, 2975.33, 3901.31]
 upperBounds = [10364.5, 3024.67, 4098.69]
 levels = [2, 2, 2]
-aDesign = otguibase.DesignOfExperiment('aDesign', myPhysicalModel, lowerBounds, upperBounds, levels)
+aDesign = otguibase.DesignOfExperiment('aDesign', myPhysicalModel, lowerBounds, upperBounds, levels, values)
 myStudy.addDesignOfExperiment(aDesign)
 myQuadraticCumul = otguibase.QuadraticCumulAnalysis('myQuadraticCumul', myPhysicalModel)
 myStudy.addAnalysis(myQuadraticCumul)
