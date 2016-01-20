@@ -13,9 +13,6 @@ PhysicalModelImplementation::PhysicalModelImplementation(const std::string & nam
   , name_(name)
   , inputs_(InputCollection(0))
   , outputs_(OutputCollection(0))
-  , inputNames_(Description())
-  , stochasticInputNames_(Description())
-  , outputNames_(Description())
   , copula_(Copula())
 {
 }
@@ -29,9 +26,6 @@ PhysicalModelImplementation::PhysicalModelImplementation(const std::string & nam
   , name_(name)
   , inputs_(inputs)
   , outputs_(outputs)
-  , inputNames_(Description())
-  , stochasticInputNames_(Description())
-  , outputNames_(Description())
   , copula_(Copula())
 {
 }
@@ -78,7 +72,6 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
   if (inputNames.size() != inputs.getSize())
     throw InvalidArgumentException(HERE) << "Two inputs can not have the same name."; 
 
-  inputNames_ = Description();
   inputs_ = inputs;
   notify("inputChanged");
   notify("updateProbabilisticModelWindow");
@@ -108,16 +101,9 @@ void PhysicalModelImplementation::setInputDistribution(const std::string & input
   getInputByName(inputName).setDistribution(distribution);
 
   // update copula if need
-  if (!inputOldStateIsStochastic && distribution.getImplementation()->getClassName()!="Dirac")
-  {
-    stochasticInputNames_ = Description();
+  if ((!inputOldStateIsStochastic && distribution.getImplementation()->getClassName()!="Dirac") ||
+      (inputOldStateIsStochastic && distribution.getImplementation()->getClassName()=="Dirac"))
     updateCopula();
-  }
-  else if (inputOldStateIsStochastic && distribution.getImplementation()->getClassName()=="Dirac")
-  {
-    stochasticInputNames_ = Description();
-    updateCopula();
-  }
 
   notify("inputChanged");
   notify("updateProbabilisticModelWindow");
@@ -130,13 +116,9 @@ void PhysicalModelImplementation::addInput(const Input & input)
     throw InvalidArgumentException(HERE) << "The physical model has already an input named " << input.getName(); 
 
   inputs_.add(input);
-  inputNames_.add(input.getName());
-
   if (input.isStochastic())
-  {
-    stochasticInputNames_.add(input.getName());
     updateCopula();
-  }
+
   notify("inputChanged");
   notify("updateProbabilisticModelWindow");
 }
@@ -150,12 +132,9 @@ void PhysicalModelImplementation::removeInput(const std::string & inputName)
       if (inputs_[i].getName() == inputName)
       {
         inputs_.erase(inputs_.begin() + i);
-        inputNames_.erase(inputNames_.begin() + i);
         if (inputs_[i].isStochastic())
-        {
-          stochasticInputNames_ = Description();
           updateCopula();
-        }
+
         notify("inputChanged");
         notify("updateProbabilisticModelWindow");
         break;
@@ -168,13 +147,14 @@ void PhysicalModelImplementation::removeInput(const std::string & inputName)
 
 void PhysicalModelImplementation::updateCopula()
 {
-  if (!getStochasticInputNames().getSize())
+  Description stochasticInputNames = getStochasticInputNames();
+  if (!stochasticInputNames.getSize())
   {
     copula_ = Copula();
     return;
   }
 
-  CorrelationMatrix newSpearmanCorrelation(getStochasticInputNames().getSize());
+  CorrelationMatrix newSpearmanCorrelation(stochasticInputNames.getSize());
   if (newSpearmanCorrelation.getDimension() > 1)
   {
     Description oldStochasticInputNames(copula_.getDescription());
@@ -184,47 +164,41 @@ void PhysicalModelImplementation::updateCopula()
       for (int col=row+1; col<size; ++col)
         {
           Collection<String>::iterator it1;
-          it1 = std::find(stochasticInputNames_.begin(), stochasticInputNames_.end(), oldStochasticInputNames[row]);
+          it1 = std::find(stochasticInputNames.begin(), stochasticInputNames.end(), oldStochasticInputNames[row]);
           Collection<String>::iterator it2;
-          it2 = std::find(stochasticInputNames_.begin(), stochasticInputNames_.end(), oldStochasticInputNames[col]);
-          if (it1 != stochasticInputNames_.end() &&  it2 != stochasticInputNames_.end())
+          it2 = std::find(stochasticInputNames.begin(), stochasticInputNames.end(), oldStochasticInputNames[col]);
+          if (it1 != stochasticInputNames.end() &&  it2 != stochasticInputNames.end())
           {
-            int newRow = it1 -stochasticInputNames_.begin();
-            int newCol = it2 - stochasticInputNames_.begin();
+            int newRow = it1 - stochasticInputNames.begin();
+            int newCol = it2 - stochasticInputNames.begin();
             newSpearmanCorrelation(newRow, newCol) = oldSpearmanCorrelation(row, col);
-            newSpearmanCorrelation(newCol, newRow) = newSpearmanCorrelation(newRow, newCol);
+            newSpearmanCorrelation(newCol, newRow) = oldSpearmanCorrelation(row, col);
           }
         }
   }
 
   CorrelationMatrix correlationMatrix(NormalCopula::GetCorrelationFromSpearmanCorrelation(newSpearmanCorrelation));
   copula_ = NormalCopula(correlationMatrix);
-  copula_.setDescription(stochasticInputNames_);
+  copula_.setDescription(stochasticInputNames);
 }
 
 
 Description PhysicalModelImplementation::getInputNames()
 {
-  if (!inputNames_.getSize())
-  {
-    inputNames_ = Description(inputs_.getSize());
-    for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
-      inputNames_[i] = inputs_[i].getName();
-  }
-  return inputNames_;
+  Description inputNames = Description(inputs_.getSize());
+  for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
+    inputNames[i] = inputs_[i].getName();
+  return inputNames;
 }
 
 
 Description PhysicalModelImplementation::getStochasticInputNames()
 {
-  if (!stochasticInputNames_.getSize())
-  {
-    stochasticInputNames_ = Description();
-    for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
-      if (inputs_[i].isStochastic())
-        stochasticInputNames_.add(inputs_[i].getName());
-  }
-  return stochasticInputNames_;
+  Description stochasticInputNames = Description();
+  for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
+    if (inputs_[i].isStochastic())
+      stochasticInputNames.add(inputs_[i].getName());
+  return stochasticInputNames;
 }
 
 
@@ -267,7 +241,6 @@ void PhysicalModelImplementation::setOutputs(const OutputCollection & outputs)
   if (outputNames.size() != outputs.getSize())
     throw InvalidArgumentException(HERE) << "Two inputs can not have the same name.";
 
-  outputNames_ = Description();
   outputs_ = outputs;
   notify("outputChanged");
   notify("updateLimitStateWindow");
@@ -303,7 +276,6 @@ void PhysicalModelImplementation::addOutput(const Output & output)
     throw InvalidArgumentException(HERE) << "The physical model has already an output named " << output.getName(); 
 
   outputs_.add(output);
-  outputNames_.add(output.getName());
   notify("outputChanged");
   notify("updateLimitStateWindow");
 }
@@ -317,7 +289,6 @@ void PhysicalModelImplementation::removeOutput(const std::string & outputName)
       if (outputs_[i].getName() == outputName)
       {
         outputs_.erase(outputs_.begin() + i);
-        outputNames_.erase(outputNames_.begin() + i);
         notify("outputChanged");
         notify("updateLimitStateWindow");
         break;
@@ -330,13 +301,10 @@ void PhysicalModelImplementation::removeOutput(const std::string & outputName)
 
 Description PhysicalModelImplementation::getOutputNames()
 {
-  if (!outputNames_.getSize())
-  {
-    outputNames_ = Description(outputs_.getSize());
-    for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
-      outputNames_[i] = outputs_[i].getName();
-  }
-  return outputNames_;
+  Description  outputNames = Description(outputs_.getSize());
+  for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
+    outputNames[i] = outputs_[i].getName();
+  return outputNames;
 }
 
 

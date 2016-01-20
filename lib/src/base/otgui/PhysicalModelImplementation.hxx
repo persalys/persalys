@@ -68,9 +68,6 @@ private:
   std::string name_;
   InputCollection inputs_;
   OutputCollection outputs_;
-  OT::Description inputNames_;
-  OT::Description stochasticInputNames_;
-  OT::Description outputNames_;
   OT::Copula copula_;
 };
 }
