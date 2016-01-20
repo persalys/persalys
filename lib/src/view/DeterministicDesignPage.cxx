@@ -46,7 +46,7 @@ void DeterministicDesignPage::buildInterface()
   tableView_->setModel(model);
 
   QStringList items = QStringList()<<tr("Levels")<<tr("Delta");
-  QVector<int> columns(1, 4);
+  QVector<int> columns(1, 6);
   HorizontalHeaderViewWithCombobox * header = new HorizontalHeaderViewWithCombobox(items, columns, tableView_);
   tableView_->setHorizontalHeader(header);
   tableView_->horizontalHeader()->show();

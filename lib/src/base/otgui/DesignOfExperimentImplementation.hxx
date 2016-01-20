@@ -17,7 +17,7 @@ public:
   DesignOfExperimentImplementation(const std::string & name, const PhysicalModel & physicalModel);
   DesignOfExperimentImplementation(const std::string & name, const PhysicalModel & physicalModel,
                      const OT::NumericalPoint & lowerBounds, const OT::NumericalPoint & upperBounds,
-                     const OT::Indices & nbValues);
+                     const OT::Indices & nbValues, const OT::NumericalPoint & values=OT::NumericalPoint(0));
   DesignOfExperimentImplementation(const std::string & name, const PhysicalModel & physicalModel,
                                    const std::string & fileName, const OT::Indices & columns);
   DesignOfExperimentImplementation(const std::string & name, const PhysicalModel & physicalModel,
@@ -33,6 +33,8 @@ public:
   Type getTypeDesignOfExperiment() const;
   int getNumberOfExperiments() const;
 
+  OT::NumericalPoint getValues() const;
+  void setValues(const OT::NumericalPoint & values);
   OT::NumericalPoint getLowerBounds() const;
   void setLowerBounds(const OT::NumericalPoint & lowerBounds);
   OT::NumericalPoint getUpperBounds() const;
@@ -69,6 +71,7 @@ private:
   Type type_;
   OT::NumericalSample inputSample_;
   OT::Description inputNames_;
+  OT::NumericalPoint values_;
   OT::NumericalPoint lowerBounds_;
   OT::NumericalPoint upperBounds_;
   OT::Indices levels_;

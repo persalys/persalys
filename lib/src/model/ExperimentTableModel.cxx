@@ -13,13 +13,30 @@ ExperimentTableModel::ExperimentTableModel(const DesignOfExperiment & designOfEx
 
 int ExperimentTableModel::columnCount(const QModelIndex & parent) const
 {
-  return 5;
+  return 7;
 }
 
 
 int ExperimentTableModel::rowCount(const QModelIndex & parent) const
 {
   return designOfExperiment_.getPhysicalModel().getInputs().getSize();
+}
+
+
+Qt::ItemFlags ExperimentTableModel::flags(const QModelIndex & index) const
+{
+  if (index.column() == 0)
+    return QAbstractTableModel::flags(index) & ~Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
+  else if (index.column() == 3 && designOfExperiment_.getLevels()[index.row()] != 1)
+    return QAbstractTableModel::flags(index) & ~Qt::ItemIsEnabled;
+  else if (index.column() == 3 && designOfExperiment_.getLevels()[index.row()] == 1)
+    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsEnabled;
+  else if (index.column() > 3 && designOfExperiment_.getLevels()[index.row()] != 1)
+    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsEnabled;
+  else if (index.column() > 3 && designOfExperiment_.getLevels()[index.row()] == 1)
+    return QAbstractTableModel::flags(index) & ~Qt::ItemIsEnabled;
+  else
+    return QAbstractTableModel::flags(index);
 }
 
 
@@ -30,14 +47,18 @@ QVariant ExperimentTableModel::headerData(int section, Qt::Orientation orientati
     switch (section)
     {
       case 0:
-        return tr("Name");
+        return tr("");
       case 1:
-        return tr("Description");
+        return tr("Name");
       case 2:
-        return tr("Lower bound");
+        return tr("Description");
       case 3:
-        return tr("Upper bound");
+        return tr("Value");
       case 4:
+        return tr("Lower bound");
+      case 5:
+        return tr("Upper bound");
+      case 6:
         if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
           return tr("Levels");
         else
@@ -58,7 +79,7 @@ bool ExperimentTableModel::setHeaderData(int section, Qt::Orientation orientatio
       designOfExperiment_.setDeltas(designOfExperiment_.getDeltas());
     else
       return true;
-    emit dataChanged(index(0, 4), index(rowCount()-1, 4));
+    emit dataChanged(index(0, 6), index(rowCount()-1, 6));
     emit headerDataChanged(Qt::Horizontal, section, section);
     return true;
   }
@@ -68,19 +89,30 @@ bool ExperimentTableModel::setHeaderData(int section, Qt::Orientation orientatio
 
 QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
 {
-  if (role == Qt::DisplayRole || role == Qt::EditRole)
+  if (role == Qt::CheckStateRole && index.column() == 0)
+  {
+    if (designOfExperiment_.getLevels()[index.row()] == 1)
+      return Qt::Unchecked;
+    else
+      return Qt::Checked;
+  }
+  else if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
     switch (index.column())
     {
       case 0:
-        return designOfExperiment_.getPhysicalModel().getInputs()[index.row()].getName().c_str();
+        return QVariant();
       case 1:
-        return designOfExperiment_.getPhysicalModel().getInputs()[index.row()].getDescription().c_str();
+        return designOfExperiment_.getPhysicalModel().getInputs()[index.row()].getName().c_str();
       case 2:
-        return designOfExperiment_.getLowerBounds()[index.row()];
+        return designOfExperiment_.getPhysicalModel().getInputs()[index.row()].getDescription().c_str();
       case 3:
-        return designOfExperiment_.getUpperBounds()[index.row()];
+        return designOfExperiment_.getValues()[index.row()];
       case 4:
+        return designOfExperiment_.getLowerBounds()[index.row()];
+      case 5:
+        return designOfExperiment_.getUpperBounds()[index.row()];
+      case 6:
       {
         if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
           return int(designOfExperiment_.getLevels()[index.row()]);
@@ -95,14 +127,41 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
 
 bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
-  if (role == Qt::EditRole)
+
+  if (role == Qt::CheckStateRole && index.column() == 0)
+  {
+    Indices levels = designOfExperiment_.getLevels();
+    if (value.toInt() == Qt::Checked)
+    {
+      levels[index.row()] = 2;
+      designOfExperiment_.setLevels(levels);
+    }
+    else if (value.toInt() == Qt::Unchecked)
+    {
+      levels[index.row()] = 1;
+      designOfExperiment_.setLevels(levels);
+    }
+    emit dataChanged(index, this->index(index.row(), 6));
+    return true;
+  }
+  else if (role == Qt::EditRole)
   {
     switch (index.column())
     {
       case 0:
       case 1:
-        return false;
       case 2:
+        return false;
+      case 3:
+      {
+        NumericalPoint values = designOfExperiment_.getValues();
+        if (values[index.row()] == value.toDouble())
+          return false;
+        values[index.row()] = value.toDouble();
+        designOfExperiment_.setValues(values);
+        break;
+      }
+      case 4:
       {
         if (value.toDouble() > designOfExperiment_.getUpperBounds()[index.row()])
           return false;
@@ -113,7 +172,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
         designOfExperiment_.setLowerBounds(lowerBounds);
         break;
       }
-      case 3:
+      case 5:
       {
         if (value.toDouble() < designOfExperiment_.getLowerBounds()[index.row()])
           return false;
@@ -124,11 +183,11 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
         designOfExperiment_.setUpperBounds(upperBounds);
         break;
       }
-      case 4:
+      case 6:
       {
         if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
         {
-          if (value.toInt() < 1)
+          if (value.toInt() < 2)
             return false;
           Indices nbValues = designOfExperiment_.getLevels();
           if (nbValues[index.row()] == value.toInt())
@@ -153,15 +212,6 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
   emit designOfExperimentChanged(designOfExperiment_);
 
   return true;
-}
-
-
-Qt::ItemFlags ExperimentTableModel::flags(const QModelIndex & index) const
-{
-  if (index.column()!=0 && index.column()!=1)
-    return Qt::ItemIsEditable | QAbstractTableModel::flags(index);
-  else
-    return QAbstractTableModel::flags(index);
 }
 
 

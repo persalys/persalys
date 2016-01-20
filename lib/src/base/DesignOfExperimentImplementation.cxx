@@ -28,13 +28,15 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
                                                                    const PhysicalModel & physicalModel,
                                                                    const NumericalPoint & lowerBounds,
                                                                    const NumericalPoint & upperBounds,
-                                                                   const Indices & levels)
+                                                                   const Indices & levels,
+                                                                   const OT::NumericalPoint & values)
   : PersistentObject()
   , Observable()
   , name_(name)
   , physicalModel_(physicalModel)
   , type_(DesignOfExperimentImplementation::FromBoundsAndLevels)
   , inputNames_(getPhysicalModel().getInputNames())
+  , values_(values)
   , lowerBounds_(lowerBounds)
   , upperBounds_(upperBounds)
   , levels_(levels)
@@ -43,6 +45,10 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
   , columns_(Indices(0))
   , experiment_(Experiment())
 {
+  if (!values_.getSize())
+    for (int i; i<values_.getSize(); ++i)
+      values_[i] = physicalModel.getInputs()[i].getValue();
+
 //   TODO: check if lowerBounds[i] <= upperBounds[i]
 }
 
@@ -93,6 +99,7 @@ void DesignOfExperimentImplementation::initializeParameters(const InputCollectio
   inputNames_ = getPhysicalModel().getInputNames();
 
   int inputSize = inputs.getSize();
+  values_ = NumericalPoint(inputSize);
   lowerBounds_ = NumericalPoint(inputSize);
   upperBounds_ = NumericalPoint(inputSize);
   levels_ = Indices(inputSize);
@@ -100,6 +107,7 @@ void DesignOfExperimentImplementation::initializeParameters(const InputCollectio
 
   for (int i=0; i<inputSize; ++i)
   {
+    values_[i] = inputs[i].getValue();
     if (!inputs[i].isStochastic())
     {
       lowerBounds_[i] = 0.9 * inputs[i].getValue();
@@ -143,6 +151,7 @@ void DesignOfExperimentImplementation::initializeParameters(const InputCollectio
 void DesignOfExperimentImplementation::updateParameters()
 {
   Description inputNames(inputNames_);
+  NumericalPoint values(values_);
   NumericalPoint infBounds(lowerBounds_);
   NumericalPoint supBounds(upperBounds_);
   Indices levels(levels_);
@@ -155,6 +164,7 @@ void DesignOfExperimentImplementation::updateParameters()
     const Description::const_iterator it = std::find(inputNames.begin(), inputNames.end(), inputNames_[i]);
     if (it != inputNames.end())
     {
+      values_[i] = values[it - inputNames.begin()];
       lowerBounds_[i] = infBounds[it - inputNames.begin()];
       upperBounds_[i] = supBounds[it - inputNames.begin()];
       levels_[i] = levels[it - inputNames.begin()];
@@ -200,6 +210,18 @@ int DesignOfExperimentImplementation::getNumberOfExperiments() const
   for (UnsignedInteger i=0; i<levels_.getSize(); ++i)
     nbExperiments *= levels_[i];
   return nbExperiments;
+}
+
+
+NumericalPoint DesignOfExperimentImplementation::getValues() const
+{
+  return values_;
+}
+
+
+void DesignOfExperimentImplementation::setValues(const NumericalPoint & values)
+{
+  values_ = values;
 }
 
 
@@ -335,28 +357,51 @@ NumericalSample DesignOfExperimentImplementation::getInputSample()
       NumericalPoint scale(0);
       NumericalPoint transvec(0);
       NumericalPoint otLevels(0);
+      Description variableInputsNames(0);
 
-      for (UnsignedInteger i=0; i<lowerBounds_.getSize(); ++i)
+      for (UnsignedInteger i=0; i<inputNames_.getSize(); ++i)
       {
-        //TODO: improve this part if a variable is constant
-        double inf = lowerBounds_[i];
-        double sup = upperBounds_[i];
-        scale.add(sup - inf);
-        transvec.add(inf);
-        if (levels_[i]>1)
+        if (levels_[i] > 1)
+        {
+          double inf = lowerBounds_[i];
+          double sup = upperBounds_[i];
+          scale.add(sup - inf);
+          transvec.add(inf);
+          variableInputsNames.add(inputNames_[i]);
           otLevels.add(levels_[i]-2);
-        else
-          otLevels.add(0);
+        }
       }
 
       if (otLevels.getSize())
       {
-        Box box = Box(otLevels);
+        NumericalSample sample = Box(otLevels).generate();
+        sample *= scale;
+        sample += transvec;
 
-        inputSample_ = box.generate();
-        inputSample_*=scale;
-        inputSample_+=transvec;
+        if (sample.getDimension() == inputNames_.getSize())
+          inputSample_ = sample;
+        else
+        {
+          inputSample_ = NumericalSample(sample.getSize(), inputNames_.getSize());
+          for (UnsignedInteger i=0; i<inputNames_.getSize(); ++i)
+          {
+            if (levels_[i] == 1)
+              for (UnsignedInteger j=0; j<sample.getSize(); ++j)
+                inputSample_[j][i] = values_[i];
+            else
+            {
+              const Description::const_iterator it = std::find(variableInputsNames.begin(), variableInputsNames.end(), inputNames_[i]);
+              if (it != variableInputsNames.end())
+              {
+                for (UnsignedInteger j=0; j<sample.getSize(); ++j)
+                  inputSample_[j][i] = sample[j][it - variableInputsNames.begin()];
+              }
+            }
+          }
+        }
       }
+      else
+        inputSample_ = NumericalSample(1, values_);
     }
     inputSample_.setDescription(inputNames_);
   }
@@ -417,6 +462,14 @@ std::string DesignOfExperimentImplementation::dump() const
   }
   else
   {
+    oss << "values = [";
+    for (UnsignedInteger i = 0; i < values_.getSize(); ++ i)
+    {
+      oss << values_[i];
+      if (i < values_.getSize()-1)
+        oss << ", ";
+    }
+    oss << "]\n";
     oss << "lowerBounds = [";
     for (UnsignedInteger i = 0; i < lowerBounds_.getSize(); ++ i)
     {
@@ -449,7 +502,7 @@ std::string DesignOfExperimentImplementation::dump() const
   }
   else
   {
-    oss << "lowerBounds, upperBounds, levels)\n";
+    oss << "lowerBounds, upperBounds, levels, values)\n";
   }
   return oss.str();
 }

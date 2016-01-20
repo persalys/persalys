@@ -16,7 +16,8 @@ DesignOfExperiment::DesignOfExperiment(const std::string & name, const PhysicalM
 
 DesignOfExperiment::DesignOfExperiment(const std::string & name, const PhysicalModel & physicalModel,
                                        const NumericalPoint & lowerBounds,
-                                       const NumericalPoint & upperBounds, const Indices & nbValues)
+                                       const NumericalPoint & upperBounds, const Indices & nbValues,
+                                       const OT::NumericalPoint & values)
   : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation(name, physicalModel, lowerBounds, upperBounds, nbValues))
 {
 }
@@ -110,6 +111,18 @@ DesignOfExperimentImplementation::Type DesignOfExperiment::getTypeDesignOfExperi
 int DesignOfExperiment::getNumberOfExperiments() const
 {
   return getImplementation()->getNumberOfExperiments();
+}
+
+
+NumericalPoint DesignOfExperiment::getValues() const
+{
+  return getImplementation()->getValues();
+}
+
+
+void DesignOfExperiment::setValues(const NumericalPoint & values)
+{
+  getImplementation()->setValues(values);
 }
 
 
