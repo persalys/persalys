@@ -53,6 +53,7 @@ private:
   QTableView * inputTableView_;
   InputTableProbabilisticModel * inputTableModel_;
   QStackedLayout * rightSideOfSplitterStackedLayout_;
+  QLineEdit * valueForDeterministicVariable_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
   GraphConfigurationWidget * pdf_cdfPlotsConfigurationWidget_;

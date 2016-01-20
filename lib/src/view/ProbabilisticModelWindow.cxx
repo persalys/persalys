@@ -88,7 +88,8 @@ void ProbabilisticModelWindow::buildInterface()
   QGridLayout * groupBoxParametersLayout = new QGridLayout(groupBoxParameters);
   QLabel * valueLabel = new QLabel(tr("Value"));
   groupBoxParametersLayout->addWidget(valueLabel, 0, 0);
-  QLineEdit * valueForDeterministicVariable_ = new QLineEdit;
+  valueForDeterministicVariable_ = new QLineEdit;
+  valueForDeterministicVariable_->setEnabled(false);
   groupBoxParametersLayout->addWidget(valueForDeterministicVariable_, 0, 1);
   groupBoxParametersLayout->setRowStretch(1, 1);
   scrollAreaForDeterministic->setWidget(groupBoxParameters);
@@ -282,6 +283,7 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   {
     rightSideOfSplitterStackedLayout_->setCurrentIndex(1);
     showHideGraphConfigurationWidget(-1);
+    valueForDeterministicVariable_->setText(QString::number(physicalModel_.getInputByName(inputName.toStdString()).getValue()));
     return;
   }
 
