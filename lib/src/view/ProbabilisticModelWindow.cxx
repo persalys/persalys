@@ -7,6 +7,7 @@
 #include "otgui/InputTableProbabilisticModel.hxx"
 #include "otgui/CorrelationTableModel.hxx"
 
+#include "DistributionFactory.hxx"
 #include "Normal.hxx"
 #include "TruncatedDistribution.hxx"
 #include "TruncatedNormal.hxx"
@@ -43,58 +44,70 @@ void ProbabilisticModelWindow::buildInterface()
 
   QSplitter * horizontalSplitter = new QSplitter;
 
-  // Inputs
-  QWidget * leftSideOfSplitter = new QWidget;
-  QVBoxLayout * leftSideOfSplitterLayout = new QVBoxLayout(leftSideOfSplitter);
-
-  //   stochastic inputs table
+  // Inputs table
   inputTableView_ = new QTableView;
-  QStringList items = QStringList()<<tr("Beta")<<tr("Gamma")<<tr("Gumbel")<<tr("LogNormal")<<tr("Normal")<<tr("Uniform");
+  QStringList items;
+  DistributionFactory::DistributionFactoryCollection collection = DistributionFactory::GetContinuousUniVariateFactories();
+  DistributionFactory factory;
+  for (int i=0; i<collection.getSize(); ++i)
+  {
+    std::string nameFactory = collection[i].getImplementation()->getClassName();
+    nameFactory.resize(nameFactory.find("Factory"));
+    if (nameFactory != "Burr" && nameFactory != "MeixnerDistribution" && nameFactory != "TruncatedNormal")
+    items << tr(nameFactory.c_str());
+  }
   ComboBoxDelegate * delegate = new ComboBoxDelegate(items);
-  inputTableView_->setItemDelegateForColumn(1, delegate);
+  inputTableView_->setItemDelegateForColumn(2, delegate);
   inputTableView_->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
   inputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
 
   inputTableModel_ = new InputTableProbabilisticModel(physicalModel_);
   inputTableView_->setModel(inputTableModel_);
+  inputTableView_->resizeColumnToContents(0);
 
   for (int i = 0; i < inputTableModel_->rowCount(); ++i)
-    inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
+    inputTableView_->openPersistentEditor(inputTableModel_->index(i, 2));
 
   connect(inputTableView_, SIGNAL(clicked(QModelIndex)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
+  connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
 
-  leftSideOfSplitterLayout->addWidget(inputTableView_);
-
-  //   deterministic inputs list
-  deterministicInputsComboBox_ = new QComboBox;
-  populateDeterministicInputsComboBox();
-  connect(deterministicInputsComboBox_, SIGNAL(activated(int)), this, SLOT(addInputRequested(int)));
-
-  QPushButton * removeButton = new QPushButton(QIcon(":/images/list-remove.png"), "Remove");
-  connect(removeButton, SIGNAL(clicked(bool)), this, SLOT(removeInputRequested()));
-
-  QHBoxLayout * buttonsLayout = new QHBoxLayout;
-  buttonsLayout->addWidget(deterministicInputsComboBox_);
-  buttonsLayout->addWidget(removeButton);
-  leftSideOfSplitterLayout->addLayout(buttonsLayout);
-
-  horizontalSplitter->addWidget(leftSideOfSplitter);
+  horizontalSplitter->addWidget(inputTableView_);
 
   // Distribution edition
+  QWidget * rightSideOfSplitterWidget = new QWidget;
+  rightSideOfSplitterStackedLayout_ = new QStackedLayout(rightSideOfSplitterWidget);
+
+  // If physical model is not valid: use a dummy widget
+  rightSideOfSplitterStackedLayout_->addWidget(new QWidget);
+
+  // If the selected variable is deterministic
+  QScrollArea * scrollAreaForDeterministic = new QScrollArea;
+  scrollAreaForDeterministic->setWidgetResizable(true);
+  QGroupBox * groupBoxParameters = new QGroupBox(tr("Parameters"));
+  QGridLayout * groupBoxParametersLayout = new QGridLayout(groupBoxParameters);
+  QLabel * valueLabel = new QLabel(tr("Value"));
+  groupBoxParametersLayout->addWidget(valueLabel, 0, 0);
+  QLineEdit * valueForDeterministicVariable_ = new QLineEdit;
+  groupBoxParametersLayout->addWidget(valueForDeterministicVariable_, 0, 1);
+  groupBoxParametersLayout->setRowStretch(1, 1);
+  scrollAreaForDeterministic->setWidget(groupBoxParameters);
+  rightSideOfSplitterStackedLayout_->addWidget(scrollAreaForDeterministic);
+
+  // If the selected variable is stochastic
   QScrollArea * rightScrollArea = new QScrollArea;
   rightScrollArea->setWidgetResizable(true);
-  rightFrame_ = new QFrame;
-  QVBoxLayout * rightLayout = new QVBoxLayout(rightFrame_);
+  QFrame * rightFrame = new QFrame;
+  QVBoxLayout * rightFrameLayout = new QVBoxLayout(rightFrame);
 
   //  PDF and CDF graphs
-  QStackedLayout * plotLayout = new QStackedLayout;
+  QStackedLayout * plotLayout = new QStackedLayout(rightFrameLayout);
 
   QVector<PlotWidget*> listPlotWidgets;
   QWidget * widget = new QWidget;
   QVBoxLayout * vBox = new QVBoxLayout(widget);
   pdfPlot_ = new PlotWidget;
-  pdfPlot_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  pdfPlot_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
   vBox->addWidget(pdfPlot_, 0, Qt::AlignHCenter|Qt::AlignTop);
   plotLayout->addWidget(widget);
   listPlotWidgets.append(pdfPlot_);
@@ -102,27 +115,26 @@ void ProbabilisticModelWindow::buildInterface()
   widget = new QWidget;
   vBox = new QVBoxLayout(widget);
   cdfPlot_ = new PlotWidget;
-  cdfPlot_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  cdfPlot_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
   vBox->addWidget(cdfPlot_, 0, Qt::AlignHCenter|Qt::AlignTop);
   plotLayout->addWidget(widget);
   listPlotWidgets.append(cdfPlot_);
 
   pdf_cdfPlotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, QStringList(), QStringList(), GraphConfigurationWidget::PDF);
   connect(pdf_cdfPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
-
-  rightLayout->addLayout(plotLayout);
+  connect(rootTab, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
 
   //  parameters
   parameterLayout_ = new QVBoxLayout;
   parameterLayout_->addWidget(new QWidget);
-  rightLayout->addLayout(parameterLayout_);
+  rightFrameLayout->addLayout(parameterLayout_);
 
   // advanced group: truncation parameters
   advancedGroup_ = new QGroupBox(tr("Truncation parameters"));
   QVBoxLayout * advancedGroupLayout = new QVBoxLayout(advancedGroup_);
   advancedGroup_->setCheckable(true);
   advancedGroup_->setStyleSheet("QGroupBox::indicator::unchecked {image: url(:/images/down_arrow.png);}\
-                                QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
+                                 QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
 
   connect(advancedGroup_, SIGNAL(toggled(bool)), this, SLOT(showHideAdvancedWidgets(bool)));
 
@@ -146,9 +158,10 @@ void ProbabilisticModelWindow::buildInterface()
 
   advancedGroupLayout->addWidget(advancedWidgets_);
   advancedGroupLayout->addStretch();
-  rightLayout->addWidget(advancedGroup_);
-  rightScrollArea->setWidget(rightFrame_);
-  horizontalSplitter->addWidget(rightScrollArea);
+  rightFrameLayout->addWidget(advancedGroup_);
+  rightScrollArea->setWidget(rightFrame);
+  rightSideOfSplitterStackedLayout_->addWidget(rightScrollArea);
+  horizontalSplitter->addWidget(rightSideOfSplitterWidget);
 
   if (inputTableModel_->rowCount())
   {
@@ -178,8 +191,10 @@ void ProbabilisticModelWindow::buildInterface()
 
   rootTab->addTab(tab, tr("Correlation"));
 
+  currentIndexTab_ = rootTab->currentIndex();
   setWidget(rootTab);
 }
+
 
 void ProbabilisticModelWindow::showHideAdvancedWidgets(bool show)
 {
@@ -187,49 +202,6 @@ void ProbabilisticModelWindow::showHideAdvancedWidgets(bool show)
     advancedWidgets_->show();
   else
     advancedWidgets_->hide();
-}
-
-
-void ProbabilisticModelWindow::addInputRequested(int comboIndex)
-{
-  if (comboIndex)
-  {
-    QString inputName = deterministicInputsComboBox_->currentText();
-    physicalModel_.setInputDistribution(inputName.toStdString(), Normal(0, 1));
-  }
-}
-
-
-void ProbabilisticModelWindow::removeInputRequested()
-{
-  if (inputTableView_->selectionModel()->hasSelection())
-  {
-    std::string inputName =  inputTableModel_->data(inputTableView_->currentIndex(), Qt::DisplayRole).toString().toStdString();
-    physicalModel_.setInputDistribution(inputName, Dirac(physicalModel_.getInputByName(inputName).getValue()));
-  }
-}
-
-
-void ProbabilisticModelWindow::updateDeterministicInputsComboBox()
-{
-  deterministicInputsComboBox_->clear();
-  delete deterministicInputsComboBoxModel_;
-  populateDeterministicInputsComboBox();
-}
-
-
-void ProbabilisticModelWindow::populateDeterministicInputsComboBox()
-{
-  deterministicInputsComboBoxModel_ = new QStandardItemModel(1, 1);
-  QStandardItem * firstItem = new QStandardItem(QIcon(":/images/list-add.png"), "Add");
-  firstItem->setBackground(QBrush(QColor(200, 200, 200)));
-  deterministicInputsComboBoxModel_->setItem(0, 0, firstItem);
-  deterministicInputsComboBox_->setModel(deterministicInputsComboBoxModel_);
-
-  for (int i=0; i<physicalModel_.getInputs().getSize(); ++i)
-    if (!physicalModel_.getInputs()[i].isStochastic())
-      deterministicInputsComboBox_->addItem(physicalModel_.getInputs()[i].getName().c_str());
-  deterministicInputsComboBox_->setCurrentIndex(0);
 }
 
 
@@ -246,10 +218,13 @@ void ProbabilisticModelWindow::updateProbabilisticModel()
   updateStochasticInputsTable();
 
   // update plots and truncation widgets
-  updateDistributionWidgets(inputTableView_->currentIndex());
-
-  // update deterministic inputs list
-  updateDeterministicInputsComboBox();
+  if (inputTableModel_->rowCount())
+  {
+    inputTableView_->selectRow(0);
+    updateDistributionWidgets(inputTableView_->currentIndex());
+  }
+  else
+    updateDistributionWidgets(inputTableModel_->index(-1, 0));
 
   // update correlation table
   updateCorrelationTable();
@@ -262,8 +237,9 @@ void ProbabilisticModelWindow::updateStochasticInputsTable()
   inputTableModel_ = new InputTableProbabilisticModel(physicalModel_);
   inputTableView_->setModel(inputTableModel_);
   for (int i = 0; i < inputTableModel_->rowCount(); ++i)
-    inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
+    inputTableView_->openPersistentEditor(inputTableModel_->index(i, 2));
   connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
+  connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
 }
 
 
@@ -288,23 +264,30 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
 
   if (!index.isValid())
   {
-    if (!inputTableView_->model()->rowCount())
-    {
-      rightFrame_->hide();
-      return;
-    }
-    else
-      inputTableView_->selectRow(0);
+    rightSideOfSplitterStackedLayout_->setCurrentIndex(0);
+    return;
   }
-  rightFrame_->show();
-  advancedGroup_->setChecked(false);
 
-  if (index.row() != inputTableView_->currentIndex().row() || index.column() == 1)
+  if (index.row() != inputTableView_->currentIndex().row()/* || index.column() == 1*/)
     inputTableView_->selectRow(index.row());
 
-  QString inputName =  inputTableModel_->data(inputTableView_->currentIndex(), Qt::DisplayRole).toString();
+  QString inputName =  inputTableModel_->data(inputTableModel_->index(index.row(), 1), Qt::DisplayRole).toString();
+  if (!physicalModel_.hasAnInputNamed(inputName.toStdString()))
+    return;
   Distribution inputDistribution = physicalModel_.getInputByName(inputName.toStdString()).getDistribution();
   std::string distributionName = inputDistribution.getImplementation()->getClassName();
+
+  // If the selected variable is deterministic
+  if (distributionName == "Dirac")
+  {
+    rightSideOfSplitterStackedLayout_->setCurrentIndex(1);
+    showHideGraphConfigurationWidget(-1);
+    return;
+  }
+
+  // If the selected variable is stochastic
+  rightSideOfSplitterStackedLayout_->setCurrentIndex(2);
+  advancedGroup_->setChecked(false);
 
   const NumericalPointWithDescription parameters = inputDistribution.getParametersCollection()[0];
   int nbParameters = parameters.getSize();
@@ -386,21 +369,34 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
 
   // update plots
   updatePlots(inputDistribution);
+  showHideGraphConfigurationWidget(0);
+}
 
-  if (inputTableModel_->rowCount())
-    emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
-  else
-    emit graphWindowDeactivated(pdf_cdfPlotsConfigurationWidget_);
+
+void ProbabilisticModelWindow::showHideGraphConfigurationWidget(int indexTab)
+{
+  currentIndexTab_ = indexTab;
+  switch (indexTab)
+  {
+    case 0:
+    {
+      if (rightSideOfSplitterStackedLayout_->currentIndex() == 2 && (windowState() == 4 | windowState() == 8 | windowState() == 10))
+        emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
+      else
+        emit graphWindowDeactivated(pdf_cdfPlotsConfigurationWidget_);
+      break;
+    }
+    default:
+      emit graphWindowDeactivated(pdf_cdfPlotsConfigurationWidget_);
+      break;
+  }
 }
 
 
 void ProbabilisticModelWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
   if (newState == 4 || newState == 8 || newState == 10)
-  {
-    if (inputTableModel_->rowCount())
-      emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
-  }
+    showHideGraphConfigurationWidget(currentIndexTab_);
   else if (newState == 0 || newState == 1 || newState == 2 || newState == 9)
     emit graphWindowDeactivated(pdf_cdfPlotsConfigurationWidget_);
 }
@@ -418,7 +414,7 @@ void ProbabilisticModelWindow::updatePlots(Distribution inputDistribution)
 void ProbabilisticModelWindow::updateDistribution()
 {
   QModelIndex index = inputTableView_->currentIndex();
-  Input input = Input(physicalModel_.getInputs()[index.data(Qt::UserRole).toInt()]);
+  Input input = Input(physicalModel_.getInputs()[index.row()]);
   Distribution inputDistribution = input.getDistribution();
   std::string distributionName = inputDistribution.getImplementation()->getClassName();
 
@@ -473,7 +469,7 @@ void ProbabilisticModelWindow::updateDistribution()
 void ProbabilisticModelWindow::truncationParametersChanged()
 {
   QModelIndex index = inputTableView_->currentIndex();
-  Input input = Input(physicalModel_.getInputs()[index.data(Qt::UserRole).toInt()]);
+  Input input = Input(physicalModel_.getInputs()[index.row()]);
   Distribution inputDistribution = input.getDistribution();
   
   TruncatedDistribution truncatedDistribution = TruncatedDistribution(*dynamic_cast<TruncatedDistribution*>(&*inputDistribution.getImplementation()));
@@ -494,7 +490,7 @@ void ProbabilisticModelWindow::truncationParametersChanged()
 void ProbabilisticModelWindow::truncationParametersStateChanged()
 {
   QModelIndex index = inputTableView_->currentIndex();
-  Input input = Input(physicalModel_.getInputs()[index.data(Qt::UserRole).toInt()]);
+  Input input = Input(physicalModel_.getInputs()[index.row()]);
   Distribution inputDistribution = input.getDistribution();
   std::string distributionName = inputDistribution.getImplementation()->getClassName();
 

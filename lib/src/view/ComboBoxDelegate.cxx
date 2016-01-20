@@ -2,6 +2,7 @@
 
 #include <QComboBox>
 #include <QApplication>
+#include <QStandardItemModel>
 
 namespace OTGUI {
 
@@ -15,6 +16,11 @@ ComboBoxDelegate::ComboBoxDelegate(QStringList items, QObject * parent)
 QWidget *ComboBoxDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
   QComboBox * editor = new QComboBox(parent);
+  QStandardItemModel * model = new QStandardItemModel(1, 1);
+  QStandardItem * firstItem = new QStandardItem;
+  firstItem->setEnabled(false);
+  model->setItem(0, 0, firstItem);
+  editor->setModel(model);
   editor->addItems(items_);
   connect(editor, SIGNAL(activated(QString)), this, SLOT(emitCommitData()));
   return editor;
@@ -25,6 +31,9 @@ void ComboBoxDelegate::setEditorData(QWidget * editor, const QModelIndex & index
 {
   QComboBox * comboBox = static_cast<QComboBox*>(editor);
   comboBox->setCurrentIndex(comboBox->findText(index.model()->data(index, Qt::DisplayRole).toString()));
+  comboBox->setEnabled(true);
+  if (comboBox->currentIndex() == -1)
+    comboBox->setEnabled(false);
 }
 
 

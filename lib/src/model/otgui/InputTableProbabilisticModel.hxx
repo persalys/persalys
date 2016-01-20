@@ -26,6 +26,10 @@ public:
   bool setData(const QModelIndex & index, const QVariant & value, int role);
   PhysicalModel getPhysicalModel() const;
 
+public slots:
+signals:
+  void correlationToChange();
+
 private:
   PhysicalModel physicalModel_;
 };

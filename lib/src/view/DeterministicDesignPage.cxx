@@ -3,7 +3,6 @@
 #include "otgui/DeterministicDesignPage.hxx"
 
 #include "otgui/ExperimentTableModel.hxx"
-#include "otgui/ComboBoxDelegate.hxx"
 #include "otgui/HorizontalHeaderViewWithCombobox.hxx"
 
 #include <NumericalSample.hxx>

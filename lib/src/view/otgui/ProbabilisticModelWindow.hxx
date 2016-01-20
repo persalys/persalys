@@ -17,6 +17,7 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QLabel>
+#include <QStackedLayout>
 
 namespace OTGUI {
 class ProbabilisticModelWindow : public OTguiSubWindow
@@ -28,22 +29,19 @@ public :
 
 protected:
   void buildInterface();
-  void updateDeterministicInputsComboBox();
-  void populateDeterministicInputsComboBox();
   void updateStochasticInputsTable();
   void updatePlots(OT::Distribution inputDistribution);
-  void updateCorrelationTable();
 
 public slots:
   void updateDistributionWidgets(const QModelIndex & index);
   void updateDistribution();
   void updatePhysicalModel(const PhysicalModel &);
   void updateProbabilisticModel();
-  void addInputRequested(int comboIndex);
-  void removeInputRequested();
+  void updateCorrelationTable();
   void showHideAdvancedWidgets(bool);
   void truncationParametersChanged();
   void truncationParametersStateChanged();
+  void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 signals:
   void graphWindowActivated(QTabWidget*);
@@ -51,11 +49,10 @@ signals:
 
 private:
   PhysicalModel physicalModel_;
+  int currentIndexTab_;
   QTableView * inputTableView_;
-  QComboBox * deterministicInputsComboBox_;
-  QStandardItemModel * deterministicInputsComboBoxModel_;
   InputTableProbabilisticModel * inputTableModel_;
-  QFrame * rightFrame_;
+  QStackedLayout * rightSideOfSplitterStackedLayout_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
   GraphConfigurationWidget * pdf_cdfPlotsConfigurationWidget_;
