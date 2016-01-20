@@ -53,30 +53,31 @@ void DeterministicDesignPage::buildInterface()
 
   pageLayout->addWidget(tableView_);
 
-  buttonToChooseMethod = new QRadioButton(tr("Use a stratified design"));
-  methodGroup_->addButton(buttonToChooseMethod, DesignOfExperimentImplementation::FromExperiment);
-  pageLayout->addWidget(buttonToChooseMethod);
-
-  QButtonGroup * designsGroup_ = new QButtonGroup;
-  designsWidget_ = new QWidget;
-  QVBoxLayout * designsLayout = new QVBoxLayout(designsWidget_);
-  QRadioButton * buttonToChooseDesign = new QRadioButton(tr("Axial"));
-  buttonToChooseDesign->setChecked(true);
-  designsGroup_->addButton(buttonToChooseDesign);
-  designsLayout->addWidget(buttonToChooseDesign);
-
-  buttonToChooseDesign = new QRadioButton(tr("Factorial"));
-  designsGroup_->addButton(buttonToChooseDesign);
-  designsLayout->addWidget(buttonToChooseDesign);
-
-  buttonToChooseDesign = new QRadioButton(tr("Composite"));
-  designsGroup_->addButton(buttonToChooseDesign);
-  designsLayout->addWidget(buttonToChooseDesign);
-
-  designsWidget_->setEnabled(true);
-  if (designOfExperiment_.getTypeDesignOfExperiment() != DesignOfExperimentImplementation::FromExperiment)
-    designsWidget_->setEnabled(false);
-  pageLayout->addWidget(designsWidget_);
+  // TODO
+//   buttonToChooseMethod = new QRadioButton(tr("Use a stratified design"));
+//   methodGroup_->addButton(buttonToChooseMethod, DesignOfExperimentImplementation::FromExperiment);
+//   pageLayout->addWidget(buttonToChooseMethod);
+// 
+//   QButtonGroup * designsGroup_ = new QButtonGroup;
+//   designsWidget_ = new QWidget;
+//   QVBoxLayout * designsLayout = new QVBoxLayout(designsWidget_);
+//   QRadioButton * buttonToChooseDesign = new QRadioButton(tr("Axial"));
+//   buttonToChooseDesign->setChecked(true);
+//   designsGroup_->addButton(buttonToChooseDesign);
+//   designsLayout->addWidget(buttonToChooseDesign);
+// 
+//   buttonToChooseDesign = new QRadioButton(tr("Factorial"));
+//   designsGroup_->addButton(buttonToChooseDesign);
+//   designsLayout->addWidget(buttonToChooseDesign);
+// 
+//   buttonToChooseDesign = new QRadioButton(tr("Composite"));
+//   designsGroup_->addButton(buttonToChooseDesign);
+//   designsLayout->addWidget(buttonToChooseDesign);
+// 
+//   designsWidget_->setEnabled(true);
+//   if (designOfExperiment_.getTypeDesignOfExperiment() != DesignOfExperimentImplementation::FromExperiment)
+//     designsWidget_->setEnabled(false);
+//   pageLayout->addWidget(designsWidget_);
 
   connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SLOT(setEnabledWidgets(int)));
 }
@@ -89,8 +90,8 @@ void DeterministicDesignPage::setEnabledWidgets(int method)
     case DesignOfExperimentImplementation::FromBoundsAndLevels:
     {
       tableView_->setEnabled(true);
-      designsWidget_->setEnabled(false);
 //       TODO
+//       designsWidget_->setEnabled(false);
 //       designOfExperiment_ = DesignOfExperiment(designOfExperiment_.getName(),
 //                                                designOfExperiment_.getPhysicalModel(),
 //                                                Bounds
@@ -98,18 +99,18 @@ void DeterministicDesignPage::setEnabledWidgets(int method)
 //       emit designOfExperimentChanged(designOfExperiment_);
       break;
     }
-    case DesignOfExperimentImplementation::FromExperiment:
-    {
-      tableView_->setEnabled(false);
-      designsWidget_->setEnabled(true);
+//     case DesignOfExperimentImplementation::FromExperiment:
+//     {
+//       tableView_->setEnabled(false);
+//       designsWidget_->setEnabled(true);
 //       TODO
 //       designOfExperiment_ = DesignOfExperiment(designOfExperiment_.getName(),
 //                                                designOfExperiment_.getPhysicalModel(),
 //                                                Experiment
 //                                               );
 //       emit designOfExperimentChanged(designOfExperiment_);
-      break;
-    }
+//       break;
+//     }
     default:
       break;
   }

@@ -34,7 +34,8 @@ private:
   QButtonGroup * methodGroup_;
   QTableView * tableView_;
   ExperimentTableModel * model_;
-  QWidget * designsWidget_ ;
+  // TODO
+//   QWidget * designsWidget_ ;
 };
 }
 #endif

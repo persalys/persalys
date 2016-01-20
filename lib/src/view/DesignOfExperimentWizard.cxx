@@ -31,13 +31,13 @@ IntroPage::IntroPage(const DesignOfExperiment & designOfExperiment, QWidget *par
   methodGroup_->addButton(buttonToChooseMethod, IntroPage::deterministic);
   methodLayout->addWidget(buttonToChooseMethod);
 
-  buttonToChooseMethod = new QRadioButton(tr("Probabilistic"));
-  buttonToChooseMethod->setEnabled(designOfExperiment.getPhysicalModel().hasStochasticInputs());
 //   TODO
+//   buttonToChooseMethod = new QRadioButton(tr("Probabilistic"));
+//   buttonToChooseMethod->setEnabled(designOfExperiment.getPhysicalModel().hasStochasticInputs());
 //   if (designOfExperiment.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::ProbaExperiment)
 //     buttonToChooseMethod->setChecked(true);
-  methodGroup_->addButton(buttonToChooseMethod, IntroPage::probabilistic);
-  methodLayout->addWidget(buttonToChooseMethod);
+//   methodGroup_->addButton(buttonToChooseMethod, IntroPage::probabilistic);
+//   methodLayout->addWidget(buttonToChooseMethod);
   buttonToChooseMethod = new QRadioButton(tr("Import data"));
   if (designOfExperiment.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromFile)
     buttonToChooseMethod->setChecked(true);
@@ -57,10 +57,10 @@ int IntroPage::nextId() const
       return DesignOfExperimentWizard::Page_Deterministic;
     }
 //     TODO
-    case IntroPage::probabilistic:
-    {
-      return DesignOfExperimentWizard::Page_Probabilistic;
-    }
+//     case IntroPage::probabilistic:
+//     {
+//       return DesignOfExperimentWizard::Page_Probabilistic;
+//     }
     case IntroPage::import:
     {
       return DesignOfExperimentWizard::Page_Import;
@@ -96,7 +96,8 @@ void DesignOfExperimentWizard::buildInterface()
   introPage_ = new IntroPage(designOfExperiment_);
   setPage(Page_Intro, introPage_);
   setPage(Page_Deterministic, new DeterministicDesignPage(designOfExperiment_));
-  setPage(Page_Probabilistic, new ProbabilisticDesignPage(designOfExperiment_));
+  // TODO
+//   setPage(Page_Probabilistic, new ProbabilisticDesignPage(designOfExperiment_));
   setPage(Page_Import, new ImportTablePage(designOfExperiment_));
 
   setStartId(Page_Intro);
@@ -109,7 +110,8 @@ int DesignOfExperimentWizard::nextId() const
     case Page_Intro:
       return introPage_->nextId();
     case Page_Deterministic:
-    case Page_Probabilistic:
+  // TODO
+//     case Page_Probabilistic:
     case Page_Import:
     default:
         return -1;
