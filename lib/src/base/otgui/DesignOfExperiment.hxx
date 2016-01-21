@@ -19,8 +19,9 @@ public:
                      const OT::Indices & nbValues, const OT::NumericalPoint & values=OT::NumericalPoint(0));
   DesignOfExperiment(const std::string & name, const PhysicalModel & physicalModel,
                      const std::string & fileName, OT::Indices columns=OT::Indices());
-  DesignOfExperiment(const std::string & name, const PhysicalModel & physicalModel,
-                     const OT::Experiment & experiment);
+//   TODO
+//   DesignOfExperiment(const std::string & name, const PhysicalModel & physicalModel,
+//                      const OT::Experiment & experiment);
   DesignOfExperiment(const DesignOfExperimentImplementation & implementation);
   DesignOfExperiment(const Implementation & p_implementation);
   DesignOfExperiment(DesignOfExperimentImplementation * p_implementation);
@@ -55,8 +56,9 @@ public:
   OT::Indices getColumns() const;
   void setColumns(OT::Indices columns);
 
-  OT::Experiment getExperiment() const;
-  void setExperiment(const OT::Experiment & experiment);
+//   TODO
+//   OT::Experiment getExperiment() const;
+//   void setExperiment(const OT::Experiment & experiment);
 
   OT::NumericalSample getInputSample();
   void setInputSample(const OT::NumericalSample & sample);

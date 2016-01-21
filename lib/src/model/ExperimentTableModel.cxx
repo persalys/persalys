@@ -130,16 +130,23 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
 
   if (role == Qt::CheckStateRole && index.column() == 0)
   {
-    Indices levels = designOfExperiment_.getLevels();
-    if (value.toInt() == Qt::Checked)
+    if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
     {
-      levels[index.row()] = 2;
+      Indices levels = designOfExperiment_.getLevels();
+      if (value.toInt() == Qt::Checked)
+        levels[index.row()] = 2;
+      else if (value.toInt() == Qt::Unchecked)
+        levels[index.row()] = 1;
       designOfExperiment_.setLevels(levels);
     }
-    else if (value.toInt() == Qt::Unchecked)
+    else
     {
-      levels[index.row()] = 1;
-      designOfExperiment_.setLevels(levels);
+      NumericalPoint deltas = designOfExperiment_.getDeltas();
+      if (value.toDouble() == Qt::Checked)
+        deltas[index.row()] = designOfExperiment_.getUpperBounds()[index.row()] - designOfExperiment_.getLowerBounds()[index.row()];
+      else if (value.toDouble() == Qt::Unchecked)
+        deltas[index.row()] = 0;
+      designOfExperiment_.setDeltas(deltas);
     }
     emit dataChanged(index, this->index(index.row(), 6));
     return true;

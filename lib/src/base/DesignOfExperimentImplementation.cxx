@@ -18,7 +18,7 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
   , type_(DesignOfExperimentImplementation::FromBoundsAndLevels)
   , fileName_("")
   , columns_(Indices(0))
-  , experiment_(Experiment())
+//   , experiment_(Experiment())
 {
   initializeParameters(physicalModel.getInputs());
 }
@@ -39,16 +39,16 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
   , values_(values)
   , lowerBounds_(lowerBounds)
   , upperBounds_(upperBounds)
-  , levels_(levels)
-  , deltas_(NumericalPoint(levels.getSize()))
+  , deltas_(NumericalPoint(physicalModel.getInputs().getSize()))
   , fileName_("")
   , columns_(Indices(0))
-  , experiment_(Experiment())
+//   , experiment_(Experiment())
 {
+  setLevels(levels);
   if (!values_.getSize())
   {
     values_ = NumericalPoint(physicalModel.getInputs().getSize());
-    for (int i; i<physicalModel.getInputs().getSize(); ++i)
+    for (UnsignedInteger i=0; i<physicalModel.getInputs().getSize(); ++i)
       values_[i] = physicalModel.getInputs()[i].getValue();
   }
 //   TODO: check if lowerBounds[i] <= upperBounds[i]
@@ -73,20 +73,22 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
   initializeParameters(physicalModel.getInputs());
 }
 
-DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::string & name,
-                                                                   const PhysicalModel & physicalModel,
-                                                                   const Experiment & experiment)
-  : PersistentObject()
-  , Observable()
-  , name_(name)
-  , physicalModel_(physicalModel)
-  , type_(DesignOfExperimentImplementation::FromExperiment)
-  , fileName_("")
-  , columns_(Indices(0))
-  , experiment_(experiment)
-{
-  initializeParameters(physicalModel.getInputs());
-}
+
+// TODO
+// DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::string & name,
+//                                                                    const PhysicalModel & physicalModel,
+//                                                                    const Experiment & experiment)
+//   : PersistentObject()
+//   , Observable()
+//   , name_(name)
+//   , physicalModel_(physicalModel)
+//   , type_(DesignOfExperimentImplementation::FromExperiment)
+//   , fileName_("")
+//   , columns_(Indices(0))
+//   , experiment_(experiment)
+// {
+//   initializeParameters(physicalModel.getInputs());
+// }
 
 
 DesignOfExperimentImplementation * DesignOfExperimentImplementation::clone() const
@@ -253,35 +255,62 @@ void DesignOfExperimentImplementation::setUpperBounds(const NumericalPoint & upp
 
 Indices DesignOfExperimentImplementation::getLevels() const
 {
-//   TODO
-//   if (type_ == DesignOfExperimentImplementation::FromBoundsAndDeltas)
-//   for (int i=0; i<deltas_.getSize(); ++i)
-//     levels_[i] = (lowerBounds[i] - upperBounds[i])/deltas_[i];
   return levels_;
 }
 
 
 void DesignOfExperimentImplementation::setLevels(const Indices & levels)
 {
+  if (levels.getSize() != physicalModel_.getInputs().getSize())
+  {
+    OSS oss;
+    oss << "DesignOfExperimentImplementation::setLevels : The dimension of the list of the levels has to be equal to the number of inputs of the physical model: ";
+    oss << physicalModel_.getInputs().getSize();
+    throw InvalidArgumentException(HERE) << oss.str();
+  }
+
   type_ = DesignOfExperimentImplementation::FromBoundsAndLevels;
   levels_ = levels;
+  for (UnsignedInteger i=0; i<levels_.getSize(); ++i)
+  {
+    if (levels_[i] == 1)
+      deltas_[i] = 0;
+    else
+      deltas_[i] = (upperBounds_[i] - lowerBounds_[i])/(levels_[i]-1);
+  }
 }
 
 
 NumericalPoint DesignOfExperimentImplementation::getDeltas() const
 {
-//   TODO
-//   if (type_ == DesignOfExperimentImplementation::FromBoundsAndLevels)
-//   for (int i=0; i<levels.getSize(); ++i)
-//     deltas_[i] = (lowerBounds[i] - upperBounds[i])/levels_[i];
   return deltas_;
 }
 
 
 void DesignOfExperimentImplementation::setDeltas(const NumericalPoint & deltas)
 {
+  if (deltas.getSize() != physicalModel_.getInputs().getSize())
+  {
+    OSS oss;
+    oss << "DesignOfExperimentImplementation::setDeltas : The dimension of the list of the deltas has to be equal to the number of inputs of the physical model: ";
+    oss << physicalModel_.getInputs().getSize();
+    throw InvalidArgumentException(HERE) << oss.str();
+  }
+
+  for (UnsignedInteger i=0; i<deltas.getSize(); ++i)
+    if (deltas[i] <= 0.)
+      throw InvalidArgumentException(HERE) << "DesignOfExperimentImplementation::setDeltas : All the deltas must be superior or equal to 0.";
+
+
   type_ = DesignOfExperimentImplementation::FromBoundsAndDeltas;
   deltas_ = deltas;
+  for (UnsignedInteger i=0; i<deltas_.getSize(); ++i)
+  {
+    if (deltas_[i] > 0)
+      levels_[i] = (upperBounds_[i] - lowerBounds_[i])/deltas_[i] + 1;
+    else
+      levels_[i] = 1.;
+  }
 }
 
 
@@ -317,16 +346,17 @@ void DesignOfExperimentImplementation::setColumns(Indices columns)
 }
 
 
-Experiment DesignOfExperimentImplementation::getExperiment() const
-{
-  return experiment_;
-}
-
-
-void DesignOfExperimentImplementation::setExperiment(const Experiment & experiment)
-{
-  experiment_ = experiment;
-}
+// TODO
+// Experiment DesignOfExperimentImplementation::getExperiment() const
+// {
+//   return experiment_;
+// }
+// 
+// 
+// void DesignOfExperimentImplementation::setExperiment(const Experiment & experiment)
+// {
+//   experiment_ = experiment;
+// }
 
 
 NumericalSample DesignOfExperimentImplementation::getInputSample()
@@ -356,10 +386,10 @@ NumericalSample DesignOfExperimentImplementation::getInputSample()
     }
     else
     {
-      NumericalPoint scale(0);
-      NumericalPoint transvec(0);
-      NumericalPoint otLevels(0);
-      Description variableInputsNames(0);
+      NumericalPoint scale;
+      NumericalPoint transvec;
+      NumericalPoint otLevels;
+      Description variableInputsNames;
 
       for (UnsignedInteger i=0; i<inputNames_.getSize(); ++i)
       {
@@ -394,10 +424,8 @@ NumericalSample DesignOfExperimentImplementation::getInputSample()
             {
               const Description::const_iterator it = std::find(variableInputsNames.begin(), variableInputsNames.end(), inputNames_[i]);
               if (it != variableInputsNames.end())
-              {
                 for (UnsignedInteger j=0; j<sample.getSize(); ++j)
                   inputSample_[j][i] = sample[j][it - variableInputsNames.begin()];
-              }
             }
           }
         }
@@ -508,6 +536,4 @@ std::string DesignOfExperimentImplementation::dump() const
   }
   return oss.str();
 }
-
-
 }

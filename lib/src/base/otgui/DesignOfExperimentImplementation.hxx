@@ -20,8 +20,9 @@ public:
                      const OT::Indices & nbValues, const OT::NumericalPoint & values=OT::NumericalPoint(0));
   DesignOfExperimentImplementation(const std::string & name, const PhysicalModel & physicalModel,
                                    const std::string & fileName, const OT::Indices & columns);
-  DesignOfExperimentImplementation(const std::string & name, const PhysicalModel & physicalModel,
-                                   const OT::Experiment & experiment);
+//   TODO
+//   DesignOfExperimentImplementation(const std::string & name, const PhysicalModel & physicalModel,
+//                                    const OT::Experiment & experiment);
   virtual DesignOfExperimentImplementation * clone() const;
 
   std::string getName() const;
@@ -49,8 +50,9 @@ public:
   OT::Indices getColumns() const;
   void setColumns(OT::Indices columns);
 
-  OT::Experiment getExperiment() const;
-  void setExperiment(const OT::Experiment & experiment);
+//   TODO
+//   OT::Experiment getExperiment() const;
+//   void setExperiment(const OT::Experiment & experiment);
 
   OT::NumericalSample getInputSample();
   void setInputSample(const OT::NumericalSample & sample);
@@ -78,7 +80,8 @@ private:
   OT::NumericalPoint deltas_;
   std::string fileName_;
   OT::Indices columns_;
-  OT::Experiment experiment_;
+//   TODO
+//   OT::Experiment experiment_;
   OT::NumericalSample outputSample_;
   ParametricAnalysisResult result_;
 };

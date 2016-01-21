@@ -29,12 +29,12 @@ DesignOfExperiment::DesignOfExperiment(const std::string & name, const PhysicalM
 {
 }
 
-
-DesignOfExperiment::DesignOfExperiment(const std::string & name, const PhysicalModel & physicalModel,
-                                       const Experiment & experiment)
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation(name, physicalModel, experiment))
-{
-}
+// TODO
+// DesignOfExperiment::DesignOfExperiment(const std::string & name, const PhysicalModel & physicalModel,
+//                                        const Experiment & experiment)
+//   : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation(name, physicalModel, experiment))
+// {
+// }
 
 
 /* Default constructor */
@@ -197,17 +197,17 @@ void DesignOfExperiment::setColumns(Indices columns)
   getImplementation()->setColumns(columns);
 }
 
-
-Experiment DesignOfExperiment::getExperiment() const
-{
-  return getImplementation()->getExperiment();
-}
-
-
-void DesignOfExperiment::setExperiment(const Experiment & experiment)
-{
-  getImplementation()->setExperiment(experiment);
-}
+// TODO
+// Experiment DesignOfExperiment::getExperiment() const
+// {
+//   return getImplementation()->getExperiment();
+// }
+// 
+// 
+// void DesignOfExperiment::setExperiment(const Experiment & experiment)
+// {
+//   getImplementation()->setExperiment(experiment);
+// }
 
 
 NumericalSample DesignOfExperiment::getInputSample()
@@ -256,6 +256,4 @@ std::string DesignOfExperiment::dump() const
 {
   return getImplementation()->dump();
 }
-
-
 }
