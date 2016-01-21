@@ -46,6 +46,7 @@ private:
   GraphConfigurationWidget * boxPlotsConfigurationWidget_;
   GraphConfigurationWidget * scatterPlotsConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
+  PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
   QLabel * meanLabel_;
   QLabel * stdLabel_;
   QLabel * skewnessLabel_;

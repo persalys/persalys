@@ -181,6 +181,18 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
 
   tabWidget_->addTab(tab, tr("Scatter plots"));
+
+  // third tab --------------------------------
+  tab = new PlotMatrixWidget(designOfExperiment_.getInputSample(), designOfExperiment_.getOutputSample());
+  plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
+
+  tabWidget_->addTab(tab, tr("Plot matrix Y-X"));
+
+  // fourth tab --------------------------------
+  tab = new PlotMatrixWidget(designOfExperiment_.getInputSample(), designOfExperiment_.getInputSample());
+  plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
+
+  tabWidget_->addTab(tab, tr("Plot matrix X-X"));
 }
 
 
@@ -212,8 +224,17 @@ void DesignOfExperimentWindow::showHideGraphConfigurationWidget(int indexTab)
   // if plotWidget is visible
   if (indexTab == 2)
     emit graphWindowActivated(graphConfigurationWidget_);
+  else if (indexTab == 3)
+    emit graphWindowActivated(plotMatrixConfigurationWidget_);
+  else if (indexTab == 4)
+    emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
+  // if no plotWidget is visible
   else
+  {
     emit graphWindowDeactivated(graphConfigurationWidget_);
+    emit graphWindowDeactivated(plotMatrixConfigurationWidget_);
+    emit graphWindowDeactivated(plotMatrix_X_X_ConfigurationWidget_);
+  }
 }
 
 
@@ -222,6 +243,6 @@ void DesignOfExperimentWindow::showHideGraphConfigurationWidget(Qt::WindowStates
   if (newState == 4 || newState == 8 || newState == 10)
     showHideGraphConfigurationWidget(tabWidget_->currentIndex());
   else if (newState == 0 || newState == 1 || newState == 2 || newState == 9)
-    emit graphWindowDeactivated(graphConfigurationWidget_);
+    showHideGraphConfigurationWidget(-1);
 }
 }

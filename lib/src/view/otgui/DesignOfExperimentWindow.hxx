@@ -6,8 +6,8 @@
 #include "OTguiSubWindow.hxx"
 #include "otgui/DesignOfExperimentItem.hxx"
 #include "OTguiTableView.hxx"
-#include "otgui/PlotWidget.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/PlotMatrixConfigurationWidget.hxx"
 
 #include <QTabWidget>
 #include <QPushButton>
@@ -44,6 +44,8 @@ private:
   QComboBox * outputsComboBoxFirstTab_;
   QLabel * minLabel_;
   QLabel * maxLabel_;
+  PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
+  PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
   GraphConfigurationWidget * graphConfigurationWidget_;
 };
 }

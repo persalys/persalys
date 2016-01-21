@@ -25,7 +25,7 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
   QComboBox * inputsComboBox = new QComboBox;
-  ListWidgetWithCheckBox * listWidget = new ListWidgetWithCheckBox("-- Select inputs --", plotMatrix_->getInputNames());
+  ListWidgetWithCheckBox * listWidget = new ListWidgetWithCheckBox("-- Select variables --", plotMatrix_->getInputNames());
   connect(listWidget, SIGNAL(checkedItemsChanged(QStringList)), plotMatrix_, SLOT(setInputsToDisplay(QStringList)));
   inputsComboBox->setModel(listWidget->model());
   inputsComboBox->setView(listWidget);
@@ -35,7 +35,7 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
   QComboBox * outputsComboBox = new QComboBox;
-  listWidget = new ListWidgetWithCheckBox("-- Select outputs --", plotMatrix_->getOutputNames());
+  listWidget = new ListWidgetWithCheckBox("-- Select variables --", plotMatrix_->getOutputNames());
   connect(listWidget, SIGNAL(checkedItemsChanged(QStringList)), plotMatrix_, SLOT(setOutputsToDisplay(QStringList)));
   outputsComboBox->setModel(listWidget->model());
   outputsComboBox->setView(listWidget);

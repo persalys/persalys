@@ -254,9 +254,15 @@ void MonteCarloResultWindow::buildInterface()
   tab = new PlotMatrixWidget(result_.getInputSample(), result_.getResultSample());
   plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
-  tabWidget_->addTab(tab, tr("Plot matrix"));
+  tabWidget_->addTab(tab, tr("Plot matrix Y-X"));
 
   // sixth tab --------------------------------
+  tab = new PlotMatrixWidget(result_.getInputSample(), result_.getInputSample());
+  plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
+
+  tabWidget_->addTab(tab, tr("Plot matrix X-X"));
+
+  // seventh tab --------------------------------
   tab = new QWidget;
   tabLayout = new QVBoxLayout(tab);
   NumericalSample sample = result_.getInputSample();
@@ -372,6 +378,9 @@ void MonteCarloResultWindow::showHideGraphConfigurationWidget(int indexTab)
     case 4:
       emit graphWindowActivated(plotMatrixConfigurationWidget_);
       break;
+    case 5:
+      emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
+      break;
     // if no plotWidget is visible
     default:
     {
@@ -379,6 +388,7 @@ void MonteCarloResultWindow::showHideGraphConfigurationWidget(int indexTab)
       emit graphWindowDeactivated(boxPlotsConfigurationWidget_);
       emit graphWindowDeactivated(scatterPlotsConfigurationWidget_);
       emit graphWindowDeactivated(plotMatrixConfigurationWidget_);
+      emit graphWindowDeactivated(plotMatrix_X_X_ConfigurationWidget_);
       break;
     }
   }
