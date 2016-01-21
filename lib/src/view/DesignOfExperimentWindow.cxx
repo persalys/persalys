@@ -139,9 +139,9 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   for (int i=0; i<nbInputs; ++i)
     inputNames << designOfExperiment_.getPhysicalModel().getInputNames()[i].c_str();
 
-  for (int i=0; i<nbOutputs; ++i)
+  for (int j=0; j<nbInputs; ++j)
   {
-    for (int j=0; j<nbInputs; ++j)
+    for (int i=0; i<nbOutputs; ++i)
     {
       PlotWidget * plot = new PlotWidget;
       plot->plotScatter(designOfExperiment_.getInputSample().getMarginal(j), designOfExperiment_.getOutputSample().getMarginal(i));
@@ -154,6 +154,22 @@ void DesignOfExperimentWindow::addTabsForOutputs()
         plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getDescription().c_str());
       else
         plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getName().c_str());
+      plotLayout->addWidget(plot);
+      listPlotWidgets.append(plot);
+    }
+    for (int i=0; i<nbInputs; ++i)
+    {
+      PlotWidget * plot = new PlotWidget;
+      plot->plotScatter(designOfExperiment_.getInputSample().getMarginal(j), designOfExperiment_.getInputSample().getMarginal(i));
+      plot->setTitle(tr("Scatter plot: ") + inputs[i].getName().c_str() + tr(" vs ") + inputs[j].getName().c_str());
+      if (inputs[j].getDescription().size())
+        plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getDescription().c_str());
+      else
+        plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getName().c_str());
+      if (inputs[i].getDescription().size())
+        plot->setAxisTitle(QwtPlot::yLeft, inputs[i].getDescription().c_str());
+      else
+        plot->setAxisTitle(QwtPlot::yLeft, inputs[i].getName().c_str());
       plotLayout->addWidget(plot);
       listPlotWidgets.append(plot);
     }

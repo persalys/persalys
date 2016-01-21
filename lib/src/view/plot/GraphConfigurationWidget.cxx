@@ -53,6 +53,8 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
     mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
     yAxisComboBox_ = new QComboBox;
     yAxisComboBox_->addItems(outputNames);
+    if (plotType_ == GraphConfigurationWidget::Scatter)
+      yAxisComboBox_->addItems(inputNames);
     mainGridLayout->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
     connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
     emit currentPlotChanged(currentPlotIndex_);
@@ -185,13 +187,11 @@ void GraphConfigurationWidget::plotChanged()
 
   if (plotType_ == GraphConfigurationWidget::Scatter)
   {
-    int inputIndex = xAxisComboBox_->currentIndex();
-    currentPlotIndex_ = outputIndex * xAxisComboBox_->count() + inputIndex;
+    currentPlotIndex_ = xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex;
   }
   else if (plotType_ == GraphConfigurationWidget::PDF || plotType_ == GraphConfigurationWidget::CDF ||
            plotType_ == GraphConfigurationWidget::PDFResult || plotType_ == GraphConfigurationWidget::CDFResult)
   {
-    
     switch (GraphConfigurationWidget::Type(pdf_cdfGroup_->checkedId()))
     {
       case GraphConfigurationWidget::PDF:

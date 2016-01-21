@@ -209,9 +209,9 @@ void MonteCarloResultWindow::buildInterface()
 
   QVector<PlotWidget*> listScatterPlotWidgets;
 
-  for (int i=0; i<nbOutputs; ++i)
+  for (int j=0; j<nbInputs; ++j)
   {
-    for (int j=0; j<nbInputs; ++j)
+    for (int i=0; i<nbOutputs; ++i)
     {
       PlotWidget * plot = new PlotWidget;
       plot->plotScatter(result_.getInputSample().getMarginal(j), result_.getResultSample().getMarginal(i));
@@ -224,6 +224,22 @@ void MonteCarloResultWindow::buildInterface()
         plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getDescription().c_str());
       else
         plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getName().c_str());
+      plotLayout->addWidget(plot);
+      listScatterPlotWidgets.append(plot);
+    }
+    for (int i=0; i<nbInputs; ++i)
+    {
+      PlotWidget *  plot = new PlotWidget;
+      plot->plotScatter(result_.getInputSample().getMarginal(j), result_.getInputSample().getMarginal(i));
+      plot->setTitle(tr("Scatter plot: ") + inputs[i].getName().c_str() + tr(" vs ") + inputs[j].getName().c_str());
+      if (inputs[j].getDescription().size())
+        plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getDescription().c_str());
+      else
+        plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getName().c_str());
+      if (inputs[i].getDescription().size())
+        plot->setAxisTitle(QwtPlot::yLeft, inputs[i].getDescription().c_str());
+      else
+        plot->setAxisTitle(QwtPlot::yLeft, inputs[i].getName().c_str());
       plotLayout->addWidget(plot);
       listScatterPlotWidgets.append(plot);
     }
