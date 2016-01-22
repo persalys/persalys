@@ -141,9 +141,9 @@ Description PhysicalModel::getStochasticInputNames()
 }
 
 
-bool PhysicalModel::hasAnInputNamed(const std::string & inputName)
+bool PhysicalModel::hasInputNamed(const std::string & inputName)
 {
-  return getImplementation()->hasAnInputNamed(inputName);
+  return getImplementation()->hasInputNamed(inputName);
 }
 
 
@@ -207,9 +207,9 @@ Description PhysicalModel::getOutputNames()
 }
 
 
-bool PhysicalModel::hasAnOutputNamed(const std::string & outputName)
+bool PhysicalModel::hasOutputNamed(const std::string & outputName)
 {
-  return getImplementation()->hasAnOutputNamed(outputName);
+  return getImplementation()->hasOutputNamed(outputName);
 }
 
 

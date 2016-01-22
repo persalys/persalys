@@ -273,7 +273,7 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
     inputTableView_->selectRow(index.row());
 
   QString inputName =  inputTableModel_->data(inputTableModel_->index(index.row(), 1), Qt::DisplayRole).toString();
-  if (!physicalModel_.hasAnInputNamed(inputName.toStdString()))
+  if (!physicalModel_.hasInputNamed(inputName.toStdString()))
     return;
   Distribution inputDistribution = physicalModel_.getInputByName(inputName.toStdString()).getDistribution();
   std::string distributionName = inputDistribution.getImplementation()->getClassName();

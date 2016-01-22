@@ -112,7 +112,7 @@ void PhysicalModelImplementation::setInputDistribution(const std::string & input
 
 void PhysicalModelImplementation::addInput(const Input & input)
 {
-  if (hasAnInputNamed(input.getName()))
+  if (hasInputNamed(input.getName()))
     throw InvalidArgumentException(HERE) << "The physical model has already an input named " << input.getName(); 
 
   inputs_.add(input);
@@ -126,7 +126,7 @@ void PhysicalModelImplementation::addInput(const Input & input)
 
 void PhysicalModelImplementation::removeInput(const std::string & inputName)
 {
-  if (hasAnInputNamed(inputName))
+  if (hasInputNamed(inputName))
   {
     for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
       if (inputs_[i].getName() == inputName)
@@ -158,10 +158,10 @@ void PhysicalModelImplementation::updateCopula()
   if (newSpearmanCorrelation.getDimension() > 1)
   {
     Description oldStochasticInputNames(copula_.getDescription());
-    int size = oldStochasticInputNames.getSize();
+    UnsignedInteger size = oldStochasticInputNames.getSize();
     CorrelationMatrix oldSpearmanCorrelation(copula_.getSpearmanCorrelation());
-    for (int row=0; row<size; ++row)
-      for (int col=row+1; col<size; ++col)
+    for (UnsignedInteger row=0; row<size; ++row)
+      for (UnsignedInteger col=row+1; col<size; ++col)
         {
           Collection<String>::iterator it1;
           it1 = std::find(stochasticInputNames.begin(), stochasticInputNames.end(), oldStochasticInputNames[row]);
@@ -169,8 +169,8 @@ void PhysicalModelImplementation::updateCopula()
           it2 = std::find(stochasticInputNames.begin(), stochasticInputNames.end(), oldStochasticInputNames[col]);
           if (it1 != stochasticInputNames.end() &&  it2 != stochasticInputNames.end())
           {
-            int newRow = it1 - stochasticInputNames.begin();
-            int newCol = it2 - stochasticInputNames.begin();
+            UnsignedInteger newRow = it1 - stochasticInputNames.begin();
+            UnsignedInteger newCol = it2 - stochasticInputNames.begin();
             newSpearmanCorrelation(newRow, newCol) = oldSpearmanCorrelation(row, col);
             newSpearmanCorrelation(newCol, newRow) = oldSpearmanCorrelation(row, col);
           }
@@ -202,7 +202,7 @@ Description PhysicalModelImplementation::getStochasticInputNames()
 }
 
 
-bool PhysicalModelImplementation::hasAnInputNamed(const std::string & inputName)
+bool PhysicalModelImplementation::hasInputNamed(const std::string & inputName)
 {
   Description inputNames = getInputNames();
   if (std::find(inputNames.begin(), inputNames.end(), inputName) != inputNames.end())
@@ -272,7 +272,7 @@ void PhysicalModelImplementation::setOutputValue(const std::string & outputName,
 
 void PhysicalModelImplementation::addOutput(const Output & output)
 {
-  if (hasAnOutputNamed(output.getName()))
+  if (hasOutputNamed(output.getName()))
     throw InvalidArgumentException(HERE) << "The physical model has already an output named " << output.getName(); 
 
   outputs_.add(output);
@@ -283,7 +283,7 @@ void PhysicalModelImplementation::addOutput(const Output & output)
 
 void PhysicalModelImplementation::removeOutput(const std::string & outputName)
 {
-  if (hasAnOutputNamed(outputName))
+  if (hasOutputNamed(outputName))
   {
     for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
       if (outputs_[i].getName() == outputName)
@@ -308,7 +308,7 @@ Description PhysicalModelImplementation::getOutputNames()
 }
 
 
-bool PhysicalModelImplementation::hasAnOutputNamed(const std::string & outputName)
+bool PhysicalModelImplementation::hasOutputNamed(const std::string & outputName)
 {
   Description outputNames = getOutputNames();
   if (std::find(outputNames.begin(), outputNames.end(), outputName) != outputNames.end())
@@ -377,7 +377,7 @@ std::string PhysicalModelImplementation::dumpProbaModel() const
 {
   std::string result;
 
-  for (int i=0; i<getInputs().getSize(); ++i)
+  for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
   {
     if (getInputs()[i].isStochastic())
     {
@@ -390,7 +390,7 @@ std::string PhysicalModelImplementation::dumpProbaModel() const
       {
         oss << "dist_" << inputName << " = ot." << distributionName << "(";
         NumericalPointWithDescription parameters = distribution.getParametersCollection()[0];
-        for (unsigned int i = 0; i < parameters.getSize(); ++ i)
+        for (UnsignedInteger i=0; i<parameters.getSize(); ++i)
         {
           oss << parameters[i];
           if (i < parameters.getSize() - 1)
@@ -404,7 +404,7 @@ std::string PhysicalModelImplementation::dumpProbaModel() const
         Distribution distribution = truncatedDistribution.getDistribution();
         oss << "dist_" << inputName << " = ot." << distribution.getImplementation()->getClassName() << "(";
         NumericalPointWithDescription parameters = distribution.getParametersCollection()[0];
-        for (unsigned int i = 0; i < parameters.getSize(); ++ i)
+        for (UnsignedInteger i=0; i<parameters.getSize(); ++i)
         {
           oss << parameters[i];
           if (i < parameters.getSize() - 1)

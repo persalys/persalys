@@ -37,7 +37,7 @@ public:
   void removeInput(const std::string & inputName);
   OT::Description getInputNames();
   OT::Description getStochasticInputNames();
-  bool hasAnInputNamed(const std::string & inputName);
+  bool hasInputNamed(const std::string & inputName);
   bool hasStochasticInputs();
 
   OutputCollection getOutputs() const;
@@ -49,7 +49,7 @@ public:
   void addOutput(const Output & output);
   void removeOutput(const std::string & outputName);
   OT::Description getOutputNames();
-  bool hasAnOutputNamed(const std::string & outputName);
+  bool hasOutputNamed(const std::string & outputName);
 
   OT::ComposedDistribution getComposedDistribution() const;
   OT::RandomVector getInputRandomVector();
