@@ -17,7 +17,7 @@ namespace OTGUI {
 
 CentralTendencyWizard::CentralTendencyWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
  : QWizard()
- , analysis_(MonteCarloAnalysis("aNameFromFirstPage", physicalModel))
+ , analysis_(MonteCarloAnalysis(otStudy->getAvailableAnalysisName("centralTendency_"), physicalModel))
  , otStudy_(otStudy)
  , physicalModel_(physicalModel)
 {

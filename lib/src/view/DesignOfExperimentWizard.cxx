@@ -74,7 +74,7 @@ int IntroPage::nextId() const
 
 DesignOfExperimentWizard::DesignOfExperimentWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
   : QWizard()
-  , designOfExperiment_(DesignOfExperiment("aDesign", physicalModel))
+  , designOfExperiment_(DesignOfExperiment(otStudy->getAvailableDesignOfExperimentName(), physicalModel))
   , otStudy_(otStudy)
 {
   buildInterface();

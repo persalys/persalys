@@ -18,9 +18,9 @@ StudyTreeViewModel::~StudyTreeViewModel()
 }
 
 
-void StudyTreeViewModel::update(Observable* source, const std::string & message)
+void StudyTreeViewModel::update(Observable * source, const std::string & message)
 {
-  if (message=="addStudy")
+  if (message == "addStudy")
   {
     OTStudy * otStudy = static_cast<OTStudy*>(source);
     addOTStudyItem(otStudy);
@@ -30,8 +30,7 @@ void StudyTreeViewModel::update(Observable* source, const std::string & message)
 
 void StudyTreeViewModel::createNewOTStudy()
 {
-  // find a name not used
-  OTStudy * newStudy = new OTStudy("anOTStudy");
+  OTStudy * newStudy = new OTStudy(OTStudy::GetAvailableOTStudyName());
 }
 
 
@@ -50,16 +49,14 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
 
 void StudyTreeViewModel::addPhysicalModelItem(const QModelIndex & parentIndex)
 {
-  // TODO: find a name for the new item
-  AnalyticalPhysicalModel newPhysicalModel("aModelPhys");
   OTStudyItem * parentItem = static_cast<OTStudyItem*>(itemFromIndex(parentIndex));
+  AnalyticalPhysicalModel newPhysicalModel(parentItem->getOTStudy()->getAvailablePhysicalModelName());
   parentItem->getOTStudy()->addPhysicalModel(newPhysicalModel);
 }
 
 
 void StudyTreeViewModel::addProbabilisticModelItem(const QModelIndex & parentIndex)
 {
-  // TODO: find a name for the new item
   PhysicalModelItem * parentItem = static_cast<PhysicalModelItem*>(itemFromIndex(parentIndex)->parent());
   ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(parentItem->getPhysicalModel());
   parentItem->getPhysicalModel().addObserver(newProbabilisticModelItem);
@@ -71,11 +68,10 @@ void StudyTreeViewModel::addProbabilisticModelItem(const QModelIndex & parentInd
 
 void StudyTreeViewModel::addLimitStateItem(const QModelIndex & parentIndex)
 {
-  // TODO: find a name for the new item
   PhysicalModelItem * parentItem = static_cast<PhysicalModelItem*>(itemFromIndex(parentIndex)->parent());
   PhysicalModel physicalModel = parentItem->getPhysicalModel();
-  LimitState newLimitState("aLimitState", physicalModel, physicalModel.getOutputs()[0].getName(), OT::Less(), 0.);
   OTStudyItem * studyItem = getOTStudyItem(parentIndex);
+  LimitState newLimitState(studyItem->getOTStudy()->getAvailableLimitStateName(), physicalModel, physicalModel.getOutputs()[0].getName(), OT::Less(), 0.);
   studyItem->getOTStudy()->addLimitState(newLimitState);
 }
 
@@ -84,9 +80,8 @@ OTStudyItem* StudyTreeViewModel::getOTStudyItem(const QModelIndex & childIndex)
 {
   QModelIndex seekRoot = childIndex;
   while(seekRoot.parent() != QModelIndex())
-      seekRoot = seekRoot.parent();
+    seekRoot = seekRoot.parent();
 
   return static_cast<OTStudyItem*>(itemFromIndex(seekRoot));
 }
-
 }

@@ -8,41 +8,58 @@ using namespace OT;
 
 namespace OTGUI {
 
-std::vector<OTStudy*> OTStudy::Instances_;
+std::vector<OTStudy*> OTStudy::OTStudies_;
+Observer * OTStudy::OTStudyObserver_ = 0;
 
 
-Observer * OTStudy::InstanceObserver_ = 0;
-
-
-std::vector<OTStudy*> OTStudy::GetInstances()
+std::vector<OTStudy*> OTStudy::GetOTStudies()
 {
-  return Instances_;
+  return OTStudies_;
 }
 
 
-OTStudy * OTStudy::FindInstance(const std::string & name)
+OTStudy * OTStudy::GetOTStudyByName(const std::string & otStudyName)
 {
-  for (std::vector<OTStudy*>::iterator it=Instances_.begin(); it!=Instances_.end(); ++it)
-    if (name == (*it)->getName())
+  for (std::vector<OTStudy*>::iterator it=OTStudies_.begin(); it!=OTStudies_.end(); ++it)
+    if ((*it)->getName() == otStudyName)
       return (*it);
   return 0;
 }
 
 
+bool OTStudy::HasOTStudyNamed(const std::string & otStudyName)
+{
+  for (std::vector<OTStudy*>::iterator it=OTStudies_.begin(); it!=OTStudies_.end(); ++it)
+    if ((*it)->getName() == otStudyName)
+      return true;
+  return false;
+}
+
+
+std::string OTStudy::GetAvailableOTStudyName()
+{
+  int i = 0;
+  std::string rootName = "OTStudy_";
+  while (HasOTStudyNamed(rootName + (OSS()<<i).str()))
+    ++i;
+  return rootName + (OSS()<<i).str();
+}
+
+
 void OTStudy::SetInstanceObserver(Observer * observer)
 {
-  InstanceObserver_ = observer;
+  OTStudyObserver_ = observer;
 }
 
 
 OTStudy::OTStudy(const std::string & name)
- : PersistentObject()
- , Observable()
- , name_(name)
+  : PersistentObject()
+  , Observable()
+  , name_(name)
 {
-  Instances_.push_back(this);
-  if (InstanceObserver_)
-    InstanceObserver_->update(this, "addStudy");
+  OTStudies_.push_back(this);
+  if (OTStudyObserver_)
+    OTStudyObserver_->update(this, "addStudy");
 }
 
 
@@ -52,9 +69,9 @@ OTStudy::OTStudy(const OTStudy & other)
   , name_(other.name_+"_copy")
 {
   setObserver(other.getObserver());
-  Instances_.push_back(this);
-  if (InstanceObserver_)
-    InstanceObserver_->update(this, "addStudy");
+  OTStudies_.push_back(this);
+  if (OTStudyObserver_)
+    OTStudyObserver_->update(this, "addStudy");
 
   for (int i=0; i<other.physicalModels_.size(); ++i)
     addPhysicalModel(*other.physicalModels_[i].getImplementation()->clone());
@@ -70,7 +87,7 @@ OTStudy* OTStudy::clone() const
 
 OTStudy::~OTStudy()
 {
-  Instances_.erase(std::remove(Instances_.begin(), Instances_.end(), this), Instances_.end());
+  OTStudies_.erase(std::remove(OTStudies_.begin(), OTStudies_.end(), this), OTStudies_.end());
 }
 
 
@@ -92,7 +109,7 @@ std::vector<PhysicalModel> OTStudy::getPhysicalModels() const
 }
 
 
-PhysicalModel & OTStudy::getPhysicalModelByName(const std::string& physicalModelName)
+PhysicalModel & OTStudy::getPhysicalModelByName(const std::string & physicalModelName)
 {
   for (UnsignedInteger i=0; i<physicalModels_.size(); ++i)
     if (physicalModels_[i].getName() == physicalModelName)
@@ -107,6 +124,16 @@ bool OTStudy::hasPhysicalModelNamed(const std::string & physicalModelName)
     if (physicalModels_[i].getImplementation()->getName() == physicalModelName)
       return true;
   return false;
+}
+
+
+std::string OTStudy::getAvailablePhysicalModelName()
+{
+  int i = 0;
+  std::string rootName = "physicalModel_";
+  while (hasPhysicalModelNamed(rootName + (OSS()<<i).str()))
+    ++i;
+  return rootName + (OSS()<<i).str();
 }
 
 
@@ -132,6 +159,16 @@ bool OTStudy::hasDesignOfExperimentNamed(const std::string & designOfExperimentN
     if (designOfExperiments_[i].getImplementation()->getName() == designOfExperimentName)
       return true;
   return false;
+}
+
+
+std::string OTStudy::getAvailableDesignOfExperimentName()
+{
+  int i = 0;
+  std::string rootName = "design_";
+  while (hasDesignOfExperimentNamed(rootName + (OSS()<<i).str()))
+    ++i;
+  return rootName + (OSS()<<i).str();
 }
 
 
@@ -171,6 +208,15 @@ bool OTStudy::hasAnalysisNamed(const std::string & analysisName)
 }
 
 
+std::string OTStudy::getAvailableAnalysisName(const std::string & rootName)
+{
+  int i = 0;
+  while (hasAnalysisNamed(rootName + (OSS()<<i).str()))
+    ++i;
+  return rootName + (OSS()<<i).str();
+}
+
+
 void OTStudy::addAnalysis(const Analysis & analysis)
 {
   if (hasAnalysisNamed(analysis.getName()))
@@ -200,6 +246,16 @@ bool OTStudy::hasLimitStateNamed(const std::string & limitStateName)
     if (limitStates_[i].getImplementation()->getName() == limitStateName)
       return true;
   return false;
+}
+
+
+std::string OTStudy::getAvailableLimitStateName()
+{
+  int i = 0;
+  std::string rootName = "limitState_";
+  while (hasLimitStateNamed(rootName + (OSS()<<i).str()))
+    ++i;
+  return rootName + (OSS()<<i).str();
 }
 
 
@@ -242,6 +298,4 @@ std::string OTStudy::dump()
   }
   return result;
 }
-
-
 }

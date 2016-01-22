@@ -15,7 +15,7 @@ namespace OTGUI {
 
 ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(OTStudy * otStudy, const LimitState & limitState)
  : QWizard()
- , analysis_(MonteCarloReliabilityAnalysis("reliabilityMC", limitState))
+ , analysis_(MonteCarloReliabilityAnalysis(otStudy->getAvailableAnalysisName("reliability_"), limitState))
  , otStudy_(otStudy)
 //  , limitState_(limitState)
 {

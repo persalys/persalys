@@ -15,7 +15,7 @@ namespace OTGUI {
 
 ModelEvaluationWizard::ModelEvaluationWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
   : QWizard()
-  , analysis_(ModelEvaluation("anEvaluation", physicalModel))
+  , analysis_(ModelEvaluation(otStudy->getAvailableAnalysisName("evaluation_"), physicalModel))
   , otStudy_(otStudy)
 {
   buildInterface();

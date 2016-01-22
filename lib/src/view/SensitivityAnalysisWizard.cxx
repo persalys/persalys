@@ -17,7 +17,7 @@ namespace OTGUI {
 
 SensitivityAnalysisWizard::SensitivityAnalysisWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
  : QWizard()
- , analysis_(SobolAnalysis("aNameFromFirstPage", physicalModel))
+ , analysis_(SobolAnalysis(otStudy->getAvailableAnalysisName("sensitivity_"), physicalModel))
  , otStudy_(otStudy)
  , physicalModel_(physicalModel)
 {
