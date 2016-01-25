@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     // Parametric analysis
     ParametricAnalysis analysis("myParametricAnalysis", myPhysicalModel);
     analysis.run();
-    NumericalSample resultSample(analysis.getResult().getResultSample());
+    NumericalSample resultSample(analysis.getResult().getOutputSample());
 
     // Reference
 

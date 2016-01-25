@@ -75,7 +75,7 @@ std::string QuadraticCumulAnalysis::dump() const
 
 bool QuadraticCumulAnalysis::analysisLaunched() const
 {
-//   return resultSample_.getSize()!=0;
+//   return outputSample_.getSize()!=0;
 }
 
 

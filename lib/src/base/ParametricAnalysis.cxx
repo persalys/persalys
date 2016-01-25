@@ -211,7 +211,7 @@ std::string ParametricAnalysis::dump() const
 
 bool ParametricAnalysis::analysisLaunched() const
 {
-  return getResult().getResultSample().getSize()!=0;
+  return getResult().getOutputSample().getSize()!=0;
 }
 
 

@@ -31,7 +31,7 @@ void ParametricAnalysisResultWindow::buildInterface()
   headLayout->addWidget(outputName);
   outputsComboBoxFirstTab_ = new QComboBox;
   QStringList items = QStringList();
-  for (int i=0; i<result_.getResultSample().getDimension(); ++i)
+  for (int i=0; i<result_.getOutputSample().getDimension(); ++i)
     items << result_.getOutputNames()[i].c_str();
   outputsComboBoxFirstTab_->addItems(items);
   connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateLabelsText(int)));
@@ -41,7 +41,7 @@ void ParametricAnalysisResultWindow::buildInterface()
   QLabel * nbSimuLabel = new QLabel(tr("Number of simulations"));
   nbSimuLabel->setStyleSheet("font: bold 14px;");
   headLayout->addWidget(nbSimuLabel);
-  nbSimuLabel = new QLabel(QString::number(result_.getResultSample().getSize()));
+  nbSimuLabel = new QLabel(QString::number(result_.getOutputSample().getSize()));
   headLayout->addWidget(nbSimuLabel);
   tabLayout->addLayout(headLayout);
 
@@ -104,7 +104,7 @@ void ParametricAnalysisResultWindow::buildInterface()
   tab = new QWidget;
   tabLayout = new QVBoxLayout(tab);
   NumericalSample sample = result_.getInputSample();
-  sample.stack(result_.getResultSample());
+  sample.stack(result_.getOutputSample());
   OTguiTableView * tabResultView = new OTguiTableView(sample);
   tabLayout->addWidget(tabResultView);
 
@@ -154,8 +154,6 @@ void ParametricAnalysisResultWindow::updateScatterPlot(int indexInput, int index
 {
   Q_ASSERT(scatterPlot_);
   scatterPlot_->clear();
-  scatterPlot_->plotScatter(result_.getInputSample().getMarginal(indexInput), result_.getResultSample().getMarginal(indexOutput));
+  scatterPlot_->plotScatter(result_.getInputSample().getMarginal(indexInput), result_.getOutputSample().getMarginal(indexOutput));
 }
-
-
 }

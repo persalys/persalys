@@ -13,11 +13,11 @@ class ParametricAnalysisResult
 
 public:
   ParametricAnalysisResult();
-  ParametricAnalysisResult(OT::NumericalSample inputSample, OT::NumericalSample resultSample);
+  ParametricAnalysisResult(OT::NumericalSample inputSample, OT::NumericalSample outputSample);
 
   virtual ~ParametricAnalysisResult();
 
-  OT::NumericalSample getResultSample() const;
+  OT::NumericalSample getOutputSample() const;
   OT::NumericalSample getInputSample() const;
   NumericalSampleCollection getListXMin() const;
   OT::NumericalPoint getListMin() const;
@@ -30,7 +30,7 @@ protected:
   void searchMinMax();
 
 private:
-  OT::NumericalSample resultSample_;
+  OT::NumericalSample outputSample_;
   OT::NumericalSample inputSample_;
   NumericalSampleCollection listXMin_;
   OT::NumericalPoint listMin_;

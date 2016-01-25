@@ -117,6 +117,6 @@ std::string ModelEvaluation::dump() const
 
 bool ModelEvaluation::analysisLaunched() const
 {
-//   return getResult().getResultSample().getSize()!=0;
+//   return getResult().getOutputSample().getSize()!=0;
 }
 }

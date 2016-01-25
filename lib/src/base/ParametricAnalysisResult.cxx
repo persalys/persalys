@@ -14,11 +14,11 @@ ParametricAnalysisResult::ParametricAnalysisResult()
 }
 
 
-ParametricAnalysisResult::ParametricAnalysisResult(NumericalSample inputSample, NumericalSample resultSample)
-  : resultSample_(resultSample)
+ParametricAnalysisResult::ParametricAnalysisResult(NumericalSample inputSample, NumericalSample outputSample)
+  : outputSample_(outputSample)
   , inputSample_(inputSample)
-  , listMin_(resultSample.getMin())
-  , listMax_(resultSample.getMax())
+  , listMin_(outputSample.getMin())
+  , listMax_(outputSample.getMax())
 {
   searchMinMax();
 }
@@ -30,9 +30,9 @@ ParametricAnalysisResult::~ParametricAnalysisResult()
 }
 
 
-NumericalSample ParametricAnalysisResult::getResultSample() const
+NumericalSample ParametricAnalysisResult::getOutputSample() const
 {
-  return resultSample_;
+  return outputSample_;
 }
 
 
@@ -50,7 +50,7 @@ NumericalSampleCollection ParametricAnalysisResult::getListXMin() const
 
 NumericalPoint ParametricAnalysisResult::getListMin() const
 {
-  return resultSample_.getMin();
+  return outputSample_.getMin();
 }
 
 
@@ -62,13 +62,13 @@ NumericalSampleCollection ParametricAnalysisResult::getListXMax() const
 
 NumericalPoint ParametricAnalysisResult::getListMax() const
 {
-  return resultSample_.getMax();
+  return outputSample_.getMax();
 }
 
 
 Description ParametricAnalysisResult::getOutputNames() const
 {
-  return resultSample_.getDescription();
+  return outputSample_.getDescription();
 }
 
 
@@ -87,7 +87,7 @@ void ParametricAnalysisResult::searchMinMax()
   indicesInputs.fill();
 
   NumericalSample sample = inputSample_;
-  sample.stack(resultSample_);
+  sample.stack(outputSample_);
 
   for (int i=numberInputs; i<sample.getDimension(); ++i)
   {

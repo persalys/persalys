@@ -33,11 +33,11 @@ void MonteCarloResultWindow::buildInterface()
   for (int i=0; i<nbInputs; ++i)
     inputNames << physicalModel_.getStochasticInputNames()[i].c_str();
 
-  int nbOutputs = result_.getResultSample().getDimension();
+  int nbOutputs = result_.getOutputSample().getDimension();
   OutputCollection outputs = physicalModel_.getOutputs();
   QStringList outputNames;
   for (int i=0; i<nbOutputs; ++i)
-    outputNames << result_.getResultSample().getDescription()[i].c_str();
+    outputNames << result_.getOutputSample().getDescription()[i].c_str();
 
   // tabWidget
   tabWidget_ = new QTabWidget;
@@ -156,14 +156,14 @@ void MonteCarloResultWindow::buildInterface()
   for (int i=0; i<nbOutputs; ++i)
   {
     PlotWidget * plot = new PlotWidget;
-    plot->plotHistogram(result_.getResultSample().getMarginal(i));
+    plot->plotHistogram(result_.getOutputSample().getMarginal(i));
     plot->plotPDFCurve(result_.getFittedDistribution()[i]);
     plot->setTitle(tr("PDF ") + outputs[i].getName().c_str());
     plotLayout->addWidget(plot);
     listPlotWidgets.append(plot);
 
     plot = new PlotWidget;
-    plot->plotHistogram(result_.getResultSample().getMarginal(i), true);
+    plot->plotHistogram(result_.getOutputSample().getMarginal(i), true);
     plot->plotCDFCurve(result_.getFittedDistribution()[i]);
     plot->setTitle(tr("CDF ") + outputs[i].getName().c_str());
     plotLayout->addWidget(plot);
@@ -214,7 +214,7 @@ void MonteCarloResultWindow::buildInterface()
     for (int i=0; i<nbOutputs; ++i)
     {
       PlotWidget * plot = new PlotWidget;
-      plot->plotScatter(result_.getInputSample().getMarginal(j), result_.getResultSample().getMarginal(i));
+      plot->plotScatter(result_.getInputSample().getMarginal(j), result_.getOutputSample().getMarginal(i));
       plot->setTitle(tr("Scatter plot: ") + outputs[i].getName().c_str() + tr(" vs ") + inputNames[j]);
       std::string inputDescription = physicalModel_.getInputByName(inputNames[j].toStdString()).getDescription();
       if (!inputDescription.empty())
@@ -254,7 +254,7 @@ void MonteCarloResultWindow::buildInterface()
   tabWidget_->addTab(tab, tr("Scatter plots"));
 
   // fifth tab --------------------------------
-  tab = new PlotMatrixWidget(result_.getInputSample(), result_.getResultSample());
+  tab = new PlotMatrixWidget(result_.getInputSample(), result_.getOutputSample());
   plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
   tabWidget_->addTab(tab, tr("Plot matrix Y-X"));
@@ -269,7 +269,7 @@ void MonteCarloResultWindow::buildInterface()
   tab = new QWidget;
   tabLayout = new QVBoxLayout(tab);
   NumericalSample sample = result_.getInputSample();
-  sample.stack(result_.getResultSample());
+  sample.stack(result_.getOutputSample());
   OTguiTableView * tabResultView = new OTguiTableView(sample);
   tabLayout->addWidget(tabResultView);
 
@@ -337,7 +337,7 @@ void MonteCarloResultWindow::updateLabelsText(int indexOutput)
 void MonteCarloResultWindow::probaValueChanged(double proba)
 {
   quantileSpinBox_->blockSignals(true);
-  quantileSpinBox_->setValue(result_.getResultSample().getMarginal(outputsComboBoxFirstTab_->currentIndex()).computeQuantile(proba)[0]);
+  quantileSpinBox_->setValue(result_.getOutputSample().getMarginal(outputsComboBoxFirstTab_->currentIndex()).computeQuantile(proba)[0]);
   quantileSpinBox_->blockSignals(false);
 }
 
@@ -346,10 +346,10 @@ void MonteCarloResultWindow::quantileValueChanged(double quantile)
 {
   probaSpinBox_->blockSignals(true);
   double cdf = 0.0;
-  double p = 1.0 / double(result_.getResultSample().getSize());
+  double p = 1.0 / double(result_.getOutputSample().getSize());
 
-  for (int j=0; j<result_.getResultSample().getSize(); ++j)
-    if (result_.getResultSample()[j][outputsComboBoxFirstTab_->currentIndex()] < quantile)
+  for (int j=0; j<result_.getOutputSample().getSize(); ++j)
+    if (result_.getOutputSample()[j][outputsComboBoxFirstTab_->currentIndex()] < quantile)
       cdf += p;
 
   probaSpinBox_->setValue(cdf);

@@ -31,7 +31,7 @@ MonteCarloResult::~MonteCarloResult()
 NumericalPoint MonteCarloResult::getMean()
 {
   if (!mean_.getSize())
-    mean_ = getResultSample().computeMean();
+    mean_ = getOutputSample().computeMean();
   return mean_;
 }
 
@@ -39,7 +39,7 @@ NumericalPoint MonteCarloResult::getMean()
 NumericalPoint MonteCarloResult::getMedian()
 {
   if (!median_.getSize())
-    median_ = getResultSample().computeMedian();
+    median_ = getOutputSample().computeMedian();
   return median_;
 }
 
@@ -47,7 +47,7 @@ NumericalPoint MonteCarloResult::getMedian()
 NumericalPoint MonteCarloResult::getStandardDeviation()
 {
   if (!standardDeviation_.getSize())
-    standardDeviation_ = getResultSample().computeStandardDeviationPerComponent();
+    standardDeviation_ = getOutputSample().computeStandardDeviationPerComponent();
   return standardDeviation_;
 }
 
@@ -55,7 +55,7 @@ NumericalPoint MonteCarloResult::getStandardDeviation()
 NumericalPoint MonteCarloResult::getVariance()
 {
   if (!variance_.getSize())
-    variance_ = getResultSample().computeVariance();
+    variance_ = getOutputSample().computeVariance();
   return variance_;
 }
 
@@ -64,9 +64,9 @@ NumericalPoint MonteCarloResult::getSkewness()
 {
   if (!skewness_.getSize())
   {
-    skewness_ = NumericalPoint(getResultSample().getDimension());
-    if (!(getResultSample().getSize() < 2))
-      skewness_ = getResultSample().computeSkewness();
+    skewness_ = NumericalPoint(getOutputSample().getDimension());
+    if (!(getOutputSample().getSize() < 2))
+      skewness_ = getOutputSample().computeSkewness();
   }
   return skewness_;
 }
@@ -76,9 +76,9 @@ NumericalPoint MonteCarloResult::getKurtosis()
 {
   if (!kurtosis_.getSize())
   {
-    kurtosis_ = NumericalPoint(getResultSample().getDimension());
-    if (!(getResultSample().getSize() < 3))
-      kurtosis_ = getResultSample().computeKurtosis();
+    kurtosis_ = NumericalPoint(getOutputSample().getDimension());
+    if (!(getOutputSample().getSize() < 3))
+      kurtosis_ = getOutputSample().computeKurtosis();
   }
   return kurtosis_;
 }
@@ -87,7 +87,7 @@ NumericalPoint MonteCarloResult::getKurtosis()
 NumericalPoint MonteCarloResult::getFirstQuartile()
 {
   if (!firstQuartile_.getSize())
-    firstQuartile_ = getResultSample().computeQuantilePerComponent(0.25);
+    firstQuartile_ = getOutputSample().computeQuantilePerComponent(0.25);
   return firstQuartile_;
 }
 
@@ -95,7 +95,7 @@ NumericalPoint MonteCarloResult::getFirstQuartile()
 NumericalPoint MonteCarloResult::getThirdQuartile()
 {
   if (!thirdQuartile_.getSize())
-    thirdQuartile_ = getResultSample().computeQuantilePerComponent(0.75);
+    thirdQuartile_ = getOutputSample().computeQuantilePerComponent(0.75);
   return thirdQuartile_;
 }
 
@@ -105,14 +105,14 @@ Interval MonteCarloResult::getMeanConfidenceInterval(const double level)
   if (!meanConfidenceInterval_.getDimension() || levelConfidenceInterval_ != level)
   {
     levelConfidenceInterval_ = level;
-    meanConfidenceInterval_ = Interval(getResultSample().getDimension());
+    meanConfidenceInterval_ = Interval(getOutputSample().getDimension());
 
     Normal X(0,1);
     double f = X.computeQuantile((1-levelConfidenceInterval_)/2, true)[0];
-    NumericalPoint delta = f * getStandardDeviation() / sqrt(getResultSample().getSize());
+    NumericalPoint delta = f * getStandardDeviation() / sqrt(getOutputSample().getSize());
     
-    NumericalPoint lowerBounds(getResultSample().getDimension());
-    NumericalPoint upperBounds(getResultSample().getDimension());
+    NumericalPoint lowerBounds(getOutputSample().getDimension());
+    NumericalPoint upperBounds(getOutputSample().getDimension());
 
     for (int i=0; i<meanConfidenceInterval_.getDimension(); ++i)
     {
@@ -133,19 +133,19 @@ Interval MonteCarloResult::getStdConfidenceInterval(const double level)
   if (!stdConfidenceInterval_.getDimension() || levelConfidenceInterval_ != level)
   {
     levelConfidenceInterval_ = level;
-    stdConfidenceInterval_ = Interval(getResultSample().getDimension());
+    stdConfidenceInterval_ = Interval(getOutputSample().getDimension());
 
     // TODO : use Normal Distribution?
-    int nbSimu = getResultSample().getSize();
+    int nbSimu = getOutputSample().getSize();
     ChiSquare X(nbSimu-1);
     // low
     double f1 = X.computeQuantile((1-levelConfidenceInterval_)/2, true)[0];
     // up
     double f2 = X.computeQuantile((1-levelConfidenceInterval_)/2, false)[0];
 
-    stdConfidenceInterval_ = Interval(getResultSample().getDimension());
-    NumericalPoint lowerBounds(getResultSample().getDimension());
-    NumericalPoint upperBounds(getResultSample().getDimension());
+    stdConfidenceInterval_ = Interval(getOutputSample().getDimension());
+    NumericalPoint lowerBounds(getOutputSample().getDimension());
+    NumericalPoint upperBounds(getOutputSample().getDimension());
 
     for (int i=0; i<stdConfidenceInterval_.getDimension(); ++i)
     {
@@ -166,7 +166,7 @@ MonteCarloResult::NumericalPointCollection MonteCarloResult::getOutliers()
   if (!outliers_.getSize())
   {
     outliers_.clear();
-    for (int i=0; i<getResultSample().getDimension(); ++i)
+    for (int i=0; i<getOutputSample().getDimension(); ++i)
     {
       NumericalPoint outliersOfIthOutput;
       double Q1 = getFirstQuartile()[i];
@@ -174,9 +174,9 @@ MonteCarloResult::NumericalPointCollection MonteCarloResult::getOutliers()
       double lowerBound = Q1 - 1.5 * (Q3 - Q1);
       double upperBound = Q3 + 1.5 * (Q3 - Q1);
 
-      for (int j=0; j<getResultSample().getSize(); ++j)
-        if (getResultSample()[j][i] < lowerBound || getResultSample()[j][i] > upperBound)
-          outliersOfIthOutput.add(getResultSample()[j][i]);
+      for (int j=0; j<getOutputSample().getSize(); ++j)
+        if (getOutputSample()[j][i] < lowerBound || getOutputSample()[j][i] > upperBound)
+          outliersOfIthOutput.add(getOutputSample()[j][i]);
 
       outliers_.add(outliersOfIthOutput);
     }
@@ -189,10 +189,10 @@ MonteCarloResult::DistributionCollection MonteCarloResult::getFittedDistribution
 {
   KernelSmoothing gaussianKernel = KernelSmoothing();
 
-  DistributionCollection distributions(getResultSample().getDimension());
+  DistributionCollection distributions(getOutputSample().getDimension());
 
-  for (int i=0; i<getResultSample().getDimension(); ++i)
-    distributions[i] = gaussianKernel.build(getResultSample().getMarginal(i), true);
+  for (int i=0; i<getOutputSample().getDimension(); ++i)
+    distributions[i] = gaussianKernel.build(getOutputSample().getMarginal(i), true);
 
   return distributions;
 }

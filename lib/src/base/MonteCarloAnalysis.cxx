@@ -89,7 +89,7 @@ std::string MonteCarloAnalysis::dump() const
 
 bool MonteCarloAnalysis::analysisLaunched() const
 {
-//   return resultSample_.getSize()!=0;
+//   return outputSample_.getSize()!=0;
 }
 
 
