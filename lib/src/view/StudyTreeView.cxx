@@ -352,6 +352,7 @@ void StudyTreeView::runDesignOfExperiment()
   if (wizard->exec())
   {
     emit checkIfWindowResultExists(item);
+    item->getDesignOfExperiment().clearResult();
     createNewDesignOfExperimentWindow(item);
   }
 }

@@ -466,6 +466,12 @@ SimulationAnalysisResult DesignOfExperimentImplementation::getResult() const
 }
 
 
+void DesignOfExperimentImplementation::clearResult()
+{
+  result_ = SimulationAnalysisResult();
+}
+
+
 void DesignOfExperimentImplementation::eval()
 {
   result_ = SimulationAnalysisResult(getInputSample(), physicalModel_.getFunction()(getInputSample()));

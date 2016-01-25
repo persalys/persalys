@@ -234,6 +234,12 @@ SimulationAnalysisResult DesignOfExperiment::getResult() const
 }
 
 
+void DesignOfExperiment::clearResult()
+{
+  getImplementation()->clearResult();
+}
+
+
 void DesignOfExperiment::updateParameters()
 {
   getImplementation()->updateParameters();
