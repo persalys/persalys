@@ -76,9 +76,10 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 %include LimitState.i
 %include AnalysisImplementation.i
 %include Analysis.i
+%include ModelEvaluationResult.i
+%include ModelEvaluation.i
 %include SimulationAnalysis.i
-%include ParametricAnalysisResult.i
-%include ParametricAnalysis.i
+%include SimulationAnalysisResult.i
 %include DesignOfExperimentImplementation.i
 %include DesignOfExperiment.i
 %include MonteCarloResult.i

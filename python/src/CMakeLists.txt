@@ -60,15 +60,16 @@ ot_add_python_module( otguibase otguibase_module.i
                       PythonPhysicalModel.i
                       PhysicalModel.i PhysicalModel_doc.i.in
                       YACSPhysicalModel.i
-                      DesignOfExperimentImplementation.i
-                      DesignOfExperiment.i
                       LimitStateImplementation.i
                       LimitState.i LimitState_doc.i.in
                       AnalysisImplementation.i
                       Analysis.i Analysis_doc.i.in
                       SimulationAnalysis.i
-                      ParametricAnalysisResult.i ParametricAnalysisResult_doc.i.in
-                      ParametricAnalysis.i ParametricAnalysis_doc.i.in
+                      ModelEvaluationResult.i
+                      ModelEvaluation.i
+                      SimulationAnalysisResult.i SimulationAnalysisResult_doc.i.in
+                      DesignOfExperimentImplementation.i
+                      DesignOfExperiment.i
                       MonteCarloResult.i MonteCarloResult_doc.i.in
                       MonteCarloAnalysis.i MonteCarloAnalysis_doc.i.in
                       QuadraticCumulResult.i QuadraticCumulResult_doc.i.in

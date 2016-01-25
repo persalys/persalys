@@ -15,11 +15,9 @@ ot_add_source_file ( PhysicalModelItem.cxx )
 ot_add_source_file ( OTStudyItem.cxx )
 ot_add_source_file ( AnalysisItem.cxx )
 ot_add_source_file ( ModelEvaluationItem.cxx )
-ot_add_source_file ( ParametricAnalysisItem.cxx )
 ot_add_source_file ( CentralTendencyItem.cxx )
 ot_add_source_file ( SensitivityAnalysisItem.cxx )
 ot_add_source_file ( ReliabilityAnalysisItem.cxx )
-ot_add_source_file ( ParametricAnalysisTableModel.cxx )
 ot_add_source_file ( StudyTreeViewModel.cxx )
 ot_add_source_file (CodeModel.cxx)
 
@@ -32,8 +30,6 @@ qt4_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
                                     otgui/CorrelationTableModel.hxx
                                     otgui/AnalysisItem.hxx
                                     otgui/ModelEvaluationItem.hxx
-                                    otgui/ParametricAnalysisItem.hxx
-                                    otgui/ParametricAnalysisTableModel.hxx
                                     otgui/CentralTendencyItem.hxx
                                     otgui/SensitivityAnalysisItem.hxx
                                     otgui/ReliabilityAnalysisItem.hxx

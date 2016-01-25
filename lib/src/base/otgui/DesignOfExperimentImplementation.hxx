@@ -4,7 +4,7 @@
 #define DESIGNOFEXPERIMENTIMPLEMENTATION_H
 
 #include "PhysicalModel.hxx"
-#include "ParametricAnalysisResult.hxx"
+#include "SimulationAnalysisResult.hxx"
 
 #include "Experiment.hxx"
 
@@ -58,9 +58,7 @@ public:
 
   OT::NumericalSample getInputSample();
   void setInputSample(const OT::NumericalSample & sample);
-  OT::NumericalSample getOutputSample();
-  void setOutputSample(const OT::NumericalSample & sample);
-  ParametricAnalysisResult getResult() const;
+  SimulationAnalysisResult getResult() const;
 
   void updateParameters();
   void eval();
@@ -84,8 +82,7 @@ private:
   OT::Indices columns_;
 //   TODO
 //   OT::Experiment experiment_;
-  OT::NumericalSample outputSample_;
-  ParametricAnalysisResult result_;
+  SimulationAnalysisResult result_;
 };
 }
 #endif

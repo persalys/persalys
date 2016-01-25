@@ -4,7 +4,7 @@
 #include "OTtestcode.hxx"
 #include "otgui/OTStudy.hxx"
 #include "otgui/AnalyticalPhysicalModel.hxx"
-#include "otgui/ParametricAnalysis.hxx"
+#include "otgui/DesignOfExperiment.hxx"
 
 
 using namespace OT;
@@ -36,9 +36,10 @@ int main(int argc, char *argv[])
     myStudy.addPhysicalModel(myPhysicalModel);
 
     // Parametric analysis
-    ParametricAnalysis analysis("myParametricAnalysis", myPhysicalModel);
-    analysis.run();
-    NumericalSample resultSample(analysis.getResult().getOutputSample());
+    DesignOfExperiment aDesign("aDesign", myPhysicalModel);
+    myStudy.addDesignOfExperiment(aDesign);
+    aDesign.eval();
+    NumericalSample resultSample(aDesign.getResult().getOutputSample());
 
     // Reference
 

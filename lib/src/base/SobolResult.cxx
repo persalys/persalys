@@ -14,10 +14,9 @@ SobolResult::SobolResult()
 SobolResult::SobolResult(const NumericalSample firstOrderIndices,
                          const NumericalSample totalOrderIndices,
                          const Description & outputNames)
- : outputNames_(outputNames)
- , inputNames_(firstOrderIndices.getDescription())
- , firstOrderIndices_(firstOrderIndices)
- , totalOrderIndices_(totalOrderIndices)
+  : outputNames_(outputNames)
+  , firstOrderIndices_(firstOrderIndices)
+  , totalOrderIndices_(totalOrderIndices)
 {
 }
 
@@ -30,7 +29,7 @@ Description SobolResult::getOutputNames() const
 
 Description SobolResult::getInputNames() const
 {
-  return inputNames_;
+  return firstOrderIndices_.getDescription();
 }
 
 

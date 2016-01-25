@@ -13,9 +13,8 @@ SRCResult::SRCResult()
 
 SRCResult::SRCResult(const NumericalSample indices,
                                      const Description & outputNames)
- : outputNames_(outputNames)
- , inputNames_(indices.getDescription())
- , indices_(indices)
+  : outputNames_(outputNames)
+  , indices_(indices)
 {
 }
 
@@ -28,7 +27,7 @@ Description SRCResult::getOutputNames() const
 
 Description SRCResult::getInputNames() const
 {
-  return inputNames_;
+  return indices_.getDescription();
 }
 
 
@@ -36,5 +35,4 @@ NumericalSample SRCResult::getIndices() const
 {
   return indices_;
 }
-
 }

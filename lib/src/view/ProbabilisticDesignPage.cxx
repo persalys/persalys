@@ -55,7 +55,6 @@ void ProbabilisticDesignPage::setDesignOfExperiment(DesignOfExperiment & designO
 
 bool ProbabilisticDesignPage::validatePage()
 {
-  designOfExperiment_.setOutputSample(NumericalSample(0, 0));
   return pageValidity_;
 }
 }

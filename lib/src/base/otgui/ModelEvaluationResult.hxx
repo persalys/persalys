@@ -3,7 +3,7 @@
 #ifndef MODELEVALUATIONRESULT_H
 #define MODELEVALUATIONRESULT_H
 
-#include "PhysicalModel.hxx"
+#include "NumericalSample.hxx"
 
 namespace OTGUI {
 class ModelEvaluationResult
@@ -18,8 +18,8 @@ public:
   OT::NumericalSample getOutputSample() const;
 
 private:
-  OT::NumericalSample outputSample_;
   OT::NumericalSample inputSample_;
+  OT::NumericalSample outputSample_;
 };
 }
 #endif

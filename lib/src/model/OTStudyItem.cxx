@@ -1,6 +1,5 @@
 #include "otgui/OTStudyItem.hxx"
 
-#include "otgui/ParametricAnalysisItem.hxx"
 #include "otgui/ModelEvaluationItem.hxx"
 #include "otgui/CentralTendencyItem.hxx"
 #include "otgui/SensitivityAnalysisItem.hxx"
@@ -98,12 +97,7 @@ void OTStudyItem::update(Observable * source, const std::string & message)
     Analysis addedAnalysis = otStudy_->getAnalyses().back();
 
     AnalysisItem * newItem;
-    if (message=="addParametricAnalysis")
-    {
-      newItem = new ParametricAnalysisItem(addedAnalysis);
-      addDeterministicAnalysisItem(addedAnalysis, newItem);
-    }
-    else if (message=="addModelEvaluation")
+    if (message=="addModelEvaluation")
     {
       newItem = new ModelEvaluationItem(addedAnalysis);
       addDeterministicAnalysisItem(addedAnalysis, newItem);

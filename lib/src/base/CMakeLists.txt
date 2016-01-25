@@ -13,7 +13,7 @@ set(BASE_SOURCEFILES Observer.cxx Observable.cxx OTStudy.cxx Variable.cxx Input.
                      DesignOfExperimentImplementation.cxx DesignOfExperiment.cxx
                      AnalysisImplementation.cxx Analysis.cxx SimulationAnalysis.cxx
                      ModelEvaluationResult.cxx ModelEvaluation.cxx
-                     ParametricAnalysisResult.cxx ParametricAnalysis.cxx
+                     SimulationAnalysisResult.cxx
                      MonteCarloResult.cxx MonteCarloAnalysis.cxx QuadraticCumulResult.cxx
                      QuadraticCumulAnalysis.cxx SobolResult.cxx SobolAnalysis.cxx
                      SRCResult.cxx SRCAnalysis.cxx

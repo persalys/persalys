@@ -20,7 +20,7 @@ levels = [2, 2]
 aDesign = otguibase.DesignOfExperiment('aDesign', aModelPhys, lowerBounds, upperBounds, levels)
 anOTStudy.addDesignOfExperiment(aDesign)
 aDesign.eval()
-print('outs=', aDesign.getOutputSample())
+print('outs=', aDesign.getResult().getOutputSample())
 
 filename = 'normal.csv'
 ot.Normal(3).getSample(10).exportToCSVFile(filename, ',')
@@ -28,7 +28,7 @@ columns = [0, 2]
 aDesign = otguibase.DesignOfExperiment('aDesign2', aModelPhys, filename, ot.Indices(columns))
 anOTStudy.addDesignOfExperiment(aDesign)
 aDesign.eval()
-print('outs=', aDesign.getOutputSample())
+print('outs=', aDesign.getResult().getOutputSample())
 
 script = anOTStudy.dump()
 print(script)

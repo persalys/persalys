@@ -12,8 +12,6 @@
 #include "otgui/DesignOfExperimentWindow.hxx"
 #include "otgui/ModelEvaluationWizard.hxx"
 #include "otgui/ModelEvaluationResultWindow.hxx"
-#include "otgui/ParametricAnalysisWizard.hxx"
-#include "otgui/ParametricAnalysisResultWindow.hxx"
 #include "otgui/CentralTendencyWizard.hxx"
 #include "otgui/MonteCarloResultWindow.hxx"
 #include "otgui/QuadraticCumulResultWindow.hxx"
@@ -88,10 +86,6 @@ void StudyTreeView::buildActions()
   newModelEvaluation_->setStatusTip(tr("Create a new model evaluation"));
   connect(newModelEvaluation_, SIGNAL(triggered()), this, SLOT(createNewModelEvaluation()));
 
-  newParametricAnalysis_ = new QAction(tr("New parametric analysis"), this);
-  newParametricAnalysis_->setStatusTip(tr("Create a new parametric analysis"));
-  connect(newParametricAnalysis_, SIGNAL(triggered()), this, SLOT(createNewParametricAnalysis()));
-
   newCentralTendency_ = new QAction(tr("New central tendency"), this);
   newCentralTendency_->setStatusTip(tr("Create a new central tendency"));
   connect(newCentralTendency_, SIGNAL(triggered()), this, SLOT(createNewCentralTendency()));
@@ -111,10 +105,6 @@ void StudyTreeView::buildActions()
   runModelEvaluation_ = new QAction(tr("Run"), this);
   runModelEvaluation_->setStatusTip(tr("Run the model evaluation"));
   connect(runModelEvaluation_, SIGNAL(triggered()), this, SLOT(runModelEvaluation()));
-
-  runParametricAnalysis_ = new QAction(tr("Run"), this);
-  runParametricAnalysis_->setStatusTip(tr("Run the parametric analysis"));
-  connect(runParametricAnalysis_, SIGNAL(triggered()), this, SLOT(runParametricAnalysis()));
 
   runCentralTendency_ = new QAction(tr("Run"), this);
   runCentralTendency_->setStatusTip(tr("Run the central tendency"));
@@ -168,10 +158,6 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
   else if (dataType=="LimitState")
   {
     actions.append(newThresholdExceedance_);
-  }
-  else if (dataType=="ParametricAnalysis")
-  {
-    actions.append(runParametricAnalysis_);
   }
   else if (dataType=="ModelEvaluation")
   {
@@ -296,21 +282,6 @@ void StudyTreeView::createNewModelEvaluation()
 }
 
 
-void StudyTreeView::createNewParametricAnalysis()
-{
-  QModelIndex physicalModelIndex = selectionModel()->currentIndex().parent();
-  PhysicalModelItem * physicalModelItem = dynamic_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
-  OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
-  ParametricAnalysisWizard * wizard = new ParametricAnalysisWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel());
-
-  if (wizard->exec())
-  {
-    wizard->validate();
-    setExpanded(physicalModelIndex, true);
-  }
-}
-
-
 void StudyTreeView::createNewCentralTendency()
 {
   QModelIndex physicalModelIndex = selectionModel()->currentIndex().parent().parent();
@@ -359,9 +330,7 @@ void StudyTreeView::createNewThresholdExceedance()
 void StudyTreeView::createAnalysisConnection(AnalysisItem * item)
 {
   QString data = item->data(Qt::UserRole).toString();
-  if (data == "ParametricAnalysis")
-    connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createParametricAnalysisResult(AnalysisItem *)));
-  else if (data == "ModelEvaluation")
+  if (data == "ModelEvaluation")
     connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createModelEvaluationResult(AnalysisItem*)));
   else if (data == "CentralTendency")
     connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createCentralTendencyResult(AnalysisItem *)));
@@ -396,21 +365,6 @@ void StudyTreeView::runModelEvaluation()
   ModelEvaluationItem * item = dynamic_cast<ModelEvaluationItem*>(selectedItem);
 
   ModelEvaluationWizard * wizard = new ModelEvaluationWizard(item->getAnalysis());
-  if (wizard->exec())
-  {
-    item->getAnalysis().run();
-  }
-}
-
-
-void StudyTreeView::runParametricAnalysis()
-{
-  QModelIndex index = selectionModel()->currentIndex();
-  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
-
-  ParametricAnalysisItem * item = dynamic_cast<ParametricAnalysisItem*>(selectedItem);
-
-  ParametricAnalysisWizard * wizard = new ParametricAnalysisWizard(item->getAnalysis());
   if (wizard->exec())
   {
     item->getAnalysis().run();
@@ -463,15 +417,6 @@ void StudyTreeView::runReliabilityAnalysis()
   {
     item->getAnalysis().run();
   }
-}
-
-
-void StudyTreeView::createParametricAnalysisResult(AnalysisItem * item)
-{
-  emit checkIfWindowResultExists(item);
-  ParametricAnalysisResultWindow * window = new ParametricAnalysisResultWindow(dynamic_cast<ParametricAnalysisItem*>(item));
-  emit showWindow(window);
-  setCurrentIndex(item->index());
 }
 
 

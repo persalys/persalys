@@ -228,19 +228,7 @@ void DesignOfExperiment::setInputSample(const NumericalSample & sample)
 }
 
 
-NumericalSample DesignOfExperiment::getOutputSample()
-{
-  return getImplementation()->getOutputSample();
-}
-
-
-void DesignOfExperiment::setOutputSample(const NumericalSample & sample)
-{
-  getImplementation()->setOutputSample(sample);
-}
-
-
-ParametricAnalysisResult DesignOfExperiment::getResult() const
+SimulationAnalysisResult DesignOfExperiment::getResult() const
 {
   return getImplementation()->getResult();
 }

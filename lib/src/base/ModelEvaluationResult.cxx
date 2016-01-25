@@ -15,8 +15,8 @@ ModelEvaluationResult::ModelEvaluationResult()
 
 
 ModelEvaluationResult::ModelEvaluationResult(NumericalSample inputSample, NumericalSample outputSample)
-  : outputSample_(outputSample)
-  , inputSample_(inputSample)
+  : inputSample_(inputSample)
+  , outputSample_(outputSample)
 {
 }
 

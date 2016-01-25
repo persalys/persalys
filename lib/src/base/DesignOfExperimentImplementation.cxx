@@ -460,19 +460,7 @@ void DesignOfExperimentImplementation::setInputSample(const OT::NumericalSample 
 }
 
 
-NumericalSample DesignOfExperimentImplementation::getOutputSample()
-{
-  return outputSample_;
-}
-
-
-void DesignOfExperimentImplementation::setOutputSample(const NumericalSample & sample)
-{
-  outputSample_ = sample;
-}
-
-
-ParametricAnalysisResult DesignOfExperimentImplementation::getResult() const
+SimulationAnalysisResult DesignOfExperimentImplementation::getResult() const
 {
   return result_;
 }
@@ -480,10 +468,7 @@ ParametricAnalysisResult DesignOfExperimentImplementation::getResult() const
 
 void DesignOfExperimentImplementation::eval()
 {
-  getInputSample();
-  outputSample_.clear();
-  outputSample_ = physicalModel_.getFunction()(inputSample_);
-  result_ = ParametricAnalysisResult(inputSample_, outputSample_);
+  result_ = SimulationAnalysisResult(getInputSample(), physicalModel_.getFunction()(getInputSample()));
   notify("analysisFinished");
 }
 

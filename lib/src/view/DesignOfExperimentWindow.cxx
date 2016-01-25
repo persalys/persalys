@@ -29,7 +29,7 @@ void DesignOfExperimentWindow::buildInterface()
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
   tableView_ = new OTguiTableView;
-  if (!designOfExperiment_.getOutputSample().getSize())
+  if (!designOfExperiment_.getResult().getOutputSample().getSize())
   {
     OTguiTableModel * model = new OTguiTableModel(designOfExperiment_.getInputSample());
     tableView_->setModel(model);
@@ -39,7 +39,7 @@ void DesignOfExperimentWindow::buildInterface()
 
   QHBoxLayout * layout = new QHBoxLayout;
   evaluateButton_ = new QPushButton(tr("Evaluate"));
-  if (designOfExperiment_.getOutputSample().getSize())
+  if (designOfExperiment_.getResult().getOutputSample().getSize())
     evaluateButton_->setEnabled(false);
   layout->addStretch();
   layout->addWidget(evaluateButton_);
@@ -69,10 +69,10 @@ void DesignOfExperimentWindow::evaluateOutputs()
 
 void DesignOfExperimentWindow::updateWindowForOutputs()
 {
-  if (designOfExperiment_.getOutputSample().getSize() > 0)
+  if (designOfExperiment_.getResult().getOutputSample().getSize() > 0)
   {
     NumericalSample sample = designOfExperiment_.getInputSample();
-    sample.stack(designOfExperiment_.getOutputSample());
+    sample.stack(designOfExperiment_.getResult().getOutputSample());
     OTguiTableModel * model = new OTguiTableModel(sample);
     tableView_->setModel(model);
     addTabsForOutputs();
@@ -97,10 +97,10 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   for (int i=0; i<nbInputs; ++i)
     inputNames << variableInputsSample.getDescription()[i].c_str();
 
-  int nbOutputs = designOfExperiment_.getOutputSample().getDimension();
+  int nbOutputs = designOfExperiment_.getResult().getOutputSample().getDimension();
   QStringList outputNames;
   for (int i=0; i<nbOutputs; ++i)
-    outputNames << designOfExperiment_.getOutputSample().getDescription()[i].c_str();
+    outputNames << designOfExperiment_.getResult().getOutputSample().getDescription()[i].c_str();
 
   // first tab --------------------------------
   QWidget * tab = new QWidget;
@@ -153,7 +153,7 @@ void DesignOfExperimentWindow::addTabsForOutputs()
     for (int i=0; i<nbOutputs; ++i)
     {
       PlotWidget * plot = new PlotWidget;
-      plot->plotScatter(variableInputsSample.getMarginal(j), designOfExperiment_.getOutputSample().getMarginal(i));
+      plot->plotScatter(variableInputsSample.getMarginal(j), designOfExperiment_.getResult().getOutputSample().getMarginal(i));
       plot->setTitle(tr("Scatter plot: ") + outputs[i].getName().c_str() + tr(" vs ") + inputNames[j]);
       std::string inputDescription = designOfExperiment_.getPhysicalModel().getInputByName(inputNames[j].toStdString()).getDescription();
       if (!inputDescription.empty())
@@ -195,7 +195,7 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   tabWidget_->addTab(tab, tr("Scatter plots"));
 
   // third tab --------------------------------
-  tab = new PlotMatrixWidget(variableInputsSample, designOfExperiment_.getOutputSample());
+  tab = new PlotMatrixWidget(variableInputsSample, designOfExperiment_.getResult().getOutputSample());
   plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
   tabWidget_->addTab(tab, tr("Plot matrix Y-X"));
@@ -212,7 +212,7 @@ void DesignOfExperimentWindow::updateLabelsText(int indexOutput)
 {
   // min
   OSS oss1;
-  oss1 << designOfExperiment_.getResult().getListMin()[indexOutput];
+  oss1 << designOfExperiment_.getResult().getOutputSample().getMin()[indexOutput];
   for (int j=0; j<designOfExperiment_.getResult().getListXMin()[indexOutput].getSize();++j)
   {
     NumericalPoint point(designOfExperiment_.getResult().getListXMin()[indexOutput][j]);
@@ -221,7 +221,7 @@ void DesignOfExperimentWindow::updateLabelsText(int indexOutput)
   minLabel_->setText(QString::fromStdString(oss1.str()));
   // max
   OSS oss2;
-  oss2 << designOfExperiment_.getResult().getListMax()[indexOutput];
+  oss2 << designOfExperiment_.getResult().getOutputSample().getMax()[indexOutput];
   for (int j=0; j<designOfExperiment_.getResult().getListXMax()[indexOutput].getSize();++j)
   {
     NumericalPoint point(designOfExperiment_.getResult().getListXMax()[indexOutput][j]);

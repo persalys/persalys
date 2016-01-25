@@ -23,9 +23,11 @@ public:
   void setNbSimulations(const int nbSimu);
 
   OT::NumericalSample getInputSample();
+  OT::Description getOutputNames() const;
+
+protected:
   OT::NumericalSample getOutputSample(OT::NumericalSample inputSample) const;
   OT::NumericalSample getOutputSample(OT::NumericalSample inputSample, const OT::Description & outputNames) const;
-  OT::Description getOutputNames() const;
 
 private:
   OutputCollection outputs_;

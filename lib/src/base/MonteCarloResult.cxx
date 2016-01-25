@@ -12,13 +12,14 @@ namespace OTGUI{
 CLASSNAMEINIT(MonteCarloResult);
 
 MonteCarloResult::MonteCarloResult()
-  : ParametricAnalysisResult()
+  : SimulationAnalysisResult()
+  , levelConfidenceInterval_(0.)
 {
 }
 
 MonteCarloResult::MonteCarloResult(NumericalSample inputSample, NumericalSample outputSample)
- : ParametricAnalysisResult(inputSample, outputSample)
- , levelConfidenceInterval_(0.95)
+  : SimulationAnalysisResult(inputSample, outputSample)
+  , levelConfidenceInterval_(0.95)
 {
 }
   
@@ -196,5 +197,4 @@ MonteCarloResult::DistributionCollection MonteCarloResult::getFittedDistribution
 
   return distributions;
 }
-
 }

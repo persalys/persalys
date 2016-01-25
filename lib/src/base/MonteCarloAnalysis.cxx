@@ -11,20 +11,20 @@ CLASSNAMEINIT(MonteCarloAnalysis);
 
 MonteCarloAnalysis::MonteCarloAnalysis(const std::string & name, const PhysicalModel & physicalModel,
                                        int nbSimu, bool confidenceInterval, double level)
- : SimulationAnalysis(name, physicalModel, nbSimu)
- , isConfidenceIntervalRequired_(confidenceInterval)
- , levelConfidenceInterval_(level)
- , result_()
+  : SimulationAnalysis(name, physicalModel, nbSimu)
+  , isConfidenceIntervalRequired_(confidenceInterval)
+  , levelConfidenceInterval_(level)
+  , result_()
 {
 //TODO ctr with outputNames (pas OutputCollection!) optionnel par défaut prendrait tous les outputs
 }
 
 
 MonteCarloAnalysis::MonteCarloAnalysis(const MonteCarloAnalysis & other)
- : SimulationAnalysis(other)
- , isConfidenceIntervalRequired_(other.isConfidenceIntervalRequired_)
- , levelConfidenceInterval_(other.levelConfidenceInterval_)
- , result_(other.result_)
+  : SimulationAnalysis(other)
+  , isConfidenceIntervalRequired_(other.isConfidenceIntervalRequired_)
+  , levelConfidenceInterval_(other.levelConfidenceInterval_)
+  , result_(other.result_)
 {
 }
 
@@ -91,6 +91,4 @@ bool MonteCarloAnalysis::analysisLaunched() const
 {
 //   return outputSample_.getSize()!=0;
 }
-
-
 }

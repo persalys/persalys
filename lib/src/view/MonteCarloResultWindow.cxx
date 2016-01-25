@@ -315,7 +315,7 @@ void MonteCarloResultWindow::updateLabelsText(int indexOutput)
   thirdQuartileLabel_->setText(QString::number(result_.getThirdQuartile()[indexOutput]));
   // min
   OSS oss3;
-  oss3 << result_.getListMin()[indexOutput];
+  oss3 << result_.getOutputSample().getMin()[indexOutput];
   for (int j=0; j<result_.getListXMin()[indexOutput].getSize();++j)
   {
     NumericalPoint point(result_.getListXMin()[indexOutput][j]);
@@ -324,7 +324,7 @@ void MonteCarloResultWindow::updateLabelsText(int indexOutput)
   minLabel_->setText(QString::fromStdString(oss3.str()));
   // max
   OSS oss4;
-  oss4 << result_.getListMax()[indexOutput];
+  oss4 << result_.getOutputSample().getMax()[indexOutput];
   for (int j=0; j<result_.getListXMax()[indexOutput].getSize();++j)
   {
     NumericalPoint point(result_.getListXMax()[indexOutput][j]);

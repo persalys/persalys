@@ -64,9 +64,7 @@ public:
 
   OT::NumericalSample getInputSample();
   void setInputSample(const OT::NumericalSample & sample);
-  OT::NumericalSample getOutputSample();
-  void setOutputSample(const OT::NumericalSample & sample);
-  ParametricAnalysisResult getResult() const;
+  SimulationAnalysisResult getResult() const;
 
   void updateParameters();
   void eval();

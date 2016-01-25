@@ -125,7 +125,6 @@ void DeterministicDesignPage::setDesignOfExperiment(DesignOfExperiment & designO
 
 bool DeterministicDesignPage::validatePage()
 {
-  designOfExperiment_.setOutputSample(NumericalSample(0, 0));
   return pageValidity_;
 }
 }

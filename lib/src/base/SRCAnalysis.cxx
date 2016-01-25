@@ -71,6 +71,4 @@ bool SRCAnalysis::analysisLaunched() const
 {
   return result_.getIndices().getSize()!=0;
 }
-
-
 }
