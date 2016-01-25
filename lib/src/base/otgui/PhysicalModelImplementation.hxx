@@ -54,6 +54,8 @@ public:
 
   virtual OT::NumericalMathFunction getFunction(const OT::Description & outputNames);
   virtual OT::NumericalMathFunction getFunction();
+  OT::NumericalMathFunction getRestrictedFunction();
+  OT::NumericalMathFunction getRestrictedFunction(const OT::Description & outputNames);
 
   OT::Copula getCopula() const;
   void setCopula(const OT::Copula & copula);

@@ -62,20 +62,20 @@ void SimulationAnalysis::setNbSimulations(const int nbSimu)
 NumericalSample SimulationAnalysis::getInputSample()
 {
   NumericalSample inputSample(getPhysicalModel().getInputRandomVector().getSample(nbSimulations_));
-  inputSample.setDescription(getPhysicalModel().getInputNames());
+  inputSample.setDescription(getPhysicalModel().getStochasticInputNames());
   return inputSample;
 }
 
 
 NumericalSample SimulationAnalysis::getOutputSample(NumericalSample inputSample) const
 {
-  return getPhysicalModel().getFunction(getOutputNames())(inputSample);
+  return getPhysicalModel().getRestrictedFunction(getOutputNames())(inputSample);
 }
 
 
 NumericalSample SimulationAnalysis::getOutputSample(NumericalSample inputSample, const Description & outputNames) const
 {
-  return getPhysicalModel().getFunction(outputNames)(inputSample);
+  return getPhysicalModel().getRestrictedFunction(outputNames)(inputSample);
 }
 
 
@@ -87,5 +87,4 @@ Description SimulationAnalysis::getOutputNames() const
     outputNames[i] = outputs_[i].getName();
   return outputNames;
 }
-
 }

@@ -38,7 +38,7 @@ void SobolAnalysis::run()
   NumericalSample inputSample1(getInputSample());
   NumericalSample inputSample2(getInputSample());
 
-  SensitivityAnalysis sensitivityAnalysis = SensitivityAnalysis(inputSample1, inputSample2, getPhysicalModel().getFunction(getOutputNames()));
+  SensitivityAnalysis sensitivityAnalysis = SensitivityAnalysis(inputSample1, inputSample2, getPhysicalModel().getRestrictedFunction(getOutputNames()));
 
   // set results
   NumericalSample firstOrderIndices(1, sensitivityAnalysis.getFirstOrderIndices(0));
@@ -50,7 +50,7 @@ void SobolAnalysis::run()
     totalOrderIndices.add(sensitivityAnalysis.getTotalOrderIndices(i));
   }
 
-  firstOrderIndices.setDescription(getPhysicalModel().getInputNames());
+  firstOrderIndices.setDescription(getPhysicalModel().getStochasticInputNames());
   result_ = SobolResult(firstOrderIndices, totalOrderIndices, getOutputNames());
 
   notify("analysisFinished");
@@ -75,6 +75,4 @@ bool SobolAnalysis::analysisLaunched() const
 {
   return result_.getFirstOrderIndices().getSize()!=0;
 }
-
-
 }

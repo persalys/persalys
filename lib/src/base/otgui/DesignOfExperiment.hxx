@@ -60,6 +60,8 @@ public:
 //   OT::Experiment getExperiment() const;
 //   void setExperiment(const OT::Experiment & experiment);
 
+  OT::Description getVariableInputsNames() const;
+
   OT::NumericalSample getInputSample();
   void setInputSample(const OT::NumericalSample & sample);
   OT::NumericalSample getOutputSample();

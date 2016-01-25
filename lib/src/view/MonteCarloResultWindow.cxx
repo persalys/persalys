@@ -29,15 +29,15 @@ void MonteCarloResultWindow::buildInterface()
 {
   // data
   int nbInputs = result_.getInputSample().getDimension();
-  int nbOutputs = result_.getResultSample().getDimension();
-  InputCollection inputs = physicalModel_.getInputs();
-  OutputCollection outputs = physicalModel_.getOutputs();
   QStringList inputNames;
   for (int i=0; i<nbInputs; ++i)
-    inputNames << physicalModel_.getInputNames()[i].c_str();
+    inputNames << physicalModel_.getStochasticInputNames()[i].c_str();
+
+  int nbOutputs = result_.getResultSample().getDimension();
+  OutputCollection outputs = physicalModel_.getOutputs();
   QStringList outputNames;
   for (int i=0; i<nbOutputs; ++i)
-    outputNames << physicalModel_.getOutputNames()[i].c_str();
+    outputNames << result_.getResultSample().getDescription()[i].c_str();
 
   // tabWidget
   tabWidget_ = new QTabWidget;
@@ -215,11 +215,12 @@ void MonteCarloResultWindow::buildInterface()
     {
       PlotWidget * plot = new PlotWidget;
       plot->plotScatter(result_.getInputSample().getMarginal(j), result_.getResultSample().getMarginal(i));
-      plot->setTitle(tr("Scatter plot: ") + outputs[i].getName().c_str() + tr(" vs ") + inputs[j].getName().c_str());
-      if (inputs[j].getDescription().size())
-        plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getDescription().c_str());
+      plot->setTitle(tr("Scatter plot: ") + outputs[i].getName().c_str() + tr(" vs ") + inputNames[j]);
+      std::string inputDescription = physicalModel_.getInputByName(inputNames[j].toStdString()).getDescription();
+      if (!inputDescription.empty())
+        plot->setAxisTitle(QwtPlot::xBottom, inputDescription.c_str());
       else
-        plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getName().c_str());
+        plot->setAxisTitle(QwtPlot::xBottom, inputNames[j]);
       if (outputs[i].getDescription().size())
         plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getDescription().c_str());
       else
@@ -229,17 +230,19 @@ void MonteCarloResultWindow::buildInterface()
     }
     for (int i=0; i<nbInputs; ++i)
     {
-      PlotWidget *  plot = new PlotWidget;
+      PlotWidget * plot = new PlotWidget;
       plot->plotScatter(result_.getInputSample().getMarginal(j), result_.getInputSample().getMarginal(i));
-      plot->setTitle(tr("Scatter plot: ") + inputs[i].getName().c_str() + tr(" vs ") + inputs[j].getName().c_str());
-      if (inputs[j].getDescription().size())
-        plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getDescription().c_str());
+      plot->setTitle(tr("Scatter plot: ") + inputNames[i] + tr(" vs ") + inputNames[j]);
+      std::string inputDescription = physicalModel_.getInputByName(inputNames[j].toStdString()).getDescription();
+      if (!inputDescription.empty())
+        plot->setAxisTitle(QwtPlot::xBottom, inputDescription.c_str());
       else
-        plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getName().c_str());
-      if (inputs[i].getDescription().size())
-        plot->setAxisTitle(QwtPlot::yLeft, inputs[i].getDescription().c_str());
+        plot->setAxisTitle(QwtPlot::xBottom, inputNames[j]);
+      inputDescription = physicalModel_.getInputByName(inputNames[i].toStdString()).getDescription();
+      if (!inputDescription.empty())
+        plot->setAxisTitle(QwtPlot::yLeft, inputDescription.c_str());
       else
-        plot->setAxisTitle(QwtPlot::yLeft, inputs[i].getName().c_str());
+        plot->setAxisTitle(QwtPlot::yLeft, inputNames[i]);
       plotLayout->addWidget(plot);
       listScatterPlotWidgets.append(plot);
     }

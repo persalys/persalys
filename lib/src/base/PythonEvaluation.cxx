@@ -32,8 +32,6 @@ PythonEvaluation::PythonEvaluation(const UnsignedInteger & inputDimension,
 }
 
 
-
-
 /* Virtual constructor */
 PythonEvaluation * PythonEvaluation::clone() const
 {
@@ -85,10 +83,12 @@ UnsignedInteger PythonEvaluation::getInputDimension() const
   return inputDimension_;
 }
 
+
 UnsignedInteger PythonEvaluation::getOutputDimension() const
 {
   return outputDimension_;
 }
+
 
 /* Operator () */
 NumericalPoint PythonEvaluation::operator() (const NumericalPoint & inP) const
@@ -161,6 +161,7 @@ void PythonEvaluation::save(Advocate & adv) const
   adv.saveAttribute("code_", code_);
 }
 
+
 /* Method load() reloads the object from the StorageManager */
 void PythonEvaluation::load(Advocate & adv)
 {
@@ -169,5 +170,4 @@ void PythonEvaluation::load(Advocate & adv)
   adv.loadAttribute("outputDimension_", outputDimension_);
   adv.loadAttribute("code_", code_);
 }
-
 }

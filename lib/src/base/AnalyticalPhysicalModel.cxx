@@ -166,26 +166,6 @@ void AnalyticalPhysicalModel::updateFunction()
 }
 
 
-NumericalMathFunction AnalyticalPhysicalModel::getFunction(const Description & outputNames)
-{
-  if (outputNames == getOutputNames())
-    return getFunction();
-
-  Description outputFormula(outputNames.getSize());
-  for (int i=0; i<outputNames.getSize(); ++i)
-    outputFormula[i] = getOutputByName(outputNames[i]).getFormula();
-
-  try
-  {
-    return NumericalMathFunction(getInputNames(), outputNames, outputFormula);
-  }
-  catch (std::exception & ex)
-  {
-    throw InvalidArgumentException(HERE) << ex.what();
-  }
-}
-
-
 NumericalMathFunction AnalyticalPhysicalModel::getFunction()
 {
   updateFunction();

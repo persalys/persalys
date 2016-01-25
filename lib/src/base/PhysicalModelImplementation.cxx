@@ -131,8 +131,9 @@ void PhysicalModelImplementation::removeInput(const std::string & inputName)
     for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
       if (inputs_[i].getName() == inputName)
       {
+        bool inputIsStochastic = inputs_[i].isStochastic();
         inputs_.erase(inputs_.begin() + i);
-        if (inputs_[i].isStochastic())
+        if (inputIsStochastic)
           updateCopula();
 
         notify("inputChanged");
@@ -321,9 +322,9 @@ ComposedDistribution PhysicalModelImplementation::getComposedDistribution() cons
 {
   ComposedDistribution::DistributionCollection marginales;
   for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
-    marginales.add(inputs_[i].getDistribution());
+    if (inputs_[i].isStochastic())
+      marginales.add(inputs_[i].getDistribution());
   return ComposedDistribution(marginales, getCopula());
-  // TODO  return ComposedDistribution(marginales, getCopula());
 }
 
 
@@ -341,13 +342,81 @@ RandomVector PhysicalModelImplementation::getOutputRandomVector(const Descriptio
 
 NumericalMathFunction PhysicalModelImplementation::getFunction(const Description & outputNames)
 {
-  throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getFunction(const Description &)";
+  if (outputNames.getSize() == getOutputs().getSize())
+    return getFunction();
+
+  Indices indices;
+  for (UnsignedInteger i=0; i<outputNames.getSize(); ++i)
+    for (UnsignedInteger j=0; j<getOutputs().getSize(); ++j)
+      if (getOutputs()[j].getName() == outputNames[i])
+      {
+        indices.add(j);
+        break;
+      }
+
+  try
+  {
+    return getFunction().getMarginal(indices);
+  }
+  catch (std::exception & ex)
+  {
+    throw InvalidArgumentException(HERE) << ex.what();
+  }
 }
 
 
 NumericalMathFunction PhysicalModelImplementation::getFunction()
 {
   throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getFunction()";
+}
+
+
+NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction()
+{
+  if (getInputs().getSize() == getStochasticInputNames().getSize())
+    return getFunction();
+
+  Indices deterministicInputsIndices;
+  NumericalPoint inputsValues(getInputs().getSize());
+  for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
+  {
+    inputsValues[i] = getInputs()[i].getValue();
+    if (!getInputs()[i].isStochastic())
+      deterministicInputsIndices.add(i);
+  }
+  try
+  {
+    return NumericalMathFunction(getFunction(), deterministicInputsIndices, inputsValues);
+  }
+  catch (std::exception & ex)
+  {
+    throw InvalidArgumentException(HERE) << "In PhysicalModelImplementation::getRestrictedFunction(): " << ex.what();
+  }
+}
+
+
+NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction(const Description & outputNames)
+{
+  if (outputNames.getSize() == getOutputs().getSize())
+    return getRestrictedFunction();
+
+  Indices indices;
+  for (UnsignedInteger i=0; i<outputNames.getSize(); ++i)
+    for (UnsignedInteger j=0; j<getOutputs().getSize(); ++j)
+      if (getOutputs()[j].getName() == outputNames[i])
+      {
+        indices.add(j);
+        break;
+      }
+
+  try
+  {
+    return getRestrictedFunction().getMarginal(indices);
+  }
+  catch (std::exception & ex)
+  {
+    throw InvalidArgumentException(HERE) << "In PhysicalModelImplementation::getRestrictedFunction(const Description & outputNames): " << ex.what();
+  }
 }
 
 

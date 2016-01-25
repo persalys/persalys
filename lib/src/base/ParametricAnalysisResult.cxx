@@ -15,10 +15,10 @@ ParametricAnalysisResult::ParametricAnalysisResult()
 
 
 ParametricAnalysisResult::ParametricAnalysisResult(NumericalSample inputSample, NumericalSample resultSample)
- : resultSample_(resultSample)
- , inputSample_(inputSample)
- , listMin_(resultSample.getMin())
- , listMax_(resultSample.getMax())
+  : resultSample_(resultSample)
+  , inputSample_(inputSample)
+  , listMin_(resultSample.getMin())
+  , listMax_(resultSample.getMax())
 {
   searchMinMax();
 }
@@ -96,7 +96,7 @@ void ParametricAnalysisResult::searchMinMax()
     // Search min value of the ith output and the corresponding set of inputs X
     double minValue = orderedSample[0][i];
 
-    int it=0;
+    int it = 0;
     double value = orderedSample[it][i];
     NumericalSample tempSample(0, numberInputs);
     do
@@ -113,7 +113,7 @@ void ParametricAnalysisResult::searchMinMax()
     // Search max value of the ith output and the corresponding set of inputs X
     double maxValue = orderedSample[size-1][i];
 
-    it=0;
+    it = 0;
     value = orderedSample[size-1-it][i];
     tempSample = NumericalSample(0, numberInputs);
     do
@@ -128,7 +128,4 @@ void ParametricAnalysisResult::searchMinMax()
     listXMax_.add(tempSample);
   }
 }
-
-
-
 }

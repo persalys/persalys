@@ -210,6 +210,12 @@ void DesignOfExperiment::setColumns(Indices columns)
 // }
 
 
+Description DesignOfExperiment::getVariableInputsNames() const
+{
+  return getImplementation()->getVariableInputsNames();
+}
+
+
 NumericalSample DesignOfExperiment::getInputSample()
 {
   return getImplementation()->getInputSample();

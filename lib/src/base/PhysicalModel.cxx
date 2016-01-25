@@ -243,6 +243,18 @@ NumericalMathFunction PhysicalModel::getFunction()
 }
 
 
+NumericalMathFunction PhysicalModel::getRestrictedFunction()
+{
+  return getImplementation()->getRestrictedFunction();
+}
+
+
+NumericalMathFunction PhysicalModel::getRestrictedFunction(const Description & outputNames)
+{
+  return getImplementation()->getRestrictedFunction(outputNames);
+}
+
+
 Copula PhysicalModel::getCopula() const
 {
   return getImplementation()->getCopula();

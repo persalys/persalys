@@ -359,6 +359,19 @@ void DesignOfExperimentImplementation::setColumns(Indices columns)
 // }
 
 
+Description DesignOfExperimentImplementation::getVariableInputsNames() const
+{
+  if (!levels_.__contains__(1))
+    return inputNames_;
+
+  Description variableInputsNames;
+  for (UnsignedInteger i=0; i<inputNames_.getSize(); ++i)
+    if (levels_[i] > 1)
+      variableInputsNames.add(inputNames_[i]);
+  return variableInputsNames;
+}
+
+
 NumericalSample DesignOfExperimentImplementation::getInputSample()
 {
   if (!inputSample_.getSize())

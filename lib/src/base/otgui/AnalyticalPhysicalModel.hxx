@@ -27,7 +27,6 @@ public:
   void removeOutput(const std::string & outputName);
 
   OT::Description getFormulas();
-  virtual OT::NumericalMathFunction getFunction(const OT::Description & outputNames);
   virtual OT::NumericalMathFunction getFunction();
 
   std::string dump() const;

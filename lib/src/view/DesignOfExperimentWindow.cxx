@@ -83,8 +83,24 @@ void DesignOfExperimentWindow::updateWindowForOutputs()
 
 void DesignOfExperimentWindow::addTabsForOutputs()
 {
-  int nbInputs = designOfExperiment_.getInputSample().getDimension();
+  int nbInputs = designOfExperiment_.getVariableInputsNames().getSize();
+  Indices ind(nbInputs);
+  for (int i=0; i<nbInputs; ++i)
+    for (int j=0; j<designOfExperiment_.getInputSample().getDimension(); ++j)
+      if (designOfExperiment_.getVariableInputsNames()[i] == designOfExperiment_.getInputSample().getDescription()[j])
+      {
+        ind[i] = j;
+        break;
+      }
+  NumericalSample variableInputsSample = designOfExperiment_.getInputSample().getMarginal(ind);
+  QStringList inputNames;
+  for (int i=0; i<nbInputs; ++i)
+    inputNames << variableInputsSample.getDescription()[i].c_str();
+
   int nbOutputs = designOfExperiment_.getOutputSample().getDimension();
+  QStringList outputNames;
+  for (int i=0; i<nbOutputs; ++i)
+    outputNames << designOfExperiment_.getOutputSample().getDescription()[i].c_str();
 
   // first tab --------------------------------
   QWidget * tab = new QWidget;
@@ -93,20 +109,17 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   QHBoxLayout * headLayout = new QHBoxLayout;
   QLabel * outputName = new QLabel(tr("Output"));
   headLayout->addWidget(outputName);
-  QComboBox * outputsComboBoxFirstTab_ = new QComboBox;
-  QStringList outputNames;
-  for (int i=0; i<nbOutputs; ++i)
-    outputNames << designOfExperiment_.getPhysicalModel().getOutputNames()[i].c_str();
-  outputsComboBoxFirstTab_->addItems(outputNames);
-  connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateLabelsText(int)));
-  headLayout->addWidget(outputsComboBoxFirstTab_);
+  QComboBox * outputsComboBoxFirstTab = new QComboBox;
+  outputsComboBoxFirstTab->addItems(outputNames);
+  connect(outputsComboBoxFirstTab, SIGNAL(currentIndexChanged(int)), this, SLOT(updateLabelsText(int)));
+  headLayout->addWidget(outputsComboBoxFirstTab);
   headLayout->addStretch();
   tabLayout->addLayout(headLayout);
 
   QGridLayout * grid = new QGridLayout;
   int gridRow = -1;
 
-  QLabel * nbSimuLabel = new QLabel(tr("Size of the design of experiment : ") + QString::number(designOfExperiment_.getInputSample().getSize()) + "\n");
+  QLabel * nbSimuLabel = new QLabel(tr("Size of the design of experiment : ") + QString::number(variableInputsSample.getSize()) + "\n");
   grid->addWidget(nbSimuLabel, ++gridRow, 0, 1, 2, Qt::AlignTop);
 
   QLabel * label = new QLabel(tr("Min"));
@@ -132,50 +145,49 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   tab = new QWidget;
   QStackedLayout * plotLayout = new QStackedLayout(tab);
 
-  QVector<PlotWidget*> listPlotWidgets;
-  InputCollection inputs = designOfExperiment_.getPhysicalModel().getInputs();
+  QVector<PlotWidget*> listScatterPlotWidgets;
   OutputCollection outputs = designOfExperiment_.getPhysicalModel().getOutputs();
-  QStringList inputNames;
-  for (int i=0; i<nbInputs; ++i)
-    inputNames << designOfExperiment_.getPhysicalModel().getInputNames()[i].c_str();
 
   for (int j=0; j<nbInputs; ++j)
   {
     for (int i=0; i<nbOutputs; ++i)
     {
       PlotWidget * plot = new PlotWidget;
-      plot->plotScatter(designOfExperiment_.getInputSample().getMarginal(j), designOfExperiment_.getOutputSample().getMarginal(i));
-      plot->setTitle(tr("Scatter plot: ") + outputs[i].getName().c_str() + tr(" vs ") + inputs[j].getName().c_str());
-      if (inputs[j].getDescription().size())
-        plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getDescription().c_str());
+      plot->plotScatter(variableInputsSample.getMarginal(j), designOfExperiment_.getOutputSample().getMarginal(i));
+      plot->setTitle(tr("Scatter plot: ") + outputs[i].getName().c_str() + tr(" vs ") + inputNames[j]);
+      std::string inputDescription = designOfExperiment_.getPhysicalModel().getInputByName(inputNames[j].toStdString()).getDescription();
+      if (!inputDescription.empty())
+        plot->setAxisTitle(QwtPlot::xBottom, inputDescription.c_str());
       else
-        plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getName().c_str());
+        plot->setAxisTitle(QwtPlot::xBottom, inputNames[j]);
       if (outputs[i].getDescription().size())
         plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getDescription().c_str());
       else
         plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getName().c_str());
       plotLayout->addWidget(plot);
-      listPlotWidgets.append(plot);
+      listScatterPlotWidgets.append(plot);
     }
     for (int i=0; i<nbInputs; ++i)
     {
       PlotWidget * plot = new PlotWidget;
-      plot->plotScatter(designOfExperiment_.getInputSample().getMarginal(j), designOfExperiment_.getInputSample().getMarginal(i));
-      plot->setTitle(tr("Scatter plot: ") + inputs[i].getName().c_str() + tr(" vs ") + inputs[j].getName().c_str());
-      if (inputs[j].getDescription().size())
-        plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getDescription().c_str());
+      plot->plotScatter(variableInputsSample.getMarginal(j),variableInputsSample.getMarginal(i));
+      plot->setTitle(tr("Scatter plot: ") + inputNames[i] + tr(" vs ") + inputNames[j]);
+      std::string inputDescription = designOfExperiment_.getPhysicalModel().getInputByName(inputNames[j].toStdString()).getDescription();
+      if (!inputDescription.empty())
+        plot->setAxisTitle(QwtPlot::xBottom, inputDescription.c_str());
       else
-        plot->setAxisTitle(QwtPlot::xBottom, inputs[j].getName().c_str());
-      if (inputs[i].getDescription().size())
-        plot->setAxisTitle(QwtPlot::yLeft, inputs[i].getDescription().c_str());
+        plot->setAxisTitle(QwtPlot::xBottom, inputNames[j]);
+      inputDescription = designOfExperiment_.getPhysicalModel().getInputByName(inputNames[i].toStdString()).getDescription();
+      if (!inputDescription.empty())
+        plot->setAxisTitle(QwtPlot::yLeft, inputDescription.c_str());
       else
-        plot->setAxisTitle(QwtPlot::yLeft, inputs[i].getName().c_str());
+        plot->setAxisTitle(QwtPlot::yLeft, inputNames[i]);
       plotLayout->addWidget(plot);
-      listPlotWidgets.append(plot);
+      listScatterPlotWidgets.append(plot);
     }
   }
 
-  graphConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, inputNames, outputNames, GraphConfigurationWidget::Scatter);
+  graphConfigurationWidget_ = new GraphConfigurationWidget(listScatterPlotWidgets, inputNames, outputNames, GraphConfigurationWidget::Scatter);
   connect(graphConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
 
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
@@ -183,13 +195,13 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   tabWidget_->addTab(tab, tr("Scatter plots"));
 
   // third tab --------------------------------
-  tab = new PlotMatrixWidget(designOfExperiment_.getInputSample(), designOfExperiment_.getOutputSample());
+  tab = new PlotMatrixWidget(variableInputsSample, designOfExperiment_.getOutputSample());
   plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
   tabWidget_->addTab(tab, tr("Plot matrix Y-X"));
 
   // fourth tab --------------------------------
-  tab = new PlotMatrixWidget(designOfExperiment_.getInputSample(), designOfExperiment_.getInputSample());
+  tab = new PlotMatrixWidget(variableInputsSample, variableInputsSample);
   plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
   tabWidget_->addTab(tab, tr("Plot matrix X-X"));
