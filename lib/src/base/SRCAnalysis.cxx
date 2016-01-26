@@ -62,7 +62,7 @@ std::string SRCAnalysis::dump() const
 {
   OSS oss;
   oss << getName() << " = otguibase.SRCAnalysis('" << getName() << "', " << getPhysicalModel().getName();
-  oss << getNbSimulations() << ")\n";
+  oss << ", " << getNbSimulations() << ")\n";
 
   return oss.str();
 }

@@ -22,8 +22,8 @@ myQuadraticCumul = otguibase.QuadraticCumulAnalysis('myQuadraticCumul', myPhysic
 myStudy.addAnalysis(myQuadraticCumul)
 myMonteCarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel, 1000)
 myStudy.addAnalysis(myMonteCarlo)
-mySobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel)
+mySobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel, 10000)
 myStudy.addAnalysis(mySobol)
-mySRC = otguibase.SRCAnalysis('mySRC', myPhysicalModel)
+mySRC = otguibase.SRCAnalysis('mySRC', myPhysicalModel, 10000)
 myStudy.addAnalysis(mySRC)
 

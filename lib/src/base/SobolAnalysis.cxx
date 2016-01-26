@@ -66,7 +66,7 @@ std::string SobolAnalysis::dump() const
 {
   OSS oss;
   oss << getName() << " = otguibase.SobolAnalysis('" << getName() << "', " << getPhysicalModel().getName();
-  oss << getNbSimulations() << ")\n";
+  oss << ", " << getNbSimulations() << ")\n";
 
   return oss.str();
 }
