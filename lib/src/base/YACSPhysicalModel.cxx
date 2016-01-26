@@ -140,6 +140,7 @@ std::string YACSPhysicalModel::dump() const
   result += getXMLFileName() + "')\n";
 
   result += dumpProbaModel();
+  result += PhysicalModelImplementation::dumpCopula();
 
   return result;
 }

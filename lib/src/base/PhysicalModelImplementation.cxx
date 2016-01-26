@@ -179,8 +179,7 @@ void PhysicalModelImplementation::updateCopula()
   }
 
   CorrelationMatrix correlationMatrix(NormalCopula::GetCorrelationFromSpearmanCorrelation(newSpearmanCorrelation));
-  copula_ = NormalCopula(correlationMatrix);
-  copula_.setDescription(stochasticInputNames);
+  setCopula(NormalCopula(correlationMatrix));
 }
 
 
@@ -495,10 +494,41 @@ std::string PhysicalModelImplementation::dumpProbaModel() const
       }
 
       result += oss.str();
-      result += getName()+ ".setInputDistribution('" + inputName + "', ";
+      result += getName() + ".setInputDistribution('" + inputName + "', ";
       result += " dist_" + inputName + ")\n";
     }
   }
+  return result;
+}
+
+
+std::string PhysicalModelImplementation::dumpCopula() const
+{
+  std::string result;
+
+  CorrelationMatrix correlationMatrix(getCopula().getCorrelation());
+
+  OSS oss;
+  oss << "correlationMatrix = ot.CorrelationMatrix(" << correlationMatrix.getNbRows() << ")\n";
+
+  bool dumpCopula = false;
+  for (UnsignedInteger i=0; i<correlationMatrix.getNbRows(); ++i)
+    for (UnsignedInteger j=i+1; j<correlationMatrix.getNbRows(); ++j)
+      if (correlationMatrix(i, j) != 0.0)
+      {
+        dumpCopula = true;
+        oss << "correlationMatrix[" << i << ", " << j << "] = " << correlationMatrix(i, j) << "\n";
+      }
+
+  // if there is no correlation: write nothing
+  if (!dumpCopula)
+    return result;
+
+  // else:
+  result += oss.str();
+  result += "copula = ot.NormalCopula(ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(correlationMatrix))\n";
+  result += getName() + ".setCopula(copula)\n";
+
   return result;
 }
 }

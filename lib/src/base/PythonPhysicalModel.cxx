@@ -30,11 +30,13 @@ PythonPhysicalModel* PythonPhysicalModel::clone() const
   return new PythonPhysicalModel(*this);
 }
 
+
 void PythonPhysicalModel::setCode(const String & code)
 {
   code_ = code;
   notify("codeChanged");
 }
+
 
 String PythonPhysicalModel::getCode() const
 {
@@ -87,29 +89,32 @@ std::string PythonPhysicalModel::dump() const
 {
   std::string result;
 
-  for (UnsignedInteger i = 0; i < getInputs().getSize(); ++ i)
+  for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
     result += getInputs()[i].dump();
 
-  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++ i)
+  for (UnsignedInteger i=0; i < getOutputs().getSize(); ++i)
     result += getOutputs()[i].dump();
 
-  result += getName()+ " = otguibase.PythonPhysicalModel('" + getName() + "')\n";
+  result += getName() + " = otguibase.PythonPhysicalModel('" + getName() + "')\n";
 
-  for (UnsignedInteger i = 0; i <getInputs().getSize(); ++ i)
-    result += getName()+ ".addInput(" + getInputs()[i].getName() + ")\n";
+  for (UnsignedInteger i=0; i <getInputs().getSize(); ++i)
+    result += getName() + ".addInput(" + getInputs()[i].getName() + ")\n";
 
-  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++ i)
-    result += getName()+ ".addOutput(" + getOutputs()[i].getName() + ")\n";
+  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
+    result += getName() + ".addOutput(" + getOutputs()[i].getName() + ")\n";
 
-  result += getName()+ ".setCode('";
+  result += getName() + ".setCode('";
   std::stringstream ss(getCode());
   std::string to;
 
-  while(std::getline(ss,to,'\n')){
-    result += to+"\\n";
+  while (std::getline(ss, to, '\n'))
+  {
+    result += to + "\\n";
   }
   result += "')\n";
+
+  result += PhysicalModelImplementation::dumpCopula();
+
   return result;
 }
-
 }

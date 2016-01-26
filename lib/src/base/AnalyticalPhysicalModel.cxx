@@ -23,8 +23,8 @@ AnalyticalPhysicalModel::AnalyticalPhysicalModel(const std::string & name,
 
 
 AnalyticalPhysicalModel::AnalyticalPhysicalModel(const AnalyticalPhysicalModel & other)
- : PhysicalModelImplementation(other)
- , function_(other.function_)
+  : PhysicalModelImplementation(other)
+  , function_(other.function_)
 {
 }
 
@@ -191,6 +191,7 @@ std::string AnalyticalPhysicalModel::dump() const
   for (int i=0; i<getOutputs().getSize(); ++i)
     result += getName()+ ".addOutput(" + getOutputs()[i].getName() + ")\n";
 
+  result += PhysicalModelImplementation::dumpCopula();
   return result;
 }
 }
