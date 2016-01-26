@@ -46,7 +46,7 @@ LimitState::LimitState(const LimitState & other)
 }
 
 
-LimitState * LimitState::clone() const
+LimitState* LimitState::clone() const
 {
   return new LimitState(*this);
 }

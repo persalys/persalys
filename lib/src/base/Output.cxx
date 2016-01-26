@@ -2,6 +2,7 @@
 
 #include "otgui/Output.hxx"
 
+using namespace OT;
 
 namespace OTGUI {
 
@@ -9,15 +10,15 @@ CLASSNAMEINIT(Output);
 
 Output::Output(const std::string & name, const double & value, const std::string & description,
                const std::string & formula)
- : Variable(name, value, description)
- , formula_(formula)
+  : Variable(name, value, description)
+  , formula_(formula)
 {
 }
 
 
 Output::Output(const Output & other)
- : Variable(other)
- , formula_(other.formula_)
+  : Variable(other)
+  , formula_(other.formula_)
 {
 }
 
@@ -47,15 +48,10 @@ void Output::setFormula(const std::string & formula)
 
 std::string Output::dump() const
 {
-  std::string result;
-  OT::OSS oss;
-
-  oss << getName() << " = otguibase.Output('" << getName() << "', " <<getValue() << ", '" << getDescription();
+  OSS oss;
+  oss << getName() << " = otguibase.Output('" << getName() << "', " << getValue() << ", '" << getDescription();
   oss << "', '" << formula_ << "')\n";
 
-  result += oss.str();
-
-  return result;
+  return oss.str();
 }
-
 }

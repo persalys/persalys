@@ -7,16 +7,16 @@ using namespace OT;
 namespace OTGUI {
 
 ReliabilityAnalysis::ReliabilityAnalysis(const std::string & name, const LimitState & limitState)
- : AnalysisImplementation(name, limitState.getPhysicalModel())
- , limitState_(limitState)
+  : AnalysisImplementation(name, limitState.getPhysicalModel())
+  , limitState_(limitState)
 {
   setIsReliabilityAnalysis(true);
 }
 
 
 ReliabilityAnalysis::ReliabilityAnalysis(const ReliabilityAnalysis & other)
- : AnalysisImplementation(other)
- , limitState_(other.limitState_)
+  : AnalysisImplementation(other)
+  , limitState_(other.limitState_)
 {
   setIsReliabilityAnalysis(true);
 }

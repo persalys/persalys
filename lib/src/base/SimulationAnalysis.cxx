@@ -13,18 +13,18 @@ CLASSNAMEINIT(SimulationAnalysis);
 
 SimulationAnalysis::SimulationAnalysis(const std::string & name, const PhysicalModel & physicalModel,
                                        int nbSimulation)
- : AnalysisImplementation(name, physicalModel)
- , outputs_(physicalModel.getOutputs())
- , nbSimulations_(nbSimulation)
+  : AnalysisImplementation(name, physicalModel)
+  , outputs_(physicalModel.getOutputs())
+  , nbSimulations_(nbSimulation)
 {
 //TODO ctr with outputNames (pas OutputCollection!) optionnel par défaut prendrait tous les outputs
 }
 
 
 SimulationAnalysis::SimulationAnalysis(const SimulationAnalysis & other)
- : AnalysisImplementation(other)
- , outputs_(other.outputs_)
- , nbSimulations_(other.nbSimulations_)
+  : AnalysisImplementation(other)
+  , outputs_(other.outputs_)
+  , nbSimulations_(other.nbSimulations_)
 {
 }
 

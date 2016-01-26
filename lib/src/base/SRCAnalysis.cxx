@@ -12,15 +12,14 @@ namespace OTGUI {
 CLASSNAMEINIT(SRCAnalysis);
 
 SRCAnalysis::SRCAnalysis(const std::string & name, const PhysicalModel & physicalModel, int nbSimu)
- : SimulationAnalysis(name, physicalModel, nbSimu)
- , result_()
+  : SimulationAnalysis(name, physicalModel, nbSimu)
 {
 }
 
 
 SRCAnalysis::SRCAnalysis(const SRCAnalysis & other)
- : SimulationAnalysis(other)
- , result_(other.result_)
+  : SimulationAnalysis(other)
+  , result_(other.result_)
 {
 }
 
@@ -61,9 +60,11 @@ SRCResult SRCAnalysis::getResult() const
 
 std::string SRCAnalysis::dump() const
 {
-  std::string result;
-  result += getName()+ " = otguibase.SRCAnalysis('" + getName() + "', " + getPhysicalModel().getName() + ")\n";
-  return result;
+  OSS oss;
+  oss << getName() << " = otguibase.SRCAnalysis('" << getName() << "', " << getPhysicalModel().getName();
+  oss << getNbSimulations() << ")\n";
+
+  return oss.str();
 }
 
 

@@ -16,15 +16,14 @@ YACSPhysicalModel::YACSPhysicalModel(const std::string & name, const std::string
   }
   catch(std::exception)
   {
-    std::cerr<<"Impossible to create an YACSPhysicalModel with the file "<<fileName<<std::endl;
-    throw;
+    throw InvalidArgumentException(HERE) << "Impossible to create an YACSPhysicalModel with the file " << fileName << "\n";
   }
 }
 
 
 YACSPhysicalModel::YACSPhysicalModel(const YACSPhysicalModel & other)
- : PhysicalModelImplementation(other)
- , evaluation_(other.evaluation_)
+  : PhysicalModelImplementation(other)
+  , evaluation_(other.evaluation_)
 {
 }
 
@@ -120,6 +119,7 @@ NumericalMathFunction YACSPhysicalModel::getFunction(const Description & outputN
 {
   if (outputNames == getOutputNames())
     return getFunction();
+
   YACSEvaluation anEvaluation(evaluation_);
   anEvaluation.setOutputVariablesNames(outputNames);
   return NumericalMathFunction(anEvaluation);

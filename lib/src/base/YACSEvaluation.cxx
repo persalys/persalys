@@ -48,7 +48,7 @@ YACSEvaluation::YACSEvaluation(const YACSEvaluation & other)
 
 
 /* Virtual constructor */
-YACSEvaluation * YACSEvaluation::clone() const
+YACSEvaluation* YACSEvaluation::clone() const
 {
   YACSEvaluation * result = new YACSEvaluation(*this);
   return result;
@@ -263,6 +263,7 @@ void YACSEvaluation::save(Advocate & adv) const
   NumericalMathEvaluationImplementation::save(adv);
   adv.saveAttribute("xmlFileName_", xmlFileName_);
 }
+
 
 /* Method load() reloads the object from the StorageManager */
 void YACSEvaluation::load(Advocate & adv)

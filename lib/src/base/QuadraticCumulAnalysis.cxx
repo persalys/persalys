@@ -10,18 +10,17 @@ namespace OTGUI {
 CLASSNAMEINIT(QuadraticCumulAnalysis);
 
 QuadraticCumulAnalysis::QuadraticCumulAnalysis(const std::string & name, const PhysicalModel & physicalModel)
- : AnalysisImplementation(name, physicalModel)
- , outputs_(physicalModel.getOutputs())
- , result_()
+  : AnalysisImplementation(name, physicalModel)
+  , outputs_(physicalModel.getOutputs())
 {
 //TODO ctr with outputNames (pas OutputCollection!) optionnel par défaut prendrait tous les outputs
 }
 
 
 QuadraticCumulAnalysis::QuadraticCumulAnalysis(const QuadraticCumulAnalysis & other)
- : AnalysisImplementation(other)
- , outputs_(other.outputs_)
- , result_(other.result_)
+  : AnalysisImplementation(other)
+  , outputs_(other.outputs_)
+  , result_(other.result_)
 {
 }
 
@@ -52,6 +51,7 @@ void QuadraticCumulAnalysis::run()
     outputNames[i] = outputs_[i].getName();
 
   QuadraticCumul algoQuadraticCumul(getPhysicalModel().getOutputRandomVector(outputNames));
+
   // set results
   result_ = QuadraticCumulResult(algoQuadraticCumul, outputs_);
 
@@ -77,6 +77,4 @@ bool QuadraticCumulAnalysis::analysisLaunched() const
 {
 //   return outputSample_.getSize()!=0;
 }
-
-
 }

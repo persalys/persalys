@@ -91,7 +91,7 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
 // }
 
 
-DesignOfExperimentImplementation * DesignOfExperimentImplementation::clone() const
+DesignOfExperimentImplementation* DesignOfExperimentImplementation::clone() const
 {
   return new DesignOfExperimentImplementation(*this);
 }

@@ -1,6 +1,7 @@
 // PythonEvaluation.cxx
 
 #include "otgui/PythonEvaluation.hxx"
+
 #include "PersistentObjectFactory.hxx"
 #include "PythonWrappingFunctions.hxx"
 
@@ -33,7 +34,7 @@ PythonEvaluation::PythonEvaluation(const UnsignedInteger & inputDimension,
 
 
 /* Virtual constructor */
-PythonEvaluation * PythonEvaluation::clone() const
+PythonEvaluation* PythonEvaluation::clone() const
 {
   PythonEvaluation * result = new PythonEvaluation(*this);
   return result;

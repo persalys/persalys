@@ -31,7 +31,7 @@ Variable::~Variable()
 
 String Variable::__repr__() const
 {
-  return OT::OSS() << "class=" << getClassName() << " name=" << getName();
+  return OSS() << "class=" << getClassName() << " name=" << getName();
 }
 
 std::string Variable::getName() const
@@ -68,8 +68,4 @@ void Variable::setDescription(const std::string & description)
 {
   description_ = description;
 }
-
-
-
-
 }

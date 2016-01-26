@@ -33,7 +33,7 @@ LimitStateImplementation::LimitStateImplementation(const LimitStateImplementatio
 }
 
 
-LimitStateImplementation * LimitStateImplementation::clone() const
+LimitStateImplementation* LimitStateImplementation::clone() const
 {
   return new LimitStateImplementation(*this);
 }

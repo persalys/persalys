@@ -25,7 +25,7 @@ AnalysisImplementation::AnalysisImplementation(const AnalysisImplementation & ot
 }
 
 
-AnalysisImplementation * AnalysisImplementation::clone() const
+AnalysisImplementation* AnalysisImplementation::clone() const
 {
   return new AnalysisImplementation(*this);
 }
@@ -88,5 +88,4 @@ std::string AnalysisImplementation::dump() const
 {
   return "";
 }
-
 }

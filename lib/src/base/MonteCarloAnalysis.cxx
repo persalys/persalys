@@ -78,12 +78,11 @@ MonteCarloResult MonteCarloAnalysis::getResult() const
 
 std::string MonteCarloAnalysis::dump() const
 {
-  std::string result;
   OSS oss;
-  oss << getNbSimulations();
-  result += getName()+ " = otguibase.MonteCarloAnalysis('" + getName() + "', " + getPhysicalModel().getName();
-  result += ", " + oss.str() + ")\n";
-  return result;
+  oss << getName() << " = otguibase.MonteCarloAnalysis('" << getName() << "', " << getPhysicalModel().getName();
+  oss << ", " << getNbSimulations() << ")\n";
+
+  return oss.str();
 }
 
 

@@ -9,7 +9,7 @@ namespace OTGUI {
 CLASSNAMEINIT(ModelEvaluation);
 
 ModelEvaluation::ModelEvaluation(const std::string & name, const PhysicalModel & physicalModel)
- : AnalysisImplementation(name, physicalModel)
+  : AnalysisImplementation(name, physicalModel)
 {
   initializeParameters(physicalModel.getInputs());
 }
@@ -17,17 +17,17 @@ ModelEvaluation::ModelEvaluation(const std::string & name, const PhysicalModel &
 
 ModelEvaluation::ModelEvaluation(const std::string & name, const PhysicalModel & physicalModel,
                                  const NumericalPoint & inputsValues)
- : AnalysisImplementation(name, physicalModel)
- , inputNames_(getPhysicalModel().getInputNames())
- , inputsValues_(inputsValues)
+  : AnalysisImplementation(name, physicalModel)
+  , inputNames_(getPhysicalModel().getInputNames())
+  , inputsValues_(inputsValues)
 {
 }
 
 
 ModelEvaluation::ModelEvaluation(const ModelEvaluation & other)
- : AnalysisImplementation(other)
- , inputNames_(other.inputNames_)
- , inputsValues_(other.inputsValues_)
+  : AnalysisImplementation(other)
+  , inputNames_(other.inputNames_)
+  , inputsValues_(other.inputsValues_)
 {
 }
 
@@ -101,13 +101,16 @@ ModelEvaluationResult ModelEvaluation::getResult() const
 std::string ModelEvaluation::dump() const
 {
   std::string result;
-  OSS oss;
-  oss << "values = ot.NumericalPoint(" << inputsValues_.getSize() << ")\n";
 
-  for (int i=0; i<inputsValues_.getSize(); ++i)
+  OSS oss;
+  oss << "values = [";
+  for (UnsignedInteger i=0; i<inputsValues_.getSize(); ++i)
   {
-    oss << "values[" << i << "] = " << inputsValues_[i] << "\n";
+    oss << inputsValues_[i];
+    if (i < inputsValues_.getSize()-1)
+      oss << ", ";
   }
+  oss << "]\n";
   result += oss.str();
   result += getName()+ " = otguibase.ModelEvaluation('" + getName() + "', " + getPhysicalModel().getName();
   result += ", values)\n";

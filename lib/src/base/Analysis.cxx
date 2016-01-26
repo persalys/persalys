@@ -100,6 +100,4 @@ std::string Analysis::dump() const
 {
   return getImplementation()->dump();
 }
-
-
 }
