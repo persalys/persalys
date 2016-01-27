@@ -105,7 +105,6 @@ NumericalPoint PythonEvaluation::operator() (const NumericalPoint & inP) const
   {
     ++ callsNumber_;
 
-    Py_Initialize();
     PyObject *module = PyImport_AddModule("__main__");// Borrowed reference.
     PyObject *dict = PyModule_GetDict(module);// Borrowed reference.
     ScopedPyObjectPointer retValue(PyRun_String(code_.c_str(), Py_file_input, dict, dict));
@@ -130,7 +129,6 @@ NumericalPoint PythonEvaluation::operator() (const NumericalPoint & inP) const
       PyObject *inputItem = PyList_GetItem(outputList.get(), i);// borrowed reference
       outP[i] = PyFloat_AsDouble(inputItem);
     }
-    Py_Finalize();
 
     if (p_cache_->isEnabled())
     {
