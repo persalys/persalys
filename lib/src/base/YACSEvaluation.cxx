@@ -93,23 +93,21 @@ void YACSEvaluation::loadData()
 {
   efx_ = YACSEvalYFX::BuildFromFile(xmlFileName_);
 
-  std::list< YACSEvalInputPort * > inps(efx_->getFreeInputPorts());
-  std::list< YACSEvalOutputPort * > outps(efx_->getFreeOutputPorts());
+  std::vector< YACSEvalInputPort * > inps(efx_->getFreeInputPorts());
+  std::vector< YACSEvalOutputPort * > outps(efx_->getFreeOutputPorts());
 
   inputValues_ = NumericalPoint(inps.size());
   inDescription_ = Description(inps.size());
   outDescription_ = Description(outps.size());
 
-  int i = 0;
-  for (std::list<YACSEvalInputPort *>::iterator it=inps.begin(); it!=inps.end(); ++it, i++)
+  for (int i=0; i<inps.size(); ++i)
   {
-    inputValues_[i] = (*it)->getDefaultValueDefined()->toDouble();
-    inDescription_[i] = (*it)->getName();
+    inputValues_[i] = inps[i]->getDefaultValueDefined()->toDouble();
+    inDescription_[i] = inps[i]->getName();
   }
 
-  i = 0;
-  for (std::list<YACSEvalOutputPort *>::iterator it=outps.begin(); it!=outps.end(); ++it, i++)
-    outDescription_[i] = (*it)->getName();
+  for (int i=0; i<outps.size(); ++i)
+    outDescription_[i] = outps[i]->getName();
 }
 
 
@@ -123,23 +121,22 @@ NumericalPoint YACSEvaluation::operator() (const NumericalPoint & inP) const
 /* Operator () */
 NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
 {
-  std::list< YACSEvalInputPort * > inps(efx_->getFreeInputPorts());
-  std::vector< YACSEvalInputPort * > inps2(inps.begin(),inps.end());
+  std::vector< YACSEvalInputPort * > inps(efx_->getFreeInputPorts());
 
-  if (inps2.size() != inS.getDimension())
+  if (inps.size() != inS.getDimension())
   {
-    std::cerr<< "inps2.size() != inS.getDimension()\n";
+    std::cerr<< "inps.size() != inS.getDimension()\n";
     throw;
   }
 
-  std::list< YACSEvalOutputPort * > outps0(efx_->getFreeOutputPorts());
-  std::list< YACSEvalOutputPort * > outps;
+  std::vector< YACSEvalOutputPort * > outps0(efx_->getFreeOutputPorts());
+  std::vector< YACSEvalOutputPort * > outps;
 
   if (getOutputDimension() == outps0.size())
     outps = outps0;
   else
     for (int i=0; i<getOutputDimension(); ++i)
-      for (std::list<YACSEvalOutputPort *>::iterator it = outps0.begin(); it != outps0.end(); it++)
+      for (std::vector<YACSEvalOutputPort *>::iterator it = outps0.begin(); it != outps0.end(); it++)
         if (getOutputVariablesNames()[i] == (*it)->getName())
         {
           outps.push_back(*it);
@@ -159,14 +156,14 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
       tab[j] = inS[j][i];
     
     YACSEvalSeqAnyDouble ds(tab);
-    inps2[i]->setSequenceOfValuesToEval(&ds);
+    inps[i]->setSequenceOfValuesToEval(&ds);
   }
 
   // launch analysis
   NumericalSample result(inS.getSize(), getOutputDimension());
   result.setDescription(getOutputVariablesNames());
 
-  efx_->lockPortsForEvaluation(outps);
+  efx_->lockPortsForEvaluation(inps, outps);
   efx_->getUndergroundGeneratedGraph();
   YACSEvalListOfResources *rss(efx_->giveResources());
   rss->setWantedMachine("localhost");

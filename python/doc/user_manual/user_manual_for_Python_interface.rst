@@ -8,7 +8,4 @@ User manual for Python interface
 .. autosummary::
     :toctree: _generated/
 
-    OTStudy
-    Variable
-    PhysicalModel
-    Analysis
+

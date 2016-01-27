@@ -207,6 +207,8 @@ QPyConsole::QPyConsole(QWidget *parent, const QString& welcomeText) :
              "import rlcompleter\n"
              "sys.path.insert(0, \".\")\n" // add current
              "sys.stdout = redirector.redirector()\n"
+             "def zzff(): pass\n"
+             "sys.stdout.flush=zzff\n"
              "sys.stderr = sys.stdout\n"
              "import __builtin__\n"
              "__builtin__.clear=console.clear\n"
