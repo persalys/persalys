@@ -61,32 +61,9 @@ DesignOfExperiment::DesignOfExperiment(DesignOfExperimentImplementation * p_impl
 }
 
 
-DesignOfExperiment::DesignOfExperiment(const DesignOfExperiment& other)
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(other.getImplementation())
-{
-}
-
-
-DesignOfExperiment::~DesignOfExperiment()
-{
-}
-
-
 void DesignOfExperiment::addObserver(Observer * observer)
 {
   getImplementation()->addObserver(observer);
-}
-
-
-std::string DesignOfExperiment::getName() const
-{
-  return getImplementation()->getName();
-}
-
-
-void DesignOfExperiment::setName(const std::string & name)
-{
-  getImplementation()->setName(name);
 }
 
 

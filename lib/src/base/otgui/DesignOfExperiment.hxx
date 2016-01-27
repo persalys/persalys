@@ -25,14 +25,8 @@ public:
   DesignOfExperiment(const DesignOfExperimentImplementation & implementation);
   DesignOfExperiment(const Implementation & p_implementation);
   DesignOfExperiment(DesignOfExperimentImplementation * p_implementation);
-  DesignOfExperiment(const DesignOfExperiment & other);
-
-  virtual ~DesignOfExperiment();
 
   void addObserver(Observer * observer);
-
-  std::string getName() const;
-  void setName(const std::string & name);
 
   PhysicalModel getPhysicalModel() const;
   void setPhysicalModel(const PhysicalModel & physicalModel);

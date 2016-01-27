@@ -13,7 +13,6 @@ class SimulationAnalysis : public AnalysisImplementation
 public:
   SimulationAnalysis(const std::string & name, const PhysicalModel & physicalModel, int nbSimu);
 
-  SimulationAnalysis(const SimulationAnalysis & other);
   virtual SimulationAnalysis * clone() const;
 
   OutputCollection getOutputs() const;

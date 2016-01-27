@@ -8,43 +8,16 @@ namespace OTGUI {
 AnalysisImplementation::AnalysisImplementation(const std::string & name, const PhysicalModel & physicalModel)
   : PersistentObject()
   , Observable()
-  , name_(name)
   , physicalModel_(physicalModel)
   , isReliabilityAnalysis_(false)
 {
-}
-
-
-AnalysisImplementation::AnalysisImplementation(const AnalysisImplementation & other)
-  : PersistentObject()
-  , Observable()
-  , name_(other.name_)
-  , physicalModel_(other.physicalModel_)
-  , isReliabilityAnalysis_(other.isReliabilityAnalysis_)
-{
+  setName(name);
 }
 
 
 AnalysisImplementation* AnalysisImplementation::clone() const
 {
   return new AnalysisImplementation(*this);
-}
-
-
-AnalysisImplementation::~AnalysisImplementation()
-{
-}
-
-
-std::string AnalysisImplementation::getName() const
-{
-  return name_;
-}
-
-
-void AnalysisImplementation::setName(const std::string & name)
-{
-  name_ = name;
 }
 
 

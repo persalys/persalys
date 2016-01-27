@@ -55,8 +55,8 @@ void OTStudy::SetInstanceObserver(Observer * observer)
 OTStudy::OTStudy(const std::string & name)
   : PersistentObject()
   , Observable()
-  , name_(name)
 {
+  setName(name);
   OTStudies_.push_back(this);
   if (OTStudyObserver_)
     OTStudyObserver_->update(this, "addStudy");
@@ -66,8 +66,8 @@ OTStudy::OTStudy(const std::string & name)
 OTStudy::OTStudy(const OTStudy & other)
   : PersistentObject()
   , Observable()
-  , name_(other.name_+"_copy")
 {
+  setName(other.getName()+"_copy");
   setObserver(other.getObserver());
   OTStudies_.push_back(this);
   if (OTStudyObserver_)
@@ -88,18 +88,6 @@ OTStudy* OTStudy::clone() const
 OTStudy::~OTStudy()
 {
   OTStudies_.erase(std::remove(OTStudies_.begin(), OTStudies_.end(), this), OTStudies_.end());
-}
-
-
-std::string OTStudy::getName() const
-{
-  return name_;
-}
-
-
-void OTStudy::setName(const std::string & name)
-{
-  name_ = name;
 }
 
 

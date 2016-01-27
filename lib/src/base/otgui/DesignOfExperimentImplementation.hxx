@@ -25,9 +25,6 @@ public:
 //                                    const OT::Experiment & experiment);
   virtual DesignOfExperimentImplementation * clone() const;
 
-  std::string getName() const;
-  void setName(const std::string & name);
-
   PhysicalModel getPhysicalModel() const;
   void setPhysicalModel(const PhysicalModel & physicalModel);
 
@@ -69,7 +66,6 @@ protected:
   void initializeParameters(const InputCollection & inputs);
 
 private:
-  std::string name_;
   PhysicalModel physicalModel_;
   Type type_;
   OT::NumericalSample inputSample_;

@@ -10,13 +10,8 @@ class AnalysisImplementation : public OT::PersistentObject, public Observable
 {
 public:
   AnalysisImplementation(const std::string & name, const PhysicalModel & physicalModel);
-  AnalysisImplementation(const AnalysisImplementation & other);
+
   virtual AnalysisImplementation * clone() const;
-
-  virtual ~AnalysisImplementation();
-
-  std::string getName() const;
-  void setName(const std::string & name);
 
   PhysicalModel getPhysicalModel() const;
   void setPhysicalModel(const PhysicalModel & physicalModel);
@@ -31,7 +26,6 @@ protected:
   void setIsReliabilityAnalysis(bool isReliabilityAnalysis);
 
 private:
-  std::string name_;
   PhysicalModel physicalModel_;
   bool isReliabilityAnalysis_;
 };

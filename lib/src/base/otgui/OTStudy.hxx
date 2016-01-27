@@ -19,12 +19,10 @@ public:
   static void SetInstanceObserver(Observer * observer);
 
   OTStudy(const std::string & name);
+
   virtual OTStudy * clone() const;
 
   virtual ~OTStudy();
-
-  std::string getName() const;
-  void setName(const std::string & name);
 
   std::vector<PhysicalModel> getPhysicalModels() const;
   PhysicalModel & getPhysicalModelByName(const std::string & physicalModelName);
@@ -54,7 +52,6 @@ private:
   OTStudy(const OTStudy & other);
   static std::vector<OTStudy*> OTStudies_;
   static Observer * OTStudyObserver_;
-  std::string name_;
   std::vector<PhysicalModel> physicalModels_;
   std::vector<DesignOfExperiment> designOfExperiments_;
   std::vector<Analysis> analyses_;

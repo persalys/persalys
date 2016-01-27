@@ -40,21 +40,9 @@ LimitState::LimitState(LimitStateImplementation * p_implementation)
 }
 
 
-LimitState::LimitState(const LimitState & other)
-  : TypedInterfaceObject<LimitStateImplementation>(other.getImplementation())
-{
-}
-
-
 LimitState* LimitState::clone() const
 {
   return new LimitState(*this);
-}
-
-
-LimitState::~LimitState()
-{
-
 }
 
 
@@ -67,18 +55,6 @@ void LimitState::addObserver(Observer * observer)
 void LimitState::blockNotification(bool block, const std::string & notBlockedMessage)
 {
   getImplementation()->blockNotification(block, notBlockedMessage);
-}
-
-
-std::string LimitState::getName() const
-{
-  return getImplementation()->getName();
-}
-
-
-void LimitState::setName(const std::string & name)
-{
-  getImplementation()->setName(name);
 }
 
 

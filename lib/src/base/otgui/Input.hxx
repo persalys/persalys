@@ -16,12 +16,10 @@ class Input : public Variable
 public:
   Input(const std::string & name="", const double & value=0., const std::string & description="",
         const OT::Distribution & distribution=OT::Dirac());
-  Input(const Input & other);
+
   virtual Input * clone() const;
 
   virtual OT::String __repr__() const;
-
-  virtual ~Input();
 
   OT::Distribution getDistribution() const;
   void setDistribution(const OT::Distribution & distribution);

@@ -14,23 +14,9 @@ ReliabilityAnalysis::ReliabilityAnalysis(const std::string & name, const LimitSt
 }
 
 
-ReliabilityAnalysis::ReliabilityAnalysis(const ReliabilityAnalysis & other)
-  : AnalysisImplementation(other)
-  , limitState_(other.limitState_)
-{
-  setIsReliabilityAnalysis(true);
-}
-
-
 ReliabilityAnalysis* ReliabilityAnalysis::clone() const
 {
   return new ReliabilityAnalysis(*this);
-}
-
-
-ReliabilityAnalysis::~ReliabilityAnalysis()
-{
-
 }
 
 

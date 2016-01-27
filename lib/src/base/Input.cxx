@@ -18,23 +18,11 @@ Input::Input(const std::string & name, const double & value, const std::string &
 }
 
 
-Input::Input(const Input & other)
- : Variable(other)
- , distribution_(other.distribution_)
-{
-
-}
-
-
 Input* Input::clone() const
 {
   return new Input(*this);
 }
 
-
-Input::~Input()
-{
-}
 
 String Input::__repr__() const
 {
@@ -42,6 +30,7 @@ String Input::__repr__() const
   oss << "class="<<GetClassName() <<" var="<<getName()<<" value="<<getValue()<<" desc="<< getDescription();
   return oss;
 }
+
 
 Distribution Input::getDistribution() const
 {
@@ -106,7 +95,7 @@ std::string Input::dumpDistribution() const
     else  // both sides truncation
       oss << truncatedDistribution.getUpperBound() << ", " << truncatedDistribution.getUpperBound() <<")\n";
   }
-  return oss.str();
+  return oss;
 }
 
 
@@ -123,6 +112,6 @@ std::string Input::dump() const
     oss << "', dist_" << getName() << ")\n";
   }
 
-  return oss.str();
+  return oss;
 }
 }

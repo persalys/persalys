@@ -21,14 +21,6 @@ SimulationAnalysis::SimulationAnalysis(const std::string & name, const PhysicalM
 }
 
 
-SimulationAnalysis::SimulationAnalysis(const SimulationAnalysis & other)
-  : AnalysisImplementation(other)
-  , outputs_(other.outputs_)
-  , nbSimulations_(other.nbSimulations_)
-{
-}
-
-
 SimulationAnalysis* SimulationAnalysis::clone() const
 {
   return new SimulationAnalysis(*this);

@@ -11,10 +11,8 @@ class ReliabilityAnalysis : public AnalysisImplementation
 {
 public:
   ReliabilityAnalysis(const std::string & name, const LimitState & limitState);
-  ReliabilityAnalysis(const ReliabilityAnalysis & other);
-  virtual ReliabilityAnalysis * clone() const;
 
-  virtual ~ReliabilityAnalysis();
+  virtual ReliabilityAnalysis * clone() const;
 
   LimitState getLimitState() const;
 

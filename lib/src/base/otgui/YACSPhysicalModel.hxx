@@ -17,7 +17,7 @@ class YACSPhysicalModel : public PhysicalModelImplementation
 
 public:
   YACSPhysicalModel(const std::string & name, const std::string & fileName);
-  YACSPhysicalModel(const YACSPhysicalModel & other);
+
   virtual YACSPhysicalModel * clone() const;
 
   void setInputs(const InputCollection & inputs);

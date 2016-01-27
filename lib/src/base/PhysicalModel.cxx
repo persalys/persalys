@@ -44,13 +44,6 @@ PhysicalModel::PhysicalModel(PhysicalModelImplementation * p_implementation)
 }
 
 
-
-PhysicalModel::PhysicalModel(const PhysicalModel & other)
-  : TypedInterfaceObject<PhysicalModelImplementation>(other.getImplementation())
-{
-}
-
-
 PhysicalModel* PhysicalModel::clone() const
 {
   return new PhysicalModel(*this);
@@ -66,18 +59,6 @@ void PhysicalModel::addObserver(Observer * observer)
 void PhysicalModel::blockNotification(bool block, const std::string & notBlockedMessage)
 {
   getImplementation()->blockNotification(block, notBlockedMessage);
-}
-
-
-std::string PhysicalModel::getName() const
-{
-  return getImplementation()->getName();
-}
-
-
-void PhysicalModel::setName(const std::string & name)
-{
-  getImplementation()->setName(name);
 }
 
 

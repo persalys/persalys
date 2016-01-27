@@ -18,14 +18,11 @@ public:
   PhysicalModel(const PhysicalModelImplementation & implementation);
   PhysicalModel(const Implementation & p_implementation);
   PhysicalModel(PhysicalModelImplementation * p_implementation);
-  PhysicalModel(const PhysicalModel & other);
+
   virtual PhysicalModel * clone() const;
 
   void addObserver(Observer * observer);
   void blockNotification(bool block, const std::string & notBlockedMessage="");
-
-  std::string getName() const;
-  void setName(const std::string & name);
 
   InputCollection getInputs() const;
   Input & getInputByName(const std::string & inputName);

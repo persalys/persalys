@@ -21,9 +21,6 @@ public:
 
   virtual PhysicalModelImplementation * clone() const;
 
-  std::string getName() const;
-  void setName(const std::string & name);
-
   InputCollection getInputs() const;
   Input & getInputByName(const std::string & inputName);
   virtual void setInputs(const InputCollection & inputs);
@@ -68,7 +65,6 @@ protected:
   std::string dumpCopula() const;
 
 private:
-  std::string name_;
   InputCollection inputs_;
   OutputCollection outputs_;
   OT::Copula copula_;

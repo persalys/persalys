@@ -14,10 +14,8 @@ class Output : public Variable
 public:
   Output(const std::string & name="", const double & value=0., const std::string & description="",
          const std::string & formula="");
-  Output(const Output & other);
-  virtual Output * clone() const;
 
-  virtual ~Output();
+  virtual Output * clone() const;
 
   std::string getFormula() const;
   void setFormula(const std::string & formula);

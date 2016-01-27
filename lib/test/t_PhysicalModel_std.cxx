@@ -4,6 +4,7 @@
 #include "otgui/AnalyticalPhysicalModel.hxx"
 #include "otgui/PythonPhysicalModel.hxx"
 #include "otgui/OTStudy.hxx"
+#include "PythonWrappingFunctions.hxx"
 
 using namespace OT;
 using namespace OTGUI;
@@ -29,6 +30,7 @@ int main(int argc, char **argv)
   std::vector<PhysicalModel> models;
   models.push_back(analyticalModel);
   models.push_back(pythonModel);
+  Py_Initialize();
   for (unsigned int i = 0; i < models.size(); ++ i)
   {
     PhysicalModel & model = models[i];
@@ -39,7 +41,7 @@ int main(int argc, char **argv)
     study.addPhysicalModel(model);
     std::cout << model.getFunction()(x) << std::endl;
   }
-  
+  Py_Finalize();
   std::cout << study.dump() << std::endl;
   return EXIT_SUCCESS;
 }

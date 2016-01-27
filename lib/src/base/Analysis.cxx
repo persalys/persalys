@@ -37,32 +37,9 @@ Analysis::Analysis(AnalysisImplementation * p_implementation)
 }
 
 
-Analysis::Analysis(const Analysis& other)
-  : TypedInterfaceObject<AnalysisImplementation>(other.getImplementation())
-{
-}
-
-
-Analysis::~Analysis()
-{
-}
-
-
 void Analysis::addObserver(Observer * observer)
 {
   getImplementation()->addObserver(observer);
-}
-
-
-std::string Analysis::getName() const
-{
-  return getImplementation()->getName();
-}
-
-
-void Analysis::setName(const std::string & name)
-{
-  getImplementation()->setName(name);
 }
 
 

@@ -16,14 +16,8 @@ public:
   LimitStateImplementation(const std::string & name, const PhysicalModel & physicalModel,
                            const std::string & outputName,
                            const OT::ComparisonOperator & failure, const double & threshold);
- 
-  LimitStateImplementation(const LimitStateImplementation & other);
+
   virtual LimitStateImplementation * clone() const;
-
-  virtual ~LimitStateImplementation();
-
-  std::string getName() const;
-  void setName(const std::string & name);
 
   PhysicalModel getPhysicalModel() const;
   void setPhysicalModel(const PhysicalModel & physicalModel);
@@ -42,7 +36,6 @@ public:
   std::string dump() const;
 
 private:
-  std::string name_;
   PhysicalModel physicalModel_;
   std::string outputName_;
   OT::ComparisonOperator operator_;

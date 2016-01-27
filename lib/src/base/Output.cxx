@@ -16,21 +16,9 @@ Output::Output(const std::string & name, const double & value, const std::string
 }
 
 
-Output::Output(const Output & other)
-  : Variable(other)
-  , formula_(other.formula_)
-{
-}
-
-
 Output* Output::clone() const
 {
   return new Output(*this);
-}
-
-
-Output::~Output()
-{
 }
 
 
@@ -52,6 +40,6 @@ std::string Output::dump() const
   oss << getName() << " = otguibase.Output('" << getName() << "', " << getValue() << ", '" << getDescription();
   oss << "', '" << formula_ << "')\n";
 
-  return oss.str();
+  return oss;
 }
 }

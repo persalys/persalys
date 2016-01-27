@@ -21,13 +21,6 @@ YACSPhysicalModel::YACSPhysicalModel(const std::string & name, const std::string
 }
 
 
-YACSPhysicalModel::YACSPhysicalModel(const YACSPhysicalModel & other)
-  : PhysicalModelImplementation(other)
-  , evaluation_(other.evaluation_)
-{
-}
-
-
 YACSPhysicalModel* YACSPhysicalModel::clone() const
 {
   return new YACSPhysicalModel(*this);

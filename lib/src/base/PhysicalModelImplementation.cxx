@@ -10,11 +10,8 @@ namespace OTGUI {
 PhysicalModelImplementation::PhysicalModelImplementation(const std::string & name)
   : PersistentObject()
   , Observable()
-  , name_(name)
-  , inputs_(InputCollection(0))
-  , outputs_(OutputCollection(0))
-  , copula_(Copula())
 {
+  setName(name);
 }
 
 
@@ -23,29 +20,16 @@ PhysicalModelImplementation::PhysicalModelImplementation(const std::string & nam
                                                          const OutputCollection & outputs)
   : PersistentObject()
   , Observable()
-  , name_(name)
   , inputs_(inputs)
   , outputs_(outputs)
-  , copula_(Copula())
 {
+  setName(name);
 }
 
 
 PhysicalModelImplementation* PhysicalModelImplementation::clone() const
 {
   return new PhysicalModelImplementation(*this);
-}
-
-
-std::string PhysicalModelImplementation::getName() const
-{
-  return name_;
-}
-
-
-void PhysicalModelImplementation::setName(const std::string & name)
-{
-  name_ = name;
 }
 
 
@@ -204,9 +188,9 @@ Description PhysicalModelImplementation::getStochasticInputNames()
 
 bool PhysicalModelImplementation::hasInputNamed(const std::string & inputName)
 {
-  Description inputNames = getInputNames();
-  if (std::find(inputNames.begin(), inputNames.end(), inputName) != inputNames.end())
-    return true;
+  for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
+    if (inputs_[i].getName() == inputName)
+      return true;
   return false;
 }
 
@@ -310,9 +294,9 @@ Description PhysicalModelImplementation::getOutputNames()
 
 bool PhysicalModelImplementation::hasOutputNamed(const std::string & outputName)
 {
-  Description outputNames = getOutputNames();
-  if (std::find(outputNames.begin(), outputNames.end(), outputName) != outputNames.end())
-    return true;
+  for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
+    if (outputs_[i].getName() == outputName)
+      return true;
   return false;
 }
 

@@ -13,13 +13,11 @@ namespace OTGUI {
 DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::string & name, const PhysicalModel & physicalModel)
   : PersistentObject()
   , Observable()
-  , name_(name)
   , physicalModel_(physicalModel)
   , type_(DesignOfExperimentImplementation::FromBoundsAndLevels)
-  , fileName_("")
-  , columns_(Indices(0))
 //   , experiment_(Experiment())
 {
+  setName(name);
   initializeParameters(physicalModel.getInputs());
 }
 
@@ -32,7 +30,6 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
                                                                    const OT::NumericalPoint & values)
   : PersistentObject()
   , Observable()
-  , name_(name)
   , physicalModel_(physicalModel)
   , type_(DesignOfExperimentImplementation::FromBoundsAndLevels)
   , inputNames_(getPhysicalModel().getInputNames())
@@ -40,10 +37,9 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
   , lowerBounds_(lowerBounds)
   , upperBounds_(upperBounds)
   , deltas_(NumericalPoint(physicalModel.getInputs().getSize()))
-  , fileName_("")
-  , columns_(Indices(0))
 //   , experiment_(Experiment())
 {
+  setName(name);
   setLevels(levels);
   if (!values_.getSize())
   {
@@ -64,11 +60,11 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
                                                                    const OT::Indices & columns)
   : PersistentObject()
   , Observable()
-  , name_(name)
   , physicalModel_(physicalModel)
   , type_(DesignOfExperimentImplementation::FromFile)
   , fileName_(fileName)
 {
+  setName(name);
   setColumns(columns);
   initializeParameters(physicalModel.getInputs());
 }
@@ -80,13 +76,13 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
 //                                                                    const Experiment & experiment)
 //   : PersistentObject()
 //   , Observable()
-//   , name_(name)
 //   , physicalModel_(physicalModel)
 //   , type_(DesignOfExperimentImplementation::FromExperiment)
 //   , fileName_("")
 //   , columns_(Indices(0))
 //   , experiment_(experiment)
 // {
+//   setName(name);
 //   initializeParameters(physicalModel.getInputs());
 // }
 
@@ -175,18 +171,6 @@ void DesignOfExperimentImplementation::updateParameters()
       deltas_[i] = deltas[it - inputNames.begin()];
     }
   }
-}
-
-
-std::string DesignOfExperimentImplementation::getName() const
-{
-  return name_;
-}
-
-
-void DesignOfExperimentImplementation::setName(const std::string & name)
-{
-  name_ = name;
 }
 
 

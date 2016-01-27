@@ -11,49 +11,18 @@ LimitStateImplementation::LimitStateImplementation(const std::string & name, con
                        const double & threshold)
   : PersistentObject()
   , Observable()
-  , name_(name)
   , physicalModel_(physicalModel)
   , outputName_(outputName)
   , operator_(comparisonOperator)
   , threshold_(threshold)
 {
-  physicalModel_.getOutputByName(outputName);
-}
-
-
-LimitStateImplementation::LimitStateImplementation(const LimitStateImplementation & other)
-  : PersistentObject()
-  , Observable()
-  , name_(other.name_)
-  , physicalModel_(other.physicalModel_)
-  , outputName_(other.outputName_)
-  , operator_(other.operator_)
-  , threshold_(other.threshold_)
-{
+  setName(name);
 }
 
 
 LimitStateImplementation* LimitStateImplementation::clone() const
 {
   return new LimitStateImplementation(*this);
-}
-
-
-LimitStateImplementation::~LimitStateImplementation()
-{
-
-}
-
-
-std::string LimitStateImplementation::getName() const
-{
-  return name_;
-}
-
-
-void LimitStateImplementation::setName(const std::string & name)
-{
-  name_ = name;
 }
 
 

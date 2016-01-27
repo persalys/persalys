@@ -12,16 +12,9 @@ class Variable : public OT::PersistentObject
 
 public:
   Variable(const std::string & name="", const double & value=0., const std::string & description="");
-  Variable(const Variable & other);
-  virtual Variable * clone() const = 0;
 
     /* String converter */
   virtual OT::String __repr__() const;
-
-  virtual ~Variable();
-
-  std::string getName() const;
-  void setName(const std::string & name);
 
   double getValue() const;
   void setValue(const double & value);
@@ -32,7 +25,6 @@ public:
   virtual std::string dump() const = 0;
 
 private:
-  std::string name_;
   double value_;
   std::string description_;
 };

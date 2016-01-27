@@ -23,16 +23,11 @@ public:
   LimitState(const LimitStateImplementation & implementation);
   LimitState(const Implementation & p_implementation);
   LimitState(LimitStateImplementation * p_implementation); 
-  LimitState(const LimitState & other);
-  virtual LimitState * clone() const;
 
-  virtual ~LimitState();
+  virtual LimitState * clone() const;
 
   void addObserver(Observer * observer);
   void blockNotification(bool block, const std::string & notBlockedMessage="");
-
-  std::string getName() const;
-  void setName(const std::string & name);
 
   PhysicalModel getPhysicalModel() const;
   void setPhysicalModel(const PhysicalModel & physicalModel);
