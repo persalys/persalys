@@ -4,7 +4,7 @@
 #include "otgui/AnalyticalPhysicalModel.hxx"
 #include "otgui/PythonPhysicalModel.hxx"
 #include "otgui/OTStudy.hxx"
-#include "PythonWrappingFunctions.hxx"
+#include "Python.h"
 
 using namespace OT;
 using namespace OTGUI;
