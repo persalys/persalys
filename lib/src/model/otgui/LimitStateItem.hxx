@@ -20,7 +20,7 @@ public:
 
   void setData(const QVariant & value, int role);
 
-  virtual void update(Observable * source, const std::string & message);
+  virtual void update(Observable * source, const OT::String & message);
 
 public slots:
 signals:

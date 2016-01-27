@@ -9,7 +9,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(MonteCarloAnalysis);
 
-MonteCarloAnalysis::MonteCarloAnalysis(const std::string & name, const PhysicalModel & physicalModel,
+MonteCarloAnalysis::MonteCarloAnalysis(const String & name, const PhysicalModel & physicalModel,
                                        int nbSimu, bool confidenceInterval, double level)
   : SimulationAnalysis(name, physicalModel, nbSimu)
   , isConfidenceIntervalRequired_(confidenceInterval)
@@ -76,7 +76,7 @@ MonteCarloResult MonteCarloAnalysis::getResult() const
 }
 
 
-std::string MonteCarloAnalysis::dump() const
+String MonteCarloAnalysis::dump() const
 {
   OSS oss;
   oss << getName() << " = otguibase.MonteCarloAnalysis('" << getName() << "', " << getPhysicalModel().getName();

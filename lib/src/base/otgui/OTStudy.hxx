@@ -13,40 +13,40 @@ class OTStudy : public OT::PersistentObject, public Observable
 {
 public:
   static std::vector<OTStudy*> GetOTStudies();
-  static OTStudy* GetOTStudyByName(const std::string & otStudyName);
-  static bool HasOTStudyNamed(const std::string & otStudyName);
-  static std::string GetAvailableOTStudyName();
+  static OTStudy* GetOTStudyByName(const OT::String & otStudyName);
+  static bool HasOTStudyNamed(const OT::String & otStudyName);
+  static OT::String GetAvailableOTStudyName();
   static void SetInstanceObserver(Observer * observer);
 
-  OTStudy(const std::string & name);
+  OTStudy(const OT::String & name);
 
   virtual OTStudy * clone() const;
 
   virtual ~OTStudy();
 
   std::vector<PhysicalModel> getPhysicalModels() const;
-  PhysicalModel & getPhysicalModelByName(const std::string & physicalModelName);
-  bool hasPhysicalModelNamed(const std::string & physicalModelName);
-  std::string getAvailablePhysicalModelName();
+  PhysicalModel & getPhysicalModelByName(const OT::String & physicalModelName);
+  bool hasPhysicalModelNamed(const OT::String & physicalModelName);
+  OT::String getAvailablePhysicalModelName();
   void addPhysicalModel(const PhysicalModel & physicalModel);
 
   std::vector<DesignOfExperiment> getDesignOfExperiments() const;
-  bool hasDesignOfExperimentNamed(const std::string & designOfExperimentName);
-  std::string getAvailableDesignOfExperimentName();
+  bool hasDesignOfExperimentNamed(const OT::String & designOfExperimentName);
+  OT::String getAvailableDesignOfExperimentName();
   void addDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
 
   std::vector<Analysis> getAnalyses() const;
-  Analysis & getAnalysisByName(const std::string & analysisName);
-  bool hasAnalysisNamed(const std::string & analysisName);
-  std::string getAvailableAnalysisName(const std::string & rootName);
+  Analysis & getAnalysisByName(const OT::String & analysisName);
+  bool hasAnalysisNamed(const OT::String & analysisName);
+  OT::String getAvailableAnalysisName(const OT::String & rootName);
   void addAnalysis(const Analysis & analysis);
 
   std::vector<LimitState> getLimitStates() const;
-  bool hasLimitStateNamed(const std::string & limitStateName);
-  std::string getAvailableLimitStateName();
+  bool hasLimitStateNamed(const OT::String & limitStateName);
+  OT::String getAvailableLimitStateName();
   void addLimitState(const LimitState & limitState);
 
-  std::string dump();
+  OT::String dump();
 
 private:
   OTStudy(const OTStudy & other);

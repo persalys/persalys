@@ -8,14 +8,14 @@ namespace OTGUI {
 
 CLASSNAMEINIT(ModelEvaluation);
 
-ModelEvaluation::ModelEvaluation(const std::string & name, const PhysicalModel & physicalModel)
+ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & physicalModel)
   : AnalysisImplementation(name, physicalModel)
 {
   initializeParameters(physicalModel.getInputs());
 }
 
 
-ModelEvaluation::ModelEvaluation(const std::string & name, const PhysicalModel & physicalModel,
+ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & physicalModel,
                                  const NumericalPoint & inputsValues)
   : AnalysisImplementation(name, physicalModel)
   , inputNames_(getPhysicalModel().getInputNames())
@@ -98,9 +98,9 @@ ModelEvaluationResult ModelEvaluation::getResult() const
 }
 
 
-std::string ModelEvaluation::dump() const
+String ModelEvaluation::dump() const
 {
-  std::string result;
+  String result;
 
   OSS oss;
   oss << "values = [";

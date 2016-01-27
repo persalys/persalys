@@ -6,6 +6,8 @@
 #include "otgui/ReliabilityAnalysisItem.hxx"
 #include "otgui/ReliabilityAnalysis.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 OTStudyItem::OTStudyItem(OTStudy * otStudy)
@@ -22,7 +24,7 @@ OTStudyItem::~OTStudyItem()
 }
 
 
-void OTStudyItem::update(Observable * source, const std::string & message)
+void OTStudyItem::update(Observable * source, const String & message)
 {
   if (message=="addPhysicalModel")
   {
@@ -176,7 +178,7 @@ void OTStudyItem::addProbabilisticAnalysisItem(Analysis & analysis, AnalysisItem
 void OTStudyItem::addReliabilityAnalysisItem(Analysis & analysis, AnalysisItem * item)
 {
   analysis.addObserver(item);
-  std::string limitStateName = dynamic_cast<ReliabilityAnalysis*>(&*analysis.getImplementation())->getLimitState().getName();
+  String limitStateName = dynamic_cast<ReliabilityAnalysis*>(&*analysis.getImplementation())->getLimitState().getName();
   for (int i=0; i<rowCount(); ++i)
     if (child(i)->text().toStdString() == analysis.getPhysicalModel().getName())
     {

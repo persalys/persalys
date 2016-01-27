@@ -73,7 +73,7 @@ void ImportTablePage::buildInterface()
 
 void ImportTablePage::loadFile()
 {
-  std::vector< std::string > separatorsList(3);
+  std::vector< String > separatorsList(3);
   separatorsList[0] = " ";
   separatorsList[1] = ",";
   separatorsList[2] = ";";

@@ -14,7 +14,7 @@ class Input : public Variable
   CLASSNAME;
 
 public:
-  Input(const std::string & name="", const double & value=0., const std::string & description="",
+  Input(const OT::String & name="", const double & value=0., const OT::String & description="",
         const OT::Distribution & distribution=OT::Dirac());
 
   virtual Input * clone() const;
@@ -26,8 +26,8 @@ public:
 
   bool isStochastic() const;
 
-  std::string dumpDistribution() const;
-  std::string dump() const;
+  OT::String dumpDistribution() const;
+  OT::String dump() const;
 
 private:
   OT::Distribution distribution_;

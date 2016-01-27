@@ -12,7 +12,7 @@ class SRCAnalysis : public SimulationAnalysis
   CLASSNAME;
 
 public:
-  SRCAnalysis(const std::string & name, const PhysicalModel & physicalModel, int nbSimu=10000);
+  SRCAnalysis(const OT::String & name, const PhysicalModel & physicalModel, int nbSimu=10000);
 
   SRCAnalysis(const SRCAnalysis & other);
   virtual SRCAnalysis * clone() const;
@@ -20,7 +20,7 @@ public:
   SRCResult getResult() const;
 
   virtual void run();
-  virtual std::string dump() const;
+  virtual OT::String dump() const;
   virtual bool analysisLaunched() const;
 
 private:

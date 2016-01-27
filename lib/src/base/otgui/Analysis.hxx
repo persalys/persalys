@@ -13,7 +13,7 @@ class Analysis : public OT::TypedInterfaceObject<AnalysisImplementation>
 public:
   typedef OT::Pointer<AnalysisImplementation>       Implementation;
 
-  Analysis(const std::string & name, const PhysicalModel & physicalModel);
+  Analysis(const OT::String & name, const PhysicalModel & physicalModel);
   Analysis(const AnalysisImplementation & implementation);
   Analysis(const Implementation & p_implementation);
   Analysis(AnalysisImplementation * p_implementation);
@@ -26,7 +26,7 @@ public:
   bool isReliabilityAnalysis() const;
 
   void run();
-  std::string dump() const;
+  OT::String dump() const;
   bool analysisLaunched() const;
 };
 }

@@ -1,5 +1,7 @@
 #include "otgui/ReliabilityAnalysisItem.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 ReliabilityAnalysisItem::ReliabilityAnalysisItem(const Analysis & analysis)
@@ -8,12 +10,11 @@ ReliabilityAnalysisItem::ReliabilityAnalysisItem(const Analysis & analysis)
 }
 
 
-void ReliabilityAnalysisItem::update(Observable* source, const std::string & message)
+void ReliabilityAnalysisItem::update(Observable* source, const String & message)
 {
   if (message=="analysisFinished")
   {
     emit analysisFinished(this);
   }
 }
-
 }

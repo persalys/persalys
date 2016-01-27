@@ -8,7 +8,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(Analysis);
 
-Analysis::Analysis(const std::string & name, const PhysicalModel & physicalModel)
+Analysis::Analysis(const String & name, const PhysicalModel & physicalModel)
   : TypedInterfaceObject<AnalysisImplementation>(new AnalysisImplementation(name, physicalModel))
 {
 }
@@ -73,7 +73,7 @@ bool Analysis::analysisLaunched() const
 }
 
 
-std::string Analysis::dump() const
+String Analysis::dump() const
 {
   return getImplementation()->dump();
 }

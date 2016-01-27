@@ -1,6 +1,8 @@
 #include "otgui/PhysicalModelItem.hxx"
 #include "otgui/PythonPhysicalModel.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel)
@@ -42,7 +44,7 @@ void PhysicalModelItem::updatePhysicalModel(const PhysicalModel & physicalModel)
 }
 
 
-void PhysicalModelItem::update(Observable* source, const std::string & message)
+void PhysicalModelItem::update(Observable* source, const String & message)
 {
   if (message == "inputChanged")
   {

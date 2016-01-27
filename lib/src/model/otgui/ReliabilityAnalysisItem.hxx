@@ -13,7 +13,7 @@ class ReliabilityAnalysisItem : public AnalysisItem
 public:
   ReliabilityAnalysisItem(const Analysis & analysis);
 
-  virtual void update(Observable * source, const std::string & message);
+  virtual void update(Observable * source, const OT::String & message);
 };
 }
 #endif

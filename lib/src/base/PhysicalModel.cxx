@@ -8,13 +8,13 @@ namespace OTGUI {
 
 CLASSNAMEINIT(PhysicalModel);
 
-PhysicalModel::PhysicalModel(const std::string & name)
+PhysicalModel::PhysicalModel(const String & name)
   : TypedInterfaceObject<PhysicalModelImplementation>(new AnalyticalPhysicalModel(name))
 {
 }
 
 
-PhysicalModel::PhysicalModel(const std::string & name, const InputCollection & inputs, const OutputCollection & outputs)
+PhysicalModel::PhysicalModel(const String & name, const InputCollection & inputs, const OutputCollection & outputs)
   : TypedInterfaceObject<PhysicalModelImplementation>(new AnalyticalPhysicalModel(name, inputs, outputs))
 {
 }
@@ -56,7 +56,7 @@ void PhysicalModel::addObserver(Observer * observer)
 }
 
 
-void PhysicalModel::blockNotification(bool block, const std::string & notBlockedMessage)
+void PhysicalModel::blockNotification(bool block, const String & notBlockedMessage)
 {
   getImplementation()->blockNotification(block, notBlockedMessage);
 }
@@ -68,7 +68,7 @@ InputCollection PhysicalModel::getInputs() const
 }
 
 
-Input & PhysicalModel::getInputByName(const std::string & inputName)
+Input & PhysicalModel::getInputByName(const String & inputName)
 {
   return getImplementation()->getInputByName(inputName);
 }
@@ -80,19 +80,19 @@ void PhysicalModel::setInputs(const InputCollection & inputs)
 }
 
 
-void PhysicalModel::setInputDescription(const std::string & inputName, const std::string & description)
+void PhysicalModel::setInputDescription(const String & inputName, const String & description)
 {
   return getImplementation()->setInputDescription(inputName, description);
 }
 
 
-void PhysicalModel::setInputValue(const std::string & inputName, const double & value)
+void PhysicalModel::setInputValue(const String & inputName, const double & value)
 {
   return getImplementation()->setInputValue(inputName, value);
 }
 
 
-void PhysicalModel::setInputDistribution(const std::string & inputName, const Distribution & distribution)
+void PhysicalModel::setInputDistribution(const String & inputName, const Distribution & distribution)
 {
   return getImplementation()->setInputDistribution(inputName, distribution);
 }
@@ -104,7 +104,7 @@ void PhysicalModel::addInput(const Input & input)
 }
 
 
-void PhysicalModel::removeInput(const std::string & inputName)
+void PhysicalModel::removeInput(const String & inputName)
 {
   getImplementation()->removeInput(inputName);
 }
@@ -122,7 +122,7 @@ Description PhysicalModel::getStochasticInputNames()
 }
 
 
-bool PhysicalModel::hasInputNamed(const std::string & inputName)
+bool PhysicalModel::hasInputNamed(const String & inputName)
 {
   return getImplementation()->hasInputNamed(inputName);
 }
@@ -134,7 +134,7 @@ bool PhysicalModel::hasStochasticInputs()
 }
 
 
-Output & PhysicalModel::getOutputByName(const std::string & outputName)
+Output & PhysicalModel::getOutputByName(const String & outputName)
 {
   return getImplementation()->getOutputByName(outputName);
 }
@@ -152,19 +152,19 @@ void PhysicalModel::setOutputs(const OutputCollection & outputs)
 }
 
 
-void PhysicalModel::setOutputDescription(const std::string & outputName, const std::string & description)
+void PhysicalModel::setOutputDescription(const String & outputName, const String & description)
 {
   return getImplementation()->setOutputDescription(outputName, description);
 }
 
 
-void PhysicalModel::setOutputFormula(const std::string & outputName, const std::string & formula)
+void PhysicalModel::setOutputFormula(const String & outputName, const String & formula)
 {
   return getImplementation()->setOutputFormula(outputName, formula);
 }
 
 
-void PhysicalModel::setOutputValue(const std::string & outputName, const double & value)
+void PhysicalModel::setOutputValue(const String & outputName, const double & value)
 {
   return getImplementation()->setOutputValue(outputName, value);
 }
@@ -176,7 +176,7 @@ void PhysicalModel::addOutput(const Output & output)
 }
 
 
-void PhysicalModel::removeOutput(const std::string & outputName)
+void PhysicalModel::removeOutput(const String & outputName)
 {
   getImplementation()->removeOutput(outputName);
 }
@@ -188,7 +188,7 @@ Description PhysicalModel::getOutputNames()
 }
 
 
-bool PhysicalModel::hasOutputNamed(const std::string & outputName)
+bool PhysicalModel::hasOutputNamed(const String & outputName)
 {
   return getImplementation()->hasOutputNamed(outputName);
 }
@@ -248,7 +248,7 @@ void PhysicalModel::setCopula(const Copula & copula)
 }
 
 
-std::string PhysicalModel::dump() const
+String PhysicalModel::dump() const
 {
   return getImplementation()->dump();
 }

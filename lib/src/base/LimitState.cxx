@@ -8,8 +8,8 @@ namespace OTGUI {
 
 CLASSNAMEINIT(LimitState);
 
-LimitState::LimitState(const std::string & name, const PhysicalModel & physicalModel,
-                       const std::string & outputName,
+LimitState::LimitState(const String & name, const PhysicalModel & physicalModel,
+                       const String & outputName,
                        const OT::ComparisonOperator & comparisonOperator, const double & threshold)
   : TypedInterfaceObject<LimitStateImplementation>(new LimitStateImplementation(name, physicalModel, outputName, comparisonOperator, threshold))
 {
@@ -52,7 +52,7 @@ void LimitState::addObserver(Observer * observer)
 }
 
 
-void LimitState::blockNotification(bool block, const std::string & notBlockedMessage)
+void LimitState::blockNotification(bool block, const String & notBlockedMessage)
 {
   getImplementation()->blockNotification(block, notBlockedMessage);
 }
@@ -70,13 +70,13 @@ void LimitState::setPhysicalModel(const PhysicalModel & physicalModel)
 }
 
 
-std::string LimitState::getOutputName() const
+String LimitState::getOutputName() const
 {
   return getImplementation()->getOutputName();
 }
 
 
-void LimitState::setOutputName(const std::string & outputName)
+void LimitState::setOutputName(const String & outputName)
 {
   getImplementation()->setOutputName(outputName);
 }
@@ -113,7 +113,7 @@ Event LimitState::getEvent()
 }
 
 
-std::string LimitState::dump() const
+String LimitState::dump() const
 {
   return getImplementation()->dump();
 }

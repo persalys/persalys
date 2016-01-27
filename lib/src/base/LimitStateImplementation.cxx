@@ -6,8 +6,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-LimitStateImplementation::LimitStateImplementation(const std::string & name, const PhysicalModel & physicalModel,
-                       const std::string & outputName, const ComparisonOperator & comparisonOperator,
+LimitStateImplementation::LimitStateImplementation(const String & name, const PhysicalModel & physicalModel,
+                       const String & outputName, const ComparisonOperator & comparisonOperator,
                        const double & threshold)
   : PersistentObject()
   , Observable()
@@ -38,13 +38,13 @@ void LimitStateImplementation::setPhysicalModel(const PhysicalModel & physicalMo
 }
 
 
-std::string LimitStateImplementation::getOutputName() const
+String LimitStateImplementation::getOutputName() const
 {
   return outputName_;
 }
 
 
-void LimitStateImplementation::setOutputName(const std::string & outputName)
+void LimitStateImplementation::setOutputName(const String & outputName)
 {
   outputName_ = outputName;
   notify("outputNameChanged");
@@ -90,9 +90,9 @@ Event LimitStateImplementation::getEvent()
 }
 
 
-std::string LimitStateImplementation::dump() const
+String LimitStateImplementation::dump() const
 {
-  std::string result;
+  String result;
   result += getName()+ " = otguibase.LimitState('" + getName() + "', " + getPhysicalModel().getName();
   result += ", '" + outputName_ + "', ot."+ operator_.getImplementation()->getClassName() + "(), ";
   OSS oss;

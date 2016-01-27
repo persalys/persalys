@@ -12,18 +12,18 @@ class Output : public Variable
   CLASSNAME;
 
 public:
-  Output(const std::string & name="", const double & value=0., const std::string & description="",
-         const std::string & formula="");
+  Output(const OT::String & name="", const double & value=0., const OT::String & description="",
+         const OT::String & formula="");
 
   virtual Output * clone() const;
 
-  std::string getFormula() const;
-  void setFormula(const std::string & formula);
+  OT::String getFormula() const;
+  void setFormula(const OT::String & formula);
  
-  std::string dump() const; 
+  OT::String dump() const; 
 
 private:
-  std::string formula_;
+  OT::String formula_;
 };
 typedef OT::Collection<Output> OutputCollection;
 }

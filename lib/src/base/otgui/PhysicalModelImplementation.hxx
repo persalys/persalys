@@ -15,35 +15,35 @@ namespace OTGUI {
 class PhysicalModelImplementation : public OT::PersistentObject, public Observable
 {
 public:
-  explicit PhysicalModelImplementation(const std::string & name);
-  PhysicalModelImplementation(const std::string & name, const InputCollection & inputs,
+  explicit PhysicalModelImplementation(const OT::String & name);
+  PhysicalModelImplementation(const OT::String & name, const InputCollection & inputs,
                               const OutputCollection & outputs);
 
   virtual PhysicalModelImplementation * clone() const;
 
   InputCollection getInputs() const;
-  Input & getInputByName(const std::string & inputName);
+  Input & getInputByName(const OT::String & inputName);
   virtual void setInputs(const InputCollection & inputs);
-  void setInputDescription(const std::string & inputName, const std::string & description);
-  void setInputValue(const std::string & inputName, const double & value);
-  void setInputDistribution(const std::string & inputName, const OT::Distribution & distribution);
+  void setInputDescription(const OT::String & inputName, const OT::String & description);
+  void setInputValue(const OT::String & inputName, const double & value);
+  void setInputDistribution(const OT::String & inputName, const OT::Distribution & distribution);
   virtual void addInput(const Input & input);
-  virtual void removeInput(const std::string & inputName);
+  virtual void removeInput(const OT::String & inputName);
   OT::Description getInputNames();
   OT::Description getStochasticInputNames();
-  bool hasInputNamed(const std::string & inputName);
+  bool hasInputNamed(const OT::String & inputName);
   bool hasStochasticInputs();
 
   OutputCollection getOutputs() const;
-  Output & getOutputByName(const std::string & outputName);
+  Output & getOutputByName(const OT::String & outputName);
   virtual void setOutputs(const OutputCollection & outputs);
-  void setOutputDescription(const std::string & outputName, const std::string & description);
-  virtual void setOutputFormula(const std::string & outputName, const std::string & formula);
-  void setOutputValue(const std::string & outputName, const double & value);
+  void setOutputDescription(const OT::String & outputName, const OT::String & description);
+  virtual void setOutputFormula(const OT::String & outputName, const OT::String & formula);
+  void setOutputValue(const OT::String & outputName, const double & value);
   virtual void addOutput(const Output & output);
-  virtual void removeOutput(const std::string & outputName);
+  virtual void removeOutput(const OT::String & outputName);
   OT::Description getOutputNames();
-  bool hasOutputNamed(const std::string & outputName);
+  bool hasOutputNamed(const OT::String & outputName);
 
   OT::ComposedDistribution getComposedDistribution() const;
   OT::RandomVector getInputRandomVector();
@@ -57,12 +57,12 @@ public:
   OT::Copula getCopula() const;
   void setCopula(const OT::Copula & copula);
 
-  virtual std::string dump() const;
+  virtual OT::String dump() const;
 
 protected:
   void updateCopula();
-  std::string dumpProbaModel() const;
-  std::string dumpCopula() const;
+  OT::String dumpProbaModel() const;
+  OT::String dumpCopula() const;
 
 private:
   InputCollection inputs_;

@@ -16,25 +16,25 @@ class YACSPhysicalModel : public PhysicalModelImplementation
   CLASSNAME;
 
 public:
-  YACSPhysicalModel(const std::string & name, const std::string & fileName);
+  YACSPhysicalModel(const OT::String & name, const OT::String & fileName);
 
   virtual YACSPhysicalModel * clone() const;
 
   void setInputs(const InputCollection & inputs);
   void addInput(const Input & input);
-  void removeInput(const std::string & inputName);
+  void removeInput(const OT::String & inputName);
 
   void setOutputs(const OutputCollection & outputs);
   void addOutput(const Output & output);
-  void removeOutput(const std::string & outputName);
+  void removeOutput(const OT::String & outputName);
 
-  std::string getXMLFileName() const;
-  void setXMLFileName(const std::string & fileName);
+  OT::String getXMLFileName() const;
+  void setXMLFileName(const OT::String & fileName);
 
   OT::NumericalMathFunction getFunction(const OT::Description & outputNames);
   OT::NumericalMathFunction getFunction();
 
-  std::string dump() const;
+  OT::String dump() const;
 
 protected:
   void updateData();

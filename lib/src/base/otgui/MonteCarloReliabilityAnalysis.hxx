@@ -14,7 +14,7 @@ class MonteCarloReliabilityAnalysis : public ReliabilityAnalysis
   CLASSNAME;
 
 public:
-  MonteCarloReliabilityAnalysis(const std::string & name, const LimitState & limitState,
+  MonteCarloReliabilityAnalysis(const OT::String & name, const LimitState & limitState,
                                 const OT::UnsignedInteger & maximumOuterSampling=1000);
 
   MonteCarloReliabilityAnalysis(const MonteCarloReliabilityAnalysis & other);
@@ -29,7 +29,7 @@ public:
   OT::SimulationResult getResult() const;
 
   virtual void run();
-  virtual std::string dump() const;
+  virtual OT::String dump() const;
 
 private:
   OT::UnsignedInteger maximumOuterSampling_;

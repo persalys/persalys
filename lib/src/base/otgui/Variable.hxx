@@ -11,7 +11,7 @@ class Variable : public OT::PersistentObject
   CLASSNAME;
 
 public:
-  Variable(const std::string & name="", const double & value=0., const std::string & description="");
+  Variable(const OT::String & name="", const double & value=0., const OT::String & description="");
 
     /* String converter */
   virtual OT::String __repr__() const;
@@ -19,14 +19,14 @@ public:
   double getValue() const;
   void setValue(const double & value);
 
-  std::string getDescription() const;
-  void setDescription(const std::string & description);
+  OT::String getDescription() const;
+  void setDescription(const OT::String & description);
 
-  virtual std::string dump() const = 0;
+  virtual OT::String dump() const = 0;
 
 private:
   double value_;
-  std::string description_;
+  OT::String description_;
 };
 }
 #endif

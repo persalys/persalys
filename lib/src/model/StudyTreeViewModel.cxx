@@ -3,6 +3,8 @@
 #include "otgui/OTStudy.hxx"
 #include "otgui/AnalyticalPhysicalModel.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 StudyTreeViewModel::StudyTreeViewModel()
@@ -18,7 +20,7 @@ StudyTreeViewModel::~StudyTreeViewModel()
 }
 
 
-void StudyTreeViewModel::update(Observable * source, const std::string & message)
+void StudyTreeViewModel::update(Observable * source, const String & message)
 {
   if (message == "addStudy")
   {

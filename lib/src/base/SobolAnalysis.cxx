@@ -11,7 +11,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(SobolAnalysis);
 
-SobolAnalysis::SobolAnalysis(const std::string & name, const PhysicalModel & physicalModel, int nbSimu)
+SobolAnalysis::SobolAnalysis(const String & name, const PhysicalModel & physicalModel, int nbSimu)
   : SimulationAnalysis(name, physicalModel, nbSimu)
 {
 //TODO ctr with outputNames (pas OutputCollection!) optionnel par défaut prendrait tous les outputs
@@ -62,7 +62,7 @@ SobolResult SobolAnalysis::getResult() const
 }
 
 
-std::string SobolAnalysis::dump() const
+String SobolAnalysis::dump() const
 {
   OSS oss;
   oss << getName() << " = otguibase.SobolAnalysis('" << getName() << "', " << getPhysicalModel().getName();

@@ -9,7 +9,7 @@ namespace OTGUI {
 class AnalysisImplementation : public OT::PersistentObject, public Observable
 {
 public:
-  AnalysisImplementation(const std::string & name, const PhysicalModel & physicalModel);
+  AnalysisImplementation(const OT::String & name, const PhysicalModel & physicalModel);
 
   virtual AnalysisImplementation * clone() const;
 
@@ -17,7 +17,7 @@ public:
   void setPhysicalModel(const PhysicalModel & physicalModel);
 
   virtual void run();
-  virtual std::string dump() const;
+  virtual OT::String dump() const;
   virtual bool analysisLaunched() const;
 
   bool isReliabilityAnalysis() const;

@@ -2,10 +2,11 @@
 
 #include "otgui/AnalysisImplementation.hxx"
 
+using namespace OT;
 
 namespace OTGUI {
 
-AnalysisImplementation::AnalysisImplementation(const std::string & name, const PhysicalModel & physicalModel)
+AnalysisImplementation::AnalysisImplementation(const String & name, const PhysicalModel & physicalModel)
   : PersistentObject()
   , Observable()
   , physicalModel_(physicalModel)
@@ -57,7 +58,7 @@ bool AnalysisImplementation::analysisLaunched() const
 }
 
 
-std::string AnalysisImplementation::dump() const
+String AnalysisImplementation::dump() const
 {
   return "";
 }

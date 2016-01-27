@@ -13,8 +13,8 @@ class LimitStateImplementation : public OT::PersistentObject, public Observable
 public:
   typedef OT::Pointer<LimitStateImplementation>       Implementation;
 
-  LimitStateImplementation(const std::string & name, const PhysicalModel & physicalModel,
-                           const std::string & outputName,
+  LimitStateImplementation(const OT::String & name, const PhysicalModel & physicalModel,
+                           const OT::String & outputName,
                            const OT::ComparisonOperator & failure, const double & threshold);
 
   virtual LimitStateImplementation * clone() const;
@@ -22,8 +22,8 @@ public:
   PhysicalModel getPhysicalModel() const;
   void setPhysicalModel(const PhysicalModel & physicalModel);
 
-  std::string getOutputName() const;
-  void setOutputName(const std::string & outputName);
+  OT::String getOutputName() const;
+  void setOutputName(const OT::String & outputName);
 
   OT::ComparisonOperator getOperator() const;
   void setOperator(const OT::ComparisonOperator & comparisonOperator);
@@ -33,11 +33,11 @@ public:
 
   OT::Event getEvent();
 
-  std::string dump() const;
+  OT::String dump() const;
 
 private:
   PhysicalModel physicalModel_;
-  std::string outputName_;
+  OT::String outputName_;
   OT::ComparisonOperator operator_;
   double threshold_;
 };

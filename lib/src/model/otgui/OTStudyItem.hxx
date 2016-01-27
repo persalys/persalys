@@ -20,7 +20,7 @@ public:
 
   virtual ~OTStudyItem();
 
-  void update(Observable * source, const std::string & message);
+  void update(Observable * source, const OT::String & message);
 
   void addDeterministicAnalysisItem(Analysis & analysis, AnalysisItem * item);
   void addProbabilisticAnalysisItem(Analysis & analysis, AnalysisItem * item);

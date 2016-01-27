@@ -11,7 +11,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(SimulationAnalysis);
 
-SimulationAnalysis::SimulationAnalysis(const std::string & name, const PhysicalModel & physicalModel,
+SimulationAnalysis::SimulationAnalysis(const String & name, const PhysicalModel & physicalModel,
                                        int nbSimulation)
   : AnalysisImplementation(name, physicalModel)
   , outputs_(physicalModel.getOutputs())

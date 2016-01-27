@@ -12,7 +12,7 @@ class MonteCarloAnalysis : public SimulationAnalysis
   CLASSNAME;
 
 public:
-  MonteCarloAnalysis(const std::string & name, const PhysicalModel & physicalModel,
+  MonteCarloAnalysis(const OT::String & name, const PhysicalModel & physicalModel,
                      int nbSimu=10000, bool confidenceInterval=true, double level=0.95);
 
   MonteCarloAnalysis(const MonteCarloAnalysis & other);
@@ -27,7 +27,7 @@ public:
   MonteCarloResult getResult() const;
 
   virtual void run();
-  virtual std::string dump() const;
+  virtual OT::String dump() const;
   virtual bool analysisLaunched() const;
 
 private:

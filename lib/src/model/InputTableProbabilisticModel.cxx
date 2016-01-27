@@ -67,7 +67,7 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
   if (!index.isValid())
     return QVariant();
 
-  std::string inputName = getPhysicalModel().getInputNames()[index.row()];
+  String inputName = getPhysicalModel().getInputNames()[index.row()];
   if (role == Qt::CheckStateRole && index.column() == 0)
   {
     Input input = getPhysicalModel().getInputByName(inputName);
@@ -84,7 +84,7 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
       case 2:
       {
         Input input = getPhysicalModel().getInputByName(inputName);
-        std::string distributionName = input.getDistribution().getImplementation()->getClassName();
+        String distributionName = input.getDistribution().getImplementation()->getClassName();
         if (distributionName == "TruncatedNormal")
           return tr("Normal");
         else if (distributionName == "TruncatedDistribution")
@@ -108,7 +108,7 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
 
   if (role == Qt::CheckStateRole && index.column() == 0)
   {
-    std::string inputName = physicalModel_.getInputNames()[index.row()];
+    String inputName = physicalModel_.getInputNames()[index.row()];
     Input input = physicalModel_.getInputByName(inputName);
     Distribution distribution;
 
@@ -127,10 +127,10 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
   }
   else if (role == Qt::EditRole && index.column() == 2)
   {
-    std::string inputName = physicalModel_.getInputNames()[index.row()];
+    String inputName = physicalModel_.getInputNames()[index.row()];
     Input input = physicalModel_.getInputByName(inputName);
 
-    std::string distributionName = input.getDistribution().getImplementation()->getClassName();
+    String distributionName = input.getDistribution().getImplementation()->getClassName();
     if (distributionName == "TruncatedNormal")
       distributionName = "Normal";
     else if (distributionName == "TruncatedDistribution")
@@ -152,7 +152,7 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
 
         for (int i=0; i<collection.getSize(); ++i)
         {
-          std::string nameFactory = collection[i].getImplementation()->getClassName();
+          String nameFactory = collection[i].getImplementation()->getClassName();
           nameFactory.resize(nameFactory.find("Factory"));
           if (value.toString().toStdString() == nameFactory)
           {

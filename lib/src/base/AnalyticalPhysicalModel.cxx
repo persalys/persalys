@@ -6,14 +6,14 @@ namespace OTGUI {
 
 CLASSNAMEINIT(AnalyticalPhysicalModel);
 
-AnalyticalPhysicalModel::AnalyticalPhysicalModel(const std::string & name)
+AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String & name)
   : PhysicalModelImplementation(name)
   , function_(NumericalMathFunction())
 {
 }
 
 
-AnalyticalPhysicalModel::AnalyticalPhysicalModel(const std::string & name,
+AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String & name,
                                                  const InputCollection & inputs,
                                                  const OutputCollection & outputs)
   : PhysicalModelImplementation(name, inputs, outputs)
@@ -65,7 +65,7 @@ void AnalyticalPhysicalModel::addInput(const Input & input)
 }
 
 
-void AnalyticalPhysicalModel::removeInput(const std::string & inputName)
+void AnalyticalPhysicalModel::removeInput(const String & inputName)
 {
   PhysicalModelImplementation::removeInput(inputName);
   try
@@ -96,7 +96,7 @@ void AnalyticalPhysicalModel::setOutputs(const OutputCollection & outputs)
 }
 
 
-void AnalyticalPhysicalModel::setOutputFormula(const std::string & outputName, const std::string & formula)
+void AnalyticalPhysicalModel::setOutputFormula(const String & outputName, const String & formula)
 {
   PhysicalModelImplementation::setOutputFormula(outputName, formula);
   try  
@@ -126,7 +126,7 @@ void AnalyticalPhysicalModel::addOutput(const Output & output)
 }
 
 
-void AnalyticalPhysicalModel::removeOutput(const std::string& outputName)
+void AnalyticalPhysicalModel::removeOutput(const String& outputName)
 {
   PhysicalModelImplementation::removeOutput(outputName);
   try
@@ -173,9 +173,9 @@ NumericalMathFunction AnalyticalPhysicalModel::getFunction()
 }
 
 
-std::string AnalyticalPhysicalModel::dump() const
+String AnalyticalPhysicalModel::dump() const
 {
-  std::string result;
+  String result;
 
   for (int i=0; i<getInputs().getSize(); ++i)
     result += getInputs()[i].dump();

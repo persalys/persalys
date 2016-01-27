@@ -13,14 +13,14 @@ class DesignOfExperiment : public OT::TypedInterfaceObject<DesignOfExperimentImp
 public:
   typedef OT::Pointer<DesignOfExperimentImplementation>       Implementation;
 
-  DesignOfExperiment(const std::string & name, const PhysicalModel & physicalModel);
-  DesignOfExperiment(const std::string & name, const PhysicalModel & physicalModel,
+  DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel);
+  DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel,
                      const OT::NumericalPoint & lowerBounds, const OT::NumericalPoint & upperBounds,
                      const OT::Indices & nbValues, const OT::NumericalPoint & values=OT::NumericalPoint(0));
-  DesignOfExperiment(const std::string & name, const PhysicalModel & physicalModel,
-                     const std::string & fileName, OT::Indices columns=OT::Indices());
+  DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel,
+                     const OT::String & fileName, OT::Indices columns=OT::Indices());
 //   TODO
-//   DesignOfExperiment(const std::string & name, const PhysicalModel & physicalModel,
+//   DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel,
 //                      const OT::Experiment & experiment);
   DesignOfExperiment(const DesignOfExperimentImplementation & implementation);
   DesignOfExperiment(const Implementation & p_implementation);
@@ -45,8 +45,8 @@ public:
   OT::NumericalPoint getDeltas() const;
   void setDeltas(const OT::NumericalPoint & deltas);
 
-  std::string getFileName() const;
-  void setFileName(const std::string & fileName);
+  OT::String getFileName() const;
+  void setFileName(const OT::String & fileName);
   OT::Indices getColumns() const;
   void setColumns(OT::Indices columns);
 
@@ -63,7 +63,7 @@ public:
 
   void updateParameters();
   void eval();
-  std::string dump() const;
+  OT::String dump() const;
 };
 }
 #endif

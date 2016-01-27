@@ -216,7 +216,7 @@ void MonteCarloResultWindow::buildInterface()
       PlotWidget * plot = new PlotWidget;
       plot->plotScatter(result_.getInputSample().getMarginal(j), result_.getOutputSample().getMarginal(i));
       plot->setTitle(tr("Scatter plot: ") + outputs[i].getName().c_str() + tr(" vs ") + inputNames[j]);
-      std::string inputDescription = physicalModel_.getInputByName(inputNames[j].toStdString()).getDescription();
+      String inputDescription = physicalModel_.getInputByName(inputNames[j].toStdString()).getDescription();
       if (!inputDescription.empty())
         plot->setAxisTitle(QwtPlot::xBottom, inputDescription.c_str());
       else
@@ -233,7 +233,7 @@ void MonteCarloResultWindow::buildInterface()
       PlotWidget * plot = new PlotWidget;
       plot->plotScatter(result_.getInputSample().getMarginal(j), result_.getInputSample().getMarginal(i));
       plot->setTitle(tr("Scatter plot: ") + inputNames[i] + tr(" vs ") + inputNames[j]);
-      std::string inputDescription = physicalModel_.getInputByName(inputNames[j].toStdString()).getDescription();
+      String inputDescription = physicalModel_.getInputByName(inputNames[j].toStdString()).getDescription();
       if (!inputDescription.empty())
         plot->setAxisTitle(QwtPlot::xBottom, inputDescription.c_str());
       else

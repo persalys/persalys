@@ -6,7 +6,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(YACSPhysicalModel);
 
-YACSPhysicalModel::YACSPhysicalModel(const std::string & name, const std::string & fileName)
+YACSPhysicalModel::YACSPhysicalModel(const String & name, const String & fileName)
   : PhysicalModelImplementation(name)
   , evaluation_(YACSEvaluation(fileName))
 {
@@ -39,7 +39,7 @@ void YACSPhysicalModel::addInput(const Input & input)
 }
 
 
-void YACSPhysicalModel::removeInput(const std::string & inputName)
+void YACSPhysicalModel::removeInput(const String & inputName)
 {
   throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify an YACSPhysicalModel";
 }
@@ -57,19 +57,19 @@ void YACSPhysicalModel::addOutput(const Output & output)
 }
 
 
-void YACSPhysicalModel::removeOutput(const std::string & outputName)
+void YACSPhysicalModel::removeOutput(const String & outputName)
 {
   throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify an YACSPhysicalModel";
 }
 
 
-std::string YACSPhysicalModel::getXMLFileName() const
+String YACSPhysicalModel::getXMLFileName() const
 {
   return evaluation_.getXMLFileName();
 }
 
 
-void YACSPhysicalModel::setXMLFileName(const std::string & fileName)
+void YACSPhysicalModel::setXMLFileName(const String & fileName)
 {
   if (fileName.empty())
   {
@@ -125,9 +125,9 @@ NumericalMathFunction YACSPhysicalModel::getFunction()
 }
 
 
-std::string YACSPhysicalModel::dump() const
+String YACSPhysicalModel::dump() const
 {
-  std::string result;
+  String result;
 
   result += getName()+ " = otguibase.YACSPhysicalModel('" + getName() + "', '";
   result += getXMLFileName() + "')\n";

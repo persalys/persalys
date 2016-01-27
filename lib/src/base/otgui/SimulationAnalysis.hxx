@@ -11,7 +11,7 @@ class SimulationAnalysis : public AnalysisImplementation
   CLASSNAME;
 
 public:
-  SimulationAnalysis(const std::string & name, const PhysicalModel & physicalModel, int nbSimu);
+  SimulationAnalysis(const OT::String & name, const PhysicalModel & physicalModel, int nbSimu);
 
   virtual SimulationAnalysis * clone() const;
 

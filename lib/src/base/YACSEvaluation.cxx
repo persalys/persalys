@@ -18,7 +18,7 @@ static Factory<YACSEvaluation> RegisteredFactory("YACSEvaluation");
 YACSEvalSession * YACSEvaluation::session_ = 0;
 
 /* Default constructor */
-YACSEvaluation::YACSEvaluation(const std::string & fileName)
+YACSEvaluation::YACSEvaluation(const String & fileName)
   : NumericalMathEvaluationImplementation()
   , xmlFileName_(fileName)
   , efx_(0)
@@ -68,8 +68,8 @@ Bool YACSEvaluation::operator ==(const YACSEvaluation & other) const
 }
 
 
-/* std::string converter */
-std::string YACSEvaluation::__repr__() const
+/* String converter */
+String YACSEvaluation::__repr__() const
 {
   OSS oss(true);
   oss << "class=" << YACSEvaluation::GetClassName()
@@ -79,8 +79,8 @@ std::string YACSEvaluation::__repr__() const
 }
 
 
-/* std::string converter */
-std::string YACSEvaluation::__str__(const std::string & offset) const
+/* String converter */
+String YACSEvaluation::__str__(const String & offset) const
 {
   OSS oss(false);
   oss << offset << getInputDescription() << " xml=" << xmlFileName_;
@@ -236,13 +236,13 @@ UnsignedInteger YACSEvaluation::getOutputDimension() const
 
 
 /* Accessor to the formulas */
-std::string YACSEvaluation::getXMLFileName() const
+String YACSEvaluation::getXMLFileName() const
 {
   return xmlFileName_;
 }
 
 
-void YACSEvaluation::setXMLFileName(const std::string & xmlFileName)
+void YACSEvaluation::setXMLFileName(const String & xmlFileName)
 {
   xmlFileName_ = xmlFileName;
   try

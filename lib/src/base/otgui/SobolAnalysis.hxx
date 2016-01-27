@@ -12,7 +12,7 @@ class SobolAnalysis : public SimulationAnalysis
   CLASSNAME;
 
 public:
-  SobolAnalysis(const std::string & name, const PhysicalModel & physicalModel, int nbSimu=10000);
+  SobolAnalysis(const OT::String & name, const PhysicalModel & physicalModel, int nbSimu=10000);
 
   SobolAnalysis(const SobolAnalysis & other);
   virtual SobolAnalysis * clone() const;
@@ -20,7 +20,7 @@ public:
   SobolResult getResult() const;
 
   virtual void run();
-  virtual std::string dump() const;
+  virtual OT::String dump() const;
   virtual bool analysisLaunched() const;
 
 private:

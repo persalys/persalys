@@ -12,7 +12,7 @@ class QuadraticCumulAnalysis : public AnalysisImplementation
   CLASSNAME;
 
 public:
-  QuadraticCumulAnalysis(const std::string & name, const PhysicalModel & physicalModel);
+  QuadraticCumulAnalysis(const OT::String & name, const PhysicalModel & physicalModel);
 
   QuadraticCumulAnalysis(const QuadraticCumulAnalysis & other);
   virtual QuadraticCumulAnalysis * clone() const;
@@ -23,7 +23,7 @@ public:
   QuadraticCumulResult getResult() const;
 
   virtual void run();
-  virtual std::string dump() const;
+  virtual OT::String dump() const;
   virtual bool analysisLaunched() const;
 
 private:

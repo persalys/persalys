@@ -14,14 +14,14 @@ class DesignOfExperimentImplementation : public OT::PersistentObject, public Obs
 public:
   enum Type {FromBoundsAndLevels, FromBoundsAndDeltas, FromFile, FromExperiment};
 
-  DesignOfExperimentImplementation(const std::string & name, const PhysicalModel & physicalModel);
-  DesignOfExperimentImplementation(const std::string & name, const PhysicalModel & physicalModel,
+  DesignOfExperimentImplementation(const OT::String & name, const PhysicalModel & physicalModel);
+  DesignOfExperimentImplementation(const OT::String & name, const PhysicalModel & physicalModel,
                      const OT::NumericalPoint & lowerBounds, const OT::NumericalPoint & upperBounds,
                      const OT::Indices & nbValues, const OT::NumericalPoint & values=OT::NumericalPoint(0));
-  DesignOfExperimentImplementation(const std::string & name, const PhysicalModel & physicalModel,
-                                   const std::string & fileName, const OT::Indices & columns);
+  DesignOfExperimentImplementation(const OT::String & name, const PhysicalModel & physicalModel,
+                                   const OT::String & fileName, const OT::Indices & columns);
 //   TODO
-//   DesignOfExperimentImplementation(const std::string & name, const PhysicalModel & physicalModel,
+//   DesignOfExperimentImplementation(const OT::String & name, const PhysicalModel & physicalModel,
 //                                    const OT::Experiment & experiment);
   virtual DesignOfExperimentImplementation * clone() const;
 
@@ -42,8 +42,8 @@ public:
   OT::NumericalPoint getDeltas() const;
   void setDeltas(const OT::NumericalPoint & deltas);
 
-  void setFileName(const std::string & fileName);
-  std::string getFileName() const;
+  void setFileName(const OT::String & fileName);
+  OT::String getFileName() const;
   OT::Indices getColumns() const;
   void setColumns(OT::Indices columns);
 
@@ -60,7 +60,7 @@ public:
 
   void updateParameters();
   void eval();
-  virtual std::string dump() const;
+  virtual OT::String dump() const;
 
 protected:
   void initializeParameters(const InputCollection & inputs);
@@ -75,7 +75,7 @@ private:
   OT::NumericalPoint upperBounds_;
   OT::Indices levels_;
   OT::NumericalPoint deltas_;
-  std::string fileName_;
+  OT::String fileName_;
   OT::Indices columns_;
 //   TODO
 //   OT::Experiment experiment_;

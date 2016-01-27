@@ -25,7 +25,7 @@ public:
 
   OTStudyItem * getOTStudyItem(const QModelIndex & childIndex);
 
-  virtual void update(Observable * source, const std::string & message);
+  virtual void update(Observable * source, const OT::String & message);
 
 public slots:
 signals:

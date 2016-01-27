@@ -9,7 +9,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(QuadraticCumulAnalysis);
 
-QuadraticCumulAnalysis::QuadraticCumulAnalysis(const std::string & name, const PhysicalModel & physicalModel)
+QuadraticCumulAnalysis::QuadraticCumulAnalysis(const String & name, const PhysicalModel & physicalModel)
   : AnalysisImplementation(name, physicalModel)
   , outputs_(physicalModel.getOutputs())
 {
@@ -65,9 +65,9 @@ QuadraticCumulResult QuadraticCumulAnalysis::getResult() const
 }
 
 
-std::string QuadraticCumulAnalysis::dump() const
+String QuadraticCumulAnalysis::dump() const
 {
-  std::string result;
+  String result;
   result += getName()+ " = otguibase.QuadraticCumulAnalysis('" + getName() + "', " + getPhysicalModel().getName() + ")\n";
   return result;
 }

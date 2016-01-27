@@ -1,5 +1,7 @@
 #include "otgui/SensitivityAnalysisItem.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 SensitivityAnalysisItem::SensitivityAnalysisItem(const Analysis & analysis)
@@ -8,12 +10,11 @@ SensitivityAnalysisItem::SensitivityAnalysisItem(const Analysis & analysis)
 }
 
 
-void SensitivityAnalysisItem::update(Observable* source, const std::string & message)
+void SensitivityAnalysisItem::update(Observable* source, const String & message)
 {
   if (message=="analysisFinished")
   {
     emit analysisFinished(this);
   }
 }
-
 }

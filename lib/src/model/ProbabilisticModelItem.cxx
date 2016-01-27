@@ -1,5 +1,7 @@
 #include "otgui/ProbabilisticModelItem.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel & physicalModel)
@@ -28,7 +30,7 @@ void ProbabilisticModelItem::updatePhysicalModel(const PhysicalModel & physicalM
 }
 
 
-void ProbabilisticModelItem::update(Observable* source, const std::string & message)
+void ProbabilisticModelItem::update(Observable* source, const String & message)
 {
   if (message=="updateProbabilisticModelWindow")
   {

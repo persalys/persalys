@@ -51,7 +51,7 @@ void ProbabilisticModelWindow::buildInterface()
   DistributionFactory factory;
   for (int i=0; i<collection.getSize(); ++i)
   {
-    std::string nameFactory = collection[i].getImplementation()->getClassName();
+    String nameFactory = collection[i].getImplementation()->getClassName();
     nameFactory.resize(nameFactory.find("Factory"));
     if (nameFactory != "Burr" && nameFactory != "MeixnerDistribution" && nameFactory != "TruncatedNormal")
     items << tr(nameFactory.c_str());
@@ -276,7 +276,7 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   if (!physicalModel_.hasInputNamed(inputName.toStdString()))
     return;
   Distribution inputDistribution = physicalModel_.getInputByName(inputName.toStdString()).getDistribution();
-  std::string distributionName = inputDistribution.getImplementation()->getClassName();
+  String distributionName = inputDistribution.getImplementation()->getClassName();
 
   // If the selected variable is deterministic
   if (distributionName == "Dirac")
@@ -418,7 +418,7 @@ void ProbabilisticModelWindow::updateDistribution()
   QModelIndex index = inputTableView_->currentIndex();
   Input input = Input(physicalModel_.getInputs()[index.row()]);
   Distribution inputDistribution = input.getDistribution();
-  std::string distributionName = inputDistribution.getImplementation()->getClassName();
+  String distributionName = inputDistribution.getImplementation()->getClassName();
 
   if (distributionName == "TruncatedDistribution")
   {
@@ -494,7 +494,7 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
   QModelIndex index = inputTableView_->currentIndex();
   Input input = Input(physicalModel_.getInputs()[index.row()]);
   Distribution inputDistribution = input.getDistribution();
-  std::string distributionName = inputDistribution.getImplementation()->getClassName();
+  String distributionName = inputDistribution.getImplementation()->getClassName();
 
   if (!lowerBoundCheckBox_->isChecked() && !upperBoundCheckBox_->isChecked())
   {

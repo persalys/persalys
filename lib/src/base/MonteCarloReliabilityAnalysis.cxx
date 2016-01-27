@@ -11,7 +11,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(MonteCarloReliabilityAnalysis);
 
-MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis(const std::string & name,
+MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis(const String & name,
                                                              const LimitState & limitState,
                                                              const UnsignedInteger & maximumOuterSampling)
   : ReliabilityAnalysis(name, limitState)
@@ -83,7 +83,7 @@ SimulationResult MonteCarloReliabilityAnalysis::getResult() const
 }
 
 
-std::string MonteCarloReliabilityAnalysis::dump() const
+String MonteCarloReliabilityAnalysis::dump() const
 {
   OSS oss;
   oss << getName() << " = otguibase.MonteCarloReliabilityAnalysis('" << getName() << "', " << getLimitState().getName();

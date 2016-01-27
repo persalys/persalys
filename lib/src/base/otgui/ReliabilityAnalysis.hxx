@@ -10,7 +10,7 @@ namespace OTGUI {
 class ReliabilityAnalysis : public AnalysisImplementation
 {
 public:
-  ReliabilityAnalysis(const std::string & name, const LimitState & limitState);
+  ReliabilityAnalysis(const OT::String & name, const LimitState & limitState);
 
   virtual ReliabilityAnalysis * clone() const;
 

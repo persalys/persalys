@@ -18,7 +18,7 @@ std::vector<OTStudy*> OTStudy::GetOTStudies()
 }
 
 
-OTStudy * OTStudy::GetOTStudyByName(const std::string & otStudyName)
+OTStudy * OTStudy::GetOTStudyByName(const String & otStudyName)
 {
   for (std::vector<OTStudy*>::iterator it=OTStudies_.begin(); it!=OTStudies_.end(); ++it)
     if ((*it)->getName() == otStudyName)
@@ -27,7 +27,7 @@ OTStudy * OTStudy::GetOTStudyByName(const std::string & otStudyName)
 }
 
 
-bool OTStudy::HasOTStudyNamed(const std::string & otStudyName)
+bool OTStudy::HasOTStudyNamed(const String & otStudyName)
 {
   for (std::vector<OTStudy*>::iterator it=OTStudies_.begin(); it!=OTStudies_.end(); ++it)
     if ((*it)->getName() == otStudyName)
@@ -36,10 +36,10 @@ bool OTStudy::HasOTStudyNamed(const std::string & otStudyName)
 }
 
 
-std::string OTStudy::GetAvailableOTStudyName()
+String OTStudy::GetAvailableOTStudyName()
 {
   int i = 0;
-  std::string rootName = "OTStudy_";
+  String rootName = "OTStudy_";
   while (HasOTStudyNamed(rootName + (OSS()<<i).str()))
     ++i;
   return rootName + (OSS()<<i).str();
@@ -52,7 +52,7 @@ void OTStudy::SetInstanceObserver(Observer * observer)
 }
 
 
-OTStudy::OTStudy(const std::string & name)
+OTStudy::OTStudy(const String & name)
   : PersistentObject()
   , Observable()
 {
@@ -97,7 +97,7 @@ std::vector<PhysicalModel> OTStudy::getPhysicalModels() const
 }
 
 
-PhysicalModel & OTStudy::getPhysicalModelByName(const std::string & physicalModelName)
+PhysicalModel & OTStudy::getPhysicalModelByName(const String & physicalModelName)
 {
   for (UnsignedInteger i=0; i<physicalModels_.size(); ++i)
     if (physicalModels_[i].getName() == physicalModelName)
@@ -106,7 +106,7 @@ PhysicalModel & OTStudy::getPhysicalModelByName(const std::string & physicalMode
 }
 
 
-bool OTStudy::hasPhysicalModelNamed(const std::string & physicalModelName)
+bool OTStudy::hasPhysicalModelNamed(const String & physicalModelName)
 {
   for (UnsignedInteger i=0; i<physicalModels_.size(); ++i)
     if (physicalModels_[i].getImplementation()->getName() == physicalModelName)
@@ -115,10 +115,10 @@ bool OTStudy::hasPhysicalModelNamed(const std::string & physicalModelName)
 }
 
 
-std::string OTStudy::getAvailablePhysicalModelName()
+String OTStudy::getAvailablePhysicalModelName()
 {
   int i = 0;
-  std::string rootName = "physicalModel_";
+  String rootName = "physicalModel_";
   while (hasPhysicalModelNamed(rootName + (OSS()<<i).str()))
     ++i;
   return rootName + (OSS()<<i).str();
@@ -141,7 +141,7 @@ std::vector<DesignOfExperiment> OTStudy::getDesignOfExperiments() const
 }
 
 
-bool OTStudy::hasDesignOfExperimentNamed(const std::string & designOfExperimentName)
+bool OTStudy::hasDesignOfExperimentNamed(const String & designOfExperimentName)
 {
   for (UnsignedInteger i=0; i<designOfExperiments_.size(); ++i)
     if (designOfExperiments_[i].getImplementation()->getName() == designOfExperimentName)
@@ -150,10 +150,10 @@ bool OTStudy::hasDesignOfExperimentNamed(const std::string & designOfExperimentN
 }
 
 
-std::string OTStudy::getAvailableDesignOfExperimentName()
+String OTStudy::getAvailableDesignOfExperimentName()
 {
   int i = 0;
-  std::string rootName = "design_";
+  String rootName = "design_";
   while (hasDesignOfExperimentNamed(rootName + (OSS()<<i).str()))
     ++i;
   return rootName + (OSS()<<i).str();
@@ -178,7 +178,7 @@ std::vector<Analysis> OTStudy::getAnalyses() const
   return analyses_;
 }
 
-Analysis & OTStudy::getAnalysisByName(const std::string & analysisName)
+Analysis & OTStudy::getAnalysisByName(const String & analysisName)
 {
   for (UnsignedInteger i=0; i<analyses_.size(); ++i)
     if (analyses_[i].getName() == analysisName)
@@ -187,7 +187,7 @@ Analysis & OTStudy::getAnalysisByName(const std::string & analysisName)
 }
 
 
-bool OTStudy::hasAnalysisNamed(const std::string & analysisName)
+bool OTStudy::hasAnalysisNamed(const String & analysisName)
 {
   for (UnsignedInteger i=0; i<analyses_.size(); ++i)
     if (analyses_[i].getImplementation()->getName() == analysisName)
@@ -196,7 +196,7 @@ bool OTStudy::hasAnalysisNamed(const std::string & analysisName)
 }
 
 
-std::string OTStudy::getAvailableAnalysisName(const std::string & rootName)
+String OTStudy::getAvailableAnalysisName(const String & rootName)
 {
   int i = 0;
   while (hasAnalysisNamed(rootName + (OSS()<<i).str()))
@@ -228,7 +228,7 @@ std::vector<LimitState> OTStudy::getLimitStates() const
 }
 
 
-bool OTStudy::hasLimitStateNamed(const std::string & limitStateName)
+bool OTStudy::hasLimitStateNamed(const String & limitStateName)
 {
   for (UnsignedInteger i=0; i<limitStates_.size(); ++i)
     if (limitStates_[i].getImplementation()->getName() == limitStateName)
@@ -237,10 +237,10 @@ bool OTStudy::hasLimitStateNamed(const std::string & limitStateName)
 }
 
 
-std::string OTStudy::getAvailableLimitStateName()
+String OTStudy::getAvailableLimitStateName()
 {
   int i = 0;
-  std::string rootName = "limitState_";
+  String rootName = "limitState_";
   while (hasLimitStateNamed(rootName + (OSS()<<i).str()))
     ++i;
   return rootName + (OSS()<<i).str();
@@ -260,9 +260,9 @@ void OTStudy::addLimitState(const LimitState & limitState)
 }
 
 
-std::string OTStudy::dump()
+String OTStudy::dump()
 {
-  std::string result;
+  String result;
   result += getName()+ " = otguibase.OTStudy('" + getName() + "')\n";
   for (std::vector<PhysicalModel>::iterator it=physicalModels_.begin(); it!= physicalModels_.end(); ++it)
   {

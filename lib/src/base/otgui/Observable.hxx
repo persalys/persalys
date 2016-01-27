@@ -16,15 +16,15 @@ public:
   virtual ~Observable() {};
 
   void addObserver(Observer * observer);
-  void notify(const std::string & message);
+  void notify(const OT::String & message);
   std::vector<Observer *> getObserver() const;
   void setObserver(const std::vector<Observer *> observer);
-  void blockNotification(bool block, const std::string & notBlockedMessage="");
+  void blockNotification(bool block, const OT::String & notBlockedMessage="");
 
 private:
   std::vector<Observer *> observers_;
   bool notificationBlocked_;
-  std::string notBlockedMessage_;
+  OT::String notBlockedMessage_;
 };
 }
 #endif

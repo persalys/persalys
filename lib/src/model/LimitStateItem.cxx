@@ -1,5 +1,7 @@
 #include "otgui/LimitStateItem.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 LimitStateItem::LimitStateItem(const LimitState & limitState)
@@ -32,7 +34,7 @@ LimitState LimitStateItem::getLimitState() const
 }
 
 
-void LimitStateItem::update(Observable* source, const std::string & message)
+void LimitStateItem::update(Observable* source, const String & message)
 {
   if (message=="updateLimitStateWindow")
   {

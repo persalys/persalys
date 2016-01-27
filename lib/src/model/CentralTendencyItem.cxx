@@ -1,5 +1,7 @@
 #include "otgui/CentralTendencyItem.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 CentralTendencyItem::CentralTendencyItem(const Analysis & analysis)
@@ -8,12 +10,11 @@ CentralTendencyItem::CentralTendencyItem(const Analysis & analysis)
 }
 
 
-void CentralTendencyItem::update(Observable* source, const std::string & message)
+void CentralTendencyItem::update(Observable* source, const String & message)
 {
   if (message=="analysisFinished")
   {
     emit analysisFinished(this);
   }
 }
-
 }

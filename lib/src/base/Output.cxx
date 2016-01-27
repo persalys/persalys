@@ -8,8 +8,8 @@ namespace OTGUI {
 
 CLASSNAMEINIT(Output);
 
-Output::Output(const std::string & name, const double & value, const std::string & description,
-               const std::string & formula)
+Output::Output(const String & name, const double & value, const String & description,
+               const String & formula)
   : Variable(name, value, description)
   , formula_(formula)
 {
@@ -22,19 +22,19 @@ Output* Output::clone() const
 }
 
 
-std::string Output::getFormula() const
+String Output::getFormula() const
 {
   return formula_;
 }
 
 
-void Output::setFormula(const std::string & formula)
+void Output::setFormula(const String & formula)
 {
   formula_ = formula;
 }
 
 
-std::string Output::dump() const
+String Output::dump() const
 {
   OSS oss;
   oss << getName() << " = otguibase.Output('" << getName() << "', " << getValue() << ", '" << getDescription();

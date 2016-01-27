@@ -6,7 +6,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(Variable);
 
-Variable::Variable(const std::string & name, const double & value, const std::string & description)
+Variable::Variable(const String & name, const double & value, const String & description)
   : PersistentObject()
   , value_(value)
   , description_(description)
@@ -33,13 +33,13 @@ void Variable::setValue(const double & value)
 }
 
 
-std::string Variable::getDescription() const
+String Variable::getDescription() const
 {
   return description_;
 }
 
 
-void Variable::setDescription(const std::string & description)
+void Variable::setDescription(const String & description)
 {
   description_ = description;
 }

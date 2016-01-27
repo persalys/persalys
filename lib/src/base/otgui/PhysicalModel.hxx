@@ -13,8 +13,8 @@ class PhysicalModel : public OT::TypedInterfaceObject<PhysicalModelImplementatio
 public:
   typedef OT::Pointer<PhysicalModelImplementation>       Implementation;
 
-  explicit PhysicalModel(const std::string & name);
-  PhysicalModel(const std::string & name, const InputCollection & inputs, const OutputCollection & outputs);
+  explicit PhysicalModel(const OT::String & name);
+  PhysicalModel(const OT::String & name, const InputCollection & inputs, const OutputCollection & outputs);
   PhysicalModel(const PhysicalModelImplementation & implementation);
   PhysicalModel(const Implementation & p_implementation);
   PhysicalModel(PhysicalModelImplementation * p_implementation);
@@ -22,31 +22,31 @@ public:
   virtual PhysicalModel * clone() const;
 
   void addObserver(Observer * observer);
-  void blockNotification(bool block, const std::string & notBlockedMessage="");
+  void blockNotification(bool block, const OT::String & notBlockedMessage="");
 
   InputCollection getInputs() const;
-  Input & getInputByName(const std::string & inputName);
+  Input & getInputByName(const OT::String & inputName);
   void setInputs(const InputCollection & inputs);
-  void setInputDescription(const std::string & inputName, const std::string & description);
-  void setInputValue(const std::string & inputName, const double & value);
-  void setInputDistribution(const std::string & inputName, const OT::Distribution & distribution);
+  void setInputDescription(const OT::String & inputName, const OT::String & description);
+  void setInputValue(const OT::String & inputName, const double & value);
+  void setInputDistribution(const OT::String & inputName, const OT::Distribution & distribution);
   void addInput(const Input & input);
-  void removeInput(const std::string & inputName);
+  void removeInput(const OT::String & inputName);
   OT::Description getInputNames();
   OT::Description getStochasticInputNames();
-  bool hasInputNamed(const std::string & inputName);
+  bool hasInputNamed(const OT::String & inputName);
   bool hasStochasticInputs();
 
   OutputCollection getOutputs() const;
-  Output & getOutputByName(const std::string & outputName);
+  Output & getOutputByName(const OT::String & outputName);
   void setOutputs(const OutputCollection & outputs);
-  void setOutputDescription(const std::string & outputName, const std::string & description);
-  void setOutputFormula(const std::string & outputName, const std::string & formula);
-  void setOutputValue(const std::string & outputName, const double & value);
+  void setOutputDescription(const OT::String & outputName, const OT::String & description);
+  void setOutputFormula(const OT::String & outputName, const OT::String & formula);
+  void setOutputValue(const OT::String & outputName, const double & value);
   void addOutput(const Output & output);
-  void removeOutput(const std::string & outputName);
+  void removeOutput(const OT::String & outputName);
   OT::Description getOutputNames();
-  bool hasOutputNamed(const std::string & outputName);
+  bool hasOutputNamed(const OT::String & outputName);
 
   OT::ComposedDistribution getComposedDistribution() const;
   OT::RandomVector getInputRandomVector();
@@ -60,7 +60,7 @@ public:
   OT::Copula getCopula() const;
   void setCopula(const OT::Copula & copula);
 
-  std::string dump() const;
+  OT::String dump() const;
 };
 }
 #endif

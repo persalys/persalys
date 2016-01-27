@@ -16,8 +16,8 @@ class LimitState : public OT::TypedInterfaceObject<LimitStateImplementation>
 public:
   typedef OT::Pointer<LimitStateImplementation>       Implementation;
 
-  LimitState(const std::string & name, const PhysicalModel & physicalModel,
-             const std::string & outputName,
+  LimitState(const OT::String & name, const PhysicalModel & physicalModel,
+             const OT::String & outputName,
              const OT::ComparisonOperator & failure=OT::Less(),
              const double & threshold=0.);
   LimitState(const LimitStateImplementation & implementation);
@@ -27,13 +27,13 @@ public:
   virtual LimitState * clone() const;
 
   void addObserver(Observer * observer);
-  void blockNotification(bool block, const std::string & notBlockedMessage="");
+  void blockNotification(bool block, const OT::String & notBlockedMessage="");
 
   PhysicalModel getPhysicalModel() const;
   void setPhysicalModel(const PhysicalModel & physicalModel);
 
-  std::string getOutputName() const;
-  void setOutputName(const std::string & outputName);
+  OT::String getOutputName() const;
+  void setOutputName(const OT::String & outputName);
 
   OT::ComparisonOperator getOperator() const;
   void setOperator(const OT::ComparisonOperator & comparisonOperator);
@@ -43,7 +43,7 @@ public:
 
   OT::Event getEvent();
 
-  std::string dump() const;
+  OT::String dump() const;
 };
 }
 #endif

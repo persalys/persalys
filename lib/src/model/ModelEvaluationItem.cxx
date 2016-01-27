@@ -1,6 +1,6 @@
 #include "otgui/ModelEvaluationItem.hxx"
 
-#include "otgui/ModelEvaluation.hxx"
+using namespace OT;
 
 namespace OTGUI {
 
@@ -10,7 +10,7 @@ ModelEvaluationItem::ModelEvaluationItem(const Analysis & analysis)
 }
 
 
-void ModelEvaluationItem::update(Observable* source, const std::string & message)
+void ModelEvaluationItem::update(Observable* source, const String & message)
 {
   if (message=="analysisFinished")
   {

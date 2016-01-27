@@ -25,7 +25,7 @@ public:
 
   PythonEvaluation(const OT::UnsignedInteger & inputDimension,
                    const OT::UnsignedInteger & ouputDimension,
-                   const std::string & code);
+                   const OT::String & code);
 
   /** Virtual constructor */
   virtual PythonEvaluation * clone() const;
@@ -36,8 +36,8 @@ public:
   OT::Bool operator ==(const PythonEvaluation & other) const;
 
   /** String converter */
-  virtual std::string __repr__() const;
-  virtual std::string __str__(const std::string & offset = "") const;
+  virtual OT::String __repr__() const;
+  virtual OT::String __str__(const OT::String & offset = "") const;
 
 protected:
 
@@ -63,7 +63,7 @@ protected:
 private:
   OT::UnsignedInteger inputDimension_;
   OT::UnsignedInteger outputDimension_;
-  std::string code_;
+  OT::String code_;
  
 };
 }

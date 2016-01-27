@@ -7,7 +7,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(PythonPhysicalModel);
 
-PythonPhysicalModel::PythonPhysicalModel(const std::string & name)
+PythonPhysicalModel::PythonPhysicalModel(const String & name)
   : PhysicalModelImplementation(name)
 {
   setCode("def _exec(X):\n    Y0 = X[0]\n    return [Y0]");
@@ -15,10 +15,10 @@ PythonPhysicalModel::PythonPhysicalModel(const std::string & name)
 }
 
 
-PythonPhysicalModel::PythonPhysicalModel(const std::string & name,
+PythonPhysicalModel::PythonPhysicalModel(const String & name,
                                          const InputCollection & inputs,
                                          const OutputCollection & outputs,
-                                         const std::string & code)
+                                         const String & code)
   : PhysicalModelImplementation(name, inputs, outputs)
 {
   updateFunction();
@@ -85,27 +85,28 @@ NumericalMathFunction PythonPhysicalModel::getFunction()
 }
 
 
-std::string PythonPhysicalModel::dump() const
+String PythonPhysicalModel::dump() const
 {
-  std::string result;
+  String result;
 
   for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
     result += getInputs()[i].dump();
 
-  for (UnsignedInteger i=0; i < getOutputs().getSize(); ++i)
+  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
     result += getOutputs()[i].dump();
 
   result += getName() + " = otguibase.PythonPhysicalModel('" + getName() + "')\n";
 
-  for (UnsignedInteger i=0; i <getInputs().getSize(); ++i)
+  for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
     result += getName() + ".addInput(" + getInputs()[i].getName() + ")\n";
 
   for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
     result += getName() + ".addOutput(" + getOutputs()[i].getName() + ")\n";
 
   result += getName() + ".setCode('";
+
   std::stringstream ss(getCode());
-  std::string to;
+  String to;
 
   while (std::getline(ss, to, '\n'))
   {

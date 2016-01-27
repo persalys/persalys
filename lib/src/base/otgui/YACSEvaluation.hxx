@@ -36,7 +36,7 @@ class OTGUI_API YACSEvaluation
 public:
 
   /** Default constructor */
-  YACSEvaluation(const std::string & xmlFileName = "");
+  YACSEvaluation(const OT::String & xmlFileName = "");
 
   YACSEvaluation(const YACSEvaluation & other);
 
@@ -49,8 +49,8 @@ public:
   OT::Bool operator ==(const YACSEvaluation & other) const;
 
   /** String converter */
-  virtual std::string __repr__() const;
-  virtual std::string __str__(const std::string & offset = "") const;
+  virtual OT::String __repr__() const;
+  virtual OT::String __str__(const OT::String & offset = "") const;
 
 protected:
   /** Method loadData() loads the data from the xmlFileName */
@@ -76,8 +76,8 @@ public:
   OT::UnsignedInteger getOutputDimension() const;
 
   /** Accessor to the xmlFileName */
-  std::string getXMLFileName() const;
-  void setXMLFileName(const std::string & xmlFileName);
+  OT::String getXMLFileName() const;
+  void setXMLFileName(const OT::String & xmlFileName);
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -89,7 +89,7 @@ protected:
 
 private:
   static YACSEvalSession * session_;
-  std::string xmlFileName_;
+  OT::String xmlFileName_;
   YACSEvalYFX * efx_;
   OT::NumericalPoint inputValues_;
   OT::Description inDescription_;

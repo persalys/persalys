@@ -1,5 +1,7 @@
 #include "otgui/Observable.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 Observable::Observable()
@@ -14,7 +16,7 @@ void Observable::addObserver(Observer * observer)
 }
 
 
-void Observable::notify(const std::string & message)
+void Observable::notify(const String & message)
 {
   if (!notificationBlocked_ || (notificationBlocked_ && message == notBlockedMessage_))
     for (unsigned int i = 0; i < observers_.size(); ++ i)
@@ -22,7 +24,7 @@ void Observable::notify(const std::string & message)
 }
 
 
-void Observable::blockNotification(bool block, const std::string & notBlockedMessage)
+void Observable::blockNotification(bool block, const String & notBlockedMessage)
 {
   notificationBlocked_ = block;
   notBlockedMessage_ = notBlockedMessage;

@@ -24,7 +24,7 @@ PythonEvaluation::PythonEvaluation()
 /* Default constructor */
 PythonEvaluation::PythonEvaluation(const UnsignedInteger & inputDimension,
                                    const UnsignedInteger & outputDimension,
-                                   const std::string & code)
+                                   const String & code)
   : NumericalMathEvaluationImplementation()
   , inputDimension_(inputDimension)
   , outputDimension_(outputDimension)
@@ -53,8 +53,8 @@ Bool PythonEvaluation::operator ==(const PythonEvaluation & other) const
 }
 
 
-/* std::string converter */
-std::string PythonEvaluation::__repr__() const
+/* String converter */
+String PythonEvaluation::__repr__() const
 {
   OSS oss(true);
   oss << "class=" << PythonEvaluation::GetClassName()
@@ -64,8 +64,8 @@ std::string PythonEvaluation::__repr__() const
 }
 
 
-/* std::string converter */
-std::string PythonEvaluation::__str__(const std::string & offset) const
+/* String converter */
+String PythonEvaluation::__str__(const String & offset) const
 {
   OSS oss(false);
   oss << offset << getInputDescription() << " code=" << code_;

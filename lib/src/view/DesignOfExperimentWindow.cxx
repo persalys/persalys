@@ -155,7 +155,7 @@ void DesignOfExperimentWindow::addTabsForOutputs()
       PlotWidget * plot = new PlotWidget;
       plot->plotScatter(variableInputsSample.getMarginal(j), designOfExperiment_.getResult().getOutputSample().getMarginal(i));
       plot->setTitle(tr("Scatter plot: ") + outputs[i].getName().c_str() + tr(" vs ") + inputNames[j]);
-      std::string inputDescription = designOfExperiment_.getPhysicalModel().getInputByName(inputNames[j].toStdString()).getDescription();
+      String inputDescription = designOfExperiment_.getPhysicalModel().getInputByName(inputNames[j].toStdString()).getDescription();
       if (!inputDescription.empty())
         plot->setAxisTitle(QwtPlot::xBottom, inputDescription.c_str());
       else
@@ -172,7 +172,7 @@ void DesignOfExperimentWindow::addTabsForOutputs()
       PlotWidget * plot = new PlotWidget;
       plot->plotScatter(variableInputsSample.getMarginal(j),variableInputsSample.getMarginal(i));
       plot->setTitle(tr("Scatter plot: ") + inputNames[i] + tr(" vs ") + inputNames[j]);
-      std::string inputDescription = designOfExperiment_.getPhysicalModel().getInputByName(inputNames[j].toStdString()).getDescription();
+      String inputDescription = designOfExperiment_.getPhysicalModel().getInputByName(inputNames[j].toStdString()).getDescription();
       if (!inputDescription.empty())
         plot->setAxisTitle(QwtPlot::xBottom, inputDescription.c_str());
       else

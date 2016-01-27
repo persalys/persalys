@@ -11,12 +11,12 @@ class PythonPhysicalModel : public PhysicalModelImplementation
   CLASSNAME;
 
 public:
-  PythonPhysicalModel(const std::string & name);
+  PythonPhysicalModel(const OT::String & name);
 
-  PythonPhysicalModel(const std::string & name,
+  PythonPhysicalModel(const OT::String & name,
                       const InputCollection & inputs,
                       const OutputCollection & outputs,
-                      const std::string & code);
+                      const OT::String & code);
 
   virtual PythonPhysicalModel * clone() const;
 
@@ -25,7 +25,7 @@ public:
   virtual OT::NumericalMathFunction getFunction(const OT::Description & outputNames);
   virtual OT::NumericalMathFunction getFunction();
 
-  std::string dump() const;
+  OT::String dump() const;
 
 protected:
   void updateFunction();

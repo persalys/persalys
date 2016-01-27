@@ -10,7 +10,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::string & name, const PhysicalModel & physicalModel)
+DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String & name, const PhysicalModel & physicalModel)
   : PersistentObject()
   , Observable()
   , physicalModel_(physicalModel)
@@ -22,7 +22,7 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
 }
 
 
-DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::string & name,
+DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String & name,
                                                                    const PhysicalModel & physicalModel,
                                                                    const NumericalPoint & lowerBounds,
                                                                    const NumericalPoint & upperBounds,
@@ -54,9 +54,9 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
 // TODO: CTR with deltas
 //   , type_(DesignOfExperimentImplementation::FromBoundsAndDeltas)
 
-DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::string & name,
+DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String & name,
                                                                    const PhysicalModel & physicalModel,
-                                                                   const std::string & fileName,
+                                                                   const String & fileName,
                                                                    const OT::Indices & columns)
   : PersistentObject()
   , Observable()
@@ -71,7 +71,7 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::st
 
 
 // TODO
-// DesignOfExperimentImplementation::DesignOfExperimentImplementation(const std::string & name,
+// DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String & name,
 //                                                                    const PhysicalModel & physicalModel,
 //                                                                    const Experiment & experiment)
 //   : PersistentObject()
@@ -116,7 +116,7 @@ void DesignOfExperimentImplementation::initializeParameters(const InputCollectio
     else
     {
       Distribution distribution = inputs[i].getDistribution();
-      std::string distributionName = distribution.getImplementation()->getClassName();
+      String distributionName = distribution.getImplementation()->getClassName();
       
       if (distributionName == "TruncatedDistribution")
       {
@@ -298,13 +298,13 @@ void DesignOfExperimentImplementation::setDeltas(const NumericalPoint & deltas)
 }
 
 
-void DesignOfExperimentImplementation::setFileName(const std::string & fileName)
+void DesignOfExperimentImplementation::setFileName(const String & fileName)
 {
   fileName_ = fileName;
 }
 
 
-std::string DesignOfExperimentImplementation::getFileName() const
+String DesignOfExperimentImplementation::getFileName() const
 {
   return fileName_;
 }
@@ -363,7 +363,7 @@ NumericalSample DesignOfExperimentImplementation::getInputSample()
     inputSample_.clear();
     if (fileName_.size() > 0)
     {
-      std::vector< std::string > separatorsList(3);
+      std::vector< String > separatorsList(3);
       separatorsList[0] = " ";
       separatorsList[1] = ",";
       separatorsList[2] = ";";
@@ -463,7 +463,7 @@ void DesignOfExperimentImplementation::eval()
 }
 
 
-std::string DesignOfExperimentImplementation::dump() const
+String DesignOfExperimentImplementation::dump() const
 {
   OSS oss;
 

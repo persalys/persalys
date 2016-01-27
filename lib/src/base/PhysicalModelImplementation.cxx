@@ -7,7 +7,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-PhysicalModelImplementation::PhysicalModelImplementation(const std::string & name)
+PhysicalModelImplementation::PhysicalModelImplementation(const String & name)
   : PersistentObject()
   , Observable()
 {
@@ -15,7 +15,7 @@ PhysicalModelImplementation::PhysicalModelImplementation(const std::string & nam
 }
 
 
-PhysicalModelImplementation::PhysicalModelImplementation(const std::string & name,
+PhysicalModelImplementation::PhysicalModelImplementation(const String & name,
                                                          const InputCollection & inputs,
                                                          const OutputCollection & outputs)
   : PersistentObject()
@@ -39,7 +39,7 @@ InputCollection PhysicalModelImplementation::getInputs() const
 }
 
 
-Input & PhysicalModelImplementation::getInputByName(const std::string & inputName)
+Input & PhysicalModelImplementation::getInputByName(const String & inputName)
 {
   for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
     if (inputs_[i].getName() == inputName)
@@ -50,7 +50,7 @@ Input & PhysicalModelImplementation::getInputByName(const std::string & inputNam
 
 void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
 {
-  std::set<std::string> inputNames;
+  std::set<String> inputNames;
   for (UnsignedInteger i=0; i<inputs.getSize(); ++i)
     inputNames.insert(inputs[i].getName());
   if (inputNames.size() != inputs.getSize())
@@ -62,7 +62,7 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
 }
 
 
-void PhysicalModelImplementation::setInputDescription(const std::string & inputName, const std::string & description)
+void PhysicalModelImplementation::setInputDescription(const String & inputName, const String & description)
 {
   getInputByName(inputName).setDescription(description);
   notify("inputChanged");
@@ -70,7 +70,7 @@ void PhysicalModelImplementation::setInputDescription(const std::string & inputN
 }
 
 
-void PhysicalModelImplementation::setInputValue(const std::string & inputName, const double & value)
+void PhysicalModelImplementation::setInputValue(const String & inputName, const double & value)
 {
   getInputByName(inputName).setValue(value);
   notify("inputChanged");
@@ -78,7 +78,7 @@ void PhysicalModelImplementation::setInputValue(const std::string & inputName, c
 }
 
 
-void PhysicalModelImplementation::setInputDistribution(const std::string & inputName, const Distribution & distribution)
+void PhysicalModelImplementation::setInputDistribution(const String & inputName, const Distribution & distribution)
 {
   bool inputOldStateIsStochastic = getInputByName(inputName).isStochastic();
 
@@ -108,7 +108,7 @@ void PhysicalModelImplementation::addInput(const Input & input)
 }
 
 
-void PhysicalModelImplementation::removeInput(const std::string & inputName)
+void PhysicalModelImplementation::removeInput(const String & inputName)
 {
   if (hasInputNamed(inputName))
   {
@@ -186,7 +186,7 @@ Description PhysicalModelImplementation::getStochasticInputNames()
 }
 
 
-bool PhysicalModelImplementation::hasInputNamed(const std::string & inputName)
+bool PhysicalModelImplementation::hasInputNamed(const String & inputName)
 {
   for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
     if (inputs_[i].getName() == inputName)
@@ -203,7 +203,7 @@ bool PhysicalModelImplementation::hasStochasticInputs()
 }
 
 
-Output & PhysicalModelImplementation::getOutputByName(const std::string & outputName)
+Output & PhysicalModelImplementation::getOutputByName(const String & outputName)
 {
   for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
     if (outputs_[i].getName() == outputName)
@@ -219,7 +219,7 @@ OutputCollection PhysicalModelImplementation::getOutputs() const
 
 void PhysicalModelImplementation::setOutputs(const OutputCollection & outputs)
 {
-  std::set<std::string> outputNames;
+  std::set<String> outputNames;
   for (UnsignedInteger i=0; i<outputs.getSize(); ++i)
     outputNames.insert(outputs[i].getName());
   if (outputNames.size() != outputs.getSize())
@@ -231,7 +231,7 @@ void PhysicalModelImplementation::setOutputs(const OutputCollection & outputs)
 }
 
 
-void PhysicalModelImplementation::setOutputDescription(const std::string & outputName, const std::string & description)
+void PhysicalModelImplementation::setOutputDescription(const String & outputName, const String & description)
 {
   getOutputByName(outputName).setDescription(description);
   notify("outputChanged");
@@ -239,7 +239,7 @@ void PhysicalModelImplementation::setOutputDescription(const std::string & outpu
 }
 
 
-void PhysicalModelImplementation::setOutputFormula(const std::string & outputName, const std::string & formula)
+void PhysicalModelImplementation::setOutputFormula(const String & outputName, const String & formula)
 {
   getOutputByName(outputName).setFormula(formula);
   notify("outputChanged");
@@ -247,7 +247,7 @@ void PhysicalModelImplementation::setOutputFormula(const std::string & outputNam
 }
 
 
-void PhysicalModelImplementation::setOutputValue(const std::string & outputName, const double & value)
+void PhysicalModelImplementation::setOutputValue(const String & outputName, const double & value)
 {
   getOutputByName(outputName).setValue(value);
   notify("outputChanged");
@@ -265,7 +265,7 @@ void PhysicalModelImplementation::addOutput(const Output & output)
 }
 
 
-void PhysicalModelImplementation::removeOutput(const std::string & outputName)
+void PhysicalModelImplementation::removeOutput(const String & outputName)
 {
   if (hasOutputNamed(outputName))
   {
@@ -292,7 +292,7 @@ Description PhysicalModelImplementation::getOutputNames()
 }
 
 
-bool PhysicalModelImplementation::hasOutputNamed(const std::string & outputName)
+bool PhysicalModelImplementation::hasOutputNamed(const String & outputName)
 {
   for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
     if (outputs_[i].getName() == outputName)
@@ -419,23 +419,23 @@ void PhysicalModelImplementation::setCopula(const Copula & copula)
 }
 
 
-std::string PhysicalModelImplementation::dump() const
+String PhysicalModelImplementation::dump() const
 {
   throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getDump()";
 }
 
 
-std::string PhysicalModelImplementation::dumpProbaModel() const
+String PhysicalModelImplementation::dumpProbaModel() const
 {
-  std::string result;
+  String result;
 
   for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
   {
     if (getInputs()[i].isStochastic())
     {
       Distribution distribution = getInputs()[i].getDistribution();
-      std::string distributionName = distribution.getImplementation()->getClassName();
-      std::string inputName = getInputs()[i].getName();
+      String distributionName = distribution.getImplementation()->getClassName();
+      String inputName = getInputs()[i].getName();
 
       OSS oss;
       if (distributionName != "TruncatedDistribution")
@@ -486,9 +486,9 @@ std::string PhysicalModelImplementation::dumpProbaModel() const
 }
 
 
-std::string PhysicalModelImplementation::dumpCopula() const
+String PhysicalModelImplementation::dumpCopula() const
 {
-  std::string result;
+  String result;
 
   CorrelationMatrix correlationMatrix(getCopula().getCorrelation());
 

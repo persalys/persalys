@@ -8,13 +8,13 @@ namespace OTGUI {
 
 CLASSNAMEINIT(DesignOfExperiment);
 
-DesignOfExperiment::DesignOfExperiment(const std::string & name, const PhysicalModel & physicalModel)
+DesignOfExperiment::DesignOfExperiment(const String & name, const PhysicalModel & physicalModel)
   : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation(name, physicalModel))
 {
 }
 
 
-DesignOfExperiment::DesignOfExperiment(const std::string & name, const PhysicalModel & physicalModel,
+DesignOfExperiment::DesignOfExperiment(const String & name, const PhysicalModel & physicalModel,
                                        const NumericalPoint & lowerBounds,
                                        const NumericalPoint & upperBounds, const Indices & nbValues,
                                        const OT::NumericalPoint & values)
@@ -23,14 +23,14 @@ DesignOfExperiment::DesignOfExperiment(const std::string & name, const PhysicalM
 }
 
 
-DesignOfExperiment::DesignOfExperiment(const std::string & name, const PhysicalModel & physicalModel,
-                                       const std::string & fileName, OT::Indices columns)
+DesignOfExperiment::DesignOfExperiment(const String & name, const PhysicalModel & physicalModel,
+                                       const String & fileName, OT::Indices columns)
   : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation(name, physicalModel, fileName, columns))
 {
 }
 
 // TODO
-// DesignOfExperiment::DesignOfExperiment(const std::string & name, const PhysicalModel & physicalModel,
+// DesignOfExperiment::DesignOfExperiment(const String & name, const PhysicalModel & physicalModel,
 //                                        const Experiment & experiment)
 //   : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation(name, physicalModel, experiment))
 // {
@@ -151,13 +151,13 @@ void DesignOfExperiment::setDeltas(const NumericalPoint & deltas)
 }
 
 
-std::string DesignOfExperiment::getFileName() const
+String DesignOfExperiment::getFileName() const
 {
   return getImplementation()->getFileName();
 }
 
 
-void DesignOfExperiment::setFileName(const std::string & fileName)
+void DesignOfExperiment::setFileName(const String & fileName)
 {
   getImplementation()->setFileName(fileName);
 }
@@ -229,7 +229,7 @@ void DesignOfExperiment::eval()
 }
 
 
-std::string DesignOfExperiment::dump() const
+String DesignOfExperiment::dump() const
 {
   return getImplementation()->dump();
 }

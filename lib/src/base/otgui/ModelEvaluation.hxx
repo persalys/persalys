@@ -12,8 +12,8 @@ class ModelEvaluation : public AnalysisImplementation
   CLASSNAME;
 
 public:
-  ModelEvaluation(const std::string & name, const PhysicalModel & physicalModel);
-  ModelEvaluation(const std::string & name, const PhysicalModel & physicalModel,
+  ModelEvaluation(const OT::String & name, const PhysicalModel & physicalModel);
+  ModelEvaluation(const OT::String & name, const PhysicalModel & physicalModel,
                   const OT::NumericalPoint & inputsValues);
   ModelEvaluation(const ModelEvaluation & other);
   virtual ModelEvaluation * clone() const;
@@ -26,7 +26,7 @@ public:
   ModelEvaluationResult getResult() const;
 
   virtual void run();
-  virtual std::string dump() const;
+  virtual OT::String dump() const;
   virtual bool analysisLaunched() const;
 
 protected:

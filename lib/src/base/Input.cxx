@@ -10,7 +10,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(Input);
 
-Input::Input(const std::string & name, const double & value, const std::string & description,
+Input::Input(const String & name, const double & value, const String & description,
              const Distribution & distribution)
  : Variable(name, value, description)
  , distribution_(distribution)
@@ -52,11 +52,11 @@ bool Input::isStochastic() const
 }
 
 
-std::string Input::dumpDistribution() const
+String Input::dumpDistribution() const
 {
   OSS oss;
 
-  std::string distributionName = distribution_.getImplementation()->getClassName();
+  String distributionName = distribution_.getImplementation()->getClassName();
   if (distributionName != "TruncatedDistribution")
   {
     oss << "dist_" << getName() << " = ot." << distributionName << "(";
@@ -99,7 +99,7 @@ std::string Input::dumpDistribution() const
 }
 
 
-std::string Input::dump() const
+String Input::dump() const
 {
   OSS oss;
 

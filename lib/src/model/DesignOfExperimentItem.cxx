@@ -1,5 +1,7 @@
 #include "otgui/DesignOfExperimentItem.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 DesignOfExperimentItem::DesignOfExperimentItem(const DesignOfExperiment & designOfExperiment)
@@ -32,7 +34,7 @@ DesignOfExperiment DesignOfExperimentItem::getDesignOfExperiment() const
 }
 
 
-void DesignOfExperimentItem::update(Observable* source, const std::string & message)
+void DesignOfExperimentItem::update(Observable* source, const String & message)
 {
   if (message=="analysisFinished")
   {
