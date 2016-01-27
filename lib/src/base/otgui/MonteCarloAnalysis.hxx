@@ -13,9 +13,8 @@ class MonteCarloAnalysis : public SimulationAnalysis
 
 public:
   MonteCarloAnalysis(const OT::String & name, const PhysicalModel & physicalModel,
-                     int nbSimu=10000, bool confidenceInterval=true, double level=0.95);
+                     const OT::UnsignedInteger nbSimu=10000, bool confidenceInterval=true, double level=0.95);
 
-  MonteCarloAnalysis(const MonteCarloAnalysis & other);
   virtual MonteCarloAnalysis * clone() const;
 
   bool isConfidenceIntervalRequired() const;

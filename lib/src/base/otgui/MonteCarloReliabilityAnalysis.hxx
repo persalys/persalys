@@ -17,7 +17,6 @@ public:
   MonteCarloReliabilityAnalysis(const OT::String & name, const LimitState & limitState,
                                 const OT::UnsignedInteger & maximumOuterSampling=1000);
 
-  MonteCarloReliabilityAnalysis(const MonteCarloReliabilityAnalysis & other);
   virtual MonteCarloReliabilityAnalysis * clone() const;
 
   OT::UnsignedInteger getMaximumOuterSampling() const;
@@ -25,6 +24,12 @@ public:
 
   double getMaximumCoefficientOfVariation() const;
   void setMaximumCoefficientOfVariation(const double & coef);
+
+  OT::UnsignedInteger getBlockSize() const;
+  void setBlockSize(const OT::UnsignedInteger & size);
+
+  OT::UnsignedInteger getSeed() const;
+  void setSeed(const OT::UnsignedInteger seed);
 
   OT::SimulationResult getResult() const;
 
@@ -34,6 +39,8 @@ public:
 private:
   OT::UnsignedInteger maximumOuterSampling_;
   double maximumCoefficientOfVariation_;
+  OT::UnsignedInteger blockSize_;
+  OT::UnsignedInteger seed_;
   OT::SimulationResult result_;
 };
 }

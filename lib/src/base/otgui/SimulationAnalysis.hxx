@@ -11,18 +11,21 @@ class SimulationAnalysis : public AnalysisImplementation
   CLASSNAME;
 
 public:
-  SimulationAnalysis(const OT::String & name, const PhysicalModel & physicalModel, int nbSimu);
+  SimulationAnalysis(const OT::String & name, const PhysicalModel & physicalModel, const OT::UnsignedInteger nbSimu);
 
   virtual SimulationAnalysis * clone() const;
 
   OutputCollection getOutputs() const;
   void setOutputs(const OutputCollection & outputs);
 
-  int getNbSimulations() const;
-  void setNbSimulations(const int nbSimu);
+  OT::UnsignedInteger getNbSimulations() const;
+  void setNbSimulations(const OT::UnsignedInteger nbSimu);
 
   OT::NumericalSample getInputSample();
   OT::Description getOutputNames() const;
+
+  OT::UnsignedInteger getSeed() const;
+  void setSeed(const OT::UnsignedInteger seed);
 
 protected:
   OT::NumericalSample getOutputSample(OT::NumericalSample inputSample) const;
@@ -30,7 +33,8 @@ protected:
 
 private:
   OutputCollection outputs_;
-  int nbSimulations_;
+  OT::UnsignedInteger nbSimulations_;
+  OT::UnsignedInteger seed_;
 };
 }
 #endif

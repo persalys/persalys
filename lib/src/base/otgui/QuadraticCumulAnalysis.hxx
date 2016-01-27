@@ -14,7 +14,6 @@ class QuadraticCumulAnalysis : public AnalysisImplementation
 public:
   QuadraticCumulAnalysis(const OT::String & name, const PhysicalModel & physicalModel);
 
-  QuadraticCumulAnalysis(const QuadraticCumulAnalysis & other);
   virtual QuadraticCumulAnalysis * clone() const;
 
   OutputCollection getOutputs() const;

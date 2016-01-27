@@ -11,15 +11,8 @@ namespace OTGUI {
 
 CLASSNAMEINIT(SRCAnalysis);
 
-SRCAnalysis::SRCAnalysis(const String & name, const PhysicalModel & physicalModel, int nbSimu)
+SRCAnalysis::SRCAnalysis(const String & name, const PhysicalModel & physicalModel, const UnsignedInteger nbSimu)
   : SimulationAnalysis(name, physicalModel, nbSimu)
-{
-}
-
-
-SRCAnalysis::SRCAnalysis(const SRCAnalysis & other)
-  : SimulationAnalysis(other)
-  , result_(other.result_)
 {
 }
 
@@ -32,7 +25,7 @@ SRCAnalysis* SRCAnalysis::clone() const
 
 void SRCAnalysis::run()
 {
-  RandomGenerator::SetSeed(0); //TODO seed in argument
+  RandomGenerator::SetSeed(getSeed());
   NumericalSample inputSample(getInputSample());
 
   // set results
@@ -63,8 +56,9 @@ String SRCAnalysis::dump() const
   OSS oss;
   oss << getName() << " = otguibase.SRCAnalysis('" << getName() << "', " << getPhysicalModel().getName();
   oss << ", " << getNbSimulations() << ")\n";
+  oss << getName() << ".setSeed(" << getSeed() << ")\n";
 
-  return oss.str();
+  return oss;
 }
 
 

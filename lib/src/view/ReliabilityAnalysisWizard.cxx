@@ -100,10 +100,25 @@ void ReliabilityAnalysisWizard::buildInterface()
   QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedWidgets_);
 
   QLabel * seedLabel = new QLabel(tr("Seed"));
-  advancedWidgetsLayout->addWidget(seedLabel, 2, 0);
+  advancedWidgetsLayout->addWidget(seedLabel, 0, 0);
   seedSpinbox_ = new QSpinBox;
+  seedSpinbox_->setMaximum(std::numeric_limits<int>::max());
   seedLabel->setBuddy(seedSpinbox_);
-  advancedWidgetsLayout->addWidget(seedSpinbox_, 2, 1);
+  advancedWidgetsLayout->addWidget(seedSpinbox_, 0, 1);
+  if (analysis_.getImplementation()->getClassName() == "MonteCarloReliabilityAnalysis")
+    seedSpinbox_->setValue(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getSeed());
+  connect(seedSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(seedChanged(int)));
+
+  QLabel * blockSizeLabel = new QLabel(tr("Block size"));
+  advancedWidgetsLayout->addWidget(blockSizeLabel, 1, 0);
+  blockSizeSpinbox_ = new QSpinBox;
+  blockSizeSpinbox_->setMinimum(1);
+  blockSizeSpinbox_->setMaximum(std::numeric_limits<int>::max());
+  blockSizeLabel->setBuddy(blockSizeSpinbox_);
+  advancedWidgetsLayout->addWidget(blockSizeSpinbox_, 1, 1);
+  if (analysis_.getImplementation()->getClassName() == "MonteCarloReliabilityAnalysis")
+    blockSizeSpinbox_->setValue(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getBlockSize());
+  connect(blockSizeSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(blockSizeChanged(int)));
 
   advancedWidgets_->hide();
   advancedGroupLayout->addWidget(advancedWidgets_);
@@ -143,11 +158,21 @@ void ReliabilityAnalysisWizard::maxiCoefficientOfVariationChanged(double maxi)
 }
 
 
+void ReliabilityAnalysisWizard::blockSizeChanged(int size)
+{
+  dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setBlockSize(size);
+}
+
+
+void ReliabilityAnalysisWizard::seedChanged(int seed)
+{
+  dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setSeed(seed);
+}
+
+
 void ReliabilityAnalysisWizard::validate()
 {
   otStudy_->addAnalysis(analysis_);
   analysis_.run();
 }
-
-
 }

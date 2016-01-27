@@ -12,10 +12,11 @@ namespace OTGUI {
 CLASSNAMEINIT(SimulationAnalysis);
 
 SimulationAnalysis::SimulationAnalysis(const String & name, const PhysicalModel & physicalModel,
-                                       int nbSimulation)
+                                       const UnsignedInteger nbSimulation)
   : AnalysisImplementation(name, physicalModel)
   , outputs_(physicalModel.getOutputs())
   , nbSimulations_(nbSimulation)
+  , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
 {
 //TODO ctr with outputNames (pas OutputCollection!) optionnel par défaut prendrait tous les outputs
 }
@@ -39,13 +40,13 @@ void SimulationAnalysis::setOutputs(const OutputCollection & outputs)
 }
 
 
-int SimulationAnalysis::getNbSimulations() const
+UnsignedInteger SimulationAnalysis::getNbSimulations() const
 {
   return nbSimulations_;
 }
 
 
-void SimulationAnalysis::setNbSimulations(const int nbSimu)
+void SimulationAnalysis::setNbSimulations(const UnsignedInteger nbSimu)
 {
   nbSimulations_ = nbSimu;
 }
@@ -78,5 +79,17 @@ Description SimulationAnalysis::getOutputNames() const
   for (int i=0; i<nbOutputs; ++i)
     outputNames[i] = outputs_[i].getName();
   return outputNames;
+}
+
+
+UnsignedInteger SimulationAnalysis::getSeed() const
+{
+  return seed_;
+}
+
+
+void SimulationAnalysis::setSeed(const UnsignedInteger seed)
+{
+  seed_ = seed;
 }
 }

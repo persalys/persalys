@@ -113,7 +113,6 @@ void CentralTendencyWizard::buildInterface()
     levelConfidenceIntervalSpinbox_->setEnabled(true);
   }
 
-
   connect(levelConfidenceIntervalSpinbox_, SIGNAL(valueChanged(double)), this, SLOT(levelConfidenceIntervalChanged(double)));
   advancedWidgetsLayout->addWidget(levelConfidenceIntervalSpinbox_, 0, 1);
 
@@ -122,6 +121,9 @@ void CentralTendencyWizard::buildInterface()
   seedSpinbox_ = new QSpinBox;
   seedLabel->setBuddy(seedSpinbox_);
   advancedWidgetsLayout->addWidget(seedSpinbox_, 2, 1);
+  if (analysis_.getImplementation()->getClassName() == "MonteCarloAnalysis")
+    seedSpinbox_->setValue(dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->getSeed());
+  connect(seedSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(seedChanged(int)));
 
   advancedWidgets_->hide();
   advancedGroupLayout->addWidget(advancedWidgets_);
@@ -215,11 +217,15 @@ void CentralTendencyWizard::levelConfidenceIntervalChanged(double confidenceInte
 }
 
 
+void CentralTendencyWizard::seedChanged(int seed)
+{
+  dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->setSeed(seed);
+}
+
+
 void CentralTendencyWizard::validate()
 {
   otStudy_->addAnalysis(analysis_);
   analysis_.run();
 }
-
-
 }

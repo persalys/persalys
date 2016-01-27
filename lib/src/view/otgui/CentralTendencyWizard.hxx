@@ -32,6 +32,7 @@ public slots:
   void confidenceIntervalRequired(bool);
   void nbSimuChanged(int);
   void levelConfidenceIntervalChanged(double);
+  void seedChanged(int);
 signals:
   void analysisChanged(const Analysis & analysis);
 

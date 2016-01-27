@@ -12,9 +12,8 @@ class SRCAnalysis : public SimulationAnalysis
   CLASSNAME;
 
 public:
-  SRCAnalysis(const OT::String & name, const PhysicalModel & physicalModel, int nbSimu=10000);
+  SRCAnalysis(const OT::String & name, const PhysicalModel & physicalModel, const OT::UnsignedInteger nbSimu=10000);
 
-  SRCAnalysis(const SRCAnalysis & other);
   virtual SRCAnalysis * clone() const;
 
   SRCResult getResult() const;

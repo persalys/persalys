@@ -17,16 +17,8 @@ MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis(const String & name
   : ReliabilityAnalysis(name, limitState)
   , maximumOuterSampling_(maximumOuterSampling)
   , maximumCoefficientOfVariation_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultMaximumCoefficientOfVariation"))
-  , result_()
-{
-}
-
-
-MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis(const MonteCarloReliabilityAnalysis & other)
-  : ReliabilityAnalysis(other)
-  , maximumOuterSampling_(other.maximumOuterSampling_)
-  , maximumCoefficientOfVariation_(other.maximumCoefficientOfVariation_)
-  , result_(other.result_)
+  , blockSize_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultBlockSize"))
+  , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
 {
 }
 
@@ -39,11 +31,11 @@ MonteCarloReliabilityAnalysis* MonteCarloReliabilityAnalysis::clone() const
 
 void MonteCarloReliabilityAnalysis::run()
 {
-  RandomGenerator::SetSeed(0); //TODO seed in argument
+  RandomGenerator::SetSeed(getSeed());
   MonteCarlo algo = MonteCarlo(getLimitState().getEvent());
   algo.setMaximumOuterSampling(maximumOuterSampling_);
   algo.setMaximumCoefficientOfVariation(maximumCoefficientOfVariation_);
-//   TODO: for YACS : algo.setBlockSize(1000);
+  algo.setBlockSize(blockSize_);
   algo.run();
 
   // set results
@@ -77,6 +69,30 @@ void MonteCarloReliabilityAnalysis::setMaximumCoefficientOfVariation(const doubl
 }
 
 
+UnsignedInteger MonteCarloReliabilityAnalysis::getBlockSize() const
+{
+  return blockSize_;
+}
+
+
+void MonteCarloReliabilityAnalysis::setBlockSize(const UnsignedInteger & size)
+{
+  blockSize_ = size;
+}
+
+
+UnsignedInteger MonteCarloReliabilityAnalysis::getSeed() const
+{
+  return seed_;
+}
+
+
+void MonteCarloReliabilityAnalysis::setSeed(const UnsignedInteger seed)
+{
+  seed_ = seed;
+}
+
+
 SimulationResult MonteCarloReliabilityAnalysis::getResult() const
 {
   return result_;
@@ -89,7 +105,9 @@ String MonteCarloReliabilityAnalysis::dump() const
   oss << getName() << " = otguibase.MonteCarloReliabilityAnalysis('" << getName() << "', " << getLimitState().getName();
   oss << ", " << maximumOuterSampling_ << ")\n";
   oss << getName() << ".setMaximumCoefficientOfVariation(" << maximumCoefficientOfVariation_ << ")\n";
+  oss << getName() << ".setBlockSize(" << blockSize_ << ")\n";
+  oss << getName() << ".setSeed(" << seed_ << ")\n";
 
-  return oss.str();
+  return oss;
 }
 }

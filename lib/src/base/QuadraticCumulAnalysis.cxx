@@ -17,14 +17,6 @@ QuadraticCumulAnalysis::QuadraticCumulAnalysis(const String & name, const Physic
 }
 
 
-QuadraticCumulAnalysis::QuadraticCumulAnalysis(const QuadraticCumulAnalysis & other)
-  : AnalysisImplementation(other)
-  , outputs_(other.outputs_)
-  , result_(other.result_)
-{
-}
-
-
 QuadraticCumulAnalysis* QuadraticCumulAnalysis::clone() const
 {
   return new QuadraticCumulAnalysis(*this);

@@ -8,6 +8,7 @@
 #include <QWizard>
 #include <QButtonGroup>
 #include <QSpinBox>
+#include <QGroupBox>
 
 namespace OTGUI {
 class SensitivityAnalysisWizard : public QWizard
@@ -27,7 +28,9 @@ protected:
 
 public slots:
   void updateMethodWidgets();
+  void showHideAdvancedWidgets(bool);
   void nbSimuChanged(int);
+  void seedChanged(int);
 signals:
   void analysisChanged(const Analysis & analysis);
 
@@ -37,7 +40,10 @@ private:
   PhysicalModel physicalModel_;
 
   QButtonGroup * methodGroup_;
+  QGroupBox * advancedGroup_;
+  QWidget * advancedWidgets_;
   QSpinBox * nbSimuSpinbox_;
+  QSpinBox * seedSpinbox_;
 };
 }
 #endif

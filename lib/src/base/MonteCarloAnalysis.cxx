@@ -10,22 +10,12 @@ namespace OTGUI {
 CLASSNAMEINIT(MonteCarloAnalysis);
 
 MonteCarloAnalysis::MonteCarloAnalysis(const String & name, const PhysicalModel & physicalModel,
-                                       int nbSimu, bool confidenceInterval, double level)
+                                       const UnsignedInteger nbSimu, bool confidenceInterval, double level)
   : SimulationAnalysis(name, physicalModel, nbSimu)
   , isConfidenceIntervalRequired_(confidenceInterval)
   , levelConfidenceInterval_(level)
-  , result_()
 {
 //TODO ctr with outputNames (pas OutputCollection!) optionnel par défaut prendrait tous les outputs
-}
-
-
-MonteCarloAnalysis::MonteCarloAnalysis(const MonteCarloAnalysis & other)
-  : SimulationAnalysis(other)
-  , isConfidenceIntervalRequired_(other.isConfidenceIntervalRequired_)
-  , levelConfidenceInterval_(other.levelConfidenceInterval_)
-  , result_(other.result_)
-{
 }
 
 
@@ -61,8 +51,9 @@ void MonteCarloAnalysis::setLevelConfidenceInterval(const double levelConfidence
 
 void MonteCarloAnalysis::run()
 {
-  RandomGenerator::SetSeed(0); //TODO seed in argument
+  RandomGenerator::SetSeed(getSeed());
   NumericalSample inputSample(getInputSample());
+
   // set results
   result_ = MonteCarloResult(inputSample, getOutputSample(inputSample));
 
@@ -81,8 +72,9 @@ String MonteCarloAnalysis::dump() const
   OSS oss;
   oss << getName() << " = otguibase.MonteCarloAnalysis('" << getName() << "', " << getPhysicalModel().getName();
   oss << ", " << getNbSimulations() << ")\n";
+  oss << getName() << ".setSeed(" << getSeed() << ")\n";
 
-  return oss.str();
+  return oss;
 }
 
 

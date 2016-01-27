@@ -12,9 +12,8 @@ class SobolAnalysis : public SimulationAnalysis
   CLASSNAME;
 
 public:
-  SobolAnalysis(const OT::String & name, const PhysicalModel & physicalModel, int nbSimu=10000);
+  SobolAnalysis(const OT::String & name, const PhysicalModel & physicalModel, const OT::UnsignedInteger nbSimu=10000);
 
-  SobolAnalysis(const SobolAnalysis & other);
   virtual SobolAnalysis * clone() const;
 
   SobolResult getResult() const;

@@ -30,6 +30,8 @@ public slots:
   void showHideAdvancedWidgets(bool);
   void maxiOuterSamplingChanged(int);
   void maxiCoefficientOfVariationChanged(double);
+  void blockSizeChanged(int);
+  void seedChanged(int);
 signals:
   void analysisChanged(const Analysis & analysis);
 
@@ -44,6 +46,7 @@ private:
   QSpinBox * maxiOuterSamplingSpinbox_;
   QDoubleSpinBox * maxiCoefficientOfVariationSpinbox_;
   QSpinBox * seedSpinbox_;
+  QSpinBox * blockSizeSpinbox_;
 };
 }
 #endif

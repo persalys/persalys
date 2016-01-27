@@ -78,6 +78,33 @@ void SensitivityAnalysisWizard::buildInterface()
 
   mainLayout->addLayout(methodParametersLayout);
 
+  // advanced parameters
+  advancedGroup_ = new QGroupBox(tr("Advanced parameters"));
+  QVBoxLayout * advancedGroup_Layout = new QVBoxLayout(advancedGroup_);
+  advancedGroup_->setCheckable(true);
+  advancedGroup_->setChecked(false);
+  advancedGroup_->setStyleSheet("QGroupBox::indicator::unchecked {image: url(:/images/down_arrow.png);}\
+                                QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
+
+  advancedWidgets_ = new QWidget;
+  QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedWidgets_);
+
+  QLabel * seedLabel = new QLabel(tr("Seed"));
+  advancedWidgetsLayout->addWidget(seedLabel, 0, 0);
+  seedSpinbox_ = new QSpinBox;
+  seedLabel->setBuddy(seedSpinbox_);
+  advancedWidgetsLayout->addWidget(seedSpinbox_, 0, 1);
+  if (analysis_.getImplementation()->getClassName() == "SobolAnalysis")
+    seedSpinbox_->setValue(dynamic_cast<SobolAnalysis*>(&*analysis_.getImplementation())->getSeed());
+  connect(seedSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(seedChanged(int)));
+
+  advancedWidgets_->hide();
+  advancedGroup_Layout->addWidget(advancedWidgets_);
+
+  mainLayout->addWidget(advancedGroup_);
+
+  connect(advancedGroup_, SIGNAL(toggled(bool)), this, SLOT(showHideAdvancedWidgets(bool)));
+
   updateMethodWidgets();
 
   addPage(page);
@@ -93,6 +120,7 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
       if (analysis_.getImplementation()->getClassName() == "SRCAnalysis")
       {
         analysis_ = SobolAnalysis(analysis_.getName(), physicalModel_);
+        advancedGroup_->hide();
         emit analysisChanged(analysis_);
       }
       break;
@@ -102,6 +130,7 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
       if (analysis_.getImplementation()->getClassName() == "SobolAnalysis")
       {
         analysis_ = SRCAnalysis(analysis_.getName(), physicalModel_);
+        advancedGroup_->show();
         emit analysisChanged(analysis_);
       }
       break;
@@ -112,9 +141,24 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
 }
 
 
+void SensitivityAnalysisWizard::showHideAdvancedWidgets(bool show)
+{
+  if (show)
+    advancedWidgets_->show();
+  else
+    advancedWidgets_->hide();
+}
+
+
 void SensitivityAnalysisWizard::nbSimuChanged(int nbSimu)
 {
   dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->setNbSimulations(nbSimu);
+}
+
+
+void SensitivityAnalysisWizard::seedChanged(int seed)
+{
+  dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->setSeed(seed);
 }
 
 
