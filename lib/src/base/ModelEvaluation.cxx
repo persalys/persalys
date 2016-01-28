@@ -24,14 +24,6 @@ ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & phys
 }
 
 
-ModelEvaluation::ModelEvaluation(const ModelEvaluation & other)
-  : AnalysisImplementation(other)
-  , inputNames_(other.inputNames_)
-  , inputsValues_(other.inputsValues_)
-{
-}
-
-
 ModelEvaluation* ModelEvaluation::clone() const
 {
   return new ModelEvaluation(*this);
@@ -43,10 +35,10 @@ void ModelEvaluation::initializeParameters(const InputCollection & inputs)
   inputsValues_.clear();
   inputNames_ = getPhysicalModel().getInputNames();
 
-  int inputSize = inputs.getSize();
+  UnsignedInteger inputSize = inputs.getSize();
   inputsValues_ = NumericalPoint(inputSize);
 
-  for (int i=0; i<inputSize; ++i)
+  for (UnsignedInteger i=0; i<inputSize; ++i)
     inputsValues_[i] = inputs[i].getValue();
 }
 
@@ -58,7 +50,7 @@ void ModelEvaluation::updateParameters()
 
   initializeParameters(getPhysicalModel().getInputs());
 
-  for (int i=0; i<inputNames.getSize(); ++i)
+  for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
   {
     const Description::const_iterator it = std::find(inputNames.begin(), inputNames.end(), inputNames_[i]);
     if (it != inputNames.end())

@@ -116,7 +116,7 @@ Interval MonteCarloResult::getMeanConfidenceInterval(const double level)
     NumericalPoint lowerBounds(getOutputSample().getDimension());
     NumericalPoint upperBounds(getOutputSample().getDimension());
 
-    for (int i=0; i<meanConfidenceInterval_.getDimension(); ++i)
+    for (UnsignedInteger i=0; i<meanConfidenceInterval_.getDimension(); ++i)
     {
       // low
       lowerBounds[i] = getMean()[i] - delta[i];
@@ -138,7 +138,7 @@ Interval MonteCarloResult::getStdConfidenceInterval(const double level)
     stdConfidenceInterval_ = Interval(getOutputSample().getDimension());
 
     // TODO : use Normal Distribution?
-    int nbSimu = getOutputSample().getSize();
+    UnsignedInteger nbSimu = getOutputSample().getSize();
     ChiSquare X(nbSimu-1);
     // low
     double f1 = X.computeQuantile((1-levelConfidenceInterval_)/2, true)[0];
@@ -149,7 +149,7 @@ Interval MonteCarloResult::getStdConfidenceInterval(const double level)
     NumericalPoint lowerBounds(getOutputSample().getDimension());
     NumericalPoint upperBounds(getOutputSample().getDimension());
 
-    for (int i=0; i<stdConfidenceInterval_.getDimension(); ++i)
+    for (UnsignedInteger i=0; i<stdConfidenceInterval_.getDimension(); ++i)
     {
       //low
       lowerBounds[i] = sqrt((nbSimu - 1) * getVariance()[i] / f1);
@@ -168,7 +168,7 @@ MonteCarloResult::NumericalPointCollection MonteCarloResult::getOutliers()
   if (!outliers_.getSize())
   {
     outliers_.clear();
-    for (int i=0; i<getOutputSample().getDimension(); ++i)
+    for (UnsignedInteger i=0; i<getOutputSample().getDimension(); ++i)
     {
       NumericalPoint outliersOfIthOutput;
       double Q1 = getFirstQuartile()[i];
@@ -176,7 +176,7 @@ MonteCarloResult::NumericalPointCollection MonteCarloResult::getOutliers()
       double lowerBound = Q1 - 1.5 * (Q3 - Q1);
       double upperBound = Q3 + 1.5 * (Q3 - Q1);
 
-      for (int j=0; j<getOutputSample().getSize(); ++j)
+      for (UnsignedInteger j=0; j<getOutputSample().getSize(); ++j)
         if (getOutputSample()[j][i] < lowerBound || getOutputSample()[j][i] > upperBound)
           outliersOfIthOutput.add(getOutputSample()[j][i]);
 
@@ -193,7 +193,7 @@ MonteCarloResult::DistributionCollection MonteCarloResult::getFittedDistribution
 
   DistributionCollection distributions(getOutputSample().getDimension());
 
-  for (int i=0; i<getOutputSample().getDimension(); ++i)
+  for (UnsignedInteger i=0; i<getOutputSample().getDimension(); ++i)
     distributions[i] = gaussianKernel.build(getOutputSample().getMarginal(i), true);
 
   return distributions;

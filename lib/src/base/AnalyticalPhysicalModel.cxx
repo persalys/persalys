@@ -146,7 +146,7 @@ Description AnalyticalPhysicalModel::getFormulas()
   if (!formulas_.getSize())
   {
     formulas_ = Description(getOutputs().getSize());
-    for (int i=0; i<getOutputs().getSize(); ++i)
+    for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
       formulas_[i] = getOutputs()[i].getFormula();
   }
   return formulas_;
@@ -177,18 +177,18 @@ String AnalyticalPhysicalModel::dump() const
 {
   String result;
 
-  for (int i=0; i<getInputs().getSize(); ++i)
+  for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
     result += getInputs()[i].dump();
 
-  for (int i=0; i<getOutputs().getSize(); ++i)
+  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
     result += getOutputs()[i].dump();
 
   result += getName()+ " = otguibase.AnalyticalPhysicalModel('" + getName() + "')\n";
 
-  for (int i=0; i<getInputs().getSize(); ++i)
+  for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
     result += getName()+ ".addInput(" + getInputs()[i].getName() + ")\n";
 
-  for (int i=0; i<getOutputs().getSize(); ++i)
+  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
     result += getName()+ ".addOutput(" + getOutputs()[i].getName() + ")\n";
 
   result += PhysicalModelImplementation::dumpCopula();

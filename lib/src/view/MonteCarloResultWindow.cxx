@@ -324,7 +324,7 @@ void MonteCarloResultWindow::updateLabelsText(int indexOutput)
   // min
   OSS oss3;
   oss3 << result_.getOutputSample().getMin()[indexOutput];
-  for (int j=0; j<result_.getListXMin()[indexOutput].getSize();++j)
+  for (UnsignedInteger j=0; j<result_.getListXMin()[indexOutput].getSize();++j)
   {
     NumericalPoint point(result_.getListXMin()[indexOutput][j]);
     oss3 << "\n  X=" << point.__str__();
@@ -333,7 +333,7 @@ void MonteCarloResultWindow::updateLabelsText(int indexOutput)
   // max
   OSS oss4;
   oss4 << result_.getOutputSample().getMax()[indexOutput];
-  for (int j=0; j<result_.getListXMax()[indexOutput].getSize();++j)
+  for (UnsignedInteger j=0; j<result_.getListXMax()[indexOutput].getSize();++j)
   {
     NumericalPoint point(result_.getListXMax()[indexOutput][j]);
     oss4 << "\n  X=" << point.__str__();
@@ -356,7 +356,7 @@ void MonteCarloResultWindow::quantileValueChanged(double quantile)
   double cdf = 0.0;
   double p = 1.0 / double(result_.getOutputSample().getSize());
 
-  for (int j=0; j<result_.getOutputSample().getSize(); ++j)
+  for (UnsignedInteger j=0; j<result_.getOutputSample().getSize(); ++j)
     if (result_.getOutputSample()[j][outputsComboBoxFirstTab_->currentIndex()] < quantile)
       cdf += p;
 

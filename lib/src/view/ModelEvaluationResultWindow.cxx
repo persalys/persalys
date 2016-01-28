@@ -36,7 +36,7 @@ void ModelEvaluationResultWindow::buildInterface()
   inputTable->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Value"));
   inputTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 
-  for (int i=0; i<result_.getInputSample().getDimension(); ++i)
+  for (UnsignedInteger i=0; i<result_.getInputSample().getDimension(); ++i)
   {
     QTableWidgetItem * item = new QTableWidgetItem(result_.getInputSample().getDescription()[i].c_str());
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
@@ -56,7 +56,7 @@ void ModelEvaluationResultWindow::buildInterface()
   outputTable->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Value"));
   outputTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 
-  for (int i=0; i<result_.getOutputSample().getDimension(); ++i)
+  for (UnsignedInteger i=0; i<result_.getOutputSample().getDimension(); ++i)
   {
     QTableWidgetItem * item = new QTableWidgetItem(result_.getOutputSample().getDescription()[i].c_str());
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);

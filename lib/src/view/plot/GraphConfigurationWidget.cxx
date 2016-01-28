@@ -206,6 +206,8 @@ void GraphConfigurationWidget::plotChanged()
         currentPlotIndex_ = 2 * outputIndex + 1;
         break;
       }
+      default:
+        break;
     }
   }
   else

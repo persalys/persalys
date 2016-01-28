@@ -36,7 +36,7 @@ void SobolAnalysis::run()
   NumericalSample firstOrderIndices(1, sensitivityAnalysis.getFirstOrderIndices(0));
   NumericalSample totalOrderIndices(1, sensitivityAnalysis.getTotalOrderIndices(0));
 
-  for (int i=1; i<getOutputs().getSize(); ++i)
+  for (UnsignedInteger i=1; i<getOutputs().getSize(); ++i)
   {
     firstOrderIndices.add(sensitivityAnalysis.getFirstOrderIndices(i));
     totalOrderIndices.add(sensitivityAnalysis.getTotalOrderIndices(i));

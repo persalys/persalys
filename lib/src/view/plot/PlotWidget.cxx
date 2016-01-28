@@ -28,7 +28,7 @@ public:
   virtual QwtText label(double value) const
   {
     const int index = qRound(value);
-    if (index >= 0 && index < labels_.getSize())
+    if (index >= 0 && index < (int)labels_.getSize())
       return QwtText(labels_[index].c_str());
     return QwtText();
   }
@@ -160,7 +160,7 @@ void PlotWidget::plotCurve(const NumericalSample & data, const QPen pen)
 
 void PlotWidget::plotScatter(const NumericalSample & input, const NumericalSample & output, const QPen pen)
 {
-  int size = input.getSize();
+  UnsignedInteger size = input.getSize();
 
   if (output.getSize()!=size)
     return;
@@ -168,7 +168,7 @@ void PlotWidget::plotScatter(const NumericalSample & input, const NumericalSampl
   double *xData = new double[size];
   double *yData = new double[size];
 
-  for (int i = 0 ; i < size ; ++i)
+  for (UnsignedInteger i=0 ; i<size ; ++i)
   {
     xData[i] = input[i][0];
     yData[i] = output[i][0];
@@ -225,7 +225,7 @@ void PlotWidget::plotHistogram(const NumericalSample & sample, bool cdf, int bar
     ++ histogramData[index];
   }
   double inverseArea = 1. / (size*width);
-  for (UnsignedInteger i = 0; i < barNumber; ++i)
+  for (int i=0; i<barNumber; ++i)
     histogramData[i] *= inverseArea;
 
   //  if CDF
@@ -327,7 +327,7 @@ void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrder, const N
   // populate bar chart
   static const char *colors[] = {"DarkOrchid", "SteelBlue"};
 
-  int size = firstOrder.getSize();
+  UnsignedInteger size = firstOrder.getSize();
   
   double *xData = new double[size];
   double *yData = new double[size];
@@ -336,7 +336,7 @@ void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrder, const N
   if (totalOrder.getSize())
     width = 0.1;
 
-  for (int i = 0 ; i < size ; ++i)
+  for (UnsignedInteger i=0 ; i<size ; ++i)
   {
     xData[i] = (i-width);
     yData[i] = firstOrder[i];
@@ -350,7 +350,7 @@ void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrder, const N
     xData = new double[size];
     yData = new double[size];
 
-    for (int i = 0 ; i < size ; ++i)
+    for (UnsignedInteger i=0 ; i<size ; ++i)
     {
       xData[i] = (i+width) ;
       yData[i] = totalOrder[i];

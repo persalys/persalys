@@ -42,8 +42,8 @@ NumericalSampleCollection SimulationAnalysisResult::getListXMax() const
 
 void SimulationAnalysisResult::searchMinMax()
 {
-  int size = getInputSample().getSize();
-  int numberInputs = getInputSample().getDimension();
+  UnsignedInteger size = getInputSample().getSize();
+  UnsignedInteger numberInputs = getInputSample().getDimension();
 
   Indices indicesInputs(numberInputs);
   indicesInputs.fill();
@@ -51,14 +51,14 @@ void SimulationAnalysisResult::searchMinMax()
   NumericalSample sample = getInputSample();
   sample.stack(getOutputSample());
 
-  for (int i=numberInputs; i<sample.getDimension(); ++i)
+  for (UnsignedInteger i=numberInputs; i<sample.getDimension(); ++i)
   {
     NumericalSample orderedSample = sample.sortAccordingToAComponent(i);
 
     // Search min value of the ith output and the corresponding set of inputs X
     double minValue = orderedSample[0][i];
 
-    int it = 0;
+    UnsignedInteger it = 0;
     double value = orderedSample[it][i];
     NumericalSample tempSample(0, numberInputs);
     do

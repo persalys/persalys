@@ -18,11 +18,11 @@ SobolResultWindow::SobolResultWindow(SensitivityAnalysisItem * item)
   : OTguiSubWindow(item)
   , result_(dynamic_cast<SobolAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
 {
-  for (int i=0; i<result_.getOutputNames().getSize(); ++i)
+  for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
   {
     std::map<double, int> firstOrder_i;
     std::map<double, int> totalOrder_i;
-    for (int j=0; j<result_.getFirstOrderIndices().getDimension(); ++j)
+    for (UnsignedInteger j=0; j<result_.getFirstOrderIndices().getDimension(); ++j)
     {
       firstOrder_i[result_.getFirstOrderIndices()[i][j]] = j;
       totalOrder_i[result_.getTotalOrderIndices()[i][j]] = j;
@@ -47,10 +47,10 @@ void SobolResultWindow::buildInterface()
   NumericalPoint currentTotalOrderIndices(result_.getInputNames().getSize());
   Description sortedInputNames = result_.getInputNames();
   QStringList outputNames;
-  for (int i=0; i<result_.getOutputNames().getSize(); ++i)
+  for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
     outputNames << result_.getOutputNames()[i].c_str();
 
-  for (int i=0; i<result_.getOutputNames().getSize(); ++i)
+  for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
   {
     QWidget * widget = new QWidget;
     QVBoxLayout * vbox = new QVBoxLayout(widget);
@@ -74,7 +74,7 @@ void SobolResultWindow::buildInterface()
     connect(table->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
     table->setSortingEnabled(true);
     // fill table
-    for (int j=0; j<result_.getInputNames().getSize(); ++j)
+    for (UnsignedInteger j=0; j<result_.getInputNames().getSize(); ++j)
     {
       QTableWidgetItem * item = new QTableWidgetItem(result_.getInputNames()[j].c_str());
       item->setFlags(item->flags() & ~Qt::ItemIsEditable);

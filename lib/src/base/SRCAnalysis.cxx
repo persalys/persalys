@@ -31,7 +31,7 @@ void SRCAnalysis::run()
   // set results
   NumericalSample indices(0, inputSample.getDimension());
 
-  for (int i=0; i<getOutputs().getSize(); ++i)
+  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
   {
     Description outputName(1);
     outputName[0] = getOutputs()[i].getName();

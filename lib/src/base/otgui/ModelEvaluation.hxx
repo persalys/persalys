@@ -15,7 +15,7 @@ public:
   ModelEvaluation(const OT::String & name, const PhysicalModel & physicalModel);
   ModelEvaluation(const OT::String & name, const PhysicalModel & physicalModel,
                   const OT::NumericalPoint & inputsValues);
-  ModelEvaluation(const ModelEvaluation & other);
+
   virtual ModelEvaluation * clone() const;
 
   void updateParameters();

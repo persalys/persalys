@@ -38,8 +38,8 @@ void QuadraticCumulAnalysis::setOutputs(const OutputCollection & outputs)
 void QuadraticCumulAnalysis::run()
 {
 //   TODO: cf CTR
-  Description outputNames = Description(outputs_.getSize());
-  for (int i=0; i<outputs_.getSize(); ++i)
+  Description outputNames(outputs_.getSize());
+  for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
     outputNames[i] = outputs_[i].getName();
 
   QuadraticCumul algoQuadraticCumul(getPhysicalModel().getOutputRandomVector(outputNames));
