@@ -42,9 +42,27 @@ void MonteCarloResultWindow::buildInterface()
   // tabWidget
   tabWidget_ = new QTabWidget;
 
-  // first tab --------------------------------
+  // first tab: Table --------------------------------
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+
+  NumericalSample sample = result_.getInputSample();
+  sample.stack(result_.getOutputSample());
+  OTguiTableView * tabResultView = new OTguiTableView(sample);
+  tabLayout->addWidget(tabResultView);
+
+  tabWidget_->addTab(tab, tr("Result table"));
+
+  // if the sample contains nan:
+  if (!dynamic_cast<OTguiTableModel*>(tabResultView->model())->sampleIsValid())
+  {
+    setWidget(tabWidget_);
+    return;
+  }
+
+  // second tab: Summary -----------------------------
+  tab = new QWidget;
+  tabLayout = new QVBoxLayout(tab);
 
   QHBoxLayout * headLayout = new QHBoxLayout;
   QLabel * outputName = new QLabel(tr("Output"));
@@ -147,7 +165,7 @@ void MonteCarloResultWindow::buildInterface()
 
   tabWidget_->addTab(tab, tr("Summary"));
 
-  // second tab --------------------------------
+  // third tab: PDF/CDF ------------------------------
   tab = new QWidget;
   QStackedLayout * plotLayout = new QStackedLayout(tab);
 
@@ -175,7 +193,7 @@ void MonteCarloResultWindow::buildInterface()
 
   tabWidget_->addTab(tab, tr("PDF/CDF"));
 
-  // third tab --------------------------------
+  // fourth tab: box plots ---------------------------
   tab = new QWidget;
   plotLayout = new QStackedLayout(tab);
 
@@ -203,7 +221,7 @@ void MonteCarloResultWindow::buildInterface()
 
   tabWidget_->addTab(tab, tr("Box plots"));
 
-  // fourth tab --------------------------------
+  // fifth tab: scatter plots ------------------------
   tab = new QWidget;
   plotLayout = new QStackedLayout(tab);
 
@@ -253,27 +271,17 @@ void MonteCarloResultWindow::buildInterface()
 
   tabWidget_->addTab(tab, tr("Scatter plots"));
 
-  // fifth tab --------------------------------
+  // sixth tab: plot matrix Y-X ----------------------
   tab = new PlotMatrixWidget(result_.getInputSample(), result_.getOutputSample());
   plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
   tabWidget_->addTab(tab, tr("Plot matrix Y-X"));
 
-  // sixth tab --------------------------------
+  // seventh tab: plot matrix X-X ----------------------
   tab = new PlotMatrixWidget(result_.getInputSample(), result_.getInputSample());
   plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
   tabWidget_->addTab(tab, tr("Plot matrix X-X"));
-
-  // seventh tab --------------------------------
-  tab = new QWidget;
-  tabLayout = new QVBoxLayout(tab);
-  NumericalSample sample = result_.getInputSample();
-  sample.stack(result_.getOutputSample());
-  OTguiTableView * tabResultView = new OTguiTableView(sample);
-  tabLayout->addWidget(tabResultView);
-
-  tabWidget_->addTab(tab, tr("Result table"));
 
   //
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
@@ -369,19 +377,19 @@ void MonteCarloResultWindow::showHideGraphConfigurationWidget(int indexTab)
   switch (indexTab)
   {
     // if a plotWidget is visible
-    case 1:
+    case 2:
       emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
       break;
-    case 2:
+    case 3:
       emit graphWindowActivated(boxPlotsConfigurationWidget_);
       break;
-    case 3:
+    case 4:
       emit graphWindowActivated(scatterPlotsConfigurationWidget_);
       break;
-    case 4:
+    case 5:
       emit graphWindowActivated(plotMatrixConfigurationWidget_);
       break;
-    case 5:
+    case 6:
       emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
       break;
     // if no plotWidget is visible

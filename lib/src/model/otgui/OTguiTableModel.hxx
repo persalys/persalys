@@ -25,8 +25,10 @@ public:
 
   bool exportData(const QString & fileName);
 
+  bool sampleIsValid();
 private:
   OT::NumericalSample data_;
+  mutable bool sampleIsValid_;
 };
 }
 #endif

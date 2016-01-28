@@ -75,7 +75,8 @@ void DesignOfExperimentWindow::updateWindowForOutputs()
     sample.stack(designOfExperiment_.getResult().getOutputSample());
     OTguiTableModel * model = new OTguiTableModel(sample);
     tableView_->setModel(model);
-    addTabsForOutputs();
+    if (model->sampleIsValid())
+      addTabsForOutputs();
     evaluateButton_->setEnabled(false);
   }
 }
