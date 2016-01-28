@@ -319,7 +319,7 @@ RandomVector PhysicalModelImplementation::getInputRandomVector()
 
 RandomVector PhysicalModelImplementation::getOutputRandomVector(const Description & outputNames)
 {
-  return RandomVector(getFunction(outputNames), getInputRandomVector());
+  return RandomVector(getRestrictedFunction(outputNames), getInputRandomVector());
 }
 
 
