@@ -15,6 +15,8 @@ public:
   SimulationAnalysisResult();
   SimulationAnalysisResult(OT::NumericalSample inputSample, OT::NumericalSample outputSample);
 
+  virtual SimulationAnalysisResult * clone() const;
+
   NumericalSampleCollection getListXMin() const;
   NumericalSampleCollection getListXMax() const;
 

@@ -19,7 +19,7 @@ public:
   MonteCarloResult();
   MonteCarloResult(OT::NumericalSample inputSample, OT::NumericalSample outputSample);
 
-  virtual ~MonteCarloResult();
+  virtual MonteCarloResult * clone() const;
 
   OT::NumericalPoint getMean();
   OT::NumericalPoint getMedian();

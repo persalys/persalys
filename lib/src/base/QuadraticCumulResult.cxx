@@ -22,6 +22,12 @@ QuadraticCumulResult::QuadraticCumulResult(const QuadraticCumul & algoQuadraticC
 }
 
 
+QuadraticCumulResult* QuadraticCumulResult::clone() const
+{
+  return new QuadraticCumulResult(*this);
+}
+
+
 Description QuadraticCumulResult::getOutputNames() const
 {
   return outputNames_;

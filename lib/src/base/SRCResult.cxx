@@ -11,11 +11,16 @@ SRCResult::SRCResult()
 }
 
 
-SRCResult::SRCResult(const NumericalSample indices,
-                                     const Description & outputNames)
+SRCResult::SRCResult(const NumericalSample indices, const Description & outputNames)
   : outputNames_(outputNames)
   , indices_(indices)
 {
+}
+
+
+SRCResult* SRCResult::clone() const
+{
+  return new SRCResult(*this);
 }
 
 

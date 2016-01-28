@@ -24,8 +24,9 @@ MonteCarloResult::MonteCarloResult(NumericalSample inputSample, NumericalSample 
 }
   
 
-MonteCarloResult::~MonteCarloResult()
+MonteCarloResult* MonteCarloResult::clone() const
 {
+  return new MonteCarloResult(*this);
 }
 
 

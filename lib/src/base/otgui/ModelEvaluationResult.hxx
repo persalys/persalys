@@ -6,13 +6,15 @@
 #include "NumericalSample.hxx"
 
 namespace OTGUI {
-class ModelEvaluationResult
+class ModelEvaluationResult : public OT::PersistentObject
 {
   CLASSNAME;
 
 public:
   ModelEvaluationResult();
   ModelEvaluationResult(OT::NumericalSample inputSample, OT::NumericalSample outputSample);
+
+  virtual ModelEvaluationResult * clone() const;
 
   OT::NumericalSample getInputSample() const;
   OT::NumericalSample getOutputSample() const;

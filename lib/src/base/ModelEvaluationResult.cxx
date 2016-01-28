@@ -21,6 +21,12 @@ ModelEvaluationResult::ModelEvaluationResult(NumericalSample inputSample, Numeri
 }
 
 
+ModelEvaluationResult* ModelEvaluationResult::clone() const
+{
+  return new ModelEvaluationResult(*this);
+}
+
+
 NumericalSample ModelEvaluationResult::getInputSample() const
 {
   return inputSample_;

@@ -22,6 +22,12 @@ SimulationAnalysisResult::SimulationAnalysisResult(NumericalSample inputSample, 
 }
 
 
+SimulationAnalysisResult* SimulationAnalysisResult::clone() const
+{
+  return new SimulationAnalysisResult(*this);
+}
+
+
 NumericalSampleCollection SimulationAnalysisResult::getListXMin() const
 {
   return listXMin_;

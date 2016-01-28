@@ -21,6 +21,12 @@ SobolResult::SobolResult(const NumericalSample firstOrderIndices,
 }
 
 
+SobolResult* SobolResult::clone() const
+{
+  return new SobolResult(*this);
+}
+
+
 Description SobolResult::getOutputNames() const
 {
   return outputNames_;

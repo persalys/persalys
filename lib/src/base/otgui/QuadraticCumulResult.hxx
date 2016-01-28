@@ -7,11 +7,13 @@
 #include "Output.hxx"
 
 namespace OTGUI {
-class QuadraticCumulResult
+class QuadraticCumulResult : public OT::PersistentObject
 {
 public:
   QuadraticCumulResult();
   QuadraticCumulResult(const OT::QuadraticCumul & algoQuadraticCumul, const OutputCollection & outputs);
+
+  virtual QuadraticCumulResult * clone() const;
 
   OT::Description getOutputNames() const;
   OT::NumericalPoint getMeanFirstOrder() const;
