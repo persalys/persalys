@@ -75,7 +75,7 @@ NumericalSample SimulationAnalysis::getOutputSample(NumericalSample inputSample,
 Description SimulationAnalysis::getOutputNames() const
 {
   int nbOutputs = outputs_.getSize();
-  Description outputNames = Description(nbOutputs);
+  Description outputNames(nbOutputs);
   for (int i=0; i<nbOutputs; ++i)
     outputNames[i] = outputs_[i].getName();
   return outputNames;

@@ -189,7 +189,7 @@ MonteCarloResult::NumericalPointCollection MonteCarloResult::getOutliers()
 
 MonteCarloResult::DistributionCollection MonteCarloResult::getFittedDistribution()
 {
-  KernelSmoothing gaussianKernel = KernelSmoothing();
+  KernelSmoothing gaussianKernel;
 
   DistributionCollection distributions(getOutputSample().getDimension());
 

@@ -56,7 +56,7 @@ void SobolResultWindow::buildInterface()
     QVBoxLayout * vbox = new QVBoxLayout(widget);
 
     // plot
-    PlotWidget * plot = new PlotWidget;
+    PlotWidget * plot = new PlotWidget(true);
     currentFirstOrderIndices = result_.getFirstOrderIndices()[i];
     currentTotalOrderIndices = result_.getTotalOrderIndices()[i];
     plot->plotSensitivityIndices(currentFirstOrderIndices, currentTotalOrderIndices, sortedInputNames);

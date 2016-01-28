@@ -169,7 +169,7 @@ void PhysicalModelImplementation::updateCopula()
 
 Description PhysicalModelImplementation::getInputNames()
 {
-  Description inputNames = Description(inputs_.getSize());
+  Description inputNames(inputs_.getSize());
   for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
     inputNames[i] = inputs_[i].getName();
   return inputNames;
@@ -178,7 +178,7 @@ Description PhysicalModelImplementation::getInputNames()
 
 Description PhysicalModelImplementation::getStochasticInputNames()
 {
-  Description stochasticInputNames = Description();
+  Description stochasticInputNames;
   for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
     if (inputs_[i].isStochastic())
       stochasticInputNames.add(inputs_[i].getName());
@@ -285,7 +285,7 @@ void PhysicalModelImplementation::removeOutput(const String & outputName)
 
 Description PhysicalModelImplementation::getOutputNames()
 {
-  Description  outputNames = Description(outputs_.getSize());
+  Description  outputNames(outputs_.getSize());
   for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
     outputNames[i] = outputs_[i].getName();
   return outputNames;

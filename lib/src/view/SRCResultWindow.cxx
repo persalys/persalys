@@ -49,7 +49,7 @@ void SRCResultWindow::buildInterface()
     QVBoxLayout * vbox = new QVBoxLayout(widget);
 
     // plot
-    PlotWidget * plot = new PlotWidget;
+    PlotWidget * plot = new PlotWidget(true);
     currentIndices = result_.getIndices()[i];
     plot->plotSensitivityIndices(currentIndices, NumericalPoint(), sortedInputNames);
     plot->setAxisTitle(QwtPlot::xBottom, "Inputs");
