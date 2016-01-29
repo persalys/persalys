@@ -176,6 +176,22 @@ if (USE_SPHINX)
       endif ()
     endforeach ()
 
+    # copy python tests in root
+    file (GLOB_RECURSE python_tests
+      ${CMAKE_SOURCE_DIR}/python/test/t_*.py
+    )
+    foreach (file ${python_tests})
+      if (EXISTS ${file})
+        get_filename_component (name ${file} NAME)
+        set (sphinx_clone ${SPHINX_BINARY_DIR}/${name})
+        add_custom_command (OUTPUT ${sphinx_clone}
+          COMMAND ${CMAKE_COMMAND} -E copy ${file} ${sphinx_clone}
+          DEPENDS ${file}
+        )
+        list (APPEND sphinx_clones ${sphinx_clone})
+      endif ()
+    endforeach()
+
     set (SPHINX_FLAGS "-W" CACHE STRING "sphinx flags")
     string (REPLACE " " ";" SPHINX_FLAGS ${SPHINX_FLAGS})
 

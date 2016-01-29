@@ -17,7 +17,7 @@ the analytical values.
 
         Show/Hide Code
 
-    .. literalinclude:: ../../../../../../python/test/t_Cogeneration_std.py
+    .. literalinclude:: ../../t_Cogeneration_std.py
 
 1- Problem statement
 ````````````````````
