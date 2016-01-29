@@ -31,7 +31,7 @@ signals:
 private:
   SRCResult result_;
   std::vector<std::map<double, int> > indices_;
-  QStackedLayout * plotLayout_;
+  QStackedLayout * frameLayout_;
   GraphConfigurationWidget * plotsConfigurationWidget_;
   QVector<PlotWidget*> listPlotWidgets_;
 };

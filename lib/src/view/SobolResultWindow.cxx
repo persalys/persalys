@@ -7,8 +7,8 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
-#include <QStackedLayout>
 #include <QTableWidget>
+#include <QScrollArea>
 
 using namespace OT;
 
@@ -40,8 +40,10 @@ void SobolResultWindow::buildInterface()
   QTabWidget * tabWidget = new QTabWidget;
 
   // first tab --------------------------------
-  QWidget * tab = new QWidget;
-  plotLayout_ = new QStackedLayout(tab);
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+  QFrame * frame = new QFrame;
+  frameLayout_ = new QStackedLayout(frame);
 
   NumericalPoint currentFirstOrderIndices(result_.getInputNames().getSize());
   NumericalPoint currentTotalOrderIndices(result_.getInputNames().getSize());
@@ -71,8 +73,7 @@ void SobolResultWindow::buildInterface()
     table->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("First order indice") << tr("Total indice"));
     table->verticalHeader()->hide();
     table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-    connect(table->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
-    table->setSortingEnabled(true);
+
     // fill table
     for (UnsignedInteger j=0; j<result_.getInputNames().getSize(); ++j)
     {
@@ -88,14 +89,18 @@ void SobolResultWindow::buildInterface()
       item->setFlags(item->flags() & ~Qt::ItemIsEditable);
       table->setItem(j, 2, item);
     }
+    table->setSortingEnabled(true);
+    connect(table->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
+
     vbox->addWidget(table);
-    plotLayout_->addWidget(widget);
+    frameLayout_->addWidget(widget);
   }
 
   plotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets_, QStringList(), outputNames, GraphConfigurationWidget::SensitivityIndices);
-  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout_, SLOT(setCurrentIndex(int)));
+  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), frameLayout_, SLOT(setCurrentIndex(int)));
 
-  tabWidget->addTab(tab, "Result");
+  scrollArea->setWidget(frame);
+  tabWidget->addTab(scrollArea, "Result");
   //
   setWidget(tabWidget);
 }
@@ -103,7 +108,7 @@ void SobolResultWindow::buildInterface()
 
 void SobolResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
 {
-  int indexOutput = plotLayout_->currentIndex();
+  int indexOutput = frameLayout_->currentIndex();
   NumericalPoint currentFirstOrderIndices(result_.getInputNames().getSize());
   NumericalPoint currentTotalOrderIndices(result_.getInputNames().getSize());
   Description sortedInputNames(result_.getInputNames().getSize());

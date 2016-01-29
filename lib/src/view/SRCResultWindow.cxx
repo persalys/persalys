@@ -8,6 +8,7 @@
 #include <QHeaderView>
 #include <QLabel>
 #include <QTableWidget>
+#include <QScrollArea>
 
 using namespace OT;
 
@@ -34,11 +35,12 @@ void SRCResultWindow::buildInterface()
   QTabWidget * tabWidget = new QTabWidget;
 
   // first tab --------------------------------
-  QWidget * tab = new QWidget;
-  plotLayout_ = new QStackedLayout(tab);
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+  QFrame * frame = new QFrame;
+  frameLayout_ = new QStackedLayout(frame);
 
-  NumericalPoint currentIndices(result_.getInputNames().getSize());
-  Description sortedInputNames = result_.getInputNames();
+  Description inputNames = result_.getInputNames();
   QStringList outputNames;
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
     outputNames << result_.getOutputNames()[i].c_str();
@@ -50,41 +52,42 @@ void SRCResultWindow::buildInterface()
 
     // plot
     PlotWidget * plot = new PlotWidget(true);
-    currentIndices = result_.getIndices()[i];
-    plot->plotSensitivityIndices(currentIndices, NumericalPoint(), sortedInputNames);
+    plot->plotSensitivityIndices(result_.getIndices()[i], NumericalPoint(), inputNames);
     plot->setAxisTitle(QwtPlot::xBottom, "Inputs");
+    plot->setAxisTitle(QwtPlot::yLeft, outputNames[i]);
 
-    plot->setAxisTitle(QwtPlot::yLeft, result_.getOutputNames()[i].c_str());
     vbox->addWidget(plot);
     listPlotWidgets_.append(plot);
 
     // table of indices
-    QTableWidget * table = new QTableWidget(0, 2, this);
+    QTableWidget * table = new QTableWidget(inputNames.getSize(), 2, this);
     table->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Indice"));
     table->verticalHeader()->hide();
     table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-    connect(table->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
-    table->setSortingEnabled(true);
+
     // fill table
-    for (UnsignedInteger j=0; j<result_.getInputNames().getSize(); ++j)
+    for (UnsignedInteger j=0; j<inputNames.getSize(); ++j)
     {
-      table->setRowCount(j + 1);
-      QTableWidgetItem * item = new QTableWidgetItem(result_.getInputNames()[j].c_str());
-      item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+      QTableWidgetItem * item = new QTableWidgetItem(inputNames[j].c_str());
+      item->setFlags(item->flags() ^ Qt::ItemIsEditable);
       table->setItem(j, 0, item);
 
       item = new QTableWidgetItem(QString::number(result_.getIndices()[i][j], 'g', 4));
-      item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+      item->setFlags(item->flags() ^ Qt::ItemIsEditable);
       table->setItem(j, 1, item);
     }
+    table->setSortingEnabled(true);
+    connect(table->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
+
     vbox->addWidget(table);
-    plotLayout_->addWidget(widget);
+    frameLayout_->addWidget(widget);
   }
 
   plotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets_, QStringList(), outputNames, GraphConfigurationWidget::SensitivityIndices);
-  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout_, SLOT(setCurrentIndex(int)));
+  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), frameLayout_, SLOT(setCurrentIndex(int)));
 
-  tabWidget->addTab(tab, "Result");
+  scrollArea->setWidget(frame);
+  tabWidget->addTab(scrollArea, "Result");
   //
   setWidget(tabWidget);
 }
@@ -92,7 +95,7 @@ void SRCResultWindow::buildInterface()
 
 void SRCResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
 {
-  int indexOutput = plotLayout_->currentIndex();
+  int indexOutput = frameLayout_->currentIndex();
   NumericalPoint currentIndices(result_.getInputNames().getSize());
   Description sortedInputNames(result_.getInputNames().getSize());
 

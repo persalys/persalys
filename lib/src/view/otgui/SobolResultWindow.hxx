@@ -32,7 +32,7 @@ private:
   SobolResult result_;
   std::vector<std::map<double, int> > firstOrderIndices_;
   std::vector<std::map<double, int> > totalOrderIndices_;
-  QStackedLayout * plotLayout_;
+  QStackedLayout * frameLayout_;
   GraphConfigurationWidget * plotsConfigurationWidget_;
   QVector<PlotWidget*> listPlotWidgets_;
 };
