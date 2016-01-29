@@ -6,7 +6,8 @@
 #include "OTtypes.hxx"
 
 namespace OTGUI {
-class Observable;  
+class Observable;
+
 class Observer
 {
 public:
