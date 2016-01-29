@@ -22,16 +22,11 @@ public:
 
   void setCode(const OT::String & code);
   OT::String getCode() const;
-  virtual OT::NumericalMathFunction getFunction(const OT::Description & outputNames);
   virtual OT::NumericalMathFunction getFunction();
 
   OT::String dump() const;
 
-protected:
-  void updateFunction();
-
 private:
-  mutable OT::NumericalMathFunction function_;
   OT::String code_;
 };
 

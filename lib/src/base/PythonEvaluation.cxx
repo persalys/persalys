@@ -41,11 +41,6 @@ PythonEvaluation* PythonEvaluation::clone() const
 }
 
 
-PythonEvaluation::~PythonEvaluation()
-{
-}
-
-
 /* Comparison operator */
 Bool PythonEvaluation::operator ==(const PythonEvaluation & other) const
 {

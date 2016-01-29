@@ -11,7 +11,6 @@ PythonPhysicalModel::PythonPhysicalModel(const String & name)
   : PhysicalModelImplementation(name)
 {
   setCode("def _exec(X):\n    Y0 = X[0]\n    return [Y0]");
-  updateFunction();
 }
 
 
@@ -21,7 +20,6 @@ PythonPhysicalModel::PythonPhysicalModel(const String & name,
                                          const String & code)
   : PhysicalModelImplementation(name, inputs, outputs)
 {
-  updateFunction();
 }
 
 
@@ -44,44 +42,9 @@ String PythonPhysicalModel::getCode() const
 }
 
 
-void PythonPhysicalModel::updateFunction()
-{
-  try
-  {
-    function_ = NumericalMathFunction();
-    function_.setEvaluation(new PythonEvaluation(getInputs().getSize(), getOutputs().getSize(), getCode()));
-  }
-  catch (std::exception & ex)
-  {
-    throw InvalidArgumentException(HERE) << ex.what();
-  }
-}
-
-
-NumericalMathFunction PythonPhysicalModel::getFunction(const Description & outputNames)
-{
-  if (outputNames == getOutputNames())
-    return getFunction();
-
-  Description outputFormula(outputNames.getSize());
-  for (UnsignedInteger i=0; i<outputNames.getSize(); ++i)
-    outputFormula[i] = getOutputByName(outputNames[i]).getFormula();
-
-  try
-  {
-    return NumericalMathFunction(getInputNames(), outputNames, outputFormula);
-  }
-  catch (std::exception & ex)
-  {
-    throw InvalidArgumentException(HERE) << ex.what();
-  }
-}
-
-
 NumericalMathFunction PythonPhysicalModel::getFunction()
 {
-  updateFunction();
-  return function_;
+  return NumericalMathFunction(PythonEvaluation(getInputs().getSize(), getOutputs().getSize(), getCode()));
 }
 
 

@@ -30,8 +30,6 @@ public:
   /** Virtual constructor */
   virtual PythonEvaluation * clone() const;
 
-  virtual ~PythonEvaluation();
-
   /** Comparison operator */
   OT::Bool operator ==(const PythonEvaluation & other) const;
 
