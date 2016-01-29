@@ -31,7 +31,7 @@ void QuadraticCumulResultWindow::buildInterface()
   headLayout->addWidget(outputName);
   outputsComboBox_ = new QComboBox;
   QStringList items = QStringList();
-  for (int i=0; i<result_.getOutputNames().getSize(); ++i)
+  for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
     items << result_.getOutputNames()[i].c_str();
   outputsComboBox_->addItems(items);
   connect(outputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateLabelsText(int)));
@@ -82,7 +82,7 @@ void QuadraticCumulResultWindow::updateLabelsText(int indexOutput)
 {
   // first order mean
   meanFirstOrderLabel_->setText(QString::number(result_.getMeanFirstOrder()[indexOutput]));
-  
+
   // second order mean
   meanSecondOrderLabel_->setText(QString::number(result_.getMeanSecondOrder()[indexOutput]));
 
@@ -92,5 +92,4 @@ void QuadraticCumulResultWindow::updateLabelsText(int indexOutput)
   // variance
   varianceLabel_->setText(QString::number(result_.getVariance()[indexOutput]));
 }
-
 }

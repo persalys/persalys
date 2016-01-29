@@ -45,9 +45,7 @@ void SobolResultWindow::buildInterface()
   QFrame * frame = new QFrame;
   frameLayout_ = new QStackedLayout(frame);
 
-  NumericalPoint currentFirstOrderIndices(result_.getInputNames().getSize());
-  NumericalPoint currentTotalOrderIndices(result_.getInputNames().getSize());
-  Description sortedInputNames = result_.getInputNames();
+  Description inputNames = result_.getInputNames();
   QStringList outputNames;
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
     outputNames << result_.getOutputNames()[i].c_str();
@@ -59,34 +57,34 @@ void SobolResultWindow::buildInterface()
 
     // plot
     PlotWidget * plot = new PlotWidget(true);
-    currentFirstOrderIndices = result_.getFirstOrderIndices()[i];
-    currentTotalOrderIndices = result_.getTotalOrderIndices()[i];
-    plot->plotSensitivityIndices(currentFirstOrderIndices, currentTotalOrderIndices, sortedInputNames);
+    NumericalPoint firstOrderIndices_i = result_.getFirstOrderIndices()[i];
+    NumericalPoint totalOrderIndices_i = result_.getTotalOrderIndices()[i];
+    plot->plotSensitivityIndices(firstOrderIndices_i, totalOrderIndices_i, inputNames);
     plot->setAxisTitle(QwtPlot::xBottom, "Inputs");
+    plot->setAxisTitle(QwtPlot::yLeft, outputNames[i]);
 
-    plot->setAxisTitle(QwtPlot::yLeft, result_.getOutputNames()[i].c_str());
     vbox->addWidget(plot);
     listPlotWidgets_.append(plot);
 
     // table of indices
-    QTableWidget * table = new QTableWidget(result_.getInputNames().getSize(), 3, this);
+    QTableWidget * table = new QTableWidget(inputNames.getSize(), 3, this);
     table->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("First order indice") << tr("Total indice"));
     table->verticalHeader()->hide();
     table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 
     // fill table
-    for (UnsignedInteger j=0; j<result_.getInputNames().getSize(); ++j)
+    for (UnsignedInteger j=0; j<inputNames.getSize(); ++j)
     {
-      QTableWidgetItem * item = new QTableWidgetItem(result_.getInputNames()[j].c_str());
-      item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+      QTableWidgetItem * item = new QTableWidgetItem(inputNames[j].c_str());
+      item->setFlags(item->flags() ^ Qt::ItemIsEditable);
       table->setItem(j, 0, item);
 
-      item = new QTableWidgetItem(QString::number(result_.getFirstOrderIndices()[i][j], 'g', 4));
-      item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+      item = new QTableWidgetItem(QString::number(firstOrderIndices_i[j], 'g', 4));
+      item->setFlags(item->flags() ^ Qt::ItemIsEditable);
       table->setItem(j, 1, item);
 
-      item = new QTableWidgetItem(QString::number(result_.getTotalOrderIndices()[i][j], 'g', 4));
-      item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+      item = new QTableWidgetItem(QString::number(totalOrderIndices_i[j], 'g', 4));
+      item->setFlags(item->flags() ^ Qt::ItemIsEditable);
       table->setItem(j, 2, item);
     }
     table->setSortingEnabled(true);
