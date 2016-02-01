@@ -24,6 +24,7 @@ PhysicalModelImplementation::PhysicalModelImplementation(const String & name,
   , outputs_(outputs)
 {
   setName(name);
+  updateCopula();
 }
 
 
