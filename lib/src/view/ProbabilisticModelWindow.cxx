@@ -49,7 +49,7 @@ void ProbabilisticModelWindow::buildInterface()
   QStringList items;
   DistributionFactory::DistributionFactoryCollection collection = DistributionFactory::GetContinuousUniVariateFactories();
   DistributionFactory factory;
-  for (int i=0; i<collection.getSize(); ++i)
+  for (UnsignedInteger i=0; i<collection.getSize(); ++i)
   {
     String nameFactory = collection[i].getImplementation()->getClassName();
     nameFactory.resize(nameFactory.find("Factory"));
@@ -57,7 +57,7 @@ void ProbabilisticModelWindow::buildInterface()
     items << tr(nameFactory.c_str());
   }
   ComboBoxDelegate * delegate = new ComboBoxDelegate(items);
-  inputTableView_->setItemDelegateForColumn(2, delegate);
+  inputTableView_->setItemDelegateForColumn(1, delegate);
   inputTableView_->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
   inputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
 
@@ -66,7 +66,7 @@ void ProbabilisticModelWindow::buildInterface()
   inputTableView_->resizeColumnToContents(0);
 
   for (int i = 0; i < inputTableModel_->rowCount(); ++i)
-    inputTableView_->openPersistentEditor(inputTableModel_->index(i, 2));
+    inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
 
   connect(inputTableView_, SIGNAL(clicked(QModelIndex)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
@@ -238,7 +238,7 @@ void ProbabilisticModelWindow::updateStochasticInputsTable()
   inputTableModel_ = new InputTableProbabilisticModel(physicalModel_);
   inputTableView_->setModel(inputTableModel_);
   for (int i = 0; i < inputTableModel_->rowCount(); ++i)
-    inputTableView_->openPersistentEditor(inputTableModel_->index(i, 2));
+    inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
   connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
 }
@@ -269,10 +269,10 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
     return;
   }
 
-  if (index.row() != inputTableView_->currentIndex().row()/* || index.column() == 1*/)
+  if (index.row() != inputTableView_->currentIndex().row()/* || index.column() == 0*/)
     inputTableView_->selectRow(index.row());
 
-  QString inputName =  inputTableModel_->data(inputTableModel_->index(index.row(), 1), Qt::DisplayRole).toString();
+  QString inputName =  inputTableModel_->data(inputTableModel_->index(index.row(), 0), Qt::DisplayRole).toString();
   if (!physicalModel_.hasInputNamed(inputName.toStdString()))
     return;
   Distribution inputDistribution = physicalModel_.getInputByName(inputName.toStdString()).getDistribution();
@@ -292,7 +292,7 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   advancedGroup_->setChecked(false);
 
   const NumericalPointWithDescription parameters = inputDistribution.getParametersCollection()[0];
-  int nbParameters = parameters.getSize();
+  UnsignedInteger nbParameters = parameters.getSize();
 
   lowerBoundCheckBox_->blockSignals(true);
   upperBoundCheckBox_->blockSignals(true);
@@ -357,7 +357,7 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
 
     paramEditor_ = new QGroupBox(tr("Parameters"));
     QGridLayout * lay = new QGridLayout(paramEditor_);
-    for (int i=0; i<nbParameters; ++i)
+    for (UnsignedInteger i=0; i<nbParameters; ++i)
     {
       parameterValuesLabel_[i] = new QLabel(parametersName[i].c_str());
       parameterValuesEdit_[i] = new QLineEdit(QString::number(parameters[i]));
@@ -424,9 +424,9 @@ void ProbabilisticModelWindow::updateDistribution()
   {
     TruncatedDistribution truncatedDistribution = *dynamic_cast<TruncatedDistribution*>(&*inputDistribution.getImplementation());
     Distribution distribution = truncatedDistribution.getDistribution();
-    int nbParameters = distribution.getParametersCollection()[0].getSize();
+    UnsignedInteger nbParameters = distribution.getParametersCollection()[0].getSize();
     NumericalPoint newParameters(nbParameters);
-    for (int i=0; i<nbParameters; ++i)
+    for (UnsignedInteger i=0; i<nbParameters; ++i)
       newParameters[i] = parameterValuesEdit_[i]->text().toDouble();
     try
     {
@@ -445,11 +445,11 @@ void ProbabilisticModelWindow::updateDistribution()
   else
   {
     NumericalPointWithDescription parameters = inputDistribution.getParametersCollection()[0];
-    int nbParameters = parameters.getSize();
+    UnsignedInteger nbParameters = parameters.getSize();
     if (distributionName == "TruncatedNormal")
       nbParameters = 2;
 
-    for (int i=0; i<nbParameters; ++i)
+    for (UnsignedInteger i=0; i<nbParameters; ++i)
       parameters[i] = parameterValuesEdit_[i]->text().toDouble();
 
     try
