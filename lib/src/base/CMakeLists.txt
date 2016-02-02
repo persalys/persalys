@@ -6,7 +6,8 @@ ot_add_current_dir_to_include_dirs ()
 
 add_subdirectory ( otgui )
 
-set(BASE_SOURCEFILES Observer.cxx Observable.cxx OTStudy.cxx Variable.cxx Input.cxx Output.cxx
+set(BASE_SOURCEFILES DistributionDictionary.cxx
+                     Observer.cxx Observable.cxx OTStudy.cxx Variable.cxx Input.cxx Output.cxx
                      PhysicalModel.cxx PhysicalModelImplementation.cxx AnalyticalPhysicalModel.cxx 
                      PythonPhysicalModel.cxx
                      PythonEvaluation.cxx

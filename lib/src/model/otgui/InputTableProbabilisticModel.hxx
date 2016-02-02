@@ -16,8 +16,6 @@ class InputTableProbabilisticModel : public QAbstractTableModel
 public:
   InputTableProbabilisticModel(const PhysicalModel & physicalModel, QObject * parent = 0);
 
-  virtual ~InputTableProbabilisticModel();
-
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
   Qt::ItemFlags flags(const QModelIndex & index) const;

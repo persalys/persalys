@@ -1,6 +1,7 @@
 #include "otgui/InputTableProbabilisticModel.hxx"
 
-#include "DistributionFactory.hxx"
+#include "otgui/DistributionDictionary.hxx"
+
 #include "TruncatedDistribution.hxx"
 #include "Normal.hxx"
 
@@ -11,11 +12,6 @@ namespace OTGUI {
 InputTableProbabilisticModel::InputTableProbabilisticModel(const PhysicalModel & physicalModel, QObject * parent)
   : QAbstractTableModel(parent)
   , physicalModel_(physicalModel)
-{
-}
-
-
-InputTableProbabilisticModel::~InputTableProbabilisticModel()
 {
 }
 
@@ -114,7 +110,7 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
     Distribution distribution;
 
     if (value.toInt() == Qt::Checked)
-      distribution = Normal(0, 1);
+      distribution = DistributionDictionary::BuildDistribution("Normal", input.getValue());
     else if (value.toInt() == Qt::Unchecked)
       distribution = Dirac(input.getValue());
     else
@@ -150,20 +146,7 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
       else
       {
         // search the distribution corresponding to 'value'
-        DistributionFactory::DistributionFactoryCollection collection = DistributionFactory::GetContinuousUniVariateFactories();
-        DistributionFactory factory;
-
-        for (UnsignedInteger i=0; i<collection.getSize(); ++i)
-        {
-          String nameFactory = collection[i].getImplementation()->getClassName();
-          nameFactory.resize(nameFactory.find("Factory"));
-          if (value.toString().toStdString() == nameFactory)
-          {
-            factory = collection[i];
-            break;
-          }
-        }
-        distribution = factory.build();
+        distribution = DistributionDictionary::BuildDistribution(value.toString().toStdString(), input.getValue());
       }
       // update the input
       physicalModel_.blockNotification(true);

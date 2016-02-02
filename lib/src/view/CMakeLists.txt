@@ -32,7 +32,7 @@ ot_add_source_file ( SensitivityAnalysisWizard.cxx )
 ot_add_source_file ( LimitStateWindow.cxx )
 ot_add_source_file ( ReliabilityAnalysisWizard.cxx )
 ot_add_source_file ( MonteCarloReliabilityResultWindow.cxx )
-ot_add_source_file (CodeDelegate.cxx)
+ot_add_source_file ( CodeDelegate.cxx )
 
 add_subdirectory (otgui)
 

@@ -1,3 +1,4 @@
+ot_install_header_file ( DistributionDictionary.hxx )
 ot_install_header_file ( Variable.hxx )
 ot_install_header_file ( Input.hxx )
 ot_install_header_file ( Output.hxx )

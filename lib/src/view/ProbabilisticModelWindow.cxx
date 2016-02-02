@@ -5,9 +5,9 @@
 #include "otgui/ComboBoxDelegate.hxx"
 #include "otgui/SpinBoxDelegate.hxx"
 #include "otgui/InputTableProbabilisticModel.hxx"
+#include "otgui/DistributionDictionary.hxx"
 #include "otgui/CorrelationTableModel.hxx"
 
-#include "DistributionFactory.hxx"
 #include "Normal.hxx"
 #include "TruncatedDistribution.hxx"
 #include "TruncatedNormal.hxx"
@@ -47,15 +47,10 @@ void ProbabilisticModelWindow::buildInterface()
   // Inputs table
   inputTableView_ = new QTableView;
   QStringList items;
-  DistributionFactory::DistributionFactoryCollection collection = DistributionFactory::GetContinuousUniVariateFactories();
-  DistributionFactory factory;
-  for (UnsignedInteger i=0; i<collection.getSize(); ++i)
-  {
-    String nameFactory = collection[i].getImplementation()->getClassName();
-    nameFactory.resize(nameFactory.find("Factory"));
-    if (nameFactory != "Burr" && nameFactory != "MeixnerDistribution" && nameFactory != "TruncatedNormal")
-    items << tr(nameFactory.c_str());
-  }
+  Description listDistributions = DistributionDictionary::GetAvailableDistributions();
+  for (UnsignedInteger i=0; i<listDistributions.getSize(); ++i)
+    items << tr(listDistributions[i].c_str());
+
   ComboBoxDelegate * delegate = new ComboBoxDelegate(items);
   inputTableView_->setItemDelegateForColumn(1, delegate);
   inputTableView_->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
