@@ -286,7 +286,7 @@ void PhysicalModelImplementation::removeOutput(const String & outputName)
 
 Description PhysicalModelImplementation::getOutputNames()
 {
-  Description  outputNames(outputs_.getSize());
+  Description outputNames(outputs_.getSize());
   for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
     outputNames[i] = outputs_[i].getName();
   return outputNames;

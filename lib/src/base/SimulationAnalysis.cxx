@@ -62,13 +62,17 @@ NumericalSample SimulationAnalysis::getInputSample()
 
 NumericalSample SimulationAnalysis::getOutputSample(NumericalSample inputSample) const
 {
-  return getPhysicalModel().getRestrictedFunction(getOutputNames())(inputSample);
+  NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(getOutputNames())(inputSample));
+  outputSample.setDescription(getOutputNames());
+  return outputSample;
 }
 
 
 NumericalSample SimulationAnalysis::getOutputSample(NumericalSample inputSample, const Description & outputNames) const
 {
-  return getPhysicalModel().getRestrictedFunction(outputNames)(inputSample);
+  NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(outputNames)(inputSample));
+  outputSample.setDescription(outputNames);
+  return outputSample;
 }
 
 
