@@ -282,7 +282,7 @@ void DesignOfExperimentImplementation::setDeltas(const NumericalPoint & deltas)
   }
 
   for (UnsignedInteger i=0; i<deltas.getSize(); ++i)
-    if (deltas[i] <= 0.)
+    if (deltas[i] < 0.)
       throw InvalidArgumentException(HERE) << "DesignOfExperimentImplementation::setDeltas : All the deltas must be superior or equal to 0.";
 
 

@@ -29,7 +29,7 @@ void HorizontalHeaderViewWithCombobox::showEvent(QShowEvent * e)
       connect(box, SIGNAL(currentIndexChanged(int)), this, SLOT(setHeaderData(int)));
       boxes_[j] = box;
     }
-    boxes_[j]->setGeometry(sectionViewportPosition(j), 0, sectionSize(j) - 5, height());
+    boxes_[j]->setGeometry(sectionViewportPosition(j), 0, sectionSize(j) - 1, height());
     boxes_[j]->show();
   }
   QHeaderView::showEvent(e);
@@ -41,7 +41,7 @@ void HorizontalHeaderViewWithCombobox::handleSectionResized(int i)
   for (int i=0; i<columnsWithComboBox_.size(); ++i)
   {
     int logical = logicalIndex(columnsWithComboBox_[i]);
-    boxes_[logical]->setGeometry(sectionViewportPosition(logical), 0, sectionSize(logical) - 5, height());
+    boxes_[logical]->setGeometry(sectionViewportPosition(logical), 0, sectionSize(logical) - 1, height());
   }
 }
 
@@ -50,7 +50,7 @@ void HorizontalHeaderViewWithCombobox::handleSectionMoved(int logical, int oldVi
   for (int i=qMin(oldVisualIndex, newVisualIndex); i<count(); ++i)
   {
     int logical = logicalIndex(columnsWithComboBox_[i]);
-    boxes_[logical]->setGeometry(sectionViewportPosition(logical), 0, sectionSize(logical) - 5, height());
+    boxes_[logical]->setGeometry(sectionViewportPosition(logical), 0, sectionSize(logical) - 1, height());
   }
 }
 
@@ -83,7 +83,7 @@ void HorizontalHeaderViewWithCombobox::fixComboPositions()
   for (int i=0; i<columnsWithComboBox_.size(); ++i)
   {
     int j = columnsWithComboBox_[i];
-    boxes_[j]->setGeometry(sectionViewportPosition(j), 0, sectionSize(j) - 5, height());
+    boxes_[j]->setGeometry(sectionViewportPosition(j), 0, sectionSize(j) - 1, height());
   }
 }
 }
