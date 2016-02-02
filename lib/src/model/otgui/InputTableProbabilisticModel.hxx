@@ -26,6 +26,7 @@ public:
 
 public slots:
 signals:
+  void distributionChanged(const QModelIndex&);
   void correlationToChange();
 
 private:

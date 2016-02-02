@@ -64,7 +64,7 @@ void ProbabilisticModelWindow::buildInterface()
     inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
 
   connect(inputTableView_, SIGNAL(clicked(QModelIndex)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
-  connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
+  connect(inputTableModel_, SIGNAL(distributionChanged(const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
 
   horizontalSplitter->addWidget(inputTableView_);
@@ -234,7 +234,7 @@ void ProbabilisticModelWindow::updateStochasticInputsTable()
   inputTableView_->setModel(inputTableModel_);
   for (int i = 0; i < inputTableModel_->rowCount(); ++i)
     inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
-  connect(inputTableModel_, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
+  connect(inputTableModel_, SIGNAL(distributionChanged(const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
 }
 
@@ -423,6 +423,10 @@ void ProbabilisticModelWindow::updateDistribution()
     NumericalPoint newParameters(nbParameters);
     for (UnsignedInteger i=0; i<nbParameters; ++i)
       newParameters[i] = parameterValuesEdit_[i]->text().toDouble();
+
+    if (newParameters == inputDistribution.getParametersCollection()[0])
+      return;
+
     try
     {
       distribution.setParametersCollection(newParameters);
@@ -430,7 +434,6 @@ void ProbabilisticModelWindow::updateDistribution()
       physicalModel_.blockNotification(true, "updateProbabilisticModelWindow");
       physicalModel_.setInputDistribution(input.getName(), truncatedDistribution);
       physicalModel_.blockNotification(false);
-      updateDistributionWidgets(index);
     }
     catch(Exception)
     {
@@ -447,13 +450,15 @@ void ProbabilisticModelWindow::updateDistribution()
     for (UnsignedInteger i=0; i<nbParameters; ++i)
       parameters[i] = parameterValuesEdit_[i]->text().toDouble();
 
+    if (parameters == inputDistribution.getParametersCollection()[0])
+      return;
+
     try
     {
       inputDistribution.setParametersCollection(parameters);
       physicalModel_.blockNotification(true, "updateProbabilisticModelWindow");
       physicalModel_.setInputDistribution(input.getName(), inputDistribution);
       physicalModel_.blockNotification(false);
-      updateDistributionWidgets(index);
     }
     catch(Exception)
     {
