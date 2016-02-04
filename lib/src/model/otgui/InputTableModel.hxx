@@ -15,8 +15,6 @@ class InputTableModel : public QAbstractTableModel
 public:
   InputTableModel(const PhysicalModel & physicalModel);
 
-  virtual ~InputTableModel();
-
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
   QVariant data(const QModelIndex & index, int role) const;
