@@ -57,7 +57,7 @@ private:
   QPushButton * removeOutputLineButton_;
   QPushButton * evaluateOutputsButton_;
   QLineEdit * XMLfileNameEdit_;
-  QPushButton * loadButton_;
+  QLabel * XMLErrorMessage_;
   QGroupBox * loadXMLFileBox_;
   CodeModel * codeModel_;
   QTableView * codeView_;

@@ -95,10 +95,9 @@ void PhysicalModelWindow::buildInterface()
   connect(selectFileButton, SIGNAL(clicked()), this, SLOT(selectImportFileDialogRequested()));
   fieldsLayout->addWidget(selectFileButton, 0, 2);
 
-  loadButton_ = new QPushButton(tr("Load Data"));
-  connect(loadButton_, SIGNAL(clicked()), this, SLOT(loadXML()));
-  fieldsLayout->addWidget(loadButton_, 1, 2);
-  loadButton_->setEnabled(false);
+  XMLErrorMessage_ = new QLabel;
+  XMLErrorMessage_->setWordWrap(true);
+  fieldsLayout->addWidget(XMLErrorMessage_, 1, 0, 1, 2, Qt::AlignTop);
 
   mainLayout->addWidget(loadXMLFileBox_);
 #endif
@@ -172,7 +171,7 @@ void PhysicalModelWindow::selectImportFileDialogRequested()
   if (!fileName.isEmpty())
   {
     XMLfileNameEdit_->setText(fileName);
-    loadButton_->setEnabled(true);
+    loadXML();
   }
 }
 
@@ -186,10 +185,11 @@ void PhysicalModelWindow::loadXML()
     emit physicalModelChanged(physicalModel_);
     updateInputTableModel();
     updateOutputTableModel();
+    XMLErrorMessage_->setText("");
   }
-  catch(std::exception)
+  catch(Exception & ex)
   {
-    std::cerr<<"Impossible to load data from the file "<< XMLfileNameEdit_->text().toStdString()<<std::endl;
+    XMLErrorMessage_->setText(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
   }
 #endif
 }

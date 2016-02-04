@@ -125,8 +125,8 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
 
   if (inps.size() != inS.getDimension())
   {
-    std::cerr<< "inps.size() != inS.getDimension()\n";
-    throw;
+    std::cerr<< "In YACSEvaluation::operator() inps.size() != inS.getDimension()\n";
+    throw InvalidArgumentException(HERE) << "The dimension of the input sample " << inS.getDimension() << " is not valid";
   }
 
   std::vector< YACSEvalOutputPort * > outps0(efx_->getFreeOutputPorts());
@@ -135,7 +135,7 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
   if (getOutputDimension() == outps0.size())
     outps = outps0;
   else
-    for (int i=0; i<getOutputDimension(); ++i)
+    for (UnsignedInteger i=0; i<getOutputDimension(); ++i)
       for (std::vector<YACSEvalOutputPort *>::iterator it = outps0.begin(); it != outps0.end(); it++)
         if (getOutputVariablesNames()[i] == (*it)->getName())
         {
@@ -146,13 +146,13 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
   if (outps.size() != getOutputDimension())
   {
     std::cerr<< "outps.size() != getOutputDimension()\n";
-    throw;
+    throw InvalidArgumentException(HERE) << "The dimension of the output sample " << getOutputDimension() << " is not valid";
   }
 
-  for (int i=0; i<inS.getDimension(); ++i)
+  for (UnsignedInteger i=0; i<inS.getDimension(); ++i)
   {
     std::vector<double> tab(inS.getSize());
-    for (int j=0; j<inS.getSize(); ++j)
+    for (UnsignedInteger j=0; j<inS.getSize(); ++j)
       tab[j] = inS[j][i];
     
     YACSEvalSeqAnyDouble ds(tab);
@@ -167,7 +167,7 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
   efx_->getUndergroundGeneratedGraph();
   YACSEvalListOfResources *rss(efx_->giveResources());
   rss->setWantedMachine("localhost");
-  int b;
+  int b = 0;
   bool a(efx_->run(session_, b));
   if (!a)
     return result;
@@ -242,15 +242,7 @@ String YACSEvaluation::getXMLFileName() const
 void YACSEvaluation::setXMLFileName(const String & xmlFileName)
 {
   xmlFileName_ = xmlFileName;
-  try
-  {
-    loadData();
-  }
-  catch(std::exception)
-  {
-    std::cerr<<"Impossible to load data from the xml file "<<xmlFileName<<std::endl;
-    throw;
-  }
+  loadData();
 }
 
 

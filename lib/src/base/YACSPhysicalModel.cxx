@@ -10,14 +10,7 @@ YACSPhysicalModel::YACSPhysicalModel(const String & name, const String & fileNam
   : PhysicalModelImplementation(name)
   , evaluation_(YACSEvaluation(fileName))
 {
-  try
-  {
-    setXMLFileName(fileName);
-  }
-  catch(std::exception)
-  {
-    throw InvalidArgumentException(HERE) << "Impossible to create an YACSPhysicalModel with the file " << fileName << "\n";
-  }
+  setXMLFileName(fileName);
 }
 
 
@@ -72,36 +65,33 @@ String YACSPhysicalModel::getXMLFileName() const
 void YACSPhysicalModel::setXMLFileName(const String & fileName)
 {
   if (fileName.empty())
-  {
-    std::cerr<<"Impossible to create a model from an empty file "<<fileName<<std::endl;
     throw InvalidArgumentException(HERE) << "Impossible to create a model from an empty file";
-  }
-    
+
   try
   {
     evaluation_.setXMLFileName(fileName);
-    updateData();
   }
-  catch(std::exception)
+  catch (std::exception & ex)
   {
-    std::cerr<<"Impossible to create a model from the file "<<fileName<<std::endl;
-    throw;
+    throw InvalidArgumentException(HERE) << "Impossible to create an YACSPhysicalModel with the file "
+                                         << fileName << "\n" << ex.what();
   }
+  updateData();
 }
 
 
 void YACSPhysicalModel::updateData()
 {
-  for (int i=0; i<evaluation_.getInputDimension(); ++i)
+  for (UnsignedInteger i=0; i<evaluation_.getInputDimension(); ++i)
   {
-    Input newInput = Input(evaluation_.getInputVariablesNames()[i], evaluation_.getInputValues()[i]);
+    Input newInput(evaluation_.getInputVariablesNames()[i], evaluation_.getInputValues()[i]);
     PhysicalModelImplementation::addInput(newInput);
   }
   notify("inputChanged");
 
-  for (int i=0; i<evaluation_.getOutputDimension(); ++i)
+  for (UnsignedInteger i=0; i<evaluation_.getOutputDimension(); ++i)
   {
-    Output newOutput = Output(evaluation_.getOutputVariablesNames()[i]);
+    Output newOutput(evaluation_.getOutputVariablesNames()[i]);
     PhysicalModelImplementation::addOutput(newOutput);
   }
   notify("outputChanged");
