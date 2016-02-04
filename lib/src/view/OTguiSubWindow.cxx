@@ -8,6 +8,7 @@ OTguiSubWindow::OTguiSubWindow(QStandardItem * item)
  : QMdiSubWindow()
  , item_(item)
 {
+  setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
 }
 
 

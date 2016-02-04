@@ -92,6 +92,7 @@ DesignOfExperimentWizard::DesignOfExperimentWizard(const DesignOfExperiment & de
 void DesignOfExperimentWizard::buildInterface()
 {
   setWindowTitle("Design Of Experiment");
+  setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
 
   introPage_ = new IntroPage(designOfExperiment_);
   setPage(Page_Intro, introPage_);

@@ -37,6 +37,7 @@ SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis & analysis)
 void SensitivityAnalysisWizard::buildInterface()
 {
   setWindowTitle("Sensitivity analysis");
+  setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
 
   // First Page: model
 

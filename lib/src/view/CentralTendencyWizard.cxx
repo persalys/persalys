@@ -37,6 +37,7 @@ CentralTendencyWizard::CentralTendencyWizard(const Analysis & analysis)
 void CentralTendencyWizard::buildInterface()
 {
   setWindowTitle("Central tendency");
+  setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
 
   // First Page: model
 

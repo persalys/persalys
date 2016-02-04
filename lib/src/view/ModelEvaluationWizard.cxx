@@ -34,6 +34,7 @@ ModelEvaluationWizard::ModelEvaluationWizard(const Analysis & analysis)
 void ModelEvaluationWizard::buildInterface()
 {
   setWindowTitle("Model evaluation");
+  setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
 
   QWizardPage * page = new QWizardPage(this);
   QVBoxLayout * pageLayout = new QVBoxLayout(page);

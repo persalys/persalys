@@ -35,6 +35,7 @@ ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis & analysis)
 void ReliabilityAnalysisWizard::buildInterface()
 {
   setWindowTitle("Reliability analysis");
+  setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
 
   // First Page: model
 
