@@ -18,6 +18,7 @@ MainWindow::MainWindow()
   buildInterface();
   buildConnections();
   setWindowTitle("OTGui");
+  setWindowIcon(QIcon(":/images/OT_icon32x32.png"));
 }
 
 
