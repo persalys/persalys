@@ -1,22 +1,22 @@
-// QuadraticCumulResultWindow.hxx
+// TaylorExpansionsMomentsResultWindow.hxx
 
-#ifndef QUADRATICCUMULRESULTWINDOW_H
-#define QUADRATICCUMULRESULTWINDOW_H
+#ifndef OTGUI_TAYLOREXPANSIONSMOMENTSRESULTWINDOW_H
+#define OTGUI_TAYLOREXPANSIONSMOMENTSRESULTWINDOW_H
 
 #include "otgui/ResultWindow.hxx"
 #include "otgui/CentralTendencyItem.hxx"
-#include "otgui/QuadraticCumulResult.hxx"
+#include "otgui/TaylorExpansionsMomentsResult.hxx"
 
 #include <QComboBox>
 #include <QLabel>
 
 namespace OTGUI {
-class QuadraticCumulResultWindow : public OTguiSubWindow //ResultWindow
+class TaylorExpansionsMomentsResultWindow : public OTguiSubWindow //ResultWindow
 {
   Q_OBJECT
 
 public:
-  QuadraticCumulResultWindow(CentralTendencyItem * item);
+  TaylorExpansionsMomentsResultWindow(CentralTendencyItem * item);
 
 protected:
   void buildInterface();
@@ -25,7 +25,7 @@ public slots:
   void updateLabelsText(int indexOutput);
 
 private:
-  QuadraticCumulResult result_;
+  TaylorExpansionsMomentsResult result_;
   QComboBox * outputsComboBox_;
   QLabel * meanFirstOrderLabel_;
   QLabel * meanSecondOrderLabel_;

@@ -1,8 +1,8 @@
-// QuadraticCumulResultWindow.cxx
+// TaylorExpansionsMomentsResultWindow.cxx
 
-#include "otgui/QuadraticCumulResultWindow.hxx"
+#include "otgui/TaylorExpansionsMomentsResultWindow.hxx"
 
-#include "otgui/QuadraticCumulAnalysis.hxx"
+#include "otgui/TaylorExpansionsMomentsAnalysis.hxx"
 
 #include <QVBoxLayout>
 
@@ -10,15 +10,15 @@ using namespace OT;
 
 namespace OTGUI {
 
-QuadraticCumulResultWindow::QuadraticCumulResultWindow(CentralTendencyItem * item)
+TaylorExpansionsMomentsResultWindow::TaylorExpansionsMomentsResultWindow(CentralTendencyItem * item)
   : OTguiSubWindow(item)
-  , result_(dynamic_cast<QuadraticCumulAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , result_(dynamic_cast<TaylorExpansionsMomentsAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
 {
   buildInterface();
 }
 
 
-void QuadraticCumulResultWindow::buildInterface()
+void TaylorExpansionsMomentsResultWindow::buildInterface()
 {
   QTabWidget * tabWidget = new QTabWidget;
 
@@ -78,7 +78,7 @@ void QuadraticCumulResultWindow::buildInterface()
 }
 
 
-void QuadraticCumulResultWindow::updateLabelsText(int indexOutput)
+void TaylorExpansionsMomentsResultWindow::updateLabelsText(int indexOutput)
 {
   // first order mean
   meanFirstOrderLabel_->setText(QString::number(result_.getMeanFirstOrder()[indexOutput]));

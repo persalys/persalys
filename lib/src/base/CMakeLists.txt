@@ -15,8 +15,8 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      AnalysisImplementation.cxx Analysis.cxx SimulationAnalysis.cxx
                      ModelEvaluationResult.cxx ModelEvaluation.cxx
                      SimulationAnalysisResult.cxx
-                     MonteCarloResult.cxx MonteCarloAnalysis.cxx QuadraticCumulResult.cxx
-                     QuadraticCumulAnalysis.cxx SobolResult.cxx SobolAnalysis.cxx
+                     MonteCarloResult.cxx MonteCarloAnalysis.cxx TaylorExpansionsMomentsResult.cxx
+                     TaylorExpansionsMomentsAnalysis.cxx SobolResult.cxx SobolAnalysis.cxx
                      SRCResult.cxx SRCAnalysis.cxx
                      LimitStateImplementation.cxx LimitState.cxx
                      ReliabilityAnalysis.cxx

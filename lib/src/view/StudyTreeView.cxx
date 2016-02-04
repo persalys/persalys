@@ -14,7 +14,7 @@
 #include "otgui/ModelEvaluationResultWindow.hxx"
 #include "otgui/CentralTendencyWizard.hxx"
 #include "otgui/MonteCarloResultWindow.hxx"
-#include "otgui/QuadraticCumulResultWindow.hxx"
+#include "otgui/TaylorExpansionsMomentsResultWindow.hxx"
 #include "otgui/SensitivityAnalysisWizard.hxx"
 #include "otgui/SobolResultWindow.hxx"
 #include "otgui/SRCResultWindow.hxx"
@@ -443,7 +443,7 @@ void StudyTreeView::createCentralTendencyResult(AnalysisItem * item)
   }
   else
   {
-    QuadraticCumulResultWindow * window = new QuadraticCumulResultWindow(dynamic_cast<CentralTendencyItem*>(item));
+    TaylorExpansionsMomentsResultWindow * window = new TaylorExpansionsMomentsResultWindow(dynamic_cast<CentralTendencyItem*>(item));
     emit showWindow(window);
   }
   setCurrentIndex(item->index());

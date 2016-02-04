@@ -42,13 +42,13 @@ aDesign.eval()
 openturns.testing.assert_almost_equal(outputSample, aDesign.getResult().getOutputSample(), 1e-16)
 
 ## Quadratic Cumul ##
-quadraticCumul = otguibase.QuadraticCumulAnalysis('myQuadraticCumul', myPhysicalModel)
-myStudy.addAnalysis(quadraticCumul)
-quadraticCumul.run()
-quadraticCumulResult = quadraticCumul.getResult()
+taylorExpansionsMoments = otguibase.TaylorExpansionsMomentsAnalysis('myTaylorExpansionsMoments', myPhysicalModel)
+myStudy.addAnalysis(taylorExpansionsMoments)
+taylorExpansionsMoments.run()
+taylorExpansionsMomentsResult = taylorExpansionsMoments.getResult()
 
 # Comparaison
-openturns.testing.assert_almost_equal(0.059730458221, quadraticCumulResult.getMeanFirstOrder()[0], 1e-13)
+openturns.testing.assert_almost_equal(0.059730458221, taylorExpansionsMomentsResult.getMeanFirstOrder()[0], 1e-13)
 
 ## Monte Carlo ##
 montecarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel, 1000)

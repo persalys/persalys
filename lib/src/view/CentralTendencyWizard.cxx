@@ -3,7 +3,7 @@
 #include "otgui/CentralTendencyWizard.hxx"
 
 #include "otgui/MonteCarloAnalysis.hxx"
-#include "otgui/QuadraticCumulAnalysis.hxx"
+#include "otgui/TaylorExpansionsMomentsAnalysis.hxx"
 
 #include <QGroupBox>
 #include <QRadioButton>
@@ -55,10 +55,10 @@ void CentralTendencyWizard::buildInterface()
     buttonToChooseMethod->setChecked(true);
   methodGroup_->addButton(buttonToChooseMethod, CentralTendencyWizard::MonteCarlo);
   methodLayout->addWidget(buttonToChooseMethod);
-  buttonToChooseMethod = new QRadioButton(tr("Quadratic cumul"));
-  if (analysis_.getImplementation()->getClassName() == "QuadraticCumulAnalysis")
+  buttonToChooseMethod = new QRadioButton(tr("Taylor expansions"));
+  if (analysis_.getImplementation()->getClassName() == "TaylorExpansionsMomentsAnalysis")
     buttonToChooseMethod->setChecked(true);
-  methodGroup_->addButton(buttonToChooseMethod, CentralTendencyWizard::QuadraticCumul);
+  methodGroup_->addButton(buttonToChooseMethod, CentralTendencyWizard::TaylorExpansionsMoments);
   methodLayout->addWidget(buttonToChooseMethod);
   connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SLOT(updateMethodWidgets()));
 
@@ -135,10 +135,10 @@ void CentralTendencyWizard::buildInterface()
 
   methodParametersLayout->addWidget(monteCarloWidget_);
 
-  /// Quadratic Cumul widgets
-  quadraticCumulWidget_ = new QWidget;
-  QVBoxLayout * taylorLayout = new QVBoxLayout(quadraticCumulWidget_);
-  methodParametersLayout->addWidget(quadraticCumulWidget_);
+  /// Taylor expansions widgets
+  TaylorExpansionsWidget_ = new QWidget;
+  QVBoxLayout * taylorLayout = new QVBoxLayout(TaylorExpansionsWidget_);
+  methodParametersLayout->addWidget(TaylorExpansionsWidget_);
   methodParametersLayout->addStretch();
 
   mainLayout->addLayout(methodParametersLayout);
@@ -156,8 +156,8 @@ void CentralTendencyWizard::updateMethodWidgets()
     case CentralTendencyWizard::MonteCarlo:
     {
       monteCarloWidget_->show();
-      quadraticCumulWidget_->hide();
-      if (analysis_.getImplementation()->getClassName() == "QuadraticCumulAnalysis")
+      TaylorExpansionsWidget_->hide();
+      if (analysis_.getImplementation()->getClassName() == "TaylorExpansionsMomentsAnalysis")
       {
         analysis_ = MonteCarloAnalysis(analysis_.getName(), physicalModel_);
         emit analysisChanged(analysis_);
@@ -165,13 +165,13 @@ void CentralTendencyWizard::updateMethodWidgets()
       nbSimuSpinbox_->setValue(dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->getNbSimulations());
       break;
     }
-    case CentralTendencyWizard::QuadraticCumul:
+    case CentralTendencyWizard::TaylorExpansionsMoments:
     {
       monteCarloWidget_->hide();
-      quadraticCumulWidget_->show();
+      TaylorExpansionsWidget_->show();
       if (analysis_.getImplementation()->getClassName() == "MonteCarloAnalysis")
       {
-        analysis_ = QuadraticCumulAnalysis(analysis_.getName(), physicalModel_);
+        analysis_ = TaylorExpansionsMomentsAnalysis(analysis_.getName(), physicalModel_);
         emit analysisChanged(analysis_);
       }
       break;

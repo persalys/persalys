@@ -16,7 +16,7 @@ class CentralTendencyWizard : public QWizard
   Q_OBJECT
 
 public:
-  enum Method {MonteCarlo, QuadraticCumul};
+  enum Method {MonteCarlo, TaylorExpansionsMoments};
 
   CentralTendencyWizard(OTStudy * otStudy, const PhysicalModel & physicalModel);
   CentralTendencyWizard(const Analysis & analysis);
@@ -44,7 +44,7 @@ private:
   QButtonGroup * methodGroup_;
   QWidget * advancedWidgets_;
   QWidget * monteCarloWidget_;
-  QWidget * quadraticCumulWidget_;
+  QWidget * TaylorExpansionsWidget_;
   QSpinBox * nbSimuSpinbox_;
   QSpinBox * seedSpinbox_;
   QCheckBox * confidenceIntervalCheckBox_;

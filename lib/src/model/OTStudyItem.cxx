@@ -104,7 +104,7 @@ void OTStudyItem::update(Observable * source, const String & message)
       newItem = new ModelEvaluationItem(addedAnalysis);
       addDeterministicAnalysisItem(addedAnalysis, newItem);
     }
-    else if (message=="addMonteCarloAnalysis" || message=="addQuadraticCumulAnalysis")
+    else if (message=="addMonteCarloAnalysis" || message=="addTaylorExpansionsMomentsAnalysis")
     {
       newItem = new CentralTendencyItem(addedAnalysis);
       addProbabilisticAnalysisItem(addedAnalysis, newItem);

@@ -25,7 +25,7 @@ ot_add_source_file ( ModelEvaluationWizard.cxx )
 ot_add_source_file ( ModelEvaluationResultWindow.cxx )
 ot_add_source_file ( CentralTendencyWizard.cxx )
 ot_add_source_file ( MonteCarloResultWindow.cxx )
-ot_add_source_file ( QuadraticCumulResultWindow.cxx )
+ot_add_source_file ( TaylorExpansionsMomentsResultWindow.cxx )
 ot_add_source_file ( SobolResultWindow.cxx )
 ot_add_source_file ( SRCResultWindow.cxx )
 ot_add_source_file ( SensitivityAnalysisWizard.cxx )
@@ -57,7 +57,7 @@ qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                    otgui/ModelEvaluationResultWindow.hxx
                                    otgui/CentralTendencyWizard.hxx
                                    otgui/MonteCarloResultWindow.hxx
-                                   otgui/QuadraticCumulResultWindow.hxx
+                                   otgui/TaylorExpansionsMomentsResultWindow.hxx
                                    otgui/SobolResultWindow.hxx
                                    otgui/SRCResultWindow.hxx
                                    otgui/SensitivityAnalysisWizard.hxx
