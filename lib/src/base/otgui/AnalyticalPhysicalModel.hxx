@@ -17,15 +17,6 @@ public:
   AnalyticalPhysicalModel(const AnalyticalPhysicalModel & other);
   virtual AnalyticalPhysicalModel * clone() const;
 
-  void setInputs(const InputCollection & inputs);
-  void addInput(const Input & input);
-  void removeInput(const OT::String & inputName);
-
-  void setOutputs(const OutputCollection & outputs);
-  void setOutputFormula(const OT::String & outputName, const OT::String & formula);
-  void addOutput(const Output & output);
-  void removeOutput(const OT::String & outputName);
-
   OT::Description getFormulas();
   virtual OT::NumericalMathFunction getFunction();
 
@@ -36,7 +27,6 @@ protected:
 
 private:
   OT::NumericalMathFunction function_;
-  OT::Description formulas_;
 };
 }
 #endif

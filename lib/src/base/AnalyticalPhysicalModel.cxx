@@ -18,7 +18,6 @@ AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String & name,
                                                  const OutputCollection & outputs)
   : PhysicalModelImplementation(name, inputs, outputs)
 {
-  updateFunction();
 }
 
 
@@ -35,121 +34,12 @@ AnalyticalPhysicalModel* AnalyticalPhysicalModel::clone() const
 }
 
 
-void AnalyticalPhysicalModel::setInputs(const InputCollection & inputs)
-{
-  PhysicalModelImplementation::setInputs(inputs);
-  try
-  {
-    if (getOutputNames().getSize())
-      updateFunction();
-  }
-  catch(std::exception & ex)
-  {
-    throw InvalidArgumentException(HERE) << ex.what();
-  }
-}
-
-
-void AnalyticalPhysicalModel::addInput(const Input & input)
-{
-  PhysicalModelImplementation::addInput(input);
-  try
-  {
-    if (getOutputNames().getSize())
-      updateFunction();
-  }
-  catch(std::exception & ex)
-  {
-    throw InvalidArgumentException(HERE) << ex.what();
-  }
-}
-
-
-void AnalyticalPhysicalModel::removeInput(const String & inputName)
-{
-  PhysicalModelImplementation::removeInput(inputName);
-  try
-  {
-    if (getOutputNames().getSize())
-      updateFunction();
-  }
-  catch(std::exception & ex)
-  {
-    throw InvalidArgumentException(HERE) << ex.what();
-  }
-}
-
-
-void AnalyticalPhysicalModel::setOutputs(const OutputCollection & outputs)
-{
-  formulas_ = Description();
-  PhysicalModelImplementation::setOutputs(outputs);
-  try
-  {
-    if (getInputNames().getSize())
-      updateFunction();
-  }
-  catch(std::exception & ex)
-  {
-    throw InvalidArgumentException(HERE) << ex.what();
-  }
-}
-
-
-void AnalyticalPhysicalModel::setOutputFormula(const String & outputName, const String & formula)
-{
-  PhysicalModelImplementation::setOutputFormula(outputName, formula);
-  try  
-  {
-    formulas_ = Description(0);
-    updateFunction();
-  }
-  catch(std::exception & ex)
-  {
-    throw InvalidArgumentException(HERE) << ex.what();
-  }
-}
-
-
-void AnalyticalPhysicalModel::addOutput(const Output & output)
-{
-  PhysicalModelImplementation::addOutput(output);
-  try  
-  {
-    formulas_.add(output.getFormula());
-    updateFunction();
-  }
-  catch(std::exception & ex)
-  {
-    throw InvalidArgumentException(HERE) << ex.what();
-  }
-}
-
-
-void AnalyticalPhysicalModel::removeOutput(const String& outputName)
-{
-  PhysicalModelImplementation::removeOutput(outputName);
-  try
-  {
-    formulas_ = Description(0);
-    updateFunction();
-  }
-  catch(std::exception & ex)
-  {
-    throw InvalidArgumentException(HERE) << ex.what();
-  } 
-}
-
-
 Description AnalyticalPhysicalModel::getFormulas()
 {
-  if (!formulas_.getSize())
-  {
-    formulas_ = Description(getOutputs().getSize());
-    for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
-      formulas_[i] = getOutputs()[i].getFormula();
-  }
-  return formulas_;
+  Description formulas(getOutputs().getSize());
+  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
+    formulas[i] = getOutputs()[i].getFormula();
+  return formulas;
 }
 
 
@@ -161,7 +51,7 @@ void AnalyticalPhysicalModel::updateFunction()
   }
   catch (std::exception & ex)
   {
-    throw InvalidArgumentException(HERE) << ex.what();
+    throw InvalidArgumentException(HERE) << "AnalyticalPhysicalModel::updateFunction " << ex.what();
   }
 }
 
