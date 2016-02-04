@@ -224,7 +224,6 @@ void PhysicalModelWindow::updateOutputTableModel()
 void PhysicalModelWindow::addInputLine()
 {
   inputTableModel_->addLine();
-  inputTableView_->selectRow(inputTableModel_->rowCount()-1);
 }
 
 
