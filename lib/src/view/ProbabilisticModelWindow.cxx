@@ -232,7 +232,7 @@ void ProbabilisticModelWindow::updateStochasticInputsTable()
   delete inputTableModel_;
   inputTableModel_ = new InputTableProbabilisticModel(physicalModel_);
   inputTableView_->setModel(inputTableModel_);
-  for (int i = 0; i < inputTableModel_->rowCount(); ++i)
+  for (int i=0; i<inputTableModel_->rowCount(); ++i)
     inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
   connect(inputTableModel_, SIGNAL(distributionChanged(const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
@@ -264,13 +264,11 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
     return;
   }
 
-  if (index.row() != inputTableView_->currentIndex().row()/* || index.column() == 0*/)
+  if (index.row() != inputTableView_->currentIndex().row())
     inputTableView_->selectRow(index.row());
 
-  QString inputName =  inputTableModel_->data(inputTableModel_->index(index.row(), 0), Qt::DisplayRole).toString();
-  if (!physicalModel_.hasInputNamed(inputName.toStdString()))
-    return;
-  Distribution inputDistribution = physicalModel_.getInputByName(inputName.toStdString()).getDistribution();
+  Input input = physicalModel_.getInputs()[index.row()];
+  Distribution inputDistribution = input.getDistribution();
   String distributionName = inputDistribution.getImplementation()->getClassName();
 
   // If the selected variable is deterministic
@@ -278,7 +276,7 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   {
     rightSideOfSplitterStackedLayout_->setCurrentIndex(1);
     showHideGraphConfigurationWidget(-1);
-    valueForDeterministicVariable_->setText(QString::number(physicalModel_.getInputByName(inputName.toStdString()).getValue()));
+    valueForDeterministicVariable_->setText(QString::number(input.getValue()));
     return;
   }
 
@@ -411,7 +409,7 @@ void ProbabilisticModelWindow::updatePlots(Distribution inputDistribution)
 void ProbabilisticModelWindow::updateDistribution()
 {
   QModelIndex index = inputTableView_->currentIndex();
-  Input input = Input(physicalModel_.getInputs()[index.row()]);
+  Input input = physicalModel_.getInputs()[inputTableView_->currentIndex().row()];
   Distribution inputDistribution = input.getDistribution();
   String distributionName = inputDistribution.getImplementation()->getClassName();
 
@@ -435,9 +433,10 @@ void ProbabilisticModelWindow::updateDistribution()
       physicalModel_.setInputDistribution(input.getName(), truncatedDistribution);
       physicalModel_.blockNotification(false);
     }
-    catch(Exception)
+    catch(Exception & ex)
     {
-      std::cerr << "ProbabilisticModelWindow::updateDistribution invalid params:"<<newParameters<<" for distribution:"<<distributionName<<std::endl;
+      std::cerr << "ProbabilisticModelWindow::updateDistribution invalid parameters:"<<newParameters<<" for distribution:"<<distributionName<<std::endl;
+      emit errorMessageChanged(ex.what());
     }
   }
   else
@@ -460,9 +459,10 @@ void ProbabilisticModelWindow::updateDistribution()
       physicalModel_.setInputDistribution(input.getName(), inputDistribution);
       physicalModel_.blockNotification(false);
     }
-    catch(Exception)
+    catch(Exception & ex)
     {
-      std::cerr << "ProbabilisticModelWindow::updateDistribution invalid params:"<<parameters<<" for distribution:"<<distributionName<<std::endl;
+      std::cerr << "ProbabilisticModelWindow::updateDistribution invalid parameters:"<<parameters<<" for distribution:"<<distributionName<<std::endl;
+      emit errorMessageChanged(ex.what());
     }
   }
 }
@@ -471,7 +471,7 @@ void ProbabilisticModelWindow::updateDistribution()
 void ProbabilisticModelWindow::truncationParametersChanged()
 {
   QModelIndex index = inputTableView_->currentIndex();
-  Input input = Input(physicalModel_.getInputs()[index.row()]);
+  Input input = physicalModel_.getInputs()[index.row()];
   Distribution inputDistribution = input.getDistribution();
   
   TruncatedDistribution truncatedDistribution = TruncatedDistribution(*dynamic_cast<TruncatedDistribution*>(&*inputDistribution.getImplementation()));
@@ -523,7 +523,7 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
   else
   {
     // update widgets
-    Interval truncatureInterval = Interval(NumericalPoint(1), NumericalPoint(1), Interval::BoolCollection(1, false), Interval::BoolCollection(1, false));
+    Interval truncatureInterval(NumericalPoint(1), NumericalPoint(1), Interval::BoolCollection(1, false), Interval::BoolCollection(1, false));
     Distribution distribution;
     TruncatedDistribution truncatedDistribution;
     if (distributionName == "TruncatedDistribution")
