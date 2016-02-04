@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
+        <file>images/OT_icon16x16.png</file>
+        <file>images/OT_icon32x32.png</file>
         <file>images/down_arrow.png</file>
         <file>images/up_arrow.png</file>
         <file>images/list-add.png</file>
