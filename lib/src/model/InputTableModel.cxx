@@ -70,14 +70,14 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
   if (role == Qt::EditRole)
   {
     Input input(physicalModel_.getInputs()[index.row()]);
-    physicalModel_.blockNotification(true, "updateProbabilisticModelWindow");
 
     switch (index.column())
     {
       case 0:
       {
         if (input.getName() == value.toString().toStdString())
-          break;
+          return true;
+        physicalModel_.blockNotification(true, "modelInputsChanged");
         physicalModel_.removeInput(input.getName());
         input.setName(value.toString().toStdString());
         physicalModel_.addInput(input);
@@ -86,14 +86,16 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
       case 1:
       {
         if (input.getDescription() == value.toString().toStdString())
-          break;
+          return true;
+        physicalModel_.blockNotification(true);
         physicalModel_.setInputDescription(input.getName(), value.toString().toStdString());
         break;
       }
       case 2:
       {
         if (input.getValue() == value.toDouble())
-          break;
+          return true;
+        physicalModel_.blockNotification(true, "modelInputsChanged");
         physicalModel_.setInputValue(input.getName(), value.toDouble());
         break;
       }
@@ -118,10 +120,10 @@ void InputTableModel::addLine()
   QModelIndex lastIndex = index(-1, 0);
   beginInsertRows(lastIndex.parent(), -1, -1);
   insertRow(lastIndex.row());
-  physicalModel_.blockNotification(true, "updateProbabilisticModelWindow");
   int i = 0;
   while (physicalModel_.hasInputNamed('X' + (OSS()<<i).str()))
     ++i;
+  physicalModel_.blockNotification(true, "modelInputsChanged");
   physicalModel_.addInput(Input('X'+(OSS()<<i).str()));
   physicalModel_.blockNotification(false);
   endInsertRows();
@@ -132,7 +134,7 @@ void InputTableModel::removeLine(const QModelIndex & index)
 {
   beginRemoveRows(index.parent(), index.row(), index.row());
   removeRows(index.row(), 1, index.parent());
-  physicalModel_.blockNotification(true, "updateProbabilisticModelWindow");
+  physicalModel_.blockNotification(true, "modelInputsChanged");
   physicalModel_.removeInput(physicalModel_.getInputs()[index.row()].getName());
   physicalModel_.blockNotification(false);
   endRemoveRows();

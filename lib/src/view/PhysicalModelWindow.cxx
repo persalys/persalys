@@ -155,6 +155,10 @@ void PhysicalModelWindow::buildInterface()
 
   mainLayout->addWidget(outputsBox);
 
+  errorMessageLabel_ = new QLabel;
+  errorMessageLabel_->setWordWrap(true);
+  mainLayout->addWidget(errorMessageLabel_);
+
   updateMethodWidgets(comboBox->currentIndex());
   ////////////////
   setWidget(mainWidget);
@@ -186,10 +190,12 @@ void PhysicalModelWindow::loadXML()
     updateInputTableModel();
     updateOutputTableModel();
     XMLErrorMessage_->setText("");
+    setErrorMessage("");
   }
-  catch(Exception & ex)
+  catch (Exception & ex)
   {
     XMLErrorMessage_->setText(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+    setErrorMessage(ex.what());
   }
 #endif
 }
@@ -220,6 +226,7 @@ void PhysicalModelWindow::updateOutputTableModel()
   outputTableModel_ = new OutputTableModel(physicalModel_);
   outputTableView_->setModel(outputTableModel_);
 }
+
 
 void PhysicalModelWindow::addInputLine()
 {
@@ -255,6 +262,7 @@ void PhysicalModelWindow::updateMethodWidgets(int method)
 
 void PhysicalModelWindow::methodChanged(int method)
 {
+  setErrorMessage("");
   switch(method)
   {
     case 0:
@@ -311,14 +319,13 @@ void PhysicalModelWindow::evaluateOutputs()
     eval.run();
     NumericalSample outputSample(eval.getResult().getOutputSample());
     for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++ i)
-    {
       physicalModel_.setOutputValue(physicalModel_.getOutputNames()[i], outputSample[0][i]);
-    }
+
     setErrorMessage("");
   }
   catch (Exception & ex)
   {
-    setErrorMessage(ex.what());
+    setErrorMessage(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
   }
 }
 }

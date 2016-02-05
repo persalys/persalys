@@ -52,8 +52,9 @@ public:
   OT::RandomVector getInputRandomVector();
   OT::RandomVector getOutputRandomVector(const OT::Description & outputNames);
 
-  OT::NumericalMathFunction getFunction(const OT::Description & outputNames);
   OT::NumericalMathFunction getFunction();
+  OT::NumericalMathFunction getFunction(const OT::Description & outputNames);
+  OT::NumericalMathFunction getFunction(const OT::String & outputName);
   OT::NumericalMathFunction getRestrictedFunction();
   OT::NumericalMathFunction getRestrictedFunction(const OT::Description & outputNames);
 

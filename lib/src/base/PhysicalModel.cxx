@@ -212,15 +212,21 @@ RandomVector PhysicalModel::getOutputRandomVector(const Description & outputName
 }
 
 
+NumericalMathFunction PhysicalModel::getFunction()
+{
+  return getImplementation()->getFunction();
+}
+
+
 NumericalMathFunction PhysicalModel::getFunction(const Description & outputNames)
 {
   return getImplementation()->getFunction(outputNames);
 }
 
 
-NumericalMathFunction PhysicalModel::getFunction()
+NumericalMathFunction PhysicalModel::getFunction(const String & outputName)
 {
-  return getImplementation()->getFunction();
+  return getImplementation()->getFunction(outputName);
 }
 
 

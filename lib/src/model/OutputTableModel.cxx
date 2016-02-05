@@ -11,11 +11,6 @@ OutputTableModel::OutputTableModel(const PhysicalModel & physicalModel)
 }
 
 
-OutputTableModel::~OutputTableModel()
-{
-}
-
-
 int OutputTableModel::columnCount(const QModelIndex & parent) const
 {
   return 4;
@@ -64,7 +59,11 @@ QVariant OutputTableModel::data(const QModelIndex & index, int role) const
       case 2:
         return physicalModel_.getOutputs()[index.row()].getFormula().c_str();
       case 3:
+      {
+        if (!physicalModel_.getOutputs()[index.row()].hasBeenComputed())
+          return QString("?");
         return physicalModel_.getOutputs()[index.row()].getValue();
+      }
     }
   }
   return QVariant();
@@ -79,16 +78,14 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
   if (role == Qt::EditRole)
   {
     Output output(physicalModel_.getOutputs()[index.row()]);
-    physicalModel_.blockNotification(true, "updateLimitStateWindow");
+
     switch (index.column())
     {
       case 0:
       {
         if (output.getName() == value.toString().toStdString())
-        {
-          physicalModel_.blockNotification(false);
-          return true;
-        }
+          break;
+        physicalModel_.blockNotification(true, "modelOutputsChanged");
         physicalModel_.removeOutput(output.getName());
         output.setName(value.toString().toStdString());
         physicalModel_.addOutput(output);
@@ -97,21 +94,17 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
       case 1:
       {
         if (output.getDescription() == value.toString().toStdString())
-        {
-          physicalModel_.blockNotification(false);
-          return true;
-        }
+          break;
+        physicalModel_.blockNotification(true);
         physicalModel_.setOutputDescription(output.getName(), value.toString().toStdString());
         break;
       }
       case 2:
       {
         if (output.getFormula() == value.toString().toStdString())
-        {
-          physicalModel_.blockNotification(false);
-          return true;
-        }
+          break;
         // TODO test if value.toString() ok
+        physicalModel_.blockNotification(true);
         physicalModel_.setOutputFormula(output.getName(), value.toString().toStdString());
         break;
       }
@@ -139,8 +132,11 @@ void OutputTableModel::addLine()
   QModelIndex lastIndex = index(-1, 0);
   beginInsertRows(lastIndex.parent(), -1, -1);
   insertRow(lastIndex.row());
-  physicalModel_.blockNotification(true, "updateLimitStateWindow");
-  physicalModel_.addOutput(Output('Y'+(OSS()<<physicalModel_.getOutputs().getSize()).str()));
+  int i = 0;
+  while (physicalModel_.hasOutputNamed('Y' + (OSS()<<i).str()))
+    ++i;
+  physicalModel_.blockNotification(true, "modelOutputsChanged");
+  physicalModel_.addOutput(Output('Y'+(OSS()<<i).str()));
   physicalModel_.blockNotification(false);
   endInsertRows();
 }
@@ -150,11 +146,9 @@ void OutputTableModel::removeLine(const QModelIndex & index)
 {
   beginRemoveRows(index.parent(), index.row(), index.row());
   removeRows(index.row(), 1, index.parent());
-  physicalModel_.blockNotification(true, "updateLimitStateWindow");
+  physicalModel_.blockNotification(true, "modelOutputsChanged");
   physicalModel_.removeOutput(physicalModel_.getOutputs()[index.row()].getName());
   physicalModel_.blockNotification(false);
   endRemoveRows();
 }
-
-
 }

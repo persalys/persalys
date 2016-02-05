@@ -58,24 +58,27 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
     throw InvalidArgumentException(HERE) << "Two inputs can not have the same name."; 
 
   inputs_ = inputs;
-  notify("inputChanged");
-  notify("updateProbabilisticModelWindow");
+  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
+    getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
+  notify("inputAdded");
+  notify("modelInputsChanged");
 }
 
 
 void PhysicalModelImplementation::setInputDescription(const String & inputName, const String & description)
 {
   getInputByName(inputName).setDescription(description);
-  notify("inputChanged");
-  notify("updateProbabilisticModelWindow");
+  notify("inputDescriptionChanged");
 }
 
 
 void PhysicalModelImplementation::setInputValue(const String & inputName, const double & value)
 {
   getInputByName(inputName).setValue(value);
-  notify("inputChanged");
-  notify("updateProbabilisticModelWindow");
+  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
+    getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
+  notify("inputValueChanged");
+  notify("modelInputsChanged");
 }
 
 
@@ -90,8 +93,7 @@ void PhysicalModelImplementation::setInputDistribution(const String & inputName,
       (inputOldStateIsStochastic && distribution.getImplementation()->getClassName()=="Dirac"))
     updateCopula();
 
-  notify("inputChanged");
-  notify("updateProbabilisticModelWindow");
+  notify("inputDistributionChanged");
 }
 
 
@@ -103,9 +105,11 @@ void PhysicalModelImplementation::addInput(const Input & input)
   inputs_.add(input);
   if (input.isStochastic())
     updateCopula();
+  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
+    getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
 
-  notify("inputChanged");
-  notify("updateProbabilisticModelWindow");
+  notify("inputAdded");
+  notify("modelInputsChanged");
 }
 
 
@@ -120,9 +124,11 @@ void PhysicalModelImplementation::removeInput(const String & inputName)
         inputs_.erase(inputs_.begin() + i);
         if (inputIsStochastic)
           updateCopula();
+        for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
+          getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
 
-        notify("inputChanged");
-        notify("updateProbabilisticModelWindow");
+        notify("inputRemoved");
+        notify("modelInputsChanged");
         break;
       }
   }
@@ -227,31 +233,31 @@ void PhysicalModelImplementation::setOutputs(const OutputCollection & outputs)
     throw InvalidArgumentException(HERE) << "Two inputs can not have the same name.";
 
   outputs_ = outputs;
-  notify("outputChanged");
-  notify("updateLimitStateWindow");
+  notify("outputAdded");
+  notify("modelOutputsChanged");
 }
 
 
 void PhysicalModelImplementation::setOutputDescription(const String & outputName, const String & description)
 {
   getOutputByName(outputName).setDescription(description);
-  notify("outputChanged");
-  notify("updateLimitStateWindow");
+  notify("outputDescriptionChanged");
 }
 
 
 void PhysicalModelImplementation::setOutputFormula(const String & outputName, const String & formula)
 {
   getOutputByName(outputName).setFormula(formula);
-  notify("outputChanged");
-  notify("updateLimitStateWindow");
+  getOutputByName(outputName).setHasBeenComputed(false);
+  notify("outputFormulaChanged");
 }
 
 
 void PhysicalModelImplementation::setOutputValue(const String & outputName, const double & value)
 {
   getOutputByName(outputName).setValue(value);
-  notify("outputChanged");
+  getOutputByName(outputName).setHasBeenComputed(true);
+  notify("outputValueChanged");
 }
 
 
@@ -261,8 +267,8 @@ void PhysicalModelImplementation::addOutput(const Output & output)
     throw InvalidArgumentException(HERE) << "The physical model has already an output named " << output.getName(); 
 
   outputs_.add(output);
-  notify("outputChanged");
-  notify("updateLimitStateWindow");
+  notify("outputAdded");
+  notify("modelOutputsChanged");
 }
 
 
@@ -274,8 +280,8 @@ void PhysicalModelImplementation::removeOutput(const String & outputName)
       if (outputs_[i].getName() == outputName)
       {
         outputs_.erase(outputs_.begin() + i);
-        notify("outputChanged");
-        notify("updateLimitStateWindow");
+        notify("outputRemoved");
+        notify("modelOutputsChanged");
         break;
       }
   }
@@ -324,6 +330,12 @@ RandomVector PhysicalModelImplementation::getOutputRandomVector(const Descriptio
 }
 
 
+NumericalMathFunction PhysicalModelImplementation::getFunction()
+{
+  throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getFunction()";
+}
+
+
 NumericalMathFunction PhysicalModelImplementation::getFunction(const Description & outputNames)
 {
   if (outputNames.getSize() == getOutputs().getSize())
@@ -349,9 +361,11 @@ NumericalMathFunction PhysicalModelImplementation::getFunction(const Description
 }
 
 
-NumericalMathFunction PhysicalModelImplementation::getFunction()
+NumericalMathFunction PhysicalModelImplementation::getFunction(const String & outputName)
 {
-  throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getFunction()";
+  Description outputNameDescription(1);
+  outputNameDescription[0] = outputName;
+  return getFunction(outputNameDescription);
 }
 
 

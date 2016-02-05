@@ -36,19 +36,19 @@ LimitState LimitStateItem::getLimitState() const
 
 void LimitStateItem::update(Observable* source, const String & message)
 {
-  if (message=="updateLimitStateWindow")
+  if (message == "modelOutputsChanged")
   {
     emit outputChanged();
   }
-  else if (message=="outputNameChanged")
+  else if (message == "outputNameChanged")
   {
     emit outputNameChanged();
   }
-  else if (message=="operatorChanged")
+  else if (message == "operatorChanged")
   {
     emit operatorChanged();
   }
-  else if (message=="thresholdChanged")
+  else if (message == "thresholdChanged")
   {
     emit thresholdChanged();
   }

@@ -16,8 +16,6 @@ class OutputTableModel : public QAbstractTableModel
 public:
   OutputTableModel(const PhysicalModel & physicalModel);
 
-  virtual ~OutputTableModel();
-
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent) const;
   QVariant data(const QModelIndex & index, int role) const;

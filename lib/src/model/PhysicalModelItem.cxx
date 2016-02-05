@@ -6,7 +6,7 @@ using namespace OT;
 namespace OTGUI {
 
 PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel)
-  : ObserverItem(physicalModel.getName().c_str(), QString("PhysicalModel"))
+  : ObserverItem(physicalModel.getName().c_str(), "PhysicalModel")
   , physicalModel_(physicalModel)
 {
 }
@@ -46,11 +46,14 @@ void PhysicalModelItem::updatePhysicalModel(const PhysicalModel & physicalModel)
 
 void PhysicalModelItem::update(Observable* source, const String & message)
 {
-  if (message == "inputChanged")
+  if (message == "inputDescriptionChanged" || message == "inputAdded" ||
+      message == "inputRemoved" || message == "inputValueChanged")
   {
     emit inputChanged();
   }
-  else if (message == "outputChanged")
+  else if (message == "outputAdded" || message == "outputRemoved" ||
+           message == "outputValueChanged" || message == "outputDescriptionChanged" ||
+           message == "modelInputsChanged")
   {
     emit outputChanged();
   }
@@ -59,7 +62,4 @@ void PhysicalModelItem::update(Observable* source, const String & message)
     emit codeChanged();
   }
 }
-
-
-
 }
