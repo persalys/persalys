@@ -21,12 +21,6 @@ public:
   virtual OT::NumericalMathFunction getFunction();
 
   OT::String dump() const;
-
-protected:
-  void updateFunction();
-
-private:
-  OT::NumericalMathFunction function_;
 };
 }
 #endif

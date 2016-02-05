@@ -8,7 +8,6 @@ CLASSNAMEINIT(AnalyticalPhysicalModel);
 
 AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String & name)
   : PhysicalModelImplementation(name)
-  , function_(NumericalMathFunction())
 {
 }
 
@@ -23,7 +22,6 @@ AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String & name,
 
 AnalyticalPhysicalModel::AnalyticalPhysicalModel(const AnalyticalPhysicalModel & other)
   : PhysicalModelImplementation(other)
-  , function_(other.function_)
 {
 }
 
@@ -43,23 +41,9 @@ Description AnalyticalPhysicalModel::getFormulas()
 }
 
 
-void AnalyticalPhysicalModel::updateFunction()
-{
-  try
-  {
-    function_ = NumericalMathFunction(getInputNames(), getOutputNames(), getFormulas());
-  }
-  catch (std::exception & ex)
-  {
-    throw InvalidArgumentException(HERE) << "AnalyticalPhysicalModel::updateFunction " << ex.what();
-  }
-}
-
-
 NumericalMathFunction AnalyticalPhysicalModel::getFunction()
 {
-  updateFunction();
-  return function_;
+  return NumericalMathFunction(getInputNames(), getOutputNames(), getFormulas());
 }
 
 
