@@ -64,7 +64,19 @@ void ModelEvaluation::run()
   // output = f(input)
   NumericalSample inputSample(1, getInputsValues());
   inputSample.setDescription(inputNames_);
-  NumericalSample outputSample(getPhysicalModel().getFunction()(inputSample));
+  NumericalSample outputSample(1, 0);
+  for (UnsignedInteger i=0; i<getPhysicalModel().getOutputNames().getSize(); ++i)
+  {
+    try
+    {
+      outputSample.stack(getPhysicalModel().getFunction(getPhysicalModel().getOutputNames()[i])(inputSample));
+    }
+    catch (Exception & ex)
+    {
+      throw InvalidArgumentException(HERE) << "Impossible to evaluate the output "
+                                           << getPhysicalModel().getOutputNames()[i] << ".\n" << ex.what();
+    }
+  }
   outputSample.setDescription(getPhysicalModel().getOutputNames());
   result_ = ModelEvaluationResult(inputSample, outputSample);
   notify("analysisFinished");

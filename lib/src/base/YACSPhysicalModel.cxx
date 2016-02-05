@@ -73,8 +73,7 @@ void YACSPhysicalModel::setXMLFileName(const String & fileName)
   }
   catch (std::exception & ex)
   {
-    throw InvalidArgumentException(HERE) << "Impossible to create an YACSPhysicalModel with the file "
-                                         << fileName << "\n" << ex.what();
+    throw InvalidArgumentException(HERE) << "Impossible to load the xml file.\n" << ex.what();
   }
   updateData();
 }
