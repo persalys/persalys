@@ -28,8 +28,8 @@ public slots:
   void showSubWindow(QMdiSubWindow * win);
   void showSubWindow(QStandardItem * item);
   void checkIfWindowResultExists(ObserverItem * item);
-  void showGraphConfigurationTabWidget(QTabWidget*);
-  void hideGraphConfigurationTabWidget(QTabWidget*);
+  void showGraphConfigurationTabWidget(QWidget*);
+  void hideGraphConfigurationTabWidget(QWidget*);
 
 protected:
   void buildInterface();

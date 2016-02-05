@@ -60,7 +60,7 @@ void SobolResultWindow::buildInterface()
     NumericalPoint firstOrderIndices_i = result_.getFirstOrderIndices()[i];
     NumericalPoint totalOrderIndices_i = result_.getTotalOrderIndices()[i];
     plot->plotSensitivityIndices(firstOrderIndices_i, totalOrderIndices_i, inputNames);
-    plot->setAxisTitle(QwtPlot::xBottom, "Inputs");
+    plot->setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
     plot->setAxisTitle(QwtPlot::yLeft, outputNames[i]);
 
     vbox->addWidget(plot);
@@ -98,7 +98,7 @@ void SobolResultWindow::buildInterface()
   connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), frameLayout_, SLOT(setCurrentIndex(int)));
 
   scrollArea->setWidget(frame);
-  tabWidget->addTab(scrollArea, "Result");
+  tabWidget->addTab(scrollArea, tr("Result"));
   //
   setWidget(tabWidget);
 }

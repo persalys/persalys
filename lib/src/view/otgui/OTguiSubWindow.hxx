@@ -23,6 +23,8 @@ public:
 public slots:
 signals:
   void errorMessageChanged(QString);
+  void graphWindowActivated(QWidget*);
+  void graphWindowDeactivated(QWidget*);
 
 protected:
   QLabel * errorMessageLabel_;

@@ -8,7 +8,6 @@
 #include <QTreeView>
 #include <QMdiSubWindow>
 #include <QAction>
-#include <QTabWidget>
 
 namespace OTGUI {
 class StudyTreeView : public QTreeView
@@ -57,8 +56,8 @@ signals:
   void itemSelected(QStandardItem *);
   void checkIfWindowResultExists(ObserverItem *);
   void loadPythonScript(const QString & fileName);
-  void graphWindowActivated(QTabWidget*);
-  void graphWindowDeactivated(QTabWidget*);
+  void graphWindowActivated(QWidget*);
+  void graphWindowDeactivated(QWidget*);
 
 private:
   StudyTreeViewModel * treeViewModel_;

@@ -53,7 +53,7 @@ void SRCResultWindow::buildInterface()
     // plot
     PlotWidget * plot = new PlotWidget(true);
     plot->plotSensitivityIndices(result_.getIndices()[i], NumericalPoint(), inputNames);
-    plot->setAxisTitle(QwtPlot::xBottom, "Inputs");
+    plot->setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
     plot->setAxisTitle(QwtPlot::yLeft, outputNames[i]);
 
     vbox->addWidget(plot);
@@ -87,7 +87,7 @@ void SRCResultWindow::buildInterface()
   connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), frameLayout_, SLOT(setCurrentIndex(int)));
 
   scrollArea->setWidget(frame);
-  tabWidget->addTab(scrollArea, "Result");
+  tabWidget->addTab(scrollArea, tr("Result"));
   //
   setWidget(tabWidget);
 }

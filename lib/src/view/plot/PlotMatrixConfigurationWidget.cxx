@@ -5,14 +5,19 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QComboBox>
+#include <QScrollArea>
 
 namespace OTGUI {
 
 PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * plotMatrix)
-  : QTabWidget()
+  : QWidget()
   , plotMatrix_(plotMatrix)
 {
-  QGridLayout * mainGridLayout = new QGridLayout(this);
+  QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+  QFrame * frame = new QFrame;
+  QGridLayout * mainGridLayout = new QGridLayout(frame);
   int rowGrid = 0;
 
   QLabel * label = new QLabel(tr("Title"));
@@ -53,6 +58,10 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   mainGridLayout->setRowStretch(++rowGrid, 1);
 
   updateLineEdits();
+
+  //
+  scrollArea->setWidget(frame);
+  mainLayout->addWidget(scrollArea);
 }
 
 

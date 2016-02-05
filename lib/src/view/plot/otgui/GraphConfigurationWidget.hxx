@@ -5,14 +5,13 @@
 
 #include "PlotWidget.hxx"
 
-#include <QTabWidget>
 #include <QLineEdit>
 #include <QComboBox>
 #include <QButtonGroup>
 
 namespace OTGUI {
 
-class GraphConfigurationWidget : public QTabWidget
+class GraphConfigurationWidget : public QWidget
 {
   Q_OBJECT
 

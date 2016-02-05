@@ -239,8 +239,8 @@ void StudyTreeView::createNewProbabilisticModelWindow(ProbabilisticModelItem * i
 {
   ProbabilisticModelWindow * window = new ProbabilisticModelWindow(item);
   connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
-  connect(window, SIGNAL(graphWindowActivated(QTabWidget*)), this, SIGNAL(graphWindowActivated(QTabWidget*)));
-  connect(window, SIGNAL(graphWindowDeactivated(QTabWidget*)), this, SIGNAL(graphWindowDeactivated(QTabWidget*)));
+  connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
+  connect(window, SIGNAL(graphWindowDeactivated(QWidget*)), this, SIGNAL(graphWindowDeactivated(QWidget*)));
   emit showWindow(window);
   setCurrentIndex(item->index());
 }
@@ -258,8 +258,8 @@ void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentItem * i
 {
   DesignOfExperimentWindow * window = new DesignOfExperimentWindow(item);
   connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
-  connect(window, SIGNAL(graphWindowActivated(QTabWidget*)), this, SIGNAL(graphWindowActivated(QTabWidget*)));
-  connect(window, SIGNAL(graphWindowDeactivated(QTabWidget*)), this, SIGNAL(graphWindowDeactivated(QTabWidget*)));
+  connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
+  connect(window, SIGNAL(graphWindowDeactivated(QWidget*)), this, SIGNAL(graphWindowDeactivated(QWidget*)));
   connect(item, SIGNAL(analysisFinished()), window, SLOT(updateWindowForOutputs()));
   emit showWindow(window);
   setExpanded(item->index().parent(), true);
@@ -436,8 +436,8 @@ void StudyTreeView::createCentralTendencyResult(AnalysisItem * item)
   if (item->getAnalysis().getImplementation()->getClassName() == "MonteCarloAnalysis")
   {
     MonteCarloResultWindow * window = new MonteCarloResultWindow(dynamic_cast<CentralTendencyItem*>(item));
-    connect(window, SIGNAL(graphWindowActivated(QTabWidget*)), this, SIGNAL(graphWindowActivated(QTabWidget*)));
-    connect(window, SIGNAL(graphWindowDeactivated(QTabWidget*)), this, SIGNAL(graphWindowDeactivated(QTabWidget*)));
+    connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
+    connect(window, SIGNAL(graphWindowDeactivated(QWidget*)), this, SIGNAL(graphWindowDeactivated(QWidget*)));
     emit showWindow(window);
   setCurrentIndex(item->index());
   }
@@ -456,15 +456,15 @@ void StudyTreeView::createSensitivityAnalysisResult(AnalysisItem * item)
   if (item->getAnalysis().getImplementation()->getClassName() == "SobolAnalysis")
   {
     SobolResultWindow * window = new SobolResultWindow(dynamic_cast<SensitivityAnalysisItem*>(item));
-    connect(window, SIGNAL(graphWindowActivated(QTabWidget*)), this, SIGNAL(graphWindowActivated(QTabWidget*)));
-    connect(window, SIGNAL(graphWindowDeactivated(QTabWidget*)), this, SIGNAL(graphWindowDeactivated(QTabWidget*)));
+    connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
+    connect(window, SIGNAL(graphWindowDeactivated(QWidget*)), this, SIGNAL(graphWindowDeactivated(QWidget*)));
     emit showWindow(window);
   }
   else
   {
     SRCResultWindow * window = new SRCResultWindow(dynamic_cast<SensitivityAnalysisItem*>(item));
-    connect(window, SIGNAL(graphWindowActivated(QTabWidget*)), this, SIGNAL(graphWindowActivated(QTabWidget*)));
-    connect(window, SIGNAL(graphWindowDeactivated(QTabWidget*)), this, SIGNAL(graphWindowDeactivated(QTabWidget*)));
+    connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
+    connect(window, SIGNAL(graphWindowDeactivated(QWidget*)), this, SIGNAL(graphWindowDeactivated(QWidget*)));
     emit showWindow(window);
   }
   setCurrentIndex(item->index());

@@ -4,11 +4,11 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QGroupBox>
-#include <QTabWidget>
 #include <QLabel>
 #include <QFileDialog>
 #include <QImageWriter>
 #include <QRadioButton>
+#include <QScrollArea>
 
 #include <qwt_plot_renderer.h>
 
@@ -17,7 +17,7 @@ namespace OTGUI {
 GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets, QStringList inputNames,
                                                    QStringList outputNames,
                                                    GraphConfigurationWidget::Type plotType)
-  : QTabWidget()
+  : QWidget()
   , plotWidgets_(plotWidgets)
   , plotType_(plotType)
   , currentPlotIndex_(0)
@@ -25,7 +25,11 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   for (int i=0; i<plotWidgets_.size(); ++i)
     connect(plotWidgets_[i], SIGNAL(plotChanged()), this, SLOT(updateLineEdits()));
 
-  QGridLayout * mainGridLayout = new QGridLayout(this);
+  QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+  QFrame * frame = new QFrame;
+  QGridLayout * mainGridLayout = new QGridLayout(frame);
   int rowGrid = 0;
 
   QLabel * label = new QLabel(tr("Title"));
@@ -148,6 +152,10 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   mainGridLayout->addLayout(hboxForBottomButtons, ++rowGrid, 1, 1, 1);
 
   updateLineEdits();
+
+  //
+  scrollArea->setWidget(frame);
+  mainLayout->addWidget(scrollArea);
 }
 
 

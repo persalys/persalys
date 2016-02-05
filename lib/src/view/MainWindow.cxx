@@ -25,34 +25,38 @@ MainWindow::MainWindow()
 void MainWindow::buildInterface()
 {
   // main widget
-  QWidget * mainWidget = new QWidget;
-  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
-
   QSplitter * mainSplitter = new QSplitter(Qt::Horizontal);
-  QWidget * widget = new QWidget;
-  QVBoxLayout * leftLayout = new QVBoxLayout(widget);
 
-  leftLayout->addWidget(studyTree_);
+  // left side of the mainSplitter
+  QSplitter * leftSideSplitter = new QSplitter(Qt::Vertical);
+  leftSideSplitter->addWidget(studyTree_);
+  leftSideSplitter->setStretchFactor(0, 8);
 
-  configurationDock_ = new QDockWidget;
+  configurationDock_ = new QDockWidget(tr("Graphic configuration"));
   configurationDock_->setFeatures(QDockWidget::NoDockWidgetFeatures);
-  leftLayout->addWidget(configurationDock_);
+
+  leftSideSplitter->addWidget(configurationDock_);
   configurationDock_->close();
+  mainSplitter->addWidget(leftSideSplitter);
+  leftSideSplitter->setStretchFactor(1, 1);
 
-  mainSplitter->addWidget(widget);
-  mainSplitter->addWidget(mdiArea_);
-  mainLayout->addWidget(mainSplitter);
-
-  setCentralWidget(mainWidget);
+  // right side of the mainSplitter
+  QSplitter * rightSideSplitter = new QSplitter(Qt::Vertical);
+  rightSideSplitter->addWidget(mdiArea_);
 
   // Python Console
   console_ = new QPyConsole(this);
-  QDockWidget * consoleDock = new QDockWidget;
+  QDockWidget * consoleDock = new QDockWidget(tr("Python Console"));
   consoleDock->setWidget(console_);
   consoleDock->setFeatures(QDockWidget::DockWidgetClosable);
-  addDockWidget(Qt::BottomDockWidgetArea, consoleDock);
+  rightSideSplitter->addWidget(consoleDock);
+  rightSideSplitter->setStretchFactor(0, 3);
   //TODO:
 //   connect(consoleDock, SIGNAL(visibilityChanged(bool)), this,SLOT(consoleVisibilityChanged()));
+  rightSideSplitter->setStretchFactor(1, 1);
+  mainSplitter->addWidget(rightSideSplitter);
+
+  setCentralWidget(mainSplitter);
 
   // menu bar
   menuBar_ = new OTguiMenuBar;
@@ -74,8 +78,8 @@ void MainWindow::buildConnections()
   connect(studyTree_, SIGNAL(showWindow(QMdiSubWindow *)), this, SLOT(showSubWindow(QMdiSubWindow *)));
   connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), this, SLOT(showSubWindow(QStandardItem *)));
   connect(studyTree_, SIGNAL(checkIfWindowResultExists(ObserverItem *)), this, SLOT(checkIfWindowResultExists(ObserverItem *)));
-  connect(studyTree_, SIGNAL(graphWindowActivated(QTabWidget*)), this, SLOT(showGraphConfigurationTabWidget(QTabWidget*)));
-  connect(studyTree_, SIGNAL(graphWindowDeactivated(QTabWidget*)), this, SLOT(hideGraphConfigurationTabWidget(QTabWidget*)));
+  connect(studyTree_, SIGNAL(graphWindowActivated(QWidget*)), this, SLOT(showGraphConfigurationTabWidget(QWidget*)));
+  connect(studyTree_, SIGNAL(graphWindowDeactivated(QWidget*)), this, SLOT(hideGraphConfigurationTabWidget(QWidget*)));
   connect(studyTree_, SIGNAL(errorMessageEmitted(QString)), statusBar_, SLOT(showErrorMessage(QString)));
 
   // signal from studyTree_ to console_
@@ -155,14 +159,14 @@ void MainWindow::checkIfWindowResultExists(ObserverItem* item)
 }
 
 
-void MainWindow::showGraphConfigurationTabWidget(QTabWidget * graph)
+void MainWindow::showGraphConfigurationTabWidget(QWidget * graph)
 {
   configurationDock_->setWidget(graph);
   configurationDock_->show();
 }
 
 
-void MainWindow::hideGraphConfigurationTabWidget(QTabWidget * graph)
+void MainWindow::hideGraphConfigurationTabWidget(QWidget * graph)
 {
   configurationDock_->close();
 }

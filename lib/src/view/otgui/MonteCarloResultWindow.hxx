@@ -31,9 +31,6 @@ public slots:
   void quantileValueChanged(double quantile);
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
-signals:
-  void graphWindowActivated(QTabWidget*);
-  void graphWindowDeactivated(QTabWidget*);
 
 private:
   MonteCarloResult result_;

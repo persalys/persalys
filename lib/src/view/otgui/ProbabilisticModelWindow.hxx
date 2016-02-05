@@ -43,9 +43,6 @@ public slots:
   void truncationParametersStateChanged();
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
-signals:
-  void graphWindowActivated(QTabWidget*);
-  void graphWindowDeactivated(QTabWidget*);
 
 private:
   PhysicalModel physicalModel_;

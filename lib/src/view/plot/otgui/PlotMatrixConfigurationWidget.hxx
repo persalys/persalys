@@ -5,12 +5,11 @@
 
 #include "otgui/PlotMatrixWidget.hxx"
 
-#include <QTabWidget>
 #include <QLineEdit>
 
 namespace OTGUI {
 
-class PlotMatrixConfigurationWidget : public QTabWidget
+class PlotMatrixConfigurationWidget : public QWidget
 {
   Q_OBJECT
 
