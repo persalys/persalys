@@ -5,6 +5,7 @@
 
 #include <QStandardItem>
 #include <QMdiSubWindow>
+#include <QLabel>
 
 namespace OTGUI {
 class OTguiSubWindow : public QMdiSubWindow
@@ -22,6 +23,9 @@ public:
 public slots:
 signals:
   void errorMessageChanged(QString);
+
+protected:
+  QLabel * errorMessageLabel_;
 
 private:
   QStandardItem * item_;
