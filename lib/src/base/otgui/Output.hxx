@@ -19,11 +19,15 @@ public:
 
   OT::String getFormula() const;
   void setFormula(const OT::String & formula);
- 
+
+  bool hasBeenComputed() const;
+  void setHasBeenComputed(const bool hasBeenComputed);
+
   OT::String dump() const; 
 
 private:
   OT::String formula_;
+  bool hasBeenComputed_;
 };
 typedef OT::Collection<Output> OutputCollection;
 }

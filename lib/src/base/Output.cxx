@@ -12,6 +12,7 @@ Output::Output(const String & name, const double & value, const String & descrip
                const String & formula)
   : Variable(name, value, description)
   , formula_(formula)
+  , hasBeenComputed_(false)
 {
 }
 
@@ -31,6 +32,18 @@ String Output::getFormula() const
 void Output::setFormula(const String & formula)
 {
   formula_ = formula;
+}
+
+
+bool Output::hasBeenComputed() const
+{
+  return hasBeenComputed_;
+}
+
+
+void Output::setHasBeenComputed(const bool hasBeenComputed)
+{
+  hasBeenComputed_ = hasBeenComputed;
 }
 
 
