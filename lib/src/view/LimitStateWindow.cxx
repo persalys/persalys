@@ -4,8 +4,7 @@
 
 #include "Greater.hxx"
 
-#include <QHBoxLayout>
-#include <QLineEdit>
+#include <QGridLayout>
 
 #include <limits>
 
@@ -14,8 +13,8 @@ using namespace OT;
 namespace OTGUI {
 
 LimitStateWindow::LimitStateWindow(LimitStateItem * item)
- : OTguiSubWindow(item)
- , limitState_(item->getLimitState())
+  : OTguiSubWindow(item)
+  , limitState_(item->getLimitState())
 {
   buildInterface();
   connect(item, SIGNAL(outputChanged()), this, SLOT(updateOutputsList()));
@@ -30,21 +29,31 @@ void LimitStateWindow::buildInterface()
   setWindowTitle("Limit state");
 
   QWidget * mainWidget = new QWidget;
-  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
+  QGridLayout * gridLayout = new QGridLayout(mainWidget);
 
-  QHBoxLayout * layout = new QHBoxLayout;
+  QLabel * label = new QLabel(tr("Definition of the failure event :"));
+  gridLayout->addWidget(label, 0, 0, 1, 3);
+
+  label = new QLabel(tr("Output"));
+  gridLayout->addWidget(label, 1, 0);
+
+  label = new QLabel(tr("Operator"));
+  gridLayout->addWidget(label, 1, 1);
+
+  label = new QLabel(tr("Threshold"));
+  gridLayout->addWidget(label, 1, 2);
 
   outputsComboBox_ = new QComboBox;
   updateOutputsList();
   connect(outputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateOutput(int)));
-  layout->addWidget(outputsComboBox_);
+  gridLayout->addWidget(outputsComboBox_, 2, 0);
 
   failureComboBox_ = new QComboBox;
   failureComboBox_->addItem(tr("<"), LimitStateWindow::LessOperator);
   failureComboBox_->addItem(tr(">"), LimitStateWindow::GreaterOperator);
   updateOperatorWidget();
   connect(failureComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateOperator(int)));
-  layout->addWidget(failureComboBox_);
+  gridLayout->addWidget(failureComboBox_, 2, 1);
 
   thresholdSpinBox_ = new QDoubleSpinBox;
   double doubleMax = std::numeric_limits<double>::max();
@@ -53,11 +62,9 @@ void LimitStateWindow::buildInterface()
   thresholdSpinBox_->setSingleStep(0.1);
   updateThresholdWidget();
   connect(thresholdSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(updateThreshold(double)));
-  layout->addWidget(thresholdSpinBox_);
+  gridLayout->addWidget(thresholdSpinBox_, 2, 2);
 
-  layout->addStretch();
-  mainLayout->addLayout(layout);
-  mainLayout->addStretch();
+  gridLayout->setRowStretch(3, 2);
   setWidget(mainWidget);
 }
 
@@ -67,7 +74,7 @@ void LimitStateWindow::updateOutputsList()
 {
   outputsComboBox_->blockSignals(true);
   outputsComboBox_->clear();
-  QStringList items = QStringList();
+  QStringList items;
   for (int i=0; i<limitState_.getPhysicalModel().getOutputs().getSize(); ++i)
     items << limitState_.getPhysicalModel().getOutputs()[i].getName().c_str();
   outputsComboBox_->addItems(items);
@@ -92,10 +99,10 @@ void LimitStateWindow::updateOutputWidget()
 void LimitStateWindow::updateOperatorWidget()
 {
   failureComboBox_->blockSignals(true);
-  int index = 0;
+  int indexOperator = 0;
   if (limitState_.getOperator().getImplementation()->getClassName() == "Greater")
-    index = 1;
-  failureComboBox_->setCurrentIndex(index);
+    indexOperator = 1;
+  failureComboBox_->setCurrentIndex(indexOperator);
   failureComboBox_->blockSignals(false);
 }
 
