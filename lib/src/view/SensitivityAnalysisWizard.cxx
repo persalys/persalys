@@ -16,19 +16,19 @@
 namespace OTGUI {
 
 SensitivityAnalysisWizard::SensitivityAnalysisWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
- : QWizard()
- , analysis_(SobolAnalysis(otStudy->getAvailableAnalysisName("sensitivity_"), physicalModel))
- , otStudy_(otStudy)
- , physicalModel_(physicalModel)
+  : OTguiWizard()
+  , analysis_(SobolAnalysis(otStudy->getAvailableAnalysisName("sensitivity_"), physicalModel))
+  , otStudy_(otStudy)
+  , physicalModel_(physicalModel)
 {
   buildInterface();
 }
 
 
 SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis & analysis)
- : QWizard()
- , analysis_(analysis)
- , physicalModel_(analysis_.getPhysicalModel())
+  : OTguiWizard()
+  , analysis_(analysis)
+  , physicalModel_(analysis_.getPhysicalModel())
 {
   buildInterface();
 }
@@ -37,7 +37,6 @@ SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis & analysis)
 void SensitivityAnalysisWizard::buildInterface()
 {
   setWindowTitle("Sensitivity analysis");
-  setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
 
   // First Page: model
 

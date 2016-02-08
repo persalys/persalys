@@ -4,8 +4,8 @@
 #define DESIGNOFEXPERIMENTWIZARD_H
 
 #include "otgui/OTStudy.hxx"
+#include "otgui/OTguiWizard.hxx"
 
-#include <QWizard>
 #include <QButtonGroup>
 
 namespace OTGUI {
@@ -26,7 +26,7 @@ private:
 };
 
 
-class DesignOfExperimentWizard : public QWizard
+class DesignOfExperimentWizard : public OTguiWizard
 {
   Q_OBJECT
 

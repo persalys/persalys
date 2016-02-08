@@ -14,7 +14,7 @@
 namespace OTGUI {
 
 ModelEvaluationWizard::ModelEvaluationWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
-  : QWizard()
+  : OTguiWizard()
   , analysis_(ModelEvaluation(otStudy->getAvailableAnalysisName("evaluation_"), physicalModel))
   , otStudy_(otStudy)
 {
@@ -23,7 +23,7 @@ ModelEvaluationWizard::ModelEvaluationWizard(OTStudy * otStudy, const PhysicalMo
 
 
 ModelEvaluationWizard::ModelEvaluationWizard(const Analysis & analysis)
-  : QWizard()
+  : OTguiWizard()
   , analysis_(analysis)
 {
   dynamic_cast<ModelEvaluation*>(&*analysis_.getImplementation())->updateParameters();
@@ -34,7 +34,6 @@ ModelEvaluationWizard::ModelEvaluationWizard(const Analysis & analysis)
 void ModelEvaluationWizard::buildInterface()
 {
   setWindowTitle("Model evaluation");
-  setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
 
   QWizardPage * page = new QWizardPage(this);
   QVBoxLayout * pageLayout = new QVBoxLayout(page);

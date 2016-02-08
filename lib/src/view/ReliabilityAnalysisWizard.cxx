@@ -14,9 +14,9 @@
 namespace OTGUI {
 
 ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(OTStudy * otStudy, const LimitState & limitState)
- : QWizard()
- , analysis_(MonteCarloReliabilityAnalysis(otStudy->getAvailableAnalysisName("reliability_"), limitState))
- , otStudy_(otStudy)
+  : OTguiWizard()
+  , analysis_(MonteCarloReliabilityAnalysis(otStudy->getAvailableAnalysisName("reliability_"), limitState))
+  , otStudy_(otStudy)
 //  , limitState_(limitState)
 {
   buildInterface();
@@ -24,8 +24,8 @@ ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(OTStudy * otStudy, const Li
 
 
 ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis & analysis)
- : QWizard()
- , analysis_(analysis)
+  : OTguiWizard()
+  , analysis_(analysis)
 //  , limitState_(dynamic_cast<ReliabilityAnalysis*>(&*analysis.getImplementation())->getLimitState())
 {
   buildInterface();
@@ -35,7 +35,6 @@ ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis & analysis)
 void ReliabilityAnalysisWizard::buildInterface()
 {
   setWindowTitle("Reliability analysis");
-  setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
 
   // First Page: model
 

@@ -1,17 +1,17 @@
 // CentralTendencyWizard.hxx
 
-#ifndef DISTRIBUTIONANALYSISWIZARD_H
-#define DISTRIBUTIONANALYSISWIZARD_H
+#ifndef OTGUI_CENTRALTENDENCYWIZARD_H
+#define OTGUI_CENTRALTENDENCYWIZARD_H
 
 #include "otgui/OTStudy.hxx"
+#include "otgui/OTguiWizard.hxx"
 
-#include <QWizard>
 #include <QButtonGroup>
 #include <QSpinBox>
 #include <QCheckBox>
 
 namespace OTGUI {
-class CentralTendencyWizard : public QWizard
+class CentralTendencyWizard : public OTguiWizard
 {
   Q_OBJECT
 

@@ -1,16 +1,17 @@
 // ModelEvaluationWizard.hxx
 
-#ifndef MODELEVALUATIONWIZARD_H
-#define MODELEVALUATIONWIZARD_H
+#ifndef OTGUI_MODELEVALUATIONWIZARD_H
+#define OTGUI_MODELEVALUATIONWIZARD_H
 
 #include "otgui/InputTableModel.hxx"
 #include "otgui/OTStudy.hxx"
+#include "otgui/OTguiWizard.hxx"
 
 #include <QWizard>
 #include <QTableWidget>
 
 namespace OTGUI {
-class ModelEvaluationWizard : public QWizard
+class ModelEvaluationWizard : public OTguiWizard
 {
   Q_OBJECT
 

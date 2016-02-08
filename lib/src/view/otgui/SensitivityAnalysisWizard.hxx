@@ -1,17 +1,17 @@
 // SensitivityAnalysisWizard.hxx
 
-#ifndef SENSITIVITYANALYSISWIZARD_H
-#define SENSITIVITYANALYSISWIZARD_H
+#ifndef OTGUI_SENSITIVITYANALYSISWIZARD_H
+#define OTGUI_SENSITIVITYANALYSISWIZARD_H
 
 #include "otgui/OTStudy.hxx"
+#include "otgui/OTguiWizard.hxx"
 
-#include <QWizard>
 #include <QButtonGroup>
 #include <QSpinBox>
 #include <QGroupBox>
 
 namespace OTGUI {
-class SensitivityAnalysisWizard : public QWizard
+class SensitivityAnalysisWizard : public OTguiWizard
 {
   Q_OBJECT
 

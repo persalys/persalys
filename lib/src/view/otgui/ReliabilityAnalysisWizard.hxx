@@ -1,17 +1,17 @@
 // ReliabilityAnalysisWizard.hxx
 
-#ifndef RELIABILITYANALYSISWIZARD_H
-#define RELIABILITYANALYSISWIZARD_H
+#ifndef OTGUI_RELIABILITYANALYSISWIZARD_H
+#define OTGUI_RELIABILITYANALYSISWIZARD_H
 
 #include "otgui/OTStudy.hxx"
 #include "otgui/LimitState.hxx"
+#include "otgui/OTguiWizard.hxx"
 
-#include <QWizard>
 #include <QButtonGroup>
 #include <QSpinBox>
 
 namespace OTGUI {
-class ReliabilityAnalysisWizard : public QWizard
+class ReliabilityAnalysisWizard : public OTguiWizard
 {
   Q_OBJECT
 

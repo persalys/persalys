@@ -16,19 +16,19 @@
 namespace OTGUI {
 
 CentralTendencyWizard::CentralTendencyWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
- : QWizard()
- , analysis_(MonteCarloAnalysis(otStudy->getAvailableAnalysisName("centralTendency_"), physicalModel))
- , otStudy_(otStudy)
- , physicalModel_(physicalModel)
+  : OTguiWizard()
+  , analysis_(MonteCarloAnalysis(otStudy->getAvailableAnalysisName("centralTendency_"), physicalModel))
+  , otStudy_(otStudy)
+  , physicalModel_(physicalModel)
 {
   buildInterface();
 }
 
 
 CentralTendencyWizard::CentralTendencyWizard(const Analysis & analysis)
- : QWizard()
- , analysis_(analysis)
- , physicalModel_(analysis_.getPhysicalModel())
+  : OTguiWizard()
+  , analysis_(analysis)
+  , physicalModel_(analysis_.getPhysicalModel())
 {
   buildInterface();
 }
@@ -37,7 +37,6 @@ CentralTendencyWizard::CentralTendencyWizard(const Analysis & analysis)
 void CentralTendencyWizard::buildInterface()
 {
   setWindowTitle("Central tendency");
-  setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
 
   // First Page: model
 

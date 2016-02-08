@@ -73,7 +73,7 @@ int IntroPage::nextId() const
 
 
 DesignOfExperimentWizard::DesignOfExperimentWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
-  : QWizard()
+  : OTguiWizard()
   , designOfExperiment_(DesignOfExperiment(otStudy->getAvailableDesignOfExperimentName(), physicalModel))
   , otStudy_(otStudy)
 {
@@ -82,7 +82,7 @@ DesignOfExperimentWizard::DesignOfExperimentWizard(OTStudy * otStudy, const Phys
 
 
 DesignOfExperimentWizard::DesignOfExperimentWizard(const DesignOfExperiment & designOfExperiment)
-  : QWizard()
+  : OTguiWizard()
   , designOfExperiment_(designOfExperiment)
 {
   buildInterface();
@@ -92,7 +92,6 @@ DesignOfExperimentWizard::DesignOfExperimentWizard(const DesignOfExperiment & de
 void DesignOfExperimentWizard::buildInterface()
 {
   setWindowTitle("Design Of Experiment");
-  setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
 
   introPage_ = new IntroPage(designOfExperiment_);
   setPage(Page_Intro, introPage_);
