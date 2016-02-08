@@ -34,7 +34,7 @@ protected:
 
 public slots:
   void updateDistributionWidgets(const QModelIndex & index);
-  void updateDistribution();
+  void updateDistributionParameters();
   void updatePhysicalModel(const PhysicalModel &);
   void updateProbabilisticModel();
   void updateCorrelationTable();

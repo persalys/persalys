@@ -19,6 +19,7 @@ public:
 
   QString getErrorMessage() const;
   void setErrorMessage(QString message);
+  void setTemporaryErrorMessage(QString message);
 
 public slots:
 signals:

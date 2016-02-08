@@ -2,6 +2,9 @@
 
 #include "otgui/OTguiSubWindow.hxx"
 
+#include <QEventLoop>
+#include <QTimer>
+
 namespace OTGUI {
 
 OTguiSubWindow::OTguiSubWindow(QStandardItem * item)
@@ -31,5 +34,15 @@ void OTguiSubWindow::setErrorMessage(QString message)
   if (errorMessageLabel_)
     errorMessageLabel_->setText(message);
   emit errorMessageChanged(message);
+}
+
+
+void OTguiSubWindow::setTemporaryErrorMessage(QString message)
+{
+  setErrorMessage(QString("%1%2%3").arg("<font color=red>").arg(message).arg("</font>"));
+  QEventLoop eventLoop;
+  QTimer::singleShot(3000, &eventLoop, SLOT(quit()));
+  eventLoop.exec();
+  setErrorMessage("");
 }
 }
