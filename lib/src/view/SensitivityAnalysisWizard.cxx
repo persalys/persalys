@@ -84,7 +84,7 @@ void SensitivityAnalysisWizard::buildInterface()
   advancedGroup_->setCheckable(true);
   advancedGroup_->setChecked(false);
   advancedGroup_->setStyleSheet("QGroupBox::indicator::unchecked {image: url(:/images/down_arrow.png);}\
-                                QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
+                                 QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
 
   advancedWidgets_ = new QWidget;
   QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedWidgets_);
@@ -120,7 +120,6 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
       if (analysis_.getImplementation()->getClassName() == "SRCAnalysis")
       {
         analysis_ = SobolAnalysis(analysis_.getName(), physicalModel_);
-        advancedGroup_->hide();
         emit analysisChanged(analysis_);
       }
       break;
@@ -130,7 +129,6 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
       if (analysis_.getImplementation()->getClassName() == "SobolAnalysis")
       {
         analysis_ = SRCAnalysis(analysis_.getName(), physicalModel_);
-        advancedGroup_->show();
         emit analysisChanged(analysis_);
       }
       break;
