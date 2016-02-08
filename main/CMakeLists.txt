@@ -1,11 +1,11 @@
-add_executable (gui main.cxx)
+add_executable (otgui main.cxx)
 include_directories (${CMAKE_SOURCE_DIR}/lib/src/base)
 include_directories (${CMAKE_SOURCE_DIR}/lib/src/model)
 
 include_directories (${CMAKE_SOURCE_DIR}/lib/src/view)
 include_directories (${CMAKE_SOURCE_DIR}/lib/src/view/pythonConsole)
 
-target_link_libraries (gui otguiview)
+target_link_libraries (otgui otguiview)
 
 if (UNIX AND NOT APPLE)
   set (launch_file ${CMAKE_BINARY_DIR}/gui_launch.sh)
@@ -21,9 +21,9 @@ if (UNIX AND NOT APPLE)
   endforeach ()
   file (APPEND ${launch_file} "export PYTHONPATH\n")
 
-  file (APPEND ${launch_file} "${CMAKE_CURRENT_BINARY_DIR}/gui\n")
+  file (APPEND ${launch_file} "${CMAKE_CURRENT_BINARY_DIR}/otgui\n")
 
   execute_process (COMMAND chmod a+rx ${launch_file})
 endif ()
 
-install (TARGETS gui DESTINATION bin)
+install (TARGETS otgui DESTINATION bin)
