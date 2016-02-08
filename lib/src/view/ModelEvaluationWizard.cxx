@@ -11,6 +11,8 @@
 
 #include <limits>
 
+using namespace OT;
+
 namespace OTGUI {
 
 ModelEvaluationWizard::ModelEvaluationWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
@@ -44,7 +46,7 @@ void ModelEvaluationWizard::buildInterface()
   table_ = new QTableWidget(analysis_.getPhysicalModel().getInputs().getSize(), 3);
   table_->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Description") << tr("Value"));
 
-  for (int i=0; i<analysis_.getPhysicalModel().getInputs().getSize(); ++i)
+  for (UnsignedInteger i=0; i<analysis_.getPhysicalModel().getInputs().getSize(); ++i)
   {
     QTableWidgetItem * item = new QTableWidgetItem(analysis_.getPhysicalModel().getInputNames()[i].c_str());
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);

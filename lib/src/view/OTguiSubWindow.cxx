@@ -8,9 +8,9 @@
 namespace OTGUI {
 
 OTguiSubWindow::OTguiSubWindow(QStandardItem * item)
- : QMdiSubWindow()
- , item_(item)
- , errorMessageLabel_(0)
+  : QMdiSubWindow()
+  , errorMessageLabel_(0)
+  , item_(item)
 {
   setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
 }

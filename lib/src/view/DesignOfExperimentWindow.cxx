@@ -87,7 +87,7 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   int nbInputs = designOfExperiment_.getVariableInputsNames().getSize();
   Indices ind(nbInputs);
   for (int i=0; i<nbInputs; ++i)
-    for (int j=0; j<designOfExperiment_.getInputSample().getDimension(); ++j)
+    for (UnsignedInteger j=0; j<designOfExperiment_.getInputSample().getDimension(); ++j)
       if (designOfExperiment_.getVariableInputsNames()[i] == designOfExperiment_.getInputSample().getDescription()[j])
       {
         ind[i] = j;
@@ -214,7 +214,7 @@ void DesignOfExperimentWindow::updateLabelsText(int indexOutput)
   // min
   OSS oss1;
   oss1 << designOfExperiment_.getResult().getOutputSample().getMin()[indexOutput];
-  for (int j=0; j<designOfExperiment_.getResult().getListXMin()[indexOutput].getSize();++j)
+  for (UnsignedInteger j=0; j<designOfExperiment_.getResult().getListXMin()[indexOutput].getSize(); ++j)
   {
     NumericalPoint point(designOfExperiment_.getResult().getListXMin()[indexOutput][j]);
     oss1 << "\n  X=" << point.__str__();
@@ -223,7 +223,7 @@ void DesignOfExperimentWindow::updateLabelsText(int indexOutput)
   // max
   OSS oss2;
   oss2 << designOfExperiment_.getResult().getOutputSample().getMax()[indexOutput];
-  for (int j=0; j<designOfExperiment_.getResult().getListXMax()[indexOutput].getSize();++j)
+  for (UnsignedInteger j=0; j<designOfExperiment_.getResult().getListXMax()[indexOutput].getSize(); ++j)
   {
     NumericalPoint point(designOfExperiment_.getResult().getListXMax()[indexOutput][j]);
     oss2 << "\n  X=" << point.__str__();

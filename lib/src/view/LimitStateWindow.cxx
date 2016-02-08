@@ -75,7 +75,7 @@ void LimitStateWindow::updateOutputsList()
   outputsComboBox_->blockSignals(true);
   outputsComboBox_->clear();
   QStringList items;
-  for (int i=0; i<limitState_.getPhysicalModel().getOutputs().getSize(); ++i)
+  for (UnsignedInteger i=0; i<limitState_.getPhysicalModel().getOutputs().getSize(); ++i)
     items << limitState_.getPhysicalModel().getOutputs()[i].getName().c_str();
   outputsComboBox_->addItems(items);
 
