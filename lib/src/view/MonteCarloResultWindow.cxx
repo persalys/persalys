@@ -150,8 +150,8 @@ void MonteCarloResultWindow::buildInterface()
   quantLayout->addWidget(label);
   quantileSpinBox_ = new QDoubleSpinBox;
   label->setBuddy(quantileSpinBox_);
-  quantileSpinBox_->setMinimum(std::numeric_limits<int>::min());
-  quantileSpinBox_->setMaximum(std::numeric_limits<int>::max());
+  quantileSpinBox_->setMinimum(std::numeric_limits<double>::min());
+  quantileSpinBox_->setMaximum(std::numeric_limits<double>::max());
   quantLayout->addWidget(quantileSpinBox_);
 
   connect(probaSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(probaValueChanged(double)));

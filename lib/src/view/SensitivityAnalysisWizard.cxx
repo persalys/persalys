@@ -92,10 +92,10 @@ void SensitivityAnalysisWizard::buildInterface()
   QLabel * seedLabel = new QLabel(tr("Seed"));
   advancedWidgetsLayout->addWidget(seedLabel, 0, 0);
   seedSpinbox_ = new QSpinBox;
+  seedSpinbox_->setMaximum(std::numeric_limits<int>::max());
   seedLabel->setBuddy(seedSpinbox_);
   advancedWidgetsLayout->addWidget(seedSpinbox_, 0, 1);
-  if (analysis_.getImplementation()->getClassName() == "SobolAnalysis")
-    seedSpinbox_->setValue(dynamic_cast<SobolAnalysis*>(&*analysis_.getImplementation())->getSeed());
+  seedSpinbox_->setValue(dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->getSeed());
   connect(seedSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(seedChanged(int)));
 
   advancedWidgets_->hide();

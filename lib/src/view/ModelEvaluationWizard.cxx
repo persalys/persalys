@@ -60,8 +60,8 @@ void ModelEvaluationWizard::buildInterface()
     double step(delta > 1e-12 ? 0.5*delta : 0.1);
 
     QDoubleSpinBox * valueSpinBox = new QDoubleSpinBox;
-    valueSpinBox->setMinimum(std::numeric_limits<int>::min());
-    valueSpinBox->setMaximum(std::numeric_limits<int>::max());
+    valueSpinBox->setMinimum(std::numeric_limits<double>::min());
+    valueSpinBox->setMaximum(std::numeric_limits<double>::max());
     valueSpinBox->setValue(defaultValue);
     valueSpinBox->setSingleStep(step);
     table_->setCellWidget(i, 2, valueSpinBox);
