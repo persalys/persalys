@@ -39,7 +39,7 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   QGridLayout * grid = new QGridLayout;
   int gridRow = -1;
 
-  QLabel * nbSimuLabel = new QLabel(tr("Number of simulations : ") + QString::number(result_.getOuterSampling()) + "\n");
+  QLabel * nbSimuLabel = new QLabel(tr("Number of simulations : ") + QString::number(result_.getOuterSampling()*result_.getBlockSize()) + "\n");
   grid->addWidget(nbSimuLabel, ++gridRow, 0, 1, 2, Qt::AlignTop);
 
   QLabel * label = new QLabel(tr("Pf"));
