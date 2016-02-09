@@ -44,7 +44,9 @@ String PythonPhysicalModel::getCode() const
 
 NumericalMathFunction PythonPhysicalModel::getFunction()
 {
-  return NumericalMathFunction(PythonEvaluation(getInputs().getSize(), getOutputs().getSize(), getCode()));
+  NumericalMathFunction function(PythonEvaluation(getInputs().getSize(), getOutputs().getSize(), getCode()));
+  function.enableCache();
+  return function;
 }
 
 
@@ -52,18 +54,19 @@ String PythonPhysicalModel::dump() const
 {
   String result;
 
-  for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getInputs().getSize(); ++ i)
     result += getInputs()[i].dump();
 
-  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++ i)
     result += getOutputs()[i].dump();
 
   result += getName() + " = otguibase.PythonPhysicalModel('" + getName() + "')\n";
+  result += getName() + ".enableCache()\n";
 
-  for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getInputs().getSize(); ++ i)
     result += getName() + ".addInput(" + getInputs()[i].getName() + ")\n";
 
-  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++ i)
     result += getName() + ".addOutput(" + getOutputs()[i].getName() + ")\n";
 
   result += getName() + ".setCode('";

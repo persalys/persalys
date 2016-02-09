@@ -105,7 +105,7 @@ NumericalPoint PythonEvaluation::operator() (const NumericalPoint & inP) const
     ScopedPyObjectPointer retValue(PyRun_String(code_.c_str(), Py_file_input, dict, dict));
     handleException();
     PyObject *script = PyDict_GetItemString(dict, "_exec");
-    if (script == NULL) throw InternalException(HERE) << "no exec_ function";
+    if (script == NULL) throw InternalException(HERE) << "no _exec function";
 
     ScopedPyObjectPointer inputList(PyList_New(inputDimension_));
     for (UnsignedInteger i = 0; i < inputDimension_; ++ i)
