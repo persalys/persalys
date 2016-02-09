@@ -33,17 +33,20 @@ void SobolAnalysis::run()
   SensitivityAnalysis sensitivityAnalysis = SensitivityAnalysis(inputSample1, inputSample2, getPhysicalModel().getRestrictedFunction(getOutputNames()));
 
   // set results
+  Collection<SymmetricMatrix> secondOrderIndices;
+  secondOrderIndices.add(sensitivityAnalysis.getSecondOrderIndices(0));
   NumericalSample firstOrderIndices(1, sensitivityAnalysis.getFirstOrderIndices(0));
   NumericalSample totalOrderIndices(1, sensitivityAnalysis.getTotalOrderIndices(0));
 
   for (UnsignedInteger i=1; i<getOutputs().getSize(); ++i)
   {
+    secondOrderIndices.add(sensitivityAnalysis.getSecondOrderIndices(i));
     firstOrderIndices.add(sensitivityAnalysis.getFirstOrderIndices(i));
     totalOrderIndices.add(sensitivityAnalysis.getTotalOrderIndices(i));
   }
 
   firstOrderIndices.setDescription(getPhysicalModel().getStochasticInputNames());
-  result_ = SobolResult(firstOrderIndices, totalOrderIndices, getOutputNames());
+  result_ = SobolResult(firstOrderIndices, secondOrderIndices, totalOrderIndices, getOutputNames());
 
   notify("analysisFinished");
 }

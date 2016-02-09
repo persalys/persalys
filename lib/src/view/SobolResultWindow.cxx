@@ -9,6 +9,7 @@
 #include <QLabel>
 #include <QTableWidget>
 #include <QScrollArea>
+#include <QSplitter>
 
 using namespace OT;
 
@@ -50,25 +51,33 @@ void SobolResultWindow::buildInterface()
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
     outputNames << result_.getOutputNames()[i].c_str();
 
+  NumericalPoint interactionsValues(result_.getOutputNames().getSize());
+
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
   {
-    QWidget * widget = new QWidget;
-    QVBoxLayout * vbox = new QVBoxLayout(widget);
+    QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
 
     // plot
     PlotWidget * plot = new PlotWidget(true);
     NumericalPoint firstOrderIndices_i = result_.getFirstOrderIndices()[i];
+    SymmetricMatrix secondOrderIndices_i = result_.getSecondOrderIndices()[i];
     NumericalPoint totalOrderIndices_i = result_.getTotalOrderIndices()[i];
     plot->plotSensitivityIndices(firstOrderIndices_i, totalOrderIndices_i, inputNames);
     plot->setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
     plot->setAxisTitle(QwtPlot::yLeft, outputNames[i]);
 
-    vbox->addWidget(plot);
+    verticalSplitter->addWidget(plot);
+    verticalSplitter->setStretchFactor(0, 1);
     listPlotWidgets_.append(plot);
+
+    // table of first order en total order indices + interactions
+    QWidget * widget = new QWidget;
+    QVBoxLayout * vbox = new QVBoxLayout(widget);
+    QString warningMessage;
 
     // table of indices
     QTableWidget * table = new QTableWidget(inputNames.getSize(), 3, this);
-    table->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("First order indice") << tr("Total indice"));
+    table->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("First order indice") << tr("Total order indice"));
     table->verticalHeader()->hide();
     table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 
@@ -84,14 +93,44 @@ void SobolResultWindow::buildInterface()
       table->setItem(j, 1, item);
 
       item = new QTableWidgetItem(QString::number(totalOrderIndices_i[j], 'g', 4));
+      if (totalOrderIndices_i[j] < firstOrderIndices_i[j])
+      {
+        item->setToolTip(tr("Warning: The total order index is inferior to the first order index."));
+        item->setData(Qt::DecorationRole, QIcon(":/images/task-attention.png"));
+      }
       item->setFlags(item->flags() ^ Qt::ItemIsEditable);
       table->setItem(j, 2, item);
+
+      // compute interactions for the ith output
+      for (UnsignedInteger k=0; k<inputNames.getSize(); ++k)
+        if (j != k) 
+          interactionsValues[i] += secondOrderIndices_i(j, k);
     }
     table->setSortingEnabled(true);
     connect(table->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
 
     vbox->addWidget(table);
-    frameLayout_->addWidget(widget);
+
+    // Interactions
+    QHBoxLayout * hbox = new QHBoxLayout;
+    QLabel * interactionsLabel = new QLabel(tr("Interactions"));
+    interactionsLabel->setStyleSheet("font: bold;");
+    hbox->addWidget(interactionsLabel);
+    interactionsLabel = new QLabel(QString::number(interactionsValues[i], 'g', 4));
+    hbox->addWidget(interactionsLabel);
+    if (interactionsValues[i] < 0 || interactionsValues[i] > 1)
+    {
+      interactionsLabel = new QLabel;
+      interactionsLabel->setPixmap(QPixmap(":/images/task-attention.png"));
+      interactionsLabel->setToolTip(tr("Warning: The sum of the second order indices is not in the range [0, 1]."));
+      hbox->addWidget(interactionsLabel);
+    }
+    hbox->addStretch();
+    vbox->addLayout(hbox);
+
+    verticalSplitter->addWidget(widget);
+    verticalSplitter->setStretchFactor(1, 3);
+    frameLayout_->addWidget(verticalSplitter);
   }
 
   plotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets_, QStringList(), outputNames, GraphConfigurationWidget::SensitivityIndices);

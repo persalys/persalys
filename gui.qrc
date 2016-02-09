@@ -12,5 +12,6 @@
         <file>images/document-new22x22.png</file>
         <file>images/document-import22x22.png</file>
         <file>images/window-close.png</file>
+        <file>images/task-attention.png</file>
     </qresource>
 </RCC>

@@ -12,10 +12,12 @@ SobolResult::SobolResult()
 
 
 SobolResult::SobolResult(const NumericalSample firstOrderIndices,
+                         const Collection<SymmetricMatrix> secondOrderIndices,
                          const NumericalSample totalOrderIndices,
                          const Description & outputNames)
   : outputNames_(outputNames)
   , firstOrderIndices_(firstOrderIndices)
+  , secondOrderIndices_(secondOrderIndices)
   , totalOrderIndices_(totalOrderIndices)
 {
 }
@@ -42,6 +44,12 @@ Description SobolResult::getInputNames() const
 NumericalSample SobolResult::getFirstOrderIndices() const
 {
   return firstOrderIndices_;
+}
+
+
+Collection<SymmetricMatrix> SobolResult::getSecondOrderIndices() const
+{
+  return secondOrderIndices_;
 }
 
 
