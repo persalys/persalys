@@ -3,6 +3,8 @@
 #include "otgui/LimitStateWindow.hxx"
 
 #include "Greater.hxx"
+#include "GreaterOrEqual.hxx"
+#include "LessOrEqual.hxx"
 
 #include <QGridLayout>
 
@@ -50,7 +52,9 @@ void LimitStateWindow::buildInterface()
 
   failureComboBox_ = new QComboBox;
   failureComboBox_->addItem(tr("<"), LimitStateWindow::LessOperator);
+  failureComboBox_->addItem(tr("<="), LimitStateWindow::LessOrEqualOperator);
   failureComboBox_->addItem(tr(">"), LimitStateWindow::GreaterOperator);
+  failureComboBox_->addItem(tr(">="), LimitStateWindow::GreaterOrEqualOperator);
   updateOperatorWidget();
   connect(failureComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateOperator(int)));
   gridLayout->addWidget(failureComboBox_, 2, 1);
@@ -99,9 +103,14 @@ void LimitStateWindow::updateOutputWidget()
 void LimitStateWindow::updateOperatorWidget()
 {
   failureComboBox_->blockSignals(true);
+  const String operatorName = limitState_.getOperator().getImplementation()->getClassName();
   int indexOperator = 0;
-  if (limitState_.getOperator().getImplementation()->getClassName() == "Greater")
+  if (operatorName == "LessOrEqual")
     indexOperator = 1;
+  else if (operatorName == "Greater")
+    indexOperator = 2;
+  else if (operatorName == "GreaterOrEqual")
+    indexOperator = 3;
   failureComboBox_->setCurrentIndex(indexOperator);
   failureComboBox_->blockSignals(false);
 }
@@ -131,8 +140,14 @@ void LimitStateWindow::updateOperator(int index)
     case LimitStateWindow::LessOperator:
       comparisonOperator = Less();
       break;
+    case LimitStateWindow::LessOrEqualOperator:
+      comparisonOperator = LessOrEqual();
+      break;
     case LimitStateWindow::GreaterOperator:
       comparisonOperator = Greater();
+      break;
+    case LimitStateWindow::GreaterOrEqualOperator:
+      comparisonOperator = GreaterOrEqual();
       break;
   }
   limitState_.blockNotification(true);

@@ -15,7 +15,7 @@ class LimitStateWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  enum Operator {LessOperator, GreaterOperator};
+  enum Operator {LessOperator, LessOrEqualOperator, GreaterOperator, GreaterOrEqualOperator};
 
   LimitStateWindow(LimitStateItem * item);
 
