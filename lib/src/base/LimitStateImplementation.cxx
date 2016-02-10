@@ -20,6 +20,8 @@
  */
 #include "otgui/LimitStateImplementation.hxx"
 
+#include "Equal.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
@@ -30,11 +32,11 @@ LimitStateImplementation::LimitStateImplementation(const String & name, const Ph
   : PersistentObject()
   , Observable()
   , physicalModel_(physicalModel)
-  , outputName_(outputName)
-  , operator_(comparisonOperator)
   , threshold_(threshold)
 {
   setName(name);
+  setOutputName(outputName);
+  setOperator(comparisonOperator);
 }
 
 
@@ -64,6 +66,9 @@ String LimitStateImplementation::getOutputName() const
 
 void LimitStateImplementation::setOutputName(const String & outputName)
 {
+  if (!physicalModel_.hasOutputNamed(outputName))
+    throw InvalidArgumentException(HERE) << "The physical model does not contain an output named " << outputName;
+
   outputName_ = outputName;
   notify("outputNameChanged");
 }
@@ -77,6 +82,9 @@ ComparisonOperator LimitStateImplementation::getOperator() const
 
 void LimitStateImplementation::setOperator(const ComparisonOperator & comparisonOperator)
 {
+  if (comparisonOperator.getImplementation()->getClassName() == "Equal")
+    throw InvalidArgumentException(HERE) << "The operator Equal is not valid to define a limit state.\n";
+
   operator_ = comparisonOperator;
   notify("operatorChanged");
 }
