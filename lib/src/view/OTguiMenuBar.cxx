@@ -33,24 +33,38 @@ OTguiMenuBar::OTguiMenuBar()
 
 void OTguiMenuBar::buildActions()
 {
-  QMenu * menu = new QMenu(tr("&Menu"));
+  // File menu
+  QMenu * fileMenu = new QMenu(tr("&File"));
 
   QAction * action = new QAction(QIcon(":/images/document-new.png"), tr("&New OTStudy"), this);
   action->setStatusTip(tr("Create a new OTStudy"));
   connect(action, SIGNAL(triggered()), this, SIGNAL(createNewOTStudy()));
-  menu->addAction(action);
+  fileMenu->addAction(action);
 
   action = new QAction(QIcon(":/images/document-import.png"), tr("&Load OTStudy"), this);
   action->setStatusTip(tr("Load an OTStudy"));
   connect(action, SIGNAL(triggered()), this, SIGNAL(loadOTStudy()));
-  menu->addAction(action);
+  fileMenu->addAction(action);
 
   addSeparator();
 
   action = new QAction(QIcon(":/images/window-close.png"), tr("E&xit"), this);
   connect(action, SIGNAL(triggered()), this, SIGNAL(closeWindow()));
-  menu->addAction(action);
+  fileMenu->addAction(action);
 
-  addMenu(menu);
+  addMenu(fileMenu);
+
+  // View menu
+  QMenu * viewMenu = new QMenu(tr("&View"));
+  QMenu * windowMenu = new QMenu(tr("W&indow"));
+  action = new QAction(tr("Python Console"), this);
+  action->setCheckable(true);
+  action->setChecked(true);
+  connect(action, SIGNAL(triggered(bool)), this, SIGNAL(showHidePythonConsole(bool)));
+  connect(this, SIGNAL(pythonConsoleVisibilityChanged(bool)), action, SLOT(setChecked(bool)));
+  windowMenu->addAction(action);
+  viewMenu->addMenu(windowMenu);
+
+  addMenu(viewMenu);
 }
 }

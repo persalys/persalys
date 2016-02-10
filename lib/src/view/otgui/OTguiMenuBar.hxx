@@ -39,6 +39,8 @@ signals:
   void createNewOTStudy();
   void loadOTStudy();
   void closeWindow();
+  void showHidePythonConsole(bool);
+  void pythonConsoleVisibilityChanged(bool);
 };
 }
 #endif

@@ -47,7 +47,6 @@ public slots:
   void showSubWindow(QStandardItem * item);
   void checkIfWindowResultExists(ObserverItem * item);
   void showGraphConfigurationTabWidget(QWidget*);
-  void hideGraphConfigurationTabWidget(QWidget*);
 
 protected:
   void buildInterface();
@@ -61,6 +60,7 @@ private:
   OTguiToolBar * toolBar_;
   OTguiStatusBar * statusBar_;
   QPyConsole * console_;
+  QDockWidget * pythonConsoleDock_;
 };
 }
 #endif

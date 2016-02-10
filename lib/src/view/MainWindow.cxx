@@ -63,16 +63,14 @@ void MainWindow::buildInterface()
   // right side of the mainSplitter
   QSplitter * rightSideSplitter = new QSplitter(Qt::Vertical);
   rightSideSplitter->addWidget(mdiArea_);
+  rightSideSplitter->setStretchFactor(0, 3);
 
   // Python Console
   console_ = new QPyConsole(this);
-  QDockWidget * consoleDock = new QDockWidget(tr("Python Console"));
-  consoleDock->setWidget(console_);
-  consoleDock->setFeatures(QDockWidget::DockWidgetClosable);
-  rightSideSplitter->addWidget(consoleDock);
-  rightSideSplitter->setStretchFactor(0, 3);
-  //TODO:
-//   connect(consoleDock, SIGNAL(visibilityChanged(bool)), this,SLOT(consoleVisibilityChanged()));
+  pythonConsoleDock_ = new QDockWidget(tr("Python Console"));
+  pythonConsoleDock_->setWidget(console_);
+  pythonConsoleDock_->setFeatures(QDockWidget::DockWidgetClosable);
+  rightSideSplitter->addWidget(pythonConsoleDock_);
   rightSideSplitter->setStretchFactor(1, 1);
   mainSplitter->addWidget(rightSideSplitter);
 
@@ -99,7 +97,8 @@ void MainWindow::buildConnections()
   connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), this, SLOT(showSubWindow(QStandardItem *)));
   connect(studyTree_, SIGNAL(checkIfWindowResultExists(ObserverItem *)), this, SLOT(checkIfWindowResultExists(ObserverItem *)));
   connect(studyTree_, SIGNAL(graphWindowActivated(QWidget*)), this, SLOT(showGraphConfigurationTabWidget(QWidget*)));
-  connect(studyTree_, SIGNAL(graphWindowDeactivated(QWidget*)), this, SLOT(hideGraphConfigurationTabWidget(QWidget*)));
+  connect(studyTree_, SIGNAL(graphWindowDeactivated(QWidget*)), configurationDock_, SLOT(close()));
+
   connect(studyTree_, SIGNAL(errorMessageEmitted(QString)), statusBar_, SLOT(showErrorMessage(QString)));
 
   // signal from studyTree_ to console_
@@ -109,6 +108,10 @@ void MainWindow::buildConnections()
   connect(menuBar_, SIGNAL(createNewOTStudy()), studyTree_, SLOT(createNewOTStudy()));
   connect(menuBar_, SIGNAL(loadOTStudy()), studyTree_, SLOT(loadOTStudy()));
   connect(menuBar_, SIGNAL(closeWindow()), this, SLOT(close()));
+
+  // signals between pythonConsoleDock_ and menuBar_
+  connect(pythonConsoleDock_, SIGNAL(visibilityChanged(bool)), menuBar_, SIGNAL(pythonConsoleVisibilityChanged(bool)));
+  connect(menuBar_, SIGNAL(showHidePythonConsole(bool)), pythonConsoleDock_, SLOT(setVisible(bool)));
 
   // signals from the tool bar to studyTree_
   connect(toolBar_, SIGNAL(createNewOTStudy()), studyTree_, SLOT(createNewOTStudy()));
@@ -170,7 +173,7 @@ void MainWindow::checkIfWindowResultExists(ObserverItem* item)
   for (int i = 0; i < listSubWindow.size(); ++i)
   {
     OTguiSubWindow * win = static_cast<OTguiSubWindow*>(listSubWindow.at(i));
-    if ( win->getItem() == item)
+    if (win->getItem() == item)
     {
       mdiArea_->removeSubWindow(win);
       delete win;
@@ -183,11 +186,5 @@ void MainWindow::showGraphConfigurationTabWidget(QWidget * graph)
 {
   configurationDock_->setWidget(graph);
   configurationDock_->show();
-}
-
-
-void MainWindow::hideGraphConfigurationTabWidget(QWidget * graph)
-{
-  configurationDock_->close();
 }
 }
