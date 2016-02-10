@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMainWindow, main window of the interface
+ *  @brief QMdiArea
  *
  *  Copyright 2015-2016 EDF
  *
@@ -18,34 +18,29 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_MAINWINDOW_HXX
-#define OTGUI_MAINWINDOW_HXX
+#ifndef OTGUI_OTGUIMDIAREA_HXX
+#define OTGUI_OTGUIMDIAREA_HXX
 
-#include "otgui/StudyTreeView.hxx"
+#include "otgui/ObserverItem.hxx"
 
-#include <QMainWindow>
-#include <QDockWidget>
+#include <QMdiArea>
+#include <QStandardItem>
+#include <QMdiSubWindow>
 
 namespace OTGUI {
-class MainWindow : public QMainWindow
+class OTguiMdiArea : public QMdiArea
 {
   Q_OBJECT
 
 public:
-  MainWindow();
-
-  QMdiArea * getMdiArea() const;
-  void launchInitialMessageBox();
+  OTguiMdiArea();
 
 public slots:
-  void showGraphConfigurationTabWidget(QWidget*);
-
-protected:
-  void buildInterface();
-
-private:
-  StudyTreeView * studyTree_;
-  QDockWidget * configurationDock_;
+  void showSubWindow(QMdiSubWindow * win);
+  void showSubWindow(QStandardItem * item);
+  void checkIfWindowResultExists(ObserverItem * item);
+signals:
+//   void ;
 };
 }
 #endif

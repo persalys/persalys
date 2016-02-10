@@ -10,6 +10,7 @@ ot_add_source_file ( OTguiMenuBar.cxx )
 ot_add_source_file ( OTguiStatusBar.cxx )
 ot_add_source_file ( OTguiSubWindow.cxx )
 ot_add_source_file ( OTguiWizard.cxx )
+ot_add_source_file ( OTguiMdiArea.cxx )
 ot_add_source_file ( ComboBoxDelegate.cxx )
 ot_add_source_file ( SpinBoxDelegate.cxx )
 ot_add_source_file ( ImportTablePage.cxx )
@@ -43,6 +44,7 @@ qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                    otgui/OTguiStatusBar.hxx
                                    otgui/OTguiSubWindow.hxx
                                    otgui/OTguiWizard.hxx
+                                   otgui/OTguiMdiArea.hxx
                                    otgui/ComboBoxDelegate.hxx
                                    otgui/SpinBoxDelegate.hxx
                                    otgui/ImportTablePage.hxx
