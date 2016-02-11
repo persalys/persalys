@@ -80,4 +80,22 @@ String AnalysisImplementation::dump() const
 {
   return "";
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void AnalysisImplementation::save(Advocate & adv) const
+{
+  PersistentObject::save(adv);
+  adv.saveAttribute("physicalModel_", physicalModel_);
+  adv.saveAttribute("isReliabilityAnalysis_", isReliabilityAnalysis_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void AnalysisImplementation::load(Advocate & adv)
+{
+  PersistentObject::load(adv);
+  adv.loadAttribute("physicalModel_", physicalModel_);
+  adv.loadAttribute("isReliabilityAnalysis_", isReliabilityAnalysis_);
+}
 }

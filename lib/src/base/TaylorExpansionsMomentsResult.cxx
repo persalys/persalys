@@ -25,13 +25,15 @@ using namespace OT;
 namespace OTGUI {
 
 TaylorExpansionsMomentsResult::TaylorExpansionsMomentsResult()
+  : PersistentObject()
 {
 
 }
 
 
 TaylorExpansionsMomentsResult::TaylorExpansionsMomentsResult(const QuadraticCumul & algoTaylorExpansionsMoments, const OutputCollection & outputs)
- : algoTaylorExpansionsMoments_(algoTaylorExpansionsMoments)
+  : PersistentObject()
+  , algoTaylorExpansionsMoments_(algoTaylorExpansionsMoments)
 {
   UnsignedInteger nbOutputs = outputs.getSize();
   outputNames_ = Description(nbOutputs);
@@ -87,4 +89,25 @@ NumericalPoint TaylorExpansionsMomentsResult::getVariance()
   return variance_;
 }
 
+
+/* Method save() stores the object through the StorageManager */
+void TaylorExpansionsMomentsResult::save(Advocate & adv) const
+{
+  PersistentObject::save(adv);
+  adv.saveAttribute("algoTaylorExpansionsMoments_", algoTaylorExpansionsMoments_);
+  adv.saveAttribute("outputNames_", outputNames_);
+  adv.saveAttribute("standardDeviation_", standardDeviation_);
+  adv.saveAttribute("variance_", variance_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void TaylorExpansionsMomentsResult::load(Advocate & adv)
+{
+  PersistentObject::load(adv);
+  adv.loadAttribute("algoTaylorExpansionsMoments_", algoTaylorExpansionsMoments_);
+  adv.loadAttribute("outputNames_", outputNames_);
+  adv.loadAttribute("standardDeviation_", standardDeviation_);
+  adv.loadAttribute("variance_", variance_);
+}
 }

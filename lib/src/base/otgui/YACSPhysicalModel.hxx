@@ -34,6 +34,7 @@ class YACSPhysicalModel : public PhysicalModelImplementation
   CLASSNAME;
 
 public:
+  YACSPhysicalModel(const OT::String & name);
   YACSPhysicalModel(const OT::String & name, const OT::String & fileName);
 
   virtual YACSPhysicalModel * clone() const;
@@ -54,11 +55,18 @@ public:
 
   OT::String dump() const;
 
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv);
+
 protected:
   void updateData();
 
 private:
   YACSEvaluation evaluation_;
+  OT::String xmlFileName_;
 };
 }
 #endif

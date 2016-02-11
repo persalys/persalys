@@ -31,7 +31,7 @@ class PhysicalModel : public OT::TypedInterfaceObject<PhysicalModelImplementatio
 public:
   typedef OT::Pointer<PhysicalModelImplementation>       Implementation;
 
-  explicit PhysicalModel(const OT::String & name);
+  explicit PhysicalModel(const OT::String & name="Unamed");
   PhysicalModel(const OT::String & name, const InputCollection & inputs, const OutputCollection & outputs);
   PhysicalModel(const PhysicalModelImplementation & implementation);
   PhysicalModel(const Implementation & p_implementation);
@@ -80,6 +80,12 @@ public:
   void setCopula(const OT::Copula & copula);
 
   OT::String dump() const;
+
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv);
 };
 }
 #endif

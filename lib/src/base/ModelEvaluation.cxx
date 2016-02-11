@@ -144,4 +144,24 @@ bool ModelEvaluation::analysisLaunched() const
 {
 //   return getResult().getOutputSample().getSize()!=0;
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void ModelEvaluation::save(Advocate & adv) const
+{
+  AnalysisImplementation::save(adv);
+  adv.saveAttribute("inputNames_", inputNames_);
+  adv.saveAttribute("inputsValues_", inputsValues_);
+  adv.saveAttribute("result_", result_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void ModelEvaluation::load(Advocate & adv)
+{
+  AnalysisImplementation::load(adv);
+  adv.loadAttribute("inputNames_", inputNames_);
+  adv.loadAttribute("inputsValues_", inputsValues_);
+  adv.loadAttribute("result_", result_);
+}
 }

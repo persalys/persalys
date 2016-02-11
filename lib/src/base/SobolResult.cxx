@@ -25,6 +25,7 @@ using namespace OT;
 namespace OTGUI {
 
 SobolResult::SobolResult()
+  : PersistentObject()
 {
 }
 
@@ -33,7 +34,8 @@ SobolResult::SobolResult(const NumericalSample firstOrderIndices,
                          const Collection<SymmetricMatrix> secondOrderIndices,
                          const NumericalSample totalOrderIndices,
                          const Description & outputNames)
-  : outputNames_(outputNames)
+  : PersistentObject()
+  , outputNames_(outputNames)
   , firstOrderIndices_(firstOrderIndices)
   , secondOrderIndices_(secondOrderIndices)
   , totalOrderIndices_(totalOrderIndices)
@@ -74,5 +76,27 @@ Collection<SymmetricMatrix> SobolResult::getSecondOrderIndices() const
 NumericalSample SobolResult::getTotalOrderIndices() const
 {
   return totalOrderIndices_;
+}
+
+
+/* Method save() stores the object through the StorageManager */
+void SobolResult::save(Advocate & adv) const
+{
+  PersistentObject::save(adv);
+  adv.saveAttribute("outputNames_", outputNames_);
+  adv.saveAttribute("firstOrderIndices_", firstOrderIndices_);
+  adv.saveAttribute("secondOrderIndices_", secondOrderIndices_);
+  adv.saveAttribute("totalOrderIndices_", totalOrderIndices_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void SobolResult::load(Advocate & adv)
+{
+  PersistentObject::load(adv);
+  adv.loadAttribute("outputNames_", outputNames_);
+  adv.loadAttribute("firstOrderIndices_", firstOrderIndices_);
+  adv.loadAttribute("secondOrderIndices_", secondOrderIndices_);
+  adv.loadAttribute("totalOrderIndices_", totalOrderIndices_);
 }
 }

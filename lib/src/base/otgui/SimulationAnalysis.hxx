@@ -45,12 +45,18 @@ public:
   OT::UnsignedInteger getSeed() const;
   void setSeed(const OT::UnsignedInteger seed);
 
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv);
+
 protected:
   OT::NumericalSample getOutputSample(OT::NumericalSample inputSample) const;
   OT::NumericalSample getOutputSample(OT::NumericalSample inputSample, const OT::Description & outputNames) const;
 
 private:
-  OutputCollection outputs_;
+  OT::PersistentCollection<Output> outputs_;
   OT::UnsignedInteger nbSimulations_;
   OT::UnsignedInteger seed_;
 };

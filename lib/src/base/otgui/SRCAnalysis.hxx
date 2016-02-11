@@ -40,6 +40,12 @@ public:
   virtual OT::String dump() const;
   virtual bool analysisLaunched() const;
 
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv);
+
 private:
   SRCResult result_;
 };

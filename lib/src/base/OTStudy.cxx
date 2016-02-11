@@ -26,11 +26,11 @@ using namespace OT;
 
 namespace OTGUI {
 
-std::vector<OTStudy*> OTStudy::OTStudies_;
+Collection<OTStudy*> OTStudy::OTStudies_;
 Observer * OTStudy::OTStudyObserver_ = 0;
 
 
-std::vector<OTStudy*> OTStudy::GetOTStudies()
+Collection<OTStudy*> OTStudy::GetOTStudies()
 {
   return OTStudies_;
 }
@@ -38,7 +38,7 @@ std::vector<OTStudy*> OTStudy::GetOTStudies()
 
 OTStudy * OTStudy::GetOTStudyByName(const String & otStudyName)
 {
-  for (std::vector<OTStudy*>::iterator it=OTStudies_.begin(); it!=OTStudies_.end(); ++it)
+  for (Collection<OTStudy*>::iterator it=OTStudies_.begin(); it!=OTStudies_.end(); ++it)
     if ((*it)->getName() == otStudyName)
       return (*it);
   return 0;
@@ -47,7 +47,7 @@ OTStudy * OTStudy::GetOTStudyByName(const String & otStudyName)
 
 bool OTStudy::HasOTStudyNamed(const String & otStudyName)
 {
-  for (std::vector<OTStudy*>::iterator it=OTStudies_.begin(); it!=OTStudies_.end(); ++it)
+  for (Collection<OTStudy*>::iterator it=OTStudies_.begin(); it!=OTStudies_.end(); ++it)
     if ((*it)->getName() == otStudyName)
       return true;
   return false;
@@ -75,7 +75,7 @@ OTStudy::OTStudy(const String & name)
   , Observable()
 {
   setName(name);
-  OTStudies_.push_back(this);
+  OTStudies_.add(this);
   if (OTStudyObserver_)
     OTStudyObserver_->update(this, "addStudy");
 }
@@ -87,11 +87,11 @@ OTStudy::OTStudy(const OTStudy & other)
 {
   setName(other.getName()+"_copy");
   setObserver(other.getObserver());
-  OTStudies_.push_back(this);
+  OTStudies_.add(this);
   if (OTStudyObserver_)
     OTStudyObserver_->update(this, "addStudy");
 
-  for (int i=0; i<other.physicalModels_.size(); ++i)
+  for (UnsignedInteger i=0; i<other.physicalModels_.getSize(); ++i)
     addPhysicalModel(*other.physicalModels_[i].getImplementation()->clone());
   // TODO copy of designOfExperiments_/analyses_/limitStates_
 }
@@ -109,7 +109,7 @@ OTStudy::~OTStudy()
 }
 
 
-std::vector<PhysicalModel> OTStudy::getPhysicalModels() const
+Collection<PhysicalModel> OTStudy::getPhysicalModels() const
 {
   return physicalModels_;
 }
@@ -117,7 +117,7 @@ std::vector<PhysicalModel> OTStudy::getPhysicalModels() const
 
 PhysicalModel & OTStudy::getPhysicalModelByName(const String & physicalModelName)
 {
-  for (UnsignedInteger i=0; i<physicalModels_.size(); ++i)
+  for (UnsignedInteger i=0; i<physicalModels_.getSize(); ++i)
     if (physicalModels_[i].getName() == physicalModelName)
       return physicalModels_[i];
   throw InvalidArgumentException(HERE) << "The given name " << physicalModelName <<" does not correspond to a physical model of the study.\n"; 
@@ -126,7 +126,7 @@ PhysicalModel & OTStudy::getPhysicalModelByName(const String & physicalModelName
 
 bool OTStudy::hasPhysicalModelNamed(const String & physicalModelName)
 {
-  for (UnsignedInteger i=0; i<physicalModels_.size(); ++i)
+  for (UnsignedInteger i=0; i<physicalModels_.getSize(); ++i)
     if (physicalModels_[i].getImplementation()->getName() == physicalModelName)
       return true;
   return false;
@@ -148,12 +148,12 @@ void OTStudy::addPhysicalModel(const PhysicalModel & physicalModel)
   if (hasPhysicalModelNamed(physicalModel.getName()))
     throw InvalidArgumentException(HERE) << "The study has already contained a physical model named " << physicalModel.getName();
 
-  physicalModels_.push_back(physicalModel);
+  physicalModels_.add(physicalModel);
   notify("addPhysicalModel");
 }
 
 
-std::vector<DesignOfExperiment> OTStudy::getDesignOfExperiments() const
+Collection<DesignOfExperiment> OTStudy::getDesignOfExperiments() const
 {
   return designOfExperiments_;
 }
@@ -161,7 +161,7 @@ std::vector<DesignOfExperiment> OTStudy::getDesignOfExperiments() const
 
 bool OTStudy::hasDesignOfExperimentNamed(const String & designOfExperimentName)
 {
-  for (UnsignedInteger i=0; i<designOfExperiments_.size(); ++i)
+  for (UnsignedInteger i=0; i<designOfExperiments_.getSize(); ++i)
     if (designOfExperiments_[i].getImplementation()->getName() == designOfExperimentName)
       return true;
   return false;
@@ -186,19 +186,19 @@ void OTStudy::addDesignOfExperiment(const DesignOfExperiment & designOfExperimen
   if (!hasPhysicalModelNamed(designOfExperiment.getPhysicalModel().getName()))
     throw InvalidArgumentException(HERE) << "The design of experiment has been created with a physical model not belonging to the study.";
 
-  designOfExperiments_.push_back(designOfExperiment);
+  designOfExperiments_.add(designOfExperiment);
   notify("addDesignOfExperiment");
 }
 
 
-std::vector<Analysis> OTStudy::getAnalyses() const
+Collection<Analysis> OTStudy::getAnalyses() const
 {
   return analyses_;
 }
 
 Analysis & OTStudy::getAnalysisByName(const String & analysisName)
 {
-  for (UnsignedInteger i=0; i<analyses_.size(); ++i)
+  for (UnsignedInteger i=0; i<analyses_.getSize(); ++i)
     if (analyses_[i].getName() == analysisName)
       return analyses_[i];
   throw InvalidArgumentException(HERE) << "The given name " << analysisName <<" does not correspond to an analysis of the study.\n"; 
@@ -207,7 +207,7 @@ Analysis & OTStudy::getAnalysisByName(const String & analysisName)
 
 bool OTStudy::hasAnalysisNamed(const String & analysisName)
 {
-  for (UnsignedInteger i=0; i<analyses_.size(); ++i)
+  for (UnsignedInteger i=0; i<analyses_.getSize(); ++i)
     if (analyses_[i].getImplementation()->getName() == analysisName)
       return true;
   return false;
@@ -235,12 +235,12 @@ void OTStudy::addAnalysis(const Analysis & analysis)
     if (!hasLimitStateNamed(dynamic_cast<const ReliabilityAnalysis*>(&*analysis.getImplementation())->getLimitState().getName()))
       throw InvalidArgumentException(HERE) << "The analysis has been created with a limit state not belonging to the study.";
 
-  analyses_.push_back(analysis);
+  analyses_.add(analysis);
   notify("add"+analysis.getImplementation()->getClassName());
 }
 
 
-std::vector<LimitState> OTStudy::getLimitStates() const
+Collection<LimitState> OTStudy::getLimitStates() const
 {
   return limitStates_;
 }
@@ -248,7 +248,7 @@ std::vector<LimitState> OTStudy::getLimitStates() const
 
 bool OTStudy::hasLimitStateNamed(const String & limitStateName)
 {
-  for (UnsignedInteger i=0; i<limitStates_.size(); ++i)
+  for (UnsignedInteger i=0; i<limitStates_.getSize(); ++i)
     if (limitStates_[i].getImplementation()->getName() == limitStateName)
       return true;
   return false;
@@ -273,7 +273,7 @@ void OTStudy::addLimitState(const LimitState & limitState)
   if (!hasPhysicalModelNamed(limitState.getPhysicalModel().getName()))
     throw InvalidArgumentException(HERE) << "The limit state has been created with a physical model not belonging to the study.";
 
-  limitStates_.push_back(limitState);
+  limitStates_.add(limitState);
   notify("addLimitState");
 }
 
@@ -282,26 +282,48 @@ String OTStudy::dump()
 {
   String result;
   result += getName()+ " = otguibase.OTStudy('" + getName() + "')\n";
-  for (std::vector<PhysicalModel>::iterator it=physicalModels_.begin(); it!= physicalModels_.end(); ++it)
+  for (Collection<PhysicalModel>::iterator it=physicalModels_.begin(); it!= physicalModels_.end(); ++it)
   {
     result += (*it).dump();
     result += getName() + ".addPhysicalModel(" + (*it).getName() + ")\n";
   }
-  for (std::vector<DesignOfExperiment>::iterator it=designOfExperiments_.begin(); it!= designOfExperiments_.end(); ++it)
+  for (Collection<DesignOfExperiment>::iterator it=designOfExperiments_.begin(); it!= designOfExperiments_.end(); ++it)
   {
     result += (*it).dump();
     result += getName() + ".addDesignOfExperiment(" + (*it).getName() + ")\n";
   }
-  for (std::vector<LimitState>::iterator it=limitStates_.begin(); it!= limitStates_.end(); ++it)
+  for (Collection<LimitState>::iterator it=limitStates_.begin(); it!= limitStates_.end(); ++it)
   {
     result += (*it).dump();
     result += getName() + ".addLimitState(" + (*it).getName() + ")\n";
   }
-  for (std::vector<Analysis>::iterator it=analyses_.begin(); it!= analyses_.end(); ++it)
+  for (Collection<Analysis>::iterator it=analyses_.begin(); it!= analyses_.end(); ++it)
   {
     result += (*it).dump();
     result += getName() + ".addAnalysis(" + (*it).getName() + ")\n";
   }
   return result;
+}
+
+
+/* Method save() stores the object through the StorageManager */
+void OTStudy::save(Advocate & adv) const
+{
+  PersistentObject::save(adv);
+  adv.saveAttribute("physicalModels_", physicalModels_);
+  adv.saveAttribute("designOfExperiments_", designOfExperiments_);
+  adv.saveAttribute("limitStates_", limitStates_);
+  adv.saveAttribute("analyses_", analyses_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void OTStudy::load(Advocate & adv)
+{
+  PersistentObject::load(adv);
+  adv.loadAttribute("physicalModels_", physicalModels_);
+  adv.loadAttribute("designOfExperiments_", designOfExperiments_);
+  adv.loadAttribute("limitStates_", limitStates_);
+  adv.loadAttribute("analyses_", analyses_);
 }
 }

@@ -34,8 +34,8 @@ class LimitState : public OT::TypedInterfaceObject<LimitStateImplementation>
 public:
   typedef OT::Pointer<LimitStateImplementation>       Implementation;
 
-  LimitState(const OT::String & name, const PhysicalModel & physicalModel,
-             const OT::String & outputName,
+  LimitState(const OT::String & name="Unamed", const PhysicalModel & physicalModel=PhysicalModel(),
+             const OT::String & outputName="",
              const OT::ComparisonOperator & failure=OT::Less(),
              const double & threshold=0.);
   LimitState(const LimitStateImplementation & implementation);
@@ -62,6 +62,12 @@ public:
   OT::Event getEvent();
 
   OT::String dump() const;
+
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv);
 };
 }
 #endif

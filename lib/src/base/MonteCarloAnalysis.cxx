@@ -99,5 +99,26 @@ String MonteCarloAnalysis::dump() const
 bool MonteCarloAnalysis::analysisLaunched() const
 {
 //   return outputSample_.getSize()!=0;
+  return true;
+}
+
+
+/* Method save() stores the object through the StorageManager */
+void MonteCarloAnalysis::save(Advocate & adv) const
+{
+  SimulationAnalysis::save(adv);
+  adv.saveAttribute("isConfidenceIntervalRequired_", isConfidenceIntervalRequired_);
+  adv.saveAttribute("levelConfidenceInterval_", levelConfidenceInterval_);
+  adv.saveAttribute("result_", result_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void MonteCarloAnalysis::load(Advocate & adv)
+{
+  SimulationAnalysis::load(adv);
+  adv.loadAttribute("isConfidenceIntervalRequired_", isConfidenceIntervalRequired_);
+  adv.loadAttribute("levelConfidenceInterval_", levelConfidenceInterval_);
+  adv.loadAttribute("result_", result_);
 }
 }

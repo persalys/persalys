@@ -216,4 +216,42 @@ MonteCarloResult::DistributionCollection MonteCarloResult::getFittedDistribution
 
   return distributions;
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void MonteCarloResult::save(Advocate & adv) const
+{
+  SimulationAnalysisResult::save(adv);
+  adv.saveAttribute("levelConfidenceInterval_", levelConfidenceInterval_);
+  adv.saveAttribute("mean_", mean_);
+  adv.saveAttribute("median_", median_);
+  adv.saveAttribute("standardDeviation_", standardDeviation_);
+  adv.saveAttribute("variance_", variance_);
+  adv.saveAttribute("skewness_", skewness_);
+  adv.saveAttribute("kurtosis_", kurtosis_);
+  adv.saveAttribute("firstQuartile_", firstQuartile_);
+  adv.saveAttribute("thirdQuartile_", thirdQuartile_);
+  adv.saveAttribute("meanConfidenceInterval_", meanConfidenceInterval_);
+  adv.saveAttribute("stdConfidenceInterval_", stdConfidenceInterval_);
+  adv.saveAttribute("outliers_", outliers_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void MonteCarloResult::load(Advocate & adv)
+{
+  SimulationAnalysisResult::load(adv);
+  adv.loadAttribute("levelConfidenceInterval_", levelConfidenceInterval_);
+  adv.loadAttribute("mean_", mean_);
+  adv.loadAttribute("median_", median_);
+  adv.loadAttribute("standardDeviation_", standardDeviation_);
+  adv.loadAttribute("variance_", variance_);
+  adv.loadAttribute("skewness_", skewness_);
+  adv.loadAttribute("kurtosis_", kurtosis_);
+  adv.loadAttribute("firstQuartile_", firstQuartile_);
+  adv.loadAttribute("thirdQuartile_", thirdQuartile_);
+  adv.loadAttribute("meanConfidenceInterval_", meanConfidenceInterval_);
+  adv.loadAttribute("stdConfidenceInterval_", stdConfidenceInterval_);
+  adv.loadAttribute("outliers_", outliers_);
+}
 }

@@ -53,6 +53,12 @@ public:
 
   DistributionCollection getFittedDistribution();
 
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv);
+
 private:
   double levelConfidenceInterval_;
   OT::NumericalPoint mean_;
@@ -65,7 +71,7 @@ private:
   OT::NumericalPoint thirdQuartile_;
   OT::Interval meanConfidenceInterval_;
   OT::Interval stdConfidenceInterval_;
-  NumericalPointCollection outliers_;
+  OT::PersistentCollection<OT::NumericalPoint> outliers_;
 };
 }
 #endif

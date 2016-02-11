@@ -41,10 +41,16 @@ public:
   OT::Collection<OT::SymmetricMatrix> getSecondOrderIndices() const;
   OT::NumericalSample getTotalOrderIndices() const;
 
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv);
+
 private:
   OT::Description outputNames_;
   OT::NumericalSample firstOrderIndices_;
-  OT::Collection<OT::SymmetricMatrix> secondOrderIndices_;
+  OT::PersistentCollection<OT::SymmetricMatrix> secondOrderIndices_;
   OT::NumericalSample totalOrderIndices_;
 };
 }

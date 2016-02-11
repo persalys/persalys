@@ -251,4 +251,18 @@ String DesignOfExperiment::dump() const
 {
   return getImplementation()->dump();
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void DesignOfExperiment::save(Advocate & adv) const
+{
+  getImplementation()->save(adv);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void DesignOfExperiment::load(Advocate & adv)
+{
+  getImplementation()->load(adv);
+}
 }

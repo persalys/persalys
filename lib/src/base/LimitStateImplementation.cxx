@@ -34,8 +34,14 @@ LimitStateImplementation::LimitStateImplementation(const String & name, const Ph
   , physicalModel_(physicalModel)
   , threshold_(threshold)
 {
+  if (!physicalModel.getOutputs().getSize())
+    throw InvalidArgumentException(HERE) << "The physical model does not contain output";
+
   setName(name);
-  setOutputName(outputName);
+  if (outputName.empty())
+    setOutputName(physicalModel.getOutputs()[0].getName());
+  else
+    setOutputName(outputName);
   setOperator(comparisonOperator);
 }
 
@@ -125,5 +131,27 @@ String LimitStateImplementation::dump() const
   oss << threshold_;
   result += oss.str() + ")\n";
   return result;
+}
+
+
+/* Method save() stores the object through the StorageManager */
+void LimitStateImplementation::save(Advocate & adv) const
+{
+  PersistentObject::save(adv);
+  adv.saveAttribute("physicalModel_", physicalModel_);
+  adv.saveAttribute("outputName_", outputName_);
+  adv.saveAttribute("operator_", operator_);
+  adv.saveAttribute("threshold_", threshold_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void LimitStateImplementation::load(Advocate & adv)
+{
+  PersistentObject::load(adv);
+  adv.loadAttribute("physicalModel_", physicalModel_);
+  adv.loadAttribute("outputName_", outputName_);
+  adv.loadAttribute("operator_", operator_);
+  adv.loadAttribute("threshold_", threshold_);
 }
 }

@@ -78,14 +78,20 @@ public:
 
   virtual OT::String dump() const;
 
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv);
+
 protected:
   void updateCopula();
   OT::String dumpProbaModel() const;
   OT::String dumpCopula() const;
 
 private:
-  InputCollection inputs_;
-  OutputCollection outputs_;
+  OT::PersistentCollection<Input> inputs_;
+  OT::PersistentCollection<Output> outputs_;
   OT::Copula copula_;
 };
 }

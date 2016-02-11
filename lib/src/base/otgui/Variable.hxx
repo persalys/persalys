@@ -42,6 +42,12 @@ public:
 
   virtual OT::String dump() const = 0;
 
+  /** Method save() stores the object through the StorageManager */
+  virtual void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  virtual void load(OT::Advocate & adv);
+
 private:
   double value_;
   OT::String description_;

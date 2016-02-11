@@ -39,6 +39,12 @@ public:
   virtual OT::NumericalMathFunction getFunction();
 
   OT::String dump() const;
+
+  /** Method save() stores the object through the StorageManager */
+  virtual void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  virtual void load(OT::Advocate & adv);
 };
 }
 #endif

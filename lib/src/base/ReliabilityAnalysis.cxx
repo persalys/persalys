@@ -42,4 +42,20 @@ LimitState ReliabilityAnalysis::getLimitState() const
 {
   return limitState_;
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void ReliabilityAnalysis::save(Advocate & adv) const
+{
+  AnalysisImplementation::save(adv);
+  adv.saveAttribute("limitState_", limitState_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void ReliabilityAnalysis::load(Advocate & adv)
+{
+  AnalysisImplementation::load(adv);
+  adv.loadAttribute("limitState_", limitState_);
+}
 }

@@ -31,7 +31,7 @@ class DesignOfExperiment : public OT::TypedInterfaceObject<DesignOfExperimentImp
 public:
   typedef OT::Pointer<DesignOfExperimentImplementation>       Implementation;
 
-  DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel);
+  DesignOfExperiment(const OT::String & name="Unamed", const PhysicalModel & physicalModel=PhysicalModel());
   DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel,
                      const OT::NumericalPoint & lowerBounds, const OT::NumericalPoint & upperBounds,
                      const OT::Indices & nbValues, const OT::NumericalPoint & values=OT::NumericalPoint(0));
@@ -82,6 +82,12 @@ public:
   void updateParameters();
   void eval();
   OT::String dump() const;
+
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv);
 };
 }
 #endif

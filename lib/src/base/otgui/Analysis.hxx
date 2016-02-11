@@ -31,7 +31,7 @@ class Analysis : public OT::TypedInterfaceObject<AnalysisImplementation>
 public:
   typedef OT::Pointer<AnalysisImplementation>       Implementation;
 
-  Analysis(const OT::String & name, const PhysicalModel & physicalModel);
+  Analysis(const OT::String & name="Unamed", const PhysicalModel & physicalModel=PhysicalModel());
   Analysis(const AnalysisImplementation & implementation);
   Analysis(const Implementation & p_implementation);
   Analysis(AnalysisImplementation * p_implementation);
@@ -46,6 +46,12 @@ public:
   void run();
   OT::String dump() const;
   bool analysisLaunched() const;
+
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv);
 };
 }
 #endif

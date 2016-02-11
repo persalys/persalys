@@ -128,4 +128,28 @@ String MonteCarloReliabilityAnalysis::dump() const
 
   return oss;
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void MonteCarloReliabilityAnalysis::save(Advocate & adv) const
+{
+  ReliabilityAnalysis::save(adv);
+  adv.saveAttribute("maximumOuterSampling_", maximumOuterSampling_);
+  adv.saveAttribute("maximumCoefficientOfVariation_", maximumCoefficientOfVariation_);
+  adv.saveAttribute("blockSize_", blockSize_);
+  adv.saveAttribute("seed_", seed_);
+  adv.saveAttribute("result_", result_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void MonteCarloReliabilityAnalysis::load(Advocate & adv)
+{
+  ReliabilityAnalysis::load(adv);
+  adv.loadAttribute("maximumOuterSampling_", maximumOuterSampling_);
+  adv.loadAttribute("maximumCoefficientOfVariation_", maximumCoefficientOfVariation_);
+  adv.loadAttribute("blockSize_", blockSize_);
+  adv.loadAttribute("seed_", seed_);
+  adv.loadAttribute("result_", result_);
+}
 }

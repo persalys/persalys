@@ -25,12 +25,14 @@ using namespace OT;
 namespace OTGUI {
 
 SRCResult::SRCResult()
+  : PersistentObject()
 {
 }
 
 
 SRCResult::SRCResult(const NumericalSample indices, const Description & outputNames)
-  : outputNames_(outputNames)
+  : PersistentObject()
+  , outputNames_(outputNames)
   , indices_(indices)
 {
 }
@@ -57,5 +59,23 @@ Description SRCResult::getInputNames() const
 NumericalSample SRCResult::getIndices() const
 {
   return indices_;
+}
+
+
+/* Method save() stores the object through the StorageManager */
+void SRCResult::save(Advocate & adv) const
+{
+  PersistentObject::save(adv);
+  adv.saveAttribute("outputNames_", outputNames_);
+  adv.saveAttribute("indices_", indices_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void SRCResult::load(Advocate & adv)
+{
+  PersistentObject::load(adv);
+  adv.loadAttribute("outputNames_", outputNames_);
+  adv.loadAttribute("indices_", indices_);
 }
 }

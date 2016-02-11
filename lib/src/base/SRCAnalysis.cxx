@@ -84,4 +84,20 @@ bool SRCAnalysis::analysisLaunched() const
 {
   return result_.getIndices().getSize()!=0;
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void SRCAnalysis::save(Advocate & adv) const
+{
+  SimulationAnalysis::save(adv);
+  adv.saveAttribute("result_", result_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void SRCAnalysis::load(Advocate & adv)
+{
+  SimulationAnalysis::load(adv);
+  adv.loadAttribute("result_", result_);
+}
 }

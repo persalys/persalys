@@ -132,4 +132,20 @@ String Input::dump() const
 
   return oss;
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void Input::save(Advocate & adv) const
+{
+  Variable::save(adv);
+  adv.saveAttribute("distribution_", distribution_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void Input::load(Advocate & adv)
+{
+  Variable::load(adv);
+  adv.loadAttribute("distribution_", distribution_);
+}
 }

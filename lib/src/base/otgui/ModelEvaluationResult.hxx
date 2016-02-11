@@ -37,6 +37,12 @@ public:
   OT::NumericalSample getInputSample() const;
   OT::NumericalSample getOutputSample() const;
 
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv);
+
 private:
   OT::NumericalSample inputSample_;
   OT::NumericalSample outputSample_;

@@ -114,4 +114,24 @@ void SimulationAnalysis::setSeed(const UnsignedInteger seed)
 {
   seed_ = seed;
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void SimulationAnalysis::save(Advocate & adv) const
+{
+  AnalysisImplementation::save(adv);
+  adv.saveAttribute("outputs_", outputs_);
+  adv.saveAttribute("nbSimulations_", nbSimulations_);
+  adv.saveAttribute("seed_", seed_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void SimulationAnalysis::load(Advocate & adv)
+{
+  AnalysisImplementation::load(adv);
+  adv.loadAttribute("outputs_", outputs_);
+  adv.loadAttribute("nbSimulations_", nbSimulations_);
+  adv.loadAttribute("seed_", seed_);
+}
 }

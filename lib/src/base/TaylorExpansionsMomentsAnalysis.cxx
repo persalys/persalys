@@ -88,4 +88,22 @@ bool TaylorExpansionsMomentsAnalysis::analysisLaunched() const
 {
 //   return outputSample_.getSize()!=0;
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void TaylorExpansionsMomentsAnalysis::save(Advocate & adv) const
+{
+  AnalysisImplementation::save(adv);
+  adv.saveAttribute("outputs_", outputs_);
+  adv.saveAttribute("result_", result_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void TaylorExpansionsMomentsAnalysis::load(Advocate & adv)
+{
+  AnalysisImplementation::load(adv);
+  adv.loadAttribute("outputs_", outputs_);
+  adv.loadAttribute("result_", result_);
+}
 }

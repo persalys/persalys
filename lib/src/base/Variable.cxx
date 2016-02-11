@@ -63,4 +63,22 @@ void Variable::setDescription(const String & description)
 {
   description_ = description;
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void Variable::save(Advocate & adv) const
+{
+  PersistentObject::save(adv);
+  adv.saveAttribute("value_", value_);
+  adv.saveAttribute("description_", description_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void Variable::load(Advocate & adv)
+{
+  PersistentObject::load(adv);
+  adv.loadAttribute("value_", value_);
+  adv.loadAttribute("description_", description_);
+}
 }

@@ -73,4 +73,22 @@ String Output::dump() const
 
   return oss;
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void Output::save(Advocate & adv) const
+{
+  Variable::save(adv);
+  adv.saveAttribute("formula_", formula_);
+  adv.saveAttribute("hasBeenComputed_", hasBeenComputed_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void Output::load(Advocate & adv)
+{
+  Variable::load(adv);
+  adv.loadAttribute("formula_", formula_);
+  adv.loadAttribute("hasBeenComputed_", hasBeenComputed_);
+}
 }

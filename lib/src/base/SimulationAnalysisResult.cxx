@@ -108,4 +108,22 @@ void SimulationAnalysisResult::searchMinMax()
     listXMax_.add(tempSample);
   }
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void SimulationAnalysisResult::save(Advocate & adv) const
+{
+  ModelEvaluationResult::save(adv);
+  adv.saveAttribute("listXMin_", listXMin_);
+  adv.saveAttribute("listXMax_", listXMax_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void SimulationAnalysisResult::load(Advocate & adv)
+{
+  ModelEvaluationResult::load(adv);
+  adv.loadAttribute("listXMin_", listXMin_);
+  adv.loadAttribute("listXMax_", listXMax_);
+}
 }

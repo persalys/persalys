@@ -80,6 +80,12 @@ public:
   void eval();
   virtual OT::String dump() const;
 
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv);
+
 protected:
   void initializeParameters(const InputCollection & inputs);
 

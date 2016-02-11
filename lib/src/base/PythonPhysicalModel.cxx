@@ -104,4 +104,20 @@ String PythonPhysicalModel::dump() const
 
   return result;
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void PythonPhysicalModel::save(Advocate & adv) const
+{
+  PhysicalModelImplementation::save(adv);
+  adv.saveAttribute("code_", code_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void PythonPhysicalModel::load(Advocate & adv)
+{
+  PhysicalModelImplementation::load(adv);
+  adv.loadAttribute("code_", code_);
+}
 }

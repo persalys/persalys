@@ -27,13 +27,15 @@ namespace OTGUI {
 CLASSNAMEINIT(ModelEvaluationResult);
 
 ModelEvaluationResult::ModelEvaluationResult()
+  : PersistentObject()
 {
 
 }
 
 
 ModelEvaluationResult::ModelEvaluationResult(NumericalSample inputSample, NumericalSample outputSample)
-  : inputSample_(inputSample)
+  : PersistentObject()
+  , inputSample_(inputSample)
   , outputSample_(outputSample)
 {
 }
@@ -54,5 +56,23 @@ NumericalSample ModelEvaluationResult::getInputSample() const
 NumericalSample ModelEvaluationResult::getOutputSample() const
 {
   return outputSample_;
+}
+
+
+/* Method save() stores the object through the StorageManager */
+void ModelEvaluationResult::save(Advocate & adv) const
+{
+  PersistentObject::save(adv);
+  adv.saveAttribute("inputSample_", inputSample_);
+  adv.saveAttribute("outputSample_", outputSample_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void ModelEvaluationResult::load(Advocate & adv)
+{
+  PersistentObject::load(adv);
+  adv.loadAttribute("inputSample_", inputSample_);
+  adv.loadAttribute("outputSample_", outputSample_);
 }
 }

@@ -542,4 +542,61 @@ String DesignOfExperimentImplementation::dump() const
   }
   return oss.str();
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void DesignOfExperimentImplementation::save(Advocate & adv) const
+{
+  PersistentObject::save(adv);
+  adv.saveAttribute("physicalModel_", physicalModel_);
+  adv.saveAttribute("type_", static_cast<UnsignedInteger>(type_));
+
+  if (type_ == DesignOfExperimentImplementation::FromBoundsAndLevels ||
+      type_ == DesignOfExperimentImplementation::FromBoundsAndDeltas)
+  {
+    adv.saveAttribute("deltas_", deltas_);
+    adv.saveAttribute("levels_", levels_);
+    adv.saveAttribute("lowerBounds_", lowerBounds_);
+    adv.saveAttribute("upperBounds_", upperBounds_);
+    adv.saveAttribute("values_", values_);
+  }
+  else if (type_ == DesignOfExperimentImplementation::FromFile)
+  {
+    adv.saveAttribute("fileName_", fileName_);
+    adv.saveAttribute("columns_", columns_);
+  }
+  adv.saveAttribute("result_", result_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void DesignOfExperimentImplementation::load(Advocate & adv)
+{
+  PersistentObject::load(adv);
+  adv.loadAttribute("physicalModel_", physicalModel_);
+  UnsignedInteger intType = 0;
+  adv.loadAttribute("type_", intType);
+  if (intType == 1)
+    type_ = DesignOfExperimentImplementation::FromBoundsAndDeltas;
+  else if (intType == 2)
+    type_ = DesignOfExperimentImplementation::FromFile;
+  else if (intType == 3)
+    type_ = DesignOfExperimentImplementation::FromExperiment;
+
+  if (type_ == DesignOfExperimentImplementation::FromBoundsAndLevels ||
+      type_ == DesignOfExperimentImplementation::FromBoundsAndDeltas)
+  {
+    adv.loadAttribute("deltas_", deltas_);
+    adv.loadAttribute("levels_", levels_);
+    adv.loadAttribute("lowerBounds_", lowerBounds_);
+    adv.loadAttribute("upperBounds_", upperBounds_);
+    adv.loadAttribute("values_", values_);
+  }
+  else if (type_ == DesignOfExperimentImplementation::FromFile)
+  {
+    adv.loadAttribute("fileName_", fileName_);
+    adv.loadAttribute("columns_", columns_);
+  }
+  adv.loadAttribute("result_", result_);
+}
 }

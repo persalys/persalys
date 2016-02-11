@@ -91,4 +91,20 @@ bool SobolAnalysis::analysisLaunched() const
 {
   return result_.getFirstOrderIndices().getSize()!=0;
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void SobolAnalysis::save(Advocate & adv) const
+{
+  SimulationAnalysis::save(adv);
+  adv.saveAttribute("result_", result_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void SobolAnalysis::load(Advocate & adv)
+{
+  SimulationAnalysis::load(adv);
+  adv.loadAttribute("result_", result_);
+}
 }

@@ -550,4 +550,24 @@ String PhysicalModelImplementation::dumpCopula() const
 
   return result;
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void PhysicalModelImplementation::save(Advocate & adv) const
+{
+  PersistentObject::save(adv);
+  adv.saveAttribute("inputs_", inputs_);
+  adv.saveAttribute("outputs_", outputs_);
+  adv.saveAttribute("copula_", copula_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void PhysicalModelImplementation::load(Advocate & adv)
+{
+  PersistentObject::load(adv);
+  adv.loadAttribute("inputs_", inputs_);
+  adv.loadAttribute("outputs_", outputs_);
+  adv.loadAttribute("copula_", copula_);
+}
 }

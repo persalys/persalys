@@ -88,4 +88,18 @@ String AnalyticalPhysicalModel::dump() const
   result += PhysicalModelImplementation::dumpCopula();
   return result;
 }
+
+
+/* Method save() stores the object through the StorageManager */
+void AnalyticalPhysicalModel::save(Advocate & adv) const
+{
+  PhysicalModelImplementation::save(adv);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void AnalyticalPhysicalModel::load(Advocate & adv)
+{
+  PhysicalModelImplementation::load(adv);
+}
 }

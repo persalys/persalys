@@ -260,7 +260,6 @@ String YACSEvaluation::getXMLFileName() const
 void YACSEvaluation::setXMLFileName(const String & xmlFileName)
 {
   xmlFileName_ = xmlFileName;
-  loadData();
 }
 
 
@@ -277,6 +276,5 @@ void YACSEvaluation::load(Advocate & adv)
 {
   NumericalMathEvaluationImplementation::load(adv);
   adv.loadAttribute("xmlFileName_", xmlFileName_);
-  *this = YACSEvaluation(xmlFileName_);
 }
 }

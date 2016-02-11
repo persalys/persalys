@@ -48,7 +48,7 @@ void OTStudyItem::update(Observable * source, const String & message)
 {
   if (message=="addPhysicalModel")
   {
-    PhysicalModel addedPhysicalModel = otStudy_->getPhysicalModels().back();
+    PhysicalModel addedPhysicalModel = *otStudy_->getPhysicalModels().end();
     PhysicalModelItem * newPhysicalModelItem = new PhysicalModelItem(addedPhysicalModel);
     addedPhysicalModel.addObserver(newPhysicalModelItem);
     connect(newPhysicalModelItem, SIGNAL(physicalModelChanged(PhysicalModel)), this, SLOT(updatePhysicalModel(PhysicalModel)));
@@ -77,7 +77,7 @@ void OTStudyItem::update(Observable * source, const String & message)
   }
   else if (message=="addDesignOfExperiment")
   {
-    DesignOfExperiment addedDesignOfExperiment = otStudy_->getDesignOfExperiments().back();
+    DesignOfExperiment addedDesignOfExperiment = *otStudy_->getDesignOfExperiments().end();
 
     DesignOfExperimentItem * newItem = new DesignOfExperimentItem(addedDesignOfExperiment);
     addedDesignOfExperiment.addObserver(newItem);
@@ -93,7 +93,7 @@ void OTStudyItem::update(Observable * source, const String & message)
   }
   else if (message=="addLimitState")
   {
-    LimitState addedLimitState = otStudy_->getLimitStates().back();
+    LimitState addedLimitState = *otStudy_->getLimitStates().end();
 
     LimitStateItem * newItem = new LimitStateItem(addedLimitState);
     addedLimitState.addObserver(newItem);
@@ -116,7 +116,7 @@ void OTStudyItem::update(Observable * source, const String & message)
   }
   else
   {
-    Analysis addedAnalysis = otStudy_->getAnalyses().back();
+    Analysis addedAnalysis = *otStudy_->getAnalyses().end();
 
     AnalysisItem * newItem;
     if (message=="addModelEvaluation")

@@ -26,6 +26,13 @@ namespace OTGUI {
 
 CLASSNAMEINIT(YACSPhysicalModel);
 
+YACSPhysicalModel::YACSPhysicalModel(const String & name)
+  : PhysicalModelImplementation(name)
+  , evaluation_(YACSEvaluation())
+{
+}
+
+
 YACSPhysicalModel::YACSPhysicalModel(const String & name, const String & fileName)
   : PhysicalModelImplementation(name)
   , evaluation_(YACSEvaluation(fileName))
@@ -78,7 +85,7 @@ void YACSPhysicalModel::removeOutput(const String & outputName)
 
 String YACSPhysicalModel::getXMLFileName() const
 {
-  return evaluation_.getXMLFileName();
+  return xmlFileName_;
 }
 
 
@@ -90,6 +97,8 @@ void YACSPhysicalModel::setXMLFileName(const String & fileName)
   try
   {
     evaluation_.setXMLFileName(fileName);
+    evaluation_.loadData();
+    xmlFileName_ = fileName;
   }
   catch (std::exception & ex)
   {
@@ -145,5 +154,22 @@ String YACSPhysicalModel::dump() const
   result += PhysicalModelImplementation::dumpCopula();
 
   return result;
+}
+
+
+/* Method save() stores the object through the StorageManager */
+void YACSPhysicalModel::save(Advocate & adv) const
+{
+  PhysicalModelImplementation::save(adv);
+  adv.saveAttribute("xmlFileName_", xmlFileName_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void YACSPhysicalModel::load(Advocate & adv)
+{
+  PhysicalModelImplementation::load(adv);
+  adv.loadAttribute("xmlFileName_", xmlFileName_);
+  evaluation_.setXMLFileName(xmlFileName_);
 }
 }
