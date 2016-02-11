@@ -31,7 +31,7 @@ using namespace OT;
 namespace OTGUI {
 
 OTStudyItem::OTStudyItem(OTStudy * otStudy)
-  : ObserverItem(otStudy->getName().c_str(), QString("OTStudy"))
+  : ObserverItem(otStudy->getName().c_str(), "OTStudy")
   , otStudy_(otStudy)
 {
 
@@ -48,15 +48,15 @@ void OTStudyItem::update(Observable * source, const String & message)
 {
   if (message=="addPhysicalModel")
   {
-    PhysicalModel addedPhysicalModel = *otStudy_->getPhysicalModels().end();
+    PhysicalModel addedPhysicalModel = otStudy_->getPhysicalModels()[otStudy_->getPhysicalModels().getSize()-1];
     PhysicalModelItem * newPhysicalModelItem = new PhysicalModelItem(addedPhysicalModel);
     addedPhysicalModel.addObserver(newPhysicalModelItem);
     connect(newPhysicalModelItem, SIGNAL(physicalModelChanged(PhysicalModel)), this, SLOT(updatePhysicalModel(PhysicalModel)));
     appendRow(newPhysicalModelItem);
-    Item * item = new Item(tr("Deterministic study"), QString("DeterministicStudy"));
+    Item * item = new Item(tr("Deterministic study"), "DeterministicStudy");
     item->setEditable(false);
     newPhysicalModelItem->appendRow(item);
-    item = new Item(tr("Probabilistic study"), QString("ProbabilisticStudy"));
+    item = new Item(tr("Probabilistic study"), "ProbabilisticStudy");
     item->setEditable(false);
     newPhysicalModelItem->appendRow(item);
 
@@ -69,7 +69,7 @@ void OTStudyItem::update(Observable * source, const String & message)
       emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
     }
 
-    item = new Item(tr("Designs of experiment"), QString("DesignOfExperimentList"));
+    item = new Item(tr("Designs of experiment"), "DesignOfExperimentList");
     item->setEditable(false);
     newPhysicalModelItem->appendRow(item);
 
@@ -77,7 +77,7 @@ void OTStudyItem::update(Observable * source, const String & message)
   }
   else if (message=="addDesignOfExperiment")
   {
-    DesignOfExperiment addedDesignOfExperiment = *otStudy_->getDesignOfExperiments().end();
+    DesignOfExperiment addedDesignOfExperiment = otStudy_->getDesignOfExperiments()[otStudy_->getDesignOfExperiments().getSize()-1];
 
     DesignOfExperimentItem * newItem = new DesignOfExperimentItem(addedDesignOfExperiment);
     addedDesignOfExperiment.addObserver(newItem);
@@ -93,7 +93,7 @@ void OTStudyItem::update(Observable * source, const String & message)
   }
   else if (message=="addLimitState")
   {
-    LimitState addedLimitState = *otStudy_->getLimitStates().end();
+    LimitState addedLimitState = otStudy_->getLimitStates()[otStudy_->getLimitStates().getSize()-1];
 
     LimitStateItem * newItem = new LimitStateItem(addedLimitState);
     addedLimitState.addObserver(newItem);
@@ -116,7 +116,7 @@ void OTStudyItem::update(Observable * source, const String & message)
   }
   else
   {
-    Analysis addedAnalysis = *otStudy_->getAnalyses().end();
+    Analysis addedAnalysis = otStudy_->getAnalyses()[otStudy_->getAnalyses().getSize()-1];
 
     AnalysisItem * newItem;
     if (message=="addModelEvaluation")
@@ -124,17 +124,17 @@ void OTStudyItem::update(Observable * source, const String & message)
       newItem = new ModelEvaluationItem(addedAnalysis);
       addDeterministicAnalysisItem(addedAnalysis, newItem);
     }
-    else if (message=="addMonteCarloAnalysis" || message=="addTaylorExpansionsMomentsAnalysis")
+    else if (message == "addMonteCarloAnalysis" || message == "addTaylorExpansionsMomentsAnalysis")
     {
       newItem = new CentralTendencyItem(addedAnalysis);
       addProbabilisticAnalysisItem(addedAnalysis, newItem);
     }
-    else if (message=="addSobolAnalysis" || message=="addSRCAnalysis")
+    else if (message == "addSobolAnalysis" || message == "addSRCAnalysis")
     {
       newItem = new SensitivityAnalysisItem(addedAnalysis);
       addProbabilisticAnalysisItem(addedAnalysis, newItem);
     }
-    else if (message=="addMonteCarloReliabilityAnalysis")
+    else if (message == "addMonteCarloReliabilityAnalysis")
     {
       newItem = new ReliabilityAnalysisItem(addedAnalysis);
       addReliabilityAnalysisItem(addedAnalysis, newItem);
