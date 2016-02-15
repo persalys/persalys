@@ -30,8 +30,12 @@ class TaylorExpansionsMomentsAnalysis : public AnalysisImplementation
   CLASSNAME;
 
 public:
+  /** Default constructor */
+  TaylorExpansionsMomentsAnalysis();
+  /** Constructor with parameters */
   TaylorExpansionsMomentsAnalysis(const OT::String & name, const PhysicalModel & physicalModel);
 
+  /** Virtual constructor */
   virtual TaylorExpansionsMomentsAnalysis * clone() const;
 
   OutputCollection getOutputs() const;

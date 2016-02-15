@@ -19,7 +19,9 @@
  *
  */
 #include "otgui/MonteCarloAnalysis.hxx"
+
 #include "RandomGenerator.hxx"
+#include "PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -27,6 +29,18 @@ namespace OTGUI {
 
 CLASSNAMEINIT(MonteCarloAnalysis);
 
+static Factory<MonteCarloAnalysis> RegisteredFactory("MonteCarloAnalysis");
+
+/* Default constructor */
+MonteCarloAnalysis::MonteCarloAnalysis()
+  : SimulationAnalysis()
+  , isConfidenceIntervalRequired_(true)
+  , levelConfidenceInterval_(0.95)
+{
+}
+
+
+/* Constructor with parameters */
 MonteCarloAnalysis::MonteCarloAnalysis(const String & name, const PhysicalModel & physicalModel,
                                        const UnsignedInteger nbSimu, bool confidenceInterval, double level)
   : SimulationAnalysis(name, physicalModel, nbSimu)
@@ -37,6 +51,7 @@ MonteCarloAnalysis::MonteCarloAnalysis(const String & name, const PhysicalModel 
 }
 
 
+/* Virtual constructor */
 MonteCarloAnalysis* MonteCarloAnalysis::clone() const
 {
   return new MonteCarloAnalysis(*this);
@@ -98,8 +113,7 @@ String MonteCarloAnalysis::dump() const
 
 bool MonteCarloAnalysis::analysisLaunched() const
 {
-//   return outputSample_.getSize()!=0;
-  return true;
+  return getResult().getOutputSample().getSize() != 0;
 }
 
 

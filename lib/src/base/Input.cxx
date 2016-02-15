@@ -21,6 +21,7 @@
 #include "otgui/Input.hxx"
 
 #include "TruncatedDistribution.hxx"
+#include "PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -28,14 +29,25 @@ namespace OTGUI {
 
 CLASSNAMEINIT(Input);
 
-Input::Input(const String & name, const double & value, const String & description,
-             const Distribution & distribution)
- : Variable(name, value, description)
- , distribution_(distribution)
+static Factory<Input> RegisteredFactory("Input");
+
+/* Default constructor */
+Input::Input()
+  : Variable()
 {
 }
 
 
+/* Constructor with parameters */
+Input::Input(const String & name, const double & value, const String & description,
+             const Distribution & distribution)
+  : Variable(name, value, description)
+  , distribution_(distribution)
+{
+}
+
+
+/* Virtual constructor */
 Input* Input::clone() const
 {
   return new Input(*this);

@@ -21,12 +21,17 @@
 #include "otgui/PythonPhysicalModel.hxx"
 #include "otgui/PythonEvaluation.hxx"
 
+#include "PersistentObjectFactory.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
 
 CLASSNAMEINIT(PythonPhysicalModel);
 
+static Factory<PythonPhysicalModel> RegisteredFactory("PythonPhysicalModel");
+
+/* Default constructor */
 PythonPhysicalModel::PythonPhysicalModel(const String & name)
   : PhysicalModelImplementation(name)
 {
@@ -34,15 +39,18 @@ PythonPhysicalModel::PythonPhysicalModel(const String & name)
 }
 
 
+/* Constructor with parameters */
 PythonPhysicalModel::PythonPhysicalModel(const String & name,
                                          const InputCollection & inputs,
                                          const OutputCollection & outputs,
                                          const String & code)
   : PhysicalModelImplementation(name, inputs, outputs)
+  , code_(code)
 {
 }
 
 
+/* Virtual constructor */
 PythonPhysicalModel* PythonPhysicalModel::clone() const
 {
   return new PythonPhysicalModel(*this);

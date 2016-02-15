@@ -24,6 +24,9 @@
 #include <QHeaderView>
 #include <QMdiSubWindow>
 #include <QFileDialog>
+#include <QFileInfo>
+#include <QApplication>
+#include <QMessageBox>
 
 #include "otgui/PhysicalModelWindow.hxx"
 #include "otgui/ProbabilisticModelWindow.hxx"
@@ -42,6 +45,8 @@
 #include "otgui/MonteCarloReliabilityResultWindow.hxx"
 
 #include <iostream>
+
+using namespace OT;
 
 namespace OTGUI {
 
@@ -118,29 +123,29 @@ void StudyTreeView::buildActions()
   newThresholdExceedance_->setStatusTip(tr("Create a new threshold exceedance"));
   connect(newThresholdExceedance_, SIGNAL(triggered()), this, SLOT(createNewThresholdExceedance()));
 
-  runDesignOfExperiment_ = new QAction(tr("Run"), this);
+  runDesignOfExperiment_ = new QAction(QIcon(":/images/run-build.png"), tr("Run"), this);
   runDesignOfExperiment_->setStatusTip(tr("Run the design of experiment"));
   connect(runDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(runDesignOfExperiment()));
 
-  runModelEvaluation_ = new QAction(tr("Run"), this);
+  runModelEvaluation_ = new QAction(QIcon(":/images/run-build.png"), tr("Run"), this);
   runModelEvaluation_->setStatusTip(tr("Run the model evaluation"));
   connect(runModelEvaluation_, SIGNAL(triggered()), this, SLOT(runModelEvaluation()));
 
-  runCentralTendency_ = new QAction(tr("Run"), this);
+  runCentralTendency_ = new QAction(QIcon(":/images/run-build.png"), tr("Run"), this);
   runCentralTendency_->setStatusTip(tr("Run the central tendency"));
   connect(runCentralTendency_, SIGNAL(triggered()), this, SLOT(runCentralTendency()));
 
-  runSensitivityAnalysis_ = new QAction(tr("Run"), this);
+  runSensitivityAnalysis_ = new QAction(QIcon(":/images/run-build.png"), tr("Run"), this);
   runSensitivityAnalysis_->setStatusTip(tr("Run the sensitivity analysis"));
   connect(runSensitivityAnalysis_, SIGNAL(triggered()), this, SLOT(runSensitivityAnalysis()));
 
-  runReliabilityAnalysis_ = new QAction(tr("Run"), this);
+  runReliabilityAnalysis_ = new QAction(QIcon(":/images/run-build.png"), tr("Run"), this);
   runReliabilityAnalysis_->setStatusTip(tr("Run the reliability analysis"));
   connect(runReliabilityAnalysis_, SIGNAL(triggered()), this, SLOT(runReliabilityAnalysis()));
 
-  dumpOTStudy_ = new QAction(tr("Dump"), this);
-  dumpOTStudy_->setStatusTip(tr("Dump the OTStudy"));
-  connect(dumpOTStudy_, SIGNAL(triggered()), this, SLOT(dumpOTStudy()));
+  saveOTStudy_ = new QAction(QIcon(":/images/document-save.png"), tr("Save"), this);
+  saveOTStudy_->setStatusTip(tr("Save the OTStudy"));
+  connect(saveOTStudy_, SIGNAL(triggered()), this, SLOT(saveOTStudy()));
 }
 
 
@@ -151,7 +156,7 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
   if (dataType=="OTStudy")
   {
     actions.append(newPhysicalModel_);
-    actions.append(dumpOTStudy_);
+    actions.append(saveOTStudy_);
   }
   else if (dataType=="DeterministicStudy")
   {
@@ -502,15 +507,13 @@ void StudyTreeView::createReliabilityAnalysisResult(AnalysisItem * item)
 
 void StudyTreeView::dumpOTStudy()
 {
-  QModelIndex index = selectionModel()->currentIndex();
-  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
-  OTStudyItem * item = dynamic_cast<OTStudyItem*>(selectedItem);
+  OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
 
   QString fileName = QFileDialog::getSaveFileName(this, tr("Dump OTStudy..."),
                      QDir::homePath(),
                      tr("Python source files (*.py)"));
 
-  if ( ! fileName.isEmpty() )
+  if (!fileName.isEmpty())
   {
     if (!fileName.endsWith(".py"))
       fileName += ".py";
@@ -563,10 +566,91 @@ void StudyTreeView::loadOTStudy()
 }
 
 
+void StudyTreeView::saveOTStudy()
+{
+  OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
+
+  if (QFileInfo(item->getOTStudy()->getFileName().c_str()).exists())
+  {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    item->getOTStudy()->save(item->getOTStudy()->getFileName());
+    QApplication::restoreOverrideCursor();
+  }
+  else
+  {
+    saveAsOTStudy();
+  }
+}
+
+
+void StudyTreeView::saveAsOTStudy()
+{
+  OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
+
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Save OTStudy..."),
+                     QDir::homePath(),
+                     tr("XML files (*.xml)"));
+
+  if (!fileName.isEmpty())
+  {
+    if (!fileName.endsWith(".xml"))
+      fileName += ".xml";
+
+    QFile file(fileName);
+
+    // check
+    if (!file.open(QFile::WriteOnly))
+    {
+      std::cout << "cannot open" << file.fileName().toStdString() << std::endl;
+    }
+    // fill
+    else
+    {
+      QApplication::setOverrideCursor(Qt::WaitCursor);
+      item->getOTStudy()->save(fileName.toStdString());
+      QApplication::restoreOverrideCursor();
+    }
+  }
+}
+
+
+void StudyTreeView::openOTStudy()
+{
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open an existing OTStudy"),
+                     QDir::homePath(),
+                     tr("XML files (*.xml)"));
+
+  if (!fileName.isEmpty())
+  {
+    QFileInfo file(fileName);
+    if (file.exists() && !OTStudy::GetOTStudiesFileNames().__contains__(file.absoluteFilePath().toStdString()))
+    {
+      QApplication::setOverrideCursor(Qt::WaitCursor);
+      OTStudy::OpenOTStudy(fileName.toStdString());
+      QApplication::restoreOverrideCursor();
+    }
+    else
+    {
+      // put this in OTStudy::OpenOTStudy
+      QString message;
+      if (!file.exists())
+      {
+        message = tr("The file '%1' does not exist.").arg(file.baseName());
+      }
+      else if (OTStudy::GetOTStudiesFileNames().__contains__(file.absoluteFilePath().toStdString()))
+      {
+        message = tr("The file '%1' is already opened.").arg(file.baseName());
+      }
+      QMessageBox::warning(this, tr("Warning"), message);
+    }
+  }
+}
+
+
 void StudyTreeView::selectedItemChanged(const QModelIndex & index)
 {
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
-  if (selectedItem->data(Qt::UserRole).toString()!="Study")
+  if (selectedItem->data(Qt::UserRole).toString() != "Study")
     emit itemSelected(selectedItem);
 }
 }

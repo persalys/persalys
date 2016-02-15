@@ -22,6 +22,7 @@
 
 #include "MonteCarlo.hxx"
 #include "RandomGenerator.hxx"
+#include "PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -29,6 +30,20 @@ namespace OTGUI {
 
 CLASSNAMEINIT(MonteCarloReliabilityAnalysis);
 
+static Factory<MonteCarloReliabilityAnalysis> RegisteredFactory("MonteCarloReliabilityAnalysis");
+
+/* Default constructor */
+MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis()
+  : ReliabilityAnalysis()
+  , maximumOuterSampling_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultMaximumOuterSampling"))
+  , maximumCoefficientOfVariation_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultMaximumCoefficientOfVariation"))
+  , blockSize_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultBlockSize"))
+  , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
+{
+}
+
+
+/* Constructor with parameters */
 MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis(const String & name,
                                                              const LimitState & limitState,
                                                              const UnsignedInteger & maximumOuterSampling)
@@ -41,6 +56,7 @@ MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis(const String & name
 }
 
 
+/* Virtual constructor */
 MonteCarloReliabilityAnalysis* MonteCarloReliabilityAnalysis::clone() const
 {
   return new MonteCarloReliabilityAnalysis(*this);
@@ -127,6 +143,12 @@ String MonteCarloReliabilityAnalysis::dump() const
   oss << getName() << ".setSeed(" << seed_ << ")\n";
 
   return oss;
+}
+
+
+bool MonteCarloReliabilityAnalysis::analysisLaunched() const
+{
+  return getResult().getOuterSampling() != 0;
 }
 
 

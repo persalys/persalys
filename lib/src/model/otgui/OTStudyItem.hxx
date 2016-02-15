@@ -40,6 +40,10 @@ public:
 
   void update(Observable * source, const OT::String & message);
 
+  void addPhysicalModelItem(PhysicalModel & physicalModel);
+  void addDesignOfExperimentItem(DesignOfExperiment & design);
+  void addLimitStateItem(LimitState & limitState);
+  void addAnalysisItem(Analysis & analysis);
   void addDeterministicAnalysisItem(Analysis & analysis, AnalysisItem * item);
   void addProbabilisticAnalysisItem(Analysis & analysis, AnalysisItem * item);
   void addReliabilityAnalysisItem(Analysis & analysis, AnalysisItem * item);

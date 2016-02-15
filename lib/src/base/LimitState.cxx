@@ -26,6 +26,14 @@ namespace OTGUI {
 
 CLASSNAMEINIT(LimitState);
 
+/* Default constructor */
+LimitState::LimitState()
+  : TypedInterfaceObject<LimitStateImplementation>(new LimitStateImplementation())
+{
+}
+
+
+/* Constructor with parameters */
 LimitState::LimitState(const String & name, const PhysicalModel & physicalModel,
                        const String & outputName,
                        const OT::ComparisonOperator & comparisonOperator, const double & threshold)
@@ -49,18 +57,13 @@ LimitState::LimitState(const Implementation & p_implementation)
   // At last, allocate memory space if needed, but go to destructor to free it
 }
 
+
 /* Constructor from implementation pointer */
 LimitState::LimitState(LimitStateImplementation * p_implementation)
   : TypedInterfaceObject<LimitStateImplementation>(p_implementation)
 {
   // Initialize any other class members here
   // At last, allocate memory space if needed, but go to destructor to free it
-}
-
-
-LimitState* LimitState::clone() const
-{
-  return new LimitState(*this);
 }
 
 

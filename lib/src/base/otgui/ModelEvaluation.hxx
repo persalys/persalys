@@ -30,10 +30,14 @@ class ModelEvaluation : public AnalysisImplementation
   CLASSNAME;
 
 public:
+  /** Default constructor */
+  ModelEvaluation();
+  /** Constructor with parameters */
   ModelEvaluation(const OT::String & name, const PhysicalModel & physicalModel);
   ModelEvaluation(const OT::String & name, const PhysicalModel & physicalModel,
                   const OT::NumericalPoint & inputsValues);
 
+  /** Virtual constructor */
   virtual ModelEvaluation * clone() const;
 
   void updateParameters();
@@ -58,8 +62,8 @@ protected:
 
 private:
   OT::Description inputNames_;
-  ModelEvaluationResult result_;
   OT::NumericalPoint inputsValues_;
+  ModelEvaluationResult result_;
 };
 }
 #endif

@@ -116,8 +116,9 @@ void ImportTablePage::loadFile()
   {
     columns = Indices(inputNames.getSize());
     columns.fill();
+    designOfExperiment_.setColumns(columns);
   }
-    
+
   for (UnsignedInteger i=0; i<columns.getSize(); ++i)
     desc[columns[i]] = inputNames[i];
   sampleFromFile.setDescription(desc);

@@ -23,11 +23,26 @@
 #include "Box.hxx"
 #include "TruncatedDistribution.hxx"
 #include "TruncatedNormal.hxx"
+#include "PersistentObjectFactory.hxx"
 
 using namespace OT;
 
 namespace OTGUI {
 
+CLASSNAMEINIT(DesignOfExperimentImplementation);
+
+static Factory<DesignOfExperimentImplementation> RegisteredFactory("DesignOfExperimentImplementation");
+
+/* Default constructor */
+DesignOfExperimentImplementation::DesignOfExperimentImplementation()
+  : PersistentObject()
+  , Observable()
+  , type_(DesignOfExperimentImplementation::FromBoundsAndLevels)
+{
+}
+
+
+/* Constructor with parameters */
 DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String & name, const PhysicalModel & physicalModel)
   : PersistentObject()
   , Observable()
@@ -36,10 +51,11 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String 
 //   , experiment_(Experiment())
 {
   setName(name);
-  initializeParameters(physicalModel.getInputs());
+  initializeParameters();
 }
 
 
+/* Constructor with parameters */
 DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String & name,
                                                                    const PhysicalModel & physicalModel,
                                                                    const NumericalPoint & lowerBounds,
@@ -72,6 +88,7 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String 
 // TODO: CTR with deltas
 //   , type_(DesignOfExperimentImplementation::FromBoundsAndDeltas)
 
+/* Constructor with parameters */
 DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String & name,
                                                                    const PhysicalModel & physicalModel,
                                                                    const String & fileName,
@@ -84,11 +101,12 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String 
 {
   setName(name);
   setColumns(columns);
-  initializeParameters(physicalModel.getInputs());
+  initializeParameters();
 }
 
 
 // TODO
+/* Constructor with parameters */
 // DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String & name,
 //                                                                    const PhysicalModel & physicalModel,
 //                                                                    const Experiment & experiment)
@@ -105,16 +123,18 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String 
 // }
 
 
+/* Virtual constructor */
 DesignOfExperimentImplementation* DesignOfExperimentImplementation::clone() const
 {
   return new DesignOfExperimentImplementation(*this);
 }
 
 
-void DesignOfExperimentImplementation::initializeParameters(const InputCollection & inputs)
+void DesignOfExperimentImplementation::initializeParameters()
 {
   inputSample_.clear();
   inputNames_ = getPhysicalModel().getInputNames();
+  const InputCollection inputs = getPhysicalModel().getInputs();
 
   int inputSize = inputs.getSize();
   values_ = NumericalPoint(inputSize);
@@ -175,7 +195,7 @@ void DesignOfExperimentImplementation::updateParameters()
   Indices levels(levels_);
   NumericalPoint deltas(deltas_);
 
-  initializeParameters(getPhysicalModel().getInputs());
+  initializeParameters();
 
   for (UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
   {
@@ -591,11 +611,13 @@ void DesignOfExperimentImplementation::load(Advocate & adv)
     adv.loadAttribute("lowerBounds_", lowerBounds_);
     adv.loadAttribute("upperBounds_", upperBounds_);
     adv.loadAttribute("values_", values_);
+    inputNames_ = getPhysicalModel().getInputNames();
   }
   else if (type_ == DesignOfExperimentImplementation::FromFile)
   {
     adv.loadAttribute("fileName_", fileName_);
     adv.loadAttribute("columns_", columns_);
+    initializeParameters();
   }
   adv.loadAttribute("result_", result_);
 }

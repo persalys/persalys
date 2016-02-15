@@ -31,17 +31,26 @@ class DesignOfExperiment : public OT::TypedInterfaceObject<DesignOfExperimentImp
 public:
   typedef OT::Pointer<DesignOfExperimentImplementation>       Implementation;
 
-  DesignOfExperiment(const OT::String & name="Unamed", const PhysicalModel & physicalModel=PhysicalModel());
+  /** Default constructor */
+  DesignOfExperiment();
+  /** Constructor with parameters */
+  DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel);
+  /** Constructor with parameters */
   DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel,
                      const OT::NumericalPoint & lowerBounds, const OT::NumericalPoint & upperBounds,
                      const OT::Indices & nbValues, const OT::NumericalPoint & values=OT::NumericalPoint(0));
+  /** Constructor with parameters */
   DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel,
                      const OT::String & fileName, OT::Indices columns=OT::Indices());
 //   TODO
+  /** Constructor with parameters */
 //   DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel,
 //                      const OT::Experiment & experiment);
+  /** Default constructor */
   DesignOfExperiment(const DesignOfExperimentImplementation & implementation);
+  /** Constructor from implementation */
   DesignOfExperiment(const Implementation & p_implementation);
+  /** Constructor from implementation pointer */
   DesignOfExperiment(DesignOfExperimentImplementation * p_implementation);
 
   void addObserver(Observer * observer);

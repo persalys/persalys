@@ -29,13 +29,15 @@ class PythonPhysicalModel : public PhysicalModelImplementation
   CLASSNAME;
 
 public:
-  PythonPhysicalModel(const OT::String & name);
-
+  /** Default constructor */
+  PythonPhysicalModel(const OT::String & name="Unnamed");
+  /** Constructor with parameters */
   PythonPhysicalModel(const OT::String & name,
                       const InputCollection & inputs,
                       const OutputCollection & outputs,
                       const OT::String & code);
 
+  /** Virtual constructor */
   virtual PythonPhysicalModel * clone() const;
 
   void setCode(const OT::String & code);

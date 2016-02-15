@@ -68,6 +68,9 @@ public slots:
   void createNewLimitStateWindow(LimitStateItem * item);
   void dumpOTStudy();
   void loadOTStudy();
+  void saveOTStudy();
+  void saveAsOTStudy();
+  void openOTStudy();
 signals:
   void showWindow(QMdiSubWindow*);
   void errorMessageEmitted(QString);
@@ -93,7 +96,7 @@ private:
   QAction * runCentralTendency_;
   QAction * runSensitivityAnalysis_;
   QAction * runReliabilityAnalysis_;
-  QAction * dumpOTStudy_;
+  QAction * saveOTStudy_;
 };
 }
 #endif

@@ -37,6 +37,10 @@ protected:
 public slots:
 signals:
   void createNewOTStudy();
+  void openOTStudy();
+  void saveOTStudy();
+  void saveAsOTStudy();
+  void dumpOTStudy();
   void loadOTStudy();
   void closeWindow();
   void showHidePythonConsole(bool);

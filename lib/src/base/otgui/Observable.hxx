@@ -29,6 +29,7 @@ namespace OTGUI {
 class Observable
 {
 public:
+  /** Default constructor */
   Observable();
 
   virtual ~Observable() {};

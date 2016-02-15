@@ -29,6 +29,7 @@ class Observable;
 class Observer
 {
 public:
+  /** Default constructor */
   Observer();
 
   virtual ~Observer() {};

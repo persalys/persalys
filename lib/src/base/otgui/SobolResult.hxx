@@ -26,13 +26,18 @@
 namespace OTGUI {
 class SobolResult : public OT::PersistentObject
 {
+  CLASSNAME;
+
 public:
+  /** Default constructor */
   SobolResult();
+  /** Constructor with parameters */
   SobolResult(const OT::NumericalSample firstOrderIndices,
               const OT::Collection<OT::SymmetricMatrix> secondOrderIndices,
               const OT::NumericalSample totalOrderIndices,
               const OT::Description & outputNames);
 
+  /** Virtual constructor */
   virtual SobolResult * clone() const;
 
   OT::Description getOutputNames() const;

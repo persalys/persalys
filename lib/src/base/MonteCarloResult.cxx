@@ -22,6 +22,7 @@
 #include "Normal.hxx"
 #include "ChiSquare.hxx"
 #include "KernelSmoothing.hxx"
+#include "PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -29,12 +30,17 @@ namespace OTGUI{
 
 CLASSNAMEINIT(MonteCarloResult);
 
+static Factory<MonteCarloResult> RegisteredFactory("MonteCarloResult");
+
+/* Default constructor */
 MonteCarloResult::MonteCarloResult()
   : SimulationAnalysisResult()
   , levelConfidenceInterval_(0.)
 {
 }
 
+
+/* Constructor with parameters */
 MonteCarloResult::MonteCarloResult(NumericalSample inputSample, NumericalSample outputSample)
   : SimulationAnalysisResult(inputSample, outputSample)
   , levelConfidenceInterval_(0.95)
@@ -42,6 +48,7 @@ MonteCarloResult::MonteCarloResult(NumericalSample inputSample, NumericalSample 
 }
   
 
+/* Virtual constructor */
 MonteCarloResult* MonteCarloResult::clone() const
 {
   return new MonteCarloResult(*this);

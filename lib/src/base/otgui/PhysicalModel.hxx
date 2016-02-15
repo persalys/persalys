@@ -29,14 +29,20 @@ class PhysicalModel : public OT::TypedInterfaceObject<PhysicalModelImplementatio
   CLASSNAME;
 
 public:
-  typedef OT::Pointer<PhysicalModelImplementation>       Implementation;
+  typedef OT::Pointer<PhysicalModelImplementation> Implementation;
 
-  explicit PhysicalModel(const OT::String & name="Unamed");
+  /** Default constructor */
+  explicit PhysicalModel(const OT::String & name="Unnamed");
+  /** Constructor with parameters */
   PhysicalModel(const OT::String & name, const InputCollection & inputs, const OutputCollection & outputs);
+  /** Default constructor */
   PhysicalModel(const PhysicalModelImplementation & implementation);
+  /** Constructor from implementation */
   PhysicalModel(const Implementation & p_implementation);
+  /** Constructor from implementation pointer */
   PhysicalModel(PhysicalModelImplementation * p_implementation);
 
+  /** Virtual constructor */
   virtual PhysicalModel * clone() const;
 
   void addObserver(Observer * observer);

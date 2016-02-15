@@ -29,9 +29,12 @@ class Variable : public OT::PersistentObject
   CLASSNAME;
 
 public:
-  Variable(const OT::String & name="", const double & value=0., const OT::String & description="");
+  /** Default constructor */
+  Variable();
+  /** Constructor with parameters */
+  Variable(const OT::String & name, const double & value=0., const OT::String & description="");
 
-    /* String converter */
+  /** String converter */
   virtual OT::String __repr__() const;
 
   double getValue() const;

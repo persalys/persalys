@@ -29,11 +29,17 @@ class Analysis : public OT::TypedInterfaceObject<AnalysisImplementation>
   CLASSNAME;
 
 public:
-  typedef OT::Pointer<AnalysisImplementation>       Implementation;
+  typedef OT::Pointer<AnalysisImplementation> Implementation;
 
-  Analysis(const OT::String & name="Unamed", const PhysicalModel & physicalModel=PhysicalModel());
+  /** Default constructor */
+  Analysis();
+  /** Constructor with parameters */
+  Analysis(const OT::String & name, const PhysicalModel & physicalModel);
+  /** Default constructor */
   Analysis(const AnalysisImplementation & implementation);
+  /** Constructor from implementation */
   Analysis(const Implementation & p_implementation);
+  /** Constructor from implementation pointer */
   Analysis(AnalysisImplementation * p_implementation);
 
   void addObserver(Observer * observer);

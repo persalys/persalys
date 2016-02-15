@@ -53,6 +53,7 @@ void StudyTreeViewModel::update(Observable * source, const String & message)
 void StudyTreeViewModel::createNewOTStudy()
 {
   OTStudy * newStudy = new OTStudy(OTStudy::GetAvailableOTStudyName());
+  OTStudy::AddOTStudy(newStudy);
 }
 
 
@@ -66,6 +67,18 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
   connect(otStudyItem, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SIGNAL(newAnalysisCreated(AnalysisItem*)));
   otStudy->addObserver(otStudyItem);
   invisibleRootItem()->appendRow(otStudyItem);
+  for (UnsignedInteger i=0; i<otStudy->getPhysicalModels().getSize(); ++i)
+    otStudyItem->addPhysicalModelItem(otStudy->getPhysicalModels()[i]);
+  for (UnsignedInteger i=0; i<otStudy->getDesignOfExperiments().getSize(); ++i)
+    otStudyItem->addDesignOfExperimentItem(otStudy->getDesignOfExperiments()[i]);
+  for (UnsignedInteger i=0; i<otStudy->getLimitStates().getSize(); ++i)
+    otStudyItem->addLimitStateItem(otStudy->getLimitStates()[i]);
+  for (UnsignedInteger i=0; i<otStudy->getAnalyses().getSize(); ++i)
+  {
+    otStudyItem->addAnalysisItem(otStudy->getAnalyses()[i]);
+    if (otStudy->getAnalyses()[i].analysisLaunched())
+      otStudy->getAnalyses()[i].getImplementation()->notify("analysisFinished");
+  }
 }
 
 

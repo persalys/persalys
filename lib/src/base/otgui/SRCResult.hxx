@@ -26,10 +26,15 @@
 namespace OTGUI {
 class SRCResult : public OT::PersistentObject
 {
+  CLASSNAME;
+
 public:
+  /** Default constructor */
   SRCResult();
+  /** Constructor with parameters */
   SRCResult(const OT::NumericalSample indices, const OT::Description & outputNames);
 
+  /** Virtual constructor */
   virtual SRCResult * clone() const;
 
   OT::Description getOutputNames() const;

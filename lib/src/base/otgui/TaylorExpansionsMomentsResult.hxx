@@ -28,10 +28,16 @@
 namespace OTGUI {
 class TaylorExpansionsMomentsResult : public OT::PersistentObject
 {
-public:
-  TaylorExpansionsMomentsResult();
-  TaylorExpansionsMomentsResult(const OT::QuadraticCumul & algoTaylorExpansionsMoments, const OutputCollection & outputs);
+  CLASSNAME;
 
+public:
+  /** Default constructor */
+  TaylorExpansionsMomentsResult();
+  /** Constructor with parameters */
+  TaylorExpansionsMomentsResult(const OT::QuadraticCumul & algoTaylorExpansionsMoments,
+                                const OT::Description & outputNames);
+
+  /** Virtual constructor */
   virtual TaylorExpansionsMomentsResult * clone() const;
 
   OT::Description getOutputNames() const;

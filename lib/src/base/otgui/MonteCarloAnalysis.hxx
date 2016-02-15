@@ -30,9 +30,13 @@ class MonteCarloAnalysis : public SimulationAnalysis
   CLASSNAME;
 
 public:
+  /** Default constructor */
+  MonteCarloAnalysis();
+  /** Constructor with parameters */
   MonteCarloAnalysis(const OT::String & name, const PhysicalModel & physicalModel,
                      const OT::UnsignedInteger nbSimu=10000, bool confidenceInterval=true, double level=0.95);
 
+  /** Virtual constructor */
   virtual MonteCarloAnalysis * clone() const;
 
   bool isConfidenceIntervalRequired() const;

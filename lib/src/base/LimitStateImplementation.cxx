@@ -21,11 +21,26 @@
 #include "otgui/LimitStateImplementation.hxx"
 
 #include "Equal.hxx"
+#include "PersistentObjectFactory.hxx"
 
 using namespace OT;
 
 namespace OTGUI {
 
+CLASSNAMEINIT(LimitStateImplementation);
+
+static Factory<LimitStateImplementation> RegisteredFactory("LimitStateImplementation");
+
+/* Default constructor */
+LimitStateImplementation::LimitStateImplementation()
+  : PersistentObject()
+  , Observable()
+  , threshold_(0.)
+{
+}
+
+
+/* Constructor with parameters */
 LimitStateImplementation::LimitStateImplementation(const String & name, const PhysicalModel & physicalModel,
                        const String & outputName, const ComparisonOperator & comparisonOperator,
                        const double & threshold)
@@ -46,6 +61,7 @@ LimitStateImplementation::LimitStateImplementation(const String & name, const Ph
 }
 
 
+/* Virtual constructor */
 LimitStateImplementation* LimitStateImplementation::clone() const
 {
   return new LimitStateImplementation(*this);

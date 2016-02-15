@@ -20,19 +20,24 @@
  */
 #include "otgui/ModelEvaluationResult.hxx"
 
+#include "PersistentObjectFactory.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
 
 CLASSNAMEINIT(ModelEvaluationResult);
 
+static Factory<ModelEvaluationResult> RegisteredFactory("ModelEvaluationResult");
+
+/* Default constructor */
 ModelEvaluationResult::ModelEvaluationResult()
   : PersistentObject()
 {
-
 }
 
 
+/* Constructor with parameters */
 ModelEvaluationResult::ModelEvaluationResult(NumericalSample inputSample, NumericalSample outputSample)
   : PersistentObject()
   , inputSample_(inputSample)
@@ -41,6 +46,7 @@ ModelEvaluationResult::ModelEvaluationResult(NumericalSample inputSample, Numeri
 }
 
 
+/* Virtual constructor */
 ModelEvaluationResult* ModelEvaluationResult::clone() const
 {
   return new ModelEvaluationResult(*this);

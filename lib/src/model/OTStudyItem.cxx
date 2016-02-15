@@ -46,104 +46,50 @@ OTStudyItem::~OTStudyItem()
 
 void OTStudyItem::update(Observable * source, const String & message)
 {
-  if (message=="addPhysicalModel")
+  if (message == "addPhysicalModel")
   {
     PhysicalModel addedPhysicalModel = otStudy_->getPhysicalModels()[otStudy_->getPhysicalModels().getSize()-1];
-    PhysicalModelItem * newPhysicalModelItem = new PhysicalModelItem(addedPhysicalModel);
-    addedPhysicalModel.addObserver(newPhysicalModelItem);
-    connect(newPhysicalModelItem, SIGNAL(physicalModelChanged(PhysicalModel)), this, SLOT(updatePhysicalModel(PhysicalModel)));
-    appendRow(newPhysicalModelItem);
-    Item * item = new Item(tr("Deterministic study"), "DeterministicStudy");
-    item->setEditable(false);
-    newPhysicalModelItem->appendRow(item);
-    item = new Item(tr("Probabilistic study"), "ProbabilisticStudy");
-    item->setEditable(false);
-    newPhysicalModelItem->appendRow(item);
-
-    if (addedPhysicalModel.hasStochasticInputs())
-    {
-      ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(addedPhysicalModel);
-      addedPhysicalModel.addObserver(newProbabilisticModelItem);
-      item->appendRow(newProbabilisticModelItem);
-      connect(newPhysicalModelItem, SIGNAL(physicalModelChanged(PhysicalModel)), newProbabilisticModelItem, SLOT(updatePhysicalModel(PhysicalModel)));
-      emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
-    }
-
-    item = new Item(tr("Designs of experiment"), "DesignOfExperimentList");
-    item->setEditable(false);
-    newPhysicalModelItem->appendRow(item);
-
-    emit newPhysicalModelItemCreated(newPhysicalModelItem);
+    addPhysicalModelItem(addedPhysicalModel);
   }
-  else if (message=="addDesignOfExperiment")
+  else if (message == "addDesignOfExperiment")
   {
     DesignOfExperiment addedDesignOfExperiment = otStudy_->getDesignOfExperiments()[otStudy_->getDesignOfExperiments().getSize()-1];
-
-    DesignOfExperimentItem * newItem = new DesignOfExperimentItem(addedDesignOfExperiment);
-    addedDesignOfExperiment.addObserver(newItem);
-    addedDesignOfExperiment.getPhysicalModel().addObserver(newItem);
-    for (int i=0; i<rowCount(); ++i)
-      if (child(i)->text().toStdString() == addedDesignOfExperiment.getPhysicalModel().getName())
-      {
-        child(i)->child(2)->appendRow(newItem);
-        emit newDesignOfExperimentItemCreated(newItem);
-        return;
-      }
-    std::cerr<<"No item added for the design of experiment named "<<addedDesignOfExperiment.getName()<<std::endl;
+    try
+    {
+      addDesignOfExperimentItem(addedDesignOfExperiment);
+    }
+    catch (std::exception & ex)
+    {
+      std::cerr<<"No item added for the design of experiment named " << addedDesignOfExperiment.getName() << "\n" << ex.what() << std::endl;
+    }
   }
-  else if (message=="addLimitState")
+  else if (message == "addLimitState")
   {
     LimitState addedLimitState = otStudy_->getLimitStates()[otStudy_->getLimitStates().getSize()-1];
-
-    LimitStateItem * newItem = new LimitStateItem(addedLimitState);
-    addedLimitState.addObserver(newItem);
-    addedLimitState.getPhysicalModel().addObserver(newItem);
-    for (int i=0; i<rowCount(); ++i)
-      if (child(i)->text().toStdString() == addedLimitState.getPhysicalModel().getName())
-      {
-        if (!addedLimitState.getPhysicalModel().hasStochasticInputs() && !child(i)->child(1)->hasChildren())
-        {
-          ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(addedLimitState.getPhysicalModel());
-          addedLimitState.getPhysicalModel().addObserver(newProbabilisticModelItem);
-          child(i)->child(1)->appendRow(newProbabilisticModelItem);
-          emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
-        }
-        child(i)->child(1)->appendRow(newItem);
-        emit newLimitStateItemCreated(newItem);
-        return;
-      }
-    std::cerr<<"No item added for the limit state named "<<addedLimitState.getName()<<std::endl;
+    try
+    {
+      addLimitStateItem(addedLimitState);
+    }
+    catch (std::exception & ex)
+    {
+      std::cerr<<"No item added for the limit state named " << addedLimitState.getName() << ex.what() << std::endl;
+    }
+  }
+  else if (message == "addAnalysis")
+  {
+    Analysis addedAnalysis = otStudy_->getAnalyses()[otStudy_->getAnalyses().getSize()-1];
+    try
+    {
+      addAnalysisItem(addedAnalysis);
+    }
+    catch (std::exception & ex)
+    {
+      std::cerr<<"No item added for the analysis named " << addedAnalysis.getName() << ex.what() << std::endl;
+    }
   }
   else
   {
-    Analysis addedAnalysis = otStudy_->getAnalyses()[otStudy_->getAnalyses().getSize()-1];
-
-    AnalysisItem * newItem;
-    if (message=="addModelEvaluation")
-    {
-      newItem = new ModelEvaluationItem(addedAnalysis);
-      addDeterministicAnalysisItem(addedAnalysis, newItem);
-    }
-    else if (message == "addMonteCarloAnalysis" || message == "addTaylorExpansionsMomentsAnalysis")
-    {
-      newItem = new CentralTendencyItem(addedAnalysis);
-      addProbabilisticAnalysisItem(addedAnalysis, newItem);
-    }
-    else if (message == "addSobolAnalysis" || message == "addSRCAnalysis")
-    {
-      newItem = new SensitivityAnalysisItem(addedAnalysis);
-      addProbabilisticAnalysisItem(addedAnalysis, newItem);
-    }
-    else if (message == "addMonteCarloReliabilityAnalysis")
-    {
-      newItem = new ReliabilityAnalysisItem(addedAnalysis);
-      addReliabilityAnalysisItem(addedAnalysis, newItem);
-    }
-    else
-    {
-      throw OT::InvalidArgumentException(HERE) << "In OTStudyItem::update: Impossible to add an item.\n";
-    }
-    connect(newItem, SIGNAL(analysisChanged(Analysis)), this, SLOT(updateAnalysis(Analysis)));
+    throw InvalidArgumentException(HERE) << "In OTStudyItem::update: not recognized message: " << message;
   }
 }
 
@@ -157,6 +103,107 @@ void OTStudyItem::updatePhysicalModel(const PhysicalModel & physicalModel)
 void OTStudyItem::updateAnalysis(const Analysis & analysis)
 {
   otStudy_->getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
+}
+
+
+void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
+{
+  PhysicalModelItem * newPhysicalModelItem = new PhysicalModelItem(physicalModel);
+  physicalModel.addObserver(newPhysicalModelItem);
+  connect(newPhysicalModelItem, SIGNAL(physicalModelChanged(PhysicalModel)), this, SLOT(updatePhysicalModel(PhysicalModel)));
+  appendRow(newPhysicalModelItem);
+  Item * item = new Item(tr("Deterministic study"), "DeterministicStudy");
+  item->setEditable(false);
+  newPhysicalModelItem->appendRow(item);
+  item = new Item(tr("Probabilistic study"), "ProbabilisticStudy");
+  item->setEditable(false);
+  newPhysicalModelItem->appendRow(item);
+
+  if (physicalModel.hasStochasticInputs())
+  {
+    ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(physicalModel);
+    physicalModel.addObserver(newProbabilisticModelItem);
+    item->appendRow(newProbabilisticModelItem);
+    connect(newPhysicalModelItem, SIGNAL(physicalModelChanged(PhysicalModel)), newProbabilisticModelItem, SLOT(updatePhysicalModel(PhysicalModel)));
+    emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
+  }
+
+  item = new Item(tr("Designs of experiment"), "DesignOfExperimentList");
+  item->setEditable(false);
+  newPhysicalModelItem->appendRow(item);
+
+  emit newPhysicalModelItemCreated(newPhysicalModelItem);
+}
+
+
+void OTStudyItem::addDesignOfExperimentItem(DesignOfExperiment & design)
+{
+  DesignOfExperimentItem * newItem = new DesignOfExperimentItem(design);
+  design.addObserver(newItem);
+  design.getPhysicalModel().addObserver(newItem);
+  for (int i=0; i<rowCount(); ++i)
+    if (child(i)->text().toStdString() == design.getPhysicalModel().getName())
+    {
+      child(i)->child(2)->appendRow(newItem);
+      emit newDesignOfExperimentItemCreated(newItem);
+      return;
+    }
+  throw InvalidArgumentException(HERE) << "No physical model matches the given name " << design.getPhysicalModel().getName();
+}
+
+
+void OTStudyItem::addLimitStateItem(LimitState & limitState)
+{
+  LimitStateItem * newItem = new LimitStateItem(limitState);
+  limitState.addObserver(newItem);
+  limitState.getPhysicalModel().addObserver(newItem);
+  for (int i=0; i<rowCount(); ++i)
+    if (child(i)->text().toStdString() == limitState.getPhysicalModel().getName())
+    {
+      if (!limitState.getPhysicalModel().hasStochasticInputs() && !child(i)->child(1)->hasChildren())
+      {
+        ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(limitState.getPhysicalModel());
+        limitState.getPhysicalModel().addObserver(newProbabilisticModelItem);
+        child(i)->child(1)->appendRow(newProbabilisticModelItem);
+        emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
+      }
+      child(i)->child(1)->appendRow(newItem);
+      emit newLimitStateItemCreated(newItem);
+      return;
+    }
+  throw InvalidArgumentException(HERE) << "No physical model matches the name " << limitState.getPhysicalModel().getName();
+}
+
+
+void OTStudyItem::addAnalysisItem(Analysis & analysis)
+{
+  String analysisName = analysis.getImplementation()->getClassName();
+  AnalysisItem * newItem;
+  if (analysisName == "ModelEvaluation")
+  {
+    newItem = new ModelEvaluationItem(analysis);
+    addDeterministicAnalysisItem(analysis, newItem);
+  }
+  else if (analysisName == "MonteCarloAnalysis" || analysisName == "TaylorExpansionsMomentsAnalysis")
+  {
+    newItem = new CentralTendencyItem(analysis);
+    addProbabilisticAnalysisItem(analysis, newItem);
+  }
+  else if (analysisName == "SobolAnalysis" || analysisName == "SRCAnalysis")
+  {
+    newItem = new SensitivityAnalysisItem(analysis);
+    addProbabilisticAnalysisItem(analysis, newItem);
+  }
+  else if (analysisName == "MonteCarloReliabilityAnalysis")
+  {
+    newItem = new ReliabilityAnalysisItem(analysis);
+    addReliabilityAnalysisItem(analysis, newItem);
+  }
+  else
+  {
+    throw InvalidArgumentException(HERE) << "In OTStudyItem::addAnalysisItem: Impossible to add an item for the analysis of type " << analysisName;
+  }
+  connect(newItem, SIGNAL(analysisChanged(Analysis)), this, SLOT(updateAnalysis(Analysis)));
 }
 
 

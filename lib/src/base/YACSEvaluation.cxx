@@ -49,6 +49,7 @@ YACSEvaluation::YACSEvaluation(const String & fileName)
 }
 
 
+/* Copy constructor */
 YACSEvaluation::YACSEvaluation(const YACSEvaluation & other)
   : xmlFileName_(other.xmlFileName_)
   , inputValues_(other.inputValues_)
@@ -199,7 +200,7 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
     for (int h=0; h<res_k->size(); ++h)
       result[h][k] = res_k->getInternal()->at(h);
   }
-
+  efx_->unlockAll();
   return result;
 }
 

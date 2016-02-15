@@ -24,6 +24,7 @@ using namespace OT;
 
 namespace OTGUI {
 
+/* Default constructor */
 Observable::Observable()
   : notificationBlocked_(false)
   , notBlockedMessage_("")

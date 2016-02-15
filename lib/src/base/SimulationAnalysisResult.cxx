@@ -20,19 +20,24 @@
  */
 #include "otgui/SimulationAnalysisResult.hxx"
 
+#include "PersistentObjectFactory.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
 
 CLASSNAMEINIT(SimulationAnalysisResult);
 
+static Factory<SimulationAnalysisResult> RegisteredFactory("SimulationAnalysisResult");
+
+/* Default constructor */
 SimulationAnalysisResult::SimulationAnalysisResult()
   : ModelEvaluationResult()
 {
-
 }
 
 
+/* Constructor with parameters */
 SimulationAnalysisResult::SimulationAnalysisResult(NumericalSample inputSample, NumericalSample outputSample)
   : ModelEvaluationResult(inputSample, outputSample)
 {
@@ -40,6 +45,7 @@ SimulationAnalysisResult::SimulationAnalysisResult(NumericalSample inputSample, 
 }
 
 
+/* Virtual constructor */
 SimulationAnalysisResult* SimulationAnalysisResult::clone() const
 {
   return new SimulationAnalysisResult(*this);

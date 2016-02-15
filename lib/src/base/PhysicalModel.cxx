@@ -28,18 +28,21 @@ namespace OTGUI {
 
 CLASSNAMEINIT(PhysicalModel);
 
+/* Default constructor */
 PhysicalModel::PhysicalModel(const String & name)
   : TypedInterfaceObject<PhysicalModelImplementation>(new AnalyticalPhysicalModel(name))
 {
 }
 
 
+/* Constructor with parameters */
 PhysicalModel::PhysicalModel(const String & name, const InputCollection & inputs, const OutputCollection & outputs)
   : TypedInterfaceObject<PhysicalModelImplementation>(new AnalyticalPhysicalModel(name, inputs, outputs))
 {
 }
 
 
+/* Default constructor */
 PhysicalModel::PhysicalModel(const PhysicalModelImplementation & implementation)
   : TypedInterfaceObject<PhysicalModelImplementation>(implementation.clone())
 {

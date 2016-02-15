@@ -20,18 +20,24 @@
  */
 #include "otgui/AnalyticalPhysicalModel.hxx"
 
+#include "PersistentObjectFactory.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
 
 CLASSNAMEINIT(AnalyticalPhysicalModel);
 
+static Factory<AnalyticalPhysicalModel> RegisteredFactory("AnalyticalPhysicalModel");
+
+/* Default constructor */
 AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String & name)
   : PhysicalModelImplementation(name)
 {
 }
 
 
+/* Constructor with parameters */
 AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String & name,
                                                  const InputCollection & inputs,
                                                  const OutputCollection & outputs)
@@ -40,12 +46,7 @@ AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String & name,
 }
 
 
-AnalyticalPhysicalModel::AnalyticalPhysicalModel(const AnalyticalPhysicalModel & other)
-  : PhysicalModelImplementation(other)
-{
-}
-
-
+/* Virtual constructor */
 AnalyticalPhysicalModel* AnalyticalPhysicalModel::clone() const
 {
   return new AnalyticalPhysicalModel(*this);

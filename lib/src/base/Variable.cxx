@@ -26,6 +26,14 @@ namespace OTGUI {
 
 CLASSNAMEINIT(Variable);
 
+/* Default constructor */
+Variable::Variable()
+  : PersistentObject()
+{
+}
+
+
+/* Constructor with parameters */
 Variable::Variable(const String & name, const double & value, const String & description)
   : PersistentObject()
   , value_(value)

@@ -34,9 +34,12 @@ class YACSPhysicalModel : public PhysicalModelImplementation
   CLASSNAME;
 
 public:
-  YACSPhysicalModel(const OT::String & name);
+  /* Default constructor */
+  YACSPhysicalModel(const OT::String & name="Unnamed");
+  /* Constructor with parameters */
   YACSPhysicalModel(const OT::String & name, const OT::String & fileName);
 
+  /** Virtual constructor */
   virtual YACSPhysicalModel * clone() const;
 
   void setInputs(const InputCollection & inputs);

@@ -20,10 +20,17 @@
  */
 #include "otgui/TaylorExpansionsMomentsResult.hxx"
 
+#include "PersistentObjectFactory.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
 
+CLASSNAMEINIT(TaylorExpansionsMomentsResult);
+
+static Factory<TaylorExpansionsMomentsResult> RegisteredFactory("TaylorExpansionsMomentsResult");
+
+/* Default constructor */
 TaylorExpansionsMomentsResult::TaylorExpansionsMomentsResult()
   : PersistentObject()
 {
@@ -31,17 +38,17 @@ TaylorExpansionsMomentsResult::TaylorExpansionsMomentsResult()
 }
 
 
-TaylorExpansionsMomentsResult::TaylorExpansionsMomentsResult(const QuadraticCumul & algoTaylorExpansionsMoments, const OutputCollection & outputs)
+/* Constructor with parameters */
+TaylorExpansionsMomentsResult::TaylorExpansionsMomentsResult(const QuadraticCumul & algoTaylorExpansionsMoments,
+                                                             const Description & outputNames)
   : PersistentObject()
   , algoTaylorExpansionsMoments_(algoTaylorExpansionsMoments)
+  , outputNames_(outputNames)
 {
-  UnsignedInteger nbOutputs = outputs.getSize();
-  outputNames_ = Description(nbOutputs);
-  for (UnsignedInteger i=0; i<nbOutputs; ++i)
-    outputNames_[i] = outputs[i].getName();
 }
 
 
+/* Virtual constructor */
 TaylorExpansionsMomentsResult* TaylorExpansionsMomentsResult::clone() const
 {
   return new TaylorExpansionsMomentsResult(*this);

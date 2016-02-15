@@ -26,12 +26,20 @@ namespace OTGUI {
 
 CLASSNAMEINIT(Analysis);
 
+/* Default constructor */
+Analysis::Analysis()
+  : TypedInterfaceObject<AnalysisImplementation>(new AnalysisImplementation())
+{
+}
+
+
+/* Constructor with parameters */
 Analysis::Analysis(const String & name, const PhysicalModel & physicalModel)
   : TypedInterfaceObject<AnalysisImplementation>(new AnalysisImplementation(name, physicalModel))
 {
 }
 
-/* Default constructor */
+
 Analysis::Analysis(const AnalysisImplementation & implementation)
   : TypedInterfaceObject<AnalysisImplementation>(implementation.clone())
 {
@@ -45,6 +53,7 @@ Analysis::Analysis(const Implementation & p_implementation)
   // Initialize any other class members here
   // At last, allocate memory space if needed, but go to destructor to free it
 }
+
 
 /* Constructor from implementation pointer */
 Analysis::Analysis(AnalysisImplementation * p_implementation)

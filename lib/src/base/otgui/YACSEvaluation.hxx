@@ -39,11 +39,11 @@ class OTGUI_API YACSEvaluation
   : public OT::NumericalMathEvaluationImplementation
 {
   CLASSNAME;
-public:
 
+public:
   /** Default constructor */
   YACSEvaluation(const OT::String & xmlFileName = "");
-
+  /* Constructor with parameters */
   YACSEvaluation(const YACSEvaluation & other);
 
   /** Virtual constructor */
@@ -58,11 +58,9 @@ public:
   virtual OT::String __repr__() const;
   virtual OT::String __str__(const OT::String & offset = "") const;
 
-protected:
   /** Method loadData() loads the data from the xmlFileName */
   void loadData();
 
-public:
   /** Operator () */
   virtual OT::NumericalPoint operator() (const OT::NumericalPoint & inP) const;
   virtual OT::NumericalSample operator() (const OT::NumericalSample & inS) const;
@@ -90,8 +88,6 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
-
-protected:
 
 private:
   static YACSEvalSession * session_;

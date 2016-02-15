@@ -1,6 +1,7 @@
 [0.0597305]
 [0.0597305]
 study1 = otguibase.OTStudy('study1')
+otguibase.OTStudy.AddOTStudy(study1)
 dist_Q = ot.Normal(10200, 100)
 Q = otguibase.Input('Q', 0, 'Primary energy', dist_Q)
 dist_E = ot.Normal(3000, 15)

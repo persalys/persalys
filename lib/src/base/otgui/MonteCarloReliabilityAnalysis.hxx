@@ -32,9 +32,13 @@ class MonteCarloReliabilityAnalysis : public ReliabilityAnalysis
   CLASSNAME;
 
 public:
+  /** Default constructor */
+  MonteCarloReliabilityAnalysis();
+  /** Constructor with parameters */
   MonteCarloReliabilityAnalysis(const OT::String & name, const LimitState & limitState,
                                 const OT::UnsignedInteger & maximumOuterSampling=1000);
 
+  /** Virtual constructor */
   virtual MonteCarloReliabilityAnalysis * clone() const;
 
   OT::UnsignedInteger getMaximumOuterSampling() const;
@@ -53,6 +57,7 @@ public:
 
   virtual void run();
   virtual OT::String dump() const;
+  virtual bool analysisLaunched() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;

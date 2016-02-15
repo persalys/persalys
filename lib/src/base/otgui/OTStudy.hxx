@@ -31,16 +31,24 @@ class OTStudy : public OT::PersistentObject, public Observable
 {
 public:
   static OT::Collection<OTStudy*> GetOTStudies();
+  static OT::Description GetOTStudiesFileNames();
   static OTStudy* GetOTStudyByName(const OT::String & otStudyName);
   static bool HasOTStudyNamed(const OT::String & otStudyName);
   static OT::String GetAvailableOTStudyName();
+  static void AddOTStudy(OTStudy * otstudy);
+  static void OpenOTStudy(const OT::String & xmlFileName);
   static void SetInstanceObserver(Observer * observer);
 
-  OTStudy(const OT::String & name);
+  /** Default constructor */
+  OTStudy(const OT::String & name="Unnamed");
 
+  /** Virtual constructor */
   virtual OTStudy * clone() const;
 
   virtual ~OTStudy();
+
+  OT::String getFileName() const;
+  void setFileName(const OT::String & fileName);
 
   OT::Collection<PhysicalModel> getPhysicalModels() const;
   PhysicalModel & getPhysicalModelByName(const OT::String & physicalModelName);
@@ -66,6 +74,8 @@ public:
 
   OT::String dump();
 
+  void save(const OT::String & xmlFileName);
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
@@ -73,9 +83,10 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  OTStudy(const OTStudy & other);
   static OT::Collection<OTStudy*> OTStudies_;
+  static OT::Description OTStudiesFileNames_;
   static Observer * OTStudyObserver_;
+  OT::String fileName_;
   OT::PersistentCollection<PhysicalModel> physicalModels_;
   OT::PersistentCollection<DesignOfExperiment> designOfExperiments_;
   OT::PersistentCollection<Analysis> analyses_;

@@ -30,9 +30,12 @@ class SimulationAnalysisResult : public ModelEvaluationResult
   CLASSNAME;
 
 public:
+  /** Default constructor */
   SimulationAnalysisResult();
+  /** Constructor with parameters */
   SimulationAnalysisResult(OT::NumericalSample inputSample, OT::NumericalSample outputSample);
 
+  /** Virtual constructor */
   virtual SimulationAnalysisResult * clone() const;
 
   NumericalSampleCollection getListXMin() const;

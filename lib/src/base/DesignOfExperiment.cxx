@@ -26,23 +26,33 @@ namespace OTGUI {
 
 CLASSNAMEINIT(DesignOfExperiment);
 
+/* Default constructor */
+DesignOfExperiment::DesignOfExperiment()
+  : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation())
+{
+}
+
+
+/* Constructor with parameters */
 DesignOfExperiment::DesignOfExperiment(const String & name, const PhysicalModel & physicalModel)
   : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation(name, physicalModel))
 {
 }
 
 
+/* Constructor with parameters */
 DesignOfExperiment::DesignOfExperiment(const String & name, const PhysicalModel & physicalModel,
                                        const NumericalPoint & lowerBounds,
                                        const NumericalPoint & upperBounds, const Indices & nbValues,
-                                       const OT::NumericalPoint & values)
+                                       const NumericalPoint & values)
   : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation(name, physicalModel, lowerBounds, upperBounds, nbValues))
 {
 }
 
 
+/* Constructor with parameters */
 DesignOfExperiment::DesignOfExperiment(const String & name, const PhysicalModel & physicalModel,
-                                       const String & fileName, OT::Indices columns)
+                                       const String & fileName, Indices columns)
   : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation(name, physicalModel, fileName, columns))
 {
 }
@@ -69,6 +79,7 @@ DesignOfExperiment::DesignOfExperiment(const Implementation & p_implementation)
   // Initialize any other class members here
   // At last, allocate memory space if needed, but go to destructor to free it
 }
+
 
 /* Constructor from implementation pointer */
 DesignOfExperiment::DesignOfExperiment(DesignOfExperimentImplementation * p_implementation)

@@ -22,11 +22,16 @@
 
 #include "NormalCopula.hxx"
 #include "TruncatedDistribution.hxx"
+#include "PersistentObjectFactory.hxx"
 
 using namespace OT;
 
 namespace OTGUI {
 
+static Factory<PersistentCollection<Input> > RegisteredFactory_CollIn("PersistentCollection<Input>");
+static Factory<PersistentCollection<Output> > RegisteredFactory_CollOut("PersistentCollection<Output>");
+
+/* Constructor with parameters */
 PhysicalModelImplementation::PhysicalModelImplementation(const String & name)
   : PersistentObject()
   , Observable()
@@ -35,6 +40,7 @@ PhysicalModelImplementation::PhysicalModelImplementation(const String & name)
 }
 
 
+/* Constructor with parameters */
 PhysicalModelImplementation::PhysicalModelImplementation(const String & name,
                                                          const InputCollection & inputs,
                                                          const OutputCollection & outputs)
@@ -48,6 +54,7 @@ PhysicalModelImplementation::PhysicalModelImplementation(const String & name,
 }
 
 
+/* Virtual constructor */
 PhysicalModelImplementation* PhysicalModelImplementation::clone() const
 {
   return new PhysicalModelImplementation(*this);

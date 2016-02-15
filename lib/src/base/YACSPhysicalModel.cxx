@@ -20,12 +20,17 @@
  */
 #include "otgui/YACSPhysicalModel.hxx"
 
+#include "PersistentObjectFactory.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
 
 CLASSNAMEINIT(YACSPhysicalModel);
 
+static Factory<YACSPhysicalModel> RegisteredFactory("YACSPhysicalModel");
+
+/* Default constructor */
 YACSPhysicalModel::YACSPhysicalModel(const String & name)
   : PhysicalModelImplementation(name)
   , evaluation_(YACSEvaluation())
@@ -33,6 +38,7 @@ YACSPhysicalModel::YACSPhysicalModel(const String & name)
 }
 
 
+/* Constructor with parameters */
 YACSPhysicalModel::YACSPhysicalModel(const String & name, const String & fileName)
   : PhysicalModelImplementation(name)
   , evaluation_(YACSEvaluation(fileName))
@@ -41,6 +47,7 @@ YACSPhysicalModel::YACSPhysicalModel(const String & name, const String & fileNam
 }
 
 
+/* Virtual constructor */
 YACSPhysicalModel* YACSPhysicalModel::clone() const
 {
   return new YACSPhysicalModel(*this);

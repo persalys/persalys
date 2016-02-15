@@ -21,6 +21,7 @@
 #include "otgui/TaylorExpansionsMomentsAnalysis.hxx"
 
 #include "QuadraticCumul.hxx"
+#include "PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -28,6 +29,17 @@ namespace OTGUI {
 
 CLASSNAMEINIT(TaylorExpansionsMomentsAnalysis);
 
+static Factory<TaylorExpansionsMomentsAnalysis> RegisteredFactory("TaylorExpansionsMomentsAnalysis");
+
+/* Default constructor */
+TaylorExpansionsMomentsAnalysis::TaylorExpansionsMomentsAnalysis()
+  : AnalysisImplementation()
+{
+
+}
+
+
+/* Constructor with parameters */
 TaylorExpansionsMomentsAnalysis::TaylorExpansionsMomentsAnalysis(const String & name, const PhysicalModel & physicalModel)
   : AnalysisImplementation(name, physicalModel)
   , outputs_(physicalModel.getOutputs())
@@ -36,6 +48,7 @@ TaylorExpansionsMomentsAnalysis::TaylorExpansionsMomentsAnalysis(const String & 
 }
 
 
+/* Virtual constructor */
 TaylorExpansionsMomentsAnalysis* TaylorExpansionsMomentsAnalysis::clone() const
 {
   return new TaylorExpansionsMomentsAnalysis(*this);
@@ -64,7 +77,7 @@ void TaylorExpansionsMomentsAnalysis::run()
   QuadraticCumul algoTaylorExpansionsMoments(getPhysicalModel().getOutputRandomVector(outputNames));
 
   // set results
-  result_ = TaylorExpansionsMomentsResult(algoTaylorExpansionsMoments, outputs_);
+  result_ = TaylorExpansionsMomentsResult(algoTaylorExpansionsMoments, outputNames);
 
   notify("analysisFinished");
 }
@@ -86,7 +99,7 @@ String TaylorExpansionsMomentsAnalysis::dump() const
 
 bool TaylorExpansionsMomentsAnalysis::analysisLaunched() const
 {
-//   return outputSample_.getSize()!=0;
+  return getResult().getOutputNames().getSize() != 0;
 }
 
 

@@ -20,12 +20,24 @@
  */
 #include "otgui/ModelEvaluation.hxx"
 
+#include "PersistentObjectFactory.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
 
 CLASSNAMEINIT(ModelEvaluation);
 
+static Factory<ModelEvaluation> RegisteredFactory("ModelEvaluation");
+
+/* Default constructor */
+ModelEvaluation::ModelEvaluation()
+  : AnalysisImplementation()
+{
+}
+
+
+/* Constructor with parameters */
 ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & physicalModel)
   : AnalysisImplementation(name, physicalModel)
 {
@@ -33,6 +45,7 @@ ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & phys
 }
 
 
+/* Constructor with parameters */
 ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & physicalModel,
                                  const NumericalPoint & inputsValues)
   : AnalysisImplementation(name, physicalModel)
@@ -42,6 +55,7 @@ ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & phys
 }
 
 
+/* Virtual constructor */
 ModelEvaluation* ModelEvaluation::clone() const
 {
   return new ModelEvaluation(*this);
@@ -142,7 +156,7 @@ String ModelEvaluation::dump() const
 
 bool ModelEvaluation::analysisLaunched() const
 {
-//   return getResult().getOutputSample().getSize()!=0;
+  return getResult().getOutputSample().getSize() != 0;
 }
 
 

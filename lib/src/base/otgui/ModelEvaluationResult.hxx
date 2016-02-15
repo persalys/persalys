@@ -29,9 +29,12 @@ class ModelEvaluationResult : public OT::PersistentObject
   CLASSNAME;
 
 public:
+  /** Default constructor */
   ModelEvaluationResult();
+  /** Constructor with parameters */
   ModelEvaluationResult(OT::NumericalSample inputSample, OT::NumericalSample outputSample);
 
+  /** Virtual constructor */
   virtual ModelEvaluationResult * clone() const;
 
   OT::NumericalSample getInputSample() const;

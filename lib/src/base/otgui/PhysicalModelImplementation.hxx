@@ -33,10 +33,13 @@ namespace OTGUI {
 class PhysicalModelImplementation : public OT::PersistentObject, public Observable
 {
 public:
+  /** Constructor with parameters */
   explicit PhysicalModelImplementation(const OT::String & name);
+  /** Constructor with parameters */
   PhysicalModelImplementation(const OT::String & name, const InputCollection & inputs,
                               const OutputCollection & outputs);
 
+  /** Virtual constructor */
   virtual PhysicalModelImplementation * clone() const;
 
   InputCollection getInputs() const;

@@ -22,6 +22,7 @@
 
 #include "RandomGenerator.hxx"
 #include "CorrelationAnalysis.hxx"
+#include "PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -29,12 +30,23 @@ namespace OTGUI {
 
 CLASSNAMEINIT(SRCAnalysis);
 
+static Factory<SRCAnalysis> RegisteredFactory("SRCAnalysis");
+
+/* Default constructor */
+SRCAnalysis::SRCAnalysis()
+  : SimulationAnalysis()
+{
+}
+
+
+/* Constructor with parameters */
 SRCAnalysis::SRCAnalysis(const String & name, const PhysicalModel & physicalModel, const UnsignedInteger nbSimu)
   : SimulationAnalysis(name, physicalModel, nbSimu)
 {
 }
 
 
+/* Virtual constructor */
 SRCAnalysis* SRCAnalysis::clone() const
 {
   return new SRCAnalysis(*this);
@@ -82,7 +94,7 @@ String SRCAnalysis::dump() const
 
 bool SRCAnalysis::analysisLaunched() const
 {
-  return result_.getIndices().getSize()!=0;
+  return result_.getIndices().getSize() != 0;
 }
 
 

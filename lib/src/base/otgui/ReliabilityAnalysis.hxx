@@ -28,8 +28,12 @@ namespace OTGUI {
 class ReliabilityAnalysis : public AnalysisImplementation
 {
 public:
+  /** Default constructor */
+  ReliabilityAnalysis();
+  /** Constructor with parameters */
   ReliabilityAnalysis(const OT::String & name, const LimitState & limitState);
 
+  /** Virtual constructor */
   virtual ReliabilityAnalysis * clone() const;
 
   LimitState getLimitState() const;

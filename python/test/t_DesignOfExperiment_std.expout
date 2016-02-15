@@ -15,6 +15,7 @@ outs=     [ Y0        ]
 8 : [   3.26745 ]
 9 : [  -5.27323 ]
 anOTStudy = otguibase.OTStudy('anOTStudy')
+otguibase.OTStudy.AddOTStudy(anOTStudy)
 X0 = otguibase.Input('X0', 1, '')
 X1 = otguibase.Input('X1', 2, '')
 Y0 = otguibase.Output('Y0', 0, '', 'sin(X0)+8*X1')

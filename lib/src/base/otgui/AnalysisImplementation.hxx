@@ -27,8 +27,12 @@ namespace OTGUI {
 class AnalysisImplementation : public OT::PersistentObject, public Observable
 {
 public:
+  /** Default constructor */
+  AnalysisImplementation();
+  /** Constructor with parameters */
   AnalysisImplementation(const OT::String & name, const PhysicalModel & physicalModel);
 
+  /** Virtual constructor */
   virtual AnalysisImplementation * clone() const;
 
   PhysicalModel getPhysicalModel() const;

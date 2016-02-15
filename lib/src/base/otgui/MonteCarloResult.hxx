@@ -30,13 +30,15 @@ class MonteCarloResult : public SimulationAnalysisResult
   CLASSNAME;
 
 public:
-
   typedef OT::Collection<OT::NumericalPoint> NumericalPointCollection;
   typedef OT::Collection<OT::Distribution> DistributionCollection;
 
+  /** Default constructor */
   MonteCarloResult();
+  /** Constructor with parameters */
   MonteCarloResult(OT::NumericalSample inputSample, OT::NumericalSample outputSample);
 
+  /** Virtual constructor */
   virtual MonteCarloResult * clone() const;
 
   OT::NumericalPoint getMean();

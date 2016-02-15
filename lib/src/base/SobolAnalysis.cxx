@@ -22,6 +22,7 @@
 
 #include "RandomGenerator.hxx"
 #include "SensitivityAnalysis.hxx"
+#include "PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -29,6 +30,16 @@ namespace OTGUI {
 
 CLASSNAMEINIT(SobolAnalysis);
 
+static Factory<SobolAnalysis> RegisteredFactory("SobolAnalysis");
+
+/* Default constructor */
+SobolAnalysis::SobolAnalysis()
+  : SimulationAnalysis()
+{
+}
+
+
+/* Constructor with parameters */
 SobolAnalysis::SobolAnalysis(const String & name, const PhysicalModel & physicalModel, const UnsignedInteger nbSimu)
   : SimulationAnalysis(name, physicalModel, nbSimu)
 {
@@ -36,6 +47,7 @@ SobolAnalysis::SobolAnalysis(const String & name, const PhysicalModel & physical
 }
 
 
+/* Virtual constructor */
 SobolAnalysis* SobolAnalysis::clone() const
 {
   return new SobolAnalysis(*this);
@@ -89,7 +101,7 @@ String SobolAnalysis::dump() const
 
 bool SobolAnalysis::analysisLaunched() const
 {
-  return result_.getFirstOrderIndices().getSize()!=0;
+  return result_.getFirstOrderIndices().getSize() != 0;
 }
 
 

@@ -34,15 +34,19 @@ class LimitState : public OT::TypedInterfaceObject<LimitStateImplementation>
 public:
   typedef OT::Pointer<LimitStateImplementation>       Implementation;
 
-  LimitState(const OT::String & name="Unamed", const PhysicalModel & physicalModel=PhysicalModel(),
+  /** Default constructor */
+  LimitState();
+  /** Constructor with parameters */
+  LimitState(const OT::String & name, const PhysicalModel & physicalModel,
              const OT::String & outputName="",
              const OT::ComparisonOperator & failure=OT::Less(),
              const double & threshold=0.);
+  /** Default constructor */
   LimitState(const LimitStateImplementation & implementation);
+  /** Constructor from implementation */
   LimitState(const Implementation & p_implementation);
+  /** Constructor from implementation pointer */
   LimitState(LimitStateImplementation * p_implementation); 
-
-  virtual LimitState * clone() const;
 
   void addObserver(Observer * observer);
   void blockNotification(bool block, const OT::String & notBlockedMessage="");

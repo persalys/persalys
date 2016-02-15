@@ -29,10 +29,13 @@ class AnalyticalPhysicalModel : public PhysicalModelImplementation
   CLASSNAME;
 
 public:
-  AnalyticalPhysicalModel(const OT::String & name);
+  /** Default constructor */
+  AnalyticalPhysicalModel(const OT::String & name="Unnamed");
+  /** Constructor with parameters */
   AnalyticalPhysicalModel(const OT::String & name, const InputCollection & inputs,
                           const OutputCollection & outputs);
-  AnalyticalPhysicalModel(const AnalyticalPhysicalModel & other);
+
+  /** Virtual constructor */
   virtual AnalyticalPhysicalModel * clone() const;
 
   OT::Description getFormulas();

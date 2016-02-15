@@ -24,6 +24,15 @@ using namespace OT;
 
 namespace OTGUI {
 
+/* Default constructor */
+ReliabilityAnalysis::ReliabilityAnalysis()
+  : AnalysisImplementation()
+{
+  setIsReliabilityAnalysis(true);
+}
+
+
+/* Constructor with parameters */
 ReliabilityAnalysis::ReliabilityAnalysis(const String & name, const LimitState & limitState)
   : AnalysisImplementation(name, limitState.getPhysicalModel())
   , limitState_(limitState)
@@ -32,6 +41,7 @@ ReliabilityAnalysis::ReliabilityAnalysis(const String & name, const LimitState &
 }
 
 
+/* Virtual constructor */
 ReliabilityAnalysis* ReliabilityAnalysis::clone() const
 {
   return new ReliabilityAnalysis(*this);

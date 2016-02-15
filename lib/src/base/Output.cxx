@@ -20,12 +20,24 @@
  */
 #include "otgui/Output.hxx"
 
+#include "PersistentObjectFactory.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
 
 CLASSNAMEINIT(Output);
 
+static Factory<Output> RegisteredFactory("Output");
+
+/* Default constructor */
+Output::Output()
+  : Variable()
+{
+}
+
+
+/* Constructor with parameters */
 Output::Output(const String & name, const double & value, const String & description,
                const String & formula)
   : Variable(name, value, description)
@@ -35,6 +47,7 @@ Output::Output(const String & name, const double & value, const String & descrip
 }
 
 
+/* Virtual constructor */
 Output* Output::clone() const
 {
   return new Output(*this);

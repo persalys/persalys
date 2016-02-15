@@ -58,6 +58,4 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
   analysis_.addObserver(this);
   emit analysisChanged(analysis_);
 }
-
-
 }

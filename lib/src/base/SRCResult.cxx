@@ -20,16 +20,24 @@
  */
 #include "otgui/SRCResult.hxx"
 
+#include "PersistentObjectFactory.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
 
+CLASSNAMEINIT(SRCResult);
+
+static Factory<SRCResult> RegisteredFactory("SRCResult");
+
+/* Default constructor */
 SRCResult::SRCResult()
   : PersistentObject()
 {
 }
 
 
+/* Constructor with parameters */
 SRCResult::SRCResult(const NumericalSample indices, const Description & outputNames)
   : PersistentObject()
   , outputNames_(outputNames)
@@ -38,6 +46,7 @@ SRCResult::SRCResult(const NumericalSample indices, const Description & outputNa
 }
 
 
+/* Virtual constructor */
 SRCResult* SRCResult::clone() const
 {
   return new SRCResult(*this);

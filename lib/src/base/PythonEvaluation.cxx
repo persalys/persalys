@@ -31,6 +31,7 @@ CLASSNAMEINIT(PythonEvaluation);
 
 static Factory<PythonEvaluation> RegisteredFactory("PythonEvaluation");
 
+/* Default constructor */
 PythonEvaluation::PythonEvaluation()
   : NumericalMathEvaluationImplementation()
   , inputDimension_(0)
@@ -39,7 +40,7 @@ PythonEvaluation::PythonEvaluation()
 }
 
 
-/* Default constructor */
+/* Constructor with parameters */
 PythonEvaluation::PythonEvaluation(const UnsignedInteger & inputDimension,
                                    const UnsignedInteger & outputDimension,
                                    const String & code)

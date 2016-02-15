@@ -41,8 +41,30 @@ void OTguiMenuBar::buildActions()
   connect(action, SIGNAL(triggered()), this, SIGNAL(createNewOTStudy()));
   fileMenu->addAction(action);
 
-  action = new QAction(QIcon(":/images/document-import.png"), tr("&Load OTStudy"), this);
-  action->setStatusTip(tr("Load an OTStudy"));
+  action = new QAction(QIcon(":/images/document-open.png"), tr("&Open OTStudy..."), this);
+  action->setStatusTip(tr("Open an OTStudy"));
+  connect(action, SIGNAL(triggered()), this, SIGNAL(openOTStudy()));
+  fileMenu->addAction(action);
+
+  action = new QAction(QIcon(":/images/document-save.png"), tr("Save"), this);
+  action->setStatusTip(tr("Save the OTStudy"));
+  connect(action, SIGNAL(triggered()), this, SIGNAL(saveOTStudy()));
+  fileMenu->addAction(action);
+
+  action = new QAction(QIcon(":/images/document-save-as.png"), tr("Save As..."), this);
+  action->setStatusTip(tr("Save the OTStudy with a new name"));
+  connect(action, SIGNAL(triggered()), this, SIGNAL(saveAsOTStudy()));
+  fileMenu->addAction(action);
+
+  addSeparator();
+
+  action = new QAction(tr("Dump OTStudy"), this);
+  action->setStatusTip(tr("Dump the OTStudy"));
+  connect(action, SIGNAL(triggered()), this, SIGNAL(dumpOTStudy()));
+  fileMenu->addAction(action);
+
+  action = new QAction(QIcon(":/images/document-import.png"), tr("&Load Script..."), this);
+  action->setStatusTip(tr("Load a Python Script"));
   connect(action, SIGNAL(triggered()), this, SIGNAL(loadOTStudy()));
   fileMenu->addAction(action);
 

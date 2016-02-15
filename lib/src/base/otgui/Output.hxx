@@ -30,9 +30,13 @@ class Output : public Variable
   CLASSNAME;
 
 public:
-  Output(const OT::String & name="", const double & value=0., const OT::String & description="",
+  /** Default constructor */
+  Output();
+  /** Constructor with parameters */
+  Output(const OT::String & name, const double & value=0., const OT::String & description="",
          const OT::String & formula="");
 
+  /** Virtual constructor */
   virtual Output * clone() const;
 
   OT::String getFormula() const;

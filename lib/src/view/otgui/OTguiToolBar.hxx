@@ -37,7 +37,9 @@ protected:
 public slots:
 signals:
   void createNewOTStudy();
+  void openOTStudy();
   void loadOTStudy();
+  void saveOTStudy();
 };
 }
 #endif

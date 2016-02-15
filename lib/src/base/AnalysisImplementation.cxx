@@ -24,6 +24,15 @@ using namespace OT;
 
 namespace OTGUI {
 
+/* Default constructor */
+AnalysisImplementation::AnalysisImplementation()
+  : PersistentObject()
+  , Observable()
+{
+}
+
+
+/* Constructor with parameters */
 AnalysisImplementation::AnalysisImplementation(const String & name, const PhysicalModel & physicalModel)
   : PersistentObject()
   , Observable()
@@ -34,6 +43,7 @@ AnalysisImplementation::AnalysisImplementation(const String & name, const Physic
 }
 
 
+/* Virtual constructor */
 AnalysisImplementation* AnalysisImplementation::clone() const
 {
   return new AnalysisImplementation(*this);

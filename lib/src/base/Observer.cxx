@@ -22,6 +22,7 @@
 
 namespace OTGUI {
 
+/* Default constructor */
 Observer::Observer()
 {
 }

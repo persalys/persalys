@@ -30,8 +30,12 @@ class SobolAnalysis : public SimulationAnalysis
   CLASSNAME;
 
 public:
+  /** Default constructor */
+  SobolAnalysis();
+  /** Constructor with parameters */
   SobolAnalysis(const OT::String & name, const PhysicalModel & physicalModel, const OT::UnsignedInteger nbSimu=10000);
 
+  /** Virtual constructor */
   virtual SobolAnalysis * clone() const;
 
   SobolResult getResult() const;

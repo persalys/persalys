@@ -32,9 +32,13 @@ class Input : public Variable
   CLASSNAME;
 
 public:
-  Input(const OT::String & name="", const double & value=0., const OT::String & description="",
+  /** Default constructor */
+  Input();
+  /** Constructor with parameters */
+  Input(const OT::String & name, const double & value=0., const OT::String & description="",
         const OT::Distribution & distribution=OT::Dirac());
 
+  /** Virtual constructor */
   virtual Input * clone() const;
 
   virtual OT::String __repr__() const;

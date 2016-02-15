@@ -36,11 +36,11 @@ class OTGUI_API PythonEvaluation
   : public OT::NumericalMathEvaluationImplementation
 {
   CLASSNAME;
-public:
 
+public:
   /** Default constructor */
   PythonEvaluation();
-
+  /** Constructor with parameters */
   PythonEvaluation(const OT::UnsignedInteger & inputDimension,
                    const OT::UnsignedInteger & ouputDimension,
                    const OT::String & code);

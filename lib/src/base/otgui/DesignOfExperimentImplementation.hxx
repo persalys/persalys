@@ -29,18 +29,27 @@
 namespace OTGUI {
 class DesignOfExperimentImplementation : public OT::PersistentObject, public Observable
 {
+  CLASSNAME;
+
 public:
   enum Type {FromBoundsAndLevels, FromBoundsAndDeltas, FromFile, FromExperiment};
 
+  /** Default constructor */
+  DesignOfExperimentImplementation();
+  /** Constructor with parameters */
   DesignOfExperimentImplementation(const OT::String & name, const PhysicalModel & physicalModel);
+  /** Constructor with parameters */
   DesignOfExperimentImplementation(const OT::String & name, const PhysicalModel & physicalModel,
                      const OT::NumericalPoint & lowerBounds, const OT::NumericalPoint & upperBounds,
                      const OT::Indices & nbValues, const OT::NumericalPoint & values=OT::NumericalPoint(0));
+  /** Constructor with parameters */
   DesignOfExperimentImplementation(const OT::String & name, const PhysicalModel & physicalModel,
                                    const OT::String & fileName, const OT::Indices & columns);
 //   TODO
+  /** Constructor with parameters */
 //   DesignOfExperimentImplementation(const OT::String & name, const PhysicalModel & physicalModel,
 //                                    const OT::Experiment & experiment);
+  /** Virtual constructor */
   virtual DesignOfExperimentImplementation * clone() const;
 
   PhysicalModel getPhysicalModel() const;
@@ -87,7 +96,7 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  void initializeParameters(const InputCollection & inputs);
+  void initializeParameters();
 
 private:
   PhysicalModel physicalModel_;

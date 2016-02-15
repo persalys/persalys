@@ -29,6 +29,17 @@ namespace OTGUI {
 
 CLASSNAMEINIT(SimulationAnalysis);
 
+/* Default constructor */
+SimulationAnalysis::SimulationAnalysis()
+  : AnalysisImplementation()
+  , outputs_()
+  , nbSimulations_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultMaximumOuterSampling"))
+  , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
+{
+}
+
+
+/* Constructor with parameters */
 SimulationAnalysis::SimulationAnalysis(const String & name, const PhysicalModel & physicalModel,
                                        const UnsignedInteger nbSimulation)
   : AnalysisImplementation(name, physicalModel)
@@ -40,6 +51,7 @@ SimulationAnalysis::SimulationAnalysis(const String & name, const PhysicalModel 
 }
 
 
+/* Virtual constructor */
 SimulationAnalysis* SimulationAnalysis::clone() const
 {
   return new SimulationAnalysis(*this);

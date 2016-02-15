@@ -29,8 +29,12 @@ class SimulationAnalysis : public AnalysisImplementation
   CLASSNAME;
 
 public:
+  /** Default constructor */
+  SimulationAnalysis();
+  /** Constructor with parameters */
   SimulationAnalysis(const OT::String & name, const PhysicalModel & physicalModel, const OT::UnsignedInteger nbSimu);
 
+  /** Virtual constructor */
   virtual SimulationAnalysis * clone() const;
 
   OutputCollection getOutputs() const;

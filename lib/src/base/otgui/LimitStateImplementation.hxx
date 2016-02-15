@@ -28,13 +28,19 @@
 namespace OTGUI {
 class LimitStateImplementation : public OT::PersistentObject, public Observable
 {
+  CLASSNAME;
+
 public:
   typedef OT::Pointer<LimitStateImplementation>       Implementation;
 
+  /** Default constructor */
+  LimitStateImplementation();
+  /** Constructor with parameters */
   LimitStateImplementation(const OT::String & name, const PhysicalModel & physicalModel,
                            const OT::String & outputName,
                            const OT::ComparisonOperator & failure, const double & threshold);
 
+  /** Virtual constructor */
   virtual LimitStateImplementation * clone() const;
 
   PhysicalModel getPhysicalModel() const;

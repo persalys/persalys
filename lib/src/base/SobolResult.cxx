@@ -20,16 +20,25 @@
  */
 #include "otgui/SobolResult.hxx"
 
+#include "PersistentObjectFactory.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
 
+CLASSNAMEINIT(SobolResult);
+
+static Factory<SobolResult> RegisteredFactory("SobolResult");
+static Factory<PersistentCollection<SymmetricMatrix> > RegisteredFactorySymMtrColl("PersistentCollection<SymmetricMatrix>");
+
+/* Default constructor */
 SobolResult::SobolResult()
   : PersistentObject()
 {
 }
 
 
+/* Constructor with parameters */
 SobolResult::SobolResult(const NumericalSample firstOrderIndices,
                          const Collection<SymmetricMatrix> secondOrderIndices,
                          const NumericalSample totalOrderIndices,
@@ -43,6 +52,7 @@ SobolResult::SobolResult(const NumericalSample firstOrderIndices,
 }
 
 
+/* Virtual constructor */
 SobolResult* SobolResult::clone() const
 {
   return new SobolResult(*this);

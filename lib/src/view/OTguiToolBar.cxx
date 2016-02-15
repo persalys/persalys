@@ -39,9 +39,19 @@ void OTguiToolBar::buildActions()
   connect(action, SIGNAL(triggered()), this, SIGNAL(createNewOTStudy()));
   addAction(action);
 
-  action = new QAction(QIcon(":/images/document-import22x22.png"), tr("&Load OTStudy"), this);
-  action->setStatusTip(tr("Load an OTStudy"));
+  action = new QAction(QIcon(":/images/document-open22x22.png"), tr("&Open an OTStudy"), this);
+  action->setStatusTip(tr("Open an existing OTStudy"));
+  connect(action, SIGNAL(triggered()), this, SIGNAL(openOTStudy()));
+  addAction(action);
+
+  action = new QAction(QIcon(":/images/document-import22x22.png"), tr("&Load Script"), this);
+  action->setStatusTip(tr("Load a Python Script"));
   connect(action, SIGNAL(triggered()), this, SIGNAL(loadOTStudy()));
+  addAction(action);
+
+  action = new QAction(QIcon(":/images/document-save22x22.png"), tr("&Save the OTStudy"), this);
+  action->setStatusTip(tr("Save the current OTStudy"));
+  connect(action, SIGNAL(triggered()), this, SIGNAL(saveOTStudy()));
   addAction(action);
 }
 }
