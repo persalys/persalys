@@ -20,10 +20,6 @@
  */
 #include "otgui/OTStudyItem.hxx"
 
-#include "otgui/ModelEvaluationItem.hxx"
-#include "otgui/CentralTendencyItem.hxx"
-#include "otgui/SensitivityAnalysisItem.hxx"
-#include "otgui/ReliabilityAnalysisItem.hxx"
 #include "otgui/ReliabilityAnalysis.hxx"
 
 using namespace OT;
