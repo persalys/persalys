@@ -22,7 +22,7 @@
 #define OTGUI_MONTECARLORESULTWINDOW_HXX
 
 #include "otgui/OTguiSubWindow.hxx"
-#include "otgui/CentralTendencyItem.hxx"
+#include "otgui/AnalysisItem.hxx"
 #include "otgui/MonteCarloResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
@@ -37,7 +37,7 @@ class MonteCarloResultWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  MonteCarloResultWindow(CentralTendencyItem * item);
+  MonteCarloResultWindow(AnalysisItem * item);
 
 protected:
   void buildInterface();

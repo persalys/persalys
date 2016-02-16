@@ -22,7 +22,7 @@
 #define OTGUI_MODELEVALUATIONRESULTWINDOW_HXX
 
 #include "OTguiSubWindow.hxx"
-#include "otgui/ModelEvaluationItem.hxx"
+#include "otgui/AnalysisItem.hxx"
 #include "otgui/ModelEvaluationResult.hxx"
 
 namespace OTGUI {
@@ -31,7 +31,7 @@ class ModelEvaluationResultWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  ModelEvaluationResultWindow(ModelEvaluationItem * item);
+  ModelEvaluationResultWindow(AnalysisItem * item);
 
 protected:
   void buildInterface();

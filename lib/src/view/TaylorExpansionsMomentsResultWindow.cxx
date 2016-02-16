@@ -28,7 +28,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-TaylorExpansionsMomentsResultWindow::TaylorExpansionsMomentsResultWindow(CentralTendencyItem * item)
+TaylorExpansionsMomentsResultWindow::TaylorExpansionsMomentsResultWindow(AnalysisItem * item)
   : OTguiSubWindow(item)
   , result_(dynamic_cast<TaylorExpansionsMomentsAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
 {

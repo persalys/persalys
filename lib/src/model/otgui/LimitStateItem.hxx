@@ -21,18 +21,17 @@
 #ifndef OTGUI_LIMITSTATEITEM_HXX
 #define OTGUI_LIMITSTATEITEM_HXX
 
-#include "otgui/ObserverItem.hxx"
 #include "otgui/LimitState.hxx"
 
+#include <QStandardItem>
+
 namespace OTGUI {
-class LimitStateItem : public ObserverItem
+class LimitStateItem : public QObject, public QStandardItem, public Observer
 {
   Q_OBJECT
 
 public:
   LimitStateItem(const LimitState & limitState);
-
-  virtual ~LimitStateItem();
 
   LimitState getLimitState() const;
 

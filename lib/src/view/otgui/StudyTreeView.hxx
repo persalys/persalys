@@ -53,10 +53,8 @@ public slots:
   void onCustomContextMenu(const QPoint & point);
   void selectedItemChanged(const QModelIndex & index);
   void runDesignOfExperiment();
-  void runModelEvaluation();
-  void runCentralTendency();
-  void runSensitivityAnalysis();
-  void runReliabilityAnalysis();
+  void runAnalysis();
+  void removeAnalysis();
   void createModelEvaluationResult(AnalysisItem *);
   void createCentralTendencyResult(AnalysisItem *);
   void createSensitivityAnalysisResult(AnalysisItem * item);
@@ -75,7 +73,7 @@ signals:
   void showWindow(QMdiSubWindow*);
   void errorMessageEmitted(QString);
   void itemSelected(QStandardItem *);
-  void checkIfWindowResultExists(ObserverItem *);
+  void checkIfWindowResultExists(QStandardItem *);
   void loadPythonScript(const QString & fileName);
   void graphWindowActivated(QWidget*);
   void graphWindowDeactivated(QWidget*);
@@ -92,10 +90,8 @@ private:
   QAction * newSensitivityAnalysis_;
   QAction * newThresholdExceedance_;
   QAction * runDesignOfExperiment_;
-  QAction * runModelEvaluation_;
-  QAction * runCentralTendency_;
-  QAction * runSensitivityAnalysis_;
-  QAction * runReliabilityAnalysis_;
+  QAction * runAnalysis_;
+  QAction * removeAnalysis_;
   QAction * saveOTStudy_;
 };
 }

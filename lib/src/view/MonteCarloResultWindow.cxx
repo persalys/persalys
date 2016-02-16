@@ -31,7 +31,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-MonteCarloResultWindow::MonteCarloResultWindow(CentralTendencyItem * item)
+MonteCarloResultWindow::MonteCarloResultWindow(AnalysisItem * item)
   : OTguiSubWindow(item)
   , result_(dynamic_cast<MonteCarloAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
   , physicalModel_(item->getAnalysis().getPhysicalModel())

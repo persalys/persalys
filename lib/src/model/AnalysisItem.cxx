@@ -20,29 +20,25 @@
  */
 #include "otgui/AnalysisItem.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
-AnalysisItem::AnalysisItem(const Analysis & analysis, const QString & typeAnalysis)
-  : ObserverItem(analysis.getName().c_str(), typeAnalysis)
+AnalysisItem::AnalysisItem(const Analysis & analysis, const String & typeAnalysis)
+  : QObject()
+  , QStandardItem(analysis.getName().c_str())
   , analysis_(analysis)
 {
+  setData(typeAnalysis.c_str(), Qt::UserRole);
 }
 
 
-AnalysisItem::~AnalysisItem()
+void AnalysisItem::setData(const QVariant & value, int role)
 {
-}
+  if (role == Qt::EditRole)
+    analysis_.getImplementation()->setName(value.toString().toStdString());
 
-
-void AnalysisItem::setData(const QVariant& value, int role)
-{
-  switch (role)
-  {
-    case Qt::EditRole:
-      analysis_.setName(value.toString().toStdString());
-      ObserverItem::setData(value, role);
-      break;
-  }
+  QStandardItem::setData(value, role);
 }
 
 
@@ -56,6 +52,20 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
 {
   analysis_ = analysis;
   analysis_.addObserver(this);
+  setData(analysis.getImplementation()->getClassName().c_str(), Qt::UserRole);
   emit analysisChanged(analysis_);
+}
+
+
+void AnalysisItem::update(Observable* source, const String & message)
+{
+  if (message=="analysisFinished")
+  {
+    emit analysisFinished(this);
+  }
+  else if (message=="analysisRemoved")
+  {
+    emit analysisRemoved(this);
+  }
 }
 }

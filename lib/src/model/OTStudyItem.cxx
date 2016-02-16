@@ -31,16 +31,11 @@ using namespace OT;
 namespace OTGUI {
 
 OTStudyItem::OTStudyItem(OTStudy * otStudy)
-  : ObserverItem(otStudy->getName().c_str(), "OTStudy")
+  : QObject()
+  , QStandardItem(otStudy->getName().c_str())
   , otStudy_(otStudy)
 {
-
-}
-
-
-OTStudyItem::~OTStudyItem()
-{
-
+  setData("OTStudy", Qt::UserRole);
 }
 
 
@@ -108,17 +103,25 @@ void OTStudyItem::updateAnalysis(const Analysis & analysis)
 
 void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
 {
+  // Physical model item
   PhysicalModelItem * newPhysicalModelItem = new PhysicalModelItem(physicalModel);
   physicalModel.addObserver(newPhysicalModelItem);
   connect(newPhysicalModelItem, SIGNAL(physicalModelChanged(PhysicalModel)), this, SLOT(updatePhysicalModel(PhysicalModel)));
   appendRow(newPhysicalModelItem);
-  Item * item = new Item(tr("Deterministic study"), "DeterministicStudy");
-  item->setEditable(false);
-  newPhysicalModelItem->appendRow(item);
-  item = new Item(tr("Probabilistic study"), "ProbabilisticStudy");
+
+  // Deterministic study item
+  QStandardItem * item = new QStandardItem(tr("Deterministic study"));
+  item->setData("DeterministicStudy", Qt::UserRole);
   item->setEditable(false);
   newPhysicalModelItem->appendRow(item);
 
+  // Probabilistic study item
+  item = new QStandardItem(tr("Probabilistic study"));
+  item->setData("ProbabilisticStudy", Qt::UserRole);
+  item->setEditable(false);
+  newPhysicalModelItem->appendRow(item);
+
+  // Probabilistic model item
   if (physicalModel.hasStochasticInputs())
   {
     ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(physicalModel);
@@ -128,7 +131,9 @@ void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
     emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
   }
 
-  item = new Item(tr("Designs of experiment"), "DesignOfExperimentList");
+  // Designs of experiment item
+  item = new QStandardItem(tr("Designs of experiment"));
+  item->setData("DesignOfExperimentList", Qt::UserRole);
   item->setEditable(false);
   newPhysicalModelItem->appendRow(item);
 
@@ -178,25 +183,18 @@ void OTStudyItem::addLimitStateItem(LimitState & limitState)
 void OTStudyItem::addAnalysisItem(Analysis & analysis)
 {
   String analysisName = analysis.getImplementation()->getClassName();
-  AnalysisItem * newItem;
+  AnalysisItem * newItem = new AnalysisItem(analysis, analysisName);
   if (analysisName == "ModelEvaluation")
   {
-    newItem = new ModelEvaluationItem(analysis);
     addDeterministicAnalysisItem(analysis, newItem);
   }
-  else if (analysisName == "MonteCarloAnalysis" || analysisName == "TaylorExpansionsMomentsAnalysis")
+  else if (analysisName == "MonteCarloAnalysis" || analysisName == "TaylorExpansionsMomentsAnalysis" ||
+           analysisName == "SobolAnalysis"      || analysisName == "SRCAnalysis")
   {
-    newItem = new CentralTendencyItem(analysis);
-    addProbabilisticAnalysisItem(analysis, newItem);
-  }
-  else if (analysisName == "SobolAnalysis" || analysisName == "SRCAnalysis")
-  {
-    newItem = new SensitivityAnalysisItem(analysis);
     addProbabilisticAnalysisItem(analysis, newItem);
   }
   else if (analysisName == "MonteCarloReliabilityAnalysis")
   {
-    newItem = new ReliabilityAnalysisItem(analysis);
     addReliabilityAnalysisItem(analysis, newItem);
   }
   else
@@ -204,6 +202,7 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis)
     throw InvalidArgumentException(HERE) << "In OTStudyItem::addAnalysisItem: Impossible to add an item for the analysis of type " << analysisName;
   }
   connect(newItem, SIGNAL(analysisChanged(Analysis)), this, SLOT(updateAnalysis(Analysis)));
+  connect(newItem, SIGNAL(analysisRemoved(AnalysisItem*)), this, SLOT(removeAnalysisItem(AnalysisItem*)));
 }
 
 
@@ -262,15 +261,18 @@ void OTStudyItem::addReliabilityAnalysisItem(Analysis & analysis, AnalysisItem *
 }
 
 
+void OTStudyItem::removeAnalysisItem(AnalysisItem* item)
+{
+  item->QStandardItem::parent()->removeRow(item->row());
+}
+
+
 void OTStudyItem::setData(const QVariant & value, int role)
 {
-  switch (role)
-  {
-    case Qt::EditRole:
-      otStudy_->setName(value.toString().toStdString());
-      ObserverItem::setData(value, role);
-      break;
-  }
+  if (role == Qt::EditRole)
+    otStudy_->setName(value.toString().toStdString());
+
+  QStandardItem::setData(value, role);
 }
 
 

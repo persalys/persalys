@@ -21,27 +21,29 @@
 #ifndef OTGUI_ANALYSISITEM_HXX
 #define OTGUI_ANALYSISITEM_HXX
 
-#include "otgui/ObserverItem.hxx"
 #include "otgui/Analysis.hxx"
 
+#include <QStandardItem>
+
 namespace OTGUI {
-class AnalysisItem : public ObserverItem
+class AnalysisItem : public QObject, public QStandardItem, public Observer
 {
   Q_OBJECT
 
 public:
-  AnalysisItem(const Analysis & analysis, const QString & typeAnalysis=QString("Analysis"));
-
-  virtual ~AnalysisItem();
+  AnalysisItem(const Analysis & analysis, const OT::String & typeAnalysis="Analysis");
 
   void setData(const QVariant & value, int role);
 
   Analysis getAnalysis() const;
 
+  virtual void update(Observable * source, const OT::String & message);
+
 public slots:
   void updateAnalysis(const Analysis & analysis);
 signals:
   void analysisFinished(AnalysisItem*);
+  void analysisRemoved(AnalysisItem*);
   void analysisChanged(const Analysis&);
 
 private:

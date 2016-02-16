@@ -21,18 +21,17 @@
 #ifndef OTGUI_DESIGNOFEXPERIMENTITEM_HXX
 #define OTGUI_DESIGNOFEXPERIMENTITEM_HXX
 
-#include "otgui/ObserverItem.hxx"
 #include "otgui/DesignOfExperiment.hxx"
 
+#include <QStandardItem>
+
 namespace OTGUI {
-class DesignOfExperimentItem : public ObserverItem
+class DesignOfExperimentItem : public QObject, public QStandardItem, public Observer
 {
   Q_OBJECT
 
 public:
   DesignOfExperimentItem(const DesignOfExperiment & designOfExperiment);
-
-  virtual ~DesignOfExperimentItem();
 
   DesignOfExperiment getDesignOfExperiment() const;
 

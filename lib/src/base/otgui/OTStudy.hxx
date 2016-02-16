@@ -66,6 +66,7 @@ public:
   bool hasAnalysisNamed(const OT::String & analysisName);
   OT::String getAvailableAnalysisName(const OT::String & rootName);
   void addAnalysis(const Analysis & analysis);
+  void removeAnalysis(const Analysis & analysis);
 
   OT::Collection<LimitState> getLimitStates() const;
   bool hasLimitStateNamed(const OT::String & limitStateName);

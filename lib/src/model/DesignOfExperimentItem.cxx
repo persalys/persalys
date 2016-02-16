@@ -25,26 +25,20 @@ using namespace OT;
 namespace OTGUI {
 
 DesignOfExperimentItem::DesignOfExperimentItem(const DesignOfExperiment & designOfExperiment)
-  : ObserverItem(designOfExperiment.getName().c_str(), QString("DesignOfExperiment"))
+  : QObject()
+  , QStandardItem(designOfExperiment.getName().c_str())
   , designOfExperiment_(designOfExperiment)
 {
-}
-
-
-DesignOfExperimentItem::~DesignOfExperimentItem()
-{
+  setData("DesignOfExperiment", Qt::UserRole);
 }
 
 
 void DesignOfExperimentItem::setData(const QVariant & value, int role)
 {
-  switch (role)
-  {
-    case Qt::EditRole:
-      designOfExperiment_.setName(value.toString().toStdString());
-      ObserverItem::setData(value, role);
-      break;
-  }
+  if (role == Qt::EditRole)
+    designOfExperiment_.getImplementation()->setName(value.toString().toStdString());
+
+  QStandardItem::setData(value, role);
 }
 
 

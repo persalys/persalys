@@ -25,26 +25,20 @@ using namespace OT;
 namespace OTGUI {
 
 LimitStateItem::LimitStateItem(const LimitState & limitState)
-  : ObserverItem(limitState.getName().c_str(), QString("LimitState"))
+  : QObject()
+  , QStandardItem(limitState.getName().c_str())
   , limitState_(limitState)
 {
-}
-
-
-LimitStateItem::~LimitStateItem()
-{
+  setData("LimitState", Qt::UserRole);
 }
 
 
 void LimitStateItem::setData(const QVariant & value, int role)
 {
-  switch (role)
-  {
-    case Qt::EditRole:
-      limitState_.setName(value.toString().toStdString());
-      ObserverItem::setData(value, role);
-      break;
-  }
+  if (role == Qt::EditRole)
+    limitState_.getImplementation()->setName(value.toString().toStdString());
+
+  QStandardItem::setData(value, role);
 }
 
 

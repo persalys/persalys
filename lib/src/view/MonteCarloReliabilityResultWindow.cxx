@@ -30,7 +30,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-MonteCarloReliabilityResultWindow::MonteCarloReliabilityResultWindow(ReliabilityAnalysisItem * item)
+MonteCarloReliabilityResultWindow::MonteCarloReliabilityResultWindow(AnalysisItem * item)
   : OTguiSubWindow(item)
   , result_(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
 {

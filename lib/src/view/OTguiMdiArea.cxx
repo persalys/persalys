@@ -54,7 +54,7 @@ void OTguiMdiArea::showSubWindow(QStandardItem * item)
 }
 
 
-void OTguiMdiArea::checkIfWindowResultExists(ObserverItem* item)
+void OTguiMdiArea::checkIfWindowResultExists(QStandardItem * item)
 {
   for (int i=0; i<subWindowList().size(); ++i)
   {

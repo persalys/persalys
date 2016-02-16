@@ -26,27 +26,20 @@ using namespace OT;
 namespace OTGUI {
 
 PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel)
-  : ObserverItem(physicalModel.getName().c_str(), "PhysicalModel")
+  : QObject()
+  , QStandardItem(physicalModel.getName().c_str())
   , physicalModel_(physicalModel)
 {
-}
-
-
-PhysicalModelItem::~PhysicalModelItem()
-{
-// delete all children (analysis) + physicalModel_
+  setData("PhysicalModel", Qt::UserRole);
 }
 
 
 void PhysicalModelItem::setData(const QVariant & value, int role)
 {
-  switch (role)
-  {
-    case Qt::EditRole:
-      physicalModel_.setName(value.toString().toStdString());
-      ObserverItem::setData(value, role);
-      break;
-  }
+  if (role == Qt::EditRole)
+    physicalModel_.getImplementation()->setName(value.toString().toStdString());
+
+  QStandardItem::setData(value, role);
 }
 
 

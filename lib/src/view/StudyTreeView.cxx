@@ -127,21 +127,13 @@ void StudyTreeView::buildActions()
   runDesignOfExperiment_->setStatusTip(tr("Run the design of experiment"));
   connect(runDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(runDesignOfExperiment()));
 
-  runModelEvaluation_ = new QAction(QIcon(":/images/run-build.png"), tr("Run"), this);
-  runModelEvaluation_->setStatusTip(tr("Run the model evaluation"));
-  connect(runModelEvaluation_, SIGNAL(triggered()), this, SLOT(runModelEvaluation()));
+  runAnalysis_ = new QAction(QIcon(":/images/run-build.png"), tr("Run"), this);
+  runAnalysis_->setStatusTip(tr("Run the analysis"));
+  connect(runAnalysis_, SIGNAL(triggered()), this, SLOT(runAnalysis()));
 
-  runCentralTendency_ = new QAction(QIcon(":/images/run-build.png"), tr("Run"), this);
-  runCentralTendency_->setStatusTip(tr("Run the central tendency"));
-  connect(runCentralTendency_, SIGNAL(triggered()), this, SLOT(runCentralTendency()));
-
-  runSensitivityAnalysis_ = new QAction(QIcon(":/images/run-build.png"), tr("Run"), this);
-  runSensitivityAnalysis_->setStatusTip(tr("Run the sensitivity analysis"));
-  connect(runSensitivityAnalysis_, SIGNAL(triggered()), this, SLOT(runSensitivityAnalysis()));
-
-  runReliabilityAnalysis_ = new QAction(QIcon(":/images/run-build.png"), tr("Run"), this);
-  runReliabilityAnalysis_->setStatusTip(tr("Run the reliability analysis"));
-  connect(runReliabilityAnalysis_, SIGNAL(triggered()), this, SLOT(runReliabilityAnalysis()));
+  removeAnalysis_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
+  removeAnalysis_->setStatusTip(tr("Remove the model evaluation"));
+  connect(removeAnalysis_, SIGNAL(triggered()), this, SLOT(removeAnalysis()));
 
   saveOTStudy_ = new QAction(QIcon(":/images/document-save.png"), tr("Save"), this);
   saveOTStudy_->setStatusTip(tr("Save the OTStudy"));
@@ -153,52 +145,43 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
 {
   QList<QAction* > actions;
 
-  if (dataType=="OTStudy")
+  if (dataType == "OTStudy")
   {
     actions.append(newPhysicalModel_);
     actions.append(saveOTStudy_);
   }
-  else if (dataType=="DeterministicStudy")
+  else if (dataType == "DeterministicStudy")
   {
     actions.append(newModelEvaluation_);
   }
-  else if (dataType=="ProbabilisticStudy")
+  else if (dataType == "ProbabilisticStudy")
   {
     actions.append(newProbabilisticModel_);
   }
-  else if (dataType=="ProbabilisticModel")
+  else if (dataType == "ProbabilisticModel")
   {
     actions.append(newLimitState_);
     actions.append(newCentralTendency_);
     actions.append(newSensitivityAnalysis_);
   }
-  else if (dataType=="DesignOfExperimentList")
+  else if (dataType == "DesignOfExperimentList")
   {
     actions.append(newDesignOfExperiment_);
   }
-  else if (dataType=="DesignOfExperiment")
+  else if (dataType == "DesignOfExperiment")
   {
     actions.append(runDesignOfExperiment_);
   }
-  else if (dataType=="LimitState")
+  else if (dataType == "LimitState")
   {
     actions.append(newThresholdExceedance_);
   }
-  else if (dataType=="ModelEvaluation")
+  else if (dataType == "ModelEvaluation" || dataType == "MonteCarloAnalysis" ||
+           dataType == "TaylorExpansionsMomentsAnalysis" || dataType == "SobolAnalysis" ||
+           dataType == "SRCAnalysis" || dataType == "MonteCarloReliabilityAnalysis")
   {
-    actions.append(runModelEvaluation_);
-  }
-  else if (dataType=="CentralTendency")
-  {
-    actions.append(runCentralTendency_);
-  }
-  else if (dataType=="SensitivityAnalysis")
-  {
-    actions.append(runSensitivityAnalysis_);
-  }
-  else if (dataType=="ReliabilityAnalysis")
-  {
-    actions.append(runReliabilityAnalysis_);
+    actions.append(runAnalysis_);
+    actions.append(removeAnalysis_);
   }
   return actions;
 }
@@ -357,11 +340,11 @@ void StudyTreeView::createAnalysisConnection(AnalysisItem * item)
   QString data = item->data(Qt::UserRole).toString();
   if (data == "ModelEvaluation")
     connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createModelEvaluationResult(AnalysisItem*)));
-  else if (data == "CentralTendency")
+  else if (data == "MonteCarloAnalysis" || data == "TaylorExpansionsMomentsAnalysis")
     connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createCentralTendencyResult(AnalysisItem *)));
-  else if (data == "SensitivityAnalysis")
+  else if (data == "SobolAnalysis" || data == "SRCAnalysis")
     connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createSensitivityAnalysisResult(AnalysisItem*)));
-  else if (data == "ReliabilityAnalysis")
+  else if (data == "MonteCarloReliabilityAnalysis")
     connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createReliabilityAnalysisResult(AnalysisItem*)));
 }
 
@@ -383,73 +366,53 @@ void StudyTreeView::runDesignOfExperiment()
 }
 
 
-void StudyTreeView::runModelEvaluation()
+void StudyTreeView::runAnalysis()
 {
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+  AnalysisItem * item = dynamic_cast<AnalysisItem*>(selectedItem);
 
-  ModelEvaluationItem * item = dynamic_cast<ModelEvaluationItem*>(selectedItem);
-
-  ModelEvaluationWizard * wizard = new ModelEvaluationWizard(item->getAnalysis());
-  if (wizard->exec())
+  OTguiWizard * wizard = 0;
+  if (item->data(Qt::UserRole).toString() == "ModelEvaluation")
   {
-    item->getAnalysis().run();
+    wizard = new ModelEvaluationWizard(item->getAnalysis());
   }
+  else if (item->data(Qt::UserRole).toString() == "MonteCarloAnalysis" ||
+           item->data(Qt::UserRole).toString() == "TaylorExpansionsMomentsAnalysis")
+  {
+    wizard = new CentralTendencyWizard(item->getAnalysis());
+  }
+  else if (item->data(Qt::UserRole).toString() == "SobolAnalysis" ||
+           item->data(Qt::UserRole).toString() == "SRCAnalysis")
+  {
+    wizard = new SensitivityAnalysisWizard(item->getAnalysis());
+  }
+  else if (item->data(Qt::UserRole).toString() == "MonteCarloReliabilityAnalysis")
+  {
+    wizard = new ReliabilityAnalysisWizard(item->getAnalysis());
+  }
+
+  connect(wizard, SIGNAL(analysisChanged(Analysis)), item, SLOT(updateAnalysis(Analysis)));
+
+  if (wizard)
+    if (wizard->exec())
+      item->getAnalysis().run();
 }
 
 
-void StudyTreeView::runCentralTendency()
+void StudyTreeView::removeAnalysis()
 {
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
-  CentralTendencyItem * item = dynamic_cast<CentralTendencyItem*>(selectedItem);
-
-  CentralTendencyWizard * wizard = new CentralTendencyWizard(item->getAnalysis());
-  connect(wizard, SIGNAL(analysisChanged(Analysis)), item, SLOT(updateAnalysis(Analysis)));
-  if (wizard->exec())
-  {
-    item->getAnalysis().run();
-  }
-}
-
-
-void StudyTreeView::runSensitivityAnalysis()
-{
-  QModelIndex index = selectionModel()->currentIndex();
-  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
-
-  SensitivityAnalysisItem * item = dynamic_cast<SensitivityAnalysisItem*>(selectedItem);
-
-  SensitivityAnalysisWizard * wizard = new SensitivityAnalysisWizard(item->getAnalysis());
-  connect(wizard, SIGNAL(analysisChanged(Analysis)), item, SLOT(updateAnalysis(Analysis)));
-  if (wizard->exec())
-  {
-    item->getAnalysis().run();
-  }
-}
-
-
-void StudyTreeView::runReliabilityAnalysis()
-{
-  QModelIndex index = selectionModel()->currentIndex();
-  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
-
-  ReliabilityAnalysisItem * item = dynamic_cast<ReliabilityAnalysisItem*>(selectedItem);
-
-  ReliabilityAnalysisWizard * wizard = new ReliabilityAnalysisWizard(item->getAnalysis());
-  connect(wizard, SIGNAL(analysisChanged(Analysis)), item, SLOT(updateAnalysis(Analysis)));
-  if (wizard->exec())
-  {
-    item->getAnalysis().run();
-  }
+  treeViewModel_->getOTStudyItem(index)->getOTStudy()->removeAnalysis(dynamic_cast<AnalysisItem*>(selectedItem)->getAnalysis());
 }
 
 
 void StudyTreeView::createModelEvaluationResult(AnalysisItem* item)
 {
   emit checkIfWindowResultExists(item);
-  ModelEvaluationResultWindow * window = new ModelEvaluationResultWindow(dynamic_cast<ModelEvaluationItem*>(item));
+  ModelEvaluationResultWindow * window = new ModelEvaluationResultWindow(item);
   emit showWindow(window);
   setCurrentIndex(item->index());
 }
@@ -458,17 +421,17 @@ void StudyTreeView::createModelEvaluationResult(AnalysisItem* item)
 void StudyTreeView::createCentralTendencyResult(AnalysisItem * item)
 {
   emit checkIfWindowResultExists(item);
-  if (item->getAnalysis().getImplementation()->getClassName() == "MonteCarloAnalysis")
+  if (item->data(Qt::UserRole).toString() == "MonteCarloAnalysis")
   {
-    MonteCarloResultWindow * window = new MonteCarloResultWindow(dynamic_cast<CentralTendencyItem*>(item));
+    MonteCarloResultWindow * window = new MonteCarloResultWindow(item);
     connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
     connect(window, SIGNAL(graphWindowDeactivated(QWidget*)), this, SIGNAL(graphWindowDeactivated(QWidget*)));
     emit showWindow(window);
-  setCurrentIndex(item->index());
+    setCurrentIndex(item->index());
   }
   else
   {
-    TaylorExpansionsMomentsResultWindow * window = new TaylorExpansionsMomentsResultWindow(dynamic_cast<CentralTendencyItem*>(item));
+    TaylorExpansionsMomentsResultWindow * window = new TaylorExpansionsMomentsResultWindow(item);
     emit showWindow(window);
   }
   setCurrentIndex(item->index());
@@ -478,16 +441,16 @@ void StudyTreeView::createCentralTendencyResult(AnalysisItem * item)
 void StudyTreeView::createSensitivityAnalysisResult(AnalysisItem * item)
 {
   emit checkIfWindowResultExists(item);
-  if (item->getAnalysis().getImplementation()->getClassName() == "SobolAnalysis")
+  if (item->data(Qt::UserRole).toString() == "SobolAnalysis")
   {
-    SobolResultWindow * window = new SobolResultWindow(dynamic_cast<SensitivityAnalysisItem*>(item));
+    SobolResultWindow * window = new SobolResultWindow(item);
     connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
     connect(window, SIGNAL(graphWindowDeactivated(QWidget*)), this, SIGNAL(graphWindowDeactivated(QWidget*)));
     emit showWindow(window);
   }
   else
   {
-    SRCResultWindow * window = new SRCResultWindow(dynamic_cast<SensitivityAnalysisItem*>(item));
+    SRCResultWindow * window = new SRCResultWindow(item);
     connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
     connect(window, SIGNAL(graphWindowDeactivated(QWidget*)), this, SIGNAL(graphWindowDeactivated(QWidget*)));
     emit showWindow(window);
@@ -499,7 +462,7 @@ void StudyTreeView::createSensitivityAnalysisResult(AnalysisItem * item)
 void StudyTreeView::createReliabilityAnalysisResult(AnalysisItem * item)
 {
   emit checkIfWindowResultExists(item);
-  MonteCarloReliabilityResultWindow * window = new MonteCarloReliabilityResultWindow(dynamic_cast<ReliabilityAnalysisItem*>(item));
+  MonteCarloReliabilityResultWindow * window = new MonteCarloReliabilityResultWindow(item);
   emit showWindow(window);
   setCurrentIndex(item->index());
 }

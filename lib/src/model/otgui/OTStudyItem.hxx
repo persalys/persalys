@@ -29,14 +29,12 @@
 #include "otgui/OTStudy.hxx"
 
 namespace OTGUI {
-class OTStudyItem : public ObserverItem
+class OTStudyItem : public QObject, public QStandardItem, public Observer
 {
   Q_OBJECT
 
 public:
   OTStudyItem(OTStudy * otStudy);
-
-  virtual ~OTStudyItem();
 
   void update(Observable * source, const OT::String & message);
 
@@ -55,6 +53,7 @@ public:
 public slots:
   void updatePhysicalModel(const PhysicalModel & physicalModel);
   void updateAnalysis(const Analysis & analysis);
+  void removeAnalysisItem(AnalysisItem*);
 signals:
   void newPhysicalModelItemCreated(PhysicalModelItem*);
   void newProbabilisticModelItemCreated(ProbabilisticModelItem*);

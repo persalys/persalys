@@ -22,7 +22,7 @@
 #define OTGUI_SOBOLRESULTWINDOW_HXX
 
 #include "otgui/OTguiSubWindow.hxx"
-#include "otgui/SensitivityAnalysisItem.hxx"
+#include "otgui/AnalysisItem.hxx"
 #include "otgui/SobolResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 
@@ -34,7 +34,7 @@ class SobolResultWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  SobolResultWindow(SensitivityAnalysisItem * item);
+  SobolResultWindow(AnalysisItem * item);
 
 protected:
   void buildInterface();

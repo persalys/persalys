@@ -277,6 +277,13 @@ void OTStudy::addAnalysis(const Analysis & analysis)
 }
 
 
+void OTStudy::removeAnalysis(const Analysis & analysis)
+{
+  analyses_.erase(std::remove(analyses_.begin(), analyses_.end(), analysis), analyses_.end());
+  analysis.getImplementation().get()->notify("analysisRemoved");
+}
+
+
 Collection<LimitState> OTStudy::getLimitStates() const
 {
   return limitStates_;

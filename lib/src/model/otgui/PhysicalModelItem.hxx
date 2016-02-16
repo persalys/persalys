@@ -21,20 +21,19 @@
 #ifndef OTGUI_PHYSICALMODELITEM_HXX
 #define OTGUI_PHYSICALMODELITEM_HXX
 
-#include "otgui/ObserverItem.hxx"
 #include "otgui/InputTableModel.hxx"
 #include "otgui/OutputTableModel.hxx"
 #include "otgui/PhysicalModel.hxx"
 
+#include <QStandardItem>
+
 namespace OTGUI {
-class PhysicalModelItem : public ObserverItem
+class PhysicalModelItem : public QObject, public QStandardItem, public Observer
 {
   Q_OBJECT
 
 public:
   PhysicalModelItem(const PhysicalModel & physicalModel);
-
-  virtual ~PhysicalModelItem();
 
   PhysicalModel getPhysicalModel() const;
 

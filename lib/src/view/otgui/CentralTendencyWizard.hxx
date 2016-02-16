@@ -51,8 +51,6 @@ public slots:
   void nbSimuChanged(int);
   void levelConfidenceIntervalChanged(double);
   void seedChanged(int);
-signals:
-  void analysisChanged(const Analysis & analysis);
 
 private:
   Analysis analysis_;

@@ -22,7 +22,7 @@
 #define OTGUI_SRCRESULTWINDOW_HXX
 
 #include "otgui/OTguiSubWindow.hxx"
-#include "otgui/SensitivityAnalysisItem.hxx"
+#include "otgui/AnalysisItem.hxx"
 #include "otgui/SRCResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 
@@ -34,7 +34,7 @@ class SRCResultWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  SRCResultWindow(SensitivityAnalysisItem * item);
+  SRCResultWindow(AnalysisItem * item);
 
 protected:
   void buildInterface();

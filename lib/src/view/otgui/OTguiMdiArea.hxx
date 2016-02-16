@@ -21,8 +21,6 @@
 #ifndef OTGUI_OTGUIMDIAREA_HXX
 #define OTGUI_OTGUIMDIAREA_HXX
 
-#include "otgui/ObserverItem.hxx"
-
 #include <QMdiArea>
 #include <QStandardItem>
 #include <QMdiSubWindow>
@@ -38,7 +36,7 @@ public:
 public slots:
   void showSubWindow(QMdiSubWindow * win);
   void showSubWindow(QStandardItem * item);
-  void checkIfWindowResultExists(ObserverItem * item);
+  void checkIfWindowResultExists(QStandardItem * item);
 signals:
 //   void ;
 };

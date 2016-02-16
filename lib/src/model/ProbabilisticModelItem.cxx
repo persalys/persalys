@@ -25,14 +25,11 @@ using namespace OT;
 namespace OTGUI {
 
 ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel & physicalModel)
-  : ObserverItem(QString("Probabilistic Model"), "ProbabilisticModel")
+  : QObject()
+  , QStandardItem("Probabilistic Model")
   , physicalModel_(physicalModel)
 {
-}
-
-
-ProbabilisticModelItem::~ProbabilisticModelItem()
-{
+  setData("ProbabilisticModel", Qt::UserRole);
 }
 
 

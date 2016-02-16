@@ -33,7 +33,7 @@ using namespace OT;
 
 namespace OTGUI {
   
-SobolResultWindow::SobolResultWindow(SensitivityAnalysisItem * item)
+SobolResultWindow::SobolResultWindow(AnalysisItem * item)
   : OTguiSubWindow(item)
   , result_(dynamic_cast<SobolAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
 {

@@ -22,7 +22,7 @@
 #define OTGUI_MONTECARLORELIABILITYRESULTWINDOW_HXX
 
 #include "otgui/OTguiSubWindow.hxx"
-#include "otgui/ReliabilityAnalysisItem.hxx"
+#include "otgui/AnalysisItem.hxx"
 #include "SimulationResult.hxx"
 
 namespace OTGUI {
@@ -31,7 +31,7 @@ class MonteCarloReliabilityResultWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  MonteCarloReliabilityResultWindow(ReliabilityAnalysisItem * item);
+  MonteCarloReliabilityResultWindow(AnalysisItem * item);
 
 protected:
   void buildInterface();

@@ -22,7 +22,7 @@
 #define OTGUI_TAYLOREXPANSIONSMOMENTSRESULTWINDOW_HXX
 
 #include "otgui/OTguiSubWindow.hxx"
-#include "otgui/CentralTendencyItem.hxx"
+#include "otgui/AnalysisItem.hxx"
 #include "otgui/TaylorExpansionsMomentsResult.hxx"
 
 #include <QComboBox>
@@ -34,7 +34,7 @@ class TaylorExpansionsMomentsResultWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  TaylorExpansionsMomentsResultWindow(CentralTendencyItem * item);
+  TaylorExpansionsMomentsResultWindow(AnalysisItem * item);
 
 protected:
   void buildInterface();

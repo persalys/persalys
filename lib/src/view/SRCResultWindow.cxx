@@ -32,7 +32,7 @@ using namespace OT;
 
 namespace OTGUI {
   
-SRCResultWindow::SRCResultWindow(SensitivityAnalysisItem * item)
+SRCResultWindow::SRCResultWindow(AnalysisItem * item)
   : OTguiSubWindow(item)
   , result_(dynamic_cast<SRCAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
 {

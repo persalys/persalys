@@ -21,20 +21,19 @@
 #ifndef OTGUI_PROBABILISTICMODELITEM_HXX
 #define OTGUI_PROBABILISTICMODELITEM_HXX
 
-#include "otgui/ObserverItem.hxx"
 #include "otgui/InputTableModel.hxx"
 #include "otgui/OutputTableModel.hxx"
 #include "otgui/PhysicalModel.hxx"
 
+#include <QStandardItem>
+
 namespace OTGUI {
-class ProbabilisticModelItem : public ObserverItem
+class ProbabilisticModelItem : public QObject, public QStandardItem, public Observer
 {
   Q_OBJECT
 
 public:
   ProbabilisticModelItem(const PhysicalModel & physicalModel);
-
-  virtual ~ProbabilisticModelItem();
 
   PhysicalModel getPhysicalModel() const;
 

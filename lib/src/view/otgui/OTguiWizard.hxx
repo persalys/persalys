@@ -21,6 +21,8 @@
 #ifndef OTGUI_OTGUIWIZARD_HXX
 #define OTGUI_OTGUIWIZARD_HXX
 
+#include "otgui/Analysis.hxx"
+
 #include <QWizard>
 
 namespace OTGUI {
@@ -30,6 +32,10 @@ class OTguiWizard : public QWizard
 
 public:
   OTguiWizard(QWidget * parent=0);
+
+public slots:
+signals:
+  void analysisChanged(const Analysis & analysis);
 };
 }
 #endif
