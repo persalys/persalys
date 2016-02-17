@@ -58,7 +58,7 @@ void ProbabilisticModelWindow::buildInterface()
   
   // First Tab: marginals
   QWidget * tab = new QWidget;
-  QHBoxLayout * tabLayout = new QHBoxLayout(tab);
+  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
   QSplitter * horizontalSplitter = new QSplitter;
 
@@ -195,9 +195,9 @@ void ProbabilisticModelWindow::buildInterface()
 
   // Second Tab: correlation
   tab = new QWidget;
-  tabLayout = new QHBoxLayout(tab);
+  tabLayout = new QVBoxLayout(tab);
 
-  QGroupBox * groupBox = new QGroupBox(tr("Spearman's rank"));
+  QGroupBox * groupBox = new QGroupBox(tr("Spearman's rank (Gaussian Copula)"));
   QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
   correlationTableView_ = new QTableView;
   SpinBoxDelegate * correlationDelegate = new SpinBoxDelegate;
@@ -207,6 +207,11 @@ void ProbabilisticModelWindow::buildInterface()
   correlationTableView_->setEditTriggers(QAbstractItemView::AllEditTriggers);
   groupBoxLayout->addWidget(correlationTableView_);
   tabLayout->addWidget(groupBox);
+
+  correlationErrorMessage_ = new QLabel;
+  correlationErrorMessage_->setWordWrap(true);
+  tabLayout->addWidget(correlationErrorMessage_);
+  connect(correlationTableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setCorrelationTabErrorMessage(QString)));
 
   rootTab->addTab(tab, tr("Correlation"));
 
@@ -267,6 +272,14 @@ void ProbabilisticModelWindow::updateCorrelationTable()
   delete correlationTableModel_;
   correlationTableModel_ = new CorrelationTableModel(physicalModel_);
   correlationTableView_->setModel(correlationTableModel_);
+  connect(correlationTableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setCorrelationTabErrorMessage(QString)));
+}
+
+
+void ProbabilisticModelWindow::setCorrelationTabErrorMessage(const QString & message)
+{
+  correlationErrorMessage_->setText(QString("%1%2%3").arg("<font color=red>").arg(message).arg("</font>"));
+  setErrorMessage(message);
 }
 
 
@@ -422,6 +435,7 @@ void ProbabilisticModelWindow::showHideGraphConfigurationWidget(Qt::WindowStates
 
 void ProbabilisticModelWindow::updatePlots()
 {
+  setErrorMessage("");
   QModelIndex index = inputTableView_->currentIndex();
   Input input = physicalModel_.getInputs()[inputTableView_->currentIndex().row()];
   pdfPlot_->clear();
@@ -464,8 +478,8 @@ void ProbabilisticModelWindow::updateDistributionParameters()
     catch(Exception & ex)
     {
       std::cerr << "ProbabilisticModelWindow::updateDistribution invalid parameters:"<<newParameters<<" for distribution:"<<distributionName<<std::endl;
-      setTemporaryErrorMessage(ex.what());
       updateDistributionWidgets(index);
+      setErrorMessage(ex.what());
     }
   }
   else
@@ -492,8 +506,8 @@ void ProbabilisticModelWindow::updateDistributionParameters()
     catch(Exception & ex)
     {
       std::cerr << "ProbabilisticModelWindow::updateDistribution invalid parameters:"<<parameters<<" for distribution:"<<distributionName<<std::endl;
-      setTemporaryErrorMessage(ex.what());
       updateDistributionWidgets(index);
+      setErrorMessage(ex.what());
     }
   }
 }
@@ -523,8 +537,8 @@ void ProbabilisticModelWindow::truncationParametersChanged()
   catch (std::exception & ex)
   {
     std::cerr << "ProbabilisticModelWindow::truncationParametersChanged \n";
-    setTemporaryErrorMessage(ex.what());
     updateDistributionWidgets(index);
+    setErrorMessage(ex.what());
   }
 }
 
@@ -654,8 +668,8 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
   catch (std::exception & ex)
   {
     std::cerr << "ProbabilisticModelWindow::truncationParametersStateChanged \n";
-    setTemporaryErrorMessage(ex.what());
     updateDistributionWidgets(index);
+    setErrorMessage(ex.what());
   }
 }
 }

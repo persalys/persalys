@@ -343,7 +343,7 @@ void PhysicalModelWindow::evaluateOutputs()
   }
   catch (Exception & ex)
   {
-    setErrorMessage(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+    setErrorMessage(ex.what());
   }
 }
 }

@@ -36,10 +36,10 @@ public:
   QStandardItem * getItem()const;
 
   QString getErrorMessage() const;
-  void setErrorMessage(QString message);
-  void setTemporaryErrorMessage(QString message);
 
 public slots:
+  void setErrorMessage(QString message);
+  void setTemporaryErrorMessage(QString message);
 signals:
   void errorMessageChanged(QString);
   void graphWindowActivated(QWidget*);

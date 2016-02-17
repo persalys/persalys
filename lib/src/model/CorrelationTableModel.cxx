@@ -38,11 +38,6 @@ CorrelationTableModel::CorrelationTableModel(const PhysicalModel & physicalModel
 }
 
 
-CorrelationTableModel::~CorrelationTableModel()
-{
-}
-
-
 int CorrelationTableModel::columnCount(const QModelIndex & parent) const
 {
   return getPhysicalModel().getStochasticInputNames().getSize();
@@ -99,13 +94,26 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
       return false;
 
     CorrelationMatrix correlation(physicalModel_.getCopula().getSpearmanCorrelation());
-    correlation(index.row(), index.column()) = value.toDouble();
+    if (value.toDouble() == correlation(index.row(), index.column()))
+      return true;
+
     // update the physicalModel
-    physicalModel_.blockNotification(true);
-    physicalModel_.setCopula(NormalCopula(NormalCopula::GetCorrelationFromSpearmanCorrelation(correlation)));
-    physicalModel_.blockNotification(false);
-    emit dataChanged(index, index);
-    return true;
+    correlation(index.row(), index.column()) = value.toDouble();
+    emit errorMessageChanged("");
+    try
+    {
+      physicalModel_.blockNotification(true);
+      physicalModel_.setCopula(NormalCopula(NormalCopula::GetCorrelationFromSpearmanCorrelation(correlation)));
+      physicalModel_.blockNotification(false);
+      emit dataChanged(index, index);
+      return true;
+    }
+    catch (std::exception & ex)
+    {
+      QString input1 = getPhysicalModel().getStochasticInputNames()[index.row()].c_str();
+      QString input2 = getPhysicalModel().getStochasticInputNames()[index.column()].c_str();
+      emit errorMessageChanged(tr("The correlation between %1 and %2 can not be equal to '%3'. %4").arg(input1).arg(input2).arg(value.toString()).arg(ex.what()));
+    }
   }
   return false;
 }

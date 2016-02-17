@@ -33,8 +33,6 @@ class CorrelationTableModel : public QAbstractTableModel
 public:
   CorrelationTableModel(const PhysicalModel & physicalModel, QObject * parent = 0);
 
-  virtual ~CorrelationTableModel();
-
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
   Qt::ItemFlags flags(const QModelIndex & index) const;
@@ -42,6 +40,10 @@ public:
   QVariant data(const QModelIndex & index, int role) const;
   bool setData(const QModelIndex & index, const QVariant & value, int role);
   PhysicalModel getPhysicalModel() const;
+
+public slots:
+signals:
+  void errorMessageChanged(const QString & errorMessage);
 
 private:
   PhysicalModel physicalModel_;

@@ -48,6 +48,7 @@ QString OTguiSubWindow::getErrorMessage() const
 
 void OTguiSubWindow::setErrorMessage(QString message)
 {
+  message = QString("%1%2%3").arg("<font color=red>").arg(message).arg("</font>");
   errorMessage_ = message;
   if (errorMessageLabel_)
     errorMessageLabel_->setText(message);
@@ -57,9 +58,9 @@ void OTguiSubWindow::setErrorMessage(QString message)
 
 void OTguiSubWindow::setTemporaryErrorMessage(QString message)
 {
-  setErrorMessage(QString("%1%2%3").arg("<font color=red>").arg(message).arg("</font>"));
+  setErrorMessage(message);
   QEventLoop eventLoop;
-  QTimer::singleShot(3000, &eventLoop, SLOT(quit()));
+  QTimer::singleShot(5000, &eventLoop, SLOT(quit()));
   eventLoop.exec();
   setErrorMessage("");
 }

@@ -56,6 +56,7 @@ public slots:
   void updatePhysicalModel(const PhysicalModel &);
   void updateProbabilisticModel();
   void updateCorrelationTable();
+  void setCorrelationTabErrorMessage(const QString &);
   void showHideAdvancedWidgets(bool);
   void truncationParametersChanged();
   void truncationParametersStateChanged();
@@ -84,6 +85,7 @@ private:
   QLineEdit * upperBoundLineEdit_;
   CorrelationTableModel * correlationTableModel_;
   QTableView * correlationTableView_;
+  QLabel * correlationErrorMessage_;
 };
 }
 #endif
