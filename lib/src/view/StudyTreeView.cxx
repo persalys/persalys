@@ -91,22 +91,27 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
 
 void StudyTreeView::buildActions()
 {
+  // new physical model action
   newPhysicalModel_ = new QAction(tr("New physical model"), this);
   newPhysicalModel_->setStatusTip(tr("Create a new physical model"));
   connect(newPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewPhysicalModel()));
 
+  // new probabilistic model action
   newProbabilisticModel_ = new QAction(tr("New probabilistic model"), this);
   newProbabilisticModel_->setStatusTip(tr("Create a new probabilistic model"));
   connect(newProbabilisticModel_, SIGNAL(triggered()), this, SLOT(createNewProbabilisticModel()));
 
+  // new design of experiment action
   newDesignOfExperiment_ = new QAction(tr("New design of experiment"), this);
   newDesignOfExperiment_->setStatusTip(tr("Create a new design of experiment"));
   connect(newDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(createNewDesignOfExperiment()));
 
+  // new limit state action
   newLimitState_ = new QAction(tr("New limit state"), this);
   newLimitState_->setStatusTip(tr("Create a new limit state"));
   connect(newLimitState_, SIGNAL(triggered()), this, SLOT(createNewLimitState()));
 
+  // new analysis actions
   newModelEvaluation_ = new QAction(tr("New model evaluation"), this);
   newModelEvaluation_->setStatusTip(tr("Create a new model evaluation"));
   connect(newModelEvaluation_, SIGNAL(triggered()), this, SLOT(createNewModelEvaluation()));
@@ -123,18 +128,22 @@ void StudyTreeView::buildActions()
   newThresholdExceedance_->setStatusTip(tr("Create a new threshold exceedance"));
   connect(newThresholdExceedance_, SIGNAL(triggered()), this, SLOT(createNewThresholdExceedance()));
 
+  // run design of experiment action
   runDesignOfExperiment_ = new QAction(QIcon(":/images/run-build.png"), tr("Run"), this);
   runDesignOfExperiment_->setStatusTip(tr("Run the design of experiment"));
   connect(runDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(runDesignOfExperiment()));
 
+  // run analysis action
   runAnalysis_ = new QAction(QIcon(":/images/run-build.png"), tr("Run"), this);
   runAnalysis_->setStatusTip(tr("Run the analysis"));
   connect(runAnalysis_, SIGNAL(triggered()), this, SLOT(runAnalysis()));
 
+  // remove analysis action
   removeAnalysis_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
   removeAnalysis_->setStatusTip(tr("Remove the model evaluation"));
   connect(removeAnalysis_, SIGNAL(triggered()), this, SLOT(removeAnalysis()));
 
+  // save the current OTStudy action
   saveOTStudy_ = new QAction(QIcon(":/images/document-save.png"), tr("Save"), this);
   saveOTStudy_->setStatusTip(tr("Save the OTStudy"));
   connect(saveOTStudy_, SIGNAL(triggered()), this, SLOT(saveOTStudy()));
@@ -337,15 +346,7 @@ void StudyTreeView::createNewThresholdExceedance()
 
 void StudyTreeView::createAnalysisConnection(AnalysisItem * item)
 {
-  QString data = item->data(Qt::UserRole).toString();
-  if (data == "ModelEvaluation")
-    connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createModelEvaluationResult(AnalysisItem*)));
-  else if (data == "MonteCarloAnalysis" || data == "TaylorExpansionsMomentsAnalysis")
-    connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createCentralTendencyResult(AnalysisItem *)));
-  else if (data == "SobolAnalysis" || data == "SRCAnalysis")
-    connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createSensitivityAnalysisResult(AnalysisItem*)));
-  else if (data == "MonteCarloReliabilityAnalysis")
-    connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createReliabilityAnalysisResult(AnalysisItem*)));
+  connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createAnalysisResultWindow(AnalysisItem*)));
 }
 
 
@@ -392,11 +393,12 @@ void StudyTreeView::runAnalysis()
     wizard = new ReliabilityAnalysisWizard(item->getAnalysis());
   }
 
-  connect(wizard, SIGNAL(analysisChanged(Analysis)), item, SLOT(updateAnalysis(Analysis)));
-
   if (wizard)
+  {
+    connect(wizard, SIGNAL(analysisChanged(Analysis)), item, SLOT(updateAnalysis(Analysis)));
     if (wizard->exec())
       item->getAnalysis().run();
+  }
 }
 
 
@@ -409,62 +411,32 @@ void StudyTreeView::removeAnalysis()
 }
 
 
-void StudyTreeView::createModelEvaluationResult(AnalysisItem* item)
+void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
 {
   emit checkIfWindowResultExists(item);
-  ModelEvaluationResultWindow * window = new ModelEvaluationResultWindow(item);
-  emit showWindow(window);
-  setCurrentIndex(item->index());
-}
 
+  OTguiSubWindow * resultWindow = 0;
+  QString data = item->data(Qt::UserRole).toString();
+  if (data == "ModelEvaluation")
+    resultWindow = new ModelEvaluationResultWindow(item);
+  else if (data == "MonteCarloAnalysis")
+    resultWindow = new MonteCarloResultWindow(item);
+  else if (data == "TaylorExpansionsMomentsAnalysis")
+    resultWindow = new TaylorExpansionsMomentsResultWindow(item);
+  else if (data == "SobolAnalysis")
+    resultWindow = new SobolResultWindow(item);
+  else if (data == "SRCAnalysis")
+    resultWindow = new SRCResultWindow(item);
+  else if (data == "MonteCarloReliabilityAnalysis")
+    resultWindow = new MonteCarloReliabilityResultWindow(item);
 
-void StudyTreeView::createCentralTendencyResult(AnalysisItem * item)
-{
-  emit checkIfWindowResultExists(item);
-  if (item->data(Qt::UserRole).toString() == "MonteCarloAnalysis")
+  if (resultWindow)
   {
-    MonteCarloResultWindow * window = new MonteCarloResultWindow(item);
-    connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-    connect(window, SIGNAL(graphWindowDeactivated(QWidget*)), this, SIGNAL(graphWindowDeactivated(QWidget*)));
-    emit showWindow(window);
+    connect(resultWindow, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
+    connect(resultWindow, SIGNAL(graphWindowDeactivated(QWidget*)), this, SIGNAL(graphWindowDeactivated(QWidget*)));
+    emit showWindow(resultWindow);
     setCurrentIndex(item->index());
   }
-  else
-  {
-    TaylorExpansionsMomentsResultWindow * window = new TaylorExpansionsMomentsResultWindow(item);
-    emit showWindow(window);
-  }
-  setCurrentIndex(item->index());
-}
-
-
-void StudyTreeView::createSensitivityAnalysisResult(AnalysisItem * item)
-{
-  emit checkIfWindowResultExists(item);
-  if (item->data(Qt::UserRole).toString() == "SobolAnalysis")
-  {
-    SobolResultWindow * window = new SobolResultWindow(item);
-    connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-    connect(window, SIGNAL(graphWindowDeactivated(QWidget*)), this, SIGNAL(graphWindowDeactivated(QWidget*)));
-    emit showWindow(window);
-  }
-  else
-  {
-    SRCResultWindow * window = new SRCResultWindow(item);
-    connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-    connect(window, SIGNAL(graphWindowDeactivated(QWidget*)), this, SIGNAL(graphWindowDeactivated(QWidget*)));
-    emit showWindow(window);
-  }
-  setCurrentIndex(item->index());
-}
-
-
-void StudyTreeView::createReliabilityAnalysisResult(AnalysisItem * item)
-{
-  emit checkIfWindowResultExists(item);
-  MonteCarloReliabilityResultWindow * window = new MonteCarloReliabilityResultWindow(item);
-  emit showWindow(window);
-  setCurrentIndex(item->index());
 }
 
 

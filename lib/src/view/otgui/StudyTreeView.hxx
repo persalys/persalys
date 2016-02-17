@@ -55,15 +55,12 @@ public slots:
   void runDesignOfExperiment();
   void runAnalysis();
   void removeAnalysis();
-  void createModelEvaluationResult(AnalysisItem *);
-  void createCentralTendencyResult(AnalysisItem *);
-  void createSensitivityAnalysisResult(AnalysisItem * item);
-  void createReliabilityAnalysisResult(AnalysisItem*);
-  void createAnalysisConnection(AnalysisItem*);
   void createNewPhysicalModelWindow(PhysicalModelItem * item);
   void createNewProbabilisticModelWindow(ProbabilisticModelItem * item);
   void createNewDesignOfExperimentWindow(DesignOfExperimentItem* item);
   void createNewLimitStateWindow(LimitStateItem * item);
+  void createAnalysisConnection(AnalysisItem*);
+  void createAnalysisResultWindow(AnalysisItem * item);
   void dumpOTStudy();
   void loadOTStudy();
   void saveOTStudy();
