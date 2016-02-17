@@ -422,10 +422,14 @@ void ProbabilisticModelWindow::showHideGraphConfigurationWidget(Qt::WindowStates
 
 void ProbabilisticModelWindow::updatePlots(Distribution inputDistribution)
 {
+  QModelIndex index = inputTableView_->currentIndex();
+  Input input = physicalModel_.getInputs()[inputTableView_->currentIndex().row()];
   pdfPlot_->clear();
   cdfPlot_->clear();
   pdfPlot_->plotPDFCurve(inputDistribution);
+  pdfPlot_->setAxisTitle(QwtPlot::xBottom, input.getName().c_str());
   cdfPlot_->plotCDFCurve(inputDistribution);
+  pdfPlot_->setAxisTitle(QwtPlot::xBottom, input.getName().c_str());
 }
 
 
