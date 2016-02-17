@@ -339,9 +339,12 @@ void PlotWidget::plotBoxPlot(double median, double lowerQuartile, double upperQu
 
 void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrder, const NumericalPoint totalOrder, const Description inputNames)
 {
-  setTitle("Sensitivity indices");
+  if (totalOrder.getSize())
+    setTitle("Sobol sensitivity indices");
+  else
+    setTitle("SRC sensitivity indices");
 
-  setAxisTitle(QwtPlot::yLeft, "Sensitivity indice");
+  setAxisTitle(QwtPlot::yLeft, "Indice value");
   setAxisTitle(QwtPlot::xBottom, "Inputs");
 
   // populate bar chart

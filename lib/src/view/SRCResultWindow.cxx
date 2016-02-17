@@ -72,7 +72,6 @@ void SRCResultWindow::buildInterface()
     PlotWidget * plot = new PlotWidget(true);
     plot->plotSensitivityIndices(result_.getIndices()[i], NumericalPoint(), inputNames);
     plot->setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
-    plot->setAxisTitle(QwtPlot::yLeft, outputNames[i]);
 
     vbox->addWidget(plot);
     listPlotWidgets_.append(plot);

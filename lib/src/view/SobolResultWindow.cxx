@@ -82,7 +82,6 @@ void SobolResultWindow::buildInterface()
     NumericalPoint totalOrderIndices_i = result_.getTotalOrderIndices()[i];
     plot->plotSensitivityIndices(firstOrderIndices_i, totalOrderIndices_i, inputNames);
     plot->setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
-    plot->setAxisTitle(QwtPlot::yLeft, outputNames[i]);
 
     verticalSplitter->addWidget(plot);
     verticalSplitter->setStretchFactor(0, 1);
