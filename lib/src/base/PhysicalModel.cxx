@@ -103,21 +103,27 @@ void PhysicalModel::setInputs(const InputCollection & inputs)
 }
 
 
+void PhysicalModel::setInputName(const String & inputName, const String & newName)
+{
+  getImplementation()->setInputName(inputName, newName);
+}
+
+
 void PhysicalModel::setInputDescription(const String & inputName, const String & description)
 {
-  return getImplementation()->setInputDescription(inputName, description);
+  getImplementation()->setInputDescription(inputName, description);
 }
 
 
 void PhysicalModel::setInputValue(const String & inputName, const double & value)
 {
-  return getImplementation()->setInputValue(inputName, value);
+  getImplementation()->setInputValue(inputName, value);
 }
 
 
 void PhysicalModel::setInputDistribution(const String & inputName, const Distribution & distribution)
 {
-  return getImplementation()->setInputDistribution(inputName, distribution);
+  getImplementation()->setInputDistribution(inputName, distribution);
 }
 
 
@@ -169,6 +175,12 @@ OutputCollection PhysicalModel::getOutputs() const
 }
 
 
+void PhysicalModel::setOutputName(const String & outputName, const String & newName)
+{
+  getImplementation()->setOutputName(outputName, newName);
+}
+
+
 void PhysicalModel::setOutputs(const OutputCollection & outputs)
 {
   getImplementation()->setOutputs(outputs);
@@ -177,19 +189,19 @@ void PhysicalModel::setOutputs(const OutputCollection & outputs)
 
 void PhysicalModel::setOutputDescription(const String & outputName, const String & description)
 {
-  return getImplementation()->setOutputDescription(outputName, description);
+  getImplementation()->setOutputDescription(outputName, description);
 }
 
 
 void PhysicalModel::setOutputFormula(const String & outputName, const String & formula)
 {
-  return getImplementation()->setOutputFormula(outputName, formula);
+  getImplementation()->setOutputFormula(outputName, formula);
 }
 
 
 void PhysicalModel::setOutputValue(const String & outputName, const double & value)
 {
-  return getImplementation()->setOutputValue(outputName, value);
+  getImplementation()->setOutputValue(outputName, value);
 }
 
 

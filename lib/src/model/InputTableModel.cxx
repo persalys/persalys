@@ -98,9 +98,15 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
         if (input.getName() == value.toString().toStdString())
           return true;
         physicalModel_.blockNotification(true, "modelInputsChanged");
-        physicalModel_.removeInput(input.getName());
-        input.setName(value.toString().toStdString());
-        physicalModel_.addInput(input);
+        emit errorMessageChanged("");
+        try
+        {
+          physicalModel_.setInputName(input.getName(), value.toString().toStdString());
+        }
+        catch (std::exception & ex)
+        {
+          emit errorMessageChanged(ex.what());
+        }
         break;
       }
       case 1:
@@ -108,6 +114,7 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
         if (input.getDescription() == value.toString().toStdString())
           return true;
         physicalModel_.blockNotification(true);
+        emit errorMessageChanged("");
         physicalModel_.setInputDescription(input.getName(), value.toString().toStdString());
         break;
       }
@@ -116,12 +123,12 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
         if (input.getValue() == value.toDouble())
           return true;
         physicalModel_.blockNotification(true, "modelInputsChanged");
+        emit errorMessageChanged("");
         physicalModel_.setInputValue(input.getName(), value.toDouble());
         break;
       }
     }
     physicalModel_.blockNotification(false);
-//  TODO   if (!updateInput) emit errorMessage
     emit dataChanged(index, index);
     return true;
   }

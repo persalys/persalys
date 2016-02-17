@@ -104,33 +104,40 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
       case 0:
       {
         if (output.getName() == value.toString().toStdString())
-          break;
+          return true;
         physicalModel_.blockNotification(true, "modelOutputsChanged");
-        physicalModel_.removeOutput(output.getName());
-        output.setName(value.toString().toStdString());
-        physicalModel_.addOutput(output);
+        emit errorMessageChanged("");
+        try
+        {
+          physicalModel_.setOutputName(output.getName(), value.toString().toStdString());
+        }
+        catch (std::exception & ex)
+        {
+          emit errorMessageChanged(ex.what());
+        }
         break;
       }
       case 1:
       {
         if (output.getDescription() == value.toString().toStdString())
-          break;
+          return true;
         physicalModel_.blockNotification(true);
+        emit errorMessageChanged("");
         physicalModel_.setOutputDescription(output.getName(), value.toString().toStdString());
         break;
       }
       case 2:
       {
         if (output.getFormula() == value.toString().toStdString())
-          break;
+          return true;
         // TODO test if value.toString() ok
         physicalModel_.blockNotification(true);
+        emit errorMessageChanged("");
         physicalModel_.setOutputFormula(output.getName(), value.toString().toStdString());
         break;
       }
     }
     physicalModel_.blockNotification(false);
-//  TODO   if (!updateOutput) emit errorMessage
     emit dataChanged(index, index);
     return true;
   }

@@ -92,6 +92,25 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
 }
 
 
+void PhysicalModelImplementation::setInputName(const OT::String & inputName, const OT::String & newName)
+{
+  if (inputName == newName)
+    return;
+
+  std::set<String> inputNames;
+  inputNames.insert(newName);
+  for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
+    if (inputs_[i].getName() != inputName)
+      inputNames.insert(inputs_[i].getName());
+  if (inputNames.size() != inputs_.getSize())
+    throw InvalidArgumentException(HERE) << "The proposed name " << newName << " is not valid. Two inputs can not have the same name.";
+
+  getInputByName(inputName).setName(newName);
+  notify("inputNameChanged");
+  notify("modelInputsChanged");
+}
+
+
 void PhysicalModelImplementation::setInputDescription(const String & inputName, const String & description)
 {
   getInputByName(inputName).setDescription(description);
@@ -261,6 +280,25 @@ void PhysicalModelImplementation::setOutputs(const OutputCollection & outputs)
 
   outputs_ = outputs;
   notify("outputAdded");
+  notify("modelOutputsChanged");
+}
+
+
+void PhysicalModelImplementation::setOutputName(const OT::String & outputName, const OT::String & newName)
+{
+  if (outputName == newName)
+    return;
+
+  std::set<String> outputNames;
+  outputNames.insert(newName);
+  for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
+    if (outputs_[i].getName() != outputName)
+      outputNames.insert(outputs_[i].getName());
+  if (outputNames.size() != outputs_.getSize())
+    throw InvalidArgumentException(HERE) << "The proposed name " << newName << " is not valid. Two outputs can not have the same name.";
+
+  getOutputByName(outputName).setName(newName);
+  notify("outputNameChanged");
   notify("modelOutputsChanged");
 }
 

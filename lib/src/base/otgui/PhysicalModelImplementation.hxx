@@ -45,6 +45,7 @@ public:
   InputCollection getInputs() const;
   Input & getInputByName(const OT::String & inputName);
   virtual void setInputs(const InputCollection & inputs);
+  void setInputName(const OT::String & inputName, const OT::String & newName);
   void setInputDescription(const OT::String & inputName, const OT::String & description);
   void setInputValue(const OT::String & inputName, const double & value);
   void setInputDistribution(const OT::String & inputName, const OT::Distribution & distribution);
@@ -58,6 +59,7 @@ public:
   OutputCollection getOutputs() const;
   Output & getOutputByName(const OT::String & outputName);
   virtual void setOutputs(const OutputCollection & outputs);
+  void setOutputName(const OT::String & outputName, const OT::String & newName);
   void setOutputDescription(const OT::String & outputName, const OT::String & description);
   virtual void setOutputFormula(const OT::String & outputName, const OT::String & formula);
   void setOutputValue(const OT::String & outputName, const double & value);

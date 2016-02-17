@@ -234,6 +234,7 @@ void PhysicalModelWindow::updateInputTableModel()
     delete inputTableModel_;
   inputTableModel_ = new InputTableModel(physicalModel_);
   inputTableView_->setModel(inputTableModel_);
+  connect(inputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
 }
 
 
@@ -243,6 +244,7 @@ void PhysicalModelWindow::updateOutputTableModel()
     delete outputTableModel_;
   outputTableModel_ = new OutputTableModel(physicalModel_);
   outputTableView_->setModel(outputTableModel_);
+  connect(outputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
 }
 
 
