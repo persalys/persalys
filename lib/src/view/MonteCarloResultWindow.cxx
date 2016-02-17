@@ -188,7 +188,7 @@ void MonteCarloResultWindow::buildInterface()
   quantLayout->addWidget(label);
   quantileSpinBox_ = new QDoubleSpinBox;
   label->setBuddy(quantileSpinBox_);
-  quantileSpinBox_->setMinimum(std::numeric_limits<double>::lowest());
+  quantileSpinBox_->setMinimum(-std::numeric_limits<double>::max());
   quantileSpinBox_->setMaximum(std::numeric_limits<double>::max());
   quantLayout->addWidget(quantileSpinBox_);
 
