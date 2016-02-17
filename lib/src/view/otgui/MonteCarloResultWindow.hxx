@@ -41,7 +41,7 @@ public:
 
 protected:
   void buildInterface();
-  void updateLabelsText(int indexOutput=0);
+  void updateResultWidgets(int indexOutput=0);
 
 public slots:
   void outputFirstTabChanged(int indexOutput);

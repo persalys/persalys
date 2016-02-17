@@ -169,7 +169,6 @@ void MonteCarloResultWindow::buildInterface()
 
   grid->setColumnStretch(1, 1);
   vbox->addLayout(grid);
-  updateLabelsText();
 
   // quantiles
   QHBoxLayout * quantLayout = new QHBoxLayout;
@@ -181,26 +180,24 @@ void MonteCarloResultWindow::buildInterface()
   probaSpinBox_->setMinimum(0.0);
   probaSpinBox_->setMaximum(1.0);
   probaSpinBox_->setSingleStep(0.01);
-  probaSpinBox_->setValue(0.5);
   quantLayout->addWidget(probaSpinBox_);
   label = new QLabel(tr("Quantile"));
   label->setStyleSheet("font: bold;");
   quantLayout->addWidget(label);
   quantileSpinBox_ = new QDoubleSpinBox;
   label->setBuddy(quantileSpinBox_);
-  quantileSpinBox_->setMinimum(-std::numeric_limits<double>::max());
-  quantileSpinBox_->setMaximum(std::numeric_limits<double>::max());
+  quantileSpinBox_->setDecimals(8);
   quantLayout->addWidget(quantileSpinBox_);
 
   connect(probaSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(probaValueChanged(double)));
   connect(quantileSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(quantileValueChanged(double)));
-  probaValueChanged(0.5);
 
   quantLayout->addStretch();
   vbox->addLayout(quantLayout);
   vbox->addStretch();
   tabLayout->addLayout(vbox);
 
+  updateResultWidgets();
   tabWidget_->addTab(tab, tr("Summary"));
 
   // third tab: PDF/CDF ------------------------------
@@ -335,7 +332,7 @@ void MonteCarloResultWindow::buildInterface()
 }
 
 
-void MonteCarloResultWindow::updateLabelsText(int indexOutput)
+void MonteCarloResultWindow::updateResultWidgets(int indexOutput)
 {
   // mean
   QString meanText = QString::number(result_.getMean()[indexOutput]);
@@ -369,7 +366,8 @@ void MonteCarloResultWindow::updateLabelsText(int indexOutput)
   thirdQuartileLabel_->setText(QString::number(result_.getThirdQuartile()[indexOutput]));
   // min
   OSS oss3;
-  oss3 << result_.getOutputSample().getMin()[indexOutput];
+  const double min = result_.getOutputSample().getMin()[indexOutput];
+  oss3 << min;
   for (UnsignedInteger j=0; j<result_.getListXMin()[indexOutput].getSize();++j)
   {
     NumericalPoint point(result_.getListXMin()[indexOutput][j]);
@@ -378,13 +376,21 @@ void MonteCarloResultWindow::updateLabelsText(int indexOutput)
   minLabel_->setText(QString::fromStdString(oss3.str()));
   // max
   OSS oss4;
-  oss4 << result_.getOutputSample().getMax()[indexOutput];
+  const double max = result_.getOutputSample().getMax()[indexOutput];
+  oss4 << max;
   for (UnsignedInteger j=0; j<result_.getListXMax()[indexOutput].getSize();++j)
   {
     NumericalPoint point(result_.getListXMax()[indexOutput][j]);
     oss4 << "\n  X=" << point.__str__();
   }
   maxLabel_->setText(QString::fromStdString(oss4.str()));
+
+  // quantiles
+  quantileSpinBox_->setMinimum(min);
+  quantileSpinBox_->setMaximum(max);
+  quantileSpinBox_->setSingleStep((max-min)/100);
+  probaSpinBox_->setValue(0.5);
+  probaValueChanged(0.5);
 }
 
 
@@ -413,7 +419,7 @@ void MonteCarloResultWindow::quantileValueChanged(double quantile)
 
 void MonteCarloResultWindow::outputFirstTabChanged(int indexOutput)
 {
-  updateLabelsText(indexOutput);
+  updateResultWidgets(indexOutput);
   probaValueChanged(0.5);
 }
 
