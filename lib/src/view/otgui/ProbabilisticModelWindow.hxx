@@ -48,7 +48,7 @@ public :
 protected:
   void buildInterface();
   void updateStochasticInputsTable();
-  void updatePlots(OT::Distribution inputDistribution);
+  void updatePlots();
 
 public slots:
   void updateDistributionWidgets(const QModelIndex & index);

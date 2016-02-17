@@ -194,14 +194,22 @@ void MonteCarloResultWindow::buildInterface()
     PlotWidget * plot = new PlotWidget;
     plot->plotHistogram(result_.getOutputSample().getMarginal(i));
     plot->plotPDFCurve(result_.getFittedDistribution()[i]);
-    plot->setTitle(tr("PDF ") + outputs[i].getName().c_str());
+    plot->setTitle(tr("PDF: ") + outputs[i].getName().c_str());
+    if (outputs[i].getDescription().size())
+      plot->setAxisTitle(QwtPlot::xBottom, outputs[i].getDescription().c_str());
+    else
+      plot->setAxisTitle(QwtPlot::xBottom, outputs[i].getName().c_str());
     plotLayout->addWidget(plot);
     listPlotWidgets.append(plot);
 
     plot = new PlotWidget;
     plot->plotHistogram(result_.getOutputSample().getMarginal(i), true);
     plot->plotCDFCurve(result_.getFittedDistribution()[i]);
-    plot->setTitle(tr("CDF ") + outputs[i].getName().c_str());
+    plot->setTitle(tr("CDF: ") + outputs[i].getName().c_str());
+    if (outputs[i].getDescription().size())
+      plot->setAxisTitle(QwtPlot::xBottom, outputs[i].getDescription().c_str());
+    else
+      plot->setAxisTitle(QwtPlot::xBottom, outputs[i].getName().c_str());
     plotLayout->addWidget(plot);
     listPlotWidgets.append(plot);
   }
@@ -225,7 +233,7 @@ void MonteCarloResultWindow::buildInterface()
     double Q3 = result_.getThirdQuartile()[i];
 
     plot->plotBoxPlot(median, Q1, Q3, Q1 - 1.5*(Q3-Q1), Q3 + 1.5*(Q3-Q1), result_.getOutliers()[i]);
-    plot->setTitle(tr("Box plot"));
+    plot->setTitle(tr("Box plot: ") + outputs[i].getName().c_str());
     if (outputs[i].getDescription().size())
       plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getDescription().c_str());
     else

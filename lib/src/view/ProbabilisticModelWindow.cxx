@@ -386,7 +386,7 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   }
 
   // update plots
-  updatePlots(inputDistribution);
+  updatePlots();
   showHideGraphConfigurationWidget(0);
 }
 
@@ -420,15 +420,15 @@ void ProbabilisticModelWindow::showHideGraphConfigurationWidget(Qt::WindowStates
 }
 
 
-void ProbabilisticModelWindow::updatePlots(Distribution inputDistribution)
+void ProbabilisticModelWindow::updatePlots()
 {
   QModelIndex index = inputTableView_->currentIndex();
   Input input = physicalModel_.getInputs()[inputTableView_->currentIndex().row()];
   pdfPlot_->clear();
   cdfPlot_->clear();
-  pdfPlot_->plotPDFCurve(inputDistribution);
+  pdfPlot_->plotPDFCurve(input.getDistribution());
   pdfPlot_->setAxisTitle(QwtPlot::xBottom, input.getName().c_str());
-  cdfPlot_->plotCDFCurve(inputDistribution);
+  cdfPlot_->plotCDFCurve(input.getDistribution());
   pdfPlot_->setAxisTitle(QwtPlot::xBottom, input.getName().c_str());
 }
 
@@ -459,7 +459,7 @@ void ProbabilisticModelWindow::updateDistributionParameters()
       physicalModel_.blockNotification(true);
       physicalModel_.setInputDistribution(input.getName(), truncatedDistribution);
       physicalModel_.blockNotification(false);
-      updatePlots(truncatedDistribution);
+      updatePlots();
     }
     catch(Exception & ex)
     {
@@ -487,7 +487,7 @@ void ProbabilisticModelWindow::updateDistributionParameters()
       physicalModel_.blockNotification(true);
       physicalModel_.setInputDistribution(input.getName(), inputDistribution);
       physicalModel_.blockNotification(false);
-      updatePlots(inputDistribution);
+      updatePlots();
     }
     catch(Exception & ex)
     {
@@ -518,7 +518,7 @@ void ProbabilisticModelWindow::truncationParametersChanged()
     physicalModel_.setInputDistribution(input.getName(), truncatedDistribution);
     physicalModel_.blockNotification(false);
 
-    updatePlots(truncatedDistribution);
+    updatePlots();
   }
   catch (std::exception & ex)
   {
@@ -560,7 +560,7 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
       physicalModel_.blockNotification(true);
       physicalModel_.setInputDistribution(input.getName(), inputDistribution);
       physicalModel_.blockNotification(false);
-      updatePlots(inputDistribution);
+      updatePlots();
     }
     else
     {
@@ -648,7 +648,7 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
       physicalModel_.setInputDistribution(input.getName(), truncatedDistribution);
       physicalModel_.blockNotification(false);
 
-      updatePlots(truncatedDistribution);
+      updatePlots();
     }
   }
   catch (std::exception & ex)
