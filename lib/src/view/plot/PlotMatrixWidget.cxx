@@ -42,6 +42,9 @@ PlotMatrixWidget::PlotMatrixWidget(const OT::NumericalSample & inputSample, cons
 {
   int nbInputs = inputSample.getDimension();
   int nbOutputs = outputSample.getDimension();
+  bool isPlotMatrixXX = true;
+  if (inputSample != outputSample)
+    isPlotMatrixXX = false;
 
   for (int i=0; i<nbInputs; ++i)
     inputNames_ << inputSample.getDescription()[i].c_str();
@@ -79,7 +82,10 @@ PlotMatrixWidget::PlotMatrixWidget(const OT::NumericalSample & inputSample, cons
       QWidget * cellMatrixWidget = new QWidget;
       QVBoxLayout * cellMatrixLayout = new QVBoxLayout(cellMatrixWidget);
       PlotWidget * plot = new PlotWidget;
-      plot->plotScatter(inputSample.getMarginal(j), outputSample.getMarginal(i), scatterPen);
+      if (isPlotMatrixXX && i == j)
+        plot->plotHistogram(inputSample.getMarginal(j));
+      else
+        plot->plotScatter(inputSample.getMarginal(j), outputSample.getMarginal(i), scatterPen);
       plot->enableAxis(QwtPlot::xBottom, false);
       plot->enableAxis(QwtPlot::yLeft, false);
       // hide borders: #f6f7fa is white
