@@ -82,6 +82,7 @@ void MonteCarloResultWindow::buildInterface()
   tab = new QWidget;
   tabLayout = new QVBoxLayout(tab);
 
+  // -- output name --
   QHBoxLayout * headLayout = new QHBoxLayout;
   QLabel * outputName = new QLabel(tr("Output"));
   headLayout->addWidget(outputName);
@@ -92,59 +93,78 @@ void MonteCarloResultWindow::buildInterface()
   headLayout->addStretch();
   tabLayout->addLayout(headLayout);
 
+  // -- results --
   QVBoxLayout * vbox = new QVBoxLayout;
   QGridLayout * grid = new QGridLayout;
   int gridRow = -1;
 
+  // number of simulations
   QLabel * nbSimuLabel = new QLabel(tr("Number of simulations : ") + QString::number(result_.getInputSample().getSize()) + "\n");
+  nbSimuLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(nbSimuLabel, ++gridRow, 0, 1, 2, Qt::AlignTop);
 
+  // min
   QLabel * label = new QLabel(tr("Min"));
   label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   minLabel_ = new QLabel;
+  minLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(minLabel_, gridRow, 1, Qt::AlignTop);
 
+  // max
   label = new QLabel(tr("Max"));
   label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   maxLabel_ = new QLabel;
+  maxLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(maxLabel_, gridRow, 1, Qt::AlignTop);
 
+  // mean
   label = new QLabel(tr("Mean"));
   label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   meanLabel_ = new QLabel;
+  meanLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(meanLabel_, gridRow, 1, Qt::AlignTop);
 
+  // standard deviation
   label = new QLabel(tr("Standard deviation"));
   label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   stdLabel_ = new QLabel;
+  stdLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(stdLabel_, gridRow, 1, Qt::AlignTop);
 
+  // skewness
   label = new QLabel(tr("Skewness"));
   label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   skewnessLabel_ = new QLabel;
+  skewnessLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(skewnessLabel_, gridRow, 1);
 
+  // kurtosis
   label = new QLabel(tr("Kurtosis"));
   label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   kurtosisLabel_ = new QLabel;
+  kurtosisLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(kurtosisLabel_, gridRow, 1, Qt::AlignTop);
 
+  // first quartile
   label = new QLabel(tr("First quartile"));
   label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   firstQuartileLabel_ = new QLabel;
+  firstQuartileLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(firstQuartileLabel_, gridRow, 1, Qt::AlignTop);
 
+  // third quartile
   label = new QLabel(tr("Third quartile"));
   label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   thirdQuartileLabel_ = new QLabel;
+  thirdQuartileLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(thirdQuartileLabel_, gridRow, 1, Qt::AlignTop);
 
   grid->setColumnStretch(1, 1);

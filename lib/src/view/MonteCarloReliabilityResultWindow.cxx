@@ -58,8 +58,10 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   int gridRow = -1;
 
   QLabel * nbSimuLabel = new QLabel(tr("Number of simulations : ") + QString::number(result_.getOuterSampling()*result_.getBlockSize()) + "\n");
+  nbSimuLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(nbSimuLabel, ++gridRow, 0, 1, 2, Qt::AlignTop);
 
+  // probability estimate
   QLabel * label = new QLabel(tr("Pf"));
   label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
@@ -70,13 +72,16 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   labelText += "\n CI = [" + QString::number(pfCILowerBound) + ", ";
   labelText += QString::number(pfCIUpperBound) + "] at 95%";
   label = new QLabel(labelText);
+  label->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(label, gridRow, 1, Qt::AlignTop);
 
+  // coefficient of variation of Pf
   label = new QLabel(tr("CV Pf"));
   label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
 
   label = new QLabel(QString::number(result_.getCoefficientOfVariation()));
+  label->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(label, gridRow, 1, Qt::AlignTop);
 
   grid->setRowStretch(++gridRow, 1);

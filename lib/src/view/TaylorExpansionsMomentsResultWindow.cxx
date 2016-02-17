@@ -44,11 +44,12 @@ void TaylorExpansionsMomentsResultWindow::buildInterface()
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
+  // -- output name --
   QHBoxLayout * headLayout = new QHBoxLayout;
   QLabel * outputName = new QLabel(tr("Output"));
   headLayout->addWidget(outputName);
   outputsComboBox_ = new QComboBox;
-  QStringList items = QStringList();
+  QStringList items;
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
     items << result_.getOutputNames()[i].c_str();
   outputsComboBox_->addItems(items);
@@ -57,31 +58,40 @@ void TaylorExpansionsMomentsResultWindow::buildInterface()
   headLayout->addStretch();
   tabLayout->addLayout(headLayout);
 
+  // -- results --
   QGridLayout * grid = new QGridLayout;
   int gridRow = -1;
 
+  // first order mean
   QLabel * label = new QLabel(tr("First order mean"));
   label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   meanFirstOrderLabel_ = new QLabel;
+  meanFirstOrderLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(meanFirstOrderLabel_, gridRow, 1, Qt::AlignTop);
 
+  // second order mean
   label = new QLabel(tr("Second order mean"));
   label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   meanSecondOrderLabel_ = new QLabel;
+  meanSecondOrderLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(meanSecondOrderLabel_, gridRow, 1, Qt::AlignTop);
 
+  // standard deviation
   label = new QLabel(tr("Standard deviation"));
   label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   stdLabel_ = new QLabel;
+  stdLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(stdLabel_, gridRow, 1, Qt::AlignTop);
 
+  // variance
   label = new QLabel(tr("Variance"));
   label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   varianceLabel_ = new QLabel;
+  varianceLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(varianceLabel_, gridRow, 1);
 
   grid->setRowStretch(++gridRow, 1);

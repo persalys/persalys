@@ -125,6 +125,7 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
+  // -- output name --
   QHBoxLayout * headLayout = new QHBoxLayout;
   QLabel * outputName = new QLabel(tr("Output"));
   headLayout->addWidget(outputName);
@@ -135,22 +136,29 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   headLayout->addStretch();
   tabLayout->addLayout(headLayout);
 
+  // -- results --
   QGridLayout * grid = new QGridLayout;
   int gridRow = -1;
 
+  // number of simulations
   QLabel * nbSimuLabel = new QLabel(tr("Size of the design of experiment : ") + QString::number(variableInputsSample.getSize()) + "\n");
+  nbSimuLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(nbSimuLabel, ++gridRow, 0, 1, 2, Qt::AlignTop);
 
+  // min
   QLabel * label = new QLabel(tr("Min"));
   label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   minLabel_ = new QLabel;
+  minLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(minLabel_, gridRow, 1, Qt::AlignTop);
 
+  // max
   label = new QLabel(tr("Max"));
   label->setStyleSheet("font: bold;");
   grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
   maxLabel_ = new QLabel;
+  maxLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
   grid->addWidget(maxLabel_, gridRow, 1, Qt::AlignTop);
 
   grid->setColumnStretch(1, 1);
