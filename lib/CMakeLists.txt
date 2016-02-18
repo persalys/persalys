@@ -4,6 +4,6 @@ add_subdirectory ( src )
 add_subdirectory ( test )
 
 install ( FILES ${HEADERFILES}
-          DESTINATION ${OTGUI_INCLUDE_PATH}
+          DESTINATION ${OTGUI_INCLUDE_PATH}/${PACKAGE_NAME}
         )
 

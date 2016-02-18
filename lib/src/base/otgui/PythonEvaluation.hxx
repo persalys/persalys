@@ -23,7 +23,7 @@
 
 #include "NumericalMathEvaluationImplementation.hxx"
 #include "Pointer.hxx"
-#include "OTGuiprivate.hxx"
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
 

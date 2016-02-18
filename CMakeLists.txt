@@ -46,7 +46,7 @@ endif ()
 
 set ( OTGUI_LIBRARY_PATH lib${LIB_SUFFIX} )
 set ( OTGUI_INCLUDE_PATH include )
-set ( OTGUI_SWIG_INCLUDE_PATH ${OTGUI_INCLUDE_PATH}/swig )
+set ( OTGUI_SWIG_INCLUDE_PATH ${OTGUI_INCLUDE_PATH}/${PACKAGE_NAME}/swig )
 set ( OTGUI_DATA_PATH share )
 set ( OTGUI_EXAMPLE_PATH ${OTGUI_DATA_PATH}/${PACKAGE_NAME}/examples )
 set ( OTGUI_CONFIG_CMAKE_PATH lib${LIB_SUFFIX}/cmake/otgui )
@@ -121,7 +121,7 @@ endmacro ( ot_add_source_file )
 
 set ( HEADERFILES "" CACHE INTERNAL "List of header files to install" )
 macro ( ot_install_header_file FILENAME )
-  set ( hf ${HEADERFILES} ${CMAKE_CURRENT_SOURCE_DIR}/${FILENAME} )
+  set ( hf ${HEADERFILES} ${CMAKE_CURRENT_SOURCE_DIR}/${PACKAGE_NAME}/${FILENAME} )
   set ( HEADERFILES ${hf} CACHE INTERNAL "List of header files to install" )
 endmacro ( ot_install_header_file )
 
