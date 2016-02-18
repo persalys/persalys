@@ -116,10 +116,11 @@ void PlotWidget::exportPlot()
       fileName += ".png";
       format = QString("png");
     }
+    int size = 512;
     if (format == "ps" || format == "pdf" || format == "svg")
     {
       QwtPlotRenderer * renderer = new QwtPlotRenderer();
-      renderer->renderDocument(this, fileName, QSizeF(150, 100));
+      renderer->renderDocument(this, fileName, QSizeF(size, size));
     }
     else
     {
@@ -127,7 +128,7 @@ void PlotWidget::exportPlot()
       // but renderDocument doesn't emit error message...
       if (QImageWriter::supportedImageFormats().indexOf(format.toLatin1()) >= 0)
       {
-        QPixmap pixmap(200, 200);
+        QPixmap pixmap(size, size);
         pixmap.fill();
         QwtPlotRenderer renderer;
 
