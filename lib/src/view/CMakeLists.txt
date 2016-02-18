@@ -13,6 +13,7 @@ ot_add_source_file ( OTguiWizard.cxx )
 ot_add_source_file ( OTguiMdiArea.cxx )
 ot_add_source_file ( ComboBoxDelegate.cxx )
 ot_add_source_file ( SpinBoxDelegate.cxx )
+ot_add_source_file ( LineEditWithQValidatorDelegate.cxx )
 ot_add_source_file ( ImportTablePage.cxx )
 ot_add_source_file ( HorizontalHeaderViewWithCombobox.cxx )
 ot_add_source_file ( DeterministicDesignPage.cxx )
@@ -47,6 +48,7 @@ qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                    otgui/OTguiMdiArea.hxx
                                    otgui/ComboBoxDelegate.hxx
                                    otgui/SpinBoxDelegate.hxx
+                                   otgui/LineEditWithQValidatorDelegate.hxx
                                    otgui/ImportTablePage.hxx
                                    otgui/StudyTreeView.hxx
                                    otgui/OTguiTableView.hxx

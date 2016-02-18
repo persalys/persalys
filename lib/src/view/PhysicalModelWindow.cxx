@@ -27,6 +27,7 @@
 #endif
 #include "otgui/PythonPhysicalModel.hxx"
 #include "otgui/CodeDelegate.hxx"
+#include "otgui/LineEditWithQValidatorDelegate.hxx"
 
 #include <QFileDialog>
 #include <QComboBox>
@@ -126,6 +127,8 @@ void PhysicalModelWindow::buildInterface()
 
   inputTableView_ = new QTableView;
   inputTableView_->setEditTriggers(QTableView::AllEditTriggers);
+  LineEditWithQValidatorDelegate * delegate = new LineEditWithQValidatorDelegate;
+  inputTableView_->setItemDelegateForColumn(0, delegate);
   inputsLayout->addWidget(inputTableView_);
 
   addInputLineButton_ = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
@@ -150,6 +153,8 @@ void PhysicalModelWindow::buildInterface()
 
   outputTableView_ = new QTableView;
   outputTableView_->setEditTriggers(QTableView::AllEditTriggers);
+  delegate = new LineEditWithQValidatorDelegate;
+  outputTableView_->setItemDelegateForColumn(0, delegate);
   outputsLayout->addWidget(outputTableView_);
 
   addOutputLineButton_ = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));

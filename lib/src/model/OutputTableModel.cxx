@@ -105,6 +105,8 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
       {
         if (output.getName() == value.toString().toStdString())
           return true;
+        if (value.toString().isEmpty())
+          return false;
         physicalModel_.blockNotification(true, "modelOutputsChanged");
         emit errorMessageChanged("");
         try

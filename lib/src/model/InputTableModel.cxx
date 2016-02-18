@@ -97,6 +97,8 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
       {
         if (input.getName() == value.toString().toStdString())
           return true;
+        if (value.toString().isEmpty())
+          return false;
         physicalModel_.blockNotification(true, "modelInputsChanged");
         emit errorMessageChanged("");
         try
