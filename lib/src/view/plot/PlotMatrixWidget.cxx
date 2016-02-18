@@ -63,6 +63,7 @@ PlotMatrixWidget::PlotMatrixWidget(const OT::NumericalSample & inputSample, cons
   // matrix
   nbInputsToDisplay_ = nbInputs;
   nbOutputsToDisplay_ = nbOutputs;
+  const int sizePixmap = 200;
 
   tableWidget_ = new QTableWidget(nbOutputs, nbInputs);
   tableWidget_->setSelectionMode(QAbstractItemView::NoSelection);
@@ -70,8 +71,8 @@ PlotMatrixWidget::PlotMatrixWidget(const OT::NumericalSample & inputSample, cons
   tableWidget_->setVerticalHeaderLabels(outputNames_);
   tableWidget_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
   tableWidget_->verticalHeader()->setResizeMode(QHeaderView::Fixed);
-  tableWidget_->horizontalHeader()->setDefaultSectionSize(100);
-  tableWidget_->verticalHeader()->setDefaultSectionSize(100);
+  tableWidget_->horizontalHeader()->setDefaultSectionSize(sizePixmap);
+  tableWidget_->verticalHeader()->setDefaultSectionSize(sizePixmap);
 
   // fill matrix and create images of the plotWidgets
   QPen scatterPen = QPen(Qt::blue, 1);
@@ -93,7 +94,7 @@ PlotMatrixWidget::PlotMatrixWidget(const OT::NumericalSample & inputSample, cons
       cellMatrixLayout->addWidget(plot);
       tableWidget_->setCellWidget(i, j, cellMatrixWidget);
 
-      QPixmap pixmap(100, 100);
+      QPixmap pixmap(sizePixmap, sizePixmap);
       pixmap.fill();
       QwtPlotRenderer renderer;
       renderer.renderTo(plot, pixmap);
