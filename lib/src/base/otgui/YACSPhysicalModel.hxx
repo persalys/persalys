@@ -24,10 +24,6 @@
 #include "PhysicalModelImplementation.hxx"
 #include "YACSEvaluation.hxx"
 
-#ifdef OTGUI_HAVE_YACS
-#include "YACSEvalSession.hxx"
-#endif
-
 namespace OTGUI {
 class YACSPhysicalModel : public PhysicalModelImplementation
 {

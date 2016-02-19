@@ -60,7 +60,7 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 
 
 // The new classes
-%include OTGuiprivate.hxx
+%include otgui/OTGuiprivate.hxx
 %include Observer.i
 %include Observable.i
 

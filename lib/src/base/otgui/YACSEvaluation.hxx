@@ -21,9 +21,10 @@
 #ifndef OTGUI_YACSEVALUATION_HXX
 #define OTGUI_YACSEVALUATION_HXX
 
+#include "otgui/OTGuiprivate.hxx"
+
 #include "NumericalMathEvaluationImplementation.hxx"
 #include "Pointer.hxx"
-#include "OTGuiprivate.hxx"
 
 #include "YACSEvalYFX.hxx"
 #include "YACSEvalSession.hxx"
@@ -35,8 +36,7 @@ namespace OTGUI {
  *
  * The class that implement the evaluation of an analytical function.
  */
-class OTGUI_API YACSEvaluation
-  : public OT::NumericalMathEvaluationImplementation
+class OTGUI_API YACSEvaluation : public OT::NumericalMathEvaluationImplementation
 {
   CLASSNAME;
 

@@ -20,8 +20,6 @@
  */
 #include "otgui/MainWindow.hxx"
 
-#include "otgui/PhysicalModelWindow.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/qpyconsole.h"
 #include "otgui/OTguiMenuBar.hxx"
 #include "otgui/OTguiToolBar.hxx"
@@ -31,6 +29,7 @@
 #include <QSplitter>
 #include <QDockWidget>
 #include <QMessageBox>
+#include <QPushButton>
 
 namespace OTGUI {
 

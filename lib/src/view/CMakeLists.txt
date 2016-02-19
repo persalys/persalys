@@ -18,7 +18,12 @@ ot_add_source_file ( ImportTablePage.cxx )
 ot_add_source_file ( HorizontalHeaderViewWithCombobox.cxx )
 ot_add_source_file ( DeterministicDesignPage.cxx )
 ot_add_source_file ( ProbabilisticDesignPage.cxx )
-ot_add_source_file ( PhysicalModelWindow.cxx )
+ot_add_source_file ( PhysicalModelWindowWidget.cxx )
+ot_add_source_file ( AnalyticalPhysicalModelWindow.cxx )
+ot_add_source_file ( PythonPhysicalModelWindow.cxx )
+if (SalomeYACS_FOUND)
+  ot_add_source_file ( YACSPhysicalModelWindow.cxx)
+endif ()
 ot_add_source_file ( ProbabilisticModelWindow.cxx )
 ot_add_source_file ( DesignOfExperimentWizard.cxx )
 ot_add_source_file ( DesignOfExperimentWindow.cxx )
@@ -52,7 +57,12 @@ ot_install_header_file ( SensitivityAnalysisWizard.hxx )
 ot_install_header_file ( LimitStateWindow.hxx )
 ot_install_header_file ( ReliabilityAnalysisWizard.hxx )
 ot_install_header_file ( OTguiSubWindow.hxx )
-ot_install_header_file ( PhysicalModelWindow.hxx )
+ot_install_header_file ( PhysicalModelWindowWidget.hxx )
+ot_install_header_file ( AnalyticalPhysicalModelWindow.hxx )
+ot_install_header_file ( PythonPhysicalModelWindow.hxx )
+if (SalomeYACS_FOUND)
+  ot_install_header_file (YACSPhysicalModelWindow.hxx)
+endif ()
 ot_install_header_file ( ProbabilisticModelWindow.hxx )
 ot_install_header_file ( DesignOfExperimentWizard.hxx )
 ot_install_header_file ( DesignOfExperimentWindow.hxx )
@@ -85,7 +95,9 @@ qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                    otgui/HorizontalHeaderViewWithCombobox.hxx
                                    otgui/DeterministicDesignPage.hxx
                                    otgui/ProbabilisticDesignPage.hxx
-                                   otgui/PhysicalModelWindow.hxx
+                                   otgui/PhysicalModelWindowWidget.hxx
+                                   otgui/AnalyticalPhysicalModelWindow.hxx
+                                   otgui/PythonPhysicalModelWindow.hxx
                                    otgui/ProbabilisticModelWindow.hxx
                                    otgui/DesignOfExperimentWizard.hxx
                                    otgui/DesignOfExperimentWindow.hxx
@@ -102,6 +114,10 @@ qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                    otgui/MonteCarloReliabilityResultWindow.hxx
                                    otgui/CodeDelegate.hxx
                                    )
+
+if (SalomeYACS_FOUND)
+  qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/YACSPhysicalModelWindow.hxx )
+endif ()
 
 set(RESOURCES ${CMAKE_SOURCE_DIR}/gui.qrc)
 qt4_add_resources(OTGUI_RESOURCES_RCC ${RESOURCES})

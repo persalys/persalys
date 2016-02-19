@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow to define a physical model
+ *  @brief QWidget to visualize the variables of the physical model
  *
  *  Copyright 2015-2016 EDF
  *
@@ -18,13 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_PHYSICALMODELWINDOW_HXX
-#define OTGUI_PHYSICALMODELWINDOW_HXX
+#ifndef OTGUI_PHYSICALMODELWINDOWWIDGET_HXX
+#define OTGUI_PHYSICALMODELWINDOWWIDGET_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
 #include "otgui/PhysicalModelItem.hxx"
-#include "otgui/PlotWidget.hxx"
-#include "otgui/CodeModel.hxx"
 
 #include <QTableView>
 #include <QLineEdit>
@@ -32,16 +29,15 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QTextEdit>
 
 namespace OTGUI {
   
-class PhysicalModelWindow : public OTguiSubWindow
+class PhysicalModelWindowWidget : public QWidget
 {
   Q_OBJECT
 
 public :
-  PhysicalModelWindow(PhysicalModelItem * item);
+  PhysicalModelWindowWidget(PhysicalModelItem * item);
 
 protected:
   void buildInterface();
@@ -52,16 +48,11 @@ public slots:
   void removeInputLine();
   void removeOutputLine();
   void evaluateOutputs();
-  void updateCodeModel();
   void updateInputTableModel();
   void updateOutputTableModel();
-  void updateMethodWidgets(int);
-  void methodChanged(int);
-  void selectImportFileDialogRequested();
-  void loadXML();
 
 signals:
-  void physicalModelChanged(PhysicalModel);
+  void errorMessageChanged(QString);
 
 private:
   PhysicalModel physicalModel_;
@@ -74,12 +65,6 @@ private:
   QPushButton * addOutputLineButton_;
   QPushButton * removeOutputLineButton_;
   QPushButton * evaluateOutputsButton_;
-  QLineEdit * XMLfileNameEdit_;
-  QLabel * XMLErrorMessage_;
-  QGroupBox * loadXMLFileBox_;
-  CodeModel * codeModel_;
-  QTableView * codeView_;
-  QGroupBox * pythonDefinitionBox_;
 };
 }
 #endif

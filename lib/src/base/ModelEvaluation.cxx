@@ -103,7 +103,7 @@ void ModelEvaluation::run()
     {
       outputSample.stack(getPhysicalModel().getFunction(getPhysicalModel().getOutputNames()[i])(inputSample));
     }
-    catch (Exception & ex)
+    catch (std::exception & ex)
     {
       throw InvalidArgumentException(HERE) << "Impossible to evaluate the output "
                                            << getPhysicalModel().getOutputNames()[i] << ".\n" << ex.what();

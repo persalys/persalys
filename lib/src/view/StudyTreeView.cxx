@@ -28,7 +28,14 @@
 #include <QApplication>
 #include <QMessageBox>
 
-#include "otgui/PhysicalModelWindow.hxx"
+#include "otgui/AnalyticalPhysicalModel.hxx"
+#include "otgui/PythonPhysicalModel.hxx"
+#ifdef OTGUI_HAVE_YACS
+#include "otgui/YACSPhysicalModel.hxx"
+#include "otgui/YACSPhysicalModelWindow.hxx"
+#endif
+#include "otgui/AnalyticalPhysicalModelWindow.hxx"
+#include "otgui/PythonPhysicalModelWindow.hxx"
 #include "otgui/ProbabilisticModelWindow.hxx"
 #include "otgui/LimitStateWindow.hxx"
 #include "otgui/DesignOfExperimentWizard.hxx"
@@ -91,10 +98,20 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
 
 void StudyTreeView::buildActions()
 {
-  // new physical model action
-  newPhysicalModel_ = new QAction(tr("New physical model"), this);
-  newPhysicalModel_->setStatusTip(tr("Create a new physical model"));
-  connect(newPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewPhysicalModel()));
+  // new physical model actions
+  newAnalyticalPhysicalModel_ = new QAction(tr("New analytical physical model"), this);
+  newAnalyticalPhysicalModel_->setStatusTip(tr("Create a new analytical physical model"));
+  connect(newAnalyticalPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewAnalyticalPhysicalModel()));
+
+  newPythonPhysicalModel_ = new QAction(tr("New Python physical model"), this);
+  newPythonPhysicalModel_->setStatusTip(tr("Create a new Python physical model"));
+  connect(newPythonPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewPythonPhysicalModel()));
+
+#ifdef OTGUI_HAVE_YACS
+  newYACSPhysicalModel_ = new QAction(tr("New YACS physical model"), this);
+  newYACSPhysicalModel_->setStatusTip(tr("Create a new YACS physical model"));
+  connect(newYACSPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewYACSPhysicalModel()));
+#endif
 
   // new probabilistic model action
   newProbabilisticModel_ = new QAction(tr("New probabilistic model"), this);
@@ -156,7 +173,11 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
 
   if (dataType == "OTStudy")
   {
-    actions.append(newPhysicalModel_);
+    actions.append(newAnalyticalPhysicalModel_);
+    actions.append(newPythonPhysicalModel_);
+#ifdef OTGUI_HAVE_YACS
+    actions.append(newYACSPhysicalModel_);
+#endif
     actions.append(saveOTStudy_);
   }
   else if (dataType == "DeterministicStudy")
@@ -202,14 +223,33 @@ void StudyTreeView::createNewOTStudy()
 }
 
 
-void StudyTreeView::createNewPhysicalModel()
+void StudyTreeView::createNewAnalyticalPhysicalModel()
 {
-  QModelIndex parentIndex = selectionModel()->currentIndex();
-  treeViewModel_->addPhysicalModelItem(parentIndex);
-  setExpanded(parentIndex, true);
-  setExpanded(parentIndex.child(0, 0), true);
-  setExpanded(parentIndex.child(1, 0), true);
+  QModelIndex studyIndex = selectionModel()->currentIndex();
+  OTStudyItem * studyItem = static_cast<OTStudyItem*>(treeViewModel_->itemFromIndex(studyIndex));
+  AnalyticalPhysicalModel newPhysicalModel(studyItem->getOTStudy()->getAvailablePhysicalModelName());
+  studyItem->getOTStudy()->addPhysicalModel(newPhysicalModel);
 }
+
+
+void StudyTreeView::createNewPythonPhysicalModel()
+{
+  QModelIndex studyIndex = selectionModel()->currentIndex();
+  OTStudyItem * studyItem = static_cast<OTStudyItem*>(treeViewModel_->itemFromIndex(studyIndex));
+  PythonPhysicalModel newPhysicalModel(studyItem->getOTStudy()->getAvailablePhysicalModelName());
+  studyItem->getOTStudy()->addPhysicalModel(newPhysicalModel);
+}
+
+
+#ifdef OTGUI_HAVE_YACS
+void StudyTreeView::createNewYACSPhysicalModel()
+{
+  QModelIndex studyIndex = selectionModel()->currentIndex();
+  OTStudyItem * studyItem = static_cast<OTStudyItem*>(treeViewModel_->itemFromIndex(studyIndex));
+  YACSPhysicalModel newPhysicalModel(studyItem->getOTStudy()->getAvailablePhysicalModelName());
+  studyItem->getOTStudy()->addPhysicalModel(newPhysicalModel);
+}
+#endif
 
 
 void StudyTreeView::createNewProbabilisticModel()
@@ -244,11 +284,23 @@ void StudyTreeView::createNewLimitState()
 
 void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 {
-  PhysicalModelWindow * window = new PhysicalModelWindow(item);
-  connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
-  emit showWindow(window);
-  setCurrentIndex(item->index());
-  setExpanded(item->index(), true);
+  OTguiSubWindow * window = 0;
+  String physicalModelType = item->getPhysicalModel().getImplementation()->getClassName();
+  if (physicalModelType == "AnalyticalPhysicalModel")
+    window = new AnalyticalPhysicalModelWindow(item);
+  else if (physicalModelType == "PythonPhysicalModel")
+    window = new PythonPhysicalModelWindow(item);
+#ifdef OTGUI_HAVE_YACS
+  else if (physicalModelType == "YACSPhysicalModel")
+    window = new YACSPhysicalModelWindow(item);
+#endif
+  if (window)
+  {
+    connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
+    emit showWindow(window);
+    setCurrentIndex(item->index());
+    setExpanded(item->index(), true);
+  }
 }
 
 
@@ -374,21 +426,20 @@ void StudyTreeView::runAnalysis()
   AnalysisItem * item = dynamic_cast<AnalysisItem*>(selectedItem);
 
   OTguiWizard * wizard = 0;
-  if (item->data(Qt::UserRole).toString() == "ModelEvaluation")
+  QString analysisType = item->data(Qt::UserRole).toString();
+  if (analysisType == "ModelEvaluation")
   {
     wizard = new ModelEvaluationWizard(item->getAnalysis());
   }
-  else if (item->data(Qt::UserRole).toString() == "MonteCarloAnalysis" ||
-           item->data(Qt::UserRole).toString() == "TaylorExpansionsMomentsAnalysis")
+  else if (analysisType == "MonteCarloAnalysis" || analysisType == "TaylorExpansionsMomentsAnalysis")
   {
     wizard = new CentralTendencyWizard(item->getAnalysis());
   }
-  else if (item->data(Qt::UserRole).toString() == "SobolAnalysis" ||
-           item->data(Qt::UserRole).toString() == "SRCAnalysis")
+  else if (analysisType == "SobolAnalysis" || analysisType == "SRCAnalysis")
   {
     wizard = new SensitivityAnalysisWizard(item->getAnalysis());
   }
-  else if (item->data(Qt::UserRole).toString() == "MonteCarloReliabilityAnalysis")
+  else if (analysisType == "MonteCarloReliabilityAnalysis")
   {
     wizard = new ReliabilityAnalysisWizard(item->getAnalysis());
   }
@@ -416,18 +467,18 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
   emit checkIfWindowResultExists(item);
 
   OTguiSubWindow * resultWindow = 0;
-  QString data = item->data(Qt::UserRole).toString();
-  if (data == "ModelEvaluation")
+  QString analysisType = item->data(Qt::UserRole).toString();
+  if (analysisType == "ModelEvaluation")
     resultWindow = new ModelEvaluationResultWindow(item);
-  else if (data == "MonteCarloAnalysis")
+  else if (analysisType == "MonteCarloAnalysis")
     resultWindow = new MonteCarloResultWindow(item);
-  else if (data == "TaylorExpansionsMomentsAnalysis")
+  else if (analysisType == "TaylorExpansionsMomentsAnalysis")
     resultWindow = new TaylorExpansionsMomentsResultWindow(item);
-  else if (data == "SobolAnalysis")
+  else if (analysisType == "SobolAnalysis")
     resultWindow = new SobolResultWindow(item);
-  else if (data == "SRCAnalysis")
+  else if (analysisType == "SRCAnalysis")
     resultWindow = new SRCResultWindow(item);
-  else if (data == "MonteCarloReliabilityAnalysis")
+  else if (analysisType == "MonteCarloReliabilityAnalysis")
     resultWindow = new MonteCarloReliabilityResultWindow(item);
 
   if (resultWindow)

@@ -78,7 +78,7 @@ void DesignOfExperimentWindow::evaluateOutputs()
   {
     designOfExperiment_.eval();
   }
-  catch (Exception & ex)
+  catch (std::exception & ex)
   {
     setErrorMessage(ex.what());
   }

@@ -82,14 +82,6 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
 }
 
 
-void StudyTreeViewModel::addPhysicalModelItem(const QModelIndex & parentIndex)
-{
-  OTStudyItem * parentItem = static_cast<OTStudyItem*>(itemFromIndex(parentIndex));
-  AnalyticalPhysicalModel newPhysicalModel(parentItem->getOTStudy()->getAvailablePhysicalModelName());
-  parentItem->getOTStudy()->addPhysicalModel(newPhysicalModel);
-}
-
-
 void StudyTreeViewModel::addProbabilisticModelItem(const QModelIndex & parentIndex)
 {
   PhysicalModelItem * parentItem = static_cast<PhysicalModelItem*>(itemFromIndex(parentIndex)->parent());

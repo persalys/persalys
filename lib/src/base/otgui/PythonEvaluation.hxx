@@ -21,9 +21,10 @@
 #ifndef OTGUI_PYTHONEVALUATION_HXX
 #define OTGUI_PYTHONEVALUATION_HXX
 
+#include "otgui/OTGuiprivate.hxx"
+
 #include "NumericalMathEvaluationImplementation.hxx"
 #include "Pointer.hxx"
-#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
 
@@ -32,8 +33,7 @@ namespace OTGUI {
  *
  * The class that implement the evaluation of an analytical function.
  */
-class OTGUI_API PythonEvaluation
-  : public OT::NumericalMathEvaluationImplementation
+class OTGUI_API PythonEvaluation : public OT::NumericalMathEvaluationImplementation
 {
   CLASSNAME;
 

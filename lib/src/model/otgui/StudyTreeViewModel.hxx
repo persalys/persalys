@@ -37,7 +37,6 @@ public:
 
   void createNewOTStudy();
   void addOTStudyItem(OTStudy * otStudy);
-  void addPhysicalModelItem(const QModelIndex & parentIndex);
   void addProbabilisticModelItem(const QModelIndex & parentIndex);
   void addLimitStateItem(const QModelIndex & parentIndex);
 

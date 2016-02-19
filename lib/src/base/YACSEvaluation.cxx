@@ -55,14 +55,13 @@ YACSEvaluation::YACSEvaluation(const YACSEvaluation & other)
   , inputValues_(other.inputValues_)
   , inDescription_(other.inDescription_)
   , outDescription_(other.outDescription_)
-  , efx_(0)
+  , efx_(other.efx_)
 {
   if (!session_)
   {
     session_ = new YACSEvalSession;
     session_->launch();
   }
-  efx_ = YACSEvalYFX::BuildFromFile(xmlFileName_);
 }
 
 
@@ -189,7 +188,10 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
   int b = 0;
   bool a(efx_->run(session_, b));
   if (!a)
-    return result;
+  {
+    efx_->unlockAll();
+    throw NotDefinedException(HERE) << "Error when executing YACS scheme. ";
+  }
 
   // get results
   std::vector<YACSEvalSeqAny *> res(efx_->getResults());

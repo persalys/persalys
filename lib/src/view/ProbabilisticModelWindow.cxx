@@ -475,7 +475,7 @@ void ProbabilisticModelWindow::updateDistributionParameters()
       physicalModel_.blockNotification(false);
       updatePlots();
     }
-    catch(Exception & ex)
+    catch(std::exception & ex)
     {
       std::cerr << "ProbabilisticModelWindow::updateDistribution invalid parameters:"<<newParameters<<" for distribution:"<<distributionName<<std::endl;
       updateDistributionWidgets(index);
@@ -503,7 +503,7 @@ void ProbabilisticModelWindow::updateDistributionParameters()
       physicalModel_.blockNotification(false);
       updatePlots();
     }
-    catch(Exception & ex)
+    catch(std::exception & ex)
     {
       std::cerr << "ProbabilisticModelWindow::updateDistribution invalid parameters:"<<parameters<<" for distribution:"<<distributionName<<std::endl;
       updateDistributionWidgets(index);

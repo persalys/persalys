@@ -42,7 +42,11 @@ protected:
 
 public slots:
   void createNewOTStudy();
-  void createNewPhysicalModel();
+  void createNewAnalyticalPhysicalModel();
+  void createNewPythonPhysicalModel();
+#ifdef OTGUI_HAVE_YACS
+  void createNewYACSPhysicalModel();
+#endif
   void createNewProbabilisticModel();
   void createNewDesignOfExperiment();
   void createNewLimitState();
@@ -78,7 +82,11 @@ signals:
 private:
   StudyTreeViewModel * treeViewModel_;
   QAction * newOTStudyAction_;
-  QAction * newPhysicalModel_;
+  QAction * newAnalyticalPhysicalModel_;
+  QAction * newPythonPhysicalModel_;
+#ifdef OTGUI_HAVE_YACS
+  QAction * newYACSPhysicalModel_;
+#endif
   QAction * newProbabilisticModel_;
   QAction * newDesignOfExperiment_;
   QAction * newLimitState_;

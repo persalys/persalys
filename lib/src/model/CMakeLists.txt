@@ -13,7 +13,7 @@ ot_add_source_file ( PhysicalModelItem.cxx )
 ot_add_source_file ( OTStudyItem.cxx )
 ot_add_source_file ( AnalysisItem.cxx )
 ot_add_source_file ( StudyTreeViewModel.cxx )
-ot_add_source_file (CodeModel.cxx)
+ot_add_source_file ( CodeModel.cxx)
 
 ot_install_header_file ( OTguiTableModel.hxx )
 ot_install_header_file ( InputTableModel.hxx )
