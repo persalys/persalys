@@ -50,7 +50,7 @@ public:
   bool isReliabilityAnalysis() const;
 
   void run();
-  OT::String dump() const;
+  OT::String getPythonScript() const;
   bool analysisLaunched() const;
 
   /** Method save() stores the object through the StorageManager */

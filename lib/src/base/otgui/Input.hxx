@@ -48,8 +48,8 @@ public:
 
   bool isStochastic() const;
 
-  OT::String dumpDistribution() const;
-  OT::String dump() const;
+  OT::String getDistributionPythonScript() const;
+  OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;

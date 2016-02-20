@@ -322,29 +322,33 @@ void OTStudy::addLimitState(const LimitState & limitState)
 }
 
 
-String OTStudy::dump()
+String OTStudy::getPythonScript()
 {
   String result;
+
+  result += "#! /usr/bin/env python\n\nfrom __future__ import print_function\nimport openturns as ot\nimport otguibase\n\n";
+
   result += getName() + " = otguibase.OTStudy('" + getName() + "')\n";
   result += "otguibase.OTStudy.AddOTStudy(" + getName() + ")\n";
+
   for (Collection<PhysicalModel>::iterator it=physicalModels_.begin(); it!= physicalModels_.end(); ++it)
   {
-    result += (*it).dump();
+    result += (*it).getPythonScript();
     result += getName() + ".addPhysicalModel(" + (*it).getName() + ")\n";
   }
   for (Collection<DesignOfExperiment>::iterator it=designOfExperiments_.begin(); it!= designOfExperiments_.end(); ++it)
   {
-    result += (*it).dump();
+    result += (*it).getPythonScript();
     result += getName() + ".addDesignOfExperiment(" + (*it).getName() + ")\n";
   }
   for (Collection<LimitState>::iterator it=limitStates_.begin(); it!= limitStates_.end(); ++it)
   {
-    result += (*it).dump();
+    result += (*it).getPythonScript();
     result += getName() + ".addLimitState(" + (*it).getName() + ")\n";
   }
   for (Collection<Analysis>::iterator it=analyses_.begin(); it!= analyses_.end(); ++it)
   {
-    result += (*it).dump();
+    result += (*it).getPythonScript();
     result += getName() + ".addAnalysis(" + (*it).getName() + ")\n";
   }
   return result;

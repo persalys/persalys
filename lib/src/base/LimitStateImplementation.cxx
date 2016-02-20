@@ -138,7 +138,7 @@ Event LimitStateImplementation::getEvent()
 }
 
 
-String LimitStateImplementation::dump() const
+String LimitStateImplementation::getPythonScript() const
 {
   String result;
   result += getName()+ " = otguibase.LimitState('" + getName() + "', " + getPhysicalModel().getName();

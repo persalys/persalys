@@ -37,6 +37,6 @@ montecarloResult = montecarlo.getResult()
 # Comparaison
 openturns.testing.assert_almost_equal(0.0006, montecarloResult.getProbabilityEstimate(), 1e-16)
 
-script = myStudy.dump()
+script = myStudy.getPythonScript()
 print(script)
 exec(script)

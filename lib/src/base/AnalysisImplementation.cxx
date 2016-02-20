@@ -86,7 +86,7 @@ bool AnalysisImplementation::analysisLaunched() const
 }
 
 
-String AnalysisImplementation::dump() const
+String AnalysisImplementation::getPythonScript() const
 {
   return "";
 }

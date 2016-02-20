@@ -40,8 +40,8 @@ signals:
   void openOTStudy();
   void saveOTStudy();
   void saveAsOTStudy();
-  void dumpOTStudy();
-  void loadOTStudy();
+  void exportPython();
+  void importPython();
   void closeWindow();
   void showHidePythonConsole(bool);
   void pythonConsoleVisibilityChanged(bool);

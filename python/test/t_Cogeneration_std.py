@@ -92,6 +92,6 @@ openturns.testing.assert_almost_equal(0.628946, srcResult.getIndices()[0][0], 1e
 openturns.testing.assert_almost_equal(0.0476118, srcResult.getIndices()[0][1], 1e-6)
 openturns.testing.assert_almost_equal(0.318226, srcResult.getIndices()[0][2], 1e-6)
 
-script = myStudy.dump()
+script = myStudy.getPythonScript()
 print(script)
 exec(script)

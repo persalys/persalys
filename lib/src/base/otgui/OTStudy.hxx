@@ -73,7 +73,7 @@ public:
   OT::String getAvailableLimitStateName();
   void addLimitState(const LimitState & limitState);
 
-  OT::String dump();
+  OT::String getPythonScript();
 
   void save(const OT::String & xmlFileName);
 

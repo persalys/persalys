@@ -100,7 +100,7 @@ MonteCarloResult MonteCarloAnalysis::getResult() const
 }
 
 
-String MonteCarloAnalysis::dump() const
+String MonteCarloAnalysis::getPythonScript() const
 {
   OSS oss;
   oss << getName() << " = otguibase.MonteCarloAnalysis('" << getName() << "', " << getPhysicalModel().getName();

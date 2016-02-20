@@ -81,7 +81,7 @@ public:
   OT::Copula getCopula() const;
   void setCopula(const OT::Copula & copula);
 
-  virtual OT::String dump() const;
+  virtual OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -91,8 +91,8 @@ public:
 
 protected:
   void updateCopula();
-  OT::String dumpProbaModel() const;
-  OT::String dumpCopula() const;
+  OT::String getProbaModelPythonScript() const;
+  OT::String getCopulaPythonScript() const;
 
 private:
   OT::PersistentCollection<Input> inputs_;

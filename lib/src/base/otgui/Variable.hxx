@@ -43,7 +43,7 @@ public:
   OT::String getDescription() const;
   void setDescription(const OT::String & description);
 
-  virtual OT::String dump() const = 0;
+  virtual OT::String getPythonScript() const = 0;
 
   /** Method save() stores the object through the StorageManager */
   virtual void save(OT::Advocate & adv) const;

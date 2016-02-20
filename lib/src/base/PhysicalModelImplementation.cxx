@@ -499,13 +499,13 @@ void PhysicalModelImplementation::setCopula(const Copula & copula)
 }
 
 
-String PhysicalModelImplementation::dump() const
+String PhysicalModelImplementation::getPythonScript() const
 {
   throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getDump()";
 }
 
 
-String PhysicalModelImplementation::dumpProbaModel() const
+String PhysicalModelImplementation::getProbaModelPythonScript() const
 {
   String result;
 
@@ -566,7 +566,7 @@ String PhysicalModelImplementation::dumpProbaModel() const
 }
 
 
-String PhysicalModelImplementation::dumpCopula() const
+String PhysicalModelImplementation::getCopulaPythonScript() const
 {
   String result;
 
@@ -575,17 +575,17 @@ String PhysicalModelImplementation::dumpCopula() const
   OSS oss;
   oss << "correlationMatrix = ot.CorrelationMatrix(" << correlationMatrix.getNbRows() << ")\n";
 
-  bool dumpCopula = false;
+  bool hasCorrelation = false;
   for (UnsignedInteger i=0; i<correlationMatrix.getNbRows(); ++i)
     for (UnsignedInteger j=i+1; j<correlationMatrix.getNbRows(); ++j)
       if (correlationMatrix(i, j) != 0.0)
       {
-        dumpCopula = true;
+        hasCorrelation = true;
         oss << "correlationMatrix[" << i << ", " << j << "] = " << correlationMatrix(i, j) << "\n";
       }
 
   // if there is no correlation: write nothing
-  if (!dumpCopula)
+  if (!hasCorrelation)
     return result;
 
   // else:

@@ -62,7 +62,7 @@ int main(int argc, char **argv)
     std::cout << model.getFunction()(x) << std::endl;
   }
   Py_Finalize();
-  std::cout << study.dump() << std::endl;
+  std::cout << study.getPythonScript() << std::endl;
   return EXIT_SUCCESS;
 }
 

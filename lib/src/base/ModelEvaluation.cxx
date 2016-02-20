@@ -134,7 +134,7 @@ ModelEvaluationResult ModelEvaluation::getResult() const
 }
 
 
-String ModelEvaluation::dump() const
+String ModelEvaluation::getPythonScript() const
 {
   String result;
 

@@ -45,7 +45,7 @@ public:
   bool hasBeenComputed() const;
   void setHasBeenComputed(const bool hasBeenComputed);
 
-  OT::String dump() const; 
+  OT::String getPythonScript() const; 
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;

@@ -30,7 +30,7 @@ anOTStudy.addDesignOfExperiment(aDesign)
 aDesign.eval()
 print('outs=', aDesign.getResult().getOutputSample())
 
-script = anOTStudy.dump()
+script = anOTStudy.getPythonScript()
 print(script)
 exec(script)
 

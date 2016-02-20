@@ -56,7 +56,7 @@ public:
   OT::SimulationResult getResult() const;
 
   virtual void run();
-  virtual OT::String dump() const;
+  virtual OT::String getPythonScript() const;
   virtual bool analysisLaunched() const;
 
   /** Method save() stores the object through the StorageManager */

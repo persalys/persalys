@@ -491,11 +491,11 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
 }
 
 
-void StudyTreeView::dumpOTStudy()
+void StudyTreeView::exportPython()
 {
   OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
 
-  QString fileName = QFileDialog::getSaveFileName(this, tr("Dump OTStudy..."),
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Export Python..."),
                      QDir::homePath(),
                      tr("Python source files (*.py)"));
 
@@ -515,10 +515,7 @@ void StudyTreeView::dumpOTStudy()
     else
     {
       QTextStream out(&file);
-      QString script("#! /usr/bin/env python\n\nfrom __future__ import print_function\nimport openturns as ot\nimport otguibase\n\n");
-      out << script;
-      script = item->dumpOTStudy();
-      out << script;
+      out << item->getOTStudy()->getPythonScript().c_str();
       file.setPermissions(QFile::ReadUser|QFile::WriteUser|QFile::ExeUser|QFile::ReadGroup|QFile::ExeGroup|QFile::ReadOther|QFile::ExeOther);
       file.close();
     }
@@ -526,9 +523,9 @@ void StudyTreeView::dumpOTStudy()
 }
 
 
-void StudyTreeView::loadOTStudy()
+void StudyTreeView::importPython()
 {
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Load OTStudy..."),
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Import Python..."),
                      QDir::homePath(),
                      tr("Python source files (*.py)"));
 
@@ -547,7 +544,7 @@ void StudyTreeView::loadOTStudy()
     }
     // load
     else
-      emit loadPythonScript(fileName);
+      emit importPythonScript(fileName);
   }
 }
 

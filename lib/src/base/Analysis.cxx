@@ -100,8 +100,8 @@ bool Analysis::analysisLaunched() const
 }
 
 
-String Analysis::dump() const
+String Analysis::getPythonScript() const
 {
-  return getImplementation()->dump();
+  return getImplementation()->getPythonScript();
 }
 }

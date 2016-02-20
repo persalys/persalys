@@ -133,7 +133,7 @@ SimulationResult MonteCarloReliabilityAnalysis::getResult() const
 }
 
 
-String MonteCarloReliabilityAnalysis::dump() const
+String MonteCarloReliabilityAnalysis::getPythonScript() const
 {
   OSS oss;
   oss << getName() << " = otguibase.MonteCarloReliabilityAnalysis('" << getName() << "', " << getLimitState().getName();

@@ -89,7 +89,7 @@ TaylorExpansionsMomentsResult TaylorExpansionsMomentsAnalysis::getResult() const
 }
 
 
-String TaylorExpansionsMomentsAnalysis::dump() const
+String TaylorExpansionsMomentsAnalysis::getPythonScript() const
 {
   String result;
   result += getName()+ " = otguibase.TaylorExpansionsMomentsAnalysis('" + getName() + "', " + getPhysicalModel().getName() + ")\n";

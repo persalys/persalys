@@ -78,7 +78,7 @@ void Output::setHasBeenComputed(const bool hasBeenComputed)
 }
 
 
-String Output::dump() const
+String Output::getPythonScript() const
 {
   OSS oss;
   oss << getName() << " = otguibase.Output('" << getName() << "', " << getValue() << ", '" << getDescription();

@@ -65,8 +65,8 @@ public slots:
   void createNewLimitStateWindow(LimitStateItem * item);
   void createAnalysisConnection(AnalysisItem*);
   void createAnalysisResultWindow(AnalysisItem * item);
-  void dumpOTStudy();
-  void loadOTStudy();
+  void exportPython();
+  void importPython();
   void saveOTStudy();
   void saveAsOTStudy();
   void openOTStudy();
@@ -75,7 +75,7 @@ signals:
   void errorMessageEmitted(QString);
   void itemSelected(QStandardItem *);
   void checkIfWindowResultExists(QStandardItem *);
-  void loadPythonScript(const QString & fileName);
+  void importPythonScript(const QString & fileName);
   void graphWindowActivated(QWidget*);
   void graphWindowDeactivated(QWidget*);
 

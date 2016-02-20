@@ -81,7 +81,7 @@ SRCResult SRCAnalysis::getResult() const
 }
 
 
-String SRCAnalysis::dump() const
+String SRCAnalysis::getPythonScript() const
 {
   OSS oss;
   oss << getName() << " = otguibase.SRCAnalysis('" << getName() << "', " << getPhysicalModel().getName();

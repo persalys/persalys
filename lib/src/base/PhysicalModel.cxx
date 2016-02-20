@@ -289,9 +289,9 @@ void PhysicalModel::setCopula(const Copula & copula)
 }
 
 
-String PhysicalModel::dump() const
+String PhysicalModel::getPythonScript() const
 {
-  return getImplementation()->dump();
+  return getImplementation()->getPythonScript();
 }
 
 

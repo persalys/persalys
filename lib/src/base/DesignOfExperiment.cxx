@@ -258,9 +258,9 @@ void DesignOfExperiment::eval()
 }
 
 
-String DesignOfExperiment::dump() const
+String DesignOfExperiment::getPythonScript() const
 {
-  return getImplementation()->dump();
+  return getImplementation()->getPythonScript();
 }
 
 

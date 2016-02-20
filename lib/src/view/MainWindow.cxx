@@ -79,7 +79,7 @@ void MainWindow::buildInterface()
   QDockWidget * pythonConsoleDock = new QDockWidget(tr("Python Console"));
   pythonConsoleDock->setWidget(pythonConsole);
   pythonConsoleDock->setFeatures(QDockWidget::DockWidgetClosable);
-  connect(studyTree_, SIGNAL(loadPythonScript(const QString &)), pythonConsole, SLOT(loadScript(const QString &)));
+  connect(studyTree_, SIGNAL(importPythonScript(const QString &)), pythonConsole, SLOT(loadScript(const QString &)));
   rightSideSplitter->addWidget(pythonConsoleDock);
   rightSideSplitter->setStretchFactor(1, 1);
 
@@ -94,8 +94,8 @@ void MainWindow::buildInterface()
   connect(menuBar, SIGNAL(openOTStudy()), studyTree_, SLOT(openOTStudy()));
   connect(menuBar, SIGNAL(saveOTStudy()), studyTree_, SLOT(saveOTStudy()));
   connect(menuBar, SIGNAL(saveAsOTStudy()), studyTree_, SLOT(saveAsOTStudy()));
-  connect(menuBar, SIGNAL(dumpOTStudy()), studyTree_, SLOT(dumpOTStudy()));
-  connect(menuBar, SIGNAL(loadOTStudy()), studyTree_, SLOT(loadOTStudy()));
+  connect(menuBar, SIGNAL(exportPython()), studyTree_, SLOT(exportPython()));
+  connect(menuBar, SIGNAL(importPython()), studyTree_, SLOT(importPython()));
   connect(menuBar, SIGNAL(closeWindow()), this, SLOT(close()));
   setMenuBar(menuBar);
 
@@ -103,7 +103,7 @@ void MainWindow::buildInterface()
   OTguiToolBar * toolBar = new OTguiToolBar;
   connect(toolBar, SIGNAL(createNewOTStudy()), studyTree_, SLOT(createNewOTStudy()));
   connect(toolBar, SIGNAL(openOTStudy()), studyTree_, SLOT(openOTStudy()));
-  connect(toolBar, SIGNAL(loadOTStudy()), studyTree_, SLOT(loadOTStudy()));
+  connect(toolBar, SIGNAL(importPython()), studyTree_, SLOT(importPython()));
   connect(toolBar, SIGNAL(saveOTStudy()), studyTree_, SLOT(saveOTStudy()));
   addToolBar(toolBar);
 
@@ -120,7 +120,7 @@ void MainWindow::launchInitialMessageBox()
   messageBox.setText("Please, select required action by pressing the corresponding button below.");
   QPushButton * newOTStudyButton = messageBox.addButton(tr("New"), QMessageBox::ActionRole);
   QPushButton * openOTStudyButton = messageBox.addButton(tr("Open..."), QMessageBox::ActionRole);
-  QPushButton * loadScriptButton = messageBox.addButton(tr("Load Script..."), QMessageBox::ActionRole);
+  QPushButton * importScriptButton = messageBox.addButton(tr("Import Python..."), QMessageBox::ActionRole);
   messageBox.setStandardButtons(QMessageBox::Cancel);
   messageBox.setDefaultButton(newOTStudyButton);
   messageBox.exec();
@@ -129,8 +129,8 @@ void MainWindow::launchInitialMessageBox()
     studyTree_->createNewOTStudy();
   else if (messageBox.clickedButton() == openOTStudyButton)
     studyTree_->openOTStudy();
-  else if (messageBox.clickedButton() == loadScriptButton)
-    studyTree_->loadOTStudy();
+  else if (messageBox.clickedButton() == importScriptButton)
+    studyTree_->importPython();
 }
 
 

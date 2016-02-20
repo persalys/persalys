@@ -48,7 +48,6 @@ public:
 
   void setData(const QVariant & value, int role);
   OTStudy * getOTStudy();
-  QString dumpOTStudy();
 
 public slots:
   void updatePhysicalModel(const PhysicalModel & physicalModel);

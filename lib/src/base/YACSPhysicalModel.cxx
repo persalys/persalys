@@ -150,15 +150,15 @@ NumericalMathFunction YACSPhysicalModel::getFunction()
 }
 
 
-String YACSPhysicalModel::dump() const
+String YACSPhysicalModel::getPythonScript() const
 {
   String result;
 
   result += getName()+ " = otguibase.YACSPhysicalModel('" + getName() + "', '";
   result += getXMLFileName() + "')\n";
 
-  result += dumpProbaModel();
-  result += PhysicalModelImplementation::dumpCopula();
+  result += getProbaModelPythonScript();
+  result += PhysicalModelImplementation::getCopulaPythonScript();
 
   return result;
 }

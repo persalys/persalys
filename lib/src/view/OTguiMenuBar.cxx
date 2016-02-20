@@ -58,14 +58,14 @@ void OTguiMenuBar::buildActions()
 
   addSeparator();
 
-  action = new QAction(tr("Dump OTStudy"), this);
-  action->setStatusTip(tr("Dump the OTStudy"));
-  connect(action, SIGNAL(triggered()), this, SIGNAL(dumpOTStudy()));
+  action = new QAction(QIcon(":/images/document-export.png"), tr("Export Python"), this);
+  action->setStatusTip(tr("Export the OTStudy in a Python Script"));
+  connect(action, SIGNAL(triggered()), this, SIGNAL(exportPython()));
   fileMenu->addAction(action);
 
-  action = new QAction(QIcon(":/images/document-import.png"), tr("&Load Script..."), this);
-  action->setStatusTip(tr("Load a Python Script"));
-  connect(action, SIGNAL(triggered()), this, SIGNAL(loadOTStudy()));
+  action = new QAction(QIcon(":/images/document-import.png"), tr("&Import Python..."), this);
+  action->setStatusTip(tr("Import a Python Script"));
+  connect(action, SIGNAL(triggered()), this, SIGNAL(importPython()));
   fileMenu->addAction(action);
 
   addSeparator();

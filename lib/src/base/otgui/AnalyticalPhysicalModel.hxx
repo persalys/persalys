@@ -41,7 +41,7 @@ public:
   OT::Description getFormulas();
   virtual OT::NumericalMathFunction getFunction();
 
-  OT::String dump() const;
+  OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */
   virtual void save(OT::Advocate & adv) const;

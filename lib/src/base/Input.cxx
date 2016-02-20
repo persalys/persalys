@@ -82,7 +82,7 @@ bool Input::isStochastic() const
 }
 
 
-String Input::dumpDistribution() const
+String Input::getDistributionPythonScript() const
 {
   OSS oss;
 
@@ -129,7 +129,7 @@ String Input::dumpDistribution() const
 }
 
 
-String Input::dump() const
+String Input::getPythonScript() const
 {
   OSS oss;
 
@@ -137,7 +137,7 @@ String Input::dump() const
     oss << getName() << " = otguibase.Input('" << getName() << "', " <<getValue() << ", '" << getDescription() << "')\n";
   else
   {
-    oss << dumpDistribution();
+    oss << getDistributionPythonScript();
     oss << getName() << " = otguibase.Input('" << getName() << "', " <<getValue() << ", '" << getDescription();
     oss << "', dist_" << getName() << ")\n";
   }

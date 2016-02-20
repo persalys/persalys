@@ -87,7 +87,7 @@ public:
 
   void updateParameters();
   void eval();
-  virtual OT::String dump() const;
+  virtual OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;

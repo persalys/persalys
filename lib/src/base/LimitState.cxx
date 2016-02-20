@@ -134,9 +134,9 @@ Event LimitState::getEvent()
 }
 
 
-String LimitState::dump() const
+String LimitState::getPythonScript() const
 {
-  return getImplementation()->dump();
+  return getImplementation()->getPythonScript();
 }
 
 

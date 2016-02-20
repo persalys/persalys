@@ -68,15 +68,15 @@ NumericalMathFunction AnalyticalPhysicalModel::getFunction()
 }
 
 
-String AnalyticalPhysicalModel::dump() const
+String AnalyticalPhysicalModel::getPythonScript() const
 {
   String result;
 
   for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
-    result += getInputs()[i].dump();
+    result += getInputs()[i].getPythonScript();
 
   for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
-    result += getOutputs()[i].dump();
+    result += getOutputs()[i].getPythonScript();
 
   result += getName()+ " = otguibase.AnalyticalPhysicalModel('" + getName() + "')\n";
 
@@ -86,7 +86,7 @@ String AnalyticalPhysicalModel::dump() const
   for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
     result += getName()+ ".addOutput(" + getOutputs()[i].getName() + ")\n";
 
-  result += PhysicalModelImplementation::dumpCopula();
+  result += PhysicalModelImplementation::getCopulaPythonScript();
   return result;
 }
 

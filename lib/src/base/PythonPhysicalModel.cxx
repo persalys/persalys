@@ -78,15 +78,15 @@ NumericalMathFunction PythonPhysicalModel::getFunction()
 }
 
 
-String PythonPhysicalModel::dump() const
+String PythonPhysicalModel::getPythonScript() const
 {
   String result;
 
   for (UnsignedInteger i = 0; i < getInputs().getSize(); ++ i)
-    result += getInputs()[i].dump();
+    result += getInputs()[i].getPythonScript();
 
   for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++ i)
-    result += getOutputs()[i].dump();
+    result += getOutputs()[i].getPythonScript();
 
   result += getName() + " = otguibase.PythonPhysicalModel('" + getName() + "')\n";
   result += getName() + ".enableCache()\n";
@@ -108,7 +108,7 @@ String PythonPhysicalModel::dump() const
   }
   result += "')\n";
 
-  result += PhysicalModelImplementation::dumpCopula();
+  result += PhysicalModelImplementation::getCopulaPythonScript();
 
   return result;
 }

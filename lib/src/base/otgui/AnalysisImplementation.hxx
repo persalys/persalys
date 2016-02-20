@@ -39,7 +39,7 @@ public:
   void setPhysicalModel(const PhysicalModel & physicalModel);
 
   virtual void run();
-  virtual OT::String dump() const;
+  virtual OT::String getPythonScript() const;
   virtual bool analysisLaunched() const;
 
   bool isReliabilityAnalysis() const;

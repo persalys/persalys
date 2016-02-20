@@ -501,7 +501,7 @@ void DesignOfExperimentImplementation::eval()
 }
 
 
-String DesignOfExperimentImplementation::dump() const
+String DesignOfExperimentImplementation::getPythonScript() const
 {
   OSS oss;
 

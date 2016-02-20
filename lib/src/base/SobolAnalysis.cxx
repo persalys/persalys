@@ -88,7 +88,7 @@ SobolResult SobolAnalysis::getResult() const
 }
 
 
-String SobolAnalysis::dump() const
+String SobolAnalysis::getPythonScript() const
 {
   OSS oss;
   oss << getName() << " = otguibase.SobolAnalysis('" << getName() << "', " << getPhysicalModel().getName();

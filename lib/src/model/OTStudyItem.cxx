@@ -276,10 +276,4 @@ OTStudy* OTStudyItem::getOTStudy()
 {
   return otStudy_;
 }
-
-
-QString OTStudyItem::dumpOTStudy()
-{
-  return otStudy_->dump().c_str();
-}
 }

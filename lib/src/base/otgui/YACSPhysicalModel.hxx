@@ -52,7 +52,7 @@ public:
   OT::NumericalMathFunction getFunction(const OT::Description & outputNames);
   OT::NumericalMathFunction getFunction();
 
-  OT::String dump() const;
+  OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
