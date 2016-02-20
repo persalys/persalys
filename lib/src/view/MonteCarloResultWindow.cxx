@@ -24,6 +24,8 @@
 
 #include <QVBoxLayout>
 #include <QStackedLayout>
+#include <QScrollArea>
+#include <QHeaderView>
 
 #include <limits>
 
@@ -79,8 +81,12 @@ void MonteCarloResultWindow::buildInterface()
   }
 
   // second tab: Summary -----------------------------
+
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
   tab = new QWidget;
   tabLayout = new QVBoxLayout(tab);
+  tabLayout->setSizeConstraint(QLayout::SetFixedSize);
 
   // -- output name --
   QHBoxLayout * headLayout = new QHBoxLayout;
@@ -95,84 +101,150 @@ void MonteCarloResultWindow::buildInterface()
 
   // -- results --
   QVBoxLayout * vbox = new QVBoxLayout;
-  QGridLayout * grid = new QGridLayout;
-  int gridRow = -1;
 
   // number of simulations
   QLabel * nbSimuLabel = new QLabel(tr("Number of simulations : ") + QString::number(result_.getInputSample().getSize()) + "\n");
   nbSimuLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(nbSimuLabel, ++gridRow, 0, 1, 2, Qt::AlignTop);
+  vbox->addWidget(nbSimuLabel);
 
-  // min
-  QLabel * label = new QLabel(tr("Min"));
-  label->setStyleSheet("font: bold;");
-  grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
+  minMaxTable_ = new QTableWidget(nbInputs+1, 4);
+  minMaxTable_->setHorizontalHeaderLabels(QStringList() << tr("") << tr("Variable") << tr("Min") << tr("Max"));
+  minMaxTable_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  minMaxTable_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  minMaxTable_->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
+  minMaxTable_->verticalHeader()->hide();
+  minMaxTable_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
+
+  QTableWidgetItem * item = new QTableWidgetItem(tr("Output"));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(minMaxTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  minMaxTable_->setItem(0, 0, item);
+  item = new QTableWidgetItem(tr("Inputs"));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(minMaxTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  minMaxTable_->setSpan(1, 0, nbInputs, 1);
+  minMaxTable_->setItem(1, 0, item);
+  minMaxTable_->resizeColumnToContents(0);
+
+  for (int i=0; i<nbInputs; ++i)
+  {
+    item = new QTableWidgetItem(inputNames[i]);
+    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+    minMaxTable_->setItem(i+1, 1, item);
+
+    item = new QTableWidgetItem(QString::number(result_.getInputSample().getMarginal(i).getMin()[0]));
+    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+    minMaxTable_->setItem(i+1, 2, item);
+
+    item = new QTableWidgetItem(QString::number(result_.getInputSample().getMarginal(i).getMax()[0]));
+    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+    minMaxTable_->setItem(i+1, 3, item);
+  }
+
+  QSize size(minMaxTable_->sizeHint());
+  int width = 0;
+  for (int i=0; i<minMaxTable_->columnCount(); ++i)
+    width += minMaxTable_->columnWidth(i);
+  size.setWidth(width);
+  int height = minMaxTable_->horizontalHeader()->height();
+  for (int i=0; i<minMaxTable_->rowCount(); ++i)
+    height += minMaxTable_->rowHeight(i);
+  size.setHeight(height);
+  minMaxTable_->setMinimumSize(size);
+  minMaxTable_->setMaximumSize(size);
+
+  vbox->addWidget(minMaxTable_);
+
+  QGridLayout * grid = new QGridLayout;
+  int gridRow = -1;
+
+  // Xmin
   minLabel_ = new QLabel;
   minLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(minLabel_, gridRow, 1, Qt::AlignTop);
+  grid->addWidget(minLabel_, ++gridRow, 1, Qt::AlignTop);
 
-  // max
-  label = new QLabel(tr("Max"));
-  label->setStyleSheet("font: bold;");
-  grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
+  // Xmax
   maxLabel_ = new QLabel;
   maxLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(maxLabel_, gridRow, 1, Qt::AlignTop);
-
-  // mean
-  label = new QLabel(tr("Mean"));
-  label->setStyleSheet("font: bold;");
-  grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
-  meanLabel_ = new QLabel;
-  meanLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(meanLabel_, gridRow, 1, Qt::AlignTop);
-
-  // standard deviation
-  label = new QLabel(tr("Standard deviation"));
-  label->setStyleSheet("font: bold;");
-  grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
-  stdLabel_ = new QLabel;
-  stdLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(stdLabel_, gridRow, 1, Qt::AlignTop);
-
-  // skewness
-  label = new QLabel(tr("Skewness"));
-  label->setStyleSheet("font: bold;");
-  grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
-  skewnessLabel_ = new QLabel;
-  skewnessLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(skewnessLabel_, gridRow, 1);
-
-  // kurtosis
-  label = new QLabel(tr("Kurtosis"));
-  label->setStyleSheet("font: bold;");
-  grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
-  kurtosisLabel_ = new QLabel;
-  kurtosisLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(kurtosisLabel_, gridRow, 1, Qt::AlignTop);
-
-  // first quartile
-  label = new QLabel(tr("First quartile"));
-  label->setStyleSheet("font: bold;");
-  grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
-  firstQuartileLabel_ = new QLabel;
-  firstQuartileLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(firstQuartileLabel_, gridRow, 1, Qt::AlignTop);
-
-  // third quartile
-  label = new QLabel(tr("Third quartile"));
-  label->setStyleSheet("font: bold;");
-  grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
-  thirdQuartileLabel_ = new QLabel;
-  thirdQuartileLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(thirdQuartileLabel_, gridRow, 1, Qt::AlignTop);
+  grid->addWidget(maxLabel_, ++gridRow, 1, Qt::AlignTop);
 
   grid->setColumnStretch(1, 1);
   vbox->addLayout(grid);
 
+  // moments estimation
+  momentsEstimationsTable_ = new QTableWidget(8, 4);
+  momentsEstimationsTable_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  momentsEstimationsTable_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  momentsEstimationsTable_->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
+  momentsEstimationsTable_->verticalHeader()->hide();
+  momentsEstimationsTable_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
+  momentsEstimationsTable_->horizontalHeader()->hide();
+
+  // vertical header
+  item = new QTableWidgetItem("Estimators");
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  item->setTextAlignment(Qt::AlignCenter);
+  momentsEstimationsTable_->setSpan(0, 0, 2, 1);
+  momentsEstimationsTable_->setItem(0, 0, item);
+  item = new QTableWidgetItem(tr("Mean"));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  momentsEstimationsTable_->setItem(2, 0, item);
+  item = new QTableWidgetItem(tr("Standard deviation"));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  momentsEstimationsTable_->setItem(3, 0, item);
+  item = new QTableWidgetItem(tr("Skewness"));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  momentsEstimationsTable_->setItem(4, 0, item);
+  item = new QTableWidgetItem(tr("Kurtosis"));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  momentsEstimationsTable_->setItem(5, 0, item);
+  item = new QTableWidgetItem(tr("First quartile"));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  momentsEstimationsTable_->setItem(6, 0, item);
+  item = new QTableWidgetItem(tr("Third quartile"));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  momentsEstimationsTable_->setItem(7, 0, item);
+  momentsEstimationsTable_->resizeColumnToContents(0);
+
+  // horizontal header
+  item = new QTableWidgetItem(tr("Value"));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  item->setTextAlignment(Qt::AlignCenter);
+  momentsEstimationsTable_->setSpan(0, 1, 2, 1);
+  momentsEstimationsTable_->setItem(0, 1, item);
+  if (isConfidenceIntervalRequired_)
+  {
+    item = new QTableWidgetItem(tr("Confidence interval at ") + QString::number(levelConfidenceInterval_) + "%");
+    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+    item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+    item->setTextAlignment(Qt::AlignCenter);
+    momentsEstimationsTable_->setSpan(0, 2, 1, 2);
+    momentsEstimationsTable_->setItem(0, 2, item);
+    item = new QTableWidgetItem(tr("Lower bound"));
+    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+    item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+    item->setTextAlignment(Qt::AlignCenter);
+    momentsEstimationsTable_->setItem(1, 2, item);
+    item = new QTableWidgetItem(tr("Upper bound"));
+    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+    item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+    item->setTextAlignment(Qt::AlignCenter);
+    momentsEstimationsTable_->setItem(1, 3, item);
+  }
+
+  vbox->addWidget(momentsEstimationsTable_);
+
   // quantiles
   QHBoxLayout * quantLayout = new QHBoxLayout;
-  label = new QLabel(tr("Probability"));
+  QLabel * label = new QLabel(tr("Probability"));
   label->setStyleSheet("font: bold;");
   quantLayout->addWidget(label);
   probaSpinBox_ = new QDoubleSpinBox;
@@ -198,7 +270,9 @@ void MonteCarloResultWindow::buildInterface()
   tabLayout->addLayout(vbox);
 
   updateResultWidgets();
-  tabWidget_->addTab(tab, tr("Summary"));
+  tab->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+  scrollArea->setWidget(tab);
+  tabWidget_->addTab(scrollArea, tr("Summary"));
 
   // third tab: PDF/CDF ------------------------------
   tab = new QWidget;
@@ -334,56 +408,100 @@ void MonteCarloResultWindow::buildInterface()
 
 void MonteCarloResultWindow::updateResultWidgets(int indexOutput)
 {
-  // mean
-  QString meanText = QString::number(result_.getMean()[indexOutput]);
-  if (isConfidenceIntervalRequired_)
-  {
-    double meanCILowerBound = result_.getMeanConfidenceInterval(levelConfidenceInterval_).getLowerBound()[indexOutput];
-    double meanCIUpperBound = result_.getMeanConfidenceInterval(levelConfidenceInterval_).getUpperBound()[indexOutput];
-    meanText += "\n CI = [" + QString::number(meanCILowerBound) + ", ";
-    meanText += QString::number(meanCIUpperBound) + "] at ";
-    meanText += QString::number(levelConfidenceInterval_) + "%";
-  }
-  meanLabel_->setText(meanText);
-  // standard deviation
-  QString stdText = QString::number(result_.getStandardDeviation()[indexOutput]);
-  if (isConfidenceIntervalRequired_)
-  {
-    double stdCILowerBound = result_.getStdConfidenceInterval(levelConfidenceInterval_).getLowerBound()[indexOutput];
-    double stdCIUpperBound = result_.getStdConfidenceInterval(levelConfidenceInterval_).getUpperBound()[indexOutput];
-    stdText += "\n CI = [" + QString::number(stdCILowerBound) + ", ";
-    stdText += QString::number(stdCIUpperBound) + "] at ";
-    stdText += QString::number(levelConfidenceInterval_) + "%";
-  }
-  stdLabel_->setText(stdText);
-  // skewness
-  skewnessLabel_->setText(QString::number(result_.getSkewness()[indexOutput]));
-  // kurtosis
-  kurtosisLabel_->setText(QString::number(result_.getKurtosis()[indexOutput]));
-  // first quartile
-  firstQuartileLabel_->setText(QString::number(result_.getFirstQuartile()[indexOutput]));
-  // third quartile
-  thirdQuartileLabel_->setText(QString::number(result_.getThirdQuartile()[indexOutput]));
+  // minMaxTable_
+  QTableWidgetItem * item = new QTableWidgetItem(outputsComboBoxFirstTab_->currentText());
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  minMaxTable_->setItem(0, 1, item);
+
   // min
-  OSS oss3;
   const double min = result_.getOutputSample().getMin()[indexOutput];
-  oss3 << min;
+  item = new QTableWidgetItem(QString::number(min));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  minMaxTable_->setItem(0, 2, item);
+
+  OSS oss3;
   for (UnsignedInteger j=0; j<result_.getListXMin()[indexOutput].getSize();++j)
   {
     NumericalPoint point(result_.getListXMin()[indexOutput][j]);
     oss3 << "\n  X=" << point.__str__();
   }
-  minLabel_->setText(QString::fromStdString(oss3.str()));
+  minLabel_->setText(tr("The outpout ") + outputsComboBoxFirstTab_->currentText() + tr(" is minimal at :") + QString::fromStdString(oss3.str()));
+
   // max
-  OSS oss4;
   const double max = result_.getOutputSample().getMax()[indexOutput];
-  oss4 << max;
+  item = new QTableWidgetItem(QString::number(max));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  minMaxTable_->setItem(0, 3, item);
+
+  OSS oss4;
   for (UnsignedInteger j=0; j<result_.getListXMax()[indexOutput].getSize();++j)
   {
     NumericalPoint point(result_.getListXMax()[indexOutput][j]);
     oss4 << "\n  X=" << point.__str__();
   }
-  maxLabel_->setText(QString::fromStdString(oss4.str()));
+  maxLabel_->setText(tr("The outpout ") + outputsComboBoxFirstTab_->currentText() + tr(" is maximal at :") + QString::fromStdString(oss4.str()));
+
+  // momentsEstimationsTable_
+  // Mean
+  item = new QTableWidgetItem(QString::number(result_.getMean()[indexOutput]));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  momentsEstimationsTable_->setItem(2, 1, item);
+  if (isConfidenceIntervalRequired_)
+  {
+    double meanCILowerBound = result_.getMeanConfidenceInterval(levelConfidenceInterval_).getLowerBound()[indexOutput];
+    item = new QTableWidgetItem(QString::number(meanCILowerBound));
+    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+    momentsEstimationsTable_->setItem(2, 2, item);
+    double meanCIUpperBound = result_.getMeanConfidenceInterval(levelConfidenceInterval_).getUpperBound()[indexOutput];
+    item = new QTableWidgetItem(QString::number(meanCIUpperBound));
+    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+    momentsEstimationsTable_->setItem(2, 3, item);
+  }
+  // Standard Deviation
+  item = new QTableWidgetItem(QString::number(result_.getStandardDeviation()[indexOutput]));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  momentsEstimationsTable_->setItem(3, 1, item);
+  if (isConfidenceIntervalRequired_)
+  {
+    double stdCILowerBound = result_.getStdConfidenceInterval(levelConfidenceInterval_).getLowerBound()[indexOutput];
+    item = new QTableWidgetItem(QString::number(stdCILowerBound));
+    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+    momentsEstimationsTable_->setItem(3, 2, item);
+    double stdCIUpperBound = result_.getStdConfidenceInterval(levelConfidenceInterval_).getUpperBound()[indexOutput];
+    item = new QTableWidgetItem(QString::number(stdCIUpperBound));
+    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+    momentsEstimationsTable_->setItem(3, 3, item);
+  }
+  // Skewness
+  item = new QTableWidgetItem(QString::number(result_.getSkewness()[indexOutput]));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  momentsEstimationsTable_->setItem(4, 1, item);
+  // Kurtosis
+  item = new QTableWidgetItem(QString::number(result_.getKurtosis()[indexOutput]));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  momentsEstimationsTable_->setItem(5, 1, item);
+
+  // First quartile
+  item = new QTableWidgetItem(QString::number(result_.getFirstQuartile()[indexOutput]));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  momentsEstimationsTable_->setItem(6, 1, item);
+  // Third quartile
+  item = new QTableWidgetItem(QString::number(result_.getThirdQuartile()[indexOutput]));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  momentsEstimationsTable_->setItem(7, 1, item);
+
+  QSize size = momentsEstimationsTable_->sizeHint();
+  int width = 0;
+  for (int i=0; i<momentsEstimationsTable_->columnCount(); ++i)
+    width += momentsEstimationsTable_->columnWidth(i);
+  size.setWidth(width);
+  int height = 0;
+  for (int i=0; i<momentsEstimationsTable_->rowCount(); ++i)
+    height += momentsEstimationsTable_->rowHeight(i);
+  size.setHeight(height);
+  momentsEstimationsTable_->setMinimumSize(size);
+  momentsEstimationsTable_->setMaximumSize(size);
+  momentsEstimationsTable_->updateGeometry();
 
   // quantiles
   quantileSpinBox_->setMinimum(min);

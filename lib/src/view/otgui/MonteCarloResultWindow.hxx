@@ -62,14 +62,10 @@ private:
   GraphConfigurationWidget * scatterPlotsConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
-  QLabel * meanLabel_;
-  QLabel * stdLabel_;
-  QLabel * skewnessLabel_;
-  QLabel * kurtosisLabel_;
+  QTableWidget * minMaxTable_;
+  QTableWidget * momentsEstimationsTable_;
   QLabel * minLabel_;
   QLabel * maxLabel_;
-  QLabel * firstQuartileLabel_;
-  QLabel * thirdQuartileLabel_;
   QDoubleSpinBox * probaSpinBox_;
   QDoubleSpinBox * quantileSpinBox_;
 };
