@@ -134,6 +134,12 @@ Event LimitState::getEvent()
 }
 
 
+NumericalMathFunction LimitState::getFunction()
+{
+  return getImplementation()->getFunction();
+}
+
+
 String LimitState::getPythonScript() const
 {
   return getImplementation()->getPythonScript();

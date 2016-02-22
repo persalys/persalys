@@ -56,6 +56,7 @@ public:
   void setThreshold(const double & threshold);
 
   OT::Event getEvent();
+  OT::NumericalMathFunction getFunction();
 
   OT::String getPythonScript() const;
 
@@ -67,6 +68,7 @@ public:
 
 private:
   PhysicalModel physicalModel_;
+  OT::NumericalMathFunction function_;
   OT::String outputName_;
   OT::ComparisonOperator operator_;
   double threshold_;

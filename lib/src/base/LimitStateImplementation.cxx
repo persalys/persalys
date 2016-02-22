@@ -57,6 +57,7 @@ LimitStateImplementation::LimitStateImplementation(const String & name, const Ph
     setOutputName(physicalModel.getOutputs()[0].getName());
   else
     setOutputName(outputName);
+  function_ = physicalModel_.getFunction(outputName_);
   setOperator(comparisonOperator);
 }
 
@@ -130,11 +131,17 @@ Event LimitStateImplementation::getEvent()
 {
   Description outputDescription(1);
   outputDescription[0] = outputName_;
-  Event event(getPhysicalModel().getOutputRandomVector(outputDescription), operator_, threshold_);
+  Event event(RandomVector(function_, physicalModel_.getInputRandomVector()), operator_, threshold_);
   Description outputName(1);
   outputName[0] = outputName_;
   event.setDescription(outputName);
   return event;
+}
+
+
+NumericalMathFunction LimitStateImplementation::getFunction()
+{
+  return function_;
 }
 
 
