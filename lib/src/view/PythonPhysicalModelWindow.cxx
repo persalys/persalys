@@ -22,9 +22,11 @@
 
 #include "otgui/CodeDelegate.hxx"
 #include "otgui/PhysicalModelWindowWidget.hxx"
+#include "otgui/PythonPhysicalModel.hxx"
 
 #include <QHBoxLayout>
 #include <QHeaderView>
+#include <QTimer>
 
 using namespace OT;
 
@@ -71,6 +73,62 @@ void PythonPhysicalModelWindow::updateCodeModel()
   if (codeModel_)
     delete codeModel_;
   codeModel_ = new CodeModel(physicalModel_);
+  connect(codeModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(parseVariables()));
   codeView_->setModel(codeModel_);
+
+//   QTimer *timer = new QTimer(this);
+//   connect(timer, SIGNAL(timeout()), this, SLOT(parseVariables()));
+//   timer->start(1000);
 }
+
+
+void PythonPhysicalModelWindow::parseVariables()
+{
+  QString code = QString::fromStdString(dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get())->getCode());
+  QStringList lines = code.split("\n");
+  Description inputVariables;
+  Description outputVariables;
+
+  foreach (QString line, lines)
+  {
+    QRegExp inputVariableAssign("([_a-zA-Z][_a-zA-Z0-9]*)[ ]*=[ ]*X\\[[ ]*\\d+[ ]*\\]");
+    if (inputVariableAssign.indexIn(line, 4) > 0)
+    {
+      inputVariables.add(inputVariableAssign.cap(1).toStdString());
+    }
+
+    QRegExp returnOutput("return[ ]+\\[([_a-zA-Z0-9, ]+)\\]");
+    if (returnOutput.indexIn(line, 4) > 0)
+    {
+      QString outputList = returnOutput.cap(1);
+      QRegExp outputVariable("([_a-zA-Z][_a-zA-Z0-9]*)");
+      int pos = 0;
+      while ((pos = outputVariable.indexIn(outputList, pos)) != -1)
+      {
+        outputVariables.add(outputVariable.cap(1).toStdString());
+        pos += outputVariable.matchedLength();
+      }
+    }
+  }
+
+  Description existingInputVariables(physicalModel_.getInputNames());
+  for(unsigned int i = 0; i < inputVariables.getSize(); ++ i)
+  {
+    if (!existingInputVariables.__contains__(inputVariables[i]))
+    {
+      physicalModel_.addInput(Input(inputVariables[i]));
+    }
+  }
+
+  Description existingOutputVariables(physicalModel_.getOutputNames());
+  for(unsigned int i = 0; i < outputVariables.getSize(); ++ i)
+  {
+    if (!existingOutputVariables.__contains__(outputVariables[i]))
+    {
+      physicalModel_.addOutput(Output(outputVariables[i]));
+    }
+  }
+}
+
+
 }

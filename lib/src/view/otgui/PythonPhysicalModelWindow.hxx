@@ -40,6 +40,9 @@ public :
 public slots:
   void updateCodeModel();
 
+private slots:
+  void parseVariables();
+
 private:
   PhysicalModel physicalModel_;
   CodeModel * codeModel_;

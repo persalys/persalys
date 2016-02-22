@@ -32,12 +32,6 @@ CodeModel::CodeModel(const PhysicalModel & physicalModel)
 {
 }
 
-
-CodeModel::~CodeModel()
-{
-}
-
-
 int CodeModel::columnCount(const QModelIndex & parent) const
 {
   return 1;
@@ -70,7 +64,7 @@ bool CodeModel::setData(const QModelIndex & index, const QVariant & value, int r
 
   if (role == Qt::EditRole)
   {
-    physicalModel_.blockNotification(true, "codeChanged");
+    physicalModel_.blockNotification(true);
     dynamic_cast<PythonPhysicalModel*>(&*physicalModel_.getImplementation().get())->setCode(value.toString().toStdString());
     physicalModel_.blockNotification(false);
     emit dataChanged(index, index);
