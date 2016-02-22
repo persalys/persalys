@@ -225,7 +225,7 @@ void PlotWidget::plotCDFCurve(const Distribution & distribution, const QPen pen)
 // graphType = 0 -> PDF
 // graphType = 1 -> CDF
 // graphType = 2 -> other
-void PlotWidget::plotHistogram(const NumericalSample & sample, const UnsignedInteger graphType, int barNumber)
+void PlotWidget::plotHistogram(const NumericalSample & sample, const UnsignedInteger graphType, int barNumber, QString title)
 {
   if (graphType > 2)
     throw InvalidArgumentException(HERE) << "Type of graph not known " << graphType;
@@ -285,6 +285,7 @@ void PlotWidget::plotHistogram(const NumericalSample & sample, const UnsignedInt
   }
 
   histogram->setData(new QwtIntervalSeriesData(samples));
+  histogram->setTitle(title);
 
   // draw
   histogram->attach(this);
