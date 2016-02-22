@@ -162,7 +162,7 @@ void PlotWidget::plotCurve(double * x, double * y, int size, const QPen pen, Qwt
 }
 
 
-void PlotWidget::plotCurve(const NumericalSample & data, const QPen pen)
+void PlotWidget::plotCurve(const NumericalSample & data, const QPen pen, QwtPlotCurve::CurveStyle style, QwtSymbol* symbol, QString title)
 {
   const int size = data.getSize();
   double * x = new double[size];
@@ -173,7 +173,7 @@ void PlotWidget::plotCurve(const NumericalSample & data, const QPen pen)
     x[i] = data[i][0];
     y[i] = data[i][1];
   }
-  plotCurve(x, y, size, pen);
+  plotCurve(x, y, size, pen, style, symbol, title);
   delete[] x;
   delete[] y;
 }
@@ -243,7 +243,8 @@ void PlotWidget::plotHistogram(const NumericalSample & sample, bool cdf, int bar
     int index = static_cast< int >((sample[i][0] - sampleMin) / width);
     // x=xmax -> index=barnumber, so bound it
     index = std::min(index, barNumber-1);
-    ++ histogramData[index];
+    if (!(index > barNumber || index < 0))
+      ++ histogramData[index];
   }
   double inverseArea = 1. / (size*width);
   for (int i=0; i<barNumber; ++i)

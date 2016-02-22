@@ -44,7 +44,8 @@ public:
   /// plot a curve
   void plotCurve(double * x, double * y, int size, const QPen pen=QPen(Qt::black, 2),
                  QwtPlotCurve::CurveStyle style=QwtPlotCurve::Lines, QwtSymbol* symbol=0, QString title="");
-  void plotCurve(const OT::NumericalSample & data, const QPen pen=QPen(Qt::black, 2));
+  void plotCurve(const OT::NumericalSample & data, const QPen pen=QPen(Qt::black, 2),
+                 QwtPlotCurve::CurveStyle style=QwtPlotCurve::Lines, QwtSymbol* symbol=0, QString title="");
 
   void plotPDFCurve(const OT::Distribution & distribution, const QPen pen=QPen(Qt::black, 2));
   void plotCDFCurve(const OT::Distribution & distribution, const QPen pen=QPen(Qt::black, 2));
