@@ -23,7 +23,8 @@
 
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/AnalysisItem.hxx"
-#include "SimulationResult.hxx"
+#include "otgui/MonteCarloReliabilityAnalysisResult.hxx"
+#include "otgui/GraphConfigurationWidget.hxx"
 
 namespace OTGUI {
 class MonteCarloReliabilityResultWindow : public OTguiSubWindow
@@ -36,8 +37,15 @@ public:
 protected:
   void buildInterface();
 
+public slots:
+  void showHideGraphConfigurationWidget(int indexTab);
+  void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+
 private:
-  OT::SimulationResult result_;
+  MonteCarloReliabilityAnalysisResult result_;
+  QTabWidget * tabWidget_;
+  GraphConfigurationWidget * histogramConfigurationWidget_;
+  GraphConfigurationWidget * convergenceGraphConfigurationWidget_;
 };
 }
 #endif

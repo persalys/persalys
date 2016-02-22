@@ -66,6 +66,9 @@ MonteCarloReliabilityAnalysis* MonteCarloReliabilityAnalysis::clone() const
 void MonteCarloReliabilityAnalysis::run()
 {
   RandomGenerator::SetSeed(getSeed());
+
+  getLimitState().getFunction().enableHistory();
+
   MonteCarlo algo = MonteCarlo(getLimitState().getEvent());
   algo.setMaximumOuterSampling(maximumOuterSampling_);
   algo.setMaximumCoefficientOfVariation(maximumCoefficientOfVariation_);
@@ -73,7 +76,14 @@ void MonteCarloReliabilityAnalysis::run()
   algo.run();
 
   // set results
-  result_ = algo.getResult();
+  // get convergence graph at level 0.95
+  Graph graph = algo.drawProbabilityConvergence();
+  result_ = MonteCarloReliabilityAnalysisResult(algo.getResult(),
+                                                getLimitState().getFunction().getHistoryOutput().getSample(),
+                                                graph.getDrawables()[0].getData(),
+                                                graph.getDrawables()[1].getData(),
+                                                graph.getDrawables()[2].getData());
+  getLimitState().getFunction().disableHistory();
 
   notify("analysisFinished");
 }
@@ -127,7 +137,7 @@ void MonteCarloReliabilityAnalysis::setSeed(const UnsignedInteger seed)
 }
 
 
-SimulationResult MonteCarloReliabilityAnalysis::getResult() const
+MonteCarloReliabilityAnalysisResult MonteCarloReliabilityAnalysis::getResult() const
 {
   return result_;
 }
@@ -148,7 +158,7 @@ String MonteCarloReliabilityAnalysis::getPythonScript() const
 
 bool MonteCarloReliabilityAnalysis::analysisLaunched() const
 {
-  return getResult().getOuterSampling() != 0;
+  return getResult().getSimulationResult().getOuterSampling() != 0;
 }
 
 

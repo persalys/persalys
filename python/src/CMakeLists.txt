@@ -80,6 +80,7 @@ ot_add_python_module( otguibase otguibase_module.i
                       SRCAnalysis.i SRCAnalysis_doc.i.in
                       ReliabilityAnalysis.i
                       MonteCarloReliabilityAnalysis.i MonteCarloReliabilityAnalysis_doc.i.in
+                      MonteCarloReliabilityAnalysisResult.i
                       OTStudy.i OTStudy_doc.i.in
                     )
 
