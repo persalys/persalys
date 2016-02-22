@@ -181,7 +181,7 @@ void MonteCarloResultWindow::buildInterface()
   momentsEstimationsTable_->horizontalHeader()->hide();
 
   // vertical header
-  item = new QTableWidgetItem("Estimators");
+  item = new QTableWidgetItem("Estimate");
   item->setFlags(item->flags() ^ Qt::ItemIsEditable);
   item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
   item->setTextAlignment(Qt::AlignCenter);
@@ -294,7 +294,7 @@ void MonteCarloResultWindow::buildInterface()
     listPlotWidgets.append(plot);
 
     plot = new PlotWidget;
-    plot->plotHistogram(result_.getOutputSample().getMarginal(i), true);
+    plot->plotHistogram(result_.getOutputSample().getMarginal(i), 1);
     plot->plotCDFCurve(result_.getFittedDistribution()[i]);
     plot->setTitle(tr("CDF: ") + outputs[i].getName().c_str());
     if (outputs[i].getDescription().size())

@@ -222,8 +222,14 @@ void PlotWidget::plotCDFCurve(const Distribution & distribution, const QPen pen)
 }
 
 
-void PlotWidget::plotHistogram(const NumericalSample & sample, bool cdf, int barNumber)
+// graphType = 0 -> PDF
+// graphType = 1 -> CDF
+// graphType = 2 -> other
+void PlotWidget::plotHistogram(const NumericalSample & sample, const UnsignedInteger graphType, int barNumber)
 {
+  if (graphType > 2)
+    throw InvalidArgumentException(HERE) << "Type of graph not known " << graphType;
+
   const int size = (int)sample.getSize();
 
   // compute bar number
@@ -246,13 +252,18 @@ void PlotWidget::plotHistogram(const NumericalSample & sample, bool cdf, int bar
     if (!(index > barNumber || index < 0))
       ++ histogramData[index];
   }
-  double inverseArea = 1. / (size*width);
-  for (int i=0; i<barNumber; ++i)
-    histogramData[i] *= inverseArea;
+
+  // if PDF or CDF
+  if (graphType < 2)
+  {
+    double inverseArea = 1. / (size*width);
+    for (int i=0; i<barNumber; ++i)
+      histogramData[i] *= inverseArea;
+  }
 
   //  if CDF
   double sum = 1.;
-  if (cdf)
+  if (graphType == 1)
   {
     sum = histogramData[0];
     for (int i=1; i<barNumber; i++)
