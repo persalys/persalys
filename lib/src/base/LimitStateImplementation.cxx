@@ -176,5 +176,6 @@ void LimitStateImplementation::load(Advocate & adv)
   adv.loadAttribute("outputName_", outputName_);
   adv.loadAttribute("operator_", operator_);
   adv.loadAttribute("threshold_", threshold_);
+  function_ = physicalModel_.getFunction(outputName_);
 }
 }
