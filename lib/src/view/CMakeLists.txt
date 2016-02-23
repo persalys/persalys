@@ -14,6 +14,7 @@ ot_add_source_file ( OTguiMdiArea.cxx )
 ot_add_source_file ( ComboBoxDelegate.cxx )
 ot_add_source_file ( SpinBoxDelegate.cxx )
 ot_add_source_file ( LineEditWithQValidatorDelegate.cxx )
+ot_add_source_file ( CustomDoubleValidator.cxx )
 ot_add_source_file ( ImportTablePage.cxx )
 ot_add_source_file ( HorizontalHeaderViewWithCombobox.cxx )
 ot_add_source_file ( DeterministicDesignPage.cxx )
@@ -51,6 +52,7 @@ ot_install_header_file ( OTguiMdiArea.hxx )
 ot_install_header_file ( ComboBoxDelegate.hxx )
 ot_install_header_file ( SpinBoxDelegate.hxx )
 ot_install_header_file ( LineEditWithQValidatorDelegate.hxx )
+ot_install_header_file ( CustomDoubleValidator.hxx )
 ot_install_header_file ( ModelEvaluationWizard.hxx )
 ot_install_header_file ( CentralTendencyWizard.hxx )
 ot_install_header_file ( SensitivityAnalysisWizard.hxx )
@@ -89,6 +91,7 @@ qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                    otgui/ComboBoxDelegate.hxx
                                    otgui/SpinBoxDelegate.hxx
                                    otgui/LineEditWithQValidatorDelegate.hxx
+                                   otgui/CustomDoubleValidator.hxx
                                    otgui/ImportTablePage.hxx
                                    otgui/StudyTreeView.hxx
                                    otgui/OTguiTableView.hxx
