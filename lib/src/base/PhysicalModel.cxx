@@ -127,6 +127,12 @@ void PhysicalModel::setInputDistribution(const String & inputName, const Distrib
 }
 
 
+void PhysicalModel::setInputDistributionParametersType(const String & inputName, const UnsignedInteger & distributionParametersType)
+{
+  getImplementation()->setInputDistributionParametersType(inputName, distributionParametersType);
+}
+
+
 void PhysicalModel::addInput(const Input & input)
 {
   getImplementation()->addInput(input);

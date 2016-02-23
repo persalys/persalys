@@ -143,6 +143,12 @@ void PhysicalModelImplementation::setInputDistribution(const String & inputName,
 }
 
 
+void PhysicalModelImplementation::setInputDistributionParametersType(const OT::String & inputName, const OT::UnsignedInteger & distributionParametersType)
+{
+  getInputByName(inputName).setDistributionParametersType(distributionParametersType);
+}
+
+
 void PhysicalModelImplementation::addInput(const Input & input)
 {
   if (hasInputNamed(input.getName()))

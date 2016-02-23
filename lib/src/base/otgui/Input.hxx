@@ -46,6 +46,9 @@ public:
   OT::Distribution getDistribution() const;
   void setDistribution(const OT::Distribution & distribution);
 
+  OT::UnsignedInteger getDistributionParametersType() const;
+  void setDistributionParametersType(const OT::UnsignedInteger & distributionParametersType);
+
   bool isStochastic() const;
 
   OT::String getDistributionPythonScript() const;
@@ -59,6 +62,7 @@ public:
 
 private:
   OT::Distribution distribution_;
+  OT::UnsignedInteger distributionParametersType_;
 };
 typedef OT::Collection<Input> InputCollection;
 }

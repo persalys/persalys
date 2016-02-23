@@ -49,6 +49,7 @@ public:
   void setInputDescription(const OT::String & inputName, const OT::String & description);
   void setInputValue(const OT::String & inputName, const double & value);
   void setInputDistribution(const OT::String & inputName, const OT::Distribution & distribution);
+  void setInputDistributionParametersType(const OT::String & inputName, const OT::UnsignedInteger & distributionParametersType);
   virtual void addInput(const Input & input);
   virtual void removeInput(const OT::String & inputName);
   OT::Description getInputNames();

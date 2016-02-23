@@ -34,6 +34,7 @@ static Factory<Input> RegisteredFactory("Input");
 /* Default constructor */
 Input::Input()
   : Variable()
+  , distributionParametersType_(0)
 {
 }
 
@@ -43,6 +44,7 @@ Input::Input(const String & name, const double & value, const String & descripti
              const Distribution & distribution)
   : Variable(name, value, description)
   , distribution_(distribution)
+  , distributionParametersType_(0)
 {
 }
 
@@ -71,6 +73,18 @@ Distribution Input::getDistribution() const
 void Input::setDistribution(const Distribution & distribution)
 {
   distribution_ = distribution;
+}
+
+
+UnsignedInteger Input::getDistributionParametersType() const
+{
+  return distributionParametersType_;
+}
+
+
+void Input::setDistributionParametersType(const UnsignedInteger & distributionParametersType)
+{
+  distributionParametersType_ = distributionParametersType;
 }
 
 
@@ -151,6 +165,7 @@ void Input::save(Advocate & adv) const
 {
   Variable::save(adv);
   adv.saveAttribute("distribution_", distribution_);
+  adv.saveAttribute("distributionParametersType_", distributionParametersType_);
 }
 
 
@@ -159,5 +174,6 @@ void Input::load(Advocate & adv)
 {
   Variable::load(adv);
   adv.loadAttribute("distribution_", distribution_);
+  adv.loadAttribute("distributionParametersType_", distributionParametersType_);
 }
 }
