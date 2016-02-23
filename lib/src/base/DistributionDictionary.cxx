@@ -27,9 +27,13 @@
 #include "Exponential.hxx"
 #include "InverseNormal.hxx"
 #include "GammaMuSigma.hxx"
+#include "Gumbel.hxx"
+#include "GumbelAB.hxx"
 #include "GumbelMuSigma.hxx"
 #include "Laplace.hxx"
+#include "LogNormal.hxx"
 #include "LogNormalMuSigma.hxx"
+#include "LogNormalMuSigmaOverMu.hxx"
 #include "Logistic.hxx"
 #include "LogUniform.hxx"
 #include "Normal.hxx"
@@ -38,6 +42,7 @@
 #include "Trapezoidal.hxx"
 #include "Triangular.hxx"
 #include "Uniform.hxx"
+#include "Weibull.hxx"
 #include "WeibullMuSigma.hxx"
 
 using namespace OT;
@@ -170,6 +175,71 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
   {
     std::cerr << "Error when creating the distribution " << distributionName << std::endl;
     throw InvalidArgumentException(HERE) << ex.what();
+  }
+}
+
+
+/* Get the parameters collection */
+Distribution::NumericalPointWithDescriptionCollection DistributionDictionary::GetParametersCollection(const Distribution & distribution)
+{
+  String distributionName = distribution.getImplementation()->getClassName();
+  Distribution::NumericalPointWithDescriptionCollection desc = distribution.getParametersCollection();
+
+  if (distributionName == "Gumbel")
+  {
+    Gumbel d = *dynamic_cast<Gumbel*>(&*distribution.getImplementation());
+    desc.add(GumbelAB(d.getA(), d.getB()).getParametersCollection());
+    desc.add(GumbelMuSigma(d.getMu(), d.getSigma()).getParametersCollection());
+  }
+  else if (distributionName == "LogNormal")
+  {
+    LogNormal d = *dynamic_cast<LogNormal*>(&*distribution.getImplementation());
+    desc.add(LogNormalMuSigma(d.getMu(), d.getSigma(), d.getGamma()).getParametersCollection());
+    desc.add(LogNormalMuSigmaOverMu(d.getMu(), d.getSigmaOverMu(), d.getGamma()).getParametersCollection());
+  }
+  else if (distributionName == "Weibull")
+  {
+    Weibull d = *dynamic_cast<Weibull*>(&*distribution.getImplementation());
+    desc.add(WeibullMuSigma(d.getMu(), d.getSigma(), d.getGamma()).getParametersCollection());
+  }
+  return desc;
+}
+
+
+/* Update de distribution */
+void DistributionDictionary::UpdateDistribution(Distribution & distribution,
+                                                const NumericalPointWithDescription & description,
+                                                UnsignedInteger parametersType)
+{
+  String distributionName = distribution.getImplementation()->getClassName();
+
+  if (parametersType == 0)
+    distribution.setParametersCollection(description);
+  else
+  {
+    if (distributionName == "Gumbel")
+    {
+      Gumbel * d = static_cast<Gumbel*>(&*distribution.getImplementation());
+      if (parametersType == 1)
+        d->setAB(description[0], description[1]);
+      else if (parametersType == 2)
+        d->setMuSigma(description[0], description[1]);
+    }
+    else if (distributionName == "LogNormal")
+    {
+      LogNormal * d = static_cast<LogNormal*>(&*distribution.getImplementation());
+      d->setGamma(description[2]);
+      if (parametersType == 1)
+        d->setMuSigma(description[0], description[1]);
+      else if (parametersType == 2)
+        d->setMuSigma(description[0], description[1]*description[0]);
+    }
+    else if (distributionName == "Weibull")
+    {
+      Weibull * d = static_cast<Weibull*>(&*distribution.getImplementation());
+      d->setGamma(description[2]);
+      d->setMuSigma(description[0], description[1]);
+    }
   }
 }
 
