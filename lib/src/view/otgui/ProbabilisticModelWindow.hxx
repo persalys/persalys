@@ -53,6 +53,7 @@ protected:
 public slots:
   void updateDistributionWidgets(const QModelIndex & index);
   void updateDistributionParameters();
+  void updateTypeDistributionParameters(int);
   void updatePhysicalModel(const PhysicalModel &);
   void updateProbabilisticModel();
   void updateCorrelationTable();
@@ -75,6 +76,7 @@ private:
   GraphConfigurationWidget * pdf_cdfPlotsConfigurationWidget_;
   QGroupBox * paramEditor_;
   QVBoxLayout * parameterLayout_;
+  QComboBox * selectParametersTypeCombo_;
   QLabel * parameterValuesLabel_[5];
   QLineEdit * parameterValuesEdit_[5];
   QGroupBox * advancedGroup_;

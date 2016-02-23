@@ -139,6 +139,7 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
     // update the input
     physicalModel_.blockNotification(true);
     physicalModel_.setInputDistribution(input.getName(), distribution);
+    physicalModel_.setInputDistributionParametersType(input.getName(), 0);
     physicalModel_.blockNotification(false);
     emit dataChanged(index, this->index(index.row(), 1));
     emit correlationToChange();
@@ -171,6 +172,7 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
       // update the input
       physicalModel_.blockNotification(true);
       physicalModel_.setInputDistribution(input.getName(), distribution);
+      physicalModel_.setInputDistributionParametersType(input.getName(), 0);
       physicalModel_.blockNotification(false);
       emit distributionChanged(index);
       return true;

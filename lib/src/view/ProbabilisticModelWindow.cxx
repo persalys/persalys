@@ -25,6 +25,7 @@
 #include "otgui/InputTableProbabilisticModel.hxx"
 #include "otgui/DistributionDictionary.hxx"
 #include "otgui/CorrelationTableModel.hxx"
+#include "otgui/CustomDoubleValidator.hxx"
 
 #include "Normal.hxx"
 #include "TruncatedDistribution.hxx"
@@ -320,8 +321,9 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   rightSideOfSplitterStackedLayout_->setCurrentIndex(2);
   advancedGroup_->setChecked(false);
 
-  const NumericalPointWithDescription parameters = inputDistribution.getParametersCollection()[0];
-  UnsignedInteger nbParameters = parameters.getSize();
+  Distribution::NumericalPointWithDescriptionCollection parameters = DistributionDictionary::GetParametersCollection(inputDistribution);
+  UnsignedInteger parametersType = input.getDistributionParametersType();
+  UnsignedInteger nbParameters = parameters[parametersType].getSize();
 
   lowerBoundCheckBox_->blockSignals(true);
   upperBoundCheckBox_->blockSignals(true);
@@ -355,7 +357,8 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
     }
     advancedGroup_->setChecked(true);
 
-    nbParameters = dist->getDistribution().getParametersCollection()[0].getSize();
+    parameters = DistributionDictionary::GetParametersCollection(dist->getDistribution().getImplementation());
+    nbParameters = parameters[parametersType].getSize();
   }
   else if (distributionName == "TruncatedNormal")
   {
@@ -381,20 +384,37 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   {
     if (nbParameters >= 5)
       std::cout << "Number of parameters invalid :"<<nbParameters<<std::endl;
-  
-    Description parametersName = parameters.getDescription();
 
     paramEditor_ = new QGroupBox(tr("Parameters"));
     QGridLayout * lay = new QGridLayout(paramEditor_);
+    QLabel * label = new QLabel(tr("Type"));
+    lay->addWidget(label, 0, 0);
+    selectParametersTypeCombo_ = new QComboBox;
+    for (UnsignedInteger i=0; i<parameters.getSize(); ++i)
+    {
+      QStringList paramatersNamesList;
+      for (UnsignedInteger j=0; j<parameters[i].getDescription().getSize(); ++j)
+      {
+        paramatersNamesList << parameters[i].getDescription()[j].c_str();
+      }
+      selectParametersTypeCombo_->addItem(paramatersNamesList.join(", "));
+    }
+    selectParametersTypeCombo_->setCurrentIndex(parametersType);
+    connect(selectParametersTypeCombo_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeDistributionParameters(int)));
+    lay->addWidget(selectParametersTypeCombo_, 0, 1);
+      
+    Description parametersName = parameters[parametersType].getDescription();
     for (UnsignedInteger i=0; i<nbParameters; ++i)
     {
       parameterValuesLabel_[i] = new QLabel(parametersName[i].c_str());
-      parameterValuesEdit_[i] = new QLineEdit(QString::number(parameters[i]));
+      parameterValuesEdit_[i] = new QLineEdit(QString::number(parameters[parametersType][i]));
+      parameterValuesEdit_[i]->setValidator(new CustomDoubleValidator);
       connect(parameterValuesEdit_[i], SIGNAL(editingFinished()), this, SLOT(updateDistributionParameters()));
       parameterValuesLabel_[i]->setBuddy(parameterValuesEdit_[i]);
-      lay->addWidget(parameterValuesLabel_[i], i, 0);
-      lay->addWidget(parameterValuesEdit_[i], i, 1);
+      lay->addWidget(parameterValuesLabel_[i], i+1, 0);
+      lay->addWidget(parameterValuesEdit_[i], i+1, 1);
     }
+
     parameterLayout_->insertWidget(0, paramEditor_);
   }
 
@@ -453,22 +473,31 @@ void ProbabilisticModelWindow::updateDistributionParameters()
   Input input = physicalModel_.getInputs()[inputTableView_->currentIndex().row()];
   Distribution inputDistribution = input.getDistribution();
   String distributionName = inputDistribution.getImplementation()->getClassName();
+  UnsignedInteger parametersType = input.getDistributionParametersType();
 
   if (distributionName == "TruncatedDistribution")
   {
     TruncatedDistribution truncatedDistribution = *dynamic_cast<TruncatedDistribution*>(&*inputDistribution.getImplementation());
     Distribution distribution = truncatedDistribution.getDistribution();
-    UnsignedInteger nbParameters = distribution.getParametersCollection()[0].getSize();
-    NumericalPoint newParameters(nbParameters);
-    for (UnsignedInteger i=0; i<nbParameters; ++i)
-      newParameters[i] = parameterValuesEdit_[i]->text().toDouble();
-
-    if (newParameters == inputDistribution.getParametersCollection()[0])
-      return;
-
+    NumericalPointWithDescription parameters = DistributionDictionary::GetParametersCollection(distribution)[parametersType];
     try
     {
-      distribution.setParametersCollection(newParameters);
+      for (UnsignedInteger i=0; i<parameters.getSize(); ++i)
+      {
+        QString value = parameterValuesEdit_[i]->text();
+        if (value[0].toLower() == 'e' || value.isEmpty() || value.toLower() == "e" || value == "-")
+          throw InvalidArgumentException(HERE) << "The value " << value.toStdString() << " is invalid";
+        bool ok;
+        parameters[i] = value.toDouble(&ok);
+        if (!ok)
+          throw InvalidArgumentException(HERE) << "The value " << value.toStdString() << " is invalid";
+      }
+
+      if (parameters == DistributionDictionary::GetParametersCollection(distribution)[parametersType])
+        return;
+
+
+      DistributionDictionary::UpdateDistribution(distribution, parameters, parametersType);
       truncatedDistribution.setDistribution(distribution);
       physicalModel_.blockNotification(true);
       physicalModel_.setInputDistribution(input.getName(), truncatedDistribution);
@@ -477,27 +506,35 @@ void ProbabilisticModelWindow::updateDistributionParameters()
     }
     catch(std::exception & ex)
     {
-      std::cerr << "ProbabilisticModelWindow::updateDistribution invalid parameters:"<<newParameters<<" for distribution:"<<distributionName<<std::endl;
+      std::cerr << "ProbabilisticModelWindow::updateDistribution invalid parameters:"<<parameters<<" for distribution:"<<distributionName<<std::endl;
       updateDistributionWidgets(index);
       setErrorMessage(ex.what());
     }
   }
   else
   {
-    NumericalPointWithDescription parameters = inputDistribution.getParametersCollection()[0];
+    NumericalPointWithDescription parameters = DistributionDictionary::GetParametersCollection(inputDistribution)[parametersType];
     UnsignedInteger nbParameters = parameters.getSize();
     if (distributionName == "TruncatedNormal")
       nbParameters = 2;
 
-    for (UnsignedInteger i=0; i<nbParameters; ++i)
-      parameters[i] = parameterValuesEdit_[i]->text().toDouble();
-
-    if (parameters == inputDistribution.getParametersCollection()[0])
-      return;
-
     try
     {
-      inputDistribution.setParametersCollection(parameters);
+      for (UnsignedInteger i=0; i<nbParameters; ++i)
+      {
+        QString value = parameterValuesEdit_[i]->text();
+        if (value[0].toLower() == 'e' || value.isEmpty() || value.toLower() == "e" || value == "-")
+          throw InvalidArgumentException(HERE) << "The value " << value.toStdString() << " is invalid";
+        bool ok;
+        parameters[i] = value.toDouble(&ok);
+        if (!ok)
+          throw InvalidArgumentException(HERE) << "The value " << value.toStdString() << " is invalid";
+      }
+
+      if (parameters == DistributionDictionary::GetParametersCollection(inputDistribution)[parametersType])
+        return;
+
+      DistributionDictionary::UpdateDistribution(inputDistribution, parameters, parametersType);
       physicalModel_.blockNotification(true);
       physicalModel_.setInputDistribution(input.getName(), inputDistribution);
       physicalModel_.blockNotification(false);
@@ -510,6 +547,15 @@ void ProbabilisticModelWindow::updateDistributionParameters()
       setErrorMessage(ex.what());
     }
   }
+}
+
+
+void ProbabilisticModelWindow::updateTypeDistributionParameters(int comboIndex)
+{
+  QModelIndex index = inputTableView_->currentIndex();
+  Input input = physicalModel_.getInputs()[inputTableView_->currentIndex().row()];
+  physicalModel_.setInputDistributionParametersType(input.getName(), comboIndex);
+  updateDistributionWidgets(index);
 }
 
 
