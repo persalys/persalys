@@ -64,7 +64,7 @@ void PhysicalModelWindowWidget::buildInterface()
   inputTableView_->setItemDelegateForColumn(0, delegate);
   inputsLayout->addWidget(inputTableView_);
 
-  if (physicalModel_.getImplementation()->getClassName() != "YACSPhysicalModel")
+  if (physicalModel_.getImplementation()->getClassName() == "AnalyticalPhysicalModel")
   {
     addInputLineButton_ = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
     addInputLineButton_->setToolTip(tr("Add an input"));
@@ -96,7 +96,7 @@ void PhysicalModelWindowWidget::buildInterface()
   QHBoxLayout * outputButtonsLayout = new QHBoxLayout;
   outputButtonsLayout->addStretch();
 
-  if (physicalModel_.getImplementation()->getClassName() != "YACSPhysicalModel")
+  if (physicalModel_.getImplementation()->getClassName() == "AnalyticalPhysicalModel")
   {
     addOutputLineButton_ = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
     addOutputLineButton_->setToolTip(tr("Add an output"));
