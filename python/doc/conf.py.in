@@ -27,10 +27,25 @@ sys.path.insert(0, '@OPENTURNS_PYTHON_MODULE_PATH@')
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.pngmath']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest']
 
 extensions.append('sphinx.ext.autosummary')
 autosummary_generate = True
+
+try:
+    import sphinx.ext.imgmath
+    extensions.append('sphinx.ext.imgmath')
+    imgmath_latex_preamble = "\usepackage{%smath_notations}" % (
+        os.path.dirname(__file__) + os.sep)
+    imgmath_use_preview = True
+except ImportError:
+    extensions.append('sphinx.ext.pngmath')
+    pngmath_latex_preamble = "\usepackage{%smath_notations}" % (
+        os.path.dirname(__file__) + os.sep)
+    # The next option is used for smart-alignment of math images on the text.
+    # It only works when the preview-latex package is installed.
+    # See http://sphinx-doc.org/latest/ext/math.html#confval-pngmath_use_preview
+    pngmath_use_preview = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
