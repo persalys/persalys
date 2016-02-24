@@ -68,6 +68,7 @@ void MonteCarloReliabilityAnalysis::run()
   RandomGenerator::SetSeed(getSeed());
 
   getLimitState().getFunction().enableHistory();
+  getLimitState().getFunction().clearHistory();
 
   MonteCarlo algo = MonteCarlo(getLimitState().getEvent());
   algo.setMaximumOuterSampling(maximumOuterSampling_);
