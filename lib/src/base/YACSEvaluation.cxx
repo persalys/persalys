@@ -52,24 +52,22 @@ YACSEvaluation::YACSEvaluation(const String & fileName)
 /* Copy constructor */
 YACSEvaluation::YACSEvaluation(const YACSEvaluation & other)
   : xmlFileName_(other.xmlFileName_)
-  , inputValues_(other.inputValues_)
-  , inDescription_(other.inDescription_)
-  , outDescription_(other.outDescription_)
-  , efx_(other.efx_)
+  , efx_(0)
 {
   if (!session_)
   {
     session_ = new YACSEvalSession;
     session_->launch();
   }
+  if (!xmlFileName_.empty())
+    loadData();
 }
 
 
 /* Virtual constructor */
 YACSEvaluation* YACSEvaluation::clone() const
 {
-  YACSEvaluation * result = new YACSEvaluation(*this);
-  return result;
+  return new YACSEvaluation(*this);
 }
 
 
@@ -279,5 +277,7 @@ void YACSEvaluation::load(Advocate & adv)
 {
   NumericalMathEvaluationImplementation::load(adv);
   adv.loadAttribute("xmlFileName_", xmlFileName_);
+  if (!xmlFileName_.empty())
+    loadData();
 }
 }
