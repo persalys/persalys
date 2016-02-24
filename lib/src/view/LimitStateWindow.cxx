@@ -20,13 +20,13 @@
  */
 #include "otgui/LimitStateWindow.hxx"
 
+#include "otgui/CustomDoubleValidator.hxx"
+
 #include "Greater.hxx"
 #include "GreaterOrEqual.hxx"
 #include "LessOrEqual.hxx"
 
 #include <QGridLayout>
-
-#include <limits>
 
 using namespace OT;
 
@@ -65,6 +65,7 @@ void LimitStateWindow::buildInterface()
 
   outputsComboBox_ = new QComboBox;
   updateOutputsList();
+  outputsComboBox_->setSizeAdjustPolicy(QComboBox::AdjustToContents);
   connect(outputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateOutput(int)));
   gridLayout->addWidget(outputsComboBox_, 2, 0);
 
@@ -77,16 +78,18 @@ void LimitStateWindow::buildInterface()
   connect(failureComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateOperator(int)));
   gridLayout->addWidget(failureComboBox_, 2, 1);
 
-  thresholdSpinBox_ = new QDoubleSpinBox;
-  double doubleMax = std::numeric_limits<double>::max();
-  thresholdSpinBox_->setRange(-doubleMax, doubleMax);
-  thresholdSpinBox_->setDecimals(4);
-  thresholdSpinBox_->setSingleStep(0.1);
+  thresholdLineEdit_ = new QLineEdit;
+  thresholdLineEdit_->setValidator(new CustomDoubleValidator);
   updateThresholdWidget();
-  connect(thresholdSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(updateThreshold(double)));
-  gridLayout->addWidget(thresholdSpinBox_, 2, 2);
+  connect(thresholdLineEdit_, SIGNAL(editingFinished()), this, SLOT(updateThreshold()));
+  gridLayout->addWidget(thresholdLineEdit_, 2, 2);
 
-  gridLayout->setRowStretch(3, 2);
+  errorMessageLabel_ = new QLabel;
+  errorMessageLabel_->setWordWrap(true);
+  gridLayout->addWidget(errorMessageLabel_, 3, 0, 1, 3);
+
+  gridLayout->setRowStretch(4, 2);
+
   setWidget(mainWidget);
 }
 
@@ -136,9 +139,9 @@ void LimitStateWindow::updateOperatorWidget()
 
 void LimitStateWindow::updateThresholdWidget()
 {
-  thresholdSpinBox_->blockSignals(true);
-  thresholdSpinBox_->setValue(limitState_.getThreshold());
-  thresholdSpinBox_->blockSignals(false);
+  thresholdLineEdit_->blockSignals(true);
+  thresholdLineEdit_->setText(QString::number(limitState_.getThreshold()));
+  thresholdLineEdit_->blockSignals(false);
 }
 
 
@@ -174,10 +177,26 @@ void LimitStateWindow::updateOperator(int index)
 }
 
 
-void LimitStateWindow::updateThreshold(double value)
+void LimitStateWindow::updateThreshold()
 {
-  limitState_.blockNotification(true);
-  limitState_.setThreshold(value);
-  limitState_.blockNotification(false);
+  try
+  {
+    setErrorMessage("");
+    QString value = thresholdLineEdit_->text();
+    if (value[0].toLower() == 'e' || value.isEmpty() || value.toLower() == "e" || value == "-")
+      throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
+    bool ok;
+    double newThreshold = value.toDouble(&ok);
+    if (!ok)
+      throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
+    limitState_.blockNotification(true);
+    limitState_.setThreshold(newThreshold);
+    limitState_.blockNotification(false);
+  }
+  catch(std::exception & ex)
+  {
+    updateThresholdWidget();
+    setErrorMessage(ex.what());
+  }
 }
 }

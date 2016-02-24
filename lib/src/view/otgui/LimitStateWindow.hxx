@@ -25,7 +25,7 @@
 #include "otgui/LimitStateItem.hxx"
 
 #include <QComboBox>
-#include <QDoubleSpinBox>
+#include <QLineEdit>
 
 namespace OTGUI {
 class LimitStateWindow : public OTguiSubWindow
@@ -47,7 +47,7 @@ public slots:
   void updateThresholdWidget();
   void updateOutput(int);
   void updateOperator(int);
-  void updateThreshold(double);
+  void updateThreshold();
 signals:
   void limitStateChanged(const LimitState & limitState);
 
@@ -56,7 +56,7 @@ private:
 
   QComboBox * outputsComboBox_;
   QComboBox * failureComboBox_;
-  QDoubleSpinBox * thresholdSpinBox_;
+  QLineEdit * thresholdLineEdit_;
 };
 }
 #endif
