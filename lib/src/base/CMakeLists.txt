@@ -5,6 +5,7 @@ include_directories (${PYTHON_INCLUDE_DIRS})
 ot_add_current_dir_to_include_dirs ()
 
 set(BASE_SOURCEFILES DistributionDictionary.cxx
+                     OTguiException.cxx
                      Observer.cxx Observable.cxx OTStudy.cxx Variable.cxx Input.cxx Output.cxx
                      PhysicalModel.cxx PhysicalModelImplementation.cxx AnalyticalPhysicalModel.cxx 
                      PythonPhysicalModel.cxx
@@ -25,6 +26,7 @@ if (SalomeYACS_FOUND)
 endif ()
 
 ot_install_header_file ( DistributionDictionary.hxx )
+ot_install_header_file ( OTguiException.hxx )
 ot_install_header_file ( Variable.hxx )
 ot_install_header_file ( Input.hxx )
 ot_install_header_file ( Output.hxx )
