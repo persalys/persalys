@@ -33,6 +33,7 @@ namespace OTGUI
   CName::~CName () throw() {}
 
 DEFINE_OTGUIEXCEPTION( PhysicalModelNotValidException )
+DEFINE_OTGUIEXCEPTION( AnalysisExecutionFailedException )
 
 #undef DEFINE_OTGUIEXCEPTION
 }

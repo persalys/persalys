@@ -51,6 +51,14 @@ namespace OTGUI {
  */
 NEW_OTGUIEXCEPTION( PhysicalModelNotValidException );
 
+
+/**
+ * @class AnalysisExecutionFailedException
+ * @brief Raised when analysis execution has failed
+ * @internal
+ */
+NEW_OTGUIEXCEPTION( AnalysisExecutionFailedException );
+
 #undef NEW_OTGUIEXCEPTION
 }
 #endif
