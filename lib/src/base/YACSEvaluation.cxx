@@ -51,7 +51,8 @@ YACSEvaluation::YACSEvaluation(const String & fileName)
 
 /* Copy constructor */
 YACSEvaluation::YACSEvaluation(const YACSEvaluation & other)
-  : xmlFileName_(other.xmlFileName_)
+  : NumericalMathEvaluationImplementation(other)
+  , xmlFileName_(other.xmlFileName_)
   , efx_(0)
 {
   if (!session_)
