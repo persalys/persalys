@@ -111,4 +111,17 @@ OTStudyItem* StudyTreeViewModel::getOTStudyItem(const QModelIndex & childIndex)
 
   return static_cast<OTStudyItem*>(itemFromIndex(seekRoot));
 }
+
+
+PhysicalModelItem* StudyTreeViewModel::getPhysicalModelItem(const QModelIndex & childIndex)
+{
+  QModelIndex seekRoot = childIndex;
+  while(seekRoot.parent() != QModelIndex())
+  {
+    seekRoot = seekRoot.parent();
+    if (itemFromIndex(seekRoot)->data(Qt::UserRole).toString() == "PhysicalModel")
+      return static_cast<PhysicalModelItem*>(itemFromIndex(seekRoot));
+  }
+  return 0;
+}
 }

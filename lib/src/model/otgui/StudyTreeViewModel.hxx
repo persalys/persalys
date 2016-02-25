@@ -41,6 +41,7 @@ public:
   void addLimitStateItem(const QModelIndex & parentIndex);
 
   OTStudyItem * getOTStudyItem(const QModelIndex & childIndex);
+  PhysicalModelItem * getPhysicalModelItem(const QModelIndex & childIndex);
 
   virtual void update(Observable * source, const OT::String & message);
 
