@@ -36,13 +36,13 @@ void OTguiMenuBar::buildActions()
   // File menu
   QMenu * fileMenu = new QMenu(tr("&File"));
 
-  QAction * action = new QAction(QIcon(":/images/document-new.png"), tr("&New OTStudy"), this);
+  QAction * action = new QAction(QIcon(":/images/document-new.png"), tr("&New"), this);
   action->setStatusTip(tr("Create a new OTStudy"));
   connect(action, SIGNAL(triggered()), this, SIGNAL(createNewOTStudy()));
   fileMenu->addAction(action);
 
-  action = new QAction(QIcon(":/images/document-open.png"), tr("&Open OTStudy..."), this);
-  action->setStatusTip(tr("Open an OTStudy"));
+  action = new QAction(QIcon(":/images/document-open.png"), tr("&Open..."), this);
+  action->setStatusTip(tr("Open an existing OTStudy"));
   connect(action, SIGNAL(triggered()), this, SIGNAL(openOTStudy()));
   fileMenu->addAction(action);
 
