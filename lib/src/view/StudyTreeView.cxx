@@ -129,6 +129,11 @@ void StudyTreeView::buildActions()
   newLimitState_->setStatusTip(tr("Create a new limit state"));
   connect(newLimitState_, SIGNAL(triggered()), this, SLOT(createNewLimitState()));
 
+  // remove limit state action
+  removeLimitState_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
+  removeLimitState_->setStatusTip(tr("Remove the limit state"));
+  connect(removeLimitState_, SIGNAL(triggered()), this, SLOT(removeLimitState()));
+
   // new analysis actions
   newModelEvaluation_ = new QAction(tr("New model evaluation"), this);
   newModelEvaluation_->setStatusTip(tr("Create a new model evaluation"));
@@ -212,6 +217,7 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
   else if (dataType == "LimitState")
   {
     actions.append(newThresholdExceedance_);
+    actions.append(removeLimitState_);
   }
   else if (dataType == "ModelEvaluation" || dataType == "MonteCarloAnalysis" ||
            dataType == "TaylorExpansionsMomentsAnalysis" || dataType == "SobolAnalysis" ||
@@ -334,6 +340,16 @@ void StudyTreeView::createNewLimitState()
     return;
   treeViewModel_->addLimitStateItem(probabilisticStudyIndex);
   setExpanded(probabilisticStudyIndex, true);
+}
+
+
+void StudyTreeView::removeLimitState()
+{
+  QModelIndex index = selectionModel()->currentIndex();
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+
+  emit removeSubWindow(selectedItem);
+  treeViewModel_->getOTStudyItem(index)->getOTStudy()->removeLimitState(dynamic_cast<LimitStateItem*>(selectedItem)->getLimitState());
 }
 
 
@@ -462,6 +478,7 @@ void StudyTreeView::createNewThresholdExceedance()
 void StudyTreeView::createAnalysisConnection(AnalysisItem * item)
 {
   connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createAnalysisResultWindow(AnalysisItem*)));
+  connect(item, SIGNAL(analysisRemoved(QStandardItem*)), this, SIGNAL(removeSubWindow(QStandardItem*)));
 }
 
 
@@ -569,7 +586,6 @@ void StudyTreeView::removeAnalysis()
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
-  emit removeSubWindow(selectedItem);
   treeViewModel_->getOTStudyItem(index)->getOTStudy()->removeAnalysis(dynamic_cast<AnalysisItem*>(selectedItem)->getAnalysis());
 }
 

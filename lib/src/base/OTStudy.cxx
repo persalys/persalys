@@ -129,8 +129,13 @@ OTStudy* OTStudy::clone() const
 /* Destructor */
 OTStudy::~OTStudy()
 {
-  OTStudiesFileNames_.erase(std::remove(OTStudiesFileNames_.begin(), OTStudiesFileNames_.end(), this->getFileName()), OTStudiesFileNames_.end());
-  OTStudies_.erase(std::remove(OTStudies_.begin(), OTStudies_.end(), this), OTStudies_.end());
+  for (UnsignedInteger i=0; i<OTStudiesFileNames_.getSize(); ++i)
+    if (OTStudiesFileNames_[i] == this->getFileName())
+      OTStudiesFileNames_.erase(OTStudiesFileNames_.begin() + i);
+
+  for (UnsignedInteger i=0; i<OTStudies_.getSize(); ++i)
+    if (OTStudies_[i] == this)
+      OTStudies_.erase(OTStudies_.begin() + i);
 }
 
 
@@ -230,7 +235,10 @@ void OTStudy::addDesignOfExperiment(const DesignOfExperiment & designOfExperimen
 
 void OTStudy::removeDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
 {
-  designOfExperiments_.erase(std::remove(designOfExperiments_.begin(), designOfExperiments_.end(), designOfExperiment), designOfExperiments_.end());
+  for (UnsignedInteger i=0; i<designOfExperiments_.getSize(); ++i)
+    if (designOfExperiments_[i].getName() == designOfExperiment.getName())
+      designOfExperiments_.erase(designOfExperiments_.begin() + i);
+
   designOfExperiment.getImplementation().get()->notify("designOfExperimentRemoved");
 }
 
@@ -286,7 +294,10 @@ void OTStudy::addAnalysis(const Analysis & analysis)
 
 void OTStudy::removeAnalysis(const Analysis & analysis)
 {
-  analyses_.erase(std::remove(analyses_.begin(), analyses_.end(), analysis), analyses_.end());
+  for (UnsignedInteger i=0; i<analyses_.getSize(); ++i)
+    if (analyses_[i].getName() == analysis.getName())
+      analyses_.erase(analyses_.begin() + i);
+
   analysis.getImplementation().get()->notify("analysisRemoved");
 }
 
@@ -326,6 +337,21 @@ void OTStudy::addLimitState(const LimitState & limitState)
 
   limitStates_.add(limitState);
   notify("addLimitState");
+}
+
+
+void OTStudy::removeLimitState(const LimitState & limitState)
+{
+  for (UnsignedInteger i=0; i<analyses_.getSize(); ++i)
+    if (analyses_[i].isReliabilityAnalysis())
+      if (dynamic_cast<ReliabilityAnalysis*>(&*analyses_[i].getImplementation())->getLimitState().getName() == limitState.getName())
+        removeAnalysis(analyses_[i]);
+
+  for (UnsignedInteger i=0; i<limitStates_.getSize(); ++i)
+    if (limitStates_[i].getName() == limitState.getName())
+      limitStates_.erase(limitStates_.begin() + i);
+
+  limitState.getImplementation().get()->notify("limitStateRemoved");
 }
 
 

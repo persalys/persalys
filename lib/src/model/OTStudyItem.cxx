@@ -170,6 +170,7 @@ void OTStudyItem::addLimitStateItem(LimitState & limitState)
       }
       child(i)->child(1)->appendRow(newItem);
       emit newLimitStateItemCreated(newItem);
+      connect(newItem, SIGNAL(limitStateRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
       return;
     }
   throw InvalidArgumentException(HERE) << "No physical model matches the name " << limitState.getPhysicalModel().getName();

@@ -66,5 +66,9 @@ void LimitStateItem::update(Observable* source, const String & message)
   {
     emit thresholdChanged();
   }
+  else if (message == "limitStateRemoved")
+  {
+    emit limitStateRemoved(this);
+  }
 }
 }

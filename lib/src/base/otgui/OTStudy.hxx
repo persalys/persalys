@@ -73,6 +73,7 @@ public:
   bool hasLimitStateNamed(const OT::String & limitStateName);
   OT::String getAvailableLimitStateName();
   void addLimitState(const LimitState & limitState);
+  void removeLimitState(const LimitState & limitState);
 
   OT::String getPythonScript();
 

@@ -53,6 +53,7 @@ public slots:
   void createNewProbabilisticModel();
   void createNewDesignOfExperiment();
   void createNewLimitState();
+  void removeLimitState();
   void createNewModelEvaluation();
   void createNewCentralTendency();
   void createNewSensitivityAnalysis();
@@ -97,6 +98,7 @@ private:
   QAction * newProbabilisticModel_;
   QAction * newDesignOfExperiment_;
   QAction * newLimitState_;
+  QAction * removeLimitState_;
   QAction * newModelEvaluation_;
   QAction * newCentralTendency_;
   QAction * newSensitivityAnalysis_;

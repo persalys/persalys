@@ -45,6 +45,7 @@ signals:
   void outputNameChanged();
   void operatorChanged();
   void thresholdChanged();
+  void limitStateRemoved(QStandardItem*);
 
 private:
   LimitState limitState_;
