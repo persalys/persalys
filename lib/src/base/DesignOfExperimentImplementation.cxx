@@ -508,7 +508,7 @@ String DesignOfExperimentImplementation::getPythonScript() const
   if (fileName_.size() > 0)
   {
     oss << "columns = ot.Indices([";
-   for (UnsignedInteger i = 0; i < columns_.getSize(); ++ i)
+    for (UnsignedInteger i = 0; i < columns_.getSize(); ++ i)
     {
       oss << columns_[i];
       if (i < columns_.getSize()-1)

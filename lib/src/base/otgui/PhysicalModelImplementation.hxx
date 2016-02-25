@@ -82,6 +82,8 @@ public:
   OT::Copula getCopula() const;
   void setCopula(const OT::Copula & copula);
 
+  bool isValid() const;
+
   virtual OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */

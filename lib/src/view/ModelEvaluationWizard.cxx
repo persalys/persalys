@@ -106,9 +106,14 @@ void ModelEvaluationWizard::inputValueChanged(double value)
 }
 
 
+QString ModelEvaluationWizard::getAnalysisName() const
+{
+  return analysis_.getName().c_str();
+}
+
+
 void ModelEvaluationWizard::validate()
 {
   otStudy_->addAnalysis(analysis_);
-  analysis_.run();
 }
 }

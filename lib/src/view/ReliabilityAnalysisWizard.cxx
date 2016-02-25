@@ -188,9 +188,14 @@ void ReliabilityAnalysisWizard::seedChanged(int seed)
 }
 
 
+QString ReliabilityAnalysisWizard::getAnalysisName() const
+{
+  return analysis_.getName().c_str();
+}
+
+
 void ReliabilityAnalysisWizard::validate()
 {
   otStudy_->addAnalysis(analysis_);
-  analysis_.run();
 }
 }

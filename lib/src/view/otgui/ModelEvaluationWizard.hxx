@@ -37,6 +37,7 @@ public:
   ModelEvaluationWizard(OTStudy * otStudy, const PhysicalModel & physicalModel);
   ModelEvaluationWizard(const Analysis & analysis);
 
+  QString getAnalysisName() const;
   void validate();
 
 protected:

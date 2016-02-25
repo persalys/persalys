@@ -178,11 +178,14 @@ void SensitivityAnalysisWizard::seedChanged(int seed)
 }
 
 
-void SensitivityAnalysisWizard::validate()
+QString SensitivityAnalysisWizard::getAnalysisName() const
 {
-  otStudy_->addAnalysis(analysis_);
-  analysis_.run();
+  return analysis_.getName().c_str();
 }
 
 
+void SensitivityAnalysisWizard::validate()
+{
+  otStudy_->addAnalysis(analysis_);
+}
 }

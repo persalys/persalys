@@ -295,6 +295,12 @@ void PhysicalModel::setCopula(const Copula & copula)
 }
 
 
+bool PhysicalModel::isValid() const
+{
+  return getImplementation()->isValid();
+}
+
+
 String PhysicalModel::getPythonScript() const
 {
   return getImplementation()->getPythonScript();

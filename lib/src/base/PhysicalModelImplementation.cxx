@@ -427,7 +427,8 @@ NumericalMathFunction PhysicalModelImplementation::getFunction(const Description
   }
   catch (std::exception & ex)
   {
-    throw InvalidArgumentException(HERE) << ex.what();
+    std::cerr << "Error in PhysicalModelImplementation::getFunction(const Description & outputNames) ";
+    throw PhysicalModelNotValidException(HERE) << ex.what();
   }
 }
 
@@ -459,7 +460,8 @@ NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction()
   }
   catch (std::exception & ex)
   {
-    throw InvalidArgumentException(HERE) << "In PhysicalModelImplementation::getRestrictedFunction(): " << ex.what();
+    std::cerr << "Error in PhysicalModelImplementation::getRestrictedFunction()";
+    throw PhysicalModelNotValidException(HERE) << ex.what();
   }
 }
 
@@ -484,7 +486,8 @@ NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction(const D
   }
   catch (std::exception & ex)
   {
-    throw InvalidArgumentException(HERE) << "In PhysicalModelImplementation::getRestrictedFunction(const Description & outputNames): " << ex.what();
+    std::cerr << "Error in PhysicalModelImplementation::getRestrictedFunction(const Description & outputNames) ";
+    throw PhysicalModelNotValidException(HERE) << ex.what();
   }
 }
 
@@ -502,6 +505,12 @@ void PhysicalModelImplementation::setCopula(const Copula & copula)
 
   copula_ = copula;
   copula_.setDescription(getStochasticInputNames());
+}
+
+
+bool PhysicalModelImplementation::isValid() const
+{
+  return getOutputs().getSize() && getInputs().getSize();
 }
 
 

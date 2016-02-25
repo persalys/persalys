@@ -39,6 +39,7 @@ public:
   SensitivityAnalysisWizard(OTStudy * otStudy, const PhysicalModel & physicalModel);
   SensitivityAnalysisWizard(const Analysis & analysis);
 
+  QString getAnalysisName() const;
   void validate();
 
 protected:

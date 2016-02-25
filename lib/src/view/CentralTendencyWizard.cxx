@@ -241,9 +241,14 @@ void CentralTendencyWizard::seedChanged(int seed)
 }
 
 
+QString CentralTendencyWizard::getAnalysisName() const
+{
+  return analysis_.getName().c_str();
+}
+
+
 void CentralTendencyWizard::validate()
 {
   otStudy_->addAnalysis(analysis_);
-  analysis_.run();
 }
 }

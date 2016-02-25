@@ -39,6 +39,7 @@ public:
   CentralTendencyWizard(OTStudy * otStudy, const PhysicalModel & physicalModel);
   CentralTendencyWizard(const Analysis & analysis);
 
+  QString getAnalysisName() const;
   void validate();
 
 protected:

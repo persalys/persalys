@@ -105,8 +105,9 @@ void ModelEvaluation::run()
     }
     catch (std::exception & ex)
     {
-      throw InvalidArgumentException(HERE) << "Impossible to evaluate the output "
-                                           << getPhysicalModel().getOutputNames()[i] << ".\n" << ex.what();
+      throw AnalysisExecutionFailedException(HERE) << "Impossible to evaluate the output "
+                                                   << getPhysicalModel().getOutputNames()[i]
+                                                   << ".\n" << ex.what();
     }
   }
   outputSample.setDescription(getPhysicalModel().getOutputNames());

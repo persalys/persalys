@@ -39,6 +39,7 @@ public:
   ReliabilityAnalysisWizard(OTStudy * otStudy, const LimitState & limitState);
   ReliabilityAnalysisWizard(const Analysis & analysis);
 
+  QString getAnalysisName() const;
   void validate();
 
 protected:

@@ -40,6 +40,7 @@
 #include "otgui/LimitStateWindow.hxx"
 #include "otgui/DesignOfExperimentWizard.hxx"
 #include "otgui/DesignOfExperimentWindow.hxx"
+#include "otgui/AnalysisExecutionFailedWindow.hxx"
 #include "otgui/ModelEvaluationWizard.hxx"
 #include "otgui/ModelEvaluationResultWindow.hxx"
 #include "otgui/CentralTendencyWizard.hxx"
@@ -217,6 +218,48 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
 }
 
 
+bool StudyTreeView::isPhysicalModelValid(const QModelIndex & currentIndex)
+{
+  PhysicalModelItem * physicalModelItem = treeViewModel_->getPhysicalModelItem(currentIndex);
+  if (!physicalModelItem)
+    return false;
+  if (!physicalModelItem->getPhysicalModel().isValid())
+  {
+    QMessageBox::critical(this, tr("Error"), tr("The physical model has no inputs and/or no outputs."));
+    return false;
+  }
+  return true;
+}
+
+
+bool StudyTreeView::hasPhysicalModelInputs(const QModelIndex & currentIndex)
+{
+  PhysicalModelItem * physicalModelItem = treeViewModel_->getPhysicalModelItem(currentIndex);
+  if (!physicalModelItem)
+    return false;
+  if (!physicalModelItem->getPhysicalModel().getInputs().getSize())
+  {
+    QMessageBox::critical(this, tr("Error"), tr("The physical model has no inputs."));
+    return false;
+  }
+  return true;
+}
+
+
+bool StudyTreeView::isProbabilisticModelValid(const QModelIndex & currentIndex)
+{
+  PhysicalModelItem * physicalModelItem = treeViewModel_->getPhysicalModelItem(currentIndex);
+  if (!physicalModelItem)
+    return false;
+  if (!physicalModelItem->getPhysicalModel().hasStochasticInputs())
+  {
+    QMessageBox::critical(this, tr("Error"), tr("The physical model has no stochastic inputs."));
+    return false;
+  }
+  return true;
+}
+
+
 void StudyTreeView::createNewOTStudy()
 {
   treeViewModel_->createNewOTStudy();
@@ -254,16 +297,20 @@ void StudyTreeView::createNewYACSPhysicalModel()
 
 void StudyTreeView::createNewProbabilisticModel()
 {
-  QModelIndex parentIndex = selectionModel()->currentIndex();
-  treeViewModel_->addProbabilisticModelItem(parentIndex);
-  setExpanded(parentIndex, true);
+  QModelIndex probabilisticStudyIndex = selectionModel()->currentIndex();
+  if (!hasPhysicalModelInputs(probabilisticStudyIndex))
+    return;
+  treeViewModel_->addProbabilisticModelItem(probabilisticStudyIndex);
+  setExpanded(probabilisticStudyIndex, true);
 }
 
 
 void StudyTreeView::createNewDesignOfExperiment()
 {
-  QModelIndex physicalModelIndex = selectionModel()->currentIndex().parent();
-  PhysicalModelItem * physicalModelItem = dynamic_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
+  QModelIndex DesignOfExperimentListIndex = selectionModel()->currentIndex();
+  PhysicalModelItem * physicalModelItem = treeViewModel_->getPhysicalModelItem(DesignOfExperimentListIndex);
+  if (!hasPhysicalModelInputs(DesignOfExperimentListIndex))
+    return;
   OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
   DesignOfExperimentWizard * wizard = new DesignOfExperimentWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel());
 
@@ -276,9 +323,11 @@ void StudyTreeView::createNewDesignOfExperiment()
 
 void StudyTreeView::createNewLimitState()
 {
-  QModelIndex parentIndex = selectionModel()->currentIndex().parent();
-  treeViewModel_->addLimitStateItem(parentIndex);
-  setExpanded(parentIndex, true);
+  QModelIndex probabilisticStudyIndex = selectionModel()->currentIndex().parent();
+  if (!isPhysicalModelValid(probabilisticStudyIndex) || !isProbabilisticModelValid(probabilisticStudyIndex))
+    return;
+  treeViewModel_->addLimitStateItem(probabilisticStudyIndex);
+  setExpanded(probabilisticStudyIndex, true);
 }
 
 
@@ -338,45 +387,51 @@ void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentItem * i
 
 void StudyTreeView::createNewModelEvaluation()
 {
-  QModelIndex physicalModelIndex = selectionModel()->currentIndex().parent();
-  PhysicalModelItem * physicalModelItem = dynamic_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
+  QModelIndex deterministicStudyIndex = selectionModel()->currentIndex();
+  if (!isPhysicalModelValid(deterministicStudyIndex))
+    return;
+  PhysicalModelItem * physicalModelItem = treeViewModel_->getPhysicalModelItem(deterministicStudyIndex);
   OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
   ModelEvaluationWizard * wizard = new ModelEvaluationWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel());
 
   if (wizard->exec())
   {
     wizard->validate();
-    setExpanded(physicalModelIndex, true);
+    findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysisName());
   }
 }
 
 
 void StudyTreeView::createNewCentralTendency()
 {
-  QModelIndex physicalModelIndex = selectionModel()->currentIndex().parent().parent();
-  PhysicalModelItem * physicalModelItem = dynamic_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
+  QModelIndex probabilisticStudyIndex = selectionModel()->currentIndex().parent();
+  if (!isPhysicalModelValid(probabilisticStudyIndex) || !isProbabilisticModelValid(probabilisticStudyIndex))
+    return;
+  PhysicalModelItem * physicalModelItem = treeViewModel_->getPhysicalModelItem(probabilisticStudyIndex);
   OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
   CentralTendencyWizard * wizard = new CentralTendencyWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel());
 
   if (wizard->exec())
   {
     wizard->validate();
-    setExpanded(physicalModelIndex, true);
+    findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysisName());
   }
 }
 
 
 void StudyTreeView::createNewSensitivityAnalysis()
 {
-  QModelIndex physicalModelIndex = selectionModel()->currentIndex().parent().parent();
-  PhysicalModelItem * physicalModelItem = dynamic_cast<PhysicalModelItem*>(treeViewModel_->itemFromIndex(physicalModelIndex));
+  QModelIndex probabilisticStudyIndex = selectionModel()->currentIndex().parent();
+  if (!isPhysicalModelValid(probabilisticStudyIndex) || !isProbabilisticModelValid(probabilisticStudyIndex))
+    return;
+  PhysicalModelItem * physicalModelItem = treeViewModel_->getPhysicalModelItem(probabilisticStudyIndex);
   OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
   SensitivityAnalysisWizard * wizard = new SensitivityAnalysisWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel());
 
   if (wizard->exec())
   {
     wizard->validate();
-    setExpanded(physicalModelIndex, true);
+    findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysisName());
   }
 }
 
@@ -384,6 +439,8 @@ void StudyTreeView::createNewSensitivityAnalysis()
 void StudyTreeView::createNewThresholdExceedance()
 {
   QModelIndex limitStateIndex = selectionModel()->currentIndex();
+  if (!isPhysicalModelValid(limitStateIndex) || !isProbabilisticModelValid(limitStateIndex))
+    return;
   LimitStateItem * limitStateItem = dynamic_cast<LimitStateItem*>(treeViewModel_->itemFromIndex(limitStateIndex));
   OTStudyItem * otStudyItem = treeViewModel_->getOTStudyItem(limitStateIndex);
   ReliabilityAnalysisWizard * wizard = new ReliabilityAnalysisWizard(otStudyItem->getOTStudy(), limitStateItem->getLimitState());
@@ -391,7 +448,7 @@ void StudyTreeView::createNewThresholdExceedance()
   if (wizard->exec())
   {
     wizard->validate();
-    setExpanded(limitStateIndex, true);
+    findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysisName());
   }
 }
 
@@ -419,36 +476,74 @@ void StudyTreeView::runDesignOfExperiment()
 }
 
 
+void StudyTreeView::findAnalysisItemAndLaunchExecution(OTStudyItem * otStudyItem, const QString & analysisName)
+{
+  AnalysisItem * analysisItem = treeViewModel_->getAnalysisItem(otStudyItem, analysisName);
+  if (analysisItem)
+  {
+    try
+    {
+      analysisItem->getAnalysis().run();
+    }
+    catch (std::exception & ex)
+    {
+      createAnalysisExecutionFailedWindow(analysisItem, ex.what());
+      setExpanded(analysisItem->index(), true);
+    }
+  }
+}
+
+
 void StudyTreeView::runAnalysis()
 {
-  QModelIndex index = selectionModel()->currentIndex();
-  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(selectionModel()->currentIndex());
   AnalysisItem * item = dynamic_cast<AnalysisItem*>(selectedItem);
 
   OTguiWizard * wizard = 0;
   QString analysisType = item->data(Qt::UserRole).toString();
+  if (!isPhysicalModelValid(selectionModel()->currentIndex()))
+    return;
   if (analysisType == "ModelEvaluation")
   {
     wizard = new ModelEvaluationWizard(item->getAnalysis());
   }
-  else if (analysisType == "MonteCarloAnalysis" || analysisType == "TaylorExpansionsMomentsAnalysis")
+  else
   {
-    wizard = new CentralTendencyWizard(item->getAnalysis());
-  }
-  else if (analysisType == "SobolAnalysis" || analysisType == "SRCAnalysis")
-  {
-    wizard = new SensitivityAnalysisWizard(item->getAnalysis());
-  }
-  else if (analysisType == "MonteCarloReliabilityAnalysis")
-  {
-    wizard = new ReliabilityAnalysisWizard(item->getAnalysis());
+    if (!isProbabilisticModelValid(selectionModel()->currentIndex()))
+      return;
+
+    if (analysisType == "MonteCarloAnalysis" || analysisType == "TaylorExpansionsMomentsAnalysis")
+    {
+      wizard = new CentralTendencyWizard(item->getAnalysis());
+    }
+    else if (analysisType == "SobolAnalysis" || analysisType == "SRCAnalysis")
+    {
+      wizard = new SensitivityAnalysisWizard(item->getAnalysis());
+    }
+    else if (analysisType == "MonteCarloReliabilityAnalysis")
+    {
+      wizard = new ReliabilityAnalysisWizard(item->getAnalysis());
+    }
+    else
+    {
+      throw InvalidArgumentException(HERE) << "analysisType " << analysisType.toStdString() << " not recognized.";
+    }
   }
 
   if (wizard)
   {
     connect(wizard, SIGNAL(analysisChanged(Analysis)), item, SLOT(updateAnalysis(Analysis)));
     if (wizard->exec())
-      item->getAnalysis().run();
+    {
+      try
+      {
+        item->getAnalysis().run();
+      }
+      catch (std::exception & ex)
+      {
+        createAnalysisExecutionFailedWindow(item, ex.what());
+      }
+    }
   }
 }
 
@@ -480,6 +575,8 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
     resultWindow = new SRCResultWindow(item);
   else if (analysisType == "MonteCarloReliabilityAnalysis")
     resultWindow = new MonteCarloReliabilityResultWindow(item);
+  else
+    throw InvalidArgumentException(HERE) << "analysisType " << analysisType.toStdString() << " not recognized.";
 
   if (resultWindow)
   {
@@ -488,6 +585,15 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
     emit showWindow(resultWindow);
     setCurrentIndex(item->index());
   }
+}
+
+
+void StudyTreeView::createAnalysisExecutionFailedWindow(AnalysisItem * item, const QString & errorMessage)
+{
+  emit checkIfWindowResultExists(item);
+  AnalysisExecutionFailedWindow * window = new AnalysisExecutionFailedWindow(item, errorMessage);
+  emit showWindow(window);
+  setCurrentIndex(item->index());
 }
 
 

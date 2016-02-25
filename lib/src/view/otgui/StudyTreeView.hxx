@@ -39,6 +39,9 @@ public:
 
 protected:
   void buildActions();
+  bool isPhysicalModelValid(const QModelIndex & currentIndex);
+  bool hasPhysicalModelInputs(const QModelIndex & currentIndex);
+  bool isProbabilisticModelValid(const QModelIndex & currentIndex);
 
 public slots:
   void createNewOTStudy();
@@ -57,6 +60,7 @@ public slots:
   void onCustomContextMenu(const QPoint & point);
   void selectedItemChanged(const QModelIndex & index);
   void runDesignOfExperiment();
+  void findAnalysisItemAndLaunchExecution(OTStudyItem * otStudyItem, const QString & analysisName);
   void runAnalysis();
   void removeAnalysis();
   void createNewPhysicalModelWindow(PhysicalModelItem * item);
@@ -65,6 +69,7 @@ public slots:
   void createNewLimitStateWindow(LimitStateItem * item);
   void createAnalysisConnection(AnalysisItem*);
   void createAnalysisResultWindow(AnalysisItem * item);
+  void createAnalysisExecutionFailedWindow(AnalysisItem * item, const QString & errorMessage="");
   void exportPython();
   void importPython();
   void saveOTStudy();
@@ -78,6 +83,7 @@ signals:
   void importPythonScript(const QString & fileName);
   void graphWindowActivated(QWidget*);
   void graphWindowDeactivated(QWidget*);
+  void analysisExecutionRequired(OTStudyItem * otStudyItem, const QString & analysisName);
 
 private:
   StudyTreeViewModel * treeViewModel_;
