@@ -64,6 +64,11 @@ Description AnalyticalPhysicalModel::getFormulas()
 
 NumericalMathFunction AnalyticalPhysicalModel::getFunction()
 {
+  if (!getInputs().getSize())
+    throw PhysicalModelNotValidException(HERE) << "The physical model has no inputs.";
+  if (!getOutputs().getSize())
+    throw PhysicalModelNotValidException(HERE) << "The physical model has no outputs.";
+
   return NumericalMathFunction(getInputNames(), getOutputNames(), getFormulas());
 }
 

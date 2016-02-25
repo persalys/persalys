@@ -146,6 +146,11 @@ NumericalMathFunction YACSPhysicalModel::getFunction(const Description & outputN
 
 NumericalMathFunction YACSPhysicalModel::getFunction()
 {
+  if (!getInputs().getSize())
+    throw PhysicalModelNotValidException(HERE) << "The physical model has no inputs.";
+  if (!getOutputs().getSize())
+    throw PhysicalModelNotValidException(HERE) << "The physical model has no outputs.";
+
   return NumericalMathFunction(evaluation_);
 }
 

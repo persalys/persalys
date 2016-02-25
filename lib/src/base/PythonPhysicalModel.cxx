@@ -72,6 +72,11 @@ String PythonPhysicalModel::getCode() const
 
 NumericalMathFunction PythonPhysicalModel::getFunction()
 {
+  if (!getInputs().getSize())
+    throw PhysicalModelNotValidException(HERE) << "The physical model has no inputs.";
+  if (!getOutputs().getSize())
+    throw PhysicalModelNotValidException(HERE) << "The physical model has no outputs.";
+
   NumericalMathFunction function(PythonEvaluation(getInputs().getSize(), getOutputs().getSize(), getCode()));
   function.enableCache();
   return function;
