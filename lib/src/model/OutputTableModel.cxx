@@ -149,7 +149,9 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
 
 Qt::ItemFlags OutputTableModel::flags(const QModelIndex & index) const
 {
-  if (index.column() == 3)
+  if (physicalModel_.getImplementation()->getClassName() == "YACSPhysicalModel" && index.column() == 0)
+    return QAbstractTableModel::flags(index);
+  else if (index.column() == 3)
     return QAbstractTableModel::flags(index);
   else
     return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
