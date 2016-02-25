@@ -52,7 +52,7 @@ public:
 public slots:
   void updatePhysicalModel(const PhysicalModel & physicalModel);
   void updateAnalysis(const Analysis & analysis);
-  void removeAnalysisItem(AnalysisItem*);
+  void removeItem(QStandardItem*);
 signals:
   void newPhysicalModelItemCreated(PhysicalModelItem*);
   void newProbabilisticModelItemCreated(ProbabilisticModelItem*);

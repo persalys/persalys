@@ -36,7 +36,7 @@ public:
 public slots:
   void showSubWindow(QMdiSubWindow * win);
   void showSubWindow(QStandardItem * item);
-  void checkIfWindowResultExists(QStandardItem * item);
+  void removeSubWindow(QStandardItem * item);
 signals:
 //   void ;
 };

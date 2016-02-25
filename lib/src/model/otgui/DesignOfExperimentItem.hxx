@@ -42,6 +42,7 @@ public:
 public slots:
 signals:
   void analysisFinished();
+  void designOfExperimentRemoved(QStandardItem*);
 
 private:
   DesignOfExperiment designOfExperiment_;

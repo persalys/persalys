@@ -54,15 +54,15 @@ void OTguiMdiArea::showSubWindow(QStandardItem * item)
 }
 
 
-void OTguiMdiArea::checkIfWindowResultExists(QStandardItem * item)
+void OTguiMdiArea::removeSubWindow(QStandardItem * item)
 {
   for (int i=0; i<subWindowList().size(); ++i)
   {
     OTguiSubWindow * win = static_cast<OTguiSubWindow*>(subWindowList().at(i));
     if (win->getItem() == item)
     {
-      removeSubWindow(win);
-      delete win;
+      QMdiArea::removeSubWindow(win);
+      win->deleteLater();
     }
   }
 }

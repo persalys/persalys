@@ -43,7 +43,7 @@ public slots:
   void updateAnalysis(const Analysis & analysis);
 signals:
   void analysisFinished(AnalysisItem*);
-  void analysisRemoved(AnalysisItem*);
+  void analysisRemoved(QStandardItem*);
   void analysisChanged(const Analysis&);
 
 private:

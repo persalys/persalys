@@ -151,6 +151,11 @@ void StudyTreeView::buildActions()
   runDesignOfExperiment_->setStatusTip(tr("Run the design of experiment"));
   connect(runDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(runDesignOfExperiment()));
 
+  // remove design of experiment action
+  removeDesignOfExperiment_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
+  removeDesignOfExperiment_->setStatusTip(tr("Remove the design of experiment"));
+  connect(removeDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(removeDesignOfExperiment()));
+
   // run analysis action
   runAnalysis_ = new QAction(QIcon(":/images/run-build.png"), tr("Run"), this);
   runAnalysis_->setStatusTip(tr("Run the analysis"));
@@ -202,6 +207,7 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
   else if (dataType == "DesignOfExperiment")
   {
     actions.append(runDesignOfExperiment_);
+    actions.append(removeDesignOfExperiment_);
   }
   else if (dataType == "LimitState")
   {
@@ -469,10 +475,20 @@ void StudyTreeView::runDesignOfExperiment()
   DesignOfExperimentWizard * wizard = new DesignOfExperimentWizard(item->getDesignOfExperiment());
   if (wizard->exec())
   {
-    emit checkIfWindowResultExists(item);
+    emit removeSubWindow(item);
     item->getDesignOfExperiment().clearResult();
     createNewDesignOfExperimentWindow(item);
   }
+}
+
+
+void StudyTreeView::removeDesignOfExperiment()
+{
+  QModelIndex index = selectionModel()->currentIndex();
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+
+  emit removeSubWindow(selectedItem);
+  treeViewModel_->getOTStudyItem(index)->getOTStudy()->removeDesignOfExperiment(dynamic_cast<DesignOfExperimentItem*>(selectedItem)->getDesignOfExperiment());
 }
 
 
@@ -553,13 +569,14 @@ void StudyTreeView::removeAnalysis()
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
+  emit removeSubWindow(selectedItem);
   treeViewModel_->getOTStudyItem(index)->getOTStudy()->removeAnalysis(dynamic_cast<AnalysisItem*>(selectedItem)->getAnalysis());
 }
 
 
 void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
 {
-  emit checkIfWindowResultExists(item);
+  emit removeSubWindow(item);
 
   OTguiSubWindow * resultWindow = 0;
   QString analysisType = item->data(Qt::UserRole).toString();
@@ -590,7 +607,7 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
 
 void StudyTreeView::createAnalysisExecutionFailedWindow(AnalysisItem * item, const QString & errorMessage)
 {
-  emit checkIfWindowResultExists(item);
+  emit removeSubWindow(item);
   AnalysisExecutionFailedWindow * window = new AnalysisExecutionFailedWindow(item, errorMessage);
   emit showWindow(window);
   setCurrentIndex(item->index());

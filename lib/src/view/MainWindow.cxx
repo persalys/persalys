@@ -70,7 +70,7 @@ void MainWindow::buildInterface()
   OTguiMdiArea * mdiArea = new OTguiMdiArea;
   connect(studyTree_, SIGNAL(showWindow(QMdiSubWindow *)), mdiArea, SLOT(showSubWindow(QMdiSubWindow *)));
   connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), mdiArea, SLOT(showSubWindow(QStandardItem *)));
-  connect(studyTree_, SIGNAL(checkIfWindowResultExists(QStandardItem *)), mdiArea, SLOT(checkIfWindowResultExists(QStandardItem *)));
+  connect(studyTree_, SIGNAL(removeSubWindow(QStandardItem *)), mdiArea, SLOT(removeSubWindow(QStandardItem *)));
   rightSideSplitter->addWidget(mdiArea);
   rightSideSplitter->setStretchFactor(0, 3);
 

@@ -60,6 +60,7 @@ public:
   bool hasDesignOfExperimentNamed(const OT::String & designOfExperimentName);
   OT::String getAvailableDesignOfExperimentName();
   void addDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
+  void removeDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
 
   OT::Collection<Analysis> getAnalyses() const;
   Analysis & getAnalysisByName(const OT::String & analysisName);

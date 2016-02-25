@@ -141,12 +141,12 @@ void OTStudyItem::addDesignOfExperimentItem(DesignOfExperiment & design)
 {
   DesignOfExperimentItem * newItem = new DesignOfExperimentItem(design);
   design.addObserver(newItem);
-  design.getPhysicalModel().addObserver(newItem);
   for (int i=0; i<rowCount(); ++i)
     if (child(i)->text().toStdString() == design.getPhysicalModel().getName())
     {
       child(i)->child(2)->appendRow(newItem);
       emit newDesignOfExperimentItemCreated(newItem);
+      connect(newItem, SIGNAL(designOfExperimentRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
       return;
     }
   throw InvalidArgumentException(HERE) << "No physical model matches the given name " << design.getPhysicalModel().getName();
@@ -198,7 +198,7 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis)
     throw InvalidArgumentException(HERE) << "In OTStudyItem::addAnalysisItem: Impossible to add an item for the analysis of type " << analysisName;
   }
   connect(newItem, SIGNAL(analysisChanged(Analysis)), this, SLOT(updateAnalysis(Analysis)));
-  connect(newItem, SIGNAL(analysisRemoved(AnalysisItem*)), this, SLOT(removeAnalysisItem(AnalysisItem*)));
+  connect(newItem, SIGNAL(analysisRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
 }
 
 
@@ -257,7 +257,7 @@ void OTStudyItem::addReliabilityAnalysisItem(Analysis & analysis, AnalysisItem *
 }
 
 
-void OTStudyItem::removeAnalysisItem(AnalysisItem* item)
+void OTStudyItem::removeItem(QStandardItem * item)
 {
   item->QStandardItem::parent()->removeRow(item->row());
 }

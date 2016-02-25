@@ -60,6 +60,7 @@ public slots:
   void onCustomContextMenu(const QPoint & point);
   void selectedItemChanged(const QModelIndex & index);
   void runDesignOfExperiment();
+  void removeDesignOfExperiment();
   void findAnalysisItemAndLaunchExecution(OTStudyItem * otStudyItem, const QString & analysisName);
   void runAnalysis();
   void removeAnalysis();
@@ -79,7 +80,7 @@ signals:
   void showWindow(QMdiSubWindow*);
   void errorMessageEmitted(QString);
   void itemSelected(QStandardItem *);
-  void checkIfWindowResultExists(QStandardItem *);
+  void removeSubWindow(QStandardItem *);
   void importPythonScript(const QString & fileName);
   void graphWindowActivated(QWidget*);
   void graphWindowDeactivated(QWidget*);
@@ -101,6 +102,7 @@ private:
   QAction * newSensitivityAnalysis_;
   QAction * newThresholdExceedance_;
   QAction * runDesignOfExperiment_;
+  QAction * removeDesignOfExperiment_;
   QAction * runAnalysis_;
   QAction * removeAnalysis_;
   QAction * saveOTStudy_;

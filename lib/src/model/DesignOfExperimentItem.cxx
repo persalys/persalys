@@ -54,5 +54,9 @@ void DesignOfExperimentItem::update(Observable* source, const String & message)
   {
     emit analysisFinished();
   }
+  else if (message=="designOfExperimentRemoved")
+  {
+    emit designOfExperimentRemoved(this);
+  }
 }
 }

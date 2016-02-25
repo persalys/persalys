@@ -228,6 +228,13 @@ void OTStudy::addDesignOfExperiment(const DesignOfExperiment & designOfExperimen
 }
 
 
+void OTStudy::removeDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
+{
+  designOfExperiments_.erase(std::remove(designOfExperiments_.begin(), designOfExperiments_.end(), designOfExperiment), designOfExperiments_.end());
+  designOfExperiment.getImplementation().get()->notify("designOfExperimentRemoved");
+}
+
+
 Collection<Analysis> OTStudy::getAnalyses() const
 {
   return analyses_;
