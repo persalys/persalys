@@ -34,12 +34,6 @@ StudyTreeViewModel::StudyTreeViewModel()
 }
 
 
-StudyTreeViewModel::~StudyTreeViewModel()
-{
-  
-}
-
-
 void StudyTreeViewModel::update(Observable * source, const String & message)
 {
   if (message == "addStudy")
@@ -122,6 +116,15 @@ PhysicalModelItem* StudyTreeViewModel::getPhysicalModelItem(const QModelIndex & 
     if (itemFromIndex(seekRoot)->data(Qt::UserRole).toString() == "PhysicalModel")
       return static_cast<PhysicalModelItem*>(itemFromIndex(seekRoot));
   }
+  return 0;
+}
+
+
+AnalysisItem* StudyTreeViewModel::getAnalysisItem(OTStudyItem * otStudyItem, const QString & analysisName)
+{
+  QModelIndexList listIndexes = match(otStudyItem->index(), Qt::DisplayRole, analysisName, 2, Qt::MatchRecursive);
+  if (listIndexes.size() == 1)
+    return dynamic_cast<AnalysisItem*>(itemFromIndex(listIndexes[0]));
   return 0;
 }
 }

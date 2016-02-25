@@ -33,8 +33,6 @@ class StudyTreeViewModel : public QStandardItemModel, public Observer
 public:
   StudyTreeViewModel();
 
-  virtual ~StudyTreeViewModel();
-
   void createNewOTStudy();
   void addOTStudyItem(OTStudy * otStudy);
   void addProbabilisticModelItem(const QModelIndex & parentIndex);
@@ -42,6 +40,7 @@ public:
 
   OTStudyItem * getOTStudyItem(const QModelIndex & childIndex);
   PhysicalModelItem * getPhysicalModelItem(const QModelIndex & childIndex);
+  AnalysisItem * getAnalysisItem(OTStudyItem * otStudyItem, const QString & analysisName);
 
   virtual void update(Observable * source, const OT::String & message);
 
