@@ -64,6 +64,10 @@ void DesignOfExperimentWindow::buildInterface()
   tabLayout->addLayout(layout);
   connect(evaluateButton_, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
 
+  errorMessageLabel_ = new QLabel;
+  errorMessageLabel_->setWordWrap(true);
+  tabLayout->addWidget(errorMessageLabel_);
+
   tabWidget_->addTab(tab, tr("Table"));
 
   updateWindowForOutputs();
@@ -80,7 +84,7 @@ void DesignOfExperimentWindow::evaluateOutputs()
   }
   catch (std::exception & ex)
   {
-    setErrorMessage(ex.what());
+    setTemporaryErrorMessage(ex.what());
   }
 }
 
