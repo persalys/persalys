@@ -24,7 +24,6 @@
 #include "otgui/OTGuiprivate.hxx"
 
 #include "NumericalMathEvaluationImplementation.hxx"
-#include "Pointer.hxx"
 
 #include "YACSEvalYFX.hxx"
 #include "YACSEvalSession.hxx"
