@@ -431,7 +431,7 @@ void ProbabilisticModelWindow::showHideGraphConfigurationWidget(int indexTab)
   {
     case 0:
     {
-      if (rightSideOfSplitterStackedLayout_->currentIndex() == 2 && (windowState() == 4 | windowState() == 8 | windowState() == 10))
+      if (rightSideOfSplitterStackedLayout_->currentIndex() == 2 && (windowState() == 4 || windowState() == 8 || windowState() == 10))
         emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
       else
         emit graphWindowDeactivated(pdf_cdfPlotsConfigurationWidget_);
