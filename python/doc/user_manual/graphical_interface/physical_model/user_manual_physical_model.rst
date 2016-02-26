@@ -22,12 +22,16 @@ items:
 
 It consists in listing manually all the input and output variables by adding
 lines in the two tables "Inputs" and "Outputs".
-By default the inputs are deterministic variables equal to 0.
+By default the inputs are deterministic variables equal to 0. Values are expected
+to be floating points or integers.
 
 .. image:: /user_manual/graphical_interface/physical_model/analyticalPhysicalModel.png
     :align: center
 
-A label can be assigned to each input and output variables in the **Description** column.
+Names of the variables are string. Only the allowable character can be used. Default set the name of the variable
+to X0 for the first input, X1 for the second, Y0 for the first output, etc...
+A label can be assigned to each input and output variables in the **Description** column. There is no restriction
+on the label value (floating point, integer, string, etc...)
 
 The relationships between the inputs and the outputs have to be defined in the **Formula** column.
 The language used here is different from Python. Syntaxes for the operators, mathematical functions
@@ -114,6 +118,9 @@ This function takes an unique argument which is a sequence of floating points an
 returns a sequence of floating points.
 
 Input variables are detected if they are set equal to any element of the input sequence.
+The value of the input variables can be set by the user and are expected
+to be floating points or integers. By default they are equal to 0.
+
 The variables listed in the output sequence are detected as output variables.
 
 Other functions which may be used by the **_exec** function can be defined in the Python editor.

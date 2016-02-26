@@ -20,6 +20,9 @@ windows (model definition or result window) open, surrounded by:
       :align: center
 
   It contains the OpenTURNS study and all subsequent models defined and analysis performed.
+  The name of each element created by can be modified by the user by double-click on the element.
+  The element **Deterministic study**, **Probabilistic study** and **Designs of experiment**
+  cannot be renamed.
 
 - The main menubar and toolbar (on top).
 
@@ -37,6 +40,7 @@ windows (model definition or result window) open, surrounded by:
 
   .. image:: /user_manual/graphical_interface/getting_started/graphicConfiguration.png
       :align: center
+
 
 1-2 On start up
 '''''''''''''''

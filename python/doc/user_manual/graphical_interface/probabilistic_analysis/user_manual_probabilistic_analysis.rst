@@ -19,10 +19,13 @@ The probabilistic model has two tabs:
     thanks to the check box. For random variables, the user has to define which
     distribution they follow.
 
-    On the right, the parameters of the distribution
-    can be filled, together with truncation parameters.
+    On the right, the parameters of the distribution can be filled, together with truncation parameters.
+    The values are expected to be floating points or integers, with respect to the distribution support.
+    If a wrong value is used, it will return to its previous value and an error message will at the bottom
+    of the window.
 
-    Some distributions allows the user to define different type of parameterization.
+    LogNormal, Weibull and Gumber distributions allows the user to define different type of parameterization.
+    To select the parametrization, click on the **Type** select button.
 
 - the tab **Correlation**
 
@@ -31,7 +34,8 @@ The probabilistic model has two tabs:
 
     The user may define correlation between the variables by modifying the upper triangular
     part of the matrix. OTGui handles automatically the symmetry of the correlation
-    matrix. By default all variables are set independent.
+    matrix. By default all variables are set independent. The values are expected to be floating points or integers,
+    included in the interval :math:`\left[-1;\right]`
 
 
 2- Limit state
@@ -47,8 +51,8 @@ created probabilistic model.
     :align: center
 
 In the corresponding window, the user has to define the threshold defining the
-failure domain corresponding to the selected output. The available operators to
-define the failure event are:
+failure domain corresponding to the selected output. By default it equals 0. The values are expected
+to be floating points or integers.The available operators to define the failure event are:
 
 - <= (less or equal)
 - >= (greater or equal)
@@ -68,13 +72,15 @@ the contextual menu of the relevant limit state
 
 The method used is the well-known crude Monte Carlo sampling. The user has to define:
 
-- The sampling size;
-- The maximum coefficient of variation for the probability.
+- The sampling size, by default equal to 1000, expected to be an integer;
+- The maximum coefficient of variation for the probability, by default equal to 0.1,
+  expected to be a floating point or an integer, in the interval :math:`\left[0;1 \right]`.
 
 In the advanced parameters (default: hidden), the user may also set:
 
-- The seed of the random generator (default: 0);
-- The block size (i.e. number of runs launched at the same time) for parallelization purpose.
+- The seed of the random generator (default: 0, positive integer expected);
+- The block size (i.e. number of runs launched at the same time), for parallelization purpose
+  (default: 1; integer expected).
 
 Results
 ~~~~~~~
@@ -130,7 +136,7 @@ the user can choose:
 
 - To compute the confidence interval thanks to the checkbox (default: selected)
   at the given level;
-- To set the seed of the random generator (default: 0).
+- To set the seed of the random generator (default: 0, positive integer expected).
 
 Taylor expansions
 ~~~~~~~~~~~~~~~~~
@@ -177,29 +183,88 @@ The results window gathers 7 tabs:
   The user can configure the plot and choose between PDF/CDF with the graphic
   configuration (below the study tree).
 
+  .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyPDFConfig.png
+      :align: center
+
+  The user can define:
+  - The Title of the graph, expected to be a string;
+  - The plotted output, by default the first output;
+
+  It has two tabs, **X-axis** and **Y-axis** where the user can define:
+    - The axis Title, expected to be a string;
+    - The minimum bound of the axis, expected to be a floating point;
+    - The maximum bound of the axis, expected to be a floating point.
+
+  The **Export** button opens a dialog box for the user to select where the
+  figure has to be saved.
+
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyPDF.png
       :align: center
 
 - The tab **Box plots** presents the box plot of the output sample.
-  The user can configure the box plot with the graphic configuration
-  (below the study tree).
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyBoxplot.png
       :align: center
 
+  The user can configure the box plot with the graphic configuration (below the study tree).
+
+  .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyBoxplotConfig.png
+      :align: center
+
+  The user can define:
+  - The Title of the graph, expected to be a string;
+  - The plotted output, by default the first output;
+
+  It has two tabs, **X-axis** and **Y-axis** where the user can define:
+    - The axis Title, expected to be a string;
+    - The minimum bound of the axis, expected to be a floating point;
+    - The maximum bound of the axis, expected to be a floating point.
+
+  The **Export** button opens a dialog box for the user to select where the
+  figure has to be saved.
+
 - The tab **Scatter plots** presents the scatter plot of two parameters (Default:
-  first output vs first input). The user can configure the scatter plot with the
-  graphic configuration (below the study tree).
+  first output vs first input).
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyScatter.png
       :align: center
 
+  The user can configure the scatter plot with the graphic configuration (below the study tree).
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentScatterConfig.png
+      :align: center
+
+  The user can define:
+  - The Title of the graph, expected to be a string;
+  - The variable plotted on the X-axis, by default the first input;
+  - The variable plotted on the Y-axis, by default the first output.
+
+  It has two tabs, **X-axis** and **Y-axis** where the user can define:
+    - The axis Title, expected to be a string;
+    - The minimum bound of the axis, expected to be a floating point;
+    - The maximum bound of the axis, expected to be a floating point.
+
+  The **Export** button opens a dialog box for the user to select where the
+  figure has to be saved.
+
 - The tab **Plot matrix Y-X** presents the scatter plot of each output with respect
-  to each input in a matrix plot. The user can configure the matrix plot with
-  the graphic configuration (below the study tree).
+  to each input in a matrix plot. 
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyYX.png
       :align: center
+
+  The user can configure the matrix plot with the graphic configuration (below the study tree).
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentYXConfig.png
+      :align: center
+
+  The user can define:
+  - The Title of the graph, expected to be a string;
+  - The variable plotted on the columns, by default all the input variables;
+  - The variable plotted on the rows, by default all the output variables.
+
+  The **Export** button opens a dialog box for the user to select where the
+  figure has to be saved.
 
 - The tab **Plot matrix X-X** gathers:
   - Out of the diagonal the scatter plot of each couple of inputs;
@@ -207,6 +272,19 @@ The results window gathers 7 tabs:
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyXX.png
       :align: center
+
+  The user can configure the matrix plot with the graphic configuration (below the study tree).
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentYXConfig.png
+      :align: center
+
+  The user can define:
+  - The Title of the graph, expected to be a string;
+  - The variable plotted on the columns, by default all the input variables;
+  - The variable plotted on the rows, by default all the output variables.
+
+  The **Export** button opens a dialog box for the user to select where the
+  figure has to be saved.
 
 Taylor expansions
 ~~~~~~~~~~~~~~~~~
@@ -236,6 +314,9 @@ Two type of sensitivity indices are available:
 - Sobol' indices
 - SRC indices
 
+For both analysis, the user has to set the number of simulations (default: 10000, integer expected).
+In the advanced parameters, the user can choose to set the seed of the random generator (default: 0, positive integer expected).
+
 4-2 Results
 '''''''''''
 
@@ -250,6 +331,20 @@ The results window gathers:
 - The first and total order indices plotted for each input variable.
   The user can configure the plot with the graphic configuration (below the 
   study tree).
+
+  .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSobolConfig.png
+      :align: center
+
+  The user can define:
+  - The Title of the graph, expected to be a string;
+  - The plotted output, by default the first output;
+
+  It has two tabs, **X-axis** and **Y-axis** where the user can define:
+    - The axis Title, expected to be a string;
+    - The minimum bound of the axis, expected to be a floating point;
+    - The maximum bound of the axis, expected to be a floating point.
+  The **Export** button opens a dialog box for the user to select where the
+  figure has to be saved.
 
 - A table with the first and total order indices value for each variable.
 
@@ -270,6 +365,20 @@ The results window gathers:
 - The SRC index plotted for each input variable.
   The user can configure the plot with the graphic configuration (below the 
   study tree).
+
+  .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSRCConfig.png
+      :align: center
+
+  The user can define:
+  - The Title of the graph, expected to be a string;
+  - The plotted output, by default the first output;
+
+  It has two tabs, **X-axis** and **Y-axis** where the user can define:
+    - The axis Title, expected to be a string;
+    - The minimum bound of the axis, expected to be a floating point;
+    - The maximum bound of the axis, expected to be a floating point.
+  The **Export** button opens a dialog box for the user to select where the
+  figure has to be saved.
 
 - A table with the SRC index value for each variable.
 
