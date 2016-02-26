@@ -27,6 +27,23 @@ The probabilistic model has two tabs:
     LogNormal, Weibull and Gumber distributions allows the user to define different type of parameterization.
     To select the parametrization, click on the **Type** select button.
 
+    The user can configure the plot of the distribution and choose between PDF/CDF with the graphic
+    configuration (below the study tree).
+
+    .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelMarginalsConfig.png
+        :align: center
+
+    The user can define:
+    - The Title of the graph, expected to be a string;
+
+    It has two tabs, **X-axis** and **Y-axis** where the user can define:
+      - The axis Title, expected to be a string;
+      - The minimum bound of the axis, expected to be a floating point;
+      - The maximum bound of the axis, expected to be a floating point.
+
+    The **Export** button opens a dialog box for the user to select where the
+    figure has to be saved.
+
 - the tab **Correlation**
 
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelCorrelation.png
