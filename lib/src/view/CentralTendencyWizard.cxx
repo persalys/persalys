@@ -154,7 +154,7 @@ void CentralTendencyWizard::buildInterface()
 
   /// Taylor expansions widgets
   TaylorExpansionsWidget_ = new QWidget;
-  QVBoxLayout * taylorLayout = new QVBoxLayout(TaylorExpansionsWidget_);
+  //QVBoxLayout * taylorLayout = new QVBoxLayout(TaylorExpansionsWidget_);
   methodParametersLayout->addWidget(TaylorExpansionsWidget_);
   methodParametersLayout->addStretch();
 
