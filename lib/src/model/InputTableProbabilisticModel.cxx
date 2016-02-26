@@ -50,13 +50,21 @@ int InputTableProbabilisticModel::rowCount(const QModelIndex & parent) const
 
 Qt::ItemFlags InputTableProbabilisticModel::flags(const QModelIndex & index) const
 {
+  Qt::ItemFlags result = QAbstractTableModel::flags(index);
   if (index.column() == 0)
-    return QAbstractTableModel::flags(index) & ~Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
+  {
+    result &= ~Qt::ItemIsEditable;
+    result |= Qt::ItemIsUserCheckable;
+  }
   else if (index.column() == 1 && data(this->index(index.row(), 1), Qt::DisplayRole).toString() != "Dirac")
-    return QAbstractTableModel::flags(index) & ~Qt::ItemIsSelectable;
+    result &= ~Qt::ItemIsSelectable;
   else if (index.column() == 1 && data(this->index(index.row(), 1), Qt::DisplayRole).toString() == "Dirac")
-    return QAbstractTableModel::flags(index) & ~Qt::ItemIsSelectable & ~Qt::ItemIsEnabled & ~Qt::ItemIsEditable;
-  return QAbstractTableModel::flags(index);
+  {
+    result &= ~Qt::ItemIsSelectable;
+    result &= ~Qt::ItemIsEnabled;
+    result &= ~Qt::ItemIsEditable;
+  }
+  return result;
 }
 
 

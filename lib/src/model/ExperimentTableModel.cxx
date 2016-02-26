@@ -45,18 +45,21 @@ int ExperimentTableModel::rowCount(const QModelIndex & parent) const
 
 Qt::ItemFlags ExperimentTableModel::flags(const QModelIndex & index) const
 {
+  Qt::ItemFlags result = QAbstractTableModel::flags(index);
   if (index.column() == 0)
-    return QAbstractTableModel::flags(index) & ~Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+  {
+    result &= ~Qt::ItemIsEditable;
+    result |= Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+  }
   else if (index.column() == 2 && designOfExperiment_.getLevels()[index.row()] != 1)
-    return QAbstractTableModel::flags(index) & ~Qt::ItemIsEnabled;
+    result &= ~Qt::ItemIsEnabled;
   else if (index.column() == 2 && designOfExperiment_.getLevels()[index.row()] == 1)
-    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsEnabled;
+    result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
   else if (index.column() > 2 && designOfExperiment_.getLevels()[index.row()] != 1)
-    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsEnabled;
+    result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
   else if (index.column() > 2 && designOfExperiment_.getLevels()[index.row()] == 1)
-    return QAbstractTableModel::flags(index) & ~Qt::ItemIsEnabled;
-  else
-    return QAbstractTableModel::flags(index);
+    result &= ~Qt::ItemIsEnabled;
+  return result;
 }
 
 
