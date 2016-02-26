@@ -23,6 +23,8 @@ windows (model definition or result window) open, surrounded by:
   The name of each element created by can be modified by the user by double-click on the element.
   The element **Deterministic study**, **Probabilistic study** and **Designs of experiment**
   cannot be renamed.
+  The right click on these elements gives access the contextual menu of the elements. Any element
+  can be removed through this contextual menu.
 
 - The main menubar and toolbar (on top).
 
