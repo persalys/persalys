@@ -50,6 +50,7 @@ signals:
   void outputChanged();
   void codeChanged();
   void physicalModelChanged(const PhysicalModel&);
+  void physicalModelRemoved(QStandardItem*);
 
 private:
   PhysicalModel physicalModel_;

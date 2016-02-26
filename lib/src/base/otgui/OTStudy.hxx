@@ -55,6 +55,7 @@ public:
   bool hasPhysicalModelNamed(const OT::String & physicalModelName);
   OT::String getAvailablePhysicalModelName();
   void addPhysicalModel(const PhysicalModel & physicalModel);
+  void removePhysicalModel(const PhysicalModel & physicalModel);
 
   OT::Collection<DesignOfExperiment> getDesignOfExperiments() const;
   bool hasDesignOfExperimentNamed(const OT::String & designOfExperimentName);

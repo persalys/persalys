@@ -27,6 +27,7 @@ namespace OTGUI {
 ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel & physicalModel)
   : QObject()
   , QStandardItem("Probabilistic Model")
+  , Observer()
   , physicalModel_(physicalModel)
 {
   setData("ProbabilisticModel", Qt::UserRole);
@@ -52,6 +53,10 @@ void ProbabilisticModelItem::update(Observable* source, const String & message)
   if (message == "inputDistributionChanged" || message == "modelInputsChanged")
   {
     emit inputChanged();
+  }
+  else if (message == "physicalModelRemoved")
+  {
+    emit physicalModelRemoved(this);
   }
 }
 }

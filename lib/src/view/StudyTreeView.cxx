@@ -69,6 +69,7 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   connect(treeViewModel_, SIGNAL(newDesignOfExperimentCreated(DesignOfExperimentItem*)), this, SLOT(createNewDesignOfExperimentWindow(DesignOfExperimentItem*)));
   connect(treeViewModel_, SIGNAL(newLimitStateCreated(LimitStateItem*)), this, SLOT(createNewLimitStateWindow(LimitStateItem*)));
   connect(treeViewModel_, SIGNAL(newAnalysisCreated(AnalysisItem*)), this, SLOT(createAnalysisConnection(AnalysisItem*)));
+  connect(treeViewModel_, SIGNAL(itemRemoved(QStandardItem*)), this, SIGNAL(removeSubWindow(QStandardItem*)));
 
   buildActions();
 
@@ -113,6 +114,11 @@ void StudyTreeView::buildActions()
   newYACSPhysicalModel_->setStatusTip(tr("Create a new YACS physical model"));
   connect(newYACSPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewYACSPhysicalModel()));
 #endif
+
+  // remove physical model action
+  removePhysicalModel_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
+  removePhysicalModel_->setStatusTip(tr("Remove the physical model"));
+  connect(removePhysicalModel_, SIGNAL(triggered()), this, SLOT(removePhysicalModel()));
 
   // new probabilistic model action
   newProbabilisticModel_ = new QAction(tr("New probabilistic model"), this);
@@ -190,6 +196,10 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
     actions.append(newYACSPhysicalModel_);
 #endif
     actions.append(saveOTStudy_);
+  }
+  else if (dataType == "PhysicalModel")
+  {
+    actions.append(removePhysicalModel_);
   }
   else if (dataType == "DeterministicStudy")
   {
@@ -307,6 +317,17 @@ void StudyTreeView::createNewYACSPhysicalModel()
 #endif
 
 
+void StudyTreeView::removePhysicalModel()
+{
+  QModelIndex index = selectionModel()->currentIndex();
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+
+  if (selectedItem->child(1)->rowCount())
+    emit removeSubWindow(selectedItem->child(1)->child(0));
+  treeViewModel_->getOTStudyItem(index)->getOTStudy()->removePhysicalModel(dynamic_cast<PhysicalModelItem*>(selectedItem)->getPhysicalModel());
+}
+
+
 void StudyTreeView::createNewProbabilisticModel()
 {
   QModelIndex probabilisticStudyIndex = selectionModel()->currentIndex();
@@ -348,7 +369,6 @@ void StudyTreeView::removeLimitState()
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
-  emit removeSubWindow(selectedItem);
   treeViewModel_->getOTStudyItem(index)->getOTStudy()->removeLimitState(dynamic_cast<LimitStateItem*>(selectedItem)->getLimitState());
 }
 
@@ -478,7 +498,6 @@ void StudyTreeView::createNewThresholdExceedance()
 void StudyTreeView::createAnalysisConnection(AnalysisItem * item)
 {
   connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createAnalysisResultWindow(AnalysisItem*)));
-  connect(item, SIGNAL(analysisRemoved(QStandardItem*)), this, SIGNAL(removeSubWindow(QStandardItem*)));
 }
 
 
@@ -504,7 +523,6 @@ void StudyTreeView::removeDesignOfExperiment()
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
-  emit removeSubWindow(selectedItem);
   treeViewModel_->getOTStudyItem(index)->getOTStudy()->removeDesignOfExperiment(dynamic_cast<DesignOfExperimentItem*>(selectedItem)->getDesignOfExperiment());
 }
 

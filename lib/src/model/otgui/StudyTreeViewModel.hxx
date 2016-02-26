@@ -51,6 +51,7 @@ signals:
   void newDesignOfExperimentCreated(DesignOfExperimentItem*);
   void newLimitStateCreated(LimitStateItem*);
   void newAnalysisCreated(AnalysisItem*);
+  void itemRemoved(QStandardItem*);
 };
 }
 #endif

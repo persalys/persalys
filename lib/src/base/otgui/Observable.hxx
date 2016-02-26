@@ -36,6 +36,7 @@ public:
   virtual ~Observable() {};
 
   void addObserver(Observer * observer);
+  void removeObserver(Observer * observer);
   void notify(const OT::String & message);
   std::vector<Observer *> getObserver() const;
   void setObserver(const std::vector<Observer *> observer);

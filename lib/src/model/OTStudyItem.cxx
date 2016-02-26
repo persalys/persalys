@@ -29,6 +29,7 @@ namespace OTGUI {
 OTStudyItem::OTStudyItem(OTStudy * otStudy)
   : QObject()
   , QStandardItem(otStudy->getName().c_str())
+  , Observer()
   , otStudy_(otStudy)
 {
   setData("OTStudy", Qt::UserRole);
@@ -103,6 +104,7 @@ void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
   PhysicalModelItem * newPhysicalModelItem = new PhysicalModelItem(physicalModel);
   physicalModel.addObserver(newPhysicalModelItem);
   connect(newPhysicalModelItem, SIGNAL(physicalModelChanged(PhysicalModel)), this, SLOT(updatePhysicalModel(PhysicalModel)));
+  connect(newPhysicalModelItem, SIGNAL(physicalModelRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
   appendRow(newPhysicalModelItem);
 
   // Deterministic study item
@@ -124,6 +126,7 @@ void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
     physicalModel.addObserver(newProbabilisticModelItem);
     item->appendRow(newProbabilisticModelItem);
     connect(newPhysicalModelItem, SIGNAL(physicalModelChanged(PhysicalModel)), newProbabilisticModelItem, SLOT(updatePhysicalModel(PhysicalModel)));
+    connect(newProbabilisticModelItem, SIGNAL(physicalModelRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
     emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
   }
 
@@ -157,7 +160,6 @@ void OTStudyItem::addLimitStateItem(LimitState & limitState)
 {
   LimitStateItem * newItem = new LimitStateItem(limitState);
   limitState.addObserver(newItem);
-  limitState.getPhysicalModel().addObserver(newItem);
   for (int i=0; i<rowCount(); ++i)
     if (child(i)->text().toStdString() == limitState.getPhysicalModel().getName())
     {
@@ -168,6 +170,7 @@ void OTStudyItem::addLimitStateItem(LimitState & limitState)
         child(i)->child(1)->appendRow(newProbabilisticModelItem);
         emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
       }
+      limitState.getPhysicalModel().addObserver(newItem);
       child(i)->child(1)->appendRow(newItem);
       emit newLimitStateItemCreated(newItem);
       connect(newItem, SIGNAL(limitStateRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
@@ -260,6 +263,7 @@ void OTStudyItem::addReliabilityAnalysisItem(Analysis & analysis, AnalysisItem *
 
 void OTStudyItem::removeItem(QStandardItem * item)
 {
+  emit itemRemoved(item);
   item->QStandardItem::parent()->removeRow(item->row());
 }
 

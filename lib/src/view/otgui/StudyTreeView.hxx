@@ -50,6 +50,7 @@ public slots:
 #ifdef OTGUI_HAVE_YACS
   void createNewYACSPhysicalModel();
 #endif
+  void removePhysicalModel();
   void createNewProbabilisticModel();
   void createNewDesignOfExperiment();
   void createNewLimitState();
@@ -95,6 +96,7 @@ private:
 #ifdef OTGUI_HAVE_YACS
   QAction * newYACSPhysicalModel_;
 #endif
+  QAction * removePhysicalModel_;
   QAction * newProbabilisticModel_;
   QAction * newDesignOfExperiment_;
   QAction * newLimitState_;

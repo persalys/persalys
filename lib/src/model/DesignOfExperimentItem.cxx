@@ -27,6 +27,7 @@ namespace OTGUI {
 DesignOfExperimentItem::DesignOfExperimentItem(const DesignOfExperiment & designOfExperiment)
   : QObject()
   , QStandardItem(designOfExperiment.getName().c_str())
+  , Observer()
   , designOfExperiment_(designOfExperiment)
 {
   setData("DesignOfExperiment", Qt::UserRole);

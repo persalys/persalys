@@ -59,6 +59,7 @@ signals:
   void newDesignOfExperimentItemCreated(DesignOfExperimentItem*);
   void newAnalysisItemCreated(AnalysisItem*);
   void newLimitStateItemCreated(LimitStateItem*);
+  void itemRemoved(QStandardItem*);
 
 private:
   OTStudy * otStudy_;

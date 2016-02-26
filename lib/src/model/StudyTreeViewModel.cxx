@@ -59,6 +59,7 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
   connect(otStudyItem, SIGNAL(newDesignOfExperimentItemCreated(DesignOfExperimentItem*)), this, SIGNAL(newDesignOfExperimentCreated(DesignOfExperimentItem*)));
   connect(otStudyItem, SIGNAL(newLimitStateItemCreated(LimitStateItem*)), this, SIGNAL(newLimitStateCreated(LimitStateItem*)));
   connect(otStudyItem, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SIGNAL(newAnalysisCreated(AnalysisItem*)));
+  connect(otStudyItem, SIGNAL(itemRemoved(QStandardItem*)), this, SIGNAL(itemRemoved(QStandardItem*)));
   otStudy->addObserver(otStudyItem);
   invisibleRootItem()->appendRow(otStudyItem);
   for (UnsignedInteger i=0; i<otStudy->getPhysicalModels().getSize(); ++i)
@@ -79,9 +80,11 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
 void StudyTreeViewModel::addProbabilisticModelItem(const QModelIndex & parentIndex)
 {
   PhysicalModelItem * parentItem = static_cast<PhysicalModelItem*>(itemFromIndex(parentIndex)->parent());
+  OTStudyItem * studyItem = static_cast<OTStudyItem*>(parentItem->QStandardItem::parent());
   ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(parentItem->getPhysicalModel());
   parentItem->getPhysicalModel().addObserver(newProbabilisticModelItem);
   connect(parentItem, SIGNAL(physicalModelChanged(PhysicalModel)), newProbabilisticModelItem, SLOT(updatePhysicalModel(PhysicalModel)));
+  connect(newProbabilisticModelItem, SIGNAL(physicalModelRemoved(QStandardItem*)), studyItem, SLOT(removeItem(QStandardItem*)));
   itemFromIndex(parentIndex)->appendRow(newProbabilisticModelItem);
   emit newProbabilisticModelCreated(newProbabilisticModelItem);
 }

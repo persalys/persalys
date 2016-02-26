@@ -44,6 +44,7 @@ public slots:
 signals:
   void inputChanged();
   void physicalModelChanged(const PhysicalModel&);
+  void physicalModelRemoved(QStandardItem*);
 
 private:
   PhysicalModel physicalModel_;

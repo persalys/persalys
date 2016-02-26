@@ -28,6 +28,7 @@ namespace OTGUI {
 PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel)
   : QObject()
   , QStandardItem(physicalModel.getName().c_str())
+  , Observer()
   , physicalModel_(physicalModel)
 {
   setData("PhysicalModel", Qt::UserRole);
@@ -73,6 +74,10 @@ void PhysicalModelItem::update(Observable* source, const String & message)
   else if (message == "codeChanged")
   {
     emit codeChanged();
+  }
+  else if (message == "physicalModelRemoved")
+  {
+    emit physicalModelRemoved(this);
   }
 }
 }

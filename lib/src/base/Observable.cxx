@@ -20,6 +20,8 @@
  */
 #include "otgui/Observable.hxx"
 
+#include <algorithm>
+
 using namespace OT;
 
 namespace OTGUI {
@@ -31,17 +33,29 @@ Observable::Observable()
 {
 }
 
+
 void Observable::addObserver(Observer * observer)
 {
   observers_.push_back(observer);
 }
 
 
+void Observable::removeObserver(Observer * observer)
+{
+  observers_.erase(std::remove(observers_.begin(), observers_.end(), observer), observers_.end());
+}
+
+
 void Observable::notify(const String & message)
 {
   if (!notificationBlocked_ || (notificationBlocked_ && message == notBlockedMessage_))
-    for (unsigned int i = 0; i < observers_.size(); ++ i)
-      observers_[i]->update(this, message);
+  {
+    std::vector<Observer*>::reverse_iterator rit = observers_.rbegin();
+    for (; rit!= observers_.rend(); ++rit)
+    {
+      (*rit)->update(this, message);
+    }
+  }
 }
 
 
