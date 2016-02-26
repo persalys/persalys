@@ -29,10 +29,11 @@ CustomDoubleValidator::CustomDoubleValidator(QObject * parent)
 
 QValidator::State CustomDoubleValidator::validate(QString & s, int & i) const
 {
-  if (s.isEmpty() || s == "-" || s.toLower() == "e" || s[0].toLower() == 'e')
+  if (s.isEmpty() || (s == "-") || (s[0].toLower() == 'e'))
   {
     return QValidator::Acceptable;
   }
-  QDoubleValidator::validate(s, i);
+  return QDoubleValidator::validate(s, i);
 }
+
 }
