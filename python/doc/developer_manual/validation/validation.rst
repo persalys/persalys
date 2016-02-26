@@ -5,11 +5,12 @@ Validation
 Test case 1: Cogeneration
 -------------------------
 
-This test-case originates from [Cogeneration2014]_ and can be found in python/test/t_Cogeneration_std.py.
+This test-case originates from [ProtoOTGUI2014]_ and can be found in python/test/t_Cogeneration_std.py.
 
-The purpose of this example is to check the default values calculated for
-the parameters of a parametric analysis. The obtained results must be equal to
-the analytical values.
+The purpose of this example is to check:
+- The Central tendency analysis using the Taylor Expansions;
+- the default values calculated for the parameters of a parametric analysis.
+The obtained results must be equal to the analytical values.
 
 .. container:: toggle
 
@@ -45,11 +46,26 @@ Primary energy savings :math:`E_p`
     Ep = 1-\frac{Q}{\frac{E}{0.54(1-0.05)}+\frac{C}{0.8}}
 
 
-
-2- Deterministic parametric analysis
-````````````````````````````````````
+2- Central tendency analysis
+````````````````````````````
 
 2-1 Inputs
+''''''''''
+
+The central tendency analysis is performed with the Taylor Expansions method.
+
+3-1 Results
+'''''''''''
+================ ================= ================== ===========
+First order mean Second order mean Standard deviation Variance
+================ ================= ================== ===========
+0.0597305        0.0596787         0.0115612          0.000133661
+================ ================= ================== ===========
+
+3- Deterministic parametric analysis
+````````````````````````````````````
+
+3-1 Inputs
 ''''''''''
 
 The minimum and the maximum values are computed automatically thanks to
@@ -65,10 +81,10 @@ E        2975.33 3024.67        2
 C        3901.31 4098.69        2
 ======== ======= ======= ================
 
-2-2 Results
+3-2 Results
 '''''''''''
 
-2-2-1 Values
+3-2-1 Values
 ************
 
 ======= ======= ======= =========
@@ -92,7 +108,7 @@ The minimum value of :math:`Ep` is 0.0292239 with X=[10364.5 2975.33 3901.31].
 The maximum value of :math:`Ep` is 0.0892877 with X=[10035.5 3024.67 4098.69].
 
 
-2-2-1 Figures
+3-2-1 Figures
 *************
 
 .. image:: result_cogeneration_ep_vs_q.png
@@ -100,53 +116,139 @@ The maximum value of :math:`Ep` is 0.0892877 with X=[10035.5 3024.67 4098.69].
     :align: center
     :height: 340px
 
-3- Reference
+4- Reference
 ````````````
 
-Test case 2: Gauge
+Test case 2: Flood
 ------------------
 
-This test-case originates from [Jauge2014]_ and can be found in python/test/t_Jauge_std.py.
+This test-case originates from [ProtoOTGUI2014]_ and can be found in python/test/t_Crue_std.py.
 
-The purpose of this example is to check the average value of the output against some exact reference value.
+.. container:: toggle
 
-.. image:: case_gauge.png
-    :width: 420px
-    :align: center
-    :height: 294px
+    .. container:: header
+
+        Show/Hide Code
+
+    .. literalinclude:: ../../t_Crue_std.py
 
 1- Problem statement
 ````````````````````
-The purpose of this example is to realize analysises with data loaded from an XML file
-previously generated with SALOME.
 
 1-1 Inputs
 ''''''''''
 
 - Stochastics variables:
 
-====== =========================== =================
-Name   Description                 Distribution
-====== =========================== =================
-conduc Heat conduction coefficient Normal(0.5, 0.01)
-====== =========================== =================
+====== ======================== ===================================
+ Name  Description              Distribution
+====== ======================== ===================================
+Q      River flow               Gumbel(alpha=0.00179211, beta=1013)
+Ks     Manning-Strickler factor Normal(30, 7.5)
+Zm     River's depth uptream    Uniform(54,56)
+Zv     River's depth downstream Uniform(49, 51)
+====== ======================== ===================================
 
 1-2 Output
 ''''''''''
 
-An average temperature on the superior surface 'temptop'.
+Difference between the dike height and the water level :math:`S`
 
-2- Analysis
-```````````
+.. math::
+
+    S = \left(\frac{Q}{Ks\times300\times\sqrt{(Zm-Zv)/5000}}\right)^{(3/5) +Zv-55.5-3}
+
+2- Reliability analysis
+```````````````````````
 
 2-1 Inputs
 ''''''''''
 
+The limit state is defined by
 
-2-2 Results
+.. math::
+    S > 0
+
+The analysis is performed with the Monte Carlo method with the following parameters:
+
+================================ ========
+Name                             Value
+================================ ========
+Maximum outer sampling           10000
+Maximum coefficient of variation 0.1
+Seed                             0
+Block size                       1
+================================ ========
+
+3-1 Results
 '''''''''''
 
+3-1-1 Values
+************
+
+=================== ======================== =============================================
+Failure probability Coefficient of variation Confidence interval at 95%
+=================== ======================== =============================================
+0.0006              0.408126                 :math:`\left[0.000120053; 0.00107995]\right]`
+=================== ======================== =============================================
+
+3-1-1 Figures
+*************
+
+.. image:: result_crue_MC_histo_S.png
+    :width: 443px
+    :align: center
+    :height: 340px
+
+.. image:: result_crue_MC_convergence.png
+    :width: 443px
+    :align: center
+    :height: 340px
+
+.. Test case 3: Gauge
+.. ------------------
+
+.. This test-case originates from [Jauge2014]_ and can be found in python/test/t_Jauge_std.py.
+
+.. The purpose of this example is to check the average value of the output against some exact reference value.
+
+.. .. image:: case_gauge.png
+..     :width: 420px
+..     :align: center
+..    :height: 294px
+
+.. 1- Problem statement
+.. ````````````````````
+.. The purpose of this example is to realize analysises with data loaded from an XML file
+.. previously generated with SALOME.
+
+.. 1-1 Inputs
+.. ''''''''''
+
+.. - Stochastics variables:
+
+.. ====== =========================== =================
+.. Name   Description                 Distribution
+.. ====== =========================== =================
+.. conduc Heat conduction coefficient Normal(0.5, 0.01)
+.. ====== =========================== =================
+
+.. 1-2 Output
+.. ''''''''''
+
+.. An average temperature on the superior surface 'temptop'.
+
+.. 2- Analysis
+.. ```````````
+
+.. 2-1 Inputs
+.. ''''''''''
 
 
-3- Reference
-````````````
+.. 2-2 Results
+.. '''''''''''
+
+
+
+.. 3- Reference
+.. ````````````
