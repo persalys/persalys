@@ -111,7 +111,21 @@ ifeq ($(DEBUG_OT),n)
 	$(TARGET)-strip --strip-unneeded $(MOD_PREFIX)/bin/*.dll
 	$(TARGET)-strip -g $(MOD_PREFIX)/lib/*.a
 	$(TARGET)-strip --strip-unneeded $(MOD_PREFIX)/Lib/site-packages/*/*.pyd
+	$(TARGET)-strip $(MOD_PREFIX)/bin/*.exe
 endif
+	# OT dlls
+	cp $(OT_PREFIX)/bin/*.dll $(MOD_PREFIX)/bin
+	# qt deps
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libpng*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libexpat*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libjpeg*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libtiff*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libdbus*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/*eay32.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libsqlite*.dll $(MOD_PREFIX)/bin
+	# qt libs
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/Qt*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/qwt*.dll $(MOD_PREFIX)/bin
 	-beep -r 2
 	touch mod-install
 
@@ -122,6 +136,8 @@ ifeq ($(CHECK_OT),y)
 	cp $(MOD_PREFIX)/bin/*.dll $(MOD_BUILD)/lib/test
 	cp $(OT_PREFIX)/bin/*.dll $(MOD_BUILD)/python/test
 	cp $(MOD_PREFIX)/bin/*.dll $(MOD_BUILD)/python/test
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/python$(PYBASEVER_NODOT).dll $(MOD_BUILD)/lib/test
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/python$(PYBASEVER_NODOT).dll $(MOD_BUILD)/python/test
 	cd $(MOD_BUILD) && ctest -j$(JOBS)
 	touch mod-test
 endif
