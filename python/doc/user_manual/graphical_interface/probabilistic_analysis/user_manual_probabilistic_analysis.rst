@@ -378,6 +378,7 @@ The results window gathers:
     - The axis Title, expected to be a string;
     - The minimum bound of the axis, expected to be a floating point;
     - The maximum bound of the axis, expected to be a floating point.
+
   The **Export** button opens a dialog box for the user to select where the
   figure has to be saved.
 
