@@ -25,7 +25,7 @@
 #include "Collection.hxx"
 
 namespace OTGUI {
-class Output : public Variable
+class OTGUI_API Output : public Variable
 {
   CLASSNAME;
 

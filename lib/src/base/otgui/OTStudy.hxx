@@ -27,7 +27,7 @@
 #include "Observer.hxx"
 
 namespace OTGUI {
-class OTStudy : public OT::PersistentObject, public Observable
+class OTGUI_API OTStudy : public OT::PersistentObject, public Observable
 {
 public:
   static OT::Collection<OTStudy*> GetOTStudies();

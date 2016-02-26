@@ -25,7 +25,7 @@
 
 namespace OTGUI {
 typedef OT::Collection<OT::NumericalSample> NumericalSampleCollection;
-class SimulationAnalysisResult : public ModelEvaluationResult
+class OTGUI_API SimulationAnalysisResult : public ModelEvaluationResult
 {
   CLASSNAME;
 

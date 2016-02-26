@@ -24,7 +24,7 @@
 #include "DesignOfExperimentImplementation.hxx"
 
 namespace OTGUI {
-class DesignOfExperiment : public OT::TypedInterfaceObject<DesignOfExperimentImplementation>
+class OTGUI_API DesignOfExperiment : public OT::TypedInterfaceObject<DesignOfExperimentImplementation>
 {
   CLASSNAME;
 

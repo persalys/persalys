@@ -24,7 +24,7 @@
 #include "PhysicalModelImplementation.hxx"
 
 namespace OTGUI {
-class PhysicalModel : public OT::TypedInterfaceObject<PhysicalModelImplementation>
+class OTGUI_API PhysicalModel : public OT::TypedInterfaceObject<PhysicalModelImplementation>
 {
   CLASSNAME;
 

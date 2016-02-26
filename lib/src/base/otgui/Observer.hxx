@@ -21,12 +21,13 @@
 #ifndef OTGUI_OBSERVER_HXX
 #define OTGUI_OBSERVER_HXX
 
-#include "OTtypes.hxx"
+#include <OTtypes.hxx>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
 class Observable;
 
-class Observer
+class OTGUI_API Observer
 {
 public:
   /** Default constructor */

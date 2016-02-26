@@ -28,7 +28,7 @@
 #include <QStandardItem>
 
 namespace OTGUI {
-class ProbabilisticModelItem : public QObject, public QStandardItem, public Observer
+class OTGUI_API ProbabilisticModelItem : public QObject, public QStandardItem, public Observer
 {
   Q_OBJECT
 

@@ -24,7 +24,7 @@
 #include "PhysicalModelImplementation.hxx"
 
 namespace OTGUI {
-class PythonPhysicalModel : public PhysicalModelImplementation
+class OTGUI_API PythonPhysicalModel : public PhysicalModelImplementation
 {
   CLASSNAME;
 

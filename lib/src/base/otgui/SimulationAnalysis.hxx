@@ -24,7 +24,7 @@
 #include "AnalysisImplementation.hxx"
 
 namespace OTGUI {
-class SimulationAnalysis : public AnalysisImplementation
+class OTGUI_API SimulationAnalysis : public AnalysisImplementation
 {
   CLASSNAME;
 

@@ -44,12 +44,14 @@
 #error "supports only Qt 4.0 or greater"
 #endif
 
+#include "otgui/OTGuiprivate.hxx"
+
 /**
  * Subclasssing QListWidget
  *
  * @author YoungTaek Oh
  */
-class PopupListWidget : public QListWidget
+class OTGUI_API PopupListWidget : public QListWidget
 {
   Q_OBJECT
 
@@ -80,7 +82,7 @@ protected:
  *        3. bugs?
  *  @note still experimental
  */
-class PopupCompleter : public QDialog
+class OTGUI_API PopupCompleter : public QDialog
 {
   Q_OBJECT
 
@@ -107,7 +109,7 @@ public:
  * An abstract Qt console
  * @author Houssem BDIOUI
  */
-class QConsole : public QTextEdit
+class OTGUI_API QConsole : public QTextEdit
 {
   Q_OBJECT
 public:

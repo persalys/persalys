@@ -27,7 +27,7 @@
 #include <vector>
 
 namespace OTGUI {
-class Observable
+class OTGUI_API Observable
 {
 public:
   /** Default constructor */

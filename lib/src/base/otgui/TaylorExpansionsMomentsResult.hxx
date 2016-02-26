@@ -26,7 +26,7 @@
 #include "QuadraticCumul.hxx"
 
 namespace OTGUI {
-class TaylorExpansionsMomentsResult : public OT::PersistentObject
+class OTGUI_API TaylorExpansionsMomentsResult : public OT::PersistentObject
 {
   CLASSNAME;
 

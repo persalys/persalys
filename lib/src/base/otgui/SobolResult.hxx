@@ -21,10 +21,11 @@
 #ifndef OTGUI_SOBOLRESULT_HXX
 #define OTGUI_SOBOLRESULT_HXX
 
+#include "otgui/OTGuiprivate.hxx"
 #include "NumericalSample.hxx"
 
 namespace OTGUI {
-class SobolResult : public OT::PersistentObject
+class OTGUI_API SobolResult : public OT::PersistentObject
 {
   CLASSNAME;
 

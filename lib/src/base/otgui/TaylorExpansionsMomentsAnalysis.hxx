@@ -25,7 +25,7 @@
 #include "TaylorExpansionsMomentsResult.hxx"
 
 namespace OTGUI {
-class TaylorExpansionsMomentsAnalysis : public AnalysisImplementation
+class OTGUI_API TaylorExpansionsMomentsAnalysis : public AnalysisImplementation
 {
   CLASSNAME;
 

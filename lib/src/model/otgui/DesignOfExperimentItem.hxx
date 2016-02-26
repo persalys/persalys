@@ -26,7 +26,7 @@
 #include <QStandardItem>
 
 namespace OTGUI {
-class DesignOfExperimentItem : public QObject, public QStandardItem, public Observer
+class OTGUI_API DesignOfExperimentItem : public QObject, public QStandardItem, public Observer
 {
   Q_OBJECT
 

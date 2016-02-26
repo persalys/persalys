@@ -27,7 +27,7 @@
 #include <QDockWidget>
 
 namespace OTGUI {
-class MainWindow : public QMainWindow
+class OTGUI_API MainWindow : public QMainWindow
 {
   Q_OBJECT
 

@@ -25,7 +25,7 @@
 #include "LimitState.hxx"
 
 namespace OTGUI {
-class ReliabilityAnalysis : public AnalysisImplementation
+class OTGUI_API ReliabilityAnalysis : public AnalysisImplementation
 {
 public:
   /** Default constructor */

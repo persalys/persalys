@@ -30,7 +30,7 @@
 #include "ComposedDistribution.hxx"
 
 namespace OTGUI {
-class PhysicalModelImplementation : public OT::PersistentObject, public Observable
+class OTGUI_API PhysicalModelImplementation : public OT::PersistentObject, public Observable
 {
 public:
   /** Constructor with parameters */

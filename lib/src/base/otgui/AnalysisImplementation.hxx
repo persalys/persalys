@@ -24,11 +24,12 @@
 #include "PhysicalModel.hxx"
 
 namespace OTGUI {
-class AnalysisImplementation : public OT::PersistentObject, public Observable
+class OTGUI_API AnalysisImplementation : public OT::PersistentObject, public Observable
 {
 public:
   /** Default constructor */
   AnalysisImplementation();
+
   /** Constructor with parameters */
   AnalysisImplementation(const OT::String & name, const PhysicalModel & physicalModel);
 

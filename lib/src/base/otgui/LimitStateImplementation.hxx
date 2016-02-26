@@ -26,7 +26,7 @@
 #include "Event.hxx"
 
 namespace OTGUI {
-class LimitStateImplementation : public OT::PersistentObject, public Observable
+class OTGUI_API LimitStateImplementation : public OT::PersistentObject, public Observable
 {
   CLASSNAME;
 

@@ -24,7 +24,7 @@
 #include "AnalysisImplementation.hxx"
 
 namespace OTGUI {
-class Analysis : public OT::TypedInterfaceObject<AnalysisImplementation>
+class OTGUI_API Analysis : public OT::TypedInterfaceObject<AnalysisImplementation>
 {
   CLASSNAME;
 

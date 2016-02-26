@@ -26,7 +26,7 @@
 #include <QAbstractTableModel>
 
 namespace OTGUI {
-class InputTableProbabilisticModel : public QAbstractTableModel
+class OTGUI_API InputTableProbabilisticModel : public QAbstractTableModel
 {
   Q_OBJECT
 

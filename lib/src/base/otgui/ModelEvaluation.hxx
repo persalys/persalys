@@ -25,7 +25,7 @@
 #include "ModelEvaluationResult.hxx"
 
 namespace OTGUI {
-class ModelEvaluation : public AnalysisImplementation
+class OTGUI_API ModelEvaluation : public AnalysisImplementation
 {
   CLASSNAME;
 

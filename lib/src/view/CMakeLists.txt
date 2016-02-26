@@ -2,6 +2,8 @@
 add_subdirectory (pythonConsole)
 add_subdirectory (plot)
 
+set (SOURCEFILES "" CACHE STRING "" FORCE)
+
 ot_add_current_dir_to_include_dirs ()
 
 ot_add_source_file ( MainWindow.cxx )
@@ -83,53 +85,55 @@ ot_install_header_file ( HorizontalHeaderViewWithCombobox.hxx )
 ot_install_header_file ( DeterministicDesignPage.hxx )
 ot_install_header_file ( ProbabilisticDesignPage.hxx )
 
-qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
-                                   otgui/OTguiToolBar.hxx
-                                   otgui/OTguiMenuBar.hxx
-                                   otgui/OTguiStatusBar.hxx
-                                   otgui/OTguiSubWindow.hxx
-                                   otgui/OTguiWizard.hxx
-                                   otgui/OTguiMdiArea.hxx
-                                   otgui/ComboBoxDelegate.hxx
-                                   otgui/SpinBoxDelegate.hxx
-                                   otgui/LineEditWithQValidatorDelegate.hxx
-                                   otgui/CustomDoubleValidator.hxx
-                                   otgui/ImportTablePage.hxx
-                                   otgui/StudyTreeView.hxx
-                                   otgui/OTguiTableView.hxx
-                                   otgui/HorizontalHeaderViewWithCombobox.hxx
-                                   otgui/DeterministicDesignPage.hxx
-                                   otgui/ProbabilisticDesignPage.hxx
-                                   otgui/PhysicalModelWindowWidget.hxx
-                                   otgui/AnalyticalPhysicalModelWindow.hxx
-                                   otgui/PythonPhysicalModelWindow.hxx
-                                   otgui/ProbabilisticModelWindow.hxx
-                                   otgui/DesignOfExperimentWizard.hxx
-                                   otgui/DesignOfExperimentWindow.hxx
-                                   otgui/ModelEvaluationWizard.hxx
-                                   otgui/ModelEvaluationResultWindow.hxx
-                                   otgui/CentralTendencyWizard.hxx
-                                   otgui/MonteCarloResultWindow.hxx
-                                   otgui/TaylorExpansionsMomentsResultWindow.hxx
-                                   otgui/SobolResultWindow.hxx
-                                   otgui/SRCResultWindow.hxx
-                                   otgui/SensitivityAnalysisWizard.hxx
-                                   otgui/LimitStateWindow.hxx
-                                   otgui/ReliabilityAnalysisWizard.hxx
-                                   otgui/MonteCarloReliabilityResultWindow.hxx
-                                   otgui/CodeDelegate.hxx
-                                   )
+qt4_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
+                                  otgui/OTguiToolBar.hxx
+                                  otgui/OTguiMenuBar.hxx
+                                  otgui/OTguiStatusBar.hxx
+                                  otgui/OTguiSubWindow.hxx
+                                  otgui/OTguiWizard.hxx
+                                  otgui/OTguiMdiArea.hxx
+                                  otgui/ComboBoxDelegate.hxx
+                                  otgui/SpinBoxDelegate.hxx
+                                  otgui/LineEditWithQValidatorDelegate.hxx
+                                  otgui/CustomDoubleValidator.hxx
+                                  otgui/ImportTablePage.hxx
+                                  otgui/StudyTreeView.hxx
+                                  otgui/OTguiTableView.hxx
+                                  otgui/HorizontalHeaderViewWithCombobox.hxx
+                                  otgui/DeterministicDesignPage.hxx
+                                  otgui/ProbabilisticDesignPage.hxx
+                                  otgui/PhysicalModelWindowWidget.hxx
+                                  otgui/AnalyticalPhysicalModelWindow.hxx
+                                  otgui/PythonPhysicalModelWindow.hxx
+                                  otgui/ProbabilisticModelWindow.hxx
+                                  otgui/DesignOfExperimentWizard.hxx
+                                  otgui/DesignOfExperimentWindow.hxx
+                                  otgui/ModelEvaluationWizard.hxx
+                                  otgui/ModelEvaluationResultWindow.hxx
+                                  otgui/CentralTendencyWizard.hxx
+                                  otgui/MonteCarloResultWindow.hxx
+                                  otgui/TaylorExpansionsMomentsResultWindow.hxx
+                                  otgui/SobolResultWindow.hxx
+                                  otgui/SRCResultWindow.hxx
+                                  otgui/SensitivityAnalysisWizard.hxx
+                                  otgui/LimitStateWindow.hxx
+                                  otgui/ReliabilityAnalysisWizard.hxx
+                                  otgui/MonteCarloReliabilityResultWindow.hxx
+                                  otgui/CodeDelegate.hxx
+                                  )
+
 
 if (SalomeYACS_FOUND)
-  qt4_wrap_cpp ( OTGUI_VIEW_MOC_SRCS otgui/YACSPhysicalModelWindow.hxx )
+  qt4_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/YACSPhysicalModelWindow.hxx)
 endif ()
 
 set(RESOURCES ${CMAKE_SOURCE_DIR}/gui.qrc)
 qt4_add_resources(OTGUI_RESOURCES_RCC ${RESOURCES})
 
-include_directories ( ${INTERNAL_INCLUDE_DIRS} )
+include_directories (${INTERNAL_INCLUDE_DIRS})
 
-add_library ( otguiview ${SOURCEFILES} ${OTGUI_VIEW_MOC_SRCS} ${OTGUI_RESOURCES_RCC} )
+
+add_library (otguiview ${SOURCEFILES} ${OTGUI_VIEW_MOC_SRCS} ${OTGUI_RESOURCES_RCC})
 
 if ( BUILD_SHARED_LIBS )
   set_target_properties ( otguiview PROPERTIES COMPILE_DEFINITIONS "OTGUI_DLL_EXPORTS" )
@@ -141,20 +145,14 @@ endif ()
 if ( NOT DEFINED LIB_SOVERSION ) 
   set ( LIB_SOVERSION 0 )
 endif ()
-set_target_properties ( otguiview PROPERTIES VERSION ${LIB_VERSION} )
-set_target_properties ( otguiview PROPERTIES SOVERSION ${LIB_SOVERSION} )
-target_link_libraries ( otguiview otguimodel )
-target_link_libraries ( otguiview otguipythonconsole )
-target_link_libraries ( otguiview otguiplot )
+set_target_properties (otguiview PROPERTIES VERSION ${LIB_VERSION} )
+set_target_properties (otguiview PROPERTIES SOVERSION ${LIB_SOVERSION} )
+target_link_libraries (otguiview otguimodel)
+target_link_libraries (otguiview otguipythonconsole)
+target_link_libraries (otguiview otguiplot)
 
-
-find_package(PythonLibs REQUIRED)
-include_directories(${PYTHON_INCLUDE_DIRS})
-target_link_libraries(otguiview ${PYTHON_LIBRARIES})
-
-find_package ( Qwt REQUIRED )
-include_directories ( ${QWT_INCLUDE_DIRS} )
-target_link_libraries( otguiview ${QWT_LIBRARIES} )
+include_directories (${QWT_INCLUDE_DIRS})
+target_link_libraries (otguiview ${QWT_LIBRARIES})
 
 
 install ( TARGETS otguiview

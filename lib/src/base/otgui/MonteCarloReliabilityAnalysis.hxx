@@ -26,7 +26,7 @@
 #include "MonteCarloReliabilityAnalysisResult.hxx"
 
 namespace OTGUI {
-class MonteCarloReliabilityAnalysis : public ReliabilityAnalysis
+class OTGUI_API MonteCarloReliabilityAnalysis : public ReliabilityAnalysis
 {
   CLASSNAME;
 

@@ -25,7 +25,7 @@
 #include "YACSEvaluation.hxx"
 
 namespace OTGUI {
-class YACSPhysicalModel : public PhysicalModelImplementation
+class OTGUI_API YACSPhysicalModel : public PhysicalModelImplementation
 {
   CLASSNAME;
 

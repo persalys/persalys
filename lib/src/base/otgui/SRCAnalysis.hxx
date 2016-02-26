@@ -25,7 +25,7 @@
 #include "SRCResult.hxx"
 
 namespace OTGUI {
-class SRCAnalysis : public SimulationAnalysis
+class OTGUI_API SRCAnalysis : public SimulationAnalysis
 {
   CLASSNAME;
 

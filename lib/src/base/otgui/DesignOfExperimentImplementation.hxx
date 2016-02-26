@@ -27,7 +27,7 @@
 #include "Experiment.hxx"
 
 namespace OTGUI {
-class DesignOfExperimentImplementation : public OT::PersistentObject, public Observable
+class OTGUI_API DesignOfExperimentImplementation : public OT::PersistentObject, public Observable
 {
   CLASSNAME;
 

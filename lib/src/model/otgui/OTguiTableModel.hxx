@@ -26,9 +26,10 @@
 #include <QAbstractTableModel>
 #include <QModelIndex>
 
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class OTguiTableModel : public QAbstractTableModel
+class OTGUI_API OTguiTableModel : public QAbstractTableModel
 {
 public:
   OTguiTableModel(const OT::NumericalSample & data);

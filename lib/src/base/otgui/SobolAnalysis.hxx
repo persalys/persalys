@@ -25,7 +25,7 @@
 #include "SobolResult.hxx"
 
 namespace OTGUI {
-class SobolAnalysis : public SimulationAnalysis
+class OTGUI_API SobolAnalysis : public SimulationAnalysis
 {
   CLASSNAME;
 

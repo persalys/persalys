@@ -26,7 +26,7 @@
 #include <QStandardItem>
 
 namespace OTGUI {
-class LimitStateItem : public QObject, public QStandardItem, public Observer
+class OTGUI_API LimitStateItem : public QObject, public QStandardItem, public Observer
 {
   Q_OBJECT
 

@@ -21,10 +21,11 @@
 #ifndef OTGUI_DISTRIBUTIONDICTIONARY_HXX
 #define OTGUI_DISTRIBUTIONDICTIONARY_HXX
 
-#include "Distribution.hxx"
+#include <Distribution.hxx>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class DistributionDictionary
+class OTGUI_API DistributionDictionary
 {
 public:
   /** Get the list of the available distributions */

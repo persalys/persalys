@@ -26,7 +26,7 @@
 #include <QAbstractTableModel>
 
 namespace OTGUI {
-class ExperimentTableModel : public QAbstractTableModel
+class OTGUI_API ExperimentTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 

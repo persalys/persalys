@@ -1,6 +1,7 @@
 cmake_minimum_required ( VERSION 2.8 )
 
 option ( BUILD_PYTHON                 "Build the python module for the library"                               ON )
+option ( BUILD_GUI                    "Build the GUI"                                                         ON )
 option ( BUILD_DOC                    "Build the documentation"                                               OFF )
 option ( LINK_PYTHON_LIBRARY          "Link python modules against python library"                            ON )
 option ( INSTALL_TESTS                "Install compiled tests for native platform testing"                    OFF )
@@ -29,8 +30,13 @@ endif ()
 add_definitions ( ${OTGUI_DEFINITIONS} )
 
 
-find_package (Qt4 COMPONENTS QtCore QtGui REQUIRED)
-include (${QT_USE_FILE})
+if (BUILD_GUI)
+  find_package (Qt4 COMPONENTS QtCore QtGui REQUIRED)
+  include (${QT_USE_FILE})
+
+  find_package (Qwt REQUIRED)
+  find_package (PythonLibs REQUIRED)
+endif ()
 
 if (USE_SALOME)
   find_package (SalomeKERNEL NO_MODULE)
@@ -137,7 +143,6 @@ macro ( ot_add_current_dir_to_include_dirs )
   set ( INTERNAL_INCLUDE_DIRS ${inc_dirs} CACHE INTERNAL "List of directories with header files needed for build" )
 endmacro ( ot_add_current_dir_to_include_dirs )
 
-
 # The tests can't be run if this function is absent
 enable_testing ()
 add_custom_target ( tests COMMENT "Build tests" )
@@ -147,7 +152,10 @@ add_custom_target ( installcheck COMMENT "Run post-installation tests" )
 add_subdirectory ( lib )
 
 add_dependencies ( check cppcheck )
-add_subdirectory (main)
+
+if (BUILD_GUI)
+  add_subdirectory (main)
+endif ()
 
 if ( PYTHONINTERP_FOUND AND PYTHONLIBS_FOUND AND SWIG_FOUND AND BUILD_SHARED_LIBS )
   add_subdirectory ( python )

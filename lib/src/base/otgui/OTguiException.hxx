@@ -22,6 +22,7 @@
 #ifndef OTGUI_EXCEPTION_HXX
 #define OTGUI_EXCEPTION_HXX
 
+#include "otgui/OTGuiprivate.hxx"
 #include "Exception.hxx"
 
 namespace OTGUI {
@@ -32,7 +33,7 @@ namespace OTGUI {
  *
  */
 
-#define NEW_OTGUIEXCEPTION( CName ) class OT_API CName : public OT::Exception   \
+#define NEW_OTGUIEXCEPTION( CName ) class OTGUI_API CName : public OT::Exception   \
   {                                                             \
   public:                                                       \
     CName (const OT::PointInSourceFile & point);                    \

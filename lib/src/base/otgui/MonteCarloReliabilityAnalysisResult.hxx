@@ -21,10 +21,11 @@
 #ifndef OTGUI_MONTECARLORELIABILITYANALYSISRESULT_HXX
 #define OTGUI_MONTECARLORELIABILITYANALYSISRESULT_HXX
 
-#include "SimulationResult.hxx"
+#include <SimulationResult.hxx>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class MonteCarloReliabilityAnalysisResult : public OT::PersistentObject
+class OTGUI_API MonteCarloReliabilityAnalysisResult : public OT::PersistentObject
 {
   CLASSNAME;
 

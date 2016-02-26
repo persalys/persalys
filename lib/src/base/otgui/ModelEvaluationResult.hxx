@@ -21,10 +21,11 @@
 #ifndef OTGUI_MODELEVALUATIONRESULT_HXX
 #define OTGUI_MODELEVALUATIONRESULT_HXX
 
-#include "NumericalSample.hxx"
+#include "otgui/OTGuiprivate.hxx"
+#include <NumericalSample.hxx>
 
 namespace OTGUI {
-class ModelEvaluationResult : public OT::PersistentObject
+class OTGUI_API ModelEvaluationResult : public OT::PersistentObject
 {
   CLASSNAME;
 

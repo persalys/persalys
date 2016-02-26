@@ -34,7 +34,7 @@
  *@author Mondrian Nuessle
  */
 
-class QPyConsole : public QConsole
+class OTGUI_API QPyConsole : public QConsole
 {
   Q_OBJECT
 

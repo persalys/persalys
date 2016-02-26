@@ -27,7 +27,7 @@
 #include "DiracFactory.hxx"
 
 namespace OTGUI {
-class Input : public Variable
+class OTGUI_API Input : public Variable
 {
   CLASSNAME;
 

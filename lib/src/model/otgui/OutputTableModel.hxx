@@ -27,7 +27,7 @@
 #include <QModelIndex>
 
 namespace OTGUI {
-class OutputTableModel : public QAbstractTableModel
+class OTGUI_API OutputTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 

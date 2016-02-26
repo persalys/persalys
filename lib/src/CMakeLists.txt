@@ -1,6 +1,7 @@
 
 add_subdirectory (base)
 
-add_subdirectory (model)
-add_subdirectory (view)
-
+if (BUILD_GUI)
+  add_subdirectory (model)
+  add_subdirectory (view)
+endif ()

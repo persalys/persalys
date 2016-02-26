@@ -21,10 +21,11 @@
 #ifndef OTGUI_SRCRESULT_HXX
 #define OTGUI_SRCRESULT_HXX
 
-#include "NumericalSample.hxx"
+#include "otgui/OTGuiprivate.hxx"
+#include <NumericalSample.hxx>
 
 namespace OTGUI {
-class SRCResult : public OT::PersistentObject
+class OTGUI_API SRCResult : public OT::PersistentObject
 {
   CLASSNAME;
 

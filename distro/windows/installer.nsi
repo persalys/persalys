@@ -280,7 +280,7 @@ Function .onInit
     ${EndIf}
 
     StrCpy $INSTDIR "$Python_INSTALL_PATH"
-    StrCpy $MODULE_INSTALL_PATH "$Python_INSTALL_PATH\Lib\site-packages\${MODULE_NAME_LOWERCASE}"
+    StrCpy $MODULE_INSTALL_PATH "$Python_INSTALL_PATH\Lib\site-packages\${MODULE_NAME_LOWERCASE}base"
     ; MessageBox MB_OK|MB_ICONEXCLAMATION "Python found in $Python_INSTALL_PATH." /SD IDOK
     ; !insertmacro PRINT "Python $PYBASEVER found in directory $Python_INSTALL_PATH."
   ${EndIf}
@@ -312,7 +312,7 @@ Section "!${MODULE_NAME} DLL & doc" SEC01
 
   ; reread $INSTDIR in case user change it.
   StrCpy $Python_INSTALL_PATH "$INSTDIR"
-  StrCpy $MODULE_INSTALL_PATH "$Python_INSTALL_PATH\Lib\site-packages\${MODULE_NAME_LOWERCASE}"
+  StrCpy $MODULE_INSTALL_PATH "$Python_INSTALL_PATH\Lib\site-packages\${MODULE_NAME_LOWERCASE}base"
 
   SetDetailsPrint both
   ClearErrors
@@ -329,7 +329,7 @@ Section "!${MODULE_NAME} DLL & doc" SEC01
   SetOutPath "$MODULE_INSTALL_PATH"
   File /r "${MODULE_PREFIX}\bin\*.*"
   ; ! not working: __init__ will override  ot __init__
-  File /r "${MODULE_PREFIX}\Lib\site-packages\${MODULE_NAME_LOWERCASE}\*.*"
+  File /r "${MODULE_PREFIX}\Lib\site-packages\${MODULE_NAME_LOWERCASE}base\*.*"
   SetOutPath "$MODULE_INSTALL_PATH\include\${MODULE_NAME_LOWERCASE}"
   File /r "${MODULE_PREFIX}\include\${MODULE_NAME_LOWERCASE}\*.*"
 
@@ -337,8 +337,8 @@ Section "!${MODULE_NAME} DLL & doc" SEC01
   File "README.txt"
 
   !insertmacro PRINT "Install doc example in $MODULE_INSTALL_PATH\doc\pdf."
-  SetOutPath "$MODULE_INSTALL_PATH\doc\pdf"
-  File "${MODULE_PREFIX}\share\doc\${MODULE_NAME_LOWERCASE}\pdf\${MODULE_NAME}_Documentation.pdf"
+  ;SetOutPath "$MODULE_INSTALL_PATH\doc\pdf"
+  ;File "${MODULE_PREFIX}\share\doc\${MODULE_NAME_LOWERCASE}\pdf\${MODULE_NAME}_Documentation.pdf"
 
   ; create a version file
   ClearErrors
@@ -378,8 +378,9 @@ Section -AdditionalIcons
 
   CreateDirectory "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}"
   CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\README.lnk" "$MODULE_INSTALL_PATH\README.txt" "" "" 0
-  CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\Documentation.lnk" "$MODULE_INSTALL_PATH\doc\pdf\${MODULE_NAME}_Documentation.pdf" "" "" 1
+  ;CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\Documentation.lnk" "$MODULE_INSTALL_PATH\doc\pdf\${MODULE_NAME}_Documentation.pdf" "" "" 1
   CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\Uninstall.lnk" "$MODULE_INSTALL_PATH\${UNINST_EXE}" "" "" 2
+  CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\otgui.lnk" "$MODULE_INSTALL_PATH\otgui.exe" "" "" 0
 SectionEnd
 
 

@@ -25,7 +25,7 @@
 #include "Distribution.hxx"
 
 namespace OTGUI {
-class MonteCarloResult : public SimulationAnalysisResult
+class OTGUI_API MonteCarloResult : public SimulationAnalysisResult
 {
   CLASSNAME;
 

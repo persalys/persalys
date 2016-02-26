@@ -27,7 +27,7 @@
 #include <Event.hxx>
 
 namespace OTGUI {
-class LimitState : public OT::TypedInterfaceObject<LimitStateImplementation>
+class OTGUI_API LimitState : public OT::TypedInterfaceObject<LimitStateImplementation>
 {
   CLASSNAME;
 

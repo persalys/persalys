@@ -29,7 +29,7 @@
 #include "otgui/OTStudy.hxx"
 
 namespace OTGUI {
-class OTStudyItem : public QObject, public QStandardItem, public Observer
+class OTGUI_API OTStudyItem : public QObject, public QStandardItem, public Observer
 {
   Q_OBJECT
 

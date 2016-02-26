@@ -22,9 +22,10 @@
 #define OTGUI_VARIABLE_HXX
 
 #include <PersistentObject.hxx>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class Variable : public OT::PersistentObject
+class OTGUI_API Variable : public OT::PersistentObject
 {
   CLASSNAME;
 

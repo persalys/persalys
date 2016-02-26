@@ -24,7 +24,7 @@
 #include "PhysicalModelImplementation.hxx"
 
 namespace OTGUI {
-class AnalyticalPhysicalModel : public PhysicalModelImplementation
+class OTGUI_API AnalyticalPhysicalModel : public PhysicalModelImplementation
 {
   CLASSNAME;
 
