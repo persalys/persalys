@@ -78,7 +78,7 @@ void SRCResultWindow::buildInterface()
 
     // table of indices
     QTableWidget * table = new QTableWidget(inputNames.getSize(), 2, this);
-    table->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Indice"));
+    table->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Index"));
     table->verticalHeader()->hide();
     table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 
@@ -120,21 +120,21 @@ void SRCResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
   {
     case 1:
     {
-      int indice = 0;
+      int index = 0;
       if (order == Qt::DescendingOrder)
       {
-        for (std::map<double,int>::reverse_iterator it=indices_[indexOutput].rbegin(); it!=indices_[indexOutput].rend(); ++it, indice++)
+        for (std::map<double,int>::reverse_iterator it=indices_[indexOutput].rbegin(); it!=indices_[indexOutput].rend(); ++it, index++)
         {
-          currentIndices[indice] = result_.getIndices()[indexOutput][it->second];
-          sortedInputNames[indice] = result_.getInputNames()[it->second];
+          currentIndices[index] = result_.getIndices()[indexOutput][it->second];
+          sortedInputNames[index] = result_.getInputNames()[it->second];
         }
       }
       else
       {
-        for (std::map<double,int>::iterator it=indices_[indexOutput].begin(); it!=indices_[indexOutput].end(); ++it, indice++)
+        for (std::map<double,int>::iterator it=indices_[indexOutput].begin(); it!=indices_[indexOutput].end(); ++it, index++)
         {
-          currentIndices[indice] = result_.getIndices()[indexOutput][it->second];
-          sortedInputNames[indice] = result_.getInputNames()[it->second];
+          currentIndices[index] = result_.getIndices()[indexOutput][it->second];
+          sortedInputNames[index] = result_.getInputNames()[it->second];
         }
       }
       break;

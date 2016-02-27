@@ -358,7 +358,7 @@ void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrder, const N
   else
     setTitle("SRC sensitivity indices");
 
-  setAxisTitle(QwtPlot::yLeft, "Indice value");
+  setAxisTitle(QwtPlot::yLeft, "Index");
   setAxisTitle(QwtPlot::xBottom, "Inputs");
 
   // populate bar chart
@@ -380,7 +380,7 @@ void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrder, const N
     //qDebug() << "x= " << xData[i] << " , y= " << yData[i];
   }
 
-  plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Ellipse, QBrush(colors[0]), QPen(colors[0]), QSize(5, 5)), "First order indice");
+  plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Ellipse, QBrush(colors[0]), QPen(colors[0]), QSize(5, 5)), "First order index");
 
   if (totalOrder.getSize())
   {
@@ -393,7 +393,7 @@ void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrder, const N
       yData[i] = totalOrder[i];
       //qDebug() << "x= " << xData[i] << " , y= " << yData[i];
     }
-    plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Rect, QBrush(colors[1]), QPen(colors[1]), QSize(5, 5)), "Total order indice");
+    plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Rect, QBrush(colors[1]), QPen(colors[1]), QSize(5, 5)), "Total order index");
 
     insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
   }

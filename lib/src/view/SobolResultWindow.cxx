@@ -94,7 +94,7 @@ void SobolResultWindow::buildInterface()
 
     // table of indices
     QTableWidget * table = new QTableWidget(inputNames.getSize(), 3, this);
-    table->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("First order indice") << tr("Total order indice"));
+    table->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("First order index") << tr("Total order index"));
     table->verticalHeader()->hide();
     table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 
@@ -171,46 +171,46 @@ void SobolResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
   {
     case 1:
     {
-      int indice = 0;
+      int index = 0;
       if (order == Qt::DescendingOrder)
       {
-        for (std::map<double,int>::reverse_iterator it=totalOrderIndices_[indexOutput].rbegin(); it!=totalOrderIndices_[indexOutput].rend(); ++it, indice++)
+        for (std::map<double,int>::reverse_iterator it=totalOrderIndices_[indexOutput].rbegin(); it!=totalOrderIndices_[indexOutput].rend(); ++it, index++)
         {
-          currentFirstOrderIndices[indice] = result_.getFirstOrderIndices()[indexOutput][it->second];
-          currentTotalOrderIndices[indice] = it->first;
-          sortedInputNames[indice] = result_.getInputNames()[it->second];
+          currentFirstOrderIndices[index] = result_.getFirstOrderIndices()[indexOutput][it->second];
+          currentTotalOrderIndices[index] = it->first;
+          sortedInputNames[index] = result_.getInputNames()[it->second];
         }
       }
       else
       {
-        for (std::map<double,int>::iterator it=totalOrderIndices_[indexOutput].begin(); it!=totalOrderIndices_[indexOutput].end(); ++it, indice++)
+        for (std::map<double,int>::iterator it=totalOrderIndices_[indexOutput].begin(); it!=totalOrderIndices_[indexOutput].end(); ++it, index++)
         {
-          currentFirstOrderIndices[indice] = result_.getFirstOrderIndices()[indexOutput][it->second];
-          currentTotalOrderIndices[indice] = it->first;
-          sortedInputNames[indice] = result_.getInputNames()[it->second];
+          currentFirstOrderIndices[index] = result_.getFirstOrderIndices()[indexOutput][it->second];
+          currentTotalOrderIndices[index] = it->first;
+          sortedInputNames[index] = result_.getInputNames()[it->second];
         }
       }
       break;
     }
     case 2:
     {
-      int indice = 0;
+      int index = 0;
       if (order == Qt::DescendingOrder)
       {
-        for (std::map<double,int>::reverse_iterator it=firstOrderIndices_[indexOutput].rbegin(); it!=firstOrderIndices_[indexOutput].rend(); ++it, indice++)
+        for (std::map<double,int>::reverse_iterator it=firstOrderIndices_[indexOutput].rbegin(); it!=firstOrderIndices_[indexOutput].rend(); ++it, index++)
         {
-          currentFirstOrderIndices[indice] = it->first;
-          currentTotalOrderIndices[indice] = result_.getTotalOrderIndices()[indexOutput][it->second];
-          sortedInputNames[indice] = result_.getInputNames()[it->second];
+          currentFirstOrderIndices[index] = it->first;
+          currentTotalOrderIndices[index] = result_.getTotalOrderIndices()[indexOutput][it->second];
+          sortedInputNames[index] = result_.getInputNames()[it->second];
         }
       }
       else
       {
-        for (std::map<double,int>::iterator it=firstOrderIndices_[indexOutput].begin(); it!=firstOrderIndices_[indexOutput].end(); ++it, indice++)
+        for (std::map<double,int>::iterator it=firstOrderIndices_[indexOutput].begin(); it!=firstOrderIndices_[indexOutput].end(); ++it, index++)
         {
-          currentFirstOrderIndices[indice] = it->first;
-          currentTotalOrderIndices[indice] = result_.getTotalOrderIndices()[indexOutput][it->second];
-          sortedInputNames[indice] = result_.getInputNames()[it->second];
+          currentFirstOrderIndices[index] = it->first;
+          currentTotalOrderIndices[index] = result_.getTotalOrderIndices()[indexOutput][it->second];
+          sortedInputNames[index] = result_.getInputNames()[it->second];
         }
       }
       break;
