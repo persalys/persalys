@@ -34,8 +34,6 @@ class OTGUI_API OTguiTableModel : public QAbstractTableModel
 public:
   OTguiTableModel(const OT::NumericalSample & data);
 
-  virtual ~OTguiTableModel();
-
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent) const;
   QVariant data(const QModelIndex & index, int role) const;

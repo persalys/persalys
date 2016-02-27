@@ -37,9 +37,6 @@ public:
 public slots:
   void contextMenu(const QPoint & pos);
   void exportData();
-
-private:
-  OTguiTableModel * model_;
 };
 }
 #endif

@@ -42,12 +42,6 @@ OTguiTableModel::OTguiTableModel(const NumericalSample & data)
 }
 
 
-OTguiTableModel::~OTguiTableModel()
-{
-
-}
-
-
 int OTguiTableModel::columnCount(const QModelIndex & parent) const
 {
   return data_.getDimension();

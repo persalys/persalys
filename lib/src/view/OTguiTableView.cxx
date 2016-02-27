@@ -22,12 +22,12 @@
 
 #include <QFileDialog>
 #include <QMenu>
+#include <QMessageBox>
 
 namespace OTGUI {
 
 OTguiTableView::OTguiTableView(QWidget* parent)
   : QTableView(parent)
-  , model_(0)
 {
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
@@ -39,8 +39,7 @@ OTguiTableView::OTguiTableView(const OT::NumericalSample & sample, QWidget *pare
 {
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
-  model_ = new OTguiTableModel(sample);
-  setModel(model_);
+  setModel(new OTguiTableModel(sample));
 }
 
 
@@ -67,7 +66,14 @@ void OTguiTableView::exportData()
     if (!fileName.endsWith(".csv"))
       fileName += ".csv";
 
-  model_->exportData(fileName);
+    try
+    {
+      static_cast<OTguiTableModel*>(model())->exportData(fileName);
+    }
+    catch (std::exception & ex)
+    {
+      QMessageBox::warning(this, tr("Warning"), tr("Impossible to export the data."));
+    }
   }
 }
 }
