@@ -144,7 +144,7 @@ void ImportTablePage::openFileRequested()
 {
   QString fileName = QFileDialog::getOpenFileName(this, tr("Data to import..."),
                      QDir::homePath(),
-                     tr("Text Files (*.txt);;"));
+                     tr("Text Files (*.txt);; CSV source files (*.csv)"));
 
   if (!fileName.isEmpty())
   {
