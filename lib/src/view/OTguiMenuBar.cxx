@@ -37,30 +37,15 @@ void OTguiMenuBar::buildActions()
   QMenu * fileMenu = new QMenu(tr("&File"));
 
   QAction * action = new QAction(QIcon(":/images/document-new.png"), tr("&New"), this);
+  action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
   action->setStatusTip(tr("Create a new OTStudy"));
   connect(action, SIGNAL(triggered()), this, SIGNAL(createNewOTStudy()));
   fileMenu->addAction(action);
 
   action = new QAction(QIcon(":/images/document-open.png"), tr("&Open..."), this);
+  action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_O));
   action->setStatusTip(tr("Open an existing OTStudy"));
   connect(action, SIGNAL(triggered()), this, SIGNAL(openOTStudy()));
-  fileMenu->addAction(action);
-
-  action = new QAction(QIcon(":/images/document-save.png"), tr("Save"), this);
-  action->setStatusTip(tr("Save the OTStudy"));
-  connect(action, SIGNAL(triggered()), this, SIGNAL(saveOTStudy()));
-  fileMenu->addAction(action);
-
-  action = new QAction(QIcon(":/images/document-save-as.png"), tr("Save As..."), this);
-  action->setStatusTip(tr("Save the OTStudy with a new name"));
-  connect(action, SIGNAL(triggered()), this, SIGNAL(saveAsOTStudy()));
-  fileMenu->addAction(action);
-
-  addSeparator();
-
-  action = new QAction(QIcon(":/images/document-export.png"), tr("Export Python"), this);
-  action->setStatusTip(tr("Export the OTStudy in a Python Script"));
-  connect(action, SIGNAL(triggered()), this, SIGNAL(exportPython()));
   fileMenu->addAction(action);
 
   action = new QAction(QIcon(":/images/document-import.png"), tr("&Import Python..."), this);
@@ -70,7 +55,31 @@ void OTguiMenuBar::buildActions()
 
   addSeparator();
 
+  action = new QAction(QIcon(":/images/document-save.png"), tr("Save"), this);
+  action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_S));
+  action->setStatusTip(tr("Save the current OTStudy"));
+  connect(action, SIGNAL(triggered()), this, SIGNAL(saveOTStudy()));
+  fileMenu->addAction(action);
+
+  action = new QAction(QIcon(":/images/document-save-as.png"), tr("Save As..."), this);
+  action->setStatusTip(tr("Save the current OTStudy with a new name"));
+  connect(action, SIGNAL(triggered()), this, SIGNAL(saveAsOTStudy()));
+  fileMenu->addAction(action);
+
+  action = new QAction(QIcon(":/images/document-export.png"), tr("Export Python"), this);
+  action->setStatusTip(tr("Export the current OTStudy in a Python Script"));
+  connect(action, SIGNAL(triggered()), this, SIGNAL(exportPython()));
+  fileMenu->addAction(action);
+
+  action = new QAction(QIcon(":/images/window-close.png"), tr("Close"), this);
+  action->setStatusTip(tr("Close the current OTStudy"));
+  connect(action, SIGNAL(triggered()), this, SIGNAL(closeOTStudy()));
+  fileMenu->addAction(action);
+
+  addSeparator();
+
   action = new QAction(QIcon(":/images/window-close.png"), tr("E&xit"), this);
+  action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Q));
   connect(action, SIGNAL(triggered()), this, SIGNAL(closeWindow()));
   fileMenu->addAction(action);
 

@@ -42,6 +42,7 @@ signals:
   void saveAsOTStudy();
   void exportPython();
   void importPython();
+  void closeOTStudy();
   void closeWindow();
   void showHidePythonConsole(bool);
   void pythonConsoleVisibilityChanged(bool);

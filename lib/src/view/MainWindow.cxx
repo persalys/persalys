@@ -96,6 +96,7 @@ void MainWindow::buildInterface()
   connect(menuBar, SIGNAL(saveAsOTStudy()), studyTree_, SLOT(saveAsOTStudy()));
   connect(menuBar, SIGNAL(exportPython()), studyTree_, SLOT(exportPython()));
   connect(menuBar, SIGNAL(importPython()), studyTree_, SLOT(importPython()));
+  connect(menuBar, SIGNAL(closeOTStudy()), studyTree_, SLOT(closeOTStudy()));
   connect(menuBar, SIGNAL(closeWindow()), this, SLOT(close()));
   setMenuBar(menuBar);
 
