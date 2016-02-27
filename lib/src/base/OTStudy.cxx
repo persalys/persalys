@@ -92,6 +92,21 @@ void OTStudy::AddOTStudy(OTStudy * otstudy)
 }
 
 
+void OTStudy::RemoveOTStudy(OTStudy * otstudy)
+{
+  PersistentCollection<PhysicalModel>::iterator iter = otstudy->physicalModels_.begin();
+  while (iter != otstudy->physicalModels_.end())
+  {
+    otstudy->clearPhysicalModel(*iter);
+    (*iter).getImplementation().get()->notify("physicalModelRemoved");
+    iter = otstudy->physicalModels_.erase(iter);
+  }
+  OTStudiesFileNames_.erase(std::remove(OTStudiesFileNames_.begin(), OTStudiesFileNames_.end(), otstudy->getFileName()), OTStudiesFileNames_.end());
+  OTStudies_.erase(std::remove(OTStudies_.begin(), OTStudies_.end(), otstudy), OTStudies_.end());
+  otstudy->notify("otStudyRemoved");
+}
+
+
 void OTStudy::OpenOTStudy(const String & xmlFileName)
 {
   Study study;
@@ -123,19 +138,6 @@ OTStudy::OTStudy(const String & name)
 OTStudy* OTStudy::clone() const
 {
   return new OTStudy(*this);
-}
-
-
-/* Destructor */
-OTStudy::~OTStudy()
-{
-  for (UnsignedInteger i=0; i<OTStudiesFileNames_.getSize(); ++i)
-    if (OTStudiesFileNames_[i] == this->getFileName())
-      OTStudiesFileNames_.erase(OTStudiesFileNames_.begin() + i);
-
-  for (UnsignedInteger i=0; i<OTStudies_.getSize(); ++i)
-    if (OTStudies_[i] == this)
-      OTStudies_.erase(OTStudies_.begin() + i);
 }
 
 
@@ -195,84 +197,62 @@ void OTStudy::addPhysicalModel(const PhysicalModel & physicalModel)
 }
 
 
+void OTStudy::clearPhysicalModel(const PhysicalModel & physicalModel)
+{
+  // remove all the limit states
+  PersistentCollection<LimitState>::iterator iter = limitStates_.begin();
+  while (iter != limitStates_.end())
+  {
+    if ((*iter).getPhysicalModel().getName() == physicalModel.getName())
+    {
+      clearLimitState(*iter);
+      (*iter).getImplementation().get()->notify("limitStateRemoved");
+
+      if ((*iter).getImplementation().get()->getObserver().size())
+        physicalModel.getImplementation().get()->removeObserver((*iter).getImplementation().get()->getObserver()[0]);
+      iter = limitStates_.erase(iter);
+    }
+    else
+    {
+      ++iter;
+    }
+  }
+
+  // remove all the analyses
+  PersistentCollection<Analysis>::iterator iterAnalysis = analyses_.begin();
+  while (iterAnalysis != analyses_.end())
+  {
+    if ((*iterAnalysis).getPhysicalModel().getName() == physicalModel.getName())
+    {
+      (*iterAnalysis).getImplementation().get()->notify("analysisRemoved");
+      iterAnalysis = analyses_.erase(iterAnalysis);
+    }
+    else
+    {
+      ++iterAnalysis;
+    }
+  }
+
+  // remove all the design Of Experiments
+  PersistentCollection<DesignOfExperiment>::iterator iterDOE = designOfExperiments_.begin();
+  while (iterDOE != designOfExperiments_.end())
+  {
+    if ((*iterDOE).getPhysicalModel().getName() == physicalModel.getName())
+    {
+      (*iterDOE).getImplementation().get()->notify("designOfExperimentRemoved");
+      iterDOE = designOfExperiments_.erase(iterDOE);
+    }
+    else
+    {
+      ++iterDOE;
+    }
+  }
+}
+
+
 void OTStudy::removePhysicalModel(const PhysicalModel & physicalModel)
 {
-  if (limitStates_.getSize())
-  {
-    PersistentCollection<LimitState>::iterator iter = limitStates_.begin();
-    while (iter != limitStates_.end())
-    {
-      if ((*iter).getPhysicalModel().getName() == physicalModel.getName())
-      {
-        if (analyses_.getSize())
-        {
-          PersistentCollection<Analysis>::iterator iterAnalysis = analyses_.begin();
-          while (iterAnalysis != analyses_.end())
-          {
-            if ((*iterAnalysis).isReliabilityAnalysis())
-            {
-              if (dynamic_cast<ReliabilityAnalysis*>(&*(*iterAnalysis).getImplementation())->getLimitState().getName() == (*iter).getName())
-              {
-                (*iterAnalysis).getImplementation().get()->notify("analysisRemoved");
-                iterAnalysis = analyses_.erase(iterAnalysis);
-              }
-              else
-              {
-                ++iterAnalysis;
-              }
-            }
-            else
-            {
-              ++iterAnalysis;
-            }
-          }
-        }
-        (*iter).getImplementation().get()->notify("limitStateRemoved");
-
-        if ((*iter).getImplementation().get()->getObserver().size())
-          physicalModel.getImplementation().get()->removeObserver((*iter).getImplementation().get()->getObserver()[0]);
-        iter = limitStates_.erase(iter);
-      }
-      else
-      {
-        ++iter;
-      }
-    }
-  }
-
-  if (analyses_.getSize())
-  {
-    PersistentCollection<Analysis>::iterator iterAnalysis = analyses_.begin();
-    while (iterAnalysis != analyses_.end())
-    {
-      if ((*iterAnalysis).getPhysicalModel().getName() == physicalModel.getName())
-      {
-        (*iterAnalysis).getImplementation().get()->notify("analysisRemoved");
-        iterAnalysis = analyses_.erase(iterAnalysis);
-      }
-      else
-      {
-        ++iterAnalysis;
-      }
-    }
-  }
-
-  if (designOfExperiments_.getSize())
-  {
-    PersistentCollection<DesignOfExperiment>::iterator iterDOE = designOfExperiments_.begin();
-    while (iterDOE != designOfExperiments_.end())
-    {
-      if ((*iterDOE).getPhysicalModel().getName() == physicalModel.getName())
-      {
-        (*iterDOE).getImplementation().get()->notify("designOfExperimentRemoved");
-        iterDOE = designOfExperiments_.erase(iterDOE);
-      }
-      else
-      {
-        ++iterDOE;
-      }
-    }
-  }
+  clearPhysicalModel(physicalModel);
 
   for (UnsignedInteger i=0; i<physicalModels_.getSize(); ++i)
     if (physicalModels_[i].getName() == physicalModel.getName())
@@ -437,30 +417,36 @@ void OTStudy::addLimitState(const LimitState & limitState)
 }
 
 
-void OTStudy::removeLimitState(const LimitState & limitState)
+void OTStudy::clearLimitState(const LimitState & limitState)
 {
-  if (analyses_.getSize())
+  // remove the analyses based on the limitState
+  PersistentCollection<Analysis>::iterator iter = analyses_.begin();
+  while (iter != analyses_.end())
   {
-    PersistentCollection<Analysis>::iterator iter = analyses_.begin();
-    while (iter != analyses_.end())
+    if ((*iter).isReliabilityAnalysis())
     {
-      if ((*iter).isReliabilityAnalysis())
+      if (dynamic_cast<ReliabilityAnalysis*>(&*(*iter).getImplementation())->getLimitState().getName() == limitState.getName())
       {
-        if (dynamic_cast<ReliabilityAnalysis*>(&*(*iter).getImplementation())->getLimitState().getName() == limitState.getName())
-        {
-          (*iter).getImplementation().get()->notify("analysisRemoved");
-          iter = analyses_.erase(iter);
-        }
-        else
-          ++iter;
+        (*iter).getImplementation().get()->notify("analysisRemoved");
+        iter = analyses_.erase(iter);
       }
       else
-      {
         ++iter;
-      }
+    }
+    else
+    {
+      ++iter;
     }
   }
+}
 
+
+void OTStudy::removeLimitState(const LimitState & limitState)
+{
+  // remove the analyses based on the limitState
+  clearLimitState(limitState);
+
+  // remove the limitState
   for (UnsignedInteger i=0; i<limitStates_.getSize(); ++i)
     if (limitStates_[i].getName() == limitState.getName())
     {

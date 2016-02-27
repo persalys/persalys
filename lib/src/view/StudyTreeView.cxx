@@ -100,6 +100,11 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
 
 void StudyTreeView::buildActions()
 {
+  // close otstudy action
+  closeOTStudy_ = new QAction(QIcon(":/images/window-close.png"), tr("Close"), this);
+  closeOTStudy_->setStatusTip(tr("Close the OTStudy"));
+  connect(closeOTStudy_, SIGNAL(triggered()), this, SLOT(closeOTStudy()));
+  
   // new physical model actions
   newAnalyticalPhysicalModel_ = new QAction(tr("New analytical physical model"), this);
   newAnalyticalPhysicalModel_->setStatusTip(tr("Create a new analytical physical model"));
@@ -196,6 +201,7 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
     actions.append(newYACSPhysicalModel_);
 #endif
     actions.append(saveOTStudy_);
+    actions.append(closeOTStudy_);
   }
   else if (dataType == "PhysicalModel")
   {
@@ -706,7 +712,7 @@ void StudyTreeView::importPython()
 }
 
 
-void StudyTreeView::saveOTStudy()
+bool StudyTreeView::saveOTStudy()
 {
   OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
 
@@ -715,15 +721,16 @@ void StudyTreeView::saveOTStudy()
     QApplication::setOverrideCursor(Qt::WaitCursor);
     item->getOTStudy()->save(item->getOTStudy()->getFileName());
     QApplication::restoreOverrideCursor();
+    return true;
   }
   else
   {
-    saveAsOTStudy();
+    return saveAsOTStudy();
   }
 }
 
 
-void StudyTreeView::saveAsOTStudy()
+bool StudyTreeView::saveAsOTStudy()
 {
   OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
 
@@ -742,6 +749,7 @@ void StudyTreeView::saveAsOTStudy()
     if (!file.open(QFile::WriteOnly))
     {
       std::cout << "cannot open" << file.fileName().toStdString() << std::endl;
+      return false;
     }
     // fill
     else
@@ -749,8 +757,10 @@ void StudyTreeView::saveAsOTStudy()
       QApplication::setOverrideCursor(Qt::WaitCursor);
       item->getOTStudy()->save(fileName.toStdString());
       QApplication::restoreOverrideCursor();
+      return true;
     }
   }
+  return false;
 }
 
 
@@ -782,6 +792,37 @@ void StudyTreeView::openOTStudy()
         message = tr("The file '%1' is already opened.").arg(file.baseName());
       }
       QMessageBox::warning(this, tr("Warning"), message);
+    }
+  }
+}
+
+
+void StudyTreeView::closeOTStudy()
+{
+  OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
+  if (QFileInfo(item->getOTStudy()->getFileName().c_str()).exists())
+  {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    item->getOTStudy()->save(item->getOTStudy()->getFileName());
+    QApplication::restoreOverrideCursor();
+    OTStudy::RemoveOTStudy(item->getOTStudy());
+  }
+  else
+  {
+    int ret = QMessageBox::warning(this, tr("Warning"),
+                               tr("Do you want to save the OTStudy '%1'?").arg(item->getOTStudy()->getName().c_str()),
+                               QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+                               QMessageBox::Save);
+
+    if (ret == QMessageBox::Cancel)
+      return;
+    else if (ret == QMessageBox::Discard)
+      OTStudy::RemoveOTStudy(item->getOTStudy());
+    else if (ret == QMessageBox::Save)
+    {
+      bool isSaved = saveOTStudy();
+      if (isSaved)
+        OTStudy::RemoveOTStudy(item->getOTStudy());
     }
   }
 }

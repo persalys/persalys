@@ -60,6 +60,7 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
   connect(otStudyItem, SIGNAL(newLimitStateItemCreated(LimitStateItem*)), this, SIGNAL(newLimitStateCreated(LimitStateItem*)));
   connect(otStudyItem, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SIGNAL(newAnalysisCreated(AnalysisItem*)));
   connect(otStudyItem, SIGNAL(itemRemoved(QStandardItem*)), this, SIGNAL(itemRemoved(QStandardItem*)));
+  connect(otStudyItem, SIGNAL(otStudyRemoved(QStandardItem*)), this, SLOT(removeOTStudyItem(QStandardItem*)));
   otStudy->addObserver(otStudyItem);
   invisibleRootItem()->appendRow(otStudyItem);
   for (UnsignedInteger i=0; i<otStudy->getPhysicalModels().getSize(); ++i)
@@ -129,5 +130,11 @@ AnalysisItem* StudyTreeViewModel::getAnalysisItem(OTStudyItem * otStudyItem, con
   if (listIndexes.size() == 1)
     return dynamic_cast<AnalysisItem*>(itemFromIndex(listIndexes[0]));
   return 0;
+}
+
+
+void StudyTreeViewModel::removeOTStudyItem(QStandardItem * item)
+{
+  invisibleRootItem()->removeRow(item->row());
 }
 }

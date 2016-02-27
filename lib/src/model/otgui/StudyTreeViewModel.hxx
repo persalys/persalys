@@ -45,6 +45,7 @@ public:
   virtual void update(Observable * source, const OT::String & message);
 
 public slots:
+  void removeOTStudyItem(QStandardItem * item);
 signals:
   void newPhysicalModelCreated(PhysicalModelItem*);
   void newProbabilisticModelCreated(ProbabilisticModelItem*);

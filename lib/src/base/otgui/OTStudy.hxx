@@ -36,6 +36,7 @@ public:
   static bool HasOTStudyNamed(const OT::String & otStudyName);
   static OT::String GetAvailableOTStudyName();
   static void AddOTStudy(OTStudy * otstudy);
+  static void RemoveOTStudy(OTStudy * otstudy);
   static void OpenOTStudy(const OT::String & xmlFileName);
   static void SetInstanceObserver(Observer * observer);
 
@@ -45,8 +46,6 @@ public:
   /** Virtual constructor */
   virtual OTStudy * clone() const;
 
-  virtual ~OTStudy();
-
   OT::String getFileName() const;
   void setFileName(const OT::String & fileName);
 
@@ -55,6 +54,7 @@ public:
   bool hasPhysicalModelNamed(const OT::String & physicalModelName);
   OT::String getAvailablePhysicalModelName();
   void addPhysicalModel(const PhysicalModel & physicalModel);
+  void clearPhysicalModel(const PhysicalModel & physicalModel);
   void removePhysicalModel(const PhysicalModel & physicalModel);
 
   OT::Collection<DesignOfExperiment> getDesignOfExperiments() const;
@@ -74,6 +74,7 @@ public:
   bool hasLimitStateNamed(const OT::String & limitStateName);
   OT::String getAvailableLimitStateName();
   void addLimitState(const LimitState & limitState);
+  void clearLimitState(const LimitState & limitState);
   void removeLimitState(const LimitState & limitState);
 
   OT::String getPythonScript();

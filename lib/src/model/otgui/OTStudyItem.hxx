@@ -60,6 +60,7 @@ signals:
   void newAnalysisItemCreated(AnalysisItem*);
   void newLimitStateItemCreated(LimitStateItem*);
   void itemRemoved(QStandardItem*);
+  void otStudyRemoved(QStandardItem*);
 
 private:
   OTStudy * otStudy_;

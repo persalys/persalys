@@ -75,9 +75,10 @@ public slots:
   void createAnalysisExecutionFailedWindow(AnalysisItem * item, const QString & errorMessage="");
   void exportPython();
   void importPython();
-  void saveOTStudy();
-  void saveAsOTStudy();
+  bool saveOTStudy();
+  bool saveAsOTStudy();
   void openOTStudy();
+  void closeOTStudy();
 signals:
   void showWindow(QMdiSubWindow*);
   void errorMessageEmitted(QString);
@@ -90,7 +91,7 @@ signals:
 
 private:
   StudyTreeViewModel * treeViewModel_;
-  QAction * newOTStudyAction_;
+  QAction * closeOTStudy_;
   QAction * newAnalyticalPhysicalModel_;
   QAction * newPythonPhysicalModel_;
 #ifdef OTGUI_HAVE_YACS

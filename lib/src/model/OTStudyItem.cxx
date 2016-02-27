@@ -79,6 +79,10 @@ void OTStudyItem::update(Observable * source, const String & message)
       std::cerr<<"No item added for the analysis named " << addedAnalysis.getName() << ex.what() << std::endl;
     }
   }
+  else if (message == "otStudyRemoved")
+  {
+    emit otStudyRemoved(this);
+  }
   else
   {
     throw InvalidArgumentException(HERE) << "In OTStudyItem::update: not recognized message: " << message;
