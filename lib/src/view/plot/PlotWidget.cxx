@@ -26,6 +26,9 @@
 #include <QMenu>
 #include <QFileDialog>
 #include <QImageWriter>
+#include <QSettings>
+#include <QMessageBox>
+#include <QApplication>
 
 #include <qwt_plot_layout.h>
 #include <qwt_plot_panner.h>
@@ -103,13 +106,18 @@ void PlotWidget::contextMenu(const QPoint & pos)
 
 void PlotWidget::exportPlot()
 {
+  QSettings settings;
+  QString currentDir = settings.value("currentDir").toString();
+  if (currentDir.isEmpty())
+    currentDir = QDir::homePath();
   QString fileName = QFileDialog::getSaveFileName(this, tr("Export plot"),
-                     QDir::homePath(),
+                     currentDir,
                      tr("Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff *.svg *.pdf *.ps)"));
 
   if (!fileName.isEmpty())
   {
     QString format = QFileInfo(fileName).suffix().toLower();
+    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
 
     if (format == "")
     {
@@ -136,11 +144,11 @@ void PlotWidget::exportPlot()
 
         bool saveOperationSucceed = pixmap.save(fileName, format.toLatin1());
         if (!saveOperationSucceed)
-          std::cerr<<"Export doesn't work\n";
+          QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Impossible to export the plot."));
       }
       else
       {
-        std::cerr<<"Format not supported\n";
+        QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Format not supported."));
       }
     }
   }

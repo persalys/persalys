@@ -23,6 +23,8 @@
 #include <QFileDialog>
 #include <QMenu>
 #include <QMessageBox>
+#include <QSettings>
+#include <QApplication>
 
 namespace OTGUI {
 
@@ -57,8 +59,12 @@ void OTguiTableView::contextMenu(const QPoint & pos)
 
 void OTguiTableView::exportData()
 {
+  QSettings settings;
+  QString currentDir = settings.value("currentDir").toString();
+  if (currentDir.isEmpty())
+    currentDir = QDir::homePath();
   QString fileName = QFileDialog::getSaveFileName(this, tr("Export model as..."),
-                     QDir::homePath(),
+                     currentDir,
                      tr("CSV source files (*.csv)"));
 
   if (!fileName.isEmpty())
@@ -66,13 +72,22 @@ void OTguiTableView::exportData()
     if (!fileName.endsWith(".csv"))
       fileName += ".csv";
 
+    QFile file(fileName);
+    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+
+    // check
+    if (!file.open(QFile::WriteOnly))
+    {
+      QMessageBox::warning(QApplication::activeWindow(), tr("Warning"),
+                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
+    }
     try
     {
       static_cast<OTguiTableModel*>(model())->exportData(fileName);
     }
     catch (std::exception & ex)
     {
-      QMessageBox::warning(this, tr("Warning"), tr("Impossible to export the data."));
+      QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Impossible to export the data."));
     }
   }
 }

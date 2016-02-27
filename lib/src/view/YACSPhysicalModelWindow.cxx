@@ -27,6 +27,10 @@
 #include <QHeaderView>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QFileInfo>
+#include <QMessageBox>
+#include <QApplication>
+#include <QSettings>
 
 using namespace OT;
 
@@ -69,22 +73,38 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelItem * item)
 
 void YACSPhysicalModelWindow::selectImportFileDialogRequested()
 {
-  QString xmlPath;
+  QSettings settings;
+  QString currentDir = settings.value("currentDir").toString();
+  if (currentDir.isEmpty())
+    currentDir = QDir::homePath();
   QString fileName = QFileDialog::getOpenFileName(this, tr("Data to import..."),
-                     xmlPath,
+                     currentDir,
                      tr("Data files (*.xml);;"));
 
   if (!fileName.isEmpty())
   {
-    XMLfileNameEdit_->setText(fileName);
-    try
+    QFile file(fileName);
+    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+
+    // check
+    if (!file.open(QFile::WriteOnly))
     {
-      dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->setXMLFileName(fileName.toStdString());
-      setErrorMessage("");
+      std::cout << "cannot open" << file.fileName().toStdString() << std::endl;
+      QMessageBox::warning(this, tr("Warning"),
+                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
     }
-    catch (std::exception & ex)
+    else
     {
-      setErrorMessage(ex.what());
+      XMLfileNameEdit_->setText(fileName);
+      try
+      {
+        dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->setXMLFileName(fileName.toStdString());
+        setErrorMessage("");
+      }
+      catch (std::exception & ex)
+      {
+        setErrorMessage(ex.what());
+      }
     }
   }
 }

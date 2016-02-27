@@ -27,6 +27,9 @@
 #include <QFileDialog>
 #include <QImageWriter>
 #include <QPainter>
+#include <QSettings>
+#include <QMessageBox>
+#include <QApplication>
 
 #include <qwt_plot_renderer.h>
 #include <qwt_plot_canvas.h>
@@ -238,14 +241,18 @@ void PlotMatrixWidget::setOutputsToDisplay(QStringList outputs)
 
 void PlotMatrixWidget::exportPlot()
 {
-
+  QSettings settings;
+  QString currentDir = settings.value("currentDir").toString();
+  if (currentDir.isEmpty())
+    currentDir = QDir::homePath();
   QString fileName = QFileDialog::getSaveFileName(this, tr("Export plot"),
-                     QDir::homePath(),
+                     currentDir,
                      tr("Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)"));
 
   if (!fileName.isEmpty())
   {
     QString format = QFileInfo(fileName).suffix().toLower();
+    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
 
     if (format.isEmpty())
     {
@@ -256,11 +263,11 @@ void PlotMatrixWidget::exportPlot()
     {
       bool saveOperationSucceed = getMatrixImage().save(fileName, format.toLatin1());
       if (!saveOperationSucceed)
-        std::cerr<<"Export doesn't work\n";
+        QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Impossible to export the plot."));
     }
     else
     {
-      std::cerr<<"Format not supported\n";
+      QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Format not supported."));
     }
   }
 }

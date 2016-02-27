@@ -19,6 +19,7 @@
  *
  */
 #include <QApplication>
+#include <QSettings>
 
 #include "otgui/MainWindow.hxx"
 
@@ -27,6 +28,9 @@ using namespace OTGUI;
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EDF_Phimeca", "OTgui");
+    settings.setValue("currentDir", QSettings().fileName());
+
     MainWindow window;
 
     window.resize(1024, 768);

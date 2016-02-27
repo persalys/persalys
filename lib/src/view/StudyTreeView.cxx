@@ -27,6 +27,7 @@
 #include <QFileInfo>
 #include <QApplication>
 #include <QMessageBox>
+#include <QSettings>
 
 #include "otgui/AnalyticalPhysicalModel.hxx"
 #include "otgui/PythonPhysicalModel.hxx"
@@ -658,8 +659,12 @@ void StudyTreeView::exportPython()
 {
   OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
 
+  QSettings settings;
+  QString currentDir = settings.value("currentDir").toString();
+  if (currentDir.isEmpty())
+    currentDir = QDir::homePath();
   QString fileName = QFileDialog::getSaveFileName(this, tr("Export Python..."),
-                     QDir::homePath(),
+                     currentDir,
                      tr("Python source files (*.py)"));
 
   if (!fileName.isEmpty())
@@ -668,11 +673,14 @@ void StudyTreeView::exportPython()
       fileName += ".py";
 
     QFile file(fileName);
+    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
 
     // check
     if (!file.open(QFile::WriteOnly))
     {
       std::cout << "cannot open" << file.fileName().toStdString() << std::endl;
+      QMessageBox::warning(this, tr("Warning"),
+                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
     }
     // fill
     else
@@ -688,22 +696,24 @@ void StudyTreeView::exportPython()
 
 void StudyTreeView::importPython()
 {
+  QSettings settings;
+  QString currentDir = settings.value("currentDir").toString();
+  if (currentDir.isEmpty())
+    currentDir = QDir::homePath();
   QString fileName = QFileDialog::getOpenFileName(this, tr("Import Python..."),
-                     QDir::homePath(),
+                     currentDir,
                      tr("Python source files (*.py)"));
 
   if (!fileName.isEmpty())
   {
     QFile file(fileName);
+    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
 
     // check
     if (!file.open(QFile::ReadOnly))
     {
-    //     "cannot open"<<file.fileName();
-//     QMessageBox::warning(QApplication::activeWindow(), QObject::tr("otgui"),
-//                          QObject::tr("Cannot read file %1:\n%2")
-//                          .arg(fileName)
-//                          .arg(file.errorString()));
+      QMessageBox::warning(this, tr("Warning"),
+                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
     }
     // load
     else
@@ -734,8 +744,12 @@ bool StudyTreeView::saveAsOTStudy()
 {
   OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
 
+  QSettings settings;
+  QString currentDir = settings.value("currentDir").toString();
+  if (currentDir.isEmpty())
+    currentDir = QDir::homePath();
   QString fileName = QFileDialog::getSaveFileName(this, tr("Save OTStudy..."),
-                     QDir::homePath(),
+                     currentDir,
                      tr("XML files (*.xml)"));
 
   if (!fileName.isEmpty())
@@ -744,11 +758,14 @@ bool StudyTreeView::saveAsOTStudy()
       fileName += ".xml";
 
     QFile file(fileName);
+    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
 
     // check
     if (!file.open(QFile::WriteOnly))
     {
       std::cout << "cannot open" << file.fileName().toStdString() << std::endl;
+      QMessageBox::warning(this, tr("Warning"),
+                           tr("Cannot save file %1:\n%2").arg(fileName).arg(file.errorString()));
       return false;
     }
     // fill
@@ -766,13 +783,19 @@ bool StudyTreeView::saveAsOTStudy()
 
 void StudyTreeView::openOTStudy()
 {
+  QSettings settings;
+  QString currentDir = settings.value("currentDir").toString();
+  if (currentDir.isEmpty())
+    currentDir = QDir::homePath();
   QString fileName = QFileDialog::getOpenFileName(this, tr("Open an existing OTStudy"),
-                     QDir::homePath(),
+                     currentDir,
                      tr("XML files (*.xml)"));
 
   if (!fileName.isEmpty())
   {
     QFileInfo file(fileName);
+    settings.setValue("currentDir", file.absolutePath());
+
     if (file.exists() && !OTStudy::GetOTStudiesFileNames().__contains__(file.absoluteFilePath().toStdString()))
     {
       QApplication::setOverrideCursor(Qt::WaitCursor);

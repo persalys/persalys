@@ -30,6 +30,10 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QFileDialog>
+#include <QFileInfo>
+#include <QSettings>
+#include <QApplication>
+#include <QMessageBox>
 
 using namespace OT;
 
@@ -142,23 +146,40 @@ void ImportTablePage::loadFile()
 
 void ImportTablePage::openFileRequested()
 {
+  QSettings settings;
+  QString currentDir = settings.value("currentDir").toString();
+  if (currentDir.isEmpty())
+    currentDir = QDir::homePath();
   QString fileName = QFileDialog::getOpenFileName(this, tr("Data to import..."),
-                     QDir::homePath(),
+                     currentDir,
                      tr("Text Files (*.txt);; CSV source files (*.csv)"));
 
   if (!fileName.isEmpty())
   {
-    filePathLineEdit_->setText(fileName);
-    try
+    QFile file(fileName);
+    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+
+    // check
+    if (!file.open(QFile::WriteOnly))
     {
-      designOfExperiment_.setFileName(filePathLineEdit_->text().toStdString());
-      loadFile();
-      pageValidity_ = true;
+      std::cout << "cannot open" << file.fileName().toStdString() << std::endl;
+      QMessageBox::warning(this, tr("Warning"),
+                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
     }
-    catch (std::exception & ex)
+    else
     {
-//       TODO set an error message
-      pageValidity_ = false;
+      filePathLineEdit_->setText(fileName);
+      try
+      {
+        designOfExperiment_.setFileName(filePathLineEdit_->text().toStdString());
+        loadFile();
+        pageValidity_ = true;
+      }
+      catch (std::exception & ex)
+      {
+  //       TODO set an error message
+        pageValidity_ = false;
+      }
     }
   }
 }
