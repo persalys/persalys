@@ -34,11 +34,11 @@ class OTGUI_API MainWindow : public QMainWindow
 public:
   MainWindow();
 
-  QMdiArea * getMdiArea() const;
   void launchInitialMessageBox();
 
 public slots:
   void showGraphConfigurationTabWidget(QWidget*);
+  void exitApplication();
 
 protected:
   void buildInterface();

@@ -97,7 +97,7 @@ void MainWindow::buildInterface()
   connect(menuBar, SIGNAL(exportPython()), studyTree_, SLOT(exportPython()));
   connect(menuBar, SIGNAL(importPython()), studyTree_, SLOT(importPython()));
   connect(menuBar, SIGNAL(closeOTStudy()), studyTree_, SLOT(closeOTStudy()));
-  connect(menuBar, SIGNAL(closeWindow()), this, SLOT(close()));
+  connect(menuBar, SIGNAL(closeWindow()), this, SLOT(exitApplication()));
   setMenuBar(menuBar);
 
   // tool bar
@@ -139,5 +139,13 @@ void MainWindow::showGraphConfigurationTabWidget(QWidget * graph)
 {
   configurationDock_->setWidget(graph);
   configurationDock_->show();
+}
+
+
+void MainWindow::exitApplication()
+{
+  int ret = studyTree_->closeAllOTStudies();
+  if (ret)
+    close();
 }
 }

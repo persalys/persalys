@@ -820,7 +820,7 @@ void StudyTreeView::openOTStudy()
 }
 
 
-void StudyTreeView::closeOTStudy()
+bool StudyTreeView::closeOTStudy()
 {
   OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
   if (QFileInfo(item->getOTStudy()->getFileName().c_str()).exists())
@@ -829,6 +829,7 @@ void StudyTreeView::closeOTStudy()
     item->getOTStudy()->save(item->getOTStudy()->getFileName());
     QApplication::restoreOverrideCursor();
     OTStudy::RemoveOTStudy(item->getOTStudy());
+    return true;
   }
   else
   {
@@ -837,17 +838,38 @@ void StudyTreeView::closeOTStudy()
                                QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                                QMessageBox::Save);
 
-    if (ret == QMessageBox::Cancel)
-      return;
-    else if (ret == QMessageBox::Discard)
+    if (ret == QMessageBox::Discard)
+    {
       OTStudy::RemoveOTStudy(item->getOTStudy());
+      return true;
+    }
     else if (ret == QMessageBox::Save)
     {
       bool isSaved = saveOTStudy();
       if (isSaved)
+      {
         OTStudy::RemoveOTStudy(item->getOTStudy());
+        return true;
+      }
     }
   }
+  return false;
+}
+
+
+bool StudyTreeView::closeAllOTStudies()
+{
+  QStandardItem * rootItem = treeViewModel_->invisibleRootItem();
+  if (!rootItem->hasChildren())
+    return true;
+  while (rootItem->hasChildren())
+  {
+    selectionModel()->setCurrentIndex(rootItem->child(0)->index(), QItemSelectionModel::Select);
+    int ret = closeOTStudy();
+    if (!ret)
+      return false;
+  }
+  return true;
 }
 
 

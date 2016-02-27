@@ -78,7 +78,8 @@ public slots:
   bool saveOTStudy();
   bool saveAsOTStudy();
   void openOTStudy();
-  void closeOTStudy();
+  bool closeOTStudy();
+  bool closeAllOTStudies();
 signals:
   void showWindow(QMdiSubWindow*);
   void errorMessageEmitted(QString);
