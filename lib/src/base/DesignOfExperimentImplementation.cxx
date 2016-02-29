@@ -148,8 +148,13 @@ void DesignOfExperimentImplementation::initializeParameters()
     values_[i] = inputs[i].getValue();
     if (!inputs[i].isStochastic())
     {
-      lowerBounds_[i] = 0.9 * inputs[i].getValue();
-      upperBounds_[i] = 1.1 * inputs[i].getValue();
+      lowerBounds_[i] = 0.9;
+      upperBounds_[i] = 1.1;
+      if (values_[i] != 0)
+      {
+        lowerBounds_[i] = 0.9 * values_[i];
+        upperBounds_[i] = 1.1 * values_[i];
+      }
     }
     else
     {

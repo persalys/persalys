@@ -196,7 +196,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
       }
       case 3:
       {
-        if (value.toDouble() > designOfExperiment_.getUpperBounds()[index.row()])
+        if (value.toDouble() >= designOfExperiment_.getUpperBounds()[index.row()])
           return false;
         NumericalPoint lowerBounds = designOfExperiment_.getLowerBounds();
         if (lowerBounds[index.row()] == value.toDouble())
@@ -207,7 +207,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
       }
       case 4:
       {
-        if (value.toDouble() < designOfExperiment_.getLowerBounds()[index.row()])
+        if (value.toDouble() <= designOfExperiment_.getLowerBounds()[index.row()])
           return false;
         NumericalPoint upperBounds = designOfExperiment_.getUpperBounds();
         if (upperBounds[index.row()] == value.toDouble())
