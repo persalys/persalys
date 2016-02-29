@@ -26,6 +26,7 @@
 #include <QStackedLayout>
 #include <QScrollArea>
 #include <QHeaderView>
+#include <QGroupBox>
 
 #include <limits>
 
@@ -107,8 +108,11 @@ void MonteCarloResultWindow::buildInterface()
   nbSimuLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
   vbox->addWidget(nbSimuLabel);
 
+  // min/max table
+  QGroupBox * minMaxGroupBox = new QGroupBox(tr("Minimum and Maximum"));
+  QVBoxLayout * minMaxVbox = new QVBoxLayout(minMaxGroupBox);
   minMaxTable_ = new QTableWidget(nbInputs+1, 4);
-  minMaxTable_->setHorizontalHeaderLabels(QStringList() << tr("") << tr("Variable") << tr("Min") << tr("Max"));
+  minMaxTable_->setHorizontalHeaderLabels(QStringList() << tr("") << tr("Variable") << tr("Minimum") << tr("Maximum"));
   minMaxTable_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   minMaxTable_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   minMaxTable_->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
@@ -131,47 +135,14 @@ void MonteCarloResultWindow::buildInterface()
     item = new QTableWidgetItem(inputNames[i]);
     item->setFlags(item->flags() ^ Qt::ItemIsEditable);
     minMaxTable_->setItem(i+1, 1, item);
-
-    item = new QTableWidgetItem(QString::number(result_.getInputSample().getMarginal(i).getMin()[0]));
-    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-    minMaxTable_->setItem(i+1, 2, item);
-
-    item = new QTableWidgetItem(QString::number(result_.getInputSample().getMarginal(i).getMax()[0]));
-    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-    minMaxTable_->setItem(i+1, 3, item);
   }
 
-  QSize size(minMaxTable_->sizeHint());
-  int width = 0;
-  for (int i=0; i<minMaxTable_->columnCount(); ++i)
-    width += minMaxTable_->columnWidth(i);
-  size.setWidth(width);
-  int height = minMaxTable_->horizontalHeader()->height();
-  for (int i=0; i<minMaxTable_->rowCount(); ++i)
-    height += minMaxTable_->rowHeight(i);
-  size.setHeight(height);
-  minMaxTable_->setMinimumSize(size);
-  minMaxTable_->setMaximumSize(size);
-
-  vbox->addWidget(minMaxTable_);
-
-  QGridLayout * grid = new QGridLayout;
-  int gridRow = -1;
-
-  // Xmin
-  minLabel_ = new QLabel;
-  minLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(minLabel_, ++gridRow, 1, Qt::AlignTop);
-
-  // Xmax
-  maxLabel_ = new QLabel;
-  maxLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(maxLabel_, ++gridRow, 1, Qt::AlignTop);
-
-  grid->setColumnStretch(1, 1);
-  vbox->addLayout(grid);
+  minMaxVbox->addWidget(minMaxTable_);
+  vbox->addWidget(minMaxGroupBox);
 
   // moments estimation
+  QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimate"));
+  QVBoxLayout * momentsVbox = new QVBoxLayout(momentsGroupBox);
   momentsEstimationsTable_ = new QTableWidget(8, 4);
   momentsEstimationsTable_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   momentsEstimationsTable_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -240,7 +211,8 @@ void MonteCarloResultWindow::buildInterface()
     momentsEstimationsTable_->setItem(1, 3, item);
   }
 
-  vbox->addWidget(momentsEstimationsTable_);
+  momentsVbox->addWidget(momentsEstimationsTable_);
+  vbox->addWidget(momentsGroupBox);
 
   // quantiles
   QHBoxLayout * quantLayout = new QHBoxLayout;
@@ -419,27 +391,46 @@ void MonteCarloResultWindow::updateResultWidgets(int indexOutput)
   item->setFlags(item->flags() ^ Qt::ItemIsEditable);
   minMaxTable_->setItem(0, 2, item);
 
-  OSS oss3;
-  for (UnsignedInteger j=0; j<result_.getListXMin()[indexOutput].getSize();++j)
-  {
-    NumericalPoint point(result_.getListXMin()[indexOutput][j]);
-    oss3 << "\n  X=" << point.__str__();
-  }
-  minLabel_->setText(tr("The outpout ") + outputsComboBoxFirstTab_->currentText() + tr(" is minimal at :") + QString::fromStdString(oss3.str()));
-
   // max
   const double max = result_.getOutputSample().getMax()[indexOutput];
   item = new QTableWidgetItem(QString::number(max));
   item->setFlags(item->flags() ^ Qt::ItemIsEditable);
   minMaxTable_->setItem(0, 3, item);
 
-  OSS oss4;
-  for (UnsignedInteger j=0; j<result_.getListXMax()[indexOutput].getSize();++j)
+  if (result_.getListXMin()[indexOutput].getSize() > 1)
   {
-    NumericalPoint point(result_.getListXMax()[indexOutput][j]);
-    oss4 << "\n  X=" << point.__str__();
+    minMaxTable_->horizontalHeaderItem(2)->setIcon(QIcon(":/images/task-attention.png"));
+    minMaxTable_->horizontalHeaderItem(2)->setToolTip(tr("Information: The output is minimum at another point."));
   }
-  maxLabel_->setText(tr("The outpout ") + outputsComboBoxFirstTab_->currentText() + tr(" is maximal at :") + QString::fromStdString(oss4.str()));
+  if (result_.getListXMax()[indexOutput].getSize() > 1)
+  {
+    minMaxTable_->horizontalHeaderItem(3)->setIcon(QIcon(":/images/task-attention.png"));
+    minMaxTable_->horizontalHeaderItem(3)->setToolTip(tr("Information: The output is maximum at another point."));
+  }
+  for (UnsignedInteger i=0; i<result_.getInputSample().getDimension(); ++i)
+  {
+    // XMin
+    item = new QTableWidgetItem(QString::number(result_.getListXMin()[indexOutput][0][i]));
+    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+    minMaxTable_->setItem(i+1, 2, item);
+
+    // XMax
+    item = new QTableWidgetItem(QString::number(result_.getListXMax()[indexOutput][0][i]));
+    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+    minMaxTable_->setItem(i+1, 3, item);
+  }
+
+  QSize size(minMaxTable_->sizeHint());
+  int width = 0;
+  for (int i=0; i<minMaxTable_->columnCount(); ++i)
+    width += minMaxTable_->columnWidth(i);
+  size.setWidth(width);
+  int height = minMaxTable_->horizontalHeader()->height();
+  for (int i=0; i<minMaxTable_->rowCount(); ++i)
+    height += minMaxTable_->rowHeight(i);
+  size.setHeight(height);
+  minMaxTable_->setMinimumSize(size);
+  minMaxTable_->setMaximumSize(size);
 
   // momentsEstimationsTable_
   // Mean
@@ -490,12 +481,12 @@ void MonteCarloResultWindow::updateResultWidgets(int indexOutput)
   item->setFlags(item->flags() ^ Qt::ItemIsEditable);
   momentsEstimationsTable_->setItem(7, 1, item);
 
-  QSize size = momentsEstimationsTable_->sizeHint();
-  int width = 0;
+  size = momentsEstimationsTable_->sizeHint();
+  width = 0;
   for (int i=0; i<momentsEstimationsTable_->columnCount(); ++i)
     width += momentsEstimationsTable_->columnWidth(i);
   size.setWidth(width);
-  int height = 0;
+  height = 0;
   for (int i=0; i<momentsEstimationsTable_->rowCount(); ++i)
     height += momentsEstimationsTable_->rowHeight(i);
   size.setHeight(height);

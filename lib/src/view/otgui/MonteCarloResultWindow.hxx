@@ -64,8 +64,6 @@ private:
   PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
   QTableWidget * minMaxTable_;
   QTableWidget * momentsEstimationsTable_;
-  QLabel * minLabel_;
-  QLabel * maxLabel_;
   QDoubleSpinBox * probaSpinBox_;
   QDoubleSpinBox * quantileSpinBox_;
 };
