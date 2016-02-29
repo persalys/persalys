@@ -29,8 +29,6 @@
 
 #include <QTabWidget>
 #include <QPushButton>
-#include <QComboBox>
-#include <QLabel>
 
 namespace OTGUI {
 class DesignOfExperimentWindow : public OTguiSubWindow
@@ -56,9 +54,7 @@ private:
   QTabWidget * tabWidget_;
   OTguiTableView * tableView_;
   QPushButton * evaluateButton_;
-  QComboBox * outputsComboBoxFirstTab_;
-  QLabel * minLabel_;
-  QLabel * maxLabel_;
+  QTableWidget * minMaxTable_;
   PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
   GraphConfigurationWidget * graphConfigurationWidget_;

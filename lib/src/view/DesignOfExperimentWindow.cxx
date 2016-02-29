@@ -23,6 +23,8 @@
 
 #include <QVBoxLayout>
 #include <QStackedLayout>
+#include <QGroupBox>
+#include <QHeaderView>
 
 using namespace OT;
 
@@ -141,33 +143,44 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   tabLayout->addLayout(headLayout);
 
   // -- results --
-  QGridLayout * grid = new QGridLayout;
-  int gridRow = -1;
 
   // number of simulations
   QLabel * nbSimuLabel = new QLabel(tr("Size of the design of experiment : ") + QString::number(variableInputsSample.getSize()) + "\n");
   nbSimuLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(nbSimuLabel, ++gridRow, 0, 1, 2, Qt::AlignTop);
+  tabLayout->addWidget(nbSimuLabel);
 
-  // min
-  QLabel * label = new QLabel(tr("Min"));
-  label->setStyleSheet("font: bold;");
-  grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
-  minLabel_ = new QLabel;
-  minLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(minLabel_, gridRow, 1, Qt::AlignTop);
+  // min/max table
+  QGroupBox * minMaxGroupBox = new QGroupBox(tr("Minimum and Maximum"));
+  QVBoxLayout * minMaxVbox = new QVBoxLayout(minMaxGroupBox);
+  minMaxTable_ = new QTableWidget(nbInputs+1, 4);
+  minMaxTable_->setHorizontalHeaderLabels(QStringList() << tr("") << tr("Variable") << tr("Minimum") << tr("Maximum"));
+  minMaxTable_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  minMaxTable_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  minMaxTable_->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
+  minMaxTable_->verticalHeader()->hide();
+  minMaxTable_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
 
-  // max
-  label = new QLabel(tr("Max"));
-  label->setStyleSheet("font: bold;");
-  grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
-  maxLabel_ = new QLabel;
-  maxLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(maxLabel_, gridRow, 1, Qt::AlignTop);
+  QTableWidgetItem * item = new QTableWidgetItem(tr("Output"));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(minMaxTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  minMaxTable_->setItem(0, 0, item);
+  item = new QTableWidgetItem(tr("Inputs"));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(minMaxTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  minMaxTable_->setSpan(1, 0, nbInputs, 1);
+  minMaxTable_->setItem(1, 0, item);
+  minMaxTable_->resizeColumnToContents(0);
 
-  grid->setColumnStretch(1, 1);
-  tabLayout->addLayout(grid);
-  tabLayout->addStretch();
+  for (int i=0; i<nbInputs; ++i)
+  {
+    item = new QTableWidgetItem(inputNames[i]);
+    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+    minMaxTable_->setItem(i+1, 1, item);
+  }
+
+  minMaxVbox->addWidget(minMaxTable_);
+  minMaxVbox->addStretch();
+  tabLayout->addWidget(minMaxGroupBox);
   updateLabelsText();
 
   tabWidget_->addTab(tab, tr("Min/Max"));
@@ -241,24 +254,58 @@ void DesignOfExperimentWindow::addTabsForOutputs()
 
 void DesignOfExperimentWindow::updateLabelsText(int indexOutput)
 {
+  // minMaxTable_
+  QTableWidgetItem * item = new QTableWidgetItem(designOfExperiment_.getResult().getOutputSample().getDescription()[indexOutput].c_str());
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  minMaxTable_->setItem(0, 1, item);
+
   // min
-  OSS oss1;
-  oss1 << designOfExperiment_.getResult().getOutputSample().getMin()[indexOutput];
-  for (UnsignedInteger j=0; j<designOfExperiment_.getResult().getListXMin()[indexOutput].getSize(); ++j)
-  {
-    NumericalPoint point(designOfExperiment_.getResult().getListXMin()[indexOutput][j]);
-    oss1 << "\n  X=" << point.__str__();
-  }
-  minLabel_->setText(QString::fromStdString(oss1.str()));
+  const double min = designOfExperiment_.getResult().getOutputSample().getMin()[indexOutput];
+  item = new QTableWidgetItem(QString::number(min));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  minMaxTable_->setItem(0, 2, item);
+
   // max
-  OSS oss2;
-  oss2 << designOfExperiment_.getResult().getOutputSample().getMax()[indexOutput];
-  for (UnsignedInteger j=0; j<designOfExperiment_.getResult().getListXMax()[indexOutput].getSize(); ++j)
+  const double max = designOfExperiment_.getResult().getOutputSample().getMax()[indexOutput];
+  item = new QTableWidgetItem(QString::number(max));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  minMaxTable_->setItem(0, 3, item);
+
+  if (designOfExperiment_.getResult().getListXMin()[indexOutput].getSize() > 1)
   {
-    NumericalPoint point(designOfExperiment_.getResult().getListXMax()[indexOutput][j]);
-    oss2 << "\n  X=" << point.__str__();
+    minMaxTable_->horizontalHeaderItem(2)->setIcon(QIcon(":/images/task-attention.png"));
+    minMaxTable_->horizontalHeaderItem(2)->setToolTip(tr("Information: The output is minimum at another point."));
   }
-  maxLabel_->setText(QString::fromStdString(oss2.str()));
+  if (designOfExperiment_.getResult().getListXMax()[indexOutput].getSize() > 1)
+  {
+    minMaxTable_->horizontalHeaderItem(3)->setIcon(QIcon(":/images/task-attention.png"));
+    minMaxTable_->horizontalHeaderItem(3)->setToolTip(tr("Information: The output is maximum at another point."));
+  }
+
+  for (UnsignedInteger i=0; i<designOfExperiment_.getResult().getInputSample().getDimension(); ++i)
+  {
+    // XMin
+    item = new QTableWidgetItem(QString::number(designOfExperiment_.getResult().getListXMin()[indexOutput][0][i]));
+    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+    minMaxTable_->setItem(i+1, 2, item);
+
+    // XMax
+    item = new QTableWidgetItem(QString::number(designOfExperiment_.getResult().getListXMax()[indexOutput][0][i]));
+    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+    minMaxTable_->setItem(i+1, 3, item);
+  }
+
+  QSize size(minMaxTable_->sizeHint());
+  int width = 0;
+  for (int i=0; i<minMaxTable_->columnCount(); ++i)
+    width += minMaxTable_->columnWidth(i);
+  size.setWidth(width);
+  int height = minMaxTable_->horizontalHeader()->height();
+  for (int i=0; i<minMaxTable_->rowCount(); ++i)
+    height += minMaxTable_->rowHeight(i);
+  size.setHeight(height);
+  minMaxTable_->setMinimumSize(size);
+  minMaxTable_->setMaximumSize(size);
 }
 
 
