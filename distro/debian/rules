@@ -19,7 +19,7 @@ builddir := obj-$(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 
 PYVER = $(shell pyversions -d)
 PY3VER = $(shell py3versions -d)
-PYALL = $(PYVER) $(PY3VER)
+PYALL = $(PYVER)
 
 %:
 	dh $@ --buildsystem=cmake --with python2,python3 --with quilt --parallel
