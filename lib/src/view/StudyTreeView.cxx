@@ -430,6 +430,7 @@ void StudyTreeView::createNewProbabilisticModelWindow(ProbabilisticModelItem * i
 void StudyTreeView::createNewLimitStateWindow(LimitStateItem* item)
 {
   LimitStateWindow * window = new LimitStateWindow(item);
+  connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
   emit showWindow(window);
   setCurrentIndex(item->index());
 }
@@ -656,6 +657,7 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
 
   if (resultWindow)
   {
+    connect(resultWindow, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
     connect(resultWindow, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
     connect(resultWindow, SIGNAL(graphWindowDeactivated(QWidget*)), this, SIGNAL(graphWindowDeactivated(QWidget*)));
     emit showWindow(resultWindow);
@@ -668,6 +670,7 @@ void StudyTreeView::createAnalysisExecutionFailedWindow(AnalysisItem * item, con
 {
   emit removeSubWindow(item);
   AnalysisExecutionFailedWindow * window = new AnalysisExecutionFailedWindow(item, errorMessage);
+  connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
   emit showWindow(window);
   setCurrentIndex(item->index());
 }

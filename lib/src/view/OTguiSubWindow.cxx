@@ -52,7 +52,8 @@ void OTguiSubWindow::setErrorMessage(QString message)
   errorMessage_ = message;
   if (errorMessageLabel_)
     errorMessageLabel_->setText(message);
-  emit errorMessageChanged(message);
+  if (windowState() == 4 || windowState() == 8 || windowState() == 10)
+    emit errorMessageChanged(message);
 }
 
 

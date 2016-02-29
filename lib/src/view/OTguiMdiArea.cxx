@@ -48,7 +48,7 @@ void OTguiMdiArea::showSubWindow(QStandardItem * item)
     {
       win->widget()->showMaximized();
       setActiveSubWindow(win);
-//       statusBar_->showErrorMessage(win->getErrorMessage());
+      win->setErrorMessage(win->getErrorMessage());
     }
   }
 }
