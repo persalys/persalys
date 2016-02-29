@@ -26,21 +26,30 @@
 
 namespace OTGUI {
 
-ComboBoxDelegate::ComboBoxDelegate(QStringList items, QObject * parent)
+ComboBoxDelegate::ComboBoxDelegate(QStringList items, QPair<int, int> cell, QObject * parent)
   : QItemDelegate(parent)
   , items_(items)
+  , cell_(cell)
 {
 }
 
 
 QWidget *ComboBoxDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
+  if (cell_ != QPair<int, int>())
+    if (index.row() != cell_.first || index.column() != cell_.second)
+        return QItemDelegate::createEditor(parent, option, index);
+
   QComboBox * editor = new QComboBox(parent);
-  QStandardItemModel * model = new QStandardItemModel(1, 1);
-  QStandardItem * firstItem = new QStandardItem;
-  firstItem->setEnabled(false);
-  model->setItem(0, 0, firstItem);
-  editor->setModel(model);
+  // for probabilisticModelWindow:
+  if (cell_ == QPair<int, int>())
+  {
+    QStandardItemModel * model = new QStandardItemModel(1, 1);
+    QStandardItem * firstItem = new QStandardItem;
+    firstItem->setEnabled(false);
+    model->setItem(0, 0, firstItem);
+    editor->setModel(model);
+  }
   editor->addItems(items_);
   connect(editor, SIGNAL(activated(QString)), this, SLOT(emitCommitData()));
   return editor;
@@ -49,6 +58,10 @@ QWidget *ComboBoxDelegate::createEditor(QWidget * parent, const QStyleOptionView
 
 void ComboBoxDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const
 {
+  if (cell_ != QPair<int, int>())
+    if (index.row() != cell_.first || index.column() != cell_.second)
+        return QItemDelegate::setEditorData(editor, index);
+
   QComboBox * comboBox = static_cast<QComboBox*>(editor);
   comboBox->setCurrentIndex(comboBox->findText(index.model()->data(index, Qt::DisplayRole).toString()));
   comboBox->setEnabled(true);
@@ -59,6 +72,10 @@ void ComboBoxDelegate::setEditorData(QWidget * editor, const QModelIndex & index
 
 void ComboBoxDelegate::setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const
 {
+  if (cell_ != QPair<int, int>())
+    if (index.row() != cell_.first || index.column() != cell_.second)
+        return QItemDelegate::setModelData(editor, model, index);
+
   QComboBox * comboBox = static_cast<QComboBox*>(editor);
   model->setData(index, comboBox->itemText(comboBox->currentIndex()), Qt::EditRole);
 }

@@ -39,109 +39,124 @@ int ExperimentTableModel::columnCount(const QModelIndex & parent) const
 
 int ExperimentTableModel::rowCount(const QModelIndex & parent) const
 {
-  return designOfExperiment_.getPhysicalModel().getInputs().getSize();
+  // +1 for the header
+  return designOfExperiment_.getPhysicalModel().getInputs().getSize() + 1;
 }
 
 
 Qt::ItemFlags ExperimentTableModel::flags(const QModelIndex & index) const
 {
   Qt::ItemFlags result = QAbstractTableModel::flags(index);
-  if (index.column() == 0)
+  if (index.row() == 0)
   {
-    result &= ~Qt::ItemIsEditable;
-    result |= Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+    if (index.column() == 5)
+      return result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
+    else if (index.column() != 5)
+      return result &= ~Qt::ItemIsEditable;
   }
-  else if (index.column() == 2 && designOfExperiment_.getLevels()[index.row()] != 1)
-    result &= ~Qt::ItemIsEnabled;
-  else if (index.column() == 2 && designOfExperiment_.getLevels()[index.row()] == 1)
-    result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
-  else if (index.column() > 2 && designOfExperiment_.getLevels()[index.row()] != 1)
-    result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
-  else if (index.column() > 2 && designOfExperiment_.getLevels()[index.row()] == 1)
-    result &= ~Qt::ItemIsEnabled;
+  else
+  {
+    int indexInput = index.row() - 1;
+    if (index.column() == 0)
+    {
+      result &= ~Qt::ItemIsEditable;
+      result |= Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+    }
+    else if (index.column() == 2 && designOfExperiment_.getLevels()[indexInput] != 1)
+      result &= ~Qt::ItemIsEnabled;
+    else if (index.column() == 2 && designOfExperiment_.getLevels()[indexInput] == 1)
+      result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
+    else if (index.column() > 2 && designOfExperiment_.getLevels()[indexInput] != 1)
+      result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
+    else if (index.column() > 2 && designOfExperiment_.getLevels()[indexInput] == 1)
+      result &= ~Qt::ItemIsEnabled;
+  }
   return result;
+
 }
 
 
 QVariant ExperimentTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-  if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+  if (orientation == Qt::Vertical && role == Qt::DisplayRole)
   {
-    switch (section)
-    {
-      case 0:
-        return tr("Name");
-      case 1:
-        return tr("Description");
-      case 2:
-        return tr("Value");
-      case 3:
-        return tr("Lower bound");
-      case 4:
-        return tr("Upper bound");
-      case 5:
-        if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
-          return tr("Levels");
-        else
-          return tr("Delta");
-      default:
-        return QVariant();
-    }
-  }
-  return QAbstractTableModel::headerData(section, orientation, role);
-}
-
-
-bool ExperimentTableModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
-{
-  if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-  {
-    if (value.toString() == tr("Levels") && designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndDeltas)
-      designOfExperiment_.setLevels(designOfExperiment_.getLevels());
-    else if (value.toString() == tr("Delta") && designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
-      designOfExperiment_.setDeltas(designOfExperiment_.getDeltas());
+    if (section != 0)
+      return section - 1;
     else
-      return false;
-    emit dataChanged(index(0, 5), index(rowCount()-1, 5));
-    emit headerDataChanged(Qt::Horizontal, section, section);
-    return true;
+      return QVariant();
   }
-  return QAbstractTableModel::setHeaderData(section, orientation, value, role);
+  return QAbstractItemModel::headerData(section, orientation, role);
 }
 
 
 QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
 {
-  if (role == Qt::CheckStateRole && index.column() == 0)
+  // header
+  if (index.row() == 0)
   {
-    if (designOfExperiment_.getLevels()[index.row()] == 1)
-      return Qt::Unchecked;
-    else
-      return Qt::Checked;
-  }
-  else if (role == Qt::DisplayRole || role == Qt::EditRole)
-  {
-    switch (index.column())
+    if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
-      case 0:
-        return designOfExperiment_.getPhysicalModel().getInputs()[index.row()].getName().c_str();
-      case 1:
-        return designOfExperiment_.getPhysicalModel().getInputs()[index.row()].getDescription().c_str();
-      case 2:
-        return designOfExperiment_.getValues()[index.row()];
-      case 3:
-        return designOfExperiment_.getLowerBounds()[index.row()];
-      case 4:
-        return designOfExperiment_.getUpperBounds()[index.row()];
-      case 5:
+      switch (index.column())
       {
-        if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
-          return int(designOfExperiment_.getLevels()[index.row()]);
-        else
-          return designOfExperiment_.getDeltas()[index.row()];
+        case 0:
+          return tr("Name");
+        case 1:
+          return tr("Description");
+        case 2:
+          return tr("Value");
+        case 3:
+          return tr("Lower bound");
+        case 4:
+          return tr("Upper bound");
+        case 5:
+          if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
+            return tr("Levels");
+          else
+            return tr("Delta");
+        default:
+          return QVariant();
       }
-      default:
-        return QVariant();
+    }
+    else
+    {
+      return headerData(index.column(), Qt::Horizontal, role);
+    }
+  }
+  // not header
+  else
+  {
+    if (role == Qt::CheckStateRole && index.column() == 0)
+    {
+      if (designOfExperiment_.getLevels()[index.row()-1] == 1)
+        return Qt::Unchecked;
+      else
+        return Qt::Checked;
+    }
+    else if (role == Qt::DisplayRole || role == Qt::EditRole)
+    {
+      int indexInput = index.row() - 1;
+      switch (index.column())
+      {
+        case 0:
+          return designOfExperiment_.getPhysicalModel().getInputs()[indexInput].getName().c_str();
+        case 1:
+          return designOfExperiment_.getPhysicalModel().getInputs()[indexInput].getDescription().c_str();
+        case 2:
+          return designOfExperiment_.getValues()[indexInput];
+        case 3:
+          return designOfExperiment_.getLowerBounds()[indexInput];
+        case 4:
+          return designOfExperiment_.getUpperBounds()[indexInput];
+        case 5:
+        {
+          if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
+            return int(designOfExperiment_.getLevels()[indexInput]);
+          else
+            return designOfExperiment_.getDeltas()[indexInput];
+        }
+        default:
+          return QVariant();
+      }
     }
   }
   return QVariant();
@@ -151,15 +166,16 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
 bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
 
-  if (role == Qt::CheckStateRole && index.column() == 0)
+  if (role == Qt::CheckStateRole && index.column() == 0 && index.row() != 0)
   {
+    int indexInput = index.row() - 1;
     if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
     {
       Indices levels = designOfExperiment_.getLevels();
       if (value.toInt() == Qt::Checked)
-        levels[index.row()] = 2;
+        levels[indexInput] = 2;
       else if (value.toInt() == Qt::Unchecked)
-        levels[index.row()] = 1;
+        levels[indexInput] = 1;
       else
         return false;
       designOfExperiment_.setLevels(levels);
@@ -168,18 +184,30 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
     {
       NumericalPoint deltas = designOfExperiment_.getDeltas();
       if (value.toDouble() == Qt::Checked)
-        deltas[index.row()] = designOfExperiment_.getUpperBounds()[index.row()] - designOfExperiment_.getLowerBounds()[index.row()];
+        deltas[indexInput] = designOfExperiment_.getUpperBounds()[indexInput] - designOfExperiment_.getLowerBounds()[indexInput];
       else if (value.toDouble() == Qt::Unchecked)
-        deltas[index.row()] = 0;
+        deltas[indexInput] = 0;
       else
         return false;
       designOfExperiment_.setDeltas(deltas);
     }
-    emit dataChanged(index, this->index(index.row(), 6));
+    emit dataChanged(index, this->index(indexInput, 6));
     return true;
   }
-  else if (role == Qt::EditRole)
+  else if (role == Qt::EditRole && index.row() == 0 && index.column() == 5)
   {
+    if (value.toString() == tr("Levels") && designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndDeltas)
+      designOfExperiment_.setLevels(designOfExperiment_.getLevels());
+    else if (value.toString() == tr("Delta") && designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
+      designOfExperiment_.setDeltas(designOfExperiment_.getDeltas());
+    else
+      return false;
+    emit dataChanged(this->index(1, 5), this->index(rowCount()-1, 5));
+    return true;
+  }
+  else if (role == Qt::EditRole && index.row() != 0)
+  {
+    int indexInput = index.row() - 1;
     switch (index.column())
     {
       case 0:
@@ -188,31 +216,31 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
       case 2:
       {
         NumericalPoint values = designOfExperiment_.getValues();
-        if (values[index.row()] == value.toDouble())
+        if (values[indexInput] == value.toDouble())
           return false;
-        values[index.row()] = value.toDouble();
+        values[indexInput] = value.toDouble();
         designOfExperiment_.setValues(values);
         break;
       }
       case 3:
       {
-        if (value.toDouble() >= designOfExperiment_.getUpperBounds()[index.row()])
+        if (value.toDouble() >= designOfExperiment_.getUpperBounds()[indexInput])
           return false;
         NumericalPoint lowerBounds = designOfExperiment_.getLowerBounds();
-        if (lowerBounds[index.row()] == value.toDouble())
+        if (lowerBounds[indexInput] == value.toDouble())
           return false;
-        lowerBounds[index.row()] = value.toDouble();
+        lowerBounds[indexInput] = value.toDouble();
         designOfExperiment_.setLowerBounds(lowerBounds);
         break;
       }
       case 4:
       {
-        if (value.toDouble() <= designOfExperiment_.getLowerBounds()[index.row()])
+        if (value.toDouble() <= designOfExperiment_.getLowerBounds()[indexInput])
           return false;
         NumericalPoint upperBounds = designOfExperiment_.getUpperBounds();
-        if (upperBounds[index.row()] == value.toDouble())
+        if (upperBounds[indexInput] == value.toDouble())
           return false;
-        upperBounds[index.row()] = value.toDouble();
+        upperBounds[indexInput] = value.toDouble();
         designOfExperiment_.setUpperBounds(upperBounds);
         break;
       }
@@ -223,18 +251,18 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           if (value.toInt() < 2)
             return false;
           Indices nbValues = designOfExperiment_.getLevels();
-          if (nbValues[index.row()] == value.toUInt())
+          if (nbValues[indexInput] == value.toUInt())
             return false;
-          nbValues[index.row()] = value.toUInt();
+          nbValues[indexInput] = value.toUInt();
           designOfExperiment_.setLevels(nbValues);
           break;
         }
         else
         {
           NumericalPoint deltas = designOfExperiment_.getDeltas();
-          if (deltas[index.row()] == value.toDouble())
+          if (deltas[indexInput] == value.toDouble())
             return false;
-          deltas[index.row()] = value.toDouble();
+          deltas[indexInput] = value.toDouble();
           designOfExperiment_.setDeltas(deltas);
           break;
         }

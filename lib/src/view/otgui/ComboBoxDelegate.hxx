@@ -29,7 +29,7 @@ class ComboBoxDelegate : public QItemDelegate
   Q_OBJECT
 
 public:
-  ComboBoxDelegate(QStringList items, QObject * parent = 0);
+  ComboBoxDelegate(QStringList items, QPair<int, int> cell=QPair<int, int>(), QObject * parent = 0);
  
   QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
   void setEditorData(QWidget * editor, const QModelIndex & index) const;
@@ -41,6 +41,7 @@ public slots:
 
 private:
   QStringList items_;
+  QPair<int, int> cell_;
 };
 }
 #endif

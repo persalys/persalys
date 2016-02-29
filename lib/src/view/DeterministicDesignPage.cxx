@@ -22,6 +22,7 @@
 
 #include "otgui/ExperimentTableModel.hxx"
 #include "otgui/HorizontalHeaderViewWithCombobox.hxx"
+#include "otgui/ComboBoxDelegate.hxx"
 
 #include <NumericalSample.hxx>
 
@@ -64,12 +65,31 @@ void DeterministicDesignPage::buildInterface()
   tableView_->setModel(model);
 
   QStringList items = QStringList()<<tr("Levels")<<tr("Delta");
-  QVector<int> columns(1, 5);
-  HorizontalHeaderViewWithCombobox * header = new HorizontalHeaderViewWithCombobox(items, columns, tableView_);
-  tableView_->setHorizontalHeader(header);
-  tableView_->horizontalHeader()->show();
+  QPair<int, int> cellWithComboBox(0, 5);
+
+  tableView_->horizontalHeader()->hide();
+  tableView_->setItemDelegateForColumn(5, new ComboBoxDelegate(items, cellWithComboBox));
+  tableView_->openPersistentEditor(model->index(0, 5));
+
+  tableView_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  tableView_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  tableView_->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
+  tableView_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
+
+  QSize size(tableView_->sizeHint());
+  int width = 0;
+  for (int i=0; i<tableView_->model()->columnCount(); ++i)
+    width += tableView_->columnWidth(i);
+  size.setWidth(width + tableView_->verticalHeader()->width() + 2);
+  int height = tableView_->horizontalHeader()->height();
+  for (int i=0; i<tableView_->model()->rowCount(); ++i)
+    height += tableView_->rowHeight(i);
+  size.setHeight(height);
+  tableView_->setMinimumSize(size);
+  tableView_->setMaximumSize(size);
 
   pageLayout->addWidget(tableView_);
+  pageLayout->addStretch();
 
   // TODO
 //   buttonToChooseMethod = new QRadioButton(tr("Use a stratified design"));
