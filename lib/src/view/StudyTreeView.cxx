@@ -819,9 +819,19 @@ void StudyTreeView::openOTStudy()
 
     if (file.exists() && !OTStudy::GetOTStudiesFileNames().__contains__(file.absoluteFilePath().toStdString()))
     {
-      QApplication::setOverrideCursor(Qt::WaitCursor);
-      OTStudy::OpenOTStudy(fileName.toStdString());
-      QApplication::restoreOverrideCursor();
+      try
+      {
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+        OTStudy::OpenOTStudy(fileName.toStdString());
+        QApplication::restoreOverrideCursor();
+      }
+      catch (std::exception & ex)
+      {
+        QApplication::restoreOverrideCursor();
+        QString message;
+        message = tr("Impossible to read the file '%1'. \n").arg(fileName);
+        QMessageBox::warning(this, tr("Warning"), message+ex.what());
+      }
     }
     else
     {
@@ -829,11 +839,11 @@ void StudyTreeView::openOTStudy()
       QString message;
       if (!file.exists())
       {
-        message = tr("The file '%1' does not exist.").arg(file.baseName());
+        message = tr("The file '%1' does not exist.").arg(fileName);
       }
       else if (OTStudy::GetOTStudiesFileNames().__contains__(file.absoluteFilePath().toStdString()))
       {
-        message = tr("The file '%1' is already opened.").arg(file.baseName());
+        message = tr("The file '%1' is already opened.").arg(fileName);
       }
       QMessageBox::warning(this, tr("Warning"), message);
     }
