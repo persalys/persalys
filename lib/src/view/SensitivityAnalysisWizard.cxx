@@ -25,7 +25,6 @@
 
 #include <QGroupBox>
 #include <QRadioButton>
-#include <QLabel>
 #include <QPushButton>
 #include <QVBoxLayout>
 
@@ -81,20 +80,33 @@ void SensitivityAnalysisWizard::buildInterface()
 
   mainLayout->addWidget(methodBox);
 
-  QGridLayout * methodParametersLayout = new QGridLayout;
+  QWidget * methodParametersWidgets = new QWidget;
+  QHBoxLayout * methodParametersLayout = new QHBoxLayout(methodParametersWidgets);
 
-  QLabel * nbSimuLabel = new QLabel(tr("Number of simulations"));
-  nbSimuSpinbox_ = new QSpinBox;
-  nbSimuSpinbox_->setMinimum(2);
-  nbSimuSpinbox_->setMaximum(std::numeric_limits<int>::max());
-  nbSimuSpinbox_->setValue(dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->getNbSimulations());
-  connect(nbSimuSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(nbSimuChanged(int)));
+  QLabel * sampleSizeLabel = new QLabel(tr("Sample size"));
+  sampleSizeSpinbox_ = new QSpinBox;
+  sampleSizeSpinbox_->setMinimum(2);
+  sampleSizeSpinbox_->setMaximum(std::numeric_limits<int>::max());
+  sampleSizeSpinbox_->setValue(dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->getNbSimulations());
+  connect(sampleSizeSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(sampleSizeChanged(int)));
 
-  nbSimuLabel->setBuddy(nbSimuSpinbox_);
-  methodParametersLayout->addWidget(nbSimuLabel, 0, 0);
-  methodParametersLayout->addWidget(nbSimuSpinbox_, 0, 1);
+  sampleSizeLabel->setBuddy(sampleSizeSpinbox_);
+  methodParametersLayout->addWidget(sampleSizeLabel);
+  methodParametersLayout->addWidget(sampleSizeSpinbox_);
+  mainLayout->addWidget(methodParametersWidgets);
 
-  mainLayout->addLayout(methodParametersLayout);
+  sobolWidgets_ = new QWidget;
+  QHBoxLayout * sobolWidgetsLayout = new QHBoxLayout(sobolWidgets_);
+  QLabel * totalNbSimuLabel = new QLabel(tr("The total number of simulations"));
+  // total nb simu: N=n*(d+2)
+  // n = nb inputs; d=sample size
+  double nbSimu = physicalModel_.getInputs().getSize() * (sampleSizeSpinbox_->value() + 2);
+  totalNbSimuLabel_ = new QLabel(QString::number(nbSimu));
+  sobolWidgetsLayout->addWidget(totalNbSimuLabel);
+  sobolWidgetsLayout->addWidget(totalNbSimuLabel_);
+  mainLayout->addWidget(sobolWidgets_);
+  if (analysis_.getImplementation()->getClassName() == "SRCAnalysis")
+    sobolWidgets_->hide();
 
   // advanced parameters
   advancedGroup_ = new QGroupBox(tr("Advanced parameters"));
@@ -138,6 +150,7 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
       if (analysis_.getImplementation()->getClassName() == "SRCAnalysis")
       {
         analysis_ = SobolAnalysis(analysis_.getName(), physicalModel_);
+        sobolWidgets_->show();
         emit analysisChanged(analysis_);
       }
       break;
@@ -147,6 +160,7 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
       if (analysis_.getImplementation()->getClassName() == "SobolAnalysis")
       {
         analysis_ = SRCAnalysis(analysis_.getName(), physicalModel_);
+        sobolWidgets_->hide();
         emit analysisChanged(analysis_);
       }
       break;
@@ -166,9 +180,13 @@ void SensitivityAnalysisWizard::showHideAdvancedWidgets(bool show)
 }
 
 
-void SensitivityAnalysisWizard::nbSimuChanged(int nbSimu)
+void SensitivityAnalysisWizard::sampleSizeChanged(int sampleSize)
 {
-  dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->setNbSimulations(nbSimu);
+  // total nb simu: N=n*(d+2)
+  // n = nb inputs; d=sample size
+  int nbSimu = physicalModel_.getInputs().getSize() * (sampleSize + 2);
+  totalNbSimuLabel_->setText(QString::number(nbSimu));
+  dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->setNbSimulations(sampleSize);
 }
 
 

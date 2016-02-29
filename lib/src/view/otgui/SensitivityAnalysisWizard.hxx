@@ -27,6 +27,7 @@
 #include <QButtonGroup>
 #include <QSpinBox>
 #include <QGroupBox>
+#include <QLabel>
 
 namespace OTGUI {
 class SensitivityAnalysisWizard : public OTguiWizard
@@ -48,7 +49,7 @@ protected:
 public slots:
   void updateMethodWidgets();
   void showHideAdvancedWidgets(bool);
-  void nbSimuChanged(int);
+  void sampleSizeChanged(int);
   void seedChanged(int);
 signals:
   void analysisChanged(const Analysis & analysis);
@@ -61,7 +62,9 @@ private:
   QButtonGroup * methodGroup_;
   QGroupBox * advancedGroup_;
   QWidget * advancedWidgets_;
-  QSpinBox * nbSimuSpinbox_;
+  QSpinBox * sampleSizeSpinbox_;
+  QWidget * sobolWidgets_;
+  QLabel * totalNbSimuLabel_;
   QSpinBox * seedSpinbox_;
 };
 }
