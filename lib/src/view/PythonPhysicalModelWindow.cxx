@@ -131,22 +131,31 @@ void PythonPhysicalModelWindow::parseVariables()
   }
 
   Description existingInputVariables(physicalModel_.getInputNames());
-  for(unsigned int i = 0; i < inputVariables.getSize(); ++ i)
+  for (unsigned int i = 0; i < inputVariables.getSize(); ++ i)
   {
     if (!existingInputVariables.__contains__(inputVariables[i]))
     {
       physicalModel_.addInput(Input(inputVariables[i]));
     }
   }
+  for (unsigned int i = 0; i < existingInputVariables.getSize(); ++ i)
+  {
+    if (!inputVariables.__contains__(existingInputVariables[i]))
+    {
+      physicalModel_.removeInput(existingInputVariables[i]);
+    }
+  }
 
   Description existingOutputVariables(physicalModel_.getOutputNames());
-  for(unsigned int i = 0; i < outputVariables.getSize(); ++ i)
+  for (unsigned int i = 0; i < outputVariables.getSize(); ++ i)
   {
     if (!existingOutputVariables.__contains__(outputVariables[i]))
     {
       physicalModel_.addOutput(Output(outputVariables[i]));
     }
   }
+  
+  
 }
 
 
