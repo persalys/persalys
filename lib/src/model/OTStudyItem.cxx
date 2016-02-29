@@ -33,6 +33,7 @@ OTStudyItem::OTStudyItem(OTStudy * otStudy)
   , otStudy_(otStudy)
 {
   setData("OTStudy", Qt::UserRole);
+  setToolTip(otStudy_->getFileName().c_str());
 }
 
 
@@ -82,6 +83,10 @@ void OTStudyItem::update(Observable * source, const String & message)
   else if (message == "otStudyRemoved")
   {
     emit otStudyRemoved(this);
+  }
+  else if (message == "fileNameChanged")
+  {
+    setToolTip(otStudy_->getFileName().c_str());
   }
   else
   {
