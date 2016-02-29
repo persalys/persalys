@@ -97,6 +97,7 @@ void LimitStateWindow::buildInterface()
 
 void LimitStateWindow::updateOutputsList()
 {
+  setErrorMessage(tr(""));
   outputsComboBox_->blockSignals(true);
   outputsComboBox_->clear();
   QStringList items;
@@ -105,8 +106,11 @@ void LimitStateWindow::updateOutputsList()
   outputsComboBox_->addItems(items);
 
   const int index = items.indexOf(limitState_.getOutputName().c_str());
-//   if (index != -1)
-//     outputsComboBox_->setCurrentIndex( index + 1 );
+
+  if (index == -1)
+  {
+    setErrorMessage(tr("The output name is not valid."));
+  }
   outputsComboBox_->setCurrentIndex(index);
   outputsComboBox_->blockSignals(false);
 }
@@ -147,6 +151,7 @@ void LimitStateWindow::updateThresholdWidget()
 
 void LimitStateWindow::updateOutput(int index)
 {
+  setErrorMessage(tr(""));
   limitState_.blockNotification(true);
   limitState_.setOutputName(outputsComboBox_->itemText(index).toStdString());
   limitState_.blockNotification(false);

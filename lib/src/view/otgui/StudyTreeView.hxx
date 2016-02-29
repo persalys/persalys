@@ -42,6 +42,7 @@ protected:
   bool isPhysicalModelValid(const QModelIndex & currentIndex);
   bool hasPhysicalModelInputs(const QModelIndex & currentIndex);
   bool isProbabilisticModelValid(const QModelIndex & currentIndex);
+  bool isLimitStateValid(const QModelIndex & currentIndex);
 
 public slots:
   void createNewOTStudy();

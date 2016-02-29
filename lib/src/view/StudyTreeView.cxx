@@ -289,6 +289,20 @@ bool StudyTreeView::isProbabilisticModelValid(const QModelIndex & currentIndex)
 }
 
 
+bool StudyTreeView::isLimitStateValid(const QModelIndex & currentIndex)
+{
+  LimitStateItem * limitStateItem = treeViewModel_->getLimitStateItem(currentIndex);
+  if (!limitStateItem)
+    return false;
+  if (!limitStateItem->getLimitState().isValid())
+  {
+    QMessageBox::critical(this, tr("Error"), tr("The limit state is not valid."));
+    return false;
+  }
+  return true;
+}
+
+
 void StudyTreeView::createNewOTStudy()
 {
   treeViewModel_->createNewOTStudy();
@@ -490,6 +504,8 @@ void StudyTreeView::createNewThresholdExceedance()
   QModelIndex limitStateIndex = selectionModel()->currentIndex();
   if (!isPhysicalModelValid(limitStateIndex) || !isProbabilisticModelValid(limitStateIndex))
     return;
+  if (!isLimitStateValid(limitStateIndex))
+    return;
   LimitStateItem * limitStateItem = dynamic_cast<LimitStateItem*>(treeViewModel_->itemFromIndex(limitStateIndex));
   OTStudyItem * otStudyItem = treeViewModel_->getOTStudyItem(limitStateIndex);
   ReliabilityAnalysisWizard * wizard = new ReliabilityAnalysisWizard(otStudyItem->getOTStudy(), limitStateItem->getLimitState());
@@ -580,6 +596,8 @@ void StudyTreeView::runAnalysis()
     }
     else if (analysisType == "MonteCarloReliabilityAnalysis")
     {
+      if (!isLimitStateValid(selectionModel()->currentIndex()))
+        return;
       wizard = new ReliabilityAnalysisWizard(item->getAnalysis());
     }
     else

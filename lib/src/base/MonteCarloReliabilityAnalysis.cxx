@@ -67,10 +67,16 @@ void MonteCarloReliabilityAnalysis::run()
 {
   RandomGenerator::SetSeed(getSeed());
 
-  getLimitState().getFunction().enableHistory();
-  getLimitState().getFunction().clearHistory();
+  Description outputDescription(1);
+  outputDescription[0] = getLimitState().getOutputName();
+  NumericalMathFunction function = getPhysicalModel().getFunction(outputDescription);
+  function.enableHistory();
+  function.clearHistory();
 
-  MonteCarlo algo = MonteCarlo(getLimitState().getEvent());
+  Event event(RandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
+  event.setDescription(outputDescription);
+
+  MonteCarlo algo = MonteCarlo(event);
   algo.setMaximumOuterSampling(maximumOuterSampling_);
   algo.setMaximumCoefficientOfVariation(maximumCoefficientOfVariation_);
   algo.setBlockSize(blockSize_);
@@ -80,11 +86,11 @@ void MonteCarloReliabilityAnalysis::run()
   // get convergence graph at level 0.95
   Graph graph = algo.drawProbabilityConvergence();
   result_ = MonteCarloReliabilityAnalysisResult(algo.getResult(),
-                                                getLimitState().getFunction().getHistoryOutput().getSample(),
+                                                function.getHistoryOutput().getSample(),
                                                 graph.getDrawables()[0].getData(),
                                                 graph.getDrawables()[1].getData(),
                                                 graph.getDrawables()[2].getData());
-  getLimitState().getFunction().disableHistory();
+  function.disableHistory();
 
   notify("analysisFinished");
 }

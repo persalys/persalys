@@ -127,16 +127,9 @@ void LimitState::setThreshold(const double & threshold)
 }
 
 
-// build event
-Event LimitState::getEvent()
+bool LimitState::isValid() const
 {
-  return getImplementation()->getEvent();
-}
-
-
-NumericalMathFunction LimitState::getFunction()
-{
-  return getImplementation()->getFunction();
+  return getImplementation()->isValid();  
 }
 
 

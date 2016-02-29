@@ -55,8 +55,7 @@ public:
   double getThreshold() const;
   void setThreshold(const double & threshold);
 
-  OT::Event getEvent();
-  OT::NumericalMathFunction getFunction();
+  bool isValid() const;
 
   OT::String getPythonScript() const;
 

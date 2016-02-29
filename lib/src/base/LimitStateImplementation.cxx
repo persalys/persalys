@@ -57,7 +57,7 @@ LimitStateImplementation::LimitStateImplementation(const String & name, const Ph
     setOutputName(physicalModel.getOutputs()[0].getName());
   else
     setOutputName(outputName);
-  function_ = physicalModel_.getFunction(outputName_);
+
   setOperator(comparisonOperator);
 }
 
@@ -90,7 +90,7 @@ String LimitStateImplementation::getOutputName() const
 void LimitStateImplementation::setOutputName(const String & outputName)
 {
   if (!physicalModel_.hasOutputNamed(outputName))
-    throw InvalidArgumentException(HERE) << "The physical model does not contain an output named " << outputName;
+    throw InvalidArgumentException(HERE) << "The physical model does not contain an output named '" << outputName <<"'.";
 
   outputName_ = outputName;
   notify("outputNameChanged");
@@ -126,22 +126,11 @@ void LimitStateImplementation::setThreshold(const double & threshold)
 }
 
 
-// build event
-Event LimitStateImplementation::getEvent()
+bool LimitStateImplementation::isValid() const
 {
-  Description outputDescription(1);
-  outputDescription[0] = outputName_;
-  Event event(RandomVector(function_, physicalModel_.getInputRandomVector()), operator_, threshold_);
-  Description outputName(1);
-  outputName[0] = outputName_;
-  event.setDescription(outputName);
-  return event;
-}
-
-
-NumericalMathFunction LimitStateImplementation::getFunction()
-{
-  return function_;
+  if (!physicalModel_.getImplementation().get()->hasOutputNamed(outputName_))
+    return false;
+  return true;
 }
 
 
@@ -176,6 +165,5 @@ void LimitStateImplementation::load(Advocate & adv)
   adv.loadAttribute("outputName_", outputName_);
   adv.loadAttribute("operator_", operator_);
   adv.loadAttribute("threshold_", threshold_);
-  function_ = physicalModel_.getFunction(outputName_);
 }
 }

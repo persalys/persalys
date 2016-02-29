@@ -124,6 +124,21 @@ PhysicalModelItem* StudyTreeViewModel::getPhysicalModelItem(const QModelIndex & 
 }
 
 
+LimitStateItem* StudyTreeViewModel::getLimitStateItem(const QModelIndex & childIndex)
+{
+  if (itemFromIndex(childIndex)->data(Qt::UserRole).toString() == "LimitState")
+    return static_cast<LimitStateItem*>(itemFromIndex(childIndex));
+  QModelIndex seekRoot = childIndex;
+  while(seekRoot.parent() != QModelIndex())
+  {
+    seekRoot = seekRoot.parent();
+    if (itemFromIndex(seekRoot)->data(Qt::UserRole).toString() == "LimitState")
+      return static_cast<LimitStateItem*>(itemFromIndex(seekRoot));
+  }
+  return 0;
+}
+
+
 AnalysisItem* StudyTreeViewModel::getAnalysisItem(OTStudyItem * otStudyItem, const QString & analysisName)
 {
   QModelIndexList listIndexes = match(otStudyItem->index(), Qt::DisplayRole, analysisName, 2, Qt::MatchRecursive);
