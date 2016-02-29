@@ -1,7 +1,6 @@
 // SWIG file
 
 %module(docstring="otguibase module") otguibase
-%feature("autodoc","1");
 
 %{
 #include "OT.hxx"

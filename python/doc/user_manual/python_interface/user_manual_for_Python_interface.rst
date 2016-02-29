@@ -9,3 +9,29 @@ User manual for Python interface
     :toctree: _generated/
 
 
+    
+    PhysicalModel
+    AnalyticalPhysicalModel
+    PythonPhysicalModel
+
+    ModelEvaluation
+    ModelEvaluationResult
+    
+    MonteCarloResult
+    DesignOfExperiment
+    
+    Analysis
+    SobolAnalysis
+    SobolResult
+    SRCAnalysis
+    SRCResult
+    TaylorExpansionsMomentsAnalysis
+    
+    LimitState
+    ReliabilityAnalysis
+    SimulationAnalysis
+    SimulationAnalysisResult
+    MonteCarloReliabilityAnalysis
+    MonteCarloReliabilityAnalysisResult
+    
+    OTStudy
