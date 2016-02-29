@@ -239,6 +239,7 @@ void PlotWidget::plotHistogram(const NumericalSample & sample, const UnsignedInt
     throw InvalidArgumentException(HERE) << "Type of graph not known " << graphType;
 
   const int size = (int)sample.getSize();
+  if (size == 0) throw InvalidArgumentException(HERE) << "Cannot draw an histogram based on an empty sample.";
 
   // compute bar number
   if (barNumber <= 0)
