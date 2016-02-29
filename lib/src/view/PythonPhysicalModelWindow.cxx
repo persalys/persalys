@@ -32,17 +32,36 @@ using namespace OT;
 
 namespace OTGUI {
 
+CodeView::CodeView(QWidget * parent)
+: QTableView(parent)
+{
+}
+
+bool CodeView::event(QEvent * event)
+{
+  if (event->type() == QEvent::KeyPress)
+  {
+    QKeyEvent *keyEvent = dynamic_cast<QKeyEvent*>(event);
+    if (keyEvent->key() == Qt::Key_Tab)
+    {
+      return true;
+    }
+    return QTableView::event(event);
+  }
+  return QTableView::event(event);
+}
+
 PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item)
   : OTguiSubWindow(item)
   , physicalModel_(item->getPhysicalModel())
   , codeModel_(0)
 {
   connect(item, SIGNAL(codeChanged()), this, SLOT(updateCodeModel()));
-
+setFocusPolicy(Qt::ClickFocus);
   QWidget * mainWidget = new QWidget;
   QHBoxLayout * mainLayout = new QHBoxLayout(mainWidget);
 
-  codeView_ = new QTableView;
+  codeView_ = new CodeView;
   codeView_->setEditTriggers(QTableView::AllEditTriggers);
   codeView_->horizontalHeader()->setStretchLastSection(true);
   codeView_->verticalHeader()->setStretchLastSection(true);

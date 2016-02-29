@@ -22,8 +22,27 @@
 #define OTGUI_CODEDELEGATE_HXX
 
 #include <QItemDelegate>
+#include <QPlainTextEdit>
 
 namespace OTGUI {
+
+class CodeEditor : public QPlainTextEdit
+{
+  Q_OBJECT
+public:
+  CodeEditor(QWidget * parent = 0);
+
+signals:
+  // signal sent when the code is ready to be parsed
+  void codeEdited(QWidget * QWidget);
+
+protected:
+  virtual bool event(QEvent * event);
+
+  virtual void keyPressEvent(QKeyEvent *e);
+
+};
+
 class CodeDelegate : public QItemDelegate
 {
   Q_OBJECT
@@ -36,6 +55,8 @@ public:
   void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const;
   void paint(QPainter *painter, const QStyleOptionViewItem & option, const QModelIndex & index) const;
 
+protected:
+  bool eventFilter(QObject *obj, QEvent *ev);
 public slots:
 
 private:

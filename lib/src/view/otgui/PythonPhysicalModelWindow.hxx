@@ -29,7 +29,16 @@
 #include <QGroupBox>
 
 namespace OTGUI {
-  
+
+class CodeView : public QTableView
+{
+  Q_OBJECT
+public:
+  CodeView(QWidget * parent = 0);
+protected:
+  virtual bool event(QEvent * event);
+};
+
 class PythonPhysicalModelWindow : public OTguiSubWindow
 {
   Q_OBJECT

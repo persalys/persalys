@@ -20,21 +20,20 @@
  */
 #include "otgui/CodeDelegate.hxx"
 
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QApplication>
 #include <QPainter>
+#include <QKeyEvent>
+#include <QTextCursor>
+
+#include <iostream>
+
 
 namespace OTGUI {
 
-CodeDelegate::CodeDelegate(QObject * parent)
-  : QItemDelegate(parent)
+CodeEditor::CodeEditor(QWidget * parent)
+: QPlainTextEdit(parent)
 {
-}
-
-
-QWidget *CodeDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const
-{
-  QTextEdit * textEdit = new QTextEdit(parent);
 #ifndef _WIN32
   QFont font("Monospace");
 #else
@@ -42,21 +41,86 @@ QWidget *CodeDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem
 #endif
   font.setPointSize(9);
   font.setFixedPitch(true);
-  textEdit->setFont(font);
+  setFont(font);
+}
+
+
+bool CodeEditor::event(QEvent * event)
+{
+  if (event->type() == QEvent::ShortcutOverride) {
+    QKeyEvent *keyEvent = dynamic_cast<QKeyEvent*>(event);
+    if (keyEvent->key() == Qt::Key_Tab) {
+      QTextCursor cursor(textCursor());
+      cursor.insertText("    ");
+      event->accept();
+      return true;
+    }
+  }
+//   if (event->type() == QEvent::KeyPress)
+//   {
+//     QKeyEvent *keyEvent = dynamic_cast<QKeyEvent*>(event);
+//     if (keyEvent->key() == Qt::Key_Tab) {
+//       return true;
+//     }
+//     return QPlainTextEdit::event(event);
+//   }
+  return QPlainTextEdit::event(event);
+}
+
+void CodeEditor::keyPressEvent(QKeyEvent *e)
+{
+
+  QPlainTextEdit::keyPressEvent(e);
+  if (e->key() == Qt::Key_Return)
+  {
+    int position = textCursor().position();
+    emit codeEdited(this);
+    QTextCursor cursor(textCursor());
+    cursor.setPosition(position);
+    setTextCursor(cursor);
+  }
+}
+
+bool CodeDelegate::eventFilter(QObject *obj, QEvent *event)
+{
+//   if (event->type() == QEvent::ShortcutOverride)
+//   {
+//     std::cout << "CodeDelegate::eventFilter ShortcutOverride"<<std::endl;
+//   }
+  if (event->type() == QEvent::KeyPress)
+  {
+    QKeyEvent *keyEvent = dynamic_cast<QKeyEvent*>(event);
+    if (keyEvent->key() == Qt::Key_Tab)
+    {
+      return true;
+    }
+  }
+  return QItemDelegate::eventFilter(obj, event);
+}
+
+CodeDelegate::CodeDelegate(QObject * parent)
+  : QItemDelegate(parent)
+{
+}
+
+QWidget *CodeDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const
+{
+  QWidget * textEdit = new CodeEditor(parent);
+  connect(textEdit, SIGNAL(codeEdited(QWidget *)), this, SIGNAL(commitData(QWidget *)));
   return textEdit;
 }
 
 
 void CodeDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const
 {
-  QTextEdit * textEdit = dynamic_cast<QTextEdit*>(editor);
+  QPlainTextEdit * textEdit = dynamic_cast<QPlainTextEdit*>(editor);
   textEdit->setPlainText(index.model()->data(index, Qt::DisplayRole).toString());
 }
 
 
 void CodeDelegate::setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const
 {
-  QTextEdit * textEdit = dynamic_cast<QTextEdit*>(editor);
+  QPlainTextEdit * textEdit = dynamic_cast<QPlainTextEdit*>(editor);
   model->setData(index, textEdit->toPlainText(), Qt::EditRole);
 }
 
