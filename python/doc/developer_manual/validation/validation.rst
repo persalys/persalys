@@ -8,8 +8,9 @@ Test case 1: Cogeneration
 This test-case originates from [ProtoOTGUI2014]_ and can be found in python/test/t_Cogeneration_std.py.
 
 The purpose of this example is to check:
-- The Central tendency analysis using the Taylor Expansions;
-- the default values calculated for the parameters of a parametric analysis.
+  - The Central tendency analysis using the Taylor Expansions;
+  - the default values calculated for the parameters of a parametric analysis.
+
 The obtained results must be equal to the analytical values.
 
 .. container:: toggle
