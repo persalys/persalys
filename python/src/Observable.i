@@ -4,8 +4,12 @@
 #include "otgui/Observable.hxx"
 %}
 
+%ignore *::addObserver;
+%ignore *::blockNotification;
+%ignore *::GetClassName;
 
 %include otgui/Observable.hxx
+
 
 namespace OTGUI {
 

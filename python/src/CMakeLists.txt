@@ -50,8 +50,9 @@ if (SalomeYACS_FOUND)
   list (APPEND SWIG_MODULE_otguibase_EXTRA_FLAGS -DOTGUI_HAVE_YACS=1)
 endif ()
 
-ot_add_python_module (otguibase otguibase_module.i 
+ot_add_python_module (otguibase otguibase_module.i
                       Observer.i
+                      Observable.i
                       Variable.i Variable_doc.i.in
                       Input.i Input_doc.i.in
                       Output.i Output_doc.i.in

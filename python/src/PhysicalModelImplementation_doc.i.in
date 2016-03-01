@@ -84,6 +84,19 @@ OTGUI_PhysicalModel_setCopula_doc
 
 // ---------------------------------------------------------------------
 
+%define OTGUI_PhysicalModel_getComposedDistribution_doc
+"Copula accessor.
+
+Parameters
+----------
+Distribution : :class:`~openturns.Distribution`
+    The composed distribution"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getComposedDistribution
+OTGUI_PhysicalModel_getComposedDistribution_doc
+
+// ---------------------------------------------------------------------
+
 %define OTGUI_PhysicalModel_getCopula_doc
 "Copula accessor.
 
@@ -110,11 +123,57 @@ description : str
 %feature("docstring") OTGUI::PhysicalModelImplementation::setInputDescription
 OTGUI_PhysicalModel_setInputDescription_doc
 
+// ---------------------------------------------------------------------
 
+%define OTGUI_PhysicalModel_setInputs_doc
+"Input variables accessor.
 
+Parameters
+----------
+inputs : sequence of :class:`~otguibase.Intput`
+    Input variables"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::setInputs
+OTGUI_PhysicalModel_setInputs_doc
 
+// ---------------------------------------------------------------------
 
+%define OTGUI_PhysicalModel_getInputs_doc
+"Input variables accessor.
 
+Returns
+-------
+inputs : sequence of :class:`~otguibase.Intput`
+    Input variables"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getInputs
+OTGUI_PhysicalModel_getInputs_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_setOutputs_doc
+"Output variables accessor.
+
+Parameters
+----------
+outputs : sequence of :class:`~otguibase.Output`
+    Output variables"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::setOutputs
+OTGUI_PhysicalModel_setOutputs_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_getOutputs_doc
+"Output variables accessor.
+
+Parameters
+----------
+outputs : sequence of :class:`~otguibase.Output`
+    Output variables"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getOutputs
+OTGUI_PhysicalModel_getOutputs_doc
 
 
 

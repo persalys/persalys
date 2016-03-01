@@ -18,4 +18,11 @@ OTGUI_PhysicalModel_setCopula_doc
 OTGUI_PhysicalModel_getCopula_doc
 %feature("docstring") OTGUI::PhysicalModel::setInputDescription
 OTGUI_PhysicalModel_setInputDescription_doc
-
+%feature("docstring") OTGUI::PhysicalModel::setInputs
+OTGUI_PhysicalModel_setInputs_doc
+%feature("docstring") OTGUI::PhysicalModel::getInputs
+OTGUI_PhysicalModel_getInputs_doc
+%feature("docstring") OTGUI::PhysicalModel::setOutputs
+OTGUI_PhysicalModel_setOutputs_doc
+%feature("docstring") OTGUI::PhysicalModel::getOutputs
+OTGUI_PhysicalModel_getOutputs_doc
