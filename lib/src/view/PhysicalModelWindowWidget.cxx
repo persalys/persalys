@@ -24,9 +24,8 @@
 #include "otgui/ModelEvaluation.hxx"
 #include "otgui/LineEditWithQValidatorDelegate.hxx"
 
-#include <QFileDialog>
-#include <QComboBox>
 #include <QHeaderView>
+#include <QSplitter>
 
 using namespace OT;
 
@@ -54,7 +53,10 @@ PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelItem * item)
 void PhysicalModelWindowWidget::buildInterface()
 {
   QVBoxLayout * vbox = new QVBoxLayout(this);
-  // Define Inputs
+
+  QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
+
+  // Table Inputs
   QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
   QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
 
@@ -62,8 +64,10 @@ void PhysicalModelWindowWidget::buildInterface()
   inputTableView_->setEditTriggers(QTableView::AllEditTriggers);
   LineEditWithQValidatorDelegate * delegate = new LineEditWithQValidatorDelegate;
   inputTableView_->setItemDelegateForColumn(0, delegate);
+  inputTableView_->horizontalHeader()->setStretchLastSection(true);
   inputsLayout->addWidget(inputTableView_);
 
+  // buttons Add/Remove input
   if (physicalModel_.getImplementation()->getClassName() == "AnalyticalPhysicalModel")
   {
     addInputLineButton_ = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
@@ -81,9 +85,10 @@ void PhysicalModelWindowWidget::buildInterface()
     inputsLayout->addLayout(buttonsLayout);
   }
 
-  vbox->addWidget(inputsBox);
+  verticalSplitter->addWidget(inputsBox);
+  verticalSplitter->setStretchFactor(0, 5);
 
-  // Define Outputs
+  // Table Outputs
   QGroupBox * outputsBox = new QGroupBox(tr("Outputs"));
   QVBoxLayout * outputsLayout = new QVBoxLayout(outputsBox);
 
@@ -91,8 +96,10 @@ void PhysicalModelWindowWidget::buildInterface()
   outputTableView_->setEditTriggers(QTableView::AllEditTriggers);
   delegate = new LineEditWithQValidatorDelegate;
   outputTableView_->setItemDelegateForColumn(0, delegate);
+  outputTableView_->horizontalHeader()->setStretchLastSection(true);
   outputsLayout->addWidget(outputTableView_);
 
+  // buttons Add/Remove output
   QHBoxLayout * outputButtonsLayout = new QHBoxLayout;
   outputButtonsLayout->addStretch();
 
@@ -110,6 +117,7 @@ void PhysicalModelWindowWidget::buildInterface()
     outputButtonsLayout->addWidget(removeOutputLineButton_);
   }
 
+  // button Evaluate outputs
   evaluateOutputsButton_ = new QPushButton(tr("Evaluate"));
   evaluateOutputsButton_->setToolTip(tr("Evaluate the value of the outputs"));
   connect(evaluateOutputsButton_, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
@@ -117,7 +125,10 @@ void PhysicalModelWindowWidget::buildInterface()
 
   outputsLayout->addLayout(outputButtonsLayout);
 
-  vbox->addWidget(outputsBox);
+  verticalSplitter->addWidget(outputsBox);
+  verticalSplitter->setStretchFactor(1, 3);
+
+  vbox->addWidget(verticalSplitter);
 
   updateInputTableModel();
   updateOutputTableModel();
@@ -130,6 +141,7 @@ void PhysicalModelWindowWidget::updateInputTableModel()
     delete inputTableModel_;
   inputTableModel_ = new InputTableModel(physicalModel_);
   inputTableView_->setModel(inputTableModel_);
+  inputTableView_->resizeColumnsToContents();
   connect(inputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
 }
 
@@ -142,6 +154,7 @@ void PhysicalModelWindowWidget::updateOutputTableModel()
   outputTableView_->setModel(outputTableModel_);
   if (physicalModel_.getImplementation()->getClassName() != "AnalyticalPhysicalModel")
     outputTableView_->setColumnHidden(2, true);
+  outputTableView_->resizeColumnsToContents();
   connect(outputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
 }
 
@@ -149,12 +162,14 @@ void PhysicalModelWindowWidget::updateOutputTableModel()
 void PhysicalModelWindowWidget::addInputLine()
 {
   inputTableModel_->addLine();
+  inputTableView_->resizeColumnsToContents();
 }
 
 
 void PhysicalModelWindowWidget::addOutputLine()
 {
   outputTableModel_->addLine();
+  outputTableView_->resizeColumnsToContents();
 }
 
 
@@ -168,6 +183,7 @@ void PhysicalModelWindowWidget::removeInputLine()
 
     if (lastRow+1)
       inputTableView_->selectRow(lastRow);
+    inputTableView_->resizeColumnsToContents();
   }
 }
 
@@ -175,7 +191,10 @@ void PhysicalModelWindowWidget::removeInputLine()
 void PhysicalModelWindowWidget::removeOutputLine()
 {
   if (outputTableView_->selectionModel()->hasSelection())
+  {
     outputTableModel_->removeLine(outputTableView_->selectionModel()->currentIndex());
+    outputTableView_->resizeColumnsToContents();
+  }
 }
 
 

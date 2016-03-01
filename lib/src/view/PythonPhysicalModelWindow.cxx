@@ -26,16 +26,17 @@
 
 #include <QHBoxLayout>
 #include <QHeaderView>
-#include <QTimer>
+#include <QSplitter>
 
 using namespace OT;
 
 namespace OTGUI {
 
 CodeView::CodeView(QWidget * parent)
-: QTableView(parent)
+  : QTableView(parent)
 {
 }
+
 
 bool CodeView::event(QEvent * event)
 {
@@ -51,15 +52,16 @@ bool CodeView::event(QEvent * event)
   return QTableView::event(event);
 }
 
+
 PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item)
   : OTguiSubWindow(item)
   , physicalModel_(item->getPhysicalModel())
   , codeModel_(0)
 {
   connect(item, SIGNAL(codeChanged()), this, SLOT(updateCodeModel()));
-setFocusPolicy(Qt::ClickFocus);
-  QWidget * mainWidget = new QWidget;
-  QHBoxLayout * mainLayout = new QHBoxLayout(mainWidget);
+  setFocusPolicy(Qt::ClickFocus);
+
+  QSplitter * horizontalSplitter = new QSplitter(Qt::Horizontal);
 
   codeView_ = new CodeView;
   codeView_->setEditTriggers(QTableView::AllEditTriggers);
@@ -68,10 +70,11 @@ setFocusPolicy(Qt::ClickFocus);
   codeView_->horizontalHeader()->hide();
   codeView_->verticalHeader()->hide();
   codeView_->setItemDelegate(new CodeDelegate);
-  mainLayout->addWidget(codeView_);
+  horizontalSplitter->addWidget(codeView_);
   updateCodeModel();
 
-  QVBoxLayout * vBoxLayout = new QVBoxLayout;
+  QWidget * rightSideWidget = new QWidget;
+  QVBoxLayout * vBoxLayout = new QVBoxLayout(rightSideWidget);
   PhysicalModelWindowWidget * widget = new PhysicalModelWindowWidget(item);
   connect(widget, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
   vBoxLayout->addWidget(widget);
@@ -80,10 +83,10 @@ setFocusPolicy(Qt::ClickFocus);
   errorMessageLabel_->setWordWrap(true);
   vBoxLayout->addWidget(errorMessageLabel_);
 
-  mainLayout->addLayout(vBoxLayout);
+  horizontalSplitter->addWidget(rightSideWidget);
 
   ////////////////
-  setWidget(mainWidget);
+  setWidget(horizontalSplitter);
 }
 
 
@@ -94,10 +97,6 @@ void PythonPhysicalModelWindow::updateCodeModel()
   codeModel_ = new CodeModel(physicalModel_);
   connect(codeModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(parseVariables()));
   codeView_->setModel(codeModel_);
-
-//   QTimer *timer = new QTimer(this);
-//   connect(timer, SIGNAL(timeout()), this, SLOT(parseVariables()));
-//   timer->start(1000);
 }
 
 
@@ -153,10 +152,6 @@ void PythonPhysicalModelWindow::parseVariables()
     {
       physicalModel_.addOutput(Output(outputVariables[i]));
     }
-  }
-  
-  
+  } 
 }
-
-
 }
