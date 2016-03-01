@@ -66,13 +66,13 @@ void Observable::blockNotification(bool block, const String & notBlockedMessage)
 }
 
 
-std::vector< Observer* > Observable::getObserver() const
+std::vector< Observer* > Observable::getObservers() const
 {
   return observers_;
 }
 
 
-void Observable::setObserver(const std::vector<Observer *> observer)
+void Observable::setObservers(const std::vector<Observer *> observer)
 {
   observers_ = observer;
 }

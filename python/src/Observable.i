@@ -5,8 +5,11 @@
 %}
 
 %ignore *::addObserver;
+%ignore *::removeObserver;
 %ignore *::blockNotification;
-%ignore *::GetClassName;
+%ignore *::getObservers;
+%ignore *::setObservers;
+%ignore *::notify;
 
 %include otgui/Observable.hxx
 

@@ -209,8 +209,8 @@ void OTStudy::clearPhysicalModel(const PhysicalModel & physicalModel)
       clearLimitState(*iter);
       (*iter).getImplementation().get()->notify("limitStateRemoved");
 
-      if ((*iter).getImplementation().get()->getObserver().size())
-        physicalModel.getImplementation().get()->removeObserver((*iter).getImplementation().get()->getObserver()[0]);
+      if ((*iter).getImplementation().get()->getObservers().size())
+        physicalModel.getImplementation().get()->removeObserver((*iter).getImplementation().get()->getObservers()[0]);
       iter = limitStates_.erase(iter);
     }
     else
@@ -451,8 +451,8 @@ void OTStudy::removeLimitState(const LimitState & limitState)
   for (UnsignedInteger i=0; i<limitStates_.getSize(); ++i)
     if (limitStates_[i].getName() == limitState.getName())
     {
-      if (limitStates_[i].getImplementation().get()->getObserver().size())
-          limitStates_[i].getPhysicalModel().getImplementation().get()->removeObserver(limitStates_[i].getImplementation().get()->getObserver()[0]);
+      if (limitStates_[i].getImplementation().get()->getObservers().size())
+          limitStates_[i].getPhysicalModel().getImplementation().get()->removeObserver(limitStates_[i].getImplementation().get()->getObservers()[0]);
         
       limitStates_.erase(limitStates_.begin() + i);
       break;

@@ -38,8 +38,8 @@ public:
   void addObserver(Observer * observer);
   void removeObserver(Observer * observer);
   void notify(const OT::String & message);
-  std::vector<Observer *> getObserver() const;
-  void setObserver(const std::vector<Observer *> observer);
+  std::vector<Observer *> getObservers() const;
+  void setObservers(const std::vector<Observer *> observer);
   void blockNotification(bool block, const OT::String & notBlockedMessage="");
 
 private:
