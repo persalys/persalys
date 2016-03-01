@@ -1,4 +1,92 @@
 %feature("docstring") OTGUI::MonteCarloReliabilityAnalysis
 "Monte Carlo for reliability analysis."
 
+// ---------------------------------------------------------------------
 
+%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::setBlockSize
+"Block size accessor.
+
+Parameters
+----------
+size : int
+    Block size"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::getBlockSize
+"Block size accessor.
+
+Returns
+-------
+size : int
+    Block size"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::setSeed
+"Seed accessor.
+
+Parameters
+----------
+seed : int
+    Seed"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::getSeed
+"Seed accessor.
+
+Returns
+-------
+seed : int
+    Seed"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::setMaximumCoefficientOfVariation
+"Maximum coefficient of variation accessor.
+
+Parameters
+----------
+maxCovar : float
+    Maximum coefficient of variation"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::getMaximumCoefficientOfVariation
+"Maximum coefficient of variation accessor.
+
+Returns
+-------
+maxCovar : float
+    Maximum coefficient of variation"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::setMaximumOuterSampling
+"Maximum outer sampling accessor.
+
+Parameters
+----------
+maxSampling : int
+    Maximum outer sampling"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::getMaximumOuterSampling
+"Maximum outer sampling accessor.
+
+Returns
+-------
+maxSampling : int
+    Maximum outer sampling"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::getResult
+"Result accessor.
+
+Returns
+-------
+result : :class:`~otguibase.MonteCarloReliabilityResult`
+    Result"

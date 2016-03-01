@@ -1,2 +1,52 @@
 %feature("docstring") OTGUI::MonteCarloReliabilityResult
 "Monte Carlo for reliability analysis result."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::getSimulationResult
+"Simulation result accessor.
+
+Returns
+-------
+sample : :class:`~openturns.SimulationResult
+    Simulation result"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::getOutputSample
+"Output sample accessor.
+
+Returns
+-------
+sample : :class:`~openturns.NumericalSample`
+    Output sample"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::getConvergenceSample
+"Convergence sample accessor.
+
+Returns
+-------
+sample : :class:`~openturns.NumericalSample`
+    Convergence sample"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::getConvergenceSampleLowerBound
+"Convergence sample lower bound accessor.
+
+Returns
+-------
+sample : :class:`~openturns.NumericalSample`
+    Convergence sample lower bound"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::getConvergenceSampleUpperBound
+"Convergence sample upper bound accessor.
+
+Returns
+-------
+sample : :class:`~openturns.NumericalSample`
+    Convergence sample upper bound"
