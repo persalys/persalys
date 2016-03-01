@@ -45,6 +45,32 @@ OTGUI_PhysicalModel_addOutput_doc
 
 // ---------------------------------------------------------------------
 
+%define OTGUI_PhysicalModel_removeInput_doc
+"Remove an input variable.
+
+Parameters
+----------
+name : str
+    Variable name"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::removeInput
+OTGUI_PhysicalModel_removeInput_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_removeOutput_doc
+"Remove an output variable.
+
+Parameters
+----------
+name : str
+    Variable name"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::removeOutput
+OTGUI_PhysicalModel_removeOutput_doc
+
+// ---------------------------------------------------------------------
+
 %define OTGUI_PhysicalModel_getFunction_doc
 "Accessor to the underlying function.
 
@@ -89,7 +115,7 @@ OTGUI_PhysicalModel_setCopula_doc
 
 Parameters
 ----------
-Distribution : :class:`~openturns.Distribution`
+Distribution : :class:`~openturns.ComposedDistribution`
     The composed distribution"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getComposedDistribution
@@ -115,13 +141,43 @@ OTGUI_PhysicalModel_getCopula_doc
 
 Parameters
 ----------
-inputName : str
+name : str
     Variable name
 description : str
     Description text"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::setInputDescription
 OTGUI_PhysicalModel_setInputDescription_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_setOutputDescription_doc
+"Output description accessor.
+
+Parameters
+----------
+name : str
+    Variable name
+description : str
+    Description text"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::setOutputDescription
+OTGUI_PhysicalModel_setOutputDescription_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_setOutputFormula_doc
+"Output formula accessor.
+
+Parameters
+----------
+name : str
+    Variable name
+formula : str
+    Formula text"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::setOutputFormula
+OTGUI_PhysicalModel_setOutputFormula_doc
 
 // ---------------------------------------------------------------------
 
@@ -175,15 +231,243 @@ outputs : sequence of :class:`~otguibase.Output`
 %feature("docstring") OTGUI::PhysicalModelImplementation::getOutputs
 OTGUI_PhysicalModel_getOutputs_doc
 
+// ---------------------------------------------------------------------
 
+%define OTGUI_PhysicalModel_getInputByName_doc
+"Input variable accessor.
 
+Parameters
+----------
+name : str
+    Variable name
 
+Returns
+-------
+input : :class:`~otguibase.Intput`
+    Input variable"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getInputByName
+OTGUI_PhysicalModel_getInputByName_doc
 
+// ---------------------------------------------------------------------
 
+%define OTGUI_PhysicalModel_getOutputByName_doc
+"Output variable accessor.
 
+Parameters
+----------
+name : str
+    Variable name
 
+Returns
+-------
+input : :class:`~otguibase.Output`
+    Output variable"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getOutputByName
+OTGUI_PhysicalModel_getOutputByName_doc
 
+// ---------------------------------------------------------------------
 
+%define OTGUI_PhysicalModel_getInputNames_doc
+"Input variable names accessor.
 
+Returns
+-------
+names : :class:`~openturns.Description`
+    Input variable names"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getInputNames
+OTGUI_PhysicalModel_getInputNames_doc
 
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_getStochasticInputNames_doc
+"Stochastic input variable names accessor.
+
+Returns
+-------
+names : :class:`~openturns.Description`
+    Stochastic input variable names"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getStochasticInputNames
+OTGUI_PhysicalModel_getStochasticInputNames_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_getInputRandomVector_doc
+"Input random vector accessor.
+
+Returns
+-------
+names : :class:`~openturns.RandomVector`
+    Input random vector"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getInputRandomVector
+OTGUI_PhysicalModel_getInputRandomVector_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_getOutputRandomVector_doc
+"Output random vector accessor.
+
+Returns
+-------
+names : :class:`~openturns.RandomVector`
+    Output random vector"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getOutputRandomVector
+OTGUI_PhysicalModel_getOutputRandomVector_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_setInputName_doc
+"Input variable name accessor.
+
+Parameters
+----------
+name : str
+    Variable name
+newName : str
+    New name"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::setInputName
+OTGUI_PhysicalModel_setInputName_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_setOutputName_doc
+"Output variable name accessor.
+
+Parameters
+----------
+name : str
+    Variable name
+newName : str
+    New name"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::setOutputName
+OTGUI_PhysicalModel_setOutputName_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_setInputValue_doc
+"Input variable name accessor.
+
+Parameters
+----------
+name : str
+    Variable name
+value : float
+    New value"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::setInputValue
+OTGUI_PhysicalModel_setInputValue_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_setOutputValue_doc
+"Output variable name accessor.
+
+Parameters
+----------
+name : str
+    Variable name
+value : float
+    New value"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::setOutputValue
+OTGUI_PhysicalModel_setOutputValue_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_hasInputNamed_doc
+"Whether an input name matches.
+
+Parameters
+----------
+name : str
+    Variable name
+
+Returns
+-------
+has : bool
+    Whether a variable name matches"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::hasInputNamed
+OTGUI_PhysicalModel_hasInputNamed_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_hasOutputNamed_doc
+"Whether an input name matches.
+
+Parameters
+----------
+name : str
+    Variable name
+
+Returns
+-------
+has : bool
+    Whether a variable name matches"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::hasOutputNamed
+OTGUI_PhysicalModel_hasOutputNamed_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_hasStochasticInputs_doc
+"Whether it contains stochastic variables.
+
+Returns
+-------
+has : bool
+    Whether it contains stochastic variables"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::hasStochasticInputs
+OTGUI_PhysicalModel_hasStochasticInputs_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_isValid_doc
+"Whether it is valid.
+
+Returns
+-------
+isValid : bool
+    Whether it is valid"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::isValid
+OTGUI_PhysicalModel_isValid_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_setInputDistribution_doc
+"Input distribution accessor.
+
+Parameters
+----------
+name : str
+    Variable name
+distribution : :class:`~openturns.Distribution`
+    Variable distribution"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::setInputDistribution
+OTGUI_PhysicalModel_setInputDistribution_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_setInputDistributionParametersType_doc
+"Input distribution parameter type accessor.
+
+Parameters
+----------
+name : str
+    Variable name
+parametersType : int
+    Distribution parameter type accessor"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::setInputDistributionParametersType
+OTGUI_PhysicalModel_setInputDistributionParametersType_doc
 

@@ -6,6 +6,8 @@
 
 %include PhysicalModelImplementation_doc.i
 
+%ignore OTGUI::PhysicalModelImplementation::getRestrictedFunction;
+
 %include otgui/PhysicalModelImplementation.hxx
 namespace OTGUI {
 

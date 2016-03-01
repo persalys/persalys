@@ -1,3 +1,13 @@
 %feature("docstring") OTGUI::AnalyticalPhysicalModel
 "Physical model defined by analytical formulas."
 
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::AnalyticalPhysicalModel::getFormulas
+"Formulas accessor.
+
+Returns
+-------
+formulas : :class:`~openturns.Description`
+    Output fomulas"
+

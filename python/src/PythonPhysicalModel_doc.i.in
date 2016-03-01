@@ -1,2 +1,22 @@
 %feature("docstring") OTGUI::PythonPhysicalModel
 "Physical model defined by Python code."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::PythonPhysicalModel::setCode
+"Code accessor.
+
+Parameters
+----------
+code : str
+    Code text"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::PythonPhysicalModel::getCode
+"Code accessor.
+
+Returns
+-------
+code : str
+    Code text"

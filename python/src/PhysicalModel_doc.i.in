@@ -18,6 +18,10 @@ OTGUI_PhysicalModel_setCopula_doc
 OTGUI_PhysicalModel_getCopula_doc
 %feature("docstring") OTGUI::PhysicalModel::setInputDescription
 OTGUI_PhysicalModel_setInputDescription_doc
+%feature("docstring") OTGUI::PhysicalModel::setOutputDescription
+OTGUI_PhysicalModel_setOutputDescription_doc
+%feature("docstring") OTGUI::PhysicalModel::setOutputFormula
+OTGUI_PhysicalModel_setOutputFormula_doc
 %feature("docstring") OTGUI::PhysicalModel::setInputs
 OTGUI_PhysicalModel_setInputs_doc
 %feature("docstring") OTGUI::PhysicalModel::getInputs
@@ -26,3 +30,39 @@ OTGUI_PhysicalModel_getInputs_doc
 OTGUI_PhysicalModel_setOutputs_doc
 %feature("docstring") OTGUI::PhysicalModel::getOutputs
 OTGUI_PhysicalModel_getOutputs_doc
+%feature("docstring") OTGUI::PhysicalModel::getInputByName
+OTGUI_PhysicalModel_getInputByName_doc
+%feature("docstring") OTGUI::PhysicalModel::getOutputByName
+OTGUI_PhysicalModel_getOutputByName_doc
+%feature("docstring") OTGUI::PhysicalModel::getStochasticInputNames
+OTGUI_PhysicalModel_getStochasticInputNames_doc
+%feature("docstring") OTGUI::PhysicalModel::getInputNames
+OTGUI_PhysicalModel_getInputNames_doc
+%feature("docstring") OTGUI::PhysicalModel::getInputRandomVector
+OTGUI_PhysicalModel_getInputRandomVector_doc
+%feature("docstring") OTGUI::PhysicalModel::getOutputRandomVector
+OTGUI_PhysicalModel_getOutputRandomVector_doc
+%feature("docstring") OTGUI::PhysicalModel::removeInput
+OTGUI_PhysicalModel_removeInput_doc
+%feature("docstring") OTGUI::PhysicalModel::removeOutput
+OTGUI_PhysicalModel_removeOutput_doc
+%feature("docstring") OTGUI::PhysicalModel::setInputName
+OTGUI_PhysicalModel_setInputName_doc
+%feature("docstring") OTGUI::PhysicalModel::setOutputName
+OTGUI_PhysicalModel_setOutputName_doc
+%feature("docstring") OTGUI::PhysicalModel::setInputValue
+OTGUI_PhysicalModel_setInputValue_doc
+%feature("docstring") OTGUI::PhysicalModel::setOutputValue
+OTGUI_PhysicalModel_setOutputValue_doc
+%feature("docstring") OTGUI::PhysicalModel::hasInputNamed
+OTGUI_PhysicalModel_hasInputNamed_doc
+%feature("docstring") OTGUI::PhysicalModel::hasOutputNamed
+OTGUI_PhysicalModel_hasOutputNamed_doc
+%feature("docstring") OTGUI::PhysicalModel::hasStochasticInputs
+OTGUI_PhysicalModel_hasStochasticInputs_doc
+%feature("docstring") OTGUI::PhysicalModel::isValid
+OTGUI_PhysicalModel_isValid_doc
+%feature("docstring") OTGUI::PhysicalModel::setInputDistribution
+OTGUI_PhysicalModel_setInputDistribution_doc
+%feature("docstring") OTGUI::PhysicalModel::setInputDistributionParametersType
+OTGUI_PhysicalModel_setInputDistributionParametersType_doc
