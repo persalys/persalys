@@ -30,14 +30,14 @@ namespace OTGUI {
 class OTGUI_API OTStudy : public OT::PersistentObject, public Observable
 {
 public:
-  static OT::Collection<OTStudy*> GetOTStudies();
-  static OT::Description GetOTStudiesFileNames();
-  static OTStudy* GetOTStudyByName(const OT::String & otStudyName);
-  static bool HasOTStudyNamed(const OT::String & otStudyName);
-  static OT::String GetAvailableOTStudyName();
-  static void AddOTStudy(OTStudy * otstudy);
-  static void RemoveOTStudy(OTStudy * otstudy);
-  static void OpenOTStudy(const OT::String & xmlFileName);
+  static OT::Collection<OTStudy*> GetInstances();
+  static OT::Description GetFileNames();
+  static OTStudy* GetInstanceByName(const OT::String & otStudyName);
+  static bool HasInstanceNamed(const OT::String & otStudyName);
+  static OT::String GetAvailableName();
+  static void Add(OTStudy * otstudy);
+  static void Remove(OTStudy * otstudy);
+  static void Open(const OT::String & xmlFileName);
   static void SetInstanceObserver(Observer * observer);
 
   /** Default constructor */
@@ -53,29 +53,29 @@ public:
   PhysicalModel & getPhysicalModelByName(const OT::String & physicalModelName);
   bool hasPhysicalModelNamed(const OT::String & physicalModelName) const;
   OT::String getAvailablePhysicalModelName() const;
-  void addPhysicalModel(const PhysicalModel & physicalModel);
-  void clearPhysicalModel(const PhysicalModel & physicalModel);
-  void removePhysicalModel(const PhysicalModel & physicalModel);
+  void add(const PhysicalModel & physicalModel);
+  void clear(const PhysicalModel & physicalModel);
+  void remove(const PhysicalModel & physicalModel);
 
   OT::Collection<DesignOfExperiment> getDesignOfExperiments() const;
   bool hasDesignOfExperimentNamed(const OT::String & designOfExperimentName) const;
   OT::String getAvailableDesignOfExperimentName() const;
-  void addDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
-  void removeDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
+  void add(const DesignOfExperiment & designOfExperiment);
+  void remove(const DesignOfExperiment & designOfExperiment);
 
   OT::Collection<Analysis> getAnalyses() const;
   Analysis & getAnalysisByName(const OT::String & analysisName);
   bool hasAnalysisNamed(const OT::String & analysisName) const;
   OT::String getAvailableAnalysisName(const OT::String & rootName) const;
-  void addAnalysis(const Analysis & analysis);
-  void removeAnalysis(const Analysis & analysis);
+  void add(const Analysis & analysis);
+  void remove(const Analysis & analysis);
 
   OT::Collection<LimitState> getLimitStates() const;
   bool hasLimitStateNamed(const OT::String & limitStateName) const;
   OT::String getAvailableLimitStateName() const;
-  void addLimitState(const LimitState & limitState);
-  void clearLimitState(const LimitState & limitState);
-  void removeLimitState(const LimitState & limitState);
+  void add(const LimitState & limitState);
+  void clear(const LimitState & limitState);
+  void remove(const LimitState & limitState);
 
   OT::String getPythonScript();
 

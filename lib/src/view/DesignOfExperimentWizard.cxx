@@ -145,6 +145,6 @@ void DesignOfExperimentWizard::setDesignOfExperiment(DesignOfExperiment & design
 
 void DesignOfExperimentWizard::validate()
 {
-  otStudy_->addDesignOfExperiment(designOfExperiment_);
+  otStudy_->add(designOfExperiment_);
 }
 }

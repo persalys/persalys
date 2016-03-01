@@ -5,7 +5,7 @@ import openturns as ot
 import otguibase
 
 myStudy = otguibase.OTStudy('myStudy')
-otguibase.OTStudy.AddOTStudy(myStudy)
+otguibase.OTStudy.Add(myStudy)
 dist_Q = ot.Normal(10200, 100)
 Q = otguibase.Input('Q', 0, 'Primary energy', dist_Q)
 dist_E = ot.Normal(3000, 15)
@@ -18,22 +18,22 @@ myPhysicalModel.addInput(Q)
 myPhysicalModel.addInput(E)
 myPhysicalModel.addInput(C)
 myPhysicalModel.addOutput(Ep)
-myStudy.addPhysicalModel(myPhysicalModel)
+myStudy.add(myPhysicalModel)
 values = [0, 0, 0]
 lowerBounds = [10035.5, 2975.33, 3901.31]
 upperBounds = [10364.5, 3024.67, 4098.69]
 levels = [2, 2, 2]
 aDesign = otguibase.DesignOfExperiment('aDesign', myPhysicalModel, lowerBounds, upperBounds, levels, values)
-myStudy.addDesignOfExperiment(aDesign)
+myStudy.add(aDesign)
 myTaylorExpansionsMoments = otguibase.TaylorExpansionsMomentsAnalysis('myTaylorExpansionsMoments', myPhysicalModel)
-myStudy.addAnalysis(myTaylorExpansionsMoments)
+myStudy.add(myTaylorExpansionsMoments)
 myMonteCarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel, 1000)
 myMonteCarlo.setSeed(0)
-myStudy.addAnalysis(myMonteCarlo)
+myStudy.add(myMonteCarlo)
 mySobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel, 10000)
 mySobol.setSeed(0)
-myStudy.addAnalysis(mySobol)
+myStudy.add(mySobol)
 mySRC = otguibase.SRCAnalysis('mySRC', myPhysicalModel, 10000)
 mySRC.setSeed(0)
-myStudy.addAnalysis(mySRC)
+myStudy.add(mySRC)
 

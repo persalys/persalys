@@ -204,6 +204,6 @@ QString SensitivityAnalysisWizard::getAnalysisName() const
 
 void SensitivityAnalysisWizard::validate()
 {
-  otStudy_->addAnalysis(analysis_);
+  otStudy_->add(analysis_);
 }
 }

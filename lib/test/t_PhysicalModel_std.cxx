@@ -58,7 +58,7 @@ int main(int argc, char **argv)
     model.addInput(E);
     model.addInput(C);
     model.addOutput(Ep);
-    study.addPhysicalModel(model);
+    study.add(model);
     std::cout << model.getFunction()(x) << std::endl;
   }
   Py_Finalize();

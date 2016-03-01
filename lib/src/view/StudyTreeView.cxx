@@ -314,7 +314,7 @@ void StudyTreeView::createNewAnalyticalPhysicalModel()
   QModelIndex studyIndex = selectionModel()->currentIndex();
   OTStudyItem * studyItem = static_cast<OTStudyItem*>(treeViewModel_->itemFromIndex(studyIndex));
   AnalyticalPhysicalModel newPhysicalModel(studyItem->getOTStudy()->getAvailablePhysicalModelName());
-  studyItem->getOTStudy()->addPhysicalModel(newPhysicalModel);
+  studyItem->getOTStudy()->add(newPhysicalModel);
 }
 
 
@@ -323,7 +323,7 @@ void StudyTreeView::createNewPythonPhysicalModel()
   QModelIndex studyIndex = selectionModel()->currentIndex();
   OTStudyItem * studyItem = static_cast<OTStudyItem*>(treeViewModel_->itemFromIndex(studyIndex));
   PythonPhysicalModel newPhysicalModel(studyItem->getOTStudy()->getAvailablePhysicalModelName());
-  studyItem->getOTStudy()->addPhysicalModel(newPhysicalModel);
+  studyItem->getOTStudy()->add(newPhysicalModel);
 }
 
 
@@ -333,7 +333,7 @@ void StudyTreeView::createNewYACSPhysicalModel()
   QModelIndex studyIndex = selectionModel()->currentIndex();
   OTStudyItem * studyItem = static_cast<OTStudyItem*>(treeViewModel_->itemFromIndex(studyIndex));
   YACSPhysicalModel newPhysicalModel(studyItem->getOTStudy()->getAvailablePhysicalModelName());
-  studyItem->getOTStudy()->addPhysicalModel(newPhysicalModel);
+  studyItem->getOTStudy()->add(newPhysicalModel);
 }
 #endif
 
@@ -345,7 +345,7 @@ void StudyTreeView::removePhysicalModel()
 
   if (selectedItem->child(1)->rowCount())
     emit removeSubWindow(selectedItem->child(1)->child(0));
-  treeViewModel_->getOTStudyItem(index)->getOTStudy()->removePhysicalModel(dynamic_cast<PhysicalModelItem*>(selectedItem)->getPhysicalModel());
+  treeViewModel_->getOTStudyItem(index)->getOTStudy()->remove(dynamic_cast<PhysicalModelItem*>(selectedItem)->getPhysicalModel());
 }
 
 
@@ -390,7 +390,7 @@ void StudyTreeView::removeLimitState()
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
-  treeViewModel_->getOTStudyItem(index)->getOTStudy()->removeLimitState(dynamic_cast<LimitStateItem*>(selectedItem)->getLimitState());
+  treeViewModel_->getOTStudyItem(index)->getOTStudy()->remove(dynamic_cast<LimitStateItem*>(selectedItem)->getLimitState());
 }
 
 
@@ -547,7 +547,7 @@ void StudyTreeView::removeDesignOfExperiment()
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
-  treeViewModel_->getOTStudyItem(index)->getOTStudy()->removeDesignOfExperiment(dynamic_cast<DesignOfExperimentItem*>(selectedItem)->getDesignOfExperiment());
+  treeViewModel_->getOTStudyItem(index)->getOTStudy()->remove(dynamic_cast<DesignOfExperimentItem*>(selectedItem)->getDesignOfExperiment());
 }
 
 
@@ -630,7 +630,7 @@ void StudyTreeView::removeAnalysis()
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
-  treeViewModel_->getOTStudyItem(index)->getOTStudy()->removeAnalysis(dynamic_cast<AnalysisItem*>(selectedItem)->getAnalysis());
+  treeViewModel_->getOTStudyItem(index)->getOTStudy()->remove(dynamic_cast<AnalysisItem*>(selectedItem)->getAnalysis());
 }
 
 
@@ -826,12 +826,12 @@ void StudyTreeView::openOTStudy(const QString & fileName)
   QSettings settings;
   settings.setValue("currentDir", file.absolutePath());
 
-  if (file.exists() && !OTStudy::GetOTStudiesFileNames().__contains__(file.absoluteFilePath().toStdString()))
+  if (file.exists() && !OTStudy::GetFileNames().__contains__(file.absoluteFilePath().toStdString()))
   {
     try
     {
       QApplication::setOverrideCursor(Qt::WaitCursor);
-      OTStudy::OpenOTStudy(fileName.toStdString());
+      OTStudy::Open(fileName.toStdString());
       QApplication::restoreOverrideCursor();
       emit recentFilesListChanged(fileName);
     }
@@ -851,7 +851,7 @@ void StudyTreeView::openOTStudy(const QString & fileName)
     {
       message = tr("The file '%1' does not exist.").arg(fileName);
     }
-    else if (OTStudy::GetOTStudiesFileNames().__contains__(file.absoluteFilePath().toStdString()))
+    else if (OTStudy::GetFileNames().__contains__(file.absoluteFilePath().toStdString()))
     {
       message = tr("The file '%1' is already opened.").arg(fileName);
     }
@@ -868,7 +868,7 @@ bool StudyTreeView::closeOTStudy()
     QApplication::setOverrideCursor(Qt::WaitCursor);
     item->getOTStudy()->save(item->getOTStudy()->getFileName());
     QApplication::restoreOverrideCursor();
-    OTStudy::RemoveOTStudy(item->getOTStudy());
+    OTStudy::Remove(item->getOTStudy());
     return true;
   }
   else
@@ -880,7 +880,7 @@ bool StudyTreeView::closeOTStudy()
 
     if (ret == QMessageBox::Discard)
     {
-      OTStudy::RemoveOTStudy(item->getOTStudy());
+      OTStudy::Remove(item->getOTStudy());
       return true;
     }
     else if (ret == QMessageBox::Save)
@@ -888,7 +888,7 @@ bool StudyTreeView::closeOTStudy()
       bool isSaved = saveOTStudy();
       if (isSaved)
       {
-        OTStudy::RemoveOTStudy(item->getOTStudy());
+        OTStudy::Remove(item->getOTStudy());
         return true;
       }
     }

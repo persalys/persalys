@@ -23,14 +23,14 @@ myPhysicalModel.addInput(Zm)
 
 myPhysicalModel.addOutput(S)
 
-myStudy.addPhysicalModel(myPhysicalModel)
+myStudy.add(myPhysicalModel)
 
 limitState = otguibase.LimitState('limitState1', myPhysicalModel, 'S', ot.Greater(), 0.)
-myStudy.addLimitState(limitState)
+myStudy.add(limitState)
 
 ## Monte Carlo ##
 montecarlo = otguibase.MonteCarloReliabilityAnalysis('myMonteCarlo', limitState, 10000)
-myStudy.addAnalysis(montecarlo)
+myStudy.add(montecarlo)
 montecarlo.run()
 montecarloResult = montecarlo.getResult()
 

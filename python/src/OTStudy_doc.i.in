@@ -1,4 +1,104 @@
 %feature("docstring") OTGUI::OTStudy
 "Study storage class."
 
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::add
+"Add an object to the study.
+
+Parameters
+----------
+object : :class:`~otguibase.PhysicalModel`, :class:`~otguibase.LimitState`, :class:`~otguibase.Analysis` ...
+    The object to add"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::remove
+"Remove an object to the study.
+
+Parameters
+----------
+object : :class:`~otguibase.PhysicalModel`, :class:`~otguibase.LimitState`, :class:`~otguibase.Analysis` ...
+    The object to remove"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::getPythonScript
+"Python script accessor.
+
+Returns
+-------
+script : str
+    The Python script"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::getPythonScript
+"Python script accessor.
+
+Returns
+-------
+script : str
+    The Python script"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::setFileName
+"File name accessor.
+
+Parameters
+----------
+fileName : str
+    The file name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::getFileName
+"File name accessor.
+
+Returns
+-------
+fileName : str
+    The file name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::getPhysicalModels
+"Physical models accessor.
+
+Returns
+-------
+models : sequence of :class:`~otguibase.PhysicalModel`
+    Physical models"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::getLimitStates
+"Limit state accessor.
+
+Returns
+-------
+models : sequence of :class:`~otguibase.LimitState`
+    Limit states"
+ 
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::getAnalyses
+"Analyses accessor.
+
+Returns
+-------
+models : sequence of :class:`~otguibase.Analysis`
+    Analyses"
+    
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::getDesignOfExperiments
+"Limit state accessor.
+
+Returns
+-------
+models : sequence of :class:`~otguibase.DesignOfExperiments`
+    Limit states"
+
 

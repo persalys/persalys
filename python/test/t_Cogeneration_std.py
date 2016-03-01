@@ -21,7 +21,7 @@ myPhysicalModel.addInput(C)
 
 myPhysicalModel.addOutput(Ep)
 
-myStudy.addPhysicalModel(myPhysicalModel)
+myStudy.add(myPhysicalModel)
 
 outputSample = [[0.060036508072],
 [0.0292238907867],
@@ -35,7 +35,7 @@ outputSample = [[0.060036508072],
 
 ## Design of Experiment - Parametric analysis ##
 aDesign = otguibase.DesignOfExperiment('aDesign', myPhysicalModel)
-myStudy.addDesignOfExperiment(aDesign)
+myStudy.add(aDesign)
 aDesign.evaluate()
 
 # Comparaison
@@ -43,7 +43,7 @@ openturns.testing.assert_almost_equal(outputSample, aDesign.getResult().getOutpu
 
 ## Quadratic Cumul ##
 taylorExpansionsMoments = otguibase.TaylorExpansionsMomentsAnalysis('myTaylorExpansionsMoments', myPhysicalModel)
-myStudy.addAnalysis(taylorExpansionsMoments)
+myStudy.add(taylorExpansionsMoments)
 taylorExpansionsMoments.run()
 taylorExpansionsMomentsResult = taylorExpansionsMoments.getResult()
 
@@ -52,7 +52,7 @@ openturns.testing.assert_almost_equal(0.059730458221, taylorExpansionsMomentsRes
 
 ## Monte Carlo ##
 montecarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel, 1000)
-myStudy.addAnalysis(montecarlo)
+myStudy.add(montecarlo)
 montecarlo.run()
 montecarloResult = montecarlo.getResult()
 
@@ -69,7 +69,7 @@ openturns.testing.assert_almost_equal(0.0117507273707, stdCi.getUpperBound()[0],
 
 ## Sobol ##
 sobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel)
-myStudy.addAnalysis(sobol)
+myStudy.add(sobol)
 sobol.run()
 sobolResult = sobol.getResult()
 
@@ -83,7 +83,7 @@ openturns.testing.assert_almost_equal(0.309692, sobolResult.getTotalOrderIndices
 
 ## SRC ##
 src = otguibase.SRCAnalysis('mySRC', myPhysicalModel)
-myStudy.addAnalysis(src)
+myStudy.add(src)
 src.run()
 srcResult = src.getResult()
 

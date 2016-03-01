@@ -114,6 +114,6 @@ QString ModelEvaluationWizard::getAnalysisName() const
 
 void ModelEvaluationWizard::validate()
 {
-  otStudy_->addAnalysis(analysis_);
+  otStudy_->add(analysis_);
 }
 }

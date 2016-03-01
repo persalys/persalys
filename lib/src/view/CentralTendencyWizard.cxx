@@ -249,6 +249,6 @@ QString CentralTendencyWizard::getAnalysisName() const
 
 void CentralTendencyWizard::validate()
 {
-  otStudy_->addAnalysis(analysis_);
+  otStudy_->add(analysis_);
 }
 }

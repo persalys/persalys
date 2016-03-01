@@ -196,6 +196,6 @@ QString ReliabilityAnalysisWizard::getAnalysisName() const
 
 void ReliabilityAnalysisWizard::validate()
 {
-  otStudy_->addAnalysis(analysis_);
+  otStudy_->add(analysis_);
 }
 }

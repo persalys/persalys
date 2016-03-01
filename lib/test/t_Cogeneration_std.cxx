@@ -51,11 +51,11 @@ int main(int argc, char *argv[])
 
     myPhysicalModel.addOutput(Ep);
 
-    myStudy.addPhysicalModel(myPhysicalModel);
+    myStudy.add(myPhysicalModel);
 
     // Parametric analysis
     DesignOfExperiment aDesign("aDesign", myPhysicalModel);
-    myStudy.addDesignOfExperiment(aDesign);
+    myStudy.add(aDesign);
     aDesign.evaluate();
     NumericalSample resultSample(aDesign.getResult().getOutputSample());
 

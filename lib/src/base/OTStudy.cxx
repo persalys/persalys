@@ -43,19 +43,19 @@ Description OTStudy::OTStudiesFileNames_;
 Observer * OTStudy::OTStudyObserver_ = 0;
 
 
-Collection<OTStudy*> OTStudy::GetOTStudies()
+Collection<OTStudy*> OTStudy::GetInstances()
 {
   return OTStudies_;
 }
 
 
-Description OTStudy::GetOTStudiesFileNames()
+Description OTStudy::GetFileNames()
 {
   return OTStudiesFileNames_;
 }
 
 
-OTStudy * OTStudy::GetOTStudyByName(const String & otStudyName)
+OTStudy * OTStudy::GetInstanceByName(const String & otStudyName)
 {
   for (Collection<OTStudy*>::iterator it=OTStudies_.begin(); it!=OTStudies_.end(); ++it)
     if ((*it)->getName() == otStudyName)
@@ -64,7 +64,7 @@ OTStudy * OTStudy::GetOTStudyByName(const String & otStudyName)
 }
 
 
-bool OTStudy::HasOTStudyNamed(const String & otStudyName)
+bool OTStudy::HasInstanceNamed(const String & otStudyName)
 {
   for (Collection<OTStudy*>::iterator it=OTStudies_.begin(); it!=OTStudies_.end(); ++it)
     if ((*it)->getName() == otStudyName)
@@ -73,17 +73,17 @@ bool OTStudy::HasOTStudyNamed(const String & otStudyName)
 }
 
 
-String OTStudy::GetAvailableOTStudyName()
+String OTStudy::GetAvailableName()
 {
   int i = 0;
   String rootName = "OTStudy_";
-  while (HasOTStudyNamed(rootName + (OSS()<<i).str()))
+  while (HasInstanceNamed(rootName + (OSS()<<i).str()))
     ++i;
   return rootName + (OSS()<<i).str();
 }
 
 
-void OTStudy::AddOTStudy(OTStudy * otstudy)
+void OTStudy::Add(OTStudy * otstudy)
 {
   OTStudies_.add(otstudy);
   OTStudiesFileNames_.add(otstudy->getFileName());
@@ -92,12 +92,12 @@ void OTStudy::AddOTStudy(OTStudy * otstudy)
 }
 
 
-void OTStudy::RemoveOTStudy(OTStudy * otstudy)
+void OTStudy::Remove(OTStudy * otstudy)
 {
   PersistentCollection<PhysicalModel>::iterator iter = otstudy->physicalModels_.begin();
   while (iter != otstudy->physicalModels_.end())
   {
-    otstudy->clearPhysicalModel(*iter);
+    otstudy->clear(*iter);
     (*iter).getImplementation().get()->notify("physicalModelRemoved");
     iter = otstudy->physicalModels_.erase(iter);
   }
@@ -107,7 +107,7 @@ void OTStudy::RemoveOTStudy(OTStudy * otstudy)
 }
 
 
-void OTStudy::OpenOTStudy(const String & xmlFileName)
+void OTStudy::Open(const String & xmlFileName)
 {
   Study study;
   study.setStorageManager(XMLStorageManager(xmlFileName));
@@ -115,7 +115,7 @@ void OTStudy::OpenOTStudy(const String & xmlFileName)
   OTStudy * openedStudy = new OTStudy;
   study.fillObject("otstudy", *openedStudy);
   openedStudy->setFileName(xmlFileName);
-  AddOTStudy(openedStudy);
+  Add(openedStudy);
 }
 
 
@@ -188,7 +188,7 @@ String OTStudy::getAvailablePhysicalModelName() const
 }
 
 
-void OTStudy::addPhysicalModel(const PhysicalModel & physicalModel)
+void OTStudy::add(const PhysicalModel & physicalModel)
 {
   if (hasPhysicalModelNamed(physicalModel.getName()))
     throw InvalidArgumentException(HERE) << "The study has already contained a physical model named " << physicalModel.getName();
@@ -198,7 +198,7 @@ void OTStudy::addPhysicalModel(const PhysicalModel & physicalModel)
 }
 
 
-void OTStudy::clearPhysicalModel(const PhysicalModel & physicalModel)
+void OTStudy::clear(const PhysicalModel & physicalModel)
 {
   // remove all the limit states
   PersistentCollection<LimitState>::iterator iter = limitStates_.begin();
@@ -206,7 +206,7 @@ void OTStudy::clearPhysicalModel(const PhysicalModel & physicalModel)
   {
     if ((*iter).getPhysicalModel().getName() == physicalModel.getName())
     {
-      clearLimitState(*iter);
+      clear(*iter);
       (*iter).getImplementation().get()->notify("limitStateRemoved");
 
       if ((*iter).getImplementation().get()->getObservers().size())
@@ -251,9 +251,9 @@ void OTStudy::clearPhysicalModel(const PhysicalModel & physicalModel)
 }
 
 
-void OTStudy::removePhysicalModel(const PhysicalModel & physicalModel)
+void OTStudy::remove(const PhysicalModel & physicalModel)
 {
-  clearPhysicalModel(physicalModel);
+  clear(physicalModel);
 
   for (UnsignedInteger i=0; i<physicalModels_.getSize(); ++i)
     if (physicalModels_[i].getName() == physicalModel.getName())
@@ -291,7 +291,7 @@ String OTStudy::getAvailableDesignOfExperimentName() const
 }
 
 
-void OTStudy::addDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
+void OTStudy::add(const DesignOfExperiment & designOfExperiment)
 {
   if (hasDesignOfExperimentNamed(designOfExperiment.getName()))
     throw InvalidArgumentException(HERE) << "The study has already contained a design of experiment named " << designOfExperiment.getName();
@@ -304,7 +304,7 @@ void OTStudy::addDesignOfExperiment(const DesignOfExperiment & designOfExperimen
 }
 
 
-void OTStudy::removeDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
+void OTStudy::remove(const DesignOfExperiment & designOfExperiment)
 {
   for (UnsignedInteger i=0; i<designOfExperiments_.getSize(); ++i)
     if (designOfExperiments_[i].getName() == designOfExperiment.getName())
@@ -350,7 +350,7 @@ String OTStudy::getAvailableAnalysisName(const String & rootName) const
 }
 
 
-void OTStudy::addAnalysis(const Analysis & analysis)
+void OTStudy::add(const Analysis & analysis)
 {
   if (hasAnalysisNamed(analysis.getName()))
     throw InvalidArgumentException(HERE) << "The study has already contained an analysis named " << analysis.getName();
@@ -367,7 +367,7 @@ void OTStudy::addAnalysis(const Analysis & analysis)
 }
 
 
-void OTStudy::removeAnalysis(const Analysis & analysis)
+void OTStudy::remove(const Analysis & analysis)
 {
   for (UnsignedInteger i=0; i<analyses_.getSize(); ++i)
     if (analyses_[i].getName() == analysis.getName())
@@ -405,7 +405,7 @@ String OTStudy::getAvailableLimitStateName() const
 }
 
 
-void OTStudy::addLimitState(const LimitState & limitState)
+void OTStudy::add(const LimitState & limitState)
 {
   if (hasLimitStateNamed(limitState.getName()))
     throw InvalidArgumentException(HERE) << "The study has already contained a limit state named " << limitState.getName();
@@ -418,7 +418,7 @@ void OTStudy::addLimitState(const LimitState & limitState)
 }
 
 
-void OTStudy::clearLimitState(const LimitState & limitState)
+void OTStudy::clear(const LimitState & limitState)
 {
   // remove the analyses based on the limitState
   PersistentCollection<Analysis>::iterator iter = analyses_.begin();
@@ -442,10 +442,10 @@ void OTStudy::clearLimitState(const LimitState & limitState)
 }
 
 
-void OTStudy::removeLimitState(const LimitState & limitState)
+void OTStudy::remove(const LimitState & limitState)
 {
   // remove the analyses based on the limitState
-  clearLimitState(limitState);
+  clear(limitState);
 
   // remove the limitState
   for (UnsignedInteger i=0; i<limitStates_.getSize(); ++i)
@@ -469,27 +469,27 @@ String OTStudy::getPythonScript()
   result += "#! /usr/bin/env python\n\nfrom __future__ import print_function\nimport openturns as ot\nimport otguibase\n\n";
 
   result += getName() + " = otguibase.OTStudy('" + getName() + "')\n";
-  result += "otguibase.OTStudy.AddOTStudy(" + getName() + ")\n";
+  result += "otguibase.OTStudy.Add(" + getName() + ")\n";
 
   for (Collection<PhysicalModel>::iterator it=physicalModels_.begin(); it!= physicalModels_.end(); ++it)
   {
     result += (*it).getPythonScript();
-    result += getName() + ".addPhysicalModel(" + (*it).getName() + ")\n";
+    result += getName() + ".add(" + (*it).getName() + ")\n";
   }
   for (Collection<DesignOfExperiment>::iterator it=designOfExperiments_.begin(); it!= designOfExperiments_.end(); ++it)
   {
     result += (*it).getPythonScript();
-    result += getName() + ".addDesignOfExperiment(" + (*it).getName() + ")\n";
+    result += getName() + ".add(" + (*it).getName() + ")\n";
   }
   for (Collection<LimitState>::iterator it=limitStates_.begin(); it!= limitStates_.end(); ++it)
   {
     result += (*it).getPythonScript();
-    result += getName() + ".addLimitState(" + (*it).getName() + ")\n";
+    result += getName() + ".add(" + (*it).getName() + ")\n";
   }
   for (Collection<Analysis>::iterator it=analyses_.begin(); it!= analyses_.end(); ++it)
   {
     result += (*it).getPythonScript();
-    result += getName() + ".addAnalysis(" + (*it).getName() + ")\n";
+    result += getName() + ".add(" + (*it).getName() + ")\n";
   }
   return result;
 }

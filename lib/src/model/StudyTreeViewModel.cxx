@@ -46,8 +46,8 @@ void StudyTreeViewModel::update(Observable * source, const String & message)
 
 void StudyTreeViewModel::createNewOTStudy()
 {
-  OTStudy * newStudy = new OTStudy(OTStudy::GetAvailableOTStudyName());
-  OTStudy::AddOTStudy(newStudy);
+  OTStudy * newStudy = new OTStudy(OTStudy::GetAvailableName());
+  OTStudy::Add(newStudy);
 }
 
 
@@ -97,7 +97,7 @@ void StudyTreeViewModel::addLimitStateItem(const QModelIndex & parentIndex)
   PhysicalModel physicalModel = parentItem->getPhysicalModel();
   OTStudyItem * studyItem = getOTStudyItem(parentIndex);
   LimitState newLimitState(studyItem->getOTStudy()->getAvailableLimitStateName(), physicalModel, physicalModel.getOutputs()[0].getName(), OT::Less(), 0.);
-  studyItem->getOTStudy()->addLimitState(newLimitState);
+  studyItem->getOTStudy()->add(newLimitState);
 }
 
 
