@@ -87,7 +87,7 @@ void YACSPhysicalModelWindow::selectImportFileDialogRequested()
     settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
 
     // check
-    if (!file.open(QFile::WriteOnly))
+    if (!file.open(QFile::ReadOnly))
     {
       std::cout << "cannot open" << file.fileName().toStdString() << std::endl;
       QMessageBox::warning(this, tr("Warning"),
