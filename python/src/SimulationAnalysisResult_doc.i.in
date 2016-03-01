@@ -1,4 +1,22 @@
 %feature("docstring") OTGUI::SimulationAnalysisResult
 "Simulation reliability analysis result."
 
+// ---------------------------------------------------------------------
 
+%feature("docstring") OTGUI::SimulationAnalysisResult::getListXMin
+"List of X min accessor.
+
+Returns
+-------
+listXMax : :class:`~openturns.NumericalSampleCollection`
+    List of X min."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationAnalysisResult::getListXMax
+"List of X max accessor.
+
+Returns
+-------
+listXMax : :class:`~openturns.NumericalSampleCollection`
+    List of X max."

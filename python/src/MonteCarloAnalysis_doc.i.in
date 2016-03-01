@@ -1,3 +1,52 @@
 %feature("docstring") OTGUI::MonteCarloAnalysis
 "Monte Carlo central tendency analysis."
 
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloAnalysis::getResult
+"Result accessor.
+
+Returns
+-------
+result : :class:`~otguibase.MonteCarloResult`
+    Result"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloAnalysis::setLevelConfidenceInterval
+"Confidence interval level accessor.
+
+Parameters
+----------
+level : float
+    Confidence interval level"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloAnalysis::getLevelConfidenceInterval
+"Confidence interval level accessor.
+
+Returns
+-------
+level : float
+    Confidence interval level"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloAnalysis::setIsConfidenceIntervalRequired
+"Confidence interval flag accessor.
+
+Parameters
+----------
+flag : bool
+    Confidence interval flag"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloAnalysis::isConfidenceIntervalRequired
+"Confidence interval flag accessor.
+
+Returns
+-------
+flag : bool
+    Confidence interval flag"

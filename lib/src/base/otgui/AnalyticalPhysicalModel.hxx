@@ -38,8 +38,8 @@ public:
   /** Virtual constructor */
   virtual AnalyticalPhysicalModel * clone() const;
 
-  OT::Description getFormulas();
-  virtual OT::NumericalMathFunction getFunction();
+  OT::Description getFormulas() const;
+  virtual OT::NumericalMathFunction getFunction() const;
 
   OT::String getPythonScript() const;
 

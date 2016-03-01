@@ -20,3 +20,4 @@ Returns
 -------
 sample : :class:`~openturns.NumericalSample`
     Output sample"
+

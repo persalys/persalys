@@ -42,7 +42,7 @@ public:
 
   void setCode(const OT::String & code);
   OT::String getCode() const;
-  virtual OT::NumericalMathFunction getFunction();
+  virtual OT::NumericalMathFunction getFunction() const;
 
   OT::String getPythonScript() const;
 

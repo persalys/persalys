@@ -3,26 +3,6 @@
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolAnalysis::getInputSample
-"Input sample accessor.
-
-Returns
--------
-sample : :class:`~openturns.NumericalSample`
-    Input sample"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::SobolAnalysis::getOutputNames
-"Output variable names accessor.
-
-Returns
--------
-sample : :class:`~openturns.Description`
-    Output variable names"
-
-// ---------------------------------------------------------------------
-
 %feature("docstring") OTGUI::SobolAnalysis::getResult
 "Result accessor.
 

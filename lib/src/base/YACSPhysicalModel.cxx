@@ -133,7 +133,7 @@ void YACSPhysicalModel::updateData()
 }
 
 
-NumericalMathFunction YACSPhysicalModel::getFunction(const Description & outputNames)
+NumericalMathFunction YACSPhysicalModel::getFunction(const Description & outputNames) const
 {
   if (outputNames == getOutputNames())
     return getFunction();
@@ -144,7 +144,7 @@ NumericalMathFunction YACSPhysicalModel::getFunction(const Description & outputN
 }
 
 
-NumericalMathFunction YACSPhysicalModel::getFunction()
+NumericalMathFunction YACSPhysicalModel::getFunction() const
 {
   if (!getInputs().getSize())
     throw PhysicalModelNotValidException(HERE) << "The physical model has no inputs.";

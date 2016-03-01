@@ -145,25 +145,25 @@ void PhysicalModel::removeInput(const String & inputName)
 }
 
 
-Description PhysicalModel::getInputNames()
+Description PhysicalModel::getInputNames() const
 {
   return getImplementation()->getInputNames();
 }
 
 
-Description PhysicalModel::getStochasticInputNames()
+Description PhysicalModel::getStochasticInputNames() const
 {
   return getImplementation()->getStochasticInputNames();
 }
 
 
-bool PhysicalModel::hasInputNamed(const String & inputName)
+bool PhysicalModel::hasInputNamed(const String & inputName) const
 {
   return getImplementation()->hasInputNamed(inputName);
 }
 
 
-bool PhysicalModel::hasStochasticInputs()
+bool PhysicalModel::hasStochasticInputs() const
 {
   return getImplementation()->hasStochasticInputs();
 }
@@ -223,13 +223,13 @@ void PhysicalModel::removeOutput(const String & outputName)
 }
 
 
-Description PhysicalModel::getOutputNames()
+Description PhysicalModel::getOutputNames() const
 {
   return getImplementation()->getOutputNames();
 }
 
 
-bool PhysicalModel::hasOutputNamed(const String & outputName)
+bool PhysicalModel::hasOutputNamed(const String & outputName) const
 {
   return getImplementation()->hasOutputNamed(outputName);
 }
@@ -241,43 +241,43 @@ ComposedDistribution PhysicalModel::getComposedDistribution() const
 }
 
 
-RandomVector PhysicalModel::getInputRandomVector()
+RandomVector PhysicalModel::getInputRandomVector() const
 {
   return getImplementation()->getInputRandomVector();
 }
 
 
-RandomVector PhysicalModel::getOutputRandomVector(const Description & outputNames)
+RandomVector PhysicalModel::getOutputRandomVector(const Description & outputNames) const
 {
   return getImplementation()->getOutputRandomVector(outputNames);
 }
 
 
-NumericalMathFunction PhysicalModel::getFunction()
+NumericalMathFunction PhysicalModel::getFunction() const
 {
   return getImplementation()->getFunction();
 }
 
 
-NumericalMathFunction PhysicalModel::getFunction(const Description & outputNames)
+NumericalMathFunction PhysicalModel::getFunction(const Description & outputNames) const
 {
   return getImplementation()->getFunction(outputNames);
 }
 
 
-NumericalMathFunction PhysicalModel::getFunction(const String & outputName)
+NumericalMathFunction PhysicalModel::getFunction(const String & outputName) const
 {
   return getImplementation()->getFunction(outputName);
 }
 
 
-NumericalMathFunction PhysicalModel::getRestrictedFunction()
+NumericalMathFunction PhysicalModel::getRestrictedFunction() const
 {
   return getImplementation()->getRestrictedFunction();
 }
 
 
-NumericalMathFunction PhysicalModel::getRestrictedFunction(const Description & outputNames)
+NumericalMathFunction PhysicalModel::getRestrictedFunction(const Description & outputNames) const
 {
   return getImplementation()->getRestrictedFunction(outputNames);
 }

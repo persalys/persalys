@@ -226,7 +226,7 @@ void PhysicalModelImplementation::updateCopula()
 }
 
 
-Description PhysicalModelImplementation::getInputNames()
+Description PhysicalModelImplementation::getInputNames() const
 {
   Description inputNames(inputs_.getSize());
   for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
@@ -235,7 +235,7 @@ Description PhysicalModelImplementation::getInputNames()
 }
 
 
-Description PhysicalModelImplementation::getStochasticInputNames()
+Description PhysicalModelImplementation::getStochasticInputNames() const
 {
   Description stochasticInputNames;
   for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
@@ -245,7 +245,7 @@ Description PhysicalModelImplementation::getStochasticInputNames()
 }
 
 
-bool PhysicalModelImplementation::hasInputNamed(const String & inputName)
+bool PhysicalModelImplementation::hasInputNamed(const String & inputName) const
 {
   for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
     if (inputs_[i].getName() == inputName)
@@ -254,7 +254,7 @@ bool PhysicalModelImplementation::hasInputNamed(const String & inputName)
 }
 
 
-bool PhysicalModelImplementation::hasStochasticInputs()
+bool PhysicalModelImplementation::hasStochasticInputs() const
 {
   if (getStochasticInputNames().getSize())
     return true;
@@ -361,7 +361,7 @@ void PhysicalModelImplementation::removeOutput(const String & outputName)
 }
 
 
-Description PhysicalModelImplementation::getOutputNames()
+Description PhysicalModelImplementation::getOutputNames() const
 {
   Description outputNames(outputs_.getSize());
   for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
@@ -370,7 +370,7 @@ Description PhysicalModelImplementation::getOutputNames()
 }
 
 
-bool PhysicalModelImplementation::hasOutputNamed(const String & outputName)
+bool PhysicalModelImplementation::hasOutputNamed(const String & outputName) const
 {
   for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
     if (outputs_[i].getName() == outputName)
@@ -389,25 +389,25 @@ ComposedDistribution PhysicalModelImplementation::getComposedDistribution() cons
 }
 
 
-RandomVector PhysicalModelImplementation::getInputRandomVector()
+RandomVector PhysicalModelImplementation::getInputRandomVector() const
 {
   return RandomVector(getComposedDistribution());
 }
 
 
-RandomVector PhysicalModelImplementation::getOutputRandomVector(const Description & outputNames)
+RandomVector PhysicalModelImplementation::getOutputRandomVector(const Description & outputNames) const
 {
   return RandomVector(getRestrictedFunction(outputNames), getInputRandomVector());
 }
 
 
-NumericalMathFunction PhysicalModelImplementation::getFunction()
+NumericalMathFunction PhysicalModelImplementation::getFunction() const
 {
   throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getFunction()";
 }
 
 
-NumericalMathFunction PhysicalModelImplementation::getFunction(const Description & outputNames)
+NumericalMathFunction PhysicalModelImplementation::getFunction(const Description & outputNames) const
 {
   if (outputNames.getSize() == getOutputs().getSize())
     return getFunction();
@@ -433,7 +433,7 @@ NumericalMathFunction PhysicalModelImplementation::getFunction(const Description
 }
 
 
-NumericalMathFunction PhysicalModelImplementation::getFunction(const String & outputName)
+NumericalMathFunction PhysicalModelImplementation::getFunction(const String & outputName) const
 {
   Description outputNameDescription(1);
   outputNameDescription[0] = outputName;
@@ -441,7 +441,7 @@ NumericalMathFunction PhysicalModelImplementation::getFunction(const String & ou
 }
 
 
-NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction()
+NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction() const
 {
   if (getInputs().getSize() == getStochasticInputNames().getSize())
     return getFunction();
@@ -466,7 +466,7 @@ NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction()
 }
 
 
-NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction(const Description & outputNames)
+NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction(const Description & outputNames) const
 {
   if (outputNames.getSize() == getOutputs().getSize())
     return getRestrictedFunction();

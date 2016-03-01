@@ -1,4 +1,32 @@
 %feature("docstring") OTGUI::TaylorExpansionsMomentsAnalysis
 "Taylor expansions for moments estimation."
 
+// ---------------------------------------------------------------------
 
+%feature("docstring") OTGUI::TaylorExpansionsMomentsAnalysis::setOutputNames
+"Output variable names accessor.
+
+Parameters
+----------
+names : :class:`~openturns.Description`
+    Output variable names"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::TaylorExpansionsMomentsAnalysis::getOutputNames
+"Output variable names accessor.
+
+Returns
+-------
+names : :class:`~openturns.Description`
+    Output variable names"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::TaylorExpansionsMomentsAnalysis::getResult
+"Result accessor.
+
+Returns
+-------
+result : :class:`~otguibase.TaylorExpansionsMomentsResult`
+    Result"

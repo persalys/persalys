@@ -61,3 +61,23 @@ Returns
 seed : int
     Seed value"
 
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationAnalysis::getInputSample
+"Input sample accessor.
+
+Returns
+-------
+sample : :class:`~openturns.NumericalSample`
+    Input sample"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationAnalysis::getOutputNames
+"Output variable names accessor.
+
+Returns
+-------
+sample : :class:`~openturns.Description`
+    Output variable names"
+

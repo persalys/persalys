@@ -42,9 +42,8 @@ TaylorExpansionsMomentsAnalysis::TaylorExpansionsMomentsAnalysis()
 /* Constructor with parameters */
 TaylorExpansionsMomentsAnalysis::TaylorExpansionsMomentsAnalysis(const String & name, const PhysicalModel & physicalModel)
   : AnalysisImplementation(name, physicalModel)
-  , outputs_(physicalModel.getOutputs())
+  , outputNames_(physicalModel.getOutputNames())
 {
-//TODO ctr with outputNames (pas OutputCollection!) optionnel par défaut prendrait tous les outputs
 }
 
 
@@ -55,29 +54,24 @@ TaylorExpansionsMomentsAnalysis* TaylorExpansionsMomentsAnalysis::clone() const
 }
 
 
-OutputCollection TaylorExpansionsMomentsAnalysis::getOutputs() const
+Description TaylorExpansionsMomentsAnalysis::getOutputNames() const
 {
-  return outputs_;
+  return outputNames_;
 }
 
 
-void TaylorExpansionsMomentsAnalysis::setOutputs(const OutputCollection & outputs)
+void TaylorExpansionsMomentsAnalysis::setOutputNames(const Description & outputNames)
 {
-  outputs_ = outputs;
+  outputNames_ = outputNames;
 }
 
 
 void TaylorExpansionsMomentsAnalysis::run()
 {
-//   TODO: cf CTR
-  Description outputNames(outputs_.getSize());
-  for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
-    outputNames[i] = outputs_[i].getName();
-
-  QuadraticCumul algoTaylorExpansionsMoments(getPhysicalModel().getOutputRandomVector(outputNames));
+  QuadraticCumul algoTaylorExpansionsMoments(getPhysicalModel().getOutputRandomVector(outputNames_));
 
   // set results
-  result_ = TaylorExpansionsMomentsResult(algoTaylorExpansionsMoments, outputNames);
+  result_ = TaylorExpansionsMomentsResult(algoTaylorExpansionsMoments, outputNames_);
 
   notify("analysisFinished");
 }
@@ -107,7 +101,7 @@ bool TaylorExpansionsMomentsAnalysis::analysisLaunched() const
 void TaylorExpansionsMomentsAnalysis::save(Advocate & adv) const
 {
   AnalysisImplementation::save(adv);
-  adv.saveAttribute("outputs_", outputs_);
+  adv.saveAttribute("outputNames_", outputNames_);
   adv.saveAttribute("result_", result_);
 }
 
@@ -116,7 +110,7 @@ void TaylorExpansionsMomentsAnalysis::save(Advocate & adv) const
 void TaylorExpansionsMomentsAnalysis::load(Advocate & adv)
 {
   AnalysisImplementation::load(adv);
-  adv.loadAttribute("outputs_", outputs_);
+  adv.loadAttribute("outputNames_", outputNames_);
   adv.loadAttribute("result_", result_);
 }
 }

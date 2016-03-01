@@ -49,8 +49,8 @@ public:
   OT::String getXMLFileName() const;
   void setXMLFileName(const OT::String & fileName);
 
-  OT::NumericalMathFunction getFunction(const OT::Description & outputNames);
-  OT::NumericalMathFunction getFunction();
+  OT::NumericalMathFunction getFunction(const OT::Description & outputNames) const;
+  OT::NumericalMathFunction getFunction() const;
 
   OT::String getPythonScript() const;
 

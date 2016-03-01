@@ -53,7 +53,7 @@ AnalyticalPhysicalModel* AnalyticalPhysicalModel::clone() const
 }
 
 
-Description AnalyticalPhysicalModel::getFormulas()
+Description AnalyticalPhysicalModel::getFormulas() const
 {
   Description formulas(getOutputs().getSize());
   for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
@@ -62,7 +62,7 @@ Description AnalyticalPhysicalModel::getFormulas()
 }
 
 
-NumericalMathFunction AnalyticalPhysicalModel::getFunction()
+NumericalMathFunction AnalyticalPhysicalModel::getFunction() const
 {
   if (!getInputs().getSize())
     throw PhysicalModelNotValidException(HERE) << "The physical model has no inputs.";

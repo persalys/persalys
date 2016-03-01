@@ -58,10 +58,10 @@ public:
   void setInputDistributionParametersType(const OT::String & inputName, const OT::UnsignedInteger & distributionParametersType);
   void addInput(const Input & input);
   void removeInput(const OT::String & inputName);
-  OT::Description getInputNames();
-  OT::Description getStochasticInputNames();
-  bool hasInputNamed(const OT::String & inputName);
-  bool hasStochasticInputs();
+  OT::Description getInputNames() const;
+  OT::Description getStochasticInputNames() const;
+  bool hasInputNamed(const OT::String & inputName) const;
+  bool hasStochasticInputs() const;
 
   OutputCollection getOutputs() const;
   Output & getOutputByName(const OT::String & outputName);
@@ -72,18 +72,18 @@ public:
   void setOutputValue(const OT::String & outputName, const double & value);
   void addOutput(const Output & output);
   void removeOutput(const OT::String & outputName);
-  OT::Description getOutputNames();
-  bool hasOutputNamed(const OT::String & outputName);
+  OT::Description getOutputNames() const;
+  bool hasOutputNamed(const OT::String & outputName) const;
 
   OT::ComposedDistribution getComposedDistribution() const;
-  OT::RandomVector getInputRandomVector();
-  OT::RandomVector getOutputRandomVector(const OT::Description & outputNames);
+  OT::RandomVector getInputRandomVector() const;
+  OT::RandomVector getOutputRandomVector(const OT::Description & outputNames) const;
 
-  OT::NumericalMathFunction getFunction();
-  OT::NumericalMathFunction getFunction(const OT::Description & outputNames);
-  OT::NumericalMathFunction getFunction(const OT::String & outputName);
-  OT::NumericalMathFunction getRestrictedFunction();
-  OT::NumericalMathFunction getRestrictedFunction(const OT::Description & outputNames);
+  OT::NumericalMathFunction getFunction() const;
+  OT::NumericalMathFunction getFunction(const OT::Description & outputNames) const;
+  OT::NumericalMathFunction getFunction(const OT::String & outputName) const;
+  OT::NumericalMathFunction getRestrictedFunction() const;
+  OT::NumericalMathFunction getRestrictedFunction(const OT::Description & outputNames) const;
 
   OT::Copula getCopula() const;
   void setCopula(const OT::Copula & copula);
