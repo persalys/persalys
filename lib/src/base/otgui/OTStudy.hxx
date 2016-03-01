@@ -51,28 +51,28 @@ public:
 
   OT::Collection<PhysicalModel> getPhysicalModels() const;
   PhysicalModel & getPhysicalModelByName(const OT::String & physicalModelName);
-  bool hasPhysicalModelNamed(const OT::String & physicalModelName);
-  OT::String getAvailablePhysicalModelName();
+  bool hasPhysicalModelNamed(const OT::String & physicalModelName) const;
+  OT::String getAvailablePhysicalModelName() const;
   void addPhysicalModel(const PhysicalModel & physicalModel);
   void clearPhysicalModel(const PhysicalModel & physicalModel);
   void removePhysicalModel(const PhysicalModel & physicalModel);
 
   OT::Collection<DesignOfExperiment> getDesignOfExperiments() const;
-  bool hasDesignOfExperimentNamed(const OT::String & designOfExperimentName);
-  OT::String getAvailableDesignOfExperimentName();
+  bool hasDesignOfExperimentNamed(const OT::String & designOfExperimentName) const;
+  OT::String getAvailableDesignOfExperimentName() const;
   void addDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
   void removeDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
 
   OT::Collection<Analysis> getAnalyses() const;
   Analysis & getAnalysisByName(const OT::String & analysisName);
-  bool hasAnalysisNamed(const OT::String & analysisName);
-  OT::String getAvailableAnalysisName(const OT::String & rootName);
+  bool hasAnalysisNamed(const OT::String & analysisName) const;
+  OT::String getAvailableAnalysisName(const OT::String & rootName) const;
   void addAnalysis(const Analysis & analysis);
   void removeAnalysis(const Analysis & analysis);
 
   OT::Collection<LimitState> getLimitStates() const;
-  bool hasLimitStateNamed(const OT::String & limitStateName);
-  OT::String getAvailableLimitStateName();
+  bool hasLimitStateNamed(const OT::String & limitStateName) const;
+  OT::String getAvailableLimitStateName() const;
   void addLimitState(const LimitState & limitState);
   void clearLimitState(const LimitState & limitState);
   void removeLimitState(const LimitState & limitState);

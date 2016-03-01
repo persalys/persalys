@@ -169,7 +169,7 @@ PhysicalModel & OTStudy::getPhysicalModelByName(const String & physicalModelName
 }
 
 
-bool OTStudy::hasPhysicalModelNamed(const String & physicalModelName)
+bool OTStudy::hasPhysicalModelNamed(const String & physicalModelName) const
 {
   for (UnsignedInteger i=0; i<physicalModels_.getSize(); ++i)
     if (physicalModels_[i].getImplementation()->getName() == physicalModelName)
@@ -178,7 +178,7 @@ bool OTStudy::hasPhysicalModelNamed(const String & physicalModelName)
 }
 
 
-String OTStudy::getAvailablePhysicalModelName()
+String OTStudy::getAvailablePhysicalModelName() const
 {
   int i = 0;
   String rootName = "physicalModel_";
@@ -272,7 +272,7 @@ Collection<DesignOfExperiment> OTStudy::getDesignOfExperiments() const
 }
 
 
-bool OTStudy::hasDesignOfExperimentNamed(const String & designOfExperimentName)
+bool OTStudy::hasDesignOfExperimentNamed(const String & designOfExperimentName) const
 {
   for (UnsignedInteger i=0; i<designOfExperiments_.getSize(); ++i)
     if (designOfExperiments_[i].getImplementation()->getName() == designOfExperimentName)
@@ -281,7 +281,7 @@ bool OTStudy::hasDesignOfExperimentNamed(const String & designOfExperimentName)
 }
 
 
-String OTStudy::getAvailableDesignOfExperimentName()
+String OTStudy::getAvailableDesignOfExperimentName() const
 {
   int i = 0;
   String rootName = "design_";
@@ -332,7 +332,7 @@ Analysis & OTStudy::getAnalysisByName(const String & analysisName)
 }
 
 
-bool OTStudy::hasAnalysisNamed(const String & analysisName)
+bool OTStudy::hasAnalysisNamed(const String & analysisName) const
 {
   for (UnsignedInteger i=0; i<analyses_.getSize(); ++i)
     if (analyses_[i].getImplementation()->getName() == analysisName)
@@ -341,7 +341,7 @@ bool OTStudy::hasAnalysisNamed(const String & analysisName)
 }
 
 
-String OTStudy::getAvailableAnalysisName(const String & rootName)
+String OTStudy::getAvailableAnalysisName(const String & rootName) const
 {
   int i = 0;
   while (hasAnalysisNamed(rootName + (OSS()<<i).str()))
@@ -386,7 +386,7 @@ Collection<LimitState> OTStudy::getLimitStates() const
 }
 
 
-bool OTStudy::hasLimitStateNamed(const String & limitStateName)
+bool OTStudy::hasLimitStateNamed(const String & limitStateName) const
 {
   for (UnsignedInteger i=0; i<limitStates_.getSize(); ++i)
     if (limitStates_[i].getImplementation()->getName() == limitStateName)
@@ -395,7 +395,7 @@ bool OTStudy::hasLimitStateNamed(const String & limitStateName)
 }
 
 
-String OTStudy::getAvailableLimitStateName()
+String OTStudy::getAvailableLimitStateName() const
 {
   int i = 0;
   String rootName = "limitState_";
