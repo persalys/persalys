@@ -59,9 +59,10 @@ void MainWindow::buildInterface()
   connect(studyTree_, SIGNAL(graphWindowDeactivated(QWidget*)), configurationDock_, SLOT(close()));
   leftSideSplitter->addWidget(configurationDock_);
   configurationDock_->close();
+  leftSideSplitter->setStretchFactor(1, 2);
 
   mainSplitter->addWidget(leftSideSplitter);
-  leftSideSplitter->setStretchFactor(1, 1);
+  mainSplitter->setStretchFactor(0, 4);
 
   // right side of the mainSplitter
   QSplitter * rightSideSplitter = new QSplitter(Qt::Vertical);
@@ -84,6 +85,7 @@ void MainWindow::buildInterface()
   rightSideSplitter->setStretchFactor(1, 1);
 
   mainSplitter->addWidget(rightSideSplitter);
+  mainSplitter->setStretchFactor(1, 4);
   setCentralWidget(mainSplitter);
 
   // menu bar
