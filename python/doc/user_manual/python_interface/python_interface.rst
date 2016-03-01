@@ -9,6 +9,7 @@ Model creation
 
 .. autosummary::
     :toctree: _generated/
+    :template: class.rst_t
 
     Input
     Output
@@ -22,17 +23,13 @@ Model evaluation
 
 .. autosummary::
     :toctree: _generated/
+    :template: class.rst_t
 
     ModelEvaluation
     ModelEvaluationResult
 
 Probabilistic studies
 ---------------------
-
-.. currentmodule:: otguibase
-
-.. autosummary::
-    :toctree: _generated/
 
 Central tendency
 ~~~~~~~~~~~~~~~~
@@ -41,6 +38,7 @@ Central tendency
 
 .. autosummary::
     :toctree: _generated/
+    :template: class.rst_t
 
     MonteCarloAnalysis
     MonteCarloResult
@@ -54,6 +52,7 @@ Sensitivity analysis
 
 .. autosummary::
     :toctree: _generated/
+    :template: class.rst_t
 
     SobolAnalysis
     SobolResult
@@ -67,6 +66,7 @@ Reliability model
 
 .. autosummary::
     :toctree: _generated/
+    :template: class.rst_t
 
     LimitState
 
@@ -77,6 +77,7 @@ Reliability analysis
 
 .. autosummary::
     :toctree: _generated/
+    :template: class.rst_t
 
     MonteCarloReliabilityAnalysis
     MonteCarloReliabilityAnalysisResult
@@ -88,6 +89,7 @@ Design of experiment
 
 .. autosummary::
     :toctree: _generated/
+    :template: class.rst_t
 
     DesignOfExperiment
 
@@ -98,5 +100,6 @@ Study storage
 
 .. autosummary::
     :toctree: _generated/
+    :template: class.rst_t
 
     OTStudy
