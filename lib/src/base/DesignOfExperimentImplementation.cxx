@@ -386,7 +386,7 @@ void DesignOfExperimentImplementation::setColumns(Indices columns)
 // }
 
 
-Description DesignOfExperimentImplementation::getVariableInputsNames() const
+Description DesignOfExperimentImplementation::getInputVariableNames() const
 {
   if (!levels_.__contains__(1))
     return inputNames_;
@@ -499,7 +499,7 @@ void DesignOfExperimentImplementation::clearResult()
 }
 
 
-void DesignOfExperimentImplementation::eval()
+void DesignOfExperimentImplementation::evaluate()
 {
   result_ = SimulationAnalysisResult(getInputSample(), physicalModel_.getFunction()(getInputSample()));
   notify("analysisFinished");

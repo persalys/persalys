@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     // Parametric analysis
     DesignOfExperiment aDesign("aDesign", myPhysicalModel);
     myStudy.addDesignOfExperiment(aDesign);
-    aDesign.eval();
+    aDesign.evaluate();
     NumericalSample resultSample(aDesign.getResult().getOutputSample());
 
     // Reference

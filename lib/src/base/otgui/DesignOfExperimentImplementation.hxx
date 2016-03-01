@@ -78,7 +78,7 @@ public:
 //   OT::Experiment getExperiment() const;
 //   void setExperiment(const OT::Experiment & experiment);
 
-  OT::Description getVariableInputsNames() const;
+  OT::Description getInputVariableNames() const;
 
   OT::NumericalSample getInputSample();
   void setInputSample(const OT::NumericalSample & sample);
@@ -86,7 +86,7 @@ public:
   void clearResult();
 
   void updateParameters();
-  void eval();
+  void evaluate();
   virtual OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */

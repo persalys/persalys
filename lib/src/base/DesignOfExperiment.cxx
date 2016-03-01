@@ -216,9 +216,9 @@ void DesignOfExperiment::setColumns(Indices columns)
 // }
 
 
-Description DesignOfExperiment::getVariableInputsNames() const
+Description DesignOfExperiment::getInputVariableNames() const
 {
-  return getImplementation()->getVariableInputsNames();
+  return getImplementation()->getInputVariableNames();
 }
 
 
@@ -252,9 +252,9 @@ void DesignOfExperiment::updateParameters()
 }
 
 
-void DesignOfExperiment::eval()
+void DesignOfExperiment::evaluate()
 {
-  getImplementation()->eval();
+  getImplementation()->evaluate();
 }
 
 
