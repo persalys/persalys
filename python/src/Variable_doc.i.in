@@ -1,5 +1,52 @@
-// PhysicalModel docstrings are defined in PhysicalModelImplementation_doc.i.in
+%feature("docstring") OTGUI::Variable
+"Variable base class."
 
-//%feature("docstring") OTGUI::Variable
-// OTGUI_Variable_doc
+// ---------------------------------------------------------------------
 
+%feature("docstring") OTGUI::Variable::setDescription
+"Description accessor.
+
+Parameters
+----------
+description : :class:`~openturns.Description`
+    Text descripting the variable"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Variable::getDescription
+"Description accessor.
+
+Returns
+-------
+description : :class:`~openturns.Description`
+    Text descripting the variable"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Variable::getPythonScript
+"Python script accessor.
+
+Returns
+-------
+script : str
+    Python script to replay the calculus"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Variable::setValue
+"Default value accessor.
+
+Parameters
+----------
+value : float
+    Default value"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Variable::getValue
+"Default value accessor.
+
+Returns
+-------
+value : float
+    Default value"

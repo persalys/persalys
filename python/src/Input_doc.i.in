@@ -1,4 +1,63 @@
 %feature("docstring") OTGUI::Input
 "Input Variable."
 
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Input::setDistribution
+"Distribution accessor.
+
+Parameters
+----------
+distribution : :class:`~openturns.Distribution`
+    Distribution associated with the variable"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Input::getDistribution
+"Distribution accessor.
+
+Returns
+-------
+distribution : :class:`~openturns.Distribution`
+    Distribution associated with the variable"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Input::setDistributionParametersType
+"Distribution parameters type accessor.
+
+Parameters
+----------
+parametersType : int
+    Distribution parameters index"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Input::getDistributionParametersType
+"Distribution parameters type accessor.
+
+Returns
+-------
+parametersType : int
+    Distribution parameters index"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Input::isStochastic
+"Whether the variable is stochastic.
+
+Returns
+-------
+isStochastic : bool
+    Whether the variable is stochastic"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Input::getDistributionPythonScript
+"Distribution script accessor.
+
+Returns
+-------
+script : str
+    Distribution script"
 

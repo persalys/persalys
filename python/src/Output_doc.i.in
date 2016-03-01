@@ -1,4 +1,42 @@
 %feature("docstring") OTGUI::Output
 "Output variable."
 
+// ---------------------------------------------------------------------
 
+%feature("docstring") OTGUI::Output::setFormula
+"Formula accessor.
+
+Parameters
+----------
+formula : str
+    Formula associated with the variable"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Output::getFormula
+"Formula accessor.
+
+Returns
+-------
+formula : str
+    Formula associated with the variable"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Output::setHasBeenComputed
+"Whether the variable has been evaluated.
+
+Parameters
+----------
+computed : bool
+    Whether the variable has been evaluated"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Output::hasBeenComputed
+"Whether the variable has been evaluated.
+
+Returns
+-------
+computed : bool
+    Whether the variable has been evaluated"

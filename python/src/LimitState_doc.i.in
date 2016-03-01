@@ -4,10 +4,19 @@
 OTGUI_LimitState_doc
 %feature("docstring") OTGUI::LimitState::setOutputName
 OTGUI_LimitState_setOutputName_doc
-%feature("docstring") OTGUI::LimitState::setOutputName
-OTGUI_LimitState_setOutputName_doc
+%feature("docstring") OTGUI::LimitState::getOutputName
+OTGUI_LimitState_getOutputName_doc
 %feature("docstring") OTGUI::LimitState::setThreshold
 OTGUI_LimitState_setThreshold_doc
 %feature("docstring") OTGUI::LimitState::getThreshold
 OTGUI_LimitState_getThreshold_doc
-
+%feature("docstring") OTGUI::LimitState::getPythonScript
+OTGUI_LimitState_getPythonScript_doc
+%feature("docstring") OTGUI::LimitState::getPhysicalModel
+OTGUI_LimitState_getPhysicalModel_doc
+%feature("docstring") OTGUI::LimitState::setPhysicalModel
+OTGUI_LimitState_setPhysicalModel_doc
+%feature("docstring") OTGUI::LimitState::setOperator
+OTGUI_LimitState_setOperator_doc
+%feature("docstring") OTGUI::LimitState::getOperator
+OTGUI_LimitState_getOperator_doc

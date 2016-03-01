@@ -1,3 +1,63 @@
 %feature("docstring") OTGUI::SimulationAnalysis
 "Simulation reliability analysis."
 
+// ----------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationAnalysis::setOutputs
+"Output variables accessor.
+
+Parameters
+----------
+outputs : sequence of :class:`~otguibase.Output`
+    The output variables"
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationAnalysis::getOutputs
+"Output variables accessor.
+
+Returns
+-------
+outputs : sequence of :class:`~otguibase.Output`
+    The output variables"
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationAnalysis::setNbSimulations
+"Simulation number accessor.
+
+Parameters
+----------
+nbSimu : int
+    The number of simulations"
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationAnalysis::getNbSimulations
+"Simulation number accessor.
+
+Returns
+-------
+nbSimu : int
+    The number of simulations"
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationAnalysis::setSeed
+"Seed accessor.
+
+Parameters
+----------
+seed : int
+    Seed value"
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationAnalysis::getSeed
+"Seed accessor.
+
+Returns
+-------
+seed : int
+    Seed value"
+

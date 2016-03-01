@@ -59,7 +59,7 @@ OTGUI_PhysicalModel_getFunction_doc
 // ---------------------------------------------------------------------
 
 %define OTGUI_PhysicalModel_getPythonScript_doc
-"Physical model accessor.
+"Python script accessor.
 
 Returns
 -------
@@ -68,3 +68,63 @@ script : str
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getPythonScript
 OTGUI_PhysicalModel_getPythonScript_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_setCopula_doc
+"Copula accessor.
+
+Parameters
+----------
+copula : :class:`~openturns.Copula`
+    The copula"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::setCopula
+OTGUI_PhysicalModel_setCopula_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_getCopula_doc
+"Copula accessor.
+
+Parameters
+----------
+copula : :class:`~openturns.Copula`
+    The copula"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getCopula
+OTGUI_PhysicalModel_getCopula_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_setInputDescription_doc
+"Input description accessor.
+
+Parameters
+----------
+inputName : str
+    Variable name
+description : str
+    Description text"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::setInputDescription
+OTGUI_PhysicalModel_setInputDescription_doc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

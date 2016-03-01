@@ -56,10 +56,69 @@ threshold : float
 %feature("docstring") OTGUI::LimitStateImplementation::getThreshold
 OTGUI_LimitState_getThreshold_doc
 
+// ---------------------------------------------------------------------
 
+%define OTGUI_LimitState_getPythonScript_doc
+"Python script accessor.
 
+Returns
+-------
+script : str
+    Python script to replay the calculus"
+%enddef
+%feature("docstring") OTGUI::LimitStateImplementation::getPythonScript
+OTGUI_LimitState_getPythonScript_doc
 
+// ---------------------------------------------------------------------
 
+%define OTGUI_LimitState_setPhysicalModel_doc
+"Physical model accessor.
 
+Parameters
+----------
+model : :class:`~otguibase.PhysicalModel`
+    Physical model"
+%enddef
+%feature("docstring") OTGUI::LimitStateImplementation::setPhysicalModel
+OTGUI_LimitState_setPhysicalModel_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_LimitState_getPhysicalModel_doc
+"Physical model accessor.
+
+Returns
+-------
+model : :class:`~otguibase.PhysicalModel`
+    Physical model"
+%enddef
+%feature("docstring") OTGUI::LimitStateImplementation::getPhysicalModel
+OTGUI_LimitState_getPhysicalModel_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_LimitState_setOperator_doc
+"Comparison operator accessor.
+
+Parameters
+----------
+operator : :class:`~openturns.ComparisonOperator`
+    Comparison operator"
+%enddef
+%feature("docstring") OTGUI::LimitStateImplementation::setOperator
+OTGUI_LimitState_setOperator_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_LimitState_getOperator_doc
+"Comparison operator accessor.
+
+Returns
+-------
+operator : :class:`~openturns.ComparisonOperator`
+    Comparison operator"
+%enddef
+%feature("docstring") OTGUI::LimitStateImplementation::getOperator
+OTGUI_LimitState_getOperator_doc
 
 
