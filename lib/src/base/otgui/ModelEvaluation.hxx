@@ -42,7 +42,7 @@ public:
 
   void updateParameters();
 
-  OT::NumericalPoint getInputsValues() const;
+  OT::NumericalPoint getInputValues() const;
   void setInputValue(const int & index, const double & value);
 
   ModelEvaluationResult getResult() const;
@@ -62,7 +62,7 @@ protected:
 
 private:
   OT::Description inputNames_;
-  OT::NumericalPoint inputsValues_;
+  OT::NumericalPoint inputValues_;
   ModelEvaluationResult result_;
 };
 }

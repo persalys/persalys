@@ -1,2 +1,34 @@
 %feature("docstring") OTGUI::ModelEvaluation
 "Simple evaluation of a model."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ModelEvaluation::getInputValues
+"Input values accessor.
+
+Returns
+-------
+values : :class:`~openturns.NumericalPoint`
+    Input values."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ModelEvaluation::setInputValue
+"Input values accessor.
+
+Parameters
+----------
+index : int
+    Input index
+value : float
+    Input value"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ModelEvaluation::getResult
+"Input values accessor.
+
+Returns
+-------
+values : :class:`~otguibase.ModelEvaluationResult`
+    Input values."

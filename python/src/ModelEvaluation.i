@@ -6,6 +6,8 @@
 
 %include ModelEvaluation_doc.i
 
+%ignore OTGUI::ModelEvaluation::updateParameters;
+
 %include otgui/ModelEvaluation.hxx
 namespace OTGUI {
 

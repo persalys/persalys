@@ -73,7 +73,7 @@ void ModelEvaluationWizard::buildInterface()
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     table_->setItem(i, 1, item);
       
-    double defaultValue = dynamic_cast<ModelEvaluation*>(&*analysis_.getImplementation())->getInputsValues()[i];
+    double defaultValue = dynamic_cast<ModelEvaluation*>(&*analysis_.getImplementation())->getInputValues()[i];
     double delta(0.1*fabs(defaultValue));
     double step(delta > 1e-12 ? 0.5*delta : 0.1);
 

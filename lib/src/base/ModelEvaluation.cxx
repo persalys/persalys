@@ -50,7 +50,7 @@ ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & phys
                                  const NumericalPoint & inputsValues)
   : AnalysisImplementation(name, physicalModel)
   , inputNames_(getPhysicalModel().getInputNames())
-  , inputsValues_(inputsValues)
+  , inputValues_(inputsValues)
 {
 }
 
@@ -64,21 +64,21 @@ ModelEvaluation* ModelEvaluation::clone() const
 
 void ModelEvaluation::initializeParameters(const InputCollection & inputs)
 {
-  inputsValues_.clear();
+  inputValues_.clear();
   inputNames_ = getPhysicalModel().getInputNames();
 
   UnsignedInteger inputSize = inputs.getSize();
-  inputsValues_ = NumericalPoint(inputSize);
+  inputValues_ = NumericalPoint(inputSize);
 
   for (UnsignedInteger i=0; i<inputSize; ++i)
-    inputsValues_[i] = inputs[i].getValue();
+    inputValues_[i] = inputs[i].getValue();
 }
 
 
 void ModelEvaluation::updateParameters()
 {
   Description inputNames(inputNames_);
-  NumericalPoint values(inputsValues_);
+  NumericalPoint values(inputValues_);
 
   initializeParameters(getPhysicalModel().getInputs());
 
@@ -86,7 +86,7 @@ void ModelEvaluation::updateParameters()
   {
     const Description::const_iterator it = std::find(inputNames.begin(), inputNames.end(), inputNames_[i]);
     if (it != inputNames.end())
-      inputsValues_[i] = values[it - inputNames.begin()];
+      inputValues_[i] = values[it - inputNames.begin()];
   }
 }
 
@@ -94,7 +94,7 @@ void ModelEvaluation::updateParameters()
 void ModelEvaluation::run()
 {
   // output = f(input)
-  NumericalSample inputSample(1, getInputsValues());
+  NumericalSample inputSample(1, getInputValues());
   inputSample.setDescription(inputNames_);
   NumericalSample outputSample(1, 0);
   for (UnsignedInteger i=0; i<getPhysicalModel().getOutputNames().getSize(); ++i)
@@ -116,16 +116,16 @@ void ModelEvaluation::run()
 }
 
 
-NumericalPoint ModelEvaluation::getInputsValues() const
+NumericalPoint ModelEvaluation::getInputValues() const
 {
-  return inputsValues_;
+  return inputValues_;
 }
 
 
 void ModelEvaluation::setInputValue(const int & index, const double & value)
 {
   // TODO error if index > nbInputs
-  inputsValues_[index] = value;
+  inputValues_[index] = value;
 }
 
 
@@ -141,10 +141,10 @@ String ModelEvaluation::getPythonScript() const
 
   OSS oss;
   oss << "values = [";
-  for (UnsignedInteger i=0; i<inputsValues_.getSize(); ++i)
+  for (UnsignedInteger i=0; i<inputValues_.getSize(); ++i)
   {
-    oss << inputsValues_[i];
-    if (i < inputsValues_.getSize()-1)
+    oss << inputValues_[i];
+    if (i < inputValues_.getSize()-1)
       oss << ", ";
   }
   oss << "]\n";
@@ -166,7 +166,7 @@ void ModelEvaluation::save(Advocate & adv) const
 {
   AnalysisImplementation::save(adv);
   adv.saveAttribute("inputNames_", inputNames_);
-  adv.saveAttribute("inputsValues_", inputsValues_);
+  adv.saveAttribute("inputValues_", inputValues_);
   adv.saveAttribute("result_", result_);
 }
 
@@ -176,7 +176,7 @@ void ModelEvaluation::load(Advocate & adv)
 {
   AnalysisImplementation::load(adv);
   adv.loadAttribute("inputNames_", inputNames_);
-  adv.loadAttribute("inputsValues_", inputsValues_);
+  adv.loadAttribute("inputValues_", inputValues_);
   adv.loadAttribute("result_", result_);
 }
 }
