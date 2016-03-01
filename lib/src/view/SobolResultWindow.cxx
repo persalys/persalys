@@ -84,7 +84,7 @@ void SobolResultWindow::buildInterface()
     plot->setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
 
     verticalSplitter->addWidget(plot);
-    verticalSplitter->setStretchFactor(0, 1);
+    verticalSplitter->setStretchFactor(0, 3);
     listPlotWidgets_.append(plot);
 
     // table of first order en total order indices + interactions
@@ -146,7 +146,7 @@ void SobolResultWindow::buildInterface()
     vbox->addLayout(hbox);
 
     verticalSplitter->addWidget(widget);
-    verticalSplitter->setStretchFactor(1, 3);
+    verticalSplitter->setStretchFactor(1, 1);
     frameLayout_->addWidget(verticalSplitter);
   }
 

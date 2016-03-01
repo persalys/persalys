@@ -27,6 +27,7 @@
 #include <QLabel>
 #include <QTableWidget>
 #include <QScrollArea>
+#include <QSplitter>
 
 using namespace OT;
 
@@ -65,15 +66,15 @@ void SRCResultWindow::buildInterface()
 
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
   {
-    QWidget * widget = new QWidget;
-    QVBoxLayout * vbox = new QVBoxLayout(widget);
+    QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
 
     // plot
     PlotWidget * plot = new PlotWidget(true);
     plot->plotSensitivityIndices(result_.getIndices()[i], NumericalPoint(), inputNames);
     plot->setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
 
-    vbox->addWidget(plot);
+    verticalSplitter->addWidget(plot);
+    verticalSplitter->setStretchFactor(0, 3);
     listPlotWidgets_.append(plot);
 
     // table of indices
@@ -96,8 +97,9 @@ void SRCResultWindow::buildInterface()
     table->setSortingEnabled(true);
     connect(table->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
 
-    vbox->addWidget(table);
-    frameLayout_->addWidget(widget);
+    verticalSplitter->addWidget(table);
+    verticalSplitter->setStretchFactor(1, 1);
+    frameLayout_->addWidget(verticalSplitter);
   }
 
   plotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets_, QStringList(), outputNames, GraphConfigurationWidget::SensitivityIndices);
