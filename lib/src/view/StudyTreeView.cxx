@@ -795,6 +795,7 @@ bool StudyTreeView::saveAsOTStudy()
       QApplication::setOverrideCursor(Qt::WaitCursor);
       item->getOTStudy()->save(fileName.toStdString());
       QApplication::restoreOverrideCursor();
+      emit recentFilesListChanged(fileName);
       return true;
     }
   }
@@ -814,39 +815,47 @@ void StudyTreeView::openOTStudy()
 
   if (!fileName.isEmpty())
   {
-    QFileInfo file(fileName);
-    settings.setValue("currentDir", file.absolutePath());
+    openOTStudy(fileName);
+  }
+}
 
-    if (file.exists() && !OTStudy::GetOTStudiesFileNames().__contains__(file.absoluteFilePath().toStdString()))
+
+void StudyTreeView::openOTStudy(const QString & fileName)
+{
+  QFileInfo file(fileName);
+  QSettings settings;
+  settings.setValue("currentDir", file.absolutePath());
+
+  if (file.exists() && !OTStudy::GetOTStudiesFileNames().__contains__(file.absoluteFilePath().toStdString()))
+  {
+    try
     {
-      try
-      {
-        QApplication::setOverrideCursor(Qt::WaitCursor);
-        OTStudy::OpenOTStudy(fileName.toStdString());
-        QApplication::restoreOverrideCursor();
-      }
-      catch (std::exception & ex)
-      {
-        QApplication::restoreOverrideCursor();
-        QString message;
-        message = tr("Impossible to read the file '%1'. \n").arg(fileName);
-        QMessageBox::warning(this, tr("Warning"), message+ex.what());
-      }
+      QApplication::setOverrideCursor(Qt::WaitCursor);
+      OTStudy::OpenOTStudy(fileName.toStdString());
+      QApplication::restoreOverrideCursor();
+      emit recentFilesListChanged(fileName);
     }
-    else
+    catch (std::exception & ex)
     {
-      // put this in OTStudy::OpenOTStudy
+      QApplication::restoreOverrideCursor();
       QString message;
-      if (!file.exists())
-      {
-        message = tr("The file '%1' does not exist.").arg(fileName);
-      }
-      else if (OTStudy::GetOTStudiesFileNames().__contains__(file.absoluteFilePath().toStdString()))
-      {
-        message = tr("The file '%1' is already opened.").arg(fileName);
-      }
-      QMessageBox::warning(this, tr("Warning"), message);
+      message = tr("Impossible to read the file '%1'. \n").arg(fileName);
+      QMessageBox::warning(this, tr("Warning"), message+ex.what());
     }
+  }
+  else
+  {
+    // put this in OTStudy::OpenOTStudy
+    QString message;
+    if (!file.exists())
+    {
+      message = tr("The file '%1' does not exist.").arg(fileName);
+    }
+    else if (OTStudy::GetOTStudiesFileNames().__contains__(file.absoluteFilePath().toStdString()))
+    {
+      message = tr("The file '%1' is already opened.").arg(fileName);
+    }
+    QMessageBox::warning(this, tr("Warning"), message);
   }
 }
 

@@ -29,15 +29,21 @@ class OTguiMenuBar : public QMenuBar
   Q_OBJECT
 
 public:
+  enum { NbMaxRecentFiles = 5 };
   OTguiMenuBar();
 
 protected:
   void buildActions();
 
 public slots:
+  void openRecentFile();
+  void updateRecentFilesList(const QString & fileName);
+  void updateRecentFilesActionsList();
+  void clearRecentFilesActions();
 signals:
   void createNewOTStudy();
   void openOTStudy();
+  void openOTStudy(QString);
   void saveOTStudy();
   void saveAsOTStudy();
   void exportPython();
@@ -46,6 +52,10 @@ signals:
   void closeWindow();
   void showHidePythonConsole(bool);
   void pythonConsoleVisibilityChanged(bool);
+
+private:
+  QMenu * recentFilesMenu_;
+  QAction *recentFileActions_[NbMaxRecentFiles];
 };
 }
 #endif

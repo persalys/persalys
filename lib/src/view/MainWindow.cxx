@@ -92,12 +92,14 @@ void MainWindow::buildInterface()
   connect(menuBar, SIGNAL(showHidePythonConsole(bool)), pythonConsoleDock, SLOT(setVisible(bool)));
   connect(menuBar, SIGNAL(createNewOTStudy()), studyTree_, SLOT(createNewOTStudy()));
   connect(menuBar, SIGNAL(openOTStudy()), studyTree_, SLOT(openOTStudy()));
+  connect(menuBar, SIGNAL(openOTStudy(QString)), studyTree_, SLOT(openOTStudy(QString)));
   connect(menuBar, SIGNAL(saveOTStudy()), studyTree_, SLOT(saveOTStudy()));
   connect(menuBar, SIGNAL(saveAsOTStudy()), studyTree_, SLOT(saveAsOTStudy()));
   connect(menuBar, SIGNAL(exportPython()), studyTree_, SLOT(exportPython()));
   connect(menuBar, SIGNAL(importPython()), studyTree_, SLOT(importPython()));
   connect(menuBar, SIGNAL(closeOTStudy()), studyTree_, SLOT(closeOTStudy()));
   connect(menuBar, SIGNAL(closeWindow()), this, SLOT(exitApplication()));
+  connect(studyTree_, SIGNAL(recentFilesListChanged(QString)), menuBar, SLOT(updateRecentFilesList(QString)));
   setMenuBar(menuBar);
 
   // tool bar

@@ -21,6 +21,8 @@
 #include "otgui/OTguiMenuBar.hxx"
 
 #include <QAction>
+#include <QSettings>
+#include <QFileInfo>
 
 namespace OTGUI {
 
@@ -47,6 +49,22 @@ void OTguiMenuBar::buildActions()
   action->setStatusTip(tr("Open an existing OTStudy"));
   connect(action, SIGNAL(triggered()), this, SIGNAL(openOTStudy()));
   fileMenu->addAction(action);
+
+  for (int i=0; i<NbMaxRecentFiles; ++i)
+  {
+    recentFileActions_[i] = new QAction(this);
+    recentFileActions_[i]->setVisible(false);
+    connect(recentFileActions_[i], SIGNAL(triggered()), this, SLOT(openRecentFile()));
+  }
+  recentFilesMenu_ = fileMenu->addMenu(tr("Open Recent"));
+  for(int i=0; i<NbMaxRecentFiles; ++i)
+    recentFilesMenu_->addAction(recentFileActions_[i]);
+  updateRecentFilesActionsList();
+
+  recentFilesMenu_->addSeparator();
+  action = new QAction(tr("Clear list"), this);
+  connect(action, SIGNAL(triggered()), this, SLOT(clearRecentFilesActions()));
+  recentFilesMenu_->addAction(action);
 
   action = new QAction(QIcon(":/images/document-import.png"), tr("&Import Python..."), this);
   action->setStatusTip(tr("Import a Python Script"));
@@ -97,5 +115,58 @@ void OTguiMenuBar::buildActions()
   viewMenu->addMenu(windowMenu);
 
   addMenu(viewMenu);
+}
+
+
+void OTguiMenuBar::openRecentFile()
+{
+  QAction * action = qobject_cast<QAction *>(sender());
+  if (action)
+    emit openOTStudy(action->data().toString());
+}
+
+
+
+void OTguiMenuBar::updateRecentFilesList(const QString & fileName)
+{
+  QSettings settings;
+  QStringList files = settings.value("recentFilesList").toStringList();
+  files.removeAll(fileName);
+  files.prepend(fileName);
+  while (files.size() > OTguiMenuBar::NbMaxRecentFiles)
+    files.removeLast();
+
+  settings.setValue("recentFilesList", files);
+  updateRecentFilesActionsList();
+}
+
+
+void OTguiMenuBar::updateRecentFilesActionsList()
+{
+  QSettings settings;
+  QStringList files = settings.value("recentFilesList").toStringList();
+
+  int numRecentFiles = qMin(files.size(), (int)NbMaxRecentFiles);
+
+  for (int i=0; i<numRecentFiles; ++i)
+  {
+    QFileInfo info = QFileInfo(files[i]);
+    QString text = QString("%1  [%2]").arg(info.baseName()).arg(info.absoluteFilePath());;
+    recentFileActions_[i]->setText(text);
+    recentFileActions_[i]->setData(files[i]);
+    recentFileActions_[i]->setVisible(true);
+  }
+  for (int i=numRecentFiles; i<NbMaxRecentFiles; ++i)
+    recentFileActions_[i]->setVisible(false);
+
+  recentFilesMenu_->setEnabled(numRecentFiles > 0);
+}
+
+
+void OTguiMenuBar::clearRecentFilesActions()
+{
+  QSettings settings;
+  settings.setValue("recentFilesList", QStringList());
+  updateRecentFilesActionsList();
 }
 }

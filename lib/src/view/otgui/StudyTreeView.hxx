@@ -79,6 +79,7 @@ public slots:
   bool saveOTStudy();
   bool saveAsOTStudy();
   void openOTStudy();
+  void openOTStudy(const QString & fileName);
   bool closeOTStudy();
   bool closeAllOTStudies();
 signals:
@@ -90,6 +91,7 @@ signals:
   void graphWindowActivated(QWidget*);
   void graphWindowDeactivated(QWidget*);
   void analysisExecutionRequired(OTStudyItem * otStudyItem, const QString & analysisName);
+  void recentFilesListChanged(const QString & recentFileName);
 
 private:
   StudyTreeViewModel * treeViewModel_;
