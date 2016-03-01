@@ -64,7 +64,6 @@ void PhysicalModelWindowWidget::buildInterface()
   inputTableView_->setEditTriggers(QTableView::AllEditTriggers);
   LineEditWithQValidatorDelegate * delegate = new LineEditWithQValidatorDelegate;
   inputTableView_->setItemDelegateForColumn(0, delegate);
-  inputTableView_->horizontalHeader()->setStretchLastSection(true);
   inputsLayout->addWidget(inputTableView_);
 
   // buttons Add/Remove input
@@ -96,7 +95,6 @@ void PhysicalModelWindowWidget::buildInterface()
   outputTableView_->setEditTriggers(QTableView::AllEditTriggers);
   delegate = new LineEditWithQValidatorDelegate;
   outputTableView_->setItemDelegateForColumn(0, delegate);
-  outputTableView_->horizontalHeader()->setStretchLastSection(true);
   outputsLayout->addWidget(outputTableView_);
 
   // buttons Add/Remove output
@@ -141,7 +139,13 @@ void PhysicalModelWindowWidget::updateInputTableModel()
     delete inputTableModel_;
   inputTableModel_ = new InputTableModel(physicalModel_);
   inputTableView_->setModel(inputTableModel_);
-  inputTableView_->resizeColumnsToContents();
+  inputTableView_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
+  inputTableView_->horizontalHeader()->setResizeMode(1, QHeaderView::Interactive);
+  inputTableView_->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+  int width = inputTableView_->horizontalHeader()->width();
+  inputTableView_->horizontalHeader()->resizeSection(0, width*1/5);
+  inputTableView_->horizontalHeader()->resizeSection(1, width*3/5);
+  inputTableView_->horizontalHeader()->resizeSection(2, width*1/5);
   connect(inputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
 }
 
@@ -152,9 +156,27 @@ void PhysicalModelWindowWidget::updateOutputTableModel()
     delete outputTableModel_;
   outputTableModel_ = new OutputTableModel(physicalModel_);
   outputTableView_->setModel(outputTableModel_);
+  outputTableView_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
+  outputTableView_->horizontalHeader()->setResizeMode(1, QHeaderView::Interactive);
+  outputTableView_->horizontalHeader()->setResizeMode(2, QHeaderView::Interactive);
+  outputTableView_->horizontalHeader()->setResizeMode(3, QHeaderView::Stretch);
   if (physicalModel_.getImplementation()->getClassName() != "AnalyticalPhysicalModel")
+  {
     outputTableView_->setColumnHidden(2, true);
-  outputTableView_->resizeColumnsToContents();
+    int width = outputTableView_->horizontalHeader()->width();
+    outputTableView_->horizontalHeader()->resizeSection(0, width*1/5);
+    outputTableView_->horizontalHeader()->resizeSection(1, width*3/5);
+    outputTableView_->horizontalHeader()->resizeSection(2, 0);
+    outputTableView_->horizontalHeader()->resizeSection(3, width*1/5);
+}
+  else
+  {
+    int width = outputTableView_->horizontalHeader()->width();
+    outputTableView_->horizontalHeader()->resizeSection(0, width*2/10);
+    outputTableView_->horizontalHeader()->resizeSection(1, width*3/10);
+    outputTableView_->horizontalHeader()->resizeSection(2, width*4/10);
+    outputTableView_->horizontalHeader()->resizeSection(3, width*1/10);
+  }
   connect(outputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
 }
 
@@ -162,14 +184,12 @@ void PhysicalModelWindowWidget::updateOutputTableModel()
 void PhysicalModelWindowWidget::addInputLine()
 {
   inputTableModel_->addLine();
-  inputTableView_->resizeColumnsToContents();
 }
 
 
 void PhysicalModelWindowWidget::addOutputLine()
 {
   outputTableModel_->addLine();
-  outputTableView_->resizeColumnsToContents();
 }
 
 
@@ -183,7 +203,6 @@ void PhysicalModelWindowWidget::removeInputLine()
 
     if (lastRow+1)
       inputTableView_->selectRow(lastRow);
-    inputTableView_->resizeColumnsToContents();
   }
 }
 
@@ -193,7 +212,6 @@ void PhysicalModelWindowWidget::removeOutputLine()
   if (outputTableView_->selectionModel()->hasSelection())
   {
     outputTableModel_->removeLine(outputTableView_->selectionModel()->currentIndex());
-    outputTableView_->resizeColumnsToContents();
   }
 }
 
