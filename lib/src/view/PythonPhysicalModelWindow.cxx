@@ -152,6 +152,13 @@ void PythonPhysicalModelWindow::parseVariables()
     {
       physicalModel_.addOutput(Output(outputVariables[i]));
     }
-  } 
+  }
+  for (unsigned int i = 0; i < existingOutputVariables.getSize(); ++ i)
+  {
+    if (!outputVariables.__contains__(existingOutputVariables[i]))
+    {
+      physicalModel_.removeOutput(existingOutputVariables[i]);
+    }
+  }
 }
 }
