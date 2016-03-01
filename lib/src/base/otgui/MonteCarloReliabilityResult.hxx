@@ -25,22 +25,22 @@
 #include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class OTGUI_API MonteCarloReliabilityAnalysisResult : public OT::PersistentObject
+class OTGUI_API MonteCarloReliabilityResult : public OT::PersistentObject
 {
   CLASSNAME;
 
 public:
   /** Default constructor */
-  MonteCarloReliabilityAnalysisResult();
+  MonteCarloReliabilityResult();
   /** Constructor with parameters */
-  MonteCarloReliabilityAnalysisResult(const OT::SimulationResult & simulationResults,
+  MonteCarloReliabilityResult(const OT::SimulationResult & simulationResults,
                                       const OT::NumericalSample & outputSample,
                                       const OT::NumericalSample & convergenceSample,
                                       const OT::NumericalSample & convergenceSampleLowerBound,
                                       const OT::NumericalSample & convergenceSampleUpperBound);
 
   /** Virtual constructor */
-  virtual MonteCarloReliabilityAnalysisResult * clone() const;
+  virtual MonteCarloReliabilityResult * clone() const;
 
   OT::SimulationResult getSimulationResult() const;
   OT::NumericalSample getOutputSample() const;

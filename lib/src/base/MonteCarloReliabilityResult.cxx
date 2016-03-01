@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MonteCarloReliabilityAnalysisResult.hxx"
+#include "otgui/MonteCarloReliabilityResult.hxx"
 
 #include "PersistentObjectFactory.hxx"
 
@@ -26,19 +26,19 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(MonteCarloReliabilityAnalysisResult);
+CLASSNAMEINIT(MonteCarloReliabilityResult);
 
-static Factory<MonteCarloReliabilityAnalysisResult> RegisteredFactory("MonteCarloReliabilityAnalysisResult");
+static Factory<MonteCarloReliabilityResult> RegisteredFactory("MonteCarloReliabilityResult");
 
 /* Default constructor */
-MonteCarloReliabilityAnalysisResult::MonteCarloReliabilityAnalysisResult()
+MonteCarloReliabilityResult::MonteCarloReliabilityResult()
   : PersistentObject()
 {
 }
 
 
 /* Constructor with parameters */
-MonteCarloReliabilityAnalysisResult::MonteCarloReliabilityAnalysisResult(const SimulationResult & simulationResults,
+MonteCarloReliabilityResult::MonteCarloReliabilityResult(const SimulationResult & simulationResults,
                                                                          const NumericalSample & outputSample,
                                                                          const NumericalSample & convergenceSample,
                                                                          const NumericalSample & convergenceSampleLowerBound,
@@ -54,44 +54,44 @@ MonteCarloReliabilityAnalysisResult::MonteCarloReliabilityAnalysisResult(const S
 
 
 /* Virtual constructor */
-MonteCarloReliabilityAnalysisResult* MonteCarloReliabilityAnalysisResult::clone() const
+MonteCarloReliabilityResult* MonteCarloReliabilityResult::clone() const
 {
-  return new MonteCarloReliabilityAnalysisResult(*this);
+  return new MonteCarloReliabilityResult(*this);
 }
 
 
-SimulationResult MonteCarloReliabilityAnalysisResult::getSimulationResult() const
+SimulationResult MonteCarloReliabilityResult::getSimulationResult() const
 {
   return simulationResult_;
 }
 
 
-NumericalSample MonteCarloReliabilityAnalysisResult::getOutputSample() const
+NumericalSample MonteCarloReliabilityResult::getOutputSample() const
 {
   return outputSample_;
 }
 
 
-NumericalSample MonteCarloReliabilityAnalysisResult::getConvergenceSample() const
+NumericalSample MonteCarloReliabilityResult::getConvergenceSample() const
 {
   return convergenceSample_;
 }
 
 
-NumericalSample MonteCarloReliabilityAnalysisResult::getConvergenceSampleLowerBound() const
+NumericalSample MonteCarloReliabilityResult::getConvergenceSampleLowerBound() const
 {
   return convergenceSampleLowerBound_;
 }
 
 
-NumericalSample MonteCarloReliabilityAnalysisResult::getConvergenceSampleUpperBound() const
+NumericalSample MonteCarloReliabilityResult::getConvergenceSampleUpperBound() const
 {
   return convergenceSampleUpperBound_;
 }
 
 
 /* Method save() stores the object through the StorageManager */
-void MonteCarloReliabilityAnalysisResult::save(Advocate& adv) const
+void MonteCarloReliabilityResult::save(Advocate& adv) const
 {
   PersistentObject::save(adv);
   adv.saveAttribute("simulationResult_", simulationResult_);
@@ -101,7 +101,7 @@ void MonteCarloReliabilityAnalysisResult::save(Advocate& adv) const
 
 
 /* Method load() reloads the object from the StorageManager */
-void MonteCarloReliabilityAnalysisResult::load(Advocate& adv)
+void MonteCarloReliabilityResult::load(Advocate& adv)
 {
   PersistentObject::load(adv);
   adv.loadAttribute("simulationResult_", simulationResult_);

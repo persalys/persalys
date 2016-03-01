@@ -23,7 +23,7 @@
 
 #include "ReliabilityAnalysis.hxx"
 #include "LimitState.hxx"
-#include "MonteCarloReliabilityAnalysisResult.hxx"
+#include "MonteCarloReliabilityResult.hxx"
 
 namespace OTGUI {
 class OTGUI_API MonteCarloReliabilityAnalysis : public ReliabilityAnalysis
@@ -52,7 +52,7 @@ public:
   OT::UnsignedInteger getSeed() const;
   void setSeed(const OT::UnsignedInteger seed);
 
-  MonteCarloReliabilityAnalysisResult getResult() const;
+  MonteCarloReliabilityResult getResult() const;
 
   virtual void run();
   virtual OT::String getPythonScript() const;
@@ -69,7 +69,7 @@ private:
   double maximumCoefficientOfVariation_;
   OT::UnsignedInteger blockSize_;
   OT::UnsignedInteger seed_;
-  MonteCarloReliabilityAnalysisResult result_;
+  MonteCarloReliabilityResult result_;
 };
 }
 #endif

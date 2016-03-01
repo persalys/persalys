@@ -85,7 +85,7 @@ void MonteCarloReliabilityAnalysis::run()
   // set results
   // get convergence graph at level 0.95
   Graph graph = algo.drawProbabilityConvergence();
-  result_ = MonteCarloReliabilityAnalysisResult(algo.getResult(),
+  result_ = MonteCarloReliabilityResult(algo.getResult(),
                                                 function.getHistoryOutput().getSample(),
                                                 graph.getDrawables()[0].getData(),
                                                 graph.getDrawables()[1].getData(),
@@ -144,7 +144,7 @@ void MonteCarloReliabilityAnalysis::setSeed(const UnsignedInteger seed)
 }
 
 
-MonteCarloReliabilityAnalysisResult MonteCarloReliabilityAnalysis::getResult() const
+MonteCarloReliabilityResult MonteCarloReliabilityAnalysis::getResult() const
 {
   return result_;
 }

@@ -23,7 +23,7 @@
 
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/AnalysisItem.hxx"
-#include "otgui/MonteCarloReliabilityAnalysisResult.hxx"
+#include "otgui/MonteCarloReliabilityResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 
 namespace OTGUI {
@@ -42,7 +42,7 @@ public slots:
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 
 private:
-  MonteCarloReliabilityAnalysisResult result_;
+  MonteCarloReliabilityResult result_;
   QTabWidget * tabWidget_;
   GraphConfigurationWidget * histogramConfigurationWidget_;
   GraphConfigurationWidget * convergenceGraphConfigurationWidget_;

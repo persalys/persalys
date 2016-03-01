@@ -80,7 +80,7 @@ Reliability analysis
     :template: class.rst_t
 
     MonteCarloReliabilityAnalysis
-    MonteCarloReliabilityAnalysisResult
+    MonteCarloReliabilityResult
 
 Design of experiment
 --------------------
