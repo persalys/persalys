@@ -121,4 +121,15 @@ operator : :class:`~openturns.ComparisonOperator`
 %feature("docstring") OTGUI::LimitStateImplementation::getOperator
 OTGUI_LimitState_getOperator_doc
 
+// ---------------------------------------------------------------------
 
+%define OTGUI_LimitState_isValid_doc
+"Whether it is valid.
+
+Returns
+-------
+isValid : bool
+    Whether it is valid"
+%enddef
+%feature("docstring") OTGUI::LimitStateImplementation::isValid
+OTGUI_LimitState_isValid_doc

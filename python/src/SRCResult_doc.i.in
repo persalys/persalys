@@ -1,3 +1,32 @@
 %feature("docstring") OTGUI::SRCResult
 "SRC sensitivity analysis results."
 
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SRCResult::getInputNames
+"Input variable names accessor.
+
+Returns
+-------
+sample : :class:`~openturns.Description`
+    Input variable names"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SRCResult::getOutputNames
+"Output variable names accessor.
+
+Returns
+-------
+sample : :class:`~openturns.Description`
+    Output variable names"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SRCResult::getIndices
+"SRC indices accessor.
+
+Returns
+-------
+indices : :class:`~openturns.NumericalPoint`
+    SRC indices"

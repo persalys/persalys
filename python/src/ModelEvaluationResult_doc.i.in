@@ -1,3 +1,22 @@
 %feature("docstring") OTGUI::ModelEvaluationResult
 "Model evaluation results."
 
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ModelEvaluationResult::getInputSample
+"Input sample accessor.
+
+Returns
+-------
+sample : :class:`~openturns.NumericalSample`
+    Input sample"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ModelEvaluationResult::getOutputSample
+"Output sample accessor.
+
+Returns
+-------
+sample : :class:`~openturns.NumericalSample`
+    Output sample"

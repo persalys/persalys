@@ -1,4 +1,52 @@
 %feature("docstring") OTGUI::SobolResult
 "Sobol' sensitivity analysis results."
 
+// ---------------------------------------------------------------------
 
+%feature("docstring") OTGUI::SobolResult::getInputNames
+"Input variable names accessor.
+
+Returns
+-------
+sample : :class:`~openturns.Description`
+    Input variable names"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SobolResult::getOutputNames
+"Output variable names accessor.
+
+Returns
+-------
+sample : :class:`~openturns.Description`
+    Output variable names"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SobolResult::getFirstOrderIndices
+"First order indices accessor.
+
+Returns
+-------
+indices : :class:`~openturns.NumericalSample`
+    First order indices"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SobolResult::getTotalOrderIndices
+"Total order indices accessor.
+
+Returns
+-------
+indices : :class:`~openturns.NumericalSample`
+    Total order indices"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SobolResult::getSecondOrderIndices
+"Second order indices accessor.
+
+Returns
+-------
+indices : collection of :class:`~openturns.SymmetricMatrix`
+    Second order indices"
