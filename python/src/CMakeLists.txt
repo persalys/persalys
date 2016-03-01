@@ -50,26 +50,26 @@ if (SalomeYACS_FOUND)
   list (APPEND SWIG_MODULE_otguibase_EXTRA_FLAGS -DOTGUI_HAVE_YACS=1)
 endif ()
 
-ot_add_python_module( otguibase otguibase_module.i 
+ot_add_python_module (otguibase otguibase_module.i 
                       Observer.i
                       Variable.i Variable_doc.i.in
                       Input.i Input_doc.i.in
                       Output.i Output_doc.i.in
                       PhysicalModelImplementation.i PhysicalModelImplementation_doc.i.in
                       AnalyticalPhysicalModel.i AnalyticalPhysicalModel_doc.i.in
-                      PythonPhysicalModel.i
+                      PythonPhysicalModel.i PythonPhysicalModel_doc.i.in
                       PhysicalModel.i PhysicalModel_doc.i.in
-                      YACSPhysicalModel.i
-                      LimitStateImplementation.i
+                      YACSPhysicalModel.i YACSPhysicalModel_doc.i.in
+                      LimitStateImplementation.i LimitStateImplementation_doc.i.in
                       LimitState.i LimitState_doc.i.in
-                      AnalysisImplementation.i
+                      AnalysisImplementation.i AnalysisImplementation_doc.i.in
                       Analysis.i Analysis_doc.i.in
-                      SimulationAnalysis.i
-                      ModelEvaluationResult.i
-                      ModelEvaluation.i
+                      SimulationAnalysis.i SimulationAnalysis_doc.i.in
+                      ModelEvaluationResult.i ModelEvaluationResult_doc.i.in
+                      ModelEvaluation.i ModelEvaluation_doc.i.in
                       SimulationAnalysisResult.i SimulationAnalysisResult_doc.i.in
-                      DesignOfExperimentImplementation.i
-                      DesignOfExperiment.i
+                      DesignOfExperimentImplementation.i DesignOfExperimentImplementation_doc.i.in
+                      DesignOfExperiment.i DesignOfExperiment_doc.i.in
                       MonteCarloResult.i MonteCarloResult_doc.i.in
                       MonteCarloAnalysis.i MonteCarloAnalysis_doc.i.in
                       TaylorExpansionsMomentsResult.i TaylorExpansionsMomentsResult_doc.i.in
@@ -78,9 +78,9 @@ ot_add_python_module( otguibase otguibase_module.i
                       SobolAnalysis.i SobolAnalysis_doc.i.in
                       SRCResult.i SRCResult_doc.i.in
                       SRCAnalysis.i SRCAnalysis_doc.i.in
-                      ReliabilityAnalysis.i
+                      ReliabilityAnalysis.i ReliabilityAnalysis_doc.i.in
                       MonteCarloReliabilityAnalysis.i MonteCarloReliabilityAnalysis_doc.i.in
-                      MonteCarloReliabilityAnalysisResult.i
+                      MonteCarloReliabilityAnalysisResult.i MonteCarloReliabilityAnalysisResult_doc.i.in
                       OTStudy.i OTStudy_doc.i.in
                     )
 

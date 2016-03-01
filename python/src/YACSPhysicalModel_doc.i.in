@@ -1,0 +1,2 @@
+%feature("docstring") OTGUI::YACSPhysicalModel
+"Physical model defined by a YACS schema."

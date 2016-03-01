@@ -4,7 +4,7 @@
 #include "otgui/DesignOfExperimentImplementation.hxx"
 %}
 
-
+%include DesignOfExperimentImplementation_doc.i
 
 %include otgui/DesignOfExperimentImplementation.hxx
 namespace OTGUI {

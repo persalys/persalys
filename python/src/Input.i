@@ -30,6 +30,8 @@ template <>
 }
 %}
 
+%include Input_doc.i
+
 %template(InputCollection) OT::Collection<OTGUI::Input>;
 
 

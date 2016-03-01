@@ -1,3 +1,4 @@
-//%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis
-// OTGUI_MonteCarloReliabilityAnalysis_doc
+%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis
+"Monte Carlo for reliability analysis."
+
 

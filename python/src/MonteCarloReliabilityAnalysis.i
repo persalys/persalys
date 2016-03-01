@@ -1,10 +1,10 @@
-// SWIG file
+// SWIG file MonteCarloReliabilityAnalysis.i
 
 %{
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
 %}
 
-
+%include MonteCarloReliabilityAnalysis_doc.i
 
 %include otgui/MonteCarloReliabilityAnalysis.hxx
 namespace OTGUI {

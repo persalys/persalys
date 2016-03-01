@@ -4,6 +4,8 @@
 #include "otgui/PhysicalModel.hxx"
 %}
 
+%include PhysicalModel_doc.i
+
 OTGUITypedInterfaceObjectHelper(PhysicalModel)
 
 %include otgui/PhysicalModel.hxx

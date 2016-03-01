@@ -1,10 +1,10 @@
-// SWIG file
+// SWIG file AnalysisImplementation.i
 
 %{
 #include "otgui/AnalysisImplementation.hxx"
 %}
 
-
+%include AnalysisImplementation_doc.i
 
 %include otgui/AnalysisImplementation.hxx
 namespace OTGUI {

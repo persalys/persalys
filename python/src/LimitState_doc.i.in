@@ -1,3 +1,13 @@
-//%feature("docstring") OTGUI::LimitState
-// OTGUI_LimitState_doc
+// LimitState docstrings are defined in LimitStateImplementation_doc.i.in
+
+%feature("docstring") OTGUI::LimitState
+OTGUI_LimitState_doc
+%feature("docstring") OTGUI::LimitState::setOutputName
+OTGUI_LimitState_setOutputName_doc
+%feature("docstring") OTGUI::LimitState::setOutputName
+OTGUI_LimitState_setOutputName_doc
+%feature("docstring") OTGUI::LimitState::setThreshold
+OTGUI_LimitState_setThreshold_doc
+%feature("docstring") OTGUI::LimitState::getThreshold
+OTGUI_LimitState_getThreshold_doc
 

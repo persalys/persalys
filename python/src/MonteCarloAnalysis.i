@@ -1,10 +1,10 @@
-// SWIG file
+// SWIG file MonteCarloAnalysis.i
 
 %{
 #include "otgui/MonteCarloAnalysis.hxx"
 %}
 
-
+%include MonteCarloAnalysis_doc.i
 
 %include otgui/MonteCarloAnalysis.hxx
 namespace OTGUI {

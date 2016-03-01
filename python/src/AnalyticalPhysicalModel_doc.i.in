@@ -1,3 +1,3 @@
-//%feature("docstring") OTGUI::AnalyticalPhysicalModel
-// OTGUI_AnalyticalPhysicalModel_doc
+%feature("docstring") OTGUI::AnalyticalPhysicalModel
+"Physical model defined by analytical formulas."
 

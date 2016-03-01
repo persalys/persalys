@@ -4,7 +4,7 @@
 #include "otgui/YACSPhysicalModel.hxx"
 %}
 
-
+%include YACSPhysicalModel_doc.i
 
 %include otgui/YACSPhysicalModel.hxx
 namespace OTGUI {

@@ -4,7 +4,7 @@
 #include "otgui/PythonPhysicalModel.hxx"
 %}
 
-
+%include PythonPhysicalModel_doc.i
 
 %include otgui/PythonPhysicalModel.hxx
 namespace OTGUI {

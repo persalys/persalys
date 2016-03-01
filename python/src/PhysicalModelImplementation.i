@@ -4,7 +4,7 @@
 #include "otgui/PhysicalModelImplementation.hxx"
 %}
 
-
+%include PhysicalModelImplementation_doc.i
 
 %include otgui/PhysicalModelImplementation.hxx
 namespace OTGUI {

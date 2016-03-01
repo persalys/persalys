@@ -4,6 +4,7 @@
 #include "otgui/SimulationAnalysis.hxx"
 %}
 
+%include SimulationAnalysis_doc.i
 
 %include otgui/SimulationAnalysis.hxx
 namespace OTGUI {

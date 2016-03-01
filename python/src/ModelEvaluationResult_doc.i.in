@@ -1,0 +1,3 @@
+%feature("docstring") OTGUI::ModelEvaluationResult
+"Model evaluation results."
+

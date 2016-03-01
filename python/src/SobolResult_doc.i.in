@@ -1,3 +1,4 @@
-//%feature("docstring") OTGUI::SobolResult
-// OTGUI_SobolResult_doc
+%feature("docstring") OTGUI::SobolResult
+"Sobol' sensitivity analysis results."
+
 

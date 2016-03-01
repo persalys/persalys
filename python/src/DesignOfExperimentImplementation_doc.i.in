@@ -1,0 +1,31 @@
+%define OTGUI_DesignOfExperiment_doc
+"Design of experiment base class."
+%enddef
+%feature("docstring") OTGUI::DesignOfExperimentImplementation
+OTGUI_DesignOfExperiment_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_DesignOfExperiment_getPhysicalModel_doc
+"Physical model accessor.
+
+Returns
+-------
+model : :class:`~otguibase.PhysicalModel`
+    Physical model"
+%enddef
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::getPhysicalModel
+OTGUI_DesignOfExperiment_getPhysicalModel_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_DesignOfExperiment_setPhysicalModel_doc
+"Physical model accessor.
+
+Parameters
+----------
+model : :class:`~otguibase.PhysicalModel`
+    Physical model"
+%enddef
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::setPhysicalModel
+OTGUI_DesignOfExperiment_setPhysicalModel_doc

@@ -1,5 +1,14 @@
 // PhysicalModel docstrings are defined in PhysicalModelImplementation_doc.i.in
 
-//%feature("docstring") OTGUI::PhysicalModel
-// OTGUI_PhysicalModel_doc
-
+%feature("docstring") OTGUI::PhysicalModel
+OTGUI_PhysicalModel_doc
+%feature("docstring") OTGUI::PhysicalModel::getOutputNames
+OTGUI_PhysicalModel_getOutputNames_doc
+%feature("docstring") OTGUI::PhysicalModel::addInput
+OTGUI_PhysicalModel_addInput_doc
+%feature("docstring") OTGUI::PhysicalModel::addOutput
+OTGUI_PhysicalModel_addOutput_doc
+%feature("docstring") OTGUI::PhysicalModel::getFunction
+OTGUI_PhysicalModel_getFunction_doc
+%feature("docstring") OTGUI::PhysicalModel::getPythonScript
+OTGUI_PhysicalModel_getPythonScript_doc

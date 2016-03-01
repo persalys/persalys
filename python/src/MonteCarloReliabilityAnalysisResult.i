@@ -4,6 +4,7 @@
 #include "otgui/MonteCarloReliabilityAnalysisResult.hxx"
 %}
 
+%include MonteCarloReliabilityAnalysisResult_doc.i
 
 %include otgui/MonteCarloReliabilityAnalysisResult.hxx
 namespace OTGUI {

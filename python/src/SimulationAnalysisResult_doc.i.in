@@ -1,3 +1,4 @@
-//%feature("docstring") OTGUI::SimulationAnalysisResult
-// OTGUI_SimulationAnalysisResult_doc
+%feature("docstring") OTGUI::SimulationAnalysisResult
+"Simulation reliability analysis result."
+
 

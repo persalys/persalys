@@ -1,3 +1,3 @@
-//%feature("docstring") OTGUI::MonteCarloAnalysis
-// OTGUI_MonteCarloAnalysis_doc
+%feature("docstring") OTGUI::MonteCarloAnalysis
+"Monte Carlo central tendency analysis."
 

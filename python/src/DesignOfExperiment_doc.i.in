@@ -1,0 +1,8 @@
+// DesignOfExperiment docstrings are defined in DesignOfExperimentImplementation_doc.i.in
+
+%feature("docstring") OTGUI::DesignOfExperiment
+OTGUI_DesignOfExperiment_doc
+%feature("docstring") OTGUI::DesignOfExperiment::getPhysicalModel
+OTGUI_DesignOfExperiment_getPhysicalModel_doc
+%feature("docstring") OTGUI::DesignOfExperiment::setPhysicalModel
+OTGUI_DesignOfExperiment_setPhysicalModel_doc

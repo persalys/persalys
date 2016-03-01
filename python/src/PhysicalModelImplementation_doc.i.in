@@ -1,3 +1,70 @@
-//%feature("docstring") OTGUI::PhysicalModelImplementation
-// OTGUI_PhysicalModelImplementation_doc
+%define OTGUI_PhysicalModel_doc
+"Physical model."
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation
+OTGUI_PhysicalModel_doc
 
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_getOutputNames_doc
+"Output variable names accessor.
+
+Returns
+-------
+names : :class:`~openturns.Description`
+    Ouput variable names"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getOutputNames
+OTGUI_PhysicalModel_getOutputNames_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_addInput_doc
+"Add an input variable.
+
+Parameters
+----------
+input : :class:`~otguibase.Input`
+    New variable"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::addInput
+OTGUI_PhysicalModel_addInput_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_addOutput_doc
+"Add an output variable.
+
+Parameters
+----------
+output : :class:`~otguibase.Output`
+    New variable"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::addOutput
+OTGUI_PhysicalModel_addOutput_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_getFunction_doc
+"Accessor to the underlying function.
+
+Returns
+-------
+function : :class:`~openturns.NumericalMathFunction`
+    New variable"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getFunction
+OTGUI_PhysicalModel_getFunction_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_getPythonScript_doc
+"Physical model accessor.
+
+Returns
+-------
+script : str
+    Python script to replay the calculus"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getPythonScript
+OTGUI_PhysicalModel_getPythonScript_doc

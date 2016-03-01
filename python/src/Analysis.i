@@ -1,8 +1,10 @@
-// SWIG file
+// SWIG file Analysis.i
 
 %{
 #include "otgui/Analysis.hxx"
 %}
+
+%include Analysis_doc.i
 
 OTGUITypedInterfaceObjectHelper(Analysis)
 

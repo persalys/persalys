@@ -4,6 +4,7 @@
 #include "otgui/ReliabilityAnalysis.hxx"
 %}
 
+%include ReliabilityAnalysis_doc.i
 
 %include otgui/ReliabilityAnalysis.hxx
 namespace OTGUI {

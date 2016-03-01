@@ -4,7 +4,7 @@
 #include "otgui/TaylorExpansionsMomentsAnalysis.hxx"
 %}
 
-
+%include TaylorExpansionsMomentsAnalysis_doc.i
 
 %include otgui/TaylorExpansionsMomentsAnalysis.hxx
 namespace OTGUI {

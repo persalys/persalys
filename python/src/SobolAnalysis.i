@@ -4,6 +4,7 @@
 #include "otgui/SobolAnalysis.hxx"
 %}
 
+%include SobolAnalysis_doc.i
 
 %include otgui/SobolAnalysis.hxx
 namespace OTGUI {

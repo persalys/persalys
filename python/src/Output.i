@@ -30,6 +30,8 @@ template <>
 }
 %}
 
+%include Output_doc.i
+
 %template(OutputCollection) OT::Collection<OTGUI::Output>;
 
 %include otgui/Output.hxx

@@ -1,0 +1,65 @@
+%define OTGUI_LimitState_doc
+"Limit-state definition."
+%enddef
+%feature("docstring") OTGUI::LimitStateImplementation
+OTGUI_LimitState_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_LimitState_setOutputName_doc
+"Interest variable name accessor.
+
+Parameters
+----------
+outputName : str
+    Interest variable name"
+%enddef
+%feature("docstring") OTGUI::LimitStateImplementation::setOutputName
+OTGUI_LimitState_setOutputName_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_LimitState_getOutputName_doc
+"Interest variable name accessor.
+
+Returns
+-------
+outputName : str
+    Interest variable name"
+%enddef
+%feature("docstring") OTGUI::LimitStateImplementation::getOutputName
+OTGUI_LimitState_getOutputName_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_LimitState_setThreshold_doc
+"Threshold value accessor.
+
+Parameters
+----------
+threshold : float
+    Threshold value"
+%enddef
+%feature("docstring") OTGUI::LimitStateImplementation::setThreshold
+OTGUI_LimitState_setThreshold_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_LimitState_getThreshold_doc
+"Threshold value accessor.
+
+Returns
+-------
+threshold : float
+    Threshold value"
+%enddef
+%feature("docstring") OTGUI::LimitStateImplementation::getThreshold
+OTGUI_LimitState_getThreshold_doc
+
+
+
+
+
+
+
+

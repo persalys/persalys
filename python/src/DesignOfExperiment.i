@@ -4,6 +4,8 @@
 #include "otgui/DesignOfExperiment.hxx"
 %}
 
+%include DesignOfExperiment_doc.i
+
 OTGUITypedInterfaceObjectHelper(DesignOfExperiment)
 
 %include otgui/DesignOfExperiment.hxx

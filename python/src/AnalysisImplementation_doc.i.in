@@ -1,0 +1,78 @@
+%define OTGUI_Analysis_doc
+"Analysis base class."
+%enddef
+%feature("docstring") OTGUI::AnalysisImplementation
+OTGUI_Analysis_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_Analysis_getPhysicalModel_doc
+"Physical model accessor.
+
+Returns
+-------
+model : :class:`~otguibase.PhysicalModel`
+    Physical model"
+%enddef
+%feature("docstring") OTGUI::AnalysisImplementation::getPhysicalModel
+OTGUI_Analysis_getPhysicalModel_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_Analysis_setPhysicalModel_doc
+"Physical model accessor.
+
+Parameters
+----------
+model : :class:`~otguibase.PhysicalModel`
+    Physical model"
+%enddef
+%feature("docstring") OTGUI::AnalysisImplementation::setPhysicalModel
+OTGUI_Analysis_setPhysicalModel_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_Analysis_getPythonScript_doc
+"Physical model accessor.
+
+Returns
+-------
+script : str
+    Python script to replay the calculus"
+%enddef
+%feature("docstring") OTGUI::AnalysisImplementation::getPythonScript
+OTGUI_Analysis_getPythonScript_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_Analysis_isReliabilityAnalysis_doc
+"Whether the analysis involves reliability.
+
+Returns
+-------
+isReliabilityAnalysis : bool
+    Whether the analysis involves a reliability calculus"
+%enddef
+%feature("docstring") OTGUI::AnalysisImplementation::isReliabilityAnalysis
+OTGUI_Analysis_isReliabilityAnalysis_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_Analysis_run_doc
+"Launch the analysis."
+%enddef
+%feature("docstring") OTGUI::AnalysisImplementation::run
+OTGUI_Analysis_run_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_Analysis_analysisLaunched_doc
+"Whether the analysis has been run.
+
+Returns
+-------
+analysisLaunched : bool
+    Whether the analysis has already been run"
+%enddef
+%feature("docstring") OTGUI::AnalysisImplementation::analysisLaunched
+OTGUI_Analysis_analysisLaunched_doc

@@ -4,7 +4,7 @@
 #include "otgui/AnalyticalPhysicalModel.hxx"
 %}
 
-
+%include AnalyticalPhysicalModel_doc.i
 
 %include otgui/AnalyticalPhysicalModel.hxx
 namespace OTGUI {

@@ -1,0 +1,14 @@
+%feature("docstring") OTGUI::ReliabilityAnalysis
+"Reliability analysis base class.
+
+The base class for analysis involving a :class:`~otguibase.LimitState`."
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ReliabilityAnalysis::getLimitState
+"Limit-state accessor.
+
+Returns
+-------
+limitState : :class:`~otguibase.LimitState`
+    The Limit-state."

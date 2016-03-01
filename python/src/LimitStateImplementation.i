@@ -4,7 +4,7 @@
 #include "otgui/LimitStateImplementation.hxx"
 %}
 
-
+%include LimitStateImplementation_doc.i
 
 %include otgui/LimitStateImplementation.hxx
 namespace OTGUI {

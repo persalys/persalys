@@ -4,6 +4,7 @@
 #include "otgui/ModelEvaluation.hxx"
 %}
 
+%include ModelEvaluation_doc.i
 
 %include otgui/ModelEvaluation.hxx
 namespace OTGUI {
