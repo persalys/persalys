@@ -27,7 +27,7 @@ The obtained results must be equal to the analytical values.
 1-1 Inputs
 ''''''''''
 
-- Stochastics variables:
+- Stochastic variables:
 
 ====== ======================== ==================
  Name  Description              Distribution
@@ -139,7 +139,7 @@ This test-case originates from [ProtoOTGUI2014]_ and can be found in python/test
 1-1 Inputs
 ''''''''''
 
-- Stochastics variables:
+- Stochastic variables:
 
 ====== ======================== ===================================
  Name  Description              Distribution
@@ -190,7 +190,7 @@ Block size                       1
 =================== ======================== =============================================
 Failure probability Coefficient of variation Confidence interval at 95%
 =================== ======================== =============================================
-0.0006              0.408126                 :math:`\left[0.000120053; 0.00107995]\right]`
+0.0006              0.408126                 :math:`\left[0.000120053; 0.00107995\right]`
 =================== ======================== =============================================
 
 3-1-1 Figures
@@ -226,7 +226,7 @@ Failure probability Coefficient of variation Confidence interval at 95%
 .. 1-1 Inputs
 .. ''''''''''
 
-.. - Stochastics variables:
+.. - Stochastic variables:
 
 .. ====== =========================== =================
 .. Name   Description                 Distribution
