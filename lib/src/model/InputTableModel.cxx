@@ -71,9 +71,9 @@ QVariant InputTableModel::data(const QModelIndex & index, int role) const
     switch (index.column())
     {
       case 0:
-        return physicalModel_.getInputs()[index.row()].getName().c_str();
+        return QString::fromLocal8Bit(physicalModel_.getInputs()[index.row()].getName().c_str());
       case 1:
-        return physicalModel_.getInputs()[index.row()].getDescription().c_str();
+        return QString::fromLocal8Bit(physicalModel_.getInputs()[index.row()].getDescription().c_str());
       case 2:
         return physicalModel_.getInputs()[index.row()].getValue();
     }
@@ -95,7 +95,7 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
     {
       case 0:
       {
-        if (input.getName() == value.toString().toStdString())
+        if (input.getName() == value.toString().toLocal8Bit().data())
           return true;
         if (value.toString().isEmpty())
           return false;
@@ -103,7 +103,7 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
         emit errorMessageChanged("");
         try
         {
-          physicalModel_.setInputName(input.getName(), value.toString().toStdString());
+          physicalModel_.setInputName(input.getName(), value.toString().toLocal8Bit().data());
         }
         catch (std::exception & ex)
         {
@@ -113,11 +113,11 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
       }
       case 1:
       {
-        if (input.getDescription() == value.toString().toStdString())
+        if (input.getDescription() == value.toString().toLocal8Bit().data())
           return true;
         physicalModel_.blockNotification(true);
         emit errorMessageChanged("");
-        physicalModel_.setInputDescription(input.getName(), value.toString().toStdString());
+        physicalModel_.setInputDescription(input.getName(), value.toString().toLocal8Bit().data());
         break;
       }
       case 2:

@@ -453,7 +453,7 @@ void OTStudy::remove(const LimitState & limitState)
     {
       if (limitStates_[i].getImplementation().get()->getObservers().size())
           limitStates_[i].getPhysicalModel().getImplementation().get()->removeObserver(limitStates_[i].getImplementation().get()->getObservers()[0]);
-        
+
       limitStates_.erase(limitStates_.begin() + i);
       break;
     }
@@ -466,7 +466,7 @@ String OTStudy::getPythonScript()
 {
   String result;
 
-  result += "#!/usr/bin/env python\n\nfrom __future__ import print_function\nimport openturns as ot\nimport otguibase\n\n";
+  result += "#!/usr/bin/env python\n# coding: utf-8\n\nfrom __future__ import print_function\nimport openturns as ot\nimport otguibase\n\n";
 
   result += getName() + " = otguibase.OTStudy('" + getName() + "')\n";
   result += "otguibase.OTStudy.Add(" + getName() + ")\n";

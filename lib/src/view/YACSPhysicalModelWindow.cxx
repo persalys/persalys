@@ -49,7 +49,7 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelItem * item)
   fieldsLayout->addWidget(new QLabel("Data file"));
 
   XMLfileNameEdit_ = new QLineEdit;
-  XMLfileNameEdit_->setText(dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getXMLFileName().c_str());
+  XMLfileNameEdit_->setText(QString::fromLocal8Bit(dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getXMLFileName().c_str()));
   fieldsLayout->addWidget(XMLfileNameEdit_);
 
   QPushButton * selectFileButton = new QPushButton(tr("Search file"));
@@ -89,7 +89,6 @@ void YACSPhysicalModelWindow::selectImportFileDialogRequested()
     // check
     if (!file.open(QFile::ReadOnly))
     {
-      std::cout << "cannot open" << file.fileName().toStdString() << std::endl;
       QMessageBox::warning(this, tr("Warning"),
                            tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
     }
@@ -98,7 +97,7 @@ void YACSPhysicalModelWindow::selectImportFileDialogRequested()
       XMLfileNameEdit_->setText(fileName);
       try
       {
-        dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->setXMLFileName(fileName.toStdString());
+        dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->setXMLFileName(fileName.toLocal8Bit().data());
         setErrorMessage("");
       }
       catch (std::exception & ex)

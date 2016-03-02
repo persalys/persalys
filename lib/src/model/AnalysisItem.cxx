@@ -26,18 +26,18 @@ namespace OTGUI {
 
 AnalysisItem::AnalysisItem(const Analysis & analysis, const String & typeAnalysis)
   : QObject()
-  , QStandardItem(analysis.getName().c_str())
+  , QStandardItem(QString::fromLocal8Bit(analysis.getName().c_str()))
   , Observer()
   , analysis_(analysis)
 {
-  setData(typeAnalysis.c_str(), Qt::UserRole);
+  setData(QString::fromLocal8Bit(typeAnalysis.c_str()), Qt::UserRole);
 }
 
 
 void AnalysisItem::setData(const QVariant & value, int role)
 {
   if (role == Qt::EditRole)
-    analysis_.getImplementation()->setName(value.toString().toStdString());
+    analysis_.getImplementation()->setName(value.toString().toLocal8Bit().data());
 
   QStandardItem::setData(value, role);
 }
@@ -53,7 +53,7 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
 {
   analysis_ = analysis;
   analysis_.addObserver(this);
-  setData(analysis.getImplementation()->getClassName().c_str(), Qt::UserRole);
+  setData(QString::fromLocal8Bit(analysis.getImplementation()->getClassName().c_str()), Qt::UserRole);
   emit analysisChanged(analysis_);
 }
 

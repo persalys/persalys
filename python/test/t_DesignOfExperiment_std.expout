@@ -15,6 +15,7 @@ outs=     [ Y0        ]
 8 : [   3.26745 ]
 9 : [  -5.27323 ]
 #!/usr/bin/env python
+# coding: utf-8
 
 from __future__ import print_function
 import openturns as ot

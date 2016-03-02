@@ -120,12 +120,12 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   NumericalSample variableInputsSample = designOfExperiment_.getInputSample().getMarginal(ind);
   QStringList inputNames;
   for (int i=0; i<nbInputs; ++i)
-    inputNames << variableInputsSample.getDescription()[i].c_str();
+    inputNames << QString::fromLocal8Bit(variableInputsSample.getDescription()[i].c_str());
 
   int nbOutputs = designOfExperiment_.getResult().getOutputSample().getDimension();
   QStringList outputNames;
   for (int i=0; i<nbOutputs; ++i)
-    outputNames << designOfExperiment_.getResult().getOutputSample().getDescription()[i].c_str();
+    outputNames << QString::fromLocal8Bit(designOfExperiment_.getResult().getOutputSample().getDescription()[i].c_str());
 
   // first tab --------------------------------
   QWidget * tab = new QWidget;
@@ -198,16 +198,16 @@ void DesignOfExperimentWindow::addTabsForOutputs()
     {
       PlotWidget * plot = new PlotWidget;
       plot->plotScatter(variableInputsSample.getMarginal(j), designOfExperiment_.getResult().getOutputSample().getMarginal(i));
-      plot->setTitle(tr("Scatter plot: ") + outputs[i].getName().c_str() + tr(" vs ") + inputNames[j]);
+      plot->setTitle(tr("Scatter plot: ") + QString::fromLocal8Bit(outputs[i].getName().c_str()) + tr(" vs ") + inputNames[j]);
       String inputDescription = designOfExperiment_.getPhysicalModel().getInputByName(inputNames[j].toStdString()).getDescription();
       if (!inputDescription.empty())
-        plot->setAxisTitle(QwtPlot::xBottom, inputDescription.c_str());
+        plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(inputDescription.c_str()));
       else
         plot->setAxisTitle(QwtPlot::xBottom, inputNames[j]);
       if (outputs[i].getDescription().size())
-        plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getDescription().c_str());
+        plot->setAxisTitle(QwtPlot::yLeft, QString::fromLocal8Bit(outputs[i].getDescription().c_str()));
       else
-        plot->setAxisTitle(QwtPlot::yLeft, outputs[i].getName().c_str());
+        plot->setAxisTitle(QwtPlot::yLeft, QString::fromLocal8Bit(outputs[i].getName().c_str()));
       plotLayout->addWidget(plot);
       listScatterPlotWidgets.append(plot);
     }
@@ -218,12 +218,12 @@ void DesignOfExperimentWindow::addTabsForOutputs()
       plot->setTitle(tr("Scatter plot: ") + inputNames[i] + tr(" vs ") + inputNames[j]);
       String inputDescription = designOfExperiment_.getPhysicalModel().getInputByName(inputNames[j].toStdString()).getDescription();
       if (!inputDescription.empty())
-        plot->setAxisTitle(QwtPlot::xBottom, inputDescription.c_str());
+        plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(inputDescription.c_str()));
       else
         plot->setAxisTitle(QwtPlot::xBottom, inputNames[j]);
       inputDescription = designOfExperiment_.getPhysicalModel().getInputByName(inputNames[i].toStdString()).getDescription();
       if (!inputDescription.empty())
-        plot->setAxisTitle(QwtPlot::yLeft, inputDescription.c_str());
+        plot->setAxisTitle(QwtPlot::yLeft, QString::fromLocal8Bit(inputDescription.c_str()));
       else
         plot->setAxisTitle(QwtPlot::yLeft, inputNames[i]);
       plotLayout->addWidget(plot);
@@ -255,7 +255,7 @@ void DesignOfExperimentWindow::addTabsForOutputs()
 void DesignOfExperimentWindow::updateLabelsText(int indexOutput)
 {
   // minMaxTable_
-  QTableWidgetItem * item = new QTableWidgetItem(designOfExperiment_.getResult().getOutputSample().getDescription()[indexOutput].c_str());
+  QTableWidgetItem * item = new QTableWidgetItem(QString::fromLocal8Bit(designOfExperiment_.getResult().getOutputSample().getDescription()[indexOutput].c_str()));
   item->setFlags(item->flags() ^ Qt::ItemIsEditable);
   minMaxTable_->setItem(0, 1, item);
 

@@ -94,7 +94,6 @@ String PythonPhysicalModel::getPythonScript() const
     result += getOutputs()[i].getPythonScript();
 
   result += getName() + " = otguibase.PythonPhysicalModel('" + getName() + "')\n";
-  result += getName() + ".enableCache()\n";
 
   for (UnsignedInteger i = 0; i < getInputs().getSize(); ++ i)
     result += getName() + ".addInput(" + getInputs()[i].getName() + ")\n";

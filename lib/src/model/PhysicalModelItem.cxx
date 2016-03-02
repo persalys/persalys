@@ -27,7 +27,7 @@ namespace OTGUI {
 
 PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel)
   : QObject()
-  , QStandardItem(physicalModel.getName().c_str())
+  , QStandardItem(QString::fromLocal8Bit(physicalModel.getName().c_str()))
   , Observer()
   , physicalModel_(physicalModel)
 {
@@ -38,7 +38,7 @@ PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel)
 void PhysicalModelItem::setData(const QVariant & value, int role)
 {
   if (role == Qt::EditRole)
-    physicalModel_.getImplementation()->setName(value.toString().toStdString());
+    physicalModel_.getImplementation()->setName(value.toString().toLocal8Bit().data());
 
   QStandardItem::setData(value, role);
 }

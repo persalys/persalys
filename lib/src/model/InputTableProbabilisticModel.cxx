@@ -103,7 +103,7 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
     switch (index.column())
     {
       case 0:
-        return inputName.c_str();
+        return QString::fromLocal8Bit(inputName.c_str());
       case 1:
       {
         Input input = getPhysicalModel().getInputByName(inputName);
@@ -164,7 +164,7 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
     else if (distributionName == "TruncatedDistribution")
     {
       TruncatedDistribution * dist = dynamic_cast<TruncatedDistribution*>(&*input.getDistribution().getImplementation());
-      distributionName = dist->getDistribution().getImplementation()->getClassName().c_str();
+      distributionName = dist->getDistribution().getImplementation()->getClassName();
     }
 
     if (value.toString().toStdString() != distributionName)

@@ -51,7 +51,7 @@ QVariant CodeModel::data(const QModelIndex & index, int role) const
   if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
     PythonPhysicalModel *pyModel =  dynamic_cast<PythonPhysicalModel*>(&*physicalModel_.getImplementation().get());
-    return pyModel? pyModel->getCode().c_str() : "";
+    return pyModel? QString::fromLocal8Bit(pyModel->getCode().c_str()) : "";
   }
   return QVariant();
 }
@@ -65,7 +65,7 @@ bool CodeModel::setData(const QModelIndex & index, const QVariant & value, int r
   if (role == Qt::EditRole)
   {
     physicalModel_.blockNotification(true);
-    dynamic_cast<PythonPhysicalModel*>(&*physicalModel_.getImplementation().get())->setCode(value.toString().toStdString());
+    dynamic_cast<PythonPhysicalModel*>(&*physicalModel_.getImplementation().get())->setCode(value.toString().toLocal8Bit().data());
     physicalModel_.blockNotification(false);
     emit dataChanged(index, index);
     return true;

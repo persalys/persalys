@@ -707,7 +707,7 @@ void StudyTreeView::exportPython()
     else
     {
       QTextStream out(&file);
-      out << item->getOTStudy()->getPythonScript().c_str();
+      out << QString::fromLocal8Bit(item->getOTStudy()->getPythonScript().c_str()).toUtf8();
       file.setPermissions(QFile::ReadUser|QFile::WriteUser|QFile::ExeUser|QFile::ReadGroup|QFile::ExeGroup|QFile::ReadOther|QFile::ExeOther);
       file.close();
     }
@@ -747,7 +747,7 @@ bool StudyTreeView::saveOTStudy()
 {
   OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
 
-  if (QFileInfo(item->getOTStudy()->getFileName().c_str()).exists())
+  if (QFileInfo(QString::fromLocal8Bit(item->getOTStudy()->getFileName().c_str())).exists())
   {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     item->getOTStudy()->save(item->getOTStudy()->getFileName());
@@ -863,7 +863,7 @@ void StudyTreeView::openOTStudy(const QString & fileName)
 bool StudyTreeView::closeOTStudy()
 {
   OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
-  if (QFileInfo(item->getOTStudy()->getFileName().c_str()).exists())
+  if (QFileInfo(QString::fromLocal8Bit(item->getOTStudy()->getFileName().c_str())).exists())
   {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     item->getOTStudy()->save(item->getOTStudy()->getFileName());

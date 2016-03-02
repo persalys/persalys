@@ -26,7 +26,7 @@ namespace OTGUI {
 
 DesignOfExperimentItem::DesignOfExperimentItem(const DesignOfExperiment & designOfExperiment)
   : QObject()
-  , QStandardItem(designOfExperiment.getName().c_str())
+  , QStandardItem(QString::fromLocal8Bit(designOfExperiment.getName().c_str()))
   , Observer()
   , designOfExperiment_(designOfExperiment)
 {
@@ -37,7 +37,7 @@ DesignOfExperimentItem::DesignOfExperimentItem(const DesignOfExperiment & design
 void DesignOfExperimentItem::setData(const QVariant & value, int role)
 {
   if (role == Qt::EditRole)
-    designOfExperiment_.getImplementation()->setName(value.toString().toStdString());
+    designOfExperiment_.getImplementation()->setName(value.toString().toLocal8Bit().data());
 
   QStandardItem::setData(value, role);
 }

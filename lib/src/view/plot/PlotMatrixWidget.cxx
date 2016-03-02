@@ -40,8 +40,8 @@ namespace OTGUI {
 
 PlotMatrixWidget::PlotMatrixWidget(const OT::NumericalSample & inputSample, const OT::NumericalSample & outputSample, QWidget* parent)
   : QWidget(parent)
-  , inputNames_(QStringList())
-  , outputNames_(QStringList())
+  , inputNames_()
+  , outputNames_()
 {
   int nbInputs = inputSample.getDimension();
   int nbOutputs = outputSample.getDimension();
@@ -50,9 +50,9 @@ PlotMatrixWidget::PlotMatrixWidget(const OT::NumericalSample & inputSample, cons
     isPlotMatrixXX = false;
 
   for (int i=0; i<nbInputs; ++i)
-    inputNames_ << inputSample.getDescription()[i].c_str();
+    inputNames_ << QString::fromLocal8Bit(inputSample.getDescription()[i].c_str());
   for (int i=0; i<nbOutputs; ++i)
-    outputNames_ << outputSample.getDescription()[i].c_str();
+    outputNames_ << QString::fromLocal8Bit(outputSample.getDescription()[i].c_str());
 
   QVBoxLayout * plotMatrixLayout = new QVBoxLayout(this);
 

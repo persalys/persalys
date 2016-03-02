@@ -57,7 +57,7 @@ int OTguiTableModel::rowCount(const QModelIndex & parent) const
 QVariant OTguiTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-    return QVariant(data_.getDescription()[section].c_str());
+    return QString::fromLocal8Bit(data_.getDescription()[section].c_str());
 
   return QAbstractTableModel::headerData(section, orientation, role);
 }

@@ -26,7 +26,7 @@ namespace OTGUI {
 
 LimitStateItem::LimitStateItem(const LimitState & limitState)
   : QObject()
-  , QStandardItem(limitState.getName().c_str())
+  , QStandardItem(QString::fromLocal8Bit(limitState.getName().c_str()))
   , Observer()
   , limitState_(limitState)
 {
@@ -37,7 +37,7 @@ LimitStateItem::LimitStateItem(const LimitState & limitState)
 void LimitStateItem::setData(const QVariant & value, int role)
 {
   if (role == Qt::EditRole)
-    limitState_.getImplementation()->setName(value.toString().toStdString());
+    limitState_.getImplementation()->setName(value.toString().toLocal8Bit().data());
 
   QStandardItem::setData(value, role);
 }

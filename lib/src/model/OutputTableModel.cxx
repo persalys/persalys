@@ -73,11 +73,11 @@ QVariant OutputTableModel::data(const QModelIndex & index, int role) const
     switch (index.column())
     {
       case 0:
-        return physicalModel_.getOutputs()[index.row()].getName().c_str();
+        return QString::fromLocal8Bit(physicalModel_.getOutputs()[index.row()].getName().c_str());
       case 1:
-        return physicalModel_.getOutputs()[index.row()].getDescription().c_str();
+        return QString::fromLocal8Bit(physicalModel_.getOutputs()[index.row()].getDescription().c_str());
       case 2:
-        return physicalModel_.getOutputs()[index.row()].getFormula().c_str();
+        return QString::fromLocal8Bit(physicalModel_.getOutputs()[index.row()].getFormula().c_str());
       case 3:
       {
         if (!physicalModel_.getOutputs()[index.row()].hasBeenComputed())
@@ -103,7 +103,7 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
     {
       case 0:
       {
-        if (output.getName() == value.toString().toStdString())
+        if (output.getName() == value.toString().toLocal8Bit().data())
           return true;
         if (value.toString().isEmpty())
           return false;
@@ -111,7 +111,7 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
         emit errorMessageChanged("");
         try
         {
-          physicalModel_.setOutputName(output.getName(), value.toString().toStdString());
+          physicalModel_.setOutputName(output.getName(), value.toString().toLocal8Bit().data());
         }
         catch (std::exception & ex)
         {
@@ -121,21 +121,21 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
       }
       case 1:
       {
-        if (output.getDescription() == value.toString().toStdString())
+        if (output.getDescription() == value.toString().toLocal8Bit().data())
           return true;
         physicalModel_.blockNotification(true);
         emit errorMessageChanged("");
-        physicalModel_.setOutputDescription(output.getName(), value.toString().toStdString());
+        physicalModel_.setOutputDescription(output.getName(), value.toString().toLocal8Bit().data());
         break;
       }
       case 2:
       {
-        if (output.getFormula() == value.toString().toStdString())
+        if (output.getFormula() == value.toString().toLocal8Bit().data())
           return true;
         // TODO test if value.toString() ok
         physicalModel_.blockNotification(true);
         emit errorMessageChanged("");
-        physicalModel_.setOutputFormula(output.getName(), value.toString().toStdString());
+        physicalModel_.setOutputFormula(output.getName(), value.toString().toLocal8Bit().data());
         break;
       }
     }

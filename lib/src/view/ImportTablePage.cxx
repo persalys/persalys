@@ -59,7 +59,7 @@ void ImportTablePage::buildInterface()
   hboxLayout->addWidget(label);
 
   filePathLineEdit_ = new QLineEdit;
-  filePathLineEdit_->setText(designOfExperiment_.getFileName().c_str());
+  filePathLineEdit_->setText(QString::fromLocal8Bit(designOfExperiment_.getFileName().c_str()));
   hboxLayout->addWidget(filePathLineEdit_);
 
   QPushButton * openFileButton = new QPushButton(tr("Open"));
@@ -132,7 +132,7 @@ void ImportTablePage::loadFile()
 
   QStringList comboBoxItems;
   for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
-    comboBoxItems << inputNames[i].c_str();
+    comboBoxItems << QString::fromLocal8Bit(inputNames[i].c_str());
   comboBoxItems << "";
 
   QVector<int> columnsWithCombo(dataPreviewTableView_->model()->columnCount());
@@ -162,7 +162,6 @@ void ImportTablePage::openFileRequested()
     // check
     if (!file.open(QFile::WriteOnly))
     {
-      std::cout << "cannot open" << file.fileName().toStdString() << std::endl;
       QMessageBox::warning(this, tr("Warning"),
                            tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
     }
@@ -171,7 +170,7 @@ void ImportTablePage::openFileRequested()
       filePathLineEdit_->setText(fileName);
       try
       {
-        designOfExperiment_.setFileName(filePathLineEdit_->text().toStdString());
+        designOfExperiment_.setFileName(filePathLineEdit_->text().toLocal8Bit().data());
         loadFile();
         pageValidity_ = true;
       }

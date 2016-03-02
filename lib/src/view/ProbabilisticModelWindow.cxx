@@ -392,12 +392,12 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
     selectParametersTypeCombo_ = new QComboBox;
     for (UnsignedInteger i=0; i<parameters.getSize(); ++i)
     {
-      QStringList paramatersNamesList;
+      QStringList parametersNamesList;
       for (UnsignedInteger j=0; j<parameters[i].getDescription().getSize(); ++j)
       {
-        paramatersNamesList << parameters[i].getDescription()[j].c_str();
+        parametersNamesList << QString::fromLocal8Bit(parameters[i].getDescription()[j].c_str());
       }
-      selectParametersTypeCombo_->addItem(paramatersNamesList.join(", "));
+      selectParametersTypeCombo_->addItem(parametersNamesList.join(", "));
     }
     selectParametersTypeCombo_->setCurrentIndex(parametersType);
     connect(selectParametersTypeCombo_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTypeDistributionParameters(int)));
@@ -461,9 +461,9 @@ void ProbabilisticModelWindow::updatePlots()
   pdfPlot_->clear();
   cdfPlot_->clear();
   pdfPlot_->plotPDFCurve(input.getDistribution());
-  pdfPlot_->setAxisTitle(QwtPlot::xBottom, input.getName().c_str());
+  pdfPlot_->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(input.getName().c_str()));
   cdfPlot_->plotCDFCurve(input.getDistribution());
-  pdfPlot_->setAxisTitle(QwtPlot::xBottom, input.getName().c_str());
+  pdfPlot_->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(input.getName().c_str()));
 }
 
 

@@ -138,9 +138,9 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
       switch (index.column())
       {
         case 0:
-          return designOfExperiment_.getPhysicalModel().getInputs()[indexInput].getName().c_str();
+          return QString::fromLocal8Bit(designOfExperiment_.getPhysicalModel().getInputs()[indexInput].getName().c_str());
         case 1:
-          return designOfExperiment_.getPhysicalModel().getInputs()[indexInput].getDescription().c_str();
+          return QString::fromLocal8Bit(designOfExperiment_.getPhysicalModel().getInputs()[indexInput].getDescription().c_str());
         case 2:
           return designOfExperiment_.getValues()[indexInput];
         case 3:
