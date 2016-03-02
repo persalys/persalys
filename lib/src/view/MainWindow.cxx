@@ -62,7 +62,7 @@ void MainWindow::buildInterface()
   leftSideSplitter->setStretchFactor(1, 2);
 
   mainSplitter->addWidget(leftSideSplitter);
-  mainSplitter->setStretchFactor(0, 4);
+  mainSplitter->setStretchFactor(0, 0);
 
   // right side of the mainSplitter
   QSplitter * rightSideSplitter = new QSplitter(Qt::Vertical);
@@ -85,7 +85,7 @@ void MainWindow::buildInterface()
   rightSideSplitter->setStretchFactor(1, 1);
 
   mainSplitter->addWidget(rightSideSplitter);
-  mainSplitter->setStretchFactor(1, 4);
+  mainSplitter->setStretchFactor(1, 3);
   setCentralWidget(mainSplitter);
 
   // menu bar
