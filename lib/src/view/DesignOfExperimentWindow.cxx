@@ -151,8 +151,9 @@ void DesignOfExperimentWindow::addTabsForOutputs()
 
   // min/max table
   QGroupBox * minMaxGroupBox = new QGroupBox(tr("Minimum and Maximum"));
+  UnsignedInteger totalNbInputs = designOfExperiment_.getInputSample().getDimension();
   QVBoxLayout * minMaxVbox = new QVBoxLayout(minMaxGroupBox);
-  minMaxTable_ = new QTableWidget(nbInputs+1, 4);
+  minMaxTable_ = new QTableWidget(totalNbInputs+1, 4);
   minMaxTable_->setHorizontalHeaderLabels(QStringList() << tr("") << tr("Variable") << tr("Minimum") << tr("Maximum"));
   minMaxTable_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   minMaxTable_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -164,16 +165,19 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   item->setFlags(item->flags() ^ Qt::ItemIsEditable);
   item->setBackgroundColor(minMaxTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
   minMaxTable_->setItem(0, 0, item);
-  item = new QTableWidgetItem(tr("Inputs"));
+  QString rowTitle = tr("Inputs");
+  if (totalNbInputs == 1)
+    rowTitle = tr("Input");
+  item = new QTableWidgetItem(rowTitle);
   item->setFlags(item->flags() ^ Qt::ItemIsEditable);
   item->setBackgroundColor(minMaxTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
-  minMaxTable_->setSpan(1, 0, nbInputs, 1);
+  minMaxTable_->setSpan(1, 0, totalNbInputs, 1);
   minMaxTable_->setItem(1, 0, item);
   minMaxTable_->resizeColumnToContents(0);
 
-  for (int i=0; i<nbInputs; ++i)
+  for (UnsignedInteger i=0; i<totalNbInputs; ++i)
   {
-    item = new QTableWidgetItem(inputNames[i]);
+    item = new QTableWidgetItem(QString::fromLocal8Bit(designOfExperiment_.getInputSample().getDescription()[i].c_str()));
     item->setFlags(item->flags() ^ Qt::ItemIsEditable);
     minMaxTable_->setItem(i+1, 1, item);
   }
