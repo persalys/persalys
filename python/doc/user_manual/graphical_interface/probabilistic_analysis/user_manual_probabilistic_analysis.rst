@@ -1,5 +1,5 @@
 ====================================
-User manual - Probabilistic analysis
+User manual - Probabilistic analyses
 ====================================
 
 1- Probabilistic study

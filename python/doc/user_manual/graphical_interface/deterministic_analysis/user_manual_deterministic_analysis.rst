@@ -118,10 +118,9 @@ of the design of experiment.
       :align: center
 
   The user can define:
-
-  - The Title of the graph, expected to be a string;
-  - The variable plotted on the X-axis, by default the first input;
-  - The variable plotted on the Y-axis, by default the first output.
+    - The Title of the graph, expected to be a string;
+    - The variable plotted on the X-axis, by default the first input;
+    - The variable plotted on the Y-axis, by default the first output.
 
   It has two tabs, **X-axis** and **Y-axis** where the user can define:
     - The axis Title, expected to be a string;
@@ -144,10 +143,9 @@ of the design of experiment.
       :align: center
 
   The user can define:
-
-  - The Title of the graph, expected to be a string;
-  - The variable plotted on the columns, by default all the input variables;
-  - The variable plotted on the rows, by default all the output variables.
+    - The Title of the graph, expected to be a string;
+    - The variable plotted on the columns, by default all the input variables;
+    - The variable plotted on the rows, by default all the output variables.
 
   The **Export** button opens a dialog box for the user to select where the
   figure has to be saved.
@@ -165,10 +163,9 @@ of the design of experiment.
       :align: center
 
   The user can define:
-
-  - The Title of the graph, expected to be a string;
-  - The variable plotted on the columns, by default all the input variables;
-  - The variable plotted on the rows, by default all the output variables.
+    - The Title of the graph, expected to be a string;
+    - The variable plotted on the columns, by default all the input variables;
+    - The variable plotted on the rows, by default all the output variables.
 
   The **Export** button opens a dialog box for the user to select where the
   figure has to be saved.

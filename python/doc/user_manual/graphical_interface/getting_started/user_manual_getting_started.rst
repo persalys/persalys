@@ -38,7 +38,7 @@ windows (model definition or result window) open, surrounded by:
       :align: center
 
 
-- The graphic configuration (below the study tree) which is shown when figures are displayed.
+- The graphic settings (below the study tree) which is shown when figures are displayed.
 
   .. image:: /user_manual/graphical_interface/getting_started/graphicConfiguration.png
       :align: center
