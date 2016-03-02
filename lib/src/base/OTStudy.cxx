@@ -466,7 +466,7 @@ String OTStudy::getPythonScript()
 {
   String result;
 
-  result += "#! /usr/bin/env python\n\nfrom __future__ import print_function\nimport openturns as ot\nimport otguibase\n\n";
+  result += "#!/usr/bin/env python\n\nfrom __future__ import print_function\nimport openturns as ot\nimport otguibase\n\n";
 
   result += getName() + " = otguibase.OTStudy('" + getName() + "')\n";
   result += "otguibase.OTStudy.Add(" + getName() + ")\n";
