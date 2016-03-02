@@ -112,12 +112,13 @@ of the design of experiment.
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentScatter.png
       :align: center
 
-  The user can configure the scatter plot with the graphic configuration (below the study tree).
+  The user can configure the scatter plot with the graphic settings (below the study tree).
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentScatterConfig.png
       :align: center
 
   The user can define:
+
   - The Title of the graph, expected to be a string;
   - The variable plotted on the X-axis, by default the first input;
   - The variable plotted on the Y-axis, by default the first output.
@@ -137,12 +138,13 @@ of the design of experiment.
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentYX.png
       :align: center
 
-  The user can configure the matrix plot with the graphic configuration (below the study tree).
+  The user can configure the matrix plot with the graphic settings (below the study tree).
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentYXConfig.png
       :align: center
 
   The user can define:
+
   - The Title of the graph, expected to be a string;
   - The variable plotted on the columns, by default all the input variables;
   - The variable plotted on the rows, by default all the output variables.
@@ -157,12 +159,13 @@ of the design of experiment.
       .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentXX.png
           :align: center
 
-    The user can configure the matrix plot with the graphic configuration (below the study tree).
+    The user can configure the matrix plot with the graphic settings (below the study tree).
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentYXConfig.png
       :align: center
 
   The user can define:
+
   - The Title of the graph, expected to be a string;
   - The variable plotted on the columns, by default all the input variables;
   - The variable plotted on the rows, by default all the output variables.
