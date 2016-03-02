@@ -21,9 +21,10 @@ Examples
 >>> R = otguibase.Input('R', 0., 'Yield strength', ot.LogNormal(300., 30., 0., ot.LogNormal.MUSIGMA))
 >>> F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))
 >>> G = otguibase.Output('Ep', 0., 'deviation', 'R-F/(_pi*100.0)')
->>> inputs = otguibase.InputCollection([R, F])
->>> outputs = otguibase.OutputCollection([G])
->>> physicalModel = otguibase.AnalyticalPhysicalModel('model1', inputs, outputs)
+>>> physicalModel = otguibase.AnalyticalPhysicalModel('model1')
+>>> physicalModel.addInput(R)
+>>> physicalModel.addInput(F)
+>>> physicalModel.addOutput(G)
 >>> limitState = otguibase.LimitState('ls1', physicalModel, 'G', ot.Less(), 0.)"
 %enddef
 %feature("docstring") OTGUI::LimitStateImplementation
