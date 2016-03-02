@@ -51,6 +51,7 @@ public slots:
   void showHideAdvancedWidgets(bool);
   void sampleSizeChanged(int);
   void seedChanged(int);
+  void blockSizeChanged(int);
 signals:
   void analysisChanged(const Analysis & analysis);
 
@@ -66,6 +67,8 @@ private:
   QWidget * sobolWidgets_;
   QLabel * totalNbSimuLabel_;
   QSpinBox * seedSpinbox_;
+  QLabel * blockSizeLabel_;
+  QSpinBox * blockSizeSpinbox_;
 };
 }
 #endif

@@ -128,6 +128,22 @@ void SensitivityAnalysisWizard::buildInterface()
   seedSpinbox_->setValue(dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->getSeed());
   connect(seedSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(seedChanged(int)));
 
+  blockSizeLabel_ = new QLabel(tr("Block size"));
+  advancedWidgetsLayout->addWidget(blockSizeLabel_, 1, 0);
+  blockSizeSpinbox_ = new QSpinBox;
+  blockSizeSpinbox_->setMinimum(1);
+  blockSizeSpinbox_->setMaximum(std::numeric_limits<int>::max());
+  blockSizeLabel_->setBuddy(blockSizeSpinbox_);
+  advancedWidgetsLayout->addWidget(blockSizeSpinbox_, 1, 1);
+  if (analysis_.getImplementation()->getClassName() == "SobolAnalysis")
+    blockSizeSpinbox_->setValue(dynamic_cast<SobolAnalysis*>(&*analysis_.getImplementation())->getBlockSize());
+  else
+  {
+    blockSizeLabel_->hide();
+    blockSizeSpinbox_->hide();
+  }
+  connect(blockSizeSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(blockSizeChanged(int)));
+
   advancedWidgets_->hide();
   advancedGroup_Layout->addWidget(advancedWidgets_);
 
@@ -151,6 +167,8 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
       {
         analysis_ = SobolAnalysis(analysis_.getName(), physicalModel_);
         sobolWidgets_->show();
+        blockSizeLabel_->show();
+        blockSizeSpinbox_->show();
         emit analysisChanged(analysis_);
       }
       break;
@@ -161,6 +179,8 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
       {
         analysis_ = SRCAnalysis(analysis_.getName(), physicalModel_);
         sobolWidgets_->hide();
+        blockSizeLabel_->hide();
+        blockSizeSpinbox_->hide();
         emit analysisChanged(analysis_);
       }
       break;
@@ -187,6 +207,12 @@ void SensitivityAnalysisWizard::sampleSizeChanged(int sampleSize)
   int nbSimu = physicalModel_.getInputs().getSize() * (sampleSize + 2);
   totalNbSimuLabel_->setText(QString::number(nbSimu));
   dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->setNbSimulations(sampleSize);
+}
+
+
+void SensitivityAnalysisWizard::blockSizeChanged(int size)
+{
+  dynamic_cast<SobolAnalysis*>(&*analysis_.getImplementation())->setBlockSize(size);
 }
 
 

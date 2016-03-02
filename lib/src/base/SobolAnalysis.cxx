@@ -123,6 +123,7 @@ bool SobolAnalysis::analysisLaunched() const
 void SobolAnalysis::save(Advocate & adv) const
 {
   SimulationAnalysis::save(adv);
+  adv.saveAttribute("blockSize_", blockSize_);
   adv.saveAttribute("result_", result_);
 }
 
@@ -131,6 +132,7 @@ void SobolAnalysis::save(Advocate & adv) const
 void SobolAnalysis::load(Advocate & adv)
 {
   SimulationAnalysis::load(adv);
+  adv.loadAttribute("blockSize_", blockSize_);
   adv.loadAttribute("result_", result_);
 }
 }
