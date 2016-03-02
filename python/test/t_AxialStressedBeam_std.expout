@@ -1,0 +1,39 @@
+[61.2676]
+#!/usr/bin/env python
+# coding: utf-8
+
+from __future__ import print_function
+import openturns as ot
+import otguibase
+
+myStudy = otguibase.OTStudy('myStudy')
+otguibase.OTStudy.Add(myStudy)
+dist_R = ot.LogNormal(5.69881, 0.0997513, 0)
+R = otguibase.Input('R', 0, 'Yield strength', dist_R)
+dist_F = ot.Normal(75000, 5000)
+F = otguibase.Input('F', 0, 'Traction load', dist_F)
+G = otguibase.Output('G', 0, 'deviation', '')
+myPhysicalModel = otguibase.PythonPhysicalModel('myPhysicalModel')
+myPhysicalModel.addInput(R)
+myPhysicalModel.addInput(F)
+myPhysicalModel.addOutput(G)
+myPhysicalModel.setCode('from math import pi\n\ndef _exec(X):\n    R = X[0]\n    F = X[1]\n    G = R-F/(pi*100.0)\n    return [G]\n')
+myStudy.add(myPhysicalModel)
+values = [0, 0]
+lowerBounds = [253.34, 66775.7]
+upperBounds = [351.737, 83224.3]
+levels = [2, 2]
+aDesign = otguibase.DesignOfExperiment('aDesign', myPhysicalModel, lowerBounds, upperBounds, levels, values)
+myStudy.add(aDesign)
+myTaylorExpansionsMoments = otguibase.TaylorExpansionsMomentsAnalysis('myTaylorExpansionsMoments', myPhysicalModel)
+myStudy.add(myTaylorExpansionsMoments)
+myMonteCarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel, 1000)
+myMonteCarlo.setSeed(0)
+myStudy.add(myMonteCarlo)
+mySobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel, 10000)
+mySobol.setSeed(0)
+myStudy.add(mySobol)
+mySRC = otguibase.SRCAnalysis('mySRC', myPhysicalModel, 10000)
+mySRC.setSeed(0)
+myStudy.add(mySRC)
+

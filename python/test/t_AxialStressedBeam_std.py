@@ -9,11 +9,16 @@ myStudy = otguibase.OTStudy('myStudy')
 
 R = otguibase.Input('R', 0., 'Yield strength', ot.LogNormal(300., 30., 0., ot.LogNormal.MUSIGMA))
 F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))
+G = otguibase.Output('G', 0., 'deviation')
 
-G = otguibase.Output('Ep', 0., 'deviation', 'R-F/(_pi*100.0)')
+myPhysicalModel = otguibase.PythonPhysicalModel('myPhysicalModel')
+myPhysicalModel.addInput(R)
+myPhysicalModel.addInput(F)
+myPhysicalModel.addOutput(G)
+myPhysicalModel.setCode('from math import pi\n\ndef _exec(X):\n    R = X[0]\n    F = X[1]\n    G = R-F/(pi*100.0)\n    return [G]\n')
 
-myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', otguibase.InputCollection([R, F]), otguibase.OutputCollection([G]))
-
+f = myPhysicalModel.getFunction()
+print(f([300.,75000.]))
 
 myStudy.add(myPhysicalModel)
 

@@ -90,12 +90,10 @@ macro ( ot_pyinstallcheck_test TESTNAME )
           )
 endmacro ( ot_pyinstallcheck_test )
 
-# ot_pyinstallcheck_test (PhysicalModel_std)
 ot_pyinstallcheck_test (Cogeneration_std)
 ot_pyinstallcheck_test (Crue_std)
 ot_pyinstallcheck_test (DesignOfExperiment_std)
-ot_pyinstallcheck_test (AxialStressedBeam_std IGNOREOUT)
-ot_pyinstallcheck_test (PythonPhysicalModel_std)
+ot_pyinstallcheck_test (AxialStressedBeam_std)
 
 if (SalomeYACS_FOUND)
 # ot_pyinstallcheck_test (yacs_eval_analytical PARAMS ${CMAKE_CURRENT_SOURCE_DIR}/analytical.xml)
