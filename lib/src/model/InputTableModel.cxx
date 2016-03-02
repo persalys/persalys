@@ -71,9 +71,9 @@ QVariant InputTableModel::data(const QModelIndex & index, int role) const
     switch (index.column())
     {
       case 0:
-        return QString::fromLocal8Bit(physicalModel_.getInputs()[index.row()].getName().c_str());
+        return QString::fromUtf8(physicalModel_.getInputs()[index.row()].getName().c_str());
       case 1:
-        return QString::fromLocal8Bit(physicalModel_.getInputs()[index.row()].getDescription().c_str());
+        return QString::fromUtf8(physicalModel_.getInputs()[index.row()].getDescription().c_str());
       case 2:
         return physicalModel_.getInputs()[index.row()].getValue();
     }

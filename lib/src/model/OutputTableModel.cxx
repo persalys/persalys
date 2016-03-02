@@ -73,11 +73,11 @@ QVariant OutputTableModel::data(const QModelIndex & index, int role) const
     switch (index.column())
     {
       case 0:
-        return QString::fromLocal8Bit(physicalModel_.getOutputs()[index.row()].getName().c_str());
+        return QString::fromUtf8(physicalModel_.getOutputs()[index.row()].getName().c_str());
       case 1:
-        return QString::fromLocal8Bit(physicalModel_.getOutputs()[index.row()].getDescription().c_str());
+        return QString::fromUtf8(physicalModel_.getOutputs()[index.row()].getDescription().c_str());
       case 2:
-        return QString::fromLocal8Bit(physicalModel_.getOutputs()[index.row()].getFormula().c_str());
+        return QString::fromUtf8(physicalModel_.getOutputs()[index.row()].getFormula().c_str());
       case 3:
       {
         if (!physicalModel_.getOutputs()[index.row()].hasBeenComputed())
