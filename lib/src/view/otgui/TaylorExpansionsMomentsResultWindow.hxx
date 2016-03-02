@@ -26,7 +26,7 @@
 #include "otgui/TaylorExpansionsMomentsResult.hxx"
 
 #include <QComboBox>
-#include <QLabel>
+#include <QTableWidget>
 
 namespace OTGUI {
 class TaylorExpansionsMomentsResultWindow : public OTguiSubWindow
@@ -40,15 +40,12 @@ protected:
   void buildInterface();
 
 public slots:
-  void updateLabelsText(int indexOutput);
+  void updateEstimatesTable(int indexOutput);
 
 private:
   TaylorExpansionsMomentsResult result_;
   QComboBox * outputsComboBox_;
-  QLabel * meanFirstOrderLabel_;
-  QLabel * meanSecondOrderLabel_;
-  QLabel * stdLabel_;
-  QLabel * varianceLabel_;
+  QTableWidget * momentsEstimationsTable_;
 };
 }
 #endif

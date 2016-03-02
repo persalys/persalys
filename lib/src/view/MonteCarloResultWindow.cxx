@@ -420,6 +420,7 @@ void MonteCarloResultWindow::updateResultWidgets(int indexOutput)
     minMaxTable_->setItem(i+1, 3, item);
   }
 
+  // resize table
   QSize size(minMaxTable_->sizeHint());
   int width = 0;
   for (int i=0; i<minMaxTable_->columnCount(); ++i)
@@ -481,6 +482,7 @@ void MonteCarloResultWindow::updateResultWidgets(int indexOutput)
   item->setFlags(item->flags() ^ Qt::ItemIsEditable);
   momentsEstimationsTable_->setItem(7, 1, item);
 
+  // resize table
   size = momentsEstimationsTable_->sizeHint();
   width = 0;
   for (int i=0; i<momentsEstimationsTable_->columnCount(); ++i)

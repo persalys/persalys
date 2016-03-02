@@ -23,6 +23,8 @@
 #include "otgui/TaylorExpansionsMomentsAnalysis.hxx"
 
 #include <QVBoxLayout>
+#include <QGroupBox>
+#include <QHeaderView>
 
 using namespace OT;
 
@@ -53,52 +55,61 @@ void TaylorExpansionsMomentsResultWindow::buildInterface()
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
     items << result_.getOutputNames()[i].c_str();
   outputsComboBox_->addItems(items);
-  connect(outputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateLabelsText(int)));
+  connect(outputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEstimatesTable(int)));
   headLayout->addWidget(outputsComboBox_);
   headLayout->addStretch();
   tabLayout->addLayout(headLayout);
 
   // -- results --
-  QGridLayout * grid = new QGridLayout;
-  int gridRow = -1;
 
-  // first order mean
-  QLabel * label = new QLabel(tr("First order mean"));
-  label->setStyleSheet("font: bold;");
-  grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
-  meanFirstOrderLabel_ = new QLabel;
-  meanFirstOrderLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(meanFirstOrderLabel_, gridRow, 1, Qt::AlignTop);
+  // moments estimation
+  QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimate"));
+  QVBoxLayout * momentsVbox = new QVBoxLayout(momentsGroupBox);
+  momentsEstimationsTable_ = new QTableWidget(5, 2);
+  momentsEstimationsTable_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  momentsEstimationsTable_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  momentsEstimationsTable_->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
+  momentsEstimationsTable_->verticalHeader()->hide();
+  momentsEstimationsTable_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
+  momentsEstimationsTable_->horizontalHeader()->hide();
 
-  // second order mean
-  label = new QLabel(tr("Second order mean"));
-  label->setStyleSheet("font: bold;");
-  grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
-  meanSecondOrderLabel_ = new QLabel;
-  meanSecondOrderLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(meanSecondOrderLabel_, gridRow, 1, Qt::AlignTop);
+  // vertical header
+  QTableWidgetItem * item = new QTableWidgetItem("Estimate");
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  item->setTextAlignment(Qt::AlignCenter);
+  momentsEstimationsTable_->setItem(0, 0, item);
+  item = new QTableWidgetItem(tr("First order mean"));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  momentsEstimationsTable_->setItem(1, 0, item);
+  item = new QTableWidgetItem(tr("Second order mean"));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  momentsEstimationsTable_->setItem(2, 0, item);
+  item = new QTableWidgetItem(tr("Standard deviation"));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  momentsEstimationsTable_->setItem(3, 0, item);
+  item = new QTableWidgetItem(tr("Variance"));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  momentsEstimationsTable_->setItem(4, 0, item);
+  momentsEstimationsTable_->resizeColumnToContents(0);
 
-  // standard deviation
-  label = new QLabel(tr("Standard deviation"));
-  label->setStyleSheet("font: bold;");
-  grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
-  stdLabel_ = new QLabel;
-  stdLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(stdLabel_, gridRow, 1, Qt::AlignTop);
+  // horizontal header
+  item = new QTableWidgetItem(tr("Value"));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+  item->setTextAlignment(Qt::AlignCenter);
+  momentsEstimationsTable_->setItem(0, 1, item);
 
-  // variance
-  label = new QLabel(tr("Variance"));
-  label->setStyleSheet("font: bold;");
-  grid->addWidget(label, ++gridRow, 0, Qt::AlignTop);
-  varianceLabel_ = new QLabel;
-  varianceLabel_->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  grid->addWidget(varianceLabel_, gridRow, 1);
+  momentsVbox->addWidget(momentsEstimationsTable_);
+  momentsVbox->addStretch();
+  tabLayout->addWidget(momentsGroupBox);
+  tabLayout->addStretch();
 
-  grid->setRowStretch(++gridRow, 1);
-  grid->setColumnStretch(1, 1);
-  tabLayout->addLayout(grid);
-
-  updateLabelsText(0);
+  updateEstimatesTable(0);
 
   tabWidget->addTab(tab, "Result");
   //
@@ -106,18 +117,41 @@ void TaylorExpansionsMomentsResultWindow::buildInterface()
 }
 
 
-void TaylorExpansionsMomentsResultWindow::updateLabelsText(int indexOutput)
+void TaylorExpansionsMomentsResultWindow::updateEstimatesTable(int indexOutput)
 {
+  // momentsEstimationsTable_
   // first order mean
-  meanFirstOrderLabel_->setText(QString::number(result_.getMeanFirstOrder()[indexOutput]));
+  QTableWidgetItem * item = new QTableWidgetItem(QString::number(result_.getMeanFirstOrder()[indexOutput]));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  momentsEstimationsTable_->setItem(1, 1, item);
 
   // second order mean
-  meanSecondOrderLabel_->setText(QString::number(result_.getMeanSecondOrder()[indexOutput]));
+  item = new QTableWidgetItem(QString::number(result_.getMeanSecondOrder()[indexOutput]));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  momentsEstimationsTable_->setItem(2, 1, item);
 
   // standard deviation
-  stdLabel_->setText(QString::number(result_.getStandardDeviation()[indexOutput]));
+  item = new QTableWidgetItem(QString::number(result_.getStandardDeviation()[indexOutput]));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  momentsEstimationsTable_->setItem(3, 1, item);
 
   // variance
-  varianceLabel_->setText(QString::number(result_.getVariance()[indexOutput]));
+  item = new QTableWidgetItem(QString::number(result_.getVariance()[indexOutput]));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  momentsEstimationsTable_->setItem(4, 1, item);
+
+  // resize table
+  QSize size = momentsEstimationsTable_->sizeHint();
+  int width = 0;
+  for (int i=0; i<momentsEstimationsTable_->columnCount(); ++i)
+    width += momentsEstimationsTable_->columnWidth(i);
+  size.setWidth(width);
+  int height = 0;
+  for (int i=0; i<momentsEstimationsTable_->rowCount(); ++i)
+    height += momentsEstimationsTable_->rowHeight(i);
+  size.setHeight(height);
+  momentsEstimationsTable_->setMinimumSize(size);
+  momentsEstimationsTable_->setMaximumSize(size);
+  momentsEstimationsTable_->updateGeometry();
 }
 }
