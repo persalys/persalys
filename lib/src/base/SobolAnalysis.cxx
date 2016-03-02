@@ -35,6 +35,7 @@ static Factory<SobolAnalysis> RegisteredFactory("SobolAnalysis");
 /* Default constructor */
 SobolAnalysis::SobolAnalysis()
   : SimulationAnalysis()
+  , blockSize_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultBlockSize"))
 {
 }
 
@@ -61,6 +62,7 @@ void SobolAnalysis::run()
   NumericalSample inputSample2(getInputSample());
 
   SensitivityAnalysis sensitivityAnalysis = SensitivityAnalysis(inputSample1, inputSample2, getPhysicalModel().getRestrictedFunction(getOutputNames()));
+  sensitivityAnalysis.setBlockSize(blockSize_);
 
   // set results
   Collection<SymmetricMatrix> secondOrderIndices;
@@ -79,6 +81,18 @@ void SobolAnalysis::run()
   result_ = SobolResult(firstOrderIndices, secondOrderIndices, totalOrderIndices, getOutputNames());
 
   notify("analysisFinished");
+}
+
+
+UnsignedInteger SobolAnalysis::getBlockSize() const
+{
+  return blockSize_;
+}
+
+
+void SobolAnalysis::setBlockSize(const UnsignedInteger & size)
+{
+  blockSize_ = size;
 }
 
 
