@@ -12,12 +12,8 @@ F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))
 
 G = otguibase.Output('Ep', 0., 'deviation', 'R-F/(_pi*100.0)')
 
-myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel')
+myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', otguibase.InputCollection([R, F]), otguibase.OutputCollection([G]))
 
-myPhysicalModel.addInput(R)
-myPhysicalModel.addInput(F)
-
-myPhysicalModel.addOutput(G)
 
 myStudy.add(myPhysicalModel)
 

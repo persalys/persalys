@@ -1,5 +1,23 @@
 %feature("docstring") OTGUI::Output
-"Output variable."
+"Output variable.
+
+Represents an output variable.
+
+Parameters
+----------
+name : str
+    Name
+value : float
+    Default value (optional)
+description : str
+    Description text (optional)
+formula : str
+    Associated analytical formula (optional)
+
+Examples
+--------
+>>> import otguibase
+>>> G = otguibase.Output('Ep', 0., 'deviation', 'R-F/(_pi*100.0)')"
 
 // ---------------------------------------------------------------------
 

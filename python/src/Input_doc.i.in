@@ -1,5 +1,24 @@
 %feature("docstring") OTGUI::Input
-"Input Variable."
+"Input Variable.
+
+Represents an input variable.
+
+Parameters
+----------
+name : str
+    Name
+value : float
+    Default value (optional)
+description : str
+    Description text (optional)
+distribution : `~openturns.Distribution`
+    Associated distribution (optional)
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+>>> F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))"
 
 // ---------------------------------------------------------------------
 

@@ -1,5 +1,30 @@
 %define OTGUI_LimitState_doc
-"Limit-state definition."
+"Limit-state definition.
+
+Parameters
+----------
+name : str
+    Name
+physicalModel : :class:`~otguibase.PhysicalModel`
+    Physical model
+outputName : str
+    Interest variable name
+operator : :class:`~otguibase.ComparisonOperator`
+    Comparison operator against threshold (optional)
+threshold : float
+    Threshold value (optional)
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+>>> R = otguibase.Input('R', 0., 'Yield strength', ot.LogNormal(300., 30., 0., ot.LogNormal.MUSIGMA))
+>>> F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))
+>>> G = otguibase.Output('Ep', 0., 'deviation', 'R-F/(_pi*100.0)')
+>>> inputs = otguibase.InputCollection([R, F])
+>>> outputs = otguibase.OutputCollection([G])
+>>> physicalModel = otguibase.AnalyticalPhysicalModel('model1', inputs, outputs)
+>>> limitState = otguibase.LimitState('ls1', physicalModel, 'G', ot.Less(), 0.)"
 %enddef
 %feature("docstring") OTGUI::LimitStateImplementation
 OTGUI_LimitState_doc

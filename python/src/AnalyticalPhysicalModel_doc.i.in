@@ -1,5 +1,29 @@
 %feature("docstring") OTGUI::AnalyticalPhysicalModel
-"Physical model defined by analytical formulas."
+"Physical model defined by analytical formulas.
+
+Parameters
+----------
+name : str
+    Name
+inputs : sequence of :class:`~otguibase.Input`
+    Input variables (optional)
+outputs : sequence of :class:`~otguibase.Output`
+    Output` variables (optional)
+
+Notes
+-----
+The output variables must contain a valid formula
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+>>> R = otguibase.Input('R', 0., 'Yield strength', ot.LogNormal(300., 30., 0., ot.LogNormal.MUSIGMA))
+>>> F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))
+>>> G = otguibase.Output('Ep', 0., 'deviation', 'R-F/(_pi*100.0)')
+>>> inputs = otguibase.InputCollection([R, F])
+>>> outputs = otguibase.OutputCollection([G])
+>>> myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', inputs, outputs, 'deeeeeeeee')"
 
 // ---------------------------------------------------------------------
 

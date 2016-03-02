@@ -1,5 +1,21 @@
 %feature("docstring") OTGUI::PythonPhysicalModel
-"Physical model defined by Python code."
+"Physical model defined by Python code.
+
+Parameters
+----------
+name : str
+    Name
+inputs : sequence of :class:`~otguibase.Input`
+    Input variables (optional)
+outputs : sequence of :class:`~otguibase.Output`
+    Output` variables (optional)
+code : str
+    Code string
+
+Notes
+-----
+The code string must contain a function named '_exec' that inputs
+and returns float sequences."
 
 // ---------------------------------------------------------------------
 
