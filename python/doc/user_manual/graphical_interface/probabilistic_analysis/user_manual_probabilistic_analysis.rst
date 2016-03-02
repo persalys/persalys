@@ -28,13 +28,13 @@ The probabilistic model has two tabs:
     To select the parametrization, click on the **Type** select button.
 
     The user can configure the plot of the distribution and choose between PDF/CDF with the graphic
-    configuration (below the study tree).
+    settings (below the study tree).
 
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelMarginalsConfig.png
         :align: center
 
     The user can define:
-    - The Title of the graph, expected to be a string;
+      - The Title of the graph, expected to be a string;
 
     It has two tabs, **X-axis** and **Y-axis** where the user can define:
       - The axis Title, expected to be a string;
@@ -50,9 +50,10 @@ The probabilistic model has two tabs:
         :align: center
 
     The user may define correlation between the variables by modifying the upper triangular
-    part of the matrix. OTGui handles automatically the symmetry of the correlation
-    matrix. By default all variables are set independent. The values are expected to be floating points or integers,
-    included in the interval :math:`\left[-1;\right]`
+    part of the Spearman correlation matrix. OTGui handles automatically the symmetry of the correlation
+    matrix. The Gaussian copula is used to model the dependency. By default all variables are set
+    independent. The values are expected to be floating points or integers,
+    included in the interval :math:`\left[-1; 1\right]`
 
 
 2- Limit state
@@ -69,7 +70,7 @@ created probabilistic model.
 
 In the corresponding window, the user has to define the threshold defining the
 failure domain corresponding to the selected output. By default it equals 0. The values are expected
-to be floating points or integers.The available operators to define the failure event are:
+to be floating points or integers. The available operators to define the failure event are:
 
 - <= (less or equal)
 - >= (greater or equal)
@@ -108,14 +109,14 @@ The result window has 3 tabs:
     - The output used for the probability estimation;
     - The number of simulations (i.e. calls to the physical model) performed;
     - The failure probability, its coefficient of variation and the corresponding
-      confidence interval à 95%
+      confidence interval at 95%
 
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilitySummary.png
         :align: center
     
 - The tab **Histogram** presents the histogram of the output sample.
 
-  The user can configure the histogram plot with the graphic configuration
+  The user can configure the histogram plot with the graphic settings
   (below the study tree).
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilityHistogram.png
@@ -125,7 +126,7 @@ The result window has 3 tabs:
   algorithm.
 
   The user can configure the convergence plot with the graphic
-  configuration (below the study tree).
+  settings (below the study tree).
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilityConvergence.png
           :align: center
@@ -198,14 +199,14 @@ The results window gathers 7 tabs:
   together with a kernel smoothing representation.
 
   The user can configure the plot and choose between PDF/CDF with the graphic
-  configuration (below the study tree).
+  settings (below the study tree).
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyPDFConfig.png
       :align: center
 
   The user can define:
-  - The Title of the graph, expected to be a string;
-  - The plotted output, by default the first output;
+    - The Title of the graph, expected to be a string;
+    - The plotted output, by default the first output;
 
   It has two tabs, **X-axis** and **Y-axis** where the user can define:
     - The axis Title, expected to be a string;
@@ -223,14 +224,14 @@ The results window gathers 7 tabs:
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyBoxplot.png
       :align: center
 
-  The user can configure the box plot with the graphic configuration (below the study tree).
+  The user can configure the box plot with the graphic settings (below the study tree).
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyBoxplotConfig.png
       :align: center
 
   The user can define:
-  - The Title of the graph, expected to be a string;
-  - The plotted output, by default the first output;
+    - The Title of the graph, expected to be a string;
+    - The plotted output, by default the first output;
 
   It has two tabs, **X-axis** and **Y-axis** where the user can define:
     - The axis Title, expected to be a string;
@@ -246,15 +247,15 @@ The results window gathers 7 tabs:
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyScatter.png
       :align: center
 
-  The user can configure the scatter plot with the graphic configuration (below the study tree).
+  The user can configure the scatter plot with the graphic settings (below the study tree).
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentScatterConfig.png
       :align: center
 
   The user can define:
-  - The Title of the graph, expected to be a string;
-  - The variable plotted on the X-axis, by default the first input;
-  - The variable plotted on the Y-axis, by default the first output.
+    - The Title of the graph, expected to be a string;
+    - The variable plotted on the X-axis, by default the first input;
+    - The variable plotted on the Y-axis, by default the first output.
 
   It has two tabs, **X-axis** and **Y-axis** where the user can define:
     - The axis Title, expected to be a string;
@@ -270,35 +271,35 @@ The results window gathers 7 tabs:
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyYX.png
       :align: center
 
-  The user can configure the matrix plot with the graphic configuration (below the study tree).
+  The user can configure the matrix plot with the graphic settings (below the study tree).
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentYXConfig.png
       :align: center
 
   The user can define:
-  - The Title of the graph, expected to be a string;
-  - The variable plotted on the columns, by default all the input variables;
-  - The variable plotted on the rows, by default all the output variables.
+    - The Title of the graph, expected to be a string;
+    - The variable plotted on the columns, by default all the input variables;
+    - The variable plotted on the rows, by default all the output variables.
 
   The **Export** button opens a dialog box for the user to select where the
   figure has to be saved.
 
 - The tab **Plot matrix X-X** gathers:
-  - Out of the diagonal the scatter plot of each couple of inputs;
-  - The histogram of the distribution of each input on the diagonal.
+    - Out of the diagonal the scatter plot of each couple of inputs;
+    - The histogram of the distribution of each input on the diagonal.
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyXX.png
       :align: center
 
-  The user can configure the matrix plot with the graphic configuration (below the study tree).
+  The user can configure the matrix plot with the graphic settings (below the study tree).
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentYXConfig.png
       :align: center
 
   The user can define:
-  - The Title of the graph, expected to be a string;
-  - The variable plotted on the columns, by default all the input variables;
-  - The variable plotted on the rows, by default all the output variables.
+    - The Title of the graph, expected to be a string;
+    - The variable plotted on the columns, by default all the input variables;
+    - The variable plotted on the rows, by default all the output variables.
 
   The **Export** button opens a dialog box for the user to select where the
   figure has to be saved.
@@ -328,6 +329,7 @@ probabilistic model.
     :align: center
 
 Two type of sensitivity indices are available:
+
 - Sobol' indices
 - SRC indices
 
@@ -346,15 +348,15 @@ Sobol' indices
 The results window gathers:
 
 - The first and total order indices plotted for each input variable.
-  The user can configure the plot with the graphic configuration (below the 
+  The user can configure the plot with the graphic settings (below the 
   study tree).
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSobolConfig.png
       :align: center
 
   The user can define:
-  - The Title of the graph, expected to be a string;
-  - The plotted output, by default the first output;
+    - The Title of the graph, expected to be a string;
+    - The plotted output, by default the first output;
 
   It has two tabs, **X-axis** and **Y-axis** where the user can define:
     - The axis Title, expected to be a string;
@@ -381,15 +383,15 @@ SRC indices
 The results window gathers:
 
 - The SRC index plotted for each input variable.
-  The user can configure the plot with the graphic configuration (below the 
+  The user can configure the plot with the graphic settings (below the 
   study tree).
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSRCConfig.png
       :align: center
 
   The user can define:
-  - The Title of the graph, expected to be a string;
-  - The plotted output, by default the first output;
+    - The Title of the graph, expected to be a string;
+    - The plotted output, by default the first output;
 
   It has two tabs, **X-axis** and **Y-axis** where the user can define:
     - The axis Title, expected to be a string;
