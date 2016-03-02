@@ -43,13 +43,13 @@ meanCI = montecarloResult.getMeanConfidenceInterval()
 stdCi = montecarloResult.getStdConfidenceInterval()
 
 ## Sobol ##
-sobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel)
+sobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel, 1000)
 myStudy.add(sobol)
 sobol.run()
 sobolResult = sobol.getResult()
 
 ## SRC ##
-src = otguibase.SRCAnalysis('mySRC', myPhysicalModel)
+src = otguibase.SRCAnalysis('mySRC', myPhysicalModel, 1000)
 myStudy.add(src)
 src.run()
 srcResult = src.getResult()
