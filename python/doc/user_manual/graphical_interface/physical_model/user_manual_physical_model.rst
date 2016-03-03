@@ -152,6 +152,6 @@ The combo box **Fitting machines** lists all the machines defined in the xml fil
 can be realized.
 
 The **Evaluate** button calculates the value of the outputs based on the input values
-and the Python code. It shall be used to test the physical model. In order to get evaluations which can be saved,
+and the YACS scheme. It shall be used to test the physical model. In order to get evaluations which can be saved,
 the user should use :ref:`the deterministic study <deterministicStudy>`.
 
