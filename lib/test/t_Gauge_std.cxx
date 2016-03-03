@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     fileName = argv[1];
   }
   else {
-    std::cerr << "Schema file (path to example.xml) not provided" << std::endl;
+    std::cerr << "Schema file (path to gauge.xml) not provided" << std::endl;
     return -1;
   }
   try
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     OTStudy myStudy("myStudy");
 
     YACSPhysicalModel myPhysicalModel("myPhysicalModel", fileName);
-    myStudy.addPhysicalModel(myPhysicalModel);
+    myStudy.add(myPhysicalModel);
 
     // Comparaison
 //     assert_almost_equal(outputSample, resultSample, 1e-16);

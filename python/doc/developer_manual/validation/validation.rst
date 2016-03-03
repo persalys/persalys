@@ -57,6 +57,10 @@ The central tendency analysis is performed with the Taylor Expansions method.
 
 3-1 Results
 '''''''''''
+
+3-1-1 Values
+************
+
 ================ ================= ================== ===========
 First order mean Second order mean Standard deviation Variance
 ================ ================= ================== ===========
@@ -206,50 +210,81 @@ Failure probability Coefficient of variation Confidence interval at 95%
     :align: center
     :height: 340px
 
-.. Test case 3: Gauge
-.. ------------------
+Test case 3: Gauge
+------------------
 
-.. This test-case originates from [Jauge2014]_ and can be found in python/test/t_Jauge_std.py.
+This test-case originates from [Jauge2014]_ and can be found in python/test/t_Gauge_std.py.
 
-.. The purpose of this example is to check the average value of the output against some exact reference value.
+The purpose of this example is to check:
+  - Test the xml file loading;
+  - The Central tendency analysis using the Taylor Expansions.
 
-.. .. image:: case_gauge.png
-..     :width: 420px
-..     :align: center
-..    :height: 294px
+.. image:: case_gauge.png
+    :width: 443px
+    :align: center
+    :height: 340px
 
-.. 1- Problem statement
-.. ````````````````````
-.. The purpose of this example is to realize analysises with data loaded from an XML file
-.. previously generated with SALOME.
+1- Problem statement
+````````````````````
 
-.. 1-1 Inputs
-.. ''''''''''
+1-1 Inputs
+''''''''''
 
-.. - Stochastic variables:
+- Deterministic variable:
 
-.. ====== =========================== =================
-.. Name   Description                 Distribution
-.. ====== =========================== =================
-.. conduc Heat conduction coefficient Normal(0.5, 0.01)
-.. ====== =========================== =================
+============ =========================== =====
+Name         Description                 Value
+============ =========================== =====
+Hauteur      Height of the cube          1.
+============ =========================== =====
 
-.. 1-2 Output
-.. ''''''''''
+- Stochastic variable:
 
-.. An average temperature on the superior surface 'temptop'.
+============ =========================== =================
+Name         Description                 Distribution
+============ =========================== =================
+Conductivity Heat conduction coefficient Normal(0.5, 0.01)
+============ =========================== =================
 
-.. 2- Analysis
-.. ```````````
+1-2 Output
+''''''''''
 
-.. 2-1 Inputs
-.. ''''''''''
+An average temperature on the superior surface 'temptop'.
 
+2- XML file loading
+````````````````````
 
-.. 2-2 Results
-.. '''''''''''
+2-1 Figure
+''''''''''
 
+.. image:: case_Gauge_loading.png
+    :width: 443px
+    :align: center
+    :height: 340px
 
+3- Central tendency analysis
+````````````````````````````
 
-.. 3- Reference
-.. ````````````
+3-1 Inputs
+''''''''''
+
+Because of a bug in the module ASTER, it is necessary to uncheck Parallelize status
+in the physical model definition window before launching the analysis.
+In the same window, choose the machine which will launch the analysis.
+
+.. image:: YACS_scheme_parameters.png
+    :align: center
+
+The central tendency analysis is performed with the Taylor Expansions method.
+
+3-2 Results
+'''''''''''
+
+3-2-1 Values
+************
+
+================ ================= ================== ===========
+First order mean Second order mean Standard deviation Variance
+================ ================= ================== ===========
+2020             2020.8            40                 1600
+================ ================= ================== ===========

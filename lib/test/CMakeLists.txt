@@ -110,7 +110,7 @@ add_custom_target ( cppcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^cppcheck_"
 
 if (SalomeYACS_FOUND)
 #   ot_check_test (yacs_eval_analytical PARAMS ${CMAKE_CURRENT_SOURCE_DIR}/analytical.xml)
-#   ot_check_test (Gauge_std PARAMS ${CMAKE_CURRENT_SOURCE_DIR}/analytical.xml)
+#   ot_check_test (Gauge_std PARAMS ${CMAKE_CURRENT_SOURCE_DIR}/gauge.xml)
 endif ()
 
 

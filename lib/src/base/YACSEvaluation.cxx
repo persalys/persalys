@@ -177,6 +177,8 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
 
   efx_.get()->lockPortsForEvaluation(inps, outps);
   efx_->getUndergroundGeneratedGraph();
+  efx_.get()->setParallelizeStatus(parallelizeStatus_);
+  efx_.get()->giveResources()->setWantedMachine(wantedMachine_);
 
   int b = 0;
   bool a(efx_.get()->run(session_, b));
@@ -256,7 +258,6 @@ bool YACSEvaluation::getParallelizeStatus() const
 /* Accessor to the parallelize status */
 void YACSEvaluation::setParallelizeStatus(const bool & status)
 {
-  efx_.get()->setParallelizeStatus(parallelizeStatus_);
   parallelizeStatus_ = status;
 }
 
@@ -278,7 +279,6 @@ String YACSEvaluation::getWantedMachine() const
 /* Accessor to the wanted machine */
 void YACSEvaluation::setWantedMachine(const String & machine)
 {
-  efx_.get()->giveResources()->setWantedMachine(wantedMachine_);
   wantedMachine_ = machine;
 }
 

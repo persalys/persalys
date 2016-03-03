@@ -11,7 +11,7 @@ XMLfilename = 'gauge.xml'
 if len(sys.argv) > 1:
     XMLfilename = sys.argv[1]
 myPhysicalModel = otguibase.YACSPhysicalModel('myPhysicalModel', XMLfilename)
-myStudy.addPhysicalModel(myPhysicalModel)
+myStudy.add(myPhysicalModel)
 
 print(myPhysicalModel.getInputs())
 print(myPhysicalModel.getOutputs())
