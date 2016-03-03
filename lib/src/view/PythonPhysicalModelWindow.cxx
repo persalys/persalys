@@ -110,8 +110,8 @@ void PythonPhysicalModelWindow::parseVariables()
   QRegExp variable("([_a-zA-Z][_a-zA-Z0-9]*)");
   foreach (QString line, lines)
   {
-    QRegExp defFunction("f[ ]+\\_exec[ ]*\\(([_a-zA-Z0-9, ]+)\\)[ ]*:");
-    if (defFunction.indexIn(line) > 0)
+    QRegExp defFunction("def[ ]+\\_exec[ ]*\\(([_a-zA-Z0-9, ]+)\\)[ ]*:");
+    if (defFunction.indexIn(line) == 0)
     {
       QString inputList = defFunction.cap(1);
       int pos = 0;
@@ -122,8 +122,8 @@ void PythonPhysicalModelWindow::parseVariables()
       }
     }
 
-    QRegExp returnOutput("return[ ]+\\[([_a-zA-Z0-9, ]+)\\]");
-    if (returnOutput.indexIn(line, 4) > 0)
+    QRegExp returnOutput("    return[ ]+\\[([_a-zA-Z0-9, ]+)\\]");
+    if (returnOutput.indexIn(line) == 0)
     {
       QString outputList = returnOutput.cap(1);
       int pos = 0;
