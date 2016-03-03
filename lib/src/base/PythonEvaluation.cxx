@@ -126,14 +126,12 @@ NumericalPoint PythonEvaluation::operator() (const NumericalPoint & inP) const
     PyObject *script = PyDict_GetItemString(dict, "_exec");
     if (script == NULL) throw InternalException(HERE) << "no _exec function";
 
-    ScopedPyObjectPointer inputList(PyList_New(inputDimension_));
+    ScopedPyObjectPointer inputTuple(PyTuple_New(inputDimension_));
     for (UnsignedInteger i = 0; i < inputDimension_; ++ i)
     {
       PyObject *outputItem = PyFloat_FromDouble(inP[i]);// new reference
-      PyList_SetItem(inputList.get(), i, outputItem);// steals reference
+      PyTuple_SetItem(inputTuple.get(), i, outputItem);
     }
-    ScopedPyObjectPointer inputTuple(PyTuple_New(1));
-    PyTuple_SetItem(inputTuple.get(), 0, inputList.get());
 
     ScopedPyObjectPointer outputList(PyObject_Call(script, inputTuple.get(), NULL));
     handleException();

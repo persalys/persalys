@@ -17,7 +17,7 @@ myPhysicalModel = otguibase.PythonPhysicalModel('myPhysicalModel')
 myPhysicalModel.addInput(R)
 myPhysicalModel.addInput(F)
 myPhysicalModel.addOutput(G)
-myPhysicalModel.setCode('from math import pi\n\ndef _exec(X):\n    R = X[0]\n    F = X[1]\n    G = R-F/(pi*100.0)\n    return [G]\n')
+myPhysicalModel.setCode('from math import pi\n\ndef _exec(R, F):\n    G = R-F/(pi*100.0)\n    return [G]\n')
 myStudy.add(myPhysicalModel)
 values = [0, 0]
 lowerBounds = [253.34, 66775.7]

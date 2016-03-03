@@ -45,7 +45,7 @@ int main(int argc, char **argv)
   AnalyticalPhysicalModel analyticalModel("analyticalModel1");
 
   PythonPhysicalModel pythonModel("pythonModel1");
-  pythonModel.setCode("def _exec(X):\n    Q = X[0]\n    E = X[1]\n    C = X[2]\n    Ep = 1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))\n    return [Ep]");
+  pythonModel.setCode("def _exec(Q, E, C):\n    Ep = 1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))\n    return [Ep]");
 
   std::vector<PhysicalModel> models;
   models.push_back(analyticalModel);

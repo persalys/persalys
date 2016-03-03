@@ -35,7 +35,7 @@ static Factory<PythonPhysicalModel> RegisteredFactory("PythonPhysicalModel");
 PythonPhysicalModel::PythonPhysicalModel(const String & name)
   : PhysicalModelImplementation(name)
 {
-  setCode("def _exec(X):\n    X0 = X[0]\n    Y0 = X0\n    return [Y0]");
+  setCode("def _exec(X0):\n    Y0 = X0\n    return [Y0]");
 }
 
 

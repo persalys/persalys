@@ -14,8 +14,8 @@ code : str
 
 Notes
 -----
-The code string must contain a function named '_exec' that inputs
-and returns float sequences."
+The code string must contain a function named '_exec' that takes float
+arguments and return a sequence of floats."
 
 // ---------------------------------------------------------------------
 

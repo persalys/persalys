@@ -114,16 +114,15 @@ It consists in defining the physical model as a Python function **_exec**
 .. image:: /user_manual/graphical_interface/physical_model/pythonPhysicalModel.png
     :align: center
 
-This function takes an unique argument which is a sequence of floating points and
-returns a sequence of floating points.
+This function takes floating point arguments and returns a sequence of floating points.
 
-Input variables are detected if they are set equal to any element of the input sequence.
+Input variables names are detected from the fonction definition.
 The value of the input variables can be set by the user and are expected
 to be floating points or integers. By default they are equal to 0.
 
-The variables listed in the output sequence are detected as output variables.
+The variables listed in the return sequence are detected as output variables.
 
-Other functions which may be used by the **_exec** function can be defined in the Python editor.
+Other statements which may be used by the **_exec** function can be defined in the Python editor.
 
 The **Evaluate** button calculates the value of the outputs based on the input values
 and the Python code. It shall be used to test the physical model. In order to get evaluations which can be saved,

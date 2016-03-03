@@ -107,24 +107,30 @@ void PythonPhysicalModelWindow::parseVariables()
   Description inputVariables;
   Description outputVariables;
 
+  QRegExp variable("([_a-zA-Z][_a-zA-Z0-9]*)");
   foreach (QString line, lines)
   {
-    QRegExp inputVariableAssign("([_a-zA-Z][_a-zA-Z0-9]*)[ ]*=[ ]*X\\[[ ]*\\d+[ ]*\\]");
-    if (inputVariableAssign.indexIn(line, 4) > 0)
+    QRegExp defFunction("f[ ]+\\_exec[ ]*\\(([_a-zA-Z0-9, ]+)\\)[ ]*:");
+    if (defFunction.indexIn(line) > 0)
     {
-      inputVariables.add(inputVariableAssign.cap(1).toStdString());
+      QString inputList = defFunction.cap(1);
+      int pos = 0;
+      while ((pos = variable.indexIn(inputList, pos)) != -1)
+      {
+        inputVariables.add(variable.cap(1).toStdString());
+        pos += variable.matchedLength();
+      }
     }
 
     QRegExp returnOutput("return[ ]+\\[([_a-zA-Z0-9, ]+)\\]");
     if (returnOutput.indexIn(line, 4) > 0)
     {
       QString outputList = returnOutput.cap(1);
-      QRegExp outputVariable("([_a-zA-Z][_a-zA-Z0-9]*)");
       int pos = 0;
-      while ((pos = outputVariable.indexIn(outputList, pos)) != -1)
+      while ((pos = variable.indexIn(outputList, pos)) != -1)
       {
-        outputVariables.add(outputVariable.cap(1).toStdString());
-        pos += outputVariable.matchedLength();
+        outputVariables.add(variable.cap(1).toStdString());
+        pos += variable.matchedLength();
       }
     }
   }
