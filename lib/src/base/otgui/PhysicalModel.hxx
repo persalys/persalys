@@ -50,6 +50,7 @@ public:
 
   InputCollection getInputs() const;
   Input & getInputByName(const OT::String & inputName);
+  Input getInputByName(const OT::String & inputName) const;
   void setInputs(const InputCollection & inputs);
   void setInputName(const OT::String & inputName, const OT::String & newName);
   void setInputDescription(const OT::String & inputName, const OT::String & description);
@@ -65,6 +66,7 @@ public:
 
   OutputCollection getOutputs() const;
   Output & getOutputByName(const OT::String & outputName);
+  Output getOutputByName(const OT::String & outputName) const;
   void setOutputs(const OutputCollection & outputs);
   void setOutputName(const OT::String & outputName, const OT::String & newName);
   void setOutputDescription(const OT::String & outputName, const OT::String & description);

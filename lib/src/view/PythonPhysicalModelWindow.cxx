@@ -135,36 +135,32 @@ void PythonPhysicalModelWindow::parseVariables()
     }
   }
 
-  Description existingInputVariables(physicalModel_.getInputNames());
+  InputCollection newInputs(inputVariables.getSize());
   for (unsigned int i = 0; i < inputVariables.getSize(); ++ i)
   {
-    if (!existingInputVariables.__contains__(inputVariables[i]))
+    if (physicalModel_.hasInputNamed(inputVariables[i]))
     {
-      physicalModel_.addInput(Input(inputVariables[i]));
+      newInputs[i] = physicalModel_.getInputByName(inputVariables[i]);
+    }
+    else
+    {
+      newInputs[i] = Input(inputVariables[i]);
     }
   }
-  for (unsigned int i = 0; i < existingInputVariables.getSize(); ++ i)
-  {
-    if (!inputVariables.__contains__(existingInputVariables[i]))
-    {
-      physicalModel_.removeInput(existingInputVariables[i]);
-    }
-  }
+  physicalModel_.setInputs(newInputs);
 
-  Description existingOutputVariables(physicalModel_.getOutputNames());
+  OutputCollection newOutputs(outputVariables.getSize());
   for (unsigned int i = 0; i < outputVariables.getSize(); ++ i)
   {
-    if (!existingOutputVariables.__contains__(outputVariables[i]))
+    if (physicalModel_.hasOutputNamed(outputVariables[i]))
     {
-      physicalModel_.addOutput(Output(outputVariables[i]));
+      newOutputs[i] = physicalModel_.getOutputByName(outputVariables[i]);
+    }
+    else
+    {
+      newOutputs[i] = Output(outputVariables[i]);
     }
   }
-  for (unsigned int i = 0; i < existingOutputVariables.getSize(); ++ i)
-  {
-    if (!outputVariables.__contains__(existingOutputVariables[i]))
-    {
-      physicalModel_.removeOutput(existingOutputVariables[i]);
-    }
-  }
+  physicalModel_.setOutputs(newOutputs);
 }
 }

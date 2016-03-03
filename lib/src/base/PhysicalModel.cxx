@@ -97,6 +97,12 @@ Input & PhysicalModel::getInputByName(const String & inputName)
 }
 
 
+Input PhysicalModel::getInputByName(const String & inputName) const
+{
+  return getImplementation()->getInputByName(inputName);
+}
+
+
 void PhysicalModel::setInputs(const InputCollection & inputs)
 {
   getImplementation()->setInputs(inputs);
@@ -170,6 +176,12 @@ bool PhysicalModel::hasStochasticInputs() const
 
 
 Output & PhysicalModel::getOutputByName(const String & outputName)
+{
+  return getImplementation()->getOutputByName(outputName);
+}
+
+
+Output PhysicalModel::getOutputByName(const String & outputName) const
 {
   return getImplementation()->getOutputByName(outputName);
 }

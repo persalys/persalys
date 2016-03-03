@@ -76,6 +76,15 @@ Input & PhysicalModelImplementation::getInputByName(const String & inputName)
 }
 
 
+Input PhysicalModelImplementation::getInputByName(const String & inputName) const
+{
+  for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
+    if (inputs_[i].getName() == inputName)
+      return inputs_[i];
+  throw InvalidArgumentException(HERE) << "The given input name " << inputName <<" does not correspond to an input of the physical model.\n";
+}
+
+
 void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
 {
   std::set<String> inputNames;
@@ -263,6 +272,15 @@ bool PhysicalModelImplementation::hasStochasticInputs() const
 
 
 Output & PhysicalModelImplementation::getOutputByName(const String & outputName)
+{
+  for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
+    if (outputs_[i].getName() == outputName)
+      return outputs_[i];
+  throw InvalidArgumentException(HERE) << "The given output name " << outputName <<" does not correspond to an output of the physical model.\n";
+}
+
+
+Output PhysicalModelImplementation::getOutputByName(const String & outputName) const
 {
   for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
     if (outputs_[i].getName() == outputName)
