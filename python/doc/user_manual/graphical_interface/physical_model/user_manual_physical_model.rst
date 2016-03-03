@@ -136,10 +136,20 @@ which contains:
 
 - Definitions for the input and output variables;
 
+- Computation parameters;
+
 - Actions to be performed to evaluate the model (for instance, a call to Code_Aster solver)
 
 .. image:: /user_manual/graphical_interface/physical_model/YACSPhysicalModel.png
     :align: center
+
+The user requires the parallelization of the computation when checking the check box
+**Parallelize status**.
+Because of a bug in the module of Code_Aster, it is necessary to uncheck **Parallelize status**
+before launching analyses using Code_Aster solver.
+
+The combo box **Fitting machines** lists all the machines defined in the xml file where the computation
+can be realized.
 
 The **Evaluate** button calculates the value of the outputs based on the input values
 and the Python code. It shall be used to test the physical model. In order to get evaluations which can be saved,

@@ -116,6 +116,11 @@ The maximum value of :math:`Ep` is 0.0892877 with X=[10035.5 3024.67 4098.69].
 3-2-1 Figures
 *************
 
+.. image:: min_max_result_cogeneration.png
+    :width: 443px
+    :align: center
+    :height: 340px
+
 .. image:: result_cogeneration_ep_vs_q.png
     :width: 443px
     :align: center
@@ -255,7 +260,7 @@ An average temperature on the superior surface 'temptop'.
 ````````````````````
 
 When loading the XML file the window illustrated bellow is completed. When clicking
-on the Evaluate button, the output value must be :math:`1906.79`.
+on the **Evaluate** button, the output value must be :math:`1906.79`.
 
 2-1 Figure
 ''''''''''
@@ -271,7 +276,7 @@ on the Evaluate button, the output value must be :math:`1906.79`.
 3-1 Inputs
 ''''''''''
 
-Because of a bug in the module ASTER, it is necessary to uncheck Parallelize status
+Because of a bug in the module ASTER, it is necessary to uncheck **Parallelize status**
 in the physical model definition window before launching the analysis.
 In the same window, choose the machine which will launch the analysis.
 
