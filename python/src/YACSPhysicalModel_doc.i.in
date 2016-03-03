@@ -1,2 +1,73 @@
 %feature("docstring") OTGUI::YACSPhysicalModel
-"Physical model defined by a YACS schema."
+"Physical model defined by a YACS scheme."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::YACSPhysicalModel::getXMLFileName
+"XML file name accessor.
+
+Returns
+-------
+fileName : str
+    XML file name containing the YACS scheme"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::YACSPhysicalModel::setXMLFileName
+"XML file name accessor.
+
+Parameters
+----------
+fileName : str
+    XML file name containing the YACS scheme"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::YACSPhysicalModel::getParallelizeStatus
+"Whether the computation is parallelized.
+
+Returns
+-------
+status : bool
+    Whether the computation is parallelized"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::YACSPhysicalModel::setParallelizeStatus
+"Whether the computation is parallelized.
+
+Parameters
+----------
+status : bool
+    Whether the computation is parallelized"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::YACSPhysicalModel::getFittingMachines
+"Fitting machines accessor.
+
+Returns
+-------
+machines : :class:`~openturns.Description`
+    Fitting machines"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::YACSPhysicalModel::getWantedMachine
+"Wanted machine for computation.
+
+Returns
+-------
+machine : str
+    Wanted machine for computation."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::YACSPhysicalModel::setWantedMachine
+"Wanted machine for computation.
+
+Parameters
+----------
+machine : str
+    Wanted machine for computation. The machine must be in the list
+    of the fitting machines"

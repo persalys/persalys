@@ -46,6 +46,7 @@ public:
   void addOutput(const Output & output);
   void removeOutput(const OT::String & outputName);
 
+  /** Accessor to the xml file name */
   OT::String getXMLFileName() const;
   void setXMLFileName(const OT::String & fileName);
 

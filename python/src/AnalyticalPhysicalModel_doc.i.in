@@ -8,7 +8,7 @@ name : str
 inputs : sequence of :class:`~otguibase.Input`
     Input variables (optional)
 outputs : sequence of :class:`~otguibase.Output`
-    Output` variables (optional)
+    Output variables (optional)
 
 Notes
 -----
