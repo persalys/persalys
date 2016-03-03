@@ -254,6 +254,9 @@ An average temperature on the superior surface 'temptop'.
 2- XML file loading
 ````````````````````
 
+When loading the XML file the window illustrated bellow is completed. When clicking
+on the Evaluate button, the output value must be :math:`1906.79`.
+
 2-1 Figure
 ''''''''''
 
