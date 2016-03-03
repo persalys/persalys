@@ -22,6 +22,8 @@
 #include "OTtestcode.hxx"
 #include "otgui/OTStudy.hxx"
 #include "otgui/YACSPhysicalModel.hxx"
+#include "otgui/TaylorExpansionsMomentsAnalysis.hxx"
+#include "otgui/ModelEvaluation.hxx"
 
 
 using namespace OT;
@@ -45,10 +47,23 @@ int main(int argc, char *argv[])
     OTStudy myStudy("myStudy");
 
     YACSPhysicalModel myPhysicalModel("myPhysicalModel", fileName);
+    myPhysicalModel.setInputDistribution("Conductivity", Normal(0.5, 0.01));
+    myPhysicalModel.setParallelizeStatus(false);
+    myPhysicalModel.setWantedMachine("localhost");
     myStudy.add(myPhysicalModel);
 
+    // Model evaluation
+    ModelEvaluation anEval("anEval", myPhysicalModel);
+    anEval.run();
+
     // Comparaison
-//     assert_almost_equal(outputSample, resultSample, 1e-16);
+    assert_almost_equal(1906.79, anEval.getResult().getOutputSample()[0][0], 1e-5);
+
+    TaylorExpansionsMomentsAnalysis analysis("TaylorExpansions", myPhysicalModel);
+    analysis.run();
+
+    // Comparaison
+    assert_almost_equal(2020., analysis.getResult().getMeanFirstOrder()[0], 1e-16);
   }
   catch (TestFailed & ex)
   {
