@@ -40,6 +40,9 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelItem * item)
   : OTguiSubWindow(item)
   , physicalModel_(item->getPhysicalModel())
 {
+  connect(item, SIGNAL(parallelizeStatusChanged()), this, SLOT(updateParallelizeStatusWidget()));
+  connect(item, SIGNAL(wantedMachineChanged()), this, SLOT(updateWantedMachineWidget()));
+
   QWidget * mainWidget = new QWidget;
   QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
 
@@ -58,10 +61,51 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelItem * item)
 
   mainLayout->addLayout(fieldsLayout);
 
+  // YACS scheme parameters
+  QGroupBox * YACSSchemeParametersGroupBox = new QGroupBox(tr("YACS Scheme Parameters"));
+  QVBoxLayout * YACSSchemeParametersGroupBoxLayout = new QVBoxLayout(YACSSchemeParametersGroupBox);
+  YACSSchemeParametersGroupBox->setCheckable(true);
+  YACSSchemeParametersGroupBox->setChecked(false);
+  YACSSchemeParametersGroupBox->setStyleSheet("QGroupBox::indicator::unchecked {image: url(:/images/down_arrow.png);}\
+                                               QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
+  
+  connect(YACSSchemeParametersGroupBox, SIGNAL(toggled(bool)), this, SLOT(showHideYACSParametersWidgets(bool)));
+
+  YACSSchemeParametersWidgets_ = new QWidget;
+  QGridLayout * YACSSchemeParametersLayout = new QGridLayout(YACSSchemeParametersWidgets_);
+
+  // parallelize status
+  parallelizeStatusCheckBox_ = new QCheckBox(tr("Parallelize status"));
+  parallelizeStatusCheckBox_->setChecked(dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getParallelizeStatus());
+  connect(parallelizeStatusCheckBox_, SIGNAL(toggled(bool)), this, SLOT(updateParallelizeStatus(bool)));
+  YACSSchemeParametersLayout->addWidget(parallelizeStatusCheckBox_, 0, 0);
+
+  // machines list
+  QLabel * fittingMachinesLabel = new QLabel(tr("Fitting machines"));
+  YACSSchemeParametersLayout->addWidget(fittingMachinesLabel, 1, 0);
+  fittingMachinesComboBox_ = new QComboBox;
+  QStringList items;
+  Description fittingMachines = dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getFittingMachines();
+  for (UnsignedInteger i=0; i<fittingMachines.getSize(); ++i)
+    items << fittingMachines[i].c_str();
+  fittingMachinesComboBox_->addItems(items);
+  QString wantedMachine = dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getWantedMachine().c_str();
+  fittingMachinesComboBox_->setCurrentIndex(fittingMachinesComboBox_->findText(wantedMachine));
+  fittingMachinesComboBox_->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+  connect(fittingMachinesComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateWantedMachine(int)));
+  YACSSchemeParametersLayout->addWidget(fittingMachinesComboBox_, 1, 1);
+  YACSSchemeParametersLayout->setColumnStretch(2, 1);
+  YACSSchemeParametersGroupBoxLayout->addWidget(YACSSchemeParametersWidgets_);
+  YACSSchemeParametersWidgets_->hide();
+
+  mainLayout->addWidget(YACSSchemeParametersGroupBox);
+
+  // variables tables
   PhysicalModelWindowWidget * widget = new PhysicalModelWindowWidget(item);
   connect(widget, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
   mainLayout->addWidget(widget);
 
+  // error message
   errorMessageLabel_ = new QLabel;
   errorMessageLabel_->setWordWrap(true);
   mainLayout->addWidget(errorMessageLabel_);
@@ -98,6 +142,20 @@ void YACSPhysicalModelWindow::selectImportFileDialogRequested()
       try
       {
         dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->setXMLFileName(fileName.toLocal8Bit().data());
+
+        // parallelize status
+        parallelizeStatusCheckBox_->setChecked(dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getParallelizeStatus());
+
+        // fitting machines
+        QStringList items;
+        fittingMachinesComboBox_->clear();
+        Description fittingMachines = dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getFittingMachines();
+        for (UnsignedInteger i=0; i<fittingMachines.getSize(); ++i)
+          items << fittingMachines[i].c_str();
+        fittingMachinesComboBox_->addItems(items);
+        QString wantedMachine = dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getWantedMachine().c_str();
+        fittingMachinesComboBox_->setCurrentIndex(fittingMachinesComboBox_->findText(wantedMachine));
+
         setErrorMessage("");
       }
       catch (std::exception & ex)
@@ -106,5 +164,44 @@ void YACSPhysicalModelWindow::selectImportFileDialogRequested()
       }
     }
   }
+}
+
+
+void YACSPhysicalModelWindow::showHideYACSParametersWidgets(bool show)
+{
+  if (show)
+    YACSSchemeParametersWidgets_->show();
+  else
+    YACSSchemeParametersWidgets_->hide();
+}
+
+
+void YACSPhysicalModelWindow::updateParallelizeStatus(bool status)
+{
+  dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->setParallelizeStatus(status);
+}
+
+
+void YACSPhysicalModelWindow::updateWantedMachine(int index)
+{
+  dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->setWantedMachine(fittingMachinesComboBox_->currentText().toStdString());
+}
+
+
+void YACSPhysicalModelWindow::updateParallelizeStatusWidget()
+{
+  parallelizeStatusCheckBox_->blockSignals(true);
+  bool newStatus = dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getParallelizeStatus();
+  parallelizeStatusCheckBox_->setChecked(newStatus);
+  parallelizeStatusCheckBox_->blockSignals(false);
+}
+
+
+void YACSPhysicalModelWindow::updateWantedMachineWidget()
+{
+  fittingMachinesComboBox_->blockSignals(true);
+  QString wantedMachine = dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getWantedMachine().c_str();
+  fittingMachinesComboBox_->setCurrentIndex(fittingMachinesComboBox_->findText(wantedMachine));
+  fittingMachinesComboBox_->blockSignals(false);
 }
 }

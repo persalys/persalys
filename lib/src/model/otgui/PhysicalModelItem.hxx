@@ -51,6 +51,8 @@ signals:
   void codeChanged();
   void physicalModelChanged(const PhysicalModel&);
   void physicalModelRemoved(QStandardItem*);
+  void parallelizeStatusChanged();
+  void wantedMachineChanged();
 
 private:
   PhysicalModel physicalModel_;

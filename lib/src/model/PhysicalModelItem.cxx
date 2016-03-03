@@ -75,6 +75,14 @@ void PhysicalModelItem::update(Observable* source, const String & message)
   {
     emit codeChanged();
   }
+  else if (message == "parallelizeStatusChanged")
+  {
+    emit parallelizeStatusChanged();
+  }
+  else if (message == "wantedMachineChanged")
+  {
+    emit wantedMachineChanged();
+  }
   else if (message == "physicalModelRemoved")
   {
     emit physicalModelRemoved(this);
