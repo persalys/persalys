@@ -100,7 +100,7 @@ An item is created in the study tree which allows the user to retrieve the resul
 of the design of experiment.
 
 - The tab **Min/Max** summarizes the result of the design. The minimum and maximum values
-  of the selected output is presented with the input values which has led to these
+  of the selected output are presented with the input values which has led to these
   extrema.
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentMinMax.png

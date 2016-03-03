@@ -87,6 +87,9 @@ The file menu gathers the following shortcuts:
 
 - Import Python...: Display a dialog box for loading an OTGui Python script.
 
+- Close: Close the current OTStudy. A pop-up dialog window will appear if the current OTStudy has not been saved.
+  Any OTStudy may also be closed through its contextual menu.
+
 - Exit: Quit OTGui
 
 View Menu
