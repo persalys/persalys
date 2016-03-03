@@ -90,6 +90,43 @@ void YACSPhysicalModel::removeOutput(const String & outputName)
 }
 
 
+/* Accessor to the parallelize status */
+bool YACSPhysicalModel::getParallelizeStatus() const
+{
+  return evaluation_.getParallelizeStatus();
+}
+
+
+/* Accessor to the parallelize status */
+void YACSPhysicalModel::setParallelizeStatus(const bool & status)
+{
+  evaluation_.setParallelizeStatus(status);
+  notify("parallelizeStatusChanged");
+}
+
+
+/* Accessor to the fitting machines */
+Description YACSPhysicalModel::getFittingMachines() const
+{
+  return evaluation_.getFittingMachines();
+}
+
+
+/* Accessor to the wanted machine */
+String YACSPhysicalModel::getWantedMachine() const
+{
+  return evaluation_.getWantedMachine();
+}
+
+
+/* Accessor to the wanted machine */
+void YACSPhysicalModel::setWantedMachine(const String & machine)
+{
+  evaluation_.setWantedMachine(machine);
+  notify("wantedMachineChanged");
+}
+
+
 String YACSPhysicalModel::getXMLFileName() const
 {
   return xmlFileName_;
@@ -174,6 +211,7 @@ void YACSPhysicalModel::save(Advocate & adv) const
 {
   PhysicalModelImplementation::save(adv);
   adv.saveAttribute("xmlFileName_", xmlFileName_);
+  adv.saveAttribute("evaluation_", evaluation_);
 }
 
 
@@ -182,6 +220,6 @@ void YACSPhysicalModel::load(Advocate & adv)
 {
   PhysicalModelImplementation::load(adv);
   adv.loadAttribute("xmlFileName_", xmlFileName_);
-  evaluation_.setXMLFileName(xmlFileName_);
+  adv.loadAttribute("evaluation_", evaluation_);
 }
 }

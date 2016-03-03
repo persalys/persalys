@@ -42,13 +42,9 @@ class OTGUI_API YACSEvaluation : public OT::NumericalMathEvaluationImplementatio
 public:
   /** Default constructor */
   YACSEvaluation(const OT::String & xmlFileName = "");
-  /* Constructor with parameters */
-  YACSEvaluation(const YACSEvaluation & other);
 
   /** Virtual constructor */
   virtual YACSEvaluation * clone() const;
-
-  virtual ~YACSEvaluation();
 
   /** Comparison operator */
   OT::Bool operator ==(const YACSEvaluation & other) const;
@@ -82,6 +78,17 @@ public:
   OT::String getXMLFileName() const;
   void setXMLFileName(const OT::String & xmlFileName);
 
+  /** Accessor to the parallelize status */
+  bool getParallelizeStatus() const;
+  void setParallelizeStatus(const bool & status);
+
+  /** Accessor to the fitting machines */
+  OT::Description getFittingMachines() const;
+
+  /** Accessor to the wanted machine */
+  OT::String getWantedMachine() const;
+  void setWantedMachine(const OT::String & machine);
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
@@ -91,10 +98,13 @@ public:
 private:
   static YACSEvalSession * session_;
   OT::String xmlFileName_;
-  YACSEvalYFX * efx_;
+  OT::Pointer<YACSEvalYFX> efx_;
   OT::NumericalPoint inputValues_;
   OT::Description inDescription_;
   OT::Description outDescription_;
+  bool parallelizeStatus_;
+  OT::Description fittingMachines_;
+  OT::String wantedMachine_;
 };
 }
 #endif

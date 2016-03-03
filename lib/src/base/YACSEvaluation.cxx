@@ -40,20 +40,8 @@ YACSEvaluation::YACSEvaluation(const String & fileName)
   : NumericalMathEvaluationImplementation()
   , xmlFileName_(fileName)
   , efx_(0)
-{
-  if (!session_)
-  {
-    session_ = new YACSEvalSession;
-    session_->launch();
-  }
-}
-
-
-/* Copy constructor */
-YACSEvaluation::YACSEvaluation(const YACSEvaluation & other)
-  : NumericalMathEvaluationImplementation(other)
-  , xmlFileName_(other.xmlFileName_)
-  , efx_(0)
+  , parallelizeStatus_(true)
+  , wantedMachine_("localhost")
 {
   if (!session_)
   {
@@ -69,12 +57,6 @@ YACSEvaluation::YACSEvaluation(const YACSEvaluation & other)
 YACSEvaluation* YACSEvaluation::clone() const
 {
   return new YACSEvaluation(*this);
-}
-
-
-YACSEvaluation::~YACSEvaluation()
-{
-  delete efx_;
 }
 
 
@@ -108,8 +90,10 @@ String YACSEvaluation::__str__(const String & offset) const
 /* Method loadData() loads the data from the xmlFileName */
 void YACSEvaluation::loadData()
 {
+  // read file
   efx_ = YACSEvalYFX::BuildFromFile(xmlFileName_);
 
+  // get variables information
   std::vector< YACSEvalInputPort * > inps(efx_->getFreeInputPorts());
   std::vector< YACSEvalOutputPort * > outps(efx_->getFreeOutputPorts());
 
@@ -125,6 +109,17 @@ void YACSEvaluation::loadData()
 
   for (int i=0; i<outps.size(); ++i)
     outDescription_[i] = outps[i]->getName();
+
+  // get parameters
+  parallelizeStatus_ = efx_->getParallelizeStatus();
+
+  efx_->lockPortsForEvaluation(inps, outps);
+  YACSEvalListOfResources *rss(efx_->giveResources());
+  fittingMachines_ = Description(rss->getAllFittingMachines().size());
+  for (int i=0; i<rss->getAllFittingMachines().size(); ++i)
+    fittingMachines_[i] = rss->getAllFittingMachines()[i];
+
+  efx_->unlockAll();
 }
 
 
@@ -180,15 +175,16 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
   NumericalSample result(inS.getSize(), getOutputDimension());
   result.setDescription(getOutputVariablesNames());
 
-  efx_->lockPortsForEvaluation(inps, outps);
+  efx_.get()->lockPortsForEvaluation(inps, outps);
   efx_->getUndergroundGeneratedGraph();
-  YACSEvalListOfResources *rss(efx_->giveResources());
-  rss->setWantedMachine("localhost");
+  efx_.get()->setParallelizeStatus(parallelizeStatus_);
+  efx_.get()->giveResources()->setWantedMachine(wantedMachine_);
+
   int b = 0;
-  bool a(efx_->run(session_, b));
+  bool a(efx_.get()->run(session_, b));
   if (!a)
   {
-    efx_->unlockAll();
+    efx_.get()->unlockAll();
     throw NotDefinedException(HERE) << "Error when executing YACS scheme. ";
   }
 
@@ -201,7 +197,7 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
     for (int h=0; h<res_k->size(); ++h)
       result[h][k] = res_k->getInternal()->at(h);
   }
-  efx_->unlockAll();
+  efx_.get()->unlockAll();
   return result;
 }
 
@@ -252,6 +248,41 @@ UnsignedInteger YACSEvaluation::getOutputDimension() const
 }
 
 
+/* Accessor to the parallelize status */
+bool YACSEvaluation::getParallelizeStatus() const
+{
+  return parallelizeStatus_;
+}
+
+
+/* Accessor to the parallelize status */
+void YACSEvaluation::setParallelizeStatus(const bool & status)
+{
+  parallelizeStatus_ = status;
+}
+
+
+/* Accessor to the fitting machines */
+Description YACSEvaluation::getFittingMachines() const
+{
+  return fittingMachines_;
+}
+
+
+/* Accessor to the wanted machine */
+String YACSEvaluation::getWantedMachine() const
+{
+  return wantedMachine_;
+}
+
+
+/* Accessor to the wanted machine */
+void YACSEvaluation::setWantedMachine(const String & machine)
+{
+  wantedMachine_ = machine;
+}
+
+
 /* Accessor to the formulas */
 String YACSEvaluation::getXMLFileName() const
 {
@@ -270,6 +301,8 @@ void YACSEvaluation::save(Advocate & adv) const
 {
   NumericalMathEvaluationImplementation::save(adv);
   adv.saveAttribute("xmlFileName_", xmlFileName_);
+  adv.saveAttribute("parallelizeStatus_", parallelizeStatus_);
+  adv.saveAttribute("wantedMachine_", wantedMachine_);
 }
 
 
@@ -280,5 +313,7 @@ void YACSEvaluation::load(Advocate & adv)
   adv.loadAttribute("xmlFileName_", xmlFileName_);
   if (!xmlFileName_.empty())
     loadData();
+  adv.loadAttribute("parallelizeStatus_", parallelizeStatus_);
+  adv.loadAttribute("wantedMachine_", wantedMachine_);
 }
 }

@@ -49,6 +49,17 @@ public:
   OT::String getXMLFileName() const;
   void setXMLFileName(const OT::String & fileName);
 
+  /** Accessor to the parallelize status */
+  bool getParallelizeStatus() const;
+  void setParallelizeStatus(const bool & status);
+
+  /** Accessor to the fitting machines */
+  OT::Description getFittingMachines() const;
+
+  /** Accessor to the wanted machine */
+  OT::String getWantedMachine() const;
+  void setWantedMachine(const OT::String & machine);
+
   OT::NumericalMathFunction getFunction(const OT::Description & outputNames) const;
   OT::NumericalMathFunction getFunction() const;
 
