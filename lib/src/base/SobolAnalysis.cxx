@@ -43,6 +43,7 @@ SobolAnalysis::SobolAnalysis()
 /* Constructor with parameters */
 SobolAnalysis::SobolAnalysis(const String & name, const PhysicalModel & physicalModel, const UnsignedInteger nbSimu)
   : SimulationAnalysis(name, physicalModel, nbSimu)
+  , blockSize_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultBlockSize"))
 {
 //TODO ctr with outputNames (pas OutputCollection!) optionnel par défaut prendrait tous les outputs
 }
