@@ -34,8 +34,10 @@ public:
   /** Default constructor */
   TaylorExpansionsMomentsResult();
   /** Constructor with parameters */
-  TaylorExpansionsMomentsResult(const OT::QuadraticCumul & algoTaylorExpansionsMoments,
-                                const OT::Description & outputNames);
+  TaylorExpansionsMomentsResult(const OT::Description & outputNames, const OT::NumericalPoint & meanFirstOrder,
+                                const OT::NumericalPoint & meanSecondOrder,
+                                const OT::NumericalPoint & standardDeviation,
+                                const OT::NumericalPoint & variance);
 
   /** Virtual constructor */
   virtual TaylorExpansionsMomentsResult * clone() const;
@@ -43,8 +45,8 @@ public:
   OT::Description getOutputNames() const;
   OT::NumericalPoint getMeanFirstOrder() const;
   OT::NumericalPoint getMeanSecondOrder() const;
-  OT::NumericalPoint getStandardDeviation();
-  OT::NumericalPoint getVariance();
+  OT::NumericalPoint getStandardDeviation() const;
+  OT::NumericalPoint getVariance() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -53,8 +55,9 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  OT::QuadraticCumul algoTaylorExpansionsMoments_;
   OT::Description outputNames_;
+  OT::NumericalPoint meanFirstOrder_;
+  OT::NumericalPoint meanSecondOrder_;
   OT::NumericalPoint standardDeviation_;
   OT::NumericalPoint variance_;
 };

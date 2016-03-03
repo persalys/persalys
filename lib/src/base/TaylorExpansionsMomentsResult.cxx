@@ -34,16 +34,21 @@ static Factory<TaylorExpansionsMomentsResult> RegisteredFactory("TaylorExpansion
 TaylorExpansionsMomentsResult::TaylorExpansionsMomentsResult()
   : PersistentObject()
 {
-
 }
 
 
 /* Constructor with parameters */
-TaylorExpansionsMomentsResult::TaylorExpansionsMomentsResult(const QuadraticCumul & algoTaylorExpansionsMoments,
-                                                             const Description & outputNames)
+TaylorExpansionsMomentsResult::TaylorExpansionsMomentsResult(const OT::Description & outputNames,
+                                                             const OT::NumericalPoint & meanFirstOrder,
+                                                             const OT::NumericalPoint & meanSecondOrder,
+                                                             const OT::NumericalPoint & standardDeviation,
+                                                             const OT::NumericalPoint & variance)
   : PersistentObject()
-  , algoTaylorExpansionsMoments_(algoTaylorExpansionsMoments)
   , outputNames_(outputNames)
+  , meanFirstOrder_(meanFirstOrder)
+  , meanSecondOrder_(meanSecondOrder)
+  , standardDeviation_(standardDeviation)
+  , variance_(variance)
 {
 }
 
@@ -63,36 +68,24 @@ Description TaylorExpansionsMomentsResult::getOutputNames() const
 
 NumericalPoint TaylorExpansionsMomentsResult::getMeanFirstOrder() const
 {
-  return algoTaylorExpansionsMoments_.getMeanFirstOrder();
+  return meanFirstOrder_;
 }
 
 
 NumericalPoint TaylorExpansionsMomentsResult::getMeanSecondOrder() const
 {
-  return algoTaylorExpansionsMoments_.getMeanSecondOrder();
+  return meanSecondOrder_;
 }
 
 
-NumericalPoint TaylorExpansionsMomentsResult::getStandardDeviation()
+NumericalPoint TaylorExpansionsMomentsResult::getStandardDeviation() const
 {
-  if (!standardDeviation_.getSize())
-  {
-    standardDeviation_ = NumericalPoint(getVariance().getDimension());
-    for (UnsignedInteger i=0; i<getVariance().getDimension(); ++i)
-      standardDeviation_[i] = sqrt(getVariance()[i]);
-  }
   return standardDeviation_;
 }
 
 
-NumericalPoint TaylorExpansionsMomentsResult::getVariance()
+NumericalPoint TaylorExpansionsMomentsResult::getVariance() const
 {
-  if (!variance_.getSize())
-  {
-    variance_ = NumericalPoint(algoTaylorExpansionsMoments_.getCovariance().getDimension());
-    for (UnsignedInteger i=0; i<variance_.getDimension(); ++i)
-      variance_[i] = algoTaylorExpansionsMoments_.getCovariance()(i,i);
-  }
   return variance_;
 }
 
@@ -101,8 +94,9 @@ NumericalPoint TaylorExpansionsMomentsResult::getVariance()
 void TaylorExpansionsMomentsResult::save(Advocate & adv) const
 {
   PersistentObject::save(adv);
-  adv.saveAttribute("algoTaylorExpansionsMoments_", algoTaylorExpansionsMoments_);
   adv.saveAttribute("outputNames_", outputNames_);
+  adv.saveAttribute("meanFirstOrder_", meanFirstOrder_);
+  adv.saveAttribute("meanSecondOrder_", meanSecondOrder_);
   adv.saveAttribute("standardDeviation_", standardDeviation_);
   adv.saveAttribute("variance_", variance_);
 }
@@ -112,8 +106,9 @@ void TaylorExpansionsMomentsResult::save(Advocate & adv) const
 void TaylorExpansionsMomentsResult::load(Advocate & adv)
 {
   PersistentObject::load(adv);
-  adv.loadAttribute("algoTaylorExpansionsMoments_", algoTaylorExpansionsMoments_);
   adv.loadAttribute("outputNames_", outputNames_);
+  adv.loadAttribute("meanFirstOrder_", meanFirstOrder_);
+  adv.loadAttribute("meanSecondOrder_", meanSecondOrder_);
   adv.loadAttribute("standardDeviation_", standardDeviation_);
   adv.loadAttribute("variance_", variance_);
 }

@@ -71,7 +71,16 @@ void TaylorExpansionsMomentsAnalysis::run()
   QuadraticCumul algoTaylorExpansionsMoments(getPhysicalModel().getOutputRandomVector(outputNames_));
 
   // set results
-  result_ = TaylorExpansionsMomentsResult(algoTaylorExpansionsMoments, outputNames_);
+  NumericalPoint meanFirstOrder = algoTaylorExpansionsMoments.getMeanFirstOrder();
+  NumericalPoint meanSecondOrder = algoTaylorExpansionsMoments.getMeanSecondOrder();
+  NumericalPoint variance = NumericalPoint(algoTaylorExpansionsMoments.getCovariance().getDimension());
+  for (UnsignedInteger i=0; i<variance.getDimension(); ++i)
+    variance[i] = algoTaylorExpansionsMoments.getCovariance()(i,i);
+  NumericalPoint standardDeviation(variance.getDimension());
+  for (UnsignedInteger i=0; i<variance.getDimension(); ++i)
+    standardDeviation[i] = sqrt(variance[i]);
+
+  result_ = TaylorExpansionsMomentsResult(outputNames_, meanFirstOrder, meanSecondOrder, standardDeviation, variance);
 
   notify("analysisFinished");
 }
