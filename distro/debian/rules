@@ -29,6 +29,7 @@ override_dh_auto_configure: $(PYALL:python%=cmake-configure-%) \
 cmake-configure-%:
 	dh_auto_configure -Bbuild-python$* -- \
             -DUSE_SPHINX=OFF \
+            -DUSE_SALOME=OFF \
             -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++ \
             -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc \
             -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo \

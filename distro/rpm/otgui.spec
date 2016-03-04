@@ -17,7 +17,7 @@ FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
 Name:           otgui
 Version:        1.0
 Release:        0%{?dist}
-Summary:        OpenTURNS module
+Summary:        GUI for OpenTURNS
 Group:          System Environment/Libraries
 License:        LGPLv3+
 URL:            http://www.openturns.org/
@@ -27,10 +27,11 @@ BuildRequires:  gcc-c++, cmake, swig
 BuildRequires:  openturns-devel
 BuildRequires:  python-openturns
 BuildRequires:  python-devel
+BuildRequires:  qwt-devel >= 6
 Requires:       libotgui0
 
 %description
-Template module for OpenTURNS library.
+GUI module for OpenTURNS library.
 
 %package -n libotgui0
 Summary:        OTGui development files
@@ -68,7 +69,8 @@ Python textual interface to OTGui uncertainty library
 %build
 %cmake -DCMAKE_INSTALL_PREFIX=/usr \
        -DINSTALL_DESTDIR:PATH=%{buildroot} \
-       -DBUILD_DOC=OFF .
+       -DUSE_SPHINX=OFF \
+       -DUSE_SALOME=OFF .
 make %{?_smp_mflags}
 
 %install
@@ -78,7 +80,7 @@ make install DESTDIR=%{buildroot}
 %check
 make tests %{?_smp_mflags}
 ctest %{?_smp_mflags} || cat Testing/Temporary/LastTest.log
-rm %{buildroot}%{python_sitearch}/%{name}/*.pyc
+rm %{buildroot}%{python_sitearch}/%{name}base/*.pyc
 
 %clean
 rm -rf %{buildroot}
@@ -89,6 +91,7 @@ rm -rf %{buildroot}
 %files -n libotgui0
 %defattr(-,root,root,-)
 %{_libdir}/*.so.*
+%{_bindir}/otgui
 
 %files devel
 %defattr(-,root,root,-)
@@ -105,7 +108,7 @@ rm -rf %{buildroot}
 
 %files -n python-%{name}
 %defattr(-,root,root,-)
-%{python_sitearch}/%{name}
+%{python_sitearch}/%{name}base
 
 
 %changelog
