@@ -1,5 +1,14 @@
 %feature("docstring") OTGUI::MonteCarloReliabilityAnalysis
-"Monte Carlo for reliability analysis."
+"Monte Carlo for reliability analysis.
+
+Parameters
+----------
+name : str
+    Name
+limitState : :class:`~otguibase.LimitState`
+    Limit state
+simulationNumber : int
+    Simulations number (optional)"
 
 // ---------------------------------------------------------------------
 

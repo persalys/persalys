@@ -1,5 +1,14 @@
 %feature("docstring") OTGUI::SRCAnalysis
-"SRC sensitivity analysis."
+"SRC sensitivity analysis.
+
+Parameters
+----------
+name : str
+    Name
+physicalModel : :class:`~otguibase.PhysicalModel`
+    Limit state
+simulationNumber : int
+    Simulations number (optional)"
 
 // ---------------------------------------------------------------------
 

@@ -1,5 +1,12 @@
 %feature("docstring") OTGUI::TaylorExpansionsMomentsAnalysis
-"Taylor expansions for moments estimation."
+"Taylor expansions for moments estimation.
+
+Parameters
+----------
+name : str
+    Name
+physicalModel : :class:`~otguibase.PhysicalModel`
+    Limit state"
 
 // ---------------------------------------------------------------------
 

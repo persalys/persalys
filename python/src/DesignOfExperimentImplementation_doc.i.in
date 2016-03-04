@@ -1,5 +1,31 @@
 %define OTGUI_DesignOfExperiment_doc
-"Design of experiment base class."
+"Design of experiment base class.
+
+Available constructors:
+    DesignOfExperiment(*name, physicalModel*)
+
+    DesignOfExperiment(*name, physicalModel, lowerBound, upperBound, nbValues, values*)
+
+    DesignOfExperiment(*name, physicalModel, fileName, columns*)
+
+Parameters
+----------
+name : str
+    Name
+physicalModel : `~otguibase.Physicalmodel`
+    Physical model
+lowerBound : sequence of float
+    Lower bound
+upperBound : sequence of float
+    Upper bound
+nbValues : sequence of int
+    Number of values along each direction
+values : sequence of float
+    Values (optional)
+fileName : str
+    Name of a data file to load
+columns : sequence of int
+    Indices of columns in files to consider (optional)"
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation
 OTGUI_DesignOfExperiment_doc

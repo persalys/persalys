@@ -19,7 +19,7 @@ windows (model definition or result window) open, surrounded by:
   .. image:: /user_manual/graphical_interface/getting_started/tree.png
       :align: center
 
-  It contains the OpenTURNS study and all subsequent models defined and analysis performed.
+  It contains the study and all subsequent models defined and analysis performed.
   The name of each element created by can be modified by the user by double-click on the element.
   The element **Deterministic study**, **Probabilistic study** and **Designs of experiment**
   cannot be renamed.

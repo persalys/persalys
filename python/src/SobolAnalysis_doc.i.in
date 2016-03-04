@@ -1,5 +1,14 @@
 %feature("docstring") OTGUI::SobolAnalysis
-"Sobol' sensitivity analysis."
+"Sobol' sensitivity analysis.
+
+Parameters
+----------
+name : str
+    Name
+physicalModel : :class:`~otguibase.PhysicalModel`
+    Physical model
+sampleSize : int
+    Simulations number (optional)"
 
 // ---------------------------------------------------------------------
 
@@ -10,3 +19,23 @@ Returns
 -------
 result : :class:`~otguibase.SobolResult`
     Result"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SobolAnalysis::setBlockSize
+"Block size accessor.
+
+Parameters
+----------
+size : int
+    Block size"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SobolAnalysis::getBlockSize
+"Block size accessor.
+
+Returns
+-------
+size : int
+    Block size"
