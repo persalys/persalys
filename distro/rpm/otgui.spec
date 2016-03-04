@@ -27,7 +27,11 @@ BuildRequires:  gcc-c++, cmake, swig
 BuildRequires:  openturns-devel
 BuildRequires:  python-openturns
 BuildRequires:  python-devel
+%if 0%{?suse_version}
+BuildRequires:  qwt6-devel
+%else
 BuildRequires:  qwt-devel >= 6
+%endif
 Requires:       libotgui0
 
 %description

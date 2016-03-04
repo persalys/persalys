@@ -14,7 +14,7 @@
 #  QWT_ROOT_DIR - root dir (ex. /usr/local)
 
 #=============================================================================
-# Copyright 2010-2013, Julien Schueller
+# Copyright 2010-2016, Julien Schueller
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -43,70 +43,70 @@
 #=============================================================================
 
 
-find_path ( QWT_INCLUDE_DIR
+find_path (QWT_INCLUDE_DIR
   NAMES qwt_plot.h
   HINTS ${QT_INCLUDE_DIR}
-  PATH_SUFFIXES qwt qwt-qt3 qwt-qt4 qwt-qt5
+  PATH_SUFFIXES qwt qwt6 qwt5 qwt-qt5 qwt-qt4
 )
 
-set ( QWT_INCLUDE_DIRS ${QWT_INCLUDE_DIR} )
+set (QWT_INCLUDE_DIRS ${QWT_INCLUDE_DIR})
 
 # version
-set ( _VERSION_FILE ${QWT_INCLUDE_DIR}/qwt_global.h )
-if ( EXISTS ${_VERSION_FILE} )
-  file ( STRINGS ${_VERSION_FILE} _VERSION_LINE REGEX "define[ ]+QWT_VERSION_STR" )
-  if ( _VERSION_LINE )
-    string ( REGEX REPLACE ".*define[ ]+QWT_VERSION_STR[ ]+\"(.*)\".*" "\\1" QWT_VERSION_STRING "${_VERSION_LINE}" )
-    string ( REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1" QWT_MAJOR_VERSION "${QWT_VERSION_STRING}" )
-    string ( REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\2" QWT_MINOR_VERSION "${QWT_VERSION_STRING}" )
-    string ( REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\3" QWT_PATCH_VERSION "${QWT_VERSION_STRING}" )
+set (_VERSION_FILE ${QWT_INCLUDE_DIR}/qwt_global.h)
+if (EXISTS ${_VERSION_FILE})
+  file (STRINGS ${_VERSION_FILE} _VERSION_LINE REGEX "define[ ]+QWT_VERSION_STR")
+  if (_VERSION_LINE)
+    string (REGEX REPLACE ".*define[ ]+QWT_VERSION_STR[ ]+\"(.*)\".*" "\\1" QWT_VERSION_STRING "${_VERSION_LINE}")
+    string (REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1" QWT_MAJOR_VERSION "${QWT_VERSION_STRING}")
+    string (REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\2" QWT_MINOR_VERSION "${QWT_VERSION_STRING}")
+    string (REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\3" QWT_PATCH_VERSION "${QWT_VERSION_STRING}")
   endif ()
 endif ()
 
 
 # check version
-set ( _QWT_VERSION_MATCH TRUE )
-if ( Qwt_FIND_VERSION AND QWT_VERSION_STRING )
-  if ( Qwt_FIND_VERSION_EXACT )
-    if ( NOT Qwt_FIND_VERSION VERSION_EQUAL QWT_VERSION_STRING )
-      set ( _QWT_VERSION_MATCH FALSE )
+set (_QWT_VERSION_MATCH TRUE)
+if (Qwt_FIND_VERSION AND QWT_VERSION_STRING)
+  if (Qwt_FIND_VERSION_EXACT)
+    if (NOT Qwt_FIND_VERSION VERSION_EQUAL QWT_VERSION_STRING)
+      set (_QWT_VERSION_MATCH FALSE)
     endif ()
   else ()
-    if ( QWT_VERSION_STRING VERSION_LESS Qwt_FIND_VERSION )
-      set ( _QWT_VERSION_MATCH FALSE )
+    if (QWT_VERSION_STRING VERSION_LESS Qwt_FIND_VERSION)
+      set (_QWT_VERSION_MATCH FALSE)
     endif ()
   endif ()
 endif ()
 
 
-find_library ( QWT_LIBRARY
-  NAMES qwt qwt-qt3 qwt-qt4 qwt-qt5
+find_library (QWT_LIBRARY
+  NAMES qwt qwt-qt5 qwt-qt4
   HINTS ${QT_LIBRARY_DIR}
 )
 
-set ( QWT_LIBRARIES ${QWT_LIBRARY} )
+set (QWT_LIBRARIES ${QWT_LIBRARY})
 
 
 # try to guess root dir from include dir
-if ( QWT_INCLUDE_DIR )
-  string ( REGEX REPLACE "(.*)/include.*" "\\1" QWT_ROOT_DIR ${QWT_INCLUDE_DIR} )
+if (QWT_INCLUDE_DIR)
+  string (REGEX REPLACE "(.*)/include.*" "\\1" QWT_ROOT_DIR ${QWT_INCLUDE_DIR})
 # try to guess root dir from library dir
-elseif ( QWT_LIBRARY )
-  string ( REGEX REPLACE "(.*)/lib[/|32|64].*" "\\1" QWT_ROOT_DIR ${QWT_LIBRARY} )
+elseif (QWT_LIBRARY)
+  string (REGEX REPLACE "(.*)/lib[/|32|64].*" "\\1" QWT_ROOT_DIR ${QWT_LIBRARY})
 endif ()
 
 
 # handle the QUIETLY and REQUIRED arguments
-include ( FindPackageHandleStandardArgs )
-if ( CMAKE_VERSION VERSION_LESS 2.8.3 )
-  find_package_handle_standard_args( Qwt DEFAULT_MSG QWT_LIBRARY QWT_INCLUDE_DIR _QWT_VERSION_MATCH )
+include (FindPackageHandleStandardArgs)
+if (CMAKE_VERSION VERSION_LESS 2.8.3)
+  find_package_handle_standard_args (Qwt DEFAULT_MSG QWT_LIBRARY QWT_INCLUDE_DIR _QWT_VERSION_MATCH)
 else ()
-  find_package_handle_standard_args( Qwt REQUIRED_VARS QWT_LIBRARY QWT_INCLUDE_DIR _QWT_VERSION_MATCH VERSION_VAR QWT_VERSION_STRING )
+  find_package_handle_standard_args (Qwt REQUIRED_VARS QWT_LIBRARY QWT_INCLUDE_DIR _QWT_VERSION_MATCH VERSION_VAR QWT_VERSION_STRING)
 endif ()
 
 
 mark_as_advanced (
-  QWT_LIBRARY 
+  QWT_LIBRARY
   QWT_LIBRARIES
   QWT_INCLUDE_DIR
   QWT_INCLUDE_DIRS

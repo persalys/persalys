@@ -34,7 +34,7 @@ if (BUILD_GUI)
   find_package (Qt4 COMPONENTS QtCore QtGui REQUIRED)
   include (${QT_USE_FILE})
 
-  find_package (Qwt REQUIRED)
+  find_package (Qwt 6 REQUIRED)
   find_package (PythonLibs REQUIRED)
 endif ()
 
