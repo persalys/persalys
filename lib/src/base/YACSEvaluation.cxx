@@ -33,7 +33,7 @@ CLASSNAMEINIT(YACSEvaluation);
 
 static Factory<YACSEvaluation> RegisteredFactory("YACSEvaluation");
 
-YACSEvalSession * YACSEvaluation::session_ = 0;
+Pointer<YACSEvalSession> YACSEvaluation::session_ = 0;
 
 /* Default constructor */
 YACSEvaluation::YACSEvaluation(const String & fileName)
@@ -181,7 +181,7 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
   efx_.get()->giveResources()->setWantedMachine(wantedMachine_);
 
   int b = 0;
-  bool a(efx_.get()->run(session_, b));
+  bool a(efx_.get()->run(session_.get(), b));
   if (!a)
   {
     efx_.get()->unlockAll();

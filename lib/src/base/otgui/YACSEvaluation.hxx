@@ -96,7 +96,7 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  static YACSEvalSession * session_;
+  static OT::Pointer<YACSEvalSession> session_;
   OT::String xmlFileName_;
   OT::Pointer<YACSEvalYFX> efx_;
   OT::NumericalPoint inputValues_;
