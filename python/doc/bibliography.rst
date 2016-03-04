@@ -8,3 +8,4 @@ Bibliography
 
 .. [Jauge2014] T. De Soza, *20141208_Pole_GC_Salome-Meca-OT.pdf*, 2014.
 
+.. [Dutfoy2009] A. Dutfoy, I. Dutka-Malen, R. Lebrun *OpenTURNS, an Open source initiative to Treat Uncertainties, Risks'N Statistics in a structured industrial approach*, 2009.

@@ -4,10 +4,7 @@ Examples
 Example 1: Deviation of a cantilever beam
 -----------------------------------------
 
-This example has been presented in the ESREL 2007 conference in the paper :
-OpenTURNS, an Open source initiative to Treat Uncertainties, Risks'N Statistics
-in a structured industrial approach, from A. Dutfoy(EDF R&D),
-I. Dutka-Malen(EDF R&D), R. Lebrun (EADS innovation Works) et al.
+This example has been presented in the ESREL 2007 conference in the paper [Dutfoy2009]_.
 
 This example is a simple beam, restrained at one side and stressed by a
 concentrated bending load F at the other side.
