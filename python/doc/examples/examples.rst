@@ -5,6 +5,7 @@ Example 1: Deviation of a cantilever beam
 -----------------------------------------
 
 This example has been presented in the ESREL 2007 conference in the paper [Dutfoy2009]_.
+It is described in the OpenTURNS Example Guide.
 
 This example is a simple beam, restrained at one side and stressed by a
 concentrated bending load F at the other side.
@@ -172,6 +173,10 @@ change the value in the corresponding cell.
 3-1 Taylor Expansions
 '''''''''''''''''''''
 
+For more details on the
+`Linear Taylor Expansions <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid6.xhtml#uid1006>`_
+see the OpenTURNS documentation.
+
 3-1-1 Inputs
 ************
 
@@ -198,10 +203,16 @@ The results window contains a table.
 .. image:: taylor_results_table.png
     :align: center
 
-3-1 Monte Carlo
+3-2 Monte Carlo
 '''''''''''''''
 
-To realize a central tendency analysis with the Monte Carlo method,
+For more details on the `Monte Carlo method <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid4.xhtml#uid626>`_
+see the OpenTURNS documentation.
+
+3-2-1 Inputs
+************
+
+To perform a central tendency analysis with the Monte Carlo method,
 choose **New central tendency** in the
 context menu (right click) of the probabilistic model item in the study tree.
 
@@ -221,12 +232,12 @@ To see advanced parameters, collapse the **Advanced parameters** group.
 Click on **Done** button. A new item with a default name appears in the study
 tree and a results window is created.
 
-3-1 Results
-'''''''''''
+3-2-2 Results
+*************
 
 The results window contains 7 tabs. When requiring 10000 simulations, the seed
 number equal to 0 and the computation of the confidence interval of the mean and
-the standard deviation at 0.95%, the second tab must be contain the following
+the standard deviation at 0.95%, the second tab must contain the following
 values :
 
 .. image:: MonteCarlo_results_window.png
@@ -236,10 +247,13 @@ values :
 4- Min/Max study with deterministic design of experiments
 `````````````````````````````````````````````````````````
 
-3-1 Inputs
+For more details on the `Min/Max approach <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid4.xhtml#uid599>`_
+see the OpenTURNS documentation.
+
+4-1 Inputs
 ''''''''''
 
-To realize a Min/Max study, choose **New design of experiment** in the
+To perform a Min/Max study, choose **New design of experiment** in the
 context menu (right click) of the designs of experiment item in the study tree.
 
 .. image:: contextual_menu_DOE.png
@@ -267,10 +281,10 @@ the column **Value**.
 Click on **Done** button. A new item with a default name appears in the study
 tree and a results window is created.
 
-3-2 Results
+4-2 Results
 '''''''''''
 
-3-2-1 Input variables
+4-2-1 Input variables
 *********************
 
 The results window contains the design of experiment.
@@ -285,7 +299,7 @@ the pavement
 
 Click on **Evaluate** button to compute the output variables.
 
-3-2-1 Min/Max values
+4-2-2 Min/Max values
 ********************
 
 When the computation is finished, columns corresponding to the output variables
@@ -294,15 +308,161 @@ values are added in the table and other tabs appear in the window.
 .. image:: DOE_results.png
     :align: center
 
-The second tab must be contain the following values :
+The second tab must contain the following values:
 
 .. image:: min_max_values_DOE.png
     :align: center
 
 
+5- Sensibility analysis
+```````````````````````
+
+5-1 Sobol' indices
+''''''''''''''''''
+
+For more details on the computation of the `Sobol' indices <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid5.xhtml#uid949>`_
+see the OpenTURNS documentation.
+
+5-1-1 Inputs
+************
+
+To perform a sensibility analysis with the Sobol method, choose
+**New sensibility analysis** in the
+context menu (right click) of the probabilistic model item in the study tree.
+
+.. image:: contextual_menu_proba_model.png
+    :align: center
+
+Check the radio button **Sobol** in the wizard which appears.
+
+.. image:: sensibilityAnalysis_defaultWizard.png
+    :align: center
+
+To see advanced parameters, collapse the **Advanced parameters** group.
+
+.. image:: sobol_parameters.png
+    :align: center
+
+Click on **Done** button. A new item with a default name appears in the study
+tree and a results window is created.
+
+5-1-2 Results
+*************
+
+The results window contains a table with the first and total order indices value
+for each variable. These values are represented in a graphic.
+When requiring 100000 simulations, the values must be:
+
+.. image:: sobol_results_window.png
+    :align: center
+
+The interaction between the variables are mentioned below of the table.
+It is the sum of second order indices. It can be visualize on the graphic by
+the distances between the first order indices and the total order indices.
+
+5-1 SRC indices
+'''''''''''''''
+
+For more details on the computation of the
+`Standard Regression Coefficients <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid5.xhtml#uid916>`_
+see the OpenTURNS documentation.
+
+5-1-1 Inputs
+************
+
+To perform a sensibility analysis with the SRC method, choose
+**New sensibility analysis** in the
+context menu (right click) of the probabilistic model item in the study tree.
+
+.. image:: contextual_menu_proba_model.png
+    :align: center
+
+Check the radio button **SRC** in the wizard which appears.
+
+.. image:: SRC_wizard.png
+    :align: center
+
+To see advanced parameters, collapse the **Advanced parameters** group.
+
+.. image:: SRC_parameters.png
+    :align: center
+
+Click on **Done** button. A new item with a default name appears in the study
+tree and a results window is created.
+
+5-1-2 Results
+*************
+
+The results window contains a table with the SRC indices values
+for each variable. These values are represented in a graphic.
+When requiring 100000 simulations, the values must be:
+
+.. image:: SRC_results_window.png
+    :align: center
 
 
+6- Threshold exceedance
+```````````````````````
+
+For more details on the computation of the failure probability by the method of
+`Monte Carlo <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid4.xhtml#docref_C321_MonteCarloStd>`_
+see the OpenTURNS documentation.
+
+6-1 Input
+'''''''''
+
+To create the limit state function which enables the definition of the failure
+event, choose **New limit state** in the context menu (right click) of the
+probabilistic model item in the study tree.
+
+.. image:: contextual_menu_proba_model.png
+    :align: center
+
+After clicking, a new item with a default name appears in the study
+tree and the following window appears:
+
+.. image:: default_limitState.png
+    :align: center
+
+We consider the event where the deviation exceeds :math:`30cm`. Choose the good
+operator in the combobox and set the value of the threshold in order to obtain
+the following limit state window:
+
+.. image:: good_limit_state.png
+    :align: center
+
+To perform the Monte Carlo simulation, choose **New threshold exceedance** in the
+context menu (right click) of the limit state item in the study tree.
+
+Then change the parameters in the wizard which appears.
+
+.. image:: MonteCarloSimulation_wizard.png
+    :align: center
+
+Click on **Done** button. A new item with a default name appears in the study
+tree and a results window is created.
+
+5-1-2 Results
+*************
+
+The results window contains a table with the SRC indices values
+for each variable. These values are represented in a graph.
+When requiring a maximum outer sampling of 40000, a block size of 100 and
+a coefficient of variation of 0.1, the results must be:
+
+.. image:: FailureProbabilityTable.png
+    :align: center
+
+The values of the output :math:`y` computed during the simulation are stored
+and plotted in the second tab of the window:
+
+.. image:: histogram.png
+    :align: center
 
 
+The convergence graph is in the third tab:
+
+.. image:: convergence_graph.png
+    :align: center
 
 
