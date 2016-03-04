@@ -6,7 +6,7 @@ User manual - Probabilistic analyses
 ======================
 
 In order to perform probabilistic analysis, the user needs first to build a
-probabilistic model by using the contextual menu of the probabilistic study in
+probabilistic model by using the context menu of the probabilistic study in
 the study tree. Only one probabilistic model can be defined by physical model.
 
 The probabilistic model has two tabs:
@@ -62,7 +62,7 @@ The probabilistic model has two tabs:
 2-1 Definition
 ''''''''''''''
 
-A new limit state can be created thanks to the contextual menu of the previously
+A new limit state can be created thanks to the context menu of the previously
 created probabilistic model.
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitState.png
@@ -83,7 +83,7 @@ Definition
 ~~~~~~~~~~
 
 The user can compute the probability of failure relative to the limit state through
-the contextual menu of the relevant limit state
+the context menu of the relevant limit state
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilityAnalysis.png
     :align: center
@@ -137,7 +137,7 @@ The result window has 3 tabs:
 3-1 Definition
 ''''''''''''''
 
-New central tendency analysis can be created thanks to be contextual menu of the
+New central tendency analysis can be created thanks to be context menu of the
 probabilistic model. Two methods are available:
 
 - Monte carlo sampling;
@@ -322,7 +322,7 @@ The results window gathers, for a given output:
 4-1 Definition
 ''''''''''''''
 
-New sensitivity analysis can be created thanks to the contextual menu of the
+New sensitivity analysis can be created thanks to the context menu of the
 probabilistic model.
 
 Two type of sensitivity indices are available:

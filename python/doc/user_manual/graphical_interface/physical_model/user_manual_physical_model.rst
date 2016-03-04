@@ -3,7 +3,7 @@ User manual - Define a physical model
 =====================================
 
 
-There are three ways to define a physical model. This way is chosen in the contextual menu
+There are three ways to define a physical model. This way is chosen in the context menu
 (right click) of the OTStudy in the study tree which proposes:
 
 - New analytical physical model

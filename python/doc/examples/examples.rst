@@ -15,7 +15,7 @@ concentrated bending load F at the other side.
 a- Inputs
 '''''''''
 
-- Stochastics variables:
+- Stochastic variables:
 
 ====== ======================== ===============================
  Name  Description              Distribution
@@ -27,7 +27,7 @@ I      Section modulus          Beta(2.5, 4., 3.1e2, 4.5e2))
 ====== ======================== ===============================
 
 The input variables :math:`L` and :math:`I` are dependent. The dependence struture
-is modelise by a Normal copula (the only copula available for now in the GUI).
+is modelised by a Normal copula (the only copula available for now in the GUI).
 The Spearman correlation matrix of the input random vector :math:`E, F, L, I` is :
 
 .. math ::
@@ -43,14 +43,14 @@ The Spearman correlation matrix of the input random vector :math:`E, F, L, I` is
 b- Output
 '''''''''
 
-The deviation :math:`y` of the free end of the beam equal to :
+The deviation :math:`y` of the free end of the beam equals to:
 
 .. math::
 
     y = \frac{FL^3}{3EI}
 
-2- Define the model with the OTGui
-``````````````````````````````````
+2- Define the model
+```````````````````
 
 2-1 Create the study
 ''''''''''''''''''''
@@ -59,7 +59,7 @@ The deviation :math:`y` of the free end of the beam equal to :
 
 There are three ways to create a new study:
 
-- Use the dialog box which appears when the OTGui is launched;
+- Use the dialog box which appears when the application is launched;
 
 - Click on |newButton| in the tool bar;
 
@@ -73,7 +73,7 @@ There are three ways to create a new study:
 ''''''''''''''''''''''''''''''''''''''''
 
 To define the physical model, choose **New analytical physical model** in the
-contextual menu (right click) of the OTStudy in the study tree.
+context menu (right click) in the study tree.
 
 .. image:: contextual_menu_otstudy.png
     :align: center
@@ -84,7 +84,7 @@ We obtain the following window :
     :align: center
 
 The creation of a physical model adds a physicalModel item in the study tree which gathers three
-items:
+sub-items:
 
 - Deterministic study
 - Probabilistic study
@@ -110,7 +110,7 @@ if the formula is not badly defined.
 .. image:: evaluation_output_PM_window.png
     :align: center
 
-The value of the output :math:`y` must be :math:`13.0208` if :
+The value of the output :math:`y` must be :math:`13.0208` if:
 
 ======= ======= ======= =======
 E       F       L       I
@@ -123,7 +123,7 @@ E       F       L       I
 ''''''''''''''''''''''''''''''''''
 
 To define the probabilistic model, choose **New probabilistic model** in the
-contextual menu (right click) of the probabilistic study item in the study tree.
+context menu (right click) of the probabilistic study item in the study tree.
 Only one probabilistic model can be defined by physical model.
 
 .. image:: contextual_menu_proba_study.png
@@ -135,8 +135,9 @@ and specify correlation between them if needed.
 .. image:: proba_model_default.png
     :align: center
 
-The first tab **Marginals** list automatically all the input variables defined in the physical
-model window. By default all the lines are unchecked which means all the inputs
+The first tab **Marginals** list automatically all the input variables defined
+in the physical model window.
+By default all the lines are unchecked which means all the inputs
 variables are deterministic. In the right side of the window the variable value
 is the value mentioned in the physical model window.
 
@@ -156,11 +157,10 @@ the parameters values in the right side of the window.
     :align: center
 
 The second tab **Correlation** show the Spearman correlation matrix.
-OTGui handles automatically the symmetry of the correlation matrix. The Gaussian
-copula is used to model the dependency. By default all variables are set
-independent.
+The symmetry of the correlation matrix is automatically handled. The Gaussian
+copula is used to model the dependency. By default all variables are independent.
 To specify the correlation between the variables :math:`L` and :math:`I`
-change the value in the corresponding case.
+change the value in the corresponding cell.
 
 .. image:: correlation.png
     :align: center
@@ -175,9 +175,9 @@ change the value in the corresponding case.
 3-1-1 Inputs
 ************
 
-To realize a central tendency analysis with the Taylor Expansions method,
-choose **New central tendency** in the
-contextual menu (right click) of the probabilistic model item in the study tree.
+To perform a central tendency analysis with the Taylor expansions for the
+estimation of moments, choose **New central tendency** in the
+context menu (right click) of the probabilistic model item in the study tree.
 
 .. image:: contextual_menu_proba_model.png
     :align: center
@@ -203,7 +203,7 @@ The results window contains a table.
 
 To realize a central tendency analysis with the Monte Carlo method,
 choose **New central tendency** in the
-contextual menu (right click) of the probabilistic model item in the study tree.
+context menu (right click) of the probabilistic model item in the study tree.
 
 .. image:: contextual_menu_proba_model.png
     :align: center
@@ -240,7 +240,7 @@ values :
 ''''''''''
 
 To realize a Min/Max study, choose **New design of experiment** in the
-contextual menu (right click) of the designs of experiment item in the study tree.
+context menu (right click) of the designs of experiment item in the study tree.
 
 .. image:: contextual_menu_DOE.png
     :align: center

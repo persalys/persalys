@@ -15,7 +15,7 @@ The OTGui allows the user to launch two types of deterministic analyses:
 Deterministic studies consist in evaluations of the physical model for defined
 input values.
 
-New model evaluations can be created through the contextual menu of the
+New model evaluations can be created through the context menu of the
 Deterministic study in the study tree, for the relevant physical model.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/modelEvaluation.png
@@ -40,7 +40,7 @@ of the deterministic study.
 Designs of experiment consist in evaluations of the physical model for a defined
 set of input values.
 
-New design of experiment can be created through the contextual menu of the Designs
+New design of experiment can be created through the context menu of the Designs
 of experiment in the study tree, for the relevant physical model.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperiment.png
