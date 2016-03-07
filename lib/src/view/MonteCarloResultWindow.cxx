@@ -123,7 +123,7 @@ void MonteCarloResultWindow::buildInterface()
   item->setFlags(item->flags() ^ Qt::ItemIsEditable);
   item->setBackgroundColor(minMaxTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
   minMaxTable_->setItem(0, 0, item);
-  item = new QTableWidgetItem(tr("Inputs"));
+  item = new QTableWidgetItem(tr("Inputs at\nextremum"));
   item->setFlags(item->flags() ^ Qt::ItemIsEditable);
   item->setBackgroundColor(minMaxTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
   minMaxTable_->setSpan(1, 0, nbInputs, 1);
