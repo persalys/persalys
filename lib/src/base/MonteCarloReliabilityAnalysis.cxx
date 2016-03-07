@@ -69,7 +69,7 @@ void MonteCarloReliabilityAnalysis::run()
 
   Description outputDescription(1);
   outputDescription[0] = getLimitState().getOutputName();
-  NumericalMathFunction function = getPhysicalModel().getFunction(outputDescription);
+  NumericalMathFunction function = getPhysicalModel().getRestrictedFunction(outputDescription);
   function.enableHistory();
   function.clearHistory();
 
