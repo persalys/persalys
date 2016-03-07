@@ -463,7 +463,7 @@ void ProbabilisticModelWindow::updatePlots()
   pdfPlot_->plotPDFCurve(input.getDistribution());
   pdfPlot_->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(input.getName().c_str()));
   cdfPlot_->plotCDFCurve(input.getDistribution());
-  pdfPlot_->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(input.getName().c_str()));
+  cdfPlot_->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(input.getName().c_str()));
 }
 
 
