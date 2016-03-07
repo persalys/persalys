@@ -43,9 +43,12 @@ IntroPage::IntroPage(const DesignOfExperiment & designOfExperiment, QWidget *par
 
   methodGroup_ = new QButtonGroup;
   QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Deterministic"));
-  if (designOfExperiment.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
+  if (designOfExperiment.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels
+   || designOfExperiment.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndDeltas)
+  {
 // TODO   + || designOfExperiment.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::DeterExperiment
     buttonToChooseMethod->setChecked(true);
+  }
   methodGroup_->addButton(buttonToChooseMethod, IntroPage::deterministic);
   methodLayout->addWidget(buttonToChooseMethod);
 
