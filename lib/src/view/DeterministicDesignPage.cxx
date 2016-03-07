@@ -74,7 +74,11 @@ void DeterministicDesignPage::buildInterface()
   tableView_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   tableView_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   tableView_->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
+#if QT_VERSION >= 0x050000
+  tableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+#else
   tableView_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
+#endif
 
   QSize size(tableView_->sizeHint());
   int width = 0;

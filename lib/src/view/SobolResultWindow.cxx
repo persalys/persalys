@@ -96,7 +96,11 @@ void SobolResultWindow::buildInterface()
     QTableWidget * table = new QTableWidget(inputNames.getSize(), 3, this);
     table->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("First order index") << tr("Total order index"));
     table->verticalHeader()->hide();
+#if QT_VERSION >= 0x050000
+    table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+#else
     table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+#endif
 
     // fill table
     for (UnsignedInteger j=0; j<inputNames.getSize(); ++j)

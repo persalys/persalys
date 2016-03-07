@@ -139,9 +139,15 @@ void PhysicalModelWindowWidget::updateInputTableModel()
     delete inputTableModel_;
   inputTableModel_ = new InputTableModel(physicalModel_);
   inputTableView_->setModel(inputTableModel_);
+#if QT_VERSION >= 0x050000
+  inputTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
+  inputTableView_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
+  inputTableView_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+#else
   inputTableView_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
   inputTableView_->horizontalHeader()->setResizeMode(1, QHeaderView::Interactive);
   inputTableView_->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+#endif
   int width = inputTableView_->horizontalHeader()->width();
   inputTableView_->horizontalHeader()->resizeSection(0, width*1/5);
   inputTableView_->horizontalHeader()->resizeSection(1, width*3/5);
@@ -156,10 +162,17 @@ void PhysicalModelWindowWidget::updateOutputTableModel()
     delete outputTableModel_;
   outputTableModel_ = new OutputTableModel(physicalModel_);
   outputTableView_->setModel(outputTableModel_);
+#if QT_VERSION >= 0x050000
+  outputTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
+  outputTableView_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
+  outputTableView_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Interactive);
+  outputTableView_->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
+#else
   outputTableView_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
   outputTableView_->horizontalHeader()->setResizeMode(1, QHeaderView::Interactive);
   outputTableView_->horizontalHeader()->setResizeMode(2, QHeaderView::Interactive);
-  outputTableView_->horizontalHeader()->setResizeMode(3, QHeaderView::Stretch);
+  outputTableView_->horizontalHeader()->setResizeMode(3, QHeaderView::Stretch); 
+#endif
   if (physicalModel_.getImplementation()->getClassName() != "AnalyticalPhysicalModel")
   {
     outputTableView_->setColumnHidden(2, true);

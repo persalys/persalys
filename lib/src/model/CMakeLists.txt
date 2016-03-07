@@ -31,7 +31,7 @@ ot_install_header_file ( PhysicalModelItem.hxx )
 ot_install_header_file ( OTStudyItem.hxx )
 ot_install_header_file ( StudyTreeViewModel.hxx )
 
-qt4_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
+qt5_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
                                     otgui/InputTableProbabilisticModel.hxx
                                     otgui/OutputTableModel.hxx
                                     otgui/ExperimentTableModel.hxx

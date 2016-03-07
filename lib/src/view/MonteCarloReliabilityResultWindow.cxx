@@ -70,7 +70,11 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   resultsTable_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   resultsTable_->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
   resultsTable_->verticalHeader()->hide();
+#if QT_VERSION >= 0x050000
+  resultsTable_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+#else
   resultsTable_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
+#endif
   resultsTable_->horizontalHeader()->hide();
 
   QTableWidgetItem * item = new QTableWidgetItem("Estimate");

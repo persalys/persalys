@@ -52,8 +52,11 @@ void ModelEvaluationResultWindow::buildInterface()
 
   QTableWidget * inputTable = new QTableWidget(result_.getInputSample().getDimension(), 2);
   inputTable->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Value"));
+#if QT_VERSION >= 0x050000
+  inputTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+#else
   inputTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-
+#endif
   for (UnsignedInteger i=0; i<result_.getInputSample().getDimension(); ++i)
   {
     QTableWidgetItem * item = new QTableWidgetItem(QString::fromLocal8Bit(result_.getInputSample().getDescription()[i].c_str()));
@@ -72,7 +75,11 @@ void ModelEvaluationResultWindow::buildInterface()
 
   QTableWidget * outputTable = new QTableWidget(result_.getOutputSample().getDimension(), 2);
   outputTable->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Value"));
+#if QT_VERSION >= 0x050000
+  outputTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+#else
   outputTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+#endif
 
   for (UnsignedInteger i=0; i<result_.getOutputSample().getDimension(); ++i)
   {

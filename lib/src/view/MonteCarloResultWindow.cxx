@@ -117,7 +117,11 @@ void MonteCarloResultWindow::buildInterface()
   minMaxTable_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   minMaxTable_->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
   minMaxTable_->verticalHeader()->hide();
+#if QT_VERSION >= 0x050000  
+  minMaxTable_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+#else
   minMaxTable_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
+#endif
 
   QTableWidgetItem * item = new QTableWidgetItem(tr("Output"));
   item->setFlags(item->flags() ^ Qt::ItemIsEditable);
@@ -148,7 +152,11 @@ void MonteCarloResultWindow::buildInterface()
   momentsEstimationsTable_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   momentsEstimationsTable_->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
   momentsEstimationsTable_->verticalHeader()->hide();
+#if QT_VERSION >= 0x050000  
+  momentsEstimationsTable_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+#else
   momentsEstimationsTable_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
+#endif
   momentsEstimationsTable_->horizontalHeader()->hide();
 
   // vertical header

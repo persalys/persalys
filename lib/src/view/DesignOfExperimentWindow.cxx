@@ -159,7 +159,11 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   minMaxTable_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   minMaxTable_->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
   minMaxTable_->verticalHeader()->hide();
+#if QT_VERSION >= 0x050000
+  minMaxTable_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+#else
   minMaxTable_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
+#endif
 
   QTableWidgetItem * item = new QTableWidgetItem(tr("Output"));
   item->setFlags(item->flags() ^ Qt::ItemIsEditable);

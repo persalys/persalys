@@ -9,7 +9,7 @@ ot_add_source_file (PlotMatrixWidget.cxx)
 ot_add_source_file (GraphConfigurationWidget.cxx)
 ot_add_source_file (PlotMatrixConfigurationWidget.cxx)
 
-qt4_wrap_cpp (OTGUI_PLOT_MOC_SRCS
+qt5_wrap_cpp (OTGUI_PLOT_MOC_SRCS
               otgui/PlotWidget.hxx
               otgui/PlotMatrixWidget.hxx
               otgui/ListWidgetWithCheckBox.hxx

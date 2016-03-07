@@ -5,7 +5,7 @@ ot_add_current_dir_to_include_dirs ()
 ot_add_source_file (qconsole.cpp)
 ot_add_source_file (qpyconsole.cpp)
 
-qt4_wrap_cpp (OTGUI_CONSOLE_MOC_SRCS
+qt5_wrap_cpp (OTGUI_CONSOLE_MOC_SRCS
               otgui/qconsole.h
               otgui/qpyconsole.h)
 

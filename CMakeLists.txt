@@ -8,6 +8,7 @@ option ( INSTALL_TESTS                "Install compiled tests for native platfor
 option ( BUILD_SHARED_LIBS            "Build shared libraries"                                                ON )
 option (USE_SALOME "use salome" ON)
 option (USE_SPHINX "use sphinx" ON)
+option (USE_QT5 "use Qt5" ON)
 
 # By default, build in Release mode. Must appear before project() command
 if ( NOT DEFINED CMAKE_BUILD_TYPE )
@@ -31,8 +32,27 @@ add_definitions ( ${OTGUI_DEFINITIONS} )
 
 
 if (BUILD_GUI)
-  find_package (Qt4 COMPONENTS QtCore QtGui REQUIRED)
-  include (${QT_USE_FILE})
+
+  if (USE_QT5)
+    find_package (Qt5Gui)
+    find_package (Qt5Widgets)
+    set (QT_LIBRARIES ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES})
+    set (CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS} ${CMAKE_CXX_FLAGS}")
+    include_directories (${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS})
+  endif ()
+
+  if (NOT Qt5Gui_FOUND)
+    find_package (Qt4 COMPONENTS QtCore QtGui REQUIRED)
+    include (${QT_USE_FILE})
+
+    macro (qt5_wrap_cpp)
+      qt4_wrap_cpp (${ARGN})
+    endmacro ()
+
+    macro (qt5_add_resources)
+      qt4_add_resources (${ARGN})
+    endmacro ()
+  endif ()
 
   find_package (Qwt 6 REQUIRED)
   find_package (PythonLibs REQUIRED)

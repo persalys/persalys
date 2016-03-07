@@ -72,7 +72,11 @@ void ProbabilisticModelWindow::buildInterface()
 
   ComboBoxDelegate * delegate = new ComboBoxDelegate(items);
   inputTableView_->setItemDelegateForColumn(1, delegate);
+#if QT_VERSION >= 0x050000
+  inputTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+#else
   inputTableView_->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+#endif
   inputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
 
   inputTableModel_ = new InputTableProbabilisticModel(physicalModel_);
@@ -457,7 +461,7 @@ void ProbabilisticModelWindow::updatePlots()
 {
   setErrorMessage("");
   QModelIndex index = inputTableView_->currentIndex();
-  Input input = physicalModel_.getInputs()[inputTableView_->currentIndex().row()];
+  Input input = physicalModel_.getInputs()[index.row()];
   pdfPlot_->clear();
   cdfPlot_->clear();
   pdfPlot_->plotPDFCurve(input.getDistribution());

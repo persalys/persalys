@@ -70,7 +70,11 @@ void TaylorExpansionsMomentsResultWindow::buildInterface()
   momentsEstimationsTable_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   momentsEstimationsTable_->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
   momentsEstimationsTable_->verticalHeader()->hide();
+#if QT_VERSION >= 0x050000
+  momentsEstimationsTable_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+#else
   momentsEstimationsTable_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
+#endif  
   momentsEstimationsTable_->horizontalHeader()->hide();
 
   // vertical header

@@ -85,7 +85,7 @@ ot_install_header_file ( HorizontalHeaderViewWithCombobox.hxx )
 ot_install_header_file ( DeterministicDesignPage.hxx )
 ot_install_header_file ( ProbabilisticDesignPage.hxx )
 
-qt4_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
+qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/OTguiToolBar.hxx
                                   otgui/OTguiMenuBar.hxx
                                   otgui/OTguiStatusBar.hxx
@@ -124,11 +124,12 @@ qt4_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
 
 
 if (SalomeYACS_FOUND)
-  qt4_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/YACSPhysicalModelWindow.hxx)
+  qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/YACSPhysicalModelWindow.hxx)
 endif ()
 
 set(RESOURCES ${CMAKE_SOURCE_DIR}/gui.qrc)
-qt4_add_resources(OTGUI_RESOURCES_RCC ${RESOURCES})
+
+qt5_add_resources (OTGUI_RESOURCES_RCC ${RESOURCES})
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
 
