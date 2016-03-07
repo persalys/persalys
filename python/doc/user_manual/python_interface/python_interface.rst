@@ -13,6 +13,7 @@ Model creation
 
     Input
     Output
+    PhysicalModel
     AnalyticalPhysicalModel
     PythonPhysicalModel
 

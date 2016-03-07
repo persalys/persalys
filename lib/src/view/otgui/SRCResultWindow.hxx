@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_SRCCRESULTWINDOW_HXX
+#ifndef OTGUI_SRCRESULTWINDOW_HXX
 #define OTGUI_SRCRESULTWINDOW_HXX
 
 #include "otgui/OTguiSubWindow.hxx"

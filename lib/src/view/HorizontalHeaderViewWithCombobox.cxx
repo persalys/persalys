@@ -54,7 +54,7 @@ void HorizontalHeaderViewWithCombobox::showEvent(QShowEvent * e)
 }
 
 
-void HorizontalHeaderViewWithCombobox::handleSectionResized(int i)
+void HorizontalHeaderViewWithCombobox::handleSectionResized(int j)
 {
   for (int i=0; i<columnsWithComboBox_.size(); ++i)
   {
@@ -63,7 +63,7 @@ void HorizontalHeaderViewWithCombobox::handleSectionResized(int i)
   }
 }
 
-void HorizontalHeaderViewWithCombobox::handleSectionMoved(int logical, int oldVisualIndex, int newVisualIndex)
+void HorizontalHeaderViewWithCombobox::handleSectionMoved(int logical2, int oldVisualIndex, int newVisualIndex)
 {
   for (int i=qMin(oldVisualIndex, newVisualIndex); i<count(); ++i)
   {

@@ -1,5 +1,11 @@
 %define OTGUI_PhysicalModel_doc
-"Physical model."
+"Physical model base class.
+
+Can only be used through it's derived classes.
+
+Notes
+-----
+See :class:`~otguibase.AnalyticalPhysicalModel`, :class:`~otguibase.PythonPhysicalModel`"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation
 OTGUI_PhysicalModel_doc
@@ -471,3 +477,21 @@ parametersType : int
 %feature("docstring") OTGUI::PhysicalModelImplementation::setInputDistributionParametersType
 OTGUI_PhysicalModel_setInputDistributionParametersType_doc
 
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_getRestrictedFunction_doc
+"Accessor to the function restricted to it's stochastic inputs.
+
+Parameters
+----------
+outputNames : sequence of str
+    Output variables (optional)
+
+Returns
+-------
+restricted : :class:`~openturns.NumericalMathFunction`
+    Stochastic function"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getRestrictedFunction
+OTGUI_PhysicalModel_getRestrictedFunction_doc
