@@ -185,8 +185,8 @@ void PhysicalModelImplementation::removeInput(const String & inputName)
         inputs_.erase(inputs_.begin() + i);
         if (inputIsStochastic)
           updateCopula();
-        for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
-          getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
+        for (UnsignedInteger j=0; j<getOutputs().getSize(); ++j)
+          getOutputByName(getOutputs()[j].getName()).setHasBeenComputed(false);
 
         notify("inputRemoved");
         notify("modelInputsChanged");
@@ -474,7 +474,8 @@ NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction() const
   }
   try
   {
-    return NumericalMathFunction(getFunction(), deterministicInputsIndices, inputsValues);
+    NumericalMathFunction restricted(getFunction(), deterministicInputsIndices, inputsValues);
+    return restricted;
   }
   catch (std::exception & ex)
   {
@@ -500,7 +501,8 @@ NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction(const D
 
   try
   {
-    return getRestrictedFunction().getMarginal(indices);
+    NumericalMathFunction restricted(getRestrictedFunction().getMarginal(indices));
+    return restricted;
   }
   catch (std::exception & ex)
   {
@@ -555,10 +557,10 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
       {
         oss << "dist_" << inputName << " = ot." << distributionName << "(";
         NumericalPointWithDescription parameters = distribution.getParametersCollection()[0];
-        for (UnsignedInteger i=0; i<parameters.getSize(); ++i)
+        for (UnsignedInteger j=0; j<parameters.getSize(); ++ j)
         {
-          oss << parameters[i];
-          if (i < parameters.getSize() - 1)
+          oss << parameters[j];
+          if (j < parameters.getSize() - 1)
             oss << ", ";
         }
         oss << ")\n";
@@ -566,13 +568,13 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
       else
       {
         TruncatedDistribution truncatedDistribution = *dynamic_cast<TruncatedDistribution*>(&*distribution.getImplementation());
-        Distribution distribution = truncatedDistribution.getDistribution();
+        distribution = truncatedDistribution.getDistribution();
         oss << "dist_" << inputName << " = ot." << distribution.getImplementation()->getClassName() << "(";
         NumericalPointWithDescription parameters = distribution.getParametersCollection()[0];
-        for (UnsignedInteger i=0; i<parameters.getSize(); ++i)
+        for (UnsignedInteger j=0; j < parameters.getSize(); ++ j)
         {
-          oss << parameters[i];
-          if (i < parameters.getSize() - 1)
+          oss << parameters[j];
+          if (j < parameters.getSize() - 1)
             oss << ", ";
         }
         oss << ")\n";
