@@ -263,7 +263,10 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           if (deltas[indexInput] == value.toDouble())
             return false;
           deltas[indexInput] = value.toDouble();
-          designOfExperiment_.setDeltas(deltas);
+          if (deltas[indexInput] <= (designOfExperiment_.getUpperBounds()[indexInput] - designOfExperiment_.getLowerBounds()[indexInput]))
+            designOfExperiment_.setDeltas(deltas);
+          else
+            return false;
           break;
         }
       }
