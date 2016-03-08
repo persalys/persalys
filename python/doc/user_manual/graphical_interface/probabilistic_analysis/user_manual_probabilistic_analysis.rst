@@ -325,7 +325,7 @@ The results window gathers, for a given output:
 New sensitivity analysis can be created thanks to the context menu of the
 probabilistic model.
 
-Two type of sensitivity indices are available:
+Two types of sensitivity indices are available:
 
 - Sobol' indices
 
@@ -338,6 +338,8 @@ Two type of sensitivity indices are available:
         - The seed of the random generator (default: 0, positive integer expected);
         - The block size (i.e. number of runs launched at the same time), for parallelization purpose
           (default: 1; integer expected).
+
+    - the input variables must be independent to perform this analysis.
 
 - SRC indices
 
@@ -384,7 +386,8 @@ The results window gathers:
 
 .. |attentionButton| image:: /user_manual/graphical_interface/probabilistic_analysis/task-attention.png
 
-If the Sobol's indices estimates are incoherent, refer to the warning message in the tooltip of |attentionButton|.
+If the Sobol's indices estimates are incoherent, refer to the warning message in the tooltip of |attentionButton|,
+and try to perform the analysis with a greater sample size.
 
 SRC indices
 ~~~~~~~~~~~

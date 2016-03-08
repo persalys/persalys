@@ -326,8 +326,9 @@ see the OpenTURNS documentation.
 5-1-1 Inputs
 ************
 
-To perform a sensibility analysis with the Sobol method, choose
-**New sensibility analysis** in the
+To perform a sensibility analysis with the Sobol method, the input variables must
+be independent (In the Correlation tab of the probabilistic model window replace
+-0.2 by 0). Choose **New sensibility analysis** in the
 context menu (right click) of the probabilistic model item in the study tree.
 
 .. image:: contextual_menu_proba_model.png
@@ -359,6 +360,11 @@ When requiring 100000 simulations, the values must be:
 The interaction between the variables are mentioned below of the table.
 It is the sum of second order indices. It can be visualize on the graphic by
 the distances between the first order indices and the total order indices.
+
+The warnings inform the user that a total order index is smaller than the first
+order index. When increasing the sample size, these warnings disappear.
+
+To perform the following analyses use again a Gaussian copula.
 
 5-1 SRC indices
 '''''''''''''''

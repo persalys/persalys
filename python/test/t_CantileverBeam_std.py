@@ -21,6 +21,19 @@ myPhysicalModel.addInput(L)
 myPhysicalModel.addInput(I)
 myPhysicalModel.addOutput(y)
 
+f = myPhysicalModel.getFunction()
+print(f([3e7, 3e4, 250, 400]))
+
+myStudy.add(myPhysicalModel)
+
+
+## Sobol ##
+sobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel, 100000)
+myStudy.add(sobol)
+sobol.run()
+sobolResult = sobol.getResult()
+
+
 # Create the Spearman correlation matrix of the input random vector
 RS = ot.CorrelationMatrix(4)
 RS[2,3] = -0.2
@@ -29,11 +42,6 @@ R = ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(RS)
 # Create the Normal copula parametrized by R
 copula = ot.NormalCopula(R)
 myPhysicalModel.setCopula(copula)
-
-f = myPhysicalModel.getFunction()
-print(f([3e7, 3e4, 250, 400]))
-
-myStudy.add(myPhysicalModel)
 
 ## Design of Experiment - Parametric analysis ##
 aDesign = otguibase.DesignOfExperiment('aDesign', myPhysicalModel)
@@ -54,12 +62,6 @@ montecarloResult = montecarlo.getResult()
 
 meanCI = montecarloResult.getMeanConfidenceInterval()
 stdCi = montecarloResult.getStdConfidenceInterval()
-
-## Sobol ##
-sobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel, 1000)
-myStudy.add(sobol)
-sobol.run()
-sobolResult = sobol.getResult()
 
 ## SRC ##
 src = otguibase.SRCAnalysis('mySRC', myPhysicalModel, 1000)

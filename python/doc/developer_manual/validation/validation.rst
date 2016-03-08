@@ -276,8 +276,8 @@ on the **Evaluate** button, the computed output value must be :math:`1906.79`.
 3-1 Inputs
 ''''''''''
 
-Because of a bug in the module ASTER, it is necessary to uncheck **Parallelize status**
-in the physical model definition window before launching the analysis.
+Because of a temporary problem with the module of Code_Aster, it is necessary to
+uncheck **Parallelize status** before launching analyses using Code_Aster solver.
 In the same window, choose the machine which will launch the analysis.
 
 .. image:: YACS_scheme_parameters.png

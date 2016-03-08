@@ -145,8 +145,8 @@ which contains:
 
 The user requires the parallelization of the computation when checking the check box
 **Parallelize status**.
-Because of a bug in the module of Code_Aster, it is necessary to uncheck **Parallelize status**
-before launching analyses using Code_Aster solver.
+Because of a temporary problem with the module of Code_Aster, it is necessary to
+uncheck **Parallelize status** before launching analyses using Code_Aster solver.
 
 The combo box **Fitting machines** lists all the machines defined in the xml file where the computation
 can be realized.
