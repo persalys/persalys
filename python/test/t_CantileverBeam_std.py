@@ -28,7 +28,7 @@ myStudy.add(myPhysicalModel)
 
 
 ## Sobol ##
-sobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel, 100000)
+sobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel, 1000)
 myStudy.add(sobol)
 sobol.run()
 sobolResult = sobol.getResult()
