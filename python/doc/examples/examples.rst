@@ -451,7 +451,7 @@ tree and a results window is created.
 5-1-2 Results
 *************
 
-The results window must contain the following table :
+The results window must contain the following table:
 
 .. image:: FailureProbabilityTable.png
     :align: center
