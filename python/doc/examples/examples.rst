@@ -451,10 +451,7 @@ tree and a results window is created.
 5-1-2 Results
 *************
 
-The results window contains a table with the SRC indices values
-for each variable. These values are represented in a graph.
-When requiring a maximum outer sampling of 40000, a block size of 100 and
-a coefficient of variation of 0.1, the results must be:
+The results window must contain the following table :
 
 .. image:: FailureProbabilityTable.png
     :align: center
