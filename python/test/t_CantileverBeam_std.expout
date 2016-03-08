@@ -1,34 +1,4 @@
 [13.0208]
-
-
-
-
- dans computeSobolIndices inputSample1_ [3.63475e+07,21373.8,253.306,435.587] [2.80923e+07,30617.8,253.613,439.01]
-
-
-
-
-
- dans computeSobolIndices inputSample2_ [3.45698e+07,35283,252.291,424.949] [3.10269e+07,21942.1,251.056,418.806]
-
-
-
-
-
- dans computeSobolIndices outputSample1 [7.31388] [13.4991]
-
-
-
-
-
- dans computeSobolIndices outputSample2 [12.8563] [8.90678]
-
-
-
-
-
- dans computeSobolIndices av normalize 
-
 #!/usr/bin/env python
 # coding: utf-8
 
