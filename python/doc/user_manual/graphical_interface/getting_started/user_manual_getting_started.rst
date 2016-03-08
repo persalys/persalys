@@ -59,6 +59,7 @@ A dialog box appears when the OTGui is started. It contains 4 items:
   study.
 
 - Import Python...: Display a dialog box for loading an OTGui Python script.
+  It is impossible to load a study when another one is already opened.
 
 - Cancel: Close the dialog box
 
