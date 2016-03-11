@@ -52,6 +52,7 @@
 #include "otgui/SRCResultWindow.hxx"
 #include "otgui/ReliabilityAnalysisWizard.hxx"
 #include "otgui/MonteCarloReliabilityResultWindow.hxx"
+#include "otgui/LineEditWithQValidatorDelegate.hxx"
 
 #include <iostream>
 
@@ -73,6 +74,10 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   connect(treeViewModel_, SIGNAL(itemRemoved(QStandardItem*)), this, SIGNAL(removeSubWindow(QStandardItem*)));
 
   buildActions();
+
+  // Forbid the user to define not valid item's name
+  LineEditWithQValidatorDelegate * delegate = new LineEditWithQValidatorDelegate;
+  setItemDelegateForColumn(0, delegate);
 
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenu(const QPoint &)));
