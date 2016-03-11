@@ -148,12 +148,12 @@ String Input::getPythonScript() const
   OSS oss;
 
   if (!isStochastic())
-    oss << getName() << " = otguibase.Input('" << getName() << "', " <<getValue() << ", '" << getDescription() << "')\n";
+    oss << getName() << " = otguibase.Input('" << getName() << "', " <<getValue() << ", \"" << getDescription() << "\")\n";
   else
   {
     oss << getDistributionPythonScript();
-    oss << getName() << " = otguibase.Input('" << getName() << "', " <<getValue() << ", '" << getDescription();
-    oss << "', dist_" << getName() << ")\n";
+    oss << getName() << " = otguibase.Input('" << getName() << "', " <<getValue() << ", \"" << getDescription();
+    oss << "\", dist_" << getName() << ")\n";
   }
 
   return oss;
