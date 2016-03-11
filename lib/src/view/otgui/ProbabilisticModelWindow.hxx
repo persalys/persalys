@@ -52,13 +52,15 @@ protected:
 
 public slots:
   void updateDistributionWidgets(const QModelIndex & index);
-  void updateDistributionParameters();
-  void updateTypeDistributionParameters(int);
+  void updateDistributionParametersWidgets(const QModelIndex & index);
+  void updateTruncationParametersWidgets(const QModelIndex & index);
   void updatePhysicalModel(const PhysicalModel &);
   void updateProbabilisticModel();
   void updateCorrelationTable();
   void setCorrelationTabErrorMessage(const QString &);
   void showHideAdvancedWidgets(bool);
+  void distributionParametersChanged();
+  void typeDistributionParametersChanged(int);
   void truncationParametersChanged();
   void truncationParametersStateChanged();
   void showHideGraphConfigurationWidget(int indexTab);
