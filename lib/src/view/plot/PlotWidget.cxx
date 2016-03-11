@@ -390,10 +390,14 @@ void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrder, const N
   if (totalOrder.getSize())
     width = 0.1;
 
+  double yMin = 0.;
+  double yMax = 0.;
   for (UnsignedInteger i=0 ; i<size ; ++i)
   {
     xData[i] = (i-width);
     yData[i] = firstOrder[i];
+    yMin = std::min(yMin, firstOrder[i]);
+    yMax = std::max(yMax, firstOrder[i]);
     //qDebug() << "x= " << xData[i] << " , y= " << yData[i];
   }
 
@@ -408,6 +412,8 @@ void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrder, const N
     {
       xData[i] = (i+width) ;
       yData[i] = totalOrder[i];
+      yMin = std::min(yMin, totalOrder[i]);
+      yMax = std::max(yMax, totalOrder[i]);
       //qDebug() << "x= " << xData[i] << " , y= " << yData[i];
     }
     plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Rect, QBrush(colors[1]), QPen(colors[1]), QSize(5, 5)), "Total order index");
@@ -420,7 +426,14 @@ void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrder, const N
   setAxisMaxMinor(QwtPlot::xBottom, 0);
   setAxisScaleDraw(QwtPlot::xBottom, new customHorizontalScaleDraw(inputNames));
 
-  setAxisAutoScale(QwtPlot::yLeft);
+  // rescale to avoid to cut points
+  yMin = 0.9 * yMin;
+  if (yMin < 0.01)
+    yMin = -0.05;
+  yMax = 1.1 * yMax;
+  if (yMax > 0.95)
+    yMax = 1.05;
+  setAxisScale(QwtPlot::yLeft, yMin, yMax);
 
   replot();
 }
