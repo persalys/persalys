@@ -1,4 +1,34 @@
 [13.0208]
+
+
+
+
+ dans computeSobolIndices inputSample1_ [2.93775e+07,31755.9,258.75,399.457] [4.03386e+07,27635.7,256.356,332.067]
+
+
+
+
+
+ dans computeSobolIndices inputSample2_ [3.44164e+07,23915.4,250.999,344.514] [3.23699e+07,71525.6,253.402,324.244]
+
+
+
+
+
+ dans computeSobolIndices outputSample1 [15.6263] [11.586]
+
+
+
+
+
+ dans computeSobolIndices outputSample2 [10.6316] [36.9623]
+
+
+
+
+
+ dans computeSobolIndices av normalize 
+
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -9,14 +39,14 @@ import otguibase
 myStudy = otguibase.OTStudy('myStudy')
 otguibase.OTStudy.Add(myStudy)
 dist_E = ot.Beta(0.93, 3.2, 2.8e+07, 4.8e+07)
-E = otguibase.Input('E', 3e+07, 'Young s modulus', dist_E)
+E = otguibase.Input('E', 3e+07, "Young s modulus", dist_E)
 dist_F = ot.LogNormal(9.46206, 0.554513, 15000)
-F = otguibase.Input('F', 30000, 'Charge applied', dist_F)
+F = otguibase.Input('F', 30000, "Charge applied", dist_F)
 dist_L = ot.Uniform(250, 260)
-L = otguibase.Input('L', 250, 'Length', dist_L)
+L = otguibase.Input('L', 250, "Length", dist_L)
 dist_I = ot.Beta(2.5, 4, 310, 450)
-I = otguibase.Input('I', 400, 'Section modulus', dist_I)
-y = otguibase.Output('y', 0, 'deviation', 'F*L^3/(3*E*I)')
+I = otguibase.Input('I', 400, "Section modulus", dist_I)
+y = otguibase.Output('y', 0, "deviation", 'F*L^3/(3*E*I)')
 myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel')
 myPhysicalModel.addInput(E)
 myPhysicalModel.addInput(F)
