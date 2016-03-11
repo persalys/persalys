@@ -689,8 +689,9 @@ void StudyTreeView::exportPython()
   QString currentDir = settings.value("currentDir").toString();
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
+  QString defaultFileName = QDir::separator() + QFileInfo(item->getOTStudy()->getFileName().c_str()).baseName();
   QString fileName = QFileDialog::getSaveFileName(this, tr("Export Python..."),
-                     currentDir,
+                     currentDir + defaultFileName,
                      tr("Python source files (*.py)"));
 
   if (!fileName.isEmpty())
