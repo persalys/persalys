@@ -713,7 +713,7 @@ void StudyTreeView::exportPython()
     else
     {
       QTextStream out(&file);
-      out << QString::fromLocal8Bit(item->getOTStudy()->getPythonScript().c_str()).toUtf8();
+      out << QString::fromUtf8(item->getOTStudy()->getPythonScript().c_str());
       file.setPermissions(QFile::ReadUser|QFile::WriteUser|QFile::ExeUser|QFile::ReadGroup|QFile::ExeGroup|QFile::ReadOther|QFile::ExeOther);
       file.close();
     }
