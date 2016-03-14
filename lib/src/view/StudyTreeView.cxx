@@ -689,7 +689,7 @@ void StudyTreeView::exportPython()
   QString currentDir = settings.value("currentDir").toString();
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
-  QString defaultFileName = QDir::separator() + QFileInfo(item->getOTStudy()->getFileName().c_str()).baseName();
+  QString defaultFileName = QDir::separator() + QFileInfo(QString::fromUtf8(item->getOTStudy()->getFileName().c_str())).baseName();
   QString fileName = QFileDialog::getSaveFileName(this, tr("Export Python..."),
                      currentDir + defaultFileName,
                      tr("Python source files (*.py)"));
@@ -815,7 +815,7 @@ bool StudyTreeView::saveAsOTStudy()
     else
     {
       QApplication::setOverrideCursor(Qt::WaitCursor);
-      item->getOTStudy()->save(fileName.toStdString());
+      item->getOTStudy()->save(fileName.toUtf8().constData());
       QApplication::restoreOverrideCursor();
       emit recentFilesListChanged(fileName);
       return true;
@@ -848,12 +848,12 @@ void StudyTreeView::openOTStudy(const QString & fileName)
   QSettings settings;
   settings.setValue("currentDir", file.absolutePath());
 
-  if (file.exists() && !OTStudy::GetFileNames().__contains__(file.absoluteFilePath().toStdString()))
+  if (file.exists() && !OTStudy::GetFileNames().__contains__(file.absoluteFilePath().toUtf8().constData()))
   {
     try
     {
       QApplication::setOverrideCursor(Qt::WaitCursor);
-      OTStudy::Open(fileName.toStdString());
+      OTStudy::Open(fileName.toUtf8().constData());
       QApplication::restoreOverrideCursor();
       emit recentFilesListChanged(fileName);
     }
@@ -873,7 +873,7 @@ void StudyTreeView::openOTStudy(const QString & fileName)
     {
       message = tr("The file '%1' does not exist.").arg(fileName);
     }
-    else if (OTStudy::GetFileNames().__contains__(file.absoluteFilePath().toStdString()))
+    else if (OTStudy::GetFileNames().__contains__(file.absoluteFilePath().toUtf8().constData()))
     {
       message = tr("The file '%1' is already opened.").arg(fileName);
     }
