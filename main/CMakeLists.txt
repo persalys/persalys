@@ -7,7 +7,7 @@ include_directories (${CMAKE_SOURCE_DIR}/lib/src/model)
 include_directories (${CMAKE_SOURCE_DIR}/lib/src/view)
 include_directories (${CMAKE_SOURCE_DIR}/lib/src/view/pythonConsole)
 
-add_executable (otgui main.cxx)
+add_executable (otgui WIN32 main.cxx)
 target_link_libraries (otgui otguiview)
 
 if (UNIX AND NOT APPLE)
