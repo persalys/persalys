@@ -81,7 +81,7 @@ void Output::setHasBeenComputed(const bool hasBeenComputed)
 String Output::getPythonScript() const
 {
   OSS oss;
-  oss << getName() << " = otguibase.Output('" << getName() << "', " << getValue() << ", '" << getDescription();
+  oss << getName() << " = otguibase.Output('" << getName() << "', " << getValue() << ", '" << getEscapedDescription();
   oss << "', '" << formula_ << "')\n";
 
   return oss;

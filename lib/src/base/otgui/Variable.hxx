@@ -51,8 +51,11 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   virtual void load(OT::Advocate & adv);
+protected:
+  OT::String getEscapedDescription() const;
 
 private:
+
   double value_;
   OT::String description_;
 };
