@@ -19,7 +19,7 @@
  *
  */
 #include "otgui/TaylorExpansionsMomentsResultWindow.hxx"
-
+#include "otgui/DataTableWidget.hxx"
 #include "otgui/TaylorExpansionsMomentsAnalysis.hxx"
 
 #include <QVBoxLayout>
@@ -65,16 +65,10 @@ void TaylorExpansionsMomentsResultWindow::buildInterface()
   // moments estimation
   QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimate"));
   QVBoxLayout * momentsVbox = new QVBoxLayout(momentsGroupBox);
-  momentsEstimationsTable_ = new QTableWidget(5, 2);
+  momentsEstimationsTable_ = new DataTableWidget(5, 2);
   momentsEstimationsTable_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   momentsEstimationsTable_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   momentsEstimationsTable_->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
-  momentsEstimationsTable_->verticalHeader()->hide();
-#if QT_VERSION >= 0x050000
-  momentsEstimationsTable_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-#else
-  momentsEstimationsTable_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
-#endif  
   momentsEstimationsTable_->horizontalHeader()->hide();
 
   // vertical header

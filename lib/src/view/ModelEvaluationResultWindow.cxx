@@ -20,6 +20,7 @@
  */
 #include "otgui/ModelEvaluationResultWindow.hxx"
 #include "otgui/ModelEvaluation.hxx"
+#include "otgui/DataTableWidget.hxx"
 
 #include <QHBoxLayout>
 #include <QTableWidget>
@@ -50,7 +51,7 @@ void ModelEvaluationResultWindow::buildInterface()
   QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
   QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
 
-  QTableWidget * inputTable = new QTableWidget(result_.getInputSample().getDimension(), 2);
+  QTableWidget * inputTable = new DataTableWidget(result_.getInputSample().getDimension(), 2);
   inputTable->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Value"));
 #if QT_VERSION >= 0x050000
   inputTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -73,7 +74,7 @@ void ModelEvaluationResultWindow::buildInterface()
   QGroupBox * outputsBox = new QGroupBox(tr("Outputs"));
   QVBoxLayout * outputsLayout = new QVBoxLayout(outputsBox);
 
-  QTableWidget * outputTable = new QTableWidget(result_.getOutputSample().getDimension(), 2);
+  QTableWidget * outputTable = new DataTableWidget(result_.getOutputSample().getDimension(), 2);
   outputTable->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Value"));
 #if QT_VERSION >= 0x050000
   outputTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);

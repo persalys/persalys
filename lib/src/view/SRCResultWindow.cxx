@@ -21,6 +21,8 @@
 #include "otgui/SRCResultWindow.hxx"
 
 #include "otgui/SRCAnalysis.hxx"
+#include "otgui/DataTableWidget.hxx"
+
 
 #include <QVBoxLayout>
 #include <QHeaderView>
@@ -78,9 +80,8 @@ void SRCResultWindow::buildInterface()
     listPlotWidgets_.append(plot);
 
     // table of indices
-    QTableWidget * table = new QTableWidget(inputNames.getSize(), 2, this);
+    QTableWidget * table = new DataTableWidget(inputNames.getSize(), 2, this);
     table->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Index"));
-    table->verticalHeader()->hide();
 #if QT_VERSION >= 0x050000
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 #else

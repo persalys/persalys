@@ -20,6 +20,7 @@
  */
 #include "otgui/DesignOfExperimentWindow.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/DataTableWidget.hxx"
 
 #include <QVBoxLayout>
 #include <QStackedLayout>
@@ -153,17 +154,11 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   QGroupBox * minMaxGroupBox = new QGroupBox(tr("Minimum and Maximum"));
   UnsignedInteger totalNbInputs = designOfExperiment_.getInputSample().getDimension();
   QVBoxLayout * minMaxVbox = new QVBoxLayout(minMaxGroupBox);
-  minMaxTable_ = new QTableWidget(totalNbInputs+1, 4);
+  minMaxTable_ = new DataTableWidget(totalNbInputs + 1, 4);
   minMaxTable_->setHorizontalHeaderLabels(QStringList() << tr("") << tr("Variable") << tr("Minimum") << tr("Maximum"));
   minMaxTable_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   minMaxTable_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   minMaxTable_->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
-  minMaxTable_->verticalHeader()->hide();
-#if QT_VERSION >= 0x050000
-  minMaxTable_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-#else
-  minMaxTable_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
-#endif
 
   QTableWidgetItem * item = new QTableWidgetItem(tr("Output"));
   item->setFlags(item->flags() ^ Qt::ItemIsEditable);
