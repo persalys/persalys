@@ -95,7 +95,7 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
     {
       case 0:
       {
-        if (input.getName() == value.toString().toLocal8Bit().data())
+        if (input.getName() == value.toString().toUtf8().constData())
           return true;
         if (value.toString().isEmpty())
           return false;
@@ -103,7 +103,7 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
         emit errorMessageChanged("");
         try
         {
-          physicalModel_.setInputName(input.getName(), value.toString().toLocal8Bit().data());
+          physicalModel_.setInputName(input.getName(), value.toString().toUtf8().constData());
         }
         catch (std::exception & ex)
         {
@@ -113,11 +113,11 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
       }
       case 1:
       {
-        if (input.getDescription() == value.toString().toLocal8Bit().data())
+        if (input.getDescription() == value.toString().toUtf8().constData())
           return true;
         physicalModel_.blockNotification(true);
         emit errorMessageChanged("");
-        physicalModel_.setInputDescription(input.getName(), value.toString().toLocal8Bit().data());
+        physicalModel_.setInputDescription(input.getName(), value.toString().toUtf8().constData());
         break;
       }
       case 2:

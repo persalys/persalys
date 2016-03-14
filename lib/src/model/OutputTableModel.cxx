@@ -103,7 +103,7 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
     {
       case 0:
       {
-        if (output.getName() == value.toString().toLocal8Bit().data())
+        if (output.getName() == value.toString().toUtf8().constData())
           return true;
         if (value.toString().isEmpty())
           return false;
@@ -111,7 +111,7 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
         emit errorMessageChanged("");
         try
         {
-          physicalModel_.setOutputName(output.getName(), value.toString().toLocal8Bit().data());
+          physicalModel_.setOutputName(output.getName(), value.toString().toUtf8().constData());
         }
         catch (std::exception & ex)
         {
@@ -121,21 +121,21 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
       }
       case 1:
       {
-        if (output.getDescription() == value.toString().toLocal8Bit().data())
+        if (output.getDescription() == value.toString().toUtf8().constData())
           return true;
         physicalModel_.blockNotification(true);
         emit errorMessageChanged("");
-        physicalModel_.setOutputDescription(output.getName(), value.toString().toLocal8Bit().data());
+        physicalModel_.setOutputDescription(output.getName(), value.toString().toUtf8().constData());
         break;
       }
       case 2:
       {
-        if (output.getFormula() == value.toString().toLocal8Bit().data())
+        if (output.getFormula() == value.toString().toUtf8().constData())
           return true;
         // TODO test if value.toString() ok
         physicalModel_.blockNotification(true);
         emit errorMessageChanged("");
-        physicalModel_.setOutputFormula(output.getName(), value.toString().toLocal8Bit().data());
+        physicalModel_.setOutputFormula(output.getName(), value.toString().toUtf8().constData());
         break;
       }
     }
