@@ -24,8 +24,9 @@
 
 namespace OTGUI {
 
-LineEditWithQValidatorDelegate::LineEditWithQValidatorDelegate(QObject *parent)
+LineEditWithQValidatorDelegate::LineEditWithQValidatorDelegate(const QString & regex, QObject *parent)
   : QStyledItemDelegate(parent)
+  , regex_(regex)
 {
 }
 
@@ -33,8 +34,7 @@ LineEditWithQValidatorDelegate::LineEditWithQValidatorDelegate(QObject *parent)
 QWidget* LineEditWithQValidatorDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &) const
 {
   QLineEdit * editor = new QLineEdit(parent);
-  editor->setValidator(new QRegExpValidator(QRegExp("^[a-zA-Z_][a-zA-Z_0-9]*")));
-
+  editor->setValidator(new QRegExpValidator(QRegExp(regex_)));
   return editor;
 }
 

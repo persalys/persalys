@@ -64,6 +64,7 @@ void PhysicalModelWindowWidget::buildInterface()
   inputTableView_->setEditTriggers(QTableView::AllEditTriggers);
   LineEditWithQValidatorDelegate * delegate = new LineEditWithQValidatorDelegate;
   inputTableView_->setItemDelegateForColumn(0, delegate);
+  inputTableView_->setItemDelegateForColumn(1, new LineEditWithQValidatorDelegate("([^']|\\\\')*"));// escaped quotes only
   inputsLayout->addWidget(inputTableView_);
 
   // buttons Add/Remove input
@@ -95,6 +96,7 @@ void PhysicalModelWindowWidget::buildInterface()
   outputTableView_->setEditTriggers(QTableView::AllEditTriggers);
   delegate = new LineEditWithQValidatorDelegate;
   outputTableView_->setItemDelegateForColumn(0, delegate);
+  outputTableView_->setItemDelegateForColumn(1, new LineEditWithQValidatorDelegate("([^']|\\\\')*"));// escaped quotes only
   outputsLayout->addWidget(outputTableView_);
 
   // buttons Add/Remove output

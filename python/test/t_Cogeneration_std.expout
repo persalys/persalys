@@ -1,33 +1,3 @@
-
-
-
-
- dans computeSobolIndices inputSample1_ [10260.8,3022.87,3970.04] [10073.4,2988.84,3981.32]
-
-
-
-
-
- dans computeSobolIndices inputSample2_ [10137.8,3016.45,3866.31] [10206.9,3007.24,4053.1]
-
-
-
-
-
- dans computeSobolIndices outputSample1 [0.0547447] [0.0675259]
-
-
-
-
-
- dans computeSobolIndices outputSample2 [0.0536836] [0.0660265]
-
-
-
-
-
- dans computeSobolIndices av normalize 
-
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -38,12 +8,12 @@ import otguibase
 myStudy = otguibase.OTStudy('myStudy')
 otguibase.OTStudy.Add(myStudy)
 dist_Q = ot.Normal(10200, 100)
-Q = otguibase.Input('Q', 0, "Primary energy", dist_Q)
+Q = otguibase.Input('Q', 0, 'Primary energy', dist_Q)
 dist_E = ot.Normal(3000, 15)
-E = otguibase.Input('E', 0, "Produced electric energy", dist_E)
+E = otguibase.Input('E', 0, 'Produced electric energy', dist_E)
 dist_C = ot.Normal(4000, 60)
-C = otguibase.Input('C', 0, "Valued thermal energy", dist_C)
-Ep = otguibase.Output('Ep', 0, "Primary energy savings", '1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))')
+C = otguibase.Input('C', 0, 'Valued thermal energy', dist_C)
+Ep = otguibase.Output('Ep', 0, 'Primary energy savings', '1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))')
 myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel')
 myPhysicalModel.addInput(Q)
 myPhysicalModel.addInput(E)
