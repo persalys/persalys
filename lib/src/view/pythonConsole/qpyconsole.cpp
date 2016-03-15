@@ -33,6 +33,7 @@
 #include <Python.h>
 #include "otgui/qpyconsole.h"
 
+#include <QMessageBox>
 #include <QDebug>
 
 PyObject* glb;
@@ -383,6 +384,10 @@ QStringList QPyConsole::suggestCommand(const QString &cmd, QString& prefix)
 
 void QPyConsole::loadScript(const QString & fileName)
 {
-  execCommand(QString("execfile(\"") + fileName + QString("\")"), false);
+  QString result;
+  bool ret = execCommand(QString("execfile(\"") + fileName + QString("\")"), false, true, &result);
+  if (!ret && !result.isEmpty())
+    QMessageBox::warning(this, tr("Error"),
+                      tr("Cannot load file %1:\n\n%2").arg(fileName).arg(result));
 }
 
