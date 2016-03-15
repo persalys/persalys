@@ -23,6 +23,7 @@
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
 
 #include <qwt_legend.h>
+#include <qwt_scale_engine.h>
 
 #include <QVBoxLayout>
 #include <QLabel>
@@ -198,6 +199,12 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   plot->setAxisTitle(QwtPlot::yLeft, tr("Estimate"));
   plot->setAxisTitle(QwtPlot::xBottom, tr("Outer iteration"));
   plot->insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
+#if (QWT_VERSION >= 0x060100)
+  QwtLogScaleEngine * scaleEngin = new QwtLogScaleEngine();
+#else
+  QwtScaleEngine * scaleEngin = new QwtLog10ScaleEngine();
+#endif
+  plot->setAxisScaleEngine(QwtPlot::xBottom, scaleEngin);
 
   listConvergenceGraph.append(plot);
   tabLayout->addWidget(plot);
