@@ -545,25 +545,14 @@ void ProbabilisticModelWindow::distributionParametersChanged()
       // create a new TruncatedDistribution (that fixes a bug...)
       TruncatedDistribution newTruncatedDistribution;
       newTruncatedDistribution.setDistribution(distribution);
+      newTruncatedDistribution.setFiniteLowerBound(false);
+      newTruncatedDistribution.setFiniteUpperBound(false);
 
       if (truncatedDistribution.getFiniteLowerBound())
-      {
-        newTruncatedDistribution.setLowerBound(truncatedDistribution.getLowerBound());
-      }
-      else
-      {
-        newTruncatedDistribution.setFiniteLowerBound(false);
-        newTruncatedDistribution.setLowerBound(distribution.getRange().getLowerBound()[0]);
-      }
+        newTruncatedDistribution.setLowerBound(truncatedDistribution.getLowerBound()); // FiniteLowerBound = true
+
       if (truncatedDistribution.getFiniteUpperBound())
-      {
-        newTruncatedDistribution.setUpperBound(truncatedDistribution.getUpperBound());
-      }
-      else
-      {
-        newTruncatedDistribution.setFiniteUpperBound(false);
-        newTruncatedDistribution.setUpperBound(distribution.getRange().getUpperBound()[0]);
-      }
+        newTruncatedDistribution.setUpperBound(truncatedDistribution.getUpperBound()); // FiniteUpperBound = true
 
       // update input distribution
       physicalModel_.blockNotification(true);
@@ -584,7 +573,7 @@ void ProbabilisticModelWindow::distributionParametersChanged()
     NumericalPointWithDescription parameters = DistributionDictionary::GetParametersCollection(inputDistribution)[parametersType];
     UnsignedInteger nbParameters = parameters.getSize();
     if (distributionName == "TruncatedNormal")
-      nbParameters = 2;
+      nbParameters = 2; // the 2 truncation parameters are updated in truncationParametersChanged
 
     try
     {
@@ -643,17 +632,32 @@ void ProbabilisticModelWindow::truncationParametersChanged()
     value.toDouble(&ok);
     if (!ok)
       throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
+    
+    if (inputDistribution.getImplementation()->getClassName() == "TruncatedNormal")
+    {
+      TruncatedNormal dist = TruncatedNormal(*dynamic_cast<TruncatedNormal*>(&*inputDistribution.getImplementation()));
 
-    TruncatedDistribution truncatedDistribution = TruncatedDistribution(*dynamic_cast<TruncatedDistribution*>(&*inputDistribution.getImplementation()));
+      if (lowerBoundCheckBox_->isChecked())
+        dist.setA(lowerBoundLineEdit_->text().toDouble());
+      if (upperBoundCheckBox_->isChecked())
+        dist.setB(upperBoundLineEdit_->text().toDouble());
 
-    if (lowerBoundCheckBox_->isChecked())
-      truncatedDistribution.setLowerBound(lowerBoundLineEdit_->text().toDouble());
-    if (upperBoundCheckBox_->isChecked())
-      truncatedDistribution.setUpperBound(upperBoundLineEdit_->text().toDouble());
+      physicalModel_.blockNotification(true);
+      physicalModel_.setInputDistribution(input.getName(), dist);
+      physicalModel_.blockNotification(false);
+    }
+    else
+    {
+      TruncatedDistribution truncatedDistribution = TruncatedDistribution(*dynamic_cast<TruncatedDistribution*>(&*inputDistribution.getImplementation()));
+      if (lowerBoundCheckBox_->isChecked())
+        truncatedDistribution.setLowerBound(lowerBoundLineEdit_->text().toDouble());
+      if (upperBoundCheckBox_->isChecked())
+        truncatedDistribution.setUpperBound(upperBoundLineEdit_->text().toDouble());
 
-    physicalModel_.blockNotification(true);
-    physicalModel_.setInputDistribution(input.getName(), truncatedDistribution);
-    physicalModel_.blockNotification(false);
+      physicalModel_.blockNotification(true);
+      physicalModel_.setInputDistribution(input.getName(), truncatedDistribution);
+      physicalModel_.blockNotification(false);
+    }
 
     updatePlots();
   }
