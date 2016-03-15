@@ -541,16 +541,40 @@ void ProbabilisticModelWindow::distributionParametersChanged()
         return;
 
       DistributionDictionary::UpdateDistribution(distribution, parameters, parametersType);
-      truncatedDistribution.setDistribution(distribution);
+
+      // create a new TruncatedDistribution (that fixes a bug...)
+      TruncatedDistribution newTruncatedDistribution;
+      newTruncatedDistribution.setDistribution(distribution);
+
+      if (truncatedDistribution.getFiniteLowerBound())
+      {
+        newTruncatedDistribution.setLowerBound(truncatedDistribution.getLowerBound());
+      }
+      else
+      {
+        newTruncatedDistribution.setFiniteLowerBound(false);
+        newTruncatedDistribution.setLowerBound(distribution.getRange().getLowerBound()[0]);
+      }
+      if (truncatedDistribution.getFiniteUpperBound())
+      {
+        newTruncatedDistribution.setUpperBound(truncatedDistribution.getUpperBound());
+      }
+      else
+      {
+        newTruncatedDistribution.setFiniteUpperBound(false);
+        newTruncatedDistribution.setUpperBound(distribution.getRange().getUpperBound()[0]);
+      }
+
+      // update input distribution
       physicalModel_.blockNotification(true);
-      physicalModel_.setInputDistribution(input.getName(), truncatedDistribution);
+      physicalModel_.setInputDistribution(input.getName(), newTruncatedDistribution);
       physicalModel_.blockNotification(false);
       updatePlots();
     }
     catch(std::exception & ex)
     {
       physicalModel_.blockNotification(false);
-      std::cerr << "ProbabilisticModelWindow::updateDistribution invalid parameters:"<<parameters<<" for distribution:"<<distributionName<<std::endl;
+      std::cerr << "ProbabilisticModelWindow::distributionParametersChanged invalid parameters:"<<parameters<<" for distribution:"<<distributionName<<std::endl;
       updateDistributionParametersWidgets(index);
       setErrorMessage(ex.what());
     }
@@ -587,7 +611,7 @@ void ProbabilisticModelWindow::distributionParametersChanged()
     catch(std::exception & ex)
     {
       physicalModel_.blockNotification(false);
-      std::cerr << "ProbabilisticModelWindow::updateDistribution invalid parameters:"<<parameters<<" for distribution:"<<distributionName<<std::endl;
+      std::cerr << "ProbabilisticModelWindow::distributionParametersChanged invalid parameters:"<<parameters<<" for distribution:"<<distributionName<<std::endl;
       updateDistributionParametersWidgets(index);
       setErrorMessage(ex.what());
     }
