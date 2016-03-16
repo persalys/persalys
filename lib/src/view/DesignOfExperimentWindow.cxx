@@ -146,7 +146,7 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   // -- results --
 
   // number of simulations
-  QLabel * nbSimuLabel = new QLabel(tr("Size of the design of experiment : ") + QString::number(variableInputsSample.getSize()) + "\n");
+  QLabel * nbSimuLabel = new QLabel(tr("Size of the design of experiment: ") + QString::number(variableInputsSample.getSize()) + "\n");
   nbSimuLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
   tabLayout->addWidget(nbSimuLabel);
 
@@ -233,6 +233,43 @@ void DesignOfExperimentWindow::addTabsForOutputs()
       listScatterPlotWidgets.append(plot);
     }
   }
+  for (int j=0; j<nbOutputs; ++j)
+    {
+      for (int i=0; i<nbOutputs; ++i)
+      {
+        PlotWidget * plot = new PlotWidget;
+        plot->plotScatter(designOfExperiment_.getResult().getOutputSample().getMarginal(j), designOfExperiment_.getResult().getOutputSample().getMarginal(i));
+        plot->setTitle(tr("Scatter plot: ") + QString::fromLocal8Bit(outputs[i].getName().c_str()) + tr(" vs ") + QString::fromLocal8Bit(outputs[j].getName().c_str()));
+        if (outputs[j].getDescription().size())
+          plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(outputs[j].getDescription().c_str()));
+        else
+          plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(outputs[j].getName().c_str()));
+        if (outputs[i].getDescription().size())
+          plot->setAxisTitle(QwtPlot::yLeft, QString::fromLocal8Bit(outputs[i].getDescription().c_str()));
+        else
+          plot->setAxisTitle(QwtPlot::yLeft, QString::fromLocal8Bit(outputs[i].getName().c_str()));
+        plotLayout->addWidget(plot);
+        listScatterPlotWidgets.append(plot);
+      }
+      for (int i=0; i<nbInputs; ++i)
+      {
+        PlotWidget * plot = new PlotWidget;
+        plot->plotScatter(designOfExperiment_.getResult().getOutputSample().getMarginal(j), variableInputsSample.getMarginal(i));
+        plot->setTitle(tr("Scatter plot: ") + inputNames[i] + tr(" vs ") + QString::fromLocal8Bit(outputs[j].getName().c_str()));
+        if (outputs[j].getDescription().size())
+          plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(outputs[j].getDescription().c_str()));
+        else
+          plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(outputs[j].getName().c_str()));
+        String inputDescription = designOfExperiment_.getPhysicalModel().getInputByName(inputNames[i].toStdString()).getDescription();
+        if (!inputDescription.empty())
+          plot->setAxisTitle(QwtPlot::yLeft, QString::fromLocal8Bit(inputDescription.c_str()));
+        else
+          plot->setAxisTitle(QwtPlot::yLeft, inputNames[i]);
+
+        plotLayout->addWidget(plot);
+        listScatterPlotWidgets.append(plot);
+      }
+    }
 
   graphConfigurationWidget_ = new GraphConfigurationWidget(listScatterPlotWidgets, inputNames, outputNames, GraphConfigurationWidget::Scatter);
   connect(graphConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));

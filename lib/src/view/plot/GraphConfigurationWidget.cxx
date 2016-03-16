@@ -66,6 +66,7 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
 
     xAxisComboBox_ = new QComboBox;
     xAxisComboBox_->addItems(inputNames);
+    xAxisComboBox_->addItems(outputNames);
     mainGridLayout->addWidget(xAxisComboBox_, rowGrid, 1, 1, 1);
     connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
   }

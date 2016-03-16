@@ -401,6 +401,43 @@ void MonteCarloResultWindow::buildInterface()
         listScatterPlotWidgets.append(plot);
       }
     }
+    for (int j=0; j<nbOutputs; ++j)
+    {
+      for (int i=0; i<nbOutputs; ++i)
+      {
+        PlotWidget * plot = new PlotWidget;
+        plot->plotScatter(result_.getOutputSample().getMarginal(j), result_.getOutputSample().getMarginal(i));
+        plot->setTitle(tr("Scatter plot: ") + QString::fromLocal8Bit(outputs[i].getName().c_str()) + tr(" vs ") + QString::fromLocal8Bit(outputs[j].getName().c_str()));
+        if (outputs[j].getDescription().size())
+          plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(outputs[j].getDescription().c_str()));
+        else
+          plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(outputs[j].getName().c_str()));
+        if (outputs[i].getDescription().size())
+          plot->setAxisTitle(QwtPlot::yLeft, QString::fromLocal8Bit(outputs[i].getDescription().c_str()));
+        else
+          plot->setAxisTitle(QwtPlot::yLeft, QString::fromLocal8Bit(outputs[i].getName().c_str()));
+        scatterPlotLayout->addWidget(plot);
+        listScatterPlotWidgets.append(plot);
+      }
+      for (int i=0; i<nbInputs; ++i)
+      {
+        PlotWidget * plot = new PlotWidget;
+        plot->plotScatter(result_.getOutputSample().getMarginal(j), result_.getInputSample().getMarginal(i));
+        plot->setTitle(tr("Scatter plot: ") + inputNames[i] + tr(" vs ") + QString::fromLocal8Bit(outputs[j].getName().c_str()));
+        if (outputs[j].getDescription().size())
+          plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(outputs[j].getDescription().c_str()));
+        else
+          plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(outputs[j].getName().c_str()));
+        String inputDescription = physicalModel_.getInputByName(inputNames[i].toStdString()).getDescription();
+        if (!inputDescription.empty())
+          plot->setAxisTitle(QwtPlot::yLeft, QString::fromLocal8Bit(inputDescription.c_str()));
+        else
+          plot->setAxisTitle(QwtPlot::yLeft, inputNames[i]);
+
+        scatterPlotLayout->addWidget(plot);
+        listScatterPlotWidgets.append(plot);
+      }
+    }
 
     scatterPlotsConfigurationWidget_ = new GraphConfigurationWidget(listScatterPlotWidgets, inputNames, outputNames, GraphConfigurationWidget::Scatter);
     connect(scatterPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), scatterPlotLayout, SLOT(setCurrentIndex(int)));
