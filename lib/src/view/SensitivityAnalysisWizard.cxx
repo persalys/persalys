@@ -101,7 +101,7 @@ void SensitivityAnalysisWizard::buildInterface()
   QVBoxLayout * sobolWidgetsLayout = new QVBoxLayout(sobolWidgets_);
 
   QHBoxLayout * nbSimuLayout = new QHBoxLayout;
-  QLabel * totalNbSimuLabel = new QLabel(tr("The total number of simulations"));
+  QLabel * totalNbSimuLabel = new QLabel(tr("Total number of simulations"));
   // total nb simu: N=n*(d+2)
   // n = nb inputs; d=sample size
   double nbSimu = physicalModel_.getInputs().getSize() * (sampleSizeSpinbox_->value() + 2);
