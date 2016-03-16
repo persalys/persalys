@@ -97,7 +97,6 @@ void LimitStateWindow::buildInterface()
 
 void LimitStateWindow::updateOutputsList()
 {
-  setErrorMessage(tr(""));
   outputsComboBox_->blockSignals(true);
   outputsComboBox_->clear();
   QStringList items;
@@ -151,7 +150,7 @@ void LimitStateWindow::updateThresholdWidget()
 
 void LimitStateWindow::updateOutput(int index)
 {
-  setErrorMessage(tr(""));
+  setErrorMessage("");
   limitState_.blockNotification(true);
   limitState_.setOutputName(outputsComboBox_->itemText(index).toStdString());
   limitState_.blockNotification(false);
@@ -186,7 +185,6 @@ void LimitStateWindow::updateThreshold()
 {
   try
   {
-    setErrorMessage("");
     QString value = thresholdLineEdit_->text();
     if (value[0].toLower() == 'e' || value.isEmpty() || value.toLower() == "e" || value == "-")
       throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
@@ -201,7 +199,7 @@ void LimitStateWindow::updateThreshold()
   catch(std::exception & ex)
   {
     updateThresholdWidget();
-    setErrorMessage(ex.what());
+    setTemporaryErrorMessage(ex.what());
   }
 }
 }

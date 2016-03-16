@@ -269,7 +269,17 @@ void ProbabilisticModelWindow::updateCorrelationTable()
 void ProbabilisticModelWindow::setCorrelationTabErrorMessage(const QString & message)
 {
   correlationErrorMessage_->setText(QString("%1%2%3").arg("<font color=red>").arg(message).arg("</font>"));
-  setErrorMessage(message);
+  setTemporaryErrorMessage(message);
+  QTimeLine * time = new QTimeLine(5000, this);
+  connect(time, SIGNAL(stateChanged(QTimeLine::State)), this, SLOT(reInitCorrelationErrorMessage(QTimeLine::State)));
+  time->start();
+}
+
+
+void ProbabilisticModelWindow::reInitCorrelationErrorMessage(QTimeLine::State state)
+{
+  if (state == QTimeLine::NotRunning)
+    correlationErrorMessage_->setText("");
 }
 
 
@@ -317,8 +327,6 @@ void ProbabilisticModelWindow::updateDistributionParametersWidgets(const QModelI
 {
   if (!index.isValid())
     return;
-
-  setErrorMessage("");
 
   // update parameters widgets
   if (paramEditor_)
@@ -399,8 +407,6 @@ void ProbabilisticModelWindow::updateTruncationParametersWidgets(const QModelInd
   Input input = physicalModel_.getInputs()[index.row()];
   Distribution inputDistribution = input.getDistribution();
   String distributionName = inputDistribution.getImplementation()->getClassName();
-
-  setErrorMessage("");
 
   lowerBoundCheckBox_->blockSignals(true);
   upperBoundCheckBox_->blockSignals(true);
@@ -484,7 +490,6 @@ void ProbabilisticModelWindow::showHideGraphConfigurationWidget(Qt::WindowStates
 
 void ProbabilisticModelWindow::updatePlots()
 {
-  setErrorMessage("");
   QModelIndex index = inputTableView_->currentIndex();
   Input input = physicalModel_.getInputs()[index.row()];
   pdfPlot_->clear();
@@ -550,7 +555,7 @@ void ProbabilisticModelWindow::distributionParametersChanged()
       physicalModel_.blockNotification(false);
       std::cerr << "ProbabilisticModelWindow::distributionParametersChanged invalid parameters:"<<parameters<<" for distribution:"<<distributionName<<std::endl;
       updateDistributionParametersWidgets(index);
-      setErrorMessage(ex.what());
+      setTemporaryErrorMessage(ex.what());
     }
   }
   else
@@ -587,7 +592,7 @@ void ProbabilisticModelWindow::distributionParametersChanged()
       physicalModel_.blockNotification(false);
       std::cerr << "ProbabilisticModelWindow::distributionParametersChanged invalid parameters:"<<parameters<<" for distribution:"<<distributionName<<std::endl;
       updateDistributionParametersWidgets(index);
-      setErrorMessage(ex.what());
+      setTemporaryErrorMessage(ex.what());
     }
   }
 }
@@ -651,7 +656,7 @@ void ProbabilisticModelWindow::truncationParametersChanged()
     physicalModel_.blockNotification(false);
     std::cerr << "ProbabilisticModelWindow::truncationParametersChanged \n";
     updateTruncationParametersWidgets(index);
-    setErrorMessage(ex.what());
+    setTemporaryErrorMessage(ex.what());
   }
 }
 
@@ -800,7 +805,7 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
     physicalModel_.blockNotification(false);
     std::cerr << "ProbabilisticModelWindow::truncationParametersStateChanged \n";
     updateTruncationParametersWidgets(index);
-    setErrorMessage(ex.what());
+    setTemporaryErrorMessage(ex.what());
   }
 }
 }

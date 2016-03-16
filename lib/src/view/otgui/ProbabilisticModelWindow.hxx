@@ -66,6 +66,7 @@ public slots:
   void truncationParametersStateChanged();
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+  void reInitCorrelationErrorMessage(QTimeLine::State);
 
 private:
   PhysicalModel physicalModel_;

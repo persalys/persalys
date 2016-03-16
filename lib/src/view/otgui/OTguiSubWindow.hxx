@@ -24,6 +24,7 @@
 #include <QStandardItem>
 #include <QMdiSubWindow>
 #include <QLabel>
+#include <QTimeLine>
 
 namespace OTGUI {
 class OTguiSubWindow : public QMdiSubWindow
@@ -40,6 +41,7 @@ public:
 public slots:
   void setErrorMessage(QString message);
   void setTemporaryErrorMessage(QString message);
+  void reInitErrorMessage(QTimeLine::State);
 signals:
   void errorMessageChanged(QString);
   void graphWindowActivated(QWidget*);

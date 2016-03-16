@@ -22,6 +22,7 @@
 
 #include <QEventLoop>
 #include <QTimer>
+#include <QTimeLine>
 
 namespace OTGUI {
 
@@ -60,9 +61,15 @@ void OTguiSubWindow::setErrorMessage(QString message)
 void OTguiSubWindow::setTemporaryErrorMessage(QString message)
 {
   setErrorMessage(message);
-  QEventLoop eventLoop;
-  QTimer::singleShot(5000, &eventLoop, SLOT(quit()));
-  eventLoop.exec();
-  setErrorMessage("");
+  QTimeLine * time = new QTimeLine(5000, this);
+  connect(time, SIGNAL(stateChanged(QTimeLine::State)), this, SLOT(reInitErrorMessage(QTimeLine::State)));
+  time->start();
+}
+
+
+void OTguiSubWindow::reInitErrorMessage(QTimeLine::State state)
+{
+  if (state == QTimeLine::NotRunning)
+    setErrorMessage("");
 }
 }
