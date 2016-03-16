@@ -21,7 +21,7 @@
 #ifndef OTGUI_IMPORTTABLEPAGE_HXX
 #define OTGUI_IMPORTTABLEPAGE_HXX
 
-#include "OTguiTableView.hxx"
+#include "DataTableView.hxx"
 #include "otgui/DesignOfExperiment.hxx"
 
 #include <QWizardPage>
@@ -51,7 +51,7 @@ private:
   DesignOfExperiment designOfExperiment_;
   bool pageValidity_;
   QLineEdit * filePathLineEdit_;
-  OTguiTableView * dataPreviewTableView_;
+  DataTableView * dataPreviewTableView_;
 };
 }
 #endif

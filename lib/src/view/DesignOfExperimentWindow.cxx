@@ -21,6 +21,7 @@
 #include "otgui/DesignOfExperimentWindow.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/DataTableWidget.hxx"
+#include "otgui/DataTableModel.hxx"
 
 #include <QVBoxLayout>
 #include <QStackedLayout>
@@ -49,10 +50,10 @@ void DesignOfExperimentWindow::buildInterface()
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
-  tableView_ = new OTguiTableView;
+  tableView_ = new DataTableView;
   if (!designOfExperiment_.getResult().getOutputSample().getSize())
   {
-    OTguiTableModel * model = new OTguiTableModel(designOfExperiment_.getInputSample());
+    DataTableModel * model = new DataTableModel(designOfExperiment_.getInputSample());
     tableView_->setModel(model);
   }
 
@@ -98,7 +99,7 @@ void DesignOfExperimentWindow::updateWindowForOutputs()
   {
     NumericalSample sample = designOfExperiment_.getInputSample();
     sample.stack(designOfExperiment_.getResult().getOutputSample());
-    OTguiTableModel * model = new OTguiTableModel(sample);
+    DataTableModel * model = new DataTableModel(sample);
     tableView_->setModel(model);
     if (model->sampleIsValid())
       addTabsForOutputs();

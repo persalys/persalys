@@ -2,7 +2,7 @@ set (SOURCEFILES "" CACHE STRING "" FORCE)
 
 ot_add_current_dir_to_include_dirs ()
 
-ot_add_source_file ( OTguiTableModel.cxx )
+ot_add_source_file ( DataTableModel.cxx )
 ot_add_source_file ( InputTableModel.cxx )
 ot_add_source_file ( InputTableProbabilisticModel.cxx )
 ot_add_source_file ( OutputTableModel.cxx )
@@ -17,7 +17,7 @@ ot_add_source_file ( AnalysisItem.cxx )
 ot_add_source_file ( StudyTreeViewModel.cxx )
 ot_add_source_file ( CodeModel.cxx)
 
-ot_install_header_file ( OTguiTableModel.hxx )
+ot_install_header_file ( DataTableModel.hxx )
 ot_install_header_file ( InputTableModel.hxx )
 ot_install_header_file ( InputTableProbabilisticModel.hxx )
 ot_install_header_file ( OutputTableModel.hxx )

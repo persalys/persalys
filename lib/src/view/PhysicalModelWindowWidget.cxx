@@ -60,7 +60,7 @@ void PhysicalModelWindowWidget::buildInterface()
   QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
   QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
 
-  inputTableView_ = new QTableView;
+  inputTableView_ = new OTguiTableView;
   inputTableView_->setEditTriggers(QTableView::AllEditTriggers);
   LineEditWithQValidatorDelegate * delegate = new LineEditWithQValidatorDelegate;
   inputTableView_->setItemDelegateForColumn(0, delegate);
@@ -91,7 +91,7 @@ void PhysicalModelWindowWidget::buildInterface()
   QGroupBox * outputsBox = new QGroupBox(tr("Outputs"));
   QVBoxLayout * outputsLayout = new QVBoxLayout(outputsBox);
 
-  outputTableView_ = new QTableView;
+  outputTableView_ = new OTguiTableView;
   outputTableView_->setEditTriggers(QTableView::AllEditTriggers);
   delegate = new LineEditWithQValidatorDelegate;
   outputTableView_->setItemDelegateForColumn(0, delegate);

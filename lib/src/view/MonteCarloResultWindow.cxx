@@ -19,7 +19,8 @@
  *
  */
 #include "otgui/MonteCarloResultWindow.hxx"
-#include "otgui/OTguiTableView.hxx"
+#include "otgui/DataTableView.hxx"
+#include "otgui/DataTableModel.hxx"
 #include "otgui/MonteCarloAnalysis.hxx"
 #include "otgui/DataTableWidget.hxx"
 
@@ -81,12 +82,12 @@ void MonteCarloResultWindow::buildInterface()
 
   NumericalSample sample = result_.getInputSample();
   sample.stack(result_.getOutputSample());
-  OTguiTableView * tabResultView = new OTguiTableView(sample);
+  DataTableView * tabResultView = new DataTableView(sample);
   tabLayout->addWidget(tabResultView);
 
   tabWidget_->addTab(tab, tr("Result table"));
 
-  const bool resultsSampleIsValid = dynamic_cast<OTguiTableModel*>(tabResultView->model())->sampleIsValid();
+  const bool resultsSampleIsValid = dynamic_cast<DataTableModel*>(tabResultView->model())->sampleIsValid();
 
   // second tab: Summary -----------------------------
 

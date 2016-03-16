@@ -21,6 +21,7 @@
 #include "otgui/ImportTablePage.hxx"
 
 #include "otgui/HorizontalHeaderViewWithCombobox.hxx"
+#include "otgui/DataTableModel.hxx"
 
 #include <NumericalSample.hxx>
 
@@ -73,7 +74,7 @@ void ImportTablePage::buildInterface()
   gridLayout->setSpacing(6);
   gridLayout->setContentsMargins(11, 11, 11, 11);
 
-  dataPreviewTableView_ = new OTguiTableView(groupBox);
+  dataPreviewTableView_ = new DataTableView(groupBox);
   gridLayout->addWidget(dataPreviewTableView_, 0, 0, 1, 1);
   if (designOfExperiment_.getFileName().size() != 0)
   {
@@ -127,7 +128,7 @@ void ImportTablePage::loadFile()
     desc[columns[i]] = inputNames[i];
   sampleFromFile.setDescription(desc);
 
-  dataPreviewTableView_->setModel(new OTguiTableModel(sampleFromFile));
+  dataPreviewTableView_->setModel(new DataTableModel(sampleFromFile));
   connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this, SLOT(columnChanged(Qt::Orientation,int,int)));
 
   QStringList comboBoxItems;

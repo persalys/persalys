@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/OTguiTableModel.hxx"
+#include "otgui/DataTableModel.hxx"
 
 #include <QFile>
 #include <QColor>
@@ -27,7 +27,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-OTguiTableModel::OTguiTableModel(const NumericalSample & data)
+DataTableModel::DataTableModel(const NumericalSample & data)
   : QAbstractTableModel()
   , data_(data)
   , sampleIsValid_(true)
@@ -42,19 +42,19 @@ OTguiTableModel::OTguiTableModel(const NumericalSample & data)
 }
 
 
-int OTguiTableModel::columnCount(const QModelIndex & parent) const
+int DataTableModel::columnCount(const QModelIndex & parent) const
 {
   return data_.getDimension();
 }
 
 
-int OTguiTableModel::rowCount(const QModelIndex & parent) const
+int DataTableModel::rowCount(const QModelIndex & parent) const
 {
   return data_.getSize();
 }
 
 
-QVariant OTguiTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant DataTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     return QString::fromLocal8Bit(data_.getDescription()[section].c_str());
@@ -63,7 +63,7 @@ QVariant OTguiTableModel::headerData(int section, Qt::Orientation orientation, i
 }
 
 
-bool OTguiTableModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
+bool DataTableModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
 {
   if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
   {
@@ -77,7 +77,7 @@ bool OTguiTableModel::setHeaderData(int section, Qt::Orientation orientation, co
 }
 
 
-QVariant OTguiTableModel::data(const QModelIndex & index, int role) const
+QVariant DataTableModel::data(const QModelIndex & index, int role) const
 {
   if (!index.isValid())
     return QVariant();
@@ -96,7 +96,7 @@ QVariant OTguiTableModel::data(const QModelIndex & index, int role) const
 }
 
 
-bool OTguiTableModel::exportData(const QString & fileName)
+bool DataTableModel::exportData(const QString & fileName)
 {
   QFile file(fileName);
 
@@ -115,7 +115,7 @@ bool OTguiTableModel::exportData(const QString & fileName)
 }
 
 
-bool OTguiTableModel::sampleIsValid()
+bool DataTableModel::sampleIsValid()
 {
   return sampleIsValid_;
 }

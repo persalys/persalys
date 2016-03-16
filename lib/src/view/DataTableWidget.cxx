@@ -21,19 +21,18 @@
 #include "otgui/DataTableWidget.hxx"
 
 #include <QtGui>
-#include <iostream>
 
 namespace OTGUI {
 
 DataTableWidget::DataTableWidget(QWidget * parent)
-: QTableWidget(parent)
+  : QTableWidget(parent)
 {
   initialize();
 }
 
 
 DataTableWidget::DataTableWidget(int rowCount, int colCount, QWidget* parent)
-: QTableWidget(rowCount, colCount, parent)
+  : QTableWidget(rowCount, colCount, parent)
 {
   initialize();
 }
@@ -88,13 +87,17 @@ void DataTableWidget::initialize()
 // }
 
 
-QTableWidgetSelectionRange DataTableWidget::selectedRange() const {
+QTableWidgetSelectionRange DataTableWidget::selectedRange() const
+{
   QList<QTableWidgetSelectionRange> ranges = selectedRanges();
   QTableWidgetSelectionRange result;
 
-  if (ranges.size() == 1) {
+  if (ranges.size() == 1)
+  {
     result = ranges.first();
-  } else if (ranges.size() > 1) {
+  }
+  else if (ranges.size() > 1)
+  {
     int top = ranges.first().topRow();
     int left = ranges.first().leftColumn();
     int bottom = ranges.last().bottomRow();
@@ -105,22 +108,24 @@ QTableWidgetSelectionRange DataTableWidget::selectedRange() const {
 }
 
 
-QString DataTableWidget::getFormattedText() const {
+QString DataTableWidget::getFormattedText() const
+{
   QTableWidgetSelectionRange range = selectedRange();
   QString result;
-  for (int i = 0; i < range.rowCount(); ++ i) {
-    if (i >0)
+  for (int i = 0; i < range.rowCount(); ++ i)
+  {
+    if (i > 0)
       result += "\n";
-    for (int j = 0; j < range.columnCount(); ++ j) {
+    for (int j = 0; j < range.columnCount(); ++ j)
+    {
       if (j > 0)
         result += "\t";
       int row = range.topRow() + i;
       int column = range.leftColumn() + j;
       QTableWidgetItem *item = this->item(row, column);
 
-      if (item) {
+      if (item)
         result += item->text();
-      }
     }
   }
   return result;
@@ -138,9 +143,9 @@ void DataTableWidget::buildActions()
     action->setShortcutContext(Qt::WidgetShortcut);
 }
 
+
 void DataTableWidget::copy()
 {
   QApplication::clipboard()->setText(getFormattedText());
 }
-
 }

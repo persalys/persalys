@@ -27,7 +27,7 @@ namespace OTGUI {
 
 class DataTableWidget : public QTableWidget
 {
-Q_OBJECT
+  Q_OBJECT
 
 public:
 
@@ -78,7 +78,5 @@ private:
   
 //   int precision_;
 };
-
 }
-
-#endif // OTGUI_DATATABLEWIDGET_HXX
+#endif

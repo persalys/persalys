@@ -22,8 +22,8 @@
 #define OTGUI_PHYSICALMODELWINDOWWIDGET_HXX
 
 #include "otgui/PhysicalModelItem.hxx"
+#include "otgui/OTguiTableView.hxx"
 
-#include <QTableView>
 #include <QLineEdit>
 #include <QGroupBox>
 #include <QPushButton>
@@ -56,11 +56,11 @@ signals:
 
 private:
   PhysicalModel physicalModel_;
-  QTableView * inputTableView_;
+  OTguiTableView * inputTableView_;
   InputTableModel * inputTableModel_;
   QPushButton * addInputLineButton_;
   QPushButton * removeInputLineButton_;
-  QTableView * outputTableView_;
+  OTguiTableView * outputTableView_;
   OutputTableModel * outputTableModel_;
   QPushButton * addOutputLineButton_;
   QPushButton * removeOutputLineButton_;

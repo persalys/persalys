@@ -208,7 +208,7 @@ void ProbabilisticModelWindow::buildInterface()
 
   QGroupBox * groupBox = new QGroupBox(tr("Spearman's rank (Gaussian Copula)"));
   QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
-  correlationTableView_ = new QTableView;
+  correlationTableView_ = new OTguiTableView;
   SpinBoxDelegate * correlationDelegate = new SpinBoxDelegate;
   correlationTableView_->setItemDelegate(correlationDelegate);
   correlationTableModel_ = new CorrelationTableModel(physicalModel_);

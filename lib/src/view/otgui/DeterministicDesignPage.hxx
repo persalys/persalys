@@ -22,9 +22,9 @@
 #define OTGUI_DETERMINISTICDESIGNPAGE_HXX
 
 #include "otgui/ExperimentTableModel.hxx"
+#include "otgui/OTguiTableView.hxx"
 
 #include <QWizardPage>
-#include <QTableView>
 #include <QButtonGroup>
 
 namespace OTGUI {
@@ -50,7 +50,7 @@ private:
   DesignOfExperiment designOfExperiment_;
   bool pageValidity_;
   QButtonGroup * methodGroup_;
-  QTableView * tableView_;
+  OTguiTableView * tableView_;
   ExperimentTableModel * model_;
   // TODO
 //   QWidget * designsWidget_ ;

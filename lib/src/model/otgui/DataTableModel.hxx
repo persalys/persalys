@@ -29,10 +29,10 @@
 #include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class OTGUI_API OTguiTableModel : public QAbstractTableModel
+class OTGUI_API DataTableModel : public QAbstractTableModel
 {
 public:
-  OTguiTableModel(const OT::NumericalSample & data);
+  DataTableModel(const OT::NumericalSample & data);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent) const;

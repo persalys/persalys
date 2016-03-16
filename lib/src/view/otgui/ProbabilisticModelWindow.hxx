@@ -26,6 +26,7 @@
 #include "otgui/PlotWidget.hxx"
 #include "otgui/InputTableProbabilisticModel.hxx"
 #include "otgui/CorrelationTableModel.hxx"
+#include "otgui/OTguiTableView.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 
 #include <QGroupBox>
@@ -88,7 +89,7 @@ private:
   QLineEdit * lowerBoundLineEdit_;
   QLineEdit * upperBoundLineEdit_;
   CorrelationTableModel * correlationTableModel_;
-  QTableView * correlationTableView_;
+  OTguiTableView * correlationTableView_;
   QLabel * correlationErrorMessage_;
 };
 }

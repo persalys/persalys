@@ -54,7 +54,7 @@ void DeterministicDesignPage::buildInterface()
   methodGroup_->addButton(buttonToChooseMethod, DesignOfExperimentImplementation::FromBoundsAndLevels);
   pageLayout->addWidget(buttonToChooseMethod);
 
-  tableView_ = new QTableView;
+  tableView_ = new OTguiTableView;
   tableView_->setEditTriggers(QTableView::AllEditTriggers);
   tableView_->setEnabled(true);
   if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromExperiment)

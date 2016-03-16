@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QTableView to display samples
+ *  @brief Generic data table
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -20,75 +20,69 @@
  */
 #include "otgui/OTguiTableView.hxx"
 
-#include <QFileDialog>
-#include <QMenu>
-#include <QMessageBox>
-#include <QSettings>
-#include <QApplication>
+#include <QtGui>
 
 namespace OTGUI {
 
-OTguiTableView::OTguiTableView(QWidget* parent)
+OTguiTableView::OTguiTableView(QWidget * parent)
   : QTableView(parent)
 {
-  setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
+  buildActions();
 }
 
 
-OTguiTableView::OTguiTableView(const OT::NumericalSample & sample, QWidget *parent)
-  : QTableView(parent)
+QString OTguiTableView::getFormattedText() const
 {
-  setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
-  setModel(new OTguiTableModel(sample));
-}
+  QString result;
+  QModelIndexList list = selectionModel()->selectedIndexes();
 
+  if(list.size() < 1)
+    return result;
 
-// show the context menu when right clicking
-void OTguiTableView::contextMenu(const QPoint & pos)
-{
-  QMenu * contextMenu(new QMenu(this));
-  QAction * exportData = new QAction(tr("Export"), this);
-  exportData->setStatusTip(tr("Export the data"));
-  connect(exportData, SIGNAL(triggered()), this, SLOT(exportData()));
-  contextMenu->addAction(exportData);
-  contextMenu->popup(this->mapToGlobal(pos));
-}
+  qSort(list);
 
+  QModelIndex last = list.last();
+  QModelIndex previous = list.first();
 
-void OTguiTableView::exportData()
-{
-  QSettings settings;
-  QString currentDir = settings.value("currentDir").toString();
-  if (currentDir.isEmpty())
-    currentDir = QDir::homePath();
-  QString fileName = QFileDialog::getSaveFileName(this, tr("Export model as..."),
-                     currentDir,
-                     tr("CSV source files (*.csv)"));
+  list.removeFirst();
 
-  if (!fileName.isEmpty())
+  for(int i = 0; i < list.size(); ++i)
   {
-    if (!fileName.endsWith(".csv"))
-      fileName += ".csv";
+    QVariant data = model()->data(previous);
+    QString text = data.toString();
+    QModelIndex index = list.at(i);
+    result.append(text);
 
-    QFile file(fileName);
-    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
-
-    // check
-    if (!file.open(QFile::WriteOnly))
-    {
-      QMessageBox::warning(QApplication::activeWindow(), tr("Warning"),
-                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
-    }
-    try
-    {
-      static_cast<OTguiTableModel*>(model())->exportData(fileName);
-    }
-    catch (std::exception & ex)
-    {
-      QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Impossible to export the data."));
-    }
+    if(index.row() != previous.row())
+      result.append('\n');
+    else
+      result.append('\t');
+    previous = index;
   }
+
+  result.append(model()->data(list.last()).toString());
+  result.append('\n');
+
+  QClipboard *clipboard = QApplication::clipboard();
+  clipboard->setText(result);
+  return result;
+}
+
+
+void OTguiTableView::buildActions()
+{
+  copyAction_ = new QAction(tr("&Copy"), this);
+  copyAction_->setShortcut(tr("Ctrl+C"));
+  addAction(copyAction_);
+  connect(copyAction_, SIGNAL(triggered()), this, SLOT(copy()));
+
+  foreach(QAction* action, actions())
+    action->setShortcutContext(Qt::WidgetShortcut);
+}
+
+
+void OTguiTableView::copy()
+{
+  QApplication::clipboard()->setText(getFormattedText());
 }
 }

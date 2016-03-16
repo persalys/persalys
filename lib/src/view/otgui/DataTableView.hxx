@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Generic table
+ *  @brief QTableView to display samples
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,32 +18,25 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_OTGUITABLEVIEW_HXX
-#define OTGUI_OTGUITABLEVIEW_HXX
+#ifndef OTGUI_DATATABLEVIEW_HXX
+#define OTGUI_DATATABLEVIEW_HXX
 
-#include <QTableView>
+#include "otgui/OTguiTableView.hxx"
+
+#include "NumericalSample.hxx"
 
 namespace OTGUI {
-
-class OTguiTableView : public QTableView
+class DataTableView : public OTguiTableView
 {
   Q_OBJECT
 
 public:
-  /** Default constructor */
-  OTguiTableView(QWidget * parent = 0);
-  
+  DataTableView(QWidget * parent=0);
+  DataTableView(const OT::NumericalSample & sample, QWidget * parent=0);
+
 public slots:
-  void copy();
-
-protected:
-  /** format the text */
-  QString getFormattedText() const;
-
-  QAction * copyAction_;
-
-private:
-  void buildActions();
+  void contextMenu(const QPoint & pos);
+  void exportData();
 };
 }
 #endif
