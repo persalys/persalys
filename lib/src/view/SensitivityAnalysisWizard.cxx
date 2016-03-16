@@ -113,8 +113,11 @@ void SensitivityAnalysisWizard::buildInterface()
   QVBoxLayout * advancedGroup_Layout = new QVBoxLayout(advancedGroup_);
   advancedGroup_->setCheckable(true);
   advancedGroup_->setChecked(false);
-  advancedGroup_->setStyleSheet("QGroupBox::indicator::unchecked {image: url(:/images/down_arrow.png);}\
-                                 QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
+  // FIXME doesn't work on KDE and Windows
+  /*
+  advancedGroup->setStyleSheet("QGroupBox::indicator::unchecked {image: url(:/images/down_arrow.png);}\
+                                QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
+  */
 
   advancedWidgets_ = new QWidget;
   QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedWidgets_);

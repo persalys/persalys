@@ -66,8 +66,11 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelItem * item)
   QVBoxLayout * YACSSchemeParametersGroupBoxLayout = new QVBoxLayout(YACSSchemeParametersGroupBox);
   YACSSchemeParametersGroupBox->setCheckable(true);
   YACSSchemeParametersGroupBox->setChecked(false);
-  YACSSchemeParametersGroupBox->setStyleSheet("QGroupBox::indicator::unchecked {image: url(:/images/down_arrow.png);}\
-                                               QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
+  // FIXME doesn't work on KDE and Windows
+  /*
+  advancedGroup->setStyleSheet("QGroupBox::indicator::unchecked {image: url(:/images/down_arrow.png);}\
+                                QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
+  */
   
   connect(YACSSchemeParametersGroupBox, SIGNAL(toggled(bool)), this, SLOT(showHideYACSParametersWidgets(bool)));
 

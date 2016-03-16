@@ -152,8 +152,11 @@ void ProbabilisticModelWindow::buildInterface()
   advancedGroup_ = new QGroupBox(tr("Truncation parameters"));
   QVBoxLayout * advancedGroupLayout = new QVBoxLayout(advancedGroup_);
   advancedGroup_->setCheckable(true);
-  advancedGroup_->setStyleSheet("QGroupBox::indicator::unchecked {image: url(:/images/down_arrow.png);}\
-                                 QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
+  // FIXME doesn't work on KDE and Windows
+  /*
+  advancedGroup->setStyleSheet("QGroupBox::indicator::unchecked {image: url(:/images/down_arrow.png);}\
+                                QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
+  */
 
   connect(advancedGroup_, SIGNAL(toggled(bool)), this, SLOT(showHideAdvancedWidgets(bool)));
 
@@ -177,6 +180,7 @@ void ProbabilisticModelWindow::buildInterface()
 
   advancedGroupLayout->addWidget(advancedWidgets_);
   advancedGroupLayout->addStretch();
+  advancedGroup_->setChecked(false);
   rightFrameLayout->addWidget(advancedGroup_);
 
   errorMessageLabel_ = new QLabel;

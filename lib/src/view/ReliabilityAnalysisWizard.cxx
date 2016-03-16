@@ -111,8 +111,11 @@ void ReliabilityAnalysisWizard::buildInterface()
   QVBoxLayout * advancedGroupLayout = new QVBoxLayout(advancedGroup);
   advancedGroup->setCheckable(true);
   advancedGroup->setChecked(false);
+  // FIXME doesn't work on KDE and Windows
+  /*
   advancedGroup->setStyleSheet("QGroupBox::indicator::unchecked {image: url(:/images/down_arrow.png);}\
                                 QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
+  */
 
   advancedWidgets_ = new QWidget;
   QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedWidgets_);
