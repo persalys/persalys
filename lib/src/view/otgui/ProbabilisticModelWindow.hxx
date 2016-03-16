@@ -28,6 +28,7 @@
 #include "otgui/CorrelationTableModel.hxx"
 #include "otgui/OTguiTableView.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/CollapsibleGroupBox.hxx"
 
 #include <QGroupBox>
 #include <QVBoxLayout>
@@ -59,7 +60,6 @@ public slots:
   void updateProbabilisticModel();
   void updateCorrelationTable();
   void setCorrelationTabErrorMessage(const QString &);
-  void showHideAdvancedWidgets(bool);
   void distributionParametersChanged();
   void typeDistributionParametersChanged(int);
   void truncationParametersChanged();
@@ -82,8 +82,7 @@ private:
   QComboBox * selectParametersTypeCombo_;
   QLabel * parameterValuesLabel_[5];
   QLineEdit * parameterValuesEdit_[5];
-  QGroupBox * advancedGroup_;
-  QWidget * advancedWidgets_;
+  CollapsibleGroupBox * truncationParamGroupBox_;
   QCheckBox * lowerBoundCheckBox_;
   QCheckBox * upperBoundCheckBox_;
   QLineEdit * lowerBoundLineEdit_;

@@ -7,6 +7,7 @@ set (SOURCEFILES "" CACHE STRING "" FORCE)
 ot_add_current_dir_to_include_dirs ()
 
 ot_add_source_file ( MainWindow.cxx )
+ot_add_source_file ( CollapsibleGroupBox.cxx )
 ot_add_source_file ( OTguiToolBar.cxx )
 ot_add_source_file ( OTguiMenuBar.cxx )
 ot_add_source_file ( OTguiStatusBar.cxx )
@@ -49,6 +50,7 @@ ot_add_source_file ( CodeDelegate.cxx )
 ot_add_source_file ( DataTableWidget.cxx )
 
 ot_install_header_file ( MainWindow.hxx )
+ot_install_header_file ( CollapsibleGroupBox.hxx )
 ot_install_header_file ( OTguiToolBar.hxx )
 ot_install_header_file ( OTguiMenuBar.hxx )
 ot_install_header_file ( OTguiStatusBar.hxx )
@@ -91,6 +93,7 @@ ot_install_header_file ( CodeDelegate.hxx )
 ot_install_header_file ( DataTableWidget.hxx )
 
 qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
+                                  otgui/CollapsibleGroupBox.hxx
                                   otgui/OTguiToolBar.hxx
                                   otgui/OTguiMenuBar.hxx
                                   otgui/OTguiStatusBar.hxx

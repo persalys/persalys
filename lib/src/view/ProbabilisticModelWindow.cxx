@@ -26,6 +26,7 @@
 #include "otgui/DistributionDictionary.hxx"
 #include "otgui/CorrelationTableModel.hxx"
 #include "otgui/CustomDoubleValidator.hxx"
+#include "otgui/CollapsibleGroupBox.hxx"
 
 #include "Normal.hxx"
 #include "TruncatedDistribution.hxx"
@@ -148,40 +149,28 @@ void ProbabilisticModelWindow::buildInterface()
   parameterLayout_->addWidget(new QWidget);
   rightFrameLayout->addLayout(parameterLayout_);
 
-  // advanced group: truncation parameters
-  advancedGroup_ = new QGroupBox(tr("Truncation parameters"));
-  QVBoxLayout * advancedGroupLayout = new QVBoxLayout(advancedGroup_);
-  advancedGroup_->setCheckable(true);
-  // FIXME doesn't work on KDE and Windows
-  /*
-  advancedGroup->setStyleSheet("QGroupBox::indicator::unchecked {image: url(:/images/down_arrow.png);}\
-                                QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
-  */
-
-  connect(advancedGroup_, SIGNAL(toggled(bool)), this, SLOT(showHideAdvancedWidgets(bool)));
-
-  advancedWidgets_ = new QWidget;
-  QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedWidgets_);
+  // truncation parameters
+  truncationParamGroupBox_ = new CollapsibleGroupBox;
+  truncationParamGroupBox_->setTitle("Truncation parameters");
+  truncationParamGroupBox_->setExpanded(false);
+  QGridLayout * truncationParamGroupBoxLayout = new QGridLayout(truncationParamGroupBox_);
 
   lowerBoundCheckBox_ = new QCheckBox(tr("Lower bound"));
-  advancedWidgetsLayout->addWidget(lowerBoundCheckBox_, 0, 0);
+  truncationParamGroupBoxLayout->addWidget(lowerBoundCheckBox_, 0, 0);
   upperBoundCheckBox_ = new QCheckBox(tr("Upper bound"));
-  advancedWidgetsLayout->addWidget(upperBoundCheckBox_, 1, 0);
+  truncationParamGroupBoxLayout->addWidget(upperBoundCheckBox_, 1, 0);
 
   lowerBoundLineEdit_ = new QLineEdit;
-  advancedWidgetsLayout->addWidget(lowerBoundLineEdit_, 0, 1);
+  truncationParamGroupBoxLayout->addWidget(lowerBoundLineEdit_, 0, 1);
   upperBoundLineEdit_ = new QLineEdit;
-  advancedWidgetsLayout->addWidget(upperBoundLineEdit_, 1, 1);
+  truncationParamGroupBoxLayout->addWidget(upperBoundLineEdit_, 1, 1);
 
   connect(lowerBoundCheckBox_, SIGNAL(stateChanged(int)), this, SLOT(truncationParametersStateChanged()));
   connect(upperBoundCheckBox_, SIGNAL(stateChanged(int)), this, SLOT(truncationParametersStateChanged()));
   connect(lowerBoundLineEdit_, SIGNAL(editingFinished()), this, SLOT(truncationParametersChanged()));
   connect(upperBoundLineEdit_, SIGNAL(editingFinished()), this, SLOT(truncationParametersChanged()));
 
-  advancedGroupLayout->addWidget(advancedWidgets_);
-  advancedGroupLayout->addStretch();
-  advancedGroup_->setChecked(false);
-  rightFrameLayout->addWidget(advancedGroup_);
+  rightFrameLayout->addWidget(truncationParamGroupBox_);
 
   errorMessageLabel_ = new QLabel;
   errorMessageLabel_->setWordWrap(true);
@@ -226,15 +215,6 @@ void ProbabilisticModelWindow::buildInterface()
 
   currentIndexTab_ = rootTab->currentIndex();
   setWidget(rootTab);
-}
-
-
-void ProbabilisticModelWindow::showHideAdvancedWidgets(bool show)
-{
-  if (show)
-    advancedWidgets_->show();
-  else
-    advancedWidgets_->hide();
 }
 
 
@@ -317,7 +297,7 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   else
   {
     rightSideOfSplitterStackedLayout_->setCurrentIndex(2);
-    advancedGroup_->setChecked(false);
+    truncationParamGroupBox_->setExpanded(false);
 
     // fill truncation parameters widgets
     updateTruncationParametersWidgets(index);
@@ -451,7 +431,7 @@ void ProbabilisticModelWindow::updateTruncationParametersWidgets(const QModelInd
       upperBoundLineEdit_->setText(QString::number(dist->getUpperBound()));
       upperBoundLineEdit_->setEnabled(true);
     }
-    advancedGroup_->setChecked(true);
+    truncationParamGroupBox_->setExpanded(true);
   }
   else if (distributionName == "TruncatedNormal")
   {
@@ -463,7 +443,7 @@ void ProbabilisticModelWindow::updateTruncationParametersWidgets(const QModelInd
     lowerBoundLineEdit_->setEnabled(true);
     upperBoundLineEdit_->setText(QString::number(dist->getB()));
     upperBoundLineEdit_->setEnabled(true);
-    advancedGroup_->setChecked(true);
+    truncationParamGroupBox_->setExpanded(true);
   }
   lowerBoundCheckBox_->blockSignals(false);
   upperBoundCheckBox_->blockSignals(false);
