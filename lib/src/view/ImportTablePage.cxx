@@ -161,7 +161,7 @@ void ImportTablePage::openFileRequested()
     settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
 
     // check
-    if (!file.open(QFile::WriteOnly))
+    if (!file.open(QFile::ReadOnly))
     {
       QMessageBox::warning(this, tr("Warning"),
                            tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
