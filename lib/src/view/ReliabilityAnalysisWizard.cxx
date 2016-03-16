@@ -21,6 +21,7 @@
 #include "otgui/ReliabilityAnalysisWizard.hxx"
 
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
+#include "otgui/CollapsibleGroupBox.hxx"
 
 #include <QGroupBox>
 #include <QRadioButton>
@@ -106,19 +107,9 @@ void ReliabilityAnalysisWizard::buildInterface()
   mclayout->addWidget(maxiCoefficientOfVariationSpinbox_, 1, 1);
 
   //// advanced parameters
-  // TODO make a class advancedParametersGroupBox?
-  QGroupBox * advancedGroup = new QGroupBox(tr("Advanced parameters"));
-  QVBoxLayout * advancedGroupLayout = new QVBoxLayout(advancedGroup);
-  advancedGroup->setCheckable(true);
-  advancedGroup->setChecked(false);
-  // FIXME doesn't work on KDE and Windows
-  /*
-  advancedGroup->setStyleSheet("QGroupBox::indicator::unchecked {image: url(:/images/down_arrow.png);}\
-                                QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
-  */
-
-  advancedWidgets_ = new QWidget;
-  QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedWidgets_);
+  CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
+  advancedParamGroupBox->setTitle(tr("Advanced parameters"));
+  QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedParamGroupBox);
 
   QLabel * seedLabel = new QLabel(tr("Seed"));
   advancedWidgetsLayout->addWidget(seedLabel, 0, 0);
@@ -141,12 +132,7 @@ void ReliabilityAnalysisWizard::buildInterface()
     blockSizeSpinbox_->setValue(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getBlockSize());
   connect(blockSizeSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(blockSizeChanged(int)));
 
-  advancedWidgets_->hide();
-  advancedGroupLayout->addWidget(advancedWidgets_);
-
-  mclayout->addWidget(advancedGroup, 2, 0, 1, -1);
-
-  connect(advancedGroup, SIGNAL(toggled(bool)), this, SLOT(showHideAdvancedWidgets(bool)));
+  mclayout->addWidget(advancedParamGroupBox, 2, 0, 1, -1);
 
   methodParametersLayout->addWidget(monteCarloWidget_);
 
@@ -155,15 +141,6 @@ void ReliabilityAnalysisWizard::buildInterface()
 //   updateMethodWidgets();
 
   addPage(page);
-}
-
-
-void ReliabilityAnalysisWizard::showHideAdvancedWidgets(bool show)
-{
-  if (show)
-    advancedWidgets_->show();
-  else
-    advancedWidgets_->hide();
 }
 
 

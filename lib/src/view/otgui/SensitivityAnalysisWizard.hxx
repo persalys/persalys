@@ -26,7 +26,6 @@
 
 #include <QButtonGroup>
 #include <QSpinBox>
-#include <QGroupBox>
 #include <QLabel>
 
 namespace OTGUI {
@@ -48,7 +47,6 @@ protected:
 
 public slots:
   void updateMethodWidgets();
-  void showHideAdvancedWidgets(bool);
   void sampleSizeChanged(int);
   void seedChanged(int);
   void blockSizeChanged(int);
@@ -61,14 +59,10 @@ private:
   PhysicalModel physicalModel_;
 
   QButtonGroup * methodGroup_;
-  QGroupBox * advancedGroup_;
-  QWidget * advancedWidgets_;
   QSpinBox * sampleSizeSpinbox_;
   QWidget * sobolWidgets_;
+  QWidget * srcWidgets_;
   QLabel * totalNbSimuLabel_;
-  QSpinBox * seedSpinbox_;
-  QLabel * blockSizeLabel_;
-  QSpinBox * blockSizeSpinbox_;
 };
 }
 #endif

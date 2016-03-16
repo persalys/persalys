@@ -22,6 +22,7 @@
 
 #include "otgui/YACSPhysicalModel.hxx"
 #include "otgui/PhysicalModelWindowWidget.hxx"
+#include "otgui/CollapsibleGroupBox.hxx"
 
 #include <QFileDialog>
 #include <QHeaderView>
@@ -62,30 +63,19 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelItem * item)
   mainLayout->addLayout(fieldsLayout);
 
   // YACS scheme parameters
-  QGroupBox * YACSSchemeParametersGroupBox = new QGroupBox(tr("YACS Scheme Parameters"));
-  QVBoxLayout * YACSSchemeParametersGroupBoxLayout = new QVBoxLayout(YACSSchemeParametersGroupBox);
-  YACSSchemeParametersGroupBox->setCheckable(true);
-  YACSSchemeParametersGroupBox->setChecked(false);
-  // FIXME doesn't work on KDE and Windows
-  /*
-  advancedGroup->setStyleSheet("QGroupBox::indicator::unchecked {image: url(:/images/down_arrow.png);}\
-                                QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
-  */
-  
-  connect(YACSSchemeParametersGroupBox, SIGNAL(toggled(bool)), this, SLOT(showHideYACSParametersWidgets(bool)));
-
-  YACSSchemeParametersWidgets_ = new QWidget;
-  QGridLayout * YACSSchemeParametersLayout = new QGridLayout(YACSSchemeParametersWidgets_);
+  CollapsibleGroupBox * YACSSchemeParametersGroupBox = new CollapsibleGroupBox;
+  YACSSchemeParametersGroupBox->setTitle(tr("YACS Scheme Parameters"));
+  QGridLayout * YACSSchemeParametersGroupBoxLayout = new QGridLayout(YACSSchemeParametersGroupBox);
 
   // parallelize status
   parallelizeStatusCheckBox_ = new QCheckBox(tr("Parallelize status"));
   parallelizeStatusCheckBox_->setChecked(dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getParallelizeStatus());
   connect(parallelizeStatusCheckBox_, SIGNAL(toggled(bool)), this, SLOT(updateParallelizeStatus(bool)));
-  YACSSchemeParametersLayout->addWidget(parallelizeStatusCheckBox_, 0, 0);
+  YACSSchemeParametersGroupBoxLayout->addWidget(parallelizeStatusCheckBox_, 0, 0);
 
   // machines list
   QLabel * fittingMachinesLabel = new QLabel(tr("Fitting machines"));
-  YACSSchemeParametersLayout->addWidget(fittingMachinesLabel, 1, 0);
+  YACSSchemeParametersGroupBoxLayout->addWidget(fittingMachinesLabel, 1, 0);
   fittingMachinesComboBox_ = new QComboBox;
   QStringList items;
   Description fittingMachines = dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getFittingMachines();
@@ -96,10 +86,10 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelItem * item)
   fittingMachinesComboBox_->setCurrentIndex(fittingMachinesComboBox_->findText(wantedMachine));
   fittingMachinesComboBox_->setSizeAdjustPolicy(QComboBox::AdjustToContents);
   connect(fittingMachinesComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateWantedMachine(int)));
-  YACSSchemeParametersLayout->addWidget(fittingMachinesComboBox_, 1, 1);
-  YACSSchemeParametersLayout->setColumnStretch(2, 1);
-  YACSSchemeParametersGroupBoxLayout->addWidget(YACSSchemeParametersWidgets_);
-  YACSSchemeParametersWidgets_->hide();
+  YACSSchemeParametersGroupBoxLayout->addWidget(fittingMachinesComboBox_, 1, 1);
+  YACSSchemeParametersGroupBoxLayout->setColumnStretch(2, 1);
+
+  YACSSchemeParametersGroupBox->setExpanded(false);
 
   mainLayout->addWidget(YACSSchemeParametersGroupBox);
 
@@ -167,15 +157,6 @@ void YACSPhysicalModelWindow::selectImportFileDialogRequested()
       }
     }
   }
-}
-
-
-void YACSPhysicalModelWindow::showHideYACSParametersWidgets(bool show)
-{
-  if (show)
-    YACSSchemeParametersWidgets_->show();
-  else
-    YACSSchemeParametersWidgets_->hide();
 }
 
 

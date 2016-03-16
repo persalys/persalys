@@ -22,6 +22,7 @@
 
 #include "otgui/SobolAnalysis.hxx"
 #include "otgui/SRCAnalysis.hxx"
+#include "otgui/CollapsibleGroupBox.hxx"
 
 #include <QGroupBox>
 #include <QRadioButton>
@@ -95,64 +96,71 @@ void SensitivityAnalysisWizard::buildInterface()
   methodParametersLayout->addWidget(sampleSizeSpinbox_);
   mainLayout->addWidget(methodParametersWidgets);
 
+  // Sobol widgets
   sobolWidgets_ = new QWidget;
-  QHBoxLayout * sobolWidgetsLayout = new QHBoxLayout(sobolWidgets_);
+  QVBoxLayout * sobolWidgetsLayout = new QVBoxLayout(sobolWidgets_);
+
+  QHBoxLayout * nbSimuLayout = new QHBoxLayout;
   QLabel * totalNbSimuLabel = new QLabel(tr("The total number of simulations"));
   // total nb simu: N=n*(d+2)
   // n = nb inputs; d=sample size
   double nbSimu = physicalModel_.getInputs().getSize() * (sampleSizeSpinbox_->value() + 2);
   totalNbSimuLabel_ = new QLabel(QString::number(nbSimu));
-  sobolWidgetsLayout->addWidget(totalNbSimuLabel);
-  sobolWidgetsLayout->addWidget(totalNbSimuLabel_);
-  mainLayout->addWidget(sobolWidgets_);
-  if (analysis_.getImplementation()->getClassName() == "SRCAnalysis")
-    sobolWidgets_->hide();
+  nbSimuLayout->addWidget(totalNbSimuLabel);
+  nbSimuLayout->addWidget(totalNbSimuLabel_);
+  sobolWidgetsLayout->addLayout(nbSimuLayout);
 
-  // advanced parameters
-  advancedGroup_ = new QGroupBox(tr("Advanced parameters"));
-  QVBoxLayout * advancedGroup_Layout = new QVBoxLayout(advancedGroup_);
-  advancedGroup_->setCheckable(true);
-  advancedGroup_->setChecked(false);
-  // FIXME doesn't work on KDE and Windows
-  /*
-  advancedGroup->setStyleSheet("QGroupBox::indicator::unchecked {image: url(:/images/down_arrow.png);}\
-                                QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
-  */
-
-  advancedWidgets_ = new QWidget;
-  QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedWidgets_);
+  // sobol advanced parameters
+  CollapsibleGroupBox * sobolAdvancedParamGroupBox = new CollapsibleGroupBox;
+  sobolAdvancedParamGroupBox->setTitle(tr("Advanced parameters"));
+  QGridLayout * sobolAdvancedParamGroupBoxLayout = new QGridLayout(sobolAdvancedParamGroupBox);
 
   QLabel * seedLabel = new QLabel(tr("Seed"));
-  advancedWidgetsLayout->addWidget(seedLabel, 0, 0);
-  seedSpinbox_ = new QSpinBox;
-  seedSpinbox_->setMaximum(std::numeric_limits<int>::max());
-  seedLabel->setBuddy(seedSpinbox_);
-  advancedWidgetsLayout->addWidget(seedSpinbox_, 0, 1);
-  seedSpinbox_->setValue(dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->getSeed());
-  connect(seedSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(seedChanged(int)));
+  sobolAdvancedParamGroupBoxLayout->addWidget(seedLabel, 0, 0);
+  QSpinBox * sobolSeedSpinbox = new QSpinBox;
+  sobolSeedSpinbox->setMaximum(std::numeric_limits<int>::max());
+  seedLabel->setBuddy(sobolSeedSpinbox);
+  sobolAdvancedParamGroupBoxLayout->addWidget(sobolSeedSpinbox, 0, 1);
+  sobolSeedSpinbox->setValue(dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->getSeed());
+  connect(sobolSeedSpinbox, SIGNAL(valueChanged(int)), this, SLOT(seedChanged(int)));
 
-  blockSizeLabel_ = new QLabel(tr("Block size"));
-  advancedWidgetsLayout->addWidget(blockSizeLabel_, 1, 0);
-  blockSizeSpinbox_ = new QSpinBox;
-  blockSizeSpinbox_->setMinimum(1);
-  blockSizeSpinbox_->setMaximum(std::numeric_limits<int>::max());
-  blockSizeLabel_->setBuddy(blockSizeSpinbox_);
-  advancedWidgetsLayout->addWidget(blockSizeSpinbox_, 1, 1);
+  QLabel * blockSizeLabel = new QLabel(tr("Block size"));
+  sobolAdvancedParamGroupBoxLayout->addWidget(blockSizeLabel, 1, 0);
+  QSpinBox * blockSizeSpinbox = new QSpinBox;
+  blockSizeSpinbox->setMinimum(1);
+  blockSizeSpinbox->setMaximum(std::numeric_limits<int>::max());
+  blockSizeLabel->setBuddy(blockSizeSpinbox);
+  sobolAdvancedParamGroupBoxLayout->addWidget(blockSizeSpinbox, 1, 1);
   if (analysis_.getImplementation()->getClassName() == "SobolAnalysis")
-    blockSizeSpinbox_->setValue(dynamic_cast<SobolAnalysis*>(&*analysis_.getImplementation())->getBlockSize());
-  else
-  {
-    blockSizeLabel_->hide();
-    blockSizeSpinbox_->hide();
-  }
-  connect(blockSizeSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(blockSizeChanged(int)));
+    blockSizeSpinbox->setValue(dynamic_cast<SobolAnalysis*>(&*analysis_.getImplementation())->getBlockSize());
 
-  advancedWidgets_->hide();
-  advancedGroup_Layout->addWidget(advancedWidgets_);
+  connect(blockSizeSpinbox, SIGNAL(valueChanged(int)), this, SLOT(blockSizeChanged(int)));
 
-  mainLayout->addWidget(advancedGroup_);
+  sobolAdvancedParamGroupBox->setExpanded(false);
+  sobolWidgetsLayout->addWidget(sobolAdvancedParamGroupBox);
+  mainLayout->addWidget(sobolWidgets_);
 
-  connect(advancedGroup_, SIGNAL(toggled(bool)), this, SLOT(showHideAdvancedWidgets(bool)));
+  // SRC widgets
+  srcWidgets_ = new QWidget;
+  QVBoxLayout * srcWidgetsLayout = new QVBoxLayout(srcWidgets_);
+
+  // SRC advanced parameters
+  CollapsibleGroupBox * srcAdvancedParamGroupBox = new CollapsibleGroupBox;
+  srcAdvancedParamGroupBox->setTitle(tr("Advanced parameters"));
+  QGridLayout * srcAdvancedParamGroupBoxLayout = new QGridLayout(srcAdvancedParamGroupBox);
+
+  seedLabel = new QLabel(tr("Seed"));
+  srcAdvancedParamGroupBoxLayout->addWidget(seedLabel, 0, 0);
+  QSpinBox * srcSeedSpinbox = new QSpinBox;
+  srcSeedSpinbox->setMaximum(std::numeric_limits<int>::max());
+  seedLabel->setBuddy(srcSeedSpinbox);
+  srcAdvancedParamGroupBoxLayout->addWidget(srcSeedSpinbox, 0, 1);
+  srcSeedSpinbox->setValue(dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->getSeed());
+  connect(srcSeedSpinbox, SIGNAL(valueChanged(int)), this, SLOT(seedChanged(int)));
+
+  srcAdvancedParamGroupBox->setExpanded(false);
+  srcWidgetsLayout->addWidget(srcAdvancedParamGroupBox);
+  mainLayout->addWidget(srcWidgets_);
 
   updateMethodWidgets();
 
@@ -169,9 +177,6 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
       if (analysis_.getImplementation()->getClassName() == "SRCAnalysis")
       {
         analysis_ = SobolAnalysis(analysis_.getName(), physicalModel_);
-        sobolWidgets_->show();
-        blockSizeLabel_->show();
-        blockSizeSpinbox_->show();
         emit analysisChanged(analysis_);
       }
       break;
@@ -181,9 +186,6 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
       if (analysis_.getImplementation()->getClassName() == "SobolAnalysis")
       {
         analysis_ = SRCAnalysis(analysis_.getName(), physicalModel_);
-        sobolWidgets_->hide();
-        blockSizeLabel_->hide();
-        blockSizeSpinbox_->hide();
         emit analysisChanged(analysis_);
       }
       break;
@@ -191,15 +193,8 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
     default:
       break;
   }
-}
-
-
-void SensitivityAnalysisWizard::showHideAdvancedWidgets(bool show)
-{
-  if (show)
-    advancedWidgets_->show();
-  else
-    advancedWidgets_->hide();
+  sobolWidgets_->setVisible(analysis_.getImplementation()->getClassName() == "SobolAnalysis");
+  srcWidgets_->setVisible(analysis_.getImplementation()->getClassName() == "SRCAnalysis");
 }
 
 

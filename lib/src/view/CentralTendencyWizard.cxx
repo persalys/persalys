@@ -22,6 +22,7 @@
 
 #include "otgui/MonteCarloAnalysis.hxx"
 #include "otgui/TaylorExpansionsMomentsAnalysis.hxx"
+#include "otgui/CollapsibleGroupBox.hxx"
 
 #include <QGroupBox>
 #include <QRadioButton>
@@ -100,18 +101,9 @@ void CentralTendencyWizard::buildInterface()
   mclayout->addWidget(nbSimuSpinbox_, 0, 1);
 
   //// advanced parameters
-  // TODO make a class advancedParametersGroupBox?
-  QGroupBox * advancedGroup = new QGroupBox(tr("Advanced parameters"));
-  QVBoxLayout * advancedGroupLayout = new QVBoxLayout(advancedGroup);
-  advancedGroup->setCheckable(true);
-  advancedGroup->setChecked(false);
-  // FIXME doesn't work on KDE and Windows
-  /*
-  advancedGroup->setStyleSheet("QGroupBox::indicator::unchecked {image: url(:/images/down_arrow.png);}\
-                                QGroupBox::indicator::checked {image: url(:/images/up_arrow.png);}");
-  */
-  advancedWidgets_ = new QWidget;
-  QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedWidgets_);
+  CollapsibleGroupBox * advancedGroup = new CollapsibleGroupBox;
+  advancedGroup->setTitle(tr("Advanced parameters"));
+  QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedGroup);
 
   confidenceIntervalCheckBox_ = new QCheckBox;
   if (analysis_.getImplementation()->getClassName() == "MonteCarloAnalysis")
@@ -145,12 +137,8 @@ void CentralTendencyWizard::buildInterface()
     seedSpinbox_->setValue(dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->getSeed());
   connect(seedSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(seedChanged(int)));
 
-  advancedWidgets_->hide();
-  advancedGroupLayout->addWidget(advancedWidgets_);
-
-  mclayout->addWidget(advancedGroup, 2, 0, 1, -1);
-
-  connect(advancedGroup, SIGNAL(toggled(bool)), this, SLOT(showHideAdvancedWidgets(bool)));
+  advancedGroup->setExpanded(false);
+  mclayout->addWidget(advancedGroup, 2, 0, 1, 2);
 
   methodParametersLayout->addWidget(monteCarloWidget_);
 
@@ -198,15 +186,6 @@ void CentralTendencyWizard::updateMethodWidgets()
     default:
       break;
   }
-}
-
-
-void CentralTendencyWizard::showHideAdvancedWidgets(bool show)
-{
-  if (show)
-    advancedWidgets_->show();
-  else
-    advancedWidgets_->hide();
 }
 
 

@@ -47,7 +47,6 @@ protected:
 
 public slots:
   void updateMethodWidgets();
-  void showHideAdvancedWidgets(bool);
   void confidenceIntervalRequired(bool);
   void nbSimuChanged(int);
   void levelConfidenceIntervalChanged(double);
@@ -59,7 +58,6 @@ private:
   PhysicalModel physicalModel_;
 
   QButtonGroup * methodGroup_;
-  QWidget * advancedWidgets_;
   QWidget * monteCarloWidget_;
   QWidget * TaylorExpansionsWidget_;
   QSpinBox * nbSimuSpinbox_;

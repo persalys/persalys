@@ -151,7 +151,7 @@ void ProbabilisticModelWindow::buildInterface()
 
   // truncation parameters
   truncationParamGroupBox_ = new CollapsibleGroupBox;
-  truncationParamGroupBox_->setTitle("Truncation parameters");
+  truncationParamGroupBox_->setTitle(tr("Truncation parameters"));
   truncationParamGroupBox_->setExpanded(false);
   QGridLayout * truncationParamGroupBoxLayout = new QGridLayout(truncationParamGroupBox_);
 
@@ -175,6 +175,7 @@ void ProbabilisticModelWindow::buildInterface()
   errorMessageLabel_ = new QLabel;
   errorMessageLabel_->setWordWrap(true);
   rightFrameLayout->addWidget(errorMessageLabel_);
+  rightFrameLayout->addStretch();
 
   rightScrollArea->setWidget(rightFrame);
   rightSideOfSplitterStackedLayout_->addWidget(rightScrollArea);

@@ -39,7 +39,6 @@ public :
 
 public slots:
   void selectImportFileDialogRequested();
-  void showHideYACSParametersWidgets(bool);
   void updateParallelizeStatus(bool);
   void updateWantedMachine(int);
   void updateParallelizeStatusWidget();
@@ -48,7 +47,6 @@ public slots:
 private:
   PhysicalModel physicalModel_;
   QLineEdit * XMLfileNameEdit_;
-  QWidget * YACSSchemeParametersWidgets_;
   QCheckBox * parallelizeStatusCheckBox_;
   QComboBox * fittingMachinesComboBox_;
 };

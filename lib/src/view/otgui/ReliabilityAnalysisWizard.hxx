@@ -46,7 +46,6 @@ protected:
   void buildInterface();
 
 public slots:
-  void showHideAdvancedWidgets(bool);
   void maxiOuterSamplingChanged(int);
   void maxiCoefficientOfVariationChanged(double);
   void blockSizeChanged(int);
@@ -60,7 +59,6 @@ private:
 //   TODO: LimitState limitState_; later when implementing FORM/SORM
 
   QButtonGroup * methodGroup_;
-  QWidget * advancedWidgets_;
   QWidget * monteCarloWidget_;
   QSpinBox * maxiOuterSamplingSpinbox_;
   QDoubleSpinBox * maxiCoefficientOfVariationSpinbox_;
