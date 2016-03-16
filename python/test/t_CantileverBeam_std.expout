@@ -38,6 +38,7 @@ limitState1 = otguibase.LimitState('limitState1', myPhysicalModel, 'y', ot.Great
 myStudy.add(limitState1)
 mySobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel, 1000)
 mySobol.setSeed(0)
+mySobol.setBlockSize(1)
 myStudy.add(mySobol)
 myTaylorExpansionsMoments = otguibase.TaylorExpansionsMomentsAnalysis('myTaylorExpansionsMoments', myPhysicalModel)
 myStudy.add(myTaylorExpansionsMoments)
