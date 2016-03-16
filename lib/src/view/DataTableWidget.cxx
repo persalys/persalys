@@ -20,7 +20,10 @@
  */
 #include "otgui/DataTableWidget.hxx"
 
-#include <QtGui>
+#include <QAction>
+#include <QHeaderView>
+#include <QApplication>
+#include <QClipboard>
 
 namespace OTGUI {
 

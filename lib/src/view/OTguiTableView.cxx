@@ -20,7 +20,9 @@
  */
 #include "otgui/OTguiTableView.hxx"
 
-#include <QtGui>
+#include <QApplication>
+#include <QAction>
+#include <QClipboard>
 
 namespace OTGUI {
 

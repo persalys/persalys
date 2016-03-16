@@ -21,7 +21,7 @@
 #ifndef OTGUI_DATATABLEWIDGET_HXX
 #define OTGUI_DATATABLEWIDGET_HXX
 
-#include <QtGui/QTableWidget>
+#include <QTableWidget>
 
 namespace OTGUI {
 
