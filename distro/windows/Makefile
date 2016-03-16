@@ -98,6 +98,7 @@ mod-config: mod-check-compiler
 	  -DPYTHON_EXECUTABLE=$(PYTHON_EXECUTABLE) \
 	  -DCMAKE_INSTALL_PREFIX=$(MOD_PREFIX) \
 	  -DUSE_SALOME=OFF \
+	  -DUSE_QT5=OFF \
 	$(MOD_SRC)
 	touch mod-config
 
