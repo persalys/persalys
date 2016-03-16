@@ -109,6 +109,7 @@ String SobolAnalysis::getPythonScript() const
   oss << getName() << " = otguibase.SobolAnalysis('" << getName() << "', " << getPhysicalModel().getName();
   oss << ", " << getNbSimulations() << ")\n";
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
+  oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
 
   return oss;
 }
