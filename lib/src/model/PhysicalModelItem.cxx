@@ -50,14 +50,6 @@ PhysicalModel PhysicalModelItem::getPhysicalModel() const
 }
 
 
-void PhysicalModelItem::updatePhysicalModel(const PhysicalModel & physicalModel)
-{
-  physicalModel_ = physicalModel;
-  physicalModel_.addObserver(this);
-  emit physicalModelChanged(physicalModel_);
-}
-
-
 void PhysicalModelItem::update(Observable* source, const String & message)
 {
   if (message == "inputNameChanged" || message == "inputDescriptionChanged" ||

@@ -84,7 +84,6 @@ void StudyTreeViewModel::addProbabilisticModelItem(const QModelIndex & parentInd
   OTStudyItem * studyItem = static_cast<OTStudyItem*>(parentItem->QStandardItem::parent());
   ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(parentItem->getPhysicalModel());
   parentItem->getPhysicalModel().addObserver(newProbabilisticModelItem);
-  connect(parentItem, SIGNAL(physicalModelChanged(PhysicalModel)), newProbabilisticModelItem, SLOT(updatePhysicalModel(PhysicalModel)));
   connect(newProbabilisticModelItem, SIGNAL(physicalModelRemoved(QStandardItem*)), studyItem, SLOT(removeItem(QStandardItem*)));
   itemFromIndex(parentIndex)->appendRow(newProbabilisticModelItem);
   emit newProbabilisticModelCreated(newProbabilisticModelItem);

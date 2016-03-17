@@ -40,10 +40,8 @@ public:
   virtual void update(Observable * source, const OT::String & message);
 
 public slots:
-  void updatePhysicalModel(const PhysicalModel & physicalModel);
 signals:
   void inputChanged();
-  void physicalModelChanged(const PhysicalModel&);
   void physicalModelRemoved(QStandardItem*);
 
 private:

@@ -40,14 +40,6 @@ PhysicalModel ProbabilisticModelItem::getPhysicalModel() const
 }
 
 
-void ProbabilisticModelItem::updatePhysicalModel(const PhysicalModel & physicalModel)
-{
-  physicalModel_ = physicalModel;
-  physicalModel_.addObserver(this);
-  emit physicalModelChanged(physicalModel_);
-}
-
-
 void ProbabilisticModelItem::update(Observable* source, const String & message)
 {
   if (message == "inputDistributionChanged" || message == "modelInputsChanged")

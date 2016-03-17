@@ -42,14 +42,10 @@ public:
   virtual void update(Observable * source, const OT::String & message);
 
 public slots:
-  void updatePhysicalModel(const PhysicalModel & physicalModel);
-
-public slots:
 signals:
   void inputChanged();
   void outputChanged();
   void codeChanged();
-  void physicalModelChanged(const PhysicalModel&);
   void physicalModelRemoved(QStandardItem*);
   void parallelizeStatusChanged();
   void wantedMachineChanged();

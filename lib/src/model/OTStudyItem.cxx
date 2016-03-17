@@ -95,12 +95,6 @@ void OTStudyItem::update(Observable * source, const String & message)
 }
 
 
-void OTStudyItem::updatePhysicalModel(const PhysicalModel & physicalModel)
-{
-  otStudy_->getPhysicalModelByName(physicalModel.getName()).setImplementationAsPersistentObject(physicalModel.getImplementation());
-}
-
-
 void OTStudyItem::updateAnalysis(const Analysis & analysis)
 {
   otStudy_->getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
@@ -112,7 +106,6 @@ void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
   // Physical model item
   PhysicalModelItem * newPhysicalModelItem = new PhysicalModelItem(physicalModel);
   physicalModel.addObserver(newPhysicalModelItem);
-  connect(newPhysicalModelItem, SIGNAL(physicalModelChanged(PhysicalModel)), this, SLOT(updatePhysicalModel(PhysicalModel)));
   connect(newPhysicalModelItem, SIGNAL(physicalModelRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
   appendRow(newPhysicalModelItem);
 
@@ -134,7 +127,6 @@ void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
     ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(physicalModel);
     physicalModel.addObserver(newProbabilisticModelItem);
     item->appendRow(newProbabilisticModelItem);
-    connect(newPhysicalModelItem, SIGNAL(physicalModelChanged(PhysicalModel)), newProbabilisticModelItem, SLOT(updatePhysicalModel(PhysicalModel)));
     connect(newProbabilisticModelItem, SIGNAL(physicalModelRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
     emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
   }

@@ -56,7 +56,6 @@ public slots:
   void updateDistributionWidgets(const QModelIndex & index);
   void updateDistributionParametersWidgets(const QModelIndex & index);
   void updateTruncationParametersWidgets(const QModelIndex & index);
-  void updatePhysicalModel(const PhysicalModel &);
   void updateProbabilisticModel();
   void updateCorrelationTable();
   void setCorrelationTabErrorMessage(const QString &);

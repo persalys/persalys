@@ -48,7 +48,6 @@ ProbabilisticModelWindow::ProbabilisticModelWindow(ProbabilisticModelItem * item
   , paramEditor_(0)
 {
   connect(item, SIGNAL(inputChanged()), this, SLOT(updateProbabilisticModel()));
-  connect(item, SIGNAL(physicalModelChanged(const PhysicalModel&)), this, SLOT(updatePhysicalModel(const PhysicalModel&)));
   buildInterface();
   connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
 }
@@ -216,13 +215,6 @@ void ProbabilisticModelWindow::buildInterface()
 
   currentIndexTab_ = rootTab->currentIndex();
   setWidget(rootTab);
-}
-
-
-void ProbabilisticModelWindow::updatePhysicalModel(const PhysicalModel & physicalModel)
-{
-  physicalModel_ = physicalModel;
-  updateProbabilisticModel();
 }
 
 

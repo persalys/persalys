@@ -50,7 +50,6 @@ public:
   OTStudy * getOTStudy();
 
 public slots:
-  void updatePhysicalModel(const PhysicalModel & physicalModel);
   void updateAnalysis(const Analysis & analysis);
   void removeItem(QStandardItem*);
 signals:
