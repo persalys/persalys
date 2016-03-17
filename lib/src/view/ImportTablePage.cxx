@@ -155,6 +155,7 @@ void ImportTablePage::loadFile()
   HorizontalHeaderViewWithCombobox * header = new HorizontalHeaderViewWithCombobox(comboBoxItems, columnsWithCombo, dataPreviewTableView_);
   dataPreviewTableView_->setHorizontalHeader(header);
   dataPreviewTableView_->horizontalHeader()->show();
+  dataPreviewTableView_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
 }
 
 
