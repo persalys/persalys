@@ -38,8 +38,9 @@ public:
   /** Virtual constructor */
   virtual TaylorExpansionsMomentsAnalysis * clone() const;
 
-  OT::Description getOutputNames() const;
-  void setOutputNames(const OT::Description & outputNames);
+  // TODO choose output(s) to evaluate.
+//   OT::Description getOutputNames() const;
+//   void setOutputNames(const OT::Description & outputNames);
 
   TaylorExpansionsMomentsResult getResult() const;
 
@@ -54,7 +55,7 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  OT::Description outputNames_;
+//   OT::Description outputNames_;
   TaylorExpansionsMomentsResult result_;
 };
 }

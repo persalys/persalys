@@ -42,7 +42,7 @@ TaylorExpansionsMomentsAnalysis::TaylorExpansionsMomentsAnalysis()
 /* Constructor with parameters */
 TaylorExpansionsMomentsAnalysis::TaylorExpansionsMomentsAnalysis(const String & name, const PhysicalModel & physicalModel)
   : AnalysisImplementation(name, physicalModel)
-  , outputNames_(physicalModel.getOutputNames())
+// TODO  , outputNames_(physicalModel.getOutputNames())
 {
 }
 
@@ -54,21 +54,21 @@ TaylorExpansionsMomentsAnalysis* TaylorExpansionsMomentsAnalysis::clone() const
 }
 
 
-Description TaylorExpansionsMomentsAnalysis::getOutputNames() const
-{
-  return outputNames_;
-}
-
-
-void TaylorExpansionsMomentsAnalysis::setOutputNames(const Description & outputNames)
-{
-  outputNames_ = outputNames;
-}
+// Description TaylorExpansionsMomentsAnalysis::getOutputNames() const
+// {
+//   return outputNames_;
+// }
+// 
+// 
+// void TaylorExpansionsMomentsAnalysis::setOutputNames(const Description & outputNames)
+// {
+//   outputNames_ = outputNames;
+// }
 
 
 void TaylorExpansionsMomentsAnalysis::run()
 {
-  QuadraticCumul algoTaylorExpansionsMoments(getPhysicalModel().getOutputRandomVector(outputNames_));
+  QuadraticCumul algoTaylorExpansionsMoments(getPhysicalModel().getOutputRandomVector(getPhysicalModel().getOutputNames()));
 
   // set results
   NumericalPoint meanFirstOrder = algoTaylorExpansionsMoments.getMeanFirstOrder();
@@ -80,7 +80,7 @@ void TaylorExpansionsMomentsAnalysis::run()
   for (UnsignedInteger i=0; i<variance.getDimension(); ++i)
     standardDeviation[i] = sqrt(variance[i]);
 
-  result_ = TaylorExpansionsMomentsResult(outputNames_, meanFirstOrder, meanSecondOrder, standardDeviation, variance);
+  result_ = TaylorExpansionsMomentsResult(getPhysicalModel().getOutputNames(), meanFirstOrder, meanSecondOrder, standardDeviation, variance);
 
   notify("analysisFinished");
 }
@@ -110,7 +110,7 @@ bool TaylorExpansionsMomentsAnalysis::analysisLaunched() const
 void TaylorExpansionsMomentsAnalysis::save(Advocate & adv) const
 {
   AnalysisImplementation::save(adv);
-  adv.saveAttribute("outputNames_", outputNames_);
+//   adv.saveAttribute("outputNames_", outputNames_);
   adv.saveAttribute("result_", result_);
 }
 
@@ -119,7 +119,7 @@ void TaylorExpansionsMomentsAnalysis::save(Advocate & adv) const
 void TaylorExpansionsMomentsAnalysis::load(Advocate & adv)
 {
   AnalysisImplementation::load(adv);
-  adv.loadAttribute("outputNames_", outputNames_);
+//   adv.loadAttribute("outputNames_", outputNames_);
   adv.loadAttribute("result_", result_);
 }
 }
