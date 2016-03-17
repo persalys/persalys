@@ -328,7 +328,6 @@ void DesignOfExperimentImplementation::setDeltas(const NumericalPoint & deltas)
     if (deltas[i] < 0.)
       throw InvalidArgumentException(HERE) << "DesignOfExperimentImplementation::setDeltas : All the deltas must be superior or equal to 0.";
 
-
   type_ = DesignOfExperimentImplementation::FromBoundsAndDeltas;
   deltas_ = deltas;
   for (UnsignedInteger i=0; i<deltas_.getSize(); ++i)
@@ -343,6 +342,7 @@ void DesignOfExperimentImplementation::setDeltas(const NumericalPoint & deltas)
 
 void DesignOfExperimentImplementation::setFileName(const String & fileName)
 {
+  type_ = DesignOfExperimentImplementation::FromFile;
   fileName_ = fileName;
 }
 
@@ -364,7 +364,7 @@ void DesignOfExperimentImplementation::setColumns(Indices columns)
   if (columns.getSize() != physicalModel_.getInputs().getSize())
   {
     OSS oss;
-    oss << "DesignOfExperimentImplementation::setColumns : The dimension of the list of the column numbers has to be equal to the number of inputs of the physical model: ";
+    oss << "The dimension of the list of the column numbers has to be equal to the number of inputs of the physical model: ";
     oss << physicalModel_.getInputs().getSize();
     throw InvalidArgumentException(HERE) << oss.str();
   }

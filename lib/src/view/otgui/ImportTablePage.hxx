@@ -26,6 +26,7 @@
 
 #include <QWizardPage>
 #include <QLineEdit>
+#include <QLabel>
 
 namespace OTGUI {
 class ImportTablePage : public QWizardPage
@@ -52,6 +53,7 @@ private:
   bool pageValidity_;
   QLineEdit * filePathLineEdit_;
   DataTableView * dataPreviewTableView_;
+  QLabel * errorMessageLabel_;
 };
 }
 #endif

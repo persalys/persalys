@@ -48,6 +48,7 @@ ImportTablePage::ImportTablePage(const DesignOfExperiment & designOfExperiment, 
   buildInterface();
 }
 
+
 void ImportTablePage::buildInterface()
 {
   setWindowTitle(tr("Import table from file"));
@@ -69,6 +70,12 @@ void ImportTablePage::buildInterface()
 
   mainGridLayout->addLayout(hboxLayout, 0, 0, 1, 3);
 
+  // error message
+  errorMessageLabel_ = new QLabel;
+  errorMessageLabel_->setWordWrap(true);
+  mainGridLayout->addWidget(errorMessageLabel_, 2, 0, 1, 1);
+
+  // file preview
   QGroupBox * groupBox = new QGroupBox(tr("File Preview"));
   QGridLayout * gridLayout = new QGridLayout(groupBox);
   gridLayout->setSpacing(6);
@@ -85,11 +92,12 @@ void ImportTablePage::buildInterface()
     }
     catch (std::exception & ex)
     {
-//       TODO set an error message
+      QString message = "Impossible to load the file.\n";
+      message = QString("%1%2%3%4").arg("<font color=red>").arg(message).arg(ex.what()).arg("</font>");
+      errorMessageLabel_->setText(message);
       pageValidity_ = false;
     }
   }
-  
   mainGridLayout->addWidget(groupBox, 1, 0, 1, 1);
 }
 
@@ -109,13 +117,18 @@ void ImportTablePage::loadFile()
       break;
   }
   if (!sampleFromFile.getSize())
-    throw InvalidArgumentException(HERE) << "In DesignOfExperimentImplementation: impossible to load sample";
+    throw InvalidArgumentException(HERE) << "Impossible to load sample";
 
   if (!designOfExperiment_.getColumns().check(sampleFromFile.getDimension()))
-    throw InvalidArgumentException(HERE) << "In DesignOfExperimentImplementation: impossible to load sample marginals";
+    throw InvalidArgumentException(HERE) << "Impossible to load sample marginals";
 
   Description desc = Description(sampleFromFile.getDimension());
   Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
+
+  if (sampleFromFile.getDimension() < inputNames.getSize())
+    throw InvalidArgumentException(HERE) << "The file contains a sample with a dimension inferior to the number of inputs of the physical model: "
+                                         << inputNames.getSize();
+
   Indices columns(designOfExperiment_.getColumns());
   if (!columns.getSize())
   {
@@ -171,13 +184,16 @@ void ImportTablePage::openFileRequested()
       filePathLineEdit_->setText(fileName);
       try
       {
+        errorMessageLabel_->setText("");
         designOfExperiment_.setFileName(filePathLineEdit_->text().toLocal8Bit().data());
         loadFile();
         pageValidity_ = true;
       }
       catch (std::exception & ex)
       {
-  //       TODO set an error message
+        QString message = "Impossible to load the file.\n";
+        message = QString("%1%2%3%4").arg("<font color=red>").arg(message).arg(ex.what()).arg("</font>");
+        errorMessageLabel_->setText(message);
         pageValidity_ = false;
       }
     }
@@ -205,18 +221,28 @@ void ImportTablePage::columnChanged(Qt::Orientation, int, int)
         columns2.add(j);
 
   if (columns != columns2)
+  {
+    QString message = "Each variable must be associated with one column.";
+    message = QString("%1%2%3").arg("<font color=red>").arg(message).arg("</font>");
+    errorMessageLabel_->setText(message);
     pageValidity_ = false;
+    return;
+  }
 
   try
   {
     designOfExperiment_.setColumns(columns);
     pageValidity_ = true;
+    errorMessageLabel_->setText("");
   }
-  catch(InvalidArgumentException &)
+  catch(InvalidArgumentException & ex)
   {
+    QString message = QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>");
+    errorMessageLabel_->setText(message);
     pageValidity_ = false;
   }
 }
+
 
 bool ImportTablePage::validatePage()
 {
