@@ -32,7 +32,7 @@ CLASSNAMEINIT(SimulationAnalysis);
 /* Default constructor */
 SimulationAnalysis::SimulationAnalysis()
   : AnalysisImplementation()
-  , outputs_()
+//   , outputs_()
   , nbSimulations_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultMaximumOuterSampling"))
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
 {
@@ -43,7 +43,7 @@ SimulationAnalysis::SimulationAnalysis()
 SimulationAnalysis::SimulationAnalysis(const String & name, const PhysicalModel & physicalModel,
                                        const UnsignedInteger nbSimulation)
   : AnalysisImplementation(name, physicalModel)
-  , outputs_(physicalModel.getOutputs())
+//  TODO , outputs_(physicalModel.getOutputs())
   , nbSimulations_(nbSimulation)
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
 {
@@ -57,17 +57,17 @@ SimulationAnalysis* SimulationAnalysis::clone() const
   return new SimulationAnalysis(*this);
 }
 
-
-OutputCollection SimulationAnalysis::getOutputs() const
-{
-  return outputs_;
-}
-
-
-void SimulationAnalysis::setOutputs(const OutputCollection & outputs)
-{
-  outputs_ = outputs;
-}
+// TODO
+// OutputCollection SimulationAnalysis::getOutputs() const
+// {
+//   return outputs_;
+// }
+// 
+// 
+// void SimulationAnalysis::setOutputs(const OutputCollection & outputs)
+// {
+//   outputs_ = outputs;
+// }
 
 
 UnsignedInteger SimulationAnalysis::getNbSimulations() const
@@ -92,8 +92,12 @@ NumericalSample SimulationAnalysis::getInputSample()
 
 NumericalSample SimulationAnalysis::getOutputSample(NumericalSample inputSample) const
 {
-  NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(getOutputNames())(inputSample));
-  outputSample.setDescription(getOutputNames());
+//   TODO
+//   NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(getOutputNames())(inputSample));
+//   outputSample.setDescription(getOutputNames());
+//   return outputSample;
+  NumericalSample outputSample(getPhysicalModel().getRestrictedFunction()(inputSample));
+  outputSample.setDescription(getPhysicalModel().getOutputNames());
   return outputSample;
 }
 
@@ -108,11 +112,13 @@ NumericalSample SimulationAnalysis::getOutputSample(NumericalSample inputSample,
 
 Description SimulationAnalysis::getOutputNames() const
 {
-  int nbOutputs = outputs_.getSize();
-  Description outputNames(nbOutputs);
-  for (int i=0; i<nbOutputs; ++i)
-    outputNames[i] = outputs_[i].getName();
-  return outputNames;
+//   TODO
+//   int nbOutputs = outputs_.getSize();
+//   Description outputNames(nbOutputs);
+//   for (int i=0; i<nbOutputs; ++i)
+//     outputNames[i] = outputs_[i].getName();
+//   return outputNames;
+  return getPhysicalModel().getOutputNames();
 }
 
 
@@ -132,7 +138,7 @@ void SimulationAnalysis::setSeed(const UnsignedInteger seed)
 void SimulationAnalysis::save(Advocate & adv) const
 {
   AnalysisImplementation::save(adv);
-  adv.saveAttribute("outputs_", outputs_);
+//   adv.saveAttribute("outputs_", outputs_);
   adv.saveAttribute("nbSimulations_", nbSimulations_);
   adv.saveAttribute("seed_", seed_);
 }
@@ -142,7 +148,7 @@ void SimulationAnalysis::save(Advocate & adv) const
 void SimulationAnalysis::load(Advocate & adv)
 {
   AnalysisImplementation::load(adv);
-  adv.loadAttribute("outputs_", outputs_);
+//   adv.loadAttribute("outputs_", outputs_);
   adv.loadAttribute("nbSimulations_", nbSimulations_);
   adv.loadAttribute("seed_", seed_);
 }
