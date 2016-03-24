@@ -61,7 +61,7 @@ void ImportTablePage::buildInterface()
   hboxLayout->addWidget(label);
 
   filePathLineEdit_ = new QLineEdit;
-  filePathLineEdit_->setText(QString::fromLocal8Bit(designOfExperiment_.getFileName().c_str()));
+  filePathLineEdit_->setText(QString::fromUtf8(designOfExperiment_.getFileName().c_str()));
   hboxLayout->addWidget(filePathLineEdit_);
 
   QPushButton * openFileButton = new QPushButton(tr("Open"));
@@ -146,7 +146,7 @@ void ImportTablePage::loadFile()
 
   QStringList comboBoxItems;
   for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
-    comboBoxItems << QString::fromLocal8Bit(inputNames[i].c_str());
+    comboBoxItems << QString::fromUtf8(inputNames[i].c_str());
   comboBoxItems << "";
 
   QVector<int> columnsWithCombo(dataPreviewTableView_->model()->columnCount());

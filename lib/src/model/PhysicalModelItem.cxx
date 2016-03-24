@@ -27,7 +27,7 @@ namespace OTGUI {
 
 PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel)
   : QObject()
-  , QStandardItem(QString::fromLocal8Bit(physicalModel.getName().c_str()))
+  , QStandardItem(QString::fromUtf8(physicalModel.getName().c_str()))
   , Observer()
   , physicalModel_(physicalModel)
 {

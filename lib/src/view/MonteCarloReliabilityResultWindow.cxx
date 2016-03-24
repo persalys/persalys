@@ -55,7 +55,7 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   QHBoxLayout * headLayout = new QHBoxLayout;
   QLabel * outputNameLabel = new QLabel(tr("Output"));
   headLayout->addWidget(outputNameLabel);
-  outputNameLabel = new QLabel(QString::fromLocal8Bit(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
+  outputNameLabel = new QLabel(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
   headLayout->addWidget(outputNameLabel);
   headLayout->addStretch();
   tabLayout->addLayout(headLayout);
@@ -164,7 +164,7 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   // output histogram
   QVector<PlotWidget*> listHistogram;
   PlotWidget * plot = new PlotWidget;
-  QString outputName(QString::fromLocal8Bit(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
+  QString outputName(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
   plot->plotHistogram(result_.getOutputSample(), 2, 0, outputName + tr(" distribution"));
   NumericalSample threshold = NumericalSample(2, 2);
   threshold[0][0] = result_.getSimulationResult().getEvent().getThreshold();

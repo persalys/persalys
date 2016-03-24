@@ -66,10 +66,10 @@ void ModelEvaluationWizard::buildInterface()
 
   for (UnsignedInteger i=0; i<analysis_.getPhysicalModel().getInputs().getSize(); ++i)
   {
-    QTableWidgetItem * item = new QTableWidgetItem(QString::fromLocal8Bit(analysis_.getPhysicalModel().getInputNames()[i].c_str()));
+    QTableWidgetItem * item = new QTableWidgetItem(QString::fromUtf8(analysis_.getPhysicalModel().getInputNames()[i].c_str()));
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     table_->setItem(i, 0, item);
-    item = new QTableWidgetItem(QString::fromLocal8Bit(analysis_.getPhysicalModel().getInputs()[i].getDescription().c_str()));
+    item = new QTableWidgetItem(QString::fromUtf8(analysis_.getPhysicalModel().getInputs()[i].getDescription().c_str()));
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     table_->setItem(i, 1, item);
       
@@ -108,7 +108,7 @@ void ModelEvaluationWizard::inputValueChanged(double value)
 
 QString ModelEvaluationWizard::getAnalysisName() const
 {
-  return QString::fromLocal8Bit(analysis_.getName().c_str());
+  return QString::fromUtf8(analysis_.getName().c_str());
 }
 
 

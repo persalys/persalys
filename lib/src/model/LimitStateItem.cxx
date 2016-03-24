@@ -26,7 +26,7 @@ namespace OTGUI {
 
 LimitStateItem::LimitStateItem(const LimitState & limitState)
   : QObject()
-  , QStandardItem(QString::fromLocal8Bit(limitState.getName().c_str()))
+  , QStandardItem(QString::fromUtf8(limitState.getName().c_str()))
   , Observer()
   , limitState_(limitState)
 {

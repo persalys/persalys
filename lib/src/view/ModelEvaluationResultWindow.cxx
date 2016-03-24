@@ -60,7 +60,7 @@ void ModelEvaluationResultWindow::buildInterface()
 #endif
   for (UnsignedInteger i=0; i<result_.getInputSample().getDimension(); ++i)
   {
-    QTableWidgetItem * item = new QTableWidgetItem(QString::fromLocal8Bit(result_.getInputSample().getDescription()[i].c_str()));
+    QTableWidgetItem * item = new QTableWidgetItem(QString::fromUtf8(result_.getInputSample().getDescription()[i].c_str()));
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     inputTable->setItem(i, 0, item);
     item = new QTableWidgetItem(QString::number(result_.getInputSample()[0][i]));
@@ -84,7 +84,7 @@ void ModelEvaluationResultWindow::buildInterface()
 
   for (UnsignedInteger i=0; i<result_.getOutputSample().getDimension(); ++i)
   {
-    QTableWidgetItem * item = new QTableWidgetItem(QString::fromLocal8Bit(result_.getOutputSample().getDescription()[i].c_str()));
+    QTableWidgetItem * item = new QTableWidgetItem(QString::fromUtf8(result_.getOutputSample().getDescription()[i].c_str()));
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     outputTable->setItem(i, 0, item);
     item = new QTableWidgetItem(QString::number(result_.getOutputSample()[0][i]));

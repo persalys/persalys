@@ -65,13 +65,13 @@ void MonteCarloResultWindow::buildInterface()
   int nbInputs = result_.getInputSample().getDimension();
   QStringList inputNames;
   for (int i=0; i<nbInputs; ++i)
-    inputNames << QString::fromLocal8Bit(physicalModel_.getStochasticInputNames()[i].c_str());
+    inputNames << QString::fromUtf8(physicalModel_.getStochasticInputNames()[i].c_str());
 
   int nbOutputs = result_.getOutputSample().getDimension();
   OutputCollection outputs = physicalModel_.getOutputs();
   QStringList outputNames;
   for (int i=0; i<nbOutputs; ++i)
-    outputNames << QString::fromLocal8Bit(result_.getOutputSample().getDescription()[i].c_str());
+    outputNames << QString::fromUtf8(result_.getOutputSample().getDescription()[i].c_str());
 
   // tabWidget
   tabWidget_ = new QTabWidget;
@@ -279,22 +279,22 @@ void MonteCarloResultWindow::buildInterface()
       PlotWidget * plot = new PlotWidget;
       plot->plotHistogram(result_.getOutputSample().getMarginal(i));
       plot->plotPDFCurve(result_.getFittedDistribution()[i]);
-      plot->setTitle(tr("PDF: ") + QString::fromLocal8Bit(outputs[i].getName().c_str()));
+      plot->setTitle(tr("PDF: ") + QString::fromUtf8(outputs[i].getName().c_str()));
       if (outputs[i].getDescription().size())
-        plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(outputs[i].getDescription().c_str()));
+        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getDescription().c_str()));
       else
-        plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(outputs[i].getName().c_str()));
+        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getName().c_str()));
       plotLayout->addWidget(plot);
       listPlotWidgets.append(plot);
 
       plot = new PlotWidget;
       plot->plotHistogram(result_.getOutputSample().getMarginal(i), 1);
       plot->plotCDFCurve(result_.getFittedDistribution()[i]);
-      plot->setTitle(tr("CDF: ") + QString::fromLocal8Bit(outputs[i].getName().c_str()));
+      plot->setTitle(tr("CDF: ") + QString::fromUtf8(outputs[i].getName().c_str()));
       if (outputs[i].getDescription().size())
-        plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(outputs[i].getDescription().c_str()));
+        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getDescription().c_str()));
       else
-        plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(outputs[i].getName().c_str()));
+        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getName().c_str()));
       plotLayout->addWidget(plot);
       listPlotWidgets.append(plot);
     }
@@ -331,11 +331,11 @@ void MonteCarloResultWindow::buildInterface()
       double Q3 = result_.getThirdQuartile()[i];
 
       plot->plotBoxPlot(median, Q1, Q3, Q1 - 1.5*(Q3-Q1), Q3 + 1.5*(Q3-Q1), result_.getOutliers()[i]);
-      plot->setTitle(tr("Box plot: ") + QString::fromLocal8Bit(outputs[i].getName().c_str()));
+      plot->setTitle(tr("Box plot: ") + QString::fromUtf8(outputs[i].getName().c_str()));
       if (outputs[i].getDescription().size())
-        plot->setAxisTitle(QwtPlot::yLeft, QString::fromLocal8Bit(outputs[i].getDescription().c_str()));
+        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getDescription().c_str()));
       else
-        plot->setAxisTitle(QwtPlot::yLeft, QString::fromLocal8Bit(outputs[i].getName().c_str()));
+        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getName().c_str()));
       boxPlotLayout->addWidget(plot);
       listBoxPlotWidgets.append(plot);
     }
@@ -370,16 +370,16 @@ void MonteCarloResultWindow::buildInterface()
       {
         PlotWidget * plot = new PlotWidget;
         plot->plotScatter(result_.getInputSample().getMarginal(j), result_.getOutputSample().getMarginal(i));
-        plot->setTitle(tr("Scatter plot: ") + QString::fromLocal8Bit(outputs[i].getName().c_str()) + tr(" vs ") + inputNames[j]);
+        plot->setTitle(tr("Scatter plot: ") + QString::fromUtf8(outputs[i].getName().c_str()) + tr(" vs ") + inputNames[j]);
         String inputDescription = physicalModel_.getInputByName(inputNames[j].toStdString()).getDescription();
         if (!inputDescription.empty())
-          plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(inputDescription.c_str()));
+          plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(inputDescription.c_str()));
         else
           plot->setAxisTitle(QwtPlot::xBottom, inputNames[j]);
         if (outputs[i].getDescription().size())
-          plot->setAxisTitle(QwtPlot::yLeft, QString::fromLocal8Bit(outputs[i].getDescription().c_str()));
+          plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getDescription().c_str()));
         else
-          plot->setAxisTitle(QwtPlot::yLeft, QString::fromLocal8Bit(outputs[i].getName().c_str()));
+          plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getName().c_str()));
         scatterPlotLayout->addWidget(plot);
         listScatterPlotWidgets.append(plot);
       }
@@ -390,12 +390,12 @@ void MonteCarloResultWindow::buildInterface()
         plot->setTitle(tr("Scatter plot: ") + inputNames[i] + tr(" vs ") + inputNames[j]);
         String inputDescription = physicalModel_.getInputByName(inputNames[j].toStdString()).getDescription();
         if (!inputDescription.empty())
-          plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(inputDescription.c_str()));
+          plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(inputDescription.c_str()));
         else
           plot->setAxisTitle(QwtPlot::xBottom, inputNames[j]);
         inputDescription = physicalModel_.getInputByName(inputNames[i].toStdString()).getDescription();
         if (!inputDescription.empty())
-          plot->setAxisTitle(QwtPlot::yLeft, QString::fromLocal8Bit(inputDescription.c_str()));
+          plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(inputDescription.c_str()));
         else
           plot->setAxisTitle(QwtPlot::yLeft, inputNames[i]);
         scatterPlotLayout->addWidget(plot);
@@ -408,15 +408,15 @@ void MonteCarloResultWindow::buildInterface()
       {
         PlotWidget * plot = new PlotWidget;
         plot->plotScatter(result_.getOutputSample().getMarginal(j), result_.getOutputSample().getMarginal(i));
-        plot->setTitle(tr("Scatter plot: ") + QString::fromLocal8Bit(outputs[i].getName().c_str()) + tr(" vs ") + QString::fromLocal8Bit(outputs[j].getName().c_str()));
+        plot->setTitle(tr("Scatter plot: ") + QString::fromUtf8(outputs[i].getName().c_str()) + tr(" vs ") + QString::fromUtf8(outputs[j].getName().c_str()));
         if (outputs[j].getDescription().size())
-          plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(outputs[j].getDescription().c_str()));
+          plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getDescription().c_str()));
         else
-          plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(outputs[j].getName().c_str()));
+          plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getName().c_str()));
         if (outputs[i].getDescription().size())
-          plot->setAxisTitle(QwtPlot::yLeft, QString::fromLocal8Bit(outputs[i].getDescription().c_str()));
+          plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getDescription().c_str()));
         else
-          plot->setAxisTitle(QwtPlot::yLeft, QString::fromLocal8Bit(outputs[i].getName().c_str()));
+          plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getName().c_str()));
         scatterPlotLayout->addWidget(plot);
         listScatterPlotWidgets.append(plot);
       }
@@ -424,14 +424,14 @@ void MonteCarloResultWindow::buildInterface()
       {
         PlotWidget * plot = new PlotWidget;
         plot->plotScatter(result_.getOutputSample().getMarginal(j), result_.getInputSample().getMarginal(i));
-        plot->setTitle(tr("Scatter plot: ") + inputNames[i] + tr(" vs ") + QString::fromLocal8Bit(outputs[j].getName().c_str()));
+        plot->setTitle(tr("Scatter plot: ") + inputNames[i] + tr(" vs ") + QString::fromUtf8(outputs[j].getName().c_str()));
         if (outputs[j].getDescription().size())
-          plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(outputs[j].getDescription().c_str()));
+          plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getDescription().c_str()));
         else
-          plot->setAxisTitle(QwtPlot::xBottom, QString::fromLocal8Bit(outputs[j].getName().c_str()));
+          plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getName().c_str()));
         String inputDescription = physicalModel_.getInputByName(inputNames[i].toStdString()).getDescription();
         if (!inputDescription.empty())
-          plot->setAxisTitle(QwtPlot::yLeft, QString::fromLocal8Bit(inputDescription.c_str()));
+          plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(inputDescription.c_str()));
         else
           plot->setAxisTitle(QwtPlot::yLeft, inputNames[i]);
 

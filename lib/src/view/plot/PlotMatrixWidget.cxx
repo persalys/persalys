@@ -50,9 +50,9 @@ PlotMatrixWidget::PlotMatrixWidget(const OT::NumericalSample & inputSample, cons
     isPlotMatrixXX = false;
 
   for (int i=0; i<nbInputs; ++i)
-    inputNames_ << QString::fromLocal8Bit(inputSample.getDescription()[i].c_str());
+    inputNames_ << QString::fromUtf8(inputSample.getDescription()[i].c_str());
   for (int i=0; i<nbOutputs; ++i)
-    outputNames_ << QString::fromLocal8Bit(outputSample.getDescription()[i].c_str());
+    outputNames_ << QString::fromUtf8(outputSample.getDescription()[i].c_str());
 
   QVBoxLayout * plotMatrixLayout = new QVBoxLayout(this);
 

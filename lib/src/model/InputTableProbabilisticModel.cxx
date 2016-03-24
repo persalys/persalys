@@ -103,7 +103,7 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
     switch (index.column())
     {
       case 0:
-        return QString::fromLocal8Bit(inputName.c_str());
+        return QString::fromUtf8(inputName.c_str());
       case 1:
       {
         Input input = getPhysicalModel().getInputByName(inputName);

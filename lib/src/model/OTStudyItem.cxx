@@ -28,12 +28,12 @@ namespace OTGUI {
 
 OTStudyItem::OTStudyItem(OTStudy * otStudy)
   : QObject()
-  , QStandardItem(QString::fromLocal8Bit(otStudy->getName().c_str()))
+  , QStandardItem(QString::fromUtf8(otStudy->getName().c_str()))
   , Observer()
   , otStudy_(otStudy)
 {
   setData("OTStudy", Qt::UserRole);
-  setToolTip(QString::fromLocal8Bit(otStudy_->getFileName().c_str()));
+  setToolTip(QString::fromUtf8(otStudy_->getFileName().c_str()));
 }
 
 
@@ -86,7 +86,7 @@ void OTStudyItem::update(Observable * source, const String & message)
   }
   else if (message == "fileNameChanged")
   {
-    setToolTip(QString::fromLocal8Bit(otStudy_->getFileName().c_str()));
+    setToolTip(QString::fromUtf8(otStudy_->getFileName().c_str()));
   }
   else
   {

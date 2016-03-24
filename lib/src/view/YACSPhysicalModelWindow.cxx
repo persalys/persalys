@@ -53,7 +53,7 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelItem * item)
   fieldsLayout->addWidget(new QLabel("Data file"));
 
   XMLfileNameEdit_ = new QLineEdit;
-  XMLfileNameEdit_->setText(QString::fromLocal8Bit(dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getXMLFileName().c_str()));
+  XMLfileNameEdit_->setText(QString::fromUtf8(dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getXMLFileName().c_str()));
   fieldsLayout->addWidget(XMLfileNameEdit_);
 
   QPushButton * selectFileButton = new QPushButton(tr("Search file"));

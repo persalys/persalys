@@ -62,7 +62,7 @@ Qt::ItemFlags CorrelationTableModel::flags(const QModelIndex & index) const
 QVariant CorrelationTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (role == Qt::DisplayRole)
-    return QString::fromLocal8Bit(getPhysicalModel().getStochasticInputNames()[section].c_str());
+    return QString::fromUtf8(getPhysicalModel().getStochasticInputNames()[section].c_str());
 
   return QVariant();
 }
@@ -110,8 +110,8 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
     }
     catch (std::exception & ex)
     {
-      QString input1 = QString::fromLocal8Bit(getPhysicalModel().getStochasticInputNames()[index.row()].c_str());
-      QString input2 = QString::fromLocal8Bit(getPhysicalModel().getStochasticInputNames()[index.column()].c_str());
+      QString input1 = QString::fromUtf8(getPhysicalModel().getStochasticInputNames()[index.row()].c_str());
+      QString input2 = QString::fromUtf8(getPhysicalModel().getStochasticInputNames()[index.column()].c_str());
       emit errorMessageChanged(tr("The correlation between %1 and %2 can not be equal to '%3'. %4").arg(input1).arg(input2).arg(value.toString()).arg(ex.what()));
     }
   }
