@@ -73,7 +73,7 @@ void CentralTendencyWizard::buildInterface()
     buttonToChooseMethod->setChecked(true);
   methodGroup_->addButton(buttonToChooseMethod, CentralTendencyWizard::MonteCarlo);
   methodLayout->addWidget(buttonToChooseMethod);
-  buttonToChooseMethod = new QRadioButton(tr("Taylor expansions"));
+  buttonToChooseMethod = new QRadioButton(tr("Taylor expansion"));
   if (analysis_.getImplementation()->getClassName() == "TaylorExpansionsMomentsAnalysis")
     buttonToChooseMethod->setChecked(true);
   methodGroup_->addButton(buttonToChooseMethod, CentralTendencyWizard::TaylorExpansionsMoments);
@@ -114,6 +114,9 @@ void CentralTendencyWizard::buildInterface()
   connect(confidenceIntervalCheckBox_, SIGNAL(toggled(bool)), this, SLOT(confidenceIntervalRequired(bool)));
   advancedWidgetsLayout->addWidget(confidenceIntervalCheckBox_, 0, 0);
   levelConfidenceIntervalSpinbox_ = new QDoubleSpinBox;
+  levelConfidenceIntervalSpinbox_->setRange(0.0, 1.0);
+  levelConfidenceIntervalSpinbox_->setSingleStep(0.05);
+
   if (analysis_.getImplementation()->getClassName() == "MonteCarloAnalysis")
   {
     levelConfidenceIntervalSpinbox_->setValue(dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->getLevelConfidenceInterval());
