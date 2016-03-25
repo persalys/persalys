@@ -26,6 +26,7 @@
 #include "otgui/MonteCarloResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
+#include "otgui/NotEditableTableWidget.hxx"
 
 #include <QComboBox>
 #include <QDoubleSpinBox>
@@ -62,8 +63,8 @@ private:
   GraphConfigurationWidget * scatterPlotsConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
-  QTableWidget * minMaxTable_;
-  QTableWidget * momentsEstimationsTable_;
+  NotEditableTableWidget * minMaxTable_;
+  NotEditableTableWidget * momentsEstimationsTable_;
   QDoubleSpinBox * probaSpinBox_;
   QDoubleSpinBox * quantileSpinBox_;
 };

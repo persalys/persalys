@@ -155,32 +155,23 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   QGroupBox * minMaxGroupBox = new QGroupBox(tr("Minimum and Maximum"));
   UnsignedInteger totalNbInputs = designOfExperiment_.getInputSample().getDimension();
   QVBoxLayout * minMaxVbox = new QVBoxLayout(minMaxGroupBox);
-  minMaxTable_ = new DataTableWidget(totalNbInputs + 1, 4);
-  minMaxTable_->setHorizontalHeaderLabels(QStringList() << tr("") << tr("Variable") << tr("Minimum") << tr("Maximum"));
-  minMaxTable_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  minMaxTable_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  minMaxTable_->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
 
-  QTableWidgetItem * item = new QTableWidgetItem(tr("Output"));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  item->setBackgroundColor(minMaxTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
-  minMaxTable_->setItem(0, 0, item);
+  minMaxTable_ = new NotEditableTableWidget(totalNbInputs + 1, 4);
+
+  // horizontal header
+  minMaxTable_->setHorizontalHeaderLabels(QStringList() << tr("") << tr("Variable") << tr("Minimum") << tr("Maximum"));
+
+  // vertical header
+  minMaxTable_->createHeaderItem(0, 0, tr("Output"));
+
   QString rowTitle = tr("Inputs at\nextremum");
   if (totalNbInputs == 1)
-    rowTitle = tr("Input");
-  item = new QTableWidgetItem(rowTitle);
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  item->setBackgroundColor(minMaxTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+    rowTitle = tr("Input at\nextremum");
+  minMaxTable_->createHeaderItem(1, 0, rowTitle);
   minMaxTable_->setSpan(1, 0, totalNbInputs, 1);
-  minMaxTable_->setItem(1, 0, item);
-  minMaxTable_->resizeColumnToContents(0);
 
   for (UnsignedInteger i=0; i<totalNbInputs; ++i)
-  {
-    item = new QTableWidgetItem(QString::fromUtf8(designOfExperiment_.getInputSample().getDescription()[i].c_str()));
-    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-    minMaxTable_->setItem(i+1, 1, item);
-  }
+    minMaxTable_->createItem(i+1, 1, QString::fromUtf8(designOfExperiment_.getInputSample().getDescription()[i].c_str()));
 
   minMaxVbox->addWidget(minMaxTable_);
   minMaxVbox->addStretch();
@@ -296,21 +287,15 @@ void DesignOfExperimentWindow::addTabsForOutputs()
 void DesignOfExperimentWindow::updateLabelsText(int indexOutput)
 {
   // minMaxTable_
-  QTableWidgetItem * item = new QTableWidgetItem(QString::fromUtf8(designOfExperiment_.getResult().getOutputSample().getDescription()[indexOutput].c_str()));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  minMaxTable_->setItem(0, 1, item);
+  minMaxTable_->createItem(0, 1, QString::fromUtf8(designOfExperiment_.getResult().getOutputSample().getDescription()[indexOutput].c_str()));
 
   // min
   const double min = designOfExperiment_.getResult().getOutputSample().getMin()[indexOutput];
-  item = new QTableWidgetItem(QString::number(min));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  minMaxTable_->setItem(0, 2, item);
+  minMaxTable_->createItem(0, 2, min);
 
   // max
   const double max = designOfExperiment_.getResult().getOutputSample().getMax()[indexOutput];
-  item = new QTableWidgetItem(QString::number(max));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  minMaxTable_->setItem(0, 3, item);
+  minMaxTable_->createItem(0, 3, max);
 
   if (designOfExperiment_.getResult().getListXMin()[indexOutput].getSize() > 1)
   {
@@ -326,29 +311,13 @@ void DesignOfExperimentWindow::updateLabelsText(int indexOutput)
   for (UnsignedInteger i=0; i<designOfExperiment_.getResult().getInputSample().getDimension(); ++i)
   {
     // XMin
-    item = new QTableWidgetItem(QString::number(designOfExperiment_.getResult().getListXMin()[indexOutput][0][i]));
-    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-    minMaxTable_->setItem(i+1, 2, item);
-
+    minMaxTable_->createItem(i+1, 2, designOfExperiment_.getResult().getListXMin()[indexOutput][0][i]);
     // XMax
-    item = new QTableWidgetItem(QString::number(designOfExperiment_.getResult().getListXMax()[indexOutput][0][i]));
-    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-    minMaxTable_->setItem(i+1, 3, item);
+    minMaxTable_->createItem(i+1, 3, designOfExperiment_.getResult().getListXMax()[indexOutput][0][i]);
   }
 
   // resize table
-  minMaxTable_->resizeColumnsToContents();
-  QSize size(minMaxTable_->sizeHint());
-  int width = 0;
-  for (int i=0; i<minMaxTable_->columnCount(); ++i)
-    width += minMaxTable_->columnWidth(i);
-  size.setWidth(width+2);
-  int height = minMaxTable_->horizontalHeader()->height();
-  for (int i=0; i<minMaxTable_->rowCount(); ++i)
-    height += minMaxTable_->rowHeight(i);
-  size.setHeight(height+2);
-  minMaxTable_->setMinimumSize(size);
-  minMaxTable_->setMaximumSize(size);
+  minMaxTable_->resizeToContents();
 }
 
 

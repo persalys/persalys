@@ -65,42 +65,18 @@ void TaylorExpansionsMomentsResultWindow::buildInterface()
   // moments estimation
   QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimate"));
   QVBoxLayout * momentsVbox = new QVBoxLayout(momentsGroupBox);
-  momentsEstimationsTable_ = new DataTableWidget(5, 2);
-  momentsEstimationsTable_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  momentsEstimationsTable_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  momentsEstimationsTable_->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
+  momentsEstimationsTable_ = new NotEditableTableWidget(5, 2);
   momentsEstimationsTable_->horizontalHeader()->hide();
 
   // vertical header
-  QTableWidgetItem * item = new QTableWidgetItem("Estimate");
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
-  item->setTextAlignment(Qt::AlignCenter);
-  momentsEstimationsTable_->setItem(0, 0, item);
-  item = new QTableWidgetItem(tr("First order mean"));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
-  momentsEstimationsTable_->setItem(1, 0, item);
-  item = new QTableWidgetItem(tr("Second order mean"));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
-  momentsEstimationsTable_->setItem(2, 0, item);
-  item = new QTableWidgetItem(tr("Standard deviation"));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
-  momentsEstimationsTable_->setItem(3, 0, item);
-  item = new QTableWidgetItem(tr("Variance"));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
-  momentsEstimationsTable_->setItem(4, 0, item);
-  momentsEstimationsTable_->resizeColumnToContents(0);
+  momentsEstimationsTable_->createHeaderItem(0, 0, tr("Estimate"));
+  momentsEstimationsTable_->createHeaderItem(1, 0, tr("First order mean"));
+  momentsEstimationsTable_->createHeaderItem(2, 0, tr("Second order mean"));
+  momentsEstimationsTable_->createHeaderItem(3, 0, tr("Standard deviation"));
+  momentsEstimationsTable_->createHeaderItem(4, 0, tr("Variance"));
 
   // horizontal header
-  item = new QTableWidgetItem(tr("Value"));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
-  item->setTextAlignment(Qt::AlignCenter);
-  momentsEstimationsTable_->setItem(0, 1, item);
+  momentsEstimationsTable_->createHeaderItem(0, 1, tr("Value"));
 
   momentsVbox->addWidget(momentsEstimationsTable_);
   momentsVbox->addStretch();

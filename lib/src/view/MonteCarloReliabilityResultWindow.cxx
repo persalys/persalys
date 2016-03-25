@@ -19,16 +19,15 @@
  *
  */
 #include "otgui/MonteCarloReliabilityResultWindow.hxx"
-#include "otgui/DataTableWidget.hxx"
+
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
+#include "otgui/NotEditableTableWidget.hxx"
 
 #include <qwt_legend.h>
 #include <qwt_scale_engine.h>
 
 #include <QVBoxLayout>
 #include <QLabel>
-#include <QTabWidget>
-#include <QTableWidget>
 #include <QHeaderView>
 
 using namespace OT;
@@ -66,91 +65,39 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   tabLayout->addWidget(nbSimuLabel);
 
   // probability estimate table
-  QTableWidget * resultsTable = new DataTableWidget(4, 4);
-  resultsTable->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  resultsTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  resultsTable->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
+  NotEditableTableWidget * resultsTable = new NotEditableTableWidget(4, 4);
   resultsTable->horizontalHeader()->hide();
 
-  QTableWidgetItem * item = new QTableWidgetItem("Estimate");
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  item->setBackgroundColor(resultsTable->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
-  item->setTextAlignment(Qt::AlignCenter);
+  // horizontal header
+  resultsTable->createHeaderItem(0, 0, tr("Estimate"));
   resultsTable->setSpan(0, 0, 2, 1);
-  resultsTable->setItem(0, 0, item);
 
-  item = new QTableWidgetItem(tr("Value"));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  item->setBackgroundColor(resultsTable->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
-  item->setTextAlignment(Qt::AlignCenter);
+  resultsTable->createHeaderItem(0, 1, tr("Value"));
   resultsTable->setSpan(0, 1, 2, 1);
-  resultsTable->setItem(0, 1, item);
 
   // Failure probability
-  item = new QTableWidgetItem(tr("Failure probability"));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  item->setBackgroundColor(resultsTable->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
-  resultsTable->setItem(2, 0, item);
-
-  item = new QTableWidgetItem(QString::number(result_.getSimulationResult().getProbabilityEstimate()));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  resultsTable->setItem(2, 1, item);
+  resultsTable->createHeaderItem(2, 0, tr("Failure probability"));
+  resultsTable->createItem(2, 1, result_.getSimulationResult().getProbabilityEstimate());
 
   // Coefficient of variation
-  item = new QTableWidgetItem(tr("Coefficient of variation"));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  item->setBackgroundColor(resultsTable->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
-  resultsTable->setItem(3, 0, item);
-  resultsTable->resizeColumnToContents(0);
-
-  item = new QTableWidgetItem(QString::number(result_.getSimulationResult().getCoefficientOfVariation()));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  resultsTable->setItem(3, 1, item);
-
-  // Confidence interval
-  item = new QTableWidgetItem(tr("Confidence interval at 95%"));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  item->setBackgroundColor(resultsTable->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
-  item->setTextAlignment(Qt::AlignCenter);
-  resultsTable->setSpan(0, 2, 1, 2);
-  resultsTable->setItem(0, 2, item);
+  resultsTable->createHeaderItem(3, 0, tr("Coefficient of variation"));
+  resultsTable->createItem(3, 1, result_.getSimulationResult().getCoefficientOfVariation());
 
   // - lower bound
-  item = new QTableWidgetItem(tr("Lower bound"));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  item->setBackgroundColor(resultsTable->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
-  item->setTextAlignment(Qt::AlignCenter);
-  resultsTable->setItem(1, 2, item);
-
+  resultsTable->createHeaderItem(1, 2, tr("Lower bound"));
   double pfCILowerBound = std::max(0.0, result_.getSimulationResult().getProbabilityEstimate() - 0.5 * result_.getSimulationResult().getConfidenceLength());
-  item = new QTableWidgetItem(QString::number(pfCILowerBound));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  resultsTable->setItem(2, 2, item);
+  resultsTable->createItem(2, 2, pfCILowerBound);
 
   // - upper bound
-  item = new QTableWidgetItem(tr("Upper bound"));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  item->setBackgroundColor(resultsTable->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
-  item->setTextAlignment(Qt::AlignCenter);
-  resultsTable->setItem(1, 3, item);
-
+  resultsTable->createHeaderItem(1, 3, tr("Upper bound"));
   double pfCIUpperBound = std::min(1.0, result_.getSimulationResult().getProbabilityEstimate() + 0.5 * result_.getSimulationResult().getConfidenceLength());
-  item = new QTableWidgetItem(QString::number(pfCIUpperBound));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  resultsTable->setItem(2, 3, item);
+  resultsTable->createItem(2, 3, pfCIUpperBound);
 
-  QSize size = resultsTable->sizeHint();
-  int width = 0;
-  for (int i=0; i<resultsTable->columnCount(); ++i)
-    width += resultsTable->columnWidth(i);
-  size.setWidth(width+2);
-  int height = 0;
-  for (int i=0; i<resultsTable->rowCount(); ++i)
-    height += resultsTable->rowHeight(i);
-  size.setHeight(height+2);
-  resultsTable->setMinimumSize(size);
-  resultsTable->setMaximumSize(size);
-  resultsTable->updateGeometry();
+  resultsTable->resizeToContents();
+  
+  // Confidence interval: do it after resizeToContents
+  resultsTable->createHeaderItem(0, 2, tr("Confidence interval at 95%"));
+  resultsTable->setSpan(0, 2, 1, 2);
 
   tabLayout->addWidget(resultsTable);
   tabLayout->addStretch();

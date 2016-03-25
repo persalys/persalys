@@ -14,6 +14,7 @@ ot_add_source_file ( OTguiStatusBar.cxx )
 ot_add_source_file ( OTguiSubWindow.cxx )
 ot_add_source_file ( OTguiWizard.cxx )
 ot_add_source_file ( OTguiMdiArea.cxx )
+ot_add_source_file ( NotEditableTableWidget.cxx )
 ot_add_source_file ( AnalysisExecutionFailedWindow.cxx )
 ot_add_source_file ( ComboBoxDelegate.cxx )
 ot_add_source_file ( SpinBoxDelegate.cxx )
@@ -56,6 +57,7 @@ ot_install_header_file ( OTguiMenuBar.hxx )
 ot_install_header_file ( OTguiStatusBar.hxx )
 ot_install_header_file ( OTguiWizard.hxx )
 ot_install_header_file ( OTguiMdiArea.hxx )
+ot_install_header_file ( NotEditableTableWidget.hxx )
 ot_install_header_file ( AnalysisExecutionFailedWindow.hxx )
 ot_install_header_file ( ComboBoxDelegate.hxx )
 ot_install_header_file ( SpinBoxDelegate.hxx )
@@ -100,6 +102,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/OTguiSubWindow.hxx
                                   otgui/OTguiWizard.hxx
                                   otgui/OTguiMdiArea.hxx
+                                  otgui/NotEditableTableWidget.hxx
                                   otgui/ComboBoxDelegate.hxx
                                   otgui/SpinBoxDelegate.hxx
                                   otgui/LineEditWithQValidatorDelegate.hxx

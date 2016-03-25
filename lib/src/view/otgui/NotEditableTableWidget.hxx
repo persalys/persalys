@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow for the results of TaylorExpansionsMomentsAnalysis
+ *  @brief QTableWidget with not editable items
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,35 +18,24 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_TAYLOREXPANSIONSMOMENTSRESULTWINDOW_HXX
-#define OTGUI_TAYLOREXPANSIONSMOMENTSRESULTWINDOW_HXX
+#ifndef OTGUI_NOTEDITABLETABLEWIDGET_HXX
+#define OTGUI_NOTEDITABLETABLEWIDGET_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
-#include "otgui/AnalysisItem.hxx"
-#include "otgui/TaylorExpansionsMomentsResult.hxx"
-#include "otgui/NotEditableTableWidget.hxx"
-
-#include <QComboBox>
-#include <QTableWidget>
+#include "otgui/DataTableWidget.hxx"
 
 namespace OTGUI {
-class TaylorExpansionsMomentsResultWindow : public OTguiSubWindow
+class NotEditableTableWidget : public DataTableWidget
 {
   Q_OBJECT
 
 public:
-  TaylorExpansionsMomentsResultWindow(AnalysisItem * item);
+  NotEditableTableWidget(QWidget * parent = 0);
+  NotEditableTableWidget(int rows, int columns, QWidget * parent = 0);
 
-protected:
-  void buildInterface();
-
-public slots:
-  void updateEstimatesTable(int indexOutput);
-
-private:
-  TaylorExpansionsMomentsResult result_;
-  QComboBox * outputsComboBox_;
-  NotEditableTableWidget * momentsEstimationsTable_;
+  void createItem(int row, int column, QString text);
+  void createItem(int row, int column, double value);
+  void createHeaderItem(int row, int column, QString text);
+  void resizeToContents();
 };
 }
 #endif

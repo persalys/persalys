@@ -26,6 +26,7 @@
 #include "otgui/DataTableView.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
+#include "otgui/NotEditableTableWidget.hxx"
 
 #include <QTabWidget>
 #include <QPushButton>
@@ -54,7 +55,7 @@ private:
   QTabWidget * tabWidget_;
   DataTableView * tableView_;
   QPushButton * evaluateButton_;
-  QTableWidget * minMaxTable_;
+  NotEditableTableWidget * minMaxTable_;
   PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
   GraphConfigurationWidget * graphConfigurationWidget_;
