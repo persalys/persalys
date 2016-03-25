@@ -97,6 +97,8 @@ void MonteCarloReliabilityResult::save(Advocate& adv) const
   adv.saveAttribute("simulationResult_", simulationResult_);
   adv.saveAttribute("outputSample_", outputSample_);
   adv.saveAttribute("convergenceSample_", convergenceSample_);
+  adv.saveAttribute("convergenceSampleLowerBound_", convergenceSampleLowerBound_);
+  adv.saveAttribute("convergenceSampleUpperBound_", convergenceSampleUpperBound_);
 }
 
 
@@ -107,5 +109,8 @@ void MonteCarloReliabilityResult::load(Advocate& adv)
   adv.loadAttribute("simulationResult_", simulationResult_);
   adv.loadAttribute("outputSample_", outputSample_);
   adv.loadAttribute("convergenceSample_", convergenceSample_);
+  adv.loadAttribute("convergenceSampleLowerBound_", convergenceSampleLowerBound_);
+  adv.loadAttribute("convergenceSampleUpperBound_", convergenceSampleUpperBound_);
 }
+
 }
