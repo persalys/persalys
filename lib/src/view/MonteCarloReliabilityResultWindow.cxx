@@ -143,11 +143,11 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   int width = 0;
   for (int i=0; i<resultsTable->columnCount(); ++i)
     width += resultsTable->columnWidth(i);
-  size.setWidth(width);
+  size.setWidth(width+2);
   int height = 0;
   for (int i=0; i<resultsTable->rowCount(); ++i)
     height += resultsTable->rowHeight(i);
-  size.setHeight(height);
+  size.setHeight(height+2);
   resultsTable->setMinimumSize(size);
   resultsTable->setMaximumSize(size);
   resultsTable->updateGeometry();

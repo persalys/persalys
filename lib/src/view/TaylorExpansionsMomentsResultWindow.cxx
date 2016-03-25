@@ -139,15 +139,16 @@ void TaylorExpansionsMomentsResultWindow::updateEstimatesTable(int indexOutput)
   momentsEstimationsTable_->setItem(4, 1, item);
 
   // resize table
+  momentsEstimationsTable_->resizeColumnsToContents();
   QSize size = momentsEstimationsTable_->sizeHint();
   int width = 0;
   for (int i=0; i<momentsEstimationsTable_->columnCount(); ++i)
     width += momentsEstimationsTable_->columnWidth(i);
-  size.setWidth(width);
+  size.setWidth(width+2);
   int height = 0;
   for (int i=0; i<momentsEstimationsTable_->rowCount(); ++i)
     height += momentsEstimationsTable_->rowHeight(i);
-  size.setHeight(height);
+  size.setHeight(height+2);
   momentsEstimationsTable_->setMinimumSize(size);
   momentsEstimationsTable_->setMaximumSize(size);
   momentsEstimationsTable_->updateGeometry();

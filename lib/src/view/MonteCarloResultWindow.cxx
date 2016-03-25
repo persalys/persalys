@@ -190,7 +190,6 @@ void MonteCarloResultWindow::buildInterface()
     item->setFlags(item->flags() ^ Qt::ItemIsEditable);
     item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
     momentsEstimationsTable_->setItem(7, 0, item);
-    momentsEstimationsTable_->resizeColumnToContents(0);
 
     // horizontal header
     item = new QTableWidgetItem(tr("Value"));
@@ -201,12 +200,6 @@ void MonteCarloResultWindow::buildInterface()
     momentsEstimationsTable_->setItem(0, 1, item);
     if (isConfidenceIntervalRequired_)
     {
-      item = new QTableWidgetItem(tr("Confidence interval at ") + QString::number(levelConfidenceInterval_) + "%");
-      item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-      item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
-      item->setTextAlignment(Qt::AlignCenter);
-      momentsEstimationsTable_->setSpan(0, 2, 1, 2);
-      momentsEstimationsTable_->setItem(0, 2, item);
       item = new QTableWidgetItem(tr("Lower bound"));
       item->setFlags(item->flags() ^ Qt::ItemIsEditable);
       item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
@@ -529,15 +522,16 @@ void MonteCarloResultWindow::updateResultWidgets(int indexOutput)
   }
 
   // resize table
+  minMaxTable_->resizeColumnsToContents();
   QSize size(minMaxTable_->sizeHint());
   int width = 0;
   for (int i=0; i<minMaxTable_->columnCount(); ++i)
     width += minMaxTable_->columnWidth(i);
-  size.setWidth(width);
+  size.setWidth(width+2);
   int height = minMaxTable_->horizontalHeader()->height();
   for (int i=0; i<minMaxTable_->rowCount(); ++i)
     height += minMaxTable_->rowHeight(i);
-  size.setHeight(height);
+  size.setHeight(height+2);
   minMaxTable_->setMinimumSize(size);
   minMaxTable_->setMaximumSize(size);
 
@@ -591,18 +585,35 @@ void MonteCarloResultWindow::updateResultWidgets(int indexOutput)
   momentsEstimationsTable_->setItem(7, 1, item);
 
   // resize table
+
+  // first: clear item at (0,2) because the text is to wide:
+  // resizeColumnsToContents takes into account the text of item at (0,2)
+  // to resize the column 2, even if there is a setSpan(0, 2, 1, 2)
+  momentsEstimationsTable_->setItem(0, 2, new QTableWidgetItem);
+
+  momentsEstimationsTable_->resizeColumnsToContents();
   size = momentsEstimationsTable_->sizeHint();
   width = 0;
   for (int i=0; i<momentsEstimationsTable_->columnCount(); ++i)
     width += momentsEstimationsTable_->columnWidth(i);
-  size.setWidth(width);
+  size.setWidth(width+2);
   height = 0;
   for (int i=0; i<momentsEstimationsTable_->rowCount(); ++i)
     height += momentsEstimationsTable_->rowHeight(i);
-  size.setHeight(height);
+  size.setHeight(height+2);
   momentsEstimationsTable_->setMinimumSize(size);
   momentsEstimationsTable_->setMaximumSize(size);
   momentsEstimationsTable_->updateGeometry();
+
+  if (isConfidenceIntervalRequired_)
+  {
+    item = new QTableWidgetItem(tr("Confidence interval at ") + QString::number(levelConfidenceInterval_*100) + "%");
+    item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+    item->setBackgroundColor(momentsEstimationsTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
+    item->setTextAlignment(Qt::AlignCenter);
+    momentsEstimationsTable_->setSpan(0, 2, 1, 2);
+    momentsEstimationsTable_->setItem(0, 2, item);
+  }
 
   // quantiles
   quantileSpinBox_->setMinimum(min);

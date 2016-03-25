@@ -336,15 +336,17 @@ void DesignOfExperimentWindow::updateLabelsText(int indexOutput)
     minMaxTable_->setItem(i+1, 3, item);
   }
 
+  // resize table
+  minMaxTable_->resizeColumnsToContents();
   QSize size(minMaxTable_->sizeHint());
   int width = 0;
   for (int i=0; i<minMaxTable_->columnCount(); ++i)
     width += minMaxTable_->columnWidth(i);
-  size.setWidth(width);
+  size.setWidth(width+2);
   int height = minMaxTable_->horizontalHeader()->height();
   for (int i=0; i<minMaxTable_->rowCount(); ++i)
     height += minMaxTable_->rowHeight(i);
-  size.setHeight(height);
+  size.setHeight(height+2);
   minMaxTable_->setMinimumSize(size);
   minMaxTable_->setMaximumSize(size);
 }
