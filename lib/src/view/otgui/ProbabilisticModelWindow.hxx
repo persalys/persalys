@@ -90,6 +90,7 @@ private:
   CorrelationTableModel * correlationTableModel_;
   OTguiTableView * correlationTableView_;
   QLabel * correlationErrorMessage_;
+  QList<QTimeLine*> qtimelineList_;
 };
 }
 #endif

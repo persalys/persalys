@@ -261,8 +261,8 @@ void ProbabilisticModelWindow::updateCorrelationTable()
 void ProbabilisticModelWindow::setCorrelationTabErrorMessage(const QString & message)
 {
   correlationErrorMessage_->setText(QString("%1%2%3").arg("<font color=red>").arg(message).arg("</font>"));
-  setTemporaryErrorMessage(message);
-  QTimeLine * time = new QTimeLine(5000, this);
+  QTimeLine * time = new QTimeLine(7000, this);
+  qtimelineList_.push_back(time);
   connect(time, SIGNAL(stateChanged(QTimeLine::State)), this, SLOT(reInitCorrelationErrorMessage(QTimeLine::State)));
   time->start();
 }
@@ -271,7 +271,18 @@ void ProbabilisticModelWindow::setCorrelationTabErrorMessage(const QString & mes
 void ProbabilisticModelWindow::reInitCorrelationErrorMessage(QTimeLine::State state)
 {
   if (state == QTimeLine::NotRunning)
-    correlationErrorMessage_->setText("");
+  {
+    if (qtimelineList_.isEmpty())
+      return;
+    // remove the the first item of the list
+    qtimelineList_.removeFirst();
+    // if another QTimeLine started before the end of the previous one: do nothing
+    if (qtimelineList_.size())
+      return;
+    // else initialize error message
+    if (correlationErrorMessage_)
+      correlationErrorMessage_->setText("");
+  }
 }
 
 

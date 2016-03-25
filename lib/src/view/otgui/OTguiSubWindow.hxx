@@ -53,6 +53,7 @@ protected:
 private:
   QStandardItem * item_;
   QString errorMessage_;
+  QList<QTimeLine*> qtimelineList_;
 };
 }
 #endif

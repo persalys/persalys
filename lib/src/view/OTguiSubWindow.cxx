@@ -60,8 +60,12 @@ void OTguiSubWindow::setErrorMessage(QString message)
 
 void OTguiSubWindow::setTemporaryErrorMessage(QString message)
 {
-  setErrorMessage(message);
-  QTimeLine * time = new QTimeLine(5000, this);
+  message = QString("%1%2%3").arg("<font color=red>").arg(message).arg("</font>");
+  errorMessage_ = message;
+  if (errorMessageLabel_)
+    errorMessageLabel_->setText(message);
+  QTimeLine * time = new QTimeLine(7000, this);
+  qtimelineList_.push_back(time);
   connect(time, SIGNAL(stateChanged(QTimeLine::State)), this, SLOT(reInitErrorMessage(QTimeLine::State)));
   time->start();
 }
@@ -70,6 +74,17 @@ void OTguiSubWindow::setTemporaryErrorMessage(QString message)
 void OTguiSubWindow::reInitErrorMessage(QTimeLine::State state)
 {
   if (state == QTimeLine::NotRunning)
-    setErrorMessage("");
+  {
+    if (qtimelineList_.isEmpty())
+      return;
+    qtimelineList_.removeFirst();
+    // if another QTimeLine started before the end of the previous one: do nothing
+    if (qtimelineList_.size())
+      return;
+    // else initialize error message
+    errorMessage_ = "";
+    if (errorMessageLabel_)
+      errorMessageLabel_->setText("");
+  }
 }
 }
