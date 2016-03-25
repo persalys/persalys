@@ -165,7 +165,7 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   item->setFlags(item->flags() ^ Qt::ItemIsEditable);
   item->setBackgroundColor(minMaxTable_->verticalHeader()->palette().color(QPalette::Active, QPalette::Background));
   minMaxTable_->setItem(0, 0, item);
-  QString rowTitle = tr("Inputs");
+  QString rowTitle = tr("Inputs at\nextremum");
   if (totalNbInputs == 1)
     rowTitle = tr("Input");
   item = new QTableWidgetItem(rowTitle);
