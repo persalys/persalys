@@ -75,6 +75,8 @@ PlotWidget::PlotWidget(bool isIndicesPlot, QWidget * parent)
     QwtPlotMagnifier * magnifier = new QwtPlotMagnifier(canvas());
     // set to NoButton to have not interference with the right click of the context menu
     magnifier->setMouseButton(Qt::NoButton);
+    // to zoom with the right direction of the wheel
+    magnifier->setWheelFactor(1.1);
   }
 
   // show coordinates
