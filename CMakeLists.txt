@@ -34,7 +34,7 @@ add_definitions ( ${OTGUI_DEFINITIONS} )
 if (BUILD_GUI)
 
   if (USE_QT5)
-    find_package (Qt5Widgets)
+    find_package (Qt5Widgets NO_MODULE)
     set (QT_LIBRARIES ${Qt5Widgets_LIBRARIES})
     set (CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS} ${CMAKE_CXX_FLAGS}")
     include_directories (${Qt5Widgets_INCLUDE_DIRS})
@@ -280,3 +280,9 @@ else ()
 endif ()
 
 include (CPack)
+
+if (CMAKE_VERSION VERSION_GREATER 2.8.5)
+  include (FeatureSummary)
+  feature_summary (WHAT ALL)
+endif ()
+
