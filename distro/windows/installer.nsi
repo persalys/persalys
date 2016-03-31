@@ -338,7 +338,7 @@ Section "!${MODULE_NAME} DLL & doc" SEC01
   File "README.txt"
   File "otgui.ico"
 
-  !insertmacro PRINT "Install doc example in $MODULE_INSTALL_PATH\doc\pdf."
+  ;!insertmacro PRINT "Install doc example in $MODULE_INSTALL_PATH\doc\pdf."
   ;SetOutPath "$MODULE_INSTALL_PATH\doc\pdf"
   ;File "${MODULE_PREFIX}\share\doc\${MODULE_NAME_LOWERCASE}\pdf\${MODULE_NAME}_Documentation.pdf"
 
