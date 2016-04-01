@@ -42,7 +42,7 @@ aDesign.evaluate()
 openturns.testing.assert_almost_equal(outputSample, aDesign.getResult().getOutputSample(), 1e-16)
 
 ## Quadratic Cumul ##
-taylorExpansionsMoments = otguibase.TaylorExpansionsMomentsAnalysis('myTaylorExpansionsMoments', myPhysicalModel)
+taylorExpansionsMoments = otguibase.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', myPhysicalModel)
 myStudy.add(taylorExpansionsMoments)
 taylorExpansionsMoments.run()
 taylorExpansionsMomentsResult = taylorExpansionsMoments.getResult()

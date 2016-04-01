@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief TaylorExpansionsMomentsResult contains the moments computed with the Taylor Expansion method
+ *  @brief TaylorExpansionMomentsResult contains the moments computed with the Taylor Expansion method
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -26,21 +26,21 @@
 #include "QuadraticCumul.hxx"
 
 namespace OTGUI {
-class OTGUI_API TaylorExpansionsMomentsResult : public OT::PersistentObject
+class OTGUI_API TaylorExpansionMomentsResult : public OT::PersistentObject
 {
   CLASSNAME;
 
 public:
   /** Default constructor */
-  TaylorExpansionsMomentsResult();
+  TaylorExpansionMomentsResult();
   /** Constructor with parameters */
-  TaylorExpansionsMomentsResult(const OT::Description & outputNames, const OT::NumericalPoint & meanFirstOrder,
+  TaylorExpansionMomentsResult(const OT::Description & outputNames, const OT::NumericalPoint & meanFirstOrder,
                                 const OT::NumericalPoint & meanSecondOrder,
                                 const OT::NumericalPoint & standardDeviation,
                                 const OT::NumericalPoint & variance);
 
   /** Virtual constructor */
-  virtual TaylorExpansionsMomentsResult * clone() const;
+  virtual TaylorExpansionMomentsResult * clone() const;
 
   OT::Description getOutputNames() const;
   OT::NumericalPoint getMeanFirstOrder() const;

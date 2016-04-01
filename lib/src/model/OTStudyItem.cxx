@@ -189,7 +189,7 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis)
   {
     addDeterministicAnalysisItem(analysis, newItem);
   }
-  else if (analysisName == "MonteCarloAnalysis" || analysisName == "TaylorExpansionsMomentsAnalysis" ||
+  else if (analysisName == "MonteCarloAnalysis" || analysisName == "TaylorExpansionMomentsAnalysis" ||
            analysisName == "SobolAnalysis"      || analysisName == "SRCAnalysis")
   {
     addProbabilisticAnalysisItem(analysis, newItem);

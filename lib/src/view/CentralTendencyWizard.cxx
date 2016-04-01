@@ -21,7 +21,7 @@
 #include "otgui/CentralTendencyWizard.hxx"
 
 #include "otgui/MonteCarloAnalysis.hxx"
-#include "otgui/TaylorExpansionsMomentsAnalysis.hxx"
+#include "otgui/TaylorExpansionMomentsAnalysis.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
 
 #include <QGroupBox>
@@ -74,9 +74,9 @@ void CentralTendencyWizard::buildInterface()
   methodGroup_->addButton(buttonToChooseMethod, CentralTendencyWizard::MonteCarlo);
   methodLayout->addWidget(buttonToChooseMethod);
   buttonToChooseMethod = new QRadioButton(tr("Taylor expansion"));
-  if (analysis_.getImplementation()->getClassName() == "TaylorExpansionsMomentsAnalysis")
+  if (analysis_.getImplementation()->getClassName() == "TaylorExpansionMomentsAnalysis")
     buttonToChooseMethod->setChecked(true);
-  methodGroup_->addButton(buttonToChooseMethod, CentralTendencyWizard::TaylorExpansionsMoments);
+  methodGroup_->addButton(buttonToChooseMethod, CentralTendencyWizard::TaylorExpansionMoments);
   methodLayout->addWidget(buttonToChooseMethod);
   connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SLOT(updateMethodWidgets()));
 
@@ -167,7 +167,7 @@ void CentralTendencyWizard::updateMethodWidgets()
     {
       monteCarloWidget_->show();
       TaylorExpansionsWidget_->hide();
-      if (analysis_.getImplementation()->getClassName() == "TaylorExpansionsMomentsAnalysis")
+      if (analysis_.getImplementation()->getClassName() == "TaylorExpansionMomentsAnalysis")
       {
         analysis_ = MonteCarloAnalysis(analysis_.getName(), physicalModel_);
         emit analysisChanged(analysis_);
@@ -175,13 +175,13 @@ void CentralTendencyWizard::updateMethodWidgets()
       nbSimuSpinbox_->setValue(dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->getNbSimulations());
       break;
     }
-    case CentralTendencyWizard::TaylorExpansionsMoments:
+    case CentralTendencyWizard::TaylorExpansionMoments:
     {
       monteCarloWidget_->hide();
       TaylorExpansionsWidget_->show();
       if (analysis_.getImplementation()->getClassName() == "MonteCarloAnalysis")
       {
-        analysis_ = TaylorExpansionsMomentsAnalysis(analysis_.getName(), physicalModel_);
+        analysis_ = TaylorExpansionMomentsAnalysis(analysis_.getName(), physicalModel_);
         emit analysisChanged(analysis_);
       }
       break;

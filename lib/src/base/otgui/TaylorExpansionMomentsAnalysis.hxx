@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief TaylorExpansionsMomentsAnalysis computes the moments with the Taylor Expansion method
+ *  @brief TaylorExpansionMomentsAnalysis computes the moments with the Taylor Expansion method
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -22,27 +22,27 @@
 #define OTGUI_TAYLOREXPANSIONSMOMENTSANALYSIS_HXX
 
 #include "Analysis.hxx"
-#include "TaylorExpansionsMomentsResult.hxx"
+#include "TaylorExpansionMomentsResult.hxx"
 
 namespace OTGUI {
-class OTGUI_API TaylorExpansionsMomentsAnalysis : public AnalysisImplementation
+class OTGUI_API TaylorExpansionMomentsAnalysis : public AnalysisImplementation
 {
   CLASSNAME;
 
 public:
   /** Default constructor */
-  TaylorExpansionsMomentsAnalysis();
+  TaylorExpansionMomentsAnalysis();
   /** Constructor with parameters */
-  TaylorExpansionsMomentsAnalysis(const OT::String & name, const PhysicalModel & physicalModel);
+  TaylorExpansionMomentsAnalysis(const OT::String & name, const PhysicalModel & physicalModel);
 
   /** Virtual constructor */
-  virtual TaylorExpansionsMomentsAnalysis * clone() const;
+  virtual TaylorExpansionMomentsAnalysis * clone() const;
 
   // TODO choose output(s) to evaluate.
 //   OT::Description getOutputNames() const;
 //   void setOutputNames(const OT::Description & outputNames);
 
-  TaylorExpansionsMomentsResult getResult() const;
+  TaylorExpansionMomentsResult getResult() const;
 
   virtual void run();
   virtual OT::String getPythonScript() const;
@@ -56,7 +56,7 @@ public:
 
 private:
 //   OT::Description outputNames_;
-  TaylorExpansionsMomentsResult result_;
+  TaylorExpansionMomentsResult result_;
 };
 }
 #endif

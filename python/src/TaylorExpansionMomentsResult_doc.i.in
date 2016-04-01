@@ -1,9 +1,9 @@
-%feature("docstring") OTGUI::TaylorExpansionsMomentsResult
+%feature("docstring") OTGUI::TaylorExpansionMomentsResult
 "Taylor expansions for moments estimation results."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::TaylorExpansionsMomentsResult::getOutputNames
+%feature("docstring") OTGUI::TaylorExpansionMomentsResult::getOutputNames
 "Output variable names accessor.
 
 Returns
@@ -13,7 +13,7 @@ listXMax : :class:`~openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::TaylorExpansionsMomentsResult::getMeanFirstOrder
+%feature("docstring") OTGUI::TaylorExpansionMomentsResult::getMeanFirstOrder
 "First order mean accessor.
 
 Returns
@@ -23,7 +23,7 @@ mean : :class:`~openturns.NumericalPoint`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::TaylorExpansionsMomentsResult::getMeanSecondOrder
+%feature("docstring") OTGUI::TaylorExpansionMomentsResult::getMeanSecondOrder
 "Second order mean accessor.
 
 Returns
@@ -33,7 +33,7 @@ mean : :class:`~openturns.NumericalPoint`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::TaylorExpansionsMomentsResult::getStandardDeviation
+%feature("docstring") OTGUI::TaylorExpansionMomentsResult::getStandardDeviation
 "Standard deviation accessor.
 
 Returns
@@ -43,7 +43,7 @@ mean : :class:`~openturns.NumericalPoint`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::TaylorExpansionsMomentsResult::getVariance
+%feature("docstring") OTGUI::TaylorExpansionMomentsResult::getVariance
 "Variance accessor.
 
 Returns

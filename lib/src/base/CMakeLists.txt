@@ -14,8 +14,8 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      AnalysisImplementation.cxx Analysis.cxx SimulationAnalysis.cxx
                      ModelEvaluationResult.cxx ModelEvaluation.cxx
                      SimulationAnalysisResult.cxx
-                     MonteCarloResult.cxx MonteCarloAnalysis.cxx TaylorExpansionsMomentsResult.cxx
-                     TaylorExpansionsMomentsAnalysis.cxx SobolResult.cxx SobolAnalysis.cxx
+                     MonteCarloResult.cxx MonteCarloAnalysis.cxx TaylorExpansionMomentsResult.cxx
+                     TaylorExpansionMomentsAnalysis.cxx SobolResult.cxx SobolAnalysis.cxx
                      SRCResult.cxx SRCAnalysis.cxx
                      LimitStateImplementation.cxx LimitState.cxx
                      ReliabilityAnalysis.cxx
@@ -43,8 +43,8 @@ ot_install_header_file ( ModelEvaluation.hxx )
 ot_install_header_file ( ModelEvaluationResult.hxx )
 ot_install_header_file ( MonteCarloAnalysis.hxx )
 ot_install_header_file ( MonteCarloResult.hxx )
-ot_install_header_file ( TaylorExpansionsMomentsAnalysis.hxx )
-ot_install_header_file ( TaylorExpansionsMomentsResult.hxx )
+ot_install_header_file ( TaylorExpansionMomentsAnalysis.hxx )
+ot_install_header_file ( TaylorExpansionMomentsResult.hxx )
 ot_install_header_file ( SobolAnalysis.hxx )
 ot_install_header_file ( SobolResult.hxx )
 ot_install_header_file ( SRCAnalysis.hxx )

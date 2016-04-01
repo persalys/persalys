@@ -84,9 +84,9 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 %include DesignOfExperimentImplementation.i
 %include DesignOfExperiment.i
 %include MonteCarloResult.i
-%include TaylorExpansionsMomentsResult.i
+%include TaylorExpansionMomentsResult.i
 %include MonteCarloAnalysis.i
-%include TaylorExpansionsMomentsAnalysis.i
+%include TaylorExpansionMomentsAnalysis.i
 %include SobolResult.i
 %include SobolAnalysis.i
 %include SRCResult.i

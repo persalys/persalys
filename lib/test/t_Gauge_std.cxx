@@ -22,7 +22,7 @@
 #include "OTtestcode.hxx"
 #include "otgui/OTStudy.hxx"
 #include "otgui/YACSPhysicalModel.hxx"
-#include "otgui/TaylorExpansionsMomentsAnalysis.hxx"
+#include "otgui/TaylorExpansionMomentsAnalysis.hxx"
 #include "otgui/ModelEvaluation.hxx"
 
 
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     // Comparaison
     assert_almost_equal(1906.79, anEval.getResult().getOutputSample()[0][0], 1e-5);
 
-    TaylorExpansionsMomentsAnalysis analysis("TaylorExpansions", myPhysicalModel);
+    TaylorExpansionMomentsAnalysis analysis("TaylorExpansions", myPhysicalModel);
     analysis.run();
 
     // Comparaison

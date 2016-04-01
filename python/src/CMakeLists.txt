@@ -73,8 +73,8 @@ ot_add_python_module (otguibase otguibase_module.i
                       DesignOfExperiment.i DesignOfExperiment_doc.i.in
                       MonteCarloResult.i MonteCarloResult_doc.i.in
                       MonteCarloAnalysis.i MonteCarloAnalysis_doc.i.in
-                      TaylorExpansionsMomentsResult.i TaylorExpansionsMomentsResult_doc.i.in
-                      TaylorExpansionsMomentsAnalysis.i TaylorExpansionsMomentsAnalysis_doc.i.in
+                      TaylorExpansionMomentsResult.i TaylorExpansionMomentsResult_doc.i.in
+                      TaylorExpansionMomentsAnalysis.i TaylorExpansionMomentsAnalysis_doc.i.in
                       SobolResult.i SobolResult_doc.i.in
                       SobolAnalysis.i SobolAnalysis_doc.i.in
                       SRCResult.i SRCResult_doc.i.in

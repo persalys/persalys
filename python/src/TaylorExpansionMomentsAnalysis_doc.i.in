@@ -1,4 +1,4 @@
-%feature("docstring") OTGUI::TaylorExpansionsMomentsAnalysis
+%feature("docstring") OTGUI::TaylorExpansionMomentsAnalysis
 "Taylor expansions for moments estimation.
 
 Parameters
@@ -10,7 +10,7 @@ physicalModel : :class:`~otguibase.PhysicalModel`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::TaylorExpansionsMomentsAnalysis::setOutputNames
+%feature("docstring") OTGUI::TaylorExpansionMomentsAnalysis::setOutputNames
 "Output variable names accessor.
 
 Parameters
@@ -20,7 +20,7 @@ names : :class:`~openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::TaylorExpansionsMomentsAnalysis::getOutputNames
+%feature("docstring") OTGUI::TaylorExpansionMomentsAnalysis::getOutputNames
 "Output variable names accessor.
 
 Returns
@@ -30,10 +30,10 @@ names : :class:`~openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::TaylorExpansionsMomentsAnalysis::getResult
+%feature("docstring") OTGUI::TaylorExpansionMomentsAnalysis::getResult
 "Result accessor.
 
 Returns
 -------
-result : :class:`~otguibase.TaylorExpansionsMomentsResult`
+result : :class:`~otguibase.TaylorExpansionMomentsResult`
     Result"

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow for the results of TaylorExpansionsMomentsAnalysis
+ *  @brief QMdiSubWindow for the results of TaylorExpansionMomentsAnalysis
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -23,19 +23,19 @@
 
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/AnalysisItem.hxx"
-#include "otgui/TaylorExpansionsMomentsResult.hxx"
+#include "otgui/TaylorExpansionMomentsResult.hxx"
 #include "otgui/NotEditableTableWidget.hxx"
 
 #include <QComboBox>
 #include <QTableWidget>
 
 namespace OTGUI {
-class TaylorExpansionsMomentsResultWindow : public OTguiSubWindow
+class TaylorExpansionMomentsResultWindow : public OTguiSubWindow
 {
   Q_OBJECT
 
 public:
-  TaylorExpansionsMomentsResultWindow(AnalysisItem * item);
+  TaylorExpansionMomentsResultWindow(AnalysisItem * item);
 
 protected:
   void buildInterface();
@@ -44,7 +44,7 @@ public slots:
   void updateEstimatesTable(int indexOutput);
 
 private:
-  TaylorExpansionsMomentsResult result_;
+  TaylorExpansionMomentsResult result_;
   QComboBox * outputsComboBox_;
   NotEditableTableWidget * momentsEstimationsTable_;
 };

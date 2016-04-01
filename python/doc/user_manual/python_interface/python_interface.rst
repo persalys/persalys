@@ -43,8 +43,8 @@ Central tendency
 
     MonteCarloAnalysis
     MonteCarloResult
-    TaylorExpansionsMomentsAnalysis
-    TaylorExpansionsMomentsResult
+    TaylorExpansionMomentsAnalysis
+    TaylorExpansionMomentsResult
 
 Sensitivity analysis
 ~~~~~~~~~~~~~~~~~~~~

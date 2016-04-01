@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow for the results of TaylorExpansionsMomentsAnalysis
+ *  @brief QMdiSubWindow for the results of TaylorExpansionMomentsAnalysis
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/TaylorExpansionsMomentsResultWindow.hxx"
+#include "otgui/TaylorExpansionMomentsResultWindow.hxx"
 #include "otgui/DataTableWidget.hxx"
-#include "otgui/TaylorExpansionsMomentsAnalysis.hxx"
+#include "otgui/TaylorExpansionMomentsAnalysis.hxx"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -30,15 +30,15 @@ using namespace OT;
 
 namespace OTGUI {
 
-TaylorExpansionsMomentsResultWindow::TaylorExpansionsMomentsResultWindow(AnalysisItem * item)
+TaylorExpansionMomentsResultWindow::TaylorExpansionMomentsResultWindow(AnalysisItem * item)
   : OTguiSubWindow(item)
-  , result_(dynamic_cast<TaylorExpansionsMomentsAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , result_(dynamic_cast<TaylorExpansionMomentsAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
 {
   buildInterface();
 }
 
 
-void TaylorExpansionsMomentsResultWindow::buildInterface()
+void TaylorExpansionMomentsResultWindow::buildInterface()
 {
   QTabWidget * tabWidget = new QTabWidget;
 
@@ -91,7 +91,7 @@ void TaylorExpansionsMomentsResultWindow::buildInterface()
 }
 
 
-void TaylorExpansionsMomentsResultWindow::updateEstimatesTable(int indexOutput)
+void TaylorExpansionMomentsResultWindow::updateEstimatesTable(int indexOutput)
 {
   // momentsEstimationsTable_
   // first order mean

@@ -46,7 +46,7 @@
 #include "otgui/ModelEvaluationResultWindow.hxx"
 #include "otgui/CentralTendencyWizard.hxx"
 #include "otgui/MonteCarloResultWindow.hxx"
-#include "otgui/TaylorExpansionsMomentsResultWindow.hxx"
+#include "otgui/TaylorExpansionMomentsResultWindow.hxx"
 #include "otgui/SensitivityAnalysisWizard.hxx"
 #include "otgui/SobolResultWindow.hxx"
 #include "otgui/SRCResultWindow.hxx"
@@ -242,7 +242,7 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
     actions.append(removeLimitState_);
   }
   else if (dataType == "ModelEvaluation" || dataType == "MonteCarloAnalysis" ||
-           dataType == "TaylorExpansionsMomentsAnalysis" || dataType == "SobolAnalysis" ||
+           dataType == "TaylorExpansionMomentsAnalysis" || dataType == "SobolAnalysis" ||
            dataType == "SRCAnalysis" || dataType == "MonteCarloReliabilityAnalysis")
   {
     actions.append(runAnalysis_);
@@ -592,7 +592,7 @@ void StudyTreeView::runAnalysis()
     if (!isProbabilisticModelValid(selectionModel()->currentIndex()))
       return;
 
-    if (analysisType == "MonteCarloAnalysis" || analysisType == "TaylorExpansionsMomentsAnalysis")
+    if (analysisType == "MonteCarloAnalysis" || analysisType == "TaylorExpansionMomentsAnalysis")
     {
       wizard = new CentralTendencyWizard(item->getAnalysis());
     }
@@ -649,8 +649,8 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
     resultWindow = new ModelEvaluationResultWindow(item);
   else if (analysisType == "MonteCarloAnalysis")
     resultWindow = new MonteCarloResultWindow(item);
-  else if (analysisType == "TaylorExpansionsMomentsAnalysis")
-    resultWindow = new TaylorExpansionsMomentsResultWindow(item);
+  else if (analysisType == "TaylorExpansionMomentsAnalysis")
+    resultWindow = new TaylorExpansionMomentsResultWindow(item);
   else if (analysisType == "SobolAnalysis")
     resultWindow = new SobolResultWindow(item);
   else if (analysisType == "SRCAnalysis")

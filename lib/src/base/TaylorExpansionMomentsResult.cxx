@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief TaylorExpansionsMomentsResult contains the moments computed with the Taylor Expansion method
+ *  @brief TaylorExpansionMomentsResult contains the moments computed with the Taylor Expansion method
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/TaylorExpansionsMomentsResult.hxx"
+#include "otgui/TaylorExpansionMomentsResult.hxx"
 
 #include "PersistentObjectFactory.hxx"
 
@@ -26,19 +26,19 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(TaylorExpansionsMomentsResult);
+CLASSNAMEINIT(TaylorExpansionMomentsResult);
 
-static Factory<TaylorExpansionsMomentsResult> RegisteredFactory("TaylorExpansionsMomentsResult");
+static Factory<TaylorExpansionMomentsResult> RegisteredFactory("TaylorExpansionMomentsResult");
 
 /* Default constructor */
-TaylorExpansionsMomentsResult::TaylorExpansionsMomentsResult()
+TaylorExpansionMomentsResult::TaylorExpansionMomentsResult()
   : PersistentObject()
 {
 }
 
 
 /* Constructor with parameters */
-TaylorExpansionsMomentsResult::TaylorExpansionsMomentsResult(const OT::Description & outputNames,
+TaylorExpansionMomentsResult::TaylorExpansionMomentsResult(const OT::Description & outputNames,
                                                              const OT::NumericalPoint & meanFirstOrder,
                                                              const OT::NumericalPoint & meanSecondOrder,
                                                              const OT::NumericalPoint & standardDeviation,
@@ -54,44 +54,44 @@ TaylorExpansionsMomentsResult::TaylorExpansionsMomentsResult(const OT::Descripti
 
 
 /* Virtual constructor */
-TaylorExpansionsMomentsResult* TaylorExpansionsMomentsResult::clone() const
+TaylorExpansionMomentsResult* TaylorExpansionMomentsResult::clone() const
 {
-  return new TaylorExpansionsMomentsResult(*this);
+  return new TaylorExpansionMomentsResult(*this);
 }
 
 
-Description TaylorExpansionsMomentsResult::getOutputNames() const
+Description TaylorExpansionMomentsResult::getOutputNames() const
 {
   return outputNames_;
 }
 
 
-NumericalPoint TaylorExpansionsMomentsResult::getMeanFirstOrder() const
+NumericalPoint TaylorExpansionMomentsResult::getMeanFirstOrder() const
 {
   return meanFirstOrder_;
 }
 
 
-NumericalPoint TaylorExpansionsMomentsResult::getMeanSecondOrder() const
+NumericalPoint TaylorExpansionMomentsResult::getMeanSecondOrder() const
 {
   return meanSecondOrder_;
 }
 
 
-NumericalPoint TaylorExpansionsMomentsResult::getStandardDeviation() const
+NumericalPoint TaylorExpansionMomentsResult::getStandardDeviation() const
 {
   return standardDeviation_;
 }
 
 
-NumericalPoint TaylorExpansionsMomentsResult::getVariance() const
+NumericalPoint TaylorExpansionMomentsResult::getVariance() const
 {
   return variance_;
 }
 
 
 /* Method save() stores the object through the StorageManager */
-void TaylorExpansionsMomentsResult::save(Advocate & adv) const
+void TaylorExpansionMomentsResult::save(Advocate & adv) const
 {
   PersistentObject::save(adv);
   adv.saveAttribute("outputNames_", outputNames_);
@@ -103,7 +103,7 @@ void TaylorExpansionsMomentsResult::save(Advocate & adv) const
 
 
 /* Method load() reloads the object from the StorageManager */
-void TaylorExpansionsMomentsResult::load(Advocate & adv)
+void TaylorExpansionMomentsResult::load(Advocate & adv)
 {
   PersistentObject::load(adv);
   adv.loadAttribute("outputNames_", outputNames_);

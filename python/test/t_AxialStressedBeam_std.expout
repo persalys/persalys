@@ -25,8 +25,8 @@ upperBounds = [351.737, 83224.3]
 levels = [2, 2]
 aDesign = otguibase.DesignOfExperiment('aDesign', myPhysicalModel, lowerBounds, upperBounds, levels, values)
 myStudy.add(aDesign)
-myTaylorExpansionsMoments = otguibase.TaylorExpansionsMomentsAnalysis('myTaylorExpansionsMoments', myPhysicalModel)
-myStudy.add(myTaylorExpansionsMoments)
+myTaylorExpansionMoments = otguibase.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', myPhysicalModel)
+myStudy.add(myTaylorExpansionMoments)
 myMonteCarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel, 1000)
 myMonteCarlo.setSeed(0)
 myStudy.add(myMonteCarlo)
