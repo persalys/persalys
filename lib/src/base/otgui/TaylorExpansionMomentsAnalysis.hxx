@@ -18,8 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_TAYLOREXPANSIONSMOMENTSANALYSIS_HXX
-#define OTGUI_TAYLOREXPANSIONSMOMENTSANALYSIS_HXX
+#ifndef OTGUI_TAYLOREXPANSIONMOMENTSANALYSIS_HXX
+#define OTGUI_TAYLOREXPANSIONMOMENTSANALYSIS_HXX
 
 #include "Analysis.hxx"
 #include "TaylorExpansionMomentsResult.hxx"

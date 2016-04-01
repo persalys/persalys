@@ -18,8 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_TAYLOREXPANSIONSMOMENTSRESULT_HXX
-#define OTGUI_TAYLOREXPANSIONSMOMENTSRESULT_HXX
+#ifndef OTGUI_TAYLOREXPANSIONMOMENTSRESULT_HXX
+#define OTGUI_TAYLOREXPANSIONMOMENTSRESULT_HXX
 
 #include "Output.hxx"
 

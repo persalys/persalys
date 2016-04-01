@@ -18,8 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_TAYLOREXPANSIONSMOMENTSRESULTWINDOW_HXX
-#define OTGUI_TAYLOREXPANSIONSMOMENTSRESULTWINDOW_HXX
+#ifndef OTGUI_TAYLOREXPANSIONMOMENTSRESULTWINDOW_HXX
+#define OTGUI_TAYLOREXPANSIONMOMENTSRESULTWINDOW_HXX
 
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/AnalysisItem.hxx"
