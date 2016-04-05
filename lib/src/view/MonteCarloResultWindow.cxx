@@ -144,7 +144,10 @@ void MonteCarloResultWindow::buildInterface()
     QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimate"));
     QVBoxLayout * momentsVbox = new QVBoxLayout(momentsGroupBox);
 
-    momentsEstimationsTable_ = new NotEditableTableWidget(8, 4);
+    int nbColumns = 2;
+    if (isConfidenceIntervalRequired_)
+      nbColumns = 4;
+    momentsEstimationsTable_ = new NotEditableTableWidget(8, nbColumns);
     momentsEstimationsTable_->horizontalHeader()->hide();
 
     // vertical header
@@ -504,11 +507,18 @@ void MonteCarloResultWindow::updateResultWidgets(int indexOutput)
   momentsEstimationsTable_->createItem(7, 1, result_.getThirdQuartile()[indexOutput]);
 
   // resize table
+  int titleWidth = 0;
+  if (isConfidenceIntervalRequired_)
+  {
+    momentsEstimationsTable_->createHeaderItem(0, 2, tr("Confidence interval at ") + QString::number(levelConfidenceInterval_*100) + "%");
+    momentsEstimationsTable_->resizeColumnsToContents();
+    titleWidth = momentsEstimationsTable_->horizontalHeader()->sectionSize(2);
 
-  // first: clear item at (0,2) because the text is to wide:
-  // resizeColumnsToContents takes into account the text of item at (0,2)
-  // to resize the column 2, even if there is a setSpan(0, 2, 1, 2)
-  momentsEstimationsTable_->setItem(0, 2, new QTableWidgetItem);
+    // first: clear item at (0,2) because the text is to wide:
+    // resizeColumnsToContents takes into account the text of item at (0,2)
+    // to resize the column 2, even if there is a setSpan(0, 2, 1, 2)
+    momentsEstimationsTable_->setItem(0, 2, new QTableWidgetItem);
+  }
 
   momentsEstimationsTable_->resizeToContents();
 
@@ -516,6 +526,13 @@ void MonteCarloResultWindow::updateResultWidgets(int indexOutput)
   {
     momentsEstimationsTable_->createHeaderItem(0, 2, tr("Confidence interval at ") + QString::number(levelConfidenceInterval_*100) + "%");
     momentsEstimationsTable_->setSpan(0, 2, 1, 2);
+    int subTitlesWidth = momentsEstimationsTable_->horizontalHeader()->sectionSize(2) + momentsEstimationsTable_->horizontalHeader()->sectionSize(3);
+    int widthCorrection = titleWidth - subTitlesWidth;
+    if (widthCorrection > 0)
+    {
+      momentsEstimationsTable_->horizontalHeader()->resizeSection(3, momentsEstimationsTable_->horizontalHeader()->sectionSize(3) + widthCorrection);
+      momentsEstimationsTable_->setMinimumWidth(momentsEstimationsTable_->minimumWidth() + widthCorrection);
+    }
   }
 
   // -- quantiles --
