@@ -62,7 +62,7 @@ namespace OTGUI {
 
 StudyTreeView::StudyTreeView(QWidget * parent)
   : QTreeView(parent)
-  , treeViewModel_(new StudyTreeViewModel())
+  , treeViewModel_(new StudyTreeViewModel(this))
 {
   OTStudy::SetInstanceObserver(treeViewModel_);
   setModel(treeViewModel_);
@@ -76,7 +76,7 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   buildActions();
 
   // Forbid the user to define not valid item's name
-  LineEditWithQValidatorDelegate * delegate = new LineEditWithQValidatorDelegate;
+  LineEditWithQValidatorDelegate * delegate = new LineEditWithQValidatorDelegate("[a-zA-Z_][a-zA-Z_0-9]*", this);
   setItemDelegateForColumn(0, delegate);
 
   setContextMenuPolicy(Qt::CustomContextMenu);

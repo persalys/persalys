@@ -27,8 +27,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-StudyTreeViewModel::StudyTreeViewModel()
-  : QStandardItemModel()
+StudyTreeViewModel::StudyTreeViewModel(QObject *parent)
+  : QStandardItemModel(parent)
   , Observer()
 {
 }

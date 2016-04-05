@@ -31,7 +31,7 @@ class OTGUI_API StudyTreeViewModel : public QStandardItemModel, public Observer
   Q_OBJECT
 
 public:
-  StudyTreeViewModel();
+  StudyTreeViewModel(QObject *parent = 0);
 
   void createNewOTStudy();
   void addOTStudyItem(OTStudy * otStudy);
