@@ -45,8 +45,8 @@ MonteCarloAnalysis::MonteCarloAnalysis(const String & name, const PhysicalModel 
                                        const UnsignedInteger nbSimu, bool confidenceInterval, double level)
   : SimulationAnalysis(name, physicalModel, nbSimu)
   , isConfidenceIntervalRequired_(confidenceInterval)
-  , levelConfidenceInterval_(level)
 {
+  setLevelConfidenceInterval(level);
 //TODO ctr with outputNames (pas OutputCollection!) optionnel par défaut prendrait tous les outputs
 }
 
@@ -78,6 +78,8 @@ double MonteCarloAnalysis::getLevelConfidenceInterval() const
 
 void MonteCarloAnalysis::setLevelConfidenceInterval(const double levelConfidenceInterval)
 {
+  if (levelConfidenceInterval < 0. || levelConfidenceInterval >= 1.)
+      throw InvalidArgumentException(HERE) << "MonteCarloAnalysis::setLevelConfidenceInterval : the level of the confidence interval must be superior or equal to 0. and inferior to 1.";
   levelConfidenceInterval_ = levelConfidenceInterval;
 }
 
