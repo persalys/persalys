@@ -27,7 +27,7 @@
 
 // modified by YoungTaek Oh.
 
-#ifdef WIN32
+#ifdef _WIN32
 #   undef _DEBUG
 #endif
 #include <Python.h>
@@ -201,11 +201,15 @@ QPyConsole::QPyConsole(QWidget *parent, const QString& welcomeText) :
   PyImport_AddModule("console");
   Py_InitModule("console", console_methods);
 
+#ifndef _WIN32 // on win32, import fails on some Python distributions
   PyImport_ImportModule("rlcompleter");
+#endif
   PyRun_SimpleString("import sys\n"
              "import redirector\n"
              "import console\n"
+#ifndef _WIN32
              "import rlcompleter\n"
+#endif
              "sys.path.insert(0, \".\")\n" // add current
              "sys.stdout = redirector.redirector()\n"
              "def zzff(): pass\n"
@@ -218,7 +222,9 @@ QPyConsole::QPyConsole(QWidget *parent, const QString& welcomeText) :
              "__builtin__.load=console.load\n"
              "__builtin__.history=console.history\n"
              "__builtin__.quit=console.quit\n"
+#ifndef _WIN32
              "__builtin__.completer=rlcompleter.Completer()\n"
+#endif
     );
 }
 char save_error_type[1024], save_error_info[1024];
@@ -360,9 +366,11 @@ QStringList QPyConsole::suggestCommand(const QString &cmd, QString& prefix)
   resultString="";
   if (!cmd.isEmpty()) {
     do {
+#ifndef _WIN32
       snprintf(run,255,"print completer.complete(\"%s\",%d)\n",
            cmd.toUtf8().data(),n);
       PyRun_SimpleString(run);
+#endif
       resultString=resultString.trimmed(); //strip trialing newline
       if (resultString!="None")
       {
