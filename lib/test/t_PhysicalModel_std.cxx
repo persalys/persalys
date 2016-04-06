@@ -24,13 +24,15 @@
 #include "otgui/AnalyticalPhysicalModel.hxx"
 #include "otgui/PythonPhysicalModel.hxx"
 #include "otgui/OTStudy.hxx"
-#include "Python.h"
+#include "otgui/PythonEnvironment.hxx"
 
 using namespace OT;
 using namespace OTGUI;
 
 int main(int argc, char **argv)
 {
+  PythonEnvironment pyEnv;
+
   OTStudy study("study1");
   Input Q("Q", 0., "Primary energy", Normal(10200, 100));
   Input E("E", 0., "Produced electric energy", Normal(3000, 15));
@@ -50,7 +52,6 @@ int main(int argc, char **argv)
   std::vector<PhysicalModel> models;
   models.push_back(analyticalModel);
   models.push_back(pythonModel);
-  Py_Initialize();
   for (unsigned int i = 0; i < models.size(); ++ i)
   {
     PhysicalModel & model = models[i];
@@ -61,7 +62,6 @@ int main(int argc, char **argv)
     study.add(model);
     std::cout << model.getFunction()(x) << std::endl;
   }
-  Py_Finalize();
   std::cout << study.getPythonScript() << std::endl;
   return EXIT_SUCCESS;
 }

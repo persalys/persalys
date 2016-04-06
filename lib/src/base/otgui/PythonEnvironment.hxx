@@ -1,8 +1,8 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Main file launching the interface
+ *  @brief PythonEnvironment handling
  *
- *  Copyright 2015-2016 EDF
+ *  Copyright 2015-2016 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -18,26 +18,21 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include <QApplication>
-#include <QSettings>
+#ifndef OTGUI_PYTHONENVIRONMENT_HXX
+#define OTGUI_PYTHONENVIRONMENT_HXX
 
-#include "otgui/MainWindow.hxx"
-#include "otgui/PythonEnvironment.hxx"
+#include "otgui/OTGuiprivate.hxx"
 
-using namespace OTGUI;
+namespace OTGUI {
 
-int main(int argc, char *argv[])
+class OTGUI_API PythonEnvironment 
 {
-  PythonEnvironment pyEnv;
+public:
+  /** Default constructor */
+  PythonEnvironment();
 
-  QApplication app(argc, argv);
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EDF_Phimeca", "OTgui");
-  settings.setValue("currentDir", QSettings().fileName());
+  virtual ~PythonEnvironment();
 
-  MainWindow window;
-  window.resize(1024, 768);
-  window.show();
-  window.launchInitialMessageBox();
-
-  return app.exec();
+};
 }
+#endif

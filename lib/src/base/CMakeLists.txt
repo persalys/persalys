@@ -20,7 +20,8 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      LimitStateImplementation.cxx LimitState.cxx
                      ReliabilityAnalysis.cxx
                      MonteCarloReliabilityAnalysis.cxx
-                     MonteCarloReliabilityResult.cxx)
+                     MonteCarloReliabilityResult.cxx
+                     PythonEnvironment.cxx)
 if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx)
 endif ()
@@ -58,6 +59,7 @@ ot_install_header_file ( LimitState.hxx )
 ot_install_header_file ( ReliabilityAnalysis.hxx )
 ot_install_header_file ( MonteCarloReliabilityAnalysis.hxx )
 ot_install_header_file ( MonteCarloReliabilityResult.hxx )
+ot_install_header_file ( PythonEnvironment.hxx )
 
 if (SalomeYACS_FOUND)
   ot_install_header_file (YACSPhysicalModel.hxx)

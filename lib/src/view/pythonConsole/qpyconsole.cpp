@@ -186,7 +186,6 @@ QPyConsole::QPyConsole(QWidget *parent, const QString& welcomeText) :
   //set the Python Prompt
   setNormalPrompt(true);
 
-  Py_Initialize();
   /* NOTE: In previous implementaion, local name and global name
        were allocated separately.  And it causes a problem that
        a function declared in this console cannot be called.  By
@@ -276,7 +275,6 @@ QPyConsole::py_check_for_unexpected_eof()
 //Desctructor
 QPyConsole::~QPyConsole()
 {
-  Py_Finalize();
 }
 
 //Call the Python interpreter to execute the command
