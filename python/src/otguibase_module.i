@@ -57,6 +57,33 @@ OTGUITypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementat
 %enddef
 
 
+// define OTGUITypedCollectionInterfaceObjectHelper
+%define OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,CollectionType)
+
+%template(CollectionType)           OT::Collection<OTGUI::Interface>;
+
+%typemap(in) const CollectionType & {
+  if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, 0))) {
+    // From interface class, ok
+  } else {
+    $1 = OT::buildCollectionFromPySequence< OTGUI::Interface >( $input );
+  }
+}
+
+%typemap(typecheck,precedence=SWIG_TYPECHECK_POINTER) const CollectionType & {
+  $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, $1_descriptor, 0))
+    || OT::canConvertCollectionObjectFromPySequence< OTGUI::Interface >( $input );
+}
+
+%apply const CollectionType & { const OT::Collection<OTGUI::Interface> & };
+
+%enddef
+
+%define OTGUITypedCollectionInterfaceObjectHelper(Interface)
+OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collection)
+%enddef
+
+
 
 // The new classes
 %include otgui/OTGuiprivate.hxx
