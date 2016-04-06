@@ -115,7 +115,7 @@ void CentralTendencyWizard::buildInterface()
   advancedWidgetsLayout->addWidget(confidenceIntervalCheckBox_, 0, 0);
   levelConfidenceIntervalSpinbox_ = new QDoubleSpinBox;
   levelConfidenceIntervalSpinbox_->setRange(0.0, 0.99);
-  levelConfidenceIntervalSpinbox_->setSingleStep(0.05);
+  levelConfidenceIntervalSpinbox_->setSingleStep(0.01);
 
   if (analysis_.getImplementation()->getClassName() == "MonteCarloAnalysis")
   {
