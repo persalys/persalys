@@ -108,11 +108,11 @@ void OTStudy::Remove(OTStudy * otstudy)
 
   otstudy->notify("otStudyRemoved");
 
-  for (int i=0; i<OTStudies_.getSize(); ++i)
+  for (UnsignedInteger i=0; i < OTStudies_.getSize(); ++ i)
   {
     if (OTStudies_[i].get() == otstudy)
     {
-      OTStudies_.erase(OTStudies_.begin()+i);
+      OTStudies_.erase(OTStudies_.begin() + i);
       break;
     }
   }
