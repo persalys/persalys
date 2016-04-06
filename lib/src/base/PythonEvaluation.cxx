@@ -104,6 +104,14 @@ UnsignedInteger PythonEvaluation::getOutputDimension() const
   return outputDimension_;
 }
 
+class InterpreterUnlocker
+{
+public:
+  InterpreterUnlocker() { gstate_ = PyGILState_Ensure(); }
+  ~InterpreterUnlocker() { PyGILState_Release(gstate_); }
+private:
+  PyGILState_STATE gstate_;
+};
 
 /* Operator () */
 NumericalPoint PythonEvaluation::operator() (const NumericalPoint & inP) const
@@ -118,7 +126,7 @@ NumericalPoint PythonEvaluation::operator() (const NumericalPoint & inP) const
   else
   {
     ++ callsNumber_;
-
+    InterpreterUnlocker iul;
     PyObject *module = PyImport_AddModule("__main__");// Borrowed reference.
     PyObject *dict = PyModule_GetDict(module);// Borrowed reference.
     ScopedPyObjectPointer retValue(PyRun_String(code_.c_str(), Py_file_input, dict, dict));
