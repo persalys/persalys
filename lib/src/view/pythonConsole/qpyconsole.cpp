@@ -357,7 +357,6 @@ QString QPyConsole::interpretCommand(const QString &command, int *res)
 
 QStringList QPyConsole::suggestCommand(const QString &cmd, QString& prefix)
 {
-  char run[255];
   int n =0;
   QStringList list;
   prefix = "";
@@ -365,6 +364,7 @@ QStringList QPyConsole::suggestCommand(const QString &cmd, QString& prefix)
   if (!cmd.isEmpty()) {
     do {
 #ifndef _WIN32
+      char run[255];
       snprintf(run,255,"print completer.complete(\"%s\",%d)\n",
            cmd.toUtf8().data(),n);
       PyRun_SimpleString(run);
