@@ -30,9 +30,11 @@ namespace OTGUI {
 class OTGUI_API OTStudy : public OT::PersistentObject, public Observable
 {
 public:
-  static OT::Collection<OTStudy*> GetInstances();
+  typedef OT::Collection<OTStudy*> OTStudyCollection;
+
+  static OTStudyCollection GetInstances();
   static OT::Description GetFileNames();
-  static OTStudy* GetInstanceByName(const OT::String & otStudyName);
+  static OTStudy * GetInstanceByName(const OT::String & otStudyName);
   static bool HasInstanceNamed(const OT::String & otStudyName);
   static OT::String GetAvailableName();
   static void Add(OTStudy * otstudy);
@@ -88,7 +90,7 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  static OT::Collection<OTStudy*> OTStudies_;
+  static OT::Collection<OT::Pointer<OTStudy> > OTStudies_;
   static OT::Description OTStudiesFileNames_;
   static Observer * OTStudyObserver_;
   OT::String fileName_;

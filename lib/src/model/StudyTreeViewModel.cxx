@@ -46,8 +46,7 @@ void StudyTreeViewModel::update(Observable * source, const String & message)
 
 void StudyTreeViewModel::createNewOTStudy()
 {
-  OTStudy * newStudy = new OTStudy(OTStudy::GetAvailableName());
-  OTStudy::Add(newStudy);
+  OTStudy::Add(new OTStudy(OTStudy::GetAvailableName()));
 }
 
 

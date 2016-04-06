@@ -38,14 +38,17 @@ static Factory<PersistentCollection<LimitState> > RegisteredFactory_CollLS("Pers
 static Factory<PersistentCollection<Analysis> > RegisteredFactory_CollAn("PersistentCollection<Analysis>");
 
 
-Collection<OTStudy*> OTStudy::OTStudies_;
+Collection<Pointer<OTStudy> > OTStudy::OTStudies_;
 Description OTStudy::OTStudiesFileNames_;
 Observer * OTStudy::OTStudyObserver_ = 0;
 
 
-Collection<OTStudy*> OTStudy::GetInstances()
+OTStudy::OTStudyCollection OTStudy::GetInstances()
 {
-  return OTStudies_;
+  OTStudyCollection collection;
+  for (Collection<Pointer<OTStudy> >::iterator it=OTStudies_.begin(); it!=OTStudies_.end(); ++it)
+    collection.add((*it).get());
+  return collection;
 }
 
 
@@ -57,16 +60,16 @@ Description OTStudy::GetFileNames()
 
 OTStudy * OTStudy::GetInstanceByName(const String & otStudyName)
 {
-  for (Collection<OTStudy*>::iterator it=OTStudies_.begin(); it!=OTStudies_.end(); ++it)
+  for (Collection<Pointer<OTStudy> >::iterator it=OTStudies_.begin(); it!=OTStudies_.end(); ++it)
     if ((*it)->getName() == otStudyName)
-      return (*it);
+      return (*it).get();
   return 0;
 }
 
 
 bool OTStudy::HasInstanceNamed(const String & otStudyName)
 {
-  for (Collection<OTStudy*>::iterator it=OTStudies_.begin(); it!=OTStudies_.end(); ++it)
+  for (Collection<Pointer<OTStudy> >::iterator it=OTStudies_.begin(); it!=OTStudies_.end(); ++it)
     if ((*it)->getName() == otStudyName)
       return true;
   return false;
@@ -102,8 +105,17 @@ void OTStudy::Remove(OTStudy * otstudy)
     iter = otstudy->physicalModels_.erase(iter);
   }
   OTStudiesFileNames_.erase(std::remove(OTStudiesFileNames_.begin(), OTStudiesFileNames_.end(), otstudy->getFileName()), OTStudiesFileNames_.end());
-  OTStudies_.erase(std::remove(OTStudies_.begin(), OTStudies_.end(), otstudy), OTStudies_.end());
+
   otstudy->notify("otStudyRemoved");
+
+  for (int i=0; i<OTStudies_.getSize(); ++i)
+  {
+    if (OTStudies_[i].get() == otstudy)
+    {
+      OTStudies_.erase(OTStudies_.begin()+i);
+      break;
+    }
+  }
 }
 
 
