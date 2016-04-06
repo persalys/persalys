@@ -31,9 +31,8 @@ YACSEvalSession * YACSEvalSessionSingleton::session_ = 0;
 YACSEvalSessionSingleton::YACSEvalSessionSingleton()
 {
   if (session_)
-    throw InternalException(HERE) << "A session already exists";
+    throw InternalException(HERE) << "A YACS session already exists";
   session_ = new YACSEvalSession;
-  session_->launch();
 }
 
 
@@ -48,7 +47,9 @@ YACSEvalSessionSingleton::~YACSEvalSessionSingleton()
 YACSEvalSession * YACSEvalSessionSingleton::Get()
 {
   if (!session_)
-    throw InternalException(HERE) << "No session";
+    throw InternalException(HERE) << "No YACS session";
+  if (!session_->isLaunched())
+    session_->launch();
   return session_;
 }
 }
