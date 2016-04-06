@@ -23,7 +23,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      MonteCarloReliabilityResult.cxx
                      PythonEnvironment.cxx)
 if (SalomeYACS_FOUND)
-  list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx)
+  list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx YACSEvalSessionSingleton.cxx)
 endif ()
 
 ot_install_header_file ( DistributionDictionary.hxx )
@@ -64,6 +64,7 @@ ot_install_header_file ( PythonEnvironment.hxx )
 if (SalomeYACS_FOUND)
   ot_install_header_file (YACSPhysicalModel.hxx)
   ot_install_header_file (YACSEvaluation.hxx)
+  ot_install_header_file (YACSEvalSessionSingleton.hxx)
 endif ()
 
 

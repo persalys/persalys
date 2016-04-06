@@ -19,6 +19,8 @@
  *
  */
 #include "otgui/YACSEvaluation.hxx"
+#include "otgui/YACSEvalSessionSingleton.hxx"
+
 #include "PersistentObjectFactory.hxx"
 
 #include "YACSEvalPort.hxx"
@@ -33,8 +35,6 @@ CLASSNAMEINIT(YACSEvaluation);
 
 static Factory<YACSEvaluation> RegisteredFactory("YACSEvaluation");
 
-Pointer<YACSEvalSession> YACSEvaluation::session_ = 0;
-
 /* Default constructor */
 YACSEvaluation::YACSEvaluation(const String & fileName)
   : NumericalMathEvaluationImplementation()
@@ -43,11 +43,6 @@ YACSEvaluation::YACSEvaluation(const String & fileName)
   , parallelizeStatus_(true)
   , wantedMachine_("localhost")
 {
-  if (!session_)
-  {
-    session_ = new YACSEvalSession;
-    session_->launch();
-  }
   if (!xmlFileName_.empty())
     loadData();
 }
@@ -181,7 +176,7 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
   efx_.get()->giveResources()->setWantedMachine(wantedMachine_);
 
   int b = 0;
-  bool a(efx_.get()->run(session_.get(), b));
+  bool a(efx_.get()->run(YACSEvalSessionSingleton::Get(), b));
   if (!a)
   {
     efx_.get()->unlockAll();

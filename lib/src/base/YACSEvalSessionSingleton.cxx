@@ -1,8 +1,8 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Main file launching the interface
+ *  @brief YACSEvalSessionSingleton allocates an YACSEvalSession
  *
- *  Copyright 2015-2016 EDF
+ *  Copyright 2015-2016 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -18,31 +18,37 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include <QApplication>
-#include <QSettings>
-
-#include "otgui/MainWindow.hxx"
-#include "otgui/PythonEnvironment.hxx"
-#ifdef OTGUI_HAVE_YACS
 #include "otgui/YACSEvalSessionSingleton.hxx"
-#endif
+#include <Exception.hxx>
 
-using namespace OTGUI;
+using namespace OT;
 
-int main(int argc, char *argv[])
+namespace OTGUI {
+
+YACSEvalSession * YACSEvalSessionSingleton::session_ = 0;
+
+/* Default constructor */
+YACSEvalSessionSingleton::YACSEvalSessionSingleton()
 {
-  PythonEnvironment pyEnv;
-#ifdef OTGUI_HAVE_YACS
-  YACSEvalSessionSingleton YACSSession;
-#endif
-  QApplication app(argc, argv);
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EDF_Phimeca", "OTgui");
-  settings.setValue("currentDir", QSettings().fileName());
+  if (session_)
+    throw InternalException(HERE) << "A session already exists";
+  session_ = new YACSEvalSession;
+  session_->launch();
+}
 
-  MainWindow window;
-  window.resize(1024, 768);
-  window.show();
-  window.launchInitialMessageBox();
 
-  return app.exec();
+/* Destructor */
+YACSEvalSessionSingleton::~YACSEvalSessionSingleton()
+{
+  delete session_;
+  session_ = 0;
+}
+
+
+YACSEvalSession * YACSEvalSessionSingleton::Get()
+{
+  if (!session_)
+    throw InternalException(HERE) << "No session";
+  return session_;
+}
 }

@@ -23,10 +23,9 @@
 
 #include "otgui/OTGuiprivate.hxx"
 
-#include "NumericalMathEvaluationImplementation.hxx"
+#include <NumericalMathEvaluationImplementation.hxx>
 
-#include "YACSEvalYFX.hxx"
-#include "YACSEvalSession.hxx"
+#include <YACSEvalYFX.hxx>
 
 namespace OTGUI {
 
@@ -96,7 +95,6 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  static OT::Pointer<YACSEvalSession> session_;
   OT::String xmlFileName_;
   OT::Pointer<YACSEvalYFX> efx_;
   OT::NumericalPoint inputValues_;
