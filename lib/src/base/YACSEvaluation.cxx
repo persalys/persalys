@@ -26,6 +26,7 @@
 #include "YACSEvalPort.hxx"
 #include "YACSEvalSeqAny.hxx"
 #include "YACSEvalResource.hxx"
+#include "YACSEvalSession.hxx"
 
 using namespace OT;
 
@@ -176,7 +177,10 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
   efx_.get()->giveResources()->setWantedMachine(wantedMachine_);
 
   int b = 0;
-  bool a(efx_.get()->run(YACSEvalSessionSingleton::Get(), b));
+  YACSEvalSession * session = YACSEvalSessionSingleton::Get();
+  if (!session_->isLaunched())
+    session_->launch();
+  bool a(efx_.get()->run(session, b));
   if (!a)
   {
     efx_.get()->unlockAll();

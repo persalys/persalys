@@ -48,8 +48,6 @@ YACSEvalSession * YACSEvalSessionSingleton::Get()
 {
   if (!session_)
     throw InternalException(HERE) << "No YACS session";
-  if (!session_->isLaunched())
-    session_->launch();
   return session_;
 }
 }
