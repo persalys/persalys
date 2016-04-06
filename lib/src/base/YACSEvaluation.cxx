@@ -86,6 +86,11 @@ String YACSEvaluation::__str__(const String & offset) const
 /* Method loadData() loads the data from the xmlFileName */
 void YACSEvaluation::loadData()
 {
+  YACSEvalSession * session = YACSEvalSessionSingleton::Get();
+  // need the session here: do not launch session in operator()
+  if (!session->isLaunched())
+    session->launch();
+
   // read file
   efx_ = YACSEvalYFX::BuildFromFile(xmlFileName_);
 
@@ -177,10 +182,7 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
   efx_.get()->giveResources()->setWantedMachine(wantedMachine_);
 
   int b = 0;
-  YACSEvalSession * session = YACSEvalSessionSingleton::Get();
-  if (!session_->isLaunched())
-    session_->launch();
-  bool a(efx_.get()->run(session, b));
+  bool a(efx_.get()->run(YACSEvalSessionSingleton::Get(), b));
   if (!a)
   {
     efx_.get()->unlockAll();
