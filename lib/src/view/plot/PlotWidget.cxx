@@ -474,8 +474,8 @@ void PlotWidget::clear()
   enableAxis(QwtPlot::xBottom); 
   setAxisAutoScale(QwtPlot::yLeft);
   enableAxis(QwtPlot::yLeft);
-  // initialize grid
-  grid_ = new QwtPlotGrid;
+  // TODO initialize grid
+//   grid_ = new QwtPlotGrid;
   replot();
 }
 

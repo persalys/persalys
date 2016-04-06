@@ -70,7 +70,7 @@ private:
   void updateScaleParameters(const OT::Distribution & distribution);
 
 private:
-  QwtPlotGrid * grid_;
+// TODO  QwtPlotGrid * grid_;
   QAction * exportPlotAction_;
 };
 }
