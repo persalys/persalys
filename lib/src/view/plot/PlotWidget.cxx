@@ -207,6 +207,8 @@ void PlotWidget::plotScatter(const NumericalSample & input, const NumericalSampl
   }
 
   plotCurve(xData, yData, size, pen, QwtPlotCurve::Dots);
+  delete[] xData;
+  delete[] yData;
 }
 
 
@@ -358,6 +360,8 @@ void PlotWidget::plotBoxPlot(double median, double lowerQuartile, double upperQu
   }
 
   plotCurve(xOutliers, yOutliers, dim, QPen(Qt::blue), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::blue), QSize(5, 5)));
+  delete[] xOutliers;
+  delete[] yOutliers;
 
 //   TODO think about:
 //   QwtScaleDiv scaleDiv(0.5, 1.5);
@@ -422,6 +426,8 @@ void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrder, const N
 
     insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
   }
+  delete[] xData;
+  delete[] yData;
 
   // scales
   setAxisScale(QwtPlot::xBottom, -0.5, firstOrder.getSize()-0.5, 1.0);

@@ -886,6 +886,8 @@ void StudyTreeView::openOTStudy(const QString & fileName)
 bool StudyTreeView::closeOTStudy()
 {
   OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
+  if (!item)
+    return true;
   if (QFileInfo(QString::fromUtf8(item->getOTStudy()->getFileName().c_str())).exists())
   {
     QApplication::setOverrideCursor(Qt::WaitCursor);
