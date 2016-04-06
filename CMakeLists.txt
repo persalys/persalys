@@ -28,8 +28,6 @@ set ( OTGUI_DEFINITIONS ${OPENTURNS_DEFINITIONS} )
 if (NOT BUILD_SHARED_LIBS)
   list ( APPEND OTGUI_DEFINITIONS "-DOTGUI_STATIC" )
 endif ()
-add_definitions ( ${OTGUI_DEFINITIONS} )
-
 
 if (BUILD_GUI)
 
@@ -62,12 +60,13 @@ if (USE_SALOME)
   find_package (SalomeGUI NO_MODULE)
   find_package (SalomeYACS NO_MODULE)
   if (SalomeYACS_FOUND)
-    add_definitions (${YACS_DEFINITIONS})
-    add_definitions (-DOTGUI_HAVE_YACS)
+    list (APPEND OTGUI_DEFINITIONS ${YACS_DEFINITIONS})
+    list (APPEND OTGUI_DEFINITIONS -DOTGUI_HAVE_YACS)
     include_directories (${YACS_INCLUDE_DIRS}) 
   endif ()
 endif ()
 
+add_definitions (${OTGUI_DEFINITIONS})
 
 set ( OTGUI_LIBRARY_PATH lib${LIB_SUFFIX} )
 set ( OTGUI_INCLUDE_PATH include )
