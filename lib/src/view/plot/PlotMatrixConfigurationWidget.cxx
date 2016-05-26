@@ -21,6 +21,7 @@
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
 
 #include "otgui/ListWidgetWithCheckBox.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -88,11 +89,8 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
 
 void PlotMatrixConfigurationWidget::updateLineEdits()
 {
-  titleLineEdit_->blockSignals(true);
-
+  SignalBlocker blocker(titleLineEdit_);
   titleLineEdit_->setText(plotMatrix_->getTitle());
-
-  titleLineEdit_->blockSignals(false);
 }
 
 

@@ -22,6 +22,7 @@
 #include "otgui/DataTableView.hxx"
 #include "otgui/DataTableModel.hxx"
 #include "otgui/MonteCarloAnalysis.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <QVBoxLayout>
 #include <QStackedLayout>
@@ -546,15 +547,14 @@ void MonteCarloResultWindow::updateResultWidgets(int indexOutput)
 
 void MonteCarloResultWindow::probaValueChanged(double proba)
 {
-  quantileSpinBox_->blockSignals(true);
+  SignalBlocker blocker(quantileSpinBox_);
   quantileSpinBox_->setValue(result_.getOutputSample().getMarginal(outputsComboBoxFirstTab_->currentIndex()).computeQuantile(proba)[0]);
-  quantileSpinBox_->blockSignals(false);
 }
 
 
 void MonteCarloResultWindow::quantileValueChanged(double quantile)
 {
-  probaSpinBox_->blockSignals(true);
+  SignalBlocker blocker(probaSpinBox_);
   double cdf = 0.0;
   double p = 1.0 / double(result_.getOutputSample().getSize());
 
@@ -563,7 +563,6 @@ void MonteCarloResultWindow::quantileValueChanged(double quantile)
       cdf += p;
 
   probaSpinBox_->setValue(cdf);
-  probaSpinBox_->blockSignals(false);
 }
 
 

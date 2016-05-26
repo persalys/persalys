@@ -13,6 +13,7 @@ ot_add_source_file (LineEditWithQValidatorDelegate.cxx)
 ot_add_source_file (DataTableWidget.cxx)
 ot_add_source_file (NotEditableTableWidget.cxx)
 ot_add_source_file (HorizontalHeaderViewWithCombobox.cxx)
+ot_add_source_file (QtTools.cxx)
 
 qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
               otgui/ListWidgetWithCheckBox.hxx
@@ -26,7 +27,8 @@ qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
               otgui/NotEditableTableWidget.hxx
               otgui/HorizontalHeaderViewWithCombobox.hxx
               otgui/CustomDoubleValidator.hxx
-              )
+              otgui/QtTools.hxx              
+             )
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
 add_library (otguiutils ${SOURCEFILES} ${OTGUI_UTILS_MOC_SRCS})

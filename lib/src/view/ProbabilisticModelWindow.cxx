@@ -27,6 +27,7 @@
 #include "otgui/CorrelationTableModel.hxx"
 #include "otgui/CustomDoubleValidator.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
+#include "otgui/QtTools.hxx"
 
 #include "Normal.hxx"
 #include "TruncatedDistribution.hxx"
@@ -410,10 +411,10 @@ void ProbabilisticModelWindow::updateTruncationParametersWidgets(const QModelInd
   Distribution inputDistribution = input.getDistribution();
   String distributionName = inputDistribution.getImplementation()->getClassName();
 
-  lowerBoundCheckBox_->blockSignals(true);
-  upperBoundCheckBox_->blockSignals(true);
-  lowerBoundLineEdit_->blockSignals(true);
-  upperBoundLineEdit_->blockSignals(true);
+  SignalBlocker lowerBoundCheckBoxBlocker(lowerBoundCheckBox_);
+  SignalBlocker upperBoundCheckBoxBlocker(upperBoundCheckBox_);
+  SignalBlocker lowerBoundLineEditBlocker(lowerBoundLineEdit_);
+  SignalBlocker upperBoundLineEditBlocker(upperBoundLineEdit_);
 
   // clear truncation parameters
   lowerBoundLineEdit_->deactivate();
@@ -446,10 +447,6 @@ void ProbabilisticModelWindow::updateTruncationParametersWidgets(const QModelInd
     upperBoundLineEdit_->setValue(dist->getB());
     truncationParamGroupBox_->setExpanded(true);
   }
-  lowerBoundCheckBox_->blockSignals(false);
-  upperBoundCheckBox_->blockSignals(false);
-  lowerBoundLineEdit_->blockSignals(false);
-  upperBoundLineEdit_->blockSignals(false);
 }
 
 
@@ -711,9 +708,8 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
             if (lowerBound >= truncatureInterval.getUpperBound()[0])
               lowerBound = truncatureInterval.getUpperBound()[0] - 0.1 * distStd;
           truncatureInterval.setLowerBound(NumericalPoint(1, lowerBound));
-          lowerBoundLineEdit_->blockSignals(true);
+          SignalBlocker blocker(lowerBoundLineEdit_);
           lowerBoundLineEdit_->setValue(lowerBound);
-          lowerBoundLineEdit_->blockSignals(false);
           truncatureInterval.setFiniteLowerBound(Interval::BoolCollection(1, true));
         }
         else
@@ -733,9 +729,8 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
             if (upperBound <= truncatureInterval.getLowerBound()[0])
               upperBound = truncatureInterval.getLowerBound()[0] + 0.1 * distStd;
           truncatureInterval.setUpperBound(NumericalPoint(1, upperBound));
-          upperBoundLineEdit_->blockSignals(true);
+          SignalBlocker blocker(upperBoundLineEdit_);
           upperBoundLineEdit_->setValue(upperBound);
-          upperBoundLineEdit_->blockSignals(false);
           truncatureInterval.setFiniteUpperBound(Interval::BoolCollection(1, true));
         }
         else

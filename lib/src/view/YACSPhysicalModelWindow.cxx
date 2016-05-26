@@ -23,6 +23,7 @@
 #include "otgui/YACSPhysicalModel.hxx"
 #include "otgui/PhysicalModelWindowWidget.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <QFileDialog>
 #include <QHeaderView>
@@ -174,18 +175,16 @@ void YACSPhysicalModelWindow::updateWantedMachine(int index)
 
 void YACSPhysicalModelWindow::updateParallelizeStatusWidget()
 {
-  parallelizeStatusCheckBox_->blockSignals(true);
+  SignalBlocker blocker(parallelizeStatusCheckBox_);
   bool newStatus = dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getParallelizeStatus();
   parallelizeStatusCheckBox_->setChecked(newStatus);
-  parallelizeStatusCheckBox_->blockSignals(false);
 }
 
 
 void YACSPhysicalModelWindow::updateWantedMachineWidget()
 {
-  fittingMachinesComboBox_->blockSignals(true);
+  SignalBlocker blocker(fittingMachinesComboBox_);
   QString wantedMachine = dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getWantedMachine().c_str();
   fittingMachinesComboBox_->setCurrentIndex(fittingMachinesComboBox_->findText(wantedMachine));
-  fittingMachinesComboBox_->blockSignals(false);
 }
 }

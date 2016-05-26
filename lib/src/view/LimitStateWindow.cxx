@@ -21,6 +21,7 @@
 #include "otgui/LimitStateWindow.hxx"
 
 #include "otgui/CustomDoubleValidator.hxx"
+#include "otgui/QtTools.hxx"
 
 #include "Greater.hxx"
 #include "GreaterOrEqual.hxx"
@@ -97,7 +98,7 @@ void LimitStateWindow::buildInterface()
 
 void LimitStateWindow::updateOutputsList()
 {
-  outputsComboBox_->blockSignals(true);
+  SignalBlocker blocker(outputsComboBox_);
   outputsComboBox_->clear();
   QStringList items;
   for (UnsignedInteger i=0; i<limitState_.getPhysicalModel().getOutputs().getSize(); ++i)
@@ -111,22 +112,20 @@ void LimitStateWindow::updateOutputsList()
     setErrorMessage(tr("The output name is not valid."));
   }
   outputsComboBox_->setCurrentIndex(index);
-  outputsComboBox_->blockSignals(false);
 }
 
 
 void LimitStateWindow::updateOutputWidget()
 {
-  outputsComboBox_->blockSignals(true);
+  SignalBlocker blocker(outputsComboBox_);
   const int index = outputsComboBox_->findText(limitState_.getOutputName().c_str());
   outputsComboBox_->setCurrentIndex(index);
-  outputsComboBox_->blockSignals(false);
 }
 
 
 void LimitStateWindow::updateOperatorWidget()
 {
-  failureComboBox_->blockSignals(true);
+  SignalBlocker blocker(failureComboBox_);
   const String operatorName = limitState_.getOperator().getImplementation()->getClassName();
   int indexOperator = 0;
   if (operatorName == "LessOrEqual")
@@ -136,15 +135,13 @@ void LimitStateWindow::updateOperatorWidget()
   else if (operatorName == "GreaterOrEqual")
     indexOperator = 3;
   failureComboBox_->setCurrentIndex(indexOperator);
-  failureComboBox_->blockSignals(false);
 }
 
 
 void LimitStateWindow::updateThresholdWidget()
 {
-  thresholdLineEdit_->blockSignals(true);
+  SignalBlocker blocker(thresholdLineEdit_);
   thresholdLineEdit_->setValue(limitState_.getThreshold());
-  thresholdLineEdit_->blockSignals(false);
 }
 
 

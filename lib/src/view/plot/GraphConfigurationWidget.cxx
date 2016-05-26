@@ -20,6 +20,8 @@
  */
 #include "otgui/GraphConfigurationWidget.hxx"
 
+#include "otgui/QtTools.hxx"
+
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
@@ -182,13 +184,13 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
 
 void GraphConfigurationWidget::updateLineEdits()
 {
-  xlabelLineEdit_->blockSignals(true);
-  xmin_->blockSignals(true);
-  xmax_->blockSignals(true);
-  ymin_->blockSignals(true);
-  ymax_->blockSignals(true);
-  ylabelLineEdit_->blockSignals(true);
-  titleLineEdit_->blockSignals(true);
+  SignalBlocker xlabelLineEditBlocker(xlabelLineEdit_);
+  SignalBlocker xminBlocker(xmin_);
+  SignalBlocker xmaxBlocker(xmax_);
+  SignalBlocker yminBlocker(ymin_);
+  SignalBlocker ymaxBlocker(ymax_);
+  SignalBlocker ylabelLineEditBlocker(ylabelLineEdit_);
+  SignalBlocker titleLineEditBlocker(titleLineEdit_);
 
   titleLineEdit_->setText(plotWidgets_[currentPlotIndex_]->title().text());
   xlabelLineEdit_->setText(plotWidgets_[currentPlotIndex_]->axisTitle(QwtPlot::xBottom).text());
@@ -197,14 +199,6 @@ void GraphConfigurationWidget::updateLineEdits()
   ylabelLineEdit_->setText(plotWidgets_[currentPlotIndex_]->axisTitle(QwtPlot::yLeft).text());
   ymin_->setText(QString::number(plotWidgets_[currentPlotIndex_]->axisInterval(QwtPlot::yLeft).minValue()));
   ymax_->setText(QString::number(plotWidgets_[currentPlotIndex_]->axisInterval(QwtPlot::yLeft).maxValue()));
-
-  xlabelLineEdit_->blockSignals(false);
-  xmin_->blockSignals(false);
-  xmax_->blockSignals(false);
-  ymin_->blockSignals(false);
-  ymax_->blockSignals(false);
-  ylabelLineEdit_->blockSignals(false);
-  titleLineEdit_->blockSignals(false);
 }
 
 
