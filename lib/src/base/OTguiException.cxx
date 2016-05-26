@@ -34,6 +34,7 @@ namespace OTGUI
 
 DEFINE_OTGUIEXCEPTION( PhysicalModelNotValidException )
 DEFINE_OTGUIEXCEPTION( AnalysisExecutionFailedException )
+DEFINE_OTGUIEXCEPTION( InvalidValueException )
 
 #undef DEFINE_OTGUIEXCEPTION
 }
