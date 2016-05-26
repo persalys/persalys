@@ -372,19 +372,18 @@ void ProbabilisticModelWindow::updateDistributionParametersWidgets(const QModelI
   // combobox to choose the type of distribution configuration
   QLabel * label = new QLabel(tr("Type"));
   lay->addWidget(label, 0, 0);
-  selectParametersTypeCombo_ = new QComboBox;
+  QComboBox * selectParametersTypeCombo = new QComboBox;
   for (UnsignedInteger i=0; i<parameters.getSize(); ++i)
   {
     QStringList parametersNamesList;
     for (UnsignedInteger j=0; j<parameters[i].getDescription().getSize(); ++j)
-    {
       parametersNamesList << QString::fromUtf8(parameters[i].getDescription()[j].c_str());
-    }
-    selectParametersTypeCombo_->addItem(parametersNamesList.join(", "));
+
+    selectParametersTypeCombo->addItem(parametersNamesList.join(", "));
   }
-  selectParametersTypeCombo_->setCurrentIndex(parametersType);
-  connect(selectParametersTypeCombo_, SIGNAL(currentIndexChanged(int)), this, SLOT(typeDistributionParametersChanged(int)));
-  lay->addWidget(selectParametersTypeCombo_, 0, 1);
+  selectParametersTypeCombo->setCurrentIndex(parametersType);
+  connect(selectParametersTypeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(typeDistributionParametersChanged(int)));
+  lay->addWidget(selectParametersTypeCombo, 0, 1);
 
   // lineEdits to set the distribution parameters
   Description parametersName = parameters[parametersType].getDescription();

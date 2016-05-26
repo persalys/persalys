@@ -79,7 +79,6 @@ private:
   GraphConfigurationWidget * pdf_cdfPlotsConfigurationWidget_;
   QGroupBox * paramEditor_;
   QVBoxLayout * parameterLayout_;
-  QComboBox * selectParametersTypeCombo_;
   QLabel * parameterValuesLabel_[5];
   QLineEdit * parameterValuesEdit_[5];
   CollapsibleGroupBox * truncationParamGroupBox_;
