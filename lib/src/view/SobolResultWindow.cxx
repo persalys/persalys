@@ -231,7 +231,7 @@ void SobolResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldSta
 {
   if (newState == 4 || newState == 8 || newState == 10)
     emit graphWindowActivated(plotsConfigurationWidget_);
-  else if (newState == 0 || newState == 1 || newState == 2 || newState == 9)
+  else if (newState == 0 || newState == 1 || newState == 9)
     emit graphWindowDeactivated(plotsConfigurationWidget_);
 }
 }

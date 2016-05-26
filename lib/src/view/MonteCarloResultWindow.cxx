@@ -618,7 +618,7 @@ void MonteCarloResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates o
 {
   if (newState == 4 || newState == 8 || newState == 10)
     showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-  else if (newState == 0 || newState == 1 || newState == 2 || newState == 9)
+  else if (newState == 0 || newState == 1 || newState == 9)
     showHideGraphConfigurationWidget(-1);
 }
 }
