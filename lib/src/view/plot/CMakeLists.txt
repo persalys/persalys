@@ -3,7 +3,6 @@ set (SOURCEFILES "" CACHE STRING "" FORCE)
 ot_add_current_dir_to_include_dirs ()
 
 ot_add_source_file (CustomScaleEngine.cxx)
-ot_add_source_file (ListWidgetWithCheckBox.cxx)
 ot_add_source_file (PlotWidget.cxx)
 ot_add_source_file (PlotMatrixWidget.cxx)
 ot_add_source_file (GraphConfigurationWidget.cxx)
@@ -12,7 +11,6 @@ ot_add_source_file (PlotMatrixConfigurationWidget.cxx)
 qt5_wrap_cpp (OTGUI_PLOT_MOC_SRCS
               otgui/PlotWidget.hxx
               otgui/PlotMatrixWidget.hxx
-              otgui/ListWidgetWithCheckBox.hxx
               otgui/GraphConfigurationWidget.hxx
               otgui/PlotMatrixConfigurationWidget.hxx)
 
@@ -31,6 +29,7 @@ if ( NOT DEFINED LIB_SOVERSION )
 endif ()
 set_target_properties ( otguiplot PROPERTIES VERSION ${LIB_VERSION} )
 set_target_properties ( otguiplot PROPERTIES SOVERSION ${LIB_SOVERSION} )
+target_link_libraries ( otguiplot otguiutils )
 target_link_libraries ( otguiplot otguibase )
 
 include_directories (${QWT_INCLUDE_DIRS})
