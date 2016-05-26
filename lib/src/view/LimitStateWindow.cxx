@@ -78,7 +78,7 @@ void LimitStateWindow::buildInterface()
   connect(failureComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateOperator(int)));
   gridLayout->addWidget(failureComboBox_, 2, 1);
 
-  thresholdLineEdit_ = new QLineEdit;
+  thresholdLineEdit_ = new ValueLineEdit;
   thresholdLineEdit_->setValidator(new CustomDoubleValidator);
   updateThresholdWidget();
   connect(thresholdLineEdit_, SIGNAL(editingFinished()), this, SLOT(updateThreshold()));
@@ -143,7 +143,7 @@ void LimitStateWindow::updateOperatorWidget()
 void LimitStateWindow::updateThresholdWidget()
 {
   thresholdLineEdit_->blockSignals(true);
-  thresholdLineEdit_->setText(QString::number(limitState_.getThreshold()));
+  thresholdLineEdit_->setValue(limitState_.getThreshold());
   thresholdLineEdit_->blockSignals(false);
 }
 
@@ -185,15 +185,8 @@ void LimitStateWindow::updateThreshold()
 {
   try
   {
-    QString value = thresholdLineEdit_->text();
-    if (value[0].toLower() == 'e' || value.isEmpty() || value.toLower() == "e" || value == "-")
-      throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
-    bool ok;
-    double newThreshold = value.toDouble(&ok);
-    if (!ok)
-      throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
     limitState_.blockNotification(true);
-    limitState_.setThreshold(newThreshold);
+    limitState_.setThreshold(thresholdLineEdit_->value());
     limitState_.blockNotification(false);
   }
   catch(std::exception & ex)

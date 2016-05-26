@@ -24,7 +24,6 @@
 #include "otgui/PhysicalModelItem.hxx"
 #include "otgui/OTguiTableView.hxx"
 
-#include <QLineEdit>
 #include <QGroupBox>
 #include <QPushButton>
 #include <QHBoxLayout>

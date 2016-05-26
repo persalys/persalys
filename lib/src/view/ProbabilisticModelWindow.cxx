@@ -106,7 +106,7 @@ void ProbabilisticModelWindow::buildInterface()
   QGridLayout * groupBoxParametersLayout = new QGridLayout(groupBoxParameters);
   QLabel * valueLabel = new QLabel(tr("Value"));
   groupBoxParametersLayout->addWidget(valueLabel, 0, 0);
-  valueForDeterministicVariable_ = new QLineEdit;
+  valueForDeterministicVariable_ = new ValueLineEdit;
   valueForDeterministicVariable_->setEnabled(false);
   groupBoxParametersLayout->addWidget(valueForDeterministicVariable_, 0, 1);
   groupBoxParametersLayout->setRowStretch(1, 1);
@@ -159,9 +159,9 @@ void ProbabilisticModelWindow::buildInterface()
   upperBoundCheckBox_ = new QCheckBox(tr("Upper bound"));
   truncationParamGroupBoxLayout->addWidget(upperBoundCheckBox_, 1, 0);
 
-  lowerBoundLineEdit_ = new QLineEdit;
+  lowerBoundLineEdit_ = new ValueLineEdit;
   truncationParamGroupBoxLayout->addWidget(lowerBoundLineEdit_, 0, 1);
-  upperBoundLineEdit_ = new QLineEdit;
+  upperBoundLineEdit_ = new ValueLineEdit;
   truncationParamGroupBoxLayout->addWidget(upperBoundLineEdit_, 1, 1);
 
   connect(lowerBoundCheckBox_, SIGNAL(stateChanged(int)), this, SLOT(truncationParametersStateChanged()));
@@ -305,7 +305,7 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   {
     rightSideOfSplitterStackedLayout_->setCurrentIndex(1);
     showHideGraphConfigurationWidget(-1);
-    valueForDeterministicVariable_->setText(QString::number(input.getValue()));
+    valueForDeterministicVariable_->setValue(input.getValue());
   }
   // If the selected variable is stochastic
   else
@@ -390,7 +390,7 @@ void ProbabilisticModelWindow::updateDistributionParametersWidgets(const QModelI
   for (UnsignedInteger i=0; i<nbParameters; ++i)
   {
     parameterValuesLabel_[i] = new QLabel(parametersName[i].c_str());
-    parameterValuesEdit_[i] = new QLineEdit(QString::number(parameters[parametersType][i]));
+    parameterValuesEdit_[i] = new ValueLineEdit(parameters[parametersType][i]);
     parameterValuesEdit_[i]->setValidator(new CustomDoubleValidator);
     connect(parameterValuesEdit_[i], SIGNAL(editingFinished()), this, SLOT(distributionParametersChanged()));
     parameterValuesLabel_[i]->setBuddy(parameterValuesEdit_[i]);
@@ -416,10 +416,8 @@ void ProbabilisticModelWindow::updateTruncationParametersWidgets(const QModelInd
   upperBoundLineEdit_->blockSignals(true);
 
   // clear truncation parameters
-  lowerBoundLineEdit_->clear();
-  lowerBoundLineEdit_->setEnabled(false);
-  upperBoundLineEdit_->clear();
-  upperBoundLineEdit_->setEnabled(false);
+  lowerBoundLineEdit_->deactivate();
+  upperBoundLineEdit_->deactivate();
   lowerBoundCheckBox_->setChecked(false);
   upperBoundCheckBox_->setChecked(false);
 
@@ -431,15 +429,11 @@ void ProbabilisticModelWindow::updateTruncationParametersWidgets(const QModelInd
     lowerBoundCheckBox_->setChecked(dist->getFiniteLowerBound());
     upperBoundCheckBox_->setChecked(dist->getFiniteUpperBound());
     if (dist->getFiniteLowerBound())
-    {
-      lowerBoundLineEdit_->setText(QString::number(dist->getLowerBound()));
-      lowerBoundLineEdit_->setEnabled(true);
-    }
+      lowerBoundLineEdit_->setValue(dist->getLowerBound());
+
     if (dist->getFiniteUpperBound())
-    {
-      upperBoundLineEdit_->setText(QString::number(dist->getUpperBound()));
-      upperBoundLineEdit_->setEnabled(true);
-    }
+      upperBoundLineEdit_->setValue(dist->getUpperBound());
+
     truncationParamGroupBox_->setExpanded(true);
   }
   else if (distributionName == "TruncatedNormal")
@@ -448,10 +442,8 @@ void ProbabilisticModelWindow::updateTruncationParametersWidgets(const QModelInd
 
     lowerBoundCheckBox_->setChecked(true);
     upperBoundCheckBox_->setChecked(true);
-    lowerBoundLineEdit_->setText(QString::number(dist->getA()));
-    lowerBoundLineEdit_->setEnabled(true);
-    upperBoundLineEdit_->setText(QString::number(dist->getB()));
-    upperBoundLineEdit_->setEnabled(true);
+    lowerBoundLineEdit_->setValue(dist->getA());
+    upperBoundLineEdit_->setValue(dist->getB());
     truncationParamGroupBox_->setExpanded(true);
   }
   lowerBoundCheckBox_->blockSignals(false);
@@ -519,15 +511,7 @@ void ProbabilisticModelWindow::distributionParametersChanged()
     try
     {
       for (UnsignedInteger i=0; i<parameters.getSize(); ++i)
-      {
-        QString value = parameterValuesEdit_[i]->text();
-        if (value[0].toLower() == 'e' || value.isEmpty() || value.toLower() == "e" || value == "-")
-          throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
-        bool ok;
-        parameters[i] = value.toDouble(&ok);
-        if (!ok)
-          throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
-      }
+        parameters[i] = parameterValuesEdit_[i]->value();
 
       if (parameters == DistributionDictionary::GetParametersCollection(distribution)[parametersType])
         return;
@@ -570,15 +554,7 @@ void ProbabilisticModelWindow::distributionParametersChanged()
     try
     {
       for (UnsignedInteger i=0; i<nbParameters; ++i)
-      {
-        QString value = parameterValuesEdit_[i]->text();
-        if (value[0].toLower() == 'e' || value.isEmpty() || value.toLower() == "e" || value == "-")
-          throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
-        bool ok;
-        parameters[i] = value.toDouble(&ok);
-        if (!ok)
-          throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
-      }
+        parameters[i] = parameterValuesEdit_[i]->value();
 
       if (parameters == DistributionDictionary::GetParametersCollection(inputDistribution)[parametersType])
         return;
@@ -617,22 +593,16 @@ void ProbabilisticModelWindow::truncationParametersChanged()
 
   try
   {
-    QString value = qobject_cast<QLineEdit *>(sender())->text();
-    if (value[0].toLower() == 'e' || value.isEmpty() || value.toLower() == "e" || value == "-")
-      throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
-    bool ok;
-    value.toDouble(&ok);
-    if (!ok)
-      throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
+    qobject_cast<ValueLineEdit *>(sender())->check();
     
     if (inputDistribution.getImplementation()->getClassName() == "TruncatedNormal")
     {
       TruncatedNormal dist = TruncatedNormal(*dynamic_cast<TruncatedNormal*>(&*inputDistribution.getImplementation()));
 
       if (lowerBoundCheckBox_->isChecked())
-        dist.setA(lowerBoundLineEdit_->text().toDouble());
+        dist.setA(lowerBoundLineEdit_->value());
       if (upperBoundCheckBox_->isChecked())
-        dist.setB(upperBoundLineEdit_->text().toDouble());
+        dist.setB(upperBoundLineEdit_->value());
 
       physicalModel_.blockNotification(true);
       physicalModel_.setInputDistribution(input.getName(), dist);
@@ -642,9 +612,9 @@ void ProbabilisticModelWindow::truncationParametersChanged()
     {
       TruncatedDistribution truncatedDistribution = TruncatedDistribution(*dynamic_cast<TruncatedDistribution*>(&*inputDistribution.getImplementation()));
       if (lowerBoundCheckBox_->isChecked())
-        truncatedDistribution.setLowerBound(lowerBoundLineEdit_->text().toDouble());
+        truncatedDistribution.setLowerBound(lowerBoundLineEdit_->value());
       if (upperBoundCheckBox_->isChecked())
-        truncatedDistribution.setUpperBound(upperBoundLineEdit_->text().toDouble());
+        truncatedDistribution.setUpperBound(upperBoundLineEdit_->value());
 
       physicalModel_.blockNotification(true);
       physicalModel_.setInputDistribution(input.getName(), truncatedDistribution);
@@ -677,10 +647,8 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
     // <=> if now the distribution is not truncated
     if (!lowerBoundCheckBox_->isChecked() && !upperBoundCheckBox_->isChecked())
     {
-      lowerBoundLineEdit_->clear();
-      upperBoundLineEdit_->clear();
-      lowerBoundLineEdit_->setEnabled(false);
-      upperBoundLineEdit_->setEnabled(false);
+      lowerBoundLineEdit_->deactivate();
+      upperBoundLineEdit_->deactivate();
       // find the not truncated distribution
       if (distributionName == "TruncatedDistribution")
       {
@@ -744,15 +712,13 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
               lowerBound = truncatureInterval.getUpperBound()[0] - 0.1 * distStd;
           truncatureInterval.setLowerBound(NumericalPoint(1, lowerBound));
           lowerBoundLineEdit_->blockSignals(true);
-          lowerBoundLineEdit_->setText(QString::number(lowerBound));
+          lowerBoundLineEdit_->setValue(lowerBound);
           lowerBoundLineEdit_->blockSignals(false);
-          lowerBoundLineEdit_->setEnabled(true);
           truncatureInterval.setFiniteLowerBound(Interval::BoolCollection(1, true));
         }
         else
         {
-          lowerBoundLineEdit_->clear();
-          lowerBoundLineEdit_->setEnabled(false);
+          lowerBoundLineEdit_->deactivate();
           truncatureInterval.setFiniteLowerBound(Interval::BoolCollection(1, false));
         }
       }
@@ -768,15 +734,13 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
               upperBound = truncatureInterval.getLowerBound()[0] + 0.1 * distStd;
           truncatureInterval.setUpperBound(NumericalPoint(1, upperBound));
           upperBoundLineEdit_->blockSignals(true);
-          upperBoundLineEdit_->setText(QString::number(upperBound));
+          upperBoundLineEdit_->setValue(upperBound);
           upperBoundLineEdit_->blockSignals(false);
-          upperBoundLineEdit_->setEnabled(true);
           truncatureInterval.setFiniteUpperBound(Interval::BoolCollection(1, true));
         }
         else
         {
-          upperBoundLineEdit_->clear();
-          upperBoundLineEdit_->setEnabled(false);
+          upperBoundLineEdit_->deactivate();
           truncatureInterval.setFiniteUpperBound(Interval::BoolCollection(1, false));
         }
       }
