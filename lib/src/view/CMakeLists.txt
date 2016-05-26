@@ -49,6 +49,7 @@ ot_add_source_file ( ReliabilityAnalysisWizard.cxx )
 ot_add_source_file ( MonteCarloReliabilityResultWindow.cxx )
 ot_add_source_file ( CodeDelegate.cxx )
 ot_add_source_file ( DataTableWidget.cxx )
+ot_add_source_file ( ValueLineEdit.cxx )
 
 ot_install_header_file ( MainWindow.hxx )
 ot_install_header_file ( CollapsibleGroupBox.hxx )
@@ -93,6 +94,7 @@ ot_install_header_file ( DeterministicDesignPage.hxx )
 ot_install_header_file ( ProbabilisticDesignPage.hxx )
 ot_install_header_file ( CodeDelegate.hxx )
 ot_install_header_file ( DataTableWidget.hxx )
+ot_install_header_file ( ValueLineEdit.hxx )
 
 qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/CollapsibleGroupBox.hxx
@@ -133,6 +135,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/MonteCarloReliabilityResultWindow.hxx
                                   otgui/CodeDelegate.hxx
                                   otgui/DataTableWidget.hxx
+                                  otgui/ValueLineEdit.hxx
                                   )
 
 
