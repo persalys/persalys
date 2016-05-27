@@ -21,12 +21,12 @@
 #ifndef OTGUI_DATATABLEVIEW_HXX
 #define OTGUI_DATATABLEVIEW_HXX
 
-#include "otgui/OTguiTableView.hxx"
+#include "otgui/CopyableTableView.hxx"
 
 #include "NumericalSample.hxx"
 
 namespace OTGUI {
-class DataTableView : public OTguiTableView
+class DataTableView : public CopyableTableView
 {
   Q_OBJECT
 

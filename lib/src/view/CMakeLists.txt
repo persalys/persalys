@@ -29,7 +29,6 @@ ot_add_source_file ( DesignOfExperimentWizard.cxx )
 ot_add_source_file ( DesignOfExperimentWindow.cxx )
 ot_add_source_file ( StudyTreeView.cxx )
 ot_add_source_file ( DataTableView.cxx )
-ot_add_source_file ( OTguiTableView.cxx )
 ot_add_source_file ( ModelEvaluationWizard.cxx )
 ot_add_source_file ( ModelEvaluationResultWindow.cxx )
 ot_add_source_file ( CentralTendencyWizard.cxx )
@@ -65,7 +64,6 @@ ot_install_header_file ( ProbabilisticModelWindow.hxx )
 ot_install_header_file ( DesignOfExperimentWizard.hxx )
 ot_install_header_file ( DesignOfExperimentWindow.hxx )
 ot_install_header_file ( DataTableView.hxx )
-ot_install_header_file ( OTguiTableView.hxx )
 ot_install_header_file ( ModelEvaluationResultWindow.hxx )
 ot_install_header_file ( MonteCarloResultWindow.hxx )
 ot_install_header_file ( TaylorExpansionMomentsResultWindow.hxx )
@@ -87,7 +85,6 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/ImportTablePage.hxx
                                   otgui/StudyTreeView.hxx
                                   otgui/DataTableView.hxx
-                                  otgui/OTguiTableView.hxx
                                   otgui/DeterministicDesignPage.hxx
                                   otgui/ProbabilisticDesignPage.hxx
                                   otgui/PhysicalModelWindowWidget.hxx

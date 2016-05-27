@@ -26,7 +26,7 @@
 #include "otgui/PlotWidget.hxx"
 #include "otgui/InputTableProbabilisticModel.hxx"
 #include "otgui/CorrelationTableModel.hxx"
-#include "otgui/OTguiTableView.hxx"
+#include "otgui/CopyableTableView.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/ValueLineEdit.hxx"
@@ -87,7 +87,7 @@ private:
   ValueLineEdit * lowerBoundLineEdit_;
   ValueLineEdit * upperBoundLineEdit_;
   CorrelationTableModel * correlationTableModel_;
-  OTguiTableView * correlationTableView_;
+  CopyableTableView * correlationTableView_;
   QLabel * correlationErrorMessage_;
   QList<QTimeLine*> qtimelineList_;
 };

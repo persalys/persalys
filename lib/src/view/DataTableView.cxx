@@ -31,7 +31,7 @@
 namespace OTGUI {
 
 DataTableView::DataTableView(QWidget* parent)
-  : OTguiTableView(parent)
+  : CopyableTableView(parent)
 {
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
@@ -39,7 +39,7 @@ DataTableView::DataTableView(QWidget* parent)
 
 
 DataTableView::DataTableView(const OT::NumericalSample & sample, QWidget *parent)
-  : OTguiTableView(parent)
+  : CopyableTableView(parent)
 {
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));

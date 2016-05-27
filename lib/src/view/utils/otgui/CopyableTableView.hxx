@@ -18,20 +18,20 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_OTGUITABLEVIEW_HXX
-#define OTGUI_OTGUITABLEVIEW_HXX
+#ifndef OTGUI_COPYABLETABLEVIEW_HXX
+#define OTGUI_COPYABLETABLEVIEW_HXX
 
 #include <QTableView>
 
 namespace OTGUI {
 
-class OTguiTableView : public QTableView
+class CopyableTableView : public QTableView
 {
   Q_OBJECT
 
 public:
   /** Default constructor */
-  OTguiTableView(QWidget * parent = 0);
+  CopyableTableView(QWidget * parent = 0);
   
 public slots:
   void copy();
