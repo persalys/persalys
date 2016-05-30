@@ -24,7 +24,6 @@
 #include "NumericalSample.hxx"
 
 #include <QAbstractTableModel>
-#include <QModelIndex>
 
 #include "otgui/OTGuiprivate.hxx"
 
@@ -40,9 +39,10 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
   bool setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role = Qt::EditRole);
 
-  bool exportData(const QString & fileName);
+  void exportData(const QString & fileName);
 
   bool sampleIsValid();
+
 private:
   OT::NumericalSample data_;
   mutable bool sampleIsValid_;

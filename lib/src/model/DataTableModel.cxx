@@ -32,8 +32,8 @@ DataTableModel::DataTableModel(const NumericalSample & data)
   , data_(data)
   , sampleIsValid_(true)
 {
-  for (UnsignedInteger i=0; i<data_.getDimension(); ++i)
-    for (UnsignedInteger j=0; j<data_.getSize(); ++j)
+  for (UnsignedInteger j=0; j<data_.getSize(); ++j)
+    for (UnsignedInteger i=0; i<data_.getDimension(); ++i)
       if (std::isnan(data_[j][i]))
       {
         sampleIsValid_ = false;
@@ -96,22 +96,10 @@ QVariant DataTableModel::data(const QModelIndex & index, int role) const
 }
 
 
-bool DataTableModel::exportData(const QString & fileName)
+void DataTableModel::exportData(const QString & fileName)
 {
-  QFile file(fileName);
-
-  // check
-  if (!file.open(QFile::WriteOnly))
-  {
-//     "cannot open"<<file.fileName();
-    return false;
-  }
-
   // write
   data_.exportToCSVFile(fileName.toLocal8Bit().data());
-  file.close();
-
-  return true;
 }
 
 
