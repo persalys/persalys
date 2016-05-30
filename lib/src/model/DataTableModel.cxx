@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QAbstractTableModel for samples
+ *  @brief QStandardItemModel for samples
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -20,7 +20,6 @@
  */
 #include "otgui/DataTableModel.hxx"
 
-#include <QFile>
 #include <QColor>
 
 using namespace OT;
@@ -28,7 +27,7 @@ using namespace OT;
 namespace OTGUI {
 
 DataTableModel::DataTableModel(const NumericalSample & data)
-  : QAbstractTableModel()
+  : CustomStandardItemModel(data.getSize(), data.getDimension())
   , data_(data)
   , sampleIsValid_(true)
 {
@@ -59,7 +58,7 @@ QVariant DataTableModel::headerData(int section, Qt::Orientation orientation, in
   if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     return QString::fromUtf8(data_.getDescription()[section].c_str());
 
-  return QAbstractTableModel::headerData(section, orientation, role);
+  return QStandardItemModel::headerData(section, orientation, role);
 }
 
 
@@ -73,7 +72,7 @@ bool DataTableModel::setHeaderData(int section, Qt::Orientation orientation, con
     emit headerDataChanged(Qt::Horizontal, section, section);
     return true;
   }
-  return QAbstractTableModel::setHeaderData(section, orientation, value, role);
+  return QStandardItemModel::setHeaderData(section, orientation, value, role);
 }
 
 

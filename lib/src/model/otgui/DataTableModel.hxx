@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QAbstractTableModel for samples
+ *  @brief QStandardItemModel for samples
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -23,12 +23,11 @@
 
 #include "NumericalSample.hxx"
 
-#include <QAbstractTableModel>
-
+#include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class OTGUI_API DataTableModel : public QAbstractTableModel
+class OTGUI_API DataTableModel : public CustomStandardItemModel
 {
 public:
   DataTableModel(const OT::NumericalSample & data);
@@ -39,7 +38,7 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
   bool setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role = Qt::EditRole);
 
-  void exportData(const QString & fileName);
+  virtual void exportData(const QString & fileName);
 
   bool sampleIsValid();
 
