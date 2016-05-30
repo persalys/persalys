@@ -37,5 +37,15 @@ public :
   SignalBlocker(QObject* blockedObject, bool block = true);
   ~SignalBlocker();
 };
+
+class SimpleException : public std::exception
+{
+  const QString text_;
+public :
+  SimpleException(const QString& text);
+  virtual ~SimpleException() throw();
+  QString text() const;
+  virtual const char* what() const throw();
+};
 }
 #endif

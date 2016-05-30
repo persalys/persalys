@@ -22,6 +22,7 @@
 
 namespace OTGUI {
 
+// SignalBlocker class
 SignalBlocker::SignalBlocker(QObject *blockedObject, bool block)
   : blockedObject_(blockedObject)
 {
@@ -32,5 +33,26 @@ SignalBlocker::SignalBlocker(QObject *blockedObject, bool block)
 SignalBlocker::~SignalBlocker()
 {
   blockedObject_->blockSignals(previousBlockingStatus_);
+}
+
+// SimpleException class
+SimpleException::SimpleException(const QString &text)
+  : text_(text)
+{
+}
+
+
+SimpleException::~SimpleException() throw(){}
+
+
+QString SimpleException::text() const
+{
+  return text_;
+}
+
+
+const char *SimpleException::what() const throw()
+{
+  return text_.toStdString().c_str();
 }
 }
