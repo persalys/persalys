@@ -68,6 +68,14 @@ NEW_OTGUIEXCEPTION( AnalysisExecutionFailedException );
  */
 NEW_OTGUIEXCEPTION( InvalidValueException );
 
+
+/**
+ * @class IOException
+ * @brief Raised when using files
+ * @internal
+ */
+NEW_OTGUIEXCEPTION( IOException );
+
 #undef NEW_OTGUIEXCEPTION
 }
 #endif
