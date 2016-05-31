@@ -189,7 +189,8 @@ void PlotWidget::plotCurve(const NumericalSample & data, const QPen pen, QwtPlot
 }
 
 
-void PlotWidget::plotScatter(const NumericalSample & input, const NumericalSample & output, const QPen pen)
+void PlotWidget::plotScatter(const NumericalSample & input, const NumericalSample & output,
+                             const QPen pen, QString Xtitle, QString Ytitle)
 {
   UnsignedInteger size = input.getSize();
 
@@ -209,6 +210,8 @@ void PlotWidget::plotScatter(const NumericalSample & input, const NumericalSampl
   plotCurve(xData, yData, size, pen, QwtPlotCurve::Dots);
   delete[] xData;
   delete[] yData;
+  setAxisTitle(QwtPlot::xBottom, Xtitle);
+  setAxisTitle(QwtPlot::yLeft, Ytitle);
 }
 
 
