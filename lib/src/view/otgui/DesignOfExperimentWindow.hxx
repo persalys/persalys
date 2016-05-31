@@ -39,6 +39,10 @@ class DesignOfExperimentWindow : public OTguiSubWindow
 public:
   DesignOfExperimentWindow(DesignOfExperimentItem * item);
 
+  static QVector<PlotWidget*> GetListScatterPlots(const OT::NumericalSample & inS, const OT::NumericalSample & outS,
+                                                  const QStringList inNames, const QStringList inAxisNames,
+                                                  const QStringList outNames, const QStringList outAxisNames);
+
 protected:
   void buildInterface();
   void addTabsForOutputs();
