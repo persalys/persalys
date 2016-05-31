@@ -42,10 +42,14 @@ public:
 
 protected:
   void buildInterface();
-  void updateResultWidgets(int indexOutput=0);
+  QWidget* getMinMaxTableWidget();
+  QWidget* getMomentsEstimatesTableWidget();
+  QWidget* getPDF_CDFWidget(const OutputCollection & outputs);
+  QWidget* getBoxPlotWidget(const OutputCollection & outputs);
+  QWidget* getScatterPlotsWidget(const OutputCollection & outputs);
 
 public slots:
-  void outputFirstTabChanged(int indexOutput);
+  void updateSpinBoxes(int indexOutput=0);
   void probaValueChanged(double proba);
   void quantileValueChanged(double quantile);
   void showHideGraphConfigurationWidget(int indexTab);
@@ -63,8 +67,6 @@ private:
   GraphConfigurationWidget * scatterPlotsConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
-  NotEditableTableWidget * minMaxTable_;
-  NotEditableTableWidget * momentsEstimationsTable_;
   QDoubleSpinBox * probaSpinBox_;
   QDoubleSpinBox * quantileSpinBox_;
 };

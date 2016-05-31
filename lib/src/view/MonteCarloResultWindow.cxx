@@ -49,8 +49,6 @@ MonteCarloResultWindow::MonteCarloResultWindow(AnalysisItem * item)
   , scatterPlotsConfigurationWidget_(0)
   , plotMatrixConfigurationWidget_(0)
   , plotMatrix_X_X_ConfigurationWidget_(0)
-  , minMaxTable_(0)
-  , momentsEstimationsTable_(0)
   , probaSpinBox_(0)
   , quantileSpinBox_(0)
 {
@@ -61,17 +59,11 @@ MonteCarloResultWindow::MonteCarloResultWindow(AnalysisItem * item)
 
 void MonteCarloResultWindow::buildInterface()
 {
-  // data
-  int nbInputs = result_.getInputSample().getDimension();
-  QStringList inputNames;
-  for (int i=0; i<nbInputs; ++i)
-    inputNames << QString::fromUtf8(physicalModel_.getStochasticInputNames()[i].c_str());
-
-  int nbOutputs = result_.getOutputSample().getDimension();
+  // outputs
   OutputCollection outputs = physicalModel_.getOutputs();
   QStringList outputNames;
-  for (int i=0; i<nbOutputs; ++i)
-    outputNames << QString::fromUtf8(result_.getOutputSample().getDescription()[i].c_str());
+  for (int i=0; i<outputs.getSize(); ++i)
+    outputNames << QString::fromUtf8(outputs[i].getName().c_str());
 
   // tabWidget
   tabWidget_ = new QTabWidget;
@@ -107,7 +99,7 @@ void MonteCarloResultWindow::buildInterface()
     headLayout->addWidget(outputName);
     outputsComboBoxFirstTab_ = new QComboBox;
     outputsComboBoxFirstTab_->addItems(outputNames);
-    connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), this, SLOT(outputFirstTabChanged(int)));
+    connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSpinBoxes(int)));
     headLayout->addWidget(outputsComboBoxFirstTab_);
     headLayout->addStretch();
     tabLayout->addLayout(headLayout);
@@ -121,57 +113,10 @@ void MonteCarloResultWindow::buildInterface()
     vbox->addWidget(nbSimuLabel);
 
     // min/max table
-    QGroupBox * minMaxGroupBox = new QGroupBox(tr("Minimum and Maximum"));
-    QVBoxLayout * minMaxVbox = new QVBoxLayout(minMaxGroupBox);
-
-    minMaxTable_ = new NotEditableTableWidget(nbInputs+1, 4);
-
-    // horizontal header
-    minMaxTable_->setHorizontalHeaderLabels(QStringList() << tr("") << tr("Variable") << tr("Minimum") << tr("Maximum"));
-
-    // vertical header
-    minMaxTable_->createHeaderItem(0, 0, tr("Output"));
-    minMaxTable_->createHeaderItem(1, 0, tr("Inputs at\nextremum"));
-    minMaxTable_->setSpan(1, 0, nbInputs, 1);
-
-    // inputs names
-    for (int i=0; i<nbInputs; ++i)
-      minMaxTable_->createItem(i+1, 1, inputNames[i]);
-
-    minMaxVbox->addWidget(minMaxTable_);
-    vbox->addWidget(minMaxGroupBox);
+    vbox->addWidget(getMinMaxTableWidget());
 
     // moments estimation
-    QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimate"));
-    QVBoxLayout * momentsVbox = new QVBoxLayout(momentsGroupBox);
-
-    int nbColumns = 2;
-    if (isConfidenceIntervalRequired_)
-      nbColumns = 4;
-    momentsEstimationsTable_ = new NotEditableTableWidget(8, nbColumns);
-    momentsEstimationsTable_->horizontalHeader()->hide();
-
-    // vertical header
-    momentsEstimationsTable_->createHeaderItem(0, 0, tr("Estimate"));
-    momentsEstimationsTable_->setSpan(0, 0, 2, 1);
-    momentsEstimationsTable_->createHeaderItem(2, 0, tr("Mean"));
-    momentsEstimationsTable_->createHeaderItem(3, 0, tr("Standard deviation"));
-    momentsEstimationsTable_->createHeaderItem(4, 0, tr("Skewness"));
-    momentsEstimationsTable_->createHeaderItem(5, 0, tr("Kurtosis"));
-    momentsEstimationsTable_->createHeaderItem(6, 0, tr("First quartile"));
-    momentsEstimationsTable_->createHeaderItem(7, 0, tr("Third quartile"));
-
-    // horizontal header
-    momentsEstimationsTable_->createHeaderItem(0, 1, tr("Value"));
-    momentsEstimationsTable_->setSpan(0, 1, 2, 1);
-    if (isConfidenceIntervalRequired_)
-    {
-      momentsEstimationsTable_->createHeaderItem(1, 2, tr("Lower bound"));
-      momentsEstimationsTable_->createHeaderItem(1, 3, tr("Upper bound"));
-    }
-
-    momentsVbox->addWidget(momentsEstimationsTable_);
-    vbox->addWidget(momentsGroupBox);
+    vbox->addWidget(getMomentsEstimatesTableWidget());
 
     // quantiles
     QHBoxLayout * quantLayout = new QHBoxLayout;
@@ -204,7 +149,7 @@ void MonteCarloResultWindow::buildInterface()
     vbox->addStretch();
     tabLayout->addLayout(vbox);
 
-    updateResultWidgets();
+    updateSpinBoxes();
     tab->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     scrollArea->setWidget(tab);
     tabWidget_->addTab(scrollArea, tr("Summary"));
@@ -225,37 +170,7 @@ void MonteCarloResultWindow::buildInterface()
   // if the sample is valid:
   if (resultsSampleIsValid)
   {
-    QStackedLayout * plotLayout = new QStackedLayout(tab);
-
-    QVector<PlotWidget*> listPlotWidgets;
-
-    for (int i=0; i<nbOutputs; ++i)
-    {
-      PlotWidget * plot = new PlotWidget;
-      plot->plotHistogram(result_.getOutputSample().getMarginal(i));
-      plot->plotPDFCurve(result_.getFittedDistribution()[i]);
-      plot->setTitle(tr("PDF: ") + QString::fromUtf8(outputs[i].getName().c_str()));
-      if (outputs[i].getDescription().size())
-        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getDescription().c_str()));
-      else
-        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getName().c_str()));
-      plotLayout->addWidget(plot);
-      listPlotWidgets.append(plot);
-
-      plot = new PlotWidget;
-      plot->plotHistogram(result_.getOutputSample().getMarginal(i), 1);
-      plot->plotCDFCurve(result_.getFittedDistribution()[i]);
-      plot->setTitle(tr("CDF: ") + QString::fromUtf8(outputs[i].getName().c_str()));
-      if (outputs[i].getDescription().size())
-        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getDescription().c_str()));
-      else
-        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getName().c_str()));
-      plotLayout->addWidget(plot);
-      listPlotWidgets.append(plot);
-    }
-
-    pdf_cdfPlotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, QStringList(), outputNames, GraphConfigurationWidget::PDFResult);
-    connect(pdf_cdfPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
+    tab = getPDF_CDFWidget(outputs);
   }
   // if the results sample contains NAN
   else
@@ -274,29 +189,7 @@ void MonteCarloResultWindow::buildInterface()
   // if the sample is valid:
   if (resultsSampleIsValid)
   {
-    QStackedLayout * boxPlotLayout = new QStackedLayout(tab);
-
-    QVector<PlotWidget*> listBoxPlotWidgets;
-
-    for (int i=0; i<nbOutputs; ++i)
-    {
-      PlotWidget * plot = new PlotWidget;
-      double median = result_.getMedian()[i];
-      double Q1 = result_.getFirstQuartile()[i];
-      double Q3 = result_.getThirdQuartile()[i];
-
-      plot->plotBoxPlot(median, Q1, Q3, Q1 - 1.5*(Q3-Q1), Q3 + 1.5*(Q3-Q1), result_.getOutliers()[i]);
-      plot->setTitle(tr("Box plot: ") + QString::fromUtf8(outputs[i].getName().c_str()));
-      if (outputs[i].getDescription().size())
-        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getDescription().c_str()));
-      else
-        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getName().c_str()));
-      boxPlotLayout->addWidget(plot);
-      listBoxPlotWidgets.append(plot);
-    }
-
-    boxPlotsConfigurationWidget_ = new GraphConfigurationWidget(listBoxPlotWidgets, QStringList(), outputNames, GraphConfigurationWidget::BoxPlot);
-    connect(boxPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), boxPlotLayout, SLOT(setCurrentIndex(int)));
+    tab = getBoxPlotWidget(outputs);
   }
   // if the results sample contains NAN
   else
@@ -315,88 +208,7 @@ void MonteCarloResultWindow::buildInterface()
   // if the sample is valid:
   if (resultsSampleIsValid)
   {
-    QStackedLayout * scatterPlotLayout = new QStackedLayout(tab);
-
-    QVector<PlotWidget*> listScatterPlotWidgets;
-
-    for (int j=0; j<nbInputs; ++j)
-    {
-      for (int i=0; i<nbOutputs; ++i)
-      {
-        PlotWidget * plot = new PlotWidget;
-        plot->plotScatter(result_.getInputSample().getMarginal(j), result_.getOutputSample().getMarginal(i));
-        plot->setTitle(tr("Scatter plot: ") + QString::fromUtf8(outputs[i].getName().c_str()) + tr(" vs ") + inputNames[j]);
-        String inputDescription = physicalModel_.getInputByName(inputNames[j].toStdString()).getDescription();
-        if (!inputDescription.empty())
-          plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(inputDescription.c_str()));
-        else
-          plot->setAxisTitle(QwtPlot::xBottom, inputNames[j]);
-        if (outputs[i].getDescription().size())
-          plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getDescription().c_str()));
-        else
-          plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getName().c_str()));
-        scatterPlotLayout->addWidget(plot);
-        listScatterPlotWidgets.append(plot);
-      }
-      for (int i=0; i<nbInputs; ++i)
-      {
-        PlotWidget * plot = new PlotWidget;
-        plot->plotScatter(result_.getInputSample().getMarginal(j), result_.getInputSample().getMarginal(i));
-        plot->setTitle(tr("Scatter plot: ") + inputNames[i] + tr(" vs ") + inputNames[j]);
-        String inputDescription = physicalModel_.getInputByName(inputNames[j].toStdString()).getDescription();
-        if (!inputDescription.empty())
-          plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(inputDescription.c_str()));
-        else
-          plot->setAxisTitle(QwtPlot::xBottom, inputNames[j]);
-        inputDescription = physicalModel_.getInputByName(inputNames[i].toStdString()).getDescription();
-        if (!inputDescription.empty())
-          plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(inputDescription.c_str()));
-        else
-          plot->setAxisTitle(QwtPlot::yLeft, inputNames[i]);
-        scatterPlotLayout->addWidget(plot);
-        listScatterPlotWidgets.append(plot);
-      }
-    }
-    for (int j=0; j<nbOutputs; ++j)
-    {
-      for (int i=0; i<nbOutputs; ++i)
-      {
-        PlotWidget * plot = new PlotWidget;
-        plot->plotScatter(result_.getOutputSample().getMarginal(j), result_.getOutputSample().getMarginal(i));
-        plot->setTitle(tr("Scatter plot: ") + QString::fromUtf8(outputs[i].getName().c_str()) + tr(" vs ") + QString::fromUtf8(outputs[j].getName().c_str()));
-        if (outputs[j].getDescription().size())
-          plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getDescription().c_str()));
-        else
-          plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getName().c_str()));
-        if (outputs[i].getDescription().size())
-          plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getDescription().c_str()));
-        else
-          plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getName().c_str()));
-        scatterPlotLayout->addWidget(plot);
-        listScatterPlotWidgets.append(plot);
-      }
-      for (int i=0; i<nbInputs; ++i)
-      {
-        PlotWidget * plot = new PlotWidget;
-        plot->plotScatter(result_.getOutputSample().getMarginal(j), result_.getInputSample().getMarginal(i));
-        plot->setTitle(tr("Scatter plot: ") + inputNames[i] + tr(" vs ") + QString::fromUtf8(outputs[j].getName().c_str()));
-        if (outputs[j].getDescription().size())
-          plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getDescription().c_str()));
-        else
-          plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getName().c_str()));
-        String inputDescription = physicalModel_.getInputByName(inputNames[i].toStdString()).getDescription();
-        if (!inputDescription.empty())
-          plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(inputDescription.c_str()));
-        else
-          plot->setAxisTitle(QwtPlot::yLeft, inputNames[i]);
-
-        scatterPlotLayout->addWidget(plot);
-        listScatterPlotWidgets.append(plot);
-      }
-    }
-
-    scatterPlotsConfigurationWidget_ = new GraphConfigurationWidget(listScatterPlotWidgets, inputNames, outputNames, GraphConfigurationWidget::Scatter);
-    connect(scatterPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), scatterPlotLayout, SLOT(setCurrentIndex(int)));
+    tab = getScatterPlotsWidget(outputs);
   }
   // if the results sample contains NAN
   else
@@ -441,102 +253,360 @@ void MonteCarloResultWindow::buildInterface()
 }
 
 
-void MonteCarloResultWindow::updateResultWidgets(int indexOutput)
+QWidget* MonteCarloResultWindow::getMinMaxTableWidget()
 {
-  // -- minMaxTable_ --
+  QStringList stochInputNames;
+  for (int i=0; i<physicalModel_.getStochasticInputNames().getSize(); ++i)
+    stochInputNames << QString::fromUtf8(physicalModel_.getStochasticInputNames()[i].c_str());
+  int nbInputs = stochInputNames.size();
+  int nbOutputs = result_.getOutputSample().getDimension();
 
-  // output name
-  minMaxTable_->createItem(0, 1, outputsComboBoxFirstTab_->currentText());
-  // min
-  const double min = result_.getOutputSample().getMin()[indexOutput];
-  minMaxTable_->createItem(0, 2, min);
-  // max
-  const double max = result_.getOutputSample().getMax()[indexOutput];
-  minMaxTable_->createItem(0, 3, max);
+  QGroupBox * minMaxGroupBox = new QGroupBox(tr("Minimum and Maximum"));
+  QVBoxLayout * minMaxGroupBoxLayout = new QVBoxLayout(minMaxGroupBox);
+  QStackedLayout * minMaxGroupBoxStackedLayout = new QStackedLayout;
 
-  // Xmin/XMax
-  if (result_.getListXMin()[indexOutput].getSize() > 1)
+  for (int indexOutput=0; indexOutput<nbOutputs; ++indexOutput)
   {
-    minMaxTable_->horizontalHeaderItem(2)->setIcon(QIcon(":/images/task-attention.png"));
-    minMaxTable_->horizontalHeaderItem(2)->setToolTip(tr("Information: The output is minimum at another point."));
-  }
-  if (result_.getListXMax()[indexOutput].getSize() > 1)
-  {
-    minMaxTable_->horizontalHeaderItem(3)->setIcon(QIcon(":/images/task-attention.png"));
-    minMaxTable_->horizontalHeaderItem(3)->setToolTip(tr("Information: The output is maximum at another point."));
-  }
-  for (UnsignedInteger i=0; i<result_.getInputSample().getDimension(); ++i)
-  {
-    // XMin
-    minMaxTable_->createItem(i+1, 2, result_.getListXMin()[indexOutput][0][i]);
-    // XMax
-    minMaxTable_->createItem(i+1, 3, result_.getListXMax()[indexOutput][0][i]);
-  }
+    NotEditableTableWidget * minMaxTable = new NotEditableTableWidget(nbInputs+1, 4);
 
-  // resize table
-  minMaxTable_->resizeToContents();
+    // horizontal header
+    minMaxTable->setHorizontalHeaderLabels(QStringList() << tr("") << tr("Variable") << tr("Minimum") << tr("Maximum"));
 
-  // -- momentsEstimationsTable_ --
+    // vertical header
+    minMaxTable->createHeaderItem(0, 0, tr("Output"));
+    minMaxTable->createHeaderItem(1, 0, tr("Inputs at\nextremum"));
+    minMaxTable->setSpan(1, 0, nbInputs, 1);
 
-  // Mean
-  momentsEstimationsTable_->createItem(2, 1, result_.getMean()[indexOutput]);
+    // inputs names
+    for (int i=0; i<nbInputs; ++i)
+      minMaxTable->createItem(i+1, 1, stochInputNames[i]);
 
-  if (isConfidenceIntervalRequired_)
-  {
-    double meanCILowerBound = result_.getMeanConfidenceInterval(levelConfidenceInterval_).getLowerBound()[indexOutput];
-    momentsEstimationsTable_->createItem(2, 2, meanCILowerBound);
-    double meanCIUpperBound = result_.getMeanConfidenceInterval(levelConfidenceInterval_).getUpperBound()[indexOutput];
-    momentsEstimationsTable_->createItem(2, 3, meanCIUpperBound);
-  }
-  // Standard Deviation
-  momentsEstimationsTable_->createItem(3, 1, result_.getStandardDeviation()[indexOutput]);
+      // output name
+    minMaxTable->createItem(0, 1, outputsComboBoxFirstTab_->currentText());
+    // min
+    const double min = result_.getOutputSample().getMin()[indexOutput];
+    minMaxTable->createItem(0, 2, min);
+    // max
+    const double max = result_.getOutputSample().getMax()[indexOutput];
+    minMaxTable->createItem(0, 3, max);
 
-  if (isConfidenceIntervalRequired_)
-  {
-    double stdCILowerBound = result_.getStdConfidenceInterval(levelConfidenceInterval_).getLowerBound()[indexOutput];
-    momentsEstimationsTable_->createItem(3, 2, stdCILowerBound);
-    double stdCIUpperBound = result_.getStdConfidenceInterval(levelConfidenceInterval_).getUpperBound()[indexOutput];
-    momentsEstimationsTable_->createItem(3, 3, stdCIUpperBound);
-  }
-  // Skewness
-  momentsEstimationsTable_->createItem(4, 1, result_.getSkewness()[indexOutput]);
-  // Kurtosis
-  momentsEstimationsTable_->createItem(5, 1, result_.getKurtosis()[indexOutput]);
-  // First quartile
-  momentsEstimationsTable_->createItem(6, 1, result_.getFirstQuartile()[indexOutput]);
-  // Third quartile
-  momentsEstimationsTable_->createItem(7, 1, result_.getThirdQuartile()[indexOutput]);
-
-  // resize table
-  int titleWidth = 0;
-  if (isConfidenceIntervalRequired_)
-  {
-    momentsEstimationsTable_->createHeaderItem(0, 2, tr("Confidence interval at ") + QString::number(levelConfidenceInterval_*100) + "%");
-    momentsEstimationsTable_->resizeColumnsToContents();
-    titleWidth = momentsEstimationsTable_->horizontalHeader()->sectionSize(2);
-
-    // first: clear item at (0,2) because the text is to wide:
-    // resizeColumnsToContents takes into account the text of item at (0,2)
-    // to resize the column 2, even if there is a setSpan(0, 2, 1, 2)
-    momentsEstimationsTable_->setItem(0, 2, new QTableWidgetItem);
-  }
-
-  momentsEstimationsTable_->resizeToContents();
-
-  if (isConfidenceIntervalRequired_)
-  {
-    momentsEstimationsTable_->createHeaderItem(0, 2, tr("Confidence interval at ") + QString::number(levelConfidenceInterval_*100) + "%");
-    momentsEstimationsTable_->setSpan(0, 2, 1, 2);
-    int subTitlesWidth = momentsEstimationsTable_->horizontalHeader()->sectionSize(2) + momentsEstimationsTable_->horizontalHeader()->sectionSize(3);
-    int widthCorrection = titleWidth - subTitlesWidth;
-    if (widthCorrection > 0)
+    // Xmin/XMax
+    if (result_.getListXMin()[indexOutput].getSize() > 1)
     {
-      momentsEstimationsTable_->horizontalHeader()->resizeSection(3, momentsEstimationsTable_->horizontalHeader()->sectionSize(3) + widthCorrection);
-      momentsEstimationsTable_->setMinimumWidth(momentsEstimationsTable_->minimumWidth() + widthCorrection);
+      minMaxTable->horizontalHeaderItem(2)->setIcon(QIcon(":/images/task-attention.png"));
+      minMaxTable->horizontalHeaderItem(2)->setToolTip(tr("Information: The output is minimum at another point."));
+    }
+    if (result_.getListXMax()[indexOutput].getSize() > 1)
+    {
+      minMaxTable->horizontalHeaderItem(3)->setIcon(QIcon(":/images/task-attention.png"));
+      minMaxTable->horizontalHeaderItem(3)->setToolTip(tr("Information: The output is maximum at another point."));
+    }
+    for (UnsignedInteger i=0; i<result_.getInputSample().getDimension(); ++i)
+    {
+      // XMin
+      minMaxTable->createItem(i+1, 2, result_.getListXMin()[indexOutput][0][i]);
+      // XMax
+      minMaxTable->createItem(i+1, 3, result_.getListXMax()[indexOutput][0][i]);
+    }
+
+    // resize table
+    minMaxTable->resizeToContents();
+
+    minMaxGroupBoxStackedLayout->addWidget(minMaxTable);
+  }
+  minMaxGroupBoxLayout->addLayout(minMaxGroupBoxStackedLayout);
+  connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), minMaxGroupBoxStackedLayout, SLOT(setCurrentIndex(int)));
+
+  return minMaxGroupBox;
+}
+
+
+QWidget* MonteCarloResultWindow::getMomentsEstimatesTableWidget()
+{
+  int nbOutputs = result_.getOutputSample().getDimension();
+
+  QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimate"));
+  QVBoxLayout * momentsGroupBoxLayout = new QVBoxLayout(momentsGroupBox);
+  QStackedLayout * momentsGroupBoxStackedLayout = new QStackedLayout;
+
+  int nbColumns = 2;
+  if (isConfidenceIntervalRequired_)
+    nbColumns = 4;
+
+  for (int indexOutput=0; indexOutput<nbOutputs; ++indexOutput)
+  {
+    NotEditableTableWidget * momentsEstimationsTable = new NotEditableTableWidget(8, nbColumns);
+    momentsEstimationsTable->horizontalHeader()->hide();
+
+    // vertical header
+    momentsEstimationsTable->createHeaderItem(0, 0, tr("Estimate"));
+    momentsEstimationsTable->setSpan(0, 0, 2, 1);
+    momentsEstimationsTable->createHeaderItem(2, 0, tr("Mean"));
+    momentsEstimationsTable->createHeaderItem(3, 0, tr("Standard deviation"));
+    momentsEstimationsTable->createHeaderItem(4, 0, tr("Skewness"));
+    momentsEstimationsTable->createHeaderItem(5, 0, tr("Kurtosis"));
+    momentsEstimationsTable->createHeaderItem(6, 0, tr("First quartile"));
+    momentsEstimationsTable->createHeaderItem(7, 0, tr("Third quartile"));
+
+    // horizontal header
+    momentsEstimationsTable->createHeaderItem(0, 1, tr("Value"));
+    momentsEstimationsTable->setSpan(0, 1, 2, 1);
+    if (isConfidenceIntervalRequired_)
+    {
+      momentsEstimationsTable->createHeaderItem(1, 2, tr("Lower bound"));
+      momentsEstimationsTable->createHeaderItem(1, 3, tr("Upper bound"));
+    }
+    // Mean
+    momentsEstimationsTable->createItem(2, 1, result_.getMean()[indexOutput]);
+
+    if (isConfidenceIntervalRequired_)
+    {
+      const double meanCILowerBound = result_.getMeanConfidenceInterval(levelConfidenceInterval_).getLowerBound()[indexOutput];
+      momentsEstimationsTable->createItem(2, 2, meanCILowerBound);
+      const double meanCIUpperBound = result_.getMeanConfidenceInterval(levelConfidenceInterval_).getUpperBound()[indexOutput];
+      momentsEstimationsTable->createItem(2, 3, meanCIUpperBound);
+    }
+    // Standard Deviation
+    momentsEstimationsTable->createItem(3, 1, result_.getStandardDeviation()[indexOutput]);
+
+    if (isConfidenceIntervalRequired_)
+    {
+      const double stdCILowerBound = result_.getStdConfidenceInterval(levelConfidenceInterval_).getLowerBound()[indexOutput];
+      momentsEstimationsTable->createItem(3, 2, stdCILowerBound);
+      const double stdCIUpperBound = result_.getStdConfidenceInterval(levelConfidenceInterval_).getUpperBound()[indexOutput];
+      momentsEstimationsTable->createItem(3, 3, stdCIUpperBound);
+    }
+    // Skewness
+    momentsEstimationsTable->createItem(4, 1, result_.getSkewness()[indexOutput]);
+    // Kurtosis
+    momentsEstimationsTable->createItem(5, 1, result_.getKurtosis()[indexOutput]);
+    // First quartile
+    momentsEstimationsTable->createItem(6, 1, result_.getFirstQuartile()[indexOutput]);
+    // Third quartile
+    momentsEstimationsTable->createItem(7, 1, result_.getThirdQuartile()[indexOutput]);
+
+    // resize table
+    int titleWidth = 0;
+    if (isConfidenceIntervalRequired_)
+    {
+      momentsEstimationsTable->createHeaderItem(0, 2, tr("Confidence interval at ") + QString::number(levelConfidenceInterval_*100) + "%");
+      momentsEstimationsTable->resizeColumnsToContents();
+      titleWidth = momentsEstimationsTable->horizontalHeader()->sectionSize(2);
+
+      // first: clear item at (0,2) because the text is to wide:
+      // resizeColumnsToContents takes into account the text of item at (0,2)
+      // to resize the column 2, even if there is a setSpan(0, 2, 1, 2)
+      momentsEstimationsTable->setItem(0, 2, new QTableWidgetItem);
+    }
+
+    momentsEstimationsTable->resizeToContents();
+
+    if (isConfidenceIntervalRequired_)
+    {
+      momentsEstimationsTable->createHeaderItem(0, 2, tr("Confidence interval at ") + QString::number(levelConfidenceInterval_*100) + "%");
+      momentsEstimationsTable->setSpan(0, 2, 1, 2);
+      const int subTitlesWidth = momentsEstimationsTable->horizontalHeader()->sectionSize(2) + momentsEstimationsTable->horizontalHeader()->sectionSize(3);
+      const int widthCorrection = titleWidth - subTitlesWidth;
+      if (widthCorrection > 0)
+      {
+        momentsEstimationsTable->horizontalHeader()->resizeSection(3, momentsEstimationsTable->horizontalHeader()->sectionSize(3) + widthCorrection);
+        momentsEstimationsTable->setMinimumWidth(momentsEstimationsTable->minimumWidth() + widthCorrection);
+      }
+    }
+    momentsGroupBoxStackedLayout->addWidget(momentsEstimationsTable);
+  }
+  momentsGroupBoxLayout->addLayout(momentsGroupBoxStackedLayout);
+  connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), momentsGroupBoxStackedLayout, SLOT(setCurrentIndex(int))); 
+
+  return momentsGroupBox;
+}
+
+
+QWidget* MonteCarloResultWindow::getPDF_CDFWidget(const OutputCollection & outputs)
+{
+  QStringList outputNames;
+  for (int i=0; i<outputs.getSize(); ++i)
+    outputNames << QString::fromUtf8(outputs[i].getName().c_str());
+
+  QWidget * tab = new QWidget;
+  QStackedLayout * plotLayout = new QStackedLayout(tab);
+
+  QVector<PlotWidget*> listPlotWidgets;
+
+  for (int i=0; i<outputs.getSize(); ++i)
+  {
+    PlotWidget * plot = new PlotWidget;
+
+    // PDF
+    plot->plotHistogram(result_.getOutputSample().getMarginal(i));
+    plot->plotPDFCurve(result_.getFittedDistribution()[i]);
+    plot->setTitle(tr("PDF: ") + QString::fromUtf8(outputs[i].getName().c_str()));
+    if (outputs[i].getDescription().size())
+      plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getDescription().c_str()));
+    else
+      plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getName().c_str()));
+
+    plotLayout->addWidget(plot);
+    listPlotWidgets.append(plot);
+
+    // CDF
+    plot = new PlotWidget;
+    plot->plotHistogram(result_.getOutputSample().getMarginal(i), 1);
+    plot->plotCDFCurve(result_.getFittedDistribution()[i]);
+    plot->setTitle(tr("CDF: ") + QString::fromUtf8(outputs[i].getName().c_str()));
+    if (outputs[i].getDescription().size())
+      plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getDescription().c_str()));
+    else
+      plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getName().c_str()));
+
+    plotLayout->addWidget(plot);
+    listPlotWidgets.append(plot);
+  }
+
+  pdf_cdfPlotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, QStringList(), outputNames, GraphConfigurationWidget::PDFResult);
+  connect(pdf_cdfPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
+
+  return tab;
+}
+
+
+QWidget* MonteCarloResultWindow::getBoxPlotWidget(const OutputCollection & outputs)
+{
+  QStringList outputNames;
+  for (int i=0; i<outputs.getSize(); ++i)
+    outputNames << QString::fromUtf8(outputs[i].getName().c_str());
+
+  QWidget * tab = new QWidget;
+  QStackedLayout * boxPlotLayout = new QStackedLayout(tab);
+
+  QVector<PlotWidget*> listBoxPlotWidgets;
+
+  for (int i=0; i<outputs.getSize(); ++i)
+  {
+    PlotWidget * plot = new PlotWidget;
+
+    double median = result_.getMedian()[i];
+    double Q1 = result_.getFirstQuartile()[i];
+    double Q3 = result_.getThirdQuartile()[i];
+    plot->plotBoxPlot(median, Q1, Q3, Q1 - 1.5*(Q3-Q1), Q3 + 1.5*(Q3-Q1), result_.getOutliers()[i]);
+    plot->setTitle(tr("Box plot: ") + QString::fromUtf8(outputs[i].getName().c_str()));
+    if (outputs[i].getDescription().size())
+      plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getDescription().c_str()));
+    else
+      plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getName().c_str()));
+
+    boxPlotLayout->addWidget(plot);
+    listBoxPlotWidgets.append(plot);
+  }
+
+  boxPlotsConfigurationWidget_ = new GraphConfigurationWidget(listBoxPlotWidgets, QStringList(), outputNames, GraphConfigurationWidget::BoxPlot);
+  connect(boxPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), boxPlotLayout, SLOT(setCurrentIndex(int)));
+
+  return tab;
+}
+
+
+QWidget* MonteCarloResultWindow::getScatterPlotsWidget(const OutputCollection & outputs)
+{
+  QStringList stochInputNames;
+  for (int i=0; i<physicalModel_.getStochasticInputNames().getSize(); ++i)
+    stochInputNames << QString::fromUtf8(physicalModel_.getStochasticInputNames()[i].c_str());
+  QStringList outputNames;
+  for (int i=0; i<outputs.getSize(); ++i)
+    outputNames << QString::fromUtf8(outputs[i].getName().c_str());
+
+  QWidget * tab = new QWidget;
+  QStackedLayout * scatterPlotLayout = new QStackedLayout(tab);
+
+  QVector<PlotWidget*> listScatterPlotWidgets;
+
+  for (int j=0; j<stochInputNames.size(); ++j)
+  {
+    for (int i=0; i<outputs.getSize(); ++i)
+    {
+      PlotWidget * plot = new PlotWidget;
+      plot->plotScatter(result_.getInputSample().getMarginal(j), result_.getOutputSample().getMarginal(i));
+      plot->setTitle(tr("Scatter plot: ") + QString::fromUtf8(outputs[i].getName().c_str()) + tr(" vs ") + stochInputNames[j]);
+      String inputDescription = physicalModel_.getInputByName(stochInputNames[j].toStdString()).getDescription();
+      if (!inputDescription.empty())
+        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(inputDescription.c_str()));
+      else
+        plot->setAxisTitle(QwtPlot::xBottom, stochInputNames[j]);
+      if (outputs[i].getDescription().size())
+        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getDescription().c_str()));
+      else
+        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getName().c_str()));
+      scatterPlotLayout->addWidget(plot);
+      listScatterPlotWidgets.append(plot);
+    }
+    for (int i=0; i<stochInputNames.size(); ++i)
+    {
+      PlotWidget * plot = new PlotWidget;
+      plot->plotScatter(result_.getInputSample().getMarginal(j), result_.getInputSample().getMarginal(i));
+      plot->setTitle(tr("Scatter plot: ") + stochInputNames[i] + tr(" vs ") + stochInputNames[j]);
+      String inputDescription = physicalModel_.getInputByName(stochInputNames[j].toStdString()).getDescription();
+      if (!inputDescription.empty())
+        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(inputDescription.c_str()));
+      else
+        plot->setAxisTitle(QwtPlot::xBottom, stochInputNames[j]);
+      inputDescription = physicalModel_.getInputByName(stochInputNames[i].toStdString()).getDescription();
+      if (!inputDescription.empty())
+        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(inputDescription.c_str()));
+      else
+        plot->setAxisTitle(QwtPlot::yLeft, stochInputNames[i]);
+      scatterPlotLayout->addWidget(plot);
+      listScatterPlotWidgets.append(plot);
+    }
+  }
+  for (int j=0; j<outputs.getSize(); ++j)
+  {
+    for (int i=0; i<outputs.getSize(); ++i)
+    {
+      PlotWidget * plot = new PlotWidget;
+      plot->plotScatter(result_.getOutputSample().getMarginal(j), result_.getOutputSample().getMarginal(i));
+      plot->setTitle(tr("Scatter plot: ") + QString::fromUtf8(outputs[i].getName().c_str()) + tr(" vs ") + QString::fromUtf8(outputs[j].getName().c_str()));
+      if (outputs[j].getDescription().size())
+        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getDescription().c_str()));
+      else
+        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getName().c_str()));
+      if (outputs[i].getDescription().size())
+        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getDescription().c_str()));
+      else
+        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getName().c_str()));
+      scatterPlotLayout->addWidget(plot);
+      listScatterPlotWidgets.append(plot);
+    }
+    for (int i=0; i<stochInputNames.size(); ++i)
+    {
+      PlotWidget * plot = new PlotWidget;
+      plot->plotScatter(result_.getOutputSample().getMarginal(j), result_.getInputSample().getMarginal(i));
+      plot->setTitle(tr("Scatter plot: ") + stochInputNames[i] + tr(" vs ") + QString::fromUtf8(outputs[j].getName().c_str()));
+      if (outputs[j].getDescription().size())
+        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getDescription().c_str()));
+      else
+        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getName().c_str()));
+      String inputDescription = physicalModel_.getInputByName(stochInputNames[i].toStdString()).getDescription();
+      if (!inputDescription.empty())
+        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(inputDescription.c_str()));
+      else
+        plot->setAxisTitle(QwtPlot::yLeft, stochInputNames[i]);
+
+      scatterPlotLayout->addWidget(plot);
+      listScatterPlotWidgets.append(plot);
     }
   }
 
-  // -- quantiles --
+  scatterPlotsConfigurationWidget_ = new GraphConfigurationWidget(listScatterPlotWidgets, stochInputNames, outputNames, GraphConfigurationWidget::Scatter);
+  connect(scatterPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), scatterPlotLayout, SLOT(setCurrentIndex(int)));
+
+  return tab;
+}
+
+
+void MonteCarloResultWindow::updateSpinBoxes(int indexOutput)
+{
+  const double min = result_.getOutputSample().getMin()[indexOutput];
+  const double max = result_.getOutputSample().getMax()[indexOutput];
   quantileSpinBox_->setMinimum(min);
   quantileSpinBox_->setMaximum(max);
   quantileSpinBox_->setSingleStep((max-min)/100);
@@ -563,13 +633,6 @@ void MonteCarloResultWindow::quantileValueChanged(double quantile)
       cdf += p;
 
   probaSpinBox_->setValue(cdf);
-}
-
-
-void MonteCarloResultWindow::outputFirstTabChanged(int indexOutput)
-{
-  updateResultWidgets(indexOutput);
-  probaValueChanged(0.5);
 }
 
 
