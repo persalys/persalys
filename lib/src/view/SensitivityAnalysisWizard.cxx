@@ -37,7 +37,6 @@ SensitivityAnalysisWizard::SensitivityAnalysisWizard(OTStudy * otStudy, const Ph
   : OTguiWizard()
   , analysis_(SobolAnalysis(otStudy->getAvailableAnalysisName("sensitivity_"), physicalModel))
   , otStudy_(otStudy)
-  , physicalModel_(physicalModel)
 {
   buildInterface();
 }
@@ -46,7 +45,6 @@ SensitivityAnalysisWizard::SensitivityAnalysisWizard(OTStudy * otStudy, const Ph
 SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis & analysis)
   : OTguiWizard()
   , analysis_(analysis)
-  , physicalModel_(analysis_.getPhysicalModel())
 {
   buildInterface();
 }
@@ -104,7 +102,7 @@ void SensitivityAnalysisWizard::buildInterface()
   QLabel * totalNbSimuLabel = new QLabel(tr("Total number of simulations"));
   // total nb simu: N=n*(d+2)
   // n = nb inputs; d=sample size
-  double nbSimu = physicalModel_.getInputs().getSize() * (sampleSizeSpinbox_->value() + 2);
+  double nbSimu = analysis_.getPhysicalModel().getInputs().getSize() * (sampleSizeSpinbox_->value() + 2);
   totalNbSimuLabel_ = new QLabel(QString::number(nbSimu));
   nbSimuLayout->addWidget(totalNbSimuLabel);
   nbSimuLayout->addWidget(totalNbSimuLabel_);
@@ -176,7 +174,7 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
     {
       if (analysis_.getImplementation()->getClassName() == "SRCAnalysis")
       {
-        analysis_ = SobolAnalysis(analysis_.getName(), physicalModel_);
+        analysis_ = SobolAnalysis(analysis_.getName(), analysis_.getPhysicalModel());
         emit analysisChanged(analysis_);
       }
       break;
@@ -185,7 +183,7 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
     {
       if (analysis_.getImplementation()->getClassName() == "SobolAnalysis")
       {
-        analysis_ = SRCAnalysis(analysis_.getName(), physicalModel_);
+        analysis_ = SRCAnalysis(analysis_.getName(), analysis_.getPhysicalModel());
         emit analysisChanged(analysis_);
       }
       break;
@@ -202,7 +200,7 @@ void SensitivityAnalysisWizard::sampleSizeChanged(int sampleSize)
 {
   // total nb simu: N=n*(d+2)
   // n = nb inputs; d=sample size
-  int nbSimu = physicalModel_.getInputs().getSize() * (sampleSize + 2);
+  int nbSimu = analysis_.getPhysicalModel().getInputs().getSize() * (sampleSize + 2);
   totalNbSimuLabel_->setText(QString::number(nbSimu));
   dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->setNbSimulations(sampleSize);
 }

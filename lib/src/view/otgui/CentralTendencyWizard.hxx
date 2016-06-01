@@ -55,7 +55,6 @@ public slots:
 private:
   Analysis analysis_;
   OTStudy * otStudy_;
-  PhysicalModel physicalModel_;
 
   QButtonGroup * methodGroup_;
   QWidget * monteCarloWidget_;

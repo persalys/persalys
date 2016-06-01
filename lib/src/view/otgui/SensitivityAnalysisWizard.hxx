@@ -56,7 +56,6 @@ signals:
 private:
   Analysis analysis_;
   OTStudy * otStudy_;
-  PhysicalModel physicalModel_;
 
   QButtonGroup * methodGroup_;
   QSpinBox * sampleSizeSpinbox_;

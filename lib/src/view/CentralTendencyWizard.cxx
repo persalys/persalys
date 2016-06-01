@@ -38,7 +38,6 @@ CentralTendencyWizard::CentralTendencyWizard(OTStudy * otStudy, const PhysicalMo
   : OTguiWizard()
   , analysis_(MonteCarloAnalysis(otStudy->getAvailableAnalysisName("centralTendency_"), physicalModel))
   , otStudy_(otStudy)
-  , physicalModel_(physicalModel)
 {
   buildInterface();
 }
@@ -47,7 +46,6 @@ CentralTendencyWizard::CentralTendencyWizard(OTStudy * otStudy, const PhysicalMo
 CentralTendencyWizard::CentralTendencyWizard(const Analysis & analysis)
   : OTguiWizard()
   , analysis_(analysis)
-  , physicalModel_(analysis_.getPhysicalModel())
 {
   buildInterface();
 }
@@ -169,7 +167,7 @@ void CentralTendencyWizard::updateMethodWidgets()
       TaylorExpansionsWidget_->hide();
       if (analysis_.getImplementation()->getClassName() == "TaylorExpansionMomentsAnalysis")
       {
-        analysis_ = MonteCarloAnalysis(analysis_.getName(), physicalModel_);
+        analysis_ = MonteCarloAnalysis(analysis_.getName(), analysis_.getPhysicalModel());
         emit analysisChanged(analysis_);
       }
       nbSimuSpinbox_->setValue(dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->getNbSimulations());
@@ -181,7 +179,7 @@ void CentralTendencyWizard::updateMethodWidgets()
       TaylorExpansionsWidget_->show();
       if (analysis_.getImplementation()->getClassName() == "MonteCarloAnalysis")
       {
-        analysis_ = TaylorExpansionMomentsAnalysis(analysis_.getName(), physicalModel_);
+        analysis_ = TaylorExpansionMomentsAnalysis(analysis_.getName(), analysis_.getPhysicalModel());
         emit analysisChanged(analysis_);
       }
       break;
