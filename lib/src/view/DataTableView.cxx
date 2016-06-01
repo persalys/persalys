@@ -39,15 +39,6 @@ DataTableView::DataTableView(QWidget* parent)
 }
 
 
-DataTableView::DataTableView(const OT::NumericalSample & sample, QWidget *parent)
-  : CopyableTableView(parent)
-{
-  setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
-  setModel(new SampleTableModel(sample));
-}
-
-
 // show the context menu when right clicking
 void DataTableView::contextMenu(const QPoint & pos)
 {

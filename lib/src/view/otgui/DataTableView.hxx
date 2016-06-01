@@ -32,7 +32,6 @@ class DataTableView : public CopyableTableView
 
 public:
   DataTableView(QWidget * parent=0);
-  DataTableView(const OT::NumericalSample & sample, QWidget * parent=0);
 
 public slots:
   void contextMenu(const QPoint & pos);

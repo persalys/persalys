@@ -76,12 +76,14 @@ void MonteCarloResultWindow::buildInterface()
 
   NumericalSample sample = result_.getInputSample();
   sample.stack(result_.getOutputSample());
-  DataTableView * tabResultView = new DataTableView(sample);
+  DataTableView * tabResultView = new DataTableView;
+  SampleTableModel * tabResultModel = new SampleTableModel(sample);
+  tabResultView->setModel(tabResultModel);
   tabLayout->addWidget(tabResultView);
 
   tabWidget_->addTab(tab, tr("Result table"));
 
-  const bool resultsSampleIsValid = dynamic_cast<SampleTableModel*>(tabResultView->model())->sampleIsValid();
+  const bool resultsSampleIsValid = tabResultModel->sampleIsValid();
 
   // second tab: Summary -----------------------------
 
