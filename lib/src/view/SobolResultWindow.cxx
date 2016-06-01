@@ -19,8 +19,9 @@
  *
  */
 #include "otgui/SobolResultWindow.hxx"
-#include "otgui/DataTableWidget.hxx"
 #include "otgui/SobolAnalysis.hxx"
+#include "otgui/CopyableTableView.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
 
 #include <QVBoxLayout>
 #include <QHeaderView>
@@ -93,39 +94,36 @@ void SobolResultWindow::buildInterface()
     QString warningMessage;
 
     // table of indices
-    QTableWidget * table = new DataTableWidget(inputNames.getSize(), 3, this);
-    table->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("First order index") << tr("Total order index"));
+    CopyableTableView * table = new CopyableTableView;
+    table->verticalHeader()->hide();
 #if QT_VERSION >= 0x050000
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 #else
     table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 #endif
+    CustomStandardItemModel * model = new CustomStandardItemModel(inputNames.getSize(), 3);
+    model->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("First order index") << tr("Total order index"));
+    table->setModel(model);
 
     // fill table
     for (UnsignedInteger j=0; j<inputNames.getSize(); ++j)
     {
-      QTableWidgetItem * item = new QTableWidgetItem(inputNames[j].c_str());
-      item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-      table->setItem(j, 0, item);
+      model->setNotEditableItem(j, 0, inputNames[j].c_str());
+      model->setNotEditableItem(j, 1, firstOrderIndices_i[j]);
+      model->setNotEditableItem(j, 2, totalOrderIndices_i[j]);
 
-      item = new QTableWidgetItem(QString::number(firstOrderIndices_i[j], 'g', 4));
-      item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-      table->setItem(j, 1, item);
-
-      item = new QTableWidgetItem(QString::number(totalOrderIndices_i[j], 'g', 4));
       if (totalOrderIndices_i[j] < firstOrderIndices_i[j])
       {
-        item->setToolTip(tr("Warning: The total order index is inferior to the first order index."));
-        item->setData(Qt::DecorationRole, QIcon(":/images/task-attention.png"));
+        model->setData(model->index(j, 2), tr("Warning: The total order index is inferior to the first order index."), Qt::ToolTipRole);
+        model->setData(model->index(j, 2), QIcon(":/images/task-attention.png"), Qt::DecorationRole);
       }
-      item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-      table->setItem(j, 2, item);
 
       // compute interactions for the ith output
       for (UnsignedInteger k=0; k<inputNames.getSize(); ++k)
         if (j != k) 
           interactionsValues[i] += secondOrderIndices_i(j, k);
     }
+
     table->setSortingEnabled(true);
     connect(table->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
 

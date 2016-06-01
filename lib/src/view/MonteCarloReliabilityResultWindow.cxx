@@ -21,7 +21,8 @@
 #include "otgui/MonteCarloReliabilityResultWindow.hxx"
 
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
-#include "otgui/NotEditableTableWidget.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
+#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 
 #include <qwt_legend.h>
 #include <qwt_scale_engine.h>
@@ -65,38 +66,41 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   tabLayout->addWidget(nbSimuLabel);
 
   // probability estimate table
-  NotEditableTableWidget * resultsTable = new NotEditableTableWidget(4, 4);
+  ResizableTableViewWithoutScrollBar * resultsTable = new ResizableTableViewWithoutScrollBar;
   resultsTable->horizontalHeader()->hide();
+  resultsTable->verticalHeader()->hide();
+  CustomStandardItemModel * resultsTableModel = new CustomStandardItemModel(4, 4);
+  resultsTable->setModel(resultsTableModel);
 
   // horizontal header
-  resultsTable->createHeaderItem(0, 0, tr("Estimate"));
+  resultsTableModel->setNotEditableHeaderItem(0, 0, tr("Estimate"));
   resultsTable->setSpan(0, 0, 2, 1);
 
-  resultsTable->createHeaderItem(0, 1, tr("Value"));
+  resultsTableModel->setNotEditableHeaderItem(0, 1, tr("Value"));
   resultsTable->setSpan(0, 1, 2, 1);
 
   // Failure probability
-  resultsTable->createHeaderItem(2, 0, tr("Failure probability"));
-  resultsTable->createItem(2, 1, result_.getSimulationResult().getProbabilityEstimate());
+  resultsTableModel->setNotEditableHeaderItem(2, 0, tr("Failure probability"));
+  resultsTableModel->setNotEditableItem(2, 1, result_.getSimulationResult().getProbabilityEstimate());
 
   // Coefficient of variation
-  resultsTable->createHeaderItem(3, 0, tr("Coefficient of variation"));
-  resultsTable->createItem(3, 1, result_.getSimulationResult().getCoefficientOfVariation());
+  resultsTableModel->setNotEditableHeaderItem(3, 0, tr("Coefficient of variation"));
+  resultsTableModel->setNotEditableItem(3, 1, result_.getSimulationResult().getCoefficientOfVariation());
 
   // - lower bound
-  resultsTable->createHeaderItem(1, 2, tr("Lower bound"));
+  resultsTableModel->setNotEditableHeaderItem(1, 2, tr("Lower bound"));
   double pfCILowerBound = std::max(0.0, result_.getSimulationResult().getProbabilityEstimate() - 0.5 * result_.getSimulationResult().getConfidenceLength());
-  resultsTable->createItem(2, 2, pfCILowerBound);
+  resultsTableModel->setNotEditableItem(2, 2, pfCILowerBound);
 
   // - upper bound
-  resultsTable->createHeaderItem(1, 3, tr("Upper bound"));
+  resultsTableModel->setNotEditableHeaderItem(1, 3, tr("Upper bound"));
   double pfCIUpperBound = std::min(1.0, result_.getSimulationResult().getProbabilityEstimate() + 0.5 * result_.getSimulationResult().getConfidenceLength());
-  resultsTable->createItem(2, 3, pfCIUpperBound);
+  resultsTableModel->setNotEditableItem(2, 3, pfCIUpperBound);
 
   resultsTable->resizeToContents();
   
   // Confidence interval: do it after resizeToContents
-  resultsTable->createHeaderItem(0, 2, tr("Confidence interval at 95%"));
+  resultsTableModel->setNotEditableHeaderItem(0, 2, tr("Confidence interval at 95%"));
   resultsTable->setSpan(0, 2, 1, 2);
 
   tabLayout->addWidget(resultsTable);

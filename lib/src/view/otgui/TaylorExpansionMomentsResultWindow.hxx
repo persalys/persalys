@@ -24,10 +24,8 @@
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/AnalysisItem.hxx"
 #include "otgui/TaylorExpansionMomentsResult.hxx"
-#include "otgui/NotEditableTableWidget.hxx"
 
 #include <QComboBox>
-#include <QTableWidget>
 
 namespace OTGUI {
 class TaylorExpansionMomentsResultWindow : public OTguiSubWindow
@@ -40,13 +38,8 @@ public:
 protected:
   void buildInterface();
 
-public slots:
-  void updateEstimatesTable(int indexOutput);
-
 private:
   TaylorExpansionMomentsResult result_;
-  QComboBox * outputsComboBox_;
-  NotEditableTableWidget * momentsEstimationsTable_;
 };
 }
 #endif

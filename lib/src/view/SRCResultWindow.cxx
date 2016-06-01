@@ -21,7 +21,8 @@
 #include "otgui/SRCResultWindow.hxx"
 
 #include "otgui/SRCAnalysis.hxx"
-#include "otgui/DataTableWidget.hxx"
+#include "otgui/CopyableTableView.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
 
 
 #include <QVBoxLayout>
@@ -80,24 +81,22 @@ void SRCResultWindow::buildInterface()
     listPlotWidgets_.append(plot);
 
     // table of indices
-    QTableWidget * table = new DataTableWidget(inputNames.getSize(), 2, this);
-    table->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Index"));
+    CopyableTableView * table = new CopyableTableView;
+    table->verticalHeader()->hide();
 #if QT_VERSION >= 0x050000
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 #else
     table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 #endif
+    CustomStandardItemModel * model = new CustomStandardItemModel(inputNames.getSize(), 2);
+    model->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Index"));
+    table->setModel(model);
 
     // fill table
     for (UnsignedInteger j=0; j<inputNames.getSize(); ++j)
     {
-      QTableWidgetItem * item = new QTableWidgetItem(inputNames[j].c_str());
-      item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-      table->setItem(j, 0, item);
-
-      item = new QTableWidgetItem(QString::number(result_.getIndices()[i][j], 'g', 4));
-      item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-      table->setItem(j, 1, item);
+      model->setNotEditableItem(j, 0, inputNames[j].c_str());
+      model->setNotEditableItem(j, 1, result_.getIndices()[i][j]);
     }
     table->setSortingEnabled(true);
     connect(table->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));

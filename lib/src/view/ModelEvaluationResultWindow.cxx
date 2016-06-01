@@ -20,10 +20,10 @@
  */
 #include "otgui/ModelEvaluationResultWindow.hxx"
 #include "otgui/ModelEvaluation.hxx"
-#include "otgui/DataTableWidget.hxx"
+#include "otgui/CopyableTableView.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
 
 #include <QHBoxLayout>
-#include <QTableWidget>
 #include <QGroupBox>
 #include <QHeaderView>
 
@@ -51,21 +51,20 @@ void ModelEvaluationResultWindow::buildInterface()
   QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
   QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
 
-  QTableWidget * inputTable = new DataTableWidget(result_.getInputSample().getDimension(), 2);
-  inputTable->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Value"));
+  CopyableTableView * inputTable = new CopyableTableView;
 #if QT_VERSION >= 0x050000
   inputTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 #else
   inputTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 #endif
+  CustomStandardItemModel * model = new CustomStandardItemModel(result_.getInputSample().getDimension(), 2);
+  model->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Value"));
+  inputTable->setModel(model);
+
   for (UnsignedInteger i=0; i<result_.getInputSample().getDimension(); ++i)
   {
-    QTableWidgetItem * item = new QTableWidgetItem(QString::fromUtf8(result_.getInputSample().getDescription()[i].c_str()));
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    inputTable->setItem(i, 0, item);
-    item = new QTableWidgetItem(QString::number(result_.getInputSample()[0][i]));
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    inputTable->setItem(i, 1, item);
+    model->setNotEditableItem(i, 0, QString::fromUtf8(result_.getInputSample().getDescription()[i].c_str()));
+    model->setNotEditableItem(i, 1, result_.getInputSample()[0][i]);
   }
   inputsLayout->addWidget(inputTable);
   tabLayout->addWidget(inputsBox);
@@ -74,22 +73,20 @@ void ModelEvaluationResultWindow::buildInterface()
   QGroupBox * outputsBox = new QGroupBox(tr("Outputs"));
   QVBoxLayout * outputsLayout = new QVBoxLayout(outputsBox);
 
-  QTableWidget * outputTable = new DataTableWidget(result_.getOutputSample().getDimension(), 2);
-  outputTable->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Value"));
+  CopyableTableView * outputTable = new CopyableTableView;
 #if QT_VERSION >= 0x050000
   outputTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 #else
   outputTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 #endif
+  model = new CustomStandardItemModel(result_.getOutputSample().getDimension(), 2);
+  model->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Value"));
+  outputTable->setModel(model);
 
   for (UnsignedInteger i=0; i<result_.getOutputSample().getDimension(); ++i)
   {
-    QTableWidgetItem * item = new QTableWidgetItem(QString::fromUtf8(result_.getOutputSample().getDescription()[i].c_str()));
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    outputTable->setItem(i, 0, item);
-    item = new QTableWidgetItem(QString::number(result_.getOutputSample()[0][i]));
-    item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-    outputTable->setItem(i, 1, item);
+    model->setNotEditableItem(i, 0, QString::fromUtf8(result_.getOutputSample().getDescription()[i].c_str()));
+    model->setNotEditableItem(i, 1, result_.getOutputSample()[0][i]);
   }
   outputsLayout->addWidget(outputTable);
   tabLayout->addWidget(outputsBox);

@@ -23,6 +23,8 @@
 #include "otgui/DataTableModel.hxx"
 #include "otgui/MonteCarloAnalysis.hxx"
 #include "otgui/QtTools.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
+#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 
 #include <QVBoxLayout>
 #include <QStackedLayout>
@@ -267,52 +269,57 @@ QWidget* MonteCarloResultWindow::getMinMaxTableWidget()
 
   for (int indexOutput=0; indexOutput<nbOutputs; ++indexOutput)
   {
-    NotEditableTableWidget * minMaxTable = new NotEditableTableWidget(nbInputs+1, 4);
+    ResizableTableViewWithoutScrollBar * minMaxTableView = new ResizableTableViewWithoutScrollBar;
+    minMaxTableView->verticalHeader()->hide();
+    CustomStandardItemModel * minMaxTable = new CustomStandardItemModel(nbInputs+1, 4);
+    minMaxTableView->setModel(minMaxTable);
 
     // horizontal header
     minMaxTable->setHorizontalHeaderLabels(QStringList() << tr("") << tr("Variable") << tr("Minimum") << tr("Maximum"));
 
     // vertical header
-    minMaxTable->createHeaderItem(0, 0, tr("Output"));
-    minMaxTable->createHeaderItem(1, 0, tr("Inputs at\nextremum"));
-    minMaxTable->setSpan(1, 0, nbInputs, 1);
+    minMaxTable->setNotEditableHeaderItem(0, 0, tr("Output"));
+
+    QString rowTitle = tr("Inputs at\nextremum");
+    if (nbInputs == 1)
+      rowTitle = tr("Input at\nextremum");
+    minMaxTable->setNotEditableHeaderItem(1, 0, rowTitle);
+    minMaxTableView->setSpan(1, 0, nbInputs, 1);
 
     // inputs names
     for (int i=0; i<nbInputs; ++i)
-      minMaxTable->createItem(i+1, 1, stochInputNames[i]);
+      minMaxTable->setNotEditableItem(i+1, 1, stochInputNames[i]);
 
-      // output name
-    minMaxTable->createItem(0, 1, outputsComboBoxFirstTab_->currentText());
+    // output name
+    minMaxTable->setNotEditableItem(0, 1, outputsComboBoxFirstTab_->currentText());
     // min
-    const double min = result_.getOutputSample().getMin()[indexOutput];
-    minMaxTable->createItem(0, 2, min);
+    minMaxTable->setNotEditableItem(0, 2, result_.getOutputSample().getMin()[indexOutput]);
     // max
-    const double max = result_.getOutputSample().getMax()[indexOutput];
-    minMaxTable->createItem(0, 3, max);
+    minMaxTable->setNotEditableItem(0, 3, result_.getOutputSample().getMax()[indexOutput]);
 
     // Xmin/XMax
     if (result_.getListXMin()[indexOutput].getSize() > 1)
     {
-      minMaxTable->horizontalHeaderItem(2)->setIcon(QIcon(":/images/task-attention.png"));
-      minMaxTable->horizontalHeaderItem(2)->setToolTip(tr("Information: The output is minimum at another point."));
+      minMaxTable->setHeaderData(2, Qt::Horizontal, QIcon(":/images/task-attention.png"), Qt::DecorationRole);
+      minMaxTable->setHeaderData(2, Qt::Horizontal, tr("Information: The output is minimum at another point."), Qt::ToolTipRole);
     }
     if (result_.getListXMax()[indexOutput].getSize() > 1)
     {
-      minMaxTable->horizontalHeaderItem(3)->setIcon(QIcon(":/images/task-attention.png"));
-      minMaxTable->horizontalHeaderItem(3)->setToolTip(tr("Information: The output is maximum at another point."));
+      minMaxTable->setHeaderData(3, Qt::Horizontal, QIcon(":/images/task-attention.png"), Qt::DecorationRole);
+      minMaxTable->setHeaderData(3, Qt::Horizontal, tr("Information: The output is maximum at another point."), Qt::ToolTipRole);
     }
     for (UnsignedInteger i=0; i<result_.getInputSample().getDimension(); ++i)
     {
       // XMin
-      minMaxTable->createItem(i+1, 2, result_.getListXMin()[indexOutput][0][i]);
+      minMaxTable->setNotEditableItem(i+1, 2, result_.getListXMin()[indexOutput][0][i]);
       // XMax
-      minMaxTable->createItem(i+1, 3, result_.getListXMax()[indexOutput][0][i]);
+      minMaxTable->setNotEditableItem(i+1, 3, result_.getListXMax()[indexOutput][0][i]);
     }
 
     // resize table
-    minMaxTable->resizeToContents();
+    minMaxTableView->resizeToContents();
 
-    minMaxGroupBoxStackedLayout->addWidget(minMaxTable);
+    minMaxGroupBoxStackedLayout->addWidget(minMaxTableView);
   }
   minMaxGroupBoxLayout->addLayout(minMaxGroupBoxStackedLayout);
   connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), minMaxGroupBoxStackedLayout, SLOT(setCurrentIndex(int)));
@@ -335,85 +342,89 @@ QWidget* MonteCarloResultWindow::getMomentsEstimatesTableWidget()
 
   for (int indexOutput=0; indexOutput<nbOutputs; ++indexOutput)
   {
-    NotEditableTableWidget * momentsEstimationsTable = new NotEditableTableWidget(8, nbColumns);
-    momentsEstimationsTable->horizontalHeader()->hide();
+    ResizableTableViewWithoutScrollBar * momentsEstimationsTableView = new ResizableTableViewWithoutScrollBar;
+    momentsEstimationsTableView->horizontalHeader()->hide();
+    momentsEstimationsTableView->verticalHeader()->hide();
+    CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(8, nbColumns);
+    momentsEstimationsTableView->setModel(momentsEstimationsTable);
 
     // vertical header
-    momentsEstimationsTable->createHeaderItem(0, 0, tr("Estimate"));
-    momentsEstimationsTable->setSpan(0, 0, 2, 1);
-    momentsEstimationsTable->createHeaderItem(2, 0, tr("Mean"));
-    momentsEstimationsTable->createHeaderItem(3, 0, tr("Standard deviation"));
-    momentsEstimationsTable->createHeaderItem(4, 0, tr("Skewness"));
-    momentsEstimationsTable->createHeaderItem(5, 0, tr("Kurtosis"));
-    momentsEstimationsTable->createHeaderItem(6, 0, tr("First quartile"));
-    momentsEstimationsTable->createHeaderItem(7, 0, tr("Third quartile"));
+    momentsEstimationsTable->setNotEditableHeaderItem(0, 0, tr("Estimate"));
+    momentsEstimationsTableView->setSpan(0, 0, 2, 1);
+    momentsEstimationsTable->setNotEditableHeaderItem(2, 0, tr("Mean"));
+    momentsEstimationsTable->setNotEditableHeaderItem(3, 0, tr("Standard deviation"));
+    momentsEstimationsTable->setNotEditableHeaderItem(4, 0, tr("Skewness"));
+    momentsEstimationsTable->setNotEditableHeaderItem(5, 0, tr("Kurtosis"));
+    momentsEstimationsTable->setNotEditableHeaderItem(6, 0, tr("First quartile"));
+    momentsEstimationsTable->setNotEditableHeaderItem(7, 0, tr("Third quartile"));
 
     // horizontal header
-    momentsEstimationsTable->createHeaderItem(0, 1, tr("Value"));
-    momentsEstimationsTable->setSpan(0, 1, 2, 1);
+    momentsEstimationsTable->setNotEditableHeaderItem(0, 1, tr("Value"));
+    momentsEstimationsTableView->setSpan(0, 1, 2, 1);
     if (isConfidenceIntervalRequired_)
     {
-      momentsEstimationsTable->createHeaderItem(1, 2, tr("Lower bound"));
-      momentsEstimationsTable->createHeaderItem(1, 3, tr("Upper bound"));
+      momentsEstimationsTable->setNotEditableHeaderItem(1, 2, tr("Lower bound"));
+      momentsEstimationsTable->setNotEditableHeaderItem(1, 3, tr("Upper bound"));
     }
     // Mean
-    momentsEstimationsTable->createItem(2, 1, result_.getMean()[indexOutput]);
+    momentsEstimationsTable->setNotEditableItem(2, 1, result_.getMean()[indexOutput]);
 
     if (isConfidenceIntervalRequired_)
     {
       const double meanCILowerBound = result_.getMeanConfidenceInterval(levelConfidenceInterval_).getLowerBound()[indexOutput];
-      momentsEstimationsTable->createItem(2, 2, meanCILowerBound);
+      momentsEstimationsTable->setNotEditableItem(2, 2, meanCILowerBound);
       const double meanCIUpperBound = result_.getMeanConfidenceInterval(levelConfidenceInterval_).getUpperBound()[indexOutput];
-      momentsEstimationsTable->createItem(2, 3, meanCIUpperBound);
+      momentsEstimationsTable->setNotEditableItem(2, 3, meanCIUpperBound);
     }
     // Standard Deviation
-    momentsEstimationsTable->createItem(3, 1, result_.getStandardDeviation()[indexOutput]);
+    momentsEstimationsTable->setNotEditableItem(3, 1, result_.getStandardDeviation()[indexOutput]);
 
     if (isConfidenceIntervalRequired_)
     {
       const double stdCILowerBound = result_.getStdConfidenceInterval(levelConfidenceInterval_).getLowerBound()[indexOutput];
-      momentsEstimationsTable->createItem(3, 2, stdCILowerBound);
+      momentsEstimationsTable->setNotEditableItem(3, 2, stdCILowerBound);
       const double stdCIUpperBound = result_.getStdConfidenceInterval(levelConfidenceInterval_).getUpperBound()[indexOutput];
-      momentsEstimationsTable->createItem(3, 3, stdCIUpperBound);
+      momentsEstimationsTable->setNotEditableItem(3, 3, stdCIUpperBound);
     }
     // Skewness
-    momentsEstimationsTable->createItem(4, 1, result_.getSkewness()[indexOutput]);
+    momentsEstimationsTable->setNotEditableItem(4, 1, result_.getSkewness()[indexOutput]);
     // Kurtosis
-    momentsEstimationsTable->createItem(5, 1, result_.getKurtosis()[indexOutput]);
+    momentsEstimationsTable->setNotEditableItem(5, 1, result_.getKurtosis()[indexOutput]);
     // First quartile
-    momentsEstimationsTable->createItem(6, 1, result_.getFirstQuartile()[indexOutput]);
+    momentsEstimationsTable->setNotEditableItem(6, 1, result_.getFirstQuartile()[indexOutput]);
     // Third quartile
-    momentsEstimationsTable->createItem(7, 1, result_.getThirdQuartile()[indexOutput]);
+    momentsEstimationsTable->setNotEditableItem(7, 1, result_.getThirdQuartile()[indexOutput]);
 
     // resize table
     int titleWidth = 0;
     if (isConfidenceIntervalRequired_)
     {
-      momentsEstimationsTable->createHeaderItem(0, 2, tr("Confidence interval at ") + QString::number(levelConfidenceInterval_*100) + "%");
-      momentsEstimationsTable->resizeColumnsToContents();
-      titleWidth = momentsEstimationsTable->horizontalHeader()->sectionSize(2);
+      momentsEstimationsTable->setNotEditableHeaderItem(0, 2, tr("Confidence interval at ") + QString::number(levelConfidenceInterval_*100) + "%");
+      momentsEstimationsTableView->resizeColumnsToContents();
+      titleWidth = momentsEstimationsTableView->horizontalHeader()->sectionSize(2);
 
       // first: clear item at (0,2) because the text is to wide:
       // resizeColumnsToContents takes into account the text of item at (0,2)
       // to resize the column 2, even if there is a setSpan(0, 2, 1, 2)
-      momentsEstimationsTable->setItem(0, 2, new QTableWidgetItem);
+      momentsEstimationsTable->setItem(0, 2, new QStandardItem);
     }
 
-    momentsEstimationsTable->resizeToContents();
+    momentsEstimationsTableView->resizeToContents();
 
     if (isConfidenceIntervalRequired_)
     {
-      momentsEstimationsTable->createHeaderItem(0, 2, tr("Confidence interval at ") + QString::number(levelConfidenceInterval_*100) + "%");
-      momentsEstimationsTable->setSpan(0, 2, 1, 2);
-      const int subTitlesWidth = momentsEstimationsTable->horizontalHeader()->sectionSize(2) + momentsEstimationsTable->horizontalHeader()->sectionSize(3);
+      momentsEstimationsTable->setNotEditableHeaderItem(0, 2, tr("Confidence interval at ") + QString::number(levelConfidenceInterval_*100) + "%");
+      momentsEstimationsTableView->setSpan(0, 2, 1, 2);
+      const int subTitlesWidth = momentsEstimationsTableView->horizontalHeader()->sectionSize(2) + momentsEstimationsTableView->horizontalHeader()->sectionSize(3);
       const int widthCorrection = titleWidth - subTitlesWidth;
       if (widthCorrection > 0)
       {
-        momentsEstimationsTable->horizontalHeader()->resizeSection(3, momentsEstimationsTable->horizontalHeader()->sectionSize(3) + widthCorrection);
-        momentsEstimationsTable->setMinimumWidth(momentsEstimationsTable->minimumWidth() + widthCorrection);
+        // correct the table width
+        momentsEstimationsTableView->horizontalHeader()->resizeSection(3, momentsEstimationsTableView->horizontalHeader()->sectionSize(3) + widthCorrection);
+        momentsEstimationsTableView->setMinimumWidth(momentsEstimationsTableView->minimumWidth() + widthCorrection);
       }
     }
-    momentsGroupBoxStackedLayout->addWidget(momentsEstimationsTable);
+    momentsGroupBoxStackedLayout->addWidget(momentsEstimationsTableView);
   }
   momentsGroupBoxLayout->addLayout(momentsGroupBoxStackedLayout);
   connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), momentsGroupBoxStackedLayout, SLOT(setCurrentIndex(int))); 

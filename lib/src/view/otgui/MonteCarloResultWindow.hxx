@@ -26,11 +26,9 @@
 #include "otgui/MonteCarloResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
-#include "otgui/NotEditableTableWidget.hxx"
 
 #include <QComboBox>
 #include <QDoubleSpinBox>
-#include <QLabel>
 
 namespace OTGUI {
 class MonteCarloResultWindow : public OTguiSubWindow

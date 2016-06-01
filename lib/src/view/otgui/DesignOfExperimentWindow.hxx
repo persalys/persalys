@@ -26,7 +26,6 @@
 #include "otgui/DataTableView.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
-#include "otgui/NotEditableTableWidget.hxx"
 
 #include <QTabWidget>
 #include <QPushButton>
@@ -45,12 +44,12 @@ public:
 
 protected:
   void buildInterface();
+  QWidget* getMinMaxTableWidget();
   void addTabsForOutputs();
 
 public slots:
   void evaluateOutputs();
   void updateWindowForOutputs();
-  void updateLabelsText(int indexOutput=0);
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 
@@ -59,7 +58,7 @@ private:
   QTabWidget * tabWidget_;
   DataTableView * tableView_;
   QPushButton * evaluateButton_;
-  NotEditableTableWidget * minMaxTable_;
+  QComboBox * outputsComboBoxFirstTab_;
   PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
   GraphConfigurationWidget * graphConfigurationWidget_;

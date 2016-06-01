@@ -19,12 +19,14 @@
  *
  */
 #include "otgui/TaylorExpansionMomentsResultWindow.hxx"
-#include "otgui/DataTableWidget.hxx"
 #include "otgui/TaylorExpansionMomentsAnalysis.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
+#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QHeaderView>
+#include <QStackedLayout>
 
 using namespace OT;
 
@@ -50,13 +52,12 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
   QHBoxLayout * headLayout = new QHBoxLayout;
   QLabel * outputName = new QLabel(tr("Output"));
   headLayout->addWidget(outputName);
-  outputsComboBox_ = new QComboBox;
+  QComboBox * outputsComboBox = new QComboBox;
   QStringList items;
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
     items << result_.getOutputNames()[i].c_str();
-  outputsComboBox_->addItems(items);
-  connect(outputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEstimatesTable(int)));
-  headLayout->addWidget(outputsComboBox_);
+  outputsComboBox->addItems(items);
+  headLayout->addWidget(outputsComboBox);
   headLayout->addStretch();
   tabLayout->addLayout(headLayout);
 
@@ -65,68 +66,46 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
   // moments estimation
   QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimate"));
   QVBoxLayout * momentsVbox = new QVBoxLayout(momentsGroupBox);
-  momentsEstimationsTable_ = new NotEditableTableWidget(5, 2);
-  momentsEstimationsTable_->horizontalHeader()->hide();
+  QStackedLayout * momentsTablesLayout = new QStackedLayout;
+  connect(outputsComboBox, SIGNAL(currentIndexChanged(int)), momentsTablesLayout, SLOT(setCurrentIndex(int)));
 
-  // vertical header
-  momentsEstimationsTable_->createHeaderItem(0, 0, tr("Estimate"));
-  momentsEstimationsTable_->createHeaderItem(1, 0, tr("First order mean"));
-  momentsEstimationsTable_->createHeaderItem(2, 0, tr("Second order mean"));
-  momentsEstimationsTable_->createHeaderItem(3, 0, tr("Standard deviation"));
-  momentsEstimationsTable_->createHeaderItem(4, 0, tr("Variance"));
+  // loop on all the outputs
+  for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
+  {
+    ResizableTableViewWithoutScrollBar * momentsEstimationsTable = new ResizableTableViewWithoutScrollBar;
+    momentsEstimationsTable->horizontalHeader()->hide();
+    momentsEstimationsTable->verticalHeader()->hide();
+    CustomStandardItemModel * momentsEstimationsTableModel = new CustomStandardItemModel(5, 2);
 
-  // horizontal header
-  momentsEstimationsTable_->createHeaderItem(0, 1, tr("Value"));
+    // vertical header
+    momentsEstimationsTableModel->setNotEditableHeaderItem(0, 0, tr("Estimate"));
+    momentsEstimationsTableModel->setNotEditableHeaderItem(1, 0, tr("First order mean"));
+    momentsEstimationsTableModel->setNotEditableHeaderItem(2, 0, tr("Second order mean"));
+    momentsEstimationsTableModel->setNotEditableHeaderItem(3, 0, tr("Standard deviation"));
+    momentsEstimationsTableModel->setNotEditableHeaderItem(4, 0, tr("Variance"));
 
-  momentsVbox->addWidget(momentsEstimationsTable_);
-  momentsVbox->addStretch();
+    // horizontal header
+    momentsEstimationsTableModel->setNotEditableHeaderItem(0, 1, tr("Value"));
+
+    // mean
+    momentsEstimationsTableModel->setNotEditableItem(1, 1, result_.getMeanFirstOrder()[i]);
+    // second order mean
+    momentsEstimationsTableModel->setNotEditableItem(2, 1, result_.getMeanSecondOrder()[i]);
+    // standard deviation
+    momentsEstimationsTableModel->setNotEditableItem(3, 1, result_.getStandardDeviation()[i]);
+    // variance
+    momentsEstimationsTableModel->setNotEditableItem(4, 1, result_.getVariance()[i]);
+
+    // resize table
+    momentsEstimationsTable->setModel(momentsEstimationsTableModel);
+    momentsEstimationsTable->resizeToContents();
+    momentsTablesLayout->addWidget(momentsEstimationsTable);
+  }
+  momentsVbox->addLayout(momentsTablesLayout);
   tabLayout->addWidget(momentsGroupBox);
-  tabLayout->addStretch();
-
-  updateEstimatesTable(0);
 
   tabWidget->addTab(tab, "Result");
   //
   setWidget(tabWidget);
-}
-
-
-void TaylorExpansionMomentsResultWindow::updateEstimatesTable(int indexOutput)
-{
-  // momentsEstimationsTable_
-  // first order mean
-  QTableWidgetItem * item = new QTableWidgetItem(QString::number(result_.getMeanFirstOrder()[indexOutput]));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  momentsEstimationsTable_->setItem(1, 1, item);
-
-  // second order mean
-  item = new QTableWidgetItem(QString::number(result_.getMeanSecondOrder()[indexOutput]));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  momentsEstimationsTable_->setItem(2, 1, item);
-
-  // standard deviation
-  item = new QTableWidgetItem(QString::number(result_.getStandardDeviation()[indexOutput]));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  momentsEstimationsTable_->setItem(3, 1, item);
-
-  // variance
-  item = new QTableWidgetItem(QString::number(result_.getVariance()[indexOutput]));
-  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-  momentsEstimationsTable_->setItem(4, 1, item);
-
-  // resize table
-  momentsEstimationsTable_->resizeColumnsToContents();
-  QSize size = momentsEstimationsTable_->sizeHint();
-  int width = 0;
-  for (int i=0; i<momentsEstimationsTable_->columnCount(); ++i)
-    width += momentsEstimationsTable_->columnWidth(i);
-  size.setWidth(width+2);
-  int height = 0;
-  for (int i=0; i<momentsEstimationsTable_->rowCount(); ++i)
-    height += momentsEstimationsTable_->rowHeight(i);
-  size.setHeight(height+2);
-  momentsEstimationsTable_->setMinimumSize(size);
-  momentsEstimationsTable_->setMaximumSize(size);
-  momentsEstimationsTable_->updateGeometry();
 }
 }

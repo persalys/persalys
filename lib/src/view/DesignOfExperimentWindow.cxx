@@ -21,6 +21,8 @@
 #include "otgui/DesignOfExperimentWindow.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/DataTableModel.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
+#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 
 #include <QVBoxLayout>
 #include <QStackedLayout>
@@ -159,10 +161,9 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   QHBoxLayout * headLayout = new QHBoxLayout;
   QLabel * outputName = new QLabel(tr("Output"));
   headLayout->addWidget(outputName);
-  QComboBox * outputsComboBoxFirstTab = new QComboBox;
-  outputsComboBoxFirstTab->addItems(outputNames);
-  connect(outputsComboBoxFirstTab, SIGNAL(currentIndexChanged(int)), this, SLOT(updateLabelsText(int)));
-  headLayout->addWidget(outputsComboBoxFirstTab);
+  outputsComboBoxFirstTab_ = new QComboBox;
+  outputsComboBoxFirstTab_->addItems(outputNames);
+  headLayout->addWidget(outputsComboBoxFirstTab_);
   headLayout->addStretch();
   tabLayout->addLayout(headLayout);
 
@@ -174,31 +175,7 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   tabLayout->addWidget(nbSimuLabel);
 
   // min/max table
-  QGroupBox * minMaxGroupBox = new QGroupBox(tr("Minimum and Maximum"));
-  UnsignedInteger totalNbInputs = designOfExperiment_.getInputSample().getDimension();
-  QVBoxLayout * minMaxVbox = new QVBoxLayout(minMaxGroupBox);
-
-  minMaxTable_ = new NotEditableTableWidget(totalNbInputs + 1, 4);
-
-  // horizontal header
-  minMaxTable_->setHorizontalHeaderLabels(QStringList() << tr("") << tr("Variable") << tr("Minimum") << tr("Maximum"));
-
-  // vertical header
-  minMaxTable_->createHeaderItem(0, 0, tr("Output"));
-
-  QString rowTitle = tr("Inputs at\nextremum");
-  if (totalNbInputs == 1)
-    rowTitle = tr("Input at\nextremum");
-  minMaxTable_->createHeaderItem(1, 0, rowTitle);
-  minMaxTable_->setSpan(1, 0, totalNbInputs, 1);
-
-  for (UnsignedInteger i=0; i<totalNbInputs; ++i)
-    minMaxTable_->createItem(i+1, 1, QString::fromUtf8(designOfExperiment_.getInputSample().getDescription()[i].c_str()));
-
-  minMaxVbox->addWidget(minMaxTable_);
-  minMaxVbox->addStretch();
-  tabLayout->addWidget(minMaxGroupBox);
-  updateLabelsText();
+  tabLayout->addWidget(getMinMaxTableWidget());
 
   tabWidget_->addTab(tab, tr("Min/Max"));
 
@@ -227,6 +204,74 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
   tabWidget_->addTab(tab, tr("Plot matrix X-X"));
+}
+
+
+QWidget* DesignOfExperimentWindow::getMinMaxTableWidget()
+{
+  UnsignedInteger totalNbInputs = designOfExperiment_.getInputSample().getDimension();
+
+  QGroupBox * minMaxGroupBox = new QGroupBox(tr("Minimum and Maximum"));
+  QVBoxLayout * minMaxGroupBoxLayout = new QVBoxLayout(minMaxGroupBox);
+  QStackedLayout * minMaxGroupBoxStackedLayout = new QStackedLayout;
+
+  for (int indexOutput=0; indexOutput<designOfExperiment_.getResult().getOutputSample().getDimension(); ++indexOutput)
+  {
+    ResizableTableViewWithoutScrollBar * minMaxTableView = new ResizableTableViewWithoutScrollBar;
+    minMaxTableView->verticalHeader()->hide();
+    CustomStandardItemModel * minMaxTable = new CustomStandardItemModel(totalNbInputs+1, 4);
+    minMaxTableView->setModel(minMaxTable);
+
+    // horizontal header
+    minMaxTable->setHorizontalHeaderLabels(QStringList() << tr("") << tr("Variable") << tr("Minimum") << tr("Maximum"));
+
+    // vertical header
+    minMaxTable->setNotEditableHeaderItem(0, 0, tr("Output"));
+    QString rowTitle = tr("Inputs at\nextremum");
+    if (totalNbInputs == 1)
+      rowTitle = tr("Input at\nextremum");
+    minMaxTable->setNotEditableHeaderItem(1, 0, rowTitle);
+    minMaxTableView->setSpan(1, 0, totalNbInputs, 1);
+
+    // inputs names
+    for (int i=0; i<totalNbInputs; ++i)
+      minMaxTable->setNotEditableItem(i+1, 1, QString::fromUtf8(designOfExperiment_.getInputSample().getDescription()[i].c_str()));
+
+    // output name
+    minMaxTable->setNotEditableItem(0, 1, QString::fromUtf8(designOfExperiment_.getResult().getOutputSample().getDescription()[indexOutput].c_str()));
+    // min
+    minMaxTable->setNotEditableItem(0, 2, designOfExperiment_.getResult().getOutputSample().getMin()[indexOutput]);
+    // max
+    minMaxTable->setNotEditableItem(0, 3, designOfExperiment_.getResult().getOutputSample().getMax()[indexOutput]);
+
+    // Xmin/XMax
+    if (designOfExperiment_.getResult().getListXMin()[indexOutput].getSize() > 1)
+    {
+      minMaxTable->setHeaderData(2, Qt::Horizontal, QIcon(":/images/task-attention.png"), Qt::DecorationRole);
+      minMaxTable->setHeaderData(2, Qt::Horizontal, tr("Information: The output is minimum at another point."), Qt::ToolTipRole);
+    }
+    if (designOfExperiment_.getResult().getListXMax()[indexOutput].getSize() > 1)
+    {
+      minMaxTable->setHeaderData(3, Qt::Horizontal, QIcon(":/images/task-attention.png"), Qt::DecorationRole);
+      minMaxTable->setHeaderData(3, Qt::Horizontal, tr("Information: The output is maximum at another point."), Qt::ToolTipRole);
+    }
+    for (UnsignedInteger i=0; i<designOfExperiment_.getResult().getInputSample().getDimension(); ++i)
+    {
+      // XMin
+      minMaxTable->setNotEditableItem(i+1, 2, designOfExperiment_.getResult().getListXMin()[indexOutput][0][i]);
+      // XMax
+      minMaxTable->setNotEditableItem(i+1, 3, designOfExperiment_.getResult().getListXMax()[indexOutput][0][i]);
+    }
+
+    // resize table
+    minMaxTableView->resizeToContents();
+
+    minMaxGroupBoxStackedLayout->addWidget(minMaxTableView);
+  }
+  minMaxGroupBoxLayout->addLayout(minMaxGroupBoxStackedLayout);
+  connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), minMaxGroupBoxStackedLayout, SLOT(setCurrentIndex(int)));
+
+  return minMaxGroupBox;
 }
 
 
@@ -274,43 +319,6 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const OT::Num
     }
   }
   return listScatterPlotWidgets;
-}
-
-
-void DesignOfExperimentWindow::updateLabelsText(int indexOutput)
-{
-  // minMaxTable_
-  minMaxTable_->createItem(0, 1, QString::fromUtf8(designOfExperiment_.getResult().getOutputSample().getDescription()[indexOutput].c_str()));
-
-  // min
-  const double min = designOfExperiment_.getResult().getOutputSample().getMin()[indexOutput];
-  minMaxTable_->createItem(0, 2, min);
-
-  // max
-  const double max = designOfExperiment_.getResult().getOutputSample().getMax()[indexOutput];
-  minMaxTable_->createItem(0, 3, max);
-
-  if (designOfExperiment_.getResult().getListXMin()[indexOutput].getSize() > 1)
-  {
-    minMaxTable_->horizontalHeaderItem(2)->setIcon(QIcon(":/images/task-attention.png"));
-    minMaxTable_->horizontalHeaderItem(2)->setToolTip(tr("Information: The output is minimum at another point."));
-  }
-  if (designOfExperiment_.getResult().getListXMax()[indexOutput].getSize() > 1)
-  {
-    minMaxTable_->horizontalHeaderItem(3)->setIcon(QIcon(":/images/task-attention.png"));
-    minMaxTable_->horizontalHeaderItem(3)->setToolTip(tr("Information: The output is maximum at another point."));
-  }
-
-  for (UnsignedInteger i=0; i<designOfExperiment_.getResult().getInputSample().getDimension(); ++i)
-  {
-    // XMin
-    minMaxTable_->createItem(i+1, 2, designOfExperiment_.getResult().getListXMin()[indexOutput][0][i]);
-    // XMax
-    minMaxTable_->createItem(i+1, 3, designOfExperiment_.getResult().getListXMax()[indexOutput][0][i]);
-  }
-
-  // resize table
-  minMaxTable_->resizeToContents();
 }
 
 
