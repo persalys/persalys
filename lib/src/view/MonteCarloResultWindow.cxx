@@ -24,6 +24,7 @@
 #include "otgui/MonteCarloAnalysis.hxx"
 #include "otgui/QtTools.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/DesignOfExperimentWindow.hxx"
 
 #include <QVBoxLayout>
 #include <QStackedLayout>
@@ -211,7 +212,7 @@ void MonteCarloResultWindow::buildInterface()
   // if the sample is valid:
   if (resultsSampleIsValid)
   {
-    tab = getScatterPlotsWidget(outputs);
+    tab = getScatterPlotsWidget();
   }
   // if the results sample contains NAN
   else
@@ -518,95 +519,43 @@ QWidget* MonteCarloResultWindow::getBoxPlotWidget(const OutputCollection & outpu
 }
 
 
-QWidget* MonteCarloResultWindow::getScatterPlotsWidget(const OutputCollection & outputs)
+QWidget* MonteCarloResultWindow::getScatterPlotsWidget()
 {
   QStringList stochInputNames;
-  for (int i=0; i<physicalModel_.getStochasticInputNames().getSize(); ++i)
-    stochInputNames << QString::fromUtf8(physicalModel_.getStochasticInputNames()[i].c_str());
+  QStringList inAxisTitles;
+  for (int i=0; i<result_.getInputSample().getDimension(); ++i)
+  {
+    String inputName = result_.getInputSample().getDescription()[i];
+    stochInputNames << QString::fromUtf8(inputName.c_str());
+    QString inputDescription = QString::fromUtf8(physicalModel_.getInputByName(inputName).getDescription().c_str());
+    if (!inputDescription.isEmpty())
+      inAxisTitles << inputDescription;
+    else
+      inAxisTitles << stochInputNames.last();
+  }
   QStringList outputNames;
-  for (int i=0; i<outputs.getSize(); ++i)
-    outputNames << QString::fromUtf8(outputs[i].getName().c_str());
+  QStringList outAxisTitles;
+  for (int i=0; i<result_.getOutputSample().getDimension(); ++i)
+  {
+    String outputName = result_.getOutputSample().getDescription()[i];
+    outputNames << QString::fromUtf8(outputName.c_str());
+    QString outputDescription = QString::fromUtf8(physicalModel_.getOutputByName(outputName).getDescription().c_str());
+    if (!outputDescription.isEmpty())
+      outAxisTitles << outputDescription;
+    else
+      outAxisTitles << outputNames.last();
+  }
 
   QWidget * tab = new QWidget;
   QStackedLayout * scatterPlotLayout = new QStackedLayout(tab);
 
-  QVector<PlotWidget*> listScatterPlotWidgets;
+  QVector<PlotWidget*> listScatterPlotWidgets =
+    DesignOfExperimentWindow::GetListScatterPlots(result_.getInputSample(), result_.getOutputSample(),
+                                                  stochInputNames, inAxisTitles,
+                                                  outputNames, outAxisTitles);
 
-  for (int j=0; j<stochInputNames.size(); ++j)
-  {
-    for (int i=0; i<outputs.getSize(); ++i)
-    {
-      PlotWidget * plot = new PlotWidget;
-      plot->plotScatter(result_.getInputSample().getMarginal(j), result_.getOutputSample().getMarginal(i));
-      plot->setTitle(tr("Scatter plot: ") + QString::fromUtf8(outputs[i].getName().c_str()) + tr(" vs ") + stochInputNames[j]);
-      String inputDescription = physicalModel_.getInputByName(stochInputNames[j].toStdString()).getDescription();
-      if (!inputDescription.empty())
-        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(inputDescription.c_str()));
-      else
-        plot->setAxisTitle(QwtPlot::xBottom, stochInputNames[j]);
-      if (outputs[i].getDescription().size())
-        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getDescription().c_str()));
-      else
-        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getName().c_str()));
-      scatterPlotLayout->addWidget(plot);
-      listScatterPlotWidgets.append(plot);
-    }
-    for (int i=0; i<stochInputNames.size(); ++i)
-    {
-      PlotWidget * plot = new PlotWidget;
-      plot->plotScatter(result_.getInputSample().getMarginal(j), result_.getInputSample().getMarginal(i));
-      plot->setTitle(tr("Scatter plot: ") + stochInputNames[i] + tr(" vs ") + stochInputNames[j]);
-      String inputDescription = physicalModel_.getInputByName(stochInputNames[j].toStdString()).getDescription();
-      if (!inputDescription.empty())
-        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(inputDescription.c_str()));
-      else
-        plot->setAxisTitle(QwtPlot::xBottom, stochInputNames[j]);
-      inputDescription = physicalModel_.getInputByName(stochInputNames[i].toStdString()).getDescription();
-      if (!inputDescription.empty())
-        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(inputDescription.c_str()));
-      else
-        plot->setAxisTitle(QwtPlot::yLeft, stochInputNames[i]);
-      scatterPlotLayout->addWidget(plot);
-      listScatterPlotWidgets.append(plot);
-    }
-  }
-  for (int j=0; j<outputs.getSize(); ++j)
-  {
-    for (int i=0; i<outputs.getSize(); ++i)
-    {
-      PlotWidget * plot = new PlotWidget;
-      plot->plotScatter(result_.getOutputSample().getMarginal(j), result_.getOutputSample().getMarginal(i));
-      plot->setTitle(tr("Scatter plot: ") + QString::fromUtf8(outputs[i].getName().c_str()) + tr(" vs ") + QString::fromUtf8(outputs[j].getName().c_str()));
-      if (outputs[j].getDescription().size())
-        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getDescription().c_str()));
-      else
-        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getName().c_str()));
-      if (outputs[i].getDescription().size())
-        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getDescription().c_str()));
-      else
-        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getName().c_str()));
-      scatterPlotLayout->addWidget(plot);
-      listScatterPlotWidgets.append(plot);
-    }
-    for (int i=0; i<stochInputNames.size(); ++i)
-    {
-      PlotWidget * plot = new PlotWidget;
-      plot->plotScatter(result_.getOutputSample().getMarginal(j), result_.getInputSample().getMarginal(i));
-      plot->setTitle(tr("Scatter plot: ") + stochInputNames[i] + tr(" vs ") + QString::fromUtf8(outputs[j].getName().c_str()));
-      if (outputs[j].getDescription().size())
-        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getDescription().c_str()));
-      else
-        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getName().c_str()));
-      String inputDescription = physicalModel_.getInputByName(stochInputNames[i].toStdString()).getDescription();
-      if (!inputDescription.empty())
-        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(inputDescription.c_str()));
-      else
-        plot->setAxisTitle(QwtPlot::yLeft, stochInputNames[i]);
-
-      scatterPlotLayout->addWidget(plot);
-      listScatterPlotWidgets.append(plot);
-    }
-  }
+  for (int i=0; i<listScatterPlotWidgets.size(); ++i)
+    scatterPlotLayout->addWidget(listScatterPlotWidgets[i]);
 
   scatterPlotsConfigurationWidget_ = new GraphConfigurationWidget(listScatterPlotWidgets, stochInputNames, outputNames, GraphConfigurationWidget::Scatter);
   connect(scatterPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), scatterPlotLayout, SLOT(setCurrentIndex(int)));

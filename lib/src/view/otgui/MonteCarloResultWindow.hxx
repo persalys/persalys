@@ -44,7 +44,7 @@ protected:
   QWidget* getMomentsEstimatesTableWidget();
   QWidget* getPDF_CDFWidget(const OutputCollection & outputs);
   QWidget* getBoxPlotWidget(const OutputCollection & outputs);
-  QWidget* getScatterPlotsWidget(const OutputCollection & outputs);
+  QWidget* getScatterPlotsWidget();
 
 public slots:
   void updateSpinBoxes(int indexOutput=0);
