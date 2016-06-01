@@ -18,8 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_OTGUITABLEMODEL_HXX
-#define OTGUI_OTGUITABLEMODEL_HXX
+#ifndef OTGUI_SAMPLETABLEMODEL_HXX
+#define OTGUI_SAMPLETABLEMODEL_HXX
 
 #include "NumericalSample.hxx"
 
@@ -27,10 +27,10 @@
 #include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class OTGUI_API DataTableModel : public CustomStandardItemModel
+class OTGUI_API SampleTableModel : public CustomStandardItemModel
 {
 public:
-  DataTableModel(const OT::NumericalSample & data);
+  SampleTableModel(const OT::NumericalSample & data);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent) const;

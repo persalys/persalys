@@ -20,7 +20,7 @@
  */
 #include "otgui/DataTableView.hxx"
 
-#include "otgui/DataTableModel.hxx"
+#include "otgui/SampleTableModel.hxx"
 #include "otgui/QtTools.hxx"
 
 #include <QFileDialog>
@@ -44,7 +44,7 @@ DataTableView::DataTableView(const OT::NumericalSample & sample, QWidget *parent
 {
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
-  setModel(new DataTableModel(sample));
+  setModel(new SampleTableModel(sample));
 }
 
 

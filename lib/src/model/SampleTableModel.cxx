@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DataTableModel.hxx"
+#include "otgui/SampleTableModel.hxx"
 
 #include <QColor>
 
@@ -26,7 +26,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-DataTableModel::DataTableModel(const NumericalSample & data)
+SampleTableModel::SampleTableModel(const NumericalSample & data)
   : CustomStandardItemModel(data.getSize(), data.getDimension())
   , data_(data)
   , sampleIsValid_(true)
@@ -41,19 +41,19 @@ DataTableModel::DataTableModel(const NumericalSample & data)
 }
 
 
-int DataTableModel::columnCount(const QModelIndex & parent) const
+int SampleTableModel::columnCount(const QModelIndex & parent) const
 {
   return data_.getDimension();
 }
 
 
-int DataTableModel::rowCount(const QModelIndex & parent) const
+int SampleTableModel::rowCount(const QModelIndex & parent) const
 {
   return data_.getSize();
 }
 
 
-QVariant DataTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant SampleTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     return QString::fromUtf8(data_.getDescription()[section].c_str());
@@ -62,7 +62,7 @@ QVariant DataTableModel::headerData(int section, Qt::Orientation orientation, in
 }
 
 
-bool DataTableModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
+bool SampleTableModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
 {
   if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
   {
@@ -76,7 +76,7 @@ bool DataTableModel::setHeaderData(int section, Qt::Orientation orientation, con
 }
 
 
-QVariant DataTableModel::data(const QModelIndex & index, int role) const
+QVariant SampleTableModel::data(const QModelIndex & index, int role) const
 {
   if (!index.isValid())
     return QVariant();
@@ -95,14 +95,14 @@ QVariant DataTableModel::data(const QModelIndex & index, int role) const
 }
 
 
-void DataTableModel::exportData(const QString & fileName)
+void SampleTableModel::exportData(const QString & fileName)
 {
   // write
   data_.exportToCSVFile(fileName.toLocal8Bit().data());
 }
 
 
-bool DataTableModel::sampleIsValid()
+bool SampleTableModel::sampleIsValid()
 {
   return sampleIsValid_;
 }

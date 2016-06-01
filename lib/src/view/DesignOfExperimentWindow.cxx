@@ -20,7 +20,7 @@
  */
 #include "otgui/DesignOfExperimentWindow.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/DataTableModel.hxx"
+#include "otgui/SampleTableModel.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 
@@ -54,7 +54,7 @@ void DesignOfExperimentWindow::buildInterface()
   tableView_ = new DataTableView;
   if (!designOfExperiment_.getResult().getOutputSample().getSize())
   {
-    DataTableModel * model = new DataTableModel(designOfExperiment_.getInputSample());
+    SampleTableModel * model = new SampleTableModel(designOfExperiment_.getInputSample());
     tableView_->setModel(model);
   }
 
@@ -100,7 +100,7 @@ void DesignOfExperimentWindow::updateWindowForOutputs()
   {
     NumericalSample sample = designOfExperiment_.getInputSample();
     sample.stack(designOfExperiment_.getResult().getOutputSample());
-    DataTableModel * model = new DataTableModel(sample);
+    SampleTableModel * model = new SampleTableModel(sample);
     tableView_->setModel(model);
     if (model->sampleIsValid())
       addTabsForOutputs();

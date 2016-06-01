@@ -20,7 +20,7 @@
  */
 #include "otgui/MonteCarloResultWindow.hxx"
 #include "otgui/DataTableView.hxx"
-#include "otgui/DataTableModel.hxx"
+#include "otgui/SampleTableModel.hxx"
 #include "otgui/MonteCarloAnalysis.hxx"
 #include "otgui/QtTools.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
@@ -81,7 +81,7 @@ void MonteCarloResultWindow::buildInterface()
 
   tabWidget_->addTab(tab, tr("Result table"));
 
-  const bool resultsSampleIsValid = dynamic_cast<DataTableModel*>(tabResultView->model())->sampleIsValid();
+  const bool resultsSampleIsValid = dynamic_cast<SampleTableModel*>(tabResultView->model())->sampleIsValid();
 
   // second tab: Summary -----------------------------
 
