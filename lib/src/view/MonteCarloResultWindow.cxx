@@ -259,70 +259,13 @@ void MonteCarloResultWindow::buildInterface()
 
 QWidget* MonteCarloResultWindow::getMinMaxTableWidget()
 {
-  QStringList stochInputNames;
-  for (int i=0; i<physicalModel_.getStochasticInputNames().getSize(); ++i)
-    stochInputNames << QString::fromUtf8(physicalModel_.getStochasticInputNames()[i].c_str());
-  int nbInputs = stochInputNames.size();
-  int nbOutputs = result_.getOutputSample().getDimension();
-
   QGroupBox * minMaxGroupBox = new QGroupBox(tr("Minimum and Maximum"));
   QVBoxLayout * minMaxGroupBoxLayout = new QVBoxLayout(minMaxGroupBox);
   QStackedLayout * minMaxGroupBoxStackedLayout = new QStackedLayout;
 
-  for (int indexOutput=0; indexOutput<nbOutputs; ++indexOutput)
-  {
-    ResizableTableViewWithoutScrollBar * minMaxTableView = new ResizableTableViewWithoutScrollBar;
-    minMaxTableView->verticalHeader()->hide();
-    CustomStandardItemModel * minMaxTable = new CustomStandardItemModel(nbInputs+1, 4);
-    minMaxTableView->setModel(minMaxTable);
+  for (int outputIndex=0; outputIndex<result_.getOutputSample().getDimension(); ++outputIndex)
+    minMaxGroupBoxStackedLayout->addWidget(DesignOfExperimentWindow::GetMinMaxTableView(result_, outputIndex));
 
-    // horizontal header
-    minMaxTable->setHorizontalHeaderLabels(QStringList() << tr("") << tr("Variable") << tr("Minimum") << tr("Maximum"));
-
-    // vertical header
-    minMaxTable->setNotEditableHeaderItem(0, 0, tr("Output"));
-
-    QString rowTitle = tr("Inputs at\nextremum");
-    if (nbInputs == 1)
-      rowTitle = tr("Input at\nextremum");
-    minMaxTable->setNotEditableHeaderItem(1, 0, rowTitle);
-    minMaxTableView->setSpan(1, 0, nbInputs, 1);
-
-    // inputs names
-    for (int i=0; i<nbInputs; ++i)
-      minMaxTable->setNotEditableItem(i+1, 1, stochInputNames[i]);
-
-    // output name
-    minMaxTable->setNotEditableItem(0, 1, outputsComboBoxFirstTab_->currentText());
-    // min
-    minMaxTable->setNotEditableItem(0, 2, result_.getOutputSample().getMin()[indexOutput]);
-    // max
-    minMaxTable->setNotEditableItem(0, 3, result_.getOutputSample().getMax()[indexOutput]);
-
-    // Xmin/XMax
-    if (result_.getListXMin()[indexOutput].getSize() > 1)
-    {
-      minMaxTable->setHeaderData(2, Qt::Horizontal, QIcon(":/images/task-attention.png"), Qt::DecorationRole);
-      minMaxTable->setHeaderData(2, Qt::Horizontal, tr("Information: The output is minimum at another point."), Qt::ToolTipRole);
-    }
-    if (result_.getListXMax()[indexOutput].getSize() > 1)
-    {
-      minMaxTable->setHeaderData(3, Qt::Horizontal, QIcon(":/images/task-attention.png"), Qt::DecorationRole);
-      minMaxTable->setHeaderData(3, Qt::Horizontal, tr("Information: The output is maximum at another point."), Qt::ToolTipRole);
-    }
-    for (UnsignedInteger i=0; i<result_.getInputSample().getDimension(); ++i)
-    {
-      // XMin
-      minMaxTable->setNotEditableItem(i+1, 2, result_.getListXMin()[indexOutput][0][i]);
-      // XMax
-      minMaxTable->setNotEditableItem(i+1, 3, result_.getListXMax()[indexOutput][0][i]);
-    }
-
-    // resize table
-    minMaxTableView->resizeToContents();
-
-    minMaxGroupBoxStackedLayout->addWidget(minMaxTableView);
-  }
   minMaxGroupBoxLayout->addLayout(minMaxGroupBoxStackedLayout);
   connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), minMaxGroupBoxStackedLayout, SLOT(setCurrentIndex(int)));
 
