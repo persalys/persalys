@@ -23,7 +23,7 @@
 
 #include "OTguiSubWindow.hxx"
 #include "otgui/DesignOfExperimentItem.hxx"
-#include "otgui/DataTableView.hxx"
+#include "otgui/ExportableTableView.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
 
@@ -56,7 +56,7 @@ public slots:
 private:
   DesignOfExperiment designOfExperiment_;
   QTabWidget * tabWidget_;
-  DataTableView * tableView_;
+  ExportableTableView * tableView_;
   QPushButton * evaluateButton_;
   QComboBox * outputsComboBoxFirstTab_;
   PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;

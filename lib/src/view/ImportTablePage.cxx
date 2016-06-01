@@ -23,8 +23,6 @@
 #include "otgui/HorizontalHeaderViewWithCombobox.hxx"
 #include "otgui/SampleTableModel.hxx"
 
-#include <NumericalSample.hxx>
-
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QHBoxLayout>
@@ -81,7 +79,7 @@ void ImportTablePage::buildInterface()
   gridLayout->setSpacing(6);
   gridLayout->setContentsMargins(11, 11, 11, 11);
 
-  dataPreviewTableView_ = new DataTableView(groupBox);
+  dataPreviewTableView_ = new ExportableTableView(groupBox);
   gridLayout->addWidget(dataPreviewTableView_, 0, 0, 1, 1);
   if (designOfExperiment_.getFileName().size() != 0)
   {

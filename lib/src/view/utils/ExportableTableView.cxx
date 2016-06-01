@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QTableView to display samples
+ *  @brief Exportable QTableView
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DataTableView.hxx"
+#include "otgui/ExportableTableView.hxx"
 
-#include "otgui/SampleTableModel.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/QtTools.hxx"
 
 #include <QFileDialog>
@@ -31,7 +31,7 @@
 
 namespace OTGUI {
 
-DataTableView::DataTableView(QWidget* parent)
+ExportableTableView::ExportableTableView(QWidget* parent)
   : CopyableTableView(parent)
 {
   setContextMenuPolicy(Qt::CustomContextMenu);
@@ -40,7 +40,7 @@ DataTableView::DataTableView(QWidget* parent)
 
 
 // show the context menu when right clicking
-void DataTableView::contextMenu(const QPoint & pos)
+void ExportableTableView::contextMenu(const QPoint & pos)
 {
   QMenu * contextMenu(new QMenu(this));
   QAction * exportData = new QAction(tr("Export"), this);
@@ -51,7 +51,7 @@ void DataTableView::contextMenu(const QPoint & pos)
 }
 
 
-void DataTableView::exportData()
+void ExportableTableView::exportData()
 {
   QSettings settings;
   QString currentDir = settings.value("currentDir").toString();

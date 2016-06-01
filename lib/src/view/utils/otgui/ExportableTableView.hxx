@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QTableView to display samples
+ *  @brief Exportable QTableView
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,20 +18,18 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_DATATABLEVIEW_HXX
-#define OTGUI_DATATABLEVIEW_HXX
+#ifndef OTGUI_EXPORTABLETABLEVIEW_HXX
+#define OTGUI_EXPORTABLETABLEVIEW_HXX
 
 #include "otgui/CopyableTableView.hxx"
 
-#include "NumericalSample.hxx"
-
 namespace OTGUI {
-class DataTableView : public CopyableTableView
+class ExportableTableView : public CopyableTableView
 {
   Q_OBJECT
 
 public:
-  DataTableView(QWidget * parent=0);
+  ExportableTableView(QWidget * parent=0);
 
 public slots:
   void contextMenu(const QPoint & pos);

@@ -11,6 +11,7 @@ ot_add_source_file (ComboBoxDelegate.cxx)
 ot_add_source_file (CustomDoubleValidator.cxx)
 ot_add_source_file (LineEditWithQValidatorDelegate.cxx)
 ot_add_source_file (HorizontalHeaderViewWithCombobox.cxx)
+ot_add_source_file (ExportableTableView.cxx)
 ot_add_source_file (CopyableTableView.cxx)
 ot_add_source_file (QtTools.cxx)
 ot_add_source_file (ResizableTableViewWithoutScrollBar.cxx)
@@ -25,6 +26,7 @@ qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
               otgui/LineEditWithQValidatorDelegate.hxx
               otgui/HorizontalHeaderViewWithCombobox.hxx
               otgui/CustomDoubleValidator.hxx
+              otgui/ExportableTableView.hxx
               otgui/CopyableTableView.hxx
               otgui/QtTools.hxx
               otgui/ResizableTableViewWithoutScrollBar.hxx

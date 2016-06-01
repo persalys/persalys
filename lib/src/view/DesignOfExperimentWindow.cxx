@@ -21,7 +21,6 @@
 #include "otgui/DesignOfExperimentWindow.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/SampleTableModel.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 
 #include <QVBoxLayout>
@@ -51,7 +50,7 @@ void DesignOfExperimentWindow::buildInterface()
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
-  tableView_ = new DataTableView;
+  tableView_ = new ExportableTableView;
   if (!designOfExperiment_.getResult().getOutputSample().getSize())
   {
     SampleTableModel * model = new SampleTableModel(designOfExperiment_.getInputSample());

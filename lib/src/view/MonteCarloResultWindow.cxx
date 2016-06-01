@@ -19,11 +19,10 @@
  *
  */
 #include "otgui/MonteCarloResultWindow.hxx"
-#include "otgui/DataTableView.hxx"
+#include "otgui/ExportableTableView.hxx"
 #include "otgui/SampleTableModel.hxx"
 #include "otgui/MonteCarloAnalysis.hxx"
 #include "otgui/QtTools.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 
 #include <QVBoxLayout>
@@ -76,7 +75,7 @@ void MonteCarloResultWindow::buildInterface()
 
   NumericalSample sample = result_.getInputSample();
   sample.stack(result_.getOutputSample());
-  DataTableView * tabResultView = new DataTableView;
+  ExportableTableView * tabResultView = new ExportableTableView;
   SampleTableModel * tabResultModel = new SampleTableModel(sample);
   tabResultView->setModel(tabResultModel);
   tabLayout->addWidget(tabResultView);
