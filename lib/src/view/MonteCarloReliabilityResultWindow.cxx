@@ -176,16 +176,17 @@ void MonteCarloReliabilityResultWindow::showHideGraphConfigurationWidget(int ind
   {
     // if a plotWidget is visible
     case 1:
-      emit graphWindowActivated(histogramConfigurationWidget_);
+      if (!histogramConfigurationWidget_->isVisible())
+        emit graphWindowActivated(histogramConfigurationWidget_);
       break;
     case 2:
-      emit graphWindowActivated(convergenceGraphConfigurationWidget_);
+      if (!convergenceGraphConfigurationWidget_->isVisible())
+        emit graphWindowActivated(convergenceGraphConfigurationWidget_);
       break;
     // if no plotWidget is visible
     default:
     {
-      emit graphWindowDeactivated(histogramConfigurationWidget_);
-      emit graphWindowDeactivated(convergenceGraphConfigurationWidget_);
+      emit graphWindowDeactivated();
       break;
     }
   }

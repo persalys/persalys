@@ -426,7 +426,7 @@ void StudyTreeView::createNewProbabilisticModelWindow(ProbabilisticModelItem * i
   ProbabilisticModelWindow * window = new ProbabilisticModelWindow(item);
   connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
   connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-  connect(window, SIGNAL(graphWindowDeactivated(QWidget*)), this, SIGNAL(graphWindowDeactivated(QWidget*)));
+  connect(window, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
   emit showWindow(window);
   setCurrentIndex(item->index());
 }
@@ -446,7 +446,7 @@ void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentItem * i
   DesignOfExperimentWindow * window = new DesignOfExperimentWindow(item);
   connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
   connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-  connect(window, SIGNAL(graphWindowDeactivated(QWidget*)), this, SIGNAL(graphWindowDeactivated(QWidget*)));
+  connect(window, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
   connect(item, SIGNAL(analysisFinished()), window, SLOT(updateWindowForOutputs()));
   emit showWindow(window);
   setExpanded(item->index().parent(), true);
@@ -664,7 +664,7 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
   {
     connect(resultWindow, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
     connect(resultWindow, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-    connect(resultWindow, SIGNAL(graphWindowDeactivated(QWidget*)), this, SIGNAL(graphWindowDeactivated(QWidget*)));
+    connect(resultWindow, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
     emit showWindow(resultWindow);
     setCurrentIndex(item->index());
   }

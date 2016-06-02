@@ -515,7 +515,6 @@ void MonteCarloResultWindow::updateSpinBoxes(int indexOutput)
   quantileSpinBox_->setMaximum(max);
   quantileSpinBox_->setSingleStep((max-min)/100);
   probaSpinBox_->setValue(0.5);
-  probaValueChanged(0.5);
 }
 
 
@@ -542,38 +541,38 @@ void MonteCarloResultWindow::quantileValueChanged(double quantile)
 
 void MonteCarloResultWindow::showHideGraphConfigurationWidget(int indexTab)
 {
-  emit graphWindowDeactivated(pdf_cdfPlotsConfigurationWidget_);
-  emit graphWindowDeactivated(boxPlotsConfigurationWidget_);
-  emit graphWindowDeactivated(scatterPlotsConfigurationWidget_);
-  emit graphWindowDeactivated(plotMatrixConfigurationWidget_);
-  emit graphWindowDeactivated(plotMatrix_X_X_ConfigurationWidget_);
-
   switch (indexTab)
   {
     // if a plotWidget is visible
     case 2:
       if (pdf_cdfPlotsConfigurationWidget_)
-        emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
+        if (!pdf_cdfPlotsConfigurationWidget_->isVisible())
+          emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
       break;
     case 3:
       if (boxPlotsConfigurationWidget_)
-        emit graphWindowActivated(boxPlotsConfigurationWidget_);
+        if (!boxPlotsConfigurationWidget_->isVisible())
+          emit graphWindowActivated(boxPlotsConfigurationWidget_);
       break;
     case 4:
       if (scatterPlotsConfigurationWidget_)
-        emit graphWindowActivated(scatterPlotsConfigurationWidget_);
+        if (!scatterPlotsConfigurationWidget_->isVisible())
+          emit graphWindowActivated(scatterPlotsConfigurationWidget_);
       break;
     case 5:
       if (plotMatrixConfigurationWidget_)
-        emit graphWindowActivated(plotMatrixConfigurationWidget_);
+        if (!plotMatrixConfigurationWidget_->isVisible())
+          emit graphWindowActivated(plotMatrixConfigurationWidget_);
       break;
     case 6:
       if (plotMatrix_X_X_ConfigurationWidget_)
-        emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
+        if (!plotMatrix_X_X_ConfigurationWidget_->isVisible())
+          emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
       break;
     // if no plotWidget is visible
     default:
     {
+      emit graphWindowDeactivated();
       break;
     }
   }

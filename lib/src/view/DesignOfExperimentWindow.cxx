@@ -327,19 +327,27 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const OT::Num
 
 void DesignOfExperimentWindow::showHideGraphConfigurationWidget(int indexTab)
 {
-  // if plotWidget is visible
-  if (indexTab == 2)
-    emit graphWindowActivated(graphConfigurationWidget_);
-  else if (indexTab == 3)
-    emit graphWindowActivated(plotMatrixConfigurationWidget_);
-  else if (indexTab == 4)
-    emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
-  // if no plotWidget is visible
-  else
+  switch (indexTab)
   {
-    emit graphWindowDeactivated(graphConfigurationWidget_);
-    emit graphWindowDeactivated(plotMatrixConfigurationWidget_);
-    emit graphWindowDeactivated(plotMatrix_X_X_ConfigurationWidget_);
+    // if a plotWidget is visible
+    case 2:
+      if (!graphConfigurationWidget_->isVisible())
+        emit graphWindowActivated(graphConfigurationWidget_);
+      break;
+    case 3:
+      if (!plotMatrixConfigurationWidget_->isVisible())
+        emit graphWindowActivated(plotMatrixConfigurationWidget_);
+      break;
+    case 4:
+      if (!plotMatrix_X_X_ConfigurationWidget_->isVisible())
+        emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
+      break;
+    // if no plotWidget is visible
+    default:
+    {
+      emit graphWindowDeactivated();
+      break;
+    }
   }
 }
 

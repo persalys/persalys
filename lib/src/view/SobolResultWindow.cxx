@@ -228,8 +228,11 @@ void SobolResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
 void SobolResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
   if (newState == 4 || newState == 8 || newState == 10)
-    emit graphWindowActivated(plotsConfigurationWidget_);
+  {
+    if (!plotsConfigurationWidget_->isVisible())
+      emit graphWindowActivated(plotsConfigurationWidget_);
+  }
   else if (newState == 0 || newState == 1 || newState == 9)
-    emit graphWindowDeactivated(plotsConfigurationWidget_);
+    emit graphWindowDeactivated();
 }
 }
