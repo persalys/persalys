@@ -31,7 +31,7 @@ class OTGUI_API MonteCarloResult : public SimulationAnalysisResult
 
 public:
   typedef OT::Collection<OT::NumericalPoint> NumericalPointCollection;
-  typedef OT::Collection<OT::Distribution> DistributionCollection;
+  typedef OT::PersistentCollection<OT::Distribution> DistributionCollection;
 
   /** Default constructor */
   MonteCarloResult();
@@ -61,6 +61,12 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
+protected:
+  void computeMeanConfidenceInterval(const double level);
+  void computeStdConfidenceInterval(const double level);
+  void computeOutliers();
+  void computeFittedDistribution();
+
 private:
   double levelConfidenceInterval_;
   OT::NumericalPoint mean_;
@@ -73,6 +79,7 @@ private:
   OT::NumericalPoint thirdQuartile_;
   OT::Interval meanConfidenceInterval_;
   OT::Interval stdConfidenceInterval_;
+  DistributionCollection fittedDistribution_;
   OT::PersistentCollection<OT::NumericalPoint> outliers_;
 };
 }
