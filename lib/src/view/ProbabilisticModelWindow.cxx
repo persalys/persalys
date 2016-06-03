@@ -458,9 +458,9 @@ void ProbabilisticModelWindow::showHideGraphConfigurationWidget(int indexTab)
   {
     case 0:
     {
-      if (rightSideOfSplitterStackedWidget_->currentIndex() == 2)
-        if (!pdf_cdfPlotsConfigurationWidget_->isVisible())
-          emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
+      if (rightSideOfSplitterStackedWidget_->currentIndex() == 2
+          && (windowState() == 4 || windowState() == 10))
+        emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
       else
         emit graphWindowDeactivated();
       break;
@@ -474,7 +474,10 @@ void ProbabilisticModelWindow::showHideGraphConfigurationWidget(int indexTab)
 
 void ProbabilisticModelWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
-  if (newState == 4 || newState == 8 || newState == 10)
+  if (oldState == 2)
+    return;
+
+  if (newState == 4 || newState == 10)
     showHideGraphConfigurationWidget(currentIndexTab_);
   else if (newState == 0 || newState == 1 || newState == 9)
     emit graphWindowDeactivated();

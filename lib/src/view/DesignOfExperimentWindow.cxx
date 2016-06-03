@@ -356,7 +356,10 @@ void DesignOfExperimentWindow::showHideGraphConfigurationWidget(int indexTab)
 
 void DesignOfExperimentWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
-  if (newState == 4 || newState == 8 || newState == 10)
+  if (oldState == 2)
+    return;
+
+  if (newState == 4 || newState == 10)
     showHideGraphConfigurationWidget(tabWidget_->currentIndex());
   else if (newState == 0 || newState == 1 || newState == 9)
     showHideGraphConfigurationWidget(-1);
