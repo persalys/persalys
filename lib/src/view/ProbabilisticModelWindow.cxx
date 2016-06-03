@@ -37,7 +37,7 @@
 #include <QHeaderView>
 #include <QScrollArea>
 #include <QPushButton>
-#include <QStackedLayout>
+#include <QStackedWidget>
 
 using namespace OT;
 
@@ -94,11 +94,10 @@ void ProbabilisticModelWindow::buildInterface()
   horizontalSplitter->addWidget(inputTableView_);
 
   // Distribution edition
-  QWidget * rightSideOfSplitterWidget = new QWidget;
-  rightSideOfSplitterStackedLayout_ = new QStackedLayout(rightSideOfSplitterWidget);
+  rightSideOfSplitterStackedWidget_ = new QStackedWidget;
 
   // If physical model is not valid: use a dummy widget
-  rightSideOfSplitterStackedLayout_->addWidget(new QWidget);
+  rightSideOfSplitterStackedWidget_->addWidget(new QWidget);
 
   // If the selected variable is deterministic
   QScrollArea * scrollAreaForDeterministic = new QScrollArea;
@@ -112,7 +111,7 @@ void ProbabilisticModelWindow::buildInterface()
   groupBoxParametersLayout->addWidget(valueForDeterministicVariable_, 0, 1);
   groupBoxParametersLayout->setRowStretch(1, 1);
   scrollAreaForDeterministic->setWidget(groupBoxParameters);
-  rightSideOfSplitterStackedLayout_->addWidget(scrollAreaForDeterministic);
+  rightSideOfSplitterStackedWidget_->addWidget(scrollAreaForDeterministic);
 
   // If the selected variable is stochastic
   QScrollArea * rightScrollArea = new QScrollArea;
@@ -121,7 +120,7 @@ void ProbabilisticModelWindow::buildInterface()
   QVBoxLayout * rightFrameLayout = new QVBoxLayout(rightFrame);
 
   //  PDF and CDF graphs
-  QStackedLayout * plotLayout = new QStackedLayout(rightFrameLayout);
+  QStackedWidget * plotStackedWidget = new QStackedWidget;
 
   QVector<PlotWidget*> listPlotWidgets;
   QWidget * widget = new QWidget;
@@ -129,7 +128,7 @@ void ProbabilisticModelWindow::buildInterface()
   pdfPlot_ = new PlotWidget;
   pdfPlot_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
   vBox->addWidget(pdfPlot_, 0, Qt::AlignHCenter|Qt::AlignTop);
-  plotLayout->addWidget(widget);
+  plotStackedWidget->addWidget(widget);
   listPlotWidgets.append(pdfPlot_);
 
   widget = new QWidget;
@@ -137,11 +136,13 @@ void ProbabilisticModelWindow::buildInterface()
   cdfPlot_ = new PlotWidget;
   cdfPlot_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
   vBox->addWidget(cdfPlot_, 0, Qt::AlignHCenter|Qt::AlignTop);
-  plotLayout->addWidget(widget);
+  plotStackedWidget->addWidget(widget);
   listPlotWidgets.append(cdfPlot_);
 
+  rightFrameLayout->addWidget(plotStackedWidget);
+
   pdf_cdfPlotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, QStringList(), QStringList(), GraphConfigurationWidget::PDF);
-  connect(pdf_cdfPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
+  connect(pdf_cdfPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
   connect(rootTab, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
 
   //  parameters
@@ -178,8 +179,8 @@ void ProbabilisticModelWindow::buildInterface()
   rightFrameLayout->addStretch();
 
   rightScrollArea->setWidget(rightFrame);
-  rightSideOfSplitterStackedLayout_->addWidget(rightScrollArea);
-  horizontalSplitter->addWidget(rightSideOfSplitterWidget);
+  rightSideOfSplitterStackedWidget_->addWidget(rightScrollArea);
+  horizontalSplitter->addWidget(rightSideOfSplitterStackedWidget_);
 
   if (inputTableModel_->rowCount())
   {
@@ -291,7 +292,7 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
 {
   if (!index.isValid())
   {
-    rightSideOfSplitterStackedLayout_->setCurrentIndex(0);
+    rightSideOfSplitterStackedWidget_->setCurrentIndex(0);
     return;
   }
 
@@ -304,14 +305,14 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   // If the selected variable is deterministic
   if (distributionName == "Dirac")
   {
-    rightSideOfSplitterStackedLayout_->setCurrentIndex(1);
+    rightSideOfSplitterStackedWidget_->setCurrentIndex(1);
     showHideGraphConfigurationWidget(-1);
     valueForDeterministicVariable_->setValue(input.getValue());
   }
   // If the selected variable is stochastic
   else
   {
-    rightSideOfSplitterStackedLayout_->setCurrentIndex(2);
+    rightSideOfSplitterStackedWidget_->setCurrentIndex(2);
     truncationParamGroupBox_->setExpanded(false);
 
     // fill truncation parameters widgets
@@ -457,7 +458,7 @@ void ProbabilisticModelWindow::showHideGraphConfigurationWidget(int indexTab)
   {
     case 0:
     {
-      if (rightSideOfSplitterStackedLayout_->currentIndex() == 2)
+      if (rightSideOfSplitterStackedWidget_->currentIndex() == 2)
         if (!pdf_cdfPlotsConfigurationWidget_->isVisible())
           emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
       else

@@ -37,7 +37,7 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QLabel>
-#include <QStackedLayout>
+#include <QStackedWidget>
 
 namespace OTGUI {
 class ProbabilisticModelWindow : public OTguiSubWindow
@@ -72,7 +72,7 @@ private:
   int currentIndexTab_;
   QTableView * inputTableView_;
   InputTableProbabilisticModel * inputTableModel_;
-  QStackedLayout * rightSideOfSplitterStackedLayout_;
+  QStackedWidget * rightSideOfSplitterStackedWidget_;
   ValueLineEdit * valueForDeterministicVariable_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;

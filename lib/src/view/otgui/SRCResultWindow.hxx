@@ -26,7 +26,7 @@
 #include "otgui/SRCResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 
-#include <QStackedLayout>
+#include <QStackedWidget>
 
 namespace OTGUI {
 class SRCResultWindow : public OTguiSubWindow
@@ -46,7 +46,7 @@ public slots:
 private:
   SRCResult result_;
   std::vector<std::map<double, int> > indices_;
-  QStackedLayout * frameLayout_;
+  QStackedWidget * scrollAreaWidget_;
   GraphConfigurationWidget * plotsConfigurationWidget_;
   QVector<PlotWidget*> listPlotWidgets_;
 };

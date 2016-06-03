@@ -24,7 +24,7 @@
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 
 #include <QVBoxLayout>
-#include <QStackedLayout>
+#include <QStackedWidget>
 #include <QGroupBox>
 #include <QHeaderView>
 
@@ -180,13 +180,15 @@ void DesignOfExperimentWindow::addTabsForOutputs()
 
   // second tab --------------------------------
   tab = new QWidget;
-  QStackedLayout * plotLayout = new QStackedLayout(tab);
+  QVBoxLayout * plotLayout = new QVBoxLayout(tab);
+  QStackedWidget * stackedWidget = new QStackedWidget;
   QVector<PlotWidget*> listScatterPlotWidgets = GetListScatterPlots(inS, outS, inputNames, inAxisTitles, outputNames, outAxisTitles);
   for (int i=0; i<listScatterPlotWidgets.size(); ++i)
-    plotLayout->addWidget(listScatterPlotWidgets[i]);
+    stackedWidget->addWidget(listScatterPlotWidgets[i]);
 
+  plotLayout->addWidget(stackedWidget);
   graphConfigurationWidget_ = new GraphConfigurationWidget(listScatterPlotWidgets, inputNames, outputNames, GraphConfigurationWidget::Scatter);
-  connect(graphConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
+  connect(graphConfigurationWidget_, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
 
@@ -266,13 +268,13 @@ QWidget* DesignOfExperimentWindow::getMinMaxTableWidget()
 {
   QGroupBox * minMaxGroupBox = new QGroupBox(tr("Minimum and Maximum"));
   QVBoxLayout * minMaxGroupBoxLayout = new QVBoxLayout(minMaxGroupBox);
-  QStackedLayout * minMaxGroupBoxStackedLayout = new QStackedLayout;
+  QStackedWidget * minMaxGroupBoxStackedWidget = new QStackedWidget;
 
   for (int indexOutput=0; indexOutput<designOfExperiment_.getResult().getOutputSample().getDimension(); ++indexOutput)
-    minMaxGroupBoxStackedLayout->addWidget(GetMinMaxTableView(designOfExperiment_.getResult(), indexOutput));
+    minMaxGroupBoxStackedWidget->addWidget(GetMinMaxTableView(designOfExperiment_.getResult(), indexOutput));
 
-  minMaxGroupBoxLayout->addLayout(minMaxGroupBoxStackedLayout);
-  connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), minMaxGroupBoxStackedLayout, SLOT(setCurrentIndex(int)));
+  minMaxGroupBoxLayout->addWidget(minMaxGroupBoxStackedWidget);
+  connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), minMaxGroupBoxStackedWidget, SLOT(setCurrentIndex(int)));
 
   return minMaxGroupBox;
 }

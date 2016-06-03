@@ -26,7 +26,7 @@
 #include "otgui/SobolResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 
-#include <QStackedLayout>
+#include <QStackedWidget>
 
 namespace OTGUI {
 class SobolResultWindow : public OTguiSubWindow
@@ -47,7 +47,7 @@ private:
   SobolResult result_;
   std::vector<std::map<double, int> > firstOrderIndices_;
   std::vector<std::map<double, int> > totalOrderIndices_;
-  QStackedLayout * frameLayout_;
+  QStackedWidget * scrollAreaWidget_;
   GraphConfigurationWidget * plotsConfigurationWidget_;
   QVector<PlotWidget*> listPlotWidgets_;
 };

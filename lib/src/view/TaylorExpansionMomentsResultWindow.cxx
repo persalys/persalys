@@ -26,7 +26,7 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QHeaderView>
-#include <QStackedLayout>
+#include <QStackedWidget>
 
 using namespace OT;
 
@@ -66,8 +66,8 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
   // moments estimation
   QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimate"));
   QVBoxLayout * momentsVbox = new QVBoxLayout(momentsGroupBox);
-  QStackedLayout * momentsTablesLayout = new QStackedLayout;
-  connect(outputsComboBox, SIGNAL(currentIndexChanged(int)), momentsTablesLayout, SLOT(setCurrentIndex(int)));
+  QStackedWidget * momentsTablesWidget = new QStackedWidget;
+  connect(outputsComboBox, SIGNAL(currentIndexChanged(int)), momentsTablesWidget, SLOT(setCurrentIndex(int)));
 
   // loop on all the outputs
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
@@ -99,9 +99,9 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
     // resize table
     momentsEstimationsTable->setModel(momentsEstimationsTableModel);
     momentsEstimationsTable->resizeToContents();
-    momentsTablesLayout->addWidget(momentsEstimationsTable);
+    momentsTablesWidget->addWidget(momentsEstimationsTable);
   }
-  momentsVbox->addLayout(momentsTablesLayout);
+  momentsVbox->addWidget(momentsTablesWidget);
   tabLayout->addWidget(momentsGroupBox);
 
   tabWidget->addTab(tab, "Result");

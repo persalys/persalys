@@ -27,7 +27,7 @@
 #include "otgui/DesignOfExperimentWindow.hxx"
 
 #include <QVBoxLayout>
-#include <QStackedLayout>
+#include <QStackedWidget>
 #include <QScrollArea>
 #include <QHeaderView>
 #include <QGroupBox>
@@ -261,13 +261,13 @@ QWidget* MonteCarloResultWindow::getMinMaxTableWidget()
 {
   QGroupBox * minMaxGroupBox = new QGroupBox(tr("Minimum and Maximum"));
   QVBoxLayout * minMaxGroupBoxLayout = new QVBoxLayout(minMaxGroupBox);
-  QStackedLayout * minMaxGroupBoxStackedLayout = new QStackedLayout;
+  QStackedWidget * minMaxGroupBoxStackedWidget = new QStackedWidget;
 
   for (int outputIndex=0; outputIndex<result_.getOutputSample().getDimension(); ++outputIndex)
-    minMaxGroupBoxStackedLayout->addWidget(DesignOfExperimentWindow::GetMinMaxTableView(result_, outputIndex));
+    minMaxGroupBoxStackedWidget->addWidget(DesignOfExperimentWindow::GetMinMaxTableView(result_, outputIndex));
 
-  minMaxGroupBoxLayout->addLayout(minMaxGroupBoxStackedLayout);
-  connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), minMaxGroupBoxStackedLayout, SLOT(setCurrentIndex(int)));
+  minMaxGroupBoxLayout->addWidget(minMaxGroupBoxStackedWidget);
+  connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), minMaxGroupBoxStackedWidget, SLOT(setCurrentIndex(int)));
 
   return minMaxGroupBox;
 }
@@ -279,7 +279,7 @@ QWidget* MonteCarloResultWindow::getMomentsEstimatesTableWidget()
 
   QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimate"));
   QVBoxLayout * momentsGroupBoxLayout = new QVBoxLayout(momentsGroupBox);
-  QStackedLayout * momentsGroupBoxStackedLayout = new QStackedLayout;
+  QStackedWidget * momentsGroupBoxStackedWidget = new QStackedWidget;
 
   int nbColumns = 2;
   if (isConfidenceIntervalRequired_)
@@ -369,10 +369,10 @@ QWidget* MonteCarloResultWindow::getMomentsEstimatesTableWidget()
         momentsEstimationsTableView->setMinimumWidth(momentsEstimationsTableView->minimumWidth() + widthCorrection);
       }
     }
-    momentsGroupBoxStackedLayout->addWidget(momentsEstimationsTableView);
+    momentsGroupBoxStackedWidget->addWidget(momentsEstimationsTableView);
   }
-  momentsGroupBoxLayout->addLayout(momentsGroupBoxStackedLayout);
-  connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), momentsGroupBoxStackedLayout, SLOT(setCurrentIndex(int))); 
+  momentsGroupBoxLayout->addWidget(momentsGroupBoxStackedWidget);
+  connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), momentsGroupBoxStackedWidget, SLOT(setCurrentIndex(int))); 
 
   return momentsGroupBox;
 }
@@ -385,7 +385,8 @@ QWidget* MonteCarloResultWindow::getPDF_CDFWidget(const OutputCollection & outpu
     outputNames << QString::fromUtf8(outputs[i].getName().c_str());
 
   QWidget * tab = new QWidget;
-  QStackedLayout * plotLayout = new QStackedLayout(tab);
+  QVBoxLayout * plotLayout = new QVBoxLayout(tab);
+  QStackedWidget * stackedWidget = new QStackedWidget;
 
   QVector<PlotWidget*> listPlotWidgets;
 
@@ -402,7 +403,7 @@ QWidget* MonteCarloResultWindow::getPDF_CDFWidget(const OutputCollection & outpu
     else
       plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getName().c_str()));
 
-    plotLayout->addWidget(plot);
+    stackedWidget->addWidget(plot);
     listPlotWidgets.append(plot);
 
     // CDF
@@ -415,12 +416,13 @@ QWidget* MonteCarloResultWindow::getPDF_CDFWidget(const OutputCollection & outpu
     else
       plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getName().c_str()));
 
-    plotLayout->addWidget(plot);
+    stackedWidget->addWidget(plot);
     listPlotWidgets.append(plot);
   }
+  plotLayout->addWidget(stackedWidget);
 
   pdf_cdfPlotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, QStringList(), outputNames, GraphConfigurationWidget::PDFResult);
-  connect(pdf_cdfPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
+  connect(pdf_cdfPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
   return tab;
 }
@@ -433,7 +435,8 @@ QWidget* MonteCarloResultWindow::getBoxPlotWidget(const OutputCollection & outpu
     outputNames << QString::fromUtf8(outputs[i].getName().c_str());
 
   QWidget * tab = new QWidget;
-  QStackedLayout * boxPlotLayout = new QStackedLayout(tab);
+  QVBoxLayout * boxPlotLayout = new QVBoxLayout(tab);
+  QStackedWidget * stackedWidget = new QStackedWidget;
 
   QVector<PlotWidget*> listBoxPlotWidgets;
 
@@ -451,12 +454,13 @@ QWidget* MonteCarloResultWindow::getBoxPlotWidget(const OutputCollection & outpu
     else
       plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getName().c_str()));
 
-    boxPlotLayout->addWidget(plot);
+    stackedWidget->addWidget(plot);
     listBoxPlotWidgets.append(plot);
   }
+  boxPlotLayout->addWidget(stackedWidget);
 
   boxPlotsConfigurationWidget_ = new GraphConfigurationWidget(listBoxPlotWidgets, QStringList(), outputNames, GraphConfigurationWidget::BoxPlot);
-  connect(boxPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), boxPlotLayout, SLOT(setCurrentIndex(int)));
+  connect(boxPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
   return tab;
 }
@@ -490,18 +494,20 @@ QWidget* MonteCarloResultWindow::getScatterPlotsWidget()
   }
 
   QWidget * tab = new QWidget;
-  QStackedLayout * scatterPlotLayout = new QStackedLayout(tab);
+  QVBoxLayout * scatterPlotLayout = new QVBoxLayout(tab);
 
   QVector<PlotWidget*> listScatterPlotWidgets =
     DesignOfExperimentWindow::GetListScatterPlots(result_.getInputSample(), result_.getOutputSample(),
                                                   stochInputNames, inAxisTitles,
                                                   outputNames, outAxisTitles);
 
+  QStackedWidget * stackedWidget = new QStackedWidget;
   for (int i=0; i<listScatterPlotWidgets.size(); ++i)
-    scatterPlotLayout->addWidget(listScatterPlotWidgets[i]);
+    stackedWidget->addWidget(listScatterPlotWidgets[i]);
 
+  scatterPlotLayout->addWidget(stackedWidget);
   scatterPlotsConfigurationWidget_ = new GraphConfigurationWidget(listScatterPlotWidgets, stochInputNames, outputNames, GraphConfigurationWidget::Scatter);
-  connect(scatterPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), scatterPlotLayout, SLOT(setCurrentIndex(int)));
+  connect(scatterPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
   return tab;
 }

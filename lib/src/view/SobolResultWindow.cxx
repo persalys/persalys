@@ -62,8 +62,7 @@ void SobolResultWindow::buildInterface()
   // first tab --------------------------------
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  QFrame * frame = new QFrame;
-  frameLayout_ = new QStackedLayout(frame);
+  scrollAreaWidget_ = new QStackedWidget;
 
   Description inputNames = result_.getInputNames();
   QStringList outputNames;
@@ -148,13 +147,13 @@ void SobolResultWindow::buildInterface()
 
     verticalSplitter->addWidget(widget);
     verticalSplitter->setStretchFactor(1, 1);
-    frameLayout_->addWidget(verticalSplitter);
+    scrollAreaWidget_->addWidget(verticalSplitter);
   }
 
   plotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets_, QStringList(), outputNames, GraphConfigurationWidget::SensitivityIndices);
-  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), frameLayout_, SLOT(setCurrentIndex(int)));
+  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), scrollAreaWidget_, SLOT(setCurrentIndex(int)));
 
-  scrollArea->setWidget(frame);
+  scrollArea->setWidget(scrollAreaWidget_);
   tabWidget->addTab(scrollArea, tr("Result"));
   //
   setWidget(tabWidget);
@@ -163,7 +162,7 @@ void SobolResultWindow::buildInterface()
 
 void SobolResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
 {
-  int indexOutput = frameLayout_->currentIndex();
+  int indexOutput = scrollAreaWidget_->currentIndex();
   NumericalPoint currentFirstOrderIndices(result_.getInputNames().getSize());
   NumericalPoint currentTotalOrderIndices(result_.getInputNames().getSize());
   Description sortedInputNames(result_.getInputNames().getSize());
