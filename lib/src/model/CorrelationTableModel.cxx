@@ -74,7 +74,7 @@ QVariant CorrelationTableModel::data(const QModelIndex & index, int role) const
     return QVariant();
 
   if (role == Qt::DisplayRole || role == Qt::EditRole)
-    return physicalModel_.getCopula().getSpearmanCorrelation()(index.row(), index.column());
+    return QString::number(physicalModel_.getCopula().getSpearmanCorrelation()(index.row(), index.column()));
 
   else if (role == Qt::BackgroundRole && index.row() >= index.column())
     return QBrush(Qt::lightGray);
