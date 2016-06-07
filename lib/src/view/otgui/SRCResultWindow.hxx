@@ -21,15 +21,14 @@
 #ifndef OTGUI_SRCRESULTWINDOW_HXX
 #define OTGUI_SRCRESULTWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
-#include "otgui/AnalysisItem.hxx"
+#include "otgui/ResultWindow.hxx"
 #include "otgui/SRCResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 
 #include <QStackedWidget>
 
 namespace OTGUI {
-class SRCResultWindow : public OTguiSubWindow
+class SRCResultWindow : public ResultWindow
 {
   Q_OBJECT
 
@@ -37,6 +36,7 @@ public:
   SRCResultWindow(AnalysisItem * item);
 
 protected:
+  void setParameters(const Analysis & analysis);
   void buildInterface();
 
 public slots:

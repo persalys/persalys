@@ -35,7 +35,7 @@ using namespace OT;
 namespace OTGUI {
   
 SobolResultWindow::SobolResultWindow(AnalysisItem * item)
-  : OTguiSubWindow(item)
+  : ResultWindow(item)
   , result_(dynamic_cast<SobolAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
 {
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
@@ -50,8 +50,21 @@ SobolResultWindow::SobolResultWindow(AnalysisItem * item)
     firstOrderIndices_.push_back(firstOrder_i);
     totalOrderIndices_.push_back(totalOrder_i);
   }
+  setParameters(item->getAnalysis());
   buildInterface();
-  connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
+}
+
+
+void SobolResultWindow::setParameters(const Analysis & analysis)
+{
+  const SobolAnalysis * SRCanalysis = dynamic_cast<const SobolAnalysis*>(&*analysis.getImplementation());
+  QStringList strList;
+  strList << tr("Sensitivity analysis parameters :") + "\n";
+  strList << tr("Sample size : ") + QString::number(SRCanalysis->getNbSimulations());
+  strList << tr("Seed : ") + QString::number(SRCanalysis->getSeed());
+  strList << tr("Block size : ") + QString::number(SRCanalysis->getBlockSize());
+
+  parameters_ = strList.join("\n");
 }
 
 
@@ -155,6 +168,10 @@ void SobolResultWindow::buildInterface()
 
   scrollArea->setWidget(scrollAreaWidget_);
   tabWidget->addTab(scrollArea, tr("Result"));
+
+  // second tab --------------------------------
+  tabWidget->addTab(buildParametersTextEdit(), tr("Parameters"));
+
   //
   setWidget(tabWidget);
 }

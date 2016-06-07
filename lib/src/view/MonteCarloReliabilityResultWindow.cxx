@@ -36,11 +36,26 @@ using namespace OT;
 namespace OTGUI {
 
 MonteCarloReliabilityResultWindow::MonteCarloReliabilityResultWindow(AnalysisItem * item)
-  : OTguiSubWindow(item)
+  : ResultWindow(item)
   , result_(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
 {
+  setParameters(item->getAnalysis());
   buildInterface();
-  connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
+}
+
+
+void MonteCarloReliabilityResultWindow::setParameters(const Analysis & analysis)
+{
+  const MonteCarloReliabilityAnalysis * MCanalysis = dynamic_cast<const MonteCarloReliabilityAnalysis*>(&*analysis.getImplementation());
+  QStringList strList;
+  strList << tr("Threshold exceedance parameters :") + "\n";
+  strList << tr("Algorithm : ") + tr("Monte Carlo");
+  strList << tr("Maximum outer sampling : ") + QString::number(MCanalysis->getMaximumOuterSampling());
+  strList << tr("Maximum coefficient of variation : ") + QString::number(MCanalysis->getMaximumCoefficientOfVariation());
+  strList << tr("Seed : ") + QString::number(MCanalysis->getSeed());
+  strList << tr("Block size : ") + QString::number(MCanalysis->getBlockSize());
+
+  parameters_ = strList.join("\n");
 }
 
 
@@ -163,6 +178,9 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   convergenceGraphConfigurationWidget_ = new GraphConfigurationWidget(listConvergenceGraph, QStringList(), QStringList()<<outputName, GraphConfigurationWidget::NoType);
 
   tabWidget_->addTab(tab, tr("Convergence graph"));
+
+  // fourth tab --------------------------------
+  tabWidget_->addTab(buildParametersTextEdit(), tr("Parameters"));
 
   //
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));

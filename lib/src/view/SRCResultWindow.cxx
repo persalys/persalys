@@ -31,13 +31,14 @@
 #include <QTableWidget>
 #include <QScrollArea>
 #include <QSplitter>
+#include <QTextEdit>
 
 using namespace OT;
 
 namespace OTGUI {
   
 SRCResultWindow::SRCResultWindow(AnalysisItem * item)
-  : OTguiSubWindow(item)
+  : ResultWindow(item)
   , result_(dynamic_cast<SRCAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
 {
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
@@ -47,8 +48,20 @@ SRCResultWindow::SRCResultWindow(AnalysisItem * item)
       indices_i[result_.getIndices()[i][j]] = j;
     indices_.push_back(indices_i);
   }
+  setParameters(item->getAnalysis());
   buildInterface();
-  connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
+}
+
+
+void SRCResultWindow::setParameters(const Analysis & analysis)
+{
+  const SRCAnalysis * SRCanalysis = dynamic_cast<const SRCAnalysis*>(&*analysis.getImplementation());
+  QStringList strList;
+  strList << tr("Sensitivity analysis parameters :") + "\n";
+  strList << tr("Sample size : ") + QString::number(SRCanalysis->getNbSimulations());
+  strList << tr("Seed : ") + QString::number(SRCanalysis->getSeed());
+
+  parameters_ = strList.join("\n");
 }
 
 
@@ -110,6 +123,10 @@ void SRCResultWindow::buildInterface()
 
   scrollArea->setWidget(scrollAreaWidget_);
   tabWidget->addTab(scrollArea, tr("Result"));
+
+  // second tab --------------------------------
+  tabWidget->addTab(buildParametersTextEdit(), tr("Parameters"));
+
   //
   setWidget(tabWidget);
 }

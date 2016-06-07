@@ -21,15 +21,14 @@
 #ifndef OTGUI_SOBOLRESULTWINDOW_HXX
 #define OTGUI_SOBOLRESULTWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
-#include "otgui/AnalysisItem.hxx"
+#include "otgui/ResultWindow.hxx"
 #include "otgui/SobolResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 
 #include <QStackedWidget>
 
 namespace OTGUI {
-class SobolResultWindow : public OTguiSubWindow
+class SobolResultWindow : public ResultWindow
 {
   Q_OBJECT
 
@@ -37,6 +36,7 @@ public:
   SobolResultWindow(AnalysisItem * item);
 
 protected:
+  void setParameters(const Analysis & analysis);
   void buildInterface();
 
 public slots:

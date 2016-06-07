@@ -21,8 +21,7 @@
 #ifndef OTGUI_MONTECARLORESULTWINDOW_HXX
 #define OTGUI_MONTECARLORESULTWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
-#include "otgui/AnalysisItem.hxx"
+#include "otgui/ResultWindow.hxx"
 #include "otgui/MonteCarloResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
@@ -31,7 +30,7 @@
 #include <QDoubleSpinBox>
 
 namespace OTGUI {
-class MonteCarloResultWindow : public OTguiSubWindow
+class MonteCarloResultWindow : public ResultWindow
 {
   Q_OBJECT
 
@@ -40,6 +39,7 @@ public:
 
 protected:
   void buildInterface();
+  void setParameters(const Analysis & analysis);
   QWidget* getMinMaxTableWidget();
   QWidget* getMomentsEstimatesTableWidget();
   QWidget* getPDF_CDFWidget(const OutputCollection & outputs);

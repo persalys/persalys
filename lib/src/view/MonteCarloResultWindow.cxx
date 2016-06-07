@@ -39,7 +39,7 @@ using namespace OT;
 namespace OTGUI {
 
 MonteCarloResultWindow::MonteCarloResultWindow(AnalysisItem * item)
-  : OTguiSubWindow(item)
+  : ResultWindow(item)
   , result_(dynamic_cast<MonteCarloAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
   , physicalModel_(item->getAnalysis().getPhysicalModel())
   , isConfidenceIntervalRequired_(dynamic_cast<MonteCarloAnalysis*>(&*item->getAnalysis().getImplementation())->isConfidenceIntervalRequired())
@@ -54,8 +54,23 @@ MonteCarloResultWindow::MonteCarloResultWindow(AnalysisItem * item)
   , probaSpinBox_(0)
   , quantileSpinBox_(0)
 {
+  setParameters(item->getAnalysis());
   buildInterface();
-  connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
+}
+
+
+void MonteCarloResultWindow::setParameters(const Analysis & analysis)
+{
+  const MonteCarloAnalysis * MCanalysis = dynamic_cast<const MonteCarloAnalysis*>(&*analysis.getImplementation());
+  QStringList strList;
+  strList << tr("Central tendency parameters :") + "\n";
+  strList << tr("Algorithm : ") + tr("Monte Carlo");
+  strList << tr("Sample size : ") + QString::number(MCanalysis->getNbSimulations());
+  if (MCanalysis->isConfidenceIntervalRequired())
+    strList << tr("Confidence level : ") + QString::number(MCanalysis->getLevelConfidenceInterval()*100) + "\%";
+  strList << tr("Seed : ") + QString::number(MCanalysis->getSeed());
+
+  parameters_ = strList.join("\n");
 }
 
 
@@ -250,6 +265,9 @@ void MonteCarloResultWindow::buildInterface()
   plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
   tabWidget_->addTab(tab, tr("Plot matrix X-X"));
+
+  // eighth tab: parameters ----------------------
+  tabWidget_->addTab(buildParametersTextEdit(), tr("Parameters"));
 
   //
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
