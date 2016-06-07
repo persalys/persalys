@@ -14,6 +14,7 @@ ot_add_source_file ( OTguiStatusBar.cxx )
 ot_add_source_file ( OTguiSubWindow.cxx )
 ot_add_source_file ( OTguiWizard.cxx )
 ot_add_source_file ( OTguiMdiArea.cxx )
+ot_add_source_file ( ResultWindow.cxx )
 ot_add_source_file ( AnalysisExecutionFailedWindow.cxx )
 ot_add_source_file ( ImportTablePage.cxx )
 ot_add_source_file ( DeterministicDesignPage.cxx )
@@ -80,6 +81,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/OTguiSubWindow.hxx
                                   otgui/OTguiWizard.hxx
                                   otgui/OTguiMdiArea.hxx
+                                  otgui/ResultWindow.hxx
                                   otgui/ImportTablePage.hxx
                                   otgui/StudyTreeView.hxx
                                   otgui/DeterministicDesignPage.hxx
