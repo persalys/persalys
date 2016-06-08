@@ -192,24 +192,27 @@ void PlotWidget::plotCurve(const NumericalSample & data, const QPen pen, QwtPlot
 void PlotWidget::plotScatter(const NumericalSample & input, const NumericalSample & output,
                              const QPen pen, QString Xtitle, QString Ytitle)
 {
-  UnsignedInteger size = input.getSize();
-
-  if (output.getSize()!=size)
-    return;
-  
-  double *xData = new double[size];
-  double *yData = new double[size];
-
-  for (UnsignedInteger i=0 ; i<size ; ++i)
+  if (input.getDimension()*input.getSize()*output.getDimension()*output.getSize() == 0)
   {
-    xData[i] = input[i][0];
-    yData[i] = output[i][0];
-    //qDebug() << "x= " << xData[i] << " , y= " << yData[i];
+    qDebug() << "In plotScatter: a sample is empty";
+    return;
+  }
+  if (input.getDimension()*output.getDimension() != 1)
+  {
+    qDebug() << "In plotScatter: the samples must have a dimension of 1";
+    return;
+  }
+  if (output.getSize() != input.getSize())
+  {
+    qDebug() << "In plotScatter: the 2 samples must have the same size";
+    return;
   }
 
-  plotCurve(xData, yData, size, pen, QwtPlotCurve::Dots);
-  delete[] xData;
-  delete[] yData;
+  double *xData = const_cast<double*>(&(input[0][0]));
+  double *yData = const_cast<double*>(&(output[0][0]));
+
+  plotCurve(xData, yData, input.getSize(), pen, QwtPlotCurve::Dots);
+
   setAxisTitle(QwtPlot::xBottom, Xtitle);
   setAxisTitle(QwtPlot::yLeft, Ytitle);
 }
@@ -222,9 +225,10 @@ void PlotWidget::plotPDFCurve(const Distribution & distribution, const QPen pen)
   setAxisTitle(QwtPlot::xBottom, tr("X"));
 
   updateScaleParameters(distribution);
-  plotCurve(distribution.drawPDF().getDrawable(0).getData(), pen);
+  const NumericalSample dataPDF = distribution.drawPDF().getDrawable(0).getData();
+  plotCurve(dataPDF, pen);
   // Add margin at the top to avoid to cut the curve
-  const double yMax = distribution.drawPDF().getDrawable(0).getData().getMax()[1];
+  const double yMax = dataPDF.getMax()[1];
   setAxisScale(QwtPlot::yLeft, 0, yMax * (1+0.02));
   replot();
 }
@@ -237,9 +241,10 @@ void PlotWidget::plotCDFCurve(const Distribution & distribution, const QPen pen)
   setAxisTitle(QwtPlot::xBottom, tr("X"));
 
   updateScaleParameters(distribution);
-  plotCurve(distribution.drawCDF().getDrawable(0).getData(), pen);
+  const NumericalSample dataCDF = distribution.drawCDF().getDrawable(0).getData();
+  plotCurve(dataCDF, pen);
   // Add margin at the top to avoid to cut the curve
-  const double yMax = distribution.drawCDF().getDrawable(0).getData().getMax()[1];
+  const double yMax = dataCDF.getMax()[1];
   setAxisScale(QwtPlot::yLeft, 0, yMax * (1+0.02));
   replot();
 }
