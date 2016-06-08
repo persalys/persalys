@@ -53,7 +53,8 @@ public:
   OT::Interval getStdConfidenceInterval(const double level=0.95);
   NumericalPointCollection getOutliers();
 
-  DistributionCollection getFittedDistribution();
+  NumericalSampleCollection getPDF();
+  NumericalSampleCollection getCDF();
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -65,7 +66,7 @@ protected:
   void computeMeanConfidenceInterval(const double level);
   void computeStdConfidenceInterval(const double level);
   void computeOutliers();
-  void computeFittedDistribution();
+  void computeFittedDistributionPDF_CDF();
 
 private:
   double levelConfidenceInterval_;
@@ -79,8 +80,9 @@ private:
   OT::NumericalPoint thirdQuartile_;
   OT::Interval meanConfidenceInterval_;
   OT::Interval stdConfidenceInterval_;
-  DistributionCollection fittedDistribution_;
   OT::PersistentCollection<OT::NumericalPoint> outliers_;
+  OT::PersistentCollection<OT::NumericalSample> pdf_;
+  OT::PersistentCollection<OT::NumericalSample> cdf_;
 };
 }
 #endif

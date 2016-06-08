@@ -60,7 +60,7 @@ MonteCarloResult::MonteCarloResult(NumericalSample inputSample, NumericalSample 
   computeMeanConfidenceInterval(levelConfidenceInterval_);
   computeStdConfidenceInterval(levelConfidenceInterval_);
   computeOutliers();
-  computeFittedDistribution();
+  computeFittedDistributionPDF_CDF();
 }
   
 
@@ -240,20 +240,33 @@ void MonteCarloResult::computeOutliers()
 }
 
 
-MonteCarloResult::DistributionCollection MonteCarloResult::getFittedDistribution()
+NumericalSampleCollection MonteCarloResult::getPDF()
 {
-  if (!fittedDistribution_.getSize())
-    computeFittedDistribution();
-  return fittedDistribution_;
+  if (!pdf_.getSize())
+    computeFittedDistributionPDF_CDF();
+  return pdf_;
 }
 
 
-void MonteCarloResult::computeFittedDistribution()
+NumericalSampleCollection MonteCarloResult::getCDF()
 {
-  fittedDistribution_ = DistributionCollection();
+  if (!cdf_.getSize())
+    computeFittedDistributionPDF_CDF();
+  return cdf_;
+}
+
+void MonteCarloResult::computeFittedDistributionPDF_CDF()
+{
+  pdf_.clear();
+  cdf_.clear();
+
   KernelSmoothing gaussianKernel;
-    for (UnsignedInteger i=0; i<getOutputSample().getDimension(); ++i)
-      fittedDistribution_.add(gaussianKernel.build(getOutputSample().getMarginal(i), true));
+  for (UnsignedInteger i=0; i<getOutputSample().getDimension(); ++i)
+  {
+    Distribution fittedDistribution = gaussianKernel.build(getOutputSample().getMarginal(i), true);
+    pdf_.add(fittedDistribution.drawPDF().getDrawable(0).getData());
+    cdf_.add(fittedDistribution.drawCDF().getDrawable(0).getData());
+  }
 }
 
 
@@ -272,7 +285,8 @@ void MonteCarloResult::save(Advocate & adv) const
   adv.saveAttribute("thirdQuartile_", thirdQuartile_);
   adv.saveAttribute("meanConfidenceInterval_", meanConfidenceInterval_);
   adv.saveAttribute("stdConfidenceInterval_", stdConfidenceInterval_);
-  adv.saveAttribute("fittedDistributions_", fittedDistribution_);
+  adv.saveAttribute("pdf_", pdf_);
+  adv.saveAttribute("cdf_", cdf_);
   adv.saveAttribute("outliers_", outliers_);
 }
 
@@ -292,7 +306,8 @@ void MonteCarloResult::load(Advocate & adv)
   adv.loadAttribute("thirdQuartile_", thirdQuartile_);
   adv.loadAttribute("meanConfidenceInterval_", meanConfidenceInterval_);
   adv.loadAttribute("stdConfidenceInterval_", stdConfidenceInterval_);
-  adv.loadAttribute("fittedDistributions_", fittedDistribution_);
+  adv.loadAttribute("pdf_", pdf_);
+  adv.loadAttribute("cdf_", cdf_);
   adv.loadAttribute("outliers_", outliers_);
 }
 }
