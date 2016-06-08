@@ -42,9 +42,9 @@ protected:
   void setParameters(const Analysis & analysis);
   QWidget* getMinMaxTableWidget();
   QWidget* getMomentsEstimatesTableWidget();
-  QWidget* getPDF_CDFWidget(const OutputCollection & outputs);
-  QWidget* getBoxPlotWidget(const OutputCollection & outputs);
-  QWidget* getScatterPlotsWidget();
+  QWidget* getPDF_CDFWidget(const QStringList & outputNames, const QStringList & outAxisTitles);
+  QWidget* getBoxPlotWidget(const QStringList & outputNames, const QStringList & outAxisTitles);
+  QWidget* getScatterPlotsWidget(const QStringList & outputNames, const QStringList & outAxisTitles);
 
 public slots:
   void updateSpinBoxes(int indexOutput=0);

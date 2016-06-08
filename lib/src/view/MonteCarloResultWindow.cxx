@@ -77,10 +77,18 @@ void MonteCarloResultWindow::setParameters(const Analysis & analysis)
 void MonteCarloResultWindow::buildInterface()
 {
   // outputs
-  OutputCollection outputs = physicalModel_.getOutputs();
   QStringList outputNames;
-  for (int i=0; i<outputs.getSize(); ++i)
-    outputNames << QString::fromUtf8(outputs[i].getName().c_str());
+  QStringList outAxisTitles;
+  for (int i=0; i<result_.getOutputSample().getDimension(); ++i)
+  {
+    String outputName = result_.getOutputSample().getDescription()[i];
+    outputNames << QString::fromUtf8(outputName.c_str());
+    QString outputDescription = QString::fromUtf8(physicalModel_.getOutputByName(outputName).getDescription().c_str());
+    if (!outputDescription.isEmpty())
+      outAxisTitles << outputDescription;
+    else
+      outAxisTitles << outputNames.last();
+  }
 
   // tabWidget
   tabWidget_ = new QTabWidget;
@@ -101,7 +109,6 @@ void MonteCarloResultWindow::buildInterface()
   const bool resultsSampleIsValid = tabResultModel->sampleIsValid();
 
   // second tab: Summary -----------------------------
-
   tab = new QWidget;
   tabLayout = new QVBoxLayout(tab);
 
@@ -189,7 +196,7 @@ void MonteCarloResultWindow::buildInterface()
   // if the sample is valid:
   if (resultsSampleIsValid)
   {
-    tab = getPDF_CDFWidget(outputs);
+    tab = getPDF_CDFWidget(outputNames, outAxisTitles);
   }
   // if the results sample contains NAN
   else
@@ -208,7 +215,7 @@ void MonteCarloResultWindow::buildInterface()
   // if the sample is valid:
   if (resultsSampleIsValid)
   {
-    tab = getBoxPlotWidget(outputs);
+    tab = getBoxPlotWidget(outputNames, outAxisTitles);
   }
   // if the results sample contains NAN
   else
@@ -227,7 +234,7 @@ void MonteCarloResultWindow::buildInterface()
   // if the sample is valid:
   if (resultsSampleIsValid)
   {
-    tab = getScatterPlotsWidget();
+    tab = getScatterPlotsWidget(outputNames, outAxisTitles);
   }
   // if the results sample contains NAN
   else
@@ -396,30 +403,23 @@ QWidget* MonteCarloResultWindow::getMomentsEstimatesTableWidget()
 }
 
 
-QWidget* MonteCarloResultWindow::getPDF_CDFWidget(const OutputCollection & outputs)
+QWidget* MonteCarloResultWindow::getPDF_CDFWidget(const QStringList & outputNames, const QStringList & outAxisTitles)
 {
-  QStringList outputNames;
-  for (int i=0; i<outputs.getSize(); ++i)
-    outputNames << QString::fromUtf8(outputs[i].getName().c_str());
-
   QWidget * tab = new QWidget;
   QVBoxLayout * plotLayout = new QVBoxLayout(tab);
   QStackedWidget * stackedWidget = new QStackedWidget;
 
   QVector<PlotWidget*> listPlotWidgets;
 
-  for (int i=0; i<outputs.getSize(); ++i)
+  for (int i=0; i<outputNames.size(); ++i)
   {
     PlotWidget * plot = new PlotWidget;
 
     // PDF
     plot->plotHistogram(result_.getOutputSample().getMarginal(i));
-    plot->plotPDFCurve(result_.getFittedDistribution()[i]);
-    plot->setTitle(tr("PDF: ") + QString::fromUtf8(outputs[i].getName().c_str()));
-    if (outputs[i].getDescription().size())
-      plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getDescription().c_str()));
-    else
-      plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getName().c_str()));
+    plot->plotCurve(result_.getPDF()[i]);
+    plot->setTitle(tr("PDF: ") + outputNames[i]);
+    plot->setAxisTitle(QwtPlot::xBottom, outAxisTitles[i]);
 
     stackedWidget->addWidget(plot);
     listPlotWidgets.append(plot);
@@ -427,12 +427,9 @@ QWidget* MonteCarloResultWindow::getPDF_CDFWidget(const OutputCollection & outpu
     // CDF
     plot = new PlotWidget;
     plot->plotHistogram(result_.getOutputSample().getMarginal(i), 1);
-    plot->plotCDFCurve(result_.getFittedDistribution()[i]);
-    plot->setTitle(tr("CDF: ") + QString::fromUtf8(outputs[i].getName().c_str()));
-    if (outputs[i].getDescription().size())
-      plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getDescription().c_str()));
-    else
-      plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[i].getName().c_str()));
+    plot->plotCurve(result_.getCDF()[i]);
+    plot->setTitle(tr("CDF: ") + outputNames[i]);
+    plot->setAxisTitle(QwtPlot::xBottom, outAxisTitles[i]);
 
     stackedWidget->addWidget(plot);
     listPlotWidgets.append(plot);
@@ -446,19 +443,15 @@ QWidget* MonteCarloResultWindow::getPDF_CDFWidget(const OutputCollection & outpu
 }
 
 
-QWidget* MonteCarloResultWindow::getBoxPlotWidget(const OutputCollection & outputs)
+QWidget* MonteCarloResultWindow::getBoxPlotWidget(const QStringList & outputNames, const QStringList & outAxisTitles)
 {
-  QStringList outputNames;
-  for (int i=0; i<outputs.getSize(); ++i)
-    outputNames << QString::fromUtf8(outputs[i].getName().c_str());
-
   QWidget * tab = new QWidget;
   QVBoxLayout * boxPlotLayout = new QVBoxLayout(tab);
   QStackedWidget * stackedWidget = new QStackedWidget;
 
   QVector<PlotWidget*> listBoxPlotWidgets;
 
-  for (int i=0; i<outputs.getSize(); ++i)
+  for (int i=0; i<outputNames.size(); ++i)
   {
     PlotWidget * plot = new PlotWidget;
 
@@ -466,11 +459,8 @@ QWidget* MonteCarloResultWindow::getBoxPlotWidget(const OutputCollection & outpu
     double Q1 = result_.getFirstQuartile()[i];
     double Q3 = result_.getThirdQuartile()[i];
     plot->plotBoxPlot(median, Q1, Q3, Q1 - 1.5*(Q3-Q1), Q3 + 1.5*(Q3-Q1), result_.getOutliers()[i]);
-    plot->setTitle(tr("Box plot: ") + QString::fromUtf8(outputs[i].getName().c_str()));
-    if (outputs[i].getDescription().size())
-      plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getDescription().c_str()));
-    else
-      plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getName().c_str()));
+    plot->setTitle(tr("Box plot: ") + outputNames[i]);
+    plot->setAxisTitle(QwtPlot::yLeft, outAxisTitles[i]);
 
     stackedWidget->addWidget(plot);
     listBoxPlotWidgets.append(plot);
@@ -484,7 +474,7 @@ QWidget* MonteCarloResultWindow::getBoxPlotWidget(const OutputCollection & outpu
 }
 
 
-QWidget* MonteCarloResultWindow::getScatterPlotsWidget()
+QWidget* MonteCarloResultWindow::getScatterPlotsWidget(const QStringList & outputNames, const QStringList & outAxisTitles)
 {
   QStringList stochInputNames;
   QStringList inAxisTitles;
@@ -497,18 +487,6 @@ QWidget* MonteCarloResultWindow::getScatterPlotsWidget()
       inAxisTitles << inputDescription;
     else
       inAxisTitles << stochInputNames.last();
-  }
-  QStringList outputNames;
-  QStringList outAxisTitles;
-  for (int i=0; i<result_.getOutputSample().getDimension(); ++i)
-  {
-    String outputName = result_.getOutputSample().getDescription()[i];
-    outputNames << QString::fromUtf8(outputName.c_str());
-    QString outputDescription = QString::fromUtf8(physicalModel_.getOutputByName(outputName).getDescription().c_str());
-    if (!outputDescription.isEmpty())
-      outAxisTitles << outputDescription;
-    else
-      outAxisTitles << outputNames.last();
   }
 
   QWidget * tab = new QWidget;
@@ -535,6 +513,8 @@ void MonteCarloResultWindow::updateSpinBoxes(int indexOutput)
 {
   const double min = result_.getOutputSample().getMin()[indexOutput];
   const double max = result_.getOutputSample().getMax()[indexOutput];
+
+  SignalBlocker blocker(quantileSpinBox_);
   quantileSpinBox_->setMinimum(min);
   quantileSpinBox_->setMaximum(max);
   quantileSpinBox_->setSingleStep((max-min)/100);
