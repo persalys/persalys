@@ -129,7 +129,7 @@ void MonteCarloReliabilityResultWindow::buildInterface()
 
   // output histogram
   QVector<PlotWidget*> listHistogram;
-  PlotWidget * plot = new PlotWidget;
+  PlotWidget * plot = new PlotWidget("histogram");
   QString outputName(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
   plot->plotHistogram(result_.getOutputSample(), 2, 0, outputName + tr(" distribution"));
   NumericalSample threshold = NumericalSample(2, 2);
@@ -140,7 +140,7 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   plot->plotCurve(threshold, QPen(Qt::red), QwtPlotCurve::Lines, 0, tr("Threshold"));
   plot->setAxisTitle(QwtPlot::xBottom, tr("Values"));
   plot->setAxisTitle(QwtPlot::yLeft, tr("Number of simulations"));
-  plot->insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
+  plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
   plot->setTitle(tr("Output ") + outputName + tr(" distribution"));
 
   listHistogram.append(plot);
@@ -155,7 +155,7 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   tabLayout = new QVBoxLayout(tab);
 
   QVector<PlotWidget*> listConvergenceGraph;
-  plot = new PlotWidget;
+  plot = new PlotWidget("convergence");
   plot->plotCurve(result_.getConvergenceSample(), QPen(Qt::red), QwtPlotCurve::Lines, 0, tr("Probability estimate"));
   if (result_.getConvergenceSampleLowerBound().getSize())
     plot->plotCurve(result_.getConvergenceSampleLowerBound(), QPen(Qt::green), QwtPlotCurve::Lines, 0, tr("Lower bound"));
@@ -164,7 +164,7 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   plot->setTitle(tr("Monte Carlo convergence graph at level 0.95"));
   plot->setAxisTitle(QwtPlot::yLeft, tr("Estimate"));
   plot->setAxisTitle(QwtPlot::xBottom, tr("Outer iteration"));
-  plot->insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
+  plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
 #if (QWT_VERSION >= 0x060100)
   QwtLogScaleEngine * scaleEngin = new QwtLogScaleEngine();
 #else

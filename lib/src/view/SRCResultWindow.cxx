@@ -84,7 +84,7 @@ void SRCResultWindow::buildInterface()
     QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
 
     // plot
-    PlotWidget * plot = new PlotWidget(true);
+    PlotWidget * plot = new PlotWidget("sensitivitySRC", true);
     plot->plotSensitivityIndices(result_.getIndices()[i], NumericalPoint(), inputNames);
     plot->setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
 

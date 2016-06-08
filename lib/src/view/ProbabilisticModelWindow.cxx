@@ -125,7 +125,7 @@ void ProbabilisticModelWindow::buildInterface()
   QVector<PlotWidget*> listPlotWidgets;
   QWidget * widget = new QWidget;
   QVBoxLayout * vBox = new QVBoxLayout(widget);
-  pdfPlot_ = new PlotWidget;
+  pdfPlot_ = new PlotWidget("distributionPDF");
   pdfPlot_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
   vBox->addWidget(pdfPlot_, 0, Qt::AlignHCenter|Qt::AlignTop);
   plotStackedWidget->addWidget(widget);
@@ -133,7 +133,7 @@ void ProbabilisticModelWindow::buildInterface()
 
   widget = new QWidget;
   vBox = new QVBoxLayout(widget);
-  cdfPlot_ = new PlotWidget;
+  cdfPlot_ = new PlotWidget("distributionCDF");
   cdfPlot_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
   vBox->addWidget(cdfPlot_, 0, Qt::AlignHCenter|Qt::AlignTop);
   plotStackedWidget->addWidget(widget);

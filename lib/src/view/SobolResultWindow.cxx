@@ -89,7 +89,7 @@ void SobolResultWindow::buildInterface()
     QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
 
     // plot
-    PlotWidget * plot = new PlotWidget(true);
+    PlotWidget * plot = new PlotWidget("sensitivitySobol", true);
     NumericalPoint firstOrderIndices_i = result_.getFirstOrderIndices()[i];
     SymmetricMatrix secondOrderIndices_i = result_.getSecondOrderIndices()[i];
     NumericalPoint totalOrderIndices_i = result_.getTotalOrderIndices()[i];

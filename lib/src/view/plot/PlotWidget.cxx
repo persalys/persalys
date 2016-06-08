@@ -63,8 +63,9 @@ private:
 
 const QColor PlotWidget::DefaultHistogramColor = QColor(127, 172, 210);
 
-PlotWidget::PlotWidget(bool isIndicesPlot, QWidget * parent)
+PlotWidget::PlotWidget(const QString plotTypeName, const bool isIndicesPlot, QWidget * parent)
   : QwtPlot(parent)
+  , plotTypeName_(plotTypeName)
 {
   if (!isIndicesPlot)
   {
@@ -81,7 +82,7 @@ PlotWidget::PlotWidget(bool isIndicesPlot, QWidget * parent)
 
   // show coordinates
   ( void ) new QwtPlotPicker(QwtPlot::xBottom, QwtPlot::yLeft,
-                              QwtPlotPicker::CrossRubberBand, QwtPicker::AlwaysOn, canvas());
+                             QwtPlotPicker::CrossRubberBand, QwtPicker::AlwaysOn, canvas());
 
   setCanvasBackground(Qt::white);
   plotLayout()->setAlignCanvasToScales(true);
@@ -113,7 +114,7 @@ void PlotWidget::exportPlot()
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
   QString fileName = QFileDialog::getSaveFileName(this, tr("Export plot"),
-                     currentDir,
+                     currentDir + QDir::separator() + plotTypeName_,
                      tr("Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff *.svg *.pdf *.ps)"));
 
   if (!fileName.isEmpty())

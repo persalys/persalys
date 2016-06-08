@@ -39,7 +39,7 @@ public:
   static const QColor DefaultHistogramColor;
 
   /// constructor
-  PlotWidget(bool isIndicesPlot = false, QWidget * parent = 0);
+  PlotWidget(const QString plotTypeName = "", const bool isIndicesPlot = false, QWidget * parent = 0);
 
   /// plot a curve
   void plotCurve(double * x, double * y, int size, const QPen pen=QPen(Qt::black, 2),
@@ -72,6 +72,7 @@ private:
 
 private:
 // TODO  QwtPlotGrid * grid_;
+  QString plotTypeName_;
   QAction * exportPlotAction_;
 };
 }

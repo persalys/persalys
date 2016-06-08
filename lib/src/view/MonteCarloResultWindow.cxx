@@ -413,7 +413,7 @@ QWidget* MonteCarloResultWindow::getPDF_CDFWidget(const QStringList & outputName
 
   for (int i=0; i<outputNames.size(); ++i)
   {
-    PlotWidget * plot = new PlotWidget;
+    PlotWidget * plot = new PlotWidget("distributionPDF");
 
     // PDF
     plot->plotHistogram(result_.getOutputSample().getMarginal(i));
@@ -425,7 +425,7 @@ QWidget* MonteCarloResultWindow::getPDF_CDFWidget(const QStringList & outputName
     listPlotWidgets.append(plot);
 
     // CDF
-    plot = new PlotWidget;
+    plot = new PlotWidget("distributionCDF");
     plot->plotHistogram(result_.getOutputSample().getMarginal(i), 1);
     plot->plotCurve(result_.getCDF()[i]);
     plot->setTitle(tr("CDF: ") + outputNames[i]);
@@ -453,7 +453,7 @@ QWidget* MonteCarloResultWindow::getBoxPlotWidget(const QStringList & outputName
 
   for (int i=0; i<outputNames.size(); ++i)
   {
-    PlotWidget * plot = new PlotWidget;
+    PlotWidget * plot = new PlotWidget("boxplot");
 
     double median = result_.getMedian()[i];
     double Q1 = result_.getFirstQuartile()[i];

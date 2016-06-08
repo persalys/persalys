@@ -293,14 +293,14 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const OT::Num
   {
     for (int i=0; i<nbOutputs; ++i)
     {
-      PlotWidget * plot = new PlotWidget;
+      PlotWidget * plot = new PlotWidget("scatterplot");
       plot->plotScatter(inS.getMarginal(j), outS.getMarginal(i), pen, inAxisNames[j], outAxisNames[i]);
       plot->setTitle(tr("Scatter plot: ") + outNames[i] + tr(" vs ") + inNames[j]);
       listScatterPlotWidgets.append(plot);
     }
     for (int i=0; i<nbInputs; ++i)
     {
-      PlotWidget * plot = new PlotWidget;
+      PlotWidget * plot = new PlotWidget("scatterplot");
       plot->plotScatter(inS.getMarginal(j), inS.getMarginal(i), pen, inAxisNames[j], inAxisNames[i]);
       plot->setTitle(tr("Scatter plot: ") + inNames[i] + tr(" vs ") + inNames[j]);
       listScatterPlotWidgets.append(plot);
@@ -310,14 +310,14 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const OT::Num
   {
     for (int i=0; i<nbOutputs; ++i)
     {
-      PlotWidget * plot = new PlotWidget;
+      PlotWidget * plot = new PlotWidget("scatterplot");
       plot->plotScatter(outS.getMarginal(j), outS.getMarginal(i), pen, outAxisNames[j], outAxisNames[i]);
       plot->setTitle(tr("Scatter plot: ") + outNames[i] + tr(" vs ") + outNames[j]);
       listScatterPlotWidgets.append(plot);
     }
     for (int i=0; i<nbInputs; ++i)
     {
-      PlotWidget * plot = new PlotWidget;
+      PlotWidget * plot = new PlotWidget("scatterplot");
       plot->plotScatter(outS.getMarginal(j), inS.getMarginal(i), pen, outAxisNames[j], inAxisNames[i]);
       plot->setTitle(tr("Scatter plot: ") + inNames[i] + tr(" vs ") + outNames[j]);
       listScatterPlotWidgets.append(plot);
