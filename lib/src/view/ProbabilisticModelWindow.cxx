@@ -34,7 +34,6 @@
 #include "TruncatedNormal.hxx"
 
 #include <QSplitter>
-#include <QHeaderView>
 #include <QScrollArea>
 #include <QPushButton>
 #include <QStackedWidget>
@@ -66,6 +65,11 @@ void ProbabilisticModelWindow::buildInterface()
 
   // Inputs table
   inputTableView_ = new QTableView;
+  inputTableView_->setSelectionMode(QAbstractItemView::SingleSelection);
+  inputTableHeaderView_ = new CheckableHeaderView;
+  if (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize())
+      inputTableHeaderView_->setChecked(true);
+  inputTableView_->setHorizontalHeader(inputTableHeaderView_);
   QStringList items;
   Description listDistributions = DistributionDictionary::GetAvailableDistributions();
   for (UnsignedInteger i=0; i<listDistributions.getSize(); ++i)
@@ -90,6 +94,8 @@ void ProbabilisticModelWindow::buildInterface()
   connect(inputTableView_, SIGNAL(clicked(QModelIndex)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(distributionChanged(const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
+  connect(inputTableModel_, SIGNAL(distributionsChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
+  connect(inputTableModel_, SIGNAL(checked(bool)), inputTableHeaderView_, SLOT(setChecked(bool)));
 
   horizontalSplitter->addWidget(inputTableView_);
 
@@ -248,6 +254,8 @@ void ProbabilisticModelWindow::updateStochasticInputsTable()
     inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
   connect(inputTableModel_, SIGNAL(distributionChanged(const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
+  connect(inputTableModel_, SIGNAL(distributionsChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
+  connect(inputTableModel_, SIGNAL(checked(bool)), inputTableHeaderView_, SLOT(setChecked(bool)));
 }
 
 
@@ -325,6 +333,12 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
     updatePlots();
     showHideGraphConfigurationWidget(0);
   }
+}
+
+
+void ProbabilisticModelWindow::updateCurrentVariableDistributionWidgets()
+{
+  updateDistributionWidgets(inputTableView_->currentIndex());
 }
 
 

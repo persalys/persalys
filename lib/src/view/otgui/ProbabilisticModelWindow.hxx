@@ -30,6 +30,7 @@
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/ValueLineEdit.hxx"
+#include "otgui/CheckableHeaderView.hxx"
 
 #include <QGroupBox>
 #include <QVBoxLayout>
@@ -54,6 +55,7 @@ protected:
 
 public slots:
   void updateDistributionWidgets(const QModelIndex & index);
+  void updateCurrentVariableDistributionWidgets();
   void updateDistributionParametersWidgets(const QModelIndex & index);
   void updateTruncationParametersWidgets(const QModelIndex & index);
   void updateProbabilisticModel();
@@ -72,6 +74,7 @@ private:
   int currentIndexTab_;
   QTableView * inputTableView_;
   InputTableProbabilisticModel * inputTableModel_;
+  CheckableHeaderView * inputTableHeaderView_;
   QStackedWidget * rightSideOfSplitterStackedWidget_;
   ValueLineEdit * valueForDeterministicVariable_;
   PlotWidget * pdfPlot_;

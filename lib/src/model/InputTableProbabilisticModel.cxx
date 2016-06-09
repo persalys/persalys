@@ -80,8 +80,21 @@ QVariant InputTableProbabilisticModel::headerData(int section, Qt::Orientation o
       default:
         return QVariant();
     }
+  return QAbstractTableModel::headerData(section, orientation, role);
+}
 
-  return QVariant();
+
+bool InputTableProbabilisticModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
+{
+  if (role == Qt::CheckStateRole && orientation == Qt::Horizontal)
+  {
+    for (int i=0; i<rowCount(); ++i)
+      if (data(index(i, 0), role).toInt() != (value.toBool()? Qt::Checked:Qt::Unchecked))
+        setData(index(i, 0), value.toBool()? Qt::Checked:Qt::Unchecked, role);
+    emit distributionsChanged();
+  }
+
+  return QAbstractTableModel::setHeaderData(section, orientation, value, role);
 }
 
 
@@ -151,6 +164,10 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
     physicalModel_.blockNotification(false);
     emit dataChanged(index, this->index(index.row(), 1));
     emit correlationToChange();
+    if (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize())
+      emit checked(true);
+    else
+      emit checked(false);
     return true;
   }
   else if (role == Qt::EditRole && index.column() == 1)
