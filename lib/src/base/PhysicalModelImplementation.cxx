@@ -403,7 +403,9 @@ ComposedDistribution PhysicalModelImplementation::getComposedDistribution() cons
   for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
     if (inputs_[i].isStochastic())
       marginales.add(inputs_[i].getDistribution());
-  return ComposedDistribution(marginales, getCopula());
+  if (marginales.getSize())
+    return ComposedDistribution(marginales, getCopula());
+  return ComposedDistribution(); // we can not build a ComposedDistribution with an empty collection
 }
 
 
