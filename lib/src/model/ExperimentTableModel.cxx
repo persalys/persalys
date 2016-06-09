@@ -81,7 +81,7 @@ QVariant ExperimentTableModel::headerData(int section, Qt::Orientation orientati
   if (orientation == Qt::Vertical && role == Qt::DisplayRole)
   {
     if (section != 0)
-      return section - 1;
+      return section;
     else
       return QVariant();
   }
