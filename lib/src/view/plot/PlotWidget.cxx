@@ -52,7 +52,7 @@ public:
   {
     const int index = qRound(value);
     if (index >= 0 && index < (int)labels_.getSize())
-      return QwtText(labels_[index].c_str());
+      return QwtText(QString::fromUtf8(labels_[index].c_str()));
     return QwtText();
   }
 

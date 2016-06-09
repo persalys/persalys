@@ -67,7 +67,7 @@ void SobolResultWindow::buildInterface()
   Description inputNames = result_.getInputNames();
   QStringList outputNames;
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
-    outputNames << result_.getOutputNames()[i].c_str();
+    outputNames << QString::fromUtf8(result_.getOutputNames()[i].c_str());
 
   NumericalPoint interactionsValues(result_.getOutputNames().getSize());
 
