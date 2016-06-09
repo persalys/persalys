@@ -24,6 +24,7 @@
 #include "otgui/ResultWindow.hxx"
 #include "otgui/SobolResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
 
 #include <QStackedWidget>
 
@@ -45,8 +46,7 @@ public slots:
 
 private:
   SobolResult result_;
-  std::vector<std::map<double, int> > firstOrderIndices_;
-  std::vector<std::map<double, int> > totalOrderIndices_;
+  CustomStandardItemModel * tableModel_;
   QStackedWidget * scrollAreaWidget_;
   GraphConfigurationWidget * plotsConfigurationWidget_;
   QVector<PlotWidget*> listPlotWidgets_;

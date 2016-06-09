@@ -24,6 +24,7 @@
 #include "otgui/ResultWindow.hxx"
 #include "otgui/SRCResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
 
 #include <QStackedWidget>
 
@@ -45,7 +46,7 @@ public slots:
 
 private:
   SRCResult result_;
-  std::vector<std::map<double, int> > indices_;
+  CustomStandardItemModel * tableModel_;
   QStackedWidget * scrollAreaWidget_;
   GraphConfigurationWidget * plotsConfigurationWidget_;
   QVector<PlotWidget*> listPlotWidgets_;

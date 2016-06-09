@@ -41,13 +41,6 @@ SRCResultWindow::SRCResultWindow(AnalysisItem * item)
   : ResultWindow(item)
   , result_(dynamic_cast<SRCAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
 {
-  for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
-  {
-    std::map<double, int> indices_i;
-    for (UnsignedInteger j=0; j<result_.getIndices().getDimension(); ++j)
-      indices_i[result_.getIndices()[i][j]] = j;
-    indices_.push_back(indices_i);
-  }
   setParameters(item->getAnalysis());
   buildInterface();
 }
@@ -100,17 +93,17 @@ void SRCResultWindow::buildInterface()
 #else
     table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 #endif
-    CustomStandardItemModel * model = new CustomStandardItemModel(inputNames.getSize(), 2);
-    model->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Index"));
-    table->setModel(model);
+    table->setSortingEnabled(true);
+    tableModel_ = new CustomStandardItemModel(inputNames.getSize(), 2);
+    tableModel_->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Index"));
+    table->setModel(tableModel_);
 
     // fill table
     for (UnsignedInteger j=0; j<inputNames.getSize(); ++j)
     {
-      model->setNotEditableItem(j, 0, inputNames[j].c_str());
-      model->setNotEditableItem(j, 1, result_.getIndices()[i][j]);
+      tableModel_->setNotEditableItem(j, 0, QString::fromUtf8(inputNames[j].c_str()));
+      tableModel_->setNotEditableItem(j, 1, result_.getIndices()[i][j]);
     }
-    table->setSortingEnabled(true);
     connect(table->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
 
     verticalSplitter->addWidget(table);
@@ -137,32 +130,10 @@ void SRCResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
   int indexOutput = scrollAreaWidget_->currentIndex();
   NumericalPoint currentIndices(result_.getInputNames().getSize());
   Description sortedInputNames(result_.getInputNames().getSize());
-
-  switch (section)
+  for (int i=0; i<result_.getInputNames().getSize(); ++i)
   {
-    case 1:
-    {
-      int index = 0;
-      if (order == Qt::DescendingOrder)
-      {
-        for (std::map<double,int>::reverse_iterator it=indices_[indexOutput].rbegin(); it!=indices_[indexOutput].rend(); ++it, index++)
-        {
-          currentIndices[index] = result_.getIndices()[indexOutput][it->second];
-          sortedInputNames[index] = result_.getInputNames()[it->second];
-        }
-      }
-      else
-      {
-        for (std::map<double,int>::iterator it=indices_[indexOutput].begin(); it!=indices_[indexOutput].end(); ++it, index++)
-        {
-          currentIndices[index] = result_.getIndices()[indexOutput][it->second];
-          sortedInputNames[index] = result_.getInputNames()[it->second];
-        }
-      }
-      break;
-    }
-    default:
-      return;
+    sortedInputNames[i] = tableModel_->data(tableModel_->index(i, 0)).toString().toStdString();
+    currentIndices[i] = tableModel_->data(tableModel_->index(i, 1)).toDouble();
   }
 
   listPlotWidgets_[indexOutput]->clear();
