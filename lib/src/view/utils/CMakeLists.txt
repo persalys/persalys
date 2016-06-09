@@ -16,6 +16,7 @@ ot_add_source_file (CopyableTableView.cxx)
 ot_add_source_file (QtTools.cxx)
 ot_add_source_file (ResizableTableViewWithoutScrollBar.cxx)
 ot_add_source_file (DoubleSpinBox.cxx)
+ot_add_source_file (CheckableHeaderView.cxx)
 
 qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
               otgui/ListWidgetWithCheckBox.hxx
@@ -32,6 +33,7 @@ qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
               otgui/QtTools.hxx
               otgui/ResizableTableViewWithoutScrollBar.hxx
               otgui/DoubleSpinBox.hxx
+              otgui/CheckableHeaderView.hxx
              )
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
