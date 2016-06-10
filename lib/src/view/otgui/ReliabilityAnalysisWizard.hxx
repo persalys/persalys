@@ -24,9 +24,9 @@
 #include "otgui/OTStudy.hxx"
 #include "otgui/LimitState.hxx"
 #include "otgui/OTguiWizard.hxx"
+#include "otgui/DoubleSpinBox.hxx"
 
 #include <QButtonGroup>
-#include <QSpinBox>
 
 namespace OTGUI {
 class ReliabilityAnalysisWizard : public OTguiWizard
@@ -61,7 +61,7 @@ private:
   QButtonGroup * methodGroup_;
   QWidget * monteCarloWidget_;
   QSpinBox * maxiOuterSamplingSpinbox_;
-  QDoubleSpinBox * maxiCoefficientOfVariationSpinbox_;
+  DoubleSpinBox * maxiCoefficientOfVariationSpinbox_;
   QSpinBox * seedSpinbox_;
   QSpinBox * blockSizeSpinbox_;
 };

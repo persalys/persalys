@@ -95,9 +95,10 @@ void ReliabilityAnalysisWizard::buildInterface()
   mclayout->addWidget(maxiOuterSamplingSpinbox_, 0, 1);
 
   QLabel * maxiCoefficientOfVariationLabel = new QLabel(tr("Maximum coefficient of variation"));
-  maxiCoefficientOfVariationSpinbox_ = new QDoubleSpinBox;
+  maxiCoefficientOfVariationSpinbox_ = new DoubleSpinBox;
   maxiCoefficientOfVariationSpinbox_->setMinimum(0.);
   maxiCoefficientOfVariationSpinbox_->setMaximum(1.);
+  maxiCoefficientOfVariationSpinbox_->setSingleStep(0.01);
   if (analysis_.getImplementation()->getClassName() == "MonteCarloReliabilityAnalysis")
     maxiCoefficientOfVariationSpinbox_->setValue(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getMaximumCoefficientOfVariation());
   connect(maxiCoefficientOfVariationSpinbox_, SIGNAL(valueChanged(double)), this, SLOT(maxiCoefficientOfVariationChanged(double)));

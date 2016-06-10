@@ -23,9 +23,9 @@
 
 #include "otgui/OTStudy.hxx"
 #include "otgui/OTguiWizard.hxx"
+#include "otgui/DoubleSpinBox.hxx"
 
 #include <QButtonGroup>
-#include <QSpinBox>
 #include <QCheckBox>
 
 namespace OTGUI {
@@ -62,7 +62,7 @@ private:
   QSpinBox * nbSimuSpinbox_;
   QSpinBox * seedSpinbox_;
   QCheckBox * confidenceIntervalCheckBox_;
-  QDoubleSpinBox * levelConfidenceIntervalSpinbox_;
+  DoubleSpinBox * levelConfidenceIntervalSpinbox_;
 };
 }
 #endif

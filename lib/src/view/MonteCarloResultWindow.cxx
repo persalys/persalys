@@ -151,7 +151,7 @@ void MonteCarloResultWindow::buildInterface()
     QLabel * label = new QLabel(tr("Probability"));
     label->setStyleSheet("font: bold;");
     quantLayout->addWidget(label);
-    probaSpinBox_ = new QDoubleSpinBox;
+    probaSpinBox_ = new DoubleSpinBox;
     label->setBuddy(probaSpinBox_);
     probaSpinBox_->setMinimum(0.0);
     probaSpinBox_->setMaximum(1.0);
@@ -161,7 +161,7 @@ void MonteCarloResultWindow::buildInterface()
     label = new QLabel(tr("Quantile"));
     label->setStyleSheet("font: bold;");
     quantLayout->addWidget(label);
-    quantileSpinBox_ = new QDoubleSpinBox;
+    quantileSpinBox_ = new DoubleSpinBox;
     label->setBuddy(quantileSpinBox_);
     quantileSpinBox_->setDecimals(8);
     quantLayout->addWidget(quantileSpinBox_);
@@ -169,7 +169,6 @@ void MonteCarloResultWindow::buildInterface()
     connect(probaSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(probaValueChanged(double)));
     connect(quantileSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(quantileValueChanged(double)));
 
-    quantLayout->addStretch();
     vbox->addLayout(quantLayout);
 
     vbox->addStretch();

@@ -25,9 +25,9 @@
 #include "otgui/MonteCarloResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
+#include "otgui/DoubleSpinBox.hxx"
 
 #include <QComboBox>
-#include <QDoubleSpinBox>
 
 namespace OTGUI {
 class MonteCarloResultWindow : public ResultWindow
@@ -65,8 +65,8 @@ private:
   GraphConfigurationWidget * scatterPlotsConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
-  QDoubleSpinBox * probaSpinBox_;
-  QDoubleSpinBox * quantileSpinBox_;
+  DoubleSpinBox * probaSpinBox_;
+  DoubleSpinBox * quantileSpinBox_;
 };
 }
 #endif

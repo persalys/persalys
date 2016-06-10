@@ -111,7 +111,7 @@ void CentralTendencyWizard::buildInterface()
   confidenceIntervalCheckBox_->setText(tr("Compute confidence interval at"));
   connect(confidenceIntervalCheckBox_, SIGNAL(toggled(bool)), this, SLOT(confidenceIntervalRequired(bool)));
   advancedWidgetsLayout->addWidget(confidenceIntervalCheckBox_, 0, 0);
-  levelConfidenceIntervalSpinbox_ = new QDoubleSpinBox;
+  levelConfidenceIntervalSpinbox_ = new DoubleSpinBox;
   levelConfidenceIntervalSpinbox_->setRange(0.0, 0.99);
   levelConfidenceIntervalSpinbox_->setSingleStep(0.01);
 
