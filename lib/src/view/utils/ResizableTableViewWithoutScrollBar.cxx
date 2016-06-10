@@ -41,7 +41,7 @@ void ResizableTableViewWithoutScrollBar::resizeToContents()
   // get the dimensions
   QSize size = sizeHint();
   // -- width
-  int width = 0;
+  int width = verticalHeader()->isHidden() ? 0 : verticalHeader()->width();
   for (int i=0; i<model()->columnCount(); ++i)
     width += columnWidth(i);
   size.setWidth(width+2);
