@@ -54,7 +54,7 @@ void DeterministicDesignPage::buildInterface()
   methodGroup_->addButton(buttonToChooseMethod, DesignOfExperimentImplementation::FromBoundsAndLevels);
   pageLayout->addWidget(buttonToChooseMethod);
 
-  tableView_ = new CopyableTableView;
+  tableView_ = new ResizableTableViewWithoutScrollBar;
   tableView_->setEditTriggers(QTableView::AllEditTriggers);
   tableView_->setEnabled(true);
   if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromExperiment)
@@ -79,18 +79,8 @@ void DeterministicDesignPage::buildInterface()
 #else
   tableView_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
 #endif
-
-  QSize size(tableView_->sizeHint());
-  int width = 0;
-  for (int i=0; i<tableView_->model()->columnCount(); ++i)
-    width += tableView_->columnWidth(i);
-  size.setWidth(width + tableView_->verticalHeader()->width() + 2);
-  int height = tableView_->horizontalHeader()->height();
-  for (int i=0; i<tableView_->model()->rowCount(); ++i)
-    height += tableView_->rowHeight(i);
-  size.setHeight(height);
-  tableView_->setMinimumSize(size);
-  tableView_->setMaximumSize(size);
+  // resize table
+  tableView_->resizeToContents();
 
   pageLayout->addWidget(tableView_);
   pageLayout->addStretch();

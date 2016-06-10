@@ -22,7 +22,7 @@
 #define OTGUI_DETERMINISTICDESIGNPAGE_HXX
 
 #include "otgui/ExperimentTableModel.hxx"
-#include "otgui/CopyableTableView.hxx"
+#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 
 #include <QWizardPage>
 #include <QButtonGroup>
@@ -50,7 +50,7 @@ private:
   DesignOfExperiment designOfExperiment_;
   bool pageValidity_;
   QButtonGroup * methodGroup_;
-  CopyableTableView * tableView_;
+  ResizableTableViewWithoutScrollBar * tableView_;
   ExperimentTableModel * model_;
   // TODO
 //   QWidget * designsWidget_ ;
