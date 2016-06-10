@@ -29,7 +29,6 @@ ResizableTableViewWithoutScrollBar::ResizableTableViewWithoutScrollBar(QWidget *
 {
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
 }
 
 
@@ -37,6 +36,7 @@ void ResizableTableViewWithoutScrollBar::resizeToContents()
 {
   // resize columns To Contents: set optimal size
   resizeColumnsToContents();
+  verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
 
   // get the dimensions
   QSize size = sizeHint();
