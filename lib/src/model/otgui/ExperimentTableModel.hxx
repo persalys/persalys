@@ -47,6 +47,7 @@ signals:
 
 private:
   DesignOfExperiment designOfExperiment_;
+  bool firstColumnChecked_;
 };
 }
 #endif
