@@ -56,7 +56,7 @@ public:
   DesignOfExperimentWizard(const DesignOfExperiment & designOfExperiment);
 
   int nextId() const;
-  void validate();
+  DesignOfExperiment getDesignOfExperiment() const;
 
 protected:
   void buildInterface();
@@ -67,7 +67,6 @@ public slots:
 private:
   IntroPage * introPage_;
   DesignOfExperiment designOfExperiment_;
-  OTStudy * otStudy_;
 };
 }
 #endif

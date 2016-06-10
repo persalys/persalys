@@ -96,7 +96,6 @@ int IntroPage::nextId() const
 DesignOfExperimentWizard::DesignOfExperimentWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
   : OTguiWizard()
   , designOfExperiment_(DesignOfExperiment(otStudy->getAvailableDesignOfExperimentName(), physicalModel))
-  , otStudy_(otStudy)
 {
   buildInterface();
 }
@@ -140,14 +139,14 @@ int DesignOfExperimentWizard::nextId() const
 }
 
 
-void DesignOfExperimentWizard::setDesignOfExperiment(DesignOfExperiment & designOfExperiment)
+DesignOfExperiment DesignOfExperimentWizard::getDesignOfExperiment() const
 {
-  designOfExperiment_ = designOfExperiment;
+  return designOfExperiment_;
 }
 
 
-void DesignOfExperimentWizard::validate()
+void DesignOfExperimentWizard::setDesignOfExperiment(DesignOfExperiment & designOfExperiment)
 {
-  otStudy_->add(designOfExperiment_);
+  designOfExperiment_ = designOfExperiment;
 }
 }

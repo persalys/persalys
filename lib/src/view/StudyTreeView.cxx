@@ -374,9 +374,7 @@ void StudyTreeView::createNewDesignOfExperiment()
   DesignOfExperimentWizard * wizard = new DesignOfExperimentWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel());
 
   if (wizard->exec())
-  {
-    wizard->validate();
-  }
+    otStudyItem->getOTStudy()->add(wizard->getDesignOfExperiment());
 }
 
 
