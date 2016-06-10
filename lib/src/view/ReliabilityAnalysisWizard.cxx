@@ -33,9 +33,7 @@
 namespace OTGUI {
 
 ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(OTStudy * otStudy, const LimitState & limitState)
-  : OTguiWizard()
-  , analysis_(MonteCarloReliabilityAnalysis(otStudy->getAvailableAnalysisName("reliability_"), limitState))
-  , otStudy_(otStudy)
+  : AnalysisWizard(MonteCarloReliabilityAnalysis(otStudy->getAvailableAnalysisName("reliability_"), limitState))
 //  , limitState_(limitState)
 {
   buildInterface();
@@ -43,8 +41,7 @@ ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(OTStudy * otStudy, const Li
 
 
 ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis & analysis)
-  : OTguiWizard()
-  , analysis_(analysis)
+  : AnalysisWizard(analysis)
 //  , limitState_(dynamic_cast<ReliabilityAnalysis*>(&*analysis.getImplementation())->getLimitState())
 {
   buildInterface();
@@ -166,17 +163,5 @@ void ReliabilityAnalysisWizard::blockSizeChanged(int size)
 void ReliabilityAnalysisWizard::seedChanged(int seed)
 {
   dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setSeed(seed);
-}
-
-
-QString ReliabilityAnalysisWizard::getAnalysisName() const
-{
-  return analysis_.getName().c_str();
-}
-
-
-void ReliabilityAnalysisWizard::validate()
-{
-  otStudy_->add(analysis_);
 }
 }

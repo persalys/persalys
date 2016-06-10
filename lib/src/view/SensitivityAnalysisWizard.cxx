@@ -33,18 +33,15 @@
 
 namespace OTGUI {
 
-SensitivityAnalysisWizard::SensitivityAnalysisWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
-  : OTguiWizard()
-  , analysis_(SobolAnalysis(otStudy->getAvailableAnalysisName("sensitivity_"), physicalModel))
-  , otStudy_(otStudy)
+SensitivityAnalysisWizard::SensitivityAnalysisWizard(OTStudy * otstudy, const PhysicalModel & physicalModel)
+  : AnalysisWizard(SobolAnalysis(otstudy->getAvailableAnalysisName("sensitivity_"), physicalModel))
 {
   buildInterface();
 }
 
 
 SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis & analysis)
-  : OTguiWizard()
-  , analysis_(analysis)
+  : AnalysisWizard(analysis)
 {
   buildInterface();
 }
@@ -173,19 +170,13 @@ void SensitivityAnalysisWizard::updateMethodWidgets()
     case SensitivityAnalysisWizard::Sobol:
     {
       if (analysis_.getImplementation()->getClassName() == "SRCAnalysis")
-      {
         analysis_ = SobolAnalysis(analysis_.getName(), analysis_.getPhysicalModel());
-        emit analysisChanged(analysis_);
-      }
       break;
     }
     case SensitivityAnalysisWizard::SRC:
     {
       if (analysis_.getImplementation()->getClassName() == "SobolAnalysis")
-      {
         analysis_ = SRCAnalysis(analysis_.getName(), analysis_.getPhysicalModel());
-        emit analysisChanged(analysis_);
-      }
       break;
     }
     default:
@@ -215,17 +206,5 @@ void SensitivityAnalysisWizard::blockSizeChanged(int size)
 void SensitivityAnalysisWizard::seedChanged(int seed)
 {
   dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->setSeed(seed);
-}
-
-
-QString SensitivityAnalysisWizard::getAnalysisName() const
-{
-  return analysis_.getName().c_str();
-}
-
-
-void SensitivityAnalysisWizard::validate()
-{
-  otStudy_->add(analysis_);
 }
 }

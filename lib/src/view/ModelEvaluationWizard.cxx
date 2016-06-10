@@ -34,17 +34,14 @@ using namespace OT;
 namespace OTGUI {
 
 ModelEvaluationWizard::ModelEvaluationWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
-  : OTguiWizard()
-  , analysis_(ModelEvaluation(otStudy->getAvailableAnalysisName("evaluation_"), physicalModel))
-  , otStudy_(otStudy)
+  : AnalysisWizard(ModelEvaluation(otStudy->getAvailableAnalysisName("evaluation_"), physicalModel))
 {
   buildInterface();
 }
 
 
 ModelEvaluationWizard::ModelEvaluationWizard(const Analysis & analysis)
-  : OTguiWizard()
-  , analysis_(analysis)
+  : AnalysisWizard(analysis)
 {
   dynamic_cast<ModelEvaluation*>(&*analysis_.getImplementation())->updateParameters();
   buildInterface();
@@ -103,17 +100,5 @@ void ModelEvaluationWizard::inputValueChanged(double value)
       return;
     }
   }
-}
-
-
-QString ModelEvaluationWizard::getAnalysisName() const
-{
-  return QString::fromUtf8(analysis_.getName().c_str());
-}
-
-
-void ModelEvaluationWizard::validate()
-{
-  otStudy_->add(analysis_);
 }
 }

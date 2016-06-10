@@ -465,8 +465,8 @@ void StudyTreeView::createNewModelEvaluation()
 
   if (wizard->exec())
   {
-    wizard->validate();
-    findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysisName());
+    otStudyItem->getOTStudy()->add(wizard->getAnalysis());
+    findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysis().getName().c_str());
   }
 }
 
@@ -482,8 +482,8 @@ void StudyTreeView::createNewCentralTendency()
 
   if (wizard->exec())
   {
-    wizard->validate();
-    findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysisName());
+    otStudyItem->getOTStudy()->add(wizard->getAnalysis());
+    findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysis().getName().c_str());
   }
 }
 
@@ -499,8 +499,8 @@ void StudyTreeView::createNewSensitivityAnalysis()
 
   if (wizard->exec())
   {
-    wizard->validate();
-    findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysisName());
+    otStudyItem->getOTStudy()->add(wizard->getAnalysis());
+    findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysis().getName().c_str());
   }
 }
 
@@ -518,8 +518,8 @@ void StudyTreeView::createNewThresholdExceedance()
 
   if (wizard->exec())
   {
-    wizard->validate();
-    findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysisName());
+    otStudyItem->getOTStudy()->add(wizard->getAnalysis());
+    findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysis().getName().c_str());
   }
 }
 
@@ -579,7 +579,7 @@ void StudyTreeView::runAnalysis()
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(selectionModel()->currentIndex());
   AnalysisItem * item = dynamic_cast<AnalysisItem*>(selectedItem);
 
-  OTguiWizard * wizard = 0;
+  AnalysisWizard * wizard = 0;
   QString analysisType = item->data(Qt::UserRole).toString();
   if (!isPhysicalModelValid(selectionModel()->currentIndex()))
     return;
@@ -614,9 +614,9 @@ void StudyTreeView::runAnalysis()
 
   if (wizard)
   {
-    connect(wizard, SIGNAL(analysisChanged(Analysis)), item, SLOT(updateAnalysis(Analysis)));
     if (wizard->exec())
     {
+      item->updateAnalysis(wizard->getAnalysis());
       try
       {
         item->getAnalysis().run();

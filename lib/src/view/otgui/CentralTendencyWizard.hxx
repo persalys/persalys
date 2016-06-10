@@ -21,15 +21,14 @@
 #ifndef OTGUI_CENTRALTENDENCYWIZARD_HXX
 #define OTGUI_CENTRALTENDENCYWIZARD_HXX
 
-#include "otgui/OTStudy.hxx"
-#include "otgui/OTguiWizard.hxx"
+#include "otgui/AnalysisWizard.hxx"
 #include "otgui/DoubleSpinBox.hxx"
 
 #include <QButtonGroup>
 #include <QCheckBox>
 
 namespace OTGUI {
-class CentralTendencyWizard : public OTguiWizard
+class CentralTendencyWizard : public AnalysisWizard
 {
   Q_OBJECT
 
@@ -38,9 +37,6 @@ public:
 
   CentralTendencyWizard(OTStudy * otStudy, const PhysicalModel & physicalModel);
   CentralTendencyWizard(const Analysis & analysis);
-
-  QString getAnalysisName() const;
-  void validate();
 
 protected:
   void buildInterface();
@@ -53,9 +49,6 @@ public slots:
   void seedChanged(int);
 
 private:
-  Analysis analysis_;
-  OTStudy * otStudy_;
-
   QButtonGroup * methodGroup_;
   QWidget * monteCarloWidget_;
   QWidget * TaylorExpansionsWidget_;

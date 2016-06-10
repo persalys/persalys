@@ -21,15 +21,14 @@
 #ifndef OTGUI_SENSITIVITYANALYSISWIZARD_HXX
 #define OTGUI_SENSITIVITYANALYSISWIZARD_HXX
 
-#include "otgui/OTStudy.hxx"
-#include "otgui/OTguiWizard.hxx"
+#include "otgui/AnalysisWizard.hxx"
 
 #include <QButtonGroup>
 #include <QSpinBox>
 #include <QLabel>
 
 namespace OTGUI {
-class SensitivityAnalysisWizard : public OTguiWizard
+class SensitivityAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
 
@@ -39,9 +38,6 @@ public:
   SensitivityAnalysisWizard(OTStudy * otStudy, const PhysicalModel & physicalModel);
   SensitivityAnalysisWizard(const Analysis & analysis);
 
-  QString getAnalysisName() const;
-  void validate();
-
 protected:
   void buildInterface();
 
@@ -50,13 +46,8 @@ public slots:
   void sampleSizeChanged(int);
   void seedChanged(int);
   void blockSizeChanged(int);
-signals:
-  void analysisChanged(const Analysis & analysis);
 
 private:
-  Analysis analysis_;
-  OTStudy * otStudy_;
-
   QButtonGroup * methodGroup_;
   QSpinBox * sampleSizeSpinbox_;
   QWidget * sobolWidgets_;
