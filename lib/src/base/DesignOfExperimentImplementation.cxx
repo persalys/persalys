@@ -235,15 +235,6 @@ DesignOfExperimentImplementation::Type DesignOfExperimentImplementation::getType
 }
 
 
-int DesignOfExperimentImplementation::getNumberOfExperiments() const
-{
-  int nbExperiments = 1;
-  for (UnsignedInteger i=0; i<levels_.getSize(); ++i)
-    nbExperiments *= levels_[i];
-  return nbExperiments;
-}
-
-
 NumericalPoint DesignOfExperimentImplementation::getValues() const
 {
   return values_;

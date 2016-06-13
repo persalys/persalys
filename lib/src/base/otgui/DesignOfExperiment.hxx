@@ -59,7 +59,6 @@ public:
   void setPhysicalModel(const PhysicalModel & physicalModel);
 
   DesignOfExperimentImplementation::Type getTypeDesignOfExperiment() const;
-  int getNumberOfExperiments() const;
 
   OT::NumericalPoint getValues() const;
   void setValues(const OT::NumericalPoint & values);

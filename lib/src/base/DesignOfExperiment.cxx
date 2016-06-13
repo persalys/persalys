@@ -114,12 +114,6 @@ DesignOfExperimentImplementation::Type DesignOfExperiment::getTypeDesignOfExperi
 }
 
 
-int DesignOfExperiment::getNumberOfExperiments() const
-{
-  return getImplementation()->getNumberOfExperiments();
-}
-
-
 NumericalPoint DesignOfExperiment::getValues() const
 {
   return getImplementation()->getValues();
