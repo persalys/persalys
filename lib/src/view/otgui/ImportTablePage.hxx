@@ -40,13 +40,12 @@ public:
 
 protected:
   void buildInterface();
-  void loadFile();
+  OT::NumericalSample loadSampleFromFile();
+  void setTable(OT::NumericalSample & sample);
 
 public slots:
   void openFileRequested();
-  void columnChanged(Qt::Orientation, int, int);
-signals:
-  void dataImported(OT::NumericalSample);
+  void columnChanged();
 
 private:
   DesignOfExperiment designOfExperiment_;
