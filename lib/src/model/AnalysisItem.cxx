@@ -52,7 +52,8 @@ Analysis AnalysisItem::getAnalysis() const
 void AnalysisItem::updateAnalysis(const Analysis & analysis)
 {
   analysis_ = analysis;
-  analysis_.addObserver(this);
+  if (!analysis_.getImplementation().get()->getObservers().size())
+    analysis_.addObserver(this);
   setData(QString::fromUtf8(analysis.getImplementation()->getClassName().c_str()), Qt::UserRole);
   emit analysisChanged(analysis_);
 }
