@@ -34,6 +34,15 @@ Observable::Observable()
 }
 
 
+/* Copy constructor */
+Observable::Observable(const Observable & other)
+  : observers_()
+  , notificationBlocked_(false)
+  , notBlockedMessage_("")
+{
+}
+
+
 void Observable::addObserver(Observer * observer)
 {
   observers_.push_back(observer);

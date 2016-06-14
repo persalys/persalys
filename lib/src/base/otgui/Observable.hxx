@@ -32,6 +32,8 @@ class OTGUI_API Observable
 public:
   /** Default constructor */
   Observable();
+  /** Copy constructor */
+  Observable(const Observable & other);
 
   virtual ~Observable() {};
 
