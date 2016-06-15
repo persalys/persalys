@@ -23,9 +23,8 @@
 
 #include "otgui/AnalysisWizard.hxx"
 #include "otgui/DoubleSpinBox.hxx"
-
-#include <QButtonGroup>
-#include <QCheckBox>
+#include "otgui/TaylorExpansionMomentsAnalysis.hxx"
+#include "otgui/MonteCarloAnalysis.hxx"
 
 namespace OTGUI {
 class CentralTendencyWizard : public AnalysisWizard
@@ -42,20 +41,18 @@ protected:
   void buildInterface();
 
 public slots:
-  void updateMethodWidgets();
-  void confidenceIntervalRequired(bool);
+  void updateMethodWidgets(int);
   void nbSimuChanged(int);
+  void confidenceIntervalRequired(bool);
   void levelConfidenceIntervalChanged(double);
   void seedChanged(int);
+  void accept();
 
 private:
-  QButtonGroup * methodGroup_;
+  MonteCarloAnalysis MCAnalysis_;
+  TaylorExpansionMomentsAnalysis taylorAnalysis_;
   QWidget * monteCarloWidget_;
   QWidget * TaylorExpansionsWidget_;
-  QSpinBox * nbSimuSpinbox_;
-  QSpinBox * seedSpinbox_;
-  QCheckBox * confidenceIntervalCheckBox_;
-  DoubleSpinBox * levelConfidenceIntervalSpinbox_;
 };
 }
 #endif
