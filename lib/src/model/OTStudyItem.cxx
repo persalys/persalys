@@ -101,6 +101,12 @@ void OTStudyItem::updateAnalysis(const Analysis & analysis)
 }
 
 
+void OTStudyItem::updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
+{
+  otStudy_->getDesignOfExperimentByName(designOfExperiment.getName()).setImplementationAsPersistentObject(designOfExperiment.getImplementation());
+}
+
+
 void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
 {
   // Physical model item
@@ -151,6 +157,7 @@ void OTStudyItem::addDesignOfExperimentItem(DesignOfExperiment & design)
       child(i)->child(2)->appendRow(newItem);
       emit newDesignOfExperimentItemCreated(newItem);
       connect(newItem, SIGNAL(designOfExperimentRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
+      connect(newItem, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), this, SLOT(updateDesignOfExperiment(DesignOfExperiment)));
       return;
     }
   throw InvalidArgumentException(HERE) << "No physical model matches the given name " << design.getPhysicalModel().getName();
