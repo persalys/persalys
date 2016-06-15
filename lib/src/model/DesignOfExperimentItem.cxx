@@ -49,6 +49,14 @@ DesignOfExperiment DesignOfExperimentItem::getDesignOfExperiment() const
 }
 
 
+void DesignOfExperimentItem::updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
+{
+  designOfExperiment_ = designOfExperiment;
+  designOfExperiment_.addObserver(this);
+  emit designOfExperimentChanged(designOfExperiment_);
+}
+
+
 void DesignOfExperimentItem::update(Observable* source, const String & message)
 {
   if (message=="analysisFinished")

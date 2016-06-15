@@ -538,7 +538,7 @@ void StudyTreeView::runDesignOfExperiment()
   if (wizard->exec())
   {
     emit removeSubWindow(item);
-    item->getDesignOfExperiment().clearResult();
+    item->updateDesignOfExperiment(wizard->getDesignOfExperiment());
     createNewDesignOfExperimentWindow(item);
   }
 }
