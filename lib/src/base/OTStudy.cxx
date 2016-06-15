@@ -284,6 +284,15 @@ Collection<DesignOfExperiment> OTStudy::getDesignOfExperiments() const
 }
 
 
+DesignOfExperiment & OTStudy::getDesignOfExperimentByName(const String & designOfExperimentName)
+{
+  for (UnsignedInteger i=0; i<designOfExperiments_.getSize(); ++i)
+    if (designOfExperiments_[i].getName() == designOfExperimentName)
+      return designOfExperiments_[i];
+  throw InvalidArgumentException(HERE) << "The given name " << designOfExperimentName <<" does not correspond to an design of experiments of the study.\n"; 
+}
+
+
 bool OTStudy::hasDesignOfExperimentNamed(const String & designOfExperimentName) const
 {
   for (UnsignedInteger i=0; i<designOfExperiments_.getSize(); ++i)
