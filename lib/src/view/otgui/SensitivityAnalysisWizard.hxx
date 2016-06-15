@@ -22,9 +22,9 @@
 #define OTGUI_SENSITIVITYANALYSISWIZARD_HXX
 
 #include "otgui/AnalysisWizard.hxx"
+#include "otgui/SobolAnalysis.hxx"
+#include "otgui/SRCAnalysis.hxx"
 
-#include <QButtonGroup>
-#include <QSpinBox>
 #include <QLabel>
 
 namespace OTGUI {
@@ -42,14 +42,15 @@ protected:
   void buildInterface();
 
 public slots:
-  void updateMethodWidgets();
+  void updateMethodWidgets(int);
   void sampleSizeChanged(int);
   void seedChanged(int);
   void blockSizeChanged(int);
+  void accept();
 
 private:
-  QButtonGroup * methodGroup_;
-  QSpinBox * sampleSizeSpinbox_;
+  SobolAnalysis sobolAnalysis_;
+  SRCAnalysis srcAnalysis_;
   QWidget * sobolWidgets_;
   QWidget * srcWidgets_;
   QLabel * totalNbSimuLabel_;
