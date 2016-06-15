@@ -18,50 +18,46 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_DESIGNOFEXPERIMENT_HXX
-#define OTGUI_DESIGNOFEXPERIMENT_HXX
+#ifndef OTGUI_FROMFILEDESIGNOFEXPERIMENT_HXX
+#define OTGUI_FROMFILEDESIGNOFEXPERIMENT_HXX
 
 #include "DesignOfExperimentImplementation.hxx"
 
 namespace OTGUI {
-class OTGUI_API DesignOfExperiment : public OT::TypedInterfaceObject<DesignOfExperimentImplementation>
+class OTGUI_API FromFileDesignOfExperiment : public DesignOfExperimentImplementation
 {
   CLASSNAME;
 
 public:
-  typedef OT::Pointer<DesignOfExperimentImplementation>       Implementation;
-
   /** Default constructor */
-  DesignOfExperiment();
+  FromFileDesignOfExperiment();
   /** Constructor with parameters */
-  DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel);
+  FromFileDesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel);
+  /** Constructor with parameters */
+  FromFileDesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel,
+                             const OT::String & fileName, const OT::Indices & columns);
 
-  /** Default constructor */
-  DesignOfExperiment(const DesignOfExperimentImplementation & implementation);
-  /** Constructor from implementation */
-  DesignOfExperiment(const Implementation & p_implementation);
-  /** Constructor from implementation pointer */
-  DesignOfExperiment(DesignOfExperimentImplementation * p_implementation);
+  /** Virtual constructor */
+  virtual FromFileDesignOfExperiment * clone() const;
 
-  void addObserver(Observer * observer);
+  void setFileName(const OT::String & fileName);
+  OT::String getFileName() const;
+  OT::Indices getColumns() const;
+  void setColumns(OT::Indices columns);
 
-  PhysicalModel getPhysicalModel() const;
-  void setPhysicalModel(const PhysicalModel & physicalModel);
+  virtual OT::NumericalSample getInputSample();
 
-  OT::Description getVariableInputNames() const;
-
-  OT::NumericalSample getInputSample();
-  void setInputSample(const OT::NumericalSample & sample);
-  SimulationAnalysisResult getResult() const;
-  void clearResult();
-  void evaluate();
-  OT::String getPythonScript() const;
+  virtual OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
+
+private:
+  OT::String fileName_;
+  OT::Indices columns_;
 };
 }
 #endif

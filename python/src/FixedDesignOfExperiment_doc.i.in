@@ -1,0 +1,151 @@
+%feature("docstring") OTGUI::FixedDesignOfExperiment
+"Design of experiment.
+
+Available constructors:
+    DesignOfExperiment(*name, physicalModel*)
+
+    DesignOfExperiment(*name, physicalModel, lowerBound, upperBound, nbValues, values*)
+
+Parameters
+----------
+name : str
+    Name
+physicalModel : :class:`~otguibase.PhysicalModel`
+    Physical model
+lowerBound : sequence of float
+    Lower bound
+upperBound : sequence of float
+    Upper bound
+nbValues : sequence of int
+    Number of values along each direction
+values : sequence of float
+    Values of the constant variables (optional)
+
+Notes
+-----
+The sequences must have a dimension equal to the number of inputs in the
+physical model.
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+>>> R = otguibase.Input('R', 0., 'Yield strength', ot.LogNormal(300., 30., 0., ot.LogNormal.MUSIGMA))
+>>> F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))
+>>> G = otguibase.Output('Ep', 0., 'deviation', 'R-F/(_pi*100.0)')
+>>> myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel')
+>>> myPhysicalModel.addInput(R)
+>>> myPhysicalModel.addInput(F)
+>>> myPhysicalModel.addOutput(G)
+>>> myDOE = otguibase.FixedDesignOfExperiment('myDOE', myPhysicalModel)"
+
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FixedDesignOfExperiment::getTypeDesignOfExperiment
+"Design type accessor.
+
+Returns
+-------
+type : int
+    Design type"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FixedDesignOfExperiment::getValues
+"Values accessor.
+
+Returns
+-------
+size : :class:`~openturns.NumericalPoint`
+   Values"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FixedDesignOfExperiment::setValues
+"Values accessor.
+
+Parameters
+----------
+size : :class:`~openturns.NumericalPoint`
+   Values"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FixedDesignOfExperiment::getLowerBounds
+"Lower bounds accessor.
+
+Returns
+-------
+bounds : :class:`~openturns.NumericalPoint`
+   Lower bounds"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FixedDesignOfExperiment::setLowerBounds
+"Lower bounds accessor.
+
+Parameters
+----------
+bounds : :class:`~openturns.NumericalPoint`
+   Lower bounds"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FixedDesignOfExperiment::getUpperBounds
+"Upper bounds accessor.
+
+Returns
+-------
+bounds : :class:`~openturns.NumericalPoint`
+   Upper bounds"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FixedDesignOfExperiment::setUpperBounds
+"Upper bounds accessor.
+
+Parameters
+----------
+bounds : :class:`~openturns.NumericalPoint`
+   Upper bounds"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FixedDesignOfExperiment::getLevels
+"Levels accessor.
+
+Returns
+-------
+levels : :class:`~openturns.Indices`
+   Levels"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FixedDesignOfExperiment::setLevels
+"Levels accessor.
+
+Parameters
+----------
+levels : :class:`~openturns.Indices`
+   Levels"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FixedDesignOfExperiment::getDeltas
+"Deltas accessor.
+
+Returns
+-------
+deltas : :class:`~openturns.NumericalPoint`
+   Deltas"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FixedDesignOfExperiment::setDeltas
+"Deltas accessor.
+
+Parameters
+----------
+deltas : :class:`~openturns.NumericalPoint`
+   Deltas"

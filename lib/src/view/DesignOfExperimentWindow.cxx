@@ -110,11 +110,11 @@ void DesignOfExperimentWindow::updateWindowForOutputs()
 
 void DesignOfExperimentWindow::addTabsForOutputs()
 {
-  int nbInputs = designOfExperiment_.getInputVariableNames().getSize();
+  int nbInputs = designOfExperiment_.getVariableInputNames().getSize();
   Indices ind(nbInputs);
   for (int i=0; i<nbInputs; ++i)
     for (UnsignedInteger j=0; j<designOfExperiment_.getInputSample().getDimension(); ++j)
-      if (designOfExperiment_.getInputVariableNames()[i] == designOfExperiment_.getInputSample().getDescription()[j])
+      if (designOfExperiment_.getVariableInputNames()[i] == designOfExperiment_.getInputSample().getDescription()[j])
       {
         ind[i] = j;
         break;

@@ -23,6 +23,7 @@
 
 #include "otgui/ExportableTableView.hxx"
 #include "otgui/DesignOfExperiment.hxx"
+#include "otgui/FromFileDesignOfExperiment.hxx"
 
 #include <QWizardPage>
 #include <QLineEdit>
@@ -46,9 +47,11 @@ protected:
 public slots:
   void openFileRequested();
   void columnChanged();
+signals:
+  void designOfExperimentChanged(const DesignOfExperiment & designOfExperiment);
 
 private:
-  DesignOfExperiment designOfExperiment_;
+  FromFileDesignOfExperiment designOfExperiment_;
   bool pageValidity_;
   QLineEdit * filePathLineEdit_;
   ExportableTableView * dataPreviewTableView_;

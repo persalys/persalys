@@ -62,7 +62,7 @@ protected:
   void buildInterface();
 
 public slots:
-  void setDesignOfExperiment(DesignOfExperiment & designOfExperiment);
+  void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
 
 private:
   IntroPage * introPage_;

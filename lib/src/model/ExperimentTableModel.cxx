@@ -24,11 +24,12 @@ using namespace OT;
 
 namespace OTGUI {
 
-ExperimentTableModel::ExperimentTableModel(const DesignOfExperiment & designOfExperiment)
+ExperimentTableModel::ExperimentTableModel(const FixedDesignOfExperiment & designOfExperiment)
   : QAbstractTableModel()
   , designOfExperiment_(designOfExperiment)
   , firstColumnChecked_(!designOfExperiment.getLevels().__contains__(1))
 {
+  designOfExperiment_.updateParameters();
 }
 
 
@@ -113,7 +114,7 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
         case 4:
           return tr("Upper bound");
         case 5:
-          if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
+          if (designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndLevels)
             return tr("Levels");
           else
             return tr("Delta");
@@ -146,7 +147,7 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
           return QString::number(designOfExperiment_.getUpperBounds()[indexInput]);
         case 5:
         {
-          if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
+          if (designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndLevels)
             return QString::number(int(designOfExperiment_.getLevels()[indexInput]));
           else
             return QString::number(designOfExperiment_.getDeltas()[indexInput]);
@@ -177,14 +178,13 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
     }
     else if (role == Qt::EditRole && index.column() == 5)
     {
-      if (value.toString() == tr("Levels") && designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndDeltas)
+      if (value.toString() == tr("Levels") && designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndDeltas)
         designOfExperiment_.setLevels(designOfExperiment_.getLevels());
-      else if (value.toString() == tr("Delta") && designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
+      else if (value.toString() == tr("Delta") && designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndLevels)
         designOfExperiment_.setDeltas(designOfExperiment_.getDeltas());
       else
         return false;
       emit dataChanged(this->index(1, 5), this->index(rowCount()-1, 5));
-      return true;
     }
   }
   // not header
@@ -193,7 +193,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
     if (role == Qt::CheckStateRole && index.column() == 0)
     {
       int indexInput = index.row() - 1;
-      if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
+      if (designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndLevels)
       {
         Indices levels = designOfExperiment_.getLevels();
         if (value.toInt() == Qt::Checked)
@@ -218,7 +218,6 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
       firstColumnChecked_ = !designOfExperiment_.getLevels().__contains__(1);
 
       emit dataChanged(index, this->index(indexInput, 6));
-      return true;
     }
     else if (role == Qt::EditRole)
     {
@@ -261,7 +260,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
         }
         case 5:
         {
-          if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels)
+          if (designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndLevels)
           {
             if (value.toInt() < 2)
               return false;
@@ -291,13 +290,11 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
     }
   }
 
-  emit designOfExperimentChanged(designOfExperiment_);
-
   return true;
 }
 
 
-DesignOfExperiment ExperimentTableModel::getDesignOfExperiment() const
+FixedDesignOfExperiment ExperimentTableModel::getDesignOfExperiment() const
 {
   return designOfExperiment_;
 }

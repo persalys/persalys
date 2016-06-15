@@ -40,9 +40,13 @@ namespace OTGUI {
 
 ImportTablePage::ImportTablePage(const DesignOfExperiment & designOfExperiment, QWidget *parent)
   : QWizardPage(parent)
-  , designOfExperiment_(designOfExperiment)
   , pageValidity_(false)
 {
+  if (designOfExperiment.getImplementation()->getClassName() == "FromFileDesignOfExperiment")
+    designOfExperiment_ = *dynamic_cast<const FromFileDesignOfExperiment*>(&*designOfExperiment.getImplementation());
+  else
+    designOfExperiment_ = FromFileDesignOfExperiment(designOfExperiment.getName(), designOfExperiment.getPhysicalModel());
+
   buildInterface();
 }
 
@@ -91,7 +95,7 @@ void ImportTablePage::buildInterface()
     }
     catch (std::exception & ex)
     {
-      QString message = "Impossible to load the file.\n";
+      QString message = tr("Impossible to load the file.") + "\n";
       message = QString("%1%2%3%4").arg("<font color=red>").arg(message).arg(ex.what()).arg("</font>");
       errorMessageLabel_->setText(message);
       pageValidity_ = false;
@@ -116,7 +120,7 @@ NumericalSample ImportTablePage::loadSampleFromFile()
       break;
   }
   if (!sampleFromFile.getSize())
-    throw InvalidArgumentException(HERE) << "Impossible to load sample";
+    throw InvalidArgumentException(HERE) << tr("Impossible to load sample").toLocal8Bit().data();
 
   return sampleFromFile;
 }
@@ -126,12 +130,12 @@ void ImportTablePage::setTable(NumericalSample & sampleFromFile)
 {
   // check sampleFromFile
   if (!designOfExperiment_.getColumns().check(sampleFromFile.getDimension()))
-    throw InvalidArgumentException(HERE) << "Impossible to load sample marginals";
+    throw InvalidArgumentException(HERE) << tr("Impossible to load sample marginals").toLocal8Bit().data();
 
   Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
 
   if (sampleFromFile.getDimension() < inputNames.getSize())
-    throw InvalidArgumentException(HERE) << "The file contains a sample with a dimension inferior to the number of inputs of the physical model: "
+    throw InvalidArgumentException(HERE) << tr("The file contains a sample with a dimension inferior to the number of inputs of the physical model: ").toLocal8Bit().data()
                                          << inputNames.getSize();
 
   // set inputs columns indices
@@ -208,7 +212,7 @@ void ImportTablePage::openFileRequested()
       }
       catch (std::exception & ex)
       {
-        QString message = "Impossible to load the file.\n";
+        QString message = tr("Impossible to load the file.") + "\n";
         message = QString("%1%2%3%4").arg("<font color=red>").arg(message).arg(ex.what()).arg("</font>");
         errorMessageLabel_->setText(message);
         pageValidity_ = false;
@@ -239,7 +243,7 @@ void ImportTablePage::columnChanged()
 
   if (columns != columns2)
   {
-    QString message = "Each variable must be associated with one column.";
+    QString message = tr("Each variable must be associated with one column.");
     message = QString("%1%2%3").arg("<font color=red>").arg(message).arg("</font>");
     errorMessageLabel_->setText(message);
     pageValidity_ = false;
@@ -263,6 +267,8 @@ void ImportTablePage::columnChanged()
 
 bool ImportTablePage::validatePage()
 {
+  if (pageValidity_)
+    emit designOfExperimentChanged(designOfExperiment_);
   return pageValidity_;
 }
 }

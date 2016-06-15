@@ -20,6 +20,8 @@
  */
 #include "otgui/DesignOfExperiment.hxx"
 
+#include "otgui/FixedDesignOfExperiment.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
@@ -28,41 +30,16 @@ CLASSNAMEINIT(DesignOfExperiment);
 
 /* Default constructor */
 DesignOfExperiment::DesignOfExperiment()
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation())
+  : TypedInterfaceObject<DesignOfExperimentImplementation>(new FixedDesignOfExperiment())
 {
 }
 
 
 /* Constructor with parameters */
 DesignOfExperiment::DesignOfExperiment(const String & name, const PhysicalModel & physicalModel)
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation(name, physicalModel))
+  : TypedInterfaceObject<DesignOfExperimentImplementation>(new FixedDesignOfExperiment(name, physicalModel))
 {
 }
-
-
-/* Constructor with parameters */
-DesignOfExperiment::DesignOfExperiment(const String & name, const PhysicalModel & physicalModel,
-                                       const NumericalPoint & lowerBounds,
-                                       const NumericalPoint & upperBounds, const Indices & nbValues,
-                                       const NumericalPoint & values)
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation(name, physicalModel, lowerBounds, upperBounds, nbValues))
-{
-}
-
-
-/* Constructor with parameters */
-DesignOfExperiment::DesignOfExperiment(const String & name, const PhysicalModel & physicalModel,
-                                       const String & fileName, Indices columns)
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation(name, physicalModel, fileName, columns))
-{
-}
-
-// TODO
-// DesignOfExperiment::DesignOfExperiment(const String & name, const PhysicalModel & physicalModel,
-//                                        const Experiment & experiment)
-//   : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation(name, physicalModel, experiment))
-// {
-// }
 
 
 /* Default constructor */
@@ -108,111 +85,9 @@ void DesignOfExperiment::setPhysicalModel(const PhysicalModel & physicalModel)
 }
 
 
-DesignOfExperimentImplementation::Type DesignOfExperiment::getTypeDesignOfExperiment() const
+Description DesignOfExperiment::getVariableInputNames() const
 {
-  return getImplementation()->getTypeDesignOfExperiment();
-}
-
-
-NumericalPoint DesignOfExperiment::getValues() const
-{
-  return getImplementation()->getValues();
-}
-
-
-void DesignOfExperiment::setValues(const NumericalPoint & values)
-{
-  getImplementation()->setValues(values);
-}
-
-
-NumericalPoint DesignOfExperiment::getLowerBounds() const
-{
-  return getImplementation()->getLowerBounds();
-}
-
-
-void DesignOfExperiment::setLowerBounds(const NumericalPoint & lowerBounds)
-{
-  getImplementation()->setLowerBounds(lowerBounds);
-}
-
-
-NumericalPoint DesignOfExperiment::getUpperBounds() const
-{
-  return getImplementation()->getUpperBounds();
-}
-
-
-void DesignOfExperiment::setUpperBounds(const NumericalPoint & upperBounds)
-{
-  getImplementation()->setUpperBounds(upperBounds);
-}
-
-
-Indices DesignOfExperiment::getLevels() const
-{
-  return getImplementation()->getLevels();
-}
-
-
-void DesignOfExperiment::setLevels(const Indices & nbValues)
-{
-  getImplementation()->setLevels(nbValues);
-}
-
-
-NumericalPoint DesignOfExperiment::getDeltas() const
-{
-  return getImplementation()->getDeltas();
-}
-
-
-void DesignOfExperiment::setDeltas(const NumericalPoint & deltas)
-{
-  getImplementation()->setDeltas(deltas);
-}
-
-
-String DesignOfExperiment::getFileName() const
-{
-  return getImplementation()->getFileName();
-}
-
-
-void DesignOfExperiment::setFileName(const String & fileName)
-{
-  getImplementation()->setFileName(fileName);
-}
-
-
-Indices DesignOfExperiment::getColumns() const
-{
-  return getImplementation()->getColumns();
-}
-
-
-void DesignOfExperiment::setColumns(Indices columns)
-{
-  getImplementation()->setColumns(columns);
-}
-
-// TODO
-// Experiment DesignOfExperiment::getExperiment() const
-// {
-//   return getImplementation()->getExperiment();
-// }
-// 
-// 
-// void DesignOfExperiment::setExperiment(const Experiment & experiment)
-// {
-//   getImplementation()->setExperiment(experiment);
-// }
-
-
-Description DesignOfExperiment::getInputVariableNames() const
-{
-  return getImplementation()->getInputVariableNames();
+  return getImplementation()->getVariableInputNames();
 }
 
 
@@ -237,12 +112,6 @@ SimulationAnalysisResult DesignOfExperiment::getResult() const
 void DesignOfExperiment::clearResult()
 {
   getImplementation()->clearResult();
-}
-
-
-void DesignOfExperiment::updateParameters()
-{
-  getImplementation()->updateParameters();
 }
 
 

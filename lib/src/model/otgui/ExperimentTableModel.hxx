@@ -21,7 +21,7 @@
 #ifndef OTGUI_EXPERIMENTTABLEMODEL_HXX
 #define OTGUI_EXPERIMENTTABLEMODEL_HXX
 
-#include "otgui/DesignOfExperiment.hxx"
+#include "otgui/FixedDesignOfExperiment.hxx"
 
 #include <QAbstractTableModel>
 
@@ -31,7 +31,7 @@ class OTGUI_API ExperimentTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  ExperimentTableModel(const DesignOfExperiment & designOfExperiment);
+  ExperimentTableModel(const FixedDesignOfExperiment & designOfExperiment);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
@@ -39,14 +39,10 @@ public:
   QVariant data(const QModelIndex & index, int role) const;
   bool setData(const QModelIndex & index, const QVariant & value, int role);
   Qt::ItemFlags flags(const QModelIndex & index) const;
-  DesignOfExperiment getDesignOfExperiment() const;
-
-public slots:
-signals:
-  void designOfExperimentChanged(DesignOfExperiment&);
+  FixedDesignOfExperiment getDesignOfExperiment() const;
 
 private:
-  DesignOfExperiment designOfExperiment_;
+  FixedDesignOfExperiment designOfExperiment_;
   bool firstColumnChecked_;
 };
 }
