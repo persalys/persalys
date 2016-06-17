@@ -38,9 +38,9 @@ public:
 
   void showEvent(QShowEvent * e);
   void scrollContentsBy(int dx, int dy);
-  void fixComboPositions();
 
 public slots:
+  void fixComboPositions();
   void handleSectionResized(int);
   void handleSectionMoved(int, int, int);
   void setHeaderData(int);
