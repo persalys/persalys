@@ -84,7 +84,7 @@ Indices FromFileDesignOfExperiment::getInputColumns() const
 }
 
 
-void FromFileDesignOfExperiment::setInputColumns(Indices inputColumns)
+void FromFileDesignOfExperiment::setInputColumns(const Indices & inputColumns)
 {
   if (inputColumns.getSize() != physicalModel_.getInputs().getSize())
   {

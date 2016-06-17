@@ -43,7 +43,7 @@ public:
   void setFileName(const OT::String & fileName);
   OT::String getFileName() const;
   OT::Indices getInputColumns() const;
-  void setInputColumns(OT::Indices inputColumns);
+  void setInputColumns(const OT::Indices & inputColumns);
 
   virtual OT::NumericalSample getInputSample();
 
