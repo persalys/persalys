@@ -129,7 +129,7 @@ NumericalSample ImportTablePage::loadSampleFromFile()
 void ImportTablePage::setTable(NumericalSample & sampleFromFile)
 {
   // check sampleFromFile
-  if (!designOfExperiment_.getColumns().check(sampleFromFile.getDimension()))
+  if (!designOfExperiment_.getInputColumns().check(sampleFromFile.getDimension()))
     throw InvalidArgumentException(HERE) << tr("Impossible to load sample marginals").toLocal8Bit().data();
 
   Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
@@ -139,12 +139,12 @@ void ImportTablePage::setTable(NumericalSample & sampleFromFile)
                                          << inputNames.getSize();
 
   // set inputs columns indices
-  Indices columns(designOfExperiment_.getColumns());
+  Indices columns(designOfExperiment_.getInputColumns());
   if (!columns.getSize())
   {
     columns = Indices(inputNames.getSize());
     columns.fill();
-    designOfExperiment_.setColumns(columns);
+    designOfExperiment_.setInputColumns(columns);
   }
 
   // set sample description
@@ -252,7 +252,7 @@ void ImportTablePage::columnChanged()
 
   try
   {
-    designOfExperiment_.setColumns(columns);
+    designOfExperiment_.setInputColumns(columns);
     pageValidity_ = true;
     errorMessageLabel_->setText("");
   }

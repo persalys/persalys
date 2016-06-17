@@ -51,11 +51,11 @@ FromFileDesignOfExperiment::FromFileDesignOfExperiment(const String & name, cons
 FromFileDesignOfExperiment::FromFileDesignOfExperiment(const String & name,
                                                        const PhysicalModel & physicalModel,
                                                        const String & fileName,
-                                                       const OT::Indices & columns)
+                                                       const OT::Indices & inputColumns)
   : DesignOfExperimentImplementation(name, physicalModel)
   , fileName_(fileName)
 {
-  setColumns(columns);
+  setInputColumns(inputColumns);
 }
 
 
@@ -78,28 +78,28 @@ String FromFileDesignOfExperiment::getFileName() const
 }
 
 
-Indices FromFileDesignOfExperiment::getColumns() const
+Indices FromFileDesignOfExperiment::getInputColumns() const
 {
-  return columns_;
+  return inputColumns_;
 }
 
 
-void FromFileDesignOfExperiment::setColumns(Indices columns)
+void FromFileDesignOfExperiment::setInputColumns(Indices inputColumns)
 {
-  if (columns.getSize() != physicalModel_.getInputs().getSize())
+  if (inputColumns.getSize() != physicalModel_.getInputs().getSize())
   {
     OSS oss;
     oss << "The dimension of the list of the column numbers has to be equal to the number of inputs of the physical model: ";
     oss << physicalModel_.getInputs().getSize();
     throw InvalidArgumentException(HERE) << oss.str();
   }
-  if (inputSample_.getSize() && columns_ != columns)
+  if (inputSample_.getSize() && inputColumns_ != inputColumns)
   {
     inputSample_.clear();
     clearResult();
   }
 
-  columns_ = columns;
+  inputColumns_ = inputColumns;
 }
 
 
@@ -124,11 +124,11 @@ NumericalSample FromFileDesignOfExperiment::getInputSample()
       }
       if (!sampleFromFile.getSize())
         throw InvalidArgumentException(HERE) << "In FromFileDesignOfExperiment: impossible to load sample";
-      if (!columns_.check(sampleFromFile.getDimension()))
+      if (!inputColumns_.check(sampleFromFile.getDimension()))
         throw InvalidArgumentException(HERE) << "In FromFileDesignOfExperiment: impossible to load sample marginals";
-      inputSample_ = sampleFromFile.getMarginal(columns_);
+      inputSample_ = sampleFromFile.getMarginal(inputColumns_);
+      inputSample_.setDescription(physicalModel_.getInputNames());
     }
-    inputSample_.setDescription(physicalModel_.getInputNames());
   }
   return inputSample_;
 }
@@ -138,17 +138,17 @@ String FromFileDesignOfExperiment::getPythonScript() const
 {
   OSS oss;
 
-  oss << "columns = ot.Indices([";
-  for (UnsignedInteger i = 0; i < columns_.getSize(); ++ i)
+  oss << "inputColumns = ot.Indices([";
+  for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++ i)
   {
-    oss << columns_[i];
-    if (i < columns_.getSize()-1)
+    oss << inputColumns_[i];
+    if (i < inputColumns_.getSize()-1)
       oss << ", ";
   }
   oss << "])\n";
 
   oss << getName()+ " = otguibase.FromFileDesignOfExperiment('" + getName() + "', "+getPhysicalModel().getName()+", ";
-  oss << "'"+fileName_+"', columns)\n";
+  oss << "'"+fileName_+"', inputColumns)\n";
 
   return oss.str();
 }
@@ -159,7 +159,7 @@ void FromFileDesignOfExperiment::save(Advocate & adv) const
 {
   DesignOfExperimentImplementation::save(adv);
   adv.saveAttribute("fileName_", fileName_);
-  adv.saveAttribute("columns_", columns_);
+  adv.saveAttribute("inputColumns_", inputColumns_);
 }
 
 
@@ -168,6 +168,6 @@ void FromFileDesignOfExperiment::load(Advocate & adv)
 {
   DesignOfExperimentImplementation::load(adv);
   adv.loadAttribute("fileName_", fileName_);
-  adv.loadAttribute("columns_", columns_);
+  adv.loadAttribute("inputColumns_", inputColumns_);
 }
 }

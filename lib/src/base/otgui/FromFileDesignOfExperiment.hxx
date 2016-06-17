@@ -35,15 +35,15 @@ public:
   FromFileDesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel);
   /** Constructor with parameters */
   FromFileDesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel,
-                             const OT::String & fileName, const OT::Indices & columns);
+                             const OT::String & fileName, const OT::Indices & inputColumns);
 
   /** Virtual constructor */
   virtual FromFileDesignOfExperiment * clone() const;
 
   void setFileName(const OT::String & fileName);
   OT::String getFileName() const;
-  OT::Indices getColumns() const;
-  void setColumns(OT::Indices columns);
+  OT::Indices getInputColumns() const;
+  void setInputColumns(OT::Indices inputColumns);
 
   virtual OT::NumericalSample getInputSample();
 
@@ -57,7 +57,7 @@ public:
 
 private:
   OT::String fileName_;
-  OT::Indices columns_;
+  OT::Indices inputColumns_;
 };
 }
 #endif
