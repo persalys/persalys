@@ -26,13 +26,13 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QPushButton>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QSettings>
 #include <QApplication>
 #include <QMessageBox>
+#include <QScrollBar>
 
 using namespace OT;
 
@@ -59,14 +59,14 @@ void ImportTablePage::buildInterface()
 
   // first row
   QHBoxLayout * hboxLayout = new QHBoxLayout;
-  QLabel * label = new QLabel(tr("File path:"));
+  QLabel * label = new QLabel(tr("Data file"));
   hboxLayout->addWidget(label);
 
   filePathLineEdit_ = new QLineEdit;
   filePathLineEdit_->setText(QString::fromUtf8(designOfExperiment_.getFileName().c_str()));
   hboxLayout->addWidget(filePathLineEdit_);
 
-  QPushButton * openFileButton = new QPushButton(tr("Open"));
+  QPushButton * openFileButton = new QPushButton(tr("Import..."));
   connect(openFileButton, SIGNAL(clicked()), this, SLOT(openFileRequested()));
   hboxLayout->addWidget(openFileButton);
 
@@ -89,7 +89,7 @@ void ImportTablePage::buildInterface()
   {
     try
     {
-      NumericalSample sampleFromFile = loadSampleFromFile();
+      NumericalSample sampleFromFile = FromFileDesignOfExperiment::ImportSample(designOfExperiment_.getFileName());
       setTable(sampleFromFile);
       pageValidity_ = true;
     }
@@ -102,27 +102,6 @@ void ImportTablePage::buildInterface()
     }
   }
   mainGridLayout->addWidget(groupBox, 1, 0, 1, 1);
-}
-
-
-NumericalSample ImportTablePage::loadSampleFromFile()
-{
-  std::vector< String > separatorsList(3);
-  separatorsList[0] = " ";
-  separatorsList[1] = ",";
-  separatorsList[2] = ";";
-  NumericalSample sampleFromFile;
-  for (UnsignedInteger i=0; i<separatorsList.size(); ++i)
-  {
-    // import sample from the file
-    sampleFromFile = NumericalSample::ImportFromTextFile(designOfExperiment_.getFileName(), separatorsList[i]);
-    if (sampleFromFile.getSize())
-      break;
-  }
-  if (!sampleFromFile.getSize())
-    throw InvalidArgumentException(HERE) << tr("Impossible to load sample").toLocal8Bit().data();
-
-  return sampleFromFile;
 }
 
 
@@ -169,6 +148,7 @@ void ImportTablePage::setTable(NumericalSample & sampleFromFile)
     columnsWithCombo[i] = i;
   HorizontalHeaderViewWithCombobox * header = new HorizontalHeaderViewWithCombobox(comboBoxItems, columnsWithCombo, dataPreviewTableView_);
   dataPreviewTableView_->setHorizontalHeader(header);
+  connect(dataPreviewTableView_->horizontalScrollBar(), SIGNAL(valueChanged(int)), header, SLOT(fixComboPositions()));
   dataPreviewTableView_->horizontalHeader()->show();
 #if QT_VERSION >= 0x050000
   dataPreviewTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
@@ -186,7 +166,7 @@ void ImportTablePage::openFileRequested()
     currentDir = QDir::homePath();
   QString fileName = QFileDialog::getOpenFileName(this, tr("Data to import..."),
                      currentDir,
-                     tr("Text Files (*.txt);; CSV source files (*.csv)"));
+                     tr("CSV source files (*.csv);; Text Files (*.txt)"));
 
   if (!fileName.isEmpty())
   {
@@ -205,8 +185,8 @@ void ImportTablePage::openFileRequested()
       try
       {
         errorMessageLabel_->setText("");
-        designOfExperiment_.setFileName(filePathLineEdit_->text().toLocal8Bit().data());
-        NumericalSample sampleFromFile = loadSampleFromFile();
+        designOfExperiment_.setFileName(fileName.toLocal8Bit().data());
+        NumericalSample sampleFromFile = FromFileDesignOfExperiment::ImportSample(fileName.toLocal8Bit().data());
         setTable(sampleFromFile);
         pageValidity_ = true;
       }

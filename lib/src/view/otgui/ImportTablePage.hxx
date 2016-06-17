@@ -41,7 +41,6 @@ public:
 
 protected:
   void buildInterface();
-  OT::NumericalSample loadSampleFromFile();
   void setTable(OT::NumericalSample & sample);
 
 public slots:
