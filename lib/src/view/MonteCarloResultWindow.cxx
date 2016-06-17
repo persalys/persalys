@@ -25,6 +25,7 @@
 #include "otgui/QtTools.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 #include "otgui/DesignOfExperimentWindow.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
 
 #include <QVBoxLayout>
 #include <QStackedWidget>

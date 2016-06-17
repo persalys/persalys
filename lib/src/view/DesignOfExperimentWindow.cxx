@@ -22,6 +22,7 @@
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/SampleTableModel.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
 
 #include <QVBoxLayout>
 #include <QStackedWidget>
