@@ -45,6 +45,8 @@ public:
   OT::Indices getInputColumns() const;
   void setInputColumns(const OT::Indices & inputColumns);
 
+  static OT::NumericalSample ImportSample(const OT::String & fileName);
+
   virtual OT::NumericalSample getInputSample();
 
   virtual OT::String getPythonScript() const;

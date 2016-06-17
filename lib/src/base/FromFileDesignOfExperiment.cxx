@@ -103,6 +103,27 @@ void FromFileDesignOfExperiment::setInputColumns(const Indices & inputColumns)
 }
 
 
+NumericalSample FromFileDesignOfExperiment::ImportSample(const String & fileName)
+{
+  std::vector< String > separatorsList(3);
+  separatorsList[0] = " ";
+  separatorsList[1] = ",";
+  separatorsList[2] = ";";
+  NumericalSample sampleFromFile;
+  for (UnsignedInteger i = 0; i < separatorsList.size(); ++ i)
+  {
+    // import sample from the file
+    sampleFromFile = NumericalSample::ImportFromTextFile(fileName, separatorsList[i]);
+    if (sampleFromFile.getSize())
+      break;
+  }
+  if (!sampleFromFile.getSize())
+    throw InvalidArgumentException(HERE) << "In FromFileDesignOfExperiment: impossible to load sample";
+
+  return sampleFromFile;
+}
+
+
 NumericalSample FromFileDesignOfExperiment::getInputSample()
 {
   if (!inputSample_.getSize())
@@ -110,20 +131,7 @@ NumericalSample FromFileDesignOfExperiment::getInputSample()
     inputSample_.clear();
     if (fileName_.size() > 0)
     {
-      std::vector< String > separatorsList(3);
-      separatorsList[0] = " ";
-      separatorsList[1] = ",";
-      separatorsList[2] = ";";
-      NumericalSample sampleFromFile;
-      for (UnsignedInteger i = 0; i < separatorsList.size(); ++ i)
-      {
-        // import sample from the file
-        sampleFromFile = NumericalSample::ImportFromTextFile(fileName_, separatorsList[i]);
-        if (sampleFromFile.getSize())
-          break;
-      }
-      if (!sampleFromFile.getSize())
-        throw InvalidArgumentException(HERE) << "In FromFileDesignOfExperiment: impossible to load sample";
+      NumericalSample sampleFromFile = ImportSample(fileName_);
       if (!inputColumns_.check(sampleFromFile.getDimension()))
         throw InvalidArgumentException(HERE) << "In FromFileDesignOfExperiment: impossible to load sample marginals";
       inputSample_ = sampleFromFile.getMarginal(inputColumns_);
