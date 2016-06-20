@@ -51,6 +51,7 @@ void SRCResultWindow::setParameters(const Analysis & analysis)
   const SRCAnalysis * SRCanalysis = dynamic_cast<const SRCAnalysis*>(&*analysis.getImplementation());
   QStringList strList;
   strList << tr("Sensitivity analysis parameters :") + "\n";
+  strList << tr("Algorithm : ") + tr("Standardized Regression Coefficients");
   strList << tr("Sample size : ") + QString::number(SRCanalysis->getNbSimulations());
   strList << tr("Seed : ") + QString::number(SRCanalysis->getSeed());
 

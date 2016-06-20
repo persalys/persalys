@@ -47,6 +47,7 @@ void SobolResultWindow::setParameters(const Analysis & analysis)
   const SobolAnalysis * SRCanalysis = dynamic_cast<const SobolAnalysis*>(&*analysis.getImplementation());
   QStringList strList;
   strList << tr("Sensitivity analysis parameters :") + "\n";
+  strList << tr("Algorithm : ") + tr("Sobol");
   strList << tr("Sample size : ") + QString::number(SRCanalysis->getNbSimulations());
   strList << tr("Seed : ") + QString::number(SRCanalysis->getSeed());
   strList << tr("Block size : ") + QString::number(SRCanalysis->getBlockSize());
