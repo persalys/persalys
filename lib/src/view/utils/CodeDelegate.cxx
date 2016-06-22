@@ -32,7 +32,7 @@
 namespace OTGUI {
 
 CodeEditor::CodeEditor(QWidget * parent)
-: QPlainTextEdit(parent)
+  : QPlainTextEdit(parent)
 {
 #ifndef _WIN32
   QFont font("Monospace");
@@ -41,35 +41,30 @@ CodeEditor::CodeEditor(QWidget * parent)
 #endif
   font.setPointSize(9);
   font.setFixedPitch(true);
+  setWordWrapMode(QTextOption::NoWrap);
   setFont(font);
 }
 
 
 bool CodeEditor::event(QEvent * event)
 {
-  if (event->type() == QEvent::ShortcutOverride) {
-    QKeyEvent *keyEvent = dynamic_cast<QKeyEvent*>(event);
-    if (keyEvent->key() == Qt::Key_Tab) {
+  if (event->type() == QEvent::ShortcutOverride)
+  {
+    QKeyEvent * keyEvent = dynamic_cast<QKeyEvent*>(event);
+    if (keyEvent->key() == Qt::Key_Tab)
+    {
       QTextCursor cursor(textCursor());
       cursor.insertText("    ");
       event->accept();
       return true;
     }
   }
-//   if (event->type() == QEvent::KeyPress)
-//   {
-//     QKeyEvent *keyEvent = dynamic_cast<QKeyEvent*>(event);
-//     if (keyEvent->key() == Qt::Key_Tab) {
-//       return true;
-//     }
-//     return QPlainTextEdit::event(event);
-//   }
   return QPlainTextEdit::event(event);
 }
 
+
 void CodeEditor::keyPressEvent(QKeyEvent *e)
 {
-
   QPlainTextEdit::keyPressEvent(e);
   if (e->key() == Qt::Key_Return)
   {
@@ -81,15 +76,12 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
   }
 }
 
+
 bool CodeDelegate::eventFilter(QObject *obj, QEvent *event)
 {
-//   if (event->type() == QEvent::ShortcutOverride)
-//   {
-//     std::cout << "CodeDelegate::eventFilter ShortcutOverride"<<std::endl;
-//   }
   if (event->type() == QEvent::KeyPress)
   {
-    QKeyEvent *keyEvent = dynamic_cast<QKeyEvent*>(event);
+    QKeyEvent * keyEvent = dynamic_cast<QKeyEvent*>(event);
     if (keyEvent->key() == Qt::Key_Tab)
     {
       return true;
@@ -98,14 +90,16 @@ bool CodeDelegate::eventFilter(QObject *obj, QEvent *event)
   return QItemDelegate::eventFilter(obj, event);
 }
 
+
 CodeDelegate::CodeDelegate(QObject * parent)
   : QItemDelegate(parent)
 {
 }
 
+
 QWidget *CodeDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
-  QWidget * textEdit = new CodeEditor(parent);
+  CodeEditor * textEdit = new CodeEditor(parent);
   connect(textEdit, SIGNAL(codeEdited(QWidget *)), this, SIGNAL(commitData(QWidget *)));
   return textEdit;
 }
@@ -113,7 +107,7 @@ QWidget *CodeDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem
 
 void CodeDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const
 {
-  QPlainTextEdit * textEdit = dynamic_cast<QPlainTextEdit*>(editor);
+  CodeEditor * textEdit = dynamic_cast<CodeEditor*>(editor);
   textEdit->setPlainText(index.model()->data(index, Qt::DisplayRole).toString());
 }
 
@@ -132,12 +126,12 @@ void CodeDelegate::paint(QPainter *painter, const QStyleOptionViewItem & option,
   {
     QTextDocument document;
 #ifndef _WIN32
-  QFont font("Monospace");
+    QFont font("Monospace");
 #else
-  QFont font("Courier");
+    QFont font("Courier");
 #endif
-  font.setPointSize(9);
-  font.setFixedPitch(true);
+    font.setPointSize(9);
+    font.setFixedPitch(true);
     document.setDefaultFont(font);
     document.setDocumentMargin(2);
     document.setPlainText(value.toString());
@@ -146,5 +140,4 @@ void CodeDelegate::paint(QPainter *painter, const QStyleOptionViewItem & option,
     painter->translate(-option.rect.topLeft());
   }
 }
-
 }

@@ -29,6 +29,7 @@ namespace OTGUI {
 class CodeEditor : public QPlainTextEdit
 {
   Q_OBJECT
+
 public:
   CodeEditor(QWidget * parent = 0);
 
@@ -38,7 +39,6 @@ signals:
 
 protected:
   virtual bool event(QEvent * event);
-
   virtual void keyPressEvent(QKeyEvent *e);
 
 };
@@ -57,9 +57,6 @@ public:
 
 protected:
   bool eventFilter(QObject *obj, QEvent *ev);
-public slots:
-
-private:
 };
 }
 #endif
