@@ -23,7 +23,14 @@
 namespace OTGUI {
 
 /* Default constructor */
-Observer::Observer()
+Observer::Observer(const OT::String & type)
+  : type_(type)
 {
+}
+
+
+OT::String Observer::getType() const
+{
+  return type_;
 }
 }

@@ -61,10 +61,23 @@ void Observable::notify(const String & message)
   {
     std::vector<Observer*>::reverse_iterator rit = observers_.rbegin();
     for (; rit!= observers_.rend(); ++rit)
-    {
       (*rit)->update(this, message);
+  }
+}
+
+
+void Observable::notifyAndRemove(const String & message, const String & type)
+{
+  for (std::vector<Observer*>::iterator it = observers_.begin(); it!= observers_.end(); ++it)
+  {
+    if ((*it)->getType() == type)
+    {
+      (*it)->update(this, message);
+      observers_.erase(it);
+      return;
     }
   }
+
 }
 
 
@@ -81,8 +94,13 @@ std::vector< Observer* > Observable::getObservers() const
 }
 
 
-void Observable::setObservers(const std::vector<Observer *> observer)
+Observer* Observable::getObserver(const String & type)
 {
-  observers_ = observer;
+  for (std::vector<Observer*>::iterator it = observers_.begin(); it!= observers_.end(); ++it)
+  {
+    if ((*it)->getType() == type)
+      return (*it);
+  }
+  return 0;
 }
 }

@@ -27,7 +27,7 @@ namespace OTGUI {
 AnalysisItem::AnalysisItem(const Analysis & analysis, const String & typeAnalysis)
   : QObject()
   , QStandardItem(QString::fromUtf8(analysis.getName().c_str()))
-  , Observer()
+  , Observer("Analysis")
   , analysis_(analysis)
 {
   setData(QString::fromUtf8(typeAnalysis.c_str()), Qt::UserRole);

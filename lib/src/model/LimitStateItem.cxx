@@ -27,7 +27,7 @@ namespace OTGUI {
 LimitStateItem::LimitStateItem(const LimitState & limitState)
   : QObject()
   , QStandardItem(QString::fromUtf8(limitState.getName().c_str()))
-  , Observer()
+  , Observer("LimitState")
   , limitState_(limitState)
 {
   setData("LimitState", Qt::UserRole);

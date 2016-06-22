@@ -29,7 +29,7 @@ namespace OTGUI {
 OTStudyItem::OTStudyItem(OTStudy * otStudy)
   : QObject()
   , QStandardItem(QString::fromUtf8(otStudy->getName().c_str()))
-  , Observer()
+  , Observer("OTStudy")
   , otStudy_(otStudy)
 {
   setData("OTStudy", Qt::UserRole);
@@ -90,7 +90,7 @@ void OTStudyItem::update(Observable * source, const String & message)
   }
   else
   {
-    throw InvalidArgumentException(HERE) << "In OTStudyItem::update: not recognized message: " << message;
+    std::cerr<< "In OTStudyItem::update: not recognized message: " << message << std::endl;
   }
 }
 
@@ -133,7 +133,7 @@ void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
     ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(physicalModel);
     physicalModel.addObserver(newProbabilisticModelItem);
     item->appendRow(newProbabilisticModelItem);
-    connect(newProbabilisticModelItem, SIGNAL(physicalModelRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
+    connect(newProbabilisticModelItem, SIGNAL(probabilisticModelRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
     emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
   }
 
