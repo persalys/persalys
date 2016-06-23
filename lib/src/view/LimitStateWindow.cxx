@@ -20,7 +20,6 @@
  */
 #include "otgui/LimitStateWindow.hxx"
 
-#include "otgui/CustomDoubleValidator.hxx"
 #include "otgui/QtTools.hxx"
 
 #include "Greater.hxx"
@@ -80,7 +79,6 @@ void LimitStateWindow::buildInterface()
   gridLayout->addWidget(failureComboBox_, 2, 1);
 
   thresholdLineEdit_ = new ValueLineEdit;
-  thresholdLineEdit_->setValidator(new CustomDoubleValidator);
   updateThresholdWidget();
   connect(thresholdLineEdit_, SIGNAL(editingFinished()), this, SLOT(updateThreshold()));
   gridLayout->addWidget(thresholdLineEdit_, 2, 2);

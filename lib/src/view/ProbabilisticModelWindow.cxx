@@ -25,7 +25,6 @@
 #include "otgui/InputTableProbabilisticModel.hxx"
 #include "otgui/DistributionDictionary.hxx"
 #include "otgui/CorrelationTableModel.hxx"
-#include "otgui/CustomDoubleValidator.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/QtTools.hxx"
 
@@ -407,7 +406,6 @@ void ProbabilisticModelWindow::updateDistributionParametersWidgets(const QModelI
   {
     parameterValuesLabel_[i] = new QLabel(parametersName[i].c_str());
     parameterValuesEdit_[i] = new ValueLineEdit(parameters[parametersType][i]);
-    parameterValuesEdit_[i]->setValidator(new CustomDoubleValidator);
     connect(parameterValuesEdit_[i], SIGNAL(editingFinished()), this, SLOT(distributionParametersChanged()));
     parameterValuesLabel_[i]->setBuddy(parameterValuesEdit_[i]);
     lay->addWidget(parameterValuesLabel_[i], i+1, 0);
@@ -609,8 +607,6 @@ void ProbabilisticModelWindow::truncationParametersChanged()
 
   try
   {
-    qobject_cast<ValueLineEdit *>(sender())->check();
-    
     if (inputDistribution.getImplementation()->getClassName() == "TruncatedNormal")
     {
       TruncatedNormal dist = TruncatedNormal(*dynamic_cast<TruncatedNormal*>(&*inputDistribution.getImplementation()));

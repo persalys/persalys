@@ -8,7 +8,6 @@ ot_add_source_file (CollapsibleGroupBox.cxx)
 ot_add_source_file (SpinBoxDelegate.cxx)
 ot_add_source_file (CodeDelegate.cxx)
 ot_add_source_file (ComboBoxDelegate.cxx)
-ot_add_source_file (CustomDoubleValidator.cxx)
 ot_add_source_file (LineEditWithQValidatorDelegate.cxx)
 ot_add_source_file (HorizontalHeaderViewWithCombobox.cxx)
 ot_add_source_file (ExportableTableView.cxx)
@@ -27,7 +26,6 @@ qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
               otgui/ComboBoxDelegate.hxx
               otgui/LineEditWithQValidatorDelegate.hxx
               otgui/HorizontalHeaderViewWithCombobox.hxx
-              otgui/CustomDoubleValidator.hxx
               otgui/ExportableTableView.hxx
               otgui/CopyableTableView.hxx
               otgui/QtTools.hxx
