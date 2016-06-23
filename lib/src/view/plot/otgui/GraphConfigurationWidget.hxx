@@ -22,8 +22,8 @@
 #define OTGUI_GRAPHCONFIGURATIONWIDGET_HXX
 
 #include "PlotWidget.hxx"
+#include "otgui/ValueLineEdit.hxx"
 
-#include <QLineEdit>
 #include <QComboBox>
 #include <QButtonGroup>
 
@@ -59,11 +59,11 @@ private:
   QComboBox * yAxisComboBox_;
   QLineEdit * titleLineEdit_;
   QLineEdit * xlabelLineEdit_;
-  QLineEdit * xmin_;
-  QLineEdit * xmax_;
+  ValueLineEdit * xmin_;
+  ValueLineEdit * xmax_;
   QLineEdit * ylabelLineEdit_;
-  QLineEdit * ymin_;
-  QLineEdit * ymax_;
+  ValueLineEdit * ymin_;
+  ValueLineEdit * ymax_;
 };
 }
 #endif

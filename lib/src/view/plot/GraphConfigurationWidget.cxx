@@ -120,15 +120,15 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   label = new QLabel(tr("Min"));
   gridLayoutTab->addWidget(label, 1, 0, 1, 1);
 
-  xmin_ = new QLineEdit;
-  connect(xmin_, SIGNAL(textChanged(QString)), this, SLOT(updateXrange()));
+  xmin_ = new ValueLineEdit;
+  connect(xmin_, SIGNAL(editingFinished()), this, SLOT(updateXrange()));
   gridLayoutTab->addWidget(xmin_, 1, 1, 1, 1);
 
   label = new QLabel(tr("Max"));
   gridLayoutTab->addWidget(label, 2, 0, 1, 1);
 
-  xmax_ = new QLineEdit;
-  connect(xmax_, SIGNAL(textChanged(QString)), this, SLOT(updateXrange()));
+  xmax_ = new ValueLineEdit;
+  connect(xmax_, SIGNAL(editingFinished()), this, SLOT(updateXrange()));
   gridLayoutTab->addWidget(xmax_, 2, 1, 1, 1);
 
   gridLayoutTab->setRowStretch(3, 1);
@@ -148,15 +148,15 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   label = new QLabel(tr("Min"));
   gridLayoutTab->addWidget(label, 1, 0, 1, 1);
 
-  ymin_ = new QLineEdit;
-  connect(ymin_, SIGNAL(textChanged(QString)), this, SLOT(updateYrange()));
+  ymin_ = new ValueLineEdit;
+  connect(ymin_, SIGNAL(editingFinished()), this, SLOT(updateYrange()));
   gridLayoutTab->addWidget(ymin_, 1, 1, 1, 1);
 
   label = new QLabel(tr("Max"));
   gridLayoutTab->addWidget(label, 2, 0, 1, 1);
 
-  ymax_ = new QLineEdit;
-  connect(ymax_, SIGNAL(textChanged(QString)), this, SLOT(updateYrange()));
+  ymax_ = new ValueLineEdit;
+  connect(ymax_, SIGNAL(editingFinished()), this, SLOT(updateYrange()));
   gridLayoutTab->addWidget(ymax_, 2, 1, 1, 1);
 
   gridLayoutTab->setRowStretch(3, 1);
@@ -194,11 +194,11 @@ void GraphConfigurationWidget::updateLineEdits()
 
   titleLineEdit_->setText(plotWidgets_[currentPlotIndex_]->title().text());
   xlabelLineEdit_->setText(plotWidgets_[currentPlotIndex_]->axisTitle(QwtPlot::xBottom).text());
-  xmin_->setText(QString::number(plotWidgets_[currentPlotIndex_]->axisInterval(QwtPlot::xBottom).minValue()));
-  xmax_->setText(QString::number(plotWidgets_[currentPlotIndex_]->axisInterval(QwtPlot::xBottom).maxValue()));
+  xmin_->setValue(plotWidgets_[currentPlotIndex_]->axisInterval(QwtPlot::xBottom).minValue());
+  xmax_->setValue(plotWidgets_[currentPlotIndex_]->axisInterval(QwtPlot::xBottom).maxValue());
   ylabelLineEdit_->setText(plotWidgets_[currentPlotIndex_]->axisTitle(QwtPlot::yLeft).text());
-  ymin_->setText(QString::number(plotWidgets_[currentPlotIndex_]->axisInterval(QwtPlot::yLeft).minValue()));
-  ymax_->setText(QString::number(plotWidgets_[currentPlotIndex_]->axisInterval(QwtPlot::yLeft).maxValue()));
+  ymin_->setValue(plotWidgets_[currentPlotIndex_]->axisInterval(QwtPlot::yLeft).minValue());
+  ymax_->setValue(plotWidgets_[currentPlotIndex_]->axisInterval(QwtPlot::yLeft).maxValue());
 }
 
 
@@ -264,30 +264,30 @@ void GraphConfigurationWidget::updateYLabel()
 
 void GraphConfigurationWidget::updateXrange()
 {
-  bool okMin;
-  double valueMin = xmin_->text().toDouble(&okMin);
-  bool okMax;
-  double valueMax = xmax_->text().toDouble(&okMax);
-  
-  if (okMin && okMax && valueMin < valueMax)
+  try
   {
-    plotWidgets_[currentPlotIndex_]->setAxisScale(QwtPlot::xBottom, valueMin, valueMax);
+    plotWidgets_[currentPlotIndex_]->setAxisScale(QwtPlot::xBottom, xmin_->value(), xmax_->value());
     plotWidgets_[currentPlotIndex_]->replot();
+  }
+  catch (std::exception & ex)
+  {
+    updateLineEdits();
+    std::cerr << "GraphConfigurationWidget::updateXrange: value not valid\n";
   }
 }
 
 
 void GraphConfigurationWidget::updateYrange()
 {
-  bool okMin;
-  double valueMin = ymin_->text().toDouble(&okMin);
-  bool okMax;
-  double valueMax = ymax_->text().toDouble(&okMax);
-
-  if (okMin && okMax && valueMin < valueMax)
+  try
   {
-    plotWidgets_[currentPlotIndex_]->setAxisScale(QwtPlot::yLeft, valueMin, valueMax);
+    plotWidgets_[currentPlotIndex_]->setAxisScale(QwtPlot::yLeft, ymin_->value(), ymax_->value());
     plotWidgets_[currentPlotIndex_]->replot();
+  }
+  catch (std::exception & ex)
+  {
+    updateLineEdits();
+    std::cerr << "GraphConfigurationWidget::updateYrange: value not valid\n";
   }
 }
 
