@@ -23,17 +23,15 @@
 
 #include "otgui/OTguiException.hxx"
 
-namespace OTGUI {
+#include <QDoubleValidator>
 
-ValueLineEdit::ValueLineEdit(const QString text, QWidget *parent)
-  : QLineEdit(parent)
-{
-  setText(text);
-}
+namespace OTGUI {
 
 ValueLineEdit::ValueLineEdit(const double value, QWidget *parent)
   : QLineEdit(parent)
 {
+  QDoubleValidator * validator = new QDoubleValidator;
+  setValidator(validator);
   setValue(value);
 }
 
@@ -56,8 +54,6 @@ double ValueLineEdit::value()
 void ValueLineEdit::check()
 {
   QString value = text();
-  if (value[0].toLower() == 'e' || value.isEmpty() || value.toLower() == "e" || value == "-")
-    throw InvalidValueException(HERE) << "The value '" << value.toStdString() << "' is invalid";
   bool ok;
   value.toDouble(&ok);
   if (!ok)
@@ -69,5 +65,28 @@ void ValueLineEdit::deactivate()
 {
   clear();
   setEnabled(false);
+}
+
+
+bool ValueLineEdit::event(QEvent * event)
+{
+  QString value = text();
+  int pos = 0;
+  // if 1e400 -> correct syntax -> but not a valid double -> not accepted -> no editingFinished signal
+  if (event->type() == QEvent::FocusOut && validator()->validate(value, pos) != QValidator::Acceptable)
+    emit editingFinished();
+
+  return QLineEdit::event(event);
+}
+
+
+void ValueLineEdit::keyPressEvent(QKeyEvent *e)
+{
+  QLineEdit::keyPressEvent(e);
+  QString value = text();
+  int pos = 0;
+  // if 1e400 -> not a valid double -> but not accepted -> no editingFinished signal
+  if (e->key() == Qt::Key_Return && validator()->validate(value, pos) != QValidator::Acceptable)
+    emit editingFinished();
 }
 }

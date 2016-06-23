@@ -22,6 +22,7 @@
 #define OTGUI_VALUELINEEDIT_HXX
 
 #include <QLineEdit>
+#include <QKeyEvent>
 
 namespace OTGUI {
 class ValueLineEdit : public QLineEdit
@@ -29,11 +30,8 @@ class ValueLineEdit : public QLineEdit
   Q_OBJECT
 
 public:
-  // text constructor
-  ValueLineEdit(const QString text = "", QWidget *parent = 0);
-
   // value constructor
-  ValueLineEdit(const double value, QWidget *parent = 0);
+  ValueLineEdit(const double value=0., QWidget *parent = 0);
 
   // value accessors
   void setValue(const double value);
@@ -44,6 +42,10 @@ public:
 
   // clear and make not editable
   void deactivate();
+
+protected:
+  virtual bool event(QEvent * event);
+  virtual void keyPressEvent(QKeyEvent *e);
 };
 }
 #endif
