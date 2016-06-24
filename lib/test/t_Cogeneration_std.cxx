@@ -22,7 +22,8 @@
 #include "OTtestcode.hxx"
 #include "otgui/OTStudy.hxx"
 #include "otgui/AnalyticalPhysicalModel.hxx"
-#include "otgui/DesignOfExperiment.hxx"
+#include "otgui/FixedDesignOfExperiment.hxx"
+#include "otgui/FromFileDesignOfExperiment.hxx"
 
 
 using namespace OT;
@@ -53,11 +54,19 @@ int main(int argc, char *argv[])
 
     myStudy.add(myPhysicalModel);
 
-    // Parametric analysis
-    DesignOfExperiment aDesign("aDesign", myPhysicalModel);
+    // First parametric analysis
+    FixedDesignOfExperiment aDesign("aDesign", myPhysicalModel);
     myStudy.add(aDesign);
     aDesign.evaluate();
-    NumericalSample resultSample(aDesign.getResult().getOutputSample());
+    NumericalSample resultSample1(aDesign.getResult().getOutputSample());
+
+    // Second parametric analysis
+    aDesign.getInputSample().exportToCSVFile("sample.csv");
+    Indices inputIndices(3);
+    inputIndices.fill();
+    FromFileDesignOfExperiment anotherdesign("anotherDesign", myPhysicalModel, "sample.csv", inputIndices);
+    anotherdesign.evaluate();
+    NumericalSample resultSample2(anotherdesign.getResult().getOutputSample());
 
     // Reference
 
@@ -97,7 +106,8 @@ int main(int argc, char *argv[])
     NumericalSample outputSample=f(inputSample);
 
     // Comparaison
-    assert_almost_equal(outputSample, resultSample, 1e-16);
+    assert_almost_equal(outputSample, resultSample1, 1e-16);
+    assert_almost_equal(outputSample, resultSample2, 1e-16);
   }
   catch (TestFailed & ex)
   {
