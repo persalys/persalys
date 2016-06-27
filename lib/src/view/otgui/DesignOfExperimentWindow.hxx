@@ -23,10 +23,9 @@
 
 #include "OTguiSubWindow.hxx"
 #include "otgui/DesignOfExperimentItem.hxx"
-#include "otgui/DataTableView.hxx"
+#include "otgui/ExportableTableView.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
-#include "otgui/NotEditableTableWidget.hxx"
 
 #include <QTabWidget>
 #include <QPushButton>
@@ -39,23 +38,28 @@ class DesignOfExperimentWindow : public OTguiSubWindow
 public:
   DesignOfExperimentWindow(DesignOfExperimentItem * item);
 
+  static QVector<PlotWidget*> GetListScatterPlots(const OT::NumericalSample & inS, const OT::NumericalSample & outS,
+                                                  const QStringList inNames, const QStringList inAxisNames,
+                                                  const QStringList outNames, const QStringList outAxisNames);
+  static QWidget* GetMinMaxTableView(const SimulationAnalysisResult & result, const int outputIndex);
+
 protected:
   void buildInterface();
+  QWidget* getMinMaxTableWidget();
   void addTabsForOutputs();
 
 public slots:
   void evaluateOutputs();
   void updateWindowForOutputs();
-  void updateLabelsText(int indexOutput=0);
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 
 private:
   DesignOfExperiment designOfExperiment_;
   QTabWidget * tabWidget_;
-  DataTableView * tableView_;
+  ExportableTableView * tableView_;
   QPushButton * evaluateButton_;
-  NotEditableTableWidget * minMaxTable_;
+  QComboBox * outputsComboBoxFirstTab_;
   PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
   GraphConfigurationWidget * graphConfigurationWidget_;

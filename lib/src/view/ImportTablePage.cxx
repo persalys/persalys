@@ -21,20 +21,18 @@
 #include "otgui/ImportTablePage.hxx"
 
 #include "otgui/HorizontalHeaderViewWithCombobox.hxx"
-#include "otgui/DataTableModel.hxx"
-
-#include <NumericalSample.hxx>
+#include "otgui/SampleTableModel.hxx"
 
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QPushButton>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QSettings>
 #include <QApplication>
 #include <QMessageBox>
+#include <QScrollBar>
 
 using namespace OT;
 
@@ -42,9 +40,13 @@ namespace OTGUI {
 
 ImportTablePage::ImportTablePage(const DesignOfExperiment & designOfExperiment, QWidget *parent)
   : QWizardPage(parent)
-  , designOfExperiment_(designOfExperiment)
   , pageValidity_(false)
 {
+  if (designOfExperiment.getImplementation()->getClassName() == "FromFileDesignOfExperiment")
+    designOfExperiment_ = *dynamic_cast<const FromFileDesignOfExperiment*>(&*designOfExperiment.getImplementation());
+  else
+    designOfExperiment_ = FromFileDesignOfExperiment(designOfExperiment.getName(), designOfExperiment.getPhysicalModel());
+
   buildInterface();
 }
 
@@ -57,14 +59,14 @@ void ImportTablePage::buildInterface()
 
   // first row
   QHBoxLayout * hboxLayout = new QHBoxLayout;
-  QLabel * label = new QLabel(tr("File path:"));
+  QLabel * label = new QLabel(tr("Data file"));
   hboxLayout->addWidget(label);
 
   filePathLineEdit_ = new QLineEdit;
   filePathLineEdit_->setText(QString::fromUtf8(designOfExperiment_.getFileName().c_str()));
   hboxLayout->addWidget(filePathLineEdit_);
 
-  QPushButton * openFileButton = new QPushButton(tr("Open"));
+  QPushButton * openFileButton = new QPushButton(tr("Import..."));
   connect(openFileButton, SIGNAL(clicked()), this, SLOT(openFileRequested()));
   hboxLayout->addWidget(openFileButton);
 
@@ -81,18 +83,19 @@ void ImportTablePage::buildInterface()
   gridLayout->setSpacing(6);
   gridLayout->setContentsMargins(11, 11, 11, 11);
 
-  dataPreviewTableView_ = new DataTableView(groupBox);
+  dataPreviewTableView_ = new ExportableTableView(groupBox);
   gridLayout->addWidget(dataPreviewTableView_, 0, 0, 1, 1);
   if (designOfExperiment_.getFileName().size() != 0)
   {
     try
     {
-      loadFile();
+      NumericalSample sampleFromFile = FromFileDesignOfExperiment::ImportSample(designOfExperiment_.getFileName());
+      setTable(sampleFromFile);
       pageValidity_ = true;
     }
     catch (std::exception & ex)
     {
-      QString message = "Impossible to load the file.\n";
+      QString message = tr("Impossible to load the file.") + "\n";
       message = QString("%1%2%3%4").arg("<font color=red>").arg(message).arg(ex.what()).arg("</font>");
       errorMessageLabel_->setText(message);
       pageValidity_ = false;
@@ -102,58 +105,50 @@ void ImportTablePage::buildInterface()
 }
 
 
-void ImportTablePage::loadFile()
+void ImportTablePage::setTable(NumericalSample & sampleFromFile)
 {
-  std::vector< String > separatorsList(3);
-  separatorsList[0] = " ";
-  separatorsList[1] = ",";
-  separatorsList[2] = ";";
-  NumericalSample sampleFromFile;
-  for (UnsignedInteger i=0; i<separatorsList.size(); ++i)
-  {
-    // import sample from the file
-    sampleFromFile = NumericalSample::ImportFromTextFile(designOfExperiment_.getFileName(), separatorsList[i]);
-    if (sampleFromFile.getSize())
-      break;
-  }
-  if (!sampleFromFile.getSize())
-    throw InvalidArgumentException(HERE) << "Impossible to load sample";
+  // check sampleFromFile
+  if (!designOfExperiment_.getInputColumns().check(sampleFromFile.getDimension()))
+    throw InvalidArgumentException(HERE) << tr("Impossible to load sample marginals").toLocal8Bit().data();
 
-  if (!designOfExperiment_.getColumns().check(sampleFromFile.getDimension()))
-    throw InvalidArgumentException(HERE) << "Impossible to load sample marginals";
-
-  Description desc = Description(sampleFromFile.getDimension());
   Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
 
   if (sampleFromFile.getDimension() < inputNames.getSize())
-    throw InvalidArgumentException(HERE) << "The file contains a sample with a dimension inferior to the number of inputs of the physical model: "
+    throw InvalidArgumentException(HERE) << tr("The file contains a sample with a dimension inferior to the number of inputs of the physical model: ").toLocal8Bit().data()
                                          << inputNames.getSize();
 
-  Indices columns(designOfExperiment_.getColumns());
+  // set inputs columns indices
+  Indices columns(designOfExperiment_.getInputColumns());
   if (!columns.getSize())
   {
     columns = Indices(inputNames.getSize());
     columns.fill();
-    designOfExperiment_.setColumns(columns);
+    designOfExperiment_.setInputColumns(columns);
   }
 
+  // set sample description
+  Description desc = Description(sampleFromFile.getDimension());
   for (UnsignedInteger i=0; i<columns.getSize(); ++i)
     desc[columns[i]] = inputNames[i];
   sampleFromFile.setDescription(desc);
 
-  dataPreviewTableView_->setModel(new DataTableModel(sampleFromFile));
-  connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this, SLOT(columnChanged(Qt::Orientation,int,int)));
+  // set table model
+  dataPreviewTableView_->setModel(new SampleTableModel(sampleFromFile));
+  connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this, SLOT(columnChanged()));
 
+  // set comboboxes items: each of them contains the input Names and an empty item
   QStringList comboBoxItems;
   for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
     comboBoxItems << QString::fromUtf8(inputNames[i].c_str());
   comboBoxItems << "";
 
-  QVector<int> columnsWithCombo(dataPreviewTableView_->model()->columnCount());
+  // set horizontal header view
+  QVector<int> columnsWithCombo(sampleFromFile.getDimension());
   for (int i=0; i<columnsWithCombo.size(); ++i)
     columnsWithCombo[i] = i;
   HorizontalHeaderViewWithCombobox * header = new HorizontalHeaderViewWithCombobox(comboBoxItems, columnsWithCombo, dataPreviewTableView_);
   dataPreviewTableView_->setHorizontalHeader(header);
+  connect(dataPreviewTableView_->horizontalScrollBar(), SIGNAL(valueChanged(int)), header, SLOT(fixComboPositions()));
   dataPreviewTableView_->horizontalHeader()->show();
 #if QT_VERSION >= 0x050000
   dataPreviewTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
@@ -171,7 +166,7 @@ void ImportTablePage::openFileRequested()
     currentDir = QDir::homePath();
   QString fileName = QFileDialog::getOpenFileName(this, tr("Data to import..."),
                      currentDir,
-                     tr("Text Files (*.txt);; CSV source files (*.csv)"));
+                     tr("CSV source files (*.csv);; Text Files (*.txt)"));
 
   if (!fileName.isEmpty())
   {
@@ -190,13 +185,14 @@ void ImportTablePage::openFileRequested()
       try
       {
         errorMessageLabel_->setText("");
-        designOfExperiment_.setFileName(filePathLineEdit_->text().toLocal8Bit().data());
-        loadFile();
+        designOfExperiment_.setFileName(fileName.toLocal8Bit().data());
+        NumericalSample sampleFromFile = FromFileDesignOfExperiment::ImportSample(fileName.toLocal8Bit().data());
+        setTable(sampleFromFile);
         pageValidity_ = true;
       }
       catch (std::exception & ex)
       {
-        QString message = "Impossible to load the file.\n";
+        QString message = tr("Impossible to load the file.") + "\n";
         message = QString("%1%2%3%4").arg("<font color=red>").arg(message).arg(ex.what()).arg("</font>");
         errorMessageLabel_->setText(message);
         pageValidity_ = false;
@@ -206,7 +202,7 @@ void ImportTablePage::openFileRequested()
 }
 
 
-void ImportTablePage::columnChanged(Qt::Orientation, int, int)
+void ImportTablePage::columnChanged()
 {
   Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
   // test the unicity of each variable
@@ -227,7 +223,7 @@ void ImportTablePage::columnChanged(Qt::Orientation, int, int)
 
   if (columns != columns2)
   {
-    QString message = "Each variable must be associated with one column.";
+    QString message = tr("Each variable must be associated with one column.");
     message = QString("%1%2%3").arg("<font color=red>").arg(message).arg("</font>");
     errorMessageLabel_->setText(message);
     pageValidity_ = false;
@@ -236,7 +232,7 @@ void ImportTablePage::columnChanged(Qt::Orientation, int, int)
 
   try
   {
-    designOfExperiment_.setColumns(columns);
+    designOfExperiment_.setInputColumns(columns);
     pageValidity_ = true;
     errorMessageLabel_->setText("");
   }
@@ -251,6 +247,8 @@ void ImportTablePage::columnChanged(Qt::Orientation, int, int)
 
 bool ImportTablePage::validatePage()
 {
+  if (pageValidity_)
+    emit designOfExperimentChanged(designOfExperiment_);
   return pageValidity_;
 }
 }

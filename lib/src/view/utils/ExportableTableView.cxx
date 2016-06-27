@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QTableView to display samples
+ *  @brief Exportable QTableView
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,9 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DataTableView.hxx"
+#include "otgui/ExportableTableView.hxx"
 
-#include "otgui/DataTableModel.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <QFileDialog>
 #include <QMenu>
@@ -30,25 +31,16 @@
 
 namespace OTGUI {
 
-DataTableView::DataTableView(QWidget* parent)
-  : OTguiTableView(parent)
+ExportableTableView::ExportableTableView(QWidget* parent)
+  : CopyableTableView(parent)
 {
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
-}
-
-
-DataTableView::DataTableView(const OT::NumericalSample & sample, QWidget *parent)
-  : OTguiTableView(parent)
-{
-  setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
-  setModel(new DataTableModel(sample));
 }
 
 
 // show the context menu when right clicking
-void DataTableView::contextMenu(const QPoint & pos)
+void ExportableTableView::contextMenu(const QPoint & pos)
 {
   QMenu * contextMenu(new QMenu(this));
   QAction * exportData = new QAction(tr("Export"), this);
@@ -59,7 +51,7 @@ void DataTableView::contextMenu(const QPoint & pos)
 }
 
 
-void DataTableView::exportData()
+void ExportableTableView::exportData()
 {
   QSettings settings;
   QString currentDir = settings.value("currentDir").toString();
@@ -74,22 +66,17 @@ void DataTableView::exportData()
     if (!fileName.endsWith(".csv"))
       fileName += ".csv";
 
-    QFile file(fileName);
     settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
 
-    // check
-    if (!file.open(QFile::WriteOnly))
-    {
-      QMessageBox::warning(QApplication::activeWindow(), tr("Warning"),
-                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
-    }
     try
     {
-      static_cast<DataTableModel*>(model())->exportData(fileName);
+      if (!dynamic_cast<CustomStandardItemModel*>(model()))
+        throw SimpleException(tr("Internal exception"));
+      dynamic_cast<CustomStandardItemModel*>(model())->exportData(fileName);
     }
     catch (std::exception & ex)
     {
-      QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Impossible to export the data."));
+      QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Impossible to export the data. ")+ex.what());
     }
   }
 }

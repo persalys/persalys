@@ -25,18 +25,17 @@
 #include "otgui/InputTableProbabilisticModel.hxx"
 #include "otgui/DistributionDictionary.hxx"
 #include "otgui/CorrelationTableModel.hxx"
-#include "otgui/CustomDoubleValidator.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
+#include "otgui/QtTools.hxx"
 
 #include "Normal.hxx"
 #include "TruncatedDistribution.hxx"
 #include "TruncatedNormal.hxx"
 
 #include <QSplitter>
-#include <QHeaderView>
 #include <QScrollArea>
 #include <QPushButton>
-#include <QStackedLayout>
+#include <QStackedWidget>
 
 using namespace OT;
 
@@ -65,6 +64,11 @@ void ProbabilisticModelWindow::buildInterface()
 
   // Inputs table
   inputTableView_ = new QTableView;
+  inputTableView_->setSelectionMode(QAbstractItemView::SingleSelection);
+  inputTableHeaderView_ = new CheckableHeaderView;
+  if (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize())
+      inputTableHeaderView_->setChecked(true);
+  inputTableView_->setHorizontalHeader(inputTableHeaderView_);
   QStringList items;
   Description listDistributions = DistributionDictionary::GetAvailableDistributions();
   for (UnsignedInteger i=0; i<listDistributions.getSize(); ++i)
@@ -89,15 +93,16 @@ void ProbabilisticModelWindow::buildInterface()
   connect(inputTableView_, SIGNAL(clicked(QModelIndex)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(distributionChanged(const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
+  connect(inputTableModel_, SIGNAL(distributionsChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
+  connect(inputTableModel_, SIGNAL(checked(bool)), inputTableHeaderView_, SLOT(setChecked(bool)));
 
   horizontalSplitter->addWidget(inputTableView_);
 
   // Distribution edition
-  QWidget * rightSideOfSplitterWidget = new QWidget;
-  rightSideOfSplitterStackedLayout_ = new QStackedLayout(rightSideOfSplitterWidget);
+  rightSideOfSplitterStackedWidget_ = new QStackedWidget;
 
   // If physical model is not valid: use a dummy widget
-  rightSideOfSplitterStackedLayout_->addWidget(new QWidget);
+  rightSideOfSplitterStackedWidget_->addWidget(new QWidget);
 
   // If the selected variable is deterministic
   QScrollArea * scrollAreaForDeterministic = new QScrollArea;
@@ -106,12 +111,12 @@ void ProbabilisticModelWindow::buildInterface()
   QGridLayout * groupBoxParametersLayout = new QGridLayout(groupBoxParameters);
   QLabel * valueLabel = new QLabel(tr("Value"));
   groupBoxParametersLayout->addWidget(valueLabel, 0, 0);
-  valueForDeterministicVariable_ = new QLineEdit;
+  valueForDeterministicVariable_ = new ValueLineEdit;
   valueForDeterministicVariable_->setEnabled(false);
   groupBoxParametersLayout->addWidget(valueForDeterministicVariable_, 0, 1);
   groupBoxParametersLayout->setRowStretch(1, 1);
   scrollAreaForDeterministic->setWidget(groupBoxParameters);
-  rightSideOfSplitterStackedLayout_->addWidget(scrollAreaForDeterministic);
+  rightSideOfSplitterStackedWidget_->addWidget(scrollAreaForDeterministic);
 
   // If the selected variable is stochastic
   QScrollArea * rightScrollArea = new QScrollArea;
@@ -120,27 +125,29 @@ void ProbabilisticModelWindow::buildInterface()
   QVBoxLayout * rightFrameLayout = new QVBoxLayout(rightFrame);
 
   //  PDF and CDF graphs
-  QStackedLayout * plotLayout = new QStackedLayout(rightFrameLayout);
+  QStackedWidget * plotStackedWidget = new QStackedWidget;
 
   QVector<PlotWidget*> listPlotWidgets;
   QWidget * widget = new QWidget;
   QVBoxLayout * vBox = new QVBoxLayout(widget);
-  pdfPlot_ = new PlotWidget;
+  pdfPlot_ = new PlotWidget("distributionPDF");
   pdfPlot_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
   vBox->addWidget(pdfPlot_, 0, Qt::AlignHCenter|Qt::AlignTop);
-  plotLayout->addWidget(widget);
+  plotStackedWidget->addWidget(widget);
   listPlotWidgets.append(pdfPlot_);
 
   widget = new QWidget;
   vBox = new QVBoxLayout(widget);
-  cdfPlot_ = new PlotWidget;
+  cdfPlot_ = new PlotWidget("distributionCDF");
   cdfPlot_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
   vBox->addWidget(cdfPlot_, 0, Qt::AlignHCenter|Qt::AlignTop);
-  plotLayout->addWidget(widget);
+  plotStackedWidget->addWidget(widget);
   listPlotWidgets.append(cdfPlot_);
 
+  rightFrameLayout->addWidget(plotStackedWidget);
+
   pdf_cdfPlotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, QStringList(), QStringList(), GraphConfigurationWidget::PDF);
-  connect(pdf_cdfPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
+  connect(pdf_cdfPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
   connect(rootTab, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
 
   //  parameters
@@ -159,9 +166,9 @@ void ProbabilisticModelWindow::buildInterface()
   upperBoundCheckBox_ = new QCheckBox(tr("Upper bound"));
   truncationParamGroupBoxLayout->addWidget(upperBoundCheckBox_, 1, 0);
 
-  lowerBoundLineEdit_ = new QLineEdit;
+  lowerBoundLineEdit_ = new ValueLineEdit;
   truncationParamGroupBoxLayout->addWidget(lowerBoundLineEdit_, 0, 1);
-  upperBoundLineEdit_ = new QLineEdit;
+  upperBoundLineEdit_ = new ValueLineEdit;
   truncationParamGroupBoxLayout->addWidget(upperBoundLineEdit_, 1, 1);
 
   connect(lowerBoundCheckBox_, SIGNAL(stateChanged(int)), this, SLOT(truncationParametersStateChanged()));
@@ -177,8 +184,8 @@ void ProbabilisticModelWindow::buildInterface()
   rightFrameLayout->addStretch();
 
   rightScrollArea->setWidget(rightFrame);
-  rightSideOfSplitterStackedLayout_->addWidget(rightScrollArea);
-  horizontalSplitter->addWidget(rightSideOfSplitterWidget);
+  rightSideOfSplitterStackedWidget_->addWidget(rightScrollArea);
+  horizontalSplitter->addWidget(rightSideOfSplitterStackedWidget_);
 
   if (inputTableModel_->rowCount())
   {
@@ -197,7 +204,7 @@ void ProbabilisticModelWindow::buildInterface()
 
   QGroupBox * groupBox = new QGroupBox(tr("Spearman's rank (Gaussian Copula)"));
   QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
-  correlationTableView_ = new OTguiTableView;
+  correlationTableView_ = new CopyableTableView;
   SpinBoxDelegate * correlationDelegate = new SpinBoxDelegate;
   correlationTableView_->setItemDelegate(correlationDelegate);
   correlationTableModel_ = new CorrelationTableModel(physicalModel_);
@@ -246,6 +253,8 @@ void ProbabilisticModelWindow::updateStochasticInputsTable()
     inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
   connect(inputTableModel_, SIGNAL(distributionChanged(const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
+  connect(inputTableModel_, SIGNAL(distributionsChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
+  connect(inputTableModel_, SIGNAL(checked(bool)), inputTableHeaderView_, SLOT(setChecked(bool)));
 }
 
 
@@ -290,7 +299,7 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
 {
   if (!index.isValid())
   {
-    rightSideOfSplitterStackedLayout_->setCurrentIndex(0);
+    rightSideOfSplitterStackedWidget_->setCurrentIndex(0);
     return;
   }
 
@@ -303,14 +312,14 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   // If the selected variable is deterministic
   if (distributionName == "Dirac")
   {
-    rightSideOfSplitterStackedLayout_->setCurrentIndex(1);
+    rightSideOfSplitterStackedWidget_->setCurrentIndex(1);
     showHideGraphConfigurationWidget(-1);
-    valueForDeterministicVariable_->setText(QString::number(input.getValue()));
+    valueForDeterministicVariable_->setValue(input.getValue());
   }
   // If the selected variable is stochastic
   else
   {
-    rightSideOfSplitterStackedLayout_->setCurrentIndex(2);
+    rightSideOfSplitterStackedWidget_->setCurrentIndex(2);
     truncationParamGroupBox_->setExpanded(false);
 
     // fill truncation parameters widgets
@@ -323,6 +332,12 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
     updatePlots();
     showHideGraphConfigurationWidget(0);
   }
+}
+
+
+void ProbabilisticModelWindow::updateCurrentVariableDistributionWidgets()
+{
+  updateDistributionWidgets(inputTableView_->currentIndex());
 }
 
 
@@ -372,27 +387,25 @@ void ProbabilisticModelWindow::updateDistributionParametersWidgets(const QModelI
   // combobox to choose the type of distribution configuration
   QLabel * label = new QLabel(tr("Type"));
   lay->addWidget(label, 0, 0);
-  selectParametersTypeCombo_ = new QComboBox;
+  QComboBox * selectParametersTypeCombo = new QComboBox;
   for (UnsignedInteger i=0; i<parameters.getSize(); ++i)
   {
     QStringList parametersNamesList;
     for (UnsignedInteger j=0; j<parameters[i].getDescription().getSize(); ++j)
-    {
       parametersNamesList << QString::fromUtf8(parameters[i].getDescription()[j].c_str());
-    }
-    selectParametersTypeCombo_->addItem(parametersNamesList.join(", "));
+
+    selectParametersTypeCombo->addItem(parametersNamesList.join(", "));
   }
-  selectParametersTypeCombo_->setCurrentIndex(parametersType);
-  connect(selectParametersTypeCombo_, SIGNAL(currentIndexChanged(int)), this, SLOT(typeDistributionParametersChanged(int)));
-  lay->addWidget(selectParametersTypeCombo_, 0, 1);
+  selectParametersTypeCombo->setCurrentIndex(parametersType);
+  connect(selectParametersTypeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(typeDistributionParametersChanged(int)));
+  lay->addWidget(selectParametersTypeCombo, 0, 1);
 
   // lineEdits to set the distribution parameters
   Description parametersName = parameters[parametersType].getDescription();
   for (UnsignedInteger i=0; i<nbParameters; ++i)
   {
     parameterValuesLabel_[i] = new QLabel(parametersName[i].c_str());
-    parameterValuesEdit_[i] = new QLineEdit(QString::number(parameters[parametersType][i]));
-    parameterValuesEdit_[i]->setValidator(new CustomDoubleValidator);
+    parameterValuesEdit_[i] = new ValueLineEdit(parameters[parametersType][i]);
     connect(parameterValuesEdit_[i], SIGNAL(editingFinished()), this, SLOT(distributionParametersChanged()));
     parameterValuesLabel_[i]->setBuddy(parameterValuesEdit_[i]);
     lay->addWidget(parameterValuesLabel_[i], i+1, 0);
@@ -411,16 +424,14 @@ void ProbabilisticModelWindow::updateTruncationParametersWidgets(const QModelInd
   Distribution inputDistribution = input.getDistribution();
   String distributionName = inputDistribution.getImplementation()->getClassName();
 
-  lowerBoundCheckBox_->blockSignals(true);
-  upperBoundCheckBox_->blockSignals(true);
-  lowerBoundLineEdit_->blockSignals(true);
-  upperBoundLineEdit_->blockSignals(true);
+  SignalBlocker lowerBoundCheckBoxBlocker(lowerBoundCheckBox_);
+  SignalBlocker upperBoundCheckBoxBlocker(upperBoundCheckBox_);
+  SignalBlocker lowerBoundLineEditBlocker(lowerBoundLineEdit_);
+  SignalBlocker upperBoundLineEditBlocker(upperBoundLineEdit_);
 
   // clear truncation parameters
-  lowerBoundLineEdit_->clear();
-  lowerBoundLineEdit_->setEnabled(false);
-  upperBoundLineEdit_->clear();
-  upperBoundLineEdit_->setEnabled(false);
+  lowerBoundLineEdit_->deactivate();
+  upperBoundLineEdit_->deactivate();
   lowerBoundCheckBox_->setChecked(false);
   upperBoundCheckBox_->setChecked(false);
 
@@ -432,15 +443,11 @@ void ProbabilisticModelWindow::updateTruncationParametersWidgets(const QModelInd
     lowerBoundCheckBox_->setChecked(dist->getFiniteLowerBound());
     upperBoundCheckBox_->setChecked(dist->getFiniteUpperBound());
     if (dist->getFiniteLowerBound())
-    {
-      lowerBoundLineEdit_->setText(QString::number(dist->getLowerBound()));
-      lowerBoundLineEdit_->setEnabled(true);
-    }
+      lowerBoundLineEdit_->setValue(dist->getLowerBound());
+
     if (dist->getFiniteUpperBound())
-    {
-      upperBoundLineEdit_->setText(QString::number(dist->getUpperBound()));
-      upperBoundLineEdit_->setEnabled(true);
-    }
+      upperBoundLineEdit_->setValue(dist->getUpperBound());
+
     truncationParamGroupBox_->setExpanded(true);
   }
   else if (distributionName == "TruncatedNormal")
@@ -449,16 +456,10 @@ void ProbabilisticModelWindow::updateTruncationParametersWidgets(const QModelInd
 
     lowerBoundCheckBox_->setChecked(true);
     upperBoundCheckBox_->setChecked(true);
-    lowerBoundLineEdit_->setText(QString::number(dist->getA()));
-    lowerBoundLineEdit_->setEnabled(true);
-    upperBoundLineEdit_->setText(QString::number(dist->getB()));
-    upperBoundLineEdit_->setEnabled(true);
+    lowerBoundLineEdit_->setValue(dist->getA());
+    upperBoundLineEdit_->setValue(dist->getB());
     truncationParamGroupBox_->setExpanded(true);
   }
-  lowerBoundCheckBox_->blockSignals(false);
-  upperBoundCheckBox_->blockSignals(false);
-  lowerBoundLineEdit_->blockSignals(false);
-  upperBoundLineEdit_->blockSignals(false);
 }
 
 
@@ -469,14 +470,15 @@ void ProbabilisticModelWindow::showHideGraphConfigurationWidget(int indexTab)
   {
     case 0:
     {
-      if (rightSideOfSplitterStackedLayout_->currentIndex() == 2 && (windowState() == 4 || windowState() == 8 || windowState() == 10))
+      if (rightSideOfSplitterStackedWidget_->currentIndex() == 2
+          && (windowState() == 4 || windowState() == 10))
         emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
       else
-        emit graphWindowDeactivated(pdf_cdfPlotsConfigurationWidget_);
+        emit graphWindowDeactivated();
       break;
     }
     default:
-      emit graphWindowDeactivated(pdf_cdfPlotsConfigurationWidget_);
+      emit graphWindowDeactivated();
       break;
   }
 }
@@ -484,10 +486,13 @@ void ProbabilisticModelWindow::showHideGraphConfigurationWidget(int indexTab)
 
 void ProbabilisticModelWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
-  if (newState == 4 || newState == 8 || newState == 10)
+  if (oldState == 2)
+    return;
+
+  if (newState == 4 || newState == 10)
     showHideGraphConfigurationWidget(currentIndexTab_);
-  else if (newState == 0 || newState == 1 || newState == 2 || newState == 9)
-    emit graphWindowDeactivated(pdf_cdfPlotsConfigurationWidget_);
+  else if (newState == 0 || newState == 1 || newState == 9)
+    emit graphWindowDeactivated();
 }
 
 
@@ -520,15 +525,7 @@ void ProbabilisticModelWindow::distributionParametersChanged()
     try
     {
       for (UnsignedInteger i=0; i<parameters.getSize(); ++i)
-      {
-        QString value = parameterValuesEdit_[i]->text();
-        if (value[0].toLower() == 'e' || value.isEmpty() || value.toLower() == "e" || value == "-")
-          throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
-        bool ok;
-        parameters[i] = value.toDouble(&ok);
-        if (!ok)
-          throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
-      }
+        parameters[i] = parameterValuesEdit_[i]->value();
 
       if (parameters == DistributionDictionary::GetParametersCollection(distribution)[parametersType])
         return;
@@ -571,15 +568,7 @@ void ProbabilisticModelWindow::distributionParametersChanged()
     try
     {
       for (UnsignedInteger i=0; i<nbParameters; ++i)
-      {
-        QString value = parameterValuesEdit_[i]->text();
-        if (value[0].toLower() == 'e' || value.isEmpty() || value.toLower() == "e" || value == "-")
-          throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
-        bool ok;
-        parameters[i] = value.toDouble(&ok);
-        if (!ok)
-          throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
-      }
+        parameters[i] = parameterValuesEdit_[i]->value();
 
       if (parameters == DistributionDictionary::GetParametersCollection(inputDistribution)[parametersType])
         return;
@@ -618,22 +607,14 @@ void ProbabilisticModelWindow::truncationParametersChanged()
 
   try
   {
-    QString value = qobject_cast<QLineEdit *>(sender())->text();
-    if (value[0].toLower() == 'e' || value.isEmpty() || value.toLower() == "e" || value == "-")
-      throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
-    bool ok;
-    value.toDouble(&ok);
-    if (!ok)
-      throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
-    
     if (inputDistribution.getImplementation()->getClassName() == "TruncatedNormal")
     {
       TruncatedNormal dist = TruncatedNormal(*dynamic_cast<TruncatedNormal*>(&*inputDistribution.getImplementation()));
 
       if (lowerBoundCheckBox_->isChecked())
-        dist.setA(lowerBoundLineEdit_->text().toDouble());
+        dist.setA(lowerBoundLineEdit_->value());
       if (upperBoundCheckBox_->isChecked())
-        dist.setB(upperBoundLineEdit_->text().toDouble());
+        dist.setB(upperBoundLineEdit_->value());
 
       physicalModel_.blockNotification(true);
       physicalModel_.setInputDistribution(input.getName(), dist);
@@ -643,9 +624,9 @@ void ProbabilisticModelWindow::truncationParametersChanged()
     {
       TruncatedDistribution truncatedDistribution = TruncatedDistribution(*dynamic_cast<TruncatedDistribution*>(&*inputDistribution.getImplementation()));
       if (lowerBoundCheckBox_->isChecked())
-        truncatedDistribution.setLowerBound(lowerBoundLineEdit_->text().toDouble());
+        truncatedDistribution.setLowerBound(lowerBoundLineEdit_->value());
       if (upperBoundCheckBox_->isChecked())
-        truncatedDistribution.setUpperBound(upperBoundLineEdit_->text().toDouble());
+        truncatedDistribution.setUpperBound(upperBoundLineEdit_->value());
 
       physicalModel_.blockNotification(true);
       physicalModel_.setInputDistribution(input.getName(), truncatedDistribution);
@@ -678,10 +659,8 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
     // <=> if now the distribution is not truncated
     if (!lowerBoundCheckBox_->isChecked() && !upperBoundCheckBox_->isChecked())
     {
-      lowerBoundLineEdit_->clear();
-      upperBoundLineEdit_->clear();
-      lowerBoundLineEdit_->setEnabled(false);
-      upperBoundLineEdit_->setEnabled(false);
+      lowerBoundLineEdit_->deactivate();
+      upperBoundLineEdit_->deactivate();
       // find the not truncated distribution
       if (distributionName == "TruncatedDistribution")
       {
@@ -744,16 +723,13 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
             if (lowerBound >= truncatureInterval.getUpperBound()[0])
               lowerBound = truncatureInterval.getUpperBound()[0] - 0.1 * distStd;
           truncatureInterval.setLowerBound(NumericalPoint(1, lowerBound));
-          lowerBoundLineEdit_->blockSignals(true);
-          lowerBoundLineEdit_->setText(QString::number(lowerBound));
-          lowerBoundLineEdit_->blockSignals(false);
-          lowerBoundLineEdit_->setEnabled(true);
+          SignalBlocker blocker(lowerBoundLineEdit_);
+          lowerBoundLineEdit_->setValue(lowerBound);
           truncatureInterval.setFiniteLowerBound(Interval::BoolCollection(1, true));
         }
         else
         {
-          lowerBoundLineEdit_->clear();
-          lowerBoundLineEdit_->setEnabled(false);
+          lowerBoundLineEdit_->deactivate();
           truncatureInterval.setFiniteLowerBound(Interval::BoolCollection(1, false));
         }
       }
@@ -768,16 +744,13 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
             if (upperBound <= truncatureInterval.getLowerBound()[0])
               upperBound = truncatureInterval.getLowerBound()[0] + 0.1 * distStd;
           truncatureInterval.setUpperBound(NumericalPoint(1, upperBound));
-          upperBoundLineEdit_->blockSignals(true);
-          upperBoundLineEdit_->setText(QString::number(upperBound));
-          upperBoundLineEdit_->blockSignals(false);
-          upperBoundLineEdit_->setEnabled(true);
+          SignalBlocker blocker(upperBoundLineEdit_);
+          upperBoundLineEdit_->setValue(upperBound);
           truncatureInterval.setFiniteUpperBound(Interval::BoolCollection(1, true));
         }
         else
         {
-          upperBoundLineEdit_->clear();
-          upperBoundLineEdit_->setEnabled(false);
+          upperBoundLineEdit_->deactivate();
           truncatureInterval.setFiniteUpperBound(Interval::BoolCollection(1, false));
         }
       }

@@ -20,11 +20,12 @@
  */
 #include "otgui/DesignOfExperimentWindow.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/DataTableWidget.hxx"
-#include "otgui/DataTableModel.hxx"
+#include "otgui/SampleTableModel.hxx"
+#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
 
 #include <QVBoxLayout>
-#include <QStackedLayout>
+#include <QStackedWidget>
 #include <QGroupBox>
 #include <QHeaderView>
 
@@ -50,10 +51,10 @@ void DesignOfExperimentWindow::buildInterface()
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
-  tableView_ = new DataTableView;
+  tableView_ = new ExportableTableView;
   if (!designOfExperiment_.getResult().getOutputSample().getSize())
   {
-    DataTableModel * model = new DataTableModel(designOfExperiment_.getInputSample());
+    SampleTableModel * model = new SampleTableModel(designOfExperiment_.getInputSample());
     tableView_->setModel(model);
   }
 
@@ -99,7 +100,7 @@ void DesignOfExperimentWindow::updateWindowForOutputs()
   {
     NumericalSample sample = designOfExperiment_.getInputSample();
     sample.stack(designOfExperiment_.getResult().getOutputSample());
-    DataTableModel * model = new DataTableModel(sample);
+    SampleTableModel * model = new SampleTableModel(sample);
     tableView_->setModel(model);
     if (model->sampleIsValid())
       addTabsForOutputs();
@@ -110,24 +111,47 @@ void DesignOfExperimentWindow::updateWindowForOutputs()
 
 void DesignOfExperimentWindow::addTabsForOutputs()
 {
-  int nbInputs = designOfExperiment_.getInputVariableNames().getSize();
+  int nbInputs = designOfExperiment_.getVariableInputNames().getSize();
   Indices ind(nbInputs);
   for (int i=0; i<nbInputs; ++i)
     for (UnsignedInteger j=0; j<designOfExperiment_.getInputSample().getDimension(); ++j)
-      if (designOfExperiment_.getInputVariableNames()[i] == designOfExperiment_.getInputSample().getDescription()[j])
+      if (designOfExperiment_.getVariableInputNames()[i] == designOfExperiment_.getInputSample().getDescription()[j])
       {
         ind[i] = j;
         break;
       }
-  NumericalSample variableInputsSample = designOfExperiment_.getInputSample().getMarginal(ind);
+  // sample of the variable inputs
+  NumericalSample inS = designOfExperiment_.getInputSample().getMarginal(ind);
+  // input names/descriptions
   QStringList inputNames;
+  QStringList inAxisTitles;
   for (int i=0; i<nbInputs; ++i)
-    inputNames << QString::fromUtf8(variableInputsSample.getDescription()[i].c_str());
+  {
+    String inputName = inS.getDescription()[i];
+    inputNames << QString::fromUtf8(inputName.c_str());
 
-  int nbOutputs = designOfExperiment_.getResult().getOutputSample().getDimension();
+    QString inputDescription = QString::fromUtf8(designOfExperiment_.getPhysicalModel().getInputByName(inputName).getDescription().c_str());
+
+    if (!inputDescription.isEmpty())
+      inAxisTitles << inputDescription;
+    else
+      inAxisTitles << inputNames.last();
+  }
+
+  // sample of the outputs
+  NumericalSample outS = designOfExperiment_.getResult().getOutputSample();
+  // output names/descriptions
   QStringList outputNames;
-  for (int i=0; i<nbOutputs; ++i)
-    outputNames << QString::fromUtf8(designOfExperiment_.getResult().getOutputSample().getDescription()[i].c_str());
+  QStringList outAxisTitles;
+  for (int i=0; i<outS.getDimension(); ++i)
+  {
+    outputNames << QString::fromUtf8(outS.getDescription()[i].c_str());
+    QString outputDescription = QString::fromUtf8(designOfExperiment_.getPhysicalModel().getOutputs()[i].getDescription().c_str());
+    if (!outputDescription.isEmpty())
+      outAxisTitles << outputDescription;
+    else
+      outAxisTitles << outputNames.last();
+  }
 
   // first tab --------------------------------
   QWidget * tab = new QWidget;
@@ -137,214 +161,208 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   QHBoxLayout * headLayout = new QHBoxLayout;
   QLabel * outputName = new QLabel(tr("Output"));
   headLayout->addWidget(outputName);
-  QComboBox * outputsComboBoxFirstTab = new QComboBox;
-  outputsComboBoxFirstTab->addItems(outputNames);
-  connect(outputsComboBoxFirstTab, SIGNAL(currentIndexChanged(int)), this, SLOT(updateLabelsText(int)));
-  headLayout->addWidget(outputsComboBoxFirstTab);
+  outputsComboBoxFirstTab_ = new QComboBox;
+  outputsComboBoxFirstTab_->addItems(outputNames);
+  headLayout->addWidget(outputsComboBoxFirstTab_);
   headLayout->addStretch();
   tabLayout->addLayout(headLayout);
 
   // -- results --
 
   // number of simulations
-  QLabel * nbSimuLabel = new QLabel(tr("Size of the design of experiment: ") + QString::number(variableInputsSample.getSize()) + "\n");
+  QLabel * nbSimuLabel = new QLabel(tr("Size of the design of experiment: ") + QString::number(inS.getSize()) + "\n");
   nbSimuLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
   tabLayout->addWidget(nbSimuLabel);
 
   // min/max table
-  QGroupBox * minMaxGroupBox = new QGroupBox(tr("Minimum and Maximum"));
-  UnsignedInteger totalNbInputs = designOfExperiment_.getInputSample().getDimension();
-  QVBoxLayout * minMaxVbox = new QVBoxLayout(minMaxGroupBox);
-
-  minMaxTable_ = new NotEditableTableWidget(totalNbInputs + 1, 4);
-
-  // horizontal header
-  minMaxTable_->setHorizontalHeaderLabels(QStringList() << tr("") << tr("Variable") << tr("Minimum") << tr("Maximum"));
-
-  // vertical header
-  minMaxTable_->createHeaderItem(0, 0, tr("Output"));
-
-  QString rowTitle = tr("Inputs at\nextremum");
-  if (totalNbInputs == 1)
-    rowTitle = tr("Input at\nextremum");
-  minMaxTable_->createHeaderItem(1, 0, rowTitle);
-  minMaxTable_->setSpan(1, 0, totalNbInputs, 1);
-
-  for (UnsignedInteger i=0; i<totalNbInputs; ++i)
-    minMaxTable_->createItem(i+1, 1, QString::fromUtf8(designOfExperiment_.getInputSample().getDescription()[i].c_str()));
-
-  minMaxVbox->addWidget(minMaxTable_);
-  minMaxVbox->addStretch();
-  tabLayout->addWidget(minMaxGroupBox);
-  updateLabelsText();
+  tabLayout->addWidget(getMinMaxTableWidget());
 
   tabWidget_->addTab(tab, tr("Min/Max"));
 
   // second tab --------------------------------
   tab = new QWidget;
-  QStackedLayout * plotLayout = new QStackedLayout(tab);
+  QVBoxLayout * plotLayout = new QVBoxLayout(tab);
+  QStackedWidget * stackedWidget = new QStackedWidget;
+  QVector<PlotWidget*> listScatterPlotWidgets = GetListScatterPlots(inS, outS, inputNames, inAxisTitles, outputNames, outAxisTitles);
+  for (int i=0; i<listScatterPlotWidgets.size(); ++i)
+    stackedWidget->addWidget(listScatterPlotWidgets[i]);
 
-  QVector<PlotWidget*> listScatterPlotWidgets;
-  OutputCollection outputs = designOfExperiment_.getPhysicalModel().getOutputs();
-
-  for (int j=0; j<nbInputs; ++j)
-  {
-    for (int i=0; i<nbOutputs; ++i)
-    {
-      PlotWidget * plot = new PlotWidget;
-      plot->plotScatter(variableInputsSample.getMarginal(j), designOfExperiment_.getResult().getOutputSample().getMarginal(i));
-      plot->setTitle(tr("Scatter plot: ") + QString::fromUtf8(outputs[i].getName().c_str()) + tr(" vs ") + inputNames[j]);
-      String inputDescription = designOfExperiment_.getPhysicalModel().getInputByName(inputNames[j].toStdString()).getDescription();
-      if (!inputDescription.empty())
-        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(inputDescription.c_str()));
-      else
-        plot->setAxisTitle(QwtPlot::xBottom, inputNames[j]);
-      if (outputs[i].getDescription().size())
-        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getDescription().c_str()));
-      else
-        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getName().c_str()));
-      plotLayout->addWidget(plot);
-      listScatterPlotWidgets.append(plot);
-    }
-    for (int i=0; i<nbInputs; ++i)
-    {
-      PlotWidget * plot = new PlotWidget;
-      plot->plotScatter(variableInputsSample.getMarginal(j),variableInputsSample.getMarginal(i));
-      plot->setTitle(tr("Scatter plot: ") + inputNames[i] + tr(" vs ") + inputNames[j]);
-      String inputDescription = designOfExperiment_.getPhysicalModel().getInputByName(inputNames[j].toStdString()).getDescription();
-      if (!inputDescription.empty())
-        plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(inputDescription.c_str()));
-      else
-        plot->setAxisTitle(QwtPlot::xBottom, inputNames[j]);
-      inputDescription = designOfExperiment_.getPhysicalModel().getInputByName(inputNames[i].toStdString()).getDescription();
-      if (!inputDescription.empty())
-        plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(inputDescription.c_str()));
-      else
-        plot->setAxisTitle(QwtPlot::yLeft, inputNames[i]);
-      plotLayout->addWidget(plot);
-      listScatterPlotWidgets.append(plot);
-    }
-  }
-  for (int j=0; j<nbOutputs; ++j)
-    {
-      for (int i=0; i<nbOutputs; ++i)
-      {
-        PlotWidget * plot = new PlotWidget;
-        plot->plotScatter(designOfExperiment_.getResult().getOutputSample().getMarginal(j), designOfExperiment_.getResult().getOutputSample().getMarginal(i));
-        plot->setTitle(tr("Scatter plot: ") + QString::fromUtf8(outputs[i].getName().c_str()) + tr(" vs ") + QString::fromUtf8(outputs[j].getName().c_str()));
-        if (outputs[j].getDescription().size())
-          plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getDescription().c_str()));
-        else
-          plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getName().c_str()));
-        if (outputs[i].getDescription().size())
-          plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getDescription().c_str()));
-        else
-          plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(outputs[i].getName().c_str()));
-        plotLayout->addWidget(plot);
-        listScatterPlotWidgets.append(plot);
-      }
-      for (int i=0; i<nbInputs; ++i)
-      {
-        PlotWidget * plot = new PlotWidget;
-        plot->plotScatter(designOfExperiment_.getResult().getOutputSample().getMarginal(j), variableInputsSample.getMarginal(i));
-        plot->setTitle(tr("Scatter plot: ") + inputNames[i] + tr(" vs ") + QString::fromUtf8(outputs[j].getName().c_str()));
-        if (outputs[j].getDescription().size())
-          plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getDescription().c_str()));
-        else
-          plot->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(outputs[j].getName().c_str()));
-        String inputDescription = designOfExperiment_.getPhysicalModel().getInputByName(inputNames[i].toStdString()).getDescription();
-        if (!inputDescription.empty())
-          plot->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(inputDescription.c_str()));
-        else
-          plot->setAxisTitle(QwtPlot::yLeft, inputNames[i]);
-
-        plotLayout->addWidget(plot);
-        listScatterPlotWidgets.append(plot);
-      }
-    }
-
+  plotLayout->addWidget(stackedWidget);
   graphConfigurationWidget_ = new GraphConfigurationWidget(listScatterPlotWidgets, inputNames, outputNames, GraphConfigurationWidget::Scatter);
-  connect(graphConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotLayout, SLOT(setCurrentIndex(int)));
+  connect(graphConfigurationWidget_, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
 
   tabWidget_->addTab(tab, tr("Scatter plots"));
 
   // third tab --------------------------------
-  tab = new PlotMatrixWidget(variableInputsSample, designOfExperiment_.getResult().getOutputSample());
+  tab = new PlotMatrixWidget(inS, outS);
   plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
   tabWidget_->addTab(tab, tr("Plot matrix Y-X"));
 
   // fourth tab --------------------------------
-  tab = new PlotMatrixWidget(variableInputsSample, variableInputsSample);
+  tab = new PlotMatrixWidget(inS, inS);
   plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
   tabWidget_->addTab(tab, tr("Plot matrix X-X"));
 }
 
 
-void DesignOfExperimentWindow::updateLabelsText(int indexOutput)
+QWidget* DesignOfExperimentWindow::GetMinMaxTableView(const SimulationAnalysisResult & result, const int outputIndex)
 {
-  // minMaxTable_
-  minMaxTable_->createItem(0, 1, QString::fromUtf8(designOfExperiment_.getResult().getOutputSample().getDescription()[indexOutput].c_str()));
+  ResizableTableViewWithoutScrollBar * minMaxTableView = new ResizableTableViewWithoutScrollBar;
+  minMaxTableView->verticalHeader()->hide();
+  UnsignedInteger totalNbInputs = result.getInputSample().getDimension();
+  CustomStandardItemModel * minMaxTable = new CustomStandardItemModel(totalNbInputs+1, 4);
+  minMaxTableView->setModel(minMaxTable);
 
+  // horizontal header
+  minMaxTable->setHorizontalHeaderLabels(QStringList() << tr("") << tr("Variable") << tr("Minimum") << tr("Maximum"));
+
+  // vertical header
+  minMaxTable->setNotEditableHeaderItem(0, 0, tr("Output"));
+  QString rowTitle = tr("Inputs at\nextremum");
+  if (totalNbInputs == 1)
+    rowTitle = tr("Input at\nextremum");
+  minMaxTable->setNotEditableHeaderItem(1, 0, rowTitle);
+  minMaxTableView->setSpan(1, 0, totalNbInputs, 1);
+
+  // inputs names
+  for (int i=0; i<totalNbInputs; ++i)
+    minMaxTable->setNotEditableItem(i+1, 1, QString::fromUtf8(result.getInputSample().getDescription()[i].c_str()));
+
+  // output name
+  minMaxTable->setNotEditableItem(0, 1, QString::fromUtf8(result.getOutputSample().getDescription()[outputIndex].c_str()));
   // min
-  const double min = designOfExperiment_.getResult().getOutputSample().getMin()[indexOutput];
-  minMaxTable_->createItem(0, 2, min);
-
+  minMaxTable->setNotEditableItem(0, 2, result.getOutputSample().getMin()[outputIndex]);
   // max
-  const double max = designOfExperiment_.getResult().getOutputSample().getMax()[indexOutput];
-  minMaxTable_->createItem(0, 3, max);
+  minMaxTable->setNotEditableItem(0, 3, result.getOutputSample().getMax()[outputIndex]);
 
-  if (designOfExperiment_.getResult().getListXMin()[indexOutput].getSize() > 1)
+  // Xmin/XMax
+  if (result.getListXMin()[outputIndex].getSize() > 1)
   {
-    minMaxTable_->horizontalHeaderItem(2)->setIcon(QIcon(":/images/task-attention.png"));
-    minMaxTable_->horizontalHeaderItem(2)->setToolTip(tr("Information: The output is minimum at another point."));
+    minMaxTable->setHeaderData(2, Qt::Horizontal, QIcon(":/images/task-attention.png"), Qt::DecorationRole);
+    minMaxTable->setHeaderData(2, Qt::Horizontal, tr("Information: The output is minimum at another point."), Qt::ToolTipRole);
   }
-  if (designOfExperiment_.getResult().getListXMax()[indexOutput].getSize() > 1)
+  if (result.getListXMax()[outputIndex].getSize() > 1)
   {
-    minMaxTable_->horizontalHeaderItem(3)->setIcon(QIcon(":/images/task-attention.png"));
-    minMaxTable_->horizontalHeaderItem(3)->setToolTip(tr("Information: The output is maximum at another point."));
+    minMaxTable->setHeaderData(3, Qt::Horizontal, QIcon(":/images/task-attention.png"), Qt::DecorationRole);
+    minMaxTable->setHeaderData(3, Qt::Horizontal, tr("Information: The output is maximum at another point."), Qt::ToolTipRole);
   }
-
-  for (UnsignedInteger i=0; i<designOfExperiment_.getResult().getInputSample().getDimension(); ++i)
+  for (UnsignedInteger i=0; i<result.getInputSample().getDimension(); ++i)
   {
     // XMin
-    minMaxTable_->createItem(i+1, 2, designOfExperiment_.getResult().getListXMin()[indexOutput][0][i]);
+    minMaxTable->setNotEditableItem(i+1, 2, result.getListXMin()[outputIndex][0][i]);
     // XMax
-    minMaxTable_->createItem(i+1, 3, designOfExperiment_.getResult().getListXMax()[indexOutput][0][i]);
+    minMaxTable->setNotEditableItem(i+1, 3, result.getListXMax()[outputIndex][0][i]);
   }
 
   // resize table
-  minMaxTable_->resizeToContents();
+  minMaxTableView->resizeToContents();
+
+  return minMaxTableView;
+}
+
+
+QWidget* DesignOfExperimentWindow::getMinMaxTableWidget()
+{
+  QGroupBox * minMaxGroupBox = new QGroupBox(tr("Minimum and Maximum"));
+  QVBoxLayout * minMaxGroupBoxLayout = new QVBoxLayout(minMaxGroupBox);
+  QStackedWidget * minMaxGroupBoxStackedWidget = new QStackedWidget;
+
+  for (int indexOutput=0; indexOutput<designOfExperiment_.getResult().getOutputSample().getDimension(); ++indexOutput)
+    minMaxGroupBoxStackedWidget->addWidget(GetMinMaxTableView(designOfExperiment_.getResult(), indexOutput));
+
+  minMaxGroupBoxLayout->addWidget(minMaxGroupBoxStackedWidget);
+  connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), minMaxGroupBoxStackedWidget, SLOT(setCurrentIndex(int)));
+
+  return minMaxGroupBox;
+}
+
+
+QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const OT::NumericalSample & inS, const OT::NumericalSample & outS,
+                                                                   const QStringList inNames, const QStringList inAxisNames,
+                                                                   const QStringList outNames, const QStringList outAxisNames)
+{
+  QVector<PlotWidget*> listScatterPlotWidgets;
+  const int nbInputs = inS.getDimension();
+  const int nbOutputs = outS.getDimension();
+  QPen pen = QPen(Qt::blue, 4);
+
+  for (int j=0; j<nbInputs; ++j)
+  {
+    for (int i=0; i<nbOutputs; ++i)
+    {
+      PlotWidget * plot = new PlotWidget("scatterplot");
+      plot->plotScatter(inS.getMarginal(j), outS.getMarginal(i), pen, inAxisNames[j], outAxisNames[i]);
+      plot->setTitle(tr("Scatter plot: ") + outNames[i] + tr(" vs ") + inNames[j]);
+      listScatterPlotWidgets.append(plot);
+    }
+    for (int i=0; i<nbInputs; ++i)
+    {
+      PlotWidget * plot = new PlotWidget("scatterplot");
+      plot->plotScatter(inS.getMarginal(j), inS.getMarginal(i), pen, inAxisNames[j], inAxisNames[i]);
+      plot->setTitle(tr("Scatter plot: ") + inNames[i] + tr(" vs ") + inNames[j]);
+      listScatterPlotWidgets.append(plot);
+    }
+  }
+  for (int j=0; j<nbOutputs; ++j)
+  {
+    for (int i=0; i<nbOutputs; ++i)
+    {
+      PlotWidget * plot = new PlotWidget("scatterplot");
+      plot->plotScatter(outS.getMarginal(j), outS.getMarginal(i), pen, outAxisNames[j], outAxisNames[i]);
+      plot->setTitle(tr("Scatter plot: ") + outNames[i] + tr(" vs ") + outNames[j]);
+      listScatterPlotWidgets.append(plot);
+    }
+    for (int i=0; i<nbInputs; ++i)
+    {
+      PlotWidget * plot = new PlotWidget("scatterplot");
+      plot->plotScatter(outS.getMarginal(j), inS.getMarginal(i), pen, outAxisNames[j], inAxisNames[i]);
+      plot->setTitle(tr("Scatter plot: ") + inNames[i] + tr(" vs ") + outNames[j]);
+      listScatterPlotWidgets.append(plot);
+    }
+  }
+  return listScatterPlotWidgets;
 }
 
 
 void DesignOfExperimentWindow::showHideGraphConfigurationWidget(int indexTab)
 {
-  // if plotWidget is visible
-  if (indexTab == 2)
-    emit graphWindowActivated(graphConfigurationWidget_);
-  else if (indexTab == 3)
-    emit graphWindowActivated(plotMatrixConfigurationWidget_);
-  else if (indexTab == 4)
-    emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
-  // if no plotWidget is visible
-  else
+  switch (indexTab)
   {
-    emit graphWindowDeactivated(graphConfigurationWidget_);
-    emit graphWindowDeactivated(plotMatrixConfigurationWidget_);
-    emit graphWindowDeactivated(plotMatrix_X_X_ConfigurationWidget_);
+    // if a plotWidget is visible
+    case 2:
+      if (!graphConfigurationWidget_->isVisible())
+        emit graphWindowActivated(graphConfigurationWidget_);
+      break;
+    case 3:
+      if (!plotMatrixConfigurationWidget_->isVisible())
+        emit graphWindowActivated(plotMatrixConfigurationWidget_);
+      break;
+    case 4:
+      if (!plotMatrix_X_X_ConfigurationWidget_->isVisible())
+        emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
+      break;
+    // if no plotWidget is visible
+    default:
+    {
+      emit graphWindowDeactivated();
+      break;
+    }
   }
 }
 
 
 void DesignOfExperimentWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
-  if (newState == 4 || newState == 8 || newState == 10)
+  if (oldState == 2)
+    return;
+
+  if (newState == 4 || newState == 10)
     showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-  else if (newState == 0 || newState == 1 || newState == 2 || newState == 9)
+  else if (newState == 0 || newState == 1 || newState == 9)
     showHideGraphConfigurationWidget(-1);
 }
 }

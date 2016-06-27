@@ -60,6 +60,22 @@ NEW_OTGUIEXCEPTION( PhysicalModelNotValidException );
  */
 NEW_OTGUIEXCEPTION( AnalysisExecutionFailedException );
 
+
+/**
+ * @class InvalidValueException
+ * @brief Raised when a value is not valid
+ * @internal
+ */
+NEW_OTGUIEXCEPTION( InvalidValueException );
+
+
+/**
+ * @class IOException
+ * @brief Raised when using files
+ * @internal
+ */
+NEW_OTGUIEXCEPTION( IOException );
+
 #undef NEW_OTGUIEXCEPTION
 }
 #endif

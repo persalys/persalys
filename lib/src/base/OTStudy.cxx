@@ -101,6 +101,7 @@ void OTStudy::Remove(OTStudy * otstudy)
   while (iter != otstudy->physicalModels_.end())
   {
     otstudy->clear(*iter);
+    (*iter).getImplementation().get()->notifyAndRemove("probabilisticModelRemoved", "ProbabilisticModel");
     (*iter).getImplementation().get()->notify("physicalModelRemoved");
     iter = otstudy->physicalModels_.erase(iter);
   }
@@ -219,10 +220,8 @@ void OTStudy::clear(const PhysicalModel & physicalModel)
     if ((*iter).getPhysicalModel().getName() == physicalModel.getName())
     {
       clear(*iter);
+      physicalModel.getImplementation().get()->removeObserver((*iter).getImplementation().get()->getObserver("LimitState"));
       (*iter).getImplementation().get()->notify("limitStateRemoved");
-
-      if ((*iter).getImplementation().get()->getObservers().size())
-        physicalModel.getImplementation().get()->removeObserver((*iter).getImplementation().get()->getObservers()[0]);
       iter = limitStates_.erase(iter);
     }
     else
@@ -274,6 +273,7 @@ void OTStudy::remove(const PhysicalModel & physicalModel)
       break;
     }
 
+  physicalModel.getImplementation().get()->notifyAndRemove("probabilisticModelRemoved", "ProbabilisticModel");
   physicalModel.getImplementation().get()->notify("physicalModelRemoved");
 }
 
@@ -281,6 +281,15 @@ void OTStudy::remove(const PhysicalModel & physicalModel)
 Collection<DesignOfExperiment> OTStudy::getDesignOfExperiments() const
 {
   return designOfExperiments_;
+}
+
+
+DesignOfExperiment & OTStudy::getDesignOfExperimentByName(const String & designOfExperimentName)
+{
+  for (UnsignedInteger i=0; i<designOfExperiments_.getSize(); ++i)
+    if (designOfExperiments_[i].getName() == designOfExperimentName)
+      return designOfExperiments_[i];
+  throw InvalidArgumentException(HERE) << "The given name " << designOfExperimentName <<" does not correspond to an design of experiments of the study.\n"; 
 }
 
 
@@ -463,8 +472,7 @@ void OTStudy::remove(const LimitState & limitState)
   for (UnsignedInteger i=0; i<limitStates_.getSize(); ++i)
     if (limitStates_[i].getName() == limitState.getName())
     {
-      if (limitStates_[i].getImplementation().get()->getObservers().size())
-          limitStates_[i].getPhysicalModel().getImplementation().get()->removeObserver(limitStates_[i].getImplementation().get()->getObservers()[0]);
+      limitStates_[i].getPhysicalModel().getImplementation().get()->removeObserver(limitStates_[i].getImplementation().get()->getObserver("LimitState"));
 
       limitStates_.erase(limitStates_.begin() + i);
       break;

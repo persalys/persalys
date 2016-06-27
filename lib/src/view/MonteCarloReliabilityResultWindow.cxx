@@ -21,7 +21,8 @@
 #include "otgui/MonteCarloReliabilityResultWindow.hxx"
 
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
-#include "otgui/NotEditableTableWidget.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
+#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 
 #include <qwt_legend.h>
 #include <qwt_scale_engine.h>
@@ -35,11 +36,26 @@ using namespace OT;
 namespace OTGUI {
 
 MonteCarloReliabilityResultWindow::MonteCarloReliabilityResultWindow(AnalysisItem * item)
-  : OTguiSubWindow(item)
+  : ResultWindow(item)
   , result_(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
 {
+  setParameters(item->getAnalysis());
   buildInterface();
-  connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
+}
+
+
+void MonteCarloReliabilityResultWindow::setParameters(const Analysis & analysis)
+{
+  const MonteCarloReliabilityAnalysis * MCanalysis = dynamic_cast<const MonteCarloReliabilityAnalysis*>(&*analysis.getImplementation());
+  QStringList strList;
+  strList << tr("Threshold exceedance parameters :") + "\n";
+  strList << tr("Algorithm : ") + tr("Monte Carlo");
+  strList << tr("Maximum outer sampling : ") + QString::number(MCanalysis->getMaximumOuterSampling());
+  strList << tr("Maximum coefficient of variation : ") + QString::number(MCanalysis->getMaximumCoefficientOfVariation());
+  strList << tr("Seed : ") + QString::number(MCanalysis->getSeed());
+  strList << tr("Block size : ") + QString::number(MCanalysis->getBlockSize());
+
+  parameters_ = strList.join("\n");
 }
 
 
@@ -65,38 +81,41 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   tabLayout->addWidget(nbSimuLabel);
 
   // probability estimate table
-  NotEditableTableWidget * resultsTable = new NotEditableTableWidget(4, 4);
+  ResizableTableViewWithoutScrollBar * resultsTable = new ResizableTableViewWithoutScrollBar;
   resultsTable->horizontalHeader()->hide();
+  resultsTable->verticalHeader()->hide();
+  CustomStandardItemModel * resultsTableModel = new CustomStandardItemModel(4, 4);
+  resultsTable->setModel(resultsTableModel);
 
   // horizontal header
-  resultsTable->createHeaderItem(0, 0, tr("Estimate"));
+  resultsTableModel->setNotEditableHeaderItem(0, 0, tr("Estimate"));
   resultsTable->setSpan(0, 0, 2, 1);
 
-  resultsTable->createHeaderItem(0, 1, tr("Value"));
+  resultsTableModel->setNotEditableHeaderItem(0, 1, tr("Value"));
   resultsTable->setSpan(0, 1, 2, 1);
 
   // Failure probability
-  resultsTable->createHeaderItem(2, 0, tr("Failure probability"));
-  resultsTable->createItem(2, 1, result_.getSimulationResult().getProbabilityEstimate());
+  resultsTableModel->setNotEditableHeaderItem(2, 0, tr("Failure probability"));
+  resultsTableModel->setNotEditableItem(2, 1, result_.getSimulationResult().getProbabilityEstimate());
 
   // Coefficient of variation
-  resultsTable->createHeaderItem(3, 0, tr("Coefficient of variation"));
-  resultsTable->createItem(3, 1, result_.getSimulationResult().getCoefficientOfVariation());
+  resultsTableModel->setNotEditableHeaderItem(3, 0, tr("Coefficient of variation"));
+  resultsTableModel->setNotEditableItem(3, 1, result_.getSimulationResult().getCoefficientOfVariation());
 
   // - lower bound
-  resultsTable->createHeaderItem(1, 2, tr("Lower bound"));
+  resultsTableModel->setNotEditableHeaderItem(1, 2, tr("Lower bound"));
   double pfCILowerBound = std::max(0.0, result_.getSimulationResult().getProbabilityEstimate() - 0.5 * result_.getSimulationResult().getConfidenceLength());
-  resultsTable->createItem(2, 2, pfCILowerBound);
+  resultsTableModel->setNotEditableItem(2, 2, pfCILowerBound);
 
   // - upper bound
-  resultsTable->createHeaderItem(1, 3, tr("Upper bound"));
+  resultsTableModel->setNotEditableHeaderItem(1, 3, tr("Upper bound"));
   double pfCIUpperBound = std::min(1.0, result_.getSimulationResult().getProbabilityEstimate() + 0.5 * result_.getSimulationResult().getConfidenceLength());
-  resultsTable->createItem(2, 3, pfCIUpperBound);
+  resultsTableModel->setNotEditableItem(2, 3, pfCIUpperBound);
 
   resultsTable->resizeToContents();
   
   // Confidence interval: do it after resizeToContents
-  resultsTable->createHeaderItem(0, 2, tr("Confidence interval at 95%"));
+  resultsTableModel->setNotEditableHeaderItem(0, 2, tr("Confidence interval at 95%"));
   resultsTable->setSpan(0, 2, 1, 2);
 
   tabLayout->addWidget(resultsTable);
@@ -110,7 +129,7 @@ void MonteCarloReliabilityResultWindow::buildInterface()
 
   // output histogram
   QVector<PlotWidget*> listHistogram;
-  PlotWidget * plot = new PlotWidget;
+  PlotWidget * plot = new PlotWidget("histogram");
   QString outputName(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
   plot->plotHistogram(result_.getOutputSample(), 2, 0, outputName + tr(" distribution"));
   NumericalSample threshold = NumericalSample(2, 2);
@@ -121,7 +140,7 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   plot->plotCurve(threshold, QPen(Qt::red), QwtPlotCurve::Lines, 0, tr("Threshold"));
   plot->setAxisTitle(QwtPlot::xBottom, tr("Values"));
   plot->setAxisTitle(QwtPlot::yLeft, tr("Number of simulations"));
-  plot->insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
+  plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
   plot->setTitle(tr("Output ") + outputName + tr(" distribution"));
 
   listHistogram.append(plot);
@@ -136,7 +155,7 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   tabLayout = new QVBoxLayout(tab);
 
   QVector<PlotWidget*> listConvergenceGraph;
-  plot = new PlotWidget;
+  plot = new PlotWidget("convergence");
   plot->plotCurve(result_.getConvergenceSample(), QPen(Qt::red), QwtPlotCurve::Lines, 0, tr("Probability estimate"));
   if (result_.getConvergenceSampleLowerBound().getSize())
     plot->plotCurve(result_.getConvergenceSampleLowerBound(), QPen(Qt::green), QwtPlotCurve::Lines, 0, tr("Lower bound"));
@@ -145,7 +164,7 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   plot->setTitle(tr("Monte Carlo convergence graph at level 0.95"));
   plot->setAxisTitle(QwtPlot::yLeft, tr("Estimate"));
   plot->setAxisTitle(QwtPlot::xBottom, tr("Outer iteration"));
-  plot->insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
+  plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
 #if (QWT_VERSION >= 0x060100)
   QwtLogScaleEngine * scaleEngin = new QwtLogScaleEngine();
 #else
@@ -160,6 +179,9 @@ void MonteCarloReliabilityResultWindow::buildInterface()
 
   tabWidget_->addTab(tab, tr("Convergence graph"));
 
+  // fourth tab --------------------------------
+  tabWidget_->addTab(buildParametersTextEdit(), tr("Parameters"));
+
   //
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
   setWidget(tabWidget_);
@@ -172,16 +194,17 @@ void MonteCarloReliabilityResultWindow::showHideGraphConfigurationWidget(int ind
   {
     // if a plotWidget is visible
     case 1:
-      emit graphWindowActivated(histogramConfigurationWidget_);
+      if (!histogramConfigurationWidget_->isVisible())
+        emit graphWindowActivated(histogramConfigurationWidget_);
       break;
     case 2:
-      emit graphWindowActivated(convergenceGraphConfigurationWidget_);
+      if (!convergenceGraphConfigurationWidget_->isVisible())
+        emit graphWindowActivated(convergenceGraphConfigurationWidget_);
       break;
     // if no plotWidget is visible
     default:
     {
-      emit graphWindowDeactivated(histogramConfigurationWidget_);
-      emit graphWindowDeactivated(convergenceGraphConfigurationWidget_);
+      emit graphWindowDeactivated();
       break;
     }
   }
@@ -192,7 +215,7 @@ void MonteCarloReliabilityResultWindow::showHideGraphConfigurationWidget(Qt::Win
 {
   if (newState == 4 || newState == 8 || newState == 10)
     showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-  else if (newState == 0 || newState == 1 || newState == 2 || newState == 9)
+  else if (newState == 0 || newState == 1 || newState == 9)
     showHideGraphConfigurationWidget(-1);
 }
 }

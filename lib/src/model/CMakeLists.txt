@@ -2,7 +2,7 @@ set (SOURCEFILES "" CACHE STRING "" FORCE)
 
 ot_add_current_dir_to_include_dirs ()
 
-ot_add_source_file ( DataTableModel.cxx )
+ot_add_source_file ( SampleTableModel.cxx )
 ot_add_source_file ( InputTableModel.cxx )
 ot_add_source_file ( InputTableProbabilisticModel.cxx )
 ot_add_source_file ( OutputTableModel.cxx )
@@ -16,8 +16,9 @@ ot_add_source_file ( OTStudyItem.cxx )
 ot_add_source_file ( AnalysisItem.cxx )
 ot_add_source_file ( StudyTreeViewModel.cxx )
 ot_add_source_file ( CodeModel.cxx)
+ot_add_source_file ( CustomStandardItemModel.cxx )
 
-ot_install_header_file ( DataTableModel.hxx )
+ot_install_header_file ( SampleTableModel.hxx )
 ot_install_header_file ( InputTableModel.hxx )
 ot_install_header_file ( InputTableProbabilisticModel.hxx )
 ot_install_header_file ( OutputTableModel.hxx )
@@ -30,6 +31,7 @@ ot_install_header_file ( ProbabilisticModelItem.hxx )
 ot_install_header_file ( PhysicalModelItem.hxx )
 ot_install_header_file ( OTStudyItem.hxx )
 ot_install_header_file ( StudyTreeViewModel.hxx )
+ot_install_header_file ( CustomStandardItemModel.hxx )
 
 qt5_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
                                     otgui/InputTableProbabilisticModel.hxx

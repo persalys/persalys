@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QTableWidget with not editable items
+ *  @brief Qt tools
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,24 +18,34 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_NOTEDITABLETABLEWIDGET_HXX
-#define OTGUI_NOTEDITABLETABLEWIDGET_HXX
+#ifndef OTGUI_QTTOOLS_HXX
+#define OTGUI_QTTOOLS_HXX
 
-#include "otgui/DataTableWidget.hxx"
+#include <QObject>
 
 namespace OTGUI {
-class NotEditableTableWidget : public DataTableWidget
+/**
+ * @class SignalBlocker
+ *
+ * Class to block signals of widgets.
+ */
+class SignalBlocker
 {
-  Q_OBJECT
+  QObject* blockedObject_;
+  bool previousBlockingStatus_;
+public :
+  SignalBlocker(QObject* blockedObject, bool block = true);
+  ~SignalBlocker();
+};
 
-public:
-  NotEditableTableWidget(QWidget * parent = 0);
-  NotEditableTableWidget(int rows, int columns, QWidget * parent = 0);
-
-  void createItem(int row, int column, QString text);
-  void createItem(int row, int column, double value);
-  void createHeaderItem(int row, int column, QString text);
-  void resizeToContents();
+class SimpleException : public std::exception
+{
+  const QString text_;
+public :
+  SimpleException(const QString& text);
+  virtual ~SimpleException() throw();
+  QString text() const;
+  virtual const char* what() const throw();
 };
 }
 #endif

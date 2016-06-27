@@ -93,6 +93,8 @@ Design of experiment
     :template: class.rst_t
 
     DesignOfExperiment
+    FixedDesignOfExperiment
+    FromFileDesignOfExperiment
 
 Study storage
 -------------

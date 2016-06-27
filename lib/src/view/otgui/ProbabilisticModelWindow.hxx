@@ -26,18 +26,19 @@
 #include "otgui/PlotWidget.hxx"
 #include "otgui/InputTableProbabilisticModel.hxx"
 #include "otgui/CorrelationTableModel.hxx"
-#include "otgui/OTguiTableView.hxx"
+#include "otgui/CopyableTableView.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
+#include "otgui/ValueLineEdit.hxx"
+#include "otgui/CheckableHeaderView.hxx"
 
 #include <QGroupBox>
 #include <QVBoxLayout>
-#include <QLineEdit>
 #include <QTableView>
 #include <QComboBox>
 #include <QCheckBox>
 #include <QLabel>
-#include <QStackedLayout>
+#include <QStackedWidget>
 
 namespace OTGUI {
 class ProbabilisticModelWindow : public OTguiSubWindow
@@ -54,6 +55,7 @@ protected:
 
 public slots:
   void updateDistributionWidgets(const QModelIndex & index);
+  void updateCurrentVariableDistributionWidgets();
   void updateDistributionParametersWidgets(const QModelIndex & index);
   void updateTruncationParametersWidgets(const QModelIndex & index);
   void updateProbabilisticModel();
@@ -72,23 +74,23 @@ private:
   int currentIndexTab_;
   QTableView * inputTableView_;
   InputTableProbabilisticModel * inputTableModel_;
-  QStackedLayout * rightSideOfSplitterStackedLayout_;
-  QLineEdit * valueForDeterministicVariable_;
+  CheckableHeaderView * inputTableHeaderView_;
+  QStackedWidget * rightSideOfSplitterStackedWidget_;
+  ValueLineEdit * valueForDeterministicVariable_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
   GraphConfigurationWidget * pdf_cdfPlotsConfigurationWidget_;
   QGroupBox * paramEditor_;
   QVBoxLayout * parameterLayout_;
-  QComboBox * selectParametersTypeCombo_;
   QLabel * parameterValuesLabel_[5];
-  QLineEdit * parameterValuesEdit_[5];
+  ValueLineEdit * parameterValuesEdit_[5];
   CollapsibleGroupBox * truncationParamGroupBox_;
   QCheckBox * lowerBoundCheckBox_;
   QCheckBox * upperBoundCheckBox_;
-  QLineEdit * lowerBoundLineEdit_;
-  QLineEdit * upperBoundLineEdit_;
+  ValueLineEdit * lowerBoundLineEdit_;
+  ValueLineEdit * upperBoundLineEdit_;
   CorrelationTableModel * correlationTableModel_;
-  OTguiTableView * correlationTableView_;
+  CopyableTableView * correlationTableView_;
   QLabel * correlationErrorMessage_;
   QList<QTimeLine*> qtimelineList_;
 };

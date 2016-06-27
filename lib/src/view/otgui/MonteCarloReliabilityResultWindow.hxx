@@ -21,13 +21,12 @@
 #ifndef OTGUI_MONTECARLORELIABILITYRESULTWINDOW_HXX
 #define OTGUI_MONTECARLORELIABILITYRESULTWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
-#include "otgui/AnalysisItem.hxx"
+#include "otgui/ResultWindow.hxx"
 #include "otgui/MonteCarloReliabilityResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 
 namespace OTGUI {
-class MonteCarloReliabilityResultWindow : public OTguiSubWindow
+class MonteCarloReliabilityResultWindow : public ResultWindow
 {
   Q_OBJECT
 
@@ -35,6 +34,7 @@ public:
   MonteCarloReliabilityResultWindow(AnalysisItem * item);
 
 protected:
+  void setParameters(const Analysis & analysis);
   void buildInterface();
 
 public slots:

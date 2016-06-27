@@ -20,7 +20,7 @@
  */
 #include "otgui/LimitStateWindow.hxx"
 
-#include "otgui/CustomDoubleValidator.hxx"
+#include "otgui/QtTools.hxx"
 
 #include "Greater.hxx"
 #include "GreaterOrEqual.hxx"
@@ -78,8 +78,7 @@ void LimitStateWindow::buildInterface()
   connect(failureComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateOperator(int)));
   gridLayout->addWidget(failureComboBox_, 2, 1);
 
-  thresholdLineEdit_ = new QLineEdit;
-  thresholdLineEdit_->setValidator(new CustomDoubleValidator);
+  thresholdLineEdit_ = new ValueLineEdit;
   updateThresholdWidget();
   connect(thresholdLineEdit_, SIGNAL(editingFinished()), this, SLOT(updateThreshold()));
   gridLayout->addWidget(thresholdLineEdit_, 2, 2);
@@ -97,7 +96,7 @@ void LimitStateWindow::buildInterface()
 
 void LimitStateWindow::updateOutputsList()
 {
-  outputsComboBox_->blockSignals(true);
+  SignalBlocker blocker(outputsComboBox_);
   outputsComboBox_->clear();
   QStringList items;
   for (UnsignedInteger i=0; i<limitState_.getPhysicalModel().getOutputs().getSize(); ++i)
@@ -111,22 +110,20 @@ void LimitStateWindow::updateOutputsList()
     setErrorMessage(tr("The output name is not valid."));
   }
   outputsComboBox_->setCurrentIndex(index);
-  outputsComboBox_->blockSignals(false);
 }
 
 
 void LimitStateWindow::updateOutputWidget()
 {
-  outputsComboBox_->blockSignals(true);
+  SignalBlocker blocker(outputsComboBox_);
   const int index = outputsComboBox_->findText(limitState_.getOutputName().c_str());
   outputsComboBox_->setCurrentIndex(index);
-  outputsComboBox_->blockSignals(false);
 }
 
 
 void LimitStateWindow::updateOperatorWidget()
 {
-  failureComboBox_->blockSignals(true);
+  SignalBlocker blocker(failureComboBox_);
   const String operatorName = limitState_.getOperator().getImplementation()->getClassName();
   int indexOperator = 0;
   if (operatorName == "LessOrEqual")
@@ -136,15 +133,13 @@ void LimitStateWindow::updateOperatorWidget()
   else if (operatorName == "GreaterOrEqual")
     indexOperator = 3;
   failureComboBox_->setCurrentIndex(indexOperator);
-  failureComboBox_->blockSignals(false);
 }
 
 
 void LimitStateWindow::updateThresholdWidget()
 {
-  thresholdLineEdit_->blockSignals(true);
-  thresholdLineEdit_->setText(QString::number(limitState_.getThreshold()));
-  thresholdLineEdit_->blockSignals(false);
+  SignalBlocker blocker(thresholdLineEdit_);
+  thresholdLineEdit_->setValue(limitState_.getThreshold());
 }
 
 
@@ -185,15 +180,8 @@ void LimitStateWindow::updateThreshold()
 {
   try
   {
-    QString value = thresholdLineEdit_->text();
-    if (value[0].toLower() == 'e' || value.isEmpty() || value.toLower() == "e" || value == "-")
-      throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
-    bool ok;
-    double newThreshold = value.toDouble(&ok);
-    if (!ok)
-      throw InvalidArgumentException(HERE) << "The value '" << value.toStdString() << "' is invalid";
     limitState_.blockNotification(true);
-    limitState_.setThreshold(newThreshold);
+    limitState_.setThreshold(thresholdLineEdit_->value());
     limitState_.blockNotification(false);
   }
   catch(std::exception & ex)

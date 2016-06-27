@@ -56,7 +56,7 @@ void MainWindow::buildInterface()
   configurationDock_ = new QDockWidget(tr("Graph settings"));
   configurationDock_->setFeatures(QDockWidget::NoDockWidgetFeatures);
   connect(studyTree_, SIGNAL(graphWindowActivated(QWidget*)), this, SLOT(showGraphConfigurationTabWidget(QWidget*)));
-  connect(studyTree_, SIGNAL(graphWindowDeactivated(QWidget*)), configurationDock_, SLOT(close()));
+  connect(studyTree_, SIGNAL(graphWindowDeactivated()), configurationDock_, SLOT(close()));
   leftSideSplitter->addWidget(configurationDock_);
   configurationDock_->close();
   leftSideSplitter->setStretchFactor(1, 2);

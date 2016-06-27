@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QAbstractTableModel for samples
+ *  @brief QStandardItemModel for samples
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,31 +18,29 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_OTGUITABLEMODEL_HXX
-#define OTGUI_OTGUITABLEMODEL_HXX
+#ifndef OTGUI_SAMPLETABLEMODEL_HXX
+#define OTGUI_SAMPLETABLEMODEL_HXX
 
 #include "NumericalSample.hxx"
 
-#include <QAbstractTableModel>
-#include <QModelIndex>
-
 #include "otgui/OTGuiprivate.hxx"
 
+#include <QStandardItemModel>
+
 namespace OTGUI {
-class OTGUI_API DataTableModel : public QAbstractTableModel
+class OTGUI_API SampleTableModel : public QStandardItemModel
 {
 public:
-  DataTableModel(const OT::NumericalSample & data);
+  SampleTableModel(const OT::NumericalSample & data, QObject * parent = 0);
 
-  int columnCount(const QModelIndex & parent = QModelIndex()) const;
-  int rowCount(const QModelIndex & parent) const;
   QVariant data(const QModelIndex & index, int role) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
   bool setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role = Qt::EditRole);
 
-  bool exportData(const QString & fileName);
+  virtual void exportData(const QString & fileName);
 
   bool sampleIsValid();
+
 private:
   OT::NumericalSample data_;
   mutable bool sampleIsValid_;

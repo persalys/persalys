@@ -19,8 +19,8 @@
  *
  */
 #include "otgui/SobolResultWindow.hxx"
-#include "otgui/DataTableWidget.hxx"
 #include "otgui/SobolAnalysis.hxx"
+#include "otgui/CopyableTableView.hxx"
 
 #include <QVBoxLayout>
 #include <QHeaderView>
@@ -34,23 +34,25 @@ using namespace OT;
 namespace OTGUI {
   
 SobolResultWindow::SobolResultWindow(AnalysisItem * item)
-  : OTguiSubWindow(item)
+  : ResultWindow(item)
   , result_(dynamic_cast<SobolAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
 {
-  for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
-  {
-    std::map<double, int> firstOrder_i;
-    std::map<double, int> totalOrder_i;
-    for (UnsignedInteger j=0; j<result_.getFirstOrderIndices().getDimension(); ++j)
-    {
-      firstOrder_i[result_.getFirstOrderIndices()[i][j]] = j;
-      totalOrder_i[result_.getTotalOrderIndices()[i][j]] = j;
-    }
-    firstOrderIndices_.push_back(firstOrder_i);
-    totalOrderIndices_.push_back(totalOrder_i);
-  }
+  setParameters(item->getAnalysis());
   buildInterface();
-  connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
+}
+
+
+void SobolResultWindow::setParameters(const Analysis & analysis)
+{
+  const SobolAnalysis * SRCanalysis = dynamic_cast<const SobolAnalysis*>(&*analysis.getImplementation());
+  QStringList strList;
+  strList << tr("Sensitivity analysis parameters :") + "\n";
+  strList << tr("Algorithm : ") + tr("Sobol");
+  strList << tr("Sample size : ") + QString::number(SRCanalysis->getNbSimulations());
+  strList << tr("Seed : ") + QString::number(SRCanalysis->getSeed());
+  strList << tr("Block size : ") + QString::number(SRCanalysis->getBlockSize());
+
+  parameters_ = strList.join("\n");
 }
 
 
@@ -61,13 +63,12 @@ void SobolResultWindow::buildInterface()
   // first tab --------------------------------
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  QFrame * frame = new QFrame;
-  frameLayout_ = new QStackedLayout(frame);
+  scrollAreaWidget_ = new QStackedWidget;
 
   Description inputNames = result_.getInputNames();
   QStringList outputNames;
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
-    outputNames << result_.getOutputNames()[i].c_str();
+    outputNames << QString::fromUtf8(result_.getOutputNames()[i].c_str());
 
   NumericalPoint interactionsValues(result_.getOutputNames().getSize());
 
@@ -76,7 +77,7 @@ void SobolResultWindow::buildInterface()
     QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
 
     // plot
-    PlotWidget * plot = new PlotWidget(true);
+    PlotWidget * plot = new PlotWidget("sensitivitySobol", true);
     NumericalPoint firstOrderIndices_i = result_.getFirstOrderIndices()[i];
     SymmetricMatrix secondOrderIndices_i = result_.getSecondOrderIndices()[i];
     NumericalPoint totalOrderIndices_i = result_.getTotalOrderIndices()[i];
@@ -93,40 +94,37 @@ void SobolResultWindow::buildInterface()
     QString warningMessage;
 
     // table of indices
-    QTableWidget * table = new DataTableWidget(inputNames.getSize(), 3, this);
-    table->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("First order index") << tr("Total order index"));
+    CopyableTableView * table = new CopyableTableView;
+    table->verticalHeader()->hide();
 #if QT_VERSION >= 0x050000
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 #else
     table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 #endif
+    table->setSortingEnabled(true);
+    tableModel_ = new CustomStandardItemModel(inputNames.getSize(), 3);
+    tableModel_->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("First order index") << tr("Total order index"));
+    table->setModel(tableModel_);
 
     // fill table
     for (UnsignedInteger j=0; j<inputNames.getSize(); ++j)
     {
-      QTableWidgetItem * item = new QTableWidgetItem(inputNames[j].c_str());
-      item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-      table->setItem(j, 0, item);
+      tableModel_->setNotEditableItem(j, 0, QString::fromUtf8(inputNames[j].c_str()));
+      tableModel_->setNotEditableItem(j, 1, firstOrderIndices_i[j]);
+      tableModel_->setNotEditableItem(j, 2, totalOrderIndices_i[j]);
 
-      item = new QTableWidgetItem(QString::number(firstOrderIndices_i[j], 'g', 4));
-      item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-      table->setItem(j, 1, item);
-
-      item = new QTableWidgetItem(QString::number(totalOrderIndices_i[j], 'g', 4));
       if (totalOrderIndices_i[j] < firstOrderIndices_i[j])
       {
-        item->setToolTip(tr("Warning: The total order index is inferior to the first order index."));
-        item->setData(Qt::DecorationRole, QIcon(":/images/task-attention.png"));
+        tableModel_->setData(tableModel_->index(j, 2), tr("Warning: The total order index is inferior to the first order index."), Qt::ToolTipRole);
+        tableModel_->setData(tableModel_->index(j, 2), QIcon(":/images/task-attention.png"), Qt::DecorationRole);
       }
-      item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-      table->setItem(j, 2, item);
 
       // compute interactions for the ith output
       for (UnsignedInteger k=0; k<inputNames.getSize(); ++k)
         if (j != k) 
           interactionsValues[i] += secondOrderIndices_i(j, k);
     }
-    table->setSortingEnabled(true);
+
     connect(table->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
 
     vbox->addWidget(table);
@@ -150,14 +148,18 @@ void SobolResultWindow::buildInterface()
 
     verticalSplitter->addWidget(widget);
     verticalSplitter->setStretchFactor(1, 1);
-    frameLayout_->addWidget(verticalSplitter);
+    scrollAreaWidget_->addWidget(verticalSplitter);
   }
 
   plotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets_, QStringList(), outputNames, GraphConfigurationWidget::SensitivityIndices);
-  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), frameLayout_, SLOT(setCurrentIndex(int)));
+  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), scrollAreaWidget_, SLOT(setCurrentIndex(int)));
 
-  scrollArea->setWidget(frame);
+  scrollArea->setWidget(scrollAreaWidget_);
   tabWidget->addTab(scrollArea, tr("Result"));
+
+  // second tab --------------------------------
+  tabWidget->addTab(buildParametersTextEdit(), tr("Parameters"));
+
   //
   setWidget(tabWidget);
 }
@@ -165,61 +167,15 @@ void SobolResultWindow::buildInterface()
 
 void SobolResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
 {
-  int indexOutput = frameLayout_->currentIndex();
+  int indexOutput = scrollAreaWidget_->currentIndex();
   NumericalPoint currentFirstOrderIndices(result_.getInputNames().getSize());
   NumericalPoint currentTotalOrderIndices(result_.getInputNames().getSize());
   Description sortedInputNames(result_.getInputNames().getSize());
-
-  switch (section)
+  for (int i=0; i<result_.getInputNames().getSize(); ++i)
   {
-    case 1:
-    {
-      int index = 0;
-      if (order == Qt::DescendingOrder)
-      {
-        for (std::map<double,int>::reverse_iterator it=totalOrderIndices_[indexOutput].rbegin(); it!=totalOrderIndices_[indexOutput].rend(); ++it, index++)
-        {
-          currentFirstOrderIndices[index] = result_.getFirstOrderIndices()[indexOutput][it->second];
-          currentTotalOrderIndices[index] = it->first;
-          sortedInputNames[index] = result_.getInputNames()[it->second];
-        }
-      }
-      else
-      {
-        for (std::map<double,int>::iterator it=totalOrderIndices_[indexOutput].begin(); it!=totalOrderIndices_[indexOutput].end(); ++it, index++)
-        {
-          currentFirstOrderIndices[index] = result_.getFirstOrderIndices()[indexOutput][it->second];
-          currentTotalOrderIndices[index] = it->first;
-          sortedInputNames[index] = result_.getInputNames()[it->second];
-        }
-      }
-      break;
-    }
-    case 2:
-    {
-      int index = 0;
-      if (order == Qt::DescendingOrder)
-      {
-        for (std::map<double,int>::reverse_iterator it=firstOrderIndices_[indexOutput].rbegin(); it!=firstOrderIndices_[indexOutput].rend(); ++it, index++)
-        {
-          currentFirstOrderIndices[index] = it->first;
-          currentTotalOrderIndices[index] = result_.getTotalOrderIndices()[indexOutput][it->second];
-          sortedInputNames[index] = result_.getInputNames()[it->second];
-        }
-      }
-      else
-      {
-        for (std::map<double,int>::iterator it=firstOrderIndices_[indexOutput].begin(); it!=firstOrderIndices_[indexOutput].end(); ++it, index++)
-        {
-          currentFirstOrderIndices[index] = it->first;
-          currentTotalOrderIndices[index] = result_.getTotalOrderIndices()[indexOutput][it->second];
-          sortedInputNames[index] = result_.getInputNames()[it->second];
-        }
-      }
-      break;
-    }
-    default:
-      return;
+    sortedInputNames[i] = tableModel_->data(tableModel_->index(i, 0)).toString().toStdString();
+    currentFirstOrderIndices[i] = tableModel_->data(tableModel_->index(i, 1)).toDouble();
+    currentTotalOrderIndices[i] = tableModel_->data(tableModel_->index(i, 2)).toDouble();
   }
 
   listPlotWidgets_[indexOutput]->clear();
@@ -229,9 +185,13 @@ void SobolResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
 
 void SobolResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
-  if (newState == 4 || newState == 8 || newState == 10)
-    emit graphWindowActivated(plotsConfigurationWidget_);
-  else if (newState == 0 || newState == 1 || newState == 2 || newState == 9)
-    emit graphWindowDeactivated(plotsConfigurationWidget_);
+  if (oldState == 2)
+    return;
+
+  if (newState == 4 || newState == 10)
+    if (!plotsConfigurationWidget_->isVisible())
+      emit graphWindowActivated(plotsConfigurationWidget_);
+  else if (newState == 0 || newState == 1 || newState == 9)
+    emit graphWindowDeactivated();
 }
 }

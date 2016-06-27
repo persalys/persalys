@@ -21,24 +21,18 @@
 #ifndef OTGUI_MODELEVALUATIONWIZARD_HXX
 #define OTGUI_MODELEVALUATIONWIZARD_HXX
 
-#include "otgui/InputTableModel.hxx"
-#include "otgui/OTStudy.hxx"
-#include "otgui/OTguiWizard.hxx"
+#include "otgui/AnalysisWizard.hxx"
 
-#include <QWizard>
 #include <QTableWidget>
 
 namespace OTGUI {
-class ModelEvaluationWizard : public OTguiWizard
+class ModelEvaluationWizard : public AnalysisWizard
 {
   Q_OBJECT
 
 public:
   ModelEvaluationWizard(OTStudy * otStudy, const PhysicalModel & physicalModel);
   ModelEvaluationWizard(const Analysis & analysis);
-
-  QString getAnalysisName() const;
-  void validate();
 
 protected:
   void buildInterface();
@@ -48,8 +42,6 @@ public slots:
 
 private:
   QTableWidget * table_;
-  Analysis analysis_;
-  OTStudy * otStudy_;
 };
 }
 #endif

@@ -60,6 +60,7 @@ public:
   void remove(const PhysicalModel & physicalModel);
 
   OT::Collection<DesignOfExperiment> getDesignOfExperiments() const;
+  DesignOfExperiment & getDesignOfExperimentByName(const OT::String & designOfExperimentName);
   bool hasDesignOfExperimentNamed(const OT::String & designOfExperimentName) const;
   OT::String getAvailableDesignOfExperimentName() const;
   void add(const DesignOfExperiment & designOfExperiment);

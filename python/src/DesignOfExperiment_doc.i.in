@@ -6,38 +6,6 @@ OTGUI_DesignOfExperiment_doc
 OTGUI_DesignOfExperiment_getPhysicalModel_doc
 %feature("docstring") OTGUI::DesignOfExperiment::setPhysicalModel
 OTGUI_DesignOfExperiment_setPhysicalModel_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getTypeDesignOfExperiment
-OTGUI_DesignOfExperiment_getTypeDesignOfExperiment_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getNumberOfExperiments
-OTGUI_DesignOfExperiment_getNumberOfExperiments_doc
-%feature("docstring") OTGUI::DesignOfExperiment::setValues
-OTGUI_DesignOfExperiment_setValues_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getValues
-OTGUI_DesignOfExperiment_getValues_doc
-%feature("docstring") OTGUI::DesignOfExperiment::setLowerBounds
-OTGUI_DesignOfExperiment_setLowerBounds_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getLowerBounds
-OTGUI_DesignOfExperiment_getLowerBounds_doc
-%feature("docstring") OTGUI::DesignOfExperiment::setUpperBounds
-OTGUI_DesignOfExperiment_setUpperBounds_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getUpperBounds
-OTGUI_DesignOfExperiment_getUpperBounds_doc
-%feature("docstring") OTGUI::DesignOfExperiment::setLevels
-OTGUI_DesignOfExperiment_setLevels_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getLevels
-OTGUI_DesignOfExperiment_getLevels_doc
-%feature("docstring") OTGUI::DesignOfExperiment::setDeltas
-OTGUI_DesignOfExperiment_setDeltas_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getDeltas
-OTGUI_DesignOfExperiment_getDeltas_doc
-%feature("docstring") OTGUI::DesignOfExperiment::setFileName
-OTGUI_DesignOfExperiment_setFileName_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getFileName
-OTGUI_DesignOfExperiment_getFileName_doc
-%feature("docstring") OTGUI::DesignOfExperiment::setColumns
-OTGUI_DesignOfExperiment_setColumns_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getColumns
-OTGUI_DesignOfExperiment_getColumns_doc
 %feature("docstring") OTGUI::DesignOfExperiment::getResult
 OTGUI_DesignOfExperiment_getResult_doc
 %feature("docstring") OTGUI::DesignOfExperiment::setInputSample
@@ -46,8 +14,8 @@ OTGUI_DesignOfExperiment_setInputSample_doc
 OTGUI_DesignOfExperiment_getInputSample_doc
 %feature("docstring") OTGUI::DesignOfExperiment::getPythonScript
 OTGUI_DesignOfExperiment_getPythonScript_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getInputVariableNames
-OTGUI_DesignOfExperiment_getInputVariableNames_doc
+%feature("docstring") OTGUI::DesignOfExperiment::getVariableInputNames
+OTGUI_DesignOfExperiment_getVariableInputNames_doc
 %feature("docstring") OTGUI::DesignOfExperiment::evaluate
 OTGUI_DesignOfExperiment_evaluate_doc
 %feature("docstring") OTGUI::DesignOfExperiment::clearResult

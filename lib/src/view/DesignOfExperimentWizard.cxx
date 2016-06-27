@@ -43,10 +43,9 @@ IntroPage::IntroPage(const DesignOfExperiment & designOfExperiment, QWidget *par
 
   methodGroup_ = new QButtonGroup;
   QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Deterministic"));
-  if (designOfExperiment.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndLevels
-   || designOfExperiment.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromBoundsAndDeltas)
+  if (designOfExperiment.getImplementation()->getClassName() == "FixedDesignOfExperiment")
   {
-// TODO   + || designOfExperiment.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::DeterExperiment
+// TODO   + || designOfExperiment.getImplementation()->getClassName() == "GeneratedDeterministicDesignOfExperiment"
     buttonToChooseMethod->setChecked(true);
   }
   methodGroup_->addButton(buttonToChooseMethod, IntroPage::deterministic);
@@ -55,12 +54,12 @@ IntroPage::IntroPage(const DesignOfExperiment & designOfExperiment, QWidget *par
 //   TODO
 //   buttonToChooseMethod = new QRadioButton(tr("Probabilistic"));
 //   buttonToChooseMethod->setEnabled(designOfExperiment.getPhysicalModel().hasStochasticInputs());
-//   if (designOfExperiment.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::ProbaExperiment)
+//   if (designOfExperiment.getImplementation()->getClassName() == "GeneratedProbabilisticDesignOfExperiment")
 //     buttonToChooseMethod->setChecked(true);
 //   methodGroup_->addButton(buttonToChooseMethod, IntroPage::probabilistic);
 //   methodLayout->addWidget(buttonToChooseMethod);
   buttonToChooseMethod = new QRadioButton(tr("Import data"));
-  if (designOfExperiment.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromFile)
+  if (designOfExperiment.getImplementation()->getClassName() == "FromFileDesignOfExperiment")
     buttonToChooseMethod->setChecked(true);
   methodGroup_->addButton(buttonToChooseMethod, IntroPage::import);
   methodLayout->addWidget(buttonToChooseMethod);
@@ -96,7 +95,6 @@ int IntroPage::nextId() const
 DesignOfExperimentWizard::DesignOfExperimentWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
   : OTguiWizard()
   , designOfExperiment_(DesignOfExperiment(otStudy->getAvailableDesignOfExperimentName(), physicalModel))
-  , otStudy_(otStudy)
 {
   buildInterface();
 }
@@ -104,8 +102,9 @@ DesignOfExperimentWizard::DesignOfExperimentWizard(OTStudy * otStudy, const Phys
 
 DesignOfExperimentWizard::DesignOfExperimentWizard(const DesignOfExperiment & designOfExperiment)
   : OTguiWizard()
-  , designOfExperiment_(designOfExperiment)
+  , designOfExperiment_(designOfExperiment.getImplementation()->clone())
 {
+  designOfExperiment_.clearResult();
   buildInterface();
 }
 
@@ -116,13 +115,18 @@ void DesignOfExperimentWizard::buildInterface()
 
   introPage_ = new IntroPage(designOfExperiment_);
   setPage(Page_Intro, introPage_);
-  setPage(Page_Deterministic, new DeterministicDesignPage(designOfExperiment_));
+  DeterministicDesignPage * deterministicDesignPage = new DeterministicDesignPage(designOfExperiment_.getImplementation()->clone());
+  connect(deterministicDesignPage, SIGNAL(designOfExperimentChanged(const DesignOfExperiment&)), this, SLOT(setDesignOfExperiment(const DesignOfExperiment&)));
+  setPage(Page_Deterministic, deterministicDesignPage);
   // TODO
 //   setPage(Page_Probabilistic, new ProbabilisticDesignPage(designOfExperiment_));
-  setPage(Page_Import, new ImportTablePage(designOfExperiment_));
+  ImportTablePage * importTablePage = new ImportTablePage(designOfExperiment_.getImplementation()->clone());
+  connect(importTablePage, SIGNAL(designOfExperimentChanged(const DesignOfExperiment&)), this, SLOT(setDesignOfExperiment(const DesignOfExperiment&)));
+  setPage(Page_Import, importTablePage);
 
   setStartId(Page_Intro);
 }
+
 
 int DesignOfExperimentWizard::nextId() const
 {
@@ -140,14 +144,14 @@ int DesignOfExperimentWizard::nextId() const
 }
 
 
-void DesignOfExperimentWizard::setDesignOfExperiment(DesignOfExperiment & designOfExperiment)
+DesignOfExperiment DesignOfExperimentWizard::getDesignOfExperiment() const
 {
-  designOfExperiment_ = designOfExperiment;
+  return designOfExperiment_;
 }
 
 
-void DesignOfExperimentWizard::validate()
+void DesignOfExperimentWizard::setDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
 {
-  otStudy_->add(designOfExperiment_);
+  designOfExperiment_ = designOfExperiment;
 }
 }

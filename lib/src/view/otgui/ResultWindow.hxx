@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QHeaderView with combobox
+ *  @brief Base class QMdiSubWindow for the results
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,37 +18,29 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_HORIZONTALHEADERVIEWWITHCOMBOBOX_HXX
-#define OTGUI_HORIZONTALHEADERVIEWWITHCOMBOBOX_HXX
+#ifndef OTGUI_RESULTWINDOW_HXX
+#define OTGUI_RESULTWINDOW_HXX
 
-#include "Description.hxx"
-#include "Indices.hxx"
-
-#include <QHeaderView>
-#include <QShowEvent>
-#include <QComboBox>
+#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/AnalysisItem.hxx"
 
 namespace OTGUI {
-class HorizontalHeaderViewWithCombobox : public QHeaderView
+class ResultWindow : public OTguiSubWindow
 {
   Q_OBJECT
 
 public:
-  HorizontalHeaderViewWithCombobox(QStringList comboBoxItems, QVector<int> columns, QWidget *parent=0);
+  ResultWindow(AnalysisItem * item);
 
-  void showEvent(QShowEvent * e);
-  void scrollContentsBy(int dx, int dy);
-  void fixComboPositions();
+protected:
+  virtual void setParameters(const Analysis & analysis) = 0;
+  QWidget* buildParametersTextEdit();
 
 public slots:
-  void handleSectionResized(int);
-  void handleSectionMoved(int, int, int);
-  void setHeaderData(int);
+  void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 
-private:
-  QMap<int, QComboBox *> boxes_;
-  QStringList comboBoxItems_;
-  QVector<int> columnsWithComboBox_;
+protected:
+  QString parameters_;
 };
 }
 #endif

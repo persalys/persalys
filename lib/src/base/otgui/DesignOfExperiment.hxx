@@ -35,17 +35,7 @@ public:
   DesignOfExperiment();
   /** Constructor with parameters */
   DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel);
-  /** Constructor with parameters */
-  DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel,
-                     const OT::NumericalPoint & lowerBounds, const OT::NumericalPoint & upperBounds,
-                     const OT::Indices & nbValues, const OT::NumericalPoint & values=OT::NumericalPoint(0));
-  /** Constructor with parameters */
-  DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel,
-                     const OT::String & fileName, OT::Indices columns=OT::Indices());
-//   TODO
-  /** Constructor with parameters */
-//   DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel,
-//                      const OT::Experiment & experiment);
+
   /** Default constructor */
   DesignOfExperiment(const DesignOfExperimentImplementation & implementation);
   /** Constructor from implementation */
@@ -58,37 +48,12 @@ public:
   PhysicalModel getPhysicalModel() const;
   void setPhysicalModel(const PhysicalModel & physicalModel);
 
-  DesignOfExperimentImplementation::Type getTypeDesignOfExperiment() const;
-  int getNumberOfExperiments() const;
-
-  OT::NumericalPoint getValues() const;
-  void setValues(const OT::NumericalPoint & values);
-  OT::NumericalPoint getLowerBounds() const;
-  void setLowerBounds(const OT::NumericalPoint & lowerBounds);
-  OT::NumericalPoint getUpperBounds() const;
-  void setUpperBounds(const OT::NumericalPoint & upperBounds);
-  OT::Indices getLevels() const;
-  void setLevels(const OT::Indices & nbValues);
-  OT::NumericalPoint getDeltas() const;
-  void setDeltas(const OT::NumericalPoint & deltas);
-
-  OT::String getFileName() const;
-  void setFileName(const OT::String & fileName);
-  OT::Indices getColumns() const;
-  void setColumns(OT::Indices columns);
-
-//   TODO
-//   OT::Experiment getExperiment() const;
-//   void setExperiment(const OT::Experiment & experiment);
-
-  OT::Description getInputVariableNames() const;
+  OT::Description getVariableInputNames() const;
 
   OT::NumericalSample getInputSample();
   void setInputSample(const OT::NumericalSample & sample);
   SimulationAnalysisResult getResult() const;
   void clearResult();
-
-  void updateParameters();
   void evaluate();
   OT::String getPythonScript() const;
 

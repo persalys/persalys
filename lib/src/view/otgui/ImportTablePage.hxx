@@ -21,8 +21,9 @@
 #ifndef OTGUI_IMPORTTABLEPAGE_HXX
 #define OTGUI_IMPORTTABLEPAGE_HXX
 
-#include "DataTableView.hxx"
+#include "otgui/ExportableTableView.hxx"
 #include "otgui/DesignOfExperiment.hxx"
+#include "otgui/FromFileDesignOfExperiment.hxx"
 
 #include <QWizardPage>
 #include <QLineEdit>
@@ -40,19 +41,19 @@ public:
 
 protected:
   void buildInterface();
-  void loadFile();
+  void setTable(OT::NumericalSample & sample);
 
 public slots:
   void openFileRequested();
-  void columnChanged(Qt::Orientation, int, int);
+  void columnChanged();
 signals:
-  void dataImported(OT::NumericalSample);
+  void designOfExperimentChanged(const DesignOfExperiment & designOfExperiment);
 
 private:
-  DesignOfExperiment designOfExperiment_;
+  FromFileDesignOfExperiment designOfExperiment_;
   bool pageValidity_;
   QLineEdit * filePathLineEdit_;
-  DataTableView * dataPreviewTableView_;
+  ExportableTableView * dataPreviewTableView_;
   QLabel * errorMessageLabel_;
 };
 }

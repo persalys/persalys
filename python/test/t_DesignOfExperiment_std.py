@@ -17,7 +17,7 @@ anOTStudy.add(aModelPhys)
 lowerBounds = [0.9, 1.8]
 upperBounds = [1.1, 2.2]
 levels = [2, 2]
-aDesign = otguibase.DesignOfExperiment('aDesign', aModelPhys, lowerBounds, upperBounds, levels)
+aDesign = otguibase.FixedDesignOfExperiment('aDesign', aModelPhys, lowerBounds, upperBounds, levels)
 anOTStudy.add(aDesign)
 aDesign.evaluate()
 print('outs=', aDesign.getResult().getOutputSample())
@@ -25,10 +25,10 @@ print('outs=', aDesign.getResult().getOutputSample())
 filename = 'normal.csv'
 ot.Normal(3).getSample(10).exportToCSVFile(filename, ',')
 columns = [0, 2]
-aDesign = otguibase.DesignOfExperiment('aDesign2', aModelPhys, filename, ot.Indices(columns))
-anOTStudy.add(aDesign)
-aDesign.evaluate()
-print('outs=', aDesign.getResult().getOutputSample())
+aDesign2 = otguibase.FromFileDesignOfExperiment('aDesign2', aModelPhys, filename, ot.Indices(columns))
+anOTStudy.add(aDesign2)
+aDesign2.evaluate()
+print('outs=', aDesign2.getResult().getOutputSample())
 
 script = anOTStudy.getPythonScript()
 print(script)

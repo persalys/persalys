@@ -29,63 +29,25 @@
 namespace OTGUI {
 class OTGUI_API DesignOfExperimentImplementation : public OT::PersistentObject, public Observable
 {
-  CLASSNAME;
-
 public:
-  enum Type {FromBoundsAndLevels, FromBoundsAndDeltas, FromFile, FromExperiment};
-
   /** Default constructor */
   DesignOfExperimentImplementation();
   /** Constructor with parameters */
   DesignOfExperimentImplementation(const OT::String & name, const PhysicalModel & physicalModel);
-  /** Constructor with parameters */
-  DesignOfExperimentImplementation(const OT::String & name, const PhysicalModel & physicalModel,
-                     const OT::NumericalPoint & lowerBounds, const OT::NumericalPoint & upperBounds,
-                     const OT::Indices & nbValues, const OT::NumericalPoint & values=OT::NumericalPoint(0));
-  /** Constructor with parameters */
-  DesignOfExperimentImplementation(const OT::String & name, const PhysicalModel & physicalModel,
-                                   const OT::String & fileName, const OT::Indices & columns);
-//   TODO
-  /** Constructor with parameters */
-//   DesignOfExperimentImplementation(const OT::String & name, const PhysicalModel & physicalModel,
-//                                    const OT::Experiment & experiment);
+
   /** Virtual constructor */
   virtual DesignOfExperimentImplementation * clone() const;
 
   PhysicalModel getPhysicalModel() const;
   void setPhysicalModel(const PhysicalModel & physicalModel);
 
-  Type getTypeDesignOfExperiment() const;
-  int getNumberOfExperiments() const;
+  virtual OT::Description getVariableInputNames() const;
 
-  OT::NumericalPoint getValues() const;
-  void setValues(const OT::NumericalPoint & values);
-  OT::NumericalPoint getLowerBounds() const;
-  void setLowerBounds(const OT::NumericalPoint & lowerBounds);
-  OT::NumericalPoint getUpperBounds() const;
-  void setUpperBounds(const OT::NumericalPoint & upperBounds);
-  OT::Indices getLevels() const;
-  void setLevels(const OT::Indices & nbValues);
-  OT::NumericalPoint getDeltas() const;
-  void setDeltas(const OT::NumericalPoint & deltas);
-
-  void setFileName(const OT::String & fileName);
-  OT::String getFileName() const;
-  OT::Indices getColumns() const;
-  void setColumns(OT::Indices columns);
-
-//   TODO
-//   OT::Experiment getExperiment() const;
-//   void setExperiment(const OT::Experiment & experiment);
-
-  OT::Description getInputVariableNames() const;
-
-  OT::NumericalSample getInputSample();
+  virtual OT::NumericalSample getInputSample();
   void setInputSample(const OT::NumericalSample & sample);
   SimulationAnalysisResult getResult() const;
   void clearResult();
 
-  void updateParameters();
   void evaluate();
   virtual OT::String getPythonScript() const;
 
@@ -96,22 +58,8 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  void initializeParameters();
-
-private:
   PhysicalModel physicalModel_;
-  Type type_;
   OT::NumericalSample inputSample_;
-  OT::Description inputNames_;
-  OT::NumericalPoint values_;
-  OT::NumericalPoint lowerBounds_;
-  OT::NumericalPoint upperBounds_;
-  OT::Indices levels_;
-  OT::NumericalPoint deltas_;
-  OT::String fileName_;
-  OT::Indices columns_;
-//   TODO
-//   OT::Experiment experiment_;
   SimulationAnalysisResult result_;
 };
 }

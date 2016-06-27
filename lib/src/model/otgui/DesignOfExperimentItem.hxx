@@ -36,11 +36,12 @@ public:
   DesignOfExperiment getDesignOfExperiment() const;
 
   void setData(const QVariant & value, int role);
-
+  void updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
   virtual void update(Observable * source, const OT::String & message);
 
 public slots:
 signals:
+  void designOfExperimentChanged(const DesignOfExperiment&);
   void analysisFinished();
   void designOfExperimentRemoved(QStandardItem*);
 

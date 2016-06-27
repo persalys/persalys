@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QAbstractTableModel for samples
+ *  @brief QStandardItemModel for samples
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,22 +18,21 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DataTableModel.hxx"
+#include "otgui/SampleTableModel.hxx"
 
-#include <QFile>
 #include <QColor>
 
 using namespace OT;
 
 namespace OTGUI {
 
-DataTableModel::DataTableModel(const NumericalSample & data)
-  : QAbstractTableModel()
+SampleTableModel::SampleTableModel(const NumericalSample & data, QObject * parent)
+  : QStandardItemModel(data.getSize(), data.getDimension(), parent)
   , data_(data)
   , sampleIsValid_(true)
 {
-  for (UnsignedInteger i=0; i<data_.getDimension(); ++i)
-    for (UnsignedInteger j=0; j<data_.getSize(); ++j)
+  for (UnsignedInteger j=0; j<data_.getSize(); ++j)
+    for (UnsignedInteger i=0; i<data_.getDimension(); ++i)
       if (std::isnan(data_[j][i]))
       {
         sampleIsValid_ = false;
@@ -42,28 +41,16 @@ DataTableModel::DataTableModel(const NumericalSample & data)
 }
 
 
-int DataTableModel::columnCount(const QModelIndex & parent) const
-{
-  return data_.getDimension();
-}
-
-
-int DataTableModel::rowCount(const QModelIndex & parent) const
-{
-  return data_.getSize();
-}
-
-
-QVariant DataTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant SampleTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     return QString::fromUtf8(data_.getDescription()[section].c_str());
 
-  return QAbstractTableModel::headerData(section, orientation, role);
+  return QStandardItemModel::headerData(section, orientation, role);
 }
 
 
-bool DataTableModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
+bool SampleTableModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
 {
   if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
   {
@@ -73,11 +60,11 @@ bool DataTableModel::setHeaderData(int section, Qt::Orientation orientation, con
     emit headerDataChanged(Qt::Horizontal, section, section);
     return true;
   }
-  return QAbstractTableModel::setHeaderData(section, orientation, value, role);
+  return QStandardItemModel::setHeaderData(section, orientation, value, role);
 }
 
 
-QVariant DataTableModel::data(const QModelIndex & index, int role) const
+QVariant SampleTableModel::data(const QModelIndex & index, int role) const
 {
   if (!index.isValid())
     return QVariant();
@@ -96,26 +83,14 @@ QVariant DataTableModel::data(const QModelIndex & index, int role) const
 }
 
 
-bool DataTableModel::exportData(const QString & fileName)
+void SampleTableModel::exportData(const QString & fileName)
 {
-  QFile file(fileName);
-
-  // check
-  if (!file.open(QFile::WriteOnly))
-  {
-//     "cannot open"<<file.fileName();
-    return false;
-  }
-
   // write
   data_.exportToCSVFile(fileName.toLocal8Bit().data());
-  file.close();
-
-  return true;
 }
 
 
-bool DataTableModel::sampleIsValid()
+bool SampleTableModel::sampleIsValid()
 {
   return sampleIsValid_;
 }

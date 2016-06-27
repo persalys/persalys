@@ -22,9 +22,8 @@
 #define OTGUI_PHYSICALMODELWINDOWWIDGET_HXX
 
 #include "otgui/PhysicalModelItem.hxx"
-#include "otgui/OTguiTableView.hxx"
+#include "otgui/CopyableTableView.hxx"
 
-#include <QLineEdit>
 #include <QGroupBox>
 #include <QPushButton>
 #include <QHBoxLayout>
@@ -56,11 +55,11 @@ signals:
 
 private:
   PhysicalModel physicalModel_;
-  OTguiTableView * inputTableView_;
+  CopyableTableView * inputTableView_;
   InputTableModel * inputTableModel_;
   QPushButton * addInputLineButton_;
   QPushButton * removeInputLineButton_;
-  OTguiTableView * outputTableView_;
+  CopyableTableView * outputTableView_;
   OutputTableModel * outputTableModel_;
   QPushButton * addOutputLineButton_;
   QPushButton * removeOutputLineButton_;

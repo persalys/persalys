@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QDoubleValidator
+ *  @brief QLineEdit with double value
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,20 +18,34 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_CUSTOMDOUBLEVALIDATOR_HXX
-#define OTGUI_CUSTOMDOUBLEVALIDATOR_HXX
+#ifndef OTGUI_VALUELINEEDIT_HXX
+#define OTGUI_VALUELINEEDIT_HXX
 
-#include <QDoubleValidator>
+#include <QLineEdit>
+#include <QKeyEvent>
 
 namespace OTGUI {
-class CustomDoubleValidator : public QDoubleValidator
+class ValueLineEdit : public QLineEdit
 {
   Q_OBJECT
 
 public:
-  CustomDoubleValidator(QObject * parent = 0);
+  // value constructor
+  ValueLineEdit(const double value=0., QWidget *parent = 0);
 
-  QValidator::State validate(QString & s, int & i) const;
+  // value accessors
+  void setValue(const double value);
+  double value();
+
+  // check value
+  void check();
+
+  // clear and make not editable
+  void deactivate();
+
+protected:
+  virtual bool event(QEvent * event);
+  virtual void keyPressEvent(QKeyEvent *e);
 };
 }
 #endif

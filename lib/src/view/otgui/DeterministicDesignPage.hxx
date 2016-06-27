@@ -21,11 +21,10 @@
 #ifndef OTGUI_DETERMINISTICDESIGNPAGE_HXX
 #define OTGUI_DETERMINISTICDESIGNPAGE_HXX
 
+#include "otgui/DesignOfExperiment.hxx"
 #include "otgui/ExperimentTableModel.hxx"
-#include "otgui/OTguiTableView.hxx"
 
 #include <QWizardPage>
-#include <QButtonGroup>
 
 namespace OTGUI {
 class DeterministicDesignPage : public QWizardPage
@@ -41,19 +40,11 @@ protected:
   void buildInterface();
 
 public slots:
-  void setEnabledWidgets(int);
-  void setDesignOfExperiment(DesignOfExperiment &);
 signals:
   void designOfExperimentChanged(const DesignOfExperiment & designOfExperiment);
 
 private:
-  DesignOfExperiment designOfExperiment_;
-  bool pageValidity_;
-  QButtonGroup * methodGroup_;
-  OTguiTableView * tableView_;
   ExperimentTableModel * model_;
-  // TODO
-//   QWidget * designsWidget_ ;
 };
 }
 #endif

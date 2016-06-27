@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QTableView to display samples
+ *  @brief QHeaderView with combobox
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,25 +18,37 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_DATATABLEVIEW_HXX
-#define OTGUI_DATATABLEVIEW_HXX
+#ifndef OTGUI_HORIZONTALHEADERVIEWWITHCOMBOBOX_HXX
+#define OTGUI_HORIZONTALHEADERVIEWWITHCOMBOBOX_HXX
 
-#include "otgui/OTguiTableView.hxx"
+#include "Description.hxx"
+#include "Indices.hxx"
 
-#include "NumericalSample.hxx"
+#include <QHeaderView>
+#include <QShowEvent>
+#include <QComboBox>
 
 namespace OTGUI {
-class DataTableView : public OTguiTableView
+class HorizontalHeaderViewWithCombobox : public QHeaderView
 {
   Q_OBJECT
 
 public:
-  DataTableView(QWidget * parent=0);
-  DataTableView(const OT::NumericalSample & sample, QWidget * parent=0);
+  HorizontalHeaderViewWithCombobox(QStringList comboBoxItems, QVector<int> columns, QWidget *parent=0);
+
+  void showEvent(QShowEvent * e);
+  void scrollContentsBy(int dx, int dy);
 
 public slots:
-  void contextMenu(const QPoint & pos);
-  void exportData();
+  void fixComboPositions();
+  void handleSectionResized(int);
+  void handleSectionMoved(int, int, int);
+  void setHeaderData(int);
+
+private:
+  QMap<int, QComboBox *> boxes_;
+  QStringList comboBoxItems_;
+  QVector<int> columnsWithComboBox_;
 };
 }
 #endif

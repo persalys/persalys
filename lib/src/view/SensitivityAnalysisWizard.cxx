@@ -20,34 +20,41 @@
  */
 #include "otgui/SensitivityAnalysisWizard.hxx"
 
-#include "otgui/SobolAnalysis.hxx"
-#include "otgui/SRCAnalysis.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
 
 #include <QGroupBox>
 #include <QRadioButton>
-#include <QPushButton>
 #include <QVBoxLayout>
+#include <QSpinBox>
+#include <QButtonGroup>
 
 #include <limits>
 
 namespace OTGUI {
 
-SensitivityAnalysisWizard::SensitivityAnalysisWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
-  : OTguiWizard()
-  , analysis_(SobolAnalysis(otStudy->getAvailableAnalysisName("sensitivity_"), physicalModel))
-  , otStudy_(otStudy)
-  , physicalModel_(physicalModel)
+SensitivityAnalysisWizard::SensitivityAnalysisWizard(OTStudy * otstudy, const PhysicalModel & physicalModel)
+  : AnalysisWizard(SobolAnalysis(otstudy->getAvailableAnalysisName("sensitivitySobol_"), physicalModel))
+  , sobolAnalysis_(*dynamic_cast<SobolAnalysis*>(&*analysis_.getImplementation()))
+  , srcAnalysis_(SRCAnalysis(otstudy->getAvailableAnalysisName("sensitivitySRC_"), physicalModel))
 {
   buildInterface();
 }
 
 
 SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis & analysis)
-  : OTguiWizard()
-  , analysis_(analysis)
-  , physicalModel_(analysis_.getPhysicalModel())
+  : AnalysisWizard(analysis)
 {
+  if (analysis.getImplementation()->getClassName() == "SobolAnalysis")
+  {
+    sobolAnalysis_ = *dynamic_cast<const SobolAnalysis*>(&*analysis.getImplementation());
+    srcAnalysis_ = SRCAnalysis(analysis.getName(), analysis.getPhysicalModel());
+  }
+  else
+  {
+    sobolAnalysis_ = SobolAnalysis(analysis.getName(), analysis.getPhysicalModel());
+    srcAnalysis_ = *dynamic_cast<const SRCAnalysis*>(&*analysis.getImplementation());
+  }
+
   buildInterface();
 }
 
@@ -66,45 +73,45 @@ void SensitivityAnalysisWizard::buildInterface()
   QGroupBox * methodBox = new QGroupBox(tr("Method"));
   QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
 
-  methodGroup_ = new QButtonGroup;
+  QButtonGroup * methodGroup = new QButtonGroup;
   QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Sobol"));
   if (analysis_.getImplementation()->getClassName() == "SobolAnalysis")
     buttonToChooseMethod->setChecked(true);
-  methodGroup_->addButton(buttonToChooseMethod, SensitivityAnalysisWizard::Sobol);
+  methodGroup->addButton(buttonToChooseMethod, SensitivityAnalysisWizard::Sobol);
   methodLayout->addWidget(buttonToChooseMethod);
   buttonToChooseMethod = new QRadioButton(tr("SRC"));
   if (analysis_.getImplementation()->getClassName() == "SRCAnalysis")
     buttonToChooseMethod->setChecked(true);
-  methodGroup_->addButton(buttonToChooseMethod, SensitivityAnalysisWizard::SRC);
+  methodGroup->addButton(buttonToChooseMethod, SensitivityAnalysisWizard::SRC);
   methodLayout->addWidget(buttonToChooseMethod);
-  connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SLOT(updateMethodWidgets()));
+  connect(methodGroup, SIGNAL(buttonClicked(int)), this, SLOT(updateMethodWidgets(int)));
 
   mainLayout->addWidget(methodBox);
 
-  QWidget * methodParametersWidgets = new QWidget;
-  QHBoxLayout * methodParametersLayout = new QHBoxLayout(methodParametersWidgets);
-
-  QLabel * sampleSizeLabel = new QLabel(tr("Sample size"));
-  sampleSizeSpinbox_ = new QSpinBox;
-  sampleSizeSpinbox_->setMinimum(2);
-  sampleSizeSpinbox_->setMaximum(std::numeric_limits<int>::max());
-  sampleSizeSpinbox_->setValue(dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->getNbSimulations());
-  connect(sampleSizeSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(sampleSizeChanged(int)));
-
-  sampleSizeLabel->setBuddy(sampleSizeSpinbox_);
-  methodParametersLayout->addWidget(sampleSizeLabel);
-  methodParametersLayout->addWidget(sampleSizeSpinbox_);
-  mainLayout->addWidget(methodParametersWidgets);
-
-  // Sobol widgets
+  // -- Sobol widgets --
   sobolWidgets_ = new QWidget;
   QVBoxLayout * sobolWidgetsLayout = new QVBoxLayout(sobolWidgets_);
 
+  // sample size
+  QHBoxLayout * sampleSizeLayout = new QHBoxLayout;
+  QLabel * sampleSizeLabel = new QLabel(tr("Sample size"));
+  QSpinBox * sobolSampleSizeSpinbox = new QSpinBox;
+  sobolSampleSizeSpinbox->setMinimum(2);
+  sobolSampleSizeSpinbox->setMaximum(std::numeric_limits<int>::max());
+  sobolSampleSizeSpinbox->setValue(sobolAnalysis_.getNbSimulations());
+  sobolSampleSizeSpinbox->setProperty("type", "Sobol");
+  connect(sobolSampleSizeSpinbox, SIGNAL(valueChanged(int)), this, SLOT(sampleSizeChanged(int)));
+  sampleSizeLabel->setBuddy(sobolSampleSizeSpinbox);
+  sampleSizeLayout->addWidget(sampleSizeLabel);
+  sampleSizeLayout->addWidget(sobolSampleSizeSpinbox);
+  sobolWidgetsLayout->addLayout(sampleSizeLayout);
+
+  // nb simu
   QHBoxLayout * nbSimuLayout = new QHBoxLayout;
   QLabel * totalNbSimuLabel = new QLabel(tr("Total number of simulations"));
   // total nb simu: N=n*(d+2)
   // n = nb inputs; d=sample size
-  double nbSimu = physicalModel_.getInputs().getSize() * (sampleSizeSpinbox_->value() + 2);
+  double nbSimu = sobolAnalysis_.getPhysicalModel().getInputs().getSize() * (sobolSampleSizeSpinbox->value() + 2);
   totalNbSimuLabel_ = new QLabel(QString::number(nbSimu));
   nbSimuLayout->addWidget(totalNbSimuLabel);
   nbSimuLayout->addWidget(totalNbSimuLabel_);
@@ -121,7 +128,8 @@ void SensitivityAnalysisWizard::buildInterface()
   sobolSeedSpinbox->setMaximum(std::numeric_limits<int>::max());
   seedLabel->setBuddy(sobolSeedSpinbox);
   sobolAdvancedParamGroupBoxLayout->addWidget(sobolSeedSpinbox, 0, 1);
-  sobolSeedSpinbox->setValue(dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->getSeed());
+  sobolSeedSpinbox->setValue(sobolAnalysis_.getSeed());
+  sobolSeedSpinbox->setProperty("type", "Sobol");
   connect(sobolSeedSpinbox, SIGNAL(valueChanged(int)), this, SLOT(seedChanged(int)));
 
   QLabel * blockSizeLabel = new QLabel(tr("Block size"));
@@ -131,18 +139,30 @@ void SensitivityAnalysisWizard::buildInterface()
   blockSizeSpinbox->setMaximum(std::numeric_limits<int>::max());
   blockSizeLabel->setBuddy(blockSizeSpinbox);
   sobolAdvancedParamGroupBoxLayout->addWidget(blockSizeSpinbox, 1, 1);
-  if (analysis_.getImplementation()->getClassName() == "SobolAnalysis")
-    blockSizeSpinbox->setValue(dynamic_cast<SobolAnalysis*>(&*analysis_.getImplementation())->getBlockSize());
-
+  blockSizeSpinbox->setValue(sobolAnalysis_.getBlockSize());
   connect(blockSizeSpinbox, SIGNAL(valueChanged(int)), this, SLOT(blockSizeChanged(int)));
 
   sobolAdvancedParamGroupBox->setExpanded(false);
   sobolWidgetsLayout->addWidget(sobolAdvancedParamGroupBox);
   mainLayout->addWidget(sobolWidgets_);
 
-  // SRC widgets
+  // -- SRC widgets --
   srcWidgets_ = new QWidget;
   QVBoxLayout * srcWidgetsLayout = new QVBoxLayout(srcWidgets_);
+
+  // sample size
+  sampleSizeLayout = new QHBoxLayout;
+  sampleSizeLabel = new QLabel(tr("Sample size"));
+  QSpinBox * srcSampleSizeSpinbox = new QSpinBox;
+  srcSampleSizeSpinbox->setMinimum(2);
+  srcSampleSizeSpinbox->setMaximum(std::numeric_limits<int>::max());
+  srcSampleSizeSpinbox->setValue(srcAnalysis_.getNbSimulations());
+  srcSampleSizeSpinbox->setProperty("type", "SRC");
+  connect(srcSampleSizeSpinbox, SIGNAL(valueChanged(int)), this, SLOT(sampleSizeChanged(int)));
+  sampleSizeLabel->setBuddy(srcSampleSizeSpinbox);
+  sampleSizeLayout->addWidget(sampleSizeLabel);
+  sampleSizeLayout->addWidget(srcSampleSizeSpinbox);
+  srcWidgetsLayout->addLayout(sampleSizeLayout);
 
   // SRC advanced parameters
   CollapsibleGroupBox * srcAdvancedParamGroupBox = new CollapsibleGroupBox;
@@ -155,79 +175,65 @@ void SensitivityAnalysisWizard::buildInterface()
   srcSeedSpinbox->setMaximum(std::numeric_limits<int>::max());
   seedLabel->setBuddy(srcSeedSpinbox);
   srcAdvancedParamGroupBoxLayout->addWidget(srcSeedSpinbox, 0, 1);
-  srcSeedSpinbox->setValue(dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->getSeed());
+  srcSeedSpinbox->setValue(srcAnalysis_.getSeed());
+  srcSeedSpinbox->setProperty("type", "SRC");
   connect(srcSeedSpinbox, SIGNAL(valueChanged(int)), this, SLOT(seedChanged(int)));
 
   srcAdvancedParamGroupBox->setExpanded(false);
   srcWidgetsLayout->addWidget(srcAdvancedParamGroupBox);
   mainLayout->addWidget(srcWidgets_);
 
-  updateMethodWidgets();
+  updateMethodWidgets(methodGroup->checkedId());
 
   addPage(page);
 }
 
 
-void SensitivityAnalysisWizard::updateMethodWidgets()
+void SensitivityAnalysisWizard::updateMethodWidgets(int id)
 {
-  switch (SensitivityAnalysisWizard::Method(methodGroup_->checkedId()))
-  {
-    case SensitivityAnalysisWizard::Sobol:
-    {
-      if (analysis_.getImplementation()->getClassName() == "SRCAnalysis")
-      {
-        analysis_ = SobolAnalysis(analysis_.getName(), physicalModel_);
-        emit analysisChanged(analysis_);
-      }
-      break;
-    }
-    case SensitivityAnalysisWizard::SRC:
-    {
-      if (analysis_.getImplementation()->getClassName() == "SobolAnalysis")
-      {
-        analysis_ = SRCAnalysis(analysis_.getName(), physicalModel_);
-        emit analysisChanged(analysis_);
-      }
-      break;
-    }
-    default:
-      break;
-  }
-  sobolWidgets_->setVisible(analysis_.getImplementation()->getClassName() == "SobolAnalysis");
-  srcWidgets_->setVisible(analysis_.getImplementation()->getClassName() == "SRCAnalysis");
+  sobolWidgets_->setVisible(id == 0);
+  srcWidgets_->setVisible(id == 1);
 }
 
 
 void SensitivityAnalysisWizard::sampleSizeChanged(int sampleSize)
 {
-  // total nb simu: N=n*(d+2)
-  // n = nb inputs; d=sample size
-  int nbSimu = physicalModel_.getInputs().getSize() * (sampleSize + 2);
-  totalNbSimuLabel_->setText(QString::number(nbSimu));
-  dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->setNbSimulations(sampleSize);
+  QSpinBox * spinbox = qobject_cast<QSpinBox*>(sender());
+  if (spinbox->property("type").toString() == "Sobol")
+  {
+    // total nb simu: N=n*(d+2)
+    // n = nb inputs; d=sample size
+    int nbSimu = sobolAnalysis_.getPhysicalModel().getInputs().getSize() * (sampleSize + 2);
+    totalNbSimuLabel_->setText(QString::number(nbSimu));
+    sobolAnalysis_.setNbSimulations(sampleSize);
+  }
+  else
+    srcAnalysis_.setNbSimulations(sampleSize);
 }
 
 
 void SensitivityAnalysisWizard::blockSizeChanged(int size)
 {
-  dynamic_cast<SobolAnalysis*>(&*analysis_.getImplementation())->setBlockSize(size);
+  sobolAnalysis_.setBlockSize(size);
 }
 
 
 void SensitivityAnalysisWizard::seedChanged(int seed)
 {
-  dynamic_cast<SimulationAnalysis*>(&*analysis_.getImplementation())->setSeed(seed);
+  QSpinBox * spinbox = qobject_cast<QSpinBox*>(sender());
+  if (spinbox->property("type").toString() == "Sobol")
+    sobolAnalysis_.setSeed(seed);
+  else
+    srcAnalysis_.setSeed(seed);
 }
 
 
-QString SensitivityAnalysisWizard::getAnalysisName() const
+void SensitivityAnalysisWizard::accept()
 {
-  return analysis_.getName().c_str();
-}
-
-
-void SensitivityAnalysisWizard::validate()
-{
-  otStudy_->add(analysis_);
+  if (sobolWidgets_->isVisible())
+    analysis_ = sobolAnalysis_;
+  else
+    analysis_ = srcAnalysis_;
+  QWizard::accept();
 }
 }

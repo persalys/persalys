@@ -51,6 +51,7 @@ public:
 
 public slots:
   void updateAnalysis(const Analysis & analysis);
+  void updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
   void removeItem(QStandardItem*);
 signals:
   void newPhysicalModelItemCreated(PhysicalModelItem*);

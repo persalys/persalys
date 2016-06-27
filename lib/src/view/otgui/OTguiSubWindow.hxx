@@ -45,7 +45,7 @@ public slots:
 signals:
   void errorMessageChanged(QString);
   void graphWindowActivated(QWidget*);
-  void graphWindowDeactivated(QWidget*);
+  void graphWindowDeactivated();
 
 protected:
   QLabel * errorMessageLabel_;

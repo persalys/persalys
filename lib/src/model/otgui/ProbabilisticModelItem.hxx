@@ -42,7 +42,7 @@ public:
 public slots:
 signals:
   void inputChanged();
-  void physicalModelRemoved(QStandardItem*);
+  void probabilisticModelRemoved(QStandardItem*);
 
 private:
   PhysicalModel physicalModel_;

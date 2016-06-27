@@ -28,7 +28,7 @@ namespace OTGUI {
 PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel)
   : QObject()
   , QStandardItem(QString::fromUtf8(physicalModel.getName().c_str()))
-  , Observer()
+  , Observer("PhysicalModel")
   , physicalModel_(physicalModel)
 {
   setData("PhysicalModel", Qt::UserRole);

@@ -4,28 +4,12 @@
 Available constructors:
     DesignOfExperiment(*name, physicalModel*)
 
-    DesignOfExperiment(*name, physicalModel, lowerBound, upperBound, nbValues, values*)
-
-    DesignOfExperiment(*name, physicalModel, fileName, columns*)
-
 Parameters
 ----------
 name : str
     Name
-physicalModel : `~otguibase.Physicalmodel`
-    Physical model
-lowerBound : sequence of float
-    Lower bound
-upperBound : sequence of float
-    Upper bound
-nbValues : sequence of int
-    Number of values along each direction
-values : sequence of float
-    Values (optional)
-fileName : str
-    Name of a data file to load
-columns : sequence of int
-    Indices of columns in files to consider (optional)"
+physicalModel : :class:`~otguibase.PhysicalModel`
+    Physical model"
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation
 OTGUI_DesignOfExperiment_doc
@@ -55,214 +39,6 @@ model : :class:`~otguibase.PhysicalModel`
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::setPhysicalModel
 OTGUI_DesignOfExperiment_setPhysicalModel_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_getTypeDesignOfExperiment_doc
-"Design type accessor.
-
-Returns
--------
-type : int
-    Design type"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getTypeDesignOfExperiment
-OTGUI_DesignOfExperiment_getTypeDesignOfExperiment_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_getNumberOfExperiments_doc
-"Design experiment size accessor.
-
-Returns
--------
-size : int
-   Design experiment size"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getNumberOfExperiments
-OTGUI_DesignOfExperiment_getNumberOfExperiments_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_getValues_doc
-"Values accessor.
-
-Returns
--------
-size : :class:`~openturns.NumericalPoint`
-   Values"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getValues
-OTGUI_DesignOfExperiment_getValues_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_setValues_doc
-"Values accessor.
-
-Parameters
-----------
-size : :class:`~openturns.NumericalPoint`
-   Values"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::setValues
-OTGUI_DesignOfExperiment_setValues_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_getLowerBounds_doc
-"Lower bounds accessor.
-
-Returns
--------
-bounds : :class:`~openturns.NumericalPoint`
-   Lower bounds"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getLowerBounds
-OTGUI_DesignOfExperiment_getLowerBounds_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_setLowerBounds_doc
-"Lower bounds accessor.
-
-Parameters
-----------
-bounds : :class:`~openturns.NumericalPoint`
-   Lower bounds"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::setLowerBounds
-OTGUI_DesignOfExperiment_setLowerBounds_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_getUpperBounds_doc
-"Upper bounds accessor.
-
-Returns
--------
-bounds : :class:`~openturns.NumericalPoint`
-   Upper bounds"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getUpperBounds
-OTGUI_DesignOfExperiment_getUpperBounds_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_setUpperBounds_doc
-"Upper bounds accessor.
-
-Parameters
-----------
-bounds : :class:`~openturns.NumericalPoint`
-   Upper bounds"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::setUpperBounds
-OTGUI_DesignOfExperiment_setUpperBounds_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_setLevels_doc
-"Levels accessor.
-
-Parameters
-----------
-levels : :class:`~openturns.Indices`
-   Levels"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::setLevels
-OTGUI_DesignOfExperiment_setLevels_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_getLevels_doc
-"Levels accessor.
-
-Returns
--------
-levels : :class:`~openturns.Indices`
-   Levels"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getLevels
-OTGUI_DesignOfExperiment_getLevels_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_setDeltas_doc
-"Deltas accessor.
-
-Parameters
-----------
-deltas : :class:`~openturns.NumericalPoint`
-   Deltas"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::setDeltas
-OTGUI_DesignOfExperiment_setDeltas_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_getDeltas_doc
-"Deltas accessor.
-
-Returns
--------
-deltas : :class:`~openturns.NumericalPoint`
-   Deltas"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getDeltas
-OTGUI_DesignOfExperiment_getDeltas_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_setFileName_doc
-"File name accessor.
-
-Parameters
-----------
-fileName : str
-   File name"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::setFileName
-OTGUI_DesignOfExperiment_setFileName_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_getFileName_doc
-"File name accessor.
-
-Returns
--------
-fileName : str
-   File name"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getFileName
-OTGUI_DesignOfExperiment_getFileName_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_setColumns_doc
-"Columns accessor.
-
-Parameters
-----------
-columns : :class:`~openturns.Indices`
-   Columns"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::setColumns
-OTGUI_DesignOfExperiment_setColumns_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_getColumns_doc
-"Columns accessor.
-
-Returns
--------
-columns : :class:`~openturns.Indices`
-   Columns"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getColumns
-OTGUI_DesignOfExperiment_getColumns_doc
 
 // ---------------------------------------------------------------------
 
@@ -318,16 +94,16 @@ OTGUI_DesignOfExperiment_getPythonScript_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_DesignOfExperiment_getInputVariableNames_doc
-"Input variable names accessor.
+%define OTGUI_DesignOfExperiment_getVariableInputNames_doc
+"Variable input names accessor.
 
 Returns
 -------
 names : :class:`~openturns.Description`
-    Input variable names"
+    Variable input names"
 %enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getInputVariableNames
-OTGUI_DesignOfExperiment_getInputVariableNames_doc
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::getVariableInputNames
+OTGUI_DesignOfExperiment_getVariableInputNames_doc
 
 // ---------------------------------------------------------------------
 

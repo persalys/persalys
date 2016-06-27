@@ -29,7 +29,7 @@ namespace OTGUI {
 OTStudyItem::OTStudyItem(OTStudy * otStudy)
   : QObject()
   , QStandardItem(QString::fromUtf8(otStudy->getName().c_str()))
-  , Observer()
+  , Observer("OTStudy")
   , otStudy_(otStudy)
 {
   setData("OTStudy", Qt::UserRole);
@@ -90,7 +90,7 @@ void OTStudyItem::update(Observable * source, const String & message)
   }
   else
   {
-    throw InvalidArgumentException(HERE) << "In OTStudyItem::update: not recognized message: " << message;
+    std::cerr<< "In OTStudyItem::update: not recognized message: " << message << std::endl;
   }
 }
 
@@ -98,6 +98,12 @@ void OTStudyItem::update(Observable * source, const String & message)
 void OTStudyItem::updateAnalysis(const Analysis & analysis)
 {
   otStudy_->getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
+}
+
+
+void OTStudyItem::updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
+{
+  otStudy_->getDesignOfExperimentByName(designOfExperiment.getName()).setImplementationAsPersistentObject(designOfExperiment.getImplementation());
 }
 
 
@@ -127,7 +133,7 @@ void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
     ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(physicalModel);
     physicalModel.addObserver(newProbabilisticModelItem);
     item->appendRow(newProbabilisticModelItem);
-    connect(newProbabilisticModelItem, SIGNAL(physicalModelRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
+    connect(newProbabilisticModelItem, SIGNAL(probabilisticModelRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
     emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
   }
 
@@ -151,6 +157,7 @@ void OTStudyItem::addDesignOfExperimentItem(DesignOfExperiment & design)
       child(i)->child(2)->appendRow(newItem);
       emit newDesignOfExperimentItemCreated(newItem);
       connect(newItem, SIGNAL(designOfExperimentRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
+      connect(newItem, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), this, SLOT(updateDesignOfExperiment(DesignOfExperiment)));
       return;
     }
   throw InvalidArgumentException(HERE) << "No physical model matches the given name " << design.getPhysicalModel().getName();

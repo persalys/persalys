@@ -110,6 +110,8 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include SimulationAnalysisResult.i
 %include DesignOfExperimentImplementation.i
 %include DesignOfExperiment.i
+%include FixedDesignOfExperiment.i
+%include FromFileDesignOfExperiment.i
 %include MonteCarloResult.i
 %include TaylorExpansionMomentsResult.i
 %include MonteCarloAnalysis.i

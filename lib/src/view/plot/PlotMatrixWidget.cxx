@@ -45,9 +45,13 @@ PlotMatrixWidget::PlotMatrixWidget(const OT::NumericalSample & inputSample, cons
 {
   int nbInputs = inputSample.getDimension();
   int nbOutputs = outputSample.getDimension();
+  QString typeNameSuffix = "XX";
   bool isPlotMatrixXX = true;
   if (inputSample != outputSample)
+  {
     isPlotMatrixXX = false;
+    typeNameSuffix = "YX";
+  }
 
   for (int i=0; i<nbInputs; ++i)
     inputNames_ << QString::fromUtf8(inputSample.getDescription()[i].c_str());
@@ -90,7 +94,7 @@ PlotMatrixWidget::PlotMatrixWidget(const OT::NumericalSample & inputSample, cons
     {
       QWidget * cellMatrixWidget = new QWidget;
       QVBoxLayout * cellMatrixLayout = new QVBoxLayout(cellMatrixWidget);
-      PlotWidget * plot = new PlotWidget;
+      PlotWidget * plot = new PlotWidget("plotmatrix"+typeNameSuffix);
       if (isPlotMatrixXX && i == j)
         plot->plotHistogram(inputSample.getMarginal(j));
       else

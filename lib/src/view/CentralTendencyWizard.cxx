@@ -20,35 +20,41 @@
  */
 #include "otgui/CentralTendencyWizard.hxx"
 
-#include "otgui/MonteCarloAnalysis.hxx"
-#include "otgui/TaylorExpansionMomentsAnalysis.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
 
 #include <QGroupBox>
 #include <QRadioButton>
 #include <QLabel>
-#include <QPushButton>
 #include <QVBoxLayout>
+#include <QButtonGroup>
+#include <QCheckBox>
 
 #include <limits>
 
 namespace OTGUI {
 
 CentralTendencyWizard::CentralTendencyWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
-  : OTguiWizard()
-  , analysis_(MonteCarloAnalysis(otStudy->getAvailableAnalysisName("centralTendency_"), physicalModel))
-  , otStudy_(otStudy)
-  , physicalModel_(physicalModel)
+  : AnalysisWizard(MonteCarloAnalysis(otStudy->getAvailableAnalysisName("centralTendencyMC_"), physicalModel))
+  , MCAnalysis_(*dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation()))
+  , taylorAnalysis_(TaylorExpansionMomentsAnalysis(otStudy->getAvailableAnalysisName("centralTendencyTaylor_"), physicalModel))
 {
   buildInterface();
 }
 
 
 CentralTendencyWizard::CentralTendencyWizard(const Analysis & analysis)
-  : OTguiWizard()
-  , analysis_(analysis)
-  , physicalModel_(analysis_.getPhysicalModel())
+  : AnalysisWizard(analysis)
 {
+  if (analysis.getImplementation()->getClassName() == "MonteCarloAnalysis")
+  {
+    MCAnalysis_ = *dynamic_cast<const MonteCarloAnalysis*>(&*analysis.getImplementation());
+    taylorAnalysis_ = TaylorExpansionMomentsAnalysis(analysis.getName(), analysis.getPhysicalModel());
+  }
+  else
+  {
+    MCAnalysis_ = MonteCarloAnalysis(analysis.getName(), analysis.getPhysicalModel());
+    taylorAnalysis_ = *dynamic_cast<const TaylorExpansionMomentsAnalysis*>(&*analysis.getImplementation());
+  }
   buildInterface();
 }
 
@@ -67,85 +73,71 @@ void CentralTendencyWizard::buildInterface()
   QGroupBox * methodBox = new QGroupBox(tr("Method"));
   QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
 
-  methodGroup_ = new QButtonGroup;
+  QButtonGroup * methodGroup = new QButtonGroup;
   QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Monte Carlo"));
   if (analysis_.getImplementation()->getClassName() == "MonteCarloAnalysis")
     buttonToChooseMethod->setChecked(true);
-  methodGroup_->addButton(buttonToChooseMethod, CentralTendencyWizard::MonteCarlo);
+  methodGroup->addButton(buttonToChooseMethod, CentralTendencyWizard::MonteCarlo);
   methodLayout->addWidget(buttonToChooseMethod);
   buttonToChooseMethod = new QRadioButton(tr("Taylor expansion"));
   if (analysis_.getImplementation()->getClassName() == "TaylorExpansionMomentsAnalysis")
     buttonToChooseMethod->setChecked(true);
-  methodGroup_->addButton(buttonToChooseMethod, CentralTendencyWizard::TaylorExpansionMoments);
+  methodGroup->addButton(buttonToChooseMethod, CentralTendencyWizard::TaylorExpansionMoments);
   methodLayout->addWidget(buttonToChooseMethod);
-  connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SLOT(updateMethodWidgets()));
+  connect(methodGroup, SIGNAL(buttonClicked(int)), this, SLOT(updateMethodWidgets(int)));
 
   mainLayout->addWidget(methodBox);
 
   QVBoxLayout * methodParametersLayout = new QVBoxLayout;
 
-  /// monte carlo widgets
+  /// -- Monte carlo widgets --
   monteCarloWidget_ = new QWidget;
   QGridLayout *mclayout = new QGridLayout(monteCarloWidget_);
 
+  // nb simu
   QLabel * nbSimuLabel = new QLabel(tr("Number of simulations"));
-  nbSimuSpinbox_ = new QSpinBox;
-  nbSimuSpinbox_->setMinimum(2);
-  nbSimuSpinbox_->setMaximum(std::numeric_limits<int>::max());
-  if (analysis_.getImplementation()->getClassName() == "MonteCarloAnalysis")
-    nbSimuSpinbox_->setValue(dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->getNbSimulations());
-  connect(nbSimuSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(nbSimuChanged(int)));
-
-  nbSimuLabel->setBuddy(nbSimuSpinbox_);
+  QSpinBox * nbSimuSpinbox = new QSpinBox;
+  nbSimuSpinbox->setMinimum(2);
+  nbSimuSpinbox->setMaximum(std::numeric_limits<int>::max());
+  nbSimuSpinbox->setValue(MCAnalysis_.getNbSimulations());
+  connect(nbSimuSpinbox, SIGNAL(valueChanged(int)), this, SLOT(nbSimuChanged(int)));
+  nbSimuLabel->setBuddy(nbSimuSpinbox);
   mclayout->addWidget(nbSimuLabel, 0, 0);
-  mclayout->addWidget(nbSimuSpinbox_, 0, 1);
+  mclayout->addWidget(nbSimuSpinbox, 0, 1);
 
   //// advanced parameters
   CollapsibleGroupBox * advancedGroup = new CollapsibleGroupBox;
   advancedGroup->setTitle(tr("Advanced parameters"));
   QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedGroup);
 
-  confidenceIntervalCheckBox_ = new QCheckBox;
-  if (analysis_.getImplementation()->getClassName() == "MonteCarloAnalysis")
-    confidenceIntervalCheckBox_->setChecked(dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->isConfidenceIntervalRequired());
-  else
-    confidenceIntervalCheckBox_->setChecked(true);
-  confidenceIntervalCheckBox_->setText(tr("Compute confidence interval at"));
-  connect(confidenceIntervalCheckBox_, SIGNAL(toggled(bool)), this, SLOT(confidenceIntervalRequired(bool)));
-  advancedWidgetsLayout->addWidget(confidenceIntervalCheckBox_, 0, 0);
-  levelConfidenceIntervalSpinbox_ = new QDoubleSpinBox;
-  levelConfidenceIntervalSpinbox_->setRange(0.0, 0.99);
-  levelConfidenceIntervalSpinbox_->setSingleStep(0.01);
+  QCheckBox * confidenceIntervalCheckBox = new QCheckBox;
+  confidenceIntervalCheckBox->setChecked(MCAnalysis_.isConfidenceIntervalRequired());
+  confidenceIntervalCheckBox->setText(tr("Compute confidence interval at"));
+  advancedWidgetsLayout->addWidget(confidenceIntervalCheckBox, 0, 0);
 
-  if (analysis_.getImplementation()->getClassName() == "MonteCarloAnalysis")
-  {
-    levelConfidenceIntervalSpinbox_->setValue(dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->getLevelConfidenceInterval());
-    confidenceIntervalRequired(confidenceIntervalCheckBox_->isChecked());
-  }
-  else
-  {
-    levelConfidenceIntervalSpinbox_->setValue(0.95);
-    levelConfidenceIntervalSpinbox_->setEnabled(true);
-  }
-
-  connect(levelConfidenceIntervalSpinbox_, SIGNAL(valueChanged(double)), this, SLOT(levelConfidenceIntervalChanged(double)));
-  advancedWidgetsLayout->addWidget(levelConfidenceIntervalSpinbox_, 0, 1);
+  DoubleSpinBox * levelConfidenceIntervalSpinbox = new DoubleSpinBox;
+  levelConfidenceIntervalSpinbox->setRange(0.0, 0.99);
+  levelConfidenceIntervalSpinbox->setSingleStep(0.01);
+  levelConfidenceIntervalSpinbox->setValue(MCAnalysis_.getLevelConfidenceInterval());
+  connect(confidenceIntervalCheckBox, SIGNAL(toggled(bool)), levelConfidenceIntervalSpinbox, SLOT(setEnabled(bool)));
+  connect(confidenceIntervalCheckBox, SIGNAL(toggled(bool)), this, SLOT(confidenceIntervalRequired(bool)));
+  connect(levelConfidenceIntervalSpinbox, SIGNAL(valueChanged(double)), this, SLOT(levelConfidenceIntervalChanged(double)));
+  advancedWidgetsLayout->addWidget(levelConfidenceIntervalSpinbox, 0, 1);
 
   QLabel * seedLabel = new QLabel(tr("Seed"));
   advancedWidgetsLayout->addWidget(seedLabel, 2, 0);
-  seedSpinbox_ = new QSpinBox;
-  seedLabel->setBuddy(seedSpinbox_);
-  advancedWidgetsLayout->addWidget(seedSpinbox_, 2, 1);
-  if (analysis_.getImplementation()->getClassName() == "MonteCarloAnalysis")
-    seedSpinbox_->setValue(dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->getSeed());
-  connect(seedSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(seedChanged(int)));
+  QSpinBox * seedSpinbox = new QSpinBox;
+  seedLabel->setBuddy(seedSpinbox);
+  advancedWidgetsLayout->addWidget(seedSpinbox, 2, 1);
+  seedSpinbox->setValue(MCAnalysis_.getSeed());
+  connect(seedSpinbox, SIGNAL(valueChanged(int)), this, SLOT(seedChanged(int)));
 
   advancedGroup->setExpanded(false);
   mclayout->addWidget(advancedGroup, 2, 0, 1, 2);
 
   methodParametersLayout->addWidget(monteCarloWidget_);
 
-  /// Taylor expansions widgets
+  /// -- Taylor expansions widgets --
   TaylorExpansionsWidget_ = new QWidget;
   //QVBoxLayout * taylorLayout = new QVBoxLayout(TaylorExpansionsWidget_);
   methodParametersLayout->addWidget(TaylorExpansionsWidget_);
@@ -153,86 +145,49 @@ void CentralTendencyWizard::buildInterface()
 
   mainLayout->addLayout(methodParametersLayout);
 
-  updateMethodWidgets();
+  updateMethodWidgets(methodGroup->checkedId());
 
   addPage(page);
 }
 
 
-void CentralTendencyWizard::updateMethodWidgets()
+void CentralTendencyWizard::updateMethodWidgets(int id)
 {
-  switch (CentralTendencyWizard::Method(methodGroup_->checkedId()))
-  {
-    case CentralTendencyWizard::MonteCarlo:
-    {
-      monteCarloWidget_->show();
-      TaylorExpansionsWidget_->hide();
-      if (analysis_.getImplementation()->getClassName() == "TaylorExpansionMomentsAnalysis")
-      {
-        analysis_ = MonteCarloAnalysis(analysis_.getName(), physicalModel_);
-        emit analysisChanged(analysis_);
-      }
-      nbSimuSpinbox_->setValue(dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->getNbSimulations());
-      break;
-    }
-    case CentralTendencyWizard::TaylorExpansionMoments:
-    {
-      monteCarloWidget_->hide();
-      TaylorExpansionsWidget_->show();
-      if (analysis_.getImplementation()->getClassName() == "MonteCarloAnalysis")
-      {
-        analysis_ = TaylorExpansionMomentsAnalysis(analysis_.getName(), physicalModel_);
-        emit analysisChanged(analysis_);
-      }
-      break;
-    }
-    default:
-      break;
-  }
-}
-
-
-void CentralTendencyWizard::confidenceIntervalRequired(bool confidenceIntervalRequired)
-{
-  if (confidenceIntervalRequired)
-  {
-    levelConfidenceIntervalSpinbox_->setEnabled(true);
-    dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->setIsConfidenceIntervalRequired(true);
-  }
-  else
-  {
-    levelConfidenceIntervalSpinbox_->setEnabled(false);
-    dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->setIsConfidenceIntervalRequired(false);
-  }
+  monteCarloWidget_->setVisible(id == 0);
+  TaylorExpansionsWidget_->setVisible(id == 1);
 }
 
 
 void CentralTendencyWizard::nbSimuChanged(int nbSimu)
 {
-  dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->setNbSimulations(nbSimu);
+  MCAnalysis_.setNbSimulations(nbSimu);
+}
+
+
+void CentralTendencyWizard::confidenceIntervalRequired(bool confidenceIntervalRequired)
+{
+  MCAnalysis_.setIsConfidenceIntervalRequired(confidenceIntervalRequired);
 }
 
 
 void CentralTendencyWizard::levelConfidenceIntervalChanged(double confidenceInterval)
 {
-  dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->setLevelConfidenceInterval(confidenceInterval);
+  MCAnalysis_.setLevelConfidenceInterval(confidenceInterval);
 }
 
 
 void CentralTendencyWizard::seedChanged(int seed)
 {
-  dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation())->setSeed(seed);
+  MCAnalysis_.setSeed(seed);
 }
 
 
-QString CentralTendencyWizard::getAnalysisName() const
+void CentralTendencyWizard::accept()
 {
-  return analysis_.getName().c_str();
-}
-
-
-void CentralTendencyWizard::validate()
-{
-  otStudy_->add(analysis_);
+  if (monteCarloWidget_->isVisible())
+    analysis_ = MCAnalysis_;
+  else
+    analysis_ = taylorAnalysis_;
+  QDialog::accept();
 }
 }

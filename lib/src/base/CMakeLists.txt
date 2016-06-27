@@ -11,6 +11,8 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      PythonPhysicalModel.cxx
                      PythonEvaluation.cxx
                      DesignOfExperimentImplementation.cxx DesignOfExperiment.cxx
+                     FixedDesignOfExperiment.cxx
+                     FromFileDesignOfExperiment.cxx
                      AnalysisImplementation.cxx Analysis.cxx SimulationAnalysis.cxx
                      ModelEvaluationResult.cxx ModelEvaluation.cxx
                      SimulationAnalysisResult.cxx
@@ -37,6 +39,8 @@ ot_install_header_file ( AnalyticalPhysicalModel.hxx )
 ot_install_header_file ( PythonPhysicalModel.hxx )
 ot_install_header_file ( DesignOfExperimentImplementation.hxx )
 ot_install_header_file ( DesignOfExperiment.hxx )
+ot_install_header_file ( FixedDesignOfExperiment.hxx )
+ot_install_header_file ( FromFileDesignOfExperiment.hxx )
 ot_install_header_file ( AnalysisImplementation.hxx )
 ot_install_header_file ( Analysis.hxx )
 ot_install_header_file ( SimulationAnalysis.hxx )

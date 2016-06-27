@@ -21,15 +21,14 @@
 #ifndef OTGUI_RELIABILITYANALYSISWIZARD_HXX
 #define OTGUI_RELIABILITYANALYSISWIZARD_HXX
 
-#include "otgui/OTStudy.hxx"
 #include "otgui/LimitState.hxx"
-#include "otgui/OTguiWizard.hxx"
+#include "otgui/AnalysisWizard.hxx"
+#include "otgui/DoubleSpinBox.hxx"
 
 #include <QButtonGroup>
-#include <QSpinBox>
 
 namespace OTGUI {
-class ReliabilityAnalysisWizard : public OTguiWizard
+class ReliabilityAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
 
@@ -39,9 +38,6 @@ public:
   ReliabilityAnalysisWizard(OTStudy * otStudy, const LimitState & limitState);
   ReliabilityAnalysisWizard(const Analysis & analysis);
 
-  QString getAnalysisName() const;
-  void validate();
-
 protected:
   void buildInterface();
 
@@ -50,18 +46,13 @@ public slots:
   void maxiCoefficientOfVariationChanged(double);
   void blockSizeChanged(int);
   void seedChanged(int);
-signals:
-  void analysisChanged(const Analysis & analysis);
 
 private:
-  Analysis analysis_;
-  OTStudy * otStudy_;
 //   TODO: LimitState limitState_; later when implementing FORM/SORM
-
   QButtonGroup * methodGroup_;
   QWidget * monteCarloWidget_;
   QSpinBox * maxiOuterSamplingSpinbox_;
-  QDoubleSpinBox * maxiCoefficientOfVariationSpinbox_;
+  DoubleSpinBox * maxiCoefficientOfVariationSpinbox_;
   QSpinBox * seedSpinbox_;
   QSpinBox * blockSizeSpinbox_;
 };

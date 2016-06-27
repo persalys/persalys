@@ -23,9 +23,9 @@
 
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/LimitStateItem.hxx"
+#include "otgui/ValueLineEdit.hxx"
 
 #include <QComboBox>
-#include <QLineEdit>
 
 namespace OTGUI {
 class LimitStateWindow : public OTguiSubWindow
@@ -56,7 +56,7 @@ private:
 
   QComboBox * outputsComboBox_;
   QComboBox * failureComboBox_;
-  QLineEdit * thresholdLineEdit_;
+  ValueLineEdit * thresholdLineEdit_;
 };
 }
 #endif

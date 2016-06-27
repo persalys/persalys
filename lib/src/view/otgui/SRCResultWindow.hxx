@@ -21,15 +21,15 @@
 #ifndef OTGUI_SRCRESULTWINDOW_HXX
 #define OTGUI_SRCRESULTWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
-#include "otgui/AnalysisItem.hxx"
+#include "otgui/ResultWindow.hxx"
 #include "otgui/SRCResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
 
-#include <QStackedLayout>
+#include <QStackedWidget>
 
 namespace OTGUI {
-class SRCResultWindow : public OTguiSubWindow
+class SRCResultWindow : public ResultWindow
 {
   Q_OBJECT
 
@@ -37,6 +37,7 @@ public:
   SRCResultWindow(AnalysisItem * item);
 
 protected:
+  void setParameters(const Analysis & analysis);
   void buildInterface();
 
 public slots:
@@ -45,8 +46,8 @@ public slots:
 
 private:
   SRCResult result_;
-  std::vector<std::map<double, int> > indices_;
-  QStackedLayout * frameLayout_;
+  CustomStandardItemModel * tableModel_;
+  QStackedWidget * scrollAreaWidget_;
   GraphConfigurationWidget * plotsConfigurationWidget_;
   QVector<PlotWidget*> listPlotWidgets_;
 };

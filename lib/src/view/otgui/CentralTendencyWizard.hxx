@@ -21,15 +21,13 @@
 #ifndef OTGUI_CENTRALTENDENCYWIZARD_HXX
 #define OTGUI_CENTRALTENDENCYWIZARD_HXX
 
-#include "otgui/OTStudy.hxx"
-#include "otgui/OTguiWizard.hxx"
-
-#include <QButtonGroup>
-#include <QSpinBox>
-#include <QCheckBox>
+#include "otgui/AnalysisWizard.hxx"
+#include "otgui/DoubleSpinBox.hxx"
+#include "otgui/TaylorExpansionMomentsAnalysis.hxx"
+#include "otgui/MonteCarloAnalysis.hxx"
 
 namespace OTGUI {
-class CentralTendencyWizard : public OTguiWizard
+class CentralTendencyWizard : public AnalysisWizard
 {
   Q_OBJECT
 
@@ -39,31 +37,22 @@ public:
   CentralTendencyWizard(OTStudy * otStudy, const PhysicalModel & physicalModel);
   CentralTendencyWizard(const Analysis & analysis);
 
-  QString getAnalysisName() const;
-  void validate();
-
 protected:
   void buildInterface();
 
 public slots:
-  void updateMethodWidgets();
-  void confidenceIntervalRequired(bool);
+  void updateMethodWidgets(int);
   void nbSimuChanged(int);
+  void confidenceIntervalRequired(bool);
   void levelConfidenceIntervalChanged(double);
   void seedChanged(int);
+  void accept();
 
 private:
-  Analysis analysis_;
-  OTStudy * otStudy_;
-  PhysicalModel physicalModel_;
-
-  QButtonGroup * methodGroup_;
+  MonteCarloAnalysis MCAnalysis_;
+  TaylorExpansionMomentsAnalysis taylorAnalysis_;
   QWidget * monteCarloWidget_;
   QWidget * TaylorExpansionsWidget_;
-  QSpinBox * nbSimuSpinbox_;
-  QSpinBox * seedSpinbox_;
-  QCheckBox * confidenceIntervalCheckBox_;
-  QDoubleSpinBox * levelConfidenceIntervalSpinbox_;
 };
 }
 #endif

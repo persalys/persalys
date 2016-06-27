@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/OTguiTableView.hxx"
+#include "otgui/CopyableTableView.hxx"
 
 #include <QApplication>
 #include <QAction>
@@ -26,14 +26,14 @@
 
 namespace OTGUI {
 
-OTguiTableView::OTguiTableView(QWidget * parent)
+CopyableTableView::CopyableTableView(QWidget * parent)
   : QTableView(parent)
 {
   buildActions();
 }
 
 
-QString OTguiTableView::getFormattedText() const
+QString CopyableTableView::getFormattedText() const
 {
   QString result;
   QModelIndexList list = selectionModel()->selectedIndexes();
@@ -65,13 +65,11 @@ QString OTguiTableView::getFormattedText() const
   result.append(model()->data(list.last()).toString());
   result.append('\n');
 
-  QClipboard *clipboard = QApplication::clipboard();
-  clipboard->setText(result);
   return result;
 }
 
 
-void OTguiTableView::buildActions()
+void CopyableTableView::buildActions()
 {
   copyAction_ = new QAction(tr("&Copy"), this);
   copyAction_->setShortcut(tr("Ctrl+C"));
@@ -83,7 +81,7 @@ void OTguiTableView::buildActions()
 }
 
 
-void OTguiTableView::copy()
+void CopyableTableView::copy()
 {
   QApplication::clipboard()->setText(getFormattedText());
 }

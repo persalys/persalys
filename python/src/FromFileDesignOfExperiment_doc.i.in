@@ -1,0 +1,56 @@
+%feature("docstring") OTGUI::FromFileDesignOfExperiment
+"Design of experiment.
+
+Available constructors:
+    FromFileDesignOfExperiment(*name, physicalModel, fileName, columns*)
+
+Parameters
+----------
+name : str
+    Name
+physicalModel : :class:`~otguibase.PhysicalModel`
+    Physical model
+fileName : str
+    Name of a data file to load
+columns : sequence of int
+    Indices of columns in files to consider (optional)"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FromFileDesignOfExperiment::getFileName
+"File name accessor.
+
+Returns
+-------
+fileName : str
+   File name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FromFileDesignOfExperiment::setFileName
+"File name accessor.
+
+Parameters
+----------
+fileName : str
+   File name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FromFileDesignOfExperiment::getColumns
+"Columns accessor.
+
+Returns
+-------
+columns : :class:`~openturns.Indices`
+   Columns"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FromFileDesignOfExperiment::setColumns
+"Columns accessor.
+
+Parameters
+----------
+columns : :class:`~openturns.Indices`
+   Columns"

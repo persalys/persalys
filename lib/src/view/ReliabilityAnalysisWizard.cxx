@@ -33,9 +33,7 @@
 namespace OTGUI {
 
 ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(OTStudy * otStudy, const LimitState & limitState)
-  : OTguiWizard()
-  , analysis_(MonteCarloReliabilityAnalysis(otStudy->getAvailableAnalysisName("reliability_"), limitState))
-  , otStudy_(otStudy)
+  : AnalysisWizard(MonteCarloReliabilityAnalysis(otStudy->getAvailableAnalysisName("reliability_"), limitState))
 //  , limitState_(limitState)
 {
   buildInterface();
@@ -43,8 +41,7 @@ ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(OTStudy * otStudy, const Li
 
 
 ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis & analysis)
-  : OTguiWizard()
-  , analysis_(analysis)
+  : AnalysisWizard(analysis)
 //  , limitState_(dynamic_cast<ReliabilityAnalysis*>(&*analysis.getImplementation())->getLimitState())
 {
   buildInterface();
@@ -95,9 +92,10 @@ void ReliabilityAnalysisWizard::buildInterface()
   mclayout->addWidget(maxiOuterSamplingSpinbox_, 0, 1);
 
   QLabel * maxiCoefficientOfVariationLabel = new QLabel(tr("Maximum coefficient of variation"));
-  maxiCoefficientOfVariationSpinbox_ = new QDoubleSpinBox;
+  maxiCoefficientOfVariationSpinbox_ = new DoubleSpinBox;
   maxiCoefficientOfVariationSpinbox_->setMinimum(0.);
   maxiCoefficientOfVariationSpinbox_->setMaximum(1.);
+  maxiCoefficientOfVariationSpinbox_->setSingleStep(0.01);
   if (analysis_.getImplementation()->getClassName() == "MonteCarloReliabilityAnalysis")
     maxiCoefficientOfVariationSpinbox_->setValue(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getMaximumCoefficientOfVariation());
   connect(maxiCoefficientOfVariationSpinbox_, SIGNAL(valueChanged(double)), this, SLOT(maxiCoefficientOfVariationChanged(double)));
@@ -165,17 +163,5 @@ void ReliabilityAnalysisWizard::blockSizeChanged(int size)
 void ReliabilityAnalysisWizard::seedChanged(int seed)
 {
   dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setSeed(seed);
-}
-
-
-QString ReliabilityAnalysisWizard::getAnalysisName() const
-{
-  return analysis_.getName().c_str();
-}
-
-
-void ReliabilityAnalysisWizard::validate()
-{
-  otStudy_->add(analysis_);
 }
 }

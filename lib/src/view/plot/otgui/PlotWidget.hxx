@@ -39,7 +39,7 @@ public:
   static const QColor DefaultHistogramColor;
 
   /// constructor
-  PlotWidget(bool isIndicesPlot = false, QWidget * parent = 0);
+  PlotWidget(const QString plotTypeName = "", const bool isIndicesPlot = false, QWidget * parent = 0);
 
   /// plot a curve
   void plotCurve(double * x, double * y, int size, const QPen pen=QPen(Qt::black, 2),
@@ -50,7 +50,8 @@ public:
   void plotPDFCurve(const OT::Distribution & distribution, const QPen pen=QPen(Qt::black, 2));
   void plotCDFCurve(const OT::Distribution & distribution, const QPen pen=QPen(Qt::black, 2));
   void plotHistogram(const OT::NumericalSample & sample, const OT::UnsignedInteger graphType=0, int barNumber=0, QString title="");
-  void plotScatter(const OT::NumericalSample & input, const OT::NumericalSample & output, QPen pen=QPen(Qt::blue, 4));
+  void plotScatter(const OT::NumericalSample & input, const OT::NumericalSample & output,
+                   QPen pen=QPen(Qt::blue, 4), QString Xtitle="", QString Ytitle="");
   void plotBoxPlot(double median, double lowerQuartile, double upperQuartile,
                    double lowerBound, double upperBound, OT::NumericalPoint outliers_);
   void plotSensitivityIndices(const OT::NumericalPoint firstOrder, const OT::NumericalPoint totalOrder,
@@ -71,6 +72,7 @@ private:
 
 private:
 // TODO  QwtPlotGrid * grid_;
+  QString plotTypeName_;
   QAction * exportPlotAction_;
 };
 }

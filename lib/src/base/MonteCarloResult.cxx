@@ -45,6 +45,22 @@ MonteCarloResult::MonteCarloResult(NumericalSample inputSample, NumericalSample 
   : SimulationAnalysisResult(inputSample, outputSample)
   , levelConfidenceInterval_(0.95)
 {
+  mean_ = getOutputSample().computeMean();
+  median_ = getOutputSample().computeMedian();
+  standardDeviation_ = getOutputSample().computeStandardDeviationPerComponent();
+  variance_ = getOutputSample().computeVariance();
+  skewness_ = NumericalPoint(getOutputSample().getDimension());
+  if (!(getOutputSample().getSize() < 2))
+    skewness_ = getOutputSample().computeSkewness();
+  kurtosis_ = NumericalPoint(getOutputSample().getDimension());
+  if (!(getOutputSample().getSize() < 3))
+    kurtosis_ = getOutputSample().computeKurtosis();
+  firstQuartile_ = getOutputSample().computeQuantilePerComponent(0.25);
+  thirdQuartile_ = getOutputSample().computeQuantilePerComponent(0.75);
+  computeMeanConfidenceInterval(levelConfidenceInterval_);
+  computeStdConfidenceInterval(levelConfidenceInterval_);
+  computeOutliers();
+  computeFittedDistributionPDF_CDF();
 }
   
 
@@ -130,98 +146,127 @@ NumericalPoint MonteCarloResult::getThirdQuartile()
 Interval MonteCarloResult::getMeanConfidenceInterval(const double level)
 {
   if (!meanConfidenceInterval_.getDimension() || levelConfidenceInterval_ != level)
-  {
-    levelConfidenceInterval_ = level;
-    meanConfidenceInterval_ = Interval(getOutputSample().getDimension());
-
-    Normal X(0,1);
-    double f = X.computeQuantile((1-levelConfidenceInterval_)/2, true)[0];
-    NumericalPoint delta = f * getStandardDeviation() / sqrt(getOutputSample().getSize());
-    
-    NumericalPoint lowerBounds(getOutputSample().getDimension());
-    NumericalPoint upperBounds(getOutputSample().getDimension());
-
-    for (UnsignedInteger i=0; i<meanConfidenceInterval_.getDimension(); ++i)
-    {
-      // low
-      lowerBounds[i] = getMean()[i] - delta[i];
-      // up
-      upperBounds[i] = getMean()[i] + delta[i];
-    }
-    meanConfidenceInterval_.setLowerBound(lowerBounds);
-    meanConfidenceInterval_.setUpperBound(upperBounds);
-  }
+    computeMeanConfidenceInterval(level);
   return meanConfidenceInterval_;
+}
+
+
+void MonteCarloResult::computeMeanConfidenceInterval(const double level)
+{
+  levelConfidenceInterval_ = level;
+  meanConfidenceInterval_ = Interval(getOutputSample().getDimension());
+
+  Normal X(0,1);
+  double f = X.computeQuantile((1-levelConfidenceInterval_)/2, true)[0];
+  NumericalPoint delta = f * getStandardDeviation() / sqrt(getOutputSample().getSize());
+
+  NumericalPoint lowerBounds(getOutputSample().getDimension());
+  NumericalPoint upperBounds(getOutputSample().getDimension());
+
+  for (UnsignedInteger i=0; i<meanConfidenceInterval_.getDimension(); ++i)
+  {
+    // low
+    lowerBounds[i] = getMean()[i] - delta[i];
+    // up
+    upperBounds[i] = getMean()[i] + delta[i];
+  }
+  meanConfidenceInterval_.setLowerBound(lowerBounds);
+  meanConfidenceInterval_.setUpperBound(upperBounds);
 }
 
 
 Interval MonteCarloResult::getStdConfidenceInterval(const double level)
 {
   if (!stdConfidenceInterval_.getDimension() || levelConfidenceInterval_ != level)
-  {
-    levelConfidenceInterval_ = level;
-    stdConfidenceInterval_ = Interval(getOutputSample().getDimension());
-
-    // TODO : use Normal Distribution?
-    UnsignedInteger nbSimu = getOutputSample().getSize();
-    ChiSquare X(nbSimu-1);
-    // low
-    double f1 = X.computeQuantile((1-levelConfidenceInterval_)/2, true)[0];
-    // up
-    double f2 = X.computeQuantile((1-levelConfidenceInterval_)/2, false)[0];
-
-    stdConfidenceInterval_ = Interval(getOutputSample().getDimension());
-    NumericalPoint lowerBounds(getOutputSample().getDimension());
-    NumericalPoint upperBounds(getOutputSample().getDimension());
-
-    for (UnsignedInteger i=0; i<stdConfidenceInterval_.getDimension(); ++i)
-    {
-      //low
-      lowerBounds[i] = sqrt((nbSimu - 1) * getVariance()[i] / f1);
-      //up
-      upperBounds[i] = sqrt((nbSimu - 1) * getVariance()[i] / f2);
-    }
-    stdConfidenceInterval_.setLowerBound(lowerBounds);
-    stdConfidenceInterval_.setUpperBound(upperBounds);
-  }
+    computeStdConfidenceInterval(level);
   return stdConfidenceInterval_;
+}
+
+
+void MonteCarloResult::computeStdConfidenceInterval(const double level)
+{
+  levelConfidenceInterval_ = level;
+  stdConfidenceInterval_ = Interval(getOutputSample().getDimension());
+
+  // TODO : use Normal Distribution?
+  UnsignedInteger nbSimu = getOutputSample().getSize();
+  ChiSquare X(nbSimu-1);
+  // low
+  double f1 = X.computeQuantile((1-levelConfidenceInterval_)/2, true)[0];
+  // up
+  double f2 = X.computeQuantile((1-levelConfidenceInterval_)/2, false)[0];
+
+  stdConfidenceInterval_ = Interval(getOutputSample().getDimension());
+  NumericalPoint lowerBounds(getOutputSample().getDimension());
+  NumericalPoint upperBounds(getOutputSample().getDimension());
+
+  for (UnsignedInteger i=0; i<stdConfidenceInterval_.getDimension(); ++i)
+  {
+    //low
+    lowerBounds[i] = sqrt((nbSimu - 1) * getVariance()[i] / f1);
+    //up
+    upperBounds[i] = sqrt((nbSimu - 1) * getVariance()[i] / f2);
+  }
+  stdConfidenceInterval_.setLowerBound(lowerBounds);
+  stdConfidenceInterval_.setUpperBound(upperBounds);
 }
 
 
 MonteCarloResult::NumericalPointCollection MonteCarloResult::getOutliers()
 {
   if (!outliers_.getSize())
-  {
-    outliers_.clear();
-    for (UnsignedInteger i=0; i<getOutputSample().getDimension(); ++i)
-    {
-      NumericalPoint outliersOfIthOutput;
-      double Q1 = getFirstQuartile()[i];
-      double Q3 = getThirdQuartile()[i];
-      double lowerBound = Q1 - 1.5 * (Q3 - Q1);
-      double upperBound = Q3 + 1.5 * (Q3 - Q1);
-
-      for (UnsignedInteger j=0; j<getOutputSample().getSize(); ++j)
-        if (getOutputSample()[j][i] < lowerBound || getOutputSample()[j][i] > upperBound)
-          outliersOfIthOutput.add(getOutputSample()[j][i]);
-
-      outliers_.add(outliersOfIthOutput);
-    }
-  }
+    computeOutliers();
   return outliers_;
 }
 
 
-MonteCarloResult::DistributionCollection MonteCarloResult::getFittedDistribution()
+void MonteCarloResult::computeOutliers()
 {
-  KernelSmoothing gaussianKernel;
-
-  DistributionCollection distributions(getOutputSample().getDimension());
-
+  outliers_.clear();
   for (UnsignedInteger i=0; i<getOutputSample().getDimension(); ++i)
-    distributions[i] = gaussianKernel.build(getOutputSample().getMarginal(i), true);
+  {
+    NumericalPoint outliersOfIthOutput;
+    double Q1 = getFirstQuartile()[i];
+    double Q3 = getThirdQuartile()[i];
+    double lowerBound = Q1 - 1.5 * (Q3 - Q1);
+    double upperBound = Q3 + 1.5 * (Q3 - Q1);
 
-  return distributions;
+    for (UnsignedInteger j=0; j<getOutputSample().getSize(); ++j)
+      if (getOutputSample()[j][i] < lowerBound || getOutputSample()[j][i] > upperBound)
+        outliersOfIthOutput.add(getOutputSample()[j][i]);
+
+    outliers_.add(outliersOfIthOutput);
+  }
+}
+
+
+NumericalSampleCollection MonteCarloResult::getPDF()
+{
+  if (!pdf_.getSize())
+    computeFittedDistributionPDF_CDF();
+  return pdf_;
+}
+
+
+NumericalSampleCollection MonteCarloResult::getCDF()
+{
+  if (!cdf_.getSize())
+    computeFittedDistributionPDF_CDF();
+  return cdf_;
+}
+
+void MonteCarloResult::computeFittedDistributionPDF_CDF()
+{
+  pdf_.clear();
+  cdf_.clear();
+
+  KernelSmoothing gaussianKernel;
+  for (UnsignedInteger i=0; i<getOutputSample().getDimension(); ++i)
+  {
+    Distribution fittedDistribution = gaussianKernel.build(getOutputSample().getMarginal(i), true);
+    pdf_.add(fittedDistribution.drawPDF().getDrawable(0).getData());
+    cdf_.add(fittedDistribution.drawCDF().getDrawable(0).getData());
+  }
 }
 
 
@@ -240,6 +285,8 @@ void MonteCarloResult::save(Advocate & adv) const
   adv.saveAttribute("thirdQuartile_", thirdQuartile_);
   adv.saveAttribute("meanConfidenceInterval_", meanConfidenceInterval_);
   adv.saveAttribute("stdConfidenceInterval_", stdConfidenceInterval_);
+  adv.saveAttribute("pdf_", pdf_);
+  adv.saveAttribute("cdf_", cdf_);
   adv.saveAttribute("outliers_", outliers_);
 }
 
@@ -259,6 +306,8 @@ void MonteCarloResult::load(Advocate & adv)
   adv.loadAttribute("thirdQuartile_", thirdQuartile_);
   adv.loadAttribute("meanConfidenceInterval_", meanConfidenceInterval_);
   adv.loadAttribute("stdConfidenceInterval_", stdConfidenceInterval_);
+  adv.loadAttribute("pdf_", pdf_);
+  adv.loadAttribute("cdf_", cdf_);
   adv.loadAttribute("outliers_", outliers_);
 }
 }

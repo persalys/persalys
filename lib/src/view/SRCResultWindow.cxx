@@ -21,7 +21,8 @@
 #include "otgui/SRCResultWindow.hxx"
 
 #include "otgui/SRCAnalysis.hxx"
-#include "otgui/DataTableWidget.hxx"
+#include "otgui/CopyableTableView.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
 
 
 #include <QVBoxLayout>
@@ -30,24 +31,31 @@
 #include <QTableWidget>
 #include <QScrollArea>
 #include <QSplitter>
+#include <QTextEdit>
 
 using namespace OT;
 
 namespace OTGUI {
   
 SRCResultWindow::SRCResultWindow(AnalysisItem * item)
-  : OTguiSubWindow(item)
+  : ResultWindow(item)
   , result_(dynamic_cast<SRCAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
 {
-  for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
-  {
-    std::map<double, int> indices_i;
-    for (UnsignedInteger j=0; j<result_.getIndices().getDimension(); ++j)
-      indices_i[result_.getIndices()[i][j]] = j;
-    indices_.push_back(indices_i);
-  }
+  setParameters(item->getAnalysis());
   buildInterface();
-  connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
+}
+
+
+void SRCResultWindow::setParameters(const Analysis & analysis)
+{
+  const SRCAnalysis * SRCanalysis = dynamic_cast<const SRCAnalysis*>(&*analysis.getImplementation());
+  QStringList strList;
+  strList << tr("Sensitivity analysis parameters :") + "\n";
+  strList << tr("Algorithm : ") + tr("Standardized Regression Coefficients");
+  strList << tr("Sample size : ") + QString::number(SRCanalysis->getNbSimulations());
+  strList << tr("Seed : ") + QString::number(SRCanalysis->getSeed());
+
+  parameters_ = strList.join("\n");
 }
 
 
@@ -58,20 +66,19 @@ void SRCResultWindow::buildInterface()
   // first tab --------------------------------
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  QFrame * frame = new QFrame;
-  frameLayout_ = new QStackedLayout(frame);
+  scrollAreaWidget_ = new QStackedWidget;
 
   Description inputNames = result_.getInputNames();
   QStringList outputNames;
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
-    outputNames << result_.getOutputNames()[i].c_str();
+    outputNames << QString::fromUtf8(result_.getOutputNames()[i].c_str());
 
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
   {
     QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
 
     // plot
-    PlotWidget * plot = new PlotWidget(true);
+    PlotWidget * plot = new PlotWidget("sensitivitySRC", true);
     plot->plotSensitivityIndices(result_.getIndices()[i], NumericalPoint(), inputNames);
     plot->setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
 
@@ -80,38 +87,40 @@ void SRCResultWindow::buildInterface()
     listPlotWidgets_.append(plot);
 
     // table of indices
-    QTableWidget * table = new DataTableWidget(inputNames.getSize(), 2, this);
-    table->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Index"));
+    CopyableTableView * table = new CopyableTableView;
+    table->verticalHeader()->hide();
 #if QT_VERSION >= 0x050000
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 #else
     table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 #endif
+    table->setSortingEnabled(true);
+    tableModel_ = new CustomStandardItemModel(inputNames.getSize(), 2);
+    tableModel_->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Index"));
+    table->setModel(tableModel_);
 
     // fill table
     for (UnsignedInteger j=0; j<inputNames.getSize(); ++j)
     {
-      QTableWidgetItem * item = new QTableWidgetItem(inputNames[j].c_str());
-      item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-      table->setItem(j, 0, item);
-
-      item = new QTableWidgetItem(QString::number(result_.getIndices()[i][j], 'g', 4));
-      item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-      table->setItem(j, 1, item);
+      tableModel_->setNotEditableItem(j, 0, QString::fromUtf8(inputNames[j].c_str()));
+      tableModel_->setNotEditableItem(j, 1, result_.getIndices()[i][j]);
     }
-    table->setSortingEnabled(true);
     connect(table->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
 
     verticalSplitter->addWidget(table);
     verticalSplitter->setStretchFactor(1, 1);
-    frameLayout_->addWidget(verticalSplitter);
+    scrollAreaWidget_->addWidget(verticalSplitter);
   }
 
   plotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets_, QStringList(), outputNames, GraphConfigurationWidget::SensitivityIndices);
-  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), frameLayout_, SLOT(setCurrentIndex(int)));
+  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), scrollAreaWidget_, SLOT(setCurrentIndex(int)));
 
-  scrollArea->setWidget(frame);
+  scrollArea->setWidget(scrollAreaWidget_);
   tabWidget->addTab(scrollArea, tr("Result"));
+
+  // second tab --------------------------------
+  tabWidget->addTab(buildParametersTextEdit(), tr("Parameters"));
+
   //
   setWidget(tabWidget);
 }
@@ -119,35 +128,13 @@ void SRCResultWindow::buildInterface()
 
 void SRCResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
 {
-  int indexOutput = frameLayout_->currentIndex();
+  int indexOutput = scrollAreaWidget_->currentIndex();
   NumericalPoint currentIndices(result_.getInputNames().getSize());
   Description sortedInputNames(result_.getInputNames().getSize());
-
-  switch (section)
+  for (int i=0; i<result_.getInputNames().getSize(); ++i)
   {
-    case 1:
-    {
-      int index = 0;
-      if (order == Qt::DescendingOrder)
-      {
-        for (std::map<double,int>::reverse_iterator it=indices_[indexOutput].rbegin(); it!=indices_[indexOutput].rend(); ++it, index++)
-        {
-          currentIndices[index] = result_.getIndices()[indexOutput][it->second];
-          sortedInputNames[index] = result_.getInputNames()[it->second];
-        }
-      }
-      else
-      {
-        for (std::map<double,int>::iterator it=indices_[indexOutput].begin(); it!=indices_[indexOutput].end(); ++it, index++)
-        {
-          currentIndices[index] = result_.getIndices()[indexOutput][it->second];
-          sortedInputNames[index] = result_.getInputNames()[it->second];
-        }
-      }
-      break;
-    }
-    default:
-      return;
+    sortedInputNames[i] = tableModel_->data(tableModel_->index(i, 0)).toString().toStdString();
+    currentIndices[i] = tableModel_->data(tableModel_->index(i, 1)).toDouble();
   }
 
   listPlotWidgets_[indexOutput]->clear();
@@ -157,9 +144,13 @@ void SRCResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
 
 void SRCResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
-  if (newState == 4 || newState == 8 || newState == 10)
-    emit graphWindowActivated(plotsConfigurationWidget_);
-  else if (newState == 0 || newState == 1 || newState == 2 || newState == 9)
-    emit graphWindowDeactivated(plotsConfigurationWidget_);
+  if (oldState == 2)
+    return;
+
+  if (newState == 4 || newState == 10)
+    if (!plotsConfigurationWidget_->isVisible())
+      emit graphWindowActivated(plotsConfigurationWidget_);
+  else if (newState == 0 || newState == 1 || newState == 9)
+    emit graphWindowDeactivated();
 }
 }

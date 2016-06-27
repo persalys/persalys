@@ -20,14 +20,14 @@
  */
 #include "otgui/DeterministicDesignPage.hxx"
 
-#include "otgui/ExperimentTableModel.hxx"
-#include "otgui/HorizontalHeaderViewWithCombobox.hxx"
 #include "otgui/ComboBoxDelegate.hxx"
+#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 
 #include <NumericalSample.hxx>
 
 #include <QVBoxLayout>
-#include <QRadioButton>
+#include <QGroupBox>
+#include <QHeaderView>
 
 using namespace OT;
 
@@ -35,10 +35,15 @@ namespace OTGUI {
 
 DeterministicDesignPage::DeterministicDesignPage(const DesignOfExperiment & designOfExperiment, QWidget* parent)
   : QWizardPage(parent)
-  , designOfExperiment_(designOfExperiment)
-  , pageValidity_(true)
 {
-  designOfExperiment_.updateParameters();
+  FixedDesignOfExperiment fixedDesignOfExperiment;
+  if (designOfExperiment.getImplementation()->getClassName() == "FixedDesignOfExperiment")
+    fixedDesignOfExperiment = *dynamic_cast<const FixedDesignOfExperiment*>(&*designOfExperiment.getImplementation());
+  else
+    fixedDesignOfExperiment = FixedDesignOfExperiment(designOfExperiment.getName(), designOfExperiment.getPhysicalModel());
+
+  model_ = new ExperimentTableModel(fixedDesignOfExperiment);
+
   buildInterface();
 }
 
@@ -48,125 +53,42 @@ void DeterministicDesignPage::buildInterface()
 
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 
-  methodGroup_ = new QButtonGroup;
-  QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Define manually"));
-  buttonToChooseMethod->setChecked(true);
-  methodGroup_->addButton(buttonToChooseMethod, DesignOfExperimentImplementation::FromBoundsAndLevels);
-  pageLayout->addWidget(buttonToChooseMethod);
+  QGroupBox * groupBox = new QGroupBox(tr("Define manually"));
+  QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
 
-  tableView_ = new OTguiTableView;
-  tableView_->setEditTriggers(QTableView::AllEditTriggers);
-  tableView_->setEnabled(true);
-  if (designOfExperiment_.getTypeDesignOfExperiment() == DesignOfExperimentImplementation::FromExperiment)
-    tableView_->setEnabled(false);
-
-  ExperimentTableModel * model = new ExperimentTableModel(designOfExperiment_);
-  connect(model, SIGNAL(designOfExperimentChanged(DesignOfExperiment &)), this, SLOT(setDesignOfExperiment(DesignOfExperiment &)));
-  tableView_->setModel(model);
+  ResizableTableViewWithoutScrollBar * tableView = new ResizableTableViewWithoutScrollBar;
+  tableView->setEditTriggers(QTableView::AllEditTriggers);
+  tableView->setModel(model_);
 
   QStringList items = QStringList()<<tr("Levels")<<tr("Delta");
   QPair<int, int> cellWithComboBox(0, 5);
 
-  tableView_->horizontalHeader()->hide();
-  tableView_->setItemDelegateForColumn(5, new ComboBoxDelegate(items, cellWithComboBox));
-  tableView_->openPersistentEditor(model->index(0, 5));
+  tableView->horizontalHeader()->hide();
+  tableView->setItemDelegateForColumn(5, new ComboBoxDelegate(items, cellWithComboBox));
+  tableView->openPersistentEditor(model_->index(0, 5));
 
-  tableView_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  tableView_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  tableView_->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
+  tableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  tableView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  tableView->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
 #if QT_VERSION >= 0x050000
-  tableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+  tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 #else
-  tableView_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
+  tableView->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
 #endif
+  // resize table
+  tableView->resizeToContents();
 
-  QSize size(tableView_->sizeHint());
-  int width = 0;
-  for (int i=0; i<tableView_->model()->columnCount(); ++i)
-    width += tableView_->columnWidth(i);
-  size.setWidth(width + tableView_->verticalHeader()->width() + 2);
-  int height = tableView_->horizontalHeader()->height();
-  for (int i=0; i<tableView_->model()->rowCount(); ++i)
-    height += tableView_->rowHeight(i);
-  size.setHeight(height);
-  tableView_->setMinimumSize(size);
-  tableView_->setMaximumSize(size);
-
-  pageLayout->addWidget(tableView_);
+  groupBoxLayout->addWidget(tableView);
+  pageLayout->addWidget(groupBox);
   pageLayout->addStretch();
-
-  // TODO
-//   buttonToChooseMethod = new QRadioButton(tr("Use a stratified design"));
-//   methodGroup_->addButton(buttonToChooseMethod, DesignOfExperimentImplementation::FromExperiment);
-//   pageLayout->addWidget(buttonToChooseMethod);
-// 
-//   QButtonGroup * designsGroup_ = new QButtonGroup;
-//   designsWidget_ = new QWidget;
-//   QVBoxLayout * designsLayout = new QVBoxLayout(designsWidget_);
-//   QRadioButton * buttonToChooseDesign = new QRadioButton(tr("Axial"));
-//   buttonToChooseDesign->setChecked(true);
-//   designsGroup_->addButton(buttonToChooseDesign);
-//   designsLayout->addWidget(buttonToChooseDesign);
-// 
-//   buttonToChooseDesign = new QRadioButton(tr("Factorial"));
-//   designsGroup_->addButton(buttonToChooseDesign);
-//   designsLayout->addWidget(buttonToChooseDesign);
-// 
-//   buttonToChooseDesign = new QRadioButton(tr("Composite"));
-//   designsGroup_->addButton(buttonToChooseDesign);
-//   designsLayout->addWidget(buttonToChooseDesign);
-// 
-//   designsWidget_->setEnabled(true);
-//   if (designOfExperiment_.getTypeDesignOfExperiment() != DesignOfExperimentImplementation::FromExperiment)
-//     designsWidget_->setEnabled(false);
-//   pageLayout->addWidget(designsWidget_);
-
-  connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SLOT(setEnabledWidgets(int)));
-}
-
-
-void DeterministicDesignPage::setEnabledWidgets(int method)
-{
-  switch (methodGroup_->checkedId())
-  {
-    case DesignOfExperimentImplementation::FromBoundsAndLevels:
-    {
-      tableView_->setEnabled(true);
-//       TODO
-//       designsWidget_->setEnabled(false);
-//       designOfExperiment_ = DesignOfExperiment(designOfExperiment_.getName(),
-//                                                designOfExperiment_.getPhysicalModel(),
-//                                                Bounds
-//                                               );
-//       emit designOfExperimentChanged(designOfExperiment_);
-      break;
-    }
-//     case DesignOfExperimentImplementation::FromExperiment:
-//     {
-//       tableView_->setEnabled(false);
-//       designsWidget_->setEnabled(true);
-//       TODO
-//       designOfExperiment_ = DesignOfExperiment(designOfExperiment_.getName(),
-//                                                designOfExperiment_.getPhysicalModel(),
-//                                                Experiment
-//                                               );
-//       emit designOfExperimentChanged(designOfExperiment_);
-//       break;
-//     }
-    default:
-      break;
-  }
-}
-
-
-void DeterministicDesignPage::setDesignOfExperiment(DesignOfExperiment & designOfExperiment)
-{
-  designOfExperiment_ = designOfExperiment;
 }
 
 
 bool DeterministicDesignPage::validatePage()
 {
-  return pageValidity_;
+  DesignOfExperiment design = DesignOfExperiment(model_->getDesignOfExperiment());
+  emit designOfExperimentChanged(design);
+
+  return true;
 }
 }

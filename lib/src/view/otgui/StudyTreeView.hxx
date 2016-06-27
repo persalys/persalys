@@ -89,7 +89,7 @@ signals:
   void removeSubWindow(QStandardItem *);
   void importPythonScript(const QString & fileName);
   void graphWindowActivated(QWidget*);
-  void graphWindowDeactivated(QWidget*);
+  void graphWindowDeactivated();
   void analysisExecutionRequired(OTStudyItem * otStudyItem, const QString & analysisName);
   void recentFilesListChanged(const QString & recentFileName);
 

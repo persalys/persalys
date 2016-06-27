@@ -21,19 +21,16 @@
 #ifndef OTGUI_MONTECARLORESULTWINDOW_HXX
 #define OTGUI_MONTECARLORESULTWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
-#include "otgui/AnalysisItem.hxx"
+#include "otgui/ResultWindow.hxx"
 #include "otgui/MonteCarloResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
-#include "otgui/NotEditableTableWidget.hxx"
+#include "otgui/DoubleSpinBox.hxx"
 
 #include <QComboBox>
-#include <QDoubleSpinBox>
-#include <QLabel>
 
 namespace OTGUI {
-class MonteCarloResultWindow : public OTguiSubWindow
+class MonteCarloResultWindow : public ResultWindow
 {
   Q_OBJECT
 
@@ -42,10 +39,15 @@ public:
 
 protected:
   void buildInterface();
-  void updateResultWidgets(int indexOutput=0);
+  void setParameters(const Analysis & analysis);
+  QWidget* getMinMaxTableWidget();
+  QWidget* getMomentsEstimatesTableWidget();
+  QWidget* getPDF_CDFWidget(const QStringList & outputNames, const QStringList & outAxisTitles);
+  QWidget* getBoxPlotWidget(const QStringList & outputNames, const QStringList & outAxisTitles);
+  QWidget* getScatterPlotsWidget(const QStringList & outputNames, const QStringList & outAxisTitles);
 
 public slots:
-  void outputFirstTabChanged(int indexOutput);
+  void updateSpinBoxes(int indexOutput=0);
   void probaValueChanged(double proba);
   void quantileValueChanged(double quantile);
   void showHideGraphConfigurationWidget(int indexTab);
@@ -63,10 +65,8 @@ private:
   GraphConfigurationWidget * scatterPlotsConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
-  NotEditableTableWidget * minMaxTable_;
-  NotEditableTableWidget * momentsEstimationsTable_;
-  QDoubleSpinBox * probaSpinBox_;
-  QDoubleSpinBox * quantileSpinBox_;
+  DoubleSpinBox * probaSpinBox_;
+  DoubleSpinBox * quantileSpinBox_;
 };
 }
 #endif

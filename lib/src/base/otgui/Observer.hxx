@@ -31,11 +31,15 @@ class OTGUI_API Observer
 {
 public:
   /** Default constructor */
-  Observer();
+  Observer(const OT::String & type="");
 
   virtual ~Observer() {};
 
+  OT::String getType() const;
   virtual void update(Observable * source, const OT::String & message) = 0;
+
+private:
+  OT::String type_;
 };
 }
 #endif

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStyledItemDelegate used to validate variables names
+ *  @brief Qt tools
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,22 +18,41 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CustomDoubleValidator.hxx"
+#include "otgui/QtTools.hxx"
 
 namespace OTGUI {
 
-CustomDoubleValidator::CustomDoubleValidator(QObject * parent)
-  : QDoubleValidator(parent)
+// SignalBlocker class
+SignalBlocker::SignalBlocker(QObject *blockedObject, bool block)
+  : blockedObject_(blockedObject)
+{
+  previousBlockingStatus_ = blockedObject_->blockSignals(block);
+}
+
+
+SignalBlocker::~SignalBlocker()
+{
+  blockedObject_->blockSignals(previousBlockingStatus_);
+}
+
+// SimpleException class
+SimpleException::SimpleException(const QString &text)
+  : text_(text)
 {
 }
 
-QValidator::State CustomDoubleValidator::validate(QString & s, int & i) const
+
+SimpleException::~SimpleException() throw(){}
+
+
+QString SimpleException::text() const
 {
-  if (s.isEmpty() || (s == "-") || (s[0].toLower() == 'e'))
-  {
-    return QValidator::Acceptable;
-  }
-  return QDoubleValidator::validate(s, i);
+  return text_;
 }
 
+
+const char *SimpleException::what() const throw()
+{
+  return text_.toStdString().c_str();
+}
 }
