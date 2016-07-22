@@ -48,6 +48,9 @@ public:
   OT::NumericalSample getConvergenceSampleLowerBound() const;
   OT::NumericalSample getConvergenceSampleUpperBound() const;
 
+  double getElapsedTime() const;
+  void setElapsedTime(const double seconds);
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
@@ -60,6 +63,7 @@ private:
   OT::NumericalSample convergenceSample_;
   OT::NumericalSample convergenceSampleLowerBound_;
   OT::NumericalSample convergenceSampleUpperBound_;
+  double elapsedTime_;
 };
 }
 #endif

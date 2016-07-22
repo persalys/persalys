@@ -33,22 +33,24 @@ static Factory<MonteCarloReliabilityResult> RegisteredFactory("MonteCarloReliabi
 /* Default constructor */
 MonteCarloReliabilityResult::MonteCarloReliabilityResult()
   : PersistentObject()
+  , elapsedTime_(0.)
 {
 }
 
 
 /* Constructor with parameters */
 MonteCarloReliabilityResult::MonteCarloReliabilityResult(const SimulationResult & simulationResults,
-                                                                         const NumericalSample & outputSample,
-                                                                         const NumericalSample & convergenceSample,
-                                                                         const NumericalSample & convergenceSampleLowerBound,
-                                                                         const NumericalSample & convergenceSampleUpperBound)
+                                                         const NumericalSample & outputSample,
+                                                         const NumericalSample & convergenceSample,
+                                                         const NumericalSample & convergenceSampleLowerBound,
+                                                         const NumericalSample & convergenceSampleUpperBound)
   : PersistentObject()
   , simulationResult_(simulationResults)
   , outputSample_(outputSample)
   , convergenceSample_(convergenceSample)
   , convergenceSampleLowerBound_(convergenceSampleLowerBound)
   , convergenceSampleUpperBound_(convergenceSampleUpperBound)
+  , elapsedTime_(0.)
 {
 }
 
@@ -90,6 +92,18 @@ NumericalSample MonteCarloReliabilityResult::getConvergenceSampleUpperBound() co
 }
 
 
+double MonteCarloReliabilityResult::getElapsedTime() const
+{
+  return elapsedTime_;
+}
+
+
+void MonteCarloReliabilityResult::setElapsedTime(const double seconds)
+{
+  elapsedTime_ = seconds;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void MonteCarloReliabilityResult::save(Advocate& adv) const
 {
@@ -99,6 +113,7 @@ void MonteCarloReliabilityResult::save(Advocate& adv) const
   adv.saveAttribute("convergenceSample_", convergenceSample_);
   adv.saveAttribute("convergenceSampleLowerBound_", convergenceSampleLowerBound_);
   adv.saveAttribute("convergenceSampleUpperBound_", convergenceSampleUpperBound_);
+  adv.saveAttribute("elapsedTime_", elapsedTime_);
 }
 
 
@@ -111,6 +126,6 @@ void MonteCarloReliabilityResult::load(Advocate& adv)
   adv.loadAttribute("convergenceSample_", convergenceSample_);
   adv.loadAttribute("convergenceSampleLowerBound_", convergenceSampleLowerBound_);
   adv.loadAttribute("convergenceSampleUpperBound_", convergenceSampleUpperBound_);
+  adv.loadAttribute("elapsedTime_", elapsedTime_);
 }
-
 }
