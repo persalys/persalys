@@ -36,6 +36,9 @@ MonteCarloAnalysis::MonteCarloAnalysis()
   : SimulationAnalysis()
   , isConfidenceIntervalRequired_(true)
   , levelConfidenceInterval_(0.95)
+  , maximumCoefficientOfVariation_(0.01)
+  , maximumElapsedTime_(60) // in seconds
+  , blockSize_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultBlockSize"))
 {
 }
 
@@ -45,6 +48,9 @@ MonteCarloAnalysis::MonteCarloAnalysis(const String & name, const PhysicalModel 
                                        const UnsignedInteger nbSimu, bool confidenceInterval, double level)
   : SimulationAnalysis(name, physicalModel, nbSimu)
   , isConfidenceIntervalRequired_(confidenceInterval)
+  , maximumCoefficientOfVariation_(0.01)
+  , maximumElapsedTime_(60) // in seconds
+  , blockSize_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultBlockSize"))
 {
   setLevelConfidenceInterval(level);
 //TODO ctr with outputNames (pas OutputCollection!) optionnel par défaut prendrait tous les outputs
@@ -87,12 +93,97 @@ void MonteCarloAnalysis::setLevelConfidenceInterval(const double levelConfidence
 void MonteCarloAnalysis::run()
 {
   RandomGenerator::SetSeed(getSeed());
-  NumericalSample inputSample(getInputSample());
+
+  NumericalSample effectiveInputSample(0, getPhysicalModel().getInputNames().getSize());
+  effectiveInputSample.setDescription(getPhysicalModel().getInputNames());
+  NumericalSample outputSample(0, getPhysicalModel().getOutputNames().getSize()); // TODO only required outputs
+  outputSample.setDescription(getPhysicalModel().getOutputNames());
+
+  const bool maximumOuterSamplingSpecified = getNbSimulations() < std::numeric_limits<int>::max();
+  const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getNbSimulations() / blockSize_)) : std::numeric_limits<int>::max();
+  const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getNbSimulations() % blockSize_ : 0;
+  const UnsignedInteger lastBlockSize = modulo == 0 ? blockSize_ : modulo;
+
+  NumericalScalar coefficientOfVariation = -1.0;
+  clock_t elapsedTime = 0;
+  const clock_t startTime = clock();
+  UnsignedInteger outerSampling = 0;
+
+  // We loop if there remains some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
+  while ((outerSampling < maximumOuterSampling)
+     && ((coefficientOfVariation == -1.0) || (coefficientOfVariation > getMaximumCoefficientOfVariation()))
+     &&  (elapsedTime < maximumElapsedTime_*CLOCKS_PER_SEC))
+  {
+    // the last block can be smaller
+    const UnsignedInteger effectiveBlockSize = outerSampling < (maximumOuterSampling - 1) ? blockSize_ : lastBlockSize;
+
+    // Perform a block of simulation
+    const NumericalSample blockInputSample(getInputSample(effectiveBlockSize));
+    effectiveInputSample.add(blockInputSample);
+
+    const NumericalSample blockOutputSample(getOutputSample(blockInputSample));
+    outputSample.add(blockOutputSample);
+
+    // stop criteria
+    if ((getMaximumCoefficientOfVariation() != -1) && (blockSize_ != 1 || (blockSize_ == 1 && outerSampling)))
+    {
+      NumericalPoint empiricalMean = outputSample.computeMean();
+      NumericalPoint empiricalStd = outputSample.computeStandardDeviationPerComponent();
+      NumericalScalar coefOfVar(0.);
+      for (int i=0; i<outputSample.getDimension(); ++i)
+      {
+        const NumericalScalar sigma_i = empiricalStd[i] / sqrt(outputSample.getSize());
+        coefOfVar = std::max(sigma_i / empiricalMean[i], coefOfVar);
+      }
+      coefficientOfVariation = coefOfVar;
+    }
+    elapsedTime = clock() - startTime;
+    ++outerSampling;
+  }
 
   // set results
-  result_ = MonteCarloResult(inputSample, getOutputSample(inputSample));
+  result_ = MonteCarloResult(effectiveInputSample, outputSample);
+  result_.setElapsedTime((float)elapsedTime / CLOCKS_PER_SEC);
 
   notify("analysisFinished");
+}
+
+
+double MonteCarloAnalysis::getMaximumCoefficientOfVariation() const
+{
+  return maximumCoefficientOfVariation_;
+}
+
+
+void MonteCarloAnalysis::setMaximumCoefficientOfVariation(const double coef)
+{
+  maximumCoefficientOfVariation_ = coef;
+}
+
+
+UnsignedInteger MonteCarloAnalysis::getMaximumElapsedTime() const
+{
+  return maximumElapsedTime_;
+}
+
+
+void MonteCarloAnalysis::setMaximumElapsedTime(const UnsignedInteger seconds)
+{
+  maximumElapsedTime_ = seconds;
+}
+
+
+UnsignedInteger MonteCarloAnalysis::getBlockSize() const
+{
+  return blockSize_;
+}
+
+
+void MonteCarloAnalysis::setBlockSize(const UnsignedInteger size)
+{
+  if (size > getNbSimulations()) // TODO check also in getMaximumCalls/NbSimulations
+    throw InvalidValueException(HERE) << "The block size can not be superior to the maximum number of simulations";
+  blockSize_ = size;
 }
 
 

@@ -45,6 +45,15 @@ public:
   double getLevelConfidenceInterval() const;
   void setLevelConfidenceInterval(const double levelConfidenceInterval);
 
+  double getMaximumCoefficientOfVariation() const;
+  void setMaximumCoefficientOfVariation(const double coef);
+
+  OT::UnsignedInteger getMaximumElapsedTime() const;
+  void setMaximumElapsedTime(const OT::UnsignedInteger seconds);
+
+  OT::UnsignedInteger getBlockSize() const;
+  void setBlockSize(const OT::UnsignedInteger size);
+
   MonteCarloResult getResult() const;
 
   virtual void run();
@@ -60,6 +69,9 @@ public:
 private:
   bool isConfidenceIntervalRequired_;
   double levelConfidenceInterval_;
+  double maximumCoefficientOfVariation_;
+  OT::UnsignedInteger maximumElapsedTime_;
+  OT::UnsignedInteger blockSize_;
   MonteCarloResult result_;
 };
 }
