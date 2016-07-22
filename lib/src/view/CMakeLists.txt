@@ -41,6 +41,7 @@ ot_add_source_file ( SensitivityAnalysisWizard.cxx )
 ot_add_source_file ( LimitStateWindow.cxx )
 ot_add_source_file ( ReliabilityAnalysisWizard.cxx )
 ot_add_source_file ( MonteCarloReliabilityResultWindow.cxx )
+ot_add_source_file ( StopCriteriaGroupBox.cxx )
 
 ot_install_header_file ( MainWindow.hxx )
 ot_install_header_file ( OTguiToolBar.hxx )
@@ -75,6 +76,7 @@ ot_install_header_file ( StudyTreeView.hxx )
 ot_install_header_file ( ImportTablePage.hxx )
 ot_install_header_file ( DeterministicDesignPage.hxx )
 ot_install_header_file ( ProbabilisticDesignPage.hxx )
+ot_install_header_file ( StopCriteriaGroupBox.hxx )
 
 qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/OTguiToolBar.hxx
@@ -105,6 +107,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/LimitStateWindow.hxx
                                   otgui/ReliabilityAnalysisWizard.hxx
                                   otgui/MonteCarloReliabilityResultWindow.hxx
+                                  otgui/StopCriteriaGroupBox.hxx
                                   )
 
 
