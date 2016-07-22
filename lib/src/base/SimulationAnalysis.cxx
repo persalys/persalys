@@ -90,6 +90,14 @@ NumericalSample SimulationAnalysis::getInputSample()
 }
 
 
+NumericalSample SimulationAnalysis::getInputSample(const UnsignedInteger nbSimu)
+{
+  NumericalSample inputSample(getPhysicalModel().getInputRandomVector().getSample(nbSimu));
+  inputSample.setDescription(getPhysicalModel().getStochasticInputNames());
+  return inputSample;
+}
+
+
 NumericalSample SimulationAnalysis::getOutputSample(NumericalSample inputSample) const
 {
 //   TODO

@@ -45,6 +45,7 @@ public:
   void setNbSimulations(const OT::UnsignedInteger nbSimu);
 
   OT::NumericalSample getInputSample();
+  OT::NumericalSample getInputSample(const OT::UnsignedInteger nbSimu);
   OT::Description getOutputNames() const;
 
   OT::UnsignedInteger getSeed() const;
