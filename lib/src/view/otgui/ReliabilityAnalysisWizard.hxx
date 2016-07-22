@@ -23,9 +23,11 @@
 
 #include "otgui/LimitState.hxx"
 #include "otgui/AnalysisWizard.hxx"
-#include "otgui/DoubleSpinBox.hxx"
+#include "otgui/UIntSpinBox.hxx"
+#include "otgui/StopCriteriaGroupBox.hxx"
 
 #include <QButtonGroup>
+#include <QLabel>
 
 namespace OTGUI {
 class ReliabilityAnalysisWizard : public AnalysisWizard
@@ -38,23 +40,25 @@ public:
   ReliabilityAnalysisWizard(OTStudy * otStudy, const LimitState & limitState);
   ReliabilityAnalysisWizard(const Analysis & analysis);
 
+  virtual bool validateCurrentPage();
+
 protected:
   void buildInterface();
 
 public slots:
-  void maxiOuterSamplingChanged(int);
   void maxiCoefficientOfVariationChanged(double);
-  void blockSizeChanged(int);
+  void maxiTimeChanged(int);
+  void maxiCallsChanged(int);
+  void blockSizeChanged(double);
   void seedChanged(int);
 
 private:
-//   TODO: LimitState limitState_; later when implementing FORM/SORM
   QButtonGroup * methodGroup_;
   QWidget * monteCarloWidget_;
-  QSpinBox * maxiOuterSamplingSpinbox_;
-  DoubleSpinBox * maxiCoefficientOfVariationSpinbox_;
+  StopCriteriaGroupBox * stopCriteriaGroupBox_;
   QSpinBox * seedSpinbox_;
-  QSpinBox * blockSizeSpinbox_;
+  UIntSpinBox * blockSizeSpinbox_;
+  QLabel * errorMessageLabel_;
 };
 }
 #endif

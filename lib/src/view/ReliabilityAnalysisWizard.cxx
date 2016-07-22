@@ -23,18 +23,17 @@
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
 
-#include <QGroupBox>
 #include <QRadioButton>
-#include <QLabel>
 #include <QVBoxLayout>
 
 #include <limits>
+
+using namespace OT;
 
 namespace OTGUI {
 
 ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(OTStudy * otStudy, const LimitState & limitState)
   : AnalysisWizard(MonteCarloReliabilityAnalysis(otStudy->getAvailableAnalysisName("reliability_"), limitState))
-//  , limitState_(limitState)
 {
   buildInterface();
 }
@@ -42,7 +41,6 @@ ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(OTStudy * otStudy, const Li
 
 ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis & analysis)
   : AnalysisWizard(analysis)
-//  , limitState_(dynamic_cast<ReliabilityAnalysis*>(&*analysis.getImplementation())->getLimitState())
 {
   buildInterface();
 }
@@ -50,13 +48,12 @@ ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis & analysis)
 
 void ReliabilityAnalysisWizard::buildInterface()
 {
-  setWindowTitle("Reliability analysis");
+  setWindowTitle("Threshold exceedance");
 
   // First Page: model
 
   // Second Page: methods
   QWizardPage * page = new QWizardPage(this);
-
   QVBoxLayout * mainLayout = new QVBoxLayout(page);
 
   QGroupBox * methodBox = new QGroupBox(tr("Method"));
@@ -69,84 +66,66 @@ void ReliabilityAnalysisWizard::buildInterface()
   methodGroup_->addButton(buttonToChooseMethod, ReliabilityAnalysisWizard::MonteCarlo);
   methodLayout->addWidget(buttonToChooseMethod);
 
-//   connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SLOT(updateMethodWidgets()));
-
   mainLayout->addWidget(methodBox);
-
-  QVBoxLayout * methodParametersLayout = new QVBoxLayout;
 
   /// monte carlo widgets
   monteCarloWidget_ = new QWidget;
-  QGridLayout *mclayout = new QGridLayout(monteCarloWidget_);
+  QVBoxLayout * monteCarloLayout = new QVBoxLayout(monteCarloWidget_);
 
-  QLabel * maxiOuterSamplingLabel = new QLabel(tr("Maximum outer sampling"));
-  maxiOuterSamplingSpinbox_ = new QSpinBox;
-  maxiOuterSamplingSpinbox_->setMinimum(2);
-  maxiOuterSamplingSpinbox_->setMaximum(std::numeric_limits<int>::max());
-  if (analysis_.getImplementation()->getClassName() == "MonteCarloReliabilityAnalysis")
-    maxiOuterSamplingSpinbox_->setValue(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getMaximumOuterSampling());
-  connect(maxiOuterSamplingSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(maxiOuterSamplingChanged(int)));
+  // stop criteria
+  const double maxCoef = dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getMaximumCoefficientOfVariation();
+  const UnsignedInteger maxTime = dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getMaximumElapsedTime();
+  const UnsignedInteger maxCalls = dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getMaximumCalls();
+  stopCriteriaGroupBox_ = new StopCriteriaGroupBox(maxCoef, maxTime, maxCalls);
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), this, SLOT(maxiCoefficientOfVariationChanged(double)));
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), this, SLOT(maxiTimeChanged(int)));
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(int)), this, SLOT(maxiCallsChanged(int)));
 
-  maxiOuterSamplingLabel->setBuddy(maxiOuterSamplingSpinbox_);
-  mclayout->addWidget(maxiOuterSamplingLabel, 0, 0);
-  mclayout->addWidget(maxiOuterSamplingSpinbox_, 0, 1);
-
-  QLabel * maxiCoefficientOfVariationLabel = new QLabel(tr("Maximum coefficient of variation"));
-  maxiCoefficientOfVariationSpinbox_ = new DoubleSpinBox;
-  maxiCoefficientOfVariationSpinbox_->setMinimum(0.);
-  maxiCoefficientOfVariationSpinbox_->setMaximum(1.);
-  maxiCoefficientOfVariationSpinbox_->setSingleStep(0.01);
-  if (analysis_.getImplementation()->getClassName() == "MonteCarloReliabilityAnalysis")
-    maxiCoefficientOfVariationSpinbox_->setValue(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getMaximumCoefficientOfVariation());
-  connect(maxiCoefficientOfVariationSpinbox_, SIGNAL(valueChanged(double)), this, SLOT(maxiCoefficientOfVariationChanged(double)));
-
-  maxiCoefficientOfVariationLabel->setBuddy(maxiCoefficientOfVariationSpinbox_);
-  mclayout->addWidget(maxiCoefficientOfVariationLabel, 1, 0);
-  mclayout->addWidget(maxiCoefficientOfVariationSpinbox_, 1, 1);
+  monteCarloLayout->addWidget(stopCriteriaGroupBox_);
 
   //// advanced parameters
   CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
   advancedParamGroupBox->setTitle(tr("Advanced parameters"));
   QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedParamGroupBox);
 
+  QLabel * blockSizeLabel = new QLabel(tr("Block size"));
+  advancedWidgetsLayout->addWidget(blockSizeLabel, 0, 0);
+  blockSizeSpinbox_ = new UIntSpinBox;
+  blockSizeSpinbox_->setMinimum(1);
+  blockSizeSpinbox_->setMaximum(std::numeric_limits<int>::max());
+  blockSizeSpinbox_->setSingleStep(100);
+  blockSizeLabel->setBuddy(blockSizeSpinbox_);
+  advancedWidgetsLayout->addWidget(blockSizeSpinbox_, 0, 1);
+  if (analysis_.getImplementation()->getClassName() == "MonteCarloReliabilityAnalysis")
+    blockSizeSpinbox_->setValue(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getBlockSize());
+  connect(blockSizeSpinbox_, SIGNAL(valueChanged(double)), this, SLOT(blockSizeChanged(double)));
+
   QLabel * seedLabel = new QLabel(tr("Seed"));
-  advancedWidgetsLayout->addWidget(seedLabel, 0, 0);
+  advancedWidgetsLayout->addWidget(seedLabel, 1, 0);
   seedSpinbox_ = new QSpinBox;
   seedSpinbox_->setMaximum(std::numeric_limits<int>::max());
   seedLabel->setBuddy(seedSpinbox_);
-  advancedWidgetsLayout->addWidget(seedSpinbox_, 0, 1);
+  advancedWidgetsLayout->addWidget(seedSpinbox_, 1, 1);
   if (analysis_.getImplementation()->getClassName() == "MonteCarloReliabilityAnalysis")
     seedSpinbox_->setValue(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getSeed());
   connect(seedSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(seedChanged(int)));
 
-  QLabel * blockSizeLabel = new QLabel(tr("Block size"));
-  advancedWidgetsLayout->addWidget(blockSizeLabel, 1, 0);
-  blockSizeSpinbox_ = new QSpinBox;
-  blockSizeSpinbox_->setMinimum(1);
-  blockSizeSpinbox_->setMaximum(std::numeric_limits<int>::max());
-  blockSizeLabel->setBuddy(blockSizeSpinbox_);
-  advancedWidgetsLayout->addWidget(blockSizeSpinbox_, 1, 1);
-  if (analysis_.getImplementation()->getClassName() == "MonteCarloReliabilityAnalysis")
-    blockSizeSpinbox_->setValue(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getBlockSize());
-  connect(blockSizeSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(blockSizeChanged(int)));
+  monteCarloLayout->addWidget(advancedParamGroupBox);
 
-  mclayout->addWidget(advancedParamGroupBox, 2, 0, 1, -1);
+  mainLayout->addWidget(monteCarloWidget_);
 
-  methodParametersLayout->addWidget(monteCarloWidget_);
-
-  mainLayout->addLayout(methodParametersLayout);
-
-//   updateMethodWidgets();
+  // error message
+  errorMessageLabel_ = new QLabel;
+  errorMessageLabel_->setWordWrap(true);
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), errorMessageLabel_, SLOT(clear()));
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), errorMessageLabel_, SLOT(clear()));
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(int)), errorMessageLabel_, SLOT(clear()));
+  connect(blockSizeSpinbox_, SIGNAL(valueChanged(double)), errorMessageLabel_, SLOT(clear()));
+  mainLayout->addStretch();
+  mainLayout->addWidget(errorMessageLabel_);
 
   addPage(page);
 }
-
-
-void ReliabilityAnalysisWizard::maxiOuterSamplingChanged(int maxi)
-{
-  dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setMaximumOuterSampling(maxi);
-}
-
 
 void ReliabilityAnalysisWizard::maxiCoefficientOfVariationChanged(double maxi)
 {
@@ -154,14 +133,61 @@ void ReliabilityAnalysisWizard::maxiCoefficientOfVariationChanged(double maxi)
 }
 
 
-void ReliabilityAnalysisWizard::blockSizeChanged(int size)
+void ReliabilityAnalysisWizard::maxiTimeChanged(int value)
 {
-  dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setBlockSize(size);
+  dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setMaximumElapsedTime(value);
+}
+
+
+void ReliabilityAnalysisWizard::maxiCallsChanged(int maxi)
+{
+  try
+  {
+    dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setMaximumCalls(maxi);
+  }
+  catch (InvalidValueException exception)
+  {
+    // check in validateCurrentPage
+  }
+}
+
+
+void ReliabilityAnalysisWizard::blockSizeChanged(double size)
+{
+  try
+  {
+    dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setBlockSize(size);
+  }
+  catch (InvalidValueException exception)
+  {
+    // check in validateCurrentPage
+  }
 }
 
 
 void ReliabilityAnalysisWizard::seedChanged(int seed)
 {
   dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setSeed(seed);
+}
+
+
+bool ReliabilityAnalysisWizard::validateCurrentPage()
+{
+  QString errorMessage = "";
+  if (!stopCriteriaGroupBox_->isValid())
+    errorMessage = tr("Please select at least one stop criteria");
+  else
+  {
+    if (!stopCriteriaGroupBox_->isMaxElapsedTimeValid())
+      errorMessage = tr("The maximum time must not be null");
+    if (stopCriteriaGroupBox_->isMaxCallsRequired())
+      if (dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getMaximumCalls() < (int)blockSizeSpinbox_->value())
+        errorMessage = tr("The maximum calls can not be inferior to the block size");
+  }
+
+  errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(errorMessage).arg("</font>"));
+  if (!errorMessage.isEmpty())
+    return false;
+  return QWizard::validateCurrentPage();
 }
 }
