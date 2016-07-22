@@ -66,9 +66,18 @@ void MonteCarloResultWindow::setParameters(const Analysis & analysis)
   QStringList strList;
   strList << tr("Central tendency parameters :") + "\n";
   strList << tr("Algorithm : ") + tr("Monte Carlo");
-  strList << tr("Sample size : ") + QString::number(MCanalysis->getNbSimulations());
   if (MCanalysis->isConfidenceIntervalRequired())
     strList << tr("Confidence level : ") + QString::number(MCanalysis->getLevelConfidenceInterval()*100) + "\%";
+  strList << tr("Maximum coefficient of variation : ") + QString::number(MCanalysis->getMaximumCoefficientOfVariation());
+  if (MCanalysis->getMaximumElapsedTime() < std::numeric_limits<int>::max())
+    strList << tr("Maximum elapsed time : ") + QString::number(MCanalysis->getMaximumElapsedTime()) + "(s)";
+  else
+    strList << tr("Maximum elapsed time : ") + "- (s)";
+  if (MCanalysis->getNbSimulations() < std::numeric_limits<int>::max())
+    strList << tr("Maximum calls : ") + QString::number(MCanalysis->getNbSimulations());
+  else
+    strList << tr("Maximum calls : ") + "-";
+  strList << tr("Block size : ") + QString::number(MCanalysis->getBlockSize());
   strList << tr("Seed : ") + QString::number(MCanalysis->getSeed());
 
   parameters_ = strList.join("\n");
@@ -134,8 +143,16 @@ void MonteCarloResultWindow::buildInterface()
     // -- results --
     QVBoxLayout * vbox = new QVBoxLayout;
 
-    // number of simulations
-    QLabel * nbSimuLabel = new QLabel(tr("Number of simulations: ") + QString::number(result_.getInputSample().getSize()) + "\n");
+    // elapsed time
+    if (result_.getElapsedTime() > 0.)
+    {
+      QLabel * elapsedTimeLabel = new QLabel(tr("Elapsed time:") + " " + QString::number(result_.getElapsedTime()) + " s");
+      elapsedTimeLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+      tabLayout->addWidget(elapsedTimeLabel);
+    }
+
+    // number of calls
+    QLabel * nbSimuLabel = new QLabel(tr("Number of calls: ") + QString::number(result_.getInputSample().getSize()) + "\n");
     nbSimuLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
     vbox->addWidget(nbSimuLabel);
 
@@ -315,55 +332,61 @@ QWidget* MonteCarloResultWindow::getMomentsEstimatesTableWidget()
     ResizableTableViewWithoutScrollBar * momentsEstimationsTableView = new ResizableTableViewWithoutScrollBar;
     momentsEstimationsTableView->horizontalHeader()->hide();
     momentsEstimationsTableView->verticalHeader()->hide();
-    CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(8, nbColumns);
+    CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(9, nbColumns);
     momentsEstimationsTableView->setModel(momentsEstimationsTable);
 
     // vertical header
-    momentsEstimationsTable->setNotEditableHeaderItem(0, 0, tr("Estimate"));
-    momentsEstimationsTableView->setSpan(0, 0, 2, 1);
-    momentsEstimationsTable->setNotEditableHeaderItem(2, 0, tr("Mean"));
-    momentsEstimationsTable->setNotEditableHeaderItem(3, 0, tr("Standard deviation"));
-    momentsEstimationsTable->setNotEditableHeaderItem(4, 0, tr("Skewness"));
-    momentsEstimationsTable->setNotEditableHeaderItem(5, 0, tr("Kurtosis"));
-    momentsEstimationsTable->setNotEditableHeaderItem(6, 0, tr("First quartile"));
-    momentsEstimationsTable->setNotEditableHeaderItem(7, 0, tr("Third quartile"));
+    int row = 0;
+    momentsEstimationsTable->setNotEditableHeaderItem(row, 0, tr("Estimate"));
+    momentsEstimationsTableView->setSpan(row, 0, 2, 1);
+    ++row;
+    momentsEstimationsTable->setNotEditableHeaderItem(++row, 0, tr("Mean"));
+    momentsEstimationsTable->setNotEditableHeaderItem(++row, 0, tr("Standard deviation"));
+    momentsEstimationsTable->setNotEditableHeaderItem(++row, 0, tr("Coefficient of variation"));
+    momentsEstimationsTable->setNotEditableHeaderItem(++row, 0, tr("Skewness"));
+    momentsEstimationsTable->setNotEditableHeaderItem(++row, 0, tr("Kurtosis"));
+    momentsEstimationsTable->setNotEditableHeaderItem(++row, 0, tr("First quartile"));
+    momentsEstimationsTable->setNotEditableHeaderItem(++row, 0, tr("Third quartile"));
 
     // horizontal header
-    momentsEstimationsTable->setNotEditableHeaderItem(0, 1, tr("Value"));
-    momentsEstimationsTableView->setSpan(0, 1, 2, 1);
+    row = 0;
+    momentsEstimationsTable->setNotEditableHeaderItem(row, 1, tr("Value"));
+    momentsEstimationsTableView->setSpan(row, 1, 2, 1);
     if (isConfidenceIntervalRequired_)
     {
-      momentsEstimationsTable->setNotEditableHeaderItem(1, 2, tr("Lower bound"));
-      momentsEstimationsTable->setNotEditableHeaderItem(1, 3, tr("Upper bound"));
+      momentsEstimationsTable->setNotEditableHeaderItem(++row, 2, tr("Lower bound"));
+      momentsEstimationsTable->setNotEditableHeaderItem(row, 3, tr("Upper bound"));
     }
     // Mean
-    momentsEstimationsTable->setNotEditableItem(2, 1, result_.getMean()[indexOutput]);
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result_.getMean()[indexOutput]);
 
     if (isConfidenceIntervalRequired_)
     {
       const double meanCILowerBound = result_.getMeanConfidenceInterval(levelConfidenceInterval_).getLowerBound()[indexOutput];
-      momentsEstimationsTable->setNotEditableItem(2, 2, meanCILowerBound);
+      momentsEstimationsTable->setNotEditableItem(row, 2, meanCILowerBound);
       const double meanCIUpperBound = result_.getMeanConfidenceInterval(levelConfidenceInterval_).getUpperBound()[indexOutput];
-      momentsEstimationsTable->setNotEditableItem(2, 3, meanCIUpperBound);
+      momentsEstimationsTable->setNotEditableItem(row, 3, meanCIUpperBound);
     }
     // Standard Deviation
-    momentsEstimationsTable->setNotEditableItem(3, 1, result_.getStandardDeviation()[indexOutput]);
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result_.getStandardDeviation()[indexOutput]);
 
     if (isConfidenceIntervalRequired_)
     {
       const double stdCILowerBound = result_.getStdConfidenceInterval(levelConfidenceInterval_).getLowerBound()[indexOutput];
-      momentsEstimationsTable->setNotEditableItem(3, 2, stdCILowerBound);
+      momentsEstimationsTable->setNotEditableItem(row, 2, stdCILowerBound);
       const double stdCIUpperBound = result_.getStdConfidenceInterval(levelConfidenceInterval_).getUpperBound()[indexOutput];
-      momentsEstimationsTable->setNotEditableItem(3, 3, stdCIUpperBound);
+      momentsEstimationsTable->setNotEditableItem(row, 3, stdCIUpperBound);
     }
+    // Coefficient of variation
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result_.getCoefficientOfVariation()[indexOutput]);
     // Skewness
-    momentsEstimationsTable->setNotEditableItem(4, 1, result_.getSkewness()[indexOutput]);
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result_.getSkewness()[indexOutput]);
     // Kurtosis
-    momentsEstimationsTable->setNotEditableItem(5, 1, result_.getKurtosis()[indexOutput]);
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result_.getKurtosis()[indexOutput]);
     // First quartile
-    momentsEstimationsTable->setNotEditableItem(6, 1, result_.getFirstQuartile()[indexOutput]);
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result_.getFirstQuartile()[indexOutput]);
     // Third quartile
-    momentsEstimationsTable->setNotEditableItem(7, 1, result_.getThirdQuartile()[indexOutput]);
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result_.getThirdQuartile()[indexOutput]);
 
     // resize table
     int titleWidth = 0;
