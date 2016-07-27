@@ -22,10 +22,11 @@
 #define OTGUI_MONTECARLOANALYSIS_HXX
 
 #include "SimulationAnalysis.hxx"
+#include "WithStopCriteriaAnalysis.hxx"
 #include "MonteCarloResult.hxx"
 
 namespace OTGUI {
-class OTGUI_API MonteCarloAnalysis : public SimulationAnalysis
+class OTGUI_API MonteCarloAnalysis : public SimulationAnalysis, public WithStopCriteriaAnalysis
 {
   CLASSNAME;
 
@@ -33,8 +34,7 @@ public:
   /** Default constructor */
   MonteCarloAnalysis();
   /** Constructor with parameters */
-  MonteCarloAnalysis(const OT::String & name, const PhysicalModel & physicalModel,
-                     const OT::UnsignedInteger nbSimu=10000, bool confidenceInterval=true, double level=0.95);
+  MonteCarloAnalysis(const OT::String & name, const PhysicalModel & physicalModel);
 
   /** Virtual constructor */
   virtual MonteCarloAnalysis * clone() const;
@@ -44,15 +44,6 @@ public:
 
   double getLevelConfidenceInterval() const;
   void setLevelConfidenceInterval(const double levelConfidenceInterval);
-
-  double getMaximumCoefficientOfVariation() const;
-  void setMaximumCoefficientOfVariation(const double coef);
-
-  OT::UnsignedInteger getMaximumElapsedTime() const;
-  void setMaximumElapsedTime(const OT::UnsignedInteger seconds);
-
-  OT::UnsignedInteger getBlockSize() const;
-  void setBlockSize(const OT::UnsignedInteger size);
 
   MonteCarloResult getResult() const;
 
@@ -69,9 +60,6 @@ public:
 private:
   bool isConfidenceIntervalRequired_;
   double levelConfidenceInterval_;
-  double maximumCoefficientOfVariation_;
-  OT::UnsignedInteger maximumElapsedTime_;
-  OT::UnsignedInteger blockSize_;
   MonteCarloResult result_;
 };
 }

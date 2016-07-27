@@ -96,7 +96,7 @@ void CentralTendencyWizard::buildInterface()
   // stop criteria
   const double maxCoef = MCAnalysis_.getMaximumCoefficientOfVariation();
   const UnsignedInteger maxTime = MCAnalysis_.getMaximumElapsedTime();
-  const UnsignedInteger maxCalls = MCAnalysis_.getNbSimulations();
+  const UnsignedInteger maxCalls = MCAnalysis_.getMaximumCalls();
   stopCriteriaGroupBox_ = new StopCriteriaGroupBox(maxCoef, maxTime, maxCalls);
   connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), this, SLOT(maxiCoefficientOfVariationChanged(double)));
   connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), this, SLOT(maxiTimeChanged(int)));
@@ -196,7 +196,7 @@ void CentralTendencyWizard::maxiCallsChanged(int maxi)
 {
   try
   {
-    MCAnalysis_.setNbSimulations(maxi);
+    MCAnalysis_.setMaximumCalls(maxi);
   }
   catch (InvalidValueException exception)
   {
@@ -248,7 +248,7 @@ bool CentralTendencyWizard::validateCurrentPage()
       if (!stopCriteriaGroupBox_->isMaxElapsedTimeValid())
         errorMessage = tr("The maximum time must not be null");
       if (stopCriteriaGroupBox_->isMaxCallsRequired())
-        if (MCAnalysis_.getNbSimulations() < (int)blockSizeSpinbox_->value())
+        if (MCAnalysis_.getMaximumCalls() < (int)blockSizeSpinbox_->value())
           errorMessage = tr("The maximum calls can not be inferior to the block size");
     }
     errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(errorMessage).arg("</font>"));

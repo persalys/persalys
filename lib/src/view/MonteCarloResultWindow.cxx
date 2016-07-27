@@ -73,8 +73,8 @@ void MonteCarloResultWindow::setParameters(const Analysis & analysis)
     strList << tr("Maximum elapsed time : ") + QString::number(MCanalysis->getMaximumElapsedTime()) + "(s)";
   else
     strList << tr("Maximum elapsed time : ") + "- (s)";
-  if (MCanalysis->getNbSimulations() < std::numeric_limits<int>::max())
-    strList << tr("Maximum calls : ") + QString::number(MCanalysis->getNbSimulations());
+  if (MCanalysis->getMaximumCalls() < std::numeric_limits<int>::max())
+    strList << tr("Maximum calls : ") + QString::number(MCanalysis->getMaximumCalls());
   else
     strList << tr("Maximum calls : ") + "-";
   strList << tr("Block size : ") + QString::number(MCanalysis->getBlockSize());
