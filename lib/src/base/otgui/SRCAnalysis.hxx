@@ -38,6 +38,9 @@ public:
   /** Virtual constructor */
   virtual SRCAnalysis * clone() const;
 
+  OT::UnsignedInteger getSimulationsNumber() const;
+  void setSimulationsNumber(const OT::UnsignedInteger number);
+
   SRCResult getResult() const;
 
   virtual void run();
@@ -51,6 +54,7 @@ public:
   void load(OT::Advocate & adv);
 
 private:
+  OT::UnsignedInteger simulationsNumber_;
   SRCResult result_;
 };
 }

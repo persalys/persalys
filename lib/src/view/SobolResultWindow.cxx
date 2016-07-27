@@ -48,7 +48,7 @@ void SobolResultWindow::setParameters(const Analysis & analysis)
   QStringList strList;
   strList << tr("Sensitivity analysis parameters :") + "\n";
   strList << tr("Algorithm : ") + tr("Sobol");
-  strList << tr("Sample size : ") + QString::number(SRCanalysis->getNbSimulations());
+  strList << tr("Sample size : ") + QString::number(SRCanalysis->getSimulationsNumber());
   strList << tr("Seed : ") + QString::number(SRCanalysis->getSeed());
   strList << tr("Block size : ") + QString::number(SRCanalysis->getBlockSize());
 

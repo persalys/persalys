@@ -24,7 +24,6 @@
 #include "otgui/CopyableTableView.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
 
-
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
@@ -52,7 +51,7 @@ void SRCResultWindow::setParameters(const Analysis & analysis)
   QStringList strList;
   strList << tr("Sensitivity analysis parameters :") + "\n";
   strList << tr("Algorithm : ") + tr("Standardized Regression Coefficients");
-  strList << tr("Sample size : ") + QString::number(SRCanalysis->getNbSimulations());
+  strList << tr("Sample size : ") + QString::number(SRCanalysis->getSimulationsNumber());
   strList << tr("Seed : ") + QString::number(SRCanalysis->getSeed());
 
   parameters_ = strList.join("\n");

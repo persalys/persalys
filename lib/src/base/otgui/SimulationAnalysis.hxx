@@ -26,25 +26,19 @@
 namespace OTGUI {
 class OTGUI_API SimulationAnalysis : public AnalysisImplementation
 {
-  CLASSNAME;
-
 public:
   /** Default constructor */
   SimulationAnalysis();
   /** Constructor with parameters */
-  SimulationAnalysis(const OT::String & name, const PhysicalModel & physicalModel, const OT::UnsignedInteger nbSimu);
+  SimulationAnalysis(const OT::String & name, const PhysicalModel & physicalModel);
 
   /** Virtual constructor */
-  virtual SimulationAnalysis * clone() const;
+  virtual SimulationAnalysis * clone() const = 0;
 
   // TODO choose output(s) to evaluate. But maybe use outputNames instead of OutputCollection
 //   OutputCollection getOutputs() const;
 //   void setOutputs(const OutputCollection & outputs);
 
-  OT::UnsignedInteger getNbSimulations() const;
-  void setNbSimulations(const OT::UnsignedInteger nbSimu);
-
-  OT::NumericalSample getInputSample();
   OT::NumericalSample getInputSample(const OT::UnsignedInteger nbSimu);
   OT::Description getOutputNames() const;
 
@@ -64,7 +58,6 @@ protected:
 private:
   // TODO choose output(s) to evaluate
 //   OT::PersistentCollection<Output> outputs_;
-  OT::UnsignedInteger nbSimulations_;
   OT::UnsignedInteger seed_;
 };
 }
