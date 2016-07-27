@@ -27,7 +27,7 @@ using namespace OT;
 namespace OTGUI {
 
 SampleTableModel::SampleTableModel(const NumericalSample & data, QObject * parent)
-  : QStandardItemModel(data.getSize(), data.getDimension(), parent)
+  : CustomStandardItemModel(data.getSize(), data.getDimension(), parent)
   , data_(data)
   , sampleIsValid_(true)
 {
