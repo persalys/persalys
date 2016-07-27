@@ -29,6 +29,7 @@
 #include <QMessageBox>
 #include <QSettings>
 
+#include "otgui/DataModel.hxx"
 #include "otgui/AnalyticalPhysicalModel.hxx"
 #include "otgui/PythonPhysicalModel.hxx"
 #ifdef OTGUI_HAVE_YACS
@@ -39,6 +40,7 @@
 #include "otgui/PythonPhysicalModelWindow.hxx"
 #include "otgui/ProbabilisticModelWindow.hxx"
 #include "otgui/LimitStateWindow.hxx"
+#include "otgui/DataModelWizard.hxx"
 #include "otgui/DesignOfExperimentWizard.hxx"
 #include "otgui/DesignOfExperimentWindow.hxx"
 #include "otgui/AnalysisExecutionFailedWindow.hxx"
@@ -110,7 +112,12 @@ void StudyTreeView::buildActions()
   closeOTStudy_ = new QAction(QIcon(":/images/window-close.png"), tr("Close"), this);
   closeOTStudy_->setStatusTip(tr("Close the OTStudy"));
   connect(closeOTStudy_, SIGNAL(triggered()), this, SLOT(closeOTStudy()));
-  
+
+  // new data model
+  newDataModel_ = new QAction(tr("New data model"), this);
+  newDataModel_->setStatusTip(tr("Create a new data model"));
+  connect(newDataModel_, SIGNAL(triggered()), this, SLOT(createNewDataModel()));
+
   // new physical model actions
   newAnalyticalPhysicalModel_ = new QAction(tr("New analytical physical model"), this);
   newAnalyticalPhysicalModel_->setStatusTip(tr("Create a new analytical physical model"));
@@ -206,6 +213,7 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
 #ifdef OTGUI_HAVE_YACS
     actions.append(newYACSPhysicalModel_);
 #endif
+    actions.append(newDataModel_);
     actions.append(saveOTStudy_);
     actions.append(closeOTStudy_);
   }
@@ -311,6 +319,18 @@ bool StudyTreeView::isLimitStateValid(const QModelIndex & currentIndex)
 void StudyTreeView::createNewOTStudy()
 {
   treeViewModel_->createNewOTStudy();
+}
+
+
+void StudyTreeView::createNewDataModel()
+{
+  QModelIndex studyIndex = selectionModel()->currentIndex();
+  OTStudyItem * studyItem = static_cast<OTStudyItem*>(treeViewModel_->itemFromIndex(studyIndex));
+  DataModel newDataModel(studyItem->getOTStudy()->getAvailableDataModelName());
+  QSharedPointer<DataModelWizard> wizard = QSharedPointer<DataModelWizard>(new DataModelWizard(newDataModel));
+
+  if (wizard->exec())
+    studyItem->getOTStudy()->add(wizard->getDataModel());
 }
 
 
