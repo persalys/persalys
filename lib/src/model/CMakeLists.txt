@@ -8,6 +8,7 @@ ot_add_source_file ( InputTableProbabilisticModel.cxx )
 ot_add_source_file ( OutputTableModel.cxx )
 ot_add_source_file ( ExperimentTableModel.cxx )
 ot_add_source_file ( CorrelationTableModel.cxx )
+ot_add_source_file ( DataModelTableModel.cxx )
 ot_add_source_file ( DataModelItem.cxx )
 ot_add_source_file ( LimitStateItem.cxx )
 ot_add_source_file ( DesignOfExperimentItem.cxx )
@@ -40,6 +41,7 @@ qt5_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
                                     otgui/OutputTableModel.hxx
                                     otgui/ExperimentTableModel.hxx
                                     otgui/CorrelationTableModel.hxx
+                                    otgui/DataModelTableModel.hxx
                                     otgui/DataModelItem.hxx
                                     otgui/AnalysisItem.hxx
                                     otgui/StudyTreeViewModel.hxx
