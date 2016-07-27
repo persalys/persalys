@@ -34,7 +34,7 @@ public:
   ReliabilityAnalysis(const OT::String & name, const LimitState & limitState);
 
   /** Virtual constructor */
-  virtual ReliabilityAnalysis * clone() const;
+  virtual ReliabilityAnalysis * clone() const = 0;
 
   LimitState getLimitState() const;
 

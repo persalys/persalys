@@ -41,13 +41,6 @@ ReliabilityAnalysis::ReliabilityAnalysis(const String & name, const LimitState &
 }
 
 
-/* Virtual constructor */
-ReliabilityAnalysis* ReliabilityAnalysis::clone() const
-{
-  return new ReliabilityAnalysis(*this);
-}
-
-
 LimitState ReliabilityAnalysis::getLimitState() const
 {
   return limitState_;
