@@ -39,7 +39,12 @@ OTStudyItem::OTStudyItem(OTStudy * otStudy)
 
 void OTStudyItem::update(Observable * source, const String & message)
 {
-  if (message == "addPhysicalModel")
+  if (message == "addDataModel")
+  {
+    DataModel addedDataModel = otStudy_->getDataModels()[otStudy_->getDataModels().getSize()-1];
+    addDataModelItem(addedDataModel);
+  }
+  else if (message == "addPhysicalModel")
   {
     PhysicalModel addedPhysicalModel = otStudy_->getPhysicalModels()[otStudy_->getPhysicalModels().getSize()-1];
     addPhysicalModelItem(addedPhysicalModel);
@@ -104,6 +109,16 @@ void OTStudyItem::updateAnalysis(const Analysis & analysis)
 void OTStudyItem::updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
 {
   otStudy_->getDesignOfExperimentByName(designOfExperiment.getName()).setImplementationAsPersistentObject(designOfExperiment.getImplementation());
+}
+
+
+void OTStudyItem::addDataModelItem(DataModel & dataModel)
+{
+  // Physical model item
+  DataModelItem * newDataModelItem = new DataModelItem(dataModel);
+  dataModel.addObserver(newDataModelItem);
+  connect(newDataModelItem, SIGNAL(dataModelRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
+  appendRow(newDataModelItem);
 }
 
 

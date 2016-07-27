@@ -21,6 +21,7 @@
 #ifndef OTGUI_OTSTUDYITEM_HXX
 #define OTGUI_OTSTUDYITEM_HXX
 
+#include "otgui/DataModelItem.hxx"
 #include "otgui/PhysicalModelItem.hxx"
 #include "otgui/ProbabilisticModelItem.hxx"
 #include "otgui/DesignOfExperimentItem.hxx"
@@ -38,6 +39,7 @@ public:
 
   void update(Observable * source, const OT::String & message);
 
+  void addDataModelItem(DataModel & dataModel);
   void addPhysicalModelItem(PhysicalModel & physicalModel);
   void addDesignOfExperimentItem(DesignOfExperiment & design);
   void addLimitStateItem(LimitState & limitState);
@@ -54,6 +56,7 @@ public slots:
   void updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
   void removeItem(QStandardItem*);
 signals:
+  void newDataModelItemCreated(DataModelItem*);
   void newPhysicalModelItemCreated(PhysicalModelItem*);
   void newProbabilisticModelItemCreated(ProbabilisticModelItem*);
   void newDesignOfExperimentItemCreated(DesignOfExperimentItem*);
