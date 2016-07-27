@@ -32,11 +32,11 @@ namespace OTGUI {
 
 static Factory<OTStudy> RegisteredFactory;
 
+static Factory<PersistentCollection<DataModel> > RegisteredFactory_CollDM;
 static Factory<PersistentCollection<PhysicalModel> > RegisteredFactory_CollPM;
 static Factory<PersistentCollection<DesignOfExperiment> > RegisteredFactory_CollDOE;
 static Factory<PersistentCollection<LimitState> > RegisteredFactory_CollLS;
 static Factory<PersistentCollection<Analysis> > RegisteredFactory_CollAn;
-
 
 Collection<Pointer<OTStudy> > OTStudy::OTStudies_;
 Description OTStudy::OTStudiesFileNames_;
@@ -166,7 +166,65 @@ void OTStudy::setFileName(const String& fileName)
   notify("fileNameChanged");
 }
 
+// ----- DATA MODEL -----
+Collection< DataModel > OTStudy::getDataModels() const
+{
+  return dataModels_;
+}
 
+
+DataModel & OTStudy::getDataModelByName(const String & dataModelName)
+{
+  for (UnsignedInteger i=0; i<dataModels_.getSize(); ++i)
+    if (dataModels_[i].getName() == dataModelName)
+      return dataModels_[i];
+  throw InvalidArgumentException(HERE) << "The given name " << dataModelName <<" does not correspond to a data model of the study.\n"; 
+}
+
+
+bool OTStudy::hasDataModelNamed(const String & dataModelName) const
+{
+  for (UnsignedInteger i=0; i<dataModels_.getSize(); ++i)
+    if (dataModels_[i].getName() == dataModelName)
+      return true;
+  return false;
+}
+
+
+String OTStudy::getAvailableDataModelName() const
+{
+  int i = 0;
+  String rootName = "dataModel_";
+  while (hasDataModelNamed(rootName + (OSS()<<i).str()))
+    ++i;
+  return rootName + (OSS()<<i).str();
+}
+
+
+void OTStudy::add(const DataModel & dataModel)
+{
+  if (hasDataModelNamed(dataModel.getName()))
+    throw InvalidArgumentException(HERE) << "The study has already contained a data model named " << dataModel.getName();
+
+  dataModels_.add(dataModel);
+  notify("addDataModel");
+}
+
+
+void OTStudy::remove(DataModel & dataModel)
+{
+  for (UnsignedInteger i=0; i<dataModels_.getSize(); ++i)
+    if (dataModels_[i].getName() == dataModel.getName())
+    {
+      dataModels_.erase(dataModels_.begin() + i);
+      break;
+    }
+
+  dataModel.notify("dataModelRemoved");
+}
+
+
+// ----- PHYSICAL MODEL -----
 Collection<PhysicalModel> OTStudy::getPhysicalModels() const
 {
   return physicalModels_;
@@ -185,7 +243,7 @@ PhysicalModel & OTStudy::getPhysicalModelByName(const String & physicalModelName
 bool OTStudy::hasPhysicalModelNamed(const String & physicalModelName) const
 {
   for (UnsignedInteger i=0; i<physicalModels_.getSize(); ++i)
-    if (physicalModels_[i].getImplementation()->getName() == physicalModelName)
+    if (physicalModels_[i].getName() == physicalModelName)
       return true;
   return false;
 }
@@ -278,6 +336,7 @@ void OTStudy::remove(const PhysicalModel & physicalModel)
 }
 
 
+// ----- DESIGN OF EXPERIMENT -----
 Collection<DesignOfExperiment> OTStudy::getDesignOfExperiments() const
 {
   return designOfExperiments_;
@@ -296,7 +355,7 @@ DesignOfExperiment & OTStudy::getDesignOfExperimentByName(const String & designO
 bool OTStudy::hasDesignOfExperimentNamed(const String & designOfExperimentName) const
 {
   for (UnsignedInteger i=0; i<designOfExperiments_.getSize(); ++i)
-    if (designOfExperiments_[i].getImplementation()->getName() == designOfExperimentName)
+    if (designOfExperiments_[i].getName() == designOfExperimentName)
       return true;
   return false;
 }
@@ -338,6 +397,8 @@ void OTStudy::remove(const DesignOfExperiment & designOfExperiment)
 }
 
 
+
+// ----- ANALYS -----
 Collection<Analysis> OTStudy::getAnalyses() const
 {
   return analyses_;
@@ -356,7 +417,7 @@ Analysis & OTStudy::getAnalysisByName(const String & analysisName)
 bool OTStudy::hasAnalysisNamed(const String & analysisName) const
 {
   for (UnsignedInteger i=0; i<analyses_.getSize(); ++i)
-    if (analyses_[i].getImplementation()->getName() == analysisName)
+    if (analyses_[i].getName() == analysisName)
       return true;
   return false;
 }
@@ -401,6 +462,7 @@ void OTStudy::remove(const Analysis & analysis)
 }
 
 
+// ----- LIMIT STATE -----
 Collection<LimitState> OTStudy::getLimitStates() const
 {
   return limitStates_;
@@ -410,7 +472,7 @@ Collection<LimitState> OTStudy::getLimitStates() const
 bool OTStudy::hasLimitStateNamed(const String & limitStateName) const
 {
   for (UnsignedInteger i=0; i<limitStates_.getSize(); ++i)
-    if (limitStates_[i].getImplementation()->getName() == limitStateName)
+    if (limitStates_[i].getName() == limitStateName)
       return true;
   return false;
 }
@@ -491,6 +553,12 @@ String OTStudy::getPythonScript()
   result += getName() + " = otguibase.OTStudy('" + getName() + "')\n";
   result += "otguibase.OTStudy.Add(" + getName() + ")\n";
 
+  for (Collection<DataModel>::iterator it=dataModels_.begin(); it!= dataModels_.end(); ++it)
+  {
+    result += (*it).getPythonScript();
+    result += getName() + ".add(" + (*it).getName() + ")\n";
+  }
+
   for (Collection<PhysicalModel>::iterator it=physicalModels_.begin(); it!= physicalModels_.end(); ++it)
   {
     result += (*it).getPythonScript();
@@ -529,6 +597,7 @@ void OTStudy::save(const String & xmlFileName)
 void OTStudy::save(Advocate & adv) const
 {
   PersistentObject::save(adv);
+  adv.saveAttribute("dataModels_", dataModels_);
   adv.saveAttribute("physicalModels_", physicalModels_);
   adv.saveAttribute("designOfExperiments_", designOfExperiments_);
   adv.saveAttribute("limitStates_", limitStates_);
@@ -540,6 +609,7 @@ void OTStudy::save(Advocate & adv) const
 void OTStudy::load(Advocate & adv)
 {
   PersistentObject::load(adv);
+  adv.loadAttribute("dataModels_", dataModels_);
   adv.loadAttribute("physicalModels_", physicalModels_);
   adv.loadAttribute("designOfExperiments_", designOfExperiments_);
   adv.loadAttribute("limitStates_", limitStates_);

@@ -22,6 +22,7 @@
 #define OTGUI_OTSTUDY_HXX
 
 #include "DesignOfExperiment.hxx"
+#include "DataModel.hxx"
 #include "Analysis.hxx"
 #include "LimitState.hxx"
 #include "Observer.hxx"
@@ -50,6 +51,13 @@ public:
 
   OT::String getFileName() const;
   void setFileName(const OT::String & fileName);
+
+  OT::Collection<DataModel> getDataModels() const;
+  DataModel & getDataModelByName(const OT::String & dataModelName);
+  bool hasDataModelNamed(const OT::String & dataModelName) const;
+  OT::String getAvailableDataModelName() const;
+  void add(const DataModel & dataModel);
+  void remove(DataModel & dataModel);
 
   OT::Collection<PhysicalModel> getPhysicalModels() const;
   PhysicalModel & getPhysicalModelByName(const OT::String & physicalModelName);
@@ -95,6 +103,7 @@ private:
   static OT::Description OTStudiesFileNames_;
   static Observer * OTStudyObserver_;
   OT::String fileName_;
+  OT::PersistentCollection<DataModel> dataModels_;
   OT::PersistentCollection<PhysicalModel> physicalModels_;
   OT::PersistentCollection<DesignOfExperiment> designOfExperiments_;
   OT::PersistentCollection<Analysis> analyses_;
