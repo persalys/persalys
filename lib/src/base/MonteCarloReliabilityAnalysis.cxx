@@ -35,10 +35,7 @@ static Factory<MonteCarloReliabilityAnalysis> RegisteredFactory("MonteCarloRelia
 /* Default constructor */
 MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis()
   : ReliabilityAnalysis()
-  , maximumCalls_(std::numeric_limits<int>::max())
-  , maximumCoefficientOfVariation_(0.01)
-  , maximumElapsedTime_(60) // in seconds
-  , blockSize_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultBlockSize"))
+  , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
 {
 }
@@ -48,10 +45,7 @@ MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis()
 MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis(const String & name,
                                                              const LimitState & limitState)
   : ReliabilityAnalysis(name, limitState)
-  , maximumCalls_(std::numeric_limits<int>::max())
-  , maximumCoefficientOfVariation_(0.01)
-  , maximumElapsedTime_(60) // in seconds
-  , blockSize_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultBlockSize"))
+  , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
 {
 }
@@ -61,17 +55,6 @@ MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis(const String & name
 MonteCarloReliabilityAnalysis* MonteCarloReliabilityAnalysis::clone() const
 {
   return new MonteCarloReliabilityAnalysis(*this);
-}
-
-
-bool MonteCarloReliabilityAnalysis::Stop(void * p)
-{
-  TimeCriteria * arg = (TimeCriteria*)p;
-  arg->elapsedTime_ = clock()-arg->startTime_;
-  // stop algorithm when the elapsed time is superior to the max elapsed time
-  if (arg->elapsedTime_ > arg->maxElapsedTime_)
-    return true;
-  return false;
 }
 
 
@@ -90,16 +73,16 @@ void MonteCarloReliabilityAnalysis::run()
 
   MonteCarlo algo = MonteCarlo(event);
   UnsignedInteger maximumOuterSampling = std::numeric_limits<int>::max();
-  if (maximumCalls_ < std::numeric_limits<int>::max())
+  if (getMaximumCalls() < std::numeric_limits<int>::max())
   {
-    algo.setConvergenceStrategy(Compact(maximumCalls_)); // TODO: propose in wizard the convergence sample's size?
-    maximumOuterSampling = static_cast<UnsignedInteger>(ceil(1.0 * maximumCalls_ / blockSize_));
+    algo.setConvergenceStrategy(Compact(getMaximumCalls())); // TODO: propose in wizard the convergence sample's size?
+    maximumOuterSampling = static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize()));
   }
   algo.setMaximumOuterSampling(maximumOuterSampling);
-  algo.setMaximumCoefficientOfVariation(maximumCoefficientOfVariation_);
-  algo.setBlockSize(blockSize_);
+  algo.setMaximumCoefficientOfVariation(getMaximumCoefficientOfVariation());
+  algo.setBlockSize(getBlockSize());
 
-  TimeCriteria data(maximumElapsedTime_);
+  TimeCriteria data(getMaximumElapsedTime());
   algo.setStopCallback(&Stop, &data);
 
   algo.run();
@@ -118,58 +101,6 @@ void MonteCarloReliabilityAnalysis::run()
   function.disableHistory();
 
   notify("analysisFinished");
-}
-
-
-UnsignedInteger MonteCarloReliabilityAnalysis::getMaximumCalls() const
-{
-  return maximumCalls_;
-}
-
-
-void MonteCarloReliabilityAnalysis::setMaximumCalls(const UnsignedInteger maxi)
-{
-  if (maxi < blockSize_)
-    throw InvalidValueException(HERE) << "The maximum calls can not be inferior to the block size";
-  maximumCalls_ = maxi;
-}
-
-
-double MonteCarloReliabilityAnalysis::getMaximumCoefficientOfVariation() const
-{
-  return maximumCoefficientOfVariation_;
-}
-
-
-void MonteCarloReliabilityAnalysis::setMaximumCoefficientOfVariation(const double coef)
-{
-  maximumCoefficientOfVariation_ = coef;
-}
-
-
-UnsignedInteger MonteCarloReliabilityAnalysis::getMaximumElapsedTime() const
-{
-  return maximumElapsedTime_;
-}
-
-
-void MonteCarloReliabilityAnalysis::setMaximumElapsedTime(const UnsignedInteger seconds)
-{
-  maximumElapsedTime_ = seconds;
-}
-
-
-UnsignedInteger MonteCarloReliabilityAnalysis::getBlockSize() const
-{
-  return blockSize_;
-}
-
-
-void MonteCarloReliabilityAnalysis::setBlockSize(const UnsignedInteger size)
-{
-  if (size > maximumCalls_)
-    throw InvalidValueException(HERE) << "The block size can not be superior to the maximum calls";
-  blockSize_ = size;
 }
 
 
@@ -195,13 +126,13 @@ String MonteCarloReliabilityAnalysis::getPythonScript() const
 {
   OSS oss;
   oss << getName() << " = otguibase.MonteCarloReliabilityAnalysis('" << getName() << "', " << getLimitState().getName() << ")\n";
-  if (maximumCalls_ != std::numeric_limits<int>::max())
-    oss << getName() << ".setMaximumCalls(" << maximumCalls_ << ")\n";
-  oss << getName() << ".setMaximumCoefficientOfVariation(" << maximumCoefficientOfVariation_ << ")\n";
-  if (maximumElapsedTime_ != std::numeric_limits<int>::max())
-    oss << getName() << ".setMaximumElapsedTime(" << maximumElapsedTime_ << ")\n";
-  oss << getName() << ".setBlockSize(" << blockSize_ << ")\n";
-  oss << getName() << ".setSeed(" << seed_ << ")\n";
+  if (getMaximumCalls() != std::numeric_limits<int>::max())
+    oss << getName() << ".setMaximumCalls(" << getMaximumCalls() << ")\n";
+  oss << getName() << ".setMaximumCoefficientOfVariation(" << getMaximumCoefficientOfVariation() << ")\n";
+  if (getMaximumElapsedTime() != std::numeric_limits<int>::max())
+    oss << getName() << ".setMaximumElapsedTime(" << getMaximumElapsedTime() << ")\n";
+  oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
+  oss << getName() << ".setSeed(" << getSeed() << ")\n";
 
   return oss;
 }
@@ -217,10 +148,7 @@ bool MonteCarloReliabilityAnalysis::analysisLaunched() const
 void MonteCarloReliabilityAnalysis::save(Advocate & adv) const
 {
   ReliabilityAnalysis::save(adv);
-  adv.saveAttribute("maximumCalls_", maximumCalls_);
-  adv.saveAttribute("maximumCoefficientOfVariation_", maximumCoefficientOfVariation_);
-  adv.saveAttribute("maximumElapsedTime_", maximumElapsedTime_);
-  adv.saveAttribute("blockSize_", blockSize_);
+  WithStopCriteriaAnalysis::save(adv);
   adv.saveAttribute("seed_", seed_);
   adv.saveAttribute("result_", result_);
 }
@@ -230,10 +158,7 @@ void MonteCarloReliabilityAnalysis::save(Advocate & adv) const
 void MonteCarloReliabilityAnalysis::load(Advocate & adv)
 {
   ReliabilityAnalysis::load(adv);
-  adv.loadAttribute("maximumCalls_", maximumCalls_);
-  adv.loadAttribute("maximumCoefficientOfVariation_", maximumCoefficientOfVariation_);
-  adv.loadAttribute("maximumElapsedTime_", maximumElapsedTime_);
-  adv.loadAttribute("blockSize_", blockSize_);
+  WithStopCriteriaAnalysis::load(adv);
   adv.loadAttribute("seed_", seed_);
   adv.loadAttribute("result_", result_);
 }

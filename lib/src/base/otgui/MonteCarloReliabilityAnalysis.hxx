@@ -22,11 +22,11 @@
 #define OTGUI_MONTECARLORELIABILITYANALYSIS_HXX
 
 #include "ReliabilityAnalysis.hxx"
-#include "LimitState.hxx"
+#include "WithStopCriteriaAnalysis.hxx"
 #include "MonteCarloReliabilityResult.hxx"
 
 namespace OTGUI {
-class OTGUI_API MonteCarloReliabilityAnalysis : public ReliabilityAnalysis
+class OTGUI_API MonteCarloReliabilityAnalysis : public ReliabilityAnalysis, public WithStopCriteriaAnalysis
 {
   CLASSNAME;
 
@@ -38,18 +38,6 @@ public:
 
   /** Virtual constructor */
   virtual MonteCarloReliabilityAnalysis * clone() const;
-
-  OT::UnsignedInteger getMaximumCalls() const;
-  void setMaximumCalls(const OT::UnsignedInteger maxi);
-
-  double getMaximumCoefficientOfVariation() const;
-  void setMaximumCoefficientOfVariation(const double coef);
-
-  OT::UnsignedInteger getMaximumElapsedTime() const;
-  void setMaximumElapsedTime(const OT::UnsignedInteger seconds);
-
-  OT::UnsignedInteger getBlockSize() const;
-  void setBlockSize(const OT::UnsignedInteger size);
 
   OT::UnsignedInteger getSeed() const;
   void setSeed(const OT::UnsignedInteger seed);
@@ -66,25 +54,7 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
-protected:
-  struct TimeCriteria
-  {
-    TimeCriteria() : startTime_(clock()), maxElapsedTime_(0.){};
-    TimeCriteria(int max) : startTime_(clock()), maxElapsedTime_(max*CLOCKS_PER_SEC){};
-    virtual ~TimeCriteria(){};
-    clock_t startTime_;
-    clock_t elapsedTime_;
-    clock_t maxElapsedTime_;
-  };
-  /** Stop callback */
-  typedef OT::Bool (*StopCallback)(void * data);
-  static OT::Bool Stop(void * p);
-
 private:
-  OT::UnsignedInteger maximumCalls_;
-  double maximumCoefficientOfVariation_;
-  OT::UnsignedInteger maximumElapsedTime_;
-  OT::UnsignedInteger blockSize_;
   OT::UnsignedInteger seed_;
   MonteCarloReliabilityResult result_;
 };
