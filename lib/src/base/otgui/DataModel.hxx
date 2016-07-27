@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class to define designs of experiments
+ *  @brief Class to define data model
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,36 +18,41 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_FROMFILEDESIGNOFEXPERIMENT_HXX
-#define OTGUI_FROMFILEDESIGNOFEXPERIMENT_HXX
+#ifndef OTGUI_DATAMODEL_HXX
+#define OTGUI_DATAMODEL_HXX
 
-#include "DesignOfExperimentImplementation.hxx"
+#include "FromFileDesignOfExperiment.hxx"
 
 namespace OTGUI {
-class OTGUI_API FromFileDesignOfExperiment : public DesignOfExperimentImplementation
+class OTGUI_API DataModel : public FromFileDesignOfExperiment
 {
   CLASSNAME;
 
 public:
   /** Default constructor */
-  FromFileDesignOfExperiment();
+  explicit DataModel(const OT::String & name="Unnamed");
+
   /** Constructor with parameters */
-  FromFileDesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel);
-  /** Constructor with parameters */
-  FromFileDesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel,
-                             const OT::String & fileName, const OT::Indices & inputColumns);
+  DataModel(const OT::String & name, const OT::String & fileName,
+            const OT::Indices & inputColumns, const OT::Indices & outputColumns,
+            const OT::Description & inputNames=OT::Description(),
+            const OT::Description & outputNames=OT::Description());
 
   /** Virtual constructor */
-  virtual FromFileDesignOfExperiment * clone() const;
+  virtual DataModel * clone() const;
 
   void setFileName(const OT::String & fileName);
-  OT::String getFileName() const;
-  OT::Indices getInputColumns() const;
-  void setInputColumns(const OT::Indices & inputColumns);
 
-  static OT::NumericalSample ImportSample(const OT::String & fileName);
+  void setInputColumns(const OT::Indices & inputColumns);
+  OT::Indices getOutputColumns() const;
+  void setColumns(const OT::Indices & inputColumns, const OT::Indices & outputColumns,
+                  const OT::Description & inputNames=OT::Description(),
+                  const OT::Description & outputNames=OT::Description());
 
   virtual OT::NumericalSample getInputSample();
+  OT::Description getInputNames() const;
+  OT::NumericalSample getOuputSample();
+  OT::Description getOutputNames() const;
 
   virtual OT::String getPythonScript() const;
 
@@ -57,9 +62,11 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
-protected:
-  OT::String fileName_;
-  OT::Indices inputColumns_;
+private:
+  OT::NumericalSample sampleFromFile_;
+  OT::Indices outputColumns_;
+  OT::Description inputNames_;
+  OT::Description outputNames_;
 };
 }
 #endif

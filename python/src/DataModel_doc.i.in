@@ -1,0 +1,36 @@
+%feature("docstring") OTGUI::DataModel
+"Design of experiment.
+
+Available constructors:
+    DataModel(*name, fileName, inputColumns, outputColumns*)
+
+Parameters
+----------
+name : str
+    Name
+fileName : str
+    Name of a data file to load
+inputColumns : sequence of int
+    Indices of columns of the output variables in files to consider (optional)
+outputColumns : sequence of int
+    Indices of columns of the output variables in files to consider (optional)"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataModel::getOutputColumns
+"Columns of the ouput variables accessor.
+
+Returns
+-------
+columns : :class:`~openturns.Indices`
+   Columns of the output variables"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataModel::setOutputColumns
+"Columns of the output variables accessor.
+
+Parameters
+----------
+columns : :class:`~openturns.Indices`
+   Columns of the output variables"

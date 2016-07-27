@@ -56,6 +56,7 @@ ot_add_python_module (otguibase otguibase_module.i
                       Variable.i Variable_doc.i.in
                       Input.i Input_doc.i.in
                       Output.i Output_doc.i.in
+                      DataModel.i DataModel_doc.i.in
                       PhysicalModelImplementation.i PhysicalModelImplementation_doc.i.in
                       AnalyticalPhysicalModel.i AnalyticalPhysicalModel_doc.i.in
                       PythonPhysicalModel.i PythonPhysicalModel_doc.i.in
