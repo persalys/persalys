@@ -35,6 +35,7 @@ static Factory<SobolAnalysis> RegisteredFactory("SobolAnalysis");
 /* Default constructor */
 SobolAnalysis::SobolAnalysis()
   : SimulationAnalysis()
+  , simulationsNumber_(10000)
   , blockSize_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultBlockSize"))
 {
 }
@@ -42,7 +43,8 @@ SobolAnalysis::SobolAnalysis()
 
 /* Constructor with parameters */
 SobolAnalysis::SobolAnalysis(const String & name, const PhysicalModel & physicalModel, const UnsignedInteger nbSimu)
-  : SimulationAnalysis(name, physicalModel, nbSimu)
+  : SimulationAnalysis(name, physicalModel)
+  , simulationsNumber_(nbSimu)
   , blockSize_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultBlockSize"))
 {
 //TODO ctr with outputNames (pas OutputCollection!) optionnel par défaut prendrait tous les outputs
@@ -59,8 +61,9 @@ SobolAnalysis* SobolAnalysis::clone() const
 void SobolAnalysis::run()
 {
   RandomGenerator::SetSeed(getSeed());
-  NumericalSample inputSample1(getInputSample());
-  NumericalSample inputSample2(getInputSample());
+
+  NumericalSample inputSample1(getInputSample(simulationsNumber_));
+  NumericalSample inputSample2(getInputSample(simulationsNumber_));
 
   SensitivityAnalysis sensitivityAnalysis = SensitivityAnalysis(inputSample1, inputSample2, getPhysicalModel().getRestrictedFunction(getOutputNames()));
   sensitivityAnalysis.setBlockSize(blockSize_);
@@ -82,6 +85,18 @@ void SobolAnalysis::run()
   result_ = SobolResult(firstOrderIndices, secondOrderIndices, totalOrderIndices, getOutputNames());
 
   notify("analysisFinished");
+}
+
+
+UnsignedInteger SobolAnalysis::getSimulationsNumber() const
+{
+  return simulationsNumber_;
+}
+
+
+void SobolAnalysis::setSimulationsNumber(const UnsignedInteger number)
+{
+  simulationsNumber_ = number;
 }
 
 
@@ -107,7 +122,7 @@ String SobolAnalysis::getPythonScript() const
 {
   OSS oss;
   oss << getName() << " = otguibase.SobolAnalysis('" << getName() << "', " << getPhysicalModel().getName();
-  oss << ", " << getNbSimulations() << ")\n";
+  oss << ", " << getSimulationsNumber() << ")\n";
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
 
@@ -125,6 +140,7 @@ bool SobolAnalysis::analysisLaunched() const
 void SobolAnalysis::save(Advocate & adv) const
 {
   SimulationAnalysis::save(adv);
+  adv.saveAttribute("simulationsNumber_", simulationsNumber_);
   adv.saveAttribute("blockSize_", blockSize_);
   adv.saveAttribute("result_", result_);
 }
@@ -134,6 +150,7 @@ void SobolAnalysis::save(Advocate & adv) const
 void SobolAnalysis::load(Advocate & adv)
 {
   SimulationAnalysis::load(adv);
+  adv.loadAttribute("simulationsNumber_", simulationsNumber_);
   adv.loadAttribute("blockSize_", blockSize_);
   adv.loadAttribute("result_", result_);
 }

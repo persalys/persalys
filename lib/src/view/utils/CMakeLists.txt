@@ -3,6 +3,7 @@ set (SOURCEFILES "" CACHE STRING "" FORCE)
 ot_add_current_dir_to_include_dirs ()
 
 ot_add_source_file (ListWidgetWithCheckBox.cxx)
+ot_add_source_file (TimeLineEdit.cxx)
 ot_add_source_file (ValueLineEdit.cxx)
 ot_add_source_file (CollapsibleGroupBox.cxx)
 ot_add_source_file (SpinBoxDelegate.cxx)
@@ -15,11 +16,13 @@ ot_add_source_file (CopyableTableView.cxx)
 ot_add_source_file (QtTools.cxx)
 ot_add_source_file (ResizableTableViewWithoutScrollBar.cxx)
 ot_add_source_file (DoubleSpinBox.cxx)
+ot_add_source_file (UIntSpinBox.cxx)
 ot_add_source_file (CheckableHeaderView.cxx)
 
 qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
               otgui/ListWidgetWithCheckBox.hxx
               otgui/ValueLineEdit.hxx
+              otgui/TimeLineEdit.hxx
               otgui/CollapsibleGroupBox.hxx
               otgui/SpinBoxDelegate.hxx
               otgui/CodeDelegate.hxx
@@ -31,6 +34,7 @@ qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
               otgui/QtTools.hxx
               otgui/ResizableTableViewWithoutScrollBar.hxx
               otgui/DoubleSpinBox.hxx
+              otgui/UIntSpinBox.hxx
               otgui/CheckableHeaderView.hxx
              )
 

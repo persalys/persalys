@@ -35,9 +35,7 @@ static Factory<MonteCarloReliabilityAnalysis> RegisteredFactory("MonteCarloRelia
 /* Default constructor */
 MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis()
   : ReliabilityAnalysis()
-  , maximumOuterSampling_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultMaximumOuterSampling"))
-  , maximumCoefficientOfVariation_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultMaximumCoefficientOfVariation"))
-  , blockSize_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultBlockSize"))
+  , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
 {
 }
@@ -45,12 +43,9 @@ MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis()
 
 /* Constructor with parameters */
 MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis(const String & name,
-                                                             const LimitState & limitState,
-                                                             const UnsignedInteger & maximumOuterSampling)
+                                                             const LimitState & limitState)
   : ReliabilityAnalysis(name, limitState)
-  , maximumOuterSampling_(maximumOuterSampling)
-  , maximumCoefficientOfVariation_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultMaximumCoefficientOfVariation"))
-  , blockSize_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultBlockSize"))
+  , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
 {
 }
@@ -67,68 +62,45 @@ void MonteCarloReliabilityAnalysis::run()
 {
   RandomGenerator::SetSeed(getSeed());
 
-  Description outputDescription(1);
-  outputDescription[0] = getLimitState().getOutputName();
-  NumericalMathFunction function = getPhysicalModel().getRestrictedFunction(outputDescription);
+  Description outputName(1);
+  outputName[0] = getLimitState().getOutputName();
+  NumericalMathFunction function(getPhysicalModel().getRestrictedFunction(outputName));
   function.enableHistory();
   function.clearHistory();
 
   Event event(RandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
-  event.setDescription(outputDescription);
+  event.setDescription(outputName);
 
   MonteCarlo algo = MonteCarlo(event);
-  algo.setMaximumOuterSampling(maximumOuterSampling_);
-  algo.setMaximumCoefficientOfVariation(maximumCoefficientOfVariation_);
-  algo.setBlockSize(blockSize_);
+  UnsignedInteger maximumOuterSampling = std::numeric_limits<int>::max();
+  if (getMaximumCalls() < std::numeric_limits<int>::max())
+  {
+    algo.setConvergenceStrategy(Compact(getMaximumCalls())); // TODO: propose in wizard the convergence sample's size?
+    maximumOuterSampling = static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize()));
+  }
+  algo.setMaximumOuterSampling(maximumOuterSampling);
+  algo.setMaximumCoefficientOfVariation(getMaximumCoefficientOfVariation());
+  algo.setBlockSize(getBlockSize());
+
+  TimeCriteria data(getMaximumElapsedTime());
+  algo.setStopCallback(&Stop, &data);
+
   algo.run();
 
   // set results
   // get convergence graph at level 0.95
   Graph graph = algo.drawProbabilityConvergence();
   result_ = MonteCarloReliabilityResult(algo.getResult(),
-                                                function.getHistoryOutput().getSample(),
-                                                graph.getDrawables()[0].getData(),
-                                                graph.getDrawables()[1].getData(),
-                                                graph.getDrawables()[2].getData());
+                                        function.getHistoryOutput().getSample(),
+                                        graph.getDrawables()[0].getData(),
+                                        graph.getDrawables()[1].getData(),
+                                        graph.getDrawables()[2].getData());
+
+  result_.setElapsedTime((float)data.elapsedTime_/CLOCKS_PER_SEC);
+
   function.disableHistory();
 
   notify("analysisFinished");
-}
-
-
-UnsignedInteger MonteCarloReliabilityAnalysis::getMaximumOuterSampling() const
-{
-  return maximumOuterSampling_;
-}
-
-
-void MonteCarloReliabilityAnalysis::setMaximumOuterSampling(const UnsignedInteger & maxi)
-{
-  maximumOuterSampling_ = maxi;
-}
-
-
-double MonteCarloReliabilityAnalysis::getMaximumCoefficientOfVariation() const
-{
-  return maximumCoefficientOfVariation_;
-}
-
-
-void MonteCarloReliabilityAnalysis::setMaximumCoefficientOfVariation(const double & coef)
-{
-  maximumCoefficientOfVariation_ = coef;
-}
-
-
-UnsignedInteger MonteCarloReliabilityAnalysis::getBlockSize() const
-{
-  return blockSize_;
-}
-
-
-void MonteCarloReliabilityAnalysis::setBlockSize(const UnsignedInteger & size)
-{
-  blockSize_ = size;
 }
 
 
@@ -153,11 +125,14 @@ MonteCarloReliabilityResult MonteCarloReliabilityAnalysis::getResult() const
 String MonteCarloReliabilityAnalysis::getPythonScript() const
 {
   OSS oss;
-  oss << getName() << " = otguibase.MonteCarloReliabilityAnalysis('" << getName() << "', " << getLimitState().getName();
-  oss << ", " << maximumOuterSampling_ << ")\n";
-  oss << getName() << ".setMaximumCoefficientOfVariation(" << maximumCoefficientOfVariation_ << ")\n";
-  oss << getName() << ".setBlockSize(" << blockSize_ << ")\n";
-  oss << getName() << ".setSeed(" << seed_ << ")\n";
+  oss << getName() << " = otguibase.MonteCarloReliabilityAnalysis('" << getName() << "', " << getLimitState().getName() << ")\n";
+  if (getMaximumCalls() != std::numeric_limits<int>::max())
+    oss << getName() << ".setMaximumCalls(" << getMaximumCalls() << ")\n";
+  oss << getName() << ".setMaximumCoefficientOfVariation(" << getMaximumCoefficientOfVariation() << ")\n";
+  if (getMaximumElapsedTime() != std::numeric_limits<int>::max())
+    oss << getName() << ".setMaximumElapsedTime(" << getMaximumElapsedTime() << ")\n";
+  oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
+  oss << getName() << ".setSeed(" << getSeed() << ")\n";
 
   return oss;
 }
@@ -173,9 +148,7 @@ bool MonteCarloReliabilityAnalysis::analysisLaunched() const
 void MonteCarloReliabilityAnalysis::save(Advocate & adv) const
 {
   ReliabilityAnalysis::save(adv);
-  adv.saveAttribute("maximumOuterSampling_", maximumOuterSampling_);
-  adv.saveAttribute("maximumCoefficientOfVariation_", maximumCoefficientOfVariation_);
-  adv.saveAttribute("blockSize_", blockSize_);
+  WithStopCriteriaAnalysis::save(adv);
   adv.saveAttribute("seed_", seed_);
   adv.saveAttribute("result_", result_);
 }
@@ -185,9 +158,7 @@ void MonteCarloReliabilityAnalysis::save(Advocate & adv) const
 void MonteCarloReliabilityAnalysis::load(Advocate & adv)
 {
   ReliabilityAnalysis::load(adv);
-  adv.loadAttribute("maximumOuterSampling_", maximumOuterSampling_);
-  adv.loadAttribute("maximumCoefficientOfVariation_", maximumCoefficientOfVariation_);
-  adv.loadAttribute("blockSize_", blockSize_);
+  WithStopCriteriaAnalysis::load(adv);
   adv.loadAttribute("seed_", seed_);
   adv.loadAttribute("result_", result_);
 }

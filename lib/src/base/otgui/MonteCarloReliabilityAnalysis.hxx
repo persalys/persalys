@@ -22,11 +22,11 @@
 #define OTGUI_MONTECARLORELIABILITYANALYSIS_HXX
 
 #include "ReliabilityAnalysis.hxx"
-#include "LimitState.hxx"
+#include "WithStopCriteriaAnalysis.hxx"
 #include "MonteCarloReliabilityResult.hxx"
 
 namespace OTGUI {
-class OTGUI_API MonteCarloReliabilityAnalysis : public ReliabilityAnalysis
+class OTGUI_API MonteCarloReliabilityAnalysis : public ReliabilityAnalysis, public WithStopCriteriaAnalysis
 {
   CLASSNAME;
 
@@ -34,20 +34,10 @@ public:
   /** Default constructor */
   MonteCarloReliabilityAnalysis();
   /** Constructor with parameters */
-  MonteCarloReliabilityAnalysis(const OT::String & name, const LimitState & limitState,
-                                const OT::UnsignedInteger & maximumOuterSampling=1000);
+  MonteCarloReliabilityAnalysis(const OT::String & name, const LimitState & limitState);
 
   /** Virtual constructor */
   virtual MonteCarloReliabilityAnalysis * clone() const;
-
-  OT::UnsignedInteger getMaximumOuterSampling() const;
-  void setMaximumOuterSampling(const OT::UnsignedInteger & maxi);
-
-  double getMaximumCoefficientOfVariation() const;
-  void setMaximumCoefficientOfVariation(const double & coef);
-
-  OT::UnsignedInteger getBlockSize() const;
-  void setBlockSize(const OT::UnsignedInteger & size);
 
   OT::UnsignedInteger getSeed() const;
   void setSeed(const OT::UnsignedInteger seed);
@@ -65,9 +55,6 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  OT::UnsignedInteger maximumOuterSampling_;
-  double maximumCoefficientOfVariation_;
-  OT::UnsignedInteger blockSize_;
   OT::UnsignedInteger seed_;
   MonteCarloReliabilityResult result_;
 };

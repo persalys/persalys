@@ -38,6 +38,9 @@ public:
   /** Virtual constructor */
   virtual SobolAnalysis * clone() const;
 
+  OT::UnsignedInteger getSimulationsNumber() const;
+  void setSimulationsNumber(const OT::UnsignedInteger number);
+
   OT::UnsignedInteger getBlockSize() const;
   void setBlockSize(const OT::UnsignedInteger & size);
 
@@ -54,6 +57,7 @@ public:
   void load(OT::Advocate & adv);
 
 private:
+  OT::UnsignedInteger simulationsNumber_;
   OT::UnsignedInteger blockSize_;
   SobolResult result_;
 };

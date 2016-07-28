@@ -51,21 +51,23 @@ taylorExpansionsMomentsResult = taylorExpansionsMoments.getResult()
 openturns.testing.assert_almost_equal(0.059730458221, taylorExpansionsMomentsResult.getMeanFirstOrder()[0], 1e-13)
 
 ## Monte Carlo ##
-montecarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel, 1000)
+montecarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel)
+montecarlo.setMaximumCalls(1000)
+montecarlo.setMaximumCoefficientOfVariation(-1)
 myStudy.add(montecarlo)
 montecarlo.run()
 montecarloResult = montecarlo.getResult()
 
 # Comparaison
-openturns.testing.assert_almost_equal(0.0598440092379, montecarloResult.getMean()[0], 1e-13)
-openturns.testing.assert_almost_equal(0.0112354112196, montecarloResult.getStandardDeviation()[0], 1e-13)
+openturns.testing.assert_almost_equal(0.0597109963361, montecarloResult.getMean()[0], 1e-13)
+openturns.testing.assert_almost_equal(0.0114128746587, montecarloResult.getStandardDeviation()[0], 1e-13)
 
 meanCI = montecarloResult.getMeanConfidenceInterval()
-openturns.testing.assert_almost_equal(0.0591476440319, meanCI.getLowerBound()[0], 1e-13)
-openturns.testing.assert_almost_equal(0.0605403744439, meanCI.getUpperBound()[0], 1e-13)
+openturns.testing.assert_almost_equal(0.0590036320343, meanCI.getLowerBound()[0], 1e-13)
+openturns.testing.assert_almost_equal(0.0604183606379, meanCI.getUpperBound()[0], 1e-13)
 stdCi = montecarloResult.getStdConfidenceInterval()
-openturns.testing.assert_almost_equal(0.0107636626958, stdCi.getLowerBound()[0], 1e-13)
-openturns.testing.assert_almost_equal(0.0117507273707, stdCi.getUpperBound()[0], 1e-13)
+openturns.testing.assert_almost_equal(0.0109336748621, stdCi.getLowerBound()[0], 1e-13)
+openturns.testing.assert_almost_equal(0.0119363302339, stdCi.getUpperBound()[0], 1e-13)
 
 ## Sobol ##
 sobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel)

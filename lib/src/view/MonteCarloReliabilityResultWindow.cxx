@@ -50,10 +50,17 @@ void MonteCarloReliabilityResultWindow::setParameters(const Analysis & analysis)
   QStringList strList;
   strList << tr("Threshold exceedance parameters :") + "\n";
   strList << tr("Algorithm : ") + tr("Monte Carlo");
-  strList << tr("Maximum outer sampling : ") + QString::number(MCanalysis->getMaximumOuterSampling());
   strList << tr("Maximum coefficient of variation : ") + QString::number(MCanalysis->getMaximumCoefficientOfVariation());
-  strList << tr("Seed : ") + QString::number(MCanalysis->getSeed());
+  if (MCanalysis->getMaximumElapsedTime() < std::numeric_limits<int>::max())
+    strList << tr("Maximum elapsed time : ") + QString::number(MCanalysis->getMaximumElapsedTime()) + "(s)";
+  else
+    strList << tr("Maximum elapsed time : ") + "- (s)";
+  if (MCanalysis->getMaximumCalls() < std::numeric_limits<int>::max())
+    strList << tr("Maximum calls : ") + QString::number(MCanalysis->getMaximumCalls());
+  else
+    strList << tr("Maximum calls : ") + "-";
   strList << tr("Block size : ") + QString::number(MCanalysis->getBlockSize());
+  strList << tr("Seed : ") + QString::number(MCanalysis->getSeed());
 
   parameters_ = strList.join("\n");
 }
@@ -75,8 +82,16 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   headLayout->addStretch();
   tabLayout->addLayout(headLayout);
 
-  // number of simulations
-  QLabel * nbSimuLabel = new QLabel(tr("Number of simulations:") + " " + QString::number(result_.getSimulationResult().getOuterSampling()*result_.getSimulationResult().getBlockSize()) + "\n");
+  // elapsed time
+  if (result_.getElapsedTime() > 0.)
+  {
+    QLabel * elapsedTimeLabel = new QLabel(tr("Elapsed time:") + " " + QString::number(result_.getElapsedTime()) + " s");
+    elapsedTimeLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    tabLayout->addWidget(elapsedTimeLabel);
+  }
+
+  // number of calls
+  QLabel * nbSimuLabel = new QLabel(tr("Number of calls:") + " " + QString::number(result_.getSimulationResult().getOuterSampling()*result_.getSimulationResult().getBlockSize()) + "\n");
   nbSimuLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
   tabLayout->addWidget(nbSimuLabel);
 

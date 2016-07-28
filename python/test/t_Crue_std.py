@@ -29,7 +29,8 @@ limitState = otguibase.LimitState('limitState1', myPhysicalModel, 'S', ot.Greate
 myStudy.add(limitState)
 
 ## Monte Carlo ##
-montecarlo = otguibase.MonteCarloReliabilityAnalysis('myMonteCarlo', limitState, 10000)
+montecarlo = otguibase.MonteCarloReliabilityAnalysis('myMonteCarlo', limitState)
+montecarlo.setMaximumCalls(10000)
 myStudy.add(montecarlo)
 montecarlo.run()
 montecarloResult = montecarlo.getResult()

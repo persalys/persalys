@@ -34,7 +34,8 @@ taylorExpansionsMoments.run()
 taylorExpansionsMomentsResult = taylorExpansionsMoments.getResult()
 
 ## Monte Carlo ##
-montecarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel, 1000)
+montecarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel)
+montecarlo.setMaximumCalls(1000)
 myStudy.add(montecarlo)
 montecarlo.run()
 montecarloResult = montecarlo.getResult()

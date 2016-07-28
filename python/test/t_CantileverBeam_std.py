@@ -55,7 +55,8 @@ taylorExpansionsMoments.run()
 taylorExpansionsMomentsResult = taylorExpansionsMoments.getResult()
 
 ## Monte Carlo ##
-montecarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel, 1000)
+montecarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel)
+montecarlo.setMaximumCalls(1000)
 myStudy.add(montecarlo)
 montecarlo.run()
 montecarloResult = montecarlo.getResult()
@@ -74,7 +75,8 @@ limitState = otguibase.LimitState('limitState1', myPhysicalModel, 'y', ot.Greate
 myStudy.add(limitState)
 
 ## Monte Carlo ##
-montecarloSimu = otguibase.MonteCarloReliabilityAnalysis('myMonteCarloSimu', limitState, 10000)
+montecarloSimu = otguibase.MonteCarloReliabilityAnalysis('myMonteCarloSimu', limitState)
+montecarloSimu.setMaximumCalls(10000)
 myStudy.add(montecarloSimu)
 montecarloSimu.run()
 montecarloSimuResult = montecarloSimu.getResult()

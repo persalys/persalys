@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizard to define a reliability analysis
+ *  @brief QGroupBox for stop criteria
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,47 +18,43 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_RELIABILITYANALYSISWIZARD_HXX
-#define OTGUI_RELIABILITYANALYSISWIZARD_HXX
+#ifndef OTGUI_STOPCRITERIAGROUPBOX_HXX
+#define OTGUI_STOPCRITERIAGROUPBOX_HXX
 
-#include "otgui/LimitState.hxx"
-#include "otgui/AnalysisWizard.hxx"
-#include "otgui/UIntSpinBox.hxx"
-#include "otgui/StopCriteriaGroupBox.hxx"
+#include "otgui/DoubleSpinBox.hxx"
+#include "otgui/TimeLineEdit.hxx"
 
-#include <QButtonGroup>
-#include <QLabel>
+#include <QGroupBox>
 
 namespace OTGUI {
-class ReliabilityAnalysisWizard : public AnalysisWizard
+class StopCriteriaGroupBox : public QGroupBox
 {
   Q_OBJECT
 
 public:
-  enum Method {MonteCarlo/*, FORM, SORM*/};
+  // constructor
+  StopCriteriaGroupBox(const double maxCoef, const unsigned int maxTime, const unsigned int maxCalls, QWidget *parent = 0);
 
-  ReliabilityAnalysisWizard(OTStudy * otStudy, const LimitState & limitState);
-  ReliabilityAnalysisWizard(const Analysis & analysis);
-
-  virtual bool validateCurrentPage();
-
-protected:
-  void buildInterface();
+  bool isMaxElapsedTimeValid() const;
+  bool isMaxCallsRequired() const;
+  bool isValid() const;
 
 public slots:
+  void maxiCoefficientOfVariationRequired(bool);
+  void maxiTimeRequired(bool);
+  void maxiTimeChanged();
+  void maxiCallsRequired(bool);
+
+signals:
   void maxiCoefficientOfVariationChanged(double);
   void maxiTimeChanged(int);
   void maxiCallsChanged(int);
-  void blockSizeChanged(double);
-  void seedChanged(int);
+  void clearErrorMessageLabel();
 
 private:
-  QButtonGroup * methodGroup_;
-  QWidget * monteCarloWidget_;
-  StopCriteriaGroupBox * stopCriteriaGroupBox_;
-  QSpinBox * seedSpinbox_;
-  UIntSpinBox * blockSizeSpinbox_;
-  QLabel * errorMessageLabel_;
+  DoubleSpinBox * maxiCoefficientOfVariationSpinbox_;
+  TimeLineEdit * maxTimeLineEdit_;
+  QSpinBox * maxiCallsSpinbox_;
 };
 }
 #endif

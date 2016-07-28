@@ -20,42 +20,28 @@
  */
 #include "otgui/SimulationAnalysis.hxx"
 
-#include "RandomGenerator.hxx"
-#include "CorrelationAnalysis.hxx"
-
 using namespace OT;
 
 namespace OTGUI {
-
-CLASSNAMEINIT(SimulationAnalysis);
 
 /* Default constructor */
 SimulationAnalysis::SimulationAnalysis()
   : AnalysisImplementation()
 //   , outputs_()
-  , nbSimulations_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultMaximumOuterSampling"))
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
 {
 }
 
 
 /* Constructor with parameters */
-SimulationAnalysis::SimulationAnalysis(const String & name, const PhysicalModel & physicalModel,
-                                       const UnsignedInteger nbSimulation)
+SimulationAnalysis::SimulationAnalysis(const String & name, const PhysicalModel & physicalModel)
   : AnalysisImplementation(name, physicalModel)
 //  TODO , outputs_(physicalModel.getOutputs())
-  , nbSimulations_(nbSimulation)
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
 {
 //TODO ctr with outputNames (pas OutputCollection!) optionnel par défaut prendrait tous les outputs
 }
 
-
-/* Virtual constructor */
-SimulationAnalysis* SimulationAnalysis::clone() const
-{
-  return new SimulationAnalysis(*this);
-}
 
 // TODO
 // OutputCollection SimulationAnalysis::getOutputs() const
@@ -70,21 +56,9 @@ SimulationAnalysis* SimulationAnalysis::clone() const
 // }
 
 
-UnsignedInteger SimulationAnalysis::getNbSimulations() const
+NumericalSample SimulationAnalysis::getInputSample(const UnsignedInteger nbSimu)
 {
-  return nbSimulations_;
-}
-
-
-void SimulationAnalysis::setNbSimulations(const UnsignedInteger nbSimu)
-{
-  nbSimulations_ = nbSimu;
-}
-
-
-NumericalSample SimulationAnalysis::getInputSample()
-{
-  NumericalSample inputSample(getPhysicalModel().getInputRandomVector().getSample(nbSimulations_));
+  NumericalSample inputSample(getPhysicalModel().getInputRandomVector().getSample(nbSimu));
   inputSample.setDescription(getPhysicalModel().getStochasticInputNames());
   return inputSample;
 }
@@ -139,7 +113,6 @@ void SimulationAnalysis::save(Advocate & adv) const
 {
   AnalysisImplementation::save(adv);
 //   adv.saveAttribute("outputs_", outputs_);
-  adv.saveAttribute("nbSimulations_", nbSimulations_);
   adv.saveAttribute("seed_", seed_);
 }
 
@@ -149,7 +122,6 @@ void SimulationAnalysis::load(Advocate & adv)
 {
   AnalysisImplementation::load(adv);
 //   adv.loadAttribute("outputs_", outputs_);
-  adv.loadAttribute("nbSimulations_", nbSimulations_);
   adv.loadAttribute("seed_", seed_);
 }
 }

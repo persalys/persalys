@@ -35,13 +35,15 @@ static Factory<SRCAnalysis> RegisteredFactory("SRCAnalysis");
 /* Default constructor */
 SRCAnalysis::SRCAnalysis()
   : SimulationAnalysis()
+  , simulationsNumber_(10000)
 {
 }
 
 
 /* Constructor with parameters */
-SRCAnalysis::SRCAnalysis(const String & name, const PhysicalModel & physicalModel, const UnsignedInteger nbSimu)
-  : SimulationAnalysis(name, physicalModel, nbSimu)
+SRCAnalysis::SRCAnalysis(const String & name, const PhysicalModel & physicalModel, const OT::UnsignedInteger nbSimu)
+  : SimulationAnalysis(name, physicalModel)
+  , simulationsNumber_(nbSimu)
 {
 }
 
@@ -56,7 +58,8 @@ SRCAnalysis* SRCAnalysis::clone() const
 void SRCAnalysis::run()
 {
   RandomGenerator::SetSeed(getSeed());
-  NumericalSample inputSample(getInputSample());
+
+  NumericalSample inputSample(getInputSample(simulationsNumber_));
 
   // set results
   NumericalSample indices(0, inputSample.getDimension());
@@ -75,6 +78,18 @@ void SRCAnalysis::run()
 }
 
 
+UnsignedInteger SRCAnalysis::getSimulationsNumber() const
+{
+  return simulationsNumber_;
+}
+
+
+void SRCAnalysis::setSimulationsNumber(const UnsignedInteger number)
+{
+  simulationsNumber_ = number;
+}
+
+
 SRCResult SRCAnalysis::getResult() const
 {
   return result_;
@@ -85,7 +100,7 @@ String SRCAnalysis::getPythonScript() const
 {
   OSS oss;
   oss << getName() << " = otguibase.SRCAnalysis('" << getName() << "', " << getPhysicalModel().getName();
-  oss << ", " << getNbSimulations() << ")\n";
+  oss << ", " << getSimulationsNumber() << ")\n";
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
 
   return oss;
@@ -102,6 +117,7 @@ bool SRCAnalysis::analysisLaunched() const
 void SRCAnalysis::save(Advocate & adv) const
 {
   SimulationAnalysis::save(adv);
+  adv.saveAttribute("simulationsNumber_", simulationsNumber_);
   adv.saveAttribute("result_", result_);
 }
 
@@ -110,6 +126,7 @@ void SRCAnalysis::save(Advocate & adv) const
 void SRCAnalysis::load(Advocate & adv)
 {
   SimulationAnalysis::load(adv);
+  adv.loadAttribute("simulationsNumber_", simulationsNumber_);
   adv.loadAttribute("result_", result_);
 }
 }

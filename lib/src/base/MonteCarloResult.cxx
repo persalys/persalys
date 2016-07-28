@@ -57,6 +57,7 @@ MonteCarloResult::MonteCarloResult(NumericalSample inputSample, NumericalSample 
     kurtosis_ = getOutputSample().computeKurtosis();
   firstQuartile_ = getOutputSample().computeQuantilePerComponent(0.25);
   thirdQuartile_ = getOutputSample().computeQuantilePerComponent(0.75);
+  computeCoefficientOfVariation();
   computeMeanConfidenceInterval(levelConfidenceInterval_);
   computeStdConfidenceInterval(levelConfidenceInterval_);
   computeOutliers();
@@ -76,6 +77,14 @@ NumericalPoint MonteCarloResult::getMean()
   if (!mean_.getSize())
     mean_ = getOutputSample().computeMean();
   return mean_;
+}
+
+
+NumericalPoint MonteCarloResult::getCoefficientOfVariation()
+{
+  if (!coefficientOfVariation_.getSize())
+    computeCoefficientOfVariation();
+  return coefficientOfVariation_;
 }
 
 
@@ -148,6 +157,16 @@ Interval MonteCarloResult::getMeanConfidenceInterval(const double level)
   if (!meanConfidenceInterval_.getDimension() || levelConfidenceInterval_ != level)
     computeMeanConfidenceInterval(level);
   return meanConfidenceInterval_;
+}
+
+
+void MonteCarloResult::computeCoefficientOfVariation()
+{
+  coefficientOfVariation_ = NumericalPoint(getOutputSample().getDimension());
+  NumericalPoint empiricalMean = getMean();
+  NumericalPoint empiricalStd = getStandardDeviation();
+  for (UnsignedInteger i=0; i<getOutputSample().getDimension(); ++i)
+    coefficientOfVariation_[i] = empiricalStd[i] / sqrt(getOutputSample().getSize()) / empiricalMean[i];
 }
 
 
@@ -270,6 +289,18 @@ void MonteCarloResult::computeFittedDistributionPDF_CDF()
 }
 
 
+double MonteCarloResult::getElapsedTime() const
+{
+  return elapsedTime_;
+}
+
+
+void MonteCarloResult::setElapsedTime(const double seconds)
+{
+  elapsedTime_ = seconds;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void MonteCarloResult::save(Advocate & adv) const
 {
@@ -288,6 +319,7 @@ void MonteCarloResult::save(Advocate & adv) const
   adv.saveAttribute("pdf_", pdf_);
   adv.saveAttribute("cdf_", cdf_);
   adv.saveAttribute("outliers_", outliers_);
+  adv.saveAttribute("elapsedTime_", elapsedTime_);
 }
 
 
@@ -309,5 +341,6 @@ void MonteCarloResult::load(Advocate & adv)
   adv.loadAttribute("pdf_", pdf_);
   adv.loadAttribute("cdf_", cdf_);
   adv.loadAttribute("outliers_", outliers_);
+  adv.loadAttribute("elapsedTime_", elapsedTime_);
 }
 }

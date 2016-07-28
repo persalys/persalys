@@ -31,6 +31,8 @@
 
 #include <limits>
 
+using namespace OT;
+
 namespace OTGUI {
 
 CentralTendencyWizard::CentralTendencyWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
@@ -67,7 +69,6 @@ void CentralTendencyWizard::buildInterface()
 
   // Second Page: methods
   QWizardPage * page = new QWizardPage(this);
-
   QVBoxLayout * mainLayout = new QVBoxLayout(page);
 
   QGroupBox * methodBox = new QGroupBox(tr("Method"));
@@ -88,22 +89,19 @@ void CentralTendencyWizard::buildInterface()
 
   mainLayout->addWidget(methodBox);
 
-  QVBoxLayout * methodParametersLayout = new QVBoxLayout;
-
   /// -- Monte carlo widgets --
   monteCarloWidget_ = new QWidget;
-  QGridLayout *mclayout = new QGridLayout(monteCarloWidget_);
+  QVBoxLayout * monteCarloLayout = new QVBoxLayout(monteCarloWidget_);
 
-  // nb simu
-  QLabel * nbSimuLabel = new QLabel(tr("Number of simulations"));
-  QSpinBox * nbSimuSpinbox = new QSpinBox;
-  nbSimuSpinbox->setMinimum(2);
-  nbSimuSpinbox->setMaximum(std::numeric_limits<int>::max());
-  nbSimuSpinbox->setValue(MCAnalysis_.getNbSimulations());
-  connect(nbSimuSpinbox, SIGNAL(valueChanged(int)), this, SLOT(nbSimuChanged(int)));
-  nbSimuLabel->setBuddy(nbSimuSpinbox);
-  mclayout->addWidget(nbSimuLabel, 0, 0);
-  mclayout->addWidget(nbSimuSpinbox, 0, 1);
+  // stop criteria
+  const double maxCoef = MCAnalysis_.getMaximumCoefficientOfVariation();
+  const UnsignedInteger maxTime = MCAnalysis_.getMaximumElapsedTime();
+  const UnsignedInteger maxCalls = MCAnalysis_.getMaximumCalls();
+  stopCriteriaGroupBox_ = new StopCriteriaGroupBox(maxCoef, maxTime, maxCalls);
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), this, SLOT(maxiCoefficientOfVariationChanged(double)));
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), this, SLOT(maxiTimeChanged(int)));
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(int)), this, SLOT(maxiCallsChanged(int)));
+  monteCarloLayout->addWidget(stopCriteriaGroupBox_);
 
   //// advanced parameters
   CollapsibleGroupBox * advancedGroup = new CollapsibleGroupBox;
@@ -115,6 +113,7 @@ void CentralTendencyWizard::buildInterface()
   confidenceIntervalCheckBox->setText(tr("Compute confidence interval at"));
   advancedWidgetsLayout->addWidget(confidenceIntervalCheckBox, 0, 0);
 
+  // confidence interval level
   DoubleSpinBox * levelConfidenceIntervalSpinbox = new DoubleSpinBox;
   levelConfidenceIntervalSpinbox->setRange(0.0, 0.99);
   levelConfidenceIntervalSpinbox->setSingleStep(0.01);
@@ -124,6 +123,19 @@ void CentralTendencyWizard::buildInterface()
   connect(levelConfidenceIntervalSpinbox, SIGNAL(valueChanged(double)), this, SLOT(levelConfidenceIntervalChanged(double)));
   advancedWidgetsLayout->addWidget(levelConfidenceIntervalSpinbox, 0, 1);
 
+  // block size
+  QLabel * blockSizeLabel = new QLabel(tr("Block size"));
+  advancedWidgetsLayout->addWidget(blockSizeLabel, 1, 0);
+  blockSizeSpinbox_ = new UIntSpinBox;
+  blockSizeSpinbox_->setMinimum(1);
+  blockSizeSpinbox_->setMaximum(std::numeric_limits<int>::max());
+  blockSizeSpinbox_->setSingleStep(100);
+  blockSizeLabel->setBuddy(blockSizeSpinbox_);
+  advancedWidgetsLayout->addWidget(blockSizeSpinbox_, 1, 1);
+  blockSizeSpinbox_->setValue(MCAnalysis_.getBlockSize());
+  connect(blockSizeSpinbox_, SIGNAL(valueChanged(double)), this, SLOT(blockSizeChanged(double)));
+
+  // seed
   QLabel * seedLabel = new QLabel(tr("Seed"));
   advancedWidgetsLayout->addWidget(seedLabel, 2, 0);
   QSpinBox * seedSpinbox = new QSpinBox;
@@ -133,17 +145,26 @@ void CentralTendencyWizard::buildInterface()
   connect(seedSpinbox, SIGNAL(valueChanged(int)), this, SLOT(seedChanged(int)));
 
   advancedGroup->setExpanded(false);
-  mclayout->addWidget(advancedGroup, 2, 0, 1, 2);
+  monteCarloLayout->addWidget(advancedGroup);
 
-  methodParametersLayout->addWidget(monteCarloWidget_);
+  mainLayout->addWidget(monteCarloWidget_);
 
   /// -- Taylor expansions widgets --
   TaylorExpansionsWidget_ = new QWidget;
-  //QVBoxLayout * taylorLayout = new QVBoxLayout(TaylorExpansionsWidget_);
-  methodParametersLayout->addWidget(TaylorExpansionsWidget_);
-  methodParametersLayout->addStretch();
+  mainLayout->addWidget(TaylorExpansionsWidget_);
+  mainLayout->addStretch();
 
-  mainLayout->addLayout(methodParametersLayout);
+//   mainLayout->addLayout(methodParametersLayout);
+
+  /// -- error message
+  errorMessageLabel_ = new QLabel;
+  errorMessageLabel_->setWordWrap(true);
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), errorMessageLabel_, SLOT(clear()));
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), errorMessageLabel_, SLOT(clear()));
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(int)), errorMessageLabel_, SLOT(clear()));
+  connect(blockSizeSpinbox_, SIGNAL(valueChanged(double)), errorMessageLabel_, SLOT(clear()));
+  mainLayout->addStretch();
+  mainLayout->addWidget(errorMessageLabel_);
 
   updateMethodWidgets(methodGroup->checkedId());
 
@@ -155,12 +176,32 @@ void CentralTendencyWizard::updateMethodWidgets(int id)
 {
   monteCarloWidget_->setVisible(id == 0);
   TaylorExpansionsWidget_->setVisible(id == 1);
+  errorMessageLabel_->setText("");
 }
 
 
-void CentralTendencyWizard::nbSimuChanged(int nbSimu)
+void CentralTendencyWizard::maxiCoefficientOfVariationChanged(double maxi)
 {
-  MCAnalysis_.setNbSimulations(nbSimu);
+  MCAnalysis_.setMaximumCoefficientOfVariation(maxi);
+}
+
+
+void CentralTendencyWizard::maxiTimeChanged(int value)
+{
+  MCAnalysis_.setMaximumElapsedTime(value);
+}
+
+
+void CentralTendencyWizard::maxiCallsChanged(int maxi)
+{
+  try
+  {
+    MCAnalysis_.setMaximumCalls(maxi);
+  }
+  catch (InvalidValueException exception)
+  {
+    // check in validateCurrentPage
+  }
 }
 
 
@@ -182,12 +223,42 @@ void CentralTendencyWizard::seedChanged(int seed)
 }
 
 
-void CentralTendencyWizard::accept()
+void CentralTendencyWizard::blockSizeChanged(double size)
+{
+  try
+  {
+    MCAnalysis_.setBlockSize(size);
+  }
+  catch (InvalidValueException exception)
+  {
+    // check in validateCurrentPage
+  }
+}
+
+
+bool CentralTendencyWizard::validateCurrentPage()
 {
   if (monteCarloWidget_->isVisible())
+  {
+    QString errorMessage = "";
+    if (!stopCriteriaGroupBox_->isValid())
+      errorMessage = tr("Please select at least one stop criteria");
+    else
+    {
+      if (!stopCriteriaGroupBox_->isMaxElapsedTimeValid())
+        errorMessage = tr("The maximum time must not be null");
+      if (stopCriteriaGroupBox_->isMaxCallsRequired())
+        if (MCAnalysis_.getMaximumCalls() < (int)blockSizeSpinbox_->value())
+          errorMessage = tr("The maximum calls can not be inferior to the block size");
+    }
+    errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(errorMessage).arg("</font>"));
+    if (!errorMessage.isEmpty())
+      return false;
     analysis_ = MCAnalysis_;
+  }
   else
     analysis_ = taylorAnalysis_;
-  QDialog::accept();
+
+  return QWizard::validateCurrentPage();
 }
 }

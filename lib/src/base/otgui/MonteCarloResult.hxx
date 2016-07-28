@@ -42,6 +42,7 @@ public:
   virtual MonteCarloResult * clone() const;
 
   OT::NumericalPoint getMean();
+  OT::NumericalPoint getCoefficientOfVariation();
   OT::NumericalPoint getMedian();
   OT::NumericalPoint getStandardDeviation();
   OT::NumericalPoint getVariance();
@@ -56,6 +57,9 @@ public:
   NumericalSampleCollection getPDF();
   NumericalSampleCollection getCDF();
 
+  double getElapsedTime() const;
+  void setElapsedTime(const double seconds);
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
@@ -63,6 +67,7 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
+  void computeCoefficientOfVariation();
   void computeMeanConfidenceInterval(const double level);
   void computeStdConfidenceInterval(const double level);
   void computeOutliers();
@@ -71,6 +76,7 @@ protected:
 private:
   double levelConfidenceInterval_;
   OT::NumericalPoint mean_;
+  OT::NumericalPoint coefficientOfVariation_;
   OT::NumericalPoint median_;
   OT::NumericalPoint standardDeviation_;
   OT::NumericalPoint variance_;
@@ -83,6 +89,7 @@ private:
   OT::PersistentCollection<OT::NumericalPoint> outliers_;
   OT::PersistentCollection<OT::NumericalSample> pdf_;
   OT::PersistentCollection<OT::NumericalSample> cdf_;
+  double elapsedTime_;
 };
 }
 #endif

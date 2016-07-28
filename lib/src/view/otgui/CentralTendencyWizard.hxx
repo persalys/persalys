@@ -22,9 +22,12 @@
 #define OTGUI_CENTRALTENDENCYWIZARD_HXX
 
 #include "otgui/AnalysisWizard.hxx"
-#include "otgui/DoubleSpinBox.hxx"
+#include "otgui/UIntSpinBox.hxx"
+#include "otgui/StopCriteriaGroupBox.hxx"
 #include "otgui/TaylorExpansionMomentsAnalysis.hxx"
 #include "otgui/MonteCarloAnalysis.hxx"
+
+#include <QLabel>
 
 namespace OTGUI {
 class CentralTendencyWizard : public AnalysisWizard
@@ -37,22 +40,29 @@ public:
   CentralTendencyWizard(OTStudy * otStudy, const PhysicalModel & physicalModel);
   CentralTendencyWizard(const Analysis & analysis);
 
+  virtual bool validateCurrentPage();
+
 protected:
   void buildInterface();
 
 public slots:
   void updateMethodWidgets(int);
-  void nbSimuChanged(int);
+  void maxiCoefficientOfVariationChanged(double);
+  void maxiTimeChanged(int);
+  void maxiCallsChanged(int);
   void confidenceIntervalRequired(bool);
   void levelConfidenceIntervalChanged(double);
   void seedChanged(int);
-  void accept();
+  void blockSizeChanged(double);
 
 private:
   MonteCarloAnalysis MCAnalysis_;
   TaylorExpansionMomentsAnalysis taylorAnalysis_;
   QWidget * monteCarloWidget_;
+  StopCriteriaGroupBox * stopCriteriaGroupBox_;
+  UIntSpinBox * blockSizeSpinbox_;
   QWidget * TaylorExpansionsWidget_;
+  QLabel * errorMessageLabel_;
 };
 }
 #endif

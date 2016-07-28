@@ -98,7 +98,7 @@ void SensitivityAnalysisWizard::buildInterface()
   QSpinBox * sobolSampleSizeSpinbox = new QSpinBox;
   sobolSampleSizeSpinbox->setMinimum(2);
   sobolSampleSizeSpinbox->setMaximum(std::numeric_limits<int>::max());
-  sobolSampleSizeSpinbox->setValue(sobolAnalysis_.getNbSimulations());
+  sobolSampleSizeSpinbox->setValue(sobolAnalysis_.getSimulationsNumber());
   sobolSampleSizeSpinbox->setProperty("type", "Sobol");
   connect(sobolSampleSizeSpinbox, SIGNAL(valueChanged(int)), this, SLOT(sampleSizeChanged(int)));
   sampleSizeLabel->setBuddy(sobolSampleSizeSpinbox);
@@ -156,7 +156,7 @@ void SensitivityAnalysisWizard::buildInterface()
   QSpinBox * srcSampleSizeSpinbox = new QSpinBox;
   srcSampleSizeSpinbox->setMinimum(2);
   srcSampleSizeSpinbox->setMaximum(std::numeric_limits<int>::max());
-  srcSampleSizeSpinbox->setValue(srcAnalysis_.getNbSimulations());
+  srcSampleSizeSpinbox->setValue(srcAnalysis_.getSimulationsNumber());
   srcSampleSizeSpinbox->setProperty("type", "SRC");
   connect(srcSampleSizeSpinbox, SIGNAL(valueChanged(int)), this, SLOT(sampleSizeChanged(int)));
   sampleSizeLabel->setBuddy(srcSampleSizeSpinbox);
@@ -205,10 +205,10 @@ void SensitivityAnalysisWizard::sampleSizeChanged(int sampleSize)
     // n = nb inputs; d=sample size
     int nbSimu = sobolAnalysis_.getPhysicalModel().getInputs().getSize() * (sampleSize + 2);
     totalNbSimuLabel_->setText(QString::number(nbSimu));
-    sobolAnalysis_.setNbSimulations(sampleSize);
+    sobolAnalysis_.setSimulationsNumber(sampleSize);
   }
   else
-    srcAnalysis_.setNbSimulations(sampleSize);
+    srcAnalysis_.setSimulationsNumber(sampleSize);
 }
 
 

@@ -22,10 +22,11 @@
 #define OTGUI_MONTECARLOANALYSIS_HXX
 
 #include "SimulationAnalysis.hxx"
+#include "WithStopCriteriaAnalysis.hxx"
 #include "MonteCarloResult.hxx"
 
 namespace OTGUI {
-class OTGUI_API MonteCarloAnalysis : public SimulationAnalysis
+class OTGUI_API MonteCarloAnalysis : public SimulationAnalysis, public WithStopCriteriaAnalysis
 {
   CLASSNAME;
 
@@ -33,8 +34,7 @@ public:
   /** Default constructor */
   MonteCarloAnalysis();
   /** Constructor with parameters */
-  MonteCarloAnalysis(const OT::String & name, const PhysicalModel & physicalModel,
-                     const OT::UnsignedInteger nbSimu=10000, bool confidenceInterval=true, double level=0.95);
+  MonteCarloAnalysis(const OT::String & name, const PhysicalModel & physicalModel);
 
   /** Virtual constructor */
   virtual MonteCarloAnalysis * clone() const;
