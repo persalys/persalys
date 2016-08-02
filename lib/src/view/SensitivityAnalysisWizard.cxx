@@ -117,6 +117,12 @@ void SensitivityAnalysisWizard::buildInterface()
   nbSimuLayout->addWidget(totalNbSimuLabel_);
   sobolWidgetsLayout->addLayout(nbSimuLayout);
 
+  // block size
+  blockSizeGroupBox_ = new BlockSizeGroupBox(tr("Evaluation parameter"));
+  blockSizeGroupBox_->setBlockSizeValue(sobolAnalysis_.getBlockSize());
+  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), this, SLOT(blockSizeChanged(double)));
+  sobolWidgetsLayout->addWidget(blockSizeGroupBox_);
+
   // sobol advanced parameters
   CollapsibleGroupBox * sobolAdvancedParamGroupBox = new CollapsibleGroupBox;
   sobolAdvancedParamGroupBox->setTitle(tr("Advanced parameters"));
@@ -131,16 +137,6 @@ void SensitivityAnalysisWizard::buildInterface()
   sobolSeedSpinbox->setValue(sobolAnalysis_.getSeed());
   sobolSeedSpinbox->setProperty("type", "Sobol");
   connect(sobolSeedSpinbox, SIGNAL(valueChanged(int)), this, SLOT(seedChanged(int)));
-
-  QLabel * blockSizeLabel = new QLabel(tr("Block size"));
-  sobolAdvancedParamGroupBoxLayout->addWidget(blockSizeLabel, 1, 0);
-  QSpinBox * blockSizeSpinbox = new QSpinBox;
-  blockSizeSpinbox->setMinimum(1);
-  blockSizeSpinbox->setMaximum(std::numeric_limits<int>::max());
-  blockSizeLabel->setBuddy(blockSizeSpinbox);
-  sobolAdvancedParamGroupBoxLayout->addWidget(blockSizeSpinbox, 1, 1);
-  blockSizeSpinbox->setValue(sobolAnalysis_.getBlockSize());
-  connect(blockSizeSpinbox, SIGNAL(valueChanged(int)), this, SLOT(blockSizeChanged(int)));
 
   sobolAdvancedParamGroupBox->setExpanded(false);
   sobolWidgetsLayout->addWidget(sobolAdvancedParamGroupBox);
@@ -212,7 +208,7 @@ void SensitivityAnalysisWizard::sampleSizeChanged(int sampleSize)
 }
 
 
-void SensitivityAnalysisWizard::blockSizeChanged(int size)
+void SensitivityAnalysisWizard::blockSizeChanged(double size)
 {
   sobolAnalysis_.setBlockSize(size);
 }

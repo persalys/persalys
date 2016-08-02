@@ -24,6 +24,7 @@
 #include "otgui/AnalysisWizard.hxx"
 #include "otgui/SobolAnalysis.hxx"
 #include "otgui/SRCAnalysis.hxx"
+#include "otgui/BlockSizeGroupBox.hxx"
 
 #include <QLabel>
 
@@ -45,13 +46,14 @@ public slots:
   void updateMethodWidgets(int);
   void sampleSizeChanged(int);
   void seedChanged(int);
-  void blockSizeChanged(int);
+  void blockSizeChanged(double);
   void accept();
 
 private:
   SobolAnalysis sobolAnalysis_;
   SRCAnalysis srcAnalysis_;
   QWidget * sobolWidgets_;
+  BlockSizeGroupBox * blockSizeGroupBox_;
   QWidget * srcWidgets_;
   QLabel * totalNbSimuLabel_;
 };
