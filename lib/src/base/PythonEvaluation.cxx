@@ -20,8 +20,8 @@
  */
 #include "otgui/PythonEvaluation.hxx"
 
-#include "PersistentObjectFactory.hxx"
-#include "PythonWrappingFunctions.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
+#include "openturns/PythonWrappingFunctions.hxx"
 
 using namespace OT;
 
@@ -29,7 +29,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(PythonEvaluation);
 
-static Factory<PythonEvaluation> RegisteredFactory("PythonEvaluation");
+static Factory<PythonEvaluation> RegisteredFactory;
 
 /* Default constructor */
 PythonEvaluation::PythonEvaluation()

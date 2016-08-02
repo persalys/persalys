@@ -27,7 +27,7 @@ namespace OTGUI {
 ExperimentTableModel::ExperimentTableModel(const FixedDesignOfExperiment & designOfExperiment)
   : QAbstractTableModel()
   , designOfExperiment_(designOfExperiment)
-  , firstColumnChecked_(!designOfExperiment.getLevels().__contains__(1))
+  , firstColumnChecked_(!designOfExperiment.getLevels().contains(1))
 {
   designOfExperiment_.updateParameters();
 }
@@ -215,7 +215,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           return false;
         designOfExperiment_.setDeltas(deltas);
       }
-      firstColumnChecked_ = !designOfExperiment_.getLevels().__contains__(1);
+      firstColumnChecked_ = !designOfExperiment_.getLevels().contains(1);
 
       emit dataChanged(index, this->index(indexInput, 6));
     }

@@ -28,9 +28,9 @@
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/QtTools.hxx"
 
-#include "Normal.hxx"
-#include "TruncatedDistribution.hxx"
-#include "TruncatedNormal.hxx"
+#include "openturns/Normal.hxx"
+#include "openturns/TruncatedDistribution.hxx"
+#include "openturns/TruncatedNormal.hxx"
 
 #include <QSplitter>
 #include <QScrollArea>
@@ -66,8 +66,8 @@ void ProbabilisticModelWindow::buildInterface()
   inputTableView_ = new QTableView;
   inputTableView_->setSelectionMode(QAbstractItemView::SingleSelection);
   inputTableHeaderView_ = new CheckableHeaderView;
-  if (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize())
-      inputTableHeaderView_->setChecked(true);
+  if (physicalModel_.hasStochasticInputs() && (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize()))
+    inputTableHeaderView_->setChecked(true);
   inputTableView_->setHorizontalHeader(inputTableHeaderView_);
   QStringList items;
   Description listDistributions = DistributionDictionary::GetAvailableDistributions();

@@ -23,7 +23,7 @@
 
 #include "Output.hxx"
 
-#include "QuadraticCumul.hxx"
+#include "openturns/NumericalSample.hxx"
 
 namespace OTGUI {
 class OTGUI_API TaylorExpansionMomentsResult : public OT::PersistentObject

@@ -20,7 +20,7 @@
  */
 #include "otgui/AnalyticalPhysicalModel.hxx"
 
-#include "PersistentObjectFactory.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(AnalyticalPhysicalModel);
 
-static Factory<AnalyticalPhysicalModel> RegisteredFactory("AnalyticalPhysicalModel");
+static Factory<AnalyticalPhysicalModel> RegisteredFactory;
 
 /* Default constructor */
 AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String & name)

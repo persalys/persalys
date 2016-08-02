@@ -20,7 +20,7 @@
  */
 #include "otgui/ModelEvaluationResult.hxx"
 
-#include "PersistentObjectFactory.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(ModelEvaluationResult);
 
-static Factory<ModelEvaluationResult> RegisteredFactory("ModelEvaluationResult");
+static Factory<ModelEvaluationResult> RegisteredFactory;
 
 /* Default constructor */
 ModelEvaluationResult::ModelEvaluationResult()

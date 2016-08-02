@@ -19,7 +19,7 @@
  *
  */
 #include "otgui/YACSEvalSessionSingleton.hxx"
-#include <Exception.hxx>
+#include "openturns/Exception.hxx"
 
 using namespace OT;
 

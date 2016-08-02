@@ -21,9 +21,6 @@
 #ifndef OTGUI_HORIZONTALHEADERVIEWWITHCOMBOBOX_HXX
 #define OTGUI_HORIZONTALHEADERVIEWWITHCOMBOBOX_HXX
 
-#include "Description.hxx"
-#include "Indices.hxx"
-
 #include <QHeaderView>
 #include <QShowEvent>
 #include <QComboBox>

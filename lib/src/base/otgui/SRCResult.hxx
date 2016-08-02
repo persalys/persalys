@@ -22,7 +22,7 @@
 #define OTGUI_SRCRESULT_HXX
 
 #include "otgui/OTGuiprivate.hxx"
-#include <NumericalSample.hxx>
+#include "openturns/NumericalSample.hxx"
 
 namespace OTGUI {
 class OTGUI_API SRCResult : public OT::PersistentObject

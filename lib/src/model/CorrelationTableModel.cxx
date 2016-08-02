@@ -20,10 +20,7 @@
  */
 #include "otgui/CorrelationTableModel.hxx"
 
-#include "DistributionFactory.hxx"
-#include "TruncatedDistribution.hxx"
-#include "Normal.hxx"
-#include "NormalCopula.hxx"
+#include "openturns/NormalCopula.hxx"
 
 #include <QBrush>
 

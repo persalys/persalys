@@ -25,9 +25,9 @@
 #include "Output.hxx"
 #include "Observable.hxx"
 
-#include "NumericalMathFunction.hxx"
-#include "RandomVector.hxx"
-#include "ComposedDistribution.hxx"
+#include "openturns/NumericalMathFunction.hxx"
+#include "openturns/RandomVector.hxx"
+#include "openturns/ComposedDistribution.hxx"
 
 namespace OTGUI {
 class OTGUI_API PhysicalModelImplementation : public OT::PersistentObject, public Observable

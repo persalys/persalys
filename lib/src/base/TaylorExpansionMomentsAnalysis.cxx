@@ -20,8 +20,8 @@
  */
 #include "otgui/TaylorExpansionMomentsAnalysis.hxx"
 
-#include "QuadraticCumul.hxx"
-#include "PersistentObjectFactory.hxx"
+#include "openturns/TaylorExpansionsMoments.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -29,7 +29,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(TaylorExpansionMomentsAnalysis);
 
-static Factory<TaylorExpansionMomentsAnalysis> RegisteredFactory("TaylorExpansionMomentsAnalysis");
+static Factory<TaylorExpansionMomentsAnalysis> RegisteredFactory;
 
 /* Default constructor */
 TaylorExpansionMomentsAnalysis::TaylorExpansionMomentsAnalysis()
@@ -68,7 +68,7 @@ TaylorExpansionMomentsAnalysis* TaylorExpansionMomentsAnalysis::clone() const
 
 void TaylorExpansionMomentsAnalysis::run()
 {
-  QuadraticCumul algoTaylorExpansionMoments(getPhysicalModel().getOutputRandomVector(getPhysicalModel().getOutputNames()));
+  TaylorExpansionsMoments algoTaylorExpansionMoments(getPhysicalModel().getOutputRandomVector(getPhysicalModel().getOutputNames()));
 
   // set results
   NumericalPoint meanFirstOrder = algoTaylorExpansionMoments.getMeanFirstOrder();

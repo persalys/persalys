@@ -23,7 +23,7 @@
 #define OTGUI_EXCEPTION_HXX
 
 #include "otgui/OTGuiprivate.hxx"
-#include "Exception.hxx"
+#include "openturns/Exception.hxx"
 
 namespace OTGUI {
 

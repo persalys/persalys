@@ -20,10 +20,7 @@
  */
 #include "otgui/FromFileDesignOfExperiment.hxx"
 
-#include "Box.hxx"
-#include "TruncatedDistribution.hxx"
-#include "TruncatedNormal.hxx"
-#include "PersistentObjectFactory.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -31,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(FromFileDesignOfExperiment);
 
-static Factory<FromFileDesignOfExperiment> RegisteredFactory("FromFileDesignOfExperiment");
+static Factory<FromFileDesignOfExperiment> RegisteredFactory;
 
 /* Default constructor */
 FromFileDesignOfExperiment::FromFileDesignOfExperiment()

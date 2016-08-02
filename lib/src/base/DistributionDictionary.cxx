@@ -20,30 +20,30 @@
  */
 #include "otgui/DistributionDictionary.hxx"
 
-#include "SpecFunc.hxx"
-#include "ArcsineMuSigma.hxx"
-#include "BetaMuSigma.hxx"
-#include "ChiSquare.hxx"
-#include "Exponential.hxx"
-#include "InverseNormal.hxx"
-#include "GammaMuSigma.hxx"
-#include "Gumbel.hxx"
-#include "GumbelAB.hxx"
-#include "GumbelMuSigma.hxx"
-#include "Laplace.hxx"
-#include "LogNormal.hxx"
-#include "LogNormalMuSigma.hxx"
-#include "LogNormalMuSigmaOverMu.hxx"
-#include "Logistic.hxx"
-#include "LogUniform.hxx"
-#include "Normal.hxx"
-#include "Rayleigh.hxx"
-#include "Student.hxx"
-#include "Trapezoidal.hxx"
-#include "Triangular.hxx"
-#include "Uniform.hxx"
-#include "Weibull.hxx"
-#include "WeibullMuSigma.hxx"
+#include "openturns/SpecFunc.hxx"
+#include "openturns/ArcsineMuSigma.hxx"
+#include "openturns/BetaMuSigma.hxx"
+#include "openturns/ChiSquare.hxx"
+#include "openturns/Exponential.hxx"
+#include "openturns/InverseNormal.hxx"
+#include "openturns/GammaMuSigma.hxx"
+#include "openturns/Gumbel.hxx"
+#include "openturns/GumbelAB.hxx"
+#include "openturns/GumbelMuSigma.hxx"
+#include "openturns/Laplace.hxx"
+#include "openturns/LogNormal.hxx"
+#include "openturns/LogNormalMuSigma.hxx"
+#include "openturns/LogNormalMuSigmaOverMu.hxx"
+#include "openturns/Logistic.hxx"
+#include "openturns/LogUniform.hxx"
+#include "openturns/Normal.hxx"
+#include "openturns/Rayleigh.hxx"
+#include "openturns/Student.hxx"
+#include "openturns/Trapezoidal.hxx"
+#include "openturns/Triangular.hxx"
+#include "openturns/Uniform.hxx"
+#include "openturns/Weibull.hxx"
+#include "openturns/WeibullMuSigma.hxx"
 
 using namespace OT;
 
@@ -183,26 +183,73 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
 Distribution::NumericalPointWithDescriptionCollection DistributionDictionary::GetParametersCollection(const Distribution & distribution)
 {
   String distributionName = distribution.getImplementation()->getClassName();
-  Distribution::NumericalPointWithDescriptionCollection desc = distribution.getParametersCollection();
+  Distribution::NumericalPointWithDescriptionCollection NPWithDescColl(distribution.getParametersCollection());
 
   if (distributionName == "Gumbel")
   {
     Gumbel d = *dynamic_cast<Gumbel*>(&*distribution.getImplementation());
-    desc.add(GumbelAB(d.getA(), d.getB()).getParametersCollection());
-    desc.add(GumbelMuSigma(d.getMu(), d.getSigma()).getParametersCollection());
+    NumericalPointWithDescription NPWithDesc;
+
+    GumbelAB d1(d.getA(), d.getB());
+    NPWithDesc = d1.getValues();
+    NPWithDesc.setDescription(d1.getDescription());
+    NPWithDescColl.add(NPWithDesc);
+
+    GumbelMuSigma d2(d.getMu(), d.getSigma());
+    NPWithDesc = d2.getValues();
+    NPWithDesc.setDescription(d2.getDescription());
+    NPWithDescColl.add(NPWithDesc);
   }
   else if (distributionName == "LogNormal")
   {
     LogNormal d = *dynamic_cast<LogNormal*>(&*distribution.getImplementation());
-    desc.add(LogNormalMuSigma(d.getMu(), d.getSigma(), d.getGamma()).getParametersCollection());
-    desc.add(LogNormalMuSigmaOverMu(d.getMu(), d.getSigmaOverMu(), d.getGamma()).getParametersCollection());
+    NumericalPointWithDescription NPWithDesc;
+
+    LogNormalMuSigma d1(d.getMu(), d.getSigma(), d.getGamma());
+    NPWithDesc = d1.getValues();
+    NPWithDesc.setDescription(d1.getDescription());
+    NPWithDescColl.add(NPWithDesc);
+
+    LogNormalMuSigmaOverMu d2(d.getMu(), d.getSigmaOverMu(), d.getGamma());
+    NPWithDesc = d2.getValues();
+    NPWithDesc.setDescription(d2.getDescription());
+    NPWithDescColl.add(NPWithDesc);
+  }
+  else if (distributionName == "Normal")
+  {
+    NumericalPointWithDescription NPWithDesc(NPWithDescColl[0]);
+
+    Description description(2);
+    description[0] = "mean";
+    description[1] = "standard deviation";
+    NPWithDesc.setDescription(description);
+
+    NPWithDescColl[0] = NPWithDesc;
+  }
+  else if (distributionName == "Student")
+  {
+    NumericalPointWithDescription NPWithDesc(NPWithDescColl[0]);
+
+    Description description(3);
+    description[0] = "nu";
+    description[1] = "mean";
+    description[2] = "standard deviation";
+    NPWithDesc.setDescription(description);
+
+    NPWithDescColl[0] = NPWithDesc;
   }
   else if (distributionName == "Weibull")
   {
     Weibull d = *dynamic_cast<Weibull*>(&*distribution.getImplementation());
-    desc.add(WeibullMuSigma(d.getMu(), d.getSigma(), d.getGamma()).getParametersCollection());
+    NumericalPointWithDescription NPWithDesc;
+
+    WeibullMuSigma d1(d.getMu(), d.getSigma(), d.getGamma());
+    NPWithDesc = d1.getValues();
+    NPWithDesc.setDescription(d1.getDescription());
+    NPWithDescColl.add(NPWithDesc);
   }
-  return desc;
+
+  return NPWithDescColl;
 }
 
 
@@ -214,7 +261,11 @@ void DistributionDictionary::UpdateDistribution(Distribution & distribution,
   String distributionName = distribution.getImplementation()->getClassName();
 
   if (parametersType == 0)
-    distribution.setParametersCollection(description);
+  {
+    Distribution::NumericalPointWithDescriptionCollection NPWithDescColl;
+    NPWithDescColl.add(description);
+    distribution.setParametersCollection(NPWithDescColl);
+  }
   else
   {
     if (distributionName == "Gumbel")

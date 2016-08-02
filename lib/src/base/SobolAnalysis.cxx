@@ -20,9 +20,9 @@
  */
 #include "otgui/SobolAnalysis.hxx"
 
-#include "RandomGenerator.hxx"
-#include "SensitivityAnalysis.hxx"
-#include "PersistentObjectFactory.hxx"
+#include "openturns/RandomGenerator.hxx"
+#include "openturns/SensitivityAnalysis.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -30,7 +30,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(SobolAnalysis);
 
-static Factory<SobolAnalysis> RegisteredFactory("SobolAnalysis");
+static Factory<SobolAnalysis> RegisteredFactory;
 
 /* Default constructor */
 SobolAnalysis::SobolAnalysis()

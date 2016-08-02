@@ -21,7 +21,7 @@
 #ifndef OTGUI_DISTRIBUTIONDICTIONARY_HXX
 #define OTGUI_DISTRIBUTIONDICTIONARY_HXX
 
-#include <Distribution.hxx>
+#include "openturns/Distribution.hxx"
 #include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {

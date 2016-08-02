@@ -846,7 +846,7 @@ void StudyTreeView::openOTStudy(const QString & fileName)
   QSettings settings;
   settings.setValue("currentDir", file.absolutePath());
 
-  if (file.exists() && !OTStudy::GetFileNames().__contains__(file.absoluteFilePath().toUtf8().constData()))
+  if (file.exists() && !OTStudy::GetFileNames().contains(file.absoluteFilePath().toUtf8().constData()))
   {
     try
     {
@@ -871,7 +871,7 @@ void StudyTreeView::openOTStudy(const QString & fileName)
     {
       message = tr("The file '%1' does not exist.").arg(fileName);
     }
-    else if (OTStudy::GetFileNames().__contains__(file.absoluteFilePath().toUtf8().constData()))
+    else if (OTStudy::GetFileNames().contains(file.absoluteFilePath().toUtf8().constData()))
     {
       message = tr("The file '%1' is already opened.").arg(fileName);
     }

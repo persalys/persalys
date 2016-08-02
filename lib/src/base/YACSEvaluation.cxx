@@ -21,7 +21,7 @@
 #include "otgui/YACSEvaluation.hxx"
 #include "otgui/YACSEvalSessionSingleton.hxx"
 
-#include "PersistentObjectFactory.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 #include "YACSEvalPort.hxx"
 #include "YACSEvalSeqAny.hxx"
@@ -34,7 +34,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(YACSEvaluation);
 
-static Factory<YACSEvaluation> RegisteredFactory("YACSEvaluation");
+static Factory<YACSEvaluation> RegisteredFactory;
 
 /* Default constructor */
 YACSEvaluation::YACSEvaluation(const String & fileName)

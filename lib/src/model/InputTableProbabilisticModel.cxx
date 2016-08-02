@@ -22,8 +22,7 @@
 
 #include "otgui/DistributionDictionary.hxx"
 
-#include "TruncatedDistribution.hxx"
-#include "Normal.hxx"
+#include "openturns/TruncatedDistribution.hxx"
 
 using namespace OT;
 
@@ -164,7 +163,7 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
     physicalModel_.blockNotification(false);
     emit dataChanged(index, this->index(index.row(), 1));
     emit correlationToChange();
-    if (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize())
+    if (physicalModel_.hasStochasticInputs() && (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize()))
       emit checked(true);
     else
       emit checked(false);
