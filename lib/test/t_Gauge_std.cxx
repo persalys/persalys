@@ -18,8 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "OT.hxx"
-#include "OTtestcode.hxx"
+#include "openturns/OT.hxx"
+#include "openturns/OTtestcode.hxx"
 #include "otgui/OTStudy.hxx"
 #include "otgui/YACSPhysicalModel.hxx"
 #include "otgui/TaylorExpansionMomentsAnalysis.hxx"

@@ -20,8 +20,8 @@
  */
 #include "otgui/YACSPhysicalModel.hxx"
 
-#include <OT.hxx>
-#include "OTtestcode.hxx"
+#include "openturns/OT.hxx"
+#include "openturns/OTtestcode.hxx"
 #include <iostream>
 
 using namespace OT;

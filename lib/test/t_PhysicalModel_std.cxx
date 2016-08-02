@@ -20,7 +20,7 @@
  */
 #include <iostream>
 // OT includes
-#include <OT.hxx>
+#include "openturns/OT.hxx"
 #include "otgui/AnalyticalPhysicalModel.hxx"
 #include "otgui/PythonPhysicalModel.hxx"
 #include "otgui/OTStudy.hxx"
