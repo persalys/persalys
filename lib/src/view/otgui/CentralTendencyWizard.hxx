@@ -22,8 +22,8 @@
 #define OTGUI_CENTRALTENDENCYWIZARD_HXX
 
 #include "otgui/AnalysisWizard.hxx"
-#include "otgui/UIntSpinBox.hxx"
 #include "otgui/StopCriteriaGroupBox.hxx"
+#include "otgui/BlockSizeGroupBox.hxx"
 #include "otgui/TaylorExpansionMomentsAnalysis.hxx"
 #include "otgui/MonteCarloAnalysis.hxx"
 
@@ -60,7 +60,7 @@ private:
   TaylorExpansionMomentsAnalysis taylorAnalysis_;
   QWidget * monteCarloWidget_;
   StopCriteriaGroupBox * stopCriteriaGroupBox_;
-  UIntSpinBox * blockSizeSpinbox_;
+  BlockSizeGroupBox * blockSizeGroupBox_;
   QWidget * TaylorExpansionsWidget_;
   QLabel * errorMessageLabel_;
 };
