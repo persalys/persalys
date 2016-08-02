@@ -23,8 +23,8 @@
 
 #include "otgui/LimitState.hxx"
 #include "otgui/AnalysisWizard.hxx"
-#include "otgui/UIntSpinBox.hxx"
 #include "otgui/StopCriteriaGroupBox.hxx"
+#include "otgui/BlockSizeGroupBox.hxx"
 
 #include <QButtonGroup>
 #include <QLabel>
@@ -57,7 +57,7 @@ private:
   QWidget * monteCarloWidget_;
   StopCriteriaGroupBox * stopCriteriaGroupBox_;
   QSpinBox * seedSpinbox_;
-  UIntSpinBox * blockSizeSpinbox_;
+  BlockSizeGroupBox * blockSizeGroupBox_;
   QLabel * errorMessageLabel_;
 };
 }
