@@ -20,8 +20,8 @@
  */
 #include "otgui/WithStopCriteriaAnalysis.hxx"
 
-#include "PersistentObjectFactory.hxx"
-#include "ResourceMap.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
+#include "openturns/ResourceMap.hxx"
 
 using namespace OT;
 
