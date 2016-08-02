@@ -411,6 +411,8 @@ ComposedDistribution PhysicalModelImplementation::getComposedDistribution() cons
 
 RandomVector PhysicalModelImplementation::getInputRandomVector() const
 {
+  if (!hasStochasticInputs())
+    throw PhysicalModelNotValidException(HERE) << "Can not use getInputRandomVector on a physical model which has no stochastic inputs.";
   return RandomVector(getComposedDistribution());
 }
 
