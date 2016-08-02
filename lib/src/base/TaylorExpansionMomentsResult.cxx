@@ -20,7 +20,7 @@
  */
 #include "otgui/TaylorExpansionMomentsResult.hxx"
 
-#include "PersistentObjectFactory.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(TaylorExpansionMomentsResult);
 
-static Factory<TaylorExpansionMomentsResult> RegisteredFactory("TaylorExpansionMomentsResult");
+static Factory<TaylorExpansionMomentsResult> RegisteredFactory;
 
 /* Default constructor */
 TaylorExpansionMomentsResult::TaylorExpansionMomentsResult()

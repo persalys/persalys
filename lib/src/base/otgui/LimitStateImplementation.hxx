@@ -23,8 +23,6 @@
 
 #include "PhysicalModel.hxx"
 
-#include "Event.hxx"
-
 namespace OTGUI {
 class OTGUI_API LimitStateImplementation : public OT::PersistentObject, public Observable
 {

@@ -20,11 +20,6 @@
  */
 #include "otgui/DesignOfExperimentImplementation.hxx"
 
-#include "Box.hxx"
-#include "TruncatedDistribution.hxx"
-#include "TruncatedNormal.hxx"
-#include "PersistentObjectFactory.hxx"
-
 using namespace OT;
 
 namespace OTGUI {

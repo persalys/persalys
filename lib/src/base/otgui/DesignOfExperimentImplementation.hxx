@@ -24,8 +24,6 @@
 #include "PhysicalModel.hxx"
 #include "SimulationAnalysisResult.hxx"
 
-#include "Experiment.hxx"
-
 namespace OTGUI {
 class OTGUI_API DesignOfExperimentImplementation : public OT::PersistentObject, public Observable
 {

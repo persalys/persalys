@@ -21,7 +21,7 @@
 #ifndef OTGUI_MONTECARLORELIABILITYANALYSISRESULT_HXX
 #define OTGUI_MONTECARLORELIABILITYANALYSISRESULT_HXX
 
-#include <SimulationResult.hxx>
+#include "openturns/SimulationResult.hxx"
 #include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {

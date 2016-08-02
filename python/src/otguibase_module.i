@@ -3,8 +3,8 @@
 %module(docstring="otguibase module") otguibase
 
 %{
-#include "OT.hxx"
-#include "PythonWrappingFunctions.hxx"
+#include "openturns/OT.hxx"
+#include "openturns/PythonWrappingFunctions.hxx"
 %}
 
 // Prerequisites needed

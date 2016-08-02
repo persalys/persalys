@@ -20,9 +20,9 @@
  */
 #include "otgui/SRCAnalysis.hxx"
 
-#include "RandomGenerator.hxx"
-#include "CorrelationAnalysis.hxx"
-#include "PersistentObjectFactory.hxx"
+#include "openturns/RandomGenerator.hxx"
+#include "openturns/CorrelationAnalysis.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -30,7 +30,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(SRCAnalysis);
 
-static Factory<SRCAnalysis> RegisteredFactory("SRCAnalysis");
+static Factory<SRCAnalysis> RegisteredFactory;
 
 /* Default constructor */
 SRCAnalysis::SRCAnalysis()

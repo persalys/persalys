@@ -22,8 +22,7 @@
 
 #include "otgui/DistributionDictionary.hxx"
 
-#include "TruncatedDistribution.hxx"
-#include "Normal.hxx"
+#include "openturns/TruncatedDistribution.hxx"
 
 using namespace OT;
 

@@ -20,10 +20,10 @@
  */
 #include "otgui/FixedDesignOfExperiment.hxx"
 
-#include "Box.hxx"
-#include "TruncatedDistribution.hxx"
-#include "TruncatedNormal.hxx"
-#include "PersistentObjectFactory.hxx"
+#include "openturns/Box.hxx"
+#include "openturns/TruncatedDistribution.hxx"
+#include "openturns/TruncatedNormal.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -31,7 +31,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(FixedDesignOfExperiment);
 
-static Factory<FixedDesignOfExperiment> RegisteredFactory("FixedDesignOfExperiment");
+static Factory<FixedDesignOfExperiment> RegisteredFactory;
 
 /* Default constructor */
 FixedDesignOfExperiment::FixedDesignOfExperiment()
@@ -331,7 +331,7 @@ NumericalSample FixedDesignOfExperiment::getInputSample()
 
 Description FixedDesignOfExperiment::getVariableInputNames() const
 {
-  if (!levels_.__contains__(1))
+  if (!levels_.contains(1))
     return inputNames_;
 
   Description variableInputsNames;

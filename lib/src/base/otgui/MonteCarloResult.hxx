@@ -22,7 +22,7 @@
 #define OTGUI_MONTECARLORESULT_HXX
 
 #include "SimulationAnalysisResult.hxx"
-#include "Distribution.hxx"
+#include "openturns/Distribution.hxx"
 
 namespace OTGUI {
 class OTGUI_API MonteCarloResult : public SimulationAnalysisResult

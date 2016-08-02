@@ -23,8 +23,8 @@
 
 #include "Variable.hxx"
 
-#include "Distribution.hxx"
-#include "DiracFactory.hxx"
+#include "openturns/Distribution.hxx"
+#include "openturns/DiracFactory.hxx"
 
 namespace OTGUI {
 class OTGUI_API Input : public Variable

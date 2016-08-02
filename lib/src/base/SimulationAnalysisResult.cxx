@@ -20,7 +20,7 @@
  */
 #include "otgui/SimulationAnalysisResult.hxx"
 
-#include "PersistentObjectFactory.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(SimulationAnalysisResult);
 
-static Factory<SimulationAnalysisResult> RegisteredFactory("SimulationAnalysisResult");
+static Factory<SimulationAnalysisResult> RegisteredFactory;
 
 /* Default constructor */
 SimulationAnalysisResult::SimulationAnalysisResult()
@@ -88,7 +88,7 @@ void SimulationAnalysisResult::searchMinMax()
     do
     {
       NumericalPoint point = orderedSample.getMarginal(indicesInputs)[it];
-      if (!tempSample.__contains__(point))
+      if (!tempSample.contains(point))
         tempSample.add(point);
       ++it;
       value = orderedSample[it][i];
@@ -105,7 +105,7 @@ void SimulationAnalysisResult::searchMinMax()
     do
     {
       NumericalPoint point = orderedSample.getMarginal(indicesInputs)[size-1-it];
-      if (!tempSample.__contains__(point))
+      if (!tempSample.contains(point))
         tempSample.add(point);
       ++it;
       value = orderedSample[size-1-it][i];

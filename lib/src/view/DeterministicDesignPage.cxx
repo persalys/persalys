@@ -23,8 +23,6 @@
 #include "otgui/ComboBoxDelegate.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 
-#include <NumericalSample.hxx>
-
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QHeaderView>

@@ -22,7 +22,7 @@
 #define OTGUI_OUTPUT_HXX
 
 #include "Variable.hxx"
-#include "Collection.hxx"
+#include "openturns/Collection.hxx"
 
 namespace OTGUI {
 class OTGUI_API Output : public Variable

@@ -20,7 +20,7 @@
  */
 #include "otgui/Output.hxx"
 
-#include "PersistentObjectFactory.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(Output);
 
-static Factory<Output> RegisteredFactory("Output");
+static Factory<Output> RegisteredFactory;
 
 /* Default constructor */
 Output::Output()

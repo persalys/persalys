@@ -20,8 +20,8 @@
  */
 #include "otgui/Input.hxx"
 
-#include "TruncatedDistribution.hxx"
-#include "PersistentObjectFactory.hxx"
+#include "openturns/TruncatedDistribution.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -29,7 +29,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(Input);
 
-static Factory<Input> RegisteredFactory("Input");
+static Factory<Input> RegisteredFactory;
 
 /* Default constructor */
 Input::Input()

@@ -20,7 +20,7 @@
  */
 #include "otgui/YACSPhysicalModel.hxx"
 
-#include "PersistentObjectFactory.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(YACSPhysicalModel);
 
-static Factory<YACSPhysicalModel> RegisteredFactory("YACSPhysicalModel");
+static Factory<YACSPhysicalModel> RegisteredFactory;
 
 /* Default constructor */
 YACSPhysicalModel::YACSPhysicalModel(const String & name)

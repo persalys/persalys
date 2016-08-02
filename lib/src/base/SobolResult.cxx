@@ -20,7 +20,7 @@
  */
 #include "otgui/SobolResult.hxx"
 
-#include "PersistentObjectFactory.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -28,8 +28,8 @@ namespace OTGUI {
 
 CLASSNAMEINIT(SobolResult);
 
-static Factory<SobolResult> RegisteredFactory("SobolResult");
-static Factory<PersistentCollection<SymmetricMatrix> > RegisteredFactorySymMtrColl("PersistentCollection<SymmetricMatrix>");
+static Factory<SobolResult> RegisteredFactory;
+static Factory<PersistentCollection<SymmetricMatrix> > RegisteredFactorySymMtrColl;
 
 /* Default constructor */
 SobolResult::SobolResult()

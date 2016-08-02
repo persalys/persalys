@@ -21,7 +21,7 @@
 #ifndef OTGUI_VARIABLE_HXX
 #define OTGUI_VARIABLE_HXX
 
-#include <PersistentObject.hxx>
+#include <openturns/PersistentObject.hxx>
 #include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {

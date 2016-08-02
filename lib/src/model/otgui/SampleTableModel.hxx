@@ -21,7 +21,7 @@
 #ifndef OTGUI_SAMPLETABLEMODEL_HXX
 #define OTGUI_SAMPLETABLEMODEL_HXX
 
-#include "NumericalSample.hxx"
+#include "openturns/NumericalSample.hxx"
 
 #include "otgui/OTGuiprivate.hxx"
 

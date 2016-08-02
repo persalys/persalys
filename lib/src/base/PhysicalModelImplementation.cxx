@@ -20,16 +20,16 @@
  */
 #include "otgui/PhysicalModelImplementation.hxx"
 
-#include "NormalCopula.hxx"
-#include "TruncatedDistribution.hxx"
-#include "PersistentObjectFactory.hxx"
+#include "openturns/NormalCopula.hxx"
+#include "openturns/TruncatedDistribution.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
 namespace OTGUI {
 
-static Factory<PersistentCollection<Input> > RegisteredFactory_CollIn("PersistentCollection<Input>");
-static Factory<PersistentCollection<Output> > RegisteredFactory_CollOut("PersistentCollection<Output>");
+static Factory<PersistentCollection<Input> > RegisteredFactory_CollIn;
+static Factory<PersistentCollection<Output> > RegisteredFactory_CollOut;
 
 /* Constructor with parameters */
 PhysicalModelImplementation::PhysicalModelImplementation(const String & name)

@@ -20,7 +20,7 @@
  */
 #include "otgui/MonteCarloReliabilityResult.hxx"
 
-#include "PersistentObjectFactory.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(MonteCarloReliabilityResult);
 
-static Factory<MonteCarloReliabilityResult> RegisteredFactory("MonteCarloReliabilityResult");
+static Factory<MonteCarloReliabilityResult> RegisteredFactory;
 
 /* Default constructor */
 MonteCarloReliabilityResult::MonteCarloReliabilityResult()

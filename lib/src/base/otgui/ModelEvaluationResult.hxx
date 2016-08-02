@@ -22,7 +22,7 @@
 #define OTGUI_MODELEVALUATIONRESULT_HXX
 
 #include "otgui/OTGuiprivate.hxx"
-#include <NumericalSample.hxx>
+#include "openturns/NumericalSample.hxx"
 
 namespace OTGUI {
 class OTGUI_API ModelEvaluationResult : public OT::PersistentObject

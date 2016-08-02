@@ -21,7 +21,7 @@
 #ifndef OTGUI_PLOTMATRIXWIDGET_HXX
 #define OTGUI_PLOTMATRIXWIDGET_HXX
 
-#include "NumericalSample.hxx"
+#include "openturns/NumericalSample.hxx"
 
 #include <QTableWidget>
 #include <QLabel>

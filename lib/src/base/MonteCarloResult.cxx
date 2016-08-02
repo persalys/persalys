@@ -19,10 +19,10 @@
  *
  */
 #include "otgui/MonteCarloResult.hxx"
-#include "Normal.hxx"
-#include "ChiSquare.hxx"
-#include "KernelSmoothing.hxx"
-#include "PersistentObjectFactory.hxx"
+#include "openturns/Normal.hxx"
+#include "openturns/ChiSquare.hxx"
+#include "openturns/KernelSmoothing.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -30,7 +30,7 @@ namespace OTGUI{
 
 CLASSNAMEINIT(MonteCarloResult);
 
-static Factory<MonteCarloResult> RegisteredFactory("MonteCarloResult");
+static Factory<MonteCarloResult> RegisteredFactory;
 
 /* Default constructor */
 MonteCarloResult::MonteCarloResult()

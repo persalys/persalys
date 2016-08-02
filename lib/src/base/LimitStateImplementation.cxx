@@ -20,8 +20,8 @@
  */
 #include "otgui/LimitStateImplementation.hxx"
 
-#include "Equal.hxx"
-#include "PersistentObjectFactory.hxx"
+#include "openturns/Equal.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -29,7 +29,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(LimitStateImplementation);
 
-static Factory<LimitStateImplementation> RegisteredFactory("LimitStateImplementation");
+static Factory<LimitStateImplementation> RegisteredFactory;
 
 /* Default constructor */
 LimitStateImplementation::LimitStateImplementation()

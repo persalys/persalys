@@ -21,7 +21,7 @@
 #include "otgui/PythonPhysicalModel.hxx"
 #include "otgui/PythonEvaluation.hxx"
 
-#include "PersistentObjectFactory.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -29,7 +29,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(PythonPhysicalModel);
 
-static Factory<PythonPhysicalModel> RegisteredFactory("PythonPhysicalModel");
+static Factory<PythonPhysicalModel> RegisteredFactory;
 
 /* Default constructor */
 PythonPhysicalModel::PythonPhysicalModel(const String & name)

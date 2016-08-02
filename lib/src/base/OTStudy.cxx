@@ -22,20 +22,20 @@
 
 #include "otgui/ReliabilityAnalysis.hxx"
 
-#include "PersistentObjectFactory.hxx"
-#include "Study.hxx"
-#include "XMLStorageManager.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
+#include "openturns/Study.hxx"
+#include "openturns/XMLStorageManager.hxx"
 
 using namespace OT;
 
 namespace OTGUI {
 
-static Factory<OTStudy> RegisteredFactory("OTStudy");
+static Factory<OTStudy> RegisteredFactory;
 
-static Factory<PersistentCollection<PhysicalModel> > RegisteredFactory_CollPM("PersistentCollection<PhysicalModel>");
-static Factory<PersistentCollection<DesignOfExperiment> > RegisteredFactory_CollDOE("PersistentCollection<DesignOfExperiment>");
-static Factory<PersistentCollection<LimitState> > RegisteredFactory_CollLS("PersistentCollection<LimitState>");
-static Factory<PersistentCollection<Analysis> > RegisteredFactory_CollAn("PersistentCollection<Analysis>");
+static Factory<PersistentCollection<PhysicalModel> > RegisteredFactory_CollPM;
+static Factory<PersistentCollection<DesignOfExperiment> > RegisteredFactory_CollDOE;
+static Factory<PersistentCollection<LimitState> > RegisteredFactory_CollLS;
+static Factory<PersistentCollection<Analysis> > RegisteredFactory_CollAn;
 
 
 Collection<Pointer<OTStudy> > OTStudy::OTStudies_;

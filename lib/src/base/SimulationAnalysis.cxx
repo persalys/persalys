@@ -20,9 +20,6 @@
  */
 #include "otgui/SimulationAnalysis.hxx"
 
-#include "RandomGenerator.hxx"
-#include "CorrelationAnalysis.hxx"
-
 using namespace OT;
 
 namespace OTGUI {

@@ -20,8 +20,8 @@
  */
 #include "otgui/MonteCarloAnalysis.hxx"
 
-#include "RandomGenerator.hxx"
-#include "PersistentObjectFactory.hxx"
+#include "openturns/RandomGenerator.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -29,7 +29,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(MonteCarloAnalysis);
 
-static Factory<MonteCarloAnalysis> RegisteredFactory("MonteCarloAnalysis");
+static Factory<MonteCarloAnalysis> RegisteredFactory;
 
 /* Default constructor */
 MonteCarloAnalysis::MonteCarloAnalysis()

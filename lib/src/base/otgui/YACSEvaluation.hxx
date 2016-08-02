@@ -23,7 +23,7 @@
 
 #include "otgui/OTGuiprivate.hxx"
 
-#include <NumericalMathEvaluationImplementation.hxx>
+#include "openturns/NumericalMathEvaluationImplementation.hxx"
 
 #include <YACSEvalYFX.hxx>
 

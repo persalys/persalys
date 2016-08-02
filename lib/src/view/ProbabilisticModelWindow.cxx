@@ -28,9 +28,9 @@
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/QtTools.hxx"
 
-#include "Normal.hxx"
-#include "TruncatedDistribution.hxx"
-#include "TruncatedNormal.hxx"
+#include "openturns/Normal.hxx"
+#include "openturns/TruncatedDistribution.hxx"
+#include "openturns/TruncatedNormal.hxx"
 
 #include <QSplitter>
 #include <QScrollArea>

@@ -21,7 +21,7 @@
 #ifndef OTGUI_OBSERVER_HXX
 #define OTGUI_OBSERVER_HXX
 
-#include <OTtypes.hxx>
+#include "openturns/OTtypes.hxx"
 #include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {

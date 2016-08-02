@@ -23,8 +23,7 @@
 
 #include "LimitStateImplementation.hxx"
 
-#include <Less.hxx>
-#include <Event.hxx>
+#include <openturns/Less.hxx>
 
 namespace OTGUI {
 class OTGUI_API LimitState : public OT::TypedInterfaceObject<LimitStateImplementation>

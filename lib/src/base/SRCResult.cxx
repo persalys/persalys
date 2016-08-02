@@ -20,7 +20,7 @@
  */
 #include "otgui/SRCResult.hxx"
 
-#include "PersistentObjectFactory.hxx"
+#include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
 
@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(SRCResult);
 
-static Factory<SRCResult> RegisteredFactory("SRCResult");
+static Factory<SRCResult> RegisteredFactory;
 
 /* Default constructor */
 SRCResult::SRCResult()

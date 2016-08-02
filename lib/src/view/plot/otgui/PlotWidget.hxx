@@ -27,7 +27,7 @@
 #include <qwt_symbol.h>
 #include <qwt_scale_draw.h>
 
-#include "Distribution.hxx"
+#include "openturns/Distribution.hxx"
 
 namespace OTGUI {
 class PlotWidget : public QwtPlot
