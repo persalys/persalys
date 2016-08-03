@@ -20,7 +20,7 @@
  */
 #include "otgui/TaylorExpansionMomentsAnalysis.hxx"
 
-#include "openturns/TaylorExpansionsMoments.hxx"
+#include "openturns/TaylorExpansionMoments.hxx"
 #include "openturns/PersistentObjectFactory.hxx"
 
 using namespace OT;
@@ -68,7 +68,7 @@ TaylorExpansionMomentsAnalysis* TaylorExpansionMomentsAnalysis::clone() const
 
 void TaylorExpansionMomentsAnalysis::run()
 {
-  TaylorExpansionsMoments algoTaylorExpansionMoments(getPhysicalModel().getOutputRandomVector(getPhysicalModel().getOutputNames()));
+  TaylorExpansionMoments algoTaylorExpansionMoments(getPhysicalModel().getOutputRandomVector(getPhysicalModel().getOutputNames()));
 
   // set results
   NumericalPoint meanFirstOrder = algoTaylorExpansionMoments.getMeanFirstOrder();

@@ -460,8 +460,8 @@ void PlotWidget::updateScaleParameters(const Distribution & distribution)
 {
   double mean = distribution.getMean()[0];
   double stepSize = 0.0;
-  const double qmin = ResourceMap::GetAsNumericalScalar("DistributionImplementation-QMin");
-  const double qmax = ResourceMap::GetAsNumericalScalar("DistributionImplementation-QMax");
+  const double qmin = ResourceMap::GetAsNumericalScalar("Distribution-QMin");
+  const double qmax = ResourceMap::GetAsNumericalScalar("Distribution-QMax");
   double x1 = distribution.computeQuantile(qmin)[0];
   double x2 = distribution.computeQuantile(qmax)[0];
   const double delta = 2.0 *(x2 - x1) *(1.0 - 0.5 *(qmax - qmin));
