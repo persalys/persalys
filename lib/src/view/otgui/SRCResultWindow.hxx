@@ -42,12 +42,13 @@ protected:
 
 public slots:
   void updateIndicesPlot(int section, Qt::SortOrder order);
+  void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 
 private:
   SRCResult result_;
-  CustomStandardItemModel * tableModel_;
-  QStackedWidget * scrollAreaWidget_;
+  QTabWidget * tabWidget_;
+  QVector<CustomStandardItemModel*> listTableModels_;
   GraphConfigurationWidget * plotsConfigurationWidget_;
   QVector<PlotWidget*> listPlotWidgets_;
 };

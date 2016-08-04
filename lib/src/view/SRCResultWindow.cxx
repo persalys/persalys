@@ -60,84 +60,127 @@ void SRCResultWindow::setParameters(const Analysis & analysis)
 
 void SRCResultWindow::buildInterface()
 {
-  QTabWidget * tabWidget = new QTabWidget;
+  tabWidget_ = new QTabWidget;
 
   // first tab --------------------------------
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  scrollAreaWidget_ = new QStackedWidget;
 
   Description inputNames = result_.getInputNames();
   QStringList outputNames;
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
     outputNames << QString::fromUtf8(result_.getOutputNames()[i].c_str());
 
+  QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
+
+  QStackedWidget * plotStackedWidget = new QStackedWidget;
+  QStackedWidget * tableStackedWidget = new QStackedWidget;
+  QStackedWidget * interactionStackedWidget = new QStackedWidget;
+
+  QWidget * widget = new QWidget;
+  QVBoxLayout * vbox = new QVBoxLayout(widget);
+
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
   {
-    QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
-
     // plot
     PlotWidget * plot = new PlotWidget("sensitivitySRC", true);
     plot->plotSensitivityIndices(result_.getIndices()[i], NumericalPoint(), inputNames);
     plot->setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
-
-    verticalSplitter->addWidget(plot);
-    verticalSplitter->setStretchFactor(0, 3);
     listPlotWidgets_.append(plot);
+    plotStackedWidget->addWidget(plot);
 
-    // table of indices
-    CopyableTableView * table = new CopyableTableView;
-    table->verticalHeader()->hide();
+    // table of first order en total order indices + interactions
+    CopyableTableView * tableView = new CopyableTableView;
+    tableView->verticalHeader()->hide();
 #if QT_VERSION >= 0x050000
-    table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 #else
-    table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+    tableView->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 #endif
-    table->setSortingEnabled(true);
-    tableModel_ = new CustomStandardItemModel(inputNames.getSize(), 2);
-    tableModel_->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Index"));
-    table->setModel(tableModel_);
+    tableView->setSortingEnabled(true);
+
+    CustomStandardItemModel * tableModel = new CustomStandardItemModel(inputNames.getSize(), 2);
+    tableModel->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Index"));
 
     // fill table
+    NumericalScalar interactionsValue(0.);
     for (UnsignedInteger j=0; j<inputNames.getSize(); ++j)
     {
-      tableModel_->setNotEditableItem(j, 0, QString::fromUtf8(inputNames[j].c_str()));
-      tableModel_->setNotEditableItem(j, 1, result_.getIndices()[i][j]);
+      tableModel->setNotEditableItem(j, 0, QString::fromUtf8(inputNames[j].c_str()));
+      tableModel->setNotEditableItem(j, 1, result_.getIndices()[i][j]);
     }
-    connect(table->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
-
-    verticalSplitter->addWidget(table);
-    verticalSplitter->setStretchFactor(1, 1);
-    scrollAreaWidget_->addWidget(verticalSplitter);
+    tableView->setModel(tableModel);
+    connect(tableView->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
+    listTableModels_.append(tableModel);
+    tableStackedWidget->addWidget(tableView);
   }
 
   plotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets_, QStringList(), outputNames, GraphConfigurationWidget::SensitivityIndices);
-  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), scrollAreaWidget_, SLOT(setCurrentIndex(int)));
 
-  scrollArea->setWidget(scrollAreaWidget_);
-  tabWidget->addTab(scrollArea, tr("Result"));
+  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
+  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), tableStackedWidget, SLOT(setCurrentIndex(int)));
+
+  vbox->addWidget(tableStackedWidget);
+
+  verticalSplitter->addWidget(plotStackedWidget);
+  verticalSplitter->setStretchFactor(0, 3);
+
+  verticalSplitter->addWidget(widget);
+  verticalSplitter->setStretchFactor(1, 1);
+
+  scrollArea->setWidget(verticalSplitter);
+  tabWidget_->addTab(scrollArea, tr("Result"));
 
   // second tab --------------------------------
-  tabWidget->addTab(buildParametersTextEdit(), tr("Parameters"));
+  tabWidget_->addTab(buildParametersTextEdit(), tr("Parameters"));
 
   //
-  setWidget(tabWidget);
+  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
+  setWidget(tabWidget_);
 }
 
 
 void SRCResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
 {
-  int indexOutput = scrollAreaWidget_->currentIndex();
+  int indexOutput = plotsConfigurationWidget_->getCurrentPlotIndex();
   NumericalPoint currentIndices(result_.getInputNames().getSize());
   Description sortedInputNames(result_.getInputNames().getSize());
+
+  CustomStandardItemModel * model = listTableModels_[indexOutput];
+  if (!model)
+  {
+    std::cerr << "can not update indices plot" << std::endl;
+    return;
+  }
+
   for (int i=0; i<result_.getInputNames().getSize(); ++i)
   {
-    sortedInputNames[i] = tableModel_->data(tableModel_->index(i, 0)).toString().toStdString();
-    currentIndices[i] = tableModel_->data(tableModel_->index(i, 1)).toDouble();
+    sortedInputNames[i] = model->data(model->index(i, 0)).toString().toStdString();
+    currentIndices[i] = model->data(model->index(i, 1)).toDouble();
   }
 
   listPlotWidgets_[indexOutput]->clear();
   listPlotWidgets_[indexOutput]->plotSensitivityIndices(currentIndices, NumericalPoint(), sortedInputNames);
+}
+
+
+void SRCResultWindow::showHideGraphConfigurationWidget(int indexTab)
+{
+  switch (indexTab)
+  {
+    // if a plotWidget is visible
+    case 0:
+      if (plotsConfigurationWidget_)
+        if (!plotsConfigurationWidget_->isVisible())
+          emit graphWindowActivated(plotsConfigurationWidget_);
+      break;
+    // if no plotWidget is visible
+    default:
+    {
+      emit graphWindowDeactivated();
+      break;
+    }
+  }
 }
 
 
@@ -147,9 +190,8 @@ void SRCResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState
     return;
 
   if (newState == 4 || newState == 10)
-    if (!plotsConfigurationWidget_->isVisible())
-      emit graphWindowActivated(plotsConfigurationWidget_);
+    showHideGraphConfigurationWidget(tabWidget_->currentIndex());
   else if (newState == 0 || newState == 1 || newState == 9)
-    emit graphWindowDeactivated();
+    showHideGraphConfigurationWidget(-1);
 }
 }
