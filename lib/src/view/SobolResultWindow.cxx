@@ -25,9 +25,9 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
-#include <QTableWidget>
 #include <QScrollArea>
 #include <QSplitter>
+#include <QStackedWidget>
 
 using namespace OT;
 
@@ -58,85 +58,81 @@ void SobolResultWindow::setParameters(const Analysis & analysis)
 
 void SobolResultWindow::buildInterface()
 {
-  QTabWidget * tabWidget = new QTabWidget;
+  tabWidget_ = new QTabWidget;
 
   // first tab --------------------------------
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  scrollAreaWidget_ = new QStackedWidget;
 
   Description inputNames = result_.getInputNames();
   QStringList outputNames;
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
     outputNames << QString::fromUtf8(result_.getOutputNames()[i].c_str());
 
-  NumericalPoint interactionsValues(result_.getOutputNames().getSize());
+  QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
+
+  QStackedWidget * plotStackedWidget = new QStackedWidget;
+  QStackedWidget * tableStackedWidget = new QStackedWidget;
+  QStackedWidget * interactionStackedWidget = new QStackedWidget;
+
+  QWidget * widget = new QWidget;
+  QVBoxLayout * vbox = new QVBoxLayout(widget);
 
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
   {
-    QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
-
     // plot
     PlotWidget * plot = new PlotWidget("sensitivitySobol", true);
-    NumericalPoint firstOrderIndices_i = result_.getFirstOrderIndices()[i];
-    SymmetricMatrix secondOrderIndices_i = result_.getSecondOrderIndices()[i];
-    NumericalPoint totalOrderIndices_i = result_.getTotalOrderIndices()[i];
-    plot->plotSensitivityIndices(firstOrderIndices_i, totalOrderIndices_i, inputNames);
+    plot->plotSensitivityIndices(result_.getFirstOrderIndices()[i], result_.getTotalOrderIndices()[i], inputNames);
     plot->setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
-
-    verticalSplitter->addWidget(plot);
-    verticalSplitter->setStretchFactor(0, 3);
     listPlotWidgets_.append(plot);
+    plotStackedWidget->addWidget(plot);
 
     // table of first order en total order indices + interactions
-    QWidget * widget = new QWidget;
-    QVBoxLayout * vbox = new QVBoxLayout(widget);
-    QString warningMessage;
-
-    // table of indices
-    CopyableTableView * table = new CopyableTableView;
-    table->verticalHeader()->hide();
+    CopyableTableView * tableView = new CopyableTableView;
+    tableView->verticalHeader()->hide();
 #if QT_VERSION >= 0x050000
-    table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 #else
-    table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+    tableView->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 #endif
-    table->setSortingEnabled(true);
-    tableModel_ = new CustomStandardItemModel(inputNames.getSize(), 3);
-    tableModel_->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("First order index") << tr("Total order index"));
-    table->setModel(tableModel_);
+    tableView->setSortingEnabled(true);
+
+    CustomStandardItemModel * tableModel = new CustomStandardItemModel(inputNames.getSize(), 3);
+    tableModel->setHorizontalHeaderLabels(QStringList() << tr("Input")
+                                                        << tr("First order index")
+                                                        << tr("Total order index"));
 
     // fill table
+    NumericalScalar interactionsValue(0.);
     for (UnsignedInteger j=0; j<inputNames.getSize(); ++j)
     {
-      tableModel_->setNotEditableItem(j, 0, QString::fromUtf8(inputNames[j].c_str()));
-      tableModel_->setNotEditableItem(j, 1, firstOrderIndices_i[j]);
-      tableModel_->setNotEditableItem(j, 2, totalOrderIndices_i[j]);
+      tableModel->setNotEditableItem(j, 0, QString::fromUtf8(inputNames[j].c_str()));
+      tableModel->setNotEditableItem(j, 1, result_.getFirstOrderIndices()[i][j]);
+      tableModel->setNotEditableItem(j, 2, result_.getTotalOrderIndices()[i][j]);
 
-      if (totalOrderIndices_i[j] < firstOrderIndices_i[j])
+      if (result_.getTotalOrderIndices()[i][j] < result_.getFirstOrderIndices()[i][j])
       {
-        tableModel_->setData(tableModel_->index(j, 2), tr("Warning: The total order index is inferior to the first order index."), Qt::ToolTipRole);
-        tableModel_->setData(tableModel_->index(j, 2), QIcon(":/images/task-attention.png"), Qt::DecorationRole);
+        tableModel->setData(tableModel->index(j, 2), tr("Warning: The total order index is inferior to the first order index."), Qt::ToolTipRole);
+        tableModel->setData(tableModel->index(j, 2), QIcon(":/images/task-attention.png"), Qt::DecorationRole);
       }
 
       // compute interactions for the ith output
-      for (UnsignedInteger k=0; k<inputNames.getSize(); ++k)
-        if (j != k) 
-          interactionsValues[i] += secondOrderIndices_i(j, k);
+      interactionsValue += (result_.getTotalOrderIndices()[i][j]-result_.getFirstOrderIndices()[i][j]);
     }
+    tableView->setModel(tableModel);
+    connect(tableView->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
+    listTableModels_.append(tableModel);
+    tableStackedWidget->addWidget(tableView);
 
-    connect(table->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
-
-    vbox->addWidget(table);
-
-    // Interactions
-    QHBoxLayout * hbox = new QHBoxLayout;
+    // Interactions widgets
+    QWidget * interactionWidget = new QWidget;
+    QHBoxLayout * hbox = new QHBoxLayout(interactionWidget);
     QLabel * interactionsLabel = new QLabel(tr("Interactions"));
     interactionsLabel->setStyleSheet("font: bold;");
     hbox->addWidget(interactionsLabel);
-    interactionsLabel = new QLabel(QString::number(interactionsValues[i], 'g', 4));
+    interactionsLabel = new QLabel(QString::number(interactionsValue, 'g', 4));
     hbox->addWidget(interactionsLabel);
-    if (interactionsValues[i] < 0 || interactionsValues[i] > 1)
+    if (interactionsValue < 0 || interactionsValue > 1)
     {
       interactionsLabel = new QLabel;
       interactionsLabel->setPixmap(QPixmap(":/images/task-attention.png"));
@@ -144,42 +140,78 @@ void SobolResultWindow::buildInterface()
       hbox->addWidget(interactionsLabel);
     }
     hbox->addStretch();
-    vbox->addLayout(hbox);
-
-    verticalSplitter->addWidget(widget);
-    verticalSplitter->setStretchFactor(1, 1);
-    scrollAreaWidget_->addWidget(verticalSplitter);
+    interactionStackedWidget->addWidget(interactionWidget);
   }
 
   plotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets_, QStringList(), outputNames, GraphConfigurationWidget::SensitivityIndices);
-  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), scrollAreaWidget_, SLOT(setCurrentIndex(int)));
 
-  scrollArea->setWidget(scrollAreaWidget_);
-  tabWidget->addTab(scrollArea, tr("Result"));
+  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
+  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), tableStackedWidget, SLOT(setCurrentIndex(int)));
+  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), interactionStackedWidget, SLOT(setCurrentIndex(int)));
+
+  vbox->addWidget(tableStackedWidget);
+  vbox->addWidget(interactionStackedWidget);
+
+  verticalSplitter->addWidget(plotStackedWidget);
+  verticalSplitter->setStretchFactor(0, 3);
+
+  verticalSplitter->addWidget(widget);
+  verticalSplitter->setStretchFactor(1, 1);
+
+  scrollArea->setWidget(verticalSplitter);
+  tabWidget_->addTab(scrollArea, tr("Result"));
 
   // second tab --------------------------------
-  tabWidget->addTab(buildParametersTextEdit(), tr("Parameters"));
+  tabWidget_->addTab(buildParametersTextEdit(), tr("Parameters"));
 
   //
-  setWidget(tabWidget);
+  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
+  setWidget(tabWidget_);
 }
 
 
 void SobolResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
 {
-  int indexOutput = scrollAreaWidget_->currentIndex();
+  int indexOutput = plotsConfigurationWidget_->getCurrentPlotIndex();
   NumericalPoint currentFirstOrderIndices(result_.getInputNames().getSize());
   NumericalPoint currentTotalOrderIndices(result_.getInputNames().getSize());
   Description sortedInputNames(result_.getInputNames().getSize());
-  for (int i=0; i<result_.getInputNames().getSize(); ++i)
+
+  CustomStandardItemModel * model = listTableModels_[indexOutput];
+  if (!model)
   {
-    sortedInputNames[i] = tableModel_->data(tableModel_->index(i, 0)).toString().toStdString();
-    currentFirstOrderIndices[i] = tableModel_->data(tableModel_->index(i, 1)).toDouble();
-    currentTotalOrderIndices[i] = tableModel_->data(tableModel_->index(i, 2)).toDouble();
+    std::cerr << "can not update indices plot" << std::endl;
+    return;
+  }
+  for (UnsignedInteger i=0; i<result_.getInputNames().getSize(); ++i)
+  {
+    sortedInputNames[i] = model->data(model->index(i, 0)).toString().toStdString();
+    currentFirstOrderIndices[i] = model->data(model->index(i, 1)).toDouble();
+    currentTotalOrderIndices[i] = model->data(model->index(i, 2)).toDouble();
   }
 
   listPlotWidgets_[indexOutput]->clear();
   listPlotWidgets_[indexOutput]->plotSensitivityIndices(currentFirstOrderIndices, currentTotalOrderIndices, sortedInputNames);
+}
+
+
+void SobolResultWindow::showHideGraphConfigurationWidget(int indexTab)
+{
+  switch (indexTab)
+  {
+    // if a plotWidget is visible
+    case 0:
+      if (plotsConfigurationWidget_)
+        if (!plotsConfigurationWidget_->isVisible())
+          emit graphWindowActivated(plotsConfigurationWidget_);
+      break;
+    // if no plotWidget is visible
+    default:
+    {
+      emit graphWindowDeactivated();
+      break;
+    }
+  }
 }
 
 
@@ -189,9 +221,8 @@ void SobolResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldSta
     return;
 
   if (newState == 4 || newState == 10)
-    if (!plotsConfigurationWidget_->isVisible())
-      emit graphWindowActivated(plotsConfigurationWidget_);
+    showHideGraphConfigurationWidget(tabWidget_->currentIndex());
   else if (newState == 0 || newState == 1 || newState == 9)
-    emit graphWindowDeactivated();
+    showHideGraphConfigurationWidget(-1);
 }
 }
