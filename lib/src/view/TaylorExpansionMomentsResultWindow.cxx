@@ -33,7 +33,7 @@ using namespace OT;
 namespace OTGUI {
 
 TaylorExpansionMomentsResultWindow::TaylorExpansionMomentsResultWindow(AnalysisItem * item)
-  : OTguiSubWindow(item)
+  : ResultWindow(item)
   , result_(dynamic_cast<TaylorExpansionMomentsAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
 {
   buildInterface();

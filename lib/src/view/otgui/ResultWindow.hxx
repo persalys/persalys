@@ -37,7 +37,7 @@ protected:
   QWidget* buildParametersTextEdit();
 
 public slots:
-  void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+  virtual void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 
 protected:
   QString parameters_;

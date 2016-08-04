@@ -32,7 +32,7 @@ using namespace OT;
 namespace OTGUI {
 
 ModelEvaluationResultWindow::ModelEvaluationResultWindow(AnalysisItem * item)
-  : OTguiSubWindow(item)
+  : ResultWindow(item)
   , result_(dynamic_cast<ModelEvaluation*>(&*item->getAnalysis().getImplementation())->getResult())
 {
   buildInterface();
