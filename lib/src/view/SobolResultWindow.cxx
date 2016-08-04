@@ -44,13 +44,22 @@ SobolResultWindow::SobolResultWindow(AnalysisItem * item)
 
 void SobolResultWindow::setParameters(const Analysis & analysis)
 {
-  const SobolAnalysis * SRCanalysis = dynamic_cast<const SobolAnalysis*>(&*analysis.getImplementation());
+  const SobolAnalysis * sobolAnalysis = dynamic_cast<const SobolAnalysis*>(&*analysis.getImplementation());
   QStringList strList;
   strList << tr("Sensitivity analysis parameters :") + "\n";
   strList << tr("Algorithm : ") + tr("Sobol");
-  strList << tr("Sample size : ") + QString::number(SRCanalysis->getSimulationsNumber());
-  strList << tr("Seed : ") + QString::number(SRCanalysis->getSeed());
-  strList << tr("Block size : ") + QString::number(SRCanalysis->getBlockSize());
+  strList << tr("Maximum coefficient of variation : ") + QString::number(sobolAnalysis->getMaximumCoefficientOfVariation());
+  if (sobolAnalysis->getMaximumElapsedTime() < std::numeric_limits<int>::max())
+    strList << tr("Maximum elapsed time : ") + QString::number(sobolAnalysis->getMaximumElapsedTime()) + "(s)";
+  else
+    strList << tr("Maximum elapsed time : ") + "- (s)";
+  if (sobolAnalysis->getMaximumCalls() < std::numeric_limits<int>::max())
+    strList << tr("Maximum calls : ") + QString::number(sobolAnalysis->getMaximumCalls());
+  else
+    strList << tr("Maximum calls : ") + "-";
+
+  strList << tr("Block size : ") + QString::number(sobolAnalysis->getBlockSize());
+  strList << tr("Seed : ") + QString::number(sobolAnalysis->getSeed());
 
   parameters_ = strList.join("\n");
 }

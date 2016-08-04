@@ -44,7 +44,10 @@ meanCI = montecarloResult.getMeanConfidenceInterval()
 stdCi = montecarloResult.getStdConfidenceInterval()
 
 ## Sobol ##
-sobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel, 1000)
+sobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel)
+sobol.setMaximumCoefficientOfVariation(-1)
+sobol.setMaximumCalls(1000)
+sobol.setBlockSize(1000)
 myStudy.add(sobol)
 sobol.run()
 sobolResult = sobol.getResult()

@@ -22,10 +22,11 @@
 #define OTGUI_SOBOLANALYSIS_HXX
 
 #include "SimulationAnalysis.hxx"
+#include "WithStopCriteriaAnalysis.hxx"
 #include "SobolResult.hxx"
 
 namespace OTGUI {
-class OTGUI_API SobolAnalysis : public SimulationAnalysis
+class OTGUI_API SobolAnalysis : public SimulationAnalysis, public WithStopCriteriaAnalysis
 {
   CLASSNAME;
 
@@ -33,16 +34,10 @@ public:
   /** Default constructor */
   SobolAnalysis();
   /** Constructor with parameters */
-  SobolAnalysis(const OT::String & name, const PhysicalModel & physicalModel, const OT::UnsignedInteger nbSimu=10000);
+  SobolAnalysis(const OT::String & name, const PhysicalModel & physicalModel);
 
   /** Virtual constructor */
   virtual SobolAnalysis * clone() const;
-
-  OT::UnsignedInteger getSimulationsNumber() const;
-  void setSimulationsNumber(const OT::UnsignedInteger number);
-
-  OT::UnsignedInteger getBlockSize() const;
-  void setBlockSize(const OT::UnsignedInteger & size);
 
   SobolResult getResult() const;
 
@@ -57,8 +52,6 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  OT::UnsignedInteger simulationsNumber_;
-  OT::UnsignedInteger blockSize_;
   SobolResult result_;
 };
 }

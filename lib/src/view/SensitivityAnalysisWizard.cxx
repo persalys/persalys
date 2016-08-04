@@ -30,6 +30,8 @@
 
 #include <limits>
 
+using namespace OT;
+
 namespace OTGUI {
 
 SensitivityAnalysisWizard::SensitivityAnalysisWizard(OTStudy * otstudy, const PhysicalModel & physicalModel)
@@ -92,36 +94,32 @@ void SensitivityAnalysisWizard::buildInterface()
   sobolWidgets_ = new QWidget;
   QVBoxLayout * sobolWidgetsLayout = new QVBoxLayout(sobolWidgets_);
 
-  // sample size
-  QHBoxLayout * sampleSizeLayout = new QHBoxLayout;
-  QLabel * sampleSizeLabel = new QLabel(tr("Sample size"));
-  QSpinBox * sobolSampleSizeSpinbox = new QSpinBox;
-  sobolSampleSizeSpinbox->setMinimum(2);
-  sobolSampleSizeSpinbox->setMaximum(std::numeric_limits<int>::max());
-  sobolSampleSizeSpinbox->setValue(sobolAnalysis_.getSimulationsNumber());
-  sobolSampleSizeSpinbox->setProperty("type", "Sobol");
-  connect(sobolSampleSizeSpinbox, SIGNAL(valueChanged(int)), this, SLOT(sampleSizeChanged(int)));
-  sampleSizeLabel->setBuddy(sobolSampleSizeSpinbox);
-  sampleSizeLayout->addWidget(sampleSizeLabel);
-  sampleSizeLayout->addWidget(sobolSampleSizeSpinbox);
-  sobolWidgetsLayout->addLayout(sampleSizeLayout);
-
-  // nb simu
-  QHBoxLayout * nbSimuLayout = new QHBoxLayout;
-  QLabel * totalNbSimuLabel = new QLabel(tr("Total number of simulations"));
-  // total nb simu: N=n*(d+2)
-  // n = nb inputs; d=sample size
-  double nbSimu = sobolAnalysis_.getPhysicalModel().getInputs().getSize() * (sobolSampleSizeSpinbox->value() + 2);
-  totalNbSimuLabel_ = new QLabel(QString::number(nbSimu));
-  nbSimuLayout->addWidget(totalNbSimuLabel);
-  nbSimuLayout->addWidget(totalNbSimuLabel_);
-  sobolWidgetsLayout->addLayout(nbSimuLayout);
+  // stop criteria
+  const double maxCoef = sobolAnalysis_.getMaximumCoefficientOfVariation();
+  const UnsignedInteger maxTime = sobolAnalysis_.getMaximumElapsedTime();
+  const UnsignedInteger maxCalls = sobolAnalysis_.getMaximumCalls();
+  stopCriteriaGroupBox_ = new StopCriteriaGroupBox(maxCoef, maxTime, maxCalls);
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), this, SLOT(maxiCoefficientOfVariationChanged(double)));
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), this, SLOT(maxiTimeChanged(int)));
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(int)), this, SLOT(maxiCallsChanged(int)));
+  sobolWidgetsLayout->addWidget(stopCriteriaGroupBox_);
 
   // block size
   blockSizeGroupBox_ = new BlockSizeGroupBox(tr("Evaluation parameter"));
   blockSizeGroupBox_->setBlockSizeValue(sobolAnalysis_.getBlockSize());
   connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), this, SLOT(blockSizeChanged(double)));
   sobolWidgetsLayout->addWidget(blockSizeGroupBox_);
+
+  // nb simu
+  QHBoxLayout * nbSimuLayout = new QHBoxLayout;
+  QLabel * totalNbSimuLabel = new QLabel(tr("Number of calls by iteration"));
+  totalNbSimuLabel->setToolTip(tr("= block_size * ( number_of_inputs + 2 )"));
+  // total nb simu/iteration: N=blockSize*(nb_inputs+2)
+  double nbSimu = blockSizeGroupBox_->getBlockSizeValue() * (sobolAnalysis_.getPhysicalModel().getInputs().getSize() + 2);
+  totalNbSimuLabel_ = new QLabel(QString::number(nbSimu));
+  nbSimuLayout->addWidget(totalNbSimuLabel);
+  nbSimuLayout->addWidget(totalNbSimuLabel_);
+  sobolWidgetsLayout->addLayout(nbSimuLayout);
 
   // sobol advanced parameters
   CollapsibleGroupBox * sobolAdvancedParamGroupBox = new CollapsibleGroupBox;
@@ -147,13 +145,12 @@ void SensitivityAnalysisWizard::buildInterface()
   QVBoxLayout * srcWidgetsLayout = new QVBoxLayout(srcWidgets_);
 
   // sample size
-  sampleSizeLayout = new QHBoxLayout;
-  sampleSizeLabel = new QLabel(tr("Sample size"));
+  QHBoxLayout * sampleSizeLayout = new QHBoxLayout;
+  QLabel * sampleSizeLabel = new QLabel(tr("Sample size"));
   QSpinBox * srcSampleSizeSpinbox = new QSpinBox;
   srcSampleSizeSpinbox->setMinimum(2);
   srcSampleSizeSpinbox->setMaximum(std::numeric_limits<int>::max());
   srcSampleSizeSpinbox->setValue(srcAnalysis_.getSimulationsNumber());
-  srcSampleSizeSpinbox->setProperty("type", "SRC");
   connect(srcSampleSizeSpinbox, SIGNAL(valueChanged(int)), this, SLOT(sampleSizeChanged(int)));
   sampleSizeLabel->setBuddy(srcSampleSizeSpinbox);
   sampleSizeLayout->addWidget(sampleSizeLabel);
@@ -179,6 +176,16 @@ void SensitivityAnalysisWizard::buildInterface()
   srcWidgetsLayout->addWidget(srcAdvancedParamGroupBox);
   mainLayout->addWidget(srcWidgets_);
 
+  // error message
+  errorMessageLabel_ = new QLabel;
+  errorMessageLabel_->setWordWrap(true);
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), errorMessageLabel_, SLOT(clear()));
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), errorMessageLabel_, SLOT(clear()));
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(int)), errorMessageLabel_, SLOT(clear()));
+  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorMessageLabel_, SLOT(clear()));
+  mainLayout->addStretch();
+  mainLayout->addWidget(errorMessageLabel_);
+
   updateMethodWidgets(methodGroup->checkedId());
 
   addPage(page);
@@ -192,25 +199,50 @@ void SensitivityAnalysisWizard::updateMethodWidgets(int id)
 }
 
 
+void SensitivityAnalysisWizard::maxiCoefficientOfVariationChanged(double maxi)
+{
+  sobolAnalysis_.setMaximumCoefficientOfVariation(maxi);
+}
+
+
+void SensitivityAnalysisWizard::maxiTimeChanged(int value)
+{
+  sobolAnalysis_.setMaximumElapsedTime(value);
+}
+
+
+void SensitivityAnalysisWizard::maxiCallsChanged(int maxi)
+{
+  try
+  {
+    sobolAnalysis_.setMaximumCalls(maxi);
+  }
+  catch (InvalidValueException exception)
+  {
+    // check in validateCurrentPage
+  }
+}
+
+
 void SensitivityAnalysisWizard::sampleSizeChanged(int sampleSize)
 {
-  QSpinBox * spinbox = qobject_cast<QSpinBox*>(sender());
-  if (spinbox->property("type").toString() == "Sobol")
-  {
-    // total nb simu: N=n*(d+2)
-    // n = nb inputs; d=sample size
-    int nbSimu = sobolAnalysis_.getPhysicalModel().getInputs().getSize() * (sampleSize + 2);
-    totalNbSimuLabel_->setText(QString::number(nbSimu));
-    sobolAnalysis_.setSimulationsNumber(sampleSize);
-  }
-  else
-    srcAnalysis_.setSimulationsNumber(sampleSize);
+  srcAnalysis_.setSimulationsNumber(sampleSize);
 }
 
 
 void SensitivityAnalysisWizard::blockSizeChanged(double size)
 {
-  sobolAnalysis_.setBlockSize(size);
+  try
+  {
+    // total nb simu/iteration: N=blockSize*(nb_inputs+2)
+    int nbSimu = size * (sobolAnalysis_.getPhysicalModel().getInputs().getSize() + 2);
+    totalNbSimuLabel_->setText(QString::number(nbSimu));
+    sobolAnalysis_.setBlockSize(size);
+  }
+  catch (InvalidValueException exception)
+  {
+    // check in validateCurrentPage
+  }
 }
 
 
@@ -224,12 +256,29 @@ void SensitivityAnalysisWizard::seedChanged(int seed)
 }
 
 
-void SensitivityAnalysisWizard::accept()
+bool SensitivityAnalysisWizard::validateCurrentPage()
 {
   if (sobolWidgets_->isVisible())
+  {
+    QString errorMessage = "";
+    if (!stopCriteriaGroupBox_->isValid())
+      errorMessage = tr("Please select at least one stop criteria");
+    else
+    {
+      if (!stopCriteriaGroupBox_->isMaxElapsedTimeValid())
+        errorMessage = tr("The maximum time must not be null");
+      if (stopCriteriaGroupBox_->isMaxCallsRequired())
+        if (sobolAnalysis_.getMaximumCalls() < (blockSizeGroupBox_->getBlockSizeValue()*(sobolAnalysis_.getPhysicalModel().getInputs().getSize() + 2)))
+          errorMessage = tr("The maximum calls can not be inferior to: block_size*(number_of_inputs + 2)");
+    }
+    errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(errorMessage).arg("</font>"));
+    if (!errorMessage.isEmpty())
+      return false;
     analysis_ = sobolAnalysis_;
+  }
   else
     analysis_ = srcAnalysis_;
-  QWizard::accept();
+
+  return QWizard::validateCurrentPage();
 }
 }

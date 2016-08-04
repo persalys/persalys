@@ -34,7 +34,6 @@ public:
   SobolResult();
   /** Constructor with parameters */
   SobolResult(const OT::NumericalSample firstOrderIndices,
-              const OT::Collection<OT::SymmetricMatrix> secondOrderIndices,
               const OT::NumericalSample totalOrderIndices,
               const OT::Description & outputNames);
 
@@ -44,7 +43,6 @@ public:
   OT::Description getOutputNames() const;
   OT::Description getInputNames() const;
   OT::NumericalSample getFirstOrderIndices() const;
-  OT::Collection<OT::SymmetricMatrix> getSecondOrderIndices() const;
   OT::NumericalSample getTotalOrderIndices() const;
 
   /** Method save() stores the object through the StorageManager */
@@ -56,7 +54,6 @@ public:
 private:
   OT::Description outputNames_;
   OT::NumericalSample firstOrderIndices_;
-  OT::PersistentCollection<OT::SymmetricMatrix> secondOrderIndices_;
   OT::NumericalSample totalOrderIndices_;
 };
 }

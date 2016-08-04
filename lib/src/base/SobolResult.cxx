@@ -29,7 +29,6 @@ namespace OTGUI {
 CLASSNAMEINIT(SobolResult);
 
 static Factory<SobolResult> RegisteredFactory;
-static Factory<PersistentCollection<SymmetricMatrix> > RegisteredFactorySymMtrColl;
 
 /* Default constructor */
 SobolResult::SobolResult()
@@ -40,13 +39,11 @@ SobolResult::SobolResult()
 
 /* Constructor with parameters */
 SobolResult::SobolResult(const NumericalSample firstOrderIndices,
-                         const Collection<SymmetricMatrix> secondOrderIndices,
                          const NumericalSample totalOrderIndices,
                          const Description & outputNames)
   : PersistentObject()
   , outputNames_(outputNames)
   , firstOrderIndices_(firstOrderIndices)
-  , secondOrderIndices_(secondOrderIndices)
   , totalOrderIndices_(totalOrderIndices)
 {
 }
@@ -77,12 +74,6 @@ NumericalSample SobolResult::getFirstOrderIndices() const
 }
 
 
-Collection<SymmetricMatrix> SobolResult::getSecondOrderIndices() const
-{
-  return secondOrderIndices_;
-}
-
-
 NumericalSample SobolResult::getTotalOrderIndices() const
 {
   return totalOrderIndices_;
@@ -95,7 +86,6 @@ void SobolResult::save(Advocate & adv) const
   PersistentObject::save(adv);
   adv.saveAttribute("outputNames_", outputNames_);
   adv.saveAttribute("firstOrderIndices_", firstOrderIndices_);
-  adv.saveAttribute("secondOrderIndices_", secondOrderIndices_);
   adv.saveAttribute("totalOrderIndices_", totalOrderIndices_);
 }
 
@@ -106,7 +96,6 @@ void SobolResult::load(Advocate & adv)
   PersistentObject::load(adv);
   adv.loadAttribute("outputNames_", outputNames_);
   adv.loadAttribute("firstOrderIndices_", firstOrderIndices_);
-  adv.loadAttribute("secondOrderIndices_", secondOrderIndices_);
   adv.loadAttribute("totalOrderIndices_", totalOrderIndices_);
 }
 }
