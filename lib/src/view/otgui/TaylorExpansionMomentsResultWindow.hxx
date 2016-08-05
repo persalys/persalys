@@ -21,14 +21,14 @@
 #ifndef OTGUI_TAYLOREXPANSIONMOMENTSRESULTWINDOW_HXX
 #define OTGUI_TAYLOREXPANSIONMOMENTSRESULTWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/ResultWindow.hxx"
 #include "otgui/AnalysisItem.hxx"
 #include "otgui/TaylorExpansionMomentsResult.hxx"
 
 #include <QComboBox>
 
 namespace OTGUI {
-class TaylorExpansionMomentsResultWindow : public OTguiSubWindow
+class TaylorExpansionMomentsResultWindow : public ResultWindow
 {
   Q_OBJECT
 
@@ -36,6 +36,7 @@ public:
   TaylorExpansionMomentsResultWindow(AnalysisItem * item);
 
 protected:
+  void setParameters(const Analysis & analysis){/*has not yet parameters*/};
   void buildInterface();
 
 private:

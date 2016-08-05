@@ -199,6 +199,24 @@ void GraphConfigurationWidget::updateLineEdits()
   ylabelLineEdit_->setText(plotWidgets_[currentPlotIndex_]->axisTitle(QwtPlot::yLeft).text());
   ymin_->setValue(plotWidgets_[currentPlotIndex_]->axisInterval(QwtPlot::yLeft).minValue());
   ymax_->setValue(plotWidgets_[currentPlotIndex_]->axisInterval(QwtPlot::yLeft).maxValue());
+
+  if (plotType_ == GraphConfigurationWidget::SensitivityIndices)
+  {
+    xmin_->setEnabled(false);
+    xmax_->setEnabled(false);
+    ymin_->setEnabled(false);
+    ymax_->setEnabled(false);
+    xmin_->clear();
+    xmax_->clear();
+    ymin_->clear();
+    ymax_->clear();
+  }
+}
+
+
+int GraphConfigurationWidget::getCurrentPlotIndex() const
+{
+  return currentPlotIndex_;
 }
 
 

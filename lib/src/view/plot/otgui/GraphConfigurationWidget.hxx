@@ -38,6 +38,8 @@ public:
 
   GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets, QStringList inputNames, QStringList outputNames, Type plotType);
 
+  int getCurrentPlotIndex() const;
+
 public slots:
   void updateLineEdits();
   void plotChanged();

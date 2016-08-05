@@ -640,7 +640,7 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
 {
   emit removeSubWindow(item);
 
-  OTguiSubWindow * resultWindow = 0;
+  ResultWindow * resultWindow = 0;
   QString analysisType = item->data(Qt::UserRole).toString();
   if (analysisType == "ModelEvaluation")
     resultWindow = new ModelEvaluationResultWindow(item);
@@ -663,6 +663,8 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
     connect(resultWindow, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
     connect(resultWindow, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
     emit showWindow(resultWindow);
+    if (analysisType == "SobolAnalysis" || analysisType == "SRCAnalysis")
+      resultWindow->showHideGraphConfigurationWidget(Qt::WindowNoState, Qt::WindowFullScreen);
     setCurrentIndex(item->index());
   }
 }

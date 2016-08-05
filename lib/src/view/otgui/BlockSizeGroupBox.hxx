@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Base class QMdiSubWindow for the results
+ *  @brief QGroupBox for block size parameter
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,29 +18,31 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_RESULTWINDOW_HXX
-#define OTGUI_RESULTWINDOW_HXX
+#ifndef OTGUI_BLOCKSIZEGROUPBOX_HXX
+#define OTGUI_BLOCKSIZEGROUPBOX_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
-#include "otgui/AnalysisItem.hxx"
+#include "otgui/UIntSpinBox.hxx"
+#include "openturns/OTtypes.hxx"
+
+#include <QGroupBox>
 
 namespace OTGUI {
-class ResultWindow : public OTguiSubWindow
+class BlockSizeGroupBox : public QGroupBox
 {
   Q_OBJECT
 
 public:
-  ResultWindow(AnalysisItem * item);
+  BlockSizeGroupBox(const QString &title, QWidget* parent=0);
 
-protected:
-  virtual void setParameters(const Analysis & analysis) = 0;
-  QWidget* buildParametersTextEdit();
+  OT::UnsignedInteger getBlockSizeValue() const;
+  void setBlockSizeValue(const OT::UnsignedInteger value);
 
 public slots:
-  virtual void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+signals:
+  void blockSizeChanged(double);
 
-protected:
-  QString parameters_;
+private:
+  UIntSpinBox * blockSizeSpinbox_;
 };
 }
 #endif

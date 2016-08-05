@@ -83,22 +83,16 @@ void ReliabilityAnalysisWizard::buildInterface()
 
   monteCarloLayout->addWidget(stopCriteriaGroupBox_);
 
+  // block size
+  blockSizeGroupBox_ = new BlockSizeGroupBox(tr("Evaluation parameter"));
+  blockSizeGroupBox_->setBlockSizeValue(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getBlockSize());
+  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), this, SLOT(blockSizeChanged(double)));
+  monteCarloLayout->addWidget(blockSizeGroupBox_);
+
   //// advanced parameters
   CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
   advancedParamGroupBox->setTitle(tr("Advanced parameters"));
   QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedParamGroupBox);
-
-  QLabel * blockSizeLabel = new QLabel(tr("Block size"));
-  advancedWidgetsLayout->addWidget(blockSizeLabel, 0, 0);
-  blockSizeSpinbox_ = new UIntSpinBox;
-  blockSizeSpinbox_->setMinimum(1);
-  blockSizeSpinbox_->setMaximum(std::numeric_limits<int>::max());
-  blockSizeSpinbox_->setSingleStep(100);
-  blockSizeLabel->setBuddy(blockSizeSpinbox_);
-  advancedWidgetsLayout->addWidget(blockSizeSpinbox_, 0, 1);
-  if (analysis_.getImplementation()->getClassName() == "MonteCarloReliabilityAnalysis")
-    blockSizeSpinbox_->setValue(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getBlockSize());
-  connect(blockSizeSpinbox_, SIGNAL(valueChanged(double)), this, SLOT(blockSizeChanged(double)));
 
   QLabel * seedLabel = new QLabel(tr("Seed"));
   advancedWidgetsLayout->addWidget(seedLabel, 1, 0);
@@ -120,7 +114,7 @@ void ReliabilityAnalysisWizard::buildInterface()
   connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), errorMessageLabel_, SLOT(clear()));
   connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), errorMessageLabel_, SLOT(clear()));
   connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(int)), errorMessageLabel_, SLOT(clear()));
-  connect(blockSizeSpinbox_, SIGNAL(valueChanged(double)), errorMessageLabel_, SLOT(clear()));
+  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorMessageLabel_, SLOT(clear()));
   mainLayout->addStretch();
   mainLayout->addWidget(errorMessageLabel_);
 
@@ -181,7 +175,7 @@ bool ReliabilityAnalysisWizard::validateCurrentPage()
     if (!stopCriteriaGroupBox_->isMaxElapsedTimeValid())
       errorMessage = tr("The maximum time must not be null");
     if (stopCriteriaGroupBox_->isMaxCallsRequired())
-      if (dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getMaximumCalls() < (int)blockSizeSpinbox_->value())
+      if (dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getMaximumCalls() < blockSizeGroupBox_->getBlockSizeValue())
         errorMessage = tr("The maximum calls can not be inferior to the block size");
   }
 

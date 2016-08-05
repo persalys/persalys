@@ -29,8 +29,6 @@
 #include <QButtonGroup>
 #include <QCheckBox>
 
-#include <limits>
-
 using namespace OT;
 
 namespace OTGUI {
@@ -103,6 +101,12 @@ void CentralTendencyWizard::buildInterface()
   connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(int)), this, SLOT(maxiCallsChanged(int)));
   monteCarloLayout->addWidget(stopCriteriaGroupBox_);
 
+  // block size
+  blockSizeGroupBox_ = new BlockSizeGroupBox(tr("Evaluation parameter"));
+  blockSizeGroupBox_->setBlockSizeValue(MCAnalysis_.getBlockSize());
+  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), this, SLOT(blockSizeChanged(double)));
+  monteCarloLayout->addWidget(blockSizeGroupBox_);
+
   //// advanced parameters
   CollapsibleGroupBox * advancedGroup = new CollapsibleGroupBox;
   advancedGroup->setTitle(tr("Advanced parameters"));
@@ -122,18 +126,6 @@ void CentralTendencyWizard::buildInterface()
   connect(confidenceIntervalCheckBox, SIGNAL(toggled(bool)), this, SLOT(confidenceIntervalRequired(bool)));
   connect(levelConfidenceIntervalSpinbox, SIGNAL(valueChanged(double)), this, SLOT(levelConfidenceIntervalChanged(double)));
   advancedWidgetsLayout->addWidget(levelConfidenceIntervalSpinbox, 0, 1);
-
-  // block size
-  QLabel * blockSizeLabel = new QLabel(tr("Block size"));
-  advancedWidgetsLayout->addWidget(blockSizeLabel, 1, 0);
-  blockSizeSpinbox_ = new UIntSpinBox;
-  blockSizeSpinbox_->setMinimum(1);
-  blockSizeSpinbox_->setMaximum(std::numeric_limits<int>::max());
-  blockSizeSpinbox_->setSingleStep(100);
-  blockSizeLabel->setBuddy(blockSizeSpinbox_);
-  advancedWidgetsLayout->addWidget(blockSizeSpinbox_, 1, 1);
-  blockSizeSpinbox_->setValue(MCAnalysis_.getBlockSize());
-  connect(blockSizeSpinbox_, SIGNAL(valueChanged(double)), this, SLOT(blockSizeChanged(double)));
 
   // seed
   QLabel * seedLabel = new QLabel(tr("Seed"));
@@ -162,7 +154,7 @@ void CentralTendencyWizard::buildInterface()
   connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), errorMessageLabel_, SLOT(clear()));
   connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), errorMessageLabel_, SLOT(clear()));
   connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(int)), errorMessageLabel_, SLOT(clear()));
-  connect(blockSizeSpinbox_, SIGNAL(valueChanged(double)), errorMessageLabel_, SLOT(clear()));
+  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorMessageLabel_, SLOT(clear()));
   mainLayout->addStretch();
   mainLayout->addWidget(errorMessageLabel_);
 
@@ -248,7 +240,7 @@ bool CentralTendencyWizard::validateCurrentPage()
       if (!stopCriteriaGroupBox_->isMaxElapsedTimeValid())
         errorMessage = tr("The maximum time must not be null");
       if (stopCriteriaGroupBox_->isMaxCallsRequired())
-        if (MCAnalysis_.getMaximumCalls() < (int)blockSizeSpinbox_->value())
+        if (MCAnalysis_.getMaximumCalls() < blockSizeGroupBox_->getBlockSizeValue())
           errorMessage = tr("The maximum calls can not be inferior to the block size");
     }
     errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(errorMessage).arg("</font>"));

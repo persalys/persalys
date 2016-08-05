@@ -24,6 +24,8 @@
 #include "otgui/AnalysisWizard.hxx"
 #include "otgui/SobolAnalysis.hxx"
 #include "otgui/SRCAnalysis.hxx"
+#include "otgui/StopCriteriaGroupBox.hxx"
+#include "otgui/BlockSizeGroupBox.hxx"
 
 #include <QLabel>
 
@@ -38,22 +40,29 @@ public:
   SensitivityAnalysisWizard(OTStudy * otStudy, const PhysicalModel & physicalModel);
   SensitivityAnalysisWizard(const Analysis & analysis);
 
+  virtual bool validateCurrentPage();
+
 protected:
   void buildInterface();
 
 public slots:
   void updateMethodWidgets(int);
+  void maxiCoefficientOfVariationChanged(double);
+  void maxiTimeChanged(int);
+  void maxiCallsChanged(int);
   void sampleSizeChanged(int);
   void seedChanged(int);
-  void blockSizeChanged(int);
-  void accept();
+  void blockSizeChanged(double);
 
 private:
   SobolAnalysis sobolAnalysis_;
   SRCAnalysis srcAnalysis_;
   QWidget * sobolWidgets_;
+  StopCriteriaGroupBox * stopCriteriaGroupBox_;
+  BlockSizeGroupBox * blockSizeGroupBox_;
   QWidget * srcWidgets_;
   QLabel * totalNbSimuLabel_;
+  QLabel * errorMessageLabel_;
 };
 }
 #endif

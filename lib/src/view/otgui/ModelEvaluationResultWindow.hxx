@@ -21,12 +21,12 @@
 #ifndef OTGUI_MODELEVALUATIONRESULTWINDOW_HXX
 #define OTGUI_MODELEVALUATIONRESULTWINDOW_HXX
 
-#include "OTguiSubWindow.hxx"
+#include "ResultWindow.hxx"
 #include "otgui/AnalysisItem.hxx"
 #include "otgui/ModelEvaluationResult.hxx"
 
 namespace OTGUI {
-class ModelEvaluationResultWindow : public OTguiSubWindow
+class ModelEvaluationResultWindow : public ResultWindow
 {
   Q_OBJECT
 
@@ -34,6 +34,7 @@ public:
   ModelEvaluationResultWindow(AnalysisItem * item);
 
 protected:
+  void setParameters(const Analysis & analysis){/*has not yet parameters*/};
   void buildInterface();
 
 private:

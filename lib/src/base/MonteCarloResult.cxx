@@ -282,7 +282,7 @@ void MonteCarloResult::computeFittedDistributionPDF_CDF()
   KernelSmoothing gaussianKernel;
   for (UnsignedInteger i=0; i<getOutputSample().getDimension(); ++i)
   {
-    Distribution fittedDistribution = gaussianKernel.build(getOutputSample().getMarginal(i), true);
+    Distribution fittedDistribution = gaussianKernel.build(getOutputSample().getMarginal(i));
     pdf_.add(fittedDistribution.drawPDF().getDrawable(0).getData());
     cdf_.add(fittedDistribution.drawCDF().getDrawable(0).getData());
   }
