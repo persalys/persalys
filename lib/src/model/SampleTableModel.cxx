@@ -73,7 +73,7 @@ QVariant SampleTableModel::data(const QModelIndex & index, int role) const
     return int(Qt::AlignRight | Qt::AlignVCenter);
   else if (role == Qt::DisplayRole)
     return QString::number(data_[index.row()][index.column()], 'g', 8);
-  else if (role == Qt::BackgroundColorRole)
+  else if (role == Qt::BackgroundRole)
   {
     if (std::isnan(data_[index.row()][index.column()]))
       return QColor(Qt::red);
