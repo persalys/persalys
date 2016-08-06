@@ -32,6 +32,7 @@ OTStudyItem::OTStudyItem(OTStudy * otStudy)
   , Observer("OTStudy")
   , otStudy_(otStudy)
 {
+  otStudy_->addObserver(this);
   setData("OTStudy", Qt::UserRole);
   setToolTip(QString::fromUtf8(otStudy_->getFileName().c_str()));
 }
@@ -116,7 +117,6 @@ void OTStudyItem::addDataModelItem(DataModel & dataModel)
 {
   // Physical model item
   DataModelItem * newDataModelItem = new DataModelItem(dataModel);
-  dataModel.addObserver(newDataModelItem);
   connect(newDataModelItem, SIGNAL(dataModelRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
   appendRow(newDataModelItem);
 }
@@ -126,7 +126,6 @@ void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
 {
   // Physical model item
   PhysicalModelItem * newPhysicalModelItem = new PhysicalModelItem(physicalModel);
-  physicalModel.addObserver(newPhysicalModelItem);
   connect(newPhysicalModelItem, SIGNAL(physicalModelRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
   appendRow(newPhysicalModelItem);
 
@@ -146,7 +145,6 @@ void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
   if (physicalModel.hasStochasticInputs())
   {
     ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(physicalModel);
-    physicalModel.addObserver(newProbabilisticModelItem);
     item->appendRow(newProbabilisticModelItem);
     connect(newProbabilisticModelItem, SIGNAL(probabilisticModelRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
     emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
@@ -165,7 +163,7 @@ void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
 void OTStudyItem::addDesignOfExperimentItem(DesignOfExperiment & design)
 {
   DesignOfExperimentItem * newItem = new DesignOfExperimentItem(design);
-  design.addObserver(newItem);
+
   for (int i=0; i<rowCount(); ++i)
     if (child(i)->text().toStdString() == design.getPhysicalModel().getName())
     {
@@ -182,7 +180,7 @@ void OTStudyItem::addDesignOfExperimentItem(DesignOfExperiment & design)
 void OTStudyItem::addLimitStateItem(LimitState & limitState)
 {
   LimitStateItem * newItem = new LimitStateItem(limitState);
-  limitState.addObserver(newItem);
+
   for (int i=0; i<rowCount(); ++i)
     if (child(i)->text().toStdString() == limitState.getPhysicalModel().getName())
     {
@@ -231,7 +229,6 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis)
 
 void OTStudyItem::addDeterministicAnalysisItem(Analysis & analysis, AnalysisItem * item)
 {
-  analysis.addObserver(item);
   for (int i=0; i<rowCount(); ++i)
     if (child(i)->text().toStdString() == analysis.getPhysicalModel().getName())
     {
@@ -245,7 +242,6 @@ void OTStudyItem::addDeterministicAnalysisItem(Analysis & analysis, AnalysisItem
 
 void OTStudyItem::addProbabilisticAnalysisItem(Analysis & analysis, AnalysisItem * item)
 {
-  analysis.addObserver(item);
   for (int i=0; i<rowCount(); ++i)
     if (child(i)->text().toStdString() == analysis.getPhysicalModel().getName())
     {
@@ -266,7 +262,6 @@ void OTStudyItem::addProbabilisticAnalysisItem(Analysis & analysis, AnalysisItem
 
 void OTStudyItem::addReliabilityAnalysisItem(Analysis & analysis, AnalysisItem * item)
 {
-  analysis.addObserver(item);
   String limitStateName = dynamic_cast<ReliabilityAnalysis*>(&*analysis.getImplementation())->getLimitState().getName();
   for (int i=0; i<rowCount(); ++i)
     if (child(i)->text().toStdString() == analysis.getPhysicalModel().getName())

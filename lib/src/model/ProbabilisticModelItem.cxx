@@ -30,6 +30,7 @@ ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel & physicalMod
   , Observer("ProbabilisticModel")
   , physicalModel_(physicalModel)
 {
+  physicalModel_.addObserver(this);
   setData("ProbabilisticModel", Qt::UserRole);
 }
 

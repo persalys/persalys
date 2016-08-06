@@ -30,6 +30,7 @@ DataModelItem::DataModelItem(const DataModel & dataModel)
   , Observer("DataModel")
   , dataModel_(dataModel)
 {
+  dataModel_.addObserver(this);
   setData("DataModel", Qt::UserRole);
 }
 

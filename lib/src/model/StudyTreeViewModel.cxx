@@ -61,7 +61,7 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
   connect(otStudyItem, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SIGNAL(newAnalysisCreated(AnalysisItem*)));
   connect(otStudyItem, SIGNAL(itemRemoved(QStandardItem*)), this, SIGNAL(itemRemoved(QStandardItem*)));
   connect(otStudyItem, SIGNAL(otStudyRemoved(QStandardItem*)), this, SLOT(removeOTStudyItem(QStandardItem*)));
-  otStudy->addObserver(otStudyItem);
+
   invisibleRootItem()->appendRow(otStudyItem);
   for (UnsignedInteger i=0; i<otStudy->getDataModels().getSize(); ++i)
     otStudyItem->addDataModelItem(otStudy->getDataModels()[i]);

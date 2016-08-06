@@ -30,6 +30,7 @@ DesignOfExperimentItem::DesignOfExperimentItem(const DesignOfExperiment & design
   , Observer("DesignOfExperiment")
   , designOfExperiment_(designOfExperiment)
 {
+  designOfExperiment_.addObserver(this);
   setData("DesignOfExperiment", Qt::UserRole);
 }
 

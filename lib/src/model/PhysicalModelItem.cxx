@@ -31,6 +31,7 @@ PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel)
   , Observer("PhysicalModel")
   , physicalModel_(physicalModel)
 {
+  physicalModel_.addObserver(this);
   setData("PhysicalModel", Qt::UserRole);
 }
 
