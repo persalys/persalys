@@ -41,6 +41,7 @@
 #include "otgui/ProbabilisticModelWindow.hxx"
 #include "otgui/LimitStateWindow.hxx"
 #include "otgui/DataModelWizard.hxx"
+#include "otgui/DataModelWindow.hxx"
 #include "otgui/DesignOfExperimentWizard.hxx"
 #include "otgui/DesignOfExperimentWindow.hxx"
 #include "otgui/AnalysisExecutionFailedWindow.hxx"
@@ -68,6 +69,7 @@ StudyTreeView::StudyTreeView(QWidget * parent)
 {
   OTStudy::SetInstanceObserver(treeViewModel_);
   setModel(treeViewModel_);
+  connect(treeViewModel_, SIGNAL(newDataModelCreated(DataModelItem*)), this, SLOT(createNewDataModelWindow(DataModelItem*)));
   connect(treeViewModel_, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)), this, SLOT(createNewPhysicalModelWindow(PhysicalModelItem*)));
   connect(treeViewModel_, SIGNAL(newProbabilisticModelCreated(ProbabilisticModelItem*)), this, SLOT(createNewProbabilisticModelWindow(ProbabilisticModelItem*)));
   connect(treeViewModel_, SIGNAL(newDesignOfExperimentCreated(DesignOfExperimentItem*)), this, SLOT(createNewDesignOfExperimentWindow(DesignOfExperimentItem*)));
@@ -117,6 +119,16 @@ void StudyTreeView::buildActions()
   newDataModel_ = new QAction(tr("New data model"), this);
   newDataModel_->setStatusTip(tr("Create a new data model"));
   connect(newDataModel_, SIGNAL(triggered()), this, SLOT(createNewDataModel()));
+
+  // modify data model action
+  modifyDataModel_ = new QAction(tr("Modify"), this);
+  modifyDataModel_->setStatusTip(tr("Modify the data model"));
+  connect(modifyDataModel_, SIGNAL(triggered(bool)), this, SLOT(modifyDataModel()));
+
+  // remove data model
+  removeDataModel_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
+  removeDataModel_->setStatusTip(tr("Remove the data model"));
+  connect(removeDataModel_, SIGNAL(triggered()), this, SLOT(removeDataModel()));
 
   // new physical model actions
   newAnalyticalPhysicalModel_ = new QAction(tr("New analytical physical model"), this);
@@ -217,6 +229,11 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
     actions.append(saveOTStudy_);
     actions.append(closeOTStudy_);
   }
+  else if (dataType == "DataModel")
+  {
+    actions.append(modifyDataModel_);
+    actions.append(removeDataModel_);
+  }
   else if (dataType == "PhysicalModel")
   {
     actions.append(removePhysicalModel_);
@@ -249,9 +266,7 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
     actions.append(newThresholdExceedance_);
     actions.append(removeLimitState_);
   }
-  else if (dataType == "ModelEvaluation" || dataType == "MonteCarloAnalysis" ||
-           dataType == "TaylorExpansionMomentsAnalysis" || dataType == "SobolAnalysis" ||
-           dataType == "SRCAnalysis" || dataType == "MonteCarloReliabilityAnalysis")
+  else if (dataType == "ModelEvaluation" || dataType.contains("Analysis"))
   {
     actions.append(runAnalysis_);
     actions.append(removeAnalysis_);
@@ -331,6 +346,31 @@ void StudyTreeView::createNewDataModel()
 
   if (wizard->exec())
     studyItem->getOTStudy()->add(wizard->getDataModel());
+}
+
+
+void StudyTreeView::modifyDataModel()
+{
+  QModelIndex index = selectionModel()->currentIndex();
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+  DataModelItem * item = dynamic_cast<DataModelItem*>(selectedItem);
+  QSharedPointer<DataModelWizard> wizard = QSharedPointer<DataModelWizard>(new DataModelWizard(item->getDataModel()));
+
+  if (wizard->exec())
+  {
+    emit removeSubWindow(item);
+    item->updateDataModel(wizard->getDataModel());
+    createNewDataModelWindow(item);
+  }
+}
+
+
+void StudyTreeView::removeDataModel()
+{
+  QModelIndex index = selectionModel()->currentIndex();
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+
+  treeViewModel_->getOTStudyItem(index)->getOTStudy()->remove(dynamic_cast<DataModelItem*>(selectedItem)->getDataModel());
 }
 
 
@@ -414,6 +454,15 @@ void StudyTreeView::removeLimitState()
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
   treeViewModel_->getOTStudyItem(index)->getOTStudy()->remove(dynamic_cast<LimitStateItem*>(selectedItem)->getLimitState());
+}
+
+
+void StudyTreeView::createNewDataModelWindow(DataModelItem * item)
+{
+  DataModelWindow * window = new DataModelWindow(item);
+  emit showWindow(window);
+  setExpanded(item->index().parent(), true);
+  setCurrentIndex(item->index());
 }
 
 

@@ -119,6 +119,8 @@ void OTStudyItem::addDataModelItem(DataModel & dataModel)
   DataModelItem * newDataModelItem = new DataModelItem(dataModel);
   connect(newDataModelItem, SIGNAL(dataModelRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
   appendRow(newDataModelItem);
+
+  emit newDataModelItemCreated(newDataModelItem);
 }
 
 
