@@ -38,24 +38,11 @@ void ResizableTableViewWithoutScrollBar::resizeToContents()
   resizeColumnsToContents();
   verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
 
-  // get the dimensions
-  QSize size = sizeHint();
-  // -- width
-  int width = verticalHeader()->isHidden() ? 0 : verticalHeader()->width();
-  for (int i=0; i<model()->columnCount(); ++i)
-    width += columnWidth(i);
-  size.setWidth(width+2);
-  // -- height
-  int height = 0;
-  if (!horizontalHeader()->isHidden())
-    height = horizontalHeader()->height();
-  for (int i=0; i<model()->rowCount(); ++i)
-    height += rowHeight(i);
-  size.setHeight(height+2);
-
-  // resize
-  setMinimumSize(size);
-  setMaximumSize(size);
-  updateGeometry();
+  // resize table
+  const int w = horizontalHeader()->length() + verticalHeader()->width();
+  const int h = verticalHeader()->length() + horizontalHeader()->height();
+  int x1, y1, x2, y2;
+  getContentsMargins(&x1, &y1, &x2, &y2);
+  setFixedSize(w+x1+x2, h+y1+y2);
 }
 }
