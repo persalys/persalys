@@ -32,6 +32,18 @@ ResizableTableViewWithoutScrollBar::ResizableTableViewWithoutScrollBar(QWidget *
 }
 
 
+QSize ResizableTableViewWithoutScrollBar::sizeHint() const
+{
+  return QSize(minimumSize());
+}
+
+
+QSize ResizableTableViewWithoutScrollBar::minimumSizeHint() const
+{
+  return QSize(minimumSize());
+}
+
+
 void ResizableTableViewWithoutScrollBar::resizeToContents()
 {
   // resize columns To Contents: set optimal size
