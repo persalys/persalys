@@ -105,6 +105,8 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include LimitStateImplementation.i
 %include LimitState.i
 %include AnalysisImplementation.i
+%include PhysicalModelAnalysis.i
+%include DataModelAnalysis.i
 %include Analysis.i
 %include WithStopCriteriaAnalysis.i
 %include ModelEvaluationResult.i
