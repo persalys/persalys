@@ -26,6 +26,7 @@
 #include "otgui/ExportableTableView.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
+#include "otgui/SimulationAnalysisResult.hxx"
 
 #include <QTabWidget>
 #include <QPushButton>
@@ -45,7 +46,6 @@ public:
 
 protected:
   void buildInterface();
-  QWidget* getMinMaxTableWidget();
   void addTabsForOutputs();
 
 public slots:

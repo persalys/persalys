@@ -23,9 +23,9 @@
 #include "otgui/SampleTableModel.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
+#include "otgui/MinMaxTableGroupBox.hxx"
 
 #include <QVBoxLayout>
-#include <QStackedWidget>
 #include <QGroupBox>
 #include <QHeaderView>
 
@@ -52,7 +52,7 @@ void DesignOfExperimentWindow::buildInterface()
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
   tableView_ = new ExportableTableView;
-  if (!designOfExperiment_.getResult().getOutputSample().getSize())
+  if (!designOfExperiment_.getOutputSample().getSize())
   {
     SampleTableModel * model = new SampleTableModel(designOfExperiment_.getInputSample());
     tableView_->setModel(model);
@@ -62,7 +62,7 @@ void DesignOfExperimentWindow::buildInterface()
 
   QHBoxLayout * layout = new QHBoxLayout;
   evaluateButton_ = new QPushButton(tr("Evaluate"));
-  if (designOfExperiment_.getResult().getOutputSample().getSize())
+  if (designOfExperiment_.getOutputSample().getSize())
     evaluateButton_->setEnabled(false);
   layout->addStretch();
   layout->addWidget(evaluateButton_);
@@ -85,7 +85,7 @@ void DesignOfExperimentWindow::evaluateOutputs()
 {
   try
   {
-    designOfExperiment_.evaluate();
+    designOfExperiment_.run();
   }
   catch (std::exception & ex)
   {
@@ -96,10 +96,10 @@ void DesignOfExperimentWindow::evaluateOutputs()
 
 void DesignOfExperimentWindow::updateWindowForOutputs()
 {
-  if (designOfExperiment_.getResult().getOutputSample().getSize() > 0)
+  if (designOfExperiment_.getOutputSample().getSize() > 0)
   {
     NumericalSample sample = designOfExperiment_.getInputSample();
-    sample.stack(designOfExperiment_.getResult().getOutputSample());
+    sample.stack(designOfExperiment_.getOutputSample());
     SampleTableModel * model = new SampleTableModel(sample);
     tableView_->setModel(model);
     if (model->sampleIsValid())
@@ -111,9 +111,9 @@ void DesignOfExperimentWindow::updateWindowForOutputs()
 
 void DesignOfExperimentWindow::addTabsForOutputs()
 {
-  int nbInputs = designOfExperiment_.getVariableInputNames().getSize();
+  UnsignedInteger nbInputs = designOfExperiment_.getVariableInputNames().getSize();
   Indices ind(nbInputs);
-  for (int i=0; i<nbInputs; ++i)
+  for (UnsignedInteger i=0; i<nbInputs; ++i)
     for (UnsignedInteger j=0; j<designOfExperiment_.getInputSample().getDimension(); ++j)
       if (designOfExperiment_.getVariableInputNames()[i] == designOfExperiment_.getInputSample().getDescription()[j])
       {
@@ -121,16 +121,16 @@ void DesignOfExperimentWindow::addTabsForOutputs()
         break;
       }
   // sample of the variable inputs
-  NumericalSample inS = designOfExperiment_.getInputSample().getMarginal(ind);
+  const NumericalSample inS = designOfExperiment_.getInputSample().getMarginal(ind);
   // input names/descriptions
   QStringList inputNames;
   QStringList inAxisTitles;
-  for (int i=0; i<nbInputs; ++i)
+  for (UnsignedInteger i=0; i<nbInputs; ++i)
   {
-    String inputName = inS.getDescription()[i];
+    const String inputName = inS.getDescription()[i];
     inputNames << QString::fromUtf8(inputName.c_str());
 
-    QString inputDescription = QString::fromUtf8(designOfExperiment_.getPhysicalModel().getInputByName(inputName).getDescription().c_str());
+    const QString inputDescription = QString::fromUtf8(designOfExperiment_.getPhysicalModel().getInputByName(inputName).getDescription().c_str());
 
     if (!inputDescription.isEmpty())
       inAxisTitles << inputDescription;
@@ -139,11 +139,11 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   }
 
   // sample of the outputs
-  NumericalSample outS = designOfExperiment_.getResult().getOutputSample();
+  const NumericalSample outS = designOfExperiment_.getOutputSample();
   // output names/descriptions
   QStringList outputNames;
   QStringList outAxisTitles;
-  for (int i=0; i<outS.getDimension(); ++i)
+  for (UnsignedInteger i=0; i<outS.getDimension(); ++i)
   {
     outputNames << QString::fromUtf8(outS.getDescription()[i].c_str());
     QString outputDescription = QString::fromUtf8(designOfExperiment_.getPhysicalModel().getOutputs()[i].getDescription().c_str());
@@ -175,14 +175,16 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   tabLayout->addWidget(nbSimuLabel);
 
   // min/max table
-  tabLayout->addWidget(getMinMaxTableWidget());
+  MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(*dynamic_cast<DataSample*>(&*designOfExperiment_.getImplementation()));
+  tabLayout->addWidget(minMaxTableGroupBox);
+  connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
 
   tabWidget_->addTab(tab, tr("Min/Max"));
 
   // second tab --------------------------------
   tab = new QWidget;
   QVBoxLayout * plotLayout = new QVBoxLayout(tab);
-  QStackedWidget * stackedWidget = new QStackedWidget;
+  ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
   QVector<PlotWidget*> listScatterPlotWidgets = GetListScatterPlots(inS, outS, inputNames, inAxisTitles, outputNames, outAxisTitles);
   for (int i=0; i<listScatterPlotWidgets.size(); ++i)
     stackedWidget->addWidget(listScatterPlotWidgets[i]);
@@ -265,41 +267,25 @@ QWidget* DesignOfExperimentWindow::GetMinMaxTableView(const SimulationAnalysisRe
 }
 
 
-QWidget* DesignOfExperimentWindow::getMinMaxTableWidget()
-{
-  QGroupBox * minMaxGroupBox = new QGroupBox(tr("Minimum and Maximum"));
-  QVBoxLayout * minMaxGroupBoxLayout = new QVBoxLayout(minMaxGroupBox);
-  QStackedWidget * minMaxGroupBoxStackedWidget = new QStackedWidget;
-
-  for (int indexOutput=0; indexOutput<designOfExperiment_.getResult().getOutputSample().getDimension(); ++indexOutput)
-    minMaxGroupBoxStackedWidget->addWidget(GetMinMaxTableView(designOfExperiment_.getResult(), indexOutput));
-
-  minMaxGroupBoxLayout->addWidget(minMaxGroupBoxStackedWidget);
-  connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), minMaxGroupBoxStackedWidget, SLOT(setCurrentIndex(int)));
-
-  return minMaxGroupBox;
-}
-
-
 QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const OT::NumericalSample & inS, const OT::NumericalSample & outS,
                                                                    const QStringList inNames, const QStringList inAxisNames,
                                                                    const QStringList outNames, const QStringList outAxisNames)
 {
   QVector<PlotWidget*> listScatterPlotWidgets;
-  const int nbInputs = inS.getDimension();
-  const int nbOutputs = outS.getDimension();
-  QPen pen = QPen(Qt::blue, 4);
+  const UnsignedInteger nbInputs = inS.getDimension();
+  const UnsignedInteger nbOutputs = outS.getDimension();
+  const QPen pen = QPen(Qt::blue, 4);
 
-  for (int j=0; j<nbInputs; ++j)
+  for (UnsignedInteger j=0; j<nbInputs; ++j)
   {
-    for (int i=0; i<nbOutputs; ++i)
+    for (UnsignedInteger i=0; i<nbOutputs; ++i)
     {
       PlotWidget * plot = new PlotWidget("scatterplot");
       plot->plotScatter(inS.getMarginal(j), outS.getMarginal(i), pen, inAxisNames[j], outAxisNames[i]);
       plot->setTitle(tr("Scatter plot: ") + outNames[i] + tr(" vs ") + inNames[j]);
       listScatterPlotWidgets.append(plot);
     }
-    for (int i=0; i<nbInputs; ++i)
+    for (UnsignedInteger i=0; i<nbInputs; ++i)
     {
       PlotWidget * plot = new PlotWidget("scatterplot");
       plot->plotScatter(inS.getMarginal(j), inS.getMarginal(i), pen, inAxisNames[j], inAxisNames[i]);
@@ -307,16 +293,16 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const OT::Num
       listScatterPlotWidgets.append(plot);
     }
   }
-  for (int j=0; j<nbOutputs; ++j)
+  for (UnsignedInteger j=0; j<nbOutputs; ++j)
   {
-    for (int i=0; i<nbOutputs; ++i)
+    for (UnsignedInteger i=0; i<nbOutputs; ++i)
     {
       PlotWidget * plot = new PlotWidget("scatterplot");
       plot->plotScatter(outS.getMarginal(j), outS.getMarginal(i), pen, outAxisNames[j], outAxisNames[i]);
       plot->setTitle(tr("Scatter plot: ") + outNames[i] + tr(" vs ") + outNames[j]);
       listScatterPlotWidgets.append(plot);
     }
-    for (int i=0; i<nbInputs; ++i)
+    for (UnsignedInteger i=0; i<nbInputs; ++i)
     {
       PlotWidget * plot = new PlotWidget("scatterplot");
       plot->plotScatter(outS.getMarginal(j), inS.getMarginal(i), pen, outAxisNames[j], inAxisNames[i]);

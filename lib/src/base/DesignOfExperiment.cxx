@@ -97,15 +97,9 @@ NumericalSample DesignOfExperiment::getInputSample()
 }
 
 
-void DesignOfExperiment::setInputSample(const NumericalSample & sample)
+NumericalSample DesignOfExperiment::getOutputSample()
 {
-  getImplementation()->setInputSample(sample);
-}
-
-
-SimulationAnalysisResult DesignOfExperiment::getResult() const
-{
-  return getImplementation()->getResult();
+  return getImplementation()->getOutputSample();
 }
 
 
@@ -115,9 +109,9 @@ void DesignOfExperiment::clearResult()
 }
 
 
-void DesignOfExperiment::evaluate()
+void DesignOfExperiment::run()
 {
-  getImplementation()->evaluate();
+  getImplementation()->run();
 }
 
 

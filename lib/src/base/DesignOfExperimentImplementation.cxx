@@ -28,6 +28,7 @@ namespace OTGUI {
 DesignOfExperimentImplementation::DesignOfExperimentImplementation()
   : PersistentObject()
   , Observable()
+  , DataSample()
 {
 }
 
@@ -36,6 +37,7 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation()
 DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String & name, const PhysicalModel & physicalModel)
   : PersistentObject()
   , Observable()
+  , DataSample()
   , physicalModel_(physicalModel)
 {
   setName(name);
@@ -73,29 +75,15 @@ NumericalSample DesignOfExperimentImplementation::getInputSample()
 }
 
 
-void DesignOfExperimentImplementation::setInputSample(const OT::NumericalSample & sample)
-{
-  if (sample.getDimension() != physicalModel_.getInputs().getSize())
-    throw InvalidArgumentException(HERE) << "The sample has not a dimension equal to the number of inputs of the physical model.";
-  inputSample_ = sample;
-}
-
-
-SimulationAnalysisResult DesignOfExperimentImplementation::getResult() const
-{
-  return result_;
-}
-
-
 void DesignOfExperimentImplementation::clearResult()
 {
-  result_ = SimulationAnalysisResult();
+  setOutputSample(NumericalSample());
 }
 
 
-void DesignOfExperimentImplementation::evaluate()
+void DesignOfExperimentImplementation::run()
 {
-  result_ = SimulationAnalysisResult(getInputSample(), physicalModel_.getFunction()(getInputSample()));
+  setOutputSample(physicalModel_.getFunction()(getInputSample()));
   notify("analysisFinished");
 }
 
@@ -110,8 +98,8 @@ String DesignOfExperimentImplementation::getPythonScript() const
 void DesignOfExperimentImplementation::save(Advocate & adv) const
 {
   PersistentObject::save(adv);
+  DataSample::save(adv);
   adv.saveAttribute("physicalModel_", physicalModel_);
-  adv.saveAttribute("result_", result_);
 }
 
 
@@ -119,7 +107,7 @@ void DesignOfExperimentImplementation::save(Advocate & adv) const
 void DesignOfExperimentImplementation::load(Advocate & adv)
 {
   PersistentObject::load(adv);
+  DataSample::load(adv);
   adv.loadAttribute("physicalModel_", physicalModel_);
-  adv.loadAttribute("result_", result_);
 }
 }

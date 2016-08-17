@@ -51,10 +51,10 @@ public:
   OT::Description getVariableInputNames() const;
 
   OT::NumericalSample getInputSample();
-  void setInputSample(const OT::NumericalSample & sample);
-  SimulationAnalysisResult getResult() const;
+  OT::NumericalSample getOutputSample();
+
   void clearResult();
-  void evaluate();
+  void run();
   OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */
