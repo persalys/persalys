@@ -49,12 +49,12 @@ SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis & analysis)
   if (analysis.getImplementation()->getClassName() == "SobolAnalysis")
   {
     sobolAnalysis_ = *dynamic_cast<const SobolAnalysis*>(&*analysis.getImplementation());
-    srcAnalysis_ = SRCAnalysis(analysis.getName(), analysis.getPhysicalModel());
+    srcAnalysis_ = SRCAnalysis(sobolAnalysis_.getName(), sobolAnalysis_.getPhysicalModel());
   }
   else
   {
-    sobolAnalysis_ = SobolAnalysis(analysis.getName(), analysis.getPhysicalModel());
     srcAnalysis_ = *dynamic_cast<const SRCAnalysis*>(&*analysis.getImplementation());
+    sobolAnalysis_ = SobolAnalysis(srcAnalysis_.getName(), srcAnalysis_.getPhysicalModel());
   }
 
   buildInterface();
