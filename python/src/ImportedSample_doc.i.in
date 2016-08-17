@@ -1,0 +1,44 @@
+%feature("docstring") OTGUI::ImportedSample
+"Class to define imported sample.
+
+The base class for imported sample."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ImportedSample::getFileName
+"File name accessor.
+
+Returns
+-------
+fileName : str
+   File name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ImportedSample::setFileName
+"File name accessor.
+
+Parameters
+----------
+fileName : str
+   File name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ImportedSample::getInputColumns
+"Input columns accessor.
+
+Returns
+-------
+columns : :class:`~openturns.Indices`
+   Columns of the inputs"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ImportedSample::setInputColumns
+"Input columns accessor.
+
+Parameters
+----------
+columns : :class:`~openturns.Indices`
+   Columns of the inputs"
