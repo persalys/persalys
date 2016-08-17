@@ -96,13 +96,13 @@ void SobolAnalysis::run()
 
     // Perform two blocks of simulations
     // - first sample
-    const NumericalSample blockInputSample1(getInputSample(effectiveBlockSize));
-    const NumericalSample blockOutputSample1(getOutputSample(blockInputSample1));
+    const NumericalSample blockInputSample1(generateInputSample(effectiveBlockSize));
+    const NumericalSample blockOutputSample1(computeOutputSample(blockInputSample1));
     X1.add(blockInputSample1);
     Y1.add(blockOutputSample1);
     // - second sample
-    const NumericalSample blockInputSample2(getInputSample(effectiveBlockSize));
-    const NumericalSample blockOutputSample2(getOutputSample(blockInputSample2));
+    const NumericalSample blockInputSample2(generateInputSample(effectiveBlockSize));
+    const NumericalSample blockOutputSample2(computeOutputSample(blockInputSample2));
     X2.add(blockInputSample2);
     Y2.add(blockOutputSample2);
 
@@ -120,7 +120,7 @@ void SobolAnalysis::run()
         x[j][i] = blockInputSample2[j][i];
       crossX1[i].add(x);
       inputDesign.add(crossX1[i]);
-      crossY1[i].add(getOutputSample(x));
+      crossY1[i].add(computeOutputSample(x));
       outputDesign.add(crossY1[i]);
     }
 

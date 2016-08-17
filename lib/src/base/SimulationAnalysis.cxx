@@ -56,7 +56,7 @@ SimulationAnalysis::SimulationAnalysis(const String & name, const PhysicalModel 
 // }
 
 
-NumericalSample SimulationAnalysis::getInputSample(const UnsignedInteger nbSimu)
+NumericalSample SimulationAnalysis::generateInputSample(const UnsignedInteger nbSimu)
 {
   NumericalSample inputSample(getPhysicalModel().getInputRandomVector().getSample(nbSimu));
   inputSample.setDescription(getPhysicalModel().getStochasticInputNames());
@@ -64,7 +64,7 @@ NumericalSample SimulationAnalysis::getInputSample(const UnsignedInteger nbSimu)
 }
 
 
-NumericalSample SimulationAnalysis::getOutputSample(NumericalSample inputSample) const
+NumericalSample SimulationAnalysis::computeOutputSample(NumericalSample inputSample) const
 {
 //   TODO
 //   NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(getOutputNames())(inputSample));
@@ -76,7 +76,7 @@ NumericalSample SimulationAnalysis::getOutputSample(NumericalSample inputSample)
 }
 
 
-NumericalSample SimulationAnalysis::getOutputSample(NumericalSample inputSample, const Description & outputNames) const
+NumericalSample SimulationAnalysis::computeOutputSample(NumericalSample inputSample, const Description & outputNames) const
 {
   NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(outputNames)(inputSample));
   outputSample.setDescription(outputNames);

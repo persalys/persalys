@@ -113,18 +113,18 @@ void MonteCarloAnalysis::run()
     const UnsignedInteger effectiveBlockSize = outerSampling < (maximumOuterSampling - 1) ? getBlockSize() : lastBlockSize;
 
     // Perform a block of simulation
-    const NumericalSample blockInputSample(getInputSample(effectiveBlockSize));
+    const NumericalSample blockInputSample(generateInputSample(effectiveBlockSize));
     effectiveInputSample.add(blockInputSample);
 
-    const NumericalSample blockOutputSample(getOutputSample(blockInputSample));
+    const NumericalSample blockOutputSample(computeOutputSample(blockInputSample));
     outputSample.add(blockOutputSample);
 
     // stop criteria
     if ((getMaximumCoefficientOfVariation() != -1) &&
         (getBlockSize() != 1 || (getBlockSize() == 1 && outerSampling)))
     {
-      NumericalPoint empiricalMean = outputSample.computeMean();
-      NumericalPoint empiricalStd = outputSample.computeStandardDeviationPerComponent();
+      const NumericalPoint empiricalMean(outputSample.computeMean());
+      const NumericalPoint empiricalStd(outputSample.computeStandardDeviationPerComponent());
       NumericalScalar coefOfVar(0.);
       for (int i=0; i<outputSample.getDimension(); ++i)
       {

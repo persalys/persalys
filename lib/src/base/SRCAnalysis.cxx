@@ -59,7 +59,7 @@ void SRCAnalysis::run()
 {
   RandomGenerator::SetSeed(getSeed());
 
-  NumericalSample inputSample(getInputSample(simulationsNumber_));
+  NumericalSample inputSample(generateInputSample(simulationsNumber_));
 
   // set results
   NumericalSample indices(0, inputSample.getDimension());
@@ -68,7 +68,7 @@ void SRCAnalysis::run()
   {
     Description outputName(1);
     outputName[0] = getOutputNames()[i];
-    indices.add(CorrelationAnalysis::SRC(inputSample, getOutputSample(inputSample, outputName)));
+    indices.add(CorrelationAnalysis::SRC(inputSample, computeOutputSample(inputSample, outputName)));
   }
 
   indices.setDescription(inputSample.getDescription());

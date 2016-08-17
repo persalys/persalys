@@ -23,26 +23,6 @@ outputs : sequence of :class:`~otguibase.Output`
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationAnalysis::setNbSimulations
-"Simulation number accessor.
-
-Parameters
-----------
-nbSimu : int
-    The number of simulations"
-
-// ----------------------------------------------------------------------
-
-%feature("docstring") OTGUI::SimulationAnalysis::getNbSimulations
-"Simulation number accessor.
-
-Returns
--------
-nbSimu : int
-    The number of simulations"
-
-// ----------------------------------------------------------------------
-
 %feature("docstring") OTGUI::SimulationAnalysis::setSeed
 "Seed accessor.
 
@@ -63,7 +43,7 @@ seed : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationAnalysis::getInputSample
+%feature("docstring") OTGUI::SimulationAnalysis::generateInputSample
 "Input sample accessor.
 
 Returns
