@@ -33,13 +33,6 @@ Analysis::Analysis()
 }
 
 
-/* Constructor with parameters */
-Analysis::Analysis(const String & name, const PhysicalModel & physicalModel)
-  : TypedInterfaceObject<AnalysisImplementation>(new AnalysisImplementation(name, physicalModel))
-{
-}
-
-
 Analysis::Analysis(const AnalysisImplementation & implementation)
   : TypedInterfaceObject<AnalysisImplementation>(implementation.clone())
 {
@@ -70,15 +63,9 @@ void Analysis::addObserver(Observer * observer)
 }
 
 
-PhysicalModel Analysis::getPhysicalModel() const
+String Analysis::getModelName() const
 {
-  return getImplementation()->getPhysicalModel();
-}
-
-
-void Analysis::setPhysicalModel(const PhysicalModel & physicalModel)
-{
-  getImplementation()->setPhysicalModel(physicalModel);
+  return getImplementation()->getModelName();
 }
 
 

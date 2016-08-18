@@ -33,7 +33,7 @@ static Factory<TaylorExpansionMomentsAnalysis> RegisteredFactory;
 
 /* Default constructor */
 TaylorExpansionMomentsAnalysis::TaylorExpansionMomentsAnalysis()
-  : AnalysisImplementation()
+  : PhysicalModelAnalysis()
 {
 
 }
@@ -41,7 +41,7 @@ TaylorExpansionMomentsAnalysis::TaylorExpansionMomentsAnalysis()
 
 /* Constructor with parameters */
 TaylorExpansionMomentsAnalysis::TaylorExpansionMomentsAnalysis(const String & name, const PhysicalModel & physicalModel)
-  : AnalysisImplementation(name, physicalModel)
+  : PhysicalModelAnalysis(name, physicalModel)
 // TODO  , outputNames_(physicalModel.getOutputNames())
 {
 }
@@ -109,7 +109,7 @@ bool TaylorExpansionMomentsAnalysis::analysisLaunched() const
 /* Method save() stores the object through the StorageManager */
 void TaylorExpansionMomentsAnalysis::save(Advocate & adv) const
 {
-  AnalysisImplementation::save(adv);
+  PhysicalModelAnalysis::save(adv);
 //   adv.saveAttribute("outputNames_", outputNames_);
   adv.saveAttribute("result_", result_);
 }
@@ -118,7 +118,7 @@ void TaylorExpansionMomentsAnalysis::save(Advocate & adv) const
 /* Method load() reloads the object from the StorageManager */
 void TaylorExpansionMomentsAnalysis::load(Advocate & adv)
 {
-  AnalysisImplementation::load(adv);
+  PhysicalModelAnalysis::load(adv);
 //   adv.loadAttribute("outputNames_", outputNames_);
   adv.loadAttribute("result_", result_);
 }

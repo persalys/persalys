@@ -31,13 +31,12 @@ public:
   AnalysisImplementation();
 
   /** Constructor with parameters */
-  AnalysisImplementation(const OT::String & name, const PhysicalModel & physicalModel);
+  AnalysisImplementation(const OT::String & name);
 
   /** Virtual constructor */
   virtual AnalysisImplementation * clone() const;
 
-  PhysicalModel getPhysicalModel() const;
-  void setPhysicalModel(const PhysicalModel & physicalModel);
+  virtual OT::String getModelName() const;
 
   virtual void run();
   virtual OT::String getPythonScript() const;
@@ -55,7 +54,6 @@ protected:
   void setIsReliabilityAnalysis(bool isReliabilityAnalysis);
 
 private:
-  PhysicalModel physicalModel_;
   bool isReliabilityAnalysis_;
 };
 }

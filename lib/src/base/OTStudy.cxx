@@ -292,7 +292,7 @@ void OTStudy::clear(const PhysicalModel & physicalModel)
   PersistentCollection<Analysis>::iterator iterAnalysis = analyses_.begin();
   while (iterAnalysis != analyses_.end())
   {
-    if ((*iterAnalysis).getPhysicalModel().getName() == physicalModel.getName())
+    if ((*iterAnalysis).getModelName() == physicalModel.getName())
     {
       (*iterAnalysis).getImplementation().get()->notify("analysisRemoved");
       iterAnalysis = analyses_.erase(iterAnalysis);
@@ -437,8 +437,9 @@ void OTStudy::add(const Analysis & analysis)
   if (hasAnalysisNamed(analysis.getName()))
     throw InvalidArgumentException(HERE) << "The study has already contained an analysis named " << analysis.getName();
 
-  if (!hasPhysicalModelNamed(analysis.getPhysicalModel().getName()))
-    throw InvalidArgumentException(HERE) << "The analysis has been created with a physical model not belonging to the study.";
+  if (dynamic_cast<const PhysicalModelAnalysis*>(&*analysis.getImplementation()))
+    if (!hasPhysicalModelNamed(analysis.getModelName()))
+      throw InvalidArgumentException(HERE) << "The analysis has been created with a physical model not belonging to the study.";
 
   if (analysis.isReliabilityAnalysis())
     if (!hasLimitStateNamed(dynamic_cast<const ReliabilityAnalysis*>(&*analysis.getImplementation())->getLimitState().getName()))

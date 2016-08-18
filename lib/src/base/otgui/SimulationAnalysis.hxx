@@ -21,17 +21,18 @@
 #ifndef OTGUI_SIMULATIONANALYSIS_HXX
 #define OTGUI_SIMULATIONANALYSIS_HXX
 
-#include "AnalysisImplementation.hxx"
+#include "PhysicalModelAnalysis.hxx"
 
 namespace OTGUI {
-class OTGUI_API SimulationAnalysis : public AnalysisImplementation
+class OTGUI_API SimulationAnalysis : public PhysicalModelAnalysis
 {
-public:
+protected:
   /** Default constructor */
   SimulationAnalysis();
   /** Constructor with parameters */
   SimulationAnalysis(const OT::String & name, const PhysicalModel & physicalModel);
 
+public:
   /** Virtual constructor */
   virtual SimulationAnalysis * clone() const = 0;
 

@@ -21,11 +21,11 @@
 #ifndef OTGUI_TAYLOREXPANSIONMOMENTSANALYSIS_HXX
 #define OTGUI_TAYLOREXPANSIONMOMENTSANALYSIS_HXX
 
-#include "Analysis.hxx"
+#include "PhysicalModelAnalysis.hxx"
 #include "TaylorExpansionMomentsResult.hxx"
 
 namespace OTGUI {
-class OTGUI_API TaylorExpansionMomentsAnalysis : public AnalysisImplementation
+class OTGUI_API TaylorExpansionMomentsAnalysis : public PhysicalModelAnalysis
 {
   CLASSNAME;
 

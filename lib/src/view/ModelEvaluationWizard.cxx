@@ -58,15 +58,17 @@ void ModelEvaluationWizard::buildInterface()
   QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
   QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
 
-  table_ = new QTableWidget(analysis_.getPhysicalModel().getInputs().getSize(), 3);
+  PhysicalModel model(dynamic_cast<const PhysicalModelAnalysis*>(&*analysis_.getImplementation())->getPhysicalModel());
+
+  table_ = new QTableWidget(model.getInputs().getSize(), 3);
   table_->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Description") << tr("Value"));
 
-  for (UnsignedInteger i=0; i<analysis_.getPhysicalModel().getInputs().getSize(); ++i)
+  for (UnsignedInteger i=0; i<model.getInputs().getSize(); ++i)
   {
-    QTableWidgetItem * item = new QTableWidgetItem(QString::fromUtf8(analysis_.getPhysicalModel().getInputNames()[i].c_str()));
+    QTableWidgetItem * item = new QTableWidgetItem(QString::fromUtf8(model.getInputNames()[i].c_str()));
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     table_->setItem(i, 0, item);
-    item = new QTableWidgetItem(QString::fromUtf8(analysis_.getPhysicalModel().getInputs()[i].getDescription().c_str()));
+    item = new QTableWidgetItem(QString::fromUtf8(model.getInputs()[i].getDescription().c_str()));
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     table_->setItem(i, 1, item);
       

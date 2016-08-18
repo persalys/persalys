@@ -71,7 +71,7 @@ void OTStudyItem::update(Observable * source, const String & message)
     }
     catch (std::exception & ex)
     {
-      std::cerr<<"No item added for the limit state named " << addedLimitState.getName() << ex.what() << std::endl;
+      std::cerr<<"No item added for the limit state named " << addedLimitState.getName() << "\n" << ex.what() << std::endl;
     }
   }
   else if (message == "addAnalysis")
@@ -83,7 +83,7 @@ void OTStudyItem::update(Observable * source, const String & message)
     }
     catch (std::exception & ex)
     {
-      std::cerr<<"No item added for the analysis named " << addedAnalysis.getName() << ex.what() << std::endl;
+      std::cerr<<"No item added for the analysis named " << addedAnalysis.getName() << "\n" << ex.what() << std::endl;
     }
   }
   else if (message == "otStudyRemoved")
@@ -232,7 +232,7 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis)
 void OTStudyItem::addDeterministicAnalysisItem(Analysis & analysis, AnalysisItem * item)
 {
   for (int i=0; i<rowCount(); ++i)
-    if (child(i)->text().toStdString() == analysis.getPhysicalModel().getName())
+    if (child(i)->text().toStdString() == analysis.getModelName())
     {
       child(i)->child(0)->appendRow(item);
       emit newAnalysisItemCreated(item);
@@ -245,12 +245,13 @@ void OTStudyItem::addDeterministicAnalysisItem(Analysis & analysis, AnalysisItem
 void OTStudyItem::addProbabilisticAnalysisItem(Analysis & analysis, AnalysisItem * item)
 {
   for (int i=0; i<rowCount(); ++i)
-    if (child(i)->text().toStdString() == analysis.getPhysicalModel().getName())
+    if (child(i)->text().toStdString() == analysis.getModelName())
     {
       if (!child(i)->child(1)->hasChildren())
       {
-        ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(analysis.getPhysicalModel());
-        analysis.getPhysicalModel().addObserver(newProbabilisticModelItem);
+        PhysicalModel physicalModel(dynamic_cast<PhysicalModelAnalysis*>(&*analysis.getImplementation())->getPhysicalModel());
+        ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(physicalModel);
+        physicalModel.addObserver(newProbabilisticModelItem);
         child(i)->child(1)->appendRow(newProbabilisticModelItem);
         emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
       }
@@ -266,7 +267,7 @@ void OTStudyItem::addReliabilityAnalysisItem(Analysis & analysis, AnalysisItem *
 {
   String limitStateName = dynamic_cast<ReliabilityAnalysis*>(&*analysis.getImplementation())->getLimitState().getName();
   for (int i=0; i<rowCount(); ++i)
-    if (child(i)->text().toStdString() == analysis.getPhysicalModel().getName())
+    if (child(i)->text().toStdString() == analysis.getModelName())
     {
       QStandardItem * probabilisticStudyItem = child(i)->child(1);
       for (int j=0; j<probabilisticStudyItem->rowCount(); ++j)

@@ -2,10 +2,6 @@
 
 %feature("docstring") OTGUI::Analysis
 OTGUI_Analysis_doc
-%feature("docstring") OTGUI::Analysis::getPhysicalModel
-OTGUI_Analysis_getPhysicalModel_doc
-%feature("docstring") OTGUI::Analysis::setPhysicalModel
-OTGUI_Analysis_setPhysicalModel_doc
 %feature("docstring") OTGUI::Analysis::run
 OTGUI_Analysis_run_doc
 %feature("docstring") OTGUI::Analysis::getPythonScript

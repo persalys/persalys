@@ -21,11 +21,11 @@
 #ifndef OTGUI_MODELEVALUATION_HXX
 #define OTGUI_MODELEVALUATION_HXX
 
-#include "AnalysisImplementation.hxx"
+#include "PhysicalModelAnalysis.hxx"
 #include "ModelEvaluationResult.hxx"
 
 namespace OTGUI {
-class OTGUI_API ModelEvaluation : public AnalysisImplementation
+class OTGUI_API ModelEvaluation : public PhysicalModelAnalysis
 {
   CLASSNAME;
 
