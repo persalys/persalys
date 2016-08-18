@@ -1,0 +1,20 @@
+[0.201254,-0.143151]
+#!/usr/bin/env python
+# coding: utf-8
+
+from __future__ import print_function
+import openturns as ot
+import otguibase
+
+myStudy = otguibase.OTStudy('myStudy')
+otguibase.OTStudy.Add(myStudy)
+inputColumns = [0, 2]
+outputColumns = []
+inputNames = ['X0', 'X2']
+outputNames = []
+myDataModel = otguibase.DataModel('myDataModel', 'data.csv', inputColumns, outputColumns, inputNames, outputNames)
+myStudy.add(myDataModel)
+myDataModelAnalysis = otguibase.DataAnalysis('myDataModelAnalysis', myDataModel)
+myStudy.add(myDataModelAnalysis)
+myDataModelAnalysis.run()
+
