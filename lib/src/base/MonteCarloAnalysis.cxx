@@ -20,6 +20,8 @@
  */
 #include "otgui/MonteCarloAnalysis.hxx"
 
+#include "otgui/DataAnalysis.hxx"
+
 #include "openturns/RandomGenerator.hxx"
 #include "openturns/PersistentObjectFactory.hxx"
 
@@ -138,14 +140,23 @@ void MonteCarloAnalysis::run()
   }
 
   // set results
-  result_ = MonteCarloResult(effectiveInputSample, outputSample);
-  result_.setElapsedTime((float)elapsedTime / CLOCKS_PER_SEC);
+  if (outputSample.getSize())
+  {
+    DataAnalysis dataAnalysis("", DataModel("", effectiveInputSample, outputSample));
+    dataAnalysis.setIsConfidenceIntervalRequired(isConfidenceIntervalRequired());
+    dataAnalysis.setLevelConfidenceInterval(levelConfidenceInterval_);
+    dataAnalysis.run();
+    result_ = dataAnalysis.getResult();
+    result_.setElapsedTime((float)elapsedTime / CLOCKS_PER_SEC);
 
-  notify("analysisFinished");
+    notify("analysisFinished");
+  }
+  else
+    throw InvalidValueException(HERE) << "MonteCarloAnalysis::run : The output sample is empty";
 }
 
 
-MonteCarloResult MonteCarloAnalysis::getResult() const
+DataAnalysisResult MonteCarloAnalysis::getResult() const
 {
   return result_;
 }
@@ -169,7 +180,7 @@ String MonteCarloAnalysis::getPythonScript() const
 
 bool MonteCarloAnalysis::analysisLaunched() const
 {
-  return getResult().getOutputSample().getSize() != 0;
+  return result_.getOutputSample().getSize() != 0;
 }
 
 

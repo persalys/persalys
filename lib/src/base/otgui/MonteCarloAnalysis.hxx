@@ -23,7 +23,7 @@
 
 #include "SimulationAnalysis.hxx"
 #include "WithStopCriteriaAnalysis.hxx"
-#include "MonteCarloResult.hxx"
+#include "DataAnalysisResult.hxx"
 
 namespace OTGUI {
 class OTGUI_API MonteCarloAnalysis : public SimulationAnalysis, public WithStopCriteriaAnalysis
@@ -45,7 +45,7 @@ public:
   double getLevelConfidenceInterval() const;
   void setLevelConfidenceInterval(const double levelConfidenceInterval);
 
-  MonteCarloResult getResult() const;
+  DataAnalysisResult getResult() const;
 
   virtual void run();
   virtual OT::String getPythonScript() const;
@@ -60,7 +60,7 @@ public:
 private:
   bool isConfidenceIntervalRequired_;
   double levelConfidenceInterval_;
-  MonteCarloResult result_;
+  DataAnalysisResult result_;
 };
 }
 #endif

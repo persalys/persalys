@@ -42,7 +42,6 @@ Central tendency
     :template: class.rst_t
 
     MonteCarloAnalysis
-    MonteCarloResult
     TaylorExpansionMomentsAnalysis
     TaylorExpansionMomentsResult
 
