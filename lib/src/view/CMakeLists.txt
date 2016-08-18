@@ -17,6 +17,8 @@ ot_add_source_file ( ImportDataPage.cxx )
 ot_add_source_file ( ImportDataModelPage.cxx )
 ot_add_source_file ( DataModelWizard.cxx )
 ot_add_source_file ( DataModelWindow.cxx )
+ot_add_source_file ( DataAnalysisWindow.cxx )
+ot_add_source_file ( DataAnalysisResultWindow.cxx )
 ot_add_source_file ( AnalysisWizard.cxx )
 ot_add_source_file ( OTguiMdiArea.cxx )
 ot_add_source_file ( BlockSizeGroupBox.cxx )
@@ -100,6 +102,8 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/ImportDataModelPage.hxx
                                   otgui/DataModelWizard.hxx
                                   otgui/DataModelWindow.hxx
+                                  otgui/DataAnalysisWindow.hxx
+                                  otgui/DataAnalysisResultWindow.hxx
                                   otgui/ImportTablePage.hxx
                                   otgui/StudyTreeView.hxx
                                   otgui/DeterministicDesignPage.hxx
