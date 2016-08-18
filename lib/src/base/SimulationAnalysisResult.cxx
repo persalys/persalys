@@ -52,13 +52,13 @@ SimulationAnalysisResult* SimulationAnalysisResult::clone() const
 }
 
 
-NumericalSampleCollection SimulationAnalysisResult::getListXMin() const
+DataSample::NumericalSampleCollection SimulationAnalysisResult::getListXMin() const
 {
   return listXMin_;
 }
 
 
-NumericalSampleCollection SimulationAnalysisResult::getListXMax() const
+DataSample::NumericalSampleCollection SimulationAnalysisResult::getListXMax() const
 {
   return listXMax_;
 }

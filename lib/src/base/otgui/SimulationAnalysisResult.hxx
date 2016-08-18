@@ -22,9 +22,9 @@
 #define OTGUI_SIMULATIONANALYSISRESULT_HXX
 
 #include "ModelEvaluationResult.hxx"
+#include "DataSample.hxx"
 
 namespace OTGUI {
-typedef OT::Collection<OT::NumericalSample> NumericalSampleCollection;
 class OTGUI_API SimulationAnalysisResult : public ModelEvaluationResult
 {
   CLASSNAME;
@@ -38,8 +38,8 @@ public:
   /** Virtual constructor */
   virtual SimulationAnalysisResult * clone() const;
 
-  NumericalSampleCollection getListXMin() const;
-  NumericalSampleCollection getListXMax() const;
+  DataSample::NumericalSampleCollection getListXMin() const;
+  DataSample::NumericalSampleCollection getListXMax() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
