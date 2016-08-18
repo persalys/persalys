@@ -30,6 +30,8 @@
 #include <QSettings>
 
 #include "otgui/DataModel.hxx"
+#include "otgui/DataAnalysis.hxx"
+#include "otgui/DataAnalysisResultWindow.hxx"
 #include "otgui/AnalyticalPhysicalModel.hxx"
 #include "otgui/PythonPhysicalModel.hxx"
 #ifdef OTGUI_HAVE_YACS
@@ -130,6 +132,10 @@ void StudyTreeView::buildActions()
   removeDataModel_->setStatusTip(tr("Remove the data model"));
   connect(removeDataModel_, SIGNAL(triggered()), this, SLOT(removeDataModel()));
 
+  newDataAnalysis_ = new QAction(tr("New data analysis"), this);
+  newDataAnalysis_->setStatusTip(tr("Analyse the data sample"));
+  connect(newDataAnalysis_, SIGNAL(triggered()), this, SLOT(createNewDataAnalysis()));
+
   // new physical model actions
   newAnalyticalPhysicalModel_ = new QAction(tr("New analytical physical model"), this);
   newAnalyticalPhysicalModel_->setStatusTip(tr("Create a new analytical physical model"));
@@ -204,7 +210,7 @@ void StudyTreeView::buildActions()
 
   // remove analysis action
   removeAnalysis_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
-  removeAnalysis_->setStatusTip(tr("Remove the model evaluation"));
+  removeAnalysis_->setStatusTip(tr("Remove the analysis"));
   connect(removeAnalysis_, SIGNAL(triggered()), this, SLOT(removeAnalysis()));
 
   // save the current OTStudy action
@@ -232,6 +238,7 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
   else if (dataType == "DataModel")
   {
     actions.append(modifyDataModel_);
+    actions.append(newDataAnalysis_);
     actions.append(removeDataModel_);
   }
   else if (dataType == "PhysicalModel")
@@ -266,9 +273,13 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
     actions.append(newThresholdExceedance_);
     actions.append(removeLimitState_);
   }
-  else if (dataType == "ModelEvaluation" || dataType.contains("Analysis"))
+  else if (dataType == "ModelEvaluation" || (dataType.contains("Analysis") && dataType != "DataAnalysis"))
   {
     actions.append(runAnalysis_);
+    actions.append(removeAnalysis_);
+  }
+  else if (dataType == "DataAnalysis")
+  {
     actions.append(removeAnalysis_);
   }
   return actions;
@@ -369,8 +380,22 @@ void StudyTreeView::removeDataModel()
 {
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+  DataModel dataModel(dynamic_cast<DataModelItem*>(selectedItem)->getDataModel());
+  treeViewModel_->getOTStudyItem(index)->getOTStudy()->remove(dataModel);
+}
 
-  treeViewModel_->getOTStudyItem(index)->getOTStudy()->remove(dynamic_cast<DataModelItem*>(selectedItem)->getDataModel());
+
+void StudyTreeView::createNewDataAnalysis()
+{
+  QModelIndex index = selectionModel()->currentIndex();
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+  DataModelItem * item = dynamic_cast<DataModelItem*>(selectedItem);
+  OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(item->QStandardItem::parent());
+  DataAnalysis * analysis = new DataAnalysis(otStudyItem->getOTStudy()->getAvailableAnalysisName("DataAnalysis_"), item->getDataModel());
+
+  otStudyItem->getOTStudy()->add(analysis);
+  analysis->run();
+  setExpanded(index, true);
 }
 
 
@@ -674,7 +699,7 @@ void StudyTreeView::runAnalysis()
     }
     else
     {
-      throw InvalidArgumentException(HERE) << "analysisType " << analysisType.toStdString() << " not recognized.";
+      std::cerr << "In runAnalysis: analysisType " << analysisType.toStdString() << " not recognized.";
     }
   }
 
@@ -723,8 +748,10 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
     resultWindow = new SRCResultWindow(item);
   else if (analysisType == "MonteCarloReliabilityAnalysis")
     resultWindow = new MonteCarloReliabilityResultWindow(item);
+  else if (analysisType == "DataAnalysis")
+    resultWindow = new DataAnalysisResultWindow(item);
   else
-    throw InvalidArgumentException(HERE) << "analysisType " << analysisType.toStdString() << " not recognized.";
+    std::cerr << "In createAnalysisResultWindow: analysisType " << analysisType.toStdString() << " not recognized.";
 
   if (resultWindow)
   {

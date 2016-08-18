@@ -220,12 +220,30 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis)
   {
     addReliabilityAnalysisItem(analysis, newItem);
   }
+  else if (analysisName == "DataAnalysis")
+  {
+    addDataModelAnalysisItem(analysis, newItem);
+  }
   else
   {
     throw InvalidArgumentException(HERE) << "In OTStudyItem::addAnalysisItem: Impossible to add an item for the analysis of type " << analysisName;
   }
   connect(newItem, SIGNAL(analysisChanged(Analysis)), this, SLOT(updateAnalysis(Analysis)));
   connect(newItem, SIGNAL(analysisRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
+}
+
+
+void OTStudyItem::addDataModelAnalysisItem(Analysis& analysis, AnalysisItem* item)
+{
+  for (int i=0; i<rowCount(); ++i)
+    if (child(i)->text().toStdString() == analysis.getModelName())
+    {
+      child(i)->appendRow(item);
+      emit newAnalysisItemCreated(item);
+      return;
+    }
+  std::cerr<<"No item added for the data analysis named "<<analysis.getName()<<std::endl;
+
 }
 
 

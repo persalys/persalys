@@ -57,6 +57,7 @@ public:
   bool hasDataModelNamed(const OT::String & dataModelName) const;
   OT::String getAvailableDataModelName() const;
   void add(const DataModel & dataModel);
+  void clear(const DataModel & dataModel);
   void remove(DataModel & dataModel);
 
   OT::Collection<PhysicalModel> getPhysicalModels() const;

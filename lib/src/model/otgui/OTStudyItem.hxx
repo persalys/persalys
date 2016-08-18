@@ -44,6 +44,7 @@ public:
   void addDesignOfExperimentItem(DesignOfExperiment & design);
   void addLimitStateItem(LimitState & limitState);
   void addAnalysisItem(Analysis & analysis);
+  void addDataModelAnalysisItem(Analysis & analysis, AnalysisItem * item);
   void addDeterministicAnalysisItem(Analysis & analysis, AnalysisItem * item);
   void addProbabilisticAnalysisItem(Analysis & analysis, AnalysisItem * item);
   void addReliabilityAnalysisItem(Analysis & analysis, AnalysisItem * item);

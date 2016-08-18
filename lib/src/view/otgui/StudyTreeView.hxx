@@ -71,6 +71,7 @@ public slots:
   void runAnalysis();
   void removeAnalysis();
   void createNewDataModelWindow(DataModelItem * item);
+  void createNewDataAnalysis();
   void createNewPhysicalModelWindow(PhysicalModelItem * item);
   void createNewProbabilisticModelWindow(ProbabilisticModelItem * item);
   void createNewDesignOfExperimentWindow(DesignOfExperimentItem* item);
@@ -103,6 +104,7 @@ private:
   QAction * newDataModel_;
   QAction * modifyDataModel_;
   QAction * removeDataModel_;
+  QAction * newDataAnalysis_;
   QAction * newAnalyticalPhysicalModel_;
   QAction * newPythonPhysicalModel_;
 #ifdef OTGUI_HAVE_YACS

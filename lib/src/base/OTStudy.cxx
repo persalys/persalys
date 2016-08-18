@@ -97,6 +97,7 @@ void OTStudy::Add(OTStudy * otstudy)
 
 void OTStudy::Remove(OTStudy * otstudy)
 {
+  // remove physical models
   PersistentCollection<PhysicalModel>::iterator iter = otstudy->physicalModels_.begin();
   while (iter != otstudy->physicalModels_.end())
   {
@@ -105,6 +106,15 @@ void OTStudy::Remove(OTStudy * otstudy)
     (*iter).getImplementation().get()->notify("physicalModelRemoved");
     iter = otstudy->physicalModels_.erase(iter);
   }
+  // remove data models
+  PersistentCollection<DataModel>::iterator iter2 = otstudy->dataModels_.begin();
+  while (iter2 != otstudy->dataModels_.end())
+  {
+    otstudy->clear(*iter2);
+    (*iter2).getImplementation().get()->notify("dataModelRemoved");
+    iter2 = otstudy->dataModels_.erase(iter2);
+  }
+
   OTStudiesFileNames_.erase(std::remove(OTStudiesFileNames_.begin(), OTStudiesFileNames_.end(), otstudy->getFileName()), OTStudiesFileNames_.end());
 
   otstudy->notify("otStudyRemoved");
@@ -211,8 +221,29 @@ void OTStudy::add(const DataModel & dataModel)
 }
 
 
+void OTStudy::clear(const DataModel& dataModel)
+{
+  // remove all the analyses
+  PersistentCollection<Analysis>::iterator iterAnalysis = analyses_.begin();
+  while (iterAnalysis != analyses_.end())
+  {
+    if ((*iterAnalysis).getModelName() == dataModel.getName())
+    {
+      (*iterAnalysis).getImplementation().get()->notify("analysisRemoved");
+      iterAnalysis = analyses_.erase(iterAnalysis);
+    }
+    else
+    {
+      ++iterAnalysis;
+    }
+  }
+}
+
+
 void OTStudy::remove(DataModel & dataModel)
 {
+  clear(dataModel);
+
   for (UnsignedInteger i=0; i<dataModels_.getSize(); ++i)
     if (dataModels_[i].getName() == dataModel.getName())
     {
@@ -579,6 +610,8 @@ String OTStudy::getPythonScript()
   {
     result += (*it).getPythonScript();
     result += getName() + ".add(" + (*it).getName() + ")\n";
+    if ((*it).getImplementation()->getClassName() == "DataAnalysis")
+      result += (*it).getName() + ".run()\n";
   }
   return result;
 }
