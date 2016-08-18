@@ -32,7 +32,7 @@ namespace OTGUI {
 
 DataModelWindow::DataModelWindow(DataModelItem * item)
   : OTguiSubWindow(item)
-  , dataModel_(item->getDataModel())
+  , dataModel_(item->getDataModel().getImplementation()->clone())
 {
   buildInterface();
 }
@@ -45,18 +45,27 @@ void DataModelWindow::buildInterface()
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
+  const UnsignedInteger nbInputs(dataModel_.getInputSample().getDimension());
+
   NumericalSample sample(dataModel_.getInputSample());
-  if (dataModel_.getResult().getOutputSample().getSize())
-    sample.stack(dataModel_.getResult().getOutputSample());
+  if (dataModel_.getOutputSample().getSize())
+    sample.stack(dataModel_.getOutputSample());
+
+  // warning: sample is not the sample from File!!!
+  // need to set inputcolumns and outputcolumns
+  Indices inIndices(nbInputs);
+  inIndices.fill();
+  Indices outIndices(dataModel_.getOutputSample().getDimension());
+  outIndices.fill(nbInputs);
+  dataModel_.setColumns(inIndices, outIndices);
 
   DataModelTableModel * model = new DataModelTableModel(sample, dataModel_, false);
 
   ExportableTableView * tableView = new ExportableTableView;
   tableView->horizontalHeader()->hide();
   tableView->setModel(model);
-  const UnsignedInteger nbInputs(dataModel_.getInputSample().getDimension());
   tableView->setSpan(1, 0, 1, nbInputs);
-  if (dataModel_.getResult().getOutputSample().getSize())
+  if (dataModel_.getOutputSample().getSize())
     tableView->setSpan(1, nbInputs, 1, sample.getDimension());
 
   tabLayout->addWidget(tableView);

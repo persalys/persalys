@@ -1,36 +1,14 @@
+// DataModel docstrings are defined in DataModelImplementation_doc.i.in
+
 %feature("docstring") OTGUI::DataModel
-"Design of experiment.
-
-Available constructors:
-    DataModel(*name, fileName, inputColumns, outputColumns*)
-
-Parameters
-----------
-name : str
-    Name
-fileName : str
-    Name of a data file to load
-inputColumns : sequence of int
-    Indices of columns of the output variables in files to consider (optional)
-outputColumns : sequence of int
-    Indices of columns of the output variables in files to consider (optional)"
-
-// ---------------------------------------------------------------------
-
+OTGUI_DataModel_doc
+%feature("docstring") OTGUI::DataModel::getInputColumns
+OTGUI_DataModel_getInputColumns_doc
 %feature("docstring") OTGUI::DataModel::getOutputColumns
-"Columns of the ouput variables accessor.
-
-Returns
--------
-columns : :class:`~openturns.Indices`
-   Columns of the output variables"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::DataModel::setOutputColumns
-"Columns of the output variables accessor.
-
-Parameters
-----------
-columns : :class:`~openturns.Indices`
-   Columns of the output variables"
+OTGUI_DataModel_getOutputColumns_doc
+%feature("docstring") OTGUI::DataModel::setColumns
+OTGUI_DataModel_setColumns_doc
+%feature("docstring") OTGUI::DataModel::getInputNames
+OTGUI_DataModel_getInputNames_doc
+%feature("docstring") OTGUI::DataModel::getOutputNames
+OTGUI_DataModel_getOutputNames_doc

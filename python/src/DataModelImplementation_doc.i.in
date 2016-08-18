@@ -1,0 +1,94 @@
+%define OTGUI_DataModel_doc
+"Data model.
+
+Available constructors:
+    DataModel(*name, fileName, inputColumns, outputColumns, inputNames, outputNames*)
+
+Parameters
+----------
+name : str
+    Name
+fileName : str
+    Name of a data file to load
+inputColumns : sequence of int
+    Indices of columns of the output variables in files to consider
+outputColumns : sequence of int
+    Indices of columns of the output variables in files to consider
+inputNames : :class:`~openturns.Description`
+    Names of the input variables (optional)
+outputNames : :class:`~openturns.Description`
+    Names of the output variables (optional)"
+%enddef
+%feature("docstring") OTGUI::DataModelImplementation
+OTGUI_DataModel_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_DataModel_getInputColumns_doc
+"Columns of the input variables accessor.
+
+Returns
+-------
+columns : :class:`~openturns.Indices`
+   Columns of the input variables"
+%enddef
+%feature("docstring") OTGUI::DataModelImplementation::getInputColumns
+OTGUI_DataModel_getInputColumns_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_DataModel_getOutputColumns_doc
+"Columns of the ouput variables accessor.
+
+Returns
+-------
+columns : :class:`~openturns.Indices`
+   Columns of the output variables"
+%enddef
+%feature("docstring") OTGUI::DataModelImplementation::getOutputColumns
+OTGUI_DataModel_getOutputColumns_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_DataModel_setColumns_doc
+"Columns and names of the variables accessor.
+
+Parameters
+----------
+inputColumns : :class:`~openturns.Indices`
+    Columns of the input variables
+outputColumns : :class:`~openturns.Indices`
+    Columns of the output variables
+inputNames : :class:`~openturns.Description`, optional
+    Names of the input variables (optional)
+outputNames : :class:`~openturns.Description`, optional
+    Names of the output variables (optional)"
+%enddef
+%feature("docstring") OTGUI::DataModelImplementation::setColumns
+OTGUI_DataModel_setColumns_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_DataModel_getInputNames_doc
+"Names of the input variables accessor.
+
+Returns
+-------
+names : :class:`~openturns.Description`
+   Names of the input variables"
+%enddef
+%feature("docstring") OTGUI::DataModelImplementation::getInputNames
+OTGUI_DataModel_getInputNames_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_DataModel_getOutputNames_doc
+"Names of the ouput variables accessor.
+
+Returns
+-------
+names : :class:`~openturns.Description`
+   Names of the output variables"
+%enddef
+%feature("docstring") OTGUI::DataModelImplementation::getOutputNames
+OTGUI_DataModel_getOutputNames_doc

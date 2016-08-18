@@ -220,7 +220,7 @@ void OTStudy::remove(DataModel & dataModel)
       break;
     }
 
-  dataModel.notify("dataModelRemoved");
+  dataModel.getImplementation().get()->notify("dataModelRemoved");
 }
 
 

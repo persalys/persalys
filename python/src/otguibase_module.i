@@ -95,6 +95,8 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include Output.i
 %include DataSample.i
 %include ImportedSample.i
+%include DataModelImplementation.i
+%include DataModel.i
 %include PhysicalModelImplementation.i
 %include AnalyticalPhysicalModel.i
 %include PythonPhysicalModel.i
@@ -117,7 +119,6 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include DesignOfExperiment.i
 %include FixedDesignOfExperiment.i
 %include FromFileDesignOfExperiment.i
-%include DataModel.i
 %include MonteCarloResult.i
 %include TaylorExpansionMomentsResult.i
 %include MonteCarloAnalysis.i
