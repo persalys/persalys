@@ -73,6 +73,8 @@ ot_add_python_module (otguibase otguibase_module.i
                       Analysis.i Analysis_doc.i.in
                       WithStopCriteriaAnalysis.i WithStopCriteriaAnalysis_doc.i.in
                       SimulationAnalysis.i SimulationAnalysis_doc.i.in
+                      DataAnalysisResult.i DataAnalysisResult_doc.i.in
+                      DataAnalysis.i
                       ModelEvaluationResult.i ModelEvaluationResult_doc.i.in
                       ModelEvaluation.i ModelEvaluation_doc.i.in
                       SimulationAnalysisResult.i SimulationAnalysisResult_doc.i.in

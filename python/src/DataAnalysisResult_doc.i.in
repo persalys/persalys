@@ -1,0 +1,132 @@
+%feature("docstring") OTGUI::DataAnalysisResult
+"Class containing results of the analysis of the data.
+
+The base class containing an input and an output sample"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getMean
+"Mean accessor.
+
+Returns
+-------
+result : :class:`~openturns.NumericalPoint`
+    Mean"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getMedian
+"Median accessor.
+
+Returns
+-------
+result : :class:`~openturns.NumericalPoint`
+    Median"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getStandardDeviation
+"Standard deviation accessor.
+
+Returns
+-------
+result : :class:`~openturns.NumericalPoint`
+    Standard deviation"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getVariance
+"Variance accessor.
+
+Returns
+-------
+result : :class:`~openturns.NumericalPoint`
+    Variance"
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getSkewness
+"Skewness accessor.
+
+Returns
+-------
+result : :class:`~openturns.NumericalPoint`
+    Skewness"
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getKurtosis
+"Kurtosis accessor.
+
+Returns
+-------
+result : :class:`~openturns.NumericalPoint`
+    Kurtosis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getFirstQuartile
+"First quartile accessor.
+
+Returns
+-------
+result : :class:`~openturns.NumericalPoint`
+    First quartile"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getThirdQuartile
+"Third quartile accessor.
+
+Returns
+-------
+result : :class:`~openturns.NumericalPoint`
+    Third quartile"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getMeanConfidenceInterval
+"Confidence interval mean accessor.
+
+Parameters
+----------
+level : float
+    Confidence level
+
+Returns
+-------
+result : :class:`~openturns.Interval`
+    Confidence interval mean"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getStdConfidenceInterval
+"Confidence interval standard deviation accessor.
+
+Parameters
+----------
+level : float
+    Confidence level
+
+Returns
+-------
+result : :class:`~openturns.Interval`
+    Confidence interval standard deviation"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getOutliers
+"Outliers accessor.
+
+Returns
+-------
+result : :class:`~openturns.NumericalPointCollection`
+    Third quartile"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getFittedDistribution
+"Fitted distribution accessor.
+
+Returns
+-------
+result : :class:`~openturns.Distribution`
+    Fitted distribution"

@@ -110,6 +110,8 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include PhysicalModelAnalysis.i
 %include DataModelAnalysis.i
 %include Analysis.i
+%include DataAnalysisResult.i
+%include DataAnalysis.i
 %include WithStopCriteriaAnalysis.i
 %include ModelEvaluationResult.i
 %include ModelEvaluation.i
