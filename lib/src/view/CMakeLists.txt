@@ -15,6 +15,7 @@ ot_add_source_file ( OTguiSubWindow.cxx )
 ot_add_source_file ( OTguiWizard.cxx )
 ot_add_source_file ( ImportDataPage.cxx )
 ot_add_source_file ( ImportDataModelPage.cxx )
+ot_add_source_file ( ImportDesignOfExperimentPage.cxx )
 ot_add_source_file ( DataModelWizard.cxx )
 ot_add_source_file ( DataModelWindow.cxx )
 ot_add_source_file ( DataAnalysisWindow.cxx )
@@ -100,6 +101,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/MomentsEstimatesTableGroupBox.hxx
                                   otgui/ImportDataPage.hxx
                                   otgui/ImportDataModelPage.hxx
+                                  otgui/ImportDesignOfExperimentPage.hxx
                                   otgui/DataModelWizard.hxx
                                   otgui/DataModelWindow.hxx
                                   otgui/DataAnalysisWindow.hxx
