@@ -42,7 +42,7 @@ DataModelTableModel::DataModelTableModel(const NumericalSample & data, DataModel
 void DataModelTableModel::initialize()
 {
   // data model
-  OT::Indices indices(inputColumns_);
+  Indices indices(inputColumns_);
   indices.add(outputColumns_);
 
   if (!indices.check(data_.getDimension()) || !indices.getSize())
@@ -160,7 +160,7 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
       if (value.toString().isEmpty())
         return false;
 
-      OT::Description description = data_.getDescription();
+      Description description = data_.getDescription();
       description[index.column()] = value.toString().toUtf8().constData();
       data_.setDescription(description);
     }
@@ -210,8 +210,8 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
 
     try
     {
-      OT::Description inNames(data_.getMarginal(inputColumns_).getDescription());
-      OT::Description outNames(data_.getMarginal(outputColumns_).getDescription());
+      Description inNames(data_.getMarginal(inputColumns_).getDescription());
+      Description outNames(data_.getMarginal(outputColumns_).getDescription());
       dataModel_.setColumns(inputColumns_, outputColumns_, inNames, outNames);
       emit dataChanged(index, index);
       emit errorMessageChanged("");
