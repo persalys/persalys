@@ -37,14 +37,12 @@ public:
   /** Virtual constructor */
   virtual DesignOfExperimentImplementation * clone() const;
 
+  bool hasPhysicalModel() const;
+
   PhysicalModel getPhysicalModel() const;
   void setPhysicalModel(const PhysicalModel & physicalModel);
 
   virtual OT::Description getVariableInputNames() const;
-
-  virtual OT::NumericalSample getInputSample();
-
-  void clearResult();
 
   void run();
   virtual OT::String getPythonScript() const;
@@ -56,6 +54,7 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
+  bool hasPhysicalModel_;
   PhysicalModel physicalModel_;
 };
 }

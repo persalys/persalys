@@ -73,6 +73,12 @@ void DesignOfExperiment::addObserver(Observer * observer)
 }
 
 
+bool DesignOfExperiment::hasPhysicalModel() const
+{
+  return getImplementation()->hasPhysicalModel();
+}
+
+
 PhysicalModel DesignOfExperiment::getPhysicalModel() const
 {
   return getImplementation()->getPhysicalModel();
@@ -91,21 +97,33 @@ Description DesignOfExperiment::getVariableInputNames() const
 }
 
 
-NumericalSample DesignOfExperiment::getInputSample()
+NumericalSample DesignOfExperiment::getInputSample() const
 {
   return getImplementation()->getInputSample();
 }
 
 
-NumericalSample DesignOfExperiment::getOutputSample()
+void DesignOfExperiment::setInputSample(const NumericalSample& sample)
+{
+  getImplementation()->setInputSample(sample);
+}
+
+
+NumericalSample DesignOfExperiment::getOutputSample() const
 {
   return getImplementation()->getOutputSample();
 }
 
 
-void DesignOfExperiment::clearResult()
+void DesignOfExperiment::setOutputSample(const NumericalSample& sample)
 {
-  getImplementation()->clearResult();
+  getImplementation()->setOutputSample(sample);
+}
+
+
+NumericalSample DesignOfExperiment::getSample() const
+{
+  return getImplementation()->getSample();
 }
 
 

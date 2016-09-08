@@ -29,6 +29,7 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation()
   : PersistentObject()
   , Observable()
   , DataSample()
+  , hasPhysicalModel_(true)
 {
 }
 
@@ -38,6 +39,7 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String 
   : PersistentObject()
   , Observable()
   , DataSample()
+  , hasPhysicalModel_(true)
   , physicalModel_(physicalModel)
 {
   setName(name);
@@ -48,6 +50,12 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String 
 DesignOfExperimentImplementation* DesignOfExperimentImplementation::clone() const
 {
   return new DesignOfExperimentImplementation(*this);
+}
+
+
+bool DesignOfExperimentImplementation::hasPhysicalModel() const
+{
+  return hasPhysicalModel_;
 }
 
 
@@ -69,18 +77,6 @@ Description DesignOfExperimentImplementation::getVariableInputNames() const
 }
 
 
-NumericalSample DesignOfExperimentImplementation::getInputSample()
-{
-  throw NotYetImplementedException(HERE) << "In DesignOfExperimentImplementation::getInputSample()";
-}
-
-
-void DesignOfExperimentImplementation::clearResult()
-{
-  setOutputSample(NumericalSample());
-}
-
-
 void DesignOfExperimentImplementation::run()
 {
   setOutputSample(physicalModel_.getFunction()(getInputSample()));
@@ -99,6 +95,7 @@ void DesignOfExperimentImplementation::save(Advocate & adv) const
 {
   PersistentObject::save(adv);
   DataSample::save(adv);
+  adv.saveAttribute("hasPhysicalModel_", hasPhysicalModel_);
   adv.saveAttribute("physicalModel_", physicalModel_);
 }
 
@@ -108,6 +105,7 @@ void DesignOfExperimentImplementation::load(Advocate & adv)
 {
   PersistentObject::load(adv);
   DataSample::load(adv);
+  adv.loadAttribute("hasPhysicalModel_", hasPhysicalModel_);
   adv.loadAttribute("physicalModel_", physicalModel_);
 }
 }

@@ -45,15 +45,19 @@ public:
 
   void addObserver(Observer * observer);
 
+  bool hasPhysicalModel() const;
+
   PhysicalModel getPhysicalModel() const;
   void setPhysicalModel(const PhysicalModel & physicalModel);
 
   OT::Description getVariableInputNames() const;
 
-  OT::NumericalSample getInputSample();
-  OT::NumericalSample getOutputSample();
+  OT::NumericalSample getInputSample() const;
+  void setInputSample(const OT::NumericalSample & sample);
+  OT::NumericalSample getOutputSample() const;
+  void setOutputSample(const OT::NumericalSample & sample);
+  OT::NumericalSample getSample() const;
 
-  void clearResult();
   void run();
   OT::String getPythonScript() const;
 
