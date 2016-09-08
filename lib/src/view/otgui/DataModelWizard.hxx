@@ -22,6 +22,7 @@
 #define OTGUI_DATAMODELWIZARD_HXX
 
 #include "otgui/OTguiWizard.hxx"
+#include "otgui/DesignOfExperiment.hxx"
 #include "otgui/DataModel.hxx"
 
 namespace OTGUI {
@@ -31,7 +32,7 @@ class DataModelWizard : public OTguiWizard
   Q_OBJECT
 
 public:
-  DataModelWizard(const DataModel & dataModel);
+  DataModelWizard(const DesignOfExperiment & designOfExperiment);
 
   DataModel getDataModel() const;
 

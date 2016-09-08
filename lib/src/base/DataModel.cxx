@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Abstract top-level class to define data model
+ *  @brief Class to define data model
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -20,164 +20,244 @@
  */
 #include "otgui/DataModel.hxx"
 
+#include "openturns/PersistentObjectFactory.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
 
 CLASSNAMEINIT(DataModel);
 
+static Factory<DataModel> RegisteredFactory;
+
 /* Default constructor */
-DataModel::DataModel()
-  : TypedInterfaceObject<DataModelImplementation>(new DataModelImplementation())
+DataModel::DataModel(const String & name)
+  : FromFileDesignOfExperiment()
 {
+  setName(name);
+  hasPhysicalModel_ = false;
 }
 
 
 /* Constructor with parameters */
-DataModel::DataModel(const String & name)
-  : TypedInterfaceObject<DataModelImplementation>(new DataModelImplementation(name))
+DataModel::DataModel(const String & name,
+                     const String & fileName,
+                     const Indices & inputColumns,
+                     const Indices & outputColumns,
+                     const Description & inputNames,
+                     const Description & outputNames)
+  : FromFileDesignOfExperiment()
 {
+  setName(name);
+  hasPhysicalModel_ = false;
+  setFileName(fileName);
+  setColumns(inputColumns, outputColumns, inputNames, outputNames);
 }
 
 
-DataModel::DataModel(const String& name, const NumericalSample& inSample, const NumericalSample& outSample)
-  : TypedInterfaceObject<DataModelImplementation>(new DataModelImplementation(name, inSample, outSample))
+DataModel::DataModel(const String & name,
+                     const NumericalSample & inSample,
+                     const NumericalSample & outSample)
+  : FromFileDesignOfExperiment()
+  , inputNames_(inSample.getDescription())
+  , outputNames_(outSample.getDescription())
 {
-
+  setName(name);
+  hasPhysicalModel_ = false;
+  setInputSample(inSample);
+  setOutputSample(outSample);
+  inputColumns_ = Indices(inSample.getDimension());
+  inputColumns_.fill();
+  outputColumns_ = Indices(outSample.getDimension());
+  outputColumns_.fill(inSample.getDimension());
 }
 
 
-DataModel::DataModel(const String& name, const String& fileName, const Indices& inputColumns, const Indices& outputColumns, const Description& inputNames, const Description& outputNames)
-  : TypedInterfaceObject<DataModelImplementation>(new DataModelImplementation(name, fileName, inputColumns, outputColumns, inputNames, outputNames))
+/* Virtual constructor */
+DataModel* DataModel::clone() const
 {
-
+  return new DataModel(*this);
 }
 
 
-/* Default constructor */
-DataModel::DataModel(const DataModelImplementation & implementation)
-  : TypedInterfaceObject<DataModelImplementation>(implementation.clone())
+void DataModel::setFileName(const String& fileName)
 {
-}
-
-
-/* Constructor from implementation */
-DataModel::DataModel(const Implementation & p_implementation)
-  : TypedInterfaceObject<DataModelImplementation>(p_implementation)
-{
-  // Initialize any other class members here
-  // At last, allocate memory space if needed, but go to destructor to free it
-}
-
-
-/* Constructor from implementation pointer */
-DataModel::DataModel(DataModelImplementation * p_implementation)
-  : TypedInterfaceObject<DataModelImplementation>(p_implementation)
-{
-  // Initialize any other class members here
-  // At last, allocate memory space if needed, but go to destructor to free it
-}
-
-
-void DataModel::addObserver(Observer * observer)
-{
-  getImplementation()->addObserver(observer);
-}
-
-
-NumericalSample DataModel::getInputSample() const
-{
-  return getImplementation()->getInputSample();
-}
-
-
-void DataModel::setInputSample(const NumericalSample& sample)
-{
-  getImplementation()->setInputSample(sample);
-}
-
-
-NumericalSample DataModel::getOutputSample() const
-{
-  return getImplementation()->getOutputSample();
-}
-
-
-void DataModel::setOutputSample(const NumericalSample& sample)
-{
-  getImplementation()->setOutputSample(sample);
-}
-
-
-DataModel::NumericalSampleCollection DataModel::getListXMax() const
-{
-  return getImplementation()->getListXMin();
-}
-
-
-DataModel::NumericalSampleCollection DataModel::getListXMin() const
-{
-  return getImplementation()->getListXMax();
-}
-
-
-NumericalSample DataModel::getSample() const
-{
-  return getImplementation()->getSample();
-}
-
-
-String DataModel::getFileName() const
-{
-  return getImplementation()->getFileName();
-}
-
-
-void DataModel::setFileName(const String & fileName)
-{
-  getImplementation()->setFileName(fileName);
-}
-
-
-Indices DataModel::getInputColumns() const
-{
-  return getImplementation()->getInputColumns();
+  FromFileDesignOfExperiment::setFileName(fileName);
+  // reinitialization
+  outputColumns_ = Indices();
+  inputNames_ = Description();
+  outputNames_ = Description();
 }
 
 
 void DataModel::setInputColumns(const Indices & inputColumns)
 {
-  getImplementation()->setInputColumns(inputColumns);
+  setColumns(inputColumns, outputColumns_, inputNames_, outputNames_);
 }
 
 
 Indices DataModel::getOutputColumns() const
 {
-  return getImplementation()->getOutputColumns();
+  return outputColumns_;
 }
 
 
-void DataModel::setColumns(const Indices & inputColumns, const Indices & outputColumns,
-                           const Description & inputNames, const Description & outputNames)
+void DataModel::setColumns(const Indices & inputColumns,
+                           const Indices & outputColumns,
+                           const Description & inputNames,
+                           const Description & outputNames)
 {
-  getImplementation()->setColumns(inputColumns, outputColumns, inputNames, outputNames);
+  if (!sampleFromFile_.getSize())
+    sampleFromFile_ = ImportSample(getFileName());
+
+  // check indices
+  if (!inputColumns.getSize())
+    throw InvalidArgumentException(HERE) << "In DataModel::setColumns: the model must have at least one input";
+
+  Indices indices(inputColumns);
+  indices.add(outputColumns);
+
+  if (!indices.check(sampleFromFile_.getDimension()))
+    throw InvalidArgumentException(HERE) << "In DataModel::setColumns: input columns and ouput columns are not compatible";
+
+  // check names
+  // input
+  Description inNames(inputNames);
+  if (inputNames.getSize())
+  {
+    if (inputColumns.getSize() != inputNames.getSize())
+      throw InvalidArgumentException(HERE) << "In DataModel::setColumns: inputNames size not compatible with input columns size";
+
+    std::set<String> inputNamesSet;
+    for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
+      inputNamesSet.insert(inputNames[i]);
+    if (inputNamesSet.size() != inputNames.getSize())
+      throw InvalidArgumentException(HERE) << "Two inputs can not have the same name.";
+  }
+
+  // output
+  Description outNames(outputNames);
+  if (outputNames.getSize())
+  {
+    if (outputColumns.getSize() != outputNames.getSize())
+      throw InvalidArgumentException(HERE) << "In DataModel::setColumns: outputNames size not compatible with output columns size";
+
+    std::set<String> outputNamesSet;
+    for (UnsignedInteger i=0; i<outputNames.getSize(); ++i)
+      outputNamesSet.insert(outputNames[i]);
+    if (outputNamesSet.size() != outputNames.getSize())
+      throw InvalidArgumentException(HERE) << "Two outputs can not have the same name.";
+  }
+
+  // set attributs
+  inputColumns_ = inputColumns;
+  outputColumns_ = outputColumns;
+  inputNames_ = inNames;
+  outputNames_ = outNames;
+
+  // set samples
+  NumericalSample inS(sampleFromFile_.getMarginal(inputColumns_));
+  inS.setDescription(getInputNames());
+  setInputSample(inS);
+  NumericalSample outS(sampleFromFile_.getMarginal(outputColumns_));
+  outS.setDescription(getOutputNames());
+  setOutputSample(outS);
 }
 
 
-Description DataModel::getInputNames() const
+Description DataModel::getInputNames()
 {
-  return getImplementation()->getInputNames();
+  if (!inputNames_.getSize())
+  {
+    if (!sampleFromFile_.getSize())
+      sampleFromFile_ = ImportSample(getFileName());
+
+    inputNames_ = Description(inputColumns_.getSize());
+    for (UnsignedInteger i=0; i<inputColumns_.getSize(); ++i)
+      inputNames_[i] = sampleFromFile_.getDescription()[inputColumns_[i]];
+  }
+  return inputNames_;
 }
 
 
-Description DataModel::getOutputNames() const
+Description DataModel::getOutputNames()
 {
-  return getImplementation()->getOutputNames();
+  if (!outputNames_.getSize())
+  {
+    if (!sampleFromFile_.getSize())
+      sampleFromFile_ = ImportSample(getFileName());
+
+    outputNames_ = Description(outputColumns_.getSize());
+    for (UnsignedInteger i=0; i<outputColumns_.getSize(); ++i)
+      outputNames_[i] = sampleFromFile_.getDescription()[outputColumns_[i]];
+  }
+  return outputNames_;
 }
 
 
 String DataModel::getPythonScript() const
 {
-  return getImplementation()->getPythonScript();
+  OSS oss;
+
+  oss << "inputColumns = [";
+  for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++ i)
+  {
+    oss << inputColumns_[i];
+    if (i < inputColumns_.getSize()-1)
+      oss << ", ";
+  }
+  oss << "]\n";
+
+  oss << "outputColumns = [";
+  for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++ i)
+  {
+    oss << outputColumns_[i];
+    if (i < outputColumns_.getSize()-1)
+      oss << ", ";
+  }
+  oss << "]\n";
+
+  oss << "inputNames = [";
+  for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++ i)
+  {
+    oss << "'" << inputNames_[i] << "'";
+    if (i < inputNames_.getSize()-1)
+      oss << ", ";
+  }
+  oss << "]\n";
+
+  oss << "outputNames = [";
+  for (UnsignedInteger i = 0; i < outputNames_.getSize(); ++ i)
+  {
+    oss << "'" << outputNames_[i] << "'";
+    if (i < outputNames_.getSize()-1)
+      oss << ", ";
+  }
+  oss << "]\n";
+
+  oss << getName()+ " = otguibase.DataModel('" + getName() + "', ";
+  oss << "'"+getFileName()+"', inputColumns, outputColumns, inputNames, outputNames)\n";
+
+  return oss.str();
+}
+
+
+/* Method save() stores the object through the StorageManager */
+void DataModel::save(Advocate & adv) const
+{
+  FromFileDesignOfExperiment::save(adv);
+  adv.saveAttribute("outputColumns_", outputColumns_);
+  adv.saveAttribute("inputNames_", inputNames_);
+  adv.saveAttribute("outputNames_", outputNames_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void DataModel::load(Advocate & adv)
+{
+  FromFileDesignOfExperiment::load(adv);
+  adv.loadAttribute("outputColumns_", outputColumns_);
+  adv.loadAttribute("inputNames_", inputNames_);
+  adv.loadAttribute("outputNames_", outputNames_);
 }
 }

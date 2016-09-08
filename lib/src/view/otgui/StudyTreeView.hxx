@@ -48,7 +48,6 @@ public slots:
   void createNewOTStudy();
   void createNewDataModel();
   void modifyDataModel();
-  void removeDataModel();
   void createNewAnalyticalPhysicalModel();
   void createNewPythonPhysicalModel();
 #ifdef OTGUI_HAVE_YACS
@@ -70,7 +69,7 @@ public slots:
   void findAnalysisItemAndLaunchExecution(OTStudyItem * otStudyItem, const QString & analysisName);
   void runAnalysis();
   void removeAnalysis();
-  void createNewDataModelWindow(DataModelItem * item);
+  void createNewDataModelWindow(DesignOfExperimentItem * item);
   void createNewDataAnalysis();
   void createNewPhysicalModelWindow(PhysicalModelItem * item);
   void createNewProbabilisticModelWindow(ProbabilisticModelItem * item);

@@ -52,13 +52,11 @@ public:
   OT::String getFileName() const;
   void setFileName(const OT::String & fileName);
 
-  OT::Collection<DataModel> getDataModels() const;
-  DataModel & getDataModelByName(const OT::String & dataModelName);
+  OT::Collection<DesignOfExperiment> getDataModels() const;
+  DesignOfExperiment & getDataModelByName(const OT::String & dataModelName);
   bool hasDataModelNamed(const OT::String & dataModelName) const;
   OT::String getAvailableDataModelName() const;
-  void add(const DataModel & dataModel);
-  void clear(const DataModel & dataModel);
-  void remove(DataModel & dataModel);
+  void clear(const DesignOfExperiment & designOfExperiment);
 
   OT::Collection<PhysicalModel> getPhysicalModels() const;
   PhysicalModel & getPhysicalModelByName(const OT::String & physicalModelName);
@@ -104,7 +102,7 @@ private:
   static OT::Description OTStudiesFileNames_;
   static Observer * OTStudyObserver_;
   OT::String fileName_;
-  OT::PersistentCollection<DataModel> dataModels_;
+  OT::PersistentCollection<DesignOfExperiment> dataModels_;
   OT::PersistentCollection<PhysicalModel> physicalModels_;
   OT::PersistentCollection<DesignOfExperiment> designOfExperiments_;
   OT::PersistentCollection<Analysis> analyses_;

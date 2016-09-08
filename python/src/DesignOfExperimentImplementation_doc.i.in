@@ -42,45 +42,6 @@ OTGUI_DesignOfExperiment_setPhysicalModel_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_DesignOfExperiment_getResult_doc
-"Result accessor.
-
-Returns
--------
-columns : :class:`~otguibase.SimulationAnalysisResult`
-   Result"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getResult
-OTGUI_DesignOfExperiment_getResult_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_getInputSample_doc
-"Input sample accessor.
-
-Returns
--------
-sample : :class:`~openturns.NumericalSample`
-   Input sample"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getInputSample
-OTGUI_DesignOfExperiment_getInputSample_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_getOutputSample_doc
-"Output sample accessor.
-
-Returns
--------
-sample : :class:`~openturns.NumericalSample`
-   Output sample"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getOutputSample
-OTGUI_DesignOfExperiment_getOutputSample_doc
-
-// ---------------------------------------------------------------------
-
 %define OTGUI_DesignOfExperiment_getPythonScript_doc
 "Python script accessor.
 
@@ -112,11 +73,3 @@ OTGUI_DesignOfExperiment_getVariableInputNames_doc
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::run
 OTGUI_DesignOfExperiment_run_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_clearResult_doc
-"Clear result."
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::clearResult
-OTGUI_DesignOfExperiment_clearResult_doc

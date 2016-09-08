@@ -71,7 +71,7 @@ StudyTreeView::StudyTreeView(QWidget * parent)
 {
   OTStudy::SetInstanceObserver(treeViewModel_);
   setModel(treeViewModel_);
-  connect(treeViewModel_, SIGNAL(newDataModelCreated(DataModelItem*)), this, SLOT(createNewDataModelWindow(DataModelItem*)));
+  connect(treeViewModel_, SIGNAL(newDataModelCreated(DesignOfExperimentItem*)), this, SLOT(createNewDataModelWindow(DesignOfExperimentItem*)));
   connect(treeViewModel_, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)), this, SLOT(createNewPhysicalModelWindow(PhysicalModelItem*)));
   connect(treeViewModel_, SIGNAL(newProbabilisticModelCreated(ProbabilisticModelItem*)), this, SLOT(createNewProbabilisticModelWindow(ProbabilisticModelItem*)));
   connect(treeViewModel_, SIGNAL(newDesignOfExperimentCreated(DesignOfExperimentItem*)), this, SLOT(createNewDesignOfExperimentWindow(DesignOfExperimentItem*)));
@@ -130,7 +130,7 @@ void StudyTreeView::buildActions()
   // remove data model
   removeDataModel_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
   removeDataModel_->setStatusTip(tr("Remove the data model"));
-  connect(removeDataModel_, SIGNAL(triggered()), this, SLOT(removeDataModel()));
+  connect(removeDataModel_, SIGNAL(triggered()), this, SLOT(removeDesignOfExperiment()));
 
   newDataAnalysis_ = new QAction(tr("New data analysis"), this);
   newDataAnalysis_->setStatusTip(tr("Analyse the data sample"));
@@ -263,7 +263,7 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
   {
     actions.append(newDesignOfExperiment_);
   }
-  else if (dataType == "DesignOfExperiment")
+  else if (dataType.contains("DesignOfExperiment"))
   {
     actions.append(runDesignOfExperiment_);
     actions.append(removeDesignOfExperiment_);
@@ -364,24 +364,15 @@ void StudyTreeView::modifyDataModel()
 {
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
-  DataModelItem * item = dynamic_cast<DataModelItem*>(selectedItem);
-  QSharedPointer<DataModelWizard> wizard = QSharedPointer<DataModelWizard>(new DataModelWizard(item->getDataModel()));
+  DesignOfExperimentItem * item = dynamic_cast<DesignOfExperimentItem*>(selectedItem);
+  QSharedPointer<DataModelWizard> wizard = QSharedPointer<DataModelWizard>(new DataModelWizard(item->getDesignOfExperiment()));
 
   if (wizard->exec())
   {
     emit removeSubWindow(item);
-    item->updateDataModel(wizard->getDataModel());
+    item->updateDesignOfExperiment(wizard->getDataModel());
     createNewDataModelWindow(item);
   }
-}
-
-
-void StudyTreeView::removeDataModel()
-{
-  QModelIndex index = selectionModel()->currentIndex();
-  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
-  DataModel dataModel(dynamic_cast<DataModelItem*>(selectedItem)->getDataModel());
-  treeViewModel_->getOTStudyItem(index)->getOTStudy()->remove(dataModel);
 }
 
 
@@ -389,9 +380,11 @@ void StudyTreeView::createNewDataAnalysis()
 {
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
-  DataModelItem * item = dynamic_cast<DataModelItem*>(selectedItem);
+  DesignOfExperimentItem * item = dynamic_cast<DesignOfExperimentItem*>(selectedItem);
   OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(item->QStandardItem::parent());
-  DataAnalysis * analysis = new DataAnalysis(otStudyItem->getOTStudy()->getAvailableAnalysisName("DataAnalysis_"), item->getDataModel());
+  if (!dynamic_cast<const DataModel*>(&*item->getDesignOfExperiment().getImplementation()))
+    throw InvalidValueException(HERE) << "StudyTreeView::createNewDataAnalysis: The design of experiment is not a datamodel";
+  DataAnalysis * analysis = new DataAnalysis(otStudyItem->getOTStudy()->getAvailableAnalysisName("DataAnalysis_"), *dynamic_cast<const DataModel*>(&*item->getDesignOfExperiment().getImplementation()));
 
   otStudyItem->getOTStudy()->add(analysis);
   analysis->run();
@@ -482,7 +475,7 @@ void StudyTreeView::removeLimitState()
 }
 
 
-void StudyTreeView::createNewDataModelWindow(DataModelItem * item)
+void StudyTreeView::createNewDataModelWindow(DesignOfExperimentItem * item)
 {
   DataModelWindow * window = new DataModelWindow(item);
   emit showWindow(window);

@@ -9,7 +9,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      Observer.cxx Observable.cxx OTStudy.cxx Variable.cxx Input.cxx Output.cxx
                      DataSample.cxx
                      ImportedSample.cxx
-                     DataModel.cxx DataModelImplementation.cxx
+                     DataModel.cxx
                      PhysicalModel.cxx PhysicalModelImplementation.cxx AnalyticalPhysicalModel.cxx 
                      PythonPhysicalModel.cxx
                      PythonEvaluation.cxx
@@ -41,8 +41,6 @@ ot_install_header_file ( Input.hxx )
 ot_install_header_file ( Output.hxx )
 ot_install_header_file ( DataSample.hxx )
 ot_install_header_file ( ImportedSample.hxx )
-ot_install_header_file ( DataModel.hxx )
-ot_install_header_file ( DataModelImplementation.hxx )
 ot_install_header_file ( PhysicalModel.hxx )
 ot_install_header_file ( PhysicalModelImplementation.hxx )
 ot_install_header_file ( AnalyticalPhysicalModel.hxx )
@@ -51,6 +49,7 @@ ot_install_header_file ( DesignOfExperimentImplementation.hxx )
 ot_install_header_file ( DesignOfExperiment.hxx )
 ot_install_header_file ( FixedDesignOfExperiment.hxx )
 ot_install_header_file ( FromFileDesignOfExperiment.hxx )
+ot_install_header_file ( DataModel.hxx )
 ot_install_header_file ( AnalysisImplementation.hxx )
 ot_install_header_file ( PhysicalModelAnalysis.hxx )
 ot_install_header_file ( DataModelAnalysis.hxx )

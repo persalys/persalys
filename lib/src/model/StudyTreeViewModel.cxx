@@ -53,7 +53,7 @@ void StudyTreeViewModel::createNewOTStudy()
 void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
 {
   OTStudyItem * otStudyItem = new OTStudyItem(otStudy);
-  connect(otStudyItem, SIGNAL(newDataModelItemCreated(DataModelItem*)), this, SIGNAL(newDataModelCreated(DataModelItem*)));
+  connect(otStudyItem, SIGNAL(newDataModelItemCreated(DesignOfExperimentItem*)), this, SIGNAL(newDataModelCreated(DesignOfExperimentItem*)));
   connect(otStudyItem, SIGNAL(newPhysicalModelItemCreated(PhysicalModelItem*)), this, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)));
   connect(otStudyItem, SIGNAL(newProbabilisticModelItemCreated(ProbabilisticModelItem*)), this, SIGNAL(newProbabilisticModelCreated(ProbabilisticModelItem*)));
   connect(otStudyItem, SIGNAL(newDesignOfExperimentItemCreated(DesignOfExperimentItem*)), this, SIGNAL(newDesignOfExperimentCreated(DesignOfExperimentItem*)));
@@ -67,8 +67,6 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
     otStudyItem->addDataModelItem(otStudy->getDataModels()[i]);
   for (UnsignedInteger i=0; i<otStudy->getPhysicalModels().getSize(); ++i)
     otStudyItem->addPhysicalModelItem(otStudy->getPhysicalModels()[i]);
-  for (UnsignedInteger i=0; i<otStudy->getDesignOfExperiments().getSize(); ++i)
-    otStudyItem->addDesignOfExperimentItem(otStudy->getDesignOfExperiments()[i]);
   for (UnsignedInteger i=0; i<otStudy->getLimitStates().getSize(); ++i)
     otStudyItem->addLimitStateItem(otStudy->getLimitStates()[i]);
   for (UnsignedInteger i=0; i<otStudy->getAnalyses().getSize(); ++i)
@@ -77,6 +75,8 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
     if (otStudy->getAnalyses()[i].analysisLaunched())
       otStudy->getAnalyses()[i].getImplementation()->notify("analysisFinished");
   }
+  for (UnsignedInteger i=0; i<otStudy->getDesignOfExperiments().getSize(); ++i)
+    otStudyItem->addDesignOfExperimentItem(otStudy->getDesignOfExperiments()[i]);
 }
 
 

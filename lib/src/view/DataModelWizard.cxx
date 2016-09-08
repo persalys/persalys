@@ -22,12 +22,17 @@
 
 #include "otgui/ImportDataModelPage.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
-DataModelWizard::DataModelWizard(const DataModel & dataModel)
+DataModelWizard::DataModelWizard(const DesignOfExperiment & designOfExperiment)
   : OTguiWizard()
-  , dataModel_(dataModel)
 {
+  if (!dynamic_cast<const DataModel*>(&*designOfExperiment.getImplementation()))
+    throw InvalidArgumentException(HERE) << "Can not build the datamodel wizard\n";
+  dataModel_ = *dynamic_cast<const DataModel*>(&*designOfExperiment.getImplementation());
+
   buildInterface();
 }
 

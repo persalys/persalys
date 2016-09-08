@@ -104,7 +104,7 @@ DesignOfExperimentWizard::DesignOfExperimentWizard(const DesignOfExperiment & de
   : OTguiWizard()
   , designOfExperiment_(designOfExperiment.getImplementation()->clone())
 {
-  designOfExperiment_.clearResult();
+  designOfExperiment_.setOutputSample(OT::NumericalSample());
   buildInterface();
 }
 
@@ -115,12 +115,12 @@ void DesignOfExperimentWizard::buildInterface()
 
   introPage_ = new IntroPage(designOfExperiment_);
   setPage(Page_Intro, introPage_);
-  DeterministicDesignPage * deterministicDesignPage = new DeterministicDesignPage(designOfExperiment_.getImplementation()->clone());
+  DeterministicDesignPage * deterministicDesignPage = new DeterministicDesignPage(designOfExperiment_.getImplementation());
   connect(deterministicDesignPage, SIGNAL(designOfExperimentChanged(const DesignOfExperiment&)), this, SLOT(setDesignOfExperiment(const DesignOfExperiment&)));
   setPage(Page_Deterministic, deterministicDesignPage);
   // TODO
 //   setPage(Page_Probabilistic, new ProbabilisticDesignPage(designOfExperiment_));
-  ImportTablePage * importTablePage = new ImportTablePage(designOfExperiment_.getImplementation()->clone());
+  ImportTablePage * importTablePage = new ImportTablePage(designOfExperiment_.getImplementation());
   connect(importTablePage, SIGNAL(designOfExperimentChanged(const DesignOfExperiment&)), this, SLOT(setDesignOfExperiment(const DesignOfExperiment&)));
   setPage(Page_Import, importTablePage);
 
@@ -139,7 +139,7 @@ int DesignOfExperimentWizard::nextId() const
 //     case Page_Probabilistic:
     case Page_Import:
     default:
-        return -1;
+      return -1;
   }
 }
 

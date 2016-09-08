@@ -30,9 +30,9 @@ using namespace OT;
 
 namespace OTGUI {
 
-DataModelWindow::DataModelWindow(DataModelItem * item)
+DataModelWindow::DataModelWindow(DesignOfExperimentItem * item)
   : OTguiSubWindow(item)
-  , dataModel_(item->getDataModel().getImplementation()->clone())
+  , designOfExperiment_(item->getDesignOfExperiment())
 {
   buildInterface();
 }
@@ -45,28 +45,20 @@ void DataModelWindow::buildInterface()
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
-  const UnsignedInteger nbInputs(dataModel_.getInputSample().getDimension());
+  const UnsignedInteger nbInputs(designOfExperiment_.getInputSample().getDimension());
 
-  NumericalSample sample(dataModel_.getInputSample());
-  if (dataModel_.getOutputSample().getSize())
-    sample.stack(dataModel_.getOutputSample());
+  // warning: sample to display is not the sample from File! -> create a new DataModel
+  DataModel newDataModel("unnamed", designOfExperiment_.getInputSample(), designOfExperiment_.getOutputSample());
 
-  // warning: sample is not the sample from File!!!
-  // need to set inputcolumns and outputcolumns
-  Indices inIndices(nbInputs);
-  inIndices.fill();
-  Indices outIndices(dataModel_.getOutputSample().getDimension());
-  outIndices.fill(nbInputs);
-  dataModel_.setColumns(inIndices, outIndices);
-
-  DataModelTableModel * model = new DataModelTableModel(sample, dataModel_, false);
+  // set table
+  DataModelTableModel * model = new DataModelTableModel(designOfExperiment_.getSample(), newDataModel, false);
 
   ExportableTableView * tableView = new ExportableTableView;
   tableView->horizontalHeader()->hide();
   tableView->setModel(model);
   tableView->setSpan(1, 0, 1, nbInputs);
-  if (dataModel_.getOutputSample().getSize())
-    tableView->setSpan(1, nbInputs, 1, sample.getDimension());
+  if (designOfExperiment_.getOutputSample().getSize())
+    tableView->setSpan(1, nbInputs, 1, designOfExperiment_.getSample().getDimension());
 
   tabLayout->addWidget(tableView);
 

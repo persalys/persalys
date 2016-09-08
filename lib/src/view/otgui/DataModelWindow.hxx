@@ -22,7 +22,7 @@
 #define OTGUI_DATAMODELWINDOW_HXX
 
 #include "OTguiSubWindow.hxx"
-#include "otgui/DataModelItem.hxx"
+#include "otgui/DesignOfExperimentItem.hxx"
 
 namespace OTGUI {
 
@@ -31,13 +31,13 @@ class DataModelWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  DataModelWindow(DataModelItem * item);
+  DataModelWindow(DesignOfExperimentItem * item);
 
 protected:
   void buildInterface();
 
 private:
-  DataModel dataModel_;
+  DesignOfExperiment designOfExperiment_;
 };
 }
 #endif

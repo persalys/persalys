@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Abstract top-level class to define data model
+ *  @brief Class to define data model
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -21,28 +21,17 @@
 #ifndef OTGUI_DATAMODEL_HXX
 #define OTGUI_DATAMODEL_HXX
 
-#include "DataModelImplementation.hxx"
+#include "FromFileDesignOfExperiment.hxx"
 
 namespace OTGUI {
-class OTGUI_API DataModel : public OT::TypedInterfaceObject<DataModelImplementation>
+class OTGUI_API DataModel : public FromFileDesignOfExperiment
 {
   CLASSNAME;
 
 public:
-  typedef OT::Pointer<DataModelImplementation> Implementation;
-  typedef OT::Collection<OT::NumericalSample> NumericalSampleCollection;
-
   /** Default constructor */
-  DataModel();
-  /** Default constructor */
-  DataModel(const DataModelImplementation & implementation);
-  /** Constructor from implementation */
-  DataModel(const Implementation & p_implementation);
-  /** Constructor from implementation pointer */
-  DataModel(DataModelImplementation * p_implementation);
+  DataModel(const OT::String & name="Unnamed");
 
-  /** Constructor with parameters */
-  DataModel(const OT::String & name);
   /** Constructor with parameters */
   DataModel(const OT::String & name,
             const OT::String & fileName,
@@ -50,39 +39,39 @@ public:
             const OT::Indices & outputColumns=OT::Indices(),
             const OT::Description & inputNames=OT::Description(),
             const OT::Description & outputNames=OT::Description());
+
   /** Constructor with parameters */
   DataModel(const OT::String & name,
             const OT::NumericalSample & inSample,
             const OT::NumericalSample & outSample);
 
-  void addObserver(Observer * observer);
+  /** Virtual constructor */
+  virtual DataModel * clone() const;
 
-  OT::NumericalSample getInputSample() const;
-  void setInputSample(const OT::NumericalSample & sample);
+  virtual void setFileName(const OT::String & fileName);
 
-  OT::NumericalSample getOutputSample() const;
-  void setOutputSample(const OT::NumericalSample & sample);
-
-  NumericalSampleCollection getListXMin() const;
-  NumericalSampleCollection getListXMax() const;
-
-  OT::NumericalSample getSample() const;
-
-  OT::String getFileName() const;
-  void setFileName(const OT::String & fileName);
-
-  OT::Indices getInputColumns() const;
-  void setInputColumns(const OT::Indices & inputColumns);
   OT::Indices getOutputColumns() const;
+  virtual void setInputColumns(const OT::Indices & inputColumns);
   void setColumns(const OT::Indices & inputColumns,
                   const OT::Indices & outputColumns,
                   const OT::Description & inputNames=OT::Description(),
                   const OT::Description & outputNames=OT::Description());
 
-  OT::Description getInputNames() const;
-  OT::Description getOutputNames() const;
+  OT::Description getInputNames();
+  OT::Description getOutputNames();
 
   virtual OT::String getPythonScript() const;
+
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv);
+
+private:
+  OT::Description inputNames_;
+  OT::Description outputNames_;
+  OT::Indices outputColumns_;
 };
 }
 #endif
