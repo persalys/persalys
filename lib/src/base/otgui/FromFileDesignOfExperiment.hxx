@@ -40,14 +40,12 @@ public:
   /** Virtual constructor */
   virtual FromFileDesignOfExperiment * clone() const;
 
-  void setFileName(const OT::String & fileName);
   OT::String getFileName() const;
+  virtual void setFileName(const OT::String & fileName);
   OT::Indices getInputColumns() const;
-  void setInputColumns(const OT::Indices & inputColumns);
+  virtual void setInputColumns(const OT::Indices & inputColumns);
 
   static OT::NumericalSample ImportSample(const OT::String & fileName);
-
-  virtual OT::NumericalSample getInputSample();
 
   virtual OT::String getPythonScript() const;
 
@@ -58,8 +56,11 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
+  void generateInputSample();
+
   OT::String fileName_;
   OT::Indices inputColumns_;
+  OT::NumericalSample sampleFromFile_;
 };
 }
 #endif

@@ -33,6 +33,7 @@ static Factory<FromFileDesignOfExperiment> RegisteredFactory;
 /* Default constructor */
 FromFileDesignOfExperiment::FromFileDesignOfExperiment()
   : DesignOfExperimentImplementation()
+  , fileName_("")
 {
 }
 
@@ -40,6 +41,7 @@ FromFileDesignOfExperiment::FromFileDesignOfExperiment()
 /* Constructor with parameters */
 FromFileDesignOfExperiment::FromFileDesignOfExperiment(const String & name, const PhysicalModel & physicalModel)
   : DesignOfExperimentImplementation(name, physicalModel)
+  , fileName_("")
 {
 }
 
@@ -50,8 +52,8 @@ FromFileDesignOfExperiment::FromFileDesignOfExperiment(const String & name,
                                                        const String & fileName,
                                                        const OT::Indices & inputColumns)
   : DesignOfExperimentImplementation(name, physicalModel)
-  , fileName_(fileName)
 {
+  setFileName(fileName);
   setInputColumns(inputColumns);
 }
 
@@ -63,15 +65,34 @@ FromFileDesignOfExperiment* FromFileDesignOfExperiment::clone() const
 }
 
 
-void FromFileDesignOfExperiment::setFileName(const String & fileName)
+void FromFileDesignOfExperiment::generateInputSample()
 {
-  fileName_ = fileName;
+  if (!sampleFromFile_.getSize())
+    sampleFromFile_ = ImportSample(fileName_);
+
+  if (!inputColumns_.check(sampleFromFile_.getDimension()))
+    throw InvalidArgumentException(HERE) << "In FromFileDesignOfExperiment::getInputSample: input columns is not compatible with the sample contained in the file";
+
+  NumericalSample inS(sampleFromFile_.getMarginal(inputColumns_));
+  inS.setDescription(physicalModel_.getInputNames());
+  setInputSample(inS);
 }
 
 
 String FromFileDesignOfExperiment::getFileName() const
 {
   return fileName_;
+}
+
+
+void FromFileDesignOfExperiment::setFileName(const String & fileName)
+{
+  fileName_ = fileName;
+  sampleFromFile_ = ImportSample(fileName_);
+  // reinitialization
+  setInputSample(NumericalSample());
+  //TODO? setOutputSample(NumericalSample());
+  inputColumns_ = Indices();
 }
 
 
@@ -90,13 +111,16 @@ void FromFileDesignOfExperiment::setInputColumns(const Indices & inputColumns)
     oss << physicalModel_.getInputs().getSize();
     throw InvalidArgumentException(HERE) << oss.str();
   }
-  if (inputSample_.getSize() && inputColumns_ != inputColumns)
-  {
-    inputSample_.clear();
-    clearResult();
-  }
+
+  if (!sampleFromFile_.getSize())
+    sampleFromFile_ = ImportSample(fileName_);
+
+  if (!inputColumns.check(sampleFromFile_.getDimension()))
+    throw InvalidArgumentException(HERE) << "In FromFileDesignOfExperiment::setInputColumns: input columns is not compatible with the sample contained in the file";
 
   inputColumns_ = inputColumns;
+  generateInputSample();
+  //TODO? setOutputSample(NumericalSample());
 }
 
 
@@ -107,6 +131,7 @@ NumericalSample FromFileDesignOfExperiment::ImportSample(const String & fileName
   separatorsList[1] = ",";
   separatorsList[2] = ";";
   NumericalSample sampleFromFile;
+
   for (UnsignedInteger i = 0; i < separatorsList.size(); ++ i)
   {
     // import sample from the file
@@ -118,24 +143,6 @@ NumericalSample FromFileDesignOfExperiment::ImportSample(const String & fileName
     throw InvalidArgumentException(HERE) << "In FromFileDesignOfExperiment: impossible to load sample";
 
   return sampleFromFile;
-}
-
-
-NumericalSample FromFileDesignOfExperiment::getInputSample()
-{
-  if (!inputSample_.getSize())
-  {
-    inputSample_.clear();
-    if (fileName_.size() > 0)
-    {
-      NumericalSample sampleFromFile = ImportSample(fileName_);
-      if (!inputColumns_.check(sampleFromFile.getDimension()))
-        throw InvalidArgumentException(HERE) << "In FromFileDesignOfExperiment: impossible to load sample marginals";
-      inputSample_ = sampleFromFile.getMarginal(inputColumns_);
-      inputSample_.setDescription(physicalModel_.getInputNames());
-    }
-  }
-  return inputSample_;
 }
 
 
