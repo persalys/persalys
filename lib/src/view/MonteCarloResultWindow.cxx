@@ -84,10 +84,8 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
   // first tab: Table --------------------------------
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
-  NumericalSample sample = result_.getInputSample();
-  sample.stack(result_.getOutputSample());
   ExportableTableView * tabResultView = new ExportableTableView;
-  SampleTableModel * tabResultModel = new SampleTableModel(sample);
+  SampleTableModel * tabResultModel = new SampleTableModel(result_.getSample());
   tabResultView->setModel(tabResultModel);
   tabLayout->addWidget(tabResultView);
 
