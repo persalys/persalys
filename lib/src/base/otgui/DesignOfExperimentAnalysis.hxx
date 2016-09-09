@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Top-level class for all analysis with data model
+ *  @brief Top-level class for all analysis with design of experiment
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,27 +18,27 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_DATAMODELANALYSIS_HXX
-#define OTGUI_DATAMODELANALYSIS_HXX
+#ifndef OTGUI_DESIGNOFEXPERIMENTANALYSIS_HXX
+#define OTGUI_DESIGNOFEXPERIMENTANALYSIS_HXX
 
 #include "AnalysisImplementation.hxx"
-#include "DataModel.hxx"
+#include "DesignOfExperiment.hxx"
 
 namespace OTGUI {
-class OTGUI_API DataModelAnalysis : public AnalysisImplementation
+class OTGUI_API DesignOfExperimentAnalysis : public AnalysisImplementation
 {
 public:
   /** Default constructor */
-  DataModelAnalysis();
+  DesignOfExperimentAnalysis();
 
   /** Constructor with parameters */
-  DataModelAnalysis(const OT::String & name, const DataModel & dataModel);
+  DesignOfExperimentAnalysis(const OT::String & name, const DesignOfExperiment & designOfExperiment);
 
   /** Virtual constructor */
-  virtual DataModelAnalysis * clone() const;
+  virtual DesignOfExperimentAnalysis * clone() const;
 
-  DataModel getDataModel() const;
-  void setDataModel(const DataModel & physicalModel);
+  DesignOfExperiment getDesignOfExperiment() const;
+  void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
 
   OT::String getModelName() const;
 
@@ -48,8 +48,8 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
-private:
-  DataModel dataModel_;
+protected:
+  DesignOfExperiment designOfExperiment_;
 };
 }
 #endif

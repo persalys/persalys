@@ -35,7 +35,7 @@ static Factory<DataAnalysis> RegisteredFactory;
 
 /* Default constructor */
 DataAnalysis::DataAnalysis()
-  : DataModelAnalysis()
+  : DesignOfExperimentAnalysis()
   , isConfidenceIntervalRequired_(false)
   , levelConfidenceInterval_(0.)
 {
@@ -43,8 +43,8 @@ DataAnalysis::DataAnalysis()
 }
 
 
-DataAnalysis::DataAnalysis(const OT::String & name, const DataModel & dataModel)
-  : DataModelAnalysis(name, dataModel)
+DataAnalysis::DataAnalysis(const OT::String & name, const DesignOfExperiment & designOfExperiment)
+  : DesignOfExperimentAnalysis(name, designOfExperiment)
   , isConfidenceIntervalRequired_(false)
   , levelConfidenceInterval_(0.)
 {
@@ -60,12 +60,12 @@ DataAnalysis* DataAnalysis::clone() const
 
 void DataAnalysis::run()
 {
-  const NumericalSample sample(getDataModel().getSample());
+  const NumericalSample sample(getDesignOfExperiment().getSample());
 
   if (sample.getSize())
   {
-    result_.setInputSample(getDataModel().getInputSample());
-    result_.setOutputSample(getDataModel().getOutputSample());
+    result_.setInputSample(getDesignOfExperiment().getInputSample());
+    result_.setOutputSample(getDesignOfExperiment().getOutputSample());
     result_.min_ = sample.getMin();
     result_.max_ = sample.getMax();
     result_.mean_ = sample.computeMean();
@@ -250,7 +250,7 @@ void DataAnalysis::ComputeFittedDistributionPDF_CDF(const OT::NumericalSample & 
 String DataAnalysis::getPythonScript() const
 {
   OSS oss;
-  oss << getName() << " = otguibase.DataAnalysis('" << getName() << "', " << getDataModel().getName() << ")\n";
+  oss << getName() << " = otguibase.DataAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
 
   return oss;
 }
@@ -265,7 +265,7 @@ bool DataAnalysis::analysisLaunched() const
 /* Method save() stores the object through the StorageManager */
 void DataAnalysis::save(Advocate & adv) const
 {
-  DataModelAnalysis::save(adv);
+  DesignOfExperimentAnalysis::save(adv);
   adv.saveAttribute("isConfidenceIntervalRequired_", isConfidenceIntervalRequired_);
   adv.saveAttribute("levelConfidenceInterval_", levelConfidenceInterval_);
   adv.saveAttribute("result_", result_);
@@ -275,7 +275,7 @@ void DataAnalysis::save(Advocate & adv) const
 /* Method load() reloads the object from the StorageManager */
 void DataAnalysis::load(Advocate & adv)
 {
-  DataModelAnalysis::load(adv);
+  DesignOfExperimentAnalysis::load(adv);
   adv.loadAttribute("isConfidenceIntervalRequired_", isConfidenceIntervalRequired_);
   adv.loadAttribute("levelConfidenceInterval_", levelConfidenceInterval_);
   adv.loadAttribute("result_", result_);

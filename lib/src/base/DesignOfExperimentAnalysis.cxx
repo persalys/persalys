@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Top-level class for all analysis with data model
+ *  @brief Top-level class for all analysis with design of experiment
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,64 +18,64 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DataModelAnalysis.hxx"
+#include "otgui/DesignOfExperimentAnalysis.hxx"
 
 using namespace OT;
 
 namespace OTGUI {
 
 /* Default constructor */
-DataModelAnalysis::DataModelAnalysis()
+DesignOfExperimentAnalysis::DesignOfExperimentAnalysis()
   : AnalysisImplementation()
 {
 }
 
 
 /* Constructor with parameters */
-DataModelAnalysis::DataModelAnalysis(const String & name, const DataModel & dataModel)
+DesignOfExperimentAnalysis::DesignOfExperimentAnalysis(const String & name, const DesignOfExperiment & designOfExperiment)
   : AnalysisImplementation(name)
-  , dataModel_(dataModel)
+  , designOfExperiment_(designOfExperiment)
 {
 }
 
 
 /* Virtual constructor */
-DataModelAnalysis* DataModelAnalysis::clone() const
+DesignOfExperimentAnalysis* DesignOfExperimentAnalysis::clone() const
 {
-  return new DataModelAnalysis(*this);
+  return new DesignOfExperimentAnalysis(*this);
 }
 
 
-DataModel DataModelAnalysis::getDataModel() const
+DesignOfExperiment DesignOfExperimentAnalysis::getDesignOfExperiment() const
 {
-  return dataModel_;
+  return designOfExperiment_;
 }
 
 
-void DataModelAnalysis::setDataModel(const DataModel & dataModel)
+void DesignOfExperimentAnalysis::setDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
 {
-  dataModel_ = dataModel;
+  designOfExperiment_ = designOfExperiment;
 }
 
 
-String DataModelAnalysis::getModelName() const
+String DesignOfExperimentAnalysis::getModelName() const
 {
-  return dataModel_.getName();
+  return designOfExperiment_.getName();
 }
 
 
 /* Method save() stores the object through the StorageManager */
-void DataModelAnalysis::save(Advocate & adv) const
+void DesignOfExperimentAnalysis::save(Advocate & adv) const
 {
   AnalysisImplementation::save(adv);
-  adv.saveAttribute("dataModel_", dataModel_);
+  adv.saveAttribute("designOfExperiment_", designOfExperiment_);
 }
 
 
 /* Method load() reloads the object from the StorageManager */
-void DataModelAnalysis::load(Advocate & adv)
+void DesignOfExperimentAnalysis::load(Advocate & adv)
 {
   AnalysisImplementation::load(adv);
-  adv.loadAttribute("dataModel_", dataModel_);
+  adv.loadAttribute("designOfExperiment_", designOfExperiment_);
 }
 }

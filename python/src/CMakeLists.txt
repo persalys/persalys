@@ -66,7 +66,7 @@ ot_add_python_module (otguibase otguibase_module.i
                       LimitStateImplementation.i LimitStateImplementation_doc.i.in
                       LimitState.i LimitState_doc.i.in
                       AnalysisImplementation.i AnalysisImplementation_doc.i.in
-                      DataModelAnalysis.i
+                      DesignOfExperimentAnalysis.i
                       PhysicalModelAnalysis.i
                       Analysis.i Analysis_doc.i.in
                       WithStopCriteriaAnalysis.i WithStopCriteriaAnalysis_doc.i.in

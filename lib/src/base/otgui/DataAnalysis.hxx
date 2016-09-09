@@ -21,13 +21,13 @@
 #ifndef OTGUI_DATAANALYSIS_HXX
 #define OTGUI_DATAANALYSIS_HXX
 
-#include "DataModelAnalysis.hxx"
+#include "DesignOfExperimentAnalysis.hxx"
 #include "DataAnalysisResult.hxx"
 
 #include "openturns/OTType.hxx"
 
 namespace OTGUI {
-class OTGUI_API DataAnalysis : public DataModelAnalysis
+class OTGUI_API DataAnalysis : public DesignOfExperimentAnalysis
 {
   CLASSNAME;
 
@@ -36,7 +36,7 @@ public:
   DataAnalysis();
 
   /** Constructor with parameters */
-  DataAnalysis(const OT::String & name, const DataModel & dataModel);
+  DataAnalysis(const OT::String & name, const DesignOfExperiment & designOfExperiment);
 
   /** Virtual constructor */
   virtual DataAnalysis * clone() const;

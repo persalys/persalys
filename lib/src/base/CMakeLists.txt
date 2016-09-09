@@ -17,7 +17,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      FixedDesignOfExperiment.cxx
                      FromFileDesignOfExperiment.cxx
                      AnalysisImplementation.cxx Analysis.cxx SimulationAnalysis.cxx
-                     PhysicalModelAnalysis.cxx DataModelAnalysis.cxx
+                     PhysicalModelAnalysis.cxx DesignOfExperimentAnalysis.cxx
                      WithStopCriteriaAnalysis.cxx
                      DataAnalysisResult.cxx DataAnalysis.cxx
                      ModelEvaluationResult.cxx ModelEvaluation.cxx
@@ -51,7 +51,7 @@ ot_install_header_file ( FromFileDesignOfExperiment.hxx )
 ot_install_header_file ( DataModel.hxx )
 ot_install_header_file ( AnalysisImplementation.hxx )
 ot_install_header_file ( PhysicalModelAnalysis.hxx )
-ot_install_header_file ( DataModelAnalysis.hxx )
+ot_install_header_file ( DesignOfExperimentAnalysis.hxx )
 ot_install_header_file ( Analysis.hxx )
 ot_install_header_file ( SimulationAnalysis.hxx )
 ot_install_header_file ( WithStopCriteriaAnalysis.hxx )
