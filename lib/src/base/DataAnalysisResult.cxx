@@ -35,8 +35,7 @@ static Factory<DataAnalysisResult> RegisteredFactory;
 
 /* Default constructor */
 DataAnalysisResult::DataAnalysisResult()
-  : PersistentObject()
-  , DataSample()
+  : DataSample()
   , elapsedTime_(0.)
 {
 
@@ -44,8 +43,7 @@ DataAnalysisResult::DataAnalysisResult()
 
 
 DataAnalysisResult::DataAnalysisResult(const NumericalSample& inputSample, const NumericalSample& outputSample)
-  : PersistentObject()
-  , DataSample(inputSample, outputSample)
+  : DataSample(inputSample, outputSample)
   , elapsedTime_(0.)
 {
 
@@ -187,7 +185,6 @@ bool DataAnalysisResult::isValid() const
 /* Method save() stores the object through the StorageManager */
 void DataAnalysisResult::save(Advocate & adv) const
 {
-  PersistentObject::save(adv);
   DataSample::save(adv);
   adv.saveAttribute("min_", min_);
   adv.saveAttribute("max_", max_);
@@ -212,7 +209,6 @@ void DataAnalysisResult::save(Advocate & adv) const
 /* Method load() reloads the object from the StorageManager */
 void DataAnalysisResult::load(Advocate & adv)
 {
-  PersistentObject::load(adv);
   DataSample::load(adv);
   adv.loadAttribute("min_", min_);
   adv.loadAttribute("max_", max_);

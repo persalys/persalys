@@ -20,21 +20,21 @@
  */
 #include "otgui/DataSample.hxx"
 
-#include "openturns/PersistentObjectFactory.hxx"
-
 using namespace OT;
 
 namespace OTGUI {
 
 /* Default constructor */
 DataSample::DataSample()
+  : PersistentObject()
 {
 }
 
 
 /* Constructor with parameters */
 DataSample::DataSample(const NumericalSample & inSample, const NumericalSample & outSample)
-  : inputSample_(inSample)
+  : PersistentObject()
+  , inputSample_(inSample)
   , outputSample_(outSample)
 {
   if (getInputSample().getSize() * getOutputSample().getSize())
@@ -176,6 +176,7 @@ NumericalSample DataSample::getSample() const
 /* Method save() stores the object through the StorageManager */
 void DataSample::save(Advocate & adv) const
 {
+  PersistentObject::save(adv);
   adv.saveAttribute("inputSample_", inputSample_);
   adv.saveAttribute("outputSample_", outputSample_);
   adv.saveAttribute("listXMin_", listXMin_);
@@ -186,6 +187,7 @@ void DataSample::save(Advocate & adv) const
 /* Method load() reloads the object from the StorageManager */
 void DataSample::load(Advocate & adv)
 {
+  PersistentObject::load(adv);
   adv.loadAttribute("inputSample_", inputSample_);
   adv.loadAttribute("outputSample_", outputSample_);
   adv.loadAttribute("listXMin_", listXMin_);

@@ -25,8 +25,7 @@
 #include "DataSample.hxx"
 
 namespace OTGUI {
-class OTGUI_API DesignOfExperimentImplementation : public OT::PersistentObject, public Observable,
-                                                   public DataSample
+class OTGUI_API DesignOfExperimentImplementation : public DataSample, public Observable
 {
 public:
   /** Default constructor */

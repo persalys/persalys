@@ -26,9 +26,8 @@ namespace OTGUI {
 
 /* Default constructor */
 DesignOfExperimentImplementation::DesignOfExperimentImplementation()
-  : PersistentObject()
+  : DataSample()
   , Observable()
-  , DataSample()
   , hasPhysicalModel_(true)
 {
 }
@@ -36,9 +35,8 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation()
 
 /* Constructor with parameters */
 DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String & name, const PhysicalModel & physicalModel)
-  : PersistentObject()
+  : DataSample()
   , Observable()
-  , DataSample()
   , hasPhysicalModel_(true)
   , physicalModel_(physicalModel)
 {
@@ -93,7 +91,6 @@ String DesignOfExperimentImplementation::getPythonScript() const
 /* Method save() stores the object through the StorageManager */
 void DesignOfExperimentImplementation::save(Advocate & adv) const
 {
-  PersistentObject::save(adv);
   DataSample::save(adv);
   adv.saveAttribute("hasPhysicalModel_", hasPhysicalModel_);
   adv.saveAttribute("physicalModel_", physicalModel_);
@@ -103,7 +100,6 @@ void DesignOfExperimentImplementation::save(Advocate & adv) const
 /* Method load() reloads the object from the StorageManager */
 void DesignOfExperimentImplementation::load(Advocate & adv)
 {
-  PersistentObject::load(adv);
   DataSample::load(adv);
   adv.loadAttribute("hasPhysicalModel_", hasPhysicalModel_);
   adv.loadAttribute("physicalModel_", physicalModel_);

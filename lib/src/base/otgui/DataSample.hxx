@@ -25,15 +25,10 @@
 #include "openturns/OTType.hxx"
 
 namespace OTGUI {
-class OTGUI_API DataSample
+class OTGUI_API DataSample : public OT::PersistentObject
 {
-//   CLASSNAME;
-
 public:
   typedef OT::Collection<OT::NumericalSample> NumericalSampleCollection;
-
-  friend class FixedDesignOfExperiment;
-  friend class FromFileDesignOfExperiment;
 
   /** Default constructor */
   DataSample();

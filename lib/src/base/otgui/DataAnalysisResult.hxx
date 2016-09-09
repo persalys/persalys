@@ -28,7 +28,7 @@
 #include "openturns/Distribution.hxx"
 
 namespace OTGUI {
-class OTGUI_API DataAnalysisResult : public OT::PersistentObject, public DataSample
+class OTGUI_API DataAnalysisResult : public DataSample
 {
   CLASSNAME;
 
