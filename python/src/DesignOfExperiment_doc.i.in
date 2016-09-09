@@ -12,3 +12,5 @@ OTGUI_DesignOfExperiment_getPythonScript_doc
 OTGUI_DesignOfExperiment_getVariableInputNames_doc
 %feature("docstring") OTGUI::DesignOfExperiment::run
 OTGUI_DesignOfExperiment_run_doc
+%feature("docstring") OTGUI::DesignOfExperiment::hasPhysicalModel
+OTGUI_DesignOfExperiment_hasPhysicalModel_doc

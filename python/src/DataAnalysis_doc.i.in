@@ -1,0 +1,52 @@
+%feature("docstring") OTGUI::DataAnalysis
+"Data analysis."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysis::getLevelConfidenceInterval
+"Confidence interval level accessor.
+
+Returns
+-------
+value : float
+    Confidence interval level."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysis::setLevelConfidenceInterval
+"Confidence interval level accessor.
+
+Parameters
+----------
+value : float
+    Confidence interval level"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysis::isConfidenceIntervalRequired
+"Whether a confidence interval is required.
+
+Returns
+-------
+value : bool
+    Whether a confidence interval is required."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysis::setIsConfidenceIntervalRequired
+"Whether a confidence interval is required.
+
+Parameters
+----------
+value : bool
+    Whether a confidence interval is required"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysis::getResult
+"Result accessor.
+
+Returns
+-------
+result : :class:`~otguibase.DataAnalysisResult`
+    Result."

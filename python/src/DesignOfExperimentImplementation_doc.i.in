@@ -73,3 +73,16 @@ OTGUI_DesignOfExperiment_getVariableInputNames_doc
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::run
 OTGUI_DesignOfExperiment_run_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_DesignOfExperiment_hasPhysicalModel_doc
+"Whether it contains a physical model.
+
+Returns
+-------
+hasPhysicalModel : bool
+    Whether it contains a physical model"
+%enddef
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::hasPhysicalModel
+OTGUI_DesignOfExperiment_hasPhysicalModel_doc

@@ -3,17 +3,17 @@
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::getSimulationResult
+%feature("docstring") OTGUI::MonteCarloReliabilityResult::getSimulationResult
 "Simulation result accessor.
 
 Returns
 -------
-sample : :class:`~openturns.SimulationResult
+sample : :class:`~openturns.SimulationResult`
     Simulation result"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::getOutputSample
+%feature("docstring") OTGUI::MonteCarloReliabilityResult::getOutputSample
 "Output sample accessor.
 
 Returns
@@ -23,7 +23,7 @@ sample : :class:`~openturns.NumericalSample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::getConvergenceSample
+%feature("docstring") OTGUI::MonteCarloReliabilityResult::getConvergenceSample
 "Convergence sample accessor.
 
 Returns
@@ -33,7 +33,7 @@ sample : :class:`~openturns.NumericalSample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::getConvergenceSampleLowerBound
+%feature("docstring") OTGUI::MonteCarloReliabilityResult::getConvergenceSampleLowerBound
 "Convergence sample lower bound accessor.
 
 Returns
@@ -43,10 +43,30 @@ sample : :class:`~openturns.NumericalSample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis::getConvergenceSampleUpperBound
+%feature("docstring") OTGUI::MonteCarloReliabilityResult::getConvergenceSampleUpperBound
 "Convergence sample upper bound accessor.
 
 Returns
 -------
 sample : :class:`~openturns.NumericalSample`
     Convergence sample upper bound"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloReliabilityResult::getElapsedTime
+"Elapsed time in seconds to perform the analysis.
+
+Returns
+-------
+time : int
+    Elapsed time in seconds to perform the analysis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MonteCarloReliabilityResult::setElapsedTime
+"Elapsed time in seconds to perform the analysis.
+
+Parameters
+----------
+time : int
+    Elapsed time in seconds to perform the analysis"

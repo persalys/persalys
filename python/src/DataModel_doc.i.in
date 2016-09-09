@@ -13,7 +13,7 @@ fileName : str
 inputColumns : sequence of int
     Indices of columns of the output variables in files to consider
 outputColumns : sequence of int
-    Indices of columns of the output variables in files to consider
+    Indices of columns of the output variables in files to consider (optional)
 inputNames : :class:`~openturns.Description`
     Names of the input variables (optional)
 outputNames : :class:`~openturns.Description`

@@ -42,3 +42,33 @@ Parameters
 ----------
 sample : :class:`~openturns.NumericalSample`
     Output sample"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataSample::getSample
+"Sample accessor.
+
+Returns
+-------
+sample : :class:`~openturns.NumericalSample`
+    Input sample and output sample"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataSample::getListXMax
+"List of input values.
+
+Returns
+-------
+list : NumericalSampleCollection
+    List of input values"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataSample::getListXMin
+"List of input values.
+
+Returns
+-------
+list : NumericalSampleCollection
+    List of input values"

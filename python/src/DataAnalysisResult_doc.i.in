@@ -1,7 +1,25 @@
 %feature("docstring") OTGUI::DataAnalysisResult
-"Class containing results of the analysis of the data.
+"Class containing results of the analysis of the data."
 
-The base class containing an input and an output sample"
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getMin
+"Minimum accessor.
+
+Returns
+-------
+result : :class:`~openturns.NumericalPoint`
+    Minimum"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getMax
+"Maximum accessor.
+
+Returns
+-------
+result : :class:`~openturns.NumericalPoint`
+    Maximum"
 
 // ---------------------------------------------------------------------
 
@@ -42,6 +60,17 @@ Returns
 -------
 result : :class:`~openturns.NumericalPoint`
     Variance"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getCoefficientOfVariation
+"Coefficient of variation accessor.
+
+Returns
+-------
+result : :class:`~openturns.NumericalPoint`
+    Coefficient of variation"
+
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::DataAnalysisResult::getSkewness
@@ -130,3 +159,43 @@ Returns
 -------
 result : :class:`~openturns.Distribution`
     Fitted distribution"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getCDF
+"CDF accessor.
+
+Returns
+-------
+result : sequence of :class:`~openturns.Numericalsample`
+    CDF"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getPDF
+"PDF accessor.
+
+Returns
+-------
+result : sequence of :class:`~openturns.Numericalsample`
+    PDF"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getElapsedTime
+"Elapsed time in seconds to perform the analysis.
+
+Returns
+-------
+time : int
+    Elapsed time in seconds to perform the analysis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::setElapsedTime
+"Elapsed time in seconds to perform the analysis.
+
+Parameters
+----------
+time : int
+    Elapsed time in seconds to perform the analysis"

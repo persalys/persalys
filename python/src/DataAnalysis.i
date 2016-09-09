@@ -4,6 +4,8 @@
 #include "otgui/DataAnalysis.hxx"
 %}
 
+%include DataAnalysis_doc.i
+
 %include otgui/DataAnalysis.hxx
 namespace OTGUI {
 

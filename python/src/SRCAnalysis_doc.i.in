@@ -19,3 +19,23 @@ Returns
 -------
 result : :class:`~otguibase.SRCResult`
     Result"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SRCAnalysis::getSimulationsNumber
+"Simulations number accessor.
+
+Returns
+-------
+number : int
+    Number of simulations"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SRCAnalysis::setSimulationsNumber
+"Simulations number accessor.
+
+Parameters
+----------
+number : int
+    Number of simulations"
