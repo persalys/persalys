@@ -21,7 +21,6 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      WithStopCriteriaAnalysis.cxx
                      DataAnalysisResult.cxx DataAnalysis.cxx
                      ModelEvaluationResult.cxx ModelEvaluation.cxx
-                     SimulationAnalysisResult.cxx
                      MonteCarloAnalysis.cxx TaylorExpansionMomentsResult.cxx
                      TaylorExpansionMomentsAnalysis.cxx SobolResult.cxx SobolAnalysis.cxx
                      SRCResult.cxx SRCAnalysis.cxx
@@ -55,7 +54,6 @@ ot_install_header_file ( PhysicalModelAnalysis.hxx )
 ot_install_header_file ( DataModelAnalysis.hxx )
 ot_install_header_file ( Analysis.hxx )
 ot_install_header_file ( SimulationAnalysis.hxx )
-ot_install_header_file ( SimulationAnalysisResult.hxx )
 ot_install_header_file ( WithStopCriteriaAnalysis.hxx )
 ot_install_header_file ( DataAnalysisResult.hxx )
 ot_install_header_file ( DataAnalysis.hxx )
