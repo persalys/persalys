@@ -20,7 +20,6 @@
  */
 #include "otgui/MainWindow.hxx"
 
-#include "otgui/qpyconsole.h"
 #include "otgui/OTguiMenuBar.hxx"
 #include "otgui/OTguiToolBar.hxx"
 #include "otgui/OTguiStatusBar.hxx"
@@ -89,11 +88,13 @@ void MainWindow::buildInterface()
   connect(mdiArea, SIGNAL(mdiAreaEmpty(bool)), mdiArea, SLOT(setHidden(bool)));
 
   // Python Console
-  QPyConsole * pythonConsole = new QPyConsole(this);
+  pythonConsole_ = new PyConsole_Console(this);
+  pythonConsole_->setIsShowBanner(false);
+  pythonConsole_->setAutoCompletion(true);
   QDockWidget * pythonConsoleDock = new QDockWidget(tr("Python Console"));
-  pythonConsoleDock->setWidget(pythonConsole);
+  pythonConsoleDock->setWidget(pythonConsole_);
   pythonConsoleDock->setFeatures(QDockWidget::DockWidgetClosable);
-  connect(studyTree_, SIGNAL(importPythonScript(const QString &)), pythonConsole, SLOT(loadScript(const QString &)));
+  connect(studyTree_, SIGNAL(importPythonScript(const QString &)), this, SLOT(loadScript(const QString &)));
   rightSideSplitter->addWidget(pythonConsoleDock);
   rightSideSplitter->setStretchFactor(2, 1);
 
@@ -131,6 +132,12 @@ void MainWindow::buildInterface()
   setStatusBar(statusBar);
 }
 
+
+void MainWindow::loadScript(const QString & fileName)
+{
+  QString command("execfile(\"" + fileName + "\")");
+  pythonConsole_->execAndWait(command);
+}
 
 void MainWindow::showGraphConfigurationTabWidget(QWidget * graph)
 {
