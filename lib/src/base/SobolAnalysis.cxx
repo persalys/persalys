@@ -21,7 +21,6 @@
 #include "otgui/SobolAnalysis.hxx"
 
 #include "openturns/RandomGenerator.hxx"
-#include "openturns/SensitivityAnalysis.hxx"
 #include "openturns/SaltelliSensitivityAlgorithm.hxx"
 #include "openturns/PersistentObjectFactory.hxx"
 
