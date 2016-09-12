@@ -96,6 +96,8 @@ ot_pyinstallcheck_test (DesignOfExperiment_std)
 ot_pyinstallcheck_test (AxialStressedBeam_std)
 ot_pyinstallcheck_test (CantileverBeam_std)
 
+ot_pyinstallcheck_test (docstring)
+
 if (SalomeYACS_FOUND)
 # ot_pyinstallcheck_test (yacs_eval_analytical PARAMS ${CMAKE_CURRENT_SOURCE_DIR}/analytical.xml)
 # ot_pyinstallcheck_test (Gauge_std PARAMS ${CMAKE_CURRENT_SOURCE_DIR}/analytical.xml)
