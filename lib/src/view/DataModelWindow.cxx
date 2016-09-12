@@ -56,8 +56,9 @@ void DataModelWindow::buildInterface()
   ExportableTableView * tableView = new ExportableTableView;
   tableView->horizontalHeader()->hide();
   tableView->setModel(model);
-  tableView->setSpan(1, 0, 1, nbInputs);
-  if (designOfExperiment_.getOutputSample().getSize())
+  if (nbInputs > 1)
+    tableView->setSpan(1, 0, 1, nbInputs);
+  if (designOfExperiment_.getOutputSample().getDimension() > 1)
     tableView->setSpan(1, nbInputs, 1, designOfExperiment_.getSample().getDimension());
 
   tabLayout->addWidget(tableView);

@@ -38,11 +38,14 @@ MinMaxTableGroupBox::MinMaxTableGroupBox(const DataSample & result, const bool o
   stackedWidget_ = new ResizableStackedWidget;
 
   if (!onlyOutput_)
-    for (int inputIndex=0; inputIndex<result.getInputSample().getDimension(); ++inputIndex)
+    for (UnsignedInteger inputIndex=0; inputIndex<result.getInputSample().getDimension(); ++inputIndex)
       stackedWidget_->addWidget(getForInputMinMaxTableView(result, inputIndex));
 
-  for (int outputIndex=0; outputIndex<result.getOutputSample().getDimension(); ++outputIndex)
-    stackedWidget_->addWidget(getForOutputMinMaxTableView(result, outputIndex));
+  if (result.getOutputSample().getSize())
+  {
+    for (UnsignedInteger outputIndex=0; outputIndex<result.getOutputSample().getDimension(); ++outputIndex)
+      stackedWidget_->addWidget(getForOutputMinMaxTableView(result, outputIndex));
+  }
 
   minMaxGroupBoxLayout->addWidget(stackedWidget_);
 }
@@ -97,7 +100,8 @@ QWidget* MinMaxTableGroupBox::getForOutputMinMaxTableView(const DataSample & res
   if (nbInputs == 1)
     rowTitle = tr("Input at\nextremum");
   minMaxTable->setNotEditableHeaderItem(1, 0, rowTitle);
-  minMaxTableView->setSpan(1, 0, nbInputs, 1);
+  if (nbInputs > 1)
+    minMaxTableView->setSpan(1, 0, nbInputs, 1);
 
   // inputs names
   for (int i=0; i<nbInputs; ++i)

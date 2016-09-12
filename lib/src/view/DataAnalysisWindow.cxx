@@ -216,31 +216,35 @@ void DataAnalysisWindow::buildInterface()
   }
   tabWidget_->addTab(tab, tr("Scatter plots"));
 
-  // sixth tab: plot matrix Y-X ----------------------
+  // sixth tab: plot matrix X-X ----------------------
 
-  // if the sample is valid:
-  if (resultsSampleIsValid_)
-  {
-    tab = new PlotMatrixWidget(result_.getInputSample(), result_.getOutputSample());
-    plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
-  }
-  // if the results sample contains NAN
-  else
-  {
-    tab = new QWidget;
-    tabLayout = new QVBoxLayout(tab);
-    QLabel * summaryErrorMessage = new QLabel(tr("Computation failed. Some results are not available."));
-    summaryErrorMessage->setWordWrap(true);
-    tabLayout->addWidget(summaryErrorMessage);
-    tabLayout->addStretch();
-  }
-  tabWidget_->addTab(tab, tr("Plot matrix Y-X"));
-
-  // seventh tab: plot matrix X-X ----------------------
   tab = new PlotMatrixWidget(result_.getInputSample(), result_.getInputSample());
   plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
   tabWidget_->addTab(tab, tr("Plot matrix X-X"));
+
+  // seventh tab: plot matrix Y-X ----------------------
+
+  if (result_.getOutputSample().getSize())
+  {
+    // if the sample is valid:
+    if (resultsSampleIsValid_)
+    {
+      tab = new PlotMatrixWidget(result_.getInputSample(), result_.getOutputSample());
+      plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
+    }
+    // if the results sample contains NAN
+    else
+    {
+      tab = new QWidget;
+      tabLayout = new QVBoxLayout(tab);
+      QLabel * summaryErrorMessage = new QLabel(tr("Computation failed. Some results are not available."));
+      summaryErrorMessage->setWordWrap(true);
+      tabLayout->addWidget(summaryErrorMessage);
+      tabLayout->addStretch();
+    }
+    tabWidget_->addTab(tab, tr("Plot matrix Y-X"));
+  }
 
   //
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
@@ -255,8 +259,8 @@ QWidget* DataAnalysisWindow::getPDF_CDFWidget()
   ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
 
   QVector<PlotWidget*> listPlotWidgets;
-  QStringList variablesNames = stochInputNames_ + outputNames_;
-  QStringList variablesAxisTitles = inAxisTitles_ + outAxisTitles_;
+  const QStringList variablesNames = stochInputNames_ + outputNames_;
+  const QStringList variablesAxisTitles = inAxisTitles_ + outAxisTitles_;
 
   for (int i=0; i<variablesNames.size(); ++i)
   {
@@ -264,7 +268,8 @@ QWidget* DataAnalysisWindow::getPDF_CDFWidget()
 
     // PDF
     plot->plotHistogram(result_.getSample().getMarginal(i));
-    plot->plotCurve(result_.getPDF()[i]);
+    if (result_.getPDF()[i].getSize())
+      plot->plotCurve(result_.getPDF()[i]);
     plot->setTitle(tr("PDF: ") + variablesNames[i]);
     plot->setAxisTitle(QwtPlot::xBottom, variablesAxisTitles[i]);
 
@@ -274,7 +279,8 @@ QWidget* DataAnalysisWindow::getPDF_CDFWidget()
     // CDF
     plot = new PlotWidget("distributionCDF");
     plot->plotHistogram(result_.getSample().getMarginal(i), 1);
-    plot->plotCurve(result_.getCDF()[i]);
+    if (result_.getCDF()[i].getSize())
+      plot->plotCurve(result_.getCDF()[i]);
     plot->setTitle(tr("CDF: ") + variablesNames[i]);
     plot->setAxisTitle(QwtPlot::xBottom, variablesAxisTitles[i]);
 
@@ -297,8 +303,8 @@ QWidget* DataAnalysisWindow::getBoxPlotWidget()
   ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
 
   QVector<PlotWidget*> listBoxPlotWidgets;
-  QStringList variablesNames = stochInputNames_ + outputNames_;
-  QStringList variablesAxisTitles = inAxisTitles_ + outAxisTitles_;
+  const QStringList variablesNames = stochInputNames_ + outputNames_;
+  const QStringList variablesAxisTitles = inAxisTitles_ + outAxisTitles_;
 
   for (int i=0; i<variablesNames.size(); ++i)
   {
@@ -403,14 +409,14 @@ void DataAnalysisWindow::showHideGraphConfigurationWidget(int indexTab)
           emit graphWindowActivated(scatterPlotsConfigurationWidget_);
       break;
     case 4:
-      if (plotMatrixConfigurationWidget_)
-        if (!plotMatrixConfigurationWidget_->isVisible())
-          emit graphWindowActivated(plotMatrixConfigurationWidget_);
-      break;
-    case 5:
       if (plotMatrix_X_X_ConfigurationWidget_)
         if (!plotMatrix_X_X_ConfigurationWidget_->isVisible())
           emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
+      break;
+    case 5:
+      if (plotMatrixConfigurationWidget_)
+        if (!plotMatrixConfigurationWidget_->isVisible())
+          emit graphWindowActivated(plotMatrixConfigurationWidget_);
       break;
     // if no plotWidget is visible
     default:

@@ -88,10 +88,13 @@ String FromFileDesignOfExperiment::getFileName() const
 void FromFileDesignOfExperiment::setFileName(const String & fileName)
 {
   fileName_ = fileName;
-  sampleFromFile_ = ImportSample(fileName_);
+  NumericalSample importedSample(ImportSample(fileName_));
+  if (importedSample == sampleFromFile_)
+    return;
+  sampleFromFile_ = importedSample;
   // reinitialization
   setInputSample(NumericalSample());
-  //TODO? setOutputSample(NumericalSample());
+  setOutputSample(NumericalSample());
   inputColumns_ = Indices();
 }
 
@@ -120,7 +123,7 @@ void FromFileDesignOfExperiment::setInputColumns(const Indices & inputColumns)
 
   inputColumns_ = inputColumns;
   generateInputSample();
-  //TODO? setOutputSample(NumericalSample());
+  setOutputSample(NumericalSample());
 }
 
 

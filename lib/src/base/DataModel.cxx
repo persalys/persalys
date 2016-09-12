@@ -68,8 +68,11 @@ DataModel::DataModel(const String & name,
   setOutputSample(outSample);
   inputColumns_ = Indices(inSample.getDimension());
   inputColumns_.fill();
-  outputColumns_ = Indices(outSample.getDimension());
-  outputColumns_.fill(inSample.getDimension());
+  if (outSample.getSize())
+  {
+    outputColumns_ = Indices(outSample.getDimension());
+    outputColumns_.fill(inSample.getDimension());
+  }
 }
 
 
@@ -84,9 +87,12 @@ void DataModel::setFileName(const String& fileName)
 {
   FromFileDesignOfExperiment::setFileName(fileName);
   // reinitialization
-  outputColumns_ = Indices();
-  inputNames_ = Description();
-  outputNames_ = Description();
+  if (!inputColumns_.getSize())
+  {
+    outputColumns_ = Indices();
+    inputNames_ = Description();
+    outputNames_ = Description();
+  }
 }
 
 
@@ -159,8 +165,13 @@ void DataModel::setColumns(const Indices & inputColumns,
   NumericalSample inS(sampleFromFile_.getMarginal(inputColumns_));
   inS.setDescription(getInputNames());
   setInputSample(inS);
-  NumericalSample outS(sampleFromFile_.getMarginal(outputColumns_));
-  outS.setDescription(getOutputNames());
+
+  NumericalSample outS;
+  if (outputColumns_.getSize())
+  {
+    outS = sampleFromFile_.getMarginal(outputColumns_);
+    outS.setDescription(getOutputNames());
+  }
   setOutputSample(outS);
 }
 

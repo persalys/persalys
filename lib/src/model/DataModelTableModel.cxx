@@ -47,9 +47,9 @@ void DataModelTableModel::initialize()
 
   if (!indices.check(data_.getDimension()) || !indices.getSize())
   {
-    inputColumns_ = Indices(data_.getDimension()-1);
+    inputColumns_ = Indices(data_.getDimension() > 1? data_.getDimension()-1 : 1);
     inputColumns_.fill();
-    outputColumns_ = Indices(1, data_.getDimension()-1);
+    outputColumns_ = Indices(data_.getDimension() > 1? 1 : 0, data_.getDimension()-1);
     dataModel_.setColumns(inputColumns_, outputColumns_);
   }
 
@@ -210,8 +210,13 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
 
     try
     {
-      Description inNames(data_.getMarginal(inputColumns_).getDescription());
-      Description outNames(data_.getMarginal(outputColumns_).getDescription());
+      Description inNames;
+      if (inputColumns_.getSize())
+        inNames = data_.getMarginal(inputColumns_).getDescription();
+      Description outNames;
+      if (outputColumns_.getSize())
+        outNames = data_.getMarginal(outputColumns_).getDescription();
+
       dataModel_.setColumns(inputColumns_, outputColumns_, inNames, outNames);
       emit dataChanged(index, index);
       emit errorMessageChanged("");

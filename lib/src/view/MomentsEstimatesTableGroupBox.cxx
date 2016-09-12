@@ -44,10 +44,14 @@ MomentsEstimatesTableGroupBox::MomentsEstimatesTableGroupBox(const DataAnalysisR
     QVBoxLayout * estimatesGroupBoxLayout = new QVBoxLayout(this);
     stackedWidget_ = new QStackedWidget;
 
-    for (int variableIndex=0; variableIndex<result.getMean().getSize(); ++variableIndex)
+    for (UnsignedInteger variableIndex=0; variableIndex<result.getMean().getSize(); ++variableIndex)
       stackedWidget_->addWidget(getMomentsEstimateTableView(result, variableIndex));
 
     estimatesGroupBoxLayout->addWidget(stackedWidget_);
+  }
+  else
+  {
+    throw InvalidArgumentException(HERE) << "Can not build MomentsEstimatesTableGroupBox: the result is invalid";
   }
 }
 
@@ -116,9 +120,15 @@ QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const DataAn
   // Coefficient of variation
   momentsEstimationsTable->setNotEditableItem(++row, 1, result.getCoefficientOfVariation()[variableIndex]);
   // Skewness
-  momentsEstimationsTable->setNotEditableItem(++row, 1, result.getSkewness()[variableIndex]);
+  if (result.getSkewness()[variableIndex] == std::numeric_limits<double>::max())
+    momentsEstimationsTable->setNotEditableItem(++row, 1, "-");
+  else
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result.getSkewness()[variableIndex]);
   // Kurtosis
-  momentsEstimationsTable->setNotEditableItem(++row, 1, result.getKurtosis()[variableIndex]);
+  if (result.getKurtosis()[variableIndex] == std::numeric_limits<double>::max())
+    momentsEstimationsTable->setNotEditableItem(++row, 1, "-");
+  else
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result.getKurtosis()[variableIndex]);
   // First quartile
   momentsEstimationsTable->setNotEditableItem(++row, 1, result.getFirstQuartile()[variableIndex]);
   // Third quartile

@@ -72,10 +72,26 @@ void DataAnalysis::run()
     result_.median_ = sample.computeMedian();
     result_.standardDeviation_ = sample.computeStandardDeviationPerComponent();
     result_.variance_ = sample.computeVariance();
-    if (!(sample.getSize() < 2))
-      result_.skewness_ = sample.computeSkewness();
-    if (!(sample.getSize() < 3))
-      result_.kurtosis_ = sample.computeKurtosis();
+    result_.skewness_ = NumericalPoint(sample.getDimension(), std::numeric_limits<double>::max());
+    try
+    {
+      if (!(sample.getSize() < 2))
+        result_.skewness_ = sample.computeSkewness();
+    }
+    catch (std::exception)
+    {
+      // nothing
+    }
+    result_.kurtosis_ = NumericalPoint(sample.getDimension(), std::numeric_limits<double>::max());
+    try
+    {
+      if (!(sample.getSize() < 3))
+        result_.kurtosis_ = sample.computeKurtosis();
+    }
+    catch (std::exception)
+    {
+      // nothing
+    }
     result_.firstQuartile_ = sample.computeQuantilePerComponent(0.25);
     result_.thirdQuartile_ = sample.computeQuantilePerComponent(0.75);
     result_.coefficientOfVariation_ = ComputeCoefficientOfVariation(sample, result_.mean_, result_.standardDeviation_);
@@ -91,6 +107,7 @@ void DataAnalysis::run()
     ComputeFittedDistributionPDF_CDF(sample, pdf, cdf);
     result_.pdf_ = pdf;
     result_.cdf_ = cdf;
+
     notify("analysisFinished");
   }
   else
@@ -240,9 +257,17 @@ void DataAnalysis::ComputeFittedDistributionPDF_CDF(const OT::NumericalSample & 
   KernelSmoothing gaussianKernel;
   for (UnsignedInteger i=0; i<sample.getDimension(); ++i)
   {
-    Distribution fittedDistribution(gaussianKernel.build(sample.getMarginal(i)));
-    pdf.add(fittedDistribution.drawPDF().getDrawable(0).getData());
-    cdf.add(fittedDistribution.drawCDF().getDrawable(0).getData());
+    try
+    {
+      Distribution fittedDistribution(gaussianKernel.build(sample.getMarginal(i)));
+      pdf.add(fittedDistribution.drawPDF().getDrawable(0).getData());
+      cdf.add(fittedDistribution.drawCDF().getDrawable(0).getData());
+    }
+    catch (std::exception)
+    {
+      pdf.add(NumericalSample());
+      cdf.add(NumericalSample());
+    }
   }
 }
 

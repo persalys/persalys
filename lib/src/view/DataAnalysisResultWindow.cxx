@@ -54,11 +54,14 @@ void DataAnalysisResultWindow::initialize(AnalysisItem* item)
   inAxisTitles_ = stochInputNames_;
 
   // outputs
-  for (UnsignedInteger i=0; i<result_.getOutputSample().getDimension(); ++i)
+  if (result_.getOutputSample().getSize())
   {
-    const String outputName = result_.getOutputSample().getDescription()[i];
-    outputNames_ << QString::fromUtf8(outputName.c_str());
+    for (UnsignedInteger i=0; i<result_.getOutputSample().getDimension(); ++i)
+    {
+      const String outputName = result_.getOutputSample().getDescription()[i];
+      outputNames_ << QString::fromUtf8(outputName.c_str());
+    }
+    outAxisTitles_ = outputNames_;
   }
-  outAxisTitles_ = outputNames_;
 }
 }

@@ -98,9 +98,7 @@ void DesignOfExperimentWindow::updateWindowForOutputs()
 {
   if (designOfExperiment_.getOutputSample().getSize() > 0)
   {
-    NumericalSample sample = designOfExperiment_.getInputSample();
-    sample.stack(designOfExperiment_.getOutputSample());
-    SampleTableModel * model = new SampleTableModel(sample);
+    SampleTableModel * model = new SampleTableModel(designOfExperiment_.getSample());
     tableView_->setModel(model);
     if (model->sampleIsValid())
       addTabsForOutputs();
@@ -198,16 +196,16 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   tabWidget_->addTab(tab, tr("Scatter plots"));
 
   // third tab --------------------------------
-  tab = new PlotMatrixWidget(inS, outS);
-  plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
-
-  tabWidget_->addTab(tab, tr("Plot matrix Y-X"));
-
-  // fourth tab --------------------------------
   tab = new PlotMatrixWidget(inS, inS);
   plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
   tabWidget_->addTab(tab, tr("Plot matrix X-X"));
+
+  // fourth tab --------------------------------
+  tab = new PlotMatrixWidget(inS, outS);
+  plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
+
+  tabWidget_->addTab(tab, tr("Plot matrix Y-X"));
 }
 
 
@@ -217,7 +215,7 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const OT::Num
 {
   QVector<PlotWidget*> listScatterPlotWidgets;
   const UnsignedInteger nbInputs = inS.getDimension();
-  const UnsignedInteger nbOutputs = outS.getDimension();
+  const UnsignedInteger nbOutputs = outS.getSize()? outS.getDimension() : 0;
   const QPen pen = QPen(Qt::blue, 4);
 
   for (UnsignedInteger j=0; j<nbInputs; ++j)
@@ -268,12 +266,12 @@ void DesignOfExperimentWindow::showHideGraphConfigurationWidget(int indexTab)
         emit graphWindowActivated(graphConfigurationWidget_);
       break;
     case 3:
-      if (!plotMatrixConfigurationWidget_->isVisible())
-        emit graphWindowActivated(plotMatrixConfigurationWidget_);
-      break;
-    case 4:
       if (!plotMatrix_X_X_ConfigurationWidget_->isVisible())
         emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
+      break;
+    case 4:
+      if (!plotMatrixConfigurationWidget_->isVisible())
+        emit graphWindowActivated(plotMatrixConfigurationWidget_);
       break;
     // if no plotWidget is visible
     default:

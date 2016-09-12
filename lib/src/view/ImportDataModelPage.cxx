@@ -57,8 +57,7 @@ void ImportDataModelPage::setTable(NumericalSample & sample)
 
 void ImportDataModelPage::setFileName(const QString & fileName)
 {
-  if (fileName.toLocal8Bit().data() != dataModel_.getFileName())
-    dataModel_.setFileName(fileName.toLocal8Bit().data());
+  dataModel_.setFileName(fileName.toLocal8Bit().data());
 }
 
 

@@ -98,8 +98,7 @@ void ImportDesignOfExperimentPage::setTable(OT::NumericalSample & sample)
 
 void ImportDesignOfExperimentPage::setFileName(const QString & fileName)
 {
-  if (fileName.toLocal8Bit().data() != designOfExperiment_.getFileName())
-    designOfExperiment_.setFileName(fileName.toLocal8Bit().data());
+  designOfExperiment_.setFileName(fileName.toLocal8Bit().data());
 }
 
 
