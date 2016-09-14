@@ -1,0 +1,19 @@
+%feature("docstring") OTGUI::MetaModel
+"Metamodel.
+
+Parameters
+----------
+name : str
+    Name
+function : :class:`~openturns.NumericalMathFunction`
+    Function (optional)"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModel::setFunction
+"Metamodel function accessor.
+
+Parameters
+----------
+function : :class:`~openturns.NumericalMathFunction`
+    Metamodel function"

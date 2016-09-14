@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Top-level class for all analysis with design of experiment
+ *  @brief Class to define metamodel functional chaos result
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,29 +18,36 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_DESIGNOFEXPERIMENTANALYSIS_HXX
-#define OTGUI_DESIGNOFEXPERIMENTANALYSIS_HXX
+#ifndef OTGUI_FUNCTIONALCHAOSANALYSISRESULT_HXX
+#define OTGUI_FUNCTIONALCHAOSANALYSISRESULT_HXX
 
-#include "AnalysisImplementation.hxx"
-#include "DesignOfExperiment.hxx"
+#include "MetaModelAnalysisResult.hxx"
+#include "SobolResult.hxx"
+
+#include "openturns/FunctionalChaosResult.hxx"
 
 namespace OTGUI {
-class OTGUI_API DesignOfExperimentAnalysis : public AnalysisImplementation
+class OTGUI_API FunctionalChaosAnalysisResult : public MetaModelAnalysisResult
 {
-public:
-  /** Default constructor */
-  DesignOfExperimentAnalysis();
+  CLASSNAME;
 
-  /** Constructor with parameters */
-  DesignOfExperimentAnalysis(const OT::String & name, const DesignOfExperiment & designOfExperiment);
+public:
+
+  friend class FunctionalChaosAnalysis;
+
+  /** Default constructor */
+  FunctionalChaosAnalysisResult();
 
   /** Virtual constructor */
-  virtual DesignOfExperimentAnalysis * clone() const;
+  virtual FunctionalChaosAnalysisResult * clone() const;
 
-  DesignOfExperiment getDesignOfExperiment() const;
-  virtual void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
+  OT::FunctionalChaosResult getFunctionalChaosResult() const;
 
-  OT::String getModelName() const;
+  OT::NumericalPoint getMean() const;
+
+  OT::NumericalPoint getVariance() const;
+
+  SobolResult getSobolResult() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -49,7 +56,10 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  DesignOfExperiment designOfExperiment_;
+  OT::FunctionalChaosResult functionalChaosResult_;
+  OT::NumericalPoint mean_;
+  OT::NumericalPoint variance_;
+  SobolResult sobolResult_;
 };
 }
 #endif

@@ -97,6 +97,7 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include PhysicalModelImplementation.i
 %include AnalyticalPhysicalModel.i
 %include PythonPhysicalModel.i
+%include MetaModel.i
 %include PhysicalModel.i
 #ifdef OTGUI_HAVE_YACS
 %include YACSPhysicalModel.i
@@ -128,5 +129,8 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include MonteCarloReliabilityResult.i
 %include ReliabilityAnalysis.i
 %include MonteCarloReliabilityAnalysis.i
+%include MetaModelAnalysisResult.i
+%include FunctionalChaosAnalysisResult.i
+%include FunctionalChaosAnalysis.i
 %include OTStudy.i
 

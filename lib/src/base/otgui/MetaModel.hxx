@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Top-level class for all analysis with design of experiment
+ *  @brief MetaModel implements models created by MetaModelAnalysis
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,29 +18,30 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_DESIGNOFEXPERIMENTANALYSIS_HXX
-#define OTGUI_DESIGNOFEXPERIMENTANALYSIS_HXX
+#ifndef OTGUI_METAMODEL_HXX
+#define OTGUI_METAMODEL_HXX
 
-#include "AnalysisImplementation.hxx"
-#include "DesignOfExperiment.hxx"
+#include "PhysicalModelImplementation.hxx"
 
 namespace OTGUI {
-class OTGUI_API DesignOfExperimentAnalysis : public AnalysisImplementation
+class OTGUI_API MetaModel : public PhysicalModelImplementation
 {
+  CLASSNAME;
+
 public:
   /** Default constructor */
-  DesignOfExperimentAnalysis();
-
+  MetaModel(const OT::String & name="Unnamed");
   /** Constructor with parameters */
-  DesignOfExperimentAnalysis(const OT::String & name, const DesignOfExperiment & designOfExperiment);
+  MetaModel(const OT::String & name,
+            const OT::NumericalMathFunction & function);
 
   /** Virtual constructor */
-  virtual DesignOfExperimentAnalysis * clone() const;
+  virtual MetaModel * clone() const;
 
-  DesignOfExperiment getDesignOfExperiment() const;
-  virtual void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
+  virtual OT::NumericalMathFunction getFunction() const;
+  void setFunction(const OT::NumericalMathFunction & function);
 
-  OT::String getModelName() const;
+  virtual OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -48,8 +49,9 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
-protected:
-  DesignOfExperiment designOfExperiment_;
+private:
+  OT::NumericalMathFunction function_;
 };
+
 }
 #endif

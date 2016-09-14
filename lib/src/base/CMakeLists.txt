@@ -11,6 +11,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      DataModel.cxx
                      PhysicalModel.cxx PhysicalModelImplementation.cxx AnalyticalPhysicalModel.cxx 
                      PythonPhysicalModel.cxx
+                     MetaModel.cxx
                      PythonEvaluation.cxx
                      DesignOfExperimentImplementation.cxx DesignOfExperiment.cxx
                      FixedDesignOfExperiment.cxx
@@ -27,6 +28,9 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      ReliabilityAnalysis.cxx
                      MonteCarloReliabilityAnalysis.cxx
                      MonteCarloReliabilityResult.cxx
+                     MetaModelAnalysisResult.cxx
+                     FunctionalChaosAnalysisResult.cxx
+                     FunctionalChaosAnalysis.cxx
                      PythonEnvironment.cxx)
 if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx YACSEvalSessionSingleton.cxx)
@@ -43,6 +47,7 @@ ot_install_header_file ( PhysicalModelImplementation.hxx )
 ot_install_header_file ( AnalyticalPhysicalModel.hxx )
 ot_install_header_file ( PythonPhysicalModel.hxx )
 ot_install_header_file ( PythonEvaluation.hxx )
+ot_install_header_file ( MetaModel.hxx )
 ot_install_header_file ( DesignOfExperimentImplementation.hxx )
 ot_install_header_file ( DesignOfExperiment.hxx )
 ot_install_header_file ( FixedDesignOfExperiment.hxx )
@@ -73,6 +78,9 @@ ot_install_header_file ( LimitState.hxx )
 ot_install_header_file ( ReliabilityAnalysis.hxx )
 ot_install_header_file ( MonteCarloReliabilityAnalysis.hxx )
 ot_install_header_file ( MonteCarloReliabilityResult.hxx )
+ot_install_header_file ( MetaModelAnalysisResult.hxx )
+ot_install_header_file ( FunctionalChaosAnalysisResult.hxx )
+ot_install_header_file ( FunctionalChaosAnalysis.hxx )
 ot_install_header_file ( PythonEnvironment.hxx )
 
 if (SalomeYACS_FOUND)

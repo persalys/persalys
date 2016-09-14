@@ -60,6 +60,7 @@ ot_add_python_module (otguibase otguibase_module.i
                       PhysicalModelImplementation.i PhysicalModelImplementation_doc.i.in
                       AnalyticalPhysicalModel.i AnalyticalPhysicalModel_doc.i.in
                       PythonPhysicalModel.i PythonPhysicalModel_doc.i.in
+                      MetaModel.i MetaModel_doc.i.in
                       PhysicalModel.i PhysicalModel_doc.i.in
                       YACSPhysicalModel.i YACSPhysicalModel_doc.i.in
                       LimitStateImplementation.i LimitStateImplementation_doc.i.in
@@ -89,6 +90,9 @@ ot_add_python_module (otguibase otguibase_module.i
                       ReliabilityAnalysis.i ReliabilityAnalysis_doc.i.in
                       MonteCarloReliabilityAnalysis.i MonteCarloReliabilityAnalysis_doc.i.in
                       MonteCarloReliabilityResult.i MonteCarloReliabilityResult_doc.i.in
+                      MetaModelAnalysisResult.i MetaModelAnalysisResult_doc.i.in
+                      FunctionalChaosAnalysisResult.i FunctionalChaosAnalysisResult_doc.i.in
+                      FunctionalChaosAnalysis.i FunctionalChaosAnalysis_doc.i.in
                       OTStudy.i OTStudy_doc.i.in
                     )
 
