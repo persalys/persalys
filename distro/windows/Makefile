@@ -25,7 +25,7 @@ OT_CONFIG_CMD = $(OT_PREFIX)/bin/openturns-config
 
 OT_VERSION ?= $(shell $(OT_CONFIG_CMD) --version)
 
-WINDEPS ?= $(OT_PREFIX)/../../distro/windows/openturns-developers-windeps-$(OT_VERSION)
+WINDEPS ?= $(OT_PREFIX)/../../distro/windows/openturns-developers-windeps
 
 # Module paths
 MOD_SRC    ?= $(PWD)/../..
@@ -86,6 +86,7 @@ mod-config: mod-check-compiler
 	-mkdir -p $(MOD_BUILD)
 	cp $(MINGW_PREFIX)/share/mingw/toolchain-$(TARGET).cmake $(MOD_BUILD)
 	echo "set ( CMAKE_FIND_ROOT_PATH $(MINGW_PREFIX)/$(TARGET) )" >> $(MOD_BUILD)/toolchain-$(TARGET).cmake
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/python$(PYBASEVER_NODOT).dll $(MOD_BUILD)
 	cd $(MOD_BUILD) && rm -f CMakeCache.txt && $(CMAKE) \
 	  -DCMAKE_BUILD_TYPE=RelWithDebInfo \
 	  -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions --param=ssp-buffer-size=4" \
@@ -104,7 +105,6 @@ mod-config: mod-check-compiler
 
 mod-compile: mod-config
 	cd $(MOD_BUILD) && make -j$(JOBS)
-	-beep
 	touch mod-compile
 
 mod-install: mod-compile
@@ -130,15 +130,14 @@ endif
 	touch mod-install
 
 mod-test: mod-install
-	cd $(MOD_BUILD) && make tests -j$(JOBS_TEST)
 ifeq ($(CHECK_OT),y)
+	cd $(MOD_BUILD) && make tests -j$(JOBS)
 	cp $(OT_PREFIX)/bin/*.dll $(MOD_BUILD)/lib/test
 	cp $(MOD_PREFIX)/bin/*.dll $(MOD_BUILD)/lib/test
 	cp $(OT_PREFIX)/bin/*.dll $(MOD_BUILD)/python/test
 	cp $(MOD_PREFIX)/bin/*.dll $(MOD_BUILD)/python/test
-	cp $(MINGW_PREFIX)/$(TARGET)/bin/python$(PYBASEVER_NODOT).dll $(MOD_BUILD)/lib/test
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/python$(PYBASEVER_NODOT).dll $(MOD_BUILD)/python/test
-	cd $(MOD_BUILD) && ctest -j$(JOBS)
+	cd $(MOD_BUILD) && ctest -j$(JOBS_TEST) --output-on-failure --timeout 1000
 	touch mod-test
 endif
 
@@ -156,7 +155,6 @@ mod-check-installer: mod-test
 mod-installer: mod-check-installer
 	makensis -DMODULE_PREFIX=$(MOD_PREFIX) -DMODULE_VERSION=$(MODULE_VERSION) -DOPENTURNS_VERSION=$(OT_VERSION) -DPYBASEVER=$(PYBASEVER) -DPYBASEVER_NODOT=$(PYBASEVER_NODOT) -DARCH=$(ARCH) installer.nsi
 	touch mod-installer
-	-beep -r 3
 
 
 clean:
