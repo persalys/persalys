@@ -24,7 +24,6 @@
 #include "otgui/ResultWindow.hxx"
 #include "otgui/SobolResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
 
 namespace OTGUI {
 class SobolResultWindow : public ResultWindow
@@ -39,16 +38,13 @@ protected:
   void buildInterface();
 
 public slots:
-  void updateIndicesPlot(int section, Qt::SortOrder order);
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 
 private:
   SobolResult result_;
   QTabWidget * tabWidget_;
-  QVector<CustomStandardItemModel*> listTableModels_;
   GraphConfigurationWidget * plotsConfigurationWidget_;
-  QVector<PlotWidget*> listPlotWidgets_;
   QString warningMessage_;
 };
 }

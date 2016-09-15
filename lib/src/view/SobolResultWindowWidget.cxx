@@ -33,10 +33,11 @@ using namespace OT;
 
 namespace OTGUI {
 
-SobolResultWindowWidget::SobolResultWindowWidget(const SobolResult& result)
+SobolResultWindowWidget::SobolResultWindowWidget(const SobolResult& result, const QString& warningMessage)
   : QScrollArea()
   , result_(result)
   , currentIndex_(0)
+  , warningMessage_(warningMessage)
 {
   setWidgetResizable(true);
   buildInterface();
@@ -126,6 +127,13 @@ void SobolResultWindowWidget::buildInterface()
 
   vbox->addWidget(tableStackedWidget);
   vbox->addWidget(interactionStackedWidget);
+
+  // add a warning (if the model has not an independent copula when doing a SensitivityAnalysis)
+  if (!warningMessage_.isEmpty())
+  {
+    QLabel * warningLabel = new QLabel(QString("%1%2%3").arg("<font color=red>").arg(warningMessage_).arg("</font>"));
+    vbox->addWidget(warningLabel);
+  }
 
   connect(this, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
   connect(this, SIGNAL(currentPlotChanged(int)), tableStackedWidget, SLOT(setCurrentIndex(int)));

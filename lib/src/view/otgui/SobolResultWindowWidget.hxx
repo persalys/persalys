@@ -33,7 +33,7 @@ class SobolResultWindowWidget : public QScrollArea
   Q_OBJECT
 
 public:
-  SobolResultWindowWidget(const SobolResult& result);
+  SobolResultWindowWidget(const SobolResult& result, const QString& warningMessage="");
 
   QVector<PlotWidget*> getPlotWidgets();
 
@@ -51,6 +51,7 @@ private:
   int currentIndex_;
   QVector<CustomStandardItemModel*> listTableModels_;
   QVector<PlotWidget*> listPlotWidgets_;
+  QString warningMessage_;
 };
 }
 #endif
