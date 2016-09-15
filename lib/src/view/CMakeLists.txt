@@ -47,6 +47,7 @@ ot_add_source_file ( ModelEvaluationResultWindow.cxx )
 ot_add_source_file ( CentralTendencyWizard.cxx )
 ot_add_source_file ( MonteCarloResultWindow.cxx )
 ot_add_source_file ( TaylorExpansionMomentsResultWindow.cxx )
+ot_add_source_file ( SobolResultWindowWidget.cxx )
 ot_add_source_file ( SobolResultWindow.cxx )
 ot_add_source_file ( SRCResultWindow.cxx )
 ot_add_source_file ( SensitivityAnalysisWizard.cxx )
@@ -93,6 +94,7 @@ ot_install_header_file ( DesignOfExperimentWindow.hxx )
 ot_install_header_file ( ModelEvaluationResultWindow.hxx )
 ot_install_header_file ( MonteCarloResultWindow.hxx )
 ot_install_header_file ( TaylorExpansionMomentsResultWindow.hxx )
+ot_install_header_file ( SobolResultWindowWidget.hxx )
 ot_install_header_file ( SobolResultWindow.hxx )
 ot_install_header_file ( SRCResultWindow.hxx )
 ot_install_header_file ( MonteCarloReliabilityResultWindow.hxx )
@@ -136,6 +138,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/CentralTendencyWizard.hxx
                                   otgui/MonteCarloResultWindow.hxx
                                   otgui/TaylorExpansionMomentsResultWindow.hxx
+                                  otgui/SobolResultWindowWidget.hxx
                                   otgui/SobolResultWindow.hxx
                                   otgui/SRCResultWindow.hxx
                                   otgui/SensitivityAnalysisWizard.hxx
