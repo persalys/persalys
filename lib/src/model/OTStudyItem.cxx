@@ -21,6 +21,7 @@
 #include "otgui/OTStudyItem.hxx"
 
 #include "otgui/ReliabilityAnalysis.hxx"
+#include "otgui/DesignOfExperimentAnalysis.hxx"
 
 using namespace OT;
 
@@ -224,9 +225,9 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis)
   {
     addReliabilityAnalysisItem(analysis, newItem);
   }
-  else if (analysisName == "DataAnalysis")
+  else if (analysisName == "DataAnalysis" || analysisName == "FunctionalChaosAnalysis")
   {
-    addDataModelAnalysisItem(analysis, newItem);
+    addDesignOfExperimentAnalysisItem(analysis, newItem);
   }
   else
   {
@@ -234,20 +235,6 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis)
   }
   connect(newItem, SIGNAL(analysisChanged(Analysis)), this, SLOT(updateAnalysis(Analysis)));
   connect(newItem, SIGNAL(analysisRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
-}
-
-
-void OTStudyItem::addDataModelAnalysisItem(Analysis& analysis, AnalysisItem* item)
-{
-  for (int i=0; i<rowCount(); ++i)
-    if (child(i)->text().toStdString() == analysis.getModelName())
-    {
-      child(i)->appendRow(item);
-      emit newAnalysisItemCreated(item);
-      return;
-    }
-  std::cerr<<"No item added for the data analysis named "<<analysis.getName()<<std::endl;
-
 }
 
 
@@ -287,6 +274,8 @@ void OTStudyItem::addProbabilisticAnalysisItem(Analysis & analysis, AnalysisItem
 
 void OTStudyItem::addReliabilityAnalysisItem(Analysis & analysis, AnalysisItem * item)
 {
+  if (!dynamic_cast<ReliabilityAnalysis*>(&*analysis.getImplementation()))
+    throw InvalidArgumentException(HERE) << "In OTStudyItem::addReliabilityAnalysisItem: Impossible to add an item for the analysis " << analysis.getName();
   String limitStateName = dynamic_cast<ReliabilityAnalysis*>(&*analysis.getImplementation())->getLimitState().getName();
   for (int i=0; i<rowCount(); ++i)
     if (child(i)->text().toStdString() == analysis.getModelName())
@@ -301,6 +290,53 @@ void OTStudyItem::addReliabilityAnalysisItem(Analysis & analysis, AnalysisItem *
         }
     }
   std::cerr<<"No item added for the reliability analysis named "<<analysis.getName()<<std::endl;
+}
+
+
+void OTStudyItem::addDesignOfExperimentAnalysisItem(Analysis& analysis, AnalysisItem* item)
+{
+  if (!dynamic_cast<DesignOfExperimentAnalysis*>(&*analysis.getImplementation()))
+    throw InvalidArgumentException(HERE) << "In OTStudyItem::addDesignOfExperimentAnalysisItem: Impossible to add an item for the analysis " << analysis.getName();
+
+  connect(item, SIGNAL(metaModelCreated(PhysicalModel&)), this, SLOT(addMetaModelItem(PhysicalModel&)));
+
+  // DataModel
+  if (!dynamic_cast<DesignOfExperimentAnalysis*>(&*analysis.getImplementation())->getDesignOfExperiment().hasPhysicalModel())
+  {
+    for (int i=0; i<rowCount(); ++i)
+      if (child(i)->text().toStdString() == analysis.getModelName())
+      {
+        child(i)->appendRow(item);
+        emit newAnalysisItemCreated(item);
+        return;
+      }
+  }
+  // DOE
+  else
+  {
+    for (int i=0; i<rowCount(); ++i)
+    {
+      if (child(i)->text().toStdString() == dynamic_cast<DesignOfExperimentAnalysis*>(&*analysis.getImplementation())->getDesignOfExperiment().getPhysicalModel().getName())
+      {
+        for (int j=0; j<child(i)->child(2)->rowCount(); ++j)
+        {
+          if (child(i)->child(2)->child(j)->text().toStdString() == analysis.getModelName())
+          {
+            child(i)->child(2)->child(j)->appendRow(item);
+            emit newAnalysisItemCreated(item);
+            return;
+          }
+        }
+      }
+    }
+  }
+  std::cerr<<"No item added for the analysis named " << analysis.getName() << std::endl;
+}
+
+
+void OTStudyItem::addMetaModelItem(PhysicalModel& metaModel)
+{
+  otStudy_->add(metaModel);
 }
 
 

@@ -22,6 +22,7 @@
 #define OTGUI_ANALYSISITEM_HXX
 
 #include "otgui/Analysis.hxx"
+#include "otgui/MetaModel.hxx"
 
 #include <QStandardItem>
 
@@ -45,6 +46,7 @@ signals:
   void analysisFinished(AnalysisItem*);
   void analysisRemoved(QStandardItem*);
   void analysisChanged(const Analysis&);
+  void metaModelCreated(PhysicalModel&);
 
 private:
   Analysis analysis_;

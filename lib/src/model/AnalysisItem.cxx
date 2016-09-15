@@ -20,6 +20,8 @@
  */
 #include "otgui/AnalysisItem.hxx"
 
+#include "otgui/FunctionalChaosAnalysis.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
@@ -62,13 +64,21 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
 
 void AnalysisItem::update(Observable* source, const String & message)
 {
-  if (message=="analysisFinished")
+  if (message == "analysisFinished")
   {
     emit analysisFinished(this);
   }
-  else if (message=="analysisRemoved")
+  else if (message == "analysisRemoved")
   {
     emit analysisRemoved(this);
+  }
+  else if (message == "fromFunctionalChaosMetaModelCreated")
+  {
+    if (dynamic_cast<FunctionalChaosAnalysis*>(&*getAnalysis().getImplementation()))
+    {
+      PhysicalModel metaModel(dynamic_cast<FunctionalChaosAnalysis*>(&*getAnalysis().getImplementation())->getResult().getMetaModel());
+      emit metaModelCreated(metaModel);
+    }
   }
 }
 }
