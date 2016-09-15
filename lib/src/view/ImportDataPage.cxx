@@ -89,7 +89,7 @@ void ImportDataPage::openFileRequested()
     currentDir = QDir::homePath();
   QString fileName = QFileDialog::getOpenFileName(this, tr("Data to import..."),
                      currentDir,
-                     tr("CSV source files (*.csv);; Text Files (*.txt)"));
+                     tr("Data files (*.csv *.txt)"));
 
   if (!fileName.isEmpty())
   {
