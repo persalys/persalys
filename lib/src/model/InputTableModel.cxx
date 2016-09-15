@@ -140,7 +140,9 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
 
 Qt::ItemFlags InputTableModel::flags(const QModelIndex & index) const
 {
-  if (physicalModel_.getImplementation()->getClassName() == "YACSPhysicalModel" && index.column() == 0)
+  if (index.column() == 0
+      && (physicalModel_.getImplementation()->getClassName() == "YACSPhysicalModel" ||
+          physicalModel_.getImplementation()->getClassName() == "MetaModel"))
     return QAbstractTableModel::flags(index);
   return Qt::ItemIsEditable | QAbstractTableModel::flags(index);
 }
