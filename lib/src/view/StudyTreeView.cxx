@@ -41,6 +41,7 @@
 #endif
 #include "otgui/AnalyticalPhysicalModelWindow.hxx"
 #include "otgui/PythonPhysicalModelWindow.hxx"
+#include "otgui/MetaModelWindow.hxx"
 #include "otgui/ProbabilisticModelWindow.hxx"
 #include "otgui/LimitStateWindow.hxx"
 #include "otgui/DataModelWizard.hxx"
@@ -516,6 +517,8 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
     window = new AnalyticalPhysicalModelWindow(item);
   else if (physicalModelType == "PythonPhysicalModel")
     window = new PythonPhysicalModelWindow(item);
+  else if (physicalModelType == "MetaModel")
+    window = new MetaModelWindow(item);
 #ifdef OTGUI_HAVE_YACS
   else if (physicalModelType == "YACSPhysicalModel")
     window = new YACSPhysicalModelWindow(item);

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow to define a metamodel
+ *  @brief QMdiSubWindow for metamodels
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
