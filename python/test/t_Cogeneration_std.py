@@ -82,9 +82,9 @@ sobolResult = sobol.getResult()
 openturns.testing.assert_almost_equal(0.66706589316, sobolResult.getFirstOrderIndices()[0][0], 1e-11)
 openturns.testing.assert_almost_equal(0.0544481329747, sobolResult.getFirstOrderIndices()[0][1], 1e-13)
 openturns.testing.assert_almost_equal(0.33361028403, sobolResult.getFirstOrderIndices()[0][2], 1e-11)
-openturns.testing.assert_almost_equal(0.608839559982, sobolResult.getTotalOrderIndices()[0][0], 1e-12)
-openturns.testing.assert_almost_equal(0.0574755596289, sobolResult.getTotalOrderIndices()[0][1], 1e-13)
-openturns.testing.assert_almost_equal(0.289572736872, sobolResult.getTotalOrderIndices()[0][2], 1e-12)
+openturns.testing.assert_almost_equal(0.608839559982, sobolResult.getTotalIndices()[0][0], 1e-12)
+openturns.testing.assert_almost_equal(0.0574755596289, sobolResult.getTotalIndices()[0][1], 1e-13)
+openturns.testing.assert_almost_equal(0.289572736872, sobolResult.getTotalIndices()[0][2], 1e-12)
 
 ## SRC ##
 src = otguibase.SRCAnalysis('mySRC', myPhysicalModel)

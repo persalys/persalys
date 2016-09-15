@@ -4,22 +4,22 @@
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::SobolResult::getInputNames
-"Input variable names accessor.
+"Input variables names accessor.
 
 Returns
 -------
 sample : :class:`~openturns.Description`
-    Input variable names"
+    Input variables names"
 
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::SobolResult::getOutputNames
-"Output variable names accessor.
+"Output variables names accessor.
 
 Returns
 -------
 sample : :class:`~openturns.Description`
-    Output variable names"
+    Output variables names"
 
 // ---------------------------------------------------------------------
 
@@ -33,20 +33,10 @@ indices : :class:`~openturns.NumericalSample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolResult::getTotalOrderIndices
-"Total order indices accessor.
+%feature("docstring") OTGUI::SobolResult::getTotalIndices
+"Total indices accessor.
 
 Returns
 -------
 indices : :class:`~openturns.NumericalSample`
-    Total order indices"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::SobolResult::getSecondOrderIndices
-"Second order indices accessor.
-
-Returns
--------
-indices : collection of :class:`~openturns.SymmetricMatrix`
-    Second order indices"
+    Total indices"

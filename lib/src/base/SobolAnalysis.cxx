@@ -81,9 +81,9 @@ void SobolAnalysis::run()
   Collection<NumericalSample> crossY1(nbInputs, NumericalSample(0, nbOutputs));
 
   Collection<NumericalSample> allFirstOrderIndices(nbOutputs, NumericalSample(0, nbInputs));
-  Collection<NumericalSample> allTotalOrderIndices(nbOutputs, NumericalSample(0, nbInputs));
+  Collection<NumericalSample> allTotalIndices(nbOutputs, NumericalSample(0, nbInputs));
   Interval firstOrderIndicesInterval;
-  Interval totalOrderIndicesInterval;
+  Interval totalIndicesInterval;
   SaltelliSensitivityAlgorithm algoSaltelli;
 
   // We loop if there remains time, some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
@@ -136,7 +136,7 @@ void SobolAnalysis::run()
       for (UnsignedInteger i=0; i<nbOutputs; ++i)
       {
         allFirstOrderIndices[i].add(algoSaltelli.getFirstOrderIndices(i));
-        allTotalOrderIndices[i].add(algoSaltelli.getTotalOrderIndices(i));
+        allTotalIndices[i].add(algoSaltelli.getTotalOrderIndices(i));
       }
     }
 
@@ -165,20 +165,20 @@ void SobolAnalysis::run()
   // retrieve the last values of indices
   NumericalSample firstOrderIndices(0, nbInputs);
   firstOrderIndices.setDescription(getPhysicalModel().getStochasticInputNames());
-  NumericalSample totalOrderIndices(0, nbInputs);
+  NumericalSample totalIndices(0, nbInputs);
   for (UnsignedInteger i=0; i<nbOutputs; ++i)
   {
     firstOrderIndices.add(allFirstOrderIndices[i][allFirstOrderIndices[i].getSize()-1]);
-    totalOrderIndices.add(allTotalOrderIndices[i][allTotalOrderIndices[i].getSize()-1]);
+    totalIndices.add(allTotalIndices[i][allTotalIndices[i].getSize()-1]);
   }
 
   // compute indices interval
   algoSaltelli.setBootstrapSize(1000);
   firstOrderIndicesInterval = algoSaltelli.getFirstOrderIndicesInterval();
-  totalOrderIndicesInterval = algoSaltelli.getTotalOrderIndicesInterval();
+  totalIndicesInterval = algoSaltelli.getTotalOrderIndicesInterval();
 
   // fill result_
-  result_ = SobolResult(firstOrderIndices, totalOrderIndices, getOutputNames());
+  result_ = SobolResult(firstOrderIndices, totalIndices, getOutputNames());
 
   // add warning if the model has not an independent copula
   if (!getPhysicalModel().getComposedDistribution().hasIndependentCopula())

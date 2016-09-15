@@ -64,7 +64,7 @@ void SobolResultWindowWidget::buildInterface()
   {
     // plot
     PlotWidget * plot = new PlotWidget("sensitivitySobol", true);
-    plot->plotSensitivityIndices(result_.getFirstOrderIndices()[i], result_.getTotalOrderIndices()[i], inputNames);
+    plot->plotSensitivityIndices(result_.getFirstOrderIndices()[i], result_.getTotalIndices()[i], inputNames);
     plot->setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
     listPlotWidgets_.append(plot);
     plotStackedWidget->addWidget(plot);
@@ -90,16 +90,16 @@ void SobolResultWindowWidget::buildInterface()
     {
       tableModel->setNotEditableItem(j, 0, QString::fromUtf8(inputNames[j].c_str()));
       tableModel->setNotEditableItem(j, 1, result_.getFirstOrderIndices()[i][j]);
-      tableModel->setNotEditableItem(j, 2, result_.getTotalOrderIndices()[i][j]);
+      tableModel->setNotEditableItem(j, 2, result_.getTotalIndices()[i][j]);
 
-      if (result_.getTotalOrderIndices()[i][j] < result_.getFirstOrderIndices()[i][j])
+      if (result_.getTotalIndices()[i][j] < result_.getFirstOrderIndices()[i][j])
       {
         tableModel->setData(tableModel->index(j, 2), tr("Warning: The total index is inferior to the first order index."), Qt::ToolTipRole);
         tableModel->setData(tableModel->index(j, 2), QIcon(":/images/task-attention.png"), Qt::DecorationRole);
       }
 
       // compute interactions for the ith output
-      interactionsValue += (result_.getTotalOrderIndices()[i][j]-result_.getFirstOrderIndices()[i][j]);
+      interactionsValue += (result_.getTotalIndices()[i][j]-result_.getFirstOrderIndices()[i][j]);
     }
     tableView->setModel(tableModel);
     connect(tableView->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
