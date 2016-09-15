@@ -96,6 +96,7 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
   inputs_ = inputs;
   for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
     getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
+  updateCopula();
   notify("inputAdded");
   notify("modelInputsChanged");
 }
