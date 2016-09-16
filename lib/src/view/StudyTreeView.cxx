@@ -59,6 +59,7 @@
 #include "otgui/SRCResultWindow.hxx"
 #include "otgui/ReliabilityAnalysisWizard.hxx"
 #include "otgui/MonteCarloReliabilityResultWindow.hxx"
+#include "otgui/FunctionalChaosResultWindow.hxx"
 #include "otgui/MetaModelAnalysisWizard.hxx"
 #include "otgui/LineEditWithQValidatorDelegate.hxx"
 
@@ -800,6 +801,8 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
     resultWindow = new MonteCarloReliabilityResultWindow(item);
   else if (analysisType == "DataAnalysis")
     resultWindow = new DataAnalysisResultWindow(item);
+  else if (analysisType == "FunctionalChaosAnalysis")
+    resultWindow = new FunctionalChaosResultWindow(item);
   else
     std::cerr << "In createAnalysisResultWindow: analysisType " << analysisType.toStdString() << " not recognized.";
 
