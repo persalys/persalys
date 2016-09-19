@@ -649,6 +649,11 @@ void StudyTreeView::createNewMetaModel()
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
   DesignOfExperimentItem * item = dynamic_cast<DesignOfExperimentItem*>(selectedItem);
+  if (!item->getDesignOfExperiment().getOutputSample().getSize())
+  {
+    QMessageBox::critical(this, tr("Error"), tr("The model must have at least one output."));
+    return;
+  }
   OTStudyItem * otStudyItem = treeViewModel_->getOTStudyItem(index);
   QSharedPointer<MetaModelAnalysisWizard> wizard = QSharedPointer<MetaModelAnalysisWizard>(new MetaModelAnalysisWizard(otStudyItem->getOTStudy(), item->getDesignOfExperiment()));
 
