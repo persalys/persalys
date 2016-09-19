@@ -255,13 +255,12 @@ bool OTStudy::hasPhysicalModelNamed(const String & physicalModelName) const
 }
 
 
-String OTStudy::getAvailablePhysicalModelName() const
+String OTStudy::getAvailablePhysicalModelName(const OT::String & physicalModelRootName) const
 {
   int i = 0;
-  String rootName = "physicalModel_";
-  while (hasPhysicalModelNamed(rootName + (OSS()<<i).str()))
+  while (hasPhysicalModelNamed(physicalModelRootName + (OSS()<<i).str()))
     ++i;
-  return rootName + (OSS()<<i).str();
+  return physicalModelRootName + (OSS()<<i).str();
 }
 
 
