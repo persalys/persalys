@@ -27,6 +27,13 @@ levels = [2, 2, 2]
 aDesign = otguibase.FixedDesignOfExperiment('aDesign', myPhysicalModel, lowerBounds, upperBounds, levels, values)
 myStudy.add(aDesign)
 aDesign.run()
+values = [10200, 3000, 4000]
+lowerBounds = [10035.5, 2975.33, 3901.31]
+upperBounds = [10364.5, 3024.67, 4098.69]
+levels = [10, 10, 10]
+design_0 = otguibase.FixedDesignOfExperiment('design_0', myPhysicalModel, lowerBounds, upperBounds, levels, values)
+myStudy.add(design_0)
+design_0.run()
 myTaylorExpansionMoments = otguibase.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', myPhysicalModel)
 myStudy.add(myTaylorExpansionMoments)
 myMonteCarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel)
@@ -46,4 +53,9 @@ myStudy.add(mySobol)
 mySRC = otguibase.SRCAnalysis('mySRC', myPhysicalModel, 10000)
 mySRC.setSeed(0)
 myStudy.add(mySRC)
+chaos_0 = otguibase.FunctionalChaosAnalysis('chaos_0', design_0)
+chaos_0.setChaosDegree(2)
+chaos_0.setSparseChaos(False)
+chaos_0.setLeaveOneOutValidation(False)
+myStudy.add(chaos_0)
 
