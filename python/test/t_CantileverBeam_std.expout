@@ -34,6 +34,7 @@ upperBounds = [4.24148e+07, 47021.3, 259.5, 441.262]
 levels = [2, 2, 2, 2]
 aDesign = otguibase.FixedDesignOfExperiment('aDesign', myPhysicalModel, lowerBounds, upperBounds, levels, values)
 myStudy.add(aDesign)
+aDesign.run()
 limitState1 = otguibase.LimitState('limitState1', myPhysicalModel, 'y', ot.Greater(), 30)
 myStudy.add(limitState1)
 mySobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel)

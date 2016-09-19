@@ -603,6 +603,8 @@ String OTStudy::getPythonScript()
   {
     result += (*it).getPythonScript();
     result += getName() + ".add(" + (*it).getName() + ")\n";
+    if ((*it).getOutputSample().getSize())
+      result += (*it).getName() + ".run()\n";
   }
   for (Collection<LimitState>::iterator it=limitStates_.begin(); it!= limitStates_.end(); ++it)
   {
