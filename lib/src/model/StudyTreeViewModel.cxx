@@ -72,11 +72,7 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
   for (UnsignedInteger i=0; i<otStudy->getDesignOfExperiments().getSize(); ++i)
     otStudyItem->addDesignOfExperimentItem(otStudy->getDesignOfExperiments()[i]);
   for (UnsignedInteger i=0; i<otStudy->getAnalyses().getSize(); ++i)
-  {
     otStudyItem->addAnalysisItem(otStudy->getAnalyses()[i]);
-    if (otStudy->getAnalyses()[i].analysisLaunched())
-      otStudy->getAnalyses()[i].getImplementation()->notify("analysisFinished");
-  }
 
   emit newOTStudyCreated(otStudyItem);
 }

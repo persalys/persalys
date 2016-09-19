@@ -235,6 +235,8 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis)
   }
   connect(newItem, SIGNAL(analysisChanged(Analysis)), this, SLOT(updateAnalysis(Analysis)));
   connect(newItem, SIGNAL(analysisRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
+  if (analysis.analysisLaunched())
+    analysis.getImplementation()->notify("analysisFinished");
 }
 
 
