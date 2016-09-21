@@ -51,6 +51,7 @@ private:
   QVector<CustomStandardItemModel*> listTableModels_;
   GraphConfigurationWidget * plotsConfigurationWidget_;
   QVector<PlotWidget*> listPlotWidgets_;
+  QString warningMessage_;
 };
 }
 #endif
