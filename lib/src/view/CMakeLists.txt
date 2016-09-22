@@ -22,6 +22,8 @@ ot_add_source_file ( DataAnalysisWindow.cxx )
 ot_add_source_file ( DataAnalysisResultWindow.cxx )
 ot_add_source_file ( AnalysisWizard.cxx )
 ot_add_source_file ( OTguiMdiArea.cxx )
+ot_add_source_file ( WelcomeWindow.cxx )
+ot_add_source_file ( OTStudyWindow.cxx )
 ot_add_source_file ( BlockSizeGroupBox.cxx )
 ot_add_source_file ( MinMaxTableGroupBox.cxx )
 ot_add_source_file ( MomentsEstimatesTableGroupBox.cxx )
@@ -93,6 +95,8 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/OTguiSubWindow.hxx
                                   otgui/OTguiWizard.hxx
                                   otgui/OTguiMdiArea.hxx
+                                  otgui/WelcomeWindow.hxx
+                                  otgui/OTStudyWindow.hxx
                                   otgui/ResultWindow.hxx
                                   otgui/BlockSizeGroupBox.hxx
                                   otgui/MinMaxTableGroupBox.hxx
