@@ -34,8 +34,6 @@ class OTGUI_API MainWindow : public QMainWindow
 public:
   MainWindow();
 
-  void launchInitialMessageBox();
-
 public slots:
   void showGraphConfigurationTabWidget(QWidget*);
   void exitApplication();

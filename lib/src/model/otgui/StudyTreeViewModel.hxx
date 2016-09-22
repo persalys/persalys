@@ -48,6 +48,7 @@ public:
 public slots:
   void removeOTStudyItem(QStandardItem * item);
 signals:
+  void newOTStudyCreated(OTStudyItem*);
   void newDataModelCreated(DesignOfExperimentItem*);
   void newPhysicalModelCreated(PhysicalModelItem*);
   void newProbabilisticModelCreated(ProbabilisticModelItem*);

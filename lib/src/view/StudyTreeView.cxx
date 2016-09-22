@@ -29,6 +29,7 @@
 #include <QMessageBox>
 #include <QSettings>
 
+#include "otgui/OTStudyWindow.hxx"
 #include "otgui/DataModel.hxx"
 #include "otgui/DataAnalysis.hxx"
 #include "otgui/DataAnalysisResultWindow.hxx"
@@ -71,6 +72,7 @@ StudyTreeView::StudyTreeView(QWidget * parent)
 {
   OTStudy::SetInstanceObserver(treeViewModel_);
   setModel(treeViewModel_);
+  connect(treeViewModel_, SIGNAL(newOTStudyCreated(OTStudyItem*)), this, SLOT(createNewOTStudyWindow(OTStudyItem*)));
   connect(treeViewModel_, SIGNAL(newDataModelCreated(DesignOfExperimentItem*)), this, SLOT(createNewDataModelWindow(DesignOfExperimentItem*)));
   connect(treeViewModel_, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)), this, SLOT(createNewPhysicalModelWindow(PhysicalModelItem*)));
   connect(treeViewModel_, SIGNAL(newProbabilisticModelCreated(ProbabilisticModelItem*)), this, SLOT(createNewProbabilisticModelWindow(ProbabilisticModelItem*)));
@@ -90,7 +92,8 @@ StudyTreeView::StudyTreeView(QWidget * parent)
 
   header()->hide();
 
-  connect(this, SIGNAL(clicked(const QModelIndex &)), this, SLOT(selectedItemChanged(const QModelIndex &)));
+  connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(selectedItemChanged(QModelIndex)));
+  connect(this->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(selectedItemChanged(QModelIndex, QModelIndex)));
 }
 
 
@@ -472,6 +475,20 @@ void StudyTreeView::removeLimitState()
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
   treeViewModel_->getOTStudyItem(index)->getOTStudy()->remove(dynamic_cast<LimitStateItem*>(selectedItem)->getLimitState());
+}
+
+
+void StudyTreeView::createNewOTStudyWindow(OTStudyItem* item)
+{
+  OTStudyWindow * window = new OTStudyWindow(item);
+  connect(window, SIGNAL(createNewAnalyticalPhysicalModel()), this, SLOT(createNewAnalyticalPhysicalModel()));
+  connect(window, SIGNAL(createNewPythonPhysicalModel()), this, SLOT(createNewPythonPhysicalModel()));
+#ifdef OTGUI_HAVE_YACS
+  connect(window, SIGNAL(createNewYACSPhysicalModel()), this, SLOT(createNewYACSPhysicalModel()));
+#endif
+  connect(window, SIGNAL(createNewDataModel()), this, SLOT(createNewDataModel()));
+  emit showWindow(window);
+  setCurrentIndex(item->index());
 }
 
 
@@ -1026,10 +1043,15 @@ bool StudyTreeView::closeAllOTStudies()
 }
 
 
-void StudyTreeView::selectedItemChanged(const QModelIndex & index)
+void StudyTreeView::selectedItemChanged(const QModelIndex& currentIndex)
 {
-  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
-  if (selectedItem->data(Qt::UserRole).toString() != "Study")
-    emit itemSelected(selectedItem);
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(currentIndex);
+  emit itemSelected(selectedItem);
+}
+
+
+void StudyTreeView::selectedItemChanged(const QModelIndex & currentIndex, const QModelIndex & previousIndex)
+{
+  selectedItemChanged(currentIndex);
 }
 }

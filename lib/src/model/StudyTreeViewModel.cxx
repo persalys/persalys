@@ -77,6 +77,8 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
   }
   for (UnsignedInteger i=0; i<otStudy->getDesignOfExperiments().getSize(); ++i)
     otStudyItem->addDesignOfExperimentItem(otStudy->getDesignOfExperiments()[i]);
+
+  emit newOTStudyCreated(otStudyItem);
 }
 
 
@@ -151,6 +153,7 @@ AnalysisItem* StudyTreeViewModel::getAnalysisItem(OTStudyItem * otStudyItem, con
 
 void StudyTreeViewModel::removeOTStudyItem(QStandardItem * item)
 {
+  emit itemRemoved(item);
   invisibleRootItem()->removeRow(item->row());
 }
 }

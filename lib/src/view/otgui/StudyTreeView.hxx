@@ -63,12 +63,14 @@ public slots:
   void createNewSensitivityAnalysis();
   void createNewThresholdExceedance();
   void onCustomContextMenu(const QPoint & point);
-  void selectedItemChanged(const QModelIndex & index);
+  void selectedItemChanged(const QModelIndex & currentIndex);
+  void selectedItemChanged(const QModelIndex & currentIndex, const QModelIndex & previousIndex);
   void runDesignOfExperiment();
   void removeDesignOfExperiment();
   void findAnalysisItemAndLaunchExecution(OTStudyItem * otStudyItem, const QString & analysisName);
   void runAnalysis();
   void removeAnalysis();
+  void createNewOTStudyWindow(OTStudyItem * item);
   void createNewDataModelWindow(DesignOfExperimentItem * item);
   void createNewDataAnalysis();
   void createNewPhysicalModelWindow(PhysicalModelItem * item);

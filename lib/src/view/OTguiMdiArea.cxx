@@ -34,6 +34,8 @@ OTguiMdiArea::OTguiMdiArea()
 
 void OTguiMdiArea::showSubWindow(QMdiSubWindow * win)
 {
+  if (!subWindowList().count())
+    emit mdiAreaEmpty(false);
   addSubWindow(win);
   win->showMaximized();
 }
@@ -44,6 +46,10 @@ void OTguiMdiArea::showSubWindow(QStandardItem * item)
   for (int i=0; i<subWindowList().size(); ++i)
   {
     OTguiSubWindow * win = static_cast<OTguiSubWindow*>(subWindowList().at(i));
+    if (win->getItem()->data(Qt::UserRole).toString() == "OTStudy")
+    {
+      win->close();
+    }
     if (win->getItem() == item)
     {
       win->widget()->showMaximized();
@@ -63,7 +69,10 @@ void OTguiMdiArea::removeSubWindow(QStandardItem * item)
     {
       QMdiArea::removeSubWindow(win);
       win->deleteLater();
+      break;
     }
   }
+  if (!subWindowList().count())
+    emit mdiAreaEmpty(true);
 }
 }
