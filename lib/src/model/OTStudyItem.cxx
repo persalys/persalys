@@ -338,6 +338,8 @@ void OTStudyItem::addDesignOfExperimentAnalysisItem(Analysis& analysis, Analysis
 
 void OTStudyItem::addMetaModelItem(PhysicalModel& metaModel)
 {
+  const String availableName = otStudy_->getAvailablePhysicalModelName(metaModel.getName());
+  metaModel.setName(availableName);
   otStudy_->add(metaModel);
 }
 
