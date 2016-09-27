@@ -33,6 +33,7 @@
 #include "otgui/DataModel.hxx"
 #include "otgui/DataAnalysis.hxx"
 #include "otgui/DataAnalysisResultWindow.hxx"
+#include "otgui/InferenceWizard.hxx"
 #include "otgui/AnalyticalPhysicalModel.hxx"
 #include "otgui/PythonPhysicalModel.hxx"
 #ifdef OTGUI_HAVE_YACS
@@ -142,6 +143,10 @@ void StudyTreeView::buildActions()
   newDataAnalysis_->setStatusTip(tr("Analyse the data sample"));
   connect(newDataAnalysis_, SIGNAL(triggered()), this, SLOT(createNewDataAnalysis()));
 
+  newInferenceAnalysis_ = new QAction(tr("New inference analysis"), this);
+  newInferenceAnalysis_->setStatusTip(tr("Inference"));
+  connect(newInferenceAnalysis_, SIGNAL(triggered()), this, SLOT(createNewInferenceAnalysis()));
+
   // new physical model actions
   newAnalyticalPhysicalModel_ = new QAction(tr("New analytical physical model"), this);
   newAnalyticalPhysicalModel_->setStatusTip(tr("Create a new analytical physical model"));
@@ -250,6 +255,7 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
     actions.append(modifyDataModel_);
     actions.append(newDataAnalysis_);
     actions.append(newMetaModel_);
+    actions.append(newInferenceAnalysis_);
     actions.append(removeDataModel_);
   }
   else if (dataType == "PhysicalModel")
@@ -402,6 +408,22 @@ void StudyTreeView::createNewDataAnalysis()
   otStudyItem->getOTStudy().add(analysis);
   analysis->run();
   setExpanded(index, true);
+}
+
+
+void StudyTreeView::createNewInferenceAnalysis()
+{
+  QModelIndex index = selectionModel()->currentIndex();
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+  DesignOfExperimentItem * item = dynamic_cast<DesignOfExperimentItem*>(selectedItem);
+  OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(item->QStandardItem::parent());
+  QSharedPointer<InferenceWizard> wizard = QSharedPointer<InferenceWizard>(new InferenceWizard(otStudyItem->getOTStudy(), item->getDesignOfExperiment()));
+
+  if (wizard->exec())
+  {
+//     otStudyItem->getOTStudy()->add(wizard->getAnalysis());
+//     findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysis().getName().c_str());
+  }
 }
 
 
