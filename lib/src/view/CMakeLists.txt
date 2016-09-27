@@ -59,6 +59,8 @@ ot_add_source_file ( MonteCarloReliabilityResultWindow.cxx )
 ot_add_source_file ( StopCriteriaGroupBox.cxx )
 ot_add_source_file ( MetaModelAnalysisWizard.cxx )
 ot_add_source_file ( FunctionalChaosResultWindow.cxx )
+ot_add_source_file ( InferenceWizard.cxx )
+ot_add_source_file ( DistributionsForInferenceWidget.cxx )
 
 ot_install_header_file ( MainWindow.hxx )
 ot_install_header_file ( OTguiToolBar.hxx )
@@ -156,6 +158,8 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/StopCriteriaGroupBox.hxx
                                   otgui/MetaModelAnalysisWizard.hxx
                                   otgui/FunctionalChaosResultWindow.hxx
+                                  otgui/InferenceWizard.hxx
+                                  otgui/DistributionsForInferenceWidget.hxx
                                   )
 
 
