@@ -65,7 +65,7 @@ void SobolResultWindowWidget::buildInterface()
     // plot
     PlotWidget * plot = new PlotWidget("sensitivitySobol", true);
     plot->plotSensitivityIndices(result_.getFirstOrderIndices()[i], result_.getTotalIndices()[i], inputNames);
-    plot->setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
+    plot->setTitle(tr("Sobol sensitivity indices: ") + outputNames[i]);
     listPlotWidgets_.append(plot);
     plotStackedWidget->addWidget(plot);
 
@@ -102,7 +102,7 @@ void SobolResultWindowWidget::buildInterface()
       interactionsValue += (result_.getTotalIndices()[i][j]-result_.getFirstOrderIndices()[i][j]);
     }
     tableView->setModel(tableModel);
-    connect(tableView->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
+    connect(tableView->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
     listTableModels_.append(tableModel);
     tableStackedWidget->addWidget(tableView);
 

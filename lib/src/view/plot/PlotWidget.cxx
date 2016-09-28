@@ -390,11 +390,6 @@ void PlotWidget::plotBoxPlot(double median, double lowerQuartile, double upperQu
 
 void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrderIndices, const NumericalPoint totalIndices, const Description inputNames)
 {
-  if (totalIndices.getSize())
-    setTitle("Sobol sensitivity indices");
-  else
-    setTitle("SRC sensitivity indices");
-
   setAxisTitle(QwtPlot::yLeft, "Index");
   setAxisTitle(QwtPlot::xBottom, "Inputs");
 
