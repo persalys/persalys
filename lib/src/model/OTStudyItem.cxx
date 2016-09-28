@@ -109,7 +109,10 @@ void OTStudyItem::updateAnalysis(const Analysis & analysis)
 
 void OTStudyItem::updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
 {
-  otStudy_->getDesignOfExperimentByName(designOfExperiment.getName()).setImplementationAsPersistentObject(designOfExperiment.getImplementation());
+  if (designOfExperiment.getImplementation()->getClassName() == "DataModel")
+    otStudy_->getDataModelByName(designOfExperiment.getName()).setImplementationAsPersistentObject(designOfExperiment.getImplementation());
+  else
+    otStudy_->getDesignOfExperimentByName(designOfExperiment.getName()).setImplementationAsPersistentObject(designOfExperiment.getImplementation());
 }
 
 
@@ -118,6 +121,7 @@ void OTStudyItem::addDataModelItem(DesignOfExperiment & dataModel)
   // Physical model item
   DesignOfExperimentItem * newDataModelItem = new DesignOfExperimentItem(dataModel);
   connect(newDataModelItem, SIGNAL(designOfExperimentRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
+  connect(newDataModelItem, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), this, SLOT(updateDesignOfExperiment(DesignOfExperiment)));
   appendRow(newDataModelItem);
 
   emit newDataModelItemCreated(newDataModelItem);
