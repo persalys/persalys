@@ -24,9 +24,10 @@
 #include <QHeaderView>
 #include <QShowEvent>
 #include <QComboBox>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class HorizontalHeaderViewWithCombobox : public QHeaderView
+class OTGUI_API HorizontalHeaderViewWithCombobox : public QHeaderView
 {
   Q_OBJECT
 

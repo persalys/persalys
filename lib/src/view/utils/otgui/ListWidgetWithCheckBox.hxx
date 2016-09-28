@@ -22,9 +22,10 @@
 #define OTGUI_LISTWIDGETWITHCHECKBOX_HXX
 
 #include <QListWidget>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class ListWidgetWithCheckBox : public QListWidget 
+class OTGUI_API ListWidgetWithCheckBox : public QListWidget 
 { 
   Q_OBJECT
 

@@ -23,6 +23,7 @@
 
 #include <QWidget>
 #include <QTimeLine>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
 
@@ -39,7 +40,7 @@ class CollapsibleGroupBoxPrivate;
  * @since 5.16
  */
   
-class CollapsibleGroupBox : public QWidget
+class OTGUI_API CollapsibleGroupBox : public QWidget
 {
     Q_OBJECT
 

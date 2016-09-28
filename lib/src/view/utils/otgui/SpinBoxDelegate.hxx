@@ -22,9 +22,10 @@
 #define OTGUI_SPINBOXDELEGATE_HXX
 
 #include <QStyledItemDelegate>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class SpinBoxDelegate : public QStyledItemDelegate
+class OTGUI_API SpinBoxDelegate : public QStyledItemDelegate
 {
   Q_OBJECT
 

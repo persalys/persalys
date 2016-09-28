@@ -22,9 +22,10 @@
 #define OTGUI_TIMELINEEDIT_HXX
 
 #include <QLineEdit>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class TimeLineEdit : public QLineEdit
+class OTGUI_API TimeLineEdit : public QLineEdit
 {
   Q_OBJECT
 

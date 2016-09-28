@@ -22,7 +22,7 @@ include_directories (${INTERNAL_INCLUDE_DIRS})
 add_library (otguipyconsole ${SOURCEFILES} ${OTGUI_CONSOLE_MOC_SRCS})
 
 if ( BUILD_SHARED_LIBS )
-  set_target_properties (otguipyconsole PROPERTIES COMPILE_DEFINITIONS "OTGUI_DLL_EXPORTS")
+  set_target_properties (otguipyconsole PROPERTIES COMPILE_DEFINITIONS "OTGUI_DLL_EXPORTS;PyConsole_EXPORTS")
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 

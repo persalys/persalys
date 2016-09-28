@@ -22,9 +22,10 @@
 #define OTGUI_LINEEDITWITHQVALIDATORDELEGATE_HXX
 
 #include <QStyledItemDelegate>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class LineEditWithQValidatorDelegate : public QStyledItemDelegate
+class OTGUI_API LineEditWithQValidatorDelegate : public QStyledItemDelegate
 {
   Q_OBJECT
 

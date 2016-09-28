@@ -22,9 +22,10 @@
 #define OTGUI_RESIZABLESTACKEDWIDGET_HXX
 
 #include <QStackedWidget>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class ResizableStackedWidget :public QStackedWidget
+class OTGUI_API ResizableStackedWidget : public QStackedWidget
 {
   Q_OBJECT
 
