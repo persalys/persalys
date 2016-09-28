@@ -47,10 +47,10 @@ windows (model definition or result window) open, surrounded by:
 1-2 On start up
 '''''''''''''''
 
-.. image:: popUpOnStartUp.png
+.. image:: window_startUp.png
     :align: center
 
-A dialog box appears when the OTGui is started. It contains 4 items:
+A window appears when the OTGui is started. It contains 3 items:
 
 - New: Create a new OTStudy
 
@@ -61,7 +61,6 @@ A dialog box appears when the OTGui is started. It contains 4 items:
 - Import Python...: Display a dialog box for loading an OTGui Python script.
   It is impossible to load a study when another one is already opened.
 
-- Cancel: Close the dialog box
 
 1-3 Menus
 '''''''''
@@ -108,11 +107,15 @@ The view menu allows the user to display/hide the Python console.
 
 There are three ways to create a new study:
 
-- Use the dialog box which appears when the OTGui is launched;
+- Use the button **New OTStudy** of the window which appears when the OTGui is launched;
 
 - Click on |newButton| in the tool bar;
 
 - Click on **New OTStudy** in the file menu.
 
+When a study is created, an item appears in the study tree. This item is associated with a window
+which provides ways to define models:
 
+.. image:: /user_manual/graphical_interface/getting_started/window_OTStudy_startUp.png
+    :align: center
 

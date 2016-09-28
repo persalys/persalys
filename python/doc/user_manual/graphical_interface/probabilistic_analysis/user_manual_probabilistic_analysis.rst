@@ -15,13 +15,13 @@ The probabilistic model has two tabs:
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelMarginals.png
         :align: center
 
-    The use has to choose which variables are to be modelled by random variables
+    The user has to choose which variables are to be modelled by random variables
     thanks to the check box. For random variables, the user has to define which
     distribution they follow.
 
     On the right, the parameters of the distribution can be filled, together with truncation parameters.
     The values are expected to be floating points or integers, with respect to the distribution support.
-    If a wrong value is used, it will return to its previous value and an error message will at the bottom
+    If a wrong value is used, it will return to its previous value and an error message will appear at the bottom
     of the window.
 
     LogNormal, Weibull and Gumber distributions allows the user to define different type of parameterization.

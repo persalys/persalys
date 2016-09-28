@@ -1,19 +1,18 @@
 %feature("docstring") OTGUI::DataModel
 "Data model.
 
-Available constructors:
-    DataModel(*name, fileName, inputColumns, outputColumns, inputNames, outputNames*)
+The OTGui allows the user to load data samples and analyse them. They are considered as data models.
 
 Parameters
 ----------
 name : str
     Name
 fileName : str
-    Name of a data file to load
+    Name of a data file (.txt ot .csv) to load
 inputColumns : sequence of int
-    Indices of columns of the output variables in files to consider
+    Indices of columns of the input variables in file to consider
 outputColumns : sequence of int
-    Indices of columns of the output variables in files to consider (optional)
+    Indices of columns of the output variables in file to consider (optional)
 inputNames : :class:`~openturns.Description`
     Names of the input variables (optional)
 outputNames : :class:`~openturns.Description`

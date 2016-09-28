@@ -151,6 +151,7 @@ of the design of experiment.
   figure has to be saved.
 
 - The tab **Plot matrix X-X** gathers:
+
   - Out of the diagonal the scatter plot of each couple of inputs;
   - The histogram of the distribution of each input on the diagonal.
 
