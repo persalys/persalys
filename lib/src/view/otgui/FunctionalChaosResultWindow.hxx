@@ -22,7 +22,7 @@
 #define OTGUI_FUNCTIONALCHAOSRESULTWINDOW_HXX
 
 #include "otgui/ResultWindow.hxx"
-#include "otgui/MetaModelFunctionalChaosResult.hxx"
+#include "otgui/FunctionalChaosAnalysisResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 
 namespace OTGUI {
@@ -42,7 +42,7 @@ public slots:
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 
 private:
-  MetaModelFunctionalChaosResult result_;
+  FunctionalChaosAnalysisResult result_;
   OT::NumericalSample outputSample_;
   QTabWidget * tabWidget_;
   GraphConfigurationWidget * metaModelPlotsConfigurationWidget_;
