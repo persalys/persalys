@@ -134,6 +134,7 @@ ifeq ($(CHECK_OT),y)
 	cd $(MOD_BUILD) && make tests -j$(JOBS)
 	cp $(OT_PREFIX)/bin/*.dll $(MOD_BUILD)/lib/test
 	cp $(MOD_PREFIX)/bin/*.dll $(MOD_BUILD)/lib/test
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/python$(PYBASEVER_NODOT).dll $(MOD_BUILD)/lib/test
 	cp $(OT_PREFIX)/bin/*.dll $(MOD_BUILD)/python/test
 	cp $(MOD_PREFIX)/bin/*.dll $(MOD_BUILD)/python/test
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/python$(PYBASEVER_NODOT).dll $(MOD_BUILD)/python/test
