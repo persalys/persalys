@@ -22,7 +22,6 @@
 #include <QSettings>
 
 #include "otgui/MainWindow.hxx"
-#include "otgui/PythonEnvironment.hxx"
 #ifdef OTGUI_HAVE_YACS
 #include "otgui/YACSEvalSessionSingleton.hxx"
 #endif
@@ -31,7 +30,6 @@ using namespace OTGUI;
 
 int main(int argc, char *argv[])
 {
-  PythonEnvironment pyEnv;
 #ifdef OTGUI_HAVE_YACS
   YACSEvalSessionSingleton YACSSession;
 #endif
