@@ -1,17 +1,23 @@
-.. image:: https://travis-ci.org/openturns/ottemplate.svg?branch=master
-    :target: https://travis-ci.org/openturns/ottemplate
+OTGui Module
+============
 
-OTTemplate Module
-=================
-
-OTTemplate is a module for OpenTURNS
-
-More information can found at http://www.openturns.org
+Qt GUI module for OpenTURNS
 
 
 Installation
 ============
-Please see the http://trac.openturns.org/wiki/Modules
-for instructions on installing OpenTURNS modules on various platforms from binaries or sources.
 
--- The OpenTURNS team
+    git clone https://github.com/openturns/openturns.git
+    cd openturns
+    git checkout 1.7
+    mkdir -p build && cd build
+    cmake -DCMAKE_INSTALL_PREFIX=$PWD/install -DUSE_SPHINX=OFF ..
+    make install
+
+    git clone http://git.phimeca.lan/ot-edf/otgui.git
+    cd otgui
+    git checkout openturns1.7
+    mkdir -p build && cd build
+    cmake -DCMAKE_INSTALL_PREFIX=$PWD/install -DOpenTURNS_DIR=$PWD/../../build/install/lib/cmake/openturns ..
+    make install
+        
