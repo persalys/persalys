@@ -27,10 +27,8 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
-#include <QTableWidget>
 #include <QScrollArea>
 #include <QSplitter>
-#include <QTextEdit>
 
 using namespace OT;
 
@@ -48,6 +46,13 @@ SRCResultWindow::SRCResultWindow(AnalysisItem * item)
 void SRCResultWindow::setParameters(const Analysis & analysis)
 {
   const SRCAnalysis * SRCanalysis = dynamic_cast<const SRCAnalysis*>(&*analysis.getImplementation());
+
+  // add warning if the model has not an independent copula
+  if (!SRCanalysis->getPhysicalModel().getComposedDistribution().hasIndependentCopula())
+  {
+    warningMessage_ = tr("The model has not an independent copula, the result could be false.");
+  }
+
   QStringList strList;
   strList << tr("Sensitivity analysis parameters :") + "\n";
   strList << tr("Algorithm : ") + tr("Standardized Regression Coefficients");
@@ -121,6 +126,13 @@ void SRCResultWindow::buildInterface()
   connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), tableStackedWidget, SLOT(setCurrentIndex(int)));
 
   vbox->addWidget(tableStackedWidget);
+
+  // add a warning if the model has not an independent copula
+  if (!warningMessage_.isEmpty())
+  {
+    QLabel * warningLabel = new QLabel(QString("%1%2%3").arg("<font color=red>").arg(warningMessage_).arg("</font>"));
+    vbox->addWidget(warningLabel);
+  }
 
   verticalSplitter->addWidget(plotStackedWidget);
   verticalSplitter->setStretchFactor(0, 3);

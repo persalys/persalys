@@ -596,6 +596,13 @@ void StudyTreeView::createNewSensitivityAnalysis()
   if (!isPhysicalModelValid(probabilisticStudyIndex) || !isProbabilisticModelValid(probabilisticStudyIndex))
     return;
   PhysicalModelItem * physicalModelItem = treeViewModel_->getPhysicalModelItem(probabilisticStudyIndex);
+  // check if the model has an independent copula
+  if (!physicalModelItem->getPhysicalModel().getComposedDistribution().hasIndependentCopula())
+  {
+    QMessageBox::critical(this, tr("Error"), tr("The model must have an independent copula to compute a sensitivity analysis but inputs are correlated."));
+    return;
+  }
+
   OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
   QSharedPointer<SensitivityAnalysisWizard> wizard = QSharedPointer<SensitivityAnalysisWizard>(new SensitivityAnalysisWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel()));
 

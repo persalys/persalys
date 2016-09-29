@@ -45,6 +45,13 @@ SobolResultWindow::SobolResultWindow(AnalysisItem * item)
 void SobolResultWindow::setParameters(const Analysis & analysis)
 {
   const SobolAnalysis * sobolAnalysis = dynamic_cast<const SobolAnalysis*>(&*analysis.getImplementation());
+
+  // add warning if the model has not an independent copula
+  if (!sobolAnalysis->getPhysicalModel().getComposedDistribution().hasIndependentCopula())
+  {
+    warningMessage_ = tr("The model has not an independent copula, the result could be false.");
+  }
+
   QStringList strList;
   strList << tr("Sensitivity analysis parameters :") + "\n";
   strList << tr("Algorithm : ") + tr("Sobol");
@@ -160,6 +167,13 @@ void SobolResultWindow::buildInterface()
 
   vbox->addWidget(tableStackedWidget);
   vbox->addWidget(interactionStackedWidget);
+
+  // add a warning if the model has not an independent copula
+  if (!warningMessage_.isEmpty())
+  {
+    QLabel * warningLabel = new QLabel(QString("%1%2%3").arg("<font color=red>").arg(warningMessage_).arg("</font>"));
+    vbox->addWidget(warningLabel);
+  }
 
   verticalSplitter->addWidget(plotStackedWidget);
   verticalSplitter->setStretchFactor(0, 3);
