@@ -80,7 +80,6 @@ void SRCResultWindow::buildInterface()
 
   QStackedWidget * plotStackedWidget = new QStackedWidget;
   QStackedWidget * tableStackedWidget = new QStackedWidget;
-  QStackedWidget * interactionStackedWidget = new QStackedWidget;
 
   QWidget * widget = new QWidget;
   QVBoxLayout * vbox = new QVBoxLayout(widget);
@@ -108,7 +107,6 @@ void SRCResultWindow::buildInterface()
     tableModel->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Index"));
 
     // fill table
-    NumericalScalar interactionsValue(0.);
     for (UnsignedInteger j=0; j<inputNames.getSize(); ++j)
     {
       tableModel->setNotEditableItem(j, 0, QString::fromUtf8(inputNames[j].c_str()));
