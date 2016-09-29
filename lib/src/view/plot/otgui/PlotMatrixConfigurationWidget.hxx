@@ -27,7 +27,7 @@
 
 namespace OTGUI {
 
-class PlotMatrixConfigurationWidget : public QWidget
+class OTGUI_API PlotMatrixConfigurationWidget : public QWidget
 {
   Q_OBJECT
 

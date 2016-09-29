@@ -21,13 +21,14 @@
 #ifndef OTGUI_PLOTMATRIXWIDGET_HXX
 #define OTGUI_PLOTMATRIXWIDGET_HXX
 
-#include "openturns/NumericalSample.hxx"
+#include <openturns/NumericalSample.hxx>
 
 #include <QTableWidget>
 #include <QLabel>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class PlotMatrixWidget : public QWidget
+class OTGUI_API PlotMatrixWidget : public QWidget
 {
   Q_OBJECT
 

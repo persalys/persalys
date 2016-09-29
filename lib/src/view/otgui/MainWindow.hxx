@@ -25,6 +25,7 @@
 
 #include <QMainWindow>
 #include <QDockWidget>
+#include "PyConsole_Console.h"
 
 namespace OTGUI {
 class OTGUI_API MainWindow : public QMainWindow
@@ -41,9 +42,13 @@ public slots:
 protected:
   void buildInterface();
 
+private slots:
+  void loadScript(const QString & fileName);
+
 private:
   StudyTreeView * studyTree_;
   QDockWidget * configurationDock_;
+  PyConsole_Console * pythonConsole_;
 };
 }
 #endif

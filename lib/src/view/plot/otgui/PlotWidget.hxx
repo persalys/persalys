@@ -27,10 +27,11 @@
 #include <qwt_symbol.h>
 #include <qwt_scale_draw.h>
 
-#include "openturns/Distribution.hxx"
+#include <openturns/Distribution.hxx>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class PlotWidget : public QwtPlot
+class OTGUI_API PlotWidget : public QwtPlot
 {
   Q_OBJECT
 

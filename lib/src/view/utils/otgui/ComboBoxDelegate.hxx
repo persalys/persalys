@@ -22,9 +22,10 @@
 #define OTGUI_COMBOBOXDELEGATE_HXX
 
 #include <QItemDelegate>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class ComboBoxDelegate : public QItemDelegate
+class OTGUI_API ComboBoxDelegate : public QItemDelegate
 {
   Q_OBJECT
 

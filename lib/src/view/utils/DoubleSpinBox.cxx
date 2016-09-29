@@ -48,7 +48,7 @@ DoubleSpinBox::DoubleSpinBox(QWidget * parent)
 void DoubleSpinBox::initLocalValues(QWidget *parent)
 {
   setLocale(QLocale::C);
-  locale().setNumberOptions(QLocale::OmitGroupSeparator & QLocale::RejectGroupSeparator);
+  locale().setNumberOptions(QLocale::OmitGroupSeparator | QLocale::RejectGroupSeparator);
   const QString str = (parent ? parent->locale() : locale()).toString(4567.1);
   if (str.size() == 6)
   {

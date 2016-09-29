@@ -23,12 +23,12 @@
 
 #include "otgui/DataModel.hxx"
 
-#include "openturns/NumericalSample.hxx"
+#include <openturns/NumericalSample.hxx>
 
 #include <QAbstractTableModel>
 
 namespace OTGUI {
-class DataModelTableModel : public QAbstractTableModel
+class OTGUI_API DataModelTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 

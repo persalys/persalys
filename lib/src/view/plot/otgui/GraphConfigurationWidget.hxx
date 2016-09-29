@@ -21,7 +21,7 @@
 #ifndef OTGUI_GRAPHCONFIGURATIONWIDGET_HXX
 #define OTGUI_GRAPHCONFIGURATIONWIDGET_HXX
 
-#include "PlotWidget.hxx"
+#include "otgui/PlotWidget.hxx"
 #include "otgui/ValueLineEdit.hxx"
 
 #include <QComboBox>
@@ -29,7 +29,7 @@
 
 namespace OTGUI {
 
-class GraphConfigurationWidget : public QWidget
+class OTGUI_API GraphConfigurationWidget : public QWidget
 {
   Q_OBJECT
 

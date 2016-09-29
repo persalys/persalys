@@ -26,9 +26,10 @@
 
 #include <QDoubleSpinBox>
 #include <QDoubleValidator>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class DoubleSpinBox : public QDoubleSpinBox
+class OTGUI_API DoubleSpinBox : public QDoubleSpinBox
 {
   Q_OBJECT
 

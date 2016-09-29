@@ -23,10 +23,11 @@
 
 #include <QItemDelegate>
 #include <QPlainTextEdit>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
 
-class CodeEditor : public QPlainTextEdit
+class OTGUI_API CodeEditor : public QPlainTextEdit
 {
   Q_OBJECT
 
@@ -43,7 +44,7 @@ protected:
 
 };
 
-class CodeDelegate : public QItemDelegate
+class OTGUI_API CodeDelegate : public QItemDelegate
 {
   Q_OBJECT
 

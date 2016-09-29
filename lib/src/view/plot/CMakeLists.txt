@@ -30,7 +30,6 @@ endif ()
 set_target_properties ( otguiplot PROPERTIES VERSION ${LIB_VERSION} )
 set_target_properties ( otguiplot PROPERTIES SOVERSION ${LIB_SOVERSION} )
 target_link_libraries ( otguiplot otguiutils )
-target_link_libraries ( otguiplot otguibase )
 
 include_directories (${QWT_INCLUDE_DIRS})
 target_link_libraries (otguiplot ${QT_LIBRARIES})

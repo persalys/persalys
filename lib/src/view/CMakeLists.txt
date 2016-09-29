@@ -1,5 +1,5 @@
-
-add_subdirectory (pythonConsole)
+add_subdirectory (PyInterp)
+add_subdirectory (PyConsole)
 add_subdirectory (utils)
 add_subdirectory (plot)
 
@@ -158,7 +158,7 @@ endif ()
 set_target_properties (otguiview PROPERTIES VERSION ${LIB_VERSION} )
 set_target_properties (otguiview PROPERTIES SOVERSION ${LIB_SOVERSION} )
 target_link_libraries (otguiview otguimodel)
-target_link_libraries (otguiview otguipythonconsole)
+target_link_libraries (otguiview otguipyconsole)
 target_link_libraries (otguiview otguiplot)
 
 include_directories (${QWT_INCLUDE_DIRS})

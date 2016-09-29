@@ -24,7 +24,7 @@
 #include "otgui/CopyableTableView.hxx"
 
 namespace OTGUI {
-class ExportableTableView : public CopyableTableView
+class OTGUI_API ExportableTableView : public CopyableTableView
 {
   Q_OBJECT
 

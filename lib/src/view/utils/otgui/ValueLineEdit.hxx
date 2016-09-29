@@ -23,9 +23,10 @@
 
 #include <QLineEdit>
 #include <QKeyEvent>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class ValueLineEdit : public QLineEdit
+class OTGUI_API ValueLineEdit : public QLineEdit
 {
   Q_OBJECT
 

@@ -22,6 +22,7 @@
 #define OTGUI_QTTOOLS_HXX
 
 #include <QObject>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
 /**
@@ -29,7 +30,7 @@ namespace OTGUI {
  *
  * Class to block signals of widgets.
  */
-class SignalBlocker
+class OTGUI_API SignalBlocker
 {
   QObject* blockedObject_;
   bool previousBlockingStatus_;
@@ -38,7 +39,7 @@ public :
   ~SignalBlocker();
 };
 
-class SimpleException : public std::exception
+class OTGUI_API SimpleException : public std::exception
 {
   const QString text_;
 public :

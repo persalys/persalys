@@ -22,10 +22,11 @@
 #define OTGUI_COPYABLETABLEVIEW_HXX
 
 #include <QTableView>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
 
-class CopyableTableView : public QTableView
+class OTGUI_API CopyableTableView : public QTableView
 {
   Q_OBJECT
 
