@@ -268,7 +268,7 @@ String OTStudy::getAvailablePhysicalModelName() const
 void OTStudy::add(const PhysicalModel & physicalModel)
 {
   if (hasPhysicalModelNamed(physicalModel.getName()))
-    throw InvalidArgumentException(HERE) << "The study has already contained a physical model named " << physicalModel.getName();
+    throw InvalidArgumentException(HERE) << "The study already contains a physical model named " << physicalModel.getName();
 
   physicalModels_.add(physicalModel);
   notify("addPhysicalModel");
@@ -382,7 +382,7 @@ void OTStudy::add(const DesignOfExperiment & designOfExperiment)
   if (designOfExperiment.hasPhysicalModel())
   {
     if (hasDesignOfExperimentNamed(designOfExperiment.getName()))
-      throw InvalidArgumentException(HERE) << "The study has already contained a design of experiment named " << designOfExperiment.getName();
+      throw InvalidArgumentException(HERE) << "The study already contains a design of experiment named " << designOfExperiment.getName();
 
     if (!hasPhysicalModelNamed(designOfExperiment.getPhysicalModel().getName()))
       throw InvalidArgumentException(HERE) << "The design of experiment has been created with a physical model not belonging to the study.";
@@ -393,7 +393,7 @@ void OTStudy::add(const DesignOfExperiment & designOfExperiment)
   else
   {
     if (hasDataModelNamed(designOfExperiment.getName()))
-      throw InvalidArgumentException(HERE) << "The study has already contained a data model named " << designOfExperiment.getName();
+      throw InvalidArgumentException(HERE) << "The study already contains a data model named " << designOfExperiment.getName();
 
     dataModels_.add(designOfExperiment);
     notify("addDataModel");
@@ -465,7 +465,7 @@ String OTStudy::getAvailableAnalysisName(const String & rootName) const
 void OTStudy::add(const Analysis & analysis)
 {
   if (hasAnalysisNamed(analysis.getName()))
-    throw InvalidArgumentException(HERE) << "The study has already contained an analysis named " << analysis.getName();
+    throw InvalidArgumentException(HERE) << "The study already contains an analysis named " << analysis.getName();
 
   if (dynamic_cast<const PhysicalModelAnalysis*>(&*analysis.getImplementation()))
     if (!hasPhysicalModelNamed(analysis.getModelName()))
@@ -522,7 +522,7 @@ String OTStudy::getAvailableLimitStateName() const
 void OTStudy::add(const LimitState & limitState)
 {
   if (hasLimitStateNamed(limitState.getName()))
-    throw InvalidArgumentException(HERE) << "The study has already contained a limit state named " << limitState.getName();
+    throw InvalidArgumentException(HERE) << "The study already contains a limit state named " << limitState.getName();
 
   if (!hasPhysicalModelNamed(limitState.getPhysicalModel().getName()))
     throw InvalidArgumentException(HERE) << "The limit state has been created with a physical model not belonging to the study.";
