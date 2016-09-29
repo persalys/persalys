@@ -93,9 +93,9 @@ src.run()
 srcResult = src.getResult()
 
 # Comparaison
-openturns.testing.assert_almost_equal(0.628946, srcResult.getIndices()[0][0], 1e-6)
-openturns.testing.assert_almost_equal(0.0476118, srcResult.getIndices()[0][1], 1e-6)
-openturns.testing.assert_almost_equal(0.318226, srcResult.getIndices()[0][2], 1e-6)
+openturns.testing.assert_almost_equal(0.632244, srcResult.getIndices()[0][0], 1e-5)
+openturns.testing.assert_almost_equal(0.0478614, srcResult.getIndices()[0][1], 1e-5)
+openturns.testing.assert_almost_equal(0.319895, srcResult.getIndices()[0][2], 1e-5)
 
 script = myStudy.getPythonScript()
 print(script)
