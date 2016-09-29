@@ -32,7 +32,6 @@ qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
               otgui/HorizontalHeaderViewWithCombobox.hxx
               otgui/ExportableTableView.hxx
               otgui/CopyableTableView.hxx
-              otgui/QtTools.hxx
               otgui/ResizableTableViewWithoutScrollBar.hxx
               otgui/DoubleSpinBox.hxx
               otgui/UIntSpinBox.hxx

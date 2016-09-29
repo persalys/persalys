@@ -6,6 +6,8 @@
 
 %include WithStopCriteriaAnalysis_doc.i
 
+%ignore OTGUI::WithStopCriteriaAnalysis::TimeCriteria;
+
 %include otgui/WithStopCriteriaAnalysis.hxx
 namespace OTGUI {
 

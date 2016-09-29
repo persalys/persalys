@@ -43,7 +43,6 @@ QString CopyableTableView::getFormattedText() const
 
   qSort(list);
 
-  QModelIndex last = list.last();
   QModelIndex previous = list.first();
 
   list.removeFirst();
