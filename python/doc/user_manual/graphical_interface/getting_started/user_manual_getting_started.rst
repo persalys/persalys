@@ -47,7 +47,7 @@ windows (model definition or result window) open, surrounded by:
 1-2 On start up
 '''''''''''''''
 
-.. image:: window_startUp.png
+.. image:: /user_manual/graphical_interface/getting_started/window_startUp.png
     :align: center
 
 A window appears when the OTGui is started. It contains 3 items:
