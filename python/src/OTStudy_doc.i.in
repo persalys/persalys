@@ -3,6 +3,106 @@
 
 // ---------------------------------------------------------------------
 
+%feature("docstring") OTGUI::OTStudy::Add
+"Add a study in the tree view.
+
+Parameters
+----------
+object : :class:`~otguibase.OTStudy`
+    The study to add"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::GetFileNames
+"Files name accessor.
+
+Returns
+-------
+filesNames : :class:`~openturns.Description`
+    The files names of all the opened studies"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::Open
+"Open a study and add it in the tree view.
+
+Parameters
+----------
+fileName : str
+    The file name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::save
+"Save it in an xml file.
+
+Parameters
+----------
+fileName : str
+    The file name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::Remove
+"Remove a study to the tree view.
+
+Parameters
+----------
+object : :class:`~otguibase.OTStudy`
+    The study to remove"
+ 
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::GetInstances
+"Studies accessor.
+
+Returns
+-------
+studies : sequence of :class:`~otguibase.OTStudy`
+    Studies in the tree view"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::GetInstanceByName
+"Study accessor.
+
+Parameters
+----------
+name : str
+    The study name
+
+Returns
+-------
+study : :class:`~otguibase.OTStudy`
+    Study"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::GetAvailableName
+"Available name for a study accessor.
+
+Returns
+-------
+name : str
+    Available name for a study"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::HasInstanceNamed
+"Whether the tree view contains a study named with the given name.
+
+Parameters
+----------
+name : str
+    A study name
+
+Returns
+-------
+contains : bool
+    Whether it contains a study named with the given name"
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") OTGUI::OTStudy::add
 "Add an object to the study.
 
@@ -74,11 +174,11 @@ models : sequence of :class:`~otguibase.PhysicalModel`
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::OTStudy::getLimitStates
-"Limit state accessor.
+"Limit states accessor.
 
 Returns
 -------
-models : sequence of :class:`~otguibase.LimitState`
+states : sequence of :class:`~otguibase.LimitState`
     Limit states"
  
 // ---------------------------------------------------------------------
@@ -88,17 +188,213 @@ models : sequence of :class:`~otguibase.LimitState`
 
 Returns
 -------
-models : sequence of :class:`~otguibase.Analysis`
+analyses : sequence of :class:`~otguibase.Analysis`
     Analyses"
     
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::OTStudy::getDesignOfExperiments
-"Limit state accessor.
+"Designs of experiment accessor.
 
 Returns
 -------
-models : sequence of :class:`~otguibase.DesignOfExperiments`
-    Limit states"
+designs : sequence of :class:`~otguibase.DesignOfExperiment`
+    Designs of experiment"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::getDataModels
+"Data models accessor.
+
+Returns
+-------
+models : sequence of :class:`~otguibase.DataModel`
+    Data models"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::getPhysicalModelByName
+"Physical model accessor.
+
+Parameters
+----------
+name : str
+    The model name
+
+Returns
+-------
+model : :class:`~otguibase.PhysicalModel`
+    Physical model"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::getDesignOfExperimentByName
+"Design of experiment accessor.
+
+Parameters
+----------
+name : str
+    The design of experiment name
+
+Returns
+-------
+design : :class:`~otguibase.DesignOfExperiment`
+    Design of experiment"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::getAnalysisByName
+"Analysis accessor.
+
+Parameters
+----------
+name : str
+    The analysis name
+
+Returns
+-------
+analysis : :class:`~otguibase.Analysis`
+    Analysis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::getDataModelByName
+"Data model accessor.
+
+Parameters
+----------
+name : str
+    The data model name
+
+Returns
+-------
+model : :class:`~otguibase.DataModel`
+    Data model"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::getAvailableAnalysisName
+"Available name for an analysis accessor.
+
+Returns
+-------
+name : str
+    Available name for an analysis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::getAvailableDataModelName
+"Available name for a data model accessor.
+
+Returns
+-------
+name : str
+    Available name for a data model"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::getAvailableDesignOfExperimentName
+"Available name for a design of experiment accessor.
+
+Returns
+-------
+name : str
+    Available name for a design of experiment"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::getAvailableLimitStateName
+"Available name for a limit state accessor.
+
+Returns
+-------
+name : str
+    Available name for a limit state"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::getAvailablePhysicalModelName
+"Available name for a physical model accessor.
+
+Returns
+-------
+name : str
+    Available name for a physical model"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::hasAnalysisNamed
+"Whether it contains an analysis named with the given name.
+
+Parameters
+----------
+name : str
+    An analysis name
+
+Returns
+-------
+contains : bool
+    Whether it contains an analysis named with the given name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::hasDataModelNamed
+"Whether it contains a data model named with the given name.
+
+Parameters
+----------
+name : str
+    A data model name
+
+Returns
+-------
+contains : bool
+    Whether it contains a data model named with the given name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::hasPhysicalModelNamed
+"Whether it contains a physical model named with the given name.
+
+Parameters
+----------
+name : str
+    A physical model name
+
+Returns
+-------
+contains : bool
+    Whether it contains a physical model named with the given name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::hasDesignOfExperimentNamed
+"Whether it contains a design of experiment named with the given name.
+
+Parameters
+----------
+name : str
+    A design of experiment name
+
+Returns
+-------
+contains : bool
+    Whether it contains a design of experiment named with the given name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OTStudy::hasLimitStateNamed
+"Whether it contains a limit state named with the given name.
+
+Parameters
+----------
+name : str
+    A limit state name
+
+Returns
+-------
+contains : bool
+    Whether it contains a limit state named with the given name"
+
 
 

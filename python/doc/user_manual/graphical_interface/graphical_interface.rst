@@ -7,5 +7,6 @@ User manual for graphical interface
 
    /user_manual/graphical_interface/getting_started/user_manual_getting_started
    /user_manual/graphical_interface/physical_model/user_manual_physical_model
+   /user_manual/graphical_interface/data_model/user_manual_data_model
    /user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis
    /user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis

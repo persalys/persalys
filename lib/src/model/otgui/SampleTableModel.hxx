@@ -23,12 +23,11 @@
 
 #include "openturns/NumericalSample.hxx"
 
+#include "CustomStandardItemModel.hxx"
 #include "otgui/OTGuiprivate.hxx"
 
-#include <QStandardItemModel>
-
 namespace OTGUI {
-class OTGUI_API SampleTableModel : public QStandardItemModel
+class OTGUI_API SampleTableModel : public CustomStandardItemModel
 {
 public:
   SampleTableModel(const OT::NumericalSample & data, QObject * parent = 0);

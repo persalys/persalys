@@ -13,12 +13,22 @@ ot_add_source_file ( OTguiMenuBar.cxx )
 ot_add_source_file ( OTguiStatusBar.cxx )
 ot_add_source_file ( OTguiSubWindow.cxx )
 ot_add_source_file ( OTguiWizard.cxx )
+ot_add_source_file ( ImportDataPage.cxx )
+ot_add_source_file ( ImportDataModelPage.cxx )
+ot_add_source_file ( ImportDesignOfExperimentPage.cxx )
+ot_add_source_file ( DataModelWizard.cxx )
+ot_add_source_file ( DataModelWindow.cxx )
+ot_add_source_file ( DataAnalysisWindow.cxx )
+ot_add_source_file ( DataAnalysisResultWindow.cxx )
 ot_add_source_file ( AnalysisWizard.cxx )
 ot_add_source_file ( OTguiMdiArea.cxx )
+ot_add_source_file ( WelcomeWindow.cxx )
+ot_add_source_file ( OTStudyWindow.cxx )
 ot_add_source_file ( BlockSizeGroupBox.cxx )
+ot_add_source_file ( MinMaxTableGroupBox.cxx )
+ot_add_source_file ( MomentsEstimatesTableGroupBox.cxx )
 ot_add_source_file ( ResultWindow.cxx )
 ot_add_source_file ( AnalysisExecutionFailedWindow.cxx )
-ot_add_source_file ( ImportTablePage.cxx )
 ot_add_source_file ( DeterministicDesignPage.cxx )
 ot_add_source_file ( ProbabilisticDesignPage.cxx )
 ot_add_source_file ( PhysicalModelWindowWidget.cxx )
@@ -74,7 +84,6 @@ ot_install_header_file ( SobolResultWindow.hxx )
 ot_install_header_file ( SRCResultWindow.hxx )
 ot_install_header_file ( MonteCarloReliabilityResultWindow.hxx )
 ot_install_header_file ( StudyTreeView.hxx )
-ot_install_header_file ( ImportTablePage.hxx )
 ot_install_header_file ( DeterministicDesignPage.hxx )
 ot_install_header_file ( ProbabilisticDesignPage.hxx )
 ot_install_header_file ( StopCriteriaGroupBox.hxx )
@@ -86,9 +95,19 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/OTguiSubWindow.hxx
                                   otgui/OTguiWizard.hxx
                                   otgui/OTguiMdiArea.hxx
+                                  otgui/WelcomeWindow.hxx
+                                  otgui/OTStudyWindow.hxx
                                   otgui/ResultWindow.hxx
                                   otgui/BlockSizeGroupBox.hxx
-                                  otgui/ImportTablePage.hxx
+                                  otgui/MinMaxTableGroupBox.hxx
+                                  otgui/MomentsEstimatesTableGroupBox.hxx
+                                  otgui/ImportDataPage.hxx
+                                  otgui/ImportDataModelPage.hxx
+                                  otgui/ImportDesignOfExperimentPage.hxx
+                                  otgui/DataModelWizard.hxx
+                                  otgui/DataModelWindow.hxx
+                                  otgui/DataAnalysisWindow.hxx
+                                  otgui/DataAnalysisResultWindow.hxx
                                   otgui/StudyTreeView.hxx
                                   otgui/DeterministicDesignPage.hxx
                                   otgui/ProbabilisticDesignPage.hxx

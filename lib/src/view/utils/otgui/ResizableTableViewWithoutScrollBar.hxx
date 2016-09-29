@@ -30,7 +30,8 @@ class ResizableTableViewWithoutScrollBar : public CopyableTableView
 
 public:
   ResizableTableViewWithoutScrollBar(QWidget * parent = 0);
-
+  QSize sizeHint() const;
+  QSize minimumSizeHint() const;
   void resizeToContents();
 };
 }

@@ -27,10 +27,11 @@ namespace OTGUI {
 DesignOfExperimentItem::DesignOfExperimentItem(const DesignOfExperiment & designOfExperiment)
   : QObject()
   , QStandardItem(QString::fromUtf8(designOfExperiment.getName().c_str()))
-  , Observer("DesignOfExperiment")
+  , Observer(designOfExperiment.getImplementation()->getClassName())
   , designOfExperiment_(designOfExperiment)
 {
-  setData("DesignOfExperiment", Qt::UserRole);
+  designOfExperiment_.addObserver(this);
+  setData(designOfExperiment_.getImplementation()->getClassName().c_str(), Qt::UserRole);
 }
 
 

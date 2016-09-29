@@ -42,45 +42,6 @@ OTGUI_DesignOfExperiment_setPhysicalModel_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_DesignOfExperiment_getResult_doc
-"Result accessor.
-
-Returns
--------
-columns : :class:`~otguibase.SimulationAnalysisResult`
-   Result"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getResult
-OTGUI_DesignOfExperiment_getResult_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_setInputSample_doc
-"Input sample accessor.
-
-Parameters
-----------
-columns : :class:`~openturns.NumericalSample`
-   Input sample"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::setInputSample
-OTGUI_DesignOfExperiment_setInputSample_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_getInputSample_doc
-"Input sample accessor.
-
-Returns
--------
-columns : :class:`~openturns.NumericalSample`
-   Input sample"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getInputSample
-OTGUI_DesignOfExperiment_getInputSample_doc
-
-// ---------------------------------------------------------------------
-
 %define OTGUI_DesignOfExperiment_getPythonScript_doc
 "Python script accessor.
 
@@ -107,16 +68,21 @@ OTGUI_DesignOfExperiment_getVariableInputNames_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_DesignOfExperiment_evaluate_doc
+%define OTGUI_DesignOfExperiment_run_doc
 "Evaluate design."
 %enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::evaluate
-OTGUI_DesignOfExperiment_evaluate_doc
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::run
+OTGUI_DesignOfExperiment_run_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_DesignOfExperiment_clearResult_doc
-"Clear result."
+%define OTGUI_DesignOfExperiment_hasPhysicalModel_doc
+"Whether it contains a physical model.
+
+Returns
+-------
+hasPhysicalModel : bool
+    Whether it contains a physical model"
 %enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::clearResult
-OTGUI_DesignOfExperiment_clearResult_doc
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::hasPhysicalModel
+OTGUI_DesignOfExperiment_hasPhysicalModel_doc

@@ -18,102 +18,40 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ImportTablePage.hxx"
+#include "otgui/ImportDesignOfExperimentPage.hxx"
 
 #include "otgui/HorizontalHeaderViewWithCombobox.hxx"
 #include "otgui/SampleTableModel.hxx"
 
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QHBoxLayout>
-#include <QPushButton>
-#include <QFileDialog>
-#include <QFileInfo>
-#include <QSettings>
-#include <QApplication>
-#include <QMessageBox>
 #include <QScrollBar>
 
 using namespace OT;
 
 namespace OTGUI {
 
-ImportTablePage::ImportTablePage(const DesignOfExperiment & designOfExperiment, QWidget *parent)
-  : QWizardPage(parent)
-  , pageValidity_(false)
+ImportDesignOfExperimentPage::ImportDesignOfExperimentPage(const DesignOfExperiment & designOfExperiment, QWidget *parent)
+  : ImportDataPage(parent)
 {
   if (designOfExperiment.getImplementation()->getClassName() == "FromFileDesignOfExperiment")
+  {
     designOfExperiment_ = *dynamic_cast<const FromFileDesignOfExperiment*>(&*designOfExperiment.getImplementation());
+    if (designOfExperiment_.getFileName().size())
+      setData(QString::fromUtf8(designOfExperiment_.getFileName().c_str()));
+  }
   else
     designOfExperiment_ = FromFileDesignOfExperiment(designOfExperiment.getName(), designOfExperiment.getPhysicalModel());
-
-  buildInterface();
 }
 
 
-void ImportTablePage::buildInterface()
+void ImportDesignOfExperimentPage::setTable(OT::NumericalSample & sample)
 {
-  setWindowTitle(tr("Import table from file"));
-
-  QGridLayout * mainGridLayout = new QGridLayout(this);
-
-  // first row
-  QHBoxLayout * hboxLayout = new QHBoxLayout;
-  QLabel * label = new QLabel(tr("Data file"));
-  hboxLayout->addWidget(label);
-
-  filePathLineEdit_ = new QLineEdit;
-  filePathLineEdit_->setText(QString::fromUtf8(designOfExperiment_.getFileName().c_str()));
-  hboxLayout->addWidget(filePathLineEdit_);
-
-  QPushButton * openFileButton = new QPushButton(tr("Import..."));
-  connect(openFileButton, SIGNAL(clicked()), this, SLOT(openFileRequested()));
-  hboxLayout->addWidget(openFileButton);
-
-  mainGridLayout->addLayout(hboxLayout, 0, 0, 1, 3);
-
-  // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
-  mainGridLayout->addWidget(errorMessageLabel_, 2, 0, 1, 1);
-
-  // file preview
-  QGroupBox * groupBox = new QGroupBox(tr("File Preview"));
-  QGridLayout * gridLayout = new QGridLayout(groupBox);
-  gridLayout->setSpacing(6);
-  gridLayout->setContentsMargins(11, 11, 11, 11);
-
-  dataPreviewTableView_ = new ExportableTableView(groupBox);
-  gridLayout->addWidget(dataPreviewTableView_, 0, 0, 1, 1);
-  if (designOfExperiment_.getFileName().size() != 0)
-  {
-    try
-    {
-      NumericalSample sampleFromFile = FromFileDesignOfExperiment::ImportSample(designOfExperiment_.getFileName());
-      setTable(sampleFromFile);
-      pageValidity_ = true;
-    }
-    catch (std::exception & ex)
-    {
-      QString message = tr("Impossible to load the file.") + "\n";
-      message = QString("%1%2%3%4").arg("<font color=red>").arg(message).arg(ex.what()).arg("</font>");
-      errorMessageLabel_->setText(message);
-      pageValidity_ = false;
-    }
-  }
-  mainGridLayout->addWidget(groupBox, 1, 0, 1, 1);
-}
-
-
-void ImportTablePage::setTable(NumericalSample & sampleFromFile)
-{
-  // check sampleFromFile
-  if (!designOfExperiment_.getInputColumns().check(sampleFromFile.getDimension()))
+  // check sample From File
+  if (!designOfExperiment_.getInputColumns().check(sample.getDimension()))
     throw InvalidArgumentException(HERE) << tr("Impossible to load sample marginals").toLocal8Bit().data();
 
-  Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
+  const Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
 
-  if (sampleFromFile.getDimension() < inputNames.getSize())
+  if (sample.getDimension() < inputNames.getSize())
     throw InvalidArgumentException(HERE) << tr("The file contains a sample with a dimension inferior to the number of inputs of the physical model: ").toLocal8Bit().data()
                                          << inputNames.getSize();
 
@@ -127,14 +65,14 @@ void ImportTablePage::setTable(NumericalSample & sampleFromFile)
   }
 
   // set sample description
-  Description desc = Description(sampleFromFile.getDimension());
+  Description desc(sample.getDimension());
   for (UnsignedInteger i=0; i<columns.getSize(); ++i)
     desc[columns[i]] = inputNames[i];
-  sampleFromFile.setDescription(desc);
+  sample.setDescription(desc);
 
   // set table model
-  dataPreviewTableView_->setModel(new SampleTableModel(sampleFromFile));
-  connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this, SLOT(columnChanged()));
+  dataPreviewTableView_->setModel(new SampleTableModel(sample));
+  connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this, SLOT(columnNameChanged()));
 
   // set comboboxes items: each of them contains the input Names and an empty item
   QStringList comboBoxItems;
@@ -143,7 +81,7 @@ void ImportTablePage::setTable(NumericalSample & sampleFromFile)
   comboBoxItems << "";
 
   // set horizontal header view
-  QVector<int> columnsWithCombo(sampleFromFile.getDimension());
+  QVector<int> columnsWithCombo(sample.getDimension());
   for (int i=0; i<columnsWithCombo.size(); ++i)
     columnsWithCombo[i] = i;
   HorizontalHeaderViewWithCombobox * header = new HorizontalHeaderViewWithCombobox(comboBoxItems, columnsWithCombo, dataPreviewTableView_);
@@ -158,53 +96,15 @@ void ImportTablePage::setTable(NumericalSample & sampleFromFile)
 }
 
 
-void ImportTablePage::openFileRequested()
+void ImportDesignOfExperimentPage::setFileName(const QString & fileName)
 {
-  QSettings settings;
-  QString currentDir = settings.value("currentDir").toString();
-  if (currentDir.isEmpty())
-    currentDir = QDir::homePath();
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Data to import..."),
-                     currentDir,
-                     tr("CSV source files (*.csv);; Text Files (*.txt)"));
-
-  if (!fileName.isEmpty())
-  {
-    QFile file(fileName);
-    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
-
-    // check
-    if (!file.open(QFile::ReadOnly))
-    {
-      QMessageBox::warning(this, tr("Warning"),
-                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
-    }
-    else
-    {
-      filePathLineEdit_->setText(fileName);
-      try
-      {
-        errorMessageLabel_->setText("");
-        designOfExperiment_.setFileName(fileName.toLocal8Bit().data());
-        NumericalSample sampleFromFile = FromFileDesignOfExperiment::ImportSample(fileName.toLocal8Bit().data());
-        setTable(sampleFromFile);
-        pageValidity_ = true;
-      }
-      catch (std::exception & ex)
-      {
-        QString message = tr("Impossible to load the file.") + "\n";
-        message = QString("%1%2%3%4").arg("<font color=red>").arg(message).arg(ex.what()).arg("</font>");
-        errorMessageLabel_->setText(message);
-        pageValidity_ = false;
-      }
-    }
-  }
+  designOfExperiment_.setFileName(fileName.toLocal8Bit().data());
 }
 
 
-void ImportTablePage::columnChanged()
+void ImportDesignOfExperimentPage::columnNameChanged()
 {
-  Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
+  const Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
   // test the unicity of each variable
   Indices columns;
   for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
@@ -245,7 +145,7 @@ void ImportTablePage::columnChanged()
 }
 
 
-bool ImportTablePage::validatePage()
+bool ImportDesignOfExperimentPage::validatePage()
 {
   if (pageValidity_)
     emit designOfExperimentChanged(designOfExperiment_);

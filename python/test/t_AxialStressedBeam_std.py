@@ -25,7 +25,7 @@ myStudy.add(myPhysicalModel)
 ## Design of Experiment - Parametric analysis ##
 aDesign = otguibase.DesignOfExperiment('aDesign', myPhysicalModel)
 myStudy.add(aDesign)
-aDesign.evaluate()
+aDesign.run()
 
 ## Quadratic Cumul ##
 taylorExpansionsMoments = otguibase.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', myPhysicalModel)

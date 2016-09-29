@@ -32,14 +32,14 @@ static Factory<ModelEvaluation> RegisteredFactory;
 
 /* Default constructor */
 ModelEvaluation::ModelEvaluation()
-  : AnalysisImplementation()
+  : PhysicalModelAnalysis()
 {
 }
 
 
 /* Constructor with parameters */
 ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & physicalModel)
-  : AnalysisImplementation(name, physicalModel)
+  : PhysicalModelAnalysis(name, physicalModel)
 {
   initializeParameters(physicalModel.getInputs());
 }
@@ -48,7 +48,7 @@ ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & phys
 /* Constructor with parameters */
 ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & physicalModel,
                                  const NumericalPoint & inputsValues)
-  : AnalysisImplementation(name, physicalModel)
+  : PhysicalModelAnalysis(name, physicalModel)
   , inputNames_(getPhysicalModel().getInputNames())
   , inputValues_(inputsValues)
 {
@@ -164,7 +164,7 @@ bool ModelEvaluation::analysisLaunched() const
 /* Method save() stores the object through the StorageManager */
 void ModelEvaluation::save(Advocate & adv) const
 {
-  AnalysisImplementation::save(adv);
+  PhysicalModelAnalysis::save(adv);
   adv.saveAttribute("inputNames_", inputNames_);
   adv.saveAttribute("inputValues_", inputValues_);
   adv.saveAttribute("result_", result_);
@@ -174,7 +174,7 @@ void ModelEvaluation::save(Advocate & adv) const
 /* Method load() reloads the object from the StorageManager */
 void ModelEvaluation::load(Advocate & adv)
 {
-  AnalysisImplementation::load(adv);
+  PhysicalModelAnalysis::load(adv);
   adv.loadAttribute("inputNames_", inputNames_);
   adv.loadAttribute("inputValues_", inputValues_);
   adv.loadAttribute("result_", result_);

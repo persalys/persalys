@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Results of a Monte Carlo analysis 
+ *  @brief Results of a data analysis
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,14 +18,17 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_MONTECARLORESULT_HXX
-#define OTGUI_MONTECARLORESULT_HXX
+#ifndef OTGUI_DATAANALYSISRESULT_HXX
+#define OTGUI_DATAANALYSISRESULT_HXX
 
-#include "SimulationAnalysisResult.hxx"
+#include "DataSample.hxx"
+#include "otgui/OTGuiprivate.hxx"
+
+#include "openturns/OTType.hxx"
 #include "openturns/Distribution.hxx"
 
 namespace OTGUI {
-class OTGUI_API MonteCarloResult : public SimulationAnalysisResult
+class OTGUI_API DataAnalysisResult : public DataSample
 {
   CLASSNAME;
 
@@ -33,32 +36,40 @@ public:
   typedef OT::Collection<OT::NumericalPoint> NumericalPointCollection;
   typedef OT::PersistentCollection<OT::Distribution> DistributionCollection;
 
+  friend class DataAnalysis;
+
   /** Default constructor */
-  MonteCarloResult();
+  DataAnalysisResult();
   /** Constructor with parameters */
-  MonteCarloResult(OT::NumericalSample inputSample, OT::NumericalSample outputSample);
+  DataAnalysisResult(const OT::NumericalSample & inputSample,
+                     const OT::NumericalSample & outputSample);
 
   /** Virtual constructor */
-  virtual MonteCarloResult * clone() const;
+  virtual DataAnalysisResult * clone() const;
 
-  OT::NumericalPoint getMean();
-  OT::NumericalPoint getCoefficientOfVariation();
-  OT::NumericalPoint getMedian();
-  OT::NumericalPoint getStandardDeviation();
-  OT::NumericalPoint getVariance();
-  OT::NumericalPoint getSkewness();
-  OT::NumericalPoint getKurtosis();
-  OT::NumericalPoint getFirstQuartile();
-  OT::NumericalPoint getThirdQuartile();
-  OT::Interval getMeanConfidenceInterval(const double level=0.95);
-  OT::Interval getStdConfidenceInterval(const double level=0.95);
-  NumericalPointCollection getOutliers();
+  OT::NumericalPoint getMin() const;
+  OT::NumericalPoint getMax() const;
 
-  NumericalSampleCollection getPDF();
-  NumericalSampleCollection getCDF();
+  OT::NumericalPoint getMean() const;
+  OT::NumericalPoint getCoefficientOfVariation() const;
+  OT::NumericalPoint getMedian() const;
+  OT::NumericalPoint getStandardDeviation() const;
+  OT::NumericalPoint getVariance() const;
+  OT::NumericalPoint getSkewness() const;
+  OT::NumericalPoint getKurtosis() const;
+  OT::NumericalPoint getFirstQuartile() const;
+  OT::NumericalPoint getThirdQuartile() const;
+  OT::Interval getMeanConfidenceInterval() const;
+  OT::Interval getStdConfidenceInterval() const;
+  NumericalPointCollection getOutliers() const;
+
+  DataSample::NumericalSampleCollection getPDF() const;
+  DataSample::NumericalSampleCollection getCDF() const;
 
   double getElapsedTime() const;
   void setElapsedTime(const double seconds);
+
+  bool isValid() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -66,15 +77,9 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
-protected:
-  void computeCoefficientOfVariation();
-  void computeMeanConfidenceInterval(const double level);
-  void computeStdConfidenceInterval(const double level);
-  void computeOutliers();
-  void computeFittedDistributionPDF_CDF();
-
 private:
-  double levelConfidenceInterval_;
+  OT::NumericalPoint min_;
+  OT::NumericalPoint max_;
   OT::NumericalPoint mean_;
   OT::NumericalPoint coefficientOfVariation_;
   OT::NumericalPoint median_;

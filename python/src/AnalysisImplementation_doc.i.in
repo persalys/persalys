@@ -6,32 +6,6 @@ OTGUI_Analysis_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_Analysis_setPhysicalModel_doc
-"Physical model accessor.
-
-Parameters
-----------
-model : :class:`~otguibase.PhysicalModel`
-    Physical model"
-%enddef
-%feature("docstring") OTGUI::AnalysisImplementation::setPhysicalModel
-OTGUI_Analysis_setPhysicalModel_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_Analysis_getPhysicalModel_doc
-"Physical model accessor.
-
-Returns
--------
-model : :class:`~otguibase.PhysicalModel`
-    Physical model"
-%enddef
-%feature("docstring") OTGUI::AnalysisImplementation::getPhysicalModel
-OTGUI_Analysis_getPhysicalModel_doc
-
-// ---------------------------------------------------------------------
-
 %define OTGUI_Analysis_getPythonScript_doc
 "Physical model accessor.
 

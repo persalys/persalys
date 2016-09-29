@@ -38,10 +38,12 @@ public:
 
   void update(Observable * source, const OT::String & message);
 
+  void addDataModelItem(DesignOfExperiment & dataModel);
   void addPhysicalModelItem(PhysicalModel & physicalModel);
   void addDesignOfExperimentItem(DesignOfExperiment & design);
   void addLimitStateItem(LimitState & limitState);
   void addAnalysisItem(Analysis & analysis);
+  void addDataModelAnalysisItem(Analysis & analysis, AnalysisItem * item);
   void addDeterministicAnalysisItem(Analysis & analysis, AnalysisItem * item);
   void addProbabilisticAnalysisItem(Analysis & analysis, AnalysisItem * item);
   void addReliabilityAnalysisItem(Analysis & analysis, AnalysisItem * item);
@@ -54,6 +56,7 @@ public slots:
   void updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
   void removeItem(QStandardItem*);
 signals:
+  void newDataModelItemCreated(DesignOfExperimentItem*);
   void newPhysicalModelItemCreated(PhysicalModelItem*);
   void newProbabilisticModelItemCreated(ProbabilisticModelItem*);
   void newDesignOfExperimentItemCreated(DesignOfExperimentItem*);

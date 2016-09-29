@@ -21,11 +21,11 @@
 #ifndef OTGUI_RELIABILITYANALYSIS_HXX
 #define OTGUI_RELIABILITYANALYSIS_HXX
 
-#include "AnalysisImplementation.hxx"
+#include "PhysicalModelAnalysis.hxx"
 #include "LimitState.hxx"
 
 namespace OTGUI {
-class OTGUI_API ReliabilityAnalysis : public AnalysisImplementation
+class OTGUI_API ReliabilityAnalysis : public PhysicalModelAnalysis
 {
 public:
   /** Default constructor */

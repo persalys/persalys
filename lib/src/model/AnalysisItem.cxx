@@ -30,6 +30,7 @@ AnalysisItem::AnalysisItem(const Analysis & analysis, const String & typeAnalysi
   , Observer("Analysis")
   , analysis_(analysis)
 {
+  analysis_.addObserver(this);
   setData(QString::fromUtf8(typeAnalysis.c_str()), Qt::UserRole);
 }
 

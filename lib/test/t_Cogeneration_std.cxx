@@ -57,16 +57,16 @@ int main(int argc, char *argv[])
     // First parametric analysis
     FixedDesignOfExperiment aDesign("aDesign", myPhysicalModel);
     myStudy.add(aDesign);
-    aDesign.evaluate();
-    NumericalSample resultSample1(aDesign.getResult().getOutputSample());
+    aDesign.run();
+    NumericalSample resultSample1(aDesign.getOutputSample());
 
     // Second parametric analysis
     aDesign.getInputSample().exportToCSVFile("sample.csv");
     Indices inputIndices(3);
     inputIndices.fill();
     FromFileDesignOfExperiment anotherdesign("anotherDesign", myPhysicalModel, "sample.csv", inputIndices);
-    anotherdesign.evaluate();
-    NumericalSample resultSample2(anotherdesign.getResult().getOutputSample());
+    anotherdesign.run();
+    NumericalSample resultSample2(anotherdesign.getOutputSample());
 
     // Reference
 

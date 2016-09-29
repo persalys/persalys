@@ -42,7 +42,6 @@ int main(int argc, char *argv[])
   MainWindow window;
   window.resize(1024, 768);
   window.show();
-  window.launchInitialMessageBox();
 
   return app.exec();
 }

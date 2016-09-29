@@ -6,17 +6,11 @@ OTGUI_DesignOfExperiment_doc
 OTGUI_DesignOfExperiment_getPhysicalModel_doc
 %feature("docstring") OTGUI::DesignOfExperiment::setPhysicalModel
 OTGUI_DesignOfExperiment_setPhysicalModel_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getResult
-OTGUI_DesignOfExperiment_getResult_doc
-%feature("docstring") OTGUI::DesignOfExperiment::setInputSample
-OTGUI_DesignOfExperiment_setInputSample_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getInputSample
-OTGUI_DesignOfExperiment_getInputSample_doc
 %feature("docstring") OTGUI::DesignOfExperiment::getPythonScript
 OTGUI_DesignOfExperiment_getPythonScript_doc
 %feature("docstring") OTGUI::DesignOfExperiment::getVariableInputNames
 OTGUI_DesignOfExperiment_getVariableInputNames_doc
-%feature("docstring") OTGUI::DesignOfExperiment::evaluate
-OTGUI_DesignOfExperiment_evaluate_doc
-%feature("docstring") OTGUI::DesignOfExperiment::clearResult
-OTGUI_DesignOfExperiment_clearResult_doc
+%feature("docstring") OTGUI::DesignOfExperiment::run
+OTGUI_DesignOfExperiment_run_doc
+%feature("docstring") OTGUI::DesignOfExperiment::hasPhysicalModel
+OTGUI_DesignOfExperiment_hasPhysicalModel_doc

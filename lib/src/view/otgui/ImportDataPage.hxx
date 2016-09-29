@@ -18,39 +18,37 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_IMPORTTABLEPAGE_HXX
-#define OTGUI_IMPORTTABLEPAGE_HXX
+#ifndef OTGUI_IMPORTDATAPAGE_HXX
+#define OTGUI_IMPORTDATAPAGE_HXX
 
 #include "otgui/ExportableTableView.hxx"
-#include "otgui/DesignOfExperiment.hxx"
-#include "otgui/FromFileDesignOfExperiment.hxx"
+
+#include "openturns/NumericalSample.hxx"
 
 #include <QWizardPage>
 #include <QLineEdit>
 #include <QLabel>
 
 namespace OTGUI {
-class ImportTablePage : public QWizardPage
+class ImportDataPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  ImportTablePage(const DesignOfExperiment & designOfExperiment, QWidget *parent = 0);
+  ImportDataPage(QWidget *parent = 0);
 
-  bool validatePage();
+  bool validatePage() = 0;
 
 protected:
   void buildInterface();
-  void setTable(OT::NumericalSample & sample);
+  virtual void setTable(OT::NumericalSample & sample) = 0;
+  virtual void setFileName(const QString & fileName) = 0;
+  void setData(const QString & fileName);
 
 public slots:
   void openFileRequested();
-  void columnChanged();
-signals:
-  void designOfExperimentChanged(const DesignOfExperiment & designOfExperiment);
 
-private:
-  FromFileDesignOfExperiment designOfExperiment_;
+protected:
   bool pageValidity_;
   QLineEdit * filePathLineEdit_;
   ExportableTableView * dataPreviewTableView_;

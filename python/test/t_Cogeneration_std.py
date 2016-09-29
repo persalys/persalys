@@ -36,10 +36,10 @@ outputSample = [[0.060036508072],
 ## Design of Experiment - Parametric analysis ##
 aDesign = otguibase.DesignOfExperiment('aDesign', myPhysicalModel)
 myStudy.add(aDesign)
-aDesign.evaluate()
+aDesign.run()
 
 # Comparaison
-openturns.testing.assert_almost_equal(outputSample, aDesign.getResult().getOutputSample(), 1e-16)
+openturns.testing.assert_almost_equal(outputSample, aDesign.getOutputSample(), 1e-16)
 
 ## Quadratic Cumul ##
 taylorExpansionsMoments = otguibase.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', myPhysicalModel)
@@ -59,15 +59,15 @@ montecarlo.run()
 montecarloResult = montecarlo.getResult()
 
 # Comparaison
-openturns.testing.assert_almost_equal(0.0597109963361, montecarloResult.getMean()[0], 1e-13)
-openturns.testing.assert_almost_equal(0.0114128746587, montecarloResult.getStandardDeviation()[0], 1e-13)
+openturns.testing.assert_almost_equal(0.0597109963361, montecarloResult.getMean()[3], 1e-13)
+openturns.testing.assert_almost_equal(0.0114128746587, montecarloResult.getStandardDeviation()[3], 1e-13)
 
 meanCI = montecarloResult.getMeanConfidenceInterval()
-openturns.testing.assert_almost_equal(0.0590036320343, meanCI.getLowerBound()[0], 1e-13)
-openturns.testing.assert_almost_equal(0.0604183606379, meanCI.getUpperBound()[0], 1e-13)
+openturns.testing.assert_almost_equal(0.0590036320343, meanCI.getLowerBound()[3], 1e-13)
+openturns.testing.assert_almost_equal(0.0604183606379, meanCI.getUpperBound()[3], 1e-13)
 stdCi = montecarloResult.getStdConfidenceInterval()
-openturns.testing.assert_almost_equal(0.0109336748621, stdCi.getLowerBound()[0], 1e-13)
-openturns.testing.assert_almost_equal(0.0119363302339, stdCi.getUpperBound()[0], 1e-13)
+openturns.testing.assert_almost_equal(0.0109336748621, stdCi.getLowerBound()[3], 1e-13)
+openturns.testing.assert_almost_equal(0.0119363302339, stdCi.getUpperBound()[3], 1e-13)
 
 ## Sobol ##
 sobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel)

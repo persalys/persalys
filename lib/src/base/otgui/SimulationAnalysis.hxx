@@ -21,17 +21,18 @@
 #ifndef OTGUI_SIMULATIONANALYSIS_HXX
 #define OTGUI_SIMULATIONANALYSIS_HXX
 
-#include "AnalysisImplementation.hxx"
+#include "PhysicalModelAnalysis.hxx"
 
 namespace OTGUI {
-class OTGUI_API SimulationAnalysis : public AnalysisImplementation
+class OTGUI_API SimulationAnalysis : public PhysicalModelAnalysis
 {
-public:
+protected:
   /** Default constructor */
   SimulationAnalysis();
   /** Constructor with parameters */
   SimulationAnalysis(const OT::String & name, const PhysicalModel & physicalModel);
 
+public:
   /** Virtual constructor */
   virtual SimulationAnalysis * clone() const = 0;
 
@@ -39,7 +40,7 @@ public:
 //   OutputCollection getOutputs() const;
 //   void setOutputs(const OutputCollection & outputs);
 
-  OT::NumericalSample getInputSample(const OT::UnsignedInteger nbSimu);
+  OT::NumericalSample generateInputSample(const OT::UnsignedInteger nbSimu);
   OT::Description getOutputNames() const;
 
   OT::UnsignedInteger getSeed() const;
@@ -52,8 +53,8 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  OT::NumericalSample getOutputSample(OT::NumericalSample inputSample) const;
-  OT::NumericalSample getOutputSample(OT::NumericalSample inputSample, const OT::Description & outputNames) const;
+  OT::NumericalSample computeOutputSample(OT::NumericalSample inputSample) const;
+  OT::NumericalSample computeOutputSample(OT::NumericalSample inputSample, const OT::Description & outputNames) const;
 
 private:
   // TODO choose output(s) to evaluate

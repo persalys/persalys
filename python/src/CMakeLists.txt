@@ -56,6 +56,7 @@ ot_add_python_module (otguibase otguibase_module.i
                       Variable.i Variable_doc.i.in
                       Input.i Input_doc.i.in
                       Output.i Output_doc.i.in
+                      DataSample.i DataSample_doc.i.in
                       PhysicalModelImplementation.i PhysicalModelImplementation_doc.i.in
                       AnalyticalPhysicalModel.i AnalyticalPhysicalModel_doc.i.in
                       PythonPhysicalModel.i PythonPhysicalModel_doc.i.in
@@ -64,17 +65,20 @@ ot_add_python_module (otguibase otguibase_module.i
                       LimitStateImplementation.i LimitStateImplementation_doc.i.in
                       LimitState.i LimitState_doc.i.in
                       AnalysisImplementation.i AnalysisImplementation_doc.i.in
+                      DesignOfExperimentAnalysis.i
+                      PhysicalModelAnalysis.i
                       Analysis.i Analysis_doc.i.in
                       WithStopCriteriaAnalysis.i WithStopCriteriaAnalysis_doc.i.in
                       SimulationAnalysis.i SimulationAnalysis_doc.i.in
+                      DataAnalysisResult.i DataAnalysisResult_doc.i.in
+                      DataAnalysis.i DataAnalysis_doc.i.in
                       ModelEvaluationResult.i ModelEvaluationResult_doc.i.in
                       ModelEvaluation.i ModelEvaluation_doc.i.in
-                      SimulationAnalysisResult.i SimulationAnalysisResult_doc.i.in
                       DesignOfExperimentImplementation.i DesignOfExperimentImplementation_doc.i.in
                       DesignOfExperiment.i DesignOfExperiment_doc.i.in
                       FixedDesignOfExperiment.i FixedDesignOfExperiment_doc.i.in
                       FromFileDesignOfExperiment.i FromFileDesignOfExperiment_doc.i.in
-                      MonteCarloResult.i MonteCarloResult_doc.i.in
+                      DataModel.i DataModel_doc.i.in
                       MonteCarloAnalysis.i MonteCarloAnalysis_doc.i.in
                       TaylorExpansionMomentsResult.i TaylorExpansionMomentsResult_doc.i.in
                       TaylorExpansionMomentsAnalysis.i TaylorExpansionMomentsAnalysis_doc.i.in

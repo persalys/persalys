@@ -26,16 +26,18 @@ namespace OTGUI {
 
 /* Default constructor */
 DesignOfExperimentImplementation::DesignOfExperimentImplementation()
-  : PersistentObject()
+  : DataSample()
   , Observable()
+  , hasPhysicalModel_(true)
 {
 }
 
 
 /* Constructor with parameters */
 DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String & name, const PhysicalModel & physicalModel)
-  : PersistentObject()
+  : DataSample()
   , Observable()
+  , hasPhysicalModel_(true)
   , physicalModel_(physicalModel)
 {
   setName(name);
@@ -46,6 +48,12 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String 
 DesignOfExperimentImplementation* DesignOfExperimentImplementation::clone() const
 {
   return new DesignOfExperimentImplementation(*this);
+}
+
+
+bool DesignOfExperimentImplementation::hasPhysicalModel() const
+{
+  return hasPhysicalModel_;
 }
 
 
@@ -67,35 +75,9 @@ Description DesignOfExperimentImplementation::getVariableInputNames() const
 }
 
 
-NumericalSample DesignOfExperimentImplementation::getInputSample()
+void DesignOfExperimentImplementation::run()
 {
-  throw NotYetImplementedException(HERE) << "In DesignOfExperimentImplementation::getInputSample()";
-}
-
-
-void DesignOfExperimentImplementation::setInputSample(const OT::NumericalSample & sample)
-{
-  if (sample.getDimension() != physicalModel_.getInputs().getSize())
-    throw InvalidArgumentException(HERE) << "The sample has not a dimension equal to the number of inputs of the physical model.";
-  inputSample_ = sample;
-}
-
-
-SimulationAnalysisResult DesignOfExperimentImplementation::getResult() const
-{
-  return result_;
-}
-
-
-void DesignOfExperimentImplementation::clearResult()
-{
-  result_ = SimulationAnalysisResult();
-}
-
-
-void DesignOfExperimentImplementation::evaluate()
-{
-  result_ = SimulationAnalysisResult(getInputSample(), physicalModel_.getFunction()(getInputSample()));
+  setOutputSample(physicalModel_.getFunction()(getInputSample()));
   notify("analysisFinished");
 }
 
@@ -109,17 +91,17 @@ String DesignOfExperimentImplementation::getPythonScript() const
 /* Method save() stores the object through the StorageManager */
 void DesignOfExperimentImplementation::save(Advocate & adv) const
 {
-  PersistentObject::save(adv);
+  DataSample::save(adv);
+  adv.saveAttribute("hasPhysicalModel_", hasPhysicalModel_);
   adv.saveAttribute("physicalModel_", physicalModel_);
-  adv.saveAttribute("result_", result_);
 }
 
 
 /* Method load() reloads the object from the StorageManager */
 void DesignOfExperimentImplementation::load(Advocate & adv)
 {
-  PersistentObject::load(adv);
+  DataSample::load(adv);
+  adv.loadAttribute("hasPhysicalModel_", hasPhysicalModel_);
   adv.loadAttribute("physicalModel_", physicalModel_);
-  adv.loadAttribute("result_", result_);
 }
 }

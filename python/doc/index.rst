@@ -10,11 +10,10 @@ User documentation
 ------------------
 
 This documentation is made to guide the user to perform uncertainty studies thanks to the
-interface for OpenTURNS. The user manual aims at describing how the interface is working
-and what are all its functionalities. This manual explains also how the user can manually
-create and manipulate objects from the software thanks to the Python language. It lists
-all the objects and their methods and details their use and their arguments.
-The examples guide provides some studies illustrating the use of the interface.
+interface for OpenTURNS. The user manual aims at describing how the interface works.
+This manual explains also how the user can create and manipulate objects from the
+software thanks to the Python language. It lists all the objects and their methods.
+The examples guide provides several studies showing the use of the interface.
 
 .. toctree::
    :maxdepth: 2

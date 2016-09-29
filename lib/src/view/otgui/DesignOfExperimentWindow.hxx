@@ -41,11 +41,9 @@ public:
   static QVector<PlotWidget*> GetListScatterPlots(const OT::NumericalSample & inS, const OT::NumericalSample & outS,
                                                   const QStringList inNames, const QStringList inAxisNames,
                                                   const QStringList outNames, const QStringList outAxisNames);
-  static QWidget* GetMinMaxTableView(const SimulationAnalysisResult & result, const int outputIndex);
 
 protected:
   void buildInterface();
-  QWidget* getMinMaxTableWidget();
   void addTabsForOutputs();
 
 public slots:

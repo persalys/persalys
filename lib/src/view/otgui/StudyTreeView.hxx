@@ -46,6 +46,8 @@ protected:
 
 public slots:
   void createNewOTStudy();
+  void createNewDataModel();
+  void modifyDataModel();
   void createNewAnalyticalPhysicalModel();
   void createNewPythonPhysicalModel();
 #ifdef OTGUI_HAVE_YACS
@@ -61,12 +63,16 @@ public slots:
   void createNewSensitivityAnalysis();
   void createNewThresholdExceedance();
   void onCustomContextMenu(const QPoint & point);
-  void selectedItemChanged(const QModelIndex & index);
+  void selectedItemChanged(const QModelIndex & currentIndex);
+  void selectedItemChanged(const QModelIndex & currentIndex, const QModelIndex & previousIndex);
   void runDesignOfExperiment();
   void removeDesignOfExperiment();
   void findAnalysisItemAndLaunchExecution(OTStudyItem * otStudyItem, const QString & analysisName);
   void runAnalysis();
   void removeAnalysis();
+  void createNewOTStudyWindow(OTStudyItem * item);
+  void createNewDataModelWindow(DesignOfExperimentItem * item);
+  void createNewDataAnalysis();
   void createNewPhysicalModelWindow(PhysicalModelItem * item);
   void createNewProbabilisticModelWindow(ProbabilisticModelItem * item);
   void createNewDesignOfExperimentWindow(DesignOfExperimentItem* item);
@@ -96,6 +102,10 @@ signals:
 private:
   StudyTreeViewModel * treeViewModel_;
   QAction * closeOTStudy_;
+  QAction * newDataModel_;
+  QAction * modifyDataModel_;
+  QAction * removeDataModel_;
+  QAction * newDataAnalysis_;
   QAction * newAnalyticalPhysicalModel_;
   QAction * newPythonPhysicalModel_;
 #ifdef OTGUI_HAVE_YACS

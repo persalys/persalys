@@ -7,6 +7,8 @@ ot_add_current_dir_to_include_dirs ()
 set(BASE_SOURCEFILES DistributionDictionary.cxx
                      OTguiException.cxx
                      Observer.cxx Observable.cxx OTStudy.cxx Variable.cxx Input.cxx Output.cxx
+                     DataSample.cxx
+                     DataModel.cxx
                      PhysicalModel.cxx PhysicalModelImplementation.cxx AnalyticalPhysicalModel.cxx 
                      PythonPhysicalModel.cxx
                      PythonEvaluation.cxx
@@ -14,10 +16,11 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      FixedDesignOfExperiment.cxx
                      FromFileDesignOfExperiment.cxx
                      AnalysisImplementation.cxx Analysis.cxx SimulationAnalysis.cxx
+                     PhysicalModelAnalysis.cxx DesignOfExperimentAnalysis.cxx
                      WithStopCriteriaAnalysis.cxx
+                     DataAnalysisResult.cxx DataAnalysis.cxx
                      ModelEvaluationResult.cxx ModelEvaluation.cxx
-                     SimulationAnalysisResult.cxx
-                     MonteCarloResult.cxx MonteCarloAnalysis.cxx TaylorExpansionMomentsResult.cxx
+                     MonteCarloAnalysis.cxx TaylorExpansionMomentsResult.cxx
                      TaylorExpansionMomentsAnalysis.cxx SobolResult.cxx SobolAnalysis.cxx
                      SRCResult.cxx SRCAnalysis.cxx
                      LimitStateImplementation.cxx LimitState.cxx
@@ -34,6 +37,7 @@ ot_install_header_file ( OTguiException.hxx )
 ot_install_header_file ( Variable.hxx )
 ot_install_header_file ( Input.hxx )
 ot_install_header_file ( Output.hxx )
+ot_install_header_file ( DataSample.hxx )
 ot_install_header_file ( PhysicalModel.hxx )
 ot_install_header_file ( PhysicalModelImplementation.hxx )
 ot_install_header_file ( AnalyticalPhysicalModel.hxx )
@@ -42,15 +46,18 @@ ot_install_header_file ( DesignOfExperimentImplementation.hxx )
 ot_install_header_file ( DesignOfExperiment.hxx )
 ot_install_header_file ( FixedDesignOfExperiment.hxx )
 ot_install_header_file ( FromFileDesignOfExperiment.hxx )
+ot_install_header_file ( DataModel.hxx )
 ot_install_header_file ( AnalysisImplementation.hxx )
+ot_install_header_file ( PhysicalModelAnalysis.hxx )
+ot_install_header_file ( DesignOfExperimentAnalysis.hxx )
 ot_install_header_file ( Analysis.hxx )
 ot_install_header_file ( SimulationAnalysis.hxx )
-ot_install_header_file ( SimulationAnalysisResult.hxx )
 ot_install_header_file ( WithStopCriteriaAnalysis.hxx )
+ot_install_header_file ( DataAnalysisResult.hxx )
+ot_install_header_file ( DataAnalysis.hxx )
 ot_install_header_file ( ModelEvaluation.hxx )
 ot_install_header_file ( ModelEvaluationResult.hxx )
 ot_install_header_file ( MonteCarloAnalysis.hxx )
-ot_install_header_file ( MonteCarloResult.hxx )
 ot_install_header_file ( TaylorExpansionMomentsAnalysis.hxx )
 ot_install_header_file ( TaylorExpansionMomentsResult.hxx )
 ot_install_header_file ( SobolAnalysis.hxx )

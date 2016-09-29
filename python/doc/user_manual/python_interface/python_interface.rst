@@ -16,6 +16,7 @@ Model creation
     PhysicalModel
     AnalyticalPhysicalModel
     PythonPhysicalModel
+    DataModel
 
 Model evaluation
 ----------------
@@ -42,7 +43,6 @@ Central tendency
     :template: class.rst_t
 
     MonteCarloAnalysis
-    MonteCarloResult
     TaylorExpansionMomentsAnalysis
     TaylorExpansionMomentsResult
 
@@ -95,6 +95,18 @@ Design of experiment
     DesignOfExperiment
     FixedDesignOfExperiment
     FromFileDesignOfExperiment
+
+Data analysis
+-------------
+
+.. currentmodule:: otguibase
+
+.. autosummary::
+    :toctree: _generated/
+    :template: class.rst_t
+
+    DataAnalysis
+    DataAnalysisResult
 
 Study storage
 -------------

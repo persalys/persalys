@@ -26,7 +26,7 @@ namespace OTGUI {
 
 /* Default constructor */
 SimulationAnalysis::SimulationAnalysis()
-  : AnalysisImplementation()
+  : PhysicalModelAnalysis()
 //   , outputs_()
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
 {
@@ -35,7 +35,7 @@ SimulationAnalysis::SimulationAnalysis()
 
 /* Constructor with parameters */
 SimulationAnalysis::SimulationAnalysis(const String & name, const PhysicalModel & physicalModel)
-  : AnalysisImplementation(name, physicalModel)
+  : PhysicalModelAnalysis(name, physicalModel)
 //  TODO , outputs_(physicalModel.getOutputs())
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
 {
@@ -56,7 +56,7 @@ SimulationAnalysis::SimulationAnalysis(const String & name, const PhysicalModel 
 // }
 
 
-NumericalSample SimulationAnalysis::getInputSample(const UnsignedInteger nbSimu)
+NumericalSample SimulationAnalysis::generateInputSample(const UnsignedInteger nbSimu)
 {
   NumericalSample inputSample(getPhysicalModel().getInputRandomVector().getSample(nbSimu));
   inputSample.setDescription(getPhysicalModel().getStochasticInputNames());
@@ -64,7 +64,7 @@ NumericalSample SimulationAnalysis::getInputSample(const UnsignedInteger nbSimu)
 }
 
 
-NumericalSample SimulationAnalysis::getOutputSample(NumericalSample inputSample) const
+NumericalSample SimulationAnalysis::computeOutputSample(NumericalSample inputSample) const
 {
 //   TODO
 //   NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(getOutputNames())(inputSample));
@@ -76,7 +76,7 @@ NumericalSample SimulationAnalysis::getOutputSample(NumericalSample inputSample)
 }
 
 
-NumericalSample SimulationAnalysis::getOutputSample(NumericalSample inputSample, const Description & outputNames) const
+NumericalSample SimulationAnalysis::computeOutputSample(NumericalSample inputSample, const Description & outputNames) const
 {
   NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(outputNames)(inputSample));
   outputSample.setDescription(outputNames);
@@ -111,7 +111,7 @@ void SimulationAnalysis::setSeed(const UnsignedInteger seed)
 /* Method save() stores the object through the StorageManager */
 void SimulationAnalysis::save(Advocate & adv) const
 {
-  AnalysisImplementation::save(adv);
+  PhysicalModelAnalysis::save(adv);
 //   adv.saveAttribute("outputs_", outputs_);
   adv.saveAttribute("seed_", seed_);
 }
@@ -120,7 +120,7 @@ void SimulationAnalysis::save(Advocate & adv) const
 /* Method load() reloads the object from the StorageManager */
 void SimulationAnalysis::load(Advocate & adv)
 {
-  AnalysisImplementation::load(adv);
+  PhysicalModelAnalysis::load(adv);
 //   adv.loadAttribute("outputs_", outputs_);
   adv.loadAttribute("seed_", seed_);
 }

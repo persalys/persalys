@@ -55,8 +55,6 @@ public:
   void setLevels(const OT::Indices & nbValues);
   OT::NumericalPoint getDeltas() const;
   void setDeltas(const OT::NumericalPoint & deltas);
-
-  virtual OT::NumericalSample getInputSample();
   OT::Description getVariableInputNames() const;
 
   void updateParameters();
@@ -71,6 +69,7 @@ public:
 
 protected:
   void initializeParameters();
+  void generateInputSample();
 
 private:
   Type type_;

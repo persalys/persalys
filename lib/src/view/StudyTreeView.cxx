@@ -29,6 +29,10 @@
 #include <QMessageBox>
 #include <QSettings>
 
+#include "otgui/OTStudyWindow.hxx"
+#include "otgui/DataModel.hxx"
+#include "otgui/DataAnalysis.hxx"
+#include "otgui/DataAnalysisResultWindow.hxx"
 #include "otgui/AnalyticalPhysicalModel.hxx"
 #include "otgui/PythonPhysicalModel.hxx"
 #ifdef OTGUI_HAVE_YACS
@@ -39,6 +43,8 @@
 #include "otgui/PythonPhysicalModelWindow.hxx"
 #include "otgui/ProbabilisticModelWindow.hxx"
 #include "otgui/LimitStateWindow.hxx"
+#include "otgui/DataModelWizard.hxx"
+#include "otgui/DataModelWindow.hxx"
 #include "otgui/DesignOfExperimentWizard.hxx"
 #include "otgui/DesignOfExperimentWindow.hxx"
 #include "otgui/AnalysisExecutionFailedWindow.hxx"
@@ -66,6 +72,8 @@ StudyTreeView::StudyTreeView(QWidget * parent)
 {
   OTStudy::SetInstanceObserver(treeViewModel_);
   setModel(treeViewModel_);
+  connect(treeViewModel_, SIGNAL(newOTStudyCreated(OTStudyItem*)), this, SLOT(createNewOTStudyWindow(OTStudyItem*)));
+  connect(treeViewModel_, SIGNAL(newDataModelCreated(DesignOfExperimentItem*)), this, SLOT(createNewDataModelWindow(DesignOfExperimentItem*)));
   connect(treeViewModel_, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)), this, SLOT(createNewPhysicalModelWindow(PhysicalModelItem*)));
   connect(treeViewModel_, SIGNAL(newProbabilisticModelCreated(ProbabilisticModelItem*)), this, SLOT(createNewProbabilisticModelWindow(ProbabilisticModelItem*)));
   connect(treeViewModel_, SIGNAL(newDesignOfExperimentCreated(DesignOfExperimentItem*)), this, SLOT(createNewDesignOfExperimentWindow(DesignOfExperimentItem*)));
@@ -84,7 +92,8 @@ StudyTreeView::StudyTreeView(QWidget * parent)
 
   header()->hide();
 
-  connect(this, SIGNAL(clicked(const QModelIndex &)), this, SLOT(selectedItemChanged(const QModelIndex &)));
+  connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(selectedItemChanged(QModelIndex)));
+  connect(this->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(selectedItemChanged(QModelIndex, QModelIndex)));
 }
 
 
@@ -110,7 +119,26 @@ void StudyTreeView::buildActions()
   closeOTStudy_ = new QAction(QIcon(":/images/window-close.png"), tr("Close"), this);
   closeOTStudy_->setStatusTip(tr("Close the OTStudy"));
   connect(closeOTStudy_, SIGNAL(triggered()), this, SLOT(closeOTStudy()));
-  
+
+  // new data model
+  newDataModel_ = new QAction(tr("New data model"), this);
+  newDataModel_->setStatusTip(tr("Create a new data model"));
+  connect(newDataModel_, SIGNAL(triggered()), this, SLOT(createNewDataModel()));
+
+  // modify data model action
+  modifyDataModel_ = new QAction(tr("Modify"), this);
+  modifyDataModel_->setStatusTip(tr("Modify the data model"));
+  connect(modifyDataModel_, SIGNAL(triggered(bool)), this, SLOT(modifyDataModel()));
+
+  // remove data model
+  removeDataModel_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
+  removeDataModel_->setStatusTip(tr("Remove the data model"));
+  connect(removeDataModel_, SIGNAL(triggered()), this, SLOT(removeDesignOfExperiment()));
+
+  newDataAnalysis_ = new QAction(tr("New data analysis"), this);
+  newDataAnalysis_->setStatusTip(tr("Analyse the data sample"));
+  connect(newDataAnalysis_, SIGNAL(triggered()), this, SLOT(createNewDataAnalysis()));
+
   // new physical model actions
   newAnalyticalPhysicalModel_ = new QAction(tr("New analytical physical model"), this);
   newAnalyticalPhysicalModel_->setStatusTip(tr("Create a new analytical physical model"));
@@ -185,7 +213,7 @@ void StudyTreeView::buildActions()
 
   // remove analysis action
   removeAnalysis_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
-  removeAnalysis_->setStatusTip(tr("Remove the model evaluation"));
+  removeAnalysis_->setStatusTip(tr("Remove the analysis"));
   connect(removeAnalysis_, SIGNAL(triggered()), this, SLOT(removeAnalysis()));
 
   // save the current OTStudy action
@@ -206,8 +234,15 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
 #ifdef OTGUI_HAVE_YACS
     actions.append(newYACSPhysicalModel_);
 #endif
+    actions.append(newDataModel_);
     actions.append(saveOTStudy_);
     actions.append(closeOTStudy_);
+  }
+  else if (dataType == "DataModel")
+  {
+    actions.append(modifyDataModel_);
+    actions.append(newDataAnalysis_);
+    actions.append(removeDataModel_);
   }
   else if (dataType == "PhysicalModel")
   {
@@ -231,7 +266,7 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
   {
     actions.append(newDesignOfExperiment_);
   }
-  else if (dataType == "DesignOfExperiment")
+  else if (dataType.contains("DesignOfExperiment"))
   {
     actions.append(runDesignOfExperiment_);
     actions.append(removeDesignOfExperiment_);
@@ -241,11 +276,13 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
     actions.append(newThresholdExceedance_);
     actions.append(removeLimitState_);
   }
-  else if (dataType == "ModelEvaluation" || dataType == "MonteCarloAnalysis" ||
-           dataType == "TaylorExpansionMomentsAnalysis" || dataType == "SobolAnalysis" ||
-           dataType == "SRCAnalysis" || dataType == "MonteCarloReliabilityAnalysis")
+  else if (dataType == "ModelEvaluation" || (dataType.contains("Analysis") && dataType != "DataAnalysis"))
   {
     actions.append(runAnalysis_);
+    actions.append(removeAnalysis_);
+  }
+  else if (dataType == "DataAnalysis")
+  {
     actions.append(removeAnalysis_);
   }
   return actions;
@@ -311,6 +348,50 @@ bool StudyTreeView::isLimitStateValid(const QModelIndex & currentIndex)
 void StudyTreeView::createNewOTStudy()
 {
   treeViewModel_->createNewOTStudy();
+}
+
+
+void StudyTreeView::createNewDataModel()
+{
+  QModelIndex studyIndex = selectionModel()->currentIndex();
+  OTStudyItem * studyItem = static_cast<OTStudyItem*>(treeViewModel_->itemFromIndex(studyIndex));
+  DataModel newDataModel(studyItem->getOTStudy()->getAvailableDataModelName());
+  QSharedPointer<DataModelWizard> wizard = QSharedPointer<DataModelWizard>(new DataModelWizard(newDataModel));
+
+  if (wizard->exec())
+    studyItem->getOTStudy()->add(wizard->getDataModel());
+}
+
+
+void StudyTreeView::modifyDataModel()
+{
+  QModelIndex index = selectionModel()->currentIndex();
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+  DesignOfExperimentItem * item = dynamic_cast<DesignOfExperimentItem*>(selectedItem);
+  QSharedPointer<DataModelWizard> wizard = QSharedPointer<DataModelWizard>(new DataModelWizard(item->getDesignOfExperiment()));
+
+  if (wizard->exec())
+  {
+    emit removeSubWindow(item);
+    item->updateDesignOfExperiment(wizard->getDataModel());
+    createNewDataModelWindow(item);
+  }
+}
+
+
+void StudyTreeView::createNewDataAnalysis()
+{
+  QModelIndex index = selectionModel()->currentIndex();
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+  DesignOfExperimentItem * item = dynamic_cast<DesignOfExperimentItem*>(selectedItem);
+  OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(item->QStandardItem::parent());
+  if (!dynamic_cast<const DataModel*>(&*item->getDesignOfExperiment().getImplementation()))
+    throw InvalidValueException(HERE) << "StudyTreeView::createNewDataAnalysis: The design of experiment is not a datamodel";
+  DataAnalysis * analysis = new DataAnalysis(otStudyItem->getOTStudy()->getAvailableAnalysisName("DataAnalysis_"), *dynamic_cast<const DataModel*>(&*item->getDesignOfExperiment().getImplementation()));
+
+  otStudyItem->getOTStudy()->add(analysis);
+  analysis->run();
+  setExpanded(index, true);
 }
 
 
@@ -394,6 +475,29 @@ void StudyTreeView::removeLimitState()
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
   treeViewModel_->getOTStudyItem(index)->getOTStudy()->remove(dynamic_cast<LimitStateItem*>(selectedItem)->getLimitState());
+}
+
+
+void StudyTreeView::createNewOTStudyWindow(OTStudyItem* item)
+{
+  OTStudyWindow * window = new OTStudyWindow(item);
+  connect(window, SIGNAL(createNewAnalyticalPhysicalModel()), this, SLOT(createNewAnalyticalPhysicalModel()));
+  connect(window, SIGNAL(createNewPythonPhysicalModel()), this, SLOT(createNewPythonPhysicalModel()));
+#ifdef OTGUI_HAVE_YACS
+  connect(window, SIGNAL(createNewYACSPhysicalModel()), this, SLOT(createNewYACSPhysicalModel()));
+#endif
+  connect(window, SIGNAL(createNewDataModel()), this, SLOT(createNewDataModel()));
+  emit showWindow(window);
+  setCurrentIndex(item->index());
+}
+
+
+void StudyTreeView::createNewDataModelWindow(DesignOfExperimentItem * item)
+{
+  DataModelWindow * window = new DataModelWindow(item);
+  emit showWindow(window);
+  setExpanded(item->index().parent(), true);
+  setCurrentIndex(item->index());
 }
 
 
@@ -605,7 +709,7 @@ void StudyTreeView::runAnalysis()
     }
     else
     {
-      throw InvalidArgumentException(HERE) << "analysisType " << analysisType.toStdString() << " not recognized.";
+      std::cerr << "In runAnalysis: analysisType " << analysisType.toStdString() << " not recognized.";
     }
   }
 
@@ -654,8 +758,10 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
     resultWindow = new SRCResultWindow(item);
   else if (analysisType == "MonteCarloReliabilityAnalysis")
     resultWindow = new MonteCarloReliabilityResultWindow(item);
+  else if (analysisType == "DataAnalysis")
+    resultWindow = new DataAnalysisResultWindow(item);
   else
-    throw InvalidArgumentException(HERE) << "analysisType " << analysisType.toStdString() << " not recognized.";
+    std::cerr << "In createAnalysisResultWindow: analysisType " << analysisType.toStdString() << " not recognized.";
 
   if (resultWindow)
   {
@@ -937,10 +1043,15 @@ bool StudyTreeView::closeAllOTStudies()
 }
 
 
-void StudyTreeView::selectedItemChanged(const QModelIndex & index)
+void StudyTreeView::selectedItemChanged(const QModelIndex& currentIndex)
 {
-  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
-  if (selectedItem->data(Qt::UserRole).toString() != "Study")
-    emit itemSelected(selectedItem);
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(currentIndex);
+  emit itemSelected(selectedItem);
+}
+
+
+void StudyTreeView::selectedItemChanged(const QModelIndex & currentIndex, const QModelIndex & previousIndex)
+{
+  selectedItemChanged(currentIndex);
 }
 }

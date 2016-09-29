@@ -48,12 +48,12 @@ CentralTendencyWizard::CentralTendencyWizard(const Analysis & analysis)
   if (analysis.getImplementation()->getClassName() == "MonteCarloAnalysis")
   {
     MCAnalysis_ = *dynamic_cast<const MonteCarloAnalysis*>(&*analysis.getImplementation());
-    taylorAnalysis_ = TaylorExpansionMomentsAnalysis(analysis.getName(), analysis.getPhysicalModel());
+    taylorAnalysis_ = TaylorExpansionMomentsAnalysis(MCAnalysis_.getName(), MCAnalysis_.getPhysicalModel());
   }
   else
   {
-    MCAnalysis_ = MonteCarloAnalysis(analysis.getName(), analysis.getPhysicalModel());
     taylorAnalysis_ = *dynamic_cast<const TaylorExpansionMomentsAnalysis*>(&*analysis.getImplementation());
+    MCAnalysis_ = MonteCarloAnalysis(taylorAnalysis_.getName(), taylorAnalysis_.getPhysicalModel());
   }
   buildInterface();
 }

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief SimulationAnalysisResult contains results of a simulation analysis
+ *  @brief Top-level class for all analysis with design of experiment
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,28 +18,29 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_SIMULATIONANALYSISRESULT_HXX
-#define OTGUI_SIMULATIONANALYSISRESULT_HXX
+#ifndef OTGUI_DESIGNOFEXPERIMENTANALYSIS_HXX
+#define OTGUI_DESIGNOFEXPERIMENTANALYSIS_HXX
 
-#include "ModelEvaluationResult.hxx"
+#include "AnalysisImplementation.hxx"
+#include "DesignOfExperiment.hxx"
 
 namespace OTGUI {
-typedef OT::Collection<OT::NumericalSample> NumericalSampleCollection;
-class OTGUI_API SimulationAnalysisResult : public ModelEvaluationResult
+class OTGUI_API DesignOfExperimentAnalysis : public AnalysisImplementation
 {
-  CLASSNAME;
-
 public:
   /** Default constructor */
-  SimulationAnalysisResult();
+  DesignOfExperimentAnalysis();
+
   /** Constructor with parameters */
-  SimulationAnalysisResult(OT::NumericalSample inputSample, OT::NumericalSample outputSample);
+  DesignOfExperimentAnalysis(const OT::String & name, const DesignOfExperiment & designOfExperiment);
 
   /** Virtual constructor */
-  virtual SimulationAnalysisResult * clone() const;
+  virtual DesignOfExperimentAnalysis * clone() const;
 
-  NumericalSampleCollection getListXMin() const;
-  NumericalSampleCollection getListXMax() const;
+  DesignOfExperiment getDesignOfExperiment() const;
+  void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
+
+  OT::String getModelName() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -48,11 +49,7 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  void searchMinMax();
-
-private:
-  OT::PersistentCollection<OT::NumericalSample> listXMin_;
-  OT::PersistentCollection<OT::NumericalSample> listXMax_;
+  DesignOfExperiment designOfExperiment_;
 };
 }
 #endif

@@ -22,10 +22,10 @@
 #define OTGUI_DESIGNOFEXPERIMENTIMPLEMENTATION_HXX
 
 #include "PhysicalModel.hxx"
-#include "SimulationAnalysisResult.hxx"
+#include "DataSample.hxx"
 
 namespace OTGUI {
-class OTGUI_API DesignOfExperimentImplementation : public OT::PersistentObject, public Observable
+class OTGUI_API DesignOfExperimentImplementation : public DataSample, public Observable
 {
 public:
   /** Default constructor */
@@ -36,17 +36,14 @@ public:
   /** Virtual constructor */
   virtual DesignOfExperimentImplementation * clone() const;
 
+  bool hasPhysicalModel() const;
+
   PhysicalModel getPhysicalModel() const;
   void setPhysicalModel(const PhysicalModel & physicalModel);
 
   virtual OT::Description getVariableInputNames() const;
 
-  virtual OT::NumericalSample getInputSample();
-  void setInputSample(const OT::NumericalSample & sample);
-  SimulationAnalysisResult getResult() const;
-  void clearResult();
-
-  void evaluate();
+  void run();
   virtual OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */
@@ -56,9 +53,8 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
+  bool hasPhysicalModel_;
   PhysicalModel physicalModel_;
-  OT::NumericalSample inputSample_;
-  SimulationAnalysisResult result_;
 };
 }
 #endif

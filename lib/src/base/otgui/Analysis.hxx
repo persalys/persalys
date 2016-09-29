@@ -33,8 +33,6 @@ public:
 
   /** Default constructor */
   Analysis();
-  /** Constructor with parameters */
-  Analysis(const OT::String & name, const PhysicalModel & physicalModel);
   /** Default constructor */
   Analysis(const AnalysisImplementation & implementation);
   /** Constructor from implementation */
@@ -44,20 +42,13 @@ public:
 
   void addObserver(Observer * observer);
 
-  PhysicalModel getPhysicalModel() const;
-  void setPhysicalModel(const PhysicalModel & physicalModel);
+  OT::String getModelName() const;
 
   bool isReliabilityAnalysis() const;
 
   void run();
   OT::String getPythonScript() const;
   bool analysisLaunched() const;
-
-  /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
-
-  /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
 };
 }
 #endif

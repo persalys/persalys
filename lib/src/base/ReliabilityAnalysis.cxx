@@ -26,7 +26,7 @@ namespace OTGUI {
 
 /* Default constructor */
 ReliabilityAnalysis::ReliabilityAnalysis()
-  : AnalysisImplementation()
+  : PhysicalModelAnalysis()
 {
   setIsReliabilityAnalysis(true);
 }
@@ -34,7 +34,7 @@ ReliabilityAnalysis::ReliabilityAnalysis()
 
 /* Constructor with parameters */
 ReliabilityAnalysis::ReliabilityAnalysis(const String & name, const LimitState & limitState)
-  : AnalysisImplementation(name, limitState.getPhysicalModel())
+  : PhysicalModelAnalysis(name, limitState.getPhysicalModel())
   , limitState_(limitState)
 {
   setIsReliabilityAnalysis(true);
@@ -50,7 +50,7 @@ LimitState ReliabilityAnalysis::getLimitState() const
 /* Method save() stores the object through the StorageManager */
 void ReliabilityAnalysis::save(Advocate & adv) const
 {
-  AnalysisImplementation::save(adv);
+  PhysicalModelAnalysis::save(adv);
   adv.saveAttribute("limitState_", limitState_);
 }
 
@@ -58,7 +58,7 @@ void ReliabilityAnalysis::save(Advocate & adv) const
 /* Method load() reloads the object from the StorageManager */
 void ReliabilityAnalysis::load(Advocate & adv)
 {
-  AnalysisImplementation::load(adv);
+  PhysicalModelAnalysis::load(adv);
   adv.loadAttribute("limitState_", limitState_);
 }
 }

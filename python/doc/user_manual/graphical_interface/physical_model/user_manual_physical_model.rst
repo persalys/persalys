@@ -3,8 +3,7 @@ User manual - Define a physical model
 =====================================
 
 
-There are three ways to define a physical model. This way is chosen in the context menu
-(right click) of the OTStudy in the study tree which proposes:
+The context menu (right click) of the OTStudy or its window provides three ways to define a physical model:
 
 - New analytical physical model
 - New Python physical model
@@ -37,7 +36,7 @@ The relationships between the inputs and the outputs have to be defined in the *
 The language used here is different from Python. Syntaxes for the operators, mathematical functions
 and constants are listed below.
 
-The **Evaluate** button calculates the value of the outputs based on the input values
+The **Evaluate** button computes the value of the outputs based on the input values
 and the formula. It shall be used to test the physical model. In order to get evaluations which can be saved,
 the user should use :ref:`the Deterministic Study <deterministicStudy>`.
 

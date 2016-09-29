@@ -38,7 +38,7 @@ public slots:
   void showSubWindow(QStandardItem * item);
   void removeSubWindow(QStandardItem * item);
 signals:
-//   void ;
+  void mdiAreaEmpty(bool);
 };
 }
 #endif

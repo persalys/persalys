@@ -25,6 +25,7 @@
 #include "otgui/OTguiToolBar.hxx"
 #include "otgui/OTguiStatusBar.hxx"
 #include "otgui/OTguiMdiArea.hxx"
+#include "otgui/WelcomeWindow.hxx"
 
 #include <QSplitter>
 #include <QDockWidget>
@@ -67,13 +68,25 @@ void MainWindow::buildInterface()
   // right side of the mainSplitter
   QSplitter * rightSideSplitter = new QSplitter(Qt::Vertical);
 
+  // welcome page
+  WelcomeWindow * welcomeWindow = new WelcomeWindow;
+  rightSideSplitter->addWidget(welcomeWindow);
+  connect(welcomeWindow, SIGNAL(createNewOTStudy()), studyTree_, SLOT(createNewOTStudy()));
+  connect(welcomeWindow, SIGNAL(openOTStudy()), studyTree_, SLOT(openOTStudy()));
+  connect(welcomeWindow, SIGNAL(importPython()), studyTree_, SLOT(importPython()));
+  rightSideSplitter->setStretchFactor(0, 5);
+
   // MdiArea
   OTguiMdiArea * mdiArea = new OTguiMdiArea;
   connect(studyTree_, SIGNAL(showWindow(QMdiSubWindow *)), mdiArea, SLOT(showSubWindow(QMdiSubWindow *)));
   connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), mdiArea, SLOT(showSubWindow(QStandardItem *)));
   connect(studyTree_, SIGNAL(removeSubWindow(QStandardItem *)), mdiArea, SLOT(removeSubWindow(QStandardItem *)));
   rightSideSplitter->addWidget(mdiArea);
-  rightSideSplitter->setStretchFactor(0, 3);
+  mdiArea->hide();
+  rightSideSplitter->setStretchFactor(1, 4);
+
+  connect(mdiArea, SIGNAL(mdiAreaEmpty(bool)), welcomeWindow, SLOT(setVisible(bool)));
+  connect(mdiArea, SIGNAL(mdiAreaEmpty(bool)), mdiArea, SLOT(setHidden(bool)));
 
   // Python Console
   QPyConsole * pythonConsole = new QPyConsole(this);
@@ -82,7 +95,7 @@ void MainWindow::buildInterface()
   pythonConsoleDock->setFeatures(QDockWidget::DockWidgetClosable);
   connect(studyTree_, SIGNAL(importPythonScript(const QString &)), pythonConsole, SLOT(loadScript(const QString &)));
   rightSideSplitter->addWidget(pythonConsoleDock);
-  rightSideSplitter->setStretchFactor(1, 1);
+  rightSideSplitter->setStretchFactor(2, 1);
 
   mainSplitter->addWidget(rightSideSplitter);
   mainSplitter->setStretchFactor(1, 3);
@@ -116,26 +129,6 @@ void MainWindow::buildInterface()
   OTguiStatusBar * statusBar = new OTguiStatusBar;
   connect(studyTree_, SIGNAL(errorMessageEmitted(QString)), statusBar, SLOT(showErrorMessage(QString)));
   setStatusBar(statusBar);
-}
-
-
-void MainWindow::launchInitialMessageBox()
-{
-  QMessageBox messageBox(this);
-  messageBox.setText("Please, select required action by pressing the corresponding button below.");
-  QPushButton * newOTStudyButton = messageBox.addButton(tr("New"), QMessageBox::ActionRole);
-  QPushButton * openOTStudyButton = messageBox.addButton(tr("Open..."), QMessageBox::ActionRole);
-  QPushButton * importScriptButton = messageBox.addButton(tr("Import Python..."), QMessageBox::ActionRole);
-  messageBox.setStandardButtons(QMessageBox::Cancel);
-  messageBox.setDefaultButton(newOTStudyButton);
-  messageBox.exec();
-
-  if (messageBox.clickedButton() == newOTStudyButton)
-    studyTree_->createNewOTStudy();
-  else if (messageBox.clickedButton() == openOTStudyButton)
-    studyTree_->openOTStudy();
-  else if (messageBox.clickedButton() == importScriptButton)
-    studyTree_->importPython();
 }
 
 

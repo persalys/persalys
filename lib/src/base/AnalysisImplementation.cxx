@@ -33,10 +33,9 @@ AnalysisImplementation::AnalysisImplementation()
 
 
 /* Constructor with parameters */
-AnalysisImplementation::AnalysisImplementation(const String & name, const PhysicalModel & physicalModel)
+AnalysisImplementation::AnalysisImplementation(const String & name)
   : PersistentObject()
   , Observable()
-  , physicalModel_(physicalModel)
   , isReliabilityAnalysis_(false)
 {
   setName(name);
@@ -50,15 +49,9 @@ AnalysisImplementation* AnalysisImplementation::clone() const
 }
 
 
-PhysicalModel AnalysisImplementation::getPhysicalModel() const
+String AnalysisImplementation::getModelName() const
 {
-  return physicalModel_;
-}
-
-
-void AnalysisImplementation::setPhysicalModel(const PhysicalModel & physicalModel)
-{
-  physicalModel_ = physicalModel;
+  return "";
 }
 
 
@@ -76,7 +69,6 @@ void AnalysisImplementation::setIsReliabilityAnalysis(bool isReliabilityAnalysis
 
 void AnalysisImplementation::run()
 {
-
 }
 
 
@@ -96,7 +88,6 @@ String AnalysisImplementation::getPythonScript() const
 void AnalysisImplementation::save(Advocate & adv) const
 {
   PersistentObject::save(adv);
-  adv.saveAttribute("physicalModel_", physicalModel_);
   adv.saveAttribute("isReliabilityAnalysis_", isReliabilityAnalysis_);
 }
 
@@ -105,7 +96,6 @@ void AnalysisImplementation::save(Advocate & adv) const
 void AnalysisImplementation::load(Advocate & adv)
 {
   PersistentObject::load(adv);
-  adv.loadAttribute("physicalModel_", physicalModel_);
   adv.loadAttribute("isReliabilityAnalysis_", isReliabilityAnalysis_);
 }
 }

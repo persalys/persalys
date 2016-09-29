@@ -45,16 +45,20 @@ public:
 
   void addObserver(Observer * observer);
 
+  bool hasPhysicalModel() const;
+
   PhysicalModel getPhysicalModel() const;
   void setPhysicalModel(const PhysicalModel & physicalModel);
 
   OT::Description getVariableInputNames() const;
 
-  OT::NumericalSample getInputSample();
+  OT::NumericalSample getInputSample() const;
   void setInputSample(const OT::NumericalSample & sample);
-  SimulationAnalysisResult getResult() const;
-  void clearResult();
-  void evaluate();
+  OT::NumericalSample getOutputSample() const;
+  void setOutputSample(const OT::NumericalSample & sample);
+  OT::NumericalSample getSample() const;
+
+  void run();
   OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */

@@ -13,7 +13,22 @@ physicalModel : :class:`~otguibase.PhysicalModel`
 fileName : str
     Name of a data file to load
 columns : sequence of int
-    Indices of columns in files to consider (optional)"
+    Indices of columns in files to consider"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FromFileDesignOfExperiment::ImportSample
+"Import a sample from a file.
+
+Parameters
+----------
+fileName : str
+   File name (.txt, .csv)
+
+Returns
+-------
+sample : :class:`~openturns.NumericalSample`
+    Sample"
 
 // ---------------------------------------------------------------------
 
@@ -37,20 +52,20 @@ fileName : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FromFileDesignOfExperiment::getColumns
-"Columns accessor.
+%feature("docstring") OTGUI::FromFileDesignOfExperiment::getInputColumns
+"Input columns accessor.
 
 Returns
 -------
 columns : :class:`~openturns.Indices`
-   Columns"
+   Columns of the inputs"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FromFileDesignOfExperiment::setColumns
-"Columns accessor.
+%feature("docstring") OTGUI::FromFileDesignOfExperiment::setInputColumns
+"Input columns accessor.
 
 Parameters
 ----------
 columns : :class:`~openturns.Indices`
-   Columns"
+   Columns of the inputs"

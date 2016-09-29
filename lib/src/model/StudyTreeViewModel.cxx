@@ -53,6 +53,7 @@ void StudyTreeViewModel::createNewOTStudy()
 void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
 {
   OTStudyItem * otStudyItem = new OTStudyItem(otStudy);
+  connect(otStudyItem, SIGNAL(newDataModelItemCreated(DesignOfExperimentItem*)), this, SIGNAL(newDataModelCreated(DesignOfExperimentItem*)));
   connect(otStudyItem, SIGNAL(newPhysicalModelItemCreated(PhysicalModelItem*)), this, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)));
   connect(otStudyItem, SIGNAL(newProbabilisticModelItemCreated(ProbabilisticModelItem*)), this, SIGNAL(newProbabilisticModelCreated(ProbabilisticModelItem*)));
   connect(otStudyItem, SIGNAL(newDesignOfExperimentItemCreated(DesignOfExperimentItem*)), this, SIGNAL(newDesignOfExperimentCreated(DesignOfExperimentItem*)));
@@ -60,12 +61,12 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
   connect(otStudyItem, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SIGNAL(newAnalysisCreated(AnalysisItem*)));
   connect(otStudyItem, SIGNAL(itemRemoved(QStandardItem*)), this, SIGNAL(itemRemoved(QStandardItem*)));
   connect(otStudyItem, SIGNAL(otStudyRemoved(QStandardItem*)), this, SLOT(removeOTStudyItem(QStandardItem*)));
-  otStudy->addObserver(otStudyItem);
+
   invisibleRootItem()->appendRow(otStudyItem);
+  for (UnsignedInteger i=0; i<otStudy->getDataModels().getSize(); ++i)
+    otStudyItem->addDataModelItem(otStudy->getDataModels()[i]);
   for (UnsignedInteger i=0; i<otStudy->getPhysicalModels().getSize(); ++i)
     otStudyItem->addPhysicalModelItem(otStudy->getPhysicalModels()[i]);
-  for (UnsignedInteger i=0; i<otStudy->getDesignOfExperiments().getSize(); ++i)
-    otStudyItem->addDesignOfExperimentItem(otStudy->getDesignOfExperiments()[i]);
   for (UnsignedInteger i=0; i<otStudy->getLimitStates().getSize(); ++i)
     otStudyItem->addLimitStateItem(otStudy->getLimitStates()[i]);
   for (UnsignedInteger i=0; i<otStudy->getAnalyses().getSize(); ++i)
@@ -74,6 +75,10 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
     if (otStudy->getAnalyses()[i].analysisLaunched())
       otStudy->getAnalyses()[i].getImplementation()->notify("analysisFinished");
   }
+  for (UnsignedInteger i=0; i<otStudy->getDesignOfExperiments().getSize(); ++i)
+    otStudyItem->addDesignOfExperimentItem(otStudy->getDesignOfExperiments()[i]);
+
+  emit newOTStudyCreated(otStudyItem);
 }
 
 
@@ -148,6 +153,7 @@ AnalysisItem* StudyTreeViewModel::getAnalysisItem(OTStudyItem * otStudyItem, con
 
 void StudyTreeViewModel::removeOTStudyItem(QStandardItem * item)
 {
+  emit itemRemoved(item);
   invisibleRootItem()->removeRow(item->row());
 }
 }

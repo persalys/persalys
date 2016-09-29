@@ -30,6 +30,7 @@ LimitStateItem::LimitStateItem(const LimitState & limitState)
   , Observer("LimitState")
   , limitState_(limitState)
 {
+  limitState_.addObserver(this);
   setData("LimitState", Qt::UserRole);
 }
 
