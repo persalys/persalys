@@ -1,13 +1,21 @@
-before_script:
-  - git clone https://github.com/openturns/openturns.git
-  - pushd openturns
-  - cmake -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so -DUSE_SPHINX=OFF .
-  - make install -j8
-  - popd
-
-job:
+linux:
   script:
-    - cmake -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so -DUSE_SALOME=OFF .
+    - git clone https://github.com/openturns/openturns.git
+    - pushd openturns
+    - cmake -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so -DUSE_SPHINX=OFF -DUSE_COTIRE=ON -DCOTIRE_TESTS=OFF -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" .
+    - make python_unity -j8
+    - make install/fast
+    - popd
+    - cmake -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so -DOpenTURNS_DIR=$PWD/openturns/install/lib/cmake/openturns -DUSE_SALOME=OFF .
     - make install -j8
     - make tests -j8
     - ctest --output-on-failure --timeout 100
+
+#mingw:
+  #script:
+    #- git clone https://github.com/openturns/openturns.git
+    #- pushd openturns/distro/windows
+    #- make CHECK_OT=n JOBS=4
+    #- popd
+    #- pushd distro/windows
+    #- make OT_PREFIX=$PWD/openturns/build-i686/install
