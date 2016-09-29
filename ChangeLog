@@ -1,3 +1,9 @@
+= 2.0 release (in-progress)
+
+ * Time/budget criteria to control algorithms
+ * Data model
+ * SALOME console
+
 = 1.0 release (2016-03-04)
 
-Initial release
+ * Initial release
