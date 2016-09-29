@@ -11,11 +11,16 @@ linux:
     - make tests -j8
     - ctest --output-on-failure --timeout 100
 
-#mingw:
-  #script:
-    #- git clone https://github.com/openturns/openturns.git
-    #- pushd openturns/distro/windows
-    #- make CHECK_OT=n JOBS=4
-    #- popd
-    #- pushd distro/windows
-    #- make OT_PREFIX=$PWD/openturns/build-i686/install
+mingw:
+  script:
+    - git clone https://github.com/openturns/openturns.git
+    - pushd openturns/distro/windows
+    - tar xzf /usr/share/openturns-developers-windeps-1.8.tar.gz
+    - pushd openturns-developers-windeps
+    - rm -r mingw-w64-x86_64
+    - tar xzf /usr/share/mingw-w64-x86_64.tar.gz
+    - popd
+    - make ot-install JOBS=4
+    - popd
+    - pushd distro/windows
+    - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install JOBS=4
