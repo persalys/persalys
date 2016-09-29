@@ -1,0 +1,13 @@
+before_script:
+  - git clone https://github.com/openturns/openturns.git
+  - pushd openturns
+  - cmake -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so -DUSE_SPHINX=OFF .
+  - make install -j8
+  - popd
+
+job:
+  script:
+    - cmake -DCMAKE_INSTALL_PREFIX=$PWD/install -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so -DUSE_SALOME=OFF .
+    - make install -j8
+    - make tests -j8
+    - ctest --output-on-failure --timeout 100
