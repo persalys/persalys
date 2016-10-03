@@ -23,6 +23,8 @@
 #include "otgui/SobolAnalysis.hxx"
 #include "otgui/SobolResultWindowWidget.hxx"
 
+#include <QVBoxLayout>
+
 using namespace OT;
 
 namespace OTGUI {
@@ -84,6 +86,31 @@ void SobolResultWindow::buildInterface()
   connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), scrollArea, SLOT(setCurrentIndex(int)));
 
   // second tab --------------------------------
+  if (result_.getElapsedTime() > 0. && result_.getCallsNumber())
+  {
+    QWidget * tab = new QWidget;
+    QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+
+    // elapsed time
+    QLabel * elapsedTimeLabel = new QLabel(tr("Elapsed time:") + " " + QString::number(result_.getElapsedTime()) + " s");
+    elapsedTimeLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    tabLayout->addWidget(elapsedTimeLabel);
+
+    // sample size
+    QLabel * nbSimuLabel = new QLabel(tr("Number of calls:") + " " + QString::number(result_.getCallsNumber()));
+    nbSimuLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    tabLayout->addWidget(nbSimuLabel);
+
+    // coefficient Of Variation
+    QLabel * coefLabel = new QLabel(tr("Coefficient of variation:") + " " + QString::number(result_.getCoefficientOfVariation()));
+    coefLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    tabLayout->addWidget(coefLabel);
+
+    tabLayout->addStretch();
+    tabWidget_->addTab(tab, tr("Summary"));
+  }
+
+  // third tab --------------------------------
   tabWidget_->addTab(buildParametersTextEdit(), tr("Parameters"));
 
   //
