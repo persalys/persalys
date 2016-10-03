@@ -40,9 +40,9 @@ void CustomStandardItemModel::setNotEditableItem(const int row, const int column
 }
 
 
-void CustomStandardItemModel::setNotEditableItem(const int row, const int column, const double value)
+void CustomStandardItemModel::setNotEditableItem(const int row, const int column, const double value, const int prec)
 {
-  setNotEditableItem(row, column, QString::number(value)); // TODO add precision
+  setNotEditableItem(row, column, QString::number(value, 'g', prec));
 }
 
 

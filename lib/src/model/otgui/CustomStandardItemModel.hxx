@@ -32,7 +32,7 @@ public:
   CustomStandardItemModel(int nbRows, int nbColumns, QObject * parent = 0);
 
   void setNotEditableItem(const int row, const int column, const QString text);
-  void setNotEditableItem(const int row, const int column, const double value);
+  void setNotEditableItem(const int row, const int column, const double value, const int prec=6);
   void setNotEditableHeaderItem(const int row, const int column, const QString text);
   virtual void exportData(const QString & fileName);
 };
