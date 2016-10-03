@@ -63,8 +63,8 @@ void SobolAnalysis::run()
   const UnsignedInteger nbOutputs(getPhysicalModel().getOutputNames().getSize()); // TODO only required outputs
 
   const bool maximumOuterSamplingSpecified = getMaximumCalls() < std::numeric_limits<int>::max();
-  /*const*/ UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / (getBlockSize()*(2+nbInputs)))) : std::numeric_limits<int>::max();
-  const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getMaximumCalls() % getBlockSize() : 0;
+  const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / (getBlockSize()*(2+nbInputs)))) : std::numeric_limits<int>::max();
+  const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getMaximumCalls() % (getBlockSize()*(2+nbInputs)) : 0;
   const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
 
   NumericalScalar coefficientOfVariation = -1.0;
@@ -179,6 +179,9 @@ void SobolAnalysis::run()
 
   // fill result_
   result_ = SobolResult(firstOrderIndices, totalIndices, getOutputNames());
+  result_.setCallsNumber(X1.getSize()*(2+nbInputs));
+  result_.setElapsedTime((float)elapsedTime/CLOCKS_PER_SEC);
+  result_.setCoefficientOfVariation(coefficientOfVariation);
 
   // add warning if the model has not an independent copula
   if (!getPhysicalModel().getComposedDistribution().hasIndependentCopula())
