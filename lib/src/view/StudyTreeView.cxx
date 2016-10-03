@@ -881,6 +881,8 @@ void StudyTreeView::importPython()
 bool StudyTreeView::saveOTStudy()
 {
   OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
+  if (!item)
+    return false;
 
   if (QFileInfo(QString::fromUtf8(item->getOTStudy()->getFileName().c_str())).exists())
   {
@@ -899,6 +901,8 @@ bool StudyTreeView::saveOTStudy()
 bool StudyTreeView::saveAsOTStudy()
 {
   OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
+  if (!item)
+    return false;
 
   QSettings settings;
   QString currentDir = settings.value("currentDir").toString();
