@@ -45,6 +45,15 @@ public:
   OT::NumericalSample getFirstOrderIndices() const;
   OT::NumericalSample getTotalIndices() const;
 
+  OT::UnsignedInteger getCallsNumber() const;
+  void setCallsNumber(const OT::UnsignedInteger cumber);
+
+  double getElapsedTime() const;
+  void setElapsedTime(const double seconds);
+
+  double getCoefficientOfVariation() const;
+  void setCoefficientOfVariation(const double coef);
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
@@ -55,6 +64,9 @@ private:
   OT::Description outputNames_;
   OT::NumericalSample firstOrderIndices_;
   OT::NumericalSample totalIndices_;
+  OT::UnsignedInteger callsNumber_;
+  double elapsedTime_;
+  double coefficientOfVariation_;
 };
 }
 #endif

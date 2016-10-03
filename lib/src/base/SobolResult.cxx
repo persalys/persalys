@@ -33,6 +33,9 @@ static Factory<SobolResult> RegisteredFactory;
 /* Default constructor */
 SobolResult::SobolResult()
   : PersistentObject()
+  , callsNumber_(0)
+  , elapsedTime_(0.)
+  , coefficientOfVariation_(-1.)
 {
 }
 
@@ -45,6 +48,9 @@ SobolResult::SobolResult(const NumericalSample firstOrderIndices,
   , outputNames_(outputNames)
   , firstOrderIndices_(firstOrderIndices)
   , totalIndices_(totalIndices)
+  , callsNumber_(0)
+  , elapsedTime_(0.)
+  , coefficientOfVariation_(-1.)
 {
 }
 
@@ -80,6 +86,42 @@ NumericalSample SobolResult::getTotalIndices() const
 }
 
 
+UnsignedInteger SobolResult::getCallsNumber() const
+{
+  return callsNumber_;
+}
+
+
+void SobolResult::setCallsNumber(const OT::UnsignedInteger number)
+{
+  callsNumber_ = number;
+}
+
+
+double SobolResult::getElapsedTime() const
+{
+  return elapsedTime_;
+}
+
+
+void SobolResult::setElapsedTime(const double seconds)
+{
+  elapsedTime_ = seconds;
+}
+
+
+double SobolResult::getCoefficientOfVariation() const
+{
+  return coefficientOfVariation_;
+}
+
+
+void SobolResult::setCoefficientOfVariation(const double coef)
+{
+  coefficientOfVariation_ = coef;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void SobolResult::save(Advocate & adv) const
 {
@@ -87,6 +129,9 @@ void SobolResult::save(Advocate & adv) const
   adv.saveAttribute("outputNames_", outputNames_);
   adv.saveAttribute("firstOrderIndices_", firstOrderIndices_);
   adv.saveAttribute("totalIndices_", totalIndices_);
+  adv.saveAttribute("elapsedTime_", elapsedTime_);
+  adv.saveAttribute("callsNumber_", callsNumber_);
+  adv.saveAttribute("coefficientOfVariation_", coefficientOfVariation_);
 }
 
 
@@ -97,5 +142,8 @@ void SobolResult::load(Advocate & adv)
   adv.loadAttribute("outputNames_", outputNames_);
   adv.loadAttribute("firstOrderIndices_", firstOrderIndices_);
   adv.loadAttribute("totalIndices_", totalIndices_);
+  adv.loadAttribute("elapsedTime_", elapsedTime_);
+  adv.loadAttribute("callsNumber_", callsNumber_);
+  adv.loadAttribute("coefficientOfVariation_", coefficientOfVariation_);
 }
 }
