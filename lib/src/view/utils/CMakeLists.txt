@@ -20,6 +20,24 @@ ot_add_source_file (UIntSpinBox.cxx)
 ot_add_source_file (CheckableHeaderView.cxx)
 ot_add_source_file (ResizableStackedWidget.cxx)
 
+ot_install_header_file ( ListWidgetWithCheckBox.hxx )
+ot_install_header_file ( TimeLineEdit.hxx )
+ot_install_header_file ( ValueLineEdit.hxx )
+ot_install_header_file ( CollapsibleGroupBox.hxx )
+ot_install_header_file ( SpinBoxDelegate.hxx )
+ot_install_header_file ( CodeDelegate.hxx )
+ot_install_header_file ( ComboBoxDelegate.hxx )
+ot_install_header_file ( LineEditWithQValidatorDelegate.hxx )
+ot_install_header_file ( HorizontalHeaderViewWithCombobox.hxx )
+ot_install_header_file ( ExportableTableView.hxx )
+ot_install_header_file ( CopyableTableView.hxx )
+ot_install_header_file ( QtTools.hxx )
+ot_install_header_file ( ResizableTableViewWithoutScrollBar.hxx )
+ot_install_header_file ( DoubleSpinBox.hxx )
+ot_install_header_file ( UIntSpinBox.hxx )
+ot_install_header_file ( CheckableHeaderView.hxx )
+ot_install_header_file ( ResizableStackedWidget.hxx )
+
 qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
               otgui/ListWidgetWithCheckBox.hxx
               otgui/ValueLineEdit.hxx

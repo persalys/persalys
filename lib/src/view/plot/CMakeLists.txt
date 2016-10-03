@@ -8,6 +8,11 @@ ot_add_source_file (PlotMatrixWidget.cxx)
 ot_add_source_file (GraphConfigurationWidget.cxx)
 ot_add_source_file (PlotMatrixConfigurationWidget.cxx)
 
+ot_install_header_file ( PlotWidget.hxx )
+ot_install_header_file ( PlotMatrixWidget.hxx )
+ot_install_header_file ( GraphConfigurationWidget.hxx )
+ot_install_header_file ( PlotMatrixConfigurationWidget.hxx )
+
 qt5_wrap_cpp (OTGUI_PLOT_MOC_SRCS
               otgui/PlotWidget.hxx
               otgui/PlotMatrixWidget.hxx
