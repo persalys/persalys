@@ -21,6 +21,7 @@
 #include "otgui/PlotWidget.hxx"
 
 #include "otgui/CustomScaleEngine.hxx"
+#include "otgui/CustomScaleDraw.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 
 #include <QMenu>
@@ -86,6 +87,10 @@ PlotWidget::PlotWidget(const QString plotTypeName, const bool isIndicesPlot, QWi
 
   setCanvasBackground(Qt::white);
   plotLayout()->setAlignCanvasToScales(true);
+
+  // QwtScaleDraw with locale insensitive labels
+  setAxisScaleDraw(xBottom, new CustomScaleDraw);
+  setAxisScaleDraw(yLeft, new CustomScaleDraw);
 
   clear();
 
