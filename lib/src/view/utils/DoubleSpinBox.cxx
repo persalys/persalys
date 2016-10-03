@@ -32,7 +32,8 @@ DoubleSpinBox::DoubleSpinBox(QWidget * parent)
 { 
   initLocalValues(parent);
 
-  QDoubleSpinBox::setDecimals(15);
+  QDoubleSpinBox::setDecimals(12);
+  setDecimals(12);
 
   // set Range to maximum possible values
   double doubleMax = std::numeric_limits<double>::max();
@@ -80,7 +81,7 @@ QString DoubleSpinBox::textFromValue(double value) const
 {
 
   // convert to string -> Using exponential display with internal decimals
-  QString str = locale().toString(value);
+  QString str = locale().toString(value, 'g', dispDecimals);
     // remove thousand sign
   if (qAbs(value) >= 1000.0)
   {
