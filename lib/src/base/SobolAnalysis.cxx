@@ -82,8 +82,8 @@ void SobolAnalysis::run()
 
   Collection<NumericalSample> allFirstOrderIndices(nbOutputs, NumericalSample(0, nbInputs));
   Collection<NumericalSample> allTotalIndices(nbOutputs, NumericalSample(0, nbInputs));
-  Interval firstOrderIndicesInterval;
-  Interval totalIndicesInterval;
+//   Interval firstOrderIndicesInterval;
+//   Interval totalIndicesInterval;
   SaltelliSensitivityAlgorithm algoSaltelli;
 
   // We loop if there remains time, some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
@@ -173,9 +173,9 @@ void SobolAnalysis::run()
   }
 
   // compute indices interval
-  algoSaltelli.setBootstrapSize(1000);
-  firstOrderIndicesInterval = algoSaltelli.getFirstOrderIndicesInterval();
-  totalIndicesInterval = algoSaltelli.getTotalOrderIndicesInterval();
+//   algoSaltelli.setBootstrapSize(1000);
+//   firstOrderIndicesInterval = algoSaltelli.getFirstOrderIndicesInterval();
+//   totalIndicesInterval = algoSaltelli.getTotalOrderIndicesInterval();
 
   // fill result_
   result_ = SobolResult(firstOrderIndices, totalIndices, getOutputNames());
