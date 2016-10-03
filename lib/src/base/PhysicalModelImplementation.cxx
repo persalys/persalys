@@ -161,7 +161,7 @@ void PhysicalModelImplementation::setInputDistributionParametersType(const OT::S
 void PhysicalModelImplementation::addInput(const Input & input)
 {
   if (hasInputNamed(input.getName()))
-    throw InvalidArgumentException(HERE) << "The physical model has already an input named " << input.getName(); 
+    throw InvalidArgumentException(HERE) << "The physical model already contains an input named " << input.getName(); 
 
   inputs_.add(input);
   if (input.isStochastic())
@@ -353,7 +353,7 @@ void PhysicalModelImplementation::setOutputValue(const String & outputName, cons
 void PhysicalModelImplementation::addOutput(const Output & output)
 {
   if (hasOutputNamed(output.getName()))
-    throw InvalidArgumentException(HERE) << "The physical model has already an output named " << output.getName(); 
+    throw InvalidArgumentException(HERE) << "The physical model already contains an output named " << output.getName(); 
 
   outputs_.add(output);
   notify("outputAdded");
