@@ -3,11 +3,13 @@ set (SOURCEFILES "" CACHE STRING "" FORCE)
 ot_add_current_dir_to_include_dirs ()
 
 ot_add_source_file (CustomScaleEngine.cxx)
+ot_add_source_file (CustomScaleDraw.cxx)
 ot_add_source_file (PlotWidget.cxx)
 ot_add_source_file (PlotMatrixWidget.cxx)
 ot_add_source_file (GraphConfigurationWidget.cxx)
 ot_add_source_file (PlotMatrixConfigurationWidget.cxx)
 
+ot_install_header_file ( CustomScaleDraw.hxx )
 ot_install_header_file ( PlotWidget.hxx )
 ot_install_header_file ( PlotMatrixWidget.hxx )
 ot_install_header_file ( GraphConfigurationWidget.hxx )
