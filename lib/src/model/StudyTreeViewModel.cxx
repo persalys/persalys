@@ -84,6 +84,8 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
 
 void StudyTreeViewModel::addProbabilisticModelItem(const QModelIndex & parentIndex)
 {
+  if (!parentIndex.isValid())
+    return;
   PhysicalModelItem * parentItem = static_cast<PhysicalModelItem*>(itemFromIndex(parentIndex)->parent());
   OTStudyItem * studyItem = static_cast<OTStudyItem*>(parentItem->QStandardItem::parent());
   ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(parentItem->getPhysicalModel());
@@ -96,6 +98,8 @@ void StudyTreeViewModel::addProbabilisticModelItem(const QModelIndex & parentInd
 
 void StudyTreeViewModel::addLimitStateItem(const QModelIndex & parentIndex)
 {
+  if (!parentIndex.isValid())
+    return;
   PhysicalModelItem * parentItem = static_cast<PhysicalModelItem*>(itemFromIndex(parentIndex)->parent());
   PhysicalModel physicalModel = parentItem->getPhysicalModel();
   OTStudyItem * studyItem = getOTStudyItem(parentIndex);
@@ -106,6 +110,8 @@ void StudyTreeViewModel::addLimitStateItem(const QModelIndex & parentIndex)
 
 OTStudyItem* StudyTreeViewModel::getOTStudyItem(const QModelIndex & childIndex)
 {
+  if (!childIndex.isValid())
+    return 0;
   QModelIndex seekRoot = childIndex;
   while(seekRoot.parent() != QModelIndex())
     seekRoot = seekRoot.parent();
@@ -116,6 +122,8 @@ OTStudyItem* StudyTreeViewModel::getOTStudyItem(const QModelIndex & childIndex)
 
 PhysicalModelItem* StudyTreeViewModel::getPhysicalModelItem(const QModelIndex & childIndex)
 {
+  if (!childIndex.isValid())
+    return 0;
   QModelIndex seekRoot = childIndex;
   while(seekRoot.parent() != QModelIndex())
   {
@@ -129,6 +137,8 @@ PhysicalModelItem* StudyTreeViewModel::getPhysicalModelItem(const QModelIndex & 
 
 LimitStateItem* StudyTreeViewModel::getLimitStateItem(const QModelIndex & childIndex)
 {
+  if (!childIndex.isValid())
+    return 0;
   if (itemFromIndex(childIndex)->data(Qt::UserRole).toString() == "LimitState")
     return static_cast<LimitStateItem*>(itemFromIndex(childIndex));
   QModelIndex seekRoot = childIndex;
