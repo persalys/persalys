@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItemModel to set not editable items and export data
+ *  @brief QwtScaleDraw with locale insensitive labels
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,23 +18,20 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_CUSTOMSTANDARDITEMMODEL_HXX
-#define OTGUI_CUSTOMSTANDARDITEMMODEL_HXX
+#include "otgui/CustomScaleDraw.hxx"
 
-#include <QStandardItemModel>
-
-#include "otgui/OTGuiprivate.hxx"
+#include <QString>
 
 namespace OTGUI {
-class OTGUI_API CustomStandardItemModel : public QStandardItemModel
-{
-public:
-  CustomStandardItemModel(int nbRows, int nbColumns, QObject * parent = 0);
 
-  void setNotEditableItem(const int row, const int column, const QString text);
-  void setNotEditableItem(const int row, const int column, const double value, const int prec=6);
-  void setNotEditableHeaderItem(const int row, const int column, const QString text);
-  virtual void exportData(const QString & fileName);
-};
+CustomScaleDraw::CustomScaleDraw()
+  : QwtScaleDraw()
+{
 }
-#endif
+
+
+QwtText CustomScaleDraw::label(double value) const
+{
+  return QString::number(value);
+}
+}

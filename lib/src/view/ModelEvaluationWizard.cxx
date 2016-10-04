@@ -19,12 +19,13 @@
  *
  */
 #include "otgui/ModelEvaluationWizard.hxx"
-#include "otgui/SpinBoxDelegate.hxx"
+
+#include "otgui/DoubleSpinBox.hxx"
 #include "otgui/ModelEvaluation.hxx"
 
 #include <QVBoxLayout>
-#include <QTableView>
-#include <QDoubleSpinBox>
+#include <QTableWidget>
+#include <QHeaderView>
 #include <QGroupBox>
 
 #include <limits>
@@ -76,7 +77,7 @@ void ModelEvaluationWizard::buildInterface()
     double delta(0.1*fabs(defaultValue));
     double step(delta > 1e-12 ? 0.5*delta : 0.1);
 
-    QDoubleSpinBox * valueSpinBox = new QDoubleSpinBox;
+    DoubleSpinBox * valueSpinBox = new DoubleSpinBox;
     valueSpinBox->setMinimum(-std::numeric_limits<double>::max());
     valueSpinBox->setMaximum(std::numeric_limits<double>::max());
     valueSpinBox->setValue(defaultValue);
@@ -84,6 +85,17 @@ void ModelEvaluationWizard::buildInterface()
     table_->setCellWidget(i, 2, valueSpinBox);
     connect(valueSpinBox, SIGNAL(valueChanged(double)), this, SLOT(inputValueChanged(double)));
   }
+
+#if QT_VERSION >= 0x050000
+  table_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
+  table_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
+  table_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+#else
+  table_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
+  table_->horizontalHeader()->setResizeMode(1, QHeaderView::Interactive);
+  table_->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+#endif
+
   inputsLayout->addWidget(table_);
   pageLayout->addWidget(inputsBox);
   addPage(page);
@@ -92,7 +104,7 @@ void ModelEvaluationWizard::buildInterface()
 
 void ModelEvaluationWizard::inputValueChanged(double value)
 {
-  QDoubleSpinBox * spinBox = qobject_cast<QDoubleSpinBox *>(sender());
+  DoubleSpinBox * spinBox = qobject_cast<DoubleSpinBox *>(sender());
   for (int i=0; i<table_->rowCount(); ++i)
   {
     QWidget * cellWidget = table_->cellWidget(i, 2);

@@ -64,7 +64,7 @@ void ModelEvaluationResultWindow::buildInterface()
   for (UnsignedInteger i=0; i<result_.getInputSample().getDimension(); ++i)
   {
     model->setNotEditableItem(i, 0, QString::fromUtf8(result_.getInputSample().getDescription()[i].c_str()));
-    model->setNotEditableItem(i, 1, result_.getInputSample()[0][i]);
+    model->setNotEditableItem(i, 1, result_.getInputSample()[0][i], 12);
   }
   inputsLayout->addWidget(inputTable);
   tabLayout->addWidget(inputsBox);
