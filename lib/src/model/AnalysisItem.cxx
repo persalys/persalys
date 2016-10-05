@@ -62,6 +62,13 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
 }
 
 
+void AnalysisItem::setDesignOfExperiment(const DesignOfExperiment& designOfExperiment)
+{
+  if (dynamic_cast<DesignOfExperimentAnalysis*>(&*getAnalysis().getImplementation()))
+    dynamic_cast<DesignOfExperimentAnalysis*>(&*getAnalysis().getImplementation())->setDesignOfExperiment(designOfExperiment);
+}
+
+
 void AnalysisItem::update(Observable* source, const String & message)
 {
   if (message == "analysisFinished")

@@ -306,12 +306,18 @@ void OTStudyItem::addDesignOfExperimentAnalysisItem(Analysis& analysis, Analysis
   if (!dynamic_cast<DesignOfExperimentAnalysis*>(&*analysis.getImplementation())->getDesignOfExperiment().hasPhysicalModel())
   {
     for (int i=0; i<rowCount(); ++i)
-      if (child(i)->text().toStdString() == analysis.getModelName())
+    {
+      DesignOfExperimentItem * DOEItem = dynamic_cast<DesignOfExperimentItem*>(child(i));
+      if (!DOEItem)
+        throw InvalidArgumentException(HERE) << "In OTStudyItem::addDesignOfExperimentAnalysisItem: Impossible to add an item for the analysis " << analysis.getName();
+      if (DOEItem->text().toStdString() == analysis.getModelName())
       {
-        child(i)->appendRow(item);
+        DOEItem->appendRow(item);
+        connect(DOEItem, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), item, SLOT(setDesignOfExperiment(DesignOfExperiment)));
         emit newAnalysisItemCreated(item);
         return;
       }
+    }
   }
   // DOE
   else
@@ -322,9 +328,13 @@ void OTStudyItem::addDesignOfExperimentAnalysisItem(Analysis& analysis, Analysis
       {
         for (int j=0; j<child(i)->child(2)->rowCount(); ++j)
         {
-          if (child(i)->child(2)->child(j)->text().toStdString() == analysis.getModelName())
+          DesignOfExperimentItem * DOEItem = dynamic_cast<DesignOfExperimentItem*>(child(i)->child(2)->child(j));
+          if (!DOEItem)
+            throw InvalidArgumentException(HERE) << "In OTStudyItem::addDesignOfExperimentAnalysisItem: Impossible to add an item for the analysis " << analysis.getName();
+          if (DOEItem->text().toStdString() == analysis.getModelName())
           {
-            child(i)->child(2)->child(j)->appendRow(item);
+            DOEItem->appendRow(item);
+            connect(DOEItem, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), item, SLOT(setDesignOfExperiment(DesignOfExperiment)));
             emit newAnalysisItemCreated(item);
             return;
           }

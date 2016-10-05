@@ -23,6 +23,7 @@
 
 #include "otgui/Analysis.hxx"
 #include "otgui/MetaModel.hxx"
+#include "otgui/DesignOfExperiment.hxx"
 
 #include <QStandardItem>
 
@@ -42,6 +43,7 @@ public:
 
 public slots:
   void updateAnalysis(const Analysis & analysis);
+  void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
 signals:
   void analysisFinished(AnalysisItem*);
   void analysisRemoved(QStandardItem*);
