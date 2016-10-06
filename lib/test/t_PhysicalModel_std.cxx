@@ -21,10 +21,7 @@
 #include <iostream>
 // OT includes
 #include "openturns/OT.hxx"
-#include "otgui/AnalyticalPhysicalModel.hxx"
-#include "otgui/PythonPhysicalModel.hxx"
-#include "otgui/OTStudy.hxx"
-#include "otgui/PythonEnvironment.hxx"
+#include "otgui/OTGui.hxx"
 
 using namespace OT;
 using namespace OTGUI;
