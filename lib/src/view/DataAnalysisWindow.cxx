@@ -246,6 +246,10 @@ void DataAnalysisWindow::buildInterface()
     tabWidget_->addTab(tab, tr("Plot matrix Y-X"));
   }
 
+  // eighth tab --------------------------------
+  if (!parameters_.isEmpty())
+    tabWidget_->addTab(buildParametersTextEdit(), tr("Parameters"));
+
   //
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
   setWidget(tabWidget_);
