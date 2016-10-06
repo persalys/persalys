@@ -44,26 +44,26 @@ void OTStudyWindow::buildInterface()
   hlayout->addStretch();
   QGridLayout * layout = new QGridLayout;
 
-  QPushButton * button = new QPushButton("New analytical physical model");
+  QPushButton * button = new QPushButton(tr("New analytical physical model"));
   button->setStatusTip(tr("Create a physical model with outputs defined by analytical formulae"));
   connect(button, SIGNAL(pressed()), this, SIGNAL(createNewAnalyticalPhysicalModel()));
   layout->addWidget(button, 0, 0);
 
-  button = new QPushButton("New Python physical model");
+  button = new QPushButton(tr("New Python physical model"));
   button->setStatusTip(tr("Create a physical model defined with a Python script"));
   connect(button, SIGNAL(pressed()), this, SIGNAL(createNewPythonPhysicalModel()));
   layout->addWidget(button, 1, 0);
 
   int row = 2;
 #ifdef OTGUI_HAVE_YACS
-  button = new QPushButton("New YACS physical model");
+  button = new QPushButton(tr("New YACS physical model"));
   button->setStatusTip(tr("Create a physical model defined with an YACS file"));
   connect(button, SIGNAL(pressed()), this, SIGNAL(createNewYACSPhysicalModel()));
   layout->addWidget(button, row, 0);
   ++row;
 #endif
 
-  button = new QPushButton("New data model");
+  button = new QPushButton(tr("New data model"));
   button->setStatusTip(tr("Import a sample to create a model"));
   connect(button, SIGNAL(pressed()), this, SIGNAL(createNewDataModel()));
   layout->addWidget(button, row, 0);
