@@ -1,7 +1,8 @@
-= 2.0 release (in-progress)
+= 1.1 release (2016-10-07)
 
- * Time/budget criteria to control algorithms
+ * Time criterion to control algorithms
  * Data model
+ * Polynomial chaos
  * SALOME console
 
 = 1.0 release (2016-03-04)
