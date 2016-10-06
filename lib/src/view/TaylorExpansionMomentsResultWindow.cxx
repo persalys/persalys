@@ -64,7 +64,7 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
   // -- results --
 
   // moments estimation
-  QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimate"));
+  QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimates"));
   QVBoxLayout * momentsVbox = new QVBoxLayout(momentsGroupBox);
   QStackedWidget * momentsTablesWidget = new QStackedWidget;
   connect(outputsComboBox, SIGNAL(currentIndexChanged(int)), momentsTablesWidget, SLOT(setCurrentIndex(int)));

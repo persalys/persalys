@@ -52,8 +52,8 @@ void ImportDesignOfExperimentPage::setTable(OT::NumericalSample & sample)
   const Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
 
   if (sample.getDimension() < inputNames.getSize())
-    throw InvalidArgumentException(HERE) << tr("The file contains a sample with a dimension inferior to the number of inputs of the physical model: ").toLocal8Bit().data()
-                                         << inputNames.getSize();
+    throw InvalidArgumentException(HERE) << tr("The file contains a sample with a dimension inferior to the number of inputs of the physical model:").toLocal8Bit().data()
+                                         << " " << inputNames.getSize();
 
   // set inputs columns indices
   Indices columns(designOfExperiment_.getInputColumns());

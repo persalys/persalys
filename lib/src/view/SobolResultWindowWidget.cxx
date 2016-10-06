@@ -65,7 +65,7 @@ void SobolResultWindowWidget::buildInterface()
     // plot
     PlotWidget * plot = new PlotWidget("sensitivitySobol", true);
     plot->plotSensitivityIndices(result_.getFirstOrderIndices()[i], result_.getTotalIndices()[i], inputNames);
-    plot->setTitle(tr("Sobol sensitivity indices: ") + outputNames[i]);
+    plot->setTitle(tr("Sobol sensitivity indices:") + " " + outputNames[i]);
     listPlotWidgets_.append(plot);
     plotStackedWidget->addWidget(plot);
 

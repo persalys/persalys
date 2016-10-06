@@ -146,7 +146,7 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   QVector<PlotWidget*> listHistogram;
   PlotWidget * plot = new PlotWidget("histogram");
   QString outputName(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
-  plot->plotHistogram(result_.getOutputSample(), 2, 0, outputName + tr(" distribution"));
+  plot->plotHistogram(result_.getOutputSample(), 2, 0, outputName + " " + tr("distribution"));
   NumericalSample threshold = NumericalSample(2, 2);
   threshold[0][0] = result_.getSimulationResult().getEvent().getThreshold();
   threshold[1][0] = plot->axisInterval(QwtPlot::yLeft).minValue();
@@ -156,7 +156,7 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   plot->setAxisTitle(QwtPlot::xBottom, tr("Values"));
   plot->setAxisTitle(QwtPlot::yLeft, tr("Number of simulations"));
   plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
-  plot->setTitle(tr("Output ") + outputName + tr(" distribution"));
+  plot->setTitle(tr("Output") + " " + outputName + " " + tr("distribution"));
 
   listHistogram.append(plot);
   tabLayout->addWidget(plot);

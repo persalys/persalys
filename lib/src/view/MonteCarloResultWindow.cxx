@@ -75,7 +75,7 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
       outAxisTitles_ << outputNames_.last();
   }
 
-  sampleSizeTitle_ = tr("Number of calls: ");
+  sampleSizeTitle_ = tr("Number of calls:") + " ";
 
   setParameters(item->getAnalysis());
 
