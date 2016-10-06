@@ -48,7 +48,7 @@ status : bool
 
 Returns
 -------
-machines : :class:`~openturns.Description`
+machines : :py:class:`openturns.Description`
     Fitting machines"
 
 // ---------------------------------------------------------------------

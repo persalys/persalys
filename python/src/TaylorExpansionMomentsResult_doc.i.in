@@ -8,7 +8,7 @@
 
 Returns
 -------
-listXMax : :class:`~openturns.Description`
+listXMax : :py:class:`openturns.Description`
     Output variable names"
 
 // ---------------------------------------------------------------------
@@ -18,7 +18,7 @@ listXMax : :class:`~openturns.Description`
 
 Returns
 -------
-mean : :class:`~openturns.NumericalPoint`
+mean : :py:class:`openturns.NumericalPoint`
     First order mean"
 
 // ---------------------------------------------------------------------
@@ -28,7 +28,7 @@ mean : :class:`~openturns.NumericalPoint`
 
 Returns
 -------
-mean : :class:`~openturns.NumericalPoint`
+mean : :py:class:`openturns.NumericalPoint`
     Second order mean"
 
 // ---------------------------------------------------------------------
@@ -38,7 +38,7 @@ mean : :class:`~openturns.NumericalPoint`
 
 Returns
 -------
-mean : :class:`~openturns.NumericalPoint`
+mean : :py:class:`openturns.NumericalPoint`
     Standard deviation"
 
 // ---------------------------------------------------------------------
@@ -48,5 +48,5 @@ mean : :class:`~openturns.NumericalPoint`
 
 Returns
 -------
-mean : :class:`~openturns.NumericalPoint`
+mean : :py:class:`openturns.NumericalPoint`
     Variance"

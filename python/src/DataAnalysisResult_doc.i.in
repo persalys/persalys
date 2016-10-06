@@ -8,7 +8,7 @@
 
 Returns
 -------
-result : :class:`~openturns.NumericalPoint`
+result : :py:class:`openturns.NumericalPoint`
     Minimum"
 
 // ---------------------------------------------------------------------
@@ -18,7 +18,7 @@ result : :class:`~openturns.NumericalPoint`
 
 Returns
 -------
-result : :class:`~openturns.NumericalPoint`
+result : :py:class:`openturns.NumericalPoint`
     Maximum"
 
 // ---------------------------------------------------------------------
@@ -28,7 +28,7 @@ result : :class:`~openturns.NumericalPoint`
 
 Returns
 -------
-result : :class:`~openturns.NumericalPoint`
+result : :py:class:`openturns.NumericalPoint`
     Mean"
 
 // ---------------------------------------------------------------------
@@ -38,7 +38,7 @@ result : :class:`~openturns.NumericalPoint`
 
 Returns
 -------
-result : :class:`~openturns.NumericalPoint`
+result : :py:class:`openturns.NumericalPoint`
     Median"
 
 // ---------------------------------------------------------------------
@@ -48,7 +48,7 @@ result : :class:`~openturns.NumericalPoint`
 
 Returns
 -------
-result : :class:`~openturns.NumericalPoint`
+result : :py:class:`openturns.NumericalPoint`
     Standard deviation"
 
 // ---------------------------------------------------------------------
@@ -58,7 +58,7 @@ result : :class:`~openturns.NumericalPoint`
 
 Returns
 -------
-result : :class:`~openturns.NumericalPoint`
+result : :py:class:`openturns.NumericalPoint`
     Variance"
 
 // ---------------------------------------------------------------------
@@ -68,7 +68,7 @@ result : :class:`~openturns.NumericalPoint`
 
 Returns
 -------
-result : :class:`~openturns.NumericalPoint`
+result : :py:class:`openturns.NumericalPoint`
     Coefficient of variation"
 
 // ---------------------------------------------------------------------
@@ -78,7 +78,7 @@ result : :class:`~openturns.NumericalPoint`
 
 Returns
 -------
-result : :class:`~openturns.NumericalPoint`
+result : :py:class:`openturns.NumericalPoint`
     Skewness"
 // ---------------------------------------------------------------------
 
@@ -87,7 +87,7 @@ result : :class:`~openturns.NumericalPoint`
 
 Returns
 -------
-result : :class:`~openturns.NumericalPoint`
+result : :py:class:`openturns.NumericalPoint`
     Kurtosis"
 
 // ---------------------------------------------------------------------
@@ -97,7 +97,7 @@ result : :class:`~openturns.NumericalPoint`
 
 Returns
 -------
-result : :class:`~openturns.NumericalPoint`
+result : :py:class:`openturns.NumericalPoint`
     First quartile"
 
 // ---------------------------------------------------------------------
@@ -107,7 +107,7 @@ result : :class:`~openturns.NumericalPoint`
 
 Returns
 -------
-result : :class:`~openturns.NumericalPoint`
+result : :py:class:`openturns.NumericalPoint`
     Third quartile"
 
 // ---------------------------------------------------------------------
@@ -122,7 +122,7 @@ level : float
 
 Returns
 -------
-result : :class:`~openturns.Interval`
+result : :py:class:`openturns.Interval`
     Confidence interval mean"
 
 // ---------------------------------------------------------------------
@@ -137,7 +137,7 @@ level : float
 
 Returns
 -------
-result : :class:`~openturns.Interval`
+result : :py:class:`openturns.Interval`
     Confidence interval standard deviation"
 
 // ---------------------------------------------------------------------
@@ -147,7 +147,7 @@ result : :class:`~openturns.Interval`
 
 Returns
 -------
-result : :class:`~openturns.NumericalPointCollection`
+result : :py:class:`openturns.NumericalPointCollection`
     Third quartile"
 
 // ---------------------------------------------------------------------
@@ -157,7 +157,7 @@ result : :class:`~openturns.NumericalPointCollection`
 
 Returns
 -------
-result : :class:`~openturns.Distribution`
+result : :py:class:`openturns.Distribution`
     Fitted distribution"
 
 // ---------------------------------------------------------------------
@@ -167,7 +167,7 @@ result : :class:`~openturns.Distribution`
 
 Returns
 -------
-result : sequence of :class:`~openturns.Numericalsample`
+result : sequence of :py:class:`openturns.Numericalsample`
     CDF"
 
 // ---------------------------------------------------------------------
@@ -177,7 +177,7 @@ result : sequence of :class:`~openturns.Numericalsample`
 
 Returns
 -------
-result : sequence of :class:`~openturns.Numericalsample`
+result : sequence of :py:class:`openturns.Numericalsample`
     PDF"
 
 // ---------------------------------------------------------------------

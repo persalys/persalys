@@ -8,7 +8,7 @@
 
 Returns
 -------
-sample : :class:`~openturns.Description`
+sample : :py:class:`openturns.Description`
     Input variable names"
 
 // ---------------------------------------------------------------------
@@ -18,7 +18,7 @@ sample : :class:`~openturns.Description`
 
 Returns
 -------
-sample : :class:`~openturns.Description`
+sample : :py:class:`openturns.Description`
     Output variable names"
 
 // ---------------------------------------------------------------------
@@ -28,5 +28,5 @@ sample : :class:`~openturns.Description`
 
 Returns
 -------
-indices : :class:`~openturns.NumericalPoint`
+indices : :py:class:`openturns.NumericalPoint`
     SRC indices"

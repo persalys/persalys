@@ -33,6 +33,6 @@ Examples
 
 Returns
 -------
-formulas : :class:`~openturns.Description`
+formulas : :py:class:`openturns.Description`
     Output fomulas"
 

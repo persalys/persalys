@@ -8,7 +8,7 @@
 
 Parameters
 ----------
-description : :class:`~openturns.Description`
+description : :py:class:`openturns.Description`
     Text descripting the variable"
 
 // ---------------------------------------------------------------------
@@ -18,7 +18,7 @@ description : :class:`~openturns.Description`
 
 Returns
 -------
-description : :class:`~openturns.Description`
+description : :py:class:`openturns.Description`
     Text descripting the variable"
 
 // ---------------------------------------------------------------------

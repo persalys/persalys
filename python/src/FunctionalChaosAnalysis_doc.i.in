@@ -116,7 +116,7 @@ validation : bool
 
 Returns
 -------
-distribution : :class:`~openturns.ComposedDistribution`
+distribution : :py:class:`openturns.ComposedDistribution`
     Distribution"
 
 // ---------------------------------------------------------------------

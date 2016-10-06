@@ -35,6 +35,9 @@ extensions = ['sphinx.ext.autodoc']
 extensions.append('sphinx.ext.autodoc')
 autodoc_default_flags = ['members', 'inherited-members']
 
+extensions.append('sphinx.ext.intersphinx')
+intersphinx_mapping = {'python': ('http://openturns.github.io/', 'openturns-objects.txt')}
+
 extensions.append('sphinx.ext.autosummary')
 autosummary_generate = True
 

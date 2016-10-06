@@ -10,7 +10,7 @@ The base class containing an input and an output sample"
 
 Returns
 -------
-sample : :class:`~openturns.NumericalSample`
+sample : :py:class:`openturns.NumericalSample`
     Input sample"
 
 // ----------------------------------------------------------------------
@@ -20,7 +20,7 @@ sample : :class:`~openturns.NumericalSample`
 
 Parameters
 ----------
-sample : :class:`~openturns.NumericalSample`
+sample : :py:class:`openturns.NumericalSample`
     Input sample"
 
 // ---------------------------------------------------------------------
@@ -30,7 +30,7 @@ sample : :class:`~openturns.NumericalSample`
 
 Returns
 -------
-sample : :class:`~openturns.NumericalSample`
+sample : :py:class:`openturns.NumericalSample`
     Output sample"
 
 // ---------------------------------------------------------------------
@@ -40,7 +40,7 @@ sample : :class:`~openturns.NumericalSample`
 
 Parameters
 ----------
-sample : :class:`~openturns.NumericalSample`
+sample : :py:class:`openturns.NumericalSample`
     Output sample"
 
 // ---------------------------------------------------------------------
@@ -50,7 +50,7 @@ sample : :class:`~openturns.NumericalSample`
 
 Returns
 -------
-sample : :class:`~openturns.NumericalSample`
+sample : :py:class:`openturns.NumericalSample`
     Input sample and output sample"
 
 // ---------------------------------------------------------------------

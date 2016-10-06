@@ -18,7 +18,7 @@ object : :class:`~otguibase.OTStudy`
 
 Returns
 -------
-filesNames : :class:`~openturns.Description`
+filesNames : :py:class:`openturns.Description`
     The files names of all the opened studies"
 
 // ---------------------------------------------------------------------

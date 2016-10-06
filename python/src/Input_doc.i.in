@@ -27,7 +27,7 @@ Examples
 
 Parameters
 ----------
-distribution : :class:`~openturns.Distribution`
+distribution : :py:class:`openturns.Distribution`
     Distribution associated with the variable"
 
 // ---------------------------------------------------------------------
@@ -37,7 +37,7 @@ distribution : :class:`~openturns.Distribution`
 
 Returns
 -------
-distribution : :class:`~openturns.Distribution`
+distribution : :py:class:`openturns.Distribution`
     Distribution associated with the variable"
 
 // ---------------------------------------------------------------------
