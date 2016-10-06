@@ -181,7 +181,7 @@ endif ()
 
 set ( CPACK_PACKAGE_NAME          ${PACKAGE_NAME} )
 set ( CPACK_PACKAGE_VERSION_MAJOR 1              )
-set ( CPACK_PACKAGE_VERSION_MINOR 0              )
+set ( CPACK_PACKAGE_VERSION_MINOR 1              )
 set ( CPACK_PACKAGE_VERSION_PATCH                )
 set ( CPACK_SOURCE_GENERATOR      "TGZ;TBZ2"     )
 set ( CPACK_BINARY_STGZ           "OFF"          )
