@@ -173,7 +173,7 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
   }
   catch (InvalidArgumentException & ex)
   {
-    std::cerr << "Error when creating the distribution " << distributionName << std::endl;
+    Log::Error(OSS() << "DistributionDictionary::BuildDistribution: Error when creating the distribution " << distributionName << "\n");
     throw InvalidArgumentException(HERE) << ex.what();
   }
 }

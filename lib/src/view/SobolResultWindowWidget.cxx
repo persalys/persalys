@@ -164,7 +164,7 @@ void SobolResultWindowWidget::updateIndicesPlot(int section, Qt::SortOrder order
 
   CustomStandardItemModel * model = listTableModels_[currentIndex_];
   if (!model)
-    throw InvalidValueException(HERE) << "SobolResultWindowWidget::updateIndicesPlot: can not update indices plot\n";
+    throw InternalException(HERE) << "SobolResultWindowWidget::updateIndicesPlot: can not update indices plot\n";
 
   for (UnsignedInteger i=0; i<inputDimension; ++i)
   {

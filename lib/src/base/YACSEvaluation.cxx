@@ -138,7 +138,7 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
 
   if (inps.size() != inS.getDimension())
   {
-    std::cerr<< "In YACSEvaluation::operator() inps.size() != inS.getDimension()\n";
+    Log::Error(OSS() << "In YACSEvaluation::operator(): inps.size() != inS.getDimension()\n");
     throw InvalidArgumentException(HERE) << "The dimension of the input sample " << inS.getDimension() << " is not valid";
   }
 
@@ -158,7 +158,7 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
 
   if (outps.size() != getOutputDimension())
   {
-    std::cerr<< "outps.size() != getOutputDimension()\n";
+    Log::Error(OSS() << "In YACSEvaluation::operator(): outps.size() != getOutputDimension()\n");
     throw InvalidArgumentException(HERE) << "The dimension of the output sample " << getOutputDimension() << " is not valid";
   }
 

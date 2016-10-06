@@ -152,18 +152,15 @@ void SRCResultWindow::buildInterface()
 
 void SRCResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
 {
-  int indexOutput = plotsConfigurationWidget_->getCurrentPlotIndex();
+  const int indexOutput = plotsConfigurationWidget_->getCurrentPlotIndex();
   NumericalPoint currentIndices(result_.getInputNames().getSize());
   Description sortedInputNames(result_.getInputNames().getSize());
 
   CustomStandardItemModel * model = listTableModels_[indexOutput];
   if (!model)
-  {
-    std::cerr << "can not update indices plot" << std::endl;
-    return;
-  }
+    throw InternalException(HERE) << "SRCResultWindow::updateIndicesPlot: can not update indices plot\n";
 
-  for (int i=0; i<result_.getInputNames().getSize(); ++i)
+  for (UnsignedInteger i=0; i<result_.getInputNames().getSize(); ++i)
   {
     sortedInputNames[i] = model->data(model->index(i, 0)).toString().toStdString();
     currentIndices[i] = model->data(model->index(i, 1)).toDouble();
