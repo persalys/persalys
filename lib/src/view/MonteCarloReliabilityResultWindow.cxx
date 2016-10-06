@@ -208,11 +208,11 @@ void MonteCarloReliabilityResultWindow::showHideGraphConfigurationWidget(int ind
   switch (indexTab)
   {
     // if a plotWidget is visible
-    case 1:
+    case 1: // histogram
       if (!histogramConfigurationWidget_->isVisible())
         emit graphWindowActivated(histogramConfigurationWidget_);
       break;
-    case 2:
+    case 2: // convergence graph
       if (!convergenceGraphConfigurationWidget_->isVisible())
         emit graphWindowActivated(convergenceGraphConfigurationWidget_);
       break;
@@ -228,9 +228,12 @@ void MonteCarloReliabilityResultWindow::showHideGraphConfigurationWidget(int ind
 
 void MonteCarloReliabilityResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
-  if (newState == 4 || newState == 8 || newState == 10)
+  if (oldState == Qt::WindowMaximized)
+    return;
+
+  if (newState == Qt::WindowFullScreen || newState == (Qt::WindowActive|Qt::WindowMaximized))
     showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-  else if (newState == 0 || newState == 1 || newState == 9)
+  else if (newState == Qt::WindowNoState || newState == Qt::WindowMinimized || newState == (Qt::WindowActive|Qt::WindowMinimized))
     showHideGraphConfigurationWidget(-1);
 }
 }

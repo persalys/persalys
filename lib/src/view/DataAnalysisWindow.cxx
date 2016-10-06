@@ -393,27 +393,27 @@ void DataAnalysisWindow::showHideGraphConfigurationWidget(int indexTab)
   switch (indexTab-tabOffset_)
   {
     // if a plotWidget is visible
-    case 1:
+    case 1: // PDF-CDF graph
       if (pdf_cdfPlotsConfigurationWidget_)
         if (!pdf_cdfPlotsConfigurationWidget_->isVisible())
           emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
       break;
-    case 2:
+    case 2: // box plot
       if (boxPlotsConfigurationWidget_)
         if (!boxPlotsConfigurationWidget_->isVisible())
           emit graphWindowActivated(boxPlotsConfigurationWidget_);
       break;
-    case 3:
+    case 3: // scatter plot
       if (scatterPlotsConfigurationWidget_)
         if (!scatterPlotsConfigurationWidget_->isVisible())
           emit graphWindowActivated(scatterPlotsConfigurationWidget_);
       break;
-    case 4:
+    case 4: // plot matrix X-X
       if (plotMatrix_X_X_ConfigurationWidget_)
         if (!plotMatrix_X_X_ConfigurationWidget_->isVisible())
           emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
       break;
-    case 5:
+    case 5: // plot matrix Y-X
       if (plotMatrixConfigurationWidget_)
         if (!plotMatrixConfigurationWidget_->isVisible())
           emit graphWindowActivated(plotMatrixConfigurationWidget_);
@@ -430,12 +430,12 @@ void DataAnalysisWindow::showHideGraphConfigurationWidget(int indexTab)
 
 void DataAnalysisWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
-  if (oldState == 2)
+  if (oldState == Qt::WindowMaximized)
     return;
 
-  if (newState == 4 || newState == 10)
+  if (newState == Qt::WindowFullScreen || newState == (Qt::WindowActive|Qt::WindowMaximized))
     showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-  else if (newState == 0 || newState == 1 || newState == 9)
+  else if (newState == Qt::WindowNoState || newState == Qt::WindowMinimized || newState == (Qt::WindowActive|Qt::WindowMinimized))
     showHideGraphConfigurationWidget(-1);
 }
 }

@@ -261,15 +261,15 @@ void DesignOfExperimentWindow::showHideGraphConfigurationWidget(int indexTab)
   switch (indexTab)
   {
     // if a plotWidget is visible
-    case 2:
+    case 2: // scatter plots
       if (!graphConfigurationWidget_->isVisible())
         emit graphWindowActivated(graphConfigurationWidget_);
       break;
-    case 3:
+    case 3: // plot matrix X-X
       if (!plotMatrix_X_X_ConfigurationWidget_->isVisible())
         emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
       break;
-    case 4:
+    case 4: // plot matrix Y-X
       if (!plotMatrixConfigurationWidget_->isVisible())
         emit graphWindowActivated(plotMatrixConfigurationWidget_);
       break;
@@ -285,12 +285,12 @@ void DesignOfExperimentWindow::showHideGraphConfigurationWidget(int indexTab)
 
 void DesignOfExperimentWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
-  if (oldState == 2)
+  if (oldState == Qt::WindowMaximized)
     return;
 
-  if (newState == 4 || newState == 10)
+  if (newState == Qt::WindowFullScreen || newState == (Qt::WindowActive|Qt::WindowMaximized))
     showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-  else if (newState == 0 || newState == 1 || newState == 9)
+  else if (newState == Qt::WindowNoState || newState == Qt::WindowMinimized || newState == (Qt::WindowActive|Qt::WindowMinimized))
     showHideGraphConfigurationWidget(-1);
 }
 }

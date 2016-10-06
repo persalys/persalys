@@ -124,7 +124,7 @@ void SobolResultWindow::showHideGraphConfigurationWidget(int indexTab)
   switch (indexTab)
   {
     // if a plotWidget is visible
-    case 0:
+    case 0: // sobol indices graph
       if (plotsConfigurationWidget_)
         if (!plotsConfigurationWidget_->isVisible())
           emit graphWindowActivated(plotsConfigurationWidget_);
@@ -141,12 +141,12 @@ void SobolResultWindow::showHideGraphConfigurationWidget(int indexTab)
 
 void SobolResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
-  if (oldState == 2)
+  if (oldState == Qt::WindowMaximized)
     return;
 
-  if (newState == 4 || newState == 10)
+  if (newState == Qt::WindowFullScreen || newState == (Qt::WindowActive|Qt::WindowMaximized))
     showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-  else if (newState == 0 || newState == 1 || newState == 9)
+  else if (newState == Qt::WindowNoState || newState == Qt::WindowMinimized || newState == (Qt::WindowActive|Qt::WindowMinimized))
     showHideGraphConfigurationWidget(-1);
 }
 }
