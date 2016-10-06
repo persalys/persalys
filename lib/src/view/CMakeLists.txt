@@ -115,6 +115,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/WelcomeWindow.hxx
                                   otgui/OTStudyWindow.hxx
                                   otgui/ResultWindow.hxx
+                                  otgui/AnalysisExecutionFailedWindow.hxx
                                   otgui/BlockSizeGroupBox.hxx
                                   otgui/MinMaxTableGroupBox.hxx
                                   otgui/MomentsEstimatesTableGroupBox.hxx
