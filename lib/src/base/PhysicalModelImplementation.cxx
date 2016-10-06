@@ -636,6 +636,16 @@ String PhysicalModelImplementation::getCopulaPythonScript() const
   return result;
 }
 
+String PhysicalModelImplementation::__repr__() const
+{
+  OSS oss;
+  oss << getClassName()
+    << " inputs=" << inputs_
+    << " outputs=" << outputs_
+    << " copula=" << copula_;
+  return oss;
+}
+
 
 /* Method save() stores the object through the StorageManager */
 void PhysicalModelImplementation::save(Advocate & adv) const
