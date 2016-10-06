@@ -61,7 +61,7 @@ public:
   OT::Collection<PhysicalModel> getPhysicalModels() const;
   PhysicalModel & getPhysicalModelByName(const OT::String & physicalModelName);
   bool hasPhysicalModelNamed(const OT::String & physicalModelName) const;
-  OT::String getAvailablePhysicalModelName() const;
+  OT::String getAvailablePhysicalModelName(const OT::String & physicalModelRootName="PhysicalModel_") const;
   void add(const PhysicalModel & physicalModel);
   void clear(const PhysicalModel & physicalModel);
   void remove(const PhysicalModel & physicalModel);

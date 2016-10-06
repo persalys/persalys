@@ -34,7 +34,7 @@ class OTGUI_API GraphConfigurationWidget : public QWidget
   Q_OBJECT
 
 public:
-  enum Type {NoType, Scatter, PDF, CDF, PDFResult, CDFResult, BoxPlot, SensitivityIndices};
+  enum Type {NoType, Scatter, PDF, CDF, PDFResult, CDFResult, BoxPlot, SensitivityIndices, MetaModel};
 
   GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets, QStringList inputNames, QStringList outputNames, Type plotType);
 

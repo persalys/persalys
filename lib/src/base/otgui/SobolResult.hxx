@@ -34,7 +34,7 @@ public:
   SobolResult();
   /** Constructor with parameters */
   SobolResult(const OT::NumericalSample firstOrderIndices,
-              const OT::NumericalSample totalOrderIndices,
+              const OT::NumericalSample totalIndices,
               const OT::Description & outputNames);
 
   /** Virtual constructor */
@@ -43,7 +43,7 @@ public:
   OT::Description getOutputNames() const;
   OT::Description getInputNames() const;
   OT::NumericalSample getFirstOrderIndices() const;
-  OT::NumericalSample getTotalOrderIndices() const;
+  OT::NumericalSample getTotalIndices() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -54,7 +54,7 @@ public:
 private:
   OT::Description outputNames_;
   OT::NumericalSample firstOrderIndices_;
-  OT::NumericalSample totalOrderIndices_;
+  OT::NumericalSample totalIndices_;
 };
 }
 #endif

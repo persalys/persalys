@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Top-level class for all analysis with design of experiment
+ *  @brief Class to define metamodel result
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,29 +18,36 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_DESIGNOFEXPERIMENTANALYSIS_HXX
-#define OTGUI_DESIGNOFEXPERIMENTANALYSIS_HXX
+#ifndef OTGUI_METAMODELANALYSISRESULT_HXX
+#define OTGUI_METAMODELANALYSISRESULT_HXX
 
-#include "AnalysisImplementation.hxx"
-#include "DesignOfExperiment.hxx"
+#include "MetaModel.hxx"
+
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class OTGUI_API DesignOfExperimentAnalysis : public AnalysisImplementation
+class OTGUI_API MetaModelAnalysisResult : public OT::PersistentObject
 {
-public:
-  /** Default constructor */
-  DesignOfExperimentAnalysis();
+  CLASSNAME;
 
-  /** Constructor with parameters */
-  DesignOfExperimentAnalysis(const OT::String & name, const DesignOfExperiment & designOfExperiment);
+public:
+
+  friend class FunctionalChaosAnalysis;
+
+  /** Default constructor */
+  MetaModelAnalysisResult();
 
   /** Virtual constructor */
-  virtual DesignOfExperimentAnalysis * clone() const;
+  virtual MetaModelAnalysisResult * clone() const;
 
-  DesignOfExperiment getDesignOfExperiment() const;
-  virtual void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
+  MetaModel getMetaModel() const;
 
-  OT::String getModelName() const;
+  OT::NumericalSample getMetaModelOutputSample() const;
+
+  OT::NumericalSample getMetaModelOutputSampleLeaveOneOut() const;
+
+  OT::NumericalPoint getErrorQ2LeaveOneOut() const;
+  OT::NumericalPoint getQ2LeaveOneOut() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -49,7 +56,11 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  DesignOfExperiment designOfExperiment_;
+  MetaModel metaModel_;
+  OT::NumericalSample metaModelOutputSample_;
+  OT::NumericalSample metaModelOutputSampleLOO_;
+  OT::NumericalPoint errorQ2LOO_;
+  OT::NumericalPoint q2LOO_;
 };
 }
 #endif

@@ -17,6 +17,7 @@ Model creation
     AnalyticalPhysicalModel
     PythonPhysicalModel
     DataModel
+    MetaModel
 
 Model evaluation
 ----------------
@@ -107,6 +108,19 @@ Data analysis
 
     DataAnalysis
     DataAnalysisResult
+
+Metamodel
+---------
+
+.. currentmodule:: otguibase
+
+.. autosummary::
+    :toctree: _generated/
+    :template: class.rst_t
+
+    FunctionalChaosAnalysis
+    MetaModelAnalysisResult
+    FunctionalChaosAnalysisResult
 
 Study storage
 -------------

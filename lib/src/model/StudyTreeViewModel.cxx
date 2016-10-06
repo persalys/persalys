@@ -69,14 +69,10 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
     otStudyItem->addPhysicalModelItem(otStudy->getPhysicalModels()[i]);
   for (UnsignedInteger i=0; i<otStudy->getLimitStates().getSize(); ++i)
     otStudyItem->addLimitStateItem(otStudy->getLimitStates()[i]);
-  for (UnsignedInteger i=0; i<otStudy->getAnalyses().getSize(); ++i)
-  {
-    otStudyItem->addAnalysisItem(otStudy->getAnalyses()[i]);
-    if (otStudy->getAnalyses()[i].analysisLaunched())
-      otStudy->getAnalyses()[i].getImplementation()->notify("analysisFinished");
-  }
   for (UnsignedInteger i=0; i<otStudy->getDesignOfExperiments().getSize(); ++i)
     otStudyItem->addDesignOfExperimentItem(otStudy->getDesignOfExperiments()[i]);
+  for (UnsignedInteger i=0; i<otStudy->getAnalyses().getSize(); ++i)
+    otStudyItem->addAnalysisItem(otStudy->getAnalyses()[i]);
 
   emit newOTStudyCreated(otStudyItem);
 }

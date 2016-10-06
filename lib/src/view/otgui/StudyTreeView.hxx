@@ -62,6 +62,7 @@ public slots:
   void createNewCentralTendency();
   void createNewSensitivityAnalysis();
   void createNewThresholdExceedance();
+  void createNewMetaModel();
   void onCustomContextMenu(const QPoint & point);
   void selectedItemChanged(const QModelIndex & currentIndex);
   void selectedItemChanged(const QModelIndex & currentIndex, const QModelIndex & previousIndex);
@@ -120,6 +121,7 @@ private:
   QAction * newCentralTendency_;
   QAction * newSensitivityAnalysis_;
   QAction * newThresholdExceedance_;
+  QAction * newMetaModel_;
   QAction * runDesignOfExperiment_;
   QAction * removeDesignOfExperiment_;
   QAction * runAnalysis_;

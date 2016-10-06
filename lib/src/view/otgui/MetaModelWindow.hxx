@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow for the results of SobolAnalysis
+ *  @brief QMdiSubWindow for metamodels
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,34 +18,22 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_SOBOLRESULTWINDOW_HXX
-#define OTGUI_SOBOLRESULTWINDOW_HXX
+#ifndef OTGUI_METAMODELWINDOW_HXX
+#define OTGUI_METAMODELWINDOW_HXX
 
-#include "otgui/ResultWindow.hxx"
-#include "otgui/SobolResult.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/PhysicalModelItem.hxx"
 
 namespace OTGUI {
-class SobolResultWindow : public ResultWindow
+class MetaModelWindow : public OTguiSubWindow
 {
   Q_OBJECT
 
-public:
-  SobolResultWindow(AnalysisItem * item);
-
-protected:
-  void setParameters(const Analysis & analysis);
-  void buildInterface();
-
-public slots:
-  void showHideGraphConfigurationWidget(int indexTab);
-  void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+public :
+  MetaModelWindow(PhysicalModelItem * item);
 
 private:
-  SobolResult result_;
-  QTabWidget * tabWidget_;
-  GraphConfigurationWidget * plotsConfigurationWidget_;
-  QString warningMessage_;
+  PhysicalModel physicalModel_;
 };
 }
 #endif

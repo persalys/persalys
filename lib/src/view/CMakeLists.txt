@@ -34,6 +34,7 @@ ot_add_source_file ( ProbabilisticDesignPage.cxx )
 ot_add_source_file ( PhysicalModelWindowWidget.cxx )
 ot_add_source_file ( AnalyticalPhysicalModelWindow.cxx )
 ot_add_source_file ( PythonPhysicalModelWindow.cxx )
+ot_add_source_file ( MetaModelWindow.cxx )
 if (SalomeYACS_FOUND)
   ot_add_source_file ( YACSPhysicalModelWindow.cxx)
 endif ()
@@ -46,6 +47,7 @@ ot_add_source_file ( ModelEvaluationResultWindow.cxx )
 ot_add_source_file ( CentralTendencyWizard.cxx )
 ot_add_source_file ( MonteCarloResultWindow.cxx )
 ot_add_source_file ( TaylorExpansionMomentsResultWindow.cxx )
+ot_add_source_file ( SobolResultWindowWidget.cxx )
 ot_add_source_file ( SobolResultWindow.cxx )
 ot_add_source_file ( SRCResultWindow.cxx )
 ot_add_source_file ( SensitivityAnalysisWizard.cxx )
@@ -53,6 +55,8 @@ ot_add_source_file ( LimitStateWindow.cxx )
 ot_add_source_file ( ReliabilityAnalysisWizard.cxx )
 ot_add_source_file ( MonteCarloReliabilityResultWindow.cxx )
 ot_add_source_file ( StopCriteriaGroupBox.cxx )
+ot_add_source_file ( MetaModelAnalysisWizard.cxx )
+ot_add_source_file ( FunctionalChaosResultWindow.cxx )
 
 ot_install_header_file ( MainWindow.hxx )
 ot_install_header_file ( OTguiToolBar.hxx )
@@ -81,6 +85,7 @@ ot_install_header_file ( OTguiSubWindow.hxx )
 ot_install_header_file ( PhysicalModelWindowWidget.hxx )
 ot_install_header_file ( AnalyticalPhysicalModelWindow.hxx )
 ot_install_header_file ( PythonPhysicalModelWindow.hxx )
+ot_install_header_file ( MetaModelWindow.hxx )
 if (SalomeYACS_FOUND)
   ot_install_header_file (YACSPhysicalModelWindow.hxx)
 endif ()
@@ -90,6 +95,7 @@ ot_install_header_file ( DesignOfExperimentWindow.hxx )
 ot_install_header_file ( ModelEvaluationResultWindow.hxx )
 ot_install_header_file ( MonteCarloResultWindow.hxx )
 ot_install_header_file ( TaylorExpansionMomentsResultWindow.hxx )
+ot_install_header_file ( SobolResultWindowWidget.hxx )
 ot_install_header_file ( SobolResultWindow.hxx )
 ot_install_header_file ( SRCResultWindow.hxx )
 ot_install_header_file ( MonteCarloReliabilityResultWindow.hxx )
@@ -97,6 +103,7 @@ ot_install_header_file ( StudyTreeView.hxx )
 ot_install_header_file ( DeterministicDesignPage.hxx )
 ot_install_header_file ( ProbabilisticDesignPage.hxx )
 ot_install_header_file ( StopCriteriaGroupBox.hxx )
+ot_install_header_file ( FunctionalChaosResultWindow.hxx )
 
 qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/OTguiToolBar.hxx
@@ -124,6 +131,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/PhysicalModelWindowWidget.hxx
                                   otgui/AnalyticalPhysicalModelWindow.hxx
                                   otgui/PythonPhysicalModelWindow.hxx
+                                  otgui/MetaModelWindow.hxx
                                   otgui/ProbabilisticModelWindow.hxx
                                   otgui/DesignOfExperimentWizard.hxx
                                   otgui/DesignOfExperimentWindow.hxx
@@ -132,6 +140,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/CentralTendencyWizard.hxx
                                   otgui/MonteCarloResultWindow.hxx
                                   otgui/TaylorExpansionMomentsResultWindow.hxx
+                                  otgui/SobolResultWindowWidget.hxx
                                   otgui/SobolResultWindow.hxx
                                   otgui/SRCResultWindow.hxx
                                   otgui/SensitivityAnalysisWizard.hxx
@@ -139,6 +148,8 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/ReliabilityAnalysisWizard.hxx
                                   otgui/MonteCarloReliabilityResultWindow.hxx
                                   otgui/StopCriteriaGroupBox.hxx
+                                  otgui/MetaModelAnalysisWizard.hxx
+                                  otgui/FunctionalChaosResultWindow.hxx
                                   )
 
 

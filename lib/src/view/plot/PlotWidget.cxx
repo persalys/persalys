@@ -388,26 +388,21 @@ void PlotWidget::plotBoxPlot(double median, double lowerQuartile, double upperQu
 }
 
 
-void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrder, const NumericalPoint totalOrder, const Description inputNames)
+void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrderIndices, const NumericalPoint totalIndices, const Description inputNames)
 {
-  if (totalOrder.getSize())
-    setTitle("Sobol sensitivity indices");
-  else
-    setTitle("SRC sensitivity indices");
-
   setAxisTitle(QwtPlot::yLeft, "Index");
   setAxisTitle(QwtPlot::xBottom, "Inputs");
 
   // populate bar chart
   static const char *colors[] = {"DarkOrchid", "SteelBlue"};
 
-  UnsignedInteger size = firstOrder.getSize();
+  const UnsignedInteger size = firstOrderIndices.getSize();
   
   double *xData = new double[size];
   double *yData = new double[size];
 
   double width = 0.;
-  if (totalOrder.getSize())
+  if (totalIndices.getSize())
     width = 0.1;
 
   double yMin = 0.;
@@ -415,15 +410,15 @@ void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrder, const N
   for (UnsignedInteger i=0 ; i<size ; ++i)
   {
     xData[i] = (i-width);
-    yData[i] = firstOrder[i];
-    yMin = std::min(yMin, firstOrder[i]);
-    yMax = std::max(yMax, firstOrder[i]);
+    yData[i] = firstOrderIndices[i];
+    yMin = std::min(yMin, firstOrderIndices[i]);
+    yMax = std::max(yMax, firstOrderIndices[i]);
     //qDebug() << "x= " << xData[i] << " , y= " << yData[i];
   }
 
   plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Ellipse, QBrush(colors[0]), QPen(colors[0]), QSize(5, 5)), "First order index");
 
-  if (totalOrder.getSize())
+  if (totalIndices.getSize())
   {
     xData = new double[size];
     yData = new double[size];
@@ -431,12 +426,12 @@ void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrder, const N
     for (UnsignedInteger i=0 ; i<size ; ++i)
     {
       xData[i] = (i+width) ;
-      yData[i] = totalOrder[i];
-      yMin = std::min(yMin, totalOrder[i]);
-      yMax = std::max(yMax, totalOrder[i]);
+      yData[i] = totalIndices[i];
+      yMin = std::min(yMin, totalIndices[i]);
+      yMax = std::max(yMax, totalIndices[i]);
       //qDebug() << "x= " << xData[i] << " , y= " << yData[i];
     }
-    plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Rect, QBrush(colors[1]), QPen(colors[1]), QSize(5, 5)), "Total order index");
+    plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Rect, QBrush(colors[1]), QPen(colors[1]), QSize(5, 5)), "Total index");
 
     insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
   }
@@ -444,7 +439,7 @@ void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrder, const N
   delete[] yData;
 
   // scales
-  setAxisScale(QwtPlot::xBottom, -0.5, firstOrder.getSize()-0.5, 1.0);
+  setAxisScale(QwtPlot::xBottom, -0.5, firstOrderIndices.getSize()-0.5, 1.0);
   setAxisMaxMinor(QwtPlot::xBottom, 0);
   setAxisScaleDraw(QwtPlot::xBottom, new customHorizontalScaleDraw(inputNames));
 

@@ -89,7 +89,7 @@ void SRCResultWindow::buildInterface()
     // plot
     PlotWidget * plot = new PlotWidget("sensitivitySRC", true);
     plot->plotSensitivityIndices(result_.getIndices()[i], NumericalPoint(), inputNames);
-    plot->setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
+    plot->setTitle(tr("SRC sensitivity indices:") + " " + outputNames[i]);
     listPlotWidgets_.append(plot);
     plotStackedWidget->addWidget(plot);
 

@@ -39,12 +39,12 @@ SobolResult::SobolResult()
 
 /* Constructor with parameters */
 SobolResult::SobolResult(const NumericalSample firstOrderIndices,
-                         const NumericalSample totalOrderIndices,
+                         const NumericalSample totalIndices,
                          const Description & outputNames)
   : PersistentObject()
   , outputNames_(outputNames)
   , firstOrderIndices_(firstOrderIndices)
-  , totalOrderIndices_(totalOrderIndices)
+  , totalIndices_(totalIndices)
 {
 }
 
@@ -74,9 +74,9 @@ NumericalSample SobolResult::getFirstOrderIndices() const
 }
 
 
-NumericalSample SobolResult::getTotalOrderIndices() const
+NumericalSample SobolResult::getTotalIndices() const
 {
-  return totalOrderIndices_;
+  return totalIndices_;
 }
 
 
@@ -86,7 +86,7 @@ void SobolResult::save(Advocate & adv) const
   PersistentObject::save(adv);
   adv.saveAttribute("outputNames_", outputNames_);
   adv.saveAttribute("firstOrderIndices_", firstOrderIndices_);
-  adv.saveAttribute("totalOrderIndices_", totalOrderIndices_);
+  adv.saveAttribute("totalIndices_", totalIndices_);
 }
 
 
@@ -96,6 +96,6 @@ void SobolResult::load(Advocate & adv)
   PersistentObject::load(adv);
   adv.loadAttribute("outputNames_", outputNames_);
   adv.loadAttribute("firstOrderIndices_", firstOrderIndices_);
-  adv.loadAttribute("totalOrderIndices_", totalOrderIndices_);
+  adv.loadAttribute("totalIndices_", totalIndices_);
 }
 }

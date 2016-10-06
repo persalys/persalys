@@ -211,13 +211,13 @@ String OTStudy::getAvailableDataModelName() const
 }
 
 
-void OTStudy::clear(const DesignOfExperiment& dataModel)
+void OTStudy::clear(const DesignOfExperiment& designOfExperiment)
 {
   // remove all the analyses
   PersistentCollection<Analysis>::iterator iterAnalysis = analyses_.begin();
   while (iterAnalysis != analyses_.end())
   {
-    if ((*iterAnalysis).getModelName() == dataModel.getName())
+    if ((*iterAnalysis).getModelName() == designOfExperiment.getName())
     {
       (*iterAnalysis).getImplementation().get()->notify("analysisRemoved");
       iterAnalysis = analyses_.erase(iterAnalysis);
@@ -255,13 +255,12 @@ bool OTStudy::hasPhysicalModelNamed(const String & physicalModelName) const
 }
 
 
-String OTStudy::getAvailablePhysicalModelName() const
+String OTStudy::getAvailablePhysicalModelName(const OT::String & physicalModelRootName) const
 {
   int i = 0;
-  String rootName = "physicalModel_";
-  while (hasPhysicalModelNamed(rootName + (OSS()<<i).str()))
+  while (hasPhysicalModelNamed(physicalModelRootName + (OSS()<<i).str()))
     ++i;
-  return rootName + (OSS()<<i).str();
+  return physicalModelRootName + (OSS()<<i).str();
 }
 
 
@@ -315,6 +314,7 @@ void OTStudy::clear(const PhysicalModel & physicalModel)
   {
     if ((*iterDOE).getPhysicalModel().getName() == physicalModel.getName())
     {
+      clear(*iterDOE);
       (*iterDOE).getImplementation().get()->notify("designOfExperimentRemoved");
       iterDOE = designOfExperiments_.erase(iterDOE);
     }
@@ -403,6 +403,8 @@ void OTStudy::add(const DesignOfExperiment & designOfExperiment)
 
 void OTStudy::remove(const DesignOfExperiment & designOfExperiment)
 {
+  clear(designOfExperiment);
+
   if (designOfExperiment.hasPhysicalModel()) // design of experiment
   {
     for (UnsignedInteger i=0; i<designOfExperiments_.getSize(); ++i)
@@ -414,8 +416,6 @@ void OTStudy::remove(const DesignOfExperiment & designOfExperiment)
   }
   else // datamodel
   {
-    clear(designOfExperiment);
-
     for (UnsignedInteger i=0; i<dataModels_.getSize(); ++i)
       if (dataModels_[i].getName() == designOfExperiment.getName())
       {
@@ -428,7 +428,7 @@ void OTStudy::remove(const DesignOfExperiment & designOfExperiment)
 
 
 
-// ----- ANALYS -----
+// ----- ANALYSIS -----
 Collection<Analysis> OTStudy::getAnalyses() const
 {
   return analyses_;
@@ -592,13 +592,18 @@ String OTStudy::getPythonScript()
 
   for (Collection<PhysicalModel>::iterator it=physicalModels_.begin(); it!= physicalModels_.end(); ++it)
   {
-    result += (*it).getPythonScript();
-    result += getName() + ".add(" + (*it).getName() + ")\n";
+    if ((*it).getImplementation()->getClassName() != "MetaModel")
+    {
+      result += (*it).getPythonScript();
+      result += getName() + ".add(" + (*it).getName() + ")\n";
+    }
   }
   for (Collection<DesignOfExperiment>::iterator it=designOfExperiments_.begin(); it!= designOfExperiments_.end(); ++it)
   {
     result += (*it).getPythonScript();
     result += getName() + ".add(" + (*it).getName() + ")\n";
+    if ((*it).getOutputSample().getSize())
+      result += (*it).getName() + ".run()\n";
   }
   for (Collection<LimitState>::iterator it=limitStates_.begin(); it!= limitStates_.end(); ++it)
   {

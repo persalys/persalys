@@ -41,6 +41,7 @@
 #endif
 #include "otgui/AnalyticalPhysicalModelWindow.hxx"
 #include "otgui/PythonPhysicalModelWindow.hxx"
+#include "otgui/MetaModelWindow.hxx"
 #include "otgui/ProbabilisticModelWindow.hxx"
 #include "otgui/LimitStateWindow.hxx"
 #include "otgui/DataModelWizard.hxx"
@@ -58,6 +59,8 @@
 #include "otgui/SRCResultWindow.hxx"
 #include "otgui/ReliabilityAnalysisWizard.hxx"
 #include "otgui/MonteCarloReliabilityResultWindow.hxx"
+#include "otgui/FunctionalChaosResultWindow.hxx"
+#include "otgui/MetaModelAnalysisWizard.hxx"
 #include "otgui/LineEditWithQValidatorDelegate.hxx"
 
 #include <iostream>
@@ -196,6 +199,10 @@ void StudyTreeView::buildActions()
   newThresholdExceedance_->setStatusTip(tr("Create a new threshold exceedance"));
   connect(newThresholdExceedance_, SIGNAL(triggered()), this, SLOT(createNewThresholdExceedance()));
 
+  newMetaModel_ = new QAction(tr("New metamodel"), this);
+  newMetaModel_->setStatusTip(tr("Create a new metamodel"));
+  connect(newMetaModel_, SIGNAL(triggered()), this, SLOT(createNewMetaModel()));
+
   // run design of experiment action
   runDesignOfExperiment_ = new QAction(QIcon(":/images/run-build.png"), tr("Run"), this);
   runDesignOfExperiment_->setStatusTip(tr("Run the design of experiment"));
@@ -242,6 +249,7 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
   {
     actions.append(modifyDataModel_);
     actions.append(newDataAnalysis_);
+    actions.append(newMetaModel_);
     actions.append(removeDataModel_);
   }
   else if (dataType == "PhysicalModel")
@@ -269,6 +277,7 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
   else if (dataType.contains("DesignOfExperiment"))
   {
     actions.append(runDesignOfExperiment_);
+    actions.append(newMetaModel_);
     actions.append(removeDesignOfExperiment_);
   }
   else if (dataType == "LimitState")
@@ -509,6 +518,8 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
     window = new AnalyticalPhysicalModelWindow(item);
   else if (physicalModelType == "PythonPhysicalModel")
     window = new PythonPhysicalModelWindow(item);
+  else if (physicalModelType == "MetaModel")
+    window = new MetaModelWindow(item);
 #ifdef OTGUI_HAVE_YACS
   else if (physicalModelType == "YACSPhysicalModel")
     window = new YACSPhysicalModelWindow(item);
@@ -633,6 +644,27 @@ void StudyTreeView::createNewThresholdExceedance()
 }
 
 
+void StudyTreeView::createNewMetaModel()
+{
+  QModelIndex index = selectionModel()->currentIndex();
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+  DesignOfExperimentItem * item = dynamic_cast<DesignOfExperimentItem*>(selectedItem);
+  if (!item->getDesignOfExperiment().getOutputSample().getSize())
+  {
+    QMessageBox::critical(this, tr("Error"), tr("The model must have at least one output."));
+    return;
+  }
+  OTStudyItem * otStudyItem = treeViewModel_->getOTStudyItem(index);
+  QSharedPointer<MetaModelAnalysisWizard> wizard = QSharedPointer<MetaModelAnalysisWizard>(new MetaModelAnalysisWizard(otStudyItem->getOTStudy(), item->getDesignOfExperiment()));
+
+  if (wizard->exec())
+  {
+    otStudyItem->getOTStudy()->add(wizard->getAnalysis());
+    findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysis().getName().c_str());
+  }
+}
+
+
 void StudyTreeView::createAnalysisConnection(AnalysisItem * item)
 {
   connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createAnalysisResultWindow(AnalysisItem*)));
@@ -689,16 +721,23 @@ void StudyTreeView::runAnalysis()
 
   QSharedPointer<AnalysisWizard> wizard;
   QString analysisType = item->data(Qt::UserRole).toString();
-  if (!isPhysicalModelValid(selectionModel()->currentIndex()))
-    return;
+
   if (analysisType == "ModelEvaluation")
   {
+    if (!isPhysicalModelValid(selectionModel()->currentIndex()))
+      std::cerr << "In runAnalysis: physical model not valid for the " << analysisType.toStdString() << "\n";
     wizard = QSharedPointer<AnalysisWizard>(new ModelEvaluationWizard(item->getAnalysis()));
+  }
+  else if (analysisType == "FunctionalChaosAnalysis")
+  {
+    wizard = QSharedPointer<AnalysisWizard>(new MetaModelAnalysisWizard(item->getAnalysis()));
   }
   else
   {
+    if (!isPhysicalModelValid(selectionModel()->currentIndex()))
+      std::cerr << "In runAnalysis: physical model not valid for the " << analysisType.toStdString() << "\n";
     if (!isProbabilisticModelValid(selectionModel()->currentIndex()))
-      return;
+      std::cerr << "In runAnalysis: probabilistic model not valid for the " << analysisType.toStdString() << "\n";
 
     if (analysisType == "MonteCarloAnalysis" || analysisType == "TaylorExpansionMomentsAnalysis")
     {
@@ -711,12 +750,12 @@ void StudyTreeView::runAnalysis()
     else if (analysisType == "MonteCarloReliabilityAnalysis")
     {
       if (!isLimitStateValid(selectionModel()->currentIndex()))
-        return;
+        std::cerr << "In runAnalysis: limit state not valid for the " << analysisType.toStdString() << "\n";
       wizard = QSharedPointer<AnalysisWizard>(new ReliabilityAnalysisWizard(item->getAnalysis()));
     }
     else
     {
-      std::cerr << "In runAnalysis: analysisType " << analysisType.toStdString() << " not recognized.";
+      std::cerr << "In runAnalysis: analysisType " << analysisType.toStdString() << " not recognized.\n";
     }
   }
 
@@ -767,6 +806,8 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
     resultWindow = new MonteCarloReliabilityResultWindow(item);
   else if (analysisType == "DataAnalysis")
     resultWindow = new DataAnalysisResultWindow(item);
+  else if (analysisType == "FunctionalChaosAnalysis")
+    resultWindow = new FunctionalChaosResultWindow(item);
   else
     std::cerr << "In createAnalysisResultWindow: analysisType " << analysisType.toStdString() << " not recognized.";
 

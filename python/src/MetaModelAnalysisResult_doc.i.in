@@ -1,0 +1,60 @@
+%feature("docstring") OTGUI::MetaModelAnalysisResult
+"Base class for metamodel result."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysisResult::getMetaModel
+"Metamodel accessor.
+
+Returns
+-------
+metamodel : :class:`~otguibase.MetaModel`
+    Metamodel"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysisResult::getMetaModelOutputSample
+"Output sample accessor.
+
+Returns
+-------
+sample : :class:`~openturns.NumericalSample`
+    Output sample evaluate with the metamodel"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysisResult::getMetaModelOutputSampleLeaveOneOut
+"Output sample accessor.
+
+Returns
+-------
+sample : :class:`~openturns.NumericalSample`
+    All the approximation :math:`\hat{y_i}^{(-i)}`
+    that has been built from the data sample without the i-th observation."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysisResult::getErrorQ2LeaveOneOut
+"Leave-one-out validation errors accessor.
+
+Returns
+-------
+error : :class:`~openturns.NumericalPoint`
+    The Leave-one-out validation errors defined as follows for each output of the model:
+    :math:`\displaystyle \frac{\sqrt{\sum_{i=1}^N (y_i - \hat{y_i}^{(-i)})^2}}{N}`
+    with :math:`y_i` the :math:`N` model's values and :math:`\hat{y_i}^{(-i)}` the
+    approximation that has been built from the data sample without the i-th observation."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysisResult::getQ2LeaveOneOut
+"Leave-one-out validation Q2 accessor.
+
+Returns
+-------
+q2 : :class:`~openturns.NumericalPoint`
+    Leave-one-out validation Q2 defined as follows for each output of the model:
+    :math:`1 - \displaystyle \frac{\sum_{i=1}^N (y_i - \hat{y_i}^{(-i)})^2}{(N-1) {\rm Var}\left[ \underline{Y} \right]}`
+    with :math:`\underline{Y}` the vector of the :math:`N` model's values
+    :math:`y_i` and :math:`\hat{y_i}^{(-i)}` the
+    approximation that has been built from the data sample without the i-th observation."

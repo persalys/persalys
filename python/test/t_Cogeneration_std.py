@@ -82,9 +82,9 @@ sobolResult = sobol.getResult()
 openturns.testing.assert_almost_equal(0.66706589316, sobolResult.getFirstOrderIndices()[0][0], 1e-11)
 openturns.testing.assert_almost_equal(0.0544481329747, sobolResult.getFirstOrderIndices()[0][1], 1e-13)
 openturns.testing.assert_almost_equal(0.33361028403, sobolResult.getFirstOrderIndices()[0][2], 1e-11)
-openturns.testing.assert_almost_equal(0.608839559982, sobolResult.getTotalOrderIndices()[0][0], 1e-12)
-openturns.testing.assert_almost_equal(0.0574755596289, sobolResult.getTotalOrderIndices()[0][1], 1e-13)
-openturns.testing.assert_almost_equal(0.289572736872, sobolResult.getTotalOrderIndices()[0][2], 1e-12)
+openturns.testing.assert_almost_equal(0.608839559982, sobolResult.getTotalIndices()[0][0], 1e-12)
+openturns.testing.assert_almost_equal(0.0574755596289, sobolResult.getTotalIndices()[0][1], 1e-13)
+openturns.testing.assert_almost_equal(0.289572736872, sobolResult.getTotalIndices()[0][2], 1e-12)
 
 ## SRC ##
 src = otguibase.SRCAnalysis('mySRC', myPhysicalModel)
@@ -96,6 +96,30 @@ srcResult = src.getResult()
 openturns.testing.assert_almost_equal(0.632244, srcResult.getIndices()[0][0], 1e-5)
 openturns.testing.assert_almost_equal(0.0478614, srcResult.getIndices()[0][1], 1e-5)
 openturns.testing.assert_almost_equal(0.319895, srcResult.getIndices()[0][2], 1e-5)
+
+## Chaos ##
+values = [10200, 3000, 4000]
+lowerBounds = [10035.5, 2975.33, 3901.31]
+upperBounds = [10364.5, 3024.67, 4098.69]
+levels = [10, 10, 10]
+design_0 = otguibase.FixedDesignOfExperiment('design_0', myPhysicalModel, lowerBounds, upperBounds, levels, values)
+design_0.run()
+myStudy.add(design_0)
+
+chaos_0 = otguibase.FunctionalChaosAnalysis('chaos_0', design_0)
+chaos_0.setChaosDegree(2)
+chaos_0.setSparseChaos(False)
+myStudy.add(chaos_0)
+chaos_0.run()
+chaosResult = chaos_0.getResult()
+
+# Comparaison
+openturns.testing.assert_almost_equal(0.6356916720224053, chaosResult.getSobolResult().getFirstOrderIndices()[0][0], 1e-16)
+openturns.testing.assert_almost_equal(0.04806204987068495, chaosResult.getSobolResult().getFirstOrderIndices()[0][1], 1e-17)
+openturns.testing.assert_almost_equal(0.31620207904361813, chaosResult.getSobolResult().getFirstOrderIndices()[0][2], 1e-17)
+openturns.testing.assert_almost_equal(0.6357266809805613, chaosResult.getSobolResult().getTotalIndices()[0][0], 1e-16)
+openturns.testing.assert_almost_equal(0.04807585948286413, chaosResult.getSobolResult().getTotalIndices()[0][1], 1e-17)
+openturns.testing.assert_almost_equal(0.3162416585998657, chaosResult.getSobolResult().getTotalIndices()[0][2], 1e-17)
 
 script = myStudy.getPythonScript()
 print(script)

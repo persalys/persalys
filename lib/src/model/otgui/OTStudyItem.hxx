@@ -43,10 +43,10 @@ public:
   void addDesignOfExperimentItem(DesignOfExperiment & design);
   void addLimitStateItem(LimitState & limitState);
   void addAnalysisItem(Analysis & analysis);
-  void addDataModelAnalysisItem(Analysis & analysis, AnalysisItem * item);
   void addDeterministicAnalysisItem(Analysis & analysis, AnalysisItem * item);
   void addProbabilisticAnalysisItem(Analysis & analysis, AnalysisItem * item);
   void addReliabilityAnalysisItem(Analysis & analysis, AnalysisItem * item);
+  void addDesignOfExperimentAnalysisItem(Analysis & analysis, AnalysisItem * item);
 
   void setData(const QVariant & value, int role);
   OTStudy * getOTStudy();
@@ -54,6 +54,7 @@ public:
 public slots:
   void updateAnalysis(const Analysis & analysis);
   void updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
+  void addMetaModelItem(PhysicalModel & metaModel);
   void removeItem(QStandardItem*);
 signals:
   void newDataModelItemCreated(DesignOfExperimentItem*);

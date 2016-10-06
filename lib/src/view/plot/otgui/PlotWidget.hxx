@@ -55,7 +55,7 @@ public:
                    QPen pen=QPen(Qt::blue, 4), QString Xtitle="", QString Ytitle="");
   void plotBoxPlot(double median, double lowerQuartile, double upperQuartile,
                    double lowerBound, double upperBound, OT::NumericalPoint outliers_);
-  void plotSensitivityIndices(const OT::NumericalPoint firstOrder, const OT::NumericalPoint totalOrder,
+  void plotSensitivityIndices(const OT::NumericalPoint firstOrderIndices, const OT::NumericalPoint totalIndices,
                               const OT::Description inputNames);
 
   /// clear plot

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItem, observer of analysis
+ *  @brief QScrollArea for the Sobol indices
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,40 +18,40 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_ANALYSISITEM_HXX
-#define OTGUI_ANALYSISITEM_HXX
+#ifndef OTGUI_SOBOLRESULTWINDOWWIDGET_HXX
+#define OTGUI_SOBOLRESULTWINDOWWIDGET_HXX
 
-#include "otgui/Analysis.hxx"
-#include "otgui/MetaModel.hxx"
-#include "otgui/DesignOfExperiment.hxx"
+#include "otgui/SobolResult.hxx"
+#include "otgui/PlotWidget.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
 
-#include <QStandardItem>
+#include <QScrollArea>
 
 namespace OTGUI {
-class OTGUI_API AnalysisItem : public QObject, public QStandardItem, public Observer
+class SobolResultWindowWidget : public QScrollArea
 {
   Q_OBJECT
 
 public:
-  AnalysisItem(const Analysis & analysis, const OT::String & typeAnalysis="Analysis");
+  SobolResultWindowWidget(const SobolResult& result, const QString& warningMessage="");
 
-  void setData(const QVariant & value, int role);
+  QVector<PlotWidget*> getPlotWidgets();
 
-  Analysis getAnalysis() const;
-
-  virtual void update(Observable * source, const OT::String & message);
+protected:
+  void buildInterface();
 
 public slots:
-  void updateAnalysis(const Analysis & analysis);
-  void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
+  void updateIndicesPlot(int section, Qt::SortOrder order);
+  void setCurrentIndex(int);
 signals:
-  void analysisFinished(AnalysisItem*);
-  void analysisRemoved(QStandardItem*);
-  void analysisChanged(const Analysis&);
-  void metaModelCreated(PhysicalModel&);
+  void currentPlotChanged(int);
 
 private:
-  Analysis analysis_;
+  SobolResult result_;
+  int currentIndex_;
+  QVector<CustomStandardItemModel*> listTableModels_;
+  QVector<PlotWidget*> listPlotWidgets_;
+  QString warningMessage_;
 };
 }
 #endif

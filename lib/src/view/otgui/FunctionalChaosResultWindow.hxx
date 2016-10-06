@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow for the results of SobolAnalysis
+ *  @brief QMdiSubWindow for the results of functional chaos
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,20 +18,20 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_SOBOLRESULTWINDOW_HXX
-#define OTGUI_SOBOLRESULTWINDOW_HXX
+#ifndef OTGUI_FUNCTIONALCHAOSRESULTWINDOW_HXX
+#define OTGUI_FUNCTIONALCHAOSRESULTWINDOW_HXX
 
 #include "otgui/ResultWindow.hxx"
-#include "otgui/SobolResult.hxx"
+#include "otgui/FunctionalChaosAnalysisResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 
 namespace OTGUI {
-class SobolResultWindow : public ResultWindow
+class FunctionalChaosResultWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
-  SobolResultWindow(AnalysisItem * item);
+  FunctionalChaosResultWindow(AnalysisItem * item);
 
 protected:
   void setParameters(const Analysis & analysis);
@@ -42,10 +42,11 @@ public slots:
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 
 private:
-  SobolResult result_;
+  FunctionalChaosAnalysisResult result_;
+  OT::NumericalSample outputSample_;
   QTabWidget * tabWidget_;
-  GraphConfigurationWidget * plotsConfigurationWidget_;
-  QString warningMessage_;
+  GraphConfigurationWidget * metaModelPlotsConfigurationWidget_;
+  GraphConfigurationWidget * sobolIndicesPlotsConfigurationWidget_;
 };
 }
 #endif

@@ -1,0 +1,48 @@
+%feature("docstring") OTGUI::FunctionalChaosAnalysisResult
+"Functional chaos result.
+
+Notes
+-----
+Structure created by the method run() of
+:class:`~otguibase.FunctionalChaosAnalysis`, and obtained thanks to the method
+getResult()."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FunctionalChaosAnalysisResult::getFunctionalChaosResult
+"Functional chaos result accessor.
+
+Returns
+-------
+result : :class:`~openturns.FunctionalChaosResult`
+    Functional chaos result"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FunctionalChaosAnalysisResult::getSobolResult
+"Sobol' indices result accessor.
+
+Returns
+-------
+result : :class:`~otguibase.SobolResult`
+    Object containing the first order and total Sobol' indices"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FunctionalChaosAnalysisResult::getMean
+"Mean estimation accessor.
+
+Returns
+-------
+result : :class:`~openturns.NumericalPoint`
+    Mean estimation"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FunctionalChaosAnalysisResult::getVariance
+"Variance estimation accessor.
+
+Returns
+-------
+result : :class:`~openturns.NumericalPoint`
+    Variance estimation"

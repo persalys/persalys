@@ -96,6 +96,7 @@ ot_pyinstallcheck_test (DesignOfExperiment_std)
 ot_pyinstallcheck_test (AxialStressedBeam_std)
 ot_pyinstallcheck_test (CantileverBeam_std)
 ot_pyinstallcheck_test (DataModel_std)
+ot_pyinstallcheck_test (FunctionalChaosAnalysis_std)
 
 ot_pyinstallcheck_test (docstring)
 
