@@ -63,8 +63,8 @@ void SobolAnalysis::run()
   const UnsignedInteger nbOutputs(getPhysicalModel().getOutputNames().getSize()); // TODO only required outputs
 
   const bool maximumOuterSamplingSpecified = getMaximumCalls() < std::numeric_limits<int>::max();
-  /*const*/ UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / (getBlockSize()*(2+nbInputs)))) : std::numeric_limits<int>::max();
-  const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getMaximumCalls() % getBlockSize() : 0;
+  const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / (getBlockSize()*(2+nbInputs)))) : std::numeric_limits<int>::max();
+  const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getMaximumCalls() % (getBlockSize()*(2+nbInputs)) : 0;
   const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
 
   NumericalScalar coefficientOfVariation = -1.0;
@@ -82,8 +82,8 @@ void SobolAnalysis::run()
 
   Collection<NumericalSample> allFirstOrderIndices(nbOutputs, NumericalSample(0, nbInputs));
   Collection<NumericalSample> allTotalIndices(nbOutputs, NumericalSample(0, nbInputs));
-  Interval firstOrderIndicesInterval;
-  Interval totalIndicesInterval;
+//   Interval firstOrderIndicesInterval;
+//   Interval totalIndicesInterval;
   SaltelliSensitivityAlgorithm algoSaltelli;
 
   // We loop if there remains time, some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
@@ -173,12 +173,15 @@ void SobolAnalysis::run()
   }
 
   // compute indices interval
-  algoSaltelli.setBootstrapSize(1000);
-  firstOrderIndicesInterval = algoSaltelli.getFirstOrderIndicesInterval();
-  totalIndicesInterval = algoSaltelli.getTotalOrderIndicesInterval();
+//   algoSaltelli.setBootstrapSize(1000);
+//   firstOrderIndicesInterval = algoSaltelli.getFirstOrderIndicesInterval();
+//   totalIndicesInterval = algoSaltelli.getTotalOrderIndicesInterval();
 
   // fill result_
   result_ = SobolResult(firstOrderIndices, totalIndices, getOutputNames());
+  result_.setCallsNumber(X1.getSize()*(2+nbInputs));
+  result_.setElapsedTime((float)elapsedTime/CLOCKS_PER_SEC);
+  result_.setCoefficientOfVariation(coefficientOfVariation);
 
   // add warning if the model has not an independent copula
   if (!getPhysicalModel().getComposedDistribution().hasIndependentCopula())
