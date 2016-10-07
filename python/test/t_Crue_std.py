@@ -14,14 +14,7 @@ Zm = otguibase.Input('Zm', 0., 'Zm (m)', ot.Uniform(54.0, 56.0))
 
 S = otguibase.Output('S', 0., '', '(Q/(Ks*300.*sqrt((Zm-Zv)/5000)))^(3.0/5.0)+Zv-55.5-3.')
 
-myPhysicalModel = otguibase.PhysicalModel('myPhysicalModel')
-
-myPhysicalModel.addInput(Q)
-myPhysicalModel.addInput(Ks)
-myPhysicalModel.addInput(Zv)
-myPhysicalModel.addInput(Zm)
-
-myPhysicalModel.addOutput(S)
+myPhysicalModel = otguibase.PhysicalModel('myPhysicalModel', [Q, Ks, Zv, Zm], [S])
 
 myStudy.add(myPhysicalModel)
 

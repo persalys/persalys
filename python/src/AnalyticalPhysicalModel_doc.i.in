@@ -21,10 +21,7 @@ Examples
 >>> R = otguibase.Input('R', 0., 'Yield strength', ot.LogNormal(300., 30., 0., ot.LogNormal.MUSIGMA))
 >>> F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))
 >>> G = otguibase.Output('Ep', 0., 'deviation', 'R-F/(_pi*100.0)')
->>> myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel')
->>> myPhysicalModel.addInput(R)
->>> myPhysicalModel.addInput(F)
->>> myPhysicalModel.addOutput(G)"
+>>> myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [R, F], [G])"
 
 // ---------------------------------------------------------------------
 

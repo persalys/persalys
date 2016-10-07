@@ -19,13 +19,7 @@ xi3 = otguibase.Input('xi3', 0., '', ot.Uniform(-pi, pi))
 formula = "sin(xi1) + (7.0) * (sin(xi2)) ^ 2 + (0.1) * xi3^4 * sin(xi1)"
 y0 = otguibase.Output('y0', 0., '', formula)
 
-myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel')
-
-myPhysicalModel.addInput(xi1)
-myPhysicalModel.addInput(xi2)
-myPhysicalModel.addInput(xi3)
-
-myPhysicalModel.addOutput(y0)
+myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [xi1, xi2, xi3], [y0])
 
 myStudy.add(myPhysicalModel)
 

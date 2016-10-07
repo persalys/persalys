@@ -14,12 +14,7 @@ L = otguibase.Input('L', 250, 'Length', ot.Uniform(250, 260))
 I = otguibase.Input('I', 400, 'Section modulus', ot.Beta(2.5, 4., 3.1e2, 4.5e2))
 y = otguibase.Output('y', 0., 'deviation', 'F*L^3/(3*E*I)')
 
-myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel')
-myPhysicalModel.addInput(E)
-myPhysicalModel.addInput(F)
-myPhysicalModel.addInput(L)
-myPhysicalModel.addInput(I)
-myPhysicalModel.addOutput(y)
+myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [E, F, L, I], [y])
 
 f = myPhysicalModel.getFunction()
 print(f([3e7, 3e4, 250, 400]))

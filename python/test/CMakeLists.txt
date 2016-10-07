@@ -90,6 +90,7 @@ macro ( ot_pyinstallcheck_test TESTNAME )
           )
 endmacro ( ot_pyinstallcheck_test )
 
+ot_pyinstallcheck_test (AnalyticalPhysicalModel_std)
 ot_pyinstallcheck_test (Cogeneration_std)
 ot_pyinstallcheck_test (Crue_std)
 ot_pyinstallcheck_test (DesignOfExperiment_std)

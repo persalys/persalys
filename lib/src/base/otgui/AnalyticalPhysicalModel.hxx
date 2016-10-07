@@ -32,7 +32,8 @@ public:
   /** Default constructor */
   AnalyticalPhysicalModel(const OT::String & name="Unnamed");
   /** Constructor with parameters */
-  AnalyticalPhysicalModel(const OT::String & name, const InputCollection & inputs,
+  AnalyticalPhysicalModel(const OT::String & name,
+                          const InputCollection & inputs,
                           const OutputCollection & outputs);
 
   /** Virtual constructor */

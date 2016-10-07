@@ -35,8 +35,10 @@ class OTGUI_API PhysicalModelImplementation : public OT::PersistentObject, publi
 public:
   /** Constructor with parameters */
   explicit PhysicalModelImplementation(const OT::String & name);
+
   /** Constructor with parameters */
-  PhysicalModelImplementation(const OT::String & name, const InputCollection & inputs,
+  PhysicalModelImplementation(const OT::String & name,
+                              const InputCollection & inputs,
                               const OutputCollection & outputs);
 
   /** Virtual constructor */
@@ -87,6 +89,9 @@ public:
   bool isValid() const;
 
   virtual OT::String getPythonScript() const;
+
+  /** String converter */
+  virtual OT::String __repr__() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;

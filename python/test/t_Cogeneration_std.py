@@ -13,13 +13,7 @@ C = otguibase.Input('C', 0., 'Valued thermal energy', ot.Normal(4000, 60))
 
 Ep = otguibase.Output('Ep', 0., 'Primary energy savings', '1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))')
 
-myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel')
-
-myPhysicalModel.addInput(Q)
-myPhysicalModel.addInput(E)
-myPhysicalModel.addInput(C)
-
-myPhysicalModel.addOutput(Ep)
+myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [Q, E, C], [Ep])
 
 myStudy.add(myPhysicalModel)
 
