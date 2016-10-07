@@ -7,7 +7,7 @@
         <location filename="../lib/src/view/AnalysisExecutionFailedWindow.cxx" line="44"/>
         <source>No results are available. An error has occured during the execution of the analysis:
 </source>
-        <translation>Pas de résultats disponibles. Une erreur est survenue pendant l&apos;exécution de l&apos;analyse:</translation>
+        <translation>Pas de résultats disponibles. Une erreur est survenue pendant l&apos;exécution de l&apos;analyse :</translation>
     </message>
 </context>
 <context>
@@ -122,7 +122,7 @@
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="40"/>
         <source>Sample size:</source>
-        <translation>Taille d&apos;échantillon:</translation>
+        <translation>Taille d&apos;échantillon :</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="78"/>
@@ -132,7 +132,7 @@
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="93"/>
         <source>Elapsed time:</source>
-        <translation>Durée:</translation>
+        <translation>Durée :</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="123"/>
@@ -192,17 +192,17 @@
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="277"/>
         <source>PDF:</source>
-        <translation>PDF:</translation>
+        <translation>PDF :</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="288"/>
         <source>CDF:</source>
-        <translation>CDF:</translation>
+        <translation>CDF :</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="321"/>
         <source>Box plot:</source>
-        <translation>Box plot:</translation>
+        <translation>Box plot :</translation>
     </message>
 </context>
 <context>
@@ -268,7 +268,7 @@
     <message>
         <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="171"/>
         <source>Size of the design of experiment:</source>
-        <translation>Taille du plan d&apos;expérience:</translation>
+        <translation>Taille du plan d&apos;expérience :</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="180"/>
@@ -296,7 +296,7 @@
         <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="244"/>
         <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="251"/>
         <source>Scatter plot:</source>
-        <translation>Scatter plot:</translation>
+        <translation>Scatter plot :</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="227"/>
@@ -411,124 +411,120 @@
 <context>
     <name>OTGUI::FunctionalChaosResultWindow</name>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="50"/>
-        <source>Metamodel creation parameters :</source>
-        <translation>Paramètres de création du métamodèle :</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="51"/>
-        <source>Algorithm : </source>
-        <translation>Algorithme :</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="51"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="58"/>
         <source>Functional chaos</source>
         <translation>Chaos fonctionel</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="52"/>
-        <source>Chaos degree : </source>
-        <translation>Degrée du chaos :</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="53"/>
-        <source>Sparse : </source>
-        <translation>Creux :</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="53"/>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="54"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="60"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="61"/>
         <source>yes</source>
         <translation>oui</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="53"/>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="54"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="60"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="61"/>
         <source>no</source>
         <translation>non</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="54"/>
-        <source>Leave-one-out validation : </source>
-        <translation>Validation par Leave-one-out :</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="82"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="89"/>
         <source>Metamodel:</source>
         <translation>Métamodèle :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="83"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="90"/>
         <source>Metamodel</source>
         <translation>Métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="84"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="91"/>
         <source>Physical model</source>
         <translation>Modèle physique</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="92"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="99"/>
         <source>Scatter plot</source>
         <translation>Scatter plot</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="103"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="110"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="114"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="55"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="121"/>
         <source>Leave-one-out validation</source>
         <translation>Validation par Leave-one-out</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="126"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="52"/>
+        <source>Algorithm</source>
+        <translation>Algorithme</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="53"/>
+        <source>Chaos degree</source>
+        <translation>Degrée du polynôme</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="54"/>
+        <source>Sparse</source>
+        <translation>Creux</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="63"/>
+        <source>Metamodel creation parameters:</source>
+        <translation>Paramètres de création du métamodèle :</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="133"/>
         <source>Residual</source>
         <translation>Résidu</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="127"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="134"/>
         <source>Q2</source>
         <translation>Q2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="144"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="151"/>
         <source>Moments estimates</source>
         <translation>Estimations des moments</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="156"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="163"/>
         <source>Estimate</source>
         <translation>Estimation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="157"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="164"/>
         <source>Mean</source>
         <translation>Moyenne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="158"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="165"/>
         <source>Variance</source>
         <translation>Variance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="160"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="167"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="174"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="181"/>
         <source>Summary</source>
         <translation>Résumé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="179"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="186"/>
         <source>Sobol indices</source>
         <translation>Indices de Sobol</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="185"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="193"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -696,11 +692,6 @@
         <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="78"/>
         <source>Distribution</source>
         <translation>Distribution</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="124"/>
-        <source>Normal</source>
-        <translation>Normale</translation>
     </message>
 </context>
 <context>
@@ -1018,154 +1009,152 @@ extremum</source>
 <context>
     <name>OTGUI::MonteCarloReliabilityResultWindow</name>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="51"/>
-        <source>Threshold exceedance parameters :</source>
-        <translation>Paramètres du calcul de probabilité de dépassement de seuil :</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="52"/>
-        <source>Algorithm : </source>
-        <translation>Algorithme :</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="52"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="61"/>
         <source>Monte Carlo</source>
         <translation>Monte-Carlo</translation>
     </message>
     <message>
         <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="53"/>
-        <source>Maximum coefficient of variation : </source>
-        <translation>Coefficient de variation maximum : </translation>
+        <source>Algorithm</source>
+        <translation>Algorithme</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="54"/>
+        <source>Maximum coefficient of variation</source>
+        <translation>Coefficient de variation maximum</translation>
     </message>
     <message>
         <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="55"/>
+        <source>Maximum elapsed time</source>
+        <translation>Durée maximale</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="56"/>
+        <source>Maximum calls</source>
+        <translation>Nombre d&apos;appels maximum</translation>
+    </message>
+    <message>
         <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="57"/>
-        <source>Maximum elapsed time : </source>
-        <translation>Durée maximale : </translation>
+        <source>Block size</source>
+        <translation>Taille de bloc</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="59"/>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="61"/>
-        <source>Maximum calls : </source>
-        <translation>Nombre d&apos;appels maximum :  </translation>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="58"/>
+        <source>Seed</source>
+        <translation>Graine</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="62"/>
-        <source>Block size : </source>
-        <translation>Taille de bloc : </translation>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="74"/>
+        <source>Threshold exceedance parameters:</source>
+        <translation>Paramètres du calcul de probabilité de dépassement de seuil :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="63"/>
-        <source>Seed : </source>
-        <translation>Graine : </translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="78"/>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="159"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="87"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="168"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="88"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="97"/>
         <source>Elapsed time:</source>
-        <translation>Durée:</translation>
+        <translation>Durée :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="94"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="103"/>
         <source>Number of calls:</source>
         <translation>Nombre d&apos;appels :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="106"/>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="180"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="115"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="189"/>
         <source>Estimate</source>
         <translation>Estimation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="109"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="118"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="113"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="122"/>
         <source>Failure probability</source>
         <translation>Probabilité de défaillance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="117"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="126"/>
         <source>Coefficient of variation</source>
         <translation>Coefficient de variation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="121"/>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="176"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="130"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="185"/>
         <source>Lower bound</source>
         <translation>Borne inférieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="126"/>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="178"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="135"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="187"/>
         <source>Upper bound</source>
         <translation>Borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="133"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="142"/>
         <source>Confidence interval at 95%</source>
         <translation>Intervalle de confiance à 95%</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="139"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="148"/>
         <source>Summary</source>
         <translation>Résumé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="149"/>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="159"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="158"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="168"/>
         <source>distribution</source>
         <translation>distribution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="155"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="164"/>
         <source>Threshold</source>
         <translation>Seuil</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="156"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="165"/>
         <source>Values</source>
         <translation>Valeurs</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="157"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="166"/>
         <source>Number of simulations</source>
         <translation>Nombre de simulations</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="166"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="175"/>
         <source>Histogram</source>
         <translation>Histogramme</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="174"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="183"/>
         <source>Probability estimate</source>
         <translation>Estimation de la probabilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="179"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="188"/>
         <source>Monte Carlo convergence graph at level 0.95</source>
         <translation>Graphique de convergence Monte-Carlo à 0.95</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="181"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="190"/>
         <source>Outer iteration</source>
         <translation>Itération externe</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="195"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="204"/>
         <source>Convergence graph</source>
         <translation>Graphique de convergence</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="198"/>
+        <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="208"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -1183,51 +1172,49 @@ extremum</source>
         <translation>Table de résultat</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="102"/>
-        <source>Central tendency parameters :</source>
-        <translation>Paramètres de l&apos;analyse en tendance centrale :</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="103"/>
-        <source>Algorithm : </source>
-        <translation>Algorithme :</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="103"/>
-        <source>Monte Carlo</source>
-        <translation>Monte-Carlo</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="105"/>
-        <source>Confidence level : </source>
-        <translation>Niveau de l&apos;intervalle de confiance : </translation>
+        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="104"/>
+        <source>Algorithm</source>
+        <translation>Algorithme</translation>
     </message>
     <message>
         <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="106"/>
-        <source>Maximum coefficient of variation : </source>
-        <translation>Coefficient de variation maximum : </translation>
+        <source>Confidence level</source>
+        <translation>Niveau de l&apos;intervalle de confiance</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="107"/>
+        <source>Maximum coefficient of variation</source>
+        <translation>Coefficient de variation maximum</translation>
     </message>
     <message>
         <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="108"/>
+        <source>Maximum elapsed time</source>
+        <translation>Durée maximale</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="109"/>
+        <source>Maximum calls</source>
+        <translation>Nombre d&apos;appels maximum</translation>
+    </message>
+    <message>
         <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="110"/>
-        <source>Maximum elapsed time : </source>
-        <translation>Durée maximale : </translation>
+        <source>Block size</source>
+        <translation>Taille de bloc</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="112"/>
+        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="111"/>
+        <source>Seed</source>
+        <translation>Graine</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="129"/>
+        <source>Central tendency parameters:</source>
+        <translation>Paramètres de l&apos;analyse en tendance centrale :</translation>
+    </message>
+    <message>
         <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="114"/>
-        <source>Maximum calls : </source>
-        <translation>Nombre d&apos;appels maximum :  </translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="115"/>
-        <source>Block size : </source>
-        <translation>Taille de bloc : </translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="116"/>
-        <source>Seed : </source>
-        <translation>Graine : </translation>
+        <source>Monte Carlo</source>
+        <translation>Monte-Carlo</translation>
     </message>
 </context>
 <context>
@@ -1795,52 +1782,52 @@ extremum</source>
         <translation>Le modèle n&apos;a pas de copule indépendante, le résultat pourrait être faux.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCResultWindow.cxx" line="57"/>
-        <source>Sensitivity analysis parameters :</source>
-        <translation>Paramètres de l&apos;analyse de sensibilité :</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/SRCResultWindow.cxx" line="58"/>
-        <source>Algorithm : </source>
-        <translation>Algorithme :</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/SRCResultWindow.cxx" line="58"/>
+        <location filename="../lib/src/view/SRCResultWindow.cxx" line="63"/>
         <source>Standardized Regression Coefficients</source>
         <translation>Standardized Regression Coefficients</translation>
     </message>
     <message>
+        <location filename="../lib/src/view/SRCResultWindow.cxx" line="58"/>
+        <source>Algorithm</source>
+        <translation>Algorithme</translation>
+    </message>
+    <message>
         <location filename="../lib/src/view/SRCResultWindow.cxx" line="59"/>
-        <source>Sample size : </source>
-        <translation>Taille d&apos;échantillon:</translation>
+        <source>Sample size</source>
+        <translation>Taille d&apos;échantillon</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SRCResultWindow.cxx" line="60"/>
-        <source>Seed : </source>
-        <translation>Graine : </translation>
+        <source>Seed</source>
+        <translation>Graine</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCResultWindow.cxx" line="92"/>
+        <location filename="../lib/src/view/SRCResultWindow.cxx" line="67"/>
+        <source>Sensitivity analysis parameters:</source>
+        <translation>Paramètres de l&apos;analyse de sensibilité :</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SRCResultWindow.cxx" line="97"/>
         <source>SRC sensitivity indices:</source>
         <translation>Indices de sensibilité SRC :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCResultWindow.cxx" line="107"/>
+        <location filename="../lib/src/view/SRCResultWindow.cxx" line="112"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCResultWindow.cxx" line="107"/>
+        <location filename="../lib/src/view/SRCResultWindow.cxx" line="112"/>
         <source>Index</source>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCResultWindow.cxx" line="142"/>
+        <location filename="../lib/src/view/SRCResultWindow.cxx" line="147"/>
         <source>Result</source>
         <translation>Résultat</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCResultWindow.cxx" line="145"/>
+        <location filename="../lib/src/view/SRCResultWindow.cxx" line="151"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -1918,74 +1905,72 @@ extremum</source>
         <translation>Le modèle n&apos;a pas de copule indépendante, le résultat pourrait être faux.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="53"/>
-        <source>Sensitivity analysis parameters :</source>
-        <translation>Paramètres de l&apos;analyse de sensibilité :</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="54"/>
-        <source>Algorithm : </source>
-        <translation>Algorithme :</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="54"/>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="62"/>
         <source>Sobol</source>
         <translation>Sobol</translation>
     </message>
     <message>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="54"/>
+        <source>Algorithm</source>
+        <translation>Algorithme</translation>
+    </message>
+    <message>
         <location filename="../lib/src/view/SobolResultWindow.cxx" line="55"/>
-        <source>Maximum coefficient of variation : </source>
-        <translation>Coefficient de variation maximum : </translation>
+        <source>Maximum coefficient of variation</source>
+        <translation>Coefficient de variation maximum</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="56"/>
+        <source>Maximum elapsed time</source>
+        <translation>Durée maximale</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SobolResultWindow.cxx" line="57"/>
+        <source>Maximum calls</source>
+        <translation>Nombre d&apos;appels maximum</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="58"/>
+        <source>Block size</source>
+        <translation>Taille de bloc</translation>
+    </message>
+    <message>
         <location filename="../lib/src/view/SobolResultWindow.cxx" line="59"/>
-        <source>Maximum elapsed time : </source>
-        <translation>Durée maximale : </translation>
+        <source>Seed</source>
+        <translation>Graine</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="61"/>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="63"/>
-        <source>Maximum calls : </source>
-        <translation>Nombre d&apos;appels maximum :  </translation>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="75"/>
+        <source>Sensitivity analysis parameters:</source>
+        <translation>Paramètres de l&apos;analyse de sensibilité :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="65"/>
-        <source>Block size : </source>
-        <translation>Taille de bloc : </translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="66"/>
-        <source>Seed : </source>
-        <translation>Graine : </translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="78"/>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="85"/>
         <source>Result</source>
         <translation>Résultat</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="95"/>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="102"/>
         <source>Elapsed time:</source>
         <translation>Durée:</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="100"/>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="107"/>
         <source>Number of calls:</source>
         <translation>Nombre d&apos;appels :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="105"/>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="112"/>
         <source>Coefficient of variation:</source>
         <translation>Coefficient de variation :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="110"/>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="117"/>
         <source>Summary</source>
         <translation>Résumé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="114"/>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="122"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -2031,22 +2016,22 @@ extremum</source>
 <context>
     <name>OTGUI::StopCriteriaGroupBox</name>
     <message>
-        <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="31"/>
+        <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="33"/>
         <source>Stop criteria</source>
         <translation>Critère d&apos;arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="36"/>
+        <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="38"/>
         <source>Accuracy - coefficient of variation</source>
         <translation>Précision - coefficient de variation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="55"/>
+        <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="57"/>
         <source>Maximum time</source>
         <translation>Durée maximale</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="69"/>
+        <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="71"/>
         <source>Maximum calls</source>
         <translation>Nombre d&apos;appels maximum</translation>
     </message>
@@ -2511,7 +2496,7 @@ Voulez-vous continuer et fermer les autres études ?</translation>
         <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="131"/>
         <source>Cannot read file %1:
 %2</source>
-        <translation>Impossible de lire le fichier %1: %2</translation>
+        <translation>Impossible de lire le fichier %1 : %2</translation>
     </message>
 </context>
 <context>
