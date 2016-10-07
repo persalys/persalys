@@ -53,13 +53,18 @@ void SRCResultWindow::setParameters(const Analysis & analysis)
     warningMessage_ = tr("The model has not an independent copula, the result could be false.");
   }
 
-  QStringList strList;
-  strList << tr("Sensitivity analysis parameters :") + "\n";
-  strList << tr("Algorithm : ") + tr("Standardized Regression Coefficients");
-  strList << tr("Sample size : ") + QString::number(SRCanalysis->getSimulationsNumber());
-  strList << tr("Seed : ") + QString::number(SRCanalysis->getSeed());
+  // ParametersWidget
+  QStringList namesList;
+  namesList << tr("Algorithm");
+  namesList << tr("Sample size");
+  namesList << tr("Seed");
 
-  parameters_ = strList.join("\n");
+  QStringList valuesList;
+  valuesList << tr("Standardized Regression Coefficients");
+  valuesList << QString::number(SRCanalysis->getSimulationsNumber());
+  valuesList << QString::number(SRCanalysis->getSeed());
+
+  parametersWidget_ = new ParametersWidget(tr("Sensitivity analysis parameters:"), namesList, valuesList);
 }
 
 
@@ -142,7 +147,8 @@ void SRCResultWindow::buildInterface()
   tabWidget_->addTab(scrollArea, tr("Result"));
 
   // second tab --------------------------------
-  tabWidget_->addTab(buildParametersTextEdit(), tr("Parameters"));
+  if (parametersWidget_)
+    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 
   //
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));

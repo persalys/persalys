@@ -247,8 +247,8 @@ void DataAnalysisWindow::buildInterface()
   }
 
   // eighth tab --------------------------------
-  if (!parameters_.isEmpty())
-    tabWidget_->addTab(buildParametersTextEdit(), tr("Parameters"));
+  if (parametersWidget_)
+    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 
   //
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));

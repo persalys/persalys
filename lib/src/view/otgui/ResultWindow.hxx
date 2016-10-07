@@ -23,6 +23,7 @@
 
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/AnalysisItem.hxx"
+#include "otgui/ParametersWidget.hxx"
 
 namespace OTGUI {
 class ResultWindow : public OTguiSubWindow
@@ -33,14 +34,13 @@ public:
   ResultWindow(AnalysisItem * item);
 
 protected:
-  virtual void setParameters(const Analysis & analysis) = 0;
-  QWidget* buildParametersTextEdit();
+  virtual void setParameters(const Analysis & analysis);
 
 public slots:
   virtual void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 
 protected:
-  QString parameters_;
+  QWidget * parametersWidget_;
 };
 }
 #endif

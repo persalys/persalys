@@ -49,23 +49,30 @@ void SobolResultWindow::setParameters(const Analysis & analysis)
     warningMessage_ = tr("The model has not an independent copula, the result could be false.");
   }
 
-  QStringList strList;
-  strList << tr("Sensitivity analysis parameters :") + "\n";
-  strList << tr("Algorithm : ") + tr("Sobol");
-  strList << tr("Maximum coefficient of variation : ") + QString::number(sobolAnalysis->getMaximumCoefficientOfVariation());
-  if (sobolAnalysis->getMaximumElapsedTime() < std::numeric_limits<int>::max())
-    strList << tr("Maximum elapsed time : ") + QString::number(sobolAnalysis->getMaximumElapsedTime()) + "(s)";
-  else
-    strList << tr("Maximum elapsed time : ") + "- (s)";
-  if (sobolAnalysis->getMaximumCalls() < std::numeric_limits<int>::max())
-    strList << tr("Maximum calls : ") + QString::number(sobolAnalysis->getMaximumCalls());
-  else
-    strList << tr("Maximum calls : ") + "-";
+  // ParametersWidget
+  QStringList namesList;
+  namesList << tr("Algorithm");
+  namesList << tr("Maximum coefficient of variation");
+  namesList << tr("Maximum elapsed time");
+  namesList << tr("Maximum calls");
+  namesList << tr("Block size");
+  namesList << tr("Seed");
 
-  strList << tr("Block size : ") + QString::number(sobolAnalysis->getBlockSize());
-  strList << tr("Seed : ") + QString::number(sobolAnalysis->getSeed());
+  QStringList valuesList;
+  valuesList << tr("Sobol");
+  valuesList << QString::number(sobolAnalysis->getMaximumCoefficientOfVariation());
+  if (sobolAnalysis->getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
+    valuesList << QString::number(sobolAnalysis->getMaximumElapsedTime()) + "(s)";
+  else
+    valuesList << "- (s)";
+  if (sobolAnalysis->getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
+    valuesList << QString::number(sobolAnalysis->getMaximumCalls());
+  else
+    valuesList << "-";
+  valuesList << QString::number(sobolAnalysis->getBlockSize());
+  valuesList << QString::number(sobolAnalysis->getSeed());
 
-  parameters_ = strList.join("\n");
+  parametersWidget_ = new ParametersWidget(tr("Sensitivity analysis parameters:"), namesList, valuesList);
 }
 
 
@@ -111,7 +118,8 @@ void SobolResultWindow::buildInterface()
   }
 
   // third tab --------------------------------
-  tabWidget_->addTab(buildParametersTextEdit(), tr("Parameters"));
+  if (parametersWidget_)
+    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 
   //
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
