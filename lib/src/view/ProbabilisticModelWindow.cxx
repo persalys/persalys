@@ -378,7 +378,7 @@ void ProbabilisticModelWindow::updateDistributionParametersWidgets(const QModelI
     return;
 
   if (nbParameters >= 5)
-    std::cerr << "Number of parameters invalid :"<<nbParameters<<std::endl;
+    throw InternalException(HERE) << "Error: Number of parameters invalid :" << nbParameters;
 
   // fill parameters widgets
   paramEditor_ = new QGroupBox(tr("Parameters"));
@@ -468,7 +468,7 @@ void ProbabilisticModelWindow::showHideGraphConfigurationWidget(int indexTab)
   currentIndexTab_ = indexTab;
   switch (indexTab)
   {
-    case 0:
+    case 0: // distribution graph
     {
       if (rightSideOfSplitterStackedWidget_->currentIndex() == 2
           && (windowState() == 4 || windowState() == 10))
@@ -486,13 +486,13 @@ void ProbabilisticModelWindow::showHideGraphConfigurationWidget(int indexTab)
 
 void ProbabilisticModelWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
-  if (oldState == 2)
+  if (oldState == Qt::WindowMaximized)
     return;
 
-  if (newState == 4 || newState == 10)
+  if (newState == Qt::WindowFullScreen || newState == (Qt::WindowActive|Qt::WindowMaximized))
     showHideGraphConfigurationWidget(currentIndexTab_);
-  else if (newState == 0 || newState == 1 || newState == 9)
-    emit graphWindowDeactivated();
+  else if (newState == Qt::WindowNoState || newState == Qt::WindowMinimized || newState == (Qt::WindowActive|Qt::WindowMinimized))
+    showHideGraphConfigurationWidget(-1);
 }
 
 
@@ -553,7 +553,8 @@ void ProbabilisticModelWindow::distributionParametersChanged()
     catch(std::exception & ex)
     {
       physicalModel_.blockNotification(false);
-      std::cerr << "ProbabilisticModelWindow::distributionParametersChanged invalid parameters:"<<parameters<<" for distribution:"<<distributionName<<std::endl;
+      qDebug() << "ProbabilisticModelWindow::distributionParametersChanged invalid parameters:"
+               << parameters.__str__().data() << " for distribution:" << distributionName.data();
       updateDistributionParametersWidgets(index);
       setTemporaryErrorMessage(ex.what());
     }
@@ -582,7 +583,8 @@ void ProbabilisticModelWindow::distributionParametersChanged()
     catch(std::exception & ex)
     {
       physicalModel_.blockNotification(false);
-      std::cerr << "ProbabilisticModelWindow::distributionParametersChanged invalid parameters:"<<parameters<<" for distribution:"<<distributionName<<std::endl;
+      qDebug() << "ProbabilisticModelWindow::distributionParametersChanged invalid parameters:"
+               << parameters.__str__().data() << " for distribution:" << distributionName.data();
       updateDistributionParametersWidgets(index);
       setTemporaryErrorMessage(ex.what());
     }
@@ -638,7 +640,7 @@ void ProbabilisticModelWindow::truncationParametersChanged()
   catch (std::exception & ex)
   {
     physicalModel_.blockNotification(false);
-    std::cerr << "ProbabilisticModelWindow::truncationParametersChanged \n";
+    qDebug() << "Error: ProbabilisticModelWindow::truncationParametersChanged\n";
     updateTruncationParametersWidgets(index);
     setTemporaryErrorMessage(ex.what());
   }
@@ -779,7 +781,7 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
   catch (std::exception & ex)
   {
     physicalModel_.blockNotification(false);
-    std::cerr << "ProbabilisticModelWindow::truncationParametersStateChanged \n";
+    qDebug() << "Error: ProbabilisticModelWindow::truncationParametersStateChanged\n";
     updateTruncationParametersWidgets(index);
     setTemporaryErrorMessage(ex.what());
   }

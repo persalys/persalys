@@ -152,18 +152,15 @@ void SRCResultWindow::buildInterface()
 
 void SRCResultWindow::updateIndicesPlot(int section, Qt::SortOrder order)
 {
-  int indexOutput = plotsConfigurationWidget_->getCurrentPlotIndex();
+  const int indexOutput = plotsConfigurationWidget_->getCurrentPlotIndex();
   NumericalPoint currentIndices(result_.getInputNames().getSize());
   Description sortedInputNames(result_.getInputNames().getSize());
 
   CustomStandardItemModel * model = listTableModels_[indexOutput];
   if (!model)
-  {
-    std::cerr << "can not update indices plot" << std::endl;
-    return;
-  }
+    throw InternalException(HERE) << "SRCResultWindow::updateIndicesPlot: can not update indices plot\n";
 
-  for (int i=0; i<result_.getInputNames().getSize(); ++i)
+  for (UnsignedInteger i=0; i<result_.getInputNames().getSize(); ++i)
   {
     sortedInputNames[i] = model->data(model->index(i, 0)).toString().toStdString();
     currentIndices[i] = model->data(model->index(i, 1)).toDouble();
@@ -179,7 +176,7 @@ void SRCResultWindow::showHideGraphConfigurationWidget(int indexTab)
   switch (indexTab)
   {
     // if a plotWidget is visible
-    case 0:
+    case 0: // sobol indices graph
       if (plotsConfigurationWidget_)
         if (!plotsConfigurationWidget_->isVisible())
           emit graphWindowActivated(plotsConfigurationWidget_);
@@ -196,12 +193,12 @@ void SRCResultWindow::showHideGraphConfigurationWidget(int indexTab)
 
 void SRCResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
-  if (oldState == 2)
+  if (oldState == Qt::WindowMaximized)
     return;
 
-  if (newState == 4 || newState == 10)
+  if (newState == Qt::WindowFullScreen || newState == (Qt::WindowActive|Qt::WindowMaximized))
     showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-  else if (newState == 0 || newState == 1 || newState == 9)
+  else if (newState == Qt::WindowNoState || newState == Qt::WindowMinimized || newState == (Qt::WindowActive|Qt::WindowMinimized))
     showHideGraphConfigurationWidget(-1);
 }
 }

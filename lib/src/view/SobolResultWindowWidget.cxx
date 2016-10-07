@@ -65,7 +65,7 @@ void SobolResultWindowWidget::buildInterface()
     // plot
     PlotWidget * plot = new PlotWidget("sensitivitySobol", true);
     plot->plotSensitivityIndices(result_.getFirstOrderIndices()[i], result_.getTotalIndices()[i], inputNames);
-    plot->setTitle(tr("Sobol sensitivity indices: ") + outputNames[i]);
+    plot->setTitle(tr("Sobol sensitivity indices:") + " " + outputNames[i]);
     listPlotWidgets_.append(plot);
     plotStackedWidget->addWidget(plot);
 
@@ -164,7 +164,7 @@ void SobolResultWindowWidget::updateIndicesPlot(int section, Qt::SortOrder order
 
   CustomStandardItemModel * model = listTableModels_[currentIndex_];
   if (!model)
-    throw InvalidValueException(HERE) << "SobolResultWindowWidget::updateIndicesPlot: can not update indices plot\n";
+    throw InternalException(HERE) << "SobolResultWindowWidget::updateIndicesPlot: can not update indices plot\n";
 
   for (UnsignedInteger i=0; i<inputDimension; ++i)
   {

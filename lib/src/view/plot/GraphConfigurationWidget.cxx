@@ -290,7 +290,7 @@ void GraphConfigurationWidget::updateXrange()
   catch (std::exception & ex)
   {
     updateLineEdits();
-    std::cerr << "GraphConfigurationWidget::updateXrange: value not valid\n";
+    qDebug() << "GraphConfigurationWidget::updateXrange: value not valid\n";
   }
 }
 
@@ -305,7 +305,7 @@ void GraphConfigurationWidget::updateYrange()
   catch (std::exception & ex)
   {
     updateLineEdits();
-    std::cerr << "GraphConfigurationWidget::updateYrange: value not valid\n";
+    qDebug() << "GraphConfigurationWidget::updateYrange: value not valid\n";
   }
 }
 

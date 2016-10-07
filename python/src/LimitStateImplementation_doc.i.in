@@ -128,7 +128,7 @@ OTGUI_LimitState_getPhysicalModel_doc
 
 Parameters
 ----------
-operator : :class:`~openturns.ComparisonOperator`
+operator : :py:class:`openturns.ComparisonOperator`
     Comparison operator"
 %enddef
 %feature("docstring") OTGUI::LimitStateImplementation::setOperator
@@ -141,7 +141,7 @@ OTGUI_LimitState_setOperator_doc
 
 Returns
 -------
-operator : :class:`~openturns.ComparisonOperator`
+operator : :py:class:`openturns.ComparisonOperator`
     Comparison operator"
 %enddef
 %feature("docstring") OTGUI::LimitStateImplementation::getOperator

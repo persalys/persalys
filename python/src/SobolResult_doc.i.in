@@ -8,7 +8,7 @@
 
 Returns
 -------
-sample : :class:`~openturns.Description`
+sample : :py:class:`openturns.Description`
     Input variables names"
 
 // ---------------------------------------------------------------------
@@ -18,7 +18,7 @@ sample : :class:`~openturns.Description`
 
 Returns
 -------
-sample : :class:`~openturns.Description`
+sample : :py:class:`openturns.Description`
     Output variables names"
 
 // ---------------------------------------------------------------------
@@ -28,7 +28,7 @@ sample : :class:`~openturns.Description`
 
 Returns
 -------
-indices : :class:`~openturns.NumericalSample`
+indices : :py:class:`openturns.NumericalSample`
     First order indices"
 
 // ---------------------------------------------------------------------
@@ -38,5 +38,5 @@ indices : :class:`~openturns.NumericalSample`
 
 Returns
 -------
-indices : :class:`~openturns.NumericalSample`
+indices : :py:class:`openturns.NumericalSample`
     Total indices"

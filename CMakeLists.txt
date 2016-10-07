@@ -168,6 +168,8 @@ add_custom_target ( installcheck COMMENT "Run post-installation tests" )
 
 add_subdirectory ( lib )
 
+add_subdirectory ( translations )
+
 add_dependencies ( check cppcheck )
 
 if (BUILD_GUI)

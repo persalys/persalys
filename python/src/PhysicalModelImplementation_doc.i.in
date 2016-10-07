@@ -17,7 +17,7 @@ OTGUI_PhysicalModel_doc
 
 Returns
 -------
-names : :class:`~openturns.Description`
+names : :py:class:`openturns.Description`
     Ouput variable names"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getOutputNames
@@ -82,7 +82,7 @@ OTGUI_PhysicalModel_removeOutput_doc
 
 Returns
 -------
-function : :class:`~openturns.NumericalMathFunction`
+function : :py:class:`openturns.NumericalMathFunction`
     New variable"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getFunction
@@ -108,7 +108,7 @@ OTGUI_PhysicalModel_getPythonScript_doc
 
 Parameters
 ----------
-copula : :class:`~openturns.Copula`
+copula : :py:class:`openturns.Copula`
     The copula"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::setCopula
@@ -121,7 +121,7 @@ OTGUI_PhysicalModel_setCopula_doc
 
 Parameters
 ----------
-Distribution : :class:`~openturns.ComposedDistribution`
+Distribution : :py:class:`openturns.ComposedDistribution`
     The composed distribution"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getComposedDistribution
@@ -134,7 +134,7 @@ OTGUI_PhysicalModel_getComposedDistribution_doc
 
 Parameters
 ----------
-copula : :class:`~openturns.Copula`
+copula : :py:class:`openturns.Copula`
     The copula"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getCopula
@@ -280,7 +280,7 @@ OTGUI_PhysicalModel_getOutputByName_doc
 
 Returns
 -------
-names : :class:`~openturns.Description`
+names : :py:class:`openturns.Description`
     Input variable names"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getInputNames
@@ -293,7 +293,7 @@ OTGUI_PhysicalModel_getInputNames_doc
 
 Returns
 -------
-names : :class:`~openturns.Description`
+names : :py:class:`openturns.Description`
     Stochastic input variable names"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getStochasticInputNames
@@ -306,7 +306,7 @@ OTGUI_PhysicalModel_getStochasticInputNames_doc
 
 Returns
 -------
-names : :class:`~openturns.RandomVector`
+names : :py:class:`openturns.RandomVector`
     Input random vector"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getInputRandomVector
@@ -319,7 +319,7 @@ OTGUI_PhysicalModel_getInputRandomVector_doc
 
 Returns
 -------
-names : :class:`~openturns.RandomVector`
+names : :py:class:`openturns.RandomVector`
     Output random vector"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getOutputRandomVector
@@ -456,7 +456,7 @@ Parameters
 ----------
 name : str
     Variable name
-distribution : :class:`~openturns.Distribution`
+distribution : :py:class:`openturns.Distribution`
     Variable distribution"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::setInputDistribution
@@ -490,7 +490,7 @@ outputNames : sequence of str
 
 Returns
 -------
-restricted : :class:`~openturns.NumericalMathFunction`
+restricted : :py:class:`openturns.NumericalMathFunction`
     Stochastic function"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getRestrictedFunction

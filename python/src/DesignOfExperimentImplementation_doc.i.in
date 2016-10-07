@@ -60,7 +60,7 @@ OTGUI_DesignOfExperiment_getPythonScript_doc
 
 Returns
 -------
-names : :class:`~openturns.Description`
+names : :py:class:`openturns.Description`
     Variable input names"
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::getVariableInputNames

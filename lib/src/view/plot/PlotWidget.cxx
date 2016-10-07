@@ -390,8 +390,8 @@ void PlotWidget::plotBoxPlot(double median, double lowerQuartile, double upperQu
 
 void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrderIndices, const NumericalPoint totalIndices, const Description inputNames)
 {
-  setAxisTitle(QwtPlot::yLeft, "Index");
-  setAxisTitle(QwtPlot::xBottom, "Inputs");
+  setAxisTitle(QwtPlot::yLeft, tr("Index"));
+  setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
 
   // populate bar chart
   static const char *colors[] = {"DarkOrchid", "SteelBlue"};
@@ -416,7 +416,7 @@ void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrderIndices, 
     //qDebug() << "x= " << xData[i] << " , y= " << yData[i];
   }
 
-  plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Ellipse, QBrush(colors[0]), QPen(colors[0]), QSize(5, 5)), "First order index");
+  plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Ellipse, QBrush(colors[0]), QPen(colors[0]), QSize(5, 5)), tr("First order index"));
 
   if (totalIndices.getSize())
   {
@@ -431,7 +431,7 @@ void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrderIndices, 
       yMax = std::max(yMax, totalIndices[i]);
       //qDebug() << "x= " << xData[i] << " , y= " << yData[i];
     }
-    plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Rect, QBrush(colors[1]), QPen(colors[1]), QSize(5, 5)), "Total index");
+    plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Rect, QBrush(colors[1]), QPen(colors[1]), QSize(5, 5)), tr("Total index"));
 
     insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
   }

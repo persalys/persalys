@@ -79,7 +79,7 @@ void FunctionalChaosResultWindow::buildInterface()
     NumericalSample lineSample(result_.getMetaModelOutputSample().getMarginal(i));
     lineSample.stack(lineSample);
     plot->plotCurve(lineSample, QPen(Qt::black, 1));
-    plot->setTitle(tr("Metamodel: ") + outputNames[i]);
+    plot->setTitle(tr("Metamodel:") + " " + outputNames[i]);
     plot->setAxisTitle(QwtPlot::xBottom, tr("Metamodel"));
     plot->setAxisTitle(QwtPlot::yLeft, tr("Physical model"));
     listMetaModels.append(plot);
@@ -141,7 +141,7 @@ void FunctionalChaosResultWindow::buildInterface()
   }
 
   // -- moments --
-  QGroupBox * momentsGroupBox = new QGroupBox(tr("Estimates"));
+  QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimates"));
   QVBoxLayout * momentsGroupBoxLayout = new QVBoxLayout(momentsGroupBox);
   ResizableStackedWidget * momentsStackedWidget = new ResizableStackedWidget;
 

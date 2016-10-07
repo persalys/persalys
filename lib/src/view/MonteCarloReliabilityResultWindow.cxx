@@ -146,7 +146,7 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   QVector<PlotWidget*> listHistogram;
   PlotWidget * plot = new PlotWidget("histogram");
   QString outputName(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
-  plot->plotHistogram(result_.getOutputSample(), 2, 0, outputName + tr(" distribution"));
+  plot->plotHistogram(result_.getOutputSample(), 2, 0, outputName + " " + tr("distribution"));
   NumericalSample threshold = NumericalSample(2, 2);
   threshold[0][0] = result_.getSimulationResult().getEvent().getThreshold();
   threshold[1][0] = plot->axisInterval(QwtPlot::yLeft).minValue();
@@ -156,7 +156,7 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   plot->setAxisTitle(QwtPlot::xBottom, tr("Values"));
   plot->setAxisTitle(QwtPlot::yLeft, tr("Number of simulations"));
   plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
-  plot->setTitle(tr("Output ") + outputName + tr(" distribution"));
+  plot->setTitle(tr("Output") + " " + outputName + " " + tr("distribution"));
 
   listHistogram.append(plot);
   tabLayout->addWidget(plot);
@@ -208,11 +208,11 @@ void MonteCarloReliabilityResultWindow::showHideGraphConfigurationWidget(int ind
   switch (indexTab)
   {
     // if a plotWidget is visible
-    case 1:
+    case 1: // histogram
       if (!histogramConfigurationWidget_->isVisible())
         emit graphWindowActivated(histogramConfigurationWidget_);
       break;
-    case 2:
+    case 2: // convergence graph
       if (!convergenceGraphConfigurationWidget_->isVisible())
         emit graphWindowActivated(convergenceGraphConfigurationWidget_);
       break;
@@ -228,9 +228,12 @@ void MonteCarloReliabilityResultWindow::showHideGraphConfigurationWidget(int ind
 
 void MonteCarloReliabilityResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
-  if (newState == 4 || newState == 8 || newState == 10)
+  if (oldState == Qt::WindowMaximized)
+    return;
+
+  if (newState == Qt::WindowFullScreen || newState == (Qt::WindowActive|Qt::WindowMaximized))
     showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-  else if (newState == 0 || newState == 1 || newState == 9)
+  else if (newState == Qt::WindowNoState || newState == Qt::WindowMinimized || newState == (Qt::WindowActive|Qt::WindowMinimized))
     showHideGraphConfigurationWidget(-1);
 }
 }

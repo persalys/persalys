@@ -168,7 +168,7 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   // -- results --
 
   // number of simulations
-  QLabel * nbSimuLabel = new QLabel(tr("Size of the design of experiment: ") + QString::number(inS.getSize()) + "\n");
+  QLabel * nbSimuLabel = new QLabel(tr("Size of the design of experiment:") + " " + QString::number(inS.getSize()) + "\n");
   nbSimuLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
   tabLayout->addWidget(nbSimuLabel);
 
@@ -224,14 +224,14 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const OT::Num
     {
       PlotWidget * plot = new PlotWidget("scatterplot");
       plot->plotScatter(inS.getMarginal(j), outS.getMarginal(i), pen, inAxisNames[j], outAxisNames[i]);
-      plot->setTitle(tr("Scatter plot: ") + outNames[i] + tr(" vs ") + inNames[j]);
+      plot->setTitle(tr("Scatter plot:") + " " + outNames[i] + " " + tr("vs") + " " + inNames[j]);
       listScatterPlotWidgets.append(plot);
     }
     for (UnsignedInteger i=0; i<nbInputs; ++i)
     {
       PlotWidget * plot = new PlotWidget("scatterplot");
       plot->plotScatter(inS.getMarginal(j), inS.getMarginal(i), pen, inAxisNames[j], inAxisNames[i]);
-      plot->setTitle(tr("Scatter plot: ") + inNames[i] + tr(" vs ") + inNames[j]);
+      plot->setTitle(tr("Scatter plot:") + " " + inNames[i] + " " + tr("vs") + " " + inNames[j]);
       listScatterPlotWidgets.append(plot);
     }
   }
@@ -241,14 +241,14 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const OT::Num
     {
       PlotWidget * plot = new PlotWidget("scatterplot");
       plot->plotScatter(outS.getMarginal(j), outS.getMarginal(i), pen, outAxisNames[j], outAxisNames[i]);
-      plot->setTitle(tr("Scatter plot: ") + outNames[i] + tr(" vs ") + outNames[j]);
+      plot->setTitle(tr("Scatter plot:") + " " + outNames[i] + " " + tr("vs") + " " + outNames[j]);
       listScatterPlotWidgets.append(plot);
     }
     for (UnsignedInteger i=0; i<nbInputs; ++i)
     {
       PlotWidget * plot = new PlotWidget("scatterplot");
       plot->plotScatter(outS.getMarginal(j), inS.getMarginal(i), pen, outAxisNames[j], inAxisNames[i]);
-      plot->setTitle(tr("Scatter plot: ") + inNames[i] + tr(" vs ") + outNames[j]);
+      plot->setTitle(tr("Scatter plot:") + " " + inNames[i] + " " + tr("vs") + " " + outNames[j]);
       listScatterPlotWidgets.append(plot);
     }
   }
@@ -261,15 +261,15 @@ void DesignOfExperimentWindow::showHideGraphConfigurationWidget(int indexTab)
   switch (indexTab)
   {
     // if a plotWidget is visible
-    case 2:
+    case 2: // scatter plots
       if (!graphConfigurationWidget_->isVisible())
         emit graphWindowActivated(graphConfigurationWidget_);
       break;
-    case 3:
+    case 3: // plot matrix X-X
       if (!plotMatrix_X_X_ConfigurationWidget_->isVisible())
         emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
       break;
-    case 4:
+    case 4: // plot matrix Y-X
       if (!plotMatrixConfigurationWidget_->isVisible())
         emit graphWindowActivated(plotMatrixConfigurationWidget_);
       break;
@@ -285,12 +285,12 @@ void DesignOfExperimentWindow::showHideGraphConfigurationWidget(int indexTab)
 
 void DesignOfExperimentWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
-  if (oldState == 2)
+  if (oldState == Qt::WindowMaximized)
     return;
 
-  if (newState == 4 || newState == 10)
+  if (newState == Qt::WindowFullScreen || newState == (Qt::WindowActive|Qt::WindowMaximized))
     showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-  else if (newState == 0 || newState == 1 || newState == 9)
+  else if (newState == Qt::WindowNoState || newState == Qt::WindowMinimized || newState == (Qt::WindowActive|Qt::WindowMinimized))
     showHideGraphConfigurationWidget(-1);
 }
 }

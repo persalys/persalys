@@ -21,29 +21,7 @@
 #include "otgui/DistributionDictionary.hxx"
 
 #include "openturns/SpecFunc.hxx"
-#include "openturns/ArcsineMuSigma.hxx"
-#include "openturns/BetaMuSigma.hxx"
-#include "openturns/ChiSquare.hxx"
-#include "openturns/Exponential.hxx"
-#include "openturns/InverseNormal.hxx"
-#include "openturns/GammaMuSigma.hxx"
-#include "openturns/Gumbel.hxx"
-#include "openturns/GumbelAB.hxx"
-#include "openturns/GumbelMuSigma.hxx"
-#include "openturns/Laplace.hxx"
-#include "openturns/LogNormal.hxx"
-#include "openturns/LogNormalMuSigma.hxx"
-#include "openturns/LogNormalMuSigmaOverMu.hxx"
-#include "openturns/Logistic.hxx"
-#include "openturns/LogUniform.hxx"
-#include "openturns/Normal.hxx"
-#include "openturns/Rayleigh.hxx"
-#include "openturns/Student.hxx"
-#include "openturns/Trapezoidal.hxx"
-#include "openturns/Triangular.hxx"
-#include "openturns/Uniform.hxx"
-#include "openturns/Weibull.hxx"
-#include "openturns/WeibullMuSigma.hxx"
+#include "openturns/OTDistribution.hxx"
 
 using namespace OT;
 
@@ -173,7 +151,7 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
   }
   catch (InvalidArgumentException & ex)
   {
-    std::cerr << "Error when creating the distribution " << distributionName << std::endl;
+    Log::Error(OSS() << "DistributionDictionary::BuildDistribution: Error when creating the distribution " << distributionName << "\n");
     throw InvalidArgumentException(HERE) << ex.what();
   }
 }
@@ -190,13 +168,13 @@ Distribution::NumericalPointWithDescriptionCollection DistributionDictionary::Ge
     Gumbel d = *dynamic_cast<Gumbel*>(&*distribution.getImplementation());
     NumericalPointWithDescription NPWithDesc;
 
-    GumbelAB d1(d.getA(), d.getB());
-    NPWithDesc = d1.getValues();
+    GumbelAB d1;
+    NPWithDesc = d1.inverse(d.getParameter());
     NPWithDesc.setDescription(d1.getDescription());
     NPWithDescColl.add(NPWithDesc);
 
-    GumbelMuSigma d2(d.getMu(), d.getSigma());
-    NPWithDesc = d2.getValues();
+    GumbelMuSigma d2;
+    NPWithDesc = d2.inverse(d.getParameter());
     NPWithDesc.setDescription(d2.getDescription());
     NPWithDescColl.add(NPWithDesc);
   }
@@ -205,13 +183,13 @@ Distribution::NumericalPointWithDescriptionCollection DistributionDictionary::Ge
     LogNormal d = *dynamic_cast<LogNormal*>(&*distribution.getImplementation());
     NumericalPointWithDescription NPWithDesc;
 
-    LogNormalMuSigma d1(d.getMu(), d.getSigma(), d.getGamma());
-    NPWithDesc = d1.getValues();
+    LogNormalMuSigma d1;
+    NPWithDesc = d1.inverse(d.getParameter());
     NPWithDesc.setDescription(d1.getDescription());
     NPWithDescColl.add(NPWithDesc);
 
-    LogNormalMuSigmaOverMu d2(d.getMu(), d.getSigmaOverMu(), d.getGamma());
-    NPWithDesc = d2.getValues();
+    LogNormalMuSigmaOverMu d2;
+    NPWithDesc = d2.inverse(d.getParameter());
     NPWithDesc.setDescription(d2.getDescription());
     NPWithDescColl.add(NPWithDesc);
   }
@@ -243,8 +221,8 @@ Distribution::NumericalPointWithDescriptionCollection DistributionDictionary::Ge
     Weibull d = *dynamic_cast<Weibull*>(&*distribution.getImplementation());
     NumericalPointWithDescription NPWithDesc;
 
-    WeibullMuSigma d1(d.getMu(), d.getSigma(), d.getGamma());
-    NPWithDesc = d1.getValues();
+    WeibullMuSigma d1;
+    NPWithDesc = d1.inverse(d.getParameter());
     NPWithDesc.setDescription(d1.getDescription());
     NPWithDescColl.add(NPWithDesc);
   }

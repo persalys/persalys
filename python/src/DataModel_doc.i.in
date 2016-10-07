@@ -13,9 +13,9 @@ inputColumns : sequence of int
     Indices of columns of the input variables in file to consider
 outputColumns : sequence of int
     Indices of columns of the output variables in file to consider (optional)
-inputNames : :class:`~openturns.Description`
+inputNames : :py:class:`openturns.Description`
     Names of the input variables (optional)
-outputNames : :class:`~openturns.Description`
+outputNames : :py:class:`openturns.Description`
     Names of the output variables (optional)"
 
 // ---------------------------------------------------------------------
@@ -25,7 +25,7 @@ outputNames : :class:`~openturns.Description`
 
 Returns
 -------
-columns : :class:`~openturns.Indices`
+columns : :py:class:`openturns.Indices`
    Columns of the input variables"
 
 // ---------------------------------------------------------------------
@@ -35,7 +35,7 @@ columns : :class:`~openturns.Indices`
 
 Returns
 -------
-columns : :class:`~openturns.Indices`
+columns : :py:class:`openturns.Indices`
    Columns of the output variables"
 
 // ---------------------------------------------------------------------
@@ -45,13 +45,13 @@ columns : :class:`~openturns.Indices`
 
 Parameters
 ----------
-inputColumns : :class:`~openturns.Indices`
+inputColumns : :py:class:`openturns.Indices`
     Columns of the input variables
-outputColumns : :class:`~openturns.Indices`
+outputColumns : :py:class:`openturns.Indices`
     Columns of the output variables
-inputNames : :class:`~openturns.Description`, optional
+inputNames : :py:class:`openturns.Description`, optional
     Names of the input variables (optional)
-outputNames : :class:`~openturns.Description`, optional
+outputNames : :py:class:`openturns.Description`, optional
     Names of the output variables (optional)"
 
 // ---------------------------------------------------------------------
@@ -61,7 +61,7 @@ outputNames : :class:`~openturns.Description`, optional
 
 Returns
 -------
-names : :class:`~openturns.Description`
+names : :py:class:`openturns.Description`
    Names of the input variables"
 
 // ---------------------------------------------------------------------
@@ -71,5 +71,5 @@ names : :class:`~openturns.Description`
 
 Returns
 -------
-names : :class:`~openturns.Description`
+names : :py:class:`openturns.Description`
    Names of the output variables"

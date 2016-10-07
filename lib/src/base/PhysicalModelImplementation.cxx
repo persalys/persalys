@@ -450,7 +450,7 @@ NumericalMathFunction PhysicalModelImplementation::getFunction(const Description
   }
   catch (std::exception & ex)
   {
-    std::cerr << "Error in PhysicalModelImplementation::getFunction(const Description & outputNames) ";
+    Log::Error(OSS() << "Error in PhysicalModelImplementation::getFunction(const Description & outputNames) ");
     throw PhysicalModelNotValidException(HERE) << ex.what();
   }
 }
@@ -484,7 +484,7 @@ NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction() const
   }
   catch (std::exception & ex)
   {
-    std::cerr << "Error in PhysicalModelImplementation::getRestrictedFunction()";
+    Log::Error(OSS() << "Error in PhysicalModelImplementation::getRestrictedFunction()");
     throw PhysicalModelNotValidException(HERE) << ex.what();
   }
 }
@@ -511,7 +511,7 @@ NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction(const D
   }
   catch (std::exception & ex)
   {
-    std::cerr << "Error in PhysicalModelImplementation::getRestrictedFunction(const Description & outputNames) ";
+    Log::Error(OSS() << "Error in PhysicalModelImplementation::getRestrictedFunction(const Description & outputNames) ");
     throw PhysicalModelNotValidException(HERE) << ex.what();
   }
 }
@@ -541,7 +541,7 @@ bool PhysicalModelImplementation::isValid() const
 
 String PhysicalModelImplementation::getPythonScript() const
 {
-  throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getDump()";
+  throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getPythonScript()";
 }
 
 

@@ -57,7 +57,7 @@ type : int
 
 Returns
 -------
-size : :class:`~openturns.NumericalPoint`
+size : :py:class:`openturns.NumericalPoint`
    Values"
 
 // ---------------------------------------------------------------------
@@ -67,7 +67,7 @@ size : :class:`~openturns.NumericalPoint`
 
 Parameters
 ----------
-size : :class:`~openturns.NumericalPoint`
+size : :py:class:`openturns.NumericalPoint`
    Values"
 
 // ---------------------------------------------------------------------
@@ -77,7 +77,7 @@ size : :class:`~openturns.NumericalPoint`
 
 Returns
 -------
-bounds : :class:`~openturns.NumericalPoint`
+bounds : :py:class:`openturns.NumericalPoint`
    Lower bounds"
 
 // ---------------------------------------------------------------------
@@ -87,7 +87,7 @@ bounds : :class:`~openturns.NumericalPoint`
 
 Parameters
 ----------
-bounds : :class:`~openturns.NumericalPoint`
+bounds : :py:class:`openturns.NumericalPoint`
    Lower bounds"
 
 // ---------------------------------------------------------------------
@@ -97,7 +97,7 @@ bounds : :class:`~openturns.NumericalPoint`
 
 Returns
 -------
-bounds : :class:`~openturns.NumericalPoint`
+bounds : :py:class:`openturns.NumericalPoint`
    Upper bounds"
 
 // ---------------------------------------------------------------------
@@ -107,7 +107,7 @@ bounds : :class:`~openturns.NumericalPoint`
 
 Parameters
 ----------
-bounds : :class:`~openturns.NumericalPoint`
+bounds : :py:class:`openturns.NumericalPoint`
    Upper bounds"
 
 // ---------------------------------------------------------------------
@@ -117,7 +117,7 @@ bounds : :class:`~openturns.NumericalPoint`
 
 Returns
 -------
-levels : :class:`~openturns.Indices`
+levels : :py:class:`openturns.Indices`
    Levels"
 
 // ---------------------------------------------------------------------
@@ -127,7 +127,7 @@ levels : :class:`~openturns.Indices`
 
 Parameters
 ----------
-levels : :class:`~openturns.Indices`
+levels : :py:class:`openturns.Indices`
    Levels"
 
 // ---------------------------------------------------------------------
@@ -137,7 +137,7 @@ levels : :class:`~openturns.Indices`
 
 Returns
 -------
-deltas : :class:`~openturns.NumericalPoint`
+deltas : :py:class:`openturns.NumericalPoint`
    Deltas"
 
 // ---------------------------------------------------------------------
@@ -147,5 +147,5 @@ deltas : :class:`~openturns.NumericalPoint`
 
 Parameters
 ----------
-deltas : :class:`~openturns.NumericalPoint`
+deltas : :py:class:`openturns.NumericalPoint`
    Deltas"

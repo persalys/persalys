@@ -28,6 +28,8 @@
 namespace OTGUI {
 class OTGUI_API CustomStandardItemModel : public QStandardItemModel
 {
+  Q_OBJECT
+
 public:
   CustomStandardItemModel(int nbRows, int nbColumns, QObject * parent = 0);
 

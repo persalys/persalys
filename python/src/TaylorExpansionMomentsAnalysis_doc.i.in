@@ -15,7 +15,7 @@ physicalModel : :class:`~otguibase.PhysicalModel`
 
 Parameters
 ----------
-names : :class:`~openturns.Description`
+names : :py:class:`openturns.Description`
     Output variable names"
 
 // ---------------------------------------------------------------------
@@ -25,7 +25,7 @@ names : :class:`~openturns.Description`
 
 Returns
 -------
-names : :class:`~openturns.Description`
+names : :py:class:`openturns.Description`
     Output variable names"
 
 // ---------------------------------------------------------------------

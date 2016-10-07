@@ -48,7 +48,7 @@ seed : int
 
 Returns
 -------
-sample : :class:`~openturns.NumericalSample`
+sample : :py:class:`openturns.NumericalSample`
     Input sample"
 
 // ---------------------------------------------------------------------
@@ -58,6 +58,6 @@ sample : :class:`~openturns.NumericalSample`
 
 Returns
 -------
-sample : :class:`~openturns.Description`
+sample : :py:class:`openturns.Description`
     Output variable names"
 

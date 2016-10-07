@@ -27,7 +27,7 @@ fileName : str
 
 Returns
 -------
-sample : :class:`~openturns.NumericalSample`
+sample : :py:class:`openturns.NumericalSample`
     Sample"
 
 // ---------------------------------------------------------------------
@@ -57,7 +57,7 @@ fileName : str
 
 Returns
 -------
-columns : :class:`~openturns.Indices`
+columns : :py:class:`openturns.Indices`
    Columns of the inputs"
 
 // ---------------------------------------------------------------------
@@ -67,5 +67,5 @@ columns : :class:`~openturns.Indices`
 
 Parameters
 ----------
-columns : :class:`~openturns.Indices`
+columns : :py:class:`openturns.Indices`
    Columns of the inputs"

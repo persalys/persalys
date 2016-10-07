@@ -725,7 +725,7 @@ void StudyTreeView::runAnalysis()
   if (analysisType == "ModelEvaluation")
   {
     if (!isPhysicalModelValid(selectionModel()->currentIndex()))
-      std::cerr << "In runAnalysis: physical model not valid for the " << analysisType.toStdString() << "\n";
+      qDebug() << "Error: In runAnalysis: physical model not valid for the " << analysisType << "\n";
     wizard = QSharedPointer<AnalysisWizard>(new ModelEvaluationWizard(item->getAnalysis()));
   }
   else if (analysisType == "FunctionalChaosAnalysis")
@@ -735,9 +735,9 @@ void StudyTreeView::runAnalysis()
   else
   {
     if (!isPhysicalModelValid(selectionModel()->currentIndex()))
-      std::cerr << "In runAnalysis: physical model not valid for the " << analysisType.toStdString() << "\n";
+      qDebug() << "Error: In runAnalysis: physical model not valid for the " << analysisType << "\n";
     if (!isProbabilisticModelValid(selectionModel()->currentIndex()))
-      std::cerr << "In runAnalysis: probabilistic model not valid for the " << analysisType.toStdString() << "\n";
+      qDebug() << "Error: In runAnalysis: probabilistic model not valid for the " << analysisType << "\n";
 
     if (analysisType == "MonteCarloAnalysis" || analysisType == "TaylorExpansionMomentsAnalysis")
     {
@@ -750,12 +750,12 @@ void StudyTreeView::runAnalysis()
     else if (analysisType == "MonteCarloReliabilityAnalysis")
     {
       if (!isLimitStateValid(selectionModel()->currentIndex()))
-        std::cerr << "In runAnalysis: limit state not valid for the " << analysisType.toStdString() << "\n";
+        qDebug() << "In runAnalysis: limit state not valid for the " << analysisType << "\n";
       wizard = QSharedPointer<AnalysisWizard>(new ReliabilityAnalysisWizard(item->getAnalysis()));
     }
     else
     {
-      std::cerr << "In runAnalysis: analysisType " << analysisType.toStdString() << " not recognized.\n";
+      qDebug() << "Error: In runAnalysis: analysisType " << analysisType << " not recognized.\n";
     }
   }
 
@@ -809,7 +809,7 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
   else if (analysisType == "FunctionalChaosAnalysis")
     resultWindow = new FunctionalChaosResultWindow(item);
   else
-    std::cerr << "In createAnalysisResultWindow: analysisType " << analysisType.toStdString() << " not recognized.";
+    qDebug() << "Error: In createAnalysisResultWindow: analysisType " << analysisType << " not recognized.";
 
   if (resultWindow)
   {

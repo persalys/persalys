@@ -27,6 +27,8 @@
 namespace OTGUI {
 class AnalysisExecutionFailedWindow : public OTguiSubWindow
 {
+  Q_OBJECT
+
 public:
   AnalysisExecutionFailedWindow(AnalysisItem * item, const QString & errorMessage);
 

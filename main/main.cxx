@@ -20,6 +20,7 @@
  */
 #include <QApplication>
 #include <QSettings>
+#include <QTranslator>
 
 #include "otgui/MainWindow.hxx"
 #ifdef OTGUI_HAVE_YACS
@@ -36,6 +37,11 @@ int main(int argc, char *argv[])
   QApplication app(argc, argv);
   QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EDF_Phimeca", "OTgui");
   settings.setValue("currentDir", QSettings().fileName());
+
+  // translations
+  QTranslator appTranslator;
+  appTranslator.load("otgui_" + QLocale::system().name(), ":/translations");
+  app.installTranslator(&appTranslator);
 
   MainWindow window;
   window.resize(1024, 768);

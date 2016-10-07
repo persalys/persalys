@@ -14,7 +14,7 @@ getResult()."
 
 Returns
 -------
-result : :class:`~openturns.FunctionalChaosResult`
+result : :py:class:`openturns.FunctionalChaosResult`
     Functional chaos result"
 
 // ---------------------------------------------------------------------
@@ -34,7 +34,7 @@ result : :class:`~otguibase.SobolResult`
 
 Returns
 -------
-result : :class:`~openturns.NumericalPoint`
+result : :py:class:`openturns.NumericalPoint`
     Mean estimation"
 
 // ---------------------------------------------------------------------
@@ -44,5 +44,5 @@ result : :class:`~openturns.NumericalPoint`
 
 Returns
 -------
-result : :class:`~openturns.NumericalPoint`
+result : :py:class:`openturns.NumericalPoint`
     Variance estimation"

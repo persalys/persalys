@@ -23,6 +23,8 @@
 #include "otgui/ReliabilityAnalysis.hxx"
 #include "otgui/DesignOfExperimentAnalysis.hxx"
 
+#include <QDebug>
+
 using namespace OT;
 
 namespace OTGUI {
@@ -60,7 +62,7 @@ void OTStudyItem::update(Observable * source, const String & message)
     }
     catch (std::exception & ex)
     {
-      std::cerr<<"No item added for the design of experiment named " << addedDesignOfExperiment.getName() << "\n" << ex.what() << std::endl;
+      qDebug() << "In OTStudyItem::update: No item added for the design of experiment named " << addedDesignOfExperiment.getName().data() << "\n" << ex.what() << "\n";
     }
   }
   else if (message == "addLimitState")
@@ -72,7 +74,7 @@ void OTStudyItem::update(Observable * source, const String & message)
     }
     catch (std::exception & ex)
     {
-      std::cerr<<"No item added for the limit state named " << addedLimitState.getName() << "\n" << ex.what() << std::endl;
+      qDebug() << "In OTStudyItem::update: No item added for the limit state named " << addedLimitState.getName().data() << "\n" << ex.what() << "\n";
     }
   }
   else if (message == "addAnalysis")
@@ -84,7 +86,7 @@ void OTStudyItem::update(Observable * source, const String & message)
     }
     catch (std::exception & ex)
     {
-      std::cerr<<"No item added for the analysis named " << addedAnalysis.getName() << "\n" << ex.what() << std::endl;
+      qDebug() << "In OTStudyItem::update: No item added for the analysis named " << addedAnalysis.getName().data() << "\n" << ex.what() << "\n";
     }
   }
   else if (message == "otStudyRemoved")
@@ -97,7 +99,7 @@ void OTStudyItem::update(Observable * source, const String & message)
   }
   else
   {
-    std::cerr<< "In OTStudyItem::update: not recognized message: " << message << std::endl;
+    qDebug() << "In OTStudyItem::update: not recognized message: " << message.data() << "\n";
   }
 }
 
@@ -249,7 +251,7 @@ void OTStudyItem::addDeterministicAnalysisItem(Analysis & analysis, AnalysisItem
       emit newAnalysisItemCreated(item);
       return;
     }
-  std::cerr<<"No item added for the deterministic analysis named "<<analysis.getName()<<std::endl;
+  qDebug() << "In OTStudyItem::addDeterministicAnalysisItem: No item added for the deterministic analysis named " << analysis.getName().data() << "\n";
 }
 
 
@@ -270,7 +272,7 @@ void OTStudyItem::addProbabilisticAnalysisItem(Analysis & analysis, AnalysisItem
       emit newAnalysisItemCreated(item);
       return;
     }
-  std::cerr<<"No item added for the probabilistic analysis named "<<analysis.getName()<<std::endl;
+  qDebug() << "In OTStudyItem::addProbabilisticAnalysisItem: No item added for the probabilistic analysis named " << analysis.getName().data() << "\n";
 }
 
 
@@ -278,6 +280,7 @@ void OTStudyItem::addReliabilityAnalysisItem(Analysis & analysis, AnalysisItem *
 {
   if (!dynamic_cast<ReliabilityAnalysis*>(&*analysis.getImplementation()))
     throw InvalidArgumentException(HERE) << "In OTStudyItem::addReliabilityAnalysisItem: Impossible to add an item for the analysis " << analysis.getName();
+
   String limitStateName = dynamic_cast<ReliabilityAnalysis*>(&*analysis.getImplementation())->getLimitState().getName();
   for (int i=0; i<rowCount(); ++i)
     if (child(i)->text().toStdString() == analysis.getModelName())
@@ -291,7 +294,7 @@ void OTStudyItem::addReliabilityAnalysisItem(Analysis & analysis, AnalysisItem *
           return;
         }
     }
-  std::cerr<<"No item added for the reliability analysis named "<<analysis.getName()<<std::endl;
+  qDebug() << "In OTStudyItem::addReliabilityAnalysisItem: No item added for the reliability analysis named " << analysis.getName().data() << "\n";
 }
 
 
@@ -342,7 +345,7 @@ void OTStudyItem::addDesignOfExperimentAnalysisItem(Analysis& analysis, Analysis
       }
     }
   }
-  std::cerr<<"No item added for the analysis named " << analysis.getName() << std::endl;
+  qDebug() << "In OTStudyItem::addDesignOfExperimentAnalysisItem: No item added for the analysis named " << analysis.getName().data() << "\n";
 }
 
 

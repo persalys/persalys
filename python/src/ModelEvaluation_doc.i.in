@@ -8,7 +8,7 @@
 
 Returns
 -------
-values : :class:`~openturns.NumericalPoint`
+values : :py:class:`openturns.NumericalPoint`
     Input values."
 
 // ---------------------------------------------------------------------
