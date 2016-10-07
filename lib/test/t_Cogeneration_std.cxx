@@ -20,11 +20,7 @@
  */
 #include "openturns/OT.hxx"
 #include "openturns/OTtestcode.hxx"
-#include "otgui/OTStudy.hxx"
-#include "otgui/AnalyticalPhysicalModel.hxx"
-#include "otgui/FixedDesignOfExperiment.hxx"
-#include "otgui/FromFileDesignOfExperiment.hxx"
-
+#include "otgui/OTGui.hxx"
 
 using namespace OT;
 using namespace OT::Test;
