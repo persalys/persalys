@@ -6,7 +6,7 @@ linux:
     - make python_unity -j8
     - make install/fast
     - popd
-    - cmake -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -DCMAKE_C_COMPILER=/usr/bin/clang -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wshadow" -DOpenTURNS_DIR=$PWD/openturns/install/lib/cmake/openturns -DUSE_SALOME=OFF .
+    - cmake -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -DCMAKE_C_COMPILER=/usr/bin/clang -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so -DCMAKE_CXX_FLAGS="-Wall -Wshadow" -DOpenTURNS_DIR=$PWD/openturns/install/lib/cmake/openturns -DUSE_SALOME=OFF .
     - make install -j8
     - make tests -j8
     - ctest --output-on-failure --timeout 100
