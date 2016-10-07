@@ -121,14 +121,14 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
         Input input = getPhysicalModel().getInputByName(inputName);
         String distributionName = input.getDistribution().getImplementation()->getClassName();
         if (distributionName == "TruncatedNormal")
-          return tr("Normal");
+          return "Normal";
         else if (distributionName == "TruncatedDistribution")
         {
           TruncatedDistribution * dist = dynamic_cast<TruncatedDistribution*>(&*input.getDistribution().getImplementation());
-          return tr(dist->getDistribution().getImplementation()->getClassName().c_str());
+          return dist->getDistribution().getImplementation()->getClassName().c_str();
         }
         else
-          return tr(input.getDistribution().getImplementation()->getClassName().c_str());
+          return input.getDistribution().getImplementation()->getClassName().c_str();
       }
       default:
         return QVariant();
