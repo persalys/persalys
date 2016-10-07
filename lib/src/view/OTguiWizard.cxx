@@ -33,6 +33,7 @@ OTguiWizard::OTguiWizard(QWidget * parent)
   setButtonText(QWizard::BackButton, tr("Back"));
   setButtonText(QWizard::CancelButton, tr("Cancel"));
   setOption(QWizard::NoDefaultButton, true);
+  setOption(QWizard::NoBackButtonOnStartPage, true);
   resize(800, 600);
 }
 }
