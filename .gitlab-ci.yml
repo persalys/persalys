@@ -10,8 +10,8 @@ linux:
     - make install -j8
     - make tests -j8
     - ctest --output-on-failure --timeout 100
-  except:
-    - master
+  only:
+    - branches
 
 mingw:
   script:
@@ -26,8 +26,8 @@ mingw:
     - popd
     - pushd distro/windows
     - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install JOBS=4
-  except:
-    - master
+  only:
+    - branches
 
 mingw-tag:
   script:
