@@ -28,3 +28,22 @@ mingw:
     - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install JOBS=4
   except:
     - master
+
+mingw-tag:
+  script:
+    - git clone https://github.com/openturns/openturns.git
+    - pushd openturns/distro/windows
+    - tar xzf /usr/share/openturns-developers-windeps-1.8.tar.gz
+    - pushd openturns-developers-windeps
+    - rm -r mingw-w64-x86_64
+    - tar xzf /usr/share/mingw-w64-x86_64.tar.gz
+    - popd
+    - make ot-install JOBS=4
+    - popd
+    - pushd distro/windows
+    - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install JOBS=4
+  artifacts:
+    paths:
+    - distro/windows/otgui*.exe
+  only:
+    - tags
