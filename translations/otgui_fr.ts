@@ -28,7 +28,7 @@
     <message>
         <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="76"/>
         <source>Monte Carlo</source>
-        <translation>Monté Carlo</translation>
+        <translation>Monte-Carlo</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="81"/>
@@ -991,7 +991,7 @@ extremum</source>
     <message>
         <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="89"/>
         <source>Third quartile</source>
-        <translation>troisième quartile</translation>
+        <translation>Troisième quartile</translation>
     </message>
     <message>
         <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="93"/>
@@ -1030,7 +1030,7 @@ extremum</source>
     <message>
         <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="52"/>
         <source>Monte Carlo</source>
-        <translation>Monté Carlo</translation>
+        <translation>Monte-Carlo</translation>
     </message>
     <message>
         <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="53"/>
@@ -1152,7 +1152,7 @@ extremum</source>
     <message>
         <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="179"/>
         <source>Monte Carlo convergence graph at level 0.95</source>
-        <translation>Graphique de convergence Monté Carlo à 0.95</translation>
+        <translation>Graphique de convergence Monte-Carlo à 0.95</translation>
     </message>
     <message>
         <location filename="../lib/src/view/MonteCarloReliabilityResultWindow.cxx" line="181"/>
@@ -1195,7 +1195,7 @@ extremum</source>
     <message>
         <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="103"/>
         <source>Monte Carlo</source>
-        <translation>Monté Carlo</translation>
+        <translation>Monte-Carlo</translation>
     </message>
     <message>
         <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="105"/>
@@ -1456,6 +1456,11 @@ extremum</source>
     </message>
     <message>
         <location filename="../lib/src/view/OTguiWizard.cxx" line="34"/>
+        <source>Finish</source>
+        <translation>Terminer</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTguiWizard.cxx" line="35"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
@@ -1682,12 +1687,12 @@ extremum</source>
     <message>
         <location filename="../lib/src/view/ProbabilisticDesignPage.cxx" line="55"/>
         <source>Quasi-Monte Carlo</source>
-        <translation>Quasi-Monté Carlo</translation>
+        <translation>Quasi-Monte-Carlo</translation>
     </message>
     <message>
         <location filename="../lib/src/view/ProbabilisticDesignPage.cxx" line="59"/>
         <source>Monte Carlo</source>
-        <translation>Monté Carlo</translation>
+        <translation>Monte-Carlo</translation>
     </message>
 </context>
 <context>
@@ -1749,7 +1754,7 @@ extremum</source>
     <message>
         <location filename="../lib/src/view/ReliabilityAnalysisWizard.cxx" line="63"/>
         <source>Monte Carlo</source>
-        <translation>Monté Carlo</translation>
+        <translation>Monte-Carlo</translation>
     </message>
     <message>
         <location filename="../lib/src/view/ReliabilityAnalysisWizard.cxx" line="87"/>

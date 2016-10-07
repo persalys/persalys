@@ -31,6 +31,7 @@ OTguiWizard::OTguiWizard(QWidget * parent)
   setWizardStyle(QWizard::MacStyle);
   setPixmap(QWizard::BackgroundPixmap, QPixmap(":/images/OT_image256x256.png"));
   setButtonText(QWizard::BackButton, tr("Back"));
+  setButtonText(QWizard::FinishButton, tr("Finish"));
   setButtonText(QWizard::CancelButton, tr("Cancel"));
   setOption(QWizard::NoDefaultButton, true);
   setOption(QWizard::NoBackButtonOnStartPage, true);
