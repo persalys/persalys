@@ -68,6 +68,10 @@ TaylorExpansionMomentsAnalysis* TaylorExpansionMomentsAnalysis::clone() const
 
 void TaylorExpansionMomentsAnalysis::run()
 {
+  // clear result
+  result_ = TaylorExpansionMomentsResult();
+
+  // set analysis
   TaylorExpansionMoments algoTaylorExpansionMoments(getPhysicalModel().getOutputRandomVector(getPhysicalModel().getOutputNames()));
 
   // set results

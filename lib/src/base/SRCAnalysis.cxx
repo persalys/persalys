@@ -57,6 +57,9 @@ SRCAnalysis* SRCAnalysis::clone() const
 
 void SRCAnalysis::run()
 {
+  // clear result
+  result_ = SRCResult();
+
   RandomGenerator::SetSeed(getSeed());
 
   NumericalSample inputSample(generateInputSample(simulationsNumber_));

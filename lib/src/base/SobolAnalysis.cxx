@@ -57,6 +57,10 @@ SobolAnalysis* SobolAnalysis::clone() const
 
 void SobolAnalysis::run()
 {
+  // clear result
+  result_ = SobolResult();
+
+  // initialization
   RandomGenerator::SetSeed(getSeed());
 
   const UnsignedInteger nbInputs(getPhysicalModel().getStochasticInputNames().getSize());
