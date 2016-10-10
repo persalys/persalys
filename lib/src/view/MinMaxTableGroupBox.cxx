@@ -104,7 +104,7 @@ QWidget* MinMaxTableGroupBox::getForOutputMinMaxTableView(const DataSample & res
     minMaxTableView->setSpan(1, 0, nbInputs, 1);
 
   // inputs names
-  for (int i=0; i<nbInputs; ++i)
+  for (UnsignedInteger i=0; i<nbInputs; ++i)
     minMaxTable->setNotEditableItem(i+1, 1, QString::fromUtf8(result.getInputSample().getDescription()[i].c_str()));
 
   // output name

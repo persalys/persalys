@@ -97,8 +97,8 @@ void MonteCarloAnalysis::run()
   NumericalSample outputSample(0, getPhysicalModel().getOutputNames().getSize()); // TODO only required outputs
   outputSample.setDescription(getPhysicalModel().getOutputNames());
 
-  const bool maximumOuterSamplingSpecified = getMaximumCalls() < std::numeric_limits<int>::max();
-  const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize())) : std::numeric_limits<int>::max();
+  const bool maximumOuterSamplingSpecified = getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max();
+  const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize())) : (UnsignedInteger)std::numeric_limits<int>::max();
   const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getMaximumCalls() % getBlockSize() : 0;
   const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
 
@@ -129,7 +129,7 @@ void MonteCarloAnalysis::run()
       const NumericalPoint empiricalMean(outputSample.computeMean());
       const NumericalPoint empiricalStd(outputSample.computeStandardDeviationPerComponent());
       NumericalScalar coefOfVar(0.);
-      for (int i=0; i<outputSample.getDimension(); ++i)
+      for (UnsignedInteger i=0; i<outputSample.getDimension(); ++i)
       {
         const NumericalScalar sigma_i = empiricalStd[i] / sqrt(outputSample.getSize());
         coefOfVar = std::max(sigma_i / empiricalMean[i], coefOfVar);
@@ -167,10 +167,10 @@ String MonteCarloAnalysis::getPythonScript() const
 {
   OSS oss;
   oss << getName() << " = otguibase.MonteCarloAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
-  if (getMaximumCalls() != std::numeric_limits<int>::max())
+  if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
     oss << getName() << ".setMaximumCalls(" << getMaximumCalls() << ")\n";
   oss << getName() << ".setMaximumCoefficientOfVariation(" << getMaximumCoefficientOfVariation() << ")\n";
-  if (getMaximumElapsedTime() != std::numeric_limits<int>::max())
+  if (getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
     oss << getName() << ".setMaximumElapsedTime(" << getMaximumElapsedTime() << ")\n";
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << getName() << ".setSeed(" << getSeed() << ")\n";

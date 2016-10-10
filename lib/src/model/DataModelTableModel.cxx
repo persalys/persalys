@@ -174,7 +174,7 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
         else if (outputColumns_.contains(index.column()))
         {
           for (UnsignedInteger i=0; i<outputColumns_.getSize(); ++i)
-            if (outputColumns_[i] == index.column())
+            if ((int)outputColumns_[i] == index.column())
               outputColumns_.erase(outputColumns_.begin() + i);
         }
         inputColumns_.add(index.column());
@@ -186,7 +186,7 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
         else if (inputColumns_.contains(index.column()))
         {
           for (UnsignedInteger i=0; i<inputColumns_.getSize(); ++i)
-            if (inputColumns_[i] == index.column())
+            if ((int)inputColumns_[i] == index.column())
               inputColumns_.erase(inputColumns_.begin() + i);
         }
         outputColumns_.add(index.column());
@@ -196,13 +196,13 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
         if (inputColumns_.contains(index.column()))
         {
           for (UnsignedInteger i=0; i<inputColumns_.getSize(); ++i)
-            if (inputColumns_[i] == index.column())
+            if ((int)inputColumns_[i] == index.column())
               inputColumns_.erase(inputColumns_.begin() + i);
         }
         else if (outputColumns_.contains(index.column()))
         {
           for (UnsignedInteger i=0; i<outputColumns_.getSize(); ++i)
-            if (outputColumns_[i] == index.column())
+            if ((int)outputColumns_[i] == index.column())
               outputColumns_.erase(outputColumns_.begin() + i);
         }
       }

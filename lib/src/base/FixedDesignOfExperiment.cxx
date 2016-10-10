@@ -106,7 +106,7 @@ void FixedDesignOfExperiment::initializeParameters()
   levels_ = Indices(inputSize);
   deltas_ = NumericalPoint(inputSize);
 
-  for (int i=0; i<inputSize; ++i)
+  for (UnsignedInteger i=0; i<inputSize; ++i)
   {
     values_[i] = inputs[i].getValue();
     if (!inputs[i].isStochastic())
