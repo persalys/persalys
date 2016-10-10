@@ -93,6 +93,9 @@ void ModelEvaluation::updateParameters()
 
 void ModelEvaluation::run()
 {
+  // clear result
+  result_ = ModelEvaluationResult();
+
   // output = f(input)
   NumericalSample inputSample(1, getInputValues());
   inputSample.setDescription(inputNames_);

@@ -60,6 +60,10 @@ MonteCarloReliabilityAnalysis* MonteCarloReliabilityAnalysis::clone() const
 
 void MonteCarloReliabilityAnalysis::run()
 {
+  // clear result
+  result_ = MonteCarloReliabilityResult();
+
+  // initialization
   RandomGenerator::SetSeed(getSeed());
 
   Description outputName(1);
@@ -71,6 +75,7 @@ void MonteCarloReliabilityAnalysis::run()
   Event event(RandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
   event.setDescription(outputName);
 
+  // create algo
   MonteCarlo algo = MonteCarlo(event);
   UnsignedInteger maximumOuterSampling = std::numeric_limits<int>::max();
   if (getMaximumCalls() < std::numeric_limits<int>::max())

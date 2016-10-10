@@ -90,6 +90,10 @@ void MonteCarloAnalysis::setLevelConfidenceInterval(const double levelConfidence
 
 void MonteCarloAnalysis::run()
 {
+  // clear result
+  result_ = DataAnalysisResult();
+
+  // initialization
   RandomGenerator::SetSeed(getSeed());
 
   NumericalSample effectiveInputSample(0, getPhysicalModel().getInputNames().getSize());
