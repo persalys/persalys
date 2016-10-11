@@ -64,6 +64,16 @@ String DesignOfExperimentAnalysis::getModelName() const
 }
 
 
+String DesignOfExperimentAnalysis::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " designOfExperiment=class=" << getDesignOfExperiment().GetClassName() << " name=" << getDesignOfExperiment().getName();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void DesignOfExperimentAnalysis::save(Advocate & adv) const
 {

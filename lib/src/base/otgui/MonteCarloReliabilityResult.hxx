@@ -51,6 +51,9 @@ public:
   double getElapsedTime() const;
   void setElapsedTime(const double seconds);
 
+  /** String converter */
+  virtual OT::String __repr__() const;
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 

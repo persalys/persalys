@@ -104,6 +104,17 @@ void MonteCarloReliabilityResult::setElapsedTime(const double seconds)
 }
 
 
+/* String converter */
+String MonteCarloReliabilityResult::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " simulationResult=" << getSimulationResult();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void MonteCarloReliabilityResult::save(Advocate& adv) const
 {

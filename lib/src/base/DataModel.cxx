@@ -253,6 +253,21 @@ String DataModel::getPythonScript() const
 }
 
 
+/* String converter */
+String DataModel::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " fileName=" << getFileName()
+      << " inputColumns=" << getInputColumns()
+      << " outputColumns=" << getOutputColumns()
+      << " inputNames=" << inputNames_
+      << " outputNames=" << outputNames_;
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void DataModel::save(Advocate & adv) const
 {

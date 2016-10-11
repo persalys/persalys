@@ -25,6 +25,7 @@
 
 #include "openturns/RandomGenerator.hxx"
 #include "openturns/PersistentObjectFactory.hxx"
+#include "openturns/SpecFunc.hxx"
 
 using namespace OT;
 
@@ -186,6 +187,24 @@ String MonteCarloAnalysis::getPythonScript() const
 bool MonteCarloAnalysis::analysisLaunched() const
 {
   return result_.getOutputSample().getSize() != 0;
+}
+
+
+/* String converter */
+String MonteCarloAnalysis::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " physicalModel=" << getPhysicalModel()
+      << " isConfidenceIntervalRequired=" << isConfidenceIntervalRequired()
+      << " levelConfidenceInterval=" << getLevelConfidenceInterval()
+      << " maximumCalls=" << getMaximumCalls()
+      << " maximumCoefficientOfVariation=" << getMaximumCoefficientOfVariation()
+      << " maximumElapsedTime=" << getMaximumElapsedTime()
+      << " blockSize=" << getBlockSize()
+      << " seed=" << getSeed();
+  return oss;
 }
 
 

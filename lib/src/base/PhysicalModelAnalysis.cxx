@@ -64,6 +64,16 @@ String PhysicalModelAnalysis::getModelName() const
 }
 
 
+String PhysicalModelAnalysis::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << getClassName()
+      << " name=" << getName()
+      << " physicalModel=" << getPhysicalModel().getName();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void PhysicalModelAnalysis::save(Advocate & adv) const
 {

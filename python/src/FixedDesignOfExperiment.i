@@ -11,8 +11,4 @@ namespace OTGUI {
 
 %extend FixedDesignOfExperiment { FixedDesignOfExperiment(const FixedDesignOfExperiment & other) { return new OTGUI::FixedDesignOfExperiment(other); } 
 
-std::string __repr__() {
-  return "FixedDesignOfExperiment";
-}
-
 } }

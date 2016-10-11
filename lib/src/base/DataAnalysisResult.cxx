@@ -182,6 +182,29 @@ bool DataAnalysisResult::isValid() const
 }
 
 
+/* String converter */
+String DataAnalysisResult::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " min=" << getMin()
+      << " max=" << getMax()
+      << " mean=" << getMean()
+      << " median=" << getMedian()
+      << " standardDeviation=" << getStandardDeviation()
+      << " coefficientOfVariation=" << getCoefficientOfVariation()
+      << " variance=" << getVariance()
+      << " skewness=" << getSkewness()
+      << " kurtosis=" << getKurtosis()
+      << " firstQuartile=" << getFirstQuartile()
+      << " thirdQuartile=" << getThirdQuartile()
+      << " meanConfidenceInterval=" << getMeanConfidenceInterval()
+      << " stdConfidenceInterval=" << getStdConfidenceInterval();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void DataAnalysisResult::save(Advocate & adv) const
 {

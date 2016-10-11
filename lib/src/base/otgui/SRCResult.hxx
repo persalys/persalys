@@ -42,6 +42,9 @@ public:
   OT::Description getInputNames() const;
   OT::NumericalSample getIndices() const;
 
+  /** String converter */
+  virtual OT::String __repr__() const;
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 

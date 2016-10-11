@@ -122,6 +122,19 @@ bool SRCAnalysis::analysisLaunched() const
 }
 
 
+/* String converter */
+String SRCAnalysis::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " physicalModel=" << getPhysicalModel().getName()
+      << " simulationsNumber=" << getSimulationsNumber()
+      << " seed=" << getSeed();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void SRCAnalysis::save(Advocate & adv) const
 {

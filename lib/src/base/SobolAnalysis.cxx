@@ -23,6 +23,7 @@
 #include "openturns/RandomGenerator.hxx"
 #include "openturns/SaltelliSensitivityAlgorithm.hxx"
 #include "openturns/PersistentObjectFactory.hxx"
+#include "openturns/SpecFunc.hxx"
 
 using namespace OT;
 
@@ -222,6 +223,22 @@ String SobolAnalysis::getPythonScript() const
 bool SobolAnalysis::analysisLaunched() const
 {
   return result_.getFirstOrderIndices().getSize() != 0;
+}
+
+
+/* String converter */
+String SobolAnalysis::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " physicalModel=" << getPhysicalModel().getName()
+      << " maximumCalls=" << getMaximumCalls()
+      << " maximumCoefficientOfVariation=" << getMaximumCoefficientOfVariation()
+      << " maximumElapsedTime=" << getMaximumElapsedTime()
+      << " blockSize=" << getBlockSize()
+      << " seed=" << getSeed();
+  return oss;
 }
 
 

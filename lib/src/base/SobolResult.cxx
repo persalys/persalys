@@ -122,6 +122,21 @@ void SobolResult::setCoefficientOfVariation(const double coef)
 }
 
 
+/* String converter */
+String SobolResult::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " outputNames=" << getOutputNames()
+      << " firstOrderIndices=" << getFirstOrderIndices()
+      << " totalIndices=" << getTotalIndices()
+      << " callsNumber=" << getCallsNumber()
+      << " coefficientOfVariation=" << getCoefficientOfVariation();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void SobolResult::save(Advocate & adv) const
 {

@@ -11,8 +11,4 @@ namespace OTGUI {
 
 %extend ModelEvaluationResult { ModelEvaluationResult(const ModelEvaluationResult & other) { return new OTGUI::ModelEvaluationResult(other); } 
 
-std::string __repr__() {
-  return "ModelEvaluationResult";
-}
-
 } }

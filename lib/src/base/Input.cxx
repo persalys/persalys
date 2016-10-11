@@ -56,14 +56,6 @@ Input* Input::clone() const
 }
 
 
-String Input::__repr__() const
-{
-  OSS oss;
-  oss << "class="<<GetClassName() <<" var="<<getName()<<" value="<<getValue()<<" desc="<< getDescription();
-  return oss;
-}
-
-
 Distribution Input::getDistribution() const
 {
   return distribution_;
@@ -156,6 +148,19 @@ String Input::getPythonScript() const
     oss << "', dist_" << getName() << ")\n";
   }
 
+  return oss;
+}
+
+
+/* String converter */
+String Input::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " value=" << getValue()
+      << " description=" << getDescription()
+      << " distribution=" << getDistribution();
   return oss;
 }
 

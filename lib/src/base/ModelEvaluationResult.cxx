@@ -65,6 +65,18 @@ NumericalSample ModelEvaluationResult::getOutputSample() const
 }
 
 
+/* String converter */
+String ModelEvaluationResult::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " inputSample=" << getInputSample()
+      << " outputSample=" << getOutputSample();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void ModelEvaluationResult::save(Advocate & adv) const
 {

@@ -72,8 +72,4 @@ namespace OTGUI {
 
 %extend Output { Output(const Output & other) { return new OTGUI::Output(other); } 
 
-std::string __repr__() {
-  return "Output";
-}
-
 } }

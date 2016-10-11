@@ -11,8 +11,4 @@ namespace OTGUI {
 
 %extend MetaModel { MetaModel(const MetaModel & other) { return new OTGUI::MetaModel(other); } 
 
-std::string __repr__() {
-  return "MetaModel";
-}
-
 } }

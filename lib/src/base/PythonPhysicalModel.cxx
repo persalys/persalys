@@ -118,6 +118,16 @@ String PythonPhysicalModel::getPythonScript() const
 }
 
 
+/** String converter */
+String PythonPhysicalModel::__repr__() const
+{
+  OSS oss;
+  oss << PhysicalModelImplementation::__repr__()
+      << " code=" << getCode();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void PythonPhysicalModel::save(Advocate & adv) const
 {

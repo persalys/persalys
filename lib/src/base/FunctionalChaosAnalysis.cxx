@@ -342,6 +342,20 @@ bool FunctionalChaosAnalysis::analysisLaunched() const
 }
 
 
+/* String converter */
+String FunctionalChaosAnalysis::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " designOfExperiment=class=" << getDesignOfExperiment().GetClassName() << " name=" << getDesignOfExperiment().getName()
+      << " chaosDegree=" << getChaosDegree()
+      << " sparseChaos=" << getSparseChaos()
+      << " leaveOneOutValidation=" << isLeaveOneOutValidation();
+  return oss;
+}
+
+
 void FunctionalChaosAnalysis::save(Advocate& adv) const
 {
   DesignOfExperimentAnalysis::save(adv);

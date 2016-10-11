@@ -11,8 +11,4 @@ namespace OTGUI {
 
 %extend TaylorExpansionMomentsAnalysis { TaylorExpansionMomentsAnalysis(const TaylorExpansionMomentsAnalysis & other) { return new OTGUI::TaylorExpansionMomentsAnalysis(other); } 
 
-std::string __repr__() {
-  return "TaylorExpansionMomentsAnalysis";
-}
-
 } }

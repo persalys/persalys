@@ -48,6 +48,9 @@ public:
   OT::NumericalPoint getStandardDeviation() const;
   OT::NumericalPoint getVariance() const;
 
+  /** String converter */
+  virtual OT::String __repr__() const;
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 

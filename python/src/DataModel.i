@@ -11,8 +11,4 @@ namespace OTGUI {
 
 %extend DataModel { DataModel(const DataModel & other) { return new OTGUI::DataModel(other); } 
 
-std::string __repr__() {
-  return "DataModel";
-}
-
 } }

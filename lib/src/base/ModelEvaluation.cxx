@@ -164,6 +164,18 @@ bool ModelEvaluation::analysisLaunched() const
 }
 
 
+/* String converter */
+String ModelEvaluation::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " physicalModel=" << getPhysicalModel().getName()
+      << " inputValues=" << getInputValues();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void ModelEvaluation::save(Advocate & adv) const
 {

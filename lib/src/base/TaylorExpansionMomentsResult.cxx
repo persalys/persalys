@@ -90,6 +90,21 @@ NumericalPoint TaylorExpansionMomentsResult::getVariance() const
 }
 
 
+/* String converter */
+String TaylorExpansionMomentsResult::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " outputNames=" << getOutputNames()
+      << " meanFirstOrder=" << getMeanFirstOrder()
+      << " meanSecondOrder=" << getMeanSecondOrder()
+      << " standardDeviation=" << getStandardDeviation()
+      << " variance=" << getVariance();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void TaylorExpansionMomentsResult::save(Advocate & adv) const
 {

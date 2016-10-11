@@ -96,6 +96,13 @@ String AnalyticalPhysicalModel::getPythonScript() const
 }
 
 
+/* String converter */
+String AnalyticalPhysicalModel::__repr__() const
+{
+  return PhysicalModelImplementation::__repr__();
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void AnalyticalPhysicalModel::save(Advocate & adv) const
 {
