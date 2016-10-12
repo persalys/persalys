@@ -96,8 +96,8 @@ void MonteCarloAnalysis::run()
   // initialization
   RandomGenerator::SetSeed(getSeed());
 
-  NumericalSample effectiveInputSample(0, getPhysicalModel().getInputNames().getSize());
-  effectiveInputSample.setDescription(getPhysicalModel().getInputNames());
+  NumericalSample effectiveInputSample(0, getPhysicalModel().getStochasticInputNames().getSize());
+  effectiveInputSample.setDescription(getPhysicalModel().getStochasticInputNames());
   NumericalSample outputSample(0, getPhysicalModel().getOutputNames().getSize()); // TODO only required outputs
   outputSample.setDescription(getPhysicalModel().getOutputNames());
 
