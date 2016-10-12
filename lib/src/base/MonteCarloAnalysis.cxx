@@ -136,7 +136,7 @@ void MonteCarloAnalysis::run()
       for (UnsignedInteger i=0; i<outputSample.getDimension(); ++i)
       {
         const NumericalScalar sigma_i = empiricalStd[i] / sqrt(outputSample.getSize());
-        coefOfVar = std::max(sigma_i / empiricalMean[i], coefOfVar);
+        coefOfVar = std::max(sigma_i / std::abs(empiricalMean[i]), coefOfVar);
       }
       coefficientOfVariation = coefOfVar;
     }

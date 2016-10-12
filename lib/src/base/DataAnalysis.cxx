@@ -160,7 +160,7 @@ NumericalPoint DataAnalysis::ComputeCoefficientOfVariation(const OT::NumericalSa
   NumericalPoint coefficientOfVariation(sample.getDimension());
 
   for (UnsignedInteger i=0; i<sample.getDimension(); ++i)
-    coefficientOfVariation[i] = empiricalStd[i] / sqrt(sample.getSize()) / empiricalMean[i];
+    coefficientOfVariation[i] = empiricalStd[i] / sqrt(sample.getSize()) / std::abs(empiricalMean[i]);
 
   return coefficientOfVariation;
 }

@@ -151,12 +151,12 @@ void SobolAnalysis::run()
       NumericalScalar coefOfVar(0.);
       for (UnsignedInteger i=0; i<nbOutputs; ++i)
       {
-        const NumericalPoint empiricalMean = allFirstOrderIndices[i].computeMean();
-        const NumericalPoint empiricalStd = allFirstOrderIndices[i].computeStandardDeviationPerComponent();
+        const NumericalPoint empiricalMean(allFirstOrderIndices[i].computeMean());
+        const NumericalPoint empiricalStd(allFirstOrderIndices[i].computeStandardDeviationPerComponent());
         for (UnsignedInteger j=0; j<nbInputs; ++j)
         {
           const NumericalScalar sigma_j = empiricalStd[j] / sqrt(allFirstOrderIndices[i].getSize());
-          coefOfVar = std::max(sigma_j / empiricalMean[j], coefOfVar);
+          coefOfVar = std::max(sigma_j / std::abs(empiricalMean[j]), coefOfVar);
         }
       }
       coefficientOfVariation = coefOfVar;
