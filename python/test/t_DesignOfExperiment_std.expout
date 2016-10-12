@@ -35,11 +35,11 @@ values = [1, 2]
 lowerBounds = [0.9, 1.8]
 upperBounds = [1.1, 2.2]
 levels = [2, 2]
-aDesign = otguibase.FixedDesignOfExperiment('aDesign', aModelPhys, lowerBounds, upperBounds, levels, values)
-anOTStudy.add(aDesign)
-aDesign.run()
+aDesign_1 = otguibase.FixedDesignOfExperiment('aDesign_1', aModelPhys, lowerBounds, upperBounds, levels, values)
+anOTStudy.add(aDesign_1)
+aDesign_1.run()
 inputColumns = ot.Indices([0, 2])
-aDesign2 = otguibase.FromFileDesignOfExperiment('aDesign2', aModelPhys, 'normal.csv', inputColumns)
-anOTStudy.add(aDesign2)
-aDesign2.run()
+aDesign_2 = otguibase.FromFileDesignOfExperiment('aDesign_2', aModelPhys, 'normal.csv', inputColumns)
+anOTStudy.add(aDesign_2)
+aDesign_2.run()
 

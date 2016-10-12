@@ -7,34 +7,34 @@ import otguibase
 
 myStudy = otguibase.OTStudy('myStudy')
 
-R = otguibase.Input('R', 0., 'Yield strength', ot.LogNormal(300., 30., 0., ot.LogNormal.MUSIGMA))
+## Model
+R = otguibase.Input('R', 0., 'Yield strength', ot.LogNormalMuSigma(300., 30.).getDistribution())
 F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))
 G = otguibase.Output('G', 0., 'deviation')
 
-myPhysicalModel = otguibase.PythonPhysicalModel('myPhysicalModel')
-myPhysicalModel.addInput(R)
-myPhysicalModel.addInput(F)
-myPhysicalModel.addOutput(G)
-myPhysicalModel.setCode('from math import pi\n\ndef _exec(R, F):\n    G = R-F/(pi*100.0)\n    return [G]\n')
+model = otguibase.PythonPhysicalModel('myPhysicalModel')
+model.addInput(R)
+model.addInput(F)
+model.addOutput(G)
+model.setCode('from math import pi\n\ndef _exec(R, F):\n    G = R-F/(pi*100.0)\n    return [G]\n')
+myStudy.add(model)
 
-f = myPhysicalModel.getFunction()
+f = model.getFunction()
 print(f([300.,75000.]))
 
-myStudy.add(myPhysicalModel)
-
 ## Design of Experiment - Parametric analysis ##
-aDesign = otguibase.DesignOfExperiment('aDesign', myPhysicalModel)
+aDesign = otguibase.DesignOfExperiment('design', model)
 myStudy.add(aDesign)
 aDesign.run()
 
-## Quadratic Cumul ##
-taylorExpansionsMoments = otguibase.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', myPhysicalModel)
+## Taylor Expansion ##
+taylorExpansionsMoments = otguibase.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', model)
 myStudy.add(taylorExpansionsMoments)
 taylorExpansionsMoments.run()
 taylorExpansionsMomentsResult = taylorExpansionsMoments.getResult()
 
 ## Monte Carlo ##
-montecarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel)
+montecarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', model)
 montecarlo.setMaximumCalls(1000)
 myStudy.add(montecarlo)
 montecarlo.run()
@@ -44,7 +44,7 @@ meanCI = montecarloResult.getMeanConfidenceInterval()
 stdCi = montecarloResult.getStdConfidenceInterval()
 
 ## Sobol ##
-sobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel)
+sobol = otguibase.SobolAnalysis('mySobol', model)
 sobol.setMaximumCoefficientOfVariation(-1)
 sobol.setMaximumCalls(1000)
 sobol.setBlockSize(1000)
@@ -53,12 +53,12 @@ sobol.run()
 sobolResult = sobol.getResult()
 
 ## SRC ##
-src = otguibase.SRCAnalysis('mySRC', myPhysicalModel, 1000)
+src = otguibase.SRCAnalysis('mySRC', model, 1000)
 myStudy.add(src)
 src.run()
 srcResult = src.getResult()
 
-
+## script
 script = myStudy.getPythonScript()
 print(script)
 exec(script)
