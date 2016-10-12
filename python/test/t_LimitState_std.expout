@@ -1,0 +1,31 @@
+class=LimitStateImplementation name=aLimitState physicalModel=aModelPhys outputName=Y0 operator=class=Greater name=Unnamed threshold=20
+class=LimitStateImplementation name=aLimitState physicalModel=aModelPhys outputName=Y0 operator=class=Less name=Unnamed threshold=10
+class=LimitStateImplementation name=aLimitState2 physicalModel=aModelPhys outputName=Y0 operator=class=Less name=Unnamed threshold=0
+class=LimitStateImplementation name=aLimitState2 physicalModel=aModelPhys outputName=Y0 operator=class=Less name=Unnamed threshold=15
+class=LimitStateImplementation name=aLimitState2 physicalModel=aModelPhys outputName=Y1 operator=class=Less name=Unnamed threshold=15
+#!/usr/bin/env python
+# coding: utf-8
+
+from __future__ import print_function
+import openturns as ot
+import otguibase
+
+myStudy = otguibase.OTStudy('myStudy')
+otguibase.OTStudy.Add(myStudy)
+dist_X0 = ot.Normal(1, 1)
+X0 = otguibase.Input('X0', 1, '', dist_X0)
+dist_X1 = ot.Normal(1, 1)
+X1 = otguibase.Input('X1', 2, '', dist_X1)
+Y0 = otguibase.Output('Y0', 0, '', 'sin(X0) + 8*X1')
+Y1 = otguibase.Output('Y1', 0, '', '1 + sin(X0) + 8*X1')
+aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys')
+aModelPhys.addInput(X0)
+aModelPhys.addInput(X1)
+aModelPhys.addOutput(Y0)
+aModelPhys.addOutput(Y1)
+myStudy.add(aModelPhys)
+aLimitState = otguibase.LimitState('aLimitState', aModelPhys, 'Y0', ot.Less(), 10)
+myStudy.add(aLimitState)
+aLimitState2 = otguibase.LimitState('aLimitState2', aModelPhys, 'Y1', ot.Less(), 15)
+myStudy.add(aLimitState2)
+

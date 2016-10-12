@@ -1,0 +1,24 @@
+class=TaylorExpansionMomentsAnalysis name=aTaylor physicalModel=aModelPhys
+result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y0] meanFirstOrder=class=NumericalPoint name=Unnamed dimension=1 values=[8.84147] meanSecondOrder=class=NumericalPoint name=Unnamed dimension=1 values=[8.42074] standardDeviation=class=NumericalPoint name=Unnamed dimension=1 values=[8.01822] variance=class=NumericalPoint name=Unnamed dimension=1 values=[64.2919]
+#!/usr/bin/env python
+# coding: utf-8
+
+from __future__ import print_function
+import openturns as ot
+import otguibase
+
+myStudy = otguibase.OTStudy('myStudy')
+otguibase.OTStudy.Add(myStudy)
+dist_X0 = ot.Normal(1, 1)
+X0 = otguibase.Input('X0', 1, '', dist_X0)
+dist_X1 = ot.Normal(1, 1)
+X1 = otguibase.Input('X1', 2, '', dist_X1)
+Y0 = otguibase.Output('Y0', 0, '', 'sin(X0) + 8*X1')
+aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys')
+aModelPhys.addInput(X0)
+aModelPhys.addInput(X1)
+aModelPhys.addOutput(Y0)
+myStudy.add(aModelPhys)
+aTaylor = otguibase.TaylorExpansionMomentsAnalysis('aTaylor', aModelPhys)
+myStudy.add(aTaylor)
+
