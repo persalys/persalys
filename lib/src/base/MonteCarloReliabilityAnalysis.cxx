@@ -77,8 +77,8 @@ void MonteCarloReliabilityAnalysis::run()
 
   // create algo
   MonteCarlo algo = MonteCarlo(event);
-  UnsignedInteger maximumOuterSampling = std::numeric_limits<int>::max();
-  if (getMaximumCalls() < std::numeric_limits<int>::max())
+  UnsignedInteger maximumOuterSampling = (UnsignedInteger)std::numeric_limits<int>::max();
+  if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
   {
     algo.setConvergenceStrategy(Compact(getMaximumCalls())); // TODO: propose in wizard the convergence sample's size?
     maximumOuterSampling = static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize()));
@@ -131,10 +131,10 @@ String MonteCarloReliabilityAnalysis::getPythonScript() const
 {
   OSS oss;
   oss << getName() << " = otguibase.MonteCarloReliabilityAnalysis('" << getName() << "', " << getLimitState().getName() << ")\n";
-  if (getMaximumCalls() != std::numeric_limits<int>::max())
+  if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
     oss << getName() << ".setMaximumCalls(" << getMaximumCalls() << ")\n";
   oss << getName() << ".setMaximumCoefficientOfVariation(" << getMaximumCoefficientOfVariation() << ")\n";
-  if (getMaximumElapsedTime() != std::numeric_limits<int>::max())
+  if (getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
     oss << getName() << ".setMaximumElapsedTime(" << getMaximumElapsedTime() << ")\n";
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << getName() << ".setSeed(" << getSeed() << ")\n";

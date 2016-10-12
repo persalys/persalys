@@ -47,22 +47,31 @@ MonteCarloReliabilityResultWindow::MonteCarloReliabilityResultWindow(AnalysisIte
 void MonteCarloReliabilityResultWindow::setParameters(const Analysis & analysis)
 {
   const MonteCarloReliabilityAnalysis * MCanalysis = dynamic_cast<const MonteCarloReliabilityAnalysis*>(&*analysis.getImplementation());
-  QStringList strList;
-  strList << tr("Threshold exceedance parameters :") + "\n";
-  strList << tr("Algorithm : ") + tr("Monte Carlo");
-  strList << tr("Maximum coefficient of variation : ") + QString::number(MCanalysis->getMaximumCoefficientOfVariation());
-  if (MCanalysis->getMaximumElapsedTime() < std::numeric_limits<int>::max())
-    strList << tr("Maximum elapsed time : ") + QString::number(MCanalysis->getMaximumElapsedTime()) + "(s)";
-  else
-    strList << tr("Maximum elapsed time : ") + "- (s)";
-  if (MCanalysis->getMaximumCalls() < std::numeric_limits<int>::max())
-    strList << tr("Maximum calls : ") + QString::number(MCanalysis->getMaximumCalls());
-  else
-    strList << tr("Maximum calls : ") + "-";
-  strList << tr("Block size : ") + QString::number(MCanalysis->getBlockSize());
-  strList << tr("Seed : ") + QString::number(MCanalysis->getSeed());
 
-  parameters_ = strList.join("\n");
+  // ParametersWidget
+  QStringList namesList;
+  namesList << tr("Algorithm");
+  namesList << tr("Maximum coefficient of variation");
+  namesList << tr("Maximum elapsed time");
+  namesList << tr("Maximum calls");
+  namesList << tr("Block size");
+  namesList << tr("Seed");
+
+  QStringList valuesList;
+  valuesList << tr("Monte Carlo");
+  valuesList << QString::number(MCanalysis->getMaximumCoefficientOfVariation());
+  if (MCanalysis->getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
+    valuesList << QString::number(MCanalysis->getMaximumElapsedTime()) + "(s)";
+  else
+    valuesList << "- (s)";
+  if (MCanalysis->getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
+    valuesList << QString::number(MCanalysis->getMaximumCalls());
+  else
+    valuesList << "-";
+  valuesList << QString::number(MCanalysis->getBlockSize());
+  valuesList << QString::number(MCanalysis->getSeed()); 
+
+  parametersWidget_ = new ParametersWidget(tr("Threshold exceedance parameters:"), namesList, valuesList);
 }
 
 
@@ -195,7 +204,8 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   tabWidget_->addTab(tab, tr("Convergence graph"));
 
   // fourth tab --------------------------------
-  tabWidget_->addTab(buildParametersTextEdit(), tr("Parameters"));
+  if (parametersWidget_)
+    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 
   //
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));

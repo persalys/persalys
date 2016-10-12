@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Base class QMdiSubWindow for the results
+ *  @brief Widget for Parameters tab of the ResultWindows
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,29 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_RESULTWINDOW_HXX
-#define OTGUI_RESULTWINDOW_HXX
+#ifndef OTGUI_PARAMETERSWIDGET_HXX
+#define OTGUI_PARAMETERSWIDGET_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
-#include "otgui/AnalysisItem.hxx"
-#include "otgui/ParametersWidget.hxx"
+#include <QWidget>
 
 namespace OTGUI {
-class ResultWindow : public OTguiSubWindow
+class ParametersWidget : public QWidget
 {
-  Q_OBJECT
-
 public:
-  ResultWindow(AnalysisItem * item);
-
-protected:
-  virtual void setParameters(const Analysis & analysis);
-
-public slots:
-  virtual void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
-
-protected:
-  QWidget * parametersWidget_;
+  ParametersWidget(const QString title, const QStringList names, const QStringList values);
 };
 }
 #endif

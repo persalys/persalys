@@ -25,9 +25,11 @@
 
 #include <limits>
 
+using namespace OT;
+
 namespace OTGUI {
 
-StopCriteriaGroupBox::StopCriteriaGroupBox(const double maxCoef, const unsigned int maxTime, const unsigned int maxCalls, QWidget* parent)
+StopCriteriaGroupBox::StopCriteriaGroupBox(const double maxCoef, const UnsignedInteger maxTime, const UnsignedInteger maxCalls, QWidget* parent)
   : QGroupBox(tr("Stop criteria"), parent)
 {
   QGridLayout * groupBoxLayout = new QGridLayout(this);
@@ -53,10 +55,10 @@ StopCriteriaGroupBox::StopCriteriaGroupBox(const double maxCoef, const unsigned 
 
   // Maximum time
   QCheckBox * maxiTimeCheckBox = new QCheckBox(tr("Maximum time"));
-  maxTimeLineEdit_ = new TimeLineEdit(maxTime < std::numeric_limits<int>::max()? maxTime : 60);
+  maxTimeLineEdit_ = new TimeLineEdit(maxTime < (UnsignedInteger)std::numeric_limits<int>::max()? maxTime : 60);
 
-  maxiTimeCheckBox->setChecked(maxTime < std::numeric_limits<int>::max());
-  maxTimeLineEdit_->setEnabled(maxTime < std::numeric_limits<int>::max());
+  maxiTimeCheckBox->setChecked(maxTime < (UnsignedInteger)std::numeric_limits<int>::max());
+  maxTimeLineEdit_->setEnabled(maxTime < (UnsignedInteger)std::numeric_limits<int>::max());
 
   connect(maxTimeLineEdit_, SIGNAL(textChanged(QString)), this, SLOT(maxiTimeChanged()));
   connect(maxiTimeCheckBox, SIGNAL(toggled(bool)), maxTimeLineEdit_, SLOT(setEnabled(bool)));
@@ -70,10 +72,10 @@ StopCriteriaGroupBox::StopCriteriaGroupBox(const double maxCoef, const unsigned 
   maxiCallsSpinbox_ = new QSpinBox;
   maxiCallsSpinbox_->setMinimum(2);
   maxiCallsSpinbox_->setMaximum(std::numeric_limits<int>::max());
-  maxiCallsSpinbox_->setValue(maxCalls < std::numeric_limits<int>::max()? maxCalls : 10000);
+  maxiCallsSpinbox_->setValue(maxCalls < (UnsignedInteger)std::numeric_limits<int>::max()? maxCalls : 10000);
 
-  maxiCallsCheckBox->setChecked(maxCalls < std::numeric_limits<int>::max());
-  maxiCallsSpinbox_->setEnabled(maxCalls < std::numeric_limits<int>::max());
+  maxiCallsCheckBox->setChecked(maxCalls < (UnsignedInteger)std::numeric_limits<int>::max());
+  maxiCallsSpinbox_->setEnabled(maxCalls < (UnsignedInteger)std::numeric_limits<int>::max());
 
   connect(maxiCallsSpinbox_, SIGNAL(valueChanged(int)), this, SIGNAL(maxiCallsChanged(int)));
   connect(maxiCallsCheckBox, SIGNAL(toggled(bool)), maxiCallsSpinbox_, SLOT(setEnabled(bool)));

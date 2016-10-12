@@ -24,6 +24,8 @@
 #include "otgui/DoubleSpinBox.hxx"
 #include "otgui/TimeLineEdit.hxx"
 
+#include "openturns/OTType.hxx"
+
 #include <QGroupBox>
 
 namespace OTGUI {
@@ -33,7 +35,7 @@ class StopCriteriaGroupBox : public QGroupBox
 
 public:
   // constructor
-  StopCriteriaGroupBox(const double maxCoef, const unsigned int maxTime, const unsigned int maxCalls, QWidget *parent = 0);
+  StopCriteriaGroupBox(const double maxCoef, const OT::UnsignedInteger maxTime, const OT::UnsignedInteger maxCalls, QWidget *parent = 0);
 
   bool isMaxElapsedTimeValid() const;
   bool isMaxCallsRequired() const;

@@ -46,14 +46,21 @@ FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item)
 void FunctionalChaosResultWindow::setParameters(const Analysis & analysis)
 {
   const FunctionalChaosAnalysis * chaos = dynamic_cast<const FunctionalChaosAnalysis*>(&*analysis.getImplementation());
-  QStringList strList;
-  strList << tr("Metamodel creation parameters :") + "\n";
-  strList << tr("Algorithm : ") + tr("Functional chaos");
-  strList << tr("Chaos degree : ") + QString::number(chaos->getChaosDegree());
-  strList << tr("Sparse : ") + (chaos->getSparseChaos()? tr("yes") : tr("no"));
-  strList << tr("Leave-one-out validation : ") + (chaos->isLeaveOneOutValidation()? tr("yes") : tr("no"));
 
-  parameters_ = strList.join("\n");
+  // ParametersWidget
+  QStringList namesList;
+  namesList << tr("Algorithm");
+  namesList << tr("Chaos degree");
+  namesList << tr("Sparse");
+  namesList << tr("Leave-one-out validation");
+
+  QStringList valuesList;
+  valuesList << tr("Functional chaos");
+  valuesList << QString::number(chaos->getChaosDegree());
+  valuesList << (chaos->getSparseChaos()? tr("yes") : tr("no"));
+  valuesList << (chaos->isLeaveOneOutValidation()? tr("yes") : tr("no"));
+
+  parametersWidget_ = new ParametersWidget(tr("Metamodel creation parameters:"), namesList, valuesList);
 }
 
 
@@ -182,7 +189,8 @@ void FunctionalChaosResultWindow::buildInterface()
   connect(sobolIndicesPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), sobolScrollArea, SLOT(setCurrentIndex(int)));
 
   // fourth tab : PARAMETERS --------------------------------
-  tabWidget_->addTab(buildParametersTextEdit(), tr("Parameters"));
+  if (parametersWidget_)
+    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 
   //
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));

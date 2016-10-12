@@ -28,19 +28,15 @@ namespace OTGUI {
   
 ResultWindow::ResultWindow(AnalysisItem * item)
   : OTguiSubWindow(item)
-  , parameters_("")
+  , parametersWidget_(0)
 {
   connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
 }
 
 
-QWidget * ResultWindow::buildParametersTextEdit()
+void ResultWindow::setParameters(const Analysis& analysis)
 {
-  QTextEdit * textEdit = new QTextEdit;
-  textEdit->setReadOnly(true);
-  textEdit->setText(parameters_);
-  textEdit->setWordWrapMode(QTextOption::NoWrap);
-  return textEdit;
+  // do nothing
 }
 
 
