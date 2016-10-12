@@ -26,7 +26,7 @@ namespace OTGUI {
 
 ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel & physicalModel)
   : QObject()
-  , QStandardItem("Probabilistic Model")
+  , QStandardItem(tr("Probabilistic Model"))
   , Observer("ProbabilisticModel")
   , physicalModel_(physicalModel)
 {
