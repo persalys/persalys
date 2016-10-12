@@ -470,12 +470,14 @@ NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction() const
     return getFunction();
 
   Indices deterministicInputsIndices;
-  NumericalPoint inputsValues(getInputs().getSize());
+  NumericalPoint inputsValues;
   for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
   {
-    inputsValues[i] = getInputs()[i].getValue();
     if (!getInputs()[i].isStochastic())
+    {
       deterministicInputsIndices.add(i);
+      inputsValues.add(getInputs()[i].getValue());
+    }
   }
   try
   {
