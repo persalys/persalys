@@ -25,6 +25,7 @@
 
 #include "openturns/RandomGenerator.hxx"
 #include "openturns/PersistentObjectFactory.hxx"
+#include "openturns/SpecFunc.hxx"
 
 using namespace OT;
 
@@ -135,6 +136,11 @@ void MonteCarloAnalysis::run()
       NumericalScalar coefOfVar(0.);
       for (UnsignedInteger i=0; i<outputSample.getDimension(); ++i)
       {
+        if (std::abs(empiricalMean[i])  < SpecFunc::Precision)
+          throw InvalidValueException(HERE) << "Impossible to continue the analysis.\
+                                                Impossible to compute the coefficient of variation because the mean of an output is too close to zero.\
+                                                Do not use the coefficient of variation as criteria to stop the algorithm";
+
         const NumericalScalar sigma_i = empiricalStd[i] / sqrt(outputSample.getSize());
         coefOfVar = std::max(sigma_i / std::abs(empiricalMean[i]), coefOfVar);
       }

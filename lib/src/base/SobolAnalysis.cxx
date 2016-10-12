@@ -23,6 +23,7 @@
 #include "openturns/RandomGenerator.hxx"
 #include "openturns/SaltelliSensitivityAlgorithm.hxx"
 #include "openturns/PersistentObjectFactory.hxx"
+#include "openturns/SpecFunc.hxx"
 
 using namespace OT;
 
@@ -155,6 +156,11 @@ void SobolAnalysis::run()
         const NumericalPoint empiricalStd(allFirstOrderIndices[i].computeStandardDeviationPerComponent());
         for (UnsignedInteger j=0; j<nbInputs; ++j)
         {
+          if (std::abs(empiricalMean[j])  < SpecFunc::Precision)
+            throw InvalidValueException(HERE) << "Impossible to continue the analysis.\
+                                                  Impossible to compute the coefficient of variation because the mean of an indice is too close to zero.\
+                                                  Do not use the coefficient of variation as criteria to stop the algorithm";
+
           const NumericalScalar sigma_j = empiricalStd[j] / sqrt(allFirstOrderIndices[i].getSize());
           coefOfVar = std::max(sigma_j / std::abs(empiricalMean[j]), coefOfVar);
         }
