@@ -34,6 +34,15 @@ namespace OTGUI {
 
 CLASSNAMEINIT(YACSEvaluation);
 
+class AutoYELocker
+{
+public:
+  AutoYELocker(YACSEvalYFX *efx, const std::vector< YACSEvalInputPort * >& inps, const std::vector< YACSEvalOutputPort * >& outps):_efx(efx) { _efx->lockPortsForEvaluation(inps, outps); }
+  ~AutoYELocker() { _efx->unlockAll(); }
+private:
+  YACSEvalYFX *_efx;
+};
+
 static Factory<YACSEvaluation> RegisteredFactory;
 
 /* Default constructor */
@@ -114,13 +123,11 @@ void YACSEvaluation::loadData()
   // get parameters
   parallelizeStatus_ = efx_->getParallelizeStatus();
 
-  efx_->lockPortsForEvaluation(inps, outps);
+  AutoYELocker ayel(efx_.get(), inps, outps);
   YACSEvalListOfResources *rss(efx_->giveResources());
   fittingMachines_ = Description(rss->getAllFittingMachines().size());
   for (int i=0; i<rss->getAllFittingMachines().size(); ++i)
     fittingMachines_[i] = rss->getAllFittingMachines()[i];
-
-  efx_->unlockAll();
 }
 
 
@@ -176,8 +183,7 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
   NumericalSample result(inS.getSize(), getOutputDimension());
   result.setDescription(getOutputVariablesNames());
 
-  efx_.get()->lockPortsForEvaluation(inps, outps);
-  efx_->getUndergroundGeneratedGraph();
+  AutoYELocker ayel(efx_.get(), inps, outps);
   efx_.get()->setParallelizeStatus(parallelizeStatus_);
   efx_.get()->giveResources()->setWantedMachine(wantedMachine_);
 
@@ -185,8 +191,8 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
   bool a(efx_.get()->run(YACSEvalSessionSingleton::Get(), b));
   if (!a)
   {
-    efx_.get()->unlockAll();
-    throw NotDefinedException(HERE) << "Error when executing YACS scheme. ";
+    std::string err(efx_.get()->getErrorDetailsInCaseOfFailure());
+    throw NotDefinedException(HERE) << "Error when executing YACS scheme. " << err;
   }
 
   // get results
@@ -198,7 +204,6 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
     for (int h=0; h<res_k->size(); ++h)
       result[h][k] = res_k->getInternal()->at(h);
   }
-  efx_.get()->unlockAll();
   return result;
 }
 
