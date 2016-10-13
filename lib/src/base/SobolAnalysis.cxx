@@ -70,7 +70,7 @@ void SobolAnalysis::run()
   const bool maximumOuterSamplingSpecified = getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max();
   const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / (getBlockSize()*(2+nbInputs)))) : (UnsignedInteger)std::numeric_limits<int>::max();
   const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getMaximumCalls() % (getBlockSize()*(2+nbInputs)) : 0;
-  const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
+  const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : (modulo/(2+nbInputs));
 
   NumericalScalar coefficientOfVariation = -1.0;
   clock_t elapsedTime = 0;
@@ -133,8 +133,8 @@ void SobolAnalysis::run()
     if (getBlockSize() != 1 || (getBlockSize() == 1 && outerSampling)) // must have at least two values
     {
       const UnsignedInteger sampleSize(outerSampling < (maximumOuterSampling - 1) ?
-                                       effectiveBlockSize*(outerSampling+1) :
-                                       effectiveBlockSize*outerSampling+lastBlockSize);
+                                       getBlockSize()*(outerSampling+1) :
+                                       getBlockSize()*outerSampling+lastBlockSize);
 
       algoSaltelli = SaltelliSensitivityAlgorithm(inputDesign, outputDesign, sampleSize);
 
