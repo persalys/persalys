@@ -446,6 +446,22 @@ String FixedDesignOfExperiment::getPythonScript() const
 }
 
 
+/* String converter */
+String FixedDesignOfExperiment::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " physicalModel=" << getPhysicalModel().getName()
+      << " deltas=" << getDeltas()
+      << " levels=" << getLevels()
+      << " lowerBounds=" << getLowerBounds()
+      << " upperBounds=" << getUpperBounds()
+      << " values=" << getValues();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void FixedDesignOfExperiment::save(Advocate & adv) const
 {

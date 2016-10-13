@@ -7,15 +7,14 @@ import otguibase
 
 myStudy = otguibase.OTStudy('myStudy')
 
+## Model
 Q = otguibase.Input('Q', 0., 'Primary energy', ot.Normal(10200, 100))
 E = otguibase.Input('E', 0., 'Produced electric energy', ot.Normal(3000, 15))
 C = otguibase.Input('C', 0., 'Valued thermal energy', ot.Normal(4000, 60))
-
 Ep = otguibase.Output('Ep', 0., 'Primary energy savings', '1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))')
 
-myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [Q, E, C], [Ep])
-
-myStudy.add(myPhysicalModel)
+model = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [Q, E, C], [Ep])
+myStudy.add(model)
 
 outputSample = [[0.060036508072],
 [0.0292238907867],
@@ -28,15 +27,15 @@ outputSample = [[0.060036508072],
 
 
 ## Design of Experiment - Parametric analysis ##
-aDesign = otguibase.DesignOfExperiment('aDesign', myPhysicalModel)
+aDesign = otguibase.DesignOfExperiment('aDesign_0', model)
 myStudy.add(aDesign)
 aDesign.run()
 
 # Comparaison
 openturns.testing.assert_almost_equal(outputSample, aDesign.getOutputSample(), 1e-16)
 
-## Quadratic Cumul ##
-taylorExpansionsMoments = otguibase.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', myPhysicalModel)
+## Taylor Expansions ##
+taylorExpansionsMoments = otguibase.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', model)
 myStudy.add(taylorExpansionsMoments)
 taylorExpansionsMoments.run()
 taylorExpansionsMomentsResult = taylorExpansionsMoments.getResult()
@@ -45,7 +44,7 @@ taylorExpansionsMomentsResult = taylorExpansionsMoments.getResult()
 openturns.testing.assert_almost_equal(0.059730458221, taylorExpansionsMomentsResult.getMeanFirstOrder()[0], 1e-13)
 
 ## Monte Carlo ##
-montecarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel)
+montecarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', model)
 montecarlo.setMaximumCalls(1000)
 montecarlo.setMaximumCoefficientOfVariation(-1)
 myStudy.add(montecarlo)
@@ -64,7 +63,7 @@ openturns.testing.assert_almost_equal(0.0109336748621, stdCi.getLowerBound()[3],
 openturns.testing.assert_almost_equal(0.0119363302339, stdCi.getUpperBound()[3], 1e-13)
 
 ## Sobol ##
-sobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel)
+sobol = otguibase.SobolAnalysis('mySobol', model)
 sobol.setMaximumCoefficientOfVariation(-1)
 sobol.setMaximumCalls(1000)
 sobol.setBlockSize(1000)
@@ -81,7 +80,7 @@ openturns.testing.assert_almost_equal(0.0574755596289, sobolResult.getTotalIndic
 openturns.testing.assert_almost_equal(0.289572736872, sobolResult.getTotalIndices()[0][2], 1e-12)
 
 ## SRC ##
-src = otguibase.SRCAnalysis('mySRC', myPhysicalModel)
+src = otguibase.SRCAnalysis('mySRC', model)
 myStudy.add(src)
 src.run()
 srcResult = src.getResult()
@@ -96,16 +95,16 @@ values = [10200, 3000, 4000]
 lowerBounds = [10035.5, 2975.33, 3901.31]
 upperBounds = [10364.5, 3024.67, 4098.69]
 levels = [10, 10, 10]
-design_0 = otguibase.FixedDesignOfExperiment('design_0', myPhysicalModel, lowerBounds, upperBounds, levels, values)
-design_0.run()
-myStudy.add(design_0)
+design_1 = otguibase.FixedDesignOfExperiment('aDesign_1', model, lowerBounds, upperBounds, levels, values)
+design_1.run()
+myStudy.add(design_1)
 
-chaos_0 = otguibase.FunctionalChaosAnalysis('chaos_0', design_0)
-chaos_0.setChaosDegree(2)
-chaos_0.setSparseChaos(False)
-myStudy.add(chaos_0)
-chaos_0.run()
-chaosResult = chaos_0.getResult()
+chaos = otguibase.FunctionalChaosAnalysis('chaos_0', design_1)
+chaos.setChaosDegree(2)
+chaos.setSparseChaos(False)
+myStudy.add(chaos)
+chaos.run()
+chaosResult = chaos.getResult()
 
 # Comparaison
 openturns.testing.assert_almost_equal(0.6356916720224053, chaosResult.getSobolResult().getFirstOrderIndices()[0][0], 1e-16)
@@ -115,6 +114,7 @@ openturns.testing.assert_almost_equal(0.6357266809805613, chaosResult.getSobolRe
 openturns.testing.assert_almost_equal(0.04807585948286413, chaosResult.getSobolResult().getTotalIndices()[0][1], 1e-17)
 openturns.testing.assert_almost_equal(0.3162416585998657, chaosResult.getSobolResult().getTotalIndices()[0][2], 1e-17)
 
+## script
 script = myStudy.getPythonScript()
 print(script)
 exec(script)

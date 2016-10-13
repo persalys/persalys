@@ -1,4 +1,4 @@
-AnalyticalPhysicalModel inputs=[class=Input var=X0 value=1 desc=,class=Input var=X1 value=2 desc=] outputs=[class=Output name=Y0] copula=class=IndependentCopula name=IndependentCopula dimension=1
+class=AnalyticalPhysicalModel inputs=[class=Input name=X0 value=1 description= distribution=class=Dirac name=Dirac dimension=1 point=class=NumericalPoint name=Unnamed dimension=1 values=[0],class=Input name=X1 value=2 description= distribution=class=Dirac name=Dirac dimension=1 point=class=NumericalPoint name=Unnamed dimension=1 values=[0]] outputs=[class=Output name=Y0 description= formula=sin(X0)+8*X1] copula=class=IndependentCopula name=IndependentCopula dimension=1
 function= [X0,X1]->[sin(X0)+8*X1]
 formulas= [sin(X0)+8*X1]
 script= X0 = otguibase.Input('X0', 1, '')

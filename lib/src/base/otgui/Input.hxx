@@ -41,8 +41,6 @@ public:
   /** Virtual constructor */
   virtual Input * clone() const;
 
-  virtual OT::String __repr__() const;
-
   OT::Distribution getDistribution() const;
   void setDistribution(const OT::Distribution & distribution);
 
@@ -53,6 +51,9 @@ public:
 
   OT::String getDistributionPythonScript() const;
   OT::String getPythonScript() const;
+
+  /** String converter */
+  virtual OT::String __repr__() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;

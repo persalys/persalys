@@ -70,6 +70,14 @@ String MetaModel::getPythonScript() const
 }
 
 
+/* String converter */
+String MetaModel::__repr__() const
+{
+  return PhysicalModelImplementation::__repr__();
+}
+
+
+/* Method save() stores the object through the StorageManager */
 void MetaModel::save(Advocate& adv) const
 {
   PhysicalModelImplementation::save(adv);
@@ -77,6 +85,7 @@ void MetaModel::save(Advocate& adv) const
 }
 
 
+/* Method load() reloads the object from the StorageManager */
 void MetaModel::load(Advocate& adv)
 {
   PhysicalModelImplementation::load(adv);

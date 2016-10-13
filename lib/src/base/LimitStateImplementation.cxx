@@ -146,6 +146,19 @@ String LimitStateImplementation::getPythonScript() const
 }
 
 
+String LimitStateImplementation::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " physicalModel=" << getPhysicalModel().getName()
+      << " outputName=" << getOutputName()
+      << " operator=" << getOperator()
+      << " threshold=" << getThreshold();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void LimitStateImplementation::save(Advocate & adv) const
 {

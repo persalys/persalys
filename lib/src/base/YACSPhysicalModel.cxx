@@ -206,6 +206,17 @@ String YACSPhysicalModel::getPythonScript() const
 }
 
 
+/** String converter */
+String YACSPhysicalModel::__repr__() const
+{
+  OSS oss;
+  oss << PhysicalModelImplementation::__repr__()
+      << " xmlFileName=" << getXMLFileName()
+      << " evaluation=" << evaluation_;
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void YACSPhysicalModel::save(Advocate & adv) const
 {

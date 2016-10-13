@@ -636,13 +636,15 @@ String PhysicalModelImplementation::getCopulaPythonScript() const
   return result;
 }
 
+
+/* String converter */
 String PhysicalModelImplementation::__repr__() const
 {
   OSS oss;
-  oss << getClassName()
-    << " inputs=" << inputs_
-    << " outputs=" << outputs_
-    << " copula=" << copula_;
+  oss << "class=" << getClassName()
+      << " inputs=" << getInputs()
+      << " outputs=" << getOutputs()
+      << " copula=" << getCopula();
   return oss;
 }
 

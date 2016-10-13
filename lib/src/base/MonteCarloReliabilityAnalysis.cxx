@@ -149,6 +149,22 @@ bool MonteCarloReliabilityAnalysis::analysisLaunched() const
 }
 
 
+/* String converter */
+String MonteCarloReliabilityAnalysis::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " limitState=" << getLimitState()
+      << " maximumCalls=" << getMaximumCalls()
+      << " maximumCoefficientOfVariation=" << getMaximumCoefficientOfVariation()
+      << " maximumElapsedTime=" << getMaximumElapsedTime()
+      << " blockSize=" << getBlockSize()
+      << " seed=" << getSeed();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void MonteCarloReliabilityAnalysis::save(Advocate & adv) const
 {

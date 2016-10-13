@@ -110,6 +110,13 @@ bool TaylorExpansionMomentsAnalysis::analysisLaunched() const
 }
 
 
+/* String converter */
+String TaylorExpansionMomentsAnalysis::__repr__() const
+{
+  return PhysicalModelAnalysis::__repr__();
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void TaylorExpansionMomentsAnalysis::save(Advocate & adv) const
 {

@@ -67,6 +67,21 @@ SobolResult FunctionalChaosAnalysisResult::getSobolResult() const
 }
 
 
+/* String converter */
+String FunctionalChaosAnalysisResult::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " mean=" << getMean()
+      << " variance=" << getVariance()
+      << " sobolResult=" << getSobolResult()
+      << " errorQ2LOO=" << getErrorQ2LeaveOneOut()
+      << " q2LOO=" << getQ2LeaveOneOut();
+  return oss;
+}
+
+
 void FunctionalChaosAnalysisResult::save(Advocate& adv) const
 {
   MetaModelAnalysisResult::save(adv);

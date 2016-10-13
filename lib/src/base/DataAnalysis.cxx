@@ -287,6 +287,19 @@ bool DataAnalysis::analysisLaunched() const
 }
 
 
+/* String converter */
+String DataAnalysis::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " designOfExperiment=class=" << getDesignOfExperiment().GetClassName() << " name=" << getDesignOfExperiment().getName()
+      << " isConfidenceIntervalRequired=" << isConfidenceIntervalRequired()
+      << " levelConfidenceInterval=" << getLevelConfidenceInterval();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void DataAnalysis::save(Advocate & adv) const
 {

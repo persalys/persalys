@@ -1,0 +1,37 @@
+class=SobolAnalysis name=aSobol physicalModel=aModel maximumCalls=1000 maximumCoefficientOfVariation=-1 maximumElapsedTime=30 blockSize=1000 seed=2
+result= class=SobolResult name=Unnamed outputNames=[y0] firstOrderIndices=class=NumericalSample name=Unnamed implementation=class=NumericalSampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.892281,0.089166]] totalIndices=class=NumericalSample name=Unnamed implementation=class=NumericalSampleImplementation name=Unnamed size=1 dimension=2 data=[[0.933059,0.0902419]] callsNumber=4000 coefficientOfVariation=-1
+class=SobolAnalysis name=aSobol2 physicalModel=aModel maximumCalls=2147483647 maximumCoefficientOfVariation=0.02 maximumElapsedTime=100000 blockSize=1 seed=0
+result= class=SobolResult name=Unnamed outputNames=[y0] firstOrderIndices=class=NumericalSample name=Unnamed implementation=class=NumericalSampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.753579,0.0727707]] totalIndices=class=NumericalSample name=Unnamed implementation=class=NumericalSampleImplementation name=Unnamed size=1 dimension=2 data=[[0.926134,0.0714451]] callsNumber=740 coefficientOfVariation=0.0199719
+#!/usr/bin/env python
+# coding: utf-8
+
+from __future__ import print_function
+import openturns as ot
+import otguibase
+
+myStudy = otguibase.OTStudy('myStudy')
+otguibase.OTStudy.Add(myStudy)
+dist_x0 = ot.Normal(0, 1)
+x0 = otguibase.Input('x0', 0, '', dist_x0)
+dist_x1 = ot.Normal(0, 1)
+x1 = otguibase.Input('x1', 0, '', dist_x1)
+y0 = otguibase.Output('y0', 0, '', '10+3*x0+x1')
+aModel = otguibase.AnalyticalPhysicalModel('aModel')
+aModel.addInput(x0)
+aModel.addInput(x1)
+aModel.addOutput(y0)
+myStudy.add(aModel)
+aSobol = otguibase.SobolAnalysis('aSobol', aModel)
+aSobol.setMaximumCalls(1000)
+aSobol.setMaximumCoefficientOfVariation(-1)
+aSobol.setMaximumElapsedTime(30)
+aSobol.setBlockSize(1000)
+aSobol.setSeed(2)
+myStudy.add(aSobol)
+aSobol2 = otguibase.SobolAnalysis('aSobol2', aModel)
+aSobol2.setMaximumCoefficientOfVariation(0.02)
+aSobol2.setMaximumElapsedTime(100000)
+aSobol2.setBlockSize(1)
+aSobol2.setSeed(0)
+myStudy.add(aSobol2)
+

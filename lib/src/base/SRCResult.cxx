@@ -71,6 +71,18 @@ NumericalSample SRCResult::getIndices() const
 }
 
 
+/* String converter */
+String SRCResult::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " outputNames=" << getOutputNames()
+      << " indices=" << getIndices();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void SRCResult::save(Advocate & adv) const
 {

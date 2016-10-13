@@ -169,6 +169,19 @@ String FromFileDesignOfExperiment::getPythonScript() const
 }
 
 
+/* String converter */
+String FromFileDesignOfExperiment::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " physicalModel=" << getPhysicalModel().getName()
+      << " fileName=" << getFileName()
+      << " inputColumns_=" << getInputColumns();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void FromFileDesignOfExperiment::save(Advocate & adv) const
 {

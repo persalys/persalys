@@ -11,8 +11,4 @@ namespace OTGUI {
 
 %extend FunctionalChaosAnalysis { FunctionalChaosAnalysis(const FunctionalChaosAnalysis & other) { return new OTGUI::FunctionalChaosAnalysis(other); } 
 
-std::string __repr__() {
-  return "FunctionalChaosAnalysis";
-}
-
 } }

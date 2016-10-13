@@ -11,8 +11,4 @@ namespace OTGUI {
 
 %extend MonteCarloReliabilityAnalysis { MonteCarloReliabilityAnalysis(const MonteCarloReliabilityAnalysis & other) { return new OTGUI::MonteCarloReliabilityAnalysis(other); } 
 
-std::string __repr__() {
-  return "MonteCarloReliabilityAnalysis";
-}
-
 } }

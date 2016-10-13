@@ -11,8 +11,4 @@ namespace OTGUI {
 
 %extend SobolAnalysis { SobolAnalysis(const SobolAnalysis & other) { return new OTGUI::SobolAnalysis(other); } 
 
-std::string __repr__() {
-  return "SobolAnalysis";
-}
-
 } }

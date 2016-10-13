@@ -1480,7 +1480,7 @@ extremum</source>
     <message>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="60"/>
         <source>Inputs</source>
-        <translation>Sorties</translation>
+        <translation>Entrées</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="72"/>
@@ -1502,7 +1502,7 @@ extremum</source>
     <message>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="77"/>
         <source>Remove the selected input</source>
-        <translation>Supprimer la sortie sélectionnée</translation>
+        <translation>Supprimer l&apos;entrée sélectionnée</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="91"/>
@@ -1512,7 +1512,7 @@ extremum</source>
     <message>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="107"/>
         <source>Add an output</source>
-        <translation>Ajouter une entrée</translation>
+        <translation>Ajouter une sortie</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="111"/>
@@ -1680,6 +1680,14 @@ extremum</source>
         <location filename="../lib/src/view/ProbabilisticDesignPage.cxx" line="59"/>
         <source>Monte Carlo</source>
         <translation>Monte-Carlo</translation>
+    </message>
+</context>
+<context>
+    <name>OTGUI::ProbabilisticModelItem</name>
+    <message>
+        <location filename="../lib/src/model/ProbabilisticModelItem.cxx" line="29"/>
+        <source>Probabilistic Model</source>
+        <translation>Modèle probabiliste</translation>
     </message>
 </context>
 <context>

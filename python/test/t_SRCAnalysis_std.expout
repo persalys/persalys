@@ -1,0 +1,25 @@
+class=SRCAnalysis name=aSRC physicalModel=aModel simulationsNumber=1000 seed=2
+result= class=SRCResult name=Unnamed outputNames=[y0] indices=class=NumericalSample name=Unnamed implementation=class=NumericalSampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.905999,0.0940007]]
+#!/usr/bin/env python
+# coding: utf-8
+
+from __future__ import print_function
+import openturns as ot
+import otguibase
+
+myStudy = otguibase.OTStudy('myStudy')
+otguibase.OTStudy.Add(myStudy)
+dist_x0 = ot.Normal(0, 1)
+x0 = otguibase.Input('x0', 0, '', dist_x0)
+dist_x1 = ot.Normal(0, 1)
+x1 = otguibase.Input('x1', 0, '', dist_x1)
+y0 = otguibase.Output('y0', 0, '', '10+3*x0+x1')
+aModel = otguibase.AnalyticalPhysicalModel('aModel')
+aModel.addInput(x0)
+aModel.addInput(x1)
+aModel.addOutput(y0)
+myStudy.add(aModel)
+aSRC = otguibase.SRCAnalysis('aSRC', aModel, 1000)
+aSRC.setSeed(2)
+myStudy.add(aSRC)
+

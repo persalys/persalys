@@ -88,6 +88,18 @@ String Output::getPythonScript() const
 }
 
 
+/* String converter */
+String Output::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " description=" << getDescription()
+      << " formula=" << getFormula();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void Output::save(Advocate & adv) const
 {

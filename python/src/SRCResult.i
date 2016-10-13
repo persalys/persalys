@@ -11,8 +11,4 @@ namespace OTGUI {
 
 %extend SRCResult { SRCResult(const SRCResult & other) { return new OTGUI::SRCResult(other); } 
 
-std::string __repr__() {
-  return "SRCResult";
-}
-
 } }
