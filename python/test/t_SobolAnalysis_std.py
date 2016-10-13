@@ -40,6 +40,23 @@ analysis2.run()
 
 print("result=", analysis2.getResult())
 
+## Sobol ##
+X2 = otguibase.Input('x2', 10)
+model.addInput(X2)
+model.setOutputFormula('y0', '3*x0 + x1 + x2')
+
+analysis3 = otguibase.SobolAnalysis('aSobol3', model)
+analysis3.setMaximumCalls(1000)
+analysis3.setBlockSize(1000)
+analysis3.setSeed(2)
+myStudy.add(analysis3)
+print(analysis3)
+
+analysis3.run()
+
+result3 = analysis3.getResult()
+print("result=", result3)
+
 ## script
 script = myStudy.getPythonScript()
 print(script)

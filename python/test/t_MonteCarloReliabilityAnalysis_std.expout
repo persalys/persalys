@@ -2,6 +2,8 @@ class=MonteCarloReliabilityAnalysis name=myMonteCarlo limitState=class=LimitStat
 result= class=MonteCarloReliabilityResult name=Unnamed simulationResult=probabilityEstimate=6.900000e-02 varianceEstimate=6.423900e-05 standard deviation=8.01e-03 coefficient of variation=1.16e-01 confidenceLength(0.95)=3.14e-02 outerSampling=1000 blockSize=1
 class=MonteCarloReliabilityAnalysis name=myMonteCarlo2 limitState=class=LimitStateImplementation name=aLimitState physicalModel=aModelPhys outputName=Y0 operator=class=Greater name=Unnamed threshold=20 maximumCalls=2147483647 maximumCoefficientOfVariation=0.02 maximumElapsedTime=100000 blockSize=100 seed=0
 result= class=MonteCarloReliabilityResult name=Unnamed simulationResult=probabilityEstimate=7.524116e-02 varianceEstimate=2.259680e-06 standard deviation=1.50e-03 coefficient of variation=2.00e-02 confidenceLength(0.95)=5.89e-03 outerSampling=311 blockSize=100
+class=MonteCarloReliabilityAnalysis name=myMonteCarlo3 limitState=class=LimitStateImplementation name=aLimitState physicalModel=aModelPhys outputName=Y0 operator=class=Greater name=Unnamed threshold=20 maximumCalls=1000 maximumCoefficientOfVariation=0.01 maximumElapsedTime=60 blockSize=1 seed=0
+result= class=MonteCarloReliabilityResult name=Unnamed simulationResult=probabilityEstimate=1.200000e-01 varianceEstimate=1.056000e-04 standard deviation=1.03e-02 coefficient of variation=8.56e-02 confidenceLength(0.95)=4.03e-02 outerSampling=1000 blockSize=1
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -15,10 +17,12 @@ dist_X0 = ot.Normal(1, 1)
 X0 = otguibase.Input('X0', 1, '', dist_X0)
 dist_X1 = ot.Normal(1, 1)
 X1 = otguibase.Input('X1', 2, '', dist_X1)
-Y0 = otguibase.Output('Y0', 0, '', 'sin(X0) + 8*X1')
+X2 = otguibase.Input('X2', 2, '')
+Y0 = otguibase.Output('Y0', 0, '', 'sin(X0) + 8*X1 + X2')
 aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys')
 aModelPhys.addInput(X0)
 aModelPhys.addInput(X1)
+aModelPhys.addInput(X2)
 aModelPhys.addOutput(Y0)
 myStudy.add(aModelPhys)
 aLimitState = otguibase.LimitState('aLimitState', aModelPhys, 'Y0', ot.Greater(), 20)
@@ -36,4 +40,11 @@ myMonteCarlo2.setMaximumElapsedTime(100000)
 myMonteCarlo2.setBlockSize(100)
 myMonteCarlo2.setSeed(0)
 myStudy.add(myMonteCarlo2)
+myMonteCarlo3 = otguibase.MonteCarloReliabilityAnalysis('myMonteCarlo3', aLimitState)
+myMonteCarlo3.setMaximumCalls(1000)
+myMonteCarlo3.setMaximumCoefficientOfVariation(0.01)
+myMonteCarlo3.setMaximumElapsedTime(60)
+myMonteCarlo3.setBlockSize(1)
+myMonteCarlo3.setSeed(0)
+myStudy.add(myMonteCarlo3)
 

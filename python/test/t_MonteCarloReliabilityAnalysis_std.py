@@ -41,6 +41,21 @@ analysis2.run()
 
 print("result=", analysis2.getResult())
 
+## Monte Carlo ##
+X2 = otguibase.Input('X2', 2)
+model.addInput(X2)
+model.setOutputFormula('Y0', 'sin(X0) + 8*X1 + X2')
+
+analysis3 = otguibase.MonteCarloReliabilityAnalysis('myMonteCarlo3', limitState)
+analysis3.setMaximumCalls(1000)
+myStudy.add(analysis3)
+print(analysis3)
+
+analysis3.run()
+
+result3 = analysis3.getResult()
+print("result=", result3)
+
 ## script
 script = myStudy.getPythonScript()
 print(script)
