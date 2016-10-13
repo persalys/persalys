@@ -26,6 +26,22 @@ analysis.run()
 
 print("result=", analysis.getResult())
 
+## SRC ##
+X2 = otguibase.Input('x2', 10)
+model.addInput(X2)
+model.setOutputFormula('y0', '3*x0 + x1 + x2')
+
+analysis2 = otguibase.SRCAnalysis('aSRC2', model)
+analysis2.setSimulationsNumber(1000)
+analysis2.setSeed(2)
+myStudy.add(analysis2)
+print(analysis2)
+
+analysis2.run()
+
+result2 = analysis2.getResult()
+print("result=", result2)
+
 ## script
 script = myStudy.getPythonScript()
 print(script)

@@ -1544,6 +1544,8 @@ CDF= [  0 : [ -2.84909      2.17662e-05 ]
 127 : [  37.8032        0.999986    ]
 128 : [  38.2718        0.999993    ]]
 outliers= [[4.02799,4.15958,4.0788,-2.24637,-2.09834,-2.02125,-2.18965,-2.07535,3.90425,-1.80651,-1.8798,4.41961,3.89876,4.43183,-2.5497,4.28698]#16,[-2.09737,4.01263,3.59603,-1.98535,3.63821,-1.99213,3.76048,4.30075,-1.80073,3.85435,-1.7466,3.61661,3.59476,3.71854,4.04884,-1.6571,-1.72807,3.59764,-2.39855,3.65829,-2.34217,-1.84172,-1.64585,3.84674,3.62061]#25,[-15.9737,32.89,-15.1282,29.7319,-15.3869,29.9918,34.4542,-13.4741,31.6002,-13.1795,30.6901,33.0728,-14.0234,-13.1215,29.573,-18.4542,30.0749,-17.997,-13.876,31.7417,29.7984]#21]
+class=MonteCarloAnalysis name=myMonteCarlo3 physicalModel=class=AnalyticalPhysicalModel inputs=[class=Input name=X0 value=1 description= distribution=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[1] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1],class=Input name=X1 value=2 description= distribution=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[1] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1],class=Input name=X2 value=2 description= distribution=class=Dirac name=Dirac dimension=1 point=class=NumericalPoint name=Unnamed dimension=1 values=[0]] outputs=[class=Output name=Y0 description= formula=sin(X0) + 8*X1 + X2] copula=class=NormalCopula name=NormalCopula dimension=2 correlation=class=CorrelationMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[1,0,0,1] isConfidenceIntervalRequired=true levelConfidenceInterval=0.95 maximumCalls=1000 maximumCoefficientOfVariation=0.01 maximumElapsedTime=60 blockSize=1 seed=0
+result= class=DataAnalysisResult name=Unnamed min=class=NumericalPoint name=Unnamed dimension=3 values=[-2.24637,-2.18965,-15.8957] max=class=NumericalPoint name=Unnamed dimension=3 values=[4.30075,4.15958,36.2692] mean=class=NumericalPoint name=Unnamed dimension=3 values=[0.973141,1.00247,10.5312] median=class=NumericalPoint name=Unnamed dimension=3 values=[0.973558,0.978013,10.3315] standardDeviation=class=NumericalPoint name=Unnamed dimension=3 values=[0.985838,1.00015,8.01243] coefficientOfVariation=class=NumericalPoint name=Unnamed dimension=3 values=[0.0320354,0.0315498,0.0240594] variance=class=NumericalPoint name=Unnamed dimension=3 values=[0.971877,1.0003,64.199] skewness=class=NumericalPoint name=Unnamed dimension=3 values=[0.0412383,0.0687836,0.0684659] kurtosis=class=NumericalPoint name=Unnamed dimension=3 values=[3.22378,3.03745,3.0559] firstQuartile=class=NumericalPoint name=Unnamed dimension=3 values=[0.357155,0.323571,5.03126] thirdQuartile=class=NumericalPoint name=Unnamed dimension=3 values=[1.58213,1.67508,15.8728] meanConfidenceInterval=class=Interval name=Unnamed dimension=3 lower bound=class=NumericalPoint name=Unnamed dimension=3 values=[0.912039,0.940478,10.0346] upper bound=class=NumericalPoint name=Unnamed dimension=3 values=[1.03424,1.06446,11.0278] finite lower bound=[1,1,1] finite upper bound=[1,1,1] stdConfidenceInterval=class=Interval name=Unnamed dimension=3 lower bound=class=NumericalPoint name=Unnamed dimension=3 values=[0.944445,0.958158,7.676] upper bound=class=NumericalPoint name=Unnamed dimension=3 values=[1.03105,1.04602,8.37992] finite lower bound=[1,1,1] finite upper bound=[1,1,1]
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -1557,10 +1559,12 @@ dist_X0 = ot.Normal(1, 1)
 X0 = otguibase.Input('X0', 1, '', dist_X0)
 dist_X1 = ot.Normal(1, 1)
 X1 = otguibase.Input('X1', 2, '', dist_X1)
-Y0 = otguibase.Output('Y0', 0, '', 'sin(X0) + 8*X1')
+X2 = otguibase.Input('X2', 2, '')
+Y0 = otguibase.Output('Y0', 0, '', 'sin(X0) + 8*X1 + X2')
 aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys')
 aModelPhys.addInput(X0)
 aModelPhys.addInput(X1)
+aModelPhys.addInput(X2)
 aModelPhys.addOutput(Y0)
 myStudy.add(aModelPhys)
 myMonteCarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', aModelPhys)
@@ -1576,4 +1580,11 @@ myMonteCarlo2.setMaximumElapsedTime(100000)
 myMonteCarlo2.setBlockSize(100)
 myMonteCarlo2.setSeed(0)
 myStudy.add(myMonteCarlo2)
+myMonteCarlo3 = otguibase.MonteCarloAnalysis('myMonteCarlo3', aModelPhys)
+myMonteCarlo3.setMaximumCalls(1000)
+myMonteCarlo3.setMaximumCoefficientOfVariation(0.01)
+myMonteCarlo3.setMaximumElapsedTime(60)
+myMonteCarlo3.setBlockSize(1)
+myMonteCarlo3.setSeed(0)
+myStudy.add(myMonteCarlo3)
 

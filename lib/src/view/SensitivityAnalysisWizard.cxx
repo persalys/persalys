@@ -115,7 +115,7 @@ void SensitivityAnalysisWizard::buildInterface()
   QLabel * totalNbSimuLabel = new QLabel(tr("Number of calls by iteration"));
   totalNbSimuLabel->setToolTip(tr("= block_size * ( number_of_inputs + 2 )"));
   // total nb simu/iteration: N=blockSize*(nb_inputs+2)
-  double nbSimu = blockSizeGroupBox_->getBlockSizeValue() * (sobolAnalysis_.getPhysicalModel().getInputs().getSize() + 2);
+  double nbSimu = blockSizeGroupBox_->getBlockSizeValue() * (sobolAnalysis_.getPhysicalModel().getStochasticInputNames().getSize() + 2);
   totalNbSimuLabel_ = new QLabel(QString::number(nbSimu));
   nbSimuLayout->addWidget(totalNbSimuLabel);
   nbSimuLayout->addWidget(totalNbSimuLabel_);
@@ -235,7 +235,7 @@ void SensitivityAnalysisWizard::blockSizeChanged(double size)
   try
   {
     // total nb simu/iteration: N=blockSize*(nb_inputs+2)
-    int nbSimu = size * (sobolAnalysis_.getPhysicalModel().getInputs().getSize() + 2);
+    int nbSimu = size * (sobolAnalysis_.getPhysicalModel().getStochasticInputNames().getSize() + 2);
     totalNbSimuLabel_->setText(QString::number(nbSimu));
     sobolAnalysis_.setBlockSize(size);
   }
@@ -268,7 +268,7 @@ bool SensitivityAnalysisWizard::validateCurrentPage()
       if (!stopCriteriaGroupBox_->isMaxElapsedTimeValid())
         errorMessage = tr("The maximum time must not be null");
       if (stopCriteriaGroupBox_->isMaxCallsRequired())
-        if (sobolAnalysis_.getMaximumCalls() < (blockSizeGroupBox_->getBlockSizeValue()*(sobolAnalysis_.getPhysicalModel().getInputs().getSize() + 2)))
+        if (sobolAnalysis_.getMaximumCalls() < (blockSizeGroupBox_->getBlockSizeValue()*(sobolAnalysis_.getPhysicalModel().getStochasticInputNames().getSize() + 2)))
           errorMessage = tr("The maximum calls can not be inferior to: block_size*(number_of_inputs + 2)");
     }
     errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(errorMessage).arg("</font>"));
