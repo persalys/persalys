@@ -709,7 +709,7 @@
     <message>
         <location filename="../lib/src/view/DesignOfExperimentWizard.cxx" line="45"/>
         <source>Deterministic</source>
-        <translation>Ddéterministe</translation>
+        <translation>Déterministe</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DesignOfExperimentWizard.cxx" line="61"/>
