@@ -97,8 +97,8 @@ void MonteCarloAnalysis::run()
   // initialization
   RandomGenerator::SetSeed(getSeed());
 
-  NumericalSample effectiveInputSample(0, getPhysicalModel().getInputNames().getSize());
-  effectiveInputSample.setDescription(getPhysicalModel().getInputNames());
+  NumericalSample effectiveInputSample(0, getPhysicalModel().getStochasticInputNames().getSize());
+  effectiveInputSample.setDescription(getPhysicalModel().getStochasticInputNames());
   NumericalSample outputSample(0, getPhysicalModel().getOutputNames().getSize()); // TODO only required outputs
   outputSample.setDescription(getPhysicalModel().getOutputNames());
 
@@ -136,8 +136,13 @@ void MonteCarloAnalysis::run()
       NumericalScalar coefOfVar(0.);
       for (UnsignedInteger i=0; i<outputSample.getDimension(); ++i)
       {
+        if (std::abs(empiricalMean[i])  < SpecFunc::Precision)
+          throw InvalidValueException(HERE) << "Impossible to continue the analysis.\
+                                                Impossible to compute the coefficient of variation because the mean of an output is too close to zero.\
+                                                Do not use the coefficient of variation as criteria to stop the algorithm";
+
         const NumericalScalar sigma_i = empiricalStd[i] / sqrt(outputSample.getSize());
-        coefOfVar = std::max(sigma_i / empiricalMean[i], coefOfVar);
+        coefOfVar = std::max(sigma_i / std::abs(empiricalMean[i]), coefOfVar);
       }
       coefficientOfVariation = coefOfVar;
     }

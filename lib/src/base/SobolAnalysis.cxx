@@ -152,12 +152,17 @@ void SobolAnalysis::run()
       NumericalScalar coefOfVar(0.);
       for (UnsignedInteger i=0; i<nbOutputs; ++i)
       {
-        const NumericalPoint empiricalMean = allFirstOrderIndices[i].computeMean();
-        const NumericalPoint empiricalStd = allFirstOrderIndices[i].computeStandardDeviationPerComponent();
+        const NumericalPoint empiricalMean(allFirstOrderIndices[i].computeMean());
+        const NumericalPoint empiricalStd(allFirstOrderIndices[i].computeStandardDeviationPerComponent());
         for (UnsignedInteger j=0; j<nbInputs; ++j)
         {
+          if (std::abs(empiricalMean[j])  < SpecFunc::Precision)
+            throw InvalidValueException(HERE) << "Impossible to continue the analysis.\
+                                                  Impossible to compute the coefficient of variation because the mean of an indice is too close to zero.\
+                                                  Do not use the coefficient of variation as criteria to stop the algorithm";
+
           const NumericalScalar sigma_j = empiricalStd[j] / sqrt(allFirstOrderIndices[i].getSize());
-          coefOfVar = std::max(sigma_j / empiricalMean[j], coefOfVar);
+          coefOfVar = std::max(sigma_j / std::abs(empiricalMean[j]), coefOfVar);
         }
       }
       coefficientOfVariation = coefOfVar;
