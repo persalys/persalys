@@ -115,7 +115,7 @@ void MonteCarloAnalysis::run()
   // We loop if there remains some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
   while ((outerSampling < maximumOuterSampling)
      && ((coefficientOfVariation == -1.0) || (coefficientOfVariation > getMaximumCoefficientOfVariation()))
-     &&  (elapsedTime < getMaximumElapsedTime()*CLOCKS_PER_SEC))
+     &&  (static_cast<UnsignedInteger>(elapsedTime) < getMaximumElapsedTime() * CLOCKS_PER_SEC))
   {
     // the last block can be smaller
     const UnsignedInteger effectiveBlockSize = outerSampling < (maximumOuterSampling - 1) ? getBlockSize() : lastBlockSize;
