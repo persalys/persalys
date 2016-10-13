@@ -150,15 +150,14 @@ Qt::ItemFlags InputTableModel::flags(const QModelIndex & index) const
 
 void InputTableModel::addLine()
 {
-  QModelIndex lastIndex = index(-1, 0);
-  beginInsertRows(lastIndex.parent(), -1, -1);
-  insertRow(lastIndex.row());
   int i = 0;
   while (physicalModel_.hasInputNamed('X' + (OSS()<<i).str()))
     ++i;
   physicalModel_.blockNotification(true, "modelInputsChanged");
   physicalModel_.addInput(Input('X'+(OSS()<<i).str()));
   physicalModel_.blockNotification(false);
+  QModelIndex lastIndex = index(rowCount()-1, 0);
+  beginInsertRows(lastIndex.parent(), lastIndex.row(), lastIndex.row());
   endInsertRows();
 }
 

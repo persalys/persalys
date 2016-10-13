@@ -162,15 +162,17 @@ Qt::ItemFlags OutputTableModel::flags(const QModelIndex & index) const
 
 void OutputTableModel::addLine()
 {
-  QModelIndex lastIndex = index(-1, 0);
-  beginInsertRows(lastIndex.parent(), -1, -1);
-  insertRow(lastIndex.row());
   int i = 0;
   while (physicalModel_.hasOutputNamed('Y' + (OSS()<<i).str()))
     ++i;
   physicalModel_.blockNotification(true, "modelOutputsChanged");
   physicalModel_.addOutput(Output('Y'+(OSS()<<i).str()));
-  physicalModel_.blockNotification(false);
+  physicalModel_.blockNotification(false);  
+  //
+  QModelIndex lastIndex = index(rowCount()-1, 0);
+  beginInsertRows(lastIndex.parent(), lastIndex.row(), lastIndex.row());
+  insertRow(lastIndex.row());
+  
   endInsertRows();
 }
 
