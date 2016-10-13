@@ -837,6 +837,8 @@ void StudyTreeView::createAnalysisExecutionFailedWindow(AnalysisItem * item, con
 void StudyTreeView::exportPython()
 {
   OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
+  if (!item)
+    return ;
 
   QSettings settings;
   QString currentDir = settings.value("currentDir").toString();
