@@ -24,8 +24,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-InputTableModel::InputTableModel(const PhysicalModel & physicalModel)
-  : QAbstractTableModel()
+InputTableModel::InputTableModel(const PhysicalModel & physicalModel, QObject * parent)
+  : QAbstractTableModel(parent)
   , physicalModel_(physicalModel)
 {
 }
