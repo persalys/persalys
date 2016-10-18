@@ -146,6 +146,22 @@ void MainWindow::showGraphConfigurationTabWidget(QWidget * graph)
 }
 
 
+void MainWindow::closeEvent(QCloseEvent * event)
+{
+  int notCanceled = studyTree_->closeAllOTStudies();
+
+  if (notCanceled)
+  {
+    event->accept();
+    QMainWindow::closeEvent(event);
+  }
+  else
+  {
+    event->ignore();
+  }
+}
+
+
 void MainWindow::exitApplication()
 {
   int ret = studyTree_->closeAllOTStudies();
