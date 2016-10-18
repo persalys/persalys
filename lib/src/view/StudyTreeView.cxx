@@ -878,50 +878,6 @@ void StudyTreeView::exportPython()
 }
 
 
-void StudyTreeView::importPython()
-{
-  if (treeViewModel_->invisibleRootItem()->hasChildren())
-  {
-    int ret = QMessageBox::warning(this, tr("Warning"),
-                           tr("Cannot import a Python script when other studies are opened.\nDo you want to continue and close the other studies?"),
-                           QMessageBox::Cancel | QMessageBox::Ok,
-                           QMessageBox::Ok);
-    if (ret == QMessageBox::Ok)
-    {
-      bool allStudiesClosed = closeAllOTStudies();
-      if (!allStudiesClosed)
-        return;
-    }
-    else
-      return;
-  }
-
-  QSettings settings;
-  QString currentDir = settings.value("currentDir").toString();
-  if (currentDir.isEmpty())
-    currentDir = QDir::homePath();
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Import Python..."),
-                     currentDir,
-                     tr("Python source files (*.py)"));
-
-  if (!fileName.isEmpty())
-  {
-    QFile file(fileName);
-    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
-
-    // check
-    if (!file.open(QFile::ReadOnly))
-    {
-      QMessageBox::warning(this, tr("Warning"),
-                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
-    }
-    // load
-    else
-      emit importPythonScript(fileName);
-  }
-}
-
-
 bool StudyTreeView::saveOTStudy()
 {
   OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());

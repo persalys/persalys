@@ -30,6 +30,9 @@
 #include <QDockWidget>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QSettings>
 
 namespace OTGUI {
 
@@ -72,7 +75,7 @@ void MainWindow::buildInterface()
   rightSideSplitter->addWidget(welcomeWindow);
   connect(welcomeWindow, SIGNAL(createNewOTStudy()), studyTree_, SLOT(createNewOTStudy()));
   connect(welcomeWindow, SIGNAL(openOTStudy()), studyTree_, SLOT(openOTStudy()));
-  connect(welcomeWindow, SIGNAL(importPython()), studyTree_, SLOT(importPython()));
+  connect(welcomeWindow, SIGNAL(importPython()), this, SLOT(importPython()));
   rightSideSplitter->setStretchFactor(0, 5);
 
   // MdiArea
@@ -94,7 +97,6 @@ void MainWindow::buildInterface()
   QDockWidget * pythonConsoleDock = new QDockWidget(tr("Python Console"));
   pythonConsoleDock->setWidget(pythonConsole_);
   pythonConsoleDock->setFeatures(QDockWidget::DockWidgetClosable);
-  connect(studyTree_, SIGNAL(importPythonScript(const QString &)), this, SLOT(loadScript(const QString &)));
   rightSideSplitter->addWidget(pythonConsoleDock);
   rightSideSplitter->setStretchFactor(2, 1);
 
@@ -112,7 +114,7 @@ void MainWindow::buildInterface()
   connect(menuBar, SIGNAL(saveOTStudy()), studyTree_, SLOT(saveOTStudy()));
   connect(menuBar, SIGNAL(saveAsOTStudy()), studyTree_, SLOT(saveAsOTStudy()));
   connect(menuBar, SIGNAL(exportPython()), studyTree_, SLOT(exportPython()));
-  connect(menuBar, SIGNAL(importPython()), studyTree_, SLOT(importPython()));
+  connect(menuBar, SIGNAL(importPython()), this, SLOT(importPython()));
   connect(menuBar, SIGNAL(closeOTStudy()), studyTree_, SLOT(closeOTStudy()));
   connect(menuBar, SIGNAL(closeWindow()), this, SLOT(exitApplication()));
   connect(studyTree_, SIGNAL(recentFilesListChanged(QString)), menuBar, SLOT(updateRecentFilesList(QString)));
@@ -122,7 +124,7 @@ void MainWindow::buildInterface()
   OTguiToolBar * toolBar = new OTguiToolBar;
   connect(toolBar, SIGNAL(createNewOTStudy()), studyTree_, SLOT(createNewOTStudy()));
   connect(toolBar, SIGNAL(openOTStudy()), studyTree_, SLOT(openOTStudy()));
-  connect(toolBar, SIGNAL(importPython()), studyTree_, SLOT(importPython()));
+  connect(toolBar, SIGNAL(importPython()), this, SLOT(importPython()));
   connect(toolBar, SIGNAL(saveOTStudy()), studyTree_, SLOT(saveOTStudy()));
   addToolBar(toolBar);
 
@@ -133,11 +135,51 @@ void MainWindow::buildInterface()
 }
 
 
-void MainWindow::loadScript(const QString & fileName)
+void MainWindow::importPython()
 {
-  QString command("execfile(\"" + fileName + "\")");
-  pythonConsole_->execAndWait(command);
+  if (studyTree_->model()->rowCount())
+  {
+    int ret = QMessageBox::warning(this, tr("Warning"),
+                                   tr("Cannot import a Python script when other studies are opened.\nDo you want to continue and close the other studies?"),
+                                   QMessageBox::Cancel | QMessageBox::Ok,
+                                   QMessageBox::Ok);
+    if (ret == QMessageBox::Ok)
+    {
+      bool allStudiesClosed = studyTree_->closeAllOTStudies();
+      if (!allStudiesClosed)
+        return;
+    }
+    else
+      return;
+  }
+
+  QSettings settings;
+  QString currentDir = settings.value("currentDir").toString();
+  if (currentDir.isEmpty())
+    currentDir = QDir::homePath();
+  const QString fileName = QFileDialog::getOpenFileName(this, tr("Import Python..."),
+                           currentDir,
+                           tr("Python source files (*.py)"));
+
+  if (!fileName.isEmpty())
+  {
+    QFile file(fileName);
+    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+
+    // check
+    if (!file.open(QFile::ReadOnly))
+    {
+      QMessageBox::warning(this, tr("Warning"),
+                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
+    }
+    // load
+    {
+      const QString command("execfile(\"" + fileName + "\")");
+      pythonConsole_->execAndWait(command);
+    }
+  }
 }
+
 
 void MainWindow::showGraphConfigurationTabWidget(QWidget * graph)
 {

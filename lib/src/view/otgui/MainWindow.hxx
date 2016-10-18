@@ -44,8 +44,8 @@ protected:
   void buildInterface();
 
 private slots:
+  void importPython();
   virtual void closeEvent (QCloseEvent * event);
-  void loadScript(const QString & fileName);
 
 private:
   StudyTreeView * studyTree_;
