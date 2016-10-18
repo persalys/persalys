@@ -1107,6 +1107,8 @@ void StudyTreeView::selectedItemChanged(const QModelIndex& currentIndex)
 
 void StudyTreeView::selectedItemChanged(const QModelIndex & currentIndex, const QModelIndex & previousIndex)
 {
+  if (!currentIndex.isValid())
+    return;
   selectedItemChanged(currentIndex);
 }
 }
