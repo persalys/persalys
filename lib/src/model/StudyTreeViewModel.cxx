@@ -38,19 +38,12 @@ void StudyTreeViewModel::update(Observable * source, const String & message)
 {
   if (message == "addStudy")
   {
-    OTStudy * otStudy = static_cast<OTStudy*>(source);
-    addOTStudyItem(otStudy);
+    addOTStudyItem(OTStudy::GetInstances()[OTStudy::GetInstances().getSize()-1]);
   }
 }
 
 
-void StudyTreeViewModel::createNewOTStudy()
-{
-  OTStudy::Add(new OTStudy(OTStudy::GetAvailableName()));
-}
-
-
-void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
+void StudyTreeViewModel::addOTStudyItem(const OTStudy & otStudy)
 {
   OTStudyItem * otStudyItem = new OTStudyItem(otStudy);
   connect(otStudyItem, SIGNAL(newDataModelItemCreated(DesignOfExperimentItem*)), this, SIGNAL(newDataModelCreated(DesignOfExperimentItem*)));
@@ -63,16 +56,16 @@ void StudyTreeViewModel::addOTStudyItem(OTStudy * otStudy)
   connect(otStudyItem, SIGNAL(otStudyRemoved(QStandardItem*)), this, SLOT(removeOTStudyItem(QStandardItem*)));
 
   invisibleRootItem()->appendRow(otStudyItem);
-  for (UnsignedInteger i=0; i<otStudy->getDataModels().getSize(); ++i)
-    otStudyItem->addDataModelItem(otStudy->getDataModels()[i]);
-  for (UnsignedInteger i=0; i<otStudy->getPhysicalModels().getSize(); ++i)
-    otStudyItem->addPhysicalModelItem(otStudy->getPhysicalModels()[i]);
-  for (UnsignedInteger i=0; i<otStudy->getLimitStates().getSize(); ++i)
-    otStudyItem->addLimitStateItem(otStudy->getLimitStates()[i]);
-  for (UnsignedInteger i=0; i<otStudy->getDesignOfExperiments().getSize(); ++i)
-    otStudyItem->addDesignOfExperimentItem(otStudy->getDesignOfExperiments()[i]);
-  for (UnsignedInteger i=0; i<otStudy->getAnalyses().getSize(); ++i)
-    otStudyItem->addAnalysisItem(otStudy->getAnalyses()[i]);
+  for (UnsignedInteger i=0; i<otStudy.getDataModels().getSize(); ++i)
+    otStudyItem->addDataModelItem(otStudy.getDataModels()[i]);
+  for (UnsignedInteger i=0; i<otStudy.getPhysicalModels().getSize(); ++i)
+    otStudyItem->addPhysicalModelItem(otStudy.getPhysicalModels()[i]);
+  for (UnsignedInteger i=0; i<otStudy.getLimitStates().getSize(); ++i)
+    otStudyItem->addLimitStateItem(otStudy.getLimitStates()[i]);
+  for (UnsignedInteger i=0; i<otStudy.getDesignOfExperiments().getSize(); ++i)
+    otStudyItem->addDesignOfExperimentItem(otStudy.getDesignOfExperiments()[i]);
+  for (UnsignedInteger i=0; i<otStudy.getAnalyses().getSize(); ++i)
+    otStudyItem->addAnalysisItem(otStudy.getAnalyses()[i]);
 
   emit newOTStudyCreated(otStudyItem);
 }
@@ -99,8 +92,8 @@ void StudyTreeViewModel::addLimitStateItem(const QModelIndex & parentIndex)
   PhysicalModelItem * parentItem = static_cast<PhysicalModelItem*>(itemFromIndex(parentIndex)->parent());
   PhysicalModel physicalModel = parentItem->getPhysicalModel();
   OTStudyItem * studyItem = getOTStudyItem(parentIndex);
-  LimitState newLimitState(studyItem->getOTStudy()->getAvailableLimitStateName(), physicalModel, physicalModel.getOutputs()[0].getName(), OT::Less(), 0.);
-  studyItem->getOTStudy()->add(newLimitState);
+  LimitState newLimitState(studyItem->getOTStudy().getAvailableLimitStateName(), physicalModel, physicalModel.getOutputs()[0].getName(), OT::Less(), 0.);
+  studyItem->getOTStudy().add(newLimitState);
 }
 
 

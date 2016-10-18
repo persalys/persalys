@@ -31,7 +31,7 @@ class ModelEvaluationWizard : public AnalysisWizard
   Q_OBJECT
 
 public:
-  ModelEvaluationWizard(OTStudy * otStudy, const PhysicalModel & physicalModel);
+  ModelEvaluationWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel);
   ModelEvaluationWizard(const Analysis & analysis);
 
 protected:

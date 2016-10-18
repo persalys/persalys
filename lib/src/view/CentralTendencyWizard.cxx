@@ -33,10 +33,10 @@ using namespace OT;
 
 namespace OTGUI {
 
-CentralTendencyWizard::CentralTendencyWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
-  : AnalysisWizard(MonteCarloAnalysis(otStudy->getAvailableAnalysisName("centralTendencyMC_"), physicalModel))
+CentralTendencyWizard::CentralTendencyWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel)
+  : AnalysisWizard(MonteCarloAnalysis(otStudy.getAvailableAnalysisName("centralTendencyMC_"), physicalModel))
   , MCAnalysis_(*dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation()))
-  , taylorAnalysis_(TaylorExpansionMomentsAnalysis(otStudy->getAvailableAnalysisName("centralTendencyTaylor_"), physicalModel))
+  , taylorAnalysis_(TaylorExpansionMomentsAnalysis(otStudy.getAvailableAnalysisName("centralTendencyTaylor_"), physicalModel))
 {
   buildInterface();
 }

@@ -32,8 +32,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(OTStudy * otStudy, const LimitState & limitState)
-  : AnalysisWizard(MonteCarloReliabilityAnalysis(otStudy->getAvailableAnalysisName("reliability_"), limitState))
+ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const OTStudy& otStudy, const LimitState & limitState)
+  : AnalysisWizard(MonteCarloReliabilityAnalysis(otStudy.getAvailableAnalysisName("reliability_"), limitState))
 {
   buildInterface();
 }

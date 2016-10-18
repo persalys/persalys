@@ -29,15 +29,15 @@ using namespace OT;
 
 namespace OTGUI {
 
-OTStudyItem::OTStudyItem(OTStudy * otStudy)
+OTStudyItem::OTStudyItem(const OTStudy& otStudy)
   : QObject()
-  , QStandardItem(QString::fromUtf8(otStudy->getName().c_str()))
+  , QStandardItem(QString::fromUtf8(otStudy.getName().c_str()))
   , Observer("OTStudy")
   , otStudy_(otStudy)
 {
-  otStudy_->addObserver(this);
+  otStudy_.addObserver(this);
   setData("OTStudy", Qt::UserRole);
-  setToolTip(QString::fromUtf8(otStudy_->getFileName().c_str()));
+  setToolTip(QString::fromUtf8(otStudy_.getFileName().c_str()));
 }
 
 
@@ -45,17 +45,17 @@ void OTStudyItem::update(Observable * source, const String & message)
 {
   if (message == "addDataModel")
   {
-    DesignOfExperiment addedDataModel = otStudy_->getDataModels()[otStudy_->getDataModels().getSize()-1];
+    DesignOfExperiment addedDataModel = otStudy_.getDataModels()[otStudy_.getDataModels().getSize()-1];
     addDataModelItem(addedDataModel);
   }
   else if (message == "addPhysicalModel")
   {
-    PhysicalModel addedPhysicalModel = otStudy_->getPhysicalModels()[otStudy_->getPhysicalModels().getSize()-1];
+    PhysicalModel addedPhysicalModel = otStudy_.getPhysicalModels()[otStudy_.getPhysicalModels().getSize()-1];
     addPhysicalModelItem(addedPhysicalModel);
   }
   else if (message == "addDesignOfExperiment")
   {
-    DesignOfExperiment addedDesignOfExperiment = otStudy_->getDesignOfExperiments()[otStudy_->getDesignOfExperiments().getSize()-1];
+    DesignOfExperiment addedDesignOfExperiment = otStudy_.getDesignOfExperiments()[otStudy_.getDesignOfExperiments().getSize()-1];
     try
     {
       addDesignOfExperimentItem(addedDesignOfExperiment);
@@ -67,7 +67,7 @@ void OTStudyItem::update(Observable * source, const String & message)
   }
   else if (message == "addLimitState")
   {
-    LimitState addedLimitState = otStudy_->getLimitStates()[otStudy_->getLimitStates().getSize()-1];
+    LimitState addedLimitState = otStudy_.getLimitStates()[otStudy_.getLimitStates().getSize()-1];
     try
     {
       addLimitStateItem(addedLimitState);
@@ -79,7 +79,7 @@ void OTStudyItem::update(Observable * source, const String & message)
   }
   else if (message == "addAnalysis")
   {
-    Analysis addedAnalysis = otStudy_->getAnalyses()[otStudy_->getAnalyses().getSize()-1];
+    Analysis addedAnalysis = otStudy_.getAnalyses()[otStudy_.getAnalyses().getSize()-1];
     try
     {
       addAnalysisItem(addedAnalysis);
@@ -95,7 +95,7 @@ void OTStudyItem::update(Observable * source, const String & message)
   }
   else if (message == "fileNameChanged")
   {
-    setToolTip(QString::fromUtf8(otStudy_->getFileName().c_str()));
+    setToolTip(QString::fromUtf8(otStudy_.getFileName().c_str()));
   }
   else
   {
@@ -106,16 +106,16 @@ void OTStudyItem::update(Observable * source, const String & message)
 
 void OTStudyItem::updateAnalysis(const Analysis & analysis)
 {
-  otStudy_->getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
+  otStudy_.getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
 }
 
 
 void OTStudyItem::updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
 {
   if (designOfExperiment.getImplementation()->getClassName() == "DataModel")
-    otStudy_->getDataModelByName(designOfExperiment.getName()).setImplementationAsPersistentObject(designOfExperiment.getImplementation());
+    otStudy_.getDataModelByName(designOfExperiment.getName()).setImplementationAsPersistentObject(designOfExperiment.getImplementation());
   else
-    otStudy_->getDesignOfExperimentByName(designOfExperiment.getName()).setImplementationAsPersistentObject(designOfExperiment.getImplementation());
+    otStudy_.getDesignOfExperimentByName(designOfExperiment.getName()).setImplementationAsPersistentObject(designOfExperiment.getImplementation());
 }
 
 
@@ -351,9 +351,9 @@ void OTStudyItem::addDesignOfExperimentAnalysisItem(Analysis& analysis, Analysis
 
 void OTStudyItem::addMetaModelItem(PhysicalModel& metaModel)
 {
-  const String availableName = otStudy_->getAvailablePhysicalModelName(metaModel.getName());
+  const String availableName = otStudy_.getAvailablePhysicalModelName(metaModel.getName());
   metaModel.setName(availableName);
-  otStudy_->add(metaModel);
+  otStudy_.add(metaModel);
 }
 
 
@@ -367,13 +367,13 @@ void OTStudyItem::removeItem(QStandardItem * item)
 void OTStudyItem::setData(const QVariant & value, int role)
 {
   if (role == Qt::EditRole)
-    otStudy_->setName(value.toString().toLocal8Bit().data());
+    otStudy_.setName(value.toString().toLocal8Bit().data());
 
   QStandardItem::setData(value, role);
 }
 
 
-OTStudy* OTStudyItem::getOTStudy()
+OTStudy OTStudyItem::getOTStudy() const
 {
   return otStudy_;
 }

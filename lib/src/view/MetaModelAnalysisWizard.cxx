@@ -31,8 +31,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-MetaModelAnalysisWizard::MetaModelAnalysisWizard(OTStudy * otStudy, const DesignOfExperiment & designOfExperiment)
-  : AnalysisWizard(FunctionalChaosAnalysis(otStudy->getAvailableAnalysisName("chaos_"), designOfExperiment))
+MetaModelAnalysisWizard::MetaModelAnalysisWizard(const OTStudy& otStudy, const DesignOfExperiment & designOfExperiment)
+  : AnalysisWizard(FunctionalChaosAnalysis(otStudy.getAvailableAnalysisName("chaos_"), designOfExperiment))
   , chaos_(*dynamic_cast<FunctionalChaosAnalysis*>(&*analysis_.getImplementation()))
 {
   buildInterface();
