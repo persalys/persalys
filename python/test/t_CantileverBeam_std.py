@@ -29,6 +29,12 @@ myStudy.add(sobol)
 sobol.run()
 sobolResult = sobol.getResult()
 
+## SRC ##
+src = otguibase.SRCAnalysis('mySRC', model, 1000)
+myStudy.add(src)
+src.run()
+srcResult = src.getResult()
+
 
 # Create the Spearman correlation matrix of the input random vector
 RS = ot.CorrelationMatrix(4)
@@ -59,12 +65,6 @@ montecarloResult = montecarlo.getResult()
 
 meanCI = montecarloResult.getMeanConfidenceInterval()
 stdCi = montecarloResult.getStdConfidenceInterval()
-
-## SRC ##
-src = otguibase.SRCAnalysis('mySRC', model, 1000)
-myStudy.add(src)
-src.run()
-srcResult = src.getResult()
 
 ## limit state ##
 limitState = otguibase.LimitState('limitState1', model, 'y', ot.Greater(), 30.)
