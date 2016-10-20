@@ -63,12 +63,32 @@ QVariant OutputTableModel::headerData(int section, Qt::Orientation orientation, 
 }
 
 
+bool OutputTableModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
+{
+  if (role == Qt::CheckStateRole && orientation == Qt::Horizontal)
+  {
+    for (int i=0; i<rowCount(); ++i)
+      if (data(index(i, 0), role).toInt() != (value.toBool()? Qt::Checked:Qt::Unchecked))
+        setData(index(i, 0), value.toBool()? Qt::Checked:Qt::Unchecked, role);
+    emit selectedOutputsChanged();
+  }
+
+  return QAbstractTableModel::setHeaderData(section, orientation, value, role);
+}
+
+
 QVariant OutputTableModel::data(const QModelIndex & index, int role) const
 {
   if (!index.isValid())
     return QVariant();
 
-  if (role == Qt::DisplayRole || role == Qt::EditRole)
+  if (role == Qt::CheckStateRole && index.column() == 0)
+  {
+    if (physicalModel_.getOutputs()[index.row()].isSelected())
+      return Qt::Checked;
+    return Qt::Unchecked;
+  }
+  else if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
     switch (index.column())
     {
@@ -95,7 +115,22 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
   if (!index.isValid())
     return false;
 
-  if (role == Qt::EditRole)
+  if (role == Qt::CheckStateRole && index.column() == 0)
+  {
+    Output output(physicalModel_.getOutputs()[index.row()]);
+
+    // update the output
+    physicalModel_.blockNotification(true);
+    physicalModel_.selectOutput(output.getName(), value.toBool());
+    physicalModel_.blockNotification(false);
+    emit dataChanged(index, this->index(index.row(), 1));
+    emit selectedOutputsChanged();
+    bool allChecked = physicalModel_.getOutputNames().getSize() == physicalModel_.getSelectedOutputsNames().getSize();
+    emit checked(allChecked);
+
+    return true;
+  }
+  else if (role == Qt::EditRole)
   {
     Output output(physicalModel_.getOutputs()[index.row()]);
 
@@ -149,7 +184,9 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
 
 Qt::ItemFlags OutputTableModel::flags(const QModelIndex & index) const
 {
-  if (index.column() == 0
+  if (index.column() == 0)
+    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
+  else if (index.column() == 1
       && (physicalModel_.getImplementation()->getClassName() == "YACSPhysicalModel" ||
           physicalModel_.getImplementation()->getClassName() == "MetaModel"))
     return QAbstractTableModel::flags(index);
@@ -174,6 +211,8 @@ void OutputTableModel::addLine()
   insertRow(lastIndex.row());
   
   endInsertRows();
+  bool allChecked = physicalModel_.getOutputNames().getSize() == physicalModel_.getSelectedOutputsNames().getSize();
+  emit checked(allChecked);
 }
 
 
@@ -185,5 +224,7 @@ void OutputTableModel::removeLine(const QModelIndex & index)
   physicalModel_.removeOutput(physicalModel_.getOutputs()[index.row()].getName());
   physicalModel_.blockNotification(false);
   endRemoveRows();
+  bool allChecked = physicalModel_.getOutputNames().getSize() == physicalModel_.getSelectedOutputsNames().getSize();
+  emit checked(allChecked && physicalModel_.getOutputNames().getSize());
 }
 }
