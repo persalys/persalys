@@ -29,18 +29,26 @@ ResizableTableViewWithoutScrollBar::ResizableTableViewWithoutScrollBar(QWidget *
 {
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+#if QT_VERSION >= 0x050000
+  horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+  verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+#else
+  horizontalHeader()->setResizeMode(QHeaderView::Fixed);
+  verticalHeader()->setResizeMode(QHeaderView::Fixed);
+#endif
 }
 
 
 QSize ResizableTableViewWithoutScrollBar::sizeHint() const
 {
-  return QSize(minimumSize());
+  return minimumSize();
 }
 
 
 QSize ResizableTableViewWithoutScrollBar::minimumSizeHint() const
 {
-  return QSize(minimumSize());
+  return minimumSize();
 }
 
 
