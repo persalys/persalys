@@ -26,6 +26,7 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QHeaderView>
+#include <QScrollBar>
 
 using namespace OT;
 
@@ -40,7 +41,7 @@ DeterministicDesignPage::DeterministicDesignPage(const DesignOfExperiment & desi
   else
     fixedDesignOfExperiment = FixedDesignOfExperiment(designOfExperiment.getName(), designOfExperiment.getPhysicalModel());
 
-  model_ = new ExperimentTableModel(fixedDesignOfExperiment);
+  model_ = new ExperimentTableModel(fixedDesignOfExperiment, this);
 
   buildInterface();
 }
@@ -58,34 +59,38 @@ void DeterministicDesignPage::buildInterface()
   tableView->setEditTriggers(QTableView::AllEditTriggers);
   tableView->setModel(model_);
 
-  QStringList items = QStringList()<<tr("Levels")<<tr("Delta");
-  QPair<int, int> cellWithComboBox(0, 5);
+  const QStringList items = QStringList() << tr("Levels") << tr("Delta");
+  const QPair<int, int> cellWithComboBox(0, 5);
 
   tableView->horizontalHeader()->hide();
   tableView->setItemDelegateForColumn(5, new ComboBoxDelegate(items, cellWithComboBox));
   tableView->openPersistentEditor(model_->index(0, 5));
 
-  tableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  tableView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  tableView->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
-#if QT_VERSION >= 0x050000
-  tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-#else
-  tableView->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
-#endif
-  // resize table
-  tableView->resizeToContents();
-
   groupBoxLayout->addWidget(tableView);
+
+  // resize table
+  if (tableView->model()->rowCount() > 15) // if too many variables: no fixed height + use scrollbar
+  {
+    tableView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    tableView->resizeColumnsToContents();
+    const int w = tableView->horizontalHeader()->length() + tableView->verticalHeader()->width() + tableView->verticalScrollBar()->sizeHint().width();
+    int x1, y1, x2, y2;
+    tableView->getContentsMargins(&x1, &y1, &x2, &y2);
+    tableView->setFixedWidth(w+x1+x2);
+  }
+  else
+  {
+    tableView->resizeToContents();
+    groupBoxLayout->addStretch();
+  }
+
   pageLayout->addWidget(groupBox);
-  pageLayout->addStretch();
 }
 
 
 bool DeterministicDesignPage::validatePage()
 {
-  DesignOfExperiment design = DesignOfExperiment(model_->getDesignOfExperiment());
-  emit designOfExperimentChanged(design);
+  emit designOfExperimentChanged(model_->getDesignOfExperiment());
 
   return true;
 }
