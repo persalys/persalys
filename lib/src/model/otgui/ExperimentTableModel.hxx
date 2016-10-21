@@ -31,7 +31,7 @@ class OTGUI_API ExperimentTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  ExperimentTableModel(const FixedDesignOfExperiment & designOfExperiment);
+  ExperimentTableModel(const FixedDesignOfExperiment & designOfExperiment, QObject * parent = 0);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;

@@ -24,8 +24,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-ExperimentTableModel::ExperimentTableModel(const FixedDesignOfExperiment & designOfExperiment)
-  : QAbstractTableModel()
+ExperimentTableModel::ExperimentTableModel(const FixedDesignOfExperiment & designOfExperiment, QObject * parent)
+  : QAbstractTableModel(parent)
   , designOfExperiment_(designOfExperiment)
   , firstColumnChecked_(!designOfExperiment.getLevels().contains(1))
 {
