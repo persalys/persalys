@@ -21,13 +21,10 @@
 #include "otgui/DesignOfExperimentWindow.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/SampleTableModel.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/MinMaxTableGroupBox.hxx"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
-#include <QHeaderView>
 
 using namespace OT;
 
@@ -54,7 +51,7 @@ void DesignOfExperimentWindow::buildInterface()
   tableView_ = new ExportableTableView;
   if (!designOfExperiment_.getOutputSample().getSize())
   {
-    SampleTableModel * model = new SampleTableModel(designOfExperiment_.getInputSample());
+    SampleTableModel * model = new SampleTableModel(designOfExperiment_.getInputSample(), tableView_);
     tableView_->setModel(model);
   }
 
@@ -109,7 +106,7 @@ void DesignOfExperimentWindow::updateWindowForOutputs()
 
 void DesignOfExperimentWindow::addTabsForOutputs()
 {
-  UnsignedInteger nbInputs = designOfExperiment_.getVariableInputNames().getSize();
+  const UnsignedInteger nbInputs = designOfExperiment_.getVariableInputNames().getSize();
   Indices ind(nbInputs);
   for (UnsignedInteger i=0; i<nbInputs; ++i)
     for (UnsignedInteger j=0; j<designOfExperiment_.getInputSample().getDimension(); ++j)
