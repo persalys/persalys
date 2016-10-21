@@ -234,7 +234,7 @@ void FixedDesignOfExperiment::updateParameters()
 
   initializeParameters();
 
-  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
+  for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++ i)
   {
     const Description::const_iterator it = std::find(inputNames.begin(), inputNames.end(), inputNames_[i]);
     if (it != inputNames.end())
