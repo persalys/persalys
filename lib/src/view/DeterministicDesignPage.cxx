@@ -42,6 +42,13 @@ DeterministicDesignPage::DeterministicDesignPage(const DesignOfExperiment & desi
     fixedDesignOfExperiment = FixedDesignOfExperiment(designOfExperiment.getName(), designOfExperiment.getPhysicalModel());
 
   model_ = new ExperimentTableModel(fixedDesignOfExperiment, this);
+  // DOE size
+  DOESizeLabel_ = new QLabel(QString::number(fixedDesignOfExperiment.getInputSample().getSize()));
+  connect(model_, SIGNAL(doeSizeChanged(QString)), DOESizeLabel_, SLOT(setText(QString)));
+  // error message
+  errorMessageLabel_ = new QLabel;
+  errorMessageLabel_->setWordWrap(true);
+  connect(model_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setText(QString)));
 
   buildInterface();
 }
@@ -85,6 +92,17 @@ void DeterministicDesignPage::buildInterface()
   }
 
   pageLayout->addWidget(groupBox);
+
+  // DOE size
+  QHBoxLayout * sizeLayout = new QHBoxLayout;
+  QLabel * sizeLabel = new QLabel(tr("Size of the design of experiment:") + " ");
+  sizeLayout->addWidget(sizeLabel);
+  sizeLayout->addWidget(DOESizeLabel_);
+  sizeLayout->addStretch();
+  pageLayout->addLayout(sizeLayout);
+
+  // error message
+  pageLayout->addWidget(errorMessageLabel_);
 }
 
 

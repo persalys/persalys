@@ -25,6 +25,7 @@
 #include "otgui/ExperimentTableModel.hxx"
 
 #include <QWizardPage>
+#include <QLabel>
 
 namespace OTGUI {
 class DeterministicDesignPage : public QWizardPage
@@ -45,6 +46,8 @@ signals:
 
 private:
   ExperimentTableModel * model_;
+  QLabel * errorMessageLabel_;
+  QLabel * DOESizeLabel_;
 };
 }
 #endif

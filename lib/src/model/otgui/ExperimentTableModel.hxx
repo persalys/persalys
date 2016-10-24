@@ -41,6 +41,11 @@ public:
   Qt::ItemFlags flags(const QModelIndex & index) const;
   FixedDesignOfExperiment getDesignOfExperiment() const;
 
+public slots:
+signals:
+  void errorMessageChanged(QString);
+  void doeSizeChanged(QString);
+
 private:
   FixedDesignOfExperiment designOfExperiment_;
   bool firstColumnChecked_;
