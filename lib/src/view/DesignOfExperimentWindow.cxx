@@ -25,6 +25,7 @@
 
 #include <QVBoxLayout>
 #include <QGroupBox>
+#include <QScrollArea>
 
 using namespace OT;
 
@@ -152,6 +153,10 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+  tabLayout->setSizeConstraint(QLayout::SetFixedSize);
+
   // -- output name --
   QHBoxLayout * headLayout = new QHBoxLayout;
   QLabel * outputName = new QLabel(tr("Output"));
@@ -174,7 +179,8 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   tabLayout->addWidget(minMaxTableGroupBox);
   connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
 
-  tabWidget_->addTab(tab, tr("Min/Max"));
+  scrollArea->setWidget(tab);
+  tabWidget_->addTab(scrollArea, tr("Min/Max"));
 
   // second tab --------------------------------
   tab = new QWidget;
