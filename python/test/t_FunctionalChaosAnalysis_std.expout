@@ -43,14 +43,14 @@ myStudy.add(model)
 values = [0, 0, 0]
 lowerBounds = [-2.82743, -2.82743, -2.82743]
 upperBounds = [2.82743, 2.82743, 2.82743]
-levels = [2, 2, 2]
+levels = [1, 1, 1]
 design = otguibase.FixedDesignOfExperiment('design', model, lowerBounds, upperBounds, levels, values)
 myStudy.add(design)
 design.run()
 values = [0, 0, 0]
 lowerBounds = [-2.82743, -2.82743, -2.82743]
 upperBounds = [2.82743, 2.82743, 2.82743]
-levels = [2, 2, 2]
+levels = [1, 1, 1]
 design2 = otguibase.FixedDesignOfExperiment('design2', model, lowerBounds, upperBounds, levels, values)
 myStudy.add(design2)
 design2.run()

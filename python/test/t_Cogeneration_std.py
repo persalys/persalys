@@ -27,7 +27,8 @@ outputSample = [[0.060036508072],
 
 
 ## Design of Experiment - Parametric analysis ##
-aDesign = otguibase.DesignOfExperiment('aDesign_0', model)
+aDesign = otguibase.FixedDesignOfExperiment('aDesign_0', model)
+aDesign.setLevels([2, 2, 2])
 myStudy.add(aDesign)
 aDesign.run()
 
