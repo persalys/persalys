@@ -465,13 +465,15 @@ void ProbabilisticModelWindow::updateTruncationParametersWidgets(const QModelInd
 
 void ProbabilisticModelWindow::showHideGraphConfigurationWidget(int indexTab)
 {
-  currentIndexTab_ = indexTab;
+  if (indexTab != -1)
+    currentIndexTab_ = indexTab;
+
   switch (indexTab)
   {
     case 0: // distribution graph
     {
       if (rightSideOfSplitterStackedWidget_->currentIndex() == 2
-          && (windowState() == 4 || windowState() == 10))
+          && (windowState() == Qt::WindowFullScreen || windowState() == (Qt::WindowActive|Qt::WindowMaximized)))
         emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
       else
         emit graphWindowDeactivated();
