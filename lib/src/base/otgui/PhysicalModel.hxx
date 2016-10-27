@@ -72,10 +72,12 @@ public:
   void setOutputDescription(const OT::String & outputName, const OT::String & description);
   void setOutputFormula(const OT::String & outputName, const OT::String & formula);
   void setOutputValue(const OT::String & outputName, const double & value);
+  void selectOutput(const OT::String & outputName, const bool selected);
   void addOutput(const Output & output);
   void removeOutput(const OT::String & outputName);
   OT::Description getOutputNames() const;
   bool hasOutputNamed(const OT::String & outputName) const;
+  OT::Description getSelectedOutputsNames() const;
 
   OT::ComposedDistribution getComposedDistribution() const;
   OT::RandomVector getInputRandomVector() const;

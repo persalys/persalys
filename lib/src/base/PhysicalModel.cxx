@@ -223,6 +223,12 @@ void PhysicalModel::setOutputValue(const String & outputName, const double & val
 }
 
 
+void PhysicalModel::selectOutput(const String& outputName, const bool selected)
+{
+  getImplementation()->selectOutput(outputName, selected);
+}
+
+
 void PhysicalModel::addOutput(const Output & output)
 {
   getImplementation()->addOutput(output);
@@ -244,6 +250,12 @@ Description PhysicalModel::getOutputNames() const
 bool PhysicalModel::hasOutputNamed(const String & outputName) const
 {
   return getImplementation()->hasOutputNamed(outputName);
+}
+
+
+Description PhysicalModel::getSelectedOutputsNames() const
+{
+  return getImplementation()->getSelectedOutputsNames();
 }
 
 
