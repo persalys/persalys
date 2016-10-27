@@ -61,9 +61,21 @@ bool AnalysisImplementation::isReliabilityAnalysis() const
 }
 
 
-void AnalysisImplementation::setIsReliabilityAnalysis(bool isReliabilityAnalysis)
+void AnalysisImplementation::setIsReliabilityAnalysis(const bool isReliabilityAnalysis)
 {
   isReliabilityAnalysis_ = isReliabilityAnalysis;
+}
+
+
+Description AnalysisImplementation::getOutputsToAnalyse() const
+{
+  return outputsToAnalyse_;
+}
+
+
+void AnalysisImplementation::setOutputsToAnalyse(const Description& outputsNames)
+{
+  outputsToAnalyse_ = outputsNames;
 }
 
 
@@ -89,6 +101,7 @@ void AnalysisImplementation::save(Advocate & adv) const
 {
   PersistentObject::save(adv);
   adv.saveAttribute("isReliabilityAnalysis_", isReliabilityAnalysis_);
+  adv.saveAttribute("outputsToAnalyse_", outputsToAnalyse_);
 }
 
 
@@ -97,5 +110,6 @@ void AnalysisImplementation::load(Advocate & adv)
 {
   PersistentObject::load(adv);
   adv.loadAttribute("isReliabilityAnalysis_", isReliabilityAnalysis_);
+  adv.loadAttribute("outputsToAnalyse_", outputsToAnalyse_);
 }
 }

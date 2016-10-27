@@ -36,6 +36,7 @@ PhysicalModelAnalysis::PhysicalModelAnalysis(const String & name, const Physical
   : AnalysisImplementation(name)
   , physicalModel_(physicalModel)
 {
+  setOutputsToAnalyse(physicalModel.getSelectedOutputsNames());
 }
 
 
@@ -55,6 +56,7 @@ PhysicalModel PhysicalModelAnalysis::getPhysicalModel() const
 void PhysicalModelAnalysis::setPhysicalModel(const PhysicalModel & physicalModel)
 {
   physicalModel_ = physicalModel;
+  setOutputsToAnalyse(physicalModel_.getSelectedOutputsNames());
 }
 
 
@@ -64,12 +66,27 @@ String PhysicalModelAnalysis::getModelName() const
 }
 
 
+void PhysicalModelAnalysis::setOutputsToAnalyse(const Description& outputsNames)
+{
+  if (!outputsNames.getSize())
+    throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
+
+  const Description modelOutputsNames(physicalModel_.getOutputNames());
+  for (UnsignedInteger i=0; i<outputsNames.getSize(); ++i)
+    if (!modelOutputsNames.contains(outputsNames[i]))
+      throw InvalidArgumentException(HERE) << "The name " << outputsNames[i] << " does not match an output name of the model";
+
+  AnalysisImplementation::setOutputsToAnalyse(outputsNames);
+}
+
+
 String PhysicalModelAnalysis::__repr__() const
 {
   OSS oss;
   oss << "class=" << getClassName()
       << " name=" << getName()
-      << " physicalModel=" << getPhysicalModel().getName();
+      << " physicalModel=" << getPhysicalModel().getName()
+      << " outputs=" << getOutputsToAnalyse();
   return oss;
 }
 
@@ -87,5 +104,7 @@ void PhysicalModelAnalysis::load(Advocate & adv)
 {
   AnalysisImplementation::load(adv);
   adv.loadAttribute("physicalModel_", physicalModel_);
+  if (!getOutputsToAnalyse().getSize() && !isReliabilityAnalysis())
+    setOutputsToAnalyse(physicalModel_.getSelectedOutputsNames());
 }
 }
