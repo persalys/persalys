@@ -30,7 +30,9 @@ class OTGUI_API ListWidgetWithCheckBox : public QListWidget
   Q_OBJECT
 
 public: 
-  ListWidgetWithCheckBox(QString title, QStringList itemNames, QWidget * parent=0);
+  ListWidgetWithCheckBox(QString title, QStringList itemNames, QStringList selectedItemNames, QWidget * parent=0);
+
+  QStringList getCheckedItemsNames() const;
 
 public slots: 
   void checkStateChanged(int state);
