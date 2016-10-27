@@ -33,6 +33,9 @@ static Factory<Output> RegisteredFactory;
 /* Default constructor */
 Output::Output()
   : Variable()
+  , formula_("")
+  , isSelected_(true)
+  , hasBeenComputed_(false)
 {
 }
 
@@ -42,6 +45,7 @@ Output::Output(const String & name, const double & value, const String & descrip
                const String & formula)
   : Variable(name, value, description)
   , formula_(formula)
+  , isSelected_(true)
   , hasBeenComputed_(false)
 {
 }
@@ -66,6 +70,18 @@ void Output::setFormula(const String & formula)
 }
 
 
+bool Output::isSelected() const
+{
+  return isSelected_;
+}
+
+
+void Output::setIsSelected(const bool isSelected)
+{
+  isSelected_ = isSelected;
+}
+
+
 bool Output::hasBeenComputed() const
 {
   return hasBeenComputed_;
@@ -83,6 +99,8 @@ String Output::getPythonScript() const
   OSS oss;
   oss << getName() << " = otguibase.Output('" << getName() << "', " << getValue() << ", '" << getEscapedDescription();
   oss << "', '" << formula_ << "')\n";
+  if (!isSelected_)
+    oss << getName() << ".setIsSelected(False)\n";
 
   return oss;
 }
@@ -105,6 +123,7 @@ void Output::save(Advocate & adv) const
 {
   Variable::save(adv);
   adv.saveAttribute("formula_", formula_);
+  adv.saveAttribute("isSelected_", isSelected_);
   adv.saveAttribute("hasBeenComputed_", hasBeenComputed_);
 }
 
@@ -114,6 +133,7 @@ void Output::load(Advocate & adv)
 {
   Variable::load(adv);
   adv.loadAttribute("formula_", formula_);
+  adv.loadAttribute("isSelected_", isSelected_);
   adv.loadAttribute("hasBeenComputed_", hasBeenComputed_);
 }
 }
