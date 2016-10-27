@@ -27,6 +27,7 @@ ot_add_source_file ( OTStudyWindow.cxx )
 ot_add_source_file ( BlockSizeGroupBox.cxx )
 ot_add_source_file ( MinMaxTableGroupBox.cxx )
 ot_add_source_file ( MomentsEstimatesTableGroupBox.cxx )
+ot_add_source_file ( OutputsSelectionGroupBox.cxx )
 ot_add_source_file ( ParametersWidget.cxx )
 ot_add_source_file ( ResultWindow.cxx )
 ot_add_source_file ( AnalysisExecutionFailedWindow.cxx )
@@ -72,6 +73,7 @@ ot_install_header_file ( ResultWindow.hxx )
 ot_install_header_file ( BlockSizeGroupBox.hxx )
 ot_install_header_file ( MinMaxTableGroupBox.hxx )
 ot_install_header_file ( MomentsEstimatesTableGroupBox.hxx )
+ot_install_header_file ( OutputsSelectionGroupBox.hxx )
 ot_install_header_file ( ParametersWidget.hxx )
 ot_install_header_file ( DataModelWizard.hxx )
 ot_install_header_file ( DataModelWindow.hxx )
@@ -121,6 +123,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/BlockSizeGroupBox.hxx
                                   otgui/MinMaxTableGroupBox.hxx
                                   otgui/MomentsEstimatesTableGroupBox.hxx
+                                  otgui/OutputsSelectionGroupBox.hxx
                                   otgui/ImportDataPage.hxx
                                   otgui/ImportDataModelPage.hxx
                                   otgui/ImportDesignOfExperimentPage.hxx
