@@ -23,6 +23,7 @@
 #include "otgui/AnalyticalPhysicalModel.hxx"
 #include "otgui/ModelEvaluation.hxx"
 #include "otgui/LineEditWithQValidatorDelegate.hxx"
+#include "otgui/CheckableHeaderView.hxx"
 
 #include <QHeaderView>
 #include <QSplitter>
@@ -63,6 +64,7 @@ void PhysicalModelWindowWidget::buildInterface()
   inputTableView_ = new CopyableTableView;
   inputTableView_->setEditTriggers(QTableView::AllEditTriggers);
   LineEditWithQValidatorDelegate * delegate = new LineEditWithQValidatorDelegate;
+  delegate->setParent(this);
   inputTableView_->setItemDelegateForColumn(0, delegate);
   inputsLayout->addWidget(inputTableView_);
 
@@ -93,7 +95,10 @@ void PhysicalModelWindowWidget::buildInterface()
 
   outputTableView_ = new CopyableTableView;
   outputTableView_->setEditTriggers(QTableView::AllEditTriggers);
-  delegate = new LineEditWithQValidatorDelegate;
+  outputTableHeaderView_ = new CheckableHeaderView;
+  outputTableView_->setHorizontalHeader(outputTableHeaderView_);
+  delegate = new LineEditWithQValidatorDelegate(true);
+  delegate->setParent(this);
   outputTableView_->setItemDelegateForColumn(0, delegate);
   outputsLayout->addWidget(outputTableView_);
 
@@ -161,6 +166,7 @@ void PhysicalModelWindowWidget::updateOutputTableModel()
   if (outputTableModel_)
     delete outputTableModel_;
   outputTableModel_ = new OutputTableModel(physicalModel_, outputTableView_);
+  // table view
   outputTableView_->setModel(outputTableModel_);
 #if QT_VERSION >= 0x050000
   outputTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
@@ -190,7 +196,12 @@ void PhysicalModelWindowWidget::updateOutputTableModel()
     outputTableView_->horizontalHeader()->resizeSection(2, width*4/10);
     outputTableView_->horizontalHeader()->resizeSection(3, width*1/10);
   }
+  // table header view
+  const UnsignedInteger nbOutputs = physicalModel_.getOutputNames().getSize();
+  bool allChecked = (nbOutputs && (nbOutputs== physicalModel_.getSelectedOutputsNames().getSize()));
+  outputTableHeaderView_->setChecked(allChecked);
   connect(outputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
+  connect(outputTableModel_, SIGNAL(checked(bool)), outputTableHeaderView_, SLOT(setChecked(bool)));
 }
 
 

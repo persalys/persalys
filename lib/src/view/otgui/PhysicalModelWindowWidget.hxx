@@ -23,6 +23,7 @@
 
 #include "otgui/PhysicalModelItem.hxx"
 #include "otgui/CopyableTableView.hxx"
+#include "otgui/CheckableHeaderView.hxx"
 
 #include <QGroupBox>
 #include <QPushButton>
@@ -60,6 +61,7 @@ private:
   QPushButton * addInputLineButton_;
   QPushButton * removeInputLineButton_;
   CopyableTableView * outputTableView_;
+  CheckableHeaderView * outputTableHeaderView_;
   OutputTableModel * outputTableModel_;
   QPushButton * addOutputLineButton_;
   QPushButton * removeOutputLineButton_;
