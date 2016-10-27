@@ -60,6 +60,8 @@ void DataSample::setInputSample(const NumericalSample & sample)
 {
   inputSample_ = sample;
   sample_ = NumericalSample();
+  listXMin_.clear();
+  listXMax_.clear();
 }
 
 
@@ -73,6 +75,8 @@ void DataSample::setOutputSample(const NumericalSample & sample)
 {
   outputSample_ = sample;
   sample_ = NumericalSample();
+  listXMin_.clear();
+  listXMax_.clear();
 }
 
 
