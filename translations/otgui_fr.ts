@@ -21,52 +21,62 @@
 <context>
     <name>OTGUI::CentralTendencyWizard</name>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="72"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="65"/>
+        <source>Central tendency</source>
+        <translation>Analyse en tendance centrale</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="79"/>
         <source>Method</source>
         <translation>Méthode</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="76"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="83"/>
         <source>Monte Carlo</source>
         <translation>Monte-Carlo</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="81"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="88"/>
         <source>Taylor expansion</source>
         <translation>Décomposition de Taylor</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="105"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="112"/>
         <source>Evaluation parameter</source>
         <translation>Paramètre d&apos;évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="112"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="119"/>
         <source>Advanced parameters</source>
         <translation>Paramètres avancés</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="117"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="124"/>
         <source>Compute confidence interval at</source>
         <translation>Calculer l&apos;intervalle de confiance à</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="131"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="138"/>
         <source>Seed</source>
         <translation>Graine</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="237"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="261"/>
+        <source>At least one output must be selected</source>
+        <translation>Au moins une sortie doit être sélectionnée</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="268"/>
         <source>Please select at least one stop criteria</source>
         <translation>Sélectionner au moins un critère d&apos;arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="241"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="272"/>
         <source>The maximum time must not be null</source>
         <translation>Le temps maximum ne doit pas être nul</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="244"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="275"/>
         <source>The maximum calls can not be inferior to the block size</source>
         <translation>Le nombre d&apos;appels ne peut pas être inférieur à la taille de bloc</translation>
     </message>
@@ -78,13 +88,13 @@
         <location filename="../lib/src/view/utils/CheckableHeaderView.cxx" line="64"/>
         <location filename="../lib/src/view/utils/CheckableHeaderView.cxx" line="79"/>
         <source>Select all</source>
-        <translation>Tout cocher</translation>
+        <translation>Tout sélectionner</translation>
     </message>
     <message>
         <location filename="../lib/src/view/utils/CheckableHeaderView.cxx" line="64"/>
         <location filename="../lib/src/view/utils/CheckableHeaderView.cxx" line="79"/>
         <source>Unselect all</source>
-        <translation>Tout décocher</translation>
+        <translation>Tout désélectionner</translation>
     </message>
 </context>
 <context>
@@ -105,7 +115,7 @@
     <message>
         <location filename="../lib/src/model/CorrelationTableModel.cxx" line="112"/>
         <source>The correlation between %1 and %2 can not be equal to &apos;%3&apos;. %4</source>
-        <translation>La corrélation entre %1 et %2 ne peut pas être égal à &apos;%3&apos;. %4</translation>
+        <translation>La corrélation entre %1 et %2 ne peut pas être égale à &apos;%3&apos;. %4</translation>
     </message>
 </context>
 <context>
@@ -416,120 +426,120 @@
 <context>
     <name>OTGUI::FunctionalChaosResultWindow</name>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="58"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="57"/>
         <source>Functional chaos</source>
         <translation>Chaos fonctionel</translation>
     </message>
     <message>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="59"/>
         <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="60"/>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="61"/>
         <source>yes</source>
         <translation>oui</translation>
     </message>
     <message>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="59"/>
         <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="60"/>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="61"/>
         <source>no</source>
         <translation>non</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="89"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="88"/>
         <source>Metamodel:</source>
         <translation>Métamodèle :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="90"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="89"/>
         <source>Metamodel</source>
         <translation>Métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="91"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="90"/>
         <source>Physical model</source>
         <translation>Modèle physique</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="99"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="98"/>
         <source>Scatter plot</source>
         <translation>Scatter plot</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="110"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="109"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="55"/>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="121"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="54"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="120"/>
         <source>Leave-one-out validation</source>
         <translation>Validation par Leave-one-out</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="52"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="51"/>
         <source>Algorithm</source>
         <translation>Algorithme</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="53"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="52"/>
         <source>Chaos degree</source>
         <translation>Degrée du polynôme</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="54"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="53"/>
         <source>Sparse</source>
         <translation>Creux</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="63"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="62"/>
         <source>Metamodel creation parameters:</source>
         <translation>Paramètres de création du métamodèle :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="133"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="132"/>
         <source>Residual</source>
         <translation>Résidu</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="134"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="133"/>
         <source>Q2</source>
         <translation>Q2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="151"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="150"/>
         <source>Moments estimates</source>
         <translation>Estimations des moments</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="163"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="162"/>
         <source>Estimate</source>
         <translation>Estimation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="164"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="163"/>
         <source>Mean</source>
         <translation>Moyenne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="165"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="164"/>
         <source>Variance</source>
         <translation>Variance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="167"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="166"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="181"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="180"/>
         <source>Summary</source>
         <translation>Résumé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="186"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="185"/>
         <source>Sobol indices</source>
         <translation>Indices de Sobol</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="193"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="192"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -816,47 +826,57 @@ Voulez-vous continuer et fermer les autres études ?</translation>
 <context>
     <name>OTGUI::MetaModelAnalysisWizard</name>
     <message>
-        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="67"/>
+        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="60"/>
+        <source>Metamodel</source>
+        <translation>Métamodèle</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="71"/>
         <source>Method</source>
         <translation>Méthode</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="71"/>
+        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="75"/>
         <source>Functional Chaos</source>
         <translation>Chaos fonctionel</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="87"/>
+        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="91"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="93"/>
+        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="97"/>
         <source>Polynomial degree</source>
         <translation>Degrée du polynôme</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="103"/>
+        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="107"/>
         <source>Validation</source>
         <translation>Validation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="110"/>
+        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="114"/>
         <source>Compute Q2 by Leave-one-out</source>
         <translation>Calculer le Q2 par Leave-one-out</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="119"/>
+        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="123"/>
         <source>Advanced parameters</source>
         <translation>Paramètres avancés</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="122"/>
+        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="126"/>
         <source>Sparse</source>
         <translation>Creux</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="180"/>
+        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="198"/>
+        <source>At least one output must be selected</source>
+        <translation>Au moins une sortie doit être sélectionnée</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MetaModelAnalysisWizard.cxx" line="208"/>
         <source>Design of experiment size too small : %1. It must be superior or equal to C(degree+nbInputs, degree) = %2</source>
         <translation>Taille de plan d&apos;expérience trop petite : %1. Elle doit être supérieure ou égale à C(degree+nbInputs, degree) = %2</translation>
     </message>
@@ -924,7 +944,7 @@ extremum</source>
     <message>
         <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="51"/>
         <source>Inputs</source>
-        <translation>Sorties</translation>
+        <translation>Entrées</translation>
     </message>
     <message>
         <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="61"/>
@@ -1511,56 +1531,69 @@ extremum</source>
     </message>
 </context>
 <context>
+    <name>OTGUI::OutputsSelectionGroupBox</name>
+    <message>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="31"/>
+        <source>Outputs to analyse</source>
+        <translation>Sortie à analyser</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="51"/>
+        <source>Select outputs</source>
+        <translation>Sélectionner des sorties</translation>
+    </message>
+</context>
+<context>
     <name>OTGUI::PhysicalModelWindowWidget</name>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="60"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="61"/>
         <source>Inputs</source>
         <translation>Entrées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="72"/>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="106"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="74"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="113"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="73"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="75"/>
         <source>Add an input</source>
         <translation>Ajouter une entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="76"/>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="110"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="78"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="117"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="77"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="79"/>
         <source>Remove the selected input</source>
         <translation>Supprimer l&apos;entrée sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="91"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="93"/>
         <source>Outputs</source>
         <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="107"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="114"/>
         <source>Add an output</source>
         <translation>Ajouter une sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="111"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="118"/>
         <source>Remove the selected output</source>
         <translation>Supprimer la sortie sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="119"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="126"/>
         <source>Evaluate</source>
         <translation>Evaluer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="120"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="127"/>
         <source>Evaluate the value of the outputs</source>
         <translation>Evaluer les sorties</translation>
     </message>
@@ -1576,6 +1609,11 @@ extremum</source>
         <location filename="../lib/src/view/plot/PlotMatrixConfigurationWidget.cxx" line="51"/>
         <source>Colums</source>
         <translation>Colonnes</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/plot/PlotMatrixConfigurationWidget.cxx" line="55"/>
+        <source>Select variables</source>
+        <translation>Sélectionner des variables</translation>
     </message>
     <message>
         <location filename="../lib/src/view/plot/PlotMatrixConfigurationWidget.cxx" line="61"/>
@@ -1878,64 +1916,69 @@ extremum</source>
 <context>
     <name>OTGUI::SensitivityAnalysisWizard</name>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="75"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="83"/>
         <source>Method</source>
         <translation>Méthode</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="79"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="87"/>
         <source>Sobol</source>
         <translation>Sobol</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="84"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="92"/>
         <source>SRC</source>
         <translation>SRC</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="108"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="116"/>
         <source>Evaluation parameter</source>
         <translation>Paramètre d&apos;évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="115"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="123"/>
         <source>Number of calls by iteration</source>
         <translation>Nombre d&apos;appels par itération</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="116"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="124"/>
         <source>= block_size * ( number_of_inputs + 2 )</source>
         <translation>= taille_bloc * (nombre_entrées + 2 )</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="126"/>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="162"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="134"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="170"/>
         <source>Advanced parameters</source>
         <translation>Paramètres avancés</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="129"/>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="165"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="137"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="173"/>
         <source>Seed</source>
         <translation>Graine</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="149"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="157"/>
         <source>Sample size</source>
         <translation>Taille d&apos;échantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="265"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="290"/>
+        <source>At least one output must be selected</source>
+        <translation>Au moins une sortie doit être sélectionnée</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="297"/>
         <source>Please select at least one stop criteria</source>
         <translation>Sélectionner au moins un critère d&apos;arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="269"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="301"/>
         <source>The maximum time must not be null</source>
         <translation>Le temps maximum ne doit pas être nul</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="272"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="304"/>
         <source>The maximum calls can not be inferior to: block_size*(number_of_inputs + 2)</source>
         <translation>Le nombre d&apos;appels ne peut pas être inférieur à : taille_bloc*(nombre_entrées + 2) </translation>
     </message>
