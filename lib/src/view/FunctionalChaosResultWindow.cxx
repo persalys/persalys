@@ -36,7 +36,6 @@ namespace OTGUI {
 FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item)
   : ResultWindow(item)
   , result_(dynamic_cast<FunctionalChaosAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
-  , outputSample_(dynamic_cast<FunctionalChaosAnalysis*>(&*item->getAnalysis().getImplementation())->getDesignOfExperiment().getOutputSample())
 {
   setParameters(item->getAnalysis());
   buildInterface();
@@ -82,7 +81,7 @@ void FunctionalChaosResultWindow::buildInterface()
   for (UnsignedInteger i=0; i<outputDimension; ++i)
   {
     PlotWidget *plot = new PlotWidget;
-    plot->plotScatter(result_.getMetaModelOutputSample().getMarginal(i), outputSample_.getMarginal(i));
+    plot->plotScatter(result_.getMetaModelOutputSample().getMarginal(i), result_.getOutputSample().getMarginal(i));
     NumericalSample lineSample(result_.getMetaModelOutputSample().getMarginal(i));
     lineSample.stack(lineSample);
     plot->plotCurve(lineSample, QPen(Qt::black, 1));

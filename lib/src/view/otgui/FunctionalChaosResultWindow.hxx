@@ -43,7 +43,6 @@ public slots:
 
 private:
   FunctionalChaosAnalysisResult result_;
-  OT::NumericalSample outputSample_;
   QTabWidget * tabWidget_;
   GraphConfigurationWidget * metaModelPlotsConfigurationWidget_;
   GraphConfigurationWidget * sobolIndicesPlotsConfigurationWidget_;
