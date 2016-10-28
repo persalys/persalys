@@ -100,20 +100,20 @@ void ModelEvaluation::run()
   NumericalSample inputSample(1, getInputValues());
   inputSample.setDescription(inputNames_);
   NumericalSample outputSample(1, 0);
-  for (UnsignedInteger i=0; i<getPhysicalModel().getOutputNames().getSize(); ++i)
+  for (UnsignedInteger i=0; i<getPhysicalModel().getSelectedOutputsNames().getSize(); ++i)
   {
     try
     {
-      outputSample.stack(getPhysicalModel().getFunction(getPhysicalModel().getOutputNames()[i])(inputSample));
+      outputSample.stack(getPhysicalModel().getFunction(getPhysicalModel().getSelectedOutputsNames()[i])(inputSample));
     }
     catch (std::exception & ex)
     {
       throw AnalysisExecutionFailedException(HERE) << "Impossible to evaluate the output "
-                                                   << getPhysicalModel().getOutputNames()[i]
+                                                   << getPhysicalModel().getSelectedOutputsNames()[i]
                                                    << ".\n" << ex.what();
     }
   }
-  outputSample.setDescription(getPhysicalModel().getOutputNames());
+  outputSample.setDescription(getPhysicalModel().getSelectedOutputsNames());
   result_ = ModelEvaluationResult(inputSample, outputSample);
   notify("analysisFinished");
 }

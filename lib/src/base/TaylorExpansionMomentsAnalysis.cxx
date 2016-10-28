@@ -42,7 +42,6 @@ TaylorExpansionMomentsAnalysis::TaylorExpansionMomentsAnalysis()
 /* Constructor with parameters */
 TaylorExpansionMomentsAnalysis::TaylorExpansionMomentsAnalysis(const String & name, const PhysicalModel & physicalModel)
   : PhysicalModelAnalysis(name, physicalModel)
-// TODO  , outputNames_(physicalModel.getOutputNames())
 {
 }
 
@@ -54,25 +53,13 @@ TaylorExpansionMomentsAnalysis* TaylorExpansionMomentsAnalysis::clone() const
 }
 
 
-// Description TaylorExpansionMomentsAnalysis::getOutputNames() const
-// {
-//   return outputNames_;
-// }
-// 
-// 
-// void TaylorExpansionMomentsAnalysis::setOutputNames(const Description & outputNames)
-// {
-//   outputNames_ = outputNames;
-// }
-
-
 void TaylorExpansionMomentsAnalysis::run()
 {
   // clear result
   result_ = TaylorExpansionMomentsResult();
 
   // set analysis
-  TaylorExpansionMoments algoTaylorExpansionMoments(getPhysicalModel().getOutputRandomVector(getPhysicalModel().getOutputNames()));
+  TaylorExpansionMoments algoTaylorExpansionMoments(getPhysicalModel().getOutputRandomVector(getOutputsToAnalyse()));
 
   // set results
   NumericalPoint meanFirstOrder = algoTaylorExpansionMoments.getMeanFirstOrder();
@@ -84,7 +71,7 @@ void TaylorExpansionMomentsAnalysis::run()
   for (UnsignedInteger i=0; i<variance.getDimension(); ++i)
     standardDeviation[i] = sqrt(variance[i]);
 
-  result_ = TaylorExpansionMomentsResult(getPhysicalModel().getOutputNames(), meanFirstOrder, meanSecondOrder, standardDeviation, variance);
+  result_ = TaylorExpansionMomentsResult(getOutputsToAnalyse(), meanFirstOrder, meanSecondOrder, standardDeviation, variance);
 
   notify("analysisFinished");
 }
@@ -98,9 +85,22 @@ TaylorExpansionMomentsResult TaylorExpansionMomentsAnalysis::getResult() const
 
 String TaylorExpansionMomentsAnalysis::getPythonScript() const
 {
-  String result;
-  result += getName()+ " = otguibase.TaylorExpansionMomentsAnalysis('" + getName() + "', " + getPhysicalModel().getName() + ")\n";
-  return result;
+  OSS oss;
+  oss << getName() << " = otguibase.TaylorExpansionMomentsAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
+  if (getOutputsToAnalyse().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
+  {
+    oss << "outputsToAnalyse = [";
+    for (UnsignedInteger i=0; i<getOutputsToAnalyse().getSize(); ++i)
+    {
+      oss << "'" << getOutputsToAnalyse()[i] << "'";
+      if (i < getOutputsToAnalyse().getSize()-1)
+        oss << ", ";
+    }
+    oss << "]\n";
+    oss << getName() << ".setOutputsToAnalyse(outputsToAnalyse)\n";
+  }
+
+  return oss;
 }
 
 
@@ -121,7 +121,6 @@ String TaylorExpansionMomentsAnalysis::__repr__() const
 void TaylorExpansionMomentsAnalysis::save(Advocate & adv) const
 {
   PhysicalModelAnalysis::save(adv);
-//   adv.saveAttribute("outputNames_", outputNames_);
   adv.saveAttribute("result_", result_);
 }
 
@@ -130,7 +129,6 @@ void TaylorExpansionMomentsAnalysis::save(Advocate & adv) const
 void TaylorExpansionMomentsAnalysis::load(Advocate & adv)
 {
   PhysicalModelAnalysis::load(adv);
-//   adv.loadAttribute("outputNames_", outputNames_);
   adv.loadAttribute("result_", result_);
 }
 }

@@ -36,12 +36,7 @@ public:
   /** Virtual constructor */
   virtual SimulationAnalysis * clone() const = 0;
 
-  // TODO choose output(s) to evaluate. But maybe use outputNames instead of OutputCollection
-//   OutputCollection getOutputs() const;
-//   void setOutputs(const OutputCollection & outputs);
-
   OT::NumericalSample generateInputSample(const OT::UnsignedInteger nbSimu);
-  OT::Description getOutputNames() const;
 
   OT::UnsignedInteger getSeed() const;
   void setSeed(const OT::UnsignedInteger seed);
@@ -57,8 +52,6 @@ protected:
   OT::NumericalSample computeOutputSample(OT::NumericalSample inputSample, const OT::Description & outputNames) const;
 
 private:
-  // TODO choose output(s) to evaluate
-//   OT::PersistentCollection<Output> outputs_;
   OT::UnsignedInteger seed_;
 };
 }
