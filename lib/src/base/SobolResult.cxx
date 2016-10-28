@@ -52,6 +52,14 @@ SobolResult::SobolResult(const NumericalSample firstOrderIndices,
   , elapsedTime_(0.)
   , coefficientOfVariation_(-1.)
 {
+  if (!(firstOrderIndices.getDimension() * totalIndices.getDimension() *outputNames.getSize()))
+    throw InvalidArgumentException(HERE) << "SobolResult: All the arguments must have the same non-zero dimension";
+  if (firstOrderIndices.getDimension() != totalIndices.getDimension())
+    throw InvalidArgumentException(HERE) << "SobolResult: The list of first order indices and the list of total indices must have the same dimension";
+  if (firstOrderIndices.getSize() != totalIndices.getSize())
+    throw InvalidArgumentException(HERE) << "SobolResult: The list of first order indices and the list of total indices must have the same size";
+  if (firstOrderIndices.getSize() != outputNames.getSize())
+    throw InvalidArgumentException(HERE) << "SobolResult: The list of output names and the list of first order indices must have the same size";
 }
 
 
