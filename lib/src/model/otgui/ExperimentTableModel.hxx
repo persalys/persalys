@@ -31,7 +31,7 @@ class OTGUI_API ExperimentTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  ExperimentTableModel(const FixedDesignOfExperiment & designOfExperiment);
+  ExperimentTableModel(const FixedDesignOfExperiment & designOfExperiment, QObject * parent = 0);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
@@ -40,6 +40,11 @@ public:
   bool setData(const QModelIndex & index, const QVariant & value, int role);
   Qt::ItemFlags flags(const QModelIndex & index) const;
   FixedDesignOfExperiment getDesignOfExperiment() const;
+
+public slots:
+signals:
+  void errorMessageChanged(QString);
+  void doeSizeChanged(QString);
 
 private:
   FixedDesignOfExperiment designOfExperiment_;

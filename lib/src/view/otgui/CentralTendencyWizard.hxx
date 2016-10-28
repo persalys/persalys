@@ -37,7 +37,7 @@ class CentralTendencyWizard : public AnalysisWizard
 public:
   enum Method {MonteCarlo, TaylorExpansionMoments};
 
-  CentralTendencyWizard(OTStudy * otStudy, const PhysicalModel & physicalModel);
+  CentralTendencyWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel);
   CentralTendencyWizard(const Analysis & analysis);
 
   virtual bool validateCurrentPage();

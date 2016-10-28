@@ -37,7 +37,7 @@ class SensitivityAnalysisWizard : public AnalysisWizard
 public:
   enum Method {Sobol, SRC};
 
-  SensitivityAnalysisWizard(OTStudy * otStudy, const PhysicalModel & physicalModel);
+  SensitivityAnalysisWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel);
   SensitivityAnalysisWizard(const Analysis & analysis);
 
   virtual bool validateCurrentPage();

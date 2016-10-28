@@ -6,7 +6,8 @@ ot_add_current_dir_to_include_dirs ()
 
 set(BASE_SOURCEFILES DistributionDictionary.cxx
                      OTguiException.cxx
-                     Observer.cxx Observable.cxx OTStudy.cxx Variable.cxx Input.cxx Output.cxx
+                     Observer.cxx Observable.cxx OTStudy.cxx OTStudyImplementation.cxx
+                     Variable.cxx Input.cxx Output.cxx
                      DataSample.cxx
                      DataModel.cxx
                      PhysicalModel.cxx PhysicalModelImplementation.cxx AnalyticalPhysicalModel.cxx 
@@ -71,6 +72,7 @@ ot_install_header_file ( SobolResult.hxx )
 ot_install_header_file ( SRCAnalysis.hxx )
 ot_install_header_file ( SRCResult.hxx )
 ot_install_header_file ( OTStudy.hxx )
+ot_install_header_file ( OTStudyImplementation.hxx )
 ot_install_header_file ( Observable.hxx )
 ot_install_header_file ( Observer.hxx )
 ot_install_header_file ( LimitStateImplementation.hxx )

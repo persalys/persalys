@@ -20,6 +20,8 @@
  */
 #include "otgui/FunctionalChaosAnalysis.hxx"
 
+#include "otgui/MetaModel.hxx"
+
 #include "openturns/LinearEnumerateFunction.hxx"
 #include "openturns/FixedStrategy.hxx"
 #include "openturns/LeastSquaresStrategy.hxx"

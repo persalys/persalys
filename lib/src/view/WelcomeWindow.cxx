@@ -45,19 +45,19 @@ void WelcomeWindow::buildInterface()
   QPushButton * button = new QPushButton(tr("New study"));
   button->setIcon(QIcon(":/images/document-new22x22.png"));
   button->setStatusTip(tr("Create a new OTStudy"));
-  connect(button, SIGNAL(pressed()), this, SIGNAL(createNewOTStudy()));
+  connect(button, SIGNAL(clicked(bool)), this, SIGNAL(createNewOTStudy()));
   layout->addWidget(button, 0, 0);
 
   button = new QPushButton(tr("Open study"));
   button->setIcon(QIcon(":/images/document-open22x22.png"));
   button->setStatusTip(tr("Open an existing OTStudy"));
-  connect(button, SIGNAL(pressed()), this, SIGNAL(openOTStudy()));
+  connect(button, SIGNAL(clicked(bool)), this, SIGNAL(openOTStudy()));
   layout->addWidget(button, 1, 0);
 
   button = new QPushButton(tr("Import Python script"));
   button->setIcon(QIcon(":/images/document-import22x22.png"));
   button->setStatusTip(tr("Import a Python Script"));
-  connect(button, SIGNAL(pressed()), this, SIGNAL(importPython()));
+  connect(button, SIGNAL(clicked(bool)), this, SIGNAL(importPython()));
   layout->addWidget(button, 2, 0);
 
   layout->setRowStretch(3, 1);

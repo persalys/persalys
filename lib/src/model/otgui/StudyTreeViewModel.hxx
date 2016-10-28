@@ -33,8 +33,7 @@ class OTGUI_API StudyTreeViewModel : public QStandardItemModel, public Observer
 public:
   StudyTreeViewModel(QObject *parent = 0);
 
-  void createNewOTStudy();
-  void addOTStudyItem(OTStudy * otStudy);
+  void addOTStudyItem(const OTStudy & otStudy);
   void addProbabilisticModelItem(const QModelIndex & parentIndex);
   void addLimitStateItem(const QModelIndex & parentIndex);
 

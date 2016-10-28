@@ -177,6 +177,7 @@ PyInterp_Interp::PyInterp_Interp():
 PyInterp_Interp::~PyInterp_Interp()
 {
   destroy();
+  Py_Finalize();
 }
 
 /*!

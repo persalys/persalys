@@ -34,7 +34,7 @@ class OTGUI_API OTStudyItem : public QObject, public QStandardItem, public Obser
   Q_OBJECT
 
 public:
-  OTStudyItem(OTStudy * otStudy);
+  OTStudyItem(const OTStudy & otStudy);
 
   void update(Observable * source, const OT::String & message);
 
@@ -49,7 +49,7 @@ public:
   void addDesignOfExperimentAnalysisItem(Analysis & analysis, AnalysisItem * item);
 
   void setData(const QVariant & value, int role);
-  OTStudy * getOTStudy();
+  OTStudy getOTStudy() const;
 
 public slots:
   void updateAnalysis(const Analysis & analysis);
@@ -67,7 +67,7 @@ signals:
   void otStudyRemoved(QStandardItem*);
 
 private:
-  OTStudy * otStudy_;
+  OTStudy otStudy_;
 };
 }
 #endif

@@ -26,6 +26,7 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QHeaderView>
+#include <QScrollBar>
 
 using namespace OT;
 
@@ -40,7 +41,14 @@ DeterministicDesignPage::DeterministicDesignPage(const DesignOfExperiment & desi
   else
     fixedDesignOfExperiment = FixedDesignOfExperiment(designOfExperiment.getName(), designOfExperiment.getPhysicalModel());
 
-  model_ = new ExperimentTableModel(fixedDesignOfExperiment);
+  model_ = new ExperimentTableModel(fixedDesignOfExperiment, this);
+  // DOE size
+  DOESizeLabel_ = new QLabel(QString::number(fixedDesignOfExperiment.getInputSample().getSize()));
+  connect(model_, SIGNAL(doeSizeChanged(QString)), DOESizeLabel_, SLOT(setText(QString)));
+  // error message
+  errorMessageLabel_ = new QLabel;
+  errorMessageLabel_->setWordWrap(true);
+  connect(model_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setText(QString)));
 
   buildInterface();
 }
@@ -58,34 +66,49 @@ void DeterministicDesignPage::buildInterface()
   tableView->setEditTriggers(QTableView::AllEditTriggers);
   tableView->setModel(model_);
 
-  QStringList items = QStringList()<<tr("Levels")<<tr("Delta");
-  QPair<int, int> cellWithComboBox(0, 5);
+  const QStringList items = QStringList() << tr("Levels") << tr("Delta");
+  const QPair<int, int> cellWithComboBox(0, 5);
 
   tableView->horizontalHeader()->hide();
   tableView->setItemDelegateForColumn(5, new ComboBoxDelegate(items, cellWithComboBox));
   tableView->openPersistentEditor(model_->index(0, 5));
 
-  tableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  tableView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  tableView->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
-#if QT_VERSION >= 0x050000
-  tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-#else
-  tableView->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
-#endif
-  // resize table
-  tableView->resizeToContents();
-
   groupBoxLayout->addWidget(tableView);
+
+  // resize table
+  if (tableView->model()->rowCount() > 15) // if too many variables: no fixed height + use scrollbar
+  {
+    tableView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    tableView->resizeColumnsToContents();
+    const int w = tableView->horizontalHeader()->length() + tableView->verticalHeader()->width() + tableView->verticalScrollBar()->sizeHint().width();
+    int x1, y1, x2, y2;
+    tableView->getContentsMargins(&x1, &y1, &x2, &y2);
+    tableView->setFixedWidth(w+x1+x2);
+  }
+  else
+  {
+    tableView->resizeToContents();
+    groupBoxLayout->addStretch();
+  }
+
   pageLayout->addWidget(groupBox);
-  pageLayout->addStretch();
+
+  // DOE size
+  QHBoxLayout * sizeLayout = new QHBoxLayout;
+  QLabel * sizeLabel = new QLabel(tr("Size of the design of experiment:") + " ");
+  sizeLayout->addWidget(sizeLabel);
+  sizeLayout->addWidget(DOESizeLabel_);
+  sizeLayout->addStretch();
+  pageLayout->addLayout(sizeLayout);
+
+  // error message
+  pageLayout->addWidget(errorMessageLabel_);
 }
 
 
 bool DeterministicDesignPage::validatePage()
 {
-  DesignOfExperiment design = DesignOfExperiment(model_->getDesignOfExperiment());
-  emit designOfExperimentChanged(design);
+  emit designOfExperimentChanged(model_->getDesignOfExperiment());
 
   return true;
 }

@@ -52,7 +52,7 @@ public:
 
   enum {Page_Intro, Page_Deterministic, Page_Probabilistic, Page_Import};
 
-  DesignOfExperimentWizard(OTStudy * otStudy, const PhysicalModel & physicalModel);
+  DesignOfExperimentWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel);
   DesignOfExperimentWizard(const DesignOfExperiment & designOfExperiment);
 
   int nextId() const;

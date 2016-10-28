@@ -37,7 +37,7 @@ class ReliabilityAnalysisWizard : public AnalysisWizard
 public:
   enum Method {MonteCarlo/*, FORM, SORM*/};
 
-  ReliabilityAnalysisWizard(OTStudy * otStudy, const LimitState & limitState);
+  ReliabilityAnalysisWizard(const OTStudy& otStudy, const LimitState & limitState);
   ReliabilityAnalysisWizard(const Analysis & analysis);
 
   virtual bool validateCurrentPage();

@@ -53,7 +53,7 @@ void OTguiSubWindow::setErrorMessage(QString message)
   errorMessage_ = message;
   if (errorMessageLabel_)
     errorMessageLabel_->setText(message);
-  if (windowState() == 4 || windowState() == 8 || windowState() == 10)
+  if (windowState() == Qt::WindowFullScreen || windowState() == Qt::WindowActive || windowState() == (Qt::WindowActive|Qt::WindowMaximized))
     emit errorMessageChanged(message);
 }
 

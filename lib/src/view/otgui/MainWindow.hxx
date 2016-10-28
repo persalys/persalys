@@ -25,6 +25,7 @@
 
 #include <QMainWindow>
 #include <QDockWidget>
+#include <QCloseEvent>
 #include "PyConsole_Console.h"
 
 namespace OTGUI {
@@ -43,7 +44,8 @@ protected:
   void buildInterface();
 
 private slots:
-  void loadScript(const QString & fileName);
+  void importPython();
+  virtual void closeEvent (QCloseEvent * event);
 
 private:
   StudyTreeView * studyTree_;

@@ -23,7 +23,8 @@ f = model.getFunction()
 print(f([300.,75000.]))
 
 ## Design of Experiment - Parametric analysis ##
-aDesign = otguibase.DesignOfExperiment('design', model)
+aDesign = otguibase.FixedDesignOfExperiment('design', model)
+aDesign.setLevels([2, 2])
 myStudy.add(aDesign)
 aDesign.run()
 

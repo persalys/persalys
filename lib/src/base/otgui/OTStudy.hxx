@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class defining the otgui studies
+ *  @brief Abstract top-level class for otstudies
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -21,92 +21,88 @@
 #ifndef OTGUI_OTSTUDY_HXX
 #define OTGUI_OTSTUDY_HXX
 
-#include "DesignOfExperiment.hxx"
-#include "DataModel.hxx"
-#include "Analysis.hxx"
-#include "LimitState.hxx"
-#include "Observer.hxx"
+#include "OTStudyImplementation.hxx"
 
 namespace OTGUI {
-class OTGUI_API OTStudy : public OT::PersistentObject, public Observable
+class OTGUI_API OTStudy : public OT::TypedInterfaceObject<OTStudyImplementation>
 {
-public:
-  typedef OT::Collection<OTStudy*> OTStudyCollection;
+  CLASSNAME;
 
-  static OTStudyCollection GetInstances();
+public:
+  typedef OT::Pointer<OTStudyImplementation> Implementation;
+
+  // static methods
+  static OT::Collection<OTStudy> GetInstances();
   static OT::Description GetFileNames();
-  static OTStudy * GetInstanceByName(const OT::String & otStudyName);
-  static bool HasInstanceNamed(const OT::String & otStudyName);
+  static bool HasInstanceNamed(const OT::String& otStudyName);
   static OT::String GetAvailableName();
-  static void Add(OTStudy * otstudy);
-  static void Remove(OTStudy * otstudy);
-  static void Open(const OT::String & xmlFileName);
+  static void Add(const OTStudy& otstudy);
+  static void Remove(const OTStudy& otstudy);
+  static void Open(const OT::String& xmlFileName);
   static void SetInstanceObserver(Observer * observer);
 
   /** Default constructor */
-  OTStudy(const OT::String & name="Unnamed");
+  explicit OTStudy(const OT::String& name="Unnamed");
+  /** Default constructor */
+  OTStudy(const OTStudyImplementation& implementation);
+  /** Constructor from implementation */
+  OTStudy(const Implementation& p_implementation);
+  /** Constructor from implementation pointer */
+  OTStudy(OTStudyImplementation * p_implementation);
 
   /** Virtual constructor */
   virtual OTStudy * clone() const;
 
+  /** Comparison operator */
+  OT::Bool operator ==(const OTStudy & other) const;
+  OT::Bool operator !=(const OTStudy & other) const;
+
+  void addObserver(Observer * observer);
+
   OT::String getFileName() const;
-  void setFileName(const OT::String & fileName);
+  void setFileName(const OT::String& fileName);
 
   OT::Collection<DesignOfExperiment> getDataModels() const;
-  DesignOfExperiment & getDataModelByName(const OT::String & dataModelName);
-  bool hasDataModelNamed(const OT::String & dataModelName) const;
+  DesignOfExperiment& getDataModelByName(const OT::String& dataModelName);
   OT::String getAvailableDataModelName() const;
-  void clear(const DesignOfExperiment & designOfExperiment);
 
   OT::Collection<PhysicalModel> getPhysicalModels() const;
-  PhysicalModel & getPhysicalModelByName(const OT::String & physicalModelName);
-  bool hasPhysicalModelNamed(const OT::String & physicalModelName) const;
-  OT::String getAvailablePhysicalModelName(const OT::String & physicalModelRootName="PhysicalModel_") const;
-  void add(const PhysicalModel & physicalModel);
-  void clear(const PhysicalModel & physicalModel);
-  void remove(const PhysicalModel & physicalModel);
+  PhysicalModel& getPhysicalModelByName(const OT::String& physicalModelName);
+  OT::String getAvailablePhysicalModelName(const OT::String& physicalModelRootName="PhysicalModel_") const;
+  void add(const PhysicalModel& physicalModel);
+  void remove(const PhysicalModel& physicalModel);
 
   OT::Collection<DesignOfExperiment> getDesignOfExperiments() const;
-  DesignOfExperiment & getDesignOfExperimentByName(const OT::String & designOfExperimentName);
-  bool hasDesignOfExperimentNamed(const OT::String & designOfExperimentName) const;
+  DesignOfExperiment& getDesignOfExperimentByName(const OT::String& designOfExperimentName);
   OT::String getAvailableDesignOfExperimentName() const;
-  void add(const DesignOfExperiment & designOfExperiment);
-  void remove(const DesignOfExperiment & designOfExperiment);
+  void add(const DesignOfExperiment& designOfExperiment);
+  void remove(const DesignOfExperiment& designOfExperiment);
 
   OT::Collection<Analysis> getAnalyses() const;
-  Analysis & getAnalysisByName(const OT::String & analysisName);
-  bool hasAnalysisNamed(const OT::String & analysisName) const;
-  OT::String getAvailableAnalysisName(const OT::String & rootName) const;
-  void add(const Analysis & analysis);
-  void remove(const Analysis & analysis);
+  Analysis& getAnalysisByName(const OT::String& analysisName);
+  OT::String getAvailableAnalysisName(const OT::String& rootName) const;
+  void add(const Analysis& analysis);
+  void remove(const Analysis& analysis);
 
   OT::Collection<LimitState> getLimitStates() const;
-  bool hasLimitStateNamed(const OT::String & limitStateName) const;
   OT::String getAvailableLimitStateName() const;
-  void add(const LimitState & limitState);
-  void clear(const LimitState & limitState);
-  void remove(const LimitState & limitState);
+  void add(const LimitState& limitState);
+  void remove(const LimitState& limitState);
 
   OT::String getPythonScript();
 
-  void save(const OT::String & xmlFileName);
+  void save(const OT::String& xmlFileName);
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate& adv) const;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate& adv);
 
 private:
-  static OT::Collection<OT::Pointer<OTStudy> > OTStudies_;
+  static OT::PersistentCollection<OTStudy > OTStudies_;
   static OT::Description OTStudiesFileNames_;
   static Observer * OTStudyObserver_;
-  OT::String fileName_;
-  OT::PersistentCollection<DesignOfExperiment> dataModels_;
-  OT::PersistentCollection<PhysicalModel> physicalModels_;
-  OT::PersistentCollection<DesignOfExperiment> designOfExperiments_;
-  OT::PersistentCollection<Analysis> analyses_;
-  OT::PersistentCollection<LimitState> limitStates_;
 };
 }
 #endif

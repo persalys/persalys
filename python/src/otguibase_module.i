@@ -132,5 +132,6 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include MetaModelAnalysisResult.i
 %include FunctionalChaosAnalysisResult.i
 %include FunctionalChaosAnalysis.i
+%include OTStudyImplementation.i
 %include OTStudy.i
 

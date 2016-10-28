@@ -93,6 +93,7 @@ ot_add_python_module (otguibase otguibase_module.i
                       MetaModelAnalysisResult.i MetaModelAnalysisResult_doc.i.in
                       FunctionalChaosAnalysisResult.i FunctionalChaosAnalysisResult_doc.i.in
                       FunctionalChaosAnalysis.i FunctionalChaosAnalysis_doc.i.in
+                      OTStudyImplementation.i
                       OTStudy.i OTStudy_doc.i.in
                     )
 

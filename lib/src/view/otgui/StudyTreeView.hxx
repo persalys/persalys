@@ -82,7 +82,6 @@ public slots:
   void createAnalysisResultWindow(AnalysisItem * item);
   void createAnalysisExecutionFailedWindow(AnalysisItem * item, const QString & errorMessage="");
   void exportPython();
-  void importPython();
   bool saveOTStudy();
   bool saveAsOTStudy();
   void openOTStudy();
@@ -94,7 +93,6 @@ signals:
   void errorMessageEmitted(QString);
   void itemSelected(QStandardItem *);
   void removeSubWindow(QStandardItem *);
-  void importPythonScript(const QString & fileName);
   void graphWindowActivated(QWidget*);
   void graphWindowDeactivated();
   void analysisExecutionRequired(OTStudyItem * otStudyItem, const QString & analysisName);

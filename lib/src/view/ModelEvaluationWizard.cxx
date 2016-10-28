@@ -34,8 +34,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-ModelEvaluationWizard::ModelEvaluationWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
-  : AnalysisWizard(ModelEvaluation(otStudy->getAvailableAnalysisName("evaluation_"), physicalModel))
+ModelEvaluationWizard::ModelEvaluationWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel)
+  : AnalysisWizard(ModelEvaluation(otStudy.getAvailableAnalysisName("evaluation_"), physicalModel))
 {
   buildInterface();
 }

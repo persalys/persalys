@@ -251,58 +251,58 @@
 <context>
     <name>OTGUI::DesignOfExperimentWindow</name>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="64"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="62"/>
         <source>Evaluate</source>
         <translation>Evaluer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="76"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="74"/>
         <source>Table</source>
         <translation>Table</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="160"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="162"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="171"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="173"/>
         <source>Size of the design of experiment:</source>
         <translation>Taille du plan d&apos;expérience :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="180"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="183"/>
         <source>Min/Max</source>
         <translation>Min/Max</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="196"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="199"/>
         <source>Scatter plots</source>
         <translation>Scatter plots</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="202"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="205"/>
         <source>Plot matrix X-X</source>
         <translation>Matrice des scatter plots X-X</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="208"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="211"/>
         <source>Plot matrix Y-X</source>
         <translation>Matrice des scatter plots Y-X</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="227"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="234"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="244"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="251"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="230"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="237"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="247"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="254"/>
         <source>Scatter plot:</source>
         <translation>Scatter plot :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="227"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="234"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="244"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="251"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="230"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="237"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="247"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="254"/>
         <source>vs</source>
         <translation>vs</translation>
     </message>
@@ -310,24 +310,29 @@
 <context>
     <name>OTGUI::DeterministicDesignPage</name>
     <message>
-        <location filename="../lib/src/view/DeterministicDesignPage.cxx" line="50"/>
+        <location filename="../lib/src/view/DeterministicDesignPage.cxx" line="58"/>
         <source>Deterministic design of experiment</source>
         <translation>Plan d&apos;expérience déterministe</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DeterministicDesignPage.cxx" line="54"/>
+        <location filename="../lib/src/view/DeterministicDesignPage.cxx" line="62"/>
         <source>Define manually</source>
         <translation>Définir manuellement</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DeterministicDesignPage.cxx" line="61"/>
+        <location filename="../lib/src/view/DeterministicDesignPage.cxx" line="69"/>
         <source>Levels</source>
         <translation>Niveaux</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DeterministicDesignPage.cxx" line="61"/>
+        <location filename="../lib/src/view/DeterministicDesignPage.cxx" line="69"/>
         <source>Delta</source>
         <translation>Incrément</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DeterministicDesignPage.cxx" line="98"/>
+        <source>Size of the design of experiment:</source>
+        <translation>Taille du plan d&apos;expérience :</translation>
     </message>
 </context>
 <context>
@@ -359,13 +364,13 @@
     </message>
     <message>
         <location filename="../lib/src/model/ExperimentTableModel.cxx" line="118"/>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="181"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="184"/>
         <source>Levels</source>
         <translation>Niveaux</translation>
     </message>
     <message>
         <location filename="../lib/src/model/ExperimentTableModel.cxx" line="120"/>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="183"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="186"/>
         <source>Delta</source>
         <translation>Incrément</translation>
     </message>
@@ -768,14 +773,44 @@
 <context>
     <name>OTGUI::MainWindow</name>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="56"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="59"/>
         <source>Graph settings</source>
         <translation>Configuration des graphiques</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="94"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="97"/>
         <source>Python Console</source>
         <translation>Console Python</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MainWindow.cxx" line="142"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="172"/>
+        <source>Warning</source>
+        <translation>Attention</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MainWindow.cxx" line="143"/>
+        <source>Cannot import a Python script when other studies are opened.
+Do you want to continue and close the other studies?</source>
+        <translation>Impossible d&apos;importer un script Python lorsque d&apos;autres études sont ouvertes.
+Voulez-vous continuer et fermer les autres études ?</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MainWindow.cxx" line="160"/>
+        <source>Import Python...</source>
+        <translation>Import Python...</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MainWindow.cxx" line="162"/>
+        <source>Python source files (*.py)</source>
+        <translation>Fichiers Python (*.py)</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MainWindow.cxx" line="173"/>
+        <source>Cannot read file %1:
+%2</source>
+        <translation>Impossible de lire le fichier %1 :
+%2</translation>
     </message>
 </context>
 <context>
@@ -2261,8 +2296,8 @@ extremum</source>
         <location filename="../lib/src/view/StudyTreeView.cxx" line="322"/>
         <location filename="../lib/src/view/StudyTreeView.cxx" line="336"/>
         <location filename="../lib/src/view/StudyTreeView.cxx" line="350"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="613"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="654"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="614"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="655"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
@@ -2287,97 +2322,81 @@ extremum</source>
         <translation>L&apos;état limite n&apos;est pas valide.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="613"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="614"/>
         <source>The model must have an independent copula to compute a sensitivity analysis but inputs are correlated.</source>
         <translation>Le modèle doit avoir une copule indépendante pour réaliser une analyse de sensibilité mais les entrées sont corrélées.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="654"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="655"/>
         <source>The model must have at least one output.</source>
         <translation>Le modèle doit avoir au moins une sortie.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="846"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="849"/>
         <source>Export Python...</source>
         <translation>Export Python...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="848"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="902"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="851"/>
         <source>Python source files (*.py)</source>
         <translation>Fichiers Python (*.py)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="862"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="882"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="912"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="968"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1023"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1038"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1058"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="865"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="927"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="982"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="997"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1017"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="863"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="913"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="866"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1: %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="883"/>
-        <source>Cannot import a Python script when other studies are opened.
-Do you want to continue and close the other studies?</source>
-        <translation>Impossible d&apos;importer un script Python lorsque d&apos;autres études sont ouvertes.
-Voulez-vous continuer et fermer les autres études ?</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="900"/>
-        <source>Import Python...</source>
-        <translation>Import Python...</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="952"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="911"/>
         <source>Save OTStudy...</source>
         <translation>Sauvegarder l&apos;étude...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="954"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="994"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="913"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="953"/>
         <source>XML files (*.xml)</source>
         <translation>Fichiers XML (*.xml)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="969"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="928"/>
         <source>Cannot save file %1:
 %2</source>
         <translation>Impossible de sauvegarder le fichier %1:
 %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="992"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="951"/>
         <source>Open an existing OTStudy</source>
         <translation>Ouvrir une étude existante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1022"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="981"/>
         <source>Impossible to read the file &apos;%1&apos;. 
 </source>
         <translation>Impossible de lire le fichier &apos;%1&apos;. </translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1032"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="991"/>
         <source>The file &apos;%1&apos; does not exist.</source>
         <translation>Le fichier &apos;%1&apos; n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1036"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="995"/>
         <source>The file &apos;%1&apos; is already opened.</source>
         <translation>Le fichier &apos;%1&apos; est déjà ouvert.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1059"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1018"/>
         <source>Do you want to save the OTStudy &apos;%1&apos; [%2]?</source>
         <translation>Voulez-vous sauvegarder l&apos;étude &apos;%1&apos; [%2] ?</translation>
     </message>
@@ -2555,48 +2574,48 @@ Voulez-vous continuer et fermer les autres études ?</translation>
 <context>
     <name>PyConsole_Editor</name>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1188"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1189"/>
         <source>NO_DOC_AVAILABLE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1399"/>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1477"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1400"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1478"/>
         <source>WARNING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1400"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1401"/>
         <source>ERR_FILE_NOT_WRITEABLE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1415"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1416"/>
         <source>GET_DUMP_COMMANDS_FILENAME</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1417"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1418"/>
         <source>PYTHON_SCRIPTS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1431"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1432"/>
         <source>GET_PYTHON_TRACE_FILENAME</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1433"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1434"/>
         <source>LOG_FILES</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1478"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1479"/>
         <source>File is not writable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1620"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1621"/>
         <source>TOO_MANY_MATCHES</source>
         <translation type="unfinished"></translation>
     </message>

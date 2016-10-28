@@ -137,7 +137,7 @@ void PhysicalModelWindowWidget::updateInputTableModel()
 {
   if (inputTableModel_)
     delete inputTableModel_;
-  inputTableModel_ = new InputTableModel(physicalModel_);
+  inputTableModel_ = new InputTableModel(physicalModel_, inputTableView_);
   inputTableView_->setModel(inputTableModel_);
 #if QT_VERSION >= 0x050000
   inputTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
@@ -160,7 +160,7 @@ void PhysicalModelWindowWidget::updateOutputTableModel()
 {
   if (outputTableModel_)
     delete outputTableModel_;
-  outputTableModel_ = new OutputTableModel(physicalModel_);
+  outputTableModel_ = new OutputTableModel(physicalModel_, outputTableView_);
   outputTableView_->setModel(outputTableModel_);
 #if QT_VERSION >= 0x050000
   outputTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);

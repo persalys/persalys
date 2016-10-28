@@ -24,8 +24,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-ExperimentTableModel::ExperimentTableModel(const FixedDesignOfExperiment & designOfExperiment)
-  : QAbstractTableModel()
+ExperimentTableModel::ExperimentTableModel(const FixedDesignOfExperiment & designOfExperiment, QObject * parent)
+  : QAbstractTableModel(parent)
   , designOfExperiment_(designOfExperiment)
   , firstColumnChecked_(!designOfExperiment.getLevels().contains(1))
 {
@@ -178,21 +178,30 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
     }
     else if (role == Qt::EditRole && index.column() == 5)
     {
-      if (value.toString() == tr("Levels") && designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndDeltas)
-        designOfExperiment_.setLevels(designOfExperiment_.getLevels());
-      else if (value.toString() == tr("Delta") && designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndLevels)
-        designOfExperiment_.setDeltas(designOfExperiment_.getDeltas());
-      else
-        return false;
+      try
+      {
+        emit errorMessageChanged("");
+        if (value.toString() == tr("Levels") && designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndDeltas)
+          designOfExperiment_.setLevels(designOfExperiment_.getLevels());
+        else if (value.toString() == tr("Delta") && designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndLevels)
+          designOfExperiment_.setDeltas(designOfExperiment_.getDeltas());
+        else
+          return false;
+      }
+      catch (std::exception & ex)
+      {
+        emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+      }
       emit dataChanged(this->index(1, 5), this->index(rowCount()-1, 5));
     }
   }
   // not header
   else
   {
+    emit errorMessageChanged("");
     if (role == Qt::CheckStateRole && index.column() == 0)
     {
-      int indexInput = index.row() - 1;
+      const int indexInput = index.row() - 1;
       if (designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndLevels)
       {
         Indices levels = designOfExperiment_.getLevels();
@@ -202,7 +211,14 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           levels[indexInput] = 1;
         else
           return false;
-        designOfExperiment_.setLevels(levels);
+        try
+        {
+          designOfExperiment_.setLevels(levels);
+        }
+        catch (std::exception & ex)
+        {
+          emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+        }
       }
       else
       {
@@ -213,7 +229,14 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           deltas[indexInput] = 0;
         else
           return false;
-        designOfExperiment_.setDeltas(deltas);
+        try
+        {
+          designOfExperiment_.setDeltas(deltas);
+        }
+        catch (std::exception & ex)
+        {
+          emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+        }
       }
       firstColumnChecked_ = !designOfExperiment_.getLevels().contains(1);
 
@@ -233,7 +256,14 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           if (values[indexInput] == value.toDouble())
             return false;
           values[indexInput] = value.toDouble();
-          designOfExperiment_.setValues(values);
+          try
+          {
+            designOfExperiment_.setValues(values);
+          }
+          catch (std::exception & ex)
+          {
+            emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+          }
           break;
         }
         case 3:
@@ -244,7 +274,14 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           if (lowerBounds[indexInput] == value.toDouble())
             return false;
           lowerBounds[indexInput] = value.toDouble();
-          designOfExperiment_.setLowerBounds(lowerBounds);
+          try
+          {
+            designOfExperiment_.setLowerBounds(lowerBounds);
+          }
+          catch (std::exception & ex)
+          {
+            emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+          }
           break;
         }
         case 4:
@@ -255,7 +292,14 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           if (upperBounds[indexInput] == value.toDouble())
             return false;
           upperBounds[indexInput] = value.toDouble();
-          designOfExperiment_.setUpperBounds(upperBounds);
+          try
+          {
+            designOfExperiment_.setUpperBounds(upperBounds);
+          }
+          catch (std::exception & ex)
+          {
+            emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+          }
           break;
         }
         case 5:
@@ -268,7 +312,14 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
             if (nbValues[indexInput] == value.toUInt())
               return false;
             nbValues[indexInput] = value.toUInt();
-            designOfExperiment_.setLevels(nbValues);
+            try
+            {
+              designOfExperiment_.setLevels(nbValues);
+            }
+            catch (std::exception & ex)
+            {
+              emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+            }
             break;
           }
           else
@@ -278,7 +329,16 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
               return false;
             deltas[indexInput] = value.toDouble();
             if (deltas[indexInput] <= (designOfExperiment_.getUpperBounds()[indexInput] - designOfExperiment_.getLowerBounds()[indexInput]))
-              designOfExperiment_.setDeltas(deltas);
+            {
+              try
+              {
+                designOfExperiment_.setDeltas(deltas);
+              }
+              catch (std::exception & ex)
+              {
+                emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+              }
+            }
             else
               return false;
             break;
@@ -289,7 +349,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
       }
     }
   }
-
+  emit doeSizeChanged(QString::number(designOfExperiment_.getInputSample().getSize()));
   return true;
 }
 

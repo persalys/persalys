@@ -31,7 +31,7 @@ class OTGUI_API InputTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  InputTableModel(const PhysicalModel & physicalModel);
+  InputTableModel(const PhysicalModel & physicalModel, QObject * parent = 0);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;

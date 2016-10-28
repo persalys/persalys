@@ -21,13 +21,11 @@
 #include "otgui/DesignOfExperimentWindow.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/SampleTableModel.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/MinMaxTableGroupBox.hxx"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
-#include <QHeaderView>
+#include <QScrollArea>
 
 using namespace OT;
 
@@ -54,7 +52,7 @@ void DesignOfExperimentWindow::buildInterface()
   tableView_ = new ExportableTableView;
   if (!designOfExperiment_.getOutputSample().getSize())
   {
-    SampleTableModel * model = new SampleTableModel(designOfExperiment_.getInputSample());
+    SampleTableModel * model = new SampleTableModel(designOfExperiment_.getInputSample(), tableView_);
     tableView_->setModel(model);
   }
 
@@ -109,7 +107,7 @@ void DesignOfExperimentWindow::updateWindowForOutputs()
 
 void DesignOfExperimentWindow::addTabsForOutputs()
 {
-  UnsignedInteger nbInputs = designOfExperiment_.getVariableInputNames().getSize();
+  const UnsignedInteger nbInputs = designOfExperiment_.getVariableInputNames().getSize();
   Indices ind(nbInputs);
   for (UnsignedInteger i=0; i<nbInputs; ++i)
     for (UnsignedInteger j=0; j<designOfExperiment_.getInputSample().getDimension(); ++j)
@@ -155,6 +153,10 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+  tabLayout->setSizeConstraint(QLayout::SetFixedSize);
+
   // -- output name --
   QHBoxLayout * headLayout = new QHBoxLayout;
   QLabel * outputName = new QLabel(tr("Output"));
@@ -177,7 +179,8 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   tabLayout->addWidget(minMaxTableGroupBox);
   connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
 
-  tabWidget_->addTab(tab, tr("Min/Max"));
+  scrollArea->setWidget(tab);
+  tabWidget_->addTab(scrollArea, tr("Min/Max"));
 
   // second tab --------------------------------
   tab = new QWidget;

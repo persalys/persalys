@@ -32,7 +32,7 @@ class OTGUI_API OutputTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  OutputTableModel(const PhysicalModel & physicalModel);
+  OutputTableModel(const PhysicalModel & physicalModel, QObject * parent = 0);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent  = QModelIndex()) const;

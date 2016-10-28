@@ -92,7 +92,6 @@ bool InputTableProbabilisticModel::setHeaderData(int section, Qt::Orientation or
         setData(index(i, 0), value.toBool()? Qt::Checked:Qt::Unchecked, role);
     emit distributionsChanged();
   }
-
   return QAbstractTableModel::setHeaderData(section, orientation, value, role);
 }
 
@@ -102,30 +101,29 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
   if (!index.isValid())
     return QVariant();
 
-  String inputName = getPhysicalModel().getInputNames()[index.row()];
   if (role == Qt::CheckStateRole && index.column() == 0)
   {
-    Input input = getPhysicalModel().getInputByName(inputName);
+    const Input input(physicalModel_.getInputs()[index.row()]);
     if (input.isStochastic())
       return Qt::Checked;
     return Qt::Unchecked;
   }
   else if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
+    const Input input(physicalModel_.getInputs()[index.row()]);
     switch (index.column())
     {
       case 0:
-        return QString::fromUtf8(inputName.c_str());
+        return QString::fromUtf8(input.getName().c_str());
       case 1:
       {
-        Input input = getPhysicalModel().getInputByName(inputName);
         String distributionName = input.getDistribution().getImplementation()->getClassName();
         if (distributionName == "TruncatedNormal")
           return "Normal";
         else if (distributionName == "TruncatedDistribution")
         {
-          TruncatedDistribution * dist = dynamic_cast<TruncatedDistribution*>(&*input.getDistribution().getImplementation());
-          return dist->getDistribution().getImplementation()->getClassName().c_str();
+          TruncatedDistribution dist = *dynamic_cast<TruncatedDistribution*>(&*input.getDistribution().getImplementation());
+          return dist.getDistribution().getImplementation()->getClassName().c_str();
         }
         else
           return input.getDistribution().getImplementation()->getClassName().c_str();
@@ -145,8 +143,7 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
 
   if (role == Qt::CheckStateRole && index.column() == 0)
   {
-    String inputName = physicalModel_.getInputNames()[index.row()];
-    Input input = physicalModel_.getInputByName(inputName);
+    const Input input(physicalModel_.getInputs()[index.row()]);
     Distribution distribution;
 
     if (value.toInt() == Qt::Checked)
@@ -171,16 +168,15 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
   }
   else if (role == Qt::EditRole && index.column() == 1)
   {
-    String inputName = physicalModel_.getInputNames()[index.row()];
-    Input input = physicalModel_.getInputByName(inputName);
+    const Input input(physicalModel_.getInputs()[index.row()]);
 
     String distributionName = input.getDistribution().getImplementation()->getClassName();
     if (distributionName == "TruncatedNormal")
       distributionName = "Normal";
     else if (distributionName == "TruncatedDistribution")
     {
-      TruncatedDistribution * dist = dynamic_cast<TruncatedDistribution*>(&*input.getDistribution().getImplementation());
-      distributionName = dist->getDistribution().getImplementation()->getClassName();
+      TruncatedDistribution dist = *dynamic_cast<TruncatedDistribution*>(&*input.getDistribution().getImplementation());
+      distributionName = dist.getDistribution().getImplementation()->getClassName();
     }
 
     if (value.toString().toStdString() != distributionName)

@@ -356,7 +356,8 @@ bool StudyTreeView::isLimitStateValid(const QModelIndex & currentIndex)
 
 void StudyTreeView::createNewOTStudy()
 {
-  treeViewModel_->createNewOTStudy();
+  OTStudy otstudy = OTStudy(OTStudy::GetAvailableName());
+  OTStudy::Add(otstudy);
 }
 
 
@@ -364,11 +365,11 @@ void StudyTreeView::createNewDataModel()
 {
   QModelIndex studyIndex = selectionModel()->currentIndex();
   OTStudyItem * studyItem = static_cast<OTStudyItem*>(treeViewModel_->itemFromIndex(studyIndex));
-  DataModel newDataModel(studyItem->getOTStudy()->getAvailableDataModelName());
+  DataModel newDataModel(studyItem->getOTStudy().getAvailableDataModelName());
   QSharedPointer<DataModelWizard> wizard = QSharedPointer<DataModelWizard>(new DataModelWizard(newDataModel));
 
   if (wizard->exec())
-    studyItem->getOTStudy()->add(wizard->getDataModel());
+    studyItem->getOTStudy().add(wizard->getDataModel());
 }
 
 
@@ -396,9 +397,9 @@ void StudyTreeView::createNewDataAnalysis()
   OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(item->QStandardItem::parent());
   if (!dynamic_cast<const DataModel*>(&*item->getDesignOfExperiment().getImplementation()))
     throw InvalidValueException(HERE) << "StudyTreeView::createNewDataAnalysis: The design of experiment is not a datamodel";
-  DataAnalysis * analysis = new DataAnalysis(otStudyItem->getOTStudy()->getAvailableAnalysisName("DataAnalysis_"), *dynamic_cast<const DataModel*>(&*item->getDesignOfExperiment().getImplementation()));
+  DataAnalysis * analysis = new DataAnalysis(otStudyItem->getOTStudy().getAvailableAnalysisName("DataAnalysis_"), *dynamic_cast<const DataModel*>(&*item->getDesignOfExperiment().getImplementation()));
 
-  otStudyItem->getOTStudy()->add(analysis);
+  otStudyItem->getOTStudy().add(analysis);
   analysis->run();
   setExpanded(index, true);
 }
@@ -408,8 +409,8 @@ void StudyTreeView::createNewAnalyticalPhysicalModel()
 {
   QModelIndex studyIndex = selectionModel()->currentIndex();
   OTStudyItem * studyItem = static_cast<OTStudyItem*>(treeViewModel_->itemFromIndex(studyIndex));
-  AnalyticalPhysicalModel newPhysicalModel(studyItem->getOTStudy()->getAvailablePhysicalModelName());
-  studyItem->getOTStudy()->add(newPhysicalModel);
+  AnalyticalPhysicalModel newPhysicalModel(studyItem->getOTStudy().getAvailablePhysicalModelName());
+  studyItem->getOTStudy().add(newPhysicalModel);
 }
 
 
@@ -417,8 +418,8 @@ void StudyTreeView::createNewPythonPhysicalModel()
 {
   QModelIndex studyIndex = selectionModel()->currentIndex();
   OTStudyItem * studyItem = static_cast<OTStudyItem*>(treeViewModel_->itemFromIndex(studyIndex));
-  PythonPhysicalModel newPhysicalModel(studyItem->getOTStudy()->getAvailablePhysicalModelName());
-  studyItem->getOTStudy()->add(newPhysicalModel);
+  PythonPhysicalModel newPhysicalModel(studyItem->getOTStudy().getAvailablePhysicalModelName());
+  studyItem->getOTStudy().add(newPhysicalModel);
 }
 
 
@@ -427,8 +428,8 @@ void StudyTreeView::createNewYACSPhysicalModel()
 {
   QModelIndex studyIndex = selectionModel()->currentIndex();
   OTStudyItem * studyItem = static_cast<OTStudyItem*>(treeViewModel_->itemFromIndex(studyIndex));
-  YACSPhysicalModel newPhysicalModel(studyItem->getOTStudy()->getAvailablePhysicalModelName());
-  studyItem->getOTStudy()->add(newPhysicalModel);
+  YACSPhysicalModel newPhysicalModel(studyItem->getOTStudy().getAvailablePhysicalModelName());
+  studyItem->getOTStudy().add(newPhysicalModel);
 }
 #endif
 
@@ -440,7 +441,7 @@ void StudyTreeView::removePhysicalModel()
 
   if (selectedItem->child(1)->rowCount())
     emit removeSubWindow(selectedItem->child(1)->child(0));
-  treeViewModel_->getOTStudyItem(index)->getOTStudy()->remove(dynamic_cast<PhysicalModelItem*>(selectedItem)->getPhysicalModel());
+  treeViewModel_->getOTStudyItem(index)->getOTStudy().remove(dynamic_cast<PhysicalModelItem*>(selectedItem)->getPhysicalModel());
 }
 
 
@@ -464,7 +465,7 @@ void StudyTreeView::createNewDesignOfExperiment()
   QSharedPointer<DesignOfExperimentWizard> wizard = QSharedPointer<DesignOfExperimentWizard>(new DesignOfExperimentWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel()));
 
   if (wizard->exec())
-    otStudyItem->getOTStudy()->add(wizard->getDesignOfExperiment());
+    otStudyItem->getOTStudy().add(wizard->getDesignOfExperiment());
 }
 
 
@@ -483,7 +484,7 @@ void StudyTreeView::removeLimitState()
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
-  treeViewModel_->getOTStudyItem(index)->getOTStudy()->remove(dynamic_cast<LimitStateItem*>(selectedItem)->getLimitState());
+  treeViewModel_->getOTStudyItem(index)->getOTStudy().remove(dynamic_cast<LimitStateItem*>(selectedItem)->getLimitState());
 }
 
 
@@ -578,7 +579,7 @@ void StudyTreeView::createNewModelEvaluation()
 
   if (wizard->exec())
   {
-    otStudyItem->getOTStudy()->add(wizard->getAnalysis());
+    otStudyItem->getOTStudy().add(wizard->getAnalysis());
     findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysis().getName().c_str());
   }
 }
@@ -595,7 +596,7 @@ void StudyTreeView::createNewCentralTendency()
 
   if (wizard->exec())
   {
-    otStudyItem->getOTStudy()->add(wizard->getAnalysis());
+    otStudyItem->getOTStudy().add(wizard->getAnalysis());
     findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysis().getName().c_str());
   }
 }
@@ -619,7 +620,7 @@ void StudyTreeView::createNewSensitivityAnalysis()
 
   if (wizard->exec())
   {
-    otStudyItem->getOTStudy()->add(wizard->getAnalysis());
+    otStudyItem->getOTStudy().add(wizard->getAnalysis());
     findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysis().getName().c_str());
   }
 }
@@ -638,7 +639,7 @@ void StudyTreeView::createNewThresholdExceedance()
 
   if (wizard->exec())
   {
-    otStudyItem->getOTStudy()->add(wizard->getAnalysis());
+    otStudyItem->getOTStudy().add(wizard->getAnalysis());
     findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysis().getName().c_str());
   }
 }
@@ -659,7 +660,7 @@ void StudyTreeView::createNewMetaModel()
 
   if (wizard->exec())
   {
-    otStudyItem->getOTStudy()->add(wizard->getAnalysis());
+    otStudyItem->getOTStudy().add(wizard->getAnalysis());
     findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysis().getName().c_str());
   }
 }
@@ -692,7 +693,7 @@ void StudyTreeView::removeDesignOfExperiment()
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
-  treeViewModel_->getOTStudyItem(index)->getOTStudy()->remove(dynamic_cast<DesignOfExperimentItem*>(selectedItem)->getDesignOfExperiment());
+  treeViewModel_->getOTStudyItem(index)->getOTStudy().remove(dynamic_cast<DesignOfExperimentItem*>(selectedItem)->getDesignOfExperiment());
 }
 
 
@@ -782,7 +783,7 @@ void StudyTreeView::removeAnalysis()
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
-  treeViewModel_->getOTStudyItem(index)->getOTStudy()->remove(dynamic_cast<AnalysisItem*>(selectedItem)->getAnalysis());
+  treeViewModel_->getOTStudyItem(index)->getOTStudy().remove(dynamic_cast<AnalysisItem*>(selectedItem)->getAnalysis());
 }
 
 
@@ -844,7 +845,7 @@ void StudyTreeView::exportPython()
   QString currentDir = settings.value("currentDir").toString();
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
-  QString defaultFileName = QDir::separator() + QFileInfo(QString::fromUtf8(item->getOTStudy()->getFileName().c_str())).baseName();
+  QString defaultFileName = QDir::separator() + QFileInfo(QString::fromUtf8(item->getOTStudy().getFileName().c_str())).baseName();
   QString fileName = QFileDialog::getSaveFileName(this, tr("Export Python..."),
                      currentDir + defaultFileName,
                      tr("Python source files (*.py)"));
@@ -869,54 +870,10 @@ void StudyTreeView::exportPython()
     {
       QTextStream out(&file);
       out.setCodec("UTF-8");
-      out << QString::fromUtf8(item->getOTStudy()->getPythonScript().c_str());
+      out << QString::fromUtf8(item->getOTStudy().getPythonScript().c_str());
       file.setPermissions(QFile::ReadUser|QFile::WriteUser|QFile::ExeUser|QFile::ReadGroup|QFile::ExeGroup|QFile::ReadOther|QFile::ExeOther);
       file.close();
     }
-  }
-}
-
-
-void StudyTreeView::importPython()
-{
-  if (treeViewModel_->invisibleRootItem()->hasChildren())
-  {
-    int ret = QMessageBox::warning(this, tr("Warning"),
-                           tr("Cannot import a Python script when other studies are opened.\nDo you want to continue and close the other studies?"),
-                           QMessageBox::Cancel | QMessageBox::Ok,
-                           QMessageBox::Ok);
-    if (ret == QMessageBox::Ok)
-    {
-      bool allStudiesClosed = closeAllOTStudies();
-      if (!allStudiesClosed)
-        return;
-    }
-    else
-      return;
-  }
-
-  QSettings settings;
-  QString currentDir = settings.value("currentDir").toString();
-  if (currentDir.isEmpty())
-    currentDir = QDir::homePath();
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Import Python..."),
-                     currentDir,
-                     tr("Python source files (*.py)"));
-
-  if (!fileName.isEmpty())
-  {
-    QFile file(fileName);
-    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
-
-    // check
-    if (!file.open(QFile::ReadOnly))
-    {
-      QMessageBox::warning(this, tr("Warning"),
-                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
-    }
-    // load
-    else
-      emit importPythonScript(fileName);
   }
 }
 
@@ -927,10 +884,10 @@ bool StudyTreeView::saveOTStudy()
   if (!item)
     return false;
 
-  if (QFileInfo(QString::fromUtf8(item->getOTStudy()->getFileName().c_str())).exists())
+  if (QFileInfo(QString::fromUtf8(item->getOTStudy().getFileName().c_str())).exists())
   {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    item->getOTStudy()->save(item->getOTStudy()->getFileName());
+    item->getOTStudy().save(item->getOTStudy().getFileName());
     QApplication::restoreOverrideCursor();
     return true;
   }
@@ -975,7 +932,7 @@ bool StudyTreeView::saveAsOTStudy()
     else
     {
       QApplication::setOverrideCursor(Qt::WaitCursor);
-      item->getOTStudy()->save(fileName.toUtf8().constData());
+      item->getOTStudy().save(fileName.toUtf8().constData());
       QApplication::restoreOverrideCursor();
       emit recentFilesListChanged(fileName);
       return true;
@@ -1047,10 +1004,10 @@ bool StudyTreeView::closeOTStudy()
   OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
   if (!item)
     return true;
-  if (QFileInfo(QString::fromUtf8(item->getOTStudy()->getFileName().c_str())).exists())
+  if (QFileInfo(QString::fromUtf8(item->getOTStudy().getFileName().c_str())).exists())
   {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    item->getOTStudy()->save(item->getOTStudy()->getFileName());
+    item->getOTStudy().save(item->getOTStudy().getFileName());
     QApplication::restoreOverrideCursor();
     OTStudy::Remove(item->getOTStudy());
     return true;
@@ -1058,7 +1015,7 @@ bool StudyTreeView::closeOTStudy()
   else
   {
     int ret = QMessageBox::warning(this, tr("Warning"),
-                               tr("Do you want to save the OTStudy '%1' [%2]?").arg(item->getOTStudy()->getName().c_str()).arg(item->getOTStudy()->getFileName().c_str()),
+                               tr("Do you want to save the OTStudy '%1' [%2]?").arg(item->getOTStudy().getName().c_str()).arg(item->getOTStudy().getFileName().c_str()),
                                QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                                QMessageBox::Save);
 
@@ -1106,6 +1063,8 @@ void StudyTreeView::selectedItemChanged(const QModelIndex& currentIndex)
 
 void StudyTreeView::selectedItemChanged(const QModelIndex & currentIndex, const QModelIndex & previousIndex)
 {
+  if (!currentIndex.isValid())
+    return;
   selectedItemChanged(currentIndex);
 }
 }

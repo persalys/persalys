@@ -32,6 +32,7 @@ static Factory<MetaModelAnalysisResult> RegisteredFactory;
 
 MetaModelAnalysisResult::MetaModelAnalysisResult()
   : PersistentObject()
+  , metaModel_(0)
 {
 
 }
@@ -43,7 +44,7 @@ MetaModelAnalysisResult* MetaModelAnalysisResult::clone() const
 }
 
 
-MetaModel MetaModelAnalysisResult::getMetaModel() const
+PhysicalModel MetaModelAnalysisResult::getMetaModel() const
 {
   return metaModel_;
 }

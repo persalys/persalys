@@ -36,7 +36,7 @@ class MetaModelAnalysisWizard : public AnalysisWizard
 public:
   enum Method {chaos, kriging};
 
-  MetaModelAnalysisWizard(OTStudy * otStudy, const DesignOfExperiment & designOfExperiment);
+  MetaModelAnalysisWizard(const OTStudy& otStudy, const DesignOfExperiment & designOfExperiment);
   MetaModelAnalysisWizard(const Analysis & analysis);
 
   virtual bool validateCurrentPage();

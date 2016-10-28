@@ -34,10 +34,10 @@ using namespace OT;
 
 namespace OTGUI {
 
-SensitivityAnalysisWizard::SensitivityAnalysisWizard(OTStudy * otstudy, const PhysicalModel & physicalModel)
-  : AnalysisWizard(SobolAnalysis(otstudy->getAvailableAnalysisName("sensitivitySobol_"), physicalModel))
+SensitivityAnalysisWizard::SensitivityAnalysisWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel)
+  : AnalysisWizard(SobolAnalysis(otStudy.getAvailableAnalysisName("sensitivitySobol_"), physicalModel))
   , sobolAnalysis_(*dynamic_cast<SobolAnalysis*>(&*analysis_.getImplementation()))
-  , srcAnalysis_(SRCAnalysis(otstudy->getAvailableAnalysisName("sensitivitySRC_"), physicalModel))
+  , srcAnalysis_(SRCAnalysis(otStudy.getAvailableAnalysisName("sensitivitySRC_"), physicalModel))
 {
   buildInterface();
 }

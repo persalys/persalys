@@ -21,7 +21,7 @@
 #ifndef OTGUI_METAMODELANALYSISRESULT_HXX
 #define OTGUI_METAMODELANALYSISRESULT_HXX
 
-#include "MetaModel.hxx"
+#include "PhysicalModel.hxx"
 
 #include "otgui/OTGuiprivate.hxx"
 
@@ -40,7 +40,7 @@ public:
   /** Virtual constructor */
   virtual MetaModelAnalysisResult * clone() const;
 
-  MetaModel getMetaModel() const;
+  PhysicalModel getMetaModel() const;
 
   OT::NumericalSample getMetaModelOutputSample() const;
 
@@ -56,7 +56,7 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  MetaModel metaModel_;
+  PhysicalModel metaModel_;
   OT::NumericalSample metaModelOutputSample_;
   OT::NumericalSample metaModelOutputSampleLOO_;
   OT::NumericalPoint errorQ2LOO_;

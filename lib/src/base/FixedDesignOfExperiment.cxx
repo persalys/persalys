@@ -148,7 +148,7 @@ void FixedDesignOfExperiment::initializeParameters()
         upperBounds_[i] = distribution.computeQuantile(0.95)[0];
       }
     }
-    levels_[i] = 2;
+    levels_[i] = 1;
     deltas_[i] = upperBounds_[i] - lowerBounds_[i];
   }
 }
@@ -189,7 +189,16 @@ void FixedDesignOfExperiment::generateInputSample()
 
   if (otLevels.getSize())
   {
-    NumericalSample sample(Box(otLevels).generate());
+    NumericalSample sample;
+    try
+    {
+      sample = Box(otLevels).generate();
+    }
+    catch (std::exception & ex)
+    {
+      throw InvalidValueException(HERE) << "Impossible to generate the design of experiment\n " << ex.what();
+    }
+
     sample *= scale;
     sample += transvec;
 
@@ -234,7 +243,7 @@ void FixedDesignOfExperiment::updateParameters()
 
   initializeParameters();
 
-  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
+  for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++ i)
   {
     const Description::const_iterator it = std::find(inputNames.begin(), inputNames.end(), inputNames_[i]);
     if (it != inputNames.end())

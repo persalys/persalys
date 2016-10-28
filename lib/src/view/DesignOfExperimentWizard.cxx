@@ -92,9 +92,9 @@ int IntroPage::nextId() const
 }
 
 
-DesignOfExperimentWizard::DesignOfExperimentWizard(OTStudy * otStudy, const PhysicalModel & physicalModel)
+DesignOfExperimentWizard::DesignOfExperimentWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel)
   : OTguiWizard()
-  , designOfExperiment_(DesignOfExperiment(otStudy->getAvailableDesignOfExperimentName(), physicalModel))
+  , designOfExperiment_(DesignOfExperiment(otStudy.getAvailableDesignOfExperimentName(), physicalModel))
 {
   buildInterface();
 }
