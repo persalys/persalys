@@ -34,6 +34,7 @@ namespace OTGUI {
 MetaModelAnalysisWizard::MetaModelAnalysisWizard(const OTStudy& otStudy, const DesignOfExperiment & designOfExperiment)
   : AnalysisWizard(FunctionalChaosAnalysis(otStudy.getAvailableAnalysisName("chaos_"), designOfExperiment))
   , chaos_(*dynamic_cast<FunctionalChaosAnalysis*>(&*analysis_.getImplementation()))
+  , errorMessageLabel_(new QLabel)
 {
   buildInterface();
 }
@@ -41,6 +42,7 @@ MetaModelAnalysisWizard::MetaModelAnalysisWizard(const OTStudy& otStudy, const D
 
 MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis & analysis)
   : AnalysisWizard(analysis)
+  , errorMessageLabel_(new QLabel)
 {
   if (analysis.getImplementation()->getClassName() == "FunctionalChaosAnalysis")
   {
@@ -57,13 +59,18 @@ MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis & analysis)
 
 void MetaModelAnalysisWizard::buildInterface()
 {
-  setWindowTitle("Metamodel");
+  setWindowTitle(tr("Metamodel"));
 
-  // methods
   QWizardPage * page = new QWizardPage(this);
-
   QVBoxLayout * mainLayout = new QVBoxLayout(page);
 
+  // output selection
+  outputsGroupBox_ = new OutputsSelectionGroupBox(chaos_.getDesignOfExperiment().getOutputSample().getDescription(), chaos_.getOutputsToAnalyse(), this);
+  setOutputsToAnalyse(outputsGroupBox_->getSelectedOutputsNames());
+  connect(outputsGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), this, SLOT(setOutputsToAnalyse(QStringList)));
+  mainLayout->addWidget(outputsGroupBox_);
+
+  // method selection
   QGroupBox * methodBox = new QGroupBox(tr("Method"));
   QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
 
@@ -168,8 +175,34 @@ void MetaModelAnalysisWizard::looValidationChanged(bool looValidation)
 }
 
 
+void MetaModelAnalysisWizard::setOutputsToAnalyse(QStringList outputsList)
+{
+  errorMessageLabel_->setText("");
+
+  Description desc(outputsList.size());
+  for (int i=0; i<outputsList.size(); ++i)
+    desc[i] = outputsList[i].toUtf8().constData();
+
+  try
+  {
+    chaos_.setOutputsToAnalyse(desc);
+  }
+  catch (InvalidDimensionException exception)
+  {
+    // check in validateCurrentPage
+  }
+
+}
+
+
 bool MetaModelAnalysisWizard::validateCurrentPage()
 {
+  errorMessageLabel_->setText("");
+  if (!outputsGroupBox_->getSelectedOutputsNames().size())
+  {
+    errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(tr("At least one output must be selected")).arg("</font>"));
+    return false;
+  }
   if (chaosParametersBox_->isVisible())
   {
     const UnsignedInteger n = chaos_.getChaosDegree() + chaos_.getDesignOfExperiment().getInputSample().getDimension();

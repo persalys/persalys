@@ -26,6 +26,7 @@
 #include "otgui/SRCAnalysis.hxx"
 #include "otgui/StopCriteriaGroupBox.hxx"
 #include "otgui/BlockSizeGroupBox.hxx"
+#include "otgui/OutputsSelectionGroupBox.hxx"
 
 #include <QLabel>
 
@@ -53,10 +54,12 @@ public slots:
   void sampleSizeChanged(int);
   void seedChanged(int);
   void blockSizeChanged(double);
+  void setOutputsToAnalyse(QStringList);
 
 private:
   SobolAnalysis sobolAnalysis_;
   SRCAnalysis srcAnalysis_;
+  OutputsSelectionGroupBox * outputsGroupBox_;
   QWidget * sobolWidgets_;
   StopCriteriaGroupBox * stopCriteriaGroupBox_;
   BlockSizeGroupBox * blockSizeGroupBox_;

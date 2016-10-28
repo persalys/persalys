@@ -38,6 +38,7 @@ SensitivityAnalysisWizard::SensitivityAnalysisWizard(const OTStudy& otStudy, con
   : AnalysisWizard(SobolAnalysis(otStudy.getAvailableAnalysisName("sensitivitySobol_"), physicalModel))
   , sobolAnalysis_(*dynamic_cast<SobolAnalysis*>(&*analysis_.getImplementation()))
   , srcAnalysis_(SRCAnalysis(otStudy.getAvailableAnalysisName("sensitivitySRC_"), physicalModel))
+  , errorMessageLabel_(new QLabel)
 {
   buildInterface();
 }
@@ -45,16 +46,19 @@ SensitivityAnalysisWizard::SensitivityAnalysisWizard(const OTStudy& otStudy, con
 
 SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis & analysis)
   : AnalysisWizard(analysis)
+  , errorMessageLabel_(new QLabel)
 {
   if (analysis.getImplementation()->getClassName() == "SobolAnalysis")
   {
     sobolAnalysis_ = *dynamic_cast<const SobolAnalysis*>(&*analysis.getImplementation());
     srcAnalysis_ = SRCAnalysis(sobolAnalysis_.getName(), sobolAnalysis_.getPhysicalModel());
+    srcAnalysis_.setOutputsToAnalyse(sobolAnalysis_.getOutputsToAnalyse());
   }
   else
   {
     srcAnalysis_ = *dynamic_cast<const SRCAnalysis*>(&*analysis.getImplementation());
     sobolAnalysis_ = SobolAnalysis(srcAnalysis_.getName(), srcAnalysis_.getPhysicalModel());
+    sobolAnalysis_.setOutputsToAnalyse(srcAnalysis_.getOutputsToAnalyse());
   }
 
   buildInterface();
@@ -72,6 +76,13 @@ void SensitivityAnalysisWizard::buildInterface()
 
   QVBoxLayout * mainLayout = new QVBoxLayout(page);
 
+  // output selection
+  outputsGroupBox_ = new OutputsSelectionGroupBox(sobolAnalysis_.getPhysicalModel().getSelectedOutputsNames(), sobolAnalysis_.getOutputsToAnalyse(), this);
+  setOutputsToAnalyse(outputsGroupBox_->getSelectedOutputsNames());
+  connect(outputsGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), this, SLOT(setOutputsToAnalyse(QStringList)));
+  mainLayout->addWidget(outputsGroupBox_);
+
+  // method selection
   QGroupBox * methodBox = new QGroupBox(tr("Method"));
   QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
 
@@ -256,8 +267,34 @@ void SensitivityAnalysisWizard::seedChanged(int seed)
 }
 
 
+void SensitivityAnalysisWizard::setOutputsToAnalyse(QStringList outputsList)
+{
+  errorMessageLabel_->setText("");
+
+  Description desc(outputsList.size());
+  for (int i=0; i<outputsList.size(); ++i)
+    desc[i] = outputsList[i].toUtf8().constData();
+
+  try
+  {
+    sobolAnalysis_.setOutputsToAnalyse(desc);
+    srcAnalysis_.setOutputsToAnalyse(desc);
+  }
+  catch (InvalidDimensionException exception)
+  {
+    // check in validateCurrentPage
+  }
+}
+
+
 bool SensitivityAnalysisWizard::validateCurrentPage()
 {
+  errorMessageLabel_->setText("");
+  if (!outputsGroupBox_->getSelectedOutputsNames().size())
+  {
+    errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(tr("At least one output must be selected")).arg("</font>"));
+    return false;
+  }
   if (sobolWidgets_->isVisible())
   {
     QString errorMessage = "";
