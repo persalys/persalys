@@ -726,7 +726,10 @@ void StudyTreeView::runAnalysis()
   if (analysisType == "ModelEvaluation")
   {
     if (!isPhysicalModelValid(selectionModel()->currentIndex()))
+    {
       qDebug() << "Error: In runAnalysis: physical model not valid for the " << analysisType << "\n";
+      return;
+    }
     wizard = QSharedPointer<AnalysisWizard>(new ModelEvaluationWizard(item->getAnalysis()));
   }
   else if (analysisType == "FunctionalChaosAnalysis")
@@ -736,9 +739,15 @@ void StudyTreeView::runAnalysis()
   else
   {
     if (!isPhysicalModelValid(selectionModel()->currentIndex()))
+    {
       qDebug() << "Error: In runAnalysis: physical model not valid for the " << analysisType << "\n";
+      return;
+    }
     if (!isProbabilisticModelValid(selectionModel()->currentIndex()))
+    {
       qDebug() << "Error: In runAnalysis: probabilistic model not valid for the " << analysisType << "\n";
+      return;
+    }
 
     if (analysisType == "MonteCarloAnalysis" || analysisType == "TaylorExpansionMomentsAnalysis")
     {
@@ -751,7 +760,10 @@ void StudyTreeView::runAnalysis()
     else if (analysisType == "MonteCarloReliabilityAnalysis")
     {
       if (!isLimitStateValid(selectionModel()->currentIndex()))
+      {
         qDebug() << "In runAnalysis: limit state not valid for the " << analysisType << "\n";
+        return;
+      }
       wizard = QSharedPointer<AnalysisWizard>(new ReliabilityAnalysisWizard(item->getAnalysis()));
     }
     else
@@ -978,7 +990,7 @@ void StudyTreeView::openOTStudy(const QString & fileName)
     {
       QApplication::restoreOverrideCursor();
       QString message;
-      message = tr("Impossible to read the file '%1'. \n").arg(fileName);
+      message = tr("A problem appeared when reading the file '%1'. \nMaybe objects are not opened.\n").arg(fileName);
       QMessageBox::warning(this, tr("Warning"), message+ex.what());
     }
   }
