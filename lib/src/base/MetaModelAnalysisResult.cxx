@@ -32,7 +32,7 @@ static Factory<MetaModelAnalysisResult> RegisteredFactory;
 
 MetaModelAnalysisResult::MetaModelAnalysisResult()
   : PersistentObject()
-  , metaModel_(0)
+  , metaModel_()
 {
 
 }
@@ -62,13 +62,13 @@ NumericalSample MetaModelAnalysisResult::getMetaModelOutputSampleLeaveOneOut() c
 }
 
 
-OT::NumericalPoint MetaModelAnalysisResult::getErrorQ2LeaveOneOut() const
+NumericalPoint MetaModelAnalysisResult::getErrorQ2LeaveOneOut() const
 {
   return errorQ2LOO_;
 }
 
 
-OT::NumericalPoint MetaModelAnalysisResult::getQ2LeaveOneOut() const
+NumericalPoint MetaModelAnalysisResult::getQ2LeaveOneOut() const
 {
   return q2LOO_;
 }
