@@ -28,6 +28,9 @@ template <>
 }
 %}
 
+%ignore *::addObserver;
+%ignore *::blockNotification;
+
 %include PhysicalModel_doc.i
 
 OTGUITypedInterfaceObjectHelper(PhysicalModel)

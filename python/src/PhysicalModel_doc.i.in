@@ -70,3 +70,7 @@ OTGUI_PhysicalModel_setInputDistribution_doc
 OTGUI_PhysicalModel_setInputDistributionParametersType_doc
 %feature("docstring") OTGUI::PhysicalModel::getRestrictedFunction
 OTGUI_PhysicalModel_getRestrictedFunction_doc
+%feature("docstring") OTGUI::PhysicalModel::getSelectedOutputsNames
+OTGUI_PhysicalModel_getSelectedOutputsNames_doc
+%feature("docstring") OTGUI::PhysicalModel::selectOutput
+OTGUI_PhysicalModel_selectOutput_doc

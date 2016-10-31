@@ -1,0 +1,22 @@
+%feature("docstring") OTGUI::DesignOfExperimentAnalysis
+"Analysis using a design of experiment"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DesignOfExperimentAnalysis::getDesignOfExperiment
+"Design of experiment accessor.
+
+Returns
+-------
+model : :class:`~otguibase.DesignOfExperiment`
+    Design of experiment"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DesignOfExperimentAnalysis::setDesignOfExperiment
+"Design of experiment accessor.
+
+Parameters
+----------
+model : :class:`~otguibase.DesignOfExperiment`
+    Design of experiment"

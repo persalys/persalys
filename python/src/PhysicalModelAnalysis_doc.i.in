@@ -1,0 +1,22 @@
+%feature("docstring") OTGUI::PhysicalModelAnalysis
+"Analysis using a physical model"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::PhysicalModelAnalysis::getPhysicalModel
+"Physical model accessor.
+
+Returns
+-------
+model : :class:`~otguibase.PhysicalModel`
+    Physical model"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::PhysicalModelAnalysis::setPhysicalModel
+"Physical model accessor.
+
+Parameters
+----------
+model : :class:`~otguibase.PhysicalModel`
+    Physical model"

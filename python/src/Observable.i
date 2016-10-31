@@ -4,12 +4,7 @@
 #include "otgui/Observable.hxx"
 %}
 
-%ignore *::addObserver;
-%ignore *::removeObserver;
-%ignore *::blockNotification;
-%ignore *::getObservers;
-%ignore *::setObservers;
-%ignore *::notify;
+%ignore Observable;
 
 %include otgui/Observable.hxx
 

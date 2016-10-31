@@ -4,6 +4,8 @@
 #include "otgui/PhysicalModelAnalysis.hxx"
 %}
 
+%include PhysicalModelAnalysis_doc.i
+
 %include otgui/PhysicalModelAnalysis.hxx
 namespace OTGUI {
 
