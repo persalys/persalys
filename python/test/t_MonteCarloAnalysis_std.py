@@ -9,9 +9,11 @@ myStudy = otguibase.OTStudy('myStudy')
 ## Model
 X0 = otguibase.Input('X0', 1, '', ot.Normal(1, 1))
 X1 = otguibase.Input('X1', 2, '', ot.Normal(1, 1))
+Y00 = otguibase.Output('fake_Y0', 0, '', 'X0')
+Y00.setIsSelected(False)
 Y0 = otguibase.Output('Y0', 0, '', 'sin(X0) + 8*X1')
 
-model = otguibase.AnalyticalPhysicalModel('aModelPhys', [X0, X1], [Y0])
+model = otguibase.AnalyticalPhysicalModel('aModelPhys', [X0, X1], [Y00, Y0])
 myStudy.add(model)
 
 ## Monte Carlo ##
@@ -52,10 +54,11 @@ print("outliers=", result2.getOutliers())
 ## Monte Carlo ##
 X2 = otguibase.Input('X2', 2)
 model.addInput(X2)
-model.setOutputFormula('Y0', 'sin(X0) + 8*X1 + X2')
+model.addOutput(otguibase.Output('Y1', 0, '', 'sin(X0) + 8*X1 + X2'))
 
 analysis3 = otguibase.MonteCarloAnalysis('myMonteCarlo3', model)
 analysis3.setMaximumCalls(1000)
+analysis3.setOutputsToAnalyse(['Y1'])
 myStudy.add(analysis3)
 print(analysis3)
 

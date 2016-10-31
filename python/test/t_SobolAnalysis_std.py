@@ -10,9 +10,11 @@ myStudy = otguibase.OTStudy('myStudy')
 ## Model
 x0 = otguibase.Input('x0', 0., '', ot.Normal())
 x1 = otguibase.Input('x1', 0., '', ot.Normal())
+y00 = otguibase.Output('fake_y0', 0, '', 'x0')
+y00.setIsSelected(False)
 y0 = otguibase.Output('y0', 0., '', '10+3*x0+x1')
 
-model = otguibase.AnalyticalPhysicalModel('aModel', [x0, x1], [y0])
+model = otguibase.AnalyticalPhysicalModel('aModel', [x0, x1], [y00, y0])
 myStudy.add(model)
 
 ## Sobol ##
@@ -43,12 +45,13 @@ print("result=", analysis2.getResult())
 ## Sobol ##
 X2 = otguibase.Input('x2', 10)
 model.addInput(X2)
-model.setOutputFormula('y0', '3*x0 + x1 + x2')
+model.addOutput(otguibase.Output('y1', 0, '', '3*x0 + x1 + x2'))
 
 analysis3 = otguibase.SobolAnalysis('aSobol3', model)
 analysis3.setMaximumCalls(1000)
 analysis3.setBlockSize(1000)
 analysis3.setSeed(2)
+analysis3.setOutputsToAnalyse(['y1'])
 myStudy.add(analysis3)
 print(analysis3)
 

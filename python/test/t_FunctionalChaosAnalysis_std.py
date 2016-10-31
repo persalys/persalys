@@ -14,10 +14,12 @@ myStudy = otguibase.OTStudy('myStudy')
 xi1 = otguibase.Input('xi1', 0., '', ot.Uniform(-pi, pi))
 xi2 = otguibase.Input('xi2', 0., '', ot.Uniform(-pi, pi))
 xi3 = otguibase.Input('xi3', 0., '', ot.Uniform(-pi, pi))
+y00 = otguibase.Output('fake_y0', 0, '', 'xi1')
+y00.setIsSelected(False)
 formula = "sin(xi1) + (7.0) * (sin(xi2)) ^ 2 + (0.1) * xi3^4 * sin(xi1)"
 y0 = otguibase.Output('y0', 0., '', formula)
 
-model = otguibase.AnalyticalPhysicalModel('model', [xi1, xi2, xi3], [y0])
+model = otguibase.AnalyticalPhysicalModel('model', [xi1, xi2, xi3], [y00, y0])
 myStudy.add(model)
 
 ## Design of Experiment ##
@@ -55,6 +57,7 @@ openturns.testing.assert_almost_equal(totalIndices, sobolResult.getTotalIndices(
 
 
 ## Design of Experiment ##
+model.addOutput(otguibase.Output('y1', 0., '', formula))
 aDesign2 = otguibase.DesignOfExperiment('design2', model)
 inputSample = ot.LHSExperiment(model.getComposedDistribution(), 150).generate()
 aDesign2.setInputSample(inputSample)
@@ -66,6 +69,7 @@ aDesign2.run()
 analysis2 = otguibase.FunctionalChaosAnalysis('chaos_1', aDesign2)
 analysis2.setChaosDegree(6)
 analysis2.setLeaveOneOutValidation(True)
+analysis2.setOutputsToAnalyse(['y1'])
 myStudy.add(analysis2)
 print(analysis2)
 
