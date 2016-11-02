@@ -32,6 +32,9 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      MetaModelAnalysisResult.cxx
                      FunctionalChaosAnalysisResult.cxx
                      FunctionalChaosAnalysis.cxx
+                     FittingTestResult.cxx
+                     InferenceResult.cxx
+                     InferenceAnalysis.cxx
                      PythonEnvironment.cxx)
 if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx YACSEvalSessionSingleton.cxx)
@@ -83,6 +86,9 @@ ot_install_header_file ( MonteCarloReliabilityResult.hxx )
 ot_install_header_file ( MetaModelAnalysisResult.hxx )
 ot_install_header_file ( FunctionalChaosAnalysisResult.hxx )
 ot_install_header_file ( FunctionalChaosAnalysis.hxx )
+ot_install_header_file ( FittingTestResult.hxx )
+ot_install_header_file ( InferenceResult.hxx )
+ot_install_header_file ( InferenceAnalysis.hxx )
 ot_install_header_file ( PythonEnvironment.hxx )
 
 if (SalomeYACS_FOUND)

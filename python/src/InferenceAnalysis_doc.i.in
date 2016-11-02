@@ -1,0 +1,92 @@
+%feature("docstring") OTGUI::InferenceAnalysis
+"Perform a Kolmogorov goodness-of-fit test for 1-d continuous distributions.
+
+Parameters
+----------
+name : str
+    Name
+design : :class:`~otguibase.DesignOfExperiment`
+    Design of experiment
+
+Examples
+--------
+Create the model:
+
+>>> import openturns as ot
+>>> import otguibase
+>>> filename = 'data.csv'
+>>> ot.RandomGenerator_SetSeed(0)
+>>> sample = ot.Normal(3).getSample(100)
+>>> sample.exportToCSVFile(filename)
+>>> model = otguibase.DataModel('myDataModel', 'data.csv', [0, 1, 2])
+
+Create the Inference Analysis:
+
+>>> analysis = otguibase.InferenceAnalysis('analysis', model)
+>>> analysis.run()
+
+Get the result:
+
+>>> result = analysis.getResult()
+>>> resultX0 = result.getFittingTestResultForVariable('X0')"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::InferenceAnalysis::getLevel
+"Level accessor.
+
+Returns
+-------
+level : float, :math:`0 < {\rm level} < 1`, optional
+    This is the value such that :math:`\alpha = 1 - {\rm level}` is the risk of
+    committing a Type I error, that is an incorrect rejection of a true
+    null hypothesis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::InferenceAnalysis::setLevel
+"Level accessor.
+
+Parameters
+----------
+level : float, :math:`0 < {\rm level} < 1`, optional
+    This is the value such that :math:`\alpha = 1 - {\rm level}` is the risk of
+    committing a Type I error, that is an incorrect rejection of a true
+    null hypothesis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::InferenceAnalysis::getDistributionsFactories
+"Get the sequence of distributions to test for a variable.
+
+Parameters
+----------
+variable : str
+    Name of the variable
+
+Returns
+-------
+factories : sequence of :py:class:`openturns.DistributionFactory`
+    Distributions to test"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::InferenceAnalysis::setDistributionsFactories
+"Set the sequence of distributions to test for a variable.
+
+Parameters
+----------
+variable : str
+    Name of the variable
+factories : sequence of :py:class:`openturns.DistributionFactory`
+    Distributions to test"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::InferenceAnalysis::getResult
+"Result accessor.
+
+Returns
+-------
+result : :class:`~otguibase.InferenceResult`
+    Result."

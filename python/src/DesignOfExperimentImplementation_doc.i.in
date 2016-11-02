@@ -9,7 +9,11 @@ Parameters
 name : str
     Name
 physicalModel : :class:`~otguibase.PhysicalModel`
-    Physical model"
+    Physical model
+
+Notes
+-----
+DesignOfExperiment is the base class of :class:`~otguibase.DataModel`"
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation
 OTGUI_DesignOfExperiment_doc
