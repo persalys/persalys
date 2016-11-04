@@ -21,10 +21,11 @@
 #ifndef OTGUI_WELCOMEWINDOW_HXX
 #define OTGUI_WELCOMEWINDOW_HXX
 
+#include "otgui/OTGuiprivate.hxx"
 #include <QWidget>
 
 namespace OTGUI {
-class WelcomeWindow : public QWidget
+class OTGUI_API WelcomeWindow : public QWidget
 {
   Q_OBJECT
 

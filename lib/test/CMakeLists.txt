@@ -79,20 +79,23 @@ macro ( ot_check_test TESTNAME )
   install ( FILES ${TESTNAME_SRC}
             DESTINATION ${OTGUI_EXAMPLE_PATH} 
           )
+endmacro ()
 
-  if ( INSTALL_TESTS )
-    install ( FILES ${TESTNAME_OUT}
-              DESTINATION ${OTGUI_EXAMPLE_PATH} 
-            )
-    install ( TARGETS ${TESTNAME_TGT}
-              DESTINATION ${OTGUI_EXAMPLE_PATH} 
-            )
 
-#     add_check_file ( ${EXTERNAL_CHECK_FILE} ${TESTNAME_TGT} ${EXTERNAL_COMMAND} ${CUR_CHECK} )
-#     math( EXPR CUR_CHECK "${CUR_CHECK} + 1" )
-  endif ()
+macro (ot_qt_check_test TESTNAME)
+  set (TESTNAME_TGT t_${TESTNAME})
+  set (TESTNAME_MOC ${TESTNAME_TGT}.moc)
+  set (TESTNAME_SRC ${TESTNAME_TGT}.cxx)
+  set (TESTNAME_SRCS ${TESTNAME_SRC} ${TESTNAME_MOC})
+  qt5_generate_moc (${TESTNAME_SRC} ${TESTNAME_MOC})
+  add_executable (${TESTNAME_TGT} EXCLUDE_FROM_ALL ${TESTNAME_SRCS})
+  add_dependencies (tests ${TESTNAME_TGT} )
+  target_link_libraries (${TESTNAME_TGT} otguiview)
+  add_test (NAME cppcheck_${TESTNAME} COMMAND ${TESTNAME_TGT})
+  set_tests_properties (cppcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${CHECK_ENVIRONMENT}")
+endmacro ()
 
-endmacro ( ot_check_test )
+
 
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 
@@ -103,6 +106,11 @@ include_directories (${PYTHON_INCLUDE_DIRS})
 
 ot_check_test ( PhysicalModel_std )
 ot_check_test ( Cogeneration_std )
+
+if (BUILD_GUI)
+  include_directories (${CMAKE_CURRENT_BINARY_DIR}) # for mocs
+  ot_qt_check_test (WelcomeWindow_std)
+endif ()
 
 add_custom_target ( cppcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^cppcheck_"
                     DEPENDS ${CHECK_TO_BE_RUN}
