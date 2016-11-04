@@ -55,7 +55,7 @@ public slots:
   void levelConfidenceIntervalChanged(double);
   void seedChanged(int);
   void blockSizeChanged(double);
-  void setOutputsToAnalyse(QStringList);
+  void setInterestVariables(QStringList);
 
 private:
   MonteCarloAnalysis MCAnalysis_;

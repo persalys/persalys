@@ -50,8 +50,8 @@ NumericalSample SimulationAnalysis::generateInputSample(const UnsignedInteger nb
 
 NumericalSample SimulationAnalysis::computeOutputSample(NumericalSample inputSample) const
 {
-  NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(getOutputsToAnalyse())(inputSample));
-  outputSample.setDescription(getOutputsToAnalyse());
+  NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(getInterestVariables())(inputSample));
+  outputSample.setDescription(getInterestVariables());
   return outputSample;
 }
 

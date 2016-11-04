@@ -31,8 +31,8 @@ aModel.addOutput(y0)
 aModel.addOutput(y1)
 myStudy.add(aModel)
 aSobol = otguibase.SobolAnalysis('aSobol', aModel)
-outputsToAnalyse = ['y0']
-aSobol.setOutputsToAnalyse(outputsToAnalyse)
+interestVariables = ['y0']
+aSobol.setInterestVariables(interestVariables)
 aSobol.setMaximumCalls(1000)
 aSobol.setMaximumCoefficientOfVariation(-1)
 aSobol.setMaximumElapsedTime(30)
@@ -40,16 +40,16 @@ aSobol.setBlockSize(1000)
 aSobol.setSeed(2)
 myStudy.add(aSobol)
 aSobol2 = otguibase.SobolAnalysis('aSobol2', aModel)
-outputsToAnalyse = ['y0']
-aSobol2.setOutputsToAnalyse(outputsToAnalyse)
+interestVariables = ['y0']
+aSobol2.setInterestVariables(interestVariables)
 aSobol2.setMaximumCoefficientOfVariation(0.02)
 aSobol2.setMaximumElapsedTime(100000)
 aSobol2.setBlockSize(1)
 aSobol2.setSeed(0)
 myStudy.add(aSobol2)
 aSobol3 = otguibase.SobolAnalysis('aSobol3', aModel)
-outputsToAnalyse = ['y1']
-aSobol3.setOutputsToAnalyse(outputsToAnalyse)
+interestVariables = ['y1']
+aSobol3.setInterestVariables(interestVariables)
 aSobol3.setMaximumCalls(1000)
 aSobol3.setMaximumCoefficientOfVariation(0.01)
 aSobol3.setMaximumElapsedTime(60)

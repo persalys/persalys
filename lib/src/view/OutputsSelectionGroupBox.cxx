@@ -27,7 +27,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-OutputsSelectionGroupBox::OutputsSelectionGroupBox(const Description& outputsNames, const Description& outputsToAnalyse, QWidget* parent)
+OutputsSelectionGroupBox::OutputsSelectionGroupBox(const Description& outputsNames, const Description& interestVariables, QWidget* parent)
   : QGroupBox(tr("Outputs to analyse"), parent)
 {
   QVBoxLayout * outputLayout = new QVBoxLayout(this);
@@ -36,16 +36,16 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(const Description& outputsNam
   for (UnsignedInteger i=0; i<outputsNames.getSize(); ++i)
     outputsList << outputsNames[i].c_str();
 
-  QStringList outputToAnalyse;
-  for (UnsignedInteger i=0; i<outputsToAnalyse.getSize(); ++i)
-    if (outputsList.contains(outputsToAnalyse[i].c_str()))
-      outputToAnalyse << outputsToAnalyse[i].c_str();
+  QStringList variablesStringList;
+  for (UnsignedInteger i=0; i<interestVariables.getSize(); ++i)
+    if (outputsList.contains(interestVariables[i].c_str()))
+      variablesStringList << interestVariables[i].c_str();
 
-  if (!outputToAnalyse.size())
-    outputToAnalyse = outputsList;
+  if (!variablesStringList.size())
+    variablesStringList = outputsList;
 
   QComboBox * outputsComboBox = new QComboBox;
-  outputsListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select outputs") + " --", outputsList, outputToAnalyse, this);
+  outputsListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select outputs") + " --", outputsList, variablesStringList, this);
   connect(outputsListWidget_, SIGNAL(checkedItemsChanged(QStringList)), this, SIGNAL(outputsSelectionChanged(QStringList)));
   outputsComboBox->setModel(outputsListWidget_->model());
   outputsComboBox->setView(outputsListWidget_);

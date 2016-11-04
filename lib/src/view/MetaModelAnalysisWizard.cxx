@@ -65,9 +65,9 @@ void MetaModelAnalysisWizard::buildInterface()
   QVBoxLayout * mainLayout = new QVBoxLayout(page);
 
   // output selection
-  outputsGroupBox_ = new OutputsSelectionGroupBox(chaos_.getDesignOfExperiment().getOutputSample().getDescription(), chaos_.getOutputsToAnalyse(), this);
-  setOutputsToAnalyse(outputsGroupBox_->getSelectedOutputsNames());
-  connect(outputsGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), this, SLOT(setOutputsToAnalyse(QStringList)));
+  outputsGroupBox_ = new OutputsSelectionGroupBox(chaos_.getDesignOfExperiment().getOutputSample().getDescription(), chaos_.getInterestVariables(), this);
+  setInterestVariables(outputsGroupBox_->getSelectedOutputsNames());
+  connect(outputsGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), this, SLOT(setInterestVariables(QStringList)));
   mainLayout->addWidget(outputsGroupBox_);
 
   // method selection
@@ -175,7 +175,7 @@ void MetaModelAnalysisWizard::looValidationChanged(bool looValidation)
 }
 
 
-void MetaModelAnalysisWizard::setOutputsToAnalyse(QStringList outputsList)
+void MetaModelAnalysisWizard::setInterestVariables(QStringList outputsList)
 {
   errorMessageLabel_->setText("");
 
@@ -185,7 +185,7 @@ void MetaModelAnalysisWizard::setOutputsToAnalyse(QStringList outputsList)
 
   try
   {
-    chaos_.setOutputsToAnalyse(desc);
+    chaos_.setInterestVariables(desc);
   }
   catch (InvalidDimensionException exception)
   {

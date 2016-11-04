@@ -36,7 +36,7 @@ model.addOutput(otguibase.Output('y1', 0, '', '3*x0 + x1 + x2'))
 analysis2 = otguibase.SRCAnalysis('aSRC2', model)
 analysis2.setSimulationsNumber(1000)
 analysis2.setSeed(2)
-analysis2.setOutputsToAnalyse(['y1'])
+analysis2.setInterestVariables(['y1'])
 myStudy.add(analysis2)
 print(analysis2)
 

@@ -38,7 +38,7 @@ public:
 
   LimitState getLimitState() const;
 
-  virtual void setOutputsToAnalyse(const OT::Description& outputsNames);
+  virtual void setInterestVariables(const OT::Description& outputsNames);
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;

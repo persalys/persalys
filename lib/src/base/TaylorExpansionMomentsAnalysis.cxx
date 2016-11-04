@@ -59,7 +59,7 @@ void TaylorExpansionMomentsAnalysis::run()
   result_ = TaylorExpansionMomentsResult();
 
   // set analysis
-  TaylorExpansionMoments algoTaylorExpansionMoments(getPhysicalModel().getOutputRandomVector(getOutputsToAnalyse()));
+  TaylorExpansionMoments algoTaylorExpansionMoments(getPhysicalModel().getOutputRandomVector(getInterestVariables()));
 
   // set results
   NumericalPoint meanFirstOrder = algoTaylorExpansionMoments.getMeanFirstOrder();
@@ -71,7 +71,7 @@ void TaylorExpansionMomentsAnalysis::run()
   for (UnsignedInteger i=0; i<variance.getDimension(); ++i)
     standardDeviation[i] = sqrt(variance[i]);
 
-  result_ = TaylorExpansionMomentsResult(getOutputsToAnalyse(), meanFirstOrder, meanSecondOrder, standardDeviation, variance);
+  result_ = TaylorExpansionMomentsResult(getInterestVariables(), meanFirstOrder, meanSecondOrder, standardDeviation, variance);
 
   notify("analysisFinished");
 }
@@ -87,17 +87,17 @@ String TaylorExpansionMomentsAnalysis::getPythonScript() const
 {
   OSS oss;
   oss << getName() << " = otguibase.TaylorExpansionMomentsAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
-  if (getOutputsToAnalyse().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
+  if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {
-    oss << "outputsToAnalyse = [";
-    for (UnsignedInteger i=0; i<getOutputsToAnalyse().getSize(); ++i)
+    oss << "interestVariables = [";
+    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
     {
-      oss << "'" << getOutputsToAnalyse()[i] << "'";
-      if (i < getOutputsToAnalyse().getSize()-1)
+      oss << "'" << getInterestVariables()[i] << "'";
+      if (i < getInterestVariables().getSize()-1)
         oss << ", ";
     }
     oss << "]\n";
-    oss << getName() << ".setOutputsToAnalyse(outputsToAnalyse)\n";
+    oss << getName() << ".setInterestVariables(interestVariables)\n";
   }
 
   return oss;

@@ -48,7 +48,6 @@ DataAnalysis::DataAnalysis(const OT::String & name, const DesignOfExperiment & d
   , isConfidenceIntervalRequired_(false)
   , levelConfidenceInterval_(0.)
 {
-  
 }
 
 

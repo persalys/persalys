@@ -29,13 +29,13 @@ aModel.addOutput(y0)
 aModel.addOutput(y1)
 myStudy.add(aModel)
 aSRC = otguibase.SRCAnalysis('aSRC', aModel, 1000)
-outputsToAnalyse = ['y0']
-aSRC.setOutputsToAnalyse(outputsToAnalyse)
+interestVariables = ['y0']
+aSRC.setInterestVariables(interestVariables)
 aSRC.setSeed(2)
 myStudy.add(aSRC)
 aSRC2 = otguibase.SRCAnalysis('aSRC2', aModel, 1000)
-outputsToAnalyse = ['y1']
-aSRC2.setOutputsToAnalyse(outputsToAnalyse)
+interestVariables = ['y1']
+aSRC2.setInterestVariables(interestVariables)
 aSRC2.setSeed(2)
 myStudy.add(aSRC2)
 
