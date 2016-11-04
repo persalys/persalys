@@ -53,13 +53,6 @@ PhysicalModel PhysicalModelAnalysis::getPhysicalModel() const
 }
 
 
-void PhysicalModelAnalysis::setPhysicalModel(const PhysicalModel & physicalModel)
-{
-  physicalModel_ = physicalModel;
-  setInterestVariables(physicalModel_.getSelectedOutputsNames());
-}
-
-
 String PhysicalModelAnalysis::getModelName() const
 {
   return physicalModel_.getName();

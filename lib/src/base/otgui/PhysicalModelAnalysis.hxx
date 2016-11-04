@@ -37,7 +37,6 @@ public:
   virtual PhysicalModelAnalysis * clone() const;
 
   PhysicalModel getPhysicalModel() const;
-  void setPhysicalModel(const PhysicalModel & physicalModel);
 
   OT::String getModelName() const;
 
