@@ -27,7 +27,6 @@ namespace OTGUI {
 /* Default constructor */
 SimulationAnalysis::SimulationAnalysis()
   : PhysicalModelAnalysis()
-//   , outputs_()
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
 {
 }
@@ -36,24 +35,9 @@ SimulationAnalysis::SimulationAnalysis()
 /* Constructor with parameters */
 SimulationAnalysis::SimulationAnalysis(const String & name, const PhysicalModel & physicalModel)
   : PhysicalModelAnalysis(name, physicalModel)
-//  TODO , outputs_(physicalModel.getOutputs())
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
 {
-//TODO ctr with outputNames (pas OutputCollection!) optionnel par défaut prendrait tous les outputs
 }
-
-
-// TODO
-// OutputCollection SimulationAnalysis::getOutputs() const
-// {
-//   return outputs_;
-// }
-// 
-// 
-// void SimulationAnalysis::setOutputs(const OutputCollection & outputs)
-// {
-//   outputs_ = outputs;
-// }
 
 
 NumericalSample SimulationAnalysis::generateInputSample(const UnsignedInteger nbSimu)
@@ -66,12 +50,8 @@ NumericalSample SimulationAnalysis::generateInputSample(const UnsignedInteger nb
 
 NumericalSample SimulationAnalysis::computeOutputSample(NumericalSample inputSample) const
 {
-//   TODO
-//   NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(getOutputNames())(inputSample));
-//   outputSample.setDescription(getOutputNames());
-//   return outputSample;
-  NumericalSample outputSample(getPhysicalModel().getRestrictedFunction()(inputSample));
-  outputSample.setDescription(getPhysicalModel().getOutputNames());
+  NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(getOutputsToAnalyse())(inputSample));
+  outputSample.setDescription(getOutputsToAnalyse());
   return outputSample;
 }
 
@@ -81,18 +61,6 @@ NumericalSample SimulationAnalysis::computeOutputSample(NumericalSample inputSam
   NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(outputNames)(inputSample));
   outputSample.setDescription(outputNames);
   return outputSample;
-}
-
-
-Description SimulationAnalysis::getOutputNames() const
-{
-//   TODO
-//   int nbOutputs = outputs_.getSize();
-//   Description outputNames(nbOutputs);
-//   for (int i=0; i<nbOutputs; ++i)
-//     outputNames[i] = outputs_[i].getName();
-//   return outputNames;
-  return getPhysicalModel().getOutputNames();
 }
 
 
@@ -112,7 +80,6 @@ void SimulationAnalysis::setSeed(const UnsignedInteger seed)
 void SimulationAnalysis::save(Advocate & adv) const
 {
   PhysicalModelAnalysis::save(adv);
-//   adv.saveAttribute("outputs_", outputs_);
   adv.saveAttribute("seed_", seed_);
 }
 

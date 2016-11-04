@@ -295,6 +295,7 @@ OutputCollection PhysicalModelImplementation::getOutputs() const
   return outputs_;
 }
 
+
 void PhysicalModelImplementation::setOutputs(const OutputCollection & outputs)
 {
   std::set<String> outputNames;
@@ -351,6 +352,13 @@ void PhysicalModelImplementation::setOutputValue(const String & outputName, cons
 }
 
 
+void PhysicalModelImplementation::selectOutput(const String& outputName, const bool selected)
+{
+  getOutputByName(outputName).setIsSelected(selected);
+  notify("outputSelectionChanged");
+}
+
+
 void PhysicalModelImplementation::addOutput(const Output & output)
 {
   if (hasOutputNamed(output.getName()))
@@ -395,6 +403,16 @@ bool PhysicalModelImplementation::hasOutputNamed(const String & outputName) cons
     if (outputs_[i].getName() == outputName)
       return true;
   return false;
+}
+
+
+Description PhysicalModelImplementation::getSelectedOutputsNames() const
+{
+  Description selectedOutputsNames;
+  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
+    if (getOutputs()[i].isSelected())
+      selectedOutputsNames.add(getOutputs()[i].getName());
+  return selectedOutputsNames;
 }
 
 
@@ -537,7 +555,7 @@ void PhysicalModelImplementation::setCopula(const Copula & copula)
 
 bool PhysicalModelImplementation::isValid() const
 {
-  return getOutputs().getSize() && getInputs().getSize();
+  return getSelectedOutputsNames().getSize() && getInputs().getSize();
 }
 
 

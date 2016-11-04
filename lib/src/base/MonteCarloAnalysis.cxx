@@ -94,13 +94,17 @@ void MonteCarloAnalysis::run()
   // clear result
   result_ = DataAnalysisResult();
 
+  // check
+  if (!getPhysicalModel().getRestrictedFunction(getOutputsToAnalyse()).getOutputDescription().getSize())
+    throw InvalidDimensionException(HERE) << "The outputs to be analysed "  << getOutputsToAnalyse() <<" are not outputs of the model " << getPhysicalModel().getOutputNames();
+
   // initialization
   RandomGenerator::SetSeed(getSeed());
 
   NumericalSample effectiveInputSample(0, getPhysicalModel().getStochasticInputNames().getSize());
   effectiveInputSample.setDescription(getPhysicalModel().getStochasticInputNames());
-  NumericalSample outputSample(0, getPhysicalModel().getOutputNames().getSize()); // TODO only required outputs
-  outputSample.setDescription(getPhysicalModel().getOutputNames());
+  NumericalSample outputSample(0, getOutputsToAnalyse().getSize());
+  outputSample.setDescription(getOutputsToAnalyse());
 
   const bool maximumOuterSamplingSpecified = getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max();
   const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize())) : (UnsignedInteger)std::numeric_limits<int>::max();
@@ -177,6 +181,18 @@ String MonteCarloAnalysis::getPythonScript() const
 {
   OSS oss;
   oss << getName() << " = otguibase.MonteCarloAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
+  if (getOutputsToAnalyse().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
+  {
+    oss << "outputsToAnalyse = [";
+    for (UnsignedInteger i=0; i<getOutputsToAnalyse().getSize(); ++i)
+    {
+      oss << "'" << getOutputsToAnalyse()[i] << "'";
+      if (i < getOutputsToAnalyse().getSize()-1)
+        oss << ", ";
+    }
+    oss << "]\n";
+    oss << getName() << ".setOutputsToAnalyse(outputsToAnalyse)\n";
+  }
   if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
     oss << getName() << ".setMaximumCalls(" << getMaximumCalls() << ")\n";
   oss << getName() << ".setMaximumCoefficientOfVariation(" << getMaximumCoefficientOfVariation() << ")\n";

@@ -24,10 +24,10 @@
 
 namespace OTGUI {
 
-ListWidgetWithCheckBox::ListWidgetWithCheckBox(QString title, QStringList itemNames, QWidget * parent)
+ListWidgetWithCheckBox::ListWidgetWithCheckBox(QString title, QStringList itemNames, QStringList selectedItemNames, QWidget * parent)
   : QListWidget(parent)
   , itemNames_(itemNames)
-  , checkedItemsNames_(itemNames)
+  , checkedItemsNames_(selectedItemNames)
 { 
   setViewMode(QListWidget::ListMode);
   setSelectionMode(QAbstractItemView::NoSelection);
@@ -46,11 +46,18 @@ ListWidgetWithCheckBox::ListWidgetWithCheckBox(QString title, QStringList itemNa
     insertItem(model()->rowCount(), item);
 
     QCheckBox * box = new QCheckBox(itemNames_[i]);
-    box->setCheckState(Qt::Checked);
+    if (selectedItemNames.contains(itemNames_[i]))
+      box->setCheckState(Qt::Checked);
     setItemWidget(item, box);
 
     connect(box, SIGNAL(stateChanged(int)), this, SLOT(checkStateChanged(int)));
   } 
+}
+
+
+QStringList ListWidgetWithCheckBox::getCheckedItemsNames() const
+{
+  return checkedItemsNames_;
 }
 
 

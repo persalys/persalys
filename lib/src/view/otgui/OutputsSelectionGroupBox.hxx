@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow for the results of functional chaos
+ *  @brief QGroupBox to select outputs
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,34 +18,31 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_FUNCTIONALCHAOSRESULTWINDOW_HXX
-#define OTGUI_FUNCTIONALCHAOSRESULTWINDOW_HXX
+#ifndef OTGUI_OUTPUTSSELECTIONGROUPBOX_HXX
+#define OTGUI_OUTPUTSSELECTIONGROUPBOX_HXX
 
-#include "otgui/ResultWindow.hxx"
-#include "otgui/FunctionalChaosAnalysisResult.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/ListWidgetWithCheckBox.hxx"
+
+#include "openturns/Description.hxx"
+
+#include <QGroupBox>
 
 namespace OTGUI {
-class FunctionalChaosResultWindow : public ResultWindow
+class OutputsSelectionGroupBox : public QGroupBox
 {
   Q_OBJECT
 
 public:
-  FunctionalChaosResultWindow(AnalysisItem * item);
+  OutputsSelectionGroupBox(const OT::Description& outputsNames, const OT::Description& outputsToAnalyse, QWidget* parent=0);
 
-protected:
-  void setParameters(const Analysis & analysis);
-  void buildInterface();
+  QStringList getSelectedOutputsNames() const;
 
 public slots:
-  void showHideGraphConfigurationWidget(int indexTab);
-  void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+signals:
+  void outputsSelectionChanged(QStringList);
 
 private:
-  FunctionalChaosAnalysisResult result_;
-  QTabWidget * tabWidget_;
-  GraphConfigurationWidget * metaModelPlotsConfigurationWidget_;
-  GraphConfigurationWidget * sobolIndicesPlotsConfigurationWidget_;
+  ListWidgetWithCheckBox * outputsListWidget_;
 };
 }
 #endif

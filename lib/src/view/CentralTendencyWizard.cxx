@@ -24,7 +24,6 @@
 
 #include <QGroupBox>
 #include <QRadioButton>
-#include <QLabel>
 #include <QVBoxLayout>
 #include <QButtonGroup>
 #include <QCheckBox>
@@ -37,6 +36,7 @@ CentralTendencyWizard::CentralTendencyWizard(const OTStudy& otStudy, const Physi
   : AnalysisWizard(MonteCarloAnalysis(otStudy.getAvailableAnalysisName("centralTendencyMC_"), physicalModel))
   , MCAnalysis_(*dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation()))
   , taylorAnalysis_(TaylorExpansionMomentsAnalysis(otStudy.getAvailableAnalysisName("centralTendencyTaylor_"), physicalModel))
+  , errorMessageLabel_(new QLabel)
 {
   buildInterface();
 }
@@ -44,16 +44,33 @@ CentralTendencyWizard::CentralTendencyWizard(const OTStudy& otStudy, const Physi
 
 CentralTendencyWizard::CentralTendencyWizard(const Analysis & analysis)
   : AnalysisWizard(analysis)
+  , errorMessageLabel_(new QLabel)
 {
   if (analysis.getImplementation()->getClassName() == "MonteCarloAnalysis")
   {
     MCAnalysis_ = *dynamic_cast<const MonteCarloAnalysis*>(&*analysis.getImplementation());
     taylorAnalysis_ = TaylorExpansionMomentsAnalysis(MCAnalysis_.getName(), MCAnalysis_.getPhysicalModel());
+    try
+    {
+      taylorAnalysis_.setOutputsToAnalyse(MCAnalysis_.getOutputsToAnalyse());
+    }
+    catch (std::exception)
+    {
+      // do nothing
+    }
   }
   else
   {
     taylorAnalysis_ = *dynamic_cast<const TaylorExpansionMomentsAnalysis*>(&*analysis.getImplementation());
     MCAnalysis_ = MonteCarloAnalysis(taylorAnalysis_.getName(), taylorAnalysis_.getPhysicalModel());
+    try
+    {
+      MCAnalysis_.setOutputsToAnalyse(taylorAnalysis_.getOutputsToAnalyse());
+    }
+    catch (std::exception)
+    {
+      // do nothing
+    }
   }
   buildInterface();
 }
@@ -61,7 +78,7 @@ CentralTendencyWizard::CentralTendencyWizard(const Analysis & analysis)
 
 void CentralTendencyWizard::buildInterface()
 {
-  setWindowTitle("Central tendency");
+  setWindowTitle(tr("Central tendency"));
 
   // First Page: model
 
@@ -69,6 +86,13 @@ void CentralTendencyWizard::buildInterface()
   QWizardPage * page = new QWizardPage(this);
   QVBoxLayout * mainLayout = new QVBoxLayout(page);
 
+  // output selection
+  outputsGroupBox_ = new OutputsSelectionGroupBox(MCAnalysis_.getPhysicalModel().getSelectedOutputsNames(), MCAnalysis_.getOutputsToAnalyse(), this);
+  setOutputsToAnalyse(outputsGroupBox_->getSelectedOutputsNames());
+  connect(outputsGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), this, SLOT(setOutputsToAnalyse(QStringList)));
+  mainLayout->addWidget(outputsGroupBox_);
+
+  // method selection
   QGroupBox * methodBox = new QGroupBox(tr("Method"));
   QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
 
@@ -149,7 +173,6 @@ void CentralTendencyWizard::buildInterface()
 //   mainLayout->addLayout(methodParametersLayout);
 
   /// -- error message
-  errorMessageLabel_ = new QLabel;
   errorMessageLabel_->setWordWrap(true);
   connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), errorMessageLabel_, SLOT(clear()));
   connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), errorMessageLabel_, SLOT(clear()));
@@ -228,8 +251,34 @@ void CentralTendencyWizard::blockSizeChanged(double size)
 }
 
 
+void CentralTendencyWizard::setOutputsToAnalyse(QStringList outputsList)
+{
+  errorMessageLabel_->setText("");
+
+  Description desc(outputsList.size());
+  for (int i=0; i<outputsList.size(); ++i)
+    desc[i] = outputsList[i].toUtf8().constData();
+
+  try
+  {
+    taylorAnalysis_.setOutputsToAnalyse(desc);
+    MCAnalysis_.setOutputsToAnalyse(desc);
+  }
+  catch (InvalidDimensionException exception)
+  {
+    // check in validateCurrentPage
+  }
+}
+
+
 bool CentralTendencyWizard::validateCurrentPage()
 {
+  errorMessageLabel_->setText("");
+  if (!outputsGroupBox_->getSelectedOutputsNames().size())
+  {
+    errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(tr("At least one output must be selected")).arg("</font>"));
+    return false;
+  }
   if (monteCarloWidget_->isVisible())
   {
     QString errorMessage = "";

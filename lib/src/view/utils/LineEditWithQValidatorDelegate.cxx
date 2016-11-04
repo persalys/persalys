@@ -24,9 +24,10 @@
 
 namespace OTGUI {
 
-LineEditWithQValidatorDelegate::LineEditWithQValidatorDelegate(const QString & regex, QObject *parent)
+LineEditWithQValidatorDelegate::LineEditWithQValidatorDelegate(const bool offsetForCheckBox, const QString & regex, QObject *parent)
   : QStyledItemDelegate(parent)
   , regex_(regex)
+  , offsetForCheckBox_(offsetForCheckBox)
 {
 }
 
@@ -55,6 +56,17 @@ void LineEditWithQValidatorDelegate::setModelData(QWidget * editor, QAbstractIte
 
 void LineEditWithQValidatorDelegate::updateEditorGeometry(QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex &) const
 {
-  editor->setGeometry(option.rect);
+  if (offsetForCheckBox_)
+  {
+    QStyleOptionButton checkBoxStyleOption;
+    QRect checkBoxRect = editor->style()->subElementRect(QStyle::SE_CheckBoxIndicator, &checkBoxStyleOption);
+    QPoint checkBoxPoint(option.rect.x() + 3 + checkBoxRect.width(), option.rect.y());
+
+    editor->setGeometry(QRect(checkBoxPoint, QSize(option.rect.width()-3-checkBoxRect.width(), option.rect.height())));
+  }
+  else
+  {
+    editor->setGeometry(option.rect);
+  }
 }
 }

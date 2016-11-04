@@ -30,6 +30,8 @@ template <>
 
 %include OTStudy_doc.i
 
+%ignore *::SetInstanceObserver;
+
 OTGUITypedInterfaceObjectHelper(OTStudy)
 OTGUITypedCollectionInterfaceObjectHelper(OTStudy)
 

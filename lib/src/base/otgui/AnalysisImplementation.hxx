@@ -44,6 +44,9 @@ public:
 
   bool isReliabilityAnalysis() const;
 
+  OT::Description getOutputsToAnalyse() const;
+  virtual void setOutputsToAnalyse(const OT::Description& outputsNames);
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
@@ -51,10 +54,11 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  void setIsReliabilityAnalysis(bool isReliabilityAnalysis);
+  void setIsReliabilityAnalysis(const bool isReliabilityAnalysis);
 
 private:
   bool isReliabilityAnalysis_;
+  OT::Description outputsToAnalyse_;
 };
 }
 #endif

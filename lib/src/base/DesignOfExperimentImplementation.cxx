@@ -78,7 +78,7 @@ Description DesignOfExperimentImplementation::getVariableInputNames() const
 
 void DesignOfExperimentImplementation::run()
 {
-  setOutputSample(physicalModel_.getFunction()(getInputSample()));
+  setOutputSample(physicalModel_.getFunction(physicalModel_.getSelectedOutputsNames())(getInputSample()));
   notify("analysisFinished");
 }
 

@@ -14,3 +14,13 @@ OTGUI_DesignOfExperiment_getVariableInputNames_doc
 OTGUI_DesignOfExperiment_run_doc
 %feature("docstring") OTGUI::DesignOfExperiment::hasPhysicalModel
 OTGUI_DesignOfExperiment_hasPhysicalModel_doc
+%feature("docstring") OTGUI::DesignOfExperiment::getInputSample
+OTGUI_DesignOfExperiment_getInputSample_doc
+%feature("docstring") OTGUI::DesignOfExperiment::setInputSample
+OTGUI_DesignOfExperiment_setInputSample_doc
+%feature("docstring") OTGUI::DesignOfExperiment::getOutputSample
+OTGUI_DesignOfExperiment_getOutputSample_doc
+%feature("docstring") OTGUI::DesignOfExperiment::setOutputSample
+OTGUI_DesignOfExperiment_setOutputSample_doc
+%feature("docstring") OTGUI::DesignOfExperiment::getSample
+OTGUI_DesignOfExperiment_getSample_doc

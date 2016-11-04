@@ -50,3 +50,29 @@ analysisLaunched : bool
 %enddef
 %feature("docstring") OTGUI::AnalysisImplementation::analysisLaunched
 OTGUI_Analysis_analysisLaunched_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_Analysis_getOutputsToAnalyse_doc
+"Get the outputs to analyse.
+
+Returns
+-------
+outputsNames : sequence of str
+    Names of the outputs to analyse"
+%enddef
+%feature("docstring") OTGUI::AnalysisImplementation::getOutputsToAnalyse
+OTGUI_Analysis_getOutputsToAnalyse_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_Analysis_setOutputsToAnalyse_doc
+"Set the outputs to analyse.
+
+Parameters
+----------
+outputsNames : sequence of str
+    Names of the outputs to analyse"
+%enddef
+%feature("docstring") OTGUI::AnalysisImplementation::setOutputsToAnalyse
+OTGUI_Analysis_setOutputsToAnalyse_doc

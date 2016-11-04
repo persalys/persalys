@@ -36,6 +36,7 @@ DesignOfExperimentAnalysis::DesignOfExperimentAnalysis(const String & name, cons
   : AnalysisImplementation(name)
   , designOfExperiment_(designOfExperiment)
 {
+  setOutputsToAnalyse(designOfExperiment_.getOutputSample().getDescription());
 }
 
 
@@ -55,12 +56,24 @@ DesignOfExperiment DesignOfExperimentAnalysis::getDesignOfExperiment() const
 void DesignOfExperimentAnalysis::setDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
 {
   designOfExperiment_ = designOfExperiment;
+  setOutputsToAnalyse(designOfExperiment.getOutputSample().getDescription());
 }
 
 
 String DesignOfExperimentAnalysis::getModelName() const
 {
   return designOfExperiment_.getName();
+}
+
+
+void DesignOfExperimentAnalysis::setOutputsToAnalyse(const Description& outputsNames)
+{
+  const Description modelOutputsNames(designOfExperiment_.getOutputSample().getDescription());
+  for (UnsignedInteger i=0; i<outputsNames.getSize(); ++i)
+    if (!modelOutputsNames.contains(outputsNames[i]))
+      throw InvalidArgumentException(HERE) << "The name " << outputsNames[i] << " does not match an output name of the model";
+
+  AnalysisImplementation::setOutputsToAnalyse(outputsNames);
 }
 
 
@@ -87,5 +100,7 @@ void DesignOfExperimentAnalysis::load(Advocate & adv)
 {
   AnalysisImplementation::load(adv);
   adv.loadAttribute("designOfExperiment_", designOfExperiment_);
+  if (!getOutputsToAnalyse().getSize())
+    setOutputsToAnalyse(designOfExperiment_.getOutputSample().getDescription());
 }
 }

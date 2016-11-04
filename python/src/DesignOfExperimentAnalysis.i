@@ -4,7 +4,7 @@
 #include "otgui/DesignOfExperimentAnalysis.hxx"
 %}
 
-%ignore DesignOfExperimentAnalysis;
+%include DesignOfExperimentAnalysis_doc.i
 
 %include otgui/DesignOfExperimentAnalysis.hxx
 namespace OTGUI {

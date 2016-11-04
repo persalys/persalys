@@ -40,6 +40,7 @@ public:
   bool setData(const QModelIndex & index, const QVariant & value, int role);
   Qt::ItemFlags flags(const QModelIndex & index) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+  bool setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role);
 
   void removeLine(const QModelIndex & index);
   bool isValid();
@@ -48,6 +49,8 @@ public slots:
     void addLine();
 signals:
   void errorMessageChanged(QString);
+  void checked(const bool) const;
+  void selectedOutputsChanged();
 
 private:
   PhysicalModel physicalModel_;

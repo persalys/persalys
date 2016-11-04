@@ -46,3 +46,13 @@ Returns
 -------
 result : :py:class:`openturns.NumericalPoint`
     Variance estimation"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FunctionalChaosAnalysisResult::getOutputSample
+"Output sample accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.NumericalSample`
+    Output sample"

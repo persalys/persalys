@@ -86,3 +86,68 @@ hasPhysicalModel : bool
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::hasPhysicalModel
 OTGUI_DesignOfExperiment_hasPhysicalModel_doc
+
+// ----------------------------------------------------------------------
+
+%define OTGUI_DesignOfExperiment_getInputSample_doc
+"Input sample accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.NumericalSample`
+    Input sample"
+%enddef
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::getInputSample
+OTGUI_DesignOfExperiment_getInputSample_doc
+
+// ----------------------------------------------------------------------
+
+%define OTGUI_DesignOfExperiment_setInputSample_doc
+"Input sample accessor.
+
+Parameters
+----------
+sample : :py:class:`openturns.NumericalSample`
+    Input sample"
+%enddef
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::setInputSample
+OTGUI_DesignOfExperiment_setInputSample_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_DesignOfExperiment_getOutputSample_doc
+"Output sample accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.NumericalSample`
+    Output sample"
+%enddef
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::getOutputSample
+OTGUI_DesignOfExperiment_getOutputSample_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_DesignOfExperiment_setOutputSample_doc
+"Output sample accessor.
+
+Parameters
+----------
+sample : :py:class:`openturns.NumericalSample`
+    Output sample"
+%enddef
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::setOutputSample
+OTGUI_DesignOfExperiment_setOutputSample_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_DesignOfExperiment_getSample_doc
+"Sample accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.NumericalSample`
+    Input sample and output sample"
+%enddef
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::getSample
+OTGUI_DesignOfExperiment_getSample_doc

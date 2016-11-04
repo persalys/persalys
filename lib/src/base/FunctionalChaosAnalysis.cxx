@@ -161,12 +161,32 @@ void FunctionalChaosAnalysis::run()
 {
   if (designOfExperiment_.getInputSample().getSize()*designOfExperiment_.getOutputSample().getSize() == 0)
     throw InvalidArgumentException(HERE) << "The design of experiment must contains not empty input AND output samples";
+  if (!getOutputsToAnalyse().getSize())
+    throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
 
   // clear result
   result_ = FunctionalChaosAnalysisResult();
 
+  // get marginals
+  Indices indices;
+  for (UnsignedInteger i=0; i<getOutputsToAnalyse().getSize(); ++i)
+  {
+    bool outputFound = false;
+    for (UnsignedInteger j=0; j<designOfExperiment_.getOutputSample().getDescription().getSize(); ++j)
+    {
+      if (designOfExperiment_.getOutputSample().getDescription()[j] == getOutputsToAnalyse()[i])
+      {
+        indices.add(j);
+        outputFound = true;
+        break;
+      }
+    }
+    if (!outputFound)
+      throw InvalidArgumentException(HERE) << "The output to analyse "  << getOutputsToAnalyse()[i] <<" is not an output of the model " << designOfExperiment_.getOutputSample().getDescription();
+  }
+
   const UnsignedInteger inputDimension = designOfExperiment_.getInputSample().getDimension();
-  const UnsignedInteger outputDimension = designOfExperiment_.getOutputSample().getDimension();
+  const UnsignedInteger outputDimension = getOutputsToAnalyse().getSize();
 
   // check chaos degree
   if (!getSparseChaos())
@@ -180,10 +200,11 @@ void FunctionalChaosAnalysis::run()
   }
 
   // create FunctionalChaosAlgorithm and run it
-  FunctionalChaosAlgorithm functionalChaos(buildFunctionalChaosAlgorithm(designOfExperiment_.getInputSample(), designOfExperiment_.getOutputSample()));
+  FunctionalChaosAlgorithm functionalChaos(buildFunctionalChaosAlgorithm(designOfExperiment_.getInputSample(), designOfExperiment_.getOutputSample().getMarginal(indices)));
   functionalChaos.run();
 
   // set result_
+  result_.outputSample_ = designOfExperiment_.getOutputSample().getMarginal(indices);
   // - ot result
   result_.functionalChaosResult_ = functionalChaos.getResult();
   postProcessFunctionalChaosResult();
@@ -191,12 +212,12 @@ void FunctionalChaosAnalysis::run()
   // validation: leave one out
   if (leaveOneOutValidation_)
   {
-    NumericalSample outputSampleLOO(designOfExperiment_.getOutputSample().getSize(), outputDimension);
-    for (UnsignedInteger i=0; i<designOfExperiment_.getOutputSample().getSize(); ++i)
+    NumericalSample outputSampleLOO(result_.outputSample_.getSize(), outputDimension);
+    for (UnsignedInteger i=0; i<result_.outputSample_.getSize(); ++i)
     {
       NumericalSample inSample(designOfExperiment_.getInputSample());
       inSample.erase(i);
-      NumericalSample outSample(designOfExperiment_.getOutputSample());
+      NumericalSample outSample(result_.outputSample_);
       outSample.erase(i);
       // build and run FunctionalChaosAlgorithm
       FunctionalChaosAlgorithm functionalChaosLOO(buildFunctionalChaosAlgorithm(inSample, outSample));
@@ -246,18 +267,30 @@ FunctionalChaosAlgorithm FunctionalChaosAnalysis::buildFunctionalChaosAlgorithm(
 
 void FunctionalChaosAnalysis::postProcessFunctionalChaosResult()
 {
+  if (!result_.outputSample_.getSize())
+    throw InvalidValueException(HERE) << "Problem during the creation of the metamodel: The outputSample is empty.\n";
   if (!result_.functionalChaosResult_.getCoefficients().getSize())
     throw InvalidValueException(HERE) << "Problem during the creation of the metamodel: The FunctionalChaosResult is empty.\n";
 
   const UnsignedInteger inputDimension = designOfExperiment_.getInputSample().getDimension();
-  const UnsignedInteger outputDimension = designOfExperiment_.getOutputSample().getDimension();
+  const UnsignedInteger outputDimension = result_.outputSample_.getDimension();
 
   // - metamodel
   MetaModel metaModel("MetaModel_" + getName() + "_", result_.functionalChaosResult_.getMetaModel());
   if (designOfExperiment_.hasPhysicalModel())
   {
     metaModel.setInputs(designOfExperiment_.getPhysicalModel().getInputs());
-    metaModel.setOutputs(designOfExperiment_.getPhysicalModel().getOutputs());
+    if (designOfExperiment_.getPhysicalModel().getOutputs().getSize() == outputDimension)
+    {
+      metaModel.setOutputs(designOfExperiment_.getPhysicalModel().getOutputs());
+    }
+    else
+    {
+      OutputCollection outputs;
+      for (UnsignedInteger i=0; i<designOfExperiment_.getPhysicalModel().getOutputs().getSize(); ++i)
+        if (getOutputsToAnalyse().contains(designOfExperiment_.getPhysicalModel().getOutputs()[i].getName()))
+          outputs.add(designOfExperiment_.getPhysicalModel().getOutputs()[i]);
+    }
   }
   else
   {
@@ -266,7 +299,8 @@ void FunctionalChaosAnalysis::postProcessFunctionalChaosResult()
       inputs.add(Input(designOfExperiment_.getInputSample().getDescription()[i]));
     OutputCollection outputs;
     for (UnsignedInteger i=0; i<outputDimension; ++i)
-      outputs.add(Output(designOfExperiment_.getOutputSample().getDescription()[i]));
+      outputs.add(Output(result_.outputSample_.getDescription()[i]));
+
     metaModel.setInputs(inputs);
     metaModel.setOutputs(outputs);
   }
@@ -294,15 +328,20 @@ void FunctionalChaosAnalysis::postProcessFunctionalChaosResult()
     }
   }
   result_.variance_ = variance;
-  result_.sobolResult_ = SobolResult(firstOrderIndices, totalIndices, designOfExperiment_.getOutputSample().getDescription());
+  result_.sobolResult_ = SobolResult(firstOrderIndices, totalIndices, result_.outputSample_.getDescription());
 }
 
 
 void FunctionalChaosAnalysis::computeErrorQ2LOO()
 {
-  const UnsignedInteger outputDimension = designOfExperiment_.getOutputSample().getDimension();
-  const UnsignedInteger size = designOfExperiment_.getOutputSample().getSize();
-  const NumericalPoint varianceOutputSample(designOfExperiment_.getOutputSample().computeVariance());
+  if (!result_.outputSample_.getSize())
+    throw InvalidValueException(HERE) << "Problem during the creation of the metamodel: The outputSample is empty.\n";
+  if (result_.variance_.getSize() != result_.outputSample_.getDimension())
+    throw InvalidValueException(HERE) << "Problem during the creation of the metamodel: The variance is not valid.\n";
+
+  const UnsignedInteger outputDimension = result_.outputSample_.getDimension();
+  const UnsignedInteger size = result_.outputSample_.getSize();
+
   result_.errorQ2LOO_ = NumericalPoint(outputDimension);
   result_.q2LOO_ = NumericalPoint(outputDimension);
 
@@ -311,11 +350,11 @@ void FunctionalChaosAnalysis::computeErrorQ2LOO()
     double quadraticResidual = 0.;
     for (UnsignedInteger j=0; j<size; ++j)
     {
-      const double diff = result_.metaModelOutputSampleLOO_[j][i] - designOfExperiment_.getOutputSample()[j][i];
+      const double diff = result_.metaModelOutputSampleLOO_[j][i] - result_.outputSample_[j][i];
       quadraticResidual += diff*diff;
     }
     result_.errorQ2LOO_[i] = sqrt(quadraticResidual) / size;
-    result_.q2LOO_[i] = 1 - (quadraticResidual/(size-1)) / varianceOutputSample[i];
+    result_.q2LOO_[i] = 1 - (quadraticResidual/(size-1)) / result_.variance_[i];
   }
 }
 
@@ -330,6 +369,18 @@ String FunctionalChaosAnalysis::getPythonScript() const
 {
   OSS oss;
   oss << getName() << " = otguibase.FunctionalChaosAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
+  if (getOutputsToAnalyse().getSize() < getDesignOfExperiment().getOutputSample().getDimension())
+  {
+    oss << "outputsToAnalyse = [";
+    for (UnsignedInteger i=0; i<getOutputsToAnalyse().getSize(); ++i)
+    {
+      oss << "'" << getOutputsToAnalyse()[i] << "'";
+      if (i < getOutputsToAnalyse().getSize()-1)
+        oss << ", ";
+    }
+    oss << "]\n";
+    oss << getName() << ".setOutputsToAnalyse(outputsToAnalyse)\n";
+  }
   oss << getName() << ".setChaosDegree(" << getChaosDegree() << ")\n";
   oss << getName() << ".setSparseChaos(" << (getSparseChaos()? "True" : "False") << ")\n";
   oss << getName() << ".setLeaveOneOutValidation(" << (isLeaveOneOutValidation()? "True" : "False") << ")\n";

@@ -4,6 +4,8 @@
 #include "otgui/AnalysisImplementation.hxx"
 %}
 
+%ignore *::getModelName;
+
 %include AnalysisImplementation_doc.i
 
 %include otgui/AnalysisImplementation.hxx

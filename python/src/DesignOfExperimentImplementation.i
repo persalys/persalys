@@ -6,8 +6,6 @@
 
 %include DesignOfExperimentImplementation_doc.i
 
-%ignore OTGUI::DesignOfExperiment::updateParameters;
-
 %include otgui/DesignOfExperimentImplementation.hxx
 namespace OTGUI {
 

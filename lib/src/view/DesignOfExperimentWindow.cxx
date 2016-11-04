@@ -126,8 +126,15 @@ void DesignOfExperimentWindow::addTabsForOutputs()
     const String inputName = inS.getDescription()[i];
     inputNames << QString::fromUtf8(inputName.c_str());
 
-    const QString inputDescription = QString::fromUtf8(designOfExperiment_.getPhysicalModel().getInputByName(inputName).getDescription().c_str());
-
+    QString inputDescription;
+    try
+    {
+      inputDescription = QString::fromUtf8(designOfExperiment_.getPhysicalModel().getInputByName(inputName).getDescription().c_str());
+    }
+    catch (std::exception) // maybe the variable does not exist anymore
+    {
+      //do nothing
+    }
     if (!inputDescription.isEmpty())
       inAxisTitles << inputDescription;
     else
@@ -141,8 +148,17 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   QStringList outAxisTitles;
   for (UnsignedInteger i=0; i<outS.getDimension(); ++i)
   {
-    outputNames << QString::fromUtf8(outS.getDescription()[i].c_str());
-    QString outputDescription = QString::fromUtf8(designOfExperiment_.getPhysicalModel().getOutputs()[i].getDescription().c_str());
+    const String outputName = outS.getDescription()[i];
+    outputNames << QString::fromUtf8(outputName.c_str());
+    QString outputDescription;
+    try
+    {
+      outputDescription = QString::fromUtf8(designOfExperiment_.getPhysicalModel().getOutputByName(outputName).getDescription().c_str());
+    }
+    catch (std::exception) // maybe the variable does not exist anymore
+    {
+      //do nothing
+    }
     if (!outputDescription.isEmpty())
       outAxisTitles << outputDescription;
     else

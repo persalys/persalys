@@ -24,6 +24,7 @@
 #include "otgui/AnalysisWizard.hxx"
 #include "otgui/FunctionalChaosAnalysis.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
+#include "otgui/OutputsSelectionGroupBox.hxx"
 
 #include <QLabel>
 #include <QGroupBox>
@@ -49,10 +50,12 @@ public slots:
   void chaosDegreeChanged(int);
   void sparseChaosChanged(bool);
   void looValidationChanged(bool);
+  void setOutputsToAnalyse(QStringList);
 
 private:
   FunctionalChaosAnalysis chaos_;
 //   Kriging kriging_;
+  OutputsSelectionGroupBox * outputsGroupBox_;
   QGroupBox * chaosParametersBox_;
   CollapsibleGroupBox * chaosAdvancedParamGroupBox_;
 //   QWidget * krigingWidgets_;

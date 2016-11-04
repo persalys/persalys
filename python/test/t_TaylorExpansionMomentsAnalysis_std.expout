@@ -1,5 +1,7 @@
-class=TaylorExpansionMomentsAnalysis name=aTaylor physicalModel=aModelPhys
+class=TaylorExpansionMomentsAnalysis name=aTaylor physicalModel=aModelPhys outputs=[Y0]
 result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y0] meanFirstOrder=class=NumericalPoint name=Unnamed dimension=1 values=[8.84147] meanSecondOrder=class=NumericalPoint name=Unnamed dimension=1 values=[8.42074] standardDeviation=class=NumericalPoint name=Unnamed dimension=1 values=[8.01822] variance=class=NumericalPoint name=Unnamed dimension=1 values=[64.2919]
+class=TaylorExpansionMomentsAnalysis name=aTaylor2 physicalModel=aModelPhys outputs=[Y1]
+result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y1] meanFirstOrder=class=NumericalPoint name=Unnamed dimension=1 values=[18.8415] meanSecondOrder=class=NumericalPoint name=Unnamed dimension=1 values=[18.4207] standardDeviation=class=NumericalPoint name=Unnamed dimension=1 values=[8.01822] variance=class=NumericalPoint name=Unnamed dimension=1 values=[64.2919]
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -13,12 +15,25 @@ dist_X0 = ot.Normal(1, 1)
 X0 = otguibase.Input('X0', 1, '', dist_X0)
 dist_X1 = ot.Normal(1, 1)
 X1 = otguibase.Input('X1', 2, '', dist_X1)
+X2 = otguibase.Input('X2', 10, '')
+fake_Y0 = otguibase.Output('fake_Y0', 0, '', 'X0')
+fake_Y0.setIsSelected(False)
 Y0 = otguibase.Output('Y0', 0, '', 'sin(X0) + 8*X1')
+Y1 = otguibase.Output('Y1', 0, '', 'sin(X0) + 8*X1 + X2')
 aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys')
 aModelPhys.addInput(X0)
 aModelPhys.addInput(X1)
+aModelPhys.addInput(X2)
+aModelPhys.addOutput(fake_Y0)
 aModelPhys.addOutput(Y0)
+aModelPhys.addOutput(Y1)
 myStudy.add(aModelPhys)
 aTaylor = otguibase.TaylorExpansionMomentsAnalysis('aTaylor', aModelPhys)
+outputsToAnalyse = ['Y0']
+aTaylor.setOutputsToAnalyse(outputsToAnalyse)
 myStudy.add(aTaylor)
+aTaylor2 = otguibase.TaylorExpansionMomentsAnalysis('aTaylor2', aModelPhys)
+outputsToAnalyse = ['Y1']
+aTaylor2.setOutputsToAnalyse(outputsToAnalyse)
+myStudy.add(aTaylor2)
 

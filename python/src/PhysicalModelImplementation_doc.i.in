@@ -477,7 +477,6 @@ parametersType : int
 %feature("docstring") OTGUI::PhysicalModelImplementation::setInputDistributionParametersType
 OTGUI_PhysicalModel_setInputDistributionParametersType_doc
 
-
 // ---------------------------------------------------------------------
 
 %define OTGUI_PhysicalModel_getRestrictedFunction_doc
@@ -495,3 +494,31 @@ restricted : :py:class:`openturns.NumericalMathFunction`
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getRestrictedFunction
 OTGUI_PhysicalModel_getRestrictedFunction_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_getSelectedOutputsNames_doc
+"Accessor to the selected outputs names.
+
+Returns
+-------
+names : :py:class:`openturns.Description`
+    Selected outputs names"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getSelectedOutputsNames
+OTGUI_PhysicalModel_getSelectedOutputsNames_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_selectOutput_doc
+"Select output.
+
+Parameters
+----------
+name : str
+    Output name
+isSelected : bool
+    Whether it is selected"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::selectOutput
+OTGUI_PhysicalModel_selectOutput_doc

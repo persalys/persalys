@@ -47,6 +47,15 @@ LimitState ReliabilityAnalysis::getLimitState() const
 }
 
 
+void ReliabilityAnalysis::setOutputsToAnalyse(const Description& outputsNames)
+{
+  if (outputsNames.getSize() == 1)
+    if (outputsNames[0] == limitState_.getOutputName())
+      return;
+  throw InvalidArgumentException(HERE) << "The output to be analysed " << limitState_.getOutputName() << "is already defined in the limit state";
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void ReliabilityAnalysis::save(Advocate & adv) const
 {

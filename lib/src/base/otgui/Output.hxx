@@ -42,6 +42,9 @@ public:
   OT::String getFormula() const;
   void setFormula(const OT::String & formula);
 
+  bool isSelected() const;
+  void setIsSelected(const bool isSelected);
+
   bool hasBeenComputed() const;
   void setHasBeenComputed(const bool hasBeenComputed);
 
@@ -58,6 +61,7 @@ public:
 
 private:
   OT::String formula_;
+  bool isSelected_;
   bool hasBeenComputed_;
 };
 typedef OT::Collection<Output> OutputCollection;

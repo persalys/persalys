@@ -24,6 +24,7 @@
 #include "otgui/AnalysisWizard.hxx"
 #include "otgui/StopCriteriaGroupBox.hxx"
 #include "otgui/BlockSizeGroupBox.hxx"
+#include "otgui/OutputsSelectionGroupBox.hxx"
 #include "otgui/TaylorExpansionMomentsAnalysis.hxx"
 #include "otgui/MonteCarloAnalysis.hxx"
 
@@ -54,10 +55,12 @@ public slots:
   void levelConfidenceIntervalChanged(double);
   void seedChanged(int);
   void blockSizeChanged(double);
+  void setOutputsToAnalyse(QStringList);
 
 private:
   MonteCarloAnalysis MCAnalysis_;
   TaylorExpansionMomentsAnalysis taylorAnalysis_;
+  OutputsSelectionGroupBox * outputsGroupBox_;
   QWidget * monteCarloWidget_;
   StopCriteriaGroupBox * stopCriteriaGroupBox_;
   BlockSizeGroupBox * blockSizeGroupBox_;
