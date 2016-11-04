@@ -56,7 +56,6 @@ DesignOfExperiment DesignOfExperimentAnalysis::getDesignOfExperiment() const
 void DesignOfExperimentAnalysis::setDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
 {
   designOfExperiment_ = designOfExperiment;
-  setInterestVariables(designOfExperiment.getSample().getDescription());
 }
 
 
@@ -68,6 +67,9 @@ String DesignOfExperimentAnalysis::getModelName() const
 
 void DesignOfExperimentAnalysis::setInterestVariables(const Description& variablesNames)
 {
+  if (!variablesNames.getSize())
+    throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
+
   const Description modelVariablesNames(designOfExperiment_.getSample().getDescription());
   for (UnsignedInteger i=0; i<variablesNames.getSize(); ++i)
     if (!modelVariablesNames.contains(variablesNames[i]))
