@@ -29,7 +29,7 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation()
   : DataSample()
   , Observable()
   , hasPhysicalModel_(true)
-  , physicalModel_(0)
+  , physicalModel_()
 {
 }
 
