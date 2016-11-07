@@ -21,10 +21,11 @@
 #ifndef OTGUI_OTGUIMENUBAR_HXX
 #define OTGUI_OTGUIMENUBAR_HXX
 
+#include "otgui/OTGuiprivate.hxx"
 #include <QMenuBar>
 
 namespace OTGUI {
-class OTguiMenuBar : public QMenuBar
+class OTGUI_API OTguiMenuBar : public QMenuBar
 {
   Q_OBJECT
 

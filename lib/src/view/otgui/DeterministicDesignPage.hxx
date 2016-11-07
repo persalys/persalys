@@ -28,7 +28,7 @@
 #include <QLabel>
 
 namespace OTGUI {
-class DeterministicDesignPage : public QWizardPage
+class OTGUI_API DeterministicDesignPage : public QWizardPage
 {
   Q_OBJECT
 

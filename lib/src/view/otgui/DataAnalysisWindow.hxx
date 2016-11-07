@@ -30,7 +30,7 @@
 #include <QComboBox>
 
 namespace OTGUI {
-class DataAnalysisWindow : public ResultWindow
+class OTGUI_API DataAnalysisWindow : public ResultWindow
 {
   Q_OBJECT
 

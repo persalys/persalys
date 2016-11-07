@@ -27,7 +27,7 @@
 #include <QStackedWidget>
 
 namespace OTGUI {
-class MomentsEstimatesTableGroupBox : public QGroupBox
+class OTGUI_API MomentsEstimatesTableGroupBox : public QGroupBox
 {
   Q_OBJECT
 

@@ -28,7 +28,7 @@
 #include <QComboBox>
 
 namespace OTGUI {
-class LimitStateWindow : public OTguiSubWindow
+class OTGUI_API LimitStateWindow : public OTguiSubWindow
 {
   Q_OBJECT
 

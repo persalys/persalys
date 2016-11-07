@@ -21,13 +21,15 @@
 #ifndef OTGUI_OTGUISUBWINDOW_HXX
 #define OTGUI_OTGUISUBWINDOW_HXX
 
+#include "otgui/OTGuiprivate.hxx"
+
 #include <QStandardItem>
 #include <QMdiSubWindow>
 #include <QLabel>
 #include <QTimeLine>
 
 namespace OTGUI {
-class OTguiSubWindow : public QMdiSubWindow
+class OTGUI_API OTguiSubWindow : public QMdiSubWindow
 {
   Q_OBJECT
 

@@ -26,7 +26,7 @@
 
 namespace OTGUI {
 
-class DataModelWindow : public OTguiSubWindow
+class OTGUI_API DataModelWindow : public OTguiSubWindow
 {
   Q_OBJECT
 

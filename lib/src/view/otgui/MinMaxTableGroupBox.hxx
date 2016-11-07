@@ -27,7 +27,7 @@
 #include <QGroupBox>
 
 namespace OTGUI {
-class MinMaxTableGroupBox : public QGroupBox
+class OTGUI_API MinMaxTableGroupBox : public QGroupBox
 {
   Q_OBJECT
 

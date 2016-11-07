@@ -28,7 +28,7 @@
 #include <QGroupBox>
 
 namespace OTGUI {
-class OutputsSelectionGroupBox : public QGroupBox
+class OTGUI_API OutputsSelectionGroupBox : public QGroupBox
 {
   Q_OBJECT
 

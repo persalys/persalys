@@ -21,10 +21,11 @@
 #ifndef OTGUI_OTGUITOOLBAR_HXX
 #define OTGUI_OTGUITOOLBAR_HXX
 
+#include "otgui/OTGuiprivate.hxx"
 #include <QToolBar>
 
 namespace OTGUI {
-class OTguiToolBar : public QToolBar
+class OTGUI_API OTguiToolBar : public QToolBar
 {
   Q_OBJECT
 

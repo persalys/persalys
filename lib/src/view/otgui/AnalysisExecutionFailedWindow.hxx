@@ -25,7 +25,7 @@
 #include "otgui/AnalysisItem.hxx"
 
 namespace OTGUI {
-class AnalysisExecutionFailedWindow : public OTguiSubWindow
+class OTGUI_API AnalysisExecutionFailedWindow : public OTguiSubWindow
 {
   Q_OBJECT
 

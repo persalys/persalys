@@ -28,7 +28,7 @@
 #include <QAction>
 
 namespace OTGUI {
-class StudyTreeView : public QTreeView
+class OTGUI_API StudyTreeView : public QTreeView
 {
   Q_OBJECT
 

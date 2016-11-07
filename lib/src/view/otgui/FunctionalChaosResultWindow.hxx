@@ -26,7 +26,7 @@
 #include "otgui/GraphConfigurationWidget.hxx"
 
 namespace OTGUI {
-class FunctionalChaosResultWindow : public ResultWindow
+class OTGUI_API FunctionalChaosResultWindow : public ResultWindow
 {
   Q_OBJECT
 

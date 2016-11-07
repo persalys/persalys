@@ -31,7 +31,7 @@
 #include <QLabel>
 
 namespace OTGUI {
-class CentralTendencyWizard : public AnalysisWizard
+class OTGUI_API CentralTendencyWizard : public AnalysisWizard
 {
   Q_OBJECT
 

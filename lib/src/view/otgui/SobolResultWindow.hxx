@@ -26,7 +26,7 @@
 #include "otgui/GraphConfigurationWidget.hxx"
 
 namespace OTGUI {
-class SobolResultWindow : public ResultWindow
+class OTGUI_API SobolResultWindow : public ResultWindow
 {
   Q_OBJECT
 

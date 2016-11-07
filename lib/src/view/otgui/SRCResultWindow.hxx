@@ -29,7 +29,7 @@
 #include <QStackedWidget>
 
 namespace OTGUI {
-class SRCResultWindow : public ResultWindow
+class OTGUI_API SRCResultWindow : public ResultWindow
 {
   Q_OBJECT
 

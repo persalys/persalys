@@ -26,7 +26,7 @@
 #include "otgui/FromFileDesignOfExperiment.hxx"
 
 namespace OTGUI {
-class ImportDesignOfExperimentPage : public ImportDataPage
+class OTGUI_API ImportDesignOfExperimentPage : public ImportDataPage
 {
   Q_OBJECT
 

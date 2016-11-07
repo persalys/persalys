@@ -21,12 +21,14 @@
 #ifndef OTGUI_OTGUIMDIAREA_HXX
 #define OTGUI_OTGUIMDIAREA_HXX
 
+#include "otgui/OTGuiprivate.hxx"
+
 #include <QMdiArea>
 #include <QStandardItem>
 #include <QMdiSubWindow>
 
 namespace OTGUI {
-class OTguiMdiArea : public QMdiArea
+class OTGUI_API OTguiMdiArea : public QMdiArea
 {
   Q_OBJECT
 

@@ -27,7 +27,7 @@
 #include <QGroupBox>
 
 namespace OTGUI {
-class BlockSizeGroupBox : public QGroupBox
+class OTGUI_API BlockSizeGroupBox : public QGroupBox
 {
   Q_OBJECT
 

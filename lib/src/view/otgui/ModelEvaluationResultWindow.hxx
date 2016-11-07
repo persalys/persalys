@@ -26,7 +26,7 @@
 #include "otgui/ModelEvaluationResult.hxx"
 
 namespace OTGUI {
-class ModelEvaluationResultWindow : public ResultWindow
+class OTGUI_API ModelEvaluationResultWindow : public ResultWindow
 {
   Q_OBJECT
 

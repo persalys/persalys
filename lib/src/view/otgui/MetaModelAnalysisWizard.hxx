@@ -30,7 +30,7 @@
 #include <QGroupBox>
 
 namespace OTGUI {
-class MetaModelAnalysisWizard : public AnalysisWizard
+class OTGUI_API MetaModelAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
 

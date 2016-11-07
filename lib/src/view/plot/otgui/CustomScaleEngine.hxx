@@ -22,10 +22,11 @@
 #define OTGUI_DISTRIBUTIONSCALEENGINE_HXX
 
 #include "qwt_scale_engine.h"
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
 
-class CustomScaleEngine : public QwtLinearScaleEngine
+class OTGUI_API CustomScaleEngine : public QwtLinearScaleEngine
 {
 public:
   CustomScaleEngine();

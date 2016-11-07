@@ -28,7 +28,7 @@
 
 namespace OTGUI {
 
-class IntroPage : public QWizardPage
+class OTGUI_API IntroPage : public QWizardPage
 {
     Q_OBJECT
 
@@ -44,7 +44,7 @@ private:
 };
 
 
-class DesignOfExperimentWizard : public OTguiWizard
+class OTGUI_API DesignOfExperimentWizard : public OTguiWizard
 {
   Q_OBJECT
 
