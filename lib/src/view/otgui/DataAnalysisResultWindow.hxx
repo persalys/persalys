@@ -24,7 +24,7 @@
 #include "otgui/DataAnalysisWindow.hxx"
 
 namespace OTGUI {
-class DataAnalysisResultWindow : public DataAnalysisWindow
+class OTGUI_API DataAnalysisResultWindow : public DataAnalysisWindow
 {
   Q_OBJECT
 

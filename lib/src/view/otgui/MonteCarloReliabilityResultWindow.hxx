@@ -26,7 +26,7 @@
 #include "otgui/GraphConfigurationWidget.hxx"
 
 namespace OTGUI {
-class MonteCarloReliabilityResultWindow : public ResultWindow
+class OTGUI_API MonteCarloReliabilityResultWindow : public ResultWindow
 {
   Q_OBJECT
 

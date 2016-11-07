@@ -30,7 +30,7 @@
 #include <QLabel>
 
 namespace OTGUI {
-class ImportDataPage : public QWizardPage
+class OTGUI_API ImportDataPage : public QWizardPage
 {
   Q_OBJECT
 

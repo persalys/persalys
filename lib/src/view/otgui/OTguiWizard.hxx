@@ -26,7 +26,7 @@
 #include <QWizard>
 
 namespace OTGUI {
-class OTguiWizard : public QWizard
+class OTGUI_API OTguiWizard : public QWizard
 {
   Q_OBJECT
 

@@ -21,10 +21,11 @@
 #ifndef OTGUI_PARAMETERSWIDGET_HXX
 #define OTGUI_PARAMETERSWIDGET_HXX
 
+#include "otgui/OTGuiprivate.hxx"
 #include <QWidget>
 
 namespace OTGUI {
-class ParametersWidget : public QWidget
+class OTGUI_API ParametersWidget : public QWidget
 {
 public:
   ParametersWidget(const QString title, const QStringList names, const QStringList values);

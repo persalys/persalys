@@ -30,7 +30,7 @@
 
 namespace OTGUI {
   
-class YACSPhysicalModelWindow : public OTguiSubWindow
+class OTGUI_API YACSPhysicalModelWindow : public OTguiSubWindow
 {
   Q_OBJECT
 

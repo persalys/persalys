@@ -30,7 +30,7 @@
 
 namespace OTGUI {
 
-class CodeView : public QTableView
+class OTGUI_API CodeView : public QTableView
 {
   Q_OBJECT
 public:
@@ -39,7 +39,7 @@ protected:
   virtual bool event(QEvent * event);
 };
 
-class PythonPhysicalModelWindow : public OTguiSubWindow
+class OTGUI_API PythonPhysicalModelWindow : public OTguiSubWindow
 {
   Q_OBJECT
 

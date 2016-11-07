@@ -27,7 +27,7 @@
 
 namespace OTGUI {
 
-class DataModelWizard : public OTguiWizard
+class OTGUI_API DataModelWizard : public OTguiWizard
 {
   Q_OBJECT
 

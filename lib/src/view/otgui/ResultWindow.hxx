@@ -26,7 +26,7 @@
 #include "otgui/ParametersWidget.hxx"
 
 namespace OTGUI {
-class ResultWindow : public OTguiSubWindow
+class OTGUI_API ResultWindow : public OTguiSubWindow
 {
   Q_OBJECT
 

@@ -21,11 +21,13 @@
 #ifndef OTGUI_OTGUISTATUSBAR_HXX
 #define OTGUI_OTGUISTATUSBAR_HXX
 
+#include "otgui/OTGuiprivate.hxx"
+
 #include <QStatusBar>
 #include <QLabel>
 
 namespace OTGUI {
-class OTguiStatusBar : public QStatusBar
+class OTGUI_API OTguiStatusBar : public QStatusBar
 {
     Q_OBJECT
 

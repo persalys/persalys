@@ -25,7 +25,7 @@
 #include "otgui/OTStudyItem.hxx"
 
 namespace OTGUI {
-class OTStudyWindow : public OTguiSubWindow
+class OTGUI_API OTStudyWindow : public OTguiSubWindow
 {
   Q_OBJECT
 

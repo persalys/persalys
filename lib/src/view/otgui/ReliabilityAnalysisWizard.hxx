@@ -30,7 +30,7 @@
 #include <QLabel>
 
 namespace OTGUI {
-class ReliabilityAnalysisWizard : public AnalysisWizard
+class OTGUI_API ReliabilityAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
 

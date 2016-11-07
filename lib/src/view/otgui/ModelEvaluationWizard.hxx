@@ -26,7 +26,7 @@
 #include <QTableWidget>
 
 namespace OTGUI {
-class ModelEvaluationWizard : public AnalysisWizard
+class OTGUI_API ModelEvaluationWizard : public AnalysisWizard
 {
   Q_OBJECT
 

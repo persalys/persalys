@@ -31,7 +31,7 @@
 #include <QLabel>
 
 namespace OTGUI {
-class SensitivityAnalysisWizard : public AnalysisWizard
+class OTGUI_API SensitivityAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
 

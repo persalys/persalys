@@ -25,7 +25,7 @@
 #include "otgui/OTStudy.hxx"
 
 namespace OTGUI {
-class AnalysisWizard : public OTguiWizard
+class OTGUI_API AnalysisWizard : public OTguiWizard
 {
 public:
   AnalysisWizard(const Analysis & analysis, QWidget * parent=0);

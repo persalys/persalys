@@ -28,7 +28,7 @@
 #include <QScrollArea>
 
 namespace OTGUI {
-class SobolResultWindowWidget : public QScrollArea
+class OTGUI_API SobolResultWindowWidget : public QScrollArea
 {
   Q_OBJECT
 

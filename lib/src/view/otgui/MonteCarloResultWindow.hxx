@@ -24,7 +24,7 @@
 #include "otgui/DataAnalysisWindow.hxx"
 
 namespace OTGUI {
-class MonteCarloResultWindow : public DataAnalysisWindow
+class OTGUI_API MonteCarloResultWindow : public DataAnalysisWindow
 {
   Q_OBJECT
 

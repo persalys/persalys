@@ -25,7 +25,7 @@
 #include "otgui/PhysicalModelItem.hxx"
 
 namespace OTGUI {
-class MetaModelWindow : public OTguiSubWindow
+class OTGUI_API MetaModelWindow : public OTguiSubWindow
 {
   Q_OBJECT
 

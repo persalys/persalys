@@ -26,7 +26,7 @@
 #include <QWizardPage>
 
 namespace OTGUI {
-class ProbabilisticDesignPage : public QWizardPage
+class OTGUI_API ProbabilisticDesignPage : public QWizardPage
 {
   Q_OBJECT
 

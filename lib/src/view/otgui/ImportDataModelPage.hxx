@@ -25,7 +25,7 @@
 #include "otgui/DataModelTableModel.hxx"
 
 namespace OTGUI {
-class ImportDataModelPage : public ImportDataPage
+class OTGUI_API ImportDataModelPage : public ImportDataPage
 {
   Q_OBJECT
 

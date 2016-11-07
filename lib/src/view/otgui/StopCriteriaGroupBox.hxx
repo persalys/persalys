@@ -29,7 +29,7 @@
 #include <QGroupBox>
 
 namespace OTGUI {
-class StopCriteriaGroupBox : public QGroupBox
+class OTGUI_API StopCriteriaGroupBox : public QGroupBox
 {
   Q_OBJECT
 

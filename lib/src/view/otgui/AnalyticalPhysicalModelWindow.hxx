@@ -26,7 +26,7 @@
 
 namespace OTGUI {
   
-class AnalyticalPhysicalModelWindow : public OTguiSubWindow
+class OTGUI_API AnalyticalPhysicalModelWindow : public OTguiSubWindow
 {
   Q_OBJECT
 

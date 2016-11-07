@@ -31,7 +31,7 @@
 #include <QPushButton>
 
 namespace OTGUI {
-class DesignOfExperimentWindow : public OTguiSubWindow
+class OTGUI_API DesignOfExperimentWindow : public OTguiSubWindow
 {
   Q_OBJECT
 

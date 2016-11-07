@@ -32,7 +32,7 @@
 
 namespace OTGUI {
   
-class PhysicalModelWindowWidget : public QWidget
+class OTGUI_API PhysicalModelWindowWidget : public QWidget
 {
   Q_OBJECT
 

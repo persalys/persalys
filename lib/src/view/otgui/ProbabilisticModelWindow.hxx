@@ -41,7 +41,7 @@
 #include <QStackedWidget>
 
 namespace OTGUI {
-class ProbabilisticModelWindow : public OTguiSubWindow
+class OTGUI_API ProbabilisticModelWindow : public OTguiSubWindow
 {
   Q_OBJECT
 

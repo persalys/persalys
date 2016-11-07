@@ -28,7 +28,7 @@
 #include <QComboBox>
 
 namespace OTGUI {
-class TaylorExpansionMomentsResultWindow : public ResultWindow
+class OTGUI_API TaylorExpansionMomentsResultWindow : public ResultWindow
 {
   Q_OBJECT
 
