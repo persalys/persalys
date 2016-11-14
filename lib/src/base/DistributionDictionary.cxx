@@ -161,73 +161,86 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
 Distribution::NumericalPointWithDescriptionCollection DistributionDictionary::GetParametersCollection(const Distribution & distribution)
 {
   String distributionName = distribution.getImplementation()->getClassName();
-  Distribution::NumericalPointWithDescriptionCollection NPWithDescColl(distribution.getParametersCollection());
+  Distribution::NumericalPointWithDescriptionCollection nPWithDescColl(distribution.getParametersCollection());
+  NumericalPointWithDescription nPWithDesc;
 
-  if (distributionName == "Gumbel")
+  if (distributionName == "Arcsine")
   {
-    Gumbel d = *dynamic_cast<Gumbel*>(&*distribution.getImplementation());
-    NumericalPointWithDescription NPWithDesc;
-
+    ArcsineMuSigma d1;
+    nPWithDesc = d1.inverse(distribution.getParameter());
+    nPWithDesc.setDescription(d1.getDescription());
+    nPWithDescColl.add(nPWithDesc);
+  }
+  else if (distributionName == "Beta")
+  {
+    BetaMuSigma d1;
+    nPWithDesc = d1.inverse(distribution.getParameter());
+    nPWithDesc.setDescription(d1.getDescription());
+    nPWithDescColl.add(nPWithDesc);
+  }
+  else if (distributionName == "Gamma")
+  {
+    GammaMuSigma d1;
+    nPWithDesc = d1.inverse(distribution.getParameter());
+    nPWithDesc.setDescription(d1.getDescription());
+    nPWithDescColl.add(nPWithDesc);
+  }
+  else if (distributionName == "Gumbel")
+  {
     GumbelAB d1;
-    NPWithDesc = d1.inverse(d.getParameter());
-    NPWithDesc.setDescription(d1.getDescription());
-    NPWithDescColl.add(NPWithDesc);
+    nPWithDesc = d1.inverse(distribution.getParameter());
+    nPWithDesc.setDescription(d1.getDescription());
+    nPWithDescColl.add(nPWithDesc);
 
     GumbelMuSigma d2;
-    NPWithDesc = d2.inverse(d.getParameter());
-    NPWithDesc.setDescription(d2.getDescription());
-    NPWithDescColl.add(NPWithDesc);
+    nPWithDesc = d2.inverse(distribution.getParameter());
+    nPWithDesc.setDescription(d2.getDescription());
+    nPWithDescColl.add(nPWithDesc);
   }
   else if (distributionName == "LogNormal")
   {
-    LogNormal d = *dynamic_cast<LogNormal*>(&*distribution.getImplementation());
-    NumericalPointWithDescription NPWithDesc;
-
     LogNormalMuSigma d1;
-    NPWithDesc = d1.inverse(d.getParameter());
-    NPWithDesc.setDescription(d1.getDescription());
-    NPWithDescColl.add(NPWithDesc);
+    nPWithDesc = d1.inverse(distribution.getParameter());
+    nPWithDesc.setDescription(d1.getDescription());
+    nPWithDescColl.add(nPWithDesc);
 
     LogNormalMuSigmaOverMu d2;
-    NPWithDesc = d2.inverse(d.getParameter());
-    NPWithDesc.setDescription(d2.getDescription());
-    NPWithDescColl.add(NPWithDesc);
+    nPWithDesc = d2.inverse(distribution.getParameter());
+    nPWithDesc.setDescription(d2.getDescription());
+    nPWithDescColl.add(nPWithDesc);
   }
   else if (distributionName == "Normal")
   {
-    NumericalPointWithDescription NPWithDesc(NPWithDescColl[0]);
+    nPWithDesc = nPWithDescColl[0];
 
     Description description(2);
     description[0] = "mean";
     description[1] = "standard deviation";
-    NPWithDesc.setDescription(description);
+    nPWithDesc.setDescription(description);
 
-    NPWithDescColl[0] = NPWithDesc;
+    nPWithDescColl[0] = nPWithDesc;
   }
   else if (distributionName == "Student")
   {
-    NumericalPointWithDescription NPWithDesc(NPWithDescColl[0]);
+    nPWithDesc = nPWithDescColl[0];
 
     Description description(3);
     description[0] = "nu";
     description[1] = "mean";
     description[2] = "standard deviation";
-    NPWithDesc.setDescription(description);
+    nPWithDesc.setDescription(description);
 
-    NPWithDescColl[0] = NPWithDesc;
+    nPWithDescColl[0] = nPWithDesc;
   }
   else if (distributionName == "Weibull")
   {
-    Weibull d = *dynamic_cast<Weibull*>(&*distribution.getImplementation());
-    NumericalPointWithDescription NPWithDesc;
-
     WeibullMuSigma d1;
-    NPWithDesc = d1.inverse(d.getParameter());
-    NPWithDesc.setDescription(d1.getDescription());
-    NPWithDescColl.add(NPWithDesc);
+    nPWithDesc = d1.inverse(distribution.getParameter());
+    nPWithDesc.setDescription(d1.getDescription());
+    nPWithDescColl.add(nPWithDesc);
   }
 
-  return NPWithDescColl;
+  return nPWithDescColl;
 }
 
 
@@ -240,34 +253,45 @@ void DistributionDictionary::UpdateDistribution(Distribution & distribution,
 
   if (parametersType == 0)
   {
-    Distribution::NumericalPointWithDescriptionCollection NPWithDescColl;
-    NPWithDescColl.add(description);
-    distribution.setParametersCollection(NPWithDescColl);
+    Distribution::NumericalPointWithDescriptionCollection nPWithDescColl;
+    nPWithDescColl.add(description);
+    distribution.setParametersCollection(nPWithDescColl);
   }
   else
   {
-    if (distributionName == "Gumbel")
+    if (distributionName == "Arcsine")
     {
-      Gumbel * d = static_cast<Gumbel*>(&*distribution.getImplementation());
       if (parametersType == 1)
-        d->setAB(description[0], description[1]);
+        distribution.setParameter(ArcsineMuSigma(description[0], description[1]).evaluate());
+    }
+    else if (distributionName == "Beta")
+    {
+      if (parametersType == 1)
+        distribution.setParameter(BetaMuSigma(description[0], description[1], description[2], description[3]).evaluate());
+    }
+    else if (distributionName == "Gamma")
+    {
+      if (parametersType == 1)
+        distribution.setParameter(GammaMuSigma(description[0], description[1], description[2]).evaluate());
+    }
+    else if (distributionName == "Gumbel")
+    {
+      if (parametersType == 1)
+        distribution.setParameter(GumbelAB(description[0], description[1]).evaluate());
       else if (parametersType == 2)
-        d->setMuSigma(description[0], description[1]);
+        distribution.setParameter(GumbelMuSigma(description[0], description[1]).evaluate());
     }
     else if (distributionName == "LogNormal")
     {
-      LogNormal * d = static_cast<LogNormal*>(&*distribution.getImplementation());
-      d->setGamma(description[2]);
       if (parametersType == 1)
-        d->setMuSigma(description[0], description[1]);
+        distribution.setParameter(LogNormalMuSigma(description[0], description[1], description[2]).evaluate());
       else if (parametersType == 2)
-        d->setMuSigma(description[0], description[1]*description[0]);
+        distribution.setParameter(LogNormalMuSigmaOverMu(description[0], description[1], description[2]).evaluate());
     }
     else if (distributionName == "Weibull")
     {
-      Weibull * d = static_cast<Weibull*>(&*distribution.getImplementation());
-      d->setGamma(description[2]);
-      d->setMuSigma(description[0], description[1]);
+      if (parametersType == 1)
+        distribution.setParameter(WeibullMuSigma(description[0], description[1], description[2]).evaluate());
     }
   }
 }
