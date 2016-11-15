@@ -22,8 +22,6 @@
 
 #include "otgui/OTguiSubWindow.hxx"
 
-#include <QAction>
-
 namespace OTGUI {
 
 OTguiMdiArea::OTguiMdiArea()
@@ -32,12 +30,13 @@ OTguiMdiArea::OTguiMdiArea()
 }
 
 
-void OTguiMdiArea::showSubWindow(QMdiSubWindow * win)
+void OTguiMdiArea::showSubWindow(OTguiSubWindow * win)
 {
   if (!subWindowList().count())
     emit mdiAreaEmpty(false);
   addSubWindow(win);
   win->showMaximized();
+  connect(win, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
 }
 
 
@@ -54,7 +53,7 @@ void OTguiMdiArea::showSubWindow(QStandardItem * item)
     {
       win->widget()->showMaximized();
       setActiveSubWindow(win);
-      win->setErrorMessage(win->getErrorMessage());
+      emit errorMessageChanged(win->getErrorMessage());
     }
   }
 }
@@ -67,6 +66,7 @@ void OTguiMdiArea::removeSubWindow(QStandardItem * item)
     OTguiSubWindow * win = static_cast<OTguiSubWindow*>(subWindowList().at(i));
     if (win->getItem() == item)
     {
+      emit errorMessageChanged("");
       QMdiArea::removeSubWindow(win);
       win->deleteLater();
       break;

@@ -22,9 +22,9 @@
 #define OTGUI_STUDYTREEVIEW_HXX
 
 #include "otgui/StudyTreeViewModel.hxx"
+#include "otgui/OTguiSubWindow.hxx"
 
 #include <QTreeView>
-#include <QMdiSubWindow>
 #include <QAction>
 
 namespace OTGUI {
@@ -64,7 +64,6 @@ public slots:
   void createNewThresholdExceedance();
   void createNewMetaModel();
   void onCustomContextMenu(const QPoint & point);
-  void selectedItemChanged(const QModelIndex & currentIndex);
   void selectedItemChanged(const QModelIndex & currentIndex, const QModelIndex & previousIndex);
   void runDesignOfExperiment();
   void removeDesignOfExperiment();
@@ -90,8 +89,7 @@ public slots:
   bool closeOTStudy();
   bool closeAllOTStudies();
 signals:
-  void showWindow(QMdiSubWindow*);
-  void errorMessageEmitted(QString);
+  void showWindow(OTguiSubWindow*);
   void itemSelected(QStandardItem *);
   void removeSubWindow(QStandardItem *);
   void graphWindowActivated(QWidget*);

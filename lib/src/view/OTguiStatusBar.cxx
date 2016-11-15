@@ -24,8 +24,8 @@ namespace OTGUI {
 
 OTguiStatusBar::OTguiStatusBar(QWidget *parent)
   : QStatusBar(parent)
+  , messageLabel_(new QLabel)
 {
-  messageLabel_ = new QLabel;
   addWidget(messageLabel_);
 }
 

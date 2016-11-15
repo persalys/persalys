@@ -96,7 +96,7 @@ StudyTreeView::StudyTreeView(QWidget * parent)
 
   header()->hide();
 
-  connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(selectedItemChanged(QModelIndex)));
+  connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(setCurrentIndex(QModelIndex)));
   connect(this->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(selectedItemChanged(QModelIndex, QModelIndex)));
 }
 
@@ -549,7 +549,6 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 #endif
   if (window)
   {
-    connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
     emit showWindow(window);
     setCurrentIndex(item->index());
     setExpanded(item->index(), true);
@@ -560,7 +559,6 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 void StudyTreeView::createNewProbabilisticModelWindow(ProbabilisticModelItem * item)
 {
   ProbabilisticModelWindow * window = new ProbabilisticModelWindow(item);
-  connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
   connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
   connect(window, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
   emit showWindow(window);
@@ -571,7 +569,6 @@ void StudyTreeView::createNewProbabilisticModelWindow(ProbabilisticModelItem * i
 void StudyTreeView::createNewLimitStateWindow(LimitStateItem* item)
 {
   LimitStateWindow * window = new LimitStateWindow(item);
-  connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
   emit showWindow(window);
   setCurrentIndex(item->index());
 }
@@ -580,7 +577,6 @@ void StudyTreeView::createNewLimitStateWindow(LimitStateItem* item)
 void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentItem * item)
 {
   DesignOfExperimentWindow * window = new DesignOfExperimentWindow(item);
-  connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
   connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
   connect(window, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
   connect(item, SIGNAL(analysisFinished()), window, SLOT(updateWindowForOutputs()));
@@ -722,6 +718,7 @@ void StudyTreeView::removeDesignOfExperiment()
 void StudyTreeView::findAnalysisItemAndLaunchExecution(OTStudyItem * otStudyItem, const QString & analysisName)
 {
   AnalysisItem * analysisItem = treeViewModel_->getAnalysisItem(otStudyItem, analysisName);
+
   if (analysisItem)
   {
     try
@@ -848,7 +845,6 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
 
   if (resultWindow)
   {
-    connect(resultWindow, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
     connect(resultWindow, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
     connect(resultWindow, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
     emit showWindow(resultWindow);
@@ -863,8 +859,9 @@ void StudyTreeView::createAnalysisExecutionFailedWindow(AnalysisItem * item, con
 {
   emit removeSubWindow(item);
   AnalysisExecutionFailedWindow * window = new AnalysisExecutionFailedWindow(item, errorMessage);
-  connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
   emit showWindow(window);
+
+  setCurrentIndex(QModelIndex()); // call it otherwise the signal currentChanged is not emitted
   setCurrentIndex(item->index());
 }
 
@@ -1088,17 +1085,11 @@ bool StudyTreeView::closeAllOTStudies()
 }
 
 
-void StudyTreeView::selectedItemChanged(const QModelIndex& currentIndex)
-{
-  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(currentIndex);
-  emit itemSelected(selectedItem);
-}
-
-
 void StudyTreeView::selectedItemChanged(const QModelIndex & currentIndex, const QModelIndex & previousIndex)
 {
   if (!currentIndex.isValid())
     return;
-  selectedItemChanged(currentIndex);
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(currentIndex);
+  emit itemSelected(selectedItem);
 }
 }
