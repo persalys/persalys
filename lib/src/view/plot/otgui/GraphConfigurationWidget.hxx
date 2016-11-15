@@ -36,7 +36,7 @@ class OTGUI_API GraphConfigurationWidget : public QWidget
 public:
   enum Type {NoType, Scatter, PDF, CDF, PDFResult, CDFResult, BoxPlot, SensitivityIndices, MetaModel};
 
-  GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets, QStringList inputNames, QStringList outputNames, Type plotType);
+  GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets, QStringList inputNames, QStringList outputNames, Type plotType, QWidget * parent=0);
 
   int getCurrentPlotIndex() const;
 
@@ -49,8 +49,10 @@ public slots:
   void updateXrange();
   void updateYrange();
   void exportPlot();
+  void plotVisibilityChanged(bool);
 signals:
   void currentPlotChanged(int);
+  void visibilityChanged(QWidget*, bool);
 
 private:
   QVector<PlotWidget *> plotWidgets_;
