@@ -61,6 +61,7 @@
 #include "otgui/ReliabilityAnalysisWizard.hxx"
 #include "otgui/MonteCarloReliabilityResultWindow.hxx"
 #include "otgui/FunctionalChaosResultWindow.hxx"
+#include "otgui/InferenceResultWindow.hxx"
 #include "otgui/MetaModelAnalysisWizard.hxx"
 #include "otgui/LineEditWithQValidatorDelegate.hxx"
 
@@ -411,22 +412,6 @@ void StudyTreeView::createNewDataAnalysis()
 }
 
 
-void StudyTreeView::createNewInferenceAnalysis()
-{
-  QModelIndex index = selectionModel()->currentIndex();
-  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
-  DesignOfExperimentItem * item = dynamic_cast<DesignOfExperimentItem*>(selectedItem);
-  OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(item->QStandardItem::parent());
-  QSharedPointer<InferenceWizard> wizard = QSharedPointer<InferenceWizard>(new InferenceWizard(otStudyItem->getOTStudy(), item->getDesignOfExperiment()));
-
-  if (wizard->exec())
-  {
-//     otStudyItem->getOTStudy()->add(wizard->getAnalysis());
-//     findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysis().getName().c_str());
-  }
-}
-
-
 void StudyTreeView::createNewAnalyticalPhysicalModel()
 {
   QModelIndex studyIndex = selectionModel()->currentIndex();
@@ -684,6 +669,22 @@ void StudyTreeView::createNewMetaModel()
 }
 
 
+void StudyTreeView::createNewInferenceAnalysis()
+{
+  QModelIndex index = selectionModel()->currentIndex();
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+  DesignOfExperimentItem * item = dynamic_cast<DesignOfExperimentItem*>(selectedItem);
+  OTStudyItem * otStudyItem = treeViewModel_->getOTStudyItem(index);
+  QSharedPointer<InferenceWizard> wizard = QSharedPointer<InferenceWizard>(new InferenceWizard(otStudyItem->getOTStudy(), item->getDesignOfExperiment()));
+
+  if (wizard->exec())
+  {
+    otStudyItem->getOTStudy().add(wizard->getAnalysis());
+    findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysis().getName().c_str());
+  }
+}
+
+
 void StudyTreeView::createAnalysisConnection(AnalysisItem * item)
 {
   connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createAnalysisResultWindow(AnalysisItem*)));
@@ -754,6 +755,10 @@ void StudyTreeView::runAnalysis()
   else if (analysisType == "FunctionalChaosAnalysis")
   {
     wizard = QSharedPointer<AnalysisWizard>(new MetaModelAnalysisWizard(item->getAnalysis()));
+  }
+  else if (analysisType == "InferenceAnalysis")
+  {
+    wizard = QSharedPointer<AnalysisWizard>(new InferenceWizard(item->getAnalysis()));
   }
   else
   {
@@ -840,6 +845,8 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
     resultWindow = new DataAnalysisResultWindow(item);
   else if (analysisType == "FunctionalChaosAnalysis")
     resultWindow = new FunctionalChaosResultWindow(item);
+  else if (analysisType == "InferenceAnalysis")
+    resultWindow = new InferenceResultWindow(item);
   else
     qDebug() << "Error: In createAnalysisResultWindow: analysisType " << analysisType << " not recognized.";
 

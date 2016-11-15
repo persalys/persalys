@@ -227,7 +227,7 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis)
   {
     addReliabilityAnalysisItem(analysis, newItem);
   }
-  else if (analysisName == "DataAnalysis" || analysisName == "FunctionalChaosAnalysis")
+  else if (analysisName == "DataAnalysis" || analysisName == "FunctionalChaosAnalysis" || analysisName == "InferenceAnalysis")
   {
     addDesignOfExperimentAnalysisItem(analysis, newItem);
   }
