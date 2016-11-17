@@ -40,6 +40,7 @@ DoubleSpinBox::DoubleSpinBox(QWidget * parent)
   setRange(-doubleMax, doubleMax);
 
   v = new QDoubleValidator(this);
+  v->setLocale(QLocale::C);
   v->setDecimals(1000); // (standard anyway)
   v->setNotation(QDoubleValidator::ScientificNotation);
   this->lineEdit()->setValidator(v);
