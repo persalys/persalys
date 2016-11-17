@@ -32,9 +32,11 @@ CustomStandardItemModel::CustomStandardItemModel(int nbRows, int nbColumns, QObj
 }
 
 
-void CustomStandardItemModel::setNotEditableItem(const int row, const int column, const QString text)
+void CustomStandardItemModel::setNotEditableItem(const int row, const int column, const QString text, const QColor color)
 {
   QStandardItem * item = new QStandardItem(text);
+  if (color != QColor())
+    item->setData(color, Qt::ForegroundRole);
   item->setFlags(item->flags() ^ Qt::ItemIsEditable);
   setItem(row, column, item);
 }
