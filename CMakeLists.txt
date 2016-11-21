@@ -92,6 +92,15 @@ if ( BUILD_PYTHON )
   endif ()
   find_package ( PythonInterp )
   find_package ( PythonLibs )
+  include (FindPythonModule)
+
+  if (USE_SPHINX)
+    find_program (SPHINX_EXECUTABLE NAMES sphinx-build DOC "Sphinx Documentation Builder (sphinx-doc.org)")
+    if (SPHINX_EXECUTABLE)
+      find_python_module (sphinx 1.1)
+      find_python_module (numpydoc)
+    endif ()
+  endif ()
 
   if ( PYTHONINTERP_FOUND )
     execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print(sysconfig.get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}'))"
