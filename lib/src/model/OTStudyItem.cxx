@@ -311,14 +311,15 @@ void OTStudyItem::addDesignOfExperimentAnalysisItem(Analysis& analysis, Analysis
     for (int i=0; i<rowCount(); ++i)
     {
       DesignOfExperimentItem * DOEItem = dynamic_cast<DesignOfExperimentItem*>(child(i));
-      if (!DOEItem)
-        throw InvalidArgumentException(HERE) << "In OTStudyItem::addDesignOfExperimentAnalysisItem: Impossible to add an item for the analysis " << analysis.getName();
-      if (DOEItem->text().toStdString() == analysis.getModelName())
+      if (DOEItem)
       {
-        DOEItem->appendRow(item);
-        connect(DOEItem, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), item, SLOT(setDesignOfExperiment(DesignOfExperiment)));
-        emit newAnalysisItemCreated(item);
-        return;
+        if (DOEItem->text().toStdString() == analysis.getModelName())
+        {
+          DOEItem->appendRow(item);
+          connect(DOEItem, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), item, SLOT(setDesignOfExperiment(DesignOfExperiment)));
+          emit newAnalysisItemCreated(item);
+          return;
+        }
       }
     }
   }
@@ -332,20 +333,22 @@ void OTStudyItem::addDesignOfExperimentAnalysisItem(Analysis& analysis, Analysis
         for (int j=0; j<child(i)->child(2)->rowCount(); ++j)
         {
           DesignOfExperimentItem * DOEItem = dynamic_cast<DesignOfExperimentItem*>(child(i)->child(2)->child(j));
-          if (!DOEItem)
-            throw InvalidArgumentException(HERE) << "In OTStudyItem::addDesignOfExperimentAnalysisItem: Impossible to add an item for the analysis " << analysis.getName();
-          if (DOEItem->text().toStdString() == analysis.getModelName())
+          if (DOEItem)
           {
-            DOEItem->appendRow(item);
-            connect(DOEItem, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), item, SLOT(setDesignOfExperiment(DesignOfExperiment)));
-            emit newAnalysisItemCreated(item);
-            return;
+            if (DOEItem->text().toStdString() == analysis.getModelName())
+            {
+              DOEItem->appendRow(item);
+              connect(DOEItem, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), item, SLOT(setDesignOfExperiment(DesignOfExperiment)));
+              emit newAnalysisItemCreated(item);
+              return;
+            }
           }
         }
       }
     }
+    throw InvalidArgumentException(HERE) << "In OTStudyItem::addDesignOfExperimentAnalysisItem: Impossible to add an item for the analysis " << analysis.getName();
   }
-  qDebug() << "In OTStudyItem::addDesignOfExperimentAnalysisItem: No item added for the analysis named " << analysis.getName().data() << "\n";
+  throw InvalidArgumentException(HERE) << "In OTStudyItem::addDesignOfExperimentAnalysisItem: Impossible to add an item for the analysis " << analysis.getName();
 }
 
 
