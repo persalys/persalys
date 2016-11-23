@@ -419,7 +419,7 @@ QVariant DoubleSpinBox::validateAndInterpret(QString &input,
         }
 
         // two thousand-chars after one other are not valid
-        const int len = copy.size();
+        len = copy.size();
         for (int i=0; i<len- 1; ++i)
         {
           if (copy.at(i) == thousand && copy.at(i + 1) == thousand)
