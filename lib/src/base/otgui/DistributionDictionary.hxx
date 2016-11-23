@@ -21,7 +21,7 @@
 #ifndef OTGUI_DISTRIBUTIONDICTIONARY_HXX
 #define OTGUI_DISTRIBUTIONDICTIONARY_HXX
 
-#include "openturns/Distribution.hxx"
+#include "openturns/DistributionFactory.hxx"
 #include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
@@ -30,6 +30,9 @@ class OTGUI_API DistributionDictionary
 public:
   /** Get the list of the available distributions */
   static OT::Description GetAvailableDistributions();
+
+  /** Build a distribution factory */
+  static OT::DistributionFactory BuildDistributionFactory(const OT::String & distributionName);
 
   /** Build a distribution with native parameters from the mean value */
   static OT::Distribution BuildDistribution(const OT::String & distributionName, const double mu);

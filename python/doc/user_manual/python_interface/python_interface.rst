@@ -108,6 +108,9 @@ Data analysis
 
     DataAnalysis
     DataAnalysisResult
+    InferenceAnalysis
+    InferenceResult
+    FittingTestResult
 
 Metamodel
 ---------

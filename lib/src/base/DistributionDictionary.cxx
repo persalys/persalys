@@ -34,9 +34,9 @@ Description DistributionDictionary::GetAvailableDistributions()
   listDistributions[0] = "Arcsine";
   listDistributions[1] = "Beta";
   listDistributions[2] = "ChiSquare";
-  listDistributions[3] = "Gamma";
-  listDistributions[4] = "Gumbel";
-  listDistributions[5] = "Exponential";
+  listDistributions[3] = "Exponential";
+  listDistributions[4] = "Gamma";
+  listDistributions[5] = "Gumbel";
   listDistributions[6] = "InverseNormal";
   listDistributions[7] = "Laplace";
   listDistributions[8] = "Logistic";
@@ -50,6 +50,88 @@ Description DistributionDictionary::GetAvailableDistributions()
   listDistributions[16] = "Uniform";
   listDistributions[17] = "Weibull";
   return listDistributions;
+}
+
+
+/* Build a distribution factory */
+DistributionFactory DistributionDictionary::BuildDistributionFactory(const String & distributionName)
+{
+  if (distributionName == "Arcsine")
+  {
+    return ArcsineFactory();
+  }
+  else if (distributionName == "Beta")
+  {
+    return BetaFactory();
+  }
+  else if (distributionName == "ChiSquare")
+  {
+    return ChiSquareFactory();
+  }
+  else if (distributionName == "Exponential")
+  {
+    return ExponentialFactory();
+  }
+  else if (distributionName == "Gamma")
+  {
+    return GammaFactory();
+  }
+  else if (distributionName == "Gumbel")
+  {
+    return GumbelFactory();
+  }
+  else if (distributionName == "InverseNormal")
+  {
+    return InverseNormalFactory();
+  }
+  else if (distributionName == "Laplace")
+  {
+    return LaplaceFactory();
+  }
+  else if (distributionName == "Logistic")
+  {
+    return LogisticFactory();
+  }
+  else if (distributionName == "LogNormal")
+  {
+    return LogNormalFactory();
+  }
+  else if (distributionName == "LogUniform")
+  {
+    return LogUniformFactory();
+  }
+  else if (distributionName == "Normal")
+  {
+    return NormalFactory();
+  }
+  else if (distributionName == "Rayleigh")
+  {
+    return RayleighFactory();
+  }
+  else if (distributionName == "Student")
+  {
+    return StudentFactory();
+  }
+  else if (distributionName == "Trapezoidal")
+  {
+    return TrapezoidalFactory();
+  }
+  else if (distributionName == "Triangular")
+  {
+    return TriangularFactory();
+  }
+  else if (distributionName == "Uniform")
+  {
+    return UniformFactory();
+  }
+  else if (distributionName == "Weibull")
+  {
+    return WeibullFactory();
+  }
+  else
+  {
+    throw InvalidArgumentException(HERE) << "Error in DistributionDictionary::BuildDistributionFactory unknow distribution : " << distributionName;
+  }
 }
 
 

@@ -30,7 +30,7 @@ model.addInput(X2)
 model.addOutput(otguibase.Output('Y1', 0, '', 'sin(X0) + 8*X1 + X2'))
 
 analysis2 = otguibase.TaylorExpansionMomentsAnalysis('aTaylor2', model)
-analysis2.setOutputsToAnalyse(['Y1'])
+analysis2.setInterestVariables(['Y1'])
 myStudy.add(analysis2)
 print(analysis2)
 

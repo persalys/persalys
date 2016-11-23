@@ -69,7 +69,7 @@ aDesign2.run()
 analysis2 = otguibase.FunctionalChaosAnalysis('chaos_1', aDesign2)
 analysis2.setChaosDegree(6)
 analysis2.setLeaveOneOutValidation(True)
-analysis2.setOutputsToAnalyse(['y1'])
+analysis2.setInterestVariables(['y1'])
 myStudy.add(analysis2)
 print(analysis2)
 

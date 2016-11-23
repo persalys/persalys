@@ -65,8 +65,8 @@ chaos_0.setSparseChaos(True)
 chaos_0.setLeaveOneOutValidation(False)
 myStudy.add(chaos_0)
 chaos_1 = otguibase.FunctionalChaosAnalysis('chaos_1', design2)
-outputsToAnalyse = ['y1']
-chaos_1.setOutputsToAnalyse(outputsToAnalyse)
+interestVariables = ['y1']
+chaos_1.setInterestVariables(interestVariables)
 chaos_1.setChaosDegree(6)
 chaos_1.setSparseChaos(False)
 chaos_1.setLeaveOneOutValidation(True)

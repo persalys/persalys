@@ -33,7 +33,7 @@ class OTGUI_API OutputsSelectionGroupBox : public QGroupBox
   Q_OBJECT
 
 public:
-  OutputsSelectionGroupBox(const OT::Description& outputsNames, const OT::Description& outputsToAnalyse, QWidget* parent=0);
+  OutputsSelectionGroupBox(const OT::Description& outputsNames, const OT::Description& interestVariables, QWidget* parent=0);
 
   QStringList getSelectedOutputsNames() const;
 

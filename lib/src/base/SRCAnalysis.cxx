@@ -67,15 +67,15 @@ void SRCAnalysis::run()
   // set results
   NumericalSample indices(0, inputSample.getDimension());
 
-  for (UnsignedInteger i=0; i<getOutputsToAnalyse().getSize(); ++i)
+  for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
   {
     Description outputName(1);
-    outputName[0] = getOutputsToAnalyse()[i];
+    outputName[0] = getInterestVariables()[i];
     indices.add(CorrelationAnalysis::SRC(inputSample, computeOutputSample(inputSample, outputName)));
   }
 
   indices.setDescription(inputSample.getDescription());
-  result_ = SRCResult(indices, getOutputsToAnalyse());
+  result_ = SRCResult(indices, getInterestVariables());
 
   // add warning if the model has not an independent copula
   if (!getPhysicalModel().getComposedDistribution().hasIndependentCopula())
@@ -110,17 +110,17 @@ String SRCAnalysis::getPythonScript() const
   OSS oss;
   oss << getName() << " = otguibase.SRCAnalysis('" << getName() << "', " << getPhysicalModel().getName();
   oss << ", " << getSimulationsNumber() << ")\n";
-  if (getOutputsToAnalyse().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
+  if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {
-    oss << "outputsToAnalyse = [";
-    for (UnsignedInteger i=0; i<getOutputsToAnalyse().getSize(); ++i)
+    oss << "interestVariables = [";
+    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
     {
-      oss << "'" << getOutputsToAnalyse()[i] << "'";
-      if (i < getOutputsToAnalyse().getSize()-1)
+      oss << "'" << getInterestVariables()[i] << "'";
+      if (i < getInterestVariables().getSize()-1)
         oss << ", ";
     }
     oss << "]\n";
-    oss << getName() << ".setOutputsToAnalyse(outputsToAnalyse)\n";
+    oss << getName() << ".setInterestVariables(interestVariables)\n";
   }
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
 

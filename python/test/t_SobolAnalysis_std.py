@@ -51,7 +51,7 @@ analysis3 = otguibase.SobolAnalysis('aSobol3', model)
 analysis3.setMaximumCalls(1000)
 analysis3.setBlockSize(1000)
 analysis3.setSeed(2)
-analysis3.setOutputsToAnalyse(['y1'])
+analysis3.setInterestVariables(['y1'])
 myStudy.add(analysis3)
 print(analysis3)
 

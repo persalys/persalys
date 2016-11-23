@@ -17,6 +17,8 @@
 %import uncertainty_module.i
 
 
+OTDefaultCollectionConvertFunctions(DistributionFactory)
+
 
 // define OTGUITypedInterfaceObjectHelper
 %define OTGUITypedInterfaceObjectImplementationHelper(Interface,Implementation)
@@ -132,6 +134,9 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include MetaModelAnalysisResult.i
 %include FunctionalChaosAnalysisResult.i
 %include FunctionalChaosAnalysis.i
+%include FittingTestResult.i
+%include InferenceResult.i
+%include InferenceAnalysis.i
 %include OTStudyImplementation.i
 %include OTStudy.i
 

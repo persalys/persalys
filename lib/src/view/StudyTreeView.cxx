@@ -33,6 +33,7 @@
 #include "otgui/DataModel.hxx"
 #include "otgui/DataAnalysis.hxx"
 #include "otgui/DataAnalysisResultWindow.hxx"
+#include "otgui/InferenceWizard.hxx"
 #include "otgui/AnalyticalPhysicalModel.hxx"
 #include "otgui/PythonPhysicalModel.hxx"
 #ifdef OTGUI_HAVE_YACS
@@ -60,6 +61,7 @@
 #include "otgui/ReliabilityAnalysisWizard.hxx"
 #include "otgui/MonteCarloReliabilityResultWindow.hxx"
 #include "otgui/FunctionalChaosResultWindow.hxx"
+#include "otgui/InferenceResultWindow.hxx"
 #include "otgui/MetaModelAnalysisWizard.hxx"
 #include "otgui/LineEditWithQValidatorDelegate.hxx"
 
@@ -95,7 +97,7 @@ StudyTreeView::StudyTreeView(QWidget * parent)
 
   header()->hide();
 
-  connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(selectedItemChanged(QModelIndex)));
+  connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(setCurrentIndex(QModelIndex)));
   connect(this->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(selectedItemChanged(QModelIndex, QModelIndex)));
 }
 
@@ -141,6 +143,10 @@ void StudyTreeView::buildActions()
   newDataAnalysis_ = new QAction(tr("New data analysis"), this);
   newDataAnalysis_->setStatusTip(tr("Analyse the data sample"));
   connect(newDataAnalysis_, SIGNAL(triggered()), this, SLOT(createNewDataAnalysis()));
+
+  newInferenceAnalysis_ = new QAction(tr("New inference analysis"), this);
+  newInferenceAnalysis_->setStatusTip(tr("Inference"));
+  connect(newInferenceAnalysis_, SIGNAL(triggered()), this, SLOT(createNewInferenceAnalysis()));
 
   // new physical model actions
   newAnalyticalPhysicalModel_ = new QAction(tr("New analytical physical model"), this);
@@ -250,6 +256,7 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
     actions.append(modifyDataModel_);
     actions.append(newDataAnalysis_);
     actions.append(newMetaModel_);
+    actions.append(newInferenceAnalysis_);
     actions.append(removeDataModel_);
   }
   else if (dataType == "PhysicalModel")
@@ -527,7 +534,6 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 #endif
   if (window)
   {
-    connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
     emit showWindow(window);
     setCurrentIndex(item->index());
     setExpanded(item->index(), true);
@@ -538,7 +544,6 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 void StudyTreeView::createNewProbabilisticModelWindow(ProbabilisticModelItem * item)
 {
   ProbabilisticModelWindow * window = new ProbabilisticModelWindow(item);
-  connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
   connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
   connect(window, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
   emit showWindow(window);
@@ -549,7 +554,6 @@ void StudyTreeView::createNewProbabilisticModelWindow(ProbabilisticModelItem * i
 void StudyTreeView::createNewLimitStateWindow(LimitStateItem* item)
 {
   LimitStateWindow * window = new LimitStateWindow(item);
-  connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
   emit showWindow(window);
   setCurrentIndex(item->index());
 }
@@ -558,7 +562,6 @@ void StudyTreeView::createNewLimitStateWindow(LimitStateItem* item)
 void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentItem * item)
 {
   DesignOfExperimentWindow * window = new DesignOfExperimentWindow(item);
-  connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
   connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
   connect(window, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
   connect(item, SIGNAL(analysisFinished()), window, SLOT(updateWindowForOutputs()));
@@ -666,6 +669,22 @@ void StudyTreeView::createNewMetaModel()
 }
 
 
+void StudyTreeView::createNewInferenceAnalysis()
+{
+  QModelIndex index = selectionModel()->currentIndex();
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+  DesignOfExperimentItem * item = dynamic_cast<DesignOfExperimentItem*>(selectedItem);
+  OTStudyItem * otStudyItem = treeViewModel_->getOTStudyItem(index);
+  QSharedPointer<InferenceWizard> wizard = QSharedPointer<InferenceWizard>(new InferenceWizard(otStudyItem->getOTStudy(), item->getDesignOfExperiment()));
+
+  if (wizard->exec())
+  {
+    otStudyItem->getOTStudy().add(wizard->getAnalysis());
+    findAnalysisItemAndLaunchExecution(otStudyItem, wizard->getAnalysis().getName().c_str());
+  }
+}
+
+
 void StudyTreeView::createAnalysisConnection(AnalysisItem * item)
 {
   connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createAnalysisResultWindow(AnalysisItem*)));
@@ -700,6 +719,7 @@ void StudyTreeView::removeDesignOfExperiment()
 void StudyTreeView::findAnalysisItemAndLaunchExecution(OTStudyItem * otStudyItem, const QString & analysisName)
 {
   AnalysisItem * analysisItem = treeViewModel_->getAnalysisItem(otStudyItem, analysisName);
+
   if (analysisItem)
   {
     try
@@ -735,6 +755,10 @@ void StudyTreeView::runAnalysis()
   else if (analysisType == "FunctionalChaosAnalysis")
   {
     wizard = QSharedPointer<AnalysisWizard>(new MetaModelAnalysisWizard(item->getAnalysis()));
+  }
+  else if (analysisType == "InferenceAnalysis")
+  {
+    wizard = QSharedPointer<AnalysisWizard>(new InferenceWizard(item->getAnalysis()));
   }
   else
   {
@@ -821,12 +845,13 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
     resultWindow = new DataAnalysisResultWindow(item);
   else if (analysisType == "FunctionalChaosAnalysis")
     resultWindow = new FunctionalChaosResultWindow(item);
+  else if (analysisType == "InferenceAnalysis")
+    resultWindow = new InferenceResultWindow(item);
   else
     qDebug() << "Error: In createAnalysisResultWindow: analysisType " << analysisType << " not recognized.";
 
   if (resultWindow)
   {
-    connect(resultWindow, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
     connect(resultWindow, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
     connect(resultWindow, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
     emit showWindow(resultWindow);
@@ -841,8 +866,9 @@ void StudyTreeView::createAnalysisExecutionFailedWindow(AnalysisItem * item, con
 {
   emit removeSubWindow(item);
   AnalysisExecutionFailedWindow * window = new AnalysisExecutionFailedWindow(item, errorMessage);
-  connect(window, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageEmitted(QString)));
   emit showWindow(window);
+
+  setCurrentIndex(QModelIndex()); // call it otherwise the signal currentChanged is not emitted
   setCurrentIndex(item->index());
 }
 
@@ -1066,17 +1092,11 @@ bool StudyTreeView::closeAllOTStudies()
 }
 
 
-void StudyTreeView::selectedItemChanged(const QModelIndex& currentIndex)
-{
-  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(currentIndex);
-  emit itemSelected(selectedItem);
-}
-
-
 void StudyTreeView::selectedItemChanged(const QModelIndex & currentIndex, const QModelIndex & previousIndex)
 {
   if (!currentIndex.isValid())
     return;
-  selectedItemChanged(currentIndex);
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(currentIndex);
+  emit itemSelected(selectedItem);
 }
 }

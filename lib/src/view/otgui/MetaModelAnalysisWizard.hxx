@@ -50,7 +50,7 @@ public slots:
   void chaosDegreeChanged(int);
   void sparseChaosChanged(bool);
   void looValidationChanged(bool);
-  void setOutputsToAnalyse(QStringList);
+  void setInterestVariables(QStringList);
 
 private:
   FunctionalChaosAnalysis chaos_;

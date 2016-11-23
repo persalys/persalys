@@ -58,7 +58,7 @@ model.addOutput(otguibase.Output('Y1', 0, '', 'sin(X0) + 8*X1 + X2'))
 
 analysis3 = otguibase.MonteCarloAnalysis('myMonteCarlo3', model)
 analysis3.setMaximumCalls(1000)
-analysis3.setOutputsToAnalyse(['Y1'])
+analysis3.setInterestVariables(['Y1'])
 myStudy.add(analysis3)
 print(analysis3)
 

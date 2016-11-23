@@ -21,11 +21,10 @@
 #ifndef OTGUI_OTGUIMDIAREA_HXX
 #define OTGUI_OTGUIMDIAREA_HXX
 
-#include "otgui/OTGuiprivate.hxx"
+#include "OTguiSubWindow.hxx"
 
 #include <QMdiArea>
 #include <QStandardItem>
-#include <QMdiSubWindow>
 
 namespace OTGUI {
 class OTGUI_API OTguiMdiArea : public QMdiArea
@@ -36,11 +35,12 @@ public:
   OTguiMdiArea();
 
 public slots:
-  void showSubWindow(QMdiSubWindow * win);
+  void showSubWindow(OTguiSubWindow * win);
   void showSubWindow(QStandardItem * item);
   void removeSubWindow(QStandardItem * item);
 signals:
   void mdiAreaEmpty(bool);
+  void errorMessageChanged(QString);
 };
 }
 #endif

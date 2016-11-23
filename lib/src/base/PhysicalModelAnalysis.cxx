@@ -36,7 +36,7 @@ PhysicalModelAnalysis::PhysicalModelAnalysis(const String & name, const Physical
   : AnalysisImplementation(name)
   , physicalModel_(physicalModel)
 {
-  setOutputsToAnalyse(physicalModel.getSelectedOutputsNames());
+  setInterestVariables(physicalModel.getSelectedOutputsNames());
 }
 
 
@@ -53,20 +53,13 @@ PhysicalModel PhysicalModelAnalysis::getPhysicalModel() const
 }
 
 
-void PhysicalModelAnalysis::setPhysicalModel(const PhysicalModel & physicalModel)
-{
-  physicalModel_ = physicalModel;
-  setOutputsToAnalyse(physicalModel_.getSelectedOutputsNames());
-}
-
-
 String PhysicalModelAnalysis::getModelName() const
 {
   return physicalModel_.getName();
 }
 
 
-void PhysicalModelAnalysis::setOutputsToAnalyse(const Description& outputsNames)
+void PhysicalModelAnalysis::setInterestVariables(const Description& outputsNames)
 {
   if (!outputsNames.getSize())
     throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
@@ -76,7 +69,7 @@ void PhysicalModelAnalysis::setOutputsToAnalyse(const Description& outputsNames)
     if (!modelOutputsNames.contains(outputsNames[i]))
       throw InvalidArgumentException(HERE) << "The name " << outputsNames[i] << " does not match an output name of the model";
 
-  AnalysisImplementation::setOutputsToAnalyse(outputsNames);
+  AnalysisImplementation::setInterestVariables(outputsNames);
 }
 
 
@@ -86,7 +79,7 @@ String PhysicalModelAnalysis::__repr__() const
   oss << "class=" << getClassName()
       << " name=" << getName()
       << " physicalModel=" << getPhysicalModel().getName()
-      << " outputs=" << getOutputsToAnalyse();
+      << " outputs=" << getInterestVariables();
   return oss;
 }
 
@@ -104,7 +97,7 @@ void PhysicalModelAnalysis::load(Advocate & adv)
 {
   AnalysisImplementation::load(adv);
   adv.loadAttribute("physicalModel_", physicalModel_);
-  if (!getOutputsToAnalyse().getSize() && !isReliabilityAnalysis())
-    setOutputsToAnalyse(physicalModel_.getSelectedOutputsNames());
+  if (!getInterestVariables().getSize() && !isReliabilityAnalysis())
+    setInterestVariables(physicalModel_.getSelectedOutputsNames());
 }
 }

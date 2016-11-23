@@ -44,8 +44,8 @@ public:
 
   bool isReliabilityAnalysis() const;
 
-  OT::Description getOutputsToAnalyse() const;
-  virtual void setOutputsToAnalyse(const OT::Description& outputsNames);
+  OT::Description getInterestVariables() const;
+  virtual void setInterestVariables(const OT::Description& variablesNames);
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -58,7 +58,7 @@ protected:
 
 private:
   bool isReliabilityAnalysis_;
-  OT::Description outputsToAnalyse_;
+  OT::Description interestVariables_;
 };
 }
 #endif

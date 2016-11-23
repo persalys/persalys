@@ -52,13 +52,13 @@ SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis & analysis)
   {
     sobolAnalysis_ = *dynamic_cast<const SobolAnalysis*>(&*analysis.getImplementation());
     srcAnalysis_ = SRCAnalysis(sobolAnalysis_.getName(), sobolAnalysis_.getPhysicalModel());
-    srcAnalysis_.setOutputsToAnalyse(sobolAnalysis_.getOutputsToAnalyse());
+    srcAnalysis_.setInterestVariables(sobolAnalysis_.getInterestVariables());
   }
   else
   {
     srcAnalysis_ = *dynamic_cast<const SRCAnalysis*>(&*analysis.getImplementation());
     sobolAnalysis_ = SobolAnalysis(srcAnalysis_.getName(), srcAnalysis_.getPhysicalModel());
-    sobolAnalysis_.setOutputsToAnalyse(srcAnalysis_.getOutputsToAnalyse());
+    sobolAnalysis_.setInterestVariables(srcAnalysis_.getInterestVariables());
   }
 
   buildInterface();
@@ -77,9 +77,9 @@ void SensitivityAnalysisWizard::buildInterface()
   QVBoxLayout * mainLayout = new QVBoxLayout(page);
 
   // output selection
-  outputsGroupBox_ = new OutputsSelectionGroupBox(sobolAnalysis_.getPhysicalModel().getSelectedOutputsNames(), sobolAnalysis_.getOutputsToAnalyse(), this);
-  setOutputsToAnalyse(outputsGroupBox_->getSelectedOutputsNames());
-  connect(outputsGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), this, SLOT(setOutputsToAnalyse(QStringList)));
+  outputsGroupBox_ = new OutputsSelectionGroupBox(sobolAnalysis_.getPhysicalModel().getSelectedOutputsNames(), sobolAnalysis_.getInterestVariables(), this);
+  setInterestVariables(outputsGroupBox_->getSelectedOutputsNames());
+  connect(outputsGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), this, SLOT(setInterestVariables(QStringList)));
   mainLayout->addWidget(outputsGroupBox_);
 
   // method selection
@@ -267,7 +267,7 @@ void SensitivityAnalysisWizard::seedChanged(int seed)
 }
 
 
-void SensitivityAnalysisWizard::setOutputsToAnalyse(QStringList outputsList)
+void SensitivityAnalysisWizard::setInterestVariables(QStringList outputsList)
 {
   errorMessageLabel_->setText("");
 
@@ -277,8 +277,8 @@ void SensitivityAnalysisWizard::setOutputsToAnalyse(QStringList outputsList)
 
   try
   {
-    sobolAnalysis_.setOutputsToAnalyse(desc);
-    srcAnalysis_.setOutputsToAnalyse(desc);
+    sobolAnalysis_.setInterestVariables(desc);
+    srcAnalysis_.setInterestVariables(desc);
   }
   catch (InvalidDimensionException exception)
   {

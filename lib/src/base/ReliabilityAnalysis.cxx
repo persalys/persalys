@@ -47,7 +47,7 @@ LimitState ReliabilityAnalysis::getLimitState() const
 }
 
 
-void ReliabilityAnalysis::setOutputsToAnalyse(const Description& outputsNames)
+void ReliabilityAnalysis::setInterestVariables(const Description& outputsNames)
 {
   if (outputsNames.getSize() == 1)
     if (outputsNames[0] == limitState_.getOutputName())

@@ -29,11 +29,11 @@ aModelPhys.addOutput(Y0)
 aModelPhys.addOutput(Y1)
 myStudy.add(aModelPhys)
 aTaylor = otguibase.TaylorExpansionMomentsAnalysis('aTaylor', aModelPhys)
-outputsToAnalyse = ['Y0']
-aTaylor.setOutputsToAnalyse(outputsToAnalyse)
+interestVariables = ['Y0']
+aTaylor.setInterestVariables(interestVariables)
 myStudy.add(aTaylor)
 aTaylor2 = otguibase.TaylorExpansionMomentsAnalysis('aTaylor2', aModelPhys)
-outputsToAnalyse = ['Y1']
-aTaylor2.setOutputsToAnalyse(outputsToAnalyse)
+interestVariables = ['Y1']
+aTaylor2.setInterestVariables(interestVariables)
 myStudy.add(aTaylor2)
 

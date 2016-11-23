@@ -1,0 +1,42 @@
+%feature("docstring") OTGUI::FittingTestResult
+"Fitting test result."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FittingTestResult::getVariableName
+"Variable name accessor.
+
+Returns
+-------
+name : str
+    The name of the variable"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FittingTestResult::getValues
+"Data accessor.
+
+Returns
+-------
+values : :py:class:`openturns.NumericalSample`
+    Values of the variable used to perform the inference analysis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::InferenceAnalysis::getTestedDistributions
+"Get the sequence of tested distributions.
+
+Returns
+-------
+distributions : sequence of :py:class:`openturns.Distribution`
+    Tested distributions"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::InferenceAnalysis::getKolmogorovTestResults
+"Result of the Kolmogorov goodness-of-fit test.
+
+Returns
+-------
+results : sequence of :py:class:`openturns.TestResult`
+    Results of the Kolmogorov goodness-of-fit test for all the distributions"

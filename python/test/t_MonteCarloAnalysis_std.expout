@@ -1573,8 +1573,8 @@ aModelPhys.addOutput(Y0)
 aModelPhys.addOutput(Y1)
 myStudy.add(aModelPhys)
 myMonteCarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', aModelPhys)
-outputsToAnalyse = ['Y0']
-myMonteCarlo.setOutputsToAnalyse(outputsToAnalyse)
+interestVariables = ['Y0']
+myMonteCarlo.setInterestVariables(interestVariables)
 myMonteCarlo.setMaximumCalls(1000)
 myMonteCarlo.setMaximumCoefficientOfVariation(-1)
 myMonteCarlo.setMaximumElapsedTime(30)
@@ -1582,16 +1582,16 @@ myMonteCarlo.setBlockSize(1)
 myMonteCarlo.setSeed(2)
 myStudy.add(myMonteCarlo)
 myMonteCarlo2 = otguibase.MonteCarloAnalysis('myMonteCarlo2', aModelPhys)
-outputsToAnalyse = ['Y0']
-myMonteCarlo2.setOutputsToAnalyse(outputsToAnalyse)
+interestVariables = ['Y0']
+myMonteCarlo2.setInterestVariables(interestVariables)
 myMonteCarlo2.setMaximumCoefficientOfVariation(0.02)
 myMonteCarlo2.setMaximumElapsedTime(100000)
 myMonteCarlo2.setBlockSize(100)
 myMonteCarlo2.setSeed(0)
 myStudy.add(myMonteCarlo2)
 myMonteCarlo3 = otguibase.MonteCarloAnalysis('myMonteCarlo3', aModelPhys)
-outputsToAnalyse = ['Y1']
-myMonteCarlo3.setOutputsToAnalyse(outputsToAnalyse)
+interestVariables = ['Y1']
+myMonteCarlo3.setInterestVariables(interestVariables)
 myMonteCarlo3.setMaximumCalls(1000)
 myMonteCarlo3.setMaximumCoefficientOfVariation(0.01)
 myMonteCarlo3.setMaximumElapsedTime(60)

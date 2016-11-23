@@ -36,7 +36,7 @@ DesignOfExperimentAnalysis::DesignOfExperimentAnalysis(const String & name, cons
   : AnalysisImplementation(name)
   , designOfExperiment_(designOfExperiment)
 {
-  setOutputsToAnalyse(designOfExperiment_.getOutputSample().getDescription());
+  setInterestVariables(designOfExperiment_.getSample().getDescription());
 }
 
 
@@ -56,7 +56,6 @@ DesignOfExperiment DesignOfExperimentAnalysis::getDesignOfExperiment() const
 void DesignOfExperimentAnalysis::setDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
 {
   designOfExperiment_ = designOfExperiment;
-  setOutputsToAnalyse(designOfExperiment.getOutputSample().getDescription());
 }
 
 
@@ -66,14 +65,17 @@ String DesignOfExperimentAnalysis::getModelName() const
 }
 
 
-void DesignOfExperimentAnalysis::setOutputsToAnalyse(const Description& outputsNames)
+void DesignOfExperimentAnalysis::setInterestVariables(const Description& variablesNames)
 {
-  const Description modelOutputsNames(designOfExperiment_.getOutputSample().getDescription());
-  for (UnsignedInteger i=0; i<outputsNames.getSize(); ++i)
-    if (!modelOutputsNames.contains(outputsNames[i]))
-      throw InvalidArgumentException(HERE) << "The name " << outputsNames[i] << " does not match an output name of the model";
+  if (!variablesNames.getSize())
+    throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
 
-  AnalysisImplementation::setOutputsToAnalyse(outputsNames);
+  const Description modelVariablesNames(designOfExperiment_.getSample().getDescription());
+  for (UnsignedInteger i=0; i<variablesNames.getSize(); ++i)
+    if (!modelVariablesNames.contains(variablesNames[i]))
+      throw InvalidArgumentException(HERE) << "The name " << variablesNames[i] << " does not match a variable name of the model";
+
+  AnalysisImplementation::setInterestVariables(variablesNames);
 }
 
 
@@ -100,7 +102,7 @@ void DesignOfExperimentAnalysis::load(Advocate & adv)
 {
   AnalysisImplementation::load(adv);
   adv.loadAttribute("designOfExperiment_", designOfExperiment_);
-  if (!getOutputsToAnalyse().getSize())
-    setOutputsToAnalyse(designOfExperiment_.getOutputSample().getDescription());
+  if (!getInterestVariables().getSize())
+    setInterestVariables(designOfExperiment_.getOutputSample().getDescription());
 }
 }

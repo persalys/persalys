@@ -54,7 +54,7 @@ public slots:
   void sampleSizeChanged(int);
   void seedChanged(int);
   void blockSizeChanged(double);
-  void setOutputsToAnalyse(QStringList);
+  void setInterestVariables(QStringList);
 
 private:
   SobolAnalysis sobolAnalysis_;

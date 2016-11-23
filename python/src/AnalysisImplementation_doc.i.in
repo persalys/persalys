@@ -53,26 +53,26 @@ OTGUI_Analysis_analysisLaunched_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_Analysis_getOutputsToAnalyse_doc
-"Get the outputs to analyse.
+%define OTGUI_Analysis_getInterestVariables_doc
+"Get the variables to analyse.
 
 Returns
 -------
-outputsNames : sequence of str
-    Names of the outputs to analyse"
+variablesNames : sequence of str
+    Names of the variables to analyse"
 %enddef
-%feature("docstring") OTGUI::AnalysisImplementation::getOutputsToAnalyse
-OTGUI_Analysis_getOutputsToAnalyse_doc
+%feature("docstring") OTGUI::AnalysisImplementation::getInterestVariables
+OTGUI_Analysis_getInterestVariables_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_Analysis_setOutputsToAnalyse_doc
-"Set the outputs to analyse.
+%define OTGUI_Analysis_setInterestVariables_doc
+"Set the variables to analyse.
 
 Parameters
 ----------
-outputsNames : sequence of str
-    Names of the outputs to analyse"
+variablesNames : sequence of str
+    Names of the variables to analyse"
 %enddef
-%feature("docstring") OTGUI::AnalysisImplementation::setOutputsToAnalyse
-OTGUI_Analysis_setOutputsToAnalyse_doc
+%feature("docstring") OTGUI::AnalysisImplementation::setInterestVariables
+OTGUI_Analysis_setInterestVariables_doc

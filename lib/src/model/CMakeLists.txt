@@ -9,6 +9,7 @@ ot_add_source_file ( OutputTableModel.cxx )
 ot_add_source_file ( ExperimentTableModel.cxx )
 ot_add_source_file ( CorrelationTableModel.cxx )
 ot_add_source_file ( DataModelTableModel.cxx )
+ot_add_source_file ( DistributionsTableModel.cxx )
 ot_add_source_file ( LimitStateItem.cxx )
 ot_add_source_file ( DesignOfExperimentItem.cxx )
 ot_add_source_file ( ProbabilisticModelItem.cxx )
@@ -17,6 +18,7 @@ ot_add_source_file ( OTStudyItem.cxx )
 ot_add_source_file ( AnalysisItem.cxx )
 ot_add_source_file ( StudyTreeViewModel.cxx )
 ot_add_source_file ( CodeModel.cxx)
+ot_add_source_file ( VariablesInferenceTableModel.cxx)
 ot_add_source_file ( CustomStandardItemModel.cxx )
 
 ot_install_header_file ( SampleTableModel.hxx )
@@ -32,6 +34,7 @@ ot_install_header_file ( ProbabilisticModelItem.hxx )
 ot_install_header_file ( PhysicalModelItem.hxx )
 ot_install_header_file ( OTStudyItem.hxx )
 ot_install_header_file ( StudyTreeViewModel.hxx )
+ot_install_header_file ( VariablesInferenceTableModel.hxx )
 ot_install_header_file ( CustomStandardItemModel.hxx )
 
 qt5_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
@@ -40,6 +43,7 @@ qt5_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
                                     otgui/ExperimentTableModel.hxx
                                     otgui/CorrelationTableModel.hxx
                                     otgui/DataModelTableModel.hxx
+                                    otgui/DistributionsTableModel.hxx
                                     otgui/AnalysisItem.hxx
                                     otgui/StudyTreeViewModel.hxx
                                     otgui/LimitStateItem.hxx
@@ -48,6 +52,7 @@ qt5_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
                                     otgui/PhysicalModelItem.hxx
                                     otgui/OTStudyItem.hxx
                                     otgui/CodeModel.hxx
+                                    otgui/VariablesInferenceTableModel.hxx
                                     otgui/CustomStandardItemModel.hxx)
 
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )

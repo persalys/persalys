@@ -1,0 +1,33 @@
+%feature("docstring") OTGUI::InferenceResult
+"Inference result.
+
+Notes
+-----
+Structure created by the method run() of
+:class:`~otguibase.InferenceAnalysis`, and obtained thanks to the method
+getResult()."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::InferenceResult::getFittingTestResultCollection
+"Sequence of fitting test results accessor.
+
+Returns
+-------
+results : sequence of :class:`~otguibase.FittingTestResult`
+    The fitting test results of all the variables"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::InferenceResult::getFittingTestResultCollection
+"Get the fitting test result of a variable.
+
+Parameters
+----------
+variable : str
+    Name of the variable
+
+Returns
+-------
+result : :class:`~otguibase.FittingTestResult`
+    The fitting test result of the variable"

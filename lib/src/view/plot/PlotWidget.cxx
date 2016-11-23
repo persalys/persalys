@@ -494,4 +494,18 @@ void PlotWidget::replot()
   QwtPlot::replot();
   emit plotChanged();
 }
+
+
+void PlotWidget::showEvent(QShowEvent * event)
+{
+  emit visibilityChanged(true);
+  QWidget::showEvent(event);
+}
+
+
+void PlotWidget::hideEvent(QHideEvent * event)
+{
+  emit visibilityChanged(false);
+  QWidget::hideEvent(event);
+}
 }

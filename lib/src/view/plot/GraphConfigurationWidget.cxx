@@ -36,10 +36,12 @@
 
 namespace OTGUI {
 
-GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets, QStringList inputNames,
+GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets,
+                                                   QStringList inputNames,
                                                    QStringList outputNames,
-                                                   GraphConfigurationWidget::Type plotType)
-  : QWidget()
+                                                   GraphConfigurationWidget::Type plotType,
+                                                   QWidget * parent)
+  : QWidget(parent)
   , plotWidgets_(plotWidgets)
   , plotType_(plotType)
   , currentPlotIndex_(0)
@@ -74,13 +76,13 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   }
 
   yAxisComboBox_ = 0;
-  if (plotType_ != GraphConfigurationWidget::PDF && plotType_ != GraphConfigurationWidget::CDF)
+  if (outputNames.size() && plotType_ != GraphConfigurationWidget::PDF && plotType_ != GraphConfigurationWidget::CDF)
   {
     label = new QLabel(tr("Y-axis"));
     mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
     yAxisComboBox_ = new QComboBox;
     yAxisComboBox_->addItems(outputNames);
-    if (plotType_ == GraphConfigurationWidget::Scatter)
+    if (plotType_ == GraphConfigurationWidget::Scatter && inputNames.size())
       yAxisComboBox_->addItems(inputNames);
     mainGridLayout->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
     connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
@@ -313,5 +315,11 @@ void GraphConfigurationWidget::updateYrange()
 void GraphConfigurationWidget::exportPlot()
 {
   plotWidgets_[currentPlotIndex_]->exportPlot();
+}
+
+
+void GraphConfigurationWidget::plotVisibilityChanged(bool visibility)
+{
+  emit visibilityChanged(this, visibility);
 }
 }

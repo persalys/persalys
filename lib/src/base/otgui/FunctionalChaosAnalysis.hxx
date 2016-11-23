@@ -56,6 +56,8 @@ public:
 
   FunctionalChaosAnalysisResult getResult() const;
 
+  virtual void setInterestVariables(const OT::Description& variablesNames);
+
   virtual void run();
   virtual OT::String getPythonScript() const;
   virtual bool analysisLaunched() const;

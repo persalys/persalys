@@ -42,7 +42,7 @@ public:
 
   OT::String getModelName() const;
 
-  virtual void setOutputsToAnalyse(const OT::Description& outputsNames);
+  virtual void setInterestVariables(const OT::Description& variablesNames);
 
   /** String converter */
   virtual OT::String __repr__() const;

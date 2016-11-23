@@ -37,11 +37,10 @@ public:
   virtual PhysicalModelAnalysis * clone() const;
 
   PhysicalModel getPhysicalModel() const;
-  void setPhysicalModel(const PhysicalModel & physicalModel);
 
   OT::String getModelName() const;
 
-  virtual void setOutputsToAnalyse(const OT::Description& outputsNames);
+  virtual void setInterestVariables(const OT::Description& outputsNames);
 
   /** String converter */
   virtual OT::String __repr__() const;

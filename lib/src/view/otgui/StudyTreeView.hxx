@@ -22,9 +22,9 @@
 #define OTGUI_STUDYTREEVIEW_HXX
 
 #include "otgui/StudyTreeViewModel.hxx"
+#include "otgui/OTguiSubWindow.hxx"
 
 #include <QTreeView>
-#include <QMdiSubWindow>
 #include <QAction>
 
 namespace OTGUI {
@@ -64,7 +64,6 @@ public slots:
   void createNewThresholdExceedance();
   void createNewMetaModel();
   void onCustomContextMenu(const QPoint & point);
-  void selectedItemChanged(const QModelIndex & currentIndex);
   void selectedItemChanged(const QModelIndex & currentIndex, const QModelIndex & previousIndex);
   void runDesignOfExperiment();
   void removeDesignOfExperiment();
@@ -74,6 +73,7 @@ public slots:
   void createNewOTStudyWindow(OTStudyItem * item);
   void createNewDataModelWindow(DesignOfExperimentItem * item);
   void createNewDataAnalysis();
+  void createNewInferenceAnalysis();
   void createNewPhysicalModelWindow(PhysicalModelItem * item);
   void createNewProbabilisticModelWindow(ProbabilisticModelItem * item);
   void createNewDesignOfExperimentWindow(DesignOfExperimentItem* item);
@@ -89,8 +89,7 @@ public slots:
   bool closeOTStudy();
   bool closeAllOTStudies();
 signals:
-  void showWindow(QMdiSubWindow*);
-  void errorMessageEmitted(QString);
+  void showWindow(OTguiSubWindow*);
   void itemSelected(QStandardItem *);
   void removeSubWindow(QStandardItem *);
   void graphWindowActivated(QWidget*);
@@ -105,6 +104,7 @@ private:
   QAction * modifyDataModel_;
   QAction * removeDataModel_;
   QAction * newDataAnalysis_;
+  QAction * newInferenceAnalysis_;
   QAction * newAnalyticalPhysicalModel_;
   QAction * newPythonPhysicalModel_;
 #ifdef OTGUI_HAVE_YACS

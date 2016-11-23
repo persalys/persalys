@@ -65,7 +65,7 @@ void SobolAnalysis::run()
   RandomGenerator::SetSeed(getSeed());
 
   const UnsignedInteger nbInputs(getPhysicalModel().getStochasticInputNames().getSize());
-  const UnsignedInteger nbOutputs(getOutputsToAnalyse().getSize());
+  const UnsignedInteger nbOutputs(getInterestVariables().getSize());
 
   const bool maximumOuterSamplingSpecified = getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max();
   const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / (getBlockSize()*(2+nbInputs)))) : (UnsignedInteger)std::numeric_limits<int>::max();
@@ -188,7 +188,7 @@ void SobolAnalysis::run()
 //   totalIndicesInterval = algoSaltelli.getTotalOrderIndicesInterval();
 
   // fill result_
-  result_ = SobolResult(firstOrderIndices, totalIndices, getOutputsToAnalyse());
+  result_ = SobolResult(firstOrderIndices, totalIndices, getInterestVariables());
   result_.setCallsNumber(X1.getSize()*(2+nbInputs));
   result_.setElapsedTime((float)elapsedTime/CLOCKS_PER_SEC);
   result_.setCoefficientOfVariation(coefficientOfVariation);
@@ -213,17 +213,17 @@ String SobolAnalysis::getPythonScript() const
 {
   OSS oss;
   oss << getName() << " = otguibase.SobolAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
-  if (getOutputsToAnalyse().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
+  if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {
-    oss << "outputsToAnalyse = [";
-    for (UnsignedInteger i=0; i<getOutputsToAnalyse().getSize(); ++i)
+    oss << "interestVariables = [";
+    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
     {
-      oss << "'" << getOutputsToAnalyse()[i] << "'";
-      if (i < getOutputsToAnalyse().getSize()-1)
+      oss << "'" << getInterestVariables()[i] << "'";
+      if (i < getInterestVariables().getSize()-1)
         oss << ", ";
     }
     oss << "]\n";
-    oss << getName() << ".setOutputsToAnalyse(outputsToAnalyse)\n";
+    oss << getName() << ".setInterestVariables(interestVariables)\n";
   }
   if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
     oss << getName() << ".setMaximumCalls(" << getMaximumCalls() << ")\n";

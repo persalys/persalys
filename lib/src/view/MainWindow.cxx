@@ -80,7 +80,7 @@ void MainWindow::buildInterface()
 
   // MdiArea
   OTguiMdiArea * mdiArea = new OTguiMdiArea;
-  connect(studyTree_, SIGNAL(showWindow(QMdiSubWindow *)), mdiArea, SLOT(showSubWindow(QMdiSubWindow *)));
+  connect(studyTree_, SIGNAL(showWindow(OTguiSubWindow *)), mdiArea, SLOT(showSubWindow(OTguiSubWindow *)));
   connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), mdiArea, SLOT(showSubWindow(QStandardItem *)));
   connect(studyTree_, SIGNAL(removeSubWindow(QStandardItem *)), mdiArea, SLOT(removeSubWindow(QStandardItem *)));
   rightSideSplitter->addWidget(mdiArea);
@@ -130,7 +130,7 @@ void MainWindow::buildInterface()
 
   // status bar
   OTguiStatusBar * statusBar = new OTguiStatusBar;
-  connect(studyTree_, SIGNAL(errorMessageEmitted(QString)), statusBar, SLOT(showErrorMessage(QString)));
+  connect(mdiArea, SIGNAL(errorMessageChanged(QString)), statusBar, SLOT(showErrorMessage(QString)));
   setStatusBar(statusBar);
 }
 

@@ -52,7 +52,7 @@ CentralTendencyWizard::CentralTendencyWizard(const Analysis & analysis)
     taylorAnalysis_ = TaylorExpansionMomentsAnalysis(MCAnalysis_.getName(), MCAnalysis_.getPhysicalModel());
     try
     {
-      taylorAnalysis_.setOutputsToAnalyse(MCAnalysis_.getOutputsToAnalyse());
+      taylorAnalysis_.setInterestVariables(MCAnalysis_.getInterestVariables());
     }
     catch (std::exception)
     {
@@ -65,7 +65,7 @@ CentralTendencyWizard::CentralTendencyWizard(const Analysis & analysis)
     MCAnalysis_ = MonteCarloAnalysis(taylorAnalysis_.getName(), taylorAnalysis_.getPhysicalModel());
     try
     {
-      MCAnalysis_.setOutputsToAnalyse(taylorAnalysis_.getOutputsToAnalyse());
+      MCAnalysis_.setInterestVariables(taylorAnalysis_.getInterestVariables());
     }
     catch (std::exception)
     {
@@ -87,9 +87,9 @@ void CentralTendencyWizard::buildInterface()
   QVBoxLayout * mainLayout = new QVBoxLayout(page);
 
   // output selection
-  outputsGroupBox_ = new OutputsSelectionGroupBox(MCAnalysis_.getPhysicalModel().getSelectedOutputsNames(), MCAnalysis_.getOutputsToAnalyse(), this);
-  setOutputsToAnalyse(outputsGroupBox_->getSelectedOutputsNames());
-  connect(outputsGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), this, SLOT(setOutputsToAnalyse(QStringList)));
+  outputsGroupBox_ = new OutputsSelectionGroupBox(MCAnalysis_.getPhysicalModel().getSelectedOutputsNames(), MCAnalysis_.getInterestVariables(), this);
+  setInterestVariables(outputsGroupBox_->getSelectedOutputsNames());
+  connect(outputsGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), this, SLOT(setInterestVariables(QStringList)));
   mainLayout->addWidget(outputsGroupBox_);
 
   // method selection
@@ -251,7 +251,7 @@ void CentralTendencyWizard::blockSizeChanged(double size)
 }
 
 
-void CentralTendencyWizard::setOutputsToAnalyse(QStringList outputsList)
+void CentralTendencyWizard::setInterestVariables(QStringList outputsList)
 {
   errorMessageLabel_->setText("");
 
@@ -261,8 +261,8 @@ void CentralTendencyWizard::setOutputsToAnalyse(QStringList outputsList)
 
   try
   {
-    taylorAnalysis_.setOutputsToAnalyse(desc);
-    MCAnalysis_.setOutputsToAnalyse(desc);
+    taylorAnalysis_.setInterestVariables(desc);
+    MCAnalysis_.setInterestVariables(desc);
   }
   catch (InvalidDimensionException exception)
   {
