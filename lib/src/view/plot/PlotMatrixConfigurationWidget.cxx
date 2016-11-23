@@ -31,6 +31,16 @@
 
 namespace OTGUI {
 
+class NoWheelEventComboBox : public QComboBox
+{
+public:
+  NoWheelEventComboBox(QWidget * parent = 0) : QComboBox(parent){}
+protected:
+  void wheelEvent(QWheelEvent *){}
+};
+
+
+
 PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * plotMatrix)
   : QWidget()
   , plotMatrix_(plotMatrix)
@@ -51,7 +61,7 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   label = new QLabel(tr("Colums"));
   mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
-  QComboBox * inputsComboBox = new QComboBox;
+  NoWheelEventComboBox * inputsComboBox = new NoWheelEventComboBox;
   ListWidgetWithCheckBox * listWidget = new ListWidgetWithCheckBox("-- " + tr("Select variables") + " --", plotMatrix_->getInputNames(), plotMatrix_->getInputNames());
   connect(listWidget, SIGNAL(checkedItemsChanged(QStringList)), plotMatrix_, SLOT(setInputsToDisplay(QStringList)));
   inputsComboBox->setModel(listWidget->model());
@@ -61,8 +71,8 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   label = new QLabel(tr("Rows"));
   mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
-  QComboBox * outputsComboBox = new QComboBox;
-  listWidget = new ListWidgetWithCheckBox("-- Select variables --", plotMatrix_->getOutputNames(), plotMatrix_->getOutputNames());
+  NoWheelEventComboBox * outputsComboBox = new NoWheelEventComboBox;
+  listWidget = new ListWidgetWithCheckBox("-- " + tr("Select variables") + " --", plotMatrix_->getOutputNames(), plotMatrix_->getOutputNames());
   connect(listWidget, SIGNAL(checkedItemsChanged(QStringList)), plotMatrix_, SLOT(setOutputsToDisplay(QStringList)));
   outputsComboBox->setModel(listWidget->model());
   outputsComboBox->setView(listWidget);
