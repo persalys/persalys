@@ -37,8 +37,8 @@ class OTGUI_API ReliabilityAnalysisWizard : public AnalysisWizard
 public:
   enum Method {MonteCarlo/*, FORM, SORM*/};
 
-  ReliabilityAnalysisWizard(const OTStudy& otStudy, const LimitState & limitState);
-  ReliabilityAnalysisWizard(const Analysis & analysis);
+  ReliabilityAnalysisWizard(const OTStudy& otStudy, const LimitState & limitState, QWidget* parent=0);
+  ReliabilityAnalysisWizard(const Analysis & analysis, QWidget* parent=0);
 
   virtual bool validateCurrentPage();
 

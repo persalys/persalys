@@ -32,8 +32,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-CentralTendencyWizard::CentralTendencyWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel)
-  : AnalysisWizard(MonteCarloAnalysis(otStudy.getAvailableAnalysisName("centralTendencyMC_"), physicalModel))
+CentralTendencyWizard::CentralTendencyWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel, QWidget* parent)
+  : AnalysisWizard(MonteCarloAnalysis(otStudy.getAvailableAnalysisName("centralTendencyMC_"), physicalModel), parent)
   , MCAnalysis_(*dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation()))
   , taylorAnalysis_(TaylorExpansionMomentsAnalysis(otStudy.getAvailableAnalysisName("centralTendencyTaylor_"), physicalModel))
   , errorMessageLabel_(new QLabel)
@@ -42,8 +42,8 @@ CentralTendencyWizard::CentralTendencyWizard(const OTStudy& otStudy, const Physi
 }
 
 
-CentralTendencyWizard::CentralTendencyWizard(const Analysis & analysis)
-  : AnalysisWizard(analysis)
+CentralTendencyWizard::CentralTendencyWizard(const Analysis & analysis, QWidget* parent)
+  : AnalysisWizard(analysis, parent)
   , errorMessageLabel_(new QLabel)
 {
   if (analysis.getImplementation()->getClassName() == "MonteCarloAnalysis")

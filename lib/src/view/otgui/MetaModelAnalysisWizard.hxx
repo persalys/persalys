@@ -37,8 +37,8 @@ class OTGUI_API MetaModelAnalysisWizard : public AnalysisWizard
 public:
   enum Method {chaos, kriging};
 
-  MetaModelAnalysisWizard(const OTStudy& otStudy, const DesignOfExperiment & designOfExperiment);
-  MetaModelAnalysisWizard(const Analysis & analysis);
+  MetaModelAnalysisWizard(const OTStudy& otStudy, const DesignOfExperiment & designOfExperiment, QWidget* parent=0);
+  MetaModelAnalysisWizard(const Analysis & analysis, QWidget* parent=0);
 
   virtual bool validateCurrentPage();
 

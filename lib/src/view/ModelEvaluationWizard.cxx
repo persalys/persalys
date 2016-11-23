@@ -34,15 +34,15 @@ using namespace OT;
 
 namespace OTGUI {
 
-ModelEvaluationWizard::ModelEvaluationWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel)
-  : AnalysisWizard(ModelEvaluation(otStudy.getAvailableAnalysisName("evaluation_"), physicalModel))
+ModelEvaluationWizard::ModelEvaluationWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel, QWidget* parent)
+  : AnalysisWizard(ModelEvaluation(otStudy.getAvailableAnalysisName("evaluation_"), physicalModel), parent)
 {
   buildInterface();
 }
 
 
-ModelEvaluationWizard::ModelEvaluationWizard(const Analysis & analysis)
-  : AnalysisWizard(analysis)
+ModelEvaluationWizard::ModelEvaluationWizard(const Analysis & analysis, QWidget* parent)
+  : AnalysisWizard(analysis, parent)
 {
   dynamic_cast<ModelEvaluation*>(&*analysis_.getImplementation())->updateParameters();
   buildInterface();

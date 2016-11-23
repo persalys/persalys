@@ -43,8 +43,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-InferenceWizard::InferenceWizard(const OTStudy& otStudy, const DesignOfExperiment& designOfExperiment)
-  : AnalysisWizard(InferenceAnalysis(otStudy.getAvailableAnalysisName("inference_"), designOfExperiment))
+InferenceWizard::InferenceWizard(const OTStudy& otStudy, const DesignOfExperiment& designOfExperiment, QWidget* parent)
+  : AnalysisWizard(InferenceAnalysis(otStudy.getAvailableAnalysisName("inference_"), designOfExperiment), parent)
   , currentVariableName_(designOfExperiment.getSample().getDescription()[0])
   , inference_(*dynamic_cast<InferenceAnalysis*>(&*analysis_.getImplementation()))
   , errorMessageLabel_(new QLabel)
@@ -63,8 +63,8 @@ InferenceWizard::InferenceWizard(const OTStudy& otStudy, const DesignOfExperimen
 }
 
 
-InferenceWizard::InferenceWizard(const Analysis& analysis)
-  : AnalysisWizard(analysis)
+InferenceWizard::InferenceWizard(const Analysis& analysis, QWidget* parent)
+  : AnalysisWizard(analysis, parent)
   , inference_(*dynamic_cast<InferenceAnalysis*>(&*analysis_.getImplementation()))
   , errorMessageLabel_(new QLabel)
   , pageValidity_(true)

@@ -31,8 +31,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-MetaModelAnalysisWizard::MetaModelAnalysisWizard(const OTStudy& otStudy, const DesignOfExperiment & designOfExperiment)
-  : AnalysisWizard(FunctionalChaosAnalysis(otStudy.getAvailableAnalysisName("chaos_"), designOfExperiment))
+MetaModelAnalysisWizard::MetaModelAnalysisWizard(const OTStudy& otStudy, const DesignOfExperiment & designOfExperiment, QWidget* parent)
+  : AnalysisWizard(FunctionalChaosAnalysis(otStudy.getAvailableAnalysisName("chaos_"), designOfExperiment), parent)
   , chaos_(*dynamic_cast<FunctionalChaosAnalysis*>(&*analysis_.getImplementation()))
   , errorMessageLabel_(new QLabel)
 {
@@ -40,8 +40,8 @@ MetaModelAnalysisWizard::MetaModelAnalysisWizard(const OTStudy& otStudy, const D
 }
 
 
-MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis & analysis)
-  : AnalysisWizard(analysis)
+MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis & analysis, QWidget* parent)
+  : AnalysisWizard(analysis, parent)
   , errorMessageLabel_(new QLabel)
 {
   if (analysis.getImplementation()->getClassName() == "FunctionalChaosAnalysis")

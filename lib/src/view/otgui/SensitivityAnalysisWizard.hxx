@@ -38,8 +38,8 @@ class OTGUI_API SensitivityAnalysisWizard : public AnalysisWizard
 public:
   enum Method {Sobol, SRC};
 
-  SensitivityAnalysisWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel);
-  SensitivityAnalysisWizard(const Analysis & analysis);
+  SensitivityAnalysisWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel, QWidget* parent=0);
+  SensitivityAnalysisWizard(const Analysis & analysis, QWidget* parent=0);
 
   virtual bool validateCurrentPage();
 

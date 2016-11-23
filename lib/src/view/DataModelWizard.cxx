@@ -26,8 +26,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-DataModelWizard::DataModelWizard(const DesignOfExperiment & designOfExperiment)
-  : OTguiWizard()
+DataModelWizard::DataModelWizard(const DesignOfExperiment & designOfExperiment, QWidget* parent)
+  : OTguiWizard(parent)
 {
   if (!dynamic_cast<const DataModel*>(&*designOfExperiment.getImplementation()))
     throw InvalidArgumentException(HERE) << "Can not build the datamodel wizard\n";
