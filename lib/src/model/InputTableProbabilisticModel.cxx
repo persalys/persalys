@@ -168,34 +168,42 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
   }
   else if (role == Qt::EditRole && index.column() == 1)
   {
-    const Input input(physicalModel_.getInputs()[index.row()]);
-
-    String distributionName = input.getDistribution().getImplementation()->getClassName();
-    if (distributionName == "TruncatedNormal")
-      distributionName = "Normal";
-    else if (distributionName == "TruncatedDistribution")
+    if (value.toString() != tr("Inference result"))
     {
-      TruncatedDistribution dist = *dynamic_cast<TruncatedDistribution*>(&*input.getDistribution().getImplementation());
-      distributionName = dist.getDistribution().getImplementation()->getClassName();
-    }
+      const Input input(physicalModel_.getInputs()[index.row()]);
 
-    if (value.toString().toStdString() != distributionName)
-    {
-      Distribution distribution;
-      if (value.toString().isEmpty())
-        distribution = Dirac(input.getValue());
-      else
+      String distributionName = input.getDistribution().getImplementation()->getClassName();
+      if (distributionName == "TruncatedNormal")
+        distributionName = "Normal";
+      else if (distributionName == "TruncatedDistribution")
       {
-        // search the distribution corresponding to 'value'
-        distribution = DistributionDictionary::BuildDistribution(value.toString().toStdString(), input.getValue());
+        TruncatedDistribution dist = *dynamic_cast<TruncatedDistribution*>(&*input.getDistribution().getImplementation());
+        distributionName = dist.getDistribution().getImplementation()->getClassName();
       }
-      // update the input
-      physicalModel_.blockNotification(true);
-      physicalModel_.setInputDistribution(input.getName(), distribution);
-      physicalModel_.setInputDistributionParametersType(input.getName(), 0);
-      physicalModel_.blockNotification(false);
-      emit distributionChanged(index);
-      return true;
+
+      if (value.toString().toStdString() != distributionName)
+      {
+        Distribution distribution;
+        if (value.toString().isEmpty())
+          distribution = Dirac(input.getValue());
+        else
+        {
+          // search the distribution corresponding to 'value'
+          distribution = DistributionDictionary::BuildDistribution(value.toString().toStdString(), input.getValue());
+        }
+        // update the input
+        physicalModel_.blockNotification(true);
+        physicalModel_.setInputDistribution(input.getName(), distribution);
+        physicalModel_.setInputDistributionParametersType(input.getName(), 0);
+        physicalModel_.blockNotification(false);
+        emit distributionChanged(index);
+        return true;
+      }
+    }
+    else
+    {
+      emit inferenceResultRequested(index);
+      emit dataChanged(index, this->index(index.row(), 1));
     }
   }
   return false;
