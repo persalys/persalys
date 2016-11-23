@@ -276,6 +276,7 @@ QWidget* DataAnalysisWindow::getPDF_CDFWidget()
       plot->plotCurve(result_.getPDF()[i]);
     plot->setTitle(tr("PDF:") + " " + variablesNames[i]);
     plot->setAxisTitle(QwtPlot::xBottom, variablesAxisTitles[i]);
+    plot->setAxisTitle(QwtPlot::yLeft, tr("Density"));
 
     stackedWidget->addWidget(plot);
     listPlotWidgets.append(plot);
@@ -287,6 +288,7 @@ QWidget* DataAnalysisWindow::getPDF_CDFWidget()
       plot->plotCurve(result_.getCDF()[i]);
     plot->setTitle(tr("CDF:") + " " + variablesNames[i]);
     plot->setAxisTitle(QwtPlot::xBottom, variablesAxisTitles[i]);
+    plot->setAxisTitle(QwtPlot::yLeft, tr("CDF"));
 
     stackedWidget->addWidget(plot);
     listPlotWidgets.append(plot);
