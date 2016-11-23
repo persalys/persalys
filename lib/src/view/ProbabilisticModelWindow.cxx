@@ -27,6 +27,7 @@
 #include "otgui/CorrelationTableModel.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/QtTools.hxx"
+#include "otgui/InferenceResultWizard.hxx"
 
 #include "openturns/Normal.hxx"
 #include "openturns/TruncatedDistribution.hxx"
@@ -41,8 +42,9 @@ using namespace OT;
 
 namespace OTGUI {
 
-ProbabilisticModelWindow::ProbabilisticModelWindow(ProbabilisticModelItem * item)
+ProbabilisticModelWindow::ProbabilisticModelWindow(const OTStudy& otStudy, ProbabilisticModelItem * item)
   : OTguiSubWindow(item)
+  , otStudy_(otStudy)
   , physicalModel_(item->getPhysicalModel())
   , paramEditor_(0)
 {
@@ -73,6 +75,7 @@ void ProbabilisticModelWindow::buildInterface()
   Description listDistributions = DistributionDictionary::GetAvailableDistributions();
   for (UnsignedInteger i=0; i<listDistributions.getSize(); ++i)
     items << tr(listDistributions[i].c_str());
+  items << tr("Inference result");
 
   ComboBoxDelegate * delegate = new ComboBoxDelegate(items);
   inputTableView_->setItemDelegateForColumn(1, delegate);
@@ -95,6 +98,7 @@ void ProbabilisticModelWindow::buildInterface()
   connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
   connect(inputTableModel_, SIGNAL(distributionsChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
   connect(inputTableModel_, SIGNAL(checked(bool)), inputTableHeaderView_, SLOT(setChecked(bool)));
+  connect(inputTableModel_, SIGNAL(inferenceResultRequested(const QModelIndex&)), this, SLOT(openWizardToChooseInferenceResult(const QModelIndex&)));
 
   horizontalSplitter->addWidget(inputTableView_);
 
@@ -255,6 +259,7 @@ void ProbabilisticModelWindow::updateStochasticInputsTable()
   connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
   connect(inputTableModel_, SIGNAL(distributionsChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
   connect(inputTableModel_, SIGNAL(checked(bool)), inputTableHeaderView_, SLOT(setChecked(bool)));
+  connect(inputTableModel_, SIGNAL(inferenceResultRequested(const QModelIndex&)), this, SLOT(openWizardToChooseInferenceResult(const QModelIndex&)));
 }
 
 
@@ -786,6 +791,22 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
     qDebug() << "Error: ProbabilisticModelWindow::truncationParametersStateChanged\n";
     updateTruncationParametersWidgets(index);
     setTemporaryErrorMessage(ex.what());
+  }
+}
+
+
+void ProbabilisticModelWindow::openWizardToChooseInferenceResult(const QModelIndex& inputIndex)
+{
+  InferenceResultWizard * wizard = new InferenceResultWizard(otStudy_, this);
+  if (wizard->exec())
+  {
+    // update the input
+    const Input input(physicalModel_.getInputs()[inputIndex.row()]);
+    physicalModel_.blockNotification(true);
+    physicalModel_.setInputDistribution(input.getName(), wizard->getDistribution());
+    physicalModel_.setInputDistributionParametersType(input.getName(), 0);
+    physicalModel_.blockNotification(false);
+    updateDistributionWidgets(inputIndex);
   }
 }
 }

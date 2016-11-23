@@ -543,7 +543,10 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 
 void StudyTreeView::createNewProbabilisticModelWindow(ProbabilisticModelItem * item)
 {
-  ProbabilisticModelWindow * window = new ProbabilisticModelWindow(item);
+  OTStudyItem * otStudyItem = treeViewModel_->getOTStudyItem(item->index());
+  if (!otStudyItem)
+    return;
+  ProbabilisticModelWindow * window = new ProbabilisticModelWindow(otStudyItem->getOTStudy(), item);
   connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
   connect(window, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
   emit showWindow(window);
