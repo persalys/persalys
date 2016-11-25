@@ -88,6 +88,8 @@ InferenceWizard::InferenceWizard(const Analysis& analysis, QWidget* parent)
 
 void InferenceWizard::buildInterface()
 {
+  setWindowTitle(tr("Inference"));
+
   QWizardPage * page = new QWizardPage(this);
   QVBoxLayout * pageLayout = new QVBoxLayout(page);
   QHBoxLayout * splitter = new QHBoxLayout;
