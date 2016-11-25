@@ -32,7 +32,7 @@ class OTGUI_API PlotMatrixConfigurationWidget : public QWidget
   Q_OBJECT
 
 public:
-  PlotMatrixConfigurationWidget(PlotMatrixWidget * plotMatrix);
+  PlotMatrixConfigurationWidget(PlotMatrixWidget * plotMatrix, QWidget* parent=0);
 
 public slots:
   void updateLineEdits();

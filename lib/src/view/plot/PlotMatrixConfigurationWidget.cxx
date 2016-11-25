@@ -41,8 +41,8 @@ protected:
 
 
 
-PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * plotMatrix)
-  : QWidget()
+PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * plotMatrix, QWidget* parent)
+  : QWidget(parent)
   , plotMatrix_(plotMatrix)
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
@@ -62,7 +62,7 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
   NoWheelEventComboBox * inputsComboBox = new NoWheelEventComboBox;
-  ListWidgetWithCheckBox * listWidget = new ListWidgetWithCheckBox("-- " + tr("Select variables") + " --", plotMatrix_->getInputNames(), plotMatrix_->getInputNames());
+  ListWidgetWithCheckBox * listWidget = new ListWidgetWithCheckBox("-- " + tr("Select variables") + " --", plotMatrix_->getInputNames(), plotMatrix_->getInputNames(), this);
   connect(listWidget, SIGNAL(checkedItemsChanged(QStringList)), plotMatrix_, SLOT(setInputsToDisplay(QStringList)));
   inputsComboBox->setModel(listWidget->model());
   inputsComboBox->setView(listWidget);
@@ -72,7 +72,7 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
   NoWheelEventComboBox * outputsComboBox = new NoWheelEventComboBox;
-  listWidget = new ListWidgetWithCheckBox("-- " + tr("Select variables") + " --", plotMatrix_->getOutputNames(), plotMatrix_->getOutputNames());
+  listWidget = new ListWidgetWithCheckBox("-- " + tr("Select variables") + " --", plotMatrix_->getOutputNames(), plotMatrix_->getOutputNames(), this);
   connect(listWidget, SIGNAL(checkedItemsChanged(QStringList)), plotMatrix_, SLOT(setOutputsToDisplay(QStringList)));
   outputsComboBox->setModel(listWidget->model());
   outputsComboBox->setView(listWidget);
