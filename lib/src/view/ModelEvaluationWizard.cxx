@@ -51,7 +51,7 @@ ModelEvaluationWizard::ModelEvaluationWizard(const Analysis & analysis, QWidget*
 
 void ModelEvaluationWizard::buildInterface()
 {
-  setWindowTitle("Model evaluation");
+  setWindowTitle(tr("Model evaluation"));
 
   QWizardPage * page = new QWizardPage(this);
   QVBoxLayout * pageLayout = new QVBoxLayout(page);

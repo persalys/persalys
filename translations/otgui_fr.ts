@@ -177,22 +177,22 @@
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="214"/>
         <source>Box plots</source>
-        <translation>Box plots</translation>
+        <translation>Boîtes à moustaches</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="233"/>
         <source>Scatter plots</source>
-        <translation>Scatter plots</translation>
+        <translation>Diagrammes de dispersion</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="240"/>
         <source>Plot matrix X-X</source>
-        <translation>Matrice des scatter plots X-X</translation>
+        <translation>Tableau de diagrammes de dispersion X-X</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="262"/>
         <source>Plot matrix Y-X</source>
-        <translation>Matrice des scatter plots Y-X</translation>
+        <translation>Tableau de diagrammes de dispersion Y-X</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="267"/>
@@ -222,7 +222,7 @@
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="339"/>
         <source>Box plot:</source>
-        <translation>Box plot :</translation>
+        <translation>Boîte à moustaches :</translation>
     </message>
 </context>
 <context>
@@ -298,17 +298,17 @@
     <message>
         <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="225"/>
         <source>Scatter plots</source>
-        <translation>Scatter plots</translation>
+        <translation>Diagrammes de dispersion</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="231"/>
         <source>Plot matrix X-X</source>
-        <translation>Matrice des scatter plots X-X</translation>
+        <translation>Tableau de diagrammes de dispersion X-X</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="237"/>
         <source>Plot matrix Y-X</source>
-        <translation>Matrice des scatter plots Y-X</translation>
+        <translation>Tableau de diagrammes de dispersion Y-X</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="256"/>
@@ -316,7 +316,7 @@
         <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="273"/>
         <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="280"/>
         <source>Scatter plot:</source>
-        <translation>Scatter plot :</translation>
+        <translation>Diagramme de dispersion :</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="256"/>
@@ -1908,6 +1908,11 @@ extremum</source>
 </context>
 <context>
     <name>OTGUI::PlotMatrixWidget</name>
+    <message>
+        <location filename="../lib/src/view/plot/PlotMatrixWidget.cxx" line="65"/>
+        <source>Scatter plots matrix</source>
+        <translation>Tableau de diagrammes de dispersion</translation>
+    </message>
     <message>
         <location filename="../lib/src/view/plot/PlotMatrixWidget.cxx" line="257"/>
         <source>Export plot</source>
