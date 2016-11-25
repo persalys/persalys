@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItemModel for data model sample
+ *  @brief QAbstractTableModel for data model sample
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -26,20 +26,12 @@ using namespace OT;
 
 namespace OTGUI {
 
-DataModelTableModel::DataModelTableModel(const NumericalSample & data, DataModel & dataModel, const bool variablesNamesEditable)
-  : QAbstractTableModel()
+DataModelTableModel::DataModelTableModel(const NumericalSample & data, DataModel & dataModel, const bool variablesNamesEditable, QObject* parent)
+  : SampleTableModel(data, parent)
   , variablesNamesEditable_(variablesNamesEditable)
-  , data_(data)
   , inputColumns_(dataModel.getInputColumns())
   , outputColumns_(dataModel.getOutputColumns())
-  , sampleIsValid_(true)
   , dataModel_(dataModel)
-{
-  initialize();
-}
-
-
-void DataModelTableModel::initialize()
 {
   // data model
   Indices indices(inputColumns_);
@@ -52,21 +44,6 @@ void DataModelTableModel::initialize()
     outputColumns_ = Indices(data_.getDimension() > 1? 1 : 0, data_.getDimension()-1);
     dataModel_.setColumns(inputColumns_, outputColumns_);
   }
-
-  // sample
-  for (UnsignedInteger j=0; j<data_.getSize(); ++j)
-    for (UnsignedInteger i=0; i<data_.getDimension(); ++i)
-      if (std::isnan(data_[j][i]))
-      {
-        sampleIsValid_ = false;
-        break;
-      }
-}
-
-
-int DataModelTableModel::columnCount(const QModelIndex& parent) const
-{
-  return data_.getDimension();
 }
 
 
@@ -79,8 +56,8 @@ int DataModelTableModel::rowCount(const QModelIndex& parent) const
 Qt::ItemFlags DataModelTableModel::flags(const QModelIndex & index) const
 {
   if (index.row() == 0 && variablesNamesEditable_) // variables names
-    return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
-  return QAbstractItemModel::flags(index);
+    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+  return QAbstractTableModel::flags(index);
 }
 
 
@@ -95,7 +72,6 @@ QVariant DataModelTableModel::headerData(int section, Qt::Orientation orientatio
     else
       return section-1;
   }
-
   return QAbstractTableModel::headerData(section, orientation, role);
 }
 
@@ -236,11 +212,5 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
 DataModel DataModelTableModel::getDataModel() const
 {
   return dataModel_;
-}
-
-
-bool DataModelTableModel::sampleIsValid()
-{
-  return sampleIsValid_;
 }
 }
