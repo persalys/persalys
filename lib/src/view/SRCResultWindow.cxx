@@ -37,9 +37,17 @@ namespace OTGUI {
 SRCResultWindow::SRCResultWindow(AnalysisItem * item)
   : ResultWindow(item)
   , result_(dynamic_cast<SRCAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , plotsConfigurationWidget_(0)
 {
   setParameters(item->getAnalysis());
   buildInterface();
+}
+
+
+SRCResultWindow::~SRCResultWindow()
+{
+  delete plotsConfigurationWidget_;
+  plotsConfigurationWidget_ = 0;
 }
 
 

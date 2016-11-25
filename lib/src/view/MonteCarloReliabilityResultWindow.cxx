@@ -38,9 +38,20 @@ namespace OTGUI {
 MonteCarloReliabilityResultWindow::MonteCarloReliabilityResultWindow(AnalysisItem * item)
   : ResultWindow(item)
   , result_(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , histogramConfigurationWidget_(0)
+  , convergenceGraphConfigurationWidget_(0)
 {
   setParameters(item->getAnalysis());
   buildInterface();
+}
+
+
+MonteCarloReliabilityResultWindow::~MonteCarloReliabilityResultWindow()
+{
+  delete histogramConfigurationWidget_;
+  delete convergenceGraphConfigurationWidget_;
+  histogramConfigurationWidget_ = 0;
+  convergenceGraphConfigurationWidget_ = 0;
 }
 
 
@@ -219,12 +230,14 @@ void MonteCarloReliabilityResultWindow::showHideGraphConfigurationWidget(int ind
   {
     // if a plotWidget is visible
     case 1: // histogram
-      if (!histogramConfigurationWidget_->isVisible())
-        emit graphWindowActivated(histogramConfigurationWidget_);
+      if (histogramConfigurationWidget_)
+        if (!histogramConfigurationWidget_->isVisible())
+          emit graphWindowActivated(histogramConfigurationWidget_);
       break;
     case 2: // convergence graph
-      if (!convergenceGraphConfigurationWidget_->isVisible())
-        emit graphWindowActivated(convergenceGraphConfigurationWidget_);
+      if (convergenceGraphConfigurationWidget_)
+        if (!convergenceGraphConfigurationWidget_->isVisible())
+          emit graphWindowActivated(convergenceGraphConfigurationWidget_);
       break;
     // if no plotWidget is visible
     default:

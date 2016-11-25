@@ -36,9 +36,20 @@ namespace OTGUI {
 FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item)
   : ResultWindow(item)
   , result_(dynamic_cast<FunctionalChaosAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , metaModelPlotsConfigurationWidget_(0)
+  , sobolIndicesPlotsConfigurationWidget_(0)
 {
   setParameters(item->getAnalysis());
   buildInterface();
+}
+
+
+FunctionalChaosResultWindow::~FunctionalChaosResultWindow()
+{
+  delete metaModelPlotsConfigurationWidget_;
+  delete sobolIndicesPlotsConfigurationWidget_;
+  metaModelPlotsConfigurationWidget_ = 0;
+  sobolIndicesPlotsConfigurationWidget_ = 0;
 }
 
 

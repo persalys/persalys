@@ -33,6 +33,8 @@ class OTGUI_API SobolResultWindow : public ResultWindow
 public:
   SobolResultWindow(AnalysisItem * item);
 
+  virtual ~SobolResultWindow();
+
 protected:
   void setParameters(const Analysis & analysis);
   void buildInterface();

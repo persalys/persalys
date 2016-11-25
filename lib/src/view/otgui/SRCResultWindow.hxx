@@ -36,6 +36,8 @@ class OTGUI_API SRCResultWindow : public ResultWindow
 public:
   SRCResultWindow(AnalysisItem * item);
 
+  virtual ~SRCResultWindow();
+
 protected:
   void setParameters(const Analysis & analysis);
   void buildInterface();

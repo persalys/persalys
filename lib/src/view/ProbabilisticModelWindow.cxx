@@ -44,11 +44,19 @@ namespace OTGUI {
 ProbabilisticModelWindow::ProbabilisticModelWindow(ProbabilisticModelItem * item)
   : OTguiSubWindow(item)
   , physicalModel_(item->getPhysicalModel())
+  , pdf_cdfPlotsConfigurationWidget_(0)
   , paramEditor_(0)
 {
   connect(item, SIGNAL(inputChanged()), this, SLOT(updateProbabilisticModel()));
   buildInterface();
   connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
+}
+
+
+ProbabilisticModelWindow::~ProbabilisticModelWindow()
+{
+  delete pdf_cdfPlotsConfigurationWidget_;
+  pdf_cdfPlotsConfigurationWidget_ = 0;
 }
 
 
@@ -472,11 +480,14 @@ void ProbabilisticModelWindow::showHideGraphConfigurationWidget(int indexTab)
   {
     case 0: // distribution graph
     {
-      if (rightSideOfSplitterStackedWidget_->currentIndex() == 2
-          && (windowState() == Qt::WindowFullScreen || windowState() == (Qt::WindowActive|Qt::WindowMaximized)))
-        emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
-      else
-        emit graphWindowDeactivated();
+      if (pdf_cdfPlotsConfigurationWidget_)
+      {
+        if (rightSideOfSplitterStackedWidget_->currentIndex() == 2
+            && (windowState() == Qt::WindowFullScreen || windowState() == (Qt::WindowActive|Qt::WindowMaximized)))
+          emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
+        else
+          emit graphWindowDeactivated();
+      }
       break;
     }
     default:

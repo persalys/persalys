@@ -50,10 +50,26 @@ DataAnalysisWindow::DataAnalysisWindow(AnalysisItem * item)
   , boxPlotsConfigurationWidget_(0)
   , scatterPlotsConfigurationWidget_(0)
   , plotMatrixConfigurationWidget_(0)
+  , plotMatrix_X_X_ConfigurationWidget_(0)
   , probaSpinBox_(0)
   , quantileSpinBox_(0)
   , tabOffset_(0)
 {
+}
+
+
+DataAnalysisWindow::~DataAnalysisWindow()
+{
+  delete plotMatrixConfigurationWidget_;
+  delete plotMatrix_X_X_ConfigurationWidget_;
+  delete pdf_cdfPlotsConfigurationWidget_;
+  delete boxPlotsConfigurationWidget_;
+  delete scatterPlotsConfigurationWidget_;
+  plotMatrixConfigurationWidget_ = 0;
+  plotMatrix_X_X_ConfigurationWidget_ = 0;
+  pdf_cdfPlotsConfigurationWidget_ = 0;
+  boxPlotsConfigurationWidget_ = 0;
+  scatterPlotsConfigurationWidget_ = 0;
 }
 
 
@@ -219,7 +235,7 @@ void DataAnalysisWindow::buildInterface()
   // sixth tab: plot matrix X-X ----------------------
 
   tab = new PlotMatrixWidget(result_.getInputSample(), result_.getInputSample());
-  plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab), this);
+  plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
   tabWidget_->addTab(tab, tr("Plot matrix X-X"));
 
@@ -231,7 +247,7 @@ void DataAnalysisWindow::buildInterface()
     if (resultsSampleIsValid_)
     {
       tab = new PlotMatrixWidget(result_.getInputSample(), result_.getOutputSample());
-      plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab), this);
+      plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
     }
     // if the results sample contains NAN
     else
