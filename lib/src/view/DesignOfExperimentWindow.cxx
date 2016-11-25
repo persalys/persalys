@@ -19,12 +19,10 @@
  *
  */
 #include "otgui/DesignOfExperimentWindow.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/SampleTableModel.hxx"
+
 #include "otgui/MinMaxTableGroupBox.hxx"
 
 #include <QVBoxLayout>
-#include <QGroupBox>
 #include <QScrollArea>
 
 using namespace OT;
@@ -34,10 +32,25 @@ namespace OTGUI {
 DesignOfExperimentWindow::DesignOfExperimentWindow(DesignOfExperimentItem * item)
   : OTguiSubWindow(item)
   , designOfExperiment_(item->getDesignOfExperiment())
+  , tableModel_(0)
+  , outputsComboBoxFirstTab_(0)
+  , plotMatrixConfigurationWidget_(0)
+  , plotMatrix_X_X_ConfigurationWidget_(0)
   , graphConfigurationWidget_(0)
 {
   buildInterface();
   connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
+}
+
+
+DesignOfExperimentWindow::~DesignOfExperimentWindow()
+{
+  delete plotMatrixConfigurationWidget_;
+  delete plotMatrix_X_X_ConfigurationWidget_;
+  delete graphConfigurationWidget_;
+  plotMatrixConfigurationWidget_ = 0;
+  plotMatrix_X_X_ConfigurationWidget_ = 0;
+  graphConfigurationWidget_ = 0;
 }
 
 
@@ -50,12 +63,6 @@ void DesignOfExperimentWindow::buildInterface()
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
   tableView_ = new ExportableTableView;
-  if (!designOfExperiment_.getOutputSample().getSize())
-  {
-    SampleTableModel * model = new SampleTableModel(designOfExperiment_.getInputSample(), tableView_);
-    tableView_->setModel(model);
-  }
-
   tabLayout->addWidget(tableView_);
 
   QHBoxLayout * layout = new QHBoxLayout;
@@ -73,7 +80,7 @@ void DesignOfExperimentWindow::buildInterface()
 
   tabWidget_->addTab(tab, tr("Table"));
 
-  updateWindowForOutputs();
+  updateTable();
 
   setWidget(tabWidget_);
 }
@@ -92,13 +99,16 @@ void DesignOfExperimentWindow::evaluateOutputs()
 }
 
 
-void DesignOfExperimentWindow::updateWindowForOutputs()
+void DesignOfExperimentWindow::updateTable()
 {
-  if (designOfExperiment_.getOutputSample().getSize() > 0)
+  if (tableModel_)
+    delete tableModel_;
+
+  tableModel_ = new SampleTableModel(designOfExperiment_.getSample(), tableView_);
+  tableView_->setModel(tableModel_);
+  if (designOfExperiment_.getOutputSample().getSize())
   {
-    SampleTableModel * model = new SampleTableModel(designOfExperiment_.getSample());
-    tableView_->setModel(model);
-    if (model->sampleIsValid())
+    if (tableModel_->sampleIsValid())
       addTabsForOutputs();
     evaluateButton_->setEnabled(false);
   }
@@ -281,16 +291,19 @@ void DesignOfExperimentWindow::showHideGraphConfigurationWidget(int indexTab)
   {
     // if a plotWidget is visible
     case 2: // scatter plots
-      if (!graphConfigurationWidget_->isVisible())
-        emit graphWindowActivated(graphConfigurationWidget_);
+      if (graphConfigurationWidget_)
+        if (!graphConfigurationWidget_->isVisible())
+          emit graphWindowActivated(graphConfigurationWidget_);
       break;
     case 3: // plot matrix X-X
-      if (!plotMatrix_X_X_ConfigurationWidget_->isVisible())
-        emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
+      if (plotMatrix_X_X_ConfigurationWidget_)
+        if (!plotMatrix_X_X_ConfigurationWidget_->isVisible())
+          emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
       break;
     case 4: // plot matrix Y-X
-      if (!plotMatrixConfigurationWidget_->isVisible())
-        emit graphWindowActivated(plotMatrixConfigurationWidget_);
+      if (plotMatrixConfigurationWidget_)
+        if (!plotMatrixConfigurationWidget_->isVisible())
+          emit graphWindowActivated(plotMatrixConfigurationWidget_);
       break;
     // if no plotWidget is visible
     default:

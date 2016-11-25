@@ -567,7 +567,7 @@ void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentItem * i
   DesignOfExperimentWindow * window = new DesignOfExperimentWindow(item);
   connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
   connect(window, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
-  connect(item, SIGNAL(analysisFinished()), window, SLOT(updateWindowForOutputs()));
+  connect(item, SIGNAL(analysisFinished()), window, SLOT(updateTable()));
   emit showWindow(window);
   setExpanded(item->index().parent(), true);
   setCurrentIndex(item->index());

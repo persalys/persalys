@@ -49,6 +49,8 @@ class OTGUI_API ProbabilisticModelWindow : public OTguiSubWindow
 public :
   ProbabilisticModelWindow(const OTStudy& otStudy, ProbabilisticModelItem * item);
 
+  virtual ~ProbabilisticModelWindow();
+
 protected:
   void buildInterface();
   void updateStochasticInputsTable();

@@ -79,7 +79,7 @@ void SobolResultWindowWidget::buildInterface()
 #endif
     tableView->setSortingEnabled(true);
 
-    CustomStandardItemModel * tableModel = new CustomStandardItemModel(inputNames.getSize(), 3);
+    CustomStandardItemModel * tableModel = new CustomStandardItemModel(inputNames.getSize(), 3, tableView);
     tableModel->setHorizontalHeaderLabels(QStringList() << tr("Input")
                                                         << tr("First order index")
                                                         << tr("Total index"));

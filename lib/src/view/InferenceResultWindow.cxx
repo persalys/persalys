@@ -139,7 +139,7 @@ void InferenceResultWindow::buildInterface()
     resultTableView->verticalHeader()->hide();
     resultTableView->horizontalHeader()->hide();
 
-    CustomStandardItemModel * resultTableModel = new CustomStandardItemModel(listDistributions.getSize()+2, 3);
+    CustomStandardItemModel * resultTableModel = new CustomStandardItemModel(listDistributions.getSize()+2, 3, resultTableView);
     resultTableView->setModel(resultTableModel);
 
     // --- horizontal header
@@ -242,7 +242,7 @@ void InferenceResultWindow::buildInterface()
       distTableView->horizontalHeader()->hide();
       distTableView->verticalHeader()->hide();
 
-      CustomStandardItemModel * distTableModel = new CustomStandardItemModel(4, 2);
+      CustomStandardItemModel * distTableModel = new CustomStandardItemModel(4, 2, distTableView);
       distTableView->setModel(distTableModel);
 
       // --- vertical header

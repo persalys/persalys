@@ -33,6 +33,8 @@ class OTGUI_API FunctionalChaosResultWindow : public ResultWindow
 public:
   FunctionalChaosResultWindow(AnalysisItem * item);
 
+  virtual ~FunctionalChaosResultWindow();
+
 protected:
   void setParameters(const Analysis & analysis);
   void buildInterface();

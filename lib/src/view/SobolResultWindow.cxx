@@ -32,10 +32,18 @@ namespace OTGUI {
 SobolResultWindow::SobolResultWindow(AnalysisItem * item)
   : ResultWindow(item)
   , result_(dynamic_cast<SobolAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , plotsConfigurationWidget_(0)
   , warningMessage_("")
 {
   setParameters(item->getAnalysis());
   buildInterface();
+}
+
+
+SobolResultWindow::~SobolResultWindow()
+{
+  delete plotsConfigurationWidget_;
+  plotsConfigurationWidget_ = 0;
 }
 
 

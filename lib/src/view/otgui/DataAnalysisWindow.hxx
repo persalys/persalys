@@ -37,6 +37,8 @@ class OTGUI_API DataAnalysisWindow : public ResultWindow
 public:
   DataAnalysisWindow(AnalysisItem * item);
 
+  virtual ~DataAnalysisWindow();
+
 protected:
   virtual void initialize(AnalysisItem * item) = 0;
   void buildInterface();

@@ -51,10 +51,10 @@ void DataModelWindow::buildInterface()
   DataModel newDataModel("unnamed", designOfExperiment_.getInputSample(), designOfExperiment_.getOutputSample());
 
   // set table
-  DataModelTableModel * model = new DataModelTableModel(designOfExperiment_.getSample(), newDataModel, false);
-
   ExportableTableView * tableView = new ExportableTableView;
   tableView->horizontalHeader()->hide();
+
+  DataModelTableModel * model = new DataModelTableModel(designOfExperiment_.getSample(), newDataModel, false, tableView);
   tableView->setModel(model);
   if (nbInputs > 1)
     tableView->setSpan(1, 0, 1, nbInputs);

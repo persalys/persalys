@@ -46,11 +46,19 @@ ProbabilisticModelWindow::ProbabilisticModelWindow(const OTStudy& otStudy, Proba
   : OTguiSubWindow(item)
   , otStudy_(otStudy)
   , physicalModel_(item->getPhysicalModel())
+  , pdf_cdfPlotsConfigurationWidget_(0)
   , paramEditor_(0)
 {
   connect(item, SIGNAL(inputChanged()), this, SLOT(updateProbabilisticModel()));
   buildInterface();
   connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
+}
+
+
+ProbabilisticModelWindow::~ProbabilisticModelWindow()
+{
+  delete pdf_cdfPlotsConfigurationWidget_;
+  pdf_cdfPlotsConfigurationWidget_ = 0;
 }
 
 
@@ -86,7 +94,7 @@ void ProbabilisticModelWindow::buildInterface()
 #endif
   inputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-  inputTableModel_ = new InputTableProbabilisticModel(physicalModel_);
+  inputTableModel_ = new InputTableProbabilisticModel(physicalModel_, inputTableView_);
   inputTableView_->setModel(inputTableModel_);
   inputTableView_->resizeColumnToContents(0);
 
@@ -211,7 +219,7 @@ void ProbabilisticModelWindow::buildInterface()
   correlationTableView_ = new CopyableTableView;
   SpinBoxDelegate * correlationDelegate = new SpinBoxDelegate;
   correlationTableView_->setItemDelegate(correlationDelegate);
-  correlationTableModel_ = new CorrelationTableModel(physicalModel_);
+  correlationTableModel_ = new CorrelationTableModel(physicalModel_, correlationTableView_);
   correlationTableView_->setModel(correlationTableModel_);
   correlationTableView_->setEditTriggers(QAbstractItemView::AllEditTriggers);
   groupBoxLayout->addWidget(correlationTableView_);
@@ -251,7 +259,7 @@ void ProbabilisticModelWindow::updateProbabilisticModel()
 void ProbabilisticModelWindow::updateStochasticInputsTable()
 {
   delete inputTableModel_;
-  inputTableModel_ = new InputTableProbabilisticModel(physicalModel_);
+  inputTableModel_ = new InputTableProbabilisticModel(physicalModel_, inputTableView_);
   inputTableView_->setModel(inputTableModel_);
   for (int i=0; i<inputTableModel_->rowCount(); ++i)
     inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
@@ -266,7 +274,7 @@ void ProbabilisticModelWindow::updateStochasticInputsTable()
 void ProbabilisticModelWindow::updateCorrelationTable()
 {
   delete correlationTableModel_;
-  correlationTableModel_ = new CorrelationTableModel(physicalModel_);
+  correlationTableModel_ = new CorrelationTableModel(physicalModel_, correlationTableView_);
   correlationTableView_->setModel(correlationTableModel_);
   connect(correlationTableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setCorrelationTabErrorMessage(QString)));
 }
@@ -477,11 +485,14 @@ void ProbabilisticModelWindow::showHideGraphConfigurationWidget(int indexTab)
   {
     case 0: // distribution graph
     {
-      if (rightSideOfSplitterStackedWidget_->currentIndex() == 2
-          && (windowState() == Qt::WindowFullScreen || windowState() == (Qt::WindowActive|Qt::WindowMaximized)))
-        emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
-      else
-        emit graphWindowDeactivated();
+      if (pdf_cdfPlotsConfigurationWidget_)
+      {
+        if (rightSideOfSplitterStackedWidget_->currentIndex() == 2
+            && (windowState() == Qt::WindowFullScreen || windowState() == (Qt::WindowActive|Qt::WindowMaximized)))
+          emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
+        else
+          emit graphWindowDeactivated();
+      }
       break;
     }
     default:

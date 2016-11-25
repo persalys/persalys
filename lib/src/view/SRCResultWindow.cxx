@@ -37,9 +37,17 @@ namespace OTGUI {
 SRCResultWindow::SRCResultWindow(AnalysisItem * item)
   : ResultWindow(item)
   , result_(dynamic_cast<SRCAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , plotsConfigurationWidget_(0)
 {
   setParameters(item->getAnalysis());
   buildInterface();
+}
+
+
+SRCResultWindow::~SRCResultWindow()
+{
+  delete plotsConfigurationWidget_;
+  plotsConfigurationWidget_ = 0;
 }
 
 
@@ -108,7 +116,7 @@ void SRCResultWindow::buildInterface()
 #endif
     tableView->setSortingEnabled(true);
 
-    CustomStandardItemModel * tableModel = new CustomStandardItemModel(inputNames.getSize(), 2);
+    CustomStandardItemModel * tableModel = new CustomStandardItemModel(inputNames.getSize(), 2, tableView);
     tableModel->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Index"));
 
     // fill table

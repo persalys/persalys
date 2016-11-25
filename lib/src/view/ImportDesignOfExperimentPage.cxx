@@ -71,7 +71,7 @@ void ImportDesignOfExperimentPage::setTable(OT::NumericalSample & sample)
   sample.setDescription(desc);
 
   // set table model
-  dataPreviewTableView_->setModel(new SampleTableModel(sample));
+  dataPreviewTableView_->setModel(new SampleTableModel(sample, dataPreviewTableView_));
   connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this, SLOT(columnNameChanged()));
 
   // set comboboxes items: each of them contains the input Names and an empty item

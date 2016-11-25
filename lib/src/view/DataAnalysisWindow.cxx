@@ -50,10 +50,26 @@ DataAnalysisWindow::DataAnalysisWindow(AnalysisItem * item)
   , boxPlotsConfigurationWidget_(0)
   , scatterPlotsConfigurationWidget_(0)
   , plotMatrixConfigurationWidget_(0)
+  , plotMatrix_X_X_ConfigurationWidget_(0)
   , probaSpinBox_(0)
   , quantileSpinBox_(0)
   , tabOffset_(0)
 {
+}
+
+
+DataAnalysisWindow::~DataAnalysisWindow()
+{
+  delete plotMatrixConfigurationWidget_;
+  delete plotMatrix_X_X_ConfigurationWidget_;
+  delete pdf_cdfPlotsConfigurationWidget_;
+  delete boxPlotsConfigurationWidget_;
+  delete scatterPlotsConfigurationWidget_;
+  plotMatrixConfigurationWidget_ = 0;
+  plotMatrix_X_X_ConfigurationWidget_ = 0;
+  pdf_cdfPlotsConfigurationWidget_ = 0;
+  boxPlotsConfigurationWidget_ = 0;
+  scatterPlotsConfigurationWidget_ = 0;
 }
 
 
@@ -276,6 +292,7 @@ QWidget* DataAnalysisWindow::getPDF_CDFWidget()
       plot->plotCurve(result_.getPDF()[i]);
     plot->setTitle(tr("PDF:") + " " + variablesNames[i]);
     plot->setAxisTitle(QwtPlot::xBottom, variablesAxisTitles[i]);
+    plot->setAxisTitle(QwtPlot::yLeft, tr("Density"));
 
     stackedWidget->addWidget(plot);
     listPlotWidgets.append(plot);
@@ -287,6 +304,7 @@ QWidget* DataAnalysisWindow::getPDF_CDFWidget()
       plot->plotCurve(result_.getCDF()[i]);
     plot->setTitle(tr("CDF:") + " " + variablesNames[i]);
     plot->setAxisTitle(QwtPlot::xBottom, variablesAxisTitles[i]);
+    plot->setAxisTitle(QwtPlot::yLeft, tr("CDF"));
 
     stackedWidget->addWidget(plot);
     listPlotWidgets.append(plot);

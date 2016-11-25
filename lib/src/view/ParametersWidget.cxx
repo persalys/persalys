@@ -48,7 +48,7 @@ ParametersWidget::ParametersWidget(const QString title, const QStringList names,
   ResizableTableViewWithoutScrollBar * table = new ResizableTableViewWithoutScrollBar;
   table->horizontalHeader()->hide();
   table->verticalHeader()->hide();
-  CustomStandardItemModel * tableModel = new CustomStandardItemModel(names.size(), 2);
+  CustomStandardItemModel * tableModel = new CustomStandardItemModel(names.size(), 2, table);
   table->setModel(tableModel);
 
   // vertical header

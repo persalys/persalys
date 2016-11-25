@@ -36,9 +36,20 @@ namespace OTGUI {
 FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item)
   : ResultWindow(item)
   , result_(dynamic_cast<FunctionalChaosAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , metaModelPlotsConfigurationWidget_(0)
+  , sobolIndicesPlotsConfigurationWidget_(0)
 {
   setParameters(item->getAnalysis());
   buildInterface();
+}
+
+
+FunctionalChaosResultWindow::~FunctionalChaosResultWindow()
+{
+  delete metaModelPlotsConfigurationWidget_;
+  delete sobolIndicesPlotsConfigurationWidget_;
+  metaModelPlotsConfigurationWidget_ = 0;
+  sobolIndicesPlotsConfigurationWidget_ = 0;
 }
 
 
@@ -126,7 +137,7 @@ void FunctionalChaosResultWindow::buildInterface()
       ResizableTableViewWithoutScrollBar * validationTableView = new ResizableTableViewWithoutScrollBar;
       validationTableView->horizontalHeader()->hide();
       validationTableView->verticalHeader()->hide();
-      CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(2, 2);
+      CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(2, 2, validationTableView);
       validationTableView->setModel(momentsEstimationsTable);
       // - vertical header
       momentsEstimationsTable->setNotEditableHeaderItem(0, 0, tr("Residual"));
@@ -156,7 +167,7 @@ void FunctionalChaosResultWindow::buildInterface()
     ResizableTableViewWithoutScrollBar * momentsEstimationsTableView = new ResizableTableViewWithoutScrollBar;
     momentsEstimationsTableView->horizontalHeader()->hide();
     momentsEstimationsTableView->verticalHeader()->hide();
-    CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(3, 2);
+    CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(3, 2, momentsEstimationsTableView);
     momentsEstimationsTableView->setModel(momentsEstimationsTable);
     // - vertical header
     momentsEstimationsTable->setNotEditableHeaderItem(0, 0, tr("Estimate"));

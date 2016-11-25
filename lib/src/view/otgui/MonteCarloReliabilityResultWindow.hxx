@@ -33,6 +33,8 @@ class OTGUI_API MonteCarloReliabilityResultWindow : public ResultWindow
 public:
   MonteCarloReliabilityResultWindow(AnalysisItem * item);
 
+  virtual ~MonteCarloReliabilityResultWindow();
+
 protected:
   void setParameters(const Analysis & analysis);
   void buildInterface();

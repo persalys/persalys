@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItemModel for data model sample
+ *  @brief QAbstractTableModel for data model sample
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -22,20 +22,16 @@
 #define OTGUI_DATAMODELTABLEMODEL_HXX
 
 #include "otgui/DataModel.hxx"
-
-#include <openturns/NumericalSample.hxx>
-
-#include <QAbstractTableModel>
+#include "otgui/SampleTableModel.hxx"
 
 namespace OTGUI {
-class OTGUI_API DataModelTableModel : public QAbstractTableModel
+class OTGUI_API DataModelTableModel : public SampleTableModel
 {
   Q_OBJECT
 
 public:
-  DataModelTableModel(const OT::NumericalSample & data, DataModel & dataModel, const bool variablesNamesEditable=true);
+  DataModelTableModel(const OT::NumericalSample & data, DataModel & dataModel, const bool variablesNamesEditable=true, QObject* parent = 0);
 
-  int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
   Qt::ItemFlags flags(const QModelIndex & index) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
@@ -44,21 +40,14 @@ public:
 
   DataModel getDataModel() const;
 
-  bool sampleIsValid();
-
 public slots:
 signals:
   void errorMessageChanged(const QString & message);
 
-protected:
-  void initialize();
-
 private:
   bool variablesNamesEditable_;
-  OT::NumericalSample data_;
   OT::Indices inputColumns_;
   OT::Indices outputColumns_;
-  mutable bool sampleIsValid_;
   DataModel dataModel_;
 };
 }
