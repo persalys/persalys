@@ -23,10 +23,8 @@
 
 #include "otgui/DistributionDictionary.hxx"
 
-#include <openturns/Distribution.hxx>
-
 #include <QAbstractTableModel>
-#include <QStringList>
+#include <QWidget>
 
 namespace OTGUI {
 class OTGUI_API DistributionsTableModel : public QAbstractTableModel
@@ -34,7 +32,7 @@ class OTGUI_API DistributionsTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  DistributionsTableModel(const QStringList & distributions);
+  DistributionsTableModel(const QStringList & distributions, QWidget* parent=0);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;

@@ -26,8 +26,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-DistributionsTableModel::DistributionsTableModel(const QStringList& distributions)
-  : QAbstractTableModel()
+DistributionsTableModel::DistributionsTableModel(const QStringList& distributions, QWidget* parent)
+  : QAbstractTableModel(parent)
   , distributions_(distributions)
 {
   distributions_.sort();
