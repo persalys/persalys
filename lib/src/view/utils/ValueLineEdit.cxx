@@ -31,6 +31,7 @@ ValueLineEdit::ValueLineEdit(const double value, QWidget *parent)
   : QLineEdit(parent)
 {
   QDoubleValidator * validator = new QDoubleValidator;
+  validator->setLocale(QLocale::C);
   setValidator(validator);
   setValue(value);
 }
