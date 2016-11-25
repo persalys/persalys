@@ -26,8 +26,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-CodeModel::CodeModel(const PhysicalModel & physicalModel)
-  : QAbstractTableModel()
+CodeModel::CodeModel(const PhysicalModel & physicalModel, QObject* parent)
+  : QAbstractTableModel(parent)
   , physicalModel_(physicalModel)
 {
 }
