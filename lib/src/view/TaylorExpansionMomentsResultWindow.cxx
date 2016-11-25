@@ -75,7 +75,7 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
     ResizableTableViewWithoutScrollBar * momentsEstimationsTable = new ResizableTableViewWithoutScrollBar;
     momentsEstimationsTable->horizontalHeader()->hide();
     momentsEstimationsTable->verticalHeader()->hide();
-    CustomStandardItemModel * momentsEstimationsTableModel = new CustomStandardItemModel(5, 2);
+    CustomStandardItemModel * momentsEstimationsTableModel = new CustomStandardItemModel(5, 2, momentsEstimationsTable);
 
     // vertical header
     momentsEstimationsTableModel->setNotEditableHeaderItem(0, 0, tr("Estimate"));

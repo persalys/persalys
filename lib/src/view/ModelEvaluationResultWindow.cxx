@@ -57,7 +57,7 @@ void ModelEvaluationResultWindow::buildInterface()
 #else
   inputTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 #endif
-  CustomStandardItemModel * model = new CustomStandardItemModel(result_.getInputSample().getDimension(), 2);
+  CustomStandardItemModel * model = new CustomStandardItemModel(result_.getInputSample().getDimension(), 2, inputTable);
   model->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Value"));
   inputTable->setModel(model);
 
@@ -79,7 +79,7 @@ void ModelEvaluationResultWindow::buildInterface()
 #else
   outputTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 #endif
-  model = new CustomStandardItemModel(result_.getOutputSample().getDimension(), 2);
+  model = new CustomStandardItemModel(result_.getOutputSample().getDimension(), 2, outputTable);
   model->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Value"));
   outputTable->setModel(model);
 

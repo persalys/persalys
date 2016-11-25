@@ -19,12 +19,10 @@
  *
  */
 #include "otgui/DesignOfExperimentWindow.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/SampleTableModel.hxx"
+
 #include "otgui/MinMaxTableGroupBox.hxx"
 
 #include <QVBoxLayout>
-#include <QGroupBox>
 #include <QScrollArea>
 
 using namespace OT;
@@ -34,6 +32,7 @@ namespace OTGUI {
 DesignOfExperimentWindow::DesignOfExperimentWindow(DesignOfExperimentItem * item)
   : OTguiSubWindow(item)
   , designOfExperiment_(item->getDesignOfExperiment())
+  , tableModel_(0)
   , graphConfigurationWidget_(0)
 {
   buildInterface();
@@ -50,12 +49,6 @@ void DesignOfExperimentWindow::buildInterface()
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
   tableView_ = new ExportableTableView;
-  if (!designOfExperiment_.getOutputSample().getSize())
-  {
-    SampleTableModel * model = new SampleTableModel(designOfExperiment_.getInputSample(), tableView_);
-    tableView_->setModel(model);
-  }
-
   tabLayout->addWidget(tableView_);
 
   QHBoxLayout * layout = new QHBoxLayout;
@@ -73,7 +66,7 @@ void DesignOfExperimentWindow::buildInterface()
 
   tabWidget_->addTab(tab, tr("Table"));
 
-  updateWindowForOutputs();
+  updateTable();
 
   setWidget(tabWidget_);
 }
@@ -92,13 +85,16 @@ void DesignOfExperimentWindow::evaluateOutputs()
 }
 
 
-void DesignOfExperimentWindow::updateWindowForOutputs()
+void DesignOfExperimentWindow::updateTable()
 {
-  if (designOfExperiment_.getOutputSample().getSize() > 0)
+  if (tableModel_)
+    delete tableModel_;
+
+  tableModel_ = new SampleTableModel(designOfExperiment_.getSample(), tableView_);
+  tableView_->setModel(tableModel_);
+  if (designOfExperiment_.getOutputSample().getSize())
   {
-    SampleTableModel * model = new SampleTableModel(designOfExperiment_.getSample());
-    tableView_->setModel(model);
-    if (model->sampleIsValid())
+    if (tableModel_->sampleIsValid())
       addTabsForOutputs();
     evaluateButton_->setEnabled(false);
   }
@@ -216,13 +212,13 @@ void DesignOfExperimentWindow::addTabsForOutputs()
 
   // third tab --------------------------------
   tab = new PlotMatrixWidget(inS, inS);
-  plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
+  plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab), this);
 
   tabWidget_->addTab(tab, tr("Plot matrix X-X"));
 
   // fourth tab --------------------------------
   tab = new PlotMatrixWidget(inS, outS);
-  plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
+  plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab), this);
 
   tabWidget_->addTab(tab, tr("Plot matrix Y-X"));
 }

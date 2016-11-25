@@ -44,7 +44,7 @@ QWidget *ComboBoxDelegate::createEditor(QWidget * parent, const QStyleOptionView
   // for probabilisticModelWindow:
   if (cell_ == QPair<int, int>())
   {
-    QStandardItemModel * model = new QStandardItemModel(1, 1);
+    QStandardItemModel * model = new QStandardItemModel(1, 1, editor);
     QStandardItem * firstItem = new QStandardItem;
     firstItem->setEnabled(false);
     model->setItem(0, 0, firstItem);

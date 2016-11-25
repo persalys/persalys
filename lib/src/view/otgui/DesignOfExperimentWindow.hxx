@@ -24,6 +24,7 @@
 #include "OTguiSubWindow.hxx"
 #include "otgui/DesignOfExperimentItem.hxx"
 #include "otgui/ExportableTableView.hxx"
+#include "otgui/SampleTableModel.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
 
@@ -48,7 +49,7 @@ protected:
 
 public slots:
   void evaluateOutputs();
-  void updateWindowForOutputs();
+  void updateTable();
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 
@@ -56,6 +57,7 @@ private:
   DesignOfExperiment designOfExperiment_;
   QTabWidget * tabWidget_;
   ExportableTableView * tableView_;
+  SampleTableModel * tableModel_;
   QPushButton * evaluateButton_;
   QComboBox * outputsComboBoxFirstTab_;
   PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;

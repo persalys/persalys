@@ -59,7 +59,7 @@ void DistributionsForInferenceWidget::buildInterface()
   distributionsTableView_->setSelectionMode(QAbstractItemView::ExtendedSelection);
   distributionsTableView_->verticalHeader()->hide();
 
-  tableModel_ = new DistributionsTableModel(distributions_);
+  tableModel_ = new DistributionsTableModel(distributions_, distributionsTableView_);
   tableModel_->setHeaderData(0, Qt::Vertical, "aName", Qt::UserRole);
   connect(tableModel_, SIGNAL(distributionsListChanged(QStringList)), this, SIGNAL(distributionsListChanged(QStringList)));
 
@@ -106,7 +106,7 @@ void DistributionsForInferenceWidget::removeSelectedDistribution()
       distributions << tr(listDistributions[i].c_str());
 
   delete tableModel_;
-  tableModel_ = new DistributionsTableModel(distributions);
+  tableModel_ = new DistributionsTableModel(distributions, distributionsTableView_);
   tableModel_->setHeaderData(0, Qt::Vertical, "aName", Qt::UserRole);
   connect(tableModel_, SIGNAL(distributionsListChanged(QStringList)), this, SIGNAL(distributionsListChanged(QStringList)));
   connect(addDistributionCombox_, SIGNAL(textActivated(QString)), tableModel_, SLOT(appendDistribution(QString)));

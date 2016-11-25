@@ -94,7 +94,7 @@ void PythonPhysicalModelWindow::updateCodeModel()
 {
   if (codeModel_)
     delete codeModel_;
-  codeModel_ = new CodeModel(physicalModel_);
+  codeModel_ = new CodeModel(physicalModel_, codeView_);
   connect(codeModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(parseVariables()));
   codeView_->setModel(codeModel_);
   codeView_->openPersistentEditor(codeModel_->index(0, 0));

@@ -83,7 +83,7 @@ void ProbabilisticModelWindow::buildInterface()
 #endif
   inputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-  inputTableModel_ = new InputTableProbabilisticModel(physicalModel_);
+  inputTableModel_ = new InputTableProbabilisticModel(physicalModel_, inputTableView_);
   inputTableView_->setModel(inputTableModel_);
   inputTableView_->resizeColumnToContents(0);
 
@@ -207,7 +207,7 @@ void ProbabilisticModelWindow::buildInterface()
   correlationTableView_ = new CopyableTableView;
   SpinBoxDelegate * correlationDelegate = new SpinBoxDelegate;
   correlationTableView_->setItemDelegate(correlationDelegate);
-  correlationTableModel_ = new CorrelationTableModel(physicalModel_);
+  correlationTableModel_ = new CorrelationTableModel(physicalModel_, correlationTableView_);
   correlationTableView_->setModel(correlationTableModel_);
   correlationTableView_->setEditTriggers(QAbstractItemView::AllEditTriggers);
   groupBoxLayout->addWidget(correlationTableView_);
@@ -247,7 +247,7 @@ void ProbabilisticModelWindow::updateProbabilisticModel()
 void ProbabilisticModelWindow::updateStochasticInputsTable()
 {
   delete inputTableModel_;
-  inputTableModel_ = new InputTableProbabilisticModel(physicalModel_);
+  inputTableModel_ = new InputTableProbabilisticModel(physicalModel_, inputTableView_);
   inputTableView_->setModel(inputTableModel_);
   for (int i=0; i<inputTableModel_->rowCount(); ++i)
     inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
@@ -261,7 +261,7 @@ void ProbabilisticModelWindow::updateStochasticInputsTable()
 void ProbabilisticModelWindow::updateCorrelationTable()
 {
   delete correlationTableModel_;
-  correlationTableModel_ = new CorrelationTableModel(physicalModel_);
+  correlationTableModel_ = new CorrelationTableModel(physicalModel_, correlationTableView_);
   correlationTableView_->setModel(correlationTableModel_);
   connect(correlationTableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setCorrelationTabErrorMessage(QString)));
 }

@@ -101,7 +101,7 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
   ExportableTableView * tabResultView = new ExportableTableView;
-  SampleTableModel * tabResultModel = new SampleTableModel(result_.getSample());
+  SampleTableModel * tabResultModel = new SampleTableModel(result_.getSample(), tabResultView);
   tabResultView->setModel(tabResultModel);
   tabLayout->addWidget(tabResultView);
 

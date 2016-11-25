@@ -55,7 +55,7 @@ QWidget* MinMaxTableGroupBox::getForInputMinMaxTableView(const DataSample & resu
 {
   ResizableTableViewWithoutScrollBar * minMaxTableView = new ResizableTableViewWithoutScrollBar;
   minMaxTableView->verticalHeader()->hide();
-  CustomStandardItemModel * minMaxTable = new CustomStandardItemModel(1, 4);
+  CustomStandardItemModel * minMaxTable = new CustomStandardItemModel(1, 4, minMaxTableView);
   minMaxTableView->setModel(minMaxTable);
 
   // horizontal header
@@ -85,7 +85,7 @@ QWidget* MinMaxTableGroupBox::getForOutputMinMaxTableView(const DataSample & res
   ResizableTableViewWithoutScrollBar * minMaxTableView = new ResizableTableViewWithoutScrollBar;
   minMaxTableView->verticalHeader()->hide();
   const UnsignedInteger nbInputs = result.getInputSample().getDimension();
-  CustomStandardItemModel * minMaxTable = new CustomStandardItemModel(nbInputs+1, 4);
+  CustomStandardItemModel * minMaxTable = new CustomStandardItemModel(nbInputs+1, 4, minMaxTableView);
   minMaxTableView->setModel(minMaxTable);
 
   // horizontal header

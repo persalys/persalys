@@ -108,7 +108,7 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   ResizableTableViewWithoutScrollBar * resultsTable = new ResizableTableViewWithoutScrollBar;
   resultsTable->horizontalHeader()->hide();
   resultsTable->verticalHeader()->hide();
-  CustomStandardItemModel * resultsTableModel = new CustomStandardItemModel(4, 4);
+  CustomStandardItemModel * resultsTableModel = new CustomStandardItemModel(4, 4, resultsTable);
   resultsTable->setModel(resultsTableModel);
 
   // horizontal header

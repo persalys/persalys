@@ -40,7 +40,7 @@ ImportDataModelPage::ImportDataModelPage(const DataModel & dataModel, QWidget *p
 void ImportDataModelPage::setTable(NumericalSample & sample)
 {
   // set table model
-  tableModel_ = new DataModelTableModel(sample, dataModel_);
+  tableModel_ = new DataModelTableModel(sample, dataModel_, true, dataPreviewTableView_);
   connect(tableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(updateErrorMessage(QString)));
   dataPreviewTableView_->setModel(tableModel_);
   

@@ -108,7 +108,7 @@ void SRCResultWindow::buildInterface()
 #endif
     tableView->setSortingEnabled(true);
 
-    CustomStandardItemModel * tableModel = new CustomStandardItemModel(inputNames.getSize(), 2);
+    CustomStandardItemModel * tableModel = new CustomStandardItemModel(inputNames.getSize(), 2, tableView);
     tableModel->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Index"));
 
     // fill table

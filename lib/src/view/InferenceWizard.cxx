@@ -104,7 +104,7 @@ void InferenceWizard::buildInterface()
   Interval::BoolCollection isVariablesChecked(variablesNames.getSize());
   for (UnsignedInteger i=0; i<variablesNames.getSize(); ++i)
     isVariablesChecked[i] = inference_.getInterestVariables().contains(variablesNames[i]);
-  VariablesInferenceTableModel * model = new VariablesInferenceTableModel(variablesNames, isVariablesChecked);
+  VariablesInferenceTableModel * model = new VariablesInferenceTableModel(variablesNames, isVariablesChecked, variablesTableView);
   variablesTableView->setModel(model);
 
   connect(variablesTableView, SIGNAL(clicked(QModelIndex)), variablesTableView, SLOT(setCurrentIndex(QModelIndex)));

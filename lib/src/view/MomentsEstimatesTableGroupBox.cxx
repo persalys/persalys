@@ -69,7 +69,7 @@ QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const DataAn
   ResizableTableViewWithoutScrollBar * momentsEstimationsTableView = new ResizableTableViewWithoutScrollBar;
   momentsEstimationsTableView->horizontalHeader()->hide();
   momentsEstimationsTableView->verticalHeader()->hide();
-  CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(nbRows, nbColumns);
+  CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(nbRows, nbColumns, momentsEstimationsTableView);
   momentsEstimationsTableView->setModel(momentsEstimationsTable);
 
   // vertical header

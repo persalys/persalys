@@ -219,7 +219,7 @@ void DataAnalysisWindow::buildInterface()
   // sixth tab: plot matrix X-X ----------------------
 
   tab = new PlotMatrixWidget(result_.getInputSample(), result_.getInputSample());
-  plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
+  plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab), this);
 
   tabWidget_->addTab(tab, tr("Plot matrix X-X"));
 
@@ -231,7 +231,7 @@ void DataAnalysisWindow::buildInterface()
     if (resultsSampleIsValid_)
     {
       tab = new PlotMatrixWidget(result_.getInputSample(), result_.getOutputSample());
-      plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
+      plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab), this);
     }
     // if the results sample contains NAN
     else
