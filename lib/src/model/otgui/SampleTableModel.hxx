@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItemModel for samples
+ *  @brief QAbstractTableModel for samples
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -23,15 +23,18 @@
 
 #include "openturns/NumericalSample.hxx"
 
-#include "CustomStandardItemModel.hxx"
 #include "otgui/OTGuiprivate.hxx"
 
+#include <QStandardItem>
+
 namespace OTGUI {
-class OTGUI_API SampleTableModel : public CustomStandardItemModel
+class OTGUI_API SampleTableModel : public QAbstractTableModel
 {
 public:
   SampleTableModel(const OT::NumericalSample & data, QObject * parent = 0);
 
+  int columnCount(const QModelIndex & parent = QModelIndex()) const;
+  int rowCount(const QModelIndex & parent = QModelIndex()) const;
   QVariant data(const QModelIndex & index, int role) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
   bool setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role = Qt::EditRole);
@@ -40,7 +43,7 @@ public:
 
   bool sampleIsValid();
 
-private:
+protected:
   OT::NumericalSample data_;
   mutable bool sampleIsValid_;
 };

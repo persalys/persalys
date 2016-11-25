@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItemModel for samples
+ *  @brief QAbstractTableModel for samples
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -27,7 +27,7 @@ using namespace OT;
 namespace OTGUI {
 
 SampleTableModel::SampleTableModel(const NumericalSample & data, QObject * parent)
-  : CustomStandardItemModel(data.getSize(), data.getDimension(), parent)
+  : QAbstractTableModel(parent)
   , data_(data)
   , sampleIsValid_(true)
 {
@@ -41,12 +41,24 @@ SampleTableModel::SampleTableModel(const NumericalSample & data, QObject * paren
 }
 
 
+int SampleTableModel::columnCount(const QModelIndex& parent) const
+{
+  return data_.getDimension();
+}
+
+
+int SampleTableModel::rowCount(const QModelIndex& parent) const
+{
+  return data_.getSize();
+}
+
+
 QVariant SampleTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     return QString::fromUtf8(data_.getDescription()[section].c_str());
 
-  return QStandardItemModel::headerData(section, orientation, role);
+  return QAbstractTableModel::headerData(section, orientation, role);
 }
 
 
@@ -60,7 +72,7 @@ bool SampleTableModel::setHeaderData(int section, Qt::Orientation orientation, c
     emit headerDataChanged(Qt::Horizontal, section, section);
     return true;
   }
-  return QStandardItemModel::setHeaderData(section, orientation, value, role);
+  return QAbstractTableModel::setHeaderData(section, orientation, value, role);
 }
 
 
