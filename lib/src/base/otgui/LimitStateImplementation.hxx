@@ -42,7 +42,6 @@ public:
   virtual LimitStateImplementation * clone() const;
 
   PhysicalModel getPhysicalModel() const;
-  void setPhysicalModel(const PhysicalModel & physicalModel);
 
   OT::String getOutputName() const;
   void setOutputName(const OT::String & outputName);

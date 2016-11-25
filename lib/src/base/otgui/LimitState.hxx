@@ -51,7 +51,6 @@ public:
   void blockNotification(bool block, const OT::String & notBlockedMessage="");
 
   PhysicalModel getPhysicalModel() const;
-  void setPhysicalModel(const PhysicalModel & physicalModel);
 
   OT::String getOutputName() const;
   void setOutputName(const OT::String & outputName);
