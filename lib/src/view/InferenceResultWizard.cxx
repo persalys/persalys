@@ -322,7 +322,7 @@ void InferenceResultWizard::updateParametersTable(QModelIndex current, QModelInd
       if (distribution.getImplementation()->getClassName() == "Student")
         nbParamDesc = 1; // display only nu (mean and std already displayed)
 
-      distParamTableModel_->setNotEditableItem(5, 0, tr("Nativ parameters"));
+      distParamTableModel_->setNotEditableItem(5, 0, tr("Native parameters"));
       distParamTableView_->setSpan(5, 0, 1, 2);
       distParamTableModel_->setData(distParamTableModel_->index(5, 0), font, Qt::FontRole);
 
