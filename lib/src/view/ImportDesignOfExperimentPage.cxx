@@ -43,7 +43,7 @@ ImportDesignOfExperimentPage::ImportDesignOfExperimentPage(const DesignOfExperim
 }
 
 
-void ImportDesignOfExperimentPage::setTable(OT::NumericalSample & sample)
+void ImportDesignOfExperimentPage::setTable(NumericalSample & sample)
 {
   // check sample From File
   if (!designOfExperiment_.getInputColumns().check(sample.getDimension()))
@@ -138,7 +138,8 @@ void ImportDesignOfExperimentPage::columnNameChanged()
   }
   catch(InvalidArgumentException & ex)
   {
-    QString message = QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>");
+    QString message = tr("Each variable must be associated with one column.");
+    message = QString("%1%2%3").arg("<font color=red>").arg(message).arg("</font>");
     errorMessageLabel_->setText(message);
     pageValidity_ = false;
   }
