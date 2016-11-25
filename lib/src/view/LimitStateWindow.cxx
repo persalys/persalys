@@ -46,7 +46,7 @@ LimitStateWindow::LimitStateWindow(LimitStateItem * item)
 
 void LimitStateWindow::buildInterface()
 {
-  setWindowTitle("Limit state");
+  setWindowTitle(tr("Limit state"));
 
   QWidget * mainWidget = new QWidget;
   QGridLayout * gridLayout = new QGridLayout(mainWidget);

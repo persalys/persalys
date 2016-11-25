@@ -62,7 +62,7 @@ PlotMatrixWidget::PlotMatrixWidget(const OT::NumericalSample & inputSample, cons
 
   // matrix title
   QHBoxLayout * tableWidgetTitleLayout = new QHBoxLayout;
-  matrixTitleLabel_ = new QLabel("Scatter plots matrix");
+  matrixTitleLabel_ = new QLabel(tr("Scatter plots matrix"));
   matrixTitleLabel_->setStyleSheet("font: bold;");
   tableWidgetTitleLayout->addWidget(matrixTitleLabel_);
   plotMatrixLayout->addLayout(tableWidgetTitleLayout);

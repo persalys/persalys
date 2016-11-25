@@ -67,7 +67,7 @@ SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis & analysis, 
 
 void SensitivityAnalysisWizard::buildInterface()
 {
-  setWindowTitle("Sensitivity analysis");
+  setWindowTitle(tr("Sensitivity analysis"));
 
   // First Page: model
 

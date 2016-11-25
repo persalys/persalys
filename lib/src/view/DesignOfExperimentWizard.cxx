@@ -111,7 +111,7 @@ DesignOfExperimentWizard::DesignOfExperimentWizard(const DesignOfExperiment & de
 
 void DesignOfExperimentWizard::buildInterface()
 {
-  setWindowTitle("Design Of Experiment");
+  setWindowTitle(tr("Design of experiment"));
 
   introPage_ = new IntroPage(designOfExperiment_);
   setPage(Page_Intro, introPage_);

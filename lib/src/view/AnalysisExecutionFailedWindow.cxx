@@ -36,7 +36,7 @@ AnalysisExecutionFailedWindow::AnalysisExecutionFailedWindow(AnalysisItem * item
 
 void AnalysisExecutionFailedWindow::buildInterface()
 {
-  setWindowTitle("Error window");
+  setWindowTitle(tr("Error window"));
 
   QWidget * mainWidget = new QWidget;
   QVBoxLayout * layout = new QVBoxLayout(mainWidget);
