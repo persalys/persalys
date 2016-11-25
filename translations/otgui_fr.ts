@@ -4,6 +4,11 @@
 <context>
     <name>OTGUI::AnalysisExecutionFailedWindow</name>
     <message>
+        <location filename="../lib/src/view/AnalysisExecutionFailedWindow.cxx" line="39"/>
+        <source>Error window</source>
+        <translation>Fenêtre d&apos;erreur</translation>
+    </message>
+    <message>
         <location filename="../lib/src/view/AnalysisExecutionFailedWindow.cxx" line="44"/>
         <source>No results are available. An error has occured during the execution of the analysis:
 </source>
@@ -269,6 +274,14 @@
     </message>
 </context>
 <context>
+    <name>OTGUI::DataModelWizard</name>
+    <message>
+        <location filename="../lib/src/view/DataModelWizard.cxx" line="42"/>
+        <source>Data model</source>
+        <translation>Modèle de données</translation>
+    </message>
+</context>
+<context>
     <name>OTGUI::DesignOfExperimentWindow</name>
     <message>
         <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="69"/>
@@ -325,6 +338,14 @@
         <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="280"/>
         <source>vs</source>
         <translation>vs</translation>
+    </message>
+</context>
+<context>
+    <name>OTGUI::DesignOfExperimentWizard</name>
+    <message>
+        <location filename="../lib/src/view/DesignOfExperimentWizard.cxx" line="114"/>
+        <source>Design of experiment</source>
+        <translation>Plan d&apos;expérience</translation>
     </message>
 </context>
 <context>
@@ -1013,6 +1034,11 @@
 </context>
 <context>
     <name>OTGUI::LimitStateWindow</name>
+    <message>
+        <location filename="../lib/src/view/LimitStateWindow.cxx" line="49"/>
+        <source>Limit state</source>
+        <translation>Etat limite</translation>
+    </message>
     <message>
         <location filename="../lib/src/view/LimitStateWindow.cxx" line="54"/>
         <source>Definition of the failure event :</source>
@@ -2110,6 +2136,11 @@ extremum</source>
 <context>
     <name>OTGUI::ReliabilityAnalysisWizard</name>
     <message>
+        <location filename="../lib/src/view/ReliabilityAnalysisWizard.cxx" line="51"/>
+        <source>Threshold exceedance</source>
+        <translation>Calcul de probabilité de dépassement de seuil</translation>
+    </message>
+    <message>
         <location filename="../lib/src/view/ReliabilityAnalysisWizard.cxx" line="59"/>
         <source>Method</source>
         <translation>Méthode</translation>
@@ -2210,6 +2241,11 @@ extremum</source>
 </context>
 <context>
     <name>OTGUI::SensitivityAnalysisWizard</name>
+    <message>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="70"/>
+        <source>Sensitivity analysis</source>
+        <translation>Analyse de sensibilité</translation>
+    </message>
     <message>
         <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="86"/>
         <source>Method</source>

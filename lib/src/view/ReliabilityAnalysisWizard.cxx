@@ -48,7 +48,7 @@ ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis & analysis, 
 
 void ReliabilityAnalysisWizard::buildInterface()
 {
-  setWindowTitle("Threshold exceedance");
+  setWindowTitle(tr("Threshold exceedance"));
 
   // First Page: model
 

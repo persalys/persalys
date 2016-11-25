@@ -39,7 +39,7 @@ DataModelWizard::DataModelWizard(const DesignOfExperiment & designOfExperiment, 
 
 void DataModelWizard::buildInterface()
 {
-  setWindowTitle("Data model");
+  setWindowTitle(tr("Data model"));
 
   ImportDataModelPage * importPage = new ImportDataModelPage(dataModel_);
   connect(importPage, SIGNAL(dataModelChanged(const DataModel&)), this, SLOT(setDataModel(const DataModel&)));
