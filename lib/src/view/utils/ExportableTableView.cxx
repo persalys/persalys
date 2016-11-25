@@ -20,7 +20,7 @@
  */
 #include "otgui/ExportableTableView.hxx"
 
-#include "otgui/CustomStandardItemModel.hxx"
+#include "otgui/SampleTableModel.hxx"
 #include "otgui/QtTools.hxx"
 
 #include <QFileDialog>
@@ -70,9 +70,9 @@ void ExportableTableView::exportData()
 
     try
     {
-      if (!dynamic_cast<CustomStandardItemModel*>(model()))
+      if (!dynamic_cast<SampleTableModel*>(model()))
         throw SimpleException(tr("Internal exception"));
-      dynamic_cast<CustomStandardItemModel*>(model())->exportData(fileName);
+      dynamic_cast<SampleTableModel*>(model())->exportData(fileName);
     }
     catch (std::exception & ex)
     {
