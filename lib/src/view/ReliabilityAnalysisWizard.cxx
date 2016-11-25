@@ -32,15 +32,15 @@ using namespace OT;
 
 namespace OTGUI {
 
-ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const OTStudy& otStudy, const LimitState & limitState)
-  : AnalysisWizard(MonteCarloReliabilityAnalysis(otStudy.getAvailableAnalysisName("reliability_"), limitState))
+ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const OTStudy& otStudy, const LimitState & limitState, QWidget* parent)
+  : AnalysisWizard(MonteCarloReliabilityAnalysis(otStudy.getAvailableAnalysisName("reliability_"), limitState), parent)
 {
   buildInterface();
 }
 
 
-ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis & analysis)
-  : AnalysisWizard(analysis)
+ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis & analysis, QWidget* parent)
+  : AnalysisWizard(analysis, parent)
 {
   buildInterface();
 }

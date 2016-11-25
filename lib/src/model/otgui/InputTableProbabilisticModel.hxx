@@ -48,6 +48,7 @@ signals:
   void correlationToChange();
   void checked(const bool) const;
   void distributionsChanged();
+  void inferenceResultRequested(const QModelIndex&);
 
 private:
   PhysicalModel physicalModel_;

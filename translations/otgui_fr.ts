@@ -581,47 +581,47 @@
     <name>OTGUI::GraphConfigurationWidget</name>
     <message>
         <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="59"/>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="116"/>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="144"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="115"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="143"/>
         <source>Title</source>
         <translation>Titre</translation>
     </message>
     <message>
         <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="68"/>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="139"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="138"/>
         <source>X-axis</source>
         <translation>Axe X</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="82"/>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="167"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="81"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="166"/>
         <source>Y-axis</source>
         <translation>Axe Y</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="97"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="96"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="101"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="100"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="123"/>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="151"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="122"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="150"/>
         <source>Min</source>
         <translation>Min</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="130"/>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="158"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="129"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="157"/>
         <source>Max</source>
         <translation>Max</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="174"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="173"/>
         <source>Export</source>
         <translation>Exporter</translation>
     </message>
@@ -845,6 +845,86 @@
     </message>
 </context>
 <context>
+    <name>OTGUI::InferenceResultWizard</name>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="83"/>
+        <source>Inference analyse</source>
+        <translation>Inférence</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="98"/>
+        <source>Variable</source>
+        <translation>Variable</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="111"/>
+        <source>Accepted distributions</source>
+        <translation>Distributions acceptées</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="132"/>
+        <source>Selected distribution parameters</source>
+        <translation>Paramètres de la distribution sélectionnée</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="198"/>
+        <source>The selected analysis does not contain accepted distributions</source>
+        <translation>L&apos;analyse sélectionnée ne contient pas de distributions acceptées</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="200"/>
+        <source>No available inference result in the current study</source>
+        <translation>Pas de résultat d&apos;inférence dans l&apos;étude courante</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="212"/>
+        <source>Distributions</source>
+        <translation>Distributions</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="212"/>
+        <source>p-value</source>
+        <translation>p-valeur</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="302"/>
+        <source>Moments</source>
+        <translation>Moments</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="306"/>
+        <source>Mean</source>
+        <translation>Moyenne</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="307"/>
+        <source>Standard deviation</source>
+        <translation>Écart type</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="308"/>
+        <source>Skewness</source>
+        <translation>Asymétrie</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="309"/>
+        <source>Kurtosis</source>
+        <translation>Aplatissement</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="325"/>
+        <source>Nativ parameters</source>
+        <translation>Paramètres natifs</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="342"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="350"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="366"/>
+        <source>-</source>
+        <translation>-</translation>
+    </message>
+</context>
+<context>
     <name>OTGUI::InferenceWizard</name>
     <message>
         <location filename="../lib/src/view/InferenceWizard.cxx" line="161"/>
@@ -891,6 +971,11 @@
         <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="78"/>
         <source>Distribution</source>
         <translation>Distribution</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="171"/>
+        <source>Inference result</source>
+        <translation>Résultat d&apos;inférence</translation>
     </message>
 </context>
 <context>
@@ -1950,48 +2035,53 @@ extremum</source>
 <context>
     <name>OTGUI::ProbabilisticModelWindow</name>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="110"/>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="384"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="78"/>
+        <source>Inference result</source>
+        <translation>Résultat d&apos;inférence</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="114"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="389"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="112"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="116"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="160"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="164"/>
         <source>Truncation parameters</source>
         <translation>Paramètres de troncature</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="164"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="168"/>
         <source>Lower bound</source>
         <translation>Borne inférieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="166"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="170"/>
         <source>Upper bound</source>
         <translation>Borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="199"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="203"/>
         <source>Marginals</source>
         <translation>Marginales</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="205"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="209"/>
         <source>Spearman&apos;s rank (Gaussian Copula)</source>
         <translation>Rang de Spearman (copule Gaussienne)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="221"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="225"/>
         <source>Correlation</source>
         <translation>Corrélation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="388"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="393"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
@@ -2533,8 +2623,8 @@ extremum</source>
         <location filename="../lib/src/view/StudyTreeView.cxx" line="329"/>
         <location filename="../lib/src/view/StudyTreeView.cxx" line="343"/>
         <location filename="../lib/src/view/StudyTreeView.cxx" line="357"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="617"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="658"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="620"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="661"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
@@ -2559,82 +2649,82 @@ extremum</source>
         <translation>L&apos;état limite n&apos;est pas valide.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="617"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="620"/>
         <source>The model must have an independent copula to compute a sensitivity analysis but inputs are correlated.</source>
         <translation>Le modèle doit avoir une copule indépendante pour réaliser une analyse de sensibilité mais les entrées sont corrélées.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="658"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="661"/>
         <source>The model must have at least one output.</source>
         <translation>Le modèle doit avoir au moins une sortie.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="887"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="890"/>
         <source>Export Python...</source>
         <translation>Export Python...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="889"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="892"/>
         <source>Python source files (*.py)</source>
         <translation>Fichiers Python (*.py)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="903"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="965"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1020"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1035"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1055"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="906"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="968"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1023"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1038"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1058"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="904"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="907"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1: %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="949"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="952"/>
         <source>Save OTStudy...</source>
         <translation>Sauvegarder l&apos;étude...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="951"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="991"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="954"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="994"/>
         <source>XML files (*.xml)</source>
         <translation>Fichiers XML (*.xml)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="966"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="969"/>
         <source>Cannot save file %1:
 %2</source>
         <translation>Impossible de sauvegarder le fichier %1:
 %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="989"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="992"/>
         <source>Open an existing OTStudy</source>
         <translation>Ouvrir une étude existante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1019"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1022"/>
         <source>A problem appeared when reading the file &apos;%1&apos;. 
 Maybe objects are not opened.
 </source>
         <translation>Un problème est survenu durant la lecture du fichier &apos;%1&apos;. Des objets ne sont peut être pas ouverts.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1029"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1032"/>
         <source>The file &apos;%1&apos; does not exist.</source>
         <translation>Le fichier &apos;%1&apos; n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1033"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1036"/>
         <source>The file &apos;%1&apos; is already opened.</source>
         <translation>Le fichier &apos;%1&apos; est déjà ouvert.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1056"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1059"/>
         <source>Do you want to save the OTStudy &apos;%1&apos; [%2]?</source>
         <translation>Voulez-vous sauvegarder l&apos;étude &apos;%1&apos; [%2] ?</translation>
     </message>

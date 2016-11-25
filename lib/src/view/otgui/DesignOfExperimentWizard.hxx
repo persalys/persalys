@@ -52,8 +52,8 @@ public:
 
   enum {Page_Intro, Page_Deterministic, Page_Probabilistic, Page_Import};
 
-  DesignOfExperimentWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel);
-  DesignOfExperimentWizard(const DesignOfExperiment & designOfExperiment);
+  DesignOfExperimentWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel, QWidget *parent=0);
+  DesignOfExperimentWizard(const DesignOfExperiment & designOfExperiment, QWidget *parent=0);
 
   int nextId() const;
   DesignOfExperiment getDesignOfExperiment() const;

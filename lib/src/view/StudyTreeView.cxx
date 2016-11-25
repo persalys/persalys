@@ -373,7 +373,7 @@ void StudyTreeView::createNewDataModel()
   QModelIndex studyIndex = selectionModel()->currentIndex();
   OTStudyItem * studyItem = static_cast<OTStudyItem*>(treeViewModel_->itemFromIndex(studyIndex));
   DataModel newDataModel(studyItem->getOTStudy().getAvailableDataModelName());
-  QSharedPointer<DataModelWizard> wizard = QSharedPointer<DataModelWizard>(new DataModelWizard(newDataModel));
+  QSharedPointer<DataModelWizard> wizard = QSharedPointer<DataModelWizard>(new DataModelWizard(newDataModel, this));
 
   if (wizard->exec())
     studyItem->getOTStudy().add(wizard->getDataModel());
@@ -385,7 +385,7 @@ void StudyTreeView::modifyDataModel()
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
   DesignOfExperimentItem * item = dynamic_cast<DesignOfExperimentItem*>(selectedItem);
-  QSharedPointer<DataModelWizard> wizard = QSharedPointer<DataModelWizard>(new DataModelWizard(item->getDesignOfExperiment()));
+  QSharedPointer<DataModelWizard> wizard = QSharedPointer<DataModelWizard>(new DataModelWizard(item->getDesignOfExperiment(), this));
 
   if (wizard->exec())
   {
@@ -469,7 +469,7 @@ void StudyTreeView::createNewDesignOfExperiment()
   if (!hasPhysicalModelInputs(DesignOfExperimentListIndex))
     return;
   OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
-  QSharedPointer<DesignOfExperimentWizard> wizard = QSharedPointer<DesignOfExperimentWizard>(new DesignOfExperimentWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel()));
+  QSharedPointer<DesignOfExperimentWizard> wizard = QSharedPointer<DesignOfExperimentWizard>(new DesignOfExperimentWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel(), this));
 
   if (wizard->exec())
     otStudyItem->getOTStudy().add(wizard->getDesignOfExperiment());
@@ -543,7 +543,10 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 
 void StudyTreeView::createNewProbabilisticModelWindow(ProbabilisticModelItem * item)
 {
-  ProbabilisticModelWindow * window = new ProbabilisticModelWindow(item);
+  OTStudyItem * otStudyItem = treeViewModel_->getOTStudyItem(item->index());
+  if (!otStudyItem)
+    return;
+  ProbabilisticModelWindow * window = new ProbabilisticModelWindow(otStudyItem->getOTStudy(), item);
   connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
   connect(window, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
   emit showWindow(window);
@@ -578,7 +581,7 @@ void StudyTreeView::createNewModelEvaluation()
     return;
   PhysicalModelItem * physicalModelItem = treeViewModel_->getPhysicalModelItem(deterministicStudyIndex);
   OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
-  QSharedPointer<ModelEvaluationWizard> wizard = QSharedPointer<ModelEvaluationWizard>(new ModelEvaluationWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel()));
+  QSharedPointer<ModelEvaluationWizard> wizard = QSharedPointer<ModelEvaluationWizard>(new ModelEvaluationWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel(), this));
 
   if (wizard->exec())
   {
@@ -595,7 +598,7 @@ void StudyTreeView::createNewCentralTendency()
     return;
   PhysicalModelItem * physicalModelItem = treeViewModel_->getPhysicalModelItem(probabilisticStudyIndex);
   OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
-  QSharedPointer<CentralTendencyWizard> wizard = QSharedPointer<CentralTendencyWizard>(new CentralTendencyWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel()));
+  QSharedPointer<CentralTendencyWizard> wizard = QSharedPointer<CentralTendencyWizard>(new CentralTendencyWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel(), this));
 
   if (wizard->exec())
   {
@@ -619,7 +622,7 @@ void StudyTreeView::createNewSensitivityAnalysis()
   }
 
   OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
-  QSharedPointer<SensitivityAnalysisWizard> wizard = QSharedPointer<SensitivityAnalysisWizard>(new SensitivityAnalysisWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel()));
+  QSharedPointer<SensitivityAnalysisWizard> wizard = QSharedPointer<SensitivityAnalysisWizard>(new SensitivityAnalysisWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel(), this));
 
   if (wizard->exec())
   {
@@ -638,7 +641,7 @@ void StudyTreeView::createNewThresholdExceedance()
     return;
   LimitStateItem * limitStateItem = dynamic_cast<LimitStateItem*>(treeViewModel_->itemFromIndex(limitStateIndex));
   OTStudyItem * otStudyItem = treeViewModel_->getOTStudyItem(limitStateIndex);
-  QSharedPointer<ReliabilityAnalysisWizard> wizard = QSharedPointer<ReliabilityAnalysisWizard>(new ReliabilityAnalysisWizard(otStudyItem->getOTStudy(), limitStateItem->getLimitState()));
+  QSharedPointer<ReliabilityAnalysisWizard> wizard = QSharedPointer<ReliabilityAnalysisWizard>(new ReliabilityAnalysisWizard(otStudyItem->getOTStudy(), limitStateItem->getLimitState(), this));
 
   if (wizard->exec())
   {
@@ -659,7 +662,7 @@ void StudyTreeView::createNewMetaModel()
     return;
   }
   OTStudyItem * otStudyItem = treeViewModel_->getOTStudyItem(index);
-  QSharedPointer<MetaModelAnalysisWizard> wizard = QSharedPointer<MetaModelAnalysisWizard>(new MetaModelAnalysisWizard(otStudyItem->getOTStudy(), item->getDesignOfExperiment()));
+  QSharedPointer<MetaModelAnalysisWizard> wizard = QSharedPointer<MetaModelAnalysisWizard>(new MetaModelAnalysisWizard(otStudyItem->getOTStudy(), item->getDesignOfExperiment(), this));
 
   if (wizard->exec())
   {
@@ -675,7 +678,7 @@ void StudyTreeView::createNewInferenceAnalysis()
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
   DesignOfExperimentItem * item = dynamic_cast<DesignOfExperimentItem*>(selectedItem);
   OTStudyItem * otStudyItem = treeViewModel_->getOTStudyItem(index);
-  QSharedPointer<InferenceWizard> wizard = QSharedPointer<InferenceWizard>(new InferenceWizard(otStudyItem->getOTStudy(), item->getDesignOfExperiment()));
+  QSharedPointer<InferenceWizard> wizard = QSharedPointer<InferenceWizard>(new InferenceWizard(otStudyItem->getOTStudy(), item->getDesignOfExperiment(), this));
 
   if (wizard->exec())
   {
@@ -696,7 +699,7 @@ void StudyTreeView::runDesignOfExperiment()
   QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
   DesignOfExperimentItem * item = dynamic_cast<DesignOfExperimentItem*>(selectedItem);
-  QSharedPointer<DesignOfExperimentWizard> wizard = QSharedPointer<DesignOfExperimentWizard>(new DesignOfExperimentWizard(item->getDesignOfExperiment()));
+  QSharedPointer<DesignOfExperimentWizard> wizard = QSharedPointer<DesignOfExperimentWizard>(new DesignOfExperimentWizard(item->getDesignOfExperiment(), this));
 
   if (wizard->exec())
   {
@@ -750,15 +753,15 @@ void StudyTreeView::runAnalysis()
       qDebug() << "Error: In runAnalysis: physical model not valid for the " << analysisType << "\n";
       return;
     }
-    wizard = QSharedPointer<AnalysisWizard>(new ModelEvaluationWizard(item->getAnalysis()));
+    wizard = QSharedPointer<AnalysisWizard>(new ModelEvaluationWizard(item->getAnalysis(), this));
   }
   else if (analysisType == "FunctionalChaosAnalysis")
   {
-    wizard = QSharedPointer<AnalysisWizard>(new MetaModelAnalysisWizard(item->getAnalysis()));
+    wizard = QSharedPointer<AnalysisWizard>(new MetaModelAnalysisWizard(item->getAnalysis(), this));
   }
   else if (analysisType == "InferenceAnalysis")
   {
-    wizard = QSharedPointer<AnalysisWizard>(new InferenceWizard(item->getAnalysis()));
+    wizard = QSharedPointer<AnalysisWizard>(new InferenceWizard(item->getAnalysis(), this));
   }
   else
   {
@@ -775,11 +778,11 @@ void StudyTreeView::runAnalysis()
 
     if (analysisType == "MonteCarloAnalysis" || analysisType == "TaylorExpansionMomentsAnalysis")
     {
-      wizard = QSharedPointer<AnalysisWizard>(new CentralTendencyWizard(item->getAnalysis()));
+      wizard = QSharedPointer<AnalysisWizard>(new CentralTendencyWizard(item->getAnalysis(), this));
     }
     else if (analysisType == "SobolAnalysis" || analysisType == "SRCAnalysis")
     {
-      wizard = QSharedPointer<AnalysisWizard>(new SensitivityAnalysisWizard(item->getAnalysis()));
+      wizard = QSharedPointer<AnalysisWizard>(new SensitivityAnalysisWizard(item->getAnalysis(), this));
     }
     else if (analysisType == "MonteCarloReliabilityAnalysis")
     {
@@ -788,7 +791,7 @@ void StudyTreeView::runAnalysis()
         qDebug() << "In runAnalysis: limit state not valid for the " << analysisType << "\n";
         return;
       }
-      wizard = QSharedPointer<AnalysisWizard>(new ReliabilityAnalysisWizard(item->getAnalysis()));
+      wizard = QSharedPointer<AnalysisWizard>(new ReliabilityAnalysisWizard(item->getAnalysis(), this));
     }
     else
     {

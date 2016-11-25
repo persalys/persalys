@@ -34,8 +34,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-SensitivityAnalysisWizard::SensitivityAnalysisWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel)
-  : AnalysisWizard(SobolAnalysis(otStudy.getAvailableAnalysisName("sensitivitySobol_"), physicalModel))
+SensitivityAnalysisWizard::SensitivityAnalysisWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel, QWidget* parent)
+  : AnalysisWizard(SobolAnalysis(otStudy.getAvailableAnalysisName("sensitivitySobol_"), physicalModel), parent)
   , sobolAnalysis_(*dynamic_cast<SobolAnalysis*>(&*analysis_.getImplementation()))
   , srcAnalysis_(SRCAnalysis(otStudy.getAvailableAnalysisName("sensitivitySRC_"), physicalModel))
   , errorMessageLabel_(new QLabel)
@@ -44,8 +44,8 @@ SensitivityAnalysisWizard::SensitivityAnalysisWizard(const OTStudy& otStudy, con
 }
 
 
-SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis & analysis)
-  : AnalysisWizard(analysis)
+SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis & analysis, QWidget* parent)
+  : AnalysisWizard(analysis, parent)
   , errorMessageLabel_(new QLabel)
 {
   if (analysis.getImplementation()->getClassName() == "SobolAnalysis")

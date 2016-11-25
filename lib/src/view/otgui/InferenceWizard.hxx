@@ -36,8 +36,8 @@ class OTGUI_API InferenceWizard : public AnalysisWizard
   Q_OBJECT
 
 public :
-  InferenceWizard(const OTStudy& otStudy, const DesignOfExperiment & designOfExperiment);
-  InferenceWizard(const Analysis& analysis);
+  InferenceWizard(const OTStudy& otStudy, const DesignOfExperiment & designOfExperiment, QWidget* parent=0);
+  InferenceWizard(const Analysis& analysis, QWidget* parent=0);
 
   virtual bool validateCurrentPage();
 

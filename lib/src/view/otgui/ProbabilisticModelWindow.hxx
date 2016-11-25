@@ -31,6 +31,7 @@
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/ValueLineEdit.hxx"
 #include "otgui/CheckableHeaderView.hxx"
+#include "otgui/OTStudy.hxx"
 
 #include <QGroupBox>
 #include <QVBoxLayout>
@@ -46,7 +47,7 @@ class OTGUI_API ProbabilisticModelWindow : public OTguiSubWindow
   Q_OBJECT
 
 public :
-  ProbabilisticModelWindow(ProbabilisticModelItem * item);
+  ProbabilisticModelWindow(const OTStudy& otStudy, ProbabilisticModelItem * item);
 
 protected:
   void buildInterface();
@@ -68,8 +69,10 @@ public slots:
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
   void reInitCorrelationErrorMessage(QTimeLine::State);
+  void openWizardToChooseInferenceResult(const QModelIndex&);
 
 private:
+  OTStudy otStudy_;
   PhysicalModel physicalModel_;
   int currentIndexTab_;
   QTableView * inputTableView_;

@@ -32,7 +32,7 @@ class OTGUI_API DataModelWizard : public OTguiWizard
   Q_OBJECT
 
 public:
-  DataModelWizard(const DesignOfExperiment & designOfExperiment);
+  DataModelWizard(const DesignOfExperiment & designOfExperiment, QWidget* parent=0);
 
   DataModel getDataModel() const;
 

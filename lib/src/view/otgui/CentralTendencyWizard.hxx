@@ -38,8 +38,8 @@ class OTGUI_API CentralTendencyWizard : public AnalysisWizard
 public:
   enum Method {MonteCarlo, TaylorExpansionMoments};
 
-  CentralTendencyWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel);
-  CentralTendencyWizard(const Analysis & analysis);
+  CentralTendencyWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel, QWidget* parent=0);
+  CentralTendencyWizard(const Analysis & analysis, QWidget* parent=0);
 
   virtual bool validateCurrentPage();
 
