@@ -1251,6 +1251,11 @@ extremum</source>
 <context>
     <name>OTGUI::ModelEvaluationWizard</name>
     <message>
+        <location filename="../lib/src/view/ModelEvaluationWizard.cxx" line="54"/>
+        <source>Model evaluation</source>
+        <translation>Evaluation du modèle</translation>
+    </message>
+    <message>
         <location filename="../lib/src/view/ModelEvaluationWizard.cxx" line="59"/>
         <source>Inputs</source>
         <translation>Entrées</translation>
