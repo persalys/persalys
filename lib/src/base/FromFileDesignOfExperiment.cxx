@@ -50,7 +50,7 @@ FromFileDesignOfExperiment::FromFileDesignOfExperiment(const String & name, cons
 FromFileDesignOfExperiment::FromFileDesignOfExperiment(const String & name,
                                                        const PhysicalModel & physicalModel,
                                                        const String & fileName,
-                                                       const OT::Indices & inputColumns)
+                                                       const Indices & inputColumns)
   : DesignOfExperimentImplementation(name, physicalModel)
 {
   setFileName(fileName);
@@ -71,7 +71,7 @@ void FromFileDesignOfExperiment::generateInputSample()
     sampleFromFile_ = ImportSample(fileName_);
 
   if (!inputColumns_.check(sampleFromFile_.getDimension()))
-    throw InvalidArgumentException(HERE) << "In FromFileDesignOfExperiment::getInputSample: input columns is not compatible with the sample contained in the file";
+    throw InvalidArgumentException(HERE) << "Input columns values are not compatible with the sample dimension contained in the file";
 
   NumericalSample inS(sampleFromFile_.getMarginal(inputColumns_));
   inS.setDescription(physicalModel_.getInputNames());
@@ -119,7 +119,7 @@ void FromFileDesignOfExperiment::setInputColumns(const Indices & inputColumns)
     sampleFromFile_ = ImportSample(fileName_);
 
   if (!inputColumns.check(sampleFromFile_.getDimension()))
-    throw InvalidArgumentException(HERE) << "In FromFileDesignOfExperiment::setInputColumns: input columns is not compatible with the sample contained in the file";
+    throw InvalidArgumentException(HERE) << "Input columns values are not compatible with the sample dimension contained in the file.";
 
   inputColumns_ = inputColumns;
   generateInputSample();
@@ -143,7 +143,7 @@ NumericalSample FromFileDesignOfExperiment::ImportSample(const String & fileName
       break;
   }
   if (!sampleFromFile.getSize())
-    throw InvalidArgumentException(HERE) << "In FromFileDesignOfExperiment: impossible to load sample";
+    throw InvalidArgumentException(HERE) << "The sample is empty.";
 
   return sampleFromFile;
 }
@@ -153,14 +153,14 @@ String FromFileDesignOfExperiment::getPythonScript() const
 {
   OSS oss;
 
-  oss << "inputColumns = ot.Indices([";
+  oss << "inputColumns = [";
   for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++ i)
   {
     oss << inputColumns_[i];
     if (i < inputColumns_.getSize()-1)
       oss << ", ";
   }
-  oss << "])\n";
+  oss << "]\n";
 
   oss << getName()+ " = otguibase.FromFileDesignOfExperiment('" + getName() + "', "+getPhysicalModel().getName()+", ";
   oss << "'"+fileName_+"', inputColumns)\n";
@@ -177,7 +177,7 @@ String FromFileDesignOfExperiment::__repr__() const
       << " name=" << getName()
       << " physicalModel=" << getPhysicalModel().getName()
       << " fileName=" << getFileName()
-      << " inputColumns_=" << getInputColumns();
+      << " inputColumns=" << getInputColumns();
   return oss;
 }
 
