@@ -43,9 +43,9 @@ Input::Input()
 Input::Input(const String & name, const double & value, const String & description,
              const Distribution & distribution)
   : Variable(name, value, description)
-  , distribution_(distribution)
   , distributionParametersType_(0)
 {
+  setDistribution(distribution);
 }
 
 
@@ -64,6 +64,9 @@ Distribution Input::getDistribution() const
 
 void Input::setDistribution(const Distribution & distribution)
 {
+  if (distribution.getDimension() > 1)
+    throw InvalidDimensionException(HERE) << "The input distribution has to be of dimension 1. Here the dimension is " << distribution.getDimension();
+
   distribution_ = distribution;
 }
 
