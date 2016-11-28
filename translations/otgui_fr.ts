@@ -66,22 +66,22 @@
         <translation>Graine</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="279"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="278"/>
         <source>At least one output must be selected</source>
         <translation>Au moins une sortie doit être sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="286"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="285"/>
         <source>Please select at least one stop criteria</source>
         <translation>Sélectionner au moins un critère d&apos;arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="290"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="289"/>
         <source>The maximum time must not be null</source>
         <translation>Le temps maximum ne doit pas être nul</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="293"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="292"/>
         <source>The maximum calls can not be inferior to the block size</source>
         <translation>Le nombre d&apos;appels ne peut pas être inférieur à la taille de bloc</translation>
     </message>
@@ -660,17 +660,17 @@
 <context>
     <name>OTGUI::ImportDataModelPage</name>
     <message>
-        <location filename="../lib/src/view/ImportDataModelPage.cxx" line="48"/>
+        <location filename="../lib/src/view/ImportDataModelPage.cxx" line="52"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportDataModelPage.cxx" line="48"/>
+        <location filename="../lib/src/view/ImportDataModelPage.cxx" line="52"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportDataModelPage.cxx" line="48"/>
+        <location filename="../lib/src/view/ImportDataModelPage.cxx" line="52"/>
         <source>Disable</source>
         <translation>Désactiver</translation>
     </message>
@@ -719,7 +719,7 @@
         <translation>Impossible de lire le fichier %1: %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportDataPage.cxx" line="126"/>
+        <location filename="../lib/src/view/ImportDataPage.cxx" line="124"/>
         <source>Impossible to load the file.</source>
         <translation>Impossible de charger les données. </translation>
     </message>
@@ -727,17 +727,18 @@
 <context>
     <name>OTGUI::ImportDesignOfExperimentPage</name>
     <message>
-        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="50"/>
+        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="56"/>
         <source>Impossible to load sample marginals</source>
         <translation>Impossible de trouver les marginales de l&apos;échantillon </translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="55"/>
+        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="61"/>
         <source>The file contains a sample with a dimension inferior to the number of inputs of the physical model:</source>
         <translation>Le fichier contient un échantillon de dimension inférieure au nombre d&apos;entrée du modèle physique:</translation>
     </message>
     <message>
         <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="126"/>
+        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="141"/>
         <source>Each variable must be associated with one column.</source>
         <translation>Chaque variable doit être associée à une colonne.</translation>
     </message>
@@ -1860,7 +1861,7 @@ extremum</source>
     <message>
         <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="31"/>
         <source>Outputs to analyse</source>
-        <translation>Sortie à analyser</translation>
+        <translation>Sorties à analyser</translation>
     </message>
     <message>
         <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="48"/>
@@ -2181,17 +2182,17 @@ extremum</source>
         <translation>Graine</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ReliabilityAnalysisWizard.cxx" line="172"/>
+        <location filename="../lib/src/view/ReliabilityAnalysisWizard.cxx" line="178"/>
         <source>Please select at least one stop criteria</source>
         <translation>Sélectionner au moins un critère d&apos;arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ReliabilityAnalysisWizard.cxx" line="176"/>
+        <location filename="../lib/src/view/ReliabilityAnalysisWizard.cxx" line="182"/>
         <source>The maximum time must not be null</source>
         <translation>Le temps maximum ne doit pas être nul</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ReliabilityAnalysisWizard.cxx" line="179"/>
+        <location filename="../lib/src/view/ReliabilityAnalysisWizard.cxx" line="185"/>
         <source>The maximum calls can not be inferior to the block size</source>
         <translation>Le nombre d&apos;appels ne peut pas être inférieur à la taille de bloc</translation>
     </message>
@@ -2309,22 +2310,22 @@ extremum</source>
         <translation>Taille d&apos;échantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="295"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="294"/>
         <source>At least one output must be selected</source>
         <translation>Au moins une sortie doit être sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="302"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="301"/>
         <source>Please select at least one stop criteria</source>
         <translation>Sélectionner au moins un critère d&apos;arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="306"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="305"/>
         <source>The maximum time must not be null</source>
         <translation>Le temps maximum ne doit pas être nul</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="309"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="308"/>
         <source>The maximum calls can not be inferior to: block_size*(number_of_inputs + 2)</source>
         <translation>Le nombre d&apos;appels ne peut pas être inférieur à : taille_bloc*(nombre_entrées + 2) </translation>
     </message>
