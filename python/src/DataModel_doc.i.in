@@ -13,10 +13,20 @@ inputColumns : sequence of int
     Indices of columns of the input variables in file to consider
 outputColumns : sequence of int
     Indices of columns of the output variables in file to consider (optional)
-inputNames : :py:class:`openturns.Description`
+inputNames : sequence of str
     Names of the input variables (optional)
-outputNames : :py:class:`openturns.Description`
-    Names of the output variables (optional)"
+outputNames : sequence of str
+    Names of the output variables (optional)
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+>>> ot.RandomGenerator.SetSeed(0)
+>>> fileName = 'sample.csv'
+>>> sample = ot.Normal(3).getSample(30)
+>>> sample.exportToCSVFile(fileName)
+>>> model = otguibase.DataModel('dataModel', fileName, [0, 2], [1], ['var1', 'var2'], ['var3'])"
 
 // ---------------------------------------------------------------------
 
@@ -45,13 +55,13 @@ columns : :py:class:`openturns.Indices`
 
 Parameters
 ----------
-inputColumns : :py:class:`openturns.Indices`
+inputColumns : sequence of int
     Columns of the input variables
-outputColumns : :py:class:`openturns.Indices`
+outputColumns : sequence of int
     Columns of the output variables
-inputNames : :py:class:`openturns.Description`, optional
+inputNames : sequence of str, optional
     Names of the input variables (optional)
-outputNames : :py:class:`openturns.Description`, optional
+outputNames : sequence of str, optional
     Names of the output variables (optional)"
 
 // ---------------------------------------------------------------------

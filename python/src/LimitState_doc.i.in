@@ -14,8 +14,6 @@ OTGUI_LimitState_getThreshold_doc
 OTGUI_LimitState_getPythonScript_doc
 %feature("docstring") OTGUI::LimitState::getPhysicalModel
 OTGUI_LimitState_getPhysicalModel_doc
-%feature("docstring") OTGUI::LimitState::setPhysicalModel
-OTGUI_LimitState_setPhysicalModel_doc
 %feature("docstring") OTGUI::LimitState::setOperator
 OTGUI_LimitState_setOperator_doc
 %feature("docstring") OTGUI::LimitState::getOperator
