@@ -61,8 +61,10 @@ UnsignedInteger WithStopCriteriaAnalysis::getMaximumCalls() const
 
 void WithStopCriteriaAnalysis::setMaximumCalls(const UnsignedInteger maxi)
 {
+  if (maxi < 4)
+    throw InvalidValueException(HERE) << "The maximum calls must be superior to 4";
   if (maxi < blockSize_)
-    throw InvalidValueException(HERE) << "The maximum calls can not be inferior to the block size";
+    throw InvalidValueException(HERE) << "The maximum calls can not be inferior to the block size " << blockSize_;
   maximumCalls_ = maxi;
 }
 
@@ -87,6 +89,8 @@ UnsignedInteger WithStopCriteriaAnalysis::getMaximumElapsedTime() const
 
 void WithStopCriteriaAnalysis::setMaximumElapsedTime(const UnsignedInteger seconds)
 {
+  if (seconds < 1)
+    throw InvalidValueException(HERE) << "The maximum elapsed time must be superior to 0 second";
   maximumElapsedTime_ = seconds;
 }
 
@@ -99,8 +103,10 @@ UnsignedInteger WithStopCriteriaAnalysis::getBlockSize() const
 
 void WithStopCriteriaAnalysis::setBlockSize(const UnsignedInteger size)
 {
+  if (size < 1)
+    throw InvalidValueException(HERE) << "The block size must be superior to 0";
   if (size > maximumCalls_)
-    throw InvalidValueException(HERE) << "The block size can not be superior to the maximum calls";
+    throw InvalidValueException(HERE) << "The block size can not be superior to the maximum calls " << maximumCalls_;
   blockSize_ = size;
 }
 
