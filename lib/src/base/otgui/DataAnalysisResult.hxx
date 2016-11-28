@@ -37,6 +37,7 @@ public:
   typedef OT::PersistentCollection<OT::Distribution> DistributionCollection;
 
   friend class DataAnalysis;
+  friend class MonteCarloAnalysis;
 
   /** Default constructor */
   DataAnalysisResult();
@@ -67,7 +68,6 @@ public:
   DataSample::NumericalSampleCollection getCDF() const;
 
   double getElapsedTime() const;
-  void setElapsedTime(const double seconds);
 
   bool isValid() const;
 

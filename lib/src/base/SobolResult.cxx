@@ -100,33 +100,15 @@ UnsignedInteger SobolResult::getCallsNumber() const
 }
 
 
-void SobolResult::setCallsNumber(const OT::UnsignedInteger number)
-{
-  callsNumber_ = number;
-}
-
-
 double SobolResult::getElapsedTime() const
 {
   return elapsedTime_;
 }
 
 
-void SobolResult::setElapsedTime(const double seconds)
-{
-  elapsedTime_ = seconds;
-}
-
-
 double SobolResult::getCoefficientOfVariation() const
 {
   return coefficientOfVariation_;
-}
-
-
-void SobolResult::setCoefficientOfVariation(const double coef)
-{
-  coefficientOfVariation_ = coef;
 }
 
 

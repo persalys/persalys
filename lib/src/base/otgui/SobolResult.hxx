@@ -30,6 +30,9 @@ class OTGUI_API SobolResult : public OT::PersistentObject
   CLASSNAME;
 
 public:
+
+  friend class SobolAnalysis;
+
   /** Default constructor */
   SobolResult();
   /** Constructor with parameters */
@@ -46,13 +49,10 @@ public:
   OT::NumericalSample getTotalIndices() const;
 
   OT::UnsignedInteger getCallsNumber() const;
-  void setCallsNumber(const OT::UnsignedInteger cumber);
 
   double getElapsedTime() const;
-  void setElapsedTime(const double seconds);
 
   double getCoefficientOfVariation() const;
-  void setCoefficientOfVariation(const double coef);
 
   /** String converter */
   virtual OT::String __repr__() const;

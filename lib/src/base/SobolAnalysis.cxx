@@ -215,9 +215,9 @@ void SobolAnalysis::run()
 
   // fill result_
   result_ = SobolResult(firstOrderIndices, totalIndices, getInterestVariables());
-  result_.setCallsNumber(X1.getSize()*(2+nbInputs));
-  result_.setElapsedTime((float)elapsedTime/CLOCKS_PER_SEC);
-  result_.setCoefficientOfVariation(coefficientOfVariation);
+  result_.callsNumber_ = X1.getSize()*(2+nbInputs);
+  result_.elapsedTime_ = (float)elapsedTime/CLOCKS_PER_SEC;
+  result_.coefficientOfVariation_ = coefficientOfVariation;
 
   // add warning if the model has not an independent copula
   if (!getPhysicalModel().getComposedDistribution().hasIndependentCopula())

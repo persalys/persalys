@@ -158,12 +158,6 @@ double DataAnalysisResult::getElapsedTime() const
 }
 
 
-void DataAnalysisResult::setElapsedTime(const double seconds)
-{
-  elapsedTime_ = seconds;
-}
-
-
 bool DataAnalysisResult::isValid() const
 {
   UnsignedInteger i(min_.getSize());

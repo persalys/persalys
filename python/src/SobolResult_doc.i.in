@@ -40,3 +40,33 @@ Returns
 -------
 indices : :py:class:`openturns.NumericalSample`
     Total indices"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SobolResult::getCoefficientOfVariation
+"Coefficient of variation accessor.
+
+Returns
+-------
+result : :py:class:`openturns.NumericalPoint`
+    Coefficient of variation"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SobolResult::getElapsedTime
+"Elapsed time in seconds to perform the analysis.
+
+Returns
+-------
+time : int
+    Elapsed time in seconds to perform the analysis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SobolResult::getCallsNumber
+"Number of calls accessor.
+
+Returns
+-------
+calls : int
+    Number of function calls"

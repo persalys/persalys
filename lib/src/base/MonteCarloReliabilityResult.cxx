@@ -98,12 +98,6 @@ double MonteCarloReliabilityResult::getElapsedTime() const
 }
 
 
-void MonteCarloReliabilityResult::setElapsedTime(const double seconds)
-{
-  elapsedTime_ = seconds;
-}
-
-
 /* String converter */
 String MonteCarloReliabilityResult::__repr__() const
 {
