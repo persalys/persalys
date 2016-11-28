@@ -70,7 +70,7 @@ StopCriteriaGroupBox::StopCriteriaGroupBox(const double maxCoef, const UnsignedI
   // Maximum function calls
   QCheckBox * maxiCallsCheckBox = new QCheckBox(tr("Maximum calls"));
   maxiCallsSpinbox_ = new QSpinBox;
-  maxiCallsSpinbox_->setMinimum(2);
+  maxiCallsSpinbox_->setMinimum(4);
   maxiCallsSpinbox_->setMaximum(std::numeric_limits<int>::max());
   maxiCallsSpinbox_->setValue(maxCalls < (UnsignedInteger)std::numeric_limits<int>::max()? maxCalls : 10000);
 
