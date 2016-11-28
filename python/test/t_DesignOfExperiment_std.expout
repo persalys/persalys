@@ -26,10 +26,9 @@ otguibase.OTStudy.Add(anOTStudy)
 X0 = otguibase.Input('X0', 1, '')
 X1 = otguibase.Input('X1', 2, '')
 Y0 = otguibase.Output('Y0', 0, '', 'sin(X0)+8*X1')
-aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys')
-aModelPhys.addInput(X0)
-aModelPhys.addInput(X1)
-aModelPhys.addOutput(Y0)
+inputs = [X0, X1]
+outputs = [Y0]
+aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys', inputs, outputs)
 anOTStudy.add(aModelPhys)
 values = [1, 2]
 lowerBounds = [0.9, 1.8]
@@ -38,7 +37,7 @@ levels = [2, 2]
 aDesign_1 = otguibase.FixedDesignOfExperiment('aDesign_1', aModelPhys, lowerBounds, upperBounds, levels, values)
 anOTStudy.add(aDesign_1)
 aDesign_1.run()
-inputColumns = ot.Indices([0, 2])
+inputColumns = [0, 2]
 aDesign_2 = otguibase.FromFileDesignOfExperiment('aDesign_2', aModelPhys, 'normal.csv', inputColumns)
 anOTStudy.add(aDesign_2)
 aDesign_2.run()

@@ -35,9 +35,9 @@ int main(int argc, char *argv[])
   {
     OTStudy myStudy("myStudy");
 
-    Input Q("Q", 0., "Primary energy", Normal(10200, 100));
-    Input E("E", 0., "Produced electric energy", Normal(3000, 15));
-    Input C("C", 0., "Valued thermal energy", Normal(4000, 60));
+    Input Q("Q", 10200., "Primary energy", Normal(10200, 100));
+    Input E("E", 3000., "Produced electric energy", Normal(3000, 15));
+    Input C("C", 4000., "Valued thermal energy", Normal(4000, 60));
 
     Output Ep("Ep", 0., "Primary energy savings", "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
     AnalyticalPhysicalModel myPhysicalModel("myPhysicalModel");
@@ -52,6 +52,8 @@ int main(int argc, char *argv[])
 
     // First parametric analysis
     FixedDesignOfExperiment aDesign("aDesign", myPhysicalModel);
+    Indices levels(3, 2);
+    aDesign.setLevels(levels);
     myStudy.add(aDesign);
     aDesign.run();
     NumericalSample resultSample1(aDesign.getOutputSample());
@@ -84,7 +86,7 @@ int main(int argc, char *argv[])
 
     NumericalPoint scale(3);
     NumericalPoint transvec(3);
-    NumericalPoint levels(3, 0.);
+    NumericalPoint otLevels(3, 0.);
 
     for (int i=0; i<3; ++i)
     {
@@ -94,7 +96,7 @@ int main(int argc, char *argv[])
       transvec[i] = a;
     }
 
-    Box box(levels);
+    Box box(otLevels);
     NumericalSample inputSample(box.generate());
     inputSample*=scale;
     inputSample+=transvec;

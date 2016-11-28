@@ -14,11 +14,9 @@ E = otguibase.Input('E', 0, 'Produced electric energy', dist_E)
 dist_C = ot.Normal(4000, 60)
 C = otguibase.Input('C', 0, 'Valued thermal energy', dist_C)
 Ep = otguibase.Output('Ep', 0, 'Primary energy savings', '1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))')
-myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel')
-myPhysicalModel.addInput(Q)
-myPhysicalModel.addInput(E)
-myPhysicalModel.addInput(C)
-myPhysicalModel.addOutput(Ep)
+inputs = [Q, E, C]
+outputs = [Ep]
+myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', inputs, outputs)
 myStudy.add(myPhysicalModel)
 values = [0, 0, 0]
 lowerBounds = [10035.5, 2975.33, 3901.31]
@@ -47,7 +45,7 @@ mySobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel)
 mySobol.setMaximumCalls(1000)
 mySobol.setMaximumCoefficientOfVariation(-1)
 mySobol.setMaximumElapsedTime(60)
-mySobol.setBlockSize(1000)
+mySobol.setBlockSize(200)
 mySobol.setSeed(0)
 myStudy.add(mySobol)
 mySRC = otguibase.SRCAnalysis('mySRC', myPhysicalModel, 10000)
