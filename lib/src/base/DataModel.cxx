@@ -113,18 +113,21 @@ void DataModel::setColumns(const Indices & inputColumns,
                            const Description & inputNames,
                            const Description & outputNames)
 {
-  if (!sampleFromFile_.getSize())
-    sampleFromFile_ = ImportSample(getFileName());
-
   // check indices
   if (!inputColumns.getSize())
-    throw InvalidArgumentException(HERE) << "In DataModel::setColumns: the model must have at least one input";
+    throw InvalidArgumentException(HERE) << "Inputs columns list can not be empty. The model must have at least one input.";
+
+  if (!inputColumns.check(getSampleFromFile().getDimension()-1))
+    throw InvalidArgumentException(HERE) << "Values in the inputs columns list are not compatible with the sample dimension contained in the file.";
+
+  if (!outputColumns.check(getSampleFromFile().getDimension()-1))
+    throw InvalidArgumentException(HERE) << "Values in the outputs columns list are not compatible with the sample dimension contained in the file.";
 
   Indices indices(inputColumns);
   indices.add(outputColumns);
 
-  if (!indices.check(sampleFromFile_.getDimension()))
-    throw InvalidArgumentException(HERE) << "In DataModel::setColumns: input columns and ouput columns are not compatible";
+  if (!indices.check(getSampleFromFile().getDimension()-1))
+    throw InvalidArgumentException(HERE) << "A value can not be in the two columns lists at the same time.";
 
   // check names
   // input
@@ -132,7 +135,7 @@ void DataModel::setColumns(const Indices & inputColumns,
   if (inputNames.getSize())
   {
     if (inputColumns.getSize() != inputNames.getSize())
-      throw InvalidArgumentException(HERE) << "In DataModel::setColumns: inputNames size not compatible with input columns size";
+      throw InvalidArgumentException(HERE) << "The dimension of the inputs names list has to be equal to the dimension of the inputs columns list.";
 
     std::set<String> inputNamesSet;
     for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
@@ -146,7 +149,7 @@ void DataModel::setColumns(const Indices & inputColumns,
   if (outputNames.getSize())
   {
     if (outputColumns.getSize() != outputNames.getSize())
-      throw InvalidArgumentException(HERE) << "In DataModel::setColumns: outputNames size not compatible with output columns size";
+      throw InvalidArgumentException(HERE) << "The dimension of the outputs names list has to be equal to the dimension of the outputs columns list.";
 
     std::set<String> outputNamesSet;
     for (UnsignedInteger i=0; i<outputNames.getSize(); ++i)
@@ -180,12 +183,10 @@ Description DataModel::getInputNames()
 {
   if (!inputNames_.getSize())
   {
-    if (!sampleFromFile_.getSize())
-      sampleFromFile_ = ImportSample(getFileName());
-
+    const Description sampleDescription(getSampleFromFile().getDescription());
     inputNames_ = Description(inputColumns_.getSize());
     for (UnsignedInteger i=0; i<inputColumns_.getSize(); ++i)
-      inputNames_[i] = sampleFromFile_.getDescription()[inputColumns_[i]];
+      inputNames_[i] = sampleDescription[inputColumns_[i]];
   }
   return inputNames_;
 }
@@ -195,12 +196,10 @@ Description DataModel::getOutputNames()
 {
   if (!outputNames_.getSize())
   {
-    if (!sampleFromFile_.getSize())
-      sampleFromFile_ = ImportSample(getFileName());
-
+    const Description sampleDescription(getSampleFromFile().getDescription());
     outputNames_ = Description(outputColumns_.getSize());
     for (UnsignedInteger i=0; i<outputColumns_.getSize(); ++i)
-      outputNames_[i] = sampleFromFile_.getDescription()[outputColumns_[i]];
+      outputNames_[i] = sampleDescription[outputColumns_[i]];
   }
   return outputNames_;
 }
