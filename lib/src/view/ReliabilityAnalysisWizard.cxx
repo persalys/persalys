@@ -111,10 +111,6 @@ void ReliabilityAnalysisWizard::buildInterface()
   // error message
   errorMessageLabel_ = new QLabel;
   errorMessageLabel_->setWordWrap(true);
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), errorMessageLabel_, SLOT(clear()));
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), errorMessageLabel_, SLOT(clear()));
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(int)), errorMessageLabel_, SLOT(clear()));
-  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorMessageLabel_, SLOT(clear()));
   mainLayout->addStretch();
   mainLayout->addWidget(errorMessageLabel_);
 
@@ -129,12 +125,21 @@ void ReliabilityAnalysisWizard::maxiCoefficientOfVariationChanged(double maxi)
 
 void ReliabilityAnalysisWizard::maxiTimeChanged(int value)
 {
-  dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setMaximumElapsedTime(value);
+  errorMessageLabel_->setText("");
+  try
+  {
+    dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setMaximumElapsedTime(value);
+  }
+  catch (InvalidValueException exception)
+  {
+    // check in validateCurrentPage
+  }
 }
 
 
 void ReliabilityAnalysisWizard::maxiCallsChanged(int maxi)
 {
+  errorMessageLabel_->setText("");
   try
   {
     dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setMaximumCalls(maxi);
@@ -148,6 +153,7 @@ void ReliabilityAnalysisWizard::maxiCallsChanged(int maxi)
 
 void ReliabilityAnalysisWizard::blockSizeChanged(double size)
 {
+  errorMessageLabel_->setText("");
   try
   {
     dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setBlockSize(size);

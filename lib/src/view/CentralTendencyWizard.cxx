@@ -174,10 +174,6 @@ void CentralTendencyWizard::buildInterface()
 
   /// -- error message
   errorMessageLabel_->setWordWrap(true);
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), errorMessageLabel_, SLOT(clear()));
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), errorMessageLabel_, SLOT(clear()));
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(int)), errorMessageLabel_, SLOT(clear()));
-  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorMessageLabel_, SLOT(clear()));
   mainLayout->addStretch();
   mainLayout->addWidget(errorMessageLabel_);
 
@@ -203,12 +199,14 @@ void CentralTendencyWizard::maxiCoefficientOfVariationChanged(double maxi)
 
 void CentralTendencyWizard::maxiTimeChanged(int value)
 {
+  errorMessageLabel_->setText("");
   MCAnalysis_.setMaximumElapsedTime(value);
 }
 
 
 void CentralTendencyWizard::maxiCallsChanged(int maxi)
 {
+  errorMessageLabel_->setText("");
   try
   {
     MCAnalysis_.setMaximumCalls(maxi);
@@ -240,6 +238,7 @@ void CentralTendencyWizard::seedChanged(int seed)
 
 void CentralTendencyWizard::blockSizeChanged(double size)
 {
+  errorMessageLabel_->setText("");
   try
   {
     MCAnalysis_.setBlockSize(size);
