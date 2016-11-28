@@ -41,8 +41,7 @@ public:
 
 protected:
   void buildInterface();
-  virtual void setTable(OT::NumericalSample & sample) = 0;
-  virtual void setFileName(const QString & fileName) = 0;
+  virtual void setTable(const QString& fileName) = 0;
   void setData(const QString & fileName);
 
 public slots:

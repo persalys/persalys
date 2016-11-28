@@ -28,7 +28,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-ImportDataModelPage::ImportDataModelPage(const DataModel & dataModel, QWidget *parent)
+ImportDataModelPage::ImportDataModelPage(const DataModel& dataModel, QWidget* parent)
   : ImportDataPage(parent)
   , dataModel_(dataModel)
 {
@@ -37,9 +37,13 @@ ImportDataModelPage::ImportDataModelPage(const DataModel & dataModel, QWidget *p
 }
 
 
-void ImportDataModelPage::setTable(NumericalSample & sample)
+void ImportDataModelPage::setTable(const QString& fileName)
 {
+  // update file name
+  dataModel_.setFileName(fileName.toLocal8Bit().data());
+
   // set table model
+  NumericalSample sample(dataModel_.getSampleFromFile());
   tableModel_ = new DataModelTableModel(sample, dataModel_, true, dataPreviewTableView_);
   connect(tableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(updateErrorMessage(QString)));
   dataPreviewTableView_->setModel(tableModel_);
@@ -52,12 +56,6 @@ void ImportDataModelPage::setTable(NumericalSample & sample)
 
   for (UnsignedInteger i=0; i<sample.getDimension(); ++i)
     dataPreviewTableView_->openPersistentEditor(tableModel_->index(1, i));
-}
-
-
-void ImportDataModelPage::setFileName(const QString & fileName)
-{
-  dataModel_.setFileName(fileName.toLocal8Bit().data());
 }
 
 

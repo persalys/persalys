@@ -29,7 +29,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-ImportDesignOfExperimentPage::ImportDesignOfExperimentPage(const DesignOfExperiment & designOfExperiment, QWidget *parent)
+ImportDesignOfExperimentPage::ImportDesignOfExperimentPage(const DesignOfExperiment& designOfExperiment, QWidget* parent)
   : ImportDataPage(parent)
 {
   if (designOfExperiment.getImplementation()->getClassName() == "FromFileDesignOfExperiment")
@@ -39,14 +39,20 @@ ImportDesignOfExperimentPage::ImportDesignOfExperimentPage(const DesignOfExperim
       setData(QString::fromUtf8(designOfExperiment_.getFileName().c_str()));
   }
   else
+  {
     designOfExperiment_ = FromFileDesignOfExperiment(designOfExperiment.getName(), designOfExperiment.getPhysicalModel());
+  }
 }
 
 
-void ImportDesignOfExperimentPage::setTable(NumericalSample & sample)
+void ImportDesignOfExperimentPage::setTable(const QString& fileName)
 {
+  // set file name
+  designOfExperiment_.setFileName(fileName.toLocal8Bit().data());
+
   // check sample From File
-  if (!designOfExperiment_.getInputColumns().check(sample.getDimension()))
+  NumericalSample sample(designOfExperiment_.getSampleFromFile());
+  if (!designOfExperiment_.getInputColumns().check(sample.getDimension()-1))
     throw InvalidArgumentException(HERE) << tr("Impossible to load sample marginals").toLocal8Bit().data();
 
   const Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
@@ -93,12 +99,6 @@ void ImportDesignOfExperimentPage::setTable(NumericalSample & sample)
 #else
   dataPreviewTableView_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
 #endif
-}
-
-
-void ImportDesignOfExperimentPage::setFileName(const QString & fileName)
-{
-  designOfExperiment_.setFileName(fileName.toLocal8Bit().data());
 }
 
 

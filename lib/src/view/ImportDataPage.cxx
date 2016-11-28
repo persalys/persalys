@@ -35,7 +35,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-ImportDataPage::ImportDataPage(QWidget *parent)
+ImportDataPage::ImportDataPage(QWidget* parent)
   : QWizardPage(parent)
   , pageValidity_(false)
 {
@@ -110,15 +110,13 @@ void ImportDataPage::openFileRequested()
 }
 
 
-void ImportDataPage::setData(const QString & fileName)
+void ImportDataPage::setData(const QString& fileName)
 {
   filePathLineEdit_->setText(fileName);
   try
   {
     errorMessageLabel_->setText("");
-    setFileName(fileName);
-    NumericalSample sampleFromFile = FromFileDesignOfExperiment::ImportSample(fileName.toLocal8Bit().data());
-    setTable(sampleFromFile);
+    setTable(fileName);
     pageValidity_ = true;
   }
   catch (std::exception & ex)

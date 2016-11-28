@@ -36,8 +36,7 @@ public:
   bool validatePage();
 
 protected:
-  virtual void setTable(OT::NumericalSample & sample);
-  virtual void setFileName(const QString & fileName);
+  virtual void setTable(const QString& fileName);
 
 public slots:
   void columnNameChanged();
