@@ -28,7 +28,6 @@
 #include <qwt_scale_draw.h>
 
 #include <openturns/Distribution.hxx>
-
 #include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
@@ -68,11 +67,7 @@ public slots:
   void exportPlot();
 signals:
   void plotChanged();
-  void visibilityChanged(bool);
 
-protected:
-  virtual void showEvent(QShowEvent * event);
-  virtual void hideEvent(QHideEvent * event);
 private:
   void updateScaleParameters(const OT::Distribution & distribution);
 
