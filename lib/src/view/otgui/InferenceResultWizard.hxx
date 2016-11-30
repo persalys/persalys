@@ -25,11 +25,10 @@
 #include "otgui/OTStudy.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/InferenceResultWidget.hxx"
 
 #include <QComboBox>
 #include <QLabel>
-
-Q_DECLARE_METATYPE(OT::Distribution)
 
 namespace OTGUI {
 class OTGUI_API InferenceResultWizard : public OTguiWizard
@@ -48,18 +47,13 @@ protected:
 
 public slots:
   void updateVariablesComboBox(int);
-  void updateDistributionTable(QString);
-  void updateRadioButtonsDistributionTable(QModelIndex);
-  void updateParametersTable(QModelIndex=QModelIndex(), QModelIndex=QModelIndex());
+  void updateInferenceResultWidget(QString);
 
 private:
   OTStudy otStudy_;
   QComboBox * inferenceResultsComboBox_;
   QComboBox * variablesComboBox_;
-  ResizableTableViewWithoutScrollBar * distTableView_;
-  CustomStandardItemModel * distTableModel_;
-  ResizableTableViewWithoutScrollBar * distParamTableView_;
-  CustomStandardItemModel * distParamTableModel_;
+  InferenceResultWidget * inferenceResultWidget_;
   QLabel * errorMessageLabel_;
 };
 }
