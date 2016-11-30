@@ -49,10 +49,8 @@ public slots:
   void updateXrange();
   void updateYrange();
   void exportPlot();
-  void plotVisibilityChanged(bool);
 signals:
   void currentPlotChanged(int);
-  void visibilityChanged(QWidget*, bool);
 
 private:
   QVector<PlotWidget *> plotWidgets_;
