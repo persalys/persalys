@@ -48,7 +48,6 @@ public:
   bool hasPhysicalModel() const;
 
   PhysicalModel getPhysicalModel() const;
-  void setPhysicalModel(const PhysicalModel & physicalModel);
 
   OT::Description getVariableInputNames() const;
 

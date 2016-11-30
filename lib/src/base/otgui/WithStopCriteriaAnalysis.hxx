@@ -35,7 +35,7 @@ public:
   virtual ~WithStopCriteriaAnalysis();
 
   OT::UnsignedInteger getMaximumCalls() const;
-  void setMaximumCalls(const OT::UnsignedInteger maxi);
+  virtual void setMaximumCalls(const OT::UnsignedInteger maxi);
 
   double getMaximumCoefficientOfVariation() const;
   void setMaximumCoefficientOfVariation(const double coef);
@@ -44,7 +44,7 @@ public:
   void setMaximumElapsedTime(const OT::UnsignedInteger seconds);
 
   OT::UnsignedInteger getBlockSize() const;
-  void setBlockSize(const OT::UnsignedInteger size);
+  virtual void setBlockSize(const OT::UnsignedInteger size);
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;

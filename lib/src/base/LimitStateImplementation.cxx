@@ -41,9 +41,11 @@ LimitStateImplementation::LimitStateImplementation()
 
 
 /* Constructor with parameters */
-LimitStateImplementation::LimitStateImplementation(const String & name, const PhysicalModel & physicalModel,
-                       const String & outputName, const ComparisonOperator & comparisonOperator,
-                       const double & threshold)
+LimitStateImplementation::LimitStateImplementation(const String& name,
+                                                   const PhysicalModel& physicalModel,
+                                                   const String& outputName,
+                                                   const ComparisonOperator& comparisonOperator,
+                                                   const double& threshold)
   : PersistentObject()
   , Observable()
   , physicalModel_(physicalModel)
@@ -75,19 +77,13 @@ PhysicalModel LimitStateImplementation::getPhysicalModel() const
 }
 
 
-void LimitStateImplementation::setPhysicalModel(const PhysicalModel & physicalModel)
-{
-  physicalModel_ = physicalModel;
-}
-
-
 String LimitStateImplementation::getOutputName() const
 {
   return outputName_;
 }
 
 
-void LimitStateImplementation::setOutputName(const String & outputName)
+void LimitStateImplementation::setOutputName(const String& outputName)
 {
   if (!physicalModel_.hasOutputNamed(outputName))
     throw InvalidArgumentException(HERE) << "The physical model does not contain an output named '" << outputName <<"'.";
@@ -103,7 +99,7 @@ ComparisonOperator LimitStateImplementation::getOperator() const
 }
 
 
-void LimitStateImplementation::setOperator(const ComparisonOperator & comparisonOperator)
+void LimitStateImplementation::setOperator(const ComparisonOperator& comparisonOperator)
 {
   if (comparisonOperator.getImplementation()->getClassName() == "Equal")
     throw InvalidArgumentException(HERE) << "The operator Equal is not valid to define a limit state.\n";
@@ -119,7 +115,7 @@ double LimitStateImplementation::getThreshold() const
 }
 
 
-void LimitStateImplementation::setThreshold(const double & threshold)
+void LimitStateImplementation::setThreshold(const double& threshold)
 {
   threshold_ = threshold;
   notify("thresholdChanged");
@@ -160,7 +156,7 @@ String LimitStateImplementation::__repr__() const
 
 
 /* Method save() stores the object through the StorageManager */
-void LimitStateImplementation::save(Advocate & adv) const
+void LimitStateImplementation::save(Advocate& adv) const
 {
   PersistentObject::save(adv);
   adv.saveAttribute("physicalModel_", physicalModel_);
@@ -171,7 +167,7 @@ void LimitStateImplementation::save(Advocate & adv) const
 
 
 /* Method load() reloads the object from the StorageManager */
-void LimitStateImplementation::load(Advocate & adv)
+void LimitStateImplementation::load(Advocate& adv)
 {
   PersistentObject::load(adv);
   adv.loadAttribute("physicalModel_", physicalModel_);

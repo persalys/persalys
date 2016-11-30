@@ -75,24 +75,37 @@ NumericalMathFunction AnalyticalPhysicalModel::getFunction() const
 
 String AnalyticalPhysicalModel::getPythonScript() const
 {
-  String result;
+  OSS oss;
 
   for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
-    result += getInputs()[i].getPythonScript();
+    oss << getInputs()[i].getPythonScript();
 
   for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
-    result += getOutputs()[i].getPythonScript();
+    oss << getOutputs()[i].getPythonScript();
 
-  result += getName()+ " = otguibase.AnalyticalPhysicalModel('" + getName() + "')\n";
-
+  oss << "inputs = [";
   for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
-    result += getName()+ ".addInput(" + getInputs()[i].getName() + ")\n";
+  {
+    oss << getInputs()[i].getName();
+    if (i < getInputs().getSize()-1)
+      oss << ", ";
+  }
+  oss << "]\n";
 
+  oss << "outputs = [";
   for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
-    result += getName()+ ".addOutput(" + getOutputs()[i].getName() + ")\n";
+  {
+    oss << getOutputs()[i].getName();
+    if (i < getOutputs().getSize()-1)
+      oss << ", ";
+  }
+  oss << "]\n";
 
-  result += PhysicalModelImplementation::getCopulaPythonScript();
-  return result;
+  oss << getName()+ " = otguibase.AnalyticalPhysicalModel('" + getName() + "', inputs, outputs)\n";
+
+  oss << PhysicalModelImplementation::getCopulaPythonScript();
+
+  return oss;
 }
 
 

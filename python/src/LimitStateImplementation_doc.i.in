@@ -18,10 +18,16 @@ Examples
 --------
 >>> import openturns as ot
 >>> import otguibase
+
+Create the model:
+
 >>> R = otguibase.Input('R', 0., 'Yield strength', ot.LogNormalMuSigma(300., 30., 0.).getDistribution())
 >>> F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))
 >>> G = otguibase.Output('G', 0., 'deviation', 'R-F/(_pi*100.0)')
 >>> physicalModel = otguibase.AnalyticalPhysicalModel('model1', [R, F], [G])
+
+Create the limit state:
+
 >>> limitState = otguibase.LimitState('ls1', physicalModel, 'G', ot.Less(), 0.)"
 %enddef
 %feature("docstring") OTGUI::LimitStateImplementation
@@ -87,23 +93,10 @@ OTGUI_LimitState_getThreshold_doc
 Returns
 -------
 script : str
-    Python script to replay the calculus"
+    Python script to replay the analysis"
 %enddef
 %feature("docstring") OTGUI::LimitStateImplementation::getPythonScript
 OTGUI_LimitState_getPythonScript_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_LimitState_setPhysicalModel_doc
-"Physical model accessor.
-
-Parameters
-----------
-model : :class:`~otguibase.PhysicalModel`
-    Physical model"
-%enddef
-%feature("docstring") OTGUI::LimitStateImplementation::setPhysicalModel
-OTGUI_LimitState_setPhysicalModel_doc
 
 // ---------------------------------------------------------------------
 

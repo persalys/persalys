@@ -36,17 +36,17 @@ static Factory<DataAnalysis> RegisteredFactory;
 /* Default constructor */
 DataAnalysis::DataAnalysis()
   : DesignOfExperimentAnalysis()
-  , isConfidenceIntervalRequired_(false)
-  , levelConfidenceInterval_(0.)
+  , isConfidenceIntervalRequired_(true)
+  , levelConfidenceInterval_(0.95)
 {
 
 }
 
 
-DataAnalysis::DataAnalysis(const OT::String & name, const DesignOfExperiment & designOfExperiment)
+DataAnalysis::DataAnalysis(const String & name, const DesignOfExperiment & designOfExperiment)
   : DesignOfExperimentAnalysis(name, designOfExperiment)
-  , isConfidenceIntervalRequired_(false)
-  , levelConfidenceInterval_(0.)
+  , isConfidenceIntervalRequired_(true)
+  , levelConfidenceInterval_(0.95)
 {
 }
 
@@ -146,7 +146,7 @@ DataAnalysisResult DataAnalysis::getResult() const
 }
 
 
-NumericalPoint DataAnalysis::ComputeCoefficientOfVariation(const OT::NumericalSample & sample,
+NumericalPoint DataAnalysis::ComputeCoefficientOfVariation(const NumericalSample & sample,
                                                            const NumericalPoint & empiricalMean,
                                                            const NumericalPoint & empiricalStd)
 {
@@ -165,8 +165,8 @@ NumericalPoint DataAnalysis::ComputeCoefficientOfVariation(const OT::NumericalSa
 }
 
 
-Interval DataAnalysis::ComputeMeanConfidenceInterval(const OT::NumericalSample & sample,
-                                                     const OT::NumericalPoint & empiricalMean,
+Interval DataAnalysis::ComputeMeanConfidenceInterval(const NumericalSample & sample,
+                                                     const NumericalPoint & empiricalMean,
                                                      const NumericalPoint & empiricalStd,
                                                      const double level)
 {
@@ -189,8 +189,8 @@ Interval DataAnalysis::ComputeMeanConfidenceInterval(const OT::NumericalSample &
 }
 
 
-Interval DataAnalysis::ComputeStdConfidenceInterval(const OT::NumericalSample & sample,
-                                                    const OT::NumericalPoint & variance,
+Interval DataAnalysis::ComputeStdConfidenceInterval(const NumericalSample & sample,
+                                                    const NumericalPoint & variance,
                                                     const double level)
 {
   if (variance.getSize() != sample.getDimension())
@@ -225,9 +225,9 @@ Interval DataAnalysis::ComputeStdConfidenceInterval(const OT::NumericalSample & 
 
 
 
-DataAnalysisResult::NumericalPointCollection DataAnalysis::ComputeOutliers(const OT::NumericalSample & sample,
-                                                                           const OT::NumericalPoint & firstQuartile,
-                                                                           const OT::NumericalPoint & thirdQuartile)
+DataAnalysisResult::NumericalPointCollection DataAnalysis::ComputeOutliers(const NumericalSample & sample,
+                                                                           const NumericalPoint & firstQuartile,
+                                                                           const NumericalPoint & thirdQuartile)
 {
   if (firstQuartile.getSize() != thirdQuartile.getSize())
     throw InvalidDimensionException(HERE) << "In computeOutliers: The first quartile must have the same dimension as the third quartile";
@@ -249,7 +249,7 @@ DataAnalysisResult::NumericalPointCollection DataAnalysis::ComputeOutliers(const
 }
 
 
-void DataAnalysis::ComputeFittedDistributionPDF_CDF(const OT::NumericalSample & sample,
+void DataAnalysis::ComputeFittedDistributionPDF_CDF(const NumericalSample & sample,
                                                     DataSample::NumericalSampleCollection & pdf,
                                                     DataSample::NumericalSampleCollection & cdf)
 {

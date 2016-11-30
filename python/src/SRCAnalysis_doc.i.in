@@ -6,9 +6,9 @@ Parameters
 name : str
     Name
 physicalModel : :class:`~otguibase.PhysicalModel`
-    Limit state
-simulationNumber : int
-    Simulations number (optional)"
+    Physical model
+simulationsNumber : int
+    Simulations number (optional). By default it is 10000."
 
 // ---------------------------------------------------------------------
 
@@ -38,4 +38,4 @@ number : int
 Parameters
 ----------
 number : int
-    Number of simulations"
+    Number of simulations. By default it is 10000."

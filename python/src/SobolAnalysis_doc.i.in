@@ -6,9 +6,7 @@ Parameters
 name : str
     Name
 physicalModel : :class:`~otguibase.PhysicalModel`
-    Physical model
-sampleSize : int
-    Simulations number (optional)"
+    Physical model"
 
 // ---------------------------------------------------------------------
 

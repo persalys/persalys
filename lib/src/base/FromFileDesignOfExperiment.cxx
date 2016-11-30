@@ -39,7 +39,7 @@ FromFileDesignOfExperiment::FromFileDesignOfExperiment()
 
 
 /* Constructor with parameters */
-FromFileDesignOfExperiment::FromFileDesignOfExperiment(const String & name, const PhysicalModel & physicalModel)
+FromFileDesignOfExperiment::FromFileDesignOfExperiment(const String& name, const PhysicalModel& physicalModel)
   : DesignOfExperimentImplementation(name, physicalModel)
   , fileName_("")
 {
@@ -47,10 +47,10 @@ FromFileDesignOfExperiment::FromFileDesignOfExperiment(const String & name, cons
 
 
 /* Constructor with parameters */
-FromFileDesignOfExperiment::FromFileDesignOfExperiment(const String & name,
-                                                       const PhysicalModel & physicalModel,
-                                                       const String & fileName,
-                                                       const OT::Indices & inputColumns)
+FromFileDesignOfExperiment::FromFileDesignOfExperiment(const String& name,
+                                                       const PhysicalModel& physicalModel,
+                                                       const String& fileName,
+                                                       const Indices& inputColumns)
   : DesignOfExperimentImplementation(name, physicalModel)
 {
   setFileName(fileName);
@@ -65,37 +65,31 @@ FromFileDesignOfExperiment* FromFileDesignOfExperiment::clone() const
 }
 
 
-void FromFileDesignOfExperiment::generateInputSample()
-{
-  if (!sampleFromFile_.getSize())
-    sampleFromFile_ = ImportSample(fileName_);
-
-  if (!inputColumns_.check(sampleFromFile_.getDimension()))
-    throw InvalidArgumentException(HERE) << "In FromFileDesignOfExperiment::getInputSample: input columns is not compatible with the sample contained in the file";
-
-  NumericalSample inS(sampleFromFile_.getMarginal(inputColumns_));
-  inS.setDescription(physicalModel_.getInputNames());
-  setInputSample(inS);
-}
-
-
 String FromFileDesignOfExperiment::getFileName() const
 {
   return fileName_;
 }
 
 
-void FromFileDesignOfExperiment::setFileName(const String & fileName)
+void FromFileDesignOfExperiment::setFileName(const String& fileName)
 {
-  fileName_ = fileName;
-  NumericalSample importedSample(ImportSample(fileName_));
-  if (importedSample == sampleFromFile_)
-    return;
-  sampleFromFile_ = importedSample;
-  // reinitialization
-  setInputSample(NumericalSample());
-  setOutputSample(NumericalSample());
-  inputColumns_ = Indices();
+  if (fileName.empty())
+    throw InvalidArgumentException(HERE) << "The file name can not be empty";
+
+  if (fileName_ != fileName)
+  {
+    NumericalSample importedSample(ImportSample(fileName));
+    fileName_ = fileName;
+    sampleFromFile_ = importedSample;
+    // reinitialization
+    setInputSample(NumericalSample());
+    setOutputSample(NumericalSample());
+    inputColumns_ = Indices();
+  }
+  else
+  {
+    getSampleFromFile();
+  }
 }
 
 
@@ -105,7 +99,7 @@ Indices FromFileDesignOfExperiment::getInputColumns() const
 }
 
 
-void FromFileDesignOfExperiment::setInputColumns(const Indices & inputColumns)
+void FromFileDesignOfExperiment::setInputColumns(const Indices& inputColumns)
 {
   if (inputColumns.getSize() != physicalModel_.getInputs().getSize())
   {
@@ -115,19 +109,30 @@ void FromFileDesignOfExperiment::setInputColumns(const Indices & inputColumns)
     throw InvalidArgumentException(HERE) << oss.str();
   }
 
-  if (!sampleFromFile_.getSize())
-    sampleFromFile_ = ImportSample(fileName_);
-
-  if (!inputColumns.check(sampleFromFile_.getDimension()))
-    throw InvalidArgumentException(HERE) << "In FromFileDesignOfExperiment::setInputColumns: input columns is not compatible with the sample contained in the file";
+  if (!inputColumns.check(getSampleFromFile().getDimension()-1))
+    throw InvalidArgumentException(HERE) << "Values in the input columns list are not compatible with the sample dimension contained in the file.";
 
   inputColumns_ = inputColumns;
-  generateInputSample();
+
+  // generate input sample
+  NumericalSample inS(getSampleFromFile().getMarginal(inputColumns_));
+  inS.setDescription(physicalModel_.getInputNames());
+  setInputSample(inS);
+
+  // initialize OutputSample
   setOutputSample(NumericalSample());
 }
 
 
-NumericalSample FromFileDesignOfExperiment::ImportSample(const String & fileName)
+NumericalSample FromFileDesignOfExperiment::getSampleFromFile()
+{
+  if (!sampleFromFile_.getSize())
+    sampleFromFile_ = ImportSample(fileName_);
+  return sampleFromFile_;
+}
+
+
+NumericalSample FromFileDesignOfExperiment::ImportSample(const String& fileName)
 {
   std::vector< String > separatorsList(3);
   separatorsList[0] = " ";
@@ -143,7 +148,7 @@ NumericalSample FromFileDesignOfExperiment::ImportSample(const String & fileName
       break;
   }
   if (!sampleFromFile.getSize())
-    throw InvalidArgumentException(HERE) << "In FromFileDesignOfExperiment: impossible to load sample";
+    throw InvalidArgumentException(HERE) << "The sample is empty.";
 
   return sampleFromFile;
 }
@@ -153,14 +158,14 @@ String FromFileDesignOfExperiment::getPythonScript() const
 {
   OSS oss;
 
-  oss << "inputColumns = ot.Indices([";
+  oss << "inputColumns = [";
   for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++ i)
   {
     oss << inputColumns_[i];
     if (i < inputColumns_.getSize()-1)
       oss << ", ";
   }
-  oss << "])\n";
+  oss << "]\n";
 
   oss << getName()+ " = otguibase.FromFileDesignOfExperiment('" + getName() + "', "+getPhysicalModel().getName()+", ";
   oss << "'"+fileName_+"', inputColumns)\n";
@@ -177,13 +182,13 @@ String FromFileDesignOfExperiment::__repr__() const
       << " name=" << getName()
       << " physicalModel=" << getPhysicalModel().getName()
       << " fileName=" << getFileName()
-      << " inputColumns_=" << getInputColumns();
+      << " inputColumns=" << getInputColumns();
   return oss;
 }
 
 
 /* Method save() stores the object through the StorageManager */
-void FromFileDesignOfExperiment::save(Advocate & adv) const
+void FromFileDesignOfExperiment::save(Advocate& adv) const
 {
   DesignOfExperimentImplementation::save(adv);
   adv.saveAttribute("fileName_", fileName_);
@@ -192,7 +197,7 @@ void FromFileDesignOfExperiment::save(Advocate & adv) const
 
 
 /* Method load() reloads the object from the StorageManager */
-void FromFileDesignOfExperiment::load(Advocate & adv)
+void FromFileDesignOfExperiment::load(Advocate& adv)
 {
   DesignOfExperimentImplementation::load(adv);
   adv.loadAttribute("fileName_", fileName_);

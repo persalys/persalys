@@ -30,18 +30,17 @@ class OTGUI_API ImportDataModelPage : public ImportDataPage
   Q_OBJECT
 
 public:
-  ImportDataModelPage(const DataModel & dataModel, QWidget *parent = 0);
+  ImportDataModelPage(const DataModel& dataModel, QWidget* parent = 0);
 
   bool validatePage();
 
 protected:
-  virtual void setTable(OT::NumericalSample & sample);
-  virtual void setFileName(const QString & fileName);
+  virtual void setTable(const QString& fileName);
 
 public slots:
-  void updateErrorMessage(const QString & message);
+  void updateErrorMessage(const QString& message);
 signals:
-  void dataModelChanged(const DataModel & dataModel);
+  void dataModelChanged(const DataModel& dataModel);
 
 private:
   DataModel dataModel_;

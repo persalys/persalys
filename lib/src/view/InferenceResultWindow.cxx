@@ -66,6 +66,8 @@ void InferenceResultWindow::setParameters(const Analysis& analysis)
 
 void InferenceResultWindow::buildInterface()
 {
+  setWindowTitle(tr("Inference analysis results"));
+
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
   // table variables

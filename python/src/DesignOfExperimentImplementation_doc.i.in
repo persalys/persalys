@@ -33,19 +33,6 @@ OTGUI_DesignOfExperiment_getPhysicalModel_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_DesignOfExperiment_setPhysicalModel_doc
-"Physical model accessor.
-
-Parameters
-----------
-model : :class:`~otguibase.PhysicalModel`
-    Physical model"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::setPhysicalModel
-OTGUI_DesignOfExperiment_setPhysicalModel_doc
-
-// ---------------------------------------------------------------------
-
 %define OTGUI_DesignOfExperiment_getPythonScript_doc
 "Python script accessor.
 
@@ -90,6 +77,19 @@ hasPhysicalModel : bool
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::hasPhysicalModel
 OTGUI_DesignOfExperiment_hasPhysicalModel_doc
+
+// ----------------------------------------------------------------------
+
+%define OTGUI_DesignOfExperiment_getSampleFromFile_doc
+"Sample from the file accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.NumericalSample`
+    Sample from the file"
+%enddef
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::getSampleFromFile
+OTGUI_DesignOfExperiment_getSampleFromFile_doc
 
 // ----------------------------------------------------------------------
 

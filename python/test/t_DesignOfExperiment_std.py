@@ -27,9 +27,8 @@ print('outs=', aDesign.getOutputSample())
 
 ## Design of Experiment ##
 filename = 'normal.csv'
-ot.Normal(3).getSample(10).exportToCSVFile(filename, ',')
-columns = [0, 2]
-aDesign2 = otguibase.FromFileDesignOfExperiment('aDesign_2', model, filename, ot.Indices(columns))
+ot.Normal(3).getSample(10).exportToCSVFile(filename)
+aDesign2 = otguibase.FromFileDesignOfExperiment('aDesign_2', model, filename, [0, 2])
 anOTStudy.add(aDesign2)
 
 aDesign2.run()

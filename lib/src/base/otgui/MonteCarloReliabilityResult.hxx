@@ -30,6 +30,8 @@ class OTGUI_API MonteCarloReliabilityResult : public OT::PersistentObject
   CLASSNAME;
 
 public:
+  friend class MonteCarloReliabilityAnalysis;
+
   /** Default constructor */
   MonteCarloReliabilityResult();
   /** Constructor with parameters */
@@ -49,7 +51,6 @@ public:
   OT::NumericalSample getConvergenceSampleUpperBound() const;
 
   double getElapsedTime() const;
-  void setElapsedTime(const double seconds);
 
   /** String converter */
   virtual OT::String __repr__() const;

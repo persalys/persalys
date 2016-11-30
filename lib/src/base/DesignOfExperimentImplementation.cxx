@@ -35,7 +35,7 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation()
 
 
 /* Constructor with parameters */
-DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String & name, const PhysicalModel & physicalModel)
+DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String& name, const PhysicalModel& physicalModel)
   : DataSample()
   , Observable()
   , hasPhysicalModel_(true)
@@ -64,12 +64,6 @@ PhysicalModel DesignOfExperimentImplementation::getPhysicalModel() const
 }
 
 
-void DesignOfExperimentImplementation::setPhysicalModel(const PhysicalModel & physicalModel)
-{
-  physicalModel_ = physicalModel;
-}
-
-
 Description DesignOfExperimentImplementation::getVariableInputNames() const
 {
   return physicalModel_.getInputNames();
@@ -90,7 +84,7 @@ String DesignOfExperimentImplementation::getPythonScript() const
 
 
 /* Method save() stores the object through the StorageManager */
-void DesignOfExperimentImplementation::save(Advocate & adv) const
+void DesignOfExperimentImplementation::save(Advocate& adv) const
 {
   DataSample::save(adv);
   adv.saveAttribute("hasPhysicalModel_", hasPhysicalModel_);
@@ -99,7 +93,7 @@ void DesignOfExperimentImplementation::save(Advocate & adv) const
 
 
 /* Method load() reloads the object from the StorageManager */
-void DesignOfExperimentImplementation::load(Advocate & adv)
+void DesignOfExperimentImplementation::load(Advocate& adv)
 {
   DataSample::load(adv);
   adv.loadAttribute("hasPhysicalModel_", hasPhysicalModel_);

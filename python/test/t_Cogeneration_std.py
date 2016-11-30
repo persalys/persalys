@@ -67,7 +67,7 @@ openturns.testing.assert_almost_equal(0.0119363302339, stdCi.getUpperBound()[3],
 sobol = otguibase.SobolAnalysis('mySobol', model)
 sobol.setMaximumCoefficientOfVariation(-1)
 sobol.setMaximumCalls(1000)
-sobol.setBlockSize(1000)
+sobol.setBlockSize(200)
 myStudy.add(sobol)
 sobol.run()
 sobolResult = sobol.getResult()

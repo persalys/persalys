@@ -36,21 +36,21 @@ DesignOfExperiment::DesignOfExperiment()
 
 
 /* Constructor with parameters */
-DesignOfExperiment::DesignOfExperiment(const String & name, const PhysicalModel & physicalModel)
+DesignOfExperiment::DesignOfExperiment(const String& name, const PhysicalModel& physicalModel)
   : TypedInterfaceObject<DesignOfExperimentImplementation>(new FixedDesignOfExperiment(name, physicalModel))
 {
 }
 
 
 /* Default constructor */
-DesignOfExperiment::DesignOfExperiment(const DesignOfExperimentImplementation & implementation)
+DesignOfExperiment::DesignOfExperiment(const DesignOfExperimentImplementation& implementation)
   : TypedInterfaceObject<DesignOfExperimentImplementation>(implementation.clone())
 {
 }
 
 
 /* Constructor from implementation */
-DesignOfExperiment::DesignOfExperiment(const Implementation & p_implementation)
+DesignOfExperiment::DesignOfExperiment(const Implementation& p_implementation)
   : TypedInterfaceObject<DesignOfExperimentImplementation>(p_implementation)
 {
   // Initialize any other class members here
@@ -59,7 +59,7 @@ DesignOfExperiment::DesignOfExperiment(const Implementation & p_implementation)
 
 
 /* Constructor from implementation pointer */
-DesignOfExperiment::DesignOfExperiment(DesignOfExperimentImplementation * p_implementation)
+DesignOfExperiment::DesignOfExperiment(DesignOfExperimentImplementation* p_implementation)
   : TypedInterfaceObject<DesignOfExperimentImplementation>(p_implementation)
 {
   // Initialize any other class members here
@@ -67,7 +67,7 @@ DesignOfExperiment::DesignOfExperiment(DesignOfExperimentImplementation * p_impl
 }
 
 
-void DesignOfExperiment::addObserver(Observer * observer)
+void DesignOfExperiment::addObserver(Observer* observer)
 {
   getImplementation()->addObserver(observer);
 }
@@ -82,12 +82,6 @@ bool DesignOfExperiment::hasPhysicalModel() const
 PhysicalModel DesignOfExperiment::getPhysicalModel() const
 {
   return getImplementation()->getPhysicalModel();
-}
-
-
-void DesignOfExperiment::setPhysicalModel(const PhysicalModel & physicalModel)
-{
-  getImplementation()->setPhysicalModel(physicalModel);
 }
 
 
@@ -140,14 +134,14 @@ String DesignOfExperiment::getPythonScript() const
 
 
 /* Method save() stores the object through the StorageManager */
-void DesignOfExperiment::save(Advocate & adv) const
+void DesignOfExperiment::save(Advocate& adv) const
 {
   getImplementation()->save(adv);
 }
 
 
 /* Method load() reloads the object from the StorageManager */
-void DesignOfExperiment::load(Advocate & adv)
+void DesignOfExperiment::load(Advocate& adv)
 {
   getImplementation()->load(adv);
 }

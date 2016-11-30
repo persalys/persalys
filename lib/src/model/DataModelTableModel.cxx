@@ -37,7 +37,7 @@ DataModelTableModel::DataModelTableModel(const NumericalSample & data, DataModel
   Indices indices(inputColumns_);
   indices.add(outputColumns_);
 
-  if (!indices.check(data_.getDimension()) || !indices.getSize())
+  if (!indices.check(data_.getDimension()-1) || !indices.getSize())
   {
     inputColumns_ = Indices(data_.getDimension() > 1? data_.getDimension()-1 : 1);
     inputColumns_.fill();

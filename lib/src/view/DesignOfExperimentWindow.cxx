@@ -66,7 +66,7 @@ void DesignOfExperimentWindow::buildInterface()
   tabLayout->addWidget(tableView_);
 
   QHBoxLayout * layout = new QHBoxLayout;
-  evaluateButton_ = new QPushButton(tr("Evaluate"));
+  evaluateButton_ = new QPushButton(QIcon(":/images/run-build.png"), tr("Evaluate"));
   if (designOfExperiment_.getOutputSample().getSize())
     evaluateButton_->setEnabled(false);
   layout->addStretch();

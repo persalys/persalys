@@ -4,8 +4,7 @@ formulas= [sin(X0)+8*X1]
 script= X0 = otguibase.Input('X0', 1, '')
 X1 = otguibase.Input('X1', 2, '')
 Y0 = otguibase.Output('Y0', 0, '', 'sin(X0)+8*X1')
-aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys')
-aModelPhys.addInput(X0)
-aModelPhys.addInput(X1)
-aModelPhys.addOutput(Y0)
+inputs = [X0, X1]
+outputs = [Y0]
+aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys', inputs, outputs)
 

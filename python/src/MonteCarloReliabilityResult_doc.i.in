@@ -60,13 +60,3 @@ Returns
 -------
 time : int
     Elapsed time in seconds to perform the analysis"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::MonteCarloReliabilityResult::setElapsedTime
-"Elapsed time in seconds to perform the analysis.
-
-Parameters
-----------
-time : int
-    Elapsed time in seconds to perform the analysis"

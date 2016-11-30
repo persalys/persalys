@@ -190,10 +190,6 @@ void SensitivityAnalysisWizard::buildInterface()
   // error message
   errorMessageLabel_ = new QLabel;
   errorMessageLabel_->setWordWrap(true);
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), errorMessageLabel_, SLOT(clear()));
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), errorMessageLabel_, SLOT(clear()));
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(int)), errorMessageLabel_, SLOT(clear()));
-  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorMessageLabel_, SLOT(clear()));
   mainLayout->addStretch();
   mainLayout->addWidget(errorMessageLabel_);
 
@@ -218,12 +214,14 @@ void SensitivityAnalysisWizard::maxiCoefficientOfVariationChanged(double maxi)
 
 void SensitivityAnalysisWizard::maxiTimeChanged(int value)
 {
+  errorMessageLabel_->setText("");
   sobolAnalysis_.setMaximumElapsedTime(value);
 }
 
 
 void SensitivityAnalysisWizard::maxiCallsChanged(int maxi)
 {
+  errorMessageLabel_->setText("");
   try
   {
     sobolAnalysis_.setMaximumCalls(maxi);
@@ -243,6 +241,7 @@ void SensitivityAnalysisWizard::sampleSizeChanged(int sampleSize)
 
 void SensitivityAnalysisWizard::blockSizeChanged(double size)
 {
+  errorMessageLabel_->setText("");
   try
   {
     // total nb simu/iteration: N=blockSize*(nb_inputs+2)

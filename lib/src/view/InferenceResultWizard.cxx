@@ -75,12 +75,14 @@ InferenceResultWizard::InferenceResultWizard(const OTStudy& otStudy, QWidget* pa
 
 void InferenceResultWizard::buildInterface()
 {
+  setWindowTitle(tr("Inference analyses results"));
+
   QWizardPage * page = new QWizardPage(this);
   QGridLayout * mainLayout = new QGridLayout(page);
 
   // choose InferenceAnalysis
   inferenceResultsComboBox_ = new QComboBox;
-  mainLayout->addWidget(new QLabel(tr("Inference analyse")), 0, 0);
+  mainLayout->addWidget(new QLabel(tr("Inference analysis")), 0, 0);
   mainLayout->addWidget(inferenceResultsComboBox_ , 0, 1);
 
   QStringList inferenceAnalyses;

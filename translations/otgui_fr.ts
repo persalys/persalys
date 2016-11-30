@@ -66,22 +66,22 @@
         <translation>Graine</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="279"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="278"/>
         <source>At least one output must be selected</source>
         <translation>Au moins une sortie doit être sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="286"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="285"/>
         <source>Please select at least one stop criteria</source>
         <translation>Sélectionner au moins un critère d&apos;arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="290"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="289"/>
         <source>The maximum time must not be null</source>
         <translation>Le temps maximum ne doit pas être nul</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="293"/>
+        <location filename="../lib/src/view/CentralTendencyWizard.cxx" line="292"/>
         <source>The maximum calls can not be inferior to the block size</source>
         <translation>Le nombre d&apos;appels ne peut pas être inférieur à la taille de bloc</translation>
     </message>
@@ -660,17 +660,17 @@
 <context>
     <name>OTGUI::ImportDataModelPage</name>
     <message>
-        <location filename="../lib/src/view/ImportDataModelPage.cxx" line="48"/>
+        <location filename="../lib/src/view/ImportDataModelPage.cxx" line="52"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportDataModelPage.cxx" line="48"/>
+        <location filename="../lib/src/view/ImportDataModelPage.cxx" line="52"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportDataModelPage.cxx" line="48"/>
+        <location filename="../lib/src/view/ImportDataModelPage.cxx" line="52"/>
         <source>Disable</source>
         <translation>Désactiver</translation>
     </message>
@@ -719,7 +719,7 @@
         <translation>Impossible de lire le fichier %1: %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportDataPage.cxx" line="126"/>
+        <location filename="../lib/src/view/ImportDataPage.cxx" line="124"/>
         <source>Impossible to load the file.</source>
         <translation>Impossible de charger les données. </translation>
     </message>
@@ -727,17 +727,18 @@
 <context>
     <name>OTGUI::ImportDesignOfExperimentPage</name>
     <message>
-        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="50"/>
+        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="56"/>
         <source>Impossible to load sample marginals</source>
         <translation>Impossible de trouver les marginales de l&apos;échantillon </translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="55"/>
+        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="61"/>
         <source>The file contains a sample with a dimension inferior to the number of inputs of the physical model:</source>
         <translation>Le fichier contient un échantillon de dimension inférieure au nombre d&apos;entrée du modèle physique:</translation>
     </message>
     <message>
         <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="126"/>
+        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="141"/>
         <source>Each variable must be associated with one column.</source>
         <translation>Chaque variable doit être associée à une colonne.</translation>
     </message>
@@ -756,8 +757,8 @@
     </message>
     <message>
         <location filename="../lib/src/view/InferenceResultWindow.cxx" line="60"/>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="147"/>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="170"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="149"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="172"/>
         <source>Kolmogorov Smirnov</source>
         <translation>Kolmogorov Smirnov</translation>
     </message>
@@ -767,110 +768,115 @@
         <translation>Paramètres de l&apos;inférence :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="76"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="69"/>
+        <source>Inference analysis results</source>
+        <translation>Résultats de l&apos;inférence</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="78"/>
         <source>Variables</source>
         <translation>Variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="146"/>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="334"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="148"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="336"/>
         <source>Distributions</source>
         <translation>Distributions</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="148"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="150"/>
         <source>p-value</source>
         <translation>p-valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="149"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="151"/>
         <source>Acceptation</source>
         <translation>Acceptation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="157"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="159"/>
         <source>yes</source>
         <translation>oui</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="157"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="159"/>
         <source>no</source>
         <translation>non</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="192"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="194"/>
         <source>Distribution</source>
         <translation>Distribution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="217"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="219"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="223"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="225"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="238"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="240"/>
         <source>Distribution parameters</source>
         <translation>Paramètres de la distribution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="249"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="251"/>
         <source>Mean</source>
         <translation>Moyenne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="250"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="252"/>
         <source>Standard deviation</source>
         <translation>Écart type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="251"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="253"/>
         <source>Skewness</source>
         <translation>Asymétrie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="252"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="254"/>
         <source>Kurtosis</source>
         <translation>Aplatissement</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="272"/>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="280"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="274"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="282"/>
         <source>-</source>
         <translation>-</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="301"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="303"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="312"/>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="323"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="314"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="325"/>
         <source>Q-Q Plot</source>
         <translation>Q-Q Plot</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="313"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="315"/>
         <source>Data quantiles</source>
         <translation>Quantiles des données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="314"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="316"/>
         <source>%1 theoretical quantiles</source>
         <translation>Quantiles théoriques de %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="333"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="335"/>
         <source>Summary</source>
         <translation>Résumé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="335"/>
+        <location filename="../lib/src/view/InferenceResultWindow.cxx" line="337"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -878,79 +884,84 @@
 <context>
     <name>OTGUI::InferenceResultWizard</name>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="83"/>
-        <source>Inference analyse</source>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="78"/>
+        <source>Inference analyses results</source>
+        <translation>Résultats d&apos;inférences</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="85"/>
+        <source>Inference analysis</source>
         <translation>Inférence</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="98"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="100"/>
         <source>Variable</source>
         <translation>Variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="111"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="113"/>
         <source>Accepted distributions</source>
         <translation>Distributions acceptées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="132"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="134"/>
         <source>Selected distribution parameters</source>
         <translation>Paramètres de la distribution sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="198"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="200"/>
         <source>The selected analysis does not contain accepted distributions</source>
         <translation>L&apos;analyse sélectionnée ne contient pas de distributions acceptées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="200"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="202"/>
         <source>No available inference result in the current study</source>
         <translation>Pas de résultat d&apos;inférence dans l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="212"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="214"/>
         <source>Distributions</source>
         <translation>Distributions</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="212"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="214"/>
         <source>p-value</source>
         <translation>p-valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="302"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="304"/>
         <source>Moments</source>
         <translation>Moments</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="306"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="308"/>
         <source>Mean</source>
         <translation>Moyenne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="307"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="309"/>
         <source>Standard deviation</source>
         <translation>Écart type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="308"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="310"/>
         <source>Skewness</source>
         <translation>Asymétrie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="309"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="311"/>
         <source>Kurtosis</source>
         <translation>Aplatissement</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="325"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="327"/>
         <source>Native parameters</source>
         <translation>Paramètres natifs</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="342"/>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="350"/>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="366"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="344"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="352"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="368"/>
         <source>-</source>
         <translation>-</translation>
     </message>
@@ -958,17 +969,22 @@
 <context>
     <name>OTGUI::InferenceWizard</name>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="161"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="91"/>
+        <source>Inference</source>
+        <translation>Inférence</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="163"/>
         <source>Level</source>
         <translation>Niveau</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="230"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="232"/>
         <source>Select at least one variable</source>
         <translation>Sélectionner au moins une variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="259"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="261"/>
         <source>At least one distribution must be tested for the selected variable &apos;%1&apos;</source>
         <translation>Au moins une distribution doit être testée pour la variable sélectionnée &apos;%1&apos;</translation>
     </message>
@@ -1845,7 +1861,7 @@ extremum</source>
     <message>
         <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="31"/>
         <source>Outputs to analyse</source>
-        <translation>Sortie à analyser</translation>
+        <translation>Sorties à analyser</translation>
     </message>
     <message>
         <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="48"/>
@@ -2166,17 +2182,17 @@ extremum</source>
         <translation>Graine</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ReliabilityAnalysisWizard.cxx" line="172"/>
+        <location filename="../lib/src/view/ReliabilityAnalysisWizard.cxx" line="178"/>
         <source>Please select at least one stop criteria</source>
         <translation>Sélectionner au moins un critère d&apos;arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ReliabilityAnalysisWizard.cxx" line="176"/>
+        <location filename="../lib/src/view/ReliabilityAnalysisWizard.cxx" line="182"/>
         <source>The maximum time must not be null</source>
         <translation>Le temps maximum ne doit pas être nul</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ReliabilityAnalysisWizard.cxx" line="179"/>
+        <location filename="../lib/src/view/ReliabilityAnalysisWizard.cxx" line="185"/>
         <source>The maximum calls can not be inferior to the block size</source>
         <translation>Le nombre d&apos;appels ne peut pas être inférieur à la taille de bloc</translation>
     </message>
@@ -2294,22 +2310,22 @@ extremum</source>
         <translation>Taille d&apos;échantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="295"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="294"/>
         <source>At least one output must be selected</source>
         <translation>Au moins une sortie doit être sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="302"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="301"/>
         <source>Please select at least one stop criteria</source>
         <translation>Sélectionner au moins un critère d&apos;arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="306"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="305"/>
         <source>The maximum time must not be null</source>
         <translation>Le temps maximum ne doit pas être nul</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="309"/>
+        <location filename="../lib/src/view/SensitivityAnalysisWizard.cxx" line="308"/>
         <source>The maximum calls can not be inferior to: block_size*(number_of_inputs + 2)</source>
         <translation>Le nombre d&apos;appels ne peut pas être inférieur à : taille_bloc*(nombre_entrées + 2) </translation>
     </message>

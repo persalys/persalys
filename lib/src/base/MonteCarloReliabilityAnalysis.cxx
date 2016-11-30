@@ -101,7 +101,7 @@ void MonteCarloReliabilityAnalysis::run()
                                         graph.getDrawables()[1].getData(),
                                         graph.getDrawables()[2].getData());
 
-  result_.setElapsedTime((float)data.elapsedTime_/CLOCKS_PER_SEC);
+  result_.elapsedTime_ = (float)data.elapsedTime_/CLOCKS_PER_SEC;
 
   function.disableHistory();
 

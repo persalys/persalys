@@ -34,23 +34,25 @@ LimitState::LimitState()
 
 
 /* Constructor with parameters */
-LimitState::LimitState(const String & name, const PhysicalModel & physicalModel,
-                       const String & outputName,
-                       const OT::ComparisonOperator & comparisonOperator, const double & threshold)
+LimitState::LimitState(const String& name,
+                       const PhysicalModel& physicalModel,
+                       const String& outputName,
+                       const ComparisonOperator& comparisonOperator,
+                       const double& threshold)
   : TypedInterfaceObject<LimitStateImplementation>(new LimitStateImplementation(name, physicalModel, outputName, comparisonOperator, threshold))
 {
 }
 
 
 /* Default constructor */
-LimitState::LimitState(const LimitStateImplementation & implementation)
+LimitState::LimitState(const LimitStateImplementation& implementation)
   : TypedInterfaceObject<LimitStateImplementation>(implementation.clone())
 {
 }
 
 
 /* Constructor from implementation */
-LimitState::LimitState(const Implementation & p_implementation)
+LimitState::LimitState(const Implementation& p_implementation)
   : TypedInterfaceObject<LimitStateImplementation>(p_implementation)
 {
   // Initialize any other class members here
@@ -59,7 +61,7 @@ LimitState::LimitState(const Implementation & p_implementation)
 
 
 /* Constructor from implementation pointer */
-LimitState::LimitState(LimitStateImplementation * p_implementation)
+LimitState::LimitState(LimitStateImplementation* p_implementation)
   : TypedInterfaceObject<LimitStateImplementation>(p_implementation)
 {
   // Initialize any other class members here
@@ -67,13 +69,13 @@ LimitState::LimitState(LimitStateImplementation * p_implementation)
 }
 
 
-void LimitState::addObserver(Observer * observer)
+void LimitState::addObserver(Observer* observer)
 {
   getImplementation()->addObserver(observer);
 }
 
 
-void LimitState::blockNotification(bool block, const String & notBlockedMessage)
+void LimitState::blockNotification(bool block, const String& notBlockedMessage)
 {
   getImplementation()->blockNotification(block, notBlockedMessage);
 }
@@ -85,19 +87,13 @@ PhysicalModel LimitState::getPhysicalModel() const
 }
 
 
-void LimitState::setPhysicalModel(const PhysicalModel & physicalModel)
-{
-  getImplementation()->setPhysicalModel(physicalModel);
-}
-
-
 String LimitState::getOutputName() const
 {
   return getImplementation()->getOutputName();
 }
 
 
-void LimitState::setOutputName(const String & outputName)
+void LimitState::setOutputName(const String& outputName)
 {
   getImplementation()->setOutputName(outputName);
 }
@@ -109,7 +105,7 @@ ComparisonOperator LimitState::getOperator() const
 }
 
 
-void LimitState::setOperator(const ComparisonOperator & comparisonOperator)
+void LimitState::setOperator(const ComparisonOperator& comparisonOperator)
 {
   getImplementation()->setOperator(comparisonOperator);
 }
@@ -121,7 +117,7 @@ double LimitState::getThreshold() const
 }
 
 
-void LimitState::setThreshold(const double & threshold)
+void LimitState::setThreshold(const double& threshold)
 {
   getImplementation()->setThreshold(threshold);
 }
@@ -140,14 +136,14 @@ String LimitState::getPythonScript() const
 
 
 /* Method save() stores the object through the StorageManager */
-void LimitState::save(Advocate & adv) const
+void LimitState::save(Advocate& adv) const
 {
   getImplementation()->save(adv);
 }
 
 
 /* Method load() reloads the object from the StorageManager */
-void LimitState::load(Advocate & adv)
+void LimitState::load(Advocate& adv)
 {
   getImplementation()->load(adv);
 }

@@ -162,7 +162,7 @@ void MonteCarloAnalysis::run()
     dataAnalysis.setLevelConfidenceInterval(levelConfidenceInterval_);
     dataAnalysis.run();
     result_ = dataAnalysis.getResult();
-    result_.setElapsedTime((float)elapsedTime / CLOCKS_PER_SEC);
+    result_.elapsedTime_ = (float)elapsedTime / CLOCKS_PER_SEC;
 
     notify("analysisFinished");
   }

@@ -13,7 +13,26 @@ physicalModel : :class:`~otguibase.PhysicalModel`
 fileName : str
     Name of a data file to load
 columns : sequence of int
-    Indices of columns in files to consider"
+    Indices of columns in files to consider
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+>>> ot.RandomGenerator.SetSeed(0)
+
+Create the model:
+
+>>> X0 = otguibase.Input('X0')
+>>> X1 = otguibase.Input('X1')
+>>> Y0 = otguibase.Output('Y0', 0, '', 'sin(X0)+8*X1')
+>>> model = otguibase.AnalyticalPhysicalModel('aModelPhys', [X0, X1], [Y0])
+
+Create the design of experiment:
+
+>>> filename = 'normal.csv'
+>>> ot.Normal(3).getSample(10).exportToCSVFile(filename)
+>>> aDesign = otguibase.FromFileDesignOfExperiment('aDesign', model, filename, [0, 2])"
 
 // ---------------------------------------------------------------------
 
@@ -67,5 +86,5 @@ columns : :py:class:`openturns.Indices`
 
 Parameters
 ----------
-columns : :py:class:`openturns.Indices`
+columns : sequence of int
    Columns of the inputs"
