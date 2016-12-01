@@ -75,6 +75,18 @@ bool Analysis::isReliabilityAnalysis() const
 }
 
 
+String Analysis::getErrorMessage() const
+{
+  return getImplementation()->getErrorMessage();
+}
+
+
+void Analysis::setErrorMessage(const String& errorMessage)
+{
+  getImplementation()->setErrorMessage(errorMessage);
+}
+
+
 void Analysis::run()
 {
   getImplementation()->run();

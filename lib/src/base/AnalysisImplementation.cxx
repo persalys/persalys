@@ -28,6 +28,8 @@ namespace OTGUI {
 AnalysisImplementation::AnalysisImplementation()
   : PersistentObject()
   , Observable()
+  , errorMessage_("")
+  , isReliabilityAnalysis_(false)
 {
 }
 
@@ -36,6 +38,7 @@ AnalysisImplementation::AnalysisImplementation()
 AnalysisImplementation::AnalysisImplementation(const String & name)
   : PersistentObject()
   , Observable()
+  , errorMessage_("")
   , isReliabilityAnalysis_(false)
 {
   setName(name);
@@ -84,6 +87,18 @@ void AnalysisImplementation::run()
 }
 
 
+String AnalysisImplementation::getErrorMessage() const
+{
+  return errorMessage_;
+}
+
+
+void AnalysisImplementation::setErrorMessage(const String& errorMessage)
+{
+  errorMessage_ = errorMessage;
+}
+
+
 bool AnalysisImplementation::analysisLaunched() const
 {
   return false;
@@ -100,6 +115,7 @@ String AnalysisImplementation::getPythonScript() const
 void AnalysisImplementation::save(Advocate & adv) const
 {
   PersistentObject::save(adv);
+  adv.saveAttribute("errorMessage_", errorMessage_);
   adv.saveAttribute("isReliabilityAnalysis_", isReliabilityAnalysis_);
   adv.saveAttribute("interestVariables_", interestVariables_);
 }
@@ -109,6 +125,7 @@ void AnalysisImplementation::save(Advocate & adv) const
 void AnalysisImplementation::load(Advocate & adv)
 {
   PersistentObject::load(adv);
+  adv.loadAttribute("errorMessage_", errorMessage_);
   adv.loadAttribute("isReliabilityAnalysis_", isReliabilityAnalysis_);
   adv.loadAttribute("interestVariables_", interestVariables_);
 }
