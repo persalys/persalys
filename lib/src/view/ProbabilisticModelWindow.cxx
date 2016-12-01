@@ -260,9 +260,14 @@ void ProbabilisticModelWindow::updateStochasticInputsTable()
 {
   delete inputTableModel_;
   inputTableModel_ = new InputTableProbabilisticModel(physicalModel_, inputTableView_);
+
   inputTableView_->setModel(inputTableModel_);
   for (int i=0; i<inputTableModel_->rowCount(); ++i)
     inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
+
+  const bool headerViewIsChecked = (physicalModel_.hasStochasticInputs() && (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize()));
+  inputTableHeaderView_->setChecked(headerViewIsChecked);
+    
   connect(inputTableModel_, SIGNAL(distributionChanged(const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
   connect(inputTableModel_, SIGNAL(distributionsChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
