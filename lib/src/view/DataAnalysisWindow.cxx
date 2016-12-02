@@ -130,6 +130,7 @@ void DataAnalysisWindow::buildInterface()
     }
     catch (std::exception & ex)
     {
+      qDebug() << "Error: In DataAnalysisWindow::buildInterface when creating the MomentsEstimatesTableGroupBox " << ex.what();
     }
 
     // quantiles
@@ -332,9 +333,9 @@ QWidget* DataAnalysisWindow::getBoxPlotWidget()
   {
     PlotWidget * plot = new PlotWidget("boxplot");
 
-    const double median = result_.getMedian()[i];
-    const double Q1 = result_.getFirstQuartile()[i];
-    const double Q3 = result_.getThirdQuartile()[i];
+    const double median = result_.getMedian()[i][0];
+    const double Q1 = result_.getFirstQuartile()[i][0];
+    const double Q3 = result_.getThirdQuartile()[i][0];
     plot->plotBoxPlot(median, Q1, Q3, Q1 - 1.5*(Q3-Q1), Q3 + 1.5*(Q3-Q1), result_.getOutliers()[i]);
     plot->setTitle(tr("Box plot:") + " " + variablesNames[i]);
     plot->setAxisTitle(QwtPlot::yLeft, variablesAxisTitles[i]);
@@ -378,8 +379,8 @@ void DataAnalysisWindow::updateSpinBoxes(int indexOutput)
   SignalBlocker blocker(quantileSpinBox_);
   if (result_.getMin().getSize() && result_.getMax().getSize())
   {
-    const double min = result_.getMin()[indexOutput];
-    const double max = result_.getMax()[indexOutput];
+    const double min = result_.getMin()[indexOutput][0];
+    const double max = result_.getMax()[indexOutput][0];
 
     quantileSpinBox_->setMinimum(min);
     quantileSpinBox_->setMaximum(max);

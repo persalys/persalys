@@ -62,23 +62,6 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
-  static OT::NumericalPoint ComputeCoefficientOfVariation(const OT::NumericalSample & sample,
-                                                          const OT::NumericalPoint & empiricalMean,
-                                                          const OT::NumericalPoint & empiricalStd);
-  static OT::Interval ComputeMeanConfidenceInterval(const OT::NumericalSample & sample,
-                                                    const OT::NumericalPoint & empiricalMean,
-                                                    const OT::NumericalPoint & empiricalStd,
-                                                    const double level);
-  static OT::Interval ComputeStdConfidenceInterval(const OT::NumericalSample & sample,
-                                                   const OT::NumericalPoint & empiricalMean,
-                                                   const double level);
-  static DataAnalysisResult::NumericalPointCollection ComputeOutliers(const OT::NumericalSample & sample,
-                                                                      const OT::NumericalPoint & firstQuartile,
-                                                                      const OT::NumericalPoint & thirdQuartile);
-  static void ComputeFittedDistributionPDF_CDF(const OT::NumericalSample & sample,
-                                        DataSample::NumericalSampleCollection & pdf,
-                                        DataSample::NumericalSampleCollection & cdf);
-
 private:
   bool isConfidenceIntervalRequired_;
   double levelConfidenceInterval_;

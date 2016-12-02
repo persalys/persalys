@@ -44,9 +44,28 @@ DataAnalysisResult::DataAnalysisResult()
 
 DataAnalysisResult::DataAnalysisResult(const NumericalSample& inputSample, const NumericalSample& outputSample)
   : DataSample(inputSample, outputSample)
+  , min_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
+  , max_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
+  , mean_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
+  , coefficientOfVariation_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
+  , median_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
+  , standardDeviation_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
+  , variance_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
+  , skewness_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
+  , kurtosis_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
+  , firstQuartile_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
+  , thirdQuartile_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
+  , meanConfidenceInterval_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
+  , stdConfidenceInterval_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
+  , outliers_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
+  , pdf_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
+  , cdf_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
   , elapsedTime_(0.)
 {
-
+  meanConfidenceInterval_.setFiniteLowerBound(Interval::BoolCollection(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0), false));
+  meanConfidenceInterval_.setFiniteUpperBound(Interval::BoolCollection(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0), false));
+  stdConfidenceInterval_.setFiniteLowerBound(Interval::BoolCollection(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0), false));
+  stdConfidenceInterval_.setFiniteUpperBound(Interval::BoolCollection(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0), false));
 }
 
 
@@ -56,67 +75,67 @@ DataAnalysisResult* DataAnalysisResult::clone() const
 }
 
 
-NumericalPoint DataAnalysisResult::getMin() const
+DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getMin() const
 {
   return min_;
 }
 
 
-NumericalPoint DataAnalysisResult::getMax() const
+DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getMax() const
 {
   return max_;
 }
 
 
-NumericalPoint DataAnalysisResult::getMean() const
+DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getMean() const
 {
   return mean_;
 }
 
 
-NumericalPoint DataAnalysisResult::getCoefficientOfVariation() const
+DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getCoefficientOfVariation() const
 {
   return coefficientOfVariation_;
 }
 
 
-NumericalPoint DataAnalysisResult::getMedian() const
+DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getMedian() const
 {
   return median_;
 }
 
 
-NumericalPoint DataAnalysisResult::getStandardDeviation() const
+DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getStandardDeviation() const
 {
   return standardDeviation_;
 }
 
 
-NumericalPoint DataAnalysisResult::getVariance() const
+DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getVariance() const
 {
   return variance_;
 }
 
 
-NumericalPoint DataAnalysisResult::getSkewness() const
+DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getSkewness() const
 {
   return skewness_;
 }
 
 
-NumericalPoint DataAnalysisResult::getKurtosis() const
+DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getKurtosis() const
 {
   return kurtosis_;
 }
 
 
-NumericalPoint DataAnalysisResult::getFirstQuartile() const
+DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getFirstQuartile() const
 {
   return firstQuartile_;
 }
 
 
-NumericalPoint DataAnalysisResult::getThirdQuartile() const
+DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getThirdQuartile() const
 {
   return thirdQuartile_;
 }
@@ -155,24 +174,6 @@ DataSample::NumericalSampleCollection DataAnalysisResult::getCDF() const
 double DataAnalysisResult::getElapsedTime() const
 {
   return elapsedTime_;
-}
-
-
-bool DataAnalysisResult::isValid() const
-{
-  UnsignedInteger i(min_.getSize());
-  i *= max_.getSize();
-  i *= mean_.getSize();
-  i *= median_.getSize();
-  i *= standardDeviation_.getSize();
-  i *= coefficientOfVariation_.getSize();
-  i *= variance_.getSize();
-  i *= skewness_.getSize();
-  i *= kurtosis_.getSize();
-  i *= firstQuartile_.getSize();
-  i *= thirdQuartile_.getSize();
-
-  return i != 0 && i == std::pow(min_.getSize(), 11);
 }
 
 

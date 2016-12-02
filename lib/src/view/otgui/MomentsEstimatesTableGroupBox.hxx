@@ -38,7 +38,7 @@ public:
                                 QWidget* parent=0);
 
 protected:
-  QWidget * getMomentsEstimateTableView(const DataAnalysisResult & result, const int outputIndex);
+  QWidget * getMomentsEstimateTableView(const DataAnalysisResult& result, const OT::UnsignedInteger outputIndex);
 
 public slots:
   void setCurrentIndexStackedWidget(int index);

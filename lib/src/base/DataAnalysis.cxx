@@ -24,6 +24,7 @@
 #include "openturns/ChiSquare.hxx"
 #include "openturns/KernelSmoothing.hxx"
 #include "openturns/PersistentObjectFactory.hxx"
+#include "openturns/SpecFunc.hxx"
 
 using namespace OT;
 
@@ -61,58 +62,111 @@ void DataAnalysis::run()
 {
   const NumericalSample sample(getDesignOfExperiment().getSample());
 
-  if (sample.getSize())
+  if (!sample.getSize())
+    throw InvalidDimensionException(HERE) << "The sample is empty";
+
+  result_ = DataAnalysisResult(getDesignOfExperiment().getInputSample(), getDesignOfExperiment().getOutputSample());
+
+  for (UnsignedInteger i=0; i<sample.getDimension(); ++i)
   {
-    result_.setInputSample(getDesignOfExperiment().getInputSample());
-    result_.setOutputSample(getDesignOfExperiment().getOutputSample());
-    result_.min_ = sample.getMin();
-    result_.max_ = sample.getMax();
-    result_.mean_ = sample.computeMean();
-    result_.median_ = sample.computeMedian();
-    result_.standardDeviation_ = sample.computeStandardDeviationPerComponent();
-    result_.variance_ = sample.computeVariance();
-    result_.skewness_ = NumericalPoint(sample.getDimension(), std::numeric_limits<double>::max());
+    // min/max
+    result_.min_[i] = sample.getMarginal(i).getMin();
+    result_.max_[i] = sample.getMarginal(i).getMax();
+
+    // moments
+    result_.mean_[i] = sample.getMarginal(i).computeMean();
+    result_.median_[i] = sample.getMarginal(i).computeMedian();
+
     try
     {
-      if (!(sample.getSize() < 2))
-        result_.skewness_ = sample.computeSkewness();
+      result_.standardDeviation_[i] = sample.getMarginal(i).computeStandardDeviationPerComponent();
+      if (std::abs(result_.mean_[i][0]) > SpecFunc::Precision)
+        result_.coefficientOfVariation_[i] = result_.standardDeviation_[i] / sqrt(sample.getSize()) / std::abs(result_.mean_[i][0]);
+      result_.variance_[i] = sample.getMarginal(i).computeVariance();
+      result_.skewness_[i] = sample.getMarginal(i).computeSkewness();
+      result_.kurtosis_[i] = sample.getMarginal(i).computeKurtosis();
     }
     catch (std::exception)
     {
       // nothing
     }
-    result_.kurtosis_ = NumericalPoint(sample.getDimension(), std::numeric_limits<double>::max());
+
+    // quartiles
+    result_.firstQuartile_[i] = sample.getMarginal(i).computeQuantilePerComponent(0.25);
+    result_.thirdQuartile_[i] = sample.getMarginal(i).computeQuantilePerComponent(0.75);
+
+    // mean Confidence Interval
+    if (isConfidenceIntervalRequired_ && result_.standardDeviation_[i].getDimension())
+    {
+      const Normal X(0,1);
+      const double f = X.computeQuantile((1-levelConfidenceInterval_)/2, true)[0];
+      double delta(f * result_.standardDeviation_[i][0] / sqrt(sample.getSize()));
+
+      NumericalPoint lowerBounds(result_.meanConfidenceInterval_.getLowerBound());
+      NumericalPoint upperBounds(result_.meanConfidenceInterval_.getUpperBound());
+      lowerBounds[i] = result_.mean_[i][0] - delta;
+      upperBounds[i] = result_.mean_[i][0] + delta;
+      result_.meanConfidenceInterval_.setLowerBound(lowerBounds);
+      result_.meanConfidenceInterval_.setUpperBound(upperBounds);
+
+      Interval::BoolCollection finiteLowerBounds(result_.meanConfidenceInterval_.getFiniteLowerBound());
+      Interval::BoolCollection finiteUpperBounds(result_.meanConfidenceInterval_.getFiniteUpperBound());
+      finiteLowerBounds[i] = true;
+      finiteUpperBounds[i] = true;
+      result_.meanConfidenceInterval_.setFiniteLowerBound(finiteLowerBounds);
+      result_.meanConfidenceInterval_.setFiniteUpperBound(finiteUpperBounds);
+    }
+    // std Confidence Interval
+    if (isConfidenceIntervalRequired_ && result_.variance_[i].getDimension() && sample.getSize() > 1)
+    {
+      // TODO : use Normal Distribution?
+      const UnsignedInteger nbSimu = sample.getSize();
+      const ChiSquare X(nbSimu-1);
+      // low
+      const double f1 = X.computeQuantile((1-levelConfidenceInterval_)/2, true)[0];
+      // up
+      const double f2 = X.computeQuantile((1-levelConfidenceInterval_)/2, false)[0];
+
+      NumericalPoint lowerBounds(result_.stdConfidenceInterval_.getLowerBound());
+      NumericalPoint upperBounds(result_.stdConfidenceInterval_.getUpperBound());
+
+      //low
+      lowerBounds[i] = sqrt((nbSimu - 1) * result_.variance_[i][0] / f1);
+      //up
+      upperBounds[i] = sqrt((nbSimu - 1) * result_.variance_[i][0] / f2);
+
+      result_.stdConfidenceInterval_.setLowerBound(lowerBounds);
+      result_.stdConfidenceInterval_.setUpperBound(upperBounds);
+
+      Interval::BoolCollection finiteLowerBounds(result_.stdConfidenceInterval_.getFiniteLowerBound());
+      Interval::BoolCollection finiteUpperBounds(result_.stdConfidenceInterval_.getFiniteUpperBound());
+      finiteLowerBounds[i] = true;
+      finiteUpperBounds[i] = true;
+      result_.stdConfidenceInterval_.setFiniteLowerBound(finiteLowerBounds);
+      result_.stdConfidenceInterval_.setFiniteUpperBound(finiteUpperBounds);
+    }
+
+    // outliers
+    const double lowerBound(result_.firstQuartile_[i][0] - 1.5 * (result_.thirdQuartile_[i][0]-result_.firstQuartile_[i][0]));
+    const double upperBound(result_.thirdQuartile_[i][0] + 1.5 * (result_.thirdQuartile_[i][0]-result_.firstQuartile_[i][0]));
+    for (UnsignedInteger j=0; j<sample.getSize(); ++j)
+      if (sample[j][i] < lowerBound || sample[j][i] > upperBound)
+        result_.outliers_[i].add(sample[j][i]);
+
+    // pdf/cdf
     try
     {
-      if (!(sample.getSize() < 3))
-        result_.kurtosis_ = sample.computeKurtosis();
+      KernelSmoothing gaussianKernel;
+      Distribution fittedDistribution(gaussianKernel.build(sample.getMarginal(i)));
+      result_.pdf_[i] = fittedDistribution.drawPDF().getDrawable(0).getData();
+      result_.cdf_[i] = fittedDistribution.drawCDF().getDrawable(0).getData();
     }
     catch (std::exception)
     {
-      // nothing
     }
-    result_.firstQuartile_ = sample.computeQuantilePerComponent(0.25);
-    result_.thirdQuartile_ = sample.computeQuantilePerComponent(0.75);
-    result_.coefficientOfVariation_ = ComputeCoefficientOfVariation(sample, result_.mean_, result_.standardDeviation_);
-    if (isConfidenceIntervalRequired_)
-    {
-      result_.meanConfidenceInterval_ = ComputeMeanConfidenceInterval(sample, result_.mean_, result_.standardDeviation_, levelConfidenceInterval_);
-      result_.stdConfidenceInterval_ = ComputeStdConfidenceInterval(sample, result_.variance_, levelConfidenceInterval_);
-    }
-    result_.outliers_ = ComputeOutliers(sample, result_.firstQuartile_, result_.thirdQuartile_);
-
-    DataSample::NumericalSampleCollection pdf;
-    DataSample::NumericalSampleCollection cdf;
-    ComputeFittedDistributionPDF_CDF(sample, pdf, cdf);
-    result_.pdf_ = pdf;
-    result_.cdf_ = cdf;
-
-    notify("analysisFinished");
   }
-  else
-  {
-    throw InvalidDimensionException(HERE) << "Impossible to analyse an empty sample";
-  }
+
+  notify("analysisFinished");
 }
 
 
@@ -143,131 +197,6 @@ void DataAnalysis::setLevelConfidenceInterval(const double level)
 DataAnalysisResult DataAnalysis::getResult() const
 {
   return result_;
-}
-
-
-NumericalPoint DataAnalysis::ComputeCoefficientOfVariation(const NumericalSample & sample,
-                                                           const NumericalPoint & empiricalMean,
-                                                           const NumericalPoint & empiricalStd)
-{
-  if (empiricalMean.getSize() != empiricalStd.getSize())
-    throw InvalidDimensionException(HERE) << "In computeCoefficientOfVariation: The mean and the standard deviation must have the same size";
-
-  if (empiricalMean.getSize() != sample.getDimension())
-    throw InvalidDimensionException(HERE) << "In computeCoefficientOfVariation: The mean must have the same dimension as the sample";
-
-  NumericalPoint coefficientOfVariation(sample.getDimension());
-
-  for (UnsignedInteger i=0; i<sample.getDimension(); ++i)
-    coefficientOfVariation[i] = empiricalStd[i] / sqrt(sample.getSize()) / std::abs(empiricalMean[i]);
-
-  return coefficientOfVariation;
-}
-
-
-Interval DataAnalysis::ComputeMeanConfidenceInterval(const NumericalSample & sample,
-                                                     const NumericalPoint & empiricalMean,
-                                                     const NumericalPoint & empiricalStd,
-                                                     const double level)
-{
-  if (empiricalMean.getSize() != empiricalStd.getSize())
-    throw InvalidDimensionException(HERE) << "In computeCoefficientOfVariation: The mean and the standard deviation must have the same size";
-
-  if (empiricalMean.getSize() != sample.getDimension())
-    throw InvalidDimensionException(HERE) << "In computeMeanConfidenceInterval: The mean must have the same dimension as the sample";
-
-  Interval meanConfidenceInterval(sample.getDimension());
-
-  const Normal X(0,1);
-  const double f = X.computeQuantile((1-level)/2, true)[0];
-  NumericalPoint delta(f * empiricalStd / sqrt(sample.getSize()));
-
-  meanConfidenceInterval.setLowerBound(empiricalMean - delta);
-  meanConfidenceInterval.setUpperBound(empiricalMean + delta);
-
-  return meanConfidenceInterval;
-}
-
-
-Interval DataAnalysis::ComputeStdConfidenceInterval(const NumericalSample & sample,
-                                                    const NumericalPoint & variance,
-                                                    const double level)
-{
-  if (variance.getSize() != sample.getDimension())
-    throw InvalidDimensionException(HERE) << "In computeStdConfidenceInterval: The variance must have the same dimension as the sample";
-
-  Interval stdConfidenceInterval(sample.getDimension());
-
-  // TODO : use Normal Distribution?
-  const UnsignedInteger nbSimu = sample.getSize();
-  const ChiSquare X(nbSimu-1);
-  // low
-  const double f1 = X.computeQuantile((1-level)/2, true)[0];
-  // up
-  const double f2 = X.computeQuantile((1-level)/2, false)[0];
-
-  NumericalPoint lowerBounds(sample.getDimension());
-  NumericalPoint upperBounds(sample.getDimension());
-
-  for (UnsignedInteger i=0; i<sample.getDimension(); ++i)
-  {
-    //low
-    lowerBounds[i] = sqrt((nbSimu - 1) * variance[i] / f1);
-    //up
-    upperBounds[i] = sqrt((nbSimu - 1) * variance[i] / f2);
-  }
-  stdConfidenceInterval.setLowerBound(lowerBounds);
-  stdConfidenceInterval.setUpperBound(upperBounds);
-
-  return stdConfidenceInterval;
-}
-
-
-
-
-DataAnalysisResult::NumericalPointCollection DataAnalysis::ComputeOutliers(const NumericalSample & sample,
-                                                                           const NumericalPoint & firstQuartile,
-                                                                           const NumericalPoint & thirdQuartile)
-{
-  if (firstQuartile.getSize() != thirdQuartile.getSize())
-    throw InvalidDimensionException(HERE) << "In computeOutliers: The first quartile must have the same dimension as the third quartile";
-
-  if (firstQuartile.getSize() != sample.getDimension())
-    throw InvalidDimensionException(HERE) << "In computeOutliers: The third quartile must have the same dimension as the sample";
-
-  DataAnalysisResult::NumericalPointCollection outliers(sample.getDimension());
-
-  const NumericalPoint lowerBound(firstQuartile - 1.5 * (thirdQuartile-firstQuartile));
-  const NumericalPoint upperBound(thirdQuartile + 1.5 * (thirdQuartile-firstQuartile));
-
-  for (UnsignedInteger i=0; i<sample.getSize(); ++i)
-    for (UnsignedInteger j=0; j<sample.getDimension(); ++j)
-      if (sample[i][j] < lowerBound[j] || sample[i][j] > upperBound[j])
-        outliers[j].add(sample[i][j]);
-
-  return outliers;
-}
-
-
-void DataAnalysis::ComputeFittedDistributionPDF_CDF(const NumericalSample & sample,
-                                                    DataSample::NumericalSampleCollection & pdf,
-                                                    DataSample::NumericalSampleCollection & cdf)
-{
-  KernelSmoothing gaussianKernel;
-  for (UnsignedInteger i=0; i<sample.getDimension(); ++i)
-  {
-    try
-    {
-      Distribution fittedDistribution(gaussianKernel.build(sample.getMarginal(i)));
-      pdf.add(fittedDistribution.drawPDF().getDrawable(0).getData());
-      cdf.add(fittedDistribution.drawCDF().getDrawable(0).getData());
-    }
-    catch (std::exception)
-    {
-      pdf.add(NumericalSample());
-      cdf.add(NumericalSample());
-    }
-  }
 }
 
 

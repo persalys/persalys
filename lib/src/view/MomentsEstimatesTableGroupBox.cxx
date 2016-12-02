@@ -39,32 +39,20 @@ MomentsEstimatesTableGroupBox::MomentsEstimatesTableGroupBox(const DataAnalysisR
   , isConfidenceIntervalRequired_(isConfidenceIntervalRequired)
   , levelConfidenceInterval_(levelConfidenceInterval)
 {
-  if (result.isValid())
-  {
-    QVBoxLayout * estimatesGroupBoxLayout = new QVBoxLayout(this);
-    stackedWidget_ = new QStackedWidget;
+  QVBoxLayout * estimatesGroupBoxLayout = new QVBoxLayout(this);
+  stackedWidget_ = new QStackedWidget;
 
-    for (UnsignedInteger variableIndex=0; variableIndex<result.getMean().getSize(); ++variableIndex)
-      stackedWidget_->addWidget(getMomentsEstimateTableView(result, variableIndex));
+  for (UnsignedInteger variableIndex=0; variableIndex<result.getMean().getSize(); ++variableIndex)
+    stackedWidget_->addWidget(getMomentsEstimateTableView(result, variableIndex));
 
-    estimatesGroupBoxLayout->addWidget(stackedWidget_);
-  }
-  else
-  {
-    throw InvalidArgumentException(HERE) << "Can not build MomentsEstimatesTableGroupBox: the result is invalid";
-  }
+  estimatesGroupBoxLayout->addWidget(stackedWidget_);
 }
 
 
-QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const DataAnalysisResult & result, const int variableIndex)
+QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const DataAnalysisResult& result, const UnsignedInteger variableIndex)
 {
   const int nbColumns = isConfidenceIntervalRequired_ ? 4 : 2;
   const int nbRows = isConfidenceIntervalRequired_ ? 9 : 8;
-  const bool meanIntervalRequired = isConfidenceIntervalRequired_ &&
-                                    result.getMeanConfidenceInterval().getDimension() == result.getMean().getSize();
-
-  const bool stdIntervalRequired = isConfidenceIntervalRequired_ &&
-                                   result.getStdConfidenceInterval().getDimension() == result.getMean().getSize();
 
   ResizableTableViewWithoutScrollBar * momentsEstimationsTableView = new ResizableTableViewWithoutScrollBar;
   momentsEstimationsTableView->horizontalHeader()->hide();
@@ -97,42 +85,61 @@ QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const DataAn
     momentsEstimationsTable->setNotEditableHeaderItem(++row, 2, tr("Lower bound"));
     momentsEstimationsTable->setNotEditableHeaderItem(row, 3, tr("Upper bound"));
   }
+
+  // moments values
+
   // Mean
-  momentsEstimationsTable->setNotEditableItem(++row, 1, result.getMean()[variableIndex]);
+  momentsEstimationsTable->setNotEditableItem(++row, 1, result.getMean()[variableIndex][0]);
 
-  if (meanIntervalRequired)
+  if (result.getMeanConfidenceInterval().getFiniteLowerBound()[variableIndex])
   {
-    const double meanCILowerBound = result.getMeanConfidenceInterval().getLowerBound()[variableIndex];
-    momentsEstimationsTable->setNotEditableItem(row, 2, meanCILowerBound);
-    const double meanCIUpperBound = result.getMeanConfidenceInterval().getUpperBound()[variableIndex];
-    momentsEstimationsTable->setNotEditableItem(row, 3, meanCIUpperBound);
+    momentsEstimationsTable->setNotEditableItem(row, 2, result.getMeanConfidenceInterval().getLowerBound()[variableIndex]);
+    momentsEstimationsTable->setNotEditableItem(row, 3, result.getMeanConfidenceInterval().getUpperBound()[variableIndex]);
   }
+  else
+  {
+    momentsEstimationsTable->setNotEditableItem(row, 2, "-");
+    momentsEstimationsTable->setNotEditableItem(row, 3, "-");
+  }
+
   // Standard Deviation
-  momentsEstimationsTable->setNotEditableItem(++row, 1, result.getStandardDeviation()[variableIndex]);
+  if (result.getStandardDeviation()[variableIndex].getSize() > 0)
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result.getStandardDeviation()[variableIndex][0]);
+  else
+    momentsEstimationsTable->setNotEditableItem(++row, 1, "-");
 
-  if (stdIntervalRequired)
+  if (result.getStdConfidenceInterval().getFiniteLowerBound()[variableIndex])
   {
-    const double stdCILowerBound = result.getStdConfidenceInterval().getLowerBound()[variableIndex];
-    momentsEstimationsTable->setNotEditableItem(row, 2, stdCILowerBound);
-    const double stdCIUpperBound = result.getStdConfidenceInterval().getUpperBound()[variableIndex];
-    momentsEstimationsTable->setNotEditableItem(row, 3, stdCIUpperBound);
+    momentsEstimationsTable->setNotEditableItem(row, 2, result.getStdConfidenceInterval().getLowerBound()[variableIndex]);
+    momentsEstimationsTable->setNotEditableItem(row, 3, result.getStdConfidenceInterval().getUpperBound()[variableIndex]);
   }
+  else
+  {
+    momentsEstimationsTable->setNotEditableItem(row, 2, "-");
+    momentsEstimationsTable->setNotEditableItem(row, 3, "-");
+  }
+
   // Coefficient of variation
-  momentsEstimationsTable->setNotEditableItem(++row, 1, result.getCoefficientOfVariation()[variableIndex]);
+  if (result.getCoefficientOfVariation()[variableIndex].getSize() > 0)
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result.getCoefficientOfVariation()[variableIndex][0]);
+  else
+    momentsEstimationsTable->setNotEditableItem(++row, 1, "-");
   // Skewness
-  if (result.getSkewness()[variableIndex] == std::numeric_limits<double>::max())
-    momentsEstimationsTable->setNotEditableItem(++row, 1, "-");
+  if (result.getSkewness()[variableIndex].getSize() > 0)
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result.getSkewness()[variableIndex][0]);
   else
-    momentsEstimationsTable->setNotEditableItem(++row, 1, result.getSkewness()[variableIndex]);
+    momentsEstimationsTable->setNotEditableItem(++row, 1, "-");
   // Kurtosis
-  if (result.getKurtosis()[variableIndex] == std::numeric_limits<double>::max())
-    momentsEstimationsTable->setNotEditableItem(++row, 1, "-");
+  if (result.getKurtosis()[variableIndex].getSize() > 0)
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result.getKurtosis()[variableIndex][0]);
   else
-    momentsEstimationsTable->setNotEditableItem(++row, 1, result.getKurtosis()[variableIndex]);
+    momentsEstimationsTable->setNotEditableItem(++row, 1, "-");
   // First quartile
-  momentsEstimationsTable->setNotEditableItem(++row, 1, result.getFirstQuartile()[variableIndex]);
+  if (result.getFirstQuartile()[variableIndex].getSize() > 0)
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result.getFirstQuartile()[variableIndex][0]);
   // Third quartile
-  momentsEstimationsTable->setNotEditableItem(++row, 1, result.getThirdQuartile()[variableIndex]);
+  if (result.getThirdQuartile()[variableIndex].getSize() > 0)
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result.getThirdQuartile()[variableIndex][0]);
 
   // resize table
   int titleWidth = 0;
@@ -163,6 +170,7 @@ QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const DataAn
       momentsEstimationsTableView->setMinimumWidth(momentsEstimationsTableView->minimumWidth() + widthCorrection);
     }
   }
+
   return momentsEstimationsTableView;
 }
 
