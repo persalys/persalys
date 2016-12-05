@@ -19,7 +19,7 @@ results : sequence of :class:`~otguibase.FittingTestResult`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::InferenceResult::getFittingTestResultCollection
+%feature("docstring") OTGUI::InferenceResult::getFittingTestResultForVariable
 "Get the fitting test result of a variable.
 
 Parameters
