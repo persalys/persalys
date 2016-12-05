@@ -44,24 +44,19 @@ static Factory<FunctionalChaosAnalysis> RegisteredFactory;
 
 /* Default constructor */
 FunctionalChaosAnalysis::FunctionalChaosAnalysis()
-  : DesignOfExperimentAnalysis()
-  , isDistributionComputed_(false)
+  : MetaModelAnalysis()
   , chaosDegree_(2)
   , sparseChaos_(false)
-  , leaveOneOutValidation_(false)
 {
 }
 
 
 /* Constructor with parameters */
 FunctionalChaosAnalysis::FunctionalChaosAnalysis(const String & name, const DesignOfExperiment & designOfExperiment)
-  : DesignOfExperimentAnalysis(name, designOfExperiment)
-  , isDistributionComputed_(false)
+  : MetaModelAnalysis(name, designOfExperiment)
   , chaosDegree_(2)
   , sparseChaos_(false)
-  , leaveOneOutValidation_(false)
 {
-  setInterestVariables(designOfExperiment_.getOutputSample().getDescription());
 }
 
 
@@ -75,14 +70,6 @@ FunctionalChaosAnalysis* FunctionalChaosAnalysis::clone() const
 UnsignedInteger FunctionalChaosAnalysis::getChaosDegree() const
 {
   return chaosDegree_;
-}
-
-
-void FunctionalChaosAnalysis::setDesignOfExperiment(const DesignOfExperiment& designOfExperiment)
-{
-  isDistributionComputed_ = false;
-  polynomialFamilyCollection_.clear();
-  DesignOfExperimentAnalysis::setDesignOfExperiment(designOfExperiment);
 }
 
 
@@ -104,38 +91,10 @@ void FunctionalChaosAnalysis::setSparseChaos(const bool sparse)
 }
 
 
-bool FunctionalChaosAnalysis::isLeaveOneOutValidation() const
+void FunctionalChaosAnalysis::setDesignOfExperiment(const DesignOfExperiment& designOfExperiment)
 {
-  return leaveOneOutValidation_;
-}
-
-
-void FunctionalChaosAnalysis::setLeaveOneOutValidation(const bool validation)
-{
-  leaveOneOutValidation_ = validation;
-}
-
-
-ComposedDistribution FunctionalChaosAnalysis::getDistribution()
-{
-  if (!isDistributionComputed_)
-  {
-    if (designOfExperiment_.hasPhysicalModel() && designOfExperiment_.getPhysicalModel().hasStochasticInputs())
-    {
-      distribution_ = designOfExperiment_.getPhysicalModel().getComposedDistribution();
-    }
-    else
-    {
-      ComposedDistribution::DistributionCollection distributionCollection;
-      const NumericalPoint min(designOfExperiment_.getInputSample().getMin());
-      const NumericalPoint max(designOfExperiment_.getInputSample().getMax());
-      for (UnsignedInteger i=0; i<designOfExperiment_.getInputSample().getDimension(); ++i)
-        distributionCollection.add(Uniform(min[i], max[i]));
-      distribution_ = ComposedDistribution(distributionCollection);
-    }
-    isDistributionComputed_ = true;
-  }
-  return distribution_;
+  polynomialFamilyCollection_.clear();
+  MetaModelAnalysis::setDesignOfExperiment(designOfExperiment);
 }
 
 
@@ -147,7 +106,7 @@ OrthogonalProductPolynomialFactory::PolynomialFamilyCollection FunctionalChaosAn
     ComposedDistribution distribution(getDistribution());
 
     // adaptiveStrategy
-    for (UnsignedInteger i=0; i<designOfExperiment_.getInputSample().getDimension(); ++i)
+    for (UnsignedInteger i=0; i<distribution.getDimension(); ++i)
     {
       const Distribution marginal(distribution.getMarginal(i));
       const StandardDistributionPolynomialFactory factory(marginal);
@@ -160,79 +119,68 @@ OrthogonalProductPolynomialFactory::PolynomialFamilyCollection FunctionalChaosAn
 
 void FunctionalChaosAnalysis::run()
 {
+  // check
   if (designOfExperiment_.getInputSample().getSize()*designOfExperiment_.getOutputSample().getSize() == 0)
     throw InvalidArgumentException(HERE) << "The design of experiment must contains not empty input AND output samples";
+  if (designOfExperiment_.getInputSample().getSize() != designOfExperiment_.getOutputSample().getSize())
+    throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
   if (!getInterestVariables().getSize())
-    throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
+    throw InvalidDimensionException(HERE) << "The number of outputs to analyze must be superior to 0";
 
   // clear result
   result_ = FunctionalChaosAnalysisResult();
 
-  // get marginals
-  Indices indices;
-  for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
-  {
-    bool outputFound = false;
-    for (UnsignedInteger j=0; j<designOfExperiment_.getOutputSample().getDescription().getSize(); ++j)
-    {
-      if (designOfExperiment_.getOutputSample().getDescription()[j] == getInterestVariables()[i])
-      {
-        indices.add(j);
-        outputFound = true;
-        break;
-      }
-    }
-    if (!outputFound)
-      throw InvalidArgumentException(HERE) << "The output to analyse "  << getInterestVariables()[i] <<" is not an output of the model " << designOfExperiment_.getOutputSample().getDescription();
-  }
-
-  const UnsignedInteger inputDimension = designOfExperiment_.getInputSample().getDimension();
-  const UnsignedInteger outputDimension = getInterestVariables().getSize();
+  // get effective samples
+  NumericalSample effectiveInputSample(getEffectiveInputSample());
+  NumericalSample effectiveOutputSample(getEffectiveOutputSample());
 
   // check chaos degree
   if (!getSparseChaos())
   {
+    const UnsignedInteger inputDimension = effectiveInputSample.getDimension();
+    const UnsignedInteger size = designOfExperiment_.getOutputSample().getSize();
     const UnsignedInteger minimumSize  = BinomialCoefficient(chaosDegree_ + inputDimension, chaosDegree_);
-    if (designOfExperiment_.getInputSample().getSize() < minimumSize)
+    if (size < minimumSize)
       throw InvalidArgumentException(HERE) << "Design of experiment size too small : "
-                                           << designOfExperiment_.getInputSample().getSize()
+                                           << size
                                            << ". It must be superior or equal to C(degree+nbInputs, degree) = "
                                            << minimumSize << ")\n";
   }
 
   // create FunctionalChaosAlgorithm and run it
-  FunctionalChaosAlgorithm functionalChaos(buildFunctionalChaosAlgorithm(designOfExperiment_.getInputSample(), designOfExperiment_.getOutputSample().getMarginal(indices)));
+  FunctionalChaosAlgorithm functionalChaos(buildFunctionalChaosAlgorithm(effectiveInputSample, effectiveOutputSample));
   functionalChaos.run();
 
   // set result_
-  result_.outputSample_ = designOfExperiment_.getOutputSample().getMarginal(indices);
-  // - ot result
+  result_.outputSample_ = effectiveOutputSample;
   result_.functionalChaosResult_ = functionalChaos.getResult();
-  postProcessFunctionalChaosResult();
 
-  // validation: leave one out
-  if (leaveOneOutValidation_)
-  {
-    NumericalSample outputSampleLOO(result_.outputSample_.getSize(), outputDimension);
-    for (UnsignedInteger i=0; i<result_.outputSample_.getSize(); ++i)
-    {
-      NumericalSample inSample(designOfExperiment_.getInputSample());
-      inSample.erase(i);
-      NumericalSample outSample(result_.outputSample_);
-      outSample.erase(i);
-      // build and run FunctionalChaosAlgorithm
-      FunctionalChaosAlgorithm functionalChaosLOO(buildFunctionalChaosAlgorithm(inSample, outSample));
-      functionalChaosLOO.run();
-      NumericalPoint outputValuesForInput_i(functionalChaosLOO.getResult().getMetaModel()(designOfExperiment_.getInputSample()[i]));
-      for (UnsignedInteger j=0; j<outputDimension; ++j)
-        outputSampleLOO[i][j] = outputValuesForInput_i[j];
-    }
-    result_.metaModelOutputSampleLOO_ = outputSampleLOO;
-    computeErrorQ2LOO();
-  }
+  // build metamodel
+  NumericalMathFunction metamodelFunction(result_.functionalChaosResult_.getMetaModel());
+  Description variablesNames(effectiveInputSample.getDescription());
+  variablesNames.add(effectiveOutputSample.getDescription());
+  metamodelFunction.setDescription(variablesNames);
+  buildMetaModel(result_, metamodelFunction);
 
-  notify("fromFunctionalChaosMetaModelCreated");
+  result_.metaModelOutputSample_ = metamodelFunction(effectiveInputSample);
+
+  // post process
+  postProcessFunctionalChaosResult(effectiveInputSample);
+
+  // validation
+  validateMetaModelResult(result_, effectiveInputSample);
+
+  notify("metaModelCreated");
   notify("analysisFinished");
+}
+
+
+NumericalMathFunction FunctionalChaosAnalysis::runAlgo(const NumericalSample& inputSample, const NumericalSample& outputSample)
+{
+  FunctionalChaosAlgorithm functionalChaos(buildFunctionalChaosAlgorithm(inputSample, outputSample));
+  functionalChaos.run();
+
+  return functionalChaos.getResult().getMetaModel();
 }
 
 
@@ -266,56 +214,28 @@ FunctionalChaosAlgorithm FunctionalChaosAnalysis::buildFunctionalChaosAlgorithm(
 }
 
 
-void FunctionalChaosAnalysis::postProcessFunctionalChaosResult()
+void FunctionalChaosAnalysis::postProcessFunctionalChaosResult(const NumericalSample& inputSample)
 {
+  // check
   if (!result_.outputSample_.getSize())
     throw InvalidValueException(HERE) << "Problem during the creation of the metamodel: The outputSample is empty.\n";
   if (!result_.functionalChaosResult_.getCoefficients().getSize())
     throw InvalidValueException(HERE) << "Problem during the creation of the metamodel: The FunctionalChaosResult is empty.\n";
 
-  const UnsignedInteger inputDimension = designOfExperiment_.getInputSample().getDimension();
+  // get dim
+  const UnsignedInteger inputDimension = inputSample.getDimension();
   const UnsignedInteger outputDimension = result_.outputSample_.getDimension();
 
-  // - metamodel
-  MetaModel metaModel("MetaModel_" + getName() + "_", result_.functionalChaosResult_.getMetaModel());
-  if (designOfExperiment_.hasPhysicalModel())
-  {
-    metaModel.setInputs(designOfExperiment_.getPhysicalModel().getInputs());
-    if (designOfExperiment_.getPhysicalModel().getOutputs().getSize() == outputDimension)
-    {
-      metaModel.setOutputs(designOfExperiment_.getPhysicalModel().getOutputs());
-    }
-    else
-    {
-      OutputCollection outputs;
-      for (UnsignedInteger i=0; i<designOfExperiment_.getPhysicalModel().getOutputs().getSize(); ++i)
-        if (getInterestVariables().contains(designOfExperiment_.getPhysicalModel().getOutputs()[i].getName()))
-          outputs.add(designOfExperiment_.getPhysicalModel().getOutputs()[i]);
-    }
-  }
-  else
-  {
-    InputCollection inputs;
-    for (UnsignedInteger i=0; i<inputDimension; ++i)
-      inputs.add(Input(designOfExperiment_.getInputSample().getDescription()[i]));
-    OutputCollection outputs;
-    for (UnsignedInteger i=0; i<outputDimension; ++i)
-      outputs.add(Output(result_.outputSample_.getDescription()[i]));
-
-    metaModel.setInputs(inputs);
-    metaModel.setOutputs(outputs);
-  }
-  result_.metaModel_ = metaModel;
-
-  // Post-process the results
-  result_.metaModelOutputSample_ = result_.functionalChaosResult_.getMetaModel()(designOfExperiment_.getInputSample());
-
+  // get FunctionalChaosRandomVector
   FunctionalChaosRandomVector vector(result_.functionalChaosResult_);
+
+  // mean
   result_.mean_ = vector.getMean();
 
+  // variance - sobol indices
   NumericalPoint variance(outputDimension);
   NumericalSample firstOrderIndices(outputDimension, inputDimension);
-  firstOrderIndices.setDescription(designOfExperiment_.getInputSample().getDescription());
+  firstOrderIndices.setDescription(inputSample.getDescription());
   NumericalSample totalIndices(outputDimension, inputDimension);
 
   for (UnsignedInteger i=0; i<outputDimension; ++i)
@@ -333,50 +253,9 @@ void FunctionalChaosAnalysis::postProcessFunctionalChaosResult()
 }
 
 
-void FunctionalChaosAnalysis::computeErrorQ2LOO()
-{
-  if (!result_.outputSample_.getSize())
-    throw InvalidValueException(HERE) << "Problem during the creation of the metamodel: The outputSample is empty.\n";
-  if (result_.variance_.getSize() != result_.outputSample_.getDimension())
-    throw InvalidValueException(HERE) << "Problem during the creation of the metamodel: The variance is not valid.\n";
-
-  const UnsignedInteger outputDimension = result_.outputSample_.getDimension();
-  const UnsignedInteger size = result_.outputSample_.getSize();
-
-  result_.errorQ2LOO_ = NumericalPoint(outputDimension);
-  result_.q2LOO_ = NumericalPoint(outputDimension);
-
-  for (UnsignedInteger i=0; i<outputDimension; ++i)
-  {
-    double quadraticResidual = 0.;
-    for (UnsignedInteger j=0; j<size; ++j)
-    {
-      const double diff = result_.metaModelOutputSampleLOO_[j][i] - result_.outputSample_[j][i];
-      quadraticResidual += diff*diff;
-    }
-    result_.errorQ2LOO_[i] = sqrt(quadraticResidual) / size;
-    result_.q2LOO_[i] = 1 - (quadraticResidual/(size-1)) / result_.variance_[i];
-  }
-}
-
-
 FunctionalChaosAnalysisResult FunctionalChaosAnalysis::getResult() const
 {
   return result_;
-}
-
-
-void FunctionalChaosAnalysis::setInterestVariables(const Description& variablesNames)
-{
-  if (!variablesNames.getSize())
-    throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
-
-  const Description modelVariablesNames(designOfExperiment_.getOutputSample().getDescription());
-  for (UnsignedInteger i=0; i<variablesNames.getSize(); ++i)
-    if (!modelVariablesNames.contains(variablesNames[i]))
-      throw InvalidArgumentException(HERE) << "The name " << variablesNames[i] << " does not match an output name of the model";
-
-    AnalysisImplementation::setInterestVariables(variablesNames);
 }
 
 
@@ -417,6 +296,7 @@ String FunctionalChaosAnalysis::__repr__() const
   oss << "class=" << GetClassName()
       << " name=" << getName()
       << " designOfExperiment=class=" << getDesignOfExperiment().GetClassName() << " name=" << getDesignOfExperiment().getName()
+      << " interestVariables=" << getInterestVariables()
       << " chaosDegree=" << getChaosDegree()
       << " sparseChaos=" << getSparseChaos()
       << " leaveOneOutValidation=" << isLeaveOneOutValidation();
@@ -424,24 +304,23 @@ String FunctionalChaosAnalysis::__repr__() const
 }
 
 
+/* Method save() stores the object through the StorageManager */
 void FunctionalChaosAnalysis::save(Advocate& adv) const
 {
   DesignOfExperimentAnalysis::save(adv);
   adv.saveAttribute("chaosDegree_", chaosDegree_);
   adv.saveAttribute("sparseChaos_", sparseChaos_);
-  adv.saveAttribute("leaveOneOutValidation_", leaveOneOutValidation_);
   adv.saveAttribute("result_", result_);
 }
 
 
+/* Method load() reloads the object from the StorageManager */
 void FunctionalChaosAnalysis::load(Advocate& adv)
 {
   DesignOfExperimentAnalysis::load(adv);
   adv.loadAttribute("chaosDegree_", chaosDegree_);
   adv.loadAttribute("sparseChaos_", sparseChaos_);
-  adv.loadAttribute("leaveOneOutValidation_", leaveOneOutValidation_);
   adv.loadAttribute("result_", result_);
-  isDistributionComputed_ = false;
 }
 
 

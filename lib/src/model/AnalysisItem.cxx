@@ -83,7 +83,7 @@ void AnalysisItem::update(Observable* source, const String & message)
   {
     emit analysisRemoved(this);
   }
-  else if (message == "fromFunctionalChaosMetaModelCreated")
+  else if (message == "metaModelCreated")
   {
     if (dynamic_cast<FunctionalChaosAnalysis*>(&*getAnalysis().getImplementation()))
     {

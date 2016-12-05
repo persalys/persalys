@@ -23,7 +23,7 @@ model = otguibase.AnalyticalPhysicalModel('model', [xi1, xi2, xi3], [y00, y0])
 myStudy.add(model)
 
 ## Design of Experiment ##
-aDesign = otguibase.DesignOfExperiment('design', model)
+aDesign = otguibase.DesignOfExperimentImplementation('design', model)
 inputSample = ot.LHSExperiment(model.getComposedDistribution(), 250).generate()
 aDesign.setInputSample(inputSample)
 myStudy.add(aDesign)
@@ -58,7 +58,7 @@ openturns.testing.assert_almost_equal(totalIndices, sobolResult.getTotalIndices(
 
 ## Design of Experiment ##
 model.addOutput(otguibase.Output('y1', 0., '', formula))
-aDesign2 = otguibase.DesignOfExperiment('design2', model)
+aDesign2 = otguibase.DesignOfExperimentImplementation('design2', model)
 inputSample = ot.LHSExperiment(model.getComposedDistribution(), 150).generate()
 aDesign2.setInputSample(inputSample)
 myStudy.add(aDesign2)
