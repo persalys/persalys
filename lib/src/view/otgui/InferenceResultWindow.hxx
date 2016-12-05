@@ -25,8 +25,7 @@
 #include "otgui/InferenceResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
-
-#include <QStackedWidget>
+#include "otgui/InferenceResultWidget.hxx"
 
 namespace OTGUI {
 class OTGUI_API InferenceResultWindow : public ResultWindow
@@ -41,11 +40,15 @@ protected:
   void buildInterface();
 
 public slots:
-  void showHideGraphConfigurationWidget(QWidget*, bool);
+  void updateInferenceResultWidget(QString);
+  void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+signals:
+  void windowActivated();
 
 private:
   InferenceResult result_;
+  InferenceResultWidget * inferenceResultWidget_;
 };
 }
 #endif

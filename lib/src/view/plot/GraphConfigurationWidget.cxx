@@ -316,10 +316,4 @@ void GraphConfigurationWidget::exportPlot()
 {
   plotWidgets_[currentPlotIndex_]->exportPlot();
 }
-
-
-void GraphConfigurationWidget::plotVisibilityChanged(bool visibility)
-{
-  emit visibilityChanged(this, visibility);
-}
 }

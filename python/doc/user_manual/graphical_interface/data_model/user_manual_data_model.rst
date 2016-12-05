@@ -210,18 +210,14 @@ The results window gathers 2 tabs for each variable:
   distributions and the associated p-value. The last column
   indicates whether the distribution is accepted or not according to the given level.
   The distributions are sorted in decreasing order of p-values.
+  The right side of this table is updated according to the distribution which is selected.
 
-.. image:: /user_manual/graphical_interface/data_model/inference_resultWindow_tab_summary.png
-    :align: center
+  This section contains 3 tabs:
 
-- The tab **Distributions** includes, for a selected variable:
+  - The tab **PDF/CDF** presents the PDF/CDF (default: PDF) of the sample
+    together with the distribution PDF.
 
-  - At the top, a combobox to choose the distribution to visualize and for the selected distribution:
-  - The tab **Description** presents the PDF/CDF (default: PDF) of the sample
-    together with the distribution PDF. It includes at its right side a table with the values
-    of the distribution parameters.
-
-  .. image:: /user_manual/graphical_interface/data_model/inference_resultWindow_tab_distributions_description.png
+  .. image:: /user_manual/graphical_interface/data_model/inference_resultWindow_tab_summary_PDF.png
       :align: center
 
   The user can configure the plot and choose between PDF/CDF with the graphic
@@ -241,7 +237,7 @@ The results window gathers 2 tabs for each variable:
   - The tab **Q-Q plot** presents the Q-Q plot which opposes the data quantiles to the quantiles
     of the tested distribution.
 
-  .. image:: /user_manual/graphical_interface/data_model/inference_resultWindow_tab_distributions_qqplot.png
+  .. image:: /user_manual/graphical_interface/data_model/inference_resultWindow_tab_summary_QQplot.png
       :align: center
 
   The user can configure the Q-Q plot with the graphic settings below the study tree.
@@ -256,3 +252,14 @@ The results window gathers 2 tabs for each variable:
     - The axis title, expected to be a string;
     - The minimum bound of the axis, expected to be a floating point;
     - The maximum bound of the axis, expected to be a floating point.
+
+  - The tab **Parameters** includes a table with the moments of the selected distribution
+    and the values of its native parameters.
+
+  .. image:: /user_manual/graphical_interface/data_model/inference_resultWindow_tab_summary_parameters.png
+      :align: center
+
+- The tab **Parameters** indicates the level used to perform the inference.
+
+  .. image:: /user_manual/graphical_interface/data_model/inference_resultWindow_tab_parameters.png
+      :align: center
