@@ -46,6 +46,7 @@ public slots:
   void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
 signals:
   void analysisFinished(AnalysisItem*);
+  void analysisBadlyFinished(AnalysisItem*,QString);
   void analysisRemoved(QStandardItem*);
   void analysisChanged(const Analysis&);
   void metaModelCreated(PhysicalModel&);

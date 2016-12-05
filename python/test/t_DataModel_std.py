@@ -34,8 +34,8 @@ print("CDF=", result.getCDF())
 print("outliers=", result.getOutliers())
 
 # Comparaison
-openturns.testing.assert_almost_equal(0.2012538261144671, result.getMean()[0], 1e-13)
-openturns.testing.assert_almost_equal(-0.14315074899830527, result.getMean()[1], 1e-13)
+openturns.testing.assert_almost_equal(0.2012538261144671, result.getMean()[0][0], 1e-13)
+openturns.testing.assert_almost_equal(-0.14315074899830527, result.getMean()[1][0], 1e-13)
 
 ## Model 2
 outColumns = [1]

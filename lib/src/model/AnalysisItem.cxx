@@ -75,6 +75,10 @@ void AnalysisItem::update(Observable* source, const String & message)
   {
     emit analysisFinished(this);
   }
+  else if (message == "analysisBadlyFinished")
+  {
+    emit analysisBadlyFinished(this, analysis_.getErrorMessage().c_str());
+  }
   else if (message == "analysisRemoved")
   {
     emit analysisRemoved(this);

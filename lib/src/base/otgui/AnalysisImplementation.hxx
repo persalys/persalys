@@ -47,6 +47,9 @@ public:
   OT::Description getInterestVariables() const;
   virtual void setInterestVariables(const OT::Description& variablesNames);
 
+  OT::String getErrorMessage() const;
+  void setErrorMessage(const OT::String& errorMessage);
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
@@ -57,6 +60,7 @@ protected:
   void setIsReliabilityAnalysis(const bool isReliabilityAnalysis);
 
 private:
+  OT::String errorMessage_;
   bool isReliabilityAnalysis_;
   OT::Description interestVariables_;
 };

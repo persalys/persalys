@@ -48,18 +48,18 @@ public:
   /** Virtual constructor */
   virtual DataAnalysisResult * clone() const;
 
-  OT::NumericalPoint getMin() const;
-  OT::NumericalPoint getMax() const;
+  NumericalPointCollection getMin() const;
+  NumericalPointCollection getMax() const;
 
-  OT::NumericalPoint getMean() const;
-  OT::NumericalPoint getCoefficientOfVariation() const;
-  OT::NumericalPoint getMedian() const;
-  OT::NumericalPoint getStandardDeviation() const;
-  OT::NumericalPoint getVariance() const;
-  OT::NumericalPoint getSkewness() const;
-  OT::NumericalPoint getKurtosis() const;
-  OT::NumericalPoint getFirstQuartile() const;
-  OT::NumericalPoint getThirdQuartile() const;
+  NumericalPointCollection getMean() const;
+  NumericalPointCollection getCoefficientOfVariation() const;
+  NumericalPointCollection getMedian() const;
+  NumericalPointCollection getStandardDeviation() const;
+  NumericalPointCollection getVariance() const;
+  NumericalPointCollection getSkewness() const;
+  NumericalPointCollection getKurtosis() const;
+  NumericalPointCollection getFirstQuartile() const;
+  NumericalPointCollection getThirdQuartile() const;
   OT::Interval getMeanConfidenceInterval() const;
   OT::Interval getStdConfidenceInterval() const;
   NumericalPointCollection getOutliers() const;
@@ -68,8 +68,6 @@ public:
   DataSample::NumericalSampleCollection getCDF() const;
 
   double getElapsedTime() const;
-
-  bool isValid() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -81,17 +79,17 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  OT::NumericalPoint min_;
-  OT::NumericalPoint max_;
-  OT::NumericalPoint mean_;
-  OT::NumericalPoint coefficientOfVariation_;
-  OT::NumericalPoint median_;
-  OT::NumericalPoint standardDeviation_;
-  OT::NumericalPoint variance_;
-  OT::NumericalPoint skewness_;
-  OT::NumericalPoint kurtosis_;
-  OT::NumericalPoint firstQuartile_;
-  OT::NumericalPoint thirdQuartile_;
+  OT::PersistentCollection<OT::NumericalPoint> min_;
+  OT::PersistentCollection<OT::NumericalPoint> max_;
+  OT::PersistentCollection<OT::NumericalPoint> mean_;
+  OT::PersistentCollection<OT::NumericalPoint> coefficientOfVariation_;
+  OT::PersistentCollection<OT::NumericalPoint> median_;
+  OT::PersistentCollection<OT::NumericalPoint> standardDeviation_;
+  OT::PersistentCollection<OT::NumericalPoint> variance_;
+  OT::PersistentCollection<OT::NumericalPoint> skewness_;
+  OT::PersistentCollection<OT::NumericalPoint> kurtosis_;
+  OT::PersistentCollection<OT::NumericalPoint> firstQuartile_;
+  OT::PersistentCollection<OT::NumericalPoint> thirdQuartile_;
   OT::Interval meanConfidenceInterval_;
   OT::Interval stdConfidenceInterval_;
   OT::PersistentCollection<OT::NumericalPoint> outliers_;

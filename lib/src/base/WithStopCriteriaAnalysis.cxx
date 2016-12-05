@@ -61,10 +61,10 @@ UnsignedInteger WithStopCriteriaAnalysis::getMaximumCalls() const
 
 void WithStopCriteriaAnalysis::setMaximumCalls(const UnsignedInteger maxi)
 {
-  if (maxi < 4)
-    throw InvalidValueException(HERE) << "The maximum calls must be superior to 4";
+  if (maxi < 1)
+    throw InvalidValueException(HERE) << "The maximum calls number can not be null";
   if (maxi < blockSize_)
-    throw InvalidValueException(HERE) << "The maximum calls can not be inferior to the block size " << blockSize_;
+    throw InvalidValueException(HERE) << "The maximum calls number can not be inferior to the block size " << blockSize_;
   maximumCalls_ = maxi;
 }
 

@@ -41,7 +41,7 @@ void AnalysisExecutionFailedWindow::buildInterface()
   QWidget * mainWidget = new QWidget;
   QVBoxLayout * layout = new QVBoxLayout(mainWidget);
 
-  QString message(tr("No results are available. An error has occured during the execution of the analysis:\n"));
+  QString message(tr("No results are available. The analysis was not launched or an error has occured during its execution.\n"));
   QLabel * label = new QLabel(message);
   label->setWordWrap(true);
   layout->addWidget(label);

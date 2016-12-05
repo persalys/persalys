@@ -28,6 +28,8 @@ template <>
 }
 %}
 
+%ignore *::setErrorMessage;
+
 %include Analysis_doc.i
 
 OTGUITypedInterfaceObjectHelper(Analysis)

@@ -691,6 +691,7 @@ void StudyTreeView::createNewInferenceAnalysis()
 void StudyTreeView::createAnalysisConnection(AnalysisItem * item)
 {
   connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createAnalysisResultWindow(AnalysisItem*)));
+  connect(item, SIGNAL(analysisBadlyFinished(AnalysisItem*,QString)), this, SLOT(createAnalysisExecutionFailedWindow(AnalysisItem*,QString)));
 }
 
 
@@ -731,6 +732,7 @@ void StudyTreeView::findAnalysisItemAndLaunchExecution(OTStudyItem * otStudyItem
     }
     catch (std::exception & ex)
     {
+      analysisItem->getAnalysis().setErrorMessage(ex.what());
       createAnalysisExecutionFailedWindow(analysisItem, ex.what());
       setExpanded(analysisItem->index(), true);
     }
@@ -810,6 +812,7 @@ void StudyTreeView::runAnalysis()
       }
       catch (std::exception & ex)
       {
+        item->getAnalysis().setErrorMessage(ex.what());
         createAnalysisExecutionFailedWindow(item, ex.what());
       }
     }

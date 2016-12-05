@@ -53,8 +53,8 @@ montecarlo.run()
 montecarloResult = montecarlo.getResult()
 
 # Comparaison
-openturns.testing.assert_almost_equal(0.0597109963361, montecarloResult.getMean()[3], 1e-13)
-openturns.testing.assert_almost_equal(0.0114128746587, montecarloResult.getStandardDeviation()[3], 1e-13)
+openturns.testing.assert_almost_equal(0.0597109963361, montecarloResult.getMean()[3][0], 1e-13)
+openturns.testing.assert_almost_equal(0.0114128746587, montecarloResult.getStandardDeviation()[3][0], 1e-13)
 
 meanCI = montecarloResult.getMeanConfidenceInterval()
 openturns.testing.assert_almost_equal(0.0590036320343, meanCI.getLowerBound()[3], 1e-13)
