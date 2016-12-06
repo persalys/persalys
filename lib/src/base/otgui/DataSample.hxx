@@ -39,7 +39,7 @@ public:
   virtual DataSample * clone() const;
 
   OT::NumericalSample getInputSample() const;
-  void setInputSample(const OT::NumericalSample & sample);
+  virtual void setInputSample(const OT::NumericalSample & sample);
 
   OT::NumericalSample getOutputSample() const;
   void setOutputSample(const OT::NumericalSample & sample);

@@ -104,7 +104,7 @@ DesignOfExperimentWizard::DesignOfExperimentWizard(const DesignOfExperiment & de
   : OTguiWizard(parent)
   , designOfExperiment_(designOfExperiment.getImplementation()->clone())
 {
-  designOfExperiment_.setOutputSample(OT::NumericalSample());
+  designOfExperiment_.getImplementation()->setOutputSample(OT::NumericalSample());
   buildInterface();
 }
 
