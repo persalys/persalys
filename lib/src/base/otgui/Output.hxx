@@ -33,14 +33,10 @@ public:
   /** Default constructor */
   Output();
   /** Constructor with parameters */
-  Output(const OT::String & name, const double & value=0., const OT::String & description="",
-         const OT::String & formula="");
+  Output(const OT::String & name, const double & value=0., const OT::String & description="");
 
   /** Virtual constructor */
   virtual Output * clone() const;
-
-  OT::String getFormula() const;
-  void setFormula(const OT::String & formula);
 
   bool isSelected() const;
   void setIsSelected(const bool isSelected);
@@ -60,7 +56,6 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  OT::String formula_;
   bool isSelected_;
   bool hasBeenComputed_;
 };

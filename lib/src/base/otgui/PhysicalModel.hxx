@@ -33,8 +33,6 @@ public:
 
   /** Default constructor */
   explicit PhysicalModel(const OT::String & name="Unnamed");
-  /** Constructor with parameters */
-  PhysicalModel(const OT::String & name, const InputCollection & inputs, const OutputCollection & outputs);
   /** Default constructor */
   PhysicalModel(const PhysicalModelImplementation & implementation);
   /** Constructor from implementation */
@@ -70,7 +68,6 @@ public:
   void setOutputs(const OutputCollection & outputs);
   void setOutputName(const OT::String & outputName, const OT::String & newName);
   void setOutputDescription(const OT::String & outputName, const OT::String & description);
-  void setOutputFormula(const OT::String & outputName, const OT::String & formula);
   void setOutputValue(const OT::String & outputName, const double & value);
   void selectOutput(const OT::String & outputName, const bool selected);
   void addOutput(const Output & output);

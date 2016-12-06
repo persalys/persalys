@@ -302,7 +302,7 @@ void PhysicalModelImplementation::setOutputs(const OutputCollection & outputs)
   for (UnsignedInteger i=0; i<outputs.getSize(); ++i)
     outputNames.insert(outputs[i].getName());
   if (outputNames.size() != outputs.getSize())
-    throw InvalidArgumentException(HERE) << "Two inputs can not have the same name.";
+    throw InvalidArgumentException(HERE) << "Two outputs can not have the same name.";
 
   outputs_ = outputs;
   notify("outputAdded");
@@ -333,14 +333,6 @@ void PhysicalModelImplementation::setOutputDescription(const String & outputName
 {
   getOutputByName(outputName).setDescription(description);
   notify("outputDescriptionChanged");
-}
-
-
-void PhysicalModelImplementation::setOutputFormula(const String & outputName, const String & formula)
-{
-  getOutputByName(outputName).setFormula(formula);
-  getOutputByName(outputName).setHasBeenComputed(false);
-  notify("outputFormulaChanged");
 }
 
 

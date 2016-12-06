@@ -31,18 +31,22 @@ CLASSNAMEINIT(AnalyticalPhysicalModel);
 static Factory<AnalyticalPhysicalModel> RegisteredFactory;
 
 /* Default constructor */
-AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String & name)
+AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String& name)
   : PhysicalModelImplementation(name)
+  , formulaForEachOutput_()
 {
 }
 
 
 /* Constructor with parameters */
-AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String & name,
-                                                 const InputCollection & inputs,
-                                                 const OutputCollection & outputs)
+AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String& name,
+                                                 const InputCollection& inputs,
+                                                 const OutputCollection& outputs,
+                                                 const Description& formulas)
   : PhysicalModelImplementation(name, inputs, outputs)
+  , formulaForEachOutput_()
 {
+  setFormulas(formulas);
 }
 
 
@@ -53,12 +57,107 @@ AnalyticalPhysicalModel* AnalyticalPhysicalModel::clone() const
 }
 
 
+void AnalyticalPhysicalModel::addOutput(const Output& output)
+{
+  if (hasOutputNamed(output.getName()))
+    throw InvalidArgumentException(HERE) << "The physical model already contains an output named " << output.getName();
+
+  formulaForEachOutput_[output.getName()] = "";
+
+  PhysicalModelImplementation::addOutput(output);
+}
+
+
+void AnalyticalPhysicalModel::removeOutput(const String& outputName)
+{
+  PhysicalModelImplementation::removeOutput(outputName);
+  formulaForEachOutput_.erase(outputName);
+}
+
+
+void AnalyticalPhysicalModel::setOutputs(const OutputCollection& outputs)
+{
+  std::set<String> outputNames;
+  for (UnsignedInteger i=0; i<outputs.getSize(); ++i)
+    outputNames.insert(outputs[i].getName());
+  if (outputNames.size() != outputs.getSize())
+    throw InvalidArgumentException(HERE) << "Two outputs can not have the same name.";
+
+  for (UnsignedInteger i=0; i<outputs.getSize(); ++i)
+    formulaForEachOutput_[outputs[i].getName()] = "";
+
+  PhysicalModelImplementation::setOutputs(outputs);
+}
+
+
+void AnalyticalPhysicalModel::setOutputName(const String& outputName, const String& newName)
+{
+  if (outputName == newName)
+    return;
+
+  std::set<String> outputNames;
+  outputNames.insert(newName);
+  for (UnsignedInteger i=0; i<getOutputNames().getSize(); ++i)
+    if (getOutputNames()[i] != outputName)
+      outputNames.insert(getOutputNames()[i]);
+  if (outputNames.size() != getOutputNames().getSize())
+    throw InvalidArgumentException(HERE) << "The proposed name " << newName << " is not valid. Two outputs can not have the same name.";
+
+  const String outputFormula = formulaForEachOutput_[outputName];
+  formulaForEachOutput_.erase(outputName);
+  formulaForEachOutput_[newName] = outputFormula;
+
+  PhysicalModelImplementation::setOutputName(outputName, newName);
+}
+
+
 Description AnalyticalPhysicalModel::getFormulas() const
 {
-  Description formulas(getOutputs().getSize());
+  Description formulas;
   for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
-    formulas[i] = getOutputs()[i].getFormula();
+  {
+    std::map<String, String>::const_iterator it(formulaForEachOutput_.find(getOutputs()[i].getName()));
+    if (it != formulaForEachOutput_.end())
+      formulas.add(it->second);
+  }
   return formulas;
+}
+
+
+void AnalyticalPhysicalModel::setFormulas(const Description& formulas)
+{
+  if (formulas.getSize() != getOutputs().getSize())
+    throw InvalidArgumentException(HERE) << "The list of formulas must have the same dimension as the list of outputs";
+
+  formulaForEachOutput_.clear();
+  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
+    formulaForEachOutput_[getOutputs()[i].getName()] = formulas[i];
+
+  notify("outputFormulaChanged");
+}
+
+
+String AnalyticalPhysicalModel::getFormula(const String& outputName) const
+{
+  if (!getOutputNames().contains(outputName))
+    throw InvalidArgumentException(HERE) << "The model does not contain an output named " << outputName;
+
+  std::map<String, String>::const_iterator it(formulaForEachOutput_.find(outputName));
+  if (it == formulaForEachOutput_.end())
+    throw InvalidArgumentException(HERE) << "Error: no formula set for the output " << outputName;
+
+  return it->second;
+}
+
+
+void AnalyticalPhysicalModel::setFormula(const String& outputName, const String& formula)
+{
+  if (!getOutputNames().contains(outputName))
+    throw InvalidArgumentException(HERE) << "The model does not contain an output named " << outputName;
+
+  formulaForEachOutput_[outputName] = formula;
+
+  notify("outputFormulaChanged");
 }
 
 
@@ -101,7 +200,16 @@ String AnalyticalPhysicalModel::getPythonScript() const
   }
   oss << "]\n";
 
-  oss << getName()+ " = otguibase.AnalyticalPhysicalModel('" + getName() + "', inputs, outputs)\n";
+  oss << "formulas = [";
+  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
+  {
+    oss << "'" << getFormula(getOutputs()[i].getName()) << "'";
+    if (i < getOutputs().getSize()-1)
+      oss << ", ";
+  }
+  oss << "]\n";
+
+  oss << getName()+ " = otguibase.AnalyticalPhysicalModel('" + getName() + "', inputs, outputs, formulas)\n";
 
   oss << PhysicalModelImplementation::getCopulaPythonScript();
 
@@ -120,6 +228,7 @@ String AnalyticalPhysicalModel::__repr__() const
 void AnalyticalPhysicalModel::save(Advocate & adv) const
 {
   PhysicalModelImplementation::save(adv);
+  adv.saveAttribute("formulas_", getFormulas());
 }
 
 
@@ -127,5 +236,8 @@ void AnalyticalPhysicalModel::save(Advocate & adv) const
 void AnalyticalPhysicalModel::load(Advocate & adv)
 {
   PhysicalModelImplementation::load(adv);
+  Description formulas;
+  adv.loadAttribute("formulas_", formulas);
+  setFormulas(formulas);
 }
 }
