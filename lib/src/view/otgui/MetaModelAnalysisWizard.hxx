@@ -23,11 +23,13 @@
 
 #include "otgui/AnalysisWizard.hxx"
 #include "otgui/FunctionalChaosAnalysis.hxx"
+#include "otgui/KrigingAnalysis.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/OutputsSelectionGroupBox.hxx"
+#include "otgui/DoubleSpinBox.hxx"
 
 #include <QLabel>
-#include <QGroupBox>
+#include <QLineEdit>
 
 namespace OTGUI {
 class OTGUI_API MetaModelAnalysisWizard : public AnalysisWizard
@@ -37,13 +39,15 @@ class OTGUI_API MetaModelAnalysisWizard : public AnalysisWizard
 public:
   enum Method {chaos, kriging};
 
-  MetaModelAnalysisWizard(const OTStudy& otStudy, const DesignOfExperiment & designOfExperiment, QWidget* parent=0);
-  MetaModelAnalysisWizard(const Analysis & analysis, QWidget* parent=0);
+  MetaModelAnalysisWizard(const OTStudy& otStudy, const DesignOfExperiment& designOfExperiment, QWidget* parent=0);
+  MetaModelAnalysisWizard(const Analysis& analysis, QWidget* parent=0);
 
   virtual bool validateCurrentPage();
 
 protected:
   void buildInterface();
+  void updateScaleLineEdit();
+  void updateAmplitudeLineEdit();
 
 public slots:
   void updateMethodWidgets(int);
@@ -51,14 +55,26 @@ public slots:
   void sparseChaosChanged(bool);
   void looValidationChanged(bool);
   void setInterestVariables(QStringList);
+  void openScaleDefinitionWizard();
+  void updateCovarianceModel(int);
+  void updateAmplitude(double);
+  void updateMaternParameterNu(double);
+  void updateGeneralizedModelParameterP(double);
+  void updateBasis(int);
 
 private:
   FunctionalChaosAnalysis chaos_;
-//   Kriging kriging_;
+  KrigingAnalysis kriging_;
   OutputsSelectionGroupBox * outputsGroupBox_;
   QGroupBox * chaosParametersBox_;
   CollapsibleGroupBox * chaosAdvancedParamGroupBox_;
-//   QWidget * krigingWidgets_;
+  QGroupBox * krigingParametersBox_;
+  QLineEdit * scaleLineEdit_;
+  DoubleSpinBox * amplitudeSpinBox_;
+  QLabel * maternParameterNuLabel_;
+  DoubleSpinBox * maternParameterNuSpinBox_;
+  QLabel * generalizedModelParameterPLabel_;
+  DoubleSpinBox * generalizedModelParameterPSpinBox_;
   QLabel * errorMessageLabel_;
 };
 }

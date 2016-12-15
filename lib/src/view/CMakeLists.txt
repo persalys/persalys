@@ -57,6 +57,7 @@ ot_add_source_file ( LimitStateWindow.cxx )
 ot_add_source_file ( ReliabilityAnalysisWizard.cxx )
 ot_add_source_file ( MonteCarloReliabilityResultWindow.cxx )
 ot_add_source_file ( StopCriteriaGroupBox.cxx )
+ot_add_source_file ( ParametersDefinitionWizard.cxx )
 ot_add_source_file ( MetaModelAnalysisWizard.cxx )
 ot_add_source_file ( FunctionalChaosResultWindow.cxx )
 ot_add_source_file ( KrigingResultWindow.cxx )
@@ -113,6 +114,8 @@ ot_install_header_file ( StudyTreeView.hxx )
 ot_install_header_file ( DeterministicDesignPage.hxx )
 ot_install_header_file ( ProbabilisticDesignPage.hxx )
 ot_install_header_file ( StopCriteriaGroupBox.hxx )
+ot_install_header_file ( ParametersDefinitionWizard.hxx )
+ot_install_header_file ( MetaModelAnalysisWizard.hxx )
 ot_install_header_file ( FunctionalChaosResultWindow.hxx )
 ot_install_header_file ( KrigingResultWindow.hxx )
 ot_install_header_file ( InferenceResultWindow.hxx )
@@ -164,6 +167,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/ReliabilityAnalysisWizard.hxx
                                   otgui/MonteCarloReliabilityResultWindow.hxx
                                   otgui/StopCriteriaGroupBox.hxx
+                                  otgui/ParametersDefinitionWizard.hxx
                                   otgui/MetaModelAnalysisWizard.hxx
                                   otgui/FunctionalChaosResultWindow.hxx
                                   otgui/KrigingResultWindow.hxx
