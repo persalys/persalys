@@ -32,12 +32,46 @@
 using namespace OT;
 
 namespace OTGUI {
-  
+
+FunctionalChaosResultWindow::ValidationTableView::ValidationTableView(const double q2Error,const double q2Value)
+: ResizableTableViewWithoutScrollBar()
+{
+  horizontalHeader()->hide();
+  verticalHeader()->hide();
+  CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(2, 2, this);
+  setModel(momentsEstimationsTable);
+  // - vertical header
+  momentsEstimationsTable->setNotEditableHeaderItem(0, 0, tr("Residual"));
+  momentsEstimationsTable->setNotEditableHeaderItem(1, 0, tr("Q2"));
+
+  // - residual/q2 values
+  momentsEstimationsTable->setNotEditableItem(0, 1, q2Error);
+  momentsEstimationsTable->setNotEditableItem(1, 1, q2Value);
+
+  resizeToContents();
+}
+
+
+FunctionalChaosResultWindow::MetaModelPlotWidget::MetaModelPlotWidget(const NumericalSample& metaModelSample, const NumericalSample& outputSample)
+  : PlotWidget()
+{
+  plotScatter(outputSample, metaModelSample);
+  NumericalSample lineSample(outputSample);
+  lineSample.stack(lineSample);
+  plotCurve(lineSample, QPen(Qt::black, 1));
+  setTitle(tr("Metamodel:") + " " + QString::fromUtf8(outputSample.getDescription()[0].c_str()));
+  setAxisTitle(QwtPlot::xBottom, tr("Physical model"));
+  setAxisTitle(QwtPlot::yLeft, tr("Metamodel"));
+}
+
+
 FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item)
   : ResultWindow(item)
   , result_(dynamic_cast<FunctionalChaosAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
   , metaModelPlotsConfigurationWidget_(0)
+  , metaModelPlotsLOOConfigurationWidget_(0)
   , sobolIndicesPlotsConfigurationWidget_(0)
+  , inSample_(dynamic_cast<FunctionalChaosAnalysis*>(&*item->getAnalysis().getImplementation())->getDesignOfExperiment().getInputSample())
 {
   setParameters(item->getAnalysis());
   buildInterface();
@@ -47,8 +81,10 @@ FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item)
 FunctionalChaosResultWindow::~FunctionalChaosResultWindow()
 {
   delete metaModelPlotsConfigurationWidget_;
+  delete metaModelPlotsLOOConfigurationWidget_;
   delete sobolIndicesPlotsConfigurationWidget_;
   metaModelPlotsConfigurationWidget_ = 0;
+  metaModelPlotsLOOConfigurationWidget_ = 0;
   sobolIndicesPlotsConfigurationWidget_ = 0;
 }
 
@@ -91,14 +127,7 @@ void FunctionalChaosResultWindow::buildInterface()
   ResizableStackedWidget * plotsStackedWidget = new ResizableStackedWidget;
   for (UnsignedInteger i=0; i<outputDimension; ++i)
   {
-    PlotWidget *plot = new PlotWidget;
-    plot->plotScatter(result_.getMetaModelOutputSample().getMarginal(i), result_.getOutputSample().getMarginal(i));
-    NumericalSample lineSample(result_.getMetaModelOutputSample().getMarginal(i));
-    lineSample.stack(lineSample);
-    plot->plotCurve(lineSample, QPen(Qt::black, 1));
-    plot->setTitle(tr("Metamodel:") + " " + outputNames[i]);
-    plot->setAxisTitle(QwtPlot::xBottom, tr("Metamodel"));
-    plot->setAxisTitle(QwtPlot::yLeft, tr("Physical model"));
+    MetaModelPlotWidget * plot = new MetaModelPlotWidget(result_.getMetaModelOutputSample().getMarginal(i), result_.getOutputSample().getMarginal(i));
     listMetaModels.append(plot);
     plotsStackedWidget->addWidget(plot);
   }
@@ -106,7 +135,7 @@ void FunctionalChaosResultWindow::buildInterface()
   metaModelPlotsConfigurationWidget_ = new GraphConfigurationWidget(listMetaModels, QStringList(), outputNames, GraphConfigurationWidget::MetaModel);
   connect(metaModelPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
 
-  tabWidget_->addTab(tab, tr("Scatter plot"));
+  tabWidget_->addTab(tab, tr("Metamodel"));
 
   // second tab : RESULTS --------------------------------
   QScrollArea * scrollArea = new QScrollArea;
@@ -132,28 +161,13 @@ void FunctionalChaosResultWindow::buildInterface()
     QVBoxLayout * validationGroupBoxLayout = new QVBoxLayout(validationGroupBox);
     ResizableStackedWidget * validationStackedWidget = new ResizableStackedWidget;
 
-    for (UnsignedInteger outputIndex=0; outputIndex<outputDimension; ++outputIndex)
+    for (UnsignedInteger outputIndex=0; outputIndex<result_.getMetaModelOutputSampleLeaveOneOut().getDimension(); ++outputIndex)
     {
-      ResizableTableViewWithoutScrollBar * validationTableView = new ResizableTableViewWithoutScrollBar;
-      validationTableView->horizontalHeader()->hide();
-      validationTableView->verticalHeader()->hide();
-      CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(2, 2, validationTableView);
-      validationTableView->setModel(momentsEstimationsTable);
-      // - vertical header
-      momentsEstimationsTable->setNotEditableHeaderItem(0, 0, tr("Residual"));
-      momentsEstimationsTable->setNotEditableHeaderItem(1, 0, tr("Q2"));
-
-      // - residual/q2 values
-      momentsEstimationsTable->setNotEditableItem(0, 1, result_.getErrorQ2LeaveOneOut()[outputIndex]);
-      momentsEstimationsTable->setNotEditableItem(1, 1, result_.getQ2LeaveOneOut()[outputIndex]);
-
-      validationTableView->resizeToContents();
-
+      ValidationTableView * validationTableView = new ValidationTableView(result_.getErrorQ2LeaveOneOut()[outputIndex], result_.getQ2LeaveOneOut()[outputIndex]);
       validationStackedWidget->addWidget(validationTableView);
     }
-    connect(outputsComboBox, SIGNAL(currentIndexChanged(int)), validationStackedWidget, SLOT(setCurrentIndex(int)));
     validationGroupBoxLayout->addWidget(validationStackedWidget);
-
+    connect(outputsComboBox, SIGNAL(currentIndexChanged(int)), validationStackedWidget, SLOT(setCurrentIndex(int)));
     resultsLayout->addWidget(validationGroupBox);
   }
 
@@ -189,7 +203,6 @@ void FunctionalChaosResultWindow::buildInterface()
   resultsLayout->addWidget(momentsGroupBox);
   scrollArea->setWidget(tab);
   tabWidget_->addTab(scrollArea, tr("Summary"));
-  
 
   // third tab : SOBOL INDICES --------------------------------
   SobolResultWindowWidget * sobolScrollArea = new SobolResultWindowWidget(result_.getSobolResult());
@@ -198,7 +211,28 @@ void FunctionalChaosResultWindow::buildInterface()
   connect(sobolIndicesPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), sobolScrollArea, SIGNAL(currentPlotChanged(int)));
   connect(sobolIndicesPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), sobolScrollArea, SLOT(setCurrentIndex(int)));
 
-  // fourth tab : PARAMETERS --------------------------------
+  // fourth tab : GRAPH METAMODEL LOO --------------------------------
+  if (result_.getMetaModelOutputSampleLeaveOneOut().getSize())
+  {
+    tab = new QWidget;
+    metaModelPlotLayout = new QVBoxLayout(tab);
+
+    QVector<PlotWidget*> listMetaModelsLOO;
+    ResizableStackedWidget * plotsLOOStackedWidget = new ResizableStackedWidget;
+    for (UnsignedInteger i=0; i<outputDimension; ++i)
+    {
+      MetaModelPlotWidget * plot = new MetaModelPlotWidget(result_.getMetaModelOutputSampleLeaveOneOut().getMarginal(i), result_.getOutputSample().getMarginal(i));
+      listMetaModelsLOO.append(plot);
+      plotsLOOStackedWidget->addWidget(plot);
+    }
+    metaModelPlotLayout->addWidget(plotsLOOStackedWidget);
+    metaModelPlotsLOOConfigurationWidget_ = new GraphConfigurationWidget(listMetaModelsLOO, QStringList(), outputNames, GraphConfigurationWidget::MetaModel);
+    connect(metaModelPlotsLOOConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotsLOOStackedWidget, SLOT(setCurrentIndex(int)));
+
+    tabWidget_->addTab(tab, tr("Leave-one-out"));
+  }
+
+  // fourth/fifth tab : PARAMETERS --------------------------------
   if (parametersWidget_)
     tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 
@@ -222,6 +256,11 @@ void FunctionalChaosResultWindow::showHideGraphConfigurationWidget(int indexTab)
       if (sobolIndicesPlotsConfigurationWidget_)
         if (!sobolIndicesPlotsConfigurationWidget_->isVisible())
           emit graphWindowActivated(sobolIndicesPlotsConfigurationWidget_);
+      break;
+    case 3: // metamodel graph LOO
+      if (metaModelPlotsLOOConfigurationWidget_)
+        if (!metaModelPlotsLOOConfigurationWidget_->isVisible())
+          emit graphWindowActivated(metaModelPlotsLOOConfigurationWidget_);
       break;
     // if no plotWidget is visible
     default:

@@ -24,13 +24,32 @@
 #include "otgui/ResultWindow.hxx"
 #include "otgui/FunctionalChaosAnalysisResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/ResizableStackedWidget.hxx"
+#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
+
+#include <QGroupBox>
+#include <QVBoxLayout>
+#include <QHeaderView>
 
 namespace OTGUI {
+
 class OTGUI_API FunctionalChaosResultWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
+  class ValidationTableView : public ResizableTableViewWithoutScrollBar
+  {
+    public:
+      ValidationTableView(const double q2Error,const double q2Value);
+  };
+  class MetaModelPlotWidget : public PlotWidget
+  {
+    public:
+      MetaModelPlotWidget(const OT::NumericalSample& metaModelSample, const OT::NumericalSample& outputSample);
+  };
+
   FunctionalChaosResultWindow(AnalysisItem * item);
 
   virtual ~FunctionalChaosResultWindow();
@@ -47,7 +66,9 @@ private:
   FunctionalChaosAnalysisResult result_;
   QTabWidget * tabWidget_;
   GraphConfigurationWidget * metaModelPlotsConfigurationWidget_;
+  GraphConfigurationWidget * metaModelPlotsLOOConfigurationWidget_;
   GraphConfigurationWidget * sobolIndicesPlotsConfigurationWidget_;
+  OT::NumericalSample inSample_;
 };
 }
 #endif
