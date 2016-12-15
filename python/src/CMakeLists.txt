@@ -94,6 +94,8 @@ ot_add_python_module (otguibase otguibase_module.i
                       MetaModelAnalysis.i MetaModelAnalysis_doc.i.in
                       FunctionalChaosAnalysisResult.i FunctionalChaosAnalysisResult_doc.i.in
                       FunctionalChaosAnalysis.i FunctionalChaosAnalysis_doc.i.in
+                      KrigingAnalysisResult.i KrigingAnalysisResult_doc.i.in
+                      KrigingAnalysis.i KrigingAnalysis_doc.i.in
                       FittingTestResult.i FittingTestResult_doc.i.in
                       InferenceResult.i InferenceResult_doc.i.in
                       InferenceAnalysis.i InferenceAnalysis_doc.i.in
