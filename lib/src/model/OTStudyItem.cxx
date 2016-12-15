@@ -214,6 +214,7 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis)
 {
   String analysisName = analysis.getImplementation()->getClassName();
   AnalysisItem * newItem = new AnalysisItem(analysis, analysisName);
+
   if (analysisName == "ModelEvaluation")
   {
     addDeterministicAnalysisItem(analysis, newItem);
@@ -227,7 +228,8 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis)
   {
     addReliabilityAnalysisItem(analysis, newItem);
   }
-  else if (analysisName == "DataAnalysis" || analysisName == "FunctionalChaosAnalysis" || analysisName == "InferenceAnalysis")
+  else if (analysisName == "DataAnalysis"      || analysisName == "FunctionalChaosAnalysis" ||
+           analysisName == "InferenceAnalysis" || analysisName == "KrigingAnalysis")
   {
     addDesignOfExperimentAnalysisItem(analysis, newItem);
   }

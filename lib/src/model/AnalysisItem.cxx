@@ -21,6 +21,9 @@
 #include "otgui/AnalysisItem.hxx"
 
 #include "otgui/FunctionalChaosAnalysis.hxx"
+#include "otgui/KrigingAnalysis.hxx"
+
+#include <QDebug>
 
 using namespace OT;
 
@@ -90,6 +93,13 @@ void AnalysisItem::update(Observable* source, const String & message)
       PhysicalModel metaModel(dynamic_cast<FunctionalChaosAnalysis*>(&*getAnalysis().getImplementation())->getResult().getMetaModel());
       emit metaModelCreated(metaModel);
     }
+    else if (dynamic_cast<KrigingAnalysis*>(&*getAnalysis().getImplementation()))
+    {
+      PhysicalModel metaModel(dynamic_cast<KrigingAnalysis*>(&*getAnalysis().getImplementation())->getResult().getMetaModel());
+      emit metaModelCreated(metaModel);
+    }
+    else
+      qDebug() << "The metamodel analysis is not recognized.";
   }
 }
 }

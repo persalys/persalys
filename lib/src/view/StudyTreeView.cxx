@@ -61,6 +61,7 @@
 #include "otgui/ReliabilityAnalysisWizard.hxx"
 #include "otgui/MonteCarloReliabilityResultWindow.hxx"
 #include "otgui/FunctionalChaosResultWindow.hxx"
+#include "otgui/KrigingResultWindow.hxx"
 #include "otgui/InferenceResultWindow.hxx"
 #include "otgui/MetaModelAnalysisWizard.hxx"
 #include "otgui/LineEditWithQValidatorDelegate.hxx"
@@ -757,7 +758,7 @@ void StudyTreeView::runAnalysis()
     }
     wizard = QSharedPointer<AnalysisWizard>(new ModelEvaluationWizard(item->getAnalysis(), this));
   }
-  else if (analysisType == "FunctionalChaosAnalysis")
+  else if (analysisType == "FunctionalChaosAnalysis" || analysisType == "KrigingAnalysis")
   {
     wizard = QSharedPointer<AnalysisWizard>(new MetaModelAnalysisWizard(item->getAnalysis(), this));
   }
@@ -851,6 +852,8 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
     resultWindow = new DataAnalysisResultWindow(item);
   else if (analysisType == "FunctionalChaosAnalysis")
     resultWindow = new FunctionalChaosResultWindow(item);
+  else if (analysisType == "KrigingAnalysis")
+    resultWindow = new KrigingResultWindow(item);
   else if (analysisType == "InferenceAnalysis")
     resultWindow = new InferenceResultWindow(item);
   else
