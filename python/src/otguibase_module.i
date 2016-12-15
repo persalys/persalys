@@ -132,6 +132,7 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include ReliabilityAnalysis.i
 %include MonteCarloReliabilityAnalysis.i
 %include MetaModelAnalysisResult.i
+%include MetaModelAnalysis.i
 %include FunctionalChaosAnalysisResult.i
 %include FunctionalChaosAnalysis.i
 %include FittingTestResult.i

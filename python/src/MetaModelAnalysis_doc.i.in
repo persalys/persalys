@@ -1,0 +1,33 @@
+%feature("docstring") OTGUI::MetaModelAnalysis
+"Base class for the creation of meta models.
+"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::isLeaveOneOutValidation
+"Whether a validation by leave-one-out is requested.
+
+Returns
+-------
+validation : bool
+    Whether a validation by leave-one-out is requested"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::setLeaveOneOutValidation
+"Whether it is sparse.
+
+Parameters
+----------
+validation : bool
+    Whether a validation by leave-one-out is requested"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::getDistribution
+"Distribution accessor.
+
+Returns
+-------
+distribution : :py:class:`openturns.ComposedDistribution`
+    Distribution"

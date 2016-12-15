@@ -29,6 +29,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      ReliabilityAnalysis.cxx
                      MonteCarloReliabilityAnalysis.cxx
                      MonteCarloReliabilityResult.cxx
+                     MetaModelAnalysis.cxx
                      MetaModelAnalysisResult.cxx
                      FunctionalChaosAnalysisResult.cxx
                      FunctionalChaosAnalysis.cxx
@@ -84,6 +85,7 @@ ot_install_header_file ( ReliabilityAnalysis.hxx )
 ot_install_header_file ( MonteCarloReliabilityAnalysis.hxx )
 ot_install_header_file ( MonteCarloReliabilityResult.hxx )
 ot_install_header_file ( MetaModelAnalysisResult.hxx )
+ot_install_header_file ( MetaModelAnalysis.hxx )
 ot_install_header_file ( FunctionalChaosAnalysisResult.hxx )
 ot_install_header_file ( FunctionalChaosAnalysis.hxx )
 ot_install_header_file ( FittingTestResult.hxx )
