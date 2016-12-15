@@ -50,6 +50,12 @@ PhysicalModel MetaModelAnalysisResult::getMetaModel() const
 }
 
 
+NumericalSample MetaModelAnalysisResult::getOutputSample() const
+{
+  return outputSample_;
+}
+
+
 NumericalSample MetaModelAnalysisResult::getMetaModelOutputSample() const
 {
   return metaModelOutputSample_;
@@ -74,10 +80,24 @@ NumericalPoint MetaModelAnalysisResult::getQ2LeaveOneOut() const
 }
 
 
+/* String converter */
+String MetaModelAnalysisResult::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " metaModel_=" << getMetaModel()
+      << " errorQ2LOO=" << getErrorQ2LeaveOneOut()
+      << " q2LOO=" << getQ2LeaveOneOut();
+  return oss;
+}
+
+
+/* Method save() stores the object through the StorageManager */
 void MetaModelAnalysisResult::save(Advocate& adv) const
 {
   PersistentObject::save(adv);
   adv.saveAttribute("metaModel_", metaModel_);
+  adv.saveAttribute("outputSample_", outputSample_);
   adv.saveAttribute("metaModelOutputSample_", metaModelOutputSample_);
   adv.saveAttribute("metaModelOutputSampleLOO_", metaModelOutputSampleLOO_);
   adv.saveAttribute("errorQ2LOO_", errorQ2LOO_);
@@ -85,10 +105,12 @@ void MetaModelAnalysisResult::save(Advocate& adv) const
 }
 
 
+/* Method load() reloads the object from the StorageManager */
 void MetaModelAnalysisResult::load(Advocate& adv)
 {
   PersistentObject::load(adv);
   adv.loadAttribute("metaModel_", metaModel_);
+  adv.loadAttribute("outputSample_", outputSample_);
   adv.loadAttribute("metaModelOutputSample_", metaModelOutputSample_);
   adv.loadAttribute("metaModelOutputSampleLOO_", metaModelOutputSampleLOO_);
   adv.loadAttribute("errorQ2LOO_", errorQ2LOO_);

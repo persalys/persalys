@@ -43,12 +43,6 @@ FunctionalChaosAnalysisResult* FunctionalChaosAnalysisResult::clone() const
 }
 
 
-NumericalSample FunctionalChaosAnalysisResult::getOutputSample() const
-{
-  return outputSample_;
-}
-
-
 FunctionalChaosResult FunctionalChaosAnalysisResult::getFunctionalChaosResult() const
 {
   return functionalChaosResult_;
@@ -88,10 +82,10 @@ String FunctionalChaosAnalysisResult::__repr__() const
 }
 
 
+/* Method save() stores the object through the StorageManager */
 void FunctionalChaosAnalysisResult::save(Advocate& adv) const
 {
   MetaModelAnalysisResult::save(adv);
-  adv.saveAttribute("outputSample_", outputSample_);
   adv.saveAttribute("functionalChaosResult_", functionalChaosResult_);
   adv.saveAttribute("mean_", mean_);
   adv.saveAttribute("variance_", variance_);
@@ -99,10 +93,10 @@ void FunctionalChaosAnalysisResult::save(Advocate& adv) const
 }
 
 
+/* Method load() reloads the object from the StorageManager */
 void FunctionalChaosAnalysisResult::load(Advocate& adv)
 {
   MetaModelAnalysisResult::load(adv);
-  adv.loadAttribute("outputSample_", outputSample_);
   adv.loadAttribute("functionalChaosResult_", functionalChaosResult_);
   adv.loadAttribute("mean_", mean_);
   adv.loadAttribute("variance_", variance_);
