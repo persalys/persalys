@@ -6,13 +6,26 @@ OTGUI_Analysis_doc
 
 // ---------------------------------------------------------------------
 
+%define OTGUI_Analysis_getErrorMessage_doc
+"Error message accessor.
+
+Returns
+-------
+message : str
+    Error message if the analysis failed"
+%enddef
+%feature("docstring") OTGUI::AnalysisImplementation::getErrorMessage
+OTGUI_Analysis_getErrorMessage_doc
+
+// ---------------------------------------------------------------------
+
 %define OTGUI_Analysis_getPythonScript_doc
 "Physical model accessor.
 
 Returns
 -------
 script : str
-    Python script to replay the calculus"
+    Python script to replay the analysis"
 %enddef
 %feature("docstring") OTGUI::AnalysisImplementation::getPythonScript
 OTGUI_Analysis_getPythonScript_doc
@@ -25,7 +38,7 @@ OTGUI_Analysis_getPythonScript_doc
 Returns
 -------
 isReliabilityAnalysis : bool
-    Whether the analysis involves a reliability calculus"
+    Whether the analysis involves a reliability analysis"
 %enddef
 %feature("docstring") OTGUI::AnalysisImplementation::isReliabilityAnalysis
 OTGUI_Analysis_isReliabilityAnalysis_doc

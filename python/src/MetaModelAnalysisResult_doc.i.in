@@ -13,6 +13,16 @@ metamodel : :class:`~otguibase.MetaModel`
 
 // ---------------------------------------------------------------------
 
+%feature("docstring") OTGUI::MetaModelAnalysisResult::getOutputSample
+"Output sample accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.NumericalSample`
+    Output sample"
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") OTGUI::MetaModelAnalysisResult::getMetaModelOutputSample
 "Output sample accessor.
 

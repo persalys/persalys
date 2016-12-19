@@ -24,10 +24,32 @@ validation : bool
 
 // ---------------------------------------------------------------------
 
+%feature("docstring") OTGUI::MetaModelAnalysis::getEffectiveInputSample
+"Effective input sample accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.NumericalSample`
+    Sample of all the input variables if all of them are deterministic.
+    Otherwise, sample of the stochastic input variables."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::getEffectiveOutputSample
+"Effective output sample accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.NumericalSample`
+    Sample of the interest output variables."
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") OTGUI::MetaModelAnalysis::getDistribution
-"Distribution accessor.
+"Input distribution accessor.
 
 Returns
 -------
 distribution : :py:class:`openturns.ComposedDistribution`
-    Distribution"
+    The distribution defined in the probabilistic model or a distribution composed
+    of Uniform laws if there is no stochastic input variable."
