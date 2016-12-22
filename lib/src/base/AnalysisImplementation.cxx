@@ -28,6 +28,7 @@ namespace OTGUI {
 AnalysisImplementation::AnalysisImplementation()
   : PersistentObject()
   , Observable()
+  , informationMessage_("")
   , errorMessage_("")
   , isReliabilityAnalysis_(false)
 {
@@ -38,6 +39,7 @@ AnalysisImplementation::AnalysisImplementation()
 AnalysisImplementation::AnalysisImplementation(const String & name)
   : PersistentObject()
   , Observable()
+  , informationMessage_("")
   , errorMessage_("")
   , isReliabilityAnalysis_(false)
 {
@@ -84,6 +86,12 @@ void AnalysisImplementation::setInterestVariables(const Description& variablesNa
 
 void AnalysisImplementation::run()
 {
+}
+
+
+String AnalysisImplementation::getInformationMessage() const
+{
+  return informationMessage_;
 }
 
 

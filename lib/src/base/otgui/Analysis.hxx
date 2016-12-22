@@ -46,6 +46,7 @@ public:
 
   bool isReliabilityAnalysis() const;
 
+  OT::String getInformationMessage() const;
   OT::String getErrorMessage() const;
   void setErrorMessage(const OT::String& errorMessage);
 

@@ -47,6 +47,7 @@ public:
   OT::Description getInterestVariables() const;
   virtual void setInterestVariables(const OT::Description& variablesNames);
 
+  OT::String getInformationMessage() const;
   OT::String getErrorMessage() const;
   void setErrorMessage(const OT::String& errorMessage);
 
@@ -58,6 +59,8 @@ public:
 
 protected:
   void setIsReliabilityAnalysis(const bool isReliabilityAnalysis);
+
+  OT::String informationMessage_;
 
 private:
   OT::String errorMessage_;
