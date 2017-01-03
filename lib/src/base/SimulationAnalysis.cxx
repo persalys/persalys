@@ -51,7 +51,14 @@ NumericalSample SimulationAnalysis::generateInputSample(const UnsignedInteger nb
 NumericalSample SimulationAnalysis::computeOutputSample(NumericalSample inputSample) const
 {
   NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(getInterestVariables())(inputSample));
-  outputSample.setDescription(getInterestVariables());
+//   outputSample.setDescription(getInterestVariables());
+  return outputSample;
+}
+
+
+NumericalSample SimulationAnalysis::computeOutputSample(NumericalPoint inputValues) const
+{
+  NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(getInterestVariables())(NumericalSample(1, inputValues)));
   return outputSample;
 }
 
@@ -59,7 +66,7 @@ NumericalSample SimulationAnalysis::computeOutputSample(NumericalSample inputSam
 NumericalSample SimulationAnalysis::computeOutputSample(NumericalSample inputSample, const Description & outputNames) const
 {
   NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(outputNames)(inputSample));
-  outputSample.setDescription(outputNames);
+//   outputSample.setDescription(outputNames);
   return outputSample;
 }
 
@@ -88,7 +95,6 @@ void SimulationAnalysis::save(Advocate & adv) const
 void SimulationAnalysis::load(Advocate & adv)
 {
   PhysicalModelAnalysis::load(adv);
-//   adv.loadAttribute("outputs_", outputs_);
   adv.loadAttribute("seed_", seed_);
 }
 }
