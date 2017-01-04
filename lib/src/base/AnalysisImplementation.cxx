@@ -31,6 +31,7 @@ AnalysisImplementation::AnalysisImplementation()
   , informationMessage_("")
   , errorMessage_("")
   , isReliabilityAnalysis_(false)
+  , stopRequested_(false)
 {
 }
 
@@ -42,6 +43,7 @@ AnalysisImplementation::AnalysisImplementation(const String & name)
   , informationMessage_("")
   , errorMessage_("")
   , isReliabilityAnalysis_(false)
+  , stopRequested_(false)
 {
   setName(name);
 }
@@ -116,6 +118,12 @@ bool AnalysisImplementation::analysisLaunched() const
 String AnalysisImplementation::getPythonScript() const
 {
   return "";
+}
+
+
+void AnalysisImplementation::stop()
+{
+  stopRequested_ = true;
 }
 
 

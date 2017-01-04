@@ -51,6 +51,8 @@ public:
   OT::String getErrorMessage() const;
   void setErrorMessage(const OT::String& errorMessage);
 
+  void stop();
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
@@ -66,6 +68,8 @@ private:
   OT::String errorMessage_;
   bool isReliabilityAnalysis_;
   OT::Description interestVariables_;
+protected:
+  bool stopRequested_;
 };
 }
 #endif

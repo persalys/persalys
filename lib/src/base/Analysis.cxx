@@ -109,4 +109,10 @@ String Analysis::getPythonScript() const
 {
   return getImplementation()->getPythonScript();
 }
+
+
+void Analysis::stop()
+{
+  getImplementation()->stop();
+}
 }

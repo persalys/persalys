@@ -53,6 +53,8 @@ public:
   void run();
   OT::String getPythonScript() const;
   bool analysisLaunched() const;
+
+  void stop();
 };
 }
 #endif
