@@ -345,7 +345,7 @@ QWidget* DataAnalysisWindow::getBoxPlotWidget()
   }
   boxPlotLayout->addWidget(stackedWidget);
 
-  boxPlotsConfigurationWidget_ = new GraphConfigurationWidget(listBoxPlotWidgets, QStringList(), variablesNames, GraphConfigurationWidget::BoxPlot);
+  boxPlotsConfigurationWidget_ = new GraphConfigurationWidget(listBoxPlotWidgets, QStringList(), variablesNames);
   connect(boxPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
   return tab;
