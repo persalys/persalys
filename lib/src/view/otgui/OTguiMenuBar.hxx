@@ -41,6 +41,7 @@ public slots:
   void updateRecentFilesList(const QString & fileName);
   void updateRecentFilesActionsList();
   void clearRecentFilesActions();
+  void changeActionsAvailability(const bool availability);
 signals:
   void createNewOTStudy();
   void openOTStudy();
@@ -56,7 +57,8 @@ signals:
 
 private:
   QMenu * recentFilesMenu_;
-  QAction *recentFileActions_[NbMaxRecentFiles];
+  QAction * recentFileActions_[NbMaxRecentFiles];
+  QAction * importPythonAction_;
 };
 }
 #endif

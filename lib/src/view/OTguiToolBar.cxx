@@ -33,7 +33,6 @@ OTguiToolBar::OTguiToolBar()
 
 void OTguiToolBar::buildActions()
 {
-
   QAction * action = new QAction(QIcon(":/images/document-new22x22.png"), tr("&New OTStudy"), this);
   action->setStatusTip(tr("Create a new OTStudy"));
   connect(action, SIGNAL(triggered()), this, SIGNAL(createNewOTStudy()));
@@ -44,14 +43,19 @@ void OTguiToolBar::buildActions()
   connect(action, SIGNAL(triggered()), this, SIGNAL(openOTStudy()));
   addAction(action);
 
-  action = new QAction(QIcon(":/images/document-import22x22.png"), tr("&Import Python"), this);
-  action->setStatusTip(tr("Import a Python Script"));
-  connect(action, SIGNAL(triggered()), this, SIGNAL(importPython()));
-  addAction(action);
+  importPythonAction_ = new QAction(QIcon(":/images/document-import22x22.png"), tr("&Import Python"), this);
+  importPythonAction_->setStatusTip(tr("Import a Python Script"));
+  connect(importPythonAction_, SIGNAL(triggered()), this, SIGNAL(importPython()));
+  addAction(importPythonAction_);
 
   action = new QAction(QIcon(":/images/document-save22x22.png"), tr("&Save the OTStudy"), this);
   action->setStatusTip(tr("Save the current OTStudy"));
   connect(action, SIGNAL(triggered()), this, SIGNAL(saveOTStudy()));
   addAction(action);
+}
+
+void OTguiToolBar::changeActionsAvailability(const bool availability)
+{
+  importPythonAction_->setEnabled(availability);
 }
 }

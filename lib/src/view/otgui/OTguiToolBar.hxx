@@ -36,11 +36,15 @@ protected:
   void buildActions();
 
 public slots:
+  void changeActionsAvailability(const bool availability);
 signals:
   void createNewOTStudy();
   void openOTStudy();
   void importPython();
   void saveOTStudy();
+
+private:
+  QAction * importPythonAction_;
 };
 }
 #endif
