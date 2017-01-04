@@ -62,23 +62,33 @@ void DataAnalysis::run()
 {
   try
   {
+    stopRequested_ = false;
+
     const NumericalSample sample(getDesignOfExperiment().getSample());
 
     if (!sample.getSize())
       throw InvalidDimensionException(HERE) << "The sample is empty";
 
-    result_ = DataAnalysisResult(getDesignOfExperiment().getInputSample(), getDesignOfExperiment().getOutputSample());
+    result_ = DataAnalysisResult();
 
     for (UnsignedInteger i=0; i<sample.getDimension(); ++i)
     {
+      if (stopRequested_)
+        break;
+
       // min/max
-      result_.min_[i] = sample.getMarginal(i).getMin();
-      result_.max_[i] = sample.getMarginal(i).getMax();
+      result_.min_.add(sample.getMarginal(i).getMin());
+      result_.max_.add(sample.getMarginal(i).getMax());
 
       // moments
-      result_.mean_[i] = sample.getMarginal(i).computeMean();
-      result_.median_[i] = sample.getMarginal(i).computeMedian();
+      result_.mean_.add(sample.getMarginal(i).computeMean());
+      result_.median_.add(sample.getMarginal(i).computeMedian());
 
+      result_.standardDeviation_.add(NumericalPoint());
+      result_.coefficientOfVariation_.add(NumericalPoint());
+      result_.variance_.add(NumericalPoint());
+      result_.skewness_.add(NumericalPoint());
+      result_.kurtosis_.add(NumericalPoint());
       try
       {
         result_.standardDeviation_[i] = sample.getMarginal(i).computeStandardDeviationPerComponent();
@@ -94,68 +104,91 @@ void DataAnalysis::run()
       }
 
       // quartiles
-      result_.firstQuartile_[i] = sample.getMarginal(i).computeQuantilePerComponent(0.25);
-      result_.thirdQuartile_[i] = sample.getMarginal(i).computeQuantilePerComponent(0.75);
+      result_.firstQuartile_.add(sample.getMarginal(i).computeQuantilePerComponent(0.25));
+      result_.thirdQuartile_.add(sample.getMarginal(i).computeQuantilePerComponent(0.75));
 
-      // mean Confidence Interval
-      if (isConfidenceIntervalRequired_ && result_.standardDeviation_[i].getDimension())
+      // Confidence Intervals
+      if (isConfidenceIntervalRequired_)
       {
-        const Normal X(0,1);
-        const double f = X.computeQuantile((1-levelConfidenceInterval_)/2, true)[0];
-        double delta(f * result_.standardDeviation_[i][0] / sqrt(sample.getSize()));
+        // mean Confidence Interval
+        NumericalPoint meanLowerBounds(result_.meanConfidenceInterval_.getLowerBound());
+        NumericalPoint meanUpperBounds(result_.meanConfidenceInterval_.getUpperBound());
+        meanLowerBounds.add(0.);
+        meanUpperBounds.add(1.);
 
-        NumericalPoint lowerBounds(result_.meanConfidenceInterval_.getLowerBound());
-        NumericalPoint upperBounds(result_.meanConfidenceInterval_.getUpperBound());
-        lowerBounds[i] = result_.mean_[i][0] - delta;
-        upperBounds[i] = result_.mean_[i][0] + delta;
-        result_.meanConfidenceInterval_.setLowerBound(lowerBounds);
-        result_.meanConfidenceInterval_.setUpperBound(upperBounds);
+        Interval::BoolCollection meanFiniteLowerBounds(result_.meanConfidenceInterval_.getFiniteLowerBound());
+        Interval::BoolCollection meanFiniteUpperBounds(result_.meanConfidenceInterval_.getFiniteUpperBound());
+        meanFiniteLowerBounds.add(false);
+        meanFiniteUpperBounds.add(false);
 
-        Interval::BoolCollection finiteLowerBounds(result_.meanConfidenceInterval_.getFiniteLowerBound());
-        Interval::BoolCollection finiteUpperBounds(result_.meanConfidenceInterval_.getFiniteUpperBound());
-        finiteLowerBounds[i] = true;
-        finiteUpperBounds[i] = true;
-        result_.meanConfidenceInterval_.setFiniteLowerBound(finiteLowerBounds);
-        result_.meanConfidenceInterval_.setFiniteUpperBound(finiteUpperBounds);
-      }
-      // std Confidence Interval
-      if (isConfidenceIntervalRequired_ && result_.variance_[i].getDimension() && sample.getSize() > 1)
-      {
-        // TODO : use Normal Distribution?
-        const UnsignedInteger nbSimu = sample.getSize();
-        const ChiSquare X(nbSimu-1);
-        // low
-        const double f1 = X.computeQuantile((1-levelConfidenceInterval_)/2, true)[0];
-        // up
-        const double f2 = X.computeQuantile((1-levelConfidenceInterval_)/2, false)[0];
+        result_.meanConfidenceInterval_ = Interval(result_.getMin().getSize());
 
-        NumericalPoint lowerBounds(result_.stdConfidenceInterval_.getLowerBound());
-        NumericalPoint upperBounds(result_.stdConfidenceInterval_.getUpperBound());
+        if (result_.standardDeviation_[i].getDimension())
+        {
+          const Normal X(0,1);
+          const double f = X.computeQuantile((1 - levelConfidenceInterval_) / 2, true)[0];
+          double delta(f * result_.standardDeviation_[i][0] / sqrt(sample.getSize()));
 
-        //low
-        lowerBounds[i] = sqrt((nbSimu - 1) * result_.variance_[i][0] / f1);
-        //up
-        upperBounds[i] = sqrt((nbSimu - 1) * result_.variance_[i][0] / f2);
+          meanLowerBounds[i] = result_.mean_[i][0] - delta;
+          meanUpperBounds[i] = result_.mean_[i][0] + delta;
+          result_.meanConfidenceInterval_.setLowerBound(meanLowerBounds);
+          result_.meanConfidenceInterval_.setUpperBound(meanUpperBounds);
 
-        result_.stdConfidenceInterval_.setLowerBound(lowerBounds);
-        result_.stdConfidenceInterval_.setUpperBound(upperBounds);
+          meanFiniteLowerBounds[i] = true;
+          meanFiniteUpperBounds[i] = true;
+          result_.meanConfidenceInterval_.setFiniteLowerBound(meanFiniteLowerBounds);
+          result_.meanConfidenceInterval_.setFiniteUpperBound(meanFiniteUpperBounds);
+        }
 
-        Interval::BoolCollection finiteLowerBounds(result_.stdConfidenceInterval_.getFiniteLowerBound());
-        Interval::BoolCollection finiteUpperBounds(result_.stdConfidenceInterval_.getFiniteUpperBound());
-        finiteLowerBounds[i] = true;
-        finiteUpperBounds[i] = true;
-        result_.stdConfidenceInterval_.setFiniteLowerBound(finiteLowerBounds);
-        result_.stdConfidenceInterval_.setFiniteUpperBound(finiteUpperBounds);
+        // std Confidence Interval
+        NumericalPoint stdLowerBounds(result_.stdConfidenceInterval_.getLowerBound());
+        NumericalPoint stdUpperBounds(result_.stdConfidenceInterval_.getUpperBound());
+        stdLowerBounds.add(0.);
+        stdUpperBounds.add(1.);
+
+        Interval::BoolCollection stdFiniteLowerBounds(result_.stdConfidenceInterval_.getFiniteLowerBound());
+        Interval::BoolCollection stdFiniteUpperBounds(result_.stdConfidenceInterval_.getFiniteUpperBound());
+        stdFiniteLowerBounds.add(false);
+        stdFiniteUpperBounds.add(false);
+
+        result_.stdConfidenceInterval_ = Interval(result_.getMin().getSize());
+
+        if (result_.variance_[i].getDimension() && sample.getSize() > 1)
+        {
+          // TODO : use Normal Distribution?
+          const UnsignedInteger nbSimu = sample.getSize();
+          const ChiSquare X(nbSimu-1);
+          // low
+          const double f1 = X.computeQuantile((1 - levelConfidenceInterval_) / 2, true)[0];
+          // up
+          const double f2 = X.computeQuantile((1 - levelConfidenceInterval_) / 2, false)[0];
+
+          //low
+          stdLowerBounds[i] = sqrt((nbSimu - 1) * result_.variance_[i][0] / f1);
+          //up
+          stdUpperBounds[i] = sqrt((nbSimu - 1) * result_.variance_[i][0] / f2);
+
+          result_.stdConfidenceInterval_.setLowerBound(stdLowerBounds);
+          result_.stdConfidenceInterval_.setUpperBound(stdUpperBounds);
+
+          stdFiniteLowerBounds[i] = true;
+          stdFiniteUpperBounds[i] = true;
+          result_.stdConfidenceInterval_.setFiniteLowerBound(stdFiniteLowerBounds);
+          result_.stdConfidenceInterval_.setFiniteUpperBound(stdFiniteUpperBounds);
+        }
       }
 
       // outliers
-      const double lowerBound(result_.firstQuartile_[i][0] - 1.5 * (result_.thirdQuartile_[i][0]-result_.firstQuartile_[i][0]));
-      const double upperBound(result_.thirdQuartile_[i][0] + 1.5 * (result_.thirdQuartile_[i][0]-result_.firstQuartile_[i][0]));
+      result_.outliers_.add(NumericalPoint());
+      const double lowerBound(result_.firstQuartile_[i][0] - 1.5 * (result_.thirdQuartile_[i][0] - result_.firstQuartile_[i][0]));
+      const double upperBound(result_.thirdQuartile_[i][0] + 1.5 * (result_.thirdQuartile_[i][0] - result_.firstQuartile_[i][0]));
       for (UnsignedInteger j=0; j<sample.getSize(); ++j)
         if (sample[j][i] < lowerBound || sample[j][i] > upperBound)
           result_.outliers_[i].add(sample[j][i]);
 
       // pdf/cdf
+      result_.pdf_.add(NumericalSample());
+      result_.cdf_.add(NumericalSample());
       try
       {
         KernelSmoothing gaussianKernel;
@@ -166,6 +199,26 @@ void DataAnalysis::run()
       catch (std::exception)
       {
       }
+    }
+
+    // input sample
+    if (result_.getMin().getSize() <= designOfExperiment_.getInputSample().getDimension())
+    {
+      Indices inputIndices(result_.getMin().getSize());
+      inputIndices.fill();
+      result_.setInputSample(designOfExperiment_.getInputSample().getMarginal(inputIndices));
+    }
+    else
+      result_.setInputSample(designOfExperiment_.getInputSample());
+
+    // output sample
+    const int nbAnalysedOutputs = result_.getMin().getSize() - designOfExperiment_.getInputSample().getDimension();
+
+    if (nbAnalysedOutputs > 0)
+    {
+      Indices outputIndices(nbAnalysedOutputs);
+      outputIndices.fill();
+      result_.setOutputSample(designOfExperiment_.getOutputSample().getMarginal(outputIndices));
     }
 
     notify("analysisFinished");

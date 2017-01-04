@@ -232,6 +232,12 @@ void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result,
 
     for (UnsignedInteger i=0; i<inputSample.getSize(); ++i)
     {
+      if (stopRequested_)
+      {
+        leaveOneOutValidation_ = false;
+        return;
+      }
+
       // remove input_i
       NumericalSample inLearnSample(inputSample);
       inLearnSample.erase(i);

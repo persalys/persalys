@@ -63,6 +63,7 @@ void MonteCarloReliabilityAnalysis::run()
   try
   {
     // clear result
+    stopRequested_ = false;
     result_ = MonteCarloReliabilityResult();
 
     // initialization

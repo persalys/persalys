@@ -60,23 +60,36 @@ void SRCAnalysis::run()
   try
   {
     // clear result
+    stopRequested_ = false;
     result_ = SRCResult();
 
     RandomGenerator::SetSeed(getSeed());
 
     NumericalSample inputSample(generateInputSample(simulationsNumber_));
 
-    // set results
+    // evaluate model
+    NumericalSample outputSample(0, getInterestVariables().getSize());
+    for (UnsignedInteger i=0; i<simulationsNumber_; ++i)
+    {
+      if (stopRequested_ && i > 1)
+        break;
+
+      outputSample.add(computeOutputSample(inputSample[i]));
+    }
+
     NumericalSample indices(0, inputSample.getDimension());
 
+    const NumericalSample effectiveInputSample(inputSample, 0, outputSample.getSize());
     for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
     {
       Description outputName(1);
       outputName[0] = getInterestVariables()[i];
-      indices.add(CorrelationAnalysis::SRC(inputSample, computeOutputSample(inputSample, outputName)));
+
+      indices.add(CorrelationAnalysis::SRC(effectiveInputSample, outputSample.getMarginal(i)));
     }
 
     indices.setDescription(inputSample.getDescription());
+    // set results
     result_ = SRCResult(indices, getInterestVariables());
 
     // add warning if the model has not an independent copula

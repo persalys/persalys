@@ -103,6 +103,7 @@ void KrigingAnalysis::run()
       throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
 
     // clear result
+    stopRequested_ = false;
     result_ = KrigingAnalysisResult();
     optimalCovarianceModel_ = CovarianceModel();
 
@@ -125,6 +126,9 @@ void KrigingAnalysis::run()
     // because with all outputs KrigingAlgorithm is not reliable
     for (UnsignedInteger i=0; i<outputDimension; ++i)
     {
+      if (stopRequested_)
+       return;
+
       // build algo
       KrigingAlgorithm kriging(buildKrigingAlgorithm(effectiveInputSample, effectiveOutputSample.getMarginal(i)));
 

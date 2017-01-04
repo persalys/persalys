@@ -94,6 +94,7 @@ void MonteCarloAnalysis::run()
   try
   {
     // clear result
+    stopRequested_ = false;
     result_ = DataAnalysisResult();
 
     // check
@@ -119,7 +120,8 @@ void MonteCarloAnalysis::run()
     UnsignedInteger outerSampling = 0;
 
     // We loop if there remains some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
-    while ((outerSampling < maximumOuterSampling)
+    while (!stopRequested_
+      && (outerSampling < maximumOuterSampling)
       && ((coefficientOfVariation == -1.0) || (coefficientOfVariation > getMaximumCoefficientOfVariation()))
       &&  (static_cast<UnsignedInteger>(elapsedTime) < getMaximumElapsedTime() * CLOCKS_PER_SEC))
     {

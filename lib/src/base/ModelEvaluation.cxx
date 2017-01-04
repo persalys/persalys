@@ -42,6 +42,7 @@ ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & phys
   : PhysicalModelAnalysis(name, physicalModel)
 {
   initializeParameters(physicalModel.getInputs());
+  setInterestVariables(getPhysicalModel().getSelectedOutputsNames());
 }
 
 
@@ -52,6 +53,7 @@ ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & phys
   , inputNames_(getPhysicalModel().getInputNames())
   , inputValues_(inputsValues)
 {
+  setInterestVariables(getPhysicalModel().getSelectedOutputsNames());
 }
 
 
@@ -96,22 +98,24 @@ void ModelEvaluation::run()
   try
   {
     // clear result
+    stopRequested_ = false;
     result_ = ModelEvaluationResult();
 
     // output = f(input)
     NumericalSample inputSample(1, getInputValues());
     inputSample.setDescription(inputNames_);
+
     NumericalSample outputSample(1, 0);
-    for (UnsignedInteger i=0; i<getPhysicalModel().getSelectedOutputsNames().getSize(); ++i)
+    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
     {
       try
       {
-        outputSample.stack(getPhysicalModel().getFunction(getPhysicalModel().getSelectedOutputsNames()[i])(inputSample));
+        outputSample.stack(getPhysicalModel().getFunction(getInterestVariables()[i])(inputSample));
       }
       catch (std::exception & ex)
       {
         throw AnalysisExecutionFailedException(HERE) << "Impossible to evaluate the output "
-                                                    << getPhysicalModel().getSelectedOutputsNames()[i]
+                                                    << getInterestVariables()[i]
                                                     << ".\n" << ex.what();
       }
     }
