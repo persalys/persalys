@@ -28,9 +28,9 @@ namespace OTGUI {
 AnalysisImplementation::AnalysisImplementation()
   : PersistentObject()
   , Observable()
+  , isReliabilityAnalysis_(false)
   , informationMessage_("")
   , errorMessage_("")
-  , isReliabilityAnalysis_(false)
   , stopRequested_(false)
 {
 }
@@ -40,9 +40,9 @@ AnalysisImplementation::AnalysisImplementation()
 AnalysisImplementation::AnalysisImplementation(const String & name)
   : PersistentObject()
   , Observable()
+  , isReliabilityAnalysis_(false)
   , informationMessage_("")
   , errorMessage_("")
-  , isReliabilityAnalysis_(false)
   , stopRequested_(false)
 {
   setName(name);
@@ -65,12 +65,6 @@ String AnalysisImplementation::getModelName() const
 bool AnalysisImplementation::isReliabilityAnalysis() const
 {
   return isReliabilityAnalysis_;
-}
-
-
-void AnalysisImplementation::setIsReliabilityAnalysis(const bool isReliabilityAnalysis)
-{
-  isReliabilityAnalysis_ = isReliabilityAnalysis;
 }
 
 
@@ -100,12 +94,6 @@ String AnalysisImplementation::getInformationMessage() const
 String AnalysisImplementation::getErrorMessage() const
 {
   return errorMessage_;
-}
-
-
-void AnalysisImplementation::setErrorMessage(const String& errorMessage)
-{
-  errorMessage_ = errorMessage;
 }
 
 

@@ -5,7 +5,6 @@
 %}
 
 %ignore *::getModelName;
-%ignore *::setErrorMessage;
 
 %include AnalysisImplementation_doc.i
 

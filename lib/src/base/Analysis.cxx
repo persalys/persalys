@@ -87,12 +87,6 @@ String Analysis::getErrorMessage() const
 }
 
 
-void Analysis::setErrorMessage(const String& errorMessage)
-{
-  getImplementation()->setErrorMessage(errorMessage);
-}
-
-
 void Analysis::run()
 {
   getImplementation()->run();

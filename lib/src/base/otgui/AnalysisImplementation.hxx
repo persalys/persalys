@@ -49,7 +49,6 @@ public:
 
   OT::String getInformationMessage() const;
   OT::String getErrorMessage() const;
-  void setErrorMessage(const OT::String& errorMessage);
 
   void stop();
 
@@ -60,16 +59,13 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  void setIsReliabilityAnalysis(const bool isReliabilityAnalysis);
-
+  bool isReliabilityAnalysis_;
   OT::String informationMessage_;
+  OT::String errorMessage_;
+  bool stopRequested_;
 
 private:
-  OT::String errorMessage_;
-  bool isReliabilityAnalysis_;
   OT::Description interestVariables_;
-protected:
-  bool stopRequested_;
 };
 }
 #endif

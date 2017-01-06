@@ -48,7 +48,6 @@ public:
 
   OT::String getInformationMessage() const;
   OT::String getErrorMessage() const;
-  void setErrorMessage(const OT::String& errorMessage);
 
   void run();
   OT::String getPythonScript() const;

@@ -112,7 +112,7 @@ void MonteCarloReliabilityAnalysis::run()
   }
   catch (std::exception & ex)
   {
-    setErrorMessage(ex.what());
+    errorMessage_ = ex.what();
     notify("analysisBadlyFinished");
   }
 }
