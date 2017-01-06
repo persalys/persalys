@@ -72,7 +72,13 @@ void AnalysisItem::setDesignOfExperiment(const DesignOfExperiment& designOfExper
 }
 
 
-void AnalysisItem::update(Observable* source, const String & message)
+void AnalysisItem::stopAnalysis()
+{
+  analysis_.stop();
+}
+
+
+void AnalysisItem::update(Observable* source, const String& message)
 {
   if (message == "analysisFinished")
   {
@@ -100,6 +106,10 @@ void AnalysisItem::update(Observable* source, const String & message)
     }
     else
       qDebug() << "The metamodel analysis is not recognized.";
+  }
+  else if (message == "informationMessageUpdated")
+  {
+    emit messageChanged(analysis_.getInformationMessage().c_str());
   }
 }
 }

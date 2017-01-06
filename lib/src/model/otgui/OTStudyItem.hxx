@@ -54,7 +54,7 @@ public:
 public slots:
   void updateAnalysis(const Analysis & analysis);
   void updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
-  void addMetaModelItem(PhysicalModel & metaModel);
+  void addMetaModelItem(PhysicalModel metaModel);
   void removeItem(QStandardItem*);
 signals:
   void newDataModelItemCreated(DesignOfExperimentItem*);

@@ -307,7 +307,7 @@ void OTStudyItem::addDesignOfExperimentAnalysisItem(Analysis& analysis, Analysis
   if (!dynamic_cast<DesignOfExperimentAnalysis*>(&*analysis.getImplementation()))
     throw InvalidArgumentException(HERE) << "In OTStudyItem::addDesignOfExperimentAnalysisItem: Impossible to add an item for the analysis " << analysis.getName();
 
-  connect(item, SIGNAL(metaModelCreated(PhysicalModel&)), this, SLOT(addMetaModelItem(PhysicalModel&)));
+  connect(item, SIGNAL(metaModelCreated(PhysicalModel)), this, SLOT(addMetaModelItem(PhysicalModel)));
 
   // DataModel
   if (!dynamic_cast<DesignOfExperimentAnalysis*>(&*analysis.getImplementation())->getDesignOfExperiment().hasPhysicalModel())
@@ -356,7 +356,7 @@ void OTStudyItem::addDesignOfExperimentAnalysisItem(Analysis& analysis, Analysis
 }
 
 
-void OTStudyItem::addMetaModelItem(PhysicalModel& metaModel)
+void OTStudyItem::addMetaModelItem(PhysicalModel metaModel)
 {
   const String availableName = otStudy_.getAvailablePhysicalModelName(metaModel.getName());
   metaModel.setName(availableName);

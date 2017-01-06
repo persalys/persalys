@@ -44,12 +44,14 @@ public:
 public slots:
   void updateAnalysis(const Analysis & analysis);
   void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
+  void stopAnalysis();
 signals:
   void analysisFinished(AnalysisItem*);
-  void analysisBadlyFinished(AnalysisItem*,QString);
+  void analysisBadlyFinished(AnalysisItem*, QString);
   void analysisRemoved(QStandardItem*);
   void analysisChanged(const Analysis&);
-  void metaModelCreated(PhysicalModel&);
+  void metaModelCreated(PhysicalModel);
+  void messageChanged(QString);
 
 private:
   Analysis analysis_;
