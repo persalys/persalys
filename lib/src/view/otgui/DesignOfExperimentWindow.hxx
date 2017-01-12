@@ -41,9 +41,13 @@ public:
 
   virtual ~DesignOfExperimentWindow();
 
-  static QVector<PlotWidget*> GetListScatterPlots(const OT::NumericalSample & inS, const OT::NumericalSample & outS,
-                                                  const QStringList inNames, const QStringList inAxisNames,
-                                                  const QStringList outNames, const QStringList outAxisNames);
+  static QVector<PlotWidget*> GetListScatterPlots(const OT::NumericalSample& inS,
+                                                  const OT::NumericalSample& notValidInS,
+                                                  const OT::NumericalSample& outS,
+                                                  const QStringList inNames,
+                                                  const QStringList inAxisNames,
+                                                  const QStringList outNames,
+                                                  const QStringList outAxisNames);
 
 protected:
   void buildInterface();
@@ -58,9 +62,13 @@ public slots:
 private:
   DesignOfExperiment designOfExperiment_;
   QTabWidget * tabWidget_;
+  QTabWidget * tablesTabWidget_;
   ExportableTableView * tableView_;
   SampleTableModel * tableModel_;
-  QPushButton * evaluateButton_;
+  ExportableTableView * failedPointsTableView_;
+  SampleTableModel * failedPointsTableModel_;
+  ExportableTableView * notEvaluatedTableView_;
+  SampleTableModel * notEvaluatedTableModel_;
   QComboBox * outputsComboBoxFirstTab_;
   PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;

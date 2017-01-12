@@ -32,7 +32,14 @@ namespace OTGUI {
 DesignOfExperimentWindow::DesignOfExperimentWindow(DesignOfExperimentItem * item)
   : OTguiSubWindow(item)
   , designOfExperiment_(item->getDesignOfExperiment())
+  , tabWidget_(0)
+  , tablesTabWidget_(0)
+  , tableView_(0)
   , tableModel_(0)
+  , failedPointsTableView_(0)
+  , failedPointsTableModel_(0)
+  , notEvaluatedTableView_(0)
+  , notEvaluatedTableModel_(0)
   , outputsComboBoxFirstTab_(0)
   , plotMatrixConfigurationWidget_(0)
   , plotMatrix_X_X_ConfigurationWidget_(0)
@@ -56,33 +63,28 @@ DesignOfExperimentWindow::~DesignOfExperimentWindow()
 
 void DesignOfExperimentWindow::buildInterface()
 {
+  QWidget * mainWidget = new QWidget;
+  QVBoxLayout * tabLayout = new QVBoxLayout(mainWidget);
+
   tabWidget_ = new QTabWidget;
 
   // first tab --------------------------------
-  QWidget * tab = new QWidget;
-  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
-
+  tablesTabWidget_ = new QTabWidget;
   tableView_ = new ExportableTableView;
-  tabLayout->addWidget(tableView_);
+  tablesTabWidget_->addTab(tableView_, tr("DOE"));
 
-  QHBoxLayout * layout = new QHBoxLayout;
-  evaluateButton_ = new QPushButton(QIcon(":/images/run-build.png"), tr("Evaluate"));
-  if (designOfExperiment_.getOutputSample().getSize())
-    evaluateButton_->setEnabled(false);
-  layout->addStretch();
-  layout->addWidget(evaluateButton_);
-  tabLayout->addLayout(layout);
-  connect(evaluateButton_, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
+  tabWidget_->addTab(tablesTabWidget_, tr("Table"));
+  tabLayout->addWidget(tabWidget_);
 
+  // error message label
   errorMessageLabel_ = new QLabel;
   errorMessageLabel_->setWordWrap(true);
   tabLayout->addWidget(errorMessageLabel_);
 
-  tabWidget_->addTab(tab, tr("Table"));
-
+  // if needed: fill other tabs
   updateTable();
 
-  setWidget(tabWidget_);
+  setWidget(mainWidget);
 }
 
 
@@ -103,14 +105,35 @@ void DesignOfExperimentWindow::updateTable()
 {
   if (tableModel_)
     delete tableModel_;
+  if (failedPointsTableModel_)
+    delete failedPointsTableModel_;
+  if (notEvaluatedTableModel_)
+    delete notEvaluatedTableModel_;
 
   tableModel_ = new SampleTableModel(designOfExperiment_.getSample(), tableView_);
   tableView_->setModel(tableModel_);
+
   if (designOfExperiment_.getOutputSample().getSize())
   {
+    // tab with failed points
+    if (designOfExperiment_.getFailedInputSample().getSize())
+    {
+      failedPointsTableModel_ = new SampleTableModel(designOfExperiment_.getFailedInputSample(), failedPointsTableView_);
+      failedPointsTableView_ = new ExportableTableView;
+      failedPointsTableView_->setModel(failedPointsTableModel_);
+      tablesTabWidget_->addTab(failedPointsTableView_, tr("Failed points"));
+    }
+    // tab with not evaluated points
+    if (designOfExperiment_.getNotEvaluatedInputSample().getSize())
+    {
+      notEvaluatedTableModel_ = new SampleTableModel(designOfExperiment_.getNotEvaluatedInputSample(), notEvaluatedTableView_);
+      notEvaluatedTableView_ = new ExportableTableView;
+      notEvaluatedTableView_->setModel(notEvaluatedTableModel_);
+      tablesTabWidget_->addTab(notEvaluatedTableView_, tr("Not evaluated points"));
+    }
+
     if (tableModel_->sampleIsValid())
       addTabsForOutputs();
-    evaluateButton_->setEnabled(false);
   }
 }
 
@@ -212,7 +235,8 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   tab = new QWidget;
   QVBoxLayout * plotLayout = new QVBoxLayout(tab);
   ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
-  QVector<PlotWidget*> listScatterPlotWidgets = GetListScatterPlots(inS, outS, inputNames, inAxisTitles, outputNames, outAxisTitles);
+  QVector<PlotWidget*> listScatterPlotWidgets = GetListScatterPlots(inS, outS, designOfExperiment_.getFailedInputSample(),
+                                                                    inputNames, inAxisTitles, outputNames, outAxisTitles);
   for (int i=0; i<listScatterPlotWidgets.size(); ++i)
     stackedWidget->addWidget(listScatterPlotWidgets[i]);
 
@@ -238,7 +262,9 @@ void DesignOfExperimentWindow::addTabsForOutputs()
 }
 
 
-QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const OT::NumericalSample & inS, const OT::NumericalSample & outS,
+QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const OT::NumericalSample & inS,
+                                                                   const OT::NumericalSample & outS,
+                                                                   const OT::NumericalSample & notValidInS,
                                                                    const QStringList inNames, const QStringList inAxisNames,
                                                                    const QStringList outNames, const QStringList outAxisNames)
 {
@@ -246,6 +272,7 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const OT::Num
   const UnsignedInteger nbInputs = inS.getDimension();
   const UnsignedInteger nbOutputs = outS.getSize()? outS.getDimension() : 0;
   const QPen pen = QPen(Qt::blue, 4);
+  const QPen notValidPen = QPen(Qt::red, 4);
 
   for (UnsignedInteger j=0; j<nbInputs; ++j)
   {
@@ -260,6 +287,8 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const OT::Num
     {
       PlotWidget * plot = new PlotWidget("scatterplot");
       plot->plotScatter(inS.getMarginal(j), inS.getMarginal(i), pen, inAxisNames[j], inAxisNames[i]);
+      if (notValidInS.getSize())
+        plot->plotScatter(notValidInS.getMarginal(j), notValidInS.getMarginal(i), notValidPen, inAxisNames[j], inAxisNames[i]);
       plot->setTitle(tr("Scatter plot:") + " " + inNames[i] + " " + tr("vs") + " " + inNames[j]);
       listScatterPlotWidgets.append(plot);
     }
