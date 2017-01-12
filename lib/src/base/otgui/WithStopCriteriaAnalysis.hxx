@@ -26,8 +26,6 @@
 namespace OTGUI {
 class OTGUI_API WithStopCriteriaAnalysis
 {
-//   CLASSNAME;
-
 public:
   /** Default constructor */
   WithStopCriteriaAnalysis();
@@ -55,12 +53,26 @@ public:
 protected:
   struct TimeCriteria
   {
-    TimeCriteria() : startTime_(clock()), maxElapsedTime_(0.){};
-    TimeCriteria(int max) : startTime_(clock()), maxElapsedTime_(max*CLOCKS_PER_SEC){};
+    TimeCriteria() : startTime_(0.), maxElapsedTime_(0.), stopRequested_(false) {};
     virtual ~TimeCriteria(){};
+
     clock_t startTime_;
     clock_t elapsedTime_;
     clock_t maxElapsedTime_;
+    bool stopRequested_;
+
+    void setStartTime(const clock_t startTime)
+    {
+      startTime_ = startTime;
+    }
+    void setMaxElapsedTime(const int seconds)
+    {
+      maxElapsedTime_ = seconds*CLOCKS_PER_SEC;
+    }
+    void stop()
+    {
+      stopRequested_ = true;
+    }
   };
   /** Stop callback */
   static OT::Bool Stop(void * p);

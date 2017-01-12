@@ -37,6 +37,7 @@ MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis()
   : ReliabilityAnalysis()
   , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
+  , timeCriteria_(new TimeCriteria())
 {
 }
 
@@ -47,6 +48,7 @@ MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis(const String & name
   : ReliabilityAnalysis(name, limitState)
   , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
+  , timeCriteria_(new TimeCriteria())
 {
 }
 
@@ -90,8 +92,9 @@ void MonteCarloReliabilityAnalysis::run()
     algo.setMaximumCoefficientOfVariation(getMaximumCoefficientOfVariation());
     algo.setBlockSize(getBlockSize());
 
-    TimeCriteria data(getMaximumElapsedTime());
-    algo.setStopCallback(&Stop, &data);
+    timeCriteria_->setStartTime(clock());
+    timeCriteria_->setMaxElapsedTime(getMaximumElapsedTime());
+    algo.setStopCallback(&Stop, timeCriteria_);
 
     algo.run();
 
@@ -104,7 +107,7 @@ void MonteCarloReliabilityAnalysis::run()
                                           graph.getDrawables()[1].getData(),
                                           graph.getDrawables()[2].getData());
 
-    result_.elapsedTime_ = (float)data.elapsedTime_/CLOCKS_PER_SEC;
+    result_.elapsedTime_ = (float)timeCriteria_->elapsedTime_/CLOCKS_PER_SEC;
 
     function.disableHistory();
 
@@ -115,6 +118,13 @@ void MonteCarloReliabilityAnalysis::run()
     errorMessage_ = ex.what();
     notify("analysisBadlyFinished");
   }
+}
+
+
+void MonteCarloReliabilityAnalysis::stop()
+{
+  AnalysisImplementation::stop();
+  timeCriteria_->stop();
 }
 
 

@@ -48,6 +48,8 @@ public:
   virtual OT::String getPythonScript() const;
   virtual bool analysisLaunched() const;
 
+  virtual void stop();
+
   /** String converter */
   virtual OT::String __repr__() const;
 
@@ -59,6 +61,7 @@ public:
 
 private:
   OT::UnsignedInteger seed_;
+  TimeCriteria * timeCriteria_;
   MonteCarloReliabilityResult result_;
 };
 }
