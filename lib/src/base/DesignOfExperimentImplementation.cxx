@@ -36,6 +36,8 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation()
   , Observable()
   , hasPhysicalModel_(true)
   , physicalModel_()
+  , errorMessage_("")
+  , stopRequested_(false)
 {
 }
 
@@ -46,6 +48,8 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String&
   , Observable()
   , hasPhysicalModel_(true)
   , physicalModel_(physicalModel)
+  , errorMessage_("")
+  , stopRequested_(false)
 {
   setName(name);
 }
@@ -76,6 +80,18 @@ Description DesignOfExperimentImplementation::getVariableInputNames() const
 }
 
 
+NumericalSample DesignOfExperimentImplementation::getFailedInputSample() const
+{
+  return failedInputSample_;
+}
+
+
+NumericalSample DesignOfExperimentImplementation::getNotEvaluatedInputSample() const
+{
+  return notEvaluatedInputSample_;
+}
+
+
 void DesignOfExperimentImplementation::setInputSample(const NumericalSample& sample)
 {
   NumericalSample newsample(sample);
@@ -90,10 +106,77 @@ void DesignOfExperimentImplementation::setInputSample(const NumericalSample& sam
 }
 
 
+String DesignOfExperimentImplementation::getErrorMessage() const
+{
+  return errorMessage_;
+}
+
+
 void DesignOfExperimentImplementation::run()
 {
-  setOutputSample(physicalModel_.getFunction(physicalModel_.getSelectedOutputsNames())(getInputSample()));
-  notify("analysisFinished");
+  if (!hasPhysicalModel())
+    throw InvalidArgumentException(HERE) << "The design of experiment must be built from a physical model";
+
+  try
+  {
+    // clear result
+    stopRequested_ = false;
+
+    // input sample
+    NumericalSample inputSample(getInputSample());
+    NumericalSample wellDoneInputSample(0, getInputSample().getDimension());
+    NumericalSample failedInputSample(0, getInputSample().getDimension());
+    failedInputSample.setDescription(getInputSample().getDescription());
+
+    // output = f(input)
+    NumericalSample outputSample(0, getPhysicalModel().getSelectedOutputsNames().getSize());
+    for (UnsignedInteger i=0; i<inputSample.getSize(); ++i)
+    {
+      if (stopRequested_)
+        break;
+
+      NumericalPoint outputPoint(getPhysicalModel().getFunction(getPhysicalModel().getSelectedOutputsNames())(inputSample[i]));
+      NumericalPoint failedPoint;
+
+      for (UnsignedInteger j=0; j<getPhysicalModel().getSelectedOutputsNames().getSize(); ++j)
+      {
+        if (std::isnan(outputPoint[j]) || std::isinf(outputPoint[j]))
+        {
+          failedPoint = inputSample[i];
+          failedInputSample.add(failedPoint);
+          break;
+        }
+      }
+      if (!failedPoint.getSize())
+      {
+        outputSample.add(outputPoint);
+        wellDoneInputSample.add(inputSample[i]);
+      }
+    }
+
+    outputSample.setDescription(getPhysicalModel().getSelectedOutputsNames());
+
+    if (!outputSample.getSize())
+      throw InvalidRangeException(HERE) << "No succeeded evaluation";
+
+    // set samples
+    if (inputSample.getSize() > wellDoneInputSample.getSize())
+      setInputSample(wellDoneInputSample);
+
+    setOutputSample(outputSample);
+
+    failedInputSample_ = failedInputSample;
+
+    if ((wellDoneInputSample.getSize() + failedInputSample.getSize()) < inputSample.getSize())
+      notEvaluatedInputSample_ = NumericalSample(inputSample, outputSample.getSize() + failedInputSample.getSize(), inputSample.getSize());
+
+    notify("analysisFinished");
+  }
+  catch (std::exception & ex)
+  {
+    errorMessage_ = ex.what();
+    notify("analysisBadlyFinished");
+  }
 }
 
 
@@ -101,7 +184,7 @@ String DesignOfExperimentImplementation::getPythonScript() const
 {
   OSS oss;
 
-  oss << getName() + " = otguibase.DesignOfExperimentImplementation('" + getName() + "', "+getPhysicalModel().getName()+")\n";
+  oss << getName() + " = otguibase.DesignOfExperimentImplementation('" + getName() + "', " + getPhysicalModel().getName() + ")\n";
 
   oss << "inputSample = [\n";
   for (UnsignedInteger i=0; i<getInputSample().getSize(); ++i)
@@ -125,12 +208,21 @@ String DesignOfExperimentImplementation::getPythonScript() const
 }
 
 
+void DesignOfExperimentImplementation::stop()
+{
+  stopRequested_ = true;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void DesignOfExperimentImplementation::save(Advocate& adv) const
 {
   DataSample::save(adv);
   adv.saveAttribute("hasPhysicalModel_", hasPhysicalModel_);
   adv.saveAttribute("physicalModel_", physicalModel_);
+  adv.saveAttribute("errorMessage_", errorMessage_);
+  adv.saveAttribute("failedInputSample_", failedInputSample_);
+  adv.saveAttribute("notEvaluatedInputSample_", notEvaluatedInputSample_);
 }
 
 
@@ -140,5 +232,8 @@ void DesignOfExperimentImplementation::load(Advocate& adv)
   DataSample::load(adv);
   adv.loadAttribute("hasPhysicalModel_", hasPhysicalModel_);
   adv.loadAttribute("physicalModel_", physicalModel_);
+  adv.loadAttribute("errorMessage_", errorMessage_);
+  adv.loadAttribute("failedInputSample_", failedInputSample_);
+  adv.loadAttribute("notEvaluatedInputSample_", notEvaluatedInputSample_);
 }
 }

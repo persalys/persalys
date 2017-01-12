@@ -60,11 +60,15 @@ void DesignOfExperimentItem::updateDesignOfExperiment(const DesignOfExperiment &
 
 void DesignOfExperimentItem::update(Observable* source, const String & message)
 {
-  if (message=="analysisFinished")
+  if (message == "analysisFinished")
   {
     emit analysisFinished();
   }
-  else if (message=="designOfExperimentRemoved")
+  if (message == "analysisBadlyFinished")
+  {
+    emit analysisBadlyFinished(designOfExperiment_.getErrorMessage().c_str());
+  }
+  else if (message == "designOfExperimentRemoved")
   {
     emit designOfExperimentRemoved(this);
   }

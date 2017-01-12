@@ -44,10 +44,16 @@ public:
 
   virtual OT::Description getVariableInputNames() const;
 
+  OT::NumericalSample getFailedInputSample() const;
+  OT::NumericalSample getNotEvaluatedInputSample() const;
+
   virtual void setInputSample(const OT::NumericalSample & sample);
+
+  OT::String getErrorMessage() const;
 
   void run();
   virtual OT::String getPythonScript() const;
+  void stop();
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -58,6 +64,10 @@ public:
 protected:
   bool hasPhysicalModel_;
   PhysicalModel physicalModel_;
+  OT::String errorMessage_;
+  bool stopRequested_;
+  OT::NumericalSample failedInputSample_;
+  OT::NumericalSample notEvaluatedInputSample_;
 };
 }
 #endif
