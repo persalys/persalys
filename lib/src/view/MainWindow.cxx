@@ -56,6 +56,14 @@ void MainWindow::buildInterface()
   leftSideSplitter->addWidget(studyTree_);
   leftSideSplitter->setStretchFactor(0, 8);
 
+  dockControllerWidget_ = new QDockWidget(tr("Current analysis"));
+  dockControllerWidget_->setFeatures(QDockWidget::NoDockWidgetFeatures);
+  connect(studyTree_, SIGNAL(showControllerWidget(QWidget*)), this, SLOT(showControllerWidget(QWidget*)));
+  connect(studyTree_, SIGNAL(analysisFinished()), dockControllerWidget_, SLOT(close()));
+  leftSideSplitter->addWidget(dockControllerWidget_);
+  dockControllerWidget_->close();
+  leftSideSplitter->setStretchFactor(1, 2);
+
   configurationDock_ = new QDockWidget(tr("Graph settings"));
   configurationDock_->setFeatures(QDockWidget::NoDockWidgetFeatures);
   connect(studyTree_, SIGNAL(graphWindowActivated(QWidget*)), this, SLOT(showGraphConfigurationTabWidget(QWidget*)));
@@ -118,6 +126,7 @@ void MainWindow::buildInterface()
   connect(menuBar, SIGNAL(closeOTStudy()), studyTree_, SLOT(closeOTStudy()));
   connect(menuBar, SIGNAL(closeWindow()), this, SLOT(exitApplication()));
   connect(studyTree_, SIGNAL(recentFilesListChanged(QString)), menuBar, SLOT(updateRecentFilesList(QString)));
+  connect(studyTree_, SIGNAL(actionsAvailabilityChanged(bool)), menuBar, SLOT(changeActionsAvailability(bool)));
   setMenuBar(menuBar);
 
   // tool bar
@@ -126,6 +135,7 @@ void MainWindow::buildInterface()
   connect(toolBar, SIGNAL(openOTStudy()), studyTree_, SLOT(openOTStudy()));
   connect(toolBar, SIGNAL(importPython()), this, SLOT(importPython()));
   connect(toolBar, SIGNAL(saveOTStudy()), studyTree_, SLOT(saveOTStudy()));
+  connect(studyTree_, SIGNAL(actionsAvailabilityChanged(bool)), toolBar, SLOT(changeActionsAvailability(bool)));
   addToolBar(toolBar);
 
   // status bar
@@ -185,6 +195,14 @@ void MainWindow::showGraphConfigurationTabWidget(QWidget * graph)
 {
   configurationDock_->setWidget(graph);
   configurationDock_->show();
+}
+
+
+void MainWindow::showControllerWidget(QWidget* widget)
+{
+  dockControllerWidget_->setWidget(widget);
+  dockControllerWidget_->show();
+  configurationDock_->close();
 }
 
 
