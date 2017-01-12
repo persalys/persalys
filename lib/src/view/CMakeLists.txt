@@ -121,6 +121,8 @@ ot_install_header_file ( KrigingResultWindow.hxx )
 ot_install_header_file ( InferenceResultWindow.hxx )
 ot_install_header_file ( InferenceResultWizard.hxx )
 ot_install_header_file ( InferenceResultWidget.hxx )
+ot_install_header_file ( Controller.hxx )
+ot_install_header_file ( ControllerWidget.hxx )
 
 qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/OTguiToolBar.hxx
@@ -177,6 +179,8 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/DistributionsForInferenceWidget.hxx
                                   otgui/InferenceResultWizard.hxx
                                   otgui/InferenceResultWidget.hxx
+                                  otgui/Controller.hxx
+                                  otgui/ControllerWidget.hxx
                                   )
 
 
