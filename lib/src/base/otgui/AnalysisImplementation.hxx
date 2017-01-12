@@ -50,7 +50,7 @@ public:
   OT::String getInformationMessage() const;
   OT::String getErrorMessage() const;
 
-  void stop();
+  virtual void stop();
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
