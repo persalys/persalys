@@ -29,9 +29,12 @@
 #include <QMessageBox>
 #include <QSettings>
 
+#include "otgui/Controller.hxx"
+#include "otgui/ControllerWidget.hxx"
 #include "otgui/OTStudyWindow.hxx"
 #include "otgui/DataModel.hxx"
 #include "otgui/DataAnalysis.hxx"
+#include "otgui/DesignOfExperimentEvaluation.hxx"
 #include "otgui/DataAnalysisResultWindow.hxx"
 #include "otgui/InferenceWizard.hxx"
 #include "otgui/AnalyticalPhysicalModel.hxx"
@@ -75,6 +78,7 @@ namespace OTGUI {
 StudyTreeView::StudyTreeView(QWidget * parent)
   : QTreeView(parent)
   , treeViewModel_(new StudyTreeViewModel(this))
+  , runningAnalysisItem_(0)
 {
   OTStudy::SetInstanceObserver(treeViewModel_);
   setModel(treeViewModel_);
@@ -103,6 +107,12 @@ StudyTreeView::StudyTreeView(QWidget * parent)
 }
 
 
+StudyTreeView::~StudyTreeView()
+{
+  runningAnalysisItem_ = 0;
+}
+
+
 void StudyTreeView::onCustomContextMenu(const QPoint &point)
 {
   QModelIndex index = indexAt(point);
@@ -110,10 +120,26 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
   if (!index.isValid())
     return;
 
-  QMenu * contextMenu = new QMenu(this);
-  QString dataType = treeViewModel_->itemFromIndex(index)->data(Qt::UserRole).toString();
-  if (dataType == "ProbabilisticStudy" && treeViewModel_->itemFromIndex(index)->hasChildren())
+  QStandardItem * currentItem = treeViewModel_->itemFromIndex(index);
+  QString dataType = currentItem->data(Qt::UserRole).toString();
+
+  if (dataType == "ProbabilisticStudy" && currentItem->hasChildren())
     return;
+
+  if (dataType.contains("DesignOfExperiment"))
+  {
+    DesignOfExperimentItem * DOEItem = dynamic_cast<DesignOfExperimentItem*>(currentItem);
+    if (DOEItem)
+    {
+      if (DOEItem->getDesignOfExperiment().getOutputSample().getSize())
+        evaluateDesignOfExperiment_->setEnabled(false);
+      else
+        if (!runningAnalysisItem_)
+          evaluateDesignOfExperiment_->setEnabled(true);
+    }
+  }
+
+  QMenu * contextMenu = new QMenu(this);
   contextMenu->addActions(getActions(dataType));
   contextMenu->exec(mapToGlobal(point));
 }
@@ -215,6 +241,10 @@ void StudyTreeView::buildActions()
   runDesignOfExperiment_->setStatusTip(tr("Run the design of experiment"));
   connect(runDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(runDesignOfExperiment()));
 
+  evaluateDesignOfExperiment_ = new QAction(tr("Evaluate"), this);
+  evaluateDesignOfExperiment_->setStatusTip(tr("Evaluate the design of experiment"));
+  connect(evaluateDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(evaluateDesignOfExperiment()));
+
   // remove design of experiment action
   removeDesignOfExperiment_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
   removeDesignOfExperiment_->setStatusTip(tr("Remove the design of experiment"));
@@ -285,6 +315,7 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
   else if (dataType.contains("DesignOfExperiment"))
   {
     actions.append(runDesignOfExperiment_);
+    actions.append(evaluateDesignOfExperiment_);
     actions.append(newMetaModel_);
     actions.append(removeDesignOfExperiment_);
   }
@@ -303,6 +334,23 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
     actions.append(removeAnalysis_);
   }
   return actions;
+}
+
+
+void StudyTreeView::changeActionsAvailability(const bool availability)
+{
+  newCentralTendency_->setEnabled(availability);
+  newSensitivityAnalysis_->setEnabled(availability);
+  newThresholdExceedance_->setEnabled(availability);
+  newModelEvaluation_->setEnabled(availability);
+  newDataAnalysis_->setEnabled(availability);
+  newMetaModel_->setEnabled(availability);
+  newInferenceAnalysis_->setEnabled(availability);
+  newDesignOfExperiment_->setEnabled(availability);
+  runAnalysis_->setEnabled(availability);
+  runDesignOfExperiment_->setEnabled(availability);
+  evaluateDesignOfExperiment_->setEnabled(availability);
+  emit actionsAvailabilityChanged(availability);
 }
 
 
@@ -408,8 +456,7 @@ void StudyTreeView::createNewDataAnalysis()
   DataAnalysis * analysis = new DataAnalysis(otStudyItem->getOTStudy().getAvailableAnalysisName("DataAnalysis_"), *dynamic_cast<const DataModel*>(&*item->getDesignOfExperiment().getImplementation()));
 
   otStudyItem->getOTStudy().add(analysis);
-  analysis->run();
-  setExpanded(index, true);
+  findAnalysisItemAndLaunchExecution(otStudyItem, analysis->getName().c_str());;
 }
 
 
@@ -566,9 +613,12 @@ void StudyTreeView::createNewLimitStateWindow(LimitStateItem* item)
 void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentItem * item)
 {
   DesignOfExperimentWindow * window = new DesignOfExperimentWindow(item);
+
   connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
   connect(window, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
   connect(item, SIGNAL(analysisFinished()), window, SLOT(updateTable()));
+  connect(item, SIGNAL(analysisBadlyFinished(QString)), window, SLOT(setTemporaryErrorMessage(QString)));
+
   emit showWindow(window);
   setExpanded(item->index().parent(), true);
   setCurrentIndex(item->index());
@@ -721,13 +771,33 @@ void StudyTreeView::removeDesignOfExperiment()
 }
 
 
+void StudyTreeView::launchAnalysis(AnalysisItem* analysisItem)
+{
+  emit removeSubWindow(analysisItem);
+
+  ControllerWidget * controllerWidget = new ControllerWidget(analysisItem->getAnalysis().getName().c_str());
+  emit showControllerWidget(controllerWidget);
+
+  connect(analysisItem, SIGNAL(messageChanged(QString)), controllerWidget, SLOT(setMessage(QString)));
+  connect(controllerWidget, SIGNAL(stopRunningRequested()), analysisItem, SLOT(stopAnalysis()));
+
+  // controller/widget automatically deleted when the analysis is finished
+  Controller * controller = new Controller;
+  connect(controller, SIGNAL(analysisFinished()), controllerWidget, SLOT(deleteLater()));
+  controller->launchAnalysis(analysisItem->getAnalysis());
+
+  runningAnalysisItem_ = analysisItem;
+  changeActionsAvailability(false);
+}
+
+
 void StudyTreeView::findAnalysisItemAndLaunchExecution(OTStudyItem * otStudyItem, const QString & analysisName)
 {
   AnalysisItem * analysisItem = treeViewModel_->getAnalysisItem(otStudyItem, analysisName);
 
   if (analysisItem)
   {
-    analysisItem->getAnalysis().run();
+    launchAnalysis(analysisItem);
   }
 }
 
@@ -798,24 +868,62 @@ void StudyTreeView::runAnalysis()
     if (wizard->exec())
     {
       item->updateAnalysis(wizard->getAnalysis());
-      item->getAnalysis().run();
+      launchAnalysis(item);
     }
   }
+}
+
+
+void StudyTreeView::resetTree()
+{
+  runningAnalysisItem_ = 0;
+  changeActionsAvailability(true);
+  emit analysisFinished();
+}
+
+
+void StudyTreeView::evaluateDesignOfExperiment()
+{
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(selectionModel()->currentIndex());
+  DesignOfExperimentItem * DOEItem = dynamic_cast<DesignOfExperimentItem*>(selectedItem);
+
+  Analysis evaluation = DesignOfExperimentEvaluation(DOEItem->getDesignOfExperiment());
+  AnalysisItem * item = new AnalysisItem(evaluation);
+
+  connect(item, SIGNAL(analysisFinished(AnalysisItem*)), item, SLOT(deleteLater()));
+  connect(item, SIGNAL(analysisBadlyFinished(AnalysisItem*,QString)), item, SLOT(deleteLater()));
+  connect(item, SIGNAL(analysisFinished(AnalysisItem*)), this, SLOT(resetTree()));
+  connect(item, SIGNAL(analysisBadlyFinished(AnalysisItem*,QString)), this, SLOT(resetTree()));
+
+  launchAnalysis(item);
 }
 
 
 void StudyTreeView::removeAnalysis()
 {
   QModelIndex index = selectionModel()->currentIndex();
-  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+  if (!index.isValid())
+    return;
 
-  treeViewModel_->getOTStudyItem(index)->getOTStudy().remove(dynamic_cast<AnalysisItem*>(selectedItem)->getAnalysis());
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+  AnalysisItem * currentItem = dynamic_cast<AnalysisItem*>(selectedItem);
+
+  if (!currentItem)
+    return;
+
+  if (runningAnalysisItem_ == currentItem)
+  {
+    QMessageBox::warning(this, tr("Warning"), tr("Cannot close a running analysis."));
+    return;
+  }
+
+  treeViewModel_->getOTStudyItem(index)->getOTStudy().remove(currentItem->getAnalysis());
 }
 
 
 void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
 {
-  emit removeSubWindow(item);
+  resetTree();
 
   ResultWindow * resultWindow = 0;
   QString analysisType = item->data(Qt::UserRole).toString();
@@ -856,7 +964,8 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
 
 void StudyTreeView::createAnalysisExecutionFailedWindow(AnalysisItem * item, const QString & errorMessage)
 {
-  emit removeSubWindow(item);
+  resetTree();
+
   AnalysisExecutionFailedWindow * window = new AnalysisExecutionFailedWindow(item, errorMessage);
   emit showWindow(window);
 
@@ -1031,6 +1140,12 @@ void StudyTreeView::openOTStudy(const QString & fileName)
 
 bool StudyTreeView::closeOTStudy()
 {
+  if (runningAnalysisItem_)
+  {
+    QMessageBox::warning(this, tr("Warning"), tr("Cannot close studies when an analysis is running."));
+    return false;
+  }
+
   OTStudyItem * item = treeViewModel_->getOTStudyItem(selectionModel()->currentIndex());
   if (!item)
     return true;
@@ -1070,6 +1185,11 @@ bool StudyTreeView::closeOTStudy()
 
 bool StudyTreeView::closeAllOTStudies()
 {
+  if (runningAnalysisItem_)
+  {
+    QMessageBox::warning(this, tr("Warning"), tr("Cannot close studies when an analysis is running."));
+    return false;
+  }
   QStandardItem * rootItem = treeViewModel_->invisibleRootItem();
   if (!rootItem->hasChildren())
     return true;
