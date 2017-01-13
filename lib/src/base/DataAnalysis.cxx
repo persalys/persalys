@@ -203,6 +203,16 @@ void DataAnalysis::run()
       {
       }
     }
+    // initialisation C.I
+    if (!isConfidenceIntervalRequired_)
+    {
+      result_.meanConfidenceInterval_ = Interval(result_.getMin().getSize());
+      result_.meanConfidenceInterval_.setFiniteLowerBound(Interval::BoolCollection(result_.getMin().getSize(), false));
+      result_.meanConfidenceInterval_.setFiniteUpperBound(Interval::BoolCollection(result_.getMin().getSize(), false));
+      result_.stdConfidenceInterval_ = Interval(result_.getMin().getSize());
+      result_.stdConfidenceInterval_.setFiniteLowerBound(Interval::BoolCollection(result_.getMin().getSize(), false));
+      result_.stdConfidenceInterval_.setFiniteUpperBound(Interval::BoolCollection(result_.getMin().getSize(), false));
+    }
 
     // input sample
     if (result_.getMin().getSize() <= designOfExperiment_.getInputSample().getDimension())
