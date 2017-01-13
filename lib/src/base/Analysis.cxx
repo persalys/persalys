@@ -87,6 +87,12 @@ String Analysis::getErrorMessage() const
 }
 
 
+int Analysis::getProgressValue() const
+{
+  return getImplementation()->getProgressValue();
+}
+
+
 void Analysis::run()
 {
   getImplementation()->run();

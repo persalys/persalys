@@ -49,6 +49,7 @@ public:
 
   OT::String getInformationMessage() const;
   OT::String getErrorMessage() const;
+  int getProgressValue() const;
 
   virtual void stop();
 
@@ -63,6 +64,7 @@ protected:
   OT::String informationMessage_;
   OT::String errorMessage_;
   bool stopRequested_;
+  int progressValue_;
 
 private:
   OT::Description interestVariables_;

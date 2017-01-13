@@ -38,6 +38,7 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation()
   , physicalModel_()
   , errorMessage_("")
   , stopRequested_(false)
+  , progressValue_(0)
 {
 }
 
@@ -50,6 +51,7 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String&
   , physicalModel_(physicalModel)
   , errorMessage_("")
   , stopRequested_(false)
+  , progressValue_(0)
 {
   setName(name);
 }
@@ -112,6 +114,12 @@ String DesignOfExperimentImplementation::getErrorMessage() const
 }
 
 
+int DesignOfExperimentImplementation::getProgressValue() const
+{
+  return progressValue_;
+}
+
+
 void DesignOfExperimentImplementation::run()
 {
   if (!hasPhysicalModel())
@@ -134,6 +142,9 @@ void DesignOfExperimentImplementation::run()
     {
       if (stopRequested_)
         break;
+
+      progressValue_ = (int) (i * 100 / inputSample.getSize());
+      notify("progressValueChanged");
 
       NumericalPoint outputPoint(getPhysicalModel().getFunction(getPhysicalModel().getSelectedOutputsNames())(inputSample[i]));
       NumericalPoint failedPoint;

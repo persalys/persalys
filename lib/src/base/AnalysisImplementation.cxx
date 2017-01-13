@@ -32,6 +32,7 @@ AnalysisImplementation::AnalysisImplementation()
   , informationMessage_("")
   , errorMessage_("")
   , stopRequested_(false)
+  , progressValue_(0)
 {
 }
 
@@ -44,6 +45,7 @@ AnalysisImplementation::AnalysisImplementation(const String & name)
   , informationMessage_("")
   , errorMessage_("")
   , stopRequested_(false)
+  , progressValue_(0)
 {
   setName(name);
 }
@@ -94,6 +96,12 @@ String AnalysisImplementation::getInformationMessage() const
 String AnalysisImplementation::getErrorMessage() const
 {
   return errorMessage_;
+}
+
+
+int AnalysisImplementation::getProgressValue() const
+{
+  return progressValue_;
 }
 
 

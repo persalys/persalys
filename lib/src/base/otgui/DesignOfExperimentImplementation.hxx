@@ -50,6 +50,7 @@ public:
   virtual void setInputSample(const OT::NumericalSample & sample);
 
   OT::String getErrorMessage() const;
+  int getProgressValue() const;
 
   void run();
   virtual OT::String getPythonScript() const;
@@ -66,6 +67,7 @@ protected:
   PhysicalModel physicalModel_;
   OT::String errorMessage_;
   bool stopRequested_;
+  int progressValue_;
   OT::NumericalSample failedInputSample_;
   OT::NumericalSample notEvaluatedInputSample_;
 };

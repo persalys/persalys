@@ -58,6 +58,7 @@ public:
   OT::NumericalSample getSample() const;
 
   OT::String getErrorMessage() const;
+  int getProgressValue() const;
 
   void run();
   OT::String getPythonScript() const;

@@ -127,6 +127,12 @@ String DesignOfExperiment::getErrorMessage() const
 }
 
 
+int DesignOfExperiment::getProgressValue() const
+{
+  return getImplementation()->getProgressValue();
+}
+
+
 void DesignOfExperiment::run()
 {
   getImplementation()->run();

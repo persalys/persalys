@@ -48,6 +48,7 @@ public:
 
   OT::String getInformationMessage() const;
   OT::String getErrorMessage() const;
+  int getProgressValue() const;
 
   void run();
   OT::String getPythonScript() const;
