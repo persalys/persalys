@@ -100,6 +100,13 @@ void SobolAnalysis::run()
       && ((coefficientOfVariation == -1.0) || (coefficientOfVariation > getMaximumCoefficientOfVariation()))
       &&  (static_cast<UnsignedInteger>(elapsedTime) < getMaximumElapsedTime() * CLOCKS_PER_SEC))
     {
+      // progress
+      if (getMaximumCalls()< (UnsignedInteger)std::numeric_limits<int>::max())
+      {
+        progressValue_ = (int) (outerSampling * 100 / maximumOuterSampling);
+        notify("progressValueChanged");
+      }
+
       // the last block can be smaller
       const UnsignedInteger effectiveBlockSize = outerSampling < (maximumOuterSampling - 1) ? getBlockSize() : lastBlockSize;
 
@@ -151,6 +158,14 @@ void SobolAnalysis::run()
         const UnsignedInteger sampleSize(outerSampling < (maximumOuterSampling - 1) ?
                                         getBlockSize()*(outerSampling+1) :
                                         getBlockSize()*outerSampling+lastBlockSize);
+
+        // information message
+        OSS oss;
+        oss << "Number of evaluations = " << inputDesign.getSize() << "\n";
+        oss << "Coefficient of variation = " << coefficientOfVariation << "\n";
+        oss << "Elapsed time = " << (float) elapsedTime / CLOCKS_PER_SEC << " s\n";
+        informationMessage_ = oss;
+        notify("informationMessageUpdated");
 
         if (sampleSize == 1)
           throw InvalidValueException(HERE) << "Impossible to compute the sensitivity indices. Increase the block size and/or the maximum calls.";
@@ -220,7 +235,7 @@ void SobolAnalysis::run()
     // fill result_
     result_ = SobolResult(firstOrderIndices, totalIndices, getInterestVariables());
     result_.callsNumber_ = X1.getSize()*(2+nbInputs);
-    result_.elapsedTime_ = (float)elapsedTime/CLOCKS_PER_SEC;
+    result_.elapsedTime_ = (float) elapsedTime/CLOCKS_PER_SEC;
     result_.coefficientOfVariation_ = coefficientOfVariation;
 
     // add warning if the model has not an independent copula

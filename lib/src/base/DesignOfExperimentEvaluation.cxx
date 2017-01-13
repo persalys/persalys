@@ -68,5 +68,10 @@ void DesignOfExperimentEvaluation::update(Observable* source, const String& mess
     errorMessage_ = getDesignOfExperiment().getErrorMessage();
     notify("analysisBadlyFinished");
   }
+  else if (message == "progressValueChanged")
+  {
+    progressValue_ = designOfExperiment_.getProgressValue();
+    notify("progressValueChanged");
+  }
 }
 }

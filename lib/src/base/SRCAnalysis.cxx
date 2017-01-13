@@ -74,6 +74,9 @@ void SRCAnalysis::run()
       if (stopRequested_ && i > 1)
         break;
 
+      progressValue_ = (int) (i * 100 / simulationsNumber_);
+      notify("progressValueChanged");
+
       outputSample.add(computeOutputSample(inputSample[i]));
     }
 

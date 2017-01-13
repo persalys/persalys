@@ -25,6 +25,8 @@
 #include "WithStopCriteriaAnalysis.hxx"
 #include "MonteCarloReliabilityResult.hxx"
 
+#include <openturns/MonteCarlo.hxx>
+
 namespace OTGUI {
 class OTGUI_API MonteCarloReliabilityAnalysis : public ReliabilityAnalysis, public WithStopCriteriaAnalysis
 {
@@ -59,9 +61,21 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
+protected:
+  struct AnalysisStruct
+  {
+    AnalysisStruct(MonteCarloReliabilityAnalysis* analysis, OT::MonteCarlo* simulation)
+    : analysis_(analysis), simulation_(simulation) {};
+    virtual ~AnalysisStruct(){};
+
+    MonteCarloReliabilityAnalysis * analysis_;
+    OT::MonteCarlo * simulation_;
+  };
+  static void UpdateProgressValue(double percent, void * data);
+
 private:
   OT::UnsignedInteger seed_;
-  TimeCriteria * timeCriteria_;
+  TimeCriteria timeCriteria_;
   MonteCarloReliabilityResult result_;
 };
 }

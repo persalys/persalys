@@ -228,6 +228,9 @@ void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result,
   // validation: leave-one-out
   if (leaveOneOutValidation_)
   {
+    informationMessage_ = "Meta model has been created.\nThe validation is running.";
+    notify("informationMessageUpdated");
+
     NumericalSample outputSampleLOO(inputSample.getSize(), result.outputSample_.getDimension());
 
     for (UnsignedInteger i=0; i<inputSample.getSize(); ++i)
@@ -237,6 +240,9 @@ void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result,
         leaveOneOutValidation_ = false;
         return;
       }
+
+      progressValue_ = (int) (i * 100 / inputSample.getSize());
+      notify("progressValueChanged");
 
       // remove input_i
       NumericalSample inLearnSample(inputSample);

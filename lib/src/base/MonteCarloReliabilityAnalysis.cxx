@@ -20,7 +20,6 @@
  */
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
 
-#include "openturns/MonteCarlo.hxx"
 #include "openturns/RandomGenerator.hxx"
 #include "openturns/PersistentObjectFactory.hxx"
 
@@ -37,7 +36,7 @@ MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis()
   : ReliabilityAnalysis()
   , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
-  , timeCriteria_(new TimeCriteria())
+  , timeCriteria_()
 {
 }
 
@@ -48,7 +47,7 @@ MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis(const String & name
   : ReliabilityAnalysis(name, limitState)
   , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
-  , timeCriteria_(new TimeCriteria())
+  , timeCriteria_()
 {
 }
 
@@ -60,12 +59,34 @@ MonteCarloReliabilityAnalysis* MonteCarloReliabilityAnalysis::clone() const
 }
 
 
+void MonteCarloReliabilityAnalysis::UpdateProgressValue(double percent, void * data)
+{
+  AnalysisStruct * analysisStruct = (AnalysisStruct*) data;
+  if (!analysisStruct)
+    return;
+
+  if (analysisStruct->analysis_->getMaximumCalls()< (UnsignedInteger)std::numeric_limits<int>::max())
+  {
+    analysisStruct->analysis_->progressValue_ = (int) percent;
+    analysisStruct->analysis_->notify("progressValueChanged");
+  }
+
+  OSS oss;
+  oss << "Number of iterations = " << analysisStruct->simulation_->getResult().getOuterSampling() << "\n";
+  oss << "Coefficient of variation = " << analysisStruct->simulation_->getResult().getCoefficientOfVariation() << "\n";
+  oss << "Elapsed time = " << (float) analysisStruct->analysis_->timeCriteria_.elapsedTime_ / CLOCKS_PER_SEC << " s\n";
+  analysisStruct->analysis_->informationMessage_ = oss;
+  analysisStruct->analysis_->notify("informationMessageUpdated");
+}
+
+
 void MonteCarloReliabilityAnalysis::run()
 {
   try
   {
     // clear result
     stopRequested_ = false;
+    timeCriteria_ = TimeCriteria();
     result_ = MonteCarloReliabilityResult();
 
     // initialization
@@ -92,9 +113,11 @@ void MonteCarloReliabilityAnalysis::run()
     algo.setMaximumCoefficientOfVariation(getMaximumCoefficientOfVariation());
     algo.setBlockSize(getBlockSize());
 
-    timeCriteria_->setStartTime(clock());
-    timeCriteria_->setMaxElapsedTime(getMaximumElapsedTime());
-    algo.setStopCallback(&Stop, timeCriteria_);
+    timeCriteria_.setStartTime(clock());
+    timeCriteria_.setMaxElapsedTime(getMaximumElapsedTime());
+    algo.setStopCallback(&Stop, &timeCriteria_);
+    AnalysisStruct analysisStruc(this, &algo);
+    algo.setProgressCallback(&UpdateProgressValue, &analysisStruc);
 
     algo.run();
 
@@ -107,7 +130,7 @@ void MonteCarloReliabilityAnalysis::run()
                                           graph.getDrawables()[1].getData(),
                                           graph.getDrawables()[2].getData());
 
-    result_.elapsedTime_ = (float)timeCriteria_->elapsedTime_/CLOCKS_PER_SEC;
+    result_.elapsedTime_ = (float)timeCriteria_.elapsedTime_/CLOCKS_PER_SEC;
 
     function.disableHistory();
 
@@ -124,7 +147,7 @@ void MonteCarloReliabilityAnalysis::run()
 void MonteCarloReliabilityAnalysis::stop()
 {
   AnalysisImplementation::stop();
-  timeCriteria_->stop();
+  timeCriteria_.stop();
 }
 
 

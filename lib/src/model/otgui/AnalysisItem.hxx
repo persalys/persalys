@@ -52,6 +52,7 @@ signals:
   void analysisChanged(const Analysis&);
   void metaModelCreated(PhysicalModel);
   void messageChanged(QString);
+  void progressValueChanged(int);
 
 private:
   Analysis analysis_;

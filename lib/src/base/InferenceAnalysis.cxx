@@ -168,6 +168,9 @@ void InferenceAnalysis::run()
     // inference
     for (UnsignedInteger i=0; i<sample.getDimension(); ++i)
     {
+      progressValue_ = (int) (i * 100 / sample.getSize());
+      notify("progressValueChanged");
+
       FittingTestResult fittingTestResult;
       fittingTestResult.variableName_ = sample.getDescription()[i];
       fittingTestResult.values_ = sample.getMarginal(i);

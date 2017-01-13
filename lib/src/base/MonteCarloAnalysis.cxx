@@ -125,6 +125,20 @@ void MonteCarloAnalysis::run()
       && ((coefficientOfVariation == -1.0) || (coefficientOfVariation > getMaximumCoefficientOfVariation()))
       &&  (static_cast<UnsignedInteger>(elapsedTime) < getMaximumElapsedTime() * CLOCKS_PER_SEC))
     {
+      // progress
+      if (getMaximumCalls()< (UnsignedInteger)std::numeric_limits<int>::max())
+      {
+        progressValue_ = (int) (outerSampling * 100 / maximumOuterSampling);
+        notify("progressValueChanged");
+      }
+      // information message
+      OSS oss;
+      oss << "Number of iterations = " << outputSample.getSize() << "\n";
+      oss << "Coefficient of variation = " << coefficientOfVariation << "\n";
+      oss << "Elapsed time = " << (float) elapsedTime / CLOCKS_PER_SEC << " s\n";
+      informationMessage_ = oss;
+      notify("informationMessageUpdated");
+
       // the last block can be smaller
       const UnsignedInteger effectiveBlockSize = outerSampling < (maximumOuterSampling - 1) ? getBlockSize() : lastBlockSize;
 
@@ -166,7 +180,7 @@ void MonteCarloAnalysis::run()
       dataAnalysis.setLevelConfidenceInterval(levelConfidenceInterval_);
       dataAnalysis.run();
       result_ = dataAnalysis.getResult();
-      result_.elapsedTime_ = (float)elapsedTime / CLOCKS_PER_SEC;
+      result_.elapsedTime_ = (float) elapsedTime / CLOCKS_PER_SEC;
 
       notify("analysisFinished");
     }

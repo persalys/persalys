@@ -76,6 +76,9 @@ void DataAnalysis::run()
       if (stopRequested_)
         break;
 
+      progressValue_ = (int) (i * 100 / sample.getSize());
+      notify("progressValueChanged");
+
       // min/max
       result_.min_.add(sample.getMarginal(i).getMin());
       result_.max_.add(sample.getMarginal(i).getMax());

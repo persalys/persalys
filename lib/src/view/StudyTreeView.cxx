@@ -779,6 +779,8 @@ void StudyTreeView::launchAnalysis(AnalysisItem* analysisItem)
   emit showControllerWidget(controllerWidget);
 
   connect(analysisItem, SIGNAL(messageChanged(QString)), controllerWidget, SLOT(setMessage(QString)));
+  connect(analysisItem, SIGNAL(progressValueChanged(int)), controllerWidget, SLOT(changeProgressBarValue(int)));
+
   connect(controllerWidget, SIGNAL(stopRunningRequested()), analysisItem, SLOT(stopAnalysis()));
 
   // controller/widget automatically deleted when the analysis is finished

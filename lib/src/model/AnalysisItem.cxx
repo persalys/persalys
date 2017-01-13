@@ -111,5 +111,9 @@ void AnalysisItem::update(Observable* source, const String& message)
   {
     emit messageChanged(analysis_.getInformationMessage().c_str());
   }
+  else if (message == "progressValueChanged")
+  {
+    emit progressValueChanged(analysis_.getProgressValue());
+  }
 }
 }
