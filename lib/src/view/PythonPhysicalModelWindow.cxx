@@ -58,6 +58,8 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item)
   , physicalModel_(item->getPhysicalModel())
   , codeModel_(0)
 {
+  setWindowTitle(tr("Python physical model"));
+
   connect(item, SIGNAL(codeChanged()), this, SLOT(updateCodeModel()));
   setFocusPolicy(Qt::ClickFocus);
 

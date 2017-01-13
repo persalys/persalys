@@ -63,6 +63,8 @@ DesignOfExperimentWindow::~DesignOfExperimentWindow()
 
 void DesignOfExperimentWindow::buildInterface()
 {
+  setWindowTitle(tr("Design of experiment"));
+
   QWidget * mainWidget = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(mainWidget);
 

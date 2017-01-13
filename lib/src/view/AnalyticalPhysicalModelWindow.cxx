@@ -31,6 +31,8 @@ namespace OTGUI {
 AnalyticalPhysicalModelWindow::AnalyticalPhysicalModelWindow(PhysicalModelItem * item)
   : OTguiSubWindow(item)
 {
+  setWindowTitle(tr("Analytical physical model"));
+
   // Widgets
   QWidget * mainWidget = new QWidget;
   QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);

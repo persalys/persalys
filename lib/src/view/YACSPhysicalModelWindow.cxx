@@ -42,6 +42,8 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelItem * item)
   : OTguiSubWindow(item)
   , physicalModel_(item->getPhysicalModel())
 {
+  setWindowTitle(tr("YACS physical model"));
+
   connect(item, SIGNAL(parallelizeStatusChanged()), this, SLOT(updateParallelizeStatusWidget()));
   connect(item, SIGNAL(wantedMachineChanged()), this, SLOT(updateWantedMachineWidget()));
 

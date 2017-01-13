@@ -40,6 +40,8 @@ DataModelWindow::DataModelWindow(DesignOfExperimentItem * item)
 
 void DataModelWindow::buildInterface()
 {
+  setWindowTitle(tr("Data model"));
+
   QTabWidget * tabWidget = new QTabWidget;
 
   QWidget * tab = new QWidget;

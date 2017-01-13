@@ -88,6 +88,8 @@ void MonteCarloReliabilityResultWindow::setParameters(const Analysis & analysis)
 
 void MonteCarloReliabilityResultWindow::buildInterface()
 {
+  setWindowTitle(tr("Threshold exceedance results"));
+
   tabWidget_ = new QTabWidget;
 
   // first tab --------------------------------

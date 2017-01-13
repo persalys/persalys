@@ -41,6 +41,8 @@ ModelEvaluationResultWindow::ModelEvaluationResultWindow(AnalysisItem * item)
 
 void ModelEvaluationResultWindow::buildInterface()
 {
+  setWindowTitle(tr("Model evaluation result"));
+
   QTabWidget * tabWidget = new QTabWidget;
 
   // first tab --------------------------------
