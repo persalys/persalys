@@ -21,55 +21,18 @@
 #include "otgui/InferenceResultWidget.hxx"
 
 #include "otgui/ResizableStackedWidget.hxx"
+#include "otgui/RadioButtonDelegate.hxx"
 
-#include "openturns/VisualTest.hxx"
+#include <openturns/VisualTest.hxx>
 
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QGroupBox>
-#include <QStyledItemDelegate>
-#include <QApplication>
 #include <QHeaderView>
 
 using namespace OT;
 
 namespace OTGUI {
-
-class RadioButtonDelegate : public QStyledItemDelegate
-{
-public:
-  RadioButtonDelegate(QObject *parent)
-    : QStyledItemDelegate(parent)
-  {
-  }
-
-  void paint(QPainter* painter, 
-             const QStyleOptionViewItem& option, 
-             const QModelIndex& index) const
-  {
-    if (index.row() < 2)
-    {
-      QStyledItemDelegate::paint(painter, option, index);
-      return;
-    }
-
-    QStyleOptionButton optionButton;
-    optionButton.rect = option.rect;
-    optionButton.text  = index.data(Qt::DisplayRole).toString();
-
-    if (index.data(Qt::CheckStateRole).toBool())
-      optionButton.state |= QStyle::State_On;
-    else
-      optionButton.state |= QStyle::State_Off;
-
-    optionButton.state |= QStyle::State_Enabled;
-
-    QApplication::style()->drawControl(QStyle::CE_RadioButton, &optionButton, painter);
-  }
-};
-
-
-
 
 InferenceResultWidget::InferenceResultWidget(const bool displayPDF_QQPlot, QWidget* parent)
   : QWidget(parent)
@@ -104,7 +67,7 @@ void InferenceResultWidget::buildInterface()
 
   // --- table view
   distTableView_ = new ResizableTableViewWithoutScrollBar;
-  RadioButtonDelegate * delegate = new RadioButtonDelegate(distTableView_);
+  RadioButtonDelegate * delegate = new RadioButtonDelegate(2, distTableView_);
   distTableView_->setItemDelegateForColumn(0, delegate);
   distTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
   distTableView_->verticalHeader()->hide();
