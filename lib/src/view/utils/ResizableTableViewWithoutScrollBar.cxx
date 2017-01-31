@@ -59,7 +59,7 @@ void ResizableTableViewWithoutScrollBar::resizeToContents()
   verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
 
   // resize table
-  const int w = horizontalHeader()->length() + verticalHeader()->width();
+  const int w = horizontalHeader()->length() + (verticalHeader()->isHidden() ? 0 : verticalHeader()->sizeHint().width());
   const int h = verticalHeader()->length() + horizontalHeader()->height();
   int x1, y1, x2, y2;
   getContentsMargins(&x1, &y1, &x2, &y2);
