@@ -45,7 +45,7 @@ InferenceAnalysis::InferenceAnalysis()
 
 
 /* Constructor with parameters */
-InferenceAnalysis::InferenceAnalysis(const String & name, const DesignOfExperiment& designOfExperiment)
+InferenceAnalysis::InferenceAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
   : DesignOfExperimentAnalysis(name, designOfExperiment)
   , distFactoriesForEachInterestVar_()
   , level_(0.95)
@@ -82,9 +82,8 @@ InferenceAnalysis::DistributionFactoryCollection InferenceAnalysis::getDistribut
 
 void InferenceAnalysis::setDistributionsFactories(const String& variableName, const DistributionFactoryCollection& distributionsFactories)
 {
-  for (UnsignedInteger i=0; i<distributionsFactories.getSize(); ++i)
-    if (!distributionsFactories.getSize())
-      throw InvalidArgumentException(HERE) << "Error: the list of distribution factories must have a dimension superior to 0";
+  if (!distributionsFactories.getSize())
+    throw InvalidArgumentException(HERE) << "Error: the list of distribution factories is empty";
 
   if (!designOfExperiment_.getSample().getDescription().contains(variableName))
     throw InvalidArgumentException(HERE) << "Error: the given variable name does not match a variable of the model";
