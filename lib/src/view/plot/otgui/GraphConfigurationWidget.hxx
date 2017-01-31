@@ -34,7 +34,7 @@ class OTGUI_API GraphConfigurationWidget : public QWidget
   Q_OBJECT
 
 public:
-  enum Type {NoType, Scatter, PDF, CDF, PDFResult, SensitivityIndices};
+  enum Type {NoType, Scatter, PDF, CDF, PDFResult, SensitivityIndices, Copula};
 
   GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets, QStringList inputNames, QStringList outputNames, Type plotType=NoType, QWidget * parent=0);
 
@@ -42,6 +42,7 @@ public:
 
 public slots:
   void updateLineEdits();
+  void updateYComboBox();
   void plotChanged();
   void updateTitle();
   void updateXLabel();

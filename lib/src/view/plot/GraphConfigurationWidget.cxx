@@ -45,6 +45,16 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   , plotWidgets_(plotWidgets)
   , plotType_(plotType)
   , currentPlotIndex_(0)
+  , pdf_cdfGroup_(0)
+  , xAxisComboBox_(0)
+  , yAxisComboBox_(0)
+  , titleLineEdit_(0)
+  , xlabelLineEdit_(0)
+  , xmin_(0)
+  , xmax_(0)
+  , ylabelLineEdit_(0)
+  , ymin_(0)
+  , ymax_(0)
 {
   for (int i=0; i<plotWidgets_.size(); ++i)
     connect(plotWidgets_[i], SIGNAL(plotChanged()), this, SLOT(updateLineEdits()));
@@ -62,38 +72,37 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   connect(titleLineEdit_, SIGNAL(textChanged(QString)), this, SLOT(updateTitle()));
   mainGridLayout->addWidget(titleLineEdit_, rowGrid, 1, 1, 1);
 
-  xAxisComboBox_ = 0;
-  if (plotType_ == GraphConfigurationWidget::Scatter)
+  if (inputNames.size() && (plotType_ == GraphConfigurationWidget::Scatter || plotType_ == GraphConfigurationWidget::Copula))
   {
     label = new QLabel(tr("X-axis"));
     mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
     xAxisComboBox_ = new QComboBox;
     xAxisComboBox_->addItems(inputNames);
-    xAxisComboBox_->addItems(outputNames);
+    if (plotType_ == GraphConfigurationWidget::Scatter && outputNames.size())
+      xAxisComboBox_->addItems(outputNames);
     mainGridLayout->addWidget(xAxisComboBox_, rowGrid, 1, 1, 1);
     connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
   }
 
-  yAxisComboBox_ = 0;
-  if (plotType_ != GraphConfigurationWidget::PDF && plotType_ != GraphConfigurationWidget::CDF)
+  if (outputNames.size())
   {
-    if (outputNames.size() || plotType_ == GraphConfigurationWidget::Scatter)
-    {
-      label = new QLabel(tr("Y-axis"));
-      mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
-      yAxisComboBox_ = new QComboBox;
-      yAxisComboBox_->addItems(outputNames);
-      if (plotType_ == GraphConfigurationWidget::Scatter && inputNames.size())
-        yAxisComboBox_->addItems(inputNames);
-      mainGridLayout->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
-      connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
-      emit currentPlotChanged(currentPlotIndex_);
-    }
+    label = new QLabel(tr("Y-axis"));
+    mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+
+    yAxisComboBox_ = new QComboBox;
+    yAxisComboBox_->addItems(outputNames);
+    if (plotType_ == GraphConfigurationWidget::Scatter && inputNames.size())
+      yAxisComboBox_->addItems(inputNames);
+    mainGridLayout->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
+    connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
+    emit currentPlotChanged(currentPlotIndex_);
   }
 
-  pdf_cdfGroup_ = 0;
-  if (plotType_ == GraphConfigurationWidget::PDF || plotType_ == GraphConfigurationWidget::PDFResult)
+  if (plotType_ == GraphConfigurationWidget::Copula)
+    connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateYComboBox()));
+
+  if (plotType_ == GraphConfigurationWidget::PDF || plotType_ == GraphConfigurationWidget::PDFResult || plotType_ == GraphConfigurationWidget::Copula)
   {
     pdf_cdfGroup_ = new QButtonGroup;
     QRadioButton * buttonToChoosePDForCDF = new QRadioButton(tr("PDF"));
@@ -181,6 +190,9 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
 
   updateLineEdits();
 
+  if (plotType_ == GraphConfigurationWidget::Copula)
+    updateYComboBox();
+
   //
   scrollArea->setWidget(frame);
   mainLayout->addWidget(scrollArea);
@@ -189,6 +201,9 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
 
 void GraphConfigurationWidget::updateLineEdits()
 {
+  if (!plotWidgets_.size())
+    return;
+
   SignalBlocker xlabelLineEditBlocker(xlabelLineEdit_);
   SignalBlocker xminBlocker(xmin_);
   SignalBlocker xmaxBlocker(xmax_);
@@ -219,6 +234,24 @@ void GraphConfigurationWidget::updateLineEdits()
 }
 
 
+void GraphConfigurationWidget::updateYComboBox()
+{
+  if (!xAxisComboBox_ || !yAxisComboBox_)
+    return;
+
+  SignalBlocker blocker(yAxisComboBox_);
+  yAxisComboBox_->clear();
+
+  QStringList variablesNames;
+  for (int i=0; i<xAxisComboBox_->count(); ++i)
+    if (i != xAxisComboBox_->currentIndex()) // must have x != y
+      variablesNames << xAxisComboBox_->itemText(i);
+
+  yAxisComboBox_->addItems(variablesNames);
+  plotChanged();
+}
+
+
 int GraphConfigurationWidget::getCurrentPlotIndex() const
 {
   return currentPlotIndex_;
@@ -231,12 +264,21 @@ void GraphConfigurationWidget::plotChanged()
   if (yAxisComboBox_)
     outputIndex = yAxisComboBox_->currentIndex();
 
-  if (plotType_ == GraphConfigurationWidget::Scatter)
+  currentPlotIndex_ = outputIndex;
+
+  if (plotType_ == GraphConfigurationWidget::Scatter && xAxisComboBox_ && yAxisComboBox_)
   {
     currentPlotIndex_ = xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex;
   }
-  else if (plotType_ == GraphConfigurationWidget::PDF ||
-           plotType_ == GraphConfigurationWidget::PDFResult)
+  else if (plotType_ == GraphConfigurationWidget::Copula && pdf_cdfGroup_ && xAxisComboBox_ && yAxisComboBox_)
+  {
+    if (pdf_cdfGroup_->checkedId() == GraphConfigurationWidget::PDF)
+      currentPlotIndex_ = 2 * (xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex);
+    else
+      currentPlotIndex_ = 2 * (xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex) + 1;
+  }
+  else if (pdf_cdfGroup_ && (plotType_ == GraphConfigurationWidget::PDF ||
+                             plotType_ == GraphConfigurationWidget::PDFResult))
   {
     switch (GraphConfigurationWidget::Type(pdf_cdfGroup_->checkedId()))
     {
@@ -254,8 +296,6 @@ void GraphConfigurationWidget::plotChanged()
         break;
     }
   }
-  else
-    currentPlotIndex_ = outputIndex;
 
   updateLineEdits();
   emit currentPlotChanged(currentPlotIndex_);
@@ -264,6 +304,9 @@ void GraphConfigurationWidget::plotChanged()
 
 void GraphConfigurationWidget::updateTitle()
 {
+  if (!plotWidgets_.size())
+    return;
+
   plotWidgets_[currentPlotIndex_]->setTitle(titleLineEdit_->text());
   plotWidgets_[currentPlotIndex_]->replot();
 }
@@ -271,6 +314,9 @@ void GraphConfigurationWidget::updateTitle()
 
 void GraphConfigurationWidget::updateXLabel()
 {
+  if (!plotWidgets_.size())
+    return;
+
   plotWidgets_[currentPlotIndex_]->setAxisTitle(QwtPlot::xBottom, xlabelLineEdit_->text());
   plotWidgets_[currentPlotIndex_]->replot();
 }
@@ -278,6 +324,9 @@ void GraphConfigurationWidget::updateXLabel()
 
 void GraphConfigurationWidget::updateYLabel()
 {
+  if (!plotWidgets_.size())
+    return;
+
   plotWidgets_[currentPlotIndex_]->setAxisTitle(QwtPlot::yLeft, ylabelLineEdit_->text());
   plotWidgets_[currentPlotIndex_]->replot();
 }
@@ -285,6 +334,9 @@ void GraphConfigurationWidget::updateYLabel()
 
 void GraphConfigurationWidget::updateXrange()
 {
+  if (!plotWidgets_.size())
+    return;
+
   try
   {
     plotWidgets_[currentPlotIndex_]->setAxisScale(QwtPlot::xBottom, xmin_->value(), xmax_->value());
@@ -300,6 +352,9 @@ void GraphConfigurationWidget::updateXrange()
 
 void GraphConfigurationWidget::updateYrange()
 {
+  if (!plotWidgets_.size())
+    return;
+
   try
   {
     plotWidgets_[currentPlotIndex_]->setAxisScale(QwtPlot::yLeft, ymin_->value(), ymax_->value());
@@ -315,6 +370,9 @@ void GraphConfigurationWidget::updateYrange()
 
 void GraphConfigurationWidget::exportPlot()
 {
+  if (!plotWidgets_.size())
+    return;
+
   plotWidgets_[currentPlotIndex_]->exportPlot();
 }
 }
