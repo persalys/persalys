@@ -57,6 +57,7 @@ public:
                    double lowerBound, double upperBound, OT::NumericalPoint outliers_);
   void plotSensitivityIndices(const OT::NumericalPoint firstOrderIndices, const OT::NumericalPoint totalIndices,
                               const OT::Description inputNames);
+  void plotContour(const OT::Distribution& distribution, const bool isPdf=true);
 
   /// clear plot
   void clear();
