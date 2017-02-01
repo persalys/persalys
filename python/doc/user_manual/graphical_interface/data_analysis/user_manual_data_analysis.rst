@@ -243,10 +243,53 @@ The results window gathers 2 tabs for each variable:
   .. image:: /user_manual/graphical_interface/data_analysis/inference_resultWindow_tab_parameters.png
       :align: center
 
-3- Metamodel creation
+
+3- Dependencies inference analysis
+==================================
+
+The dependencies inference analysis allows to infer the Gaussian copula on the input sample
+of the design of experiment.
+
+3-1 Results
+'''''''''''
+
+The results window gathers the tab **Summary** for each set of variables.
+
+- The tab **Summary** includes, for a selected set of variables, a table of all the tested
+  copulae. The right side of this tab is updated according to the distribution which is selected.
+
+  This section contains 2 tabs:
+
+  - The tab **PDF/CDF** presents for each pair of variables the PDF/CDF (default: PDF) of the sample
+    together with the distribution PDF.
+
+  .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_PDF.png
+      :align: center
+
+  With the graphic settings below the study tree, the user can configure the plot, choose the pair of
+  variables to analyze and choose between PDF/CDF.
+
+  .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_PDF_setting.png
+      :align: center
+
+  The user can define:
+    - The title of the graph, expected to be a string;
+
+  It has two tabs, **X-axis** and **Y-axis** where the user can define:
+    - The axis title, expected to be a string;
+    - The minimum bound of the axis, expected to be a floating point;
+    - The maximum bound of the axis, expected to be a floating point.
+
+  - The tab **Parameters** includes the parameters of the selected copula. For the Gaussian copula, the
+    tab displays the Spearman's coefficients.
+
+  .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_parameters.png
+      :align: center
+
+4- Metamodel creation
 ======================
 
-3-1 Definition
+4-1 Definition
 ''''''''''''''
 
 A new metamodel can be created thanks to be context menu of a data model or a
@@ -320,7 +363,7 @@ Kriging
     - Quadratic
 
 
-3-2 Results
+4-2 Results
 '''''''''''
 
 For the two methods the results window gathers:
