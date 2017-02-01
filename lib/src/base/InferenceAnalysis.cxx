@@ -88,6 +88,10 @@ void InferenceAnalysis::setDistributionsFactories(const String& variableName, co
   if (!designOfExperiment_.getSample().getDescription().contains(variableName))
     throw InvalidArgumentException(HERE) << "Error: the given variable name does not match a variable of the model";
 
+  for (UnsignedInteger i=0; i<distributionsFactories.getSize(); ++i)
+    if (distributionsFactories[i].getImplementation()->getClassName().find("Copula") != std::string::npos)
+      throw InvalidArgumentException(HERE) << "Error: the inference is performed with 1-d distribution.";
+
   Description interestVariables(getInterestVariables());
   if (!interestVariables.contains(variableName))
   {
