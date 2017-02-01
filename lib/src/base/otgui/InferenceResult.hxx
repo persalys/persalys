@@ -29,6 +29,8 @@ class OTGUI_API InferenceResult : public OT::PersistentObject
   CLASSNAME;
 
 public:
+  typedef OT::Collection<FittingTestResult> FittingTestResultCollection;
+
   friend class InferenceAnalysis;
 
   /** Default constructor */
@@ -37,7 +39,7 @@ public:
   /** Virtual constructor */
   virtual InferenceResult * clone() const;
 
-  OT::Collection< FittingTestResult > getFittingTestResultCollection() const;
+  FittingTestResultCollection getFittingTestResultCollection() const;
   FittingTestResult getFittingTestResultForVariable(const OT::String & variableName) const;
 
   /** String converter */

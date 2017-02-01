@@ -45,7 +45,7 @@ InferenceResult* InferenceResult::clone() const
 }
 
 
-Collection< FittingTestResult > InferenceResult::getFittingTestResultCollection() const
+InferenceResult::FittingTestResultCollection InferenceResult::getFittingTestResultCollection() const
 {
   return fittingTestResultCollection_;
 }
