@@ -1,0 +1,24 @@
+%feature("docstring") OTGUI::CopulaInferenceSetResult
+"Dependencies inference result for a set of variables.
+
+"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::CopulaInferenceSetResult::getSetOfVariablesNames
+"Set of variables names accessor.
+
+Returns
+-------
+names : :py:class:`openturns.Description`
+    Set of variables names"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::CopulaInferenceSetResult::getTestedDistributions
+"Get the sequence of tested distributions.
+
+Returns
+-------
+distributions : sequence of :py:class:`openturns.Distribution`
+    Tested distributions"

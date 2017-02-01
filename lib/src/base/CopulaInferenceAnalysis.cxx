@@ -1,0 +1,283 @@
+//                                               -*- C++ -*-
+/**
+ *  @brief Inference analysis
+ *
+ *  Copyright 2015-2016 EDF-Phimeca
+ *
+ *  This library is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+#include "otgui/CopulaInferenceAnalysis.hxx"
+
+#include "otgui/DistributionDictionary.hxx"
+#include "otgui/CopulaInferenceSetResult.hxx"
+
+#include <openturns/NormalCopulaFactory.hxx>
+#include <openturns/PersistentObjectFactory.hxx>
+
+using namespace OT;
+
+namespace OTGUI {
+
+CLASSNAMEINIT(CopulaInferenceAnalysis);
+
+static Factory<CopulaInferenceAnalysis> RegisteredFactory;
+static Factory<PersistentCollection<Description> > RegisteredFactory_CollDesc;
+
+/* Default constructor */
+CopulaInferenceAnalysis::CopulaInferenceAnalysis()
+  : DesignOfExperimentAnalysis()
+  , distFactoriesForSetVar_()
+{
+}
+
+
+/* Constructor with parameters */
+CopulaInferenceAnalysis::CopulaInferenceAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
+  : DesignOfExperimentAnalysis(name, designOfExperiment)
+  , distFactoriesForSetVar_()
+{
+  setInterestVariables(designOfExperiment_.getInputSample().getDescription());
+
+  // by default we test the Normal copula for all the inputs of the DOE
+  DistributionFactoryCollection collectionCopula;
+  collectionCopula.add(NormalCopulaFactory());
+  Description allVariables(getInterestVariables());
+  allVariables.sort();
+  distFactoriesForSetVar_[allVariables] = collectionCopula;
+}
+
+
+/* Virtual constructor */
+CopulaInferenceAnalysis* CopulaInferenceAnalysis::clone() const
+{
+  return new CopulaInferenceAnalysis(*this);
+}
+
+
+CopulaInferenceAnalysis::DistributionFactoryCollection CopulaInferenceAnalysis::getDistributionsFactories(const Description& variablesNames) const
+{
+  for (UnsignedInteger i=0; i<variablesNames.getSize(); ++i)
+    if (!designOfExperiment_.getSample().getDescription().contains(variablesNames[i]))
+      throw InvalidArgumentException(HERE) << "Error: the variable name " << variablesNames[i] << " does not match a variable of the model";
+
+  Description setOfVariables(variablesNames);
+  setOfVariables.sort();
+  std::map<Description, DistributionFactoryCollection>::const_iterator it(distFactoriesForSetVar_.find(setOfVariables));
+  if (it == distFactoriesForSetVar_.end())
+    throw InvalidArgumentException(HERE) << "Error: no distribution factories set for the set of variables " << variablesNames;
+
+  return it->second;
+}
+
+
+void CopulaInferenceAnalysis::setDistributionsFactories(const Description& variablesNames, const DistributionFactoryCollection& distributionsFactories)
+{
+  if (!distributionsFactories.getSize())
+    throw InvalidArgumentException(HERE) << "Error: the list of distribution factories is empty";
+
+  for (UnsignedInteger i=0; i<variablesNames.getSize(); ++i)
+    if (!designOfExperiment_.getSample().getDescription().contains(variablesNames[i]))
+      throw InvalidArgumentException(HERE) << "Error: the variable name " << variablesNames[i] << " does not match a variable of the model";
+
+  if (variablesNames.getSize() < 2)
+    throw InvalidArgumentException(HERE) << "Error: the dependency inference is performed with at least 2 variables";
+
+  for (UnsignedInteger i=0; i<distributionsFactories.getSize(); ++i)
+    if (distributionsFactories[i].getImplementation()->getClassName().find("Copula") == std::string::npos)
+      throw InvalidArgumentException(HERE) << "Error: the dependency inference is performed with copulae.";
+
+  Description setOfVariables(variablesNames);
+  setOfVariables.sort();
+  distFactoriesForSetVar_[setOfVariables] = distributionsFactories;
+}
+
+
+void CopulaInferenceAnalysis::run()
+{
+  try
+  {
+    // clear result
+    stopRequested_ = false;
+    result_ = CopulaInferenceResult();
+
+    // inference
+    std::map<Description, DistributionFactoryCollection>::iterator it;
+    for (it=distFactoriesForSetVar_.begin(); it!=distFactoriesForSetVar_.end(); ++it)
+    {
+      Description variablesNames(it->first);
+      Indices indices;
+      for (UnsignedInteger i=0; i<variablesNames.getSize(); ++i)
+      {
+        bool varFound = false;
+        for (UnsignedInteger j=0; j<designOfExperiment_.getSample().getDescription().getSize(); ++j)
+        {
+          if (designOfExperiment_.getSample().getDescription()[j] == variablesNames[i])
+          {
+            indices.add(j);
+            varFound = true;
+            break;
+          }
+        }
+        if (!varFound)
+          throw InvalidArgumentException(HERE) << "The variable "  << variablesNames[i] <<" is not a variable of the model " << designOfExperiment_.getSample().getDescription();
+      }
+
+      const NumericalSample sample(designOfExperiment_.getSample().getMarginal(indices));
+
+      CopulaInferenceSetResult inferenceSetResult;
+      inferenceSetResult.setOfVariablesNames_ = it->first;
+
+      for (UnsignedInteger i=0; i<it->second.getSize(); ++i)
+      {
+        try
+        {
+          Distribution distribution(it->second[i].build(sample));
+          inferenceSetResult.testedDistributions_.add(distribution);
+        }
+        catch (std::exception & ex)
+        {
+          String str = it->second[i].getImplementation()->getClassName();
+          throw InvalidValueException(HERE) << "Error when building the "
+                                            << str.substr(0, str.find("Factory"))
+                                            << " distribution with the sample of the variables "
+                                            << sample.getDescription()
+                                            << ". "
+                                            << ex.what();
+        }
+      }
+      result_.copulaInferenceSetResultCollection_.add(inferenceSetResult);
+      result_.designOfExperiment_ = getDesignOfExperiment();
+    }
+    notify("analysisFinished");
+  }
+  catch (std::exception & ex)
+  {
+    errorMessage_ = ex.what();
+    notify("analysisBadlyFinished");
+  }
+}
+
+
+CopulaInferenceResult CopulaInferenceAnalysis::getResult() const
+{
+  return result_;
+}
+
+
+String CopulaInferenceAnalysis::getPythonScript() const
+{
+  OSS oss;
+  oss << getName() << " = otguibase.CopulaInferenceAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
+
+  std::map<Description, DistributionFactoryCollection>::const_iterator it;
+  for (it=distFactoriesForSetVar_.begin(); it!=distFactoriesForSetVar_.end(); ++it)
+  {
+    // variables list
+    oss << "variablesSet = [";
+    for (UnsignedInteger j=0; j<it->first.getSize(); ++j)
+    {
+      oss << "'" << it->first[j] << "'";
+      if (j < it->first.getSize()-1)
+        oss << ", ";
+    }
+    oss << "]\n";
+    // factories list
+    oss << "factories = [";
+    for (UnsignedInteger j=0; j<it->second.getSize(); ++j)
+    {
+      oss << "ot." << it->second[j].getImplementation()->getClassName() << "()";
+      if (j < it->second.getSize()-1)
+        oss << ", ";
+    }
+    oss << "]\n";
+    oss << getName() << ".setDistributionsFactories(variablesSet, factories)\n";
+  }
+
+  return oss;
+}
+
+
+bool CopulaInferenceAnalysis::analysisLaunched() const
+{
+  return result_.getCopulaInferenceSetResultCollection().getSize() != 0;
+}
+
+
+String CopulaInferenceAnalysis::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " designOfExperiment=class=" << getDesignOfExperiment().GetClassName() << " name=" << getDesignOfExperiment().getName();
+
+  std::map<Description, DistributionFactoryCollection>::const_iterator it;
+  for (it=distFactoriesForSetVar_.begin(); it!=distFactoriesForSetVar_.end(); ++it)
+  {
+    oss << " setOfVariables " << it->first
+        << " distributionFactories=" << it->second;
+  }
+
+  return oss;
+}
+
+
+/* Method save() stores the object through the StorageManager */
+void CopulaInferenceAnalysis::save(Advocate& adv) const
+{
+  DesignOfExperimentAnalysis::save(adv);
+
+  PersistentCollection<Description> listSets;
+
+  // TODO with new version of OT (where DistributionFactory can be saved)
+//   DistributionFactoryCollectionCollection collection;
+  PersistentCollection<Description> collection;
+
+  std::map<Description, DistributionFactoryCollection>::const_iterator it;
+  for (it=distFactoriesForSetVar_.begin(); it!=distFactoriesForSetVar_.end(); ++it)
+  {
+    listSets.add(it->first);
+    Description listFactoriesNames(it->second.getSize());
+    for (UnsignedInteger j=0; j<it->second.getSize(); ++j)
+    {
+      String str = it->second[j].getImplementation()->getClassName();
+      listFactoriesNames[j] = str.substr(0, str.find("CopulaFactory"));
+    }
+    collection.add(listFactoriesNames);
+  }
+  adv.saveAttribute("listSetsOfVariables_", listSets);
+  adv.saveAttribute("distFactoriesCollection_", collection);
+  adv.saveAttribute("result_", result_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void CopulaInferenceAnalysis::load(Advocate& adv)
+{
+  DesignOfExperimentAnalysis::load(adv);
+  PersistentCollection<Description> listSets;
+  adv.loadAttribute("listSetsOfVariables_", listSets);
+  PersistentCollection<Description> collection;
+  adv.loadAttribute("distFactoriesCollection_", collection);
+  adv.loadAttribute("result_", result_);
+
+  for (UnsignedInteger i=0; i<listSets.getSize(); ++i)
+  {
+    DistributionFactoryCollection factoryCollection;
+    for (UnsignedInteger j=0; j<collection[i].getSize(); ++j)
+      factoryCollection.add(DistributionDictionary::BuildCopulaFactory(collection[i][j]));
+    distFactoriesForSetVar_[listSets[i]] = factoryCollection;
+  }
+}
+}

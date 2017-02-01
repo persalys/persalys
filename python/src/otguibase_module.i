@@ -140,6 +140,9 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include FittingTestResult.i
 %include InferenceResult.i
 %include InferenceAnalysis.i
+%include CopulaInferenceSetResult.i
+%include CopulaInferenceResult.i
+%include CopulaInferenceAnalysis.i
 %include OTStudyImplementation.i
 %include OTStudy.i
 
