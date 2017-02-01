@@ -292,7 +292,7 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
   if (current.isValid())
   {
     // -- get distribution
-    QVariant variant = distTableModel_->data(distTableModel_->index(current.row(), 0), Qt::UserRole);
+    const QVariant variant = distTableModel_->data(distTableModel_->index(current.row(), 0), Qt::UserRole);
     Distribution distribution = variant.value<Distribution>();
 
     // -- set titles
@@ -367,7 +367,7 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
 
   // update
   // -- get distribution
-  QVariant variant = distTableModel_->data(distTableModel_->index(current.row(), 0), Qt::UserRole);
+  const QVariant variant = distTableModel_->data(distTableModel_->index(current.row(), 0), Qt::UserRole);
   Distribution distribution = variant.value<Distribution>();
 
   // -- pdf
@@ -397,10 +397,18 @@ Distribution InferenceResultWidget::getDistribution() const
     throw InternalException(HERE) << "Error in InferenceResultWidget::getDistribution";
 
   // get current distribution
-  const QModelIndex currentDistributionIndex = distTableModel_->index(distTableView_->currentIndex().row(), 0);
+  // loop begins at 2 because the two first rows are the table titles
+  QModelIndex selectedDistributionIndex;
+  for (int i=2; i<distTableModel_->rowCount(); ++i)
+    if (distTableModel_->data(distTableModel_->index(i, 0), Qt::CheckStateRole).toBool())
+      selectedDistributionIndex = distTableModel_->index(i, 0);
 
-  QVariant variant = distTableModel_->data(currentDistributionIndex, Qt::UserRole);
-  Distribution distribution = variant.value<Distribution>();
+  Distribution distribution;
+  if (selectedDistributionIndex.isValid())
+  {
+    const QVariant variant = distTableModel_->data(selectedDistributionIndex, Qt::UserRole);
+    distribution = variant.value<Distribution>();
+  }
 
   return distribution;
 }
