@@ -34,6 +34,9 @@ public:
   /** Build a distribution factory */
   static OT::DistributionFactory BuildDistributionFactory(const OT::String & distributionName);
 
+  /** Build a copula factory */
+  static OT::DistributionFactory BuildCopulaFactory(const OT::String & distributionName);
+
   /** Build a distribution with native parameters from the mean value */
   static OT::Distribution BuildDistribution(const OT::String & distributionName, const double mu);
 
