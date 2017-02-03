@@ -491,18 +491,17 @@ void StudyTreeView::createNewYACSPhysicalModel()
 
 void StudyTreeView::removePhysicalModel()
 {
-  QModelIndex index = selectionModel()->currentIndex();
+  const QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
-  if (selectedItem->child(1)->rowCount())
-    emit removeSubWindow(selectedItem->child(1)->child(0));
-  treeViewModel_->getOTStudyItem(index)->getOTStudy().remove(dynamic_cast<PhysicalModelItem*>(selectedItem)->getPhysicalModel());
+  if (dynamic_cast<PhysicalModelItem*>(selectedItem))
+    treeViewModel_->getOTStudyItem(index)->getOTStudy().remove(dynamic_cast<PhysicalModelItem*>(selectedItem)->getPhysicalModel());
 }
 
 
 void StudyTreeView::createNewProbabilisticModel()
 {
-  QModelIndex probabilisticStudyIndex = selectionModel()->currentIndex();
+  const QModelIndex probabilisticStudyIndex = selectionModel()->currentIndex();
   if (!hasPhysicalModelInputs(probabilisticStudyIndex))
     return;
   treeViewModel_->addProbabilisticModelItem(probabilisticStudyIndex);
@@ -512,8 +511,11 @@ void StudyTreeView::createNewProbabilisticModel()
 
 void StudyTreeView::createNewDesignOfExperiment()
 {
-  QModelIndex DesignOfExperimentListIndex = selectionModel()->currentIndex();
+  const QModelIndex DesignOfExperimentListIndex = selectionModel()->currentIndex();
   PhysicalModelItem * physicalModelItem = treeViewModel_->getPhysicalModelItem(DesignOfExperimentListIndex);
+  if (!physicalModelItem)
+    return;
+
   if (!hasPhysicalModelInputs(DesignOfExperimentListIndex))
     return;
   OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
@@ -526,7 +528,7 @@ void StudyTreeView::createNewDesignOfExperiment()
 
 void StudyTreeView::createNewLimitState()
 {
-  QModelIndex probabilisticStudyIndex = selectionModel()->currentIndex().parent();
+  const QModelIndex probabilisticStudyIndex = selectionModel()->currentIndex().parent();
   if (!isPhysicalModelValid(probabilisticStudyIndex) || !isProbabilisticModelValid(probabilisticStudyIndex))
     return;
   treeViewModel_->addLimitStateItem(probabilisticStudyIndex);
@@ -536,10 +538,11 @@ void StudyTreeView::createNewLimitState()
 
 void StudyTreeView::removeLimitState()
 {
-  QModelIndex index = selectionModel()->currentIndex();
+  const QModelIndex index = selectionModel()->currentIndex();
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
 
-  treeViewModel_->getOTStudyItem(index)->getOTStudy().remove(dynamic_cast<LimitStateItem*>(selectedItem)->getLimitState());
+  if (dynamic_cast<LimitStateItem*>(selectedItem))
+    treeViewModel_->getOTStudyItem(index)->getOTStudy().remove(dynamic_cast<LimitStateItem*>(selectedItem)->getLimitState());
 }
 
 
