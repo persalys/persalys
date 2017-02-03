@@ -177,7 +177,6 @@ PyInterp_Interp::PyInterp_Interp():
 PyInterp_Interp::~PyInterp_Interp()
 {
   destroy();
-  Py_Finalize();
 }
 
 /*!
@@ -296,9 +295,7 @@ bool PyInterp_Interp::initContext()
   Py_INCREF(_global_context);
   _local_context = _global_context;
 
-  int ret = 0; //PyRun_SimpleString("import salome_iapp;salome_iapp.IN_SALOME_GUI=True");
-
-  return ret == 0;
+  return true;
 }
 
 /*!
