@@ -727,16 +727,7 @@ void StudyTreeView::findAnalysisItemAndLaunchExecution(OTStudyItem * otStudyItem
 
   if (analysisItem)
   {
-    try
-    {
-      analysisItem->getAnalysis().run();
-    }
-    catch (std::exception & ex)
-    {
-      analysisItem->getAnalysis().setErrorMessage(ex.what());
-      createAnalysisExecutionFailedWindow(analysisItem, ex.what());
-      setExpanded(analysisItem->index(), true);
-    }
+    analysisItem->getAnalysis().run();
   }
 }
 
@@ -807,15 +798,7 @@ void StudyTreeView::runAnalysis()
     if (wizard->exec())
     {
       item->updateAnalysis(wizard->getAnalysis());
-      try
-      {
-        item->getAnalysis().run();
-      }
-      catch (std::exception & ex)
-      {
-        item->getAnalysis().setErrorMessage(ex.what());
-        createAnalysisExecutionFailedWindow(item, ex.what());
-      }
+      item->getAnalysis().run();
     }
   }
 }

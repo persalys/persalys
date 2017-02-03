@@ -92,85 +92,93 @@ void KrigingAnalysis::setCovarianceModel(const CovarianceModel& model)
 
 void KrigingAnalysis::run()
 {
-  // check
-  if (designOfExperiment_.getInputSample().getSize()*designOfExperiment_.getOutputSample().getSize() == 0)
-    throw InvalidArgumentException(HERE) << "The design of experiment must contains not empty input AND output samples";
-  if (designOfExperiment_.getInputSample().getSize() != designOfExperiment_.getOutputSample().getSize())
-    throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
-  if (!getInterestVariables().getSize())
-    throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
-
-  // clear result
-  result_ = KrigingAnalysisResult();
-  optimalCovarianceModel_ = CovarianceModel();
-
-  // get effective samples
-  const NumericalSample effectiveInputSample(getEffectiveInputSample());
-  const NumericalSample effectiveOutputSample(getEffectiveOutputSample());
-  const UnsignedInteger size = effectiveInputSample.getSize();
-  const UnsignedInteger outputDimension = effectiveOutputSample.getDimension();
-
-  // Kriging
-  Collection<KrigingResult> krigingResultCollection;
-  NumericalMathFunction::NumericalMathFunctionCollection metaModelCollection;
-
-  // temp
-  NumericalSample metaModelLOO(size, outputDimension);
-  NumericalPoint q2LOO(outputDimension);
-  NumericalPoint errorQ2LOO(outputDimension);
-
-  // for each output:
-  // because with all outputs KrigingAlgorithm is not reliable
-  for (UnsignedInteger i=0; i<outputDimension; ++i)
+  try
   {
-    // build algo
-    KrigingAlgorithm kriging(buildKrigingAlgorithm(effectiveInputSample, effectiveOutputSample.getMarginal(i)));
+    // check
+    if (designOfExperiment_.getInputSample().getSize()*designOfExperiment_.getOutputSample().getSize() == 0)
+      throw InvalidArgumentException(HERE) << "The design of experiment must contains not empty input AND output samples";
+    if (designOfExperiment_.getInputSample().getSize() != designOfExperiment_.getOutputSample().getSize())
+      throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
+    if (!getInterestVariables().getSize())
+      throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
 
-    // run algo
-    kriging.run();
+    // clear result
+    result_ = KrigingAnalysisResult();
+    optimalCovarianceModel_ = CovarianceModel();
 
-    // get results
-    krigingResultCollection.add(kriging.getResult());
-    metaModelCollection.add(kriging.getResult().getMetaModel());
-    optimalCovarianceModel_ = kriging.getResult().getCovarianceModel();
+    // get effective samples
+    const NumericalSample effectiveInputSample(getEffectiveInputSample());
+    const NumericalSample effectiveOutputSample(getEffectiveOutputSample());
+    const UnsignedInteger size = effectiveInputSample.getSize();
+    const UnsignedInteger outputDimension = effectiveOutputSample.getDimension();
+
+    // Kriging
+    Collection<KrigingResult> krigingResultCollection;
+    NumericalMathFunction::NumericalMathFunctionCollection metaModelCollection;
+
+    // temp
+    NumericalSample metaModelLOO(size, outputDimension);
+    NumericalPoint q2LOO(outputDimension);
+    NumericalPoint errorQ2LOO(outputDimension);
+
+    // for each output:
+    // because with all outputs KrigingAlgorithm is not reliable
+    for (UnsignedInteger i=0; i<outputDimension; ++i)
+    {
+      // build algo
+      KrigingAlgorithm kriging(buildKrigingAlgorithm(effectiveInputSample, effectiveOutputSample.getMarginal(i)));
+
+      // run algo
+      kriging.run();
+
+      // get results
+      krigingResultCollection.add(kriging.getResult());
+      metaModelCollection.add(kriging.getResult().getMetaModel());
+      optimalCovarianceModel_ = kriging.getResult().getCovarianceModel();
+
+      // validation
+      if (leaveOneOutValidation_)
+      {
+        MetaModelAnalysisResult result_i;
+        result_i.outputSample_ = effectiveOutputSample.getMarginal(i);
+        validateMetaModelResult(result_i, effectiveInputSample);
+        for (UnsignedInteger j=0; j<size; ++j)
+          metaModelLOO[j][i] = result_i.metaModelOutputSampleLOO_[j][0];
+
+        q2LOO[i] = result_i.q2LOO_[0];
+        errorQ2LOO[i] = result_i.errorQ2LOO_[0];
+      }
+    }
+
+    // set result_
+    result_.outputSample_ = effectiveOutputSample;
+    result_.krigingResultCollection_ = krigingResultCollection;
+
+    // build metamodel
+    NumericalMathFunction metamodelFunction(metaModelCollection);
+    Description variablesNames(effectiveInputSample.getDescription());
+    variablesNames.add(effectiveOutputSample.getDescription());
+    metamodelFunction.setDescription(variablesNames);
+
+    buildMetaModel(result_, metamodelFunction);
+    result_.metaModelOutputSample_ = metamodelFunction(effectiveInputSample);
 
     // validation
     if (leaveOneOutValidation_)
     {
-      MetaModelAnalysisResult result_i;
-      result_i.outputSample_ = effectiveOutputSample.getMarginal(i);
-      validateMetaModelResult(result_i, effectiveInputSample);
-      for (UnsignedInteger j=0; j<size; ++j)
-        metaModelLOO[j][i] = result_i.metaModelOutputSampleLOO_[j][0];
-
-      q2LOO[i] = result_i.q2LOO_[0];
-      errorQ2LOO[i] = result_i.errorQ2LOO_[0];
+      result_.metaModelOutputSampleLOO_ = metaModelLOO;
+      result_.q2LOO_ = q2LOO;
+      result_.errorQ2LOO_ = errorQ2LOO;
     }
+
+    notify("metaModelCreated");
+    notify("analysisFinished");
   }
-
-  // set result_
-  result_.outputSample_ = effectiveOutputSample;
-  result_.krigingResultCollection_ = krigingResultCollection;
-
-  // build metamodel
-  NumericalMathFunction metamodelFunction(metaModelCollection);
-  Description variablesNames(effectiveInputSample.getDescription());
-  variablesNames.add(effectiveOutputSample.getDescription());
-  metamodelFunction.setDescription(variablesNames);
-
-  buildMetaModel(result_, metamodelFunction);
-  result_.metaModelOutputSample_ = metamodelFunction(effectiveInputSample);
-
-  // validation
-  if (leaveOneOutValidation_)
+  catch (std::exception & ex)
   {
-    result_.metaModelOutputSampleLOO_ = metaModelLOO;
-    result_.q2LOO_ = q2LOO;
-    result_.errorQ2LOO_ = errorQ2LOO;
+    setErrorMessage(ex.what());
+    notify("analysisBadlyFinished");
   }
-
-  notify("metaModelCreated");
-  notify("analysisFinished");
 }
 
 

@@ -57,33 +57,41 @@ SRCAnalysis* SRCAnalysis::clone() const
 
 void SRCAnalysis::run()
 {
-  // clear result
-  result_ = SRCResult();
-
-  RandomGenerator::SetSeed(getSeed());
-
-  NumericalSample inputSample(generateInputSample(simulationsNumber_));
-
-  // set results
-  NumericalSample indices(0, inputSample.getDimension());
-
-  for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+  try
   {
-    Description outputName(1);
-    outputName[0] = getInterestVariables()[i];
-    indices.add(CorrelationAnalysis::SRC(inputSample, computeOutputSample(inputSample, outputName)));
+    // clear result
+    result_ = SRCResult();
+
+    RandomGenerator::SetSeed(getSeed());
+
+    NumericalSample inputSample(generateInputSample(simulationsNumber_));
+
+    // set results
+    NumericalSample indices(0, inputSample.getDimension());
+
+    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+    {
+      Description outputName(1);
+      outputName[0] = getInterestVariables()[i];
+      indices.add(CorrelationAnalysis::SRC(inputSample, computeOutputSample(inputSample, outputName)));
+    }
+
+    indices.setDescription(inputSample.getDescription());
+    result_ = SRCResult(indices, getInterestVariables());
+
+    // add warning if the model has not an independent copula
+    if (!getPhysicalModel().getComposedDistribution().hasIndependentCopula())
+    {
+      LOGWARN("The model has not an independent copula, the result of the sensitivity analysis could be false.");
+    }
+
+    notify("analysisFinished");
   }
-
-  indices.setDescription(inputSample.getDescription());
-  result_ = SRCResult(indices, getInterestVariables());
-
-  // add warning if the model has not an independent copula
-  if (!getPhysicalModel().getComposedDistribution().hasIndependentCopula())
+  catch (std::exception & ex)
   {
-    LOGWARN("The model has not an independent copula, the result of the sensitivity analysis could be false.");
+    setErrorMessage(ex.what());
+    notify("analysisBadlyFinished");
   }
-
-  notify("analysisFinished");
 }
 
 

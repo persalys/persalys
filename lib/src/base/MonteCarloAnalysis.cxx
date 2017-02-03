@@ -91,83 +91,91 @@ void MonteCarloAnalysis::setLevelConfidenceInterval(const double levelConfidence
 
 void MonteCarloAnalysis::run()
 {
-  // clear result
-  result_ = DataAnalysisResult();
-
-  // check
-  if (!getPhysicalModel().getRestrictedFunction(getInterestVariables()).getOutputDescription().getSize())
-    throw InvalidDimensionException(HERE) << "The outputs to be analysed "  << getInterestVariables() <<" are not outputs of the model " << getPhysicalModel().getOutputNames();
-
-  // initialization
-  RandomGenerator::SetSeed(getSeed());
-
-  NumericalSample effectiveInputSample(0, getPhysicalModel().getStochasticInputNames().getSize());
-  effectiveInputSample.setDescription(getPhysicalModel().getStochasticInputNames());
-  NumericalSample outputSample(0, getInterestVariables().getSize());
-  outputSample.setDescription(getInterestVariables());
-
-  const bool maximumOuterSamplingSpecified = getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max();
-  const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize())) : (UnsignedInteger)std::numeric_limits<int>::max();
-  const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getMaximumCalls() % getBlockSize() : 0;
-  const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
-
-  NumericalScalar coefficientOfVariation = -1.0;
-  clock_t elapsedTime = 0;
-  const clock_t startTime = clock();
-  UnsignedInteger outerSampling = 0;
-
-  // We loop if there remains some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
-  while ((outerSampling < maximumOuterSampling)
-     && ((coefficientOfVariation == -1.0) || (coefficientOfVariation > getMaximumCoefficientOfVariation()))
-     &&  (static_cast<UnsignedInteger>(elapsedTime) < getMaximumElapsedTime() * CLOCKS_PER_SEC))
+  try
   {
-    // the last block can be smaller
-    const UnsignedInteger effectiveBlockSize = outerSampling < (maximumOuterSampling - 1) ? getBlockSize() : lastBlockSize;
+    // clear result
+    result_ = DataAnalysisResult();
 
-    // Perform a block of simulation
-    const NumericalSample blockInputSample(generateInputSample(effectiveBlockSize));
-    effectiveInputSample.add(blockInputSample);
+    // check
+    if (!getPhysicalModel().getRestrictedFunction(getInterestVariables()).getOutputDescription().getSize())
+      throw InvalidDimensionException(HERE) << "The outputs to be analysed "  << getInterestVariables() <<" are not outputs of the model " << getPhysicalModel().getOutputNames();
 
-    const NumericalSample blockOutputSample(computeOutputSample(blockInputSample));
-    outputSample.add(blockOutputSample);
+    // initialization
+    RandomGenerator::SetSeed(getSeed());
 
-    // stop criteria
-    if ((getMaximumCoefficientOfVariation() != -1) &&
-        (getBlockSize() != 1 || (getBlockSize() == 1 && outerSampling)))
+    NumericalSample effectiveInputSample(0, getPhysicalModel().getStochasticInputNames().getSize());
+    effectiveInputSample.setDescription(getPhysicalModel().getStochasticInputNames());
+    NumericalSample outputSample(0, getInterestVariables().getSize());
+    outputSample.setDescription(getInterestVariables());
+
+    const bool maximumOuterSamplingSpecified = getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max();
+    const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize())) : (UnsignedInteger)std::numeric_limits<int>::max();
+    const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getMaximumCalls() % getBlockSize() : 0;
+    const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
+
+    NumericalScalar coefficientOfVariation = -1.0;
+    clock_t elapsedTime = 0;
+    const clock_t startTime = clock();
+    UnsignedInteger outerSampling = 0;
+
+    // We loop if there remains some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
+    while ((outerSampling < maximumOuterSampling)
+      && ((coefficientOfVariation == -1.0) || (coefficientOfVariation > getMaximumCoefficientOfVariation()))
+      &&  (static_cast<UnsignedInteger>(elapsedTime) < getMaximumElapsedTime() * CLOCKS_PER_SEC))
     {
-      const NumericalPoint empiricalMean(outputSample.computeMean());
-      const NumericalPoint empiricalStd(outputSample.computeStandardDeviationPerComponent());
-      NumericalScalar coefOfVar(0.);
-      for (UnsignedInteger i=0; i<outputSample.getDimension(); ++i)
+      // the last block can be smaller
+      const UnsignedInteger effectiveBlockSize = outerSampling < (maximumOuterSampling - 1) ? getBlockSize() : lastBlockSize;
+
+      // Perform a block of simulation
+      const NumericalSample blockInputSample(generateInputSample(effectiveBlockSize));
+      effectiveInputSample.add(blockInputSample);
+
+      const NumericalSample blockOutputSample(computeOutputSample(blockInputSample));
+      outputSample.add(blockOutputSample);
+
+      // stop criteria
+      if ((getMaximumCoefficientOfVariation() != -1) &&
+          (getBlockSize() != 1 || (getBlockSize() == 1 && outerSampling)))
       {
-        if (std::abs(empiricalMean[i])  < SpecFunc::Precision)
-          throw InvalidValueException(HERE) << "Impossible to continue the analysis.\
-                                                Impossible to compute the coefficient of variation because the mean of an output is too close to zero.\
-                                                Do not use the coefficient of variation as criteria to stop the algorithm";
+        const NumericalPoint empiricalMean(outputSample.computeMean());
+        const NumericalPoint empiricalStd(outputSample.computeStandardDeviationPerComponent());
+        NumericalScalar coefOfVar(0.);
+        for (UnsignedInteger i=0; i<outputSample.getDimension(); ++i)
+        {
+          if (std::abs(empiricalMean[i])  < SpecFunc::Precision)
+            throw InvalidValueException(HERE) << "Impossible to continue the analysis.\
+                                                  Impossible to compute the coefficient of variation because the mean of an output is too close to zero.\
+                                                  Do not use the coefficient of variation as criteria to stop the algorithm";
 
-        const NumericalScalar sigma_i = empiricalStd[i] / sqrt(outputSample.getSize());
-        coefOfVar = std::max(sigma_i / std::abs(empiricalMean[i]), coefOfVar);
+          const NumericalScalar sigma_i = empiricalStd[i] / sqrt(outputSample.getSize());
+          coefOfVar = std::max(sigma_i / std::abs(empiricalMean[i]), coefOfVar);
+        }
+        coefficientOfVariation = coefOfVar;
       }
-      coefficientOfVariation = coefOfVar;
+      elapsedTime = clock() - startTime;
+      ++outerSampling;
     }
-    elapsedTime = clock() - startTime;
-    ++outerSampling;
-  }
 
-  // set results
-  if (outputSample.getSize())
+    // set results
+    if (outputSample.getSize())
+    {
+      DataAnalysis dataAnalysis("", DataModel("", effectiveInputSample, outputSample));
+      dataAnalysis.setIsConfidenceIntervalRequired(isConfidenceIntervalRequired());
+      dataAnalysis.setLevelConfidenceInterval(levelConfidenceInterval_);
+      dataAnalysis.run();
+      result_ = dataAnalysis.getResult();
+      result_.elapsedTime_ = (float)elapsedTime / CLOCKS_PER_SEC;
+
+      notify("analysisFinished");
+    }
+    else
+      throw InvalidValueException(HERE) << "MonteCarloAnalysis::run : The output sample is empty";
+  }
+  catch (std::exception & ex)
   {
-    DataAnalysis dataAnalysis("", DataModel("", effectiveInputSample, outputSample));
-    dataAnalysis.setIsConfidenceIntervalRequired(isConfidenceIntervalRequired());
-    dataAnalysis.setLevelConfidenceInterval(levelConfidenceInterval_);
-    dataAnalysis.run();
-    result_ = dataAnalysis.getResult();
-    result_.elapsedTime_ = (float)elapsedTime / CLOCKS_PER_SEC;
-
-    notify("analysisFinished");
+    setErrorMessage(ex.what());
+    notify("analysisBadlyFinished");
   }
-  else
-    throw InvalidValueException(HERE) << "MonteCarloAnalysis::run : The output sample is empty";
 }
 
 
