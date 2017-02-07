@@ -101,6 +101,14 @@ public:
   {
     Py_XDECREF(myObject);
     myObject = theObjWrapper->myObject;
+    Py_XINCREF(myObject);
+    return *this;
+  }
+  PyObjWrapper& operator=(const PyObjWrapper& theObjWrapper)
+  {
+    Py_XDECREF(myObject);
+    myObject = theObjWrapper.myObject;
+    Py_XINCREF(myObject);
     return *this;
   }
 };

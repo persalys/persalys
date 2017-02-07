@@ -147,26 +147,48 @@ void PyConsole_CallbackStderr( void* data, char* c )
 }
 
 /*!
+  \brief Default constructor. 
+  
+  Creates python editor window.
+  \param theParent parent widget
+*/
+PyConsole_Editor::PyConsole_Editor( QWidget* parent )
+  : QTextEdit( parent )
+{
+  PyConsole_Interp *interp(new PyConsole_Interp);
+  interp->initialize();
+  myInterp=interp;
+  init();
+}
+
+/*!
   \brief Constructor. 
   
   Creates python editor window.
-  \param theInterp python interper
-  \param theParent parent widget
+  \param parent parent widget
+  \param interp python interper
 */
-PyConsole_Editor::PyConsole_Editor( PyConsole_Interp* theInterp, 
-                                    QWidget*          theParent )
-: QTextEdit( theParent ),
-  myInterp( theInterp ),
-  myCmdInHistory( -1 ),
-  myEventLoop( 0 ),
-  myShowBanner( true ),
-  myIsSync( true ),
-  myIsSuppressOutput( false ),
-  myMultiLinePaste( false ),
-  myAutoCompletion( false ),
-  myTabMode( false ),
-  myComplCursorPos( -1 )
+PyConsole_Editor::PyConsole_Editor( QWidget*          parent,
+                                    PyConsole_Interp* interp )
+  : QTextEdit( parent )
 {
+  myInterp.takeRef(interp);
+  init();
+}
+
+
+void PyConsole_Editor::init()
+{
+  myCmdInHistory = -1;
+  myEventLoop = 0;
+  myShowBanner = true;
+  myIsSync = true;
+  myIsSuppressOutput = false;
+  myMultiLinePaste = false;
+  myAutoCompletion = false;
+  myTabMode = false;
+  myComplCursorPos = -1;
+
   setFont( QFont( "Courier", 11 ) ); // default font
   setUndoRedoEnabled( false );
 
@@ -198,16 +220,14 @@ PyConsole_Editor::PyConsole_Editor( PyConsole_Interp* theInterp,
 */
 PyConsole_Editor::~PyConsole_Editor()
 {
-  delete myInterp;
-  myInterp = 0;
 }
 
 /*!
   \brief Get Python interpreter
 */
-PyConsole_Interp* PyConsole_Editor::getInterp() const
+PyConsole_Interp *PyConsole_Editor::getInterp() const
 {
-  return myInterp;
+  return myInterp.iAmATrollConstCast();
 }
 
 /*!

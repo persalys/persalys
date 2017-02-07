@@ -27,6 +27,8 @@
 
 #include "PyConsole.h"
 
+#include "PyInterp_RefCounterObj.h"
+
 #include <QTextEdit>
 #include <QQueue>
 
@@ -39,7 +41,8 @@ class PYCONSOLE_EXPORT PyConsole_Editor : public QTextEdit
   Q_OBJECT;
 
 public:
-  PyConsole_Editor( PyConsole_Interp*, QWidget* = 0 );
+  PyConsole_Editor( QWidget* = 0 );
+  PyConsole_Editor( QWidget*, PyConsole_Interp* );
   ~PyConsole_Editor();
 
   PyConsole_Interp* getInterp() const;
@@ -95,6 +98,8 @@ protected:
   virtual QString getLogFileName();
 
 private:
+  void           init();
+
   void           multilinePaste( const QString& );
   void           multiLineProcessNextLine();
 
@@ -112,25 +117,25 @@ private:
   QString        banner() const;
   inline int     promptSize() const { return myPrompt.size(); }
 
-  PyConsole_Interp* myInterp;           //!< python interpreter
-  QString           myCommandBuffer;    //!< python command buffer
-  QString           myCurrentCommand;   //!< currently being printed command
-  QString           myPrompt;           //!< current command line prompt
-  int               myCmdInHistory;     //!< current history command index
-  QString           myLogFile;          //!< current output log
-  QStringList       myHistory;          //!< commands history buffer
-  QEventLoop*       myEventLoop;        //!< internal event loop
-  bool              myShowBanner;       //!< 'show banner' flag
-  QStringList       myQueue;            //!< python commands queue
-  bool              myIsSync;           //!< synchronous mode flag
-  bool              myIsSuppressOutput; //!< suppress output flag
-  bool              myMultiLinePaste;   //!< true when pasting several lines
-  QQueue<QString>   myMultiLineContent; //!< queue of lines being pasted
-  bool              myAutoCompletion;   //!< auto-completion mode flag
-  bool              myTabMode;          //!< flag that is \c true when editor performs completion
-  QString           myComplBeforePoint; //!< string on which the dir() command is executed
-  QString           myComplAfterPoint;  //!< string on which the results of the dir() are matched
-  int               myComplCursorPos;   //!< cursor position when <TAB> is hit
+  PyInterp_Auto<PyConsole_Interp> myInterp;           //!< python interpreter
+  QString                         myCommandBuffer;    //!< python command buffer
+  QString                         myCurrentCommand;   //!< currently being printed command
+  QString                         myPrompt;           //!< current command line prompt
+  int                             myCmdInHistory;     //!< current history command index
+  QString                         myLogFile;          //!< current output log
+  QStringList                     myHistory;          //!< commands history buffer
+  QEventLoop*                     myEventLoop;        //!< internal event loop
+  bool                            myShowBanner;       //!< 'show banner' flag
+  QStringList                     myQueue;            //!< python commands queue
+  bool                            myIsSync;           //!< synchronous mode flag
+  bool                            myIsSuppressOutput; //!< suppress output flag
+  bool                            myMultiLinePaste;   //!< true when pasting several lines
+  QQueue<QString>                 myMultiLineContent; //!< queue of lines being pasted
+  bool                            myAutoCompletion;   //!< auto-completion mode flag
+  bool                            myTabMode;          //!< flag that is \c true when editor performs completion
+  QString                         myComplBeforePoint; //!< string on which the dir() command is executed
+  QString                         myComplAfterPoint;  //!< string on which the results of the dir() are matched
+  int                             myComplCursorPos;   //!< cursor position when <TAB> is hit
 
   friend void PyConsole_CallbackStdout( void*, char* );
   friend void PyConsole_CallbackStderr( void*, char* );

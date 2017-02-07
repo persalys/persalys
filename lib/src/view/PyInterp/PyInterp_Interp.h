@@ -27,6 +27,7 @@
 
 #include "PyInterp.h"   // !!! WARNING !!! THIS INCLUDE MUST BE THE VERY FIRST !!!
 #include "PyInterp_Utils.h"
+#include "PyInterp_RefCounterObj.h"
 
 #include <list>
 #include <string>
@@ -50,20 +51,17 @@ typedef struct {
  * (only there namespace is made available when importing in another context).
  * See also class PyConsole_Interp.
  */
-class PYINTERP_EXPORT PyInterp_Interp
+class PYINTERP_EXPORT PyInterp_Interp : public PyInterp_RefCounterObj
 {
 public:
   static int _argc;
   static char* _argv[];
   
-  PyInterp_Interp();
-  virtual ~PyInterp_Interp();
-  
   void initialize();
   void destroy();
 
   virtual int run(const char *command); 
-  virtual void initStudy() {};
+  virtual void initStudy() {}
 
   std::string getBanner() const;
   void setverrcb(PyOutChanged*, void*);
@@ -71,6 +69,11 @@ public:
 
   const char* getPrevious();
   const char* getNext();
+
+protected:
+  
+  PyInterp_Interp();
+  virtual ~PyInterp_Interp();
 
 protected:
   /** Redirection of stdout and stderr */

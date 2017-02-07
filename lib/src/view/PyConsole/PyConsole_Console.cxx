@@ -44,24 +44,42 @@
 
   This will create a console with default editor and interpreter.
 
-  To use custom editor and/or interpreter class with the console, you can use additional parameter
-  of the constructor; in this case you have to ensure that Python interpeter is initialized properly:
+  To use custom editor with the console, you can use alternative constructor:
   \code
-  PyConsole_Interp* interp = new PyConsole_Interp();
-  interp->initialize();
-  PyConsole_Console c(myWindow, new MyEditor(interp));
+  PyConsole_Console c(myWindow, new MyEditor());
   \endcode
 */  
+
+/*!
+  \brief Default constructor.
+
+  Creates new python console widget.
+  \param parent parent widget
+*/
+PyConsole_Console::PyConsole_Console( QWidget* parent )
+: QWidget( parent )
+{
+  init( 0 );
+}
 
 /*!
   \brief Constructor.
 
   Creates new python console widget.
   \param parent parent widget
-  \param interp python interpreter
+  \param editor python editor
 */
 PyConsole_Console::PyConsole_Console( QWidget* parent, PyConsole_Editor* editor )
 : QWidget( parent )
+{
+  init( editor );
+}
+
+/*!
+  \brief Initialize console widget.
+  \param editor python editor
+*/
+void PyConsole_Console::init( PyConsole_Editor* editor )
 {
   // initialize Python interpretator
   PyConsole_Interp* interp = editor ? editor->getInterp() : new PyConsole_Interp();
@@ -70,7 +88,7 @@ PyConsole_Console::PyConsole_Console( QWidget* parent, PyConsole_Editor* editor 
   // create editor console
   QVBoxLayout* lay = new QVBoxLayout( this );
   lay->setMargin( 0 );
-  myEditor = editor ? editor : new PyConsole_Editor( interp, this );
+  myEditor = editor ? editor : new PyConsole_Editor( this, interp );
   myEditor->setContextMenuPolicy( Qt::NoContextMenu );
   lay->addWidget( myEditor );
 

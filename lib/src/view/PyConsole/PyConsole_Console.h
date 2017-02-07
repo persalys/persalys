@@ -54,7 +54,8 @@ public:
   };
 
 public:
-  PyConsole_Console( QWidget* parent, PyConsole_Editor* editor = 0 );
+  PyConsole_Console( QWidget* = 0 );
+  PyConsole_Console( QWidget*, PyConsole_Editor* );
   virtual ~PyConsole_Console();
 
   PyConsole_Interp*   getInterp() const;
@@ -88,6 +89,9 @@ protected:
   void                updateActions();
 
   virtual void        contextMenuEvent( QContextMenuEvent* );
+
+private:
+  void                init( PyConsole_Editor* );
 
 protected:
   PyConsole_Editor*   myEditor;    //!< python console editor widget
