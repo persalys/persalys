@@ -21,9 +21,12 @@
 #include "otgui/SobolResultWindow.hxx"
 
 #include "otgui/SobolAnalysis.hxx"
-#include "otgui/SobolResultWindowWidget.hxx"
+#include "otgui/SensitivityResultWidget.hxx"
+#include "otgui/ResizableStackedWidget.hxx"
 
-#include <QVBoxLayout>
+#include <QGroupBox>
+#include <QScrollArea>
+#include <QSplitter>
 
 using namespace OT;
 
@@ -32,18 +35,12 @@ namespace OTGUI {
 SobolResultWindow::SobolResultWindow(AnalysisItem * item)
   : ResultWindow(item)
   , result_(dynamic_cast<SobolAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
-  , plotsConfigurationWidget_(0)
+  , outputsListWidget_(0)
+  , tabWidget_(0)
   , warningMessage_("")
 {
   setParameters(item->getAnalysis());
   buildInterface();
-}
-
-
-SobolResultWindow::~SobolResultWindow()
-{
-  delete plotsConfigurationWidget_;
-  plotsConfigurationWidget_ = 0;
 }
 
 
@@ -86,19 +83,60 @@ void SobolResultWindow::setParameters(const Analysis & analysis)
 
 void SobolResultWindow::buildInterface()
 {
+  const UnsignedInteger outputDimension = result_.getOutputNames().getSize();
+  QStringList outputNames;
+  for (UnsignedInteger i=0; i<outputDimension; ++i)
+    outputNames << QString::fromUtf8(result_.getOutputNames()[i].c_str());
+
+  // main splitter
+  QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
+
+  // - list outputs
+  QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
+  QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
+
+  outputsListWidget_ = new QListWidget;
+  outputsListWidget_->addItems(outputNames);
+  outputsLayoutGroupBox->addWidget(outputsListWidget_);
+  outputsLayoutGroupBox->addStretch();
+
+  mainWidget->addWidget(outputsGroupBox);
+  mainWidget->setStretchFactor(0, 1);
+
+  // - tab widget
   tabWidget_ = new QTabWidget;
 
   // first tab --------------------------------
-  SobolResultWindowWidget * scrollArea = new SobolResultWindowWidget(result_, warningMessage_);
-  tabWidget_->addTab(scrollArea, tr("Result"));
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+  QWidget * widget = new QWidget;
+  QVBoxLayout * vbox = new QVBoxLayout(widget);
 
-  QStringList outputNames;
+  ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
+  connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
-    outputNames << QString::fromUtf8(result_.getOutputNames()[i].c_str());
+  {
+    SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(result_.getFirstOrderIndices()[i],
+                                                                                result_.getTotalIndices()[i],
+                                                                                result_.getInputNames(),
+                                                                                result_.getOutputNames()[i],
+                                                                                SensitivityResultWidget::Sobol,
+                                                                                i);
+    stackedWidget->addWidget(indicesResultWidget);
+    connect(indicesResultWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
+    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), indicesResultWidget, SLOT(showHideGraphConfigurationWidget(int)));
+    connect(this, SIGNAL(stateChanged(int)), indicesResultWidget, SLOT(showHideGraphConfigurationWidget(int)));
+  }
+  vbox->addWidget(stackedWidget);
 
-  plotsConfigurationWidget_ = new GraphConfigurationWidget(scrollArea->getPlotWidgets(), QStringList(), outputNames, GraphConfigurationWidget::SensitivityIndices);
-  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), scrollArea, SIGNAL(currentPlotChanged(int)));
-  connect(plotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), scrollArea, SLOT(setCurrentIndex(int)));
+  // add a warning (if the model has not an independent copula when doing a SensitivityAnalysis)
+  if (!warningMessage_.isEmpty())
+  {
+    QLabel * warningLabel = new QLabel(QString("<font color=red>%1</font>").arg(warningMessage_));
+    vbox->addWidget(warningLabel);
+  }
+  scrollArea->setWidget(widget);
+  tabWidget_->addTab(scrollArea, tr("Result"));
 
   // second tab --------------------------------
   if (result_.getElapsedTime() > 0. && result_.getCallsNumber())
@@ -129,29 +167,22 @@ void SobolResultWindow::buildInterface()
   if (parametersWidget_)
     tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 
-  //
+  // set widgets
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
-  setWidget(tabWidget_);
+
+  mainWidget->addWidget(tabWidget_);
+  mainWidget->setStretchFactor(1, 10);
+  outputsListWidget_->setCurrentRow(0);
+  setWidget(mainWidget);
 }
 
 
 void SobolResultWindow::showHideGraphConfigurationWidget(int indexTab)
 {
-  switch (indexTab)
-  {
-    // if a plotWidget is visible
-    case 0: // sobol indices graph
-      if (plotsConfigurationWidget_)
-        if (!plotsConfigurationWidget_->isVisible())
-          emit graphWindowActivated(plotsConfigurationWidget_);
-      break;
-    // if no plotWidget is visible
-    default:
-    {
-      emit graphWindowDeactivated();
-      break;
-    }
-  }
+  if (indexTab == 0) // indices
+    emit stateChanged(outputsListWidget_->currentRow());
+  else
+    emit graphWindowDeactivated();
 }
 
 

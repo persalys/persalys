@@ -22,8 +22,9 @@
 #define OTGUI_KRIGINGRESULTWINDOW_HXX
 
 #include "otgui/ResultWindow.hxx"
-#include "otgui/MetaModelAnalysisResult.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/KrigingAnalysisResult.hxx"
+
+#include <QListWidget>
 
 namespace OTGUI {
 class OTGUI_API KrigingResultWindow : public ResultWindow
@@ -33,8 +34,6 @@ class OTGUI_API KrigingResultWindow : public ResultWindow
 public:
   KrigingResultWindow(AnalysisItem* item);
 
-  virtual ~KrigingResultWindow();
-
 protected:
   void setParameters(const Analysis& analysis);
   void buildInterface();
@@ -42,13 +41,13 @@ protected:
 public slots:
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+signals:
+  void stateChanged(int);
 
 private:
-  MetaModelAnalysisResult result_;
+  KrigingAnalysisResult result_;
+  QListWidget * outputsListWidget_;
   QTabWidget * tabWidget_;
-  GraphConfigurationWidget * metaModelPlotsConfigurationWidget_;
-  GraphConfigurationWidget * metaModelPlotsLOOConfigurationWidget_;
-  OT::NumericalSample inSample_;
 };
 }
 #endif

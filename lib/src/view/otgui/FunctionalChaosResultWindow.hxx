@@ -31,6 +31,7 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QHeaderView>
+#include <QListWidget>
 
 namespace OTGUI {
 
@@ -39,20 +40,7 @@ class OTGUI_API FunctionalChaosResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  class ValidationTableView : public ResizableTableViewWithoutScrollBar
-  {
-    public:
-      ValidationTableView(const double q2Error,const double q2Value);
-  };
-  class MetaModelPlotWidget : public PlotWidget
-  {
-    public:
-      MetaModelPlotWidget(const OT::NumericalSample& metaModelSample, const OT::NumericalSample& outputSample);
-  };
-
   FunctionalChaosResultWindow(AnalysisItem * item);
-
-  virtual ~FunctionalChaosResultWindow();
 
 protected:
   void setParameters(const Analysis & analysis);
@@ -61,14 +49,13 @@ protected:
 public slots:
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+signals:
+  void stateChanged(int);
 
 private:
   FunctionalChaosAnalysisResult result_;
+  QListWidget * outputsListWidget_;
   QTabWidget * tabWidget_;
-  GraphConfigurationWidget * metaModelPlotsConfigurationWidget_;
-  GraphConfigurationWidget * metaModelPlotsLOOConfigurationWidget_;
-  GraphConfigurationWidget * sobolIndicesPlotsConfigurationWidget_;
-  OT::NumericalSample inSample_;
 };
 }
 #endif

@@ -21,71 +21,26 @@
 #include "otgui/FunctionalChaosResultWindow.hxx"
 
 #include "otgui/FunctionalChaosAnalysis.hxx"
-#include "otgui/SobolResultWindowWidget.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/MetaModelValidationWidget.hxx"
+#include "otgui/SensitivityResultWidget.hxx"
 
-#include <QVBoxLayout>
 #include <QGroupBox>
-#include <QHeaderView>
+#include <QSplitter>
+#include <QScrollArea>
 
 using namespace OT;
 
 namespace OTGUI {
 
-FunctionalChaosResultWindow::ValidationTableView::ValidationTableView(const double q2Error,const double q2Value)
-: ResizableTableViewWithoutScrollBar()
-{
-  horizontalHeader()->hide();
-  verticalHeader()->hide();
-  CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(2, 2, this);
-  setModel(momentsEstimationsTable);
-  // - vertical header
-  momentsEstimationsTable->setNotEditableHeaderItem(0, 0, tr("Residual"));
-  momentsEstimationsTable->setNotEditableHeaderItem(1, 0, tr("Q2"));
-
-  // - residual/q2 values
-  momentsEstimationsTable->setNotEditableItem(0, 1, q2Error);
-  momentsEstimationsTable->setNotEditableItem(1, 1, q2Value);
-
-  resizeToContents();
-}
-
-
-FunctionalChaosResultWindow::MetaModelPlotWidget::MetaModelPlotWidget(const NumericalSample& metaModelSample, const NumericalSample& outputSample)
-  : PlotWidget()
-{
-  plotScatter(outputSample, metaModelSample);
-  NumericalSample lineSample(outputSample);
-  lineSample.stack(lineSample);
-  plotCurve(lineSample, QPen(Qt::black, 1));
-  setTitle(tr("Metamodel:") + " " + QString::fromUtf8(outputSample.getDescription()[0].c_str()));
-  setAxisTitle(QwtPlot::xBottom, tr("Physical model"));
-  setAxisTitle(QwtPlot::yLeft, tr("Metamodel"));
-}
-
-
 FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item)
   : ResultWindow(item)
   , result_(dynamic_cast<FunctionalChaosAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
-  , metaModelPlotsConfigurationWidget_(0)
-  , metaModelPlotsLOOConfigurationWidget_(0)
-  , sobolIndicesPlotsConfigurationWidget_(0)
-  , inSample_(dynamic_cast<FunctionalChaosAnalysis*>(&*item->getAnalysis().getImplementation())->getDesignOfExperiment().getInputSample())
+  , outputsListWidget_(0)
+  , tabWidget_(0)
 {
   setParameters(item->getAnalysis());
   buildInterface();
-}
-
-
-FunctionalChaosResultWindow::~FunctionalChaosResultWindow()
-{
-  delete metaModelPlotsConfigurationWidget_;
-  delete metaModelPlotsLOOConfigurationWidget_;
-  delete sobolIndicesPlotsConfigurationWidget_;
-  metaModelPlotsConfigurationWidget_ = 0;
-  metaModelPlotsLOOConfigurationWidget_ = 0;
-  sobolIndicesPlotsConfigurationWidget_ = 0;
 }
 
 
@@ -112,66 +67,55 @@ void FunctionalChaosResultWindow::setParameters(const Analysis & analysis)
 
 void FunctionalChaosResultWindow::buildInterface()
 {
-  tabWidget_ = new QTabWidget;
-
+  // get output info
   const UnsignedInteger outputDimension = result_.getSobolResult().getOutputNames().getSize();
   QStringList outputNames;
   for (UnsignedInteger i=0; i<outputDimension; ++i)
     outputNames << QString::fromUtf8(result_.getSobolResult().getOutputNames()[i].c_str());
 
+  // main splitter
+  QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
+
+  // - list outputs
+  QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
+  QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
+
+  outputsListWidget_ = new QListWidget;
+  outputsListWidget_->addItems(outputNames);
+  outputsLayoutGroupBox->addWidget(outputsListWidget_);
+  outputsLayoutGroupBox->addStretch();
+
+  mainWidget->addWidget(outputsGroupBox);
+  mainWidget->setStretchFactor(0, 1);
+
+  // - tab widget
+  tabWidget_ = new QTabWidget;
+
   // first tab : METAMODEL GRAPH --------------------------------
   QWidget * tab = new QWidget;
   QVBoxLayout * metaModelPlotLayout = new QVBoxLayout(tab);
 
-  QVector<PlotWidget*> listMetaModels;
   ResizableStackedWidget * plotsStackedWidget = new ResizableStackedWidget;
+  connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
   for (UnsignedInteger i=0; i<outputDimension; ++i)
   {
-    MetaModelPlotWidget * plot = new MetaModelPlotWidget(result_.getMetaModelOutputSample().getMarginal(i), result_.getOutputSample().getMarginal(i));
-    listMetaModels.append(plot);
-    plotsStackedWidget->addWidget(plot);
+    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSample().getMarginal(i),
+                                                                                 result_.getOutputSample().getMarginal(i),
+                                                                                 result_.getFunctionalChaosResult().getResiduals()[i],
+                                                                                 result_.getFunctionalChaosResult().getRelativeErrors()[i],
+                                                                                 true,
+                                                                                 i);
+
+    plotsStackedWidget->addWidget(validationWidget);
+    connect(validationWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
+    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
+    connect(this, SIGNAL(stateChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
   }
   metaModelPlotLayout->addWidget(plotsStackedWidget);
-  metaModelPlotsConfigurationWidget_ = new GraphConfigurationWidget(listMetaModels, QStringList(), outputNames, GraphConfigurationWidget::MetaModel);
-  connect(metaModelPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
 
   tabWidget_->addTab(tab, tr("Metamodel"));
 
-  // second tab : RESULTS --------------------------------
-  QScrollArea * scrollArea = new QScrollArea;
-  scrollArea->setWidgetResizable(true);
-  tab = new QWidget;
-  QVBoxLayout * resultsLayout = new QVBoxLayout(tab);
-  resultsLayout->setSizeConstraint(QLayout::SetFixedSize);
-
-  // -- output name --
-  QHBoxLayout * headLayout = new QHBoxLayout;
-  QLabel * outputName = new QLabel(tr("Output"));
-  headLayout->addWidget(outputName);
-  QComboBox * outputsComboBox = new QComboBox;
-  outputsComboBox->addItems(outputNames);
-  headLayout->addWidget(outputsComboBox);
-  headLayout->addStretch();
-  resultsLayout->addLayout(headLayout);
-
-  // -- validation --
-  if (result_.getMetaModelOutputSampleLeaveOneOut().getSize())
-  {
-    QGroupBox * validationGroupBox = new QGroupBox(tr("Leave-one-out validation"));
-    QVBoxLayout * validationGroupBoxLayout = new QVBoxLayout(validationGroupBox);
-    ResizableStackedWidget * validationStackedWidget = new ResizableStackedWidget;
-
-    for (UnsignedInteger outputIndex=0; outputIndex<result_.getMetaModelOutputSampleLeaveOneOut().getDimension(); ++outputIndex)
-    {
-      ValidationTableView * validationTableView = new ValidationTableView(result_.getErrorQ2LeaveOneOut()[outputIndex], result_.getQ2LeaveOneOut()[outputIndex]);
-      validationStackedWidget->addWidget(validationTableView);
-    }
-    validationGroupBoxLayout->addWidget(validationStackedWidget);
-    connect(outputsComboBox, SIGNAL(currentIndexChanged(int)), validationStackedWidget, SLOT(setCurrentIndex(int)));
-    resultsLayout->addWidget(validationGroupBox);
-  }
-
-  // -- moments --
+  // second tab : MOMENTS --------------------------------
   QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimates"));
   QVBoxLayout * momentsGroupBoxLayout = new QVBoxLayout(momentsGroupBox);
   ResizableStackedWidget * momentsStackedWidget = new ResizableStackedWidget;
@@ -197,78 +141,89 @@ void FunctionalChaosResultWindow::buildInterface()
 
     momentsStackedWidget->addWidget(momentsEstimationsTableView);
   }
-  connect(outputsComboBox, SIGNAL(currentIndexChanged(int)), momentsStackedWidget, SLOT(setCurrentIndex(int)));
   momentsGroupBoxLayout->addWidget(momentsStackedWidget);
 
-  resultsLayout->addWidget(momentsGroupBox);
-  scrollArea->setWidget(tab);
-  tabWidget_->addTab(scrollArea, tr("Summary"));
+  connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), momentsStackedWidget, SLOT(setCurrentIndex(int)));
+
+  tabWidget_->addTab(momentsGroupBox, tr("Moments"));
 
   // third tab : SOBOL INDICES --------------------------------
-  SobolResultWindowWidget * sobolScrollArea = new SobolResultWindowWidget(result_.getSobolResult());
+  QScrollArea * sobolScrollArea = new QScrollArea;
+  sobolScrollArea->setWidgetResizable(true);
+  QWidget * widget = new QWidget;
+  QVBoxLayout * vbox = new QVBoxLayout(widget);
+  ResizableStackedWidget * sobolStackedWidget = new ResizableStackedWidget;
+  connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), sobolStackedWidget, SLOT(setCurrentIndex(int)));
+  for (UnsignedInteger i=0; i<outputDimension; ++i)
+  {
+    SensitivityResultWidget * sobolResultWidget = new SensitivityResultWidget(result_.getSobolResult().getFirstOrderIndices()[i],
+                                                                              result_.getSobolResult().getTotalIndices()[i],
+                                                                              result_.getSobolResult().getInputNames(),
+                                                                              result_.getSobolResult().getOutputNames()[i],
+                                                                              SensitivityResultWidget::Sobol,
+                                                                              i);
+    sobolStackedWidget->addWidget(sobolResultWidget);
+    connect(sobolResultWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
+    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), sobolResultWidget, SLOT(showHideGraphConfigurationWidget(int)));
+    connect(this, SIGNAL(stateChanged(int)), sobolResultWidget, SLOT(showHideGraphConfigurationWidget(int)));
+  }
+  vbox->addWidget(sobolStackedWidget);
+  sobolScrollArea->setWidget(widget);
   tabWidget_->addTab(sobolScrollArea, tr("Sobol indices"));
-  sobolIndicesPlotsConfigurationWidget_ = new GraphConfigurationWidget(sobolScrollArea->getPlotWidgets(), QStringList(), outputNames, GraphConfigurationWidget::SensitivityIndices);
-  connect(sobolIndicesPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), sobolScrollArea, SIGNAL(currentPlotChanged(int)));
-  connect(sobolIndicesPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), sobolScrollArea, SLOT(setCurrentIndex(int)));
 
-  // fourth tab : GRAPH METAMODEL LOO --------------------------------
+  // fourth tab : VALIDATION --------------------------------
   if (result_.getMetaModelOutputSampleLeaveOneOut().getSize())
   {
+    QTabWidget * validationTabWidget = new QTabWidget;
+
     tab = new QWidget;
     metaModelPlotLayout = new QVBoxLayout(tab);
 
-    QVector<PlotWidget*> listMetaModelsLOO;
     ResizableStackedWidget * plotsLOOStackedWidget = new ResizableStackedWidget;
+    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), plotsLOOStackedWidget, SLOT(setCurrentIndex(int)));
     for (UnsignedInteger i=0; i<outputDimension; ++i)
     {
-      MetaModelPlotWidget * plot = new MetaModelPlotWidget(result_.getMetaModelOutputSampleLeaveOneOut().getMarginal(i), result_.getOutputSample().getMarginal(i));
-      listMetaModelsLOO.append(plot);
-      plotsLOOStackedWidget->addWidget(plot);
+      MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSampleLeaveOneOut().getMarginal(i),
+                                                                                   result_.getOutputSample().getMarginal(i),
+                                                                                   result_.getErrorQ2LeaveOneOut()[i],
+                                                                                   result_.getQ2LeaveOneOut()[i],
+                                                                                   false,
+                                                                                   i);
+      plotsLOOStackedWidget->addWidget(validationWidget);
+  
+      connect(validationWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
+      connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
+      connect(this, SIGNAL(stateChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
     }
     metaModelPlotLayout->addWidget(plotsLOOStackedWidget);
-    metaModelPlotsLOOConfigurationWidget_ = new GraphConfigurationWidget(listMetaModelsLOO, QStringList(), outputNames, GraphConfigurationWidget::MetaModel);
-    connect(metaModelPlotsLOOConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotsLOOStackedWidget, SLOT(setCurrentIndex(int)));
 
-    tabWidget_->addTab(tab, tr("Leave-one-out"));
+    validationTabWidget->addTab(plotsLOOStackedWidget, tr("Leave-one-out"));
+    tabWidget_->addTab(validationTabWidget, tr("Validation"));
   }
 
   // fourth/fifth tab : PARAMETERS --------------------------------
   if (parametersWidget_)
     tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 
-  //
+  // set widgets
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
-  setWidget(tabWidget_);
+
+  mainWidget->addWidget(tabWidget_);
+  mainWidget->setStretchFactor(1, 10);
+  outputsListWidget_->setCurrentRow(0);
+  setWidget(mainWidget);
 }
 
 
 void FunctionalChaosResultWindow::showHideGraphConfigurationWidget(int indexTab)
 {
-  switch (indexTab)
-  {
-    // if a plotWidget is visible
-    case 0: // metamodel graph
-      if (metaModelPlotsConfigurationWidget_)
-        if (!metaModelPlotsConfigurationWidget_->isVisible())
-          emit graphWindowActivated(metaModelPlotsConfigurationWidget_);
-      break;
-    case 2: // sobol indices graph
-      if (sobolIndicesPlotsConfigurationWidget_)
-        if (!sobolIndicesPlotsConfigurationWidget_->isVisible())
-          emit graphWindowActivated(sobolIndicesPlotsConfigurationWidget_);
-      break;
-    case 3: // metamodel graph LOO
-      if (metaModelPlotsLOOConfigurationWidget_)
-        if (!metaModelPlotsLOOConfigurationWidget_->isVisible())
-          emit graphWindowActivated(metaModelPlotsLOOConfigurationWidget_);
-      break;
-    // if no plotWidget is visible
-    default:
-    {
-      emit graphWindowDeactivated();
-      break;
-    }
-  }
+  if (indexTab == 0 || // metamodel
+      indexTab == 2 || // sobol
+      indexTab == 3    // validation
+     )
+    emit stateChanged(outputsListWidget_->currentRow());
+  else
+    emit graphWindowDeactivated();
 }
 
 
@@ -280,6 +235,6 @@ void FunctionalChaosResultWindow::showHideGraphConfigurationWidget(Qt::WindowSta
   if (newState == Qt::WindowFullScreen || newState == (Qt::WindowActive|Qt::WindowMaximized))
     showHideGraphConfigurationWidget(tabWidget_->currentIndex());
   else if (newState == Qt::WindowNoState || newState == Qt::WindowMinimized || newState == (Qt::WindowActive|Qt::WindowMinimized))
-    showHideGraphConfigurationWidget(-1);
+    emit graphWindowDeactivated();
 }
 }

@@ -24,12 +24,14 @@
 #include "otgui/FunctionalChaosResultWindow.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/MetaModelValidationWidget.hxx"
 
 #include "openturns/OTBase.hxx"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QScrollArea>
+#include <QSplitter>
 
 using namespace OT;
 
@@ -38,21 +40,11 @@ namespace OTGUI {
 KrigingResultWindow::KrigingResultWindow(AnalysisItem * item)
   : ResultWindow(item)
   , result_(dynamic_cast<KrigingAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
-  , metaModelPlotsConfigurationWidget_(0)
-  , metaModelPlotsLOOConfigurationWidget_(0)
-  , inSample_(dynamic_cast<KrigingAnalysis*>(&*item->getAnalysis().getImplementation())->getDesignOfExperiment().getInputSample())
+  , outputsListWidget_(0)
+  , tabWidget_(0)
 {
   setParameters(item->getAnalysis());
   buildInterface();
-}
-
-
-KrigingResultWindow::~KrigingResultWindow()
-{
-  delete metaModelPlotsConfigurationWidget_;
-  delete metaModelPlotsLOOConfigurationWidget_;
-  metaModelPlotsConfigurationWidget_ = 0;
-  metaModelPlotsLOOConfigurationWidget_ = 0;
 }
 
 
@@ -122,121 +114,107 @@ void KrigingResultWindow::setParameters(const Analysis& analysis)
 
 void KrigingResultWindow::buildInterface()
 {
-  tabWidget_ = new QTabWidget;
-
   const UnsignedInteger outputDimension = result_.getOutputSample().getDimension();
   QStringList outputNames;
   for (UnsignedInteger i=0; i<outputDimension; ++i)
     outputNames << QString::fromUtf8(result_.getOutputSample().getDescription()[i].c_str());
 
+  // main splitter
+  QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
+  tabWidget_ = new QTabWidget;
+
+  // list outputs
+  QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
+  QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
+
+  outputsListWidget_ = new QListWidget;
+  outputsListWidget_->addItems(outputNames);
+  outputsLayoutGroupBox->addWidget(outputsListWidget_);
+  outputsLayoutGroupBox->addStretch();
+
+  mainWidget->addWidget(outputsGroupBox);
+  mainWidget->setStretchFactor(0, 1);
+
+  // tab widget
+  tabWidget_ = new QTabWidget;
+
   // first tab : METAMODEL GRAPH --------------------------------
   QWidget * tab = new QWidget;
   QVBoxLayout * metaModelPlotLayout = new QVBoxLayout(tab);
 
-  QVector<PlotWidget*> listMetaModels;
   ResizableStackedWidget * plotsStackedWidget = new ResizableStackedWidget;
+  connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
   for (UnsignedInteger i=0; i<outputDimension; ++i)
   {
-    FunctionalChaosResultWindow::MetaModelPlotWidget * plot = new FunctionalChaosResultWindow::MetaModelPlotWidget(result_.getMetaModelOutputSample().getMarginal(i), result_.getOutputSample().getMarginal(i));
-    listMetaModels.append(plot);
-    plotsStackedWidget->addWidget(plot);
+    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSample().getMarginal(i),
+                                                                                 result_.getOutputSample().getMarginal(i),
+                                                                                 result_.getKrigingResultCollection()[i].getResiduals()[0],
+                                                                                 result_.getKrigingResultCollection()[i].getRelativeErrors()[0],
+                                                                                 true,
+                                                                                 i);
+
+    plotsStackedWidget->addWidget(validationWidget);
+    connect(validationWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
+    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
+    connect(this, SIGNAL(stateChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
   }
   metaModelPlotLayout->addWidget(plotsStackedWidget);
-  metaModelPlotsConfigurationWidget_ = new GraphConfigurationWidget(listMetaModels, QStringList(), outputNames, GraphConfigurationWidget::MetaModel);
-  connect(metaModelPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
 
   tabWidget_->addTab(tab, tr("Metamodel"));
 
-  // second tab : RESULTS --------------------------------
+  // second tab : GRAPH METAMODEL LOO --------------------------------
   if (result_.getMetaModelOutputSampleLeaveOneOut().getSize())
   {
-    QScrollArea * scrollArea = new QScrollArea;
-    scrollArea->setWidgetResizable(true);
-    tab = new QWidget;
-    QVBoxLayout * resultsLayout = new QVBoxLayout(tab);
-    resultsLayout->setSizeConstraint(QLayout::SetFixedSize);
+    QTabWidget * validationTabWidget = new QTabWidget;
 
-    // -- output name --
-    QHBoxLayout * headLayout = new QHBoxLayout;
-    QLabel * outputName = new QLabel(tr("Output"));
-    headLayout->addWidget(outputName);
-    QComboBox * outputsComboBox = new QComboBox;
-    outputsComboBox->addItems(outputNames);
-    headLayout->addWidget(outputsComboBox);
-    headLayout->addStretch();
-    resultsLayout->addLayout(headLayout);
-
-    // -- validation --
-    QGroupBox * validationGroupBox = new QGroupBox(tr("Leave-one-out validation"));
-    QVBoxLayout * validationGroupBoxLayout = new QVBoxLayout(validationGroupBox);
-    ResizableStackedWidget * validationStackedWidget = new ResizableStackedWidget;
-
-    for (UnsignedInteger outputIndex=0; outputIndex<result_.getMetaModelOutputSampleLeaveOneOut().getDimension(); ++outputIndex)
-    {
-      FunctionalChaosResultWindow::ValidationTableView * validationTableView = new FunctionalChaosResultWindow::ValidationTableView(result_.getErrorQ2LeaveOneOut()[outputIndex], result_.getQ2LeaveOneOut()[outputIndex]);
-      validationStackedWidget->addWidget(validationTableView);
-    }
-    validationGroupBoxLayout->addWidget(validationStackedWidget);
-    connect(outputsComboBox, SIGNAL(currentIndexChanged(int)), validationStackedWidget, SLOT(setCurrentIndex(int)));
-    resultsLayout->addWidget(validationGroupBox);
-
-    scrollArea->setWidget(tab);
-    tabWidget_->addTab(scrollArea, tr("Summary"));
-  }
-
-  // third tab : GRAPH METAMODEL LOO --------------------------------
-  if (result_.getMetaModelOutputSampleLeaveOneOut().getSize())
-  {
     tab = new QWidget;
     metaModelPlotLayout = new QVBoxLayout(tab);
 
-    QVector<PlotWidget*> listMetaModelsLOO;
     ResizableStackedWidget * plotsLOOStackedWidget = new ResizableStackedWidget;
+    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), plotsLOOStackedWidget, SLOT(setCurrentIndex(int)));
     for (UnsignedInteger i=0; i<outputDimension; ++i)
     {
-      FunctionalChaosResultWindow::MetaModelPlotWidget * plot = new FunctionalChaosResultWindow::MetaModelPlotWidget(result_.getMetaModelOutputSampleLeaveOneOut().getMarginal(i), result_.getOutputSample().getMarginal(i));
-      listMetaModelsLOO.append(plot);
-      plotsLOOStackedWidget->addWidget(plot);
+      MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSampleLeaveOneOut().getMarginal(i),
+                                                                                   result_.getOutputSample().getMarginal(i),
+                                                                                   result_.getErrorQ2LeaveOneOut()[i],
+                                                                                   result_.getQ2LeaveOneOut()[i],
+                                                                                   false,
+                                                                                   i);
+      plotsLOOStackedWidget->addWidget(validationWidget);
+  
+      connect(validationWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
+      connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
+      connect(this, SIGNAL(stateChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
     }
     metaModelPlotLayout->addWidget(plotsLOOStackedWidget);
-    metaModelPlotsLOOConfigurationWidget_ = new GraphConfigurationWidget(listMetaModelsLOO, QStringList(), outputNames, GraphConfigurationWidget::MetaModel);
-    connect(metaModelPlotsLOOConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotsLOOStackedWidget, SLOT(setCurrentIndex(int)));
 
-    tabWidget_->addTab(tab, tr("Leave-one-out"));
+    validationTabWidget->addTab(plotsLOOStackedWidget, tr("Leave-one-out"));
+    tabWidget_->addTab(validationTabWidget, tr("Validation"));
   }
 
-  // third/fourth tab : PARAMETERS --------------------------------
+  // third tab : PARAMETERS --------------------------------
   if (parametersWidget_)
     tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 
-  //
+  // set widgets
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
-  setWidget(tabWidget_);
+
+  mainWidget->addWidget(tabWidget_);
+  mainWidget->setStretchFactor(1, 10);
+  outputsListWidget_->setCurrentRow(0);
+  setWidget(mainWidget);
 }
 
 
 void KrigingResultWindow::showHideGraphConfigurationWidget(int indexTab)
 {
-  switch (indexTab)
-  {
-    // if a plotWidget is visible
-    case 0: // metamodel graph
-      if (metaModelPlotsConfigurationWidget_)
-        if (!metaModelPlotsConfigurationWidget_->isVisible())
-          emit graphWindowActivated(metaModelPlotsConfigurationWidget_);
-      break;
-    case 2: // metamodel graph LOO
-      if (metaModelPlotsLOOConfigurationWidget_)
-        if (!metaModelPlotsLOOConfigurationWidget_->isVisible())
-          emit graphWindowActivated(metaModelPlotsLOOConfigurationWidget_);
-      break;
-    // if no plotWidget is visible
-    default:
-    {
-      emit graphWindowDeactivated();
-      break;
-    }
-  }
+
+  if (indexTab == 0 || // metamodel
+      indexTab == 1    // validation
+     )
+    emit stateChanged(outputsListWidget_->currentRow());
+  else
+    emit graphWindowDeactivated();
 }
 
 

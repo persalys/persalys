@@ -23,7 +23,8 @@
 
 #include "otgui/ResultWindow.hxx"
 #include "otgui/SobolResult.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
+
+#include <QListWidget>
 
 namespace OTGUI {
 class OTGUI_API SobolResultWindow : public ResultWindow
@@ -33,8 +34,6 @@ class OTGUI_API SobolResultWindow : public ResultWindow
 public:
   SobolResultWindow(AnalysisItem * item);
 
-  virtual ~SobolResultWindow();
-
 protected:
   void setParameters(const Analysis & analysis);
   void buildInterface();
@@ -42,11 +41,13 @@ protected:
 public slots:
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+signals:
+  void stateChanged(int);
 
 private:
   SobolResult result_;
+  QListWidget * outputsListWidget_;
   QTabWidget * tabWidget_;
-  GraphConfigurationWidget * plotsConfigurationWidget_;
   QString warningMessage_;
 };
 }
