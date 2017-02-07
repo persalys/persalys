@@ -24,16 +24,23 @@
 #include "otgui/ResultWindow.hxx"
 #include "otgui/FunctionalChaosAnalysisResult.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/ResizableStackedWidget.hxx"
+#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
+
+#include <QGroupBox>
+#include <QVBoxLayout>
+#include <QHeaderView>
+#include <QListWidget>
 
 namespace OTGUI {
+
 class OTGUI_API FunctionalChaosResultWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
   FunctionalChaosResultWindow(AnalysisItem * item);
-
-  virtual ~FunctionalChaosResultWindow();
 
 protected:
   void setParameters(const Analysis & analysis);
@@ -42,12 +49,13 @@ protected:
 public slots:
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+signals:
+  void stateChanged(int);
 
 private:
   FunctionalChaosAnalysisResult result_;
+  QListWidget * outputsListWidget_;
   QTabWidget * tabWidget_;
-  GraphConfigurationWidget * metaModelPlotsConfigurationWidget_;
-  GraphConfigurationWidget * sobolIndicesPlotsConfigurationWidget_;
 };
 }
 #endif

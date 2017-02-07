@@ -21,14 +21,14 @@
 #ifndef OTGUI_FUNCTIONALCHAOSANALYSIS_HXX
 #define OTGUI_FUNCTIONALCHAOSANALYSIS_HXX
 
-#include "DesignOfExperimentAnalysis.hxx"
+#include "MetaModelAnalysis.hxx"
 #include "FunctionalChaosAnalysisResult.hxx"
 
 #include "openturns/OrthogonalProductPolynomialFactory.hxx"
 #include "openturns/FunctionalChaosAlgorithm.hxx"
 
 namespace OTGUI {
-class OTGUI_API FunctionalChaosAnalysis : public DesignOfExperimentAnalysis
+class OTGUI_API FunctionalChaosAnalysis : public MetaModelAnalysis
 {
   CLASSNAME;
 
@@ -41,7 +41,7 @@ public:
   /** Virtual constructor */
   virtual FunctionalChaosAnalysis * clone() const;
 
-  virtual void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
+  virtual void setDesignOfExperiment(const DesignOfExperiment& designOfExperiment);
 
   OT::UnsignedInteger getChaosDegree() const;
   void setChaosDegree(const OT::UnsignedInteger degree);
@@ -49,14 +49,7 @@ public:
   bool getSparseChaos() const;
   void setSparseChaos(const bool sparse);
 
-  bool isLeaveOneOutValidation() const;
-  void setLeaveOneOutValidation(const bool validation);
-
-  OT::ComposedDistribution getDistribution();
-
   FunctionalChaosAnalysisResult getResult() const;
-
-  virtual void setInterestVariables(const OT::Description& variablesNames);
 
   virtual void run();
   virtual OT::String getPythonScript() const;
@@ -75,19 +68,16 @@ public:
   // Binomial coefficient
   static OT::UnsignedInteger BinomialCoefficient(const OT::UnsignedInteger n,
                                                  const OT::UnsignedInteger k);
-private:
+protected:
+  virtual OT::NumericalMathFunction runAlgo(const OT::NumericalSample& inputSample, const OT::NumericalSample& outputSample);
   OT::FunctionalChaosAlgorithm buildFunctionalChaosAlgorithm(const OT::NumericalSample & inputSample, const OT::NumericalSample & outputSample);
-  void postProcessFunctionalChaosResult();
+  void postProcessFunctionalChaosResult(const OT::NumericalSample& inputSample);
   OT::OrthogonalProductPolynomialFactory::PolynomialFamilyCollection getPolynomialFamilyCollection();
-  void computeErrorQ2LOO();
 
 private:
-  OT::ComposedDistribution distribution_;
-  bool isDistributionComputed_;
   OT::OrthogonalProductPolynomialFactory::PolynomialFamilyCollection polynomialFamilyCollection_;
   OT::UnsignedInteger chaosDegree_;
   bool sparseChaos_;
-  bool leaveOneOutValidation_;
   FunctionalChaosAnalysisResult result_;
 };
 }

@@ -91,8 +91,11 @@ ot_add_python_module (otguibase otguibase_module.i
                       MonteCarloReliabilityAnalysis.i MonteCarloReliabilityAnalysis_doc.i.in
                       MonteCarloReliabilityResult.i MonteCarloReliabilityResult_doc.i.in
                       MetaModelAnalysisResult.i MetaModelAnalysisResult_doc.i.in
+                      MetaModelAnalysis.i MetaModelAnalysis_doc.i.in
                       FunctionalChaosAnalysisResult.i FunctionalChaosAnalysisResult_doc.i.in
                       FunctionalChaosAnalysis.i FunctionalChaosAnalysis_doc.i.in
+                      KrigingAnalysisResult.i KrigingAnalysisResult_doc.i.in
+                      KrigingAnalysis.i KrigingAnalysis_doc.i.in
                       FittingTestResult.i FittingTestResult_doc.i.in
                       InferenceResult.i InferenceResult_doc.i.in
                       InferenceAnalysis.i InferenceAnalysis_doc.i.in

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QScrollArea for the Sobol indices
+ *  @brief QMdiSubWindow for the results of kriging
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,40 +18,36 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_SOBOLRESULTWINDOWWIDGET_HXX
-#define OTGUI_SOBOLRESULTWINDOWWIDGET_HXX
+#ifndef OTGUI_KRIGINGRESULTWINDOW_HXX
+#define OTGUI_KRIGINGRESULTWINDOW_HXX
 
-#include "otgui/SobolResult.hxx"
-#include "otgui/PlotWidget.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
+#include "otgui/ResultWindow.hxx"
+#include "otgui/KrigingAnalysisResult.hxx"
 
-#include <QScrollArea>
+#include <QListWidget>
 
 namespace OTGUI {
-class OTGUI_API SobolResultWindowWidget : public QScrollArea
+class OTGUI_API KrigingResultWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
-  SobolResultWindowWidget(const SobolResult& result, const QString& warningMessage="");
-
-  QVector<PlotWidget*> getPlotWidgets();
+  KrigingResultWindow(AnalysisItem* item);
 
 protected:
+  void setParameters(const Analysis& analysis);
   void buildInterface();
 
 public slots:
-  void updateIndicesPlot(int section, Qt::SortOrder order);
-  void setCurrentIndex(int);
+  void showHideGraphConfigurationWidget(int indexTab);
+  void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 signals:
-  void currentPlotChanged(int);
+  void stateChanged(int);
 
 private:
-  SobolResult result_;
-  int currentIndex_;
-  QVector<CustomStandardItemModel*> listTableModels_;
-  QVector<PlotWidget*> listPlotWidgets_;
-  QString warningMessage_;
+  KrigingAnalysisResult result_;
+  QListWidget * outputsListWidget_;
+  QTabWidget * tabWidget_;
 };
 }
 #endif

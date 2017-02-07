@@ -23,10 +23,8 @@
 
 #include "otgui/ResultWindow.hxx"
 #include "otgui/SRCResult.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
 
-#include <QStackedWidget>
+#include <QListWidget>
 
 namespace OTGUI {
 class OTGUI_API SRCResultWindow : public ResultWindow
@@ -36,23 +34,20 @@ class OTGUI_API SRCResultWindow : public ResultWindow
 public:
   SRCResultWindow(AnalysisItem * item);
 
-  virtual ~SRCResultWindow();
-
 protected:
   void setParameters(const Analysis & analysis);
   void buildInterface();
 
 public slots:
-  void updateIndicesPlot(int section, Qt::SortOrder order);
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+signals:
+  void stateChanged(int);
 
 private:
   SRCResult result_;
+  QListWidget * outputsListWidget_;
   QTabWidget * tabWidget_;
-  QVector<CustomStandardItemModel*> listTableModels_;
-  GraphConfigurationWidget * plotsConfigurationWidget_;
-  QVector<PlotWidget*> listPlotWidgets_;
   QString warningMessage_;
 };
 }

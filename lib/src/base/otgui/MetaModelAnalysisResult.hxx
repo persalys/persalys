@@ -33,6 +33,8 @@ class OTGUI_API MetaModelAnalysisResult : public OT::PersistentObject
 public:
 
   friend class FunctionalChaosAnalysis;
+  friend class KrigingAnalysis;
+  friend class MetaModelAnalysis;
 
   /** Default constructor */
   MetaModelAnalysisResult();
@@ -42,12 +44,17 @@ public:
 
   PhysicalModel getMetaModel() const;
 
+  OT::NumericalSample getOutputSample() const;
+
   OT::NumericalSample getMetaModelOutputSample() const;
 
   OT::NumericalSample getMetaModelOutputSampleLeaveOneOut() const;
 
   OT::NumericalPoint getErrorQ2LeaveOneOut() const;
   OT::NumericalPoint getQ2LeaveOneOut() const;
+
+  /** String converter */
+  virtual OT::String __repr__() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -57,6 +64,7 @@ public:
 
 protected:
   PhysicalModel metaModel_;
+  OT::NumericalSample outputSample_;
   OT::NumericalSample metaModelOutputSample_;
   OT::NumericalSample metaModelOutputSampleLOO_;
   OT::NumericalPoint errorQ2LOO_;

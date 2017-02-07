@@ -20,9 +20,15 @@
  */
 #include "otgui/DesignOfExperimentImplementation.hxx"
 
+#include "openturns/PersistentObjectFactory.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
+
+CLASSNAMEINIT(DesignOfExperimentImplementation);
+
+static Factory<DesignOfExperimentImplementation> RegisteredFactory;
 
 /* Default constructor */
 DesignOfExperimentImplementation::DesignOfExperimentImplementation()
@@ -70,6 +76,20 @@ Description DesignOfExperimentImplementation::getVariableInputNames() const
 }
 
 
+void DesignOfExperimentImplementation::setInputSample(const NumericalSample& sample)
+{
+  NumericalSample newsample(sample);
+  if (newsample.getSize() && hasPhysicalModel())
+  {
+    if (physicalModel_.getInputs().getSize() != sample.getDimension())
+      throw InvalidArgumentException(HERE) << "The sample dimension must be equal to the number of inputs in the physical model " << physicalModel_.getInputs().getSize();
+
+    newsample.setDescription(physicalModel_.getInputNames());
+  }
+  DataSample::setInputSample(newsample);
+}
+
+
 void DesignOfExperimentImplementation::run()
 {
   setOutputSample(physicalModel_.getFunction(physicalModel_.getSelectedOutputsNames())(getInputSample()));
@@ -79,7 +99,29 @@ void DesignOfExperimentImplementation::run()
 
 String DesignOfExperimentImplementation::getPythonScript() const
 {
-  throw NotYetImplementedException(HERE) << "In DesignOfExperimentImplementation::getPythonScript()";
+  OSS oss;
+
+  oss << getName() + " = otguibase.DesignOfExperimentImplementation('" + getName() + "', "+getPhysicalModel().getName()+")\n";
+
+  oss << "inputSample = [\n";
+  for (UnsignedInteger i=0; i<getInputSample().getSize(); ++i)
+  {
+    oss << "[";
+    for (UnsignedInteger j=0; j<getInputSample().getDimension(); ++j)
+    {
+      oss << getInputSample()[i][j];
+      if (j < (getInputSample().getDimension()-1))
+        oss << ", ";
+    }
+    oss << "]";
+    if (i < (getInputSample().getSize()-1))
+       oss << ",\n";
+  }
+  oss << "]\n";
+
+  oss << getName() << ".setInputSample(inputSample)\n";
+
+  return oss.str();
 }
 
 

@@ -97,21 +97,9 @@ NumericalSample DesignOfExperiment::getInputSample() const
 }
 
 
-void DesignOfExperiment::setInputSample(const NumericalSample& sample)
-{
-  getImplementation()->setInputSample(sample);
-}
-
-
 NumericalSample DesignOfExperiment::getOutputSample() const
 {
   return getImplementation()->getOutputSample();
-}
-
-
-void DesignOfExperiment::setOutputSample(const NumericalSample& sample)
-{
-  getImplementation()->setOutputSample(sample);
 }
 
 

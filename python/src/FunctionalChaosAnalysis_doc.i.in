@@ -9,7 +9,7 @@ Parameters
 name : str
     Name
 designOfExperiment : :class:`~otguibase.DesignOfExperiment`
-    DesignOfExperiment
+    Design of experiment
 
 Examples
 --------
@@ -27,7 +27,7 @@ Create the model:
 
 Create the design of experiment:
 
->>> aDesign = otguibase.DesignOfExperiment('aDesign', myPhysicalModel)
+>>> aDesign = otguibase.DesignOfExperimentImplementation('aDesign', myPhysicalModel)
 >>> inputSample = ot.LHSExperiment(myPhysicalModel.getComposedDistribution(), 250).generate()
 >>> aDesign.setInputSample(inputSample)
 >>> aDesign.run()
@@ -84,36 +84,6 @@ Parameters
 ----------
 isSparse : bool
     Whether it is sparse"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::FunctionalChaosAnalysis::isLeaveOneOutValidation
-"Whether a validation by leave-one-out is requested.
-
-Returns
--------
-validation : bool
-    Whether a validation by leave-one-out is requested"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::FunctionalChaosAnalysis::setLeaveOneOutValidation
-"Whether it is sparse.
-
-Parameters
-----------
-validation : bool
-    Whether a validation by leave-one-out is requested"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::FunctionalChaosAnalysis::getDistribution
-"Distribution accessor.
-
-Returns
--------
-distribution : :py:class:`openturns.ComposedDistribution`
-    Distribution"
 
 // ---------------------------------------------------------------------
 

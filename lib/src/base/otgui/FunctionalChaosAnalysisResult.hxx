@@ -41,12 +41,9 @@ public:
   /** Virtual constructor */
   virtual FunctionalChaosAnalysisResult * clone() const;
 
-  OT::NumericalSample getOutputSample() const;
-
   OT::FunctionalChaosResult getFunctionalChaosResult() const;
 
   OT::NumericalPoint getMean() const;
-
   OT::NumericalPoint getVariance() const;
 
   SobolResult getSobolResult() const;
@@ -61,7 +58,6 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  OT::NumericalSample outputSample_;
   OT::FunctionalChaosResult functionalChaosResult_;
   OT::NumericalPoint mean_;
   OT::NumericalPoint variance_;

@@ -327,27 +327,29 @@ probabilistic model.
 
 Two types of sensitivity indices are available:
 
-- Sobol' indices
+Sobol' indices
+~~~~~~~~~~~~~~
 
-    .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisDefineSobol.png
-        :align: center
+.. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisDefineSobol.png
+    :align: center
 
-    - The user has to set the sample size (default: 10000, integer expected). The resulting number of
-      simulations (i.e. calls to the physical model) is given below;
-    - In the advanced parameters, the user can choose:
-        - The seed of the random generator (default: 0, positive integer expected);
-        - The block size (i.e. number of runs launched at the same time), for parallelization purpose
-          (default: 1; integer expected).
+- The user has to set the sample size (default: 10000, integer expected). The resulting number of
+  simulations (i.e. calls to the physical model) is given below;
+- In the advanced parameters, the user can choose:
+    - The seed of the random generator (default: 0, positive integer expected);
+    - The block size (i.e. number of runs launched at the same time), for parallelization purpose
+      (default: 1; integer expected).
 
-    - the input variables must be independent to perform this analysis.
+- the input variables must be independent to perform this analysis.
 
-- SRC indices
+SRC indices
+~~~~~~~~~~~
 
-    .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisDefineSRC.png
-        :align: center
+.. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisDefineSRC.png
+    :align: center
 
-    - The user has to set the sample size (default: 10000, integer expected);
-    - In the advanced parameters, the user can choose to set the seed of the random generator (default: 0, positive integer expected).
+- The user has to set the sample size (default: 10000, integer expected);
+- In the advanced parameters, the user can choose to set the seed of the random generator (default: 0, positive integer expected).
 
 
 4-2 Results
@@ -380,7 +382,9 @@ The results window gathers:
   The **Export** button opens a dialog box for the user to select where the
   figure has to be saved;
 
-- A table with the first and total order indices value for each variable;
+- A table with the first and total order indices value for each variable. Each
+  column can be sorted by clicking on its header. When sorting the table, the
+  points on the graphic are also sorted;
 
 - The index corresponding to the interactions;
 

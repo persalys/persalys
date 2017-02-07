@@ -1,0 +1,33 @@
+%feature("docstring") OTGUI::KrigingAnalysisResult
+"Kriging result.
+
+Notes
+-----
+Structure created by the method run() of
+:class:`~otguibase.KrigingAnalysis`, and obtained thanks to the method
+getResult()."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::KrigingAnalysisResult::getKrigingResultCollection
+"Sequence of kriging results accessor.
+
+Returns
+-------
+results : sequence of :class:`openturns.KrigingResult`
+    The kriging results of all the interest outputs"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::KrigingAnalysisResult::getKrigingResultForVariable
+"Get the kriging result of a variable.
+
+Parameters
+----------
+variable : str
+    Name of the variable
+
+Returns
+-------
+result : py:class:`openturns.KrigingResult`
+    The kriging result of the variable"

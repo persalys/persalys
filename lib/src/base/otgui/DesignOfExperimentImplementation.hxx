@@ -27,6 +27,8 @@
 namespace OTGUI {
 class OTGUI_API DesignOfExperimentImplementation : public DataSample, public Observable
 {
+  CLASSNAME;
+
 public:
   /** Default constructor */
   DesignOfExperimentImplementation();
@@ -41,6 +43,8 @@ public:
   PhysicalModel getPhysicalModel() const;
 
   virtual OT::Description getVariableInputNames() const;
+
+  virtual void setInputSample(const OT::NumericalSample & sample);
 
   void run();
   virtual OT::String getPythonScript() const;

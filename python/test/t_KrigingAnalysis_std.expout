@@ -1,0 +1,54 @@
+class=KrigingAnalysis name=kriging_0 designOfExperiment=class=DesignOfExperiment name=design interestVariables=[y0] basis=class=Basis coll=[class=NumericalMathFunction name=Unnamed implementation=class=NumericalMathFunctionImplementation name=Unnamed description=[x0,x1,y0] evaluationImplementation=class=LinearNumericalMathEvaluationImplementation name=Unnamed center=class=NumericalPoint name=Unnamed dimension=2 values=[0,0] constant=class=NumericalPoint name=Unnamed dimension=1 values=[1] linear=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[0,0] gradientImplementation=class=ConstantNumericalMathGradientImplementation name=Unnamed constant=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[0,0] hessianImplementation=class=ConstantNumericalMathHessianImplementation name=Unnamed constant=class=SymmetricTensor implementation=class=TensorImplementation name=Unnamed rows=2 columns=2 sheets=1 values=[0,0,0,0],class=NumericalMathFunction name=Unnamed implementation=class=NumericalMathFunctionImplementation name=Unnamed description=[x0,x1,y0] evaluationImplementation=class=LinearNumericalMathEvaluationImplementation name=Unnamed center=class=NumericalPoint name=Unnamed dimension=2 values=[0,0] constant=class=NumericalPoint name=Unnamed dimension=1 values=[0] linear=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[1,0] gradientImplementation=class=ConstantNumericalMathGradientImplementation name=Unnamed constant=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[1,0] hessianImplementation=class=ConstantNumericalMathHessianImplementation name=Unnamed constant=class=SymmetricTensor implementation=class=TensorImplementation name=Unnamed rows=2 columns=2 sheets=1 values=[0,0,0,0],class=NumericalMathFunction name=Unnamed implementation=class=NumericalMathFunctionImplementation name=Unnamed description=[x0,x1,y0] evaluationImplementation=class=LinearNumericalMathEvaluationImplementation name=Unnamed center=class=NumericalPoint name=Unnamed dimension=2 values=[0,0] constant=class=NumericalPoint name=Unnamed dimension=1 values=[0] linear=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[0,1] gradientImplementation=class=ConstantNumericalMathGradientImplementation name=Unnamed constant=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[0,1] hessianImplementation=class=ConstantNumericalMathHessianImplementation name=Unnamed constant=class=SymmetricTensor implementation=class=TensorImplementation name=Unnamed rows=2 columns=2 sheets=1 values=[0,0,0,0]] covarianceModel=class=MaternModel scale=class=NumericalPoint name=Unnamed dimension=2 values=[1,1] amplitude=class=NumericalPoint name=Unnamed dimension=1 values=[1] nu=1.5 leaveOneOutValidation=false
+class=KrigingAnalysis name=kriging_1 designOfExperiment=class=DesignOfExperiment name=design interestVariables=[y1,y2] basis=class=Basis coll=[class=NumericalMathFunction name=Unnamed implementation=class=NumericalMathFunctionImplementation name=Unnamed description=[x0,x1,y0] evaluationImplementation=class=LinearNumericalMathEvaluationImplementation name=Unnamed center=class=NumericalPoint name=Unnamed dimension=2 values=[0,0] constant=class=NumericalPoint name=Unnamed dimension=1 values=[1] linear=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[0,0] gradientImplementation=class=ConstantNumericalMathGradientImplementation name=Unnamed constant=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[0,0] hessianImplementation=class=ConstantNumericalMathHessianImplementation name=Unnamed constant=class=SymmetricTensor implementation=class=TensorImplementation name=Unnamed rows=2 columns=2 sheets=1 values=[0,0,0,0]] covarianceModel=class=SquaredExponential scale=class=NumericalPoint name=Unnamed dimension=2 values=[1,1] amplitude=class=NumericalPoint name=Unnamed dimension=1 values=[1] leaveOneOutValidation=true
+#!/usr/bin/env python
+# coding: utf-8
+
+from __future__ import print_function
+import openturns as ot
+import otguibase
+
+myStudy = otguibase.OTStudy('myStudy')
+otguibase.OTStudy.Add(myStudy)
+dist_xi1 = ot.Uniform(0, 10)
+xi1 = otguibase.Input('xi1', 0, '', dist_xi1)
+dist_xi2 = ot.Uniform(0, 10)
+xi2 = otguibase.Input('xi2', 0, '', dist_xi2)
+fake_y0 = otguibase.Output('fake_y0', 0, '', 'xi1')
+fake_y0.setIsSelected(False)
+y0 = otguibase.Output('y0', 0, '', 'cos(0.5*xi1) + sin(xi2)')
+y1 = otguibase.Output('y1', 0, '', 'cos(0.5*xi1) + sin(xi2)')
+y2 = otguibase.Output('y2', 0, '', '(cos(0.5*xi1) + sin(xi2))*2')
+inputs = [xi1, xi2]
+outputs = [fake_y0, y0, y1, y2]
+model = otguibase.AnalyticalPhysicalModel('model', inputs, outputs)
+myStudy.add(model)
+design = otguibase.DesignOfExperimentImplementation('design', model)
+inputSample = [
+[4.68457, 6.82803],
+[0.359802, 4.95475],
+[6.58862, 8.18204],
+[9.08578, 5.66073],
+[7.21044, 2.38623],
+[1.02456, 0.418919],
+[2.98184, 3.91613],
+[5.9556, 7.47295],
+[3.25986, 9.66134],
+[8.48977, 1.46852]]
+design.setInputSample(inputSample)
+myStudy.add(design)
+design.run()
+kriging_0 = otguibase.KrigingAnalysis('kriging_0', design)
+interestVariables = ['y0']
+kriging_0.setInterestVariables(interestVariables)
+kriging_0.setBasis(ot.LinearBasisFactory(2).build())
+kriging_0.setCovarianceModel(ot.MaternModel([1,1], [1], 1.5))
+kriging_0.setLeaveOneOutValidation(False)
+myStudy.add(kriging_0)
+kriging_1 = otguibase.KrigingAnalysis('kriging_1', design)
+interestVariables = ['y1', 'y2']
+kriging_1.setInterestVariables(interestVariables)
+kriging_1.setBasis(ot.ConstantBasisFactory(2).build())
+kriging_1.setCovarianceModel(ot.SquaredExponential([1,1], [1]))
+kriging_1.setLeaveOneOutValidation(True)
+myStudy.add(kriging_1)
+

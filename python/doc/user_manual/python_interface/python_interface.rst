@@ -121,9 +121,12 @@ Metamodel
     :toctree: _generated/
     :template: class.rst_t
 
+    MetaModelAnalysis
     FunctionalChaosAnalysis
+    KrigingAnalysis
     MetaModelAnalysisResult
     FunctionalChaosAnalysisResult
+    KrigingAnalysisResult
 
 Study storage
 -------------

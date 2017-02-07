@@ -1,0 +1,55 @@
+%feature("docstring") OTGUI::MetaModelAnalysis
+"Base class for the creation of meta models.
+"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::isLeaveOneOutValidation
+"Whether a validation by leave-one-out is requested.
+
+Returns
+-------
+validation : bool
+    Whether a validation by leave-one-out is requested"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::setLeaveOneOutValidation
+"Whether it is sparse.
+
+Parameters
+----------
+validation : bool
+    Whether a validation by leave-one-out is requested"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::getEffectiveInputSample
+"Effective input sample accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.NumericalSample`
+    Sample of all the input variables if all of them are deterministic.
+    Otherwise, sample of the stochastic input variables."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::getEffectiveOutputSample
+"Effective output sample accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.NumericalSample`
+    Sample of the interest output variables."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::getDistribution
+"Input distribution accessor.
+
+Returns
+-------
+distribution : :py:class:`openturns.ComposedDistribution`
+    The distribution defined in the probabilistic model or a distribution composed
+    of Uniform laws if there is no stochastic input variable."

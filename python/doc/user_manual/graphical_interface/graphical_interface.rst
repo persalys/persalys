@@ -10,3 +10,4 @@ User manual for graphical interface
    /user_manual/graphical_interface/data_model/user_manual_data_model
    /user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis
    /user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis
+   /user_manual/graphical_interface/data_analysis/user_manual_data_analysis
