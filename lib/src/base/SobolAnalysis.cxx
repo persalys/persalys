@@ -121,7 +121,7 @@ void SobolAnalysis::run()
       // fill samples, inputs of the sensitivity analysis algo
       NumericalSample inputDesign(X1);
       inputDesign.add(X2);
-      NumericalSample outputDesign;
+      NumericalSample outputDesign(0, nbOutputs);
 
       try
       {
