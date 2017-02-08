@@ -1,0 +1,32 @@
+class=DataModel name=myDataModel fileName=data.csv inputColumns=[0,2,3] outputColumns=[] inputNames=[X0,X2,X3] outputNames=[]
+class=CopulaInferenceAnalysis name=analysis designOfExperiment=class=DesignOfExperiment name=myDataModel setOfVariables [X0,X2,X3] distributionFactories=[NormalCopulaFactory] setOfVariables [X0,X3] distributionFactories=[NormalCopulaFactory,GumbelCopulaFactory]
+result= class=CopulaInferenceResult copulaInferenceSetResultCollection=[class=CopulaInferenceSetResult setOfVariablesNames=[X0,X2,X3] testedDistributions=[NormalCopula(R = [[ 1         0.0529305 0.0580361 ]
+ [ 0.0529305 1         0.039636  ]
+ [ 0.0580361 0.039636  1         ]])],class=CopulaInferenceSetResult setOfVariablesNames=[X0,X3] testedDistributions=[NormalCopula(R = [[ 1         0.0580361 ]
+ [ 0.0580361 1         ]]),GumbelCopula(theta = 1.03839)]]
+class=CopulaInferenceSetResult setOfVariablesNames=[X0,X3] testedDistributions=[NormalCopula(R = [[ 1         0.0580361 ]
+ [ 0.0580361 1         ]]),GumbelCopula(theta = 1.03839)]
+#!/usr/bin/env python
+# coding: utf-8
+
+from __future__ import print_function
+import openturns as ot
+import otguibase
+
+myStudy = otguibase.OTStudy('myStudy')
+otguibase.OTStudy.Add(myStudy)
+inputColumns = [0, 2, 3]
+outputColumns = []
+inputNames = ['X0', 'X2', 'X3']
+outputNames = []
+myDataModel = otguibase.DataModel('myDataModel', 'data.csv', inputColumns, outputColumns, inputNames, outputNames)
+myStudy.add(myDataModel)
+analysis = otguibase.CopulaInferenceAnalysis('analysis', myDataModel)
+variablesSet = ['X0', 'X2', 'X3']
+factories = [ot.NormalCopulaFactory()]
+analysis.setDistributionsFactories(variablesSet, factories)
+variablesSet = ['X0', 'X3']
+factories = [ot.NormalCopulaFactory(), ot.GumbelCopulaFactory()]
+analysis.setDistributionsFactories(variablesSet, factories)
+myStudy.add(analysis)
+

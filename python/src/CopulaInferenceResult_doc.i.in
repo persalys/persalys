@@ -1,0 +1,43 @@
+%feature("docstring") OTGUI::CopulaInferenceResult
+"Dependencies inference result.
+
+Notes
+-----
+Structure created by the method run() of
+:class:`~otguibase.CopulaInferenceAnalysis`, and obtained thanks to the method
+getResult()."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::CopulaInferenceResult::getCopulaInferenceSetResultCollection
+"Sequence of results accessor.
+
+Returns
+-------
+results : sequence of :class:`~otguibase.CopulaInferenceSetResult`
+    The results of each set of variables"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::CopulaInferenceResult::getCopulaInferenceSetResult
+"Get the result of a set of variables.
+
+Parameters
+----------
+variables : sequence of str
+    Names of the variables
+
+Returns
+-------
+result : :class:`~otguibase.CopulaInferenceSetResult`
+    The result of the given set of variables"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::CopulaInferenceResult::getDesignOfExperiment
+"Design of experiment accessor.
+
+Returns
+-------
+design : :class:`~otguibase.DesignOfExperiment`
+    Design of experiment"

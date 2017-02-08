@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Inference analysis result
+ *  @brief Copula inference result for a set of variables
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,29 +18,29 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_INFERENCERESULT_HXX
-#define OTGUI_INFERENCERESULT_HXX
+#ifndef OTGUI_COPULAINFERENCESETRESULT_HXX
+#define OTGUI_COPULAINFERENCESETRESULT_HXX
 
-#include "FittingTestResult.hxx"
+#include "otgui/OTGuiprivate.hxx"
+
+#include <openturns/Distribution.hxx>
 
 namespace OTGUI {
-class OTGUI_API InferenceResult : public OT::PersistentObject
+class OTGUI_API CopulaInferenceSetResult : public OT::PersistentObject
 {
   CLASSNAME;
 
 public:
-  typedef OT::Collection<FittingTestResult> FittingTestResultCollection;
-
-  friend class InferenceAnalysis;
+  friend class CopulaInferenceAnalysis;
 
   /** Default constructor */
-  InferenceResult();
+  CopulaInferenceSetResult();
 
   /** Virtual constructor */
-  virtual InferenceResult * clone() const;
+  virtual CopulaInferenceSetResult * clone() const;
 
-  FittingTestResultCollection getFittingTestResultCollection() const;
-  FittingTestResult getFittingTestResultForVariable(const OT::String & variableName) const;
+  OT::Description getSetOfVariablesNames() const;
+  OT::Collection<OT::Distribution> getTestedDistributions() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -51,8 +51,9 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
-private:
-  OT::PersistentCollection< FittingTestResult > fittingTestResultCollection_;
+protected:
+  OT::Description setOfVariablesNames_;
+  OT::PersistentCollection< OT::Distribution > testedDistributions_;
 };
 }
 #endif

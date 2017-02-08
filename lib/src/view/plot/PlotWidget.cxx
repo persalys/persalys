@@ -23,6 +23,7 @@
 #include "otgui/CustomScaleEngine.hxx"
 #include "otgui/CustomScaleDraw.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/ContourData.hxx"
 
 #include <QMenu>
 #include <QFileDialog>
@@ -39,15 +40,20 @@
 #include <qwt_legend.h>
 #include <qwt_column_symbol.h>
 #include <qwt_plot_renderer.h>
+#include <qwt_plot_spectrogram.h>
 
 using namespace OT;
 
 namespace OTGUI {
 
-class customHorizontalScaleDraw: public QwtScaleDraw
+// -- custom class CustomHorizontalScaleDraw --
+class CustomHorizontalScaleDraw: public QwtScaleDraw
 {
 public:
-  customHorizontalScaleDraw(const OT::Description & labels): labels_(labels){}
+  CustomHorizontalScaleDraw(const Description& labels)
+    : labels_(labels)
+  {
+  }
 
   virtual QwtText label(double value) const
   {
@@ -58,9 +64,11 @@ public:
   }
 
 private:
-    const OT::Description labels_;
+  const Description labels_;
 };
 
+
+// -- class PlotWidget --
 
 const QColor PlotWidget::DefaultHistogramColor = QColor(127, 172, 210);
 
@@ -327,6 +335,7 @@ void PlotWidget::plotHistogram(const NumericalSample & sample, const UnsignedInt
   replot();
 }
 
+
 void PlotWidget::plotBoxPlot(double median, double lowerQuartile, double upperQuartile,
                              double lowerBound, double upperBound, NumericalPoint outliers_)
 {
@@ -441,7 +450,7 @@ void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrderIndices, 
   // scales
   setAxisScale(QwtPlot::xBottom, -0.5, firstOrderIndices.getSize()-0.5, 1.0);
   setAxisMaxMinor(QwtPlot::xBottom, 0);
-  setAxisScaleDraw(QwtPlot::xBottom, new customHorizontalScaleDraw(inputNames));
+  setAxisScaleDraw(QwtPlot::xBottom, new CustomHorizontalScaleDraw(inputNames));
 
   // rescale to avoid to cut points
   yMin = 0.9 * yMin;
@@ -452,6 +461,46 @@ void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrderIndices, 
     yMax = 1.05;
   setAxisScale(QwtPlot::yLeft, yMin, yMax);
 
+  replot();
+}
+
+
+void PlotWidget::plotContour(const Distribution& distribution, const bool isPdf)
+{
+  if (distribution.getDimension() != 2)
+  {
+    qDebug() << "In plotContour: distribution dimension must be 2";
+    return;
+  }
+
+  QwtPlotSpectrogram * spectrogram = new QwtPlotSpectrogram;
+
+  spectrogram->setRenderThreadCount(0); // use system specific thread count
+  spectrogram->setCachePolicy(QwtPlotRasterItem::PaintCache);
+  spectrogram->setDisplayMode(QwtPlotSpectrogram::ContourMode, true);
+  spectrogram->setDisplayMode(QwtPlotSpectrogram::ImageMode, false);
+  spectrogram->setDefaultContourPen(QPen(Qt::black, 2));
+
+  // drawable
+  Drawable aDrawable;
+  if (isPdf)
+    aDrawable = distribution.drawPDF().getDrawable(1);
+  else
+    aDrawable = distribution.drawCDF().getDrawable(0);
+  Contour contour = *dynamic_cast<Contour*>(&*aDrawable.getImplementation());
+
+  // data
+  ContourData * contourData = new ContourData;
+  contourData->setData(contour);
+  spectrogram->setData(contourData);
+
+  // levels
+  QList<double> contourLevels;
+  for (UnsignedInteger i=0; i<contour.getLevels().getSize(); ++i)
+    contourLevels += contour.getLevels()[i];
+  spectrogram->setContourLevels(contourLevels);
+
+  spectrogram->attach(this);
   replot();
 }
 

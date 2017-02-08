@@ -111,6 +111,9 @@ Data analysis
     InferenceAnalysis
     InferenceResult
     FittingTestResult
+    CopulaInferenceAnalysis
+    CopulaInferenceResult
+    CopulaInferenceSetResult
 
 Metamodel
 ---------

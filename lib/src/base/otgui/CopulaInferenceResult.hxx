@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Inference analysis result
+ *  @brief Copula Inference analysis result
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,29 +18,32 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_INFERENCERESULT_HXX
-#define OTGUI_INFERENCERESULT_HXX
+#ifndef OTGUI_COPULAINFERENCERESULT_HXX
+#define OTGUI_COPULAINFERENCERESULT_HXX
 
-#include "FittingTestResult.hxx"
+#include "CopulaInferenceSetResult.hxx"
+#include "DesignOfExperiment.hxx"
 
 namespace OTGUI {
-class OTGUI_API InferenceResult : public OT::PersistentObject
+class OTGUI_API CopulaInferenceResult : public OT::PersistentObject
 {
   CLASSNAME;
 
 public:
-  typedef OT::Collection<FittingTestResult> FittingTestResultCollection;
+  typedef OT::Collection<CopulaInferenceSetResult> CopulaInferenceSetResultCollection;
 
-  friend class InferenceAnalysis;
+  friend class CopulaInferenceAnalysis;
 
   /** Default constructor */
-  InferenceResult();
+  CopulaInferenceResult();
 
   /** Virtual constructor */
-  virtual InferenceResult * clone() const;
+  virtual CopulaInferenceResult * clone() const;
 
-  FittingTestResultCollection getFittingTestResultCollection() const;
-  FittingTestResult getFittingTestResultForVariable(const OT::String & variableName) const;
+  CopulaInferenceSetResultCollection getCopulaInferenceSetResultCollection() const;
+  CopulaInferenceSetResult getCopulaInferenceSetResult(const OT::Description& variablesNames) const;
+
+  DesignOfExperiment getDesignOfExperiment() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -52,7 +55,8 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  OT::PersistentCollection< FittingTestResult > fittingTestResultCollection_;
+  OT::PersistentCollection< CopulaInferenceSetResult > copulaInferenceSetResultCollection_;
+  DesignOfExperiment designOfExperiment_;
 };
 }
 #endif

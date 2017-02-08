@@ -11,6 +11,7 @@ ot_add_source_file (PlotMatrixConfigurationWidget.cxx)
 
 ot_install_header_file ( CustomScaleEngine.hxx )
 ot_install_header_file ( CustomScaleDraw.hxx )
+ot_install_header_file ( ContourData.hxx )
 ot_install_header_file ( PlotWidget.hxx )
 ot_install_header_file ( PlotMatrixWidget.hxx )
 ot_install_header_file ( GraphConfigurationWidget.hxx )

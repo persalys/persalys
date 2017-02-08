@@ -35,6 +35,7 @@
 #include "otgui/DataModel.hxx"
 #include "otgui/DataAnalysis.hxx"
 #include "otgui/DesignOfExperimentEvaluation.hxx"
+#include "otgui/CopulaInferenceAnalysis.hxx"
 #include "otgui/DataAnalysisResultWindow.hxx"
 #include "otgui/InferenceWizard.hxx"
 #include "otgui/AnalyticalPhysicalModel.hxx"
@@ -68,6 +69,7 @@
 #include "otgui/InferenceResultWindow.hxx"
 #include "otgui/MetaModelAnalysisWizard.hxx"
 #include "otgui/LineEditWithQValidatorDelegate.hxx"
+#include "otgui/CopulaInferenceResultWindow.hxx"
 
 #include <iostream>
 
@@ -167,6 +169,7 @@ void StudyTreeView::buildActions()
   removeDataModel_->setStatusTip(tr("Remove the data model"));
   connect(removeDataModel_, SIGNAL(triggered()), this, SLOT(removeDesignOfExperiment()));
 
+  // new data analyses
   newDataAnalysis_ = new QAction(tr("New data analysis"), this);
   newDataAnalysis_->setStatusTip(tr("Analyse the data sample"));
   connect(newDataAnalysis_, SIGNAL(triggered()), this, SLOT(createNewDataAnalysis()));
@@ -174,6 +177,10 @@ void StudyTreeView::buildActions()
   newInferenceAnalysis_ = new QAction(tr("New inference analysis"), this);
   newInferenceAnalysis_->setStatusTip(tr("Inference"));
   connect(newInferenceAnalysis_, SIGNAL(triggered()), this, SLOT(createNewInferenceAnalysis()));
+
+  newCopulaInferenceAnalysis_ = new QAction(tr("Dependencies inference analysis"), this);
+  newCopulaInferenceAnalysis_->setStatusTip(tr("Dependencies inference"));
+  connect(newCopulaInferenceAnalysis_, SIGNAL(triggered()), this, SLOT(createNewCopulaInferenceAnalysis()));
 
   // new physical model actions
   newAnalyticalPhysicalModel_ = new QAction(tr("New analytical physical model"), this);
@@ -288,6 +295,7 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
     actions.append(newDataAnalysis_);
     actions.append(newMetaModel_);
     actions.append(newInferenceAnalysis_);
+    actions.append(newCopulaInferenceAnalysis_);
     actions.append(removeDataModel_);
   }
   else if (dataType == "PhysicalModel")
@@ -324,13 +332,11 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
     actions.append(newThresholdExceedance_);
     actions.append(removeLimitState_);
   }
-  else if (dataType == "ModelEvaluation" || (dataType.contains("Analysis") && dataType != "DataAnalysis"))
+  else if (dataType.contains("Analysis") || dataType == "ModelEvaluation")
   {
-    actions.append(runAnalysis_);
-    actions.append(removeAnalysis_);
-  }
-  else if (dataType == "DataAnalysis")
-  {
+    if (dataType != "DataAnalysis" && dataType != "CopulaInferenceAnalysis") // there is no wizard associated with these analyses
+      actions.append(runAnalysis_);
+
     actions.append(removeAnalysis_);
   }
   return actions;
@@ -456,7 +462,7 @@ void StudyTreeView::createNewDataAnalysis()
   DataAnalysis * analysis = new DataAnalysis(otStudyItem->getOTStudy().getAvailableAnalysisName("DataAnalysis_"), *dynamic_cast<const DataModel*>(&*item->getDesignOfExperiment().getImplementation()));
 
   otStudyItem->getOTStudy().add(analysis);
-  findAnalysisItemAndLaunchExecution(otStudyItem, analysis->getName().c_str());;
+  findAnalysisItemAndLaunchExecution(otStudyItem, analysis->getName().c_str());
 }
 
 
@@ -742,6 +748,22 @@ void StudyTreeView::createNewInferenceAnalysis()
 }
 
 
+void StudyTreeView::createNewCopulaInferenceAnalysis()
+{
+  QModelIndex index = selectionModel()->currentIndex();
+  QStandardItem * selectedItem = treeViewModel_->itemFromIndex(index);
+  DesignOfExperimentItem * item = dynamic_cast<DesignOfExperimentItem*>(selectedItem);
+  OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(item->QStandardItem::parent());
+  if (!dynamic_cast<const DataModel*>(&*item->getDesignOfExperiment().getImplementation()))
+    throw InvalidValueException(HERE) << "StudyTreeView::createNewCopulaInferenceAnalysis: The design of experiment is not a datamodel";
+
+  CopulaInferenceAnalysis * analysis = new CopulaInferenceAnalysis(otStudyItem->getOTStudy().getAvailableAnalysisName("DependenciesInference_"), *dynamic_cast<const DataModel*>(&*item->getDesignOfExperiment().getImplementation()));
+
+  otStudyItem->getOTStudy().add(analysis);
+  findAnalysisItemAndLaunchExecution(otStudyItem, analysis->getName().c_str());
+}
+
+
 void StudyTreeView::createAnalysisConnection(AnalysisItem * item)
 {
   connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createAnalysisResultWindow(AnalysisItem*)));
@@ -952,6 +974,8 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
     resultWindow = new KrigingResultWindow(item);
   else if (analysisType == "InferenceAnalysis")
     resultWindow = new InferenceResultWindow(item);
+  else if (analysisType == "CopulaInferenceAnalysis")
+    resultWindow = new CopulaInferenceResultWindow(item);
   else
     qDebug() << "Error: In createAnalysisResultWindow: analysisType " << analysisType << " not recognized.";
 

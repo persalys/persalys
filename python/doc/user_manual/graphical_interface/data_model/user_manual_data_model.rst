@@ -29,6 +29,3 @@ The item created in the study tree is associated with a window summarizing the p
 
 .. image:: /user_manual/graphical_interface/data_model/data_model_display.png
     :align: center
-
-The right click on the item proposes to modify the model, analyze the data, perform an inference or
-create a meta model.

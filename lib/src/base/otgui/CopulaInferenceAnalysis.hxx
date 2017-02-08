@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Inference analysis result
+ *  @brief Dependencies inference analysis
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,29 +18,39 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_INFERENCERESULT_HXX
-#define OTGUI_INFERENCERESULT_HXX
+#ifndef OTGUI_COPULAINFERENCEANALYSIS_HXX
+#define OTGUI_COPULAINFERENCEANALYSIS_HXX
 
-#include "FittingTestResult.hxx"
+#include "DesignOfExperimentAnalysis.hxx"
+#include "CopulaInferenceResult.hxx"
+
+#include <openturns/DistributionFactory.hxx>
 
 namespace OTGUI {
-class OTGUI_API InferenceResult : public OT::PersistentObject
+class OTGUI_API CopulaInferenceAnalysis : public DesignOfExperimentAnalysis
 {
   CLASSNAME;
 
 public:
-  typedef OT::Collection<FittingTestResult> FittingTestResultCollection;
-
-  friend class InferenceAnalysis;
+  typedef OT::Collection<OT::DistributionFactory> DistributionFactoryCollection;
 
   /** Default constructor */
-  InferenceResult();
+  CopulaInferenceAnalysis();
+
+  /** Constructor with parameters */
+  CopulaInferenceAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment);
 
   /** Virtual constructor */
-  virtual InferenceResult * clone() const;
+  virtual CopulaInferenceAnalysis * clone() const;
 
-  FittingTestResultCollection getFittingTestResultCollection() const;
-  FittingTestResult getFittingTestResultForVariable(const OT::String & variableName) const;
+  DistributionFactoryCollection getDistributionsFactories(const OT::Description& variablesNames) const;
+  void setDistributionsFactories(const OT::Description& variablesNames, const DistributionFactoryCollection& distributionsFactories);
+
+  CopulaInferenceResult getResult() const;
+
+  virtual void run();
+  virtual OT::String getPythonScript() const;
+  virtual bool analysisLaunched() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -52,7 +62,8 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  OT::PersistentCollection< FittingTestResult > fittingTestResultCollection_;
+  std::map<OT::Description, DistributionFactoryCollection> distFactoriesForSetVar_;
+  CopulaInferenceResult result_;
 };
 }
 #endif

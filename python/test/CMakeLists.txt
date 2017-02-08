@@ -107,6 +107,7 @@ ot_pyinstallcheck_test (SobolAnalysis_std)
 ot_pyinstallcheck_test (SRCAnalysis_std)
 ot_pyinstallcheck_test (LimitState_std)
 ot_pyinstallcheck_test (InferenceAnalysis_std)
+ot_pyinstallcheck_test (CopulaInferenceAnalysis_std)
 
 ot_pyinstallcheck_test (docstring)
 

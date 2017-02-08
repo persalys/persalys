@@ -99,6 +99,9 @@ ot_add_python_module (otguibase otguibase_module.i
                       FittingTestResult.i FittingTestResult_doc.i.in
                       InferenceResult.i InferenceResult_doc.i.in
                       InferenceAnalysis.i InferenceAnalysis_doc.i.in
+                      CopulaInferenceSetResult.i CopulaInferenceSetResult_doc.i.in
+                      CopulaInferenceResult.i CopulaInferenceResult_doc.i.in
+                      CopulaInferenceAnalysis.i CopulaInferenceAnalysis_doc.i.in
                       OTStudyImplementation.i
                       OTStudy.i OTStudy_doc.i.in
                     )

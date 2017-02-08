@@ -135,6 +135,44 @@ DistributionFactory DistributionDictionary::BuildDistributionFactory(const Strin
 }
 
 
+/* Build a copula factory */
+DistributionFactory DistributionDictionary::BuildCopulaFactory(const String& distributionName)
+{
+  if (distributionName == "AliMikhailHaq")
+  {
+    return AliMikhailHaqCopulaFactory();
+  }
+  else if (distributionName == "Bernstein")
+  {
+    return BernsteinCopulaFactory();
+  }
+  else if (distributionName == "Clayton")
+  {
+    return ClaytonCopulaFactory();
+  }
+  else if (distributionName == "FarlieGumbelMorgenstern")
+  {
+    return FarlieGumbelMorgensternCopulaFactory();
+  }
+  else if (distributionName == "Frank")
+  {
+    return FrankCopulaFactory();
+  }
+  else if (distributionName == "Gumbel")
+  {
+    return GumbelCopulaFactory();
+  }
+  else if (distributionName == "Normal")
+  {
+    return NormalCopulaFactory();
+  }
+  else
+  {
+    throw InvalidArgumentException(HERE) << "Error in DistributionDictionary::BuildCopulaFactory unknow copula : " << distributionName;
+  }
+}
+
+
 /* Build a distribution with native parameters from the mean value */
 Distribution DistributionDictionary::BuildDistribution(const String & distributionName, const double mu)
 {
