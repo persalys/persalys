@@ -28,7 +28,7 @@ namespace OTGUI {
 ReliabilityAnalysis::ReliabilityAnalysis()
   : PhysicalModelAnalysis()
 {
-  setIsReliabilityAnalysis(true);
+  isReliabilityAnalysis_ = true;
 }
 
 
@@ -37,7 +37,7 @@ ReliabilityAnalysis::ReliabilityAnalysis(const String & name, const LimitState &
   : PhysicalModelAnalysis(name, limitState.getPhysicalModel())
   , limitState_(limitState)
 {
-  setIsReliabilityAnalysis(true);
+  isReliabilityAnalysis_ = true;
 }
 
 

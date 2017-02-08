@@ -67,6 +67,8 @@ void FunctionalChaosResultWindow::setParameters(const Analysis & analysis)
 
 void FunctionalChaosResultWindow::buildInterface()
 {
+  setWindowTitle(tr("Functional chaos results"));
+
   // get output info
   const UnsignedInteger outputDimension = result_.getSobolResult().getOutputNames().getSize();
   QStringList outputNames;

@@ -35,6 +35,8 @@ class OTGUI_API StudyTreeView : public QTreeView
 public:
   StudyTreeView(QWidget * parent = 0);
 
+  virtual ~StudyTreeView();
+
   QList<QAction* > getActions(const QString & dataType);
 
 protected:
@@ -43,6 +45,8 @@ protected:
   bool hasPhysicalModelInputs(const QModelIndex & currentIndex);
   bool isProbabilisticModelValid(const QModelIndex & currentIndex);
   bool isLimitStateValid(const QModelIndex & currentIndex);
+  void launchAnalysis(AnalysisItem*);
+  void changeActionsAvailability(const bool availability);
 
 public slots:
   void createNewOTStudy();
@@ -66,9 +70,11 @@ public slots:
   void onCustomContextMenu(const QPoint & point);
   void selectedItemChanged(const QModelIndex & currentIndex, const QModelIndex & previousIndex);
   void runDesignOfExperiment();
+  void evaluateDesignOfExperiment();
   void removeDesignOfExperiment();
   void findAnalysisItemAndLaunchExecution(OTStudyItem * otStudyItem, const QString & analysisName);
   void runAnalysis();
+  void resetTree();
   void removeAnalysis();
   void createNewOTStudyWindow(OTStudyItem * item);
   void createNewDataModelWindow(DesignOfExperimentItem * item);
@@ -96,9 +102,13 @@ signals:
   void graphWindowDeactivated();
   void analysisExecutionRequired(OTStudyItem * otStudyItem, const QString & analysisName);
   void recentFilesListChanged(const QString & recentFileName);
+  void showControllerWidget(QWidget*);
+  void analysisFinished();
+  void actionsAvailabilityChanged(bool availability);
 
 private:
   StudyTreeViewModel * treeViewModel_;
+  AnalysisItem * runningAnalysisItem_;
   QAction * closeOTStudy_;
   QAction * newDataModel_;
   QAction * modifyDataModel_;
@@ -123,6 +133,7 @@ private:
   QAction * runDesignOfExperiment_;
   QAction * removeDesignOfExperiment_;
   QAction * runAnalysis_;
+  QAction * evaluateDesignOfExperiment_;
   QAction * removeAnalysis_;
   QAction * saveOTStudy_;
 };

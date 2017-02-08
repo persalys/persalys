@@ -114,6 +114,9 @@ void KrigingResultWindow::setParameters(const Analysis& analysis)
 
 void KrigingResultWindow::buildInterface()
 {
+  setWindowTitle(tr("Kriging results"));
+
+  // get output info
   const UnsignedInteger outputDimension = result_.getOutputSample().getDimension();
   QStringList outputNames;
   for (UnsignedInteger i=0; i<outputDimension; ++i)

@@ -70,6 +70,9 @@ void SRCResultWindow::setParameters(const Analysis & analysis)
 
 void SRCResultWindow::buildInterface()
 {
+  setWindowTitle(tr("SRC analysis results"));
+
+  // get output info
   const UnsignedInteger outputDimension = result_.getOutputNames().getSize();
   QStringList outputNames;
   for (UnsignedInteger i=0; i<outputDimension; ++i)

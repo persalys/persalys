@@ -36,6 +36,8 @@ class OTGUI_API OTguiSubWindow : public QMdiSubWindow
 public:
   OTguiSubWindow(QStandardItem * item);
 
+  virtual ~OTguiSubWindow();
+
   QStandardItem * getItem()const;
 
   QString getErrorMessage() const;

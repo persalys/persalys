@@ -127,75 +127,87 @@ void InferenceAnalysis::setInterestVariables(const Description& variablesNames)
 
 void InferenceAnalysis::run()
 {
-  // clear result
-  result_ = InferenceResult();
-
-  // check
-  if (!getInterestVariables().getSize())
-    throw InvalidDimensionException(HERE) << "The number of variables to analyse must be superior to 0";
-
-  std::map<String, DistributionFactoryCollection>::iterator it;
-  for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+  try
   {
-    it = distFactoriesForEachInterestVar_.find(getInterestVariables()[i]);
-    if (it == distFactoriesForEachInterestVar_.end())
-      throw InvalidArgumentException(HERE) << "Error: no distribution factories set for the variable " << getInterestVariables()[i];
-  }
+    // clear result
+    stopRequested_ = false;
+    result_ = InferenceResult();
 
-  // get marginals
-  Indices indices;
-  for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
-  {
-    bool outputFound = false;
-    for (UnsignedInteger j=0; j<designOfExperiment_.getSample().getDescription().getSize(); ++j)
+    // check
+    if (!getInterestVariables().getSize())
+      throw InvalidDimensionException(HERE) << "The number of variables to analyse must be superior to 0";
+
+    std::map<String, DistributionFactoryCollection>::iterator it;
+    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
     {
-      if (designOfExperiment_.getSample().getDescription()[j] == getInterestVariables()[i])
-      {
-        indices.add(j);
-        outputFound = true;
-        break;
-      }
+      it = distFactoriesForEachInterestVar_.find(getInterestVariables()[i]);
+      if (it == distFactoriesForEachInterestVar_.end())
+        throw InvalidArgumentException(HERE) << "Error: no distribution factories set for the variable " << getInterestVariables()[i];
     }
-    if (!outputFound)
-      throw InvalidArgumentException(HERE) << "The variable to analyse "  << getInterestVariables()[i] <<" is not a variable of the model " << designOfExperiment_.getSample().getDescription();
-  }
 
-  const NumericalSample sample(designOfExperiment_.getSample().getMarginal(indices));
-
-  // inference
-  for (UnsignedInteger i=0; i<sample.getDimension(); ++i)
-  {
-    FittingTestResult fittingTestResult;
-    fittingTestResult.variableName_ = sample.getDescription()[i];
-    fittingTestResult.values_ = sample.getMarginal(i);
-
-    for (UnsignedInteger j=0; j<distFactoriesForEachInterestVar_[sample.getDescription()[i]].getSize(); ++j)
+    // get marginals
+    Indices indices;
+    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
     {
-      try
+      bool outputFound = false;
+      for (UnsignedInteger j=0; j<designOfExperiment_.getSample().getDescription().getSize(); ++j)
       {
-        Distribution distribution(distFactoriesForEachInterestVar_[sample.getDescription()[i]][j].build(sample.getMarginal(i)));
-
-        // Kolmogorov test
-        TestResult testResult(FittingTest::Kolmogorov(sample.getMarginal(i), distribution, level_, distribution.getParameterDimension()));
-
-        // set fittingTestResult
-        fittingTestResult.testedDistributions_.add(distribution);
-        fittingTestResult.kolmogorovTestResults_.add(testResult);
+        if (designOfExperiment_.getSample().getDescription()[j] == getInterestVariables()[i])
+        {
+          indices.add(j);
+          outputFound = true;
+          break;
+        }
       }
-      catch (std::exception & ex)
-      {
-        String str = distFactoriesForEachInterestVar_[sample.getDescription()[i]][j].getImplementation()->getClassName();
-        throw InvalidValueException(HERE) << "Error when building the "
-                                          << str.substr(0, str.find("Factory"))
-                                          << " distribution with the sample of the variable "
-                                          << sample.getDescription()[i]
-                                          << ". "
-                                          << ex.what();
-      }
+      if (!outputFound)
+        throw InvalidArgumentException(HERE) << "The variable to analyse "  << getInterestVariables()[i] <<" is not a variable of the model " << designOfExperiment_.getSample().getDescription();
     }
-    result_.fittingTestResultCollection_.add(fittingTestResult);
+
+    const NumericalSample sample(designOfExperiment_.getSample().getMarginal(indices));
+
+    // inference
+    for (UnsignedInteger i=0; i<sample.getDimension(); ++i)
+    {
+      progressValue_ = (int) (i * 100 / sample.getSize());
+      notify("progressValueChanged");
+
+      FittingTestResult fittingTestResult;
+      fittingTestResult.variableName_ = sample.getDescription()[i];
+      fittingTestResult.values_ = sample.getMarginal(i);
+
+      for (UnsignedInteger j=0; j<distFactoriesForEachInterestVar_[sample.getDescription()[i]].getSize(); ++j)
+      {
+        try
+        {
+          Distribution distribution(distFactoriesForEachInterestVar_[sample.getDescription()[i]][j].build(sample.getMarginal(i)));
+
+          // Kolmogorov test
+          TestResult testResult(FittingTest::Kolmogorov(sample.getMarginal(i), distribution, level_, distribution.getParameterDimension()));
+
+          // set fittingTestResult
+          fittingTestResult.testedDistributions_.add(distribution);
+          fittingTestResult.kolmogorovTestResults_.add(testResult);
+        }
+        catch (std::exception & ex)
+        {
+          String str = distFactoriesForEachInterestVar_[sample.getDescription()[i]][j].getImplementation()->getClassName();
+          throw InvalidValueException(HERE) << "Error when building the "
+                                            << str.substr(0, str.find("Factory"))
+                                            << " distribution with the sample of the variable "
+                                            << sample.getDescription()[i]
+                                            << ". "
+                                            << ex.what();
+        }
+      }
+      result_.fittingTestResultCollection_.add(fittingTestResult);
+    }
+    notify("analysisFinished");
   }
-  notify("analysisFinished");
+  catch (std::exception & ex)
+  {
+    errorMessage_ = ex.what();
+    notify("analysisBadlyFinished");
+  }
 }
 
 

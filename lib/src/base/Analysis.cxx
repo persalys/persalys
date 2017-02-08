@@ -75,15 +75,21 @@ bool Analysis::isReliabilityAnalysis() const
 }
 
 
+String Analysis::getInformationMessage() const
+{
+  return getImplementation()->getInformationMessage();
+}
+
+
 String Analysis::getErrorMessage() const
 {
   return getImplementation()->getErrorMessage();
 }
 
 
-void Analysis::setErrorMessage(const String& errorMessage)
+int Analysis::getProgressValue() const
 {
-  getImplementation()->setErrorMessage(errorMessage);
+  return getImplementation()->getProgressValue();
 }
 
 
@@ -102,5 +108,11 @@ bool Analysis::analysisLaunched() const
 String Analysis::getPythonScript() const
 {
   return getImplementation()->getPythonScript();
+}
+
+
+void Analysis::stop()
+{
+  getImplementation()->stop();
 }
 }

@@ -42,6 +42,8 @@ TaylorExpansionMomentsResultWindow::TaylorExpansionMomentsResultWindow(AnalysisI
 
 void TaylorExpansionMomentsResultWindow::buildInterface()
 {
+  setWindowTitle(tr("Taylor expansion moments results"));
+
   QTabWidget * tabWidget = new QTabWidget;
 
   // first tab --------------------------------

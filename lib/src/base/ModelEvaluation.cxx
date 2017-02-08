@@ -42,6 +42,7 @@ ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & phys
   : PhysicalModelAnalysis(name, physicalModel)
 {
   initializeParameters(physicalModel.getInputs());
+  setInterestVariables(getPhysicalModel().getSelectedOutputsNames());
 }
 
 
@@ -52,6 +53,7 @@ ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & phys
   , inputNames_(getPhysicalModel().getInputNames())
   , inputValues_(inputsValues)
 {
+  setInterestVariables(getPhysicalModel().getSelectedOutputsNames());
 }
 
 
@@ -93,29 +95,39 @@ void ModelEvaluation::updateParameters()
 
 void ModelEvaluation::run()
 {
-  // clear result
-  result_ = ModelEvaluationResult();
-
-  // output = f(input)
-  NumericalSample inputSample(1, getInputValues());
-  inputSample.setDescription(inputNames_);
-  NumericalSample outputSample(1, 0);
-  for (UnsignedInteger i=0; i<getPhysicalModel().getSelectedOutputsNames().getSize(); ++i)
+  try
   {
-    try
+    // clear result
+    stopRequested_ = false;
+    result_ = ModelEvaluationResult();
+
+    // output = f(input)
+    NumericalSample inputSample(1, getInputValues());
+    inputSample.setDescription(inputNames_);
+
+    NumericalSample outputSample(1, 0);
+    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
     {
-      outputSample.stack(getPhysicalModel().getFunction(getPhysicalModel().getSelectedOutputsNames()[i])(inputSample));
+      try
+      {
+        outputSample.stack(getPhysicalModel().getFunction(getInterestVariables()[i])(inputSample));
+      }
+      catch (std::exception & ex)
+      {
+        throw AnalysisExecutionFailedException(HERE) << "Impossible to evaluate the output "
+                                                    << getInterestVariables()[i]
+                                                    << ".\n" << ex.what();
+      }
     }
-    catch (std::exception & ex)
-    {
-      throw AnalysisExecutionFailedException(HERE) << "Impossible to evaluate the output "
-                                                   << getPhysicalModel().getSelectedOutputsNames()[i]
-                                                   << ".\n" << ex.what();
-    }
+    outputSample.setDescription(getPhysicalModel().getSelectedOutputsNames());
+    result_ = ModelEvaluationResult(inputSample, outputSample);
+    notify("analysisFinished");
   }
-  outputSample.setDescription(getPhysicalModel().getSelectedOutputsNames());
-  result_ = ModelEvaluationResult(inputSample, outputSample);
-  notify("analysisFinished");
+  catch (std::exception & ex)
+  {
+    errorMessage_ = ex.what();
+    notify("analysisBadlyFinished");
+  }
 }
 
 

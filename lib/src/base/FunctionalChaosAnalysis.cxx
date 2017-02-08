@@ -119,59 +119,68 @@ OrthogonalProductPolynomialFactory::PolynomialFamilyCollection FunctionalChaosAn
 
 void FunctionalChaosAnalysis::run()
 {
-  // check
-  if (designOfExperiment_.getInputSample().getSize()*designOfExperiment_.getOutputSample().getSize() == 0)
-    throw InvalidArgumentException(HERE) << "The design of experiment must contains not empty input AND output samples";
-  if (designOfExperiment_.getInputSample().getSize() != designOfExperiment_.getOutputSample().getSize())
-    throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
-  if (!getInterestVariables().getSize())
-    throw InvalidDimensionException(HERE) << "The number of outputs to analyze must be superior to 0";
-
-  // clear result
-  result_ = FunctionalChaosAnalysisResult();
-
-  // get effective samples
-  NumericalSample effectiveInputSample(getEffectiveInputSample());
-  NumericalSample effectiveOutputSample(getEffectiveOutputSample());
-
-  // check chaos degree
-  if (!getSparseChaos())
+  try
   {
-    const UnsignedInteger inputDimension = effectiveInputSample.getDimension();
-    const UnsignedInteger size = designOfExperiment_.getOutputSample().getSize();
-    const UnsignedInteger minimumSize  = BinomialCoefficient(chaosDegree_ + inputDimension, chaosDegree_);
-    if (size < minimumSize)
-      throw InvalidArgumentException(HERE) << "Design of experiment size too small : "
-                                           << size
-                                           << ". It must be superior or equal to C(degree+nbInputs, degree) = "
-                                           << minimumSize << ")\n";
+    // check
+    if (designOfExperiment_.getInputSample().getSize()*designOfExperiment_.getOutputSample().getSize() == 0)
+      throw InvalidArgumentException(HERE) << "The design of experiment must contains not empty input AND output samples";
+    if (designOfExperiment_.getInputSample().getSize() != designOfExperiment_.getOutputSample().getSize())
+      throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
+    if (!getInterestVariables().getSize())
+      throw InvalidDimensionException(HERE) << "The number of outputs to analyze must be superior to 0";
+
+    // clear result
+    stopRequested_ = false;
+    result_ = FunctionalChaosAnalysisResult();
+
+    // get effective samples
+    NumericalSample effectiveInputSample(getEffectiveInputSample());
+    NumericalSample effectiveOutputSample(getEffectiveOutputSample());
+
+    // check chaos degree
+    if (!getSparseChaos())
+    {
+      const UnsignedInteger inputDimension = effectiveInputSample.getDimension();
+      const UnsignedInteger size = designOfExperiment_.getOutputSample().getSize();
+      const UnsignedInteger minimumSize  = BinomialCoefficient(chaosDegree_ + inputDimension, chaosDegree_);
+      if (size < minimumSize)
+        throw InvalidArgumentException(HERE) << "Design of experiment size too small : "
+                                            << size
+                                            << ". It must be superior or equal to C(degree+nbInputs, degree) = "
+                                            << minimumSize << ")\n";
+    }
+
+    // create FunctionalChaosAlgorithm and run it
+    FunctionalChaosAlgorithm functionalChaos(buildFunctionalChaosAlgorithm(effectiveInputSample, effectiveOutputSample));
+    functionalChaos.run();
+
+    // set result_
+    result_.outputSample_ = effectiveOutputSample;
+    result_.functionalChaosResult_ = functionalChaos.getResult();
+
+    // build metamodel
+    NumericalMathFunction metamodelFunction(result_.functionalChaosResult_.getMetaModel());
+    Description variablesNames(effectiveInputSample.getDescription());
+    variablesNames.add(effectiveOutputSample.getDescription());
+    metamodelFunction.setDescription(variablesNames);
+    buildMetaModel(result_, metamodelFunction);
+
+    result_.metaModelOutputSample_ = metamodelFunction(effectiveInputSample);
+
+    // post process
+    postProcessFunctionalChaosResult(effectiveInputSample);
+
+    // validation
+    validateMetaModelResult(result_, effectiveInputSample);
+
+    notify("metaModelCreated");
+    notify("analysisFinished");
   }
-
-  // create FunctionalChaosAlgorithm and run it
-  FunctionalChaosAlgorithm functionalChaos(buildFunctionalChaosAlgorithm(effectiveInputSample, effectiveOutputSample));
-  functionalChaos.run();
-
-  // set result_
-  result_.outputSample_ = effectiveOutputSample;
-  result_.functionalChaosResult_ = functionalChaos.getResult();
-
-  // build metamodel
-  NumericalMathFunction metamodelFunction(result_.functionalChaosResult_.getMetaModel());
-  Description variablesNames(effectiveInputSample.getDescription());
-  variablesNames.add(effectiveOutputSample.getDescription());
-  metamodelFunction.setDescription(variablesNames);
-  buildMetaModel(result_, metamodelFunction);
-
-  result_.metaModelOutputSample_ = metamodelFunction(effectiveInputSample);
-
-  // post process
-  postProcessFunctionalChaosResult(effectiveInputSample);
-
-  // validation
-  validateMetaModelResult(result_, effectiveInputSample);
-
-  notify("metaModelCreated");
-  notify("analysisFinished");
+  catch (std::exception & ex)
+  {
+    errorMessage_ = ex.what();
+    notify("analysisBadlyFinished");
+  }
 }
 
 

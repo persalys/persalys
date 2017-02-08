@@ -39,10 +39,10 @@ public:
   void updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
   virtual void update(Observable * source, const OT::String & message);
 
-public slots:
 signals:
   void designOfExperimentChanged(const DesignOfExperiment&);
   void analysisFinished();
+  void analysisBadlyFinished(QString);
   void designOfExperimentRemoved(QStandardItem*);
 
 private:

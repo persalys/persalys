@@ -81,10 +81,10 @@ void OTguiMenuBar::buildActions()
 
   addSeparator();
 
-  action = new QAction(QIcon(":/images/document-import.png"), tr("&Import Python..."), this);
-  action->setStatusTip(tr("Import a Python Script"));
-  connect(action, SIGNAL(triggered()), this, SIGNAL(importPython()));
-  fileMenu->addAction(action);
+  importPythonAction_ = new QAction(QIcon(":/images/document-import.png"), tr("&Import Python..."), this);
+  importPythonAction_->setStatusTip(tr("Import a Python Script"));
+  connect(importPythonAction_, SIGNAL(triggered()), this, SIGNAL(importPython()));
+  fileMenu->addAction(importPythonAction_);
 
   
   action = new QAction(QIcon(":/images/document-export.png"), tr("Export Python"), this);
@@ -171,5 +171,11 @@ void OTguiMenuBar::clearRecentFilesActions()
   QSettings settings;
   settings.setValue("recentFilesList", QStringList());
   updateRecentFilesActionsList();
+}
+
+
+void OTguiMenuBar::changeActionsAvailability(const bool availability)
+{
+  importPythonAction_->setEnabled(availability);
 }
 }

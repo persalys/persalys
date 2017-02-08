@@ -20,7 +20,6 @@
  */
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
 
-#include "openturns/MonteCarlo.hxx"
 #include "openturns/RandomGenerator.hxx"
 #include "openturns/PersistentObjectFactory.hxx"
 
@@ -37,6 +36,7 @@ MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis()
   : ReliabilityAnalysis()
   , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
+  , timeCriteria_()
 {
 }
 
@@ -47,6 +47,7 @@ MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis(const String & name
   : ReliabilityAnalysis(name, limitState)
   , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
+  , timeCriteria_()
 {
 }
 
@@ -58,54 +59,95 @@ MonteCarloReliabilityAnalysis* MonteCarloReliabilityAnalysis::clone() const
 }
 
 
+void MonteCarloReliabilityAnalysis::UpdateProgressValue(double percent, void * data)
+{
+  AnalysisStruct * analysisStruct = (AnalysisStruct*) data;
+  if (!analysisStruct)
+    return;
+
+  if (analysisStruct->analysis_->getMaximumCalls()< (UnsignedInteger)std::numeric_limits<int>::max())
+  {
+    analysisStruct->analysis_->progressValue_ = (int) percent;
+    analysisStruct->analysis_->notify("progressValueChanged");
+  }
+
+  OSS oss;
+  oss << "Number of iterations = " << analysisStruct->simulation_->getResult().getOuterSampling() << "\n";
+  oss << "Coefficient of variation = " << analysisStruct->simulation_->getResult().getCoefficientOfVariation() << "\n";
+  oss << "Elapsed time = " << (float) analysisStruct->analysis_->timeCriteria_.elapsedTime_ / CLOCKS_PER_SEC << " s\n";
+  analysisStruct->analysis_->informationMessage_ = oss;
+  analysisStruct->analysis_->notify("informationMessageUpdated");
+}
+
+
 void MonteCarloReliabilityAnalysis::run()
 {
-  // clear result
-  result_ = MonteCarloReliabilityResult();
-
-  // initialization
-  RandomGenerator::SetSeed(getSeed());
-
-  Description outputName(1);
-  outputName[0] = getLimitState().getOutputName();
-  NumericalMathFunction function(getPhysicalModel().getRestrictedFunction(outputName));
-  function.enableHistory();
-  function.clearHistory();
-
-  Event event(RandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
-  event.setDescription(outputName);
-
-  // create algo
-  MonteCarlo algo = MonteCarlo(event);
-  UnsignedInteger maximumOuterSampling = (UnsignedInteger)std::numeric_limits<int>::max();
-  if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
+  try
   {
-    algo.setConvergenceStrategy(Compact(getMaximumCalls())); // TODO: propose in wizard the convergence sample's size?
-    maximumOuterSampling = static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize()));
+    // clear result
+    stopRequested_ = false;
+    timeCriteria_ = TimeCriteria();
+    result_ = MonteCarloReliabilityResult();
+
+    // initialization
+    RandomGenerator::SetSeed(getSeed());
+
+    Description outputName(1);
+    outputName[0] = getLimitState().getOutputName();
+    NumericalMathFunction function(getPhysicalModel().getRestrictedFunction(outputName));
+    function.enableHistory();
+    function.clearHistory();
+
+    Event event(RandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
+    event.setDescription(outputName);
+
+    // create algo
+    MonteCarlo algo = MonteCarlo(event);
+    UnsignedInteger maximumOuterSampling = (UnsignedInteger)std::numeric_limits<int>::max();
+    if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
+    {
+      algo.setConvergenceStrategy(Compact(getMaximumCalls())); // TODO: propose in wizard the convergence sample's size?
+      maximumOuterSampling = static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize()));
+    }
+    algo.setMaximumOuterSampling(maximumOuterSampling);
+    algo.setMaximumCoefficientOfVariation(getMaximumCoefficientOfVariation());
+    algo.setBlockSize(getBlockSize());
+
+    timeCriteria_.setStartTime(clock());
+    timeCriteria_.setMaxElapsedTime(getMaximumElapsedTime());
+    algo.setStopCallback(&Stop, &timeCriteria_);
+    AnalysisStruct analysisStruc(this, &algo);
+    algo.setProgressCallback(&UpdateProgressValue, &analysisStruc);
+
+    algo.run();
+
+    // set results
+    // get convergence graph at level 0.95
+    Graph graph = algo.drawProbabilityConvergence();
+    result_ = MonteCarloReliabilityResult(algo.getResult(),
+                                          function.getHistoryOutput().getSample(),
+                                          graph.getDrawables()[0].getData(),
+                                          graph.getDrawables()[1].getData(),
+                                          graph.getDrawables()[2].getData());
+
+    result_.elapsedTime_ = (float)timeCriteria_.elapsedTime_/CLOCKS_PER_SEC;
+
+    function.disableHistory();
+
+    notify("analysisFinished");
   }
-  algo.setMaximumOuterSampling(maximumOuterSampling);
-  algo.setMaximumCoefficientOfVariation(getMaximumCoefficientOfVariation());
-  algo.setBlockSize(getBlockSize());
+  catch (std::exception & ex)
+  {
+    errorMessage_ = ex.what();
+    notify("analysisBadlyFinished");
+  }
+}
 
-  TimeCriteria data(getMaximumElapsedTime());
-  algo.setStopCallback(&Stop, &data);
 
-  algo.run();
-
-  // set results
-  // get convergence graph at level 0.95
-  Graph graph = algo.drawProbabilityConvergence();
-  result_ = MonteCarloReliabilityResult(algo.getResult(),
-                                        function.getHistoryOutput().getSample(),
-                                        graph.getDrawables()[0].getData(),
-                                        graph.getDrawables()[1].getData(),
-                                        graph.getDrawables()[2].getData());
-
-  result_.elapsedTime_ = (float)data.elapsedTime_/CLOCKS_PER_SEC;
-
-  function.disableHistory();
-
-  notify("analysisFinished");
+void MonteCarloReliabilityAnalysis::stop()
+{
+  AnalysisImplementation::stop();
+  timeCriteria_.stop();
 }
 
 

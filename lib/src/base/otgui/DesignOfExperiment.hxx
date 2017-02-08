@@ -52,11 +52,17 @@ public:
   OT::Description getVariableInputNames() const;
 
   OT::NumericalSample getInputSample() const;
+  OT::NumericalSample getFailedInputSample() const;
+  OT::NumericalSample getNotEvaluatedInputSample() const;
   OT::NumericalSample getOutputSample() const;
   OT::NumericalSample getSample() const;
 
+  OT::String getErrorMessage() const;
+  int getProgressValue() const;
+
   void run();
   OT::String getPythonScript() const;
+  void stop();
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;

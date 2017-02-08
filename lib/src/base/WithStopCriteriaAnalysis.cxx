@@ -47,7 +47,7 @@ bool WithStopCriteriaAnalysis::Stop(void * p)
   TimeCriteria * arg = (TimeCriteria*)p;
   arg->elapsedTime_ = clock()-arg->startTime_;
   // stop algorithm when the elapsed time is superior to the max elapsed time
-  if (arg->elapsedTime_ > arg->maxElapsedTime_)
+  if (arg->stopRequested_ || (arg->elapsedTime_ > arg->maxElapsedTime_))
     return true;
   return false;
 }

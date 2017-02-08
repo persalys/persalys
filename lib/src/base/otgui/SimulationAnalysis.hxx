@@ -49,6 +49,7 @@ public:
 
 protected:
   OT::NumericalSample computeOutputSample(OT::NumericalSample inputSample) const;
+  OT::NumericalSample computeOutputSample(OT::NumericalPoint inputValues) const;
   OT::NumericalSample computeOutputSample(OT::NumericalSample inputSample, const OT::Description & outputNames) const;
 
 private:

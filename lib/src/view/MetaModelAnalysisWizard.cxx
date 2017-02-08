@@ -55,14 +55,29 @@ MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis& analysis, QWidg
   {
     chaos_ = *dynamic_cast<const FunctionalChaosAnalysis*>(&*analysis.getImplementation());
     kriging_ = KrigingAnalysis(chaos_.getName(), chaos_.getDesignOfExperiment());
-    kriging_.setInterestVariables(chaos_.getInterestVariables());
+    try
+    {
+      kriging_.setInterestVariables(chaos_.getInterestVariables());
+    }
+    catch (std::exception & ex)
+    {
+      // do nothing
+    }
+    
     kriging_.setLeaveOneOutValidation(chaos_.isLeaveOneOutValidation());
   }
   else // Kriging
   {
     kriging_ = *dynamic_cast<const KrigingAnalysis*>(&*analysis.getImplementation());
     chaos_ = FunctionalChaosAnalysis(kriging_.getName(), kriging_.getDesignOfExperiment());
-    chaos_.setInterestVariables(kriging_.getInterestVariables());
+    try
+    {
+      chaos_.setInterestVariables(kriging_.getInterestVariables());
+    }
+    catch (std::exception & ex)
+    {
+      // do nothing
+    }
     chaos_.setLeaveOneOutValidation(kriging_.isLeaveOneOutValidation());
   }
   buildInterface();

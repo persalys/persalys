@@ -345,7 +345,7 @@ QWidget* DataAnalysisWindow::getBoxPlotWidget()
   }
   boxPlotLayout->addWidget(stackedWidget);
 
-  boxPlotsConfigurationWidget_ = new GraphConfigurationWidget(listBoxPlotWidgets, QStringList(), variablesNames, GraphConfigurationWidget::BoxPlot);
+  boxPlotsConfigurationWidget_ = new GraphConfigurationWidget(listBoxPlotWidgets, QStringList(), variablesNames);
   connect(boxPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
   return tab;
@@ -359,6 +359,7 @@ QWidget* DataAnalysisWindow::getScatterPlotsWidget()
 
   QVector<PlotWidget*> listScatterPlotWidgets =
     DesignOfExperimentWindow::GetListScatterPlots(result_.getInputSample(), result_.getOutputSample(),
+                                                  NumericalSample(),
                                                   stochInputNames_, inAxisTitles_,
                                                   outputNames_, outAxisTitles_);
 

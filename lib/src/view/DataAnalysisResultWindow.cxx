@@ -35,6 +35,8 @@ DataAnalysisResultWindow::DataAnalysisResultWindow(AnalysisItem * item)
     throw InvalidArgumentException (HERE) << "Can NOT build the DataAnalysisResultWindow: The analysis of the item is not valid";
 
   buildInterface();
+
+  setWindowTitle(tr("Data analysis results"));
 }
 
 

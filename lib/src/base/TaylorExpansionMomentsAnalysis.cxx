@@ -55,25 +55,34 @@ TaylorExpansionMomentsAnalysis* TaylorExpansionMomentsAnalysis::clone() const
 
 void TaylorExpansionMomentsAnalysis::run()
 {
-  // clear result
-  result_ = TaylorExpansionMomentsResult();
+  try
+  {
+    // clear result
+    stopRequested_ = false;
+    result_ = TaylorExpansionMomentsResult();
 
-  // set analysis
-  TaylorExpansionMoments algoTaylorExpansionMoments(getPhysicalModel().getOutputRandomVector(getInterestVariables()));
+    // set analysis
+    TaylorExpansionMoments algoTaylorExpansionMoments(getPhysicalModel().getOutputRandomVector(getInterestVariables()));
 
-  // set results
-  NumericalPoint meanFirstOrder = algoTaylorExpansionMoments.getMeanFirstOrder();
-  NumericalPoint meanSecondOrder = algoTaylorExpansionMoments.getMeanSecondOrder();
-  NumericalPoint variance = NumericalPoint(algoTaylorExpansionMoments.getCovariance().getDimension());
-  for (UnsignedInteger i=0; i<variance.getDimension(); ++i)
-    variance[i] = algoTaylorExpansionMoments.getCovariance()(i,i);
-  NumericalPoint standardDeviation(variance.getDimension());
-  for (UnsignedInteger i=0; i<variance.getDimension(); ++i)
-    standardDeviation[i] = sqrt(variance[i]);
+    // set results
+    NumericalPoint meanFirstOrder = algoTaylorExpansionMoments.getMeanFirstOrder();
+    NumericalPoint meanSecondOrder = algoTaylorExpansionMoments.getMeanSecondOrder();
+    NumericalPoint variance = NumericalPoint(algoTaylorExpansionMoments.getCovariance().getDimension());
+    for (UnsignedInteger i=0; i<variance.getDimension(); ++i)
+      variance[i] = algoTaylorExpansionMoments.getCovariance()(i,i);
+    NumericalPoint standardDeviation(variance.getDimension());
+    for (UnsignedInteger i=0; i<variance.getDimension(); ++i)
+      standardDeviation[i] = sqrt(variance[i]);
 
-  result_ = TaylorExpansionMomentsResult(getInterestVariables(), meanFirstOrder, meanSecondOrder, standardDeviation, variance);
+    result_ = TaylorExpansionMomentsResult(getInterestVariables(), meanFirstOrder, meanSecondOrder, standardDeviation, variance);
 
-  notify("analysisFinished");
+    notify("analysisFinished");
+  }
+  catch (std::exception & ex)
+  {
+    errorMessage_ = ex.what();
+    notify("analysisBadlyFinished");
+  }
 }
 
 

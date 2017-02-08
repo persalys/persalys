@@ -64,6 +64,8 @@ ProbabilisticModelWindow::~ProbabilisticModelWindow()
 
 void ProbabilisticModelWindow::buildInterface()
 {
+  setWindowTitle(tr("Probabilistic model"));
+
   QTabWidget * rootTab = new QTabWidget;
   
   // First Tab: marginals

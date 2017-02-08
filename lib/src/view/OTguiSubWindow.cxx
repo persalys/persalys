@@ -35,6 +35,12 @@ OTguiSubWindow::OTguiSubWindow(QStandardItem * item)
 }
 
 
+OTguiSubWindow::~OTguiSubWindow()
+{
+  emit graphWindowDeactivated();
+}
+
+
 QStandardItem * OTguiSubWindow::getItem()const
 {
   return item_;

@@ -97,6 +97,18 @@ NumericalSample DesignOfExperiment::getInputSample() const
 }
 
 
+NumericalSample DesignOfExperiment::getFailedInputSample() const
+{
+  return getImplementation()->getFailedInputSample();
+}
+
+
+NumericalSample DesignOfExperiment::getNotEvaluatedInputSample() const
+{
+  return getImplementation()->getNotEvaluatedInputSample();
+}
+
+
 NumericalSample DesignOfExperiment::getOutputSample() const
 {
   return getImplementation()->getOutputSample();
@@ -109,6 +121,18 @@ NumericalSample DesignOfExperiment::getSample() const
 }
 
 
+String DesignOfExperiment::getErrorMessage() const
+{
+  return getImplementation()->getErrorMessage();
+}
+
+
+int DesignOfExperiment::getProgressValue() const
+{
+  return getImplementation()->getProgressValue();
+}
+
+
 void DesignOfExperiment::run()
 {
   getImplementation()->run();
@@ -118,6 +142,12 @@ void DesignOfExperiment::run()
 String DesignOfExperiment::getPythonScript() const
 {
   return getImplementation()->getPythonScript();
+}
+
+
+void DesignOfExperiment::stop()
+{
+  getImplementation()->stop();
 }
 
 

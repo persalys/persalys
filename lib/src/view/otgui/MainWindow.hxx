@@ -26,6 +26,7 @@
 #include <QMainWindow>
 #include <QDockWidget>
 #include <QCloseEvent>
+
 #include "PyConsole_Console.h"
 
 namespace OTGUI {
@@ -38,6 +39,7 @@ public:
 
 public slots:
   void showGraphConfigurationTabWidget(QWidget*);
+  void showControllerWidget(QWidget*);
   void exitApplication();
 
 protected:
@@ -51,6 +53,7 @@ private:
   StudyTreeView * studyTree_;
   QDockWidget * configurationDock_;
   PyConsole_Console * pythonConsole_;
+  QDockWidget * dockControllerWidget_;
 };
 }
 #endif

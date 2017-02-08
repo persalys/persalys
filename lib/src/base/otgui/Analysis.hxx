@@ -46,12 +46,15 @@ public:
 
   bool isReliabilityAnalysis() const;
 
+  OT::String getInformationMessage() const;
   OT::String getErrorMessage() const;
-  void setErrorMessage(const OT::String& errorMessage);
+  int getProgressValue() const;
 
   void run();
   OT::String getPythonScript() const;
   bool analysisLaunched() const;
+
+  void stop();
 };
 }
 #endif

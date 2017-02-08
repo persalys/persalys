@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QToolBar
+ *  @brief Evaluates the design of experiment
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,33 +18,27 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_OTGUITOOLBAR_HXX
-#define OTGUI_OTGUITOOLBAR_HXX
+#ifndef OTGUI_DESIGNOFEXPERIMENTEVALUATION_HXX
+#define OTGUI_DESIGNOFEXPERIMENTEVALUATION_HXX
 
-#include "otgui/OTGuiprivate.hxx"
-#include <QToolBar>
+#include "DesignOfExperimentAnalysis.hxx"
 
 namespace OTGUI {
-class OTGUI_API OTguiToolBar : public QToolBar
+class OTGUI_API DesignOfExperimentEvaluation : public DesignOfExperimentAnalysis, public Observer
 {
-  Q_OBJECT
+  /** Fake analysis to be enable to launch the evaluation of the DOE in a separate thread from StudyTreeView */
 
 public:
-  OTguiToolBar();
+  /** Constructor with parameters */
+  DesignOfExperimentEvaluation(const DesignOfExperiment& design);
 
-protected:
-  void buildActions();
+  /** Virtual constructor */
+  virtual DesignOfExperimentEvaluation * clone() const;
 
-public slots:
-  void changeActionsAvailability(const bool availability);
-signals:
-  void createNewOTStudy();
-  void openOTStudy();
-  void importPython();
-  void saveOTStudy();
+  virtual void run();
+  virtual void stop();
 
-private:
-  QAction * importPythonAction_;
+  virtual void update(Observable * source, const OT::String & message);
 };
 }
 #endif

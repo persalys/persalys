@@ -28,8 +28,11 @@ namespace OTGUI {
 AnalysisImplementation::AnalysisImplementation()
   : PersistentObject()
   , Observable()
-  , errorMessage_("")
   , isReliabilityAnalysis_(false)
+  , informationMessage_("")
+  , errorMessage_("")
+  , stopRequested_(false)
+  , progressValue_(0)
 {
 }
 
@@ -38,8 +41,11 @@ AnalysisImplementation::AnalysisImplementation()
 AnalysisImplementation::AnalysisImplementation(const String & name)
   : PersistentObject()
   , Observable()
-  , errorMessage_("")
   , isReliabilityAnalysis_(false)
+  , informationMessage_("")
+  , errorMessage_("")
+  , stopRequested_(false)
+  , progressValue_(0)
 {
   setName(name);
 }
@@ -64,12 +70,6 @@ bool AnalysisImplementation::isReliabilityAnalysis() const
 }
 
 
-void AnalysisImplementation::setIsReliabilityAnalysis(const bool isReliabilityAnalysis)
-{
-  isReliabilityAnalysis_ = isReliabilityAnalysis;
-}
-
-
 Description AnalysisImplementation::getInterestVariables() const
 {
   return interestVariables_;
@@ -87,15 +87,21 @@ void AnalysisImplementation::run()
 }
 
 
+String AnalysisImplementation::getInformationMessage() const
+{
+  return informationMessage_;
+}
+
+
 String AnalysisImplementation::getErrorMessage() const
 {
   return errorMessage_;
 }
 
 
-void AnalysisImplementation::setErrorMessage(const String& errorMessage)
+int AnalysisImplementation::getProgressValue() const
 {
-  errorMessage_ = errorMessage;
+  return progressValue_;
 }
 
 
@@ -108,6 +114,12 @@ bool AnalysisImplementation::analysisLaunched() const
 String AnalysisImplementation::getPythonScript() const
 {
   return "";
+}
+
+
+void AnalysisImplementation::stop()
+{
+  stopRequested_ = true;
 }
 
 

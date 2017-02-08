@@ -47,8 +47,11 @@ public:
   OT::Description getInterestVariables() const;
   virtual void setInterestVariables(const OT::Description& variablesNames);
 
+  OT::String getInformationMessage() const;
   OT::String getErrorMessage() const;
-  void setErrorMessage(const OT::String& errorMessage);
+  int getProgressValue() const;
+
+  virtual void stop();
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -57,11 +60,13 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  void setIsReliabilityAnalysis(const bool isReliabilityAnalysis);
+  bool isReliabilityAnalysis_;
+  OT::String informationMessage_;
+  OT::String errorMessage_;
+  bool stopRequested_;
+  int progressValue_;
 
 private:
-  OT::String errorMessage_;
-  bool isReliabilityAnalysis_;
   OT::Description interestVariables_;
 };
 }

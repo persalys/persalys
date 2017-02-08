@@ -52,13 +52,27 @@ SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis & analysis, 
   {
     sobolAnalysis_ = *dynamic_cast<const SobolAnalysis*>(&*analysis.getImplementation());
     srcAnalysis_ = SRCAnalysis(sobolAnalysis_.getName(), sobolAnalysis_.getPhysicalModel());
-    srcAnalysis_.setInterestVariables(sobolAnalysis_.getInterestVariables());
+    try
+    {
+      srcAnalysis_.setInterestVariables(sobolAnalysis_.getInterestVariables());
+    }
+    catch (std::exception & ex)
+    {
+      // do nothing
+    }
   }
   else
   {
     srcAnalysis_ = *dynamic_cast<const SRCAnalysis*>(&*analysis.getImplementation());
     sobolAnalysis_ = SobolAnalysis(srcAnalysis_.getName(), srcAnalysis_.getPhysicalModel());
-    sobolAnalysis_.setInterestVariables(srcAnalysis_.getInterestVariables());
+    try
+    {
+      sobolAnalysis_.setInterestVariables(srcAnalysis_.getInterestVariables());
+    }
+    catch (std::exception & ex)
+    {
+      // do nothing
+    }
   }
 
   buildInterface();

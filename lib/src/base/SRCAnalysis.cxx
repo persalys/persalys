@@ -57,33 +57,57 @@ SRCAnalysis* SRCAnalysis::clone() const
 
 void SRCAnalysis::run()
 {
-  // clear result
-  result_ = SRCResult();
-
-  RandomGenerator::SetSeed(getSeed());
-
-  NumericalSample inputSample(generateInputSample(simulationsNumber_));
-
-  // set results
-  NumericalSample indices(0, inputSample.getDimension());
-
-  for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+  try
   {
-    Description outputName(1);
-    outputName[0] = getInterestVariables()[i];
-    indices.add(CorrelationAnalysis::SRC(inputSample, computeOutputSample(inputSample, outputName)));
+    // clear result
+    stopRequested_ = false;
+    result_ = SRCResult();
+
+    RandomGenerator::SetSeed(getSeed());
+
+    NumericalSample inputSample(generateInputSample(simulationsNumber_));
+
+    // evaluate model
+    NumericalSample outputSample(0, getInterestVariables().getSize());
+    for (UnsignedInteger i=0; i<simulationsNumber_; ++i)
+    {
+      if (stopRequested_ && i > 1)
+        break;
+
+      progressValue_ = (int) (i * 100 / simulationsNumber_);
+      notify("progressValueChanged");
+
+      outputSample.add(computeOutputSample(inputSample[i]));
+    }
+
+    NumericalSample indices(0, inputSample.getDimension());
+
+    const NumericalSample effectiveInputSample(inputSample, 0, outputSample.getSize());
+    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+    {
+      Description outputName(1);
+      outputName[0] = getInterestVariables()[i];
+
+      indices.add(CorrelationAnalysis::SRC(effectiveInputSample, outputSample.getMarginal(i)));
+    }
+
+    indices.setDescription(inputSample.getDescription());
+    // set results
+    result_ = SRCResult(indices, getInterestVariables());
+
+    // add warning if the model has not an independent copula
+    if (!getPhysicalModel().getComposedDistribution().hasIndependentCopula())
+    {
+      LOGWARN("The model has not an independent copula, the result of the sensitivity analysis could be false.");
+    }
+
+    notify("analysisFinished");
   }
-
-  indices.setDescription(inputSample.getDescription());
-  result_ = SRCResult(indices, getInterestVariables());
-
-  // add warning if the model has not an independent copula
-  if (!getPhysicalModel().getComposedDistribution().hasIndependentCopula())
+  catch (std::exception & ex)
   {
-    LOGWARN("The model has not an independent copula, the result of the sensitivity analysis could be false.");
+    errorMessage_ = ex.what();
+    notify("analysisBadlyFinished");
   }
-
-  notify("analysisFinished");
 }
 
 

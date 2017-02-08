@@ -83,6 +83,9 @@ void SobolResultWindow::setParameters(const Analysis & analysis)
 
 void SobolResultWindow::buildInterface()
 {
+  setWindowTitle(tr("Sobol' analysis results"));
+
+  // get output info
   const UnsignedInteger outputDimension = result_.getOutputNames().getSize();
   QStringList outputNames;
   for (UnsignedInteger i=0; i<outputDimension; ++i)

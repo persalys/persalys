@@ -76,17 +76,20 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   }
 
   yAxisComboBox_ = 0;
-  if (outputNames.size() && plotType_ != GraphConfigurationWidget::PDF && plotType_ != GraphConfigurationWidget::CDF)
+  if (plotType_ != GraphConfigurationWidget::PDF && plotType_ != GraphConfigurationWidget::CDF)
   {
-    label = new QLabel(tr("Y-axis"));
-    mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
-    yAxisComboBox_ = new QComboBox;
-    yAxisComboBox_->addItems(outputNames);
-    if (plotType_ == GraphConfigurationWidget::Scatter && inputNames.size())
-      yAxisComboBox_->addItems(inputNames);
-    mainGridLayout->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
-    connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
-    emit currentPlotChanged(currentPlotIndex_);
+    if (outputNames.size() || plotType_ == GraphConfigurationWidget::Scatter)
+    {
+      label = new QLabel(tr("Y-axis"));
+      mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+      yAxisComboBox_ = new QComboBox;
+      yAxisComboBox_->addItems(outputNames);
+      if (plotType_ == GraphConfigurationWidget::Scatter && inputNames.size())
+        yAxisComboBox_->addItems(inputNames);
+      mainGridLayout->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
+      connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
+      emit currentPlotChanged(currentPlotIndex_);
+    }
   }
 
   pdf_cdfGroup_ = 0;
@@ -232,19 +235,17 @@ void GraphConfigurationWidget::plotChanged()
   {
     currentPlotIndex_ = xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex;
   }
-  else if (plotType_ == GraphConfigurationWidget::PDF || plotType_ == GraphConfigurationWidget::CDF ||
-           plotType_ == GraphConfigurationWidget::PDFResult || plotType_ == GraphConfigurationWidget::CDFResult)
+  else if (plotType_ == GraphConfigurationWidget::PDF ||
+           plotType_ == GraphConfigurationWidget::PDFResult)
   {
     switch (GraphConfigurationWidget::Type(pdf_cdfGroup_->checkedId()))
     {
       case GraphConfigurationWidget::PDF:
-      case GraphConfigurationWidget::PDFResult:
       {
         currentPlotIndex_ = 2 * outputIndex;
         break;
       }
       case GraphConfigurationWidget::CDF:
-      case GraphConfigurationWidget::CDFResult:
       {
         currentPlotIndex_ = 2 * outputIndex + 1;
         break;
