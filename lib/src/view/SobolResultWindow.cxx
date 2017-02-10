@@ -119,12 +119,13 @@ void SobolResultWindow::buildInterface()
   connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
   {
-    SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(result_.getFirstOrderIndices()[i],
+    SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(i,
+                                                                                result_.getFirstOrderIndices()[i],
                                                                                 result_.getTotalIndices()[i],
                                                                                 result_.getInputNames(),
                                                                                 result_.getOutputNames()[i],
-                                                                                SensitivityResultWidget::Sobol,
-                                                                                i);
+                                                                                SensitivityResultWidget::Sobol
+                                                                               );
     stackedWidget->addWidget(indicesResultWidget);
     connect(indicesResultWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
     connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), indicesResultWidget, SLOT(showHideGraphConfigurationWidget(int)));

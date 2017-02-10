@@ -106,12 +106,13 @@ void SRCResultWindow::buildInterface()
   connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
   for (UnsignedInteger i=0; i<outputDimension; ++i)
   {
-    SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(result_.getIndices()[i],
+    SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(i,
+                                                                                result_.getIndices()[i],
                                                                                 NumericalPoint(),
                                                                                 result_.getInputNames(),
                                                                                 result_.getOutputNames()[i],
-                                                                                SensitivityResultWidget::SRC,
-                                                                                i);
+                                                                                SensitivityResultWidget::SRC
+                                                                               );
     stackedWidget->addWidget(indicesResultWidget);
     connect(indicesResultWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
     connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), indicesResultWidget, SLOT(showHideGraphConfigurationWidget(int)));
