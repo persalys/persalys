@@ -41,6 +41,7 @@ KrigingAnalysis::KrigingAnalysis()
 /* Constructor with parameters */
 KrigingAnalysis::KrigingAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
   : MetaModelAnalysis(name, designOfExperiment)
+  , optimizeParameters_(true)
 {
   const UnsignedInteger inputDimension = getEffectiveInputSample().getDimension();
   // basis
@@ -87,6 +88,18 @@ void KrigingAnalysis::setCovarianceModel(const CovarianceModel& model)
     throw InvalidArgumentException(HERE) << "The covariance model dimension must be equal to 1 ";
 
   covarianceModel_ = model;
+}
+
+
+bool KrigingAnalysis::getOptimizeParameters() const
+{
+  return optimizeParameters_;
+}
+
+
+void KrigingAnalysis::setOptimizeParameters(const bool optimize)
+{
+  optimizeParameters_ = optimize;
 }
 
 
@@ -214,6 +227,8 @@ KrigingAlgorithm KrigingAnalysis::buildKrigingAlgorithm(const NumericalSample& i
                         getBasis(),
                         useOptimalCovModel? optimalCovarianceModel_ : covarianceModel_);
 
+  algo.setOptimizeParameters(optimizeParameters_);
+
   return algo;
 }
 
@@ -267,6 +282,8 @@ String KrigingAnalysis::getPythonScript() const
     oss << ", " << dynamic_cast<GeneralizedExponential*>(&*getCovarianceModel().getImplementation())->getP();
   oss << "))\n";
 
+  oss << getName() << ".setOptimizeParameters(" <<(getOptimizeParameters()? "True" : "False") << ")\n";
+
   // validation
   oss << getName() << ".setLeaveOneOutValidation(" << (isLeaveOneOutValidation()? "True" : "False") << ")\n";
 
@@ -290,6 +307,7 @@ String KrigingAnalysis::__repr__() const
       << " interestVariables=" << getInterestVariables()
       << " basis=" << getBasis()
       << " covarianceModel=" << getCovarianceModel()
+      << " optimizeParameters=" << getOptimizeParameters()
       << " leaveOneOutValidation=" << isLeaveOneOutValidation();
   return oss;
 }
@@ -301,6 +319,7 @@ void KrigingAnalysis::save(Advocate& adv) const
   MetaModelAnalysis::save(adv);
   adv.saveAttribute("basis_", basis_);
   adv.saveAttribute("covarianceModel_", covarianceModel_);
+  adv.saveAttribute("optimizeParameters_", optimizeParameters_);
   adv.saveAttribute("result_", result_);
 }
 
@@ -311,6 +330,7 @@ void KrigingAnalysis::load(Advocate& adv)
   MetaModelAnalysis::load(adv);
   adv.loadAttribute("basis_", basis_);
   adv.loadAttribute("covarianceModel_", covarianceModel_);
+  adv.loadAttribute("optimizeParameters_", optimizeParameters_);
   adv.loadAttribute("result_", result_);
 }
 }

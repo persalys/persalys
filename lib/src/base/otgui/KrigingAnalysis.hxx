@@ -46,6 +46,9 @@ public:
   OT::CovarianceModel getCovarianceModel() const;
   void setCovarianceModel(const OT::CovarianceModel& model);
 
+  bool getOptimizeParameters() const;
+  void setOptimizeParameters(const bool optimize);
+
   KrigingAnalysisResult getResult() const;
 
   virtual void run();
@@ -72,6 +75,7 @@ private:
   OT::CovarianceModel covarianceModel_;
   KrigingAnalysisResult result_;
   OT::CovarianceModel optimalCovarianceModel_;
+  bool optimizeParameters_;
 };
 }
 #endif
