@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QGroupBox to select outputs
+ *  @brief QComboBox with no wheel event
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,32 +18,27 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_OUTPUTSSELECTIONGROUPBOX_HXX
-#define OTGUI_OUTPUTSSELECTIONGROUPBOX_HXX
+#ifndef OTGUI_NOWHEELEVENTCOMBOBOX_HXX
+#define OTGUI_NOWHEELEVENTCOMBOBOX_HXX
 
-#include "otgui/ListWidgetWithCheckBox.hxx"
-
-#include "openturns/Description.hxx"
-
-#include <QGroupBox>
 #include <QWheelEvent>
+#include <QComboBox>
+#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
-class OTGUI_API OutputsSelectionGroupBox : public QGroupBox
+class OTGUI_API NoWheelEventComboBox : public QComboBox
 {
-  Q_OBJECT
-
 public:
-  OutputsSelectionGroupBox(const OT::Description& outputsNames, const OT::Description& interestVariables, QWidget* parent=0);
+  NoWheelEventComboBox(QWidget * parent = 0)
+  : QComboBox(parent)
+  {
+  }
 
-  QStringList getSelectedOutputsNames() const;
-
-public slots:
-signals:
-  void outputsSelectionChanged(QStringList);
-
-private:
-  ListWidgetWithCheckBox * outputsListWidget_;
+protected:
+  void wheelEvent(QWheelEvent *)
+  {
+    // do nothing
+  }
 };
 }
 #endif

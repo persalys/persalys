@@ -22,24 +22,14 @@
 
 #include "otgui/ListWidgetWithCheckBox.hxx"
 #include "otgui/QtTools.hxx"
+#include "otgui/NoWheelEventComboBox.hxx"
 
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
-#include <QComboBox>
 #include <QScrollArea>
 
 namespace OTGUI {
-
-class NoWheelEventComboBox : public QComboBox
-{
-public:
-  NoWheelEventComboBox(QWidget * parent = 0) : QComboBox(parent){}
-protected:
-  void wheelEvent(QWheelEvent *){}
-};
-
-
 
 PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * plotMatrix, QWidget* parent)
   : QWidget(parent)
@@ -52,15 +42,18 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   QGridLayout * mainGridLayout = new QGridLayout(frame);
   int rowGrid = 0;
 
+  // title
   QLabel * label = new QLabel(tr("Title"));
   mainGridLayout->addWidget(label, rowGrid, 0, 1, 1);
   titleLineEdit_ = new QLineEdit;
   connect(titleLineEdit_, SIGNAL(textChanged(QString)), this, SLOT(updateTitle()));
   mainGridLayout->addWidget(titleLineEdit_, rowGrid, 1, 1, 1);
 
+  // columns label
   label = new QLabel(tr("Colums"));
   mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
+  // combobox to select the columns to display
   NoWheelEventComboBox * inputsComboBox = new NoWheelEventComboBox;
   ListWidgetWithCheckBox * listWidget = new ListWidgetWithCheckBox("-- " + tr("Select variables") + " --", plotMatrix_->getInputNames(), plotMatrix_->getInputNames(), this);
   connect(listWidget, SIGNAL(checkedItemsChanged(QStringList)), plotMatrix_, SLOT(setInputsToDisplay(QStringList)));
@@ -68,9 +61,11 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   inputsComboBox->setView(listWidget);
   mainGridLayout->addWidget(inputsComboBox, rowGrid, 1, 1, 1);
 
+  // rows label
   label = new QLabel(tr("Rows"));
   mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
+  // combobox to select the rows to display
   NoWheelEventComboBox * outputsComboBox = new NoWheelEventComboBox;
   listWidget = new ListWidgetWithCheckBox("-- " + tr("Select variables") + " --", plotMatrix_->getOutputNames(), plotMatrix_->getOutputNames(), this);
   connect(listWidget, SIGNAL(checkedItemsChanged(QStringList)), plotMatrix_, SLOT(setOutputsToDisplay(QStringList)));
@@ -78,7 +73,7 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   outputsComboBox->setView(listWidget);
   mainGridLayout->addWidget(outputsComboBox, rowGrid, 1, 1, 1);
 
-  // Bottom layout
+  // pushbutton to export the plot
   QHBoxLayout * hboxForBottomButtons = new QHBoxLayout;
   hboxForBottomButtons->addStretch();
   QPushButton * button = new QPushButton(tr("Export"));
