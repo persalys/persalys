@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Widget for Parameters tab of the ResultWindows
+ *  @brief QWidget for Parameters tab of results windows
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -20,46 +20,45 @@
  */
 #include "otgui/ParametersWidget.hxx"
 
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
+#include "otgui/ParametersTableView.hxx"
 
 #include "openturns/Exception.hxx"
 
 #include <QVBoxLayout>
-#include <QHeaderView>
-#include <QLabel>
+#include <QGroupBox>
 
 using namespace OT;
 
 namespace OTGUI {
 
-ParametersWidget::ParametersWidget(const QString title, const QStringList names, const QStringList values)
-  : QWidget()
+ParametersWidget::ParametersWidget(const QString title,           // table title
+                                   const QStringList names,       // parameters names
+                                   const QStringList values,      // parameters values
+                                   const bool showGrid,           // show the grid of the table
+                                   const bool namesHasHeaderType, // parameters names display has table header
+                                   QWidget * parent
+                                  )
+  : QWidget(parent)
 {
   if (!names.size() * values.size() > 0)
-    throw InvalidArgumentException(HERE) << "To build the widget, the data vectors must have the same (not null) dimension\n";
+    throw InvalidArgumentException(HERE) << "To build the ParametersWidget, the data vectors must have the same (not null) dimension\n";
 
-  QVBoxLayout * layout = new QVBoxLayout(this);
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  QLabel * titleLabel = new QLabel(title);
-  titleLabel->setWordWrap(false);
-  layout->addWidget(titleLabel);
+  QGroupBox * groupBox = new QGroupBox;
+  QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
 
-  ResizableTableViewWithoutScrollBar * table = new ResizableTableViewWithoutScrollBar;
-  table->horizontalHeader()->hide();
-  table->verticalHeader()->hide();
-  CustomStandardItemModel * tableModel = new CustomStandardItemModel(names.size(), 2, table);
-  table->setModel(tableModel);
+  // title
+  if (!title.isEmpty())
+    groupBox->setTitle(title);
 
-  // vertical header
-  for (int i=0; i<names.size(); ++i)
-  {
-    tableModel->setNotEditableItem(i, 0, names[i]);
-    tableModel->setNotEditableItem(i, 1, values[i]);
-  }
-  table->setShowGrid(false);
-  table->resizeToContents();
-  layout->addWidget(table);
-  layout->addStretch();
+  // table view
+  ParametersTableView * table = new ParametersTableView(names, values, showGrid, namesHasHeaderType);
+  groupBoxLayout->addWidget(table);
+
+  groupBoxLayout->addStretch();
+
+  // fill layout
+  widgetLayout->addWidget(groupBox);
 }
 }

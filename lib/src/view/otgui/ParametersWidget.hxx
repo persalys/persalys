@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Widget for Parameters tab of the ResultWindows
+ *  @brief QWidget for Parameters tab of results windows
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -22,13 +22,20 @@
 #define OTGUI_PARAMETERSWIDGET_HXX
 
 #include "otgui/OTGuiprivate.hxx"
+
 #include <QWidget>
 
 namespace OTGUI {
 class OTGUI_API ParametersWidget : public QWidget
 {
 public:
-  ParametersWidget(const QString title, const QStringList names, const QStringList values);
+  ParametersWidget(const QString title,                 // table title
+                   const QStringList names,             // parameters names
+                   const QStringList values,            // parameters values
+                   const bool showGrid=false,           // show the grid of the table
+                   const bool namesHasHeaderType=false, // parameters names display has table header
+                   QWidget * parent=0
+                  );
 };
 }
 #endif
