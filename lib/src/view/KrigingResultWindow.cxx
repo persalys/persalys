@@ -21,14 +21,12 @@
 #include "otgui/KrigingResultWindow.hxx"
 
 #include "otgui/KrigingAnalysis.hxx"
-#include "otgui/FunctionalChaosResultWindow.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 #include "otgui/MetaModelValidationWidget.hxx"
+#include "otgui/ParametersTableView.hxx"
 
 #include "openturns/OTBase.hxx"
 
-#include <QVBoxLayout>
 #include <QGroupBox>
 #include <QScrollArea>
 #include <QSplitter>
@@ -40,6 +38,7 @@ namespace OTGUI {
 KrigingResultWindow::KrigingResultWindow(AnalysisItem * item)
   : ResultWindow(item)
   , result_(dynamic_cast<KrigingAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , optimizeParameters_(true)
   , outputsListWidget_(0)
   , tabWidget_(0)
 {
@@ -51,23 +50,40 @@ KrigingResultWindow::KrigingResultWindow(AnalysisItem * item)
 void KrigingResultWindow::setParameters(const Analysis& analysis)
 {
   const KrigingAnalysis kriging = *dynamic_cast<const KrigingAnalysis*>(&*analysis.getImplementation());
+  optimizeParameters_ = kriging.getOptimizeParameters();
 
   // ParametersWidget
   QStringList namesList;
   namesList << tr("Algorithm");
-  namesList << tr("Correlation model");
-  namesList << tr("Scale");
-  namesList << tr("Amplitude");
+  namesList << tr("Covariance model");
   if (kriging.getCovarianceModel().getImplementation()->getClassName() == "MaternModel")
     namesList << tr("nu");
   else if (kriging.getCovarianceModel().getImplementation()->getClassName() == "GeneralizedExponential")
     namesList << tr("p");
+  namesList << tr("Parameters optimization");
+  namesList << tr("Scale");
+  namesList << tr("Amplitude");
   namesList << tr("Trend basis");
   namesList << tr("Leave-one-out validation");
 
   QStringList valuesList;
   valuesList << tr("Kriging");
   valuesList << QString(kriging.getCovarianceModel().getImplementation()->getClassName().c_str());
+  // covariance model parameters
+  if (kriging.getCovarianceModel().getImplementation()->getClassName() == "MaternModel")
+  {
+    double nu = dynamic_cast<MaternModel*>(&*kriging.getCovarianceModel().getImplementation())->getNu();
+    valuesList << QString::number(nu);
+  }
+  else if (kriging.getCovarianceModel().getImplementation()->getClassName() == "GeneralizedExponential")
+  {
+    double p = dynamic_cast<GeneralizedExponential*>(&*kriging.getCovarianceModel().getImplementation())->getP();
+    valuesList << QString::number(p);
+  }
+
+  // Optimize parameters
+  valuesList << (kriging.getOptimizeParameters()? tr("yes") : tr("no"));
+
   // scale
   QString scaleText;
   for (UnsignedInteger i=0; i<kriging.getCovarianceModel().getScale().getSize(); ++i)
@@ -86,17 +102,6 @@ void KrigingResultWindow::setParameters(const Analysis& analysis)
       amplitudeText += "; ";
   }
   valuesList << amplitudeText;
-  // covariance model parameters
-  if (kriging.getCovarianceModel().getImplementation()->getClassName() == "MaternModel")
-  {
-    double nu = dynamic_cast<MaternModel*>(&*kriging.getCovarianceModel().getImplementation())->getNu();
-    valuesList << QString::number(nu);
-  }
-  else if (kriging.getCovarianceModel().getImplementation()->getClassName() == "GeneralizedExponential")
-  {
-    double p = dynamic_cast<GeneralizedExponential*>(&*kriging.getCovarianceModel().getImplementation())->getP();
-    valuesList << QString::number(p);
-  }
   // basis
   QString basisType(tr("Constant"));
   const UnsignedInteger dim = kriging.getBasis().getDimension();
@@ -108,7 +113,7 @@ void KrigingResultWindow::setParameters(const Analysis& analysis)
 
   valuesList << (kriging.isLeaveOneOutValidation()? tr("yes") : tr("no"));
 
-  parametersWidget_ = new ParametersWidget(tr("Metamodel creation parameters:"), namesList, valuesList);
+  parametersWidget_ = new ParametersWidget(tr("Metamodel creation parameters"), namesList, valuesList);
 }
 
 
@@ -133,7 +138,6 @@ void KrigingResultWindow::buildInterface()
   outputsListWidget_ = new QListWidget;
   outputsListWidget_->addItems(outputNames);
   outputsLayoutGroupBox->addWidget(outputsListWidget_);
-  outputsLayoutGroupBox->addStretch();
 
   mainWidget->addWidget(outputsGroupBox);
   mainWidget->setStretchFactor(0, 1);
@@ -143,10 +147,11 @@ void KrigingResultWindow::buildInterface()
 
   // first tab : METAMODEL GRAPH --------------------------------
   QWidget * tab = new QWidget;
-  QVBoxLayout * metaModelPlotLayout = new QVBoxLayout(tab);
+  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
   ResizableStackedWidget * plotsStackedWidget = new ResizableStackedWidget;
   connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
+
   for (UnsignedInteger i=0; i<outputDimension; ++i)
   {
     MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(i,
@@ -159,20 +164,98 @@ void KrigingResultWindow::buildInterface()
     connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
     connect(this, SIGNAL(stateChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
   }
-  metaModelPlotLayout->addWidget(plotsStackedWidget);
+  tabLayout->addWidget(plotsStackedWidget);
 
   tabWidget_->addTab(tab, tr("Metamodel"));
 
-  // second tab : GRAPH METAMODEL LOO --------------------------------
+  // second tab : METAMODEL RESULT --------------------------------
+  tab = new QWidget;
+  tabLayout = new QVBoxLayout(tab);
+
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+  tabLayout->setSizeConstraint(QLayout::SetFixedSize);
+
+  if (optimizeParameters_) // covariance model parameters has been optimized
+  {
+    // covariance model optimized parameters
+    QGroupBox * parametersGroupBox = new QGroupBox(tr("Optimized covariance model parameters"));
+    QVBoxLayout * parametersGroupBoxLayout = new QVBoxLayout(parametersGroupBox);
+
+    ResizableStackedWidget * parametersStackedWidget = new ResizableStackedWidget;
+    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), parametersStackedWidget, SLOT(setCurrentIndex(int)));
+
+    QStringList namesList;
+    namesList << tr("Scale");
+    namesList << tr("Amplitude");
+
+    for (UnsignedInteger i=0; i<outputDimension; ++i)
+    {
+      QStringList valuesList;
+      // scale
+      QString scaleText;
+      for (UnsignedInteger j=0; j<result_.getKrigingResultCollection()[i].getCovarianceModel().getScale().getSize(); ++j)
+      {
+        scaleText += QString::number(result_.getKrigingResultCollection()[i].getCovarianceModel().getScale()[j]);
+        if (j < result_.getKrigingResultCollection()[i].getCovarianceModel().getScale().getSize()-1)
+          scaleText += "; ";
+      }
+      valuesList << scaleText;
+
+      // amplitude
+      QString amplitudeText;
+      for (UnsignedInteger j=0; j<result_.getKrigingResultCollection()[i].getCovarianceModel().getAmplitude().getSize(); ++j)
+      {
+        amplitudeText += QString::number(result_.getKrigingResultCollection()[i].getCovarianceModel().getAmplitude()[j]);
+        if (j < result_.getKrigingResultCollection()[i].getCovarianceModel().getAmplitude().getSize()-1)
+          amplitudeText += "; ";
+      }
+      valuesList << amplitudeText;
+
+      ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
+      parametersStackedWidget->addWidget(table);
+    }
+    parametersGroupBoxLayout->addWidget(parametersStackedWidget);
+    tabLayout->addWidget(parametersGroupBox);
+  }
+
+  // trend coefficients
+  QGroupBox * trendGroupBox = new QGroupBox(tr("Trend"));
+  QVBoxLayout * trendGroupBoxLayout = new QVBoxLayout(trendGroupBox);
+
+  ResizableStackedWidget * trendStackedWidget = new ResizableStackedWidget;
+  connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), trendStackedWidget, SLOT(setCurrentIndex(int)));
+
+  for (UnsignedInteger i=0; i<outputDimension; ++i)
+  {
+    QString trendCoefText;
+    for (UnsignedInteger j=0; j<result_.getKrigingResultCollection()[i].getTrendCoefficients()[0].getSize(); ++j)
+    {
+      trendCoefText += QString::number(result_.getKrigingResultCollection()[i].getTrendCoefficients()[0][j]);
+      if (j < result_.getKrigingResultCollection()[i].getTrendCoefficients()[0].getSize()-1)
+        trendCoefText += "; ";
+    }
+    ParametersTableView * trendCoefTable = new ParametersTableView(QStringList() << tr("Trend coefficients"), QStringList() << trendCoefText, true, true);
+    trendStackedWidget->addWidget(trendCoefTable);
+  }
+
+  trendGroupBoxLayout->addWidget(trendStackedWidget);
+  tabLayout->addWidget(trendGroupBox);
+
+  scrollArea->setWidget(tab);
+  tabWidget_->addTab(scrollArea, tr("Results"));
+
+  // third tab : GRAPH METAMODEL LOO --------------------------------
   if (result_.getMetaModelOutputSampleLeaveOneOut().getSize())
   {
     QTabWidget * validationTabWidget = new QTabWidget;
 
     tab = new QWidget;
-    metaModelPlotLayout = new QVBoxLayout(tab);
+    tabLayout = new QVBoxLayout(tab);
 
     ResizableStackedWidget * plotsLOOStackedWidget = new ResizableStackedWidget;
     connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), plotsLOOStackedWidget, SLOT(setCurrentIndex(int)));
+
     for (UnsignedInteger i=0; i<outputDimension; ++i)
     {
       MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(i,
@@ -183,18 +266,18 @@ void KrigingResultWindow::buildInterface()
                                                                                    tr("Q2")
                                                                                   );
       plotsLOOStackedWidget->addWidget(validationWidget);
-  
+
       connect(validationWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
       connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
       connect(this, SIGNAL(stateChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
     }
-    metaModelPlotLayout->addWidget(plotsLOOStackedWidget);
+    tabLayout->addWidget(plotsLOOStackedWidget);
 
     validationTabWidget->addTab(plotsLOOStackedWidget, tr("Leave-one-out"));
     tabWidget_->addTab(validationTabWidget, tr("Validation"));
   }
 
-  // third tab : PARAMETERS --------------------------------
+  // fourth tab : PARAMETERS --------------------------------
   if (parametersWidget_)
     tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 

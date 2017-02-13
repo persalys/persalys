@@ -46,6 +46,7 @@ signals:
 
 private:
   KrigingAnalysisResult result_;
+  bool optimizeParameters_;
   QListWidget * outputsListWidget_;
   QTabWidget * tabWidget_;
 };
