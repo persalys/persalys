@@ -60,7 +60,7 @@ void InferenceResultWindow::setParameters(const Analysis& analysis)
   valuesList << tr("Kolmogorov Smirnov");
   valuesList << QString::number(inferenceAnalysis->getLevel());
 
-  parametersWidget_ = new ParametersWidget(tr("Inference analysis parameters:"), namesList, valuesList);
+  parametersWidget_ = new ParametersWidget(tr("Inference analysis parameters"), namesList, valuesList);
 }
 
 
@@ -82,7 +82,6 @@ void InferenceResultWindow::buildInterface()
   listVariables->addItems(variablesNames);
   connect(listVariables, SIGNAL(currentTextChanged(QString)), this, SLOT(updateInferenceResultWidget(QString)));
   variablesLayoutGroupBox->addWidget(listVariables);
-  variablesLayoutGroupBox->addStretch();
 
   mainWidget->addWidget(variablesGroupBox);
   mainWidget->setStretchFactor(0, 1);
