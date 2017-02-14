@@ -28,6 +28,8 @@
 #include "otgui/DoubleSpinBox.hxx"
 
 #include <QComboBox>
+#include <QListWidget>
+#include <QGroupBox>
 
 namespace OTGUI {
 class OTGUI_API DataAnalysisWindow : public ResultWindow
@@ -51,8 +53,11 @@ public slots:
   void updateSpinBoxes(int indexOutput=0);
   void probaValueChanged(double proba);
   void quantileValueChanged(double quantile);
+  void scatterPlotsTabWidgetIndexChanged();
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+signals:
+  void stateChanged(int);
 
 protected:
   DataAnalysisResult result_;
@@ -64,16 +69,17 @@ protected:
   QStringList outAxisTitles_;
   bool isConfidenceIntervalRequired_;
   double levelConfidenceInterval_;
+  bool showTable_;
+private:
+  QGroupBox * variablesGroupBox_;
+  QListWidget * variablesListWidget_;
   QTabWidget * tabWidget_;
-  QComboBox * variablesComboBox_;
-  GraphConfigurationWidget * pdf_cdfPlotsConfigurationWidget_;
-  GraphConfigurationWidget * boxPlotsConfigurationWidget_;
+  QTabWidget * scatterPlotsTabWidget_;
   GraphConfigurationWidget * scatterPlotsConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
   DoubleSpinBox * probaSpinBox_;
   DoubleSpinBox * quantileSpinBox_;
-  int tabOffset_;
 };
 }
 #endif

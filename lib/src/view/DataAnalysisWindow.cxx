@@ -24,10 +24,13 @@
 #include "otgui/DesignOfExperimentWindow.hxx"
 #include "otgui/MinMaxTableGroupBox.hxx"
 #include "otgui/MomentsEstimatesTableGroupBox.hxx"
+#include "otgui/PlotWidgetWithGraphSetting.hxx"
+#include "otgui/ParametersTableView.hxx"
 
 #include <QVBoxLayout>
 #include <QScrollArea>
 #include <QHeaderView>
+#include <QSplitter>
 
 using namespace OT;
 
@@ -37,23 +40,23 @@ DataAnalysisWindow::DataAnalysisWindow(AnalysisItem * item)
   : ResultWindow(item)
   , result_()
   , resultsSampleIsValid_(true)
-  , sampleSizeTitle_(tr("Sample size:"))
+  , sampleSizeTitle_(tr("Sample size"))
   , stochInputNames_(QStringList())
   , inAxisTitles_(QStringList())
   , outputNames_(QStringList())
   , outAxisTitles_(QStringList())
   , isConfidenceIntervalRequired_(false)
   , levelConfidenceInterval_(0.)
+  , showTable_(false)
+  , variablesGroupBox_(0)
+  , variablesListWidget_(0)
   , tabWidget_(new QTabWidget)
-  , variablesComboBox_(0)
-  , pdf_cdfPlotsConfigurationWidget_(0)
-  , boxPlotsConfigurationWidget_(0)
+  , scatterPlotsTabWidget_(0)
   , scatterPlotsConfigurationWidget_(0)
   , plotMatrixConfigurationWidget_(0)
   , plotMatrix_X_X_ConfigurationWidget_(0)
   , probaSpinBox_(0)
   , quantileSpinBox_(0)
-  , tabOffset_(0)
 {
 }
 
@@ -62,23 +65,36 @@ DataAnalysisWindow::~DataAnalysisWindow()
 {
   delete plotMatrixConfigurationWidget_;
   delete plotMatrix_X_X_ConfigurationWidget_;
-  delete pdf_cdfPlotsConfigurationWidget_;
-  delete boxPlotsConfigurationWidget_;
   delete scatterPlotsConfigurationWidget_;
   plotMatrixConfigurationWidget_ = 0;
   plotMatrix_X_X_ConfigurationWidget_ = 0;
-  pdf_cdfPlotsConfigurationWidget_ = 0;
-  boxPlotsConfigurationWidget_ = 0;
   scatterPlotsConfigurationWidget_ = 0;
 }
 
 
 void DataAnalysisWindow::buildInterface()
 {
-  // first tab: Table --------------------------------
-  // table if MonteCarlo result
+  // get output info
+  QStringList variablesNames = stochInputNames_ + outputNames_;
 
-  // second tab: Summary -----------------------------
+  // main splitter
+  QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
+
+  // - list outputs
+  variablesGroupBox_ = new QGroupBox(tr("Variables"));
+  QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(variablesGroupBox_);
+
+  variablesListWidget_ = new QListWidget;
+  variablesListWidget_->addItems(variablesNames);
+  variablesListWidget_->setCurrentRow(0);
+  connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), this, SLOT(updateSpinBoxes(int)));
+  outputsLayoutGroupBox->addWidget(variablesListWidget_);
+
+  mainWidget->addWidget(variablesGroupBox_);
+  variablesGroupBox_->hide();
+  mainWidget->setStretchFactor(0, 1);
+
+  // first tab: Summary -----------------------------
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
@@ -89,44 +105,41 @@ void DataAnalysisWindow::buildInterface()
     scrollArea->setWidgetResizable(true);
     tabLayout->setSizeConstraint(QLayout::SetFixedSize);
 
-    // -- output name --
-    QHBoxLayout * headLayout = new QHBoxLayout;
-    QLabel * outputName = new QLabel(tr("Variable"));
-    headLayout->addWidget(outputName);
-    variablesComboBox_ = new QComboBox;
-    variablesComboBox_->addItems(stochInputNames_ + outputNames_);
-    connect(variablesComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSpinBoxes(int)));
-    headLayout->addWidget(variablesComboBox_);
-    headLayout->addStretch();
-    tabLayout->addLayout(headLayout);
-
     // -- results --
     QVBoxLayout * vbox = new QVBoxLayout;
 
+    // stop criteria
+    QString groupBoxTitle = (result_.getElapsedTime() > 0.)? tr("Stop criteria") : tr("");
+    QGroupBox * parametersGroupBox = new QGroupBox(groupBoxTitle);
+    QVBoxLayout * parametersGroupBoxLayout = new QVBoxLayout(parametersGroupBox);
+
+    QStringList namesList;
     // elapsed time
     if (result_.getElapsedTime() > 0.)
-    {
-      QLabel * elapsedTimeLabel = new QLabel(tr("Elapsed time:") + " " + QString::number(result_.getElapsedTime()) + " s");
-      elapsedTimeLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
-      tabLayout->addWidget(elapsedTimeLabel);
-    }
-
+      namesList << tr("Elapsed time");
     // sample size
-    QLabel * nbSimuLabel = new QLabel(sampleSizeTitle_ + " " + QString::number(result_.getInputSample().getSize()) + "\n");
-    nbSimuLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
-    vbox->addWidget(nbSimuLabel);
+    namesList << sampleSizeTitle_;
+
+    QStringList valuesList;
+    if (result_.getElapsedTime() > 0.)
+      valuesList << QString::number(result_.getElapsedTime()) + " s";
+    valuesList << QString::number(result_.getInputSample().getSize());
+
+    ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
+    parametersGroupBoxLayout->addWidget(table);
+    vbox->addWidget(parametersGroupBox);
 
     // min/max table
     MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(result_, false);
     vbox->addWidget(minMaxTableGroupBox);
-    connect(variablesComboBox_, SIGNAL(currentIndexChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
+    connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
 
     // moments estimation
     try
     {
       MomentsEstimatesTableGroupBox * estimatesGroupBox = new MomentsEstimatesTableGroupBox(result_, isConfidenceIntervalRequired_, levelConfidenceInterval_);
       vbox->addWidget(estimatesGroupBox);
-      connect(variablesComboBox_, SIGNAL(currentIndexChanged(int)), estimatesGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
+      connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), estimatesGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
     }
     catch (std::exception & ex)
     {
@@ -176,7 +189,7 @@ void DataAnalysisWindow::buildInterface()
     tabWidget_->addTab(tab, tr("Summary"));
   }
 
-  // third tab: PDF/CDF ------------------------------
+  // second tab: PDF/CDF ------------------------------
 
   // if the sample is valid:
   if (resultsSampleIsValid_)
@@ -195,7 +208,7 @@ void DataAnalysisWindow::buildInterface()
   }
   tabWidget_->addTab(tab, tr("PDF/CDF"));
 
-  // fourth tab: box plots ---------------------------
+  // third tab: box plots ---------------------------
 
   // if the sample is valid:
   if (resultsSampleIsValid_)
@@ -214,7 +227,9 @@ void DataAnalysisWindow::buildInterface()
   }
   tabWidget_->addTab(tab, tr("Box plots"));
 
-  // fifth tab: scatter plots ------------------------
+  // fourth tab: scatter plots ------------------------
+
+  scatterPlotsTabWidget_ = new QTabWidget;
 
   // if the sample is valid:
   if (resultsSampleIsValid_)
@@ -231,16 +246,16 @@ void DataAnalysisWindow::buildInterface()
     tabLayout->addWidget(summaryErrorMessage);
     tabLayout->addStretch();
   }
-  tabWidget_->addTab(tab, tr("Scatter plots"));
+  scatterPlotsTabWidget_->addTab(tab, tr("Scatter plots"));
 
-  // sixth tab: plot matrix X-X ----------------------
+  // fourth tab: plot matrix X-X ----------------------
 
   tab = new PlotMatrixWidget(result_.getInputSample(), result_.getInputSample());
   plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
-  tabWidget_->addTab(tab, tr("Plot matrix X-X"));
+  scatterPlotsTabWidget_->addTab(tab, tr("Plot matrix X-X"));
 
-  // seventh tab: plot matrix Y-X ----------------------
+  // fourth tab: plot matrix Y-X ----------------------
 
   if (result_.getOutputSample().getSize())
   {
@@ -260,33 +275,52 @@ void DataAnalysisWindow::buildInterface()
       tabLayout->addWidget(summaryErrorMessage);
       tabLayout->addStretch();
     }
-    tabWidget_->addTab(tab, tr("Plot matrix Y-X"));
+    scatterPlotsTabWidget_->addTab(tab, tr("Plot matrix Y-X"));
+  }
+  connect(scatterPlotsTabWidget_, SIGNAL(currentChanged(int)), this, SLOT(scatterPlotsTabWidgetIndexChanged()));
+  tabWidget_->addTab(scatterPlotsTabWidget_, tr("Scatter plots"));
+
+  // fifth tab: Table --------------------------------
+  // table if MonteCarlo result
+  if (showTable_)
+  {
+    QWidget * tab = new QWidget;
+    QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+    ExportableTableView * tabResultView = new ExportableTableView;
+    SampleTableModel * tabResultModel = new SampleTableModel(result_.getSample(), tabResultView);
+    tabResultView->setModel(tabResultModel);
+    tabLayout->addWidget(tabResultView);
+
+    tabWidget_->addTab(tab, tr("Table"));
   }
 
-  // eighth tab --------------------------------
+  // sixth tab --------------------------------
   if (parametersWidget_)
     tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 
   //
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
-  setWidget(tabWidget_);
+
+  mainWidget->addWidget(tabWidget_);
+  mainWidget->setStretchFactor(1, 10);
+
+  setWidget(mainWidget);
 }
 
 
 QWidget* DataAnalysisWindow::getPDF_CDFWidget()
 {
-  QWidget * tab = new QWidget;
-  QVBoxLayout * plotLayout = new QVBoxLayout(tab);
-  ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
+  ResizableStackedWidget * tabStackedWidget = new ResizableStackedWidget;
+  connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), tabStackedWidget, SLOT(setCurrentIndex(int)));
 
-  QVector<PlotWidget*> listPlotWidgets;
   const QStringList variablesNames = stochInputNames_ + outputNames_;
   const QStringList variablesAxisTitles = inAxisTitles_ + outAxisTitles_;
 
   for (int i=0; i<variablesNames.size(); ++i)
   {
-    PlotWidget * plot = new PlotWidget("distributionPDF");
+    QVector<PlotWidget*> listPlotWidgets;
 
+    PlotWidget * plot = new PlotWidget("distributionPDF");
     // PDF
     plot->plotHistogram(result_.getSample().getMarginal(i));
     if (result_.getPDF()[i].getSize())
@@ -295,7 +329,6 @@ QWidget* DataAnalysisWindow::getPDF_CDFWidget()
     plot->setAxisTitle(QwtPlot::xBottom, variablesAxisTitles[i]);
     plot->setAxisTitle(QwtPlot::yLeft, tr("Density"));
 
-    stackedWidget->addWidget(plot);
     listPlotWidgets.append(plot);
 
     // CDF
@@ -307,30 +340,34 @@ QWidget* DataAnalysisWindow::getPDF_CDFWidget()
     plot->setAxisTitle(QwtPlot::xBottom, variablesAxisTitles[i]);
     plot->setAxisTitle(QwtPlot::yLeft, tr("CDF"));
 
-    stackedWidget->addWidget(plot);
     listPlotWidgets.append(plot);
+
+    // PlotWidgetWithGraphSetting
+    PlotWidgetWithGraphSetting * plotWidget = new PlotWidgetWithGraphSetting(i, listPlotWidgets, GraphConfigurationWidget::PDFResult);
+
+    connect(plotWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
+    connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), plotWidget, SLOT(showHideGraphConfigurationWidget(int)));
+    connect(this, SIGNAL(stateChanged(int)), plotWidget, SLOT(showHideGraphConfigurationWidget(int)));
+
+    tabStackedWidget->addWidget(plotWidget);
   }
-  plotLayout->addWidget(stackedWidget);
 
-  pdf_cdfPlotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, QStringList(), variablesNames, GraphConfigurationWidget::PDFResult);
-  connect(pdf_cdfPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
-
-  return tab;
+  return tabStackedWidget;
 }
 
 
 QWidget* DataAnalysisWindow::getBoxPlotWidget()
 {
-  QWidget * tab = new QWidget;
-  QVBoxLayout * boxPlotLayout = new QVBoxLayout(tab);
-  ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
+  ResizableStackedWidget * tabStackedWidget = new ResizableStackedWidget;
+  connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), tabStackedWidget, SLOT(setCurrentIndex(int)));
 
-  QVector<PlotWidget*> listBoxPlotWidgets;
   const QStringList variablesNames = stochInputNames_ + outputNames_;
   const QStringList variablesAxisTitles = inAxisTitles_ + outAxisTitles_;
 
   for (int i=0; i<variablesNames.size(); ++i)
   {
+    QVector<PlotWidget*> listBoxPlotWidgets;
+
     PlotWidget * plot = new PlotWidget("boxplot");
 
     const double median = result_.getMedian()[i][0];
@@ -340,15 +377,18 @@ QWidget* DataAnalysisWindow::getBoxPlotWidget()
     plot->setTitle(tr("Box plot:") + " " + variablesNames[i]);
     plot->setAxisTitle(QwtPlot::yLeft, variablesAxisTitles[i]);
 
-    stackedWidget->addWidget(plot);
     listBoxPlotWidgets.append(plot);
+
+    // PlotWidgetWithGraphSetting
+    PlotWidgetWithGraphSetting * plotWidget = new PlotWidgetWithGraphSetting(i, listBoxPlotWidgets, GraphConfigurationWidget::NoType);
+    connect(plotWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
+    connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), plotWidget, SLOT(showHideGraphConfigurationWidget(int)));
+    connect(this, SIGNAL(stateChanged(int)), plotWidget, SLOT(showHideGraphConfigurationWidget(int)));
+
+    tabStackedWidget->addWidget(plotWidget);
   }
-  boxPlotLayout->addWidget(stackedWidget);
 
-  boxPlotsConfigurationWidget_ = new GraphConfigurationWidget(listBoxPlotWidgets, QStringList(), variablesNames);
-  connect(boxPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
-
-  return tab;
+  return tabStackedWidget;
 }
 
 
@@ -358,10 +398,13 @@ QWidget* DataAnalysisWindow::getScatterPlotsWidget()
   QVBoxLayout * scatterPlotLayout = new QVBoxLayout(tab);
 
   QVector<PlotWidget*> listScatterPlotWidgets =
-    DesignOfExperimentWindow::GetListScatterPlots(result_.getInputSample(), result_.getOutputSample(),
+    DesignOfExperimentWindow::GetListScatterPlots(result_.getInputSample(),
+                                                  result_.getOutputSample(),
                                                   NumericalSample(),
-                                                  stochInputNames_, inAxisTitles_,
-                                                  outputNames_, outAxisTitles_);
+                                                  stochInputNames_,
+                                                  inAxisTitles_,
+                                                  outputNames_,
+                                                  outAxisTitles_);
 
   ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
   for (int i=0; i<listScatterPlotWidgets.size(); ++i)
@@ -394,7 +437,7 @@ void DataAnalysisWindow::updateSpinBoxes(int indexOutput)
 void DataAnalysisWindow::probaValueChanged(double proba)
 {
   SignalBlocker blocker(quantileSpinBox_);
-  quantileSpinBox_->setValue(result_.getSample().getMarginal(variablesComboBox_->currentIndex()).computeQuantile(proba)[0]);
+  quantileSpinBox_->setValue(result_.getSample().getMarginal(variablesListWidget_->currentRow()).computeQuantile(proba)[0]);
 }
 
 
@@ -405,47 +448,55 @@ void DataAnalysisWindow::quantileValueChanged(double quantile)
   const double p = 1.0 / double(result_.getSample().getSize());
 
   for (UnsignedInteger j=0; j<result_.getSample().getSize(); ++j)
-    if (result_.getSample()[j][variablesComboBox_->currentIndex()] < quantile)
+    if (result_.getSample()[j][variablesListWidget_->currentRow()] < quantile)
       cdf += p;
 
   probaSpinBox_->setValue(cdf);
 }
 
 
+void DataAnalysisWindow::scatterPlotsTabWidgetIndexChanged()
+{
+  showHideGraphConfigurationWidget(tabWidget_->currentIndex());
+}
+
+
 void DataAnalysisWindow::showHideGraphConfigurationWidget(int indexTab)
 {
-  switch (indexTab-tabOffset_)
+  switch (indexTab)
   {
     // if a plotWidget is visible
     case 1: // PDF-CDF graph
-      if (pdf_cdfPlotsConfigurationWidget_)
-        if (!pdf_cdfPlotsConfigurationWidget_->isVisible())
-          emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
-      break;
     case 2: // box plot
-      if (boxPlotsConfigurationWidget_)
-        if (!boxPlotsConfigurationWidget_->isVisible())
-          emit graphWindowActivated(boxPlotsConfigurationWidget_);
+      emit stateChanged(variablesListWidget_->currentRow());
+      variablesGroupBox_->show();
       break;
-    case 3: // scatter plot
-      if (scatterPlotsConfigurationWidget_)
-        if (!scatterPlotsConfigurationWidget_->isVisible())
-          emit graphWindowActivated(scatterPlotsConfigurationWidget_);
+    case 3: // scatter plots
+      if (scatterPlotsTabWidget_->currentIndex() == 0) // scatter plots
+      {
+        if (scatterPlotsConfigurationWidget_)
+          if (!scatterPlotsConfigurationWidget_->isVisible())
+            emit graphWindowActivated(scatterPlotsConfigurationWidget_);
+      }
+      else if (scatterPlotsTabWidget_->currentIndex() == 1) // plot matrix X-X
+      {
+        if (plotMatrix_X_X_ConfigurationWidget_)
+          if (!plotMatrix_X_X_ConfigurationWidget_->isVisible())
+            emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
+      }
+      else if (scatterPlotsTabWidget_->currentIndex() == 2) // plot matrix Y-X
+      {
+        if (plotMatrixConfigurationWidget_)
+          if (!plotMatrixConfigurationWidget_->isVisible())
+            emit graphWindowActivated(plotMatrixConfigurationWidget_);
+      }
+      variablesGroupBox_->hide();
       break;
-    case 4: // plot matrix X-X
-      if (plotMatrix_X_X_ConfigurationWidget_)
-        if (!plotMatrix_X_X_ConfigurationWidget_->isVisible())
-          emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
-      break;
-    case 5: // plot matrix Y-X
-      if (plotMatrixConfigurationWidget_)
-        if (!plotMatrixConfigurationWidget_->isVisible())
-          emit graphWindowActivated(plotMatrixConfigurationWidget_);
-      break;
-    // if no plotWidget is visible
+    // if no plotWidget is visible. Summary; Table; Parameters
     default:
     {
       emit graphWindowDeactivated();
+      variablesGroupBox_->show();
       break;
     }
   }
