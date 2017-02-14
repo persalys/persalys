@@ -40,6 +40,7 @@ ot_install_header_file ( CheckableHeaderView.hxx )
 ot_install_header_file ( ResizableStackedWidget.hxx )
 ot_install_header_file ( RadioButtonDelegate.hxx )
 ot_install_header_file ( NoWheelEventComboBox.hxx )
+ot_install_header_file ( ParametersTableView.hxx )
 
 qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
               otgui/ListWidgetWithCheckBox.hxx
@@ -60,6 +61,7 @@ qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
               otgui/ResizableStackedWidget.hxx
               otgui/TitledComboBox.hxx
               otgui/RadioButtonDelegate.hxx
+              otgui/ParametersTableView.hxx
              )
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
