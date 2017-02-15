@@ -140,7 +140,7 @@ void SobolResultWindow::buildInterface()
     vbox->addWidget(warningLabel);
   }
   scrollArea->setWidget(widget);
-  tabWidget_->addTab(scrollArea, tr("Result"));
+  tabWidget_->addTab(scrollArea, tr("Indices"));
 
   // second tab --------------------------------
   if (result_.getElapsedTime() > 0. && result_.getCallsNumber())
