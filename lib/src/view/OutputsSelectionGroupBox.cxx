@@ -20,8 +20,9 @@
  */
 #include "otgui/OutputsSelectionGroupBox.hxx"
 
+#include "otgui/NoWheelEventComboBox.hxx"
+
 #include <QVBoxLayout>
-#include <QComboBox>
 
 using namespace OT;
 
@@ -44,7 +45,8 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(const Description& outputsNam
   if (!variablesStringList.size())
     variablesStringList = outputsList;
 
-  QComboBox * outputsComboBox = new QComboBox;
+  // custom combobox to choose output to analyse
+  NoWheelEventComboBox * outputsComboBox = new NoWheelEventComboBox;
   outputsListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select outputs") + " --", outputsList, variablesStringList, this);
   connect(outputsListWidget_, SIGNAL(checkedItemsChanged(QStringList)), this, SIGNAL(outputsSelectionChanged(QStringList)));
   outputsComboBox->setModel(outputsListWidget_->model());

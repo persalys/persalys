@@ -147,6 +147,11 @@ void CollapsibleGroupBox::paintEvent(QPaintEvent *event)
 {
   QPainter p(this);
 
+  // bold the title
+  QFont font(p.font());
+  font.setBold(true);
+  p.setFont(font);
+
   QStyleOptionButton baseOption;
   baseOption.initFrom(this);
   baseOption.rect = QRect(0, 0, width(), d->headerSize.height());
@@ -161,13 +166,22 @@ void CollapsibleGroupBox::paintEvent(QPaintEvent *event)
   else
     element = isLeftToRight() ? QStyle::PE_IndicatorArrowRight : QStyle::PE_IndicatorArrowLeft;
 
-  QStyleOptionButton indicatorOption = baseOption;
-  indicatorOption.rect = style()->subElementRect(QStyle::SE_CheckBoxIndicator, &indicatorOption, this);
-  style()->drawPrimitive(element, &indicatorOption, &p, this);
-
+  // -- label option
   QStyleOptionButton labelOption = baseOption;
   labelOption.rect = style()->subElementRect(QStyle::SE_CheckBoxContents, &labelOption, this);
+  // move the label at x=0
+  labelOption.rect.moveLeft(0);
   style()->drawControl(QStyle::CE_CheckBoxLabel, &labelOption, &p, this);
+
+  // -- indicator option
+  QStyleOptionButton indicatorOption = baseOption;
+  indicatorOption.rect = style()->subElementRect(QStyle::SE_CheckBoxIndicator, &indicatorOption, this);
+
+  // move the arrow after the text
+  const int textWidth = p.boundingRect(labelOption.rect, 0, d->title).width();
+  indicatorOption.rect.moveRight(textWidth + indicatorOption.rect.width()); // move arrow after text
+
+  style()->drawPrimitive(element, &indicatorOption, &p, this);
 
   Q_UNUSED(event)
 }
@@ -187,6 +201,7 @@ QSize CollapsibleGroupBox::minimumSizeHint() const
   int minimumWidth = qMax(d->contentSize().width(), d->headerSize.width());
   return QSize(minimumWidth, d->headerSize.height());
 }
+
 
 bool CollapsibleGroupBox::event(QEvent *event)
 {
@@ -298,7 +313,7 @@ void CollapsibleGroupBoxPrivate::recalculateHeaderSize()
                                     title).size();
 
   headerSize = q->style()->sizeFromContents(QStyle::CT_CheckBox, &option, textSize, q);
-  q->setContentsMargins(q->style()->pixelMetric(QStyle::PM_IndicatorWidth), headerSize.height(), 0, 0);
+  q->setContentsMargins(q->style()->pixelMetric(QStyle::PM_LayoutLeftMargin), headerSize.height(), 0, 0);
 }
 
 
