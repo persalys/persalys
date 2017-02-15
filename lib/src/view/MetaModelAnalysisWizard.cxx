@@ -32,6 +32,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QToolButton>
+#include <QScrollArea>
 
 using namespace OT;
 
@@ -89,7 +90,13 @@ void MetaModelAnalysisWizard::buildInterface()
   setWindowTitle(tr("Metamodel"));
 
   QWizardPage * page = new QWizardPage(this);
-  QVBoxLayout * mainLayout = new QVBoxLayout(page);
+  QVBoxLayout * pageLayout = new QVBoxLayout(page);
+
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+
+  QWidget * mainWidget = new QWidget;
+  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
 
   // output selection
   outputsGroupBox_ = new OutputsSelectionGroupBox(chaos_.getDesignOfExperiment().getOutputSample().getDescription(), chaos_.getInterestVariables(), this);
@@ -139,13 +146,13 @@ void MetaModelAnalysisWizard::buildInterface()
   QGridLayout * krigingParametersLayout = new QGridLayout(krigingParametersBox_);
 
   // correlation model
-  krigingParametersLayout->addWidget(new QLabel(tr("Correlation model")), 0, 0, 1, 2);
+  krigingParametersLayout->addWidget(new QLabel(tr("Covariance model")), 0, 0, 1, 2);
   QComboBox * krigingCorrelationModelComboBox = new QComboBox;
   krigingCorrelationModelComboBox->addItems(QStringList() << tr("Squared exponential")
                                                           << tr("Absolute exponential")
                                                           << tr("Generalized exponential")
                                                           << QString::fromUtf8("Matérn"));
-  krigingParametersLayout->addWidget(krigingCorrelationModelComboBox, 0, 2, 1, 2);
+  krigingParametersLayout->addWidget(krigingCorrelationModelComboBox, 0, 1, 1, 2);
   krigingCorrelationModelComboBox->setCurrentIndex(0);
   if (kriging_.getCovarianceModel().getImplementation()->getClassName() == "AbsoluteExponential")
     krigingCorrelationModelComboBox->setCurrentIndex(1);
@@ -155,36 +162,17 @@ void MetaModelAnalysisWizard::buildInterface()
     krigingCorrelationModelComboBox->setCurrentIndex(3);
   connect(krigingCorrelationModelComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCovarianceModel(int)));
 
-  // scale
-  krigingParametersLayout->addWidget(new QLabel(tr("Scale")), 1, 1);
-
-  scaleLineEdit_ = new QLineEdit;
-  scaleLineEdit_->setReadOnly(true);
-  krigingParametersLayout->addWidget(scaleLineEdit_, 1, 2);
-  updateScaleLineEdit();
-
-  QToolButton * editButton = new QToolButton;
-  editButton->setText("...");
-  krigingParametersLayout->addWidget(editButton, 1, 3);
-  connect(editButton, SIGNAL(pressed()), this, SLOT(openScaleDefinitionWizard()));
-
-  // amplitude
-  // same amplitude for all the outputs
-  krigingParametersLayout->addWidget(new QLabel(tr("Amplitude")), 2, 1);
-  amplitudeSpinBox_ = new DoubleSpinBox;
-  amplitudeSpinBox_->setMinimum(1e-12);
-  krigingParametersLayout->addWidget(amplitudeSpinBox_, 2, 2, 1, 2);
-  amplitudeSpinBox_->setValue(kriging_.getCovarianceModel().getAmplitude()[0]);
-  connect(amplitudeSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(updateAmplitude(double)));
-
   // Matern parameter nu
+  //  -label
   maternParameterNuLabel_ = new QLabel(tr("nu"));
   maternParameterNuLabel_->setVisible(krigingCorrelationModelComboBox->currentIndex() == 3);
-  krigingParametersLayout->addWidget(maternParameterNuLabel_, 3, 1);
+  krigingParametersLayout->addWidget(maternParameterNuLabel_, 1, 1);
+
+  //  -spinbox
   maternParameterNuSpinBox_ = new DoubleSpinBox;
-  maternParameterNuSpinBox_->setMinimum(0.0);
+  maternParameterNuSpinBox_->setMinimum(1e-12);
   maternParameterNuSpinBox_->setVisible(krigingCorrelationModelComboBox->currentIndex() == 3);
-  krigingParametersLayout->addWidget(maternParameterNuSpinBox_, 3, 2, 1, 2);
+  krigingParametersLayout->addWidget(maternParameterNuSpinBox_, 1, 2);
   maternParameterNuSpinBox_->setValue(ResourceMap::GetAsNumericalScalar("MaternModel-DefaultNu"));
   if (kriging_.getCovarianceModel().getImplementation()->getClassName() == "MaternModel")
   {
@@ -194,13 +182,16 @@ void MetaModelAnalysisWizard::buildInterface()
   connect(maternParameterNuSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(updateMaternParameterNu(double)));
 
   // GeneralizedExponential parameter P
+  //  -label
   generalizedModelParameterPLabel_ = new QLabel(tr("p"));
   generalizedModelParameterPLabel_->setVisible(krigingCorrelationModelComboBox->currentIndex() == 2);
-  krigingParametersLayout->addWidget(generalizedModelParameterPLabel_, 4, 1);
+  krigingParametersLayout->addWidget(generalizedModelParameterPLabel_, 2, 1);
+
+  //  -spinbox
   generalizedModelParameterPSpinBox_ = new DoubleSpinBox;
   generalizedModelParameterPSpinBox_->setMinimum(1e-12); // TODO setMaximum with the next OT version
   generalizedModelParameterPSpinBox_->setVisible(krigingCorrelationModelComboBox->currentIndex() == 2);
-  krigingParametersLayout->addWidget(generalizedModelParameterPSpinBox_, 4, 2, 1, 2);
+  krigingParametersLayout->addWidget(generalizedModelParameterPSpinBox_, 2, 2);
   generalizedModelParameterPSpinBox_->setValue(1.0);
   if (kriging_.getCovarianceModel().getImplementation()->getClassName() == "GeneralizedExponential")
   {
@@ -210,10 +201,10 @@ void MetaModelAnalysisWizard::buildInterface()
   connect(generalizedModelParameterPSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(updateGeneralizedModelParameterP(double)));
 
   // basis
-  krigingParametersLayout->addWidget(new QLabel(tr("Trend basis")), 5, 0, 1, 2);
+  krigingParametersLayout->addWidget(new QLabel(tr("Trend basis type")), 3, 0);
   QComboBox * krigingBasisTypeComboBox = new QComboBox;
   krigingBasisTypeComboBox->addItems(QStringList() << tr("Constant") << tr("Linear") << tr("Quadratic"));
-  krigingParametersLayout->addWidget(krigingBasisTypeComboBox, 5, 2, 1, 2);
+  krigingParametersLayout->addWidget(krigingBasisTypeComboBox, 3, 1, 1, 2);
   krigingBasisTypeComboBox->setCurrentIndex(0);
   const UnsignedInteger dim = kriging_.getBasis().getDimension();
   if (kriging_.getBasis().getSize() == (dim+1))
@@ -222,6 +213,8 @@ void MetaModelAnalysisWizard::buildInterface()
     krigingBasisTypeComboBox->setCurrentIndex(2);
   connect(krigingBasisTypeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateBasis(int)));
 
+  krigingParametersLayout->setColumnStretch(0, 1);
+  krigingParametersLayout->setColumnStretch(2, 2);
   mainLayout->addWidget(krigingParametersBox_);
 
   // Metamodel validation
@@ -236,6 +229,47 @@ void MetaModelAnalysisWizard::buildInterface()
   connect(leaveOneOutCheckBox, SIGNAL(toggled(bool)), this, SLOT(looValidationChanged(bool)));
   validationLayout->setColumnStretch(2, 1);
   mainLayout->addWidget(validationGroupBox);
+
+
+  // Avanced parameters
+
+  // kriging advanced parameters
+  krigingAdvancedParamGroupBox_ = new CollapsibleGroupBox;
+  krigingAdvancedParamGroupBox_->setTitle(tr("Advanced parameters"));
+  QGridLayout * krigingAdvancedParamGroupBox_Layout = new QGridLayout(krigingAdvancedParamGroupBox_);
+
+  // request parameters optimization
+  QCheckBox * optimizationCheckBox = new QCheckBox(tr("Optimize covariance model parameters"));
+  optimizationCheckBox->setToolTip(tr("Optimize scale and amplitude parameters"));
+  optimizationCheckBox->setChecked(kriging_.getOptimizeParameters());
+  krigingAdvancedParamGroupBox_Layout->addWidget(optimizationCheckBox,  0, 0, 1, 3);
+  connect(optimizationCheckBox, SIGNAL(clicked(bool)), this, SLOT(updateOptimizeParameters(bool)));
+
+  // scale
+  krigingAdvancedParamGroupBox_Layout->addWidget(new QLabel(tr("Scale")), 1, 0);
+
+  scaleLineEdit_ = new QLineEdit;
+  scaleLineEdit_->setReadOnly(true);
+  krigingAdvancedParamGroupBox_Layout->addWidget(scaleLineEdit_, 1, 1);
+  updateScaleLineEdit();
+
+  QToolButton * editButton = new QToolButton;
+  editButton->setText("...");
+  krigingAdvancedParamGroupBox_Layout->addWidget(editButton, 1, 2);
+  connect(editButton, SIGNAL(pressed()), this, SLOT(openScaleDefinitionWizard()));
+
+  // amplitude
+  // same amplitude for all the outputs
+  krigingAdvancedParamGroupBox_Layout->addWidget(new QLabel(tr("Amplitude")), 2, 0);
+
+  amplitudeSpinBox_ = new DoubleSpinBox;
+  amplitudeSpinBox_->setMinimum(1e-12);
+  krigingAdvancedParamGroupBox_Layout->addWidget(amplitudeSpinBox_, 2, 1, 1, 2);
+  amplitudeSpinBox_->setValue(kriging_.getCovarianceModel().getAmplitude()[0]);
+  connect(amplitudeSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(updateAmplitude(double)));
+
+  krigingAdvancedParamGroupBox_->setExpanded(false);
+  mainLayout->addWidget(krigingAdvancedParamGroupBox_);
 
   // functional chaos advanced parameters
   chaosAdvancedParamGroupBox_ = new CollapsibleGroupBox;
@@ -258,7 +292,11 @@ void MetaModelAnalysisWizard::buildInterface()
   mainLayout->addStretch();
   mainLayout->addWidget(errorMessageLabel_);
 
+  // set widgets
   updateMethodWidgets(methodGroup->checkedId());
+
+  scrollArea->setWidget(mainWidget);
+  pageLayout->addWidget(scrollArea);
 
   addPage(page);
 }
@@ -283,6 +321,7 @@ void MetaModelAnalysisWizard::updateMethodWidgets(int id)
   chaosAdvancedParamGroupBox_->setVisible(id == 0);
 
   krigingParametersBox_->setVisible(id == 1);
+  krigingAdvancedParamGroupBox_->setVisible(id == 1);
 }
 
 
@@ -351,6 +390,12 @@ void MetaModelAnalysisWizard::updateCovarianceModel(int modelType)
   generalizedModelParameterPSpinBox_->setVisible(modelType == 2);
   maternParameterNuLabel_->setVisible(modelType == 3);
   maternParameterNuSpinBox_->setVisible(modelType == 3);
+}
+
+
+void MetaModelAnalysisWizard::updateOptimizeParameters(bool optimize)
+{
+  kriging_.setOptimizeParameters(optimize);
 }
 
 

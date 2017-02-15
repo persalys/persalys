@@ -149,12 +149,10 @@ void KrigingResultWindow::buildInterface()
   connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
   for (UnsignedInteger i=0; i<outputDimension; ++i)
   {
-    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSample().getMarginal(i),
-                                                                                 result_.getOutputSample().getMarginal(i),
-                                                                                 result_.getKrigingResultCollection()[i].getResiduals()[0],
-                                                                                 result_.getKrigingResultCollection()[i].getRelativeErrors()[0],
-                                                                                 true,
-                                                                                 i);
+    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(i,
+                                                                                 result_.getMetaModelOutputSample().getMarginal(i),
+                                                                                 result_.getOutputSample().getMarginal(i)
+                                                                                );
 
     plotsStackedWidget->addWidget(validationWidget);
     connect(validationWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
@@ -177,12 +175,13 @@ void KrigingResultWindow::buildInterface()
     connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), plotsLOOStackedWidget, SLOT(setCurrentIndex(int)));
     for (UnsignedInteger i=0; i<outputDimension; ++i)
     {
-      MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSampleLeaveOneOut().getMarginal(i),
+      MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(i,
+                                                                                   result_.getMetaModelOutputSampleLeaveOneOut().getMarginal(i),
                                                                                    result_.getOutputSample().getMarginal(i),
                                                                                    result_.getErrorQ2LeaveOneOut()[i],
                                                                                    result_.getQ2LeaveOneOut()[i],
-                                                                                   false,
-                                                                                   i);
+                                                                                   tr("Q2")
+                                                                                  );
       plotsLOOStackedWidget->addWidget(validationWidget);
   
       connect(validationWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));

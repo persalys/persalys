@@ -101,12 +101,13 @@ void FunctionalChaosResultWindow::buildInterface()
   connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
   for (UnsignedInteger i=0; i<outputDimension; ++i)
   {
-    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSample().getMarginal(i),
+    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(i,
+                                                                                 result_.getMetaModelOutputSample().getMarginal(i),
                                                                                  result_.getOutputSample().getMarginal(i),
                                                                                  result_.getFunctionalChaosResult().getResiduals()[i],
                                                                                  result_.getFunctionalChaosResult().getRelativeErrors()[i],
-                                                                                 true,
-                                                                                 i);
+                                                                                 tr("R2")
+                                                                                );
 
     plotsStackedWidget->addWidget(validationWidget);
     connect(validationWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
@@ -158,12 +159,13 @@ void FunctionalChaosResultWindow::buildInterface()
   connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), sobolStackedWidget, SLOT(setCurrentIndex(int)));
   for (UnsignedInteger i=0; i<outputDimension; ++i)
   {
-    SensitivityResultWidget * sobolResultWidget = new SensitivityResultWidget(result_.getSobolResult().getFirstOrderIndices()[i],
+    SensitivityResultWidget * sobolResultWidget = new SensitivityResultWidget(i,
+                                                                              result_.getSobolResult().getFirstOrderIndices()[i],
                                                                               result_.getSobolResult().getTotalIndices()[i],
                                                                               result_.getSobolResult().getInputNames(),
                                                                               result_.getSobolResult().getOutputNames()[i],
-                                                                              SensitivityResultWidget::Sobol,
-                                                                              i);
+                                                                              SensitivityResultWidget::Sobol
+                                                                             );
     sobolStackedWidget->addWidget(sobolResultWidget);
     connect(sobolResultWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
     connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), sobolResultWidget, SLOT(showHideGraphConfigurationWidget(int)));
@@ -185,12 +187,13 @@ void FunctionalChaosResultWindow::buildInterface()
     connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), plotsLOOStackedWidget, SLOT(setCurrentIndex(int)));
     for (UnsignedInteger i=0; i<outputDimension; ++i)
     {
-      MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSampleLeaveOneOut().getMarginal(i),
+      MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(i,
+                                                                                   result_.getMetaModelOutputSampleLeaveOneOut().getMarginal(i),
                                                                                    result_.getOutputSample().getMarginal(i),
                                                                                    result_.getErrorQ2LeaveOneOut()[i],
                                                                                    result_.getQ2LeaveOneOut()[i],
-                                                                                   false,
-                                                                                   i);
+                                                                                   tr("Q2")
+                                                                                  );
       plotsLOOStackedWidget->addWidget(validationWidget);
   
       connect(validationWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));

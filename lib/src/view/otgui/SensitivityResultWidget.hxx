@@ -42,12 +42,13 @@ class OTGUI_API SensitivityResultWidget : public QSplitter
 public:
   enum Type {Sobol, SRC};
 
-  SensitivityResultWidget(const OT::NumericalPoint& firstIndices,
+  SensitivityResultWidget(const int indexWidget,
+                          const OT::NumericalPoint& firstIndices,
                           const OT::NumericalPoint& totalIndices,
                           const OT::Description& inputNames,
                           const OT::String& outputName,
-                          const Type type,
-                          const int indexWidget)
+                          const Type type
+                         )
     : QSplitter(Qt::Vertical)
     , plot_(0)
     , graphConfigWidget_(0)

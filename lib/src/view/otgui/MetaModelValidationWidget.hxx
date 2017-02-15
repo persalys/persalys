@@ -37,12 +37,12 @@ class OTGUI_API MetaModelValidationWidget : public QWidget
   Q_OBJECT
 
 public:
-  MetaModelValidationWidget(const OT::NumericalSample& metaModelSample,
+  MetaModelValidationWidget(const int indexWidget,
+                            const OT::NumericalSample& metaModelSample,
                             const OT::NumericalSample& outputSample,
-                            const double error,
-                            const double value,
-                            const bool isR2,
-                            const int indexWidget
+                            const double error=-1.0,
+                            const double value=-1.0,
+                            const QString measure=""
                            )
     : QWidget()
     , graphConfigWidget_(0)
@@ -50,22 +50,25 @@ public:
   {
     QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-    // validation table view
-    ResizableTableViewWithoutScrollBar * validationTableView = new ResizableTableViewWithoutScrollBar;
-    validationTableView->horizontalHeader()->hide();
-    validationTableView->verticalHeader()->hide();
-    CustomStandardItemModel * validationTable = new CustomStandardItemModel(2, 2, this);
-    validationTableView->setModel(validationTable);
-    // - vertical header
-    validationTable->setNotEditableHeaderItem(0, 0, tr("Residual"));
-    validationTable->setNotEditableHeaderItem(1, 0, isR2? tr("R2") : tr("Q2"));
+    if (!measure.isEmpty())
+    {
+      // validation table view
+      ResizableTableViewWithoutScrollBar * validationTableView = new ResizableTableViewWithoutScrollBar;
+      validationTableView->horizontalHeader()->hide();
+      validationTableView->verticalHeader()->hide();
+      CustomStandardItemModel * validationTable = new CustomStandardItemModel(2, 2, this);
+      validationTableView->setModel(validationTable);
+      // - vertical header
+      validationTable->setNotEditableHeaderItem(0, 0, tr("Residual"));
+      validationTable->setNotEditableHeaderItem(1, 0, measure);
 
-    // - residual/q2 values
-    validationTable->setNotEditableItem(0, 1, error);
-    validationTable->setNotEditableItem(1, 1, value);
+      // - residual/q2 values
+      validationTable->setNotEditableItem(0, 1, error);
+      validationTable->setNotEditableItem(1, 1, value);
 
-    validationTableView->resizeToContents();
-    widgetLayout->addWidget(validationTableView);
+      validationTableView->resizeToContents();
+      widgetLayout->addWidget(validationTableView);
+    }
 
     // plot widget
     PlotWidget * plot = new PlotWidget;

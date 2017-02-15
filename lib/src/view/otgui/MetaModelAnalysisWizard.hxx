@@ -47,7 +47,6 @@ public:
 protected:
   void buildInterface();
   void updateScaleLineEdit();
-  void updateAmplitudeLineEdit();
 
 public slots:
   void updateMethodWidgets(int);
@@ -57,6 +56,7 @@ public slots:
   void setInterestVariables(QStringList);
   void openScaleDefinitionWizard();
   void updateCovarianceModel(int);
+  void updateOptimizeParameters(bool);
   void updateAmplitude(double);
   void updateMaternParameterNu(double);
   void updateGeneralizedModelParameterP(double);
@@ -69,6 +69,7 @@ private:
   QGroupBox * chaosParametersBox_;
   CollapsibleGroupBox * chaosAdvancedParamGroupBox_;
   QGroupBox * krigingParametersBox_;
+  CollapsibleGroupBox * krigingAdvancedParamGroupBox_;
   QLineEdit * scaleLineEdit_;
   DoubleSpinBox * amplitudeSpinBox_;
   QLabel * maternParameterNuLabel_;
