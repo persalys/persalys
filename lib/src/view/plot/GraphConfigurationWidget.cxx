@@ -77,7 +77,9 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   mainGridLayout->addWidget(titleLineEdit_, rowGrid, 1, 1, 1);
 
   // Axis comboboxes
-  if (plotType_ == GraphConfigurationWidget::Scatter || plotType_ == GraphConfigurationWidget::Copula)
+  if (plotType_ == GraphConfigurationWidget::Scatter ||
+      plotType_ == GraphConfigurationWidget::Copula  ||
+      plotType_ == GraphConfigurationWidget::Kendall)
   {
     // X-axis combobox
     label = new QLabel(tr("X-axis"));
@@ -92,15 +94,20 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
       xAxisComboBox_->addItem(outputNames[i], false);
 
     mainGridLayout->addWidget(xAxisComboBox_, rowGrid, 1, 1, 1);
-    connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateYComboBox()));
+    if (plotType_ != GraphConfigurationWidget::Kendall)
+    {
+      connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateYComboBox()));
 
-    // Y-axis combobox
-    label = new QLabel(tr("Y-axis"));
-    mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+      // Y-axis combobox
+      label = new QLabel(tr("Y-axis"));
+      mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
-    yAxisComboBox_ = new QComboBox;
-    mainGridLayout->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
-    connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
+      yAxisComboBox_ = new QComboBox;
+      mainGridLayout->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
+      connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
+    }
+    else
+      connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
   }
 
   if (plotType_ == GraphConfigurationWidget::Scatter)
@@ -304,6 +311,10 @@ void GraphConfigurationWidget::plotChanged()
       currentPlotIndex_ = 2 * (xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex);
     else
       currentPlotIndex_ = 2 * (xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex) + 1;
+  }
+  else if (plotType_ == GraphConfigurationWidget::Kendall && xAxisComboBox_)
+  {
+    currentPlotIndex_ = xAxisComboBox_->currentIndex();
   }
   else if (pdf_cdfGroup_ && (plotType_ == GraphConfigurationWidget::PDF ||
                              plotType_ == GraphConfigurationWidget::PDFResult))

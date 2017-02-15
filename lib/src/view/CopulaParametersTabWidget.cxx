@@ -25,6 +25,8 @@
 #include "otgui/ResizableStackedWidget.hxx"
 
 #include <openturns/NormalCopula.hxx>
+#include <openturns/VisualTest.hxx>
+#include <openturns/Combinations.hxx>
 
 #include <QVBoxLayout>
 #include <QHeaderView>
@@ -36,10 +38,12 @@ namespace OTGUI {
 
 CopulaParametersTabWidget::CopulaParametersTabWidget(const Distribution& distribution,
                                                      const NumericalSample& sample,
+                                                     const DataSample::NumericalSampleCollection& kendallPlotData,
                                                      QWidget* parent)
   : QTabWidget(parent)
   , distribution_(distribution)
   , sample_(sample)
+  , kendallPlotData_(kendallPlotData)
   , pdf_cdfPlotGraphConfigWidget_(0)
 {
   buildInterface();
@@ -56,21 +60,26 @@ void CopulaParametersTabWidget::buildInterface()
   for (UnsignedInteger i=0; i<distribution_.getDimension(); ++i)
     variablesNames << QString::fromUtf8(distribution_.getDescription()[i].c_str());
 
+  // get distribution name
+  String distributionName = distribution_.getImplementation()->getClassName();
+  distributionName = distributionName.substr(0, distributionName.find("Copula"));
+
+  const QPen pen(PlotWidget::DefaultHistogramColor, 2);
+
   // tab PDF/CDF
   ResizableStackedWidget * pdf_StackedWidget = new ResizableStackedWidget;
 
   // -- plots creation
   // create a PDF and a CDF for each pair of variables
   QVector<PlotWidget*> listPlot;
+  const int size = sample_.getSize();
+  NumericalSample sampleRanks(sample_.rank() / size);
   for (UnsignedInteger i=0; i<distribution_.getDimension(); ++i)
   {
     for (UnsignedInteger j=0; j<distribution_.getDimension(); ++j)
     {
       if (i != j)
       {
-        String distributionName = distribution_.getImplementation()->getClassName();
-        distributionName = distributionName.substr(0, distributionName.find("Copula"));
-
         Indices marginals(2);
         marginals[0] = i;
         marginals[1] = j;
@@ -78,9 +87,7 @@ void CopulaParametersTabWidget::buildInterface()
         //pdf
         PlotWidget * plotWidget = new PlotWidget;
         //  use rank of the NumericalSample to have the points in [0, 1]*[0, 1]
-        const QPen pen(PlotWidget::DefaultHistogramColor, 2);
-        const int size = sample_.getSize();
-        plotWidget->plotCurve(sample_.getMarginal(marginals).rank() / size, pen, QwtPlotCurve::Dots);
+        plotWidget->plotCurve(sampleRanks.getMarginal(marginals), pen, QwtPlotCurve::Dots);
         plotWidget->plotContour(distribution_.getMarginal(marginals));
         plotWidget->setTitle(tr("PDF") + " " + distributionName.c_str() + " copula");
         plotWidget->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(sample_.getDescription()[i].c_str()));
@@ -106,6 +113,42 @@ void CopulaParametersTabWidget::buildInterface()
   connect(this, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
 
   addTab(pdf_StackedWidget, tr("PDF/CDF"));
+
+  // tab Kendall plot
+  ResizableStackedWidget * kendall_StackedWidget = new ResizableStackedWidget;
+
+  // -- plots creation
+  // create a Kendall plot for each pair of variables
+  QVector<PlotWidget*> listKendallPlots;
+
+  QStringList variablesPairsNames;
+  // diagonal
+  NumericalSample dataDiagonal(0, 2);
+  dataDiagonal.add(NumericalPoint(2, 0.0));
+  dataDiagonal.add(NumericalPoint(2, 1.0));
+
+  for (UnsignedInteger i=0; i<kendallPlotData_.getSize(); ++i)
+  {
+    //pdf
+    PlotWidget * plotWidget = new PlotWidget;
+
+    plotWidget->plotCurve(kendallPlotData_[i], pen);
+    plotWidget->plotCurve(dataDiagonal);
+    plotWidget->setTitle(tr("Kendall plot") + ": " + distributionName.c_str() + " copula");
+    plotWidget->setAxisTitle(QwtPlot::xBottom, tr("%1 copula").arg(distributionName.c_str()));
+    QString pairNames = QString::fromUtf8(kendallPlotData_[i].getDescription()[0].c_str());
+    plotWidget->setAxisTitle(QwtPlot::yLeft, tr("Data") + " " + pairNames);
+    variablesPairsNames << pairNames;
+
+    kendall_StackedWidget->addWidget(plotWidget);
+    listKendallPlots.append(plotWidget);
+  }
+
+  // -- GraphConfigurationWidget
+  kendallPlotGraphConfigWidget_ = new GraphConfigurationWidget(listKendallPlots, variablesPairsNames, QStringList(), GraphConfigurationWidget::Kendall);
+  connect(kendallPlotGraphConfigWidget_, SIGNAL(currentPlotChanged(int)), kendall_StackedWidget, SLOT(setCurrentIndex(int)));
+
+  addTab(kendall_StackedWidget, tr("Kendall plot"));
 
   // tab Parameters
   QWidget * paramWidget = new QWidget;
@@ -162,11 +205,17 @@ void CopulaParametersTabWidget::stateChanged()
 void CopulaParametersTabWidget::showHideGraphConfigurationWidget(int index)
 {
   // PDF/CDF tab
-  if (!index)
+  if (index == 0)
   {
     if (pdf_cdfPlotGraphConfigWidget_)
       if (!pdf_cdfPlotGraphConfigWidget_->isVisible())
         emit graphWindowActivated(pdf_cdfPlotGraphConfigWidget_);
+  }
+  else if (index == 1)
+  {
+    if (kendallPlotGraphConfigWidget_)
+      if (!kendallPlotGraphConfigWidget_->isVisible())
+        emit graphWindowActivated(kendallPlotGraphConfigWidget_);
   }
   // parameters tab
   else

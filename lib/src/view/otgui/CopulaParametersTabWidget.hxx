@@ -22,6 +22,7 @@
 #define OTGUI_COPULAPARAMETERSTABWIDGET_HXX
 
 #include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/DataSample.hxx"
 
 #include <QTabWidget>
 
@@ -33,6 +34,7 @@ class OTGUI_API CopulaParametersTabWidget : public QTabWidget
 public:
   CopulaParametersTabWidget(const OT::Distribution& distribution,
                             const OT::NumericalSample& sample,
+                            const DataSample::NumericalSampleCollection& kendallPlotData,
                             QWidget* parent = 0);
 
 protected:
@@ -49,7 +51,9 @@ signals:
 private:
   OT::Distribution distribution_;
   OT::NumericalSample sample_;
+  OT::PersistentCollection<OT::NumericalSample> kendallPlotData_;
   GraphConfigurationWidget * pdf_cdfPlotGraphConfigWidget_;
+  GraphConfigurationWidget * kendallPlotGraphConfigWidget_;
 };
 }
 #endif
