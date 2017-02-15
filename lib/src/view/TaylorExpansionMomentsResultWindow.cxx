@@ -19,14 +19,17 @@
  *
  */
 #include "otgui/TaylorExpansionMomentsResultWindow.hxx"
+
 #include "otgui/TaylorExpansionMomentsAnalysis.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/ResizableStackedWidget.hxx"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QHeaderView>
-#include <QStackedWidget>
+#include <QSplitter>
+#include <QListWidget>
 
 using namespace OT;
 
@@ -44,35 +47,44 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
 {
   setWindowTitle(tr("Taylor expansion moments results"));
 
+  // get output info
+  const UnsignedInteger outputDimension = result_.getOutputNames().getSize();
+  QStringList outputNames;
+  for (UnsignedInteger i=0; i<outputDimension; ++i)
+    outputNames << result_.getOutputNames()[i].c_str();
+
+  // main splitter
+  QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
+
+  // - list outputs
+  QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
+  QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
+
+  QListWidget * outputsListWidget = new QListWidget;
+  outputsListWidget->addItems(outputNames);
+  outputsLayoutGroupBox->addWidget(outputsListWidget);
+
+  mainWidget->addWidget(outputsGroupBox);
+  mainWidget->setStretchFactor(0, 1);
+
+  // - tab widget
   QTabWidget * tabWidget = new QTabWidget;
 
   // first tab --------------------------------
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
-  // -- output name --
-  QHBoxLayout * headLayout = new QHBoxLayout;
-  QLabel * outputName = new QLabel(tr("Output"));
-  headLayout->addWidget(outputName);
-  QComboBox * outputsComboBox = new QComboBox;
-  QStringList items;
-  for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
-    items << result_.getOutputNames()[i].c_str();
-  outputsComboBox->addItems(items);
-  headLayout->addWidget(outputsComboBox);
-  headLayout->addStretch();
-  tabLayout->addLayout(headLayout);
-
   // -- results --
 
   // moments estimation
   QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimates"));
   QVBoxLayout * momentsVbox = new QVBoxLayout(momentsGroupBox);
-  QStackedWidget * momentsTablesWidget = new QStackedWidget;
-  connect(outputsComboBox, SIGNAL(currentIndexChanged(int)), momentsTablesWidget, SLOT(setCurrentIndex(int)));
+
+  ResizableStackedWidget * momentsTablesWidget = new ResizableStackedWidget;
+  connect(outputsListWidget, SIGNAL(currentRowChanged(int)), momentsTablesWidget, SLOT(setCurrentIndex(int)));
 
   // loop on all the outputs
-  for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
+  for (UnsignedInteger i=0; i<outputDimension; ++i)
   {
     ResizableTableViewWithoutScrollBar * momentsEstimationsTable = new ResizableTableViewWithoutScrollBar;
     momentsEstimationsTable->horizontalHeader()->hide();
@@ -106,8 +118,12 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
   momentsVbox->addWidget(momentsTablesWidget);
   tabLayout->addWidget(momentsGroupBox);
 
-  tabWidget->addTab(tab, "Result");
+  tabWidget->addTab(tab, "Summary");
+
   //
-  setWidget(tabWidget);
+  mainWidget->addWidget(tabWidget);
+  mainWidget->setStretchFactor(1, 10);
+  outputsListWidget->setCurrentRow(0);
+  setWidget(mainWidget);
 }
 }
