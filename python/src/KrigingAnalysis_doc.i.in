@@ -86,6 +86,26 @@ basis : :py:class:`openturns.Basis`
 
 // ---------------------------------------------------------------------
 
+%feature("docstring") OTGUI::KrigingAnalysis::getOptimizeParameters
+"Accessor to the covariance model parameters optimization flag.
+
+Returns
+-------
+optimize : bool
+    Whether to optimize the covariance model parameters"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::KrigingAnalysis::setOptimizeParameters
+"Accessor to the covariance model parameters optimization flag.
+
+Parameters
+----------
+optimize : bool
+    Whether to optimize the covariance model parameters"
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") OTGUI::KrigingAnalysis::getResult
 "Results accessor.
 
