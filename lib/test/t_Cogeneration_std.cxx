@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     Input E("E", 3000., "Produced electric energy", Normal(3000, 15));
     Input C("C", 4000., "Valued thermal energy", Normal(4000, 60));
 
-    Output Ep("Ep", 0., "Primary energy savings", "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
+    Output Ep("Ep", 0., "Primary energy savings");
     AnalyticalPhysicalModel myPhysicalModel("myPhysicalModel");
 
     myPhysicalModel.addInput(Q);
@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
     myPhysicalModel.addInput(C);
 
     myPhysicalModel.addOutput(Ep);
+    myPhysicalModel.setFormula("Ep", "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
 
     myStudy.add(myPhysicalModel);
 

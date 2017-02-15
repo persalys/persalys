@@ -10,9 +10,9 @@ anOTStudy = otguibase.OTStudy('anOTStudy')
 ## Model
 X0 = otguibase.Input('X0', 1, '')
 X1 = otguibase.Input('X1', 2, '')
-Y0 = otguibase.Output('Y0', 0, '', 'sin(X0)+8*X1')
+Y0 = otguibase.Output('Y0')
 
-model = otguibase.AnalyticalPhysicalModel('aModelPhys', [X0, X1], [Y0])
+model = otguibase.AnalyticalPhysicalModel('aModelPhys', [X0, X1], [Y0], ['sin(X0)+8*X1'])
 anOTStudy.add(model)
 
 ## Design of Experiment ##

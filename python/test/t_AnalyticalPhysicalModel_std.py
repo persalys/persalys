@@ -9,10 +9,11 @@ myStudy = otguibase.OTStudy('myStudy')
 ## Model
 X0 = otguibase.Input('X0', 1, '')
 X1 = otguibase.Input('X1', 2, '')
-Y0 = otguibase.Output('Y0', 0, '', 'sin(X0)+8*X1')
+Y0 = otguibase.Output('Y0', 0, 'output_1')
 inputs = [X0, X1]
 outputs = [Y0]
-model = otguibase.AnalyticalPhysicalModel('aModelPhys', inputs, outputs)
+formulas = ['sin(X0)+8*X1']
+model = otguibase.AnalyticalPhysicalModel('aModelPhys', inputs, outputs, formulas)
 myStudy.add(model)
 print(model)
 
@@ -21,6 +22,12 @@ print('function=', function)
 
 formulas = model.getFormulas()
 print('formulas=', formulas)
+
+formula_Y0 = model.getFormula('Y0')
+print('formula_Y0=', formula_Y0)
+
+model.setFormulas(['sin(X0)+8*X1+0.5'])
+print('formulas=', model.getFormulas())
 
 ## script
 script = model.getPythonScript()

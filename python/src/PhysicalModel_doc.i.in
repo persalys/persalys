@@ -22,8 +22,6 @@ OTGUI_PhysicalModel_getComposedDistribution_doc
 OTGUI_PhysicalModel_setInputDescription_doc
 %feature("docstring") OTGUI::PhysicalModel::setOutputDescription
 OTGUI_PhysicalModel_setOutputDescription_doc
-%feature("docstring") OTGUI::PhysicalModel::setOutputFormula
-OTGUI_PhysicalModel_setOutputFormula_doc
 %feature("docstring") OTGUI::PhysicalModel::setInputs
 OTGUI_PhysicalModel_setInputs_doc
 %feature("docstring") OTGUI::PhysicalModel::getInputs

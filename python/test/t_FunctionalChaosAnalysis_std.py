@@ -14,12 +14,13 @@ myStudy = otguibase.OTStudy('myStudy')
 xi1 = otguibase.Input('xi1', 0., '', ot.Uniform(-pi, pi))
 xi2 = otguibase.Input('xi2', 0., '', ot.Uniform(-pi, pi))
 xi3 = otguibase.Input('xi3', 0., '', ot.Uniform(-pi, pi))
-y00 = otguibase.Output('fake_y0', 0, '', 'xi1')
+y00 = otguibase.Output('fake_y0')
 y00.setIsSelected(False)
-formula = "sin(xi1) + (7.0) * (sin(xi2)) ^ 2 + (0.1) * xi3^4 * sin(xi1)"
-y0 = otguibase.Output('y0', 0., '', formula)
+y0 = otguibase.Output('y0')
 
-model = otguibase.AnalyticalPhysicalModel('model', [xi1, xi2, xi3], [y00, y0])
+formula_y00 = "xi1"
+formula_y0 = "sin(xi1) + (7.0) * (sin(xi2)) ^ 2 + (0.1) * xi3^4 * sin(xi1)"
+model = otguibase.AnalyticalPhysicalModel('model', [xi1, xi2, xi3], [y00, y0], [formula_y00, formula_y0])
 myStudy.add(model)
 
 ## Design of Experiment ##
@@ -57,7 +58,8 @@ openturns.testing.assert_almost_equal(totalIndices, sobolResult.getTotalIndices(
 
 
 ## Design of Experiment ##
-model.addOutput(otguibase.Output('y1', 0., '', formula))
+model.addOutput(otguibase.Output('y1'))
+model.setFormula('y1', formula_y0)
 aDesign2 = otguibase.DesignOfExperimentImplementation('design2', model)
 inputSample = ot.LHSExperiment(model.getComposedDistribution(), 150).generate()
 aDesign2.setInputSample(inputSample)

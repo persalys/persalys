@@ -11,33 +11,12 @@ value : float
     Default value (optional)
 description : str
     Description text (optional)
-formula : str
-    Associated analytical formula (optional)
 
 Examples
 --------
 >>> import otguibase
->>> G = otguibase.Output('Ep', 0., 'deviation', 'R-F/(_pi*100.0)')"
+>>> G = otguibase.Output('Ep', 0., 'deviation')"
 
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::Output::setFormula
-"Formula accessor.
-
-Parameters
-----------
-formula : str
-    Formula associated with the variable"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::Output::getFormula
-"Formula accessor.
-
-Returns
--------
-formula : str
-    Formula associated with the variable"
 
 // ---------------------------------------------------------------------
 

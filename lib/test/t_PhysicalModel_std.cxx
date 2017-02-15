@@ -34,7 +34,7 @@ int main(int argc, char **argv)
   Input Q("Q", 0., "Primary energy", Normal(10200, 100));
   Input E("E", 0., "Produced electric energy", Normal(3000, 15));
   Input C("C", 0., "Valued thermal energy", Normal(4000, 60));
-  Output Ep("Ep", 0., "Primary energy savings", "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
+  Output Ep("Ep", 0., "Primary energy savings");
 
   NumericalPoint x(3);
   x[0] = 10200;
@@ -42,9 +42,12 @@ int main(int argc, char **argv)
   x[2] = 4000;
 
   AnalyticalPhysicalModel analyticalModel("analyticalModel1");
+  analyticalModel.addOutput(Ep);
+  analyticalModel.setFormula("Ep", "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
 
   PythonPhysicalModel pythonModel("pythonModel1");
   pythonModel.setCode("def _exec(Q, E, C):\n    Ep = 1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))\n    return [Ep]");
+  pythonModel.addOutput(Ep);
 
   std::vector<PhysicalModel> models;
   models.push_back(analyticalModel);
@@ -55,10 +58,10 @@ int main(int argc, char **argv)
     model.addInput(Q);
     model.addInput(E);
     model.addInput(C);
-    model.addOutput(Ep);
     study.add(model);
     std::cout << model.getFunction()(x) << std::endl;
   }
+
   std::cout << study.getPythonScript() << std::endl;
   return EXIT_SUCCESS;
 }

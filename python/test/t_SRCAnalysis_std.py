@@ -10,11 +10,13 @@ myStudy = otguibase.OTStudy('myStudy')
 ## Model
 x0 = otguibase.Input('x0', 0., '', ot.Normal())
 x1 = otguibase.Input('x1', 0., '', ot.Normal())
-y00 = otguibase.Output('fake_y0', 0, '', 'x0')
+y00 = otguibase.Output('fake_y0')
 y00.setIsSelected(False)
-y0 = otguibase.Output('y0', 0., '', '10+3*x0+x1')
+y0 = otguibase.Output('y0')
 
-model = otguibase.AnalyticalPhysicalModel('aModel', [x0, x1], [y00, y0])
+formula_y00 = 'x0'
+formula_y0 = '10+3*x0+x1'
+model = otguibase.AnalyticalPhysicalModel('aModel', [x0, x1], [y00, y0], [formula_y00, formula_y0])
 myStudy.add(model)
 
 ## SRC ##
@@ -31,7 +33,8 @@ print("result=", analysis.getResult())
 ## SRC ##
 X2 = otguibase.Input('x2', 10)
 model.addInput(X2)
-model.addOutput(otguibase.Output('y1', 0, '', '3*x0 + x1 + x2'))
+model.addOutput(otguibase.Output('y1'))
+model.setFormula('y1', '3*x0 + x1 + x2')
 
 analysis2 = otguibase.SRCAnalysis('aSRC2', model)
 analysis2.setSimulationsNumber(1000)

@@ -172,21 +172,6 @@ OTGUI_PhysicalModel_setOutputDescription_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setOutputFormula_doc
-"Output formula accessor.
-
-Parameters
-----------
-name : str
-    Variable name
-formula : str
-    Formula text"
-%enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setOutputFormula
-OTGUI_PhysicalModel_setOutputFormula_doc
-
-// ---------------------------------------------------------------------
-
 %define OTGUI_PhysicalModel_setInputs_doc
 "Input variables accessor.
 

@@ -12,9 +12,9 @@ E = otguibase.Input('E', 3e7, 'Young s modulus', ot.Beta(0.93, 3.2, 2.8e7, 4.8e7
 F = otguibase.Input('F', 3e4, 'Charge applied', ot.LogNormalMuSigma(30000., 9000., 15000).getDistribution())
 L = otguibase.Input('L', 250, 'Length', ot.Uniform(250, 260))
 I = otguibase.Input('I', 400, 'Section modulus', ot.Beta(2.5, 4., 3.1e2, 4.5e2))
-y = otguibase.Output('y', 0., 'deviation', 'F*L^3/(3*E*I)')
+y = otguibase.Output('y', 0., 'deviation')
 
-model = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [E, F, L, I], [y])
+model = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [E, F, L, I], [y], ['F*L^3/(3*E*I)'])
 myStudy.add(model)
 
 f = model.getFunction()

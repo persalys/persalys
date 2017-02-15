@@ -16,13 +16,14 @@ X0 = otguibase.Input('X0', 1, '', dist_X0)
 dist_X1 = ot.Normal(1, 1)
 X1 = otguibase.Input('X1', 2, '', dist_X1)
 X2 = otguibase.Input('X2', 10, '')
-fake_Y0 = otguibase.Output('fake_Y0', 0, '', 'X0')
+fake_Y0 = otguibase.Output('fake_Y0', 0, '')
 fake_Y0.setIsSelected(False)
-Y0 = otguibase.Output('Y0', 0, '', 'sin(X0) + 8*X1')
-Y1 = otguibase.Output('Y1', 0, '', 'sin(X0) + 8*X1 + X2')
+Y0 = otguibase.Output('Y0', 0, '')
+Y1 = otguibase.Output('Y1', 0, '')
 inputs = [X0, X1, X2]
 outputs = [fake_Y0, Y0, Y1]
-aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys', inputs, outputs)
+formulas = ['X0', 'sin(X0) + 8*X1', 'sin(X0) + 8*X1 + X2']
+aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys', inputs, outputs, formulas)
 myStudy.add(aModelPhys)
 aTaylor = otguibase.TaylorExpansionMomentsAnalysis('aTaylor', aModelPhys)
 interestVariables = ['Y0']
