@@ -75,7 +75,7 @@ DataAnalysisWindow::~DataAnalysisWindow()
 void DataAnalysisWindow::buildInterface()
 {
   // get output info
-  QStringList variablesNames = stochInputNames_ + outputNames_;
+  QStringList variablesNames = outputNames_ + stochInputNames_;
 
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
@@ -313,8 +313,18 @@ QWidget* DataAnalysisWindow::getPDF_CDFWidget()
   ResizableStackedWidget * tabStackedWidget = new ResizableStackedWidget;
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), tabStackedWidget, SLOT(setCurrentIndex(int)));
 
-  const QStringList variablesNames = stochInputNames_ + outputNames_;
-  const QStringList variablesAxisTitles = inAxisTitles_ + outAxisTitles_;
+  const QStringList variablesNames = outputNames_ + stochInputNames_;
+  const QStringList variablesAxisTitles = outAxisTitles_ + inAxisTitles_;
+
+  // we want to display output results before the input results
+  // input indices
+  Indices inInd(stochInputNames_.size());
+  inInd.fill();
+  // ouput indices
+  Indices ind(outputNames_.size());
+  ind.fill(stochInputNames_.size());
+  // indices with good order
+  ind.add(inInd);
 
   for (int i=0; i<variablesNames.size(); ++i)
   {
@@ -322,9 +332,9 @@ QWidget* DataAnalysisWindow::getPDF_CDFWidget()
 
     PlotWidget * plot = new PlotWidget("distributionPDF");
     // PDF
-    plot->plotHistogram(result_.getSample().getMarginal(i));
-    if (result_.getPDF()[i].getSize())
-      plot->plotCurve(result_.getPDF()[i]);
+    plot->plotHistogram(result_.getSample().getMarginal(ind[i]));
+    if (result_.getPDF()[ind[i]].getSize())
+      plot->plotCurve(result_.getPDF()[ind[i]]);
     plot->setTitle(tr("PDF:") + " " + variablesNames[i]);
     plot->setAxisTitle(QwtPlot::xBottom, variablesAxisTitles[i]);
     plot->setAxisTitle(QwtPlot::yLeft, tr("Density"));
@@ -333,9 +343,9 @@ QWidget* DataAnalysisWindow::getPDF_CDFWidget()
 
     // CDF
     plot = new PlotWidget("distributionCDF");
-    plot->plotHistogram(result_.getSample().getMarginal(i), 1);
-    if (result_.getCDF()[i].getSize())
-      plot->plotCurve(result_.getCDF()[i]);
+    plot->plotHistogram(result_.getSample().getMarginal(ind[i]), 1);
+    if (result_.getCDF()[ind[i]].getSize())
+      plot->plotCurve(result_.getCDF()[ind[i]]);
     plot->setTitle(tr("CDF:") + " " + variablesNames[i]);
     plot->setAxisTitle(QwtPlot::xBottom, variablesAxisTitles[i]);
     plot->setAxisTitle(QwtPlot::yLeft, tr("CDF"));
@@ -361,8 +371,18 @@ QWidget* DataAnalysisWindow::getBoxPlotWidget()
   ResizableStackedWidget * tabStackedWidget = new ResizableStackedWidget;
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), tabStackedWidget, SLOT(setCurrentIndex(int)));
 
-  const QStringList variablesNames = stochInputNames_ + outputNames_;
-  const QStringList variablesAxisTitles = inAxisTitles_ + outAxisTitles_;
+  const QStringList variablesNames = outputNames_ + stochInputNames_;
+  const QStringList variablesAxisTitles = outAxisTitles_ + inAxisTitles_;
+
+  // we want to display output results before the input results
+  // input indices
+  Indices inInd(stochInputNames_.size());
+  inInd.fill();
+  // ouput indices
+  Indices ind(outputNames_.size());
+  ind.fill(stochInputNames_.size());
+  // indices with good order
+  ind.add(inInd);
 
   for (int i=0; i<variablesNames.size(); ++i)
   {
@@ -370,10 +390,10 @@ QWidget* DataAnalysisWindow::getBoxPlotWidget()
 
     PlotWidget * plot = new PlotWidget("boxplot");
 
-    const double median = result_.getMedian()[i][0];
-    const double Q1 = result_.getFirstQuartile()[i][0];
-    const double Q3 = result_.getThirdQuartile()[i][0];
-    plot->plotBoxPlot(median, Q1, Q3, Q1 - 1.5*(Q3-Q1), Q3 + 1.5*(Q3-Q1), result_.getOutliers()[i]);
+    const double median = result_.getMedian()[ind[i]][0];
+    const double Q1 = result_.getFirstQuartile()[ind[i]][0];
+    const double Q3 = result_.getThirdQuartile()[ind[i]][0];
+    plot->plotBoxPlot(median, Q1, Q3, Q1 - 1.5*(Q3-Q1), Q3 + 1.5*(Q3-Q1), result_.getOutliers()[ind[i]]);
     plot->setTitle(tr("Box plot:") + " " + variablesNames[i]);
     plot->setAxisTitle(QwtPlot::yLeft, variablesAxisTitles[i]);
 
