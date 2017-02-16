@@ -30,28 +30,26 @@ using namespace OT;
 
 namespace OTGUI {
 
-MinMaxTableGroupBox::MinMaxTableGroupBox(const DataSample & result, const bool onlyOutput, QWidget* parent)
+MinMaxTableGroupBox::MinMaxTableGroupBox(const DataSample& result, const bool onlyOutput, QWidget* parent)
   : QGroupBox(tr("Minimum and Maximum"), parent)
   , onlyOutput_(onlyOutput)
 {
   QVBoxLayout * minMaxGroupBoxLayout = new QVBoxLayout(this);
   stackedWidget_ = new ResizableStackedWidget;
 
+  if (result.getOutputSample().getSize())
+    for (UnsignedInteger outputIndex=0; outputIndex<result.getOutputSample().getDimension(); ++outputIndex)
+      stackedWidget_->addWidget(getForOutputMinMaxTableView(result, outputIndex));
+
   if (!onlyOutput_)
     for (UnsignedInteger inputIndex=0; inputIndex<result.getInputSample().getDimension(); ++inputIndex)
       stackedWidget_->addWidget(getForInputMinMaxTableView(result, inputIndex));
-
-  if (result.getOutputSample().getSize())
-  {
-    for (UnsignedInteger outputIndex=0; outputIndex<result.getOutputSample().getDimension(); ++outputIndex)
-      stackedWidget_->addWidget(getForOutputMinMaxTableView(result, outputIndex));
-  }
 
   minMaxGroupBoxLayout->addWidget(stackedWidget_);
 }
 
 
-QWidget* MinMaxTableGroupBox::getForInputMinMaxTableView(const DataSample & result, const int outputIndex)
+QWidget* MinMaxTableGroupBox::getForInputMinMaxTableView(const DataSample& result, const UnsignedInteger inputIndex)
 {
   ResizableTableViewWithoutScrollBar * minMaxTableView = new ResizableTableViewWithoutScrollBar;
   minMaxTableView->verticalHeader()->hide();
@@ -67,11 +65,11 @@ QWidget* MinMaxTableGroupBox::getForInputMinMaxTableView(const DataSample & resu
   // vertical header
   minMaxTable->setNotEditableHeaderItem(0, 0, tr("Input"));
   // input name
-  minMaxTable->setNotEditableItem(0, 1, QString::fromUtf8(result.getInputSample().getDescription()[outputIndex].c_str()));
+  minMaxTable->setNotEditableItem(0, 1, QString::fromUtf8(result.getInputSample().getDescription()[inputIndex].c_str()));
   // min
-  minMaxTable->setNotEditableItem(0, 2, result.getInputSample().getMin()[outputIndex]);
+  minMaxTable->setNotEditableItem(0, 2, result.getInputSample().getMin()[inputIndex]);
   // max
-  minMaxTable->setNotEditableItem(0, 3, result.getInputSample().getMax()[outputIndex]);
+  minMaxTable->setNotEditableItem(0, 3, result.getInputSample().getMax()[inputIndex]);
 
   // resize table
   minMaxTableView->resizeToContents();
@@ -80,7 +78,7 @@ QWidget* MinMaxTableGroupBox::getForInputMinMaxTableView(const DataSample & resu
 }
 
 
-QWidget* MinMaxTableGroupBox::getForOutputMinMaxTableView(const DataSample & result, const int outputIndex)
+QWidget* MinMaxTableGroupBox::getForOutputMinMaxTableView(const DataSample& result, const UnsignedInteger outputIndex)
 {
   ResizableTableViewWithoutScrollBar * minMaxTableView = new ResizableTableViewWithoutScrollBar;
   minMaxTableView->verticalHeader()->hide();

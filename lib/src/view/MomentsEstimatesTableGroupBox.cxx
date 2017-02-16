@@ -23,7 +23,6 @@
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
 
-#include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QHeaderView>
 
@@ -31,7 +30,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-MomentsEstimatesTableGroupBox::MomentsEstimatesTableGroupBox(const DataAnalysisResult & result,
+MomentsEstimatesTableGroupBox::MomentsEstimatesTableGroupBox(const DataAnalysisResult& result,
                                                              const bool isConfidenceIntervalRequired,
                                                              const double levelConfidenceInterval,
                                                              QWidget* parent)
@@ -40,10 +39,20 @@ MomentsEstimatesTableGroupBox::MomentsEstimatesTableGroupBox(const DataAnalysisR
   , levelConfidenceInterval_(levelConfidenceInterval)
 {
   QVBoxLayout * estimatesGroupBoxLayout = new QVBoxLayout(this);
-  stackedWidget_ = new QStackedWidget;
+  stackedWidget_ = new ResizableStackedWidget;
+
+  // we want to display output results before the input results
+  // input indices
+  Indices inInd(result.getInputSample().getDimension());
+  inInd.fill();
+  // ouput indices
+  Indices ind(result.getOutputSample().getDimension());
+  ind.fill(result.getInputSample().getDimension());
+  // indices with good order
+  ind.add(inInd);
 
   for (UnsignedInteger variableIndex=0; variableIndex<result.getMean().getSize(); ++variableIndex)
-    stackedWidget_->addWidget(getMomentsEstimateTableView(result, variableIndex));
+    stackedWidget_->addWidget(getMomentsEstimateTableView(result, ind[variableIndex]));
 
   estimatesGroupBoxLayout->addWidget(stackedWidget_);
 }

@@ -30,6 +30,8 @@
 
 #include <QTabWidget>
 #include <QPushButton>
+#include <QListWidget>
+#include <QGroupBox>
 
 namespace OTGUI {
 class OTGUI_API DesignOfExperimentWindow : public OTguiSubWindow
@@ -56,23 +58,26 @@ protected:
 public slots:
   void evaluateOutputs();
   void updateTable();
+  void scatterPlotsTabWidgetIndexChanged();
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
 
 private:
   DesignOfExperiment designOfExperiment_;
+  QGroupBox * variablesGroupBox_;
+  QListWidget * variablesListWidget_;
   QTabWidget * tabWidget_;
   QTabWidget * tablesTabWidget_;
+  QTabWidget * scatterPlotsTabWidget_;
   ExportableTableView * tableView_;
   SampleTableModel * tableModel_;
   ExportableTableView * failedPointsTableView_;
   SampleTableModel * failedPointsTableModel_;
   ExportableTableView * notEvaluatedTableView_;
   SampleTableModel * notEvaluatedTableModel_;
-  QComboBox * outputsComboBoxFirstTab_;
-  PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
+  GraphConfigurationWidget * scatterPlotsConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
-  GraphConfigurationWidget * graphConfigurationWidget_;
+  PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
 };
 }
 #endif

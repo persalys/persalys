@@ -61,7 +61,7 @@ void FunctionalChaosResultWindow::setParameters(const Analysis & analysis)
   valuesList << (chaos->getSparseChaos()? tr("yes") : tr("no"));
   valuesList << (chaos->isLeaveOneOutValidation()? tr("yes") : tr("no"));
 
-  parametersWidget_ = new ParametersWidget(tr("Metamodel creation parameters:"), namesList, valuesList);
+  parametersWidget_ = new ParametersWidget(tr("Metamodel creation parameters"), namesList, valuesList);
 }
 
 
@@ -85,7 +85,6 @@ void FunctionalChaosResultWindow::buildInterface()
   outputsListWidget_ = new QListWidget;
   outputsListWidget_->addItems(outputNames);
   outputsLayoutGroupBox->addWidget(outputsListWidget_);
-  outputsLayoutGroupBox->addStretch();
 
   mainWidget->addWidget(outputsGroupBox);
   mainWidget->setStretchFactor(0, 1);
@@ -119,6 +118,8 @@ void FunctionalChaosResultWindow::buildInterface()
   tabWidget_->addTab(tab, tr("Metamodel"));
 
   // second tab : MOMENTS --------------------------------
+  QWidget * momentsWidget = new QWidget;
+  QVBoxLayout * momentsWidgetLayout = new QVBoxLayout(momentsWidget);
   QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimates"));
   QVBoxLayout * momentsGroupBoxLayout = new QVBoxLayout(momentsGroupBox);
   ResizableStackedWidget * momentsStackedWidget = new ResizableStackedWidget;
@@ -148,7 +149,8 @@ void FunctionalChaosResultWindow::buildInterface()
 
   connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), momentsStackedWidget, SLOT(setCurrentIndex(int)));
 
-  tabWidget_->addTab(momentsGroupBox, tr("Moments"));
+  momentsWidgetLayout->addWidget(momentsGroupBox);
+  tabWidget_->addTab(momentsWidget, tr("Moments"));
 
   // third tab : SOBOL INDICES --------------------------------
   QScrollArea * sobolScrollArea = new QScrollArea;

@@ -77,7 +77,7 @@ void SobolResultWindow::setParameters(const Analysis & analysis)
   valuesList << QString::number(sobolAnalysis->getBlockSize());
   valuesList << QString::number(sobolAnalysis->getSeed());
 
-  parametersWidget_ = new ParametersWidget(tr("Sensitivity analysis parameters:"), namesList, valuesList);
+  parametersWidget_ = new ParametersWidget(tr("Sensitivity analysis parameters"), namesList, valuesList);
 }
 
 
@@ -101,7 +101,6 @@ void SobolResultWindow::buildInterface()
   outputsListWidget_ = new QListWidget;
   outputsListWidget_->addItems(outputNames);
   outputsLayoutGroupBox->addWidget(outputsListWidget_);
-  outputsLayoutGroupBox->addStretch();
 
   mainWidget->addWidget(outputsGroupBox);
   mainWidget->setStretchFactor(0, 1);
@@ -117,6 +116,7 @@ void SobolResultWindow::buildInterface()
 
   ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
   connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+
   for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
   {
     SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(i,
@@ -140,31 +140,25 @@ void SobolResultWindow::buildInterface()
     vbox->addWidget(warningLabel);
   }
   scrollArea->setWidget(widget);
-  tabWidget_->addTab(scrollArea, tr("Result"));
+  tabWidget_->addTab(scrollArea, tr("Indices"));
 
   // second tab --------------------------------
   if (result_.getElapsedTime() > 0. && result_.getCallsNumber())
   {
-    QWidget * tab = new QWidget;
-    QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+    // stop criteria
+    QStringList namesList;
+    namesList << tr("Elapsed time");
+    namesList << tr("Number of calls");
+    namesList << tr("Coefficient of variation");
 
-    // elapsed time
-    QLabel * elapsedTimeLabel = new QLabel(tr("Elapsed time:") + " " + QString::number(result_.getElapsedTime()) + " s");
-    elapsedTimeLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
-    tabLayout->addWidget(elapsedTimeLabel);
+    QStringList valuesList;
+    valuesList << QString::number(result_.getElapsedTime()) + " s";
+    valuesList << QString::number(result_.getCallsNumber());
+    valuesList << QString::number(result_.getCoefficientOfVariation());
 
-    // sample size
-    QLabel * nbSimuLabel = new QLabel(tr("Number of calls:") + " " + QString::number(result_.getCallsNumber()));
-    nbSimuLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
-    tabLayout->addWidget(nbSimuLabel);
+    ParametersWidget * parametersWidget = new ParametersWidget(tr("Stop criteria"), namesList, valuesList, true, true);
 
-    // coefficient Of Variation
-    QLabel * coefLabel = new QLabel(tr("Coefficient of variation:") + " " + QString::number(result_.getCoefficientOfVariation()));
-    coefLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
-    tabLayout->addWidget(coefLabel);
-
-    tabLayout->addStretch();
-    tabWidget_->addTab(tab, tr("Summary"));
+    tabWidget_->addTab(parametersWidget, tr("Summary"));
   }
 
   // third tab --------------------------------

@@ -21,9 +21,11 @@
 #include "otgui/DesignOfExperimentWindow.hxx"
 
 #include "otgui/MinMaxTableGroupBox.hxx"
+#include "otgui/ParametersTableView.hxx"
 
 #include <QVBoxLayout>
 #include <QScrollArea>
+#include <QSplitter>
 
 using namespace OT;
 
@@ -32,18 +34,20 @@ namespace OTGUI {
 DesignOfExperimentWindow::DesignOfExperimentWindow(DesignOfExperimentItem * item)
   : OTguiSubWindow(item)
   , designOfExperiment_(item->getDesignOfExperiment())
+  , variablesGroupBox_(0)
+  , variablesListWidget_(0)
   , tabWidget_(0)
   , tablesTabWidget_(0)
+  , scatterPlotsTabWidget_(0)
   , tableView_(0)
   , tableModel_(0)
   , failedPointsTableView_(0)
   , failedPointsTableModel_(0)
   , notEvaluatedTableView_(0)
   , notEvaluatedTableModel_(0)
-  , outputsComboBoxFirstTab_(0)
-  , plotMatrixConfigurationWidget_(0)
+  , scatterPlotsConfigurationWidget_(0)
   , plotMatrix_X_X_ConfigurationWidget_(0)
-  , graphConfigurationWidget_(0)
+  , plotMatrixConfigurationWidget_(0)
 {
   buildInterface();
   connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
@@ -52,12 +56,12 @@ DesignOfExperimentWindow::DesignOfExperimentWindow(DesignOfExperimentItem * item
 
 DesignOfExperimentWindow::~DesignOfExperimentWindow()
 {
-  delete plotMatrixConfigurationWidget_;
+  delete scatterPlotsConfigurationWidget_;
   delete plotMatrix_X_X_ConfigurationWidget_;
-  delete graphConfigurationWidget_;
-  plotMatrixConfigurationWidget_ = 0;
+  delete plotMatrixConfigurationWidget_;
+  scatterPlotsConfigurationWidget_ = 0;
   plotMatrix_X_X_ConfigurationWidget_ = 0;
-  graphConfigurationWidget_ = 0;
+  plotMatrixConfigurationWidget_ = 0;
 }
 
 
@@ -65,8 +69,22 @@ void DesignOfExperimentWindow::buildInterface()
 {
   setWindowTitle(tr("Design of experiment"));
 
-  QWidget * mainWidget = new QWidget;
-  QVBoxLayout * tabLayout = new QVBoxLayout(mainWidget);
+  // main splitter
+  QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
+
+  // - list outputs
+  variablesGroupBox_ = new QGroupBox(tr("Variables"));
+  QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(variablesGroupBox_);
+
+  variablesListWidget_ = new QListWidget;
+  outputsLayoutGroupBox->addWidget(variablesListWidget_);
+
+  mainWidget->addWidget(variablesGroupBox_);
+  variablesGroupBox_->hide();
+  mainWidget->setStretchFactor(0, 1);
+
+  QWidget * tab = new QWidget;
+  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
   tabWidget_ = new QTabWidget;
 
@@ -82,6 +100,9 @@ void DesignOfExperimentWindow::buildInterface()
   errorMessageLabel_ = new QLabel;
   errorMessageLabel_->setWordWrap(true);
   tabLayout->addWidget(errorMessageLabel_);
+
+  mainWidget->addWidget(tab);
+  mainWidget->setStretchFactor(1, 10);
 
   // if needed: fill other tabs
   updateTable();
@@ -112,31 +133,30 @@ void DesignOfExperimentWindow::updateTable()
   if (notEvaluatedTableModel_)
     delete notEvaluatedTableModel_;
 
+  // tab with well evaluated points
   tableModel_ = new SampleTableModel(designOfExperiment_.getSample(), tableView_);
   tableView_->setModel(tableModel_);
 
-  if (designOfExperiment_.getOutputSample().getSize())
+  // tab with failed points
+  if (designOfExperiment_.getFailedInputSample().getSize())
   {
-    // tab with failed points
-    if (designOfExperiment_.getFailedInputSample().getSize())
-    {
-      failedPointsTableModel_ = new SampleTableModel(designOfExperiment_.getFailedInputSample(), failedPointsTableView_);
-      failedPointsTableView_ = new ExportableTableView;
-      failedPointsTableView_->setModel(failedPointsTableModel_);
-      tablesTabWidget_->addTab(failedPointsTableView_, tr("Failed points"));
-    }
-    // tab with not evaluated points
-    if (designOfExperiment_.getNotEvaluatedInputSample().getSize())
-    {
-      notEvaluatedTableModel_ = new SampleTableModel(designOfExperiment_.getNotEvaluatedInputSample(), notEvaluatedTableView_);
-      notEvaluatedTableView_ = new ExportableTableView;
-      notEvaluatedTableView_->setModel(notEvaluatedTableModel_);
-      tablesTabWidget_->addTab(notEvaluatedTableView_, tr("Not evaluated points"));
-    }
-
-    if (tableModel_->sampleIsValid())
-      addTabsForOutputs();
+    failedPointsTableModel_ = new SampleTableModel(designOfExperiment_.getFailedInputSample(), failedPointsTableView_);
+    failedPointsTableView_ = new ExportableTableView;
+    failedPointsTableView_->setModel(failedPointsTableModel_);
+    tablesTabWidget_->addTab(failedPointsTableView_, tr("Failed points"));
   }
+  // tab with not evaluated points
+  if (designOfExperiment_.getNotEvaluatedInputSample().getSize())
+  {
+    notEvaluatedTableModel_ = new SampleTableModel(designOfExperiment_.getNotEvaluatedInputSample(), notEvaluatedTableView_);
+    notEvaluatedTableView_ = new ExportableTableView;
+    notEvaluatedTableView_->setModel(notEvaluatedTableModel_);
+    tablesTabWidget_->addTab(notEvaluatedTableView_, tr("Not evaluated points"));
+  }
+
+  // tabs with results
+  if (designOfExperiment_.getOutputSample().getSize() && tableModel_->sampleIsValid())
+    addTabsForOutputs();
 }
 
 
@@ -208,67 +228,73 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   scrollArea->setWidgetResizable(true);
   tabLayout->setSizeConstraint(QLayout::SetFixedSize);
 
-  // -- output name --
-  QHBoxLayout * headLayout = new QHBoxLayout;
-  QLabel * outputName = new QLabel(tr("Output"));
-  headLayout->addWidget(outputName);
-  outputsComboBoxFirstTab_ = new QComboBox;
-  outputsComboBoxFirstTab_->addItems(outputNames);
-  headLayout->addWidget(outputsComboBoxFirstTab_);
-  headLayout->addStretch();
-  tabLayout->addLayout(headLayout);
+  // -- outputs names --
+  variablesListWidget_->addItems(outputNames);
+  variablesListWidget_->setCurrentRow(0);
 
   // -- results --
 
   // number of simulations
-  QLabel * nbSimuLabel = new QLabel(tr("Size of the design of experiment:") + " " + QString::number(inS.getSize()) + "\n");
-  nbSimuLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  tabLayout->addWidget(nbSimuLabel);
+  QGroupBox * aGroupBox = new QGroupBox;
+  QVBoxLayout * aGroupBoxLayout = new QVBoxLayout(aGroupBox);
+
+  ParametersTableView * table = new ParametersTableView(QStringList() << tr("Sample size"), QStringList() << QString::number(inS.getSize()), true, true);
+  aGroupBoxLayout->addWidget(table);
+  tabLayout->addWidget(aGroupBox);
 
   // min/max table
   MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(*dynamic_cast<DataSample*>(&*designOfExperiment_.getImplementation()));
   tabLayout->addWidget(minMaxTableGroupBox);
-  connect(outputsComboBoxFirstTab_, SIGNAL(currentIndexChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
+  connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
 
   scrollArea->setWidget(tab);
   tabWidget_->addTab(scrollArea, tr("Min/Max"));
 
   // second tab --------------------------------
+  scatterPlotsTabWidget_ = new QTabWidget;
+
+  // - scatter plots
   tab = new QWidget;
-  QVBoxLayout * plotLayout = new QVBoxLayout(tab);
+  tabLayout = new QVBoxLayout(tab);
   ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
   QVector<PlotWidget*> listScatterPlotWidgets = GetListScatterPlots(inS, outS, designOfExperiment_.getFailedInputSample(),
                                                                     inputNames, inAxisTitles, outputNames, outAxisTitles);
   for (int i=0; i<listScatterPlotWidgets.size(); ++i)
     stackedWidget->addWidget(listScatterPlotWidgets[i]);
 
-  plotLayout->addWidget(stackedWidget);
-  graphConfigurationWidget_ = new GraphConfigurationWidget(listScatterPlotWidgets, inputNames, outputNames, GraphConfigurationWidget::Scatter);
-  connect(graphConfigurationWidget_, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+  tabLayout->addWidget(stackedWidget);
+  scatterPlotsConfigurationWidget_ = new GraphConfigurationWidget(listScatterPlotWidgets, inputNames, outputNames, GraphConfigurationWidget::Scatter);
+  connect(scatterPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
 
-  tabWidget_->addTab(tab, tr("Scatter plots"));
+  scatterPlotsTabWidget_->addTab(tab, tr("Scatter plots"));
 
-  // third tab --------------------------------
+  // - plot matrix X-X --------------------------------
   tab = new PlotMatrixWidget(inS, inS);
   plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
-  tabWidget_->addTab(tab, tr("Plot matrix X-X"));
+  scatterPlotsTabWidget_->addTab(tab, tr("Plot matrix X-X"));
 
-  // fourth tab --------------------------------
+  // - plot matrix Y-X --------------------------------
   tab = new PlotMatrixWidget(inS, outS);
   plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
-  tabWidget_->addTab(tab, tr("Plot matrix Y-X"));
+  scatterPlotsTabWidget_->addTab(tab, tr("Plot matrix Y-X"));
+
+  connect(scatterPlotsTabWidget_, SIGNAL(currentChanged(int)), this, SLOT(scatterPlotsTabWidgetIndexChanged()));
+  tabWidget_->addTab(scatterPlotsTabWidget_, tr("Scatter plots"));
 }
 
 
-QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const OT::NumericalSample & inS,
-                                                                   const OT::NumericalSample & outS,
-                                                                   const OT::NumericalSample & notValidInS,
-                                                                   const QStringList inNames, const QStringList inAxisNames,
-                                                                   const QStringList outNames, const QStringList outAxisNames)
+QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const NumericalSample& inS,
+                                                                   const NumericalSample& outS,
+                                                                   const NumericalSample& notValidInS,
+                                                                   const QStringList inNames,
+                                                                   const QStringList inAxisNames,
+                                                                   const QStringList outNames,
+                                                                   const QStringList outAxisNames
+                                                                  )
 {
   QVector<PlotWidget*> listScatterPlotWidgets;
   const UnsignedInteger nbInputs = inS.getDimension();
@@ -316,32 +342,45 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const OT::Num
 }
 
 
+void DesignOfExperimentWindow::scatterPlotsTabWidgetIndexChanged()
+{
+  showHideGraphConfigurationWidget(tabWidget_->currentIndex());
+}
+
+
 void DesignOfExperimentWindow::showHideGraphConfigurationWidget(int indexTab)
 {
-  switch (indexTab)
+  // if a plotWidget is visible
+  if (indexTab == 2) // scatter plots
   {
-    // if a plotWidget is visible
-    case 2: // scatter plots
-      if (graphConfigurationWidget_)
-        if (!graphConfigurationWidget_->isVisible())
-          emit graphWindowActivated(graphConfigurationWidget_);
-      break;
-    case 3: // plot matrix X-X
+    if (scatterPlotsTabWidget_->currentIndex() == 0) // scatter plots
+    {
+      if (scatterPlotsConfigurationWidget_)
+        if (!scatterPlotsConfigurationWidget_->isVisible())
+          emit graphWindowActivated(scatterPlotsConfigurationWidget_);
+    }
+    else if (scatterPlotsTabWidget_->currentIndex() == 1) // plot matrix X-X
+    {
       if (plotMatrix_X_X_ConfigurationWidget_)
         if (!plotMatrix_X_X_ConfigurationWidget_->isVisible())
           emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
-      break;
-    case 4: // plot matrix Y-X
+    }
+    else if (scatterPlotsTabWidget_->currentIndex() == 2) // plot matrix Y-X
+    {
       if (plotMatrixConfigurationWidget_)
         if (!plotMatrixConfigurationWidget_->isVisible())
           emit graphWindowActivated(plotMatrixConfigurationWidget_);
-      break;
-    // if no plotWidget is visible
-    default:
-    {
-      emit graphWindowDeactivated();
-      break;
     }
+    variablesGroupBox_->hide();
+  }
+  // if no plotWidget is visible
+  else
+  {
+    emit graphWindowDeactivated();
+    if (indexTab == 1)
+      variablesGroupBox_->show();
+    else
+      variablesGroupBox_->hide();
   }
 }
 

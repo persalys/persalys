@@ -22,12 +22,10 @@
 #define OTGUI_METAMODELVALIDATIONWIDGET_HXX
 
 #include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
+#include "otgui/ParametersTableView.hxx"
 
 #include <openturns/NumericalSample.hxx>
 
-#include <QHeaderView>
 #include <QVBoxLayout>
 
 namespace OTGUI {
@@ -53,21 +51,17 @@ public:
     if (!measure.isEmpty())
     {
       // validation table view
-      ResizableTableViewWithoutScrollBar * validationTableView = new ResizableTableViewWithoutScrollBar;
-      validationTableView->horizontalHeader()->hide();
-      validationTableView->verticalHeader()->hide();
-      CustomStandardItemModel * validationTable = new CustomStandardItemModel(2, 2, this);
-      validationTableView->setModel(validationTable);
-      // - vertical header
-      validationTable->setNotEditableHeaderItem(0, 0, tr("Residual"));
-      validationTable->setNotEditableHeaderItem(1, 0, measure);
+      QStringList namesList;
+      namesList << tr("Residual");
+      namesList << measure;
 
-      // - residual/q2 values
-      validationTable->setNotEditableItem(0, 1, error);
-      validationTable->setNotEditableItem(1, 1, value);
+      QStringList valuesList;
+      valuesList << QString::number(error);
+      valuesList << QString::number(value);
 
-      validationTableView->resizeToContents();
-      widgetLayout->addWidget(validationTableView);
+      ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
+
+      widgetLayout->addWidget(table);
     }
 
     // plot widget
@@ -84,7 +78,7 @@ public:
     // GraphConfigurationWidget
     QVector<PlotWidget*> listPlot;
     listPlot.append(plot);
-    graphConfigWidget_ = new GraphConfigurationWidget(listPlot, QStringList(), QStringList(), GraphConfigurationWidget::NoType);
+    graphConfigWidget_ = new GraphConfigurationWidget(listPlot);
   }
 
   virtual ~MetaModelValidationWidget()

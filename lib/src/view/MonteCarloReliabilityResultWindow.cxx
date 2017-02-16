@@ -21,15 +21,15 @@
 #include "otgui/MonteCarloReliabilityResultWindow.hxx"
 
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/ParametersTableView.hxx"
 
 #include <qwt_legend.h>
 #include <qwt_scale_engine.h>
 
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QHeaderView>
+#include <QScrollArea>
+#include <QSplitter>
+#include <QListWidget>
+#include <QGroupBox>
 
 using namespace OT;
 
@@ -82,7 +82,7 @@ void MonteCarloReliabilityResultWindow::setParameters(const Analysis & analysis)
   valuesList << QString::number(MCanalysis->getBlockSize());
   valuesList << QString::number(MCanalysis->getSeed()); 
 
-  parametersWidget_ = new ParametersWidget(tr("Threshold exceedance parameters:"), namesList, valuesList);
+  parametersWidget_ = new ParametersWidget(tr("Threshold exceedance parameters"), namesList, valuesList);
 }
 
 
@@ -90,34 +90,58 @@ void MonteCarloReliabilityResultWindow::buildInterface()
 {
   setWindowTitle(tr("Threshold exceedance results"));
 
+  // get output info
+  QString outputName(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
+
+  // main splitter
+  QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
+
+  // - list outputs
+  QGroupBox * outputsGroupBox = new QGroupBox(tr("Output"));
+  QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
+
+  QListWidget * outputsListWidget = new QListWidget;
+  outputsListWidget->addItems(QStringList() << outputName);
+  outputsLayoutGroupBox->addWidget(outputsListWidget);
+
+  mainWidget->addWidget(outputsGroupBox);
+  mainWidget->setStretchFactor(0, 1);
+
+  // tab widget
   tabWidget_ = new QTabWidget;
 
-  // first tab --------------------------------
+  // first tab : summary --------------------------------
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
-  QHBoxLayout * headLayout = new QHBoxLayout;
-  QLabel * outputNameLabel = new QLabel(tr("Output"));
-  headLayout->addWidget(outputNameLabel);
-  outputNameLabel = new QLabel(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
-  headLayout->addWidget(outputNameLabel);
-  headLayout->addStretch();
-  tabLayout->addLayout(headLayout);
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+  tabLayout->setSizeConstraint(QLayout::SetFixedSize);
 
+  // stop criteria
+  QGroupBox * parametersGroupBox = new QGroupBox(tr("Stop criteria"));
+  QVBoxLayout * parametersGroupBoxLayout = new QVBoxLayout(parametersGroupBox);
+
+  QStringList namesList;
   // elapsed time
   if (result_.getElapsedTime() > 0.)
-  {
-    QLabel * elapsedTimeLabel = new QLabel(tr("Elapsed time:") + " " + QString::number(result_.getElapsedTime()) + " s");
-    elapsedTimeLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
-    tabLayout->addWidget(elapsedTimeLabel);
-  }
+    namesList << tr("Elapsed time");
+  // sample size
+  namesList << tr("Number of calls");
 
-  // number of calls
-  QLabel * nbSimuLabel = new QLabel(tr("Number of calls:") + " " + QString::number(result_.getSimulationResult().getOuterSampling()*result_.getSimulationResult().getBlockSize()) + "\n");
-  nbSimuLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  tabLayout->addWidget(nbSimuLabel);
+  QStringList valuesList;
+  if (result_.getElapsedTime() > 0.)
+    valuesList << QString::number(result_.getElapsedTime()) + " s";
+  valuesList << QString::number(result_.getSimulationResult().getOuterSampling() * result_.getSimulationResult().getBlockSize());
+
+  ParametersTableView * parametersTable = new ParametersTableView(namesList, valuesList, true, true);
+  parametersGroupBoxLayout->addWidget(parametersTable);
+  tabLayout->addWidget(parametersGroupBox);
 
   // probability estimate table
+  QGroupBox * groupBox = new QGroupBox(tr("Failure probability estimate"));
+  QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
+
   ResizableTableViewWithoutScrollBar * resultsTable = new ResizableTableViewWithoutScrollBar;
   resultsTable->horizontalHeader()->hide();
   resultsTable->verticalHeader()->hide();
@@ -135,39 +159,42 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   resultsTableModel->setNotEditableHeaderItem(2, 0, tr("Failure probability"));
   resultsTableModel->setNotEditableItem(2, 1, result_.getSimulationResult().getProbabilityEstimate());
 
-  // Coefficient of variation
-  resultsTableModel->setNotEditableHeaderItem(3, 0, tr("Coefficient of variation"));
-  resultsTableModel->setNotEditableItem(3, 1, result_.getSimulationResult().getCoefficientOfVariation());
-
   // - lower bound
   resultsTableModel->setNotEditableHeaderItem(1, 2, tr("Lower bound"));
-  double pfCILowerBound = std::max(0.0, result_.getSimulationResult().getProbabilityEstimate() - 0.5 * result_.getSimulationResult().getConfidenceLength());
+  const double pfCILowerBound = std::max(0.0, result_.getSimulationResult().getProbabilityEstimate() - 0.5 * result_.getSimulationResult().getConfidenceLength());
   resultsTableModel->setNotEditableItem(2, 2, pfCILowerBound);
 
   // - upper bound
   resultsTableModel->setNotEditableHeaderItem(1, 3, tr("Upper bound"));
-  double pfCIUpperBound = std::min(1.0, result_.getSimulationResult().getProbabilityEstimate() + 0.5 * result_.getSimulationResult().getConfidenceLength());
+  const double pfCIUpperBound = std::min(1.0, result_.getSimulationResult().getProbabilityEstimate() + 0.5 * result_.getSimulationResult().getConfidenceLength());
   resultsTableModel->setNotEditableItem(2, 3, pfCIUpperBound);
 
+  // Coefficient of variation
+  resultsTableModel->setNotEditableHeaderItem(3, 0, tr("Coefficient of variation"));
+  resultsTableModel->setNotEditableItem(3, 1, result_.getSimulationResult().getCoefficientOfVariation());
+
+  // resize to contents
   resultsTable->resizeToContents();
   
   // Confidence interval: do it after resizeToContents
   resultsTableModel->setNotEditableHeaderItem(0, 2, tr("Confidence interval at 95%"));
   resultsTable->setSpan(0, 2, 1, 2);
 
-  tabLayout->addWidget(resultsTable);
+  groupBoxLayout->addWidget(resultsTable);
+  groupBoxLayout->addStretch();
+
+  tabLayout->addWidget(groupBox);
   tabLayout->addStretch();
 
-  tabWidget_->addTab(tab, tr("Summary"));
+  scrollArea->setWidget(tab);
+  tabWidget_->addTab(scrollArea, tr("Summary"));
 
-  // second tab --------------------------------
+  // second tab : output histogram --------------------------------
   tab = new QWidget;
   tabLayout = new QVBoxLayout(tab);
 
-  // output histogram
   QVector<PlotWidget*> listHistogram;
   PlotWidget * plot = new PlotWidget("histogram");
-  QString outputName(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
   plot->plotHistogram(result_.getOutputSample(), 2, 0, outputName + " " + tr("distribution"));
   NumericalSample threshold = NumericalSample(2, 2);
   threshold[0][0] = result_.getSimulationResult().getEvent().getThreshold();
@@ -183,11 +210,11 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   listHistogram.append(plot);
   tabLayout->addWidget(plot);
 
-  histogramConfigurationWidget_ = new GraphConfigurationWidget(listHistogram, QStringList(), QStringList()<<outputName, GraphConfigurationWidget::NoType);
+  histogramConfigurationWidget_ = new GraphConfigurationWidget(listHistogram);
 
   tabWidget_->addTab(tab, tr("Histogram"));
 
-  // third tab --------------------------------
+  // third tab : convergence --------------------------------
   tab = new QWidget;
   tabLayout = new QVBoxLayout(tab);
 
@@ -212,17 +239,20 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   listConvergenceGraph.append(plot);
   tabLayout->addWidget(plot);
 
-  convergenceGraphConfigurationWidget_ = new GraphConfigurationWidget(listConvergenceGraph, QStringList(), QStringList()<<outputName, GraphConfigurationWidget::NoType);
+  convergenceGraphConfigurationWidget_ = new GraphConfigurationWidget(listConvergenceGraph);
 
   tabWidget_->addTab(tab, tr("Convergence graph"));
 
-  // fourth tab --------------------------------
+  // fourth tab : parameters --------------------------------
   if (parametersWidget_)
     tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 
   //
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
-  setWidget(tabWidget_);
+  mainWidget->addWidget(tabWidget_);
+  mainWidget->setStretchFactor(1, 10);
+
+  setWidget(mainWidget);
 }
 
 

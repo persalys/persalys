@@ -64,7 +64,7 @@ void SRCResultWindow::setParameters(const Analysis & analysis)
   valuesList << QString::number(SRCanalysis->getSimulationsNumber());
   valuesList << QString::number(SRCanalysis->getSeed());
 
-  parametersWidget_ = new ParametersWidget(tr("Sensitivity analysis parameters:"), namesList, valuesList);
+  parametersWidget_ = new ParametersWidget(tr("Sensitivity analysis parameters"), namesList, valuesList);
 }
 
 
@@ -88,7 +88,6 @@ void SRCResultWindow::buildInterface()
   outputsListWidget_ = new QListWidget;
   outputsListWidget_->addItems(outputNames);
   outputsLayoutGroupBox->addWidget(outputsListWidget_);
-  outputsLayoutGroupBox->addStretch();
 
   mainWidget->addWidget(outputsGroupBox);
   mainWidget->setStretchFactor(0, 1);
@@ -127,7 +126,7 @@ void SRCResultWindow::buildInterface()
     vbox->addWidget(warningLabel);
   }
   scrollArea->setWidget(widget);
-  tabWidget_->addTab(scrollArea, tr("Result"));
+  tabWidget_->addTab(scrollArea, tr("Indices"));
 
   // second tab --------------------------------
   if (parametersWidget_)

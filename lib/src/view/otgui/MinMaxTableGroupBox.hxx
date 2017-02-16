@@ -32,11 +32,11 @@ class OTGUI_API MinMaxTableGroupBox : public QGroupBox
   Q_OBJECT
 
 public:
-  MinMaxTableGroupBox(const DataSample & result, const bool onlyOutput=true, QWidget* parent=0);
+  MinMaxTableGroupBox(const DataSample& result, const bool onlyOutput=true, QWidget* parent=0);
 
 protected:
-  QWidget * getForOutputMinMaxTableView(const DataSample & result, const int outputIndex);
-  QWidget * getForInputMinMaxTableView(const DataSample & result, const int inputIndex);
+  QWidget * getForOutputMinMaxTableView(const DataSample & result, const OT::UnsignedInteger outputIndex);
+  QWidget * getForInputMinMaxTableView(const DataSample & result, const OT::UnsignedInteger inputIndex);
 
 public slots:
   void setCurrentIndexStackedWidget(int index);

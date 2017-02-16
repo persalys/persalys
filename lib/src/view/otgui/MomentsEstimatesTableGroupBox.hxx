@@ -22,9 +22,9 @@
 #define OTGUI_MOMENTASESTIMATESTABLEGROUPBOX_HXX
 
 #include "otgui/DataAnalysisResult.hxx"
+#include "otgui/ResizableStackedWidget.hxx"
 
 #include <QGroupBox>
-#include <QStackedWidget>
 
 namespace OTGUI {
 class OTGUI_API MomentsEstimatesTableGroupBox : public QGroupBox
@@ -44,7 +44,7 @@ public slots:
   void setCurrentIndexStackedWidget(int index);
 
 private:
-  QStackedWidget * stackedWidget_;
+  ResizableStackedWidget * stackedWidget_;
   bool isConfidenceIntervalRequired_;
   double levelConfidenceInterval_;
 };

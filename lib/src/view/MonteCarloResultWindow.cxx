@@ -93,23 +93,19 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
       outAxisTitles_ << outputNames_.last();
   }
 
-  sampleSizeTitle_ = tr("Number of calls:") + " ";
+  sampleSizeTitle_ = tr("Number of calls") + " ";
 
   setParameters(item->getAnalysis());
 
-  tabOffset_ = 1;
+  showTable_ = true;
 
-  // first tab: Table --------------------------------
-  QWidget * tab = new QWidget;
-  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
-  ExportableTableView * tabResultView = new ExportableTableView;
-  SampleTableModel * tabResultModel = new SampleTableModel(result_.getSample(), tabResultView);
-  tabResultView->setModel(tabResultModel);
-  tabLayout->addWidget(tabResultView);
-
-  tabWidget_->addTab(tab, tr("Result table"));
-
-  resultsSampleIsValid_ = tabResultModel->sampleIsValid();
+  for (UnsignedInteger j=0; j<result_.getSample().getSize(); ++j)
+    for (UnsignedInteger i=0; i<result_.getSample().getDimension(); ++i)
+      if (std::isnan(result_.getSample()[j][i]))
+      {
+        resultsSampleIsValid_ = false;
+        break;
+      }
 }
 
 
@@ -144,6 +140,6 @@ void MonteCarloResultWindow::setParameters(const Analysis & analysis)
   valuesList << QString::number(MCanalysis->getBlockSize());
   valuesList << QString::number(MCanalysis->getSeed()); 
 
-  parametersWidget_ = new ParametersWidget(tr("Central tendency parameters:"), namesList, valuesList);
+  parametersWidget_ = new ParametersWidget(tr("Central tendency parameters"), namesList, valuesList);
 }
 }

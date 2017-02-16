@@ -57,7 +57,6 @@ void CopulaInferenceResultWindow::buildInterface()
   QListWidget * listSetOfVariables = new QListWidget;
   listSetOfVariables->addItems(setOfVariablesNames);
   variablesLayoutGroupBox->addWidget(listSetOfVariables);
-  variablesLayoutGroupBox->addStretch();
 
   mainWidget->addWidget(variablesGroupBox);
   mainWidget->setStretchFactor(0, 1);
