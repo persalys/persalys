@@ -313,22 +313,28 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const Numeric
     }
     for (UnsignedInteger i=0; i<nbInputs; ++i)
     {
-      PlotWidget * plot = new PlotWidget("scatterplot");
-      plot->plotScatter(inS.getMarginal(j), inS.getMarginal(i), pen, inAxisNames[j], inAxisNames[i]);
-      if (notValidInS.getSize())
-        plot->plotScatter(notValidInS.getMarginal(j), notValidInS.getMarginal(i), notValidPen, inAxisNames[j], inAxisNames[i]);
-      plot->setTitle(tr("Scatter plot:") + " " + inNames[i] + " " + tr("vs") + " " + inNames[j]);
-      listScatterPlotWidgets.append(plot);
+      if (i != j)
+      {
+        PlotWidget * plot = new PlotWidget("scatterplot");
+        plot->plotScatter(inS.getMarginal(j), inS.getMarginal(i), pen, inAxisNames[j], inAxisNames[i]);
+        if (notValidInS.getSize())
+          plot->plotScatter(notValidInS.getMarginal(j), notValidInS.getMarginal(i), notValidPen, inAxisNames[j], inAxisNames[i]);
+        plot->setTitle(tr("Scatter plot:") + " " + inNames[i] + " " + tr("vs") + " " + inNames[j]);
+        listScatterPlotWidgets.append(plot);
+      }
     }
   }
   for (UnsignedInteger j=0; j<nbOutputs; ++j)
   {
     for (UnsignedInteger i=0; i<nbOutputs; ++i)
     {
-      PlotWidget * plot = new PlotWidget("scatterplot");
-      plot->plotScatter(outS.getMarginal(j), outS.getMarginal(i), pen, outAxisNames[j], outAxisNames[i]);
-      plot->setTitle(tr("Scatter plot:") + " " + outNames[i] + " " + tr("vs") + " " + outNames[j]);
-      listScatterPlotWidgets.append(plot);
+      if (i != j)
+      {
+        PlotWidget * plot = new PlotWidget("scatterplot");
+        plot->plotScatter(outS.getMarginal(j), outS.getMarginal(i), pen, outAxisNames[j], outAxisNames[i]);
+        plot->setTitle(tr("Scatter plot:") + " " + outNames[i] + " " + tr("vs") + " " + outNames[j]);
+        listScatterPlotWidgets.append(plot);
+      }
     }
     for (UnsignedInteger i=0; i<nbInputs; ++i)
     {
@@ -350,7 +356,7 @@ void DesignOfExperimentWindow::scatterPlotsTabWidgetIndexChanged()
 
 void DesignOfExperimentWindow::showHideGraphConfigurationWidget(int indexTab)
 {
-  // if a plotWidget is visible
+  // if scatter plots are visible
   if (indexTab == 2) // scatter plots
   {
     if (scatterPlotsTabWidget_->currentIndex() == 0) // scatter plots
@@ -373,11 +379,11 @@ void DesignOfExperimentWindow::showHideGraphConfigurationWidget(int indexTab)
     }
     variablesGroupBox_->hide();
   }
-  // if no plotWidget is visible
+  // if not tab with scatter plots
   else
   {
     emit graphWindowDeactivated();
-    if (indexTab == 1)
+    if (indexTab == 1) // tab summary
       variablesGroupBox_->show();
     else
       variablesGroupBox_->hide();

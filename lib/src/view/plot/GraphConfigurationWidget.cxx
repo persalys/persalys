@@ -66,43 +66,45 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   QGridLayout * mainGridLayout = new QGridLayout(frame);
   int rowGrid = 0;
 
+  // title
   QLabel * label = new QLabel(tr("Title"));
   mainGridLayout->addWidget(label, rowGrid, 0, 1, 1);
+
   titleLineEdit_ = new QLineEdit;
   connect(titleLineEdit_, SIGNAL(textChanged(QString)), this, SLOT(updateTitle()));
   mainGridLayout->addWidget(titleLineEdit_, rowGrid, 1, 1, 1);
 
-  if (inputNames.size() && (plotType_ == GraphConfigurationWidget::Scatter || plotType_ == GraphConfigurationWidget::Copula))
+  // Axis comboboxes
+  if (plotType_ == GraphConfigurationWidget::Scatter || plotType_ == GraphConfigurationWidget::Copula)
   {
+    // X-axis combobox
     label = new QLabel(tr("X-axis"));
     mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
     xAxisComboBox_ = new QComboBox;
-    xAxisComboBox_->addItems(inputNames);
-    if (plotType_ == GraphConfigurationWidget::Scatter && outputNames.size())
-      xAxisComboBox_->addItems(outputNames);
-    mainGridLayout->addWidget(xAxisComboBox_, rowGrid, 1, 1, 1);
-    connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
-  }
 
-  if (outputNames.size())
-  {
+    for (int i=0; i<inputNames.size(); ++i)
+      xAxisComboBox_->addItem(inputNames[i], true);
+
+    for (int i=0; i<outputNames.size(); ++i)
+      xAxisComboBox_->addItem(outputNames[i], false);
+
+    mainGridLayout->addWidget(xAxisComboBox_, rowGrid, 1, 1, 1);
+    connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateYComboBox()));
+
+    // Y-axis combobox
     label = new QLabel(tr("Y-axis"));
     mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
     yAxisComboBox_ = new QComboBox;
-    yAxisComboBox_->addItems(outputNames);
-    if (plotType_ == GraphConfigurationWidget::Scatter && inputNames.size())
-      yAxisComboBox_->addItems(inputNames);
     mainGridLayout->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
     connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
-    emit currentPlotChanged(currentPlotIndex_);
   }
 
-  if (plotType_ == GraphConfigurationWidget::Copula)
-    connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateYComboBox()));
-
-  if (plotType_ == GraphConfigurationWidget::PDF || plotType_ == GraphConfigurationWidget::PDFResult || plotType_ == GraphConfigurationWidget::Copula)
+  // buttons PDF - CDF
+  if (plotType_ == GraphConfigurationWidget::PDF ||
+      plotType_ == GraphConfigurationWidget::PDFResult ||
+      plotType_ == GraphConfigurationWidget::Copula)
   {
     pdf_cdfGroup_ = new QButtonGroup;
     QRadioButton * buttonToChoosePDForCDF = new QRadioButton(tr("PDF"));
@@ -188,10 +190,9 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
 
   mainGridLayout->addLayout(hboxForBottomButtons, ++rowGrid, 1, 1, 1);
 
+  // update widgets
   updateLineEdits();
-
-  if (plotType_ == GraphConfigurationWidget::Copula)
-    updateYComboBox();
+  updateYComboBox();
 
   //
   scrollArea->setWidget(frame);
@@ -242,12 +243,27 @@ void GraphConfigurationWidget::updateYComboBox()
   SignalBlocker blocker(yAxisComboBox_);
   yAxisComboBox_->clear();
 
-  QStringList variablesNames;
-  for (int i=0; i<xAxisComboBox_->count(); ++i)
-    if (i != xAxisComboBox_->currentIndex()) // must have x != y
-      variablesNames << xAxisComboBox_->itemText(i);
+  QStringList inputNames;
+  QStringList outputNames;
 
-  yAxisComboBox_->addItems(variablesNames);
+  for (int i=0; i<xAxisComboBox_->count(); ++i)
+  {
+    if (i != xAxisComboBox_->currentIndex()) // must have x != y
+    {
+      // == input
+      if (xAxisComboBox_->itemData(i).toBool())
+        inputNames << xAxisComboBox_->itemText(i);
+      // == output
+      else
+        outputNames << xAxisComboBox_->itemText(i);
+    }
+  }
+
+  if (plotType_ == GraphConfigurationWidget::Scatter)
+    yAxisComboBox_->addItems(outputNames+inputNames);
+  else if (plotType_ == GraphConfigurationWidget::Copula)
+    yAxisComboBox_->addItems(inputNames+outputNames);
+
   plotChanged();
 }
 
