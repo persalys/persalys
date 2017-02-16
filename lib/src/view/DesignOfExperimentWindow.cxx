@@ -133,31 +133,30 @@ void DesignOfExperimentWindow::updateTable()
   if (notEvaluatedTableModel_)
     delete notEvaluatedTableModel_;
 
+  // tab with well evaluated points
   tableModel_ = new SampleTableModel(designOfExperiment_.getSample(), tableView_);
   tableView_->setModel(tableModel_);
 
-  if (designOfExperiment_.getOutputSample().getSize())
+  // tab with failed points
+  if (designOfExperiment_.getFailedInputSample().getSize())
   {
-    // tab with failed points
-    if (designOfExperiment_.getFailedInputSample().getSize())
-    {
-      failedPointsTableModel_ = new SampleTableModel(designOfExperiment_.getFailedInputSample(), failedPointsTableView_);
-      failedPointsTableView_ = new ExportableTableView;
-      failedPointsTableView_->setModel(failedPointsTableModel_);
-      tablesTabWidget_->addTab(failedPointsTableView_, tr("Failed points"));
-    }
-    // tab with not evaluated points
-    if (designOfExperiment_.getNotEvaluatedInputSample().getSize())
-    {
-      notEvaluatedTableModel_ = new SampleTableModel(designOfExperiment_.getNotEvaluatedInputSample(), notEvaluatedTableView_);
-      notEvaluatedTableView_ = new ExportableTableView;
-      notEvaluatedTableView_->setModel(notEvaluatedTableModel_);
-      tablesTabWidget_->addTab(notEvaluatedTableView_, tr("Not evaluated points"));
-    }
-
-    if (tableModel_->sampleIsValid())
-      addTabsForOutputs();
+    failedPointsTableModel_ = new SampleTableModel(designOfExperiment_.getFailedInputSample(), failedPointsTableView_);
+    failedPointsTableView_ = new ExportableTableView;
+    failedPointsTableView_->setModel(failedPointsTableModel_);
+    tablesTabWidget_->addTab(failedPointsTableView_, tr("Failed points"));
   }
+  // tab with not evaluated points
+  if (designOfExperiment_.getNotEvaluatedInputSample().getSize())
+  {
+    notEvaluatedTableModel_ = new SampleTableModel(designOfExperiment_.getNotEvaluatedInputSample(), notEvaluatedTableView_);
+    notEvaluatedTableView_ = new ExportableTableView;
+    notEvaluatedTableView_->setModel(notEvaluatedTableModel_);
+    tablesTabWidget_->addTab(notEvaluatedTableView_, tr("Not evaluated points"));
+  }
+
+  // tabs with results
+  if (designOfExperiment_.getOutputSample().getSize() && tableModel_->sampleIsValid())
+    addTabsForOutputs();
 }
 
 
