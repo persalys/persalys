@@ -33,7 +33,6 @@ static Factory<Output> RegisteredFactory;
 /* Default constructor */
 Output::Output()
   : Variable()
-  , formula_("")
   , isSelected_(true)
   , hasBeenComputed_(false)
 {
@@ -41,10 +40,8 @@ Output::Output()
 
 
 /* Constructor with parameters */
-Output::Output(const String & name, const double & value, const String & description,
-               const String & formula)
+Output::Output(const String & name, const double & value, const String & description)
   : Variable(name, value, description)
-  , formula_(formula)
   , isSelected_(true)
   , hasBeenComputed_(false)
 {
@@ -55,18 +52,6 @@ Output::Output(const String & name, const double & value, const String & descrip
 Output* Output::clone() const
 {
   return new Output(*this);
-}
-
-
-String Output::getFormula() const
-{
-  return formula_;
-}
-
-
-void Output::setFormula(const String & formula)
-{
-  formula_ = formula;
 }
 
 
@@ -97,8 +82,7 @@ void Output::setHasBeenComputed(const bool hasBeenComputed)
 String Output::getPythonScript() const
 {
   OSS oss;
-  oss << getName() << " = otguibase.Output('" << getName() << "', " << getValue() << ", '" << getEscapedDescription();
-  oss << "', '" << formula_ << "')\n";
+  oss << getName() << " = otguibase.Output('" << getName() << "', " << getValue() << ", '" << getEscapedDescription() << "')\n";
   if (!isSelected_)
     oss << getName() << ".setIsSelected(False)\n";
 
@@ -112,8 +96,7 @@ String Output::__repr__() const
   OSS oss;
   oss << "class=" << GetClassName()
       << " name=" << getName()
-      << " description=" << getDescription()
-      << " formula=" << getFormula();
+      << " description=" << getDescription();
   return oss;
 }
 
@@ -122,7 +105,6 @@ String Output::__repr__() const
 void Output::save(Advocate & adv) const
 {
   Variable::save(adv);
-  adv.saveAttribute("formula_", formula_);
   adv.saveAttribute("isSelected_", isSelected_);
   adv.saveAttribute("hasBeenComputed_", hasBeenComputed_);
 }
@@ -132,7 +114,6 @@ void Output::save(Advocate & adv) const
 void Output::load(Advocate & adv)
 {
   Variable::load(adv);
-  adv.loadAttribute("formula_", formula_);
   adv.loadAttribute("isSelected_", isSelected_);
   adv.loadAttribute("hasBeenComputed_", hasBeenComputed_);
 }

@@ -12,9 +12,9 @@ Q = otguibase.Input('Q', 0., 'Q (m3/s)', ot.TruncatedDistribution(ot.Gumbel(1./5
 Ks = otguibase.Input('Ks', 0., 'Ks (m^(1/3)/s)', ot.TruncatedDistribution(ot.Normal(30.0, 7.5), 0, ot.TruncatedDistribution.LOWER))
 Zv = otguibase.Input('Zv', 0., 'Zv (m)', ot.Uniform(49.0, 51.0))
 Zm = otguibase.Input('Zm', 0., 'Zm (m)', ot.Uniform(54.0, 56.0))
-S = otguibase.Output('S', 0., '', '(Q/(Ks*300.*sqrt((Zm-Zv)/5000)))^(3.0/5.0)+Zv-55.5-3.')
+S = otguibase.Output('S')
 
-model = otguibase.PhysicalModel('myPhysicalModel', [Q, Ks, Zv, Zm], [S])
+model = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [Q, Ks, Zv, Zm], [S], ['(Q/(Ks*300.*sqrt((Zm-Zv)/5000)))^(3.0/5.0)+Zv-55.5-3.'])
 myStudy.add(model)
 
 ## limit state ##

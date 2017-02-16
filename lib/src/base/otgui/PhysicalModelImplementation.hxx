@@ -64,9 +64,8 @@ public:
   Output & getOutputByName(const OT::String & outputName);
   Output getOutputByName(const OT::String & outputName) const;
   virtual void setOutputs(const OutputCollection & outputs);
-  void setOutputName(const OT::String & outputName, const OT::String & newName);
+  virtual void setOutputName(const OT::String & outputName, const OT::String & newName);
   void setOutputDescription(const OT::String & outputName, const OT::String & description);
-  virtual void setOutputFormula(const OT::String & outputName, const OT::String & formula);
   void setOutputValue(const OT::String & outputName, const double & value);
   void selectOutput(const OT::String & outputName, const bool selected);
   virtual void addOutput(const Output & output);

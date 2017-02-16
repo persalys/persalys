@@ -20,6 +20,10 @@
  */
 #include "otgui/OutputTableModel.hxx"
 
+#include "otgui/AnalyticalPhysicalModel.hxx"
+
+#include <QDebug>
+
 using namespace OT;
 
 namespace OTGUI {
@@ -28,6 +32,8 @@ OutputTableModel::OutputTableModel(const PhysicalModel & physicalModel, QObject 
   : QAbstractTableModel(parent)
   , physicalModel_(physicalModel)
 {
+  if (!dynamic_cast<AnalyticalPhysicalModel*>(&*physicalModel_.getImplementation()))
+    qDebug() << "In OutputTableModel: the physicalModel implementation must be an AnalyticalPhysicalModel";
 }
 
 
@@ -97,7 +103,10 @@ QVariant OutputTableModel::data(const QModelIndex & index, int role) const
       case 1:
         return QString::fromUtf8(physicalModel_.getOutputs()[index.row()].getDescription().c_str());
       case 2:
-        return QString::fromUtf8(physicalModel_.getOutputs()[index.row()].getFormula().c_str());
+      {
+        const AnalyticalPhysicalModel * model = dynamic_cast<const AnalyticalPhysicalModel*>(&*physicalModel_.getImplementation());
+        return QString::fromUtf8(model->getFormula(physicalModel_.getOutputs()[index.row()].getName()).c_str());
+      }
       case 3:
       {
         if (!physicalModel_.getOutputs()[index.row()].hasBeenComputed())
@@ -165,12 +174,13 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
       }
       case 2:
       {
-        if (output.getFormula() == value.toString().toUtf8().constData())
+        AnalyticalPhysicalModel * model = dynamic_cast<AnalyticalPhysicalModel*>(&*physicalModel_.getImplementation());
+        if (model->getFormula(output.getName()) == value.toString().toUtf8().constData())
           return true;
         // TODO test if value.toString() ok
         physicalModel_.blockNotification(true);
         emit errorMessageChanged("");
-        physicalModel_.setOutputFormula(output.getName(), value.toString().toUtf8().constData());
+        model->setFormula(output.getName(), value.toString().toUtf8().constData());
         break;
       }
     }

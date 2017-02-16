@@ -9,9 +9,9 @@ myStudy = otguibase.OTStudy('myStudy')
 ## Model
 X0 = otguibase.Input('X0', 1, '', ot.Normal(1, 1))
 X1 = otguibase.Input('X1', 2, '', ot.Normal(1, 1))
-Y0 = otguibase.Output('Y0', 0, '', 'sin(X0) + 8*X1')
+Y0 = otguibase.Output('Y0')
 
-model = otguibase.AnalyticalPhysicalModel('aModelPhys', [X0, X1], [Y0])
+model = otguibase.AnalyticalPhysicalModel('aModelPhys', [X0, X1], [Y0], ['sin(X0) + 8*X1'])
 myStudy.add(model)
 
 ## limit state ##
@@ -44,7 +44,7 @@ print("result=", analysis2.getResult())
 ## Monte Carlo ##
 X2 = otguibase.Input('X2', 2)
 model.addInput(X2)
-model.setOutputFormula('Y0', 'sin(X0) + 8*X1 + X2')
+model.setFormula('Y0', 'sin(X0) + 8*X1 + X2')
 
 analysis3 = otguibase.MonteCarloReliabilityAnalysis('myMonteCarlo3', limitState)
 analysis3.setMaximumCalls(1000)

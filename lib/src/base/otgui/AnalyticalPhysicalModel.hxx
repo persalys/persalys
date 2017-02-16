@@ -30,16 +30,27 @@ class OTGUI_API AnalyticalPhysicalModel : public PhysicalModelImplementation
 
 public:
   /** Default constructor */
-  AnalyticalPhysicalModel(const OT::String & name="Unnamed");
+  AnalyticalPhysicalModel(const OT::String& name="Unnamed");
   /** Constructor with parameters */
-  AnalyticalPhysicalModel(const OT::String & name,
-                          const InputCollection & inputs,
-                          const OutputCollection & outputs);
+  AnalyticalPhysicalModel(const OT::String& name,
+                          const InputCollection& inputs,
+                          const OutputCollection& outputs,
+                          const OT::Description& formulas);
 
   /** Virtual constructor */
   virtual AnalyticalPhysicalModel * clone() const;
 
+  virtual void addOutput(const Output& output);
+  virtual void removeOutput(const OT::String& outputName);
+  virtual void setOutputs(const OutputCollection& outputs);
+  virtual void setOutputName(const OT::String& outputName, const OT::String& newName);
+
   OT::Description getFormulas() const;
+  void setFormulas(const OT::Description& formulas);
+
+  OT::String getFormula(const OT::String& outputName) const;
+  void setFormula(const OT::String& outputName, const OT::String& formula);
+
   virtual OT::NumericalMathFunction getFunction() const;
 
   OT::String getPythonScript() const;
@@ -52,6 +63,9 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   virtual void load(OT::Advocate & adv);
+
+private:
+  std::map<OT::String, OT::String> formulaForEachOutput_;
 };
 }
 #endif

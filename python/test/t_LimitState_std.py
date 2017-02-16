@@ -9,9 +9,9 @@ myStudy = otguibase.OTStudy('myStudy')
 ## Model
 X0 = otguibase.Input('X0', 1, '', ot.Normal(1, 1))
 X1 = otguibase.Input('X1', 2, '', ot.Normal(1, 1))
-Y0 = otguibase.Output('Y0', 0, '', 'sin(X0) + 8*X1')
+Y0 = otguibase.Output('Y0')
 
-model = otguibase.AnalyticalPhysicalModel('aModelPhys', [X0, X1], [Y0])
+model = otguibase.AnalyticalPhysicalModel('aModelPhys', [X0, X1], [Y0], ['sin(X0) + 8*X1'])
 myStudy.add(model)
 
 ## limit state ##
@@ -31,7 +31,8 @@ myStudy.add(limitState2)
 limitState2.setThreshold(15.)
 print(limitState2)
 
-model.addOutput(otguibase.Output('Y1', 0, '', '1 + sin(X0) + 8*X1'))
+model.addOutput(otguibase.Output('Y1'))
+model.setFormula('Y1', '1 + sin(X0) + 8*X1')
 limitState2.setOutputName('Y1')
 print(limitState2)
 

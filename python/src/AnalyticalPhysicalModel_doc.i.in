@@ -9,10 +9,9 @@ inputs : sequence of :class:`~otguibase.Input`
     Input variables (optional)
 outputs : sequence of :class:`~otguibase.Output`
     Output variables (optional)
-
-Notes
------
-The output variables must contain a valid formula
+formulas : sequence of str
+    List of analytical formulas between the inputs and the outputs (optional).
+    The function is defined by ouputs = formulas(inputs).
 
 Examples
 --------
@@ -20,8 +19,8 @@ Examples
 >>> import otguibase
 >>> R = otguibase.Input('R', 0., 'Yield strength', ot.LogNormalMuSigma(300., 30., 0.).getDistribution())
 >>> F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))
->>> G = otguibase.Output('Ep', 0., 'deviation', 'R-F/(_pi*100.0)')
->>> myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [R, F], [G])"
+>>> G = otguibase.Output('Ep', 0., 'deviation')
+>>> myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(_pi*100.0)'])"
 
 // ---------------------------------------------------------------------
 
@@ -32,4 +31,42 @@ Returns
 -------
 formulas : :py:class:`openturns.Description`
     Output fomulas"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::AnalyticalPhysicalModel::setFormulas
+"Formulas accessor.
+
+Parameters
+----------
+formulas : sequence of str
+    Output fomulas"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::AnalyticalPhysicalModel::getFormula
+"Output formula accessor.
+
+Parameters
+----------
+name : str
+    Variable name
+
+Returns
+-------
+formula : str
+    Formula text"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::AnalyticalPhysicalModel::setFormula
+"Output formula accessor.
+
+Parameters
+----------
+name : str
+    Variable name
+formula : str
+    Formula text"
+
 

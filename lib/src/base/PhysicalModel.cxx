@@ -35,13 +35,6 @@ PhysicalModel::PhysicalModel(const String & name)
 }
 
 
-/* Constructor with parameters */
-PhysicalModel::PhysicalModel(const String & name, const InputCollection & inputs, const OutputCollection & outputs)
-  : TypedInterfaceObject<PhysicalModelImplementation>(new AnalyticalPhysicalModel(name, inputs, outputs))
-{
-}
-
-
 /* Default constructor */
 PhysicalModel::PhysicalModel(const PhysicalModelImplementation & implementation)
   : TypedInterfaceObject<PhysicalModelImplementation>(implementation.clone())
@@ -208,12 +201,6 @@ void PhysicalModel::setOutputs(const OutputCollection & outputs)
 void PhysicalModel::setOutputDescription(const String & outputName, const String & description)
 {
   getImplementation()->setOutputDescription(outputName, description);
-}
-
-
-void PhysicalModel::setOutputFormula(const String & outputName, const String & formula)
-{
-  getImplementation()->setOutputFormula(outputName, formula);
 }
 
 
