@@ -202,7 +202,7 @@ set(RESOURCES ${CMAKE_SOURCE_DIR}/gui.qrc)
 qt5_add_resources (OTGUI_RESOURCES_RCC ${RESOURCES})
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
-
+include_directories (${PYTHON_INCLUDE_DIRS})
 
 add_library (otguiview ${SOURCEFILES} ${OTGUI_VIEW_MOC_SRCS} ${OTGUI_RESOURCES_RCC})
 
