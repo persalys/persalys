@@ -31,6 +31,7 @@
 #include <QImageWriter>
 #include <QRadioButton>
 #include <QScrollArea>
+#include <QCheckBox>
 
 #include <qwt_plot_renderer.h>
 
@@ -45,6 +46,7 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   , plotWidgets_(plotWidgets)
   , plotType_(plotType)
   , currentPlotIndex_(0)
+  , rankCheckBox_(0)
   , pdf_cdfGroup_(0)
   , xAxisComboBox_(0)
   , yAxisComboBox_(0)
@@ -99,6 +101,13 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
     yAxisComboBox_ = new QComboBox;
     mainGridLayout->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
     connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
+  }
+
+  if (plotType_ == GraphConfigurationWidget::Scatter)
+  {
+    rankCheckBox_ = new QCheckBox(tr("Ranks"));
+    mainGridLayout->addWidget(rankCheckBox_, ++rowGrid, 0, 1, 2);
+    connect(rankCheckBox_, SIGNAL(stateChanged(int)), this, SLOT(plotChanged()));
   }
 
   // buttons PDF - CDF
@@ -282,9 +291,12 @@ void GraphConfigurationWidget::plotChanged()
 
   currentPlotIndex_ = outputIndex;
 
-  if (plotType_ == GraphConfigurationWidget::Scatter && xAxisComboBox_ && yAxisComboBox_)
+  if (plotType_ == GraphConfigurationWidget::Scatter && xAxisComboBox_ && yAxisComboBox_ && rankCheckBox_)
   {
-    currentPlotIndex_ = xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex;
+    if (!rankCheckBox_->isChecked())
+      currentPlotIndex_ = 2 * (xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex);
+    else
+      currentPlotIndex_ = 2 * (xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex) + 1;
   }
   else if (plotType_ == GraphConfigurationWidget::Copula && pdf_cdfGroup_ && xAxisComboBox_ && yAxisComboBox_)
   {
