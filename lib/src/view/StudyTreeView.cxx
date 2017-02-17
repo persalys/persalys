@@ -951,6 +951,8 @@ void StudyTreeView::removeAnalysis()
 void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
 {
   resetTree();
+  // do removeSubWindow if the analysis run method has been launched from a Python script
+  emit removeSubWindow(item);
 
   ResultWindow * resultWindow = 0;
   QString analysisType = item->data(Qt::UserRole).toString();
