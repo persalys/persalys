@@ -302,13 +302,9 @@ bool FunctionalChaosAnalysis::analysisLaunched() const
 String FunctionalChaosAnalysis::__repr__() const
 {
   OSS oss;
-  oss << "class=" << GetClassName()
-      << " name=" << getName()
-      << " designOfExperiment=class=" << getDesignOfExperiment().GetClassName() << " name=" << getDesignOfExperiment().getName()
-      << " interestVariables=" << getInterestVariables()
+  oss << MetaModelAnalysis::__repr__()
       << " chaosDegree=" << getChaosDegree()
-      << " sparseChaos=" << getSparseChaos()
-      << " leaveOneOutValidation=" << isLeaveOneOutValidation();
+      << " sparseChaos=" << getSparseChaos();
   return oss;
 }
 

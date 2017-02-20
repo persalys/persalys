@@ -111,6 +111,27 @@ void WithStopCriteriaAnalysis::setBlockSize(const UnsignedInteger size)
 }
 
 
+/* String converter */
+String WithStopCriteriaAnalysis::__repr__() const
+{
+  OSS oss;
+  oss << " maximumCalls=";
+  if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
+    oss << getMaximumCalls();
+  else
+    oss << "inf";
+  oss << " maximumCoefficientOfVariation=" << getMaximumCoefficientOfVariation()
+      << " maximumElapsedTime=";
+  if (getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
+    oss << getMaximumElapsedTime();
+  else
+    oss << "inf";
+  oss << " blockSize=" << getBlockSize();
+
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void WithStopCriteriaAnalysis::save(Advocate & adv) const
 {

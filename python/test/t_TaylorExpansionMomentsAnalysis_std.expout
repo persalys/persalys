@@ -1,6 +1,6 @@
-class=TaylorExpansionMomentsAnalysis name=aTaylor physicalModel=aModelPhys outputs=[Y0]
+class=TaylorExpansionMomentsAnalysis name=aTaylor physicalModel=aModelPhys interestVariables=[Y0]
 result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y0] meanFirstOrder=class=NumericalPoint name=Unnamed dimension=1 values=[8.84147] meanSecondOrder=class=NumericalPoint name=Unnamed dimension=1 values=[8.42074] standardDeviation=class=NumericalPoint name=Unnamed dimension=1 values=[8.01822] variance=class=NumericalPoint name=Unnamed dimension=1 values=[64.2919]
-class=TaylorExpansionMomentsAnalysis name=aTaylor2 physicalModel=aModelPhys outputs=[Y1]
+class=TaylorExpansionMomentsAnalysis name=aTaylor2 physicalModel=aModelPhys interestVariables=[Y1]
 result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y1] meanFirstOrder=class=NumericalPoint name=Unnamed dimension=1 values=[18.8415] meanSecondOrder=class=NumericalPoint name=Unnamed dimension=1 values=[18.4207] standardDeviation=class=NumericalPoint name=Unnamed dimension=1 values=[8.01822] variance=class=NumericalPoint name=Unnamed dimension=1 values=[64.2919]
 #!/usr/bin/env python
 # coding: utf-8

@@ -268,6 +268,16 @@ void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result,
 }
 
 
+/* String converter */
+String MetaModelAnalysis::__repr__() const
+{
+  OSS oss;
+  oss << DesignOfExperimentAnalysis::__repr__()
+      << " leaveOneOutValidation=" << isLeaveOneOutValidation();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void MetaModelAnalysis::save(Advocate& adv) const
 {

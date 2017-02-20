@@ -56,6 +56,17 @@ void ReliabilityAnalysis::setInterestVariables(const Description& outputsNames)
 }
 
 
+/* String converter */
+String ReliabilityAnalysis::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << getClassName()
+      << " name=" << getName()
+      << " limitState=" << getLimitState();
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void ReliabilityAnalysis::save(Advocate & adv) const
 {

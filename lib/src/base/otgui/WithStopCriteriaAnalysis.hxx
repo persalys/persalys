@@ -44,6 +44,9 @@ public:
   OT::UnsignedInteger getBlockSize() const;
   virtual void setBlockSize(const OT::UnsignedInteger size);
 
+  /** String converter */
+  virtual OT::String __repr__() const;
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 

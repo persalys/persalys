@@ -79,7 +79,7 @@ String PhysicalModelAnalysis::__repr__() const
   oss << "class=" << getClassName()
       << " name=" << getName()
       << " physicalModel=" << getPhysicalModel().getName()
-      << " outputs=" << getInterestVariables();
+      << " interestVariables=" << getInterestVariables();
   return oss;
 }
 

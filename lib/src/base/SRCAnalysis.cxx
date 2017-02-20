@@ -162,9 +162,7 @@ bool SRCAnalysis::analysisLaunched() const
 String SRCAnalysis::__repr__() const
 {
   OSS oss;
-  oss << "class=" << GetClassName()
-      << " name=" << getName()
-      << " physicalModel=" << getPhysicalModel().getName()
+  oss << PhysicalModelAnalysis::__repr__()
       << " simulationsNumber=" << getSimulationsNumber()
       << " seed=" << getSeed();
   return oss;

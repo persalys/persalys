@@ -218,9 +218,7 @@ bool CopulaInferenceAnalysis::analysisLaunched() const
 String CopulaInferenceAnalysis::__repr__() const
 {
   OSS oss;
-  oss << "class=" << GetClassName()
-      << " name=" << getName()
-      << " designOfExperiment=class=" << getDesignOfExperiment().GetClassName() << " name=" << getDesignOfExperiment().getName();
+  oss << DesignOfExperimentAnalysis::__repr__();
 
   std::map<Description, DistributionFactoryCollection>::const_iterator it;
   for (it=distFactoriesForSetVar_.begin(); it!=distFactoriesForSetVar_.end(); ++it)

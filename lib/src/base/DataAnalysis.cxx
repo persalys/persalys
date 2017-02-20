@@ -295,7 +295,7 @@ String DataAnalysis::__repr__() const
   OSS oss;
   oss << "class=" << GetClassName()
       << " name=" << getName()
-      << " designOfExperiment=class=" << getDesignOfExperiment().GetClassName() << " name=" << getDesignOfExperiment().getName()
+      << " designOfExperiment=" << getDesignOfExperiment().getName()
       << " isConfidenceIntervalRequired=" << isConfidenceIntervalRequired()
       << " levelConfidenceInterval=" << getLevelConfidenceInterval();
   return oss;

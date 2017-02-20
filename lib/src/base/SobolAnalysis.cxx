@@ -316,13 +316,8 @@ bool SobolAnalysis::analysisLaunched() const
 String SobolAnalysis::__repr__() const
 {
   OSS oss;
-  oss << "class=" << GetClassName()
-      << " name=" << getName()
-      << " physicalModel=" << getPhysicalModel().getName()
-      << " maximumCalls=" << getMaximumCalls()
-      << " maximumCoefficientOfVariation=" << getMaximumCoefficientOfVariation()
-      << " maximumElapsedTime=" << getMaximumElapsedTime()
-      << " blockSize=" << getBlockSize()
+  oss << PhysicalModelAnalysis::__repr__()
+      << WithStopCriteriaAnalysis::__repr__()
       << " seed=" << getSeed();
   return oss;
 }
