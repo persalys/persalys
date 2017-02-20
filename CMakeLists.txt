@@ -55,6 +55,7 @@ if (BUILD_GUI)
   endif ()
 
   find_package (Qwt 6 REQUIRED)
+  find_package (PythonInterp)
   find_package (PythonLibs REQUIRED)
 endif ()
 
