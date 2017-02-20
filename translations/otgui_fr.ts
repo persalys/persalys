@@ -1331,45 +1331,45 @@ Début : %2.</translation>
 <context>
     <name>OTGUI::MainWindow</name>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="59"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="61"/>
         <source>Current analysis</source>
         <translation>Analyse en cours</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="67"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="69"/>
         <source>Graph settings</source>
         <translation>Configuration des graphiques</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="105"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="109"/>
         <source>Python Console</source>
         <translation>Console Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="152"/>
-        <location filename="../lib/src/view/MainWindow.cxx" line="182"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="156"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="186"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="153"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="157"/>
         <source>Cannot import a Python script when other studies are opened.
 Do you want to continue and close the other studies?</source>
         <translation>Impossible d&apos;importer un script Python lorsque d&apos;autres études sont ouvertes.
 Voulez-vous continuer et fermer les autres études ?</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="170"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="174"/>
         <source>Import Python...</source>
         <translation>Import Python...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="172"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="176"/>
         <source>Python source files (*.py)</source>
         <translation>Fichiers Python (*.py)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="183"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="187"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1 :
@@ -2194,22 +2194,22 @@ extremum</source>
 <context>
     <name>OTGUI::OutputTableModel</name>
     <message>
-        <location filename="../lib/src/model/OutputTableModel.cxx" line="53"/>
+        <location filename="../lib/src/model/OutputTableModel.cxx" line="59"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/OutputTableModel.cxx" line="55"/>
+        <location filename="../lib/src/model/OutputTableModel.cxx" line="61"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/OutputTableModel.cxx" line="57"/>
+        <location filename="../lib/src/model/OutputTableModel.cxx" line="63"/>
         <source>Formula</source>
         <translation>Formule</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/OutputTableModel.cxx" line="59"/>
+        <location filename="../lib/src/model/OutputTableModel.cxx" line="65"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
@@ -3079,7 +3079,7 @@ extremum</source>
         <location filename="../lib/src/view/StudyTreeView.cxx" line="247"/>
         <location filename="../lib/src/view/StudyTreeView.cxx" line="261"/>
         <source>Run</source>
-        <translation>Exécuter</translation>
+        <translation>Lancer</translation>
     </message>
     <message>
         <location filename="../lib/src/view/StudyTreeView.cxx" line="248"/>
@@ -3167,81 +3167,81 @@ extremum</source>
         <translation>Impossible de fermer une analyse en cours.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1017"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1019"/>
         <source>Export Python...</source>
         <translation>Export Python...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1019"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1021"/>
         <source>Python source files (*.py)</source>
         <translation>Fichiers Python (*.py)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/StudyTreeView.cxx" line="943"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1033"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1095"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1150"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1165"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1174"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1191"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1219"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1035"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1097"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1152"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1167"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1176"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1193"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1221"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1034"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1036"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1: %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1079"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1081"/>
         <source>Save OTStudy...</source>
         <translation>Sauvegarder l&apos;étude...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1081"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1121"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1083"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1123"/>
         <source>XML files (*.xml)</source>
         <translation>Fichiers XML (*.xml)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1096"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1098"/>
         <source>Cannot save file %1:
 %2</source>
         <translation>Impossible de sauvegarder le fichier %1:
 %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1119"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1121"/>
         <source>Open an existing OTStudy</source>
         <translation>Ouvrir une étude existante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1149"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1151"/>
         <source>A problem appeared when reading the file &apos;%1&apos;. 
 Maybe objects are not opened.
 </source>
         <translation>Un problème est survenu durant la lecture du fichier &apos;%1&apos;. Des objets ne sont peut être pas ouverts.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1159"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1161"/>
         <source>The file &apos;%1&apos; does not exist.</source>
         <translation>Le fichier &apos;%1&apos; n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1163"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1165"/>
         <source>The file &apos;%1&apos; is already opened.</source>
         <translation>Le fichier &apos;%1&apos; est déjà ouvert.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1174"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1219"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1176"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1221"/>
         <source>Cannot close studies when an analysis is running.</source>
         <translation>Impossible de fermer des études quand une analyse est en cours.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="1192"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="1194"/>
         <source>Do you want to save the OTStudy &apos;%1&apos; [%2]?</source>
         <translation>Voulez-vous sauvegarder l&apos;étude &apos;%1&apos; [%2] ?</translation>
     </message>
