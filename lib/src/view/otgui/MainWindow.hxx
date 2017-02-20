@@ -27,7 +27,7 @@
 #include <QDockWidget>
 #include <QCloseEvent>
 
-#include "PyConsole_Console.h"
+#include <PyConsole_Console.h>
 
 namespace OTGUI {
 class OTGUI_API MainWindow : public QMainWindow

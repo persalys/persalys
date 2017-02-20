@@ -26,6 +26,7 @@
 
 #include <QComboBox>
 #include <QButtonGroup>
+#include <QCheckBox>
 
 namespace OTGUI {
 
@@ -61,6 +62,7 @@ private:
   QVector<PlotWidget *> plotWidgets_;
   Type plotType_;
   int currentPlotIndex_;
+  QCheckBox * rankCheckBox_;
   QButtonGroup * pdf_cdfGroup_;
   QComboBox * xAxisComboBox_;
   QComboBox * yAxisComboBox_;

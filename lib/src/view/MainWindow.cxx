@@ -34,6 +34,8 @@
 #include <QFileInfo>
 #include <QSettings>
 
+#include <PyConsole_Interp.h>
+
 namespace OTGUI {
 
 MainWindow::MainWindow()
@@ -100,8 +102,10 @@ void MainWindow::buildInterface()
 
   // Python Console
   pythonConsole_ = new PyConsole_Console(this);
+  pythonConsole_->getInterp()->decrRef();
   pythonConsole_->setIsShowBanner(false);
   pythonConsole_->setAutoCompletion(true);
+
   QDockWidget * pythonConsoleDock = new QDockWidget(tr("Python Console"));
   pythonConsoleDock->setWidget(pythonConsole_);
   pythonConsoleDock->setFeatures(QDockWidget::DockWidgetClosable);

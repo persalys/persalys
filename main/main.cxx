@@ -23,6 +23,7 @@
 #include <QTranslator>
 
 #include "otgui/MainWindow.hxx"
+#include "otgui/PythonEnvironment.hxx"
 #ifdef OTGUI_HAVE_YACS
 #include "otgui/YACSEvalSessionSingleton.hxx"
 #endif
@@ -34,7 +35,11 @@ int main(int argc, char *argv[])
 #ifdef OTGUI_HAVE_YACS
   YACSEvalSessionSingleton YACSSession;
 #endif
+  // Python Environment
+  PythonEnvironment env;
+  // Application
   QApplication app(argc, argv);
+  // Settings
   QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EDF_Phimeca", "OTgui");
   settings.setValue("currentDir", QSettings().fileName());
 
@@ -43,6 +48,7 @@ int main(int argc, char *argv[])
   appTranslator.load("otgui_" + QLocale::system().name(), ":/translations");
   app.installTranslator(&appTranslator);
 
+  // main window
   MainWindow window;
   window.resize(1024, 768);
   window.show();

@@ -101,7 +101,7 @@ void CopulaParametersTabWidget::buildInterface()
   }
 
   // -- GraphConfigurationWidget
-  pdf_cdfPlotGraphConfigWidget_ = new GraphConfigurationWidget(listPlot, variablesNames, variablesNames, GraphConfigurationWidget::Copula);
+  pdf_cdfPlotGraphConfigWidget_ = new GraphConfigurationWidget(listPlot, variablesNames, QStringList(), GraphConfigurationWidget::Copula);
   connect(pdf_cdfPlotGraphConfigWidget_, SIGNAL(currentPlotChanged(int)), pdf_StackedWidget, SLOT(setCurrentIndex(int)));
   connect(this, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
 
