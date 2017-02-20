@@ -32,8 +32,6 @@ OutputTableModel::OutputTableModel(const PhysicalModel & physicalModel, QObject 
   : QAbstractTableModel(parent)
   , physicalModel_(physicalModel)
 {
-  if (!dynamic_cast<AnalyticalPhysicalModel*>(&*physicalModel_.getImplementation()))
-    qDebug() << "In OutputTableModel: the physicalModel implementation must be an AnalyticalPhysicalModel";
 }
 
 
@@ -105,7 +103,9 @@ QVariant OutputTableModel::data(const QModelIndex & index, int role) const
       case 2:
       {
         const AnalyticalPhysicalModel * model = dynamic_cast<const AnalyticalPhysicalModel*>(&*physicalModel_.getImplementation());
-        return QString::fromUtf8(model->getFormula(physicalModel_.getOutputs()[index.row()].getName()).c_str());
+        if (model)
+          return QString::fromUtf8(model->getFormula(physicalModel_.getOutputs()[index.row()].getName()).c_str());
+        break;
       }
       case 3:
       {
@@ -175,8 +175,13 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
       case 2:
       {
         AnalyticalPhysicalModel * model = dynamic_cast<AnalyticalPhysicalModel*>(&*physicalModel_.getImplementation());
-        if (model->getFormula(output.getName()) == value.toString().toUtf8().constData())
-          return true;
+        if (model)
+        {
+          if (model->getFormula(output.getName()) == value.toString().toUtf8().constData())
+            return true;
+        }
+        else
+          return false;
         // TODO test if value.toString() ok
         physicalModel_.blockNotification(true);
         emit errorMessageChanged("");
