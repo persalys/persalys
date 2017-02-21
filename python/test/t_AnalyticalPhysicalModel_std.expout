@@ -2,12 +2,48 @@ class=AnalyticalPhysicalModel inputs=[class=Input name=X0 value=1 description= d
 function= [X0,X1]->[sin(X0)+8*X1]
 formulas= [sin(X0)+8*X1]
 formula_Y0= sin(X0)+8*X1
-formulas= [sin(X0)+8*X1+0.5]
-script= X0 = otguibase.Input('X0', 1, '')
-X1 = otguibase.Input('X1', 2, '')
+stochastic var= []
+distribution= ComposedDistribution(Uniform(a = -1, b = 1))
+copula= IndependentCopula(dimension = 1)
+output_YO= class=Output name=Y0 description=output_1
+input_XO= class=Input name=X0 value=1 description= distribution=class=Dirac name=Dirac dimension=1 point=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+inputs names= [X0,X1]
+outputs names= [Y0]
+hasY0 True
+hasX0 True
+inputs= [class=Input name=X0 value=1 description= distribution=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1],class=Input name=X1 value=2 description= distribution=class=LogNormal name=LogNormal dimension=1 muLog=0 sigmaLog=1 gamma=0]
+stochastic var= [X0,X1]
+distribution= ComposedDistribution(Normal(mu = 0, sigma = 1), LogNormal(muLog = 0, sigmaLog = 1, gamma = 0), NormalCopula(R = [[ 1    0.25 ]
+ [ 0.25 1    ]]))
+copula= NormalCopula(R = [[ 1    0.25 ]
+ [ 0.25 1    ]])
+outputs= [class=Output name=Y0 description=output_1]
+inputs= [class=Input name=X0 value=1 description= distribution=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1],class=Input name=X1 value=2 description= distribution=class=LogNormal name=LogNormal dimension=1 muLog=0 sigmaLog=1 gamma=0,class=Input name=X_2 value=10 description= distribution=class=Dirac name=Dirac dimension=1 point=class=NumericalPoint name=Unnamed dimension=1 values=[0]]
+copula= NormalCopula(R = [[ 1    0.25 ]
+ [ 0.25 1    ]])
+stochastic var= [X0,X1,X3]
+distribution= ComposedDistribution(Normal(mu = 0, sigma = 1), LogNormal(muLog = 0, sigmaLog = 1, gamma = 0), Normal(mu = 0, sigma = 1), NormalCopula(R = [[ 1    0.25 0    ]
+ [ 0.25 1    0    ]
+ [ 0    0    1    ]]))
+copula= NormalCopula(R = [[ 1    0.25 0    ]
+ [ 0.25 1    0    ]
+ [ 0    0    1    ]])
+formula_Y1= sin(X0)+8*X1+X2
+outputs= [class=Output name=Y0 description=output_1,class=Output name=Y_1 description=]
+selected outputs= [Y0]
+inputs= [class=Input name=X0 value=1 description= distribution=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1],class=Input name=X1 value=2 description= distribution=class=LogNormal name=LogNormal dimension=1 muLog=0 sigmaLog=1 gamma=0]
+outputs= [class=Output name=Y0 description=output_1]
+script= dist_X0 = ot.Normal(0, 1)
+X0 = otguibase.Input('X0', 1, '', dist_X0)
+dist_X1 = ot.LogNormal(0, 1, 0)
+X1 = otguibase.Input('X1', 2, '', dist_X1)
 Y0 = otguibase.Output('Y0', 0, 'output_1')
 inputs = [X0, X1]
 outputs = [Y0]
 formulas = ['sin(X0)+8*X1+0.5']
 aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys', inputs, outputs, formulas)
+correlationMatrix = ot.CorrelationMatrix(2)
+correlationMatrix[0, 1] = 0.239359
+copula = ot.NormalCopula(ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(correlationMatrix))
+aModelPhys.setCopula(copula)
 
