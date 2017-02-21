@@ -262,9 +262,7 @@ bool InferenceAnalysis::analysisLaunched() const
 String InferenceAnalysis::__repr__() const
 {
   OSS oss;
-  oss << "class=" << GetClassName()
-      << " name=" << getName()
-      << " designOfExperiment=class=" << getDesignOfExperiment().GetClassName() << " name=" << getDesignOfExperiment().getName()
+  oss << DesignOfExperimentAnalysis::__repr__()
       << " level=" << getLevel();
       for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
       {

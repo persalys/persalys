@@ -82,9 +82,10 @@ void DesignOfExperimentAnalysis::setInterestVariables(const Description& variabl
 String DesignOfExperimentAnalysis::__repr__() const
 {
   OSS oss;
-  oss << "class=" << GetClassName()
+  oss << "class=" << getClassName()
       << " name=" << getName()
-      << " designOfExperiment=class=" << getDesignOfExperiment().GetClassName() << " name=" << getDesignOfExperiment().getName();
+      << " designOfExperiment=" << getDesignOfExperiment().getName()
+      << " interestVariables=" << getInterestVariables();
   return oss;
 }
 

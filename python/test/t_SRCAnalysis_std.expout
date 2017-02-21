@@ -1,6 +1,6 @@
-class=SRCAnalysis name=aSRC physicalModel=aModel simulationsNumber=1000 seed=2
+class=SRCAnalysis name=aSRC physicalModel=aModel interestVariables=[y0] simulationsNumber=1000 seed=2
 result= class=SRCResult name=Unnamed outputNames=[y0] indices=class=NumericalSample name=Unnamed implementation=class=NumericalSampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.905999,0.0940007]]
-class=SRCAnalysis name=aSRC2 physicalModel=aModel simulationsNumber=1000 seed=2
+class=SRCAnalysis name=aSRC2 physicalModel=aModel interestVariables=[y1] simulationsNumber=1000 seed=2
 result= class=SRCResult name=Unnamed outputNames=[y1] indices=class=NumericalSample name=Unnamed implementation=class=NumericalSampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.905999,0.0940007]]
 #!/usr/bin/env python
 # coding: utf-8

@@ -1,9 +1,9 @@
-class=SobolAnalysis name=aSobol physicalModel=aModel maximumCalls=1000 maximumCoefficientOfVariation=-1 maximumElapsedTime=30 blockSize=250 seed=2
+class=SobolAnalysis name=aSobol physicalModel=aModel interestVariables=[y0] maximumCalls=1000 maximumCoefficientOfVariation=-1 maximumElapsedTime=30 blockSize=250 seed=2
 result= class=SobolResult name=Unnamed outputNames=[y0] firstOrderIndices=class=NumericalSample name=Unnamed implementation=class=NumericalSampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.907378,0.104983]] totalIndices=class=NumericalSample name=Unnamed implementation=class=NumericalSampleImplementation name=Unnamed size=1 dimension=2 data=[[0.986434,0.0980133]] callsNumber=1000 coefficientOfVariation=-1
-class=SobolAnalysis name=aSobol2 physicalModel=aModel maximumCalls=2147483647 maximumCoefficientOfVariation=0.02 maximumElapsedTime=100000 blockSize=1 seed=0
+class=SobolAnalysis name=aSobol2 physicalModel=aModel interestVariables=[y0] maximumCalls=inf maximumCoefficientOfVariation=0.02 maximumElapsedTime=100000 blockSize=1 seed=0
 result= class=SobolResult name=Unnamed outputNames=[y0] firstOrderIndices=class=NumericalSample name=Unnamed implementation=class=NumericalSampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.753579,0.0727707]] totalIndices=class=NumericalSample name=Unnamed implementation=class=NumericalSampleImplementation name=Unnamed size=1 dimension=2 data=[[0.926134,0.0714451]] callsNumber=740 coefficientOfVariation=0.0199719
-class=SobolAnalysis name=aSobol3 physicalModel=aModel maximumCalls=1000 maximumCoefficientOfVariation=0.01 maximumElapsedTime=60 blockSize=250 seed=2
-result= class=SobolResult name=Unnamed outputNames=[y1] firstOrderIndices=class=NumericalSample name=Unnamed implementation=class=NumericalSampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.907378,0.104983]] totalIndices=class=NumericalSample name=Unnamed implementation=class=NumericalSampleImplementation name=Unnamed size=1 dimension=2 data=[[0.986434,0.0980133]] callsNumber=1000 coefficientOfVariation=-1
+class=SobolAnalysis name=aSobol3 physicalModel=aModel interestVariables=[y0,y1] maximumCalls=1000 maximumCoefficientOfVariation=0.01 maximumElapsedTime=60 blockSize=250 seed=2
+result= class=SobolResult name=Unnamed outputNames=[y0,y1] firstOrderIndices=class=NumericalSample name=Unnamed implementation=class=NumericalSampleImplementation name=Unnamed size=2 dimension=2 description=[x0,x1] data=[[0.907378,0.104983],[0.907378,0.104983]] totalIndices=class=NumericalSample name=Unnamed implementation=class=NumericalSampleImplementation name=Unnamed size=2 dimension=2 data=[[0.986434,0.0980133],[0.986434,0.0980133]] callsNumber=1000 coefficientOfVariation=-1
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -45,8 +45,6 @@ aSobol2.setBlockSize(1)
 aSobol2.setSeed(0)
 myStudy.add(aSobol2)
 aSobol3 = otguibase.SobolAnalysis('aSobol3', aModel)
-interestVariables = ['y1']
-aSobol3.setInterestVariables(interestVariables)
 aSobol3.setMaximumCalls(1000)
 aSobol3.setMaximumCoefficientOfVariation(0.01)
 aSobol3.setMaximumElapsedTime(60)

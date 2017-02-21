@@ -220,7 +220,10 @@ String AnalyticalPhysicalModel::getPythonScript() const
 /* String converter */
 String AnalyticalPhysicalModel::__repr__() const
 {
-  return PhysicalModelImplementation::__repr__();
+  OSS oss;
+  oss << PhysicalModelImplementation::__repr__()
+      << " formulas=" << getFormulas();
+  return oss;
 }
 
 

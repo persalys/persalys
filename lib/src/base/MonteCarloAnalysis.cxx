@@ -239,15 +239,10 @@ bool MonteCarloAnalysis::analysisLaunched() const
 String MonteCarloAnalysis::__repr__() const
 {
   OSS oss;
-  oss << "class=" << GetClassName()
-      << " name=" << getName()
-      << " physicalModel=" << getPhysicalModel()
+  oss << PhysicalModelAnalysis::__repr__()
       << " isConfidenceIntervalRequired=" << isConfidenceIntervalRequired()
       << " levelConfidenceInterval=" << getLevelConfidenceInterval()
-      << " maximumCalls=" << getMaximumCalls()
-      << " maximumCoefficientOfVariation=" << getMaximumCoefficientOfVariation()
-      << " maximumElapsedTime=" << getMaximumElapsedTime()
-      << " blockSize=" << getBlockSize()
+      << WithStopCriteriaAnalysis::__repr__()
       << " seed=" << getSeed();
   return oss;
 }

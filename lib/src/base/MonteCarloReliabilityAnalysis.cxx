@@ -195,13 +195,8 @@ bool MonteCarloReliabilityAnalysis::analysisLaunched() const
 String MonteCarloReliabilityAnalysis::__repr__() const
 {
   OSS oss;
-  oss << "class=" << GetClassName()
-      << " name=" << getName()
-      << " limitState=" << getLimitState()
-      << " maximumCalls=" << getMaximumCalls()
-      << " maximumCoefficientOfVariation=" << getMaximumCoefficientOfVariation()
-      << " maximumElapsedTime=" << getMaximumElapsedTime()
-      << " blockSize=" << getBlockSize()
+  oss << ReliabilityAnalysis::__repr__()
+      << WithStopCriteriaAnalysis::__repr__()
       << " seed=" << getSeed();
   return oss;
 }

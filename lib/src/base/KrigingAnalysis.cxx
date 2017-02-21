@@ -301,14 +301,10 @@ bool KrigingAnalysis::analysisLaunched() const
 String KrigingAnalysis::__repr__() const
 {
   OSS oss;
-  oss << "class=" << GetClassName()
-      << " name=" << getName()
-      << " designOfExperiment=class=" << getDesignOfExperiment().GetClassName() << " name=" << getDesignOfExperiment().getName()
-      << " interestVariables=" << getInterestVariables()
+  oss << MetaModelAnalysis::__repr__()
       << " basis=" << getBasis()
       << " covarianceModel=" << getCovarianceModel()
-      << " optimizeParameters=" << getOptimizeParameters()
-      << " leaveOneOutValidation=" << isLeaveOneOutValidation();
+      << " optimizeParameters=" << getOptimizeParameters();
   return oss;
 }
 
