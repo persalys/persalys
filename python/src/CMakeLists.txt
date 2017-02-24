@@ -93,6 +93,7 @@ ot_add_python_module (otguibase otguibase_module.i
                       MonteCarloReliabilityAnalysis.i MonteCarloReliabilityAnalysis_doc.i.in
                       ImportanceSamplingAnalysis.i ImportanceSamplingAnalysis_doc.i.in
                       ApproximationAnalysis.i ApproximationAnalysis_doc.i.in
+                      FORMAnalysis.i FORMAnalysis_doc.i.in
                       MonteCarloReliabilityResult.i MonteCarloReliabilityResult_doc.i.in
                       MetaModelAnalysisResult.i MetaModelAnalysisResult_doc.i.in
                       MetaModelAnalysis.i MetaModelAnalysis_doc.i.in
