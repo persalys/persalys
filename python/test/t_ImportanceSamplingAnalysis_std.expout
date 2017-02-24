@@ -1,0 +1,62 @@
+class=ImportanceSamplingAnalysis name=myIS limitState=class=LimitStateImplementation name=aLimitState physicalModel=aModelPhys outputName=Y0 operator=class=Greater name=Unnamed threshold=20 maximumCalls=1000 maximumCoefficientOfVariation=0.01 maximumElapsedTime=60 blockSize=1 seed=2 standardSpaceDesignPoint=class=NumericalPoint name=Unnamed dimension=2 values=[0,0]
+result= class=SimulationReliabilityResult name=Unnamed simulationResult=probabilityEstimate=6.900000e-02 varianceEstimate=6.423900e-05 standard deviation=8.01e-03 coefficient of variation=1.16e-01 confidenceLength(0.95)=3.14e-02 outerSampling=1000 blockSize=1
+class=ImportanceSamplingAnalysis name=myIS2 limitState=class=LimitStateImplementation name=aLimitState physicalModel=aModelPhys outputName=Y0 operator=class=Greater name=Unnamed threshold=20 maximumCalls=inf maximumCoefficientOfVariation=0.02 maximumElapsedTime=100000 blockSize=100 seed=0 standardSpaceDesignPoint=class=NumericalPoint name=Unnamed dimension=2 values=[0,0]
+result= class=SimulationReliabilityResult name=Unnamed simulationResult=probabilityEstimate=7.684211e-02 varianceEstimate=2.356834e-06 standard deviation=1.54e-03 coefficient of variation=2.00e-02 confidenceLength(0.95)=6.02e-03 outerSampling=304 blockSize=100
+class=ImportanceSamplingAnalysis name=myIS3 limitState=class=LimitStateImplementation name=aLimitState physicalModel=aModelPhys outputName=Y0 operator=class=Greater name=Unnamed threshold=20 maximumCalls=1000 maximumCoefficientOfVariation=0.01 maximumElapsedTime=60 blockSize=1 seed=0 standardSpaceDesignPoint=class=NumericalPoint name=Unnamed dimension=2 values=[0,0]
+result= class=SimulationReliabilityResult name=Unnamed simulationResult=probabilityEstimate=1.200000e-01 varianceEstimate=1.056000e-04 standard deviation=1.03e-02 coefficient of variation=8.56e-02 confidenceLength(0.95)=4.03e-02 outerSampling=1000 blockSize=1
+class=ImportanceSamplingAnalysis name=myIS4 limitState=class=LimitStateImplementation name=aLimitState physicalModel=aModelPhys outputName=Y0 operator=class=Greater name=Unnamed threshold=20 maximumCalls=1000 maximumCoefficientOfVariation=-1 maximumElapsedTime=60 blockSize=1 seed=0 standardSpaceDesignPoint=class=NumericalPoint name=Unnamed dimension=2 values=[0.0686039,1.14043]
+result= class=SimulationReliabilityResult name=Unnamed simulationResult=probabilityEstimate=1.124246e-01 varianceEstimate=2.149790e-05 standard deviation=4.64e-03 coefficient of variation=4.12e-02 confidenceLength(0.95)=1.82e-02 outerSampling=1000 blockSize=1
+#!/usr/bin/env python
+# coding: utf-8
+
+from __future__ import print_function
+import openturns as ot
+import otguibase
+
+myStudy = otguibase.OTStudy('myStudy')
+otguibase.OTStudy.Add(myStudy)
+dist_X0 = ot.Normal(1, 1)
+X0 = otguibase.Input('X0', 1, '', dist_X0)
+dist_X1 = ot.Normal(1, 1)
+X1 = otguibase.Input('X1', 2, '', dist_X1)
+X2 = otguibase.Input('X2', 2, '')
+Y0 = otguibase.Output('Y0', 0, '')
+inputs = [X0, X1, X2]
+outputs = [Y0]
+formulas = ['sin(X0) + 8*X1 + X2']
+aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys', inputs, outputs, formulas)
+myStudy.add(aModelPhys)
+aLimitState = otguibase.LimitState('aLimitState', aModelPhys, 'Y0', ot.Greater(), 20)
+myStudy.add(aLimitState)
+myIS = otguibase.ImportanceSamplingAnalysis('myIS', aLimitState)
+myIS.setMaximumCalls(1000)
+myIS.setMaximumCoefficientOfVariation(0.01)
+myIS.setMaximumElapsedTime(60)
+myIS.setBlockSize(1)
+myIS.setSeed(2)
+myIS.setStandardSpaceDesignPoint([0,0])
+myStudy.add(myIS)
+myIS2 = otguibase.ImportanceSamplingAnalysis('myIS2', aLimitState)
+myIS2.setMaximumCoefficientOfVariation(0.02)
+myIS2.setMaximumElapsedTime(100000)
+myIS2.setBlockSize(100)
+myIS2.setSeed(0)
+myIS2.setStandardSpaceDesignPoint([0,0])
+myStudy.add(myIS2)
+myIS3 = otguibase.ImportanceSamplingAnalysis('myIS3', aLimitState)
+myIS3.setMaximumCalls(1000)
+myIS3.setMaximumCoefficientOfVariation(0.01)
+myIS3.setMaximumElapsedTime(60)
+myIS3.setBlockSize(1)
+myIS3.setSeed(0)
+myIS3.setStandardSpaceDesignPoint([0,0])
+myStudy.add(myIS3)
+myIS4 = otguibase.ImportanceSamplingAnalysis('myIS4', aLimitState)
+myIS4.setMaximumCalls(1000)
+myIS4.setMaximumCoefficientOfVariation(-1)
+myIS4.setMaximumElapsedTime(60)
+myIS4.setBlockSize(1)
+myIS4.setSeed(0)
+myIS4.setStandardSpaceDesignPoint([0.0686039,1.14043])
+myStudy.add(myIS4)
+

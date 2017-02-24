@@ -31,6 +31,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      SimulationReliabilityAnalysis.cxx
                      SimulationReliabilityResult.cxx
                      MonteCarloReliabilityAnalysis.cxx
+                     ImportanceSamplingAnalysis.cxx
                      MonteCarloReliabilityResult.cxx
                      MetaModelAnalysis.cxx
                      MetaModelAnalysisResult.cxx
@@ -94,6 +95,7 @@ ot_install_header_file ( ReliabilityAnalysis.hxx )
 ot_install_header_file ( SimulationReliabilityAnalysis.hxx )
 ot_install_header_file ( SimulationReliabilityResult.hxx )
 ot_install_header_file ( MonteCarloReliabilityAnalysis.hxx )
+ot_install_header_file ( ImportanceSamplingAnalysis.hxx )
 ot_install_header_file ( MonteCarloReliabilityResult.hxx )
 ot_install_header_file ( MetaModelAnalysisResult.hxx )
 ot_install_header_file ( MetaModelAnalysis.hxx )
