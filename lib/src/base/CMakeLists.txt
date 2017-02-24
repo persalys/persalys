@@ -28,6 +28,8 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      SRCResult.cxx SRCAnalysis.cxx
                      LimitStateImplementation.cxx LimitState.cxx
                      ReliabilityAnalysis.cxx
+                     SimulationReliabilityAnalysis.cxx
+                     SimulationReliabilityResult.cxx
                      MonteCarloReliabilityAnalysis.cxx
                      MonteCarloReliabilityResult.cxx
                      MetaModelAnalysis.cxx
@@ -89,6 +91,8 @@ ot_install_header_file ( Observer.hxx )
 ot_install_header_file ( LimitStateImplementation.hxx )
 ot_install_header_file ( LimitState.hxx )
 ot_install_header_file ( ReliabilityAnalysis.hxx )
+ot_install_header_file ( SimulationReliabilityAnalysis.hxx )
+ot_install_header_file ( SimulationReliabilityResult.hxx )
 ot_install_header_file ( MonteCarloReliabilityAnalysis.hxx )
 ot_install_header_file ( MonteCarloReliabilityResult.hxx )
 ot_install_header_file ( MetaModelAnalysisResult.hxx )

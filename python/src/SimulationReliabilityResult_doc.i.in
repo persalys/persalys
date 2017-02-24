@@ -1,0 +1,62 @@
+%feature("docstring") OTGUI::SimulationReliabilityResult
+"Monte Carlo for reliability analysis result."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationReliabilityResult::getSimulationResult
+"Simulation result accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.SimulationResult`
+    Simulation result"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationReliabilityResult::getOutputSample
+"Output sample accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.NumericalSample`
+    Output sample"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationReliabilityResult::getConvergenceSample
+"Convergence sample accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.NumericalSample`
+    Convergence sample"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationReliabilityResult::getConvergenceSampleLowerBound
+"Convergence sample lower bound accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.NumericalSample`
+    Convergence sample lower bound"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationReliabilityResult::getConvergenceSampleUpperBound
+"Convergence sample upper bound accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.NumericalSample`
+    Convergence sample upper bound"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationReliabilityResult::getElapsedTime
+"Elapsed time in seconds to perform the analysis.
+
+Returns
+-------
+time : int
+    Elapsed time in seconds to perform the analysis"
