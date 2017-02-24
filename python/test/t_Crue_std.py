@@ -32,6 +32,19 @@ montecarloResult = montecarlo.getResult()
 # Comparaison
 openturns.testing.assert_almost_equal(0.0006, montecarloResult.getSimulationResult().getProbabilityEstimate(), 1e-16)
 
+## FORM-IS ##
+formIS = otguibase.FORMImportanceSamplingAnalysis('myformIS', limitState)
+formIS.setMaximumCoefficientOfVariation(0.01)
+formIS.setMaximumCalls(10000)
+formIS.setBlockSize(1000)
+myStudy.add(formIS)
+
+formIS.run()
+formISResult = formIS.getResult()
+
+# Comparaison
+openturns.testing.assert_almost_equal(0.000634097, formISResult.getSimulationResult().getProbabilityEstimate(), 1e-16)
+
 ## script
 script = myStudy.getPythonScript()
 print(script)

@@ -1,0 +1,79 @@
+class=FORMImportanceSamplingAnalysis name=myIS limitState=class=LimitStateImplementation name=aLimitState physicalModel=aModelPhys outputName=Y0 operator=class=Greater name=Unnamed threshold=20 maximumCalls=1000 maximumCoefficientOfVariation=0.01 maximumElapsedTime=60 blockSize=1 seed=2 standardSpaceDesignPoint=class=NumericalPoint name=Unnamed dimension=2 values=[0,0] optimization algorithm=class=OptimizationSolver implementation=class=Cobyla class=OptimizationSolverImplementation problem=class=OptimizationProblem implementation=class=OptimizationProblemImplementation objective=class=NumericalMathFunction name=Unnamed implementation=class=NumericalMathFunctionImplementation name=Unnamed description=[] evaluationImplementation=class=NoNumericalMathEvaluationImplementation name=Unnamed gradientImplementation=class=NoNumericalMathGradientImplementation name=Unnamed hessianImplementation=class=NoNumericalMathHessianImplementation name=Unnamed equality constraint=none inequality constraint=none bounds=none minimization=true dimension=0 startingPoint=class=NumericalPoint name=Unnamed dimension=2 values=[1,1] maximumIterationNumber=100 maximumEvaluationNumber=100000 maximumAbsoluteError=1e-05 maximumRelativeError=1e-05 maximumResidualError=1e-05 maximumConstraintError=1e-05 verbose=false rhoBeg=0.1 physicalStartingPoint=class=NumericalPoint name=Unnamed dimension=2 values=[1,1]
+result= class=SimulationReliabilityResult name=Unnamed simulationResult=probabilityEstimate=7.882715e-02 varianceEstimate=1.090194e-05 standard deviation=3.30e-03 coefficient of variation=4.19e-02 confidenceLength(0.95)=1.29e-02 outerSampling=1000 blockSize=1
+class=FORMImportanceSamplingAnalysis name=myIS2 limitState=class=LimitStateImplementation name=aLimitState physicalModel=aModelPhys outputName=Y0 operator=class=Greater name=Unnamed threshold=20 maximumCalls=inf maximumCoefficientOfVariation=0.02 maximumElapsedTime=100000 blockSize=100 seed=0 standardSpaceDesignPoint=class=NumericalPoint name=Unnamed dimension=2 values=[0,0] optimization algorithm=class=OptimizationSolver implementation=class=Cobyla class=OptimizationSolverImplementation problem=class=OptimizationProblem implementation=class=OptimizationProblemImplementation objective=class=NumericalMathFunction name=Unnamed implementation=class=NumericalMathFunctionImplementation name=Unnamed description=[] evaluationImplementation=class=NoNumericalMathEvaluationImplementation name=Unnamed gradientImplementation=class=NoNumericalMathGradientImplementation name=Unnamed hessianImplementation=class=NoNumericalMathHessianImplementation name=Unnamed equality constraint=none inequality constraint=none bounds=none minimization=true dimension=0 startingPoint=class=NumericalPoint name=Unnamed dimension=2 values=[1,1] maximumIterationNumber=100 maximumEvaluationNumber=100000 maximumAbsoluteError=1e-05 maximumRelativeError=1e-05 maximumResidualError=1e-05 maximumConstraintError=1e-05 verbose=false rhoBeg=0.1 physicalStartingPoint=class=NumericalPoint name=Unnamed dimension=2 values=[1,1]
+result= class=SimulationReliabilityResult name=Unnamed simulationResult=probabilityEstimate=7.237923e-02 varianceEstimate=2.085960e-06 standard deviation=1.44e-03 coefficient of variation=2.00e-02 confidenceLength(0.95)=5.66e-03 outerSampling=50 blockSize=100
+class=FORMImportanceSamplingAnalysis name=myIS3 limitState=class=LimitStateImplementation name=aLimitState physicalModel=aModelPhys outputName=Y0 operator=class=Greater name=Unnamed threshold=20 maximumCalls=1000 maximumCoefficientOfVariation=-1 maximumElapsedTime=60 blockSize=1 seed=0 standardSpaceDesignPoint=class=NumericalPoint name=Unnamed dimension=2 values=[0,0] optimization algorithm=class=OptimizationSolver implementation=class=AbdoRackwitz class=OptimizationSolverImplementation problem=class=OptimizationProblem implementation=class=OptimizationProblemImplementation objective=class=NumericalMathFunction name=Unnamed implementation=class=NumericalMathFunctionImplementation name=Unnamed description=[] evaluationImplementation=class=NoNumericalMathEvaluationImplementation name=Unnamed gradientImplementation=class=NoNumericalMathGradientImplementation name=Unnamed hessianImplementation=class=NoNumericalMathHessianImplementation name=Unnamed equality constraint=none inequality constraint=none bounds=none minimization=true dimension=0 startingPoint=class=NumericalPoint name=Unnamed dimension=2 values=[1.08161,2.38966] maximumIterationNumber=100 maximumEvaluationNumber=100000 maximumAbsoluteError=1e-05 maximumRelativeError=1e-05 maximumResidualError=1e-05 maximumConstraintError=1e-05 verbose=false tau=0.5 omega=0.0001 smooth=1.2 physicalStartingPoint=class=NumericalPoint name=Unnamed dimension=2 values=[1.08161,2.38966]
+result= class=SimulationReliabilityResult name=Unnamed simulationResult=probabilityEstimate=1.124241e-01 varianceEstimate=2.149782e-05 standard deviation=4.64e-03 coefficient of variation=4.12e-02 confidenceLength(0.95)=1.82e-02 outerSampling=1000 blockSize=1
+#!/usr/bin/env python
+# coding: utf-8
+
+from __future__ import print_function
+import openturns as ot
+import otguibase
+
+myStudy = otguibase.OTStudy('myStudy')
+otguibase.OTStudy.Add(myStudy)
+dist_X0 = ot.Normal(1, 1)
+X0 = otguibase.Input('X0', 1, '', dist_X0)
+dist_X1 = ot.Normal(1, 1)
+X1 = otguibase.Input('X1', 2, '', dist_X1)
+X2 = otguibase.Input('X2', 2, '')
+Y0 = otguibase.Output('Y0', 0, '')
+inputs = [X0, X1, X2]
+outputs = [Y0]
+formulas = ['sin(X0) + 8*X1 + X2']
+aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys', inputs, outputs, formulas)
+myStudy.add(aModelPhys)
+aLimitState = otguibase.LimitState('aLimitState', aModelPhys, 'Y0', ot.Greater(), 20)
+myStudy.add(aLimitState)
+myIS = otguibase.FORMImportanceSamplingAnalysis('myIS', aLimitState)
+myIS.setMaximumCalls(1000)
+myIS.setMaximumCoefficientOfVariation(0.01)
+myIS.setMaximumElapsedTime(60)
+myIS.setBlockSize(1)
+myIS.setSeed(2)
+myIS.setStandardSpaceDesignPoint([0.0816124,1.38966])
+myIS.setPhysicalStartingPoint([1,1])
+myIS.setStandardSpaceDesignPoint([0.0816124,1.38966])
+optimizationAlgo = ot.Cobyla()
+optimizationAlgo.setMaximumIterationNumber(100)
+optimizationAlgo.setMaximumAbsoluteError(1e-05)
+optimizationAlgo.setMaximumRelativeError(1e-05)
+optimizationAlgo.setMaximumResidualError(1e-05)
+optimizationAlgo.setMaximumConstraintError(1e-05)
+myIS.setOptimizationAlgorithm(optimizationAlgo)
+myStudy.add(myIS)
+myIS2 = otguibase.FORMImportanceSamplingAnalysis('myIS2', aLimitState)
+myIS2.setMaximumCoefficientOfVariation(0.02)
+myIS2.setMaximumElapsedTime(100000)
+myIS2.setBlockSize(100)
+myIS2.setSeed(0)
+myIS2.setStandardSpaceDesignPoint([0.0816124,1.38966])
+myIS2.setPhysicalStartingPoint([1,1])
+myIS2.setStandardSpaceDesignPoint([0.0816124,1.38966])
+optimizationAlgo = ot.Cobyla()
+optimizationAlgo.setMaximumIterationNumber(100)
+optimizationAlgo.setMaximumAbsoluteError(1e-05)
+optimizationAlgo.setMaximumRelativeError(1e-05)
+optimizationAlgo.setMaximumResidualError(1e-05)
+optimizationAlgo.setMaximumConstraintError(1e-05)
+myIS2.setOptimizationAlgorithm(optimizationAlgo)
+myStudy.add(myIS2)
+myIS3 = otguibase.FORMImportanceSamplingAnalysis('myIS3', aLimitState)
+myIS3.setMaximumCalls(1000)
+myIS3.setMaximumCoefficientOfVariation(-1)
+myIS3.setMaximumElapsedTime(60)
+myIS3.setBlockSize(1)
+myIS3.setSeed(0)
+myIS3.setStandardSpaceDesignPoint([0.0688187,1.14042])
+myIS3.setPhysicalStartingPoint([1.08161,2.38966])
+myIS3.setStandardSpaceDesignPoint([0.0688187,1.14042])
+optimizationAlgo = ot.AbdoRackwitz()
+optimizationAlgo.setMaximumIterationNumber(100)
+optimizationAlgo.setMaximumAbsoluteError(1e-05)
+optimizationAlgo.setMaximumRelativeError(1e-05)
+optimizationAlgo.setMaximumResidualError(1e-05)
+optimizationAlgo.setMaximumConstraintError(1e-05)
+myIS3.setOptimizationAlgorithm(optimizationAlgo)
+myStudy.add(myIS3)
+

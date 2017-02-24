@@ -83,6 +83,9 @@ Reliability analysis
 
     MonteCarloReliabilityAnalysis
     MonteCarloReliabilityResult
+    FORMImportanceSamplingAnalysis
+    ImportanceSamplingAnalysis
+    FORMAnalysis
 
 Design of experiment
 --------------------

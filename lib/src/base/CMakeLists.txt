@@ -34,6 +34,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      ImportanceSamplingAnalysis.cxx
                      ApproximationAnalysis.cxx
                      FORMAnalysis.cxx
+                     FORMImportanceSamplingAnalysis.cxx
                      MonteCarloReliabilityResult.cxx
                      MetaModelAnalysis.cxx
                      MetaModelAnalysisResult.cxx
@@ -100,6 +101,7 @@ ot_install_header_file ( MonteCarloReliabilityAnalysis.hxx )
 ot_install_header_file ( ImportanceSamplingAnalysis.hxx )
 ot_install_header_file ( ApproximationAnalysis.hxx )
 ot_install_header_file ( FORMAnalysis.hxx )
+ot_install_header_file ( FORMImportanceSamplingAnalysis.hxx )
 ot_install_header_file ( MonteCarloReliabilityResult.hxx )
 ot_install_header_file ( MetaModelAnalysisResult.hxx )
 ot_install_header_file ( MetaModelAnalysis.hxx )

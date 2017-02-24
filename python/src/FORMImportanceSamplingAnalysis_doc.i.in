@@ -1,0 +1,46 @@
+%feature("docstring") OTGUI::FORMImportanceSamplingAnalysis
+"FORM analysis followed by an importance sampling for reliability analysis.
+
+Parameters
+----------
+name : str
+    Name
+limitState : :class:`~otguibase.LimitState`
+    Limit state
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+
+Create the model:
+
+>>> R = otguibase.Input('R', 0., 'Yield strength', ot.LogNormalMuSigma(300., 30., 0.).getDistribution())
+>>> F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))
+>>> Ep = otguibase.Output('Ep', 0., 'deviation')
+>>> myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [R, F], [Ep], ['R-F/(_pi*100.0)'])
+
+Create the limit state:
+
+>>> limitState = otguibase.LimitState('ls1', myPhysicalModel, 'Ep', ot.Less(), 0.)
+
+Process the reliability analysis:
+
+>>> analysis = otguibase.FORMImportanceSamplingAnalysis('myAnalysis', limitState)
+>>> analysis.setMaximumCalls(1000)
+>>> analysis.run()
+
+Get the result:
+
+>>> result = analysis.getResult()
+>>> pf = result.getSimulationResult().getProbabilityEstimate()"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ApproximationAnalysis::getFORMResult
+"FORM result accessor.
+
+Returns
+-------
+result : :py:class:`openturns.FORMResult`
+    Result of the FORM analysis"
