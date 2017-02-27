@@ -82,10 +82,10 @@ Reliability analysis
     :template: class.rst_t
 
     MonteCarloReliabilityAnalysis
-    MonteCarloReliabilityResult
     FORMImportanceSamplingAnalysis
     ImportanceSamplingAnalysis
     FORMAnalysis
+    SimulationReliabilityResult
 
 Design of experiment
 --------------------

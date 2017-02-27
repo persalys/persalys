@@ -63,7 +63,7 @@
 #include "otgui/SobolResultWindow.hxx"
 #include "otgui/SRCResultWindow.hxx"
 #include "otgui/ReliabilityAnalysisWizard.hxx"
-#include "otgui/MonteCarloReliabilityResultWindow.hxx"
+#include "otgui/SimulationReliabilityResultWindow.hxx"
 #include "otgui/FunctionalChaosResultWindow.hxx"
 #include "otgui/KrigingResultWindow.hxx"
 #include "otgui/InferenceResultWindow.hxx"
@@ -966,8 +966,10 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
     resultWindow = new SobolResultWindow(item);
   else if (analysisType == "SRCAnalysis")
     resultWindow = new SRCResultWindow(item);
-  else if (analysisType == "MonteCarloReliabilityAnalysis")
-    resultWindow = new MonteCarloReliabilityResultWindow(item);
+  else if (analysisType == "MonteCarloReliabilityAnalysis" ||
+           analysisType == "FORMImportanceSamplingAnalysis" ||
+           analysisType == "ImportanceSamplingAnalysis")
+    resultWindow = new SimulationReliabilityResultWindow(item);
   else if (analysisType == "DataAnalysis")
     resultWindow = new DataAnalysisResultWindow(item);
   else if (analysisType == "FunctionalChaosAnalysis")

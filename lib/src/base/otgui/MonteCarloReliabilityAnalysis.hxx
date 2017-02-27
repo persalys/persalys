@@ -21,14 +21,10 @@
 #ifndef OTGUI_MONTECARLORELIABILITYANALYSIS_HXX
 #define OTGUI_MONTECARLORELIABILITYANALYSIS_HXX
 
-#include "ReliabilityAnalysis.hxx"
-#include "WithStopCriteriaAnalysis.hxx"
-#include "MonteCarloReliabilityResult.hxx"
-
-#include <openturns/MonteCarlo.hxx>
+#include "SimulationReliabilityAnalysis.hxx"
 
 namespace OTGUI {
-class OTGUI_API MonteCarloReliabilityAnalysis : public ReliabilityAnalysis, public WithStopCriteriaAnalysis
+class OTGUI_API MonteCarloReliabilityAnalysis : public SimulationReliabilityAnalysis
 {
   CLASSNAME;
 
@@ -36,47 +32,13 @@ public:
   /** Default constructor */
   MonteCarloReliabilityAnalysis();
   /** Constructor with parameters */
-  MonteCarloReliabilityAnalysis(const OT::String & name, const LimitState & limitState);
+  MonteCarloReliabilityAnalysis(const OT::String& name, const LimitState& limitState);
 
   /** Virtual constructor */
   virtual MonteCarloReliabilityAnalysis * clone() const;
 
-  OT::UnsignedInteger getSeed() const;
-  void setSeed(const OT::UnsignedInteger seed);
-
-  MonteCarloReliabilityResult getResult() const;
-
-  virtual void run();
-  virtual OT::String getPythonScript() const;
-  virtual bool analysisLaunched() const;
-
-  virtual void stop();
-
-  /** String converter */
-  virtual OT::String __repr__() const;
-
-  /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
-
-  /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
-
 protected:
-  struct AnalysisStruct
-  {
-    AnalysisStruct(MonteCarloReliabilityAnalysis* analysis, OT::MonteCarlo* simulation)
-    : analysis_(analysis), simulation_(simulation) {};
-    virtual ~AnalysisStruct(){};
-
-    MonteCarloReliabilityAnalysis * analysis_;
-    OT::MonteCarlo * simulation_;
-  };
-  static void UpdateProgressValue(double percent, void * data);
-
-private:
-  OT::UnsignedInteger seed_;
-  TimeCriteria timeCriteria_;
-  MonteCarloReliabilityResult result_;
+  virtual OT::Simulation* getSimulationAlgorithm(const OT::Event& event);
 };
 }
 #endif

@@ -128,7 +128,6 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include SobolAnalysis.i
 %include SRCResult.i
 %include SRCAnalysis.i
-%include MonteCarloReliabilityResult.i
 %include ReliabilityAnalysis.i
 %include SimulationReliabilityResult.i
 %include SimulationReliabilityAnalysis.i
