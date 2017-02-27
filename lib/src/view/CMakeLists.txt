@@ -55,6 +55,8 @@ ot_add_source_file ( SensitivityAnalysisWizard.cxx )
 ot_add_source_file ( LimitStateWindow.cxx )
 ot_add_source_file ( ReliabilityAnalysisWizard.cxx )
 ot_add_source_file ( MonteCarloReliabilityResultWindow.cxx )
+ot_add_source_file ( SimulationReliabilityResultWindow.cxx )
+ot_add_source_file ( ApproximationResultTabWidget.cxx )
 ot_add_source_file ( StopCriteriaGroupBox.cxx )
 ot_add_source_file ( ParametersDefinitionWizard.cxx )
 ot_add_source_file ( MetaModelAnalysisWizard.cxx )
@@ -112,6 +114,8 @@ ot_install_header_file ( SensitivityResultWidget.hxx )
 ot_install_header_file ( SobolResultWindow.hxx )
 ot_install_header_file ( SRCResultWindow.hxx )
 ot_install_header_file ( MonteCarloReliabilityResultWindow.hxx )
+ot_install_header_file ( SimulationReliabilityResultWindow.hxx )
+ot_install_header_file ( ApproximationResultTabWidget.hxx )
 ot_install_header_file ( StudyTreeView.hxx )
 ot_install_header_file ( DeterministicDesignPage.hxx )
 ot_install_header_file ( ProbabilisticDesignPage.hxx )
@@ -174,6 +178,8 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/LimitStateWindow.hxx
                                   otgui/ReliabilityAnalysisWizard.hxx
                                   otgui/MonteCarloReliabilityResultWindow.hxx
+                                  otgui/SimulationReliabilityResultWindow.hxx
+                                  otgui/ApproximationResultTabWidget.hxx
                                   otgui/StopCriteriaGroupBox.hxx
                                   otgui/ParametersDefinitionWizard.hxx
                                   otgui/MetaModelAnalysisWizard.hxx
