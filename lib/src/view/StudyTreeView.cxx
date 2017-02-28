@@ -875,7 +875,7 @@ void StudyTreeView::runAnalysis()
     {
       wizard = QSharedPointer<AnalysisWizard>(new SensitivityAnalysisWizard(item->getAnalysis(), this));
     }
-    else if (analysisType == "MonteCarloReliabilityAnalysis")
+    else if (analysisType == "MonteCarloReliabilityAnalysis" || analysisType == "FORMImportanceSamplingAnalysis")
     {
       if (!isLimitStateValid(selectionModel()->currentIndex()))
       {

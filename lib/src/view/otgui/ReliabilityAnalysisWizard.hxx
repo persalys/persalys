@@ -21,44 +21,49 @@
 #ifndef OTGUI_RELIABILITYANALYSISWIZARD_HXX
 #define OTGUI_RELIABILITYANALYSISWIZARD_HXX
 
-#include "otgui/LimitState.hxx"
 #include "otgui/AnalysisWizard.hxx"
-#include "otgui/StopCriteriaGroupBox.hxx"
-#include "otgui/BlockSizeGroupBox.hxx"
-
-#include <QButtonGroup>
-#include <QLabel>
+#include "otgui/SimulationReliabilityPage.hxx"
+#include "otgui/OptimizationWidget.hxx"
 
 namespace OTGUI {
+
+class OTGUI_API FORMPage : public QWizardPage
+{
+public:
+  FORMPage(QWidget* parent=0);
+
+  void initialize(const Analysis& analysis);
+  OT::OptimizationSolver getOptimizationAlgorithm() const;
+
+private:
+  OptimizationWidget * formWidget_;
+  OT::OptimizationSolver optimAlgo_;
+};
+
+
 class OTGUI_API ReliabilityAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
 
 public:
-  enum Method {MonteCarlo/*, FORM, SORM*/};
+  enum Method {MonteCarlo, FORM_IS};
+  enum {Page_SimuMethod, Page_FORM};
 
-  ReliabilityAnalysisWizard(const OTStudy& otStudy, const LimitState & limitState, QWidget* parent=0);
-  ReliabilityAnalysisWizard(const Analysis & analysis, QWidget* parent=0);
+  ReliabilityAnalysisWizard(const OTStudy& otStudy, const LimitState& limitState, QWidget* parent=0);
+  ReliabilityAnalysisWizard(const Analysis& analysis, QWidget* parent=0);
 
+  virtual int nextId() const;
   virtual bool validateCurrentPage();
 
 protected:
   void buildInterface();
 
 public slots:
-  void maxiCoefficientOfVariationChanged(double);
-  void maxiTimeChanged(int);
-  void maxiCallsChanged(int);
-  void blockSizeChanged(double);
-  void seedChanged(int);
+  void updateNextId(int);
 
 private:
-  QButtonGroup * methodGroup_;
-  QWidget * monteCarloWidget_;
-  StopCriteriaGroupBox * stopCriteriaGroupBox_;
-  QSpinBox * seedSpinbox_;
-  BlockSizeGroupBox * blockSizeGroupBox_;
-  QLabel * errorMessageLabel_;
+  SimulationReliabilityPage * simulationPage_;
+  FORMPage * formPage_;
 };
 }
 #endif
