@@ -35,12 +35,12 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(const Description& outputsNam
 
   QStringList outputsList;
   for (UnsignedInteger i=0; i<outputsNames.getSize(); ++i)
-    outputsList << outputsNames[i].c_str();
+    outputsList << QString::fromUtf8(outputsNames[i].c_str());
 
   QStringList variablesStringList;
   for (UnsignedInteger i=0; i<interestVariables.getSize(); ++i)
-    if (outputsList.contains(interestVariables[i].c_str()))
-      variablesStringList << interestVariables[i].c_str();
+    if (outputsList.contains(QString::fromUtf8(interestVariables[i].c_str())))
+      variablesStringList << QString::fromUtf8(interestVariables[i].c_str());
 
   if (!variablesStringList.size())
     variablesStringList = outputsList;

@@ -51,7 +51,7 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
   const UnsignedInteger outputDimension = result_.getOutputNames().getSize();
   QStringList outputNames;
   for (UnsignedInteger i=0; i<outputDimension; ++i)
-    outputNames << result_.getOutputNames()[i].c_str();
+    outputNames << QString::fromUtf8(result_.getOutputNames()[i].c_str());
 
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
