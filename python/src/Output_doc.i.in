@@ -37,3 +37,23 @@ Returns
 -------
 computed : bool
     Whether the variable has been evaluated"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Output::isSelected
+"Whether the variable is selected.
+
+Returns
+-------
+isSelected : bool
+    Whether the variable is selected"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Output::setIsSelected
+"Whether the variable is selected.
+
+Parameters
+----------
+isSelected : bool
+    Whether the variable is selected"
