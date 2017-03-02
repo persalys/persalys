@@ -16,7 +16,7 @@ Deterministic studies consist in evaluations of the physical model for defined
 input values.
 
 New model evaluations can be created through the context menu of the
-Deterministic study in the study tree, for the relevant physical model.
+**Deterministic study** in the study tree, for the relevant physical model.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/modelEvaluation.png
     :align: center
@@ -40,8 +40,8 @@ of the deterministic study.
 Designs of experiment consist in evaluations of the physical model for a defined
 set of input values.
 
-New design of experiment can be created through the context menu of the Designs
-of experiment in the study tree, for the relevant physical model.
+New design of experiment can be created through the context menu of the
+**Designs of experiment** in the study tree, for the relevant physical model.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperiment.png
     :align: center
@@ -59,7 +59,7 @@ button:
 
 To define a deterministic design, the user has to choose the input variables which
 will vary by selecting them with the corresponding check box (default: all variables
-are selected).
+are unselected).
 
 - **Varying input variables**:
   The user has to define the lower and upper bound for the variable. The values
@@ -90,84 +90,100 @@ variable, second column for the second input variable, etc...)
 2-3 Results
 '''''''''''
 
-The design of experiment appears in a table and can be launched by using the **Evaluate** button.
-The corresponding values of the outputs will be added to the table.
+A new item is added in the study tree. This item is asociated with a window where the design
+of experiment appears in a table.
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTableX.png
+    :align: center
+
+The context menu of this new item proposes to modify the design of experiment, to evaluate it,
+to perform a meta model or to remove it.
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentContextMenu.png
+    :align: center
+
+Before performing a meta model the user must evaluate the design of experiment.
+
+When clicking on **Evaluate**, the model is evaluating on all the points defined in the design of
+experiment. Then the windows is updated. The corresponding values of the outputs are added to the
+table and tabs present an analysis of the outputs.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTable.png
     :align: center
 
-An item is created in the study tree which allows the user to retrieve the result
-of the design of experiment.
 
 - The tab **Min/Max** summarizes the result of the design. The minimum and maximum values
-  of the selected output are presented with the input values which has led to these
-  extrema.
+  of the selected output (at the left of the window) are presented with the input values which has
+  led to these extrema.
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentMinMax.png
       :align: center
 
-- The tab **Scatter plots** presents the scatter plot of two parameters (Default:
-  first output vs first input).
+- The tab **Scatter plots** gathers 3 tabs:
 
-  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentScatter.png
-      :align: center
+  - The tab **Scatter plots** presents the scatter plot of two parameters (Default:
+    first output vs first input).
 
-  The user can configure the scatter plot with the graphic settings (below the study tree).
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentScatter.png
+        :align: center
 
-  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentScatterConfig.png
-      :align: center
+    The user can configure the scatter plot with the graphic settings below the study tree.
 
-  The user can define:
-    - The Title of the graph, expected to be a string;
-    - The variable plotted on the X-axis, by default the first input;
-    - The variable plotted on the Y-axis, by default the first output.
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentScatterConfig.png
+        :align: center
 
-  It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis Title, expected to be a string;
-    - The minimum bound of the axis, expected to be a floating point;
-    - The maximum bound of the axis, expected to be a floating point.
+    The user can define:
+      - The title of the graph, expected to be a string;
+      - The variable plotted on the X-axis, by default the first input;
+      - The variable plotted on the Y-axis, by default the first output.
 
-  The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
+    The scatter plot is plotted in the ranks space when the user checks **Ranks**.
 
+    It has two tabs, **X-axis** and **Y-axis** where the user can define:
+      - The axis title, expected to be a string;
+      - The minimum bound of the axis, expected to be a floating point;
+      - The maximum bound of the axis, expected to be a floating point.
 
-- The tab **Plot matrix Y-X** presents the scatter plot of each output with respect
-  to each input in a matrix plot. 
+    The **Export** button opens a dialog box for the user to select where the
+    figure has to be saved.
 
-  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentYX.png
-      :align: center
+  - The tab **Plot matrix X-X** gathers:
 
-  The user can configure the matrix plot with the graphic settings (below the study tree).
+    - Out of the diagonal the scatter plot of each couple of inputs;
+    - The histogram of the distribution of each input on the diagonal.
 
-  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentYXConfig.png
-      :align: center
+        .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentXX.png
+            :align: center
 
-  The user can define:
-    - The Title of the graph, expected to be a string;
-    - The variable plotted on the columns, by default all the input variables;
-    - The variable plotted on the rows, by default all the output variables.
+      The user can configure the matrix plot with the graphic settings below the study tree.
 
-  The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentYXConfig.png
+        :align: center
 
-- The tab **Plot matrix X-X** gathers:
+    The user can define:
+      - The title of the graph, expected to be a string;
+      - The variable plotted on the columns, by default all the input variables;
+      - The variable plotted on the rows, by default all the output variables.
 
-  - Out of the diagonal the scatter plot of each couple of inputs;
-  - The histogram of the distribution of each input on the diagonal.
+    The **Export** button opens a dialog box for the user to select where the
+    figure has to be saved.
 
-      .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentXX.png
-          :align: center
+  - The tab **Plot matrix Y-X** presents the scatter plot of each output with respect
+    to each input in a matrix plot. 
 
-    The user can configure the matrix plot with the graphic settings (below the study tree).
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentYX.png
+        :align: center
 
-  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentYXConfig.png
-      :align: center
+    The user can configure the matrix plot with the graphic settings below the study tree.
 
-  The user can define:
-    - The Title of the graph, expected to be a string;
-    - The variable plotted on the columns, by default all the input variables;
-    - The variable plotted on the rows, by default all the output variables.
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentYXConfig.png
+        :align: center
 
-  The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
+    The user can define:
+      - The title of the graph, expected to be a string;
+      - The variable plotted on the columns, by default all the input variables;
+      - The variable plotted on the rows, by default all the output variables.
+
+    The **Export** button opens a dialog box for the user to select where the
+    figure has to be saved.
 

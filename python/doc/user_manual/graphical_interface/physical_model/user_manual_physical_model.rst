@@ -30,7 +30,11 @@ to be floating points or integers.
 Names of the variables are string. Only the allowable character can be used. Default set the name of the variable
 to X0 for the first input, X1 for the second, Y0 for the first output, etc...
 A label can be assigned to each input and output variables in the **Description** column. There is no restriction
-on the label value (floating point, integer, string, etc...)
+on the label value (floating point, integer, string, etc...).
+
+Each line of the "Outputs" table is checkable to allow the user to enable or disable one or several variables.
+By default all of the outputs are checked. The model must have at least one selected output to perform
+analyses.
 
 The relationships between the inputs and the outputs have to be defined in the **Formula** column.
 The language used here is different from Python. Syntaxes for the operators, mathematical functions
