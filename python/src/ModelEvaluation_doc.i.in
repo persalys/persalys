@@ -1,5 +1,34 @@
 %feature("docstring") OTGUI::ModelEvaluation
-"Simple evaluation of a model."
+"Simple evaluation of a model.
+
+Parameters
+----------
+name : str
+    Name
+physicalModel : :class:`~otguibase.PhysicalModel`
+    Physical model
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+
+Create the model:
+
+>>> R = otguibase.Input('R', 300., 'Yield strength', ot.LogNormalMuSigma(300., 30., 0.).getDistribution())
+>>> F = otguibase.Input('F', 75000., 'Traction load', ot.Normal(75000., 5000.))
+>>> G = otguibase.Output('Ep', 0., 'deviation')
+>>> myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(_pi*100.0)'])
+
+Create the Model evaluation:
+
+>>> analysis = otguibase.ModelEvaluation('anAnalysis', myPhysicalModel)
+>>> analysis.run()
+
+Get the result:
+
+>>> result = analysis.getResult()
+>>> outputValue = result.getOutputSample()"
 
 // ---------------------------------------------------------------------
 

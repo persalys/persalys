@@ -1,9 +1,6 @@
 %feature("docstring") OTGUI::KrigingAnalysis
 "Kriging.
 
-:Available constructors:
-    KrigingAnalysis(*name, designOfExperiment*)
-
 Parameters
 ----------
 name : str
@@ -19,6 +16,9 @@ Create the model:
 >>> import otguibase
 >>> from math import pi
 >>> ot.RandomGenerator.SetSeed(0)
+
+Create the model:
+
 >>> xi1 = otguibase.Input('xi1', 0., '', ot.Uniform(-pi, pi))
 >>> xi2 = otguibase.Input('xi2', 0., '', ot.Uniform(-pi, pi))
 >>> xi3 = otguibase.Input('xi3', 0., '', ot.Uniform(-pi, pi))

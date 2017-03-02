@@ -1,10 +1,9 @@
 %define OTGUI_PhysicalModel_doc
 "Physical model base class.
 
-Can only be used through it's derived classes.
-
 Notes
 -----
+Can only be used through it's derived classes.
 See :class:`~otguibase.AnalyticalPhysicalModel`, :class:`~otguibase.PythonPhysicalModel`"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation

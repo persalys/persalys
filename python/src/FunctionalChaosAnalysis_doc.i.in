@@ -1,9 +1,6 @@
 %feature("docstring") OTGUI::FunctionalChaosAnalysis
 "Functional chaos.
 
-:Available constructors:
-    FunctionalChaosAnalysis(*name, designOfExperiment*)
-
 Parameters
 ----------
 name : str
@@ -13,10 +10,11 @@ designOfExperiment : :class:`~otguibase.DesignOfExperiment`
 
 Examples
 --------
-Create the model:
-
 >>> import openturns as ot
 >>> import otguibase
+
+Create the model:
+
 >>> from math import pi
 >>> ot.RandomGenerator.SetSeed(0)
 >>> xi1 = otguibase.Input('xi1', 0., '', ot.Uniform(-pi, pi))

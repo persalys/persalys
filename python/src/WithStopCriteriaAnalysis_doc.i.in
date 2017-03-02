@@ -71,7 +71,7 @@ maxTime : positive int
 Returns
 -------
 blockSize : positive int
-    Number of terms in the probability simulation estimator grouped together.
+    Number of terms analysed together.
     It is set by default to 1."
 
 // ----------------------------------------------------------------------
@@ -82,5 +82,5 @@ blockSize : positive int
 Parameters
 ----------
 blockSize : positive int
-    Number of terms in the probability simulation estimator grouped together.
+    Number of terms analysed together.
     It is set by default to 1."

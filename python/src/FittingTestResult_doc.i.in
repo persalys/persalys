@@ -23,7 +23,7 @@ values : :py:class:`openturns.NumericalSample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::InferenceAnalysis::getTestedDistributions
+%feature("docstring") OTGUI::FittingTestResult::getTestedDistributions
 "Get the sequence of tested distributions.
 
 Returns
@@ -33,7 +33,7 @@ distributions : sequence of :py:class:`openturns.Distribution`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::InferenceAnalysis::getKolmogorovTestResults
+%feature("docstring") OTGUI::FittingTestResult::getKolmogorovTestResults
 "Result of the Kolmogorov goodness-of-fit test.
 
 Returns

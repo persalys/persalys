@@ -8,14 +8,27 @@ name : str
 inputs : sequence of :class:`~otguibase.Input`
     Input variables (optional)
 outputs : sequence of :class:`~otguibase.Output`
-    Output` variables (optional)
+    Output variables (optional)
 code : str
-    Code string
+    Code string (optional)
 
 Notes
 -----
 The code string must contain a function named '_exec' that takes float
-arguments and return a sequence of floats."
+arguments and return a sequence of floats.
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+
+Create the model:
+
+>>> R = otguibase.Input('R', 0., 'Yield strength', ot.LogNormalMuSigma(300., 30.).getDistribution())
+>>> F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))
+>>> G = otguibase.Output('G', 0., 'deviation')
+>>> code = 'from math import pi\n\ndef _exec(R, F):\n    G = R-F/(pi*100.0)\n    return [G]\n'
+>>> model = otguibase.PythonPhysicalModel('myPhysicalModel', [R, F], [G], code)"
 
 // ---------------------------------------------------------------------
 
