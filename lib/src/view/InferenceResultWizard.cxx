@@ -58,15 +58,10 @@ void InferenceResultWizard::buildInterface()
   mainLayout->addWidget(new QLabel(tr("Inference analysis")), 0, 0);
   mainLayout->addWidget(inferenceResultsComboBox_ , 0, 1);
 
-  QStringList inferenceAnalyses;
   for (UnsignedInteger i=0; i<otStudy_.getAnalyses().getSize(); ++i)
-  {
     if (otStudy_.getAnalyses()[i].getImplementation()->getClassName() == "InferenceAnalysis")
-    {
-      inferenceAnalyses << otStudy_.getAnalyses()[i].getName().c_str();
-      inferenceResultsComboBox_->addItem(otStudy_.getAnalyses()[i].getName().c_str(), (int)i);
-    }
-  }
+      inferenceResultsComboBox_->addItem(QString::fromUtf8(otStudy_.getAnalyses()[i].getName().c_str()), (int)i);
+
   // choose variable
   variablesComboBox_ = new QComboBox;
   mainLayout->addWidget(new QLabel(tr("Variable")), 1, 0);
@@ -108,7 +103,7 @@ void InferenceResultWizard::updateVariablesComboBox(int currentAnalysis)
     Collection< FittingTestResult > fittingTestResultCollection(result.getFittingTestResultCollection());
 
     for (UnsignedInteger i=0; i<fittingTestResultCollection.getSize(); ++i)
-      variablesNames << fittingTestResultCollection[i].getVariableName().c_str();
+      variablesNames << QString::fromUtf8(fittingTestResultCollection[i].getVariableName().c_str());
   }
   variablesComboBox_->addItems(variablesNames);
 }
