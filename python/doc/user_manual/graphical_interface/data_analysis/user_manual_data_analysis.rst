@@ -385,7 +385,7 @@ For the two methods the results window gathers:
 - The tab **Metamodel** which contains a plot opposing the metamodel values
   to the physical model output values. A diagonal is built with the physical
   model output values.
-  It presents for each output the metamodel predictivity coefficient
+  For the functional chaos method, it presents for each output the metamodel predictivity coefficient
   :math:`\displaystyle R2 = \frac{\sum_{i=0}^N (y_i - \hat{y_i})^2}{\sum_{i=0}^N {(\bar{y} - y_i)}}`
   and the residual :math:`\displaystyle res = \frac{\sqrt{\sum_{i=0}^N (y_i - \hat{y_i})^2}}{N}`.
 
@@ -398,10 +398,10 @@ For the two methods the results window gathers:
       :align: center
 
   The user can define:
-    - The Title of the graph, expected to be a string;
+    - The title of the graph, expected to be a string;
 
   It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis Title, expected to be a string;
+    - The axis title, expected to be a string;
     - The minimum bound of the axis, expected to be a floating point;
     - The maximum bound of the axis, expected to be a floating point.
 
@@ -426,10 +426,10 @@ For the two methods the results window gathers:
       :align: center
 
   The user can define:
-    - The Title of the graph, expected to be a string;
+    - The title of the graph, expected to be a string;
 
   It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis Title, expected to be a string;
+    - The axis title, expected to be a string;
     - The minimum bound of the axis, expected to be a floating point;
     - The maximum bound of the axis, expected to be a floating point.
 
@@ -462,10 +462,10 @@ The results window gathers two tabs:
       :align: center
 
   The user can define:
-    - The Title of the graph, expected to be a string;
+    - The title of the graph, expected to be a string;
 
   It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis Title, expected to be a string;
+    - The axis title, expected to be a string;
     - The minimum bound of the axis, expected to be a floating point;
     - The maximum bound of the axis, expected to be a floating point.
 
