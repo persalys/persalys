@@ -133,7 +133,7 @@ void InferenceAnalysis::run()
   try
   {
     // clear result
-    stopRequested_ = false;
+    initialize();
     result_ = InferenceResult();
 
     // check

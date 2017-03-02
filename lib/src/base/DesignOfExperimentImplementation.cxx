@@ -128,7 +128,9 @@ void DesignOfExperimentImplementation::run()
   try
   {
     // clear result
+    errorMessage_ = "";
     stopRequested_ = false;
+    progressValue_ = 0;
 
     // input sample
     NumericalSample inputSample(getInputSample());

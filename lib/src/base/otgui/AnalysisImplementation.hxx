@@ -60,6 +60,9 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
+  void initialize();
+
+protected:
   bool isReliabilityAnalysis_;
   OT::String informationMessage_;
   OT::String errorMessage_;

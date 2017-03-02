@@ -60,7 +60,7 @@ void SRCAnalysis::run()
   try
   {
     // clear result
-    stopRequested_ = false;
+    initialize();
     result_ = SRCResult();
 
     RandomGenerator::SetSeed(getSeed());

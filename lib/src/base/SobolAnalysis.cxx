@@ -61,7 +61,7 @@ void SobolAnalysis::run()
   try
   {
     // clear result
-    stopRequested_ = false;
+    initialize();
     result_ = SobolResult();
 
     // initialization

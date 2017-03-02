@@ -58,7 +58,7 @@ void TaylorExpansionMomentsAnalysis::run()
   try
   {
     // clear result
-    stopRequested_ = false;
+    initialize();
     result_ = TaylorExpansionMomentsResult();
 
     // set analysis

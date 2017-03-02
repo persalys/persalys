@@ -58,6 +58,15 @@ AnalysisImplementation* AnalysisImplementation::clone() const
 }
 
 
+void AnalysisImplementation::initialize()
+{
+  informationMessage_ = "";
+  errorMessage_ = "";
+  stopRequested_ = false;
+  progressValue_ = 0;
+}
+
+
 String AnalysisImplementation::getModelName() const
 {
   return "";

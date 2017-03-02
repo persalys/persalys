@@ -116,7 +116,7 @@ void KrigingAnalysis::run()
       throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
 
     // clear result
-    stopRequested_ = false;
+    initialize();
     result_ = KrigingAnalysisResult();
     optimalCovarianceModel_ = CovarianceModel();
 

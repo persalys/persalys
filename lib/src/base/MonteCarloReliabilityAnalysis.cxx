@@ -85,7 +85,7 @@ void MonteCarloReliabilityAnalysis::run()
   try
   {
     // clear result
-    stopRequested_ = false;
+    initialize();
     timeCriteria_ = TimeCriteria();
     result_ = MonteCarloReliabilityResult();
 
