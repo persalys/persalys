@@ -104,6 +104,10 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 #ifdef OTGUI_HAVE_YACS
 %include YACSPhysicalModel.i
 #endif
+#ifdef OTGUI_HAVE_OTFMI
+%include FMUInfo.i
+%include FMIPhysicalModel.i
+#endif
 %include LimitStateImplementation.i
 %include LimitState.i
 %include AnalysisImplementation.i

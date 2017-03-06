@@ -190,16 +190,19 @@ String Input::getPythonScript() const
   OSS oss;
   oss.setPrecision(12);
 
+  String pythonName(getName());
+  std::replace(pythonName.begin(), pythonName.end(), '.', '_');
+
   if (!isStochastic())
-    oss << getName() << " = otguibase.Input('" << getName() << "', " << getValue() << ", '" << getEscapedDescription() << "')\n";
+    oss << pythonName << " = otguibase.Input('" << getName() << "', " << getValue() << ", '" << getEscapedDescription() << "')\n";
   else
   {
     oss << getDistributionPythonScript();
-    oss << getName() << " = otguibase.Input('" << getName() << "', " << getValue();
-    oss << ", dist_" << getName() << ", '" << getEscapedDescription() << "')\n";
+    oss << pythonName << " = otguibase.Input('" << getName() << "', " << getValue();
+    oss << ", dist_" << pythonName << ", '" << getEscapedDescription() << "')\n";
   }
   if (getFiniteDifferenceStep() != ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
-    oss << getName() << ".setFiniteDifferenceStep(" << getFiniteDifferenceStep() << ")\n";
+    oss << pythonName << ".setFiniteDifferenceStep(" << getFiniteDifferenceStep() << ")\n";
 
   return oss;
 }

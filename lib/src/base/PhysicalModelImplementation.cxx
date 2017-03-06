@@ -613,13 +613,15 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
       Distribution distribution = getInputs()[i].getDistribution();
       String distributionName = distribution.getImplementation()->getClassName();
       String inputName = getInputs()[i].getName();
+      String inputPythonName(inputName);
+      std::replace(inputPythonName.begin(), inputPythonName.end(), '.', '_');
 
       OSS oss;
       oss.setPrecision(12);
 
       if (distributionName != "TruncatedDistribution")
       {
-        oss << "dist_" << inputName << " = ot." << distributionName << "(";
+        oss << "dist_" << inputPythonName << " = ot." << distributionName << "(";
         PointWithDescription parameters = distribution.getParametersCollection()[0];
         for (UnsignedInteger j=0; j<parameters.getSize(); ++ j)
         {
@@ -633,7 +635,7 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
       {
         TruncatedDistribution truncatedDistribution = *dynamic_cast<TruncatedDistribution*>(distribution.getImplementation().get());
         distribution = truncatedDistribution.getDistribution();
-        oss << "dist_" << inputName << " = ot." << distribution.getImplementation()->getClassName() << "(";
+        oss << "dist_" << inputPythonName << " = ot." << distribution.getImplementation()->getClassName() << "(";
         PointWithDescription parameters = distribution.getParametersCollection()[0];
         for (UnsignedInteger j=0; j < parameters.getSize(); ++ j)
         {
@@ -642,8 +644,8 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
             oss << ", ";
         }
         oss << ")\n";
-        oss << "dist_" << inputName << " = ot." << distributionName << "(";
-        oss << "dist_" << inputName << ", ";
+        oss << "dist_" << inputPythonName << " = ot." << distributionName << "(";
+        oss << "dist_" << inputPythonName << ", ";
 
         if (!(truncatedDistribution.getFiniteLowerBound() && truncatedDistribution.getFiniteUpperBound())) // one side truncation ?
         {
@@ -658,7 +660,7 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
 
       result += oss.str();
       result += getName() + ".setDistribution('" + inputName + "', ";
-      result += " dist_" + inputName + ")\n";
+      result += " dist_" + inputPythonName + ")\n";
     }
   }
   return result;

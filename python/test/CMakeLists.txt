@@ -56,12 +56,10 @@ macro ( ot_pyinstallcheck_test TESTNAME )
   
   if (_IGNOREOUT)
     set ( COMMAND "( ${PYTHON_EXECUTABLE} ${TESTNAME_LOC} ${_PARAMS} > /dev/null )" )
-    set ( EXTERNAL_COMMAND "$PYTHON_EXE ${TESTNAME_SRC} > $DEBUG_FILE 2>&1" )
   else (_IGNOREOUT)
     set ( TESTNAME_OUT ${TESTNAME_TGT}.expout )
     set ( OUTFILE_LOC ${CMAKE_CURRENT_SOURCE_DIR}/${TESTNAME_OUT} ) 
     set ( COMMAND "( ${PYTHON_EXECUTABLE} ${TESTNAME_LOC} ${_PARAMS} ${REPLACE_EOL} > ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out ) && diff -u ${OUTFILE_LOC} ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out" )
-    set ( EXTERNAL_COMMAND "( $PYTHON_EXE ${TESTNAME_SRC} 2>$DEBUG_FILE | tr -d '\\\\r' > ${TESTNAME_TGT}.out ) && diff -u ${TESTNAME_SRC}.expout ${TESTNAME_TGT}.out" )
   endif (_IGNOREOUT)
 
   if (_PRE OR _POST)
@@ -71,16 +69,6 @@ macro ( ot_pyinstallcheck_test TESTNAME )
   endif (_PRE OR _POST)
 
   add_test ( pyinstallcheck_${TESTNAME} "sh" "-c" "${COMMAND}" )
-
-#   if ( MINGW )
-#     install ( FILES ${TESTNAME_OUT}
-#               DESTINATION ${OTGUI_EXAMPLE_PATH} 
-#               RENAME ${TESTNAME_SRC}.expout
-#             )
-#           add_check_file ( ${EXTERNAL_PYTHONINSTALLCHECK_FILE} ${TESTNAME_SRC} ${EXTERNAL_COMMAND} ${CUR_PYTHONINSTALLCHECK} )
-#     math( EXPR CUR_PYTHONINSTALLCHECK "${CUR_PYTHONINSTALLCHECK} + 1" )
-#   endif ( MINGW )
-
 
   set_tests_properties ( pyinstallcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${PYINSTALLCHECK_ENVIRONMENT}" )
   list ( APPEND PYINSTALLCHECK_TO_BE_RUN ${TESTNAME_SRC} )
@@ -92,6 +80,9 @@ endmacro ( ot_pyinstallcheck_test )
 
 ot_pyinstallcheck_test (SymbolicPhysicalModel_std)
 ot_pyinstallcheck_test (PythonPhysicalModel_std)
+if (OTFMI_FOUND)
+  ot_pyinstallcheck_test (FMIPhysicalModel_std IGNOREOUT)
+endif ()
 ot_pyinstallcheck_test (Cogeneration_std)
 ot_pyinstallcheck_test (Crue_std)
 ot_pyinstallcheck_test (DesignOfExperiment_std)

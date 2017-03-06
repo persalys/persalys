@@ -53,6 +53,10 @@ if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx YACSEvalSessionSingleton.cxx)
 endif ()
 
+if (USE_OTFMI)
+  list (APPEND BASE_SOURCEFILES FMIPhysicalModel.cxx FMUInfo.cxx)
+endif ()
+
 ot_install_header_file ( DistributionDictionary.hxx )
 ot_install_header_file ( OTguiException.hxx )
 ot_install_header_file ( Variable.hxx )
@@ -116,6 +120,11 @@ ot_install_header_file ( CopulaInferenceSetResult.hxx )
 ot_install_header_file ( CopulaInferenceResult.hxx )
 ot_install_header_file ( CopulaInferenceAnalysis.hxx )
 ot_install_header_file ( PythonEnvironment.hxx )
+
+if (USE_OTFMI)
+  ot_install_header_file (FMIPhysicalModel.hxx)
+  ot_install_header_file (FMUInfo.hxx)
+endif ()
 
 if (SalomeYACS_FOUND)
   ot_install_header_file (YACSPhysicalModel.hxx)

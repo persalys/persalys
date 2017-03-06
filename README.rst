@@ -12,11 +12,13 @@ Dependencies
 - SalomeYACS (optional, for YACS support)
 - Sphinx >= 1.1 (optional, for doc)
 - Numpydoc (optional, for doc)
+- otfmi (optional, for FMI support)
 
 Installation
 ------------
 - Python libs found must be version 2.7 as well as interpreter (else adjust PYTHON_INCLUDE_DIR, PYTHON_LIBRARY)
 - The Qwt library found must be linked to the qt libs found (else adjust QWT_LIBRARY, or use USE_QT5=OFF)
+- otfmi must be importable at configure time, so both openturns & otfmi should be reachable via PYTHONPATH or a default location
 
 Compile OpenTURNS::
 

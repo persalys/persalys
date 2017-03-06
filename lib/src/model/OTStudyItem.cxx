@@ -27,7 +27,9 @@
 #ifdef OTGUI_HAVE_YACS
 #include "otgui/YACSPhysicalModel.hxx"
 #endif
-
+#ifdef OTGUI_HAVE_OTFMI
+#include "otgui/FMIPhysicalModel.hxx"
+#endif
 #include <QDebug>
 #include <QFileInfo>
 #include <QSettings>
@@ -64,6 +66,10 @@ void OTStudyItem::buildActions()
   newYACSPhysicalModel_ = new QAction(tr("New YACS physical model"), this);
   connect(newYACSPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewYACSPhysicalModel()));
 #endif
+#ifdef OTGUI_HAVE_OTFMI
+  newFMIPhysicalModel_ = new QAction(tr("New FMI physical model"), this);
+  connect(newFMIPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewFMIPhysicalModel()));
+#endif
 
   newDataModel_ = new QAction(tr("New data model"), this);
   connect(newDataModel_, SIGNAL(triggered()), this, SLOT(createNewDataModel()));
@@ -89,6 +95,9 @@ void OTStudyItem::buildActions()
   appendAction(newPythonPhysicalModel_);
 #ifdef OTGUI_HAVE_YACS
   appendAction(newYACSPhysicalModel_);
+#endif
+#ifdef OTGUI_HAVE_OTFMI
+  appendAction(newFMIPhysicalModel_);
 #endif
   appendAction(newDataModel_);
   appendAction(exportOTStudy_);
@@ -155,9 +164,18 @@ void OTStudyItem::createNewPythonPhysicalModel()
 
 
 #ifdef OTGUI_HAVE_YACS
-void StudyTreeView::createNewYACSPhysicalModel()
+void OTStudyItem::createNewYACSPhysicalModel()
 {
   YACSPhysicalModel * newPhysicalModel = new YACSPhysicalModel(otStudy_.getAvailablePhysicalModelName());
+  otStudy_.add(newPhysicalModel);
+}
+#endif
+
+
+#ifdef OTGUI_HAVE_OTFMI
+void OTStudyItem::createNewFMIPhysicalModel()
+{
+  FMIPhysicalModel newPhysicalModel(otStudy_.getAvailablePhysicalModelName());
   otStudy_.add(newPhysicalModel);
 }
 #endif

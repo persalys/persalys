@@ -65,6 +65,7 @@ JOBS_TEST=$(JOBS)
 export PATH := $(MINGW_PREFIX)/bin:$(PATH)
 
 DEBUG_OT=n
+OTFMI=n
 
 ###############################################################################
 # rules:
@@ -80,7 +81,9 @@ mod-check-compiler:
 	@ls $(MOD_SRC) $(PYTHON_EXECUTABLE) > /dev/null
 	@echo "ok"
 	touch mod-check-compiler
-
+ifeq ($(OTFMI),y)
+	echo "__version__='0'" > $(MINGW_PREFIX)/$(TARGET)/lib/python$(PYBASEVER_NODOT)/otfmi.py
+endif
 
 mod-config: mod-check-compiler
 	-mkdir -p $(MOD_BUILD)

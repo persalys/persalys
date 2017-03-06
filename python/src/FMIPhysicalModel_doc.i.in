@@ -1,0 +1,50 @@
+%feature("docstring") OTGUI::FMIPhysicalModel
+"Physical model defined by a FMI scheme.
+
+Parameters
+----------
+name : str
+    Model name
+inputs : sequence of :class:`~otguibase.Input`
+    Input variables (optional)
+outputs : sequence of :class:`~otguibase.Output`
+    Output variables (optional)
+fmuFile : str
+    FMU file name
+
+Notes
+-----
+When only the file name is provided, only variables marked with *Input* FMI
+causality are set as model input variables, and only variables marked with
+*Output* FMI causality are set as model output variables.
+"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMIPhysicalModel::getFMUFileName
+"FMU file name accessor.
+
+Returns
+-------
+fileName : str
+    FMU file name containing the FMI scheme"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMIPhysicalModel::setFMUFileName
+"FMU file name accessor.
+
+Parameters
+----------
+fileName : str
+    FMU file name containing the FMI scheme"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMIPhysicalModel::getFMUInfo
+"FMU infos accessor.
+
+Returns
+-------
+fmuInfo : :class:`~otguibase.FMUInfo`
+    FMU infos"
