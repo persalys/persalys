@@ -198,7 +198,7 @@ void PhysicalModelWindowWidget::updateOutputTableModel()
   }
   // table header view
   const UnsignedInteger nbOutputs = physicalModel_.getOutputNames().getSize();
-  bool allChecked = (nbOutputs && (nbOutputs== physicalModel_.getSelectedOutputsNames().getSize()));
+  const bool allChecked = (nbOutputs && (nbOutputs== physicalModel_.getSelectedOutputsNames().getSize()));
   outputTableHeaderView_->setChecked(allChecked);
   connect(outputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
   connect(outputTableModel_, SIGNAL(checked(bool)), outputTableHeaderView_, SLOT(setChecked(bool)));
@@ -223,7 +223,7 @@ void PhysicalModelWindowWidget::removeInputLine()
   {
     QModelIndex index = inputTableView_->selectionModel()->currentIndex();
     inputTableModel_->removeLine(index);
-    int lastRow = inputTableModel_->rowCount()-1;
+    const int lastRow = inputTableModel_->rowCount()-1;
 
     if (lastRow+1)
       inputTableView_->selectRow(lastRow);
@@ -234,27 +234,35 @@ void PhysicalModelWindowWidget::removeInputLine()
 void PhysicalModelWindowWidget::removeOutputLine()
 {
   if (outputTableView_->selectionModel()->hasSelection())
-  {
     outputTableModel_->removeLine(outputTableView_->selectionModel()->currentIndex());
-  }
 }
 
 
 void PhysicalModelWindowWidget::evaluateOutputs()
 {
-  try
-  {
-    ModelEvaluation eval("anEval", physicalModel_);
-    eval.run();
-    NumericalSample outputSample(eval.getResult().getOutputSample());
-    for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++ i)
-      physicalModel_.setOutputValue(physicalModel_.getOutputNames()[i], outputSample[0][i]);
+  // evaluate
+  ModelEvaluation eval("anEval", physicalModel_);
+  eval.run();
 
-    errorMessageChanged("");
-  }
-  catch (std::exception & ex)
+  // get result
+  NumericalSample outputSample(eval.getResult().getOutputSample());
+
+  // check
+  if (!eval.getErrorMessage().empty())
   {
-    errorMessageChanged(ex.what());
+    errorMessageChanged(eval.getErrorMessage().c_str());
+    return;
   }
+  if (!outputSample.getSize() || outputSample.getDimension() != physicalModel_.getOutputNames().getSize())
+  {
+    errorMessageChanged(tr("Not possible to evaluate the outputs"));
+    return;
+  }
+
+  // set output value
+  for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++ i)
+    physicalModel_.setOutputValue(physicalModel_.getOutputNames()[i], outputSample[0][i]);
+
+  errorMessageChanged("");
 }
 }
