@@ -5,6 +5,9 @@
 %}
 
 %ignore *::getModelName;
+%ignore *::getInformationMessage;
+%ignore *::getProgressValue;
+%ignore *::stop;
 
 %include AnalysisImplementation_doc.i
 

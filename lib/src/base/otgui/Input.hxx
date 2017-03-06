@@ -49,7 +49,6 @@ public:
 
   bool isStochastic() const;
 
-  OT::String getDistributionPythonScript() const;
   OT::String getPythonScript() const;
 
   /** String converter */
@@ -60,6 +59,9 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
+
+protected:
+  OT::String getDistributionPythonScript() const;
 
 private:
   OT::Distribution distribution_;

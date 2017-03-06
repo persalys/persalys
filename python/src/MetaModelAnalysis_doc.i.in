@@ -1,6 +1,11 @@
 %feature("docstring") OTGUI::MetaModelAnalysis
 "Base class for the creation of meta models.
-"
+
+Notes
+-----
+Can only be used through it's derived classes.
+See :class:`~otguibase.FunctionalChaosAnalysis`,
+:class:`~otguibase.KrigingAnalysis`"
 
 // ---------------------------------------------------------------------
 

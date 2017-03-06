@@ -9,7 +9,7 @@ physicalModel : :class:`~otguibase.PhysicalModel`
     Physical model
 outputName : str
     Interest variable name
-operator : :class:`~otguibase.ComparisonOperator`
+operator : :py:class:`~openturns.ComparisonOperator`
     Comparison operator against threshold (optional)
 threshold : float
     Threshold value (optional)

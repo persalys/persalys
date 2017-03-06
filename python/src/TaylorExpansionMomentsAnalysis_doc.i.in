@@ -6,27 +6,29 @@ Parameters
 name : str
     Name
 physicalModel : :class:`~otguibase.PhysicalModel`
-    Limit state"
+    Physical model
 
-// ---------------------------------------------------------------------
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
 
-%feature("docstring") OTGUI::TaylorExpansionMomentsAnalysis::setOutputNames
-"Output variable names accessor.
+Create the model:
 
-Parameters
-----------
-names : :py:class:`openturns.Description`
-    Output variable names"
+>>> R = otguibase.Input('R', 0., 'Yield strength', ot.LogNormalMuSigma(300., 30., 0.).getDistribution())
+>>> F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))
+>>> G = otguibase.Output('Ep', 0., 'deviation')
+>>> myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(_pi*100.0)'])
 
-// ---------------------------------------------------------------------
+Create the Taylor expansions analysis:
 
-%feature("docstring") OTGUI::TaylorExpansionMomentsAnalysis::getOutputNames
-"Output variable names accessor.
+>>> analysis = otguibase.TaylorExpansionMomentsAnalysis('anAnalysis', myPhysicalModel)
+>>> analysis.run()
 
-Returns
--------
-names : :py:class:`openturns.Description`
-    Output variable names"
+Get the result:
+
+>>> result = analysis.getResult()
+>>> mean = result.getMeanFirstOrder()"
 
 // ---------------------------------------------------------------------
 

@@ -1,5 +1,35 @@
 %feature("docstring") OTGUI::DataAnalysis
-"Data analysis."
+"Data analysis.
+
+Parameters
+----------
+name : str
+    Name
+design : :class:`~otguibase.DesignOfExperiment`
+    Design of experiment
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+>>> ot.RandomGenerator_SetSeed(0)
+
+Create the model:
+
+>>> filename = 'data.csv'
+>>> sample = ot.Normal(3).getSample(100)
+>>> sample.exportToCSVFile(filename)
+>>> model = otguibase.DataModel('myDataModel', 'data.csv', [0, 1, 2])
+
+Create the Data analysis:
+
+>>> analysis = otguibase.DataAnalysis('analysis', model)
+>>> analysis.run()
+
+Get the result:
+
+>>> result = analysis.getResult()
+>>> mean = result.getMean()"
 
 // ---------------------------------------------------------------------
 

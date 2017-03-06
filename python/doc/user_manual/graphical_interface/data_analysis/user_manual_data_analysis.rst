@@ -11,9 +11,10 @@ The OTGui allows the user to launch three types of data analyses:
 1- Data analysis
 ================
 
-The right click on a data model proposes to analyze the sample.
+The right click on a data model proposes to analyse the sample.
 
-The results window gathers 6 tabs:
+At the left of the result window the section **Variables** enables the user to choose the result to display.
+The results window gathers 4 tabs:
 
 - The tab **Summary** includes, for a selected variable:
     - The number of values;
@@ -38,14 +39,13 @@ The results window gathers 6 tabs:
   together with a kernel smoothing representation.
 
   The user can configure the plot and choose between PDF/CDF with the graphic
-  settings (below the study tree).
+  settings below the study tree.
 
   .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_PDF_setting.png
       :align: center
 
   The user can define:
     - The title of the graph, expected to be a string;
-    - The plotted variable, by default the first variable.
 
   It has two tabs, **X-axis** and **Y-axis** where the user can define:
     - The axis title, expected to be a string;
@@ -70,7 +70,6 @@ The results window gathers 6 tabs:
 
   The user can define:
     - The title of the graph, expected to be a string;
-    - The plotted variable, by default the first variable.
 
   It has two tabs, **X-axis** and **Y-axis** where the user can define:
     - The axis title, expected to be a string;
@@ -80,68 +79,72 @@ The results window gathers 6 tabs:
   The **Export** button opens a dialog box for the user to select where the
   figure has to be saved.
 
-- The tab **Scatter plots** presents the scatter plot of two parameters (Default:
-  first output vs first input).
+- The tab **Scatter plots** gathers 3 tabs:
 
-  .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_scatterplot.png
-      :align: center
+  - The tab **Scatter plots** presents the scatter plot of two parameters (Default:
+    first output vs first input).
 
-  The user can configure the scatter plot with the graphic settings (below the study tree).
+    .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_scatterplot.png
+        :align: center
 
-  .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_scatterplot_setting.png
-      :align: center
+    The user can configure the scatter plot with the graphic settings (below the study tree).
 
-  The user can define:
-    - The title of the graph, expected to be a string;
-    - The variable plotted on the X-axis, by default the first input;
-    - The variable plotted on the Y-axis, by default the first output.
+    .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_scatterplot_setting.png
+        :align: center
 
-  It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis title, expected to be a string;
-    - The minimum bound of the axis, expected to be a floating point;
-    - The maximum bound of the axis, expected to be a floating point.
+    The user can define:
+      - The title of the graph, expected to be a string;
+      - The variable plotted on the X-axis, by default the first input;
+      - The variable plotted on the Y-axis, by default the first output.
 
-  The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
+    The scatter plot is plotted in the ranks space when the user checks **Ranks**.
 
-- The tab **Plot matrix X-X** gathers:
-    - Out of the diagonal the scatter plot of each couple of inputs;
-    - The histogram of the distribution of each input on the diagonal.
+    It has two tabs, **X-axis** and **Y-axis** where the user can define:
+      - The axis title, expected to be a string;
+      - The minimum bound of the axis, expected to be a floating point;
+      - The maximum bound of the axis, expected to be a floating point.
 
-  .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_plotmatrixXX.png
-      :align: center
+    The **Export** button opens a dialog box for the user to select where the
+    figure has to be saved.
 
-  The user can configure the matrix plot with the graphic settings (below the study tree).
+  - The tab **Plot matrix X-X** gathers:
+      - Out of the diagonal the scatter plot of each couple of inputs;
+      - The histogram of the distribution of each input on the diagonal.
 
-  .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_plotmatrixYX_setting.png
-      :align: center
+    .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_plotmatrixXX.png
+        :align: center
 
-  The user can define:
-    - The title of the graph, expected to be a string;
-    - The variable plotted on the columns, by default all the input variables;
-    - The variable plotted on the rows, by default all the output variables.
+    The user can configure the matrix plot with the graphic settings (below the study tree).
 
-  The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
+    .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_plotmatrixYX_setting.png
+        :align: center
 
-- The tab **Plot matrix Y-X** presents the scatter plot of each output with respect
-  to each input in a matrix plot. 
+    The user can define:
+      - The title of the graph, expected to be a string;
+      - The variable plotted on the columns, by default all the input variables;
+      - The variable plotted on the rows, by default all the output variables.
 
-  .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_plotmatrixYX.png
-      :align: center
+    The **Export** button opens a dialog box for the user to select where the
+    figure has to be saved.
 
-  The user can configure the matrix plot with the graphic settings (below the study tree).
+  - The tab **Plot matrix Y-X** presents the scatter plot of each output with respect
+    to each input in a matrix plot. 
 
-  .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_plotmatrixYX_setting.png
-      :align: center
+    .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_plotmatrixYX.png
+        :align: center
 
-  The user can define:
-    - The title of the graph, expected to be a string;
-    - The variable plotted on the columns, by default all the input variables;
-    - The variable plotted on the rows, by default all the output variables.
+    The user can configure the matrix plot with the graphic settings (below the study tree).
 
-  The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
+    .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_plotmatrixYX_setting.png
+        :align: center
+
+    The user can define:
+      - The title of the graph, expected to be a string;
+      - The variable plotted on the columns, by default all the input variables;
+      - The variable plotted on the rows, by default all the output variables.
+
+    The **Export** button opens a dialog box for the user to select where the
+    figure has to be saved.
 
 2- Inference analysis
 =====================
@@ -300,13 +303,17 @@ Two methods are available:
 - Functional chaos
 - Kriging
 
-The user can choose the output variables of interest of the design of experiment
-or data model. By default all the output variables are analyzed.
-
 Functional chaos
 ~~~~~~~~~~~~~~~~
 
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_functional_chaos_wizard.png
+    :align: center
+
+The user can choose the output variables of interest of the design of experiment
+or data model by clicking on the button **-- Select Outputs --** at the top of the window.
+By default all the output variables are analysed.
+
+.. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png
     :align: center
 
 - In the section **Parameters** the user can specify the needed chaos degree. The
@@ -321,6 +328,13 @@ Kriging
 ~~~~~~~
 
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_kriging_wizard.png
+    :align: center
+
+The user can choose the output variables of interest of the design of experiment
+or data model by clicking on the button **-- Select Outputs --** at the top of the window.
+By default all the output variables are analysed.
+
+.. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png
     :align: center
 
 - In the section **Parameters** the user can choose:
@@ -371,7 +385,7 @@ For the two methods the results window gathers:
 - The tab **Metamodel** which contains a plot opposing the metamodel values
   to the physical model output values. A diagonal is built with the physical
   model output values.
-  It presents for each output the metamodel predictivity coefficient
+  For the functional chaos method, it presents for each output the metamodel predictivity coefficient
   :math:`\displaystyle R2 = \frac{\sum_{i=0}^N (y_i - \hat{y_i})^2}{\sum_{i=0}^N {(\bar{y} - y_i)}}`
   and the residual :math:`\displaystyle res = \frac{\sqrt{\sum_{i=0}^N (y_i - \hat{y_i})^2}}{N}`.
 
@@ -384,10 +398,10 @@ For the two methods the results window gathers:
       :align: center
 
   The user can define:
-    - The Title of the graph, expected to be a string;
+    - The title of the graph, expected to be a string;
 
   It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis Title, expected to be a string;
+    - The axis title, expected to be a string;
     - The minimum bound of the axis, expected to be a floating point;
     - The maximum bound of the axis, expected to be a floating point.
 
@@ -412,10 +426,10 @@ For the two methods the results window gathers:
       :align: center
 
   The user can define:
-    - The Title of the graph, expected to be a string;
+    - The title of the graph, expected to be a string;
 
   It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis Title, expected to be a string;
+    - The axis title, expected to be a string;
     - The minimum bound of the axis, expected to be a floating point;
     - The maximum bound of the axis, expected to be a floating point.
 
@@ -448,10 +462,10 @@ The results window gathers two tabs:
       :align: center
 
   The user can define:
-    - The Title of the graph, expected to be a string;
+    - The title of the graph, expected to be a string;
 
   It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis Title, expected to be a string;
+    - The axis title, expected to be a string;
     - The minimum bound of the axis, expected to be a floating point;
     - The maximum bound of the axis, expected to be a floating point.
 

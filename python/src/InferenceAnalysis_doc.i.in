@@ -10,12 +10,13 @@ design : :class:`~otguibase.DesignOfExperiment`
 
 Examples
 --------
-Create the model:
-
 >>> import openturns as ot
 >>> import otguibase
->>> filename = 'data.csv'
 >>> ot.RandomGenerator_SetSeed(0)
+
+Create the model:
+
+>>> filename = 'data.csv'
 >>> sample = ot.Normal(3).getSample(100)
 >>> sample.exportToCSVFile(filename)
 >>> model = otguibase.DataModel('myDataModel', 'data.csv', [0, 1, 2])

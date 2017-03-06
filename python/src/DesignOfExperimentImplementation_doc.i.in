@@ -20,6 +20,19 @@ OTGUI_DesignOfExperiment_doc
 
 // ---------------------------------------------------------------------
 
+%define OTGUI_DesignOfExperiment_getErrorMessage_doc
+"Error message accessor.
+
+Returns
+-------
+message : str
+    Error message if the evaluation of the design of experiment failed"
+%enddef
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::getErrorMessage
+OTGUI_DesignOfExperiment_getErrorMessage_doc
+
+// ---------------------------------------------------------------------
+
 %define OTGUI_DesignOfExperiment_getPhysicalModel_doc
 "Physical model accessor.
 
@@ -103,6 +116,32 @@ sample : :py:class:`openturns.NumericalSample`
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::getInputSample
 OTGUI_DesignOfExperiment_getInputSample_doc
+
+// ----------------------------------------------------------------------
+
+%define OTGUI_DesignOfExperiment_getFailedInputSample_doc
+"Failed input sample accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.NumericalSample`
+    Points of the design of experiment which could not be evaluated"
+%enddef
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::getFailedInputSample
+OTGUI_DesignOfExperiment_getFailedInputSample_doc
+
+// ----------------------------------------------------------------------
+
+%define OTGUI_DesignOfExperiment_getNotEvaluatedInputSample_doc
+"Not evaluated input sample accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.NumericalSample`
+    Points of the design of experiment which were not evaluated"
+%enddef
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::getNotEvaluatedInputSample
+OTGUI_DesignOfExperiment_getNotEvaluatedInputSample_doc
 
 // ----------------------------------------------------------------------
 
