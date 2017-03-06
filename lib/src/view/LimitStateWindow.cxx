@@ -99,11 +99,11 @@ void LimitStateWindow::updateOutputsList()
   SignalBlocker blocker(outputsComboBox_);
   outputsComboBox_->clear();
   QStringList items;
-  for (UnsignedInteger i=0; i<limitState_.getPhysicalModel().getOutputs().getSize(); ++i)
-    items << limitState_.getPhysicalModel().getOutputs()[i].getName().c_str();
+  for (UnsignedInteger i=0; i<limitState_.getPhysicalModel().getSelectedOutputsNames().getSize(); ++i)
+    items << QString::fromUtf8(limitState_.getPhysicalModel().getSelectedOutputsNames()[i].c_str());
   outputsComboBox_->addItems(items);
 
-  const int index = items.indexOf(limitState_.getOutputName().c_str());
+  const int index = items.indexOf(QString::fromUtf8(limitState_.getOutputName().c_str()));
 
   if (index == -1)
   {
@@ -116,7 +116,7 @@ void LimitStateWindow::updateOutputsList()
 void LimitStateWindow::updateOutputWidget()
 {
   SignalBlocker blocker(outputsComboBox_);
-  const int index = outputsComboBox_->findText(limitState_.getOutputName().c_str());
+  const int index = outputsComboBox_->findText(QString::fromUtf8(limitState_.getOutputName().c_str()));
   outputsComboBox_->setCurrentIndex(index);
 }
 

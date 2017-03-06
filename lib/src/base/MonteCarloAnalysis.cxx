@@ -94,7 +94,7 @@ void MonteCarloAnalysis::run()
   try
   {
     // clear result
-    stopRequested_ = false;
+    initialize();
     result_ = DataAnalysisResult();
 
     // check

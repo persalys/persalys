@@ -109,7 +109,7 @@ void CopulaInferenceAnalysis::run()
   try
   {
     // clear result
-    stopRequested_ = false;
+    initialize();
     result_ = CopulaInferenceResult();
 
     // inference

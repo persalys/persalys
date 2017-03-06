@@ -244,11 +244,11 @@ void StudyTreeView::buildActions()
   connect(newMetaModel_, SIGNAL(triggered()), this, SLOT(createNewMetaModel()));
 
   // run design of experiment action
-  runDesignOfExperiment_ = new QAction(QIcon(":/images/run-build.png"), tr("Run"), this);
-  runDesignOfExperiment_->setStatusTip(tr("Run the design of experiment"));
+  runDesignOfExperiment_ = new QAction(tr("Modify"), this);
+  runDesignOfExperiment_->setStatusTip(tr("Modify the design of experiment"));
   connect(runDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(runDesignOfExperiment()));
 
-  evaluateDesignOfExperiment_ = new QAction(tr("Evaluate"), this);
+  evaluateDesignOfExperiment_ = new QAction(QIcon(":/images/run-build.png"), tr("Evaluate"), this);
   evaluateDesignOfExperiment_->setStatusTip(tr("Evaluate the design of experiment"));
   connect(evaluateDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(evaluateDesignOfExperiment()));
 

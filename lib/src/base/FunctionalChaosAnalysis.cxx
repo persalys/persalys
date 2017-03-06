@@ -130,7 +130,7 @@ void FunctionalChaosAnalysis::run()
       throw InvalidDimensionException(HERE) << "The number of outputs to analyze must be superior to 0";
 
     // clear result
-    stopRequested_ = false;
+    initialize();
     result_ = FunctionalChaosAnalysisResult();
 
     // get effective samples

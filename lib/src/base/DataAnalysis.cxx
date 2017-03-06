@@ -62,14 +62,15 @@ void DataAnalysis::run()
 {
   try
   {
-    stopRequested_ = false;
+    // clear result
+    initialize();
+    result_ = DataAnalysisResult();
 
+    // get sample to analyse
     const NumericalSample sample(getDesignOfExperiment().getSample());
 
     if (!sample.getSize())
       throw InvalidDimensionException(HERE) << "The sample is empty";
-
-    result_ = DataAnalysisResult();
 
     for (UnsignedInteger i=0; i<sample.getDimension(); ++i)
     {

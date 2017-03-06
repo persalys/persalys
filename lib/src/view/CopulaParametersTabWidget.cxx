@@ -54,7 +54,7 @@ void CopulaParametersTabWidget::buildInterface()
   // get variables names
   QStringList variablesNames;
   for (UnsignedInteger i=0; i<distribution_.getDimension(); ++i)
-    variablesNames << distribution_.getDescription()[i].c_str();
+    variablesNames << QString::fromUtf8(distribution_.getDescription()[i].c_str());
 
   // tab PDF/CDF
   ResizableStackedWidget * pdf_StackedWidget = new ResizableStackedWidget;
@@ -83,8 +83,8 @@ void CopulaParametersTabWidget::buildInterface()
         plotWidget->plotCurve(sample_.getMarginal(marginals).rank() / size, pen, QwtPlotCurve::Dots);
         plotWidget->plotContour(distribution_.getMarginal(marginals));
         plotWidget->setTitle(tr("PDF") + " " + distributionName.c_str() + " copula");
-        plotWidget->setAxisTitle(QwtPlot::xBottom, sample_.getDescription()[i].c_str());
-        plotWidget->setAxisTitle(QwtPlot::yLeft, sample_.getDescription()[j].c_str());
+        plotWidget->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(sample_.getDescription()[i].c_str()));
+        plotWidget->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(sample_.getDescription()[j].c_str()));
         pdf_StackedWidget->addWidget(plotWidget);
         listPlot.append(plotWidget);
 
@@ -92,8 +92,8 @@ void CopulaParametersTabWidget::buildInterface()
         plotWidget = new PlotWidget;
         plotWidget->plotContour(distribution_.getMarginal(marginals), false);
         plotWidget->setTitle(tr("CDF") + " " + distributionName.c_str() + " copula");
-        plotWidget->setAxisTitle(QwtPlot::xBottom, sample_.getDescription()[i].c_str());
-        plotWidget->setAxisTitle(QwtPlot::yLeft, sample_.getDescription()[j].c_str());
+        plotWidget->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(sample_.getDescription()[i].c_str()));
+        plotWidget->setAxisTitle(QwtPlot::yLeft, QString::fromUtf8(sample_.getDescription()[j].c_str()));
         pdf_StackedWidget->addWidget(plotWidget);
         listPlot.append(plotWidget);
       }
