@@ -64,6 +64,7 @@
 #include "otgui/SRCResultWindow.hxx"
 #include "otgui/ReliabilityAnalysisWizard.hxx"
 #include "otgui/SimulationReliabilityResultWindow.hxx"
+#include "otgui/ApproximationResultWindow.hxx"
 #include "otgui/FunctionalChaosResultWindow.hxx"
 #include "otgui/KrigingResultWindow.hxx"
 #include "otgui/InferenceResultWindow.hxx"
@@ -970,6 +971,8 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
            analysisType == "FORMImportanceSamplingAnalysis" ||
            analysisType == "ImportanceSamplingAnalysis")
     resultWindow = new SimulationReliabilityResultWindow(item);
+  else if (analysisType == "FORMAnalysis")
+    resultWindow = new ApproximationResultWindow(item);
   else if (analysisType == "DataAnalysis")
     resultWindow = new DataAnalysisResultWindow(item);
   else if (analysisType == "FunctionalChaosAnalysis")

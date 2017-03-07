@@ -226,7 +226,9 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis)
   }
   else if (analysisName == "MonteCarloReliabilityAnalysis" ||
            analysisName == "FORMImportanceSamplingAnalysis" ||
-           analysisName == "ImportanceSamplingAnalysis")
+           analysisName == "ImportanceSamplingAnalysis" ||
+           analysisName == "FORMAnalysis"
+          )
   {
     addReliabilityAnalysisItem(analysis, newItem);
   }
