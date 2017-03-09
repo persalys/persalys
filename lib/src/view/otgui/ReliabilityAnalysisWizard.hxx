@@ -23,12 +23,32 @@
 
 #include "otgui/AnalysisWizard.hxx"
 #include "otgui/SimulationReliabilityPage.hxx"
+#include "otgui/ApproximationReliabilityPage.hxx"
 #include "otgui/OptimizationWidget.hxx"
 
 namespace OTGUI {
 
+class OTGUI_API IntroReliabilityPage : public QWizardPage
+{
+    Q_OBJECT
+
+public:
+  enum Method {SimuMethod, ApproxMethod};
+
+  IntroReliabilityPage(QWidget* parent=0);
+
+  void initialize(const Analysis& analysis);
+  virtual int nextId() const;
+
+private:
+  QButtonGroup * methodGroup_;
+};
+
+
 class OTGUI_API FORMPage : public QWizardPage
 {
+    Q_OBJECT
+
 public:
   FORMPage(QWidget* parent=0);
 
@@ -46,8 +66,7 @@ class OTGUI_API ReliabilityAnalysisWizard : public AnalysisWizard
   Q_OBJECT
 
 public:
-  enum Method {MonteCarlo, FORM_IS};
-  enum {Page_SimuMethod, Page_FORM};
+  enum {Page_Intro, Page_SimuMethod, Page_ApproxMethod, Page_FORM};
 
   ReliabilityAnalysisWizard(const OTStudy& otStudy, const LimitState& limitState, QWidget* parent=0);
   ReliabilityAnalysisWizard(const Analysis& analysis, QWidget* parent=0);
@@ -62,7 +81,9 @@ public slots:
   void updateNextId(int);
 
 private:
+  IntroReliabilityPage * introPage_;
   SimulationReliabilityPage * simulationPage_;
+  ApproximationReliabilityPage * approximationPage_;
   FORMPage * formPage_;
 };
 }
