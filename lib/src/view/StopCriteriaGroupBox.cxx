@@ -35,54 +35,93 @@ StopCriteriaGroupBox::StopCriteriaGroupBox(const double maxCoef, const UnsignedI
   QGridLayout * groupBoxLayout = new QGridLayout(this);
 
   // Maximum coefficient of variation
-  QCheckBox * maxiCoefOfVarCheckBox = new QCheckBox(tr("Accuracy - coefficient of variation"));
+  maxiCoefOfVarCheckBox_ = new QCheckBox(tr("Accuracy - coefficient of variation"));
   maxiCoefficientOfVariationSpinbox_ = new DoubleSpinBox;
   maxiCoefficientOfVariationSpinbox_->setMinimum(0.);
   maxiCoefficientOfVariationSpinbox_->setMaximum(1.);
   maxiCoefficientOfVariationSpinbox_->setSingleStep(0.01);
-  const double maxCoefOfVar = maxCoef;
-  maxiCoefficientOfVariationSpinbox_->setValue((maxCoef >= 0. && maxCoef <= 1.) ? maxCoef : 0.01);
-
-  maxiCoefOfVarCheckBox->setChecked(maxCoefOfVar >= 0. && maxCoefOfVar <= 1.);
-  maxiCoefficientOfVariationSpinbox_->setEnabled(maxCoefOfVar >= 0. && maxCoefOfVar <= 1.);
+  setMaximumCoefficientOfVariation(maxCoef);
 
   connect(maxiCoefficientOfVariationSpinbox_, SIGNAL(valueChanged(double)), this, SIGNAL(maxiCoefficientOfVariationChanged(double)));
-  connect(maxiCoefOfVarCheckBox, SIGNAL(toggled(bool)), maxiCoefficientOfVariationSpinbox_, SLOT(setEnabled(bool)));
-  connect(maxiCoefOfVarCheckBox, SIGNAL(toggled(bool)), this, SLOT(maxiCoefficientOfVariationRequired(bool)));
+  connect(maxiCoefOfVarCheckBox_, SIGNAL(toggled(bool)), maxiCoefficientOfVariationSpinbox_, SLOT(setEnabled(bool)));
+  connect(maxiCoefOfVarCheckBox_, SIGNAL(toggled(bool)), this, SLOT(maxiCoefficientOfVariationRequired(bool)));
 
-  groupBoxLayout->addWidget(maxiCoefOfVarCheckBox, 0, 0);
+  groupBoxLayout->addWidget(maxiCoefOfVarCheckBox_, 0, 0);
   groupBoxLayout->addWidget(maxiCoefficientOfVariationSpinbox_, 0, 1);
 
   // Maximum time
-  QCheckBox * maxiTimeCheckBox = new QCheckBox(tr("Maximum time"));
-  maxTimeLineEdit_ = new TimeLineEdit(maxTime < (UnsignedInteger)std::numeric_limits<int>::max()? maxTime : 60);
-
-  maxiTimeCheckBox->setChecked(maxTime < (UnsignedInteger)std::numeric_limits<int>::max());
-  maxTimeLineEdit_->setEnabled(maxTime < (UnsignedInteger)std::numeric_limits<int>::max());
+  maxiTimeCheckBox_ = new QCheckBox(tr("Maximum time"));
+  maxTimeLineEdit_ = new TimeLineEdit("");
+  setMaximumElapsedTime(maxTime);
 
   connect(maxTimeLineEdit_, SIGNAL(textChanged(QString)), this, SLOT(maxiTimeChanged()));
-  connect(maxiTimeCheckBox, SIGNAL(toggled(bool)), maxTimeLineEdit_, SLOT(setEnabled(bool)));
-  connect(maxiTimeCheckBox, SIGNAL(toggled(bool)), this, SLOT(maxiTimeRequired(bool)));
+  connect(maxiTimeCheckBox_, SIGNAL(toggled(bool)), maxTimeLineEdit_, SLOT(setEnabled(bool)));
+  connect(maxiTimeCheckBox_, SIGNAL(toggled(bool)), this, SLOT(maxiTimeRequired(bool)));
 
-  groupBoxLayout->addWidget(maxiTimeCheckBox, 1, 0);
+  groupBoxLayout->addWidget(maxiTimeCheckBox_, 1, 0);
   groupBoxLayout->addWidget(maxTimeLineEdit_, 1, 1);
 
   // Maximum function calls
-  QCheckBox * maxiCallsCheckBox = new QCheckBox(tr("Maximum calls"));
+  maxiCallsCheckBox_ = new QCheckBox(tr("Maximum calls"));
   maxiCallsSpinbox_ = new QSpinBox;
   maxiCallsSpinbox_->setMinimum(1);
   maxiCallsSpinbox_->setMaximum(std::numeric_limits<int>::max());
-  maxiCallsSpinbox_->setValue(maxCalls < (UnsignedInteger)std::numeric_limits<int>::max()? maxCalls : 10000);
-
-  maxiCallsCheckBox->setChecked(maxCalls < (UnsignedInteger)std::numeric_limits<int>::max());
-  maxiCallsSpinbox_->setEnabled(maxCalls < (UnsignedInteger)std::numeric_limits<int>::max());
+  setMaximumCalls(maxCalls);
 
   connect(maxiCallsSpinbox_, SIGNAL(valueChanged(int)), this, SIGNAL(maxiCallsChanged(int)));
-  connect(maxiCallsCheckBox, SIGNAL(toggled(bool)), maxiCallsSpinbox_, SLOT(setEnabled(bool)));
-  connect(maxiCallsCheckBox, SIGNAL(toggled(bool)), this, SLOT(maxiCallsRequired(bool)));
+  connect(maxiCallsCheckBox_, SIGNAL(toggled(bool)), maxiCallsSpinbox_, SLOT(setEnabled(bool)));
+  connect(maxiCallsCheckBox_, SIGNAL(toggled(bool)), this, SLOT(maxiCallsRequired(bool)));
 
-  groupBoxLayout->addWidget(maxiCallsCheckBox, 2, 0);
+  groupBoxLayout->addWidget(maxiCallsCheckBox_, 2, 0);
   groupBoxLayout->addWidget(maxiCallsSpinbox_, 2, 1);
+}
+
+
+UnsignedInteger StopCriteriaGroupBox::getMaximumCalls() const
+{
+  if (maxiCallsCheckBox_->isChecked())
+    return maxiCallsSpinbox_->value();
+  return (UnsignedInteger)std::numeric_limits<int>::max();
+}
+
+
+void StopCriteriaGroupBox::setMaximumCalls(const UnsignedInteger maxCalls)
+{
+  maxiCallsSpinbox_->setValue(maxCalls < (UnsignedInteger)std::numeric_limits<int>::max()? maxCalls : 10000);
+  maxiCallsCheckBox_->setChecked(maxCalls < (UnsignedInteger)std::numeric_limits<int>::max());
+  maxiCallsSpinbox_->setEnabled(maxCalls < (UnsignedInteger)std::numeric_limits<int>::max());
+}
+
+
+double StopCriteriaGroupBox::getMaximumCoefficientOfVariation() const
+{
+  if (maxiCoefOfVarCheckBox_->isChecked())
+    return maxiCoefficientOfVariationSpinbox_->value();
+  return -1.0;
+}
+
+
+void StopCriteriaGroupBox::setMaximumCoefficientOfVariation(const double maxCoef)
+{
+  maxiCoefficientOfVariationSpinbox_->setValue((maxCoef >= 0. && maxCoef <= 1.) ? maxCoef : 0.01);
+  maxiCoefOfVarCheckBox_->setChecked(maxCoef >= 0. && maxCoef <= 1.);
+  maxiCoefficientOfVariationSpinbox_->setEnabled(maxCoef >= 0. && maxCoef <= 1.);
+}
+
+
+UnsignedInteger StopCriteriaGroupBox::getMaximumElapsedTime() const
+{
+  if (maxiTimeCheckBox_->isChecked())
+    return maxTimeLineEdit_->getSeconds();
+  return (UnsignedInteger)std::numeric_limits<int>::max();
+}
+
+
+void StopCriteriaGroupBox::setMaximumElapsedTime(const UnsignedInteger maxTime)
+{
+  maxTimeLineEdit_->setSeconds(maxTime < (UnsignedInteger)std::numeric_limits<int>::max()? maxTime : 60);
+  maxiTimeCheckBox_->setChecked(maxTime < (UnsignedInteger)std::numeric_limits<int>::max());
+  maxTimeLineEdit_->setEnabled(maxTime < (UnsignedInteger)std::numeric_limits<int>::max());
 }
 
 
