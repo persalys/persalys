@@ -335,7 +335,8 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
   }
   else if (dataType.contains("Analysis") || dataType == "ModelEvaluation")
   {
-    if (dataType != "DataAnalysis" && dataType != "CopulaInferenceAnalysis") // there is no wizard associated with these analyses
+    if (dataType != "DataAnalysis" && dataType != "CopulaInferenceAnalysis" &&
+        dataType != "ImportanceSamplingAnalysis") // there is no wizard associated with these analyses
       actions.append(runAnalysis_);
 
     actions.append(removeAnalysis_);
@@ -876,7 +877,8 @@ void StudyTreeView::runAnalysis()
     {
       wizard = QSharedPointer<AnalysisWizard>(new SensitivityAnalysisWizard(item->getAnalysis(), this));
     }
-    else if (analysisType == "MonteCarloReliabilityAnalysis" || analysisType == "FORMImportanceSamplingAnalysis")
+    else if (analysisType == "MonteCarloReliabilityAnalysis" || analysisType == "FORMImportanceSamplingAnalysis" ||
+             analysisType == "FORMAnalysis")
     {
       if (!isLimitStateValid(selectionModel()->currentIndex()))
       {
