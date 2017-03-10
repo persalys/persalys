@@ -23,8 +23,7 @@
 
 #include "Variable.hxx"
 
-#include "openturns/Distribution.hxx"
-#include "openturns/DiracFactory.hxx"
+#include <openturns/Distribution.hxx>
 
 namespace OTGUI {
 class OTGUI_API Input : public Variable
@@ -52,6 +51,9 @@ public:
   OT::UnsignedInteger getDistributionParametersType() const;
   void setDistributionParametersType(const OT::UnsignedInteger & distributionParametersType);
 
+  double getFiniteDifferenceStep() const;
+  void setFiniteDifferenceStep(const double& step);
+
   bool isStochastic() const;
 
   OT::String getPythonScript() const;
@@ -71,6 +73,7 @@ protected:
 private:
   OT::Distribution distribution_;
   OT::UnsignedInteger distributionParametersType_;
+  double finiteDifferenceStep_;
 };
 typedef OT::Collection<Input> InputCollection;
 }

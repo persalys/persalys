@@ -20,8 +20,9 @@
  */
 #include "otgui/Input.hxx"
 
-#include "openturns/TruncatedDistribution.hxx"
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/TruncatedDistribution.hxx>
+#include <openturns/Dirac.hxx>
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
@@ -29,13 +30,14 @@ namespace OTGUI {
 
 CLASSNAMEINIT(Input);
 
-static Factory<Input> RegisteredFactory;
+static Factory<Input> Factory_Input;
 
 /* Default constructor */
 Input::Input()
   : Variable()
   , distribution_(Dirac())
   , distributionParametersType_(0)
+  , finiteDifferenceStep_(ResourceMap::GetAsNumericalScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
 {
 }
 
@@ -45,6 +47,7 @@ Input::Input(const String& name)
   : Variable(name)
   , distribution_(Dirac())
   , distributionParametersType_(0)
+  , finiteDifferenceStep_(ResourceMap::GetAsNumericalScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
 {
 }
 
@@ -54,6 +57,7 @@ Input::Input(const String& name, const double& value, const Distribution& distri
   : Variable(name, value, description)
   , distribution_(Dirac())
   , distributionParametersType_(0)
+  , finiteDifferenceStep_(ResourceMap::GetAsNumericalScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
 {
   setDistribution(distribution);
 }
@@ -64,6 +68,7 @@ Input::Input(const String& name, const Distribution& distribution, const String&
   : Variable(name, 0., description)
   , distribution_(Dirac())
   , distributionParametersType_(0)
+  , finiteDifferenceStep_(ResourceMap::GetAsNumericalScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
 {
   setDistribution(distribution);
 }
@@ -74,6 +79,7 @@ Input::Input(const String& name, const double& value, const String& description)
   : Variable(name, value, description)
   , distribution_(Dirac())
   , distributionParametersType_(0)
+  , finiteDifferenceStep_(ResourceMap::GetAsNumericalScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
 {
 }
 
@@ -109,6 +115,18 @@ UnsignedInteger Input::getDistributionParametersType() const
 void Input::setDistributionParametersType(const UnsignedInteger & distributionParametersType)
 {
   distributionParametersType_ = distributionParametersType;
+}
+
+
+double Input::getFiniteDifferenceStep() const
+{
+  return finiteDifferenceStep_;
+}
+
+
+void Input::setFiniteDifferenceStep(const double& step)
+{
+  finiteDifferenceStep_ = step;
 }
 
 
@@ -179,6 +197,8 @@ String Input::getPythonScript() const
     oss << getName() << " = otguibase.Input('" << getName() << "', " << getValue();
     oss << ", dist_" << getName() << ", '" << getEscapedDescription() << "')\n";
   }
+  if (getFiniteDifferenceStep() != ResourceMap::GetAsNumericalScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
+    oss << getName() << ".setFiniteDifferenceStep(" << getFiniteDifferenceStep() << ")\n";
 
   return oss;
 }
@@ -192,7 +212,8 @@ String Input::__repr__() const
       << " name=" << getName()
       << " value=" << getValue()
       << " description=" << getDescription()
-      << " distribution=" << getDistribution();
+      << " distribution=" << getDistribution()
+      << " finiteDifferenceStep=" << getFiniteDifferenceStep();
   return oss;
 }
 
@@ -203,6 +224,7 @@ void Input::save(Advocate & adv) const
   Variable::save(adv);
   adv.saveAttribute("distribution_", distribution_);
   adv.saveAttribute("distributionParametersType_", distributionParametersType_);
+  adv.saveAttribute("finiteDifferenceStep_", finiteDifferenceStep_);
 }
 
 
@@ -212,5 +234,6 @@ void Input::load(Advocate & adv)
   Variable::load(adv);
   adv.loadAttribute("distribution_", distribution_);
   adv.loadAttribute("distributionParametersType_", distributionParametersType_);
+  adv.loadAttribute("finiteDifferenceStep_", finiteDifferenceStep_);
 }
 }
