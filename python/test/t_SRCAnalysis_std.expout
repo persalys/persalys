@@ -12,14 +12,14 @@ import otguibase
 myStudy = otguibase.OTStudy('myStudy')
 otguibase.OTStudy.Add(myStudy)
 dist_x0 = ot.Normal(0, 1)
-x0 = otguibase.Input('x0', 0, '', dist_x0)
+x0 = otguibase.Input('x0', 0, dist_x0, '')
 dist_x1 = ot.Normal(0, 1)
-x1 = otguibase.Input('x1', 0, '', dist_x1)
+x1 = otguibase.Input('x1', 0, dist_x1, '')
 x2 = otguibase.Input('x2', 10, '')
-fake_y0 = otguibase.Output('fake_y0', 0, '')
+fake_y0 = otguibase.Output('fake_y0', '')
 fake_y0.setIsSelected(False)
-y0 = otguibase.Output('y0', 0, '')
-y1 = otguibase.Output('y1', 0, '')
+y0 = otguibase.Output('y0', '')
+y1 = otguibase.Output('y1', '')
 inputs = [x0, x1, x2]
 outputs = [fake_y0, y0, y1]
 formulas = ['x0', '10+3*x0+x1', '3*x0 + x1 + x2']

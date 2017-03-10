@@ -33,7 +33,7 @@ public:
   /** Default constructor */
   Output();
   /** Constructor with parameters */
-  Output(const OT::String & name, const double & value=0., const OT::String & description="");
+  Output(const OT::String& name, const OT::String& description="");
 
   /** Virtual constructor */
   virtual Output * clone() const;

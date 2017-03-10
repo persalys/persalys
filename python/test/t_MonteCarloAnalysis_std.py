@@ -7,8 +7,8 @@ import otguibase
 myStudy = otguibase.OTStudy('myStudy')
 
 ## Model
-X0 = otguibase.Input('X0', 1, '', ot.Normal(1, 1))
-X1 = otguibase.Input('X1', 2, '', ot.Normal(1, 1))
+X0 = otguibase.Input('X0', ot.Normal(1, 1))
+X1 = otguibase.Input('X1', ot.Normal(1, 1))
 Y00 = otguibase.Output('fake_Y0')
 Y00.setIsSelected(False)
 Y0 = otguibase.Output('Y0')

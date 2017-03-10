@@ -31,10 +31,10 @@ int main(int argc, char **argv)
   PythonEnvironment pyEnv;
 
   OTStudy study("study1");
-  Input Q("Q", 0., "Primary energy", Normal(10200, 100));
-  Input E("E", 0., "Produced electric energy", Normal(3000, 15));
-  Input C("C", 0., "Valued thermal energy", Normal(4000, 60));
-  Output Ep("Ep", 0., "Primary energy savings");
+  Input Q("Q", 0., Normal(10200, 100), "Primary energy");
+  Input E("E", 0., Normal(3000, 15), "Produced electric energy");
+  Input C("C", 0., Normal(4000, 60), "Valued thermal energy");
+  Output Ep("Ep", "Primary energy savings");
 
   NumericalPoint x(3);
   x[0] = 10200;

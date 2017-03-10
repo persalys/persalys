@@ -7,9 +7,9 @@ import otguibase
 myStudy = otguibase.OTStudy('myStudy')
 
 ## Model
-X0 = otguibase.Input('X0', 1, '')
-X1 = otguibase.Input('X1', 2, '')
-Y0 = otguibase.Output('Y0', 0, 'output_1')
+X0 = otguibase.Input('X0', 1, ot.Normal(), 'aDescription')
+X1 = otguibase.Input('X1', 2)
+Y0 = otguibase.Output('Y0', 'output_1')
 inputs = [X0, X1]
 outputs = [Y0]
 formulas = ['sin(X0)+8*X1']
@@ -35,7 +35,6 @@ print('hasX0', model.hasInputNamed('X0'))
 # in
 model.setInputs(inputs)
 model.setOutputs(outputs)
-model.setInputDistribution('X0', ot.Normal())
 model.setInputDistribution('X1', ot.LogNormal())
 R = ot.CorrelationMatrix(2)
 R[0, 1] = 0.25
@@ -55,8 +54,12 @@ model.addInput(X2)
 model.setInputName('X2', 'X_2')
 print('inputs=', model.getInputs())
 print('copula=', model.getCopula())
-X3 = otguibase.Input('X3', 10, '', ot.Normal())
+X3 = otguibase.Input('X3', 10, 'aDescription')
 model.addInput(X3)
+X4 = otguibase.Input('X4', ot.Normal())
+model.addInput(X4)
+X5 = otguibase.Input('X5', ot.Normal(), 'aDescription')
+model.addInput(X5)
 print('stochastic var=', model.getStochasticInputNames())
 print('distribution=',model.getComposedDistribution())
 print('copula=', model.getCopula())

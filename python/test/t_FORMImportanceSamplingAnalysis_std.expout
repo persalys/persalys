@@ -14,11 +14,11 @@ import otguibase
 myStudy = otguibase.OTStudy('myStudy')
 otguibase.OTStudy.Add(myStudy)
 dist_X0 = ot.Normal(1, 1)
-X0 = otguibase.Input('X0', 1, '', dist_X0)
+X0 = otguibase.Input('X0', 0, dist_X0, '')
 dist_X1 = ot.Normal(1, 1)
-X1 = otguibase.Input('X1', 2, '', dist_X1)
+X1 = otguibase.Input('X1', 0, dist_X1, '')
 X2 = otguibase.Input('X2', 2, '')
-Y0 = otguibase.Output('Y0', 0, '')
+Y0 = otguibase.Output('Y0', '')
 inputs = [X0, X1, X2]
 outputs = [Y0]
 formulas = ['sin(X0) + 8*X1 + X2']

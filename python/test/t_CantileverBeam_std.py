@@ -8,11 +8,11 @@ import otguibase
 myStudy = otguibase.OTStudy('myStudy')
 
 ## Model
-E = otguibase.Input('E', 3e7, 'Young s modulus', ot.Beta(0.93, 3.2, 2.8e7, 4.8e7))
-F = otguibase.Input('F', 3e4, 'Charge applied', ot.LogNormalMuSigma(30000., 9000., 15000).getDistribution())
-L = otguibase.Input('L', 250, 'Length', ot.Uniform(250, 260))
-I = otguibase.Input('I', 400, 'Section modulus', ot.Beta(2.5, 4., 3.1e2, 4.5e2))
-y = otguibase.Output('y', 0., 'deviation')
+E = otguibase.Input('E', 3e7, ot.Beta(0.93, 3.2, 2.8e7, 4.8e7), 'Young s modulus')
+F = otguibase.Input('F', 3e4, ot.LogNormalMuSigma(30000., 9000., 15000).getDistribution(), 'Charge applied')
+L = otguibase.Input('L', 250, ot.Uniform(250, 260), 'Length')
+I = otguibase.Input('I', 400, ot.Beta(2.5, 4., 3.1e2, 4.5e2), 'Section modulus')
+y = otguibase.Output('y', 'deviation')
 
 model = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [E, F, L, I], [y], ['F*L^3/(3*E*I)'])
 myStudy.add(model)

@@ -8,10 +8,10 @@ import otguibase
 myStudy = otguibase.OTStudy('myStudy')
 
 ## Model
-Q = otguibase.Input('Q', 0., 'Primary energy', ot.Normal(10200, 100))
-E = otguibase.Input('E', 0., 'Produced electric energy', ot.Normal(3000, 15))
-C = otguibase.Input('C', 0., 'Valued thermal energy', ot.Normal(4000, 60))
-Ep = otguibase.Output('Ep', 0., 'Primary energy savings')
+Q = otguibase.Input('Q', 0., ot.Normal(10200, 100), 'Primary energy')
+E = otguibase.Input('E', 0., ot.Normal(3000, 15), 'Produced electric energy')
+C = otguibase.Input('C', 0., ot.Normal(4000, 60), 'Valued thermal energy')
+Ep = otguibase.Output('Ep', 'Primary energy savings')
 
 model = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [Q, E, C], [Ep], ['1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))'])
 myStudy.add(model)

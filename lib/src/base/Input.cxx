@@ -34,18 +34,47 @@ static Factory<Input> RegisteredFactory;
 /* Default constructor */
 Input::Input()
   : Variable()
+  , distribution_(Dirac())
   , distributionParametersType_(0)
 {
 }
 
 
 /* Constructor with parameters */
-Input::Input(const String & name, const double & value, const String & description,
-             const Distribution & distribution)
+Input::Input(const String& name)
+  : Variable(name)
+  , distribution_(Dirac())
+  , distributionParametersType_(0)
+{
+}
+
+
+/* Constructor with parameters */
+Input::Input(const String& name, const double& value, const Distribution& distribution, const String& description)
   : Variable(name, value, description)
+  , distribution_(Dirac())
   , distributionParametersType_(0)
 {
   setDistribution(distribution);
+}
+
+
+/* Constructor with parameters */
+Input::Input(const String& name, const Distribution& distribution, const String& description)
+  : Variable(name, 0., description)
+  , distribution_(Dirac())
+  , distributionParametersType_(0)
+{
+  setDistribution(distribution);
+}
+
+
+/* Constructor with parameters */
+Input::Input(const String& name, const double& value, const String& description)
+  : Variable(name, value, description)
+  , distribution_(Dirac())
+  , distributionParametersType_(0)
+{
 }
 
 
@@ -143,12 +172,12 @@ String Input::getPythonScript() const
   OSS oss;
 
   if (!isStochastic())
-    oss << getName() << " = otguibase.Input('" << getName() << "', " <<getValue() << ", '" << getEscapedDescription() << "')\n";
+    oss << getName() << " = otguibase.Input('" << getName() << "', " << getValue() << ", '" << getEscapedDescription() << "')\n";
   else
   {
     oss << getDistributionPythonScript();
-    oss << getName() << " = otguibase.Input('" << getName() << "', " <<getValue() << ", '" << getEscapedDescription();
-    oss << "', dist_" << getName() << ")\n";
+    oss << getName() << " = otguibase.Input('" << getName() << "', " << getValue();
+    oss << ", dist_" << getName() << ", '" << getEscapedDescription() << "')\n";
   }
 
   return oss;

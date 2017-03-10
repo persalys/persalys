@@ -40,8 +40,8 @@ Output::Output()
 
 
 /* Constructor with parameters */
-Output::Output(const String & name, const double & value, const String & description)
-  : Variable(name, value, description)
+Output::Output(const String& name, const String& description)
+  : Variable(name, 0., description)
   , isSelected_(true)
   , hasBeenComputed_(false)
 {
@@ -82,7 +82,9 @@ void Output::setHasBeenComputed(const bool hasBeenComputed)
 String Output::getPythonScript() const
 {
   OSS oss;
-  oss << getName() << " = otguibase.Output('" << getName() << "', " << getValue() << ", '" << getEscapedDescription() << "')\n";
+  oss << getName() << " = otguibase.Output('" << getName() << "', '" << getEscapedDescription() << "')\n";
+  if (hasBeenComputed_)
+    oss << getName() << ".setValue(" << getValue() << ")\n";
   if (!isSelected_)
     oss << getName() << ".setIsSelected(False)\n";
 

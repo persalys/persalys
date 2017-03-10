@@ -8,17 +8,19 @@ Parameters
 name : str
     Name
 value : float
-    Default value (optional)
+    Default value
+distribution : :py:class:`~openturns.Distribution`
+    Associated distribution
 description : str
     Description text (optional)
-distribution : :py:class:`~openturns.Distribution`
-    Associated distribution (optional)
 
 Examples
 --------
 >>> import openturns as ot
 >>> import otguibase
->>> F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))"
+>>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> R = otguibase.Input('R', ot.Normal(75000., 5000.))
+>>> S = otguibase.Input('S', 10.5)"
 
 // ---------------------------------------------------------------------
 

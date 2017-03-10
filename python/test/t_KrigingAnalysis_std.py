@@ -11,8 +11,8 @@ ot.TBB_Disable()
 myStudy = otguibase.OTStudy('myStudy')
 
 ## Model
-xi1 = otguibase.Input('xi1', 0., '', ot.Uniform(0., 10.))
-xi2 = otguibase.Input('xi2', 0., '', ot.Uniform(0., 10.))
+xi1 = otguibase.Input('xi1', ot.Uniform(0., 10.))
+xi2 = otguibase.Input('xi2', ot.Uniform(0., 10.))
 y00 = otguibase.Output('fake_y0')
 y00.setIsSelected(False)
 y0 = otguibase.Output('y0')

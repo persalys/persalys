@@ -35,8 +35,13 @@ public:
   /** Default constructor */
   Input();
   /** Constructor with parameters */
-  Input(const OT::String & name, const double & value=0., const OT::String & description="",
-        const OT::Distribution & distribution=OT::Dirac());
+  Input(const OT::String& name);
+  /** Constructor with parameters */
+  Input(const OT::String& name, const double& value, const OT::Distribution& distribution, const OT::String& description="");
+  /** Constructor with parameters */
+  Input(const OT::String& name, const OT::Distribution& distribution, const OT::String& description="");
+  /** Constructor with parameters */
+  Input(const OT::String& name, const double& value, const OT::String& description="");
 
   /** Virtual constructor */
   virtual Input * clone() const;

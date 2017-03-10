@@ -35,11 +35,11 @@ int main(int argc, char *argv[])
   {
     OTStudy myStudy("myStudy");
 
-    Input Q("Q", 10200., "Primary energy", Normal(10200, 100));
-    Input E("E", 3000., "Produced electric energy", Normal(3000, 15));
-    Input C("C", 4000., "Valued thermal energy", Normal(4000, 60));
+    Input Q("Q", 10200., Normal(10200, 100), "Primary energy");
+    Input E("E", 3000., Normal(3000, 15), "Produced electric energy");
+    Input C("C", 4000., Normal(4000, 60), "Valued thermal energy");
 
-    Output Ep("Ep", 0., "Primary energy savings");
+    Output Ep("Ep", "Primary energy savings");
     AnalyticalPhysicalModel myPhysicalModel("myPhysicalModel");
 
     myPhysicalModel.addInput(Q);

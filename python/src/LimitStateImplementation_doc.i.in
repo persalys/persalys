@@ -21,9 +21,9 @@ Examples
 
 Create the model:
 
->>> R = otguibase.Input('R', 0., 'Yield strength', ot.LogNormalMuSigma(300., 30., 0.).getDistribution())
->>> F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))
->>> G = otguibase.Output('G', 0., 'deviation')
+>>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
+>>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> G = otguibase.Output('G', 'deviation')
 >>> physicalModel = otguibase.AnalyticalPhysicalModel('model1', [R, F], [G], ['R-F/(_pi*100.0)'])
 
 Create the limit state:
