@@ -199,8 +199,10 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
 
 Qt::ItemFlags OutputTableModel::flags(const QModelIndex & index) const
 {
-  if (index.column() == 0)
+  if (index.column() == 0 && physicalModel_.getImplementation()->getClassName() == "AnalyticalPhysicalModel")
     return QAbstractTableModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
+  else if (index.column() == 0 && physicalModel_.getImplementation()->getClassName() != "AnalyticalPhysicalModel")
+    return QAbstractTableModel::flags(index) | Qt::ItemIsUserCheckable;
   else if (index.column() == 1
       && (physicalModel_.getImplementation()->getClassName() == "YACSPhysicalModel" ||
           physicalModel_.getImplementation()->getClassName() == "MetaModel"))
