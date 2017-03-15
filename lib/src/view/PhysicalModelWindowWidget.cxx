@@ -27,18 +27,21 @@
 
 #include <QHeaderView>
 #include <QSplitter>
+#include <QScrollBar>
 
 using namespace OT;
 
 namespace OTGUI {
 
 PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelItem * item)
-  : QWidget()
+  : QTabWidget()
   , physicalModel_(item->getPhysicalModel())
   , inputTableView_(0)
   , inputTableModel_(0)
   , addInputLineButton_(0)
   , removeInputLineButton_(0)
+  , differentiationTableView_(0)
+  , differentiationTableModel_(0)
   , outputTableView_(0)
   , outputTableModel_(0)
   , addOutputLineButton_(0)
@@ -47,13 +50,16 @@ PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelItem * item)
 {
   connect(item, SIGNAL(outputChanged()), this, SLOT(updateOutputTableModel()));
   connect(item, SIGNAL(inputChanged()), this, SLOT(updateInputTableModel()));
+  connect(item, SIGNAL(inputChanged()), this, SLOT(updateDifferentiationTableModel()));
+  connect(item, SIGNAL(modelInputsChanged()), this, SLOT(updateDifferentiationTableModel()));
   buildInterface();
 }
 
 
 void PhysicalModelWindowWidget::buildInterface()
 {
-  QVBoxLayout * vbox = new QVBoxLayout(this);
+  QWidget * tab = new QWidget;
+  QVBoxLayout * vbox = new QVBoxLayout(tab);
 
   QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
 
@@ -135,6 +141,22 @@ void PhysicalModelWindowWidget::buildInterface()
 
   updateInputTableModel();
   updateOutputTableModel();
+
+  addTab(tab, tr("Definition"));
+
+  // differentiation
+  tab = new QWidget;
+  vbox = new QVBoxLayout(tab);
+
+  QLabel * label = new QLabel(tr("Finite difference step definition"));
+  label->setStyleSheet("font: bold;");
+  vbox->addWidget(label);
+
+  differentiationTableView_ = new CopyableTableView;
+  differentiationTableView_->setEditTriggers(QTableView::AllEditTriggers);
+  vbox->addWidget(differentiationTableView_);
+
+  addTab(tab, tr("Differentiation"));
 }
 
 
@@ -161,6 +183,22 @@ void PhysicalModelWindowWidget::updateInputTableModel()
 }
 
 
+void PhysicalModelWindowWidget::updateDifferentiationTableModel()
+{
+  if (differentiationTableModel_)
+    delete differentiationTableModel_;
+  differentiationTableModel_  = new DifferentiationTableModel(physicalModel_, differentiationTableView_);
+  differentiationTableView_->setModel(differentiationTableModel_);
+#if QT_VERSION >= 0x050000
+  differentiationTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
+  differentiationTableView_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+#else
+  differentiationTableView_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
+  differentiationTableView_->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+#endif
+}
+
+
 void PhysicalModelWindowWidget::updateOutputTableModel()
 {
   if (outputTableModel_)
@@ -179,18 +217,17 @@ void PhysicalModelWindowWidget::updateOutputTableModel()
   outputTableView_->horizontalHeader()->setResizeMode(2, QHeaderView::Interactive);
   outputTableView_->horizontalHeader()->setResizeMode(3, QHeaderView::Stretch); 
 #endif
+  const int width = outputTableView_->horizontalHeader()->width();
   if (physicalModel_.getImplementation()->getClassName() != "AnalyticalPhysicalModel")
   {
     outputTableView_->setColumnHidden(2, true);
-    int width = outputTableView_->horizontalHeader()->width();
     outputTableView_->horizontalHeader()->resizeSection(0, width*1/5);
     outputTableView_->horizontalHeader()->resizeSection(1, width*3/5);
     outputTableView_->horizontalHeader()->resizeSection(2, 0);
     outputTableView_->horizontalHeader()->resizeSection(3, width*1/5);
-}
+  }
   else
   {
-    int width = outputTableView_->horizontalHeader()->width();
     outputTableView_->horizontalHeader()->resizeSection(0, width*2/10);
     outputTableView_->horizontalHeader()->resizeSection(1, width*3/10);
     outputTableView_->horizontalHeader()->resizeSection(2, width*4/10);
@@ -198,7 +235,7 @@ void PhysicalModelWindowWidget::updateOutputTableModel()
   }
   // table header view
   const UnsignedInteger nbOutputs = physicalModel_.getOutputNames().getSize();
-  const bool allChecked = (nbOutputs && (nbOutputs== physicalModel_.getSelectedOutputsNames().getSize()));
+  const bool allChecked = (nbOutputs && (nbOutputs == physicalModel_.getSelectedOutputsNames().getSize()));
   outputTableHeaderView_->setChecked(allChecked);
   connect(outputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
   connect(outputTableModel_, SIGNAL(checked(bool)), outputTableHeaderView_, SLOT(setChecked(bool)));
