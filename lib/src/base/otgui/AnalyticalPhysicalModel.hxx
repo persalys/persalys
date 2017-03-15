@@ -51,8 +51,6 @@ public:
   OT::String getFormula(const OT::String& outputName) const;
   void setFormula(const OT::String& outputName, const OT::String& formula);
 
-  virtual OT::NumericalMathFunction getFunction() const;
-
   OT::String getPythonScript() const;
 
   /** String converter */
@@ -63,6 +61,9 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   virtual void load(OT::Advocate & adv);
+
+protected:
+  virtual OT::NumericalMathFunction generateFunction() const;
 
 private:
   std::map<OT::String, OT::String> formulaForEachOutput_;

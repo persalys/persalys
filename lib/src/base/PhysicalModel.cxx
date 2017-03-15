@@ -26,8 +26,6 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(PhysicalModel);
-
 /* Default constructor */
 PhysicalModel::PhysicalModel(const String & name)
   : TypedInterfaceObject<PhysicalModelImplementation>(new AnalyticalPhysicalModel(name))
@@ -129,6 +127,12 @@ void PhysicalModel::setInputDistribution(const String & inputName, const Distrib
 void PhysicalModel::setInputDistributionParametersType(const String & inputName, const UnsignedInteger & distributionParametersType)
 {
   getImplementation()->setInputDistributionParametersType(inputName, distributionParametersType);
+}
+
+
+void PhysicalModel::setInputFiniteDifferenceStep(const String& inputName, const double& step)
+{
+  getImplementation()->setInputFiniteDifferenceStep(inputName, step);
 }
 
 

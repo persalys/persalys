@@ -25,9 +25,9 @@
 #include "Output.hxx"
 #include "Observable.hxx"
 
-#include "openturns/NumericalMathFunction.hxx"
-#include "openturns/RandomVector.hxx"
-#include "openturns/ComposedDistribution.hxx"
+#include <openturns/NumericalMathFunction.hxx>
+#include <openturns/RandomVector.hxx>
+#include <openturns/ComposedDistribution.hxx>
 
 namespace OTGUI {
 class OTGUI_API PhysicalModelImplementation : public OT::PersistentObject, public Observable
@@ -53,6 +53,7 @@ public:
   void setInputValue(const OT::String & inputName, const double & value);
   void setInputDistribution(const OT::String & inputName, const OT::Distribution & distribution);
   void setInputDistributionParametersType(const OT::String & inputName, const OT::UnsignedInteger & distributionParametersType);
+  void setInputFiniteDifferenceStep(const OT::String& inputName, const double& step);
   virtual void addInput(const Input & input);
   virtual void removeInput(const OT::String & inputName);
   OT::Description getInputNames() const;
@@ -78,8 +79,8 @@ public:
   OT::RandomVector getInputRandomVector() const;
   OT::RandomVector getOutputRandomVector(const OT::Description & outputNames) const;
 
-  virtual OT::NumericalMathFunction getFunction() const;
-  virtual OT::NumericalMathFunction getFunction(const OT::Description & outputNames) const;
+  OT::NumericalMathFunction getFunction() const;
+  OT::NumericalMathFunction getFunction(const OT::Description& outputNames) const;
   OT::NumericalMathFunction getFunction(const OT::String & outputName) const;
   OT::NumericalMathFunction getRestrictedFunction() const;
   OT::NumericalMathFunction getRestrictedFunction(const OT::Description & outputNames) const;
@@ -101,14 +102,19 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
+  virtual OT::NumericalMathFunction generateFunction() const;
+  virtual OT::NumericalMathFunction generateFunction(const OT::Description& outputNames) const;
   void updateCopula();
   OT::String getProbaModelPythonScript() const;
   OT::String getCopulaPythonScript() const;
+  OT::NumericalPoint getInputsSteps() const;
+  void updateInputsStep() const;
 
 private:
   OT::PersistentCollection<Input> inputs_;
   OT::PersistentCollection<Output> outputs_;
   OT::Copula copula_;
+  mutable OT::NumericalPoint inputsSteps_;
 };
 }
 #endif

@@ -20,7 +20,7 @@
  */
 #include "otgui/AnalyticalPhysicalModel.hxx"
 
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(AnalyticalPhysicalModel);
 
-static Factory<AnalyticalPhysicalModel> RegisteredFactory;
+static Factory<AnalyticalPhysicalModel> Factory_AnalyticalPhysicalModel;
 
 /* Default constructor */
 AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String& name)
@@ -160,14 +160,8 @@ void AnalyticalPhysicalModel::setFormula(const String& outputName, const String&
   notify("outputFormulaChanged");
 }
 
-
-NumericalMathFunction AnalyticalPhysicalModel::getFunction() const
+NumericalMathFunction AnalyticalPhysicalModel::generateFunction() const
 {
-  if (!getInputs().getSize())
-    throw PhysicalModelNotValidException(HERE) << "The physical model has no inputs.";
-  if (!getOutputs().getSize())
-    throw PhysicalModelNotValidException(HERE) << "The physical model has no outputs.";
-
   return NumericalMathFunction(getInputNames(), getOutputNames(), getFormulas());
 }
 
