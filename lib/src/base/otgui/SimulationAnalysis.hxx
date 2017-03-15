@@ -48,9 +48,8 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  OT::NumericalSample computeOutputSample(OT::NumericalSample inputSample) const;
-  OT::NumericalSample computeOutputSample(OT::NumericalPoint inputValues) const;
-  OT::NumericalSample computeOutputSample(OT::NumericalSample inputSample, const OT::Description & outputNames) const;
+  OT::NumericalSample computeOutputSample(const OT::NumericalSample& inputSample) const;
+  OT::NumericalSample computeOutputSample(const OT::NumericalPoint& inputValues) const;
 
 private:
   OT::UnsignedInteger seed_;
