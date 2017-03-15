@@ -8,6 +8,7 @@ ot_add_source_file ( InputTableProbabilisticModel.cxx )
 ot_add_source_file ( OutputTableModel.cxx )
 ot_add_source_file ( ExperimentTableModel.cxx )
 ot_add_source_file ( CorrelationTableModel.cxx )
+ot_add_source_file ( DifferentiationTableModel.cxx )
 ot_add_source_file ( DataModelTableModel.cxx )
 ot_add_source_file ( DistributionsTableModel.cxx )
 ot_add_source_file ( LimitStateItem.cxx )
@@ -27,6 +28,7 @@ ot_install_header_file ( InputTableProbabilisticModel.hxx )
 ot_install_header_file ( OutputTableModel.hxx )
 ot_install_header_file ( ExperimentTableModel.hxx )
 ot_install_header_file ( CorrelationTableModel.hxx )
+ot_install_header_file ( DifferentiationTableModel.hxx )
 ot_install_header_file ( AnalysisItem.hxx )
 ot_install_header_file ( LimitStateItem.hxx )
 ot_install_header_file ( DesignOfExperimentItem.hxx )
@@ -42,6 +44,7 @@ qt5_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
                                     otgui/OutputTableModel.hxx
                                     otgui/ExperimentTableModel.hxx
                                     otgui/CorrelationTableModel.hxx
+                                    otgui/DifferentiationTableModel.hxx
                                     otgui/DataModelTableModel.hxx
                                     otgui/DistributionsTableModel.hxx
                                     otgui/AnalysisItem.hxx
