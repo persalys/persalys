@@ -463,6 +463,21 @@ OTGUI_PhysicalModel_setInputDistributionParametersType_doc
 
 // ---------------------------------------------------------------------
 
+%define OTGUI_PhysicalModel_setInputFiniteDifferenceStep_doc
+"Finite difference step accessor.
+
+Parameters
+----------
+name : str
+    Variable name
+step : float
+    Finite difference step used to define the gradient of the model's function"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::setInputDistribution
+OTGUI_PhysicalModel_setInputDistribution_doc
+
+// ---------------------------------------------------------------------
+
 %define OTGUI_PhysicalModel_getRestrictedFunction_doc
 "Accessor to the function restricted to it's stochastic inputs.
 

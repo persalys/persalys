@@ -64,6 +64,26 @@ parametersType : int
 
 // ---------------------------------------------------------------------
 
+%feature("docstring") OTGUI::Input::setFiniteDifferenceStep
+"Finite difference step accessor.
+
+Parameters
+----------
+step : float
+    Finite difference step used to define the gradient of the model's function"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Input::getFiniteDifferenceStep
+"Finite difference step accessor.
+
+Returns
+-------
+step : float
+    Finite difference step used to define the gradient of the model's function"
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") OTGUI::Input::isStochastic
 "Whether the variable is stochastic.
 

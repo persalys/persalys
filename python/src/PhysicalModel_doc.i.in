@@ -66,6 +66,8 @@ OTGUI_PhysicalModel_isValid_doc
 OTGUI_PhysicalModel_setInputDistribution_doc
 %feature("docstring") OTGUI::PhysicalModel::setInputDistributionParametersType
 OTGUI_PhysicalModel_setInputDistributionParametersType_doc
+%feature("docstring") OTGUI::PhysicalModel::setInputFiniteDifferenceStep
+OTGUI_PhysicalModel_setInputFiniteDifferenceStep_doc
 %feature("docstring") OTGUI::PhysicalModel::getRestrictedFunction
 OTGUI_PhysicalModel_getRestrictedFunction_doc
 %feature("docstring") OTGUI::PhysicalModel::getSelectedOutputsNames
