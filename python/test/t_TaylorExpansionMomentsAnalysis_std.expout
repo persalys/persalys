@@ -1,7 +1,17 @@
 class=TaylorExpansionMomentsAnalysis name=aTaylor physicalModel=aModelPhys interestVariables=[Y0]
 result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y0] meanFirstOrder=class=NumericalPoint name=Unnamed dimension=1 values=[8.84147] meanSecondOrder=class=NumericalPoint name=Unnamed dimension=1 values=[8.42074] standardDeviation=class=NumericalPoint name=Unnamed dimension=1 values=[8.01822] variance=class=NumericalPoint name=Unnamed dimension=1 values=[64.2919]
+
+
 class=TaylorExpansionMomentsAnalysis name=aTaylor2 physicalModel=aModelPhys interestVariables=[Y1]
 result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y1] meanFirstOrder=class=NumericalPoint name=Unnamed dimension=1 values=[18.8415] meanSecondOrder=class=NumericalPoint name=Unnamed dimension=1 values=[18.4207] standardDeviation=class=NumericalPoint name=Unnamed dimension=1 values=[8.01822] variance=class=NumericalPoint name=Unnamed dimension=1 values=[64.2919]
+
+
+class=TaylorExpansionMomentsAnalysis name=aTaylor3 physicalModel=myPhysicalModel interestVariables=[Y0]
+result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y0] meanFirstOrder=class=NumericalPoint name=Unnamed dimension=1 values=[8.84147] meanSecondOrder=class=NumericalPoint name=Unnamed dimension=1 values=[8.39738] standardDeviation=class=NumericalPoint name=Unnamed dimension=1 values=[8.01822] variance=class=NumericalPoint name=Unnamed dimension=1 values=[64.2919]
+
+
+class=TaylorExpansionMomentsAnalysis name=aTaylor4 physicalModel=myPhysicalModel interestVariables=[Y0]
+result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y0] meanFirstOrder=class=NumericalPoint name=Unnamed dimension=1 values=[8.84147] meanSecondOrder=class=NumericalPoint name=Unnamed dimension=1 values=[8.42074] standardDeviation=class=NumericalPoint name=Unnamed dimension=1 values=[8.01808] variance=class=NumericalPoint name=Unnamed dimension=1 values=[64.2897]
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -25,6 +35,19 @@ outputs = [fake_Y0, Y0, Y1]
 formulas = ['X0', 'sin(X0) + 8*X1', 'sin(X0) + 8*X1 + X2']
 aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys', inputs, outputs, formulas)
 myStudy.add(aModelPhys)
+dist_X0 = ot.Normal(1, 1)
+X0 = otguibase.Input('X0', 0, dist_X0, '')
+X0.setFiniteDifferenceStep(0.005)
+dist_X1 = ot.Normal(1, 1)
+X1 = otguibase.Input('X1', 0, dist_X1, '')
+X1.setFiniteDifferenceStep(0.005)
+Y0 = otguibase.Output('Y0', '')
+myPhysicalModel = otguibase.PythonPhysicalModel('myPhysicalModel')
+myPhysicalModel.addInput(X0)
+myPhysicalModel.addInput(X1)
+myPhysicalModel.addOutput(Y0)
+myPhysicalModel.setCode('from math import sin\n\ndef _exec(X0, X1):\n    Y0 = sin(X0) + 8*X1\n    fake_Y0 = X0\n    return [Y0, fake_Y0]\n')
+myStudy.add(myPhysicalModel)
 aTaylor = otguibase.TaylorExpansionMomentsAnalysis('aTaylor', aModelPhys)
 interestVariables = ['Y0']
 aTaylor.setInterestVariables(interestVariables)
@@ -33,4 +56,8 @@ aTaylor2 = otguibase.TaylorExpansionMomentsAnalysis('aTaylor2', aModelPhys)
 interestVariables = ['Y1']
 aTaylor2.setInterestVariables(interestVariables)
 myStudy.add(aTaylor2)
+aTaylor3 = otguibase.TaylorExpansionMomentsAnalysis('aTaylor3', myPhysicalModel)
+myStudy.add(aTaylor3)
+aTaylor4 = otguibase.TaylorExpansionMomentsAnalysis('aTaylor4', myPhysicalModel)
+myStudy.add(aTaylor4)
 

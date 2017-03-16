@@ -36,6 +36,7 @@ print('hasX0', model.hasInputNamed('X0'))
 model.setInputs(inputs)
 model.setOutputs(outputs)
 model.setInputDistribution('X1', ot.LogNormal())
+model.setInputFiniteDifferenceStep('X1', 1e-5)
 R = ot.CorrelationMatrix(2)
 R[0, 1] = 0.25
 model.setCopula(ot.NormalCopula(R))
