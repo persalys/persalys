@@ -303,11 +303,13 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const Numeric
   const QPen pen = QPen(Qt::blue, 4);
   const QPen notValidPen = QPen(Qt::red, 4);
 
-  const NumericalSample inSrank(inS.rank()/(inS.getSize()));
+  const NumericalSample inSrank(inS.rank() / (inS.getSize()));
   NumericalSample notValidInSrank;
   if (notValidInS.getSize())
-    notValidInSrank = notValidInS.rank()/(notValidInS.getSize());
-  const NumericalSample outSrank(outS.rank()/(outS.getSize()));
+    notValidInSrank = notValidInS.rank() / (notValidInS.getSize());
+  NumericalSample outSrank;
+  if (nbOutputs)
+    outSrank = outS.rank() / (outS.getSize());
 
   for (UnsignedInteger j=0; j<nbInputs; ++j)
   {
