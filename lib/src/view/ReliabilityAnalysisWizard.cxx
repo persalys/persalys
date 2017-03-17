@@ -20,26 +20,101 @@
  */
 #include "otgui/ReliabilityAnalysisWizard.hxx"
 
+#include "otgui/FORMImportanceSamplingAnalysis.hxx"
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
-#include "otgui/CollapsibleGroupBox.hxx"
 
-#include <QRadioButton>
 #include <QVBoxLayout>
-
-#include <limits>
+#include <QRadioButton>
 
 using namespace OT;
 
 namespace OTGUI {
 
-ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const OTStudy& otStudy, const LimitState & limitState, QWidget* parent)
+IntroReliabilityPage::IntroReliabilityPage(QWidget * parent)
+  : QWizardPage(parent)
+{
+  setTitle(tr("Reliability methods"));
+
+  QVBoxLayout * pageLayout = new QVBoxLayout(this);
+
+  QGroupBox * methodBox = new QGroupBox(tr("Types of methods"));
+  QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
+
+  methodGroup_ = new QButtonGroup;
+
+  QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Simulation methods"));
+  methodGroup_->addButton(buttonToChooseMethod, IntroReliabilityPage::SimuMethod);
+  methodLayout->addWidget(buttonToChooseMethod);
+
+  buttonToChooseMethod = new QRadioButton(tr("Approximation method"));
+  methodGroup_->addButton(buttonToChooseMethod, IntroReliabilityPage::ApproxMethod);
+  methodLayout->addWidget(buttonToChooseMethod);
+
+  pageLayout->addWidget(methodBox);
+}
+
+
+void IntroReliabilityPage::initialize(const Analysis& analysis)
+{
+  const String analysisName = analysis.getImplementation()->getClassName();
+
+  if (analysisName == "FORMImportanceSamplingAnalysis" || analysisName == "MonteCarloReliabilityAnalysis")
+    methodGroup_->button(IntroReliabilityPage::SimuMethod)->click();
+  else
+    methodGroup_->button(IntroReliabilityPage::ApproxMethod)->click();
+}
+
+
+int IntroReliabilityPage::nextId() const
+{
+  switch (IntroReliabilityPage::Method(methodGroup_->checkedId()))
+  {
+    case IntroReliabilityPage::SimuMethod:
+    {
+      return ReliabilityAnalysisWizard::Page_SimuMethod;
+    }
+    case IntroReliabilityPage::ApproxMethod:
+    {
+      return ReliabilityAnalysisWizard::Page_ApproxMethod;
+    }
+    default:
+      return -1;
+      break;
+  }
+}
+
+
+FORMPage::FORMPage(QWidget* parent)
+  : QWizardPage(parent)
+{
+  setTitle(tr("Optimization algorithm configuration for FORM"));
+
+  QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  formWidget_ = new OptimizationWidget(this);
+  mainLayout->addWidget(formWidget_);
+}
+
+
+void FORMPage::initialize(const Analysis& analysis)
+{
+  formWidget_->initialize(analysis);
+}
+
+
+OptimizationSolver FORMPage::getOptimizationAlgorithm() const
+{
+  return formWidget_->getOptimizationAlgorithm();
+}
+
+
+ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const OTStudy& otStudy, const LimitState& limitState, QWidget* parent)
   : AnalysisWizard(MonteCarloReliabilityAnalysis(otStudy.getAvailableAnalysisName("reliability_"), limitState), parent)
 {
   buildInterface();
 }
 
 
-ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis & analysis, QWidget* parent)
+ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis& analysis, QWidget* parent)
   : AnalysisWizard(analysis, parent)
 {
   buildInterface();
@@ -50,144 +125,75 @@ void ReliabilityAnalysisWizard::buildInterface()
 {
   setWindowTitle(tr("Threshold exceedance"));
 
-  // First Page: model
+  // First Page: choose method of reliability analysis
+  introPage_ = new IntroReliabilityPage(this);
+  introPage_->initialize(analysis_);
+  setPage(Page_Intro, introPage_);
 
-  // Second Page: methods
-  QWizardPage * page = new QWizardPage(this);
-  QVBoxLayout * mainLayout = new QVBoxLayout(page);
+  // Second Page: simulation methods
+  simulationPage_ = new SimulationReliabilityPage(this);
+  simulationPage_->initialize(analysis_);
+  connect(simulationPage_, SIGNAL(methodChanged(int)), this, SLOT(updateNextId(int)));
+  setPage(Page_SimuMethod, simulationPage_);
 
-  QGroupBox * methodBox = new QGroupBox(tr("Method"));
-  QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
+  // Second Page: approximation methods
+  approximationPage_ = new ApproximationReliabilityPage(this);
+  approximationPage_->initialize(analysis_);
+  setPage(Page_ApproxMethod, approximationPage_);
 
-  methodGroup_ = new QButtonGroup;
-  QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Monte Carlo"));
-  if (analysis_.getImplementation()->getClassName() == "MonteCarloReliabilityAnalysis")
-    buttonToChooseMethod->setChecked(true);
-  methodGroup_->addButton(buttonToChooseMethod, ReliabilityAnalysisWizard::MonteCarlo);
-  methodLayout->addWidget(buttonToChooseMethod);
+  // third page: FORM page
+  formPage_ = new FORMPage(this);
+  formPage_->initialize(analysis_);
+  setPage(Page_FORM, formPage_);
 
-  mainLayout->addWidget(methodBox);
-
-  /// monte carlo widgets
-  monteCarloWidget_ = new QWidget;
-  QVBoxLayout * monteCarloLayout = new QVBoxLayout(monteCarloWidget_);
-
-  // stop criteria
-  const double maxCoef = dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getMaximumCoefficientOfVariation();
-  const UnsignedInteger maxTime = dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getMaximumElapsedTime();
-  const UnsignedInteger maxCalls = dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getMaximumCalls();
-  stopCriteriaGroupBox_ = new StopCriteriaGroupBox(maxCoef, maxTime, maxCalls);
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), this, SLOT(maxiCoefficientOfVariationChanged(double)));
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), this, SLOT(maxiTimeChanged(int)));
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(int)), this, SLOT(maxiCallsChanged(int)));
-
-  monteCarloLayout->addWidget(stopCriteriaGroupBox_);
-
-  // block size
-  blockSizeGroupBox_ = new BlockSizeGroupBox(tr("Evaluation parameter"));
-  blockSizeGroupBox_->setBlockSizeValue(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getBlockSize());
-  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), this, SLOT(blockSizeChanged(double)));
-  monteCarloLayout->addWidget(blockSizeGroupBox_);
-
-  //// advanced parameters
-  CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
-  advancedParamGroupBox->setTitle(tr("Advanced parameters"));
-  QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedParamGroupBox);
-
-  QLabel * seedLabel = new QLabel(tr("Seed"));
-  advancedWidgetsLayout->addWidget(seedLabel, 1, 0);
-  seedSpinbox_ = new QSpinBox;
-  seedSpinbox_->setMaximum(std::numeric_limits<int>::max());
-  seedLabel->setBuddy(seedSpinbox_);
-  advancedWidgetsLayout->addWidget(seedSpinbox_, 1, 1);
-  if (analysis_.getImplementation()->getClassName() == "MonteCarloReliabilityAnalysis")
-    seedSpinbox_->setValue(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getSeed());
-  connect(seedSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(seedChanged(int)));
-
-  monteCarloLayout->addWidget(advancedParamGroupBox);
-
-  mainLayout->addWidget(monteCarloWidget_);
-
-  // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
-  mainLayout->addStretch();
-  mainLayout->addWidget(errorMessageLabel_);
-
-  addPage(page);
-}
-
-void ReliabilityAnalysisWizard::maxiCoefficientOfVariationChanged(double maxi)
-{
-  dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setMaximumCoefficientOfVariation(maxi);
+  setStartId(Page_Intro);
 }
 
 
-void ReliabilityAnalysisWizard::maxiTimeChanged(int value)
+void ReliabilityAnalysisWizard::updateNextId(int id)
 {
-  errorMessageLabel_->setText("");
-  try
-  {
-    dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setMaximumElapsedTime(value);
-  }
-  catch (InvalidValueException exception)
-  {
-    // check in validateCurrentPage
-  }
+  simulationPage_->setFinalPage(id == SimulationReliabilityPage::MonteCarlo);
 }
 
 
-void ReliabilityAnalysisWizard::maxiCallsChanged(int maxi)
+int ReliabilityAnalysisWizard::nextId() const
 {
-  errorMessageLabel_->setText("");
-  try
+  switch (currentId())
   {
-    dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setMaximumCalls(maxi);
+    case Page_Intro:
+      return introPage_->nextId();
+    case Page_SimuMethod:
+      return simulationPage_->nextId();
+    case Page_FORM:
+    default:
+      return -1;
   }
-  catch (InvalidValueException exception)
-  {
-    // check in validateCurrentPage
-  }
-}
-
-
-void ReliabilityAnalysisWizard::blockSizeChanged(double size)
-{
-  errorMessageLabel_->setText("");
-  try
-  {
-    dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setBlockSize(size);
-  }
-  catch (InvalidValueException exception)
-  {
-    // check in validateCurrentPage
-  }
-}
-
-
-void ReliabilityAnalysisWizard::seedChanged(int seed)
-{
-  dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->setSeed(seed);
 }
 
 
 bool ReliabilityAnalysisWizard::validateCurrentPage()
 {
-  QString errorMessage = "";
-  if (!stopCriteriaGroupBox_->isValid())
-    errorMessage = tr("Please select at least one stop criteria");
-  else
+  if (currentId() == Page_SimuMethod || currentId() == Page_ApproxMethod)
   {
-    if (!stopCriteriaGroupBox_->isMaxElapsedTimeValid())
-      errorMessage = tr("The maximum time must not be null");
-    if (stopCriteriaGroupBox_->isMaxCallsRequired())
-      if (dynamic_cast<MonteCarloReliabilityAnalysis*>(&*analysis_.getImplementation())->getMaximumCalls() < blockSizeGroupBox_->getBlockSizeValue())
-        errorMessage = tr("The maximum calls can not be inferior to the block size");
+    const LimitState limitState = dynamic_cast<ReliabilityAnalysis*>(analysis_.getImplementation().get())->getLimitState();
+
+    if (currentId() == Page_SimuMethod)
+      analysis_ = simulationPage_->getAnalysis(analysis_.getName(), limitState);
+    else
+      analysis_ = approximationPage_->getAnalysis(analysis_.getName(), limitState);
+  }
+  else if (currentId() == Page_FORM)
+  {
+    FORMImportanceSamplingAnalysis * formIS_ptr = dynamic_cast<FORMImportanceSamplingAnalysis*>(analysis_.getImplementation().get());
+    if (formIS_ptr)
+    {
+      FORMImportanceSamplingAnalysis analysis(*formIS_ptr);
+      analysis.setOptimizationAlgorithm(formPage_->getOptimizationAlgorithm());
+      analysis.setPhysicalStartingPoint(formPage_->getOptimizationAlgorithm().getStartingPoint());
+      analysis_ = analysis;
+    }
   }
 
-  errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(errorMessage).arg("</font>"));
-  if (!errorMessage.isEmpty())
-    return false;
   return QWizard::validateCurrentPage();
 }
 }

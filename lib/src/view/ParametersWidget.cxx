@@ -40,7 +40,7 @@ ParametersWidget::ParametersWidget(const QString title,           // table title
                                   )
   : QWidget(parent)
 {
-  if (!names.size() * values.size() > 0)
+  if (names.size() != values.size() || names.size() * values.size() == 0)
     throw InvalidArgumentException(HERE) << "To build the ParametersWidget, the data vectors must have the same (not null) dimension\n";
 
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class for Reliability Analysis with the Monte Carlo method
+ *  @brief QWizardPage to define approximation reliability analysis
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,27 +18,37 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_MONTECARLORELIABILITYANALYSIS_HXX
-#define OTGUI_MONTECARLORELIABILITYANALYSIS_HXX
+#ifndef OTGUI_APPROXIMATIONRELIABILITYPAGE_HXX
+#define OTGUI_APPROXIMATIONRELIABILITYPAGE_HXX
 
-#include "SimulationReliabilityAnalysis.hxx"
+#include "otgui/LimitState.hxx"
+#include "otgui/OptimizationWidget.hxx"
+
+#include <QWizardPage>
+#include <QButtonGroup>
 
 namespace OTGUI {
-class OTGUI_API MonteCarloReliabilityAnalysis : public SimulationReliabilityAnalysis
+class OTGUI_API ApproximationReliabilityPage : public QWizardPage
 {
-  CLASSNAME;
+  Q_OBJECT
 
 public:
-  /** Default constructor */
-  MonteCarloReliabilityAnalysis();
-  /** Constructor with parameters */
-  MonteCarloReliabilityAnalysis(const OT::String& name, const LimitState& limitState);
+  enum Method {FORM};
 
-  /** Virtual constructor */
-  virtual MonteCarloReliabilityAnalysis * clone() const;
+  ApproximationReliabilityPage(QWidget* parent=0);
+
+  void initialize(const Analysis& analysis);
+  Analysis getAnalysis(const OT::String& name, const LimitState& limitState) const;
+
+  virtual int nextId() const;
+  virtual bool validatePage();
 
 protected:
-  virtual OT::Simulation* getSimulationAlgorithm(const OT::Event& event);
+  void buildInterface();
+
+private:
+  QButtonGroup * methodGroup_;
+  OptimizationWidget * optimWidget_;
 };
 }
 #endif

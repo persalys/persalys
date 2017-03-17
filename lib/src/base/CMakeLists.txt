@@ -28,8 +28,13 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      SRCResult.cxx SRCAnalysis.cxx
                      LimitStateImplementation.cxx LimitState.cxx
                      ReliabilityAnalysis.cxx
+                     SimulationReliabilityAnalysis.cxx
+                     SimulationReliabilityResult.cxx
                      MonteCarloReliabilityAnalysis.cxx
-                     MonteCarloReliabilityResult.cxx
+                     ImportanceSamplingAnalysis.cxx
+                     ApproximationAnalysis.cxx
+                     FORMAnalysis.cxx
+                     FORMImportanceSamplingAnalysis.cxx
                      MetaModelAnalysis.cxx
                      MetaModelAnalysisResult.cxx
                      FunctionalChaosAnalysisResult.cxx
@@ -89,8 +94,13 @@ ot_install_header_file ( Observer.hxx )
 ot_install_header_file ( LimitStateImplementation.hxx )
 ot_install_header_file ( LimitState.hxx )
 ot_install_header_file ( ReliabilityAnalysis.hxx )
+ot_install_header_file ( SimulationReliabilityAnalysis.hxx )
+ot_install_header_file ( SimulationReliabilityResult.hxx )
 ot_install_header_file ( MonteCarloReliabilityAnalysis.hxx )
-ot_install_header_file ( MonteCarloReliabilityResult.hxx )
+ot_install_header_file ( ImportanceSamplingAnalysis.hxx )
+ot_install_header_file ( ApproximationAnalysis.hxx )
+ot_install_header_file ( FORMAnalysis.hxx )
+ot_install_header_file ( FORMImportanceSamplingAnalysis.hxx )
 ot_install_header_file ( MetaModelAnalysisResult.hxx )
 ot_install_header_file ( MetaModelAnalysis.hxx )
 ot_install_header_file ( FunctionalChaosAnalysisResult.hxx )

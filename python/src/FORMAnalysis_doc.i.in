@@ -1,5 +1,5 @@
-%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis
-"Monte Carlo for reliability analysis.
+%feature("docstring") OTGUI::FORMAnalysis
+"FORM analysis.
 
 Parameters
 ----------
@@ -24,13 +24,23 @@ Create the limit state:
 
 >>> limitState = otguibase.LimitState('ls1', myPhysicalModel, 'Ep', ot.Less(), 0.)
 
-Process a reliability analysis using the Monte Carlo method:
+Process a reliability analysis using the FORM method:
 
->>> analysis = otguibase.MonteCarloReliabilityAnalysis('myAnalysis', limitState)
->>> analysis.setMaximumCalls(1000)
+>>> analysis = otguibase.FORMAnalysis('myAnalysis', limitState)
 >>> analysis.run()
 
 Get the result:
 
 >>> result = analysis.getResult()
->>> pf = result.getSimulationResult().getProbabilityEstimate()"
+>>> pf = result.getEventProbability()
+>>> designPoint = result.getStandardSpaceDesignPoint()"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FORMAnalysis::getResult
+"Result accessor.
+
+Returns
+-------
+result : :py:class:`openturns.FORMResult`
+    Result"

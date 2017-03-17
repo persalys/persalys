@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class for Reliability Analysis with the Monte Carlo method
+ *  @brief Analysis FORM
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,27 +18,45 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_MONTECARLORELIABILITYANALYSIS_HXX
-#define OTGUI_MONTECARLORELIABILITYANALYSIS_HXX
+#ifndef OTGUI_FORMANALYSIS_HXX
+#define OTGUI_FORMANALYSIS_HXX
 
-#include "SimulationReliabilityAnalysis.hxx"
+#include "ApproximationAnalysis.hxx"
+#include "ReliabilityAnalysis.hxx"
+
+#include <openturns/FORMResult.hxx>
 
 namespace OTGUI {
-class OTGUI_API MonteCarloReliabilityAnalysis : public SimulationReliabilityAnalysis
+class OTGUI_API FORMAnalysis : public ReliabilityAnalysis, public ApproximationAnalysis
 {
   CLASSNAME;
 
 public:
   /** Default constructor */
-  MonteCarloReliabilityAnalysis();
+  FORMAnalysis();
   /** Constructor with parameters */
-  MonteCarloReliabilityAnalysis(const OT::String& name, const LimitState& limitState);
+  FORMAnalysis(const OT::String& name, const LimitState& limitState);
 
   /** Virtual constructor */
-  virtual MonteCarloReliabilityAnalysis * clone() const;
+  virtual FORMAnalysis * clone() const;
 
-protected:
-  virtual OT::Simulation* getSimulationAlgorithm(const OT::Event& event);
+  OT::FORMResult getResult() const;
+
+  virtual void run();
+  virtual OT::String getPythonScript() const;
+  virtual bool analysisLaunched() const;
+
+  /** String converter */
+  virtual OT::String __repr__() const;
+
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv);
+
+private:
+  OT::FORMResult result_;
 };
 }
 #endif

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class for Reliability Analysis with the Monte Carlo method
+ *  @brief QTabWidget for the FORM results
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,27 +18,31 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_MONTECARLORELIABILITYANALYSIS_HXX
-#define OTGUI_MONTECARLORELIABILITYANALYSIS_HXX
+#ifndef OTGUI_APPROXIMATIONRESULTTABWIDGET_HXX
+#define OTGUI_APPROXIMATIONRESULTTABWIDGET_HXX
 
-#include "SimulationReliabilityAnalysis.hxx"
+#include "otgui/ApproximationAnalysis.hxx"
+
+#include <openturns/FORMResult.hxx>
+
+#include <QTabWidget>
 
 namespace OTGUI {
-class OTGUI_API MonteCarloReliabilityAnalysis : public SimulationReliabilityAnalysis
+class OTGUI_API ApproximationResultTabWidget : public QTabWidget
 {
-  CLASSNAME;
+  Q_OBJECT
 
 public:
-  /** Default constructor */
-  MonteCarloReliabilityAnalysis();
-  /** Constructor with parameters */
-  MonteCarloReliabilityAnalysis(const OT::String& name, const LimitState& limitState);
-
-  /** Virtual constructor */
-  virtual MonteCarloReliabilityAnalysis * clone() const;
+  ApproximationResultTabWidget(const OT::FORMResult& result,
+                               const ApproximationAnalysis& analysis,
+                               QWidget* parent = 0);
 
 protected:
-  virtual OT::Simulation* getSimulationAlgorithm(const OT::Event& event);
+  void buildInterface();
+
+private:
+  OT::FORMResult result_;
+  QWidget * parametersWidget_;
 };
 }
 #endif

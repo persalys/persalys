@@ -27,6 +27,7 @@
 #include "openturns/OTType.hxx"
 
 #include <QGroupBox>
+#include <QCheckBox>
 
 namespace OTGUI {
 class OTGUI_API StopCriteriaGroupBox : public QGroupBox
@@ -36,6 +37,15 @@ class OTGUI_API StopCriteriaGroupBox : public QGroupBox
 public:
   // constructor
   StopCriteriaGroupBox(const double maxCoef, const OT::UnsignedInteger maxTime, const OT::UnsignedInteger maxCalls, QWidget *parent = 0);
+
+  OT::UnsignedInteger getMaximumCalls() const;
+  void setMaximumCalls(const OT::UnsignedInteger maxi);
+
+  double getMaximumCoefficientOfVariation() const;
+  void setMaximumCoefficientOfVariation(const double coef);
+
+  OT::UnsignedInteger getMaximumElapsedTime() const;
+  void setMaximumElapsedTime(const OT::UnsignedInteger seconds);
 
   bool isMaxElapsedTimeValid() const;
   bool isMaxCallsRequired() const;
@@ -54,8 +64,11 @@ signals:
   void clearErrorMessageLabel();
 
 private:
+  QCheckBox * maxiCoefOfVarCheckBox_;
   DoubleSpinBox * maxiCoefficientOfVariationSpinbox_;
+  QCheckBox * maxiTimeCheckBox_;
   TimeLineEdit * maxTimeLineEdit_;
+  QCheckBox * maxiCallsCheckBox_;
   QSpinBox * maxiCallsSpinbox_;
 };
 }

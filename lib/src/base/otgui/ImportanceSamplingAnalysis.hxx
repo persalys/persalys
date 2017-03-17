@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class for Reliability Analysis with the Monte Carlo method
+ *  @brief Class for Reliability Analysis using the Importance sampling method
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,27 +18,44 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_MONTECARLORELIABILITYANALYSIS_HXX
-#define OTGUI_MONTECARLORELIABILITYANALYSIS_HXX
+#ifndef OTGUI_IMPORTANCESAMPLINGANALYSIS_HXX
+#define OTGUI_IMPORTANCESAMPLINGANALYSIS_HXX
 
 #include "SimulationReliabilityAnalysis.hxx"
 
 namespace OTGUI {
-class OTGUI_API MonteCarloReliabilityAnalysis : public SimulationReliabilityAnalysis
+class OTGUI_API ImportanceSamplingAnalysis : public SimulationReliabilityAnalysis
 {
   CLASSNAME;
 
 public:
   /** Default constructor */
-  MonteCarloReliabilityAnalysis();
+  ImportanceSamplingAnalysis();
   /** Constructor with parameters */
-  MonteCarloReliabilityAnalysis(const OT::String& name, const LimitState& limitState);
+  ImportanceSamplingAnalysis(const OT::String& name, const LimitState& limitState);
 
   /** Virtual constructor */
-  virtual MonteCarloReliabilityAnalysis * clone() const;
+  virtual ImportanceSamplingAnalysis * clone() const;
+
+  OT::NumericalPoint getStandardSpaceDesignPoint() const;
+  void setStandardSpaceDesignPoint(const OT::NumericalPoint& point);
+
+  virtual OT::String getPythonScript() const;
+
+  /** String converter */
+  virtual OT::String __repr__() const;
+
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv);
 
 protected:
   virtual OT::Simulation* getSimulationAlgorithm(const OT::Event& event);
+
+private:
+  OT::NumericalPoint standardSpaceDesignPoint_;
 };
 }
 #endif

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Results of the reliability analysis with Monte Carlo method 
+ *  @brief Results of the reliability analysis using simulation methods
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,31 +18,32 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_MONTECARLORELIABILITYANALYSISRESULT_HXX
-#define OTGUI_MONTECARLORELIABILITYANALYSISRESULT_HXX
+#ifndef OTGUI_SIMULATIONRELIABILITYRESULT_HXX
+#define OTGUI_SIMULATIONRELIABILITYRESULT_HXX
 
-#include "openturns/SimulationResult.hxx"
 #include "otgui/OTGuiprivate.hxx"
 
+#include <openturns/SimulationResult.hxx>
+
 namespace OTGUI {
-class OTGUI_API MonteCarloReliabilityResult : public OT::PersistentObject
+class OTGUI_API SimulationReliabilityResult : public OT::PersistentObject
 {
   CLASSNAME;
 
 public:
-  friend class MonteCarloReliabilityAnalysis;
+  friend class SimulationReliabilityAnalysis;
 
   /** Default constructor */
-  MonteCarloReliabilityResult();
+  SimulationReliabilityResult();
   /** Constructor with parameters */
-  MonteCarloReliabilityResult(const OT::SimulationResult & simulationResults,
-                                      const OT::NumericalSample & outputSample,
-                                      const OT::NumericalSample & convergenceSample,
-                                      const OT::NumericalSample & convergenceSampleLowerBound,
-                                      const OT::NumericalSample & convergenceSampleUpperBound);
+  SimulationReliabilityResult(const OT::SimulationResult& simulationResults,
+                              const OT::NumericalSample& outputSample,
+                              const OT::NumericalSample& convergenceSample,
+                              const OT::NumericalSample& convergenceSampleLowerBound,
+                              const OT::NumericalSample& convergenceSampleUpperBound);
 
   /** Virtual constructor */
-  virtual MonteCarloReliabilityResult * clone() const;
+  virtual SimulationReliabilityResult * clone() const;
 
   OT::SimulationResult getSimulationResult() const;
   OT::NumericalSample getOutputSample() const;
@@ -50,7 +51,7 @@ public:
   OT::NumericalSample getConvergenceSampleLowerBound() const;
   OT::NumericalSample getConvergenceSampleUpperBound() const;
 
-  double getElapsedTime() const;
+  OT::NumericalScalar getElapsedTime() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -67,7 +68,7 @@ private:
   OT::NumericalSample convergenceSample_;
   OT::NumericalSample convergenceSampleLowerBound_;
   OT::NumericalSample convergenceSampleUpperBound_;
-  double elapsedTime_;
+  OT::NumericalScalar elapsedTime_;
 };
 }
 #endif

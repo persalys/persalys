@@ -63,7 +63,8 @@
 #include "otgui/SobolResultWindow.hxx"
 #include "otgui/SRCResultWindow.hxx"
 #include "otgui/ReliabilityAnalysisWizard.hxx"
-#include "otgui/MonteCarloReliabilityResultWindow.hxx"
+#include "otgui/SimulationReliabilityResultWindow.hxx"
+#include "otgui/ApproximationResultWindow.hxx"
 #include "otgui/FunctionalChaosResultWindow.hxx"
 #include "otgui/KrigingResultWindow.hxx"
 #include "otgui/InferenceResultWindow.hxx"
@@ -334,7 +335,8 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
   }
   else if (dataType.contains("Analysis") || dataType == "ModelEvaluation")
   {
-    if (dataType != "DataAnalysis" && dataType != "CopulaInferenceAnalysis") // there is no wizard associated with these analyses
+    if (dataType != "DataAnalysis" && dataType != "CopulaInferenceAnalysis" &&
+        dataType != "ImportanceSamplingAnalysis") // there is no wizard associated with these analyses
       actions.append(runAnalysis_);
 
     actions.append(removeAnalysis_);
@@ -875,7 +877,8 @@ void StudyTreeView::runAnalysis()
     {
       wizard = QSharedPointer<AnalysisWizard>(new SensitivityAnalysisWizard(item->getAnalysis(), this));
     }
-    else if (analysisType == "MonteCarloReliabilityAnalysis")
+    else if (analysisType == "MonteCarloReliabilityAnalysis" || analysisType == "FORMImportanceSamplingAnalysis" ||
+             analysisType == "FORMAnalysis")
     {
       if (!isLimitStateValid(selectionModel()->currentIndex()))
       {
@@ -966,8 +969,12 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
     resultWindow = new SobolResultWindow(item);
   else if (analysisType == "SRCAnalysis")
     resultWindow = new SRCResultWindow(item);
-  else if (analysisType == "MonteCarloReliabilityAnalysis")
-    resultWindow = new MonteCarloReliabilityResultWindow(item);
+  else if (analysisType == "MonteCarloReliabilityAnalysis" ||
+           analysisType == "FORMImportanceSamplingAnalysis" ||
+           analysisType == "ImportanceSamplingAnalysis")
+    resultWindow = new SimulationReliabilityResultWindow(item);
+  else if (analysisType == "FORMAnalysis")
+    resultWindow = new ApproximationResultWindow(item);
   else if (analysisType == "DataAnalysis")
     resultWindow = new DataAnalysisResultWindow(item);
   else if (analysisType == "FunctionalChaosAnalysis")

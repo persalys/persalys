@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow for the results of the reliability analysis by Monte Carlo
+ *  @brief QMdiSubWindow for the results of ApproximationAnalysis
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,36 +18,29 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_MONTECARLORELIABILITYRESULTWINDOW_HXX
-#define OTGUI_MONTECARLORELIABILITYRESULTWINDOW_HXX
+#ifndef OTGUI_APPROXIMATIONRESULTWINDOW_HXX
+#define OTGUI_APPROXIMATIONRESULTWINDOW_HXX
 
 #include "otgui/ResultWindow.hxx"
-#include "otgui/MonteCarloReliabilityResult.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
+
+#include <openturns/FORMResult.hxx>
+
+#include <QTabWidget>
 
 namespace OTGUI {
-class OTGUI_API MonteCarloReliabilityResultWindow : public ResultWindow
+class OTGUI_API ApproximationResultWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
-  MonteCarloReliabilityResultWindow(AnalysisItem * item);
-
-  virtual ~MonteCarloReliabilityResultWindow();
+  ApproximationResultWindow(AnalysisItem * item);
 
 protected:
-  void setParameters(const Analysis & analysis);
   void buildInterface();
 
-public slots:
-  void showHideGraphConfigurationWidget(int indexTab);
-  void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
-
 private:
-  MonteCarloReliabilityResult result_;
+  OT::FORMResult result_;
   QTabWidget * tabWidget_;
-  GraphConfigurationWidget * histogramConfigurationWidget_;
-  GraphConfigurationWidget * convergenceGraphConfigurationWidget_;
 };
 }
 #endif

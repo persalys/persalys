@@ -463,6 +463,7 @@ void MetaModelAnalysisWizard::openScaleDefinitionWizard()
   const Description inputsNames(kriging_.getEffectiveInputSample().getDescription());
   const QStringList labels = QStringList() << tr("Input") << tr("Scale");
   ParametersDefinitionWizard * paramDefinitionWizard = new ParametersDefinitionWizard(inputsNames, kriging_.getCovarianceModel().getScale(), labels, this);
+  paramDefinitionWizard->setWindowTitle(tr("Scale"));
 
   if (paramDefinitionWizard->exec())
   {

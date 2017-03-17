@@ -22,6 +22,7 @@
 
 #include <QTableView>
 #include <QVBoxLayout>
+#include <QDebug>
 
 using namespace OT;
 
@@ -32,6 +33,11 @@ namespace OTGUI {
   , names_(names)
   , values_(values)
 {
+  if (names_.getSize() != values_.getSize())
+  {
+    qDebug() << "Error: In ParametersTableModel: arguments have different dimensions";
+    throw std::exception();
+  }
   setHorizontalHeaderLabels(labels);
 }
 

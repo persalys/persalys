@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Results of the reliability analysis with Monte Carlo method
+ *  @brief Results of the reliability analysis using simulation methods
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,20 +18,20 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MonteCarloReliabilityResult.hxx"
+#include "otgui/SimulationReliabilityResult.hxx"
 
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(MonteCarloReliabilityResult);
+CLASSNAMEINIT(SimulationReliabilityResult);
 
-static Factory<MonteCarloReliabilityResult> RegisteredFactory;
+static Factory<SimulationReliabilityResult> Factory_SimulationReliabilityResult;
 
 /* Default constructor */
-MonteCarloReliabilityResult::MonteCarloReliabilityResult()
+SimulationReliabilityResult::SimulationReliabilityResult()
   : PersistentObject()
   , elapsedTime_(0.)
 {
@@ -39,11 +39,12 @@ MonteCarloReliabilityResult::MonteCarloReliabilityResult()
 
 
 /* Constructor with parameters */
-MonteCarloReliabilityResult::MonteCarloReliabilityResult(const SimulationResult & simulationResults,
-                                                         const NumericalSample & outputSample,
-                                                         const NumericalSample & convergenceSample,
-                                                         const NumericalSample & convergenceSampleLowerBound,
-                                                         const NumericalSample & convergenceSampleUpperBound)
+SimulationReliabilityResult::SimulationReliabilityResult(const SimulationResult& simulationResults,
+                                                         const NumericalSample& outputSample,
+                                                         const NumericalSample& convergenceSample,
+                                                         const NumericalSample& convergenceSampleLowerBound,
+                                                         const NumericalSample& convergenceSampleUpperBound
+                                                        )
   : PersistentObject()
   , simulationResult_(simulationResults)
   , outputSample_(outputSample)
@@ -56,53 +57,53 @@ MonteCarloReliabilityResult::MonteCarloReliabilityResult(const SimulationResult 
 
 
 /* Virtual constructor */
-MonteCarloReliabilityResult* MonteCarloReliabilityResult::clone() const
+SimulationReliabilityResult* SimulationReliabilityResult::clone() const
 {
-  return new MonteCarloReliabilityResult(*this);
+  return new SimulationReliabilityResult(*this);
 }
 
 
-SimulationResult MonteCarloReliabilityResult::getSimulationResult() const
+SimulationResult SimulationReliabilityResult::getSimulationResult() const
 {
   return simulationResult_;
 }
 
 
-NumericalSample MonteCarloReliabilityResult::getOutputSample() const
+NumericalSample SimulationReliabilityResult::getOutputSample() const
 {
   return outputSample_;
 }
 
 
-NumericalSample MonteCarloReliabilityResult::getConvergenceSample() const
+NumericalSample SimulationReliabilityResult::getConvergenceSample() const
 {
   return convergenceSample_;
 }
 
 
-NumericalSample MonteCarloReliabilityResult::getConvergenceSampleLowerBound() const
+NumericalSample SimulationReliabilityResult::getConvergenceSampleLowerBound() const
 {
   return convergenceSampleLowerBound_;
 }
 
 
-NumericalSample MonteCarloReliabilityResult::getConvergenceSampleUpperBound() const
+NumericalSample SimulationReliabilityResult::getConvergenceSampleUpperBound() const
 {
   return convergenceSampleUpperBound_;
 }
 
 
-double MonteCarloReliabilityResult::getElapsedTime() const
+NumericalScalar SimulationReliabilityResult::getElapsedTime() const
 {
   return elapsedTime_;
 }
 
 
 /* String converter */
-String MonteCarloReliabilityResult::__repr__() const
+String SimulationReliabilityResult::__repr__() const
 {
   OSS oss;
-  oss << "class=" << GetClassName()
+  oss << "class=" << getClassName()
       << " name=" << getName()
       << " simulationResult=" << getSimulationResult();
   return oss;
@@ -110,7 +111,7 @@ String MonteCarloReliabilityResult::__repr__() const
 
 
 /* Method save() stores the object through the StorageManager */
-void MonteCarloReliabilityResult::save(Advocate& adv) const
+void SimulationReliabilityResult::save(Advocate& adv) const
 {
   PersistentObject::save(adv);
   adv.saveAttribute("simulationResult_", simulationResult_);
@@ -123,7 +124,7 @@ void MonteCarloReliabilityResult::save(Advocate& adv) const
 
 
 /* Method load() reloads the object from the StorageManager */
-void MonteCarloReliabilityResult::load(Advocate& adv)
+void SimulationReliabilityResult::load(Advocate& adv)
 {
   PersistentObject::load(adv);
   adv.loadAttribute("simulationResult_", simulationResult_);

@@ -5,6 +5,7 @@ ot_add_current_dir_to_include_dirs ()
 ot_add_source_file (CustomScaleEngine.cxx)
 ot_add_source_file (CustomScaleDraw.cxx)
 ot_add_source_file (PlotWidget.cxx)
+ot_add_source_file (PieChartView.cxx)
 ot_add_source_file (PlotMatrixWidget.cxx)
 ot_add_source_file (GraphConfigurationWidget.cxx)
 ot_add_source_file (PlotMatrixConfigurationWidget.cxx)
@@ -13,6 +14,7 @@ ot_install_header_file ( CustomScaleEngine.hxx )
 ot_install_header_file ( CustomScaleDraw.hxx )
 ot_install_header_file ( ContourData.hxx )
 ot_install_header_file ( PlotWidget.hxx )
+ot_install_header_file ( PieChartView.hxx )
 ot_install_header_file ( PlotMatrixWidget.hxx )
 ot_install_header_file ( GraphConfigurationWidget.hxx )
 ot_install_header_file ( PlotMatrixConfigurationWidget.hxx )
@@ -20,6 +22,7 @@ ot_install_header_file ( PlotWidgetWithGraphSetting.hxx )
 
 qt5_wrap_cpp (OTGUI_PLOT_MOC_SRCS
               otgui/PlotWidget.hxx
+              otgui/PieChartView.hxx
               otgui/PlotMatrixWidget.hxx
               otgui/GraphConfigurationWidget.hxx
               otgui/PlotMatrixConfigurationWidget.hxx

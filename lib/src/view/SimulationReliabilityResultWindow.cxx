@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow for the results of the reliability analysis by Monte Carlo
+ *  @brief QMdiSubWindow for the results of the reliability analysis using simulation method
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,10 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MonteCarloReliabilityResultWindow.hxx"
+#include "otgui/SimulationReliabilityResultWindow.hxx"
 
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
+#include "otgui/ImportanceSamplingAnalysis.hxx"
+#include "otgui/FORMImportanceSamplingAnalysis.hxx"
 #include "otgui/ParametersTableView.hxx"
+#include "otgui/ApproximationResultTabWidget.hxx"
+#include "otgui/ResizableStackedWidget.hxx"
 
 #include <qwt_legend.h>
 #include <qwt_scale_engine.h>
@@ -35,18 +39,27 @@ using namespace OT;
 
 namespace OTGUI {
 
-MonteCarloReliabilityResultWindow::MonteCarloReliabilityResultWindow(AnalysisItem * item)
+SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisItem * item)
   : ResultWindow(item)
-  , result_(dynamic_cast<MonteCarloReliabilityAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , result_(dynamic_cast<SimulationReliabilityAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , tabWidget_(0)
+  , formTabWidget_(0)
   , histogramConfigurationWidget_(0)
   , convergenceGraphConfigurationWidget_(0)
 {
+  // FORM result widget
+  if (dynamic_cast<const FORMImportanceSamplingAnalysis*>(&*item->getAnalysis().getImplementation()))
+  {
+    FORMImportanceSamplingAnalysis analysis = *dynamic_cast<const FORMImportanceSamplingAnalysis*>(&*item->getAnalysis().getImplementation());
+    formTabWidget_ = new ApproximationResultTabWidget(analysis.getFORMResult(), analysis, this);
+  }
+
   setParameters(item->getAnalysis());
   buildInterface();
 }
 
 
-MonteCarloReliabilityResultWindow::~MonteCarloReliabilityResultWindow()
+SimulationReliabilityResultWindow::~SimulationReliabilityResultWindow()
 {
   delete histogramConfigurationWidget_;
   delete convergenceGraphConfigurationWidget_;
@@ -55,38 +68,70 @@ MonteCarloReliabilityResultWindow::~MonteCarloReliabilityResultWindow()
 }
 
 
-void MonteCarloReliabilityResultWindow::setParameters(const Analysis & analysis)
+void SimulationReliabilityResultWindow::setParameters(const Analysis & analysis)
 {
-  const MonteCarloReliabilityAnalysis * MCanalysis = dynamic_cast<const MonteCarloReliabilityAnalysis*>(&*analysis.getImplementation());
+  const SimulationReliabilityAnalysis * simuAnalysis = dynamic_cast<const SimulationReliabilityAnalysis*>(&*analysis.getImplementation());
 
-  // ParametersWidget
+  // - parameters names
   QStringList namesList;
   namesList << tr("Algorithm");
+  if (dynamic_cast<const ImportanceSamplingAnalysis*>(&*analysis.getImplementation()))
+    namesList << tr("Design point (standard space)");
   namesList << tr("Maximum coefficient of variation");
   namesList << tr("Maximum elapsed time");
   namesList << tr("Maximum calls");
   namesList << tr("Block size");
   namesList << tr("Seed");
 
+  // - parameters values
   QStringList valuesList;
-  valuesList << tr("Monte Carlo");
-  valuesList << QString::number(MCanalysis->getMaximumCoefficientOfVariation());
-  if (MCanalysis->getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
-    valuesList << QString::number(MCanalysis->getMaximumElapsedTime()) + "(s)";
+
+  // algo
+  if (dynamic_cast<const MonteCarloReliabilityAnalysis*>(&*analysis.getImplementation()))
+    valuesList << tr("Monte Carlo");
+  else if (dynamic_cast<const ImportanceSamplingAnalysis*>(&*analysis.getImplementation()))
+  {
+    if (dynamic_cast<const FORMImportanceSamplingAnalysis*>(&*analysis.getImplementation()))
+      valuesList << tr("FORM - Importance sampling");
+    else
+      valuesList << tr("Importance sampling");
+
+    // starting point
+    const NumericalPoint startingPoint(dynamic_cast<const ImportanceSamplingAnalysis*>(&*analysis.getImplementation())->getStandardSpaceDesignPoint());
+    QString startingPointText = "[";
+    for (UnsignedInteger i=0; i<startingPoint.getDimension(); ++i)
+    {
+      startingPointText += QString::number(startingPoint[i]);
+      if (i < startingPoint.getDimension()-1)
+        startingPointText += "; ";
+    }
+    startingPointText += "]";
+    valuesList << startingPointText;
+  }
+  else
+    return;
+
+  // stop criteria
+  valuesList << QString::number(simuAnalysis->getMaximumCoefficientOfVariation());
+  if (simuAnalysis->getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
+    valuesList << QString::number(simuAnalysis->getMaximumElapsedTime()) + "(s)";
   else
     valuesList << "- (s)";
-  if (MCanalysis->getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
-    valuesList << QString::number(MCanalysis->getMaximumCalls());
+  if (simuAnalysis->getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
+    valuesList << QString::number(simuAnalysis->getMaximumCalls());
   else
     valuesList << "-";
-  valuesList << QString::number(MCanalysis->getBlockSize());
-  valuesList << QString::number(MCanalysis->getSeed()); 
+  valuesList << QString::number(simuAnalysis->getBlockSize());
 
-  parametersWidget_ = new ParametersWidget(tr("Threshold exceedance parameters"), namesList, valuesList);
+  // seed
+  valuesList << QString::number(simuAnalysis->getSeed()); 
+
+  if (namesList.size() == valuesList.size())
+    parametersWidget_ = new ParametersWidget(tr("Threshold exceedance parameters"), namesList, valuesList);
 }
 
 
-void MonteCarloReliabilityResultWindow::buildInterface()
+void SimulationReliabilityResultWindow::buildInterface()
 {
   setWindowTitle(tr("Threshold exceedance results"));
 
@@ -111,6 +156,33 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   tabWidget_ = new QTabWidget;
 
   // first tab : summary --------------------------------
+  tabWidget_->addTab(getSummaryTab(), tr("Summary"));
+
+  // second tab : output histogram --------------------------------
+  tabWidget_->addTab(getHistogramTab(), tr("Histogram"));
+
+  // third tab : convergence --------------------------------
+  tabWidget_->addTab(getConvergenceTab(), tr("Convergence graph"));
+
+  // fourth tab : FORM result --------------------------------
+  if (formTabWidget_)
+    tabWidget_->addTab(formTabWidget_, tr("FORM results"));
+
+  // fifth tab : parameters --------------------------------
+  if (parametersWidget_)
+    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
+
+  //
+  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
+  mainWidget->addWidget(tabWidget_);
+  mainWidget->setStretchFactor(1, 10);
+
+  setWidget(mainWidget);
+}
+
+
+QWidget* SimulationReliabilityResultWindow::getSummaryTab()
+{
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
@@ -156,17 +228,19 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   resultsTable->setSpan(0, 1, 2, 1);
 
   // Failure probability
+  const NumericalScalar pfEstimate = result_.getSimulationResult().getProbabilityEstimate();
+
   resultsTableModel->setNotEditableHeaderItem(2, 0, tr("Failure probability"));
-  resultsTableModel->setNotEditableItem(2, 1, result_.getSimulationResult().getProbabilityEstimate());
+  resultsTableModel->setNotEditableItem(2, 1, pfEstimate);
 
   // - lower bound
   resultsTableModel->setNotEditableHeaderItem(1, 2, tr("Lower bound"));
-  const double pfCILowerBound = std::max(0.0, result_.getSimulationResult().getProbabilityEstimate() - 0.5 * result_.getSimulationResult().getConfidenceLength());
+  const double pfCILowerBound = std::max(0.0, pfEstimate - 0.5 * result_.getSimulationResult().getConfidenceLength());
   resultsTableModel->setNotEditableItem(2, 2, pfCILowerBound);
 
   // - upper bound
   resultsTableModel->setNotEditableHeaderItem(1, 3, tr("Upper bound"));
-  const double pfCIUpperBound = std::min(1.0, result_.getSimulationResult().getProbabilityEstimate() + 0.5 * result_.getSimulationResult().getConfidenceLength());
+  const double pfCIUpperBound = std::min(1.0, pfEstimate + 0.5 * result_.getSimulationResult().getConfidenceLength());
   resultsTableModel->setNotEditableItem(2, 3, pfCIUpperBound);
 
   // Coefficient of variation
@@ -181,51 +255,67 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   resultsTable->setSpan(0, 2, 1, 2);
 
   groupBoxLayout->addWidget(resultsTable);
-  groupBoxLayout->addStretch();
 
   tabLayout->addWidget(groupBox);
-  tabLayout->addStretch();
 
   scrollArea->setWidget(tab);
-  tabWidget_->addTab(scrollArea, tr("Summary"));
 
-  // second tab : output histogram --------------------------------
-  tab = new QWidget;
-  tabLayout = new QVBoxLayout(tab);
+  return scrollArea;
+}
 
+
+QWidget* SimulationReliabilityResultWindow::getHistogramTab()
+{
+  QWidget * tab = new QWidget;
+  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+
+  // get output info
+  QString outputName(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
+
+  // plot histogram
   QVector<PlotWidget*> listHistogram;
   PlotWidget * plot = new PlotWidget("histogram");
-  plot->plotHistogram(result_.getOutputSample(), 2, 0, outputName + " " + tr("distribution"));
+  plot->plotHistogram(result_.getOutputSample(), 2, 0, tr("%1 distribution").arg(outputName));
+
+  // plot threshold
   NumericalSample threshold = NumericalSample(2, 2);
   threshold[0][0] = result_.getSimulationResult().getEvent().getThreshold();
   threshold[1][0] = plot->axisInterval(QwtPlot::yLeft).minValue();
   threshold[1][0] = result_.getSimulationResult().getEvent().getThreshold();
   threshold[1][1] = plot->axisInterval(QwtPlot::yLeft).maxValue();
   plot->plotCurve(threshold, QPen(Qt::red), QwtPlotCurve::Lines, 0, tr("Threshold"));
+
   plot->setAxisTitle(QwtPlot::xBottom, tr("Values"));
   plot->setAxisTitle(QwtPlot::yLeft, tr("Number of simulations"));
   plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
-  plot->setTitle(tr("Output") + " " + outputName + " " + tr("distribution"));
+  plot->setTitle(tr("%1 output distribution").arg(outputName));
 
   listHistogram.append(plot);
   tabLayout->addWidget(plot);
 
   histogramConfigurationWidget_ = new GraphConfigurationWidget(listHistogram);
 
-  tabWidget_->addTab(tab, tr("Histogram"));
+  return tab;
+}
 
-  // third tab : convergence --------------------------------
-  tab = new QWidget;
-  tabLayout = new QVBoxLayout(tab);
+
+QWidget* SimulationReliabilityResultWindow::getConvergenceTab()
+{
+  // do not use a simple QWidget here otherwise it is not possible to resize the window
+  ResizableStackedWidget * tab = new ResizableStackedWidget;
 
   QVector<PlotWidget*> listConvergenceGraph;
-  plot = new PlotWidget("convergence");
+  PlotWidget * plot = new PlotWidget("convergence");
+  // plot pf convergence
   plot->plotCurve(result_.getConvergenceSample(), QPen(Qt::red), QwtPlotCurve::Lines, 0, tr("Probability estimate"));
+  // plot lower bound
   if (result_.getConvergenceSampleLowerBound().getSize())
     plot->plotCurve(result_.getConvergenceSampleLowerBound(), QPen(Qt::green), QwtPlotCurve::Lines, 0, tr("Lower bound"));
+  // plot upper bound
   if (result_.getConvergenceSampleUpperBound().getSize())
     plot->plotCurve(result_.getConvergenceSampleUpperBound(), QPen(Qt::green), QwtPlotCurve::Lines, 0, tr("Upper bound"));
-  plot->setTitle(tr("Monte Carlo convergence graph at level 0.95"));
+
+  plot->setTitle(tr("Probability estimate convergence graph at level 0.95"));
   plot->setAxisTitle(QwtPlot::yLeft, tr("Estimate"));
   plot->setAxisTitle(QwtPlot::xBottom, tr("Outer iteration"));
   plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
@@ -237,26 +327,15 @@ void MonteCarloReliabilityResultWindow::buildInterface()
   plot->setAxisScaleEngine(QwtPlot::xBottom, scaleEngin);
 
   listConvergenceGraph.append(plot);
-  tabLayout->addWidget(plot);
+  tab->addWidget(plot);
 
   convergenceGraphConfigurationWidget_ = new GraphConfigurationWidget(listConvergenceGraph);
 
-  tabWidget_->addTab(tab, tr("Convergence graph"));
-
-  // fourth tab : parameters --------------------------------
-  if (parametersWidget_)
-    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
-
-  //
-  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
-  mainWidget->addWidget(tabWidget_);
-  mainWidget->setStretchFactor(1, 10);
-
-  setWidget(mainWidget);
+  return tab;
 }
 
 
-void MonteCarloReliabilityResultWindow::showHideGraphConfigurationWidget(int indexTab)
+void SimulationReliabilityResultWindow::showHideGraphConfigurationWidget(int indexTab)
 {
   switch (indexTab)
   {
@@ -281,7 +360,7 @@ void MonteCarloReliabilityResultWindow::showHideGraphConfigurationWidget(int ind
 }
 
 
-void MonteCarloReliabilityResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
+void SimulationReliabilityResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
 {
   if (oldState == Qt::WindowMaximized)
     return;

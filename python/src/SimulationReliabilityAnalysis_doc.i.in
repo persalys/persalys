@@ -1,0 +1,101 @@
+%feature("docstring") OTGUI::SimulationReliabilityAnalysis
+"Reliability analysis using simulation method.
+
+Parameters
+----------
+name : str
+    Name
+limitState : :class:`~otguibase.LimitState`
+    Limit state"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationReliabilityAnalysis::setBlockSize
+"Block size accessor.
+
+Parameters
+----------
+size : int
+    Number of terms in the probability simulation estimator grouped together.
+    It is set by default to 1."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationReliabilityAnalysis::getBlockSize
+"Block size accessor.
+
+Returns
+-------
+size : int
+    Number of terms in the probability simulation estimator grouped together.
+    It is set by default to 1."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationReliabilityAnalysis::setSeed
+"Seed accessor.
+
+Parameters
+----------
+seed : int
+    Seed"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationReliabilityAnalysis::getSeed
+"Seed accessor.
+
+Returns
+-------
+seed : int
+    Seed"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationReliabilityAnalysis::setMaximumCoefficientOfVariation
+"Maximum coefficient of variation accessor.
+
+Parameters
+----------
+maxCovar : float
+    Maximum coefficient of variation"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationReliabilityAnalysis::getMaximumCoefficientOfVariation
+"Maximum coefficient of variation accessor.
+
+Returns
+-------
+maxCovar : float
+    Maximum coefficient of variation"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationReliabilityAnalysis::setMaximumCalls
+"Maximum calls accessor.
+
+Parameters
+----------
+max : int
+    Maximum calls"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationReliabilityAnalysis::getMaximumCalls
+"Maximum calls accessor.
+
+Returns
+-------
+max : int
+    Maximum calls"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationReliabilityAnalysis::getResult
+"Result accessor.
+
+Returns
+-------
+result : :class:`~otguibase.SimulationReliabilityResult`
+    Result"
