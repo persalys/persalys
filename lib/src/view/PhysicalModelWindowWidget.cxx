@@ -20,7 +20,7 @@
  */
 #include "otgui/PhysicalModelWindowWidget.hxx"
 
-#include "otgui/AnalyticalPhysicalModel.hxx"
+#include "otgui/SymbolicPhysicalModel.hxx"
 #include "otgui/ModelEvaluation.hxx"
 #include "otgui/LineEditWithQValidatorDelegate.hxx"
 #include "otgui/CheckableHeaderView.hxx"
@@ -75,7 +75,7 @@ void PhysicalModelWindowWidget::buildInterface()
   inputsLayout->addWidget(inputTableView_);
 
   // buttons Add/Remove input
-  if (physicalModel_.getImplementation()->getClassName() == "AnalyticalPhysicalModel")
+  if (physicalModel_.getImplementation()->getClassName() == "SymbolicPhysicalModel")
   {
     addInputLineButton_ = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
     addInputLineButton_->setToolTip(tr("Add an input"));
@@ -112,7 +112,7 @@ void PhysicalModelWindowWidget::buildInterface()
   QHBoxLayout * outputButtonsLayout = new QHBoxLayout;
   outputButtonsLayout->addStretch();
 
-  if (physicalModel_.getImplementation()->getClassName() == "AnalyticalPhysicalModel")
+  if (physicalModel_.getImplementation()->getClassName() == "SymbolicPhysicalModel")
   {
     addOutputLineButton_ = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
     addOutputLineButton_->setToolTip(tr("Add an output"));
@@ -218,7 +218,7 @@ void PhysicalModelWindowWidget::updateOutputTableModel()
   outputTableView_->horizontalHeader()->setResizeMode(3, QHeaderView::Stretch); 
 #endif
   const int width = outputTableView_->horizontalHeader()->width();
-  if (physicalModel_.getImplementation()->getClassName() != "AnalyticalPhysicalModel")
+  if (physicalModel_.getImplementation()->getClassName() != "SymbolicPhysicalModel")
   {
     outputTableView_->setColumnHidden(2, true);
     outputTableView_->horizontalHeader()->resizeSection(0, width*1/5);

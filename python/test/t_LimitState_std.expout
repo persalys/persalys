@@ -21,7 +21,7 @@ Y1 = otguibase.Output('Y1', '')
 inputs = [X0, X1]
 outputs = [Y0, Y1]
 formulas = ['sin(X0) + 8*X1', '1 + sin(X0) + 8*X1']
-aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys', inputs, outputs, formulas)
+aModelPhys = otguibase.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
 myStudy.add(aModelPhys)
 aLimitState = otguibase.LimitState('aLimitState', aModelPhys, 'Y0', ot.Less(), 10)
 myStudy.add(aLimitState)

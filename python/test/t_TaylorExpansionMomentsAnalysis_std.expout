@@ -33,7 +33,7 @@ Y1 = otguibase.Output('Y1', '')
 inputs = [X0, X1, X2]
 outputs = [fake_Y0, Y0, Y1]
 formulas = ['X0', 'sin(X0) + 8*X1', 'sin(X0) + 8*X1 + X2']
-aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys', inputs, outputs, formulas)
+aModelPhys = otguibase.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
 myStudy.add(aModelPhys)
 dist_X0 = ot.Normal(1, 1)
 X0 = otguibase.Input('X0', 0, dist_X0, '')

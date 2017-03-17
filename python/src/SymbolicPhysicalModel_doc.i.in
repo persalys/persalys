@@ -1,4 +1,4 @@
-%feature("docstring") OTGUI::AnalyticalPhysicalModel
+%feature("docstring") OTGUI::SymbolicPhysicalModel
 "Physical model defined by analytical formulas.
 
 Parameters
@@ -20,11 +20,11 @@ Examples
 >>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
 >>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
 >>> G = otguibase.Output('G', 'deviation')
->>> myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(_pi*100.0)'])"
+>>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(_pi*100.0)'])"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::AnalyticalPhysicalModel::getFormulas
+%feature("docstring") OTGUI::SymbolicPhysicalModel::getFormulas
 "Formulas accessor.
 
 Returns
@@ -34,7 +34,7 @@ formulas : :py:class:`openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::AnalyticalPhysicalModel::setFormulas
+%feature("docstring") OTGUI::SymbolicPhysicalModel::setFormulas
 "Formulas accessor.
 
 Parameters
@@ -44,7 +44,7 @@ formulas : sequence of str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::AnalyticalPhysicalModel::getFormula
+%feature("docstring") OTGUI::SymbolicPhysicalModel::getFormula
 "Output formula accessor.
 
 Parameters
@@ -59,7 +59,7 @@ formula : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::AnalyticalPhysicalModel::setFormula
+%feature("docstring") OTGUI::SymbolicPhysicalModel::setFormula
 "Output formula accessor.
 
 Parameters

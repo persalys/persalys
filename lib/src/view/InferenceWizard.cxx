@@ -20,7 +20,7 @@
  */
 #include "otgui/InferenceWizard.hxx"
 
-#include "otgui/AnalyticalPhysicalModel.hxx"
+#include "otgui/SymbolicPhysicalModel.hxx"
 #include "otgui/InputTableProbabilisticModel.hxx"
 #include "otgui/CheckableHeaderView.hxx"
 #include "otgui/DistributionDictionary.hxx"

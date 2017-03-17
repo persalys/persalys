@@ -14,7 +14,7 @@ L = otguibase.Input('L', 250, ot.Uniform(250, 260), 'Length')
 I = otguibase.Input('I', 400, ot.Beta(2.5, 4., 3.1e2, 4.5e2), 'Section modulus')
 y = otguibase.Output('y', 'deviation')
 
-model = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [E, F, L, I], [y], ['F*L^3/(3*E*I)'])
+model = otguibase.SymbolicPhysicalModel('myPhysicalModel', [E, F, L, I], [y], ['F*L^3/(3*E*I)'])
 myStudy.add(model)
 
 f = model.getFunction()

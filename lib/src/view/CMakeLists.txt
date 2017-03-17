@@ -34,7 +34,7 @@ ot_add_source_file ( AnalysisExecutionFailedWindow.cxx )
 ot_add_source_file ( DeterministicDesignPage.cxx )
 ot_add_source_file ( ProbabilisticDesignPage.cxx )
 ot_add_source_file ( PhysicalModelWindowWidget.cxx )
-ot_add_source_file ( AnalyticalPhysicalModelWindow.cxx )
+ot_add_source_file ( SymbolicPhysicalModelWindow.cxx )
 ot_add_source_file ( PythonPhysicalModelWindow.cxx )
 ot_add_source_file ( MetaModelWindow.cxx )
 if (SalomeYACS_FOUND)
@@ -104,7 +104,7 @@ ot_install_header_file ( ApproximationReliabilityPage.hxx )
 ot_install_header_file ( ReliabilityAnalysisWizard.hxx )
 ot_install_header_file ( OTguiSubWindow.hxx )
 ot_install_header_file ( PhysicalModelWindowWidget.hxx )
-ot_install_header_file ( AnalyticalPhysicalModelWindow.hxx )
+ot_install_header_file ( SymbolicPhysicalModelWindow.hxx )
 ot_install_header_file ( PythonPhysicalModelWindow.hxx )
 ot_install_header_file ( MetaModelWindow.hxx )
 if (SalomeYACS_FOUND)
@@ -166,7 +166,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/DeterministicDesignPage.hxx
                                   otgui/ProbabilisticDesignPage.hxx
                                   otgui/PhysicalModelWindowWidget.hxx
-                                  otgui/AnalyticalPhysicalModelWindow.hxx
+                                  otgui/SymbolicPhysicalModelWindow.hxx
                                   otgui/PythonPhysicalModelWindow.hxx
                                   otgui/MetaModelWindow.hxx
                                   otgui/ProbabilisticModelWindow.hxx

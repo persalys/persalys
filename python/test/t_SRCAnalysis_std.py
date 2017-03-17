@@ -16,7 +16,7 @@ y0 = otguibase.Output('y0')
 
 formula_y00 = 'x0'
 formula_y0 = '10+3*x0+x1'
-model = otguibase.AnalyticalPhysicalModel('aModel', [x0, x1], [y00, y0], [formula_y00, formula_y0])
+model = otguibase.SymbolicPhysicalModel('aModel', [x0, x1], [y00, y0], [formula_y00, formula_y0])
 myStudy.add(model)
 
 ## SRC ##

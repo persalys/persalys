@@ -18,7 +18,7 @@ Create the model:
 >>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
 >>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
 >>> G = otguibase.Output('G', 'deviation')
->>> myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(_pi*100.0)'])
+>>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(_pi*100.0)'])
 
 Create the Model evaluation:
 

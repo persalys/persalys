@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/AnalyticalPhysicalModel.hxx"
+#include "otgui/SymbolicPhysicalModel.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
@@ -26,12 +26,12 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(AnalyticalPhysicalModel);
+CLASSNAMEINIT(SymbolicPhysicalModel);
 
-static Factory<AnalyticalPhysicalModel> Factory_AnalyticalPhysicalModel;
+static Factory<SymbolicPhysicalModel> Factory_SymbolicPhysicalModel;
 
 /* Default constructor */
-AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String& name)
+SymbolicPhysicalModel::SymbolicPhysicalModel(const String& name)
   : PhysicalModelImplementation(name)
   , formulaForEachOutput_()
 {
@@ -39,7 +39,7 @@ AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String& name)
 
 
 /* Constructor with parameters */
-AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String& name,
+SymbolicPhysicalModel::SymbolicPhysicalModel(const String& name,
                                                  const InputCollection& inputs,
                                                  const OutputCollection& outputs,
                                                  const Description& formulas)
@@ -51,13 +51,13 @@ AnalyticalPhysicalModel::AnalyticalPhysicalModel(const String& name,
 
 
 /* Virtual constructor */
-AnalyticalPhysicalModel* AnalyticalPhysicalModel::clone() const
+SymbolicPhysicalModel* SymbolicPhysicalModel::clone() const
 {
-  return new AnalyticalPhysicalModel(*this);
+  return new SymbolicPhysicalModel(*this);
 }
 
 
-void AnalyticalPhysicalModel::addOutput(const Output& output)
+void SymbolicPhysicalModel::addOutput(const Output& output)
 {
   if (hasOutputNamed(output.getName()))
     throw InvalidArgumentException(HERE) << "The physical model already contains an output named " << output.getName();
@@ -68,14 +68,14 @@ void AnalyticalPhysicalModel::addOutput(const Output& output)
 }
 
 
-void AnalyticalPhysicalModel::removeOutput(const String& outputName)
+void SymbolicPhysicalModel::removeOutput(const String& outputName)
 {
   PhysicalModelImplementation::removeOutput(outputName);
   formulaForEachOutput_.erase(outputName);
 }
 
 
-void AnalyticalPhysicalModel::setOutputs(const OutputCollection& outputs)
+void SymbolicPhysicalModel::setOutputs(const OutputCollection& outputs)
 {
   std::set<String> outputNames;
   for (UnsignedInteger i=0; i<outputs.getSize(); ++i)
@@ -90,7 +90,7 @@ void AnalyticalPhysicalModel::setOutputs(const OutputCollection& outputs)
 }
 
 
-void AnalyticalPhysicalModel::setOutputName(const String& outputName, const String& newName)
+void SymbolicPhysicalModel::setOutputName(const String& outputName, const String& newName)
 {
   if (outputName == newName)
     return;
@@ -111,7 +111,7 @@ void AnalyticalPhysicalModel::setOutputName(const String& outputName, const Stri
 }
 
 
-Description AnalyticalPhysicalModel::getFormulas() const
+Description SymbolicPhysicalModel::getFormulas() const
 {
   Description formulas;
   for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
@@ -124,7 +124,7 @@ Description AnalyticalPhysicalModel::getFormulas() const
 }
 
 
-void AnalyticalPhysicalModel::setFormulas(const Description& formulas)
+void SymbolicPhysicalModel::setFormulas(const Description& formulas)
 {
   if (formulas.getSize() != getOutputs().getSize())
     throw InvalidArgumentException(HERE) << "The list of formulas must have the same dimension as the list of outputs";
@@ -137,7 +137,7 @@ void AnalyticalPhysicalModel::setFormulas(const Description& formulas)
 }
 
 
-String AnalyticalPhysicalModel::getFormula(const String& outputName) const
+String SymbolicPhysicalModel::getFormula(const String& outputName) const
 {
   if (!getOutputNames().contains(outputName))
     throw InvalidArgumentException(HERE) << "The model does not contain an output named " << outputName;
@@ -150,7 +150,7 @@ String AnalyticalPhysicalModel::getFormula(const String& outputName) const
 }
 
 
-void AnalyticalPhysicalModel::setFormula(const String& outputName, const String& formula)
+void SymbolicPhysicalModel::setFormula(const String& outputName, const String& formula)
 {
   if (!getOutputNames().contains(outputName))
     throw InvalidArgumentException(HERE) << "The model does not contain an output named " << outputName;
@@ -160,13 +160,13 @@ void AnalyticalPhysicalModel::setFormula(const String& outputName, const String&
   notify("outputFormulaChanged");
 }
 
-NumericalMathFunction AnalyticalPhysicalModel::generateFunction() const
+NumericalMathFunction SymbolicPhysicalModel::generateFunction() const
 {
   return NumericalMathFunction(getInputNames(), getOutputNames(), getFormulas());
 }
 
 
-String AnalyticalPhysicalModel::getPythonScript() const
+String SymbolicPhysicalModel::getPythonScript() const
 {
   OSS oss;
 
@@ -203,7 +203,7 @@ String AnalyticalPhysicalModel::getPythonScript() const
   }
   oss << "]\n";
 
-  oss << getName()+ " = otguibase.AnalyticalPhysicalModel('" + getName() + "', inputs, outputs, formulas)\n";
+  oss << getName()+ " = otguibase.SymbolicPhysicalModel('" + getName() + "', inputs, outputs, formulas)\n";
 
   oss << PhysicalModelImplementation::getCopulaPythonScript();
 
@@ -212,7 +212,7 @@ String AnalyticalPhysicalModel::getPythonScript() const
 
 
 /* String converter */
-String AnalyticalPhysicalModel::__repr__() const
+String SymbolicPhysicalModel::__repr__() const
 {
   OSS oss;
   oss << PhysicalModelImplementation::__repr__()
@@ -222,7 +222,7 @@ String AnalyticalPhysicalModel::__repr__() const
 
 
 /* Method save() stores the object through the StorageManager */
-void AnalyticalPhysicalModel::save(Advocate & adv) const
+void SymbolicPhysicalModel::save(Advocate & adv) const
 {
   PhysicalModelImplementation::save(adv);
   adv.saveAttribute("formulas_", getFormulas());
@@ -230,7 +230,7 @@ void AnalyticalPhysicalModel::save(Advocate & adv) const
 
 
 /* Method load() reloads the object from the StorageManager */
-void AnalyticalPhysicalModel::load(Advocate & adv)
+void SymbolicPhysicalModel::load(Advocate & adv)
 {
   PhysicalModelImplementation::load(adv);
   Description formulas;

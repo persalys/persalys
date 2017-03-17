@@ -23,7 +23,7 @@ y1 = otguibase.Output('y1', '')
 inputs = [x0, x1, x2]
 outputs = [fake_y0, y0, y1]
 formulas = ['x0', '10+3*x0+x1', '3*x0 + x1 + x2']
-aModel = otguibase.AnalyticalPhysicalModel('aModel', inputs, outputs, formulas)
+aModel = otguibase.SymbolicPhysicalModel('aModel', inputs, outputs, formulas)
 myStudy.add(aModel)
 aSRC = otguibase.SRCAnalysis('aSRC', aModel, 1000)
 interestVariables = ['y0']

@@ -19,7 +19,7 @@ Ep = otguibase.Output('Ep', 'Primary energy savings')
 inputs = [Q, E, C]
 outputs = [Ep]
 formulas = ['1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))']
-analyticalModel1 = otguibase.AnalyticalPhysicalModel('analyticalModel1', inputs, outputs, formulas)
+analyticalModel1 = otguibase.SymbolicPhysicalModel('analyticalModel1', inputs, outputs, formulas)
 study1.add(analyticalModel1)
 dist_Q = ot.Normal(10200, 100)
 Q = otguibase.Input('Q', 0, dist_Q, 'Primary energy')

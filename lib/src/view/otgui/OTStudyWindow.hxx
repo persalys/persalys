@@ -37,7 +37,7 @@ public:
 public slots:
 signals:
   void createNewDataModel();
-  void createNewAnalyticalPhysicalModel();
+  void createNewSymbolicPhysicalModel();
   void createNewPythonPhysicalModel();
 #ifdef OTGUI_HAVE_YACS
   void createNewYACSPhysicalModel();

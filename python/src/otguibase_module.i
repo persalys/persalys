@@ -97,7 +97,7 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include Output.i
 %include DataSample.i
 %include PhysicalModelImplementation.i
-%include AnalyticalPhysicalModel.i
+%include SymbolicPhysicalModel.i
 %include PythonPhysicalModel.i
 %include MetaModel.i
 %include PhysicalModel.i

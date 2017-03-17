@@ -44,9 +44,9 @@ void OTStudyWindow::buildInterface()
   hlayout->addStretch();
   QGridLayout * layout = new QGridLayout;
 
-  QPushButton * button = new QPushButton(tr("New analytical physical model"));
+  QPushButton * button = new QPushButton(tr("New symbolic physical model"));
   button->setStatusTip(tr("Create a physical model with outputs defined by analytical formulae"));
-  connect(button, SIGNAL(pressed()), this, SIGNAL(createNewAnalyticalPhysicalModel()));
+  connect(button, SIGNAL(pressed()), this, SIGNAL(createNewSymbolicPhysicalModel()));
   layout->addWidget(button, 0, 0);
 
   button = new QPushButton(tr("New Python physical model"));

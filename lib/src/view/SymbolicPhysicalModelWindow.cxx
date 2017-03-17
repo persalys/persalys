@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow to define a analytical physical model
+ *  @brief QMdiSubWindow to define a symbolic physical model
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/AnalyticalPhysicalModelWindow.hxx"
+#include "otgui/SymbolicPhysicalModelWindow.hxx"
 
 #include "otgui/PhysicalModelWindowWidget.hxx"
 
@@ -28,10 +28,10 @@ using namespace OT;
 
 namespace OTGUI {
 
-AnalyticalPhysicalModelWindow::AnalyticalPhysicalModelWindow(PhysicalModelItem * item)
+SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelItem * item)
   : OTguiSubWindow(item)
 {
-  setWindowTitle(tr("Analytical physical model"));
+  setWindowTitle(tr("Symbolic physical model"));
 
   // Widgets
   QWidget * mainWidget = new QWidget;

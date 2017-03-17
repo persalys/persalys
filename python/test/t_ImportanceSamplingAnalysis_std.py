@@ -11,7 +11,7 @@ X0 = otguibase.Input('X0', ot.Normal(1, 1))
 X1 = otguibase.Input('X1', ot.Normal(1, 1))
 Y0 = otguibase.Output('Y0')
 
-model = otguibase.AnalyticalPhysicalModel('aModelPhys', [X0, X1], [Y0], ['sin(X0) + 8*X1'])
+model = otguibase.SymbolicPhysicalModel('aModelPhys', [X0, X1], [Y0], ['sin(X0) + 8*X1'])
 myStudy.add(model)
 
 ## limit state ##

@@ -4,7 +4,7 @@
 Notes
 -----
 Can only be used through it's derived classes.
-See :class:`~otguibase.AnalyticalPhysicalModel`, :class:`~otguibase.PythonPhysicalModel`"
+See :class:`~otguibase.SymbolicPhysicalModel`, :class:`~otguibase.PythonPhysicalModel`"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation
 OTGUI_PhysicalModel_doc
@@ -473,8 +473,8 @@ name : str
 step : float
     Finite difference step used to define the gradient of the model's function"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setInputDistribution
-OTGUI_PhysicalModel_setInputDistribution_doc
+%feature("docstring") OTGUI::PhysicalModelImplementation::setInputFiniteDifferenceStep
+OTGUI_PhysicalModel_setInputFiniteDifferenceStep_doc
 
 // ---------------------------------------------------------------------
 

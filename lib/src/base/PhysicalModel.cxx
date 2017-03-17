@@ -20,7 +20,7 @@
  */
 #include "otgui/PhysicalModel.hxx"
 
-#include "otgui/AnalyticalPhysicalModel.hxx"
+#include "otgui/SymbolicPhysicalModel.hxx"
 
 using namespace OT;
 
@@ -28,7 +28,7 @@ namespace OTGUI {
 
 /* Default constructor */
 PhysicalModel::PhysicalModel(const String & name)
-  : TypedInterfaceObject<PhysicalModelImplementation>(new AnalyticalPhysicalModel(name))
+  : TypedInterfaceObject<PhysicalModelImplementation>(new SymbolicPhysicalModel(name))
 {
 }
 

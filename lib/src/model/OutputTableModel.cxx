@@ -20,7 +20,7 @@
  */
 #include "otgui/OutputTableModel.hxx"
 
-#include "otgui/AnalyticalPhysicalModel.hxx"
+#include "otgui/SymbolicPhysicalModel.hxx"
 
 #include <QDebug>
 
@@ -102,7 +102,7 @@ QVariant OutputTableModel::data(const QModelIndex & index, int role) const
         return QString::fromUtf8(physicalModel_.getOutputs()[index.row()].getDescription().c_str());
       case 2:
       {
-        const AnalyticalPhysicalModel * model = dynamic_cast<const AnalyticalPhysicalModel*>(&*physicalModel_.getImplementation());
+        const SymbolicPhysicalModel * model = dynamic_cast<const SymbolicPhysicalModel*>(&*physicalModel_.getImplementation());
         if (model)
           return QString::fromUtf8(model->getFormula(physicalModel_.getOutputs()[index.row()].getName()).c_str());
         break;
@@ -174,7 +174,7 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
       }
       case 2:
       {
-        AnalyticalPhysicalModel * model = dynamic_cast<AnalyticalPhysicalModel*>(&*physicalModel_.getImplementation());
+        SymbolicPhysicalModel * model = dynamic_cast<SymbolicPhysicalModel*>(&*physicalModel_.getImplementation());
         if (model)
         {
           if (model->getFormula(output.getName()) == value.toString().toUtf8().constData())
@@ -199,9 +199,9 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
 
 Qt::ItemFlags OutputTableModel::flags(const QModelIndex & index) const
 {
-  if (index.column() == 0 && physicalModel_.getImplementation()->getClassName() == "AnalyticalPhysicalModel")
+  if (index.column() == 0 && physicalModel_.getImplementation()->getClassName() == "SymbolicPhysicalModel")
     return QAbstractTableModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
-  else if (index.column() == 0 && physicalModel_.getImplementation()->getClassName() != "AnalyticalPhysicalModel")
+  else if (index.column() == 0 && physicalModel_.getImplementation()->getClassName() != "SymbolicPhysicalModel")
     return QAbstractTableModel::flags(index) | Qt::ItemIsUserCheckable;
   else if (index.column() == 1
       && (physicalModel_.getImplementation()->getClassName() == "YACSPhysicalModel" ||

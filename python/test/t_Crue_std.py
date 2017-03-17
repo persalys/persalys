@@ -14,7 +14,7 @@ Zv = otguibase.Input('Zv', 0., ot.Uniform(49.0, 51.0), 'Zv (m)')
 Zm = otguibase.Input('Zm', 0., ot.Uniform(54.0, 56.0), 'Zm (m)')
 S = otguibase.Output('S')
 
-model = otguibase.AnalyticalPhysicalModel('myPhysicalModel', [Q, Ks, Zv, Zm], [S], ['(Q/(Ks*300.*sqrt((Zm-Zv)/5000)))^(3.0/5.0)+Zv-55.5-3.'])
+model = otguibase.SymbolicPhysicalModel('myPhysicalModel', [Q, Ks, Zv, Zm], [S], ['(Q/(Ks*300.*sqrt((Zm-Zv)/5000)))^(3.0/5.0)+Zv-55.5-3.'])
 myStudy.add(model)
 
 ## limit state ##

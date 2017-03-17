@@ -890,7 +890,7 @@
       <UML:Interface stereotype="interface" visibility="public" isSpecification="false" namespace="Logical View" isAbstract="true" isLeaf="false" isRoot="false" xmi.id="n2qxCJXJOfeQ" name="PhysicalModel"/>
       <UML:Interface stereotype="interface" visibility="public" isSpecification="false" namespace="Logical View" isAbstract="true" isLeaf="false" isRoot="false" xmi.id="MKg3VBIGE6DO" name="Analysis"/>
       <UML:Interface stereotype="interface" visibility="public" isSpecification="false" namespace="Logical View" isAbstract="true" isLeaf="false" isRoot="false" xmi.id="sssBqjKC3yGZ" name="LimitState"/>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="kzHY3XgvOY4E" name="AnalyticalPhysicalModel">
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="kzHY3XgvOY4E" name="SymbolicPhysicalModel">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="hZkRzVZjSrGV"/>
        </UML:GeneralizableElement.generalization>
@@ -1123,7 +1123,7 @@
         <UML:Attribute visibility="private" isSpecification="false" xmi.id="5AVLxd3pdfB0" type="96AL25pTOuyX" name="doe_"/>
        </UML:Classifier.feature>
       </UML:Class>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="FH93uXUefUeN" name="AnalyticalPhysicalModelWindow">
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="FH93uXUefUeN" name="SymbolicPhysicalModelWindow">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="TOz4dk3yCIy6"/>
        </UML:GeneralizableElement.generalization>

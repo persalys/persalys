@@ -21,7 +21,7 @@ y2 = otguibase.Output('y2', '')
 inputs = [xi1, xi2]
 outputs = [fake_y0, y0, y1, y2]
 formulas = ['xi1', 'cos(0.5*xi1) + sin(xi2)', 'cos(0.5*xi1) + sin(xi2)', '(cos(0.5*xi1) + sin(xi2))*2']
-model = otguibase.AnalyticalPhysicalModel('model', inputs, outputs, formulas)
+model = otguibase.SymbolicPhysicalModel('model', inputs, outputs, formulas)
 myStudy.add(model)
 design = otguibase.DesignOfExperimentImplementation('design', model)
 inputSample = [

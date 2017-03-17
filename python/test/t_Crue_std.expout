@@ -21,7 +21,7 @@ S = otguibase.Output('S', '')
 inputs = [Q, Ks, Zv, Zm]
 outputs = [S]
 formulas = ['(Q/(Ks*300.*sqrt((Zm-Zv)/5000)))^(3.0/5.0)+Zv-55.5-3.']
-myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', inputs, outputs, formulas)
+myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', inputs, outputs, formulas)
 myStudy.add(myPhysicalModel)
 limitState1 = otguibase.LimitState('limitState1', myPhysicalModel, 'S', ot.Greater(), 0)
 myStudy.add(limitState1)

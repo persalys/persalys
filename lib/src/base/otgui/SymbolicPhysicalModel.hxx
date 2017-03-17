@@ -18,27 +18,27 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_ANALYTICALPHYSICALMODEL_HXX
-#define OTGUI_ANALYTICALPHYSICALMODEL_HXX
+#ifndef OTGUI_SYMBOLICPHYSICALMODEL_HXX
+#define OTGUI_SYMBOLICPHYSICALMODEL_HXX
 
 #include "PhysicalModelImplementation.hxx"
 
 namespace OTGUI {
-class OTGUI_API AnalyticalPhysicalModel : public PhysicalModelImplementation
+class OTGUI_API SymbolicPhysicalModel : public PhysicalModelImplementation
 {
   CLASSNAME;
 
 public:
   /** Default constructor */
-  AnalyticalPhysicalModel(const OT::String& name="Unnamed");
+  SymbolicPhysicalModel(const OT::String& name="Unnamed");
   /** Constructor with parameters */
-  AnalyticalPhysicalModel(const OT::String& name,
+  SymbolicPhysicalModel(const OT::String& name,
                           const InputCollection& inputs,
                           const OutputCollection& outputs,
                           const OT::Description& formulas);
 
   /** Virtual constructor */
-  virtual AnalyticalPhysicalModel * clone() const;
+  virtual SymbolicPhysicalModel * clone() const;
 
   virtual void addOutput(const Output& output);
   virtual void removeOutput(const OT::String& outputName);

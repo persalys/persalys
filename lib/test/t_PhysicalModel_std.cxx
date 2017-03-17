@@ -41,7 +41,7 @@ int main(int argc, char **argv)
   x[1] = 3000;
   x[2] = 4000;
 
-  AnalyticalPhysicalModel analyticalModel("analyticalModel1");
+  SymbolicPhysicalModel analyticalModel("analyticalModel1");
   analyticalModel.addOutput(Ep);
   analyticalModel.setFormula("Ep", "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
 

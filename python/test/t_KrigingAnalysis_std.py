@@ -19,7 +19,7 @@ y0 = otguibase.Output('y0')
 
 formula_y00 = "xi1"
 formula_y0 = "cos(0.5*xi1) + sin(xi2)"
-model = otguibase.AnalyticalPhysicalModel('model', [xi1, xi2], [y00, y0], [formula_y00, formula_y0])
+model = otguibase.SymbolicPhysicalModel('model', [xi1, xi2], [y00, y0], [formula_y00, formula_y0])
 myStudy.add(model)
 
 ## Design of Experiment ##

@@ -52,7 +52,7 @@ public slots:
   void createNewOTStudy();
   void createNewDataModel();
   void modifyDataModel();
-  void createNewAnalyticalPhysicalModel();
+  void createNewSymbolicPhysicalModel();
   void createNewPythonPhysicalModel();
 #ifdef OTGUI_HAVE_YACS
   void createNewYACSPhysicalModel();
@@ -117,7 +117,7 @@ private:
   QAction * newDataAnalysis_;
   QAction * newInferenceAnalysis_;
   QAction * newCopulaInferenceAnalysis_;
-  QAction * newAnalyticalPhysicalModel_;
+  QAction * newSymbolicPhysicalModel_;
   QAction * newPythonPhysicalModel_;
 #ifdef OTGUI_HAVE_YACS
   QAction * newYACSPhysicalModel_;

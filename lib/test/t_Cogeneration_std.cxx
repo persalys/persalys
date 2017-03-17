@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     Input C("C", 4000., Normal(4000, 60), "Valued thermal energy");
 
     Output Ep("Ep", "Primary energy savings");
-    AnalyticalPhysicalModel myPhysicalModel("myPhysicalModel");
+    SymbolicPhysicalModel myPhysicalModel("myPhysicalModel");
 
     myPhysicalModel.addInput(Q);
     myPhysicalModel.addInput(E);

@@ -14,7 +14,7 @@ Model creation
     Input
     Output
     PhysicalModel
-    AnalyticalPhysicalModel
+    SymbolicPhysicalModel
     PythonPhysicalModel
     DataModel
     MetaModel
