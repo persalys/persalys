@@ -62,12 +62,12 @@ OTGUI_PhysicalModel_hasOutputNamed_doc
 OTGUI_PhysicalModel_hasStochasticInputs_doc
 %feature("docstring") OTGUI::PhysicalModel::isValid
 OTGUI_PhysicalModel_isValid_doc
-%feature("docstring") OTGUI::PhysicalModel::setInputDistribution
-OTGUI_PhysicalModel_setInputDistribution_doc
-%feature("docstring") OTGUI::PhysicalModel::setInputDistributionParametersType
-OTGUI_PhysicalModel_setInputDistributionParametersType_doc
-%feature("docstring") OTGUI::PhysicalModel::setInputFiniteDifferenceStep
-OTGUI_PhysicalModel_setInputFiniteDifferenceStep_doc
+%feature("docstring") OTGUI::PhysicalModel::setDistribution
+OTGUI_PhysicalModel_setDistribution_doc
+%feature("docstring") OTGUI::PhysicalModel::setDistributionParametersType
+OTGUI_PhysicalModel_setDistributionParametersType_doc
+%feature("docstring") OTGUI::PhysicalModel::setFiniteDifferenceStep
+OTGUI_PhysicalModel_setFiniteDifferenceStep_doc
 %feature("docstring") OTGUI::PhysicalModel::getRestrictedFunction
 OTGUI_PhysicalModel_getRestrictedFunction_doc
 %feature("docstring") OTGUI::PhysicalModel::getSelectedOutputsNames

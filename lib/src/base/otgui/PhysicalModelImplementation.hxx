@@ -51,9 +51,9 @@ public:
   void setInputName(const OT::String & inputName, const OT::String & newName);
   void setInputDescription(const OT::String & inputName, const OT::String & description);
   void setInputValue(const OT::String & inputName, const double & value);
-  void setInputDistribution(const OT::String & inputName, const OT::Distribution & distribution);
-  void setInputDistributionParametersType(const OT::String & inputName, const OT::UnsignedInteger & distributionParametersType);
-  void setInputFiniteDifferenceStep(const OT::String& inputName, const double& step);
+  void setDistribution(const OT::String & inputName, const OT::Distribution & distribution);
+  void setDistributionParametersType(const OT::String & inputName, const OT::UnsignedInteger & distributionParametersType);
+  void setFiniteDifferenceStep(const OT::String& inputName, const double& step);
   virtual void addInput(const Input & input);
   virtual void removeInput(const OT::String & inputName);
   OT::Description getInputNames() const;
@@ -107,14 +107,14 @@ protected:
   void updateCopula();
   OT::String getProbaModelPythonScript() const;
   OT::String getCopulaPythonScript() const;
-  OT::NumericalPoint getInputsSteps() const;
-  void updateInputsStep() const;
+  OT::NumericalPoint getFiniteDifferenceSteps() const;
+  void updateFiniteDifferenceSteps() const;
 
 private:
   OT::PersistentCollection<Input> inputs_;
   OT::PersistentCollection<Output> outputs_;
   OT::Copula copula_;
-  mutable OT::NumericalPoint inputsSteps_;
+  mutable OT::NumericalPoint finiteDifferenceSteps_;
 };
 }
 #endif

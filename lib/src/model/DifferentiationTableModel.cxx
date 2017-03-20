@@ -94,9 +94,9 @@ bool DifferentiationTableModel::setData(const QModelIndex& index, const QVariant
       return true;
 
     // update the physicalModel
-    Input input(physicalModel_.getInputs()[index.row()]);
+    const Input input(physicalModel_.getInputs()[index.row()]);
     physicalModel_.blockNotification(true);
-    physicalModel_.setInputFiniteDifferenceStep(input.getName(), value.toDouble());
+    physicalModel_.setFiniteDifferenceStep(input.getName(), value.toDouble());
     physicalModel_.blockNotification(false);
     emit dataChanged(index, index);
     return true;

@@ -433,7 +433,7 @@ OTGUI_PhysicalModel_isValid_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setInputDistribution_doc
+%define OTGUI_PhysicalModel_setDistribution_doc
 "Input distribution accessor.
 
 Parameters
@@ -443,12 +443,12 @@ name : str
 distribution : :py:class:`openturns.Distribution`
     Variable distribution"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setInputDistribution
-OTGUI_PhysicalModel_setInputDistribution_doc
+%feature("docstring") OTGUI::PhysicalModelImplementation::setDistribution
+OTGUI_PhysicalModel_setDistribution_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setInputDistributionParametersType_doc
+%define OTGUI_PhysicalModel_setDistributionParametersType_doc
 "Input distribution parameter type accessor.
 
 Parameters
@@ -458,12 +458,12 @@ name : str
 parametersType : int
     Distribution parameter type accessor"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setInputDistributionParametersType
-OTGUI_PhysicalModel_setInputDistributionParametersType_doc
+%feature("docstring") OTGUI::PhysicalModelImplementation::setDistributionParametersType
+OTGUI_PhysicalModel_setDistributionParametersType_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setInputFiniteDifferenceStep_doc
+%define OTGUI_PhysicalModel_setFiniteDifferenceStep_doc
 "Finite difference step accessor.
 
 Parameters
@@ -473,8 +473,8 @@ name : str
 step : float
     Finite difference step used to define the gradient of the model's function"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setInputFiniteDifferenceStep
-OTGUI_PhysicalModel_setInputFiniteDifferenceStep_doc
+%feature("docstring") OTGUI::PhysicalModelImplementation::setFiniteDifferenceStep
+OTGUI_PhysicalModel_setFiniteDifferenceStep_doc
 
 // ---------------------------------------------------------------------
 

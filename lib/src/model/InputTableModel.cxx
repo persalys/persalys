@@ -89,7 +89,7 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
 
   if (role == Qt::EditRole)
   {
-    Input input(physicalModel_.getInputs()[index.row()]);
+    const Input input(physicalModel_.getInputs()[index.row()]);
 
     switch (index.column())
     {

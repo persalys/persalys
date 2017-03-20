@@ -384,8 +384,8 @@ void ProbabilisticModelWindow::updateDistributionParametersWidgets(const QModelI
 
   if (distributionName == "TruncatedDistribution")
   {
-    TruncatedDistribution * dist = dynamic_cast<TruncatedDistribution*>(&*inputDistribution.getImplementation());
-    parameters = DistributionDictionary::GetParametersCollection(dist->getDistribution().getImplementation());
+    TruncatedDistribution dist(*dynamic_cast<TruncatedDistribution*>(inputDistribution.getImplementation().get()));
+    parameters = DistributionDictionary::GetParametersCollection(dist.getDistribution().getImplementation());
     nbParameters = parameters[parametersType].getSize();
   }
   else if (distributionName == "TruncatedNormal")
@@ -458,26 +458,26 @@ void ProbabilisticModelWindow::updateTruncationParametersWidgets(const QModelInd
   // fill truncation parameters widgets
   if (distributionName == "TruncatedDistribution")
   {
-    TruncatedDistribution * dist = dynamic_cast<TruncatedDistribution*>(&*inputDistribution.getImplementation());
+    TruncatedDistribution dist(*dynamic_cast<TruncatedDistribution*>(inputDistribution.getImplementation().get()));
 
-    lowerBoundCheckBox_->setChecked(dist->getFiniteLowerBound());
-    upperBoundCheckBox_->setChecked(dist->getFiniteUpperBound());
-    if (dist->getFiniteLowerBound())
-      lowerBoundLineEdit_->setValue(dist->getLowerBound());
+    lowerBoundCheckBox_->setChecked(dist.getFiniteLowerBound());
+    upperBoundCheckBox_->setChecked(dist.getFiniteUpperBound());
+    if (dist.getFiniteLowerBound())
+      lowerBoundLineEdit_->setValue(dist.getLowerBound());
 
-    if (dist->getFiniteUpperBound())
-      upperBoundLineEdit_->setValue(dist->getUpperBound());
+    if (dist.getFiniteUpperBound())
+      upperBoundLineEdit_->setValue(dist.getUpperBound());
 
     truncationParamGroupBox_->setExpanded(true);
   }
   else if (distributionName == "TruncatedNormal")
   {
-    TruncatedNormal * dist = dynamic_cast<TruncatedNormal*>(&*inputDistribution.getImplementation());
+    TruncatedNormal dist(*dynamic_cast<TruncatedNormal*>(inputDistribution.getImplementation().get()));
 
     lowerBoundCheckBox_->setChecked(true);
     upperBoundCheckBox_->setChecked(true);
-    lowerBoundLineEdit_->setValue(dist->getA());
-    upperBoundLineEdit_->setValue(dist->getB());
+    lowerBoundLineEdit_->setValue(dist.getA());
+    upperBoundLineEdit_->setValue(dist.getB());
     truncationParamGroupBox_->setExpanded(true);
   }
 }
@@ -544,7 +544,7 @@ void ProbabilisticModelWindow::distributionParametersChanged()
 
   if (distributionName == "TruncatedDistribution")
   {
-    TruncatedDistribution truncatedDistribution = *dynamic_cast<TruncatedDistribution*>(&*inputDistribution.getImplementation());
+    TruncatedDistribution truncatedDistribution(*dynamic_cast<TruncatedDistribution*>(inputDistribution.getImplementation().get()));
     Distribution distribution = truncatedDistribution.getDistribution();
     NumericalPointWithDescription parameters = DistributionDictionary::GetParametersCollection(distribution)[parametersType];
     try
@@ -571,7 +571,7 @@ void ProbabilisticModelWindow::distributionParametersChanged()
 
       // update input distribution
       physicalModel_.blockNotification(true);
-      physicalModel_.setInputDistribution(input.getName(), newTruncatedDistribution);
+      physicalModel_.setDistribution(input.getName(), newTruncatedDistribution);
       physicalModel_.blockNotification(false);
       updatePlots();
     }
@@ -601,7 +601,7 @@ void ProbabilisticModelWindow::distributionParametersChanged()
 
       DistributionDictionary::UpdateDistribution(inputDistribution, parameters, parametersType);
       physicalModel_.blockNotification(true);
-      physicalModel_.setInputDistribution(input.getName(), inputDistribution);
+      physicalModel_.setDistribution(input.getName(), inputDistribution);
       physicalModel_.blockNotification(false);
       updatePlots();
     }
@@ -621,7 +621,7 @@ void ProbabilisticModelWindow::typeDistributionParametersChanged(int comboIndex)
 {
   QModelIndex index = inputTableView_->currentIndex();
   Input input = physicalModel_.getInputs()[index.row()];
-  physicalModel_.setInputDistributionParametersType(input.getName(), comboIndex);
+  physicalModel_.setDistributionParametersType(input.getName(), comboIndex);
   updateDistributionParametersWidgets(index);
 }
 
@@ -636,7 +636,7 @@ void ProbabilisticModelWindow::truncationParametersChanged()
   {
     if (inputDistribution.getImplementation()->getClassName() == "TruncatedNormal")
     {
-      TruncatedNormal dist = TruncatedNormal(*dynamic_cast<TruncatedNormal*>(&*inputDistribution.getImplementation()));
+      TruncatedNormal dist(*dynamic_cast<TruncatedNormal*>(inputDistribution.getImplementation().get()));
 
       if (lowerBoundCheckBox_->isChecked())
         dist.setA(lowerBoundLineEdit_->value());
@@ -644,19 +644,19 @@ void ProbabilisticModelWindow::truncationParametersChanged()
         dist.setB(upperBoundLineEdit_->value());
 
       physicalModel_.blockNotification(true);
-      physicalModel_.setInputDistribution(input.getName(), dist);
+      physicalModel_.setDistribution(input.getName(), dist);
       physicalModel_.blockNotification(false);
     }
     else
     {
-      TruncatedDistribution truncatedDistribution = TruncatedDistribution(*dynamic_cast<TruncatedDistribution*>(&*inputDistribution.getImplementation()));
+      TruncatedDistribution truncatedDistribution(*dynamic_cast<TruncatedDistribution*>(inputDistribution.getImplementation().get()));
       if (lowerBoundCheckBox_->isChecked())
         truncatedDistribution.setLowerBound(lowerBoundLineEdit_->value());
       if (upperBoundCheckBox_->isChecked())
         truncatedDistribution.setUpperBound(upperBoundLineEdit_->value());
 
       physicalModel_.blockNotification(true);
-      physicalModel_.setInputDistribution(input.getName(), truncatedDistribution);
+      physicalModel_.setDistribution(input.getName(), truncatedDistribution);
       physicalModel_.blockNotification(false);
     }
 
@@ -691,19 +691,19 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
       // find the not truncated distribution
       if (distributionName == "TruncatedDistribution")
       {
-        TruncatedDistribution * dist = dynamic_cast<TruncatedDistribution*>(&*inputDistribution.getImplementation());
-        inputDistribution = dist->getDistribution();
+        TruncatedDistribution dist(*dynamic_cast<TruncatedDistribution*>(inputDistribution.getImplementation().get()));
+        inputDistribution = dist.getDistribution();
       }
       else if (distributionName == "TruncatedNormal")
       {
-        TruncatedNormal * dist = dynamic_cast<TruncatedNormal*>(&*inputDistribution.getImplementation());
-        inputDistribution = Normal(dist->getMu(), dist->getSigma());
+        TruncatedNormal dist(*dynamic_cast<TruncatedNormal*>(inputDistribution.getImplementation().get()));
+        inputDistribution = Normal(dist.getMu(), dist.getSigma());
       }
       else
         throw;
 
       physicalModel_.blockNotification(true);
-      physicalModel_.setInputDistribution(input.getName(), inputDistribution);
+      physicalModel_.setDistribution(input.getName(), inputDistribution);
       physicalModel_.blockNotification(false);
 
       // update plots
@@ -719,7 +719,7 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
       TruncatedDistribution truncatedDistribution;
       if (distributionName == "TruncatedDistribution")
       {
-        truncatedDistribution = TruncatedDistribution(*dynamic_cast<TruncatedDistribution*>(&*inputDistribution.getImplementation()));
+        truncatedDistribution = TruncatedDistribution(*dynamic_cast<TruncatedDistribution*>(inputDistribution.getImplementation().get()));
         distribution = truncatedDistribution.getDistribution();
         truncatureInterval = Interval(truncatedDistribution.getLowerBound(), truncatedDistribution.getUpperBound());
         truncatureInterval.setFiniteLowerBound(Interval::BoolCollection(1, truncatedDistribution.getFiniteLowerBound()));
@@ -727,7 +727,7 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
       }
       else if (distributionName == "TruncatedNormal")
       {
-        TruncatedNormal dist = TruncatedNormal(*dynamic_cast<TruncatedNormal*>(&*inputDistribution.getImplementation()));
+        TruncatedNormal dist(*dynamic_cast<TruncatedNormal*>(inputDistribution.getImplementation().get()));
         distribution = Normal(dist.getMu(), dist.getSigma());
         truncatureInterval = Interval(dist.getA(), dist.getB());
       }
@@ -796,7 +796,7 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
         truncatedDistribution = TruncatedDistribution(distribution, truncatureInterval.getLowerBound()[0], truncatureInterval.getUpperBound()[0]);
 
       physicalModel_.blockNotification(true);
-      physicalModel_.setInputDistribution(input.getName(), truncatedDistribution);
+      physicalModel_.setDistribution(input.getName(), truncatedDistribution);
       physicalModel_.blockNotification(false);
 
       // update plots
@@ -821,8 +821,8 @@ void ProbabilisticModelWindow::openWizardToChooseInferenceResult(const QModelInd
     // update the input
     const Input input(physicalModel_.getInputs()[inputIndex.row()]);
     physicalModel_.blockNotification(true);
-    physicalModel_.setInputDistribution(input.getName(), wizard->getDistribution());
-    physicalModel_.setInputDistributionParametersType(input.getName(), 0);
+    physicalModel_.setDistribution(input.getName(), wizard->getDistribution());
+    physicalModel_.setDistributionParametersType(input.getName(), 0);
     physicalModel_.blockNotification(false);
     updateDistributionWidgets(inputIndex);
   }

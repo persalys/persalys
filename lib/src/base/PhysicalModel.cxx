@@ -118,21 +118,21 @@ void PhysicalModel::setInputValue(const String & inputName, const double & value
 }
 
 
-void PhysicalModel::setInputDistribution(const String & inputName, const Distribution & distribution)
+void PhysicalModel::setDistribution(const String & inputName, const Distribution & distribution)
 {
-  getImplementation()->setInputDistribution(inputName, distribution);
+  getImplementation()->setDistribution(inputName, distribution);
 }
 
 
-void PhysicalModel::setInputDistributionParametersType(const String & inputName, const UnsignedInteger & distributionParametersType)
+void PhysicalModel::setDistributionParametersType(const String & inputName, const UnsignedInteger & distributionParametersType)
 {
-  getImplementation()->setInputDistributionParametersType(inputName, distributionParametersType);
+  getImplementation()->setDistributionParametersType(inputName, distributionParametersType);
 }
 
 
-void PhysicalModel::setInputFiniteDifferenceStep(const String& inputName, const double& step)
+void PhysicalModel::setFiniteDifferenceStep(const String& inputName, const double& step)
 {
-  getImplementation()->setInputFiniteDifferenceStep(inputName, step);
+  getImplementation()->setFiniteDifferenceStep(inputName, step);
 }
 
 

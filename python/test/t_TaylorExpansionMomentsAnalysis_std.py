@@ -62,8 +62,8 @@ print("result=", analysis3.getResult())
 print("\n")
 
 # greater finite difference steps
-model2.setInputFiniteDifferenceStep('X0', 0.005)
-model2.setInputFiniteDifferenceStep('X1', 0.005)
+model2.setFiniteDifferenceStep('X0', 0.005)
+model2.setFiniteDifferenceStep('X1', 0.005)
 
 analysis4 = otguibase.TaylorExpansionMomentsAnalysis('aTaylor4', model2)
 analysis4.setInterestVariables(['Y0'])

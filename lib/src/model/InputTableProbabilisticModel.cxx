@@ -123,7 +123,7 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
           return "Normal";
         else if (distributionName == "TruncatedDistribution")
         {
-          TruncatedDistribution dist = *dynamic_cast<TruncatedDistribution*>(&*input.getDistribution().getImplementation());
+          TruncatedDistribution dist = *dynamic_cast<TruncatedDistribution*>(input.getDistribution().getImplementation().get());
           return dist.getDistribution().getImplementation()->getClassName().c_str();
         }
         else
@@ -156,8 +156,8 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
 
     // update the input
     physicalModel_.blockNotification(true);
-    physicalModel_.setInputDistribution(input.getName(), distribution);
-    physicalModel_.setInputDistributionParametersType(input.getName(), 0);
+    physicalModel_.setDistribution(input.getName(), distribution);
+    physicalModel_.setDistributionParametersType(input.getName(), 0);
     physicalModel_.blockNotification(false);
     emit dataChanged(index, this->index(index.row(), 1));
     emit correlationToChange();
@@ -178,7 +178,7 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
         distributionName = "Normal";
       else if (distributionName == "TruncatedDistribution")
       {
-        TruncatedDistribution dist = *dynamic_cast<TruncatedDistribution*>(&*input.getDistribution().getImplementation());
+        TruncatedDistribution dist = *dynamic_cast<TruncatedDistribution*>(input.getDistribution().getImplementation().get());
         distributionName = dist.getDistribution().getImplementation()->getClassName();
       }
 
@@ -194,8 +194,8 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
         }
         // update the input
         physicalModel_.blockNotification(true);
-        physicalModel_.setInputDistribution(input.getName(), distribution);
-        physicalModel_.setInputDistributionParametersType(input.getName(), 0);
+        physicalModel_.setDistribution(input.getName(), distribution);
+        physicalModel_.setDistributionParametersType(input.getName(), 0);
         physicalModel_.blockNotification(false);
         emit distributionChanged(index);
         return true;

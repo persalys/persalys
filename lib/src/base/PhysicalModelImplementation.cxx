@@ -57,7 +57,7 @@ PhysicalModelImplementation::PhysicalModelImplementation(const String & name,
   updateCopula();
 
   // set finite difference step
-  updateInputsStep();
+  updateFiniteDifferenceSteps();
 }
 
 
@@ -110,7 +110,7 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
   updateCopula();
 
   // update finite difference step
-  updateInputsStep();
+  updateFiniteDifferenceSteps();
 
   notify("inputAdded");
   notify("modelInputsChanged");
@@ -153,7 +153,7 @@ void PhysicalModelImplementation::setInputValue(const String & inputName, const 
 }
 
 
-void PhysicalModelImplementation::setInputDistribution(const String & inputName, const Distribution & distribution)
+void PhysicalModelImplementation::setDistribution(const String & inputName, const Distribution & distribution)
 {
   bool inputOldStateIsStochastic = getInputByName(inputName).isStochastic();
 
@@ -168,7 +168,7 @@ void PhysicalModelImplementation::setInputDistribution(const String & inputName,
 }
 
 
-void PhysicalModelImplementation::setInputDistributionParametersType(const OT::String & inputName, const OT::UnsignedInteger & distributionParametersType)
+void PhysicalModelImplementation::setDistributionParametersType(const OT::String & inputName, const OT::UnsignedInteger & distributionParametersType)
 {
   getInputByName(inputName).setDistributionParametersType(distributionParametersType);
 }
@@ -190,19 +190,19 @@ void PhysicalModelImplementation::addInput(const Input & input)
     getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
 
   // update finite difference step
-  updateInputsStep();
+  updateFiniteDifferenceSteps();
 
   notify("inputAdded");
   notify("modelInputsChanged");
 }
 
 
-void PhysicalModelImplementation::setInputFiniteDifferenceStep(const String& inputName, const double& step)
+void PhysicalModelImplementation::setFiniteDifferenceStep(const String& inputName, const double& step)
 {
   getInputByName(inputName).setFiniteDifferenceStep(step);
 
   // update finite difference step
-  updateInputsStep();
+  updateFiniteDifferenceSteps();
 
   notify("inputStepChanged");
 }
@@ -229,7 +229,7 @@ void PhysicalModelImplementation::removeInput(const String & inputName)
       }
     }
     // update finite difference step
-    updateInputsStep();
+    updateFiniteDifferenceSteps();
   }
   else
     throw InvalidArgumentException(HERE) << "The given input name " << inputName <<" does not correspond to an input of the physical model.\n";
@@ -282,20 +282,20 @@ Description PhysicalModelImplementation::getInputNames() const
 }
 
 
-void PhysicalModelImplementation::updateInputsStep() const
+void PhysicalModelImplementation::updateFiniteDifferenceSteps() const
 {
-  inputsSteps_ = NumericalPoint(getInputs().getSize());
+  finiteDifferenceSteps_ = NumericalPoint(getInputs().getSize());
   for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
-    inputsSteps_[i] = getInputs()[i].getFiniteDifferenceStep();
+    finiteDifferenceSteps_[i] = getInputs()[i].getFiniteDifferenceStep();
 }
 
 
-NumericalPoint PhysicalModelImplementation::getInputsSteps() const
+NumericalPoint PhysicalModelImplementation::getFiniteDifferenceSteps() const
 {
-  if (inputsSteps_.getSize() != inputs_.getSize())
-    updateInputsStep();
+  if (finiteDifferenceSteps_.getSize() != inputs_.getSize())
+    updateFiniteDifferenceSteps();
 
-  return inputsSteps_;
+  return finiteDifferenceSteps_;
 }
 
 
@@ -533,12 +533,15 @@ NumericalMathFunction PhysicalModelImplementation::getFunction(const Description
 
   if (function.getUseDefaultGradientImplementation())
   {
-    // use finite difference gradient and hessian
-    NonCenteredFiniteDifferenceGradient gradient(getInputsSteps(), function.getEvaluation());
-    CenteredFiniteDifferenceHessian hessian(getInputsSteps(), function.getEvaluation());
+    // use finite difference gradient
+    NonCenteredFiniteDifferenceGradient gradient(getFiniteDifferenceSteps(), function.getEvaluation());
     function.setGradient(gradient);
+  }
+  if (function.getUseDefaultHessianImplementation())
+  {
+    // use finite difference hessian
+    CenteredFiniteDifferenceHessian hessian(getFiniteDifferenceSteps(), function.getEvaluation());
     function.setHessian(hessian);
-    function.setUseDefaultGradientImplementation(true);
   }
   return function;
 }
@@ -546,9 +549,7 @@ NumericalMathFunction PhysicalModelImplementation::getFunction(const Description
 
 NumericalMathFunction PhysicalModelImplementation::getFunction(const String & outputName) const
 {
-  Description outputNameDescription(1);
-  outputNameDescription[0] = outputName;
-  return getFunction(outputNameDescription);
+  return getFunction(Description(1, outputName));
 }
 
 
@@ -647,7 +648,7 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
       }
       else
       {
-        TruncatedDistribution truncatedDistribution = *dynamic_cast<TruncatedDistribution*>(&*distribution.getImplementation());
+        TruncatedDistribution truncatedDistribution = *dynamic_cast<TruncatedDistribution*>(distribution.getImplementation().get());
         distribution = truncatedDistribution.getDistribution();
         oss << "dist_" << inputName << " = ot." << distribution.getImplementation()->getClassName() << "(";
         NumericalPointWithDescription parameters = distribution.getParametersCollection()[0];
@@ -673,7 +674,7 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
       }
 
       result += oss.str();
-      result += getName() + ".setInputDistribution('" + inputName + "', ";
+      result += getName() + ".setDistribution('" + inputName + "', ";
       result += " dist_" + inputName + ")\n";
     }
   }
