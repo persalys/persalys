@@ -38,13 +38,13 @@
 #include "otgui/CopulaInferenceAnalysis.hxx"
 #include "otgui/DataAnalysisResultWindow.hxx"
 #include "otgui/InferenceWizard.hxx"
-#include "otgui/AnalyticalPhysicalModel.hxx"
+#include "otgui/SymbolicPhysicalModel.hxx"
 #include "otgui/PythonPhysicalModel.hxx"
 #ifdef OTGUI_HAVE_YACS
 #include "otgui/YACSPhysicalModel.hxx"
 #include "otgui/YACSPhysicalModelWindow.hxx"
 #endif
-#include "otgui/AnalyticalPhysicalModelWindow.hxx"
+#include "otgui/SymbolicPhysicalModelWindow.hxx"
 #include "otgui/PythonPhysicalModelWindow.hxx"
 #include "otgui/MetaModelWindow.hxx"
 #include "otgui/ProbabilisticModelWindow.hxx"
@@ -184,9 +184,9 @@ void StudyTreeView::buildActions()
   connect(newCopulaInferenceAnalysis_, SIGNAL(triggered()), this, SLOT(createNewCopulaInferenceAnalysis()));
 
   // new physical model actions
-  newAnalyticalPhysicalModel_ = new QAction(tr("New analytical physical model"), this);
-  newAnalyticalPhysicalModel_->setStatusTip(tr("Create a new analytical physical model"));
-  connect(newAnalyticalPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewAnalyticalPhysicalModel()));
+  newSymbolicPhysicalModel_ = new QAction(tr("New symbolic physical model"), this);
+  newSymbolicPhysicalModel_->setStatusTip(tr("Create a new symbolic physical model"));
+  connect(newSymbolicPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewSymbolicPhysicalModel()));
 
   newPythonPhysicalModel_ = new QAction(tr("New Python physical model"), this);
   newPythonPhysicalModel_->setStatusTip(tr("Create a new Python physical model"));
@@ -281,7 +281,7 @@ QList<QAction* > StudyTreeView::getActions(const QString & dataType)
 
   if (dataType == "OTStudy")
   {
-    actions.append(newAnalyticalPhysicalModel_);
+    actions.append(newSymbolicPhysicalModel_);
     actions.append(newPythonPhysicalModel_);
 #ifdef OTGUI_HAVE_YACS
     actions.append(newYACSPhysicalModel_);
@@ -468,11 +468,11 @@ void StudyTreeView::createNewDataAnalysis()
 }
 
 
-void StudyTreeView::createNewAnalyticalPhysicalModel()
+void StudyTreeView::createNewSymbolicPhysicalModel()
 {
   QModelIndex studyIndex = selectionModel()->currentIndex();
   OTStudyItem * studyItem = static_cast<OTStudyItem*>(treeViewModel_->itemFromIndex(studyIndex));
-  AnalyticalPhysicalModel newPhysicalModel(studyItem->getOTStudy().getAvailablePhysicalModelName());
+  SymbolicPhysicalModel newPhysicalModel(studyItem->getOTStudy().getAvailablePhysicalModelName());
   studyItem->getOTStudy().add(newPhysicalModel);
 }
 
@@ -557,7 +557,7 @@ void StudyTreeView::removeLimitState()
 void StudyTreeView::createNewOTStudyWindow(OTStudyItem* item)
 {
   OTStudyWindow * window = new OTStudyWindow(item);
-  connect(window, SIGNAL(createNewAnalyticalPhysicalModel()), this, SLOT(createNewAnalyticalPhysicalModel()));
+  connect(window, SIGNAL(createNewSymbolicPhysicalModel()), this, SLOT(createNewSymbolicPhysicalModel()));
   connect(window, SIGNAL(createNewPythonPhysicalModel()), this, SLOT(createNewPythonPhysicalModel()));
 #ifdef OTGUI_HAVE_YACS
   connect(window, SIGNAL(createNewYACSPhysicalModel()), this, SLOT(createNewYACSPhysicalModel()));
@@ -581,8 +581,8 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelItem * item)
 {
   OTguiSubWindow * window = 0;
   String physicalModelType = item->getPhysicalModel().getImplementation()->getClassName();
-  if (physicalModelType == "AnalyticalPhysicalModel")
-    window = new AnalyticalPhysicalModelWindow(item);
+  if (physicalModelType == "SymbolicPhysicalModel")
+    window = new SymbolicPhysicalModelWindow(item);
   else if (physicalModelType == "PythonPhysicalModel")
     window = new PythonPhysicalModelWindow(item);
   else if (physicalModelType == "MetaModel")

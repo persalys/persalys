@@ -54,13 +54,19 @@ PhysicalModel PhysicalModelItem::getPhysicalModel() const
 void PhysicalModelItem::update(Observable* source, const String & message)
 {
   if (message == "inputNameChanged" || message == "inputDescriptionChanged" ||
-      message == "inputAdded" || message == "inputRemoved" || message == "inputValueChanged")
+      message == "inputAdded" || message == "inputRemoved" || message == "inputValueChanged" ||
+      message == "inputStepChanged")
   {
     emit inputChanged();
   }
+  else if (message == "modelInputsChanged")
+  {
+    emit modelInputsChanged();
+    emit outputChanged();
+  }
   else if (message == "outputNameChanged" || message == "outputAdded" ||
            message == "outputRemoved" || message == "outputValueChanged" ||
-           message == "outputDescriptionChanged" || message == "modelInputsChanged")
+           message == "outputDescriptionChanged")
   {
     emit outputChanged();
   }

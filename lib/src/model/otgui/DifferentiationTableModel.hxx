@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItem, observer of a physical model
+ *  @brief QAbstractTableModel to define finite difference steps
  *
  *  Copyright 2015-2016 EDF-Phimeca
  *
@@ -18,38 +18,27 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_PHYSICALMODELITEM_HXX
-#define OTGUI_PHYSICALMODELITEM_HXX
+#ifndef OTGUI_DIFFERENTIATIONTABLEMODEL_HXX
+#define OTGUI_DIFFERENTIATIONTABLEMODEL_HXX
 
-#include "otgui/InputTableModel.hxx"
-#include "otgui/OutputTableModel.hxx"
 #include "otgui/PhysicalModel.hxx"
 
-#include <QStandardItem>
+#include <QAbstractTableModel>
 
 namespace OTGUI {
-class OTGUI_API PhysicalModelItem : public QObject, public QStandardItem, public Observer
+class OTGUI_API DifferentiationTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 
 public:
-  PhysicalModelItem(const PhysicalModel & physicalModel);
+  DifferentiationTableModel(const PhysicalModel& physicalModel, QObject* parent=0);
 
-  PhysicalModel getPhysicalModel() const;
-
-  void setData(const QVariant & value, int role);
-
-  virtual void update(Observable * source, const OT::String & message);
-
-public slots:
-signals:
-  void inputChanged();
-  void modelInputsChanged();
-  void outputChanged();
-  void codeChanged();
-  void physicalModelRemoved(QStandardItem*);
-  void parallelizeStatusChanged();
-  void wantedMachineChanged();
+  int columnCount(const QModelIndex& parent = QModelIndex()) const;
+  int rowCount(const QModelIndex& parent = QModelIndex()) const;
+  Qt::ItemFlags flags(const QModelIndex& index) const;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+  QVariant data(const QModelIndex& index, int role) const;
+  bool setData(const QModelIndex& index, const QVariant& value, int role);
 
 private:
   PhysicalModel physicalModel_;

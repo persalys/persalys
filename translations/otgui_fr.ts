@@ -16,14 +16,6 @@
     </message>
 </context>
 <context>
-    <name>OTGUI::AnalyticalPhysicalModelWindow</name>
-    <message>
-        <location filename="../lib/src/view/AnalyticalPhysicalModelWindow.cxx" line="34"/>
-        <source>Analytical physical model</source>
-        <translation>Modèle physique analytique</translation>
-    </message>
-</context>
-<context>
     <name>OTGUI::ApproximationReliabilityPage</name>
     <message>
         <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="42"/>
@@ -701,6 +693,19 @@ Début : %2.</translation>
     </message>
 </context>
 <context>
+    <name>OTGUI::DifferentiationTableModel</name>
+    <message>
+        <location filename="../lib/src/model/DifferentiationTableModel.cxx" line="60"/>
+        <source>Variable</source>
+        <translation>Variable</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DifferentiationTableModel.cxx" line="62"/>
+        <source>Step</source>
+        <translation>Pas</translation>
+    </message>
+</context>
+<context>
     <name>OTGUI::DistributionsForInferenceWidget</name>
     <message>
         <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="50"/>
@@ -1297,17 +1302,17 @@ Début : %2.</translation>
 <context>
     <name>OTGUI::InputTableProbabilisticModel</name>
     <message>
-        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="76"/>
+        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="77"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="78"/>
+        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="79"/>
         <source>Distribution</source>
         <translation>Distribution</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="171"/>
+        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="172"/>
         <source>Inference result</source>
         <translation>Résultat d&apos;inférence</translation>
     </message>
@@ -2041,8 +2046,8 @@ extremum</source>
     </message>
     <message>
         <location filename="../lib/src/view/OTStudyWindow.cxx" line="47"/>
-        <source>New analytical physical model</source>
-        <translation>Nouveau modèle physique analytique</translation>
+        <source>New symbolic physical model</source>
+        <translation>Nouveau modèle physique symbolique</translation>
     </message>
     <message>
         <location filename="../lib/src/view/OTStudyWindow.cxx" line="48"/>
@@ -2380,59 +2385,74 @@ extremum</source>
 <context>
     <name>OTGUI::PhysicalModelWindowWidget</name>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="61"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="67"/>
         <source>Inputs</source>
         <translation>Entrées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="74"/>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="111"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="80"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="117"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="75"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="81"/>
         <source>Add an input</source>
         <translation>Ajouter une entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="78"/>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="115"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="84"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="121"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="79"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="85"/>
         <source>Remove the selected input</source>
         <translation>Supprimer l&apos;entrée sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="93"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="99"/>
         <source>Outputs</source>
         <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="112"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="118"/>
         <source>Add an output</source>
         <translation>Ajouter une sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="116"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="122"/>
         <source>Remove the selected output</source>
         <translation>Supprimer la sortie sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="124"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="130"/>
         <source>Evaluate</source>
         <translation>Evaluer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="125"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="131"/>
         <source>Evaluate the value of the outputs</source>
         <translation>Evaluer les sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="258"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="145"/>
+        <source>Definition</source>
+        <translation>Définition</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="151"/>
+        <source>Finite difference step definition</source>
+        <translation>Définition du pas de différence finie</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="159"/>
+        <source>Differentiation</source>
+        <translation>Différenciation</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="295"/>
         <source>Not possible to evaluate the outputs</source>
         <translation>Impossible d&apos;évaluer les sorties</translation>
     </message>
@@ -3328,16 +3348,6 @@ extremum</source>
         <translation>Inférence des dépendances</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="187"/>
-        <source>New analytical physical model</source>
-        <translation>Nouveau modèle physique analytique</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="188"/>
-        <source>Create a new analytical physical model</source>
-        <translation>Créer un nouveau modèle physique analytique</translation>
-    </message>
-    <message>
         <location filename="../lib/src/view/StudyTreeView.cxx" line="191"/>
         <source>New Python physical model</source>
         <translation>Nouveau modèle physique Python</translation>
@@ -3461,6 +3471,16 @@ extremum</source>
         <location filename="../lib/src/view/StudyTreeView.cxx" line="252"/>
         <source>Evaluate</source>
         <translation>Evaluer</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="187"/>
+        <source>New symbolic physical model</source>
+        <translation>Nouveau modèle physique symbolique</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="188"/>
+        <source>Create a new symbolic physical model</source>
+        <translation>Créer un nouveau modèle physique symbolique</translation>
     </message>
     <message>
         <location filename="../lib/src/view/StudyTreeView.cxx" line="253"/>
@@ -3615,6 +3635,14 @@ Maybe objects are not opened.
         <location filename="../lib/src/view/StudyTreeView.cxx" line="1201"/>
         <source>Do you want to save the OTStudy &apos;%1&apos; [%2]?</source>
         <translation>Voulez-vous sauvegarder l&apos;étude &apos;%1&apos; [%2] ?</translation>
+    </message>
+</context>
+<context>
+    <name>OTGUI::SymbolicPhysicalModelWindow</name>
+    <message>
+        <location filename="../lib/src/view/SymbolicPhysicalModelWindow.cxx" line="34"/>
+        <source>Symbolic physical model</source>
+        <translation>Modèle physique symbolique</translation>
     </message>
 </context>
 <context>

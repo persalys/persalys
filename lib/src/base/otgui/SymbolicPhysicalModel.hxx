@@ -18,27 +18,27 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_ANALYTICALPHYSICALMODEL_HXX
-#define OTGUI_ANALYTICALPHYSICALMODEL_HXX
+#ifndef OTGUI_SYMBOLICPHYSICALMODEL_HXX
+#define OTGUI_SYMBOLICPHYSICALMODEL_HXX
 
 #include "PhysicalModelImplementation.hxx"
 
 namespace OTGUI {
-class OTGUI_API AnalyticalPhysicalModel : public PhysicalModelImplementation
+class OTGUI_API SymbolicPhysicalModel : public PhysicalModelImplementation
 {
   CLASSNAME;
 
 public:
   /** Default constructor */
-  AnalyticalPhysicalModel(const OT::String& name="Unnamed");
+  SymbolicPhysicalModel(const OT::String& name="Unnamed");
   /** Constructor with parameters */
-  AnalyticalPhysicalModel(const OT::String& name,
+  SymbolicPhysicalModel(const OT::String& name,
                           const InputCollection& inputs,
                           const OutputCollection& outputs,
                           const OT::Description& formulas);
 
   /** Virtual constructor */
-  virtual AnalyticalPhysicalModel * clone() const;
+  virtual SymbolicPhysicalModel * clone() const;
 
   virtual void addOutput(const Output& output);
   virtual void removeOutput(const OT::String& outputName);
@@ -51,8 +51,6 @@ public:
   OT::String getFormula(const OT::String& outputName) const;
   void setFormula(const OT::String& outputName, const OT::String& formula);
 
-  virtual OT::NumericalMathFunction getFunction() const;
-
   OT::String getPythonScript() const;
 
   /** String converter */
@@ -63,6 +61,9 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   virtual void load(OT::Advocate & adv);
+
+protected:
+  virtual OT::NumericalMathFunction generateFunction() const;
 
 private:
   std::map<OT::String, OT::String> formulaForEachOutput_;

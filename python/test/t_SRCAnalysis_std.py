@@ -8,15 +8,15 @@ from math import pi
 myStudy = otguibase.OTStudy('myStudy')
 
 ## Model
-x0 = otguibase.Input('x0', 0., '', ot.Normal())
-x1 = otguibase.Input('x1', 0., '', ot.Normal())
+x0 = otguibase.Input('x0', ot.Normal())
+x1 = otguibase.Input('x1', ot.Normal())
 y00 = otguibase.Output('fake_y0')
 y00.setIsSelected(False)
 y0 = otguibase.Output('y0')
 
 formula_y00 = 'x0'
 formula_y0 = '10+3*x0+x1'
-model = otguibase.AnalyticalPhysicalModel('aModel', [x0, x1], [y00, y0], [formula_y00, formula_y0])
+model = otguibase.SymbolicPhysicalModel('aModel', [x0, x1], [y00, y0], [formula_y00, formula_y0])
 myStudy.add(model)
 
 ## SRC ##

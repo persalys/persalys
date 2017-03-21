@@ -89,7 +89,7 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
 
   if (role == Qt::EditRole)
   {
-    Input input(physicalModel_.getInputs()[index.row()]);
+    const Input input(physicalModel_.getInputs()[index.row()]);
 
     switch (index.column())
     {
@@ -140,9 +140,7 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
 
 Qt::ItemFlags InputTableModel::flags(const QModelIndex & index) const
 {
-  if (index.column() == 0
-      && (physicalModel_.getImplementation()->getClassName() == "YACSPhysicalModel" ||
-          physicalModel_.getImplementation()->getClassName() == "MetaModel"))
+  if (index.column() == 0 && physicalModel_.getImplementation()->getClassName() != "SymbolicPhysicalModel")
     return QAbstractTableModel::flags(index);
   return Qt::ItemIsEditable | QAbstractTableModel::flags(index);
 }

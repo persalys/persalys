@@ -7,15 +7,13 @@ Parameters
 ----------
 name : str
     Name
-value : float
-    Default value (optional)
 description : str
     Description text (optional)
 
 Examples
 --------
 >>> import otguibase
->>> G = otguibase.Output('Ep', 0., 'deviation')"
+>>> G = otguibase.Output('G', 'deviation')"
 
 
 // ---------------------------------------------------------------------

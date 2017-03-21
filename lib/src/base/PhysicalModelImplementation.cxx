@@ -20,16 +20,18 @@
  */
 #include "otgui/PhysicalModelImplementation.hxx"
 
-#include "openturns/NormalCopula.hxx"
-#include "openturns/TruncatedDistribution.hxx"
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/NonCenteredFiniteDifferenceGradient.hxx>
+#include <openturns/CenteredFiniteDifferenceHessian.hxx>
+#include <openturns/NormalCopula.hxx>
+#include <openturns/TruncatedDistribution.hxx>
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
 namespace OTGUI {
 
-static Factory<PersistentCollection<Input> > RegisteredFactory_CollIn;
-static Factory<PersistentCollection<Output> > RegisteredFactory_CollOut;
+static Factory<PersistentCollection<Input> > Factory_PersistentCollectionInput;
+static Factory<PersistentCollection<Output> > Factory_PersistentCollectionOutput;
 
 /* Constructor with parameters */
 PhysicalModelImplementation::PhysicalModelImplementation(const String & name)
@@ -50,7 +52,12 @@ PhysicalModelImplementation::PhysicalModelImplementation(const String & name,
   , outputs_(outputs)
 {
   setName(name);
+
+  // set copula
   updateCopula();
+
+  // set finite difference step
+  updateFiniteDifferenceSteps();
 }
 
 
@@ -94,9 +101,17 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
     throw InvalidArgumentException(HERE) << "Two inputs can not have the same name."; 
 
   inputs_ = inputs;
+
+  // reset outputs values
   for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
     getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
+
+  // update copula
   updateCopula();
+
+  // update finite difference step
+  updateFiniteDifferenceSteps();
+
   notify("inputAdded");
   notify("modelInputsChanged");
 }
@@ -138,7 +153,7 @@ void PhysicalModelImplementation::setInputValue(const String & inputName, const 
 }
 
 
-void PhysicalModelImplementation::setInputDistribution(const String & inputName, const Distribution & distribution)
+void PhysicalModelImplementation::setDistribution(const String & inputName, const Distribution & distribution)
 {
   bool inputOldStateIsStochastic = getInputByName(inputName).isStochastic();
 
@@ -153,7 +168,7 @@ void PhysicalModelImplementation::setInputDistribution(const String & inputName,
 }
 
 
-void PhysicalModelImplementation::setInputDistributionParametersType(const OT::String & inputName, const OT::UnsignedInteger & distributionParametersType)
+void PhysicalModelImplementation::setDistributionParametersType(const OT::String & inputName, const OT::UnsignedInteger & distributionParametersType)
 {
   getInputByName(inputName).setDistributionParametersType(distributionParametersType);
 }
@@ -165,13 +180,31 @@ void PhysicalModelImplementation::addInput(const Input & input)
     throw InvalidArgumentException(HERE) << "The physical model already contains an input named " << input.getName(); 
 
   inputs_.add(input);
+
+  // update copula
   if (input.isStochastic())
     updateCopula();
+
+  // reset outputs values
   for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
     getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
 
+  // update finite difference step
+  updateFiniteDifferenceSteps();
+
   notify("inputAdded");
   notify("modelInputsChanged");
+}
+
+
+void PhysicalModelImplementation::setFiniteDifferenceStep(const String& inputName, const double& step)
+{
+  getInputByName(inputName).setFiniteDifferenceStep(step);
+
+  // update finite difference step
+  updateFiniteDifferenceSteps();
+
+  notify("inputStepChanged");
 }
 
 
@@ -180,6 +213,7 @@ void PhysicalModelImplementation::removeInput(const String & inputName)
   if (hasInputNamed(inputName))
   {
     for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
+    {
       if (inputs_[i].getName() == inputName)
       {
         bool inputIsStochastic = inputs_[i].isStochastic();
@@ -193,6 +227,9 @@ void PhysicalModelImplementation::removeInput(const String & inputName)
         notify("modelInputsChanged");
         break;
       }
+    }
+    // update finite difference step
+    updateFiniteDifferenceSteps();
   }
   else
     throw InvalidArgumentException(HERE) << "The given input name " << inputName <<" does not correspond to an input of the physical model.\n";
@@ -223,8 +260,8 @@ void PhysicalModelImplementation::updateCopula()
           it2 = std::find(stochasticInputNames.begin(), stochasticInputNames.end(), oldStochasticInputNames[col]);
           if (it1 != stochasticInputNames.end() &&  it2 != stochasticInputNames.end())
           {
-            UnsignedInteger newRow = it1 - stochasticInputNames.begin();
-            UnsignedInteger newCol = it2 - stochasticInputNames.begin();
+            const UnsignedInteger newRow = it1 - stochasticInputNames.begin();
+            const UnsignedInteger newCol = it2 - stochasticInputNames.begin();
             newSpearmanCorrelation(newRow, newCol) = oldSpearmanCorrelation(row, col);
             newSpearmanCorrelation(newCol, newRow) = oldSpearmanCorrelation(row, col);
           }
@@ -242,6 +279,23 @@ Description PhysicalModelImplementation::getInputNames() const
   for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
     inputNames[i] = inputs_[i].getName();
   return inputNames;
+}
+
+
+void PhysicalModelImplementation::updateFiniteDifferenceSteps() const
+{
+  finiteDifferenceSteps_ = NumericalPoint(getInputs().getSize());
+  for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
+    finiteDifferenceSteps_[i] = getInputs()[i].getFiniteDifferenceStep();
+}
+
+
+NumericalPoint PhysicalModelImplementation::getFiniteDifferenceSteps() const
+{
+  if (finiteDifferenceSteps_.getSize() != inputs_.getSize())
+    updateFiniteDifferenceSteps();
+
+  return finiteDifferenceSteps_;
 }
 
 
@@ -434,17 +488,18 @@ RandomVector PhysicalModelImplementation::getOutputRandomVector(const Descriptio
 }
 
 
-NumericalMathFunction PhysicalModelImplementation::getFunction() const
+NumericalMathFunction PhysicalModelImplementation::generateFunction() const
 {
-  throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getFunction()";
+  throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::generateFunction()";
 }
 
 
-NumericalMathFunction PhysicalModelImplementation::getFunction(const Description & outputNames) const
+NumericalMathFunction PhysicalModelImplementation::generateFunction(const Description& outputNames) const
 {
   if (outputNames.getSize() == getOutputs().getSize())
-    return getFunction();
+    return generateFunction();
 
+  // search interest outputs indices
   Indices indices;
   for (UnsignedInteger i=0; i<outputNames.getSize(); ++i)
     for (UnsignedInteger j=0; j<getOutputs().getSize(); ++j)
@@ -456,21 +511,45 @@ NumericalMathFunction PhysicalModelImplementation::getFunction(const Description
 
   try
   {
-    return getFunction().getMarginal(indices);
+    return generateFunction().getMarginal(indices);
   }
   catch (std::exception & ex)
   {
-    Log::Error(OSS() << "Error in PhysicalModelImplementation::getFunction(const Description & outputNames) ");
+    Log::Error(OSS() << "Error in PhysicalModelImplementation::generateFunction(const Description& outputNames) ");
     throw PhysicalModelNotValidException(HERE) << ex.what();
   }
 }
 
 
+NumericalMathFunction PhysicalModelImplementation::getFunction() const
+{
+  return getFunction(getOutputNames());
+}
+
+
+NumericalMathFunction PhysicalModelImplementation::getFunction(const Description& outputNames) const
+{
+  NumericalMathFunction function(generateFunction(outputNames));
+
+  if (function.getUseDefaultGradientImplementation())
+  {
+    // use finite difference gradient
+    NonCenteredFiniteDifferenceGradient gradient(getFiniteDifferenceSteps(), function.getEvaluation());
+    function.setGradient(gradient);
+  }
+  if (function.getUseDefaultHessianImplementation())
+  {
+    // use finite difference hessian
+    CenteredFiniteDifferenceHessian hessian(getFiniteDifferenceSteps(), function.getEvaluation());
+    function.setHessian(hessian);
+  }
+  return function;
+}
+
+
 NumericalMathFunction PhysicalModelImplementation::getFunction(const String & outputName) const
 {
-  Description outputNameDescription(1);
-  outputNameDescription[0] = outputName;
-  return getFunction(outputNameDescription);
+  return getFunction(Description(1, outputName));
 }
 
 
@@ -479,6 +558,13 @@ NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction() const
   if (getInputs().getSize() == getStochasticInputNames().getSize())
     return getFunction();
 
+  return getRestrictedFunction(getOutputNames());
+}
+
+
+NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction(const Description& outputNames) const
+{
+  // search deterministic inputs
   Indices deterministicInputsIndices;
   NumericalPoint inputsValues;
   for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
@@ -489,36 +575,14 @@ NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction() const
       inputsValues.add(getInputs()[i].getValue());
     }
   }
+  // if there is no deterministic inputs
+  if (!deterministicInputsIndices.getSize())
+    return getFunction(outputNames);
+
+  // if there are deterministic inputs
   try
   {
-    NumericalMathFunction restricted(getFunction(), deterministicInputsIndices, inputsValues);
-    return restricted;
-  }
-  catch (std::exception & ex)
-  {
-    Log::Error(OSS() << "Error in PhysicalModelImplementation::getRestrictedFunction()");
-    throw PhysicalModelNotValidException(HERE) << ex.what();
-  }
-}
-
-
-NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction(const Description & outputNames) const
-{
-  if (outputNames.getSize() == getOutputs().getSize())
-    return getRestrictedFunction();
-
-  Indices indices;
-  for (UnsignedInteger i=0; i<outputNames.getSize(); ++i)
-    for (UnsignedInteger j=0; j<getOutputs().getSize(); ++j)
-      if (getOutputs()[j].getName() == outputNames[i])
-      {
-        indices.add(j);
-        break;
-      }
-
-  try
-  {
-    NumericalMathFunction restricted(getRestrictedFunction().getMarginal(indices));
+    NumericalMathFunction restricted(getFunction(outputNames), deterministicInputsIndices, inputsValues);
     return restricted;
   }
   catch (std::exception & ex)
@@ -584,7 +648,7 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
       }
       else
       {
-        TruncatedDistribution truncatedDistribution = *dynamic_cast<TruncatedDistribution*>(&*distribution.getImplementation());
+        TruncatedDistribution truncatedDistribution = *dynamic_cast<TruncatedDistribution*>(distribution.getImplementation().get());
         distribution = truncatedDistribution.getDistribution();
         oss << "dist_" << inputName << " = ot." << distribution.getImplementation()->getClassName() << "(";
         NumericalPointWithDescription parameters = distribution.getParametersCollection()[0];
@@ -610,7 +674,7 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
       }
 
       result += oss.str();
-      result += getName() + ".setInputDistribution('" + inputName + "', ";
+      result += getName() + ".setDistribution('" + inputName + "', ";
       result += " dist_" + inputName + ")\n";
     }
   }

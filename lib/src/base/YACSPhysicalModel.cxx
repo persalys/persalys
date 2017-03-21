@@ -20,7 +20,7 @@
  */
 #include "otgui/YACSPhysicalModel.hxx"
 
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(YACSPhysicalModel);
 
-static Factory<YACSPhysicalModel> RegisteredFactory;
+static Factory<YACSPhysicalModel> Factory_YACSPhysicalModel;
 
 /* Default constructor */
 YACSPhysicalModel::YACSPhysicalModel(const String & name)
@@ -170,24 +170,17 @@ void YACSPhysicalModel::updateData()
 }
 
 
-NumericalMathFunction YACSPhysicalModel::getFunction(const Description & outputNames) const
+NumericalMathFunction YACSPhysicalModel::generateFunction(const Description& outputNames) const
 {
-  if (outputNames == getOutputNames())
-    return getFunction();
-
   YACSEvaluation anEvaluation(evaluation_);
   anEvaluation.setOutputVariablesNames(outputNames);
+
   return NumericalMathFunction(anEvaluation);
 }
 
 
-NumericalMathFunction YACSPhysicalModel::getFunction() const
+NumericalMathFunction YACSPhysicalModel::generateFunction() const
 {
-  if (!getInputs().getSize())
-    throw PhysicalModelNotValidException(HERE) << "The physical model has no inputs.";
-  if (!getOutputs().getSize())
-    throw PhysicalModelNotValidException(HERE) << "The physical model has no outputs.";
-
   return NumericalMathFunction(evaluation_);
 }
 

@@ -8,9 +8,9 @@ import otguibase
 myStudy = otguibase.OTStudy('myStudy')
 
 ## Model
-R = otguibase.Input('R', 0., 'Yield strength', ot.LogNormalMuSigma(300., 30.).getDistribution())
-F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))
-G = otguibase.Output('G', 0., 'deviation')
+R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30.).getDistribution(), 'Yield strength')
+F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+G = otguibase.Output('G', 'deviation')
 
 model = otguibase.PythonPhysicalModel('myPhysicalModel')
 model.addInput(R)

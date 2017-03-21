@@ -9,18 +9,18 @@ import otguibase
 myStudy = otguibase.OTStudy('myStudy')
 otguibase.OTStudy.Add(myStudy)
 dist_E = ot.Beta(0.93, 3.2, 2.8e+07, 4.8e+07)
-E = otguibase.Input('E', 3e+07, 'Young s modulus', dist_E)
+E = otguibase.Input('E', 3e+07, dist_E, 'Young s modulus')
 dist_F = ot.LogNormal(9.46206, 0.554513, 15000)
-F = otguibase.Input('F', 30000, 'Charge applied', dist_F)
+F = otguibase.Input('F', 30000, dist_F, 'Charge applied')
 dist_L = ot.Uniform(250, 260)
-L = otguibase.Input('L', 250, 'Length', dist_L)
+L = otguibase.Input('L', 250, dist_L, 'Length')
 dist_I = ot.Beta(2.5, 4, 310, 450)
-I = otguibase.Input('I', 400, 'Section modulus', dist_I)
-y = otguibase.Output('y', 0, 'deviation')
+I = otguibase.Input('I', 400, dist_I, 'Section modulus')
+y = otguibase.Output('y', 'deviation')
 inputs = [E, F, L, I]
 outputs = [y]
 formulas = ['F*L^3/(3*E*I)']
-myPhysicalModel = otguibase.AnalyticalPhysicalModel('myPhysicalModel', inputs, outputs, formulas)
+myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', inputs, outputs, formulas)
 correlationMatrix = ot.CorrelationMatrix(4)
 correlationMatrix[2, 3] = -0.2
 copula = ot.NormalCopula(ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(correlationMatrix))

@@ -10,8 +10,8 @@ ot.RandomGenerator.SetSeed(0)
 myStudy = otguibase.OTStudy('myStudy')
 
 ## Model
-xi1 = otguibase.Input('xi1', 0., '', ot.Uniform(0., 10.))
-xi2 = otguibase.Input('xi2', 0., '', ot.Uniform(0., 10.))
+xi1 = otguibase.Input('xi1', ot.Uniform(0., 10.))
+xi2 = otguibase.Input('xi2', ot.Uniform(0., 10.))
 y00 = otguibase.Output('fake_y0')
 y00.setIsSelected(False)
 y0 = otguibase.Output('y0')
@@ -20,7 +20,7 @@ y1 = otguibase.Output('y1')
 formula_y00 = "xi1"
 formula_y0 = "cos(0.5*xi1) + sin(xi2)"
 formula_y1 = "cos(0.5*xi1) + sin(xi2) + 0.5"
-model = otguibase.AnalyticalPhysicalModel('model', [xi1, xi2], [y00, y0, y1], [formula_y00, formula_y0, formula_y1])
+model = otguibase.SymbolicPhysicalModel('model', [xi1, xi2], [y00, y0, y1], [formula_y00, formula_y0, formula_y1])
 myStudy.add(model)
 
 ## Design of Experiment ##

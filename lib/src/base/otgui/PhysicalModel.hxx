@@ -26,8 +26,6 @@
 namespace OTGUI {
 class OTGUI_API PhysicalModel : public OT::TypedInterfaceObject<PhysicalModelImplementation>
 {
-  CLASSNAME;
-
 public:
   typedef OT::Pointer<PhysicalModelImplementation> Implementation;
 
@@ -53,8 +51,9 @@ public:
   void setInputName(const OT::String & inputName, const OT::String & newName);
   void setInputDescription(const OT::String & inputName, const OT::String & description);
   void setInputValue(const OT::String & inputName, const double & value);
-  void setInputDistribution(const OT::String & inputName, const OT::Distribution & distribution);
-  void setInputDistributionParametersType(const OT::String & inputName, const OT::UnsignedInteger & distributionParametersType);
+  void setDistribution(const OT::String & inputName, const OT::Distribution & distribution);
+  void setDistributionParametersType(const OT::String & inputName, const OT::UnsignedInteger & distributionParametersType);
+  void setFiniteDifferenceStep(const OT::String& inputName, const double& step);
   void addInput(const Input & input);
   void removeInput(const OT::String & inputName);
   OT::Description getInputNames() const;

@@ -22,7 +22,7 @@
 #ifndef OTGUI_OTGUI_HXX
 #define OTGUI_OTGUI_HXX
 
-#include "otgui/AnalyticalPhysicalModel.hxx"
+#include "otgui/SymbolicPhysicalModel.hxx"
 #include "otgui/PythonPhysicalModel.hxx"
 #include "otgui/OTStudy.hxx"
 #include "otgui/PythonEnvironment.hxx"

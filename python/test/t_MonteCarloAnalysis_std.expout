@@ -1556,18 +1556,18 @@ import otguibase
 myStudy = otguibase.OTStudy('myStudy')
 otguibase.OTStudy.Add(myStudy)
 dist_X0 = ot.Normal(1, 1)
-X0 = otguibase.Input('X0', 1, '', dist_X0)
+X0 = otguibase.Input('X0', 0, dist_X0, '')
 dist_X1 = ot.Normal(1, 1)
-X1 = otguibase.Input('X1', 2, '', dist_X1)
+X1 = otguibase.Input('X1', 0, dist_X1, '')
 X2 = otguibase.Input('X2', 2, '')
-fake_Y0 = otguibase.Output('fake_Y0', 0, '')
+fake_Y0 = otguibase.Output('fake_Y0', '')
 fake_Y0.setIsSelected(False)
-Y0 = otguibase.Output('Y0', 0, '')
-Y1 = otguibase.Output('Y1', 0, '')
+Y0 = otguibase.Output('Y0', '')
+Y1 = otguibase.Output('Y1', '')
 inputs = [X0, X1, X2]
 outputs = [fake_Y0, Y0, Y1]
 formulas = ['X0', 'sin(X0) + 8*X1', 'sin(X0) + 8*X1 + X2']
-aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys', inputs, outputs, formulas)
+aModelPhys = otguibase.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
 myStudy.add(aModelPhys)
 myMonteCarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', aModelPhys)
 interestVariables = ['Y0']

@@ -23,8 +23,7 @@
 
 #include "Variable.hxx"
 
-#include "openturns/Distribution.hxx"
-#include "openturns/DiracFactory.hxx"
+#include <openturns/Distribution.hxx>
 
 namespace OTGUI {
 class OTGUI_API Input : public Variable
@@ -35,8 +34,13 @@ public:
   /** Default constructor */
   Input();
   /** Constructor with parameters */
-  Input(const OT::String & name, const double & value=0., const OT::String & description="",
-        const OT::Distribution & distribution=OT::Dirac());
+  Input(const OT::String& name);
+  /** Constructor with parameters */
+  Input(const OT::String& name, const double& value, const OT::Distribution& distribution, const OT::String& description="");
+  /** Constructor with parameters */
+  Input(const OT::String& name, const OT::Distribution& distribution, const OT::String& description="");
+  /** Constructor with parameters */
+  Input(const OT::String& name, const double& value, const OT::String& description="");
 
   /** Virtual constructor */
   virtual Input * clone() const;
@@ -46,6 +50,9 @@ public:
 
   OT::UnsignedInteger getDistributionParametersType() const;
   void setDistributionParametersType(const OT::UnsignedInteger & distributionParametersType);
+
+  double getFiniteDifferenceStep() const;
+  void setFiniteDifferenceStep(const double& step);
 
   bool isStochastic() const;
 
@@ -66,6 +73,7 @@ protected:
 private:
   OT::Distribution distribution_;
   OT::UnsignedInteger distributionParametersType_;
+  double finiteDifferenceStep_;
 };
 typedef OT::Collection<Input> InputCollection;
 }

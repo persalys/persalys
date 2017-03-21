@@ -61,9 +61,6 @@ public:
   OT::String getWantedMachine() const;
   void setWantedMachine(const OT::String & machine);
 
-  OT::NumericalMathFunction getFunction(const OT::Description & outputNames) const;
-  OT::NumericalMathFunction getFunction() const;
-
   OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */
@@ -74,6 +71,8 @@ public:
 
 protected:
   void updateData();
+  virtual OT::NumericalMathFunction generateFunction() const;
+  virtual OT::NumericalMathFunction generateFunction(const OT::Description& outputNames) const;
 
 private:
   YACSEvaluation evaluation_;

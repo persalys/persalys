@@ -21,7 +21,7 @@
 #include "otgui/PythonPhysicalModel.hxx"
 #include "otgui/PythonEvaluation.hxx"
 
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
@@ -29,7 +29,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(PythonPhysicalModel);
 
-static Factory<PythonPhysicalModel> RegisteredFactory;
+static Factory<PythonPhysicalModel> Factory_PythonPhysicalModel;
 
 /* Default constructor */
 PythonPhysicalModel::PythonPhysicalModel(const String & name)
@@ -70,15 +70,11 @@ String PythonPhysicalModel::getCode() const
 }
 
 
-NumericalMathFunction PythonPhysicalModel::getFunction() const
+NumericalMathFunction PythonPhysicalModel::generateFunction() const
 {
-  if (!getInputs().getSize())
-    throw PhysicalModelNotValidException(HERE) << "The physical model has no inputs.";
-  if (!getOutputs().getSize())
-    throw PhysicalModelNotValidException(HERE) << "The physical model has no outputs.";
-
   NumericalMathFunction function(PythonEvaluation(getInputs().getSize(), getOutputs().getSize(), getCode()));
   function.enableCache();
+
   return function;
 }
 

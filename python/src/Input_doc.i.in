@@ -8,17 +8,19 @@ Parameters
 name : str
     Name
 value : float
-    Default value (optional)
+    Default value
+distribution : :py:class:`~openturns.Distribution`
+    Associated distribution
 description : str
     Description text (optional)
-distribution : :py:class:`~openturns.Distribution`
-    Associated distribution (optional)
 
 Examples
 --------
 >>> import openturns as ot
 >>> import otguibase
->>> F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))"
+>>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> R = otguibase.Input('R', ot.Normal(75000., 5000.))
+>>> S = otguibase.Input('S', 10.5)"
 
 // ---------------------------------------------------------------------
 
@@ -59,6 +61,26 @@ Returns
 -------
 parametersType : int
     Distribution parameters index"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Input::setFiniteDifferenceStep
+"Finite difference step accessor.
+
+Parameters
+----------
+step : float
+    Finite difference step used to define the gradient of the model's function"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::Input::getFiniteDifferenceStep
+"Finite difference step accessor.
+
+Returns
+-------
+step : float
+    Finite difference step used to define the gradient of the model's function"
 
 // ---------------------------------------------------------------------
 

@@ -24,9 +24,9 @@ Examples
 
 Create the model:
 
->>> R = otguibase.Input('R', 0., 'Yield strength', ot.LogNormalMuSigma(300., 30.).getDistribution())
->>> F = otguibase.Input('F', 0., 'Traction load', ot.Normal(75000., 5000.))
->>> G = otguibase.Output('G', 0., 'deviation')
+>>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
+>>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> G = otguibase.Output('G', 'deviation')
 >>> code = 'from math import pi\n\ndef _exec(R, F):\n    G = R-F/(pi*100.0)\n    return [G]\n'
 >>> model = otguibase.PythonPhysicalModel('myPhysicalModel', [R, F], [G], code)"
 

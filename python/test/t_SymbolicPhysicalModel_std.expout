@@ -1,0 +1,56 @@
+class=SymbolicPhysicalModel inputs=[class=Input name=X0 value=1 description=aDescription distribution=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] finiteDifferenceStep=1e-07,class=Input name=X1 value=2 description= distribution=class=Dirac name=Dirac dimension=1 point=class=NumericalPoint name=Unnamed dimension=1 values=[0] finiteDifferenceStep=1e-07] outputs=[class=Output name=Y0 description=output_1] copula=class=NormalCopula name=NormalCopula dimension=1 correlation=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] formulas=[sin(X0)+8*X1]
+function= [X0,X1]->[sin(X0)+8*X1]
+formulas= [sin(X0)+8*X1]
+formula_Y0= sin(X0)+8*X1
+stochastic var= [X0]
+distribution= ComposedDistribution(Normal(mu = 0, sigma = 1))
+copula= NormalCopula(R = [[ 1 ]])
+output_YO= class=Output name=Y0 description=output_1
+input_XO= class=Input name=X0 value=1 description=aDescription distribution=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] finiteDifferenceStep=1e-07
+inputs names= [X0,X1]
+outputs names= [Y0]
+hasY0 True
+hasX0 True
+inputs= [class=Input name=X0 value=1 description=aDescription distribution=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] finiteDifferenceStep=1e-07,class=Input name=X1 value=2 description= distribution=class=LogNormal name=LogNormal dimension=1 muLog=0 sigmaLog=1 gamma=0 finiteDifferenceStep=1e-05]
+stochastic var= [X0,X1]
+distribution= ComposedDistribution(Normal(mu = 0, sigma = 1), LogNormal(muLog = 0, sigmaLog = 1, gamma = 0), NormalCopula(R = [[ 1    0.25 ]
+ [ 0.25 1    ]]))
+copula= NormalCopula(R = [[ 1    0.25 ]
+ [ 0.25 1    ]])
+outputs= [class=Output name=Y0 description=output_1]
+inputs= [class=Input name=X0 value=1 description=aDescription distribution=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] finiteDifferenceStep=1e-07,class=Input name=X1 value=2 description= distribution=class=LogNormal name=LogNormal dimension=1 muLog=0 sigmaLog=1 gamma=0 finiteDifferenceStep=1e-05,class=Input name=X_2 value=10 description= distribution=class=Dirac name=Dirac dimension=1 point=class=NumericalPoint name=Unnamed dimension=1 values=[0] finiteDifferenceStep=1e-07]
+copula= NormalCopula(R = [[ 1    0.25 ]
+ [ 0.25 1    ]])
+stochastic var= [X0,X1,X4,X5]
+distribution= ComposedDistribution(Normal(mu = 0, sigma = 1), LogNormal(muLog = 0, sigmaLog = 1, gamma = 0), Normal(mu = 0, sigma = 1), Normal(mu = 0, sigma = 1), NormalCopula(R = [[ 1    0.25 0    0    ]
+ [ 0.25 1    0    0    ]
+ [ 0    0    1    0    ]
+ [ 0    0    0    1    ]]))
+copula= NormalCopula(R = [[ 1    0.25 0    0    ]
+ [ 0.25 1    0    0    ]
+ [ 0    0    1    0    ]
+ [ 0    0    0    1    ]])
+formula_Y1= sin(X0)+8*X1+X2
+outputs= [class=Output name=Y0 description=output_1,class=Output name=Y_1 description=]
+selected outputs= [Y0]
+inputs= [class=Input name=X0 value=1 description=aDescription distribution=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] finiteDifferenceStep=1e-07,class=Input name=X1 value=2 description= distribution=class=LogNormal name=LogNormal dimension=1 muLog=0 sigmaLog=1 gamma=0 finiteDifferenceStep=1e-05,class=Input name=X4 value=0 description= distribution=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] finiteDifferenceStep=1e-07,class=Input name=X5 value=0 description=aDescription distribution=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] finiteDifferenceStep=1e-07]
+outputs= [class=Output name=Y0 description=output_1]
+script= dist_X0 = ot.Normal(0, 1)
+X0 = otguibase.Input('X0', 1, dist_X0, 'aDescription')
+dist_X1 = ot.LogNormal(0, 1, 0)
+X1 = otguibase.Input('X1', 2, dist_X1, '')
+X1.setFiniteDifferenceStep(1e-05)
+dist_X4 = ot.Normal(0, 1)
+X4 = otguibase.Input('X4', 0, dist_X4, '')
+dist_X5 = ot.Normal(0, 1)
+X5 = otguibase.Input('X5', 0, dist_X5, 'aDescription')
+Y0 = otguibase.Output('Y0', 'output_1')
+inputs = [X0, X1, X4, X5]
+outputs = [Y0]
+formulas = ['sin(X0)+8*X1+0.5']
+aModelPhys = otguibase.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
+correlationMatrix = ot.CorrelationMatrix(4)
+correlationMatrix[0, 1] = 0.239359
+copula = ot.NormalCopula(ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(correlationMatrix))
+aModelPhys.setCopula(copula)
+

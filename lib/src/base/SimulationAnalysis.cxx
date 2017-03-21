@@ -27,7 +27,7 @@ namespace OTGUI {
 /* Default constructor */
 SimulationAnalysis::SimulationAnalysis()
   : PhysicalModelAnalysis()
-  , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
+  , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
 }
 
@@ -35,7 +35,7 @@ SimulationAnalysis::SimulationAnalysis()
 /* Constructor with parameters */
 SimulationAnalysis::SimulationAnalysis(const String & name, const PhysicalModel & physicalModel)
   : PhysicalModelAnalysis(name, physicalModel)
-  , seed_(ResourceMap::GetAsNumericalScalar("RandomGenerator-InitialSeed"))
+  , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
 }
 
@@ -48,26 +48,16 @@ NumericalSample SimulationAnalysis::generateInputSample(const UnsignedInteger nb
 }
 
 
-NumericalSample SimulationAnalysis::computeOutputSample(NumericalSample inputSample) const
+NumericalSample SimulationAnalysis::computeOutputSample(const NumericalSample& inputSample) const
 {
   NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(getInterestVariables())(inputSample));
-//   outputSample.setDescription(getInterestVariables());
   return outputSample;
 }
 
 
-NumericalSample SimulationAnalysis::computeOutputSample(NumericalPoint inputValues) const
+NumericalSample SimulationAnalysis::computeOutputSample(const NumericalPoint& inputValues) const
 {
-  NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(getInterestVariables())(NumericalSample(1, inputValues)));
-  return outputSample;
-}
-
-
-NumericalSample SimulationAnalysis::computeOutputSample(NumericalSample inputSample, const Description & outputNames) const
-{
-  NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(outputNames)(inputSample));
-//   outputSample.setDescription(outputNames);
-  return outputSample;
+  return computeOutputSample(NumericalSample(1, inputValues));
 }
 
 

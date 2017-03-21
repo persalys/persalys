@@ -21,7 +21,7 @@
 #include "otgui/StudyTreeViewModel.hxx"
 
 #include "otgui/OTStudy.hxx"
-#include "otgui/AnalyticalPhysicalModel.hxx"
+#include "otgui/SymbolicPhysicalModel.hxx"
 
 using namespace OT;
 

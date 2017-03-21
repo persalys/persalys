@@ -24,6 +24,7 @@
 #include "otgui/PhysicalModelItem.hxx"
 #include "otgui/CopyableTableView.hxx"
 #include "otgui/CheckableHeaderView.hxx"
+#include "otgui/DifferentiationTableModel.hxx"
 
 #include <QGroupBox>
 #include <QPushButton>
@@ -32,7 +33,7 @@
 
 namespace OTGUI {
   
-class OTGUI_API PhysicalModelWindowWidget : public QWidget
+class OTGUI_API PhysicalModelWindowWidget : public QTabWidget
 {
   Q_OBJECT
 
@@ -49,6 +50,7 @@ public slots:
   void removeOutputLine();
   void evaluateOutputs();
   void updateInputTableModel();
+  void updateDifferentiationTableModel();
   void updateOutputTableModel();
 
 signals:
@@ -60,6 +62,8 @@ private:
   InputTableModel * inputTableModel_;
   QPushButton * addInputLineButton_;
   QPushButton * removeInputLineButton_;
+  CopyableTableView * differentiationTableView_;
+  DifferentiationTableModel * differentiationTableModel_;
   CopyableTableView * outputTableView_;
   CheckableHeaderView * outputTableHeaderView_;
   OutputTableModel * outputTableModel_;

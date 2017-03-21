@@ -25,11 +25,11 @@ anOTStudy = otguibase.OTStudy('anOTStudy')
 otguibase.OTStudy.Add(anOTStudy)
 X0 = otguibase.Input('X0', 1, '')
 X1 = otguibase.Input('X1', 2, '')
-Y0 = otguibase.Output('Y0', 0, '')
+Y0 = otguibase.Output('Y0', '')
 inputs = [X0, X1]
 outputs = [Y0]
 formulas = ['sin(X0)+8*X1']
-aModelPhys = otguibase.AnalyticalPhysicalModel('aModelPhys', inputs, outputs, formulas)
+aModelPhys = otguibase.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
 anOTStudy.add(aModelPhys)
 values = [1, 2]
 lowerBounds = [0.9, 1.8]
