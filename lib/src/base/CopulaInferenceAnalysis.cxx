@@ -24,6 +24,8 @@
 #include "otgui/CopulaInferenceSetResult.hxx"
 
 #include <openturns/NormalCopulaFactory.hxx>
+#include <openturns/Combinations.hxx>
+#include <openturns/VisualTest.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
@@ -32,8 +34,8 @@ namespace OTGUI {
 
 CLASSNAMEINIT(CopulaInferenceAnalysis);
 
-static Factory<CopulaInferenceAnalysis> RegisteredFactory;
-static Factory<PersistentCollection<Description> > RegisteredFactory_CollDesc;
+static Factory<CopulaInferenceAnalysis> Factory_CopulaInferenceAnalysis;
+static Factory<PersistentCollection<Description> > Factory_CollectionDescription;
 
 /* Default constructor */
 CopulaInferenceAnalysis::CopulaInferenceAnalysis()
@@ -112,6 +114,8 @@ void CopulaInferenceAnalysis::run()
     initialize();
     result_ = CopulaInferenceResult();
 
+    const UnsignedInteger sizeKendall = 100;
+
     // inference
     std::map<Description, DistributionFactoryCollection>::iterator it;
     for (it=distFactoriesForSetVar_.begin(); it!=distFactoriesForSetVar_.end(); ++it)
@@ -139,12 +143,30 @@ void CopulaInferenceAnalysis::run()
       CopulaInferenceSetResult inferenceSetResult;
       inferenceSetResult.setOfVariablesNames_ = it->first;
 
+      CombinatorialGeneratorImplementation::IndicesCollection pairs(Combinations(2, it->first.getSize()).generate());
+
+      NumericalSample splitSample(sample);
+      if (sample.getSize() > sizeKendall)
+        NumericalSample otherSample = splitSample.split(sizeKendall);
+
       for (UnsignedInteger i=0; i<it->second.getSize(); ++i)
       {
         try
         {
           Distribution distribution(it->second[i].build(sample));
           inferenceSetResult.testedDistributions_.add(distribution);
+
+          Description description(2);
+          Collection<NumericalSample> kendallPlotDataCollection;
+          for (UnsignedInteger j=0; j<pairs.getSize(); ++j)
+          {
+            Graph graph = VisualTest::DrawKendallPlot(splitSample.getMarginal(pairs[j]), distribution.getMarginal(pairs[j]));
+            NumericalSample kendallPlotData(graph.getDrawable(1).getData());
+            description[0] = sample.getDescription()[pairs[j][0]] + " - " + sample.getDescription()[pairs[j][1]];
+            kendallPlotData.setDescription(description);
+            kendallPlotDataCollection.add(kendallPlotData);
+          }
+          inferenceSetResult.kendallPlotData_.add(kendallPlotDataCollection);
         }
         catch (std::exception & ex)
         {

@@ -102,7 +102,7 @@ void CopulaInferenceResultWidget::buildInterface()
   ResizableStackedWidget * paramStackWidget = new ResizableStackedWidget;
   for (UnsignedInteger i=0; i<currentSetResult_.getTestedDistributions().getSize(); ++i)
   {
-    CopulaParametersTabWidget * paramWidget = new CopulaParametersTabWidget(currentSetResult_.getTestedDistributions()[i], sample_);
+    CopulaParametersTabWidget * paramWidget = new CopulaParametersTabWidget(currentSetResult_.getTestedDistributions()[i], sample_, currentSetResult_.getKendallPlotData()[i]);
     paramStackWidget->addWidget(paramWidget);
 
     connect(this, SIGNAL(stateChanged()), paramWidget, SLOT(stateChanged()));
@@ -111,7 +111,7 @@ void CopulaInferenceResultWidget::buildInterface()
   }
   connect(this, SIGNAL(distributionChanged(int)), paramStackWidget, SLOT(setCurrentIndex(int)));
 
-  distTabListWidgetLayout->addWidget(paramStackWidget);
+  distTabListWidgetLayout->addWidget(paramStackWidget, 1);
 
   scrollArea->setWidget(distTabListWidget);
   mainLayout->addWidget(scrollArea);

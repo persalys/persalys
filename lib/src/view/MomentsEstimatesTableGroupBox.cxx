@@ -43,13 +43,19 @@ MomentsEstimatesTableGroupBox::MomentsEstimatesTableGroupBox(const DataAnalysisR
 
   // we want to display output results before the input results
   // input indices
+  if (!result.getInputSample().getSize())
+    throw InvalidArgumentException(HERE) << "MomentsEstimatesTableGroupBox: no result";
   Indices inInd(result.getInputSample().getDimension());
   inInd.fill();
   // ouput indices
-  Indices ind(result.getOutputSample().getDimension());
-  ind.fill(result.getInputSample().getDimension());
-  // indices with good order
-  ind.add(inInd);
+  Indices ind(inInd);
+  if (result.getOutputSample().getSize())
+  {
+    ind = Indices(result.getOutputSample().getDimension());
+    ind.fill(result.getInputSample().getDimension());
+    // indices with good order
+    ind.add(inInd);
+  }
 
   for (UnsignedInteger variableIndex=0; variableIndex<result.getMean().getSize(); ++variableIndex)
     stackedWidget_->addWidget(getMomentsEstimateTableView(result, ind[variableIndex]));
