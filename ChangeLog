@@ -1,10 +1,12 @@
-= 2.0 release (in progress)
+= 2.0 release (2017-03-31)
 
  * Kriging
  * SALOME console update
  * Stop analyses and progress bar
  * Dependencies inference
  * FORM-IS
+ * Finite difference steps settings
+ * Kendall correlation plots
 
 = 1.2 release (2016-11-25)
 
