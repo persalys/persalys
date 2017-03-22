@@ -38,7 +38,6 @@ public:
   /** Virtual constructor */
   virtual MetaModel * clone() const;
 
-  virtual OT::NumericalMathFunction getFunction() const;
   void setFunction(const OT::NumericalMathFunction & function);
 
   virtual OT::String getPythonScript() const;
@@ -51,6 +50,9 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
+
+protected:
+  virtual OT::NumericalMathFunction generateFunction() const;
 
 private:
   OT::NumericalMathFunction function_;
