@@ -176,7 +176,14 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Nu
 
     // outputs
     for (UnsignedInteger i=0; i<outputsNames.getSize(); ++i)
-      metaModel.addOutput(designOfExperiment_.getPhysicalModel().getOutputByName(outputsNames[i]));
+    {
+      Output output(designOfExperiment_.getPhysicalModel().getOutputByName(outputsNames[i]));
+      if (!output.getDescription().empty())
+        output.setDescription(output.getDescription() + " - " + getName() + " metamodel");
+      else
+        output.setDescription(getName() + " metamodel");
+      metaModel.addOutput(output);
+    }
   }
   else
   {
@@ -185,7 +192,7 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Nu
       metaModel.addInput(Input(inputsNames[i]));
     // outputs
     for (UnsignedInteger i=0; i<outputsNames.getSize(); ++i)
-      metaModel.addOutput(Output(outputsNames[i]));
+      metaModel.addOutput(Output(outputsNames[i], getName() + " metamodel"));
   }
   result.metaModel_ = metaModel;
 }
