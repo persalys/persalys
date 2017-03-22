@@ -35,9 +35,10 @@ namespace OTGUI {
 
 FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item)
   : ResultWindow(item)
-  , result_(dynamic_cast<FunctionalChaosAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , result_(dynamic_cast<FunctionalChaosAnalysis*>(item->getAnalysis().getImplementation().get())->getResult())
   , outputsListWidget_(0)
   , tabWidget_(0)
+  , errorMessage_(item->getAnalysis().getErrorMessage().c_str())
 {
   setParameters(item->getAnalysis());
   buildInterface();
@@ -46,7 +47,7 @@ FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item)
 
 void FunctionalChaosResultWindow::setParameters(const Analysis & analysis)
 {
-  const FunctionalChaosAnalysis * chaos = dynamic_cast<const FunctionalChaosAnalysis*>(&*analysis.getImplementation());
+  const FunctionalChaosAnalysis chaos(*dynamic_cast<const FunctionalChaosAnalysis*>(analysis.getImplementation().get()));
 
   // ParametersWidget
   QStringList namesList;
@@ -57,9 +58,9 @@ void FunctionalChaosResultWindow::setParameters(const Analysis & analysis)
 
   QStringList valuesList;
   valuesList << tr("Functional chaos");
-  valuesList << QString::number(chaos->getChaosDegree());
-  valuesList << (chaos->getSparseChaos()? tr("yes") : tr("no"));
-  valuesList << (chaos->isLeaveOneOutValidation()? tr("yes") : tr("no"));
+  valuesList << QString::number(chaos.getChaosDegree());
+  valuesList << (chaos.getSparseChaos()? tr("yes") : tr("no"));
+  valuesList << (chaos.isLeaveOneOutValidation()? tr("yes") : tr("no"));
 
   parametersWidget_ = new ParametersWidget(tr("Metamodel creation parameters"), namesList, valuesList);
 }
@@ -70,10 +71,10 @@ void FunctionalChaosResultWindow::buildInterface()
   setWindowTitle(tr("Functional chaos results"));
 
   // get output info
-  const UnsignedInteger outputDimension = result_.getSobolResult().getOutputNames().getSize();
+  const UnsignedInteger outputDimension = result_.getOutputSample().getDescription().getSize();
   QStringList outputNames;
   for (UnsignedInteger i=0; i<outputDimension; ++i)
-    outputNames << QString::fromUtf8(result_.getSobolResult().getOutputNames()[i].c_str());
+    outputNames << QString::fromUtf8(result_.getOutputSample().getDescription()[i].c_str());
 
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
@@ -118,64 +119,95 @@ void FunctionalChaosResultWindow::buildInterface()
   tabWidget_->addTab(tab, tr("Metamodel"));
 
   // second tab : MOMENTS --------------------------------
-  QWidget * momentsWidget = new QWidget;
-  QVBoxLayout * momentsWidgetLayout = new QVBoxLayout(momentsWidget);
-  QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimates"));
-  QVBoxLayout * momentsGroupBoxLayout = new QVBoxLayout(momentsGroupBox);
-  ResizableStackedWidget * momentsStackedWidget = new ResizableStackedWidget;
-
-  for (UnsignedInteger outputIndex=0; outputIndex<outputDimension; ++outputIndex)
+  if (result_.getMean().getSize() == outputDimension && result_.getVariance().getSize() == outputDimension)
   {
-    ResizableTableViewWithoutScrollBar * momentsEstimationsTableView = new ResizableTableViewWithoutScrollBar;
-    momentsEstimationsTableView->horizontalHeader()->hide();
-    momentsEstimationsTableView->verticalHeader()->hide();
-    CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(3, 2, momentsEstimationsTableView);
-    momentsEstimationsTableView->setModel(momentsEstimationsTable);
-    // - vertical header
-    momentsEstimationsTable->setNotEditableHeaderItem(0, 0, tr("Estimate"));
-    momentsEstimationsTable->setNotEditableHeaderItem(1, 0, tr("Mean"));
-    momentsEstimationsTable->setNotEditableHeaderItem(2, 0, tr("Variance"));
-    // - horizontal header
-    momentsEstimationsTable->setNotEditableHeaderItem(0, 1, tr("Value"));
-    // - moments values
-    momentsEstimationsTable->setNotEditableItem(1, 1, result_.getMean()[outputIndex]);
-    momentsEstimationsTable->setNotEditableItem(2, 1, result_.getVariance()[outputIndex]);
+    QWidget * momentsWidget = new QWidget;
+    QVBoxLayout * momentsWidgetLayout = new QVBoxLayout(momentsWidget);
+    QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimates"));
+    QVBoxLayout * momentsGroupBoxLayout = new QVBoxLayout(momentsGroupBox);
+    ResizableStackedWidget * momentsStackedWidget = new ResizableStackedWidget;
 
-    momentsEstimationsTableView->resizeToContents();
+    for (UnsignedInteger outputIndex=0; outputIndex<outputDimension; ++outputIndex)
+    {
+      ResizableTableViewWithoutScrollBar * momentsEstimationsTableView = new ResizableTableViewWithoutScrollBar;
+      momentsEstimationsTableView->horizontalHeader()->hide();
+      momentsEstimationsTableView->verticalHeader()->hide();
+      CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(3, 2, momentsEstimationsTableView);
+      momentsEstimationsTableView->setModel(momentsEstimationsTable);
+      // - vertical header
+      momentsEstimationsTable->setNotEditableHeaderItem(0, 0, tr("Estimate"));
+      momentsEstimationsTable->setNotEditableHeaderItem(1, 0, tr("Mean"));
+      momentsEstimationsTable->setNotEditableHeaderItem(2, 0, tr("Variance"));
+      // - horizontal header
+      momentsEstimationsTable->setNotEditableHeaderItem(0, 1, tr("Value"));
+      // - moments values
+      momentsEstimationsTable->setNotEditableItem(1, 1, result_.getMean()[outputIndex]);
+      momentsEstimationsTable->setNotEditableItem(2, 1, result_.getVariance()[outputIndex]);
 
-    momentsStackedWidget->addWidget(momentsEstimationsTableView);
+      momentsEstimationsTableView->resizeToContents();
+
+      momentsStackedWidget->addWidget(momentsEstimationsTableView);
+    }
+    momentsGroupBoxLayout->addWidget(momentsStackedWidget);
+
+    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), momentsStackedWidget, SLOT(setCurrentIndex(int)));
+
+    momentsWidgetLayout->addWidget(momentsGroupBox);
+
+    tabWidget_->addTab(momentsWidget, tr("Moments"));
   }
-  momentsGroupBoxLayout->addWidget(momentsStackedWidget);
-
-  connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), momentsStackedWidget, SLOT(setCurrentIndex(int)));
-
-  momentsWidgetLayout->addWidget(momentsGroupBox);
-  tabWidget_->addTab(momentsWidget, tr("Moments"));
+  else
+  {
+    if (!errorMessage_.isEmpty())
+    {
+      QWidget * momentsWidget = new QWidget;
+      QVBoxLayout * momentsWidgetLayout = new QVBoxLayout(momentsWidget);
+      QLabel * errorLabel = new QLabel(errorMessage_);
+      momentsWidgetLayout->addWidget(errorLabel);
+      momentsWidgetLayout->addStretch();
+      tabWidget_->addTab(momentsWidget, tr("Moments"));
+    }
+  }
 
   // third tab : SOBOL INDICES --------------------------------
-  QScrollArea * sobolScrollArea = new QScrollArea;
-  sobolScrollArea->setWidgetResizable(true);
-  QWidget * widget = new QWidget;
-  QVBoxLayout * vbox = new QVBoxLayout(widget);
-  ResizableStackedWidget * sobolStackedWidget = new ResizableStackedWidget;
-  connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), sobolStackedWidget, SLOT(setCurrentIndex(int)));
-  for (UnsignedInteger i=0; i<outputDimension; ++i)
+  if (result_.getSobolResult().getOutputNames().getSize() == outputDimension)
   {
-    SensitivityResultWidget * sobolResultWidget = new SensitivityResultWidget(i,
-                                                                              result_.getSobolResult().getFirstOrderIndices()[i],
-                                                                              result_.getSobolResult().getTotalIndices()[i],
-                                                                              result_.getSobolResult().getInputNames(),
-                                                                              result_.getSobolResult().getOutputNames()[i],
-                                                                              SensitivityResultWidget::Sobol
-                                                                             );
-    sobolStackedWidget->addWidget(sobolResultWidget);
-    connect(sobolResultWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), sobolResultWidget, SLOT(showHideGraphConfigurationWidget(int)));
-    connect(this, SIGNAL(stateChanged(int)), sobolResultWidget, SLOT(showHideGraphConfigurationWidget(int)));
+    QScrollArea * sobolScrollArea = new QScrollArea;
+    sobolScrollArea->setWidgetResizable(true);
+    QWidget * widget = new QWidget;
+    QVBoxLayout * vbox = new QVBoxLayout(widget);
+    ResizableStackedWidget * sobolStackedWidget = new ResizableStackedWidget;
+    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), sobolStackedWidget, SLOT(setCurrentIndex(int)));
+    for (UnsignedInteger i=0; i<outputDimension; ++i)
+    {
+      SensitivityResultWidget * sobolResultWidget = new SensitivityResultWidget(i,
+                                                                                result_.getSobolResult().getFirstOrderIndices()[i],
+                                                                                result_.getSobolResult().getTotalIndices()[i],
+                                                                                result_.getSobolResult().getInputNames(),
+                                                                                result_.getSobolResult().getOutputNames()[i],
+                                                                                SensitivityResultWidget::Sobol
+                                                                              );
+      sobolStackedWidget->addWidget(sobolResultWidget);
+      connect(sobolResultWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
+      connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), sobolResultWidget, SLOT(showHideGraphConfigurationWidget(int)));
+      connect(this, SIGNAL(stateChanged(int)), sobolResultWidget, SLOT(showHideGraphConfigurationWidget(int)));
+    }
+    vbox->addWidget(sobolStackedWidget);
+    sobolScrollArea->setWidget(widget);
+    tabWidget_->addTab(sobolScrollArea, tr("Sobol indices"));
   }
-  vbox->addWidget(sobolStackedWidget);
-  sobolScrollArea->setWidget(widget);
-  tabWidget_->addTab(sobolScrollArea, tr("Sobol indices"));
+  else
+  {
+    if (!errorMessage_.isEmpty())
+    {
+      QWidget * indicesWidget = new QWidget;
+      QVBoxLayout * indicesWidgetLayout = new QVBoxLayout(indicesWidget);
+      QLabel * errorLabel = new QLabel(errorMessage_);
+      indicesWidgetLayout->addWidget(errorLabel);
+      indicesWidgetLayout->addStretch();
+      tabWidget_->addTab(indicesWidget, tr("Sobol indices"));
+    }
+  }
 
   // fourth tab : VALIDATION --------------------------------
   if (result_.getMetaModelOutputSampleLeaveOneOut().getSize())

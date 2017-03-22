@@ -168,7 +168,14 @@ void FunctionalChaosAnalysis::run()
     result_.metaModelOutputSample_ = metamodelFunction(effectiveInputSample);
 
     // post process
-    postProcessFunctionalChaosResult(effectiveInputSample);
+    try
+    {
+      postProcessFunctionalChaosResult(effectiveInputSample);
+    }
+    catch (std::exception & ex)
+    {
+      errorMessage_ = OSS() << "Impossible to compute Sobol indices and moments.\n" << ex.what() << "\nTry to increase the size of the design of experiment.";
+    }
 
     // validation
     validateMetaModelResult(result_, effectiveInputSample);
@@ -178,7 +185,7 @@ void FunctionalChaosAnalysis::run()
   }
   catch (std::exception & ex)
   {
-    errorMessage_ = ex.what();
+    errorMessage_ =  OSS() << errorMessage_ << ex.what();
     notify("analysisBadlyFinished");
   }
 }
@@ -294,7 +301,7 @@ String FunctionalChaosAnalysis::getPythonScript() const
 
 bool FunctionalChaosAnalysis::analysisLaunched() const
 {
-  return getResult().getSobolResult().getFirstOrderIndices().getSize();
+  return getResult().getMetaModelOutputSample().getSize();
 }
 
 

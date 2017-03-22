@@ -235,6 +235,10 @@ void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result,
   // validation: leave-one-out
   if (leaveOneOutValidation_)
   {
+    // check
+    if (!result.outputSample_.getSize())
+      throw InvalidValueException(HERE) << "Problem during the creation of the metamodel: The outputSample is empty.\n";
+
     informationMessage_ = "Meta model has been created.\nThe validation is running.";
     notify("informationMessageUpdated");
 
