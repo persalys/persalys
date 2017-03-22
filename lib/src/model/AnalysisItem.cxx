@@ -67,8 +67,8 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
 
 void AnalysisItem::setDesignOfExperiment(const DesignOfExperiment& designOfExperiment)
 {
-  if (dynamic_cast<DesignOfExperimentAnalysis*>(&*getAnalysis().getImplementation()))
-    dynamic_cast<DesignOfExperimentAnalysis*>(&*getAnalysis().getImplementation())->setDesignOfExperiment(designOfExperiment);
+  if (dynamic_cast<DesignOfExperimentAnalysis*>(getAnalysis().getImplementation().get()))
+    dynamic_cast<DesignOfExperimentAnalysis*>(getAnalysis().getImplementation().get())->setDesignOfExperiment(designOfExperiment);
 }
 
 
@@ -94,14 +94,14 @@ void AnalysisItem::update(Observable* source, const String& message)
   }
   else if (message == "metaModelCreated")
   {
-    if (dynamic_cast<FunctionalChaosAnalysis*>(&*getAnalysis().getImplementation()))
+    if (dynamic_cast<FunctionalChaosAnalysis*>(getAnalysis().getImplementation().get()))
     {
-      PhysicalModel metaModel(dynamic_cast<FunctionalChaosAnalysis*>(&*getAnalysis().getImplementation())->getResult().getMetaModel());
+      PhysicalModel metaModel(dynamic_cast<FunctionalChaosAnalysis*>(getAnalysis().getImplementation().get())->getResult().getMetaModel());
       emit metaModelCreated(metaModel);
     }
-    else if (dynamic_cast<KrigingAnalysis*>(&*getAnalysis().getImplementation()))
+    else if (dynamic_cast<KrigingAnalysis*>(getAnalysis().getImplementation().get()))
     {
-      PhysicalModel metaModel(dynamic_cast<KrigingAnalysis*>(&*getAnalysis().getImplementation())->getResult().getMetaModel());
+      PhysicalModel metaModel(dynamic_cast<KrigingAnalysis*>(getAnalysis().getImplementation().get())->getResult().getMetaModel());
       emit metaModelCreated(metaModel);
     }
     else
