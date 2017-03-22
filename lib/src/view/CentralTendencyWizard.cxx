@@ -34,7 +34,7 @@ namespace OTGUI {
 
 CentralTendencyWizard::CentralTendencyWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel, QWidget* parent)
   : AnalysisWizard(MonteCarloAnalysis(otStudy.getAvailableAnalysisName("centralTendencyMC_"), physicalModel), parent)
-  , MCAnalysis_(*dynamic_cast<MonteCarloAnalysis*>(&*analysis_.getImplementation()))
+  , MCAnalysis_(*dynamic_cast<MonteCarloAnalysis*>(analysis_.getImplementation().get()))
   , taylorAnalysis_(TaylorExpansionMomentsAnalysis(otStudy.getAvailableAnalysisName("centralTendencyTaylor_"), physicalModel))
   , errorMessageLabel_(new QLabel)
 {
@@ -48,7 +48,7 @@ CentralTendencyWizard::CentralTendencyWizard(const Analysis & analysis, QWidget*
 {
   if (analysis.getImplementation()->getClassName() == "MonteCarloAnalysis")
   {
-    MCAnalysis_ = *dynamic_cast<const MonteCarloAnalysis*>(&*analysis.getImplementation());
+    MCAnalysis_ = *dynamic_cast<const MonteCarloAnalysis*>(analysis.getImplementation().get());
     taylorAnalysis_ = TaylorExpansionMomentsAnalysis(MCAnalysis_.getName(), MCAnalysis_.getPhysicalModel());
     try
     {
@@ -61,7 +61,7 @@ CentralTendencyWizard::CentralTendencyWizard(const Analysis & analysis, QWidget*
   }
   else
   {
-    taylorAnalysis_ = *dynamic_cast<const TaylorExpansionMomentsAnalysis*>(&*analysis.getImplementation());
+    taylorAnalysis_ = *dynamic_cast<const TaylorExpansionMomentsAnalysis*>(analysis.getImplementation().get());
     MCAnalysis_ = MonteCarloAnalysis(taylorAnalysis_.getName(), taylorAnalysis_.getPhysicalModel());
     try
     {
@@ -146,10 +146,13 @@ void CentralTendencyWizard::buildInterface()
   levelConfidenceIntervalSpinbox->setRange(0.0, 0.99);
   levelConfidenceIntervalSpinbox->setSingleStep(0.01);
   levelConfidenceIntervalSpinbox->setValue(MCAnalysis_.getLevelConfidenceInterval());
+  levelConfidenceIntervalSpinbox->setEnabled(MCAnalysis_.isConfidenceIntervalRequired());
   connect(confidenceIntervalCheckBox, SIGNAL(toggled(bool)), levelConfidenceIntervalSpinbox, SLOT(setEnabled(bool)));
   connect(confidenceIntervalCheckBox, SIGNAL(toggled(bool)), this, SLOT(confidenceIntervalRequired(bool)));
   connect(levelConfidenceIntervalSpinbox, SIGNAL(valueChanged(double)), this, SLOT(levelConfidenceIntervalChanged(double)));
   advancedWidgetsLayout->addWidget(levelConfidenceIntervalSpinbox, 0, 1);
+
+  connect(confidenceIntervalCheckBox, SIGNAL(toggled(bool)), levelConfidenceIntervalSpinbox, SLOT(setEnabled(bool)));
 
   // seed
   QLabel * seedLabel = new QLabel(tr("Seed"));
