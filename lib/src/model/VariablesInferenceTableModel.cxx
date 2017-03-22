@@ -57,7 +57,7 @@ Qt::ItemFlags VariablesInferenceTableModel::flags(const QModelIndex& index) cons
 QVariant VariablesInferenceTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (role == Qt::DisplayRole && orientation == Qt::Horizontal && section == 0)
-    return tr("Name");
+    return tr("Variables");
   return QAbstractTableModel::headerData(section, orientation, role);
 }
 

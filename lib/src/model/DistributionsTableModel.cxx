@@ -49,7 +49,7 @@ int DistributionsTableModel::columnCount(const QModelIndex& parent) const
 QVariant DistributionsTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (orientation == Qt::Horizontal && role == Qt::DisplayRole && section == 0)
-    return tr("Distribution");
+    return tr("Distributions");
   return QAbstractItemModel::headerData(section, orientation, role);
 }
 
