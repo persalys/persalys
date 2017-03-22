@@ -156,6 +156,8 @@ void PhysicalModelWindowWidget::buildInterface()
   differentiationTableView_->setEditTriggers(QTableView::AllEditTriggers);
   vbox->addWidget(differentiationTableView_);
 
+  updateDifferentiationTableModel();
+
   addTab(tab, tr("Differentiation"));
 }
 
