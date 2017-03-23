@@ -26,6 +26,7 @@
 #include <QStyledItemDelegate>
 #include <QApplication>
 #include <QPainter>
+#include <QRadioButton>
 
 namespace OTGUI {
 class RadioButtonDelegate : public QStyledItemDelegate
@@ -36,6 +37,7 @@ public:
     , firstRowWithButton_(firstRowWithButton)
   {
   }
+
 
   void paint(QPainter* painter, 
              const QStyleOptionViewItem& option, 
@@ -60,6 +62,13 @@ public:
 
     QApplication::style()->drawControl(QStyle::CE_RadioButton, &optionButton, painter);
   }
+
+
+  virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+  {
+    return QRadioButton(index.data(Qt::DisplayRole).toString()).sizeHint();
+  }
+
 private:
   int firstRowWithButton_;
 };
