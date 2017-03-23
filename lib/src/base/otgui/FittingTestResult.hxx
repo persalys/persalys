@@ -44,6 +44,7 @@ public:
   OT::NumericalSample getValues() const;
   OT::Collection<OT::Distribution> getTestedDistributions() const;
   OT::Collection<OT::TestResult> getKolmogorovTestResults() const;
+  OT::Description getErrorMessages() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -59,6 +60,7 @@ protected:
   OT::NumericalSample values_;
   OT::PersistentCollection< OT::Distribution > testedDistributions_;
   OT::PersistentCollection< OT::TestResult > kolmogorovTestResults_;
+  OT::Description errorMessages_;
 };
 }
 #endif

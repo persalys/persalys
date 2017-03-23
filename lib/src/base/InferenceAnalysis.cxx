@@ -177,6 +177,7 @@ void InferenceAnalysis::run()
       FittingTestResult fittingTestResult;
       fittingTestResult.variableName_ = sample.getDescription()[i];
       fittingTestResult.values_ = sample.getMarginal(i);
+      fittingTestResult.errorMessages_ = Description(distFactoriesForEachInterestVar_[sample.getDescription()[i]].getSize());
 
       for (UnsignedInteger j=0; j<distFactoriesForEachInterestVar_[sample.getDescription()[i]].getSize(); ++j)
       {
@@ -194,12 +195,19 @@ void InferenceAnalysis::run()
         catch (std::exception & ex)
         {
           String str = distFactoriesForEachInterestVar_[sample.getDescription()[i]][j].getImplementation()->getClassName();
-          throw InvalidValueException(HERE) << "Error when building the "
-                                            << str.substr(0, str.find("Factory"))
-                                            << " distribution with the sample of the variable "
-                                            << sample.getDescription()[i]
-                                            << ". "
-                                            << ex.what();
+          const String distributionName = str.substr(0, str.find("Factory"));
+          const String message = OSS() << "Error when building the "
+                                       << distributionName
+                                       << " distribution with the sample of the variable "
+                                       << sample.getDescription()[i]
+                                       << ". "
+                                       << ex.what()
+                                       << "\n";
+          // set fittingTestResult
+          fittingTestResult.testedDistributions_.add(DistributionDictionary::BuildDistribution(distributionName, 0));
+          TestResult testResult;
+          fittingTestResult.kolmogorovTestResults_.add(testResult);
+          fittingTestResult.errorMessages_[j] = message;
         }
       }
       result_.fittingTestResultCollection_.add(fittingTestResult);
