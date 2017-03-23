@@ -46,6 +46,7 @@ protected:
   void buildInterface();
 
 public slots:
+  void clearErrorMessage();
   void updateVariablesComboBox(int);
   void updateInferenceResultWidget(QString);
 

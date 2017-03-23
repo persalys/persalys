@@ -28,6 +28,7 @@
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/QtTools.hxx"
 #include "otgui/InferenceResultWizard.hxx"
+#include "otgui/InferenceAnalysis.hxx"
 
 #include "openturns/Normal.hxx"
 #include "openturns/TruncatedDistribution.hxx"
@@ -37,6 +38,7 @@
 #include <QScrollArea>
 #include <QPushButton>
 #include <QStackedWidget>
+#include <QMessageBox>
 
 using namespace OT;
 
@@ -815,16 +817,38 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
 
 void ProbabilisticModelWindow::openWizardToChooseInferenceResult(const QModelIndex& inputIndex)
 {
-  InferenceResultWizard * wizard = new InferenceResultWizard(otStudy_, this);
-  if (wizard->exec())
+  bool otStudyHasInferenceResults = false;
+  // we need at least one inference analysis result to open the wizard
+  for (UnsignedInteger i=0; i<otStudy_.getAnalyses().getSize(); ++i)
   {
-    // update the input
-    const Input input(physicalModel_.getInputs()[inputIndex.row()]);
-    physicalModel_.blockNotification(true);
-    physicalModel_.setDistribution(input.getName(), wizard->getDistribution());
-    physicalModel_.setDistributionParametersType(input.getName(), 0);
-    physicalModel_.blockNotification(false);
-    updateDistributionWidgets(inputIndex);
+    if (otStudy_.getAnalyses()[i].getImplementation()->getClassName() == "InferenceAnalysis")
+    {
+      if (dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[i].getImplementation().get())->analysisLaunched())
+      {
+        otStudyHasInferenceResults = true;
+        break;
+      }
+    }
+  }
+
+  if (!otStudyHasInferenceResults)
+  {
+    QMessageBox::critical(this, tr("Error"), tr("The current study has not inference analyses results."));
+    return;
+  }
+  else
+  {
+    InferenceResultWizard * wizard = new InferenceResultWizard(otStudy_, this);
+    if (wizard->exec())
+    {
+      // update the input
+      const Input input(physicalModel_.getInputs()[inputIndex.row()]);
+      physicalModel_.blockNotification(true);
+      physicalModel_.setDistribution(input.getName(), wizard->getDistribution());
+      physicalModel_.setDistributionParametersType(input.getName(), 0);
+      physicalModel_.blockNotification(false);
+      updateDistributionWidgets(inputIndex);
+    }
   }
 }
 }

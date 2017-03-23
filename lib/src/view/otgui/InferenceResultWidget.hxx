@@ -27,6 +27,7 @@
 #include "otgui/GraphConfigurationWidget.hxx"
 
 #include <QTabWidget>
+#include <QLabel>
 
 Q_DECLARE_METATYPE(OT::Distribution)
 
@@ -39,6 +40,7 @@ public:
   InferenceResultWidget(const bool displayPDF_QQPlot=true, QWidget* parent=0);
 
   OT::Distribution getDistribution() const;
+  bool isSelectedDistributionValid() const;
 
 protected:
   void buildInterface();
@@ -51,6 +53,7 @@ public slots:
   void showHideGraphConfigurationWidget(int indexTab);
   void showHideGraphConfigurationWidget();
 signals:
+  void currentDistributionChanged();
   void graphWindowActivated(QWidget*);
   void graphWindowDeactivated();
 
@@ -62,6 +65,7 @@ private:
   CustomStandardItemModel * distTableModel_;
   ResizableTableViewWithoutScrollBar * distParamTableView_;
   CustomStandardItemModel * distParamTableModel_;
+  QLabel * analysisErrorMessageLabel_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
   GraphConfigurationWidget * pdf_cdfPlotGraphConfigWidget_;

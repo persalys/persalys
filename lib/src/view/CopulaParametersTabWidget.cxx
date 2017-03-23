@@ -64,7 +64,7 @@ void CopulaParametersTabWidget::buildInterface()
   String distributionName = distribution_.getImplementation()->getClassName();
   distributionName = distributionName.substr(0, distributionName.find("Copula"));
 
-  const QPen pen(PlotWidget::DefaultHistogramColor, 2);
+  const QPen pen(Qt::blue, 2);
 
   // tab PDF/CDF
   ResizableStackedWidget * pdf_StackedWidget = new ResizableStackedWidget;
