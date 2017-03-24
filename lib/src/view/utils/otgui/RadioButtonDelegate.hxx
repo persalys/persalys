@@ -29,7 +29,7 @@
 #include <QRadioButton>
 
 namespace OTGUI {
-class RadioButtonDelegate : public QStyledItemDelegate
+class OTGUI_API RadioButtonDelegate : public QStyledItemDelegate
 {
 public:
   RadioButtonDelegate(const int firstRowWithButton, QObject *parent)
