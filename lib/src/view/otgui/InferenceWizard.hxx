@@ -24,6 +24,7 @@
 #include "otgui/AnalysisWizard.hxx"
 #include "otgui/InferenceAnalysis.hxx"
 #include "otgui/DistributionsForInferenceWidget.hxx"
+#include "otgui/VariablesInferenceTableModel.hxx"
 
 #include <openturns/FittingTest.hxx>
 
@@ -42,6 +43,7 @@ public :
   virtual bool validateCurrentPage();
 
 protected:
+  void initialize();
   void buildInterface();
 
 public slots:
@@ -56,9 +58,11 @@ signals:
 private:
   OT::String currentVariableName_;
   InferenceAnalysis inference_;
+  OT::Description interestVariables_;
   std::map<OT::String, OT::FittingTest::DistributionFactoryCollection> distFactoriesForEachInterestVar_;
   QLabel * errorMessageLabel_;
   bool pageValidity_;
+  VariablesInferenceTableModel * variablesInferenceTableModel_;
 };
 }
 #endif
