@@ -318,8 +318,9 @@ void InferenceAnalysis::load(Advocate& adv)
   for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
   {
     DistributionFactoryCollection factoryCollection;
-    for (UnsignedInteger j=0; j<collection[i].getSize(); ++j)
-      factoryCollection.add(DistributionDictionary::BuildDistributionFactory(collection[i][j]));
+    if (collection.getSize() == getInterestVariables().getSize())
+      for (UnsignedInteger j=0; j<collection[i].getSize(); ++j)
+        factoryCollection.add(DistributionDictionary::BuildDistributionFactory(collection[i][j]));
     distFactoriesForEachInterestVar_[getInterestVariables()[i]] = factoryCollection;
   }
 }
