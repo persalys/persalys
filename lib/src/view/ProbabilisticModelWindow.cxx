@@ -79,10 +79,27 @@ void ProbabilisticModelWindow::buildInterface()
   // Inputs table
   inputTableView_ = new QTableView;
   inputTableView_->setSelectionMode(QAbstractItemView::SingleSelection);
+  inputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+  // - model
+  inputTableModel_ = new InputTableProbabilisticModel(physicalModel_, inputTableView_);
+  inputTableView_->setModel(inputTableModel_);
+
+  // - header view
   inputTableHeaderView_ = new CheckableHeaderView;
+  inputTableView_->setHorizontalHeader(inputTableHeaderView_);
   if (physicalModel_.hasStochasticInputs() && (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize()))
     inputTableHeaderView_->setChecked(true);
-  inputTableView_->setHorizontalHeader(inputTableHeaderView_);
+
+  #if QT_VERSION >= 0x050000
+  inputTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
+  inputTableView_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+#else
+  inputTableView_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
+  inputTableView_->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+#endif
+
+  // - delegate for distributions list
   QStringList items;
   Description listDistributions = DistributionDictionary::GetAvailableDistributions();
   for (UnsignedInteger i=0; i<listDistributions.getSize(); ++i)
@@ -91,20 +108,12 @@ void ProbabilisticModelWindow::buildInterface()
 
   ComboBoxDelegate * delegate = new ComboBoxDelegate(items);
   inputTableView_->setItemDelegateForColumn(1, delegate);
-#if QT_VERSION >= 0x050000
-  inputTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-#else
-  inputTableView_->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-#endif
-  inputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-  inputTableModel_ = new InputTableProbabilisticModel(physicalModel_, inputTableView_);
-  inputTableView_->setModel(inputTableModel_);
-  inputTableView_->resizeColumnToContents(0);
-
+  // - show combo box
   for (int i = 0; i < inputTableModel_->rowCount(); ++i)
     inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
 
+  // - connections
   connect(inputTableView_, SIGNAL(clicked(QModelIndex)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(distributionChanged(const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
@@ -202,6 +211,7 @@ void ProbabilisticModelWindow::buildInterface()
   rightScrollArea->setWidget(rightFrame);
   rightSideOfSplitterStackedWidget_->addWidget(rightScrollArea);
   horizontalSplitter->addWidget(rightSideOfSplitterStackedWidget_);
+  horizontalSplitter->setStretchFactor(1, 3);
 
   if (inputTableModel_->rowCount())
   {
