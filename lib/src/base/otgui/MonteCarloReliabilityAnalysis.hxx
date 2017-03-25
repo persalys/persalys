@@ -38,7 +38,7 @@ public:
   virtual MonteCarloReliabilityAnalysis * clone() const;
 
 protected:
-  virtual OT::Simulation* getSimulationAlgorithm(const OT::Event& event);
+  virtual SimulationInterface getSimulationAlgorithm(const OT::Event& event);
 };
 }
 #endif

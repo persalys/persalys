@@ -52,7 +52,7 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  virtual OT::Simulation* getSimulationAlgorithm(const OT::Event& event);
+  virtual SimulationInterface getSimulationAlgorithm(const OT::Event& event);
 
 private:
   OT::NumericalPoint standardSpaceDesignPoint_;

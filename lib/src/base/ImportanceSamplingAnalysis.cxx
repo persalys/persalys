@@ -31,7 +31,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(ImportanceSamplingAnalysis);
 
-static Factory<ImportanceSamplingAnalysis> RegisteredFactory;
+static Factory<ImportanceSamplingAnalysis> Factory_ImportanceSamplingAnalysis;
 
 /* Default constructor */
 ImportanceSamplingAnalysis::ImportanceSamplingAnalysis()
@@ -57,12 +57,12 @@ ImportanceSamplingAnalysis* ImportanceSamplingAnalysis::clone() const
 }
 
 
-Simulation* ImportanceSamplingAnalysis::getSimulationAlgorithm(const Event& event)
+SimulationInterface ImportanceSamplingAnalysis::getSimulationAlgorithm(const Event& event)
 {
   const UnsignedInteger inDimension = standardSpaceDesignPoint_.getSize();
   const Normal conditionalDistribution(standardSpaceDesignPoint_, NumericalPoint(inDimension, 1.), CorrelationMatrix(inDimension));
 
-  return new ImportanceSampling(StandardEvent(event), conditionalDistribution);
+  return ImportanceSampling(StandardEvent(event), conditionalDistribution);
 }
 
 
