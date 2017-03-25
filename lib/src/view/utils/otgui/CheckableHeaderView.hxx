@@ -21,10 +21,11 @@
 #ifndef OTGUI_CHECKABLEHEADERVIEW_HXX
 #define OTGUI_CHECKABLEHEADERVIEW_HXX
 
+#include "otgui/OTGuiprivate.hxx"
+
 #include <QHeaderView>
 #include <QPainter>
 #include <QMouseEvent>
-#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
 class OTGUI_API CheckableHeaderView : public QHeaderView
@@ -32,11 +33,14 @@ class OTGUI_API CheckableHeaderView : public QHeaderView
   Q_OBJECT
 
 public:
-  CheckableHeaderView(QWidget * parent = 0);
+  CheckableHeaderView(QWidget* parent = 0);
+
+  virtual void setModel(QAbstractItemModel* model);
 
 protected:
-  void paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const;
-  void mousePressEvent(QMouseEvent *event);
+  int getMinimumSectionSize() const;
+  virtual void paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const;
+  virtual void mousePressEvent(QMouseEvent *event);
 
 public slots:
   void setChecked(bool checked);
