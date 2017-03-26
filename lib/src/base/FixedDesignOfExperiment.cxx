@@ -20,10 +20,10 @@
  */
 #include "otgui/FixedDesignOfExperiment.hxx"
 
-#include "openturns/Box.hxx"
-#include "openturns/TruncatedDistribution.hxx"
-#include "openturns/TruncatedNormal.hxx"
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/Box.hxx>
+#include <openturns/TruncatedDistribution.hxx>
+#include <openturns/TruncatedNormal.hxx>
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
@@ -31,7 +31,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(FixedDesignOfExperiment);
 
-static Factory<FixedDesignOfExperiment> RegisteredFactory;
+static Factory<FixedDesignOfExperiment> Factory_FixedDesignOfExperiment;
 
 /* Default constructor */
 FixedDesignOfExperiment::FixedDesignOfExperiment()
@@ -57,7 +57,7 @@ FixedDesignOfExperiment::FixedDesignOfExperiment(const String & name,
                                                  const NumericalPoint & lowerBounds,
                                                  const NumericalPoint & upperBounds,
                                                  const Indices & levels,
-                                                 const OT::NumericalPoint & values)
+                                                 const NumericalPoint & values)
   : DesignOfExperimentImplementation(name, physicalModel)
   , type_(FixedDesignOfExperiment::FromBoundsAndLevels)
   , inputNames_(physicalModel.getInputNames())
@@ -103,7 +103,7 @@ void FixedDesignOfExperiment::initializeParameters()
   values_ = NumericalPoint(inputSize);
   lowerBounds_ = NumericalPoint(inputSize);
   upperBounds_ = NumericalPoint(inputSize);
-  levels_ = Indices(inputSize);
+  levels_ = Indices(inputSize, 1);
   deltas_ = NumericalPoint(inputSize);
 
   for (UnsignedInteger i=0; i<inputSize; ++i)
@@ -148,8 +148,6 @@ void FixedDesignOfExperiment::initializeParameters()
         upperBounds_[i] = distribution.computeQuantile(0.95)[0];
       }
     }
-    levels_[i] = 1;
-    deltas_[i] = upperBounds_[i] - lowerBounds_[i];
   }
 }
 
