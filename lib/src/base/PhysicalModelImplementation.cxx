@@ -529,6 +529,11 @@ NumericalMathFunction PhysicalModelImplementation::getFunction() const
 
 NumericalMathFunction PhysicalModelImplementation::getFunction(const Description& outputNames) const
 {
+  if (!getInputs().getSize())
+    throw PhysicalModelNotValidException(HERE) << "The physical model has no inputs.";
+  if (!getOutputs().getSize())
+    throw PhysicalModelNotValidException(HERE) << "The physical model has no outputs.";
+
   NumericalMathFunction function(generateFunction(outputNames));
 
   if (function.getUseDefaultGradientImplementation())
