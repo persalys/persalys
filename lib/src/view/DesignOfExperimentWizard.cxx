@@ -43,7 +43,7 @@ IntroPage::IntroPage(const DesignOfExperiment & designOfExperiment, QWidget *par
 
   methodGroup_ = new QButtonGroup;
   QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Deterministic"));
-  if (designOfExperiment.getImplementation()->getClassName() == "FixedDesignOfExperiment")
+  if (designOfExperiment.getImplementation()->getClassName() != "FromFileDesignOfExperiment")
   {
 // TODO   + || designOfExperiment.getImplementation()->getClassName() == "GeneratedDeterministicDesignOfExperiment"
     buttonToChooseMethod->setChecked(true);
