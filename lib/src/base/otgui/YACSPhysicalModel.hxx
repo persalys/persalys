@@ -69,6 +69,8 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
+  /** String converter */
+  virtual OT::String __repr__() const;
 protected:
   void updateData();
   virtual OT::NumericalMathFunction generateFunction() const;
