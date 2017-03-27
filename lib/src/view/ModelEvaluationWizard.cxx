@@ -24,9 +24,7 @@
 #include "otgui/ModelEvaluation.hxx"
 
 #include <QVBoxLayout>
-#include <QTableWidget>
 #include <QHeaderView>
-#include <QGroupBox>
 
 #include <limits>
 
@@ -36,6 +34,9 @@ namespace OTGUI {
 
 ModelEvaluationWizard::ModelEvaluationWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel, QWidget* parent)
   : AnalysisWizard(ModelEvaluation(otStudy.getAvailableAnalysisName("evaluation_"), physicalModel), parent)
+  , table_(0)
+  , outputsGroupBox_(0)
+  , errorMessageLabel_(new QLabel)
 {
   buildInterface();
 }
@@ -43,8 +44,9 @@ ModelEvaluationWizard::ModelEvaluationWizard(const OTStudy& otStudy, const Physi
 
 ModelEvaluationWizard::ModelEvaluationWizard(const Analysis & analysis, QWidget* parent)
   : AnalysisWizard(analysis, parent)
+  , errorMessageLabel_(new QLabel)
 {
-  dynamic_cast<ModelEvaluation*>(&*analysis_.getImplementation())->updateParameters();
+  dynamic_cast<ModelEvaluation*>(analysis_.getImplementation().get())->updateParameters();
   buildInterface();
 }
 
@@ -56,10 +58,16 @@ void ModelEvaluationWizard::buildInterface()
   QWizardPage * page = new QWizardPage(this);
   QVBoxLayout * pageLayout = new QVBoxLayout(page);
 
+  PhysicalModel model(dynamic_cast<const PhysicalModelAnalysis*>(analysis_.getImplementation().get())->getPhysicalModel());
+
+  // output selection
+  outputsGroupBox_ = new OutputsSelectionGroupBox(model.getSelectedOutputsNames(), analysis_.getImplementation()->getInterestVariables(), this);
+  setInterestVariables(outputsGroupBox_->getSelectedOutputsNames());
+  connect(outputsGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), this, SLOT(setInterestVariables(QStringList)));
+  pageLayout->addWidget(outputsGroupBox_);
+
   QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
   QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
-
-  PhysicalModel model(dynamic_cast<const PhysicalModelAnalysis*>(&*analysis_.getImplementation())->getPhysicalModel());
 
   table_ = new QTableWidget(model.getInputs().getSize(), 3);
   table_->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Description") << tr("Value"));
@@ -73,7 +81,7 @@ void ModelEvaluationWizard::buildInterface()
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     table_->setItem(i, 1, item);
       
-    double defaultValue = dynamic_cast<ModelEvaluation*>(&*analysis_.getImplementation())->getInputValues()[i];
+    double defaultValue = dynamic_cast<ModelEvaluation*>(analysis_.getImplementation().get())->getInputValues()[i];
     double delta(0.1*fabs(defaultValue));
     double step(delta > 1e-12 ? 0.5*delta : 0.1);
 
@@ -98,6 +106,12 @@ void ModelEvaluationWizard::buildInterface()
 
   inputsLayout->addWidget(table_);
   pageLayout->addWidget(inputsBox);
+
+  /// -- error message
+  errorMessageLabel_->setWordWrap(true);
+  pageLayout->addStretch();
+  pageLayout->addWidget(errorMessageLabel_);
+
   addPage(page);
 }
 
@@ -110,9 +124,41 @@ void ModelEvaluationWizard::inputValueChanged(double value)
     QWidget * cellWidget = table_->cellWidget(i, 2);
     if (cellWidget == spinBox)
     {
-      dynamic_cast<ModelEvaluation*>(&*analysis_.getImplementation())->setInputValue(i, value);
+      dynamic_cast<ModelEvaluation*>(analysis_.getImplementation().get())->setInputValue(i, value);
       return;
     }
   }
+}
+
+
+void ModelEvaluationWizard::setInterestVariables(QStringList outputsList)
+{
+  errorMessageLabel_->setText("");
+
+  Description desc(outputsList.size());
+  for (int i=0; i<outputsList.size(); ++i)
+    desc[i] = outputsList[i].toUtf8().constData();
+
+  try
+  {
+    analysis_.getImplementation()->setInterestVariables(desc);
+  }
+  catch (InvalidDimensionException exception)
+  {
+    // check in validateCurrentPage
+  }
+}
+
+
+bool ModelEvaluationWizard::validateCurrentPage()
+{
+  errorMessageLabel_->setText("");
+  if (!outputsGroupBox_->getSelectedOutputsNames().size())
+  {
+    errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(tr("At least one output must be selected")).arg("</font>"));
+    return false;
+  }
+
+  return QWizard::validateCurrentPage();
 }
 }
