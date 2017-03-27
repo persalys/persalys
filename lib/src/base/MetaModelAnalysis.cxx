@@ -62,7 +62,7 @@ void MetaModelAnalysis::setInterestVariables(const Description& variablesNames)
   const Description modelVariablesNames(designOfExperiment_.getOutputSample().getDescription());
   for (UnsignedInteger i=0; i<variablesNames.getSize(); ++i)
     if (!modelVariablesNames.contains(variablesNames[i]))
-      throw InvalidArgumentException(HERE) << "The name " << variablesNames[i] << " does not match an output name of the model";
+      throw InvalidArgumentException(HERE) << "The name " << variablesNames[i] << " does not match an output name of the model " << designOfExperiment_.getName();
 
   AnalysisImplementation::setInterestVariables(variablesNames);
 }
