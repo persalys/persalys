@@ -121,6 +121,10 @@ void FunctionalChaosAnalysis::run()
 {
   try
   {
+    // clear result
+    initialize();
+    result_ = FunctionalChaosAnalysisResult();
+
     // check
     if (designOfExperiment_.getInputSample().getSize()*designOfExperiment_.getOutputSample().getSize() == 0)
       throw InvalidArgumentException(HERE) << "The design of experiment must contains not empty input AND output samples";
@@ -128,10 +132,6 @@ void FunctionalChaosAnalysis::run()
       throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
     if (!getInterestVariables().getSize())
       throw InvalidDimensionException(HERE) << "The number of outputs to analyze must be superior to 0";
-
-    // clear result
-    initialize();
-    result_ = FunctionalChaosAnalysisResult();
 
     // get effective samples
     NumericalSample effectiveInputSample(getEffectiveInputSample());
