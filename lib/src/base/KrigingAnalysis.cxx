@@ -142,6 +142,9 @@ void KrigingAnalysis::run()
       if (stopRequested_)
        break;
 
+      informationMessage_ = "Creation of a meta model for the variable " + effectiveOutputSample.getDescription()[i] + " in progress.\n";
+      notify("informationMessageUpdated");
+
       // build algo
       KrigingAlgorithm kriging(buildKrigingAlgorithm(effectiveInputSample, effectiveOutputSample.getMarginal(i)));
 
