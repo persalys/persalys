@@ -140,7 +140,7 @@ void KrigingAnalysis::run()
     for (UnsignedInteger i=0; i<outputDimension; ++i)
     {
       if (stopRequested_)
-       return;
+       break;
 
       // build algo
       KrigingAlgorithm kriging(buildKrigingAlgorithm(effectiveInputSample, effectiveOutputSample.getMarginal(i)));
@@ -168,13 +168,15 @@ void KrigingAnalysis::run()
     }
 
     // set result_
-    result_.outputSample_ = effectiveOutputSample;
+    Indices computedOutputIndices(krigingResultCollection.getSize());
+    computedOutputIndices.fill();
+    result_.outputSample_ = effectiveOutputSample.getMarginal(computedOutputIndices);
     result_.krigingResultCollection_ = krigingResultCollection;
 
     // build metamodel
     NumericalMathFunction metamodelFunction(metaModelCollection);
     Description variablesNames(effectiveInputSample.getDescription());
-    variablesNames.add(effectiveOutputSample.getDescription());
+    variablesNames.add(result_.outputSample_.getDescription());
     metamodelFunction.setDescription(variablesNames);
 
     buildMetaModel(result_, metamodelFunction);
