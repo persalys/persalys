@@ -279,6 +279,10 @@ void PhysicalModelWindowWidget::removeOutputLine()
 
 void PhysicalModelWindowWidget::evaluateOutputs()
 {
+  // if no outputs do nothing
+  if (!physicalModel_.getSelectedOutputsNames().getSize())
+    return;
+
   // evaluate
   ModelEvaluation eval("anEval", physicalModel_);
   eval.run();
