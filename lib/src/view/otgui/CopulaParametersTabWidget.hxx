@@ -42,7 +42,8 @@ protected:
   void buildInterface();
 
 public slots:
-  void stateChanged();  
+  void stateChanged();
+  void currentTabChanged(int);
   void showHideGraphConfigurationWidget(int index);
 
 signals:

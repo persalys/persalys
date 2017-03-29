@@ -108,6 +108,8 @@ void CopulaInferenceResultWidget::buildInterface()
       paramStackWidget->addWidget(paramWidget);
 
       connect(this, SIGNAL(stateChanged()), paramWidget, SLOT(stateChanged()));
+      connect(paramWidget, SIGNAL(currentChanged(int)), this, SIGNAL(currentResultsTabChanged(int)));
+      connect(this, SIGNAL(currentResultsTabChangedFromAnother(int)), paramWidget, SLOT(currentTabChanged(int)));
       connect(paramWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
       connect(paramWidget, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
     }
@@ -116,10 +118,8 @@ void CopulaInferenceResultWidget::buildInterface()
       QTabWidget * paramWidget = new QTabWidget;
       QWidget * aWidget = new QWidget;
       paramWidget->addTab(aWidget, tr("PDF/CDF"));
-      paramWidget->setTabEnabled(0, false);
       aWidget = new QWidget;
       paramWidget->addTab(aWidget, tr("Kendall plot"));
-      paramWidget->setTabEnabled(1, false);
       const QString message = QString("%1%2%3").arg("<font color=red>").arg(QString::fromUtf8(currentSetResult_.getErrorMessages()[i].c_str())).arg("</font>");
       aWidget = new QWidget;
       QVBoxLayout * aWidgetLayout = new QVBoxLayout(aWidget);
@@ -128,6 +128,8 @@ void CopulaInferenceResultWidget::buildInterface()
       aWidgetLayout->addWidget(errorMessageLabel);
       aWidgetLayout->addStretch();
       paramWidget->addTab(aWidget, tr("Parameters"));
+      paramWidget->setTabEnabled(0, false);
+      paramWidget->setTabEnabled(1, false);
       paramStackWidget->addWidget(paramWidget);
     }
   }

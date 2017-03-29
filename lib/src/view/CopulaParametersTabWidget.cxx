@@ -23,6 +23,7 @@
 #include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <openturns/NormalCopula.hxx>
 #include <openturns/VisualTest.hxx>
@@ -199,6 +200,13 @@ void CopulaParametersTabWidget::stateChanged()
   // if this widget is the current widget
   if (isVisible())
     showHideGraphConfigurationWidget(currentIndex());
+}
+
+
+void CopulaParametersTabWidget::currentTabChanged(int indexTab)
+{
+  SignalBlocker blocker(this);
+  setCurrentIndex(indexTab);
 }
 
 

@@ -40,11 +40,14 @@ protected:
 
 public slots:
   void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+  void updateCurrentResultsTab(int);
 signals:
   void windowActivated();
+  void currentResultsTabChanged(int);
 
 private:
   CopulaInferenceResult result_;
+  int currentResultsTab_;
 };
 }
 #endif
