@@ -56,6 +56,7 @@ private:
   FunctionalChaosAnalysisResult result_;
   QListWidget * outputsListWidget_;
   QTabWidget * tabWidget_;
+  QString errorMessage_;
 };
 }
 #endif

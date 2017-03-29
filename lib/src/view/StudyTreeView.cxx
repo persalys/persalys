@@ -369,7 +369,7 @@ bool StudyTreeView::isPhysicalModelValid(const QModelIndex & currentIndex)
     return false;
   if (!physicalModelItem->getPhysicalModel().isValid())
   {
-    QMessageBox::critical(this, tr("Error"), tr("The physical model has no inputs and/or no outputs."));
+    QMessageBox::critical(this, tr("Error"), tr("The physical model has no inputs and/or no selected outputs."));
     return false;
   }
   return true;
@@ -412,6 +412,20 @@ bool StudyTreeView::isLimitStateValid(const QModelIndex & currentIndex)
   if (!limitStateItem->getLimitState().isValid())
   {
     QMessageBox::critical(this, tr("Error"), tr("The limit state is not valid."));
+    return false;
+  }
+  return true;
+}
+
+
+bool StudyTreeView::isDesignOfExperimentValid(const QModelIndex& currentIndex)
+{
+  DesignOfExperimentItem * doeItem = treeViewModel_->getDesignOfExperimentItem(currentIndex);
+  if (!doeItem)
+    return false;
+  if (!doeItem->getDesignOfExperiment().getOutputSample().getSize())
+  {
+    QMessageBox::critical(this, tr("Error"), tr("The model must have at least one output."));
     return false;
   }
   return true;
@@ -519,12 +533,12 @@ void StudyTreeView::createNewProbabilisticModel()
 
 void StudyTreeView::createNewDesignOfExperiment()
 {
-  const QModelIndex DesignOfExperimentListIndex = selectionModel()->currentIndex();
-  PhysicalModelItem * physicalModelItem = treeViewModel_->getPhysicalModelItem(DesignOfExperimentListIndex);
+  const QModelIndex doeListIndex = selectionModel()->currentIndex();
+  PhysicalModelItem * physicalModelItem = treeViewModel_->getPhysicalModelItem(doeListIndex);
   if (!physicalModelItem)
     return;
 
-  if (!hasPhysicalModelInputs(DesignOfExperimentListIndex))
+  if (!hasPhysicalModelInputs(doeListIndex))
     return;
   OTStudyItem * otStudyItem = dynamic_cast<OTStudyItem*>(physicalModelItem->QStandardItem::parent());
   QSharedPointer<DesignOfExperimentWizard> wizard = QSharedPointer<DesignOfExperimentWizard>(new DesignOfExperimentWizard(otStudyItem->getOTStudy(), physicalModelItem->getPhysicalModel(), this));
@@ -850,6 +864,11 @@ void StudyTreeView::runAnalysis()
   }
   else if (analysisType == "FunctionalChaosAnalysis" || analysisType == "KrigingAnalysis")
   {
+    if (!isDesignOfExperimentValid(selectionModel()->currentIndex()))
+    {
+      qDebug() << "Error: In runAnalysis: design of experiment not valid for the " << analysisType << "\n";
+      return;
+    }
     wizard = QSharedPointer<AnalysisWizard>(new MetaModelAnalysisWizard(item->getAnalysis(), this));
   }
   else if (analysisType == "InferenceAnalysis")

@@ -44,7 +44,9 @@ MainWindow::MainWindow()
 {
   setWindowTitle("OTGui");
   setWindowIcon(QIcon(":/images/OT_icon32x32.png"));
+
   buildInterface();
+  buildActions();
 }
 
 
@@ -146,6 +148,30 @@ void MainWindow::buildInterface()
   OTguiStatusBar * statusBar = new OTguiStatusBar;
   connect(mdiArea, SIGNAL(errorMessageChanged(QString)), statusBar, SLOT(showErrorMessage(QString)));
   setStatusBar(statusBar);
+}
+
+
+void MainWindow::buildActions()
+{
+  QAction * action = new QAction(tr("&New"), this);
+  action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
+  connect(action, SIGNAL(triggered()), studyTree_, SLOT(createNewOTStudy()));
+  addAction(action);
+
+  action = new QAction(tr("&Open..."), this);
+  action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_O));
+  connect(action, SIGNAL(triggered()), studyTree_, SLOT(openOTStudy()));
+  addAction(action);
+
+  action = new QAction(tr("Save"), this);
+  action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_S));
+  connect(action, SIGNAL(triggered()), studyTree_, SLOT(saveOTStudy()));
+  addAction(action);
+
+  action = new QAction(QIcon(":/images/window-close.png"), tr("E&xit"), this);
+  action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Q));
+  connect(action, SIGNAL(triggered()), this, SLOT(exitApplication()));
+  addAction(action);
 }
 
 

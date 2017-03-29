@@ -102,12 +102,36 @@ void CopulaInferenceResultWidget::buildInterface()
   ResizableStackedWidget * paramStackWidget = new ResizableStackedWidget;
   for (UnsignedInteger i=0; i<currentSetResult_.getTestedDistributions().getSize(); ++i)
   {
-    CopulaParametersTabWidget * paramWidget = new CopulaParametersTabWidget(currentSetResult_.getTestedDistributions()[i], sample_, currentSetResult_.getKendallPlotData()[i]);
-    paramStackWidget->addWidget(paramWidget);
+    if (currentSetResult_.getErrorMessages()[i].empty())
+    {
+      CopulaParametersTabWidget * paramWidget = new CopulaParametersTabWidget(currentSetResult_.getTestedDistributions()[i], sample_, currentSetResult_.getKendallPlotData()[i]);
+      paramStackWidget->addWidget(paramWidget);
 
-    connect(this, SIGNAL(stateChanged()), paramWidget, SLOT(stateChanged()));
-    connect(paramWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-    connect(paramWidget, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
+      connect(this, SIGNAL(stateChanged()), paramWidget, SLOT(stateChanged()));
+      connect(paramWidget, SIGNAL(currentChanged(int)), this, SIGNAL(currentResultsTabChanged(int)));
+      connect(this, SIGNAL(currentResultsTabChangedFromAnother(int)), paramWidget, SLOT(currentTabChanged(int)));
+      connect(paramWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
+      connect(paramWidget, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
+    }
+    else
+    {
+      QTabWidget * paramWidget = new QTabWidget;
+      QWidget * aWidget = new QWidget;
+      paramWidget->addTab(aWidget, tr("PDF/CDF"));
+      aWidget = new QWidget;
+      paramWidget->addTab(aWidget, tr("Kendall plot"));
+      const QString message = QString("%1%2%3").arg("<font color=red>").arg(QString::fromUtf8(currentSetResult_.getErrorMessages()[i].c_str())).arg("</font>");
+      aWidget = new QWidget;
+      QVBoxLayout * aWidgetLayout = new QVBoxLayout(aWidget);
+      QLabel * errorMessageLabel = new QLabel(message);
+      errorMessageLabel->setWordWrap(true);
+      aWidgetLayout->addWidget(errorMessageLabel);
+      aWidgetLayout->addStretch();
+      paramWidget->addTab(aWidget, tr("Parameters"));
+      paramWidget->setTabEnabled(0, false);
+      paramWidget->setTabEnabled(1, false);
+      paramStackWidget->addWidget(paramWidget);
+    }
   }
   connect(this, SIGNAL(distributionChanged(int)), paramStackWidget, SLOT(setCurrentIndex(int)));
 

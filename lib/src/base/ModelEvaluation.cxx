@@ -119,7 +119,7 @@ void ModelEvaluation::run()
                                                     << ".\n" << ex.what();
       }
     }
-    outputSample.setDescription(getPhysicalModel().getSelectedOutputsNames());
+    outputSample.setDescription(getInterestVariables());
     result_ = ModelEvaluationResult(inputSample, outputSample);
     notify("analysisFinished");
   }

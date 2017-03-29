@@ -107,6 +107,11 @@ void KrigingAnalysis::run()
 {
   try
   {
+    // clear result
+    initialize();
+    result_ = KrigingAnalysisResult();
+    optimalCovarianceModel_ = CovarianceModel();
+
     // check
     if (designOfExperiment_.getInputSample().getSize()*designOfExperiment_.getOutputSample().getSize() == 0)
       throw InvalidArgumentException(HERE) << "The design of experiment must contains not empty input AND output samples";
@@ -114,11 +119,6 @@ void KrigingAnalysis::run()
       throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
     if (!getInterestVariables().getSize())
       throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
-
-    // clear result
-    initialize();
-    result_ = KrigingAnalysisResult();
-    optimalCovarianceModel_ = CovarianceModel();
 
     // get effective samples
     const NumericalSample effectiveInputSample(getEffectiveInputSample());
@@ -140,7 +140,10 @@ void KrigingAnalysis::run()
     for (UnsignedInteger i=0; i<outputDimension; ++i)
     {
       if (stopRequested_)
-       return;
+       break;
+
+      informationMessage_ = "Creation of a meta model for the variable " + effectiveOutputSample.getDescription()[i] + " in progress.\n";
+      notify("informationMessageUpdated");
 
       // build algo
       KrigingAlgorithm kriging(buildKrigingAlgorithm(effectiveInputSample, effectiveOutputSample.getMarginal(i)));
@@ -168,13 +171,15 @@ void KrigingAnalysis::run()
     }
 
     // set result_
-    result_.outputSample_ = effectiveOutputSample;
+    Indices computedOutputIndices(krigingResultCollection.getSize());
+    computedOutputIndices.fill();
+    result_.outputSample_ = effectiveOutputSample.getMarginal(computedOutputIndices);
     result_.krigingResultCollection_ = krigingResultCollection;
 
     // build metamodel
     NumericalMathFunction metamodelFunction(metaModelCollection);
     Description variablesNames(effectiveInputSample.getDescription());
-    variablesNames.add(effectiveOutputSample.getDescription());
+    variablesNames.add(result_.outputSample_.getDescription());
     metamodelFunction.setDescription(variablesNames);
 
     buildMetaModel(result_, metamodelFunction);

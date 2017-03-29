@@ -45,6 +45,7 @@ protected:
   bool hasPhysicalModelInputs(const QModelIndex & currentIndex);
   bool isProbabilisticModelValid(const QModelIndex & currentIndex);
   bool isLimitStateValid(const QModelIndex & currentIndex);
+  bool isDesignOfExperimentValid(const QModelIndex& currentIndex);
   void launchAnalysis(AnalysisItem*);
   void changeActionsAvailability(const bool availability);
 

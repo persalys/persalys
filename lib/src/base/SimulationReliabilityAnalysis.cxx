@@ -69,15 +69,15 @@ void SimulationReliabilityAnalysis::UpdateProgressValue(double percent, void * d
 
   // set information message
   OSS oss;
-  oss << "Number of iterations = " << analysisStruct->simulation_->getResult().getOuterSampling() << "\n";
-  oss << "Coefficient of variation = " << analysisStruct->simulation_->getResult().getCoefficientOfVariation() << "\n";
+  oss << "Number of iterations = " << analysisStruct->simulation_.getResult().getOuterSampling() << "\n";
+  oss << "Coefficient of variation = " << analysisStruct->simulation_.getResult().getCoefficientOfVariation() << "\n";
   oss << "Elapsed time = " << (NumericalScalar) analysisStruct->analysis_->timeCriteria_.elapsedTime_ / CLOCKS_PER_SEC << " s\n";
   analysisStruct->analysis_->informationMessage_ = oss;
   analysisStruct->analysis_->notify("informationMessageUpdated");
 }
 
 
-Simulation* SimulationReliabilityAnalysis::getSimulationAlgorithm(const OT::Event& event)
+SimulationInterface SimulationReliabilityAnalysis::getSimulationAlgorithm(const OT::Event& event)
 {
   throw NotYetImplementedException(HERE) << "In SimulationReliabilityAnalysis::getSimulationAlgorithm()";
 }
@@ -108,32 +108,32 @@ void SimulationReliabilityAnalysis::run()
     event.setDescription(outputName);
 
     // create OT::Simulation
-    Simulation * algo = getSimulationAlgorithm(event);
+    SimulationInterface algo = getSimulationAlgorithm(event);
 
     // set algo parameters
     UnsignedInteger maximumOuterSampling = (UnsignedInteger)std::numeric_limits<int>::max();
     if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
     {
-      algo->setConvergenceStrategy(Compact(getMaximumCalls())); // TODO: propose in wizard the convergence sample's size?
+      algo.setConvergenceStrategy(Compact(getMaximumCalls())); // TODO: propose in wizard the convergence sample's size?
       maximumOuterSampling = static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize()));
     }
-    algo->setMaximumOuterSampling(maximumOuterSampling);
-    algo->setMaximumCoefficientOfVariation(getMaximumCoefficientOfVariation());
-    algo->setBlockSize(getBlockSize());
+    algo.setMaximumOuterSampling(maximumOuterSampling);
+    algo.setMaximumCoefficientOfVariation(getMaximumCoefficientOfVariation());
+    algo.setBlockSize(getBlockSize());
 
     timeCriteria_.setStartTime(clock());
     timeCriteria_.setMaxElapsedTime(getMaximumElapsedTime());
-    algo->setStopCallback(&Stop, &timeCriteria_);
+    algo.setStopCallback(&Stop, &timeCriteria_);
     AnalysisStruct analysisStruc(this, algo);
-    algo->setProgressCallback(&UpdateProgressValue, &analysisStruc);
+    algo.setProgressCallback(&UpdateProgressValue, &analysisStruc);
 
     // run algo
-    algo->run();
+    algo.run();
 
     // set results
     // get convergence graph at level 0.95
-    const Graph graph = algo->drawProbabilityConvergence();
-    result_ = SimulationReliabilityResult(algo->getResult(),
+    const Graph graph = algo.drawProbabilityConvergence();
+    result_ = SimulationReliabilityResult(algo.getResult(),
                                           function.getHistoryOutput().getSample(),
                                           graph.getDrawables()[0].getData(),
                                           graph.getDrawables()[1].getData(),

@@ -295,7 +295,7 @@ void KrigingResultWindow::showHideGraphConfigurationWidget(int indexTab)
 {
 
   if (indexTab == 0 || // metamodel
-      indexTab == 1    // validation
+      indexTab == 2    // validation
      )
     emit stateChanged(outputsListWidget_->currentRow());
   else

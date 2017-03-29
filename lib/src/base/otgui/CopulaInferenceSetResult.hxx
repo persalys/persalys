@@ -42,6 +42,7 @@ public:
   OT::Description getSetOfVariablesNames() const;
   OT::Collection<OT::Distribution> getTestedDistributions() const;
   OT::PersistentCollection<OT::PersistentCollection<OT::NumericalSample > > getKendallPlotData() const;
+  OT::Description getErrorMessages() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -56,6 +57,7 @@ protected:
   OT::Description setOfVariablesNames_;
   OT::PersistentCollection< OT::Distribution > testedDistributions_;
   OT::PersistentCollection<OT::PersistentCollection<OT::NumericalSample > > kendallPlotData_;
+  OT::Description errorMessages_;
 };
 }
 #endif

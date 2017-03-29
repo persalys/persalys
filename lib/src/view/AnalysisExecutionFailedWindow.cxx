@@ -28,9 +28,10 @@ namespace OTGUI {
 
 AnalysisExecutionFailedWindow::AnalysisExecutionFailedWindow(AnalysisItem * item, const QString & errorMessage)
   : OTguiSubWindow(item)
+  , analysisErrorMessage_(errorMessage)
 {
   buildInterface();
-  setErrorMessage(errorMessage);
+  setErrorMessage(tr("No available results"));
 }
 
 
@@ -41,15 +42,18 @@ void AnalysisExecutionFailedWindow::buildInterface()
   QWidget * mainWidget = new QWidget;
   QVBoxLayout * layout = new QVBoxLayout(mainWidget);
 
-  QString message(tr("No results are available. The analysis was not launched or an error has occured during its execution.\n"));
+  QString message(tr("No results are available.") + "\n" + tr("The analysis was not launched or an error has occured during its execution.") + "\n");
   QLabel * label = new QLabel(message);
   label->setWordWrap(true);
   layout->addWidget(label);
 
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
-  layout->addWidget(errorMessageLabel_);
-
+  if (!analysisErrorMessage_.isEmpty())
+  {
+    QString errorMessage = QString("%1%2%3").arg("<font color=red>").arg(analysisErrorMessage_).arg("</font>");
+    label = new QLabel(errorMessage);
+    label->setWordWrap(true);
+    layout->addWidget(label);
+  }
   layout->addStretch();
 
   setWidget(mainWidget);

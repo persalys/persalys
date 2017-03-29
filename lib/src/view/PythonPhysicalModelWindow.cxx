@@ -56,7 +56,9 @@ bool CodeView::event(QEvent * event)
 PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item)
   : OTguiSubWindow(item)
   , physicalModel_(item->getPhysicalModel())
+  , codeText_("")
   , codeModel_(0)
+  , codeView_(0)
 {
   setWindowTitle(tr("Python physical model"));
 
@@ -77,9 +79,10 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item)
 
   QWidget * rightSideWidget = new QWidget;
   QVBoxLayout * vBoxLayout = new QVBoxLayout(rightSideWidget);
-  PhysicalModelWindowWidget * widget = new PhysicalModelWindowWidget(item);
-  connect(widget, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
-  vBoxLayout->addWidget(widget);
+
+  PhysicalModelWindowWidget * tablesWidget = new PhysicalModelWindowWidget(item);
+  connect(tablesWidget, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
+  vBoxLayout->addWidget(tablesWidget);
 
   errorMessageLabel_ = new QLabel;
   errorMessageLabel_->setWordWrap(true);
@@ -100,12 +103,19 @@ void PythonPhysicalModelWindow::updateCodeModel()
   connect(codeModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(parseVariables()));
   codeView_->setModel(codeModel_);
   codeView_->openPersistentEditor(codeModel_->index(0, 0));
+  codeText_ = QString::fromStdString(dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get())->getCode());
 }
 
 
 void PythonPhysicalModelWindow::parseVariables()
 {
   QString code = QString::fromStdString(dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get())->getCode());
+
+  if (code.split("\n", QString::SkipEmptyParts) == codeText_.split("\n", QString::SkipEmptyParts))
+    return;
+
+  codeText_ = code;
+
   QStringList lines = code.split("\n");
   Description inputVariables;
   Description outputVariables;

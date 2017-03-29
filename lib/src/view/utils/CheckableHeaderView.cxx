@@ -22,15 +22,51 @@
 
 namespace OTGUI {
 
-CheckableHeaderView::CheckableHeaderView(QWidget * parent)
+CheckableHeaderView::CheckableHeaderView(QWidget* parent)
   : QHeaderView(Qt::Horizontal, parent)
   , isChecked_(false)
 {
+#if QT_VERSION >= 0x050000
+  setSectionsClickable(true);
+#else
+  setClickable(true);
+#endif
+
   setToolTip(tr("Select all"));
 }
 
 
-void CheckableHeaderView::paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const
+void CheckableHeaderView::setModel(QAbstractItemModel* model)
+{
+  QHeaderView::setModel(model);
+  // we need to define a minimum section size
+  // to avoid that the text takes place under the indicator when resizing the section 0
+  setMinimumSectionSize(getMinimumSectionSize());
+}
+
+
+int CheckableHeaderView::getMinimumSectionSize() const
+{
+  // define the minimum section size
+  // to avoid that the text takes place under the indicator when resizing the section 0
+  QStyleOptionButton option;
+  QString textContent;
+  if (model())
+    textContent = model()->headerData(0, Qt::Horizontal).toString();
+
+  const int textWidth = style()->itemTextRect(option.fontMetrics, QRect(), Qt::TextShowMnemonic, true, textContent).size().width();
+  const int buttonMargin = 3;
+  const int labelSpacing = style()->pixelMetric(QStyle::PM_CheckBoxLabelSpacing);
+  const int indicatorWidth = style()->subElementRect(QStyle::SE_CheckBoxIndicator, &option).width();
+
+  // before the text we need the size: (buttonMargin + labelSpacing + indicatorWidth)
+  // the text is at the middle of the cell
+  // so we also need the size (buttonMargin + labelSpacing + indicatorWidth) after the text
+  return textWidth + 2 * (buttonMargin + labelSpacing + indicatorWidth);
+}
+
+
+void CheckableHeaderView::paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const
 {
   painter->save();
   QHeaderView::paintSection(painter, rect, logicalIndex);
@@ -40,7 +76,8 @@ void CheckableHeaderView::paintSection(QPainter *painter, const QRect &rect, int
   {
     QStyleOptionButton checkBoxStyleOption;
     QRect checkBoxRect = style()->subElementRect(QStyle::SE_CheckBoxIndicator, &checkBoxStyleOption);
-    QPoint checkBoxPoint(rect.x() + 3, rect.y() + rect.height() / 2 - checkBoxRect.height() / 2);
+    const int buttonMargin = 3;
+    QPoint checkBoxPoint(rect.x() + buttonMargin, rect.y() + rect.height() / 2 - checkBoxRect.height() / 2);
 
     QStyleOptionButton option;
     option.rect = QRect(checkBoxPoint, checkBoxRect.size());
@@ -53,20 +90,28 @@ void CheckableHeaderView::paintSection(QPainter *painter, const QRect &rect, int
 }
 
 
-void CheckableHeaderView::mousePressEvent(QMouseEvent *event)
+void CheckableHeaderView::mousePressEvent(QMouseEvent* event)
 {
-  if (isEnabled() && logicalIndexAt(event->pos()) == 0)
+  if (isEnabled() && logicalIndexAt(event->pos()) == 0 && model())
   {
-    isChecked_ = !isChecked_;
-    updateSection(0);
-    if (model())
+    QStyleOptionButton checkBoxStyleOption;
+    QRect checkBoxRect = style()->subElementRect(QStyle::SE_CheckBoxIndicator, &checkBoxStyleOption);
+    const int sectionPosX = sectionViewportPosition(0);
+    const int buttonMargin = 3;
+
+    if (event->x() <= (sectionPosX + buttonMargin + checkBoxRect.width()) &&
+        event->x() >= (sectionPosX + buttonMargin))
+    {
+      isChecked_ = !isChecked_;
+      updateSection(0);
       model()->setHeaderData(0, Qt::Horizontal, isChecked_, Qt::CheckStateRole);
-    setToolTip(isChecked_? tr("Unselect all"):tr("Select all"));
+
+      setToolTip(isChecked_? tr("Unselect all") : tr("Select all"));
+      return;
+    }
   }
-  else
-  {
-    QHeaderView::mousePressEvent(event);
-  }
+
+  QHeaderView::mousePressEvent(event);
 }
 
 
@@ -76,7 +121,7 @@ void CheckableHeaderView::setChecked(bool checked)
   {
     isChecked_ = checked;
     updateSection(0);
-    setToolTip(isChecked_? tr("Unselect all"):tr("Select all"));
+    setToolTip(isChecked_? tr("Unselect all") : tr("Select all"));
   }
 }
 }

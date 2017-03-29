@@ -34,6 +34,8 @@ public:
 
 protected:
   void buildInterface();
+private:
+  QString analysisErrorMessage_;
 };
 }
 #endif

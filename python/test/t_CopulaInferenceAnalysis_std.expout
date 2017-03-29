@@ -2,10 +2,10 @@ class=DataModel name=myDataModel fileName=data.csv inputColumns=[0,2,3] outputCo
 class=CopulaInferenceAnalysis name=analysis designOfExperiment=myDataModel interestVariables=[X0,X2,X3] setOfVariables [X0,X2,X3] distributionFactories=[NormalCopulaFactory] setOfVariables [X0,X3] distributionFactories=[NormalCopulaFactory,GumbelCopulaFactory]
 result= class=CopulaInferenceResult copulaInferenceSetResultCollection=[class=CopulaInferenceSetResult setOfVariablesNames=[X0,X2,X3] testedDistributions=[NormalCopula(R = [[ 1         0.0529305 0.0580361 ]
  [ 0.0529305 1         0.039636  ]
- [ 0.0580361 0.039636  1         ]])],class=CopulaInferenceSetResult setOfVariablesNames=[X0,X3] testedDistributions=[NormalCopula(R = [[ 1         0.0580361 ]
- [ 0.0580361 1         ]]),GumbelCopula(theta = 1.03839)]]
+ [ 0.0580361 0.039636  1         ]])] error messages=[],class=CopulaInferenceSetResult setOfVariablesNames=[X0,X3] testedDistributions=[NormalCopula(R = [[ 1         0.0580361 ]
+ [ 0.0580361 1         ]]),GumbelCopula(theta = 1.03839)] error messages=[,]]
 class=CopulaInferenceSetResult setOfVariablesNames=[X0,X3] testedDistributions=[NormalCopula(R = [[ 1         0.0580361 ]
- [ 0.0580361 1         ]]),GumbelCopula(theta = 1.03839)]
+ [ 0.0580361 1         ]]),GumbelCopula(theta = 1.03839)] error messages=[,]
 #!/usr/bin/env python
 # coding: utf-8
 

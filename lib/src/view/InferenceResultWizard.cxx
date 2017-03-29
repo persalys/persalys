@@ -60,7 +60,8 @@ void InferenceResultWizard::buildInterface()
 
   for (UnsignedInteger i=0; i<otStudy_.getAnalyses().getSize(); ++i)
     if (otStudy_.getAnalyses()[i].getImplementation()->getClassName() == "InferenceAnalysis")
-      inferenceResultsComboBox_->addItem(QString::fromUtf8(otStudy_.getAnalyses()[i].getName().c_str()), (int)i);
+      if (dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[i].getImplementation().get())->analysisLaunched())
+        inferenceResultsComboBox_->addItem(QString::fromUtf8(otStudy_.getAnalyses()[i].getName().c_str()), (int)i);
 
   // choose variable
   variablesComboBox_ = new QComboBox;
@@ -70,6 +71,7 @@ void InferenceResultWizard::buildInterface()
   // widget with tables
   inferenceResultWidget_ = new InferenceResultWidget(false, this);
   mainLayout->addWidget(inferenceResultWidget_, 2, 0, 1, 2);
+  connect(inferenceResultWidget_, SIGNAL(currentDistributionChanged()), this, SLOT(clearErrorMessage()));
 
   // error message
   errorMessageLabel_ = new QLabel;
@@ -91,7 +93,6 @@ void InferenceResultWizard::updateVariablesComboBox(int currentAnalysis)
     return;
 
   // reset
-  errorMessageLabel_->setText("");
   variablesComboBox_->clear();
 
   // get variables names
@@ -99,7 +100,7 @@ void InferenceResultWizard::updateVariablesComboBox(int currentAnalysis)
   if (inferenceResultsComboBox_->count())
   {
     const int analysisIndex = inferenceResultsComboBox_->itemData(currentAnalysis).toInt();
-    InferenceResult result(dynamic_cast<InferenceAnalysis*>(&*otStudy_.getAnalyses()[analysisIndex].getImplementation())->getResult());
+    InferenceResult result(dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
     Collection< FittingTestResult > fittingTestResultCollection(result.getFittingTestResultCollection());
 
     for (UnsignedInteger i=0; i<fittingTestResultCollection.getSize(); ++i)
@@ -114,10 +115,15 @@ void InferenceResultWizard::updateInferenceResultWidget(QString variableName)
   if (!(inferenceResultsComboBox_ && inferenceResultWidget_))
     return;
 
-  const int analysisIndex = inferenceResultsComboBox_->itemData(inferenceResultsComboBox_->currentIndex()).toInt();
-  InferenceResult result(dynamic_cast<InferenceAnalysis*>(&*otStudy_.getAnalyses()[analysisIndex].getImplementation())->getResult());
+  clearErrorMessage();
 
-  inferenceResultWidget_->updateDistributionTable(result, variableName);
+  if (inferenceResultsComboBox_->count())
+  {
+    const int analysisIndex = inferenceResultsComboBox_->itemData(inferenceResultsComboBox_->currentIndex()).toInt();
+    InferenceResult result(dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
+
+    inferenceResultWidget_->updateDistributionTable(result, variableName);
+  }
 }
 
 
@@ -127,10 +133,25 @@ Distribution InferenceResultWizard::getDistribution() const
 }
 
 
+void InferenceResultWizard::clearErrorMessage()
+{
+  if (errorMessageLabel_)
+    errorMessageLabel_->setText("");
+}
+
+
 bool InferenceResultWizard::validateCurrentPage()
 {
   if (!inferenceResultsComboBox_->count())
+  {
+    errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(tr("The current study has not inference analyses results.")).arg("</font>"));
     return false;
+  }
+  if (!inferenceResultWidget_->isSelectedDistributionValid())
+  {
+    errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(tr("The selected distribution is not valid.")).arg("</font>"));
+    return false;
+  }
 
   return QWizard::validateCurrentPage();
 }

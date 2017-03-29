@@ -39,6 +39,7 @@ public:
 
   OTStudyItem * getOTStudyItem(const QModelIndex & childIndex);
   PhysicalModelItem * getPhysicalModelItem(const QModelIndex & childIndex);
+  DesignOfExperimentItem * getDesignOfExperimentItem(const QModelIndex& childIndex);
   LimitStateItem * getLimitStateItem(const QModelIndex & childIndex);
   AnalysisItem * getAnalysisItem(OTStudyItem * otStudyItem, const QString & analysisName);
 

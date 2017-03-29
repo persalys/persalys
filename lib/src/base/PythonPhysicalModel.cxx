@@ -35,6 +35,8 @@ static Factory<PythonPhysicalModel> Factory_PythonPhysicalModel;
 PythonPhysicalModel::PythonPhysicalModel(const String & name)
   : PhysicalModelImplementation(name)
 {
+  addInput(Input("X0"));
+  addOutput(Output("Y0"));
   setCode("def _exec(X0):\n    Y0 = X0\n    return [Y0]");
 }
 

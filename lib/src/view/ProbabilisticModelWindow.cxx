@@ -28,6 +28,7 @@
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/QtTools.hxx"
 #include "otgui/InferenceResultWizard.hxx"
+#include "otgui/InferenceAnalysis.hxx"
 
 #include "openturns/Normal.hxx"
 #include "openturns/TruncatedDistribution.hxx"
@@ -37,6 +38,7 @@
 #include <QScrollArea>
 #include <QPushButton>
 #include <QStackedWidget>
+#include <QMessageBox>
 
 using namespace OT;
 
@@ -77,10 +79,27 @@ void ProbabilisticModelWindow::buildInterface()
   // Inputs table
   inputTableView_ = new QTableView;
   inputTableView_->setSelectionMode(QAbstractItemView::SingleSelection);
+  inputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+  // - model
+  inputTableModel_ = new InputTableProbabilisticModel(physicalModel_, inputTableView_);
+  inputTableView_->setModel(inputTableModel_);
+
+  // - header view
   inputTableHeaderView_ = new CheckableHeaderView;
+  inputTableView_->setHorizontalHeader(inputTableHeaderView_);
   if (physicalModel_.hasStochasticInputs() && (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize()))
     inputTableHeaderView_->setChecked(true);
-  inputTableView_->setHorizontalHeader(inputTableHeaderView_);
+
+  #if QT_VERSION >= 0x050000
+  inputTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
+  inputTableView_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+#else
+  inputTableView_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
+  inputTableView_->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+#endif
+
+  // - delegate for distributions list
   QStringList items;
   Description listDistributions = DistributionDictionary::GetAvailableDistributions();
   for (UnsignedInteger i=0; i<listDistributions.getSize(); ++i)
@@ -89,20 +108,12 @@ void ProbabilisticModelWindow::buildInterface()
 
   ComboBoxDelegate * delegate = new ComboBoxDelegate(items);
   inputTableView_->setItemDelegateForColumn(1, delegate);
-#if QT_VERSION >= 0x050000
-  inputTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-#else
-  inputTableView_->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-#endif
-  inputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-  inputTableModel_ = new InputTableProbabilisticModel(physicalModel_, inputTableView_);
-  inputTableView_->setModel(inputTableModel_);
-  inputTableView_->resizeColumnToContents(0);
-
+  // - show combo box
   for (int i = 0; i < inputTableModel_->rowCount(); ++i)
     inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
 
+  // - connections
   connect(inputTableView_, SIGNAL(clicked(QModelIndex)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(distributionChanged(const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
@@ -200,6 +211,7 @@ void ProbabilisticModelWindow::buildInterface()
   rightScrollArea->setWidget(rightFrame);
   rightSideOfSplitterStackedWidget_->addWidget(rightScrollArea);
   horizontalSplitter->addWidget(rightSideOfSplitterStackedWidget_);
+  horizontalSplitter->setStretchFactor(1, 3);
 
   if (inputTableModel_->rowCount())
   {
@@ -815,16 +827,38 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
 
 void ProbabilisticModelWindow::openWizardToChooseInferenceResult(const QModelIndex& inputIndex)
 {
-  InferenceResultWizard * wizard = new InferenceResultWizard(otStudy_, this);
-  if (wizard->exec())
+  bool otStudyHasInferenceResults = false;
+  // we need at least one inference analysis result to open the wizard
+  for (UnsignedInteger i=0; i<otStudy_.getAnalyses().getSize(); ++i)
   {
-    // update the input
-    const Input input(physicalModel_.getInputs()[inputIndex.row()]);
-    physicalModel_.blockNotification(true);
-    physicalModel_.setDistribution(input.getName(), wizard->getDistribution());
-    physicalModel_.setDistributionParametersType(input.getName(), 0);
-    physicalModel_.blockNotification(false);
-    updateDistributionWidgets(inputIndex);
+    if (otStudy_.getAnalyses()[i].getImplementation()->getClassName() == "InferenceAnalysis")
+    {
+      if (dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[i].getImplementation().get())->analysisLaunched())
+      {
+        otStudyHasInferenceResults = true;
+        break;
+      }
+    }
+  }
+
+  if (!otStudyHasInferenceResults)
+  {
+    QMessageBox::critical(this, tr("Error"), tr("The current study has not inference analyses results."));
+    return;
+  }
+  else
+  {
+    InferenceResultWizard * wizard = new InferenceResultWizard(otStudy_, this);
+    if (wizard->exec())
+    {
+      // update the input
+      const Input input(physicalModel_.getInputs()[inputIndex.row()]);
+      physicalModel_.blockNotification(true);
+      physicalModel_.setDistribution(input.getName(), wizard->getDistribution());
+      physicalModel_.setDistributionParametersType(input.getName(), 0);
+      physicalModel_.blockNotification(false);
+      updateDistributionWidgets(inputIndex);
+    }
   }
 }
 }

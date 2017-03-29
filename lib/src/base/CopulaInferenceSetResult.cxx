@@ -63,13 +63,20 @@ PersistentCollection<PersistentCollection<NumericalSample > > CopulaInferenceSet
 }
 
 
+Description CopulaInferenceSetResult::getErrorMessages() const
+{
+  return errorMessages_;
+}
+
+
 /* String converter */
 String CopulaInferenceSetResult::__repr__() const
 {
   OSS oss;
   oss << "class=" << GetClassName()
       << " setOfVariablesNames=" << getSetOfVariablesNames()
-      << " testedDistributions=" << getTestedDistributions();
+      << " testedDistributions=" << getTestedDistributions()
+      << " error messages=" << getErrorMessages();
   return oss;
 }
 
@@ -81,6 +88,7 @@ void CopulaInferenceSetResult::save(Advocate& adv) const
   adv.saveAttribute("setOfVariablesNames_", setOfVariablesNames_);
   adv.saveAttribute("testedDistributions_", testedDistributions_);
   adv.saveAttribute("kendallPlotData_", kendallPlotData_);
+  adv.saveAttribute("errorMessages_", errorMessages_);
 }
 
 
@@ -91,5 +99,6 @@ void CopulaInferenceSetResult::load(Advocate& adv)
   adv.loadAttribute("setOfVariablesNames_", setOfVariablesNames_);
   adv.loadAttribute("testedDistributions_", testedDistributions_);
   adv.loadAttribute("kendallPlotData_", kendallPlotData_);
+  adv.loadAttribute("errorMessages_", errorMessages_);
 }
 }

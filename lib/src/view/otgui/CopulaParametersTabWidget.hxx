@@ -25,6 +25,7 @@
 #include "otgui/DataSample.hxx"
 
 #include <QTabWidget>
+#include <QLabel>
 
 namespace OTGUI {
 class OTGUI_API CopulaParametersTabWidget : public QTabWidget
@@ -41,7 +42,8 @@ protected:
   void buildInterface();
 
 public slots:
-  void stateChanged();  
+  void stateChanged();
+  void currentTabChanged(int);
   void showHideGraphConfigurationWidget(int index);
 
 signals:
@@ -54,6 +56,7 @@ private:
   OT::PersistentCollection<OT::NumericalSample> kendallPlotData_;
   GraphConfigurationWidget * pdf_cdfPlotGraphConfigWidget_;
   GraphConfigurationWidget * kendallPlotGraphConfigWidget_;
+  QLabel * analysisErrorMessageLabel_;
 };
 }
 #endif

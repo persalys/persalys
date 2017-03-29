@@ -70,6 +70,12 @@ Collection< TestResult > FittingTestResult::getKolmogorovTestResults() const
 }
 
 
+Description FittingTestResult::getErrorMessages() const
+{
+  return errorMessages_;
+}
+
+
 /* String converter */
 String FittingTestResult::__repr__() const
 {
@@ -77,7 +83,8 @@ String FittingTestResult::__repr__() const
   oss << "class=" << GetClassName()
       << " variableName=" << getVariableName()
       << " testedDistributions=" << getTestedDistributions()
-      << " kolmogorovTestResults=" << getKolmogorovTestResults();
+      << " kolmogorovTestResults=" << getKolmogorovTestResults()
+      << " error messages=" << getErrorMessages();
   return oss;
 }
 
@@ -90,6 +97,7 @@ void FittingTestResult::save(Advocate& adv) const
   adv.saveAttribute("values_", values_);
   adv.saveAttribute("testedDistributions_", testedDistributions_);
   adv.saveAttribute("kolmogorovTestResults_", kolmogorovTestResults_);
+  adv.saveAttribute("errorMessages_", errorMessages_);
 }
 
 
@@ -101,5 +109,6 @@ void FittingTestResult::load(Advocate& adv)
   adv.loadAttribute("values_", values_);
   adv.loadAttribute("testedDistributions_", testedDistributions_);
   adv.loadAttribute("kolmogorovTestResults_", kolmogorovTestResults_);
+  adv.loadAttribute("errorMessages_", errorMessages_);
 }
 }

@@ -378,8 +378,12 @@ void OTStudyItem::removeItem(QStandardItem * item)
 
 void OTStudyItem::setData(const QVariant & value, int role)
 {
+  // do NOT use otStudy_.setName otherwise otStudy_ is duplicated!!
+  // when copying an Observable, the list of observers is not duplicated...
+  // when an observable has no observer, otgui is lost
+  // for example is not possible to remove the items...
   if (role == Qt::EditRole)
-    otStudy_.setName(value.toString().toLocal8Bit().data());
+    otStudy_.getImplementation()->setName(value.toString().toLocal8Bit().data());
 
   QStandardItem::setData(value, role);
 }

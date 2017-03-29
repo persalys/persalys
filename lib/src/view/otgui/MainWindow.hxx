@@ -44,6 +44,7 @@ public slots:
 
 protected:
   void buildInterface();
+  void buildActions();
 
 private slots:
   void importPython();

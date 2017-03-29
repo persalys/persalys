@@ -21,7 +21,6 @@
 #include "otgui/StudyTreeViewModel.hxx"
 
 #include "otgui/OTStudy.hxx"
-#include "otgui/SymbolicPhysicalModel.hxx"
 
 using namespace OT;
 
@@ -119,6 +118,22 @@ PhysicalModelItem* StudyTreeViewModel::getPhysicalModelItem(const QModelIndex & 
     seekRoot = seekRoot.parent();
     if (itemFromIndex(seekRoot)->data(Qt::UserRole).toString() == "PhysicalModel")
       return static_cast<PhysicalModelItem*>(itemFromIndex(seekRoot));
+  }
+  return 0;
+}
+
+
+DesignOfExperimentItem* StudyTreeViewModel::getDesignOfExperimentItem(const QModelIndex& childIndex)
+{
+  if (!childIndex.isValid())
+    return 0;
+  QModelIndex seekRoot = childIndex;
+  while(seekRoot.parent() != QModelIndex())
+  {
+    seekRoot = seekRoot.parent();
+    if (itemFromIndex(seekRoot)->data(Qt::UserRole).toString().contains("DesignOfExperiment") ||
+        itemFromIndex(seekRoot)->data(Qt::UserRole).toString() == "DataModel")
+      return static_cast<DesignOfExperimentItem*>(itemFromIndex(seekRoot));
   }
   return 0;
 }

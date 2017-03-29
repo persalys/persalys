@@ -142,6 +142,7 @@ void CopulaInferenceAnalysis::run()
 
       CopulaInferenceSetResult inferenceSetResult;
       inferenceSetResult.setOfVariablesNames_ = it->first;
+      inferenceSetResult.errorMessages_ = Description(it->second.getSize());
 
       CombinatorialGeneratorImplementation::IndicesCollection pairs(Combinations(2, it->first.getSize()).generate());
 
@@ -153,14 +154,14 @@ void CopulaInferenceAnalysis::run()
       {
         try
         {
-          Distribution distribution(it->second[i].build(sample));
+          const Distribution distribution(it->second[i].build(sample));
           inferenceSetResult.testedDistributions_.add(distribution);
 
           Description description(2);
           Collection<NumericalSample> kendallPlotDataCollection;
           for (UnsignedInteger j=0; j<pairs.getSize(); ++j)
           {
-            Graph graph = VisualTest::DrawKendallPlot(splitSample.getMarginal(pairs[j]), distribution.getMarginal(pairs[j]));
+            const Graph graph = VisualTest::DrawKendallPlot(splitSample.getMarginal(pairs[j]), distribution.getMarginal(pairs[j]));
             NumericalSample kendallPlotData(graph.getDrawable(1).getData());
             description[0] = sample.getDescription()[pairs[j][0]] + " - " + sample.getDescription()[pairs[j][1]];
             kendallPlotData.setDescription(description);
@@ -171,12 +172,19 @@ void CopulaInferenceAnalysis::run()
         catch (std::exception & ex)
         {
           String str = it->second[i].getImplementation()->getClassName();
-          throw InvalidValueException(HERE) << "Error when building the "
-                                            << str.substr(0, str.find("Factory"))
-                                            << " distribution with the sample of the variables "
-                                            << sample.getDescription()
-                                            << ". "
-                                            << ex.what();
+          const String distributionName = str.substr(0, str.find("Copula"));
+          const String message = OSS() << "Error when building the "
+                                       << distributionName
+                                       << " copula with the sample of the variables "
+                                       << sample.getDescription()
+                                       << ". "
+                                       << ex.what()
+                                       << "\n";
+          // set fittingTestResult
+          inferenceSetResult.testedDistributions_.add(DistributionDictionary::BuildDistribution(distributionName, 0));
+          Collection<NumericalSample> kendallPlotDataCollection;
+          inferenceSetResult.kendallPlotData_.add(kendallPlotDataCollection);
+          inferenceSetResult.errorMessages_[i] = message;
         }
       }
       result_.copulaInferenceSetResultCollection_.add(inferenceSetResult);

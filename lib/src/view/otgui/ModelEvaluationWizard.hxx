@@ -22,8 +22,10 @@
 #define OTGUI_MODELEVALUATIONWIZARD_HXX
 
 #include "otgui/AnalysisWizard.hxx"
+#include "otgui/OutputsSelectionGroupBox.hxx"
 
 #include <QTableWidget>
+#include <QLabel>
 
 namespace OTGUI {
 class OTGUI_API ModelEvaluationWizard : public AnalysisWizard
@@ -34,14 +36,19 @@ public:
   ModelEvaluationWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel, QWidget* parent=0);
   ModelEvaluationWizard(const Analysis & analysis, QWidget* parent=0);
 
+  virtual bool validateCurrentPage();
+
 protected:
   void buildInterface();
 
 public slots:
   void inputValueChanged(double value);
+  void setInterestVariables(QStringList);
 
 private:
   QTableWidget * table_;
+  OutputsSelectionGroupBox * outputsGroupBox_;
+  QLabel * errorMessageLabel_;
 };
 }
 #endif

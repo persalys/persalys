@@ -62,7 +62,7 @@ void MetaModelAnalysis::setInterestVariables(const Description& variablesNames)
   const Description modelVariablesNames(designOfExperiment_.getOutputSample().getDescription());
   for (UnsignedInteger i=0; i<variablesNames.getSize(); ++i)
     if (!modelVariablesNames.contains(variablesNames[i]))
-      throw InvalidArgumentException(HERE) << "The name " << variablesNames[i] << " does not match an output name of the model";
+      throw InvalidArgumentException(HERE) << "The name " << variablesNames[i] << " does not match an output name of the model " << designOfExperiment_.getName();
 
   AnalysisImplementation::setInterestVariables(variablesNames);
 }
@@ -176,7 +176,15 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Nu
 
     // outputs
     for (UnsignedInteger i=0; i<outputsNames.getSize(); ++i)
-      metaModel.addOutput(designOfExperiment_.getPhysicalModel().getOutputByName(outputsNames[i]));
+    {
+      Output output(designOfExperiment_.getPhysicalModel().getOutputByName(outputsNames[i]));
+      if (!output.getDescription().empty())
+        output.setDescription(output.getDescription() + " - " + getName() + " metamodel");
+      else
+        output.setDescription(getName() + " metamodel");
+      metaModel.addOutput(output);
+      metaModel.setCopula(designOfExperiment_.getPhysicalModel().getCopula());
+    }
   }
   else
   {
@@ -185,7 +193,7 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Nu
       metaModel.addInput(Input(inputsNames[i]));
     // outputs
     for (UnsignedInteger i=0; i<outputsNames.getSize(); ++i)
-      metaModel.addOutput(Output(outputsNames[i]));
+      metaModel.addOutput(Output(outputsNames[i], getName() + " metamodel"));
   }
   result.metaModel_ = metaModel;
 }
@@ -228,6 +236,10 @@ void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result,
   // validation: leave-one-out
   if (leaveOneOutValidation_)
   {
+    // check
+    if (!result.outputSample_.getSize())
+      throw InvalidValueException(HERE) << "Problem during the creation of the metamodel: The outputSample is empty.\n";
+
     informationMessage_ = "Meta model has been created.\nThe validation is running.";
     notify("informationMessageUpdated");
 

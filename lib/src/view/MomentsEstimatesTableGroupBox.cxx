@@ -106,15 +106,18 @@ QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const DataAn
   // Mean
   momentsEstimationsTable->setNotEditableItem(++row, 1, result.getMean()[variableIndex][0]);
 
-  if (result.getMeanConfidenceInterval().getFiniteLowerBound()[variableIndex])
+  if (isConfidenceIntervalRequired_)
   {
-    momentsEstimationsTable->setNotEditableItem(row, 2, result.getMeanConfidenceInterval().getLowerBound()[variableIndex]);
-    momentsEstimationsTable->setNotEditableItem(row, 3, result.getMeanConfidenceInterval().getUpperBound()[variableIndex]);
-  }
-  else
-  {
-    momentsEstimationsTable->setNotEditableItem(row, 2, "-");
-    momentsEstimationsTable->setNotEditableItem(row, 3, "-");
+    if (result.getMeanConfidenceInterval().getFiniteLowerBound()[variableIndex])
+    {
+      momentsEstimationsTable->setNotEditableItem(row, 2, result.getMeanConfidenceInterval().getLowerBound()[variableIndex]);
+      momentsEstimationsTable->setNotEditableItem(row, 3, result.getMeanConfidenceInterval().getUpperBound()[variableIndex]);
+    }
+    else
+    {
+      momentsEstimationsTable->setNotEditableItem(row, 2, "-");
+      momentsEstimationsTable->setNotEditableItem(row, 3, "-");
+    }
   }
 
   // Standard Deviation
@@ -123,15 +126,18 @@ QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const DataAn
   else
     momentsEstimationsTable->setNotEditableItem(++row, 1, "-");
 
-  if (result.getStdConfidenceInterval().getFiniteLowerBound()[variableIndex])
+  if (isConfidenceIntervalRequired_)
   {
-    momentsEstimationsTable->setNotEditableItem(row, 2, result.getStdConfidenceInterval().getLowerBound()[variableIndex]);
-    momentsEstimationsTable->setNotEditableItem(row, 3, result.getStdConfidenceInterval().getUpperBound()[variableIndex]);
-  }
-  else
-  {
-    momentsEstimationsTable->setNotEditableItem(row, 2, "-");
-    momentsEstimationsTable->setNotEditableItem(row, 3, "-");
+    if (result.getStdConfidenceInterval().getFiniteLowerBound()[variableIndex])
+    {
+      momentsEstimationsTable->setNotEditableItem(row, 2, result.getStdConfidenceInterval().getLowerBound()[variableIndex]);
+      momentsEstimationsTable->setNotEditableItem(row, 3, result.getStdConfidenceInterval().getUpperBound()[variableIndex]);
+    }
+    else
+    {
+      momentsEstimationsTable->setNotEditableItem(row, 2, "-");
+      momentsEstimationsTable->setNotEditableItem(row, 3, "-");
+    }
   }
 
   // Coefficient of variation

@@ -220,7 +220,7 @@ PhysicalModel& OTStudy::getPhysicalModelByName(const String& physicalModelName)
 
 String OTStudy::getAvailablePhysicalModelName(const String& physicalModelRootName) const
 {
-  return getImplementation()->getAvailablePhysicalModelName();
+  return getImplementation()->getAvailablePhysicalModelName(physicalModelRootName);
 }
 
 

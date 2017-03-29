@@ -26,7 +26,6 @@
 #include "otgui/CodeModel.hxx"
 
 #include <QTableView>
-#include <QGroupBox>
 
 namespace OTGUI {
 
@@ -43,7 +42,7 @@ class OTGUI_API PythonPhysicalModelWindow : public OTguiSubWindow
 {
   Q_OBJECT
 
-public :
+public:
   PythonPhysicalModelWindow(PhysicalModelItem * item);
 
 public slots:
@@ -54,6 +53,7 @@ private slots:
 
 private:
   PhysicalModel physicalModel_;
+  QString codeText_;
   CodeModel * codeModel_;
   QTableView * codeView_;
 };

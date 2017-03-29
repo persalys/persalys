@@ -35,32 +35,27 @@ int main(int argc, char **argv)
   Input E("E", 0., Normal(3000, 15), "Produced electric energy");
   Input C("C", 0., Normal(4000, 60), "Valued thermal energy");
   Output Ep("Ep", "Primary energy savings");
+  InputCollection inputCollection(3);
+  inputCollection[0] = Q;
+  inputCollection[1] = E;
+  inputCollection[2] = C;
+  OutputCollection outputCollection(1);
+  outputCollection[0] = Ep;
 
   NumericalPoint x(3);
   x[0] = 10200;
   x[1] = 3000;
   x[2] = 4000;
 
-  SymbolicPhysicalModel analyticalModel("analyticalModel1");
-  analyticalModel.addOutput(Ep);
-  analyticalModel.setFormula("Ep", "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
+  Description formula(1, "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
+  SymbolicPhysicalModel analyticalModel("analyticalModel1", inputCollection, outputCollection, formula);
+  study.add(analyticalModel);
+  std::cout << analyticalModel.getFunction()(x) << std::endl;
 
-  PythonPhysicalModel pythonModel("pythonModel1");
-  pythonModel.setCode("def _exec(Q, E, C):\n    Ep = 1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))\n    return [Ep]");
-  pythonModel.addOutput(Ep);
-
-  std::vector<PhysicalModel> models;
-  models.push_back(analyticalModel);
-  models.push_back(pythonModel);
-  for (unsigned int i = 0; i < models.size(); ++ i)
-  {
-    PhysicalModel & model = models[i];
-    model.addInput(Q);
-    model.addInput(E);
-    model.addInput(C);
-    study.add(model);
-    std::cout << model.getFunction()(x) << std::endl;
-  }
+  String code = "def _exec(Q, E, C):\n    Ep = 1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))\n    return [Ep]";
+  PythonPhysicalModel pythonModel("pythonModel1", inputCollection, outputCollection, code);
+  study.add(pythonModel);
+  std::cout << pythonModel.getFunction()(x) << std::endl;
 
   std::cout << study.getPythonScript() << std::endl;
   return EXIT_SUCCESS;

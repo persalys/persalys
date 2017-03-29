@@ -127,6 +127,7 @@ void DataAnalysisWindow::buildInterface()
 
     ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
     parametersGroupBoxLayout->addWidget(table);
+    parametersGroupBoxLayout->addStretch();
     vbox->addWidget(parametersGroupBox);
 
     // min/max table
@@ -147,35 +148,36 @@ void DataAnalysisWindow::buildInterface()
     }
 
     // quantiles
-    QHBoxLayout * quantLayout = new QHBoxLayout;
+    QGridLayout * quantLayout = new QGridLayout;
 
     // Probability
     QLabel * label = new QLabel(tr("Probability"));
     label->setStyleSheet("font: bold;");
-    quantLayout->addWidget(label);
+    quantLayout->addWidget(label, 0, 0);
     probaSpinBox_ = new DoubleSpinBox;
     label->setBuddy(probaSpinBox_);
     probaSpinBox_->setMinimum(0.0);
     probaSpinBox_->setMaximum(1.0);
     probaSpinBox_->setSingleStep(0.01);
-    quantLayout->addWidget(probaSpinBox_);
+    quantLayout->addWidget(probaSpinBox_, 0, 1);
     // Quantile
     label = new QLabel(tr("Quantile"));
     label->setStyleSheet("font: bold;");
-    quantLayout->addWidget(label);
+    quantLayout->addWidget(label, 1, 0);
     quantileSpinBox_ = new DoubleSpinBox;
     label->setBuddy(quantileSpinBox_);
     quantileSpinBox_->setDecimals(8);
-    quantLayout->addWidget(quantileSpinBox_);
+    quantLayout->addWidget(quantileSpinBox_, 1, 1);
 
     connect(probaSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(probaValueChanged(double)));
     connect(quantileSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(quantileValueChanged(double)));
 
     vbox->addLayout(quantLayout);
+    updateSpinBoxes();
 
     tabLayout->addLayout(vbox);
+    tabLayout->addStretch();
 
-    updateSpinBoxes();
     scrollArea->setWidget(tab);
     tabWidget_->addTab(scrollArea, tr("Summary"));
   }

@@ -20,8 +20,8 @@
  */
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
 
-#include "openturns/MonteCarlo.hxx"
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/MonteCarlo.hxx>
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
@@ -29,7 +29,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(MonteCarloReliabilityAnalysis);
 
-static Factory<MonteCarloReliabilityAnalysis> RegisteredFactory;
+static Factory<MonteCarloReliabilityAnalysis> Factory_MonteCarloReliabilityAnalysis;
 
 /* Default constructor */
 MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis()
@@ -53,8 +53,8 @@ MonteCarloReliabilityAnalysis* MonteCarloReliabilityAnalysis::clone() const
 }
 
 
-Simulation* MonteCarloReliabilityAnalysis::getSimulationAlgorithm(const Event& event)
+SimulationInterface MonteCarloReliabilityAnalysis::getSimulationAlgorithm(const Event& event)
 {
-  return new MonteCarlo(event);
+  return MonteCarlo(event);
 }
 }

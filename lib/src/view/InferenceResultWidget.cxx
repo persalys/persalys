@@ -43,6 +43,7 @@ InferenceResultWidget::InferenceResultWidget(const bool displayPDF_QQPlot, QWidg
   , distTableModel_(0)
   , distParamTableView_(0)
   , distParamTableModel_(0)
+  , analysisErrorMessageLabel_(0)
   , pdfPlot_(0)
   , cdfPlot_(0)
   , qqPlot_(0)
@@ -69,7 +70,7 @@ void InferenceResultWidget::buildInterface()
   distTableView_ = new ResizableTableViewWithoutScrollBar;
   RadioButtonDelegate * delegate = new RadioButtonDelegate(2, distTableView_);
   distTableView_->setItemDelegateForColumn(0, delegate);
-  distTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
+  distTableView_->setSelectionMode(QAbstractItemView::NoSelection);
   distTableView_->verticalHeader()->hide();
   distTableView_->horizontalHeader()->hide();
 
@@ -91,6 +92,7 @@ void InferenceResultWidget::buildInterface()
   distParamTableView_ = new ResizableTableViewWithoutScrollBar;
   distParamTableView_->horizontalHeader()->hide();
   distParamTableView_->verticalHeader()->hide();
+  distParamTableView_->setTabKeyNavigation(false);
 
   // --- table model
   distParamTableModel_ = new CustomStandardItemModel(4, 2, distParamTableView_);
@@ -138,20 +140,28 @@ void InferenceResultWidget::buildInterface()
     QWidget * paramWidget = new QWidget;
     QVBoxLayout * paramGroupBoxLayout = new QVBoxLayout(paramWidget);
     paramGroupBoxLayout->addWidget(distParamTableView_);
-    tabWidget_->addTab(distParamTableView_, tr("Parameters"));
+    analysisErrorMessageLabel_ = new QLabel;
+    analysisErrorMessageLabel_->setWordWrap(true);
+    paramGroupBoxLayout->addWidget(analysisErrorMessageLabel_);
+    paramGroupBoxLayout->addStretch();
+
+    tabWidget_->addTab(paramWidget, tr("Parameters"));
 
     connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
 
-    distTabListWidgetLayout->addWidget(tabWidget_);
+    distTabListWidgetLayout->addWidget(tabWidget_, 1);
   }
   else
   {
     QGroupBox * paramGroupBox = new QGroupBox(tr("Distribution parameters"));
     QVBoxLayout * paramGroupBoxLayout = new QVBoxLayout(paramGroupBox);
     paramGroupBoxLayout->addWidget(distParamTableView_);
+    analysisErrorMessageLabel_ = new QLabel;
+    analysisErrorMessageLabel_->setWordWrap(true);
+    paramGroupBoxLayout->addWidget(analysisErrorMessageLabel_);
     paramGroupBoxLayout->addStretch();
     distTabListWidgetLayout->setSizeConstraint(QLayout::SetFixedSize);
-    distTabListWidgetLayout->addWidget(paramGroupBox);
+    distTabListWidgetLayout->addWidget(paramGroupBox, 1);
   }
 
   scrollArea->setWidget(distTabListWidget);
@@ -169,6 +179,7 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
 
   // reset
   distTableModel_->clear();
+  analysisErrorMessageLabel_->clear();
 
   // horizontal header
   distTableModel_->setNotEditableHeaderItem(0, 0, tr("Distributions"));
@@ -211,12 +222,21 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
   for (UnsignedInteger i=0; i<pValues.getSize(); ++i)
   {
     distTableModel_->setNotEditableItem(i+2, 0, currentFittingTestResult_.getTestedDistributions()[indices[i]].getImplementation()->getClassName().c_str());
-    QVariant aVariant = QVariant::fromValue(currentFittingTestResult_.getTestedDistributions()[indices[i]]);
-    distTableModel_->setData(distTableModel_->index(i+2, 0), aVariant, Qt::UserRole);
+    distTableModel_->setData(distTableModel_->index(i+2, 0), (int)indices[i], Qt::UserRole);
     distTableModel_->setNotEditableItem(i+2, 1, pValues[i], 3);
     const bool isAccepted = currentFittingTestResult_.getKolmogorovTestResults()[indices[i]].getBinaryQualityMeasure();
-    const QString text = isAccepted? tr("yes") : tr("no");
-    const QColor color = isAccepted? Qt::green : QColor();
+    QString text = tr("yes");
+    QColor color = Qt::green;
+    if (!isAccepted && currentFittingTestResult_.getErrorMessages()[indices[i]].empty())
+    {
+      text = tr("no");
+      color = QColor();
+    }
+    else if (!isAccepted && !currentFittingTestResult_.getErrorMessages()[indices[i]].empty())
+    {
+      text = tr("failed");
+      color = Qt::red;
+    }
     distTableModel_->setNotEditableItem(i+2, 2, text, color);
   }
   // -- update parameters table
@@ -266,15 +286,40 @@ void InferenceResultWidget::updateRadioButtonsDistributionTable(QModelIndex curr
 void InferenceResultWidget::updateParametersTable(QModelIndex current)
 {
   // check
-  if (!(distTableModel_ && distParamTableModel_ && distParamTableView_))
+  if (!(distTableModel_ && distParamTableModel_ && distParamTableView_ && analysisErrorMessageLabel_))
     return;
   if (current.row() < 2)
     return;
 
+  emit currentDistributionChanged();
+
   // reset
   distParamTableModel_->clear();
+  analysisErrorMessageLabel_->clear();
+
+  // if the selected distribution is not valid (failed inference)
+  if (current.isValid())
+  {
+    const QVariant variant = distTableModel_->data(distTableModel_->index(current.row(), 0), Qt::UserRole);
+    const int resultIndex = variant.value<int>();
+    const String testResultMessage = currentFittingTestResult_.getErrorMessages()[resultIndex];
+    if (!testResultMessage.empty())
+    {
+      const QString message = QString("%1%2%3").arg("<font color=red>").arg(QString::fromUtf8(testResultMessage.c_str())).arg("</font>");
+      analysisErrorMessageLabel_->setText(message);
+      analysisErrorMessageLabel_->show();
+      distParamTableView_->hide();
+      return;
+    }
+  }
+
+  // if the distribution is valid
+  analysisErrorMessageLabel_->hide();
+  distParamTableView_->show();
+
   distParamTableModel_->setColumnCount(2);
 
+  // used font for titles
   QFont font;
   font.setBold(true);
 
@@ -288,12 +333,12 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
   distParamTableModel_->setNotEditableHeaderItem(3, 0, tr("Skewness"));
   distParamTableModel_->setNotEditableHeaderItem(4, 0, tr("Kurtosis"));
 
-  // fill
+  // fill table
   if (current.isValid())
   {
     // -- get distribution
     const QVariant variant = distTableModel_->data(distTableModel_->index(current.row(), 0), Qt::UserRole);
-    Distribution distribution = variant.value<Distribution>();
+    Distribution distribution = currentFittingTestResult_.getTestedDistributions()[variant.value<int>()];
 
     // -- set titles
     if (distribution.getImplementation()->getClassName() != "Normal") // mean and std already displayed
@@ -366,9 +411,19 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
   qqPlot_->clear();
 
   // update
-  // -- get distribution
   const QVariant variant = distTableModel_->data(distTableModel_->index(current.row(), 0), Qt::UserRole);
-  Distribution distribution = variant.value<Distribution>();
+  const int resultIndex = variant.value<int>();
+
+  const bool isInferredDistribution = currentFittingTestResult_.getErrorMessages()[resultIndex].empty();
+
+  tabWidget_->setTabEnabled(0, isInferredDistribution);
+  tabWidget_->setTabEnabled(1, isInferredDistribution);
+
+  if (!isInferredDistribution)
+    return;
+
+  // -- get distribution
+  const Distribution distribution = currentFittingTestResult_.getTestedDistributions()[resultIndex];
 
   // -- pdf
   pdfPlot_->plotHistogram(currentFittingTestResult_.getValues());
@@ -407,10 +462,37 @@ Distribution InferenceResultWidget::getDistribution() const
   if (selectedDistributionIndex.isValid())
   {
     const QVariant variant = distTableModel_->data(selectedDistributionIndex, Qt::UserRole);
-    distribution = variant.value<Distribution>();
+    return currentFittingTestResult_.getTestedDistributions()[variant.value<int>()];
   }
 
   return distribution;
+}
+
+
+bool InferenceResultWidget::isSelectedDistributionValid() const
+{
+  // check
+  if (!(distTableModel_ && distTableView_))
+    return false;
+
+  // get current distribution
+  // loop begins at 2 because the two first rows are the table titles
+  QModelIndex selectedDistributionIndex;
+  for (int i=2; i<distTableModel_->rowCount(); ++i)
+  {
+    if (distTableModel_->data(distTableModel_->index(i, 0), Qt::CheckStateRole).toBool())
+    {
+      const QVariant variant = distTableModel_->data(distTableModel_->index(i, 0), Qt::UserRole);
+      const int resultIndex = variant.value<int>();
+      Description testResultDescription = currentFittingTestResult_.getKolmogorovTestResults()[resultIndex].getDescription();
+
+      if (!testResultDescription.getSize())
+        return false;
+
+      return testResultDescription[0].find("Error") == std::string::npos;
+    }
+  }
+  return false;
 }
 
 

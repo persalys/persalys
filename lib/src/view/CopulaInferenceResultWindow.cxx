@@ -35,6 +35,7 @@ namespace OTGUI {
 CopulaInferenceResultWindow::CopulaInferenceResultWindow(AnalysisItem* item)
   : ResultWindow(item)
   , result_(dynamic_cast<CopulaInferenceAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , currentResultsTab_(0)
 {
   buildInterface();
 }
@@ -88,8 +89,10 @@ void CopulaInferenceResultWindow::buildInterface()
     inferenceResultStackWidget->addWidget(inferenceResultWidget_i);
 
     connect(this, SIGNAL(windowActivated()), inferenceResultWidget_i, SIGNAL(stateChanged()));
+    connect(this, SIGNAL(currentResultsTabChanged(int)), inferenceResultWidget_i, SIGNAL(currentResultsTabChangedFromAnother(int)));
     connect(inferenceResultWidget_i, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
     connect(inferenceResultWidget_i, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
+    connect(inferenceResultWidget_i, SIGNAL(currentResultsTabChanged(int)), this, SLOT(updateCurrentResultsTab(int)));
     connect(listSetOfVariables, SIGNAL(currentRowChanged(int)), inferenceResultWidget_i, SIGNAL(stateChanged()));
   }
   tabWidget->addTab(inferenceResultStackWidget, tr("Summary"));
@@ -100,6 +103,13 @@ void CopulaInferenceResultWindow::buildInterface()
   mainWidget->setStretchFactor(1, 10);
 
   setWidget(mainWidget);
+}
+
+
+void CopulaInferenceResultWindow::updateCurrentResultsTab(int indexTab)
+{
+  currentResultsTab_ = indexTab;
+  emit currentResultsTabChanged(currentResultsTab_);
 }
 
 

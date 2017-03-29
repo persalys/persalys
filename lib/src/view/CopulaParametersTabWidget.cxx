@@ -23,6 +23,7 @@
 #include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <openturns/NormalCopula.hxx>
 #include <openturns/VisualTest.hxx>
@@ -64,7 +65,7 @@ void CopulaParametersTabWidget::buildInterface()
   String distributionName = distribution_.getImplementation()->getClassName();
   distributionName = distributionName.substr(0, distributionName.find("Copula"));
 
-  const QPen pen(PlotWidget::DefaultHistogramColor, 2);
+  const QPen pen(Qt::blue, 2);
 
   // tab PDF/CDF
   ResizableStackedWidget * pdf_StackedWidget = new ResizableStackedWidget;
@@ -199,6 +200,13 @@ void CopulaParametersTabWidget::stateChanged()
   // if this widget is the current widget
   if (isVisible())
     showHideGraphConfigurationWidget(currentIndex());
+}
+
+
+void CopulaParametersTabWidget::currentTabChanged(int indexTab)
+{
+  SignalBlocker blocker(this);
+  setCurrentIndex(indexTab);
 }
 
 

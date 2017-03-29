@@ -33,7 +33,7 @@ namespace OTGUI {
 MonteCarloResultWindow::MonteCarloResultWindow(AnalysisItem * item)
   : DataAnalysisWindow(item)
 {
-  if (dynamic_cast<MonteCarloAnalysis*>(&*item->getAnalysis().getImplementation()))
+  if (dynamic_cast<MonteCarloAnalysis*>(item->getAnalysis().getImplementation().get()))
     initialize(item);
   else
     throw InvalidArgumentException (HERE) << "Can NOT build the MonteCarloResultWindow: The analysis of the item is not valid";
@@ -46,12 +46,14 @@ MonteCarloResultWindow::MonteCarloResultWindow(AnalysisItem * item)
 
 void MonteCarloResultWindow::initialize(AnalysisItem* item)
 {
-  result_ = dynamic_cast<MonteCarloAnalysis*>(&*item->getAnalysis().getImplementation())->getResult();
+  MonteCarloAnalysis analysis(*dynamic_cast<MonteCarloAnalysis*>(item->getAnalysis().getImplementation().get()));
 
-  isConfidenceIntervalRequired_ = dynamic_cast<MonteCarloAnalysis*>(&*item->getAnalysis().getImplementation())->isConfidenceIntervalRequired();
-  levelConfidenceInterval_ = dynamic_cast<MonteCarloAnalysis*>(&*item->getAnalysis().getImplementation())->getLevelConfidenceInterval();
+  result_ = analysis.getResult();
 
-  PhysicalModel model(dynamic_cast<const PhysicalModelAnalysis*>(&*item->getAnalysis().getImplementation())->getPhysicalModel());
+  isConfidenceIntervalRequired_ = analysis.isConfidenceIntervalRequired();
+  levelConfidenceInterval_ = analysis.getLevelConfidenceInterval();
+
+  PhysicalModel model(analysis.getPhysicalModel());
 
   // inputs
   for (UnsignedInteger i=0; i<result_.getInputSample().getDimension(); ++i)
@@ -111,12 +113,12 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
 
 void MonteCarloResultWindow::setParameters(const Analysis & analysis)
 {
-  const MonteCarloAnalysis * MCanalysis = dynamic_cast<const MonteCarloAnalysis*>(&*analysis.getImplementation());
+  const MonteCarloAnalysis MCanalysis(*dynamic_cast<const MonteCarloAnalysis*>(&*analysis.getImplementation()));
 
   // ParametersWidget
   QStringList namesList;
   namesList << tr("Algorithm");
-  if (MCanalysis->isConfidenceIntervalRequired())
+  if (MCanalysis.isConfidenceIntervalRequired())
     namesList << tr("Confidence level");
   namesList << tr("Maximum coefficient of variation");
   namesList << tr("Maximum elapsed time");
@@ -126,19 +128,19 @@ void MonteCarloResultWindow::setParameters(const Analysis & analysis)
 
   QStringList valuesList;
   valuesList << tr("Monte Carlo");
-  if (MCanalysis->isConfidenceIntervalRequired())
-    valuesList << QString::number(MCanalysis->getLevelConfidenceInterval()*100) + "\%";
-  valuesList << QString::number(MCanalysis->getMaximumCoefficientOfVariation());
-  if (MCanalysis->getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
-    valuesList << QString::number(MCanalysis->getMaximumElapsedTime()) + "(s)";
+  if (MCanalysis.isConfidenceIntervalRequired())
+    valuesList << QString::number(MCanalysis.getLevelConfidenceInterval()*100) + "\%";
+  valuesList << QString::number(MCanalysis.getMaximumCoefficientOfVariation());
+  if (MCanalysis.getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
+    valuesList << QString::number(MCanalysis.getMaximumElapsedTime()) + "(s)";
   else
     valuesList << "- (s)";
-  if (MCanalysis->getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
-    valuesList << QString::number(MCanalysis->getMaximumCalls());
+  if (MCanalysis.getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
+    valuesList << QString::number(MCanalysis.getMaximumCalls());
   else
     valuesList << "-";
-  valuesList << QString::number(MCanalysis->getBlockSize());
-  valuesList << QString::number(MCanalysis->getSeed()); 
+  valuesList << QString::number(MCanalysis.getBlockSize());
+  valuesList << QString::number(MCanalysis.getSeed());
 
   parametersWidget_ = new ParametersWidget(tr("Central tendency parameters"), namesList, valuesList);
 }

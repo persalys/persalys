@@ -24,6 +24,7 @@
 #include "ReliabilityAnalysis.hxx"
 #include "WithStopCriteriaAnalysis.hxx"
 #include "SimulationReliabilityResult.hxx"
+#include "SimulationInterface.hxx"
 
 #include <openturns/Simulation.hxx>
 
@@ -60,12 +61,12 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  virtual OT::Simulation* getSimulationAlgorithm(const OT::Event& event);
+  virtual SimulationInterface getSimulationAlgorithm(const OT::Event& event);
   static void UpdateProgressValue(double percent, void* data);
 
   struct AnalysisStruct
   {
-    AnalysisStruct(SimulationReliabilityAnalysis* analysis, OT::Simulation* simulation)
+    AnalysisStruct(SimulationReliabilityAnalysis* analysis, SimulationInterface simulation)
     : analysis_(analysis)
     , simulation_(simulation)
     {
@@ -74,7 +75,7 @@ protected:
     virtual ~AnalysisStruct(){};
 
     SimulationReliabilityAnalysis * analysis_;
-    OT::Simulation * simulation_;
+    SimulationInterface simulation_;
   };
 
 private:
