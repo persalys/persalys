@@ -42,12 +42,8 @@ print(analysis)
 
 analysis.run()
 
-result = analysis.getResult()
-print("result=", result)
-
 metaModel = analysis.getResult().getResultForVariable('y0').getMetaModel()
 openturns.testing.assert_almost_equal(aDesign.getOutputSample(), metaModel(validationInputSample), 3.0e-5, 3.0e-5)
-
 
 ## Design of Experiment ##
 model.addOutput(otguibase.Output('y1'))
@@ -64,11 +60,24 @@ print(analysis2)
 analysis2.run()
 
 result2 = analysis2.getResult()
-print("result=", result2)
-
 metaModel2 = result2.getResultForVariable('y1').getMetaModel()
 openturns.testing.assert_almost_equal(aDesign.getOutputSample().getMarginal(1), metaModel2(validationInputSample), 3.0e-5, 3.0e-5)
 openturns.testing.assert_almost_equal(result2.getQ2LeaveOneOut(), [0.832447,0.832278], 1e-3, 1e-3)
+
+## Kriging ##
+analysis3 = otguibase.KrigingAnalysis('kriging_2', aDesign)
+analysis3.setOptimizeParameters(False)
+analysis3.setInterestVariables(['y0'])
+myStudy.add(analysis3)
+print(analysis3)
+
+analysis3.run()
+
+result3 = analysis3.getResult()
+print("result=", result3)
+
+metaModel3 = result3.getResultForVariable('y0').getMetaModel()
+openturns.testing.assert_almost_equal(aDesign.getOutputSample().getMarginal(0), metaModel3(validationInputSample), 3.0e-5, 3.0e-5)
 
 # script
 script = myStudy.getPythonScript()
