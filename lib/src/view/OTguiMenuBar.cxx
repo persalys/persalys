@@ -40,12 +40,14 @@ void OTguiMenuBar::buildActions()
 
   QAction * action = new QAction(QIcon(":/images/document-new.png"), tr("&New"), this);
   action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
+  action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   action->setStatusTip(tr("Create a new OTStudy"));
   connect(action, SIGNAL(triggered()), this, SIGNAL(createNewOTStudy()));
   fileMenu->addAction(action);
 
   action = new QAction(QIcon(":/images/document-open.png"), tr("&Open..."), this);
   action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_O));
+  action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   action->setStatusTip(tr("Open an existing OTStudy"));
   connect(action, SIGNAL(triggered()), this, SIGNAL(openOTStudy()));
   fileMenu->addAction(action);
@@ -70,6 +72,7 @@ void OTguiMenuBar::buildActions()
 
   action = new QAction(QIcon(":/images/document-save.png"), tr("Save"), this);
   action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_S));
+  action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   action->setStatusTip(tr("Save the current OTStudy"));
   connect(action, SIGNAL(triggered()), this, SIGNAL(saveOTStudy()));
   fileMenu->addAction(action);
@@ -101,6 +104,7 @@ void OTguiMenuBar::buildActions()
 
   action = new QAction(QIcon(":/images/window-close.png"), tr("E&xit"), this);
   action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Q));
+  action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   connect(action, SIGNAL(triggered()), this, SIGNAL(closeWindow()));
   fileMenu->addAction(action);
 
