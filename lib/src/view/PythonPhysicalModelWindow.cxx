@@ -80,7 +80,7 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item)
   QWidget * rightSideWidget = new QWidget;
   QVBoxLayout * vBoxLayout = new QVBoxLayout(rightSideWidget);
 
-  PhysicalModelWindowWidget * tablesWidget = new PhysicalModelWindowWidget(item, this);
+  PhysicalModelWindowWidget * tablesWidget = new PhysicalModelWindowWidget(item);
   connect(tablesWidget, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
   vBoxLayout->addWidget(tablesWidget);
 

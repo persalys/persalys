@@ -12,11 +12,8 @@ R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30.).getDistribution(), '
 F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
 G = otguibase.Output('G', 'deviation')
 
-model = otguibase.PythonPhysicalModel('myPhysicalModel')
-model.addInput(R)
-model.addInput(F)
-model.addOutput(G)
-model.setCode('from math import pi\n\ndef _exec(R, F):\n    G = R-F/(pi*100.0)\n    return [G]\n')
+code = 'from math import pi\n\ndef _exec(R, F):\n    G = R-F/(pi*100.0)\n    return [G]\n'
+model = otguibase.PythonPhysicalModel('myPhysicalModel', [R, F], [G], code)
 myStudy.add(model)
 
 f = model.getFunction()
