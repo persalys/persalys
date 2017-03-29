@@ -206,6 +206,8 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
 
   mainGridLayout->addLayout(hboxForBottomButtons, ++rowGrid, 1, 1, 1);
 
+  mainGridLayout->setRowStretch(++rowGrid, 1);
+
   // update widgets
   updateLineEdits();
   updateYComboBox();
