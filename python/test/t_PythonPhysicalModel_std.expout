@@ -14,10 +14,12 @@ R = otguibase.Input('R', 0, dist_R, 'Yield strength')
 dist_F = ot.Normal(75000, 5000)
 F = otguibase.Input('F', 0, dist_F, 'Traction load')
 G = otguibase.Output('G', 'deviation')
-myPhysicalModel = otguibase.PythonPhysicalModel('myPhysicalModel')
-myPhysicalModel.addInput(R)
-myPhysicalModel.addInput(F)
-myPhysicalModel.addOutput(G)
-myPhysicalModel.setCode('from math import pi\n\ndef _exec(R, F):\n    G = 2*R-F/(pi*100.0)\n    return [G]\n')
+inputCollection = []
+inputCollection.append(R)
+inputCollection.append(F)
+outputCollection = []
+outputCollection.append(G)
+code='from math import pi\n\ndef _exec(R, F):\n    G = 2*R-F/(pi*100.0)\n    return [G]\n'
+myPhysicalModel = otguibase.PythonPhysicalModel('myPhysicalModel', inputCollection, outputCollection, code)
 myStudy.add(myPhysicalModel)
 

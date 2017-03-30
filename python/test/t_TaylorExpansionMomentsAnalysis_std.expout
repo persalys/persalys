@@ -42,11 +42,15 @@ dist_X1 = ot.Normal(1, 1)
 X1 = otguibase.Input('X1', 0, dist_X1, '')
 X1.setFiniteDifferenceStep(0.005)
 Y0 = otguibase.Output('Y0', '')
-myPhysicalModel = otguibase.PythonPhysicalModel('myPhysicalModel')
-myPhysicalModel.addInput(X0)
-myPhysicalModel.addInput(X1)
-myPhysicalModel.addOutput(Y0)
-myPhysicalModel.setCode('from math import sin\n\ndef _exec(X0, X1):\n    Y0 = sin(X0) + 8*X1\n    fake_Y0 = X0\n    return [Y0, fake_Y0]\n')
+fake_Y0 = otguibase.Output('fake_Y0', '')
+inputCollection = []
+inputCollection.append(X0)
+inputCollection.append(X1)
+outputCollection = []
+outputCollection.append(Y0)
+outputCollection.append(fake_Y0)
+code='from math import sin\n\ndef _exec(X0, X1):\n    Y0 = sin(X0) + 8*X1\n    fake_Y0 = X0\n    return [Y0, fake_Y0]\n'
+myPhysicalModel = otguibase.PythonPhysicalModel('myPhysicalModel', inputCollection, outputCollection, code)
 myStudy.add(myPhysicalModel)
 aTaylor = otguibase.TaylorExpansionMomentsAnalysis('aTaylor', aModelPhys)
 interestVariables = ['Y0']
@@ -57,7 +61,11 @@ interestVariables = ['Y1']
 aTaylor2.setInterestVariables(interestVariables)
 myStudy.add(aTaylor2)
 aTaylor3 = otguibase.TaylorExpansionMomentsAnalysis('aTaylor3', myPhysicalModel)
+interestVariables = ['Y0']
+aTaylor3.setInterestVariables(interestVariables)
 myStudy.add(aTaylor3)
 aTaylor4 = otguibase.TaylorExpansionMomentsAnalysis('aTaylor4', myPhysicalModel)
+interestVariables = ['Y0']
+aTaylor4.setInterestVariables(interestVariables)
 myStudy.add(aTaylor4)
 

@@ -30,7 +30,8 @@ class OTGUI_API PythonPhysicalModel : public PhysicalModelImplementation
 
 public:
   /** Default constructor */
-  PythonPhysicalModel(const OT::String & name="Unnamed");
+  PythonPhysicalModel(const OT::String & name = "Unnamed");
+
   /** Constructor with parameters */
   PythonPhysicalModel(const OT::String & name,
                       const InputCollection & inputs,
@@ -53,6 +54,14 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
+
+  void setInputs(const InputCollection & inputs);
+  void addInput(const Input & input);
+  void removeInput(const OT::String & inputName);
+
+  void setOutputs(const OutputCollection & outputs);
+  void addOutput(const Output & output);
+  void removeOutput(const OT::String & outputName);
 
 protected:
   virtual OT::NumericalMathFunction generateFunction() const;

@@ -27,6 +27,9 @@ if (NOT BUILD_SHARED_LIBS)
   list ( APPEND OTGUI_DEFINITIONS "-DOTGUI_STATIC" )
 endif ()
 
+find_package (Boost COMPONENTS regex REQUIRED)
+include_directories (${Boost_INCLUDE_DIRS})
+
 if (BUILD_GUI)
 
   if (USE_QT5)

@@ -138,6 +138,7 @@ if ( NOT DEFINED LIB_SOVERSION )
 endif ()
 set_target_properties ( otguibase PROPERTIES VERSION ${LIB_VERSION} )
 set_target_properties ( otguibase PROPERTIES SOVERSION ${LIB_SOVERSION} )
+
 target_link_libraries ( otguibase ${OPENTURNS_LIBRARIES} )
 
 if (SalomeYACS_FOUND)
@@ -145,7 +146,8 @@ if (SalomeYACS_FOUND)
 endif ()
 
 target_link_libraries (otguibase ${PYTHON_LIBRARIES})
-  
+target_link_libraries (otguibase ${Boost_LIBRARIES})
+
 install ( TARGETS otguibase
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION ${OTGUI_LIBRARY_PATH}

@@ -48,12 +48,8 @@ public:
 public slots:
   void updateCodeModel();
 
-private slots:
-  void parseVariables();
-
 private:
   PhysicalModel physicalModel_;
-  QString codeText_;
   CodeModel * codeModel_;
   QTableView * codeView_;
 };

@@ -115,6 +115,7 @@ ifeq ($(DEBUG_OT),n)
 	$(TARGET)-strip --strip-unneeded $(MOD_PREFIX)/Lib/site-packages/*/*.pyd
 	$(TARGET)-strip $(MOD_PREFIX)/bin/*.exe
 endif
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libboost_regex-mt.dll $(MOD_PREFIX)/bin
 	# qt deps
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/libpng*.dll $(MOD_PREFIX)/bin
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/libexpat*.dll $(MOD_PREFIX)/bin
