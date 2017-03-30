@@ -496,8 +496,22 @@ NumericalMathFunction PhysicalModelImplementation::generateFunction() const
 
 NumericalMathFunction PhysicalModelImplementation::generateFunction(const Description& outputNames) const
 {
+  NumericalMathFunction function(generateFunction());
+  if (function.getUseDefaultGradientImplementation())
+  {
+    // use finite difference gradient
+    NonCenteredFiniteDifferenceGradient gradient(getFiniteDifferenceSteps(), function.getEvaluation());
+    function.setGradient(gradient);
+  }
+  if (function.getUseDefaultHessianImplementation())
+  {
+    // use finite difference hessian
+    CenteredFiniteDifferenceHessian hessian(getFiniteDifferenceSteps(), function.getEvaluation());
+    function.setHessian(hessian);
+  }
+
   if (outputNames.getSize() == getOutputs().getSize())
-    return generateFunction();
+    return function;
 
   // search interest outputs indices
   Indices indices;
@@ -511,7 +525,7 @@ NumericalMathFunction PhysicalModelImplementation::generateFunction(const Descri
 
   try
   {
-    return generateFunction().getMarginal(indices);
+    return function.getMarginal(indices);
   }
   catch (std::exception & ex)
   {
@@ -535,19 +549,6 @@ NumericalMathFunction PhysicalModelImplementation::getFunction(const Description
     throw PhysicalModelNotValidException(HERE) << "The physical model has no outputs.";
 
   NumericalMathFunction function(generateFunction(outputNames));
-
-  if (function.getUseDefaultGradientImplementation())
-  {
-    // use finite difference gradient
-    NonCenteredFiniteDifferenceGradient gradient(getFiniteDifferenceSteps(), function.getEvaluation());
-    function.setGradient(gradient);
-  }
-  if (function.getUseDefaultHessianImplementation())
-  {
-    // use finite difference hessian
-    CenteredFiniteDifferenceHessian hessian(getFiniteDifferenceSteps(), function.getEvaluation());
-    function.setHessian(hessian);
-  }
   return function;
 }
 
