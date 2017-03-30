@@ -170,18 +170,12 @@ void YACSPhysicalModel::updateData()
 }
 
 
-NumericalMathFunction YACSPhysicalModel::generateFunction(const Description& outputNames) const
+NumericalMathFunction YACSPhysicalModel::generateFunction(const Description & outputNames) const
 {
   YACSEvaluation anEvaluation(evaluation_);
   anEvaluation.setOutputVariablesNames(outputNames);
 
   return NumericalMathFunction(anEvaluation);
-}
-
-
-NumericalMathFunction YACSPhysicalModel::generateFunction() const
-{
-  return NumericalMathFunction(evaluation_);
 }
 
 

@@ -64,7 +64,7 @@ public:
   void removeOutput(const OT::String & outputName);
 
 protected:
-  virtual OT::NumericalMathFunction generateFunction() const;
+  virtual OT::NumericalMathFunction generateFunction(const OT::Description & outputNames) const;
 
 private:
   OT::String code_;

@@ -142,11 +142,10 @@ String PythonPhysicalModel::getCode() const
 }
 
 
-NumericalMathFunction PythonPhysicalModel::generateFunction() const
+NumericalMathFunction PythonPhysicalModel::generateFunction(const Description &) const
 {
   NumericalMathFunction function(PythonEvaluation(getInputs().getSize(), getOutputs().getSize(), getCode()));
   function.enableCache();
-
   return function;
 }
 
