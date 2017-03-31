@@ -73,8 +73,8 @@ public:
   virtual OT::String __repr__() const;
 protected:
   void updateData();
-  virtual OT::NumericalMathFunction generateFunction() const;
-  virtual OT::NumericalMathFunction generateFunction(const OT::Description& outputNames) const;
+
+  virtual OT::NumericalMathFunction generateFunction(const OT::Description & outputNames) const;
 
 private:
   YACSEvaluation evaluation_;

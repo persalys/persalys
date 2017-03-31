@@ -80,7 +80,7 @@ endif ()
 set_target_properties ( otguiutils PROPERTIES VERSION ${LIB_VERSION} )
 set_target_properties ( otguiutils PROPERTIES SOVERSION ${LIB_SOVERSION} )
 
-target_link_libraries (otguiutils otguibase)
+target_link_libraries (otguiutils otguibase otguimodel)
 target_link_libraries (otguiutils ${QT_LIBRARIES})
 
 install ( TARGETS otguiutils

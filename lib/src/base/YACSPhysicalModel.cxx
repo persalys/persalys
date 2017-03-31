@@ -56,37 +56,37 @@ YACSPhysicalModel* YACSPhysicalModel::clone() const
 
 void YACSPhysicalModel::setInputs(const InputCollection & inputs)
 {
-  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify an YACSPhysicalModel";
+  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify a YACS model";
 }
 
 
 void YACSPhysicalModel::addInput(const Input & input)
 {
-  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify an YACSPhysicalModel";
+  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify a YACS model";
 }
 
 
 void YACSPhysicalModel::removeInput(const String & inputName)
 {
-  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify an YACSPhysicalModel";
+  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify a YACS model";
 }
 
 
 void YACSPhysicalModel::setOutputs(const OutputCollection & outputs)
 {
-  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify an YACSPhysicalModel";
+  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify a YACS model";
 }
 
 
 void YACSPhysicalModel::addOutput(const Output & output)
 {
-  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify an YACSPhysicalModel";
+  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify a YACS model";
 }
 
 
 void YACSPhysicalModel::removeOutput(const String & outputName)
 {
-  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify an YACSPhysicalModel";
+  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify a YACS model";
 }
 
 
@@ -170,18 +170,12 @@ void YACSPhysicalModel::updateData()
 }
 
 
-NumericalMathFunction YACSPhysicalModel::generateFunction(const Description& outputNames) const
+NumericalMathFunction YACSPhysicalModel::generateFunction(const Description & outputNames) const
 {
   YACSEvaluation anEvaluation(evaluation_);
   anEvaluation.setOutputVariablesNames(outputNames);
 
   return NumericalMathFunction(anEvaluation);
-}
-
-
-NumericalMathFunction YACSPhysicalModel::generateFunction() const
-{
-  return NumericalMathFunction(evaluation_);
 }
 
 

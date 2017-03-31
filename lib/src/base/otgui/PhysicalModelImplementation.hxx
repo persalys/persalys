@@ -102,8 +102,8 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  virtual OT::NumericalMathFunction generateFunction() const;
-  virtual OT::NumericalMathFunction generateFunction(const OT::Description& outputNames) const;
+  virtual OT::NumericalMathFunction generateFunction(const OT::Description & outputNames) const;
+
   void updateCopula();
   OT::String getProbaModelPythonScript() const;
   OT::String getCopulaPythonScript() const;

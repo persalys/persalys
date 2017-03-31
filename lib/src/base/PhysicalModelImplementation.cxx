@@ -487,37 +487,9 @@ RandomVector PhysicalModelImplementation::getOutputRandomVector(const Descriptio
   return RandomVector(getRestrictedFunction(outputNames), getInputRandomVector());
 }
 
-
-NumericalMathFunction PhysicalModelImplementation::generateFunction() const
+NumericalMathFunction PhysicalModelImplementation::generateFunction(const Description & outputNames) const
 {
-  throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::generateFunction()";
-}
-
-
-NumericalMathFunction PhysicalModelImplementation::generateFunction(const Description& outputNames) const
-{
-  if (outputNames.getSize() == getOutputs().getSize())
-    return generateFunction();
-
-  // search interest outputs indices
-  Indices indices;
-  for (UnsignedInteger i=0; i<outputNames.getSize(); ++i)
-    for (UnsignedInteger j=0; j<getOutputs().getSize(); ++j)
-      if (getOutputs()[j].getName() == outputNames[i])
-      {
-        indices.add(j);
-        break;
-      }
-
-  try
-  {
-    return generateFunction().getMarginal(indices);
-  }
-  catch (std::exception & ex)
-  {
-    Log::Error(OSS() << "Error in PhysicalModelImplementation::generateFunction(const Description& outputNames) ");
-    throw PhysicalModelNotValidException(HERE) << ex.what();
-  }
+  throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::generateFunction(outputNames)";
 }
 
 
@@ -527,7 +499,7 @@ NumericalMathFunction PhysicalModelImplementation::getFunction() const
 }
 
 
-NumericalMathFunction PhysicalModelImplementation::getFunction(const Description& outputNames) const
+NumericalMathFunction PhysicalModelImplementation::getFunction(const Description & outputNames) const
 {
   if (!getInputs().getSize())
     throw PhysicalModelNotValidException(HERE) << "The physical model has no inputs.";
@@ -548,7 +520,21 @@ NumericalMathFunction PhysicalModelImplementation::getFunction(const Description
     CenteredFiniteDifferenceHessian hessian(getFiniteDifferenceSteps(), function.getEvaluation());
     function.setHessian(hessian);
   }
-  return function;
+
+  if (function.getOutputDimension() == outputNames.getSize())
+    return function;
+
+  // search interest outputs indices
+  Indices indices;
+  for (UnsignedInteger i=0; i<outputNames.getSize(); ++i)
+    for (UnsignedInteger j=0; j<getOutputs().getSize(); ++j)
+      if (getOutputs()[j].getName() == outputNames[i])
+      {
+        indices.add(j);
+        break;
+      }
+
+  return function.getMarginal(indices);
 }
 
 
@@ -580,21 +566,17 @@ NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction(const D
       inputsValues.add(getInputs()[i].getValue());
     }
   }
+
+  const NumericalMathFunction function(getFunction(outputNames));
+
   // if there is no deterministic inputs
   if (!deterministicInputsIndices.getSize())
-    return getFunction(outputNames);
+    return function;
 
   // if there are deterministic inputs
-  try
-  {
-    NumericalMathFunction restricted(getFunction(outputNames), deterministicInputsIndices, inputsValues);
-    return restricted;
-  }
-  catch (std::exception & ex)
-  {
-    Log::Error(OSS() << "Error in PhysicalModelImplementation::getRestrictedFunction(const Description & outputNames) ");
-    throw PhysicalModelNotValidException(HERE) << ex.what();
-  }
+  const NumericalMathFunction restricted(function, deterministicInputsIndices, inputsValues);
+  return restricted;
+
 }
 
 

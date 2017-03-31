@@ -21,6 +21,9 @@
 #include "otgui/PythonPhysicalModel.hxx"
 #include "otgui/PythonEvaluation.hxx"
 
+#include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
+
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
@@ -35,8 +38,6 @@ static Factory<PythonPhysicalModel> Factory_PythonPhysicalModel;
 PythonPhysicalModel::PythonPhysicalModel(const String & name)
   : PhysicalModelImplementation(name)
 {
-  addInput(Input("X0"));
-  addOutput(Output("Y0"));
   setCode("def _exec(X0):\n    Y0 = X0\n    return [Y0]");
 }
 
@@ -47,8 +48,8 @@ PythonPhysicalModel::PythonPhysicalModel(const String & name,
                                          const OutputCollection & outputs,
                                          const String & code)
   : PhysicalModelImplementation(name, inputs, outputs)
-  , code_(code)
 {
+  setCode(code);
 }
 
 
@@ -61,6 +62,75 @@ PythonPhysicalModel* PythonPhysicalModel::clone() const
 
 void PythonPhysicalModel::setCode(const String & code)
 {
+
+  std::vector<std::string> lines;
+  boost::split(lines, code, boost::is_any_of("\n"));
+
+  Description inputVariables;
+  Description outputVariables;
+
+  boost::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
+  for (unsigned int i = 0; i < lines.size(); ++ i)
+  {
+    String line = lines[i];
+    boost::regex defFunction("def[ ]+\\_exec[ ]*\\(([_a-zA-Z0-9, ]+)\\)[ ]*:", boost::regex::extended);
+    boost::smatch what;
+    if (boost::regex_match(line, what, defFunction))
+    {
+      String inputList = what[1];
+      std::string::const_iterator start = inputList.begin(), end = inputList.end();
+      while (boost::regex_search(start, end, what, variable))
+      {
+        start = what[0].second;
+        inputVariables.add(what[1]);
+      }
+    }
+
+    boost::regex returnOutput("    return[ ]+\\[([_a-zA-Z0-9, ]+)\\]");
+    if (boost::regex_match(line, what, returnOutput))
+    {
+      String outputList = what[1];
+      std::string::const_iterator start = outputList.begin(), end = outputList.end();
+      while (boost::regex_search(start, end, what, variable))
+      {
+        start = what[0].second;
+        outputVariables.add(what[1]);
+      }
+    }
+  }
+
+  InputCollection newInputs(inputVariables.getSize());
+  for (unsigned int i = 0; i < inputVariables.getSize(); ++ i)
+  {
+    const String inputName(inputVariables[i]);
+    if (hasInputNamed(inputName))
+    {
+      newInputs[i] = getInputByName(inputName);
+    }
+    else
+    {
+      newInputs[i] = Input(inputName);
+    }
+  }
+
+  PhysicalModelImplementation::setInputs(newInputs);
+
+  OutputCollection newOutputs(outputVariables.getSize());
+  for (unsigned int i = 0; i < outputVariables.getSize(); ++ i)
+  {
+    const String outputName(outputVariables[i]);
+    if (hasOutputNamed(outputName))
+    {
+      newOutputs[i] = getOutputByName(outputName);
+    }
+    else
+    {
+      newOutputs[i] = Output(outputName);
+    }
+  }
+
+  PhysicalModelImplementation::setOutputs(newOutputs);
+
   code_ = code;
   notify("codeChanged");
 }
@@ -72,11 +142,10 @@ String PythonPhysicalModel::getCode() const
 }
 
 
-NumericalMathFunction PythonPhysicalModel::generateFunction() const
+NumericalMathFunction PythonPhysicalModel::generateFunction(const Description &) const
 {
   NumericalMathFunction function(PythonEvaluation(getInputs().getSize(), getOutputs().getSize(), getCode()));
   function.enableCache();
-
   return function;
 }
 
@@ -91,16 +160,19 @@ String PythonPhysicalModel::getPythonScript() const
   for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++ i)
     result += getOutputs()[i].getPythonScript();
 
-  result += getName() + " = otguibase.PythonPhysicalModel('" + getName() + "')\n";
-
+  result += "inputCollection = []\n";
   for (UnsignedInteger i = 0; i < getInputs().getSize(); ++ i)
-    result += getName() + ".addInput(" + getInputs()[i].getName() + ")\n";
+  {
+    result += "inputCollection.append("+getInputs()[i].getName()+")\n";
+  }
 
+  result += "outputCollection = []\n";
   for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++ i)
-    result += getName() + ".addOutput(" + getOutputs()[i].getName() + ")\n";
+  {
+    result += "outputCollection.append("+getOutputs()[i].getName()+")\n";
+  }
 
-  result += getName() + ".setCode('";
-
+  result += "code='";
   std::stringstream ss(getCode());
   String to;
 
@@ -108,7 +180,8 @@ String PythonPhysicalModel::getPythonScript() const
   {
     result += to + "\\n";
   }
-  result += "')\n";
+  result += "'\n";
+  result += getName() + " = otguibase.PythonPhysicalModel('" + getName() + "', inputCollection, outputCollection, code)\n";
 
   result += PhysicalModelImplementation::getCopulaPythonScript();
 
@@ -140,4 +213,39 @@ void PythonPhysicalModel::load(Advocate & adv)
   PhysicalModelImplementation::load(adv);
   adv.loadAttribute("code_", code_);
 }
+
+void PythonPhysicalModel::setInputs(const InputCollection & inputs)
+{
+  throw NotYetImplementedException(HERE) << "Use setCode to modify a PythonPhysicalModel";
+}
+
+
+void PythonPhysicalModel::addInput(const Input & input)
+{
+  throw NotYetImplementedException(HERE) << "Use setCode to modify a PythonPhysicalModel";
+}
+
+
+void PythonPhysicalModel::removeInput(const String & inputName)
+{
+  throw NotYetImplementedException(HERE) << "Use setCode to modify a PythonPhysicalModel";
+}
+
+void PythonPhysicalModel::setOutputs(const OutputCollection & outputs)
+{
+  throw NotYetImplementedException(HERE) << "Use setCode to modify a PythonPhysicalModel";
+}
+
+
+void PythonPhysicalModel::addOutput(const Output & output)
+{
+  throw NotYetImplementedException(HERE) << "Use setCode to modify a PythonPhysicalModel";
+}
+
+
+void PythonPhysicalModel::removeOutput(const String & outputName)
+{
+  throw NotYetImplementedException(HERE) << "Use setCode to modify a PythonPhysicalModel";
+}
+
 }

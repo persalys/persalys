@@ -160,9 +160,14 @@ void SymbolicPhysicalModel::setFormula(const String& outputName, const String& f
   notify("outputFormulaChanged");
 }
 
-NumericalMathFunction SymbolicPhysicalModel::generateFunction() const
+NumericalMathFunction SymbolicPhysicalModel::generateFunction(const Description & outputNames) const
 {
-  return NumericalMathFunction(getInputNames(), getOutputNames(), getFormulas());
+  Description formulas;
+  for (UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
+  {
+    formulas.add(getFormula(outputNames[i]));
+  }
+  return NumericalMathFunction(getInputNames(), outputNames, formulas);
 }
 
 

@@ -56,7 +56,6 @@ bool CodeView::event(QEvent * event)
 PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item)
   : OTguiSubWindow(item)
   , physicalModel_(item->getPhysicalModel())
-  , codeText_("")
   , codeModel_(0)
   , codeView_(0)
 {
@@ -100,80 +99,8 @@ void PythonPhysicalModelWindow::updateCodeModel()
   if (codeModel_)
     delete codeModel_;
   codeModel_ = new CodeModel(physicalModel_, codeView_);
-  connect(codeModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(parseVariables()));
   codeView_->setModel(codeModel_);
   codeView_->openPersistentEditor(codeModel_->index(0, 0));
-  codeText_ = QString::fromStdString(dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get())->getCode());
 }
 
-
-void PythonPhysicalModelWindow::parseVariables()
-{
-  QString code = QString::fromStdString(dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get())->getCode());
-
-  if (code.split("\n", QString::SkipEmptyParts) == codeText_.split("\n", QString::SkipEmptyParts))
-    return;
-
-  codeText_ = code;
-
-  QStringList lines = code.split("\n");
-  Description inputVariables;
-  Description outputVariables;
-
-  QRegExp variable("([_a-zA-Z][_a-zA-Z0-9]*)");
-  foreach (QString line, lines)
-  {
-    QRegExp defFunction("def[ ]+\\_exec[ ]*\\(([_a-zA-Z0-9, ]+)\\)[ ]*:");
-    if (defFunction.indexIn(line) == 0)
-    {
-      QString inputList = defFunction.cap(1);
-      int pos = 0;
-      while ((pos = variable.indexIn(inputList, pos)) != -1)
-      {
-        inputVariables.add(variable.cap(1).toStdString());
-        pos += variable.matchedLength();
-      }
-    }
-
-    QRegExp returnOutput("    return[ ]+\\[([_a-zA-Z0-9, ]+)\\]");
-    if (returnOutput.indexIn(line) == 0)
-    {
-      QString outputList = returnOutput.cap(1);
-      int pos = 0;
-      while ((pos = variable.indexIn(outputList, pos)) != -1)
-      {
-        outputVariables.add(variable.cap(1).toStdString());
-        pos += variable.matchedLength();
-      }
-    }
-  }
-
-  InputCollection newInputs(inputVariables.getSize());
-  for (unsigned int i = 0; i < inputVariables.getSize(); ++ i)
-  {
-    if (physicalModel_.hasInputNamed(inputVariables[i]))
-    {
-      newInputs[i] = physicalModel_.getInputByName(inputVariables[i]);
-    }
-    else
-    {
-      newInputs[i] = Input(inputVariables[i]);
-    }
-  }
-  physicalModel_.setInputs(newInputs);
-
-  OutputCollection newOutputs(outputVariables.getSize());
-  for (unsigned int i = 0; i < outputVariables.getSize(); ++ i)
-  {
-    if (physicalModel_.hasOutputNamed(outputVariables[i]))
-    {
-      newOutputs[i] = physicalModel_.getOutputByName(outputVariables[i]);
-    }
-    else
-    {
-      newOutputs[i] = Output(outputVariables[i]);
-    }
-  }
-  physicalModel_.setOutputs(newOutputs);
-}
 }
