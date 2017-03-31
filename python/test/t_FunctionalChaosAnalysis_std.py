@@ -2,7 +2,7 @@
 
 from __future__ import print_function
 import openturns as ot
-import openturns.testing
+import openturns.testing as ott
 import otguibase
 
 ot.RandomGenerator.SetSeed(0)
@@ -53,10 +53,10 @@ variance = [0.8727523923767868, 0.8729938152031875]
 firstOrderIndices = [[ 0.5218735936795287, 0.4781264063204713 ], [ 0.5216496993795265, 0.4783503006204734 ]]
 totalIndices = [[ 0.5218735936795287, 0.4781264063204713 ], [ 0.5216496993795265, 0.4783503006204734 ]]
 
-openturns.testing.assert_almost_equal(mean, chaosResult.getMean(), 1e-16)
-openturns.testing.assert_almost_equal(variance, chaosResult.getVariance(), 1e-16)
-openturns.testing.assert_almost_equal(firstOrderIndices, sobolResult.getFirstOrderIndices(), 1e-16)
-openturns.testing.assert_almost_equal(totalIndices, sobolResult.getTotalIndices(), 1e-16)
+ott.assert_almost_equal(mean, chaosResult.getMean(), 1e-16)
+ott.assert_almost_equal(variance, chaosResult.getVariance(), 1e-16)
+ott.assert_almost_equal(firstOrderIndices, sobolResult.getFirstOrderIndices(), 1e-16)
+ott.assert_almost_equal(totalIndices, sobolResult.getTotalIndices(), 1e-16)
 
 ## Chaos 2 ##
 analysis2 = otguibase.FunctionalChaosAnalysis('chaos_1', aDesign)
@@ -73,7 +73,14 @@ sobolResult2 = chaosResult2.getSobolResult()
 print("result=", chaosResult2)
 print("functionalChaosResult", chaosResult2.getFunctionalChaosResult())
 
-openturns.testing.assert_almost_equal([0.9223441081335271], chaosResult2.getQ2LeaveOneOut(), 1e-16)
+ott.assert_almost_equal([0.9223441081335271], chaosResult2.getQ2LeaveOneOut(), 1e-16)
+
+# extract metamodel
+metamodel = chaosResult2.getMetaModel()
+ott.assert_almost_equal(metamodel.getFunction().getInputDimension(), 2)
+ott.assert_almost_equal(metamodel.getFunction().getOutputDimension(), 1)
+ott.assert_almost_equal(metamodel.getFunction()([0.5] * 2), [2.17011])
+
 
 ## script
 script = myStudy.getPythonScript()

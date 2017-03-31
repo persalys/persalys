@@ -52,7 +52,7 @@ MetaModel* MetaModel::clone() const
 }
 
 
-NumericalMathFunction MetaModel::generateFunction() const
+NumericalMathFunction MetaModel::generateFunction(const Description & outputNames) const
 {
   return function_;
 }
