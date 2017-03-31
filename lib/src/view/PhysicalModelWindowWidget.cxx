@@ -28,6 +28,9 @@
 #include <QHeaderView>
 #include <QSplitter>
 #include <QScrollBar>
+#include <QGroupBox>
+#include <QVBoxLayout>
+#include <QLabel>
 
 using namespace OT;
 
@@ -162,6 +165,44 @@ void PhysicalModelWindowWidget::buildInterface()
 }
 
 
+void PhysicalModelWindowWidget::resizeEvent(QResizeEvent* event)
+{
+  QTabWidget::resizeEvent(event);
+
+  if (event->oldSize().width() > 0)
+  {
+    resizeInputTable();
+    resizeOutputTable();
+  }
+}
+
+
+void PhysicalModelWindowWidget::resizeInputTable()
+{
+  int width = inputTableView_->horizontalHeader()->width();
+  inputTableView_->horizontalHeader()->resizeSection(0, width*1/5);
+  inputTableView_->horizontalHeader()->resizeSection(1, width*3/5);
+}
+
+
+void PhysicalModelWindowWidget::resizeOutputTable()
+{
+  const int width = outputTableView_->horizontalHeader()->width();
+  if (physicalModel_.getImplementation()->getClassName() != "SymbolicPhysicalModel")
+  {
+    outputTableView_->setColumnHidden(2, true);
+    outputTableView_->horizontalHeader()->resizeSection(0, outputTableHeaderView_->minimumSectionSize());
+    outputTableView_->horizontalHeader()->resizeSection(1, width - 2*(outputTableHeaderView_->minimumSectionSize()));
+  }
+  else
+  {
+    outputTableView_->horizontalHeader()->resizeSection(0, outputTableHeaderView_->minimumSectionSize());
+    outputTableView_->horizontalHeader()->resizeSection(1, width*3/10);
+    outputTableView_->horizontalHeader()->resizeSection(2, width*4/10);
+  }
+}
+
+
 void PhysicalModelWindowWidget::updateInputTableModel()
 {
   if (inputTableModel_)
@@ -177,10 +218,7 @@ void PhysicalModelWindowWidget::updateInputTableModel()
   inputTableView_->horizontalHeader()->setResizeMode(1, QHeaderView::Interactive);
   inputTableView_->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
 #endif
-  int width = inputTableView_->horizontalHeader()->width();
-  inputTableView_->horizontalHeader()->resizeSection(0, width*1/5);
-  inputTableView_->horizontalHeader()->resizeSection(1, width*3/5);
-  inputTableView_->horizontalHeader()->resizeSection(2, width*1/5);
+  resizeInputTable();
   connect(inputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
 }
 
@@ -219,22 +257,7 @@ void PhysicalModelWindowWidget::updateOutputTableModel()
   outputTableView_->horizontalHeader()->setResizeMode(2, QHeaderView::Interactive);
   outputTableView_->horizontalHeader()->setResizeMode(3, QHeaderView::Stretch); 
 #endif
-  const int width = outputTableView_->horizontalHeader()->width();
-  if (physicalModel_.getImplementation()->getClassName() != "SymbolicPhysicalModel")
-  {
-    outputTableView_->setColumnHidden(2, true);
-    outputTableView_->horizontalHeader()->resizeSection(0, width*1/5);
-    outputTableView_->horizontalHeader()->resizeSection(1, width*3/5);
-    outputTableView_->horizontalHeader()->resizeSection(2, 0);
-    outputTableView_->horizontalHeader()->resizeSection(3, width*1/5);
-  }
-  else
-  {
-    outputTableView_->horizontalHeader()->resizeSection(0, width*2/10);
-    outputTableView_->horizontalHeader()->resizeSection(1, width*3/10);
-    outputTableView_->horizontalHeader()->resizeSection(2, width*4/10);
-    outputTableView_->horizontalHeader()->resizeSection(3, width*1/10);
-  }
+  resizeOutputTable();
   // table header view
   const UnsignedInteger nbOutputs = physicalModel_.getOutputNames().getSize();
   const bool allChecked = (nbOutputs && (nbOutputs == physicalModel_.getSelectedOutputsNames().getSize()));

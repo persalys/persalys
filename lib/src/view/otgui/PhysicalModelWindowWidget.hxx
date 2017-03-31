@@ -26,10 +26,7 @@
 #include "otgui/CheckableHeaderView.hxx"
 #include "otgui/DifferentiationTableModel.hxx"
 
-#include <QGroupBox>
 #include <QPushButton>
-#include <QHBoxLayout>
-#include <QLabel>
 
 namespace OTGUI {
   
@@ -42,6 +39,7 @@ public :
 
 protected:
   void buildInterface();
+  virtual void resizeEvent(QResizeEvent * event);
 
 public slots:
   void addInputLine();
@@ -52,6 +50,8 @@ public slots:
   void updateInputTableModel();
   void updateDifferentiationTableModel();
   void updateOutputTableModel();
+  void resizeInputTable();
+  void resizeOutputTable();
 
 signals:
   void errorMessageChanged(QString);
