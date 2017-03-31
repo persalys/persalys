@@ -37,6 +37,7 @@ public:
   ControllerWidget(const QString& analysisName, QWidget* parent = 0)
   : QWidget(parent)
   {
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
     QScrollArea * scrollArea = new QScrollArea;
