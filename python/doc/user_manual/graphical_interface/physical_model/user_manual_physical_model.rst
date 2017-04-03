@@ -5,7 +5,7 @@ User manual - Define a physical model
 
 The context menu (right click) of the OTStudy or its window provides three ways to define a physical model:
 
-- New analytical physical model
+- New symbolic physical model
 - New Python physical model
 - New YACS physical model
 
@@ -16,7 +16,7 @@ items:
 - Probabilistic study
 - Designs of experiment
 
-1- "Analytical physical model": define a physical model with analytical formulas
+1- "Symbolic physical model": define a physical model with analytical formulas
 ================================================================================
 
 It consists in listing manually all the input and output variables by adding
@@ -24,12 +24,12 @@ lines in the two tables "Inputs" and "Outputs".
 By default the inputs are deterministic variables equal to 0. Values are expected
 to be floating points or integers.
 
-.. image:: /user_manual/graphical_interface/physical_model/analyticalPhysicalModel.png
+.. image:: /user_manual/graphical_interface/physical_model/symbolicPhysicalModel.png
     :align: center
 
-Names of the variables are string. Only the allowable character can be used. Default set the name of the variable
+Names of the variables are strings. Only alphanumeric characters are allowed. Default set the name of the variable
 to X0 for the first input, X1 for the second, Y0 for the first output, etc...
-A label can be assigned to each input and output variables in the **Description** column. There is no restriction
+A label can be assigned to each input and output variable in the **Description** column. There is no restriction
 on the label value (floating point, integer, string, etc...).
 
 Each line of the "Outputs" table is checkable to allow the user to enable or disable one or several variables.
