@@ -44,6 +44,10 @@ int main(int argc, char *argv[])
   settings.setValue("currentDir", QSettings().fileName());
 
   // translations
+  QTranslator qtTranslator;
+  qtTranslator.load("qt_" + QLocale::system().name(), ":/translations");
+  app.installTranslator(&qtTranslator);
+
   QTranslator appTranslator;
   appTranslator.load("otgui_" + QLocale::system().name(), ":/translations");
   app.installTranslator(&appTranslator);
