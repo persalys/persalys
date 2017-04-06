@@ -60,8 +60,6 @@ qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
               otgui/CheckableHeaderView.hxx
               otgui/ResizableStackedWidget.hxx
               otgui/TitledComboBox.hxx
-              otgui/RadioButtonDelegate.hxx
-              otgui/ParametersTableView.hxx
              )
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
