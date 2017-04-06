@@ -25,13 +25,11 @@ using namespace OT;
 
 namespace OTGUI {
 
-YACSEvalSession * YACSEvalSessionSingleton::session_ = 0;
+YACSEvalSessionSingleton * YACSEvalSessionSingleton::singleton_ = 0;
 
 /* Default constructor */
 YACSEvalSessionSingleton::YACSEvalSessionSingleton()
 {
-  if (session_)
-    throw InternalException(HERE) << "A YACS session already exists";
   session_ = new YACSEvalSession;
 }
 
@@ -46,8 +44,20 @@ YACSEvalSessionSingleton::~YACSEvalSessionSingleton()
 
 YACSEvalSession * YACSEvalSessionSingleton::Get()
 {
-  if (!session_)
-    throw InternalException(HERE) << "No YACS session";
-  return session_;
+  // singleton built at the first function call
+  if(!singleton_)
+  {
+    singleton_ = new YACSEvalSessionSingleton();
+  }
+  return singleton_->session_;
+}
+
+void YACSEvalSessionSingleton::Reset()
+{
+  if(singleton_)
+  {
+    delete singleton_;
+    singleton_ = 0;
+  }
 }
 }

@@ -33,16 +33,19 @@ namespace OTGUI {
 class OTGUI_API YACSEvalSessionSingleton
 {
 
-public:
+private:
   /** Default constructor */
   YACSEvalSessionSingleton();
   /** Destructor */
   virtual ~YACSEvalSessionSingleton();
 
+public:
   static YACSEvalSession * Get();
+  static void Reset();
 
 private:
-  static YACSEvalSession * session_;
+  YACSEvalSession * session_;
+  static YACSEvalSessionSingleton *singleton_;
 };
 }
 #endif
