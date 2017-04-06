@@ -171,6 +171,7 @@ void DesignOfExperimentWindow::addTabsForOutputs()
         ind[i] = j;
         break;
       }
+
   // sample of the variable inputs
   const NumericalSample inS = designOfExperiment_.getInputSample().getMarginal(ind);
   // input names/descriptions
@@ -251,39 +252,43 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   tabWidget_->addTab(scrollArea, tr("Min/Max"));
 
   // second tab --------------------------------
-  scatterPlotsTabWidget_ = new QTabWidget;
+  // if no variable inputs : no graph
+  if (nbInputs)
+  {
+    scatterPlotsTabWidget_ = new QTabWidget;
 
-  // - scatter plots
-  tab = new QWidget;
-  tabLayout = new QVBoxLayout(tab);
-  ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
-  QVector<PlotWidget*> listScatterPlotWidgets = GetListScatterPlots(inS, outS, designOfExperiment_.getFailedInputSample(),
-                                                                    inputNames, inAxisTitles, outputNames, outAxisTitles);
-  for (int i=0; i<listScatterPlotWidgets.size(); ++i)
-    stackedWidget->addWidget(listScatterPlotWidgets[i]);
+    // - scatter plots
+    tab = new QWidget;
+    tabLayout = new QVBoxLayout(tab);
+    ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
+    QVector<PlotWidget*> listScatterPlotWidgets = GetListScatterPlots(inS, outS, designOfExperiment_.getFailedInputSample(),
+                                                                      inputNames, inAxisTitles, outputNames, outAxisTitles);
+    for (int i=0; i<listScatterPlotWidgets.size(); ++i)
+      stackedWidget->addWidget(listScatterPlotWidgets[i]);
 
-  tabLayout->addWidget(stackedWidget);
-  scatterPlotsConfigurationWidget_ = new GraphConfigurationWidget(listScatterPlotWidgets, inputNames, outputNames, GraphConfigurationWidget::Scatter);
-  connect(scatterPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+    tabLayout->addWidget(stackedWidget);
+    scatterPlotsConfigurationWidget_ = new GraphConfigurationWidget(listScatterPlotWidgets, inputNames, outputNames, GraphConfigurationWidget::Scatter);
+    connect(scatterPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+
+    scatterPlotsTabWidget_->addTab(tab, tr("Scatter plots"));
+
+    // - plot matrix X-X --------------------------------
+    tab = new PlotMatrixWidget(inS, inS);
+    plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
+
+    scatterPlotsTabWidget_->addTab(tab, tr("Plot matrix X-X"));
+
+    // - plot matrix Y-X --------------------------------
+    tab = new PlotMatrixWidget(inS, outS);
+    plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
+
+    scatterPlotsTabWidget_->addTab(tab, tr("Plot matrix Y-X"));
+
+    connect(scatterPlotsTabWidget_, SIGNAL(currentChanged(int)), this, SLOT(scatterPlotsTabWidgetIndexChanged()));
+    tabWidget_->addTab(scatterPlotsTabWidget_, tr("Scatter plots"));
+  }
 
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
-
-  scatterPlotsTabWidget_->addTab(tab, tr("Scatter plots"));
-
-  // - plot matrix X-X --------------------------------
-  tab = new PlotMatrixWidget(inS, inS);
-  plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
-
-  scatterPlotsTabWidget_->addTab(tab, tr("Plot matrix X-X"));
-
-  // - plot matrix Y-X --------------------------------
-  tab = new PlotMatrixWidget(inS, outS);
-  plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
-
-  scatterPlotsTabWidget_->addTab(tab, tr("Plot matrix Y-X"));
-
-  connect(scatterPlotsTabWidget_, SIGNAL(currentChanged(int)), this, SLOT(scatterPlotsTabWidgetIndexChanged()));
-  tabWidget_->addTab(scatterPlotsTabWidget_, tr("Scatter plots"));
 }
 
 

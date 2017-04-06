@@ -451,6 +451,165 @@ Models
 - unselect fake_var + select y0, fake_y0 and y1
 
 
+
+Designs of experiment
+`````````````````````
+
+- check the wizards:
+
+  - right click on design_1 and choose Modify :
+
+    - First page :
+
+      - type : Deterministic
+
+      - continue
+
+    - Second page :
+
+      - no checked line
+
+      - first and second columns are not editable
+
+      - 3 last columns are disable
+
+      - all levels are equal to 1
+
+      - check wizard behavior :
+
+        - fifth header item : change combo box item to Delta
+
+          - values changed : all deltas values are null
+
+        - first header item : check all
+
+          - third column is disable
+
+          - 3 last columns are enabled
+
+        - fifth header item : change combo box item to Levels
+
+          - values changed : all levels values are equal to 2
+
+        - first header item : uncheck all
+
+        - check second line
+
+        - line 2 : change lower bound to 10, press enter
+
+          - error message : 'The lower bound be inferior to the upper bound'
+
+        - line 2 : change upper bound to 0, press enter
+
+          - error message : 'The upper bound be superior to the lower bound'
+
+        - fifth header item : change combo box item to Delta
+
+        - line 2 : change delta to 15, press enter
+
+          - error message : 'Delta must be inferior to the upper bound - the lower bound'
+
+        - line 2 : change delta to 0.5, press enter
+
+          - size of the design of experiment : 19
+
+        - check all lines one by one :
+
+          - fifth header item is checked
+
+          - size of the design of experiment : 76
+
+      - cancel
+
+  - right click on design_2 and choose Modify :
+
+    - First page :
+
+      - type : Deterministic
+
+      - continue
+
+    - Second page :
+
+      - x1 and x2 checked
+
+      - lower bounds : [0.5, 0.5]
+
+      - upper bounds : [9.5, 9.5]
+
+      - levels : [7, 7]
+
+      - fifth header item : change combo box item to Delta :
+
+        - deltas : [1.5, 1.5]
+
+      - size of the design of experiment : 49
+
+      - cancel
+
+  - right click on design_3 and choose Modify :
+
+    - First page :
+
+      - type : Import data
+
+      - continue
+
+    - Second page :
+
+      - Data file : data.csv
+
+      - header items : ['x1', '', 'x2', 'x3']
+
+      - when changing a combo box item : the error message 'Each variable must be associated with one column' appears
+
+      - set the second header item to 'x2' and the third one to ''
+
+      - finish
+
+        - check the design of experiment window is updated : check the values of x2 have changed
+
+  - right click on design_3 and choose New metamodel :
+
+    - error message box : 'The model must have at least one output
+
+  - right click on design_3 and choose Evaluate :
+
+    - the valuation is launched, a widget with a progress bar appears at the bottom of the tree view
+
+  - check result window :
+
+    - 3 tabs Table - Min/Max - Scatter plots
+
+    - Min/Max tab :
+
+      - a list view with 3 variables appears at the left side of the window
+
+      - when changing the variable, the Min/Max tab is updated
+
+    - Scatter plots tab :
+
+      - 3 sub-tabs Scatter plots - Plot matrix X-X - Plot matrix Y-X
+
+      - when clicking on the tab, the list view is hidden
+
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+
+- right click on Design of experiment of model2 and choose New design of experiment :
+
+  - a wizard appears, click on the Continue button of the first page then on the Finish button of the second page
+
+  - right click on the item which appeared and choose Evaluate :
+
+    - check result window :
+
+      - 2 tabs Table - Min/Max
+
+      - Min/Max tab :
+
+        - a list view with a variable appears at the left side of the window
+
+
 Analyses
 `````````````
 
@@ -759,156 +918,6 @@ Analyses
 
         - At the bottom: error message 'The model has not independant copula, the result could be false.'
 
-  - Designs of experiment
-
-    - check the wizards:
-
-      - right click on design_1 and choose Modify :
-
-        - First page :
-
-          - type : Deterministic
-
-          - continue
-
-        - Second page :
-
-          - no checked line
-
-          - first and second columns are not editable
-
-          - 3 last columns are disable
-
-          - all levels are equal to 1
-
-          - check wizard behavior :
-
-            - fifth header item : change combo box item to Delta
-
-              - values changed : all deltas values are null
-
-            - first header item : check all
-
-              - third column is disable
-
-              - 3 last columns are enabled
-
-            - fifth header item : change combo box item to Levels
-
-              - values changed : all levels values are equal to 2
-
-            - first header item : uncheck all
-
-            - check second line
-
-            - line 2 : change lower bound to 10, press enter
-
-              - error message : 'The lower bound be inferior to the upper bound'
-
-            - line 2 : change upper bound to 0, press enter
-
-              - error message : 'The upper bound be superior to the lower bound'
-
-            - fifth header item : change combo box item to Delta
-
-            - line 2 : change delta to 15, press enter
-
-              - error message : 'Delta must be inferior to the upper bound - the lower bound'
-
-            - line 2 : change delta to 0.5, press enter
-
-              - size of the design of experiment : 19
-
-            - check all lines one by one :
-
-              - fifth header item is checked
-
-              - size of the design of experiment : 76
-
-          - cancel
-
-      - right click on design_2 and choose Modify :
-
-        - First page :
-
-          - type : Deterministic
-
-          - continue
-
-        - Second page :
-
-          - x1 and x2 checked
-
-          - lower bounds : [0.5, 0.5]
-
-          - upper bounds : [9.5, 9.5]
-
-          - levels : [7, 7]
-
-          - fifth header item : change combo box item to Delta :
-
-            - deltas : [1.5, 1.5]
-
-          - size of the design of experiment : 49
-
-          - cancel
-
-      - right click on design_3 and choose Modify :
-
-        - First page :
-
-          - type : Import data
-
-          - continue
-
-        - Second page :
-
-          - Data file : data.csv
-
-          - header items : ['x1', '', 'x2', 'x3']
-
-          - when changing a combo box item : the error message 'Each variable must be associated with one column' appears
-
-          - set the second header item to 'x2' and the third one to ''
-
-          - finish
-
-            - check the design of experiment window is updated : check the values of x2 have changed
-
-      - right click on design_3 and choose New metamodel :
-
-        - error message box : 'The model must have at least one output
-
-      - right click on design_3 and choose Evaluate :
-
-        - the valuation is launched, a widget with a progress bar appears at the bottom of the tree view
-
-      - check result window :
-
-        - 3 tabs Table - Min/Max - Scatter plots
-
-        - Min/Max tab :
-
-          - a list view with 2 variables appears at the left side of the window
-
-          - when changing the variable, the Min/Max tab is updated
-
-        - Scatter plots tab :
-
-          - 3 sub-tabs Scatter plots - Plot matrix X-X - Plot matrix Y-X
-
-          - when clicking on the tab, the list view is hidden
-
-          - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-
-      - right click on design_3 and choose New metamodel
-
-        - choose the Kriging method and click on the Finish button
-
-        - a widget with a progress bar appears at the bottom of the tree view : click immediately on the Stop button
-
-        - there is only y0 in the list view at the left side of the result window
-
   - Kriging
 
     - check the values:
@@ -943,6 +952,10 @@ Analyses
 
       - widget with a progress bar appears at the bottom of the tree view
 
+    - a new model appears in the tree view
+
+      - Evaluate it
+
     - check result window :
 
       - left side: 1 variable in the list view
@@ -956,6 +969,15 @@ Analyses
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
 
       - check tables are well drawn
+
+
+    - right click on design_3 and choose New metamodel
+
+      - choose the Kriging method and click on the Finish button
+
+      - a widget with a progress bar appears at the bottom of the tree view : click immediately on the Stop button
+
+      - there is only y0 in the list view at the left side of the result window
 
   - chaos_1
 
@@ -976,6 +998,10 @@ Analyses
     - click on the Finish button
 
       - widget with a progress bar appears at the bottom of the tree view
+
+    - a new model appears in the tree view
+
+      - Evaluate it
 
     - check result window :
 
@@ -1137,8 +1163,5 @@ Analyses
       - check tables are well drawn
 
 
-
-
-
-
+- save the study, close it, reopen it and check all is here
 
