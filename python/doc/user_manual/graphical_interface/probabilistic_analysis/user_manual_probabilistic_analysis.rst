@@ -19,12 +19,32 @@ The probabilistic model has two tabs:
     thanks to the check box. For random variables, the user has to define which
     distribution they follow.
 
-    On the right, the parameters of the distribution can be filled, together with truncation parameters.
+    .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelDistributionsList.png
+        :align: center
+
+    In the proposed distributions list, there is the item 'Inference result'. If the current study has at least
+    an :ref:`inference analysis result <inferenceAnalysis>`, when clicking on
+    this item, the following window appears:
+
+    .. image:: /user_manual/graphical_interface/probabilistic_analysis/inference_resultWizard.png
+        :align: center
+
+    The user can search the wanted analysis result with the 'Inference analysis' combo box.
+    Then the user can choose a result of a variable with the 'Variable' combo box.
+    The user can choose one distribution in the displayed list. The right side of the window displays
+    the current distribution parameters.
+    The distributions with which the inference analysis failed ('failed' indicated in the acceptance column) are
+    listed for convenience but it is not possible to validate the window when selecting one of them.
+
+    When clicking on the **Finish** button, the chosen distribution is defining for the selected variable.
+
+    On the right side of the probabilistic model window, the parameters of the distribution can be filled,
+    together with truncation parameters.
     The values are expected to be floating points or integers, with respect to the distribution support.
     If a wrong value is used, it will return to its previous value and an error message will appear at the bottom
     of the window.
 
-    There are different ways to set the parameters of the LogNormal, Weibull and Gumber distributions.
+    There are different ways to set the parameters of the LogNormal, Weibull and Gumbel distributions.
     To select the good one, click on the **Type** select button.
 
     The user can configure the plot of the distribution and choose between PDF/CDF with the graphic
@@ -147,7 +167,7 @@ The result window has 3 tabs:
 3-1 Definition
 ''''''''''''''
 
-New central tendency analysis can be created thanks to be context menu of the
+New central tendency analysis can be created thanks to the context menu of the
 probabilistic model. Two methods are available:
 
 - Monte carlo sampling;

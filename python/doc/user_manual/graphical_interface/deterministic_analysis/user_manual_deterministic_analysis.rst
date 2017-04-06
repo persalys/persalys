@@ -21,9 +21,18 @@ New model evaluations can be created through the context menu of the
 .. image:: /user_manual/graphical_interface/deterministic_analysis/modelEvaluation.png
     :align: center
 
-In the resulting window, the user has to define the value of each input variables
+In the resulting window, the user has to define the value of each input variable
 for which the evaluation has to be performed. The values are expected
-to be floating points or integer.
+to be floating points or integer. The default values are the ones defined in the physical
+model window.
+
+The user can choose the ouputs to evaluate by clicking on the button **-- Select Outputs --**
+at the top of the window:
+
+.. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png
+    :align: center
+
+By default all the output variables are evaluated.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/modelEvaluationResults.png
     :align: center

@@ -24,7 +24,7 @@ The results window gathers 4 tabs:
     - Statistics of the variable distribution:
         - Mean;
         - Standard deviation;
-        - Coefficient of variation
+        - Coefficient of variation;
         - Skewness;
         - Kurtosis;
         - First quartile;
@@ -146,6 +146,8 @@ The results window gathers 4 tabs:
     The **Export** button opens a dialog box for the user to select where the
     figure has to be saved.
 
+.. _inferenceAnalysis:
+
 2- Inference analysis
 =====================
 
@@ -239,6 +241,12 @@ The results window gathers 2 tabs for each variable:
     and the values of its native parameters.
 
   .. image:: /user_manual/graphical_interface/data_analysis/inference_resultWindow_tab_summary_parameters.png
+      :align: center
+
+  - If an error occured when building a distribution with the given sample, 'failed' is indicated in the
+    acceptance column, the first two tabs are disabled and the **Parameters** tab displays the error message.
+
+  .. image:: /user_manual/graphical_interface/data_analysis/inference_resultWindow_tab_summary_parameters_error_message.png
       :align: center
 
 - The tab **Parameters** indicates the level used to perform the inference.
