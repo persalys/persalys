@@ -23,19 +23,23 @@
 namespace OTGUI {
 
 ResizableStackedWidget::ResizableStackedWidget(QWidget * parent)
-  :QStackedWidget(parent)
+  : QStackedWidget(parent)
 {
 }
 
 
 QSize ResizableStackedWidget::sizeHint() const
 {
-  return currentWidget()->sizeHint();
+  if (currentWidget())
+    return currentWidget()->sizeHint();
+  return QStackedWidget::sizeHint();
 }
 
 
 QSize ResizableStackedWidget::minimumSizeHint() const
 {
-  return currentWidget()->minimumSizeHint();
+  if (currentWidget())
+    return currentWidget()->minimumSizeHint();
+  return QStackedWidget::minimumSizeHint();
 }
 }
