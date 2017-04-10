@@ -120,6 +120,17 @@ int DesignOfExperimentImplementation::getProgressValue() const
 }
 
 
+void DesignOfExperimentImplementation::initialize()
+{
+  errorMessage_ = "";
+  stopRequested_ = false;
+  progressValue_ = 0;
+  failedInputSample_ = NumericalSample();
+  notEvaluatedInputSample_ = NumericalSample();
+  setOutputSample(NumericalSample());
+}
+
+
 void DesignOfExperimentImplementation::run()
 {
   if (!hasPhysicalModel())
@@ -128,9 +139,7 @@ void DesignOfExperimentImplementation::run()
   try
   {
     // clear result
-    errorMessage_ = "";
-    stopRequested_ = false;
-    progressValue_ = 0;
+    initialize();
 
     // input sample
     NumericalSample inputSample(getInputSample());
@@ -160,6 +169,7 @@ void DesignOfExperimentImplementation::run()
           break;
         }
       }
+
       if (!failedPoint.getSize())
       {
         outputSample.add(outputPoint);
@@ -170,7 +180,7 @@ void DesignOfExperimentImplementation::run()
     outputSample.setDescription(getPhysicalModel().getSelectedOutputsNames());
 
     if (!outputSample.getSize())
-      throw InvalidRangeException(HERE) << "No succeeded evaluation";
+      throw InvalidRangeException(HERE) << "All the evaluations have failed";
 
     // set samples
     if (inputSample.getSize() > wellDoneInputSample.getSize())

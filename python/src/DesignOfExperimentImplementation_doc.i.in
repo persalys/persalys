@@ -91,6 +91,17 @@ hasPhysicalModel : bool
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::hasPhysicalModel
 OTGUI_DesignOfExperiment_hasPhysicalModel_doc
 
+// ---------------------------------------------------------------------
+
+%define OTGUI_DesignOfExperiment_initialize_doc
+"Initialize the design of experiment.
+
+Empty the output sample, the failed input sample and the not evaluated input sample.
+Reset the error message."
+%enddef
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::initialize
+OTGUI_DesignOfExperiment_initialize_doc
+
 // ----------------------------------------------------------------------
 
 %define OTGUI_DesignOfExperiment_getSampleFromFile_doc
