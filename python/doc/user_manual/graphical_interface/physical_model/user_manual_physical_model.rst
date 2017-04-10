@@ -119,7 +119,7 @@ It consists in defining the physical model as a Python function **_exec**
 
 This function takes floating point arguments and returns a sequence of floating points.
 
-Input variables names are detected from the fonction definition.
+Input variables names are detected from the function definition.
 The value of the input variables can be set by the user and are expected
 to be floating points or integers. By default they are equal to 0.
 
@@ -157,4 +157,34 @@ can be realized.
 The **Evaluate** button calculates the value of the outputs based on the input values
 and the YACS scheme. It shall be used to test the physical model. In order to get evaluations which can be saved,
 the user should use :ref:`the deterministic study <deterministicStudy>`.
+
+4 - Differentiation tab
+=======================
+
+.. image:: /user_manual/graphical_interface/physical_model/differentiation_tab.png
+    :align: center
+
+The **Differentiation** tab enables the user to define the finite difference step of each input variable.
+By default each step is equal to 1e-7.
+These steps are used to set the gradient of the model function with the first order non-centered finite difference scheme
+and its hessian with the second order centered finite difference scheme.
+
+First order non-centered finite difference scheme:
+
+.. math::
+
+    \frac{\partial f_j}{\partial x_i} \approx \frac{f_j(x + \epsilon_i) - f_j(x)}
+                                                   {\epsilon_i}
+
+Second order centered finite difference scheme:
+
+.. math::
+
+  \frac{\partial^2 f_k}{\partial x_i \partial x_j} \approx
+                                     \frac{
+                                        f_k(x + \epsilon_i + \epsilon_j) -
+                                        f_k(x + \epsilon_i - \epsilon_j) +
+                                        f_k(x - \epsilon_i - \epsilon_j) -
+                                        f_k(x - \epsilon_i + \epsilon_j)}
+                                     {4 \epsilon_i \epsilon_j}
 
