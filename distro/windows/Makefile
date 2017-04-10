@@ -127,7 +127,6 @@ endif
 	# qt libs
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/Qt*.dll $(MOD_PREFIX)/bin
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/qwt*.dll $(MOD_PREFIX)/bin
-	-beep -r 2
 	touch mod-install
 
 mod-test: mod-install
