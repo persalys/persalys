@@ -646,52 +646,52 @@ Début : %2.</translation>
         <translation>Points non évalués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="241"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="242"/>
         <source>Sample size</source>
         <translation>Taille d&apos;échantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="251"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="252"/>
         <source>Min/Max</source>
         <translation>Min/Max</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="271"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="286"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="273"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="288"/>
         <source>Scatter plots</source>
         <translation>Diagrammes de dispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="277"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="279"/>
         <source>Plot matrix X-X</source>
         <translation>Tableau de diagrammes de dispersion X-X</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="283"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="285"/>
         <source>Plot matrix Y-X</source>
         <translation>Tableau de diagrammes de dispersion Y-X</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="320"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="326"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="337"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="345"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="358"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="364"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="372"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="378"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="325"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="331"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="342"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="350"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="363"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="369"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="377"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="383"/>
         <source>Scatter plot:</source>
         <translation>Diagramme de dispersion :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="320"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="326"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="337"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="345"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="358"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="364"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="372"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="378"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="325"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="331"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="342"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="350"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="363"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="369"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="377"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="383"/>
         <source>vs</source>
         <translation>vs</translation>
     </message>
@@ -1135,8 +1135,8 @@ Début : %2.</translation>
         <translation>Le fichier contient un échantillon de dimension inférieure au nombre d&apos;entrée du modèle physique :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="126"/>
-        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="141"/>
+        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="127"/>
+        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="142"/>
         <source>Each variable must be associated with one column.</source>
         <translation>Chaque variable doit être associée à une colonne.</translation>
     </message>
@@ -2546,7 +2546,7 @@ extremum</source>
     <message>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="164"/>
         <source>Differentiation</source>
-        <translation>Différenciation</translation>
+        <translation>Différentiation</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="324"/>
