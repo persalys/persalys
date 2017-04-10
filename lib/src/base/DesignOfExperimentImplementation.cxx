@@ -21,6 +21,7 @@
 #include "otgui/DesignOfExperimentImplementation.hxx"
 
 #include "openturns/PersistentObjectFactory.hxx"
+#include "openturns/SpecFunc.hxx"
 
 using namespace OT;
 
@@ -157,16 +158,29 @@ void DesignOfExperimentImplementation::run()
       progressValue_ = (int) (i * 100 / inputSample.getSize());
       notify("progressValueChanged");
 
-      NumericalPoint outputPoint(getPhysicalModel().getFunction(getPhysicalModel().getSelectedOutputsNames())(inputSample[i]));
+      NumericalPoint outputPoint;
       NumericalPoint failedPoint;
 
-      for (UnsignedInteger j=0; j<getPhysicalModel().getSelectedOutputsNames().getSize(); ++j)
+      try
       {
-        if (std::isnan(outputPoint[j]) || std::isinf(outputPoint[j]))
+        outputPoint = getPhysicalModel().getFunction(getPhysicalModel().getSelectedOutputsNames())(inputSample[i]);
+      }
+      catch (InternalException & ex)
+      {
+        failedPoint = inputSample[i];
+        failedInputSample.add(failedPoint);
+      }
+
+      if (!failedPoint.getSize())
+      {
+        for (UnsignedInteger j=0; j<getPhysicalModel().getSelectedOutputsNames().getSize(); ++j)
         {
-          failedPoint = inputSample[i];
-          failedInputSample.add(failedPoint);
-          break;
+          if (!SpecFunc::IsNormal(outputPoint[j])) // for ex: in case of zero division the Symbolic models do not raise error
+          {
+            failedPoint = inputSample[i];
+            failedInputSample.add(failedPoint);
+            break;
+          }
         }
       }
 
@@ -180,7 +194,7 @@ void DesignOfExperimentImplementation::run()
     outputSample.setDescription(getPhysicalModel().getSelectedOutputsNames());
 
     if (!outputSample.getSize())
-      throw InvalidRangeException(HERE) << "All the evaluations have failed";
+      throw InvalidRangeException(HERE) << "All the evaluations have failed. Check the model.";
 
     // set samples
     if (inputSample.getSize() > wellDoneInputSample.getSize())
