@@ -316,12 +316,12 @@ void PhysicalModelWindowWidget::evaluateOutputs()
   // check
   if (!eval.getErrorMessage().empty())
   {
-    errorMessageChanged(eval.getErrorMessage().c_str());
+    emit errorMessageChanged(eval.getErrorMessage().c_str());
     return;
   }
   if (!outputSample.getSize())
   {
-    errorMessageChanged(tr("Not possible to evaluate the outputs"));
+    emit errorMessageChanged(tr("Not possible to evaluate the outputs"));
     return;
   }
 
@@ -329,6 +329,6 @@ void PhysicalModelWindowWidget::evaluateOutputs()
   for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++ i)
     physicalModel_.setOutputValue(outputSample.getDescription()[i], outputSample[0][i]);
 
-  errorMessageChanged("");
+  emit errorMessageChanged("");
 }
 }
