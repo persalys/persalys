@@ -36,19 +36,8 @@ class Worker : public QObject
 public slots:
   void process(Analysis analysis)
   {
-    // some additional operations (PyEval_InitThreads & PyEval_Save/RestoreThread)
-    // are required when calling Python in the thread (ex: when using PythonPhysicalModel)
-    // (GIL management (acquire then release) is done directly when using Python/C API (ex: in PythonEvaluation))
-
-    // initialize Python threading
-    PyEval_InitThreads();
-    // allow other threads to run
-    PyThreadState * save = PyEval_SaveThread();
-
     analysis.run();
     emit processFinished();
-
-    PyEval_RestoreThread(save);
   }
 
 signals:

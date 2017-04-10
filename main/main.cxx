@@ -32,11 +32,10 @@ using namespace OTGUI;
 
 int main(int argc, char *argv[])
 {
-#ifdef OTGUI_HAVE_YACS
-  YACSEvalSessionSingleton YACSSession;
-#endif
+  int ret(0);
   // Python Environment
   PythonEnvironment env;
+  {
   // Application
   QApplication app(argc, argv);
   // Settings
@@ -57,5 +56,10 @@ int main(int argc, char *argv[])
   window.resize(1024, 768);
   window.show();
 
-  return app.exec();
+  ret=app.exec();
+#ifdef OTGUI_HAVE_YACS
+  YACSEvalSessionSingleton::Reset();
+#endif
+  }
+  return ret;
 }

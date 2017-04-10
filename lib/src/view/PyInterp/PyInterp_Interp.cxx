@@ -247,7 +247,9 @@ void PyInterp_Interp::initPython()
     PySys_SetArgv(_argc, _argv);
 
     PyEval_InitThreads(); // Create (and acquire) the Python global interpreter lock (GIL)
-    PyEval_ReleaseLock();
+    PyEval_SaveThread(); /* Release the thread state */
+    //here we do not have the Global Interpreter Lock
+//    PyEval_ReleaseLock();
   }
 }
 

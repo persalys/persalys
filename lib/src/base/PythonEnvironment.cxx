@@ -20,16 +20,22 @@
  */
 #include "otgui/PythonEnvironment.hxx"
 #include <Python.h>
+#include "otgui/PythonEvaluation.hxx"
 
 namespace OTGUI {
 
 PythonEnvironment::PythonEnvironment()
 {
+  // Py_Initialize should be done by PyInterp_Interp
   Py_Initialize();
+  PyEval_InitThreads(); // Create (and acquire) the Python global interpreter lock (GIL)
+  PyEval_SaveThread(); /* Release the thread state */
+  //here we do not have the Global Interpreter Lock
 }
 
 PythonEnvironment::~PythonEnvironment()
 {
+  PyGILState_Ensure();
   Py_Finalize();
 }
 
