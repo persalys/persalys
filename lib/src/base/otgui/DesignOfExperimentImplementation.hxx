@@ -52,6 +52,8 @@ public:
   OT::String getErrorMessage() const;
   int getProgressValue() const;
 
+  void initialize();
+
   void run();
   virtual OT::String getPythonScript() const;
   void stop();

@@ -21,6 +21,7 @@
 #include "otgui/DesignOfExperimentImplementation.hxx"
 
 #include "openturns/PersistentObjectFactory.hxx"
+#include "openturns/SpecFunc.hxx"
 
 using namespace OT;
 
@@ -120,6 +121,17 @@ int DesignOfExperimentImplementation::getProgressValue() const
 }
 
 
+void DesignOfExperimentImplementation::initialize()
+{
+  errorMessage_ = "";
+  stopRequested_ = false;
+  progressValue_ = 0;
+  failedInputSample_ = NumericalSample();
+  notEvaluatedInputSample_ = NumericalSample();
+  setOutputSample(NumericalSample());
+}
+
+
 void DesignOfExperimentImplementation::run()
 {
   if (!hasPhysicalModel())
@@ -128,9 +140,7 @@ void DesignOfExperimentImplementation::run()
   try
   {
     // clear result
-    errorMessage_ = "";
-    stopRequested_ = false;
-    progressValue_ = 0;
+    initialize();
 
     // input sample
     NumericalSample inputSample(getInputSample());
@@ -148,18 +158,32 @@ void DesignOfExperimentImplementation::run()
       progressValue_ = (int) (i * 100 / inputSample.getSize());
       notify("progressValueChanged");
 
-      NumericalPoint outputPoint(getPhysicalModel().getFunction(getPhysicalModel().getSelectedOutputsNames())(inputSample[i]));
+      NumericalPoint outputPoint;
       NumericalPoint failedPoint;
 
-      for (UnsignedInteger j=0; j<getPhysicalModel().getSelectedOutputsNames().getSize(); ++j)
+      try
       {
-        if (std::isnan(outputPoint[j]) || std::isinf(outputPoint[j]))
+        outputPoint = getPhysicalModel().getFunction(getPhysicalModel().getSelectedOutputsNames())(inputSample[i]);
+      }
+      catch (InternalException & ex)
+      {
+        failedPoint = inputSample[i];
+        failedInputSample.add(failedPoint);
+      }
+
+      if (!failedPoint.getSize())
+      {
+        for (UnsignedInteger j=0; j<getPhysicalModel().getSelectedOutputsNames().getSize(); ++j)
         {
-          failedPoint = inputSample[i];
-          failedInputSample.add(failedPoint);
-          break;
+          if (!SpecFunc::IsNormal(outputPoint[j])) // for ex: in case of zero division the Symbolic models do not raise error
+          {
+            failedPoint = inputSample[i];
+            failedInputSample.add(failedPoint);
+            break;
+          }
         }
       }
+
       if (!failedPoint.getSize())
       {
         outputSample.add(outputPoint);
@@ -170,7 +194,7 @@ void DesignOfExperimentImplementation::run()
     outputSample.setDescription(getPhysicalModel().getSelectedOutputsNames());
 
     if (!outputSample.getSize())
-      throw InvalidRangeException(HERE) << "No succeeded evaluation";
+      throw InvalidRangeException(HERE) << "All the evaluations have failed. Check the model.";
 
     // set samples
     if (inputSample.getSize() > wellDoneInputSample.getSize())

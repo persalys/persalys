@@ -83,7 +83,7 @@ void FromFileDesignOfExperiment::setFileName(const String& fileName)
     sampleFromFile_ = importedSample;
     // reinitialization
     setInputSample(NumericalSample());
-    setOutputSample(NumericalSample());
+    initialize();
     inputColumns_ = Indices();
   }
   else
@@ -119,8 +119,8 @@ void FromFileDesignOfExperiment::setInputColumns(const Indices& inputColumns)
   inS.setDescription(physicalModel_.getInputNames());
   setInputSample(inS);
 
-  // initialize OutputSample
-  setOutputSample(NumericalSample());
+  // reinitialize
+  initialize();
 }
 
 

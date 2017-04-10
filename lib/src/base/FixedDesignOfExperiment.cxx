@@ -154,6 +154,9 @@ void FixedDesignOfExperiment::initializeParameters()
 
 void FixedDesignOfExperiment::generateInputSample()
 {
+  // reitialize
+  initialize();
+
   // check attributs size
   UnsignedInteger powSize = levels_.getSize();
   powSize *= lowerBounds_.getSize();

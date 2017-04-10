@@ -114,6 +114,7 @@ void ApproximationResultTabWidget::buildInterface()
 
   namesList.clear();
   namesList << tr("Iterations number");
+  namesList << tr("Calls number");
   namesList << tr("Absolute error");
   namesList << tr("Relative error");
   namesList << tr("Residual error");
@@ -121,6 +122,7 @@ void ApproximationResultTabWidget::buildInterface()
 
   valuesList.clear();
   valuesList << QString::number(result_.getOptimizationResult().getIterationNumber());
+  valuesList << QString::number(result_.getLimitStateVariable().getFunction().getCallsNumber());
   valuesList << QString::number(result_.getOptimizationResult().getAbsoluteError());
   valuesList << QString::number(result_.getOptimizationResult().getRelativeError());
   valuesList << QString::number(result_.getOptimizationResult().getResidualError());

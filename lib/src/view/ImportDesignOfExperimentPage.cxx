@@ -67,8 +67,9 @@ void ImportDesignOfExperimentPage::setTable(const QString& fileName)
   {
     columns = Indices(inputNames.getSize());
     columns.fill();
-    designOfExperiment_.setInputColumns(columns);
   }
+  // reset input sample
+  designOfExperiment_.setInputColumns(columns);
 
   // set sample description
   Description desc(sample.getDimension());

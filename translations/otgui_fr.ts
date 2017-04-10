@@ -102,7 +102,7 @@
     <message>
         <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="96"/>
         <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="100"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="225"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="227"/>
         <source>Failure probability</source>
         <translation>Probabilité de défaillance</translation>
     </message>
@@ -123,84 +123,89 @@
     </message>
     <message>
         <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="117"/>
+        <source>Calls number</source>
+        <translation>Nombre d&apos;appels</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="118"/>
         <source>Absolute error</source>
         <translation>Erreur absolue</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="118"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="119"/>
         <source>Relative error</source>
         <translation>Erreur relative</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="119"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="120"/>
         <source>Residual error</source>
         <translation>Erreur sur les résidus</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="120"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="121"/>
         <source>Constraint error</source>
         <translation>Erreur sur la contrainte</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="135"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="137"/>
         <source>Summary</source>
         <translation>Résumé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="145"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="202"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="147"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="204"/>
         <source>Design point</source>
         <translation>Point de conception</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="158"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="223"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="160"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="225"/>
         <source>Variable</source>
         <translation>Variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="160"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="162"/>
         <source>Importance factors</source>
         <translation>Facteurs d&apos;importance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="162"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="164"/>
         <source>Coordinates</source>
         <translation>Coordonnées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="163"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="165"/>
         <source>Standard space</source>
         <translation>Espace standard</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="164"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="166"/>
         <source>Physical space</source>
         <translation>Espace physique</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="194"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="196"/>
         <source>Importance factors pie chart</source>
         <translation>Diagrammes des facteurs d&apos;importance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="212"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="268"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="214"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="270"/>
         <source>Sensitivities</source>
         <translation>Sensibilités</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="224"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="226"/>
         <source>Distribution parameters</source>
         <translation>Paramètres de distribution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="226"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="228"/>
         <source>Reliability index</source>
         <translation>Indice de fiabilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="272"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="274"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -646,52 +651,52 @@ Début : %2.</translation>
         <translation>Points non évalués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="241"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="242"/>
         <source>Sample size</source>
         <translation>Taille d&apos;échantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="251"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="252"/>
         <source>Min/Max</source>
         <translation>Min/Max</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="271"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="286"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="273"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="288"/>
         <source>Scatter plots</source>
         <translation>Diagrammes de dispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="277"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="279"/>
         <source>Plot matrix X-X</source>
         <translation>Tableau de diagrammes de dispersion X-X</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="283"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="285"/>
         <source>Plot matrix Y-X</source>
         <translation>Tableau de diagrammes de dispersion Y-X</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="320"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="326"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="337"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="345"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="358"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="364"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="372"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="378"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="325"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="331"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="342"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="350"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="363"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="369"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="377"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="383"/>
         <source>Scatter plot:</source>
         <translation>Diagramme de dispersion :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="320"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="326"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="337"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="345"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="358"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="364"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="372"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="378"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="325"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="331"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="342"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="350"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="363"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="369"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="377"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="383"/>
         <source>vs</source>
         <translation>vs</translation>
     </message>
@@ -1135,8 +1140,8 @@ Début : %2.</translation>
         <translation>Le fichier contient un échantillon de dimension inférieure au nombre d&apos;entrée du modèle physique :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="126"/>
-        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="141"/>
+        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="127"/>
+        <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="142"/>
         <source>Each variable must be associated with one column.</source>
         <translation>Chaque variable doit être associée à une colonne.</translation>
     </message>
@@ -2546,7 +2551,7 @@ extremum</source>
     <message>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="164"/>
         <source>Differentiation</source>
-        <translation>Différenciation</translation>
+        <translation>Différentiation</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="324"/>
