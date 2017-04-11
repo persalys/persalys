@@ -850,7 +850,7 @@ void StudyTreeView::runAnalysis()
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(selectionModel()->currentIndex());
   AnalysisItem * item = dynamic_cast<AnalysisItem*>(selectedItem);
 
-  AnalysisWizard * wizard;
+  AnalysisWizard * wizard = 0;
   const QString analysisType = item->data(Qt::UserRole).toString();
 
   if (analysisType == "ModelEvaluation")
