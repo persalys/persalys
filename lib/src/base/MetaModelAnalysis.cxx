@@ -182,6 +182,9 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Nu
         output.setDescription(output.getDescription() + " - " + getName() + " metamodel");
       else
         output.setDescription(getName() + " metamodel");
+      output.setValue(0.);
+      output.setHasBeenComputed(false);
+
       metaModel.addOutput(output);
       metaModel.setCopula(designOfExperiment_.getPhysicalModel().getCopula());
     }
