@@ -420,6 +420,9 @@ Models
 
 - click on model1 item
 
+  .. image:: /developer_manual/validation/model1.png
+      :align: center
+
 - click on Evaluate button
 
   - only y0 and y1 are evaluated
@@ -450,6 +453,15 @@ Models
 
 - unselect fake_var + select y0, fake_y0 and y1
 
+- click on model2 item
+
+  .. image:: /developer_manual/validation/model2.png
+      :align: center
+
+- click on model3 item
+
+  .. image:: /developer_manual/validation/model3.png
+      :align: center
 
 
 Designs of experiment
@@ -461,11 +473,17 @@ Designs of experiment
 
     - First page :
 
+      .. image:: /developer_manual/validation/design_1_wizard_1st_page.png
+          :align: center
+
       - type : Deterministic
 
       - continue
 
     - Second page :
+
+      .. image:: /developer_manual/validation/design_1_wizard_2nd_page.png
+          :align: center
 
       - no checked line
 
@@ -531,6 +549,9 @@ Designs of experiment
 
     - Second page :
 
+      .. image:: /developer_manual/validation/design_2_wizard_2nd_page.png
+          :align: center
+
       - x1 and x2 checked
 
       - lower bounds : [0.5, 0.5]
@@ -557,6 +578,9 @@ Designs of experiment
 
     - Second page :
 
+      .. image:: /developer_manual/validation/design_3_wizard_2nd_page.png
+          :align: center
+
       - Data file : data.csv
 
       - header items : ['x1', '', 'x2', 'x3']
@@ -579,6 +603,9 @@ Designs of experiment
 
   - check result window :
 
+    .. image:: /developer_manual/validation/design_3_Table.png
+        :align: center
+
     - 3 tabs Table - Min/Max - Scatter plots
 
     - Min/Max tab :
@@ -599,9 +626,15 @@ Designs of experiment
 
   - a wizard appears, click on the Continue button of the first page then on the Finish button of the second page
 
+    .. image:: /developer_manual/validation/DOE_wizard_model2.png
+        :align: center
+
   - right click on the item which appeared and choose Evaluate :
 
     - check result window :
+
+      .. image:: /developer_manual/validation/DOE_result_model2_one_point.png
+          :align: center
 
       - 2 tabs Table - Min/Max
 
@@ -617,7 +650,10 @@ Analyses
 
   - Evaluation
 
-    - check the values are the same as the values written in the physical model window
+    .. image:: /developer_manual/validation/evaluation_wizard.png
+        :align: center
+
+    - check the values : [0.2, 1.2, 1]
 
     - click on the Finish button
 
@@ -625,9 +661,15 @@ Analyses
 
     - check result window
 
+      .. image:: /developer_manual/validation/evaluation_result.png
+          :align: center
+
       - results only for y0 and y1
 
   - Monte Carlo
+
+    .. image:: /developer_manual/validation/monteCarlo_central_tendency_wizard.png
+        :align: center
 
     - check the values:
 
@@ -653,6 +695,9 @@ Analyses
 
     - check result window :
 
+      .. image:: /developer_manual/validation/monteCarlo_central_tendency_result.png
+          :align: center
+
       - left side: 4 variables in the list view
 
       - right side: 6 tabs Summary - PDF/CDF - Box plots - Scatter plots - Table - Parameters
@@ -664,6 +709,9 @@ Analyses
       - Summary tab:
 
         - 2 types of extrema tables: one for the output y1 and one for inputs x1 and x2
+
+        .. image:: /developer_manual/validation/monteCarlo_central_tendency_result_input_table.png
+            :align: center
 
         - Moments estimates table has only 2 columns: Estimate and Value
 
@@ -677,6 +725,9 @@ Analyses
 
   - Taylor
 
+    .. image:: /developer_manual/validation/taylor_central_tendency_wizard.png
+        :align: center
+
     - check the values:
 
       - selected outputs: y1 and y0
@@ -688,6 +739,9 @@ Analyses
       - widget with a progress bar appears at the bottom of the tree view
 
     - check result window :
+
+      .. image:: /developer_manual/validation/taylor_central_tendency_result.png
+          :align: center
 
       - left side: 2 variables in the list view
 
@@ -707,6 +761,9 @@ Analyses
 
     - Second page check the values:
 
+      .. image:: /developer_manual/validation/monteCarlo_reliability_wizard.png
+          :align: center
+
       - method : Monte Carlo
 
       - Accuracy disable : 0.01
@@ -724,6 +781,9 @@ Analyses
       - widget with a progress bar appears at the bottom of the tree view
 
     - check result window :
+
+      .. image:: /developer_manual/validation/monteCarlo_reliability_result.png
+          :align: center
 
       - left side: 1 variable in the list view
 
@@ -743,6 +803,9 @@ Analyses
 
     - Second page check the values:
 
+      .. image:: /developer_manual/validation/FORM_IS_reliability_wizard.png
+          :align: center
+
       - method : FORM - Importance sampling
 
       - Accuracy disable : 0.01
@@ -759,6 +822,9 @@ Analyses
 
     - Third page check the values:
 
+      .. image:: /developer_manual/validation/FORM_IS_optimization_page_wizard.png
+          :align: center
+
       - Algorithm : Abdo-Rackwitz
 
       - Physical starting point : 5; 5
@@ -770,6 +836,9 @@ Analyses
         - press Finish button
 
         - Physical starting point : 5; 5.5
+
+        .. image:: /developer_manual/validation/FORM_IS_reliability_starting_point_wizard.png
+            :align: center
 
       - Number of iterations : 150
 
@@ -783,6 +852,9 @@ Analyses
 
     - check result window :
 
+      .. image:: /developer_manual/validation/FORM_IS_reliability_result.png
+          :align: center
+
       - left side: 1 variable in the list view
 
       - right side: 5 tabs Summary - Histogram - Covergence graph - FORM results - Parameters
@@ -791,15 +863,21 @@ Analyses
 
       - tab FORM results:
 
+        .. image:: /developer_manual/validation/FORM_IS_reliability_FORM_results_tab.png
+            :align: center
+
         - 4 sub-tabs : Summary - Design point - Sensitivities - Parameters
 
       - check tables are well drawn
 
   - FORM
 
+    .. image:: /developer_manual/validation/FORM_wizard.png
+        :align: center
+
     - First page check the values:
 
-      - checked: Approximation methods
+      - checked: Approximation method
 
       - continue
 
@@ -823,6 +901,9 @@ Analyses
 
     - check result window :
 
+      .. image:: /developer_manual/validation/FORM_result.png
+          :align: center
+
       - left side: 1 variable in the list view
 
       - right side: 4 tabs Summary - Design point - Sensitivities - Parameters
@@ -830,6 +911,9 @@ Analyses
       - check tables are well drawn
 
   - Sobol
+
+    .. image:: /developer_manual/validation/sobol_wizard.png
+        :align: center
 
     - check the values:
 
@@ -854,6 +938,9 @@ Analyses
       - widget with a progress bar appears at the bottom of the tree view
 
     - check result window :
+
+      .. image:: /developer_manual/validation/sobol_result.png
+          :align: center
 
       - left side: 1 variable in the list view
 
@@ -882,6 +969,9 @@ Analyses
 
   - SRC
 
+    .. image:: /developer_manual/validation/src_wizard.png
+        :align: center
+
     - check the values:
 
       - selected output: y1
@@ -897,6 +987,9 @@ Analyses
       - widget with a progress bar appears at the bottom of the tree view
 
     - check result window :
+
+      .. image:: /developer_manual/validation/src_result.png
+          :align: center
 
       - left side: 1 variable in the list view
 
@@ -919,6 +1012,9 @@ Analyses
         - At the bottom: error message 'The model has not independant copula, the result could be false.'
 
   - Kriging
+
+    .. image:: /developer_manual/validation/kriging_wizard.png
+        :align: center
 
     - check the values:
 
@@ -946,17 +1042,33 @@ Analyses
 
     - change the scale value of x1 to 2, then finish
 
+      .. image:: /developer_manual/validation/kriging_scale_wizard.png
+          :align: center
+
     - change the amplitude value to 2
+
+      .. image:: /developer_manual/validation/kriging_wizard_scale_amplitude_updated.png
+          :align: center
 
     - click on the Finish button
 
       - widget with a progress bar appears at the bottom of the tree view
 
-    - a new model appears in the tree view
+    - a new item MetaModel_kriging_0 appears in the tree view
 
-      - Evaluate it
+      - click on it
+
+      - change the value of x2 to 1.6
+
+      - click on the Evaluate button
+
+      .. image:: /developer_manual/validation/kriging_new_model.png
+          :align: center
 
     - check result window :
+
+      .. image:: /developer_manual/validation/kriging_result.png
+          :align: center
 
       - left side: 1 variable in the list view
 
@@ -975,11 +1087,20 @@ Analyses
 
       - choose the Kriging method and click on the Finish button
 
+      .. image:: /developer_manual/validation/design_3_kriging_wizard.png
+          :align: center
+
       - a widget with a progress bar appears at the bottom of the tree view : click immediately on the Stop button
 
       - there is only y0 in the list view at the left side of the result window
 
+      .. image:: /developer_manual/validation/design_3_result.png
+          :align: center
+
   - chaos_1
+
+    .. image:: /developer_manual/validation/chaos_wizard.png
+        :align: center
 
     - check the values:
 
@@ -988,8 +1109,6 @@ Analyses
       - method : Functional chaos
 
       - degree : 2
-
-      - nu : 1.5
 
       - compute Q2 : unchecked
 
@@ -1005,6 +1124,9 @@ Analyses
 
     - check result window :
 
+      .. image:: /developer_manual/validation/chaos_result.png
+          :align: center
+
       - left side: 1 variable in the list view
 
       - right side: 4 tabs MetaModel - Moments - Sobol indices - Parameters
@@ -1012,6 +1134,9 @@ Analyses
       - Metamodel tab : plot + R2 table
 
       - Moments and Sobol indices tabs : error message 'Impossible to compute Sobol indices and moments etc.'
+
+        .. image:: /developer_manual/validation/chaos_result_tab_moments_error_message.png
+            :align: center
 
       - when changing the variable, the tabs are updated
 
@@ -1024,17 +1149,22 @@ Analyses
 
     - error message box : 'The model must have at least one output'
 
-    - evaluate design_2
+    - right click on the item design_2 and click on Evaluate
+
+    - right click on the item chaos_2 and click on Run
+
+    .. image:: /developer_manual/validation/chaos_2_wizard.png
+        :align: center
 
     - check the values:
 
-      - selected outputs : y0, y1
+      - selected outputs : y0, fake_y0, y1
+
+        - uncheck fake_y0
 
       - method : Functional chaos
 
       - degree : 2
-
-      - nu : 1.5
 
       - compute Q2 : unchecked
 
@@ -1045,6 +1175,9 @@ Analyses
       - widget with a progress bar appears at the bottom of the tree view
 
     - check result window :
+
+      .. image:: /developer_manual/validation/chaos_2_result.png
+          :align: center
 
       - left side: 1 variable in the list view
 
@@ -1063,6 +1196,9 @@ Analyses
   - Data analysis
 
     - check result window :
+
+      .. image:: /developer_manual/validation/data_analysis_result.png
+          :align: center
 
       - left side: 4 variables in the list view
 
@@ -1094,6 +1230,9 @@ Analyses
 
   - Inference analysis
 
+    .. image:: /developer_manual/validation/inference_wizard.png
+        :align: center
+
     - check the wizard behavior :
 
       - check all / uncheck all
@@ -1122,6 +1261,9 @@ Analyses
 
     - check result window :
 
+      .. image:: /developer_manual/validation/inference_result.png
+          :align: center
+
       - left side: 2 variables in the list view
 
       - right side: 2 tabs Summary - Parameters
@@ -1144,9 +1286,15 @@ Analyses
 
         - the Parameters tab contains an error message
 
+        .. image:: /developer_manual/validation/inference_result_error.png
+            :align: center
+
   - Copula inference
 
     - check result window :
+
+      .. image:: /developer_manual/validation/copula_inference_result.png
+          :align: center
 
       - left side: 2 sets of variables in the list view
 
@@ -1162,6 +1310,10 @@ Analyses
 
       - check tables are well drawn
 
+- check the study tree is as follows:
+
+.. image:: /developer_manual/validation/studyTreeView_at_the_end.png
+          :align: center
 
 - save the study, close it, reopen it and check all is here
 
