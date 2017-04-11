@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf-8
 
 from __future__ import print_function
 import openturns as ot
@@ -8,11 +9,16 @@ import otguibase
 myStudy = otguibase.OTStudy('myStudy')
 
 ## Model
-Q = otguibase.Input('Q', 0., ot.TruncatedDistribution(ot.Gumbel(1./558., 1013.), 0, ot.TruncatedDistribution.LOWER), 'Q (m3/s)')
-Ks = otguibase.Input('Ks', 0., ot.TruncatedDistribution(ot.Normal(30.0, 7.5), 0, ot.TruncatedDistribution.LOWER), 'Ks (m^(1/3)/s)')
-Zv = otguibase.Input('Zv', 0., ot.Uniform(49.0, 51.0), 'Zv (m)')
-Zm = otguibase.Input('Zm', 0., ot.Uniform(54.0, 56.0), 'Zm (m)')
-S = otguibase.Output('S')
+dist_Q = ot.TruncatedDistribution(ot.Gumbel(1./558., 1013.), 0, ot.TruncatedDistribution.LOWER)
+dist_Ks = ot.TruncatedDistribution(ot.Normal(30.0, 7.5), 0, ot.TruncatedDistribution.LOWER)
+dist_Zv = ot.Uniform(49.0, 51.0)
+dist_Zm = ot.Uniform(54.0, 56.0)
+
+Q = otguibase.Input('Q', 1000., dist_Q, 'Débit maximal annuel (m3/s)')
+Ks = otguibase.Input('Ks', 30., dist_Ks, 'Strickler (m^(1/3)/s)')
+Zv = otguibase.Input('Zv', 50., dist_Zv, 'Côte de la rivière en aval (m)')
+Zm = otguibase.Input('Zm', 55., dist_Zm, 'Côte de la rivière en amont (m)')
+S = otguibase.Output('S','Surverse (m)')
 
 model = otguibase.SymbolicPhysicalModel('myPhysicalModel', [Q, Ks, Zv, Zm], [S], ['(Q/(Ks*300.*sqrt((Zm-Zv)/5000)))^(3.0/5.0)+Zv-55.5-3.'])
 myStudy.add(model)

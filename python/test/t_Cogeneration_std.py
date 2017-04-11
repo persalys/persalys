@@ -8,10 +8,14 @@ import otguibase
 myStudy = otguibase.OTStudy('myStudy')
 
 ## Model
-Q = otguibase.Input('Q', 0., ot.Normal(10200, 100), 'Primary energy')
-E = otguibase.Input('E', 0., ot.Normal(3000, 15), 'Produced electric energy')
-C = otguibase.Input('C', 0., ot.Normal(4000, 60), 'Valued thermal energy')
-Ep = otguibase.Output('Ep', 'Primary energy savings')
+dist_Q = ot.Normal(10200, 100)
+dist_E = ot.Normal(3000, 15)
+dist_C = ot.Normal(4000, 60)
+
+Q = otguibase.Input('Q', 10200, dist_Q, 'Primary energy (W.h)')
+E = otguibase.Input('E', 3000, dist_E, 'Produced electric energy (W.h)')
+C = otguibase.Input('C', 4000, dist_C, 'Valued thermal energy (W.h)')
+Ep = otguibase.Output('Ep', 'Primary energy savings (W.h)')
 
 model = otguibase.SymbolicPhysicalModel('myPhysicalModel', [Q, E, C], [Ep], ['1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))'])
 myStudy.add(model)
