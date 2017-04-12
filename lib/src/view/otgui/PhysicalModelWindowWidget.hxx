@@ -29,7 +29,6 @@
 #include <QPushButton>
 
 namespace OTGUI {
-  
 class OTGUI_API PhysicalModelWindowWidget : public QTabWidget
 {
   Q_OBJECT
@@ -52,6 +51,7 @@ public slots:
   void updateOutputTableModel();
   void resizeInputTable();
   void resizeOutputTable();
+  void applyDifferentiationStepToAllInputs(double);
 
 signals:
   void errorMessageChanged(QString);
