@@ -17,6 +17,7 @@ ot_add_source_file (QtTools.cxx)
 ot_add_source_file (ResizableTableViewWithoutScrollBar.cxx)
 ot_add_source_file (DoubleSpinBox.cxx)
 ot_add_source_file (UIntSpinBox.cxx)
+ot_add_source_file (LogDoubleSpinBox.cxx)
 ot_add_source_file (CheckableHeaderView.cxx)
 ot_add_source_file (ResizableStackedWidget.cxx)
 ot_add_source_file (TitledComboBox.cxx)
@@ -36,6 +37,7 @@ ot_install_header_file ( QtTools.hxx )
 ot_install_header_file ( ResizableTableViewWithoutScrollBar.hxx )
 ot_install_header_file ( DoubleSpinBox.hxx )
 ot_install_header_file ( UIntSpinBox.hxx )
+ot_install_header_file ( LogDoubleSpinBox.hxx )
 ot_install_header_file ( CheckableHeaderView.hxx )
 ot_install_header_file ( ResizableStackedWidget.hxx )
 ot_install_header_file ( RadioButtonDelegate.hxx )
@@ -57,6 +59,7 @@ qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
               otgui/ResizableTableViewWithoutScrollBar.hxx
               otgui/DoubleSpinBox.hxx
               otgui/UIntSpinBox.hxx
+              otgui/LogDoubleSpinBox.hxx
               otgui/CheckableHeaderView.hxx
               otgui/ResizableStackedWidget.hxx
               otgui/TitledComboBox.hxx
