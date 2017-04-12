@@ -139,8 +139,8 @@ ifeq ($(CHECK_OT),y)
 	cp $(MOD_PREFIX)/bin/*.dll $(MOD_BUILD)/python/test
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/python$(PYBASEVER_NODOT).dll $(MOD_BUILD)/python/test
 	cd $(MOD_BUILD) && xvfb-run ctest -j$(JOBS_TEST) --output-on-failure --timeout 1000
-	touch mod-test
 endif
+	touch mod-test
 
 mod-check-installer: mod-test
 	@echo -n "Check OpenTURNS prefix: "
