@@ -17,6 +17,7 @@ linux:
     - xvfb-run ctest --output-on-failure --timeout 100
   except:
     - master
+    - tags
 
 mingw:
   script:
@@ -36,6 +37,7 @@ mingw:
     - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install JOBS=4
   except:
     - master
+    - tags
 
 mingw-tag:
   script:
