@@ -106,16 +106,17 @@ void OptimizationWidget::buildInterface()
   // max number iterations
   QLabel * label = new QLabel(tr("Number of iterations"));
   advancedGroupLayout->addWidget(label, 0, 0);
-  iterationsSpinBox_ = new DoubleSpinBox;
+  iterationsSpinBox_ = new UIntSpinBox;
   label->setBuddy(iterationsSpinBox_);
   iterationsSpinBox_->setRange(1, 2e9);
+  iterationsSpinBox_->setSingleStep(5);
   connect(iterationsSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(updateNumberIterations(double)));
   advancedGroupLayout->addWidget(iterationsSpinBox_, 0, 1);
 
   // Absolute error
   label = new QLabel(tr("Absolute error"));
   advancedGroupLayout->addWidget(label, 1, 0);
-  absoluteErrSpinBox_ = new DoubleSpinBox;
+  absoluteErrSpinBox_ = new LogDoubleSpinBox;
   label->setBuddy(absoluteErrSpinBox_);
   absoluteErrSpinBox_->setRange(std::numeric_limits<double>::min(), 1.0);
   connect(absoluteErrSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(updateAbsoluteError(double)));
@@ -124,7 +125,7 @@ void OptimizationWidget::buildInterface()
   // Relative error
   label = new QLabel(tr("Relative error"));
   advancedGroupLayout->addWidget(label, 2, 0);
-  relativeErrSpinBox_ = new DoubleSpinBox;
+  relativeErrSpinBox_ = new LogDoubleSpinBox;
   label->setBuddy(relativeErrSpinBox_);
   relativeErrSpinBox_->setRange(std::numeric_limits<double>::min(), 1.0);
   connect(relativeErrSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(updateRelativeError(double)));
@@ -133,7 +134,7 @@ void OptimizationWidget::buildInterface()
   // Residual error
   label = new QLabel(tr("Residual error"));
   advancedGroupLayout->addWidget(label, 1, 2);
-  residualErrSpinBox_ = new DoubleSpinBox;
+  residualErrSpinBox_ = new LogDoubleSpinBox;
   label->setBuddy(residualErrSpinBox_);
   residualErrSpinBox_->setRange(std::numeric_limits<double>::min(), 1.0);
   connect(residualErrSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(updateResidualError(double)));
@@ -142,7 +143,7 @@ void OptimizationWidget::buildInterface()
   // Constraint error
   label = new QLabel(tr("Constraint error"));
   advancedGroupLayout->addWidget(label, 2, 2);
-  constraintErrSpinBox_ = new DoubleSpinBox;
+  constraintErrSpinBox_ = new LogDoubleSpinBox;
   label->setBuddy(constraintErrSpinBox_);
   constraintErrSpinBox_->setRange(std::numeric_limits<double>::min(), 1.0);
   connect(constraintErrSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(updateConstraintError(double)));
@@ -251,7 +252,7 @@ void OptimizationWidget::updateAlgorithmType(int algoType)
 
 void OptimizationWidget::updateNumberIterations(double iter)
 {
-  optimAlgo_.setMaximumIterationNumber(iter);
+  optimAlgo_.setMaximumIterationNumber((UnsignedInteger)iter);
 }
 
 

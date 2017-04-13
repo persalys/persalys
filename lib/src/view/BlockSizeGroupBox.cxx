@@ -25,7 +25,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 
-#include <limits>
+using namespace OT;
 
 namespace OTGUI {
 
@@ -36,9 +36,6 @@ BlockSizeGroupBox::BlockSizeGroupBox(const QString &title, QWidget* parent)
   QLabel * blockSizeLabel = new QLabel(tr("Block size"));
   layout->addWidget(blockSizeLabel);
   blockSizeSpinbox_ = new UIntSpinBox;
-  blockSizeSpinbox_->setMinimum(1);
-  blockSizeSpinbox_->setMaximum(std::numeric_limits<int>::max());
-  blockSizeSpinbox_->setSingleStep(100);
   blockSizeLabel->setBuddy(blockSizeSpinbox_);
   layout->addWidget(blockSizeSpinbox_);
 
@@ -46,13 +43,13 @@ BlockSizeGroupBox::BlockSizeGroupBox(const QString &title, QWidget* parent)
 }
 
 
-OT::UnsignedInteger BlockSizeGroupBox::getBlockSizeValue() const
+UnsignedInteger BlockSizeGroupBox::getBlockSizeValue() const
 {
-  return (OT::UnsignedInteger) blockSizeSpinbox_->value();
+  return (UnsignedInteger) blockSizeSpinbox_->value();
 }
 
 
-void BlockSizeGroupBox::setBlockSizeValue(const OT::UnsignedInteger value)
+void BlockSizeGroupBox::setBlockSizeValue(const UnsignedInteger value)
 {
   blockSizeSpinbox_->setValue(value);
 }
