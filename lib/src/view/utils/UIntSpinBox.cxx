@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QSpinBox QSpinBox for unsigned integer with scientific notation allowed
+ *  @brief QSpinBox for unsigned integer with scientific notation allowed
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -22,12 +22,17 @@
 
 #include <QLineEdit>
 
+#include <limits>
+
 namespace OTGUI {
 
 UIntSpinBox::UIntSpinBox(QWidget* parent)
   : DoubleSpinBox(parent)
 {
-  setDecimals(0);
+  setMinimum(1);
+  setMaximum(std::numeric_limits<int>::max());
+  setSingleStep(1);
+  // can not write a "-" or a "." : allow numbers in [1, max]
   lineEdit()->setValidator(new QRegExpValidator(QRegExp("[0-9]+[eE][+]?[0-9]+")));
 }
 }
