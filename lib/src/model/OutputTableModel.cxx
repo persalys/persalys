@@ -111,7 +111,7 @@ QVariant OutputTableModel::data(const QModelIndex & index, int role) const
       {
         if (!physicalModel_.getOutputs()[index.row()].hasBeenComputed())
           return QString("?");
-        return QString::number(physicalModel_.getOutputs()[index.row()].getValue());
+        return QString::number(physicalModel_.getOutputs()[index.row()].getValue(), 'g', 15);
       }
     }
   }

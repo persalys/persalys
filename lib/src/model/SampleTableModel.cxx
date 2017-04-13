@@ -84,7 +84,7 @@ QVariant SampleTableModel::data(const QModelIndex & index, int role) const
   if (role == Qt::TextAlignmentRole)
     return int(Qt::AlignRight | Qt::AlignVCenter);
   else if (role == Qt::DisplayRole)
-    return QString::number(data_[index.row()][index.column()], 'g', 8);
+    return QString::number(data_[index.row()][index.column()], 'g', 15);
   else if (role == Qt::BackgroundRole)
   {
     if (std::isnan(data_[index.row()][index.column()]))

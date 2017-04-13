@@ -75,7 +75,7 @@ QVariant InputTableModel::data(const QModelIndex & index, int role) const
       case 1:
         return QString::fromUtf8(physicalModel_.getInputs()[index.row()].getDescription().c_str());
       case 2:
-        return QString::number(physicalModel_.getInputs()[index.row()].getValue());
+        return QString::number(physicalModel_.getInputs()[index.row()].getValue(), 'g', 15);
     }
   }
   return QVariant();

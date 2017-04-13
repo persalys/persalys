@@ -142,17 +142,17 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
         case 1:
           return QString::fromUtf8(designOfExperiment_.getPhysicalModel().getInputs()[indexInput].getDescription().c_str());
         case 2:
-          return QString::number(designOfExperiment_.getValues()[indexInput]);
+          return QString::number(designOfExperiment_.getValues()[indexInput], 'g', 15);
         case 3:
-          return QString::number(designOfExperiment_.getLowerBounds()[indexInput]);
+          return QString::number(designOfExperiment_.getLowerBounds()[indexInput], 'g', 15);
         case 4:
-          return QString::number(designOfExperiment_.getUpperBounds()[indexInput]);
+          return QString::number(designOfExperiment_.getUpperBounds()[indexInput], 'g', 15);
         case 5:
         {
           if (designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndLevels)
             return QString::number(int(designOfExperiment_.getLevels()[indexInput]));
           else
-            return QString::number(designOfExperiment_.getDeltas()[indexInput]);
+            return QString::number(designOfExperiment_.getDeltas()[indexInput], 'g', 15);
         }
         default:
           return QVariant();
