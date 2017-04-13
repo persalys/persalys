@@ -347,7 +347,7 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   {
     rightSideOfSplitterStackedWidget_->setCurrentIndex(1);
     showHideGraphConfigurationWidget(-1);
-    valueForDeterministicVariable_->setValue(input.getValue());
+    valueForDeterministicVariable_->setValue(input.getValue(), false);
   }
   // If the selected variable is stochastic
   else
