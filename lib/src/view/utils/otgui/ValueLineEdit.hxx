@@ -35,7 +35,7 @@ public:
   ValueLineEdit(const double value=0., QWidget *parent = 0);
 
   // value accessors
-  void setValue(const double value);
+  void setValue(const double value, const bool enabled = true);
   double value();
 
   // check value

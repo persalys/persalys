@@ -37,11 +37,11 @@ ValueLineEdit::ValueLineEdit(const double value, QWidget *parent)
 }
 
 
-void ValueLineEdit::setValue(const double value)
+void ValueLineEdit::setValue(const double value, const bool enabled)
 {
-  setText(QString::number(value));
+  setText(QString::number(value, 'g', 15));
   //TODO setText(QString::number(value, 'g', precision_));
-  setEnabled(true);
+  setEnabled(enabled);
 }
 
 
