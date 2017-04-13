@@ -19,7 +19,6 @@
  *
  */
 #include "otgui/ListWidgetWithCheckBox.hxx"
-
 #include <QCheckBox>
 
 namespace OTGUI {
@@ -27,7 +26,7 @@ namespace OTGUI {
 ListWidgetWithCheckBox::ListWidgetWithCheckBox(QString title, QStringList itemNames, QStringList selectedItemNames, QWidget * parent)
   : QListWidget(parent)
   , itemNames_(itemNames)
-  , checkedItemsNames_(selectedItemNames)
+  , checkedItemNames_(selectedItemNames)
 { 
   setViewMode(QListWidget::ListMode);
   setSelectionMode(QAbstractItemView::NoSelection);
@@ -51,15 +50,34 @@ ListWidgetWithCheckBox::ListWidgetWithCheckBox(QString title, QStringList itemNa
     setItemWidget(item, box);
 
     connect(box, SIGNAL(stateChanged(int)), this, SLOT(checkStateChanged(int)));
-  } 
+  }
 }
 
 
-QStringList ListWidgetWithCheckBox::getCheckedItemsNames() const
+void ListWidgetWithCheckBox::setCheckedNames(QStringList selectedItemNames)
 {
-  return checkedItemsNames_;
+  for (int i = 0; i < itemNames_.size(); ++ i)
+  {
+    if (selectedItemNames.contains(itemNames_[i]))
+    {
+      QListWidgetItem * item_i = item(i + 1);// skip first item
+      QWidget * widget_i = itemWidget(item_i);
+      QCheckBox * box = qobject_cast<QCheckBox *>(widget_i);
+      box->setCheckState(Qt::Checked);
+    }
+  }
 }
 
+QStringList ListWidgetWithCheckBox::getCheckedItemNames() const
+{
+  return checkedItemNames_;
+}
+
+
+QStringList ListWidgetWithCheckBox::getItemNames() const
+{
+  return itemNames_;
+}
 
 void ListWidgetWithCheckBox::checkStateChanged(int state)
 {
@@ -67,18 +85,18 @@ void ListWidgetWithCheckBox::checkStateChanged(int state)
 
   if (state == Qt::Checked)
   {
-    if (checkedItemsNames_.contains(box->text()))
+    if (checkedItemNames_.contains(box->text()))
       return;
     else
-      checkedItemsNames_.append(box->text());
+      checkedItemNames_.append(box->text());
   }
   else
   {
-    if (!checkedItemsNames_.contains(box->text()))
+    if (!checkedItemNames_.contains(box->text()))
       return;
     else
-      checkedItemsNames_.removeAt(checkedItemsNames_.indexOf(box->text()));
+      checkedItemNames_.removeAt(checkedItemNames_.indexOf(box->text()));
   }
-  emit checkedItemsChanged(checkedItemsNames_);
+  emit checkedItemsChanged(checkedItemNames_);
 }
 }

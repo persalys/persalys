@@ -57,6 +57,6 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(const Description& outputsNam
 
 QStringList OutputsSelectionGroupBox::getSelectedOutputsNames() const
 {
-  return outputsListWidget_->getCheckedItemsNames();
+  return outputsListWidget_->getCheckedItemNames();
 }
 }
