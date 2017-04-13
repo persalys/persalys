@@ -73,9 +73,7 @@ void PhysicalModelWindowWidget::buildInterface()
 
   inputTableView_ = new CopyableTableView;
   inputTableView_->setEditTriggers(QTableView::AllEditTriggers);
-  LineEditWithQValidatorDelegate * delegate = new LineEditWithQValidatorDelegate;
-  delegate->setParent(this);
-  inputTableView_->setItemDelegateForColumn(0, delegate);
+  inputTableView_->setItemDelegateForColumn(0, new LineEditWithQValidatorDelegate(inputTableView_));
   inputsLayout->addWidget(inputTableView_);
 
   // buttons Add/Remove input
@@ -107,9 +105,7 @@ void PhysicalModelWindowWidget::buildInterface()
   outputTableView_->setEditTriggers(QTableView::AllEditTriggers);
   outputTableHeaderView_ = new CheckableHeaderView;
   outputTableView_->setHorizontalHeader(outputTableHeaderView_);
-  delegate = new LineEditWithQValidatorDelegate(true);
-  delegate->setParent(this);
-  outputTableView_->setItemDelegateForColumn(0, delegate);
+  outputTableView_->setItemDelegateForColumn(0, new LineEditWithQValidatorDelegate(true, outputTableView_));
   outputsLayout->addWidget(outputTableView_);
 
   // buttons Add/Remove output

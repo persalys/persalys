@@ -97,7 +97,7 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   buildActions();
 
   // Forbid the user to define not valid item's name
-  LineEditWithQValidatorDelegate * delegate = new LineEditWithQValidatorDelegate(false, "[a-zA-Z_][a-zA-Z_0-9]*", this);
+  LineEditWithQValidatorDelegate * delegate = new LineEditWithQValidatorDelegate("[a-zA-Z_][a-zA-Z_0-9]*", this);
   setItemDelegateForColumn(0, delegate);
 
   setContextMenuPolicy(Qt::CustomContextMenu);

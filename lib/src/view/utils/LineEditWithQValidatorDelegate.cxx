@@ -24,10 +24,26 @@
 
 namespace OTGUI {
 
-LineEditWithQValidatorDelegate::LineEditWithQValidatorDelegate(const bool offsetForCheckBox, const QString & regex, QObject *parent)
+LineEditWithQValidatorDelegate::LineEditWithQValidatorDelegate(QObject *parent)
+  : QStyledItemDelegate(parent)
+  , regex_("[a-zA-Z_][a-zA-Z_0-9]*")
+  , offsetForCheckBox_(false)
+{
+}
+
+
+LineEditWithQValidatorDelegate::LineEditWithQValidatorDelegate(const bool offsetForCheckBox, QObject* parent)
+  : QStyledItemDelegate(parent)
+  , regex_("[a-zA-Z_][a-zA-Z_0-9]*")
+  , offsetForCheckBox_(offsetForCheckBox)
+{
+}
+
+
+LineEditWithQValidatorDelegate::LineEditWithQValidatorDelegate(const QString & regex, QObject *parent)
   : QStyledItemDelegate(parent)
   , regex_(regex)
-  , offsetForCheckBox_(offsetForCheckBox)
+  , offsetForCheckBox_(false)
 {
 }
 
