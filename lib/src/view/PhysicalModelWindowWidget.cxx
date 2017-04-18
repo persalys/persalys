@@ -24,6 +24,7 @@
 #include "otgui/ModelEvaluation.hxx"
 #include "otgui/LineEditWithQValidatorDelegate.hxx"
 #include "otgui/CheckableHeaderView.hxx"
+#include "otgui/SpinBoxDelegate.hxx"
 
 #include <QHeaderView>
 #include <QSplitter>
@@ -72,9 +73,7 @@ void PhysicalModelWindowWidget::buildInterface()
 
   inputTableView_ = new CopyableTableView;
   inputTableView_->setEditTriggers(QTableView::AllEditTriggers);
-  LineEditWithQValidatorDelegate * delegate = new LineEditWithQValidatorDelegate;
-  delegate->setParent(this);
-  inputTableView_->setItemDelegateForColumn(0, delegate);
+  inputTableView_->setItemDelegateForColumn(0, new LineEditWithQValidatorDelegate(inputTableView_));
   inputsLayout->addWidget(inputTableView_);
 
   // buttons Add/Remove input
@@ -106,9 +105,7 @@ void PhysicalModelWindowWidget::buildInterface()
   outputTableView_->setEditTriggers(QTableView::AllEditTriggers);
   outputTableHeaderView_ = new CheckableHeaderView;
   outputTableView_->setHorizontalHeader(outputTableHeaderView_);
-  delegate = new LineEditWithQValidatorDelegate(true);
-  delegate->setParent(this);
-  outputTableView_->setItemDelegateForColumn(0, delegate);
+  outputTableView_->setItemDelegateForColumn(0, new LineEditWithQValidatorDelegate(true, outputTableView_));
   outputsLayout->addWidget(outputTableView_);
 
   // buttons Add/Remove output
@@ -156,12 +153,28 @@ void PhysicalModelWindowWidget::buildInterface()
   vbox->addWidget(label);
 
   differentiationTableView_ = new CopyableTableView;
+  SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate;
+  spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::differentiationStep);
+  connect(spinBoxDelegate, SIGNAL(applyToAllRequested(double)), this, SLOT(applyDifferentiationStepToAllInputs(double)));
+  differentiationTableView_->setItemDelegateForColumn(1, spinBoxDelegate);
   differentiationTableView_->setEditTriggers(QTableView::AllEditTriggers);
   vbox->addWidget(differentiationTableView_);
 
   updateDifferentiationTableModel();
 
   addTab(tab, tr("Differentiation"));
+}
+
+
+void PhysicalModelWindowWidget::applyDifferentiationStepToAllInputs(double value)
+{
+  if (differentiationTableModel_)
+  {
+    for (int i=0; i<differentiationTableModel_->rowCount(); ++i)
+    {
+      differentiationTableModel_->setData(differentiationTableModel_->index(i, 1), value, Qt::EditRole);
+    }
+  }
 }
 
 
@@ -179,7 +192,7 @@ void PhysicalModelWindowWidget::resizeEvent(QResizeEvent* event)
 
 void PhysicalModelWindowWidget::resizeInputTable()
 {
-  int width = inputTableView_->horizontalHeader()->width();
+  const int width = inputTableView_->horizontalHeader()->width();
   inputTableView_->horizontalHeader()->resizeSection(0, width*1/5);
   inputTableView_->horizontalHeader()->resizeSection(1, width*3/5);
 }

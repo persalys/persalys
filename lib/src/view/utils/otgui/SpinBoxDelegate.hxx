@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStyledItemDelegate used to define Correlations
+ *  @brief QStyledItemDelegate using a QSpinBox
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -30,12 +30,21 @@ class OTGUI_API SpinBoxDelegate : public QStyledItemDelegate
   Q_OBJECT
 
 public:
+  enum spinboxType {noType, correlation, differentiationStep};
+
   SpinBoxDelegate(QObject * parent = 0);
  
   QWidget * createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
   void setEditorData(QWidget * editor, const QModelIndex & index) const;
   void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const;
   void updateEditorGeometry(QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex & index) const;
+  void setSpinBoxType(const spinboxType type);
+
+signals:
+  void applyToAllRequested(double);
+
+private:
+  spinboxType type_;
 };
 }
 #endif

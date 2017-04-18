@@ -122,7 +122,7 @@ void CentralTendencyWizard::buildInterface()
   stopCriteriaGroupBox_ = new StopCriteriaGroupBox(maxCoef, maxTime, maxCalls);
   connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), this, SLOT(maxiCoefficientOfVariationChanged(double)));
   connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), this, SLOT(maxiTimeChanged(int)));
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(int)), this, SLOT(maxiCallsChanged(int)));
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(double)), this, SLOT(maxiCallsChanged(double)));
   monteCarloLayout->addWidget(stopCriteriaGroupBox_);
 
   // block size
@@ -207,12 +207,12 @@ void CentralTendencyWizard::maxiTimeChanged(int value)
 }
 
 
-void CentralTendencyWizard::maxiCallsChanged(int maxi)
+void CentralTendencyWizard::maxiCallsChanged(double maxi)
 {
   errorMessageLabel_->setText("");
   try
   {
-    MCAnalysis_.setMaximumCalls(maxi);
+    MCAnalysis_.setMaximumCalls((UnsignedInteger)maxi);
   }
   catch (InvalidValueException exception)
   {
@@ -244,7 +244,7 @@ void CentralTendencyWizard::blockSizeChanged(double size)
   errorMessageLabel_->setText("");
   try
   {
-    MCAnalysis_.setBlockSize(size);
+    MCAnalysis_.setBlockSize((UnsignedInteger)size);
   }
   catch (InvalidValueException exception)
   {

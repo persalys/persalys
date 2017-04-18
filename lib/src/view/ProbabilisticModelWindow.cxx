@@ -232,6 +232,7 @@ void ProbabilisticModelWindow::buildInterface()
   QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
   correlationTableView_ = new CopyableTableView;
   SpinBoxDelegate * correlationDelegate = new SpinBoxDelegate;
+  correlationDelegate->setSpinBoxType(SpinBoxDelegate::correlation);
   correlationTableView_->setItemDelegate(correlationDelegate);
   correlationTableModel_ = new CorrelationTableModel(physicalModel_, correlationTableView_);
   correlationTableView_->setModel(correlationTableModel_);
@@ -346,7 +347,7 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   {
     rightSideOfSplitterStackedWidget_->setCurrentIndex(1);
     showHideGraphConfigurationWidget(-1);
-    valueForDeterministicVariable_->setValue(input.getValue());
+    valueForDeterministicVariable_->setValue(input.getValue(), false);
   }
   // If the selected variable is stochastic
   else

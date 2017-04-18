@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStyledItemDelegate used to define Correlations
+ *  @brief QStyledItemDelegate using a QSpinBox
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -20,46 +20,90 @@
  */
 #include "otgui/SpinBoxDelegate.hxx"
 
-#include "otgui/DoubleSpinBox.hxx"
+#include "otgui/LogDoubleSpinBox.hxx"
 
 namespace OTGUI {
 
 SpinBoxDelegate::SpinBoxDelegate(QObject *parent)
   : QStyledItemDelegate(parent)
+  , type_(SpinBoxDelegate::noType)
 {
 }
 
 
 QWidget* SpinBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &) const
 {
-  DoubleSpinBox * editor = new DoubleSpinBox(parent);
-  editor->setFrame(false);
-  editor->setMinimum(-1.0);
-  editor->setMaximum(1.0);
-  editor->setSingleStep(0.05);
-  editor->setDecimals(3);
-
-  return editor;
+  if (type_ == SpinBoxDelegate::noType)
+  {
+    return new QSpinBox(parent);
+  }
+  else if (type_ == SpinBoxDelegate::correlation)
+  {
+    DoubleSpinBox * editor = new DoubleSpinBox(parent);
+    editor->setFrame(false);
+    editor->setMinimum(-1.0);
+    editor->setMaximum(1.0);
+    editor->setSingleStep(0.05);
+    editor->setDecimals(15);
+    return editor;
+  }
+  else if (type_ == SpinBoxDelegate::differentiationStep)
+  {
+    LogDoubleSpinBox * editor = new LogDoubleSpinBox(parent);
+    editor->setFrame(false);
+    editor->setDecimals(15);
+    editor->setApplyToAllInContextMenu(true);
+    connect(editor, SIGNAL(applyToAllRequested(double)), this, SIGNAL(applyToAllRequested(double)));
+    return editor;
+  }
 }
 
 
 void SpinBoxDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const
 {
-  DoubleSpinBox * spinBox = static_cast<DoubleSpinBox*>(editor);
-  spinBox->setValue(index.model()->data(index, Qt::EditRole).toDouble());
+  if (type_ == SpinBoxDelegate::noType)
+  {
+    QSpinBox * spinBox = static_cast<QSpinBox*>(editor);
+    spinBox->setValue(index.model()->data(index, Qt::EditRole).toInt());
+  }
+  else
+  {
+    DoubleSpinBox * spinBox = static_cast<DoubleSpinBox*>(editor);
+    spinBox->setValue(index.model()->data(index, Qt::EditRole).toDouble());
+  }
 }
 
 
 void SpinBoxDelegate::setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const
 {
-  DoubleSpinBox * spinBox = static_cast<DoubleSpinBox*>(editor);
-  spinBox->interpretText();
-  model->setData(index, spinBox->value(), Qt::EditRole);
+  if (!editor || !model || !index.isValid())
+    return;
+
+  if (type_ == SpinBoxDelegate::noType)
+  {
+    QSpinBox * spinBox = static_cast<QSpinBox*>(editor);
+    spinBox->interpretText();
+    model->setData(index, spinBox->value(), Qt::EditRole);
+  }
+  else
+  {
+    DoubleSpinBox * spinBox = static_cast<DoubleSpinBox*>(editor);
+    spinBox->interpretText();
+    model->setData(index, spinBox->value(), Qt::EditRole);
+  }
 }
 
 
 void SpinBoxDelegate::updateEditorGeometry(QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex &) const
 {
+  if (!editor)
+    return;
   editor->setGeometry(option.rect);
+}
+
+
+void SpinBoxDelegate::setSpinBoxType(const SpinBoxDelegate::spinboxType type)
+{
+  type_ = type;
 }
 }

@@ -21,8 +21,8 @@
 #ifndef OTGUI_STOPCRITERIAGROUPBOX_HXX
 #define OTGUI_STOPCRITERIAGROUPBOX_HXX
 
-#include "otgui/DoubleSpinBox.hxx"
 #include "otgui/TimeLineEdit.hxx"
+#include "otgui/LogSpinBox.hxx"
 
 #include "openturns/OTType.hxx"
 
@@ -60,7 +60,7 @@ public slots:
 signals:
   void maxiCoefficientOfVariationChanged(double);
   void maxiTimeChanged(int);
-  void maxiCallsChanged(int);
+  void maxiCallsChanged(double);
   void clearErrorMessageLabel();
 
 private:
@@ -69,7 +69,7 @@ private:
   QCheckBox * maxiTimeCheckBox_;
   TimeLineEdit * maxTimeLineEdit_;
   QCheckBox * maxiCallsCheckBox_;
-  QSpinBox * maxiCallsSpinbox_;
+  LogSpinBox * maxiCallsSpinbox_;
 };
 }
 #endif

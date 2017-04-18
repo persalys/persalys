@@ -30,7 +30,9 @@ class OTGUI_API LineEditWithQValidatorDelegate : public QStyledItemDelegate
   Q_OBJECT
 
 public:
-  LineEditWithQValidatorDelegate(const bool offsetForCheckBox = false, const QString & regex = "[a-zA-Z_][a-zA-Z_0-9]*", QObject * parent = 0);
+  LineEditWithQValidatorDelegate(QObject * parent = 0);
+  LineEditWithQValidatorDelegate(const bool offsetForCheckBox, QObject * parent = 0);
+  LineEditWithQValidatorDelegate(const QString & regex, QObject * parent = 0);
 
   QWidget * createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
   void setEditorData(QWidget * editor, const QModelIndex & index) const;

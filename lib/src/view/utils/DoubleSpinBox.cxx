@@ -29,11 +29,11 @@ namespace OTGUI {
 
 DoubleSpinBox::DoubleSpinBox(QWidget * parent)
   : QDoubleSpinBox(parent)
-{ 
+{
   initLocalValues(parent);
 
-  QDoubleSpinBox::setDecimals(12);
-  setDecimals(12);
+  QDoubleSpinBox::setDecimals(15);
+  setDecimals(15);
 
   // set Range to maximum possible values
   double doubleMax = std::numeric_limits<double>::max();
@@ -51,7 +51,9 @@ void DoubleSpinBox::initLocalValues(QWidget *parent)
 {
   setLocale(QLocale::C);
   locale().setNumberOptions(QLocale::OmitGroupSeparator | QLocale::RejectGroupSeparator);
-  const QString str = (parent ? parent->locale() : locale()).toString(4567.1);
+//   const QString str = (parent ? parent->locale() : locale()).toString(4567.1);
+  // for now use only QLocale::C
+  const QString str = locale().toString(4567.1);
   if (str.size() == 6)
   {
     delimiter = str.at(4);
@@ -80,7 +82,6 @@ void DoubleSpinBox::setDecimals(int value)
 
 QString DoubleSpinBox::textFromValue(double value) const
 {
-
   // convert to string -> Using exponential display with internal decimals
   QString str = locale().toString(value, 'g', dispDecimals);
     // remove thousand sign

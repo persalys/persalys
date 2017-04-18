@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QSpinBox QSpinBox for unsigned integer with scientific notation allowed
+ *  @brief QSpinBox for unsigned integer with scientific notation allowed
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -22,7 +22,6 @@
 #define OTGUI_UINTSPINBOX_HXX
 
 #include "otgui/DoubleSpinBox.hxx"
-#include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI {
 class OTGUI_API UIntSpinBox : public DoubleSpinBox

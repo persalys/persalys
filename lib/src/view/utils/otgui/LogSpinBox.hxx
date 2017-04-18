@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QSpinBox for unsigned integer with scientific notation allowed
+ *  @brief QSpinBox with logarithmic increment
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,21 +18,33 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef OTGUI_LOGSPINBOX_HXX
+#define OTGUI_LOGSPINBOX_HXX
+
 #include "otgui/UIntSpinBox.hxx"
 
-#include <QLineEdit>
-
-#include <limits>
+#include <QSpinBox>
 
 namespace OTGUI {
-
-UIntSpinBox::UIntSpinBox(QWidget* parent)
-  : DoubleSpinBox(parent)
+/// This SpinBox has a logarithmic increment : e.g. value=base*value
+/// when clicking on the up arrow
+/// by default base=10
+/// also the default range is (1, max int)
+class OTGUI_API LogSpinBox : public UIntSpinBox
 {
-  setMinimum(1);
-  setMaximum(std::numeric_limits<int>::max());
-  setSingleStep(1);
-  // can not write a "-" or a "." : allow numbers in [1, max]
-  lineEdit()->setValidator(new QRegExpValidator(QRegExp("[0-9]+[eE][+]?[0-9]+")));
+  Q_OBJECT
+
+public :
+  LogSpinBox(int base = 10, QWidget* parent = 0);
+
+  /// base accessor
+  void setBase(int base);
+  int base() const;
+
+  virtual void stepBy(int steps);
+
+private:
+  int base_;
+};
 }
-}
+#endif

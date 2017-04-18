@@ -22,7 +22,8 @@
 #define OTGUI_OPTIMIZATIONWIDGET_HXX
 
 #include "otgui/Analysis.hxx"
-#include "otgui/DoubleSpinBox.hxx"
+#include "otgui/LogDoubleSpinBox.hxx"
+#include "otgui/UIntSpinBox.hxx"
 
 #include <openturns/OptimizationSolver.hxx>
 
@@ -61,11 +62,11 @@ private:
   OT::Description inputNames_;
   QLineEdit * pointLineEdit_;
   QButtonGroup * algoChoice_;
-  QDoubleSpinBox * iterationsSpinBox_;
-  QDoubleSpinBox * absoluteErrSpinBox_;
-  QDoubleSpinBox * relativeErrSpinBox_;
-  QDoubleSpinBox * residualErrSpinBox_;
-  QDoubleSpinBox * constraintErrSpinBox_;
+  UIntSpinBox * iterationsSpinBox_;
+  LogDoubleSpinBox * absoluteErrSpinBox_;
+  LogDoubleSpinBox * relativeErrSpinBox_;
+  LogDoubleSpinBox * residualErrSpinBox_;
+  LogDoubleSpinBox * constraintErrSpinBox_;
 };
 }
 #endif

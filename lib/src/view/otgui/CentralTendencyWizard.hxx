@@ -50,7 +50,7 @@ public slots:
   void updateMethodWidgets(int);
   void maxiCoefficientOfVariationChanged(double);
   void maxiTimeChanged(int);
-  void maxiCallsChanged(int);
+  void maxiCallsChanged(double);
   void confidenceIntervalRequired(bool);
   void levelConfidenceIntervalChanged(double);
   void seedChanged(int);

@@ -50,8 +50,8 @@ public slots:
   void updateMethodWidgets(int);
   void maxiCoefficientOfVariationChanged(double);
   void maxiTimeChanged(int);
-  void maxiCallsChanged(int);
-  void sampleSizeChanged(int);
+  void maxiCallsChanged(double);
+  void sampleSizeChanged(double);
   void seedChanged(int);
   void blockSizeChanged(double);
   void setInterestVariables(QStringList);

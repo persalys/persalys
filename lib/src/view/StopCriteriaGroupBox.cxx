@@ -63,12 +63,10 @@ StopCriteriaGroupBox::StopCriteriaGroupBox(const double maxCoef, const UnsignedI
 
   // Maximum function calls
   maxiCallsCheckBox_ = new QCheckBox(tr("Maximum calls"));
-  maxiCallsSpinbox_ = new QSpinBox;
-  maxiCallsSpinbox_->setMinimum(1);
-  maxiCallsSpinbox_->setMaximum(std::numeric_limits<int>::max());
+  maxiCallsSpinbox_ = new LogSpinBox;
   setMaximumCalls(maxCalls);
 
-  connect(maxiCallsSpinbox_, SIGNAL(valueChanged(int)), this, SIGNAL(maxiCallsChanged(int)));
+  connect(maxiCallsSpinbox_, SIGNAL(valueChanged(double)), this, SIGNAL(maxiCallsChanged(double)));
   connect(maxiCallsCheckBox_, SIGNAL(toggled(bool)), maxiCallsSpinbox_, SLOT(setEnabled(bool)));
   connect(maxiCallsCheckBox_, SIGNAL(toggled(bool)), this, SLOT(maxiCallsRequired(bool)));
 

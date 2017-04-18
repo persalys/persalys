@@ -110,7 +110,7 @@ QVariant DataModelTableModel::data(const QModelIndex & index, int role) const
   else // variable value
   {
     if (role == Qt::DisplayRole || role == Qt::EditRole)
-      return QString::number(data_[index.row()-2][index.column()], 'g', 8);
+      return QString::number(data_[index.row()-2][index.column()], 'g', 15);
 
     else if (role == Qt::TextAlignmentRole)
       return int(Qt::AlignRight | Qt::AlignVCenter);
