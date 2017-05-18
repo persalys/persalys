@@ -55,6 +55,7 @@ TaylorExpansionMomentsAnalysis* TaylorExpansionMomentsAnalysis::clone() const
 
 void TaylorExpansionMomentsAnalysis::run()
 {
+  isRunning_ = true;
   try
   {
     // clear result
@@ -83,6 +84,7 @@ void TaylorExpansionMomentsAnalysis::run()
     errorMessage_ = ex.what();
     notify("analysisBadlyFinished");
   }
+  isRunning_ = false;
 }
 
 

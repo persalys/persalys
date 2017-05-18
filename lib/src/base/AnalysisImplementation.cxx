@@ -29,6 +29,7 @@ AnalysisImplementation::AnalysisImplementation()
   : PersistentObject()
   , Observable()
   , isReliabilityAnalysis_(false)
+  , isRunning_(false)
   , informationMessage_("")
   , errorMessage_("")
   , stopRequested_(false)
@@ -42,6 +43,7 @@ AnalysisImplementation::AnalysisImplementation(const String & name)
   : PersistentObject()
   , Observable()
   , isReliabilityAnalysis_(false)
+  , isRunning_(false)
   , informationMessage_("")
   , errorMessage_("")
   , stopRequested_(false)
@@ -76,6 +78,12 @@ String AnalysisImplementation::getModelName() const
 bool AnalysisImplementation::isReliabilityAnalysis() const
 {
   return isReliabilityAnalysis_;
+}
+
+
+bool AnalysisImplementation::isRunning() const
+{
+  return isRunning_;
 }
 
 

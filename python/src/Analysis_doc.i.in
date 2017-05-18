@@ -10,5 +10,7 @@ OTGUI_Analysis_getErrorMessage_doc
 OTGUI_Analysis_getPythonScript_doc
 %feature("docstring") OTGUI::Analysis::isReliabilityAnalysis
 OTGUI_Analysis_isReliabilityAnalysis_doc
+%feature("docstring") OTGUI::Analysis::isRunning
+OTGUI_Analysis_isRunning_doc
 %feature("docstring") OTGUI::Analysis::analysisLaunched
 OTGUI_Analysis_analysisLaunched_doc

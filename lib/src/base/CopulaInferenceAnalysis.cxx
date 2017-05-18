@@ -108,6 +108,7 @@ void CopulaInferenceAnalysis::setDistributionsFactories(const Description& varia
 
 void CopulaInferenceAnalysis::run()
 {
+  isRunning_ = true;
   try
   {
     // clear result
@@ -197,6 +198,7 @@ void CopulaInferenceAnalysis::run()
     errorMessage_ = ex.what();
     notify("analysisBadlyFinished");
   }
+  isRunning_ = false;
 }
 
 

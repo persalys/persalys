@@ -59,6 +59,7 @@ FORMImportanceSamplingAnalysis* FORMImportanceSamplingAnalysis::clone() const
 
 void FORMImportanceSamplingAnalysis::run()
 {
+  isRunning_ = true;
   // No section try/except here as for the other analyses
   // because this section is directly in FORMAnalysis/IS::run
 
@@ -86,6 +87,7 @@ void FORMImportanceSamplingAnalysis::run()
   // Importance sampling
   setStandardSpaceDesignPoint(designPoint);
   ImportanceSamplingAnalysis::run();
+  isRunning_ = false;
 }
 
 

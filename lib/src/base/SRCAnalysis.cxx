@@ -57,6 +57,7 @@ SRCAnalysis* SRCAnalysis::clone() const
 
 void SRCAnalysis::run()
 {
+  isRunning_ = true;
   try
   {
     // clear result
@@ -108,6 +109,7 @@ void SRCAnalysis::run()
     errorMessage_ = ex.what();
     notify("analysisBadlyFinished");
   }
+  isRunning_ = false;
 }
 
 

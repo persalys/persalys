@@ -47,9 +47,11 @@ DesignOfExperimentEvaluation* DesignOfExperimentEvaluation::clone() const
 
 void DesignOfExperimentEvaluation::run()
 {
+  isRunning_ = true;
   getDesignOfExperiment().getImplementation()->addObserver(this);
   getDesignOfExperiment().run();
   getDesignOfExperiment().getImplementation()->removeObserver(this);
+  isRunning_ = false;
 }
 
 

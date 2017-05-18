@@ -60,6 +60,7 @@ DataAnalysis* DataAnalysis::clone() const
 
 void DataAnalysis::run()
 {
+  isRunning_ = true;
   try
   {
     // clear result
@@ -242,6 +243,7 @@ void DataAnalysis::run()
     errorMessage_ = ex.what();
     notify("analysisBadlyFinished");
   }
+  isRunning_ = false;
 }
 
 

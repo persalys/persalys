@@ -58,6 +58,7 @@ SobolAnalysis* SobolAnalysis::clone() const
 
 void SobolAnalysis::run()
 {
+  isRunning_ = true;
   try
   {
     // clear result
@@ -251,6 +252,7 @@ void SobolAnalysis::run()
     errorMessage_ = ex.what();
     notify("analysisBadlyFinished");
   }
+  isRunning_ = false;
 }
 
 

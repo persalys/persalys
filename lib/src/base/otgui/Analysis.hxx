@@ -46,6 +46,8 @@ public:
 
   bool isReliabilityAnalysis() const;
 
+  bool isRunning() const;
+
   OT::String getInformationMessage() const;
   OT::String getErrorMessage() const;
   int getProgressValue() const;

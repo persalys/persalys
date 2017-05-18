@@ -91,6 +91,7 @@ void MonteCarloAnalysis::setLevelConfidenceInterval(const double levelConfidence
 
 void MonteCarloAnalysis::run()
 {
+  isRunning_ = true;
   try
   {
     // clear result
@@ -192,6 +193,7 @@ void MonteCarloAnalysis::run()
     errorMessage_ = ex.what();
     notify("analysisBadlyFinished");
   }
+  isRunning_ = false;
 }
 
 

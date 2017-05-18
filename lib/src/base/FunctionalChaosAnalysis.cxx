@@ -119,6 +119,7 @@ OrthogonalProductPolynomialFactory::PolynomialFamilyCollection FunctionalChaosAn
 
 void FunctionalChaosAnalysis::run()
 {
+  isRunning_ = true;
   try
   {
     // clear result
@@ -188,6 +189,7 @@ void FunctionalChaosAnalysis::run()
     errorMessage_ =  OSS() << errorMessage_ << ex.what();
     notify("analysisBadlyFinished");
   }
+  isRunning_ = false;
 }
 
 

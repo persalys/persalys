@@ -105,6 +105,7 @@ void KrigingAnalysis::setOptimizeParameters(const bool optimize)
 
 void KrigingAnalysis::run()
 {
+  isRunning_ = true;
   try
   {
     // clear result
@@ -201,6 +202,7 @@ void KrigingAnalysis::run()
     errorMessage_ = ex.what();
     notify("analysisBadlyFinished");
   }
+  isRunning_ = false;
 }
 
 
