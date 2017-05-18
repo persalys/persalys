@@ -26,6 +26,7 @@
 namespace OTGUI {
 class OTGUI_API DesignOfExperimentEvaluation : public DesignOfExperimentAnalysis, public Observer
 {
+  CLASSNAME;
   /** Fake analysis to be enable to launch the evaluation of the DOE in a separate thread from StudyTreeView */
 
 public:
@@ -36,6 +37,7 @@ public:
   virtual DesignOfExperimentEvaluation * clone() const;
 
   virtual void run();
+  virtual bool analysisLaunched() const;
   virtual void stop();
 
   virtual void update(Observable * source, const OT::String & message);

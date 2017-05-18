@@ -24,6 +24,8 @@ using namespace OT;
 
 namespace OTGUI {
 
+CLASSNAMEINIT(DesignOfExperimentEvaluation);
+
 /* Constructor with parameters */
 DesignOfExperimentEvaluation::DesignOfExperimentEvaluation(const DesignOfExperiment& design)
   : DesignOfExperimentAnalysis("evaluation", design)
@@ -48,6 +50,12 @@ void DesignOfExperimentEvaluation::run()
   getDesignOfExperiment().getImplementation()->addObserver(this);
   getDesignOfExperiment().run();
   getDesignOfExperiment().getImplementation()->removeObserver(this);
+}
+
+
+bool DesignOfExperimentEvaluation::analysisLaunched() const
+{
+  return getDesignOfExperiment().getOutputSample().getSize() > 0;
 }
 
 
