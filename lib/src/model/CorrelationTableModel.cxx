@@ -99,9 +99,7 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
     emit errorMessageChanged("");
     try
     {
-      physicalModel_.blockNotification(true);
       physicalModel_.setCopula(NormalCopula(NormalCopula::GetCorrelationFromSpearmanCorrelation(correlation)));
-      physicalModel_.blockNotification(false);
       emit dataChanged(index, index);
       return true;
     }
