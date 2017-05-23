@@ -37,7 +37,9 @@ public:
 public slots:
   void showSubWindow(OTguiSubWindow * win);
   void showSubWindow(QStandardItem * item);
+  void removeSubWindow(OTguiSubWindow * win);
   void removeSubWindow(QStandardItem * item);
+  void removeSubWindow();
 signals:
   void mdiAreaEmpty(bool);
   void errorMessageChanged(QString);
