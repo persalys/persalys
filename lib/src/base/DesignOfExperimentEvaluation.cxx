@@ -51,6 +51,7 @@ void DesignOfExperimentEvaluation::run()
   getDesignOfExperiment().getImplementation()->addObserver(this);
   getDesignOfExperiment().run();
   getDesignOfExperiment().getImplementation()->removeObserver(this);
+  errorMessage_ = getDesignOfExperiment().getErrorMessage();
   isRunning_ = false;
 }
 
