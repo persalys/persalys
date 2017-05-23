@@ -17,6 +17,7 @@ ot_add_source_file ( PhysicalModelDefinitionItem.cxx )
 ot_add_source_file ( LimitStateItem.cxx )
 ot_add_source_file ( DesignOfExperimentItem.cxx )
 ot_add_source_file ( DesignOfExperimentDefinitionItem.cxx )
+ot_add_source_file ( DataModelDefinitionItem.cxx )
 ot_add_source_file ( ProbabilisticModelItem.cxx )
 ot_add_source_file ( PhysicalModelItem.cxx )
 ot_add_source_file ( OTStudyItem.cxx )
@@ -40,6 +41,7 @@ ot_install_header_file ( AnalysisItem.hxx )
 ot_install_header_file ( LimitStateItem.hxx )
 ot_install_header_file ( DesignOfExperimentItem.hxx )
 ot_install_header_file ( DesignOfExperimentDefinitionItem.hxx )
+ot_install_header_file ( DataModelDefinitionItem.hxx )
 ot_install_header_file ( ProbabilisticModelItem.hxx )
 ot_install_header_file ( PhysicalModelItem.hxx )
 ot_install_header_file ( OTStudyItem.hxx )
@@ -63,6 +65,7 @@ qt5_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
                                     otgui/LimitStateItem.hxx
                                     otgui/DesignOfExperimentItem.hxx
                                     otgui/DesignOfExperimentDefinitionItem.hxx
+                                    otgui/DataModelDefinitionItem.hxx
                                     otgui/ProbabilisticModelItem.hxx
                                     otgui/PhysicalModelItem.hxx
                                     otgui/OTStudyItem.hxx
