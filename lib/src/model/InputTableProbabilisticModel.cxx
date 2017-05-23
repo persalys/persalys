@@ -155,10 +155,10 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
       return false;
 
     // update the input
-    physicalModel_.blockNotification(true);
+    physicalModel_.blockNotification("ProbabilisticModel");
     physicalModel_.setDistribution(input.getName(), distribution);
     physicalModel_.setDistributionParametersType(input.getName(), 0);
-    physicalModel_.blockNotification(false);
+    physicalModel_.blockNotification();
     emit dataChanged(index, this->index(index.row(), 1));
     emit correlationToChange();
     if (physicalModel_.hasStochasticInputs() && (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize()))
@@ -193,10 +193,10 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
           distribution = DistributionDictionary::BuildDistribution(value.toString().toStdString(), input.getValue());
         }
         // update the input
-        physicalModel_.blockNotification(true);
+        physicalModel_.blockNotification("ProbabilisticModel");
         physicalModel_.setDistribution(input.getName(), distribution);
         physicalModel_.setDistributionParametersType(input.getName(), 0);
-        physicalModel_.blockNotification(false);
+        physicalModel_.blockNotification();
         emit distributionChanged(index);
         return true;
       }

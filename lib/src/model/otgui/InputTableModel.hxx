@@ -47,6 +47,8 @@ public slots:
   void addLine();
 signals:
   void errorMessageChanged(QString);
+  void inputNumberChanged();
+  void inputNameChanged();
 
 private:
   PhysicalModel physicalModel_;

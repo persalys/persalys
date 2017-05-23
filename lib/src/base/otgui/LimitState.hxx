@@ -48,7 +48,7 @@ public:
   LimitState(LimitStateImplementation * p_implementation); 
 
   void addObserver(Observer * observer);
-  void blockNotification(bool block, const OT::String & notBlockedMessage="");
+  void blockNotification(const OT::String & notBlockedMessage="");
 
   PhysicalModel getPhysicalModel() const;
 

@@ -37,8 +37,9 @@ LimitStateWindow::LimitStateWindow(LimitStateItem * item)
   , limitState_(item->getLimitState())
 {
   buildInterface();
-  connect(item, SIGNAL(outputChanged()), this, SLOT(updateOutputsList()));
-  connect(item, SIGNAL(outputNameChanged()), this, SLOT(updateOutputWidget()));
+
+  // connections
+  connect(item, SIGNAL(outputListChanged()), this, SLOT(updateOutputsList()));
   connect(item, SIGNAL(operatorChanged()), this, SLOT(updateOperatorWidget()));
   connect(item, SIGNAL(thresholdChanged()), this, SLOT(updateThresholdWidget()));
 }
@@ -146,9 +147,9 @@ void LimitStateWindow::updateThresholdWidget()
 void LimitStateWindow::updateOutput(int index)
 {
   setErrorMessage("");
-  limitState_.blockNotification(true);
+  limitState_.blockNotification("LimitState");
   limitState_.setOutputName(outputsComboBox_->itemText(index).toStdString());
-  limitState_.blockNotification(false);
+  limitState_.blockNotification();
 }
 
 
@@ -170,9 +171,9 @@ void LimitStateWindow::updateOperator(int index)
       comparisonOperator = GreaterOrEqual();
       break;
   }
-  limitState_.blockNotification(true);
+  limitState_.blockNotification("LimitState");
   limitState_.setOperator(comparisonOperator);
-  limitState_.blockNotification(false);
+  limitState_.blockNotification();
 }
 
 
@@ -180,9 +181,9 @@ void LimitStateWindow::updateThreshold()
 {
   try
   {
-    limitState_.blockNotification(true);
+    limitState_.blockNotification("LimitState");
     limitState_.setThreshold(thresholdLineEdit_->value());
-    limitState_.blockNotification(false);
+    limitState_.blockNotification();
   }
   catch(std::exception & ex)
   {

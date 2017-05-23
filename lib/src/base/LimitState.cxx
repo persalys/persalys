@@ -75,9 +75,9 @@ void LimitState::addObserver(Observer* observer)
 }
 
 
-void LimitState::blockNotification(bool block, const String& notBlockedMessage)
+void LimitState::blockNotification(const String& notBlockedMessage)
 {
-  getImplementation()->blockNotification(block, notBlockedMessage);
+  getImplementation()->blockNotification(notBlockedMessage);
 }
 
 

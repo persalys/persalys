@@ -28,8 +28,8 @@ namespace OTGUI {
 
 /* Default constructor */
 Observable::Observable()
-  : notificationBlocked_(false)
-  , notBlockedMessage_("")
+  : observers_()
+  , blockedObserverType_("")
 {
 }
 
@@ -37,8 +37,7 @@ Observable::Observable()
 /* Copy constructor */
 Observable::Observable(const Observable & other)
   : observers_()
-  , notificationBlocked_(false)
-  , notBlockedMessage_("")
+  , blockedObserverType_("")
 {
 }
 
@@ -57,10 +56,10 @@ void Observable::removeObserver(Observer * observer)
 
 void Observable::notify(const String & message)
 {
-  if (!notificationBlocked_ || (notificationBlocked_ && message == notBlockedMessage_))
+  std::vector<Observer*>::reverse_iterator rit = observers_.rbegin();
+  for (; rit!= observers_.rend(); ++rit)
   {
-    std::vector<Observer*>::reverse_iterator rit = observers_.rbegin();
-    for (; rit!= observers_.rend(); ++rit)
+    if ((*rit)->getType() != blockedObserverType_)
       (*rit)->update(this, message);
   }
 }
@@ -68,7 +67,7 @@ void Observable::notify(const String & message)
 
 void Observable::notifyAndRemove(const String & message, const String & type)
 {
-  for (std::vector<Observer*>::iterator it = observers_.begin(); it!= observers_.end(); ++it)
+  for (std::vector<Observer*>::iterator it = observers_.begin(); it != observers_.end(); ++it)
   {
     if ((*it)->getType() == type)
     {
@@ -77,14 +76,12 @@ void Observable::notifyAndRemove(const String & message, const String & type)
       return;
     }
   }
-
 }
 
 
-void Observable::blockNotification(bool block, const String & notBlockedMessage)
+void Observable::blockNotification(const String & blockedObserverType)
 {
-  notificationBlocked_ = block;
-  notBlockedMessage_ = notBlockedMessage;
+  blockedObserverType_ = blockedObserverType;
 }
 
 
@@ -96,7 +93,7 @@ std::vector< Observer* > Observable::getObservers() const
 
 Observer* Observable::getObserver(const String & type)
 {
-  for (std::vector<Observer*>::iterator it = observers_.begin(); it!= observers_.end(); ++it)
+  for (std::vector<Observer*>::iterator it = observers_.begin(); it != observers_.end(); ++it)
   {
     if ((*it)->getType() == type)
       return (*it);
