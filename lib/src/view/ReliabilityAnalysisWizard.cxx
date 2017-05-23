@@ -22,70 +22,19 @@
 
 #include "otgui/FORMImportanceSamplingAnalysis.hxx"
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
+#include "otgui/OTStudyItem.hxx"
 
 #include <QVBoxLayout>
-#include <QRadioButton>
 
 using namespace OT;
 
 namespace OTGUI {
 
-IntroReliabilityPage::IntroReliabilityPage(QWidget * parent)
-  : QWizardPage(parent)
-{
-  setTitle(tr("Reliability methods"));
-
-  QVBoxLayout * pageLayout = new QVBoxLayout(this);
-
-  QGroupBox * methodBox = new QGroupBox(tr("Types of methods"));
-  QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
-
-  methodGroup_ = new QButtonGroup;
-
-  QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Simulation methods"));
-  methodGroup_->addButton(buttonToChooseMethod, IntroReliabilityPage::SimuMethod);
-  methodLayout->addWidget(buttonToChooseMethod);
-
-  buttonToChooseMethod = new QRadioButton(tr("Approximation method"));
-  methodGroup_->addButton(buttonToChooseMethod, IntroReliabilityPage::ApproxMethod);
-  methodLayout->addWidget(buttonToChooseMethod);
-
-  pageLayout->addWidget(methodBox);
-}
-
-
-void IntroReliabilityPage::initialize(const Analysis& analysis)
-{
-  const String analysisName = analysis.getImplementation()->getClassName();
-
-  if (analysisName == "FORMImportanceSamplingAnalysis" || analysisName == "MonteCarloReliabilityAnalysis")
-    methodGroup_->button(IntroReliabilityPage::SimuMethod)->click();
-  else
-    methodGroup_->button(IntroReliabilityPage::ApproxMethod)->click();
-}
-
-
-int IntroReliabilityPage::nextId() const
-{
-  switch (IntroReliabilityPage::Method(methodGroup_->checkedId()))
-  {
-    case IntroReliabilityPage::SimuMethod:
-    {
-      return ReliabilityAnalysisWizard::Page_SimuMethod;
-    }
-    case IntroReliabilityPage::ApproxMethod:
-    {
-      return ReliabilityAnalysisWizard::Page_ApproxMethod;
-    }
-    default:
-      return -1;
-      break;
-  }
-}
-
+// FORM page
 
 FORMPage::FORMPage(QWidget* parent)
   : QWizardPage(parent)
+  , formWidget_(0)
 {
   setTitle(tr("Optimization algorithm configuration for FORM"));
 
@@ -106,6 +55,7 @@ OptimizationSolver FORMPage::getOptimizationAlgorithm() const
   return formWidget_->getOptimizationAlgorithm();
 }
 
+// ReliabilityAnalysisWizard
 
 ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const OTStudy& otStudy, const LimitState& limitState, QWidget* parent)
   : AnalysisWizard(MonteCarloReliabilityAnalysis(otStudy.getAvailableAnalysisName("reliability_"), limitState), parent)
@@ -114,9 +64,28 @@ ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const OTStudy& otStudy, con
 }
 
 
-ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis& analysis, QWidget* parent)
+ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard, QWidget* parent)
   : AnalysisWizard(analysis, parent)
+  , limitStateList_()
+  , introPage_(0)
+  , simulationPage_(0)
+  , approximationPage_(0)
+  , formPage_(0)
 {
+  const LimitState limitState = dynamic_cast<ReliabilityAnalysis*>(analysis_.getImplementation().get())->getLimitState();
+  if (isGeneralWizard)
+  {
+    for (UnsignedInteger i=0; i<item->getParentOTStudyItem()->getOTStudy().getLimitStates().getSize(); ++i)
+    {
+      const LimitState limitState_i = item->getParentOTStudyItem()->getOTStudy().getLimitStates()[i];
+      if (limitState_i.getPhysicalModel().getImplementation().get() == limitState.getPhysicalModel().getImplementation().get())
+        limitStateList_.append(limitState_i);
+    }
+  }
+  else
+  {
+    limitStateList_.append(limitState);
+  }
   buildInterface();
 }
 
@@ -125,16 +94,16 @@ void ReliabilityAnalysisWizard::buildInterface()
 {
   setWindowTitle(tr("Threshold exceedance"));
 
-  // First Page: choose method of reliability analysis
+  // First Page: choose the limit state and the method of reliability analysis
   introPage_ = new IntroReliabilityPage(this);
-  introPage_->initialize(analysis_);
+  introPage_->initialize(analysis_, limitStateList_);
   setPage(Page_Intro, introPage_);
 
   // Second Page: simulation methods
   simulationPage_ = new SimulationReliabilityPage(this);
   simulationPage_->initialize(analysis_);
-  connect(simulationPage_, SIGNAL(methodChanged(int)), this, SLOT(updateNextId(int)));
   setPage(Page_SimuMethod, simulationPage_);
+  connect(introPage_, SIGNAL(methodChanged(int)), simulationPage_, SLOT(updateMethod(int)));
 
   // Second Page: approximation methods
   approximationPage_ = new ApproximationReliabilityPage(this);
@@ -147,12 +116,6 @@ void ReliabilityAnalysisWizard::buildInterface()
   setPage(Page_FORM, formPage_);
 
   setStartId(Page_Intro);
-}
-
-
-void ReliabilityAnalysisWizard::updateNextId(int id)
-{
-  simulationPage_->setFinalPage(id == SimulationReliabilityPage::MonteCarlo);
 }
 
 
@@ -175,7 +138,7 @@ bool ReliabilityAnalysisWizard::validateCurrentPage()
 {
   if (currentId() == Page_SimuMethod || currentId() == Page_ApproxMethod)
   {
-    const LimitState limitState = dynamic_cast<ReliabilityAnalysis*>(analysis_.getImplementation().get())->getLimitState();
+    const LimitState limitState = introPage_->getLimitState();
 
     if (currentId() == Page_SimuMethod)
       analysis_ = simulationPage_->getAnalysis(analysis_.getName(), limitState);

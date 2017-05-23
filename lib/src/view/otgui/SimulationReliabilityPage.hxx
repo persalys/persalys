@@ -28,7 +28,6 @@
 
 #include <QWizardPage>
 #include <QLabel>
-#include <QButtonGroup>
 
 namespace OTGUI {
 class OTGUI_API SimulationReliabilityPage : public QWizardPage
@@ -36,7 +35,7 @@ class OTGUI_API SimulationReliabilityPage : public QWizardPage
   Q_OBJECT
 
 public:
-  enum Method {MonteCarlo, FORM_IS};
+  enum Method {MonteCarlo = 1, FORM_IS = 2};
 
   SimulationReliabilityPage(QWidget* parent=0);
 
@@ -50,11 +49,12 @@ protected:
   void buildInterface();
 
 public slots:
+  void updateMethod(int);
 signals:
   void methodChanged(int);
 
 private:
-  QButtonGroup * methodGroup_;
+  Method method_;
   StopCriteriaGroupBox * stopCriteriaGroupBox_;
   BlockSizeGroupBox * blockSizeGroupBox_;
   QSpinBox * seedSpinbox_;

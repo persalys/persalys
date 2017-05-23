@@ -23,8 +23,6 @@
 #include "otgui/FORMAnalysis.hxx"
 
 #include <QVBoxLayout>
-#include <QRadioButton>
-#include <QGroupBox>
 
 using namespace OT;
 
@@ -43,19 +41,6 @@ void ApproximationReliabilityPage::buildInterface()
 
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 
-  QGroupBox * methodBox = new QGroupBox(tr("Method"));
-  QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
-
-  // radioButtons
-  methodGroup_ = new QButtonGroup;
-  // FORM
-  QRadioButton * buttonToChooseMethod = new QRadioButton(tr("First order analysis (FORM)"));
-  buttonToChooseMethod->setChecked(true);
-  methodGroup_->addButton(buttonToChooseMethod, ApproximationReliabilityPage::FORM);
-  methodLayout->addWidget(buttonToChooseMethod);
-
-  pageLayout->addWidget(methodBox);
-
   // optimization widgets
   optimWidget_ = new OptimizationWidget(this);
 
@@ -65,7 +50,6 @@ void ApproximationReliabilityPage::buildInterface()
 
 void ApproximationReliabilityPage::initialize(const Analysis& analysis)
 {
-  methodGroup_->button(ApproximationReliabilityPage::FORM)->click();
   optimWidget_->initialize(analysis);
 }
 

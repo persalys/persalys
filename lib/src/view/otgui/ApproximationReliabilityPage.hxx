@@ -33,7 +33,7 @@ class OTGUI_API ApproximationReliabilityPage : public QWizardPage
   Q_OBJECT
 
 public:
-  enum Method {FORM};
+  enum Method {FORM = 3};
 
   ApproximationReliabilityPage(QWidget* parent=0);
 
@@ -47,7 +47,6 @@ protected:
   void buildInterface();
 
 private:
-  QButtonGroup * methodGroup_;
   OptimizationWidget * optimWidget_;
 };
 }

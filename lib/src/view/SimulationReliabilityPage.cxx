@@ -26,7 +26,6 @@
 #include "otgui/ReliabilityAnalysisWizard.hxx"
 
 #include <QVBoxLayout>
-#include <QRadioButton>
 
 using namespace OT;
 
@@ -34,6 +33,11 @@ namespace OTGUI {
 
 SimulationReliabilityPage::SimulationReliabilityPage(QWidget* parent)
   : QWizardPage(parent)
+  , method_(SimulationReliabilityPage::MonteCarlo)
+  , stopCriteriaGroupBox_(0)
+  , blockSizeGroupBox_(0)
+  , seedSpinbox_(0)
+  , errorMessageLabel_(0)
 {
   buildInterface();
 }
@@ -44,24 +48,6 @@ void SimulationReliabilityPage::buildInterface()
   setTitle(tr("Simulation methods"));
 
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
-
-  QGroupBox * methodBox = new QGroupBox(tr("Methods"));
-  QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
-
-  // radioButtons
-  methodGroup_ = new QButtonGroup;
-  // Monte carlo
-  QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Monte Carlo"));
-  buttonToChooseMethod->setChecked(true);
-  methodGroup_->addButton(buttonToChooseMethod, SimulationReliabilityPage::MonteCarlo);
-  methodLayout->addWidget(buttonToChooseMethod);
-  // FORM - IS
-  buttonToChooseMethod = new QRadioButton(tr("FORM - Importance sampling"));
-  methodGroup_->addButton(buttonToChooseMethod, SimulationReliabilityPage::FORM_IS);
-  methodLayout->addWidget(buttonToChooseMethod);
-  connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SIGNAL(methodChanged(int)));
-
-  pageLayout->addWidget(methodBox);
 
   /// simulation widgets
   QWidget * mainSimuWidget = new QWidget;
@@ -106,14 +92,15 @@ void SimulationReliabilityPage::buildInterface()
 
 void SimulationReliabilityPage::initialize(const Analysis& analysis)
 {
-  if (!dynamic_cast<const SimulationReliabilityAnalysis*>(&*analysis.getImplementation()))
+  const SimulationReliabilityAnalysis * analysis_ptr = dynamic_cast<const SimulationReliabilityAnalysis*>(analysis.getImplementation().get());
+
+  if (!analysis_ptr)
     return;
 
-  const SimulationReliabilityAnalysis * analysis_ptr = dynamic_cast<const SimulationReliabilityAnalysis*>(analysis.getImplementation().get());
   if (dynamic_cast<const MonteCarloReliabilityAnalysis*>(analysis_ptr))
-    methodGroup_->button(SimulationReliabilityPage::MonteCarlo)->click();
+    method_ = SimulationReliabilityPage::MonteCarlo;
   else
-    methodGroup_->button(SimulationReliabilityPage::FORM_IS)->click();
+    method_ = SimulationReliabilityPage::FORM_IS;
 
   stopCriteriaGroupBox_->setMaximumCoefficientOfVariation(analysis_ptr->getMaximumCoefficientOfVariation());
   stopCriteriaGroupBox_->setMaximumElapsedTime(analysis_ptr->getMaximumElapsedTime());
@@ -125,9 +112,9 @@ void SimulationReliabilityPage::initialize(const Analysis& analysis)
 }
 
 
-Analysis SimulationReliabilityPage::getAnalysis(const OT::String& name, const LimitState& limitState) const
+Analysis SimulationReliabilityPage::getAnalysis(const String& name, const LimitState& limitState) const
 {
-  if (methodGroup_->checkedId() == SimulationReliabilityPage::MonteCarlo)
+  if (method_ == SimulationReliabilityPage::MonteCarlo)
   {
     MonteCarloReliabilityAnalysis analysis(name, limitState);
     analysis.setMaximumCalls(stopCriteriaGroupBox_->getMaximumCalls());
@@ -150,9 +137,16 @@ Analysis SimulationReliabilityPage::getAnalysis(const OT::String& name, const Li
 }
 
 
+void SimulationReliabilityPage::updateMethod(int id)
+{
+  method_ = Method(id);
+  setFinalPage(id == SimulationReliabilityPage::MonteCarlo);
+}
+
+
 int SimulationReliabilityPage::nextId() const
 {
-  if (methodGroup_->checkedId() == SimulationReliabilityPage::MonteCarlo)
+  if (method_ == SimulationReliabilityPage::MonteCarlo)
     return -1;
   else
     return ReliabilityAnalysisWizard::Page_FORM;
