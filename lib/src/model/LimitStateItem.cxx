@@ -20,18 +20,40 @@
  */
 #include "otgui/LimitStateItem.hxx"
 
+#include "otgui/MonteCarloReliabilityAnalysis.hxx"
+#include "otgui/OTStudyItem.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
 
 LimitStateItem::LimitStateItem(const LimitState & limitState)
-  : QObject()
-  , QStandardItem(QString::fromUtf8(limitState.getName().c_str()))
+  : OTguiItem(QString::fromUtf8(limitState.getName().c_str()), "LimitState")
   , Observer("LimitState")
   , limitState_(limitState)
 {
   limitState_.addObserver(this);
-  setData("LimitState", Qt::UserRole);
+  limitState_.getPhysicalModel().addObserver(this);
+
+  buildActions();
+}
+
+
+void LimitStateItem::buildActions()
+{
+  // new threshold exceedance action
+  newThresholdExceedance_ = new QAction(tr("New threshold exceedance"), this);
+  newThresholdExceedance_->setStatusTip(tr("Create a new threshold exceedance"));
+  connect(newThresholdExceedance_, SIGNAL(triggered()), this, SLOT(createNewThresholdExceedance()));
+
+  // remove limit state action
+  removeLimitState_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
+  removeLimitState_->setStatusTip(tr("Remove the limit state"));
+  connect(removeLimitState_, SIGNAL(triggered()), this, SLOT(removeLimitState()));
+
+  // add actions
+  appendAction(newThresholdExceedance_);
+  appendAction(removeLimitState_);
 }
 
 
@@ -52,13 +74,12 @@ LimitState LimitStateItem::getLimitState() const
 
 void LimitStateItem::update(Observable* source, const String & message)
 {
-  if (message == "modelOutputsChanged")
+  if (message == "outputNumberChanged" ||
+      message == "outputNameChanged" ||
+      message == "outputSelectionChanged"
+     )
   {
-    emit outputChanged();
-  }
-  else if (message == "outputNameChanged")
-  {
-    emit outputNameChanged();
+    emit outputListChanged();
   }
   else if (message == "operatorChanged")
   {
@@ -70,7 +91,55 @@ void LimitStateItem::update(Observable* source, const String & message)
   }
   else if (message == "limitStateRemoved")
   {
-    emit limitStateRemoved(this);
+    emit removeRequested(row());
+  }
+}
+
+
+void LimitStateItem::appendAnalysisItem(Analysis& analysis)
+{
+  AnalysisItem * newItem = new AnalysisItem(analysis);
+  connect(newItem, SIGNAL(analysisStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
+  if (getParentOTStudyItem())
+    connect(newItem, SIGNAL(analysisStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
+  appendRow(newItem);
+
+  emit newAnalysisItemCreated(newItem);
+}
+
+
+void LimitStateItem::createNewThresholdExceedance()
+{
+  if (!limitState_.getPhysicalModel().isValid())
+  {
+    emit emitErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
+    return;
+  }
+  if (!limitState_.getPhysicalModel().hasStochasticInputs())
+  {
+    emit emitErrorMessageRequested(tr("The physical model must have stochastic inputs."));
+    return;
+  }
+  if (!limitState_.isValid())
+  {
+    emit emitErrorMessageRequested(tr("The limit state is not valid."));
+  }
+
+  MonteCarloReliabilityAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("reliability_"), limitState_);
+  emit analysisRequested(this, analysis);
+}
+
+
+void LimitStateItem::removeLimitState()
+{
+  if (getParentOTStudyItem())
+  {
+    if (analysisInProgress_)
+    {
+      emit emitErrorMessageRequested(tr("Can not remove a limit state when an analysis is running."));
+      return;
+    }
+    getParentOTStudyItem()->getOTStudy().remove(LimitState(limitState_));
   }
 }
 }

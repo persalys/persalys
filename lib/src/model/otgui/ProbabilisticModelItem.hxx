@@ -21,31 +21,34 @@
 #ifndef OTGUI_PROBABILISTICMODELITEM_HXX
 #define OTGUI_PROBABILISTICMODELITEM_HXX
 
-#include "otgui/InputTableModel.hxx"
-#include "otgui/OutputTableModel.hxx"
-#include "otgui/PhysicalModel.hxx"
-
-#include <QStandardItem>
+#include "otgui/PhysicalModelItem.hxx"
 
 namespace OTGUI {
-class OTGUI_API ProbabilisticModelItem : public QObject, public QStandardItem, public Observer
+class OTGUI_API ProbabilisticModelItem : public PhysicalModelItem
 {
   Q_OBJECT
 
 public:
   ProbabilisticModelItem(const PhysicalModel & physicalModel);
 
-  PhysicalModel getPhysicalModel() const;
-
   virtual void update(Observable * source, const OT::String & message);
 
+protected:
+  void buildActions();
+  bool physicalModelValid();
+
 public slots:
+  void createNewLimitState();
+  void createNewCentralTendency();
+  void createNewSensitivityAnalysis();
 signals:
-  void inputChanged();
-  void probabilisticModelRemoved(QStandardItem*);
+  void stochasticInputListChanged();
+  void inputListCorrelationChanged();
 
 private:
-  PhysicalModel physicalModel_;
+  QAction * newLimitState_;
+  QAction * newCentralTendency_;
+  QAction * newSensitivityAnalysis_;
 };
 }
 #endif

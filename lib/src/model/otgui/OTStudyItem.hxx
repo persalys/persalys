@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItem, observer of a otStudy
+ *  @brief QStandardItem, observer of an otStudy
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -21,15 +21,12 @@
 #ifndef OTGUI_OTSTUDYITEM_HXX
 #define OTGUI_OTSTUDYITEM_HXX
 
-#include "otgui/PhysicalModelItem.hxx"
-#include "otgui/ProbabilisticModelItem.hxx"
-#include "otgui/DesignOfExperimentItem.hxx"
-#include "otgui/LimitStateItem.hxx"
-#include "otgui/AnalysisItem.hxx"
+#include "otgui/PhysicalModelDiagramItem.hxx"
+#include "otgui/DataModelDiagramItem.hxx"
 #include "otgui/OTStudy.hxx"
 
 namespace OTGUI {
-class OTGUI_API OTStudyItem : public QObject, public QStandardItem, public Observer
+class OTGUI_API OTStudyItem : public OTguiItem, public Observer
 {
   Q_OBJECT
 
@@ -43,31 +40,50 @@ public:
   void addDesignOfExperimentItem(DesignOfExperiment & design);
   void addLimitStateItem(LimitState & limitState);
   void addAnalysisItem(Analysis & analysis);
-  void addDeterministicAnalysisItem(Analysis & analysis, AnalysisItem * item);
-  void addProbabilisticAnalysisItem(Analysis & analysis, AnalysisItem * item);
-  void addReliabilityAnalysisItem(Analysis & analysis, AnalysisItem * item);
-  void addDesignOfExperimentAnalysisItem(Analysis & analysis, AnalysisItem * item);
 
   void setData(const QVariant & value, int role);
   OTStudy getOTStudy() const;
 
+  void exportOTStudy(QString fileName);
+
+protected slots:
+  virtual void requestRemove();
+
 public slots:
-  void updateAnalysis(const Analysis & analysis);
-  void updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
+  void createNewSymbolicPhysicalModel();
+  void createNewPythonPhysicalModel();
+#ifdef OTGUI_HAVE_YACS
+  void createNewYACSPhysicalModel();
+#endif
+  void createNewDataModel();
+  bool saveOTStudy();
+  bool saveOTStudy(QString);
+  bool closeOTStudy();
   void addMetaModelItem(PhysicalModel metaModel);
-  void removeItem(QStandardItem*);
 signals:
-  void newDataModelItemCreated(DesignOfExperimentItem*);
-  void newPhysicalModelItemCreated(PhysicalModelItem*);
-  void newProbabilisticModelItemCreated(ProbabilisticModelItem*);
-  void newDesignOfExperimentItemCreated(DesignOfExperimentItem*);
-  void newAnalysisItemCreated(AnalysisItem*);
-  void newLimitStateItemCreated(LimitStateItem*);
-  void itemRemoved(QStandardItem*);
-  void otStudyRemoved(QStandardItem*);
+  void otStudyExportRequested();
+  void otStudySaveAsRequested();
+  void otStudySaveAsRequested(OTStudyItem* item, bool* notcancel);
+  void otStudyCloseRequested(OTStudyItem* item, bool* canClose);
+  void newDataModelItemCreated(DataModelDiagramItem*);
+  void newPhysicalModelItemCreated(PhysicalModelDiagramItem*);
+  void recentFilesListChanged(const QString & recentFileName);
+
+protected:
+  void buildActions();
 
 private:
   OTStudy otStudy_;
+  QAction * newSymbolicPhysicalModel_;
+  QAction * newPythonPhysicalModel_;
+#ifdef OTGUI_HAVE_YACS
+  QAction * newYACSPhysicalModel_;
+#endif
+  QAction * newDataModel_;
+  QAction * exportOTStudy_;
+  QAction * saveOTStudy_;
+  QAction * saveAsOTStudy_;
+  QAction * closeOTStudy_;
 };
 }
 #endif

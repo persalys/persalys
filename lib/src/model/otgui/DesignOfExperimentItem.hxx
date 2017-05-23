@@ -22,30 +22,39 @@
 #define OTGUI_DESIGNOFEXPERIMENTITEM_HXX
 
 #include "otgui/DesignOfExperiment.hxx"
-
-#include <QStandardItem>
+#include "otgui/AnalysisItem.hxx"
 
 namespace OTGUI {
-class OTGUI_API DesignOfExperimentItem : public QObject, public QStandardItem, public Observer
+class OTGUI_API DesignOfExperimentItem : public OTguiItem, public Observer
 {
   Q_OBJECT
 
 public:
-  DesignOfExperimentItem(const DesignOfExperiment & designOfExperiment);
+  DesignOfExperimentItem(const DesignOfExperiment & designOfExperiment, const OT::String observerType);
 
   DesignOfExperiment getDesignOfExperiment() const;
 
-  void setData(const QVariant & value, int role);
-  void updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
+  void appendAnalysisItem(Analysis& analysis);
+
+  virtual void updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
   virtual void update(Observable * source, const OT::String & message);
 
+public slots:
+  void removeDesignOfExperiment();
+  void createNewMetaModel();
 signals:
+  void newAnalysisItemCreated(AnalysisItem*);
   void designOfExperimentChanged(const DesignOfExperiment&);
   void analysisFinished();
   void analysisBadlyFinished(QString);
-  void designOfExperimentRemoved(QStandardItem*);
+  void evaluateDesignOfExperimentRequested(DesignOfExperimentItem*);
+  void designOfExperimentEvaluationRequested(AnalysisItem*);
+  void updateDiagram(const DesignOfExperiment&);
 
-private:
+protected:
+  bool designOfExperimentValid();
+
+protected:
   DesignOfExperiment designOfExperiment_;
 };
 }

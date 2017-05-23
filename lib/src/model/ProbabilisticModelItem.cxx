@@ -20,36 +20,121 @@
  */
 #include "otgui/ProbabilisticModelItem.hxx"
 
+#include "otgui/LimitState.hxx"
+#include "otgui/SobolAnalysis.hxx"
+#include "otgui/MonteCarloAnalysis.hxx"
+#include "otgui/OTStudyItem.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
 
 ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel & physicalModel)
-  : QObject()
-  , QStandardItem(tr("Probabilistic Model"))
-  , Observer("ProbabilisticModel")
-  , physicalModel_(physicalModel)
+  : PhysicalModelItem(physicalModel, "ProbabilisticModel")
 {
-  physicalModel_.addObserver(this);
-  setData("ProbabilisticModel", Qt::UserRole);
+  setData(tr("Probabilistic model"), Qt::DisplayRole);
+  QFont font;
+  font.setWeight(font.weight()+10);
+  setData(font, Qt::FontRole);
+  setEditable(false);
+
+  buildActions();
 }
 
 
-PhysicalModel ProbabilisticModelItem::getPhysicalModel() const
+void ProbabilisticModelItem::buildActions()
 {
-  return physicalModel_;
+  // new limit state action
+  newLimitState_ = new QAction(tr("New limit state"), this);
+  newLimitState_->setStatusTip(tr("Create a new limit state"));
+  connect(newLimitState_, SIGNAL(triggered()), this, SLOT(createNewLimitState()));
+
+  // new analysis action
+  newCentralTendency_ = new QAction(tr("New central tendency"), this);
+  newCentralTendency_->setStatusTip(tr("Create a new central tendency"));
+  connect(newCentralTendency_, SIGNAL(triggered()), this, SLOT(createNewCentralTendency()));
+
+  newSensitivityAnalysis_ = new QAction(tr("New sensitivity analysis"), this);
+  newSensitivityAnalysis_->setStatusTip(tr("Create a new sensitivity analysis"));
+  connect(newSensitivityAnalysis_, SIGNAL(triggered()), this, SLOT(createNewSensitivityAnalysis()));
+
+  // add actions
+  appendAction(newLimitState_);
+  appendAction(newCentralTendency_);
+  appendAction(newSensitivityAnalysis_);
 }
 
 
 void ProbabilisticModelItem::update(Observable* source, const String & message)
 {
-  if (message == "inputDistributionChanged" || message == "modelInputsChanged")
+  if (message == "inputNameChanged" ||
+      message == "inputNumberChanged" ||
+      message == "inputDistributionChanged"
+     )
   {
-    emit inputChanged();
+    emit stochasticInputListChanged();
+    emit inputListCorrelationChanged();
+  }
+  if (message == "inputValueChanged")
+  {
+    emit inputListDefinitionChanged();
   }
   else if (message == "probabilisticModelRemoved")
   {
-    emit probabilisticModelRemoved(this);
+    emit removeRequested(row());
   }
+}
+
+
+bool ProbabilisticModelItem::physicalModelValid()
+{
+  if (!physicalModel_.isValid())
+  {
+    emit emitErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
+    return false;
+  }
+  if (!physicalModel_.hasStochasticInputs())
+  {
+    emit emitErrorMessageRequested(tr("The physical model must have stochastic inputs."));
+    return false;
+  }
+  return true;
+}
+
+
+void ProbabilisticModelItem::createNewLimitState()
+{
+  if (!physicalModelValid())
+    return;
+
+  LimitState newLimitState(getParentOTStudyItem()->getOTStudy().getAvailableLimitStateName(), physicalModel_, physicalModel_.getSelectedOutputsNames()[0], OT::Less(), 0.);
+  getParentOTStudyItem()->getOTStudy().add(newLimitState);
+}
+
+
+void ProbabilisticModelItem::createNewCentralTendency()
+{
+  if (!physicalModelValid())
+    return;
+
+  MonteCarloAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("centralTendency_"), physicalModel_);
+  emit analysisRequested(this, analysis);
+}
+
+
+void ProbabilisticModelItem::createNewSensitivityAnalysis()
+{
+  if (!physicalModelValid())
+    return;
+
+  // check if the model has an independent copula
+  if (!physicalModel_.getComposedDistribution().hasIndependentCopula())
+  {
+    emit emitErrorMessageRequested(tr("The model must have an independent copula to compute a sensitivity analysis but inputs are correlated."));
+    return;
+  }
+
+  SobolAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("sensitivity_"), physicalModel_);
+  emit analysisRequested(this, analysis);
 }
 }

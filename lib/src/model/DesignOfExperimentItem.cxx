@@ -20,27 +20,19 @@
  */
 #include "otgui/DesignOfExperimentItem.hxx"
 
+#include "otgui/FunctionalChaosAnalysis.hxx"
+#include "otgui/OTStudyItem.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
 
-DesignOfExperimentItem::DesignOfExperimentItem(const DesignOfExperiment & designOfExperiment)
-  : QObject()
-  , QStandardItem(QString::fromUtf8(designOfExperiment.getName().c_str()))
-  , Observer(designOfExperiment.getImplementation()->getClassName())
+DesignOfExperimentItem::DesignOfExperimentItem(const DesignOfExperiment& designOfExperiment, const OT::String observerType)
+  : OTguiItem(QString::fromUtf8(designOfExperiment.getName().c_str()), "DesignOfExperiment")
+  , Observer(observerType)
   , designOfExperiment_(designOfExperiment)
 {
   designOfExperiment_.addObserver(this);
-  setData(designOfExperiment_.getImplementation()->getClassName().c_str(), Qt::UserRole);
-}
-
-
-void DesignOfExperimentItem::setData(const QVariant & value, int role)
-{
-  if (role == Qt::EditRole)
-    designOfExperiment_.getImplementation()->setName(value.toString().toLocal8Bit().data());
-
-  QStandardItem::setData(value, role);
 }
 
 
@@ -50,11 +42,32 @@ DesignOfExperiment DesignOfExperimentItem::getDesignOfExperiment() const
 }
 
 
+void DesignOfExperimentItem::appendAnalysisItem(Analysis& analysis)
+{
+  AnalysisItem * newItem = new AnalysisItem(analysis);
+  connect(newItem, SIGNAL(analysisStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
+  if (getParentOTStudyItem())
+    connect(newItem, SIGNAL(analysisStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
+  appendRow(newItem);
+
+  emit newAnalysisItemCreated(newItem);
+}
+
+
 void DesignOfExperimentItem::updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
 {
+  designOfExperiment_.getImplementation().get()->removeObserver(this);
+  // TODO ? remove observer evaluation
   designOfExperiment_ = designOfExperiment;
   designOfExperiment_.addObserver(this);
-  emit designOfExperimentChanged(designOfExperiment_);
+
+  // update the implementation of the design of experiment stored in OTStudy
+  if (designOfExperiment.getImplementation()->getClassName() == "DataModel")
+    getParentOTStudyItem()->getOTStudy().getDataModelByName(designOfExperiment.getName()).setImplementationAsPersistentObject(designOfExperiment.getImplementation());
+  else
+    getParentOTStudyItem()->getOTStudy().getDesignOfExperimentByName(designOfExperiment.getName()).setImplementationAsPersistentObject(designOfExperiment.getImplementation());
+
+  emit updateDiagram(designOfExperiment_);
 }
 
 
@@ -70,7 +83,45 @@ void DesignOfExperimentItem::update(Observable* source, const String & message)
   }
   else if (message == "designOfExperimentRemoved")
   {
-    emit designOfExperimentRemoved(this);
+    emit removeRequested(row());
+  }
+}
+
+
+bool DesignOfExperimentItem::designOfExperimentValid()
+{
+  if (!designOfExperiment_.getSample().getSize())
+  {
+    emit emitErrorMessageRequested(tr("The sample is empty."));
+    return false;
+  }
+  return true;
+}
+
+
+void DesignOfExperimentItem::createNewMetaModel()
+{
+  if (!designOfExperiment_.getOutputSample().getSize())
+  {
+    emit emitErrorMessageRequested(tr("The model must have at least one output."));
+    return;
+  }
+
+  FunctionalChaosAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("metaModel_"), designOfExperiment_);
+  emit analysisRequested(this, analysis);
+}
+
+
+void DesignOfExperimentItem::removeDesignOfExperiment()
+{
+  if (getParentOTStudyItem())
+  {
+    if (analysisInProgress_)
+    {
+      emit emitErrorMessageRequested(tr("Can not remove a design of experiment when an analysis is running."));
+      return;
+    }
+    getParentOTStudyItem()->getOTStudy().remove(DesignOfExperiment(designOfExperiment_));
   }
 }
 }
