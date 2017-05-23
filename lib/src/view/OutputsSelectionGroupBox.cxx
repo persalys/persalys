@@ -28,10 +28,47 @@ using namespace OT;
 
 namespace OTGUI {
 
+OutputsSelectionGroupBox::OutputsSelectionGroupBox(QWidget* parent)
+  : QGroupBox(tr("Outputs to analyse"), parent)
+  , outputsListWidget_(0)
+  , outputsComboBox_(0)
+{
+  QVBoxLayout * outputLayout = new QVBoxLayout(this);
+
+  // custom combobox to choose output to analyse
+  outputsComboBox_ = new NoWheelEventComboBox;
+  outputLayout->addWidget(outputsComboBox_);
+}
+
+
 OutputsSelectionGroupBox::OutputsSelectionGroupBox(const Description& outputsNames, const Description& interestVariables, QWidget* parent)
   : QGroupBox(tr("Outputs to analyse"), parent)
 {
   QVBoxLayout * outputLayout = new QVBoxLayout(this);
+
+  // custom combobox to choose output to analyse
+  outputsComboBox_ = new NoWheelEventComboBox;
+  outputLayout->addWidget(outputsComboBox_);
+
+  updateComboBoxModel(outputsNames, interestVariables);
+}
+
+
+QStringList OutputsSelectionGroupBox::getSelectedOutputsNames() const
+{
+  if (outputsListWidget_)
+    return outputsListWidget_->getCheckedItemNames();
+  return QStringList();
+}
+
+
+void OutputsSelectionGroupBox::updateComboBoxModel(const Description& outputsNames, const Description& interestVariables)
+{
+  if (outputsListWidget_)
+  {
+    outputsComboBox_->clear();
+    outputsListWidget_ = 0;
+  }
 
   QStringList outputsList;
   for (UnsignedInteger i=0; i<outputsNames.getSize(); ++i)
@@ -44,19 +81,10 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(const Description& outputsNam
 
   if (!variablesStringList.size())
     variablesStringList = outputsList;
-
-  // custom combobox to choose output to analyse
-  NoWheelEventComboBox * outputsComboBox = new NoWheelEventComboBox;
   outputsListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select outputs") + " --", outputsList, variablesStringList, this);
+
   connect(outputsListWidget_, SIGNAL(checkedItemsChanged(QStringList)), this, SIGNAL(outputsSelectionChanged(QStringList)));
-  outputsComboBox->setModel(outputsListWidget_->model());
-  outputsComboBox->setView(outputsListWidget_);
-  outputLayout->addWidget(outputsComboBox);
-}
-
-
-QStringList OutputsSelectionGroupBox::getSelectedOutputsNames() const
-{
-  return outputsListWidget_->getCheckedItemNames();
+  outputsComboBox_->setModel(outputsListWidget_->model());
+  outputsComboBox_->setView(outputsListWidget_);
 }
 }
