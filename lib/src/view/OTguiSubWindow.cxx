@@ -26,12 +26,13 @@
 
 namespace OTGUI {
 
-OTguiSubWindow::OTguiSubWindow(QStandardItem * item)
+OTguiSubWindow::OTguiSubWindow(OTguiItem * item)
   : QMdiSubWindow()
   , errorMessageLabel_(0)
   , item_(item)
 {
   setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
+  connect(item, SIGNAL(removeWindowRequested()), this, SIGNAL(removeWindowRequested()));
 }
 
 

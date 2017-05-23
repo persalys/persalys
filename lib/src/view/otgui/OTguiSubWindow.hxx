@@ -21,7 +21,7 @@
 #ifndef OTGUI_OTGUISUBWINDOW_HXX
 #define OTGUI_OTGUISUBWINDOW_HXX
 
-#include "otgui/OTGuiprivate.hxx"
+#include "otgui/OTguiItem.hxx"
 
 #include <QStandardItem>
 #include <QMdiSubWindow>
@@ -34,7 +34,7 @@ class OTGUI_API OTguiSubWindow : public QMdiSubWindow
   Q_OBJECT
 
 public:
-  OTguiSubWindow(QStandardItem * item);
+  OTguiSubWindow(OTguiItem * item);
 
   virtual ~OTguiSubWindow();
 
@@ -47,6 +47,7 @@ public slots:
   void setTemporaryErrorMessage(QString message);
   void reInitErrorMessage(QTimeLine::State);
 signals:
+  void removeWindowRequested();
   void errorMessageChanged(QString);
   void graphWindowActivated(QWidget*);
   void graphWindowDeactivated();
