@@ -34,16 +34,8 @@ public:
 
   void buildInterface();
 
-public slots:
-signals:
-  void createNewDataModel();
-  void createNewSymbolicPhysicalModel();
-  void createNewPythonPhysicalModel();
-#ifdef OTGUI_HAVE_YACS
-  void createNewYACSPhysicalModel();
-#endif
-
 private:
+  OTStudyItem * otStudyItem_;
 };
 }
 #endif
