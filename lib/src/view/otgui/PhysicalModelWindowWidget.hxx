@@ -24,6 +24,8 @@
 #include "otgui/PhysicalModelItem.hxx"
 #include "otgui/CopyableTableView.hxx"
 #include "otgui/CheckableHeaderView.hxx"
+#include "otgui/InputTableModel.hxx"
+#include "otgui/OutputTableModel.hxx"
 #include "otgui/DifferentiationTableModel.hxx"
 
 #include <QPushButton>

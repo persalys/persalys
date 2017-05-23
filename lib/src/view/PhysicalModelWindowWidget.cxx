@@ -52,10 +52,10 @@ PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelItem * item)
   , removeOutputLineButton_(0)
   , evaluateOutputsButton_(0)
 {
+  connect(item, SIGNAL(inputListDefinitionChanged()), this, SLOT(updateInputTableModel()));
+  connect(item, SIGNAL(inputListDifferentiationChanged()), this, SLOT(updateDifferentiationTableModel()));
   connect(item, SIGNAL(outputChanged()), this, SLOT(updateOutputTableModel()));
-  connect(item, SIGNAL(inputChanged()), this, SLOT(updateInputTableModel()));
-  connect(item, SIGNAL(inputChanged()), this, SLOT(updateDifferentiationTableModel()));
-  connect(item, SIGNAL(modelInputsChanged()), this, SLOT(updateDifferentiationTableModel()));
+
   buildInterface();
 }
 
@@ -232,7 +232,11 @@ void PhysicalModelWindowWidget::updateInputTableModel()
   inputTableView_->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
 #endif
   resizeInputTable();
+
+  // connections
   connect(inputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
+  connect(inputTableModel_, SIGNAL(inputNumberChanged()), this, SLOT(updateDifferentiationTableModel()));
+  connect(inputTableModel_, SIGNAL(inputNameChanged()), this, SLOT(updateDifferentiationTableModel()));
 }
 
 
