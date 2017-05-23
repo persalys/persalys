@@ -13,6 +13,7 @@ ot_add_source_file ( OTguiMenuBar.cxx )
 ot_add_source_file ( OTguiStatusBar.cxx )
 ot_add_source_file ( OTguiSubWindow.cxx )
 ot_add_source_file ( OTguiWizard.cxx )
+ot_add_source_file ( PhysicalModelDiagramWindow.cxx )
 ot_add_source_file ( ImportDataPage.cxx )
 ot_add_source_file ( ImportDataModelPage.cxx )
 ot_add_source_file ( ImportDesignOfExperimentPage.cxx )
@@ -84,6 +85,7 @@ ot_install_header_file ( AnalysisWizard.hxx )
 ot_install_header_file ( OTguiMdiArea.hxx )
 ot_install_header_file ( WelcomeWindow.hxx )
 ot_install_header_file ( OTStudyWindow.hxx )
+ot_install_header_file ( PhysicalModelDiagramWindow.hxx )
 ot_install_header_file ( ResultWindow.hxx )
 ot_install_header_file ( BlockSizeGroupBox.hxx )
 ot_install_header_file ( MinMaxTableGroupBox.hxx )
@@ -151,6 +153,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/OTguiMdiArea.hxx
                                   otgui/WelcomeWindow.hxx
                                   otgui/OTStudyWindow.hxx
+                                  otgui/PhysicalModelDiagramWindow.hxx
                                   otgui/ResultWindow.hxx
                                   otgui/AnalysisExecutionFailedWindow.hxx
                                   otgui/BlockSizeGroupBox.hxx
