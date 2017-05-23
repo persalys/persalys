@@ -89,12 +89,6 @@ void OTguiMenuBar::buildActions()
   connect(importPythonAction_, SIGNAL(triggered()), this, SIGNAL(importPython()));
   fileMenu->addAction(importPythonAction_);
 
-  
-  action = new QAction(QIcon(":/images/document-export.png"), tr("Export Python"), this);
-  action->setStatusTip(tr("Export the current OTStudy in a Python Script"));
-  connect(action, SIGNAL(triggered()), this, SIGNAL(exportPython()));
-  fileMenu->addAction(action);
-
   addSeparator();
 
   action = new QAction(QIcon(":/images/window-close.png"), tr("Close"), this);

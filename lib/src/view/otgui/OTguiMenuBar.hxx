@@ -48,7 +48,6 @@ signals:
   void openOTStudy(QString);
   void saveOTStudy();
   void saveAsOTStudy();
-  void exportPython();
   void importPython();
   void closeOTStudy();
   void closeWindow();
