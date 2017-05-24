@@ -23,6 +23,7 @@
 
 #include "OTguiSubWindow.hxx"
 #include "otgui/DesignOfExperimentItem.hxx"
+#include "otgui/AnalysisItem.hxx"
 #include "otgui/ExportableTableView.hxx"
 #include "otgui/SampleTableModel.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
@@ -40,6 +41,7 @@ class OTGUI_API DesignOfExperimentWindow : public OTguiSubWindow
 
 public:
   DesignOfExperimentWindow(DesignOfExperimentItem * item);
+  DesignOfExperimentWindow(AnalysisItem * item);
 
   virtual ~DesignOfExperimentWindow();
 

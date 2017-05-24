@@ -22,6 +22,7 @@
 
 #include "otgui/MinMaxTableGroupBox.hxx"
 #include "otgui/ParametersTableView.hxx"
+#include "otgui/DesignOfExperimentAnalysis.hxx"
 
 #include <QVBoxLayout>
 #include <QScrollArea>
@@ -49,6 +50,34 @@ DesignOfExperimentWindow::DesignOfExperimentWindow(DesignOfExperimentItem * item
   , plotMatrix_X_X_ConfigurationWidget_(0)
   , plotMatrixConfigurationWidget_(0)
 {
+  buildInterface();
+  connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
+}
+
+
+DesignOfExperimentWindow::DesignOfExperimentWindow(AnalysisItem* item)
+  : OTguiSubWindow(item)
+  , designOfExperiment_()
+  , variablesGroupBox_(0)
+  , variablesListWidget_(0)
+  , tabWidget_(0)
+  , tablesTabWidget_(0)
+  , scatterPlotsTabWidget_(0)
+  , tableView_(0)
+  , tableModel_(0)
+  , failedPointsTableView_(0)
+  , failedPointsTableModel_(0)
+  , notEvaluatedTableView_(0)
+  , notEvaluatedTableModel_(0)
+  , scatterPlotsConfigurationWidget_(0)
+  , plotMatrix_X_X_ConfigurationWidget_(0)
+  , plotMatrixConfigurationWidget_(0)
+{
+  if (dynamic_cast<DesignOfExperimentAnalysis*>(item->getAnalysis().getImplementation().get()))
+    designOfExperiment_ = dynamic_cast<DesignOfExperimentAnalysis*>(item->getAnalysis().getImplementation().get())->getDesignOfExperiment();
+  else
+    throw InvalidArgumentException (HERE) << "The analysis must be a DesignOfExperimentAnalysis";
+
   buildInterface();
   connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
 }
@@ -244,7 +273,7 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   tabLayout->addWidget(aGroupBox);
 
   // min/max table
-  MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(*dynamic_cast<DataSample*>(&*designOfExperiment_.getImplementation()));
+  MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(*dynamic_cast<DataSample*>(designOfExperiment_.getImplementation().get()));
   tabLayout->addWidget(minMaxTableGroupBox);
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
 
