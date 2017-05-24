@@ -44,6 +44,7 @@ signals:
   void processFinished();
 };
 
+
 class Controller : public QObject
 {
   Q_OBJECT
@@ -64,7 +65,7 @@ public:
 
     // connections
     connect(this, SIGNAL(launchAnalysisRequested(Analysis)), worker, SLOT(process(Analysis)));
-    connect(worker, SIGNAL(processFinished()), this, SIGNAL(analysisFinished()));
+    connect(worker, SIGNAL(processFinished()), this, SIGNAL(processFinished()));
     connect(worker, SIGNAL(processFinished()), workerThread, SLOT(quit()));
     connect(worker, SIGNAL(processFinished()), worker, SLOT(deleteLater()));
     connect(worker, SIGNAL(processFinished()), this, SLOT(deleteLater()));
@@ -73,7 +74,7 @@ public:
     workerThread->start();
   }
 
-public slots:
+
   void launchAnalysis(Analysis analysis)
   {
     emit launchAnalysisRequested(analysis);
@@ -84,7 +85,7 @@ public slots:
 
 signals:
   void launchAnalysisRequested(Analysis analysis);
-  void analysisFinished();
+  void processFinished();
 };
 }
 #endif
