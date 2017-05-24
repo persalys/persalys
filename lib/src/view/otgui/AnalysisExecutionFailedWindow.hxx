@@ -24,18 +24,36 @@
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/AnalysisItem.hxx"
 
+#include <QPushButton>
+#include <QProgressBar>
+
 namespace OTGUI {
 class OTGUI_API AnalysisExecutionFailedWindow : public OTguiSubWindow
 {
   Q_OBJECT
 
 public:
-  AnalysisExecutionFailedWindow(AnalysisItem * item, const QString & errorMessage);
+  AnalysisExecutionFailedWindow(AnalysisItem* item, const QString& errorMessage);
 
 protected:
   void buildInterface();
+
+public slots:
+  void updateRunButtonAvailability(bool);
+protected slots:
+  void launchAnalysis();
+  void processFinished();
+  void requestStop();
+signals:
+  void actionsAvailabilityChanged(bool);
+
 private:
   QString analysisErrorMessage_;
+  AnalysisItem * analysisItem_;
+  QProgressBar * progressBar_;
+  QPushButton * runButton_;
+  QPushButton * stopButton_;
+  QLabel * messageLabel_;
 };
 }
 #endif
