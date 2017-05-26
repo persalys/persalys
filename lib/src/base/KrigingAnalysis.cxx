@@ -163,11 +163,15 @@ void KrigingAnalysis::run()
         MetaModelAnalysisResult result_i;
         result_i.outputSample_ = effectiveOutputSample.getMarginal(i);
         validateMetaModelResult(result_i, effectiveInputSample);
-        for (UnsignedInteger j=0; j<size; ++j)
+
+        if (!stopRequested_)
+        {
+          for (UnsignedInteger j=0; j<size; ++j)
           metaModelLOO[j][i] = result_i.metaModelOutputSampleLOO_[j][0];
 
-        q2LOO[i] = result_i.q2LOO_[0];
-        errorQ2LOO[i] = result_i.errorQ2LOO_[0];
+          q2LOO[i] = result_i.q2LOO_[0];
+          errorQ2LOO[i] = result_i.errorQ2LOO_[0];
+        }
       }
     }
 
