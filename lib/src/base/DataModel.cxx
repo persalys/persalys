@@ -31,7 +31,7 @@ CLASSNAMEINIT(DataModel);
 static Factory<DataModel> RegisteredFactory;
 
 /* Default constructor */
-DataModel::DataModel(const String & name)
+DataModel::DataModel(const String& name)
   : FromFileDesignOfExperiment()
 {
   setName(name);
@@ -40,30 +40,32 @@ DataModel::DataModel(const String & name)
 
 
 /* Constructor with parameters */
-DataModel::DataModel(const String & name,
-                     const String & fileName,
-                     const Indices & inputColumns,
-                     const Indices & outputColumns,
-                     const Description & inputNames,
-                     const Description & outputNames)
+DataModel::DataModel(const String& name,
+                     const String& fileName,
+                     const Indices& inputColumns,
+                     const Indices& outputColumns,
+                     const Description& inputNames,
+                     const Description& outputNames)
   : FromFileDesignOfExperiment()
 {
   setName(name);
   hasPhysicalModel_ = false;
+
   setFileName(fileName);
   setColumns(inputColumns, outputColumns, inputNames, outputNames);
 }
 
 
-DataModel::DataModel(const String & name,
-                     const NumericalSample & inSample,
-                     const NumericalSample & outSample)
+DataModel::DataModel(const String& name,
+                     const NumericalSample& inSample,
+                     const NumericalSample& outSample)
   : FromFileDesignOfExperiment()
   , inputNames_(inSample.getDescription())
   , outputNames_(outSample.getDescription())
 {
   setName(name);
   hasPhysicalModel_ = false;
+
   setInputSample(inSample);
   setOutputSample(outSample);
   inputColumns_ = Indices(inSample.getDimension());
@@ -85,9 +87,11 @@ DataModel* DataModel::clone() const
 
 void DataModel::setFileName(const String& fileName)
 {
+  const String oldName = fileName_;
   FromFileDesignOfExperiment::setFileName(fileName);
+
   // reinitialization
-  if (!inputColumns_.getSize())
+  if (oldName != fileName)
   {
     outputColumns_ = Indices();
     inputNames_ = Description();
@@ -96,7 +100,7 @@ void DataModel::setFileName(const String& fileName)
 }
 
 
-void DataModel::setInputColumns(const Indices & inputColumns)
+void DataModel::setInputColumns(const Indices& inputColumns)
 {
   setColumns(inputColumns, outputColumns_, inputNames_, outputNames_);
 }
@@ -108,15 +112,12 @@ Indices DataModel::getOutputColumns() const
 }
 
 
-void DataModel::setColumns(const Indices & inputColumns,
-                           const Indices & outputColumns,
-                           const Description & inputNames,
-                           const Description & outputNames)
+void DataModel::setColumns(const Indices& inputColumns,
+                           const Indices& outputColumns,
+                           const Description& inputNames,
+                           const Description& outputNames)
 {
   // check indices
-  if (!inputColumns.getSize())
-    throw InvalidArgumentException(HERE) << "Inputs columns list can not be empty. The model must have at least one input.";
-
   if (!inputColumns.check(getSampleFromFile().getDimension()-1))
     throw InvalidArgumentException(HERE) << "Values in the inputs columns list are not compatible with the sample dimension contained in the file.";
 
@@ -130,8 +131,7 @@ void DataModel::setColumns(const Indices & inputColumns,
     throw InvalidArgumentException(HERE) << "A value can not be in the two columns lists at the same time.";
 
   // check names
-  // input
-  Description inNames(inputNames);
+  // - check input
   if (inputNames.getSize())
   {
     if (inputColumns.getSize() != inputNames.getSize())
@@ -144,8 +144,7 @@ void DataModel::setColumns(const Indices & inputColumns,
       throw InvalidArgumentException(HERE) << "Two inputs can not have the same name.";
   }
 
-  // output
-  Description outNames(outputNames);
+  // - check output
   if (outputNames.getSize())
   {
     if (outputColumns.getSize() != outputNames.getSize())
@@ -161,12 +160,16 @@ void DataModel::setColumns(const Indices & inputColumns,
   // set attributs
   inputColumns_ = inputColumns;
   outputColumns_ = outputColumns;
-  inputNames_ = inNames;
-  outputNames_ = outNames;
+  inputNames_ = inputNames;
+  outputNames_ = outputNames;
 
   // set samples
-  NumericalSample inS(sampleFromFile_.getMarginal(inputColumns_));
-  inS.setDescription(getInputNames());
+  NumericalSample inS;
+  if (inputColumns_.getSize())
+  {
+    inS = sampleFromFile_.getMarginal(inputColumns_);
+    inS.setDescription(getInputNames());
+  }
   setInputSample(inS);
 
   NumericalSample outS;
@@ -176,6 +179,8 @@ void DataModel::setColumns(const Indices & inputColumns,
     outS.setDescription(getOutputNames());
   }
   setOutputSample(outS);
+
+  notify("variablesChanged");
 }
 
 
