@@ -39,7 +39,6 @@ public:
 
 public slots:
   void showGraphConfigurationTabWidget(QWidget*);
-  void showControllerWidget(QWidget*);
   void exitApplication();
 
 protected:
@@ -48,13 +47,12 @@ protected:
 
 private slots:
   void importPython();
-  virtual void closeEvent (QCloseEvent * event);
+  virtual void closeEvent(QCloseEvent * event);
 
 private:
   StudyTreeView * studyTree_;
   QDockWidget * configurationDock_;
   PyConsole_Console * pythonConsole_;
-  QDockWidget * dockControllerWidget_;
 };
 }
 #endif

@@ -23,9 +23,11 @@
 
 #include "otgui/StudyTreeViewModel.hxx"
 #include "otgui/OTguiSubWindow.hxx"
+#include "otgui/AnalysisWizard.hxx"
+#include "otgui/DataModelDefinitionItem.hxx"
+#include "otgui/DesignOfExperimentDefinitionItem.hxx"
 
 #include <QTreeView>
-#include <QAction>
 
 namespace OTGUI {
 class OTGUI_API StudyTreeView : public QTreeView
@@ -37,108 +39,60 @@ public:
 
   virtual ~StudyTreeView();
 
-  QList<QAction* > getActions(const QString & dataType);
-
-protected:
-  void buildActions();
-  bool isPhysicalModelValid(const QModelIndex & currentIndex);
-  bool hasPhysicalModelInputs(const QModelIndex & currentIndex);
-  bool isProbabilisticModelValid(const QModelIndex & currentIndex);
-  bool isLimitStateValid(const QModelIndex & currentIndex);
-  bool isDesignOfExperimentValid(const QModelIndex& currentIndex);
-  void launchAnalysis(AnalysisItem*);
-  void changeActionsAvailability(const bool availability);
-
 public slots:
+  void showErrorMessage(QString);
+  void onCustomContextMenu(const QPoint& point);
+  void selectedItemChanged(const QModelIndex& currentIndex, const QModelIndex& previousIndex);
+
+  // create objects
   void createNewOTStudy();
-  void createNewDataModel();
-  void modifyDataModel();
-  void createNewSymbolicPhysicalModel();
-  void createNewPythonPhysicalModel();
-#ifdef OTGUI_HAVE_YACS
-  void createNewYACSPhysicalModel();
-#endif
-  void removePhysicalModel();
-  void createNewProbabilisticModel();
-  void createNewDesignOfExperiment();
-  void createNewLimitState();
-  void removeLimitState();
-  void createNewModelEvaluation();
-  void createNewCentralTendency();
-  void createNewSensitivityAnalysis();
-  void createNewThresholdExceedance();
-  void createNewMetaModel();
-  void onCustomContextMenu(const QPoint & point);
-  void selectedItemChanged(const QModelIndex & currentIndex, const QModelIndex & previousIndex);
-  void runDesignOfExperiment();
-  void evaluateDesignOfExperiment();
-  void removeDesignOfExperiment();
-  void findAnalysisItemAndLaunchExecution(OTStudyItem * otStudyItem, const QString & analysisName);
-  void runAnalysis();
-  void resetTree();
-  void removeAnalysis();
-  void createNewOTStudyWindow(OTStudyItem * item);
-  void createNewDataModelWindow(DesignOfExperimentItem * item);
-  void createNewDataAnalysis();
-  void createNewInferenceAnalysis();
-  void createNewCopulaInferenceAnalysis();
-  void createNewPhysicalModelWindow(PhysicalModelItem * item);
-  void createNewProbabilisticModelWindow(ProbabilisticModelItem * item);
-  void createNewDesignOfExperimentWindow(DesignOfExperimentItem* item);
-  void createNewLimitStateWindow(LimitStateItem * item);
-  void createAnalysisConnection(AnalysisItem*);
-  void createAnalysisResultWindow(AnalysisItem * item);
-  void createAnalysisExecutionFailedWindow(AnalysisItem * item, const QString & errorMessage="");
-  void exportPython();
-  bool saveOTStudy();
-  bool saveAsOTStudy();
-  void openOTStudy();
-  void openOTStudy(const QString & fileName);
+  void createNewDesignOfExperiment(OTguiItem* item, const DesignOfExperiment& design);
+  void createNewDesignOfExperimentEvaluation(QList<QStandardItem*> items);
+  void createNewAnalysis(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard=false);
+
+  // create windows
+  void createNewOTStudyWindow(OTStudyItem* item);
+  void createNewDataModelDiagramWindow(DataModelDiagramItem*);
+  void createNewDataModelWindow(DataModelDefinitionItem* item, const bool createConnections=true);
+  void createNewPhysicalModelDiagramWindow(PhysicalModelDiagramItem* item);
+  void createNewPhysicalModelWindow(PhysicalModelDefinitionItem* item);
+  void createNewProbabilisticModelWindow(ProbabilisticModelItem* item);
+  void createNewDesignOfExperimentWindow(DesignOfExperimentDefinitionItem* item, const bool createConnections=true);
+  void createNewLimitStateWindow(LimitStateItem* item);
+  void createAnalysisWindow(AnalysisItem* item);
+  void createAnalysisResultWindow(AnalysisItem* item);
+  void createAnalysisExecutionFailedWindow(AnalysisItem* item, const QString& errorMessage="");
+
+  // modify objects
+  void modifyDataModel(DataModelDefinitionItem* item);
+  void modifyDesignOfExperiment(DesignOfExperimentDefinitionItem* item);
+  void modifyAnalysis(AnalysisItem* item);
+
+  // export/save/clos otstudy
+  void exportOTStudy();
+  void saveCurrentOTStudy();
+  void saveAsCurrentOTStudy();
+  void saveAsOTStudy();
+  void saveAsOTStudy(OTStudyItem* item, bool* notcancel=0);
+  void openOTStudy(const QString& fileName="");
+  void closeNotSavedOTStudyRequest(OTStudyItem* item, bool* canClose);
   bool closeOTStudy();
   bool closeAllOTStudies();
 signals:
   void showWindow(OTguiSubWindow*);
-  void itemSelected(QStandardItem *);
-  void removeSubWindow(QStandardItem *);
+  void itemSelected(QStandardItem*);
+  void removeSubWindow(QStandardItem*);
   void graphWindowActivated(QWidget*);
   void graphWindowDeactivated();
-  void analysisExecutionRequired(OTStudyItem * otStudyItem, const QString & analysisName);
-  void recentFilesListChanged(const QString & recentFileName);
-  void showControllerWidget(QWidget*);
-  void analysisFinished();
+  void recentFilesListChanged(const QString& recentFileName);
   void actionsAvailabilityChanged(bool availability);
+
+protected:
+  AnalysisWizard * getWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard=false);
 
 private:
   StudyTreeViewModel * treeViewModel_;
   AnalysisItem * runningAnalysisItem_;
-  QAction * closeOTStudy_;
-  QAction * newDataModel_;
-  QAction * modifyDataModel_;
-  QAction * removeDataModel_;
-  QAction * newDataAnalysis_;
-  QAction * newInferenceAnalysis_;
-  QAction * newCopulaInferenceAnalysis_;
-  QAction * newSymbolicPhysicalModel_;
-  QAction * newPythonPhysicalModel_;
-#ifdef OTGUI_HAVE_YACS
-  QAction * newYACSPhysicalModel_;
-#endif
-  QAction * removePhysicalModel_;
-  QAction * newProbabilisticModel_;
-  QAction * newDesignOfExperiment_;
-  QAction * newLimitState_;
-  QAction * removeLimitState_;
-  QAction * newModelEvaluation_;
-  QAction * newCentralTendency_;
-  QAction * newSensitivityAnalysis_;
-  QAction * newThresholdExceedance_;
-  QAction * newMetaModel_;
-  QAction * runDesignOfExperiment_;
-  QAction * removeDesignOfExperiment_;
-  QAction * runAnalysis_;
-  QAction * evaluateDesignOfExperiment_;
-  QAction * removeAnalysis_;
-  QAction * saveOTStudy_;
 };
 }
 #endif
