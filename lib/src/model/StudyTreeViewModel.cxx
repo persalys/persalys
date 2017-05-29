@@ -20,8 +20,6 @@
  */
 #include "otgui/StudyTreeViewModel.hxx"
 
-#include "otgui/OTStudy.hxx"
-
 using namespace OT;
 
 namespace OTGUI {
@@ -30,6 +28,22 @@ StudyTreeViewModel::StudyTreeViewModel(QObject *parent)
   : QStandardItemModel(parent)
   , Observer()
 {
+  setColumnCount(1);
+}
+
+
+QVariant StudyTreeViewModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+  if (section == 0 && orientation == Qt::Horizontal)
+  {
+    if (role == Qt::DisplayRole)
+      return tr("Studies");
+
+    else if (role == Qt::DecorationRole)
+      return QIcon(":/images/OT_icon16x16.png");
+  }
+
+  return QStandardItemModel::headerData(section, orientation, role);
 }
 
 
@@ -45,129 +59,27 @@ void StudyTreeViewModel::update(Observable * source, const String & message)
 void StudyTreeViewModel::addOTStudyItem(const OTStudy & otStudy)
 {
   OTStudyItem * otStudyItem = new OTStudyItem(otStudy);
-  connect(otStudyItem, SIGNAL(newDataModelItemCreated(DesignOfExperimentItem*)), this, SIGNAL(newDataModelCreated(DesignOfExperimentItem*)));
-  connect(otStudyItem, SIGNAL(newPhysicalModelItemCreated(PhysicalModelItem*)), this, SIGNAL(newPhysicalModelCreated(PhysicalModelItem*)));
-  connect(otStudyItem, SIGNAL(newProbabilisticModelItemCreated(ProbabilisticModelItem*)), this, SIGNAL(newProbabilisticModelCreated(ProbabilisticModelItem*)));
-  connect(otStudyItem, SIGNAL(newDesignOfExperimentItemCreated(DesignOfExperimentItem*)), this, SIGNAL(newDesignOfExperimentCreated(DesignOfExperimentItem*)));
-  connect(otStudyItem, SIGNAL(newLimitStateItemCreated(LimitStateItem*)), this, SIGNAL(newLimitStateCreated(LimitStateItem*)));
-  connect(otStudyItem, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SIGNAL(newAnalysisCreated(AnalysisItem*)));
-  connect(otStudyItem, SIGNAL(itemRemoved(QStandardItem*)), this, SIGNAL(itemRemoved(QStandardItem*)));
-  connect(otStudyItem, SIGNAL(otStudyRemoved(QStandardItem*)), this, SLOT(removeOTStudyItem(QStandardItem*)));
 
+  // append the item
   invisibleRootItem()->appendRow(otStudyItem);
+
+  // signal for StudyTreeView to create the window
+  emit newOTStudyCreated(otStudyItem);
+
+  // add sub items
   for (UnsignedInteger i=0; i<otStudy.getDataModels().getSize(); ++i)
     otStudyItem->addDataModelItem(otStudy.getDataModels()[i]);
+
   for (UnsignedInteger i=0; i<otStudy.getPhysicalModels().getSize(); ++i)
     otStudyItem->addPhysicalModelItem(otStudy.getPhysicalModels()[i]);
+
   for (UnsignedInteger i=0; i<otStudy.getLimitStates().getSize(); ++i)
     otStudyItem->addLimitStateItem(otStudy.getLimitStates()[i]);
+
   for (UnsignedInteger i=0; i<otStudy.getDesignOfExperiments().getSize(); ++i)
     otStudyItem->addDesignOfExperimentItem(otStudy.getDesignOfExperiments()[i]);
+
   for (UnsignedInteger i=0; i<otStudy.getAnalyses().getSize(); ++i)
     otStudyItem->addAnalysisItem(otStudy.getAnalyses()[i]);
-
-  emit newOTStudyCreated(otStudyItem);
-}
-
-
-void StudyTreeViewModel::addProbabilisticModelItem(const QModelIndex & parentIndex)
-{
-  if (!parentIndex.isValid())
-    return;
-  PhysicalModelItem * parentItem = static_cast<PhysicalModelItem*>(itemFromIndex(parentIndex)->parent());
-  OTStudyItem * studyItem = static_cast<OTStudyItem*>(parentItem->QStandardItem::parent());
-  ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(parentItem->getPhysicalModel());
-  parentItem->getPhysicalModel().addObserver(newProbabilisticModelItem);
-  connect(newProbabilisticModelItem, SIGNAL(probabilisticModelRemoved(QStandardItem*)), studyItem, SLOT(removeItem(QStandardItem*)));
-  itemFromIndex(parentIndex)->appendRow(newProbabilisticModelItem);
-  emit newProbabilisticModelCreated(newProbabilisticModelItem);
-}
-
-
-void StudyTreeViewModel::addLimitStateItem(const QModelIndex & parentIndex)
-{
-  if (!parentIndex.isValid())
-    return;
-  PhysicalModelItem * parentItem = static_cast<PhysicalModelItem*>(itemFromIndex(parentIndex)->parent());
-  PhysicalModel physicalModel = parentItem->getPhysicalModel();
-  OTStudyItem * studyItem = getOTStudyItem(parentIndex);
-  LimitState newLimitState(studyItem->getOTStudy().getAvailableLimitStateName(), physicalModel, physicalModel.getOutputs()[0].getName(), OT::Less(), 0.);
-  studyItem->getOTStudy().add(newLimitState);
-}
-
-
-OTStudyItem* StudyTreeViewModel::getOTStudyItem(const QModelIndex & childIndex)
-{
-  if (!childIndex.isValid())
-    return 0;
-  QModelIndex seekRoot = childIndex;
-  while(seekRoot.parent() != QModelIndex())
-    seekRoot = seekRoot.parent();
-
-  return static_cast<OTStudyItem*>(itemFromIndex(seekRoot));
-}
-
-
-PhysicalModelItem* StudyTreeViewModel::getPhysicalModelItem(const QModelIndex & childIndex)
-{
-  if (!childIndex.isValid())
-    return 0;
-  QModelIndex seekRoot = childIndex;
-  while(seekRoot.parent() != QModelIndex())
-  {
-    seekRoot = seekRoot.parent();
-    if (itemFromIndex(seekRoot)->data(Qt::UserRole).toString() == "PhysicalModel")
-      return static_cast<PhysicalModelItem*>(itemFromIndex(seekRoot));
-  }
-  return 0;
-}
-
-
-DesignOfExperimentItem* StudyTreeViewModel::getDesignOfExperimentItem(const QModelIndex& childIndex)
-{
-  if (!childIndex.isValid())
-    return 0;
-  QModelIndex seekRoot = childIndex;
-  while(seekRoot.parent() != QModelIndex())
-  {
-    seekRoot = seekRoot.parent();
-    if (itemFromIndex(seekRoot)->data(Qt::UserRole).toString().contains("DesignOfExperiment") ||
-        itemFromIndex(seekRoot)->data(Qt::UserRole).toString() == "DataModel")
-      return static_cast<DesignOfExperimentItem*>(itemFromIndex(seekRoot));
-  }
-  return 0;
-}
-
-
-LimitStateItem* StudyTreeViewModel::getLimitStateItem(const QModelIndex & childIndex)
-{
-  if (!childIndex.isValid())
-    return 0;
-  if (itemFromIndex(childIndex)->data(Qt::UserRole).toString() == "LimitState")
-    return static_cast<LimitStateItem*>(itemFromIndex(childIndex));
-  QModelIndex seekRoot = childIndex;
-  while(seekRoot.parent() != QModelIndex())
-  {
-    seekRoot = seekRoot.parent();
-    if (itemFromIndex(seekRoot)->data(Qt::UserRole).toString() == "LimitState")
-      return static_cast<LimitStateItem*>(itemFromIndex(seekRoot));
-  }
-  return 0;
-}
-
-
-AnalysisItem* StudyTreeViewModel::getAnalysisItem(OTStudyItem * otStudyItem, const QString & analysisName)
-{
-  QModelIndexList listIndexes = match(otStudyItem->index(), Qt::DisplayRole, analysisName, 2, Qt::MatchRecursive);
-  if (listIndexes.size() == 1)
-    return dynamic_cast<AnalysisItem*>(itemFromIndex(listIndexes[0]));
-  return 0;
-}
-
-
-void StudyTreeViewModel::removeOTStudyItem(QStandardItem * item)
-{
-  emit itemRemoved(item);
-  invisibleRootItem()->removeRow(item->row());
 }
 }
