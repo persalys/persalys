@@ -119,7 +119,7 @@ void KrigingAnalysis::run()
     if (designOfExperiment_.getInputSample().getSize() != designOfExperiment_.getOutputSample().getSize())
       throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
     if (!getInterestVariables().getSize())
-      throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
+      throw InvalidDimensionException(HERE) << "You have not defined output variable to be analysed. Set the list of interest variables.";
 
     // get effective samples
     const NumericalSample effectiveInputSample(getEffectiveInputSample());

@@ -132,7 +132,7 @@ void FunctionalChaosAnalysis::run()
     if (designOfExperiment_.getInputSample().getSize() != designOfExperiment_.getOutputSample().getSize())
       throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
     if (!getInterestVariables().getSize())
-      throw InvalidDimensionException(HERE) << "The number of outputs to analyze must be superior to 0";
+      throw InvalidDimensionException(HERE) << "You have not defined output variable to be analysed. Set the list of interest variables.";
 
     // get effective samples
     NumericalSample effectiveInputSample(getEffectiveInputSample());
