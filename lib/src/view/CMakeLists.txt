@@ -80,6 +80,7 @@ ot_add_source_file ( InferenceResultWidget.cxx )
 ot_add_source_file ( CopulaParametersTabWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWindow.cxx )
+ot_add_source_file ( DesignOfExperimentSelectionWizard.cxx )
 
 ot_install_header_file ( MainWindow.hxx )
 ot_install_header_file ( OTguiToolBar.hxx )
@@ -153,6 +154,7 @@ ot_install_header_file ( ControllerWidget.hxx )
 ot_install_header_file ( CopulaInferenceResultWidget.hxx )
 ot_install_header_file ( CopulaInferenceResultWindow.hxx )
 ot_install_header_file ( CopulaParametersTabWidget.hxx )
+ot_install_header_file ( DesignOfExperimentSelectionWizard.hxx )
 
 qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/OTguiToolBar.hxx
@@ -226,6 +228,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/CopulaInferenceResultWidget.hxx
                                   otgui/CopulaInferenceResultWindow.hxx
                                   otgui/CopulaParametersTabWidget.hxx
+                                  otgui/DesignOfExperimentSelectionWizard.hxx
                                   )
 
 
