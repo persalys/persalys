@@ -20,5 +20,23 @@
         <file>images/window-close.png</file>
         <file>images/task-attention.png</file>
         <file>images/run-build.png</file>
+        <file>images/system-run.png</file>
+        <file>images/process-stop.png</file>
+        <file>images/view-refresh.png</file>
+        <file>images/user-busy.png</file>
+        <file>images/document-open-recent.png</file>
+        <file>images/document-export-table.png</file>
+        <file>images/branch-closed.png</file>
+        <file>images/branch-opened.png</file>
+        <file>images/branch-end.png</file>
+        <file>images/branch-more.png</file>
+        <file>images/physicalModel.png</file>
+        <file>images/dataModel.png</file>
+        <file>images/metaModel.png</file>
+        <file>images/modelEvaluation.png</file>
+        <file>images/designOfExperiment.png</file>
+        <file>images/centralTendency.png</file>
+        <file>images/sensitivity.png</file>
+        <file>images/limitstate.png</file>
     </qresource>
 </RCC>
