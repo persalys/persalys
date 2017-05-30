@@ -58,7 +58,7 @@ void OTguiMenuBar::buildActions()
     recentFileActions_[i]->setVisible(false);
     connect(recentFileActions_[i], SIGNAL(triggered()), this, SLOT(openRecentFile()));
   }
-  recentFilesMenu_ = fileMenu->addMenu(tr("Open Recent"));
+  recentFilesMenu_ = fileMenu->addMenu(QIcon(":/images/document-open-recent.png"), tr("Open Recent"));
   for(int i=0; i<NbMaxRecentFiles; ++i)
     recentFilesMenu_->addAction(recentFileActions_[i]);
   updateRecentFilesActionsList();
