@@ -38,3 +38,8 @@ Compile OTGui::
 Run OTGui::
 
     gui_launch.sh
+
+Translation::
+
+    lupdate-qt4 -verbose lib/ -ts translations/otgui_fr.ts -no-obsolete
+    linguist-qt4 translations/otgui_fr.ts
