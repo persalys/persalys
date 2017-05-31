@@ -132,6 +132,7 @@ void PythonPhysicalModel::setCode(const String & code)
   PhysicalModelImplementation::setOutputs(newOutputs);
 
   code_ = code;
+  functionCache_ = NumericalMathFunction();
   notify("codeChanged");
 }
 
@@ -144,9 +145,12 @@ String PythonPhysicalModel::getCode() const
 
 NumericalMathFunction PythonPhysicalModel::generateFunction(const Description &) const
 {
-  NumericalMathFunction function(PythonEvaluation(getInputs().getSize(), getOutputs().getSize(), getCode()));
-  function.enableCache();
-  return function;
+  if (!functionCache_.getEvaluation()->isActualImplementation())
+  {
+    functionCache_ = NumericalMathFunction(PythonEvaluation(getInputs().getSize(), getOutputs().getSize(), getCode()));
+    functionCache_.enableCache();
+  }
+  return functionCache_;
 }
 
 

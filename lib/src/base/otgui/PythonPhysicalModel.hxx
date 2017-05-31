@@ -68,6 +68,7 @@ protected:
 
 private:
   OT::String code_;
+  mutable OT::NumericalMathFunction functionCache_;
 };
 
 }
