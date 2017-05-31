@@ -125,12 +125,18 @@ NumericalPoint PythonEvaluation::operator() (const NumericalPoint & inP) const
   }
   else
   {
-    ++ callsNumber_;
     InterpreterUnlocker iul;
     PyObject *module = PyImport_AddModule("__main__");// Borrowed reference.
     PyObject *dict = PyModule_GetDict(module);// Borrowed reference.
-    ScopedPyObjectPointer retValue(PyRun_String(code_.c_str(), Py_file_input, dict, dict));
-    handleException();
+
+    // define the script on the first run only to allow to save a state
+    if (callsNumber_ == 0)
+    {
+      ScopedPyObjectPointer retValue(PyRun_String(code_.c_str(), Py_file_input, dict, dict));
+      handleException();
+    }
+
+    ++ callsNumber_;
     PyObject *script = PyDict_GetItemString(dict, "_exec");
     if (script == NULL) throw InternalException(HERE) << "no _exec function";
 
