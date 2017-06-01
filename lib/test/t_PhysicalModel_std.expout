@@ -34,7 +34,7 @@ inputCollection.append(E)
 inputCollection.append(C)
 outputCollection = []
 outputCollection.append(Ep)
-code='def _exec(Q, E, C):\n    Ep = 1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))\n    return [Ep]\n'
+code='def _exec(Q, E, C):\n    Ep = 1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))\n    return [Ep]'
 pythonModel1 = otguibase.PythonPhysicalModel('pythonModel1', inputCollection, outputCollection, code)
 study1.add(pythonModel1)
 

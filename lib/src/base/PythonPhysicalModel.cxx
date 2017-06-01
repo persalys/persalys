@@ -176,15 +176,11 @@ String PythonPhysicalModel::getPythonScript() const
     result += "outputCollection.append("+getOutputs()[i].getName()+")\n";
   }
 
-  result += "code='";
-  std::stringstream ss(getCode());
-  String to;
+  // escape quotes, eols
+  String escaped_code = boost::regex_replace(getCode(), boost::regex("'"), "\\\\'");
+  escaped_code = boost::regex_replace(escaped_code, boost::regex("\n"), "\\\\n");
+  result += "code='" + escaped_code + "'\n";
 
-  while (std::getline(ss, to, '\n'))
-  {
-    result += to + "\\n";
-  }
-  result += "'\n";
   result += getName() + " = otguibase.PythonPhysicalModel('" + getName() + "', inputCollection, outputCollection, code)\n";
 
   result += PhysicalModelImplementation::getCopulaPythonScript();
