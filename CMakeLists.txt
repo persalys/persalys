@@ -30,6 +30,9 @@ endif ()
 find_package (Boost COMPONENTS regex REQUIRED)
 include_directories (${Boost_INCLUDE_DIRS})
 
+find_package (PythonInterp)
+find_package (PythonLibs REQUIRED)
+
 if (BUILD_GUI)
 
   if (USE_QT5)
@@ -58,8 +61,6 @@ if (BUILD_GUI)
   endif ()
 
   find_package (Qwt 6 REQUIRED)
-  find_package (PythonInterp)
-  find_package (PythonLibs REQUIRED)
 endif ()
 
 if (USE_SALOME)
@@ -94,8 +95,6 @@ if ( BUILD_PYTHON )
       set ( SWIG_FOUND TRUE )
     endif ()
   endif ()
-  find_package ( PythonInterp )
-  find_package ( PythonLibs )
   include (FindPythonModule)
 
   if (USE_SPHINX)
