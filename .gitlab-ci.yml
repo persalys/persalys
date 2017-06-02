@@ -33,7 +33,7 @@ mingw:
     - popd
     - popd
     - pushd distro/windows
-    - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install JOBS=4
+    - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install JOBS=8
   except:
     - master
     - tags
@@ -53,7 +53,7 @@ mingw-tag:
     - popd
     - popd
     - pushd distro/windows
-    - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install JOBS=4
+    - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install JOBS=8
   artifacts:
     paths:
     - distro/windows/otgui*.exe
