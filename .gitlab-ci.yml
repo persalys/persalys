@@ -6,8 +6,7 @@ linux:
     - cmake -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -DCMAKE_C_COMPILER=/usr/bin/clang
         -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so -DUSE_SPHINX=OFF
         -DUSE_COTIRE=ON -DCOTIRE_TESTS=OFF -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" .
-    - make python_unity -j8
-    - make install/fast
+    - if test -d /tmp/ot-linux-install; then cp -r /tmp/ot-linux-install ./install; else make python_unity -j8 && make install/fast && cp -r ./install /tmp/ot-linux-install; fi
     - popd
     - cmake -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_CXX_FLAGS="-Wall"
         -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so
@@ -30,11 +29,11 @@ mingw:
     - rm -r mingw-w64-x86_64
     - tar xzf /usr/share/mingw-w64-x86_64.tar.gz
     - popd
-    - make ot-install JOBS=4
+    - if test -d /tmp/ot-mingw-install; then mkdir -p ../../build-i686-w64-mingw32 && cp -r /tmp/ot-mingw-install ../../build-i686-w64-mingw32/install; else make ot-install JOBS=4 && cp -r ../../build-i686-w64-mingw32/install /tmp/ot-mingw-install; fi
     - popd
     - popd
     - pushd distro/windows
-    - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install JOBS=4
+    - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install JOBS=8
   except:
     - master
     - tags
@@ -54,7 +53,7 @@ mingw-tag:
     - popd
     - popd
     - pushd distro/windows
-    - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install JOBS=4
+    - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install JOBS=8
   artifacts:
     paths:
     - distro/windows/otgui*.exe
