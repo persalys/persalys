@@ -20,11 +20,17 @@
  */
 #include "otgui/DataModelWindow.hxx"
 
-#include "otgui/DataModelTableModel.hxx"
-#include "otgui/ExportableTableView.hxx"
+#include "otgui/ComboBoxDelegate.hxx"
 
-#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QHeaderView>
+#include <QPushButton>
+#include <QToolButton>
+#include <QGroupBox>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QSettings>
+#include <QMessageBox>
 
 using namespace OT;
 
@@ -32,41 +38,198 @@ namespace OTGUI {
 
 DataModelWindow::DataModelWindow(DesignOfExperimentItem * item)
   : OTguiSubWindow(item)
-  , designOfExperiment_(item->getDesignOfExperiment())
+  , dataModel_(0)
+  , filePathLineEdit_(0)
+  , defaultLineEditPalette_()
+  , dataTableView_(0)
+  , dataTableModel_(0)
 {
+  dataModel_ = dynamic_cast<DataModel*>(&*item->getDesignOfExperiment().getImplementation());
+  if (!dataModel_)
+    throw InvalidArgumentException(HERE) << "DataModelWindow: the design of experiment must be a DataModel";
+
   buildInterface();
+}
+
+
+DataModelWindow::~DataModelWindow()
+{
+  dataModel_ = 0;
 }
 
 
 void DataModelWindow::buildInterface()
 {
-  setWindowTitle(tr("Data model"));
+  setWindowTitle(tr("Data model definition"));
 
-  QTabWidget * tabWidget = new QTabWidget;
+  QWidget * mainWidget = new QWidget;
+  QGridLayout * mainGridLayout = new QGridLayout(mainWidget);
 
-  QWidget * tab = new QWidget;
-  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+  // first row
+  QHBoxLayout * hboxLayout = new QHBoxLayout;
+  QLabel * label = new QLabel(tr("Data file"));
+  hboxLayout->addWidget(label);
 
-  const UnsignedInteger nbInputs(designOfExperiment_.getInputSample().getDimension());
+  // file path line edit
+  filePathLineEdit_ = new QLineEdit;
+  defaultLineEditPalette_ = filePathLineEdit_->palette();
+  filePathLineEdit_->setReadOnly(true);
+  filePathLineEdit_->setText(dataModel_->getFileName().c_str());
+  hboxLayout->addWidget(filePathLineEdit_);
 
-  // warning: sample to display is not the sample from File! -> create a new DataModel
-  DataModel newDataModel("unnamed", designOfExperiment_.getInputSample(), designOfExperiment_.getOutputSample());
+  // open file button
+  QPushButton * openFileButton = new QPushButton(tr("Search file"));
+  connect(openFileButton, SIGNAL(clicked()), this, SLOT(openFileRequested()));
+  hboxLayout->addWidget(openFileButton);
 
-  // set table
-  ExportableTableView * tableView = new ExportableTableView;
-  tableView->horizontalHeader()->hide();
+  // reload button
+  QToolButton * reloadButton = new QToolButton;
+  reloadButton->setEnabled(false);
+  reloadButton->setIcon(QIcon(":/images/view-refresh.png"));
+  connect(reloadButton, SIGNAL(clicked()), this, SLOT(refreshTable()));
+  hboxLayout->addWidget(reloadButton);
 
-  DataModelTableModel * model = new DataModelTableModel(designOfExperiment_.getSample(), newDataModel, false, tableView);
-  tableView->setModel(model);
-  if (nbInputs > 1)
-    tableView->setSpan(1, 0, 1, nbInputs);
-  if (designOfExperiment_.getOutputSample().getDimension() > 1)
-    tableView->setSpan(1, nbInputs, 1, designOfExperiment_.getSample().getDimension());
+  mainGridLayout->addLayout(hboxLayout, 0, 0, 1, 3);
 
-  tabLayout->addWidget(tableView);
+  // error message
+  errorMessageLabel_ = new QLabel;
+  errorMessageLabel_->setWordWrap(true);
+  mainGridLayout->addWidget(errorMessageLabel_, 2, 0, 1, 1);
 
-  tabWidget->addTab(tab, tr("Table"));
+  // file preview
+  QGroupBox * groupBox = new QGroupBox(tr("Sample"));
+  QGridLayout * gridLayout = new QGridLayout(groupBox);
+  gridLayout->setSpacing(6);
+  gridLayout->setContentsMargins(11, 11, 11, 11);
 
-  setWidget(tabWidget);
+  dataTableView_ = new ExportableTableView(groupBox);
+  dataTableView_->horizontalHeader()->hide();
+  dataTableView_->setEditTriggers(QTableView::AllEditTriggers);
+  const QStringList comboBoxItems = QStringList() << tr("Input") << tr("Output") << tr("Disable");
+  dataTableView_->setItemDelegateForRow(1, new ComboBoxDelegate(comboBoxItems));
+  gridLayout->addWidget(dataTableView_, 0, 0, 1, 1);
+
+  mainGridLayout->addWidget(groupBox, 1, 0, 1, 1);
+
+  // if the model has a sample: fill the table
+  if (dataModel_->getSample().getSize())
+  {
+    reloadButton->setEnabled(true);
+
+    // table model
+    dataTableModel_ = new DataModelTableModel(dataModel_->getSample(), dataModel_, false, dataTableView_);
+    connect(dataTableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
+    connect(dataTableModel_, SIGNAL(temporaryErrorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
+
+    // table view
+    dataTableView_->setModel(dataTableModel_);
+
+    UnsignedInteger nbInputs = 0;
+    if (dataModel_->getInputSample().getSize())
+    {
+      nbInputs = dataModel_->getInputSample().getDimension();
+      dataTableView_->setSpan(1, 0, 1, nbInputs);
+    }
+    if (dataModel_->getOutputSample().getSize())
+      dataTableView_->setSpan(1, nbInputs, 1, dataModel_->getSample().getDimension());
+  }
+
+  setWidget(mainWidget);
+}
+
+
+void DataModelWindow::importSample(const QString& fileName)
+{
+  filePathLineEdit_->setText(fileName);
+  updateTable(fileName);
+}
+
+
+void DataModelWindow::updateTable(const QString& fileName)
+{
+  // re-initialization
+  errorMessageLabel_->setText("");
+  filePathLineEdit_->setPalette(defaultLineEditPalette_);
+
+  // try to retrieve data from the selected file
+  try
+  {
+    // update file name
+    dataModel_->setFileName(fileName.toLocal8Bit().data());
+  }
+  catch (std::exception& ex)
+  {
+    // set error message
+    QString message = tr("Impossible to update the table.") + "\n";
+    message = QString("<font color=red>%1%2</font>").arg(message).arg(ex.what());
+    errorMessageLabel_->setText(message);
+
+    // file path in red
+    QPalette palette = filePathLineEdit_->palette();
+    palette.setColor(QPalette::Text, Qt::red);
+    filePathLineEdit_->setPalette(palette);
+    return;
+  }
+
+  // get all the values of the file
+  NumericalSample sample(dataModel_->getSampleFromFile());
+
+  // set table model
+  if (dataTableModel_)
+    delete dataTableModel_;
+
+  dataTableModel_ = new DataModelTableModel(sample, dataModel_, true, dataTableView_);
+  connect(dataTableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
+  connect(dataTableModel_, SIGNAL(temporaryErrorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
+
+  // set table view
+  dataTableView_->setModel(dataTableModel_);
+
+  dataTableView_->clearSpans();
+
+  for (UnsignedInteger i=0; i<sample.getDimension(); ++i)
+    dataTableView_->openPersistentEditor(dataTableModel_->index(1, i));
+}
+
+
+void DataModelWindow::openFileRequested()
+{
+  QSettings settings;
+  QString currentDir = settings.value("currentDir").toString();
+  if (currentDir.isEmpty())
+    currentDir = QDir::homePath();
+  const QString fileName = QFileDialog::getOpenFileName(this, tr("Data to import..."),
+                           currentDir,
+                           tr("Data files (*.csv *.txt)"));
+
+  if (!fileName.isEmpty())
+  {
+    QFile file(fileName);
+    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+
+    // check
+    if (!file.open(QFile::ReadOnly))
+    {
+      QMessageBox::warning(this,
+                           tr("Warning"),
+                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
+    }
+    else
+    {
+      importSample(fileName);
+    }
+  }
+}
+
+
+void DataModelWindow::refreshTable()
+{
+  if (!dataModel_->getFileName().empty())
+  {
+    if (sender())
+      if (sender()->isWidgetType())
+        qobject_cast<QWidget*>(sender())->setEnabled(false);
+    updateTable(QString::fromUtf8(dataModel_->getFileName().c_str()));
+  }
 }
 }

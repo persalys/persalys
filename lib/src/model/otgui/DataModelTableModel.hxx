@@ -22,6 +22,7 @@
 #define OTGUI_DATAMODELTABLEMODEL_HXX
 
 #include "otgui/DataModel.hxx"
+#include "otgui/DesignOfExperiment.hxx"
 #include "otgui/SampleTableModel.hxx"
 
 namespace OTGUI {
@@ -30,7 +31,7 @@ class OTGUI_API DataModelTableModel : public SampleTableModel
   Q_OBJECT
 
 public:
-  DataModelTableModel(const OT::NumericalSample & data, DataModel & dataModel, const bool variablesNamesEditable=true, QObject* parent = 0);
+  DataModelTableModel(const OT::NumericalSample & data, DataModel* dataModel, const bool useColumns=false, QObject* parent = 0);
 
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
   Qt::ItemFlags flags(const QModelIndex & index) const;
@@ -38,17 +39,14 @@ public:
   QVariant data(const QModelIndex & index, int role) const;
   bool setData(const QModelIndex & index, const QVariant & value, int role);
 
-  DataModel getDataModel() const;
-
-public slots:
 signals:
   void errorMessageChanged(const QString & message);
+  void temporaryErrorMessageChanged(const QString & message);
 
 private:
-  bool variablesNamesEditable_;
   OT::Indices inputColumns_;
   OT::Indices outputColumns_;
-  DataModel dataModel_;
+  DataModel* dataModel_;
 };
 }
 #endif
