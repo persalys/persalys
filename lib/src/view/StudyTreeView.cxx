@@ -48,7 +48,6 @@
 #include "otgui/InferenceResultWindow.hxx"
 #include "otgui/CopulaInferenceResultWindow.hxx"
 
-#include "otgui/DataModelWizard.hxx"
 #include "otgui/InferenceWizard.hxx"
 #include "otgui/DesignOfExperimentWizard.hxx"
 #include "otgui/ModelEvaluationWizard.hxx"
@@ -65,6 +64,7 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QSettings>
+#include <QHeaderView>
 
 #include <iostream>
 
@@ -72,19 +72,59 @@ using namespace OT;
 
 namespace OTGUI {
 
+// define QStyledItemDelegate
+class TreeItemDelegate : public LineEditWithQValidatorDelegate
+{
+public:
+  TreeItemDelegate(QObject* parent)
+    : LineEditWithQValidatorDelegate(QString("[a-zA-Z_][a-zA-Z_0-9]*"), parent)
+  {
+  }
+
+
+  void paint(QPainter* painter,
+            const QStyleOptionViewItem& option,
+            const QModelIndex& index) const
+  {
+    painter->save();
+
+    QStyleOptionViewItem optionButton = option;
+    initStyleOption(&optionButton, index);
+
+    // use optionButton.widget() to keep information from style sheet
+    if (optionButton.widget)
+      optionButton.widget->style()->drawControl(QStyle::CE_ItemViewItem, &optionButton, painter, optionButton.widget);
+    else
+      QApplication::style()->drawControl(QStyle::CE_ItemViewItem, &optionButton, painter);
+
+    // draw a line at the bottom of the OTStudyItem
+    if (index.data(Qt::UserRole).toString().contains("OTStudy"))
+    {
+      QLineF aLine(optionButton.rect.bottomLeft(), optionButton.rect.bottomRight());
+      QPen pen("#0a5205");
+      pen.setWidth(1);
+      painter->setPen(pen);
+      painter->drawLine(aLine);
+    }
+
+    painter->restore();
+  }
+};
+
+
 StudyTreeView::StudyTreeView(QWidget * parent)
   : QTreeView(parent)
   , treeViewModel_(new StudyTreeViewModel(this))
-  , runningAnalysisItem_(0)
 {
   // set model
   OTStudy::SetInstanceObserver(treeViewModel_);
   setModel(treeViewModel_);
   connect(treeViewModel_, SIGNAL(newOTStudyCreated(OTStudyItem*)), this, SLOT(createNewOTStudyWindow(OTStudyItem*)));
 
-  // Forbid the user to define not valid item's name
-  LineEditWithQValidatorDelegate * delegate = new LineEditWithQValidatorDelegate("[a-zA-Z_][a-zA-Z_0-9]*", this);
-  setItemDelegateForColumn(0, delegate);
+  // forbid the user to define not valid item's name
+  // draw a line at the bottom of the OTStudyItem
+  TreeItemDelegate * itemDelegate = new TreeItemDelegate(this);
+  setItemDelegate(itemDelegate);
 
   // context menu
   setContextMenuPolicy(Qt::CustomContextMenu);
@@ -93,12 +133,65 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   // connections
   connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(setCurrentIndex(QModelIndex)));
   connect(this->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(selectedItemChanged(QModelIndex, QModelIndex)));
+
+  setExpandsOnDoubleClick(false);
+
+  // style sheet
+  const QString styleSheet = " QTreeView::item:selected { background-color: #a5d3a1;\
+                                                          color: doubledarkgray;\
+                               }\
+                               QTreeView::branch:selected { background-color: #a5d3a1;\
+                               }\
+                               QTreeView::branch:has-children:!has-siblings:closed,\
+                               QTreeView::branch:closed:has-children:has-siblings { border-image: none;\
+                                                                                    image: url(:/images/branch-closed.png);\
+                               }\
+                               QTreeView::branch:open:has-children:!has-siblings,\
+                               QTreeView::branch:open:has-children:has-siblings { border-image: none;\
+                                                                                  image: url(:/images/branch-opened.png);\
+                               }\
+                               QTreeView::branch:has-siblings:adjoins-item { border-image: url(:/images/branch-more.png) 0;\
+                               }\
+                               QTreeView::branch:!has-children:!has-siblings:adjoins-item { border-image: url(:/images/branch-end.png) 0;\
+                               }\
+                             ";
+
+  setStyleSheet(styleSheet);
+
+  // style sheet for header
+  const QString headerStyleSheet = " QHeaderView::section { border: 2px solid #0a5205;\
+                                                            border-radius: 1px;\
+                                                            background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\
+                                                                                              stop: 0 #0a5205, stop: 0.4 #4ea248,\
+                                                                                              stop: 0.5 #4ea248, stop: 1.0 #0a5205);\
+                                                            color: white;\
+                                                            font: bold;\
+                                                            padding: 5px 1px;\
+                                                            outline: none;\
+                                                          }\
+                                   ";
+  header()->setStyleSheet(headerStyleSheet);
 }
 
 
-StudyTreeView::~StudyTreeView()
+void StudyTreeView::mousePressEvent(QMouseEvent* event)
 {
-  runningAnalysisItem_ = 0;
+  // get the clicked item
+  const QModelIndex eventIndex = indexAt(event->pos());
+  QStandardItem * currentItem = treeViewModel_->itemFromIndex(eventIndex);
+
+  if (currentItem)
+  {
+    // if it is a title: no selection possible
+    if (currentItem->data(Qt::UserRole).toString().contains("Title"))
+    {
+      if (event->button() == Qt::LeftButton)
+        setExpanded(eventIndex, !isExpanded(eventIndex));
+      return;
+    }
+  }
+
+  QTreeView::mousePressEvent(event);
 }
 
 
@@ -257,9 +350,7 @@ void StudyTreeView::createNewDataModelWindow(DataModelDefinitionItem* item, cons
   if (createConnections)
   {
     connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
-//     connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
     connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis)), this, SLOT(createNewAnalysis(OTguiItem*, Analysis)));
-    connect(item, SIGNAL(modifyDataModelRequested(DataModelDefinitionItem*)), this, SLOT(modifyDataModel(DataModelDefinitionItem*)));
   }
 
   // window
@@ -522,24 +613,7 @@ void StudyTreeView::createAnalysisExecutionFailedWindow(AnalysisItem* item, cons
   connect(this, SIGNAL(actionsAvailabilityChanged(bool)), window, SLOT(updateRunButtonAvailability(bool)));
 
   emit showWindow(window);
-  setCurrentIndex(QModelIndex()); // call it otherwise the signal currentChanged is not emitted
   setCurrentIndex(item->index());
-}
-
-
-void StudyTreeView::modifyDataModel(DataModelDefinitionItem* item)
-{
-  if (!item)
-    return;
-
-  DataModelWizard wizard(item->getDesignOfExperiment());
-
-  if (wizard.exec())
-  {
-    emit removeSubWindow(item);
-    item->updateDesignOfExperiment(wizard.getDataModel());
-    createNewDataModelWindow(item, false);
-  }
 }
 
 

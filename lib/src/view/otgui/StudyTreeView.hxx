@@ -28,6 +28,7 @@
 #include "otgui/DesignOfExperimentDefinitionItem.hxx"
 
 #include <QTreeView>
+#include <QMouseEvent>
 
 namespace OTGUI {
 class OTGUI_API StudyTreeView : public QTreeView
@@ -37,7 +38,7 @@ class OTGUI_API StudyTreeView : public QTreeView
 public:
   StudyTreeView(QWidget * parent = 0);
 
-  virtual ~StudyTreeView();
+  virtual void mousePressEvent(QMouseEvent*);
 
 public slots:
   void showErrorMessage(QString);
@@ -64,7 +65,6 @@ public slots:
   void createAnalysisExecutionFailedWindow(AnalysisItem* item, const QString& errorMessage="");
 
   // modify objects
-  void modifyDataModel(DataModelDefinitionItem* item);
   void modifyDesignOfExperiment(DesignOfExperimentDefinitionItem* item);
   void modifyAnalysis(AnalysisItem* item);
 
@@ -92,7 +92,6 @@ protected:
 
 private:
   StudyTreeViewModel * treeViewModel_;
-  AnalysisItem * runningAnalysisItem_;
 };
 }
 #endif
