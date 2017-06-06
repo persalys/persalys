@@ -21,7 +21,6 @@
 #include "otgui/ComboBoxDelegate.hxx"
 
 #include <QComboBox>
-#include <QApplication>
 #include <QStandardItemModel>
 
 namespace OTGUI {
@@ -38,7 +37,7 @@ QWidget *ComboBoxDelegate::createEditor(QWidget * parent, const QStyleOptionView
 {
   if (cell_ != QPair<int, int>())
     if (index.row() != cell_.first || index.column() != cell_.second)
-        return QItemDelegate::createEditor(parent, option, index);
+      return QItemDelegate::createEditor(parent, option, index);
 
   QComboBox * editor = new QComboBox(parent);
   // for probabilisticModelWindow:
@@ -60,13 +59,11 @@ void ComboBoxDelegate::setEditorData(QWidget * editor, const QModelIndex & index
 {
   if (cell_ != QPair<int, int>())
     if (index.row() != cell_.first || index.column() != cell_.second)
-        return QItemDelegate::setEditorData(editor, index);
+      return QItemDelegate::setEditorData(editor, index);
 
   QComboBox * comboBox = static_cast<QComboBox*>(editor);
   comboBox->setCurrentIndex(comboBox->findText(index.model()->data(index, Qt::DisplayRole).toString()));
-  comboBox->setEnabled(true);
-  if (comboBox->currentIndex() == -1)
-    comboBox->setEnabled(false);
+  comboBox->setEnabled(comboBox->currentIndex() != -1);
 }
 
 
@@ -74,7 +71,7 @@ void ComboBoxDelegate::setModelData(QWidget * editor, QAbstractItemModel * model
 {
   if (cell_ != QPair<int, int>())
     if (index.row() != cell_.first || index.column() != cell_.second)
-        return QItemDelegate::setModelData(editor, model, index);
+      return QItemDelegate::setModelData(editor, model, index);
 
   QComboBox * comboBox = static_cast<QComboBox*>(editor);
   model->setData(index, comboBox->itemText(comboBox->currentIndex()), Qt::EditRole);
