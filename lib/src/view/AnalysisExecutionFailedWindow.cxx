@@ -99,7 +99,7 @@ void AnalysisExecutionFailedWindow::buildInterface()
   hLayout->addStretch();
 
   runButton_ = new QPushButton(tr("Run"));
-  runButton_->setIcon(QIcon(":/images/run-build.png"));
+  runButton_->setIcon(QIcon(":/images/system-run.png"));
   connect(runButton_, SIGNAL(clicked(bool)), this, SLOT(launchAnalysis()));
   hLayout->addWidget(runButton_);
 
