@@ -20,9 +20,11 @@
  */
 #include "otgui/OTStudyWindow.hxx"
 #include "otgui/DiagramPushButton.hxx"
-#include <QGridLayout>
+
+#include <QVBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QPainter>
 
 namespace OTGUI {
 
@@ -106,6 +108,20 @@ void OTStudyWindow::buildInterface()
   // set widget
   mainLayout->addLayout(layout);
   mainLayout->addStretch();
+
+  // OT image
+  QLabel * imageLabel = new QLabel;
+  QPixmap pixmap(":/images/OT_image256x256.png");
+  QImage image(pixmap.size(), QImage::Format_ARGB32_Premultiplied);
+  image.fill(Qt::transparent);
+  QPainter p(&image);
+  p.setOpacity(0.4);
+  p.drawPixmap(0, 0, pixmap);
+  p.end();
+  QPixmap imagePixmap = QPixmap::fromImage(image);
+  imageLabel->setPixmap(imagePixmap);
+
+  mainLayout->addWidget(imageLabel, 0, Qt::AlignCenter);
 
   setWidget(mainWidget);
 }
