@@ -37,7 +37,9 @@ WelcomeWindow::WelcomeWindow()
 void WelcomeWindow::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
-  mainLayout->addWidget(new QLabel(tr("To get started, select one action by pressing the corresponding button below.")), 0, Qt::AlignCenter);
+  QLabel * textLabel = new QLabel(tr("To get started, select one action by pressing the corresponding button below."));
+  textLabel->setStyleSheet("font: bold;");
+  mainLayout->addWidget(textLabel , 0, Qt::AlignCenter);
 
   QHBoxLayout * hlayout = new QHBoxLayout;
   hlayout->addStretch();
