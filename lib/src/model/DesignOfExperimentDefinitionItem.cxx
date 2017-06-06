@@ -36,17 +36,17 @@ DesignOfExperimentDefinitionItem::DesignOfExperimentDefinitionItem(const DesignO
 void DesignOfExperimentDefinitionItem::buildActions()
 {
   // run design of experiment action
-  modifyDesignOfExperiment_ = new QAction(tr("Modify"), this);
+  modifyDesignOfExperiment_ = new QAction(QIcon(":/images/run-build.png"), tr("Modify"), this);
   modifyDesignOfExperiment_->setStatusTip(tr("Modify the design of experiment"));
   connect(modifyDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(modifyDesignOfExperiment()));
 
-  evaluateDesignOfExperiment_ = new QAction(QIcon(":/images/run-build.png"), tr("Evaluate"), this);
+  evaluateDesignOfExperiment_ = new QAction(QIcon(":/images/system-run.png"), tr("Evaluate"), this);
   evaluateDesignOfExperiment_->setStatusTip(tr("Evaluate the design of experiment"));
   connect(evaluateDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(appendEvaluationItem()));
   if (designOfExperiment_.getOutputSample().getSize())
     evaluateDesignOfExperiment_->setEnabled(false);
 
-  newMetaModel_ = new QAction(tr("New metamodel"), this);
+  newMetaModel_ = new QAction(QIcon(":/images/metaModel.png"), tr("New metamodel"), this);
   newMetaModel_->setStatusTip(tr("Create a new metamodel"));
   connect(newMetaModel_, SIGNAL(triggered()), this, SLOT(createNewMetaModel()));
 

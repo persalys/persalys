@@ -45,16 +45,16 @@ ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel & physicalMod
 void ProbabilisticModelItem::buildActions()
 {
   // new limit state action
-  newLimitState_ = new QAction(tr("New limit state"), this);
+  newLimitState_ = new QAction(QIcon(":/images/limitstate.png"), tr("New limit state"), this);
   newLimitState_->setStatusTip(tr("Create a new limit state"));
   connect(newLimitState_, SIGNAL(triggered()), this, SLOT(createNewLimitState()));
 
   // new analysis action
-  newCentralTendency_ = new QAction(tr("New central tendency"), this);
+  newCentralTendency_ = new QAction(QIcon(":/images/centralTendency.png"), tr("New central tendency"), this);
   newCentralTendency_->setStatusTip(tr("Create a new central tendency"));
   connect(newCentralTendency_, SIGNAL(triggered()), this, SLOT(createNewCentralTendency()));
 
-  newSensitivityAnalysis_ = new QAction(tr("New sensitivity analysis"), this);
+  newSensitivityAnalysis_ = new QAction(QIcon(":/images/sensitivity.png"), tr("New sensitivity analysis"), this);
   newSensitivityAnalysis_->setStatusTip(tr("Create a new sensitivity analysis"));
   connect(newSensitivityAnalysis_, SIGNAL(triggered()), this, SLOT(createNewSensitivityAnalysis()));
 

@@ -287,7 +287,7 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
     if (!analysisTypeItem->getActions().size())
     {
       // context menu actions
-      QAction * newEvaluation = new QAction(tr("New model evaluation"), this);
+      QAction * newEvaluation = new QAction(QIcon(":/images/modelEvaluation.png"), tr("New model evaluation"), this);
       newEvaluation->setStatusTip(tr("Create a new model evaluation"));
       connect(newEvaluation, SIGNAL(triggered()), this, SIGNAL(evaluationModelRequested()));
       analysisTypeItem->appendAction(newEvaluation);
@@ -301,7 +301,7 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
     if (!analysisTypeItem->getActions().size())
     {
       // context menu actions
-      QAction * newCentralTendency = new QAction(tr("New central tendency"), this);
+      QAction * newCentralTendency = new QAction(QIcon(":/images/centralTendency.png"), tr("New central tendency"), this);
       newCentralTendency->setStatusTip(tr("Create a new central tendency"));
       connect(newCentralTendency, SIGNAL(triggered()), this, SIGNAL(centralTendencyRequested()));
       analysisTypeItem->appendAction(newCentralTendency);
@@ -315,7 +315,7 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
     if (!analysisTypeItem->getActions().size())
     {
       // context menu actions
-      QAction * newSensitivityAnalysis = new QAction(tr("New sensitivity analysis"), this);
+      QAction * newSensitivityAnalysis = new QAction(QIcon(":/images/sensitivity.png"), tr("New sensitivity analysis"), this);
       newSensitivityAnalysis->setStatusTip(tr("Create a new sensitivity analysis"));
       connect(newSensitivityAnalysis, SIGNAL(triggered()), this, SIGNAL(sensitivityRequested()));
       analysisTypeItem->appendAction(newSensitivityAnalysis);
@@ -347,7 +347,7 @@ void PhysicalModelDiagramItem::appendLimitStateItem(const LimitState& limitState
   if (!analysisTypeItem->getActions().size())
   {
     // context menu actions
-    QAction * newLimitState = new QAction(tr("New limit state"), this);
+    QAction * newLimitState = new QAction(QIcon(":/images/limitstate.png"), tr("New limit state"), this);
     newLimitState->setStatusTip(tr("Create a new limit state"));
     connect(newLimitState, SIGNAL(triggered()), this, SIGNAL(limitStateRequested()));
     analysisTypeItem->appendAction(newLimitState);
@@ -376,7 +376,7 @@ void PhysicalModelDiagramItem::appendDesignOfExperimentItem(const DesignOfExperi
   // context menu actions
   if (!typeItem->getActions().size())
   {
-    QAction * newDesignOfExperiment = new QAction(tr("New design of experiment"), this);
+    QAction * newDesignOfExperiment = new QAction(QIcon(":/images/designOfExperiment.png"), tr("New design of experiment"), this);
     newDesignOfExperiment->setStatusTip(tr("Create a new design of experiment"));
     connect(newDesignOfExperiment, SIGNAL(triggered()), this, SIGNAL(designOfExperimentRequested()));
     typeItem->appendAction(newDesignOfExperiment);
