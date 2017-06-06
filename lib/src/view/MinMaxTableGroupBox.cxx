@@ -32,16 +32,17 @@ namespace OTGUI {
 
 MinMaxTableGroupBox::MinMaxTableGroupBox(const DataSample& result, const bool onlyOutput, QWidget* parent)
   : QGroupBox(tr("Minimum and Maximum"), parent)
-  , onlyOutput_(onlyOutput)
 {
   QVBoxLayout * minMaxGroupBoxLayout = new QVBoxLayout(this);
   stackedWidget_ = new ResizableStackedWidget;
 
+  // table for outputs
   if (result.getOutputSample().getSize())
     for (UnsignedInteger outputIndex=0; outputIndex<result.getOutputSample().getDimension(); ++outputIndex)
       stackedWidget_->addWidget(getForOutputMinMaxTableView(result, outputIndex));
 
-  if (!onlyOutput_)
+    // table for inputs
+  if (!onlyOutput && result.getInputSample().getSize())
     for (UnsignedInteger inputIndex=0; inputIndex<result.getInputSample().getDimension(); ++inputIndex)
       stackedWidget_->addWidget(getForInputMinMaxTableView(result, inputIndex));
 
@@ -51,8 +52,10 @@ MinMaxTableGroupBox::MinMaxTableGroupBox(const DataSample& result, const bool on
 
 QWidget* MinMaxTableGroupBox::getForInputMinMaxTableView(const DataSample& result, const UnsignedInteger inputIndex)
 {
+  // table view
   ResizableTableViewWithoutScrollBar * minMaxTableView = new ResizableTableViewWithoutScrollBar;
   minMaxTableView->verticalHeader()->hide();
+  // table model
   CustomStandardItemModel * minMaxTable = new CustomStandardItemModel(1, 4, minMaxTableView);
   minMaxTableView->setModel(minMaxTable);
 
@@ -80,9 +83,11 @@ QWidget* MinMaxTableGroupBox::getForInputMinMaxTableView(const DataSample& resul
 
 QWidget* MinMaxTableGroupBox::getForOutputMinMaxTableView(const DataSample& result, const UnsignedInteger outputIndex)
 {
+  // table view
   ResizableTableViewWithoutScrollBar * minMaxTableView = new ResizableTableViewWithoutScrollBar;
   minMaxTableView->verticalHeader()->hide();
-  const UnsignedInteger nbInputs = result.getInputSample().getDimension();
+  // table model
+  const UnsignedInteger nbInputs = result.getInputSample().getSize() > 0 ? result.getInputSample().getDimension() : 0;
   CustomStandardItemModel * minMaxTable = new CustomStandardItemModel(nbInputs+1, 4, minMaxTableView);
   minMaxTableView->setModel(minMaxTable);
 
@@ -94,16 +99,6 @@ QWidget* MinMaxTableGroupBox::getForOutputMinMaxTableView(const DataSample& resu
 
   // vertical header
   minMaxTable->setNotEditableHeaderItem(0, 0, tr("Output"));
-  QString rowTitle = tr("Inputs at\nextremum");
-  if (nbInputs == 1)
-    rowTitle = tr("Input at\nextremum");
-  minMaxTable->setNotEditableHeaderItem(1, 0, rowTitle);
-  if (nbInputs > 1)
-    minMaxTableView->setSpan(1, 0, nbInputs, 1);
-
-  // inputs names
-  for (UnsignedInteger i=0; i<nbInputs; ++i)
-    minMaxTable->setNotEditableItem(i+1, 1, QString::fromUtf8(result.getInputSample().getDescription()[i].c_str()));
 
   // output name
   minMaxTable->setNotEditableItem(0, 1, QString::fromUtf8(result.getOutputSample().getDescription()[outputIndex].c_str()));
@@ -112,23 +107,38 @@ QWidget* MinMaxTableGroupBox::getForOutputMinMaxTableView(const DataSample& resu
   // max
   minMaxTable->setNotEditableItem(0, 3, result.getOutputSample().getMax()[outputIndex]);
 
-  // Xmin/XMax
-  if (result.getListXMin()[outputIndex].getSize() > 1)
+  if (nbInputs)
   {
-    minMaxTable->setHeaderData(2, Qt::Horizontal, QIcon(":/images/task-attention.png"), Qt::DecorationRole);
-    minMaxTable->setHeaderData(2, Qt::Horizontal, tr("Information: The output is minimum at another point."), Qt::ToolTipRole);
-  }
-  if (result.getListXMax()[outputIndex].getSize() > 1)
-  {
-    minMaxTable->setHeaderData(3, Qt::Horizontal, QIcon(":/images/task-attention.png"), Qt::DecorationRole);
-    minMaxTable->setHeaderData(3, Qt::Horizontal, tr("Information: The output is maximum at another point."), Qt::ToolTipRole);
-  }
-  for (UnsignedInteger i=0; i<result.getInputSample().getDimension(); ++i)
-  {
-    // XMin
-    minMaxTable->setNotEditableItem(i+1, 2, result.getListXMin()[outputIndex][0][i]);
-    // XMax
-    minMaxTable->setNotEditableItem(i+1, 3, result.getListXMax()[outputIndex][0][i]);
+    // vertical header
+    const QString rowTitle = nbInputs > 1 ? tr("Inputs at\nextremum") : tr("Input at\nextremum");
+    minMaxTable->setNotEditableHeaderItem(1, 0, rowTitle);
+
+    if (nbInputs > 1)
+      minMaxTableView->setSpan(1, 0, nbInputs, 1);
+
+    // inputs names
+    for (UnsignedInteger i=0; i<nbInputs; ++i)
+      minMaxTable->setNotEditableItem(i+1, 1, QString::fromUtf8(result.getInputSample().getDescription()[i].c_str()));
+
+    // information message and warning icon
+    if (result.getListXMin()[outputIndex].getSize() > 1)
+    {
+      minMaxTable->setHeaderData(2, Qt::Horizontal, QIcon(":/images/task-attention.png"), Qt::DecorationRole);
+      minMaxTable->setHeaderData(2, Qt::Horizontal, tr("Information: The output is minimum at another point."), Qt::ToolTipRole);
+    }
+    if (result.getListXMax()[outputIndex].getSize() > 1)
+    {
+      minMaxTable->setHeaderData(3, Qt::Horizontal, QIcon(":/images/task-attention.png"), Qt::DecorationRole);
+      minMaxTable->setHeaderData(3, Qt::Horizontal, tr("Information: The output is maximum at another point."), Qt::ToolTipRole);
+    }
+    // Xmin/XMax
+    for (UnsignedInteger i=0; i<result.getInputSample().getDimension(); ++i)
+    {
+      // XMin
+      minMaxTable->setNotEditableItem(i+1, 2, result.getListXMin()[outputIndex][0][i]);
+      // XMax
+      minMaxTable->setNotEditableItem(i+1, 3, result.getListXMax()[outputIndex][0][i]);
+    }
   }
 
   // resize table

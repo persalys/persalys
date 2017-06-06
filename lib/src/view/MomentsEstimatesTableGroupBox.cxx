@@ -43,16 +43,15 @@ MomentsEstimatesTableGroupBox::MomentsEstimatesTableGroupBox(const DataAnalysisR
 
   // we want to display output results before the input results
   // input indices
-  if (!result.getInputSample().getSize())
-    throw InvalidArgumentException(HERE) << "MomentsEstimatesTableGroupBox: no result";
-  Indices inInd(result.getInputSample().getDimension());
+  Indices inInd(result.getInputSample().getSize() > 0 ? result.getInputSample().getDimension() : 0);
   inInd.fill();
+
   // ouput indices
   Indices ind(inInd);
   if (result.getOutputSample().getSize())
   {
     ind = Indices(result.getOutputSample().getDimension());
-    ind.fill(result.getInputSample().getDimension());
+    ind.fill(result.getInputSample().getSize() > 0 ? result.getInputSample().getDimension() : 0);
     // indices with good order
     ind.add(inInd);
   }
@@ -69,9 +68,11 @@ QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const DataAn
   const int nbColumns = isConfidenceIntervalRequired_ ? 4 : 2;
   const int nbRows = isConfidenceIntervalRequired_ ? 9 : 8;
 
+  // table view
   ResizableTableViewWithoutScrollBar * momentsEstimationsTableView = new ResizableTableViewWithoutScrollBar;
   momentsEstimationsTableView->horizontalHeader()->hide();
   momentsEstimationsTableView->verticalHeader()->hide();
+  // table model
   CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(nbRows, nbColumns, momentsEstimationsTableView);
   momentsEstimationsTableView->setModel(momentsEstimationsTable);
 

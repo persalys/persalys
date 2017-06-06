@@ -123,7 +123,7 @@ void DataAnalysisWindow::buildInterface()
     QStringList valuesList;
     if (result_.getElapsedTime() > 0.)
       valuesList << QString::number(result_.getElapsedTime()) + " s";
-    valuesList << QString::number(result_.getInputSample().getSize());
+    valuesList << QString::number(result_.getSample().getSize());
 
     ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
     parametersGroupBoxLayout->addWidget(table);
@@ -252,35 +252,38 @@ void DataAnalysisWindow::buildInterface()
 
   // fourth tab: plot matrix X-X ----------------------
 
-  tab = new PlotMatrixWidget(result_.getInputSample(), result_.getInputSample());
-  plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
+  if (result_.getInputSample().getSize())
+  {
+    tab = new PlotMatrixWidget(result_.getInputSample(), result_.getInputSample());
+    plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
 
-  scatterPlotsTabWidget_->addTab(tab, tr("Plot matrix X-X"));
+    scatterPlotsTabWidget_->addTab(tab, tr("Plot matrix X-X"));
 
   // fourth tab: plot matrix Y-X ----------------------
 
-  if (result_.getOutputSample().getSize())
-  {
-    // if the sample is valid:
-    if (resultsSampleIsValid_)
+    if (result_.getOutputSample().getSize())
     {
-      tab = new PlotMatrixWidget(result_.getInputSample(), result_.getOutputSample());
-      plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
+      // if the sample is valid:
+      if (resultsSampleIsValid_)
+      {
+        tab = new PlotMatrixWidget(result_.getInputSample(), result_.getOutputSample());
+        plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
+      }
+      // if the results sample contains NAN
+      else
+      {
+        tab = new QWidget;
+        tabLayout = new QVBoxLayout(tab);
+        QLabel * summaryErrorMessage = new QLabel(tr("Computation failed. Some results are not available."));
+        summaryErrorMessage->setWordWrap(true);
+        tabLayout->addWidget(summaryErrorMessage);
+        tabLayout->addStretch();
+      }
+      scatterPlotsTabWidget_->addTab(tab, tr("Plot matrix Y-X"));
     }
-    // if the results sample contains NAN
-    else
-    {
-      tab = new QWidget;
-      tabLayout = new QVBoxLayout(tab);
-      QLabel * summaryErrorMessage = new QLabel(tr("Computation failed. Some results are not available."));
-      summaryErrorMessage->setWordWrap(true);
-      tabLayout->addWidget(summaryErrorMessage);
-      tabLayout->addStretch();
-    }
-    scatterPlotsTabWidget_->addTab(tab, tr("Plot matrix Y-X"));
+    connect(scatterPlotsTabWidget_, SIGNAL(currentChanged(int)), this, SLOT(scatterPlotsTabWidgetIndexChanged()));
+    tabWidget_->addTab(scatterPlotsTabWidget_, tr("Scatter plots"));
   }
-  connect(scatterPlotsTabWidget_, SIGNAL(currentChanged(int)), this, SLOT(scatterPlotsTabWidgetIndexChanged()));
-  tabWidget_->addTab(scatterPlotsTabWidget_, tr("Scatter plots"));
 
   // fifth tab: Table --------------------------------
   // table if MonteCarlo result

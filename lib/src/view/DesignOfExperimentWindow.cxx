@@ -73,10 +73,10 @@ DesignOfExperimentWindow::DesignOfExperimentWindow(AnalysisItem* item)
   , plotMatrix_X_X_ConfigurationWidget_(0)
   , plotMatrixConfigurationWidget_(0)
 {
-  if (dynamic_cast<DesignOfExperimentAnalysis*>(item->getAnalysis().getImplementation().get()))
-    designOfExperiment_ = dynamic_cast<DesignOfExperimentAnalysis*>(item->getAnalysis().getImplementation().get())->getDesignOfExperiment();
-  else
+  if (!dynamic_cast<DesignOfExperimentAnalysis*>(item->getAnalysis().getImplementation().get()))
     throw InvalidArgumentException (HERE) << "The analysis must be a DesignOfExperimentAnalysis";
+
+  designOfExperiment_ = dynamic_cast<DesignOfExperimentAnalysis*>(item->getAnalysis().getImplementation().get())->getDesignOfExperiment();
 
   buildInterface();
   connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
@@ -332,15 +332,19 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const Numeric
 {
   QVector<PlotWidget*> listScatterPlotWidgets;
 
-  const UnsignedInteger nbInputs = inS.getDimension();
-  const UnsignedInteger nbOutputs = outS.getSize()? outS.getDimension() : 0;
+  const UnsignedInteger nbInputs = inS.getSize() ? inS.getDimension() : 0;
+  const UnsignedInteger nbOutputs = outS.getSize() ? outS.getDimension() : 0;
   const QPen pen = QPen(Qt::blue, 4);
   const QPen notValidPen = QPen(Qt::red, 4);
 
-  const NumericalSample inSrank(inS.rank() / (inS.getSize()));
+  // in rank
+  NumericalSample inSrank;
+  if (nbInputs)
+    inSrank = inS.rank() / (inS.getSize());
   NumericalSample notValidInSrank;
   if (notValidInS.getSize())
     notValidInSrank = notValidInS.rank() / (notValidInS.getSize());
+  // out rank
   NumericalSample outSrank;
   if (nbOutputs)
     outSrank = outS.rank() / (outS.getSize());
