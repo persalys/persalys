@@ -18,7 +18,6 @@ ot_add_source_file ( DataModelDiagramWindow.cxx )
 ot_add_source_file ( ImportDataPage.cxx )
 ot_add_source_file ( ImportDataModelPage.cxx )
 ot_add_source_file ( ImportDesignOfExperimentPage.cxx )
-ot_add_source_file ( DataModelWizard.cxx )
 ot_add_source_file ( DataModelWindow.cxx )
 ot_add_source_file ( DataAnalysisWindow.cxx )
 ot_add_source_file ( DataAnalysisResultWindow.cxx )
@@ -99,7 +98,6 @@ ot_install_header_file ( MinMaxTableGroupBox.hxx )
 ot_install_header_file ( MomentsEstimatesTableGroupBox.hxx )
 ot_install_header_file ( OutputsSelectionGroupBox.hxx )
 ot_install_header_file ( ParametersWidget.hxx )
-ot_install_header_file ( DataModelWizard.hxx )
 ot_install_header_file ( DataModelWindow.hxx )
 ot_install_header_file ( DataAnalysisWindow.hxx )
 ot_install_header_file ( DataAnalysisResultWindow.hxx )
@@ -176,7 +174,6 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/ImportDataPage.hxx
                                   otgui/ImportDataModelPage.hxx
                                   otgui/ImportDesignOfExperimentPage.hxx
-                                  otgui/DataModelWizard.hxx
                                   otgui/DataModelWindow.hxx
                                   otgui/DataAnalysisWindow.hxx
                                   otgui/DataAnalysisResultWindow.hxx
