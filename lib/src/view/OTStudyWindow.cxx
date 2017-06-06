@@ -19,7 +19,7 @@
  *
  */
 #include "otgui/OTStudyWindow.hxx"
-
+#include "otgui/DiagramPushButton.hxx"
 #include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -53,19 +53,19 @@ void OTStudyWindow::buildInterface()
 
   // left side
 
-  QPushButton * button = new QPushButton(tr("Symbolic model"));
+  QPushButton * button = new DiagramPushButton(tr("Symbolic model"));
   button->setStatusTip(tr("Create a physical model with outputs defined by analytical formulae"));
   connect(button, SIGNAL(pressed()), otStudyItem_, SLOT(createNewSymbolicPhysicalModel()));
   layout->addWidget(button, 0, 0);
 
-  button = new QPushButton(tr("Python model"));
+  button = new DiagramPushButton(tr("Python model"));
   button->setStatusTip(tr("Create a physical model defined with a Python script"));
   connect(button, SIGNAL(pressed()), otStudyItem_, SLOT(createNewPythonPhysicalModel()));
   layout->addWidget(button, 1, 0);
 
   int row = 2;
 #ifdef OTGUI_HAVE_YACS
-  button = new QPushButton(tr("YACS model"));
+  button = new DiagramPushButton(tr("YACS model"));
   button->setStatusTip(tr("Create a physical model defined with an YACS file"));
   connect(button, SIGNAL(pressed()), otStudyItem_, SLOT(createNewYACSPhysicalModel()));
   layout->addWidget(button, row, 0);
@@ -89,7 +89,7 @@ void OTStudyWindow::buildInterface()
 
   // right side
 
-  button = new QPushButton(tr("Data model"));
+  button = new DiagramPushButton(tr("Data model"));
   button->setStatusTip(tr("Import a sample to create a model"));
   connect(button, SIGNAL(pressed()), otStudyItem_, SLOT(createNewDataModel()));
   layout->addWidget(button, 0, 2);
