@@ -165,5 +165,6 @@ void AnalysisExecutionFailedWindow::processFinished()
 {
   // emit signal to enable run analysis/close study/import script...
   emit actionsAvailabilityChanged(true);
+  analysisItem_->setData(QVariant(), Qt::DecorationRole);
 }
 }

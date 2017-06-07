@@ -214,6 +214,7 @@ void AnalysisItem::update(Observable* source, const String& message)
 {
   if (message == "analysisLaunched")
   {
+    setData(QIcon(":/images/green-arrow-right.png"), Qt::DecorationRole);
     emit analysisStatusChanged(true);
   }
   else if (message == "analysisFinished")
