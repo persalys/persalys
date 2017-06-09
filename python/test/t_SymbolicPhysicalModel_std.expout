@@ -50,7 +50,7 @@ outputs = [Y0]
 formulas = ['sin(X0)+8*X1+0.5']
 aModelPhys = otguibase.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
 correlationMatrix = ot.CorrelationMatrix(4)
-correlationMatrix[0, 1] = 0.239359
+correlationMatrix[0, 1] = 0.239358526049
 copula = ot.NormalCopula(ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(correlationMatrix))
 aModelPhys.setCopula(copula)
 

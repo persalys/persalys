@@ -136,6 +136,7 @@ String LimitStateImplementation::getPythonScript() const
   result += getName()+ " = otguibase.LimitState('" + getName() + "', " + getPhysicalModel().getName();
   result += ", '" + outputName_ + "', ot."+ operator_.getImplementation()->getClassName() + "(), ";
   OSS oss;
+  oss.setPrecision(12);
   oss << threshold_;
   result += oss.str() + ")\n";
   return result;

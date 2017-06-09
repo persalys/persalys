@@ -101,6 +101,7 @@ FORMResult FORMAnalysis::getResult() const
 String FORMAnalysis::getPythonScript() const
 {
   OSS oss;
+  oss.setPrecision(12);
   oss << getName() << " = otguibase.FORMAnalysis('" << getName() << "', " << getLimitState().getName() << ")\n";
   oss << getName() << ".setPhysicalStartingPoint(" << getPhysicalStartingPoint().__str__() << ")\n";
   // optimization algo

@@ -188,6 +188,7 @@ String Input::getDistributionPythonScript() const
 String Input::getPythonScript() const
 {
   OSS oss;
+  oss.setPrecision(12);
 
   if (!isStochastic())
     oss << getName() << " = otguibase.Input('" << getName() << "', " << getValue() << ", '" << getEscapedDescription() << "')\n";

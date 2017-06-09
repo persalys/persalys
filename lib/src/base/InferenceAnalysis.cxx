@@ -231,6 +231,7 @@ InferenceResult InferenceAnalysis::getResult() const
 String InferenceAnalysis::getPythonScript() const
 {
   OSS oss;
+  oss.setPrecision(12);
   oss << getName() << " = otguibase.InferenceAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
   oss << "interestVariables = [";
   for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)

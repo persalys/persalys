@@ -621,6 +621,8 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
       String inputName = getInputs()[i].getName();
 
       OSS oss;
+      oss.setPrecision(12);
+
       if (distributionName != "TruncatedDistribution")
       {
         oss << "dist_" << inputName << " = ot." << distributionName << "(";
@@ -676,6 +678,8 @@ String PhysicalModelImplementation::getCopulaPythonScript() const
   CorrelationMatrix correlationMatrix(getCopula().getCorrelation());
 
   OSS oss;
+  oss.setPrecision(12);
+
   oss << "correlationMatrix = ot.CorrelationMatrix(" << correlationMatrix.getNbRows() << ")\n";
 
   bool hasCorrelation = false;
