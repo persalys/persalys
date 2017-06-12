@@ -27,8 +27,9 @@ Create the model:
 >>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
 >>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
 >>> G = otguibase.Output('G', 'deviation')
->>> code = 'from math import pi\n\ndef _exec(R, F):\n    G = R-F/(pi*100.0)\n    return [G]\n'
->>> model = otguibase.PythonPhysicalModel('myPhysicalModel', [R, F], [G], code)"
+>>> code = 'from math import pi\n\ndef _exec(R, F):\n    G = R-F/(pi*100.0)\n    return G\n'
+>>> model = otguibase.PythonPhysicalModel('myPhysicalModel', [R, F], [G], code)
+>>> y = model.getFunction()([300.0,75000.0])"
 
 // ---------------------------------------------------------------------
 

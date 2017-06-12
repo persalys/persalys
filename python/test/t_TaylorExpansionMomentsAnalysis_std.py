@@ -46,7 +46,7 @@ print("\n")
 
 ## Taylor Expansion ##
 # test definition gradient with PythonPhysicalModel
-code = 'from math import sin\n\ndef _exec(X0, X1):\n    Y0 = sin(X0) + 8*X1\n    fake_Y0 = X0\n    return [Y0, fake_Y0]\n'
+code = 'from math import sin\n\ndef _exec(X0, X1):\n    Y0 = sin(X0) + 8*X1\n    fake_Y0 = X0\n    return Y0, fake_Y0\n'
 model2 = otguibase.PythonPhysicalModel('myPhysicalModel', [X0, X1], [Y0], code)
 myStudy.add(model2)
 

@@ -116,7 +116,7 @@ private:
 /* Operator () */
 NumericalPoint PythonEvaluation::operator() (const NumericalPoint & inP) const
 {
-  NumericalPoint outP(outputDimension_);
+  NumericalPoint outP;
 
   CacheKeyType inKey(inP.getCollection());
   if (p_cache_->isEnabled() && p_cache_->hasKey(inKey))
@@ -140,20 +140,18 @@ NumericalPoint PythonEvaluation::operator() (const NumericalPoint & inP) const
     PyObject *script = PyDict_GetItemString(dict, "_exec");
     if (script == NULL) throw InternalException(HERE) << "no _exec function";
 
-    ScopedPyObjectPointer inputTuple(PyTuple_New(inputDimension_));
-    for (UnsignedInteger i = 0; i < inputDimension_; ++ i)
-    {
-      PyObject *outputItem = PyFloat_FromDouble(inP[i]);// new reference
-      PyTuple_SetItem(inputTuple.get(), i, outputItem);
-    }
-
+    ScopedPyObjectPointer inputTuple(convert< NumericalPoint, _PySequence_ >(inP));
     ScopedPyObjectPointer outputList(PyObject_Call(script, inputTuple.get(), NULL));
     handleException();
 
-    for (UnsignedInteger i = 0; i < outputDimension_; ++ i)
+    if (outputDimension_ > 1)
     {
-      PyObject *inputItem = PyList_GetItem(outputList.get(), i);// borrowed reference
-      outP[i] = PyFloat_AsDouble(inputItem);
+      outP = convert<_PySequence_, NumericalPoint>(outputList.get());
+    }
+    else
+    {
+      NumericalScalar value = convert<_PyFloat_, NumericalScalar>(outputList.get());
+      outP = NumericalPoint(1, value);
     }
 
     if (p_cache_->isEnabled())
