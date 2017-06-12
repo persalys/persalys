@@ -1357,7 +1357,7 @@
         <UML:Attribute visibility="private" isSpecification="false" xmi.id="KLTjUuYvjRh5" type="wgEALeqdzHKR" name="efx_"/>
        </UML:Classifier.feature>
       </UML:Class>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="cSAs2YXco5j7" name="PythonEvaluation">
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="cSAs2YXco5j7" name="PythonScriptEvaluation">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="kQJP5v3I3KKG"/>
        </UML:GeneralizableElement.generalization>

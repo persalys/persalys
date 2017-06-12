@@ -20,7 +20,6 @@
  */
 #include "otgui/PythonEnvironment.hxx"
 #include <Python.h>
-#include "otgui/PythonEvaluation.hxx"
 
 namespace OTGUI {
 

@@ -19,7 +19,7 @@
  *
  */
 #include "otgui/PythonPhysicalModel.hxx"
-#include "otgui/PythonEvaluation.hxx"
+#include "otgui/PythonScriptEvaluation.hxx"
 
 #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
@@ -147,7 +147,7 @@ NumericalMathFunction PythonPhysicalModel::generateFunction(const Description &)
 {
   if (!functionCache_.getEvaluation()->isActualImplementation())
   {
-    functionCache_ = NumericalMathFunction(PythonEvaluation(getInputs().getSize(), getOutputs().getSize(), getCode()));
+    functionCache_ = NumericalMathFunction(PythonScriptEvaluation(getInputs().getSize(), getOutputs().getSize(), getCode()));
     functionCache_.enableCache();
   }
   return functionCache_;
