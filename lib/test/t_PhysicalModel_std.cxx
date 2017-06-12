@@ -52,7 +52,7 @@ int main(int argc, char **argv)
   study.add(analyticalModel);
   std::cout << analyticalModel.getFunction()(x) << std::endl;
 
-  String code = "def _exec(Q, E, C):\n    Ep = 1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))\n    return [Ep]";
+  String code = "def _exec(Q, E, C):\n    Ep = 1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))\n    return Ep";
   PythonPhysicalModel pythonModel("pythonModel1", inputCollection, outputCollection, code);
   study.add(pythonModel);
   std::cout << pythonModel.getFunction()(x) << std::endl;

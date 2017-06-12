@@ -13,7 +13,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      PhysicalModel.cxx PhysicalModelImplementation.cxx SymbolicPhysicalModel.cxx 
                      PythonPhysicalModel.cxx
                      MetaModel.cxx
-                     PythonEvaluation.cxx
+                     PythonScriptEvaluation.cxx
                      DesignOfExperimentImplementation.cxx DesignOfExperiment.cxx
                      FixedDesignOfExperiment.cxx
                      FromFileDesignOfExperiment.cxx
@@ -63,7 +63,7 @@ ot_install_header_file ( PhysicalModel.hxx )
 ot_install_header_file ( PhysicalModelImplementation.hxx )
 ot_install_header_file ( SymbolicPhysicalModel.hxx )
 ot_install_header_file ( PythonPhysicalModel.hxx )
-ot_install_header_file ( PythonEvaluation.hxx )
+ot_install_header_file ( PythonScriptEvaluation.hxx )
 ot_install_header_file ( MetaModel.hxx )
 ot_install_header_file ( DesignOfExperimentImplementation.hxx )
 ot_install_header_file ( DesignOfExperiment.hxx )

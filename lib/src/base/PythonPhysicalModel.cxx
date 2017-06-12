@@ -19,7 +19,7 @@
  *
  */
 #include "otgui/PythonPhysicalModel.hxx"
-#include "otgui/PythonEvaluation.hxx"
+#include "otgui/PythonScriptEvaluation.hxx"
 
 #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
@@ -38,7 +38,7 @@ static Factory<PythonPhysicalModel> Factory_PythonPhysicalModel;
 PythonPhysicalModel::PythonPhysicalModel(const String & name)
   : PhysicalModelImplementation(name)
 {
-  setCode("def _exec(X0):\n    Y0 = X0\n    return [Y0]");
+  setCode("def _exec(X0):\n    Y0 = X0\n    return Y0");
 }
 
 
@@ -86,7 +86,7 @@ void PythonPhysicalModel::setCode(const String & code)
       }
     }
 
-    boost::regex returnOutput("    return[ ]+\\[([_a-zA-Z0-9, ]+)\\]");
+    boost::regex returnOutput("    return[ ]+([_a-zA-Z0-9, ]+)");
     if (boost::regex_match(line, what, returnOutput))
     {
       String outputList = what[1];
@@ -147,7 +147,7 @@ NumericalMathFunction PythonPhysicalModel::generateFunction(const Description &)
 {
   if (!functionCache_.getEvaluation()->isActualImplementation())
   {
-    functionCache_ = NumericalMathFunction(PythonEvaluation(getInputs().getSize(), getOutputs().getSize(), getCode()));
+    functionCache_ = NumericalMathFunction(PythonScriptEvaluation(getInputs().getSize(), getOutputs().getSize(), getCode()));
     functionCache_.enableCache();
   }
   return functionCache_;

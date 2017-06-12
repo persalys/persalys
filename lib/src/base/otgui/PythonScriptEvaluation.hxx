@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief PythonEvaluation implements the evaluation of the models defined by a Python script
+ *  @brief PythonScriptEvaluation implements the evaluation of the models defined by a Python script
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,8 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_PYTHONEVALUATION_HXX
-#define OTGUI_PYTHONEVALUATION_HXX
+#ifndef OTGUI_PYTHONSCRIPTEVALUATION_HXX
+#define OTGUI_PYTHONSCRIPTEVALUATION_HXX
 
 #include "otgui/OTGuiprivate.hxx"
 
@@ -29,27 +29,27 @@
 namespace OTGUI {
 
 /**
- * @class PythonEvaluation
+ * @class PythonScriptEvaluation
  *
  * The class that implement the evaluation of an analytical function.
  */
-class OTGUI_API PythonEvaluation : public OT::NumericalMathEvaluationImplementation
+class OTGUI_API PythonScriptEvaluation : public OT::NumericalMathEvaluationImplementation
 {
   CLASSNAME;
 
 public:
   /** Default constructor */
-  PythonEvaluation();
+  PythonScriptEvaluation();
   /** Constructor with parameters */
-  PythonEvaluation(const OT::UnsignedInteger & inputDimension,
+  PythonScriptEvaluation(const OT::UnsignedInteger & inputDimension,
                    const OT::UnsignedInteger & ouputDimension,
                    const OT::String & code);
 
   /** Virtual constructor */
-  virtual PythonEvaluation * clone() const;
+  virtual PythonScriptEvaluation * clone() const;
 
   /** Comparison operator */
-  OT::Bool operator ==(const PythonEvaluation & other) const;
+  OT::Bool operator ==(const PythonScriptEvaluation & other) const;
 
   /** String converter */
   virtual OT::String __repr__() const;

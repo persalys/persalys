@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief PythonEvaluation implements the evaluation of the models defined by a Python script
+ *  @brief PythonScriptEvaluation implements the evaluation of the models defined by a Python script
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/PythonEvaluation.hxx"
+#include "otgui/PythonScriptEvaluation.hxx"
 
 #include "openturns/PersistentObjectFactory.hxx"
 #include "openturns/PythonWrappingFunctions.hxx"
@@ -27,12 +27,12 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(PythonEvaluation);
+CLASSNAMEINIT(PythonScriptEvaluation);
 
-static Factory<PythonEvaluation> RegisteredFactory;
+static Factory<PythonScriptEvaluation> RegisteredFactory;
 
 /* Default constructor */
-PythonEvaluation::PythonEvaluation()
+PythonScriptEvaluation::PythonScriptEvaluation()
   : NumericalMathEvaluationImplementation()
   , inputDimension_(0)
   , outputDimension_(0)
@@ -41,7 +41,7 @@ PythonEvaluation::PythonEvaluation()
 
 
 /* Constructor with parameters */
-PythonEvaluation::PythonEvaluation(const UnsignedInteger & inputDimension,
+PythonScriptEvaluation::PythonScriptEvaluation(const UnsignedInteger & inputDimension,
                                    const UnsignedInteger & outputDimension,
                                    const String & code)
   : NumericalMathEvaluationImplementation()
@@ -53,25 +53,25 @@ PythonEvaluation::PythonEvaluation(const UnsignedInteger & inputDimension,
 
 
 /* Virtual constructor */
-PythonEvaluation* PythonEvaluation::clone() const
+PythonScriptEvaluation* PythonScriptEvaluation::clone() const
 {
-  PythonEvaluation * result = new PythonEvaluation(*this);
+  PythonScriptEvaluation * result = new PythonScriptEvaluation(*this);
   return result;
 }
 
 
 /* Comparison operator */
-Bool PythonEvaluation::operator ==(const PythonEvaluation & other) const
+Bool PythonScriptEvaluation::operator ==(const PythonScriptEvaluation & other) const
 {
   return (code_ == other.code_);
 }
 
 
 /* String converter */
-String PythonEvaluation::__repr__() const
+String PythonScriptEvaluation::__repr__() const
 {
   OSS oss(true);
-  oss << "class=" << PythonEvaluation::GetClassName()
+  oss << "class=" << PythonScriptEvaluation::GetClassName()
       << " name=" << getName()
       << " code=" << code_;
   return oss;
@@ -79,7 +79,7 @@ String PythonEvaluation::__repr__() const
 
 
 /* String converter */
-String PythonEvaluation::__str__(const String & offset) const
+String PythonScriptEvaluation::__str__(const String & offset) const
 {
   OSS oss(false);
   oss << offset << getInputDescription() << " code=" << code_;
@@ -87,19 +87,19 @@ String PythonEvaluation::__str__(const String & offset) const
 }
 
 
-void PythonEvaluation::initialize()
+void PythonScriptEvaluation::initialize()
 {
 //   Py_CompileStringFlags
 }
 
 
-UnsignedInteger PythonEvaluation::getInputDimension() const
+UnsignedInteger PythonScriptEvaluation::getInputDimension() const
 {
   return inputDimension_;
 }
 
 
-UnsignedInteger PythonEvaluation::getOutputDimension() const
+UnsignedInteger PythonScriptEvaluation::getOutputDimension() const
 {
   return outputDimension_;
 }
@@ -114,9 +114,9 @@ private:
 };
 
 /* Operator () */
-NumericalPoint PythonEvaluation::operator() (const NumericalPoint & inP) const
+NumericalPoint PythonScriptEvaluation::operator() (const NumericalPoint & inP) const
 {
-  NumericalPoint outP(outputDimension_);
+  NumericalPoint outP;
 
   CacheKeyType inKey(inP.getCollection());
   if (p_cache_->isEnabled() && p_cache_->hasKey(inKey))
@@ -140,20 +140,18 @@ NumericalPoint PythonEvaluation::operator() (const NumericalPoint & inP) const
     PyObject *script = PyDict_GetItemString(dict, "_exec");
     if (script == NULL) throw InternalException(HERE) << "no _exec function";
 
-    ScopedPyObjectPointer inputTuple(PyTuple_New(inputDimension_));
-    for (UnsignedInteger i = 0; i < inputDimension_; ++ i)
-    {
-      PyObject *outputItem = PyFloat_FromDouble(inP[i]);// new reference
-      PyTuple_SetItem(inputTuple.get(), i, outputItem);
-    }
-
+    ScopedPyObjectPointer inputTuple(convert< NumericalPoint, _PySequence_ >(inP));
     ScopedPyObjectPointer outputList(PyObject_Call(script, inputTuple.get(), NULL));
     handleException();
 
-    for (UnsignedInteger i = 0; i < outputDimension_; ++ i)
+    if (outputDimension_ > 1)
     {
-      PyObject *inputItem = PyList_GetItem(outputList.get(), i);// borrowed reference
-      outP[i] = PyFloat_AsDouble(inputItem);
+      outP = convert<_PySequence_, NumericalPoint>(outputList.get());
+    }
+    else
+    {
+      NumericalScalar value = convert<_PyFloat_, NumericalScalar>(outputList.get());
+      outP = NumericalPoint(1, value);
     }
 
     if (p_cache_->isEnabled())
@@ -172,13 +170,13 @@ NumericalPoint PythonEvaluation::operator() (const NumericalPoint & inP) const
 
 
 /* Operator () */
-// NumericalSample PythonEvaluation::operator() (const NumericalSample & inS) const
+// NumericalSample PythonScriptEvaluation::operator() (const NumericalSample & inS) const
 // {
 //   
 // }
 
 /* Method save() stores the object through the StorageManager */
-void PythonEvaluation::save(Advocate & adv) const
+void PythonScriptEvaluation::save(Advocate & adv) const
 {
   NumericalMathEvaluationImplementation::save(adv);
   adv.saveAttribute("inputDimension_", inputDimension_);
@@ -188,7 +186,7 @@ void PythonEvaluation::save(Advocate & adv) const
 
 
 /* Method load() reloads the object from the StorageManager */
-void PythonEvaluation::load(Advocate & adv)
+void PythonScriptEvaluation::load(Advocate & adv)
 {
   NumericalMathEvaluationImplementation::load(adv);
   adv.loadAttribute("inputDimension_", inputDimension_);
