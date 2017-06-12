@@ -82,6 +82,8 @@ void Output::setHasBeenComputed(const bool hasBeenComputed)
 String Output::getPythonScript() const
 {
   OSS oss;
+  oss.setPrecision(12);
+
   oss << getName() << " = otguibase.Output('" << getName() << "', '" << getEscapedDescription() << "')\n";
   if (hasBeenComputed_)
     oss << getName() << ".setValue(" << getValue() << ")\n";

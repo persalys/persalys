@@ -181,6 +181,7 @@ SimulationReliabilityResult SimulationReliabilityAnalysis::getResult() const
 String SimulationReliabilityAnalysis::getPythonScript() const
 {
   OSS oss;
+  oss.setPrecision(12);
   oss << getName() << " = otguibase." << getClassName() << "('" << getName() << "', " << getLimitState().getName() << ")\n";
 
   if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())

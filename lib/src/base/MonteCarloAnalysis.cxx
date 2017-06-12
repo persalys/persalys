@@ -204,6 +204,7 @@ DataAnalysisResult MonteCarloAnalysis::getResult() const
 String MonteCarloAnalysis::getPythonScript() const
 {
   OSS oss;
+  oss.setPrecision(12);
   oss << getName() << " = otguibase.MonteCarloAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
   if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {

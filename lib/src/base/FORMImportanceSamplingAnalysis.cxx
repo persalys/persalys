@@ -98,6 +98,7 @@ FORMResult FORMImportanceSamplingAnalysis::getFORMResult() const
 String FORMImportanceSamplingAnalysis::getPythonScript() const
 {
   OSS oss;
+  oss.setPrecision(12);
   oss << ImportanceSamplingAnalysis::getPythonScript();
   oss << getName() << ".setPhysicalStartingPoint(" << getPhysicalStartingPoint().__str__() << ")\n";
   oss << getName() << ".setStandardSpaceDesignPoint(" << getStandardSpaceDesignPoint().__str__() << ")\n";
