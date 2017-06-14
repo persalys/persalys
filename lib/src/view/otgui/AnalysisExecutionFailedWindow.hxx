@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Base class for otgui error window
+ *  @brief Window associated with an AnalysisItem
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -33,22 +33,23 @@ class OTGUI_API AnalysisExecutionFailedWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  AnalysisExecutionFailedWindow(AnalysisItem* item, const QString& errorMessage);
+  AnalysisExecutionFailedWindow(AnalysisItem* item, const bool analysisInProgress=false);
+
+  virtual ~AnalysisExecutionFailedWindow();
 
 protected:
   void buildInterface();
+  void initializeWidgets();
 
 public slots:
   void updateRunButtonAvailability(bool);
+
 protected slots:
   void launchAnalysis();
-  void processFinished();
-  void requestStop();
-signals:
-  void actionsAvailabilityChanged(bool);
+  void stopAnalysis();
 
 private:
-  QString analysisErrorMessage_;
+  bool analysisInProgress_;
   AnalysisItem * analysisItem_;
   QProgressBar * progressBar_;
   QPushButton * runButton_;

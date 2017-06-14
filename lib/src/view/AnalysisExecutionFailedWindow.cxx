@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Base class for otgui error window
+ *  @brief Window associated with an AnalysisItem
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -21,19 +21,28 @@
 #include "otgui/AnalysisExecutionFailedWindow.hxx"
 
 #include "otgui/Controller.hxx"
-#include "otgui/OTStudyItem.hxx"
 #include "otgui/ParametersWidget.hxx"
 
-#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 namespace OTGUI {
 
-AnalysisExecutionFailedWindow::AnalysisExecutionFailedWindow(AnalysisItem* item, const QString& errorMessage)
+AnalysisExecutionFailedWindow::AnalysisExecutionFailedWindow(AnalysisItem* item, const bool analysisInProgress)
   : OTguiSubWindow(item)
-  , analysisErrorMessage_(errorMessage)
+  , analysisInProgress_(analysisInProgress)
   , analysisItem_(item)
+  , progressBar_(0)
+  , runButton_(0)
+  , stopButton_(0)
+  , messageLabel_(0)
 {
   buildInterface();
+}
+
+
+AnalysisExecutionFailedWindow::~AnalysisExecutionFailedWindow()
+{
+  analysisItem_ = 0;
 }
 
 
@@ -42,41 +51,74 @@ void AnalysisExecutionFailedWindow::buildInterface()
   setWindowTitle(tr("Analysis window"));
 
   QWidget * mainWidget = new QWidget;
-  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
+  QGridLayout * mainLayout = new QGridLayout(mainWidget);
 
-  // parameters widget
+  // analysis parameters widget
   QStringList paramNames;
   QStringList paramValues;
   AnalysisItem::GetAnalysisParameters(analysisItem_->getAnalysis(), paramNames, paramValues);
   if (!paramNames.isEmpty())
   {
     ParametersWidget * parametersWidget_ = new ParametersWidget(tr("Analysis parameters"), paramNames, paramValues);
-    mainLayout->addWidget(parametersWidget_);
+    mainLayout->addWidget(parametersWidget_, 0, 0);
   }
 
   // progress bar
   progressBar_ = new QProgressBar;
-  mainLayout->addWidget(progressBar_);
+  mainLayout->addWidget(progressBar_, 1, 0);
   connect(analysisItem_, SIGNAL(progressValueChanged(int)), progressBar_, SLOT(setValue(int)));
 
   // information message
   messageLabel_ = new QLabel;
   messageLabel_->setWordWrap(true);
-  mainLayout->addWidget(messageLabel_);
+  mainLayout->addWidget(messageLabel_, 2, 0);
   connect(analysisItem_, SIGNAL(messageChanged(QString)), messageLabel_, SLOT(setText(QString)));
 
   // initialization
-  QString message;
+  initializeWidgets();
+
+  // buttons
+  QHBoxLayout * hLayout = new QHBoxLayout;
+  hLayout->addStretch();
+
+  // - run button
+  runButton_ = new QPushButton(tr("Run"));
+  runButton_->setIcon(QIcon(":/images/system-run.png"));
+  runButton_->setDisabled(analysisInProgress_);
+  connect(runButton_, SIGNAL(clicked(bool)), this, SLOT(launchAnalysis()));
+  hLayout->addWidget(runButton_);
+
+  // - stop button
+  stopButton_ = new QPushButton(tr("Stop"));
+  stopButton_->setIcon(QIcon(":/images/process-stop.png"));
+  stopButton_->setEnabled(false);
+  connect(stopButton_, SIGNAL(clicked(bool)), this, SLOT(stopAnalysis()));
+  hLayout->addWidget(stopButton_);
+
+  mainLayout->addLayout(hLayout, 3, 0);
+  mainLayout->setRowStretch(4, 1);
+
+  setWidget(mainWidget);
+}
+
+
+void AnalysisExecutionFailedWindow::initializeWidgets()
+{
+  QString informationMessage;
   QString statusBarMessage;
+
+  // if an error has occured
   if (!analysisItem_->getAnalysis().getErrorMessage().empty())
   {
     // progress bar value
     progressBar_->setValue(100);
 
     // messages
-    const QString errorMessage = tr("No results are available. An error has occured during the execution of the analysis.") + "\n";
-    message = QString("%1%2%3").arg("<font color=red>").arg(errorMessage + analysisErrorMessage_).arg("</font>");
-    statusBarMessage = tr("An error has occured during the execution");
+    QString errorMessage = tr("No results are available. An error has occured during the execution of the analysis.") + "\n";
+    errorMessage += analysisItem_->getAnalysis().getErrorMessage().c_str();
+    informationMessage = QString("<font color=red>%1</font>").arg(errorMessage);
+
+    statusBarMessage = tr("An error has occured during the execution of the analysis");
   }
   else // if no error
   {
@@ -87,41 +129,21 @@ void AnalysisExecutionFailedWindow::buildInterface()
       progressBar_->setValue(0);
 
       // messages
-      message = tr("The analysis is ready to be launched.") + "\n";
+      informationMessage = tr("The analysis is ready to be launched.") + "\n";
+
       statusBarMessage = tr("Ready to be launched");
     }
   }
-  messageLabel_->setText(message);
+  messageLabel_->setText(informationMessage);
   setErrorMessage(statusBarMessage);
-
-  // run button
-  QHBoxLayout * hLayout = new QHBoxLayout;
-  hLayout->addStretch();
-
-  runButton_ = new QPushButton(tr("Run"));
-  runButton_->setIcon(QIcon(":/images/system-run.png"));
-  connect(runButton_, SIGNAL(clicked(bool)), this, SLOT(launchAnalysis()));
-  hLayout->addWidget(runButton_);
-
-  // stop button
-  stopButton_ = new QPushButton(tr("Stop"));
-  stopButton_->setIcon(QIcon(":/images/process-stop.png"));
-  stopButton_->setEnabled(false);
-  connect(stopButton_, SIGNAL(clicked(bool)), this, SLOT(requestStop()));
-  hLayout->addWidget(stopButton_);
-
-  mainLayout->addLayout(hLayout);
-  mainLayout->addStretch();
-
-  setWidget(mainWidget);
 }
 
 
-void AnalysisExecutionFailedWindow::updateRunButtonAvailability(bool isAvailable)
+void AnalysisExecutionFailedWindow::updateRunButtonAvailability(bool analysisInProgress)
 {
   // impossible to launch an analysis when another one is already running
   if (!analysisItem_->getAnalysis().isRunning())
-    runButton_->setEnabled(isAvailable);
+    runButton_->setDisabled(analysisInProgress);
 }
 
 
@@ -129,26 +151,24 @@ void AnalysisExecutionFailedWindow::launchAnalysis()
 {
   // enable stop button
   stopButton_->setEnabled(true);
-  // To start indefinite/busy progress bar
+  // start indefinite/busy progress bar
   progressBar_->setRange(0, 0);
   progressBar_->setValue(10);
+  // messages
+  messageLabel_->setText(tr("The analysis is running"));
+  setErrorMessage("");
 
   // create controller
   Controller * controller = new Controller;
-  connect(controller, SIGNAL(processFinished()), this, SLOT(processFinished()));
+  connect(controller, SIGNAL(launchAnalysisRequested(Analysis)), analysisItem_, SLOT(processLaunched()));
+  connect(controller, SIGNAL(processFinished()), analysisItem_, SLOT(processFinished()));
 
   // launch the analysis in a separate thread
   controller->launchAnalysis(analysisItem_->getAnalysis());
-
-  // warn the study that an analysis is running
-  analysisItem_->update(0, "analysisLaunched");
-
-  // emit signal to disable run analysis/close study/import script...
-  emit actionsAvailabilityChanged(false);
 }
 
 
-void AnalysisExecutionFailedWindow::requestStop()
+void AnalysisExecutionFailedWindow::stopAnalysis()
 {
   // add a message in case the analysis take too much time to end
   messageLabel_->setText(messageLabel_->text() + "\n" + tr("Stop in progress"));
@@ -158,13 +178,5 @@ void AnalysisExecutionFailedWindow::requestStop()
 
   // stop the analysis
   analysisItem_->stopAnalysis();
-}
-
-
-void AnalysisExecutionFailedWindow::processFinished()
-{
-  // emit signal to enable run analysis/close study/import script...
-  emit actionsAvailabilityChanged(true);
-  analysisItem_->setData(QVariant(), Qt::DecorationRole);
 }
 }
