@@ -56,11 +56,13 @@ void Observable::removeObserver(Observer * observer)
 
 void Observable::notify(const String & message)
 {
-  std::vector<Observer*>::reverse_iterator rit = observers_.rbegin();
-  for (; rit!= observers_.rend(); ++rit)
+  // do not use for (std::vector<Observer*>::iterator it = observers_.begin(); it != observers_.end(); ++it)
+  // avoid problem if an observer is added in the list observers_ in the update function
+  const int nbObservers = observers_.size();
+  for (int i=0; i<nbObservers; ++i)
   {
-    if ((*rit)->getType() != blockedObserverType_)
-      (*rit)->update(this, message);
+    if (observers_[i]->getType() != blockedObserverType_)
+      observers_[i]->update(this, message);
   }
 }
 
