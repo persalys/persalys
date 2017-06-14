@@ -61,9 +61,9 @@ public slots:
   void createNewProbabilisticModelWindow(ProbabilisticModelItem* item);
   void createNewDesignOfExperimentWindow(DesignOfExperimentDefinitionItem* item, const bool createConnections=true);
   void createNewLimitStateWindow(LimitStateItem* item);
-  void createAnalysisWindow(AnalysisItem* item);
+  void createNewAnalysisWindow(AnalysisItem* item);
   void createAnalysisResultWindow(AnalysisItem* item);
-  void createAnalysisExecutionFailedWindow(AnalysisItem* item);
+  void createAnalysisWindow(AnalysisItem* item);
 
   // modify objects
   void modifyDesignOfExperiment(DesignOfExperimentDefinitionItem* item);

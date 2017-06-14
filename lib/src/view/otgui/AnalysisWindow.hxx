@@ -18,8 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_ANALYSISEXECUTIONFAILEDWINDOW_HXX
-#define OTGUI_ANALYSISEXECUTIONFAILEDWINDOW_HXX
+#ifndef OTGUI_ANALYSISWINDOW_HXX
+#define OTGUI_ANALYSISWINDOW_HXX
 
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/AnalysisItem.hxx"
@@ -28,14 +28,14 @@
 #include <QProgressBar>
 
 namespace OTGUI {
-class OTGUI_API AnalysisExecutionFailedWindow : public OTguiSubWindow
+class OTGUI_API AnalysisWindow : public OTguiSubWindow
 {
   Q_OBJECT
 
 public:
-  AnalysisExecutionFailedWindow(AnalysisItem* item, const bool analysisInProgress=false);
+  AnalysisWindow(AnalysisItem* item, const bool analysisInProgress=false);
 
-  virtual ~AnalysisExecutionFailedWindow();
+  virtual ~AnalysisWindow();
 
 protected:
   void buildInterface();

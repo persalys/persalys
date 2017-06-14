@@ -30,7 +30,7 @@ ot_add_source_file ( MomentsEstimatesTableGroupBox.cxx )
 ot_add_source_file ( OutputsSelectionGroupBox.cxx )
 ot_add_source_file ( ParametersWidget.cxx )
 ot_add_source_file ( ResultWindow.cxx )
-ot_add_source_file ( AnalysisExecutionFailedWindow.cxx )
+ot_add_source_file ( AnalysisWindow.cxx )
 ot_add_source_file ( DeterministicDesignPage.cxx )
 ot_add_source_file ( ProbabilisticDesignPage.cxx )
 ot_add_source_file ( PhysicalModelWindowWidget.cxx )
@@ -105,7 +105,7 @@ ot_install_header_file ( ParametersWidget.hxx )
 ot_install_header_file ( DataModelWindow.hxx )
 ot_install_header_file ( DataAnalysisWindow.hxx )
 ot_install_header_file ( DataAnalysisResultWindow.hxx )
-ot_install_header_file ( AnalysisExecutionFailedWindow.hxx )
+ot_install_header_file ( AnalysisWindow.hxx )
 ot_install_header_file ( ModelEvaluationWizard.hxx )
 ot_install_header_file ( IntroCentralTendencyPage.hxx )
 ot_install_header_file ( MonteCarloPage.hxx )
@@ -175,7 +175,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/PhysicalModelDiagramWindow.hxx
                                   otgui/DataModelDiagramWindow.hxx
                                   otgui/ResultWindow.hxx
-                                  otgui/AnalysisExecutionFailedWindow.hxx
+                                  otgui/AnalysisWindow.hxx
                                   otgui/BlockSizeGroupBox.hxx
                                   otgui/MinMaxTableGroupBox.hxx
                                   otgui/MomentsEstimatesTableGroupBox.hxx

@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/AnalysisExecutionFailedWindow.hxx"
+#include "otgui/AnalysisWindow.hxx"
 
 #include "otgui/Controller.hxx"
 #include "otgui/ParametersWidget.hxx"
@@ -27,7 +27,7 @@
 
 namespace OTGUI {
 
-AnalysisExecutionFailedWindow::AnalysisExecutionFailedWindow(AnalysisItem* item, const bool analysisInProgress)
+AnalysisWindow::AnalysisWindow(AnalysisItem* item, const bool analysisInProgress)
   : OTguiSubWindow(item)
   , analysisInProgress_(analysisInProgress)
   , analysisItem_(item)
@@ -40,13 +40,13 @@ AnalysisExecutionFailedWindow::AnalysisExecutionFailedWindow(AnalysisItem* item,
 }
 
 
-AnalysisExecutionFailedWindow::~AnalysisExecutionFailedWindow()
+AnalysisWindow::~AnalysisWindow()
 {
   analysisItem_ = 0;
 }
 
 
-void AnalysisExecutionFailedWindow::buildInterface()
+void AnalysisWindow::buildInterface()
 {
   setWindowTitle(tr("Analysis window"));
 
@@ -102,7 +102,7 @@ void AnalysisExecutionFailedWindow::buildInterface()
 }
 
 
-void AnalysisExecutionFailedWindow::initializeWidgets()
+void AnalysisWindow::initializeWidgets()
 {
   QString informationMessage;
   QString statusBarMessage;
@@ -139,7 +139,7 @@ void AnalysisExecutionFailedWindow::initializeWidgets()
 }
 
 
-void AnalysisExecutionFailedWindow::updateRunButtonAvailability(bool analysisInProgress)
+void AnalysisWindow::updateRunButtonAvailability(bool analysisInProgress)
 {
   // impossible to launch an analysis when another one is already running
   if (!analysisItem_->getAnalysis().isRunning())
@@ -147,7 +147,7 @@ void AnalysisExecutionFailedWindow::updateRunButtonAvailability(bool analysisInP
 }
 
 
-void AnalysisExecutionFailedWindow::launchAnalysis()
+void AnalysisWindow::launchAnalysis()
 {
   // enable stop button
   stopButton_->setEnabled(true);
@@ -168,7 +168,7 @@ void AnalysisExecutionFailedWindow::launchAnalysis()
 }
 
 
-void AnalysisExecutionFailedWindow::stopAnalysis()
+void AnalysisWindow::stopAnalysis()
 {
   // add a message in case the analysis take too much time to end
   messageLabel_->setText(messageLabel_->text() + "\n" + tr("Stop in progress"));

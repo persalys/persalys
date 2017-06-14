@@ -35,7 +35,7 @@
 #include "otgui/DataModelWindow.hxx"
 #include "otgui/DesignOfExperimentInputWindow.hxx"
 #include "otgui/DesignOfExperimentWindow.hxx"
-#include "otgui/AnalysisExecutionFailedWindow.hxx"
+#include "otgui/AnalysisWindow.hxx"
 #include "otgui/ModelEvaluationResultWindow.hxx"
 #include "otgui/MonteCarloResultWindow.hxx"
 #include "otgui/TaylorExpansionMomentsResultWindow.hxx"
@@ -334,7 +334,7 @@ void StudyTreeView::createNewDataModelDiagramWindow(DataModelDiagramItem* item)
   // connections
   connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(modelDefinitionWindowRequested(DataModelDefinitionItem*)), this, SLOT(createNewDataModelWindow(DataModelDefinitionItem*)));
-  connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
+  connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
   connect(item, SIGNAL(analysisRequested(OTguiItem*,Analysis, bool)), this, SLOT(createNewAnalysis(OTguiItem*,Analysis, bool)));
 
   // window
@@ -388,7 +388,7 @@ void StudyTreeView::createNewPhysicalModelDiagramWindow(PhysicalModelDiagramItem
   connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
 		connect(item, SIGNAL(modelDefinitionWindowRequested(PhysicalModelDefinitionItem*)), this, SLOT(createNewPhysicalModelWindow(PhysicalModelDefinitionItem*)));
   connect(item, SIGNAL(newProbabilisticModelItemCreated(ProbabilisticModelItem*)), this, SLOT(createNewProbabilisticModelWindow(ProbabilisticModelItem*)));
-  connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
+  connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
   connect(item, SIGNAL(newLimitStateCreated(LimitStateItem*)), this, SLOT(createNewLimitStateWindow(LimitStateItem*)));
   connect(item, SIGNAL(newDesignOfExperimentCreated(DesignOfExperimentDefinitionItem*)), this, SLOT(createNewDesignOfExperimentWindow(DesignOfExperimentDefinitionItem*)));
   connect(item, SIGNAL(designOfExperimentEvaluationRequested(QList<QStandardItem*>)), this, SLOT(createNewDesignOfExperimentEvaluation(QList<QStandardItem*>)));
@@ -484,7 +484,7 @@ void StudyTreeView::createNewLimitStateWindow(LimitStateItem* item)
   // connections
   connect(item, SIGNAL(analysisRequested(OTguiItem*, const Analysis&)), this, SLOT(createNewAnalysis(OTguiItem*, const Analysis&)));
   connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
-  connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
+  connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
 
   // window
   LimitStateWindow * window = new LimitStateWindow(item);
@@ -509,9 +509,9 @@ void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentDefiniti
   if (createConnections)
   {
     connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
-    connect(item, SIGNAL(designOfExperimentEvaluationRequested(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
+    connect(item, SIGNAL(designOfExperimentEvaluationRequested(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
     connect(item, SIGNAL(modifyDesignOfExperimentRequested(DesignOfExperimentDefinitionItem*)), this, SLOT(modifyDesignOfExperiment(DesignOfExperimentDefinitionItem*)));
-    connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
+    connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
     connect(item, SIGNAL(analysisRequested(OTguiItem*,Analysis)), this, SLOT(createNewAnalysis(OTguiItem*,Analysis)));
   }
 
@@ -530,7 +530,7 @@ void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentDefiniti
 }
 
 
-void StudyTreeView::createAnalysisWindow(AnalysisItem * item)
+void StudyTreeView::createNewAnalysisWindow(AnalysisItem * item)
 {
   if (!item)
     return;
@@ -539,14 +539,14 @@ void StudyTreeView::createAnalysisWindow(AnalysisItem * item)
   connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
   connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createAnalysisResultWindow(AnalysisItem*)));
-  connect(item, SIGNAL(analysisBadlyFinished(AnalysisItem*)), this, SLOT(createAnalysisExecutionFailedWindow(AnalysisItem*)));
+  connect(item, SIGNAL(analysisBadlyFinished(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
   connect(item, SIGNAL(modifyAnalysisRequested(AnalysisItem*)), this, SLOT(modifyAnalysis(AnalysisItem*)));
 
   // window
   if (item->getAnalysis().analysisLaunched())
     createAnalysisResultWindow(item);
   else
-    createAnalysisExecutionFailedWindow(item);
+    createAnalysisWindow(item);
 }
 
 
@@ -607,7 +607,7 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
 }
 
 
-void StudyTreeView::createAnalysisExecutionFailedWindow(AnalysisItem* item)
+void StudyTreeView::createAnalysisWindow(AnalysisItem* item)
 {
   if (!item)
     return;
@@ -615,11 +615,11 @@ void StudyTreeView::createAnalysisExecutionFailedWindow(AnalysisItem* item)
   // do removeSubWindow if the analysis run method has been launched from a Python script
   emit removeSubWindow(item); // need?
 
-  AnalysisExecutionFailedWindow * window = new AnalysisExecutionFailedWindow(item, analysisInProgress_);
+  AnalysisWindow * window = new AnalysisWindow(item, analysisInProgress_);
 
   if (!window)
   {
-    qDebug() << "Error: In createAnalysisExecutionFailedWindow: impossible to create AnalysisExecutionFailedWindow\n";
+    qDebug() << "Error: In createAnalysisWindow: impossible to create AnalysisWindow\n";
     return;
   }
 
@@ -659,7 +659,7 @@ void StudyTreeView::modifyAnalysis(AnalysisItem* item)
     {
       emit removeSubWindow(item);
       item->updateAnalysis(wizard->getAnalysis());
-      createAnalysisExecutionFailedWindow(item);
+      createAnalysisWindow(item);
       delete wizard;
       wizard = 0;
     }
