@@ -70,9 +70,9 @@ void PhysicalModel::addObserver(Observer * observer)
 }
 
 
-void PhysicalModel::blockNotification(const String & notBlockedMessage)
+void PhysicalModel::blockNotification(const String & blockedObserverType)
 {
-  getImplementation()->blockNotification(notBlockedMessage);
+  getImplementation()->blockNotification(blockedObserverType);
 }
 
 
