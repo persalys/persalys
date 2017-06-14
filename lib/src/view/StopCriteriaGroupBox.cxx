@@ -29,8 +29,14 @@ using namespace OT;
 
 namespace OTGUI {
 
-StopCriteriaGroupBox::StopCriteriaGroupBox(const double maxCoef, const UnsignedInteger maxTime, const UnsignedInteger maxCalls, QWidget* parent)
+StopCriteriaGroupBox::StopCriteriaGroupBox(QWidget* parent)
   : QGroupBox(tr("Stop criteria"), parent)
+{
+  buildInterface();
+}
+
+
+void StopCriteriaGroupBox::buildInterface()
 {
   QGridLayout * groupBoxLayout = new QGridLayout(this);
 
@@ -40,7 +46,6 @@ StopCriteriaGroupBox::StopCriteriaGroupBox(const double maxCoef, const UnsignedI
   maxiCoefficientOfVariationSpinbox_->setMinimum(0.);
   maxiCoefficientOfVariationSpinbox_->setMaximum(1.);
   maxiCoefficientOfVariationSpinbox_->setSingleStep(0.01);
-  setMaximumCoefficientOfVariation(maxCoef);
 
   connect(maxiCoefficientOfVariationSpinbox_, SIGNAL(valueChanged(double)), this, SIGNAL(maxiCoefficientOfVariationChanged(double)));
   connect(maxiCoefOfVarCheckBox_, SIGNAL(toggled(bool)), maxiCoefficientOfVariationSpinbox_, SLOT(setEnabled(bool)));
@@ -52,7 +57,6 @@ StopCriteriaGroupBox::StopCriteriaGroupBox(const double maxCoef, const UnsignedI
   // Maximum time
   maxiTimeCheckBox_ = new QCheckBox(tr("Maximum time"));
   maxTimeLineEdit_ = new TimeLineEdit("");
-  setMaximumElapsedTime(maxTime);
 
   connect(maxTimeLineEdit_, SIGNAL(textChanged(QString)), this, SLOT(maxiTimeChanged()));
   connect(maxiTimeCheckBox_, SIGNAL(toggled(bool)), maxTimeLineEdit_, SLOT(setEnabled(bool)));
@@ -64,7 +68,6 @@ StopCriteriaGroupBox::StopCriteriaGroupBox(const double maxCoef, const UnsignedI
   // Maximum function calls
   maxiCallsCheckBox_ = new QCheckBox(tr("Maximum calls"));
   maxiCallsSpinbox_ = new LogSpinBox;
-  setMaximumCalls(maxCalls);
 
   connect(maxiCallsSpinbox_, SIGNAL(valueChanged(double)), this, SIGNAL(maxiCallsChanged(double)));
   connect(maxiCallsCheckBox_, SIGNAL(toggled(bool)), maxiCallsSpinbox_, SLOT(setEnabled(bool)));

@@ -36,7 +36,7 @@ class OTGUI_API StopCriteriaGroupBox : public QGroupBox
 
 public:
   // constructor
-  StopCriteriaGroupBox(const double maxCoef, const OT::UnsignedInteger maxTime, const OT::UnsignedInteger maxCalls, QWidget *parent = 0);
+  StopCriteriaGroupBox(QWidget* parent = 0);
 
   OT::UnsignedInteger getMaximumCalls() const;
   void setMaximumCalls(const OT::UnsignedInteger maxi);
@@ -50,6 +50,9 @@ public:
   bool isMaxElapsedTimeValid() const;
   bool isMaxCallsRequired() const;
   bool isValid() const;
+
+protected:
+  void buildInterface();
 
 public slots:
   void maxiCoefficientOfVariationRequired(bool);
