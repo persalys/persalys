@@ -41,7 +41,7 @@ public slots:
   void updateRecentFilesList(const QString & fileName);
   void updateRecentFilesActionsList();
   void clearRecentFilesActions();
-  void changeActionsAvailability(const bool availability);
+  void updateActionsAvailability(const bool analysisInProgress);
 signals:
   void createNewOTStudy();
   void openOTStudy();

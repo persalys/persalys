@@ -172,8 +172,9 @@ void OTguiMenuBar::clearRecentFilesActions()
 }
 
 
-void OTguiMenuBar::changeActionsAvailability(const bool availability)
+void OTguiMenuBar::updateActionsAvailability(const bool analysisInProgress)
 {
-  importPythonAction_->setEnabled(availability);
+  // can not import a Python script when an analysis is running
+  importPythonAction_->setDisabled(analysisInProgress);
 }
 }

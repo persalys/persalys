@@ -54,8 +54,10 @@ void OTguiToolBar::buildActions()
   addAction(action);
 }
 
-void OTguiToolBar::changeActionsAvailability(const bool availability)
+
+void OTguiToolBar::updateActionsAvailability(const bool analysisInProgress)
 {
-  importPythonAction_->setEnabled(availability);
+  // can not import a Python script when an analysis is running
+  importPythonAction_->setDisabled(analysisInProgress);
 }
 }
