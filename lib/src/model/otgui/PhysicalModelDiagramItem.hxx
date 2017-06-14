@@ -25,6 +25,7 @@
 #include "otgui/ProbabilisticModelItem.hxx"
 #include "otgui/LimitStateItem.hxx"
 #include "otgui/DesignOfExperimentDefinitionItem.hxx"
+#include <QMetaType> // mandatory to specify it to avoid windows compilation problem
 
 Q_DECLARE_METATYPE(OTGUI::DesignOfExperimentDefinitionItem*)
 

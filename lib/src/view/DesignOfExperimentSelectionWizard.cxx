@@ -20,9 +20,10 @@
  */
 #include "otgui/DesignOfExperimentSelectionWizard.hxx"
 
+#include "otgui/PhysicalModelDiagramItem.hxx" // for Q_DECLARE_METATYPE(OTGUI::DesignOfExperimentDefinitionItem*)
+
 #include <QVBoxLayout>
 #include <QLabel>
-#include <QMetaType> // mandatory to specify it to avoid windows compilation problem
 
 namespace OTGUI {
 
