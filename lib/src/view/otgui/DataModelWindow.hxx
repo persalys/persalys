@@ -21,8 +21,7 @@
 #ifndef OTGUI_DATAMODELWINDOW_HXX
 #define OTGUI_DATAMODELWINDOW_HXX
 
-#include "otgui/DataModel.hxx"
-#include "otgui/DesignOfExperimentItem.hxx"
+#include "otgui/DataModelDefinitionItem.hxx"
 #include "otgui/DataModelTableModel.hxx"
 #include "otgui/ExportableTableView.hxx"
 #include "otgui/OTguiSubWindow.hxx"
@@ -36,7 +35,7 @@ class OTGUI_API DataModelWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  DataModelWindow(DesignOfExperimentItem * item);
+  DataModelWindow(DataModelDefinitionItem * item);
 
   virtual ~DataModelWindow();
 
@@ -48,6 +47,7 @@ protected:
 public slots:
   void openFileRequested();
   void refreshTable();
+  void updateTableView(const OT::NumericalSample& sample=OT::NumericalSample());
 
 private:
   DataModel * dataModel_;

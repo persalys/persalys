@@ -36,7 +36,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-DataModelWindow::DataModelWindow(DesignOfExperimentItem * item)
+DataModelWindow::DataModelWindow(DataModelDefinitionItem * item)
   : OTguiSubWindow(item)
   , dataModel_(0)
   , filePathLineEdit_(0)
@@ -47,6 +47,8 @@ DataModelWindow::DataModelWindow(DesignOfExperimentItem * item)
   dataModel_ = dynamic_cast<DataModel*>(&*item->getDesignOfExperiment().getImplementation());
   if (!dataModel_)
     throw InvalidArgumentException(HERE) << "DataModelWindow: the design of experiment must be a DataModel";
+
+  connect(item, SIGNAL(variablesChanged()), this, SLOT(updateTableView()));
 
   buildInterface();
 }
@@ -78,7 +80,8 @@ void DataModelWindow::buildInterface()
   hboxLayout->addWidget(filePathLineEdit_);
 
   // open file button
-  QPushButton * openFileButton = new QPushButton(tr("Search file"));
+  QToolButton * openFileButton = new QToolButton;
+  openFileButton->setText("...");
   connect(openFileButton, SIGNAL(clicked()), this, SLOT(openFileRequested()));
   hboxLayout->addWidget(openFileButton);
 
@@ -95,7 +98,7 @@ void DataModelWindow::buildInterface()
   errorMessageLabel_ = new QLabel;
   errorMessageLabel_->setWordWrap(true);
   mainGridLayout->addWidget(errorMessageLabel_, 2, 0, 1, 1);
-
+;
   // file preview
   QGroupBox * groupBox = new QGroupBox(tr("Sample"));
   QGridLayout * gridLayout = new QGridLayout(groupBox);
@@ -116,14 +119,10 @@ void DataModelWindow::buildInterface()
   {
     reloadButton->setEnabled(true);
 
-    // table model
-    dataTableModel_ = new DataModelTableModel(dataModel_->getSample(), dataModel_, false, dataTableView_);
-    connect(dataTableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
-    connect(dataTableModel_, SIGNAL(temporaryErrorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
-
     // table view
-    dataTableView_->setModel(dataTableModel_);
+    updateTableView(dataModel_->getSample());
 
+    // table span
     UnsignedInteger nbInputs = 0;
     if (dataModel_->getInputSample().getSize())
     {
@@ -171,24 +170,8 @@ void DataModelWindow::updateTable(const QString& fileName)
     return;
   }
 
-  // get all the values of the file
-  NumericalSample sample(dataModel_->getSampleFromFile());
-
-  // set table model
-  if (dataTableModel_)
-    delete dataTableModel_;
-
-  dataTableModel_ = new DataModelTableModel(sample, dataModel_, true, dataTableView_);
-  connect(dataTableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
-  connect(dataTableModel_, SIGNAL(temporaryErrorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
-
-  // set table view
-  dataTableView_->setModel(dataTableModel_);
-
-  dataTableView_->clearSpans();
-
-  for (UnsignedInteger i=0; i<sample.getDimension(); ++i)
-    dataTableView_->openPersistentEditor(dataTableModel_->index(1, i));
+  // update table view
+  updateTableView();
 }
 
 
@@ -231,5 +214,29 @@ void DataModelWindow::refreshTable()
         qobject_cast<QWidget*>(sender())->setEnabled(false);
     updateTable(QString::fromUtf8(dataModel_->getFileName().c_str()));
   }
+}
+
+
+void DataModelWindow::updateTableView(const NumericalSample& sample)
+{
+  // set table model
+  if (dataTableModel_)
+    delete dataTableModel_;
+
+  NumericalSample fullSample(sample);
+  if (!sample.getSize())
+    fullSample = dataModel_->getSampleFromFile();
+
+  dataTableModel_ = new DataModelTableModel(fullSample, dataModel_, (sample.getSize() < 1), dataTableView_);
+  connect(dataTableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
+  connect(dataTableModel_, SIGNAL(temporaryErrorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
+
+  // set table view
+  dataTableView_->setModel(dataTableModel_);
+  dataTableView_->clearSpans();
+
+  if (sample.getSize() < 1)
+    for (int i=0; i<dataTableModel_->columnCount(); ++i)
+      dataTableView_->openPersistentEditor(dataTableModel_->index(1, i));
 }
 }
