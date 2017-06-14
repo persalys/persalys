@@ -83,19 +83,23 @@ public:
 
 
   void paint(QPainter* painter,
-            const QStyleOptionViewItem& option,
-            const QModelIndex& index) const
+             const QStyleOptionViewItem& option,
+             const QModelIndex& index) const
   {
     painter->save();
 
     QStyleOptionViewItem optionButton = option;
     initStyleOption(&optionButton, index);
 
-    // use optionButton.widget() to keep information from style sheet
+#if QT_VERSION >= 0x050000
+    // use optionButton.widget to keep information from style sheet
     if (optionButton.widget)
       optionButton.widget->style()->drawControl(QStyle::CE_ItemViewItem, &optionButton, painter, optionButton.widget);
     else
       QApplication::style()->drawControl(QStyle::CE_ItemViewItem, &optionButton, painter);
+#else
+      QApplication::style()->drawControl(QStyle::CE_ItemViewItem, &optionButton, painter);
+#endif
 
     // draw a line at the bottom of the OTStudyItem
     if (index.data(Qt::UserRole).toString().contains("OTStudy"))
@@ -123,9 +127,12 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   connect(treeViewModel_, SIGNAL(newOTStudyCreated(OTStudyItem*)), this, SLOT(createNewOTStudyWindow(OTStudyItem*)));
 
   // forbid the user to define not valid item's name
+#if QT_VERSION >= 0x050000
   // draw a line at the bottom of the OTStudyItem
-  TreeItemDelegate * itemDelegate = new TreeItemDelegate(this);
-  setItemDelegate(itemDelegate);
+  setItemDelegate(new TreeItemDelegate(this));
+#else
+  setItemDelegate(new LineEditWithQValidatorDelegate(QString("[a-zA-Z_][a-zA-Z_0-9]*")));
+#endif
 
   // context menu
   setContextMenuPolicy(Qt::CustomContextMenu);
