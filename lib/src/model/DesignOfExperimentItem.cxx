@@ -42,86 +42,66 @@ DesignOfExperiment DesignOfExperimentItem::getDesignOfExperiment() const
 }
 
 
+void DesignOfExperimentItem::setData(const QVariant & value, int role)
+{
+  // rename
+  if (role == Qt::EditRole)
+    designOfExperiment_.getImplementation()->setName(value.toString().toLocal8Bit().data());
+
+  QStandardItem::setData(value, role);
+}
+
+
 void DesignOfExperimentItem::appendAnalysisItem(Analysis& analysis)
 {
+  // new item
   AnalysisItem * newItem = new AnalysisItem(analysis);
-  connect(newItem, SIGNAL(analysisStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
+
+  // connections
+  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
+  // - signal for the PhysicalModelDiagramItem
+  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SIGNAL(analysisInProgressStatusChanged(bool)));
   if (getParentOTStudyItem())
-    connect(newItem, SIGNAL(analysisStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
+  {
+    connect(newItem, SIGNAL(metaModelCreated(PhysicalModel)), getParentOTStudyItem(), SLOT(addMetaModelItem(PhysicalModel)));
+    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
+  }
+  connect(this, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), newItem, SLOT(setDesignOfExperiment(DesignOfExperiment)));
+
+  // append item
   appendRow(newItem);
 
+  // emit signal to StudyTreeView to create a window
   emit newAnalysisItemCreated(newItem);
-}
-
-
-void DesignOfExperimentItem::updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
-{
-  designOfExperiment_.getImplementation().get()->removeObserver(this);
-  // TODO ? remove observer evaluation
-  designOfExperiment_ = designOfExperiment;
-  designOfExperiment_.addObserver(this);
-
-  // update the implementation of the design of experiment stored in OTStudy
-  if (designOfExperiment.getImplementation()->getClassName() == "DataModel")
-    getParentOTStudyItem()->getOTStudy().getDataModelByName(designOfExperiment.getName()).setImplementationAsPersistentObject(designOfExperiment.getImplementation());
-  else
-    getParentOTStudyItem()->getOTStudy().getDesignOfExperimentByName(designOfExperiment.getName()).setImplementationAsPersistentObject(designOfExperiment.getImplementation());
-
-  emit updateDiagram(designOfExperiment_);
-}
-
-
-void DesignOfExperimentItem::update(Observable* source, const String & message)
-{
-  if (message == "analysisFinished")
-  {
-    emit analysisFinished();
-  }
-  if (message == "analysisBadlyFinished")
-  {
-    emit analysisBadlyFinished(designOfExperiment_.getErrorMessage().c_str());
-  }
-  else if (message == "designOfExperimentRemoved")
-  {
-    emit removeRequested(row());
-  }
-}
-
-
-bool DesignOfExperimentItem::designOfExperimentValid()
-{
-  if (!designOfExperiment_.getSample().getSize())
-  {
-    emit emitErrorMessageRequested(tr("The sample is empty."));
-    return false;
-  }
-  return true;
 }
 
 
 void DesignOfExperimentItem::createNewMetaModel()
 {
+  // check
   if (!designOfExperiment_.getOutputSample().getSize())
   {
     emit emitErrorMessageRequested(tr("The model must have at least one output."));
     return;
   }
 
+  // new analysis
   FunctionalChaosAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("metaModel_"), designOfExperiment_);
+  // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);
 }
 
 
 void DesignOfExperimentItem::removeDesignOfExperiment()
 {
-  if (getParentOTStudyItem())
+  // check
+  if (analysisInProgress_)
   {
-    if (analysisInProgress_)
-    {
-      emit emitErrorMessageRequested(tr("Can not remove a design of experiment when an analysis is running."));
-      return;
-    }
-    getParentOTStudyItem()->getOTStudy().remove(DesignOfExperiment(designOfExperiment_));
+    emit emitErrorMessageRequested(tr("Can not remove a design of experiment when an analysis is running."));
+    return;
   }
+  // remove
+  if (getParentOTStudyItem())
+    getParentOTStudyItem()->getOTStudy().remove(DesignOfExperiment(designOfExperiment_));
 }
 }

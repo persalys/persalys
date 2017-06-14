@@ -44,9 +44,9 @@ signals:
   void temporaryErrorMessageChanged(const QString & message);
 
 private:
+  DataModel * dataModel_;
   OT::Indices inputColumns_;
   OT::Indices outputColumns_;
-  DataModel* dataModel_;
 };
 }
 #endif

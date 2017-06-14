@@ -20,11 +20,6 @@
  */
 #include "otgui/DataModelDiagramItem.hxx"
 
-#include "otgui/OTStudyItem.hxx"
-#include "otgui/InferenceAnalysis.hxx"
-#include "otgui/DataAnalysis.hxx"
-#include "otgui/CopulaInferenceAnalysis.hxx"
-
 using namespace OT;
 
 namespace OTGUI {
@@ -56,19 +51,17 @@ void DataModelDiagramItem::buildActions()
 }
 
 
-void DataModelDiagramItem::setData(const QVariant& value, int role)
-{
-  if (role == Qt::EditRole)
-    designOfExperiment_.getImplementation()->setName(value.toString().toLocal8Bit().data());
-
-  QStandardItem::setData(value, role);
-}
-
-
 void DataModelDiagramItem::update(Observable* source, const String& message)
 {
   if (message == "variablesChanged")
   {
+    if (!hasChildren()) // if modification from Python console
+    {
+      fill();
+      return;
+    }
+    // emit signals to DataModelDiagramWindow
+    // to update the diagram (arrow color and button availability)
     emit dataModelValidityChanged(designOfExperiment_.getSample().getSize() > 0);
     emit dependenciesValidityChanged(designOfExperiment_.getInputSample().getDimension() > 1);
     emit metaModelValidityChanged(designOfExperiment_.getInputSample().getSize() && designOfExperiment_.getOutputSample().getSize());
@@ -77,20 +70,6 @@ void DataModelDiagramItem::update(Observable* source, const String& message)
   {
     emit removeRequested(row());
   }
-}
-
-
-void DataModelDiagramItem::updateDiagram(const DesignOfExperiment& designOfExperiment)
-{
-  designOfExperiment_.getImplementation().get()->removeObserver(this);
-  // TODO ? remove observer evaluation
-  designOfExperiment_ = designOfExperiment;
-  designOfExperiment_.addObserver(this);
-
-  // update diagram (arrow color and button availability)
-  emit dataModelValidityChanged(designOfExperiment_.getSample().getSize() > 0);
-  emit dependenciesValidityChanged(designOfExperiment_.getInputSample().getDimension() > 1);
-  emit metaModelValidityChanged(designOfExperiment_.getInputSample().getSize() && designOfExperiment_.getOutputSample().getSize());
 }
 
 
@@ -112,15 +91,19 @@ void DataModelDiagramItem::appendDataModelItem()
   if (hasChildren())
     return;
 
+  // new item
   DataModelDefinitionItem * dmItem = new DataModelDefinitionItem(getDesignOfExperiment());
-  appendRow(dmItem);
 
-  connect(dmItem, SIGNAL(updateDiagram(DesignOfExperiment)), this, SLOT(updateDiagram(DesignOfExperiment)));
+  // connections
   connect(this, SIGNAL(dataAnalysisRequested()), dmItem, SLOT(createNewDataAnalysis()));
   connect(this, SIGNAL(inferenceRequested()), dmItem, SLOT(createNewInferenceAnalysis()));
   connect(this, SIGNAL(copulaInferenceRequested()), dmItem, SLOT(createNewCopulaInferenceAnalysis()));
   connect(this, SIGNAL(metaModelRequested()), dmItem, SLOT(createNewMetaModel()));
 
+  // append item
+  appendRow(dmItem);
+
+  // emit signal to the StudyTreeView to create a window
   emit modelDefinitionWindowRequested(dmItem);
 
   // disable the definition action

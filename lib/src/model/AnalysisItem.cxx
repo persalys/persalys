@@ -20,7 +20,7 @@
  */
 #include "otgui/AnalysisItem.hxx"
 
-#include "otgui/PhysicalModelAnalysis.hxx"
+#include "otgui/ModelEvaluation.hxx"
 #include "otgui/FunctionalChaosAnalysis.hxx"
 #include "otgui/KrigingAnalysis.hxx"
 
@@ -46,8 +46,10 @@ namespace OTGUI {
 
 AnalysisItem::AnalysisItem(const Analysis & analysis)
   : OTguiItem(QString::fromUtf8(analysis.getName().c_str()), analysis.getImplementation()->getClassName().c_str())
-  , Observer(analysis.getImplementation()->getClassName())
+  , Observer("Analysis")
   , analysis_(analysis)
+  , modifyAnalysis_(0)
+  , removeAnalysis_(0)
 {
   analysis_.addObserver(this);
 
@@ -57,23 +59,27 @@ AnalysisItem::AnalysisItem(const Analysis & analysis)
 
 void AnalysisItem::buildActions()
 {
+  const QString analysisType = data(Qt::UserRole).toString();
+
+  if (analysisType == "DesignOfExperimentEvaluation") // no action for this analysis
+    return;
+
   // modify analysis action
-  modifyAnalysis_ = new QAction(QIcon(":/images/run-build.png"), tr("Modify"), this);
-  modifyAnalysis_->setStatusTip(tr("Modify the analysis"));
-  connect(modifyAnalysis_, SIGNAL(triggered()), this, SLOT(modifyAnalysis()));
+  if (analysisType != "DataAnalysis" &&
+      analysisType != "CopulaInferenceAnalysis" &&
+      analysisType != "ImportanceSamplingAnalysis") // there is no wizard associated with these analyses <=> impossible to modify them
+  {
+    modifyAnalysis_ = new QAction(QIcon(":/images/run-build.png"), tr("Modify"), this);
+    modifyAnalysis_->setStatusTip(tr("Modify the analysis"));
+    connect(modifyAnalysis_, SIGNAL(triggered()), this, SLOT(modifyAnalysis()));
+
+    appendAction(modifyAnalysis_);
+  }
 
   // remove analysis action
   removeAnalysis_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
   removeAnalysis_->setStatusTip(tr("Remove the analysis"));
   connect(removeAnalysis_, SIGNAL(triggered()), this, SLOT(removeAnalysis()));
-
-  // add actions
-  if (getType() != "DataAnalysis" &&
-      getType() != "CopulaInferenceAnalysis" &&
-      getType() != "ImportanceSamplingAnalysis") // there is no wizard associated with these analyses <==> impossible to modify them
-  {
-    appendAction(modifyAnalysis_);
-  }
 
   appendAction(removeAnalysis_);
 }
@@ -81,6 +87,7 @@ void AnalysisItem::buildActions()
 
 void AnalysisItem::setData(const QVariant & value, int role)
 {
+  // rename
   if (role == Qt::EditRole)
     analysis_.getImplementation()->setName(value.toString().toLocal8Bit().data());
 
@@ -96,10 +103,14 @@ Analysis AnalysisItem::getAnalysis() const
 
 void AnalysisItem::updateAnalysis(const Analysis & analysis)
 {
+  // update analysis_
   analysis_.getImplementation().get()->removeObserver(this);
   analysis_ = analysis;
   if (!analysis_.getImplementation().get()->getObservers().size())
     analysis_.addObserver(this);
+
+  // update analysis type
+  setData(analysis_.getImplementation()->getClassName().c_str(), Qt::UserRole);
 
   // update the implementation of the analysis stored in OTStudy
   getParentOTStudyItem()->getOTStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
@@ -108,6 +119,7 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
 
 void AnalysisItem::setDesignOfExperiment(const DesignOfExperiment& designOfExperiment)
 {
+  // update the design of experiment
   if (dynamic_cast<DesignOfExperimentAnalysis*>(getAnalysis().getImplementation().get()))
     dynamic_cast<DesignOfExperimentAnalysis*>(getAnalysis().getImplementation().get())->setDesignOfExperiment(designOfExperiment);
 }
@@ -128,7 +140,9 @@ void AnalysisItem::modifyAnalysis()
     return;
   }
 
-  const String analysisName = analysis_.getImplementation()->getClassName();
+  const QString analysisType = data(Qt::UserRole).toString();
+
+  // -- IF PhysicalModelAnalysis
 
   // check physical model
   if (dynamic_cast<PhysicalModelAnalysis*>(analysis_.getImplementation().get()))
@@ -144,7 +158,7 @@ void AnalysisItem::modifyAnalysis()
       return;
     }
     // if proba analysis
-    if (analysisName != "ModelEvaluation")
+    if (analysisType != "ModelEvaluation")
     {
       // must have stochastic variables
       if (!item->getPhysicalModel().hasStochasticInputs())
@@ -152,19 +166,22 @@ void AnalysisItem::modifyAnalysis()
         emit emitErrorMessageRequested(tr("The physical model must have stochastic inputs."));
         return;
       }
-    }
-    // if sensitivity
-    if (analysisName == "SobolAnalysis" || analysisName == "SRCAnalysis")
-    {
-      // must have an independent copula
-      if (!item->getPhysicalModel().getComposedDistribution().hasIndependentCopula())
+      // if sensitivity analysis
+      if (analysisType == "SobolAnalysis" || analysisType == "SRCAnalysis")
       {
-        emit emitErrorMessageRequested(tr("The model must have an independent copula to compute a sensitivity analysis but here the inputs are correlated."));
-        return;
+        // must have an independent copula
+        if (!item->getPhysicalModel().getComposedDistribution().hasIndependentCopula())
+        {
+          emit emitErrorMessageRequested(tr("The model must have an independent copula to compute a sensitivity analysis but here the inputs are correlated."));
+          return;
+        }
       }
     }
   // TODO check limitstate?
   }
+
+  // -- IF DesignOfExperimentAnalysis
+
   // check data model
   else if (dynamic_cast<DesignOfExperimentAnalysis*>(analysis_.getImplementation().get()))
   {
@@ -172,14 +189,14 @@ void AnalysisItem::modifyAnalysis()
     if (!item)
       return;
 
-    // must have data
+    // must have at least a point
     if (!item->getDesignOfExperiment().getSample().getSize())
     {
       emit emitErrorMessageRequested(tr("The sample is empty."));
       return;
     }
-    // if meta model
-    if (analysisName == "FunctionalChaosAnalysis" || analysisName == "KrigingAnalysis")
+    // if meta model analysis
+    if (analysisType == "FunctionalChaosAnalysis" || analysisType == "KrigingAnalysis")
     {
       // must have output data
       if (!item->getDesignOfExperiment().getOutputSample().getSize())
@@ -190,7 +207,7 @@ void AnalysisItem::modifyAnalysis()
     }
   }
 
-  // emit signal to open the wizard
+  // emit signal to StudyTreeView to open the wizard
   emit modifyAnalysisRequested(this);
 }
 
@@ -210,33 +227,52 @@ void AnalysisItem::removeAnalysis()
 }
 
 
+void AnalysisItem::processLaunched()
+{
+  // change icon
+  setData(QIcon(":/images/green-arrow-right.png"), Qt::DecorationRole);
+
+  // emit signal to disable run analysis/close study/import script...
+  // warn the other objects that an analysis is running
+  emit analysisInProgressStatusChanged(true);
+}
+
+
+void AnalysisItem::processFinished()
+{
+  // change icon
+  setData(QVariant(), Qt::DecorationRole);
+
+  // emit signal to enable run analysis/close study/import script...
+  // warn the other objects that an analysis is finished
+  emit analysisInProgressStatusChanged(false);
+}
+
+
 void AnalysisItem::update(Observable* source, const String& message)
 {
-  if (message == "analysisLaunched")
+  if (message == "analysisFinished")
   {
-    setData(QIcon(":/images/green-arrow-right.png"), Qt::DecorationRole);
-    emit analysisStatusChanged(true);
-  }
-  else if (message == "analysisFinished")
-  {
+    // emit signal to the StudyTreeView to create a window
     emit analysisFinished(this);
-    emit analysisStatusChanged(false);
   }
   else if (message == "analysisBadlyFinished")
   {
-    emit analysisBadlyFinished(this, analysis_.getErrorMessage().c_str());
-    emit analysisStatusChanged(false);
+    // emit signal to the StudyTreeView to create a window
+    emit analysisBadlyFinished(this);
   }
   else if (message == "metaModelCreated")
   {
     if (dynamic_cast<FunctionalChaosAnalysis*>(analysis_.getImplementation().get()))
     {
       PhysicalModel metaModel(dynamic_cast<FunctionalChaosAnalysis*>(analysis_.getImplementation().get())->getResult().getMetaModel());
+    // emit signal to OTStudyItem to add metaModel in study_
       emit metaModelCreated(metaModel);
     }
     else if (dynamic_cast<KrigingAnalysis*>(analysis_.getImplementation().get()))
     {
       PhysicalModel metaModel(dynamic_cast<KrigingAnalysis*>(analysis_.getImplementation().get())->getResult().getMetaModel());
+    // emit signal to OTStudyItem to add metaModel in study_
       emit metaModelCreated(metaModel);
     }
     // can NOT write here : getParentOTStudyItem()->getOTStudy().add(metaModel);
@@ -249,10 +285,12 @@ void AnalysisItem::update(Observable* source, const String& message)
   }
   else if (message == "informationMessageUpdated")
   {
+    // emit signal to AnalysisWindow to update the information message
     emit messageChanged(analysis_.getInformationMessage().c_str());
   }
   else if (message == "progressValueChanged")
   {
+    // emit signal to AnalysisWindow to upate the progress bar
     emit progressValueChanged(analysis_.getProgressValue());
   }
   else if (message == "analysisRemoved")
@@ -264,6 +302,7 @@ void AnalysisItem::update(Observable* source, const String& message)
 
 QStandardItem* AnalysisItem::getParentItem(const QString itemType)
 {
+  // get the parent item with the type itemType
   QModelIndex seekRoot = index();
   while(seekRoot.parent() != QModelIndex())
   {
@@ -280,7 +319,35 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
   namesList.clear();
   valuesList.clear();
 
-  if (analysis.getImplementation()->getClassName() == "MonteCarloAnalysis")
+  const QString analysisType = analysis.getImplementation()->getClassName().c_str();
+
+  if (analysisType == "ModelEvaluation")
+  {
+    const ModelEvaluation evaluation(*dynamic_cast<const ModelEvaluation*>(&*analysis.getImplementation()));
+
+    // Parameters names
+    namesList << tr("Point to be evaluated");
+
+    // Parameters values
+    const NumericalPoint point(evaluation.getInputValues());
+    QString pointText = "[";
+    for (UnsignedInteger i=0; i<point.getDimension(); ++i)
+    {
+      pointText += QString::number(point[i]);
+      if (i < point.getDimension()-1)
+        pointText += "; ";
+    }
+    pointText += "]";
+    valuesList << pointText;
+  }
+  else if (analysisType == "TaylorExpansionMomentsAnalysis")
+  {
+    // Parameters names
+    namesList << tr("Algorithm");
+    // Parameters values
+    valuesList << tr("Taylor expansion moments");
+  }
+  else if (analysisType == "MonteCarloAnalysis")
   {
     const MonteCarloAnalysis MCanalysis(*dynamic_cast<const MonteCarloAnalysis*>(&*analysis.getImplementation()));
 
@@ -288,11 +355,11 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
     namesList << tr("Algorithm");
     if (MCanalysis.isConfidenceIntervalRequired())
       namesList << tr("Confidence level");
-    namesList << tr("Maximum coefficient of variation");
-    namesList << tr("Maximum elapsed time");
-    namesList << tr("Maximum calls");
-    namesList << tr("Block size");
-    namesList << tr("Seed");
+    namesList << tr("Maximum coefficient of variation")
+              << tr("Maximum elapsed time")
+              << tr("Maximum calls")
+              << tr("Block size")
+              << tr("Seed");
 
     // Parameters values
     valuesList << tr("Monte Carlo");
@@ -307,26 +374,29 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
       valuesList << QString::number(MCanalysis.getMaximumCalls());
     else
       valuesList << "-";
-    valuesList << QString::number(MCanalysis.getBlockSize());
-    valuesList << QString::number(MCanalysis.getSeed());
+    valuesList << QString::number(MCanalysis.getBlockSize())
+               << QString::number(MCanalysis.getSeed());
   }
-  else if (analysis.getImplementation()->getClassName() == "KrigingAnalysis")
+  else if (analysisType == "KrigingAnalysis")
   {
     const KrigingAnalysis kriging(*dynamic_cast<const KrigingAnalysis*>(&*analysis.getImplementation()));
 
     // Parameters names
-    namesList << tr("Algorithm");
-    namesList << tr("Covariance model");
+    namesList << tr("Algorithm")
+              << tr("Covariance model");
     if (kriging.getCovarianceModel().getImplementation()->getClassName() == "MaternModel")
       namesList << tr("nu");
     else if (kriging.getCovarianceModel().getImplementation()->getClassName() == "GeneralizedExponential")
       namesList << tr("p");
-    namesList << tr("Parameters optimization") << tr("Scale") << tr("Amplitude") << tr("Trend basis");
-    namesList << tr("Leave-one-out validation");
+    namesList << tr("Parameters optimization")
+              << tr("Scale")
+              << tr("Amplitude")
+              << tr("Trend basis")
+              << tr("Leave-one-out validation");
 
     // Parameters values
-    valuesList << tr("Kriging");
-    valuesList << QString(kriging.getCovarianceModel().getImplementation()->getClassName().c_str());
+    valuesList << tr("Kriging")
+               << QString(kriging.getCovarianceModel().getImplementation()->getClassName().c_str());
     // covariance model parameters
     if (kriging.getCovarianceModel().getImplementation()->getClassName() == "MaternModel")
     {
@@ -350,7 +420,6 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
       if (i < kriging.getCovarianceModel().getScale().getSize()-1)
         scaleText += "; ";
     }
-    valuesList << scaleText;
     // amplitude
     QString amplitudeText;
     for (UnsignedInteger i=0; i<kriging.getCovarianceModel().getAmplitude().getSize(); ++i)
@@ -359,7 +428,6 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
       if (i < kriging.getCovarianceModel().getAmplitude().getSize()-1)
         amplitudeText += "; ";
     }
-    valuesList << amplitudeText;
     // basis
     QString basisType(tr("Constant"));
     const UnsignedInteger dim = kriging.getBasis().getDimension();
@@ -367,34 +435,43 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
       basisType = tr("Linear");
     else if (kriging.getBasis().getSize() == ((dim+1)*(dim+2)/2))
       basisType = tr("Quadratic");
-    valuesList << basisType;
 
-    valuesList << (kriging.isLeaveOneOutValidation()? tr("yes") : tr("no"));
+    valuesList << scaleText
+               << amplitudeText
+               << basisType
+               << (kriging.isLeaveOneOutValidation()? tr("yes") : tr("no"));
   }
-  else if (analysis.getImplementation()->getClassName() == "FunctionalChaosAnalysis")
+  else if (analysisType == "FunctionalChaosAnalysis")
   {
     const FunctionalChaosAnalysis chaos(*dynamic_cast<const FunctionalChaosAnalysis*>(&*analysis.getImplementation()));
 
     // Parameters names
-    namesList << tr("Algorithm") << tr("Chaos degree") << tr("Sparse") << tr("Leave-one-out validation");
+    namesList << tr("Algorithm")
+              << tr("Chaos degree")
+              << tr("Sparse")
+              << tr("Leave-one-out validation");
 
     // Parameters values
-    valuesList << tr("Functional chaos");
-    valuesList << QString::number(chaos.getChaosDegree());
-    valuesList << (chaos.getSparseChaos()? tr("yes") : tr("no"));
-    valuesList << (chaos.isLeaveOneOutValidation()? tr("yes") : tr("no"));
+    valuesList << tr("Functional chaos")
+               << QString::number(chaos.getChaosDegree())
+               << (chaos.getSparseChaos()? tr("yes") : tr("no"))
+               << (chaos.isLeaveOneOutValidation()? tr("yes") : tr("no"));
   }
-  else if (analysis.getImplementation()->getClassName() == "SobolAnalysis")
+  else if (analysisType == "SobolAnalysis")
   {
     const SobolAnalysis sobolAnalysis(*dynamic_cast<const SobolAnalysis*>(&*analysis.getImplementation()));
 
     // Parameters names
-    namesList << tr("Algorithm") << tr("Maximum coefficient of variation") << tr("Maximum elapsed time");
-    namesList << tr("Maximum calls") << tr("Block size") << tr("Seed");
+    namesList << tr("Algorithm")
+              << tr("Maximum coefficient of variation")
+              << tr("Maximum elapsed time")
+              << tr("Maximum calls")
+              << tr("Block size")
+              << tr("Seed");
 
     // Parameters values
-    valuesList << tr("Sobol");
-    valuesList << QString::number(sobolAnalysis.getMaximumCoefficientOfVariation());
+    valuesList << tr("Sobol")
+               << QString::number(sobolAnalysis.getMaximumCoefficientOfVariation());
     if (sobolAnalysis.getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
       valuesList << QString::number(sobolAnalysis.getMaximumElapsedTime()) + "(s)";
     else
@@ -403,38 +480,40 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
       valuesList << QString::number(sobolAnalysis.getMaximumCalls());
     else
       valuesList << "-";
-    valuesList << QString::number(sobolAnalysis.getBlockSize());
-    valuesList << QString::number(sobolAnalysis.getSeed());
+    valuesList << QString::number(sobolAnalysis.getBlockSize())
+               << QString::number(sobolAnalysis.getSeed());
   }
-  else if (analysis.getImplementation()->getClassName() == "SRCAnalysis")
+  else if (analysisType == "SRCAnalysis")
   {
     const SRCAnalysis srcAnalysis(*dynamic_cast<const SRCAnalysis*>(&*analysis.getImplementation()));
 
     // Parameters names
-    namesList << tr("Algorithm") << tr("Sample size") << tr("Seed");
+    namesList << tr("Algorithm")
+              << tr("Sample size")
+              << tr("Seed");
 
     // Parameters values
-    valuesList << tr("Standardized Regression Coefficients");
-    valuesList << QString::number(srcAnalysis.getSimulationsNumber());
-    valuesList << QString::number(srcAnalysis.getSeed());
+    valuesList << tr("Standardized Regression Coefficients")
+               << QString::number(srcAnalysis.getSimulationsNumber())
+               << QString::number(srcAnalysis.getSeed());
   }
-  else if (analysis.getImplementation()->getClassName() == "FORMAnalysis")
+  else if (analysisType == "FORMAnalysis")
   {
     const ApproximationAnalysis approxAnalysis(*dynamic_cast<const ApproximationAnalysis*>(&*analysis.getImplementation().get()));
 
     // Parameters names
-    namesList << tr("Algorithm");
-    namesList << tr("Optimization algorithm");
-    namesList << tr("Physical starting point");
-    namesList << tr("Maximum iterations number");
-    namesList << tr("Maximum absolute error");
-    namesList << tr("Maximum relative error");
-    namesList << tr("Maximum residual error");
-    namesList << tr("Maximum constraint error");
+    namesList << tr("Algorithm")
+              << tr("Optimization algorithm")
+              << tr("Physical starting point")
+              << tr("Maximum iterations number")
+              << tr("Maximum absolute error")
+              << tr("Maximum relative error")
+              << tr("Maximum residual error")
+              << tr("Maximum constraint error");
 
     // Parameters values
-    valuesList << tr("FORM");
-    valuesList << QString(approxAnalysis.getOptimizationAlgorithm().getImplementation()->getClassName().c_str());
+    valuesList << tr("FORM")
+               << QString(approxAnalysis.getOptimizationAlgorithm().getImplementation()->getClassName().c_str());
 
     // starting point
     const NumericalPoint startingPoint(approxAnalysis.getPhysicalStartingPoint());
@@ -449,11 +528,11 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
     valuesList << startingPointText;
 
     // optimization algo parameters
-    valuesList << QString::number(approxAnalysis.getOptimizationAlgorithm().getMaximumIterationNumber());
-    valuesList << QString::number(approxAnalysis.getOptimizationAlgorithm().getMaximumAbsoluteError());
-    valuesList << QString::number(approxAnalysis.getOptimizationAlgorithm().getMaximumRelativeError());
-    valuesList << QString::number(approxAnalysis.getOptimizationAlgorithm().getMaximumResidualError());
-    valuesList << QString::number(approxAnalysis.getOptimizationAlgorithm().getMaximumConstraintError());
+    valuesList << QString::number(approxAnalysis.getOptimizationAlgorithm().getMaximumIterationNumber())
+               << QString::number(approxAnalysis.getOptimizationAlgorithm().getMaximumAbsoluteError())
+               << QString::number(approxAnalysis.getOptimizationAlgorithm().getMaximumRelativeError())
+               << QString::number(approxAnalysis.getOptimizationAlgorithm().getMaximumResidualError())
+               << QString::number(approxAnalysis.getOptimizationAlgorithm().getMaximumConstraintError());
   }
   else if (dynamic_cast<const SimulationReliabilityAnalysis*>(&*analysis.getImplementation()))
   {
@@ -463,11 +542,11 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
     namesList << tr("Algorithm");
     if (dynamic_cast<const ImportanceSamplingAnalysis*>(&*analysis.getImplementation()))
       namesList << tr("Design point (standard space)");
-    namesList << tr("Maximum coefficient of variation");
-    namesList << tr("Maximum elapsed time");
-    namesList << tr("Maximum calls");
-    namesList << tr("Block size");
-    namesList << tr("Seed");
+    namesList << tr("Maximum coefficient of variation")
+              << tr("Maximum elapsed time")
+              << tr("Maximum calls")
+              << tr("Block size")
+              << tr("Seed");
 
     // Parameters values
     // algo

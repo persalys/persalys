@@ -63,6 +63,7 @@ void PhysicalModelDiagramItem::buildActions()
 
 void PhysicalModelDiagramItem::setData(const QVariant & value, int role)
 {
+  // rename
   if (role == Qt::EditRole)
     physicalModel_.getImplementation()->setName(value.toString().toLocal8Bit().data());
 
@@ -72,8 +73,16 @@ void PhysicalModelDiagramItem::setData(const QVariant & value, int role)
 
 void PhysicalModelDiagramItem::update(Observable* source, const String & message)
 {
+  // emit signals to PhysicalModelDiagramWindow
+  // to update the diagram (arrow color and button availability)
+
   if (message == "inputNumberChanged")
   {
+    if (!hasChildren()) // if modification from Python console
+    {
+      fill();
+      return;
+    }
     emit inputNumberValidityChanged(physicalModel_.getInputs().getSize());
     emit physicalModelValidityChanged(physicalModel_.isValid());
     emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
@@ -84,6 +93,11 @@ void PhysicalModelDiagramItem::update(Observable* source, const String & message
   }
   else if (message == "outputNumberChanged")
   {
+    if (!hasChildren()) // if modification from Python console
+    {
+      fill();
+      return;
+    }
     emit physicalModelValidityChanged(physicalModel_.isValid());
     emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
     emit dependencyValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getComposedDistribution().hasIndependentCopula());
@@ -93,6 +107,7 @@ void PhysicalModelDiagramItem::update(Observable* source, const String & message
   }
   else if (message == "inputDistributionChanged")
   {
+    appendProbabilisticModelItem(); // if modification from Python console
     emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
     emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
   }
@@ -109,40 +124,41 @@ void PhysicalModelDiagramItem::update(Observable* source, const String & message
 
 void PhysicalModelDiagramItem::requestDesignOfExperimentEvaluation()
 {
-  if (!getParentOTStudyItem())
-  {
-    qDebug() << "In PhysicalModelDiagramItem::requestDesignOfExperimentEvaluation: no OTStudyItem.\n";
-    return;
-  }
-  QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "DesignsOfExperimentTitle", 2, Qt::MatchRecursive);
-  if (listIndexes.size() != 1)
+  // check if there is at least a design of experiment
+  QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "DesignsOfExperimentTitle", 1, Qt::MatchRecursive);
+  if (listIndexes.size() < 1)
   {
     emit emitErrorMessageRequested(tr("There is no design of experiment."));
     return;
   }
+  // find all the designs of experiment which have not been evaluated
   QList<QStandardItem*> listDOEItems;
-  QStandardItem * doeTitleItem = model()->itemFromIndex(listIndexes[0]);
-  for (int i=0; i<doeTitleItem->rowCount(); ++i)
+  for (UnsignedInteger i=0; i<getParentOTStudyItem()->getOTStudy().getDesignOfExperiments().getSize(); ++i)
   {
-    if (!doeTitleItem->child(i)->hasChildren())
+    DesignOfExperiment doe_i(getParentOTStudyItem()->getOTStudy().getDesignOfExperiments()[i]);
+    if (doe_i.getPhysicalModel().getImplementation().get() == physicalModel_.getImplementation().get() &&
+        !doe_i.getOutputSample().getSize()
+       )
     {
-      QStandardItem * item = new QStandardItem(doeTitleItem->child(i)->text());
-      DesignOfExperimentDefinitionItem * doeItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeTitleItem->child(i));
-      if (!doeItem)
+      DesignOfExperimentDefinitionItem * doeItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doe_i.getImplementation().get()->getObserver("DesignOfExperimentDefinition"));
+      if (doeItem)
       {
-        qDebug() << "In PhysicalModelDiagramItem::requestDesignOfExperimentEvaluation: can not convert item into DesignOfExperimentDefinitionItem.\n";
-        emit emitErrorMessageRequested(tr("Internal error. Impossible to evaluate the design of experiment"));
-        return;
+        QStandardItem * item = new QStandardItem(doe_i.getName().c_str());
+        item->setData(qVariantFromValue(doeItem));
+        listDOEItems.append(item);
       }
-      item->setData(qVariantFromValue(doeItem));
-      listDOEItems.append(item);
-				}
-		}
+    }
+  }
 
+		// check
   if (listDOEItems.isEmpty())
+  {
     emit emitErrorMessageRequested(tr("All the designs of experiment have already been evaluated."));
-  else
-    emit designOfExperimentEvaluationRequested(listDOEItems);
+    return;
+  }
+
+  // emit signal to StudyTreeView to open a wizard (with the list of designs of experiment)
+  emit designOfExperimentEvaluationRequested(listDOEItems);
 }
 
 
@@ -159,13 +175,16 @@ void PhysicalModelDiagramItem::requestMetaModelCreation()
       break;
     }
   }
+  // check
   if (!design.getOutputSample().getSize())
   {
-    qDebug() << "In PhysicalModelDiagramItem::requestMetaModelCreation: We have not found a design of experiment with an output sample.\n";
+    emit emitErrorMessageRequested(tr("We have not found a design of experiment with an output sample.\n"));
     return;
   }
 
+  // new analysis
   FunctionalChaosAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("metamodel_"), design);
+  // emit signal to StudyTreeView to open a 'general' wizard (with a list of designs of experiment)
   emit analysisRequested(this, analysis, true);
 }
 
@@ -182,22 +201,24 @@ void PhysicalModelDiagramItem::requestReliabilityCreation()
     }
   }
 
+  // new analysis
   MonteCarloReliabilityAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("reliability_"), limitState);
+  // emit signal to StudyTreeView to open a 'general' wizard (with a list of limit states)
   emit analysisRequested(this, analysis, true);
 }
 
 
 void PhysicalModelDiagramItem::removePhysicalModel()
 {
-  if (getParentOTStudyItem())
+  // check
+  if (analysisInProgress_)
   {
-    if (analysisInProgress_)
-    {
-      emit emitErrorMessageRequested(tr("Can not remove a physical model when an analysis is running."));
-      return;
-    }
-    getParentOTStudyItem()->getOTStudy().remove(PhysicalModel(physicalModel_));
+    emit emitErrorMessageRequested(tr("Can not remove a physical model when an analysis is running."));
+    return;
   }
+  // remove
+  if (getParentOTStudyItem())
+    getParentOTStudyItem()->getOTStudy().remove(PhysicalModel(physicalModel_));
 }
 
 
@@ -226,14 +247,19 @@ void PhysicalModelDiagramItem::appendPhysicalModelItem()
   if (hasChildren())
     return;
 
+  // new item
   PhysicalModelDefinitionItem * pmItem = new PhysicalModelDefinitionItem(getPhysicalModel());
-  connect(pmItem, SIGNAL(probabilisticModelRequested(PhysicalModelItem*)), this, SLOT(appendProbabilisticModelItem()));
-  appendRow(pmItem);
 
+  // connections
+  connect(pmItem, SIGNAL(probabilisticModelRequested(PhysicalModelItem*)), this, SLOT(appendProbabilisticModelItem()));
   connect(this, SIGNAL(evaluationModelRequested()), pmItem, SLOT(createNewModelEvaluation()));
   connect(this, SIGNAL(designOfExperimentRequested()), pmItem, SLOT(createNewDesignOfExperiment()));
   connect(this, SIGNAL(newProbabilisticModelItemCreated(ProbabilisticModelItem*)), pmItem, SLOT(updateProbaActionAvailability()));
 
+  // append item
+  appendRow(pmItem);
+
+  // emit signal to the StudyTreeView to create a window
   emit modelDefinitionWindowRequested(pmItem);
 
   // disable the definition action
@@ -247,14 +273,18 @@ void PhysicalModelDiagramItem::appendProbabilisticModelItem()
   if (model()->match(this->index(), Qt::UserRole, "ProbabilisticModel", -1, Qt::MatchRecursive).size() == 1)
     return;
 
+  // new item
   ProbabilisticModelItem * probaItem = new ProbabilisticModelItem(getPhysicalModel());
+
   // insert the item after the model definition item
   insertRow(1, probaItem);
 
+  // connections
   connect(this, SIGNAL(limitStateRequested()), probaItem, SLOT(createNewLimitState()));
   connect(this, SIGNAL(centralTendencyRequested()), probaItem, SLOT(createNewCentralTendency()));
   connect(this, SIGNAL(sensitivityRequested()), probaItem, SLOT(createNewSensitivityAnalysis()));
 
+  // emit signal to the StudyTreeView to create a window
   emit newProbabilisticModelItemCreated(probaItem);
 }
 
@@ -275,14 +305,17 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
     return;
   }
 
+  /// append a sub-item (title) if it does not exist yet
+
   // parent item of the new analysis item
   OTguiItem * analysisTypeItem = 0;
 
   const String analysisName = analysis.getImplementation()->getClassName();
-  // Evaluation
+
+  // Evaluation title
   if (analysisName == "ModelEvaluation")
   {
-    analysisTypeItem = getTitleItemNamed("ModelEvaluationTitle", tr("Evaluation"));
+    analysisTypeItem = getTitleItemNamed(tr("Evaluation"), "ModelEvaluationTitle");
 
     if (!analysisTypeItem->getActions().size())
     {
@@ -293,10 +326,11 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
       analysisTypeItem->appendAction(newEvaluation);
     }
   }
-  // Central tendency
-  else if (analysisName == "MonteCarloAnalysis" || analysisName == "TaylorExpansionMomentsAnalysis")
+  // Central tendency title
+  else if (analysisName == "MonteCarloAnalysis" ||
+           analysisName == "TaylorExpansionMomentsAnalysis")
   {
-    analysisTypeItem = getTitleItemNamed("CentralTendencyTitle", tr("Central tendency"));
+    analysisTypeItem = getTitleItemNamed(tr("Central tendency"), "CentralTendencyTitle");
 
     if (!analysisTypeItem->getActions().size())
     {
@@ -307,10 +341,11 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
       analysisTypeItem->appendAction(newCentralTendency);
     }
   }
-  // Sensitivity
-  else if (analysisName == "SobolAnalysis" || analysisName == "SRCAnalysis")
+  // Sensitivity title
+  else if (analysisName == "SobolAnalysis" ||
+           analysisName == "SRCAnalysis")
   {
-    analysisTypeItem = getTitleItemNamed("SensitivityTitle", tr("Sensitivity"));
+    analysisTypeItem = getTitleItemNamed(tr("Sensitivity"), "SensitivityTitle");
 
     if (!analysisTypeItem->getActions().size())
     {
@@ -321,6 +356,7 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
       analysisTypeItem->appendAction(newSensitivityAnalysis);
     }
   }
+  ///
 
   if (!analysisTypeItem)
   {
@@ -330,11 +366,16 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
 
   // new analysis item
   AnalysisItem * newItem = new AnalysisItem(analysis);
-  connect(newItem, SIGNAL(analysisStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
+
+  // connections
+  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
   if (getParentOTStudyItem())
-    connect(newItem, SIGNAL(analysisStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
+    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
+
+  // append item
   analysisTypeItem->appendRow(newItem);
 
+  // emit signal to StudyTreeView to create a window
   emit newAnalysisItemCreated(newItem);
 }
 
@@ -342,7 +383,7 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
 void PhysicalModelDiagramItem::appendLimitStateItem(const LimitState& limitState)
 {
   // parent item of the new limit state item
-  OTguiItem * analysisTypeItem = getTitleItemNamed("ReliabilityTitle", tr("Reliability"));
+  OTguiItem * analysisTypeItem = getTitleItemNamed(tr("Reliability"), "ReliabilityTitle");
 
   if (!analysisTypeItem->getActions().size())
   {
@@ -353,13 +394,17 @@ void PhysicalModelDiagramItem::appendLimitStateItem(const LimitState& limitState
     analysisTypeItem->appendAction(newLimitState);
   }
 
-  // limit state item
+  // new limit state item
   LimitStateItem * newItem = new LimitStateItem(limitState);
+
+  // connections
   connect(newItem, SIGNAL(removeRequested(int)), this, SLOT(requestLimitStateRemoval()));
-  connect(newItem, SIGNAL(analysisStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
+  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
+
+  // append item
   analysisTypeItem->appendRow(newItem);
 
-  // signal for StudyTreeView : create a window
+  // emit signal to StudyTreeView to create a window
   emit newLimitStateCreated(newItem);
 
   // signal for diagram window : update diagram
@@ -371,7 +416,7 @@ void PhysicalModelDiagramItem::appendLimitStateItem(const LimitState& limitState
 void PhysicalModelDiagramItem::appendDesignOfExperimentItem(const DesignOfExperiment& designOfExperiment)
 {
   // parent item of the new doe item
-  OTguiItem * typeItem = getTitleItemNamed("DesignsOfExperimentTitle", tr("Designs of experiment"));
+  OTguiItem * typeItem = getTitleItemNamed(tr("Designs of experiment"), "DesignsOfExperimentTitle");
 
   // context menu actions
   if (!typeItem->getActions().size())
@@ -382,14 +427,18 @@ void PhysicalModelDiagramItem::appendDesignOfExperimentItem(const DesignOfExperi
     typeItem->appendAction(newDesignOfExperiment);
   }
 
-  // doe item
+  // new doe item
   DesignOfExperimentDefinitionItem * newItem = new DesignOfExperimentDefinitionItem(designOfExperiment);
+
+  // connections
   connect(newItem, SIGNAL(numberDesignEvaluationChanged(bool)),this, SLOT(requestDesignOfExperimentRemoval(bool)));
   connect(newItem, SIGNAL(designEvaluationAppended()), this , SLOT(incrementDesignEvaluationCounter()));
-  connect(newItem, SIGNAL(analysisStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
+  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
+
+  // append item
   typeItem->appendRow(newItem);
 
-  // signal for StudyTreeView : create a window
+  // emit signal to StudyTreeView to create a window
   emit newDesignOfExperimentCreated(newItem);
 
   // signal for diagram window : update diagram

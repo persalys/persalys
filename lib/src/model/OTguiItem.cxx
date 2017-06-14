@@ -142,11 +142,10 @@ void OTguiItem::requestRemoveChild(int row)
 void OTguiItem::setAnalysisInProgress(bool inProgress)
 {
   analysisInProgress_ = inProgress;
-  emit analysisStatusChanged(inProgress);
 }
 
 
-OTguiItem* OTguiItem::getTitleItemNamed(const QString& typeName, const QString& name)
+OTguiItem* OTguiItem::getTitleItemNamed(const QString& name, const QString& typeName)
 {
   QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, typeName, 1, Qt::MatchRecursive);
   if (listIndexes.size() == 1)

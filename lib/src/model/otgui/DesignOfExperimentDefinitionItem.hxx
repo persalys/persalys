@@ -31,7 +31,7 @@ class OTGUI_API DesignOfExperimentDefinitionItem : public DesignOfExperimentItem
 public:
   DesignOfExperimentDefinitionItem(const DesignOfExperiment & designOfExperiment);
 
-  void setData(const QVariant & value, int role);
+  virtual void updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
   virtual void update(Observable * source, const OT::String & message);
 
   void fill();
@@ -50,8 +50,8 @@ signals:
 private:
   QAction * modifyDesignOfExperiment_;
   QAction * evaluateDesignOfExperiment_;
-  QAction * removeDesignOfExperiment_;
   QAction * newMetaModel_;
+  QAction * removeDesignOfExperiment_;
 };
 }
 #endif

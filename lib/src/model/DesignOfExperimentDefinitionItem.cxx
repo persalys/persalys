@@ -21,6 +21,9 @@
 #include "otgui/DesignOfExperimentDefinitionItem.hxx"
 
 #include "otgui/DesignOfExperimentEvaluation.hxx"
+#include "otgui/OTStudyItem.hxx"
+
+#include <QDebug>
 
 using namespace OT;
 
@@ -28,6 +31,10 @@ namespace OTGUI {
 
 DesignOfExperimentDefinitionItem::DesignOfExperimentDefinitionItem(const DesignOfExperiment & designOfExperiment)
   : DesignOfExperimentItem(designOfExperiment, "DesignOfExperimentDefinition")
+  , modifyDesignOfExperiment_(0)
+  , evaluateDesignOfExperiment_(0)
+  , newMetaModel_(0)
+  , removeDesignOfExperiment_(0)
 {
   buildActions();
 }
@@ -40,12 +47,12 @@ void DesignOfExperimentDefinitionItem::buildActions()
   modifyDesignOfExperiment_->setStatusTip(tr("Modify the design of experiment"));
   connect(modifyDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(modifyDesignOfExperiment()));
 
+  // evaluate design of experiment action
   evaluateDesignOfExperiment_ = new QAction(QIcon(":/images/system-run.png"), tr("Evaluate"), this);
   evaluateDesignOfExperiment_->setStatusTip(tr("Evaluate the design of experiment"));
   connect(evaluateDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(appendEvaluationItem()));
-  if (designOfExperiment_.getOutputSample().getSize())
-    evaluateDesignOfExperiment_->setEnabled(false);
 
+  // new metamodel action
   newMetaModel_ = new QAction(QIcon(":/images/metaModel.png"), tr("New metamodel"), this);
   newMetaModel_->setStatusTip(tr("Create a new metamodel"));
   connect(newMetaModel_, SIGNAL(triggered()), this, SLOT(createNewMetaModel()));
@@ -62,12 +69,23 @@ void DesignOfExperimentDefinitionItem::buildActions()
 }
 
 
-void DesignOfExperimentDefinitionItem::setData(const QVariant & value, int role)
+void DesignOfExperimentDefinitionItem::updateDesignOfExperiment(const DesignOfExperiment & doe)
 {
-  if (role == Qt::EditRole)
-    designOfExperiment_.getImplementation()->setName(value.toString().toLocal8Bit().data());
+  // remove Evaluation item
+  designOfExperiment_.getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
+  evaluateDesignOfExperiment_->setEnabled(true);
+  // remove last observer
+  designOfExperiment_.getImplementation().get()->removeObserver(this);
 
-  QStandardItem::setData(value, role);
+  // update designOfExperiment_
+  designOfExperiment_ = doe;
+  designOfExperiment_.addObserver(this);
+
+  // update the implementation of the design of experiment stored in OTStudy
+  getParentOTStudyItem()->getOTStudy().getDesignOfExperimentByName(doe.getName()).setImplementationAsPersistentObject(doe.getImplementation());
+
+  // emit signal to all analysisItem children to update the doe of the analyses
+  emit designOfExperimentChanged(designOfExperiment_);
 }
 
 
@@ -75,18 +93,16 @@ void DesignOfExperimentDefinitionItem::update(Observable* source, const String &
 {
   if (message == "analysisFinished")
   {
-    evaluateDesignOfExperiment_->setEnabled(false);
+    // emit signal to PhysicalModelDiagramItem to update the diagram
     emit designEvaluationAppended();
-    emit analysisFinished();
-  }
-  if (message == "analysisBadlyFinished")
-  {
-    evaluateDesignOfExperiment_->setEnabled(false);
-    emit analysisBadlyFinished(designOfExperiment_.getErrorMessage().c_str());
   }
   else if (message == "designOfExperimentRemoved")
   {
+    // emit signal to PhysicalModelDiagramItem to update the diagram
     emit numberDesignEvaluationChanged(designOfExperiment_.getOutputSample().getSize() > 0);
+    if (hasChildren())
+      qDebug() << "DesignOfExperimentDefinitionItem::update(designOfExperimentRemoved) has not to contain child\n";
+
     emit removeRequested(row());
   }
 }
@@ -94,36 +110,49 @@ void DesignOfExperimentDefinitionItem::update(Observable* source, const String &
 
 void DesignOfExperimentDefinitionItem::modifyDesignOfExperiment()
 {
+  // emit signal to StudyTreeView to open a wizard
   emit modifyDesignOfExperimentRequested(this);
 }
 
 
 void DesignOfExperimentDefinitionItem::appendEvaluationItem()
 {
+  // check
   if (!designOfExperiment_.getInputSample().getSize())
   {
     emit emitErrorMessageRequested(tr("The input sample is empty."));
     return;
   }
+  // new analysis
   DesignOfExperimentEvaluation * evaluation = new DesignOfExperimentEvaluation(DesignOfExperiment(designOfExperiment_));
+
   // new analysis item
   AnalysisItem * evaluationItem = new AnalysisItem(evaluation);
+
   evaluationItem->setData(tr("Evaluation"), Qt::DisplayRole);
   QFont font;
-  font.setWeight(font.weight()+10);
+  font.setWeight(font.weight() + 10);
   evaluationItem->setData(font, Qt::FontRole);
   evaluationItem->setEditable(false);
   evaluationItem->insertAction(1, newMetaModel_);
 
+  // the new item is an observer of designOfExperiment_
   getDesignOfExperiment().addObserver(evaluationItem);
 
-  appendRow(evaluationItem);
+  // insert item
+  insertRow(0, evaluationItem);
+
+  // emit signal to StudyTreeView to create a window
   emit designOfExperimentEvaluationRequested(evaluationItem);
+
+  // disable the evaluation action
+  evaluateDesignOfExperiment_->setDisabled(true);
 }
 
 
 void DesignOfExperimentDefinitionItem::fill()
 {
+  // append Evaluation item
   if (designOfExperiment_.getOutputSample().getSize())
     appendEvaluationItem();
 }

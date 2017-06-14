@@ -34,10 +34,9 @@ public:
 
   DesignOfExperiment getDesignOfExperiment() const;
 
-  void appendAnalysisItem(Analysis& analysis);
+  void setData(const QVariant & value, int role);
 
-  virtual void updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
-  virtual void update(Observable * source, const OT::String & message);
+  void appendAnalysisItem(Analysis& analysis);
 
 public slots:
   void removeDesignOfExperiment();
@@ -49,10 +48,6 @@ signals:
   void analysisBadlyFinished(QString);
   void evaluateDesignOfExperimentRequested(DesignOfExperimentItem*);
   void designOfExperimentEvaluationRequested(AnalysisItem*);
-  void updateDiagram(const DesignOfExperiment&);
-
-protected:
-  bool designOfExperimentValid();
 
 protected:
   DesignOfExperiment designOfExperiment_;

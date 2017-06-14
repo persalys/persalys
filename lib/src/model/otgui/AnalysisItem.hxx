@@ -47,6 +47,8 @@ protected:
   QStandardItem * getParentItem(const QString itemType);
 
 public slots:
+  void processLaunched();
+  void processFinished();
   void updateAnalysis(const Analysis & analysis);
   void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
   void stopAnalysis();
@@ -54,9 +56,8 @@ public slots:
   void removeAnalysis();
 signals:
   void analysisFinished(AnalysisItem*);
-  void analysisBadlyFinished(AnalysisItem*, QString);
+  void analysisBadlyFinished(AnalysisItem*);
   void analysisRemoved(QStandardItem*);
-  void analysisChanged(const Analysis&);
   void metaModelCreated(PhysicalModel);
   void messageChanged(QString);
   void progressValueChanged(int);

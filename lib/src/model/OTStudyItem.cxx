@@ -282,12 +282,13 @@ bool OTStudyItem::closeOTStudy()
 
 void OTStudyItem::addDataModelItem(DesignOfExperiment & dataModel)
 {
-  OTguiItem * item = getTitleItemNamed("DataModelsTitle", tr("Data models"));
+  OTguiItem * item = getTitleItemNamed(tr("Data models"), "DataModelsTitle");
 
   // new Data model item
   DataModelDiagramItem * newDataModelItem = new DataModelDiagramItem(dataModel);
   item->appendRow(newDataModelItem);
 
+  // signal for StudyTreeView to create the window
   emit newDataModelItemCreated(newDataModelItem);
 
   // Add sub items
@@ -297,9 +298,9 @@ void OTStudyItem::addDataModelItem(DesignOfExperiment & dataModel)
 
 void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
 {
-  const QString titleType = (physicalModel.getImplementation()->getClassName() == "MetaModel") ? "MetaModelsTitle" : "PhysicalModelsTitle";
   const QString title = (physicalModel.getImplementation()->getClassName() == "MetaModel") ? tr("Metamodels") : tr("Physical models");
-  OTguiItem * item = getTitleItemNamed(titleType, title);
+  const QString titleType = (physicalModel.getImplementation()->getClassName() == "MetaModel") ? "MetaModelsTitle" : "PhysicalModelsTitle";
+  OTguiItem * item = getTitleItemNamed(title, titleType);
 
   // new Physical model item
   PhysicalModelDiagramItem * newPhysicalModelItem = new PhysicalModelDiagramItem(physicalModel);

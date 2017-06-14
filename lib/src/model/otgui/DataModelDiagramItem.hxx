@@ -31,8 +31,6 @@ class OTGUI_API DataModelDiagramItem : public DesignOfExperimentItem
 public:
   DataModelDiagramItem(const DesignOfExperiment& designOfExperiment);
 
-  void setData(const QVariant& value, int role);
-
   virtual void update(Observable* source, const OT::String& message);
 
   void fill();
@@ -41,7 +39,6 @@ protected:
   void buildActions();
 
 public slots:
-  void updateDiagram(const DesignOfExperiment&);
   void appendDataModelItem();
 signals:
   void modelDefinitionWindowRequested(DataModelDefinitionItem*);

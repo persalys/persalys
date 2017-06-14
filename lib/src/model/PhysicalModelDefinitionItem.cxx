@@ -66,6 +66,8 @@ void PhysicalModelDefinitionItem::buildActions()
 
 void PhysicalModelDefinitionItem::update(Observable* source, const String & message)
 {
+  // emit signals to PhysicalModelWindowWidget
+
   // input signals
   if (message == "inputNameChanged" ||
       message == "inputNumberChanged"
@@ -115,34 +117,46 @@ void PhysicalModelDefinitionItem::update(Observable* source, const String & mess
 
 void PhysicalModelDefinitionItem::createProbabilisticModel()
 {
+  // check
   if (!physicalModel_.getInputs().getSize())
+  {
     emit emitErrorMessageRequested(tr("The physical model must have inputs."));
-  else
-    emit probabilisticModelRequested(this);
+    return;
+  }
+  // emit signal to StudyTreeView to create a window
+  emit probabilisticModelRequested(this);
 }
 
 
 void PhysicalModelDefinitionItem::createNewModelEvaluation()
 {
+  // check
   if (!physicalModel_.isValid())
-    emit emitErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
-  else
   {
-    ModelEvaluation evaluation(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("evaluation_"), physicalModel_);
-    emit analysisRequested(this, evaluation);
+    emit emitErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
+    return;
   }
+
+  // new analysis
+  ModelEvaluation evaluation(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("evaluation_"), physicalModel_);
+  // emit signal to StudyTreeView to open a wizard
+  emit analysisRequested(this, evaluation);
 }
 
 
 void PhysicalModelDefinitionItem::createNewDesignOfExperiment()
 {
+  // check
   if (!physicalModel_.getInputs().getSize())
-    emit emitErrorMessageRequested(tr("The physical model must have inputs."));
-  else
   {
-    DesignOfExperiment design(getParentOTStudyItem()->getOTStudy().getAvailableDesignOfExperimentName(), physicalModel_);
-    emit designOfExperimentRequested(this, design);
+    emit emitErrorMessageRequested(tr("The physical model must have inputs."));
+    return;
   }
+
+  // new design
+  DesignOfExperiment design(getParentOTStudyItem()->getOTStudy().getAvailableDesignOfExperimentName(), physicalModel_);
+  // emit signal to StudyTreeView to open a wizard
+  emit designOfExperimentRequested(this, design);
 }
 
 

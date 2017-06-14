@@ -75,19 +75,11 @@ void DataModelDefinitionItem::buildActions()
 }
 
 
-void DataModelDefinitionItem::setData(const QVariant & value, int role)
-{
-  if (role == Qt::EditRole)
-    designOfExperiment_.getImplementation()->setName(value.toString().toLocal8Bit().data());
-
-  QStandardItem::setData(value, role);
-}
-
-
 void DataModelDefinitionItem::update(Observable* source, const String& message)
 {
   if (message == "variablesChanged")
   {
+    // emit signal to DataModelWindow
     emit variablesChanged();
   }
   else if (message == "designOfExperimentRemoved")
@@ -97,11 +89,24 @@ void DataModelDefinitionItem::update(Observable* source, const String& message)
 }
 
 
+bool DataModelDefinitionItem::designOfExperimentValid()
+{
+  if (!designOfExperiment_.getSample().getSize())
+  {
+    emit emitErrorMessageRequested(tr("The sample is empty."));
+    return false;
+  }
+  return true;
+}
+
+
 void DataModelDefinitionItem::createNewDataAnalysis()
 {
+  // check
   if (!designOfExperimentValid())
     return;
 
+  // new analysis
   DataAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("DataAnalysis_"), designOfExperiment_);
   getParentOTStudyItem()->getOTStudy().add(analysis);
 }
@@ -109,25 +114,31 @@ void DataModelDefinitionItem::createNewDataAnalysis()
 
 void DataModelDefinitionItem::createNewInferenceAnalysis()
 {
+  // check
   if (!designOfExperimentValid())
     return;
 
+  // new analysis
   InferenceAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("inference_"), designOfExperiment_);
+  // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);
 }
 
 
 void DataModelDefinitionItem::createNewCopulaInferenceAnalysis()
 {
+  // check
   if (!designOfExperimentValid())
     return;
 
   if (designOfExperiment_.getInputSample().getDimension() < 2)
-    emit emitErrorMessageRequested(tr("The model must contain at least two inputs."));
-  else
   {
-    CopulaInferenceAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("DependenciesInference_"), designOfExperiment_);
-    getParentOTStudyItem()->getOTStudy().add(analysis);
+    emit emitErrorMessageRequested(tr("The model must contain at least two inputs."));
+    return;
   }
+
+  // new analysis
+  CopulaInferenceAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("DependenciesInference_"), designOfExperiment_);
+  getParentOTStudyItem()->getOTStudy().add(analysis);
 }
 }

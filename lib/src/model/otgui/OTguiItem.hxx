@@ -56,10 +56,10 @@ signals:
   void analysisRequested(OTguiItem*, const Analysis&, const bool isGeneralWizard=false);
   void removeRequested(int);
   void removeWindowRequested();
-  void analysisStatusChanged(bool);
+  void analysisInProgressStatusChanged(bool);
 
 protected:
-  OTguiItem * getTitleItemNamed(const QString& typeName, const QString& name);
+  OTguiItem * getTitleItemNamed(const QString& name, const QString& typeName);
 
 protected:
   OTStudyItem * parentOTStudyItem_;

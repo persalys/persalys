@@ -31,11 +31,11 @@ class OTGUI_API DataModelDefinitionItem : public DesignOfExperimentItem
 public:
   DataModelDefinitionItem(const DesignOfExperiment & designOfExperiment);
 
-  void setData(const QVariant & value, int role);
   virtual void update(Observable * source, const OT::String & message);
 
 protected:
   void buildActions();
+  bool designOfExperimentValid();
 
 public slots:
   void createNewDataAnalysis();

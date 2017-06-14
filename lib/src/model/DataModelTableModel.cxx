@@ -29,6 +29,8 @@ namespace OTGUI {
 DataModelTableModel::DataModelTableModel(const NumericalSample& data, DataModel* dataModel, const bool useColumns, QObject* parent)
   : SampleTableModel(data, parent)
   , dataModel_(dataModel)
+  , inputColumns_()
+  , outputColumns_()
 {
   if (useColumns)
   {
@@ -37,6 +39,10 @@ DataModelTableModel::DataModelTableModel(const NumericalSample& data, DataModel*
   }
   else
   {
+    // condition used when opening a data model: we use dataModel.getSample() and not the sample from the file
+    // so we can not use getInputColumns and getOutputColumns.
+    // In dataModel.getSample(): we put first the input sample, then the output sample
+    // so we can retrieve easily the indices
     inputColumns_ = Indices(dataModel->getInputSample().getSize() > 0 ? dataModel->getInputSample().getDimension() : 0);
     inputColumns_.fill();
     outputColumns_ = Indices(dataModel->getOutputSample().getSize() > 0 ? dataModel->getOutputSample().getDimension() : 0);
@@ -55,6 +61,21 @@ DataModelTableModel::DataModelTableModel(const NumericalSample& data, DataModel*
     dataModel->blockNotification("DataModelDefinition");
     dataModel->setColumns(inputColumns_, outputColumns_);
     dataModel->blockNotification();
+  }
+  else // the indices are ok so we can use the variables names stored in the model
+  {
+    Description dataDescription(data_.getDescription());
+    if (dataModel_->getInputNames().getSize() == inputColumns_.getSize())
+    {
+      for (UnsignedInteger i=0; i<dataModel_->getInputNames().getSize(); ++i)
+        dataDescription[inputColumns_[i]] = dataModel_->getInputNames()[i];
+    }
+    if (dataModel_->getOutputNames().getSize() == outputColumns_.getSize())
+    {
+      for (UnsignedInteger i=0; i<dataModel_->getOutputNames().getSize(); ++i)
+        dataDescription[outputColumns_[i]] = dataModel_->getOutputNames()[i];
+    }
+    data_.setDescription(dataDescription);
   }
 }
 

@@ -67,6 +67,8 @@ void ProbabilisticModelItem::buildActions()
 
 void ProbabilisticModelItem::update(Observable* source, const String & message)
 {
+  // emit signals to ProbabilisticModelWindow
+
   if (message == "inputNameChanged" ||
       message == "inputNumberChanged" ||
       message == "inputDistributionChanged"
@@ -104,9 +106,11 @@ bool ProbabilisticModelItem::physicalModelValid()
 
 void ProbabilisticModelItem::createNewLimitState()
 {
+  // check
   if (!physicalModelValid())
     return;
 
+  // new limit state
   LimitState newLimitState(getParentOTStudyItem()->getOTStudy().getAvailableLimitStateName(), physicalModel_, physicalModel_.getSelectedOutputsNames()[0], OT::Less(), 0.);
   getParentOTStudyItem()->getOTStudy().add(newLimitState);
 }
@@ -114,16 +118,20 @@ void ProbabilisticModelItem::createNewLimitState()
 
 void ProbabilisticModelItem::createNewCentralTendency()
 {
+  // check
   if (!physicalModelValid())
     return;
 
+  // new analysis
   MonteCarloAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("centralTendency_"), physicalModel_);
+  // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);
 }
 
 
 void ProbabilisticModelItem::createNewSensitivityAnalysis()
 {
+  // check
   if (!physicalModelValid())
     return;
 
@@ -134,7 +142,9 @@ void ProbabilisticModelItem::createNewSensitivityAnalysis()
     return;
   }
 
+  // new analysis
   SobolAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("sensitivity_"), physicalModel_);
+  // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);
 }
 }

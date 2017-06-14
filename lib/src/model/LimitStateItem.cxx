@@ -59,6 +59,7 @@ void LimitStateItem::buildActions()
 
 void LimitStateItem::setData(const QVariant & value, int role)
 {
+  // rename
   if (role == Qt::EditRole)
     limitState_.getImplementation()->setName(value.toString().toLocal8Bit().data());
 
@@ -74,6 +75,8 @@ LimitState LimitStateItem::getLimitState() const
 
 void LimitStateItem::update(Observable* source, const String & message)
 {
+  // emit signals to LimitStateWindow
+
   if (message == "outputNumberChanged" ||
       message == "outputNameChanged" ||
       message == "outputSelectionChanged"
@@ -98,18 +101,27 @@ void LimitStateItem::update(Observable* source, const String & message)
 
 void LimitStateItem::appendAnalysisItem(Analysis& analysis)
 {
+  // new item
   AnalysisItem * newItem = new AnalysisItem(analysis);
-  connect(newItem, SIGNAL(analysisStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
+
+  // connections
+  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
+  // - signal for the PhysicalModelDiagramItem
+  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SIGNAL(analysisInProgressStatusChanged(bool)));
   if (getParentOTStudyItem())
-    connect(newItem, SIGNAL(analysisStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
+    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
+
+  // append item
   appendRow(newItem);
 
+  // emit signal to StudyTreeView to create a window
   emit newAnalysisItemCreated(newItem);
 }
 
 
 void LimitStateItem::createNewThresholdExceedance()
 {
+  // check
   if (!limitState_.getPhysicalModel().isValid())
   {
     emit emitErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
@@ -123,23 +135,26 @@ void LimitStateItem::createNewThresholdExceedance()
   if (!limitState_.isValid())
   {
     emit emitErrorMessageRequested(tr("The limit state is not valid."));
+    return;
   }
 
+  // new analysis
   MonteCarloReliabilityAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("reliability_"), limitState_);
+  // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);
 }
 
 
 void LimitStateItem::removeLimitState()
 {
-  if (getParentOTStudyItem())
+  // check
+  if (analysisInProgress_)
   {
-    if (analysisInProgress_)
-    {
-      emit emitErrorMessageRequested(tr("Can not remove a limit state when an analysis is running."));
-      return;
-    }
-    getParentOTStudyItem()->getOTStudy().remove(LimitState(limitState_));
+    emit emitErrorMessageRequested(tr("Can not remove a limit state when an analysis is running."));
+    return;
   }
+  // remove
+  if (getParentOTStudyItem())
+    getParentOTStudyItem()->getOTStudy().remove(LimitState(limitState_));
 }
 }
