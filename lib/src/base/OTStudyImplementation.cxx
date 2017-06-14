@@ -98,7 +98,7 @@ void OTStudyImplementation::clear()
   // remove all the design Of Experiments
   for (UnsignedInteger i=0; i<designOfExperiments_.getSize(); ++i)
   {
-    designOfExperiments_[i].getImplementation().get()->notifyAndRemove("analysisRemoved", "DesignOfExperimentEvaluation");
+    designOfExperiments_[i].getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
     designOfExperiments_[i].getImplementation().get()->notify("designOfExperimentRemoved");
   }
 
@@ -271,7 +271,7 @@ void OTStudyImplementation::clear(const PhysicalModel& physicalModel)
     if ((*iterDOE).getPhysicalModel().getName() == physicalModel.getName())
     {
       clear(*iterDOE);
-      (*iterDOE).getImplementation().get()->notifyAndRemove("analysisRemoved", "DesignOfExperimentEvaluation");
+      (*iterDOE).getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
       (*iterDOE).getImplementation().get()->notify("designOfExperimentRemoved");
       iterDOE = designOfExperiments_.erase(iterDOE);
     }
@@ -371,7 +371,7 @@ void OTStudyImplementation::remove(const DesignOfExperiment& designOfExperiment)
         designOfExperiments_.erase(designOfExperiments_.begin() + i);
         break;
       }
-    designOfExperiment.getImplementation().get()->notifyAndRemove("analysisRemoved", "DesignOfExperimentEvaluation");
+    designOfExperiment.getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
   }
   else // datamodel
   {
