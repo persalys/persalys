@@ -38,7 +38,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelItem * item)
+YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * item)
   : OTguiSubWindow(item)
   , physicalModel_(item->getPhysicalModel())
 {

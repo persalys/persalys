@@ -37,7 +37,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelItem * item)
+PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelDefinitionItem * item)
   : QTabWidget()
   , physicalModel_(item->getPhysicalModel())
   , inputTableView_(0)

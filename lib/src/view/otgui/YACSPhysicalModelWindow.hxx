@@ -22,7 +22,7 @@
 #define OTGUI_YACSPHYSICALMODELWINDOW_HXX
 
 #include "otgui/OTguiSubWindow.hxx"
-#include "otgui/PhysicalModelItem.hxx"
+#include "otgui/PhysicalModelDefinitionItem.hxx"
 
 #include <QLineEdit>
 #include <QCheckBox>
@@ -35,7 +35,7 @@ class OTGUI_API YACSPhysicalModelWindow : public OTguiSubWindow
   Q_OBJECT
 
 public :
-  YACSPhysicalModelWindow(PhysicalModelItem * item);
+  YACSPhysicalModelWindow(PhysicalModelDefinitionItem * item);
 
 public slots:
   void selectImportFileDialogRequested();

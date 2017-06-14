@@ -21,7 +21,7 @@
 #ifndef OTGUI_PHYSICALMODELWINDOWWIDGET_HXX
 #define OTGUI_PHYSICALMODELWINDOWWIDGET_HXX
 
-#include "otgui/PhysicalModelItem.hxx"
+#include "otgui/PhysicalModelDefinitionItem.hxx"
 #include "otgui/CopyableTableView.hxx"
 #include "otgui/CheckableHeaderView.hxx"
 #include "otgui/InputTableModel.hxx"
@@ -36,7 +36,7 @@ class OTGUI_API PhysicalModelWindowWidget : public QTabWidget
   Q_OBJECT
 
 public :
-  PhysicalModelWindowWidget(PhysicalModelItem * item);
+  PhysicalModelWindowWidget(PhysicalModelDefinitionItem * item);
 
 protected:
   void buildInterface();

@@ -24,7 +24,7 @@
 
 namespace OTGUI {
 
-MetaModelWindow::MetaModelWindow(PhysicalModelItem * item)
+MetaModelWindow::MetaModelWindow(PhysicalModelDefinitionItem * item)
   : OTguiSubWindow(item)
   , physicalModel_(item->getPhysicalModel())
 {

@@ -28,7 +28,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelItem * item)
+SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelDefinitionItem * item)
   : OTguiSubWindow(item)
 {
   setWindowTitle(tr("Symbolic physical model"));

@@ -22,7 +22,7 @@
 #define OTGUI_PYTHONPHYSICALMODELWINDOW_HXX
 
 #include "otgui/OTguiSubWindow.hxx"
-#include "otgui/PhysicalModelItem.hxx"
+#include "otgui/PhysicalModelDefinitionItem.hxx"
 #include "otgui/CodeModel.hxx"
 
 #include <QTableView>
@@ -43,7 +43,7 @@ class OTGUI_API PythonPhysicalModelWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  PythonPhysicalModelWindow(PhysicalModelItem * item);
+  PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item);
 
 public slots:
   void updateCodeModel();

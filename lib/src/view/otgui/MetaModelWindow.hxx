@@ -22,7 +22,7 @@
 #define OTGUI_METAMODELWINDOW_HXX
 
 #include "otgui/OTguiSubWindow.hxx"
-#include "otgui/PhysicalModelItem.hxx"
+#include "otgui/PhysicalModelDefinitionItem.hxx"
 
 namespace OTGUI {
 class OTGUI_API MetaModelWindow : public OTguiSubWindow
@@ -30,7 +30,7 @@ class OTGUI_API MetaModelWindow : public OTguiSubWindow
   Q_OBJECT
 
 public :
-  MetaModelWindow(PhysicalModelItem * item);
+  MetaModelWindow(PhysicalModelDefinitionItem * item);
 
 private:
   PhysicalModel physicalModel_;

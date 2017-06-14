@@ -22,7 +22,7 @@
 #define OTGUI_SYMBOLICPHYSICALMODELWINDOW_HXX
 
 #include "otgui/OTguiSubWindow.hxx"
-#include "otgui/PhysicalModelItem.hxx"
+#include "otgui/PhysicalModelDefinitionItem.hxx"
 
 namespace OTGUI {
   
@@ -31,7 +31,7 @@ class OTGUI_API SymbolicPhysicalModelWindow : public OTguiSubWindow
   Q_OBJECT
 
 public :
-  SymbolicPhysicalModelWindow(PhysicalModelItem * item);
+  SymbolicPhysicalModelWindow(PhysicalModelDefinitionItem * item);
 };
 }
 #endif

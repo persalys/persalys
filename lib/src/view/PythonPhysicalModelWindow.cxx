@@ -53,7 +53,7 @@ bool CodeView::event(QEvent * event)
 }
 
 
-PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item)
+PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item)
   : OTguiSubWindow(item)
   , physicalModel_(item->getPhysicalModel())
   , codeModel_(0)
