@@ -79,8 +79,6 @@ IntroMetaModelPage::IntroMetaModelPage(QWidget* parent)
   methodGroup_->addButton(buttonToChooseMethod, MetaModelAnalysisWizard::kriging);
   methodLayout->addWidget(buttonToChooseMethod);
 
-  connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SIGNAL(methodChanged(int)));
-
   pageLayout->addWidget(methodBox);
 
   // error message
@@ -138,6 +136,7 @@ DesignOfExperiment IntroMetaModelPage::getDesignOfExperiment() const
   const QVariant variant = doesComboBoxModel_->item(itemRow)->data();
   if (variant.canConvert<DesignOfExperiment>())
     return variant.value<DesignOfExperiment>();
+  return DesignOfExperiment();
 }
 
 
@@ -188,9 +187,7 @@ bool IntroMetaModelPage::validatePage()
 
   if (!outputsSelectionGroupBox_->getSelectedOutputsNames().size())
   {
-    errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>")
-                                .arg(tr("At least one output must be selected"))
-                                .arg("</font>"));
+    errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(tr("At least one output must be selected")));
     return false;
   }
   return QWizardPage::validatePage();

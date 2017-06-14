@@ -25,28 +25,9 @@
 #include "otgui/IntroReliabilityPage.hxx"
 #include "otgui/SimulationReliabilityPage.hxx"
 #include "otgui/ApproximationReliabilityPage.hxx"
-#include "otgui/OptimizationWidget.hxx"
 #include "otgui/OTguiItem.hxx"
 
 namespace OTGUI {
-
-// FORM page
-class OTGUI_API FORMPage : public QWizardPage
-{
-  Q_OBJECT
-
-public:
-  FORMPage(QWidget* parent=0);
-
-  void initialize(const Analysis& analysis);
-  OT::OptimizationSolver getOptimizationAlgorithm() const;
-
-private:
-  OptimizationWidget * formWidget_;
-};
-
-
-// ReliabilityAnalysisWizard
 class OTGUI_API ReliabilityAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
@@ -54,7 +35,6 @@ class OTGUI_API ReliabilityAnalysisWizard : public AnalysisWizard
 public:
   enum {Page_Intro, Page_SimuMethod, Page_ApproxMethod, Page_FORM};
 
-  ReliabilityAnalysisWizard(const OTStudy& otStudy, const LimitState& limitState, QWidget* parent=0);
   ReliabilityAnalysisWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard=false, QWidget* parent=0);
 
   virtual int nextId() const;
@@ -68,7 +48,7 @@ private:
   IntroReliabilityPage * introPage_;
   SimulationReliabilityPage * simulationPage_;
   ApproximationReliabilityPage * approximationPage_;
-  FORMPage * formPage_;
+  ApproximationReliabilityPage * formPage_;
 };
 }
 #endif

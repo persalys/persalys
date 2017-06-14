@@ -54,62 +54,59 @@ KrigingPage::KrigingPage(QWidget* parent)
 
 void KrigingPage::buildInterface()
 {
-  const KrigingAnalysis defaultKriging;
-
   setTitle(tr("Kriging parameters"));
 
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 
   // Kriging parameters group
-  QGroupBox * krigingParametersBox = new QGroupBox(tr("Parameters"));
-  QGridLayout * krigingParametersLayout = new QGridLayout(krigingParametersBox);
+  QGroupBox * parametersBox = new QGroupBox(tr("Parameters"));
+  QGridLayout * parametersLayout = new QGridLayout(parametersBox);
 
   // correlation model
-  krigingParametersLayout->addWidget(new QLabel(tr("Covariance model")), 0, 0, 1, 2);
+  parametersLayout->addWidget(new QLabel(tr("Covariance model")), 0, 0, 1, 2);
   covarianceModelComboBox_ = new QComboBox;
   covarianceModelComboBox_->addItems(QStringList() << tr("Squared exponential")
                                                    << tr("Absolute exponential")
                                                    << tr("Generalized exponential")
                                                    << QString::fromUtf8("Matérn"));
-  krigingParametersLayout->addWidget(covarianceModelComboBox_, 0, 1, 1, 2);
-  covarianceModelComboBox_->setCurrentIndex(0);
+  parametersLayout->addWidget(covarianceModelComboBox_, 0, 1, 1, 2);
 
   connect(covarianceModelComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCovarianceModel(int)));
 
   // Matern parameter nu
   //  -label
   maternParameterNuLabel_ = new QLabel(tr("nu"));
-  krigingParametersLayout->addWidget(maternParameterNuLabel_, 1, 1);
+  parametersLayout->addWidget(maternParameterNuLabel_, 1, 1);
 
   //  -spinbox
   maternParameterNuSpinBox_ = new DoubleSpinBox;
   maternParameterNuSpinBox_->setMinimum(1e-12);
-  krigingParametersLayout->addWidget(maternParameterNuSpinBox_, 1, 2);
+  parametersLayout->addWidget(maternParameterNuSpinBox_, 1, 2);
   maternParameterNuSpinBox_->setValue(ResourceMap::GetAsNumericalScalar("MaternModel-DefaultNu"));
 
   // GeneralizedExponential parameter P
   //  -label
   generalizedModelParameterPLabel_ = new QLabel(tr("p"));
-  krigingParametersLayout->addWidget(generalizedModelParameterPLabel_, 2, 1);
+  parametersLayout->addWidget(generalizedModelParameterPLabel_, 2, 1);
 
   //  -spinbox
   generalizedModelParameterPSpinBox_ = new DoubleSpinBox;
   generalizedModelParameterPSpinBox_->setMinimum(1e-12); // TODO setMaximum with the next OT version
-  krigingParametersLayout->addWidget(generalizedModelParameterPSpinBox_, 2, 2);
+  parametersLayout->addWidget(generalizedModelParameterPSpinBox_, 2, 2);
   generalizedModelParameterPSpinBox_->setValue(1.0);
 
   // basis
-  krigingParametersLayout->addWidget(new QLabel(tr("Trend basis type")), 3, 0);
+  parametersLayout->addWidget(new QLabel(tr("Trend basis type")), 3, 0);
   basisTypeComboBox_ = new QComboBox;
   basisTypeComboBox_->addItems(QStringList() << tr("Constant")
                                              << tr("Linear")
                                              << tr("Quadratic"));
-  krigingParametersLayout->addWidget(basisTypeComboBox_, 3, 1, 1, 2);
+  parametersLayout->addWidget(basisTypeComboBox_, 3, 1, 1, 2);
   basisTypeComboBox_->setCurrentIndex(0);
 
-  krigingParametersLayout->setColumnStretch(0, 1);
-  krigingParametersLayout->setColumnStretch(2, 2);
-  pageLayout->addWidget(krigingParametersBox);
+  parametersLayout->setColumnStretch(0, 1);
+  parametersLayout->setColumnStretch(2, 2);
+  pageLayout->addWidget(parametersBox);
 
   // Metamodel validation
   QGroupBox * validationGroupBox = new QGroupBox(tr("Validation"));
@@ -117,49 +114,48 @@ void KrigingPage::buildInterface()
 
   // -- LOO
   leaveOneOutCheckBox_ = new QCheckBox;
-  leaveOneOutCheckBox_->setChecked(defaultKriging.isLeaveOneOutValidation());
   validationLayout->addWidget(leaveOneOutCheckBox_, 0, 0);
   validationLayout->addWidget(new QLabel(tr("Compute Q2 by Leave-one-out")), 0, 1);
   validationLayout->setColumnStretch(2, 1);
   pageLayout->addWidget(validationGroupBox);
 
 
-  // Avanced parameters
+  // Advanced parameters
 
   // kriging advanced parameters
   CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
   advancedParamGroupBox->setTitle(tr("Advanced parameters"));
-  QGridLayout * krigingAdvancedParamGroupBox_Layout = new QGridLayout(advancedParamGroupBox);
+  QGridLayout * advancedParamGroupBoxLayout = new QGridLayout(advancedParamGroupBox);
 
   // request parameters optimization
   optimizationCheckBox_ = new QCheckBox(tr("Optimize covariance model parameters"));
   optimizationCheckBox_->setToolTip(tr("Optimize scale and amplitude parameters"));
-  krigingAdvancedParamGroupBox_Layout->addWidget(optimizationCheckBox_,  0, 0, 1, 3);
-  optimizationCheckBox_->setChecked(defaultKriging.getOptimizeParameters());
+  advancedParamGroupBoxLayout->addWidget(optimizationCheckBox_,  0, 0, 1, 3);
 
   // scale
-  krigingAdvancedParamGroupBox_Layout->addWidget(new QLabel(tr("Scale")), 1, 0);
+  advancedParamGroupBoxLayout->addWidget(new QLabel(tr("Scale")), 1, 0);
 
   scaleLineEdit_ = new QLineEdit;
   scaleLineEdit_->setReadOnly(true);
-  krigingAdvancedParamGroupBox_Layout->addWidget(scaleLineEdit_, 1, 1);
+  advancedParamGroupBoxLayout->addWidget(scaleLineEdit_, 1, 1);
 
   QToolButton * editButton = new QToolButton;
   editButton->setText("...");
-  krigingAdvancedParamGroupBox_Layout->addWidget(editButton, 1, 2);
+  advancedParamGroupBoxLayout->addWidget(editButton, 1, 2);
   connect(editButton, SIGNAL(pressed()), this, SLOT(openScaleDefinitionWizard()));
 
   // amplitude
   // same amplitude for all the outputs
-  krigingAdvancedParamGroupBox_Layout->addWidget(new QLabel(tr("Amplitude")), 2, 0);
+  advancedParamGroupBoxLayout->addWidget(new QLabel(tr("Amplitude")), 2, 0);
 
   amplitudeSpinBox_ = new DoubleSpinBox;
   amplitudeSpinBox_->setMinimum(1e-12);
-  amplitudeSpinBox_->setValue(defaultKriging.getCovarianceModel().getAmplitude()[0]);
-  krigingAdvancedParamGroupBox_Layout->addWidget(amplitudeSpinBox_, 2, 1, 1, 2);
+  advancedParamGroupBoxLayout->addWidget(amplitudeSpinBox_, 2, 1, 1, 2);
 
   advancedParamGroupBox->setExpanded(false);
   pageLayout->addWidget(advancedParamGroupBox);
+
+  initialize(KrigingAnalysis());
 }
 
 

@@ -50,6 +50,7 @@ protected:
 
 public slots:
   void updateMethod(int);
+  void clearErrorMessageLabel();
 signals:
   void methodChanged(int);
 

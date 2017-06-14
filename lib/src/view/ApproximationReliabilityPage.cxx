@@ -21,8 +21,19 @@
 #include "otgui/ApproximationReliabilityPage.hxx"
 
 #include "otgui/FORMAnalysis.hxx"
+#include "otgui/CollapsibleGroupBox.hxx"
+#include "otgui/ParametersDefinitionWizard.hxx"
 
+#include <openturns/Cobyla.hxx>
+#include <openturns/AbdoRackwitz.hxx>
+#include <openturns/SQP.hxx>
+
+#include <QGroupBox>
 #include <QVBoxLayout>
+#include <QRadioButton>
+#include <QLabel>
+#include <QToolButton>
+#include <QDebug>
 
 using namespace OT;
 
@@ -30,6 +41,15 @@ namespace OTGUI {
 
 ApproximationReliabilityPage::ApproximationReliabilityPage(QWidget* parent)
   : QWizardPage(parent)
+  , inputNames_()
+  , startingPoint_()
+  , pointLineEdit_(0)
+  , algoChoice_(0)
+  , iterationsSpinBox_(0)
+  , absoluteErrSpinBox_(0)
+  , relativeErrSpinBox_(0)
+  , residualErrSpinBox_(0)
+  , constraintErrSpinBox_(0)
 {
   buildInterface();
 }
@@ -37,28 +57,205 @@ ApproximationReliabilityPage::ApproximationReliabilityPage(QWidget* parent)
 
 void ApproximationReliabilityPage::buildInterface()
 {
-  setTitle(tr("Approximation method"));
+  setTitle(tr("Optimization parameters"));
 
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 
-  // optimization widgets
-  optimWidget_ = new OptimizationWidget(this);
+  // optimization algorithm ---------- ----------
+  algoChoice_ = new QButtonGroup;
 
-  pageLayout->addWidget(optimWidget_);
+  QGroupBox * optimAlgoGroup = new QGroupBox(tr("Algorithm"));
+  QVBoxLayout * optimAlgoGroupLayout = new QVBoxLayout(optimAlgoGroup);
+
+  // Abdo-Rackwitz
+  QRadioButton * abdoRackwitzRadioButton = new QRadioButton(tr("Abdo-Rackwitz"));
+  abdoRackwitzRadioButton->setChecked(true);
+  optimAlgoGroupLayout->addWidget(abdoRackwitzRadioButton);
+  algoChoice_->addButton(abdoRackwitzRadioButton, ApproximationReliabilityPage::AbdoRackwitzAlgo);
+
+  // Cobyla
+  QRadioButton * cobylaRadioButton = new QRadioButton(tr("Cobyla"));
+  optimAlgoGroupLayout->addWidget(cobylaRadioButton);
+  algoChoice_->addButton(cobylaRadioButton, ApproximationReliabilityPage::CobylaAlgo);
+
+  // SQP
+  QRadioButton * sqpRadioButton = new QRadioButton(tr("SQP"));
+  optimAlgoGroupLayout->addWidget(sqpRadioButton);
+  algoChoice_->addButton(sqpRadioButton, ApproximationReliabilityPage::SQPAlgo);
+
+  pageLayout->addWidget(optimAlgoGroup);
+
+  // starting point
+  QGroupBox * pointGroup = new QGroupBox(tr("Starting point"));
+  QGridLayout * pointGroupLayout = new QGridLayout(pointGroup);
+
+  QLabel * pointLabel = new QLabel(tr("Physical starting point"));
+  pointGroupLayout->addWidget(pointLabel, 0, 0);
+
+  pointLineEdit_ = new QLineEdit;
+  pointLineEdit_->setReadOnly(true);
+  pointGroupLayout->addWidget(pointLineEdit_, 0, 1);
+
+  QToolButton * editButton = new QToolButton;
+  editButton->setText("...");
+  pointGroupLayout->addWidget(editButton, 0, 2);
+  connect(editButton, SIGNAL(pressed()), this, SLOT(openPointDefinitionWizard()));
+
+  pageLayout->addWidget(pointGroup);
+
+  // Advanced parameters ---------- ----------
+  CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
+  advancedParamGroupBox->setTitle(tr("Advanced parameters"));
+  QGridLayout * advancedGroupLayout = new QGridLayout(advancedParamGroupBox);
+
+  // max number iterations
+  QLabel * label = new QLabel(tr("Number of iterations"));
+  advancedGroupLayout->addWidget(label, 0, 0);
+  iterationsSpinBox_ = new UIntSpinBox;
+  label->setBuddy(iterationsSpinBox_);
+  iterationsSpinBox_->setRange(1, 2e9);
+  iterationsSpinBox_->setSingleStep(5);
+  advancedGroupLayout->addWidget(iterationsSpinBox_, 0, 1);
+
+  // Absolute error
+  label = new QLabel(tr("Absolute error"));
+  advancedGroupLayout->addWidget(label, 1, 0);
+  absoluteErrSpinBox_ = new LogDoubleSpinBox;
+  label->setBuddy(absoluteErrSpinBox_);
+  absoluteErrSpinBox_->setRange(std::numeric_limits<double>::min(), 1.0);
+  advancedGroupLayout->addWidget(absoluteErrSpinBox_, 1, 1);
+
+  // Relative error
+  label = new QLabel(tr("Relative error"));
+  advancedGroupLayout->addWidget(label, 2, 0);
+  relativeErrSpinBox_ = new LogDoubleSpinBox;
+  label->setBuddy(relativeErrSpinBox_);
+  relativeErrSpinBox_->setRange(std::numeric_limits<double>::min(), 1.0);
+  advancedGroupLayout->addWidget(relativeErrSpinBox_, 2, 1);
+
+  // Residual error
+  label = new QLabel(tr("Residual error"));
+  advancedGroupLayout->addWidget(label, 1, 2);
+  residualErrSpinBox_ = new LogDoubleSpinBox;
+  label->setBuddy(residualErrSpinBox_);
+  residualErrSpinBox_->setRange(std::numeric_limits<double>::min(), 1.0);
+  advancedGroupLayout->addWidget(residualErrSpinBox_, 1, 3);
+
+  // Constraint error
+  label = new QLabel(tr("Constraint error"));
+  advancedGroupLayout->addWidget(label, 2, 2);
+  constraintErrSpinBox_ = new LogDoubleSpinBox;
+  label->setBuddy(constraintErrSpinBox_);
+  constraintErrSpinBox_->setRange(std::numeric_limits<double>::min(), 1.0);
+  advancedGroupLayout->addWidget(constraintErrSpinBox_, 2, 3);
+
+  pageLayout->addWidget(advancedParamGroupBox);
+
+  // initialize widgets
+  initialize(FORMAnalysis());
 }
 
 
 void ApproximationReliabilityPage::initialize(const Analysis& analysis)
 {
-  optimWidget_->initialize(analysis);
+  const ReliabilityAnalysis * analysis_ptr = dynamic_cast<const ReliabilityAnalysis*>(analysis.getImplementation().get());
+
+  if (!analysis_ptr)
+    return;
+
+  inputNames_ = analysis_ptr->getPhysicalModel().getStochasticInputNames();
+
+  const ApproximationAnalysis * approxAnalysis_ptr = dynamic_cast<const ApproximationAnalysis*>(analysis_ptr);
+  OptimizationSolver solver;
+
+  if (approxAnalysis_ptr)
+    solver = approxAnalysis_ptr->getOptimizationAlgorithm();
+
+  startingPoint_ = solver.getStartingPoint();
+
+  // if analysis is not an ApproximationAnalysis or if number of inputs changed
+  if (!approxAnalysis_ptr || (startingPoint_.getSize() != inputNames_.getSize()))
+    solver.setStartingPoint(analysis_ptr->getPhysicalModel().getComposedDistribution().getMean());
+
+  // initialize widgets
+  if (solver.getImplementation()->getClassName() == "AbdoRackwitz")
+    algoChoice_->button(ApproximationReliabilityPage::AbdoRackwitzAlgo)->click();
+  else if (solver.getImplementation()->getClassName() ==  "Cobyla")
+    algoChoice_->button(ApproximationReliabilityPage::CobylaAlgo)->click();
+  else
+    algoChoice_->button(ApproximationReliabilityPage::SQPAlgo)->click();
+
+  iterationsSpinBox_->setValue(solver.getMaximumIterationNumber());
+  absoluteErrSpinBox_->setValue(solver.getMaximumAbsoluteError());
+  relativeErrSpinBox_->setValue(solver.getMaximumRelativeError());
+  residualErrSpinBox_->setValue(solver.getMaximumResidualError());
+  constraintErrSpinBox_->setValue(solver.getMaximumConstraintError());
+
+  updatePointLineEdit();
+}
+
+
+void ApproximationReliabilityPage::updatePointLineEdit()
+{
+  QString pointText;
+  for (UnsignedInteger i=0; i<startingPoint_.getSize(); ++i)
+  {
+    pointText += QString::number(startingPoint_[i]);
+    if (i < startingPoint_.getSize()-1)
+      pointText += "; ";
+  }
+  pointLineEdit_->setText(pointText);
+}
+
+
+void ApproximationReliabilityPage::openPointDefinitionWizard()
+{
+  if (inputNames_.getSize() != startingPoint_.getSize())
+  {
+    qDebug() << "Error: In OptimizationWidget::openPointDefinitionWizard: arguments have different dimensions";
+    return;
+  }
+
+  const QStringList labels = QStringList() << tr("Input") << tr("Value");
+  ParametersDefinitionWizard * paramDefinitionWizard = new ParametersDefinitionWizard(inputNames_, startingPoint_, labels, this);
+  paramDefinitionWizard->setWindowTitle(tr("Physical starting point"));
+
+  if (paramDefinitionWizard->exec())
+  {
+    startingPoint_ = paramDefinitionWizard->getValues();
+    updatePointLineEdit();
+  }
+
+}
+
+
+OptimizationSolver ApproximationReliabilityPage::getOptimizationAlgorithm() const
+{
+  OptimizationSolver optimAlgo;
+
+  if (algoChoice_->checkedId() == ApproximationReliabilityPage::CobylaAlgo)
+    optimAlgo = Cobyla();
+  else if (algoChoice_->checkedId() == ApproximationReliabilityPage::AbdoRackwitzAlgo)
+    optimAlgo = AbdoRackwitz();
+  else if (algoChoice_->checkedId() == ApproximationReliabilityPage::SQPAlgo)
+    optimAlgo = SQP();
+
+  optimAlgo.setStartingPoint(startingPoint_);
+  optimAlgo.setMaximumIterationNumber(iterationsSpinBox_->value());
+  optimAlgo.setMaximumAbsoluteError(absoluteErrSpinBox_->value());
+  optimAlgo.setMaximumRelativeError(relativeErrSpinBox_->value());
+  optimAlgo.setMaximumResidualError(residualErrSpinBox_->value());
+  optimAlgo.setMaximumConstraintError(constraintErrSpinBox_->value());
+
+  return optimAlgo;
 }
 
 
 Analysis ApproximationReliabilityPage::getAnalysis(const String& name, const LimitState& limitState) const
 {
   FORMAnalysis analysis(name, limitState);
-  analysis.setOptimizationAlgorithm(optimWidget_->getOptimizationAlgorithm());
-  analysis.setPhysicalStartingPoint(optimWidget_->getOptimizationAlgorithm().getStartingPoint());
+  analysis.setOptimizationAlgorithm(getOptimizationAlgorithm());
+  analysis.setPhysicalStartingPoint(startingPoint_);
 
   return analysis;
 }

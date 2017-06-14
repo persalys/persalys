@@ -45,8 +45,6 @@ FunctionalChaosPage::FunctionalChaosPage(QWidget* parent)
 
 void FunctionalChaosPage::buildInterface()
 {
-  const FunctionalChaosAnalysis defaultChaos;
-
   setTitle(tr("Functional chaos parameters"));
 
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
@@ -59,7 +57,6 @@ void FunctionalChaosPage::buildInterface()
   chaosParametersLayout->addWidget(new QLabel(tr("Polynomial degree")));
   chaosDegreeSpinbox_ = new QSpinBox;
   chaosDegreeSpinbox_->setRange(1, 30);
-  chaosDegreeSpinbox_->setValue(defaultChaos.getChaosDegree());
   chaosParametersLayout->addWidget(chaosDegreeSpinbox_);
 
   pageLayout->addWidget(parametersBox);
@@ -70,7 +67,6 @@ void FunctionalChaosPage::buildInterface()
 
   // -- LOO
   leaveOneOutCheckBox_ = new QCheckBox;
-  leaveOneOutCheckBox_->setChecked(defaultChaos.isLeaveOneOutValidation());
   validationLayout->addWidget(leaveOneOutCheckBox_, 0, 0);
   validationLayout->addWidget(new QLabel(tr("Compute Q2 by Leave-one-out")), 0, 1);
   validationLayout->setColumnStretch(2, 1);
@@ -79,11 +75,10 @@ void FunctionalChaosPage::buildInterface()
   // functional chaos advanced parameters
   CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
   advancedParamGroupBox->setTitle(tr("Advanced parameters"));
-  QGridLayout * chaosAdvancedParamGroupBox_Layout = new QGridLayout(advancedParamGroupBox);
+  QGridLayout * advancedParamGroupBoxLayout = new QGridLayout(advancedParamGroupBox);
 
   sparseCheckBox_ = new QCheckBox(tr("Sparse"));
-  sparseCheckBox_->setChecked(defaultChaos.getSparseChaos());
-  chaosAdvancedParamGroupBox_Layout->addWidget(sparseCheckBox_, 0, 0);
+  advancedParamGroupBoxLayout->addWidget(sparseCheckBox_, 0, 0);
 
   advancedParamGroupBox->setExpanded(false);
   pageLayout->addWidget(advancedParamGroupBox);
@@ -94,6 +89,8 @@ void FunctionalChaosPage::buildInterface()
 
   pageLayout->addStretch();
   pageLayout->addWidget(errorMessageLabel_);
+
+  initialize(FunctionalChaosAnalysis());
 }
 
 

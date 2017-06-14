@@ -21,48 +21,11 @@
 #include "otgui/ReliabilityAnalysisWizard.hxx"
 
 #include "otgui/FORMImportanceSamplingAnalysis.hxx"
-#include "otgui/MonteCarloReliabilityAnalysis.hxx"
 #include "otgui/OTStudyItem.hxx"
-
-#include <QVBoxLayout>
 
 using namespace OT;
 
 namespace OTGUI {
-
-// FORM page
-
-FORMPage::FORMPage(QWidget* parent)
-  : QWizardPage(parent)
-  , formWidget_(0)
-{
-  setTitle(tr("Optimization algorithm configuration for FORM"));
-
-  QVBoxLayout * mainLayout = new QVBoxLayout(this);
-  formWidget_ = new OptimizationWidget(this);
-  mainLayout->addWidget(formWidget_);
-}
-
-
-void FORMPage::initialize(const Analysis& analysis)
-{
-  formWidget_->initialize(analysis);
-}
-
-
-OptimizationSolver FORMPage::getOptimizationAlgorithm() const
-{
-  return formWidget_->getOptimizationAlgorithm();
-}
-
-// ReliabilityAnalysisWizard
-
-ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const OTStudy& otStudy, const LimitState& limitState, QWidget* parent)
-  : AnalysisWizard(MonteCarloReliabilityAnalysis(otStudy.getAvailableAnalysisName("reliability_"), limitState), parent)
-{
-  buildInterface();
-}
-
 
 ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard, QWidget* parent)
   : AnalysisWizard(analysis, parent)
@@ -111,7 +74,7 @@ void ReliabilityAnalysisWizard::buildInterface()
   setPage(Page_ApproxMethod, approximationPage_);
 
   // third page: FORM page
-  formPage_ = new FORMPage(this);
+  formPage_ = new ApproximationReliabilityPage(this);
   formPage_->initialize(analysis_);
   setPage(Page_FORM, formPage_);
 
@@ -127,7 +90,6 @@ int ReliabilityAnalysisWizard::nextId() const
       return introPage_->nextId();
     case Page_SimuMethod:
       return simulationPage_->nextId();
-    case Page_FORM:
     default:
       return -1;
   }

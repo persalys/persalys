@@ -55,7 +55,6 @@ public slots:
   void updateDesignOfExperiment(int);
   void updateInterestVariables(QStringList);
 signals:
-  void methodChanged(int);
   void designOfExperimentChanged(DesignOfExperiment);
 
 private:

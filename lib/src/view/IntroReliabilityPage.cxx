@@ -143,6 +143,7 @@ LimitState IntroReliabilityPage::getLimitState() const
   const QVariant variant = limitStatesComboBoxModel_->item(itemRow)->data();
   if (variant.canConvert<LimitState>())
     return variant.value<LimitState>();
+  return LimitState();
 }
 
 
