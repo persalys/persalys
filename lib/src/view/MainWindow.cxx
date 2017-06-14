@@ -123,7 +123,7 @@ void MainWindow::buildInterface()
   connect(menuBar, SIGNAL(closeOTStudy()), studyTree_, SLOT(closeOTStudy()));
   connect(menuBar, SIGNAL(closeWindow()), this, SLOT(exitApplication()));
   connect(studyTree_, SIGNAL(recentFilesListChanged(QString)), menuBar, SLOT(updateRecentFilesList(QString)));
-  connect(studyTree_, SIGNAL(actionsAvailabilityChanged(bool)), menuBar, SLOT(changeActionsAvailability(bool)));
+  connect(studyTree_, SIGNAL(analysisInProgressStatusChanged(bool)), menuBar, SLOT(updateActionsAvailability(bool)));
   setMenuBar(menuBar);
 
   // tool bar
@@ -132,7 +132,7 @@ void MainWindow::buildInterface()
   connect(toolBar, SIGNAL(openOTStudy()), studyTree_, SLOT(openOTStudy()));
   connect(toolBar, SIGNAL(importPython()), this, SLOT(importPython()));
   connect(toolBar, SIGNAL(saveOTStudy()), studyTree_, SLOT(saveCurrentOTStudy()));
-  connect(studyTree_, SIGNAL(actionsAvailabilityChanged(bool)), toolBar, SLOT(changeActionsAvailability(bool)));
+  connect(studyTree_, SIGNAL(analysisInProgressStatusChanged(bool)), toolBar, SLOT(updateActionsAvailability(bool)));
   addToolBar(toolBar);
 
   // status bar

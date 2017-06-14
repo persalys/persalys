@@ -115,6 +115,7 @@ public:
 StudyTreeView::StudyTreeView(QWidget * parent)
   : QTreeView(parent)
   , treeViewModel_(new StudyTreeViewModel(this))
+  , analysisInProgress_(false)
 {
   // set model
   OTStudy::SetInstanceObserver(treeViewModel_);
@@ -178,7 +179,7 @@ void StudyTreeView::mousePressEvent(QMouseEvent* event)
 {
   // get the clicked item
   const QModelIndex eventIndex = indexAt(event->pos());
-  QStandardItem * currentItem = treeViewModel_->itemFromIndex(eventIndex);
+  const QStandardItem * currentItem = treeViewModel_->itemFromIndex(eventIndex);
 
   if (currentItem)
   {
@@ -192,6 +193,16 @@ void StudyTreeView::mousePressEvent(QMouseEvent* event)
   }
 
   QTreeView::mousePressEvent(event);
+}
+
+
+void StudyTreeView::setAnalysisInProgress(bool analysisInProgress)
+{
+  analysisInProgress_ = analysisInProgress;
+
+  // emit signal to MenuBar/ToolBar to disable/enable import Python script actions
+  //             to AnalysisWindows to disable/enable the run buttons
+  emit analysisInProgressStatusChanged(analysisInProgress);
 }
 
 
@@ -356,9 +367,15 @@ void StudyTreeView::createNewDataModelWindow(DataModelDefinitionItem* item, cons
   // window
 		DataModelWindow * window = new DataModelWindow(item);
 
+  if (!window)
+  {
+    qDebug() << "Error: In createNewDataModelWindow: impossible to create DataModelWindow\n";
+    return;
+  }
+
 		emit showWindow(window);
-  setExpanded(item->index().parent(), true);
   setCurrentIndex(item->index());
+  setExpanded(item->index().parent(), true);
 }
 
 
@@ -435,8 +452,8 @@ void StudyTreeView::createNewProbabilisticModelWindow(ProbabilisticModelItem* it
     return;
 
   // connections
-  connect(item, SIGNAL(analysisRequested(OTguiItem*, const Analysis&)), this, SLOT(createNewAnalysis(OTguiItem*, const Analysis&)));
   connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
+  connect(item, SIGNAL(analysisRequested(OTguiItem*, const Analysis&)), this, SLOT(createNewAnalysis(OTguiItem*, const Analysis&)));
 
   OTStudyItem * otStudyItem = item->getParentOTStudyItem();
   if (!otStudyItem)
@@ -507,9 +524,6 @@ void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentDefiniti
     return;
   }
 
-  connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));//to rm: no graph
-  connect(window, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));//to rm
-
   emit showWindow(window);
   setCurrentIndex(item->index());
   setExpanded(item->index().parent(), true);
@@ -522,17 +536,17 @@ void StudyTreeView::createAnalysisWindow(AnalysisItem * item)
     return;
 
   // connections
-  connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createAnalysisResultWindow(AnalysisItem*)));
-  connect(item, SIGNAL(analysisBadlyFinished(AnalysisItem*,QString)), this, SLOT(createAnalysisExecutionFailedWindow(AnalysisItem*,QString)));
-  connect(item, SIGNAL(modifyAnalysisRequested(AnalysisItem*)), this, SLOT(modifyAnalysis(AnalysisItem*)));
   connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
-  connect(item, SIGNAL(metaModelCreated(PhysicalModel)), item->getParentOTStudyItem(), SLOT(addMetaModelItem(PhysicalModel)));
+  connect(item, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
+  connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createAnalysisResultWindow(AnalysisItem*)));
+  connect(item, SIGNAL(analysisBadlyFinished(AnalysisItem*)), this, SLOT(createAnalysisExecutionFailedWindow(AnalysisItem*)));
+  connect(item, SIGNAL(modifyAnalysisRequested(AnalysisItem*)), this, SLOT(modifyAnalysis(AnalysisItem*)));
 
   // window
   if (item->getAnalysis().analysisLaunched())
     createAnalysisResultWindow(item);
   else
-    createAnalysisExecutionFailedWindow(item, item->getAnalysis().getErrorMessage().c_str());
+    createAnalysisExecutionFailedWindow(item);
 }
 
 
@@ -593,7 +607,7 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
 }
 
 
-void StudyTreeView::createAnalysisExecutionFailedWindow(AnalysisItem* item, const QString& errorMessage)
+void StudyTreeView::createAnalysisExecutionFailedWindow(AnalysisItem* item)
 {
   if (!item)
     return;
@@ -601,7 +615,7 @@ void StudyTreeView::createAnalysisExecutionFailedWindow(AnalysisItem* item, cons
   // do removeSubWindow if the analysis run method has been launched from a Python script
   emit removeSubWindow(item); // need?
 
-  AnalysisExecutionFailedWindow * window = new AnalysisExecutionFailedWindow(item, errorMessage);
+  AnalysisExecutionFailedWindow * window = new AnalysisExecutionFailedWindow(item, analysisInProgress_);
 
   if (!window)
   {
@@ -609,8 +623,7 @@ void StudyTreeView::createAnalysisExecutionFailedWindow(AnalysisItem* item, cons
     return;
   }
 
-  connect(window, SIGNAL(actionsAvailabilityChanged(bool)), this, SIGNAL(actionsAvailabilityChanged(bool)));
-  connect(this, SIGNAL(actionsAvailabilityChanged(bool)), window, SLOT(updateRunButtonAvailability(bool)));
+  connect(this, SIGNAL(analysisInProgressStatusChanged(bool)), window, SLOT(updateRunButtonAvailability(bool)));
 
   emit showWindow(window);
   setCurrentIndex(item->index());
@@ -860,7 +873,7 @@ bool StudyTreeView::closeAllOTStudies()
 
   while (rootItem->hasChildren())
   {
-    selectionModel()->setCurrentIndex(rootItem->child(0)->index(), QItemSelectionModel::Select);
+    setCurrentIndex(rootItem->child(0)->index());
     const int ret = closeOTStudy();
     if (!ret)
       return false;
@@ -880,28 +893,32 @@ AnalysisWizard* StudyTreeView::getWizard(OTguiItem* item, const Analysis& analys
 
   if (analysisName == "ModelEvaluation")
   {
-    wizard = new ModelEvaluationWizard(analysis);
+    wizard = new ModelEvaluationWizard(analysis, this);
   }
-  else if (analysisName == "FunctionalChaosAnalysis" || analysisName == "KrigingAnalysis")
+  else if (analysisName == "FunctionalChaosAnalysis" ||
+           analysisName == "KrigingAnalysis")
   {
-    wizard = new MetaModelAnalysisWizard(item, analysis, isGeneralWizard);
+    wizard = new MetaModelAnalysisWizard(item, analysis, isGeneralWizard, this);
   }
   else if (analysisName == "InferenceAnalysis")
   {
-    wizard = new InferenceWizard(analysis);
+    wizard = new InferenceWizard(analysis, this);
   }
-  else if (analysisName == "MonteCarloAnalysis" || analysisName == "TaylorExpansionMomentsAnalysis")
+  else if (analysisName == "MonteCarloAnalysis" ||
+           analysisName == "TaylorExpansionMomentsAnalysis")
   {
-    wizard = new CentralTendencyWizard(analysis);
+    wizard = new CentralTendencyWizard(analysis, this);
   }
-  else if (analysisName == "SobolAnalysis" || analysisName == "SRCAnalysis")
+  else if (analysisName == "SobolAnalysis" ||
+           analysisName == "SRCAnalysis")
   {
-    wizard = new SensitivityAnalysisWizard(analysis);
+    wizard = new SensitivityAnalysisWizard(analysis, this);
   }
-  else if (analysisName == "MonteCarloReliabilityAnalysis" || analysisName == "FORMImportanceSamplingAnalysis" ||
+  else if (analysisName == "MonteCarloReliabilityAnalysis" ||
+           analysisName == "FORMImportanceSamplingAnalysis" ||
            analysisName == "FORMAnalysis")
   {
-    wizard = new ReliabilityAnalysisWizard(item, analysis, isGeneralWizard);
+    wizard = new ReliabilityAnalysisWizard(item, analysis, isGeneralWizard, this);
   }
   else
   {

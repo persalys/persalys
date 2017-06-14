@@ -41,6 +41,7 @@ public:
   virtual void mousePressEvent(QMouseEvent*);
 
 public slots:
+  void setAnalysisInProgress(bool);
   void showErrorMessage(QString);
   void onCustomContextMenu(const QPoint& point);
   void selectedItemChanged(const QModelIndex& currentIndex, const QModelIndex& previousIndex);
@@ -62,7 +63,7 @@ public slots:
   void createNewLimitStateWindow(LimitStateItem* item);
   void createAnalysisWindow(AnalysisItem* item);
   void createAnalysisResultWindow(AnalysisItem* item);
-  void createAnalysisExecutionFailedWindow(AnalysisItem* item, const QString& errorMessage="");
+  void createAnalysisExecutionFailedWindow(AnalysisItem* item);
 
   // modify objects
   void modifyDesignOfExperiment(DesignOfExperimentDefinitionItem* item);
@@ -85,13 +86,14 @@ signals:
   void graphWindowActivated(QWidget*);
   void graphWindowDeactivated();
   void recentFilesListChanged(const QString& recentFileName);
-  void actionsAvailabilityChanged(bool availability);
+  void analysisInProgressStatusChanged(bool analysisInProgress);
 
 protected:
   AnalysisWizard * getWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard=false);
 
 private:
   StudyTreeViewModel * treeViewModel_;
+  bool analysisInProgress_;
 };
 }
 #endif
