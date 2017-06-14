@@ -212,7 +212,7 @@ void ApproximationReliabilityPage::openPointDefinitionWizard()
 {
   if (inputNames_.getSize() != startingPoint_.getSize())
   {
-    qDebug() << "Error: In OptimizationWidget::openPointDefinitionWizard: arguments have different dimensions";
+    qDebug() << "Error: In ApproximationReliabilityPage::openPointDefinitionWizard: arguments have different dimensions";
     return;
   }
 

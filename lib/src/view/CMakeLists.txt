@@ -59,7 +59,6 @@ ot_add_source_file ( SobolPage.cxx )
 ot_add_source_file ( SRCPage.cxx )
 ot_add_source_file ( SensitivityAnalysisWizard.cxx )
 ot_add_source_file ( LimitStateWindow.cxx )
-ot_add_source_file ( OptimizationWidget.cxx )
 ot_add_source_file ( IntroReliabilityPage.cxx )
 ot_add_source_file ( SimulationReliabilityPage.cxx )
 ot_add_source_file ( ApproximationReliabilityPage.cxx )
@@ -115,7 +114,6 @@ ot_install_header_file ( SobolPage.hxx )
 ot_install_header_file ( SRCPage.hxx )
 ot_install_header_file ( SensitivityAnalysisWizard.hxx )
 ot_install_header_file ( LimitStateWindow.hxx )
-ot_install_header_file ( OptimizationWidget.hxx )
 ot_install_header_file ( IntroReliabilityPage.hxx )
 ot_install_header_file ( SimulationReliabilityPage.hxx )
 ot_install_header_file ( ApproximationReliabilityPage.hxx )
@@ -211,7 +209,6 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/SRCPage.hxx
                                   otgui/SensitivityAnalysisWizard.hxx
                                   otgui/LimitStateWindow.hxx
-                                  otgui/OptimizationWidget.hxx
                                   otgui/IntroReliabilityPage.hxx
                                   otgui/SimulationReliabilityPage.hxx
                                   otgui/ApproximationReliabilityPage.hxx
