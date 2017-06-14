@@ -53,6 +53,7 @@ ProbabilisticModelWindow::ProbabilisticModelWindow(const OTStudy& otStudy, Proba
 {
   connect(item, SIGNAL(stochasticInputListChanged()), this, SLOT(updateProbabilisticModel()));
   connect(item, SIGNAL(inputListCorrelationChanged()), this, SLOT(updateCorrelationTable()));
+  connect(item, SIGNAL(inputListDefinitionChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
 
   buildInterface();
   connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
