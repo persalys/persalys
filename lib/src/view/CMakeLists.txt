@@ -47,11 +47,16 @@ ot_add_source_file ( DesignOfExperimentWindow.cxx )
 ot_add_source_file ( StudyTreeView.cxx )
 ot_add_source_file ( ModelEvaluationWizard.cxx )
 ot_add_source_file ( ModelEvaluationResultWindow.cxx )
+ot_add_source_file ( IntroCentralTendencyPage.cxx )
+ot_add_source_file ( MonteCarloPage.cxx )
 ot_add_source_file ( CentralTendencyWizard.cxx )
 ot_add_source_file ( MonteCarloResultWindow.cxx )
 ot_add_source_file ( TaylorExpansionMomentsResultWindow.cxx )
 ot_add_source_file ( SobolResultWindow.cxx )
 ot_add_source_file ( SRCResultWindow.cxx )
+ot_add_source_file ( IntroSensitivityPage.cxx )
+ot_add_source_file ( SobolPage.cxx )
+ot_add_source_file ( SRCPage.cxx )
 ot_add_source_file ( SensitivityAnalysisWizard.cxx )
 ot_add_source_file ( LimitStateWindow.cxx )
 ot_add_source_file ( OptimizationWidget.cxx )
@@ -102,7 +107,12 @@ ot_install_header_file ( DataAnalysisWindow.hxx )
 ot_install_header_file ( DataAnalysisResultWindow.hxx )
 ot_install_header_file ( AnalysisExecutionFailedWindow.hxx )
 ot_install_header_file ( ModelEvaluationWizard.hxx )
+ot_install_header_file ( IntroCentralTendencyPage.hxx )
+ot_install_header_file ( MonteCarloPage.hxx )
 ot_install_header_file ( CentralTendencyWizard.hxx )
+ot_install_header_file ( IntroSensitivityPage.hxx )
+ot_install_header_file ( SobolPage.hxx )
+ot_install_header_file ( SRCPage.hxx )
 ot_install_header_file ( SensitivityAnalysisWizard.hxx )
 ot_install_header_file ( LimitStateWindow.hxx )
 ot_install_header_file ( OptimizationWidget.hxx )
@@ -188,12 +198,17 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/DesignOfExperimentWindow.hxx
                                   otgui/ModelEvaluationWizard.hxx
                                   otgui/ModelEvaluationResultWindow.hxx
+                                  otgui/IntroCentralTendencyPage.hxx
+                                  otgui/MonteCarloPage.hxx
                                   otgui/CentralTendencyWizard.hxx
                                   otgui/MonteCarloResultWindow.hxx
                                   otgui/TaylorExpansionMomentsResultWindow.hxx
                                   otgui/SensitivityResultWidget.hxx
                                   otgui/SobolResultWindow.hxx
                                   otgui/SRCResultWindow.hxx
+                                  otgui/IntroSensitivityPage.hxx
+                                  otgui/SobolPage.hxx
+                                  otgui/SRCPage.hxx
                                   otgui/SensitivityAnalysisWizard.hxx
                                   otgui/LimitStateWindow.hxx
                                   otgui/OptimizationWidget.hxx
