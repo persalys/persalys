@@ -77,6 +77,7 @@ void FORMImportanceSamplingAnalysis::run()
   if (!formAnalysis.getErrorMessage().empty() || designPoint.getSize() == 0)
   {
     errorMessage_ = "Error when processing the FORM analysis.\n" + formAnalysis.getErrorMessage();
+    isRunning_ = false;
     notify("analysisBadlyFinished");
     return;
   }
