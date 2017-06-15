@@ -76,6 +76,12 @@ void PhysicalModel::blockNotification(const String & blockedObserverType)
 }
 
 
+void PhysicalModel::blockNotification(const bool block)
+{
+  getImplementation()->blockNotification(block);
+}
+
+
 InputCollection PhysicalModel::getInputs() const
 {
   return getImplementation()->getInputs();
