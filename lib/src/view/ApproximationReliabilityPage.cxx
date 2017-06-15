@@ -164,18 +164,22 @@ void ApproximationReliabilityPage::initialize(const Analysis& analysis)
     return;
 
   inputNames_ = analysis_ptr->getPhysicalModel().getStochasticInputNames();
+  startingPoint_ = analysis_ptr->getPhysicalModel().getComposedDistribution().getMean();
+  updatePointLineEdit();
 
-  const ApproximationAnalysis * approxAnalysis_ptr = dynamic_cast<const ApproximationAnalysis*>(analysis_ptr);
-  OptimizationSolver solver;
+  const ApproximationAnalysis * approxAnalysis_ptr = dynamic_cast<const ApproximationAnalysis*>(analysis.getImplementation().get());
 
-  if (approxAnalysis_ptr)
-    solver = approxAnalysis_ptr->getOptimizationAlgorithm();
+  if (!approxAnalysis_ptr)
+    return;
 
-  startingPoint_ = solver.getStartingPoint();
+  OptimizationSolver solver = approxAnalysis_ptr->getOptimizationAlgorithm();
 
-  // if analysis is not an ApproximationAnalysis or if number of inputs changed
-  if (!approxAnalysis_ptr || (startingPoint_.getSize() != inputNames_.getSize()))
-    solver.setStartingPoint(analysis_ptr->getPhysicalModel().getComposedDistribution().getMean());
+  // if solver.getStartingPoint is valid, we use it
+  if (solver.getStartingPoint().getSize() == inputNames_.getSize())
+  {
+    startingPoint_ = solver.getStartingPoint();
+    updatePointLineEdit();
+  }
 
   // initialize widgets
   if (solver.getImplementation()->getClassName() == "AbdoRackwitz")
@@ -190,8 +194,6 @@ void ApproximationReliabilityPage::initialize(const Analysis& analysis)
   relativeErrSpinBox_->setValue(solver.getMaximumRelativeError());
   residualErrSpinBox_->setValue(solver.getMaximumResidualError());
   constraintErrSpinBox_->setValue(solver.getMaximumConstraintError());
-
-  updatePointLineEdit();
 }
 
 
