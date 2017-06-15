@@ -37,21 +37,21 @@ public:
   SimulationReliabilityResult();
   /** Constructor with parameters */
   SimulationReliabilityResult(const OT::SimulationResult& simulationResults,
-                              const OT::NumericalSample& outputSample,
-                              const OT::NumericalSample& convergenceSample,
-                              const OT::NumericalSample& convergenceSampleLowerBound,
-                              const OT::NumericalSample& convergenceSampleUpperBound);
+                              const OT::Sample& outputSample,
+                              const OT::Sample& convergenceSample,
+                              const OT::Sample& convergenceSampleLowerBound,
+                              const OT::Sample& convergenceSampleUpperBound);
 
   /** Virtual constructor */
   virtual SimulationReliabilityResult * clone() const;
 
   OT::SimulationResult getSimulationResult() const;
-  OT::NumericalSample getOutputSample() const;
-  OT::NumericalSample getConvergenceSample() const;
-  OT::NumericalSample getConvergenceSampleLowerBound() const;
-  OT::NumericalSample getConvergenceSampleUpperBound() const;
+  OT::Sample getOutputSample() const;
+  OT::Sample getConvergenceSample() const;
+  OT::Sample getConvergenceSampleLowerBound() const;
+  OT::Sample getConvergenceSampleUpperBound() const;
 
-  OT::NumericalScalar getElapsedTime() const;
+  OT::Scalar getElapsedTime() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -64,11 +64,11 @@ public:
 
 private:
   OT::SimulationResult simulationResult_;
-  OT::NumericalSample outputSample_;
-  OT::NumericalSample convergenceSample_;
-  OT::NumericalSample convergenceSampleLowerBound_;
-  OT::NumericalSample convergenceSampleUpperBound_;
-  OT::NumericalScalar elapsedTime_;
+  OT::Sample outputSample_;
+  OT::Sample convergenceSample_;
+  OT::Sample convergenceSampleLowerBound_;
+  OT::Sample convergenceSampleUpperBound_;
+  OT::Scalar elapsedTime_;
 };
 }
 #endif

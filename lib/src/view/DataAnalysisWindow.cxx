@@ -425,7 +425,7 @@ QWidget* DataAnalysisWindow::getScatterPlotsWidget()
   QVector<PlotWidget*> listScatterPlotWidgets =
     DesignOfExperimentWindow::GetListScatterPlots(result_.getInputSample(),
                                                   result_.getOutputSample(),
-                                                  NumericalSample(),
+                                                  Sample(),
                                                   stochInputNames_,
                                                   inAxisTitles_,
                                                   outputNames_,

@@ -79,11 +79,11 @@ public:
   OT::RandomVector getInputRandomVector() const;
   OT::RandomVector getOutputRandomVector(const OT::Description & outputNames) const;
 
-  OT::NumericalMathFunction getFunction() const;
-  OT::NumericalMathFunction getFunction(const OT::Description & outputNames) const;
-  OT::NumericalMathFunction getFunction(const OT::String & outputName) const;
-  OT::NumericalMathFunction getRestrictedFunction() const;
-  OT::NumericalMathFunction getRestrictedFunction(const OT::Description & outputNames) const;
+  OT::Function getFunction() const;
+  OT::Function getFunction(const OT::Description & outputNames) const;
+  OT::Function getFunction(const OT::String & outputName) const;
+  OT::Function getRestrictedFunction() const;
+  OT::Function getRestrictedFunction(const OT::Description & outputNames) const;
 
   OT::Copula getCopula() const;
   void setCopula(const OT::Copula & copula);

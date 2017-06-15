@@ -83,21 +83,21 @@ Description DesignOfExperimentImplementation::getVariableInputNames() const
 }
 
 
-NumericalSample DesignOfExperimentImplementation::getFailedInputSample() const
+Sample DesignOfExperimentImplementation::getFailedInputSample() const
 {
   return failedInputSample_;
 }
 
 
-NumericalSample DesignOfExperimentImplementation::getNotEvaluatedInputSample() const
+Sample DesignOfExperimentImplementation::getNotEvaluatedInputSample() const
 {
   return notEvaluatedInputSample_;
 }
 
 
-void DesignOfExperimentImplementation::setInputSample(const NumericalSample& sample)
+void DesignOfExperimentImplementation::setInputSample(const Sample& sample)
 {
-  NumericalSample newsample(sample);
+  Sample newsample(sample);
   if (newsample.getSize() && hasPhysicalModel())
   {
     if (physicalModel_.getInputs().getSize() != sample.getDimension())
@@ -126,9 +126,9 @@ void DesignOfExperimentImplementation::initialize()
   errorMessage_ = "";
   stopRequested_ = false;
   progressValue_ = 0;
-  failedInputSample_ = NumericalSample();
-  notEvaluatedInputSample_ = NumericalSample();
-  setOutputSample(NumericalSample());
+  failedInputSample_ = Sample();
+  notEvaluatedInputSample_ = Sample();
+  setOutputSample(Sample());
 }
 
 
@@ -143,13 +143,13 @@ void DesignOfExperimentImplementation::run()
     initialize();
 
     // input sample
-    NumericalSample inputSample(getInputSample());
-    NumericalSample wellDoneInputSample(0, getInputSample().getDimension());
-    NumericalSample failedInputSample(0, getInputSample().getDimension());
+    Sample inputSample(getInputSample());
+    Sample wellDoneInputSample(0, getInputSample().getDimension());
+    Sample failedInputSample(0, getInputSample().getDimension());
     failedInputSample.setDescription(getInputSample().getDescription());
 
     // output = f(input)
-    NumericalSample outputSample(0, getPhysicalModel().getSelectedOutputsNames().getSize());
+    Sample outputSample(0, getPhysicalModel().getSelectedOutputsNames().getSize());
     for (UnsignedInteger i=0; i<inputSample.getSize(); ++i)
     {
       if (stopRequested_)
@@ -158,8 +158,8 @@ void DesignOfExperimentImplementation::run()
       progressValue_ = (int) (i * 100 / inputSample.getSize());
       notify("progressValueChanged");
 
-      NumericalPoint outputPoint;
-      NumericalPoint failedPoint;
+      Point outputPoint;
+      Point failedPoint;
 
       try
       {
@@ -205,7 +205,7 @@ void DesignOfExperimentImplementation::run()
     failedInputSample_ = failedInputSample;
 
     if ((wellDoneInputSample.getSize() + failedInputSample.getSize()) < inputSample.getSize())
-      notEvaluatedInputSample_ = NumericalSample(inputSample, outputSample.getSize() + failedInputSample.getSize(), inputSample.getSize());
+      notEvaluatedInputSample_ = Sample(inputSample, outputSample.getSize() + failedInputSample.getSize(), inputSample.getSize());
 
     notify("analysisFinished");
   }

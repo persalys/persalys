@@ -40,24 +40,24 @@ SimulationAnalysis::SimulationAnalysis(const String & name, const PhysicalModel 
 }
 
 
-NumericalSample SimulationAnalysis::generateInputSample(const UnsignedInteger nbSimu)
+Sample SimulationAnalysis::generateInputSample(const UnsignedInteger nbSimu)
 {
-  NumericalSample inputSample(getPhysicalModel().getInputRandomVector().getSample(nbSimu));
+  Sample inputSample(getPhysicalModel().getInputRandomVector().getSample(nbSimu));
   inputSample.setDescription(getPhysicalModel().getStochasticInputNames());
   return inputSample;
 }
 
 
-NumericalSample SimulationAnalysis::computeOutputSample(const NumericalSample& inputSample) const
+Sample SimulationAnalysis::computeOutputSample(const Sample& inputSample) const
 {
-  NumericalSample outputSample(getPhysicalModel().getRestrictedFunction(getInterestVariables())(inputSample));
+  Sample outputSample(getPhysicalModel().getRestrictedFunction(getInterestVariables())(inputSample));
   return outputSample;
 }
 
 
-NumericalSample SimulationAnalysis::computeOutputSample(const NumericalPoint& inputValues) const
+Sample SimulationAnalysis::computeOutputSample(const Point& inputValues) const
 {
-  return computeOutputSample(NumericalSample(1, inputValues));
+  return computeOutputSample(Sample(1, inputValues));
 }
 
 

@@ -36,7 +36,7 @@ public:
   /** Virtual constructor */
   virtual SimulationAnalysis * clone() const = 0;
 
-  OT::NumericalSample generateInputSample(const OT::UnsignedInteger nbSimu);
+  OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu);
 
   OT::UnsignedInteger getSeed() const;
   void setSeed(const OT::UnsignedInteger seed);
@@ -48,8 +48,8 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  OT::NumericalSample computeOutputSample(const OT::NumericalSample& inputSample) const;
-  OT::NumericalSample computeOutputSample(const OT::NumericalPoint& inputValues) const;
+  OT::Sample computeOutputSample(const OT::Sample& inputSample) const;
+  OT::Sample computeOutputSample(const OT::Point& inputValues) const;
 
 private:
   OT::UnsignedInteger seed_;

@@ -66,12 +66,12 @@ void TaylorExpansionMomentsAnalysis::run()
     TaylorExpansionMoments algoTaylorExpansionMoments(getPhysicalModel().getOutputRandomVector(getInterestVariables()));
 
     // set results
-    NumericalPoint meanFirstOrder = algoTaylorExpansionMoments.getMeanFirstOrder();
-    NumericalPoint meanSecondOrder = algoTaylorExpansionMoments.getMeanSecondOrder();
-    NumericalPoint variance = NumericalPoint(algoTaylorExpansionMoments.getCovariance().getDimension());
+    Point meanFirstOrder = algoTaylorExpansionMoments.getMeanFirstOrder();
+    Point meanSecondOrder = algoTaylorExpansionMoments.getMeanSecondOrder();
+    Point variance = Point(algoTaylorExpansionMoments.getCovariance().getDimension());
     for (UnsignedInteger i=0; i<variance.getDimension(); ++i)
       variance[i] = algoTaylorExpansionMoments.getCovariance()(i,i);
-    NumericalPoint standardDeviation(variance.getDimension());
+    Point standardDeviation(variance.getDimension());
     for (UnsignedInteger i=0; i<variance.getDimension(); ++i)
       standardDeviation[i] = sqrt(variance[i]);
 

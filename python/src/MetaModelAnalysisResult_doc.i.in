@@ -18,7 +18,7 @@ metamodel : :class:`~otguibase.MetaModel`
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Output sample"
 
 // ---------------------------------------------------------------------
@@ -28,7 +28,7 @@ sample : :py:class:`openturns.NumericalSample`
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Output sample evaluate with the metamodel"
 
 // ---------------------------------------------------------------------
@@ -38,7 +38,7 @@ sample : :py:class:`openturns.NumericalSample`
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     All the approximation :math:`\hat{y_i}^{(-i)}`
     that has been built from the data sample without the i-th observation."
 
@@ -49,7 +49,7 @@ sample : :py:class:`openturns.NumericalSample`
 
 Returns
 -------
-error : :py:class:`openturns.NumericalPoint`
+error : :py:class:`openturns.Point`
     The Leave-one-out validation errors defined as follows for each output of the model:
     :math:`\displaystyle \frac{\sqrt{\sum_{i=1}^N (y_i - \hat{y_i}^{(-i)})^2}}{N}`
     with :math:`y_i` the :math:`N` model's values and :math:`\hat{y_i}^{(-i)}` the
@@ -62,7 +62,7 @@ error : :py:class:`openturns.NumericalPoint`
 
 Returns
 -------
-q2 : :py:class:`openturns.NumericalPoint`
+q2 : :py:class:`openturns.Point`
     Leave-one-out validation Q2 defined as follows for each output of the model:
     :math:`1 - \displaystyle \frac{\sum_{i=1}^N (y_i - \hat{y_i}^{(-i)})^2}{(N-1) {\rm Var}\left[ \underline{Y} \right]}`
     with :math:`\underline{Y}` the vector of the :math:`N` model's values

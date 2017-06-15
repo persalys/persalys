@@ -39,26 +39,26 @@ ApproximationAnalysis::~ApproximationAnalysis()
 }
 
 
-OptimizationSolver ApproximationAnalysis::getOptimizationAlgorithm() const
+OptimizationAlgorithm ApproximationAnalysis::getOptimizationAlgorithm() const
 {
   return optimizationAlgorithm_;
 }
 
 
-void ApproximationAnalysis::setOptimizationAlgorithm(const OptimizationSolver& solver)
+void ApproximationAnalysis::setOptimizationAlgorithm(const OptimizationAlgorithm& solver)
 {
   optimizationAlgorithm_ = solver;
   optimizationAlgorithm_.setStartingPoint(physicalStartingPoint_);
 }
 
 
-NumericalPoint ApproximationAnalysis::getPhysicalStartingPoint() const
+Point ApproximationAnalysis::getPhysicalStartingPoint() const
 {
   return physicalStartingPoint_;
 }
 
 
-void ApproximationAnalysis::setPhysicalStartingPoint(const NumericalPoint& point)
+void ApproximationAnalysis::setPhysicalStartingPoint(const Point& point)
 {
   optimizationAlgorithm_.setStartingPoint(point);
   physicalStartingPoint_ = point;

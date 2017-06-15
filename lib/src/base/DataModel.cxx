@@ -57,8 +57,8 @@ DataModel::DataModel(const String& name,
 
 
 DataModel::DataModel(const String& name,
-                     const NumericalSample& inSample,
-                     const NumericalSample& outSample)
+                     const Sample& inSample,
+                     const Sample& outSample)
   : FromFileDesignOfExperiment()
   , inputNames_(inSample.getDescription())
   , outputNames_(outSample.getDescription())
@@ -118,16 +118,16 @@ void DataModel::setColumns(const Indices& inputColumns,
                            const Description& outputNames)
 {
   // check indices
-  if (!inputColumns.check(getSampleFromFile().getDimension()-1))
+  if (!inputColumns.check(getSampleFromFile().getDimension()))
     throw InvalidArgumentException(HERE) << "Values in the inputs columns list are not compatible with the sample dimension contained in the file.";
 
-  if (!outputColumns.check(getSampleFromFile().getDimension()-1))
+  if (!outputColumns.check(getSampleFromFile().getDimension()))
     throw InvalidArgumentException(HERE) << "Values in the outputs columns list are not compatible with the sample dimension contained in the file.";
 
   Indices indices(inputColumns);
   indices.add(outputColumns);
 
-  if (!indices.check(getSampleFromFile().getDimension()-1))
+  if (!indices.check(getSampleFromFile().getDimension()))
     throw InvalidArgumentException(HERE) << "A value can not be in the two columns lists at the same time.";
 
   // check names
@@ -164,7 +164,7 @@ void DataModel::setColumns(const Indices& inputColumns,
   outputNames_ = outputNames;
 
   // set samples
-  NumericalSample inS;
+  Sample inS;
   if (inputColumns_.getSize())
   {
     inS = sampleFromFile_.getMarginal(inputColumns_);
@@ -172,7 +172,7 @@ void DataModel::setColumns(const Indices& inputColumns,
   }
   setInputSample(inS);
 
-  NumericalSample outS;
+  Sample outS;
   if (outputColumns_.getSize())
   {
     outS = sampleFromFile_.getMarginal(outputColumns_);

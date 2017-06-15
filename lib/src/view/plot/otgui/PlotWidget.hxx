@@ -45,17 +45,17 @@ public:
   /// plot a curve
   void plotCurve(double * x, double * y, int size, const QPen pen=QPen(Qt::black, 2),
                  QwtPlotCurve::CurveStyle style=QwtPlotCurve::Lines, QwtSymbol* symbol=0, QString title="");
-  void plotCurve(const OT::NumericalSample & data, const QPen pen=QPen(Qt::black, 2),
+  void plotCurve(const OT::Sample & data, const QPen pen=QPen(Qt::black, 2),
                  QwtPlotCurve::CurveStyle style=QwtPlotCurve::Lines, QwtSymbol* symbol=0, QString title="");
 
   void plotPDFCurve(const OT::Distribution & distribution, const QPen pen=QPen(Qt::black, 2));
   void plotCDFCurve(const OT::Distribution & distribution, const QPen pen=QPen(Qt::black, 2));
-  void plotHistogram(const OT::NumericalSample & sample, const OT::UnsignedInteger graphType=0, int barNumber=0, QString title="");
-  void plotScatter(const OT::NumericalSample & input, const OT::NumericalSample & output,
+  void plotHistogram(const OT::Sample & sample, const OT::UnsignedInteger graphType=0, int barNumber=0, QString title="");
+  void plotScatter(const OT::Sample & input, const OT::Sample & output,
                    QPen pen=QPen(Qt::blue, 4), QString Xtitle="", QString Ytitle="");
   void plotBoxPlot(double median, double lowerQuartile, double upperQuartile,
-                   double lowerBound, double upperBound, OT::NumericalPoint outliers_);
-  void plotSensitivityIndices(const OT::NumericalPoint firstOrderIndices, const OT::NumericalPoint totalIndices,
+                   double lowerBound, double upperBound, OT::Point outliers_);
+  void plotSensitivityIndices(const OT::Point firstOrderIndices, const OT::Point totalIndices,
                               const OT::Description inputNames);
   void plotContour(const OT::Distribution& distribution, const bool isPdf=true);
 

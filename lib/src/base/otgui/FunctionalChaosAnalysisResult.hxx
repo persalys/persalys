@@ -43,8 +43,8 @@ public:
 
   OT::FunctionalChaosResult getFunctionalChaosResult() const;
 
-  OT::NumericalPoint getMean() const;
-  OT::NumericalPoint getVariance() const;
+  OT::Point getMean() const;
+  OT::Point getVariance() const;
 
   SobolResult getSobolResult() const;
 
@@ -59,8 +59,8 @@ public:
 
 protected:
   OT::FunctionalChaosResult functionalChaosResult_;
-  OT::NumericalPoint mean_;
-  OT::NumericalPoint variance_;
+  OT::Point mean_;
+  OT::Point variance_;
   SobolResult sobolResult_;
 };
 }

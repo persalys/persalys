@@ -39,8 +39,8 @@ public:
   bool isLeaveOneOutValidation() const;
   void setLeaveOneOutValidation(const bool validation);
 
-  OT::NumericalSample getEffectiveInputSample() const;
-  OT::NumericalSample getEffectiveOutputSample() const;
+  OT::Sample getEffectiveInputSample() const;
+  OT::Sample getEffectiveOutputSample() const;
 
   OT::ComposedDistribution getDistribution();
 
@@ -54,10 +54,10 @@ public:
   void load(OT::Advocate& adv);
 
 protected:
-  virtual OT::NumericalMathFunction runAlgo(const OT::NumericalSample& inputSample, const OT::NumericalSample& outputSample) = 0;
-  void buildMetaModel(MetaModelAnalysisResult& result, const OT::NumericalMathFunction& function);
-  void computeError(const OT::NumericalSample& metaOutSample, const OT::NumericalSample& outSample, OT::NumericalPoint& error, OT::NumericalPoint& q2);
-  void validateMetaModelResult(MetaModelAnalysisResult& result, const OT::NumericalSample& inputSample);
+  virtual OT::Function runAlgo(const OT::Sample& inputSample, const OT::Sample& outputSample) = 0;
+  void buildMetaModel(MetaModelAnalysisResult& result, const OT::Function& function);
+  void computeError(const OT::Sample& metaOutSample, const OT::Sample& outSample, OT::Point& error, OT::Point& q2);
+  void validateMetaModelResult(MetaModelAnalysisResult& result, const OT::Sample& inputSample);
 
 protected:
   OT::ComposedDistribution distribution_;

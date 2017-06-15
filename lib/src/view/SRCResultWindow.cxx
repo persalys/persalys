@@ -107,7 +107,7 @@ void SRCResultWindow::buildInterface()
   {
     SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(i,
                                                                                 result_.getIndices()[i],
-                                                                                NumericalPoint(),
+                                                                                Point(),
                                                                                 result_.getInputNames(),
                                                                                 result_.getOutputNames()[i],
                                                                                 SensitivityResultWidget::SRC

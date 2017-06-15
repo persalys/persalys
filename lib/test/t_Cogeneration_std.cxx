@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     aDesign.setLevels(levels);
     myStudy.add(aDesign);
     aDesign.run();
-    NumericalSample resultSample1(aDesign.getOutputSample());
+    Sample resultSample1(aDesign.getOutputSample());
 
     // Second parametric analysis
     aDesign.getInputSample().exportToCSVFile("sample.csv");
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     inputIndices.fill();
     FromFileDesignOfExperiment anotherdesign("anotherDesign", myPhysicalModel, "sample.csv", inputIndices);
     anotherdesign.run();
-    NumericalSample resultSample2(anotherdesign.getOutputSample());
+    Sample resultSample2(anotherdesign.getOutputSample());
 
     // Reference
 
@@ -73,11 +73,9 @@ int main(int argc, char *argv[])
     inputVariables[0] = "Q";
     inputVariables[1] = "E";
     inputVariables[2] = "C";
-    Description outputVariables(1);
-    outputVariables[0] = "Ep";
     Description formula(1);
     formula[0] = (OSS() << "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
-    NumericalMathFunction f(inputVariables, outputVariables, formula);
+    SymbolicFunction f(inputVariables, formula);
 
 
     ComposedDistribution::DistributionCollection distributions;
@@ -85,9 +83,9 @@ int main(int argc, char *argv[])
     distributions.add(Normal(3000,15));
     distributions.add(Normal(4000,60));
 
-    NumericalPoint scale(3);
-    NumericalPoint transvec(3);
-    NumericalPoint otLevels(3, 0.);
+    Point scale(3);
+    Point transvec(3);
+    Point otLevels(3, 0.);
 
     for (int i=0; i<3; ++i)
     {
@@ -98,11 +96,11 @@ int main(int argc, char *argv[])
     }
 
     Box box(otLevels);
-    NumericalSample inputSample(box.generate());
+    Sample inputSample(box.generate());
     inputSample*=scale;
     inputSample+=transvec;
 
-    NumericalSample outputSample=f(inputSample);
+    Sample outputSample=f(inputSample);
 
     // Comparaison
     assert_almost_equal(outputSample, resultSample1, 1e-16);

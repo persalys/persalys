@@ -217,13 +217,13 @@ void DataModelWindow::refreshTable()
 }
 
 
-void DataModelWindow::updateTableView(const NumericalSample& sample)
+void DataModelWindow::updateTableView(const Sample& sample)
 {
   // set table model
   if (dataTableModel_)
     delete dataTableModel_;
 
-  NumericalSample fullSample(sample);
+  Sample fullSample(sample);
   if (!sample.getSize())
     fullSample = dataModel_->getSampleFromFile();
 

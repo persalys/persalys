@@ -56,7 +56,7 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& res
   valuesList << QString(analysis.getOptimizationAlgorithm().getImplementation()->getClassName().c_str());
 
   // starting point
-  const NumericalPoint startingPoint(analysis.getPhysicalStartingPoint());
+  const Point startingPoint(analysis.getPhysicalStartingPoint());
   QString startingPointText = "[";
   for (UnsignedInteger i=0; i<startingPoint.getDimension(); ++i)
   {
@@ -166,7 +166,7 @@ void ApproximationResultTabWidget::buildInterface()
   resultsTableModel->setNotEditableHeaderItem(1, 3, tr("Physical space"));
 
   // importance factors
-  NumericalPointWithDescription importanceFactors(result_.getImportanceFactors());
+  PointWithDescription importanceFactors(result_.getImportanceFactors());
   importanceFactors.setDescription(inDescription);
 
   // set values
@@ -235,8 +235,8 @@ void ApproximationResultTabWidget::buildInterface()
     const int varRow = row;
     resultsTableModel->setNotEditableItem(row, 0, inDescription[i].c_str());
 
-    NumericalPointWithDescription pfSensitivity(result_.getEventProbabilitySensitivity()[i]);
-    const NumericalPointWithDescription betaSensitivity(result_.getHasoferReliabilityIndexSensitivity()[i]);
+    PointWithDescription pfSensitivity(result_.getEventProbabilitySensitivity()[i]);
+    const PointWithDescription betaSensitivity(result_.getHasoferReliabilityIndexSensitivity()[i]);
 
     for (UnsignedInteger j=0; j<betaSensitivity.getDimension(); ++j)
     {

@@ -74,7 +74,7 @@ public:
 protected:
   void updateData();
 
-  virtual OT::NumericalMathFunction generateFunction(const OT::Description & outputNames) const;
+  virtual OT::Function generateFunction(const OT::Description & outputNames) const;
 
 private:
   YACSEvaluation evaluation_;

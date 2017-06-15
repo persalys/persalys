@@ -28,5 +28,5 @@ sample : :py:class:`openturns.Description`
 
 Returns
 -------
-indices : :py:class:`openturns.NumericalPoint`
+indices : :py:class:`openturns.Point`
     SRC indices"

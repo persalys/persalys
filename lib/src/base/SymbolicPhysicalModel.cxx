@@ -21,6 +21,7 @@
 #include "otgui/SymbolicPhysicalModel.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/SymbolicFunction.hxx>
 
 using namespace OT;
 
@@ -160,14 +161,14 @@ void SymbolicPhysicalModel::setFormula(const String& outputName, const String& f
   notify("outputFormulaChanged");
 }
 
-NumericalMathFunction SymbolicPhysicalModel::generateFunction(const Description & outputNames) const
+Function SymbolicPhysicalModel::generateFunction(const Description & outputNames) const
 {
   Description formulas;
   for (UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
   {
     formulas.add(getFormula(outputNames[i]));
   }
-  return NumericalMathFunction(getInputNames(), outputNames, formulas);
+  return SymbolicFunction(getInputNames(), formulas);
 }
 
 

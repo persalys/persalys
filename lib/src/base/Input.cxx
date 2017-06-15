@@ -37,7 +37,7 @@ Input::Input()
   : Variable()
   , distribution_(Dirac())
   , distributionParametersType_(0)
-  , finiteDifferenceStep_(ResourceMap::GetAsNumericalScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
+  , finiteDifferenceStep_(ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
 {
 }
 
@@ -47,7 +47,7 @@ Input::Input(const String& name)
   : Variable(name)
   , distribution_(Dirac())
   , distributionParametersType_(0)
-  , finiteDifferenceStep_(ResourceMap::GetAsNumericalScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
+  , finiteDifferenceStep_(ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
 {
 }
 
@@ -57,7 +57,7 @@ Input::Input(const String& name, const double& value, const Distribution& distri
   : Variable(name, value, description)
   , distribution_(Dirac())
   , distributionParametersType_(0)
-  , finiteDifferenceStep_(ResourceMap::GetAsNumericalScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
+  , finiteDifferenceStep_(ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
 {
   setDistribution(distribution);
 }
@@ -68,7 +68,7 @@ Input::Input(const String& name, const Distribution& distribution, const String&
   : Variable(name, 0., description)
   , distribution_(Dirac())
   , distributionParametersType_(0)
-  , finiteDifferenceStep_(ResourceMap::GetAsNumericalScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
+  , finiteDifferenceStep_(ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
 {
   setDistribution(distribution);
 }
@@ -79,7 +79,7 @@ Input::Input(const String& name, const double& value, const String& description)
   : Variable(name, value, description)
   , distribution_(Dirac())
   , distributionParametersType_(0)
-  , finiteDifferenceStep_(ResourceMap::GetAsNumericalScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
+  , finiteDifferenceStep_(ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
 {
 }
 
@@ -146,7 +146,7 @@ String Input::getDistributionPythonScript() const
   if (distributionName != "TruncatedDistribution")
   {
     oss << "dist_" << getName() << " = ot." << distributionName << "(";
-    NumericalPointWithDescription parameters = distribution_.getParametersCollection()[0];
+    PointWithDescription parameters = distribution_.getParametersCollection()[0];
     for (unsigned int i = 0; i < parameters.getSize(); ++ i)
     {
       oss << parameters[i];
@@ -160,7 +160,7 @@ String Input::getDistributionPythonScript() const
     TruncatedDistribution truncatedDistribution = *dynamic_cast<TruncatedDistribution*>(&*distribution_.getImplementation());
     Distribution distribution = truncatedDistribution.getDistribution();
     oss << "dist_" << getName() << " = ot." << distribution.getImplementation()->getClassName() << "(";
-    NumericalPointWithDescription parameters = distribution.getParametersCollection()[0];
+    PointWithDescription parameters = distribution.getParametersCollection()[0];
     for (unsigned int i = 0; i < parameters.getSize(); ++ i)
     {
       oss << parameters[i];
@@ -198,7 +198,7 @@ String Input::getPythonScript() const
     oss << getName() << " = otguibase.Input('" << getName() << "', " << getValue();
     oss << ", dist_" << getName() << ", '" << getEscapedDescription() << "')\n";
   }
-  if (getFiniteDifferenceStep() != ResourceMap::GetAsNumericalScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
+  if (getFiniteDifferenceStep() != ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
     oss << getName() << ".setFiniteDifferenceStep(" << getFiniteDifferenceStep() << ")\n";
 
   return oss;

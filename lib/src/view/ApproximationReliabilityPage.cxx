@@ -172,7 +172,7 @@ void ApproximationReliabilityPage::initialize(const Analysis& analysis)
   if (!approxAnalysis_ptr)
     return;
 
-  OptimizationSolver solver = approxAnalysis_ptr->getOptimizationAlgorithm();
+  OptimizationAlgorithm solver = approxAnalysis_ptr->getOptimizationAlgorithm();
 
   // if solver.getStartingPoint is valid, we use it
   if (solver.getStartingPoint().getSize() == inputNames_.getSize())
@@ -231,9 +231,9 @@ void ApproximationReliabilityPage::openPointDefinitionWizard()
 }
 
 
-OptimizationSolver ApproximationReliabilityPage::getOptimizationAlgorithm() const
+OptimizationAlgorithm ApproximationReliabilityPage::getOptimizationAlgorithm() const
 {
-  OptimizationSolver optimAlgo;
+  OptimizationAlgorithm optimAlgo;
 
   if (algoChoice_->checkedId() == ApproximationReliabilityPage::CobylaAlgo)
     optimAlgo = Cobyla();

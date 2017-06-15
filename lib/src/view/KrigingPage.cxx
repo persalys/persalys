@@ -82,7 +82,7 @@ void KrigingPage::buildInterface()
   maternParameterNuSpinBox_ = new DoubleSpinBox;
   maternParameterNuSpinBox_->setMinimum(1e-12);
   parametersLayout->addWidget(maternParameterNuSpinBox_, 1, 2);
-  maternParameterNuSpinBox_->setValue(ResourceMap::GetAsNumericalScalar("MaternModel-DefaultNu"));
+  maternParameterNuSpinBox_->setValue(ResourceMap::GetAsScalar("MaternModel-DefaultNu"));
 
   // GeneralizedExponential parameter P
   //  -label
@@ -270,7 +270,7 @@ Analysis KrigingPage::getAnalysis(const String& name, const DesignOfExperiment& 
   KrigingAnalysis analysis(name, doe);
 
   // covariance model
-  const NumericalPoint amplitude(1, amplitudeSpinBox_->value());
+  const Point amplitude(1, amplitudeSpinBox_->value());
   switch (covarianceModelComboBox_->currentIndex())
   {
     case 0: // SquaredExponential

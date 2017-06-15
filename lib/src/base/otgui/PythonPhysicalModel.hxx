@@ -64,11 +64,11 @@ public:
   void removeOutput(const OT::String & outputName);
 
 protected:
-  virtual OT::NumericalMathFunction generateFunction(const OT::Description & outputNames) const;
+  virtual OT::Function generateFunction(const OT::Description & outputNames) const;
 
 private:
   OT::String code_;
-  mutable OT::NumericalMathFunction functionCache_;
+  mutable OT::Function functionCache_;
 };
 
 }

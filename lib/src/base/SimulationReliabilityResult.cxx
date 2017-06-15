@@ -40,10 +40,10 @@ SimulationReliabilityResult::SimulationReliabilityResult()
 
 /* Constructor with parameters */
 SimulationReliabilityResult::SimulationReliabilityResult(const SimulationResult& simulationResults,
-                                                         const NumericalSample& outputSample,
-                                                         const NumericalSample& convergenceSample,
-                                                         const NumericalSample& convergenceSampleLowerBound,
-                                                         const NumericalSample& convergenceSampleUpperBound
+                                                         const Sample& outputSample,
+                                                         const Sample& convergenceSample,
+                                                         const Sample& convergenceSampleLowerBound,
+                                                         const Sample& convergenceSampleUpperBound
                                                         )
   : PersistentObject()
   , simulationResult_(simulationResults)
@@ -69,31 +69,31 @@ SimulationResult SimulationReliabilityResult::getSimulationResult() const
 }
 
 
-NumericalSample SimulationReliabilityResult::getOutputSample() const
+Sample SimulationReliabilityResult::getOutputSample() const
 {
   return outputSample_;
 }
 
 
-NumericalSample SimulationReliabilityResult::getConvergenceSample() const
+Sample SimulationReliabilityResult::getConvergenceSample() const
 {
   return convergenceSample_;
 }
 
 
-NumericalSample SimulationReliabilityResult::getConvergenceSampleLowerBound() const
+Sample SimulationReliabilityResult::getConvergenceSampleLowerBound() const
 {
   return convergenceSampleLowerBound_;
 }
 
 
-NumericalSample SimulationReliabilityResult::getConvergenceSampleUpperBound() const
+Sample SimulationReliabilityResult::getConvergenceSampleUpperBound() const
 {
   return convergenceSampleUpperBound_;
 }
 
 
-NumericalScalar SimulationReliabilityResult::getElapsedTime() const
+Scalar SimulationReliabilityResult::getElapsedTime() const
 {
   return elapsedTime_;
 }

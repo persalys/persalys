@@ -63,7 +63,7 @@ public:
   virtual void load(OT::Advocate & adv);
 
 protected:
-  virtual OT::NumericalMathFunction generateFunction(const OT::Description & outputNames) const;
+  virtual OT::Function generateFunction(const OT::Description & outputNames) const;
 
 private:
   std::map<OT::String, OT::String> formulaForEachOutput_;

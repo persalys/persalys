@@ -26,7 +26,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-SampleTableModel::SampleTableModel(const NumericalSample & data, QObject * parent)
+SampleTableModel::SampleTableModel(const Sample & data, QObject * parent)
   : QAbstractTableModel(parent)
   , data_(data)
   , sampleIsValid_(true)

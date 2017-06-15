@@ -49,13 +49,13 @@ FunctionalChaosResult FunctionalChaosAnalysisResult::getFunctionalChaosResult() 
 }
 
 
-NumericalPoint FunctionalChaosAnalysisResult::getMean() const
+Point FunctionalChaosAnalysisResult::getMean() const
 {
   return mean_;
 }
 
 
-NumericalPoint FunctionalChaosAnalysisResult::getVariance() const
+Point FunctionalChaosAnalysisResult::getVariance() const
 {
   return variance_;
 }

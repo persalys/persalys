@@ -97,7 +97,7 @@ void SimulationReliabilityResultWindow::setParameters(const Analysis & analysis)
       valuesList << tr("Importance sampling");
 
     // starting point
-    const NumericalPoint startingPoint(dynamic_cast<const ImportanceSamplingAnalysis*>(&*analysis.getImplementation())->getStandardSpaceDesignPoint());
+    const Point startingPoint(dynamic_cast<const ImportanceSamplingAnalysis*>(&*analysis.getImplementation())->getStandardSpaceDesignPoint());
     QString startingPointText = "[";
     for (UnsignedInteger i=0; i<startingPoint.getDimension(); ++i)
     {
@@ -228,7 +228,7 @@ QWidget* SimulationReliabilityResultWindow::getSummaryTab()
   resultsTable->setSpan(0, 1, 2, 1);
 
   // Failure probability
-  const NumericalScalar pfEstimate = result_.getSimulationResult().getProbabilityEstimate();
+  const Scalar pfEstimate = result_.getSimulationResult().getProbabilityEstimate();
 
   resultsTableModel->setNotEditableHeaderItem(2, 0, tr("Failure probability"));
   resultsTableModel->setNotEditableItem(2, 1, pfEstimate);
@@ -278,7 +278,7 @@ QWidget* SimulationReliabilityResultWindow::getHistogramTab()
   plot->plotHistogram(result_.getOutputSample(), 2, 0, tr("%1 distribution").arg(outputName));
 
   // plot threshold
-  NumericalSample threshold = NumericalSample(2, 2);
+  Sample threshold = Sample(2, 2);
   threshold[0][0] = result_.getSimulationResult().getEvent().getThreshold();
   threshold[1][0] = plot->axisInterval(QwtPlot::yLeft).minValue();
   threshold[1][0] = result_.getSimulationResult().getEvent().getThreshold();

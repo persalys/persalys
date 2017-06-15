@@ -39,7 +39,7 @@ MetaModel::MetaModel(const String& name)
 
 
 /* Constructor with parameters */
-MetaModel::MetaModel(const OT::String& name, const OT::NumericalMathFunction& function)
+MetaModel::MetaModel(const OT::String& name, const OT::Function& function)
   : PhysicalModelImplementation(name)
   , function_(function)
 {
@@ -52,13 +52,13 @@ MetaModel* MetaModel::clone() const
 }
 
 
-NumericalMathFunction MetaModel::generateFunction(const Description & outputNames) const
+Function MetaModel::generateFunction(const Description & outputNames) const
 {
   return function_;
 }
 
 
-void MetaModel::setFunction(const NumericalMathFunction& function)
+void MetaModel::setFunction(const Function& function)
 {
   function_ = function;
 }

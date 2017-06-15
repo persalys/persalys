@@ -81,7 +81,7 @@ OTGUI_PhysicalModel_removeOutput_doc
 
 Returns
 -------
-function : :py:class:`openturns.NumericalMathFunction`
+function : :py:class:`openturns.Function`
     New variable"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getFunction
@@ -488,7 +488,7 @@ outputNames : sequence of str
 
 Returns
 -------
-restricted : :py:class:`openturns.NumericalMathFunction`
+restricted : :py:class:`openturns.Function`
     Stochastic function"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getRestrictedFunction

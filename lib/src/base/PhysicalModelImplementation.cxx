@@ -25,6 +25,7 @@
 #include <openturns/NormalCopula.hxx>
 #include <openturns/TruncatedDistribution.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/ParametricFunction.hxx>
 
 using namespace OT;
 
@@ -280,13 +281,13 @@ Description PhysicalModelImplementation::getInputNames() const
 
 void PhysicalModelImplementation::updateFiniteDifferenceSteps() const
 {
-  finiteDifferenceSteps_ = NumericalPoint(getInputs().getSize());
+  finiteDifferenceSteps_ = Point(getInputs().getSize());
   for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
     finiteDifferenceSteps_[i] = getInputs()[i].getFiniteDifferenceStep();
 }
 
 
-NumericalPoint PhysicalModelImplementation::getFiniteDifferenceSteps() const
+Point PhysicalModelImplementation::getFiniteDifferenceSteps() const
 {
   if (finiteDifferenceSteps_.getSize() != inputs_.getSize())
     updateFiniteDifferenceSteps();
@@ -479,26 +480,26 @@ RandomVector PhysicalModelImplementation::getOutputRandomVector(const Descriptio
   return RandomVector(getRestrictedFunction(outputNames), getInputRandomVector());
 }
 
-NumericalMathFunction PhysicalModelImplementation::generateFunction(const Description & outputNames) const
+Function PhysicalModelImplementation::generateFunction(const Description & outputNames) const
 {
   throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::generateFunction(outputNames)";
 }
 
 
-NumericalMathFunction PhysicalModelImplementation::getFunction() const
+Function PhysicalModelImplementation::getFunction() const
 {
   return getFunction(getOutputNames());
 }
 
 
-NumericalMathFunction PhysicalModelImplementation::getFunction(const Description & outputNames) const
+Function PhysicalModelImplementation::getFunction(const Description & outputNames) const
 {
   if (!getInputs().getSize())
     throw PhysicalModelNotValidException(HERE) << "The physical model has no inputs.";
   if (!getOutputs().getSize())
     throw PhysicalModelNotValidException(HERE) << "The physical model has no outputs.";
 
-  NumericalMathFunction function(generateFunction(outputNames));
+  Function function(generateFunction(outputNames));
 
   if (function.getUseDefaultGradientImplementation())
   {
@@ -530,13 +531,13 @@ NumericalMathFunction PhysicalModelImplementation::getFunction(const Description
 }
 
 
-NumericalMathFunction PhysicalModelImplementation::getFunction(const String & outputName) const
+Function PhysicalModelImplementation::getFunction(const String & outputName) const
 {
   return getFunction(Description(1, outputName));
 }
 
 
-NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction() const
+Function PhysicalModelImplementation::getRestrictedFunction() const
 {
   if (getInputs().getSize() == getStochasticInputNames().getSize())
     return getFunction();
@@ -545,11 +546,11 @@ NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction() const
 }
 
 
-NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction(const Description& outputNames) const
+Function PhysicalModelImplementation::getRestrictedFunction(const Description& outputNames) const
 {
   // search deterministic inputs
   Indices deterministicInputsIndices;
-  NumericalPoint inputsValues;
+  Point inputsValues;
   for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
   {
     if (!getInputs()[i].isStochastic())
@@ -559,14 +560,14 @@ NumericalMathFunction PhysicalModelImplementation::getRestrictedFunction(const D
     }
   }
 
-  const NumericalMathFunction function(getFunction(outputNames));
+  const Function function(getFunction(outputNames));
 
   // if there is no deterministic inputs
   if (!deterministicInputsIndices.getSize())
     return function;
 
   // if there are deterministic inputs
-  const NumericalMathFunction restricted(function, deterministicInputsIndices, inputsValues);
+  const ParametricFunction restricted(function, deterministicInputsIndices, inputsValues);
   return restricted;
 
 }
@@ -619,7 +620,7 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
       if (distributionName != "TruncatedDistribution")
       {
         oss << "dist_" << inputName << " = ot." << distributionName << "(";
-        NumericalPointWithDescription parameters = distribution.getParametersCollection()[0];
+        PointWithDescription parameters = distribution.getParametersCollection()[0];
         for (UnsignedInteger j=0; j<parameters.getSize(); ++ j)
         {
           oss << parameters[j];
@@ -633,7 +634,7 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
         TruncatedDistribution truncatedDistribution = *dynamic_cast<TruncatedDistribution*>(distribution.getImplementation().get());
         distribution = truncatedDistribution.getDistribution();
         oss << "dist_" << inputName << " = ot." << distribution.getImplementation()->getClassName() << "(";
-        NumericalPointWithDescription parameters = distribution.getParametersCollection()[0];
+        PointWithDescription parameters = distribution.getParametersCollection()[0];
         for (UnsignedInteger j=0; j < parameters.getSize(); ++ j)
         {
           oss << parameters[j];

@@ -68,7 +68,7 @@ void DataAnalysis::run()
     result_ = DataAnalysisResult();
 
     // get sample to analyse
-    const NumericalSample sample(getDesignOfExperiment().getSample());
+    const Sample sample(getDesignOfExperiment().getSample());
 
     if (!sample.getSize())
       throw InvalidDimensionException(HERE) << "The sample is empty";
@@ -89,11 +89,11 @@ void DataAnalysis::run()
       result_.mean_.add(sample.getMarginal(i).computeMean());
       result_.median_.add(sample.getMarginal(i).computeMedian());
 
-      result_.standardDeviation_.add(NumericalPoint());
-      result_.coefficientOfVariation_.add(NumericalPoint());
-      result_.variance_.add(NumericalPoint());
-      result_.skewness_.add(NumericalPoint());
-      result_.kurtosis_.add(NumericalPoint());
+      result_.standardDeviation_.add(Point());
+      result_.coefficientOfVariation_.add(Point());
+      result_.variance_.add(Point());
+      result_.skewness_.add(Point());
+      result_.kurtosis_.add(Point());
       try
       {
         result_.standardDeviation_[i] = sample.getMarginal(i).computeStandardDeviationPerComponent();
@@ -116,8 +116,8 @@ void DataAnalysis::run()
       if (isConfidenceIntervalRequired_)
       {
         // mean Confidence Interval
-        NumericalPoint meanLowerBounds(result_.meanConfidenceInterval_.getLowerBound());
-        NumericalPoint meanUpperBounds(result_.meanConfidenceInterval_.getUpperBound());
+        Point meanLowerBounds(result_.meanConfidenceInterval_.getLowerBound());
+        Point meanUpperBounds(result_.meanConfidenceInterval_.getUpperBound());
         meanLowerBounds.add(0.);
         meanUpperBounds.add(1.);
 
@@ -146,8 +146,8 @@ void DataAnalysis::run()
         }
 
         // std Confidence Interval
-        NumericalPoint stdLowerBounds(result_.stdConfidenceInterval_.getLowerBound());
-        NumericalPoint stdUpperBounds(result_.stdConfidenceInterval_.getUpperBound());
+        Point stdLowerBounds(result_.stdConfidenceInterval_.getLowerBound());
+        Point stdUpperBounds(result_.stdConfidenceInterval_.getUpperBound());
         stdLowerBounds.add(0.);
         stdUpperBounds.add(1.);
 
@@ -184,7 +184,7 @@ void DataAnalysis::run()
       }
 
       // outliers
-      result_.outliers_.add(NumericalPoint());
+      result_.outliers_.add(Point());
       const double lowerBound(result_.firstQuartile_[i][0] - 1.5 * (result_.thirdQuartile_[i][0] - result_.firstQuartile_[i][0]));
       const double upperBound(result_.thirdQuartile_[i][0] + 1.5 * (result_.thirdQuartile_[i][0] - result_.firstQuartile_[i][0]));
       for (UnsignedInteger j=0; j<sample.getSize(); ++j)
@@ -192,8 +192,8 @@ void DataAnalysis::run()
           result_.outliers_[i].add(sample[j][i]);
 
       // pdf/cdf
-      result_.pdf_.add(NumericalSample());
-      result_.cdf_.add(NumericalSample());
+      result_.pdf_.add(Sample());
+      result_.cdf_.add(Sample());
       try
       {
         KernelSmoothing gaussianKernel;

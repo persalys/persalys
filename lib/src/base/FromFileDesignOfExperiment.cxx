@@ -78,11 +78,11 @@ void FromFileDesignOfExperiment::setFileName(const String& fileName)
 
   if (fileName_ != fileName)
   {
-    NumericalSample importedSample(ImportSample(fileName));
+    Sample importedSample(ImportSample(fileName));
     fileName_ = fileName;
     sampleFromFile_ = importedSample;
     // reinitialization
-    setInputSample(NumericalSample());
+    setInputSample(Sample());
     initialize();
     inputColumns_ = Indices();
   }
@@ -109,13 +109,13 @@ void FromFileDesignOfExperiment::setInputColumns(const Indices& inputColumns)
     throw InvalidArgumentException(HERE) << oss.str();
   }
 
-  if (!inputColumns.check(getSampleFromFile().getDimension()-1))
+  if (!inputColumns.check(getSampleFromFile().getDimension()))
     throw InvalidArgumentException(HERE) << "Values in the input columns list are not compatible with the sample dimension contained in the file.";
 
   inputColumns_ = inputColumns;
 
   // generate input sample
-  NumericalSample inS(getSampleFromFile().getMarginal(inputColumns_));
+  Sample inS(getSampleFromFile().getMarginal(inputColumns_));
   inS.setDescription(physicalModel_.getInputNames());
   setInputSample(inS);
 
@@ -124,7 +124,7 @@ void FromFileDesignOfExperiment::setInputColumns(const Indices& inputColumns)
 }
 
 
-NumericalSample FromFileDesignOfExperiment::getSampleFromFile()
+Sample FromFileDesignOfExperiment::getSampleFromFile()
 {
   if (!sampleFromFile_.getSize())
     sampleFromFile_ = ImportSample(fileName_);
@@ -132,18 +132,18 @@ NumericalSample FromFileDesignOfExperiment::getSampleFromFile()
 }
 
 
-NumericalSample FromFileDesignOfExperiment::ImportSample(const String& fileName)
+Sample FromFileDesignOfExperiment::ImportSample(const String& fileName)
 {
   std::vector< String > separatorsList(3);
   separatorsList[0] = " ";
   separatorsList[1] = ",";
   separatorsList[2] = ";";
-  NumericalSample sampleFromFile;
+  Sample sampleFromFile;
 
   for (UnsignedInteger i = 0; i < separatorsList.size(); ++ i)
   {
     // import sample from the file
-    sampleFromFile = NumericalSample::ImportFromTextFile(fileName, separatorsList[i]);
+    sampleFromFile = Sample::ImportFromTextFile(fileName, separatorsList[i]);
     if (sampleFromFile.getSize())
       break;
   }

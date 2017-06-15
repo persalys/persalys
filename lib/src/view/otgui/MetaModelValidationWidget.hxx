@@ -24,7 +24,7 @@
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/ParametersTableView.hxx"
 
-#include <openturns/NumericalSample.hxx>
+#include <openturns/Sample.hxx>
 
 #include <QVBoxLayout>
 
@@ -36,8 +36,8 @@ class OTGUI_API MetaModelValidationWidget : public QWidget
 
 public:
   MetaModelValidationWidget(const int indexWidget,
-                            const OT::NumericalSample& metaModelSample,
-                            const OT::NumericalSample& outputSample,
+                            const OT::Sample& metaModelSample,
+                            const OT::Sample& outputSample,
                             const double error=-1.0,
                             const double value=-1.0,
                             const QString measure=""
@@ -67,7 +67,7 @@ public:
     // plot widget
     PlotWidget * plot = new PlotWidget;
     plot->plotScatter(outputSample, metaModelSample);
-    OT::NumericalSample lineSample(outputSample);
+    OT::Sample lineSample(outputSample);
     lineSample.stack(lineSample);
     plot->plotCurve(lineSample, QPen(Qt::black, 1));
     plot->setTitle(tr("Metamodel:") + " " + QString::fromUtf8(outputSample.getDescription()[0].c_str()));

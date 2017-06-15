@@ -25,7 +25,7 @@
 #include "Output.hxx"
 #include "Observable.hxx"
 
-#include <openturns/NumericalMathFunction.hxx>
+#include <openturns/Function.hxx>
 #include <openturns/RandomVector.hxx>
 #include <openturns/ComposedDistribution.hxx>
 
@@ -79,11 +79,11 @@ public:
   OT::RandomVector getInputRandomVector() const;
   OT::RandomVector getOutputRandomVector(const OT::Description & outputNames) const;
 
-  OT::NumericalMathFunction getFunction() const;
-  OT::NumericalMathFunction getFunction(const OT::Description& outputNames) const;
-  OT::NumericalMathFunction getFunction(const OT::String & outputName) const;
-  OT::NumericalMathFunction getRestrictedFunction() const;
-  OT::NumericalMathFunction getRestrictedFunction(const OT::Description & outputNames) const;
+  OT::Function getFunction() const;
+  OT::Function getFunction(const OT::Description& outputNames) const;
+  OT::Function getFunction(const OT::String & outputName) const;
+  OT::Function getRestrictedFunction() const;
+  OT::Function getRestrictedFunction(const OT::Description & outputNames) const;
 
   OT::Copula getCopula() const;
   void setCopula(const OT::Copula & copula);
@@ -102,19 +102,19 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  virtual OT::NumericalMathFunction generateFunction(const OT::Description & outputNames) const;
+  virtual OT::Function generateFunction(const OT::Description & outputNames) const;
 
   void updateCopula();
   OT::String getProbaModelPythonScript() const;
   OT::String getCopulaPythonScript() const;
-  OT::NumericalPoint getFiniteDifferenceSteps() const;
+  OT::Point getFiniteDifferenceSteps() const;
   void updateFiniteDifferenceSteps() const;
 
 private:
   OT::PersistentCollection<Input> inputs_;
   OT::PersistentCollection<Output> outputs_;
   OT::Copula copula_;
-  mutable OT::NumericalPoint finiteDifferenceSteps_;
+  mutable OT::Point finiteDifferenceSteps_;
 };
 }
 #endif

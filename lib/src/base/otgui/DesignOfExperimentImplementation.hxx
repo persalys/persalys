@@ -44,10 +44,10 @@ public:
 
   virtual OT::Description getVariableInputNames() const;
 
-  OT::NumericalSample getFailedInputSample() const;
-  OT::NumericalSample getNotEvaluatedInputSample() const;
+  OT::Sample getFailedInputSample() const;
+  OT::Sample getNotEvaluatedInputSample() const;
 
-  virtual void setInputSample(const OT::NumericalSample & sample);
+  virtual void setInputSample(const OT::Sample & sample);
 
   OT::String getErrorMessage() const;
   int getProgressValue() const;
@@ -70,8 +70,8 @@ protected:
   OT::String errorMessage_;
   bool stopRequested_;
   int progressValue_;
-  OT::NumericalSample failedInputSample_;
-  OT::NumericalSample notEvaluatedInputSample_;
+  OT::Sample failedInputSample_;
+  OT::Sample notEvaluatedInputSample_;
 };
 }
 #endif

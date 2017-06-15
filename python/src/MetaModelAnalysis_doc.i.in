@@ -34,7 +34,7 @@ validation : bool
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Sample of all the input variables if all of them are deterministic.
     Otherwise, sample of the stochastic input variables."
 
@@ -45,7 +45,7 @@ sample : :py:class:`openturns.NumericalSample`
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Sample of the interest output variables."
 
 // ---------------------------------------------------------------------

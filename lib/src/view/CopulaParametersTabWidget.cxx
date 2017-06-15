@@ -38,8 +38,8 @@ using namespace OT;
 namespace OTGUI {
 
 CopulaParametersTabWidget::CopulaParametersTabWidget(const Distribution& distribution,
-                                                     const NumericalSample& sample,
-                                                     const DataSample::NumericalSampleCollection& kendallPlotData,
+                                                     const Sample& sample,
+                                                     const DataSample::SampleCollection& kendallPlotData,
                                                      QWidget* parent)
   : QTabWidget(parent)
   , distribution_(distribution)
@@ -74,7 +74,7 @@ void CopulaParametersTabWidget::buildInterface()
   // create a PDF and a CDF for each pair of variables
   QVector<PlotWidget*> listPlot;
   const int size = sample_.getSize();
-  NumericalSample sampleRanks(sample_.rank() / size);
+  Sample sampleRanks(sample_.rank() / size);
   for (UnsignedInteger i=0; i<distribution_.getDimension(); ++i)
   {
     for (UnsignedInteger j=0; j<distribution_.getDimension(); ++j)
@@ -87,7 +87,7 @@ void CopulaParametersTabWidget::buildInterface()
 
         //pdf
         PlotWidget * plotWidget = new PlotWidget;
-        //  use rank of the NumericalSample to have the points in [0, 1]*[0, 1]
+        //  use rank of the Sample to have the points in [0, 1]*[0, 1]
         plotWidget->plotCurve(sampleRanks.getMarginal(marginals), pen, QwtPlotCurve::Dots);
         plotWidget->plotContour(distribution_.getMarginal(marginals));
         plotWidget->setTitle(tr("PDF") + " " + distributionName.c_str() + " copula");
@@ -124,9 +124,9 @@ void CopulaParametersTabWidget::buildInterface()
 
   QStringList variablesPairsNames;
   // diagonal
-  NumericalSample dataDiagonal(0, 2);
-  dataDiagonal.add(NumericalPoint(2, 0.0));
-  dataDiagonal.add(NumericalPoint(2, 1.0));
+  Sample dataDiagonal(0, 2);
+  dataDiagonal.add(Point(2, 0.0));
+  dataDiagonal.add(Point(2, 1.0));
 
   for (UnsignedInteger i=0; i<kendallPlotData_.getSize(); ++i)
   {

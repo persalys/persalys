@@ -167,7 +167,7 @@ void InferenceAnalysis::run()
         throw InvalidArgumentException(HERE) << "The variable to analyse "  << getInterestVariables()[i] <<" is not a variable of the model " << designOfExperiment_.getSample().getDescription();
     }
 
-    const NumericalSample sample(designOfExperiment_.getSample().getMarginal(indices));
+    const Sample sample(designOfExperiment_.getSample().getMarginal(indices));
 
     // inference
     for (UnsignedInteger i=0; i<sample.getDimension(); ++i)

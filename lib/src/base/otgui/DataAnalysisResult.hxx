@@ -33,7 +33,7 @@ class OTGUI_API DataAnalysisResult : public DataSample
   CLASSNAME;
 
 public:
-  typedef OT::Collection<OT::NumericalPoint> NumericalPointCollection;
+  typedef OT::Collection<OT::Point> PointCollection;
   typedef OT::PersistentCollection<OT::Distribution> DistributionCollection;
 
   friend class DataAnalysis;
@@ -42,30 +42,30 @@ public:
   /** Default constructor */
   DataAnalysisResult();
   /** Constructor with parameters */
-  DataAnalysisResult(const OT::NumericalSample & inputSample,
-                     const OT::NumericalSample & outputSample);
+  DataAnalysisResult(const OT::Sample & inputSample,
+                     const OT::Sample & outputSample);
 
   /** Virtual constructor */
   virtual DataAnalysisResult * clone() const;
 
-  NumericalPointCollection getMin() const;
-  NumericalPointCollection getMax() const;
+  PointCollection getMin() const;
+  PointCollection getMax() const;
 
-  NumericalPointCollection getMean() const;
-  NumericalPointCollection getCoefficientOfVariation() const;
-  NumericalPointCollection getMedian() const;
-  NumericalPointCollection getStandardDeviation() const;
-  NumericalPointCollection getVariance() const;
-  NumericalPointCollection getSkewness() const;
-  NumericalPointCollection getKurtosis() const;
-  NumericalPointCollection getFirstQuartile() const;
-  NumericalPointCollection getThirdQuartile() const;
+  PointCollection getMean() const;
+  PointCollection getCoefficientOfVariation() const;
+  PointCollection getMedian() const;
+  PointCollection getStandardDeviation() const;
+  PointCollection getVariance() const;
+  PointCollection getSkewness() const;
+  PointCollection getKurtosis() const;
+  PointCollection getFirstQuartile() const;
+  PointCollection getThirdQuartile() const;
   OT::Interval getMeanConfidenceInterval() const;
   OT::Interval getStdConfidenceInterval() const;
-  NumericalPointCollection getOutliers() const;
+  PointCollection getOutliers() const;
 
-  DataSample::NumericalSampleCollection getPDF() const;
-  DataSample::NumericalSampleCollection getCDF() const;
+  DataSample::SampleCollection getPDF() const;
+  DataSample::SampleCollection getCDF() const;
 
   double getElapsedTime() const;
 
@@ -79,22 +79,22 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  OT::PersistentCollection<OT::NumericalPoint> min_;
-  OT::PersistentCollection<OT::NumericalPoint> max_;
-  OT::PersistentCollection<OT::NumericalPoint> mean_;
-  OT::PersistentCollection<OT::NumericalPoint> coefficientOfVariation_;
-  OT::PersistentCollection<OT::NumericalPoint> median_;
-  OT::PersistentCollection<OT::NumericalPoint> standardDeviation_;
-  OT::PersistentCollection<OT::NumericalPoint> variance_;
-  OT::PersistentCollection<OT::NumericalPoint> skewness_;
-  OT::PersistentCollection<OT::NumericalPoint> kurtosis_;
-  OT::PersistentCollection<OT::NumericalPoint> firstQuartile_;
-  OT::PersistentCollection<OT::NumericalPoint> thirdQuartile_;
+  OT::PersistentCollection<OT::Point> min_;
+  OT::PersistentCollection<OT::Point> max_;
+  OT::PersistentCollection<OT::Point> mean_;
+  OT::PersistentCollection<OT::Point> coefficientOfVariation_;
+  OT::PersistentCollection<OT::Point> median_;
+  OT::PersistentCollection<OT::Point> standardDeviation_;
+  OT::PersistentCollection<OT::Point> variance_;
+  OT::PersistentCollection<OT::Point> skewness_;
+  OT::PersistentCollection<OT::Point> kurtosis_;
+  OT::PersistentCollection<OT::Point> firstQuartile_;
+  OT::PersistentCollection<OT::Point> thirdQuartile_;
   OT::Interval meanConfidenceInterval_;
   OT::Interval stdConfidenceInterval_;
-  OT::PersistentCollection<OT::NumericalPoint> outliers_;
-  OT::PersistentCollection<OT::NumericalSample> pdf_;
-  OT::PersistentCollection<OT::NumericalSample> cdf_;
+  OT::PersistentCollection<OT::Point> outliers_;
+  OT::PersistentCollection<OT::Sample> pdf_;
+  OT::PersistentCollection<OT::Sample> cdf_;
   double elapsedTime_;
 };
 }

@@ -38,7 +38,7 @@ SRCResult::SRCResult()
 
 
 /* Constructor with parameters */
-SRCResult::SRCResult(const NumericalSample indices, const Description & outputNames)
+SRCResult::SRCResult(const Sample indices, const Description & outputNames)
   : PersistentObject()
   , outputNames_(outputNames)
   , indices_(indices)
@@ -65,7 +65,7 @@ Description SRCResult::getInputNames() const
 }
 
 
-NumericalSample SRCResult::getIndices() const
+Sample SRCResult::getIndices() const
 {
   return indices_;
 }

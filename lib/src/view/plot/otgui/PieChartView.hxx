@@ -52,7 +52,7 @@
 
 #include "otgui/OTGuiprivate.hxx"
 
-#include <openturns/NumericalPointWithDescription.hxx>
+#include <openturns/PointWithDescription.hxx>
 
 #include <QAbstractItemView>
 #include <QPen>
@@ -66,9 +66,9 @@ class OTGUI_API PieChartView: public QAbstractItemView
   Q_OBJECT
 
 public:
-  PieChartView(const OT::NumericalPointWithDescription& data, QWidget* parent = 0);
+  PieChartView(const OT::PointWithDescription& data, QWidget* parent = 0);
 
-  void setData(const OT::NumericalPointWithDescription& data);
+  void setData(const OT::PointWithDescription& data);
 
   virtual QModelIndex indexAt(const QPoint &point) const;
   virtual QRect visualRect(const QModelIndex &index) const;

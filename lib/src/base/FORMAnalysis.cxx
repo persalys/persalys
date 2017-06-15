@@ -68,7 +68,7 @@ void FORMAnalysis::run()
     outputName[0] = getLimitState().getOutputName();
 
     // get function
-    NumericalMathFunction function(getPhysicalModel().getRestrictedFunction(outputName));
+    Function function(getPhysicalModel().getRestrictedFunction(outputName));
 
     // create OT::Event
     Event event(RandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());

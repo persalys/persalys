@@ -23,7 +23,7 @@
 
 #include "otgui/OTGuiprivate.hxx"
 
-#include "openturns/NumericalMathEvaluationImplementation.hxx"
+#include "openturns/EvaluationImplementation.hxx"
 #include "openturns/Pointer.hxx"
 
 namespace OTGUI {
@@ -33,7 +33,7 @@ namespace OTGUI {
  *
  * The class that implement the evaluation of an analytical function.
  */
-class OTGUI_API PythonScriptEvaluation : public OT::NumericalMathEvaluationImplementation
+class OTGUI_API PythonScriptEvaluation : public OT::EvaluationImplementation
 {
   CLASSNAME;
 
@@ -61,8 +61,8 @@ protected:
 
 public:
   /** Operator () */
-  virtual OT::NumericalPoint operator() (const OT::NumericalPoint & inP) const;
-//   virtual OT::NumericalSample operator() (const OT::NumericalSample & inS) const;
+  virtual OT::Point operator() (const OT::Point & inP) const;
+//   virtual OT::Sample operator() (const OT::Sample & inS) const;
 
    /** Accessor for input point dimension */
   OT::UnsignedInteger getInputDimension() const;

@@ -105,9 +105,9 @@ void MonteCarloAnalysis::run()
     // initialization
     RandomGenerator::SetSeed(getSeed());
 
-    NumericalSample effectiveInputSample(0, getPhysicalModel().getStochasticInputNames().getSize());
+    Sample effectiveInputSample(0, getPhysicalModel().getStochasticInputNames().getSize());
     effectiveInputSample.setDescription(getPhysicalModel().getStochasticInputNames());
-    NumericalSample outputSample(0, getInterestVariables().getSize());
+    Sample outputSample(0, getInterestVariables().getSize());
     outputSample.setDescription(getInterestVariables());
 
     const bool maximumOuterSamplingSpecified = getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max();
@@ -115,7 +115,7 @@ void MonteCarloAnalysis::run()
     const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getMaximumCalls() % getBlockSize() : 0;
     const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
 
-    NumericalScalar coefficientOfVariation = -1.0;
+    Scalar coefficientOfVariation = -1.0;
     clock_t elapsedTime = 0;
     const clock_t startTime = clock();
     UnsignedInteger outerSampling = 0;
@@ -144,19 +144,19 @@ void MonteCarloAnalysis::run()
       const UnsignedInteger effectiveBlockSize = outerSampling < (maximumOuterSampling - 1) ? getBlockSize() : lastBlockSize;
 
       // Perform a block of simulation
-      const NumericalSample blockInputSample(generateInputSample(effectiveBlockSize));
+      const Sample blockInputSample(generateInputSample(effectiveBlockSize));
       effectiveInputSample.add(blockInputSample);
 
-      const NumericalSample blockOutputSample(computeOutputSample(blockInputSample));
+      const Sample blockOutputSample(computeOutputSample(blockInputSample));
       outputSample.add(blockOutputSample);
 
       // stop criteria
       if ((getMaximumCoefficientOfVariation() != -1) &&
           (getBlockSize() != 1 || (getBlockSize() == 1 && outerSampling)))
       {
-        const NumericalPoint empiricalMean(outputSample.computeMean());
-        const NumericalPoint empiricalStd(outputSample.computeStandardDeviationPerComponent());
-        NumericalScalar coefOfVar(0.);
+        const Point empiricalMean(outputSample.computeMean());
+        const Point empiricalStd(outputSample.computeStandardDeviationPerComponent());
+        Scalar coefOfVar(0.);
         for (UnsignedInteger i=0; i<outputSample.getDimension(); ++i)
         {
           if (std::abs(empiricalMean[i])  < SpecFunc::Precision)
@@ -164,7 +164,7 @@ void MonteCarloAnalysis::run()
                                                   Impossible to compute the coefficient of variation because the mean of an output is too close to zero.\
                                                   Do not use the coefficient of variation as criteria to stop the algorithm";
 
-          const NumericalScalar sigma_i = empiricalStd[i] / sqrt(outputSample.getSize());
+          const Scalar sigma_i = empiricalStd[i] / sqrt(outputSample.getSize());
           coefOfVar = std::max(sigma_i / std::abs(empiricalMean[i]), coefOfVar);
         }
         coefficientOfVariation = coefOfVar;

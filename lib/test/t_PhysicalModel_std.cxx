@@ -42,7 +42,7 @@ int main(int argc, char **argv)
   OutputCollection outputCollection(1);
   outputCollection[0] = Ep;
 
-  NumericalPoint x(3);
+  Point x(3);
   x[0] = 10200;
   x[1] = 3000;
   x[2] = 4000;

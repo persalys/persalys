@@ -278,11 +278,11 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
 
 
 /* Get the parameters collection */
-Distribution::NumericalPointWithDescriptionCollection DistributionDictionary::GetParametersCollection(const Distribution & distribution)
+Distribution::PointWithDescriptionCollection DistributionDictionary::GetParametersCollection(const Distribution & distribution)
 {
   String distributionName = distribution.getImplementation()->getClassName();
-  Distribution::NumericalPointWithDescriptionCollection nPWithDescColl(distribution.getParametersCollection());
-  NumericalPointWithDescription nPWithDesc;
+  Distribution::PointWithDescriptionCollection nPWithDescColl(distribution.getParametersCollection());
+  PointWithDescription nPWithDesc;
 
   if (distributionName == "Arcsine")
   {
@@ -366,14 +366,14 @@ Distribution::NumericalPointWithDescriptionCollection DistributionDictionary::Ge
 
 /* Update de distribution */
 void DistributionDictionary::UpdateDistribution(Distribution & distribution,
-                                                const NumericalPointWithDescription & description,
+                                                const PointWithDescription & description,
                                                 UnsignedInteger parametersType)
 {
   String distributionName = distribution.getImplementation()->getClassName();
 
   if (parametersType == 0)
   {
-    Distribution::NumericalPointWithDescriptionCollection nPWithDescColl;
+    Distribution::PointWithDescriptionCollection nPWithDescColl;
     nPWithDescColl.add(description);
     distribution.setParametersCollection(nPWithDescColl);
   }

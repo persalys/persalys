@@ -139,7 +139,7 @@ void CopulaInferenceAnalysis::run()
           throw InvalidArgumentException(HERE) << "The variable "  << variablesNames[i] <<" is not a variable of the model " << designOfExperiment_.getSample().getDescription();
       }
 
-      const NumericalSample sample(designOfExperiment_.getSample().getMarginal(indices));
+      const Sample sample(designOfExperiment_.getSample().getMarginal(indices));
 
       CopulaInferenceSetResult inferenceSetResult;
       inferenceSetResult.setOfVariablesNames_ = it->first;
@@ -147,9 +147,9 @@ void CopulaInferenceAnalysis::run()
 
       CombinatorialGeneratorImplementation::IndicesCollection pairs(Combinations(2, it->first.getSize()).generate());
 
-      NumericalSample splitSample(sample);
+      Sample splitSample(sample);
       if (sample.getSize() > sizeKendall)
-        NumericalSample otherSample = splitSample.split(sizeKendall);
+        Sample otherSample = splitSample.split(sizeKendall);
 
       for (UnsignedInteger i=0; i<it->second.getSize(); ++i)
       {
@@ -159,11 +159,11 @@ void CopulaInferenceAnalysis::run()
           inferenceSetResult.testedDistributions_.add(distribution);
 
           Description description(2);
-          Collection<NumericalSample> kendallPlotDataCollection;
+          Collection<Sample> kendallPlotDataCollection;
           for (UnsignedInteger j=0; j<pairs.getSize(); ++j)
           {
             const Graph graph = VisualTest::DrawKendallPlot(splitSample.getMarginal(pairs[j]), distribution.getMarginal(pairs[j]));
-            NumericalSample kendallPlotData(graph.getDrawable(1).getData());
+            Sample kendallPlotData(graph.getDrawable(1).getData());
             description[0] = sample.getDescription()[pairs[j][0]] + " - " + sample.getDescription()[pairs[j][1]];
             kendallPlotData.setDescription(description);
             kendallPlotDataCollection.add(kendallPlotData);
@@ -183,7 +183,7 @@ void CopulaInferenceAnalysis::run()
                                        << "\n";
           // set fittingTestResult
           inferenceSetResult.testedDistributions_.add(DistributionDictionary::BuildDistribution(distributionName, 0));
-          Collection<NumericalSample> kendallPlotDataCollection;
+          Collection<Sample> kendallPlotDataCollection;
           inferenceSetResult.kendallPlotData_.add(kendallPlotDataCollection);
           inferenceSetResult.errorMessages_[i] = message;
         }

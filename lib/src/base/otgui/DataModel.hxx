@@ -42,8 +42,8 @@ public:
 
   /** Constructor with parameters */
   DataModel(const OT::String & name,
-            const OT::NumericalSample & inSample,
-            const OT::NumericalSample & outSample);
+            const OT::Sample & inSample,
+            const OT::Sample & outSample);
 
   /** Virtual constructor */
   virtual DataModel * clone() const;

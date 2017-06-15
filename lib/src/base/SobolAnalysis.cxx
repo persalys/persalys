@@ -76,21 +76,21 @@ void SobolAnalysis::run()
     const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getMaximumCalls() % (getBlockSize()*(2+nbInputs)) : 0;
     const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : (modulo/(2+nbInputs));
 
-    NumericalScalar coefficientOfVariation = -1.0;
+    Scalar coefficientOfVariation = -1.0;
     clock_t elapsedTime = 0;
     const clock_t startTime = clock();
     UnsignedInteger outerSampling = 0;
 
-    NumericalSample X1(0, nbInputs);
-    NumericalSample X2(0, nbInputs);
-    Collection<NumericalSample> crossX1(nbInputs, NumericalSample(0, nbInputs));
+    Sample X1(0, nbInputs);
+    Sample X2(0, nbInputs);
+    Collection<Sample> crossX1(nbInputs, Sample(0, nbInputs));
 
-    NumericalSample Y1(0, nbOutputs);
-    NumericalSample Y2(0, nbOutputs);
-    Collection<NumericalSample> crossY1(nbInputs, NumericalSample(0, nbOutputs));
+    Sample Y1(0, nbOutputs);
+    Sample Y2(0, nbOutputs);
+    Collection<Sample> crossY1(nbInputs, Sample(0, nbOutputs));
 
-    Collection<NumericalSample> allFirstOrderIndices(nbOutputs, NumericalSample(0, nbInputs));
-    Collection<NumericalSample> allTotalIndices(nbOutputs, NumericalSample(0, nbInputs));
+    Collection<Sample> allFirstOrderIndices(nbOutputs, Sample(0, nbInputs));
+    Collection<Sample> allTotalIndices(nbOutputs, Sample(0, nbInputs));
   //   Interval firstOrderIndicesInterval;
   //   Interval totalIndicesInterval;
     SaltelliSensitivityAlgorithm algoSaltelli;
@@ -113,24 +113,24 @@ void SobolAnalysis::run()
 
       // Perform two blocks of simulations
       // - first input sample
-      const NumericalSample blockInputSample1(generateInputSample(effectiveBlockSize));
+      const Sample blockInputSample1(generateInputSample(effectiveBlockSize));
       X1.add(blockInputSample1);
       // - second input sample
-      const NumericalSample blockInputSample2(generateInputSample(effectiveBlockSize));
+      const Sample blockInputSample2(generateInputSample(effectiveBlockSize));
       X2.add(blockInputSample2);
 
       // fill samples, inputs of the sensitivity analysis algo
-      NumericalSample inputDesign(X1);
+      Sample inputDesign(X1);
       inputDesign.add(X2);
-      NumericalSample outputDesign(0, nbOutputs);
+      Sample outputDesign(0, nbOutputs);
 
       try
       {
         // - first output sample
-        const NumericalSample blockOutputSample1(computeOutputSample(blockInputSample1));
+        const Sample blockOutputSample1(computeOutputSample(blockInputSample1));
         Y1.add(blockOutputSample1);
         // - second output sample
-        const NumericalSample blockOutputSample2(computeOutputSample(blockInputSample2));
+        const Sample blockOutputSample2(computeOutputSample(blockInputSample2));
         Y2.add(blockOutputSample2);
 
         outputDesign.add(Y1);
@@ -139,7 +139,7 @@ void SobolAnalysis::run()
         // - compute designs of type Saltelli
         for (UnsignedInteger i = 0; i < nbInputs; ++i)
         {
-          NumericalSample x(blockInputSample1);
+          Sample x(blockInputSample1);
           for (UnsignedInteger j = 0; j < effectiveBlockSize; ++j)
             x[j][i] = blockInputSample2[j][i];
           crossX1[i].add(x);
@@ -191,21 +191,21 @@ void SobolAnalysis::run()
       // - compute coefficient of variation: take into account the greatest one
       if ((getMaximumCoefficientOfVariation() != -1) && (allFirstOrderIndices[0].getSize() > 1))
       {
-        NumericalScalar coefOfVar(0.);
+        Scalar coefOfVar(0.);
         for (UnsignedInteger i=0; i<nbOutputs; ++i)
         {
           if (!allFirstOrderIndices[i].getSize())
             throw InvalidValueException(HERE) << "An error happened when computing the coefficient of variation";
 
-          const NumericalPoint empiricalMean(allFirstOrderIndices[i].computeMean());
-          const NumericalPoint empiricalStd(allFirstOrderIndices[i].computeStandardDeviationPerComponent());
+          const Point empiricalMean(allFirstOrderIndices[i].computeMean());
+          const Point empiricalStd(allFirstOrderIndices[i].computeStandardDeviationPerComponent());
           for (UnsignedInteger j=0; j<nbInputs; ++j)
           {
             if (std::abs(empiricalMean[j])  < SpecFunc::Precision)
               throw InvalidValueException(HERE) << "Impossible to compute the coefficient of variation because the mean of an indice is too close to zero.\
                                                     Do not use the coefficient of variation as criteria to stop the algorithm";
 
-            const NumericalScalar sigma_j = empiricalStd[j] / sqrt(allFirstOrderIndices[i].getSize());
+            const Scalar sigma_j = empiricalStd[j] / sqrt(allFirstOrderIndices[i].getSize());
             coefOfVar = std::max(sigma_j / std::abs(empiricalMean[j]), coefOfVar);
           }
         }
@@ -217,9 +217,9 @@ void SobolAnalysis::run()
     }
 
     // retrieve the last values of indices
-    NumericalSample firstOrderIndices(0, nbInputs);
+    Sample firstOrderIndices(0, nbInputs);
     firstOrderIndices.setDescription(getPhysicalModel().getStochasticInputNames());
-    NumericalSample totalIndices(0, nbInputs);
+    Sample totalIndices(0, nbInputs);
     for (UnsignedInteger i=0; i<nbOutputs; ++i)
     {
       if (!(allFirstOrderIndices[i].getSize()*allTotalIndices[i].getSize()))

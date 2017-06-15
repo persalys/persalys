@@ -391,7 +391,7 @@ void ProbabilisticModelWindow::updateDistributionParametersWidgets(const QModelI
   Input input = physicalModel_.getInputs()[index.row()];
   Distribution inputDistribution = input.getDistribution();
   String distributionName = inputDistribution.getImplementation()->getClassName();
-  Distribution::NumericalPointWithDescriptionCollection parameters = DistributionDictionary::GetParametersCollection(inputDistribution);
+  Distribution::PointWithDescriptionCollection parameters = DistributionDictionary::GetParametersCollection(inputDistribution);
   UnsignedInteger parametersType = input.getDistributionParametersType();
   UnsignedInteger nbParameters = parameters[parametersType].getSize();
 
@@ -559,7 +559,7 @@ void ProbabilisticModelWindow::distributionParametersChanged()
   {
     TruncatedDistribution truncatedDistribution(*dynamic_cast<TruncatedDistribution*>(inputDistribution.getImplementation().get()));
     Distribution distribution = truncatedDistribution.getDistribution();
-    NumericalPointWithDescription parameters = DistributionDictionary::GetParametersCollection(distribution)[parametersType];
+    PointWithDescription parameters = DistributionDictionary::GetParametersCollection(distribution)[parametersType];
     try
     {
       for (UnsignedInteger i=0; i<parameters.getSize(); ++i)
@@ -599,7 +599,7 @@ void ProbabilisticModelWindow::distributionParametersChanged()
   }
   else
   {
-    NumericalPointWithDescription parameters = DistributionDictionary::GetParametersCollection(inputDistribution)[parametersType];
+    PointWithDescription parameters = DistributionDictionary::GetParametersCollection(inputDistribution)[parametersType];
     UnsignedInteger nbParameters = parameters.getSize();
     if (distributionName == "TruncatedNormal")
       nbParameters = 2; // the 2 truncation parameters are updated in truncationParametersChanged
@@ -727,7 +727,7 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
     else
     {
       // update widgets
-      Interval truncatureInterval(NumericalPoint(1), NumericalPoint(1), Interval::BoolCollection(1, false), Interval::BoolCollection(1, false));
+      Interval truncatureInterval(Point(1), Point(1), Interval::BoolCollection(1, false), Interval::BoolCollection(1, false));
       Distribution distribution;
       TruncatedDistribution truncatedDistribution;
       if (distributionName == "TruncatedDistribution")
@@ -762,7 +762,7 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
           if (truncatureInterval.getFiniteUpperBound()[0])
             if (lowerBound >= truncatureInterval.getUpperBound()[0])
               lowerBound = truncatureInterval.getUpperBound()[0] - 0.1 * distStd;
-          truncatureInterval.setLowerBound(NumericalPoint(1, lowerBound));
+          truncatureInterval.setLowerBound(Point(1, lowerBound));
           SignalBlocker blocker(lowerBoundLineEdit_);
           lowerBoundLineEdit_->setValue(lowerBound);
           truncatureInterval.setFiniteLowerBound(Interval::BoolCollection(1, true));
@@ -783,7 +783,7 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
           if (truncatureInterval.getFiniteLowerBound()[0])
             if (upperBound <= truncatureInterval.getLowerBound()[0])
               upperBound = truncatureInterval.getLowerBound()[0] + 0.1 * distStd;
-          truncatureInterval.setUpperBound(NumericalPoint(1, upperBound));
+          truncatureInterval.setUpperBound(Point(1, upperBound));
           SignalBlocker blocker(upperBoundLineEdit_);
           upperBoundLineEdit_->setValue(upperBound);
           truncatureInterval.setFiniteUpperBound(Interval::BoolCollection(1, true));

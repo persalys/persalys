@@ -33,12 +33,12 @@ public:
   MetaModel(const OT::String & name="Unnamed");
   /** Constructor with parameters */
   MetaModel(const OT::String & name,
-            const OT::NumericalMathFunction & function);
+            const OT::Function & function);
 
   /** Virtual constructor */
   virtual MetaModel * clone() const;
 
-  void setFunction(const OT::NumericalMathFunction & function);
+  void setFunction(const OT::Function & function);
 
   virtual OT::String getPythonScript() const;
 
@@ -52,10 +52,10 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  virtual OT::NumericalMathFunction generateFunction(const OT::Description & outputNames) const;
+  virtual OT::Function generateFunction(const OT::Description & outputNames) const;
 
 private:
-  OT::NumericalMathFunction function_;
+  OT::Function function_;
 };
 
 }

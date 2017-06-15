@@ -32,7 +32,7 @@ class OTGUI_API CopulaInferenceResultWidget : public QWidget
 
 public:
   CopulaInferenceResultWidget(const CopulaInferenceSetResult& currentSetResult,
-                              const OT::NumericalSample& sample,
+                              const OT::Sample& sample,
                               const bool displayPDF=true,
                               QWidget* parent=0);
 
@@ -55,7 +55,7 @@ signals:
 
 private:
   CopulaInferenceSetResult currentSetResult_;
-  OT::NumericalSample sample_;
+  OT::Sample sample_;
   bool displayPDF_;
   ResizableTableViewWithoutScrollBar * distTableView_;
   CustomStandardItemModel * distTableModel_;

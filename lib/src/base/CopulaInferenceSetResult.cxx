@@ -29,7 +29,7 @@ namespace OTGUI {
 CLASSNAMEINIT(CopulaInferenceSetResult);
 
 static Factory<CopulaInferenceSetResult> Factory_CopulaInferenceSetResult;
-static Factory<PersistentCollection<PersistentCollection<NumericalSample > > > Factory_CollectionCollectionSample;
+static Factory<PersistentCollection<PersistentCollection<Sample > > > Factory_CollectionCollectionSample;
 
 /* Default constructor */
 CopulaInferenceSetResult::CopulaInferenceSetResult()
@@ -57,7 +57,7 @@ Collection< Distribution > CopulaInferenceSetResult::getTestedDistributions() co
 }
 
 
-PersistentCollection<PersistentCollection<NumericalSample > > CopulaInferenceSetResult::getKendallPlotData() const
+PersistentCollection<PersistentCollection<Sample > > CopulaInferenceSetResult::getKendallPlotData() const
 {
   return kendallPlotData_;
 }

@@ -38,7 +38,7 @@ ModelEvaluationResult::ModelEvaluationResult()
 
 
 /* Constructor with parameters */
-ModelEvaluationResult::ModelEvaluationResult(NumericalSample inputSample, NumericalSample outputSample)
+ModelEvaluationResult::ModelEvaluationResult(Sample inputSample, Sample outputSample)
   : PersistentObject()
   , inputSample_(inputSample)
   , outputSample_(outputSample)
@@ -53,13 +53,13 @@ ModelEvaluationResult* ModelEvaluationResult::clone() const
 }
 
 
-NumericalSample ModelEvaluationResult::getInputSample() const
+Sample ModelEvaluationResult::getInputSample() const
 {
   return inputSample_;
 }
 
 
-NumericalSample ModelEvaluationResult::getOutputSample() const
+Sample ModelEvaluationResult::getOutputSample() const
 {
   return outputSample_;
 }

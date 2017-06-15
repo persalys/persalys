@@ -67,7 +67,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-PieChartView::PieChartView(const NumericalPointWithDescription& data, QWidget *parent)
+PieChartView::PieChartView(const PointWithDescription& data, QWidget *parent)
   : QAbstractItemView(parent)
   , margin_(8)
   , totalSize_(200)
@@ -95,9 +95,9 @@ PieChartView::PieChartView(const NumericalPointWithDescription& data, QWidget *p
 }
 
 
-void PieChartView::setData(const NumericalPointWithDescription& valuesAndDescription)
+void PieChartView::setData(const PointWithDescription& valuesAndDescription)
 {
-  NumericalPointWithDescription data(valuesAndDescription);
+  PointWithDescription data(valuesAndDescription);
 
   // check
   UnsignedInteger size = data.getSize();
@@ -107,7 +107,7 @@ void PieChartView::setData(const NumericalPointWithDescription& valuesAndDescrip
     throw std::exception();
   }
 
-  NumericalScalar l1Norm = data.norm1();
+  Scalar l1Norm = data.norm1();
   if (l1Norm == .0)
   {
     qDebug() << "In PieChartView::setData: norm is null";

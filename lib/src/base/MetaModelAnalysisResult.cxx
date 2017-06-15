@@ -50,31 +50,31 @@ PhysicalModel MetaModelAnalysisResult::getMetaModel() const
 }
 
 
-NumericalSample MetaModelAnalysisResult::getOutputSample() const
+Sample MetaModelAnalysisResult::getOutputSample() const
 {
   return outputSample_;
 }
 
 
-NumericalSample MetaModelAnalysisResult::getMetaModelOutputSample() const
+Sample MetaModelAnalysisResult::getMetaModelOutputSample() const
 {
   return metaModelOutputSample_;
 }
 
 
-NumericalSample MetaModelAnalysisResult::getMetaModelOutputSampleLeaveOneOut() const
+Sample MetaModelAnalysisResult::getMetaModelOutputSampleLeaveOneOut() const
 {
   return metaModelOutputSampleLOO_;
 }
 
 
-NumericalPoint MetaModelAnalysisResult::getErrorQ2LeaveOneOut() const
+Point MetaModelAnalysisResult::getErrorQ2LeaveOneOut() const
 {
   return errorQ2LOO_;
 }
 
 
-NumericalPoint MetaModelAnalysisResult::getQ2LeaveOneOut() const
+Point MetaModelAnalysisResult::getQ2LeaveOneOut() const
 {
   return q2LOO_;
 }

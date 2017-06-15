@@ -26,7 +26,7 @@
 #include "otgui/LogDoubleSpinBox.hxx"
 #include "otgui/UIntSpinBox.hxx"
 
-#include <openturns/OptimizationSolver.hxx>
+#include <openturns/OptimizationAlgorithm.hxx>
 
 #include <QWizardPage>
 #include <QLineEdit>
@@ -44,7 +44,7 @@ public:
   ApproximationReliabilityPage(QWidget* parent=0);
 
   void initialize(const Analysis& analysis);
-  OT::OptimizationSolver getOptimizationAlgorithm() const;
+  OT::OptimizationAlgorithm getOptimizationAlgorithm() const;
   Analysis getAnalysis(const OT::String& name, const LimitState& limitState) const;
 
   virtual int nextId() const;
@@ -59,7 +59,7 @@ public slots:
 
 private:
   OT::Description inputNames_;
-  OT::NumericalPoint startingPoint_;
+  OT::Point startingPoint_;
   QLineEdit * pointLineEdit_;
   QButtonGroup * algoChoice_;
   UIntSpinBox * iterationsSpinBox_;

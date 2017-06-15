@@ -28,7 +28,7 @@ using namespace OT;
 
 namespace OTGUI {
 
- ParametersTableModel::ParametersTableModel(const Description& names, const NumericalPoint& values, const QStringList& labels, QObject* parent)
+ ParametersTableModel::ParametersTableModel(const Description& names, const Point& values, const QStringList& labels, QObject* parent)
   : QStandardItemModel(names.getSize(), 2, parent)
   , names_(names)
   , values_(values)
@@ -80,13 +80,13 @@ bool  ParametersTableModel::setData(const QModelIndex& index, const QVariant& va
 }
 
 
-NumericalPoint  ParametersTableModel::getValues() const
+Point  ParametersTableModel::getValues() const
 {
   return values_;
 }
 
 
-ParametersDefinitionWizard::ParametersDefinitionWizard(const Description& names, const NumericalPoint& values, const QStringList& labels, QWidget* parent)
+ParametersDefinitionWizard::ParametersDefinitionWizard(const Description& names, const Point& values, const QStringList& labels, QWidget* parent)
   : QWizard(parent)
 {
   setWindowTitle(tr("Parameter definition"));
@@ -106,7 +106,7 @@ ParametersDefinitionWizard::ParametersDefinitionWizard(const Description& names,
 }
 
 
-NumericalPoint ParametersDefinitionWizard::getValues() const
+Point ParametersDefinitionWizard::getValues() const
 {
   return tableModel_->getValues();
 }

@@ -80,13 +80,13 @@ void MetaModelAnalysis::setLeaveOneOutValidation(const bool validation)
 }
 
 
-NumericalSample MetaModelAnalysis::getEffectiveInputSample() const
+Sample MetaModelAnalysis::getEffectiveInputSample() const
 {
   // if data model
   if (!designOfExperiment_.hasPhysicalModel())
     return designOfExperiment_.getInputSample();
 
-  NumericalSample effectiveInputSample(designOfExperiment_.getInputSample());
+  Sample effectiveInputSample(designOfExperiment_.getInputSample());
 
   // if only deterministic inputs
   if (!designOfExperiment_.getPhysicalModel().hasStochasticInputs())
@@ -102,7 +102,7 @@ NumericalSample MetaModelAnalysis::getEffectiveInputSample() const
 }
 
 
-NumericalSample MetaModelAnalysis::getEffectiveOutputSample() const
+Sample MetaModelAnalysis::getEffectiveOutputSample() const
 {
   Indices outputIndices;
   for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
@@ -121,7 +121,7 @@ NumericalSample MetaModelAnalysis::getEffectiveOutputSample() const
       throw InvalidArgumentException(HERE) << "The output to analyze "  << getInterestVariables()[i] <<" is not an output of the model " << designOfExperiment_.getOutputSample().getDescription();
   }
 
-  NumericalSample effectiveOutputSample(designOfExperiment_.getOutputSample().getMarginal(outputIndices));
+  Sample effectiveOutputSample(designOfExperiment_.getOutputSample().getMarginal(outputIndices));
   effectiveOutputSample.setDescription(getInterestVariables());
 
   return effectiveOutputSample;
@@ -144,8 +144,8 @@ ComposedDistribution MetaModelAnalysis::getDistribution()
     else
     {
       // get min/max inputSample
-      const NumericalPoint min(designOfExperiment_.getInputSample().getMin());
-      const NumericalPoint max(designOfExperiment_.getInputSample().getMax());
+      const Point min(designOfExperiment_.getInputSample().getMin());
+      const Point max(designOfExperiment_.getInputSample().getMax());
 
       // build Uniform
       ComposedDistribution::DistributionCollection distributionCollection;
@@ -160,7 +160,7 @@ ComposedDistribution MetaModelAnalysis::getDistribution()
 }
 
 
-void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const NumericalMathFunction& function)
+void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Function& function)
 {
   MetaModel metaModel("MetaModel_", function);
 
@@ -204,7 +204,7 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Nu
 }
 
 
-void MetaModelAnalysis::computeError(const NumericalSample& metaOutSample, const NumericalSample& outSample, NumericalPoint& error, NumericalPoint& q2)
+void MetaModelAnalysis::computeError(const Sample& metaOutSample, const Sample& outSample, Point& error, Point& q2)
 {
   // check
   if (!outSample.getSize())
@@ -214,10 +214,10 @@ void MetaModelAnalysis::computeError(const NumericalSample& metaOutSample, const
 
   const UnsignedInteger size = outSample.getSize();
   const UnsignedInteger dimension = outSample.getDimension();
-  const NumericalPoint variance(outSample.computeVariance());
+  const Point variance(outSample.computeVariance());
 
-  error = NumericalPoint(dimension);
-  q2 = NumericalPoint(dimension);
+  error = Point(dimension);
+  q2 = Point(dimension);
 
   for (UnsignedInteger i=0; i<dimension; ++i)
   {
@@ -236,7 +236,7 @@ void MetaModelAnalysis::computeError(const NumericalSample& metaOutSample, const
 }
 
 
-void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result, const NumericalSample& inputSample)
+void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result, const Sample& inputSample)
 {
   // validation: leave-one-out
   if (leaveOneOutValidation_)
@@ -248,7 +248,7 @@ void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result,
     informationMessage_ = "Meta model has been created.\nThe validation is running.";
     notify("informationMessageUpdated");
 
-    NumericalSample outputSampleLOO(inputSample.getSize(), result.outputSample_.getDimension());
+    Sample outputSampleLOO(inputSample.getSize(), result.outputSample_.getDimension());
 
     for (UnsignedInteger i=0; i<inputSample.getSize(); ++i)
     {
@@ -262,16 +262,16 @@ void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result,
       notify("progressValueChanged");
 
       // remove input_i
-      NumericalSample inLearnSample(inputSample);
+      Sample inLearnSample(inputSample);
       inLearnSample.erase(i);
-      NumericalSample outLearnSample(result.outputSample_);
+      Sample outLearnSample(result.outputSample_);
       outLearnSample.erase(i);
 
       // build and run OT::MetaModel Algorithm
-      NumericalMathFunction function(runAlgo(inLearnSample, outLearnSample));
+      Function function(runAlgo(inLearnSample, outLearnSample));
 
       // evaluate output at input_i
-      NumericalPoint outputValuesForInput_i(function(inputSample[i]));
+      Point outputValuesForInput_i(function(inputSample[i]));
 
       // fill sample
       for (UnsignedInteger j=0; j<result.outputSample_.getDimension(); ++j)
