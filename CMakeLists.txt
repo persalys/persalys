@@ -198,9 +198,9 @@ if ( PYTHONINTERP_FOUND AND PYTHONLIBS_FOUND AND SWIG_FOUND AND BUILD_SHARED_LIB
 endif ()
 
 set ( CPACK_PACKAGE_NAME          ${PACKAGE_NAME} )
-set ( CPACK_PACKAGE_VERSION_MAJOR 2              )
-set ( CPACK_PACKAGE_VERSION_MINOR 0              )
-set ( CPACK_PACKAGE_VERSION_PATCH 1               )
+set ( CPACK_PACKAGE_VERSION_MAJOR 3              )
+set ( CPACK_PACKAGE_VERSION_MINOR 0dev              )
+set ( CPACK_PACKAGE_VERSION_PATCH                )
 set ( CPACK_SOURCE_GENERATOR      "TGZ;TBZ2"     )
 set ( CPACK_BINARY_STGZ           "OFF"          )
 set ( CPACK_BINARY_TBZ2           "ON"           )
