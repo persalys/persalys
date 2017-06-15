@@ -1,3 +1,8 @@
+= 3.0 release (in progress)
+
+ * New tree/model diagram
+ * Switch to OpenTURNS 1.9
+
 = 2.0.1 release (2017-04-14)
 
  * Various fixes
