@@ -91,7 +91,8 @@ void PhysicalModelDefinitionItem::update(Observable* source, const String & mess
            message == "outputDescriptionChanged" ||
            message == "outputNumberChanged" ||
            message == "outputFormulaChanged" ||
-           message == "outputSelectionChanged"
+           message == "outputSelectionChanged" ||
+           message == "outputValueChanged"
           )
   {
     emit outputChanged();
