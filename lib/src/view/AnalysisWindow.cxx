@@ -68,15 +68,6 @@ void AnalysisWindow::buildInterface()
   mainLayout->addWidget(progressBar_, 1, 0);
   connect(analysisItem_, SIGNAL(progressValueChanged(int)), progressBar_, SLOT(setValue(int)));
 
-  // information message
-  messageLabel_ = new QLabel;
-  messageLabel_->setWordWrap(true);
-  mainLayout->addWidget(messageLabel_, 2, 0);
-  connect(analysisItem_, SIGNAL(messageChanged(QString)), messageLabel_, SLOT(setText(QString)));
-
-  // initialization
-  initializeWidgets();
-
   // buttons
   QHBoxLayout * hLayout = new QHBoxLayout;
   hLayout->addStretch();
@@ -95,8 +86,18 @@ void AnalysisWindow::buildInterface()
   connect(stopButton_, SIGNAL(clicked(bool)), this, SLOT(stopAnalysis()));
   hLayout->addWidget(stopButton_);
 
-  mainLayout->addLayout(hLayout, 3, 0);
+  mainLayout->addLayout(hLayout, 2, 0);
+
+  // information message
+  messageLabel_ = new QLabel;
+  messageLabel_->setWordWrap(true);
+  mainLayout->addWidget(messageLabel_, 3, 0);
+  connect(analysisItem_, SIGNAL(messageChanged(QString)), messageLabel_, SLOT(setText(QString)));
+
   mainLayout->setRowStretch(4, 1);
+
+  // initialization
+  initializeWidgets();
 
   setWidget(mainWidget);
 }
