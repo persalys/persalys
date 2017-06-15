@@ -46,26 +46,17 @@ CodeEditor::CodeEditor(QWidget * parent)
 }
 
 
-bool CodeEditor::event(QEvent * event)
-{
-  if (event->type() == QEvent::ShortcutOverride)
-  {
-    QKeyEvent * keyEvent = dynamic_cast<QKeyEvent*>(event);
-    if (keyEvent->key() == Qt::Key_Tab)
-    {
-      QTextCursor cursor(textCursor());
-      cursor.insertText("    ");
-      event->accept();
-      return true;
-    }
-  }
-  return QPlainTextEdit::event(event);
-}
-
-
 void CodeEditor::keyPressEvent(QKeyEvent *e)
 {
+  if (e->key() == Qt::Key_Tab)
+  {
+    QTextCursor cursor(textCursor());
+    cursor.insertText("    ");
+    return;
+  }
+
   QPlainTextEdit::keyPressEvent(e);
+
   if (e->key() == Qt::Key_Return)
   {
     int position = textCursor().position();
@@ -84,7 +75,7 @@ bool CodeDelegate::eventFilter(QObject *obj, QEvent *event)
     QKeyEvent * keyEvent = dynamic_cast<QKeyEvent*>(event);
     if (keyEvent->key() == Qt::Key_Tab)
     {
-      return true;
+      return false;
     }
   }
   return QItemDelegate::eventFilter(obj, event);

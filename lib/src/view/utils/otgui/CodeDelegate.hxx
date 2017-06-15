@@ -39,7 +39,6 @@ signals:
   void codeEdited(QWidget * QWidget);
 
 protected:
-  virtual bool event(QEvent * event);
   virtual void keyPressEvent(QKeyEvent *e);
 
 };
