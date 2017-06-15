@@ -340,6 +340,7 @@ void StudyTreeView::createNewDataModelDiagramWindow(DataModelDiagramItem* item)
 
   // connections
   connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
+  connect(item, SIGNAL(changeCurrentItemRequested(QModelIndex)), this, SLOT(setCurrentIndex(QModelIndex)));
   connect(item, SIGNAL(modelDefinitionWindowRequested(DataModelDefinitionItem*)), this, SLOT(createNewDataModelWindow(DataModelDefinitionItem*)));
   connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
   connect(item, SIGNAL(analysisRequested(OTguiItem*,Analysis, bool)), this, SLOT(createNewAnalysis(OTguiItem*,Analysis, bool)));
@@ -393,6 +394,7 @@ void StudyTreeView::createNewPhysicalModelDiagramWindow(PhysicalModelDiagramItem
 
   // connections
   connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
+  connect(item, SIGNAL(changeCurrentItemRequested(QModelIndex)), this, SLOT(setCurrentIndex(QModelIndex)));
 		connect(item, SIGNAL(modelDefinitionWindowRequested(PhysicalModelDefinitionItem*)), this, SLOT(createNewPhysicalModelWindow(PhysicalModelDefinitionItem*)));
   connect(item, SIGNAL(newProbabilisticModelItemCreated(ProbabilisticModelItem*)), this, SLOT(createNewProbabilisticModelWindow(ProbabilisticModelItem*)));
   connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));

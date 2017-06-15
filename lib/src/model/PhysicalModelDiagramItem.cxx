@@ -245,7 +245,10 @@ void PhysicalModelDiagramItem::fill()
 void PhysicalModelDiagramItem::appendPhysicalModelItem()
 {
   if (hasChildren())
+  {
+    emit changeCurrentItemRequested(child(0)->index());
     return;
+  }
 
   // new item
   PhysicalModelDefinitionItem * pmItem = new PhysicalModelDefinitionItem(getPhysicalModel());
@@ -270,8 +273,12 @@ void PhysicalModelDiagramItem::appendPhysicalModelItem()
 void PhysicalModelDiagramItem::appendProbabilisticModelItem()
 {
   // do nothing if the item already exists
-  if (model()->match(this->index(), Qt::UserRole, "ProbabilisticModel", -1, Qt::MatchRecursive).size() == 1)
+  QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "ProbabilisticModel", -1, Qt::MatchRecursive);
+  if (listIndexes.size() == 1)
+  {
+    emit changeCurrentItemRequested(listIndexes[0]);
     return;
+  }
 
   // new item
   ProbabilisticModelItem * probaItem = new ProbabilisticModelItem(getPhysicalModel());

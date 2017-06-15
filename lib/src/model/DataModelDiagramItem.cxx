@@ -89,7 +89,10 @@ void DataModelDiagramItem::fill()
 void DataModelDiagramItem::appendDataModelItem()
 {
   if (hasChildren())
+  {
+    emit changeCurrentItemRequested(child(0)->index());
     return;
+  }
 
   // new item
   DataModelDefinitionItem * dmItem = new DataModelDefinitionItem(getDesignOfExperiment());

@@ -41,11 +41,16 @@ protected:
 public slots:
   void appendDataModelItem();
 signals:
+  // signals for StudyTreeview
   void modelDefinitionWindowRequested(DataModelDefinitionItem*);
   void dataAnalysisRequested();
   void inferenceRequested();
   void copulaInferenceRequested();
   void metaModelRequested();
+
+  void changeCurrentItemRequested(QModelIndex);
+
+  // signal for diagram
   void dataModelValidityChanged(bool);
   void dependenciesValidityChanged(bool);
   void metaModelValidityChanged(bool);

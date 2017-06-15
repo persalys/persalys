@@ -58,6 +58,7 @@ public slots:
   void removePhysicalModel();
 
 signals:
+  // signal for diagram
   void inputNumberValidityChanged(bool);
   void outputNumberValidityChanged(bool);
   void physicalModelValidityChanged(bool);
@@ -67,6 +68,7 @@ signals:
   void designOfExperimentNumberValidityChanged(bool);
   void designOfExperimentEvaluationNumberValidityChanged(bool);
 
+  // signals for StudyTreeview
   void evaluationModelRequested();
   void probabilisticModelRequested();
   void centralTendencyRequested();
@@ -80,6 +82,8 @@ signals:
   void newAnalysisItemCreated(AnalysisItem*);
   void newLimitStateCreated(LimitStateItem*);
   void newDesignOfExperimentCreated(DesignOfExperimentDefinitionItem*);
+
+  void changeCurrentItemRequested(QModelIndex);
 
 protected:
   void buildActions();
