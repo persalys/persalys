@@ -44,7 +44,7 @@ int main(int argc, char *argv[], char* env[])
   try
   {
     YACSPhysicalModel myPhysicalModel("myPhysicalModel", fileName);
-    NumericalSample inputSample(3, 3);
+    Sample inputSample(3, 3);
     inputSample[0][0] = 1;
     inputSample[1][0] = 2;
     inputSample[2][0] = 6;
@@ -55,7 +55,7 @@ int main(int argc, char *argv[], char* env[])
     inputSample[1][2] = 5;
     inputSample[2][2] = 3;
 
-    NumericalSample evalSample(3, 2);
+    Sample evalSample(3, 2);
     evalSample[0][0] = 15.;
     evalSample[0][1] = 7.;
     evalSample[1][0] = 23.;
@@ -63,7 +63,7 @@ int main(int argc, char *argv[], char* env[])
     evalSample[2][0] = 25.;
     evalSample[2][1] = 10.;
 
-    NumericalSample resultSample(myPhysicalModel.getFunction()(inputSample));
+    Sample resultSample(myPhysicalModel.getFunction()(inputSample));
     std::cout << resultSample << std::endl;
 
     // Comparison

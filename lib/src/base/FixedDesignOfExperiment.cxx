@@ -54,10 +54,10 @@ FixedDesignOfExperiment::FixedDesignOfExperiment(const String & name, const Phys
 /* Constructor with parameters */
 FixedDesignOfExperiment::FixedDesignOfExperiment(const String & name,
                                                  const PhysicalModel & physicalModel,
-                                                 const NumericalPoint & lowerBounds,
-                                                 const NumericalPoint & upperBounds,
+                                                 const Point & lowerBounds,
+                                                 const Point & upperBounds,
                                                  const Indices & levels,
-                                                 const NumericalPoint & values)
+                                                 const Point & values)
   : DesignOfExperimentImplementation(name, physicalModel)
   , type_(FixedDesignOfExperiment::FromBoundsAndLevels)
   , inputNames_(physicalModel.getInputNames())
@@ -72,7 +72,7 @@ FixedDesignOfExperiment::FixedDesignOfExperiment(const String & name,
 
   if (!values_.getSize())
   {
-    values_ = NumericalPoint(physicalModel.getInputs().getSize());
+    values_ = Point(physicalModel.getInputs().getSize());
     for (UnsignedInteger i=0; i<physicalModel.getInputs().getSize(); ++i)
       values_[i] = physicalModel.getInputs()[i].getValue();
   }
@@ -100,11 +100,11 @@ void FixedDesignOfExperiment::initializeParameters()
   const InputCollection inputs = getPhysicalModel().getInputs();
 
   const UnsignedInteger inputSize = inputs.getSize();
-  values_ = NumericalPoint(inputSize);
-  lowerBounds_ = NumericalPoint(inputSize);
-  upperBounds_ = NumericalPoint(inputSize);
+  values_ = Point(inputSize);
+  lowerBounds_ = Point(inputSize);
+  upperBounds_ = Point(inputSize);
   levels_ = Indices(inputSize, 1);
-  deltas_ = NumericalPoint(inputSize);
+  deltas_ = Point(inputSize);
 
   for (UnsignedInteger i=0; i<inputSize; ++i)
   {
@@ -165,14 +165,14 @@ void FixedDesignOfExperiment::generateInputSample()
 
   if (powSize != std::pow(inputNames_.getSize(), 4))
   {
-    setInputSample(NumericalSample());
+    setInputSample(Sample());
     return;
   }
 
-  NumericalSample inputSample;
-  NumericalPoint scale;
-  NumericalPoint transvec;
-  NumericalPoint otLevels;
+  Sample inputSample;
+  Point scale;
+  Point transvec;
+  Point otLevels;
   Description variableInputsNames;
 
   for (UnsignedInteger i=0; i<inputNames_.getSize(); ++i)
@@ -190,7 +190,7 @@ void FixedDesignOfExperiment::generateInputSample()
 
   if (otLevels.getSize())
   {
-    NumericalSample sample;
+    Sample sample;
     try
     {
       sample = Box(otLevels).generate();
@@ -207,7 +207,7 @@ void FixedDesignOfExperiment::generateInputSample()
       inputSample = sample;
     else
     {
-      inputSample = NumericalSample(sample.getSize(), inputNames_.getSize());
+      inputSample = Sample(sample.getSize(), inputNames_.getSize());
       for (UnsignedInteger i=0; i<inputNames_.getSize(); ++i)
       {
         if (levels_[i] == 1)
@@ -224,7 +224,7 @@ void FixedDesignOfExperiment::generateInputSample()
     }
   }
   else
-    inputSample = NumericalSample(1, values_);
+    inputSample = Sample(1, values_);
 
   if (inputNames_.getSize() == inputSample.getDimension())
     inputSample.setDescription(inputNames_);
@@ -236,11 +236,11 @@ void FixedDesignOfExperiment::generateInputSample()
 void FixedDesignOfExperiment::updateParameters()
 {
   const Description inputNames(inputNames_);
-  const NumericalPoint values(values_);
-  const NumericalPoint infBounds(lowerBounds_);
-  const NumericalPoint supBounds(upperBounds_);
+  const Point values(values_);
+  const Point infBounds(lowerBounds_);
+  const Point supBounds(upperBounds_);
   const Indices levels(levels_);
-  const NumericalPoint deltas(deltas_);
+  const Point deltas(deltas_);
 
   initializeParameters();
 
@@ -260,13 +260,13 @@ void FixedDesignOfExperiment::updateParameters()
 }
 
 
-NumericalPoint FixedDesignOfExperiment::getValues() const
+Point FixedDesignOfExperiment::getValues() const
 {
   return values_;
 }
 
 
-void FixedDesignOfExperiment::setValues(const NumericalPoint & values)
+void FixedDesignOfExperiment::setValues(const Point & values)
 {
   if (values.getSize() != physicalModel_.getInputs().getSize())
   {
@@ -281,13 +281,13 @@ void FixedDesignOfExperiment::setValues(const NumericalPoint & values)
 }
 
 
-NumericalPoint FixedDesignOfExperiment::getLowerBounds() const
+Point FixedDesignOfExperiment::getLowerBounds() const
 {
   return lowerBounds_;
 }
 
 
-void FixedDesignOfExperiment::setLowerBounds(const NumericalPoint & lowerBounds)
+void FixedDesignOfExperiment::setLowerBounds(const Point & lowerBounds)
 {
   if (lowerBounds.getSize() != physicalModel_.getInputs().getSize())
   {
@@ -302,13 +302,13 @@ void FixedDesignOfExperiment::setLowerBounds(const NumericalPoint & lowerBounds)
 }
 
 
-NumericalPoint FixedDesignOfExperiment::getUpperBounds() const
+Point FixedDesignOfExperiment::getUpperBounds() const
 {
   return upperBounds_;
 }
 
 
-void FixedDesignOfExperiment::setUpperBounds(const NumericalPoint & upperBounds)
+void FixedDesignOfExperiment::setUpperBounds(const Point & upperBounds)
 {
   if (upperBounds.getSize() != physicalModel_.getInputs().getSize())
   {
@@ -339,7 +339,7 @@ void FixedDesignOfExperiment::setLevels(const Indices & levels)
     throw InvalidArgumentException(HERE) << oss.str();
   }
 
-  NumericalPoint deltas(physicalModel_.getInputs().getSize());
+  Point deltas(physicalModel_.getInputs().getSize());
   for (UnsignedInteger i=0; i<levels.getSize(); ++i)
   {
     if (levels[i] == 1)
@@ -359,13 +359,13 @@ void FixedDesignOfExperiment::setLevels(const Indices & levels)
 }
 
 
-NumericalPoint FixedDesignOfExperiment::getDeltas() const
+Point FixedDesignOfExperiment::getDeltas() const
 {
   return deltas_;
 }
 
 
-void FixedDesignOfExperiment::setDeltas(const NumericalPoint & deltas)
+void FixedDesignOfExperiment::setDeltas(const Point & deltas)
 {
   if (deltas.getSize() != physicalModel_.getInputs().getSize())
   {

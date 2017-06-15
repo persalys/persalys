@@ -202,7 +202,7 @@
         </UML:Operation>
        </UML:Classifier.feature>
       </UML:Class>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="G3hD2Z8ZK3M1" name="NumericalMathFunction"/>
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="G3hD2Z8ZK3M1" name="Function"/>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="KG6tFugBMo2Y" name="PythonPhysicalModel">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="C66fqRYgai4C"/>
@@ -306,7 +306,7 @@
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="agGMb8IeZMqX" name="QList double"/>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="FlzlesHL6YPU" name="QList"/>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="0t2wKfUeVN1t" name="QList VariableValues"/>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="rePugzhLa8tP" name="NumericalSample"/>
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="rePugzhLa8tP" name="Sample"/>
       <UML:Association visibility="public" isSpecification="false" namespace="Logical View" xmi.id="q8LHdyjnhEo3" name="">
        <UML:Association.connection>
         <UML:AssociationEnd changeability="changeable" visibility="public" isNavigable="true" isSpecification="false" xmi.id="Q4LIiQk6KPi8" type="qiVDNFMAb6oU" name="" aggregation="aggregate"/>
@@ -845,7 +845,7 @@
       </UML:Class>
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="qiVDNFMAb6oU" xmi.id="2rymbQA5Ar5B" parent="u7cL9wy89MPD" name=""/>
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="qiVDNFMAb6oU" xmi.id="wd75SAGALoTu" parent="oQ8AcIMsP0NG" name=""/>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="7drtUCugmOAs" name="OT::NumericalPointWithDescription"/>
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="7drtUCugmOAs" name="OT::PointWithDescription"/>
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="qiVDNFMAb6oU" xmi.id="6sPovLZ1xPuR" parent="LhqWeeJ1FdIE" name=""/>
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="Y8RCPJde4fpv" xmi.id="6UQzcd0y102R" parent="JHi0FPPA4ANa" name=""/>
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="Ca4xRgjwwTen" xmi.id="wYg1Ml8mpXc4" parent="Ecrwbbr5nWyj" name=""/>
@@ -1348,7 +1348,7 @@
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="Nj7qjzTp41JN" xmi.id="omtX9qSXYaLH" parent="LhqWeeJ1FdIE" name=""/>
       <UML:Dependency visibility="public" isSpecification="false" namespace="Logical View" supplier="PPtAPq7qMMSg" xmi.id="zAgkaSzya8xQ" client="Gu4Sg4xhrnR5" name=""/>
       <UML:Dependency visibility="public" isSpecification="false" namespace="Logical View" supplier="LlS1Rn9RQ6dQ" xmi.id="TXByeUiEBLvi" client="Gu4Sg4xhrnR5" name=""/>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="XWPiqIP3UbIb" name="NumericalMathEvaluationImplementation"/>
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="XWPiqIP3UbIb" name="EvaluationImplementation"/>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="aGY6JMJorgUh" name="YACSEvaluation">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="g5BpCCWmehcg"/>

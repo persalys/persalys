@@ -32,7 +32,7 @@ WithStopCriteriaAnalysis::WithStopCriteriaAnalysis()
   : maximumCalls_(std::numeric_limits<int>::max())
   , maximumCoefficientOfVariation_(0.01)
   , maximumElapsedTime_(60) // in seconds
-  , blockSize_(ResourceMap::GetAsNumericalScalar("Simulation-DefaultBlockSize"))
+  , blockSize_(ResourceMap::GetAsScalar("Simulation-DefaultBlockSize"))
 {
 }
 

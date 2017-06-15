@@ -65,9 +65,9 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  virtual OT::NumericalMathFunction runAlgo(const OT::NumericalSample& inputSample, const OT::NumericalSample& outputSample);
-  OT::KrigingAlgorithm buildKrigingAlgorithm(const OT::NumericalSample& inputSample,
-                                             const OT::NumericalSample& outputSample,
+  virtual OT::Function runAlgo(const OT::Sample& inputSample, const OT::Sample& outputSample);
+  OT::KrigingAlgorithm buildKrigingAlgorithm(const OT::Sample& inputSample,
+                                             const OT::Sample& outputSample,
                                              const bool useOptimalCovModel=false);
 
 private:

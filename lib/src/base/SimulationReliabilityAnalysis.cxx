@@ -71,7 +71,7 @@ void SimulationReliabilityAnalysis::UpdateProgressValue(double percent, void * d
   OSS oss;
   oss << "Number of iterations = " << analysisStruct->simulation_.getResult().getOuterSampling() << "\n";
   oss << "Coefficient of variation = " << analysisStruct->simulation_.getResult().getCoefficientOfVariation() << "\n";
-  oss << "Elapsed time = " << (NumericalScalar) analysisStruct->analysis_->timeCriteria_.elapsedTime_ / CLOCKS_PER_SEC << " s\n";
+  oss << "Elapsed time = " << (Scalar) analysisStruct->analysis_->timeCriteria_.elapsedTime_ / CLOCKS_PER_SEC << " s\n";
   analysisStruct->analysis_->informationMessage_ = oss;
   analysisStruct->analysis_->notify("informationMessageUpdated");
 }
@@ -100,7 +100,7 @@ void SimulationReliabilityAnalysis::run()
     outputName[0] = getLimitState().getOutputName();
 
     // get function
-    NumericalMathFunction function(getPhysicalModel().getRestrictedFunction(outputName));
+    Function function(getPhysicalModel().getRestrictedFunction(outputName));
     function.enableHistory();
     function.clearHistory();
 
@@ -140,7 +140,7 @@ void SimulationReliabilityAnalysis::run()
                                           graph.getDrawables()[1].getData(),
                                           graph.getDrawables()[2].getData());
 
-    result_.elapsedTime_ = (NumericalScalar) timeCriteria_.elapsedTime_ / CLOCKS_PER_SEC;
+    result_.elapsedTime_ = (Scalar) timeCriteria_.elapsedTime_ / CLOCKS_PER_SEC;
 
     function.disableHistory();
 

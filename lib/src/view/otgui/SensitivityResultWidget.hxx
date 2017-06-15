@@ -25,7 +25,7 @@
 #include "otgui/CopyableTableView.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
 
-#include <openturns/NumericalPoint.hxx>
+#include <openturns/Point.hxx>
 #include <openturns/Exception.hxx>
 
 #include <QHeaderView>
@@ -43,8 +43,8 @@ public:
   enum Type {Sobol, SRC};
 
   SensitivityResultWidget(const int indexWidget,
-                          const OT::NumericalPoint& firstIndices,
-                          const OT::NumericalPoint& totalIndices,
+                          const OT::Point& firstIndices,
+                          const OT::Point& totalIndices,
                           const OT::Description& inputNames,
                           const OT::String& outputName,
                           const Type type
@@ -100,7 +100,7 @@ public:
     indicesTableModel_->setHorizontalHeaderLabels(tableTitles);
 
     // fill table
-    OT::NumericalScalar interactionsValue = 0.;
+    OT::Scalar interactionsValue = 0.;
     for (OT::UnsignedInteger j=0; j<inputNames.getSize(); ++j)
     {
       indicesTableModel_->setNotEditableItem(j, 0, QString::fromUtf8(inputNames[j].c_str()));
@@ -176,8 +176,8 @@ public slots:
       throw OT::InternalException(HERE) << "SensitivityResultWidget::updateIndicesPlot: not defined table\n";
 
     const OT::UnsignedInteger inputDimension = indicesTableModel_->rowCount();
-    OT::NumericalPoint currentFirstOrderIndices(inputDimension);
-    OT::NumericalPoint currentTotalIndices;
+    OT::Point currentFirstOrderIndices(inputDimension);
+    OT::Point currentTotalIndices;
     OT::Description sortedInputNames(inputDimension);
 
     for (OT::UnsignedInteger i=0; i<inputDimension; ++i)

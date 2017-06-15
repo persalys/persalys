@@ -39,10 +39,10 @@ TaylorExpansionMomentsResult::TaylorExpansionMomentsResult()
 
 /* Constructor with parameters */
 TaylorExpansionMomentsResult::TaylorExpansionMomentsResult(const OT::Description & outputNames,
-                                                             const OT::NumericalPoint & meanFirstOrder,
-                                                             const OT::NumericalPoint & meanSecondOrder,
-                                                             const OT::NumericalPoint & standardDeviation,
-                                                             const OT::NumericalPoint & variance)
+                                                             const OT::Point & meanFirstOrder,
+                                                             const OT::Point & meanSecondOrder,
+                                                             const OT::Point & standardDeviation,
+                                                             const OT::Point & variance)
   : PersistentObject()
   , outputNames_(outputNames)
   , meanFirstOrder_(meanFirstOrder)
@@ -66,25 +66,25 @@ Description TaylorExpansionMomentsResult::getOutputNames() const
 }
 
 
-NumericalPoint TaylorExpansionMomentsResult::getMeanFirstOrder() const
+Point TaylorExpansionMomentsResult::getMeanFirstOrder() const
 {
   return meanFirstOrder_;
 }
 
 
-NumericalPoint TaylorExpansionMomentsResult::getMeanSecondOrder() const
+Point TaylorExpansionMomentsResult::getMeanSecondOrder() const
 {
   return meanSecondOrder_;
 }
 
 
-NumericalPoint TaylorExpansionMomentsResult::getStandardDeviation() const
+Point TaylorExpansionMomentsResult::getStandardDeviation() const
 {
   return standardDeviation_;
 }
 
 
-NumericalPoint TaylorExpansionMomentsResult::getVariance() const
+Point TaylorExpansionMomentsResult::getVariance() const
 {
   return variance_;
 }

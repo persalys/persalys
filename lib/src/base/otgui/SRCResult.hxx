@@ -22,7 +22,7 @@
 #define OTGUI_SRCRESULT_HXX
 
 #include "otgui/OTGuiprivate.hxx"
-#include "openturns/NumericalSample.hxx"
+#include "openturns/Sample.hxx"
 
 namespace OTGUI {
 class OTGUI_API SRCResult : public OT::PersistentObject
@@ -33,14 +33,14 @@ public:
   /** Default constructor */
   SRCResult();
   /** Constructor with parameters */
-  SRCResult(const OT::NumericalSample indices, const OT::Description & outputNames);
+  SRCResult(const OT::Sample indices, const OT::Description & outputNames);
 
   /** Virtual constructor */
   virtual SRCResult * clone() const;
 
   OT::Description getOutputNames() const;
   OT::Description getInputNames() const;
-  OT::NumericalSample getIndices() const;
+  OT::Sample getIndices() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -53,7 +53,7 @@ public:
 
 private:
   OT::Description outputNames_;
-  OT::NumericalSample indices_;
+  OT::Sample indices_;
 };
 }
 #endif

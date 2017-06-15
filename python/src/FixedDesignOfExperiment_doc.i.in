@@ -60,7 +60,7 @@ type : int
 
 Returns
 -------
-size : :py:class:`openturns.NumericalPoint`
+size : :py:class:`openturns.Point`
    Values"
 
 // ---------------------------------------------------------------------
@@ -70,7 +70,7 @@ size : :py:class:`openturns.NumericalPoint`
 
 Parameters
 ----------
-size : :py:class:`openturns.NumericalPoint`
+size : :py:class:`openturns.Point`
    Values"
 
 // ---------------------------------------------------------------------
@@ -80,7 +80,7 @@ size : :py:class:`openturns.NumericalPoint`
 
 Returns
 -------
-bounds : :py:class:`openturns.NumericalPoint`
+bounds : :py:class:`openturns.Point`
    Lower bounds"
 
 // ---------------------------------------------------------------------
@@ -90,7 +90,7 @@ bounds : :py:class:`openturns.NumericalPoint`
 
 Parameters
 ----------
-bounds : :py:class:`openturns.NumericalPoint`
+bounds : :py:class:`openturns.Point`
    Lower bounds"
 
 // ---------------------------------------------------------------------
@@ -100,7 +100,7 @@ bounds : :py:class:`openturns.NumericalPoint`
 
 Returns
 -------
-bounds : :py:class:`openturns.NumericalPoint`
+bounds : :py:class:`openturns.Point`
    Upper bounds"
 
 // ---------------------------------------------------------------------
@@ -110,7 +110,7 @@ bounds : :py:class:`openturns.NumericalPoint`
 
 Parameters
 ----------
-bounds : :py:class:`openturns.NumericalPoint`
+bounds : :py:class:`openturns.Point`
    Upper bounds"
 
 // ---------------------------------------------------------------------
@@ -140,7 +140,7 @@ levels : :py:class:`openturns.Indices`
 
 Returns
 -------
-deltas : :py:class:`openturns.NumericalPoint`
+deltas : :py:class:`openturns.Point`
    Deltas"
 
 // ---------------------------------------------------------------------
@@ -150,5 +150,5 @@ deltas : :py:class:`openturns.NumericalPoint`
 
 Parameters
 ----------
-deltas : :py:class:`openturns.NumericalPoint`
+deltas : :py:class:`openturns.Point`
    Deltas"

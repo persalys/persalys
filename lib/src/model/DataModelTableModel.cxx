@@ -26,7 +26,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-DataModelTableModel::DataModelTableModel(const NumericalSample& data, DataModel* dataModel, const bool useColumns, QObject* parent)
+DataModelTableModel::DataModelTableModel(const Sample& data, DataModel* dataModel, const bool useColumns, QObject* parent)
   : SampleTableModel(data, parent)
   , dataModel_(dataModel)
   , inputColumns_()
@@ -53,7 +53,7 @@ DataModelTableModel::DataModelTableModel(const NumericalSample& data, DataModel*
   Indices indices(inputColumns_);
   indices.add(outputColumns_);
 
-  if (!indices.check(data_.getDimension()-1) || !indices.getSize())
+  if (!indices.check(data_.getDimension()) || !indices.getSize())
   {
     inputColumns_ = Indices(data_.getDimension() > 1? data_.getDimension()-1 : 1);
     inputColumns_.fill();

@@ -33,7 +33,7 @@ static Factory<PythonScriptEvaluation> RegisteredFactory;
 
 /* Default constructor */
 PythonScriptEvaluation::PythonScriptEvaluation()
-  : NumericalMathEvaluationImplementation()
+  : EvaluationImplementation()
   , inputDimension_(0)
   , outputDimension_(0)
 {
@@ -44,7 +44,7 @@ PythonScriptEvaluation::PythonScriptEvaluation()
 PythonScriptEvaluation::PythonScriptEvaluation(const UnsignedInteger & inputDimension,
                                    const UnsignedInteger & outputDimension,
                                    const String & code)
-  : NumericalMathEvaluationImplementation()
+  : EvaluationImplementation()
   , inputDimension_(inputDimension)
   , outputDimension_(outputDimension)
   , code_(code)
@@ -114,14 +114,14 @@ private:
 };
 
 /* Operator () */
-NumericalPoint PythonScriptEvaluation::operator() (const NumericalPoint & inP) const
+Point PythonScriptEvaluation::operator() (const Point & inP) const
 {
-  NumericalPoint outP;
+  Point outP;
 
   CacheKeyType inKey(inP.getCollection());
   if (p_cache_->isEnabled() && p_cache_->hasKey(inKey))
   {
-    outP = NumericalPoint::ImplementationType(p_cache_->find(inKey));
+    outP = Point::ImplementationType(p_cache_->find(inKey));
   }
   else
   {
@@ -140,18 +140,18 @@ NumericalPoint PythonScriptEvaluation::operator() (const NumericalPoint & inP) c
     PyObject *script = PyDict_GetItemString(dict, "_exec");
     if (script == NULL) throw InternalException(HERE) << "no _exec function";
 
-    ScopedPyObjectPointer inputTuple(convert< NumericalPoint, _PySequence_ >(inP));
+    ScopedPyObjectPointer inputTuple(convert< Point, _PySequence_ >(inP));
     ScopedPyObjectPointer outputList(PyObject_Call(script, inputTuple.get(), NULL));
     handleException();
 
     if (outputDimension_ > 1)
     {
-      outP = convert<_PySequence_, NumericalPoint>(outputList.get());
+      outP = convert<_PySequence_, Point>(outputList.get());
     }
     else
     {
-      NumericalScalar value = convert<_PyFloat_, NumericalScalar>(outputList.get());
-      outP = NumericalPoint(1, value);
+      Scalar value = convert<_PyFloat_, Scalar>(outputList.get());
+      outP = Point(1, value);
     }
 
     if (p_cache_->isEnabled())
@@ -170,7 +170,7 @@ NumericalPoint PythonScriptEvaluation::operator() (const NumericalPoint & inP) c
 
 
 /* Operator () */
-// NumericalSample PythonScriptEvaluation::operator() (const NumericalSample & inS) const
+// Sample PythonScriptEvaluation::operator() (const Sample & inS) const
 // {
 //   
 // }
@@ -178,7 +178,7 @@ NumericalPoint PythonScriptEvaluation::operator() (const NumericalPoint & inP) c
 /* Method save() stores the object through the StorageManager */
 void PythonScriptEvaluation::save(Advocate & adv) const
 {
-  NumericalMathEvaluationImplementation::save(adv);
+  EvaluationImplementation::save(adv);
   adv.saveAttribute("inputDimension_", inputDimension_);
   adv.saveAttribute("outputDimension_", outputDimension_);
   adv.saveAttribute("code_", code_);
@@ -188,7 +188,7 @@ void PythonScriptEvaluation::save(Advocate & adv) const
 /* Method load() reloads the object from the StorageManager */
 void PythonScriptEvaluation::load(Advocate & adv)
 {
-  NumericalMathEvaluationImplementation::load(adv);
+  EvaluationImplementation::load(adv);
   adv.loadAttribute("inputDimension_", inputDimension_);
   adv.loadAttribute("outputDimension_", outputDimension_);
   adv.loadAttribute("code_", code_);

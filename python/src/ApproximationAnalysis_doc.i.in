@@ -10,7 +10,7 @@
 
 Returns
 -------
-point : :py:class:`openturns.NumericalPoint`
+point : :py:class:`openturns.Point`
     Physical starting point. By default it set to the mean of the composed
     distribution of the physical model"
 
@@ -32,7 +32,7 @@ point : sequence of float
 
 Returns
 -------
-algorithm : :py:class:`openturns.OptimizationSolver`
+algorithm : :py:class:`openturns.OptimizationAlgorithm`
     Optimization algorithm used to research the design point. Cobyla is
     the default used algorithm."
 
@@ -43,7 +43,7 @@ algorithm : :py:class:`openturns.OptimizationSolver`
 
 Parameters
 ----------
-algorithm : :py:class:`openturns.OptimizationSolver`
+algorithm : :py:class:`openturns.OptimizationAlgorithm`
     Optimization algorithm used to research the design point. Cobyla is
     the default used algorithm."
 

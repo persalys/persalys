@@ -109,7 +109,7 @@ OTGUI_DesignOfExperiment_initialize_doc
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Sample from the file"
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::getSampleFromFile
@@ -122,7 +122,7 @@ OTGUI_DesignOfExperiment_getSampleFromFile_doc
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Input sample"
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::getInputSample
@@ -135,7 +135,7 @@ OTGUI_DesignOfExperiment_getInputSample_doc
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Points of the design of experiment which could not be evaluated"
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::getFailedInputSample
@@ -148,7 +148,7 @@ OTGUI_DesignOfExperiment_getFailedInputSample_doc
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Points of the design of experiment which were not evaluated"
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::getNotEvaluatedInputSample
@@ -161,7 +161,7 @@ OTGUI_DesignOfExperiment_getNotEvaluatedInputSample_doc
 
 Parameters
 ----------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Input sample"
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::setInputSample
@@ -174,7 +174,7 @@ OTGUI_DesignOfExperiment_setInputSample_doc
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Output sample"
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::getOutputSample
@@ -187,7 +187,7 @@ OTGUI_DesignOfExperiment_getOutputSample_doc
 
 Parameters
 ----------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Output sample"
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::setOutputSample
@@ -200,7 +200,7 @@ OTGUI_DesignOfExperiment_setOutputSample_doc
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Input sample and output sample"
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::getSample

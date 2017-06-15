@@ -42,7 +42,7 @@ Get the result:
 
 Returns
 -------
-point : :py:class:`openturns.NumericalPoint`
+point : :py:class:`openturns.Point`
     Standard space design point. It is the mean of the Normal distribution used to sample."
 
 // ---------------------------------------------------------------------

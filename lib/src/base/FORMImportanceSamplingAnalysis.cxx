@@ -73,7 +73,7 @@ void FORMImportanceSamplingAnalysis::run()
   formAnalysis.setPhysicalStartingPoint(getPhysicalStartingPoint());
   formAnalysis.run();
 
-  const NumericalPoint designPoint(formAnalysis.getResult().getStandardSpaceDesignPoint());
+  const Point designPoint(formAnalysis.getResult().getStandardSpaceDesignPoint());
   if (!formAnalysis.getErrorMessage().empty() || designPoint.getSize() == 0)
   {
     errorMessage_ = "Error when processing the FORM analysis.\n" + formAnalysis.getErrorMessage();

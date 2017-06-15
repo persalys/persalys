@@ -186,7 +186,7 @@ void PlotWidget::plotCurve(double * x, double * y, int size, const QPen pen, Qwt
 }
 
 
-void PlotWidget::plotCurve(const NumericalSample & data, const QPen pen, QwtPlotCurve::CurveStyle style, QwtSymbol* symbol, QString title)
+void PlotWidget::plotCurve(const Sample & data, const QPen pen, QwtPlotCurve::CurveStyle style, QwtSymbol* symbol, QString title)
 {
   const int size = data.getSize();
   double * x = new double[size];
@@ -203,7 +203,7 @@ void PlotWidget::plotCurve(const NumericalSample & data, const QPen pen, QwtPlot
 }
 
 
-void PlotWidget::plotScatter(const NumericalSample & input, const NumericalSample & output,
+void PlotWidget::plotScatter(const Sample & input, const Sample & output,
                              const QPen pen, QString Xtitle, QString Ytitle)
 {
   if (input.getDimension()*input.getSize()*output.getDimension()*output.getSize() == 0)
@@ -239,7 +239,7 @@ void PlotWidget::plotPDFCurve(const Distribution & distribution, const QPen pen)
   setAxisTitle(QwtPlot::xBottom, tr("X"));
 
   updateScaleParameters(distribution);
-  const NumericalSample dataPDF = distribution.drawPDF().getDrawable(0).getData();
+  const Sample dataPDF = distribution.drawPDF().getDrawable(0).getData();
   plotCurve(dataPDF, pen);
   // Add margin at the top to avoid to cut the curve
   const double yMax = dataPDF.getMax()[1];
@@ -255,7 +255,7 @@ void PlotWidget::plotCDFCurve(const Distribution & distribution, const QPen pen)
   setAxisTitle(QwtPlot::xBottom, tr("X"));
 
   updateScaleParameters(distribution);
-  const NumericalSample dataCDF = distribution.drawCDF().getDrawable(0).getData();
+  const Sample dataCDF = distribution.drawCDF().getDrawable(0).getData();
   plotCurve(dataCDF, pen);
   // Add margin at the top to avoid to cut the curve
   const double yMax = dataCDF.getMax()[1];
@@ -267,7 +267,7 @@ void PlotWidget::plotCDFCurve(const Distribution & distribution, const QPen pen)
 // graphType = 0 -> PDF
 // graphType = 1 -> CDF
 // graphType = 2 -> other
-void PlotWidget::plotHistogram(const NumericalSample & sample, const UnsignedInteger graphType, int barNumber, QString title)
+void PlotWidget::plotHistogram(const Sample & sample, const UnsignedInteger graphType, int barNumber, QString title)
 {
   if (graphType > 2)
     throw InvalidArgumentException(HERE) << "Type of graph not known " << graphType;
@@ -285,7 +285,7 @@ void PlotWidget::plotHistogram(const NumericalSample & sample, const UnsignedInt
   if (width < 1e-12)
     return;
 
-  NumericalPoint histogramData(barNumber);
+  Point histogramData(barNumber);
 
   for (int i=0; i<size; ++i)
   {
@@ -337,7 +337,7 @@ void PlotWidget::plotHistogram(const NumericalSample & sample, const UnsignedInt
 
 
 void PlotWidget::plotBoxPlot(double median, double lowerQuartile, double upperQuartile,
-                             double lowerBound, double upperBound, NumericalPoint outliers_)
+                             double lowerBound, double upperBound, Point outliers_)
 {
   // draw median
   double xMedian[2] = {0.9, 1.1};
@@ -397,7 +397,7 @@ void PlotWidget::plotBoxPlot(double median, double lowerQuartile, double upperQu
 }
 
 
-void PlotWidget::plotSensitivityIndices(const NumericalPoint firstOrderIndices, const NumericalPoint totalIndices, const Description inputNames)
+void PlotWidget::plotSensitivityIndices(const Point firstOrderIndices, const Point totalIndices, const Description inputNames)
 {
   setAxisTitle(QwtPlot::yLeft, tr("Index"));
   setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
@@ -509,8 +509,8 @@ void PlotWidget::updateScaleParameters(const Distribution & distribution)
 {
   double mean = distribution.getMean()[0];
   double stepSize = 0.0;
-  const double qmin = ResourceMap::GetAsNumericalScalar("Distribution-QMin");
-  const double qmax = ResourceMap::GetAsNumericalScalar("Distribution-QMax");
+  const double qmin = ResourceMap::GetAsScalar("Distribution-QMin");
+  const double qmax = ResourceMap::GetAsScalar("Distribution-QMax");
   double x1 = distribution.computeQuantile(qmin)[0];
   double x2 = distribution.computeQuantile(qmax)[0];
   const double delta = 2.0 *(x2 - x1) *(1.0 - 0.5 *(qmax - qmin));

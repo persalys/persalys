@@ -192,7 +192,7 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
   // -- get results of the variable
   currentFittingTestResult_ = result.getFittingTestResultForVariable(variableName.toStdString());
 
-  NumericalPoint pValues(currentFittingTestResult_.getKolmogorovTestResults().getSize());
+  Point pValues(currentFittingTestResult_.getKolmogorovTestResults().getSize());
   for (UnsignedInteger i=0; i<currentFittingTestResult_.getKolmogorovTestResults().getSize(); ++i)
     pValues[i] = currentFittingTestResult_.getKolmogorovTestResults()[i].getPValue();
 
@@ -207,7 +207,7 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
       {
         if (pValues[l-1] < pValues[l])
         {
-          NumericalScalar temp = pValues[l-1];
+          Scalar temp = pValues[l-1];
           pValues[l-1] = pValues[l];
           pValues[l] = temp;
           UnsignedInteger ind_temp = indices[l-1];

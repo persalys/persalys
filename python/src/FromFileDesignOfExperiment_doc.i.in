@@ -46,7 +46,7 @@ fileName : str
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Sample"
 
 // ---------------------------------------------------------------------

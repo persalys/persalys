@@ -91,31 +91,31 @@ Description DesignOfExperiment::getVariableInputNames() const
 }
 
 
-NumericalSample DesignOfExperiment::getInputSample() const
+Sample DesignOfExperiment::getInputSample() const
 {
   return getImplementation()->getInputSample();
 }
 
 
-NumericalSample DesignOfExperiment::getFailedInputSample() const
+Sample DesignOfExperiment::getFailedInputSample() const
 {
   return getImplementation()->getFailedInputSample();
 }
 
 
-NumericalSample DesignOfExperiment::getNotEvaluatedInputSample() const
+Sample DesignOfExperiment::getNotEvaluatedInputSample() const
 {
   return getImplementation()->getNotEvaluatedInputSample();
 }
 
 
-NumericalSample DesignOfExperiment::getOutputSample() const
+Sample DesignOfExperiment::getOutputSample() const
 {
   return getImplementation()->getOutputSample();
 }
 
 
-NumericalSample DesignOfExperiment::getSample() const
+Sample DesignOfExperiment::getSample() const
 {
   return getImplementation()->getSample();
 }

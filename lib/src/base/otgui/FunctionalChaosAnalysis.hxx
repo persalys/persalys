@@ -69,9 +69,9 @@ public:
   static OT::UnsignedInteger BinomialCoefficient(const OT::UnsignedInteger n,
                                                  const OT::UnsignedInteger k);
 protected:
-  virtual OT::NumericalMathFunction runAlgo(const OT::NumericalSample& inputSample, const OT::NumericalSample& outputSample);
-  OT::FunctionalChaosAlgorithm buildFunctionalChaosAlgorithm(const OT::NumericalSample & inputSample, const OT::NumericalSample & outputSample);
-  void postProcessFunctionalChaosResult(const OT::NumericalSample& inputSample);
+  virtual OT::Function runAlgo(const OT::Sample& inputSample, const OT::Sample& outputSample);
+  OT::FunctionalChaosAlgorithm buildFunctionalChaosAlgorithm(const OT::Sample & inputSample, const OT::Sample & outputSample);
+  void postProcessFunctionalChaosResult(const OT::Sample& inputSample);
   OT::OrthogonalProductPolynomialFactory::PolynomialFamilyCollection getPolynomialFamilyCollection();
 
 private:

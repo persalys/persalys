@@ -31,7 +31,7 @@ class OTGUI_API DataModelTableModel : public SampleTableModel
   Q_OBJECT
 
 public:
-  DataModelTableModel(const OT::NumericalSample & data, DataModel* dataModel, const bool useColumns=false, QObject* parent = 0);
+  DataModelTableModel(const OT::Sample & data, DataModel* dataModel, const bool useColumns=false, QObject* parent = 0);
 
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
   Qt::ItemFlags flags(const QModelIndex & index) const;

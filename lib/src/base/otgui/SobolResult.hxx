@@ -22,7 +22,7 @@
 #define OTGUI_SOBOLRESULT_HXX
 
 #include "otgui/OTGuiprivate.hxx"
-#include "openturns/NumericalSample.hxx"
+#include "openturns/Sample.hxx"
 
 namespace OTGUI {
 class OTGUI_API SobolResult : public OT::PersistentObject
@@ -36,8 +36,8 @@ public:
   /** Default constructor */
   SobolResult();
   /** Constructor with parameters */
-  SobolResult(const OT::NumericalSample firstOrderIndices,
-              const OT::NumericalSample totalIndices,
+  SobolResult(const OT::Sample firstOrderIndices,
+              const OT::Sample totalIndices,
               const OT::Description & outputNames);
 
   /** Virtual constructor */
@@ -45,8 +45,8 @@ public:
 
   OT::Description getOutputNames() const;
   OT::Description getInputNames() const;
-  OT::NumericalSample getFirstOrderIndices() const;
-  OT::NumericalSample getTotalIndices() const;
+  OT::Sample getFirstOrderIndices() const;
+  OT::Sample getTotalIndices() const;
 
   OT::UnsignedInteger getCallsNumber() const;
 
@@ -65,8 +65,8 @@ public:
 
 private:
   OT::Description outputNames_;
-  OT::NumericalSample firstOrderIndices_;
-  OT::NumericalSample totalIndices_;
+  OT::Sample firstOrderIndices_;
+  OT::Sample totalIndices_;
   OT::UnsignedInteger callsNumber_;
   double elapsedTime_;
   double coefficientOfVariation_;

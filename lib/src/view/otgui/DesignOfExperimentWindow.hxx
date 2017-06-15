@@ -45,9 +45,9 @@ public:
 
   virtual ~DesignOfExperimentWindow();
 
-  static QVector<PlotWidget*> GetListScatterPlots(const OT::NumericalSample& inS,
-                                                  const OT::NumericalSample& notValidInS,
-                                                  const OT::NumericalSample& outS,
+  static QVector<PlotWidget*> GetListScatterPlots(const OT::Sample& inS,
+                                                  const OT::Sample& notValidInS,
+                                                  const OT::Sample& outS,
                                                   const QStringList inNames,
                                                   const QStringList inAxisNames,
                                                   const QStringList outNames,

@@ -47,7 +47,7 @@ protected:
 public slots:
   void openFileRequested();
   void refreshTable();
-  void updateTableView(const OT::NumericalSample& sample=OT::NumericalSample());
+  void updateTableView(const OT::Sample& sample=OT::Sample());
 
 private:
   DataModel * dataModel_;

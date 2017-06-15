@@ -268,31 +268,31 @@ RandomVector PhysicalModel::getOutputRandomVector(const Description & outputName
 }
 
 
-NumericalMathFunction PhysicalModel::getFunction() const
+Function PhysicalModel::getFunction() const
 {
   return getImplementation()->getFunction();
 }
 
 
-NumericalMathFunction PhysicalModel::getFunction(const Description & outputNames) const
+Function PhysicalModel::getFunction(const Description & outputNames) const
 {
   return getImplementation()->getFunction(outputNames);
 }
 
 
-NumericalMathFunction PhysicalModel::getFunction(const String & outputName) const
+Function PhysicalModel::getFunction(const String & outputName) const
 {
   return getImplementation()->getFunction(outputName);
 }
 
 
-NumericalMathFunction PhysicalModel::getRestrictedFunction() const
+Function PhysicalModel::getRestrictedFunction() const
 {
   return getImplementation()->getRestrictedFunction();
 }
 
 
-NumericalMathFunction PhysicalModel::getRestrictedFunction(const Description & outputNames) const
+Function PhysicalModel::getRestrictedFunction(const Description & outputNames) const
 {
   return getImplementation()->getRestrictedFunction(outputNames);
 }

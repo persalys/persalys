@@ -45,8 +45,8 @@ public:
   OT::Indices getInputColumns() const;
   virtual void setInputColumns(const OT::Indices& inputColumns);
 
-  OT::NumericalSample getSampleFromFile();
-  static OT::NumericalSample ImportSample(const OT::String& fileName);
+  OT::Sample getSampleFromFile();
+  static OT::Sample ImportSample(const OT::String& fileName);
 
   virtual OT::String getPythonScript() const;
 
@@ -62,7 +62,7 @@ public:
 protected:
   OT::String fileName_;
   OT::Indices inputColumns_;
-  OT::NumericalSample sampleFromFile_;
+  OT::Sample sampleFromFile_;
 };
 }
 #endif

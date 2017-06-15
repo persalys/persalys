@@ -50,7 +50,7 @@ public:
   void setMaximumOuterSampling(const OT::UnsignedInteger maximumOuterSampling);
 
   /** Maximum coefficient of variation accessor */
-  void setMaximumCoefficientOfVariation(const OT::NumericalScalar maximumCoefficientOfVariation);
+  void setMaximumCoefficientOfVariation(const OT::Scalar maximumCoefficientOfVariation);
 
   /** Block size accessor */
   void setBlockSize(const OT::UnsignedInteger blockSize);
@@ -62,10 +62,10 @@ public:
   void run();
 
   /** Draw the probability convergence at the given level */
-  OT::Graph drawProbabilityConvergence(const OT::NumericalScalar level = OT::ResourceMap::GetAsNumericalScalar("SimulationResult-DefaultConfidenceLevel")) const;
+  OT::Graph drawProbabilityConvergence(const OT::Scalar level = OT::ResourceMap::GetAsScalar("SimulationResult-DefaultConfidenceLevel")) const;
 
   /** Progress callback */
-  typedef void (*ProgressCallback)(OT::NumericalScalar, void * data);
+  typedef void (*ProgressCallback)(OT::Scalar, void * data);
   void setProgressCallback(ProgressCallback callBack, void * data = 0);
 
   /** Stop callback */

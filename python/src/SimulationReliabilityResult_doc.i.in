@@ -18,7 +18,7 @@ sample : :py:class:`openturns.SimulationResult`
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Output sample"
 
 // ---------------------------------------------------------------------
@@ -28,7 +28,7 @@ sample : :py:class:`openturns.NumericalSample`
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Convergence sample"
 
 // ---------------------------------------------------------------------
@@ -38,7 +38,7 @@ sample : :py:class:`openturns.NumericalSample`
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Convergence sample lower bound"
 
 // ---------------------------------------------------------------------
@@ -48,7 +48,7 @@ sample : :py:class:`openturns.NumericalSample`
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Convergence sample upper bound"
 
 // ---------------------------------------------------------------------

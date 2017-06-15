@@ -21,7 +21,7 @@
 #ifndef OTGUI_PLOTMATRIXWIDGET_HXX
 #define OTGUI_PLOTMATRIXWIDGET_HXX
 
-#include <openturns/NumericalSample.hxx>
+#include <openturns/Sample.hxx>
 
 #include <QTableWidget>
 #include <QLabel>
@@ -33,7 +33,7 @@ class OTGUI_API PlotMatrixWidget : public QWidget
   Q_OBJECT
 
 public:
-  PlotMatrixWidget(const OT::NumericalSample & inputSample, const OT::NumericalSample & outputSample, QWidget * parent = 0);
+  PlotMatrixWidget(const OT::Sample & inputSample, const OT::Sample & outputSample, QWidget * parent = 0);
 
   QString getTitle() const;
   void setTitle(const QString & title);

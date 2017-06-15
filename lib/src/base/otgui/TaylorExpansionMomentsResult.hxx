@@ -23,7 +23,7 @@
 
 #include "Output.hxx"
 
-#include "openturns/NumericalSample.hxx"
+#include "openturns/Sample.hxx"
 
 namespace OTGUI {
 class OTGUI_API TaylorExpansionMomentsResult : public OT::PersistentObject
@@ -34,19 +34,19 @@ public:
   /** Default constructor */
   TaylorExpansionMomentsResult();
   /** Constructor with parameters */
-  TaylorExpansionMomentsResult(const OT::Description & outputNames, const OT::NumericalPoint & meanFirstOrder,
-                                const OT::NumericalPoint & meanSecondOrder,
-                                const OT::NumericalPoint & standardDeviation,
-                                const OT::NumericalPoint & variance);
+  TaylorExpansionMomentsResult(const OT::Description & outputNames, const OT::Point & meanFirstOrder,
+                                const OT::Point & meanSecondOrder,
+                                const OT::Point & standardDeviation,
+                                const OT::Point & variance);
 
   /** Virtual constructor */
   virtual TaylorExpansionMomentsResult * clone() const;
 
   OT::Description getOutputNames() const;
-  OT::NumericalPoint getMeanFirstOrder() const;
-  OT::NumericalPoint getMeanSecondOrder() const;
-  OT::NumericalPoint getStandardDeviation() const;
-  OT::NumericalPoint getVariance() const;
+  OT::Point getMeanFirstOrder() const;
+  OT::Point getMeanSecondOrder() const;
+  OT::Point getStandardDeviation() const;
+  OT::Point getVariance() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -59,10 +59,10 @@ public:
 
 private:
   OT::Description outputNames_;
-  OT::NumericalPoint meanFirstOrder_;
-  OT::NumericalPoint meanSecondOrder_;
-  OT::NumericalPoint standardDeviation_;
-  OT::NumericalPoint variance_;
+  OT::Point meanFirstOrder_;
+  OT::Point meanSecondOrder_;
+  OT::Point standardDeviation_;
+  OT::Point variance_;
 };
 }
 #endif

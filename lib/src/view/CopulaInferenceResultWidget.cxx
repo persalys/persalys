@@ -35,7 +35,7 @@ using namespace OT;
 namespace OTGUI {
 
 CopulaInferenceResultWidget::CopulaInferenceResultWidget(const CopulaInferenceSetResult& currentSetResult,
-                                                         const NumericalSample& sample,
+                                                         const Sample& sample,
                                                          const bool displayPDF,
                                                          QWidget* parent)
   : QWidget(parent)

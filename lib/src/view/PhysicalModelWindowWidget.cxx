@@ -328,7 +328,7 @@ void PhysicalModelWindowWidget::evaluateOutputs()
   eval.run();
 
   // get result
-  NumericalSample outputSample(eval.getResult().getOutputSample());
+  Sample outputSample(eval.getResult().getOutputSample());
 
   // check
   if (!eval.getErrorMessage().empty())

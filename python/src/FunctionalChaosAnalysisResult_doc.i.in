@@ -34,7 +34,7 @@ result : :class:`~otguibase.SobolResult`
 
 Returns
 -------
-result : :py:class:`openturns.NumericalPoint`
+result : :py:class:`openturns.Point`
     Mean estimation"
 
 // ---------------------------------------------------------------------
@@ -44,7 +44,7 @@ result : :py:class:`openturns.NumericalPoint`
 
 Returns
 -------
-result : :py:class:`openturns.NumericalPoint`
+result : :py:class:`openturns.Point`
     Variance estimation"
 
 // ---------------------------------------------------------------------
@@ -54,5 +54,5 @@ result : :py:class:`openturns.NumericalPoint`
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Output sample"

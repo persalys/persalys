@@ -20,7 +20,7 @@ string ( TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME )
 # set module dir to find custom scripts
 list ( APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 
-find_package ( OpenTURNS NO_MODULE REQUIRED )
+find_package (OpenTURNS 1.9 NO_MODULE REQUIRED)
 include ( ${OPENTURNS_USE_FILE} )
 set ( OTGUI_DEFINITIONS ${OPENTURNS_DEFINITIONS} )
 if (NOT BUILD_SHARED_LIBS)

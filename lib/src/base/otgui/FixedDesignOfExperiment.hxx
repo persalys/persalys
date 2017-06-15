@@ -37,24 +37,24 @@ public:
   FixedDesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel);
   /** Constructor with parameters */
   FixedDesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel,
-                     const OT::NumericalPoint & lowerBounds, const OT::NumericalPoint & upperBounds,
-                     const OT::Indices & nbValues, const OT::NumericalPoint & values=OT::NumericalPoint(0));
+                     const OT::Point & lowerBounds, const OT::Point & upperBounds,
+                     const OT::Indices & nbValues, const OT::Point & values=OT::Point(0));
 
   /** Virtual constructor */
   virtual FixedDesignOfExperiment * clone() const;
 
   Type getTypeDesignOfExperiment() const;
 
-  OT::NumericalPoint getValues() const;
-  void setValues(const OT::NumericalPoint & values);
-  OT::NumericalPoint getLowerBounds() const;
-  void setLowerBounds(const OT::NumericalPoint & lowerBounds);
-  OT::NumericalPoint getUpperBounds() const;
-  void setUpperBounds(const OT::NumericalPoint & upperBounds);
+  OT::Point getValues() const;
+  void setValues(const OT::Point & values);
+  OT::Point getLowerBounds() const;
+  void setLowerBounds(const OT::Point & lowerBounds);
+  OT::Point getUpperBounds() const;
+  void setUpperBounds(const OT::Point & upperBounds);
   OT::Indices getLevels() const;
   void setLevels(const OT::Indices & nbValues);
-  OT::NumericalPoint getDeltas() const;
-  void setDeltas(const OT::NumericalPoint & deltas);
+  OT::Point getDeltas() const;
+  void setDeltas(const OT::Point & deltas);
   OT::Description getVariableInputNames() const;
 
   void updateParameters();
@@ -77,11 +77,11 @@ protected:
 private:
   Type type_;
   OT::Description inputNames_;
-  OT::NumericalPoint values_;
-  OT::NumericalPoint lowerBounds_;
-  OT::NumericalPoint upperBounds_;
+  OT::Point values_;
+  OT::Point lowerBounds_;
+  OT::Point upperBounds_;
   OT::Indices levels_;
-  OT::NumericalPoint deltas_;
+  OT::Point deltas_;
 };
 }
 #endif

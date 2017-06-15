@@ -67,7 +67,7 @@ public:
 
 private:
   PhysicalModel physicalModel_;
-  OT::NumericalMathFunction function_;
+  OT::Function function_;
   OT::String outputName_;
   OT::ComparisonOperator operator_;
   double threshold_;

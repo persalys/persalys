@@ -4,7 +4,7 @@ Qt GUI module for OpenTURNS
 
 Dependencies
 ------------
-- OpenTURNS = 1.8.1
+- OpenTURNS >= 1.9
 - Qt >= 4
 - Qwt >= 6
 - Python >= 2.7, < 3
@@ -22,7 +22,7 @@ Compile OpenTURNS::
 
     git clone https://github.com/openturns/openturns.git
     cd openturns
-    git checkout 1.8
+    git checkout 1.9
     mkdir -p build && cd build
     cmake -DCMAKE_INSTALL_PREFIX=$PWD/install -DUSE_SPHINX=OFF ..
     make install

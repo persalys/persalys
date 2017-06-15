@@ -22,7 +22,7 @@
 #define OTGUI_MODELEVALUATIONRESULT_HXX
 
 #include "otgui/OTGuiprivate.hxx"
-#include "openturns/NumericalSample.hxx"
+#include "openturns/Sample.hxx"
 
 namespace OTGUI {
 class OTGUI_API ModelEvaluationResult : public OT::PersistentObject
@@ -33,13 +33,13 @@ public:
   /** Default constructor */
   ModelEvaluationResult();
   /** Constructor with parameters */
-  ModelEvaluationResult(OT::NumericalSample inputSample, OT::NumericalSample outputSample);
+  ModelEvaluationResult(OT::Sample inputSample, OT::Sample outputSample);
 
   /** Virtual constructor */
   virtual ModelEvaluationResult * clone() const;
 
-  OT::NumericalSample getInputSample() const;
-  OT::NumericalSample getOutputSample() const;
+  OT::Sample getInputSample() const;
+  OT::Sample getOutputSample() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -51,8 +51,8 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  OT::NumericalSample inputSample_;
-  OT::NumericalSample outputSample_;
+  OT::Sample inputSample_;
+  OT::Sample outputSample_;
 };
 }
 #endif

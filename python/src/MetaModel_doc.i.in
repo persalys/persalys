@@ -5,7 +5,7 @@ Parameters
 ----------
 name : str
     Name
-function : :py:class:`openturns.NumericalMathFunction`
+function : :py:class:`openturns.Function`
     Function (optional)"
 
 // ---------------------------------------------------------------------
@@ -15,5 +15,5 @@ function : :py:class:`openturns.NumericalMathFunction`
 
 Parameters
 ----------
-function : :py:class:`openturns.NumericalMathFunction`
+function : :py:class:`openturns.Function`
     Metamodel function"

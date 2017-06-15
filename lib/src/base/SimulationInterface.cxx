@@ -76,7 +76,7 @@ void SimulationInterface::setMaximumOuterSampling(const UnsignedInteger maximumO
 }
 
 
-void SimulationInterface::setMaximumCoefficientOfVariation(const NumericalScalar maximumCoefficientOfVariation)
+void SimulationInterface::setMaximumCoefficientOfVariation(const Scalar maximumCoefficientOfVariation)
 {
   getImplementation()->setMaximumCoefficientOfVariation(maximumCoefficientOfVariation);
 }
@@ -100,7 +100,7 @@ void SimulationInterface::run()
 }
 
 
-Graph SimulationInterface::drawProbabilityConvergence(const NumericalScalar level) const
+Graph SimulationInterface::drawProbabilityConvergence(const Scalar level) const
 {
   return getImplementation()->drawProbabilityConvergence(level);
 }

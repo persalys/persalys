@@ -45,7 +45,7 @@ ImportanceSamplingAnalysis::ImportanceSamplingAnalysis()
 ImportanceSamplingAnalysis::ImportanceSamplingAnalysis(const String& name,
                                                        const LimitState& limitState)
   : SimulationReliabilityAnalysis(name, limitState)
-  , standardSpaceDesignPoint_(NumericalPoint(limitState.getPhysicalModel().getStochasticInputNames().getSize()))
+  , standardSpaceDesignPoint_(Point(limitState.getPhysicalModel().getStochasticInputNames().getSize()))
 {
 }
 
@@ -60,19 +60,19 @@ ImportanceSamplingAnalysis* ImportanceSamplingAnalysis::clone() const
 SimulationInterface ImportanceSamplingAnalysis::getSimulationAlgorithm(const Event& event)
 {
   const UnsignedInteger inDimension = standardSpaceDesignPoint_.getSize();
-  const Normal conditionalDistribution(standardSpaceDesignPoint_, NumericalPoint(inDimension, 1.), CorrelationMatrix(inDimension));
+  const Normal conditionalDistribution(standardSpaceDesignPoint_, Point(inDimension, 1.), CorrelationMatrix(inDimension));
 
   return ImportanceSampling(StandardEvent(event), conditionalDistribution);
 }
 
 
-NumericalPoint ImportanceSamplingAnalysis::getStandardSpaceDesignPoint() const
+Point ImportanceSamplingAnalysis::getStandardSpaceDesignPoint() const
 {
   return standardSpaceDesignPoint_;
 }
 
 
-void ImportanceSamplingAnalysis::setStandardSpaceDesignPoint(const NumericalPoint& point)
+void ImportanceSamplingAnalysis::setStandardSpaceDesignPoint(const Point& point)
 {
   standardSpaceDesignPoint_ = point;
 }

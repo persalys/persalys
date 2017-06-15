@@ -100,7 +100,7 @@ protected:
   }
 
 private:
-  OT::NumericalSample Zvalues_;
+  OT::Sample Zvalues_;
   int sizeX_;
   double minX_;
   double minY_;

@@ -122,19 +122,19 @@ void KrigingAnalysis::run()
       throw InvalidDimensionException(HERE) << "You have not defined output variable to be analysed. Set the list of interest variables.";
 
     // get effective samples
-    const NumericalSample effectiveInputSample(getEffectiveInputSample());
-    const NumericalSample effectiveOutputSample(getEffectiveOutputSample());
+    const Sample effectiveInputSample(getEffectiveInputSample());
+    const Sample effectiveOutputSample(getEffectiveOutputSample());
     const UnsignedInteger size = effectiveInputSample.getSize();
     const UnsignedInteger outputDimension = effectiveOutputSample.getDimension();
 
     // Kriging
     Collection<KrigingResult> krigingResultCollection;
-    NumericalMathFunction::NumericalMathFunctionCollection metaModelCollection;
+    Function::FunctionCollection metaModelCollection;
 
     // temp
-    NumericalSample metaModelLOO(size, outputDimension);
-    NumericalPoint q2LOO(outputDimension);
-    NumericalPoint errorQ2LOO(outputDimension);
+    Sample metaModelLOO(size, outputDimension);
+    Point q2LOO(outputDimension);
+    Point errorQ2LOO(outputDimension);
 
     // for each output:
     // because with all outputs KrigingAlgorithm is not reliable
@@ -182,7 +182,7 @@ void KrigingAnalysis::run()
     result_.krigingResultCollection_ = krigingResultCollection;
 
     // build metamodel
-    NumericalMathFunction metamodelFunction(metaModelCollection);
+    Function metamodelFunction(metaModelCollection);
     Description variablesNames(effectiveInputSample.getDescription());
     variablesNames.add(result_.outputSample_.getDescription());
     metamodelFunction.setDescription(variablesNames);
@@ -210,7 +210,7 @@ void KrigingAnalysis::run()
 }
 
 
-NumericalMathFunction KrigingAnalysis::runAlgo(const NumericalSample& inputSample, const NumericalSample& outputSample)
+Function KrigingAnalysis::runAlgo(const Sample& inputSample, const Sample& outputSample)
 {
   if (outputSample.getDimension() > 1)
     throw InternalException(HERE) << "KrigingAnalysis::runAlgo: the output sample must have a dimension of 1";
@@ -223,8 +223,8 @@ NumericalMathFunction KrigingAnalysis::runAlgo(const NumericalSample& inputSampl
 }
 
 
-KrigingAlgorithm KrigingAnalysis::buildKrigingAlgorithm(const NumericalSample& inputSample,
-                                                        const NumericalSample& outputSample,
+KrigingAlgorithm KrigingAnalysis::buildKrigingAlgorithm(const Sample& inputSample,
+                                                        const Sample& outputSample,
                                                         const bool useOptimalCovModel)
 {
   if (outputSample.getDimension() != 1)
@@ -235,8 +235,8 @@ KrigingAlgorithm KrigingAnalysis::buildKrigingAlgorithm(const NumericalSample& i
   KrigingAlgorithm algo(inputSample,
                         getDistribution().getIsoProbabilisticTransformation(),
                         outputSample,
-                        getBasis(),
-                        useOptimalCovModel? optimalCovarianceModel_ : covarianceModel_);
+                        useOptimalCovModel? optimalCovarianceModel_ : covarianceModel_,
+                        getBasis());
 
   algo.setOptimizeParameters(optimizeParameters_);
 

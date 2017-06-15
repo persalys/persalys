@@ -37,8 +37,8 @@ public:
   /** Virtual constructor */
   virtual ImportanceSamplingAnalysis * clone() const;
 
-  OT::NumericalPoint getStandardSpaceDesignPoint() const;
-  void setStandardSpaceDesignPoint(const OT::NumericalPoint& point);
+  OT::Point getStandardSpaceDesignPoint() const;
+  void setStandardSpaceDesignPoint(const OT::Point& point);
 
   virtual OT::String getPythonScript() const;
 
@@ -55,7 +55,7 @@ protected:
   virtual SimulationInterface getSimulationAlgorithm(const OT::Event& event);
 
 private:
-  OT::NumericalPoint standardSpaceDesignPoint_;
+  OT::Point standardSpaceDesignPoint_;
 };
 }
 #endif

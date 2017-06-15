@@ -48,7 +48,7 @@ ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & phys
 
 /* Constructor with parameters */
 ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & physicalModel,
-                                 const NumericalPoint & inputsValues)
+                                 const Point & inputsValues)
   : PhysicalModelAnalysis(name, physicalModel)
   , inputNames_(getPhysicalModel().getInputNames())
   , inputValues_(inputsValues)
@@ -70,7 +70,7 @@ void ModelEvaluation::initializeParameters(const InputCollection & inputs)
   inputNames_ = getPhysicalModel().getInputNames();
 
   UnsignedInteger inputSize = inputs.getSize();
-  inputValues_ = NumericalPoint(inputSize);
+  inputValues_ = Point(inputSize);
 
   for (UnsignedInteger i=0; i<inputSize; ++i)
     inputValues_[i] = inputs[i].getValue();
@@ -80,7 +80,7 @@ void ModelEvaluation::initializeParameters(const InputCollection & inputs)
 void ModelEvaluation::updateParameters()
 {
   Description inputNames(inputNames_);
-  NumericalPoint values(inputValues_);
+  Point values(inputValues_);
 
   initializeParameters(getPhysicalModel().getInputs());
 
@@ -103,10 +103,10 @@ void ModelEvaluation::run()
     result_ = ModelEvaluationResult();
 
     // output = f(input)
-    NumericalSample inputSample(1, getInputValues());
+    Sample inputSample(1, getInputValues());
     inputSample.setDescription(inputNames_);
 
-    NumericalSample outputSample(1, 0);
+    Sample outputSample(1, 0);
     for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
     {
       try
@@ -133,7 +133,7 @@ void ModelEvaluation::run()
 }
 
 
-NumericalPoint ModelEvaluation::getInputValues() const
+Point ModelEvaluation::getInputValues() const
 {
   return inputValues_;
 }

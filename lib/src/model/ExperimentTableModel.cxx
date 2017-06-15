@@ -229,7 +229,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
       // doe defined with deltas
       else
       {
-        NumericalPoint deltas = designOfExperiment_.getDeltas();
+        Point deltas = designOfExperiment_.getDeltas();
         if (value.toDouble() == Qt::Checked)
           deltas[indexInput] = designOfExperiment_.getUpperBounds()[indexInput] - designOfExperiment_.getLowerBounds()[indexInput];
         else if (value.toDouble() == Qt::Unchecked)
@@ -260,7 +260,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           return false;
         case 2: // values
         {
-          NumericalPoint values = designOfExperiment_.getValues();
+          Point values = designOfExperiment_.getValues();
           if (values[indexInput] == value.toDouble())
             return false;
           values[indexInput] = value.toDouble();
@@ -281,7 +281,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
             emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(tr("The lower bound must be inferior to the upper bound")).arg("</font>"));
             return false;
           }
-          NumericalPoint lowerBounds = designOfExperiment_.getLowerBounds();
+          Point lowerBounds = designOfExperiment_.getLowerBounds();
           if (lowerBounds[indexInput] == value.toDouble())
             return false;
           lowerBounds[indexInput] = value.toDouble();
@@ -302,7 +302,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
             emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(tr("The upper bound must be superior to the lower bound")).arg("</font>"));
             return false;
           }
-          NumericalPoint upperBounds = designOfExperiment_.getUpperBounds();
+          Point upperBounds = designOfExperiment_.getUpperBounds();
           if (upperBounds[indexInput] == value.toDouble())
             return false;
           upperBounds[indexInput] = value.toDouble();
@@ -340,7 +340,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           // deltas
           else
           {
-            NumericalPoint deltas = designOfExperiment_.getDeltas();
+            Point deltas = designOfExperiment_.getDeltas();
             if (deltas[indexInput] == value.toDouble())
               return false;
             deltas[indexInput] = value.toDouble();

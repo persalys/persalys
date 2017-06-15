@@ -202,7 +202,7 @@ void DesignOfExperimentWindow::addTabsForOutputs()
       }
 
   // sample of the variable inputs
-  const NumericalSample inS = designOfExperiment_.getInputSample().getMarginal(ind);
+  const Sample inS = designOfExperiment_.getInputSample().getMarginal(ind);
   // input names/descriptions
   QStringList inputNames;
   QStringList inAxisTitles;
@@ -227,7 +227,7 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   }
 
   // sample of the outputs
-  const NumericalSample outS = designOfExperiment_.getOutputSample();
+  const Sample outS = designOfExperiment_.getOutputSample();
   // output names/descriptions
   QStringList outputNames;
   QStringList outAxisTitles;
@@ -321,9 +321,9 @@ void DesignOfExperimentWindow::addTabsForOutputs()
 }
 
 
-QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const NumericalSample& inS,
-                                                                   const NumericalSample& outS,
-                                                                   const NumericalSample& notValidInS,
+QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const Sample& inS,
+                                                                   const Sample& outS,
+                                                                   const Sample& notValidInS,
                                                                    const QStringList inNames,
                                                                    const QStringList inAxisNames,
                                                                    const QStringList outNames,
@@ -338,14 +338,14 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const Numeric
   const QPen notValidPen = QPen(Qt::red, 4);
 
   // in rank
-  NumericalSample inSrank;
+  Sample inSrank;
   if (nbInputs)
     inSrank = inS.rank() / (inS.getSize());
-  NumericalSample notValidInSrank;
+  Sample notValidInSrank;
   if (notValidInS.getSize())
     notValidInSrank = notValidInS.rank() / (notValidInS.getSize());
   // out rank
-  NumericalSample outSrank;
+  Sample outSrank;
   if (nbOutputs)
     outSrank = outS.rank() / (outS.getSize());
 

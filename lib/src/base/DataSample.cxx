@@ -32,7 +32,7 @@ DataSample::DataSample()
 
 
 /* Constructor with parameters */
-DataSample::DataSample(const NumericalSample & inSample, const NumericalSample & outSample)
+DataSample::DataSample(const Sample & inSample, const Sample & outSample)
   : PersistentObject()
   , inputSample_(inSample)
   , outputSample_(outSample)
@@ -50,37 +50,37 @@ DataSample* DataSample::clone() const
 }
 
 
-NumericalSample DataSample::getInputSample() const
+Sample DataSample::getInputSample() const
 {
   return inputSample_;
 }
 
 
-void DataSample::setInputSample(const NumericalSample & sample)
+void DataSample::setInputSample(const Sample & sample)
 {
   inputSample_ = sample;
-  sample_ = NumericalSample();
+  sample_ = Sample();
   listXMin_.clear();
   listXMax_.clear();
 }
 
 
-NumericalSample DataSample::getOutputSample() const
+Sample DataSample::getOutputSample() const
 {
   return outputSample_;
 }
 
 
-void DataSample::setOutputSample(const NumericalSample & sample)
+void DataSample::setOutputSample(const Sample & sample)
 {
   outputSample_ = sample;
-  sample_ = NumericalSample();
+  sample_ = Sample();
   listXMin_.clear();
   listXMax_.clear();
 }
 
 
-DataSample::NumericalSampleCollection DataSample::getListXMin() const
+DataSample::SampleCollection DataSample::getListXMin() const
 {
   if (!listXMin_.getSize())
     searchMinMax();
@@ -88,7 +88,7 @@ DataSample::NumericalSampleCollection DataSample::getListXMin() const
 }
 
 
-DataSample::NumericalSampleCollection DataSample::getListXMax() const
+DataSample::SampleCollection DataSample::getListXMax() const
 {
   if (!listXMax_.getSize())
     searchMinMax();
@@ -107,22 +107,22 @@ void DataSample::searchMinMax() const
   Indices indicesInputs(numberInputs);
   indicesInputs.fill();
 
-  NumericalSample sample(getInputSample());
+  Sample sample(getInputSample());
   sample.stack(getOutputSample());
 
   for (UnsignedInteger i=numberInputs; i<sample.getDimension(); ++i)
   {
-    NumericalSample orderedSample(sample.sortAccordingToAComponent(i));
+    Sample orderedSample(sample.sortAccordingToAComponent(i));
 
     // Search min value of the ith output and the corresponding set of inputs X
     const double minValue = orderedSample[0][i];
 
     UnsignedInteger it = 0;
     double value = orderedSample[it][i];
-    NumericalSample tempSample(0, numberInputs);
+    Sample tempSample(0, numberInputs);
     do
     {
-      const NumericalPoint point(orderedSample.getMarginal(indicesInputs)[it]);
+      const Point point(orderedSample.getMarginal(indicesInputs)[it]);
       if (!tempSample.contains(point))
         tempSample.add(point);
       ++it;
@@ -136,10 +136,10 @@ void DataSample::searchMinMax() const
 
     it = 0;
     value = orderedSample[size-1-it][i];
-    tempSample = NumericalSample(0, numberInputs);
+    tempSample = Sample(0, numberInputs);
     do
     {
-      const NumericalPoint point(orderedSample.getMarginal(indicesInputs)[size-1-it]);
+      const Point point(orderedSample.getMarginal(indicesInputs)[size-1-it]);
       if (!tempSample.contains(point))
         tempSample.add(point);
       ++it;
@@ -151,11 +151,11 @@ void DataSample::searchMinMax() const
 }
 
 
-NumericalSample DataSample::getSample() const
+Sample DataSample::getSample() const
 {
   if (!sample_.getSize())
   {
-    NumericalSample sample;
+    Sample sample;
 
     if (getInputSample().getSize() == getOutputSample().getSize())
     {

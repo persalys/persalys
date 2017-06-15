@@ -28,7 +28,7 @@ sample : :py:class:`openturns.Description`
 
 Returns
 -------
-indices : :py:class:`openturns.NumericalSample`
+indices : :py:class:`openturns.Sample`
     First order indices"
 
 // ---------------------------------------------------------------------
@@ -38,7 +38,7 @@ indices : :py:class:`openturns.NumericalSample`
 
 Returns
 -------
-indices : :py:class:`openturns.NumericalSample`
+indices : :py:class:`openturns.Sample`
     Total indices"
 
 // ---------------------------------------------------------------------
@@ -48,7 +48,7 @@ indices : :py:class:`openturns.NumericalSample`
 
 Returns
 -------
-result : :py:class:`openturns.NumericalPoint`
+result : :py:class:`openturns.Point`
     Coefficient of variation"
 
 // ---------------------------------------------------------------------

@@ -66,10 +66,10 @@ void SRCAnalysis::run()
 
     RandomGenerator::SetSeed(getSeed());
 
-    NumericalSample inputSample(generateInputSample(simulationsNumber_));
+    Sample inputSample(generateInputSample(simulationsNumber_));
 
     // evaluate model
-    NumericalSample outputSample(0, getInterestVariables().getSize());
+    Sample outputSample(0, getInterestVariables().getSize());
     for (UnsignedInteger i=0; i<simulationsNumber_; ++i)
     {
       if (stopRequested_ && i > 1)
@@ -81,9 +81,9 @@ void SRCAnalysis::run()
       outputSample.add(computeOutputSample(inputSample[i]));
     }
 
-    NumericalSample indices(0, inputSample.getDimension());
+    Sample indices(0, inputSample.getDimension());
 
-    const NumericalSample effectiveInputSample(inputSample, 0, outputSample.getSize());
+    const Sample effectiveInputSample(inputSample, 0, outputSample.getSize());
     for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
     {
       Description outputName(1);

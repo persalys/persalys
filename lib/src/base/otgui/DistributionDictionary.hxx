@@ -41,10 +41,10 @@ public:
   static OT::Distribution BuildDistribution(const OT::String & distributionName, const double mu);
 
   /** Get the parameters collection */
-  static OT::Distribution::NumericalPointWithDescriptionCollection GetParametersCollection(const OT::Distribution & distribution);
+  static OT::Distribution::PointWithDescriptionCollection GetParametersCollection(const OT::Distribution & distribution);
 
   /** Update de distribution */
-  static void UpdateDistribution(OT::Distribution & distribution, const OT::NumericalPointWithDescription & description, OT::UnsignedInteger parametersType);
+  static void UpdateDistribution(OT::Distribution & distribution, const OT::PointWithDescription & description, OT::UnsignedInteger parametersType);
 
   /** Compute standard deviation from mean */
   static double ComputeSigmaFromMu(const double mu);

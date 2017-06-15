@@ -30,16 +30,16 @@ namespace OTGUI {
 class ParametersTableModel: public QStandardItemModel
 {
 public:
-  ParametersTableModel(const OT::Description& names, const OT::NumericalPoint& values, const QStringList& labels, QObject* parent = 0);
+  ParametersTableModel(const OT::Description& names, const OT::Point& values, const QStringList& labels, QObject* parent = 0);
 
   Qt::ItemFlags flags(const QModelIndex& index) const;
   QVariant data(const QModelIndex& index, int role) const;
   bool setData(const QModelIndex& index, const QVariant& value, int role);
-  OT::NumericalPoint getValues() const;
+  OT::Point getValues() const;
 
 private:
     OT::Description names_;
-    OT::NumericalPoint values_;
+    OT::Point values_;
 };
 
 class ParametersDefinitionWizard: public QWizard
@@ -47,9 +47,9 @@ class ParametersDefinitionWizard: public QWizard
   Q_OBJECT
 
 public:
-  ParametersDefinitionWizard(const OT::Description& names, const OT::NumericalPoint& values, const QStringList& labels, QWidget* parent=0);
+  ParametersDefinitionWizard(const OT::Description& names, const OT::Point& values, const QStringList& labels, QWidget* parent=0);
 
-  OT::NumericalPoint getValues() const;
+  OT::Point getValues() const;
 
 private:
   ParametersTableModel * tableModel_;

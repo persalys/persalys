@@ -135,8 +135,8 @@ void FunctionalChaosAnalysis::run()
       throw InvalidDimensionException(HERE) << "You have not defined output variable to be analysed. Set the list of interest variables.";
 
     // get effective samples
-    NumericalSample effectiveInputSample(getEffectiveInputSample());
-    NumericalSample effectiveOutputSample(getEffectiveOutputSample());
+    Sample effectiveInputSample(getEffectiveInputSample());
+    Sample effectiveOutputSample(getEffectiveOutputSample());
 
     // check chaos degree
     if (!getSparseChaos())
@@ -160,7 +160,7 @@ void FunctionalChaosAnalysis::run()
     result_.functionalChaosResult_ = functionalChaos.getResult();
 
     // build metamodel
-    NumericalMathFunction metamodelFunction(result_.functionalChaosResult_.getMetaModel());
+    Function metamodelFunction(result_.functionalChaosResult_.getMetaModel());
     Description variablesNames(effectiveInputSample.getDescription());
     variablesNames.add(effectiveOutputSample.getDescription());
     metamodelFunction.setDescription(variablesNames);
@@ -193,7 +193,7 @@ void FunctionalChaosAnalysis::run()
 }
 
 
-NumericalMathFunction FunctionalChaosAnalysis::runAlgo(const NumericalSample& inputSample, const NumericalSample& outputSample)
+Function FunctionalChaosAnalysis::runAlgo(const Sample& inputSample, const Sample& outputSample)
 {
   FunctionalChaosAlgorithm functionalChaos(buildFunctionalChaosAlgorithm(inputSample, outputSample));
   functionalChaos.run();
@@ -202,12 +202,13 @@ NumericalMathFunction FunctionalChaosAnalysis::runAlgo(const NumericalSample& in
 }
 
 
-FunctionalChaosAlgorithm FunctionalChaosAnalysis::buildFunctionalChaosAlgorithm(const NumericalSample& inputSample, const NumericalSample& outputSample)
+FunctionalChaosAlgorithm FunctionalChaosAnalysis::buildFunctionalChaosAlgorithm(const Sample& inputSample, const Sample& outputSample)
 {
   const UnsignedInteger inputDimension = inputSample.getDimension();
+  const EnumerateFunction phi(inputDimension);
 
   // adaptiveStrategy
-  const OrthogonalProductPolynomialFactory multivariateBasis(getPolynomialFamilyCollection(), inputDimension);
+  const OrthogonalProductPolynomialFactory multivariateBasis(getPolynomialFamilyCollection(), phi);
   const UnsignedInteger baseDim = LinearEnumerateFunction(inputDimension).getStrataCumulatedCardinal(chaosDegree_);
   const FixedStrategy adaptiveStrategy(multivariateBasis, baseDim);
 
@@ -232,7 +233,7 @@ FunctionalChaosAlgorithm FunctionalChaosAnalysis::buildFunctionalChaosAlgorithm(
 }
 
 
-void FunctionalChaosAnalysis::postProcessFunctionalChaosResult(const NumericalSample& inputSample)
+void FunctionalChaosAnalysis::postProcessFunctionalChaosResult(const Sample& inputSample)
 {
   // check
   if (!result_.outputSample_.getSize())
@@ -251,10 +252,10 @@ void FunctionalChaosAnalysis::postProcessFunctionalChaosResult(const NumericalSa
   result_.mean_ = vector.getMean();
 
   // variance - sobol indices
-  NumericalPoint variance(outputDimension);
-  NumericalSample firstOrderIndices(outputDimension, inputDimension);
+  Point variance(outputDimension);
+  Sample firstOrderIndices(outputDimension, inputDimension);
   firstOrderIndices.setDescription(inputSample.getDescription());
-  NumericalSample totalIndices(outputDimension, inputDimension);
+  Sample totalIndices(outputDimension, inputDimension);
 
   for (UnsignedInteger i=0; i<outputDimension; ++i)
   {

@@ -8,7 +8,7 @@
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Input sample"
 
 // ---------------------------------------------------------------------
@@ -18,6 +18,6 @@ sample : :py:class:`openturns.NumericalSample`
 
 Returns
 -------
-sample : :py:class:`openturns.NumericalSample`
+sample : :py:class:`openturns.Sample`
     Output sample"
 

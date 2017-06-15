@@ -23,7 +23,7 @@
 
 #include "otgui/OTGuiprivate.hxx"
 
-#include <openturns/OptimizationSolver.hxx>
+#include <openturns/OptimizationAlgorithm.hxx>
 
 namespace OTGUI {
 class OTGUI_API ApproximationAnalysis
@@ -34,11 +34,11 @@ public:
 
   virtual ~ApproximationAnalysis();
 
-  OT::OptimizationSolver getOptimizationAlgorithm() const;
-  void setOptimizationAlgorithm(const OT::OptimizationSolver& solver);
+  OT::OptimizationAlgorithm getOptimizationAlgorithm() const;
+  void setOptimizationAlgorithm(const OT::OptimizationAlgorithm& solver);
 
-  OT::NumericalPoint getPhysicalStartingPoint() const;
-  void setPhysicalStartingPoint(const OT::NumericalPoint& point);
+  OT::Point getPhysicalStartingPoint() const;
+  void setPhysicalStartingPoint(const OT::Point& point);
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -50,8 +50,8 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  OT::OptimizationSolver optimizationAlgorithm_;
-  OT::NumericalPoint physicalStartingPoint_;
+  OT::OptimizationAlgorithm optimizationAlgorithm_;
+  OT::Point physicalStartingPoint_;
 };
 }
 #endif

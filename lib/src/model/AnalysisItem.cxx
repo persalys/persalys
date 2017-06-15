@@ -329,7 +329,7 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
     namesList << tr("Point to be evaluated");
 
     // Parameters values
-    const NumericalPoint point(evaluation.getInputValues());
+    const Point point(evaluation.getInputValues());
     QString pointText = "[";
     for (UnsignedInteger i=0; i<point.getDimension(); ++i)
     {
@@ -516,7 +516,7 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
                << QString(approxAnalysis.getOptimizationAlgorithm().getImplementation()->getClassName().c_str());
 
     // starting point
-    const NumericalPoint startingPoint(approxAnalysis.getPhysicalStartingPoint());
+    const Point startingPoint(approxAnalysis.getPhysicalStartingPoint());
     QString startingPointText = "[";
     for (UnsignedInteger i=0; i<startingPoint.getDimension(); ++i)
     {
@@ -560,7 +560,7 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
         valuesList << tr("Importance sampling");
 
       // starting point
-      const NumericalPoint startingPoint(dynamic_cast<const ImportanceSamplingAnalysis*>(&*analysis.getImplementation())->getStandardSpaceDesignPoint());
+      const Point startingPoint(dynamic_cast<const ImportanceSamplingAnalysis*>(&*analysis.getImplementation())->getStandardSpaceDesignPoint());
       QString startingPointText = "[";
       for (UnsignedInteger i=0; i<startingPoint.getDimension(); ++i)
       {

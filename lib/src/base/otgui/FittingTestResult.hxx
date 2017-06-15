@@ -41,7 +41,7 @@ public:
   virtual FittingTestResult * clone() const;
 
   OT::String getVariableName() const;
-  OT::NumericalSample getValues() const;
+  OT::Sample getValues() const;
   OT::Collection<OT::Distribution> getTestedDistributions() const;
   OT::Collection<OT::TestResult> getKolmogorovTestResults() const;
   OT::Description getErrorMessages() const;
@@ -57,7 +57,7 @@ public:
 
 protected:
   OT::String variableName_;
-  OT::NumericalSample values_;
+  OT::Sample values_;
   OT::PersistentCollection< OT::Distribution > testedDistributions_;
   OT::PersistentCollection< OT::TestResult > kolmogorovTestResults_;
   OT::Description errorMessages_;

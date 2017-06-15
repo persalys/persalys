@@ -42,7 +42,7 @@ DataAnalysisResult::DataAnalysisResult()
 }
 
 
-DataAnalysisResult::DataAnalysisResult(const NumericalSample& inputSample, const NumericalSample& outputSample)
+DataAnalysisResult::DataAnalysisResult(const Sample& inputSample, const Sample& outputSample)
   : DataSample(inputSample, outputSample)
   , min_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
   , max_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
@@ -75,67 +75,67 @@ DataAnalysisResult* DataAnalysisResult::clone() const
 }
 
 
-DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getMin() const
+DataAnalysisResult::PointCollection DataAnalysisResult::getMin() const
 {
   return min_;
 }
 
 
-DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getMax() const
+DataAnalysisResult::PointCollection DataAnalysisResult::getMax() const
 {
   return max_;
 }
 
 
-DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getMean() const
+DataAnalysisResult::PointCollection DataAnalysisResult::getMean() const
 {
   return mean_;
 }
 
 
-DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getCoefficientOfVariation() const
+DataAnalysisResult::PointCollection DataAnalysisResult::getCoefficientOfVariation() const
 {
   return coefficientOfVariation_;
 }
 
 
-DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getMedian() const
+DataAnalysisResult::PointCollection DataAnalysisResult::getMedian() const
 {
   return median_;
 }
 
 
-DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getStandardDeviation() const
+DataAnalysisResult::PointCollection DataAnalysisResult::getStandardDeviation() const
 {
   return standardDeviation_;
 }
 
 
-DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getVariance() const
+DataAnalysisResult::PointCollection DataAnalysisResult::getVariance() const
 {
   return variance_;
 }
 
 
-DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getSkewness() const
+DataAnalysisResult::PointCollection DataAnalysisResult::getSkewness() const
 {
   return skewness_;
 }
 
 
-DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getKurtosis() const
+DataAnalysisResult::PointCollection DataAnalysisResult::getKurtosis() const
 {
   return kurtosis_;
 }
 
 
-DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getFirstQuartile() const
+DataAnalysisResult::PointCollection DataAnalysisResult::getFirstQuartile() const
 {
   return firstQuartile_;
 }
 
 
-DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getThirdQuartile() const
+DataAnalysisResult::PointCollection DataAnalysisResult::getThirdQuartile() const
 {
   return thirdQuartile_;
 }
@@ -153,19 +153,19 @@ Interval DataAnalysisResult::getStdConfidenceInterval() const
 }
 
 
-DataAnalysisResult::NumericalPointCollection DataAnalysisResult::getOutliers() const
+DataAnalysisResult::PointCollection DataAnalysisResult::getOutliers() const
 {
   return outliers_;
 }
 
 
-DataSample::NumericalSampleCollection DataAnalysisResult::getPDF() const
+DataSample::SampleCollection DataAnalysisResult::getPDF() const
 {
   return pdf_;
 }
 
 
-DataSample::NumericalSampleCollection DataAnalysisResult::getCDF() const
+DataSample::SampleCollection DataAnalysisResult::getCDF() const
 {
   return cdf_;
 }

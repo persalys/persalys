@@ -28,26 +28,26 @@ namespace OTGUI {
 class OTGUI_API DataSample : public OT::PersistentObject
 {
 public:
-  typedef OT::Collection<OT::NumericalSample> NumericalSampleCollection;
+  typedef OT::Collection<OT::Sample> SampleCollection;
 
   /** Default constructor */
   DataSample();
   /** Constructor with parameters */
-  DataSample(const OT::NumericalSample & inSample, const OT::NumericalSample & outSample);
+  DataSample(const OT::Sample & inSample, const OT::Sample & outSample);
 
   /** Virtual constructor */
   virtual DataSample * clone() const;
 
-  OT::NumericalSample getInputSample() const;
-  virtual void setInputSample(const OT::NumericalSample & sample);
+  OT::Sample getInputSample() const;
+  virtual void setInputSample(const OT::Sample & sample);
 
-  OT::NumericalSample getOutputSample() const;
-  void setOutputSample(const OT::NumericalSample & sample);
+  OT::Sample getOutputSample() const;
+  void setOutputSample(const OT::Sample & sample);
 
-  NumericalSampleCollection getListXMin() const;
-  NumericalSampleCollection getListXMax() const;
+  SampleCollection getListXMin() const;
+  SampleCollection getListXMax() const;
 
-  OT::NumericalSample getSample() const;
+  OT::Sample getSample() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -59,11 +59,11 @@ private:
   void searchMinMax() const;
 
 private:
-  OT::NumericalSample inputSample_;
-  OT::NumericalSample outputSample_;
-  mutable OT::NumericalSample sample_;
-  mutable OT::PersistentCollection<OT::NumericalSample> listXMin_;
-  mutable OT::PersistentCollection<OT::NumericalSample> listXMax_;
+  OT::Sample inputSample_;
+  OT::Sample outputSample_;
+  mutable OT::Sample sample_;
+  mutable OT::PersistentCollection<OT::Sample> listXMin_;
+  mutable OT::PersistentCollection<OT::Sample> listXMax_;
 };
 }
 #endif

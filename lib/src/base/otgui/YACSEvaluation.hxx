@@ -23,7 +23,7 @@
 
 #include "otgui/OTGuiprivate.hxx"
 
-#include "openturns/NumericalMathEvaluationImplementation.hxx"
+#include "openturns/EvaluationImplementation.hxx"
 
 #include <YACSEvalYFX.hxx>
 
@@ -34,7 +34,7 @@ namespace OTGUI {
  *
  * The class that implement the evaluation of an analytical function.
  */
-class OTGUI_API YACSEvaluation : public OT::NumericalMathEvaluationImplementation
+class OTGUI_API YACSEvaluation : public OT::EvaluationImplementation
 {
   CLASSNAME;
 
@@ -56,12 +56,12 @@ public:
   void loadData();
 
   /** Operator () */
-  virtual OT::NumericalPoint operator() (const OT::NumericalPoint & inP) const;
-  virtual OT::NumericalSample operator() (const OT::NumericalSample & inS) const;
+  virtual OT::Point operator() (const OT::Point & inP) const;
+  virtual OT::Sample operator() (const OT::Sample & inS) const;
 
   /** Accessor for input values */
-  OT::NumericalPoint getInputValues() const;
-  void setInputValues(const OT::NumericalPoint & inP);
+  OT::Point getInputValues() const;
+  void setInputValues(const OT::Point & inP);
   /** Accessor to the input variables names */
   OT::Description getInputVariablesNames() const;
   /** Accessor for input point dimension */
@@ -97,7 +97,7 @@ public:
 private:
   OT::String xmlFileName_;
   OT::Pointer<YACSEvalYFX> efx_;
-  OT::NumericalPoint inputValues_;
+  OT::Point inputValues_;
   OT::Description inDescription_;
   OT::Description outDescription_;
   bool parallelizeStatus_;

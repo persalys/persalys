@@ -47,7 +47,7 @@ static Factory<YACSEvaluation> RegisteredFactory;
 
 /* Default constructor */
 YACSEvaluation::YACSEvaluation(const String & fileName)
-  : NumericalMathEvaluationImplementation()
+  : EvaluationImplementation()
   , xmlFileName_(fileName)
   , efx_(0)
   , parallelizeStatus_(true)
@@ -107,7 +107,7 @@ void YACSEvaluation::loadData()
   std::vector< YACSEvalInputPort * > inps(efx_->getFreeInputPorts());
   std::vector< YACSEvalOutputPort * > outps(efx_->getFreeOutputPorts());
 
-  inputValues_ = NumericalPoint(inps.size());
+  inputValues_ = Point(inps.size());
   inDescription_ = Description(inps.size());
   outDescription_ = Description(outps.size());
 
@@ -132,14 +132,14 @@ void YACSEvaluation::loadData()
 
 
 /* Operator () */
-NumericalPoint YACSEvaluation::operator() (const NumericalPoint & inP) const
+Point YACSEvaluation::operator() (const Point & inP) const
 {
-  return operator()(NumericalSample(1, inP))[0];
+  return operator()(Sample(1, inP))[0];
 }
 
 
 /* Operator () */
-NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
+Sample YACSEvaluation::operator() (const Sample & inS) const
 {
   std::vector< YACSEvalInputPort * > inps(efx_->getFreeInputPorts());
 
@@ -180,7 +180,7 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
   }
 
   // launch analysis
-  NumericalSample result(inS.getSize(), getOutputDimension());
+  Sample result(inS.getSize(), getOutputDimension());
   result.setDescription(getOutputVariablesNames());
 
   AutoYELocker ayel(efx_.get(), inps, outps);
@@ -209,14 +209,14 @@ NumericalSample YACSEvaluation::operator() (const NumericalSample & inS) const
 
 
 /* Accessor for input values */
-NumericalPoint YACSEvaluation::getInputValues() const
+Point YACSEvaluation::getInputValues() const
 {
   return inputValues_;
 }
 
 
 /* Accessor for input values */
-void YACSEvaluation::setInputValues(const NumericalPoint & inP)
+void YACSEvaluation::setInputValues(const Point & inP)
 {
   inputValues_ = inP;
 }
@@ -305,7 +305,7 @@ void YACSEvaluation::setXMLFileName(const String & xmlFileName)
 /* Method save() stores the object through the StorageManager */
 void YACSEvaluation::save(Advocate & adv) const
 {
-  NumericalMathEvaluationImplementation::save(adv);
+  EvaluationImplementation::save(adv);
   adv.saveAttribute("xmlFileName_", xmlFileName_);
   adv.saveAttribute("parallelizeStatus_", parallelizeStatus_);
   adv.saveAttribute("wantedMachine_", wantedMachine_);
@@ -315,7 +315,7 @@ void YACSEvaluation::save(Advocate & adv) const
 /* Method load() reloads the object from the StorageManager */
 void YACSEvaluation::load(Advocate & adv)
 {
-  NumericalMathEvaluationImplementation::load(adv);
+  EvaluationImplementation::load(adv);
   adv.loadAttribute("xmlFileName_", xmlFileName_);
   if (!xmlFileName_.empty())
     loadData();

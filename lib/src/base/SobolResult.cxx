@@ -41,8 +41,8 @@ SobolResult::SobolResult()
 
 
 /* Constructor with parameters */
-SobolResult::SobolResult(const NumericalSample firstOrderIndices,
-                         const NumericalSample totalIndices,
+SobolResult::SobolResult(const Sample firstOrderIndices,
+                         const Sample totalIndices,
                          const Description & outputNames)
   : PersistentObject()
   , outputNames_(outputNames)
@@ -82,13 +82,13 @@ Description SobolResult::getInputNames() const
 }
 
 
-NumericalSample SobolResult::getFirstOrderIndices() const
+Sample SobolResult::getFirstOrderIndices() const
 {
   return firstOrderIndices_;
 }
 
 
-NumericalSample SobolResult::getTotalIndices() const
+Sample SobolResult::getTotalIndices() const
 {
   return totalIndices_;
 }

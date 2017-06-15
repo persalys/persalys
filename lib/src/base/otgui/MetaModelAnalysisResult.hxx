@@ -44,14 +44,14 @@ public:
 
   PhysicalModel getMetaModel() const;
 
-  OT::NumericalSample getOutputSample() const;
+  OT::Sample getOutputSample() const;
 
-  OT::NumericalSample getMetaModelOutputSample() const;
+  OT::Sample getMetaModelOutputSample() const;
 
-  OT::NumericalSample getMetaModelOutputSampleLeaveOneOut() const;
+  OT::Sample getMetaModelOutputSampleLeaveOneOut() const;
 
-  OT::NumericalPoint getErrorQ2LeaveOneOut() const;
-  OT::NumericalPoint getQ2LeaveOneOut() const;
+  OT::Point getErrorQ2LeaveOneOut() const;
+  OT::Point getQ2LeaveOneOut() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -64,11 +64,11 @@ public:
 
 protected:
   PhysicalModel metaModel_;
-  OT::NumericalSample outputSample_;
-  OT::NumericalSample metaModelOutputSample_;
-  OT::NumericalSample metaModelOutputSampleLOO_;
-  OT::NumericalPoint errorQ2LOO_;
-  OT::NumericalPoint q2LOO_;
+  OT::Sample outputSample_;
+  OT::Sample metaModelOutputSample_;
+  OT::Sample metaModelOutputSampleLOO_;
+  OT::Point errorQ2LOO_;
+  OT::Point q2LOO_;
 };
 }
 #endif

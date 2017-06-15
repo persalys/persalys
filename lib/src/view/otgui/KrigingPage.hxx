@@ -63,7 +63,7 @@ private:
   QCheckBox * optimizationCheckBox_;
   QLineEdit * scaleLineEdit_;
   OT::Description inputsNames_;
-  OT::NumericalPoint scales_;
+  OT::Point scales_;
   DoubleSpinBox * amplitudeSpinBox_;
 };
 }

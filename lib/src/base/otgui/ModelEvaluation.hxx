@@ -35,14 +35,14 @@ public:
   /** Constructor with parameters */
   ModelEvaluation(const OT::String & name, const PhysicalModel & physicalModel);
   ModelEvaluation(const OT::String & name, const PhysicalModel & physicalModel,
-                  const OT::NumericalPoint & inputsValues);
+                  const OT::Point & inputsValues);
 
   /** Virtual constructor */
   virtual ModelEvaluation * clone() const;
 
   void updateParameters();
 
-  OT::NumericalPoint getInputValues() const;
+  OT::Point getInputValues() const;
   void setInputValue(const int & index, const double & value);
 
   ModelEvaluationResult getResult() const;
@@ -65,7 +65,7 @@ protected:
 
 private:
   OT::Description inputNames_;
-  OT::NumericalPoint inputValues_;
+  OT::Point inputValues_;
   ModelEvaluationResult result_;
 };
 }

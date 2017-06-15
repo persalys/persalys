@@ -52,7 +52,7 @@ String FittingTestResult::getVariableName() const
 }
 
 
-NumericalSample FittingTestResult::getValues() const
+Sample FittingTestResult::getValues() const
 {
   return values_;
 }

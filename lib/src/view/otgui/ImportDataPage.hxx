@@ -23,7 +23,7 @@
 
 #include "otgui/ExportableTableView.hxx"
 
-#include "openturns/NumericalSample.hxx"
+#include "openturns/Sample.hxx"
 
 #include <QWizardPage>
 #include <QLineEdit>

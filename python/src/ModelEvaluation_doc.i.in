@@ -37,7 +37,7 @@ Get the result:
 
 Returns
 -------
-values : :py:class:`openturns.NumericalPoint`
+values : :py:class:`openturns.Point`
     Input values."
 
 // ---------------------------------------------------------------------

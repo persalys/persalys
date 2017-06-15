@@ -38,7 +38,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-PlotMatrixWidget::PlotMatrixWidget(const OT::NumericalSample & inputSample, const OT::NumericalSample & outputSample, QWidget* parent)
+PlotMatrixWidget::PlotMatrixWidget(const OT::Sample & inputSample, const OT::Sample & outputSample, QWidget* parent)
   : QWidget(parent)
   , inputNames_()
   , outputNames_()
