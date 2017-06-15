@@ -45,6 +45,19 @@ OTGUI_Analysis_isReliabilityAnalysis_doc
 
 // ---------------------------------------------------------------------
 
+%define OTGUI_Analysis_isRunning_doc
+"Whether the analysis is running.
+
+Returns
+-------
+isRunning : bool
+    Whether the analysis is running"
+%enddef
+%feature("docstring") OTGUI::AnalysisImplementation::isRunning
+OTGUI_Analysis_isRunning_doc
+
+// ---------------------------------------------------------------------
+
 %define OTGUI_Analysis_run_doc
 "Launch the analysis."
 %enddef

@@ -130,6 +130,7 @@ void InferenceAnalysis::setInterestVariables(const Description& variablesNames)
 
 void InferenceAnalysis::run()
 {
+  isRunning_ = true;
   try
   {
     // clear result
@@ -219,6 +220,7 @@ void InferenceAnalysis::run()
     errorMessage_ = ex.what();
     notify("analysisBadlyFinished");
   }
+  isRunning_ = false;
 }
 
 

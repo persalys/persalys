@@ -22,6 +22,7 @@
 #define OTGUI_OUTPUTSSELECTIONGROUPBOX_HXX
 
 #include "otgui/ListWidgetWithCheckBox.hxx"
+#include "otgui/NoWheelEventComboBox.hxx"
 
 #include "openturns/Description.hxx"
 
@@ -34,9 +35,11 @@ class OTGUI_API OutputsSelectionGroupBox : public QGroupBox
   Q_OBJECT
 
 public:
+  OutputsSelectionGroupBox(QWidget* parent=0);
   OutputsSelectionGroupBox(const OT::Description& outputsNames, const OT::Description& interestVariables, QWidget* parent=0);
 
   QStringList getSelectedOutputsNames() const;
+  void updateComboBoxModel(const OT::Description& outputsNames, const OT::Description& interestVariables);
 
 public slots:
 signals:
@@ -44,6 +47,7 @@ signals:
 
 private:
   ListWidgetWithCheckBox * outputsListWidget_;
+  NoWheelEventComboBox * outputsComboBox_;
 };
 }
 #endif

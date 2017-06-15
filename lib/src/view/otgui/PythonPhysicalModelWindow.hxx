@@ -22,28 +22,19 @@
 #define OTGUI_PYTHONPHYSICALMODELWINDOW_HXX
 
 #include "otgui/OTguiSubWindow.hxx"
-#include "otgui/PhysicalModelItem.hxx"
+#include "otgui/PhysicalModelDefinitionItem.hxx"
+#include "otgui/PhysicalModelWindowWidget.hxx"
 #include "otgui/CodeModel.hxx"
 
 #include <QTableView>
 
 namespace OTGUI {
-
-class OTGUI_API CodeView : public QTableView
-{
-  Q_OBJECT
-public:
-  CodeView(QWidget * parent = 0);
-protected:
-  virtual bool event(QEvent * event);
-};
-
 class OTGUI_API PythonPhysicalModelWindow : public OTguiSubWindow
 {
   Q_OBJECT
 
 public:
-  PythonPhysicalModelWindow(PhysicalModelItem * item);
+  PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item);
 
 public slots:
   void updateCodeModel();
@@ -52,6 +43,7 @@ private:
   PhysicalModel physicalModel_;
   CodeModel * codeModel_;
   QTableView * codeView_;
+  PhysicalModelWindowWidget * tablesWidget_;
 };
 }
 #endif

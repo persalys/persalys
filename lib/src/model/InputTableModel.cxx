@@ -99,11 +99,12 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
           return true;
         if (value.toString().isEmpty())
           return false;
-        physicalModel_.blockNotification(true, "modelInputsChanged");
+        physicalModel_.blockNotification("PhysicalModelDefinition");
         emit errorMessageChanged("");
         try
         {
           physicalModel_.setInputName(input.getName(), value.toString().toUtf8().constData());
+          emit inputNameChanged();
         }
         catch (std::exception & ex)
         {
@@ -115,7 +116,7 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
       {
         if (input.getDescription() == value.toString().toUtf8().constData())
           return true;
-        physicalModel_.blockNotification(true);
+        physicalModel_.blockNotification("PhysicalModelDefinition");
         emit errorMessageChanged("");
         physicalModel_.setInputDescription(input.getName(), value.toString().toUtf8().constData());
         break;
@@ -124,13 +125,13 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
       {
         if (input.getValue() == value.toDouble())
           return true;
-        physicalModel_.blockNotification(true, "modelInputsChanged");
+        physicalModel_.blockNotification("PhysicalModelDefinition");
         emit errorMessageChanged("");
         physicalModel_.setInputValue(input.getName(), value.toDouble());
         break;
       }
     }
-    physicalModel_.blockNotification(false);
+    physicalModel_.blockNotification();
     emit dataChanged(index, index);
     return true;
   }
@@ -151,9 +152,10 @@ void InputTableModel::addLine()
   int i = 0;
   while (physicalModel_.hasInputNamed('X' + (OSS()<<i).str()))
     ++i;
-  physicalModel_.blockNotification(true, "modelInputsChanged");
+  physicalModel_.blockNotification("PhysicalModelDefinition");
   physicalModel_.addInput(Input('X'+(OSS()<<i).str()));
-  physicalModel_.blockNotification(false);
+  emit inputNumberChanged();
+  physicalModel_.blockNotification();
   QModelIndex lastIndex = index(rowCount()-1, 0);
   beginInsertRows(lastIndex.parent(), lastIndex.row(), lastIndex.row());
   endInsertRows();
@@ -164,9 +166,10 @@ void InputTableModel::removeLine(const QModelIndex & index)
 {
   beginRemoveRows(index.parent(), index.row(), index.row());
   removeRows(index.row(), 1, index.parent());
-  physicalModel_.blockNotification(true, "modelInputsChanged");
+  physicalModel_.blockNotification("PhysicalModelDefinition");
   physicalModel_.removeInput(physicalModel_.getInputs()[index.row()].getName());
-  physicalModel_.blockNotification(false);
+  emit inputNumberChanged();
+  physicalModel_.blockNotification();
   endRemoveRows();
 }
 }

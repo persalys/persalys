@@ -26,13 +26,29 @@ using namespace OT;
 
 namespace OTGUI {
 
-DataModelTableModel::DataModelTableModel(const NumericalSample & data, DataModel & dataModel, const bool variablesNamesEditable, QObject* parent)
+DataModelTableModel::DataModelTableModel(const NumericalSample& data, DataModel* dataModel, const bool useColumns, QObject* parent)
   : SampleTableModel(data, parent)
-  , variablesNamesEditable_(variablesNamesEditable)
-  , inputColumns_(dataModel.getInputColumns())
-  , outputColumns_(dataModel.getOutputColumns())
   , dataModel_(dataModel)
+  , inputColumns_()
+  , outputColumns_()
 {
+  if (useColumns)
+  {
+    inputColumns_ = dataModel->getInputColumns();
+    outputColumns_ = dataModel->getOutputColumns();
+  }
+  else
+  {
+    // condition used when opening a data model: we use dataModel.getSample() and not the sample from the file
+    // so we can not use getInputColumns and getOutputColumns.
+    // In dataModel.getSample(): we put first the input sample, then the output sample
+    // so we can retrieve easily the indices
+    inputColumns_ = Indices(dataModel->getInputSample().getSize() > 0 ? dataModel->getInputSample().getDimension() : 0);
+    inputColumns_.fill();
+    outputColumns_ = Indices(dataModel->getOutputSample().getSize() > 0 ? dataModel->getOutputSample().getDimension() : 0);
+    outputColumns_.fill(inputColumns_.getSize());
+  }
+
   // data model
   Indices indices(inputColumns_);
   indices.add(outputColumns_);
@@ -42,7 +58,24 @@ DataModelTableModel::DataModelTableModel(const NumericalSample & data, DataModel
     inputColumns_ = Indices(data_.getDimension() > 1? data_.getDimension()-1 : 1);
     inputColumns_.fill();
     outputColumns_ = Indices(data_.getDimension() > 1? 1 : 0, data_.getDimension()-1);
-    dataModel_.setColumns(inputColumns_, outputColumns_);
+    dataModel->blockNotification("DataModelDefinition");
+    dataModel->setColumns(inputColumns_, outputColumns_);
+    dataModel->blockNotification();
+  }
+  else // the indices are ok so we can use the variables names stored in the model
+  {
+    Description dataDescription(data_.getDescription());
+    if (dataModel_->getInputNames().getSize() == inputColumns_.getSize())
+    {
+      for (UnsignedInteger i=0; i<dataModel_->getInputNames().getSize(); ++i)
+        dataDescription[inputColumns_[i]] = dataModel_->getInputNames()[i];
+    }
+    if (dataModel_->getOutputNames().getSize() == outputColumns_.getSize())
+    {
+      for (UnsignedInteger i=0; i<dataModel_->getOutputNames().getSize(); ++i)
+        dataDescription[outputColumns_[i]] = dataModel_->getOutputNames()[i];
+    }
+    data_.setDescription(dataDescription);
   }
 }
 
@@ -55,8 +88,12 @@ int DataModelTableModel::rowCount(const QModelIndex& parent) const
 
 Qt::ItemFlags DataModelTableModel::flags(const QModelIndex & index) const
 {
-  if (index.row() == 0 && variablesNamesEditable_) // variables names
+  if (index.row() == 0) // variables names
     return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+
+  if (index.row() == 1)
+    return QAbstractTableModel::flags(index) & ~Qt::ItemIsSelectable;
+
   return QAbstractTableModel::flags(index);
 }
 
@@ -88,9 +125,6 @@ QVariant DataModelTableModel::data(const QModelIndex & index, int role) const
 
     else if (role == Qt::TextAlignmentRole)
       return Qt::AlignCenter;
-
-    else if (role == Qt::BackgroundRole && !variablesNamesEditable_)
-      return QColor("#f2f1f0");
   }
   else if (index.row() == 1) // variable type
   {
@@ -106,6 +140,13 @@ QVariant DataModelTableModel::data(const QModelIndex & index, int role) const
 
     else if (role == Qt::TextAlignmentRole)
       return Qt::AlignCenter;
+
+    else if (role == Qt::FontRole)
+    {
+      QFont font;
+      font.setBold(true);
+      return font;
+    }
   }
   else // variable value
   {
@@ -137,6 +178,14 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
         return false;
 
       Description description = data_.getDescription();
+      if (description[index.column()] == value.toString().toUtf8().constData())
+        return true;
+
+      if (description.contains(value.toString().toUtf8().constData()))
+      {
+        emit temporaryErrorMessageChanged(tr("The name %2 is already used by another variable").arg(value.toString()));
+        return false;
+      }
       description[index.column()] = value.toString().toUtf8().constData();
       data_.setDescription(description);
     }
@@ -184,33 +233,22 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
       }
     }
 
-    try
-    {
-      Description inNames;
-      if (inputColumns_.getSize())
-        inNames = data_.getMarginal(inputColumns_).getDescription();
-      Description outNames;
-      if (outputColumns_.getSize())
-        outNames = data_.getMarginal(outputColumns_).getDescription();
+    Description inNames;
+    if (inputColumns_.getSize())
+      inNames = data_.getMarginal(inputColumns_).getDescription();
+    Description outNames;
+    if (outputColumns_.getSize())
+      outNames = data_.getMarginal(outputColumns_).getDescription();
 
-      dataModel_.setColumns(inputColumns_, outputColumns_, inNames, outNames);
-      emit dataChanged(index, index);
-      emit errorMessageChanged("");
-    }
-    catch (std::exception & ex)
-    {
-      if (!inputColumns_.getSize())
-        emit errorMessageChanged(tr("The data model must contain at least one input"));
-      else
-        emit errorMessageChanged(ex.what());
-    }
+    dataModel_->blockNotification("DataModelDefinition");
+    dataModel_->setColumns(inputColumns_, outputColumns_, inNames, outNames);
+    emit dataChanged(index, index);
+    emit errorMessageChanged("");
+    if (!inputColumns_.getSize() && !outputColumns_.getSize())
+      emit errorMessageChanged(tr("Define at least a variable"));
+
+    dataModel_->blockNotification();
   }
   return true;
-}
-
-
-DataModel DataModelTableModel::getDataModel() const
-{
-  return dataModel_;
 }
 }

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItem, observer of an object
+ *  @brief QWizardPage to define src analysis
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,26 +18,34 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_OBSERVERITEM_HXX
-#define OTGUI_OBSERVERITEM_HXX
+#ifndef OTGUI_SRCPAGE_HXX
+#define OTGUI_SRCPAGE_HXX
 
-#include "otgui/Observer.hxx"
-#include "otgui/Item.hxx"
+#include "otgui/Analysis.hxx"
+#include "otgui/LogSpinBox.hxx"
 
-#include <QStandardItem>
+#include <QWizardPage>
 
 namespace OTGUI {
-class OTGUI_API ObserverItem : public QObject, public Item, public Observer
+class OTGUI_API SRCPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  ObserverItem(const QString & name, const QString & typeName);
+  SRCPage(QWidget* parent=0);
 
-  virtual ~ObserverItem();
+  void initialize(const Analysis& analysis);
+  Analysis getAnalysis(const OT::String& name, const PhysicalModel& physicalModel) const;
 
-  QVariant data(int role = Qt::EditRole) const;
-  void setData(const QVariant & value, int role);
+  virtual int nextId() const;
+  virtual bool validatePage();
+
+protected:
+  void buildInterface();
+
+private:
+  LogSpinBox * sampleSizeSpinbox_;
+  QSpinBox * seedSpinbox_;
 };
 }
 #endif

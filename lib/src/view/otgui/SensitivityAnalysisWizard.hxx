@@ -22,13 +22,9 @@
 #define OTGUI_SENSITIVITYANALYSISWIZARD_HXX
 
 #include "otgui/AnalysisWizard.hxx"
-#include "otgui/SobolAnalysis.hxx"
-#include "otgui/SRCAnalysis.hxx"
-#include "otgui/StopCriteriaGroupBox.hxx"
-#include "otgui/BlockSizeGroupBox.hxx"
-#include "otgui/OutputsSelectionGroupBox.hxx"
-
-#include <QLabel>
+#include "otgui/IntroSensitivityPage.hxx"
+#include "otgui/SobolPage.hxx"
+#include "otgui/SRCPage.hxx"
 
 namespace OTGUI {
 class OTGUI_API SensitivityAnalysisWizard : public AnalysisWizard
@@ -36,36 +32,21 @@ class OTGUI_API SensitivityAnalysisWizard : public AnalysisWizard
   Q_OBJECT
 
 public:
+  enum {Page_Intro, Page_Sobol, Page_SRC};
   enum Method {Sobol, SRC};
 
-  SensitivityAnalysisWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel, QWidget* parent=0);
-  SensitivityAnalysisWizard(const Analysis & analysis, QWidget* parent=0);
+  SensitivityAnalysisWizard(const Analysis& analysis, QWidget* parent=0);
 
-  virtual bool validateCurrentPage();
+  virtual Analysis getAnalysis() const;
+  virtual int nextId() const;
 
 protected:
   void buildInterface();
 
-public slots:
-  void updateMethodWidgets(int);
-  void maxiCoefficientOfVariationChanged(double);
-  void maxiTimeChanged(int);
-  void maxiCallsChanged(double);
-  void sampleSizeChanged(double);
-  void seedChanged(int);
-  void blockSizeChanged(double);
-  void setInterestVariables(QStringList);
-
 private:
-  SobolAnalysis sobolAnalysis_;
-  SRCAnalysis srcAnalysis_;
-  OutputsSelectionGroupBox * outputsGroupBox_;
-  QWidget * sobolWidgets_;
-  StopCriteriaGroupBox * stopCriteriaGroupBox_;
-  BlockSizeGroupBox * blockSizeGroupBox_;
-  QWidget * srcWidgets_;
-  QLabel * totalNbSimuLabel_;
-  QLabel * errorMessageLabel_;
+  IntroSensitivityPage * introPage_;
+  SobolPage * sobolPage_;
+  SRCPage * srcPage_;
 };
 }
 #endif

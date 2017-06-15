@@ -26,7 +26,6 @@
 #include "otgui/ReliabilityAnalysisWizard.hxx"
 
 #include <QVBoxLayout>
-#include <QRadioButton>
 
 using namespace OT;
 
@@ -34,6 +33,11 @@ namespace OTGUI {
 
 SimulationReliabilityPage::SimulationReliabilityPage(QWidget* parent)
   : QWizardPage(parent)
+  , method_(SimulationReliabilityPage::MonteCarlo)
+  , stopCriteriaGroupBox_(0)
+  , blockSizeGroupBox_(0)
+  , seedSpinbox_(0)
+  , errorMessageLabel_(0)
 {
   buildInterface();
 }
@@ -45,35 +49,18 @@ void SimulationReliabilityPage::buildInterface()
 
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 
-  QGroupBox * methodBox = new QGroupBox(tr("Methods"));
-  QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
-
-  // radioButtons
-  methodGroup_ = new QButtonGroup;
-  // Monte carlo
-  QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Monte Carlo"));
-  buttonToChooseMethod->setChecked(true);
-  methodGroup_->addButton(buttonToChooseMethod, SimulationReliabilityPage::MonteCarlo);
-  methodLayout->addWidget(buttonToChooseMethod);
-  // FORM - IS
-  buttonToChooseMethod = new QRadioButton(tr("FORM - Importance sampling"));
-  methodGroup_->addButton(buttonToChooseMethod, SimulationReliabilityPage::FORM_IS);
-  methodLayout->addWidget(buttonToChooseMethod);
-  connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SIGNAL(methodChanged(int)));
-
-  pageLayout->addWidget(methodBox);
-
   /// simulation widgets
-  QWidget * mainSimuWidget = new QWidget;
-  QVBoxLayout * monteCarloLayout = new QVBoxLayout(mainSimuWidget);
 
   // stop criteria
-  stopCriteriaGroupBox_ = new StopCriteriaGroupBox(0.01, 60, (UnsignedInteger)std::numeric_limits<int>::max());
-  monteCarloLayout->addWidget(stopCriteriaGroupBox_);
+  stopCriteriaGroupBox_ = new StopCriteriaGroupBox;
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), this, SLOT(clearErrorMessageLabel()));
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), this, SLOT(clearErrorMessageLabel()));
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(double)), this, SLOT(clearErrorMessageLabel()));
+  pageLayout->addWidget(stopCriteriaGroupBox_);
 
   // block size
   blockSizeGroupBox_ = new BlockSizeGroupBox(tr("Evaluation parameter"));
-  monteCarloLayout->addWidget(blockSizeGroupBox_);
+  pageLayout->addWidget(blockSizeGroupBox_);
 
   //// advanced parameters
   CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
@@ -89,9 +76,7 @@ void SimulationReliabilityPage::buildInterface()
   seedLabel->setBuddy(seedSpinbox_);
   advancedWidgetsLayout->addWidget(seedSpinbox_, 1, 1);
 
-  monteCarloLayout->addWidget(advancedParamGroupBox);
-
-  pageLayout->addWidget(mainSimuWidget);
+  pageLayout->addWidget(advancedParamGroupBox);
 
   // error message
   errorMessageLabel_ = new QLabel;
@@ -99,21 +84,21 @@ void SimulationReliabilityPage::buildInterface()
   pageLayout->addStretch();
   pageLayout->addWidget(errorMessageLabel_);
 
-  // error message
-  pageLayout->addWidget(errorMessageLabel_);
+  initialize(MonteCarloReliabilityAnalysis());
 }
 
 
 void SimulationReliabilityPage::initialize(const Analysis& analysis)
 {
-  if (!dynamic_cast<const SimulationReliabilityAnalysis*>(&*analysis.getImplementation()))
+  const SimulationReliabilityAnalysis * analysis_ptr = dynamic_cast<const SimulationReliabilityAnalysis*>(analysis.getImplementation().get());
+
+  if (!analysis_ptr)
     return;
 
-  const SimulationReliabilityAnalysis * analysis_ptr = dynamic_cast<const SimulationReliabilityAnalysis*>(analysis.getImplementation().get());
   if (dynamic_cast<const MonteCarloReliabilityAnalysis*>(analysis_ptr))
-    methodGroup_->button(SimulationReliabilityPage::MonteCarlo)->click();
+    method_ = SimulationReliabilityPage::MonteCarlo;
   else
-    methodGroup_->button(SimulationReliabilityPage::FORM_IS)->click();
+    method_ = SimulationReliabilityPage::FORM_IS;
 
   stopCriteriaGroupBox_->setMaximumCoefficientOfVariation(analysis_ptr->getMaximumCoefficientOfVariation());
   stopCriteriaGroupBox_->setMaximumElapsedTime(analysis_ptr->getMaximumElapsedTime());
@@ -125,9 +110,9 @@ void SimulationReliabilityPage::initialize(const Analysis& analysis)
 }
 
 
-Analysis SimulationReliabilityPage::getAnalysis(const OT::String& name, const LimitState& limitState) const
+Analysis SimulationReliabilityPage::getAnalysis(const String& name, const LimitState& limitState) const
 {
-  if (methodGroup_->checkedId() == SimulationReliabilityPage::MonteCarlo)
+  if (method_ == SimulationReliabilityPage::MonteCarlo)
   {
     MonteCarloReliabilityAnalysis analysis(name, limitState);
     analysis.setMaximumCalls(stopCriteriaGroupBox_->getMaximumCalls());
@@ -150,18 +135,33 @@ Analysis SimulationReliabilityPage::getAnalysis(const OT::String& name, const Li
 }
 
 
+void SimulationReliabilityPage::updateMethod(int id)
+{
+  method_ = Method(id);
+  setFinalPage(id == SimulationReliabilityPage::MonteCarlo);
+}
+
+
 int SimulationReliabilityPage::nextId() const
 {
-  if (methodGroup_->checkedId() == SimulationReliabilityPage::MonteCarlo)
+  if (method_ == SimulationReliabilityPage::MonteCarlo)
     return -1;
   else
     return ReliabilityAnalysisWizard::Page_FORM;
 }
 
 
+void SimulationReliabilityPage::clearErrorMessageLabel()
+{
+  // the slot clear() of QLabel does not work...
+  errorMessageLabel_->setText("");
+}
+
+
 bool SimulationReliabilityPage::validatePage()
 {
-  QString errorMessage = "";
+  QString errorMessage;
+
   if (!stopCriteriaGroupBox_->isValid())
     errorMessage = tr("Please select at least one stop criteria");
   else
@@ -176,7 +176,7 @@ bool SimulationReliabilityPage::validatePage()
     }
   }
 
-  errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(errorMessage).arg("</font>"));
+  errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
   if (!errorMessage.isEmpty())
     return false;
 

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItem, observer of a otStudy
+ *  @brief QStandardItem, observer of an otStudy
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -20,24 +20,80 @@
  */
 #include "otgui/OTStudyItem.hxx"
 
-#include "otgui/ReliabilityAnalysis.hxx"
+#include "otgui/PhysicalModelAnalysis.hxx"
 #include "otgui/DesignOfExperimentAnalysis.hxx"
+#include "otgui/SymbolicPhysicalModel.hxx"
+#include "otgui/PythonPhysicalModel.hxx"
+#ifdef OTGUI_HAVE_YACS
+#include "otgui/YACSPhysicalModel.hxx"
+#endif
 
 #include <QDebug>
+#include <QFileInfo>
+#include <QSettings>
+#include <QApplication>
 
 using namespace OT;
 
 namespace OTGUI {
 
 OTStudyItem::OTStudyItem(const OTStudy& otStudy)
-  : QObject()
-  , QStandardItem(QString::fromUtf8(otStudy.getName().c_str()))
+  : OTguiItem(QString::fromUtf8(otStudy.getName().c_str()), "OTStudy")
   , Observer("OTStudy")
   , otStudy_(otStudy)
 {
+  parentOTStudyItem_ = this;
   otStudy_.addObserver(this);
-  setData("OTStudy", Qt::UserRole);
-  setToolTip(QString::fromUtf8(otStudy_.getFileName().c_str()));
+  if (!otStudy_.getFileName().empty())
+    setToolTip(QString::fromUtf8(otStudy_.getFileName().c_str()));
+
+  buildActions();
+}
+
+
+void OTStudyItem::buildActions()
+{
+  // new model actions
+  newSymbolicPhysicalModel_ = new QAction(tr("New symbolic physical model"), this);
+  connect(newSymbolicPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewSymbolicPhysicalModel()));
+
+  newPythonPhysicalModel_ = new QAction(tr("New Python physical model"), this);
+  connect(newPythonPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewPythonPhysicalModel()));
+
+#ifdef OTGUI_HAVE_YACS
+  newYACSPhysicalModel_ = new QAction(tr("New YACS physical model"), this);
+  connect(newYACSPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewYACSPhysicalModel()));
+#endif
+
+  newDataModel_ = new QAction(tr("New data model"), this);
+  connect(newDataModel_, SIGNAL(triggered()), this, SLOT(createNewDataModel()));
+
+  // export action
+  exportOTStudy_ = new QAction(QIcon(":/images/document-export.png"), tr("Export Python"), this);
+  connect(exportOTStudy_, SIGNAL(triggered()), this, SIGNAL(otStudyExportRequested()));
+
+  // save  action
+  saveOTStudy_ = new QAction(QIcon(":/images/document-save.png"), tr("Save"), this);
+  connect(saveOTStudy_, SIGNAL(triggered()), this, SLOT(saveOTStudy()));
+
+  // save as  action
+  saveAsOTStudy_ = new QAction(QIcon(":/images/document-save-as.png"), tr("Save As..."), this);
+  connect(saveAsOTStudy_, SIGNAL(triggered()), this, SIGNAL(otStudySaveAsRequested()));
+
+  // close action
+  closeOTStudy_ = new QAction(QIcon(":/images/window-close.png"), tr("Close"), this);
+  connect(closeOTStudy_, SIGNAL(triggered()), this, SLOT(closeOTStudy()));
+
+  // add actions
+  appendAction(newSymbolicPhysicalModel_);
+  appendAction(newPythonPhysicalModel_);
+#ifdef OTGUI_HAVE_YACS
+  appendAction(newYACSPhysicalModel_);
+#endif
+  appendAction(newDataModel_);
+  appendAction(exportOTStudy_);
+  appendAction(saveOTStudy_);
+  appendAction(closeOTStudy_);
 }
 
 
@@ -56,46 +112,26 @@ void OTStudyItem::update(Observable * source, const String & message)
   else if (message == "addDesignOfExperiment")
   {
     DesignOfExperiment addedDesignOfExperiment = otStudy_.getDesignOfExperiments()[otStudy_.getDesignOfExperiments().getSize()-1];
-    try
-    {
-      addDesignOfExperimentItem(addedDesignOfExperiment);
-    }
-    catch (std::exception & ex)
-    {
-      qDebug() << "In OTStudyItem::update: No item added for the design of experiment named " << addedDesignOfExperiment.getName().data() << "\n" << ex.what() << "\n";
-    }
+    addDesignOfExperimentItem(addedDesignOfExperiment);
   }
   else if (message == "addLimitState")
   {
     LimitState addedLimitState = otStudy_.getLimitStates()[otStudy_.getLimitStates().getSize()-1];
-    try
-    {
-      addLimitStateItem(addedLimitState);
-    }
-    catch (std::exception & ex)
-    {
-      qDebug() << "In OTStudyItem::update: No item added for the limit state named " << addedLimitState.getName().data() << "\n" << ex.what() << "\n";
-    }
+    addLimitStateItem(addedLimitState);
   }
   else if (message == "addAnalysis")
   {
     Analysis addedAnalysis = otStudy_.getAnalyses()[otStudy_.getAnalyses().getSize()-1];
-    try
-    {
-      addAnalysisItem(addedAnalysis);
-    }
-    catch (std::exception & ex)
-    {
-      qDebug() << "In OTStudyItem::update: No item added for the analysis named " << addedAnalysis.getName().data() << "\n" << ex.what() << "\n";
-    }
+    addAnalysisItem(addedAnalysis);
   }
   else if (message == "otStudyRemoved")
   {
-    emit otStudyRemoved(this);
+    requestRemove();
   }
   else if (message == "fileNameChanged")
   {
-    setToolTip(QString::fromUtf8(otStudy_.getFileName().c_str()));
+    if (!otStudy_.getFileName().empty())
+      setToolTip(QString::fromUtf8(otStudy_.getFileName().c_str()));
   }
   else
   {
@@ -104,260 +140,246 @@ void OTStudyItem::update(Observable * source, const String & message)
 }
 
 
-void OTStudyItem::updateAnalysis(const Analysis & analysis)
+void OTStudyItem::createNewSymbolicPhysicalModel()
 {
-  otStudy_.getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
+  SymbolicPhysicalModel * newPhysicalModel = new SymbolicPhysicalModel(otStudy_.getAvailablePhysicalModelName());
+  otStudy_.add(newPhysicalModel);
 }
 
 
-void OTStudyItem::updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
+void OTStudyItem::createNewPythonPhysicalModel()
 {
-  if (designOfExperiment.getImplementation()->getClassName() == "DataModel")
-    otStudy_.getDataModelByName(designOfExperiment.getName()).setImplementationAsPersistentObject(designOfExperiment.getImplementation());
-  else
-    otStudy_.getDesignOfExperimentByName(designOfExperiment.getName()).setImplementationAsPersistentObject(designOfExperiment.getImplementation());
+  PythonPhysicalModel * newPhysicalModel = new PythonPhysicalModel(otStudy_.getAvailablePhysicalModelName());
+  otStudy_.add(newPhysicalModel);
+}
+
+
+#ifdef OTGUI_HAVE_YACS
+void StudyTreeView::createNewYACSPhysicalModel()
+{
+  YACSPhysicalModel * newPhysicalModel = new YACSPhysicalModel(otStudy_.getAvailablePhysicalModelName());
+  otStudy_.add(newPhysicalModel);
+}
+#endif
+
+
+void OTStudyItem::createNewDataModel()
+{
+  DesignOfExperiment newDataModel(DataModel(otStudy_.getAvailableDataModelName()));
+  otStudy_.add(newDataModel);
+}
+
+
+void OTStudyItem::exportOTStudy(QString fileName)
+{
+  if (fileName.isEmpty())
+  {
+    qDebug() << "OTStudyItem::exportStudy : file name empty\n";
+    return;
+  }
+
+  if (!fileName.endsWith(".py"))
+    fileName += ".py";
+
+  QFile file(fileName);
+
+  // check
+  if (!file.open(QFile::WriteOnly))
+  {
+    qDebug() << "OTStudyItem::exportStudy : cannot open the file " << file.fileName() << "\n";
+    emit emitErrorMessageRequested(tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
+    return;
+  }
+
+  // write file
+  QTextStream out(&file);
+  out.setCodec("UTF-8");
+  out << QString::fromUtf8(otStudy_.getPythonScript().c_str());
+  file.setPermissions(QFile::ReadUser|QFile::WriteUser|QFile::ExeUser|QFile::ReadGroup|QFile::ExeGroup|QFile::ReadOther|QFile::ExeOther);
+  file.close();
+
+  // update QSettings
+  QSettings settings;
+  settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+}
+
+
+bool OTStudyItem::saveOTStudy()
+{
+  if (!QFileInfo(QString::fromUtf8(otStudy_.getFileName().c_str())).exists())
+  {
+    bool notcancel = true;
+    emit otStudySaveAsRequested(this, &notcancel);
+
+    if (!notcancel)
+      return false;
+
+    return true;
+  }
+
+  QApplication::setOverrideCursor(Qt::WaitCursor);
+  otStudy_.save(otStudy_.getFileName());
+  QApplication::restoreOverrideCursor();
+  return true;
+}
+
+
+bool OTStudyItem::saveOTStudy(QString fileName)
+{
+  if (fileName.isEmpty())
+  {
+    qDebug() << "OTStudyItem::saveOTStudy : file name empty\n";
+    return true;
+  }
+
+  if (!fileName.endsWith(".xml"))
+    fileName += ".xml";
+
+  QFile file(fileName);
+
+  // check
+  if (!file.open(QFile::WriteOnly))
+  {
+    qDebug() << "OTStudyItem::saveOTStudy : cannot open the file " << file.fileName() << "\n";
+    emit emitErrorMessageRequested(tr("Cannot save file %1:\n%2").arg(fileName).arg(file.errorString()));
+    return false;
+  }
+
+  // write file
+  QApplication::setOverrideCursor(Qt::WaitCursor);
+  otStudy_.save(fileName.toUtf8().constData());
+  QApplication::restoreOverrideCursor();
+
+  emit recentFilesListChanged(fileName);
+
+  // update QSettings
+  QSettings settings;
+  settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+
+  return true;
+}
+
+
+bool OTStudyItem::closeOTStudy()
+{
+  // check if the analysis is running
+  if (analysisInProgress_)
+  {
+    emit emitErrorMessageRequested(tr("Can not remove a study when an analysis is running."));
+    return false;
+  }
+
+  // if there are modifications
+  bool canClose = false;
+  emit otStudyCloseRequested(this, &canClose);
+
+  if (canClose)
+    OTStudy::Remove(otStudy_);
+
+  return canClose;
 }
 
 
 void OTStudyItem::addDataModelItem(DesignOfExperiment & dataModel)
 {
-  // Physical model item
-  DesignOfExperimentItem * newDataModelItem = new DesignOfExperimentItem(dataModel);
-  connect(newDataModelItem, SIGNAL(designOfExperimentRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
-  connect(newDataModelItem, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), this, SLOT(updateDesignOfExperiment(DesignOfExperiment)));
-  appendRow(newDataModelItem);
+  OTguiItem * item = getTitleItemNamed(tr("Data models"), "DataModelsTitle");
 
+  // new Data model item
+  DataModelDiagramItem * newDataModelItem = new DataModelDiagramItem(dataModel);
+  item->appendRow(newDataModelItem);
+
+  // signal for StudyTreeView to create the window
   emit newDataModelItemCreated(newDataModelItem);
+
+  // Add sub items
+  newDataModelItem->fill();
 }
 
 
 void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
 {
-  // Physical model item
-  PhysicalModelItem * newPhysicalModelItem = new PhysicalModelItem(physicalModel);
-  connect(newPhysicalModelItem, SIGNAL(physicalModelRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
-  appendRow(newPhysicalModelItem);
+  const QString title = (physicalModel.getImplementation()->getClassName() == "MetaModel") ? tr("Metamodels") : tr("Physical models");
+  const QString titleType = (physicalModel.getImplementation()->getClassName() == "MetaModel") ? "MetaModelsTitle" : "PhysicalModelsTitle";
+  OTguiItem * item = getTitleItemNamed(title, titleType);
 
-  // Deterministic study item
-  QStandardItem * item = new QStandardItem(tr("Deterministic study"));
-  item->setData("DeterministicStudy", Qt::UserRole);
-  item->setEditable(false);
-  newPhysicalModelItem->appendRow(item);
+  // new Physical model item
+  PhysicalModelDiagramItem * newPhysicalModelItem = new PhysicalModelDiagramItem(physicalModel);
+  item->appendRow(newPhysicalModelItem);
 
-  // Probabilistic study item
-  item = new QStandardItem(tr("Probabilistic study"));
-  item->setData("ProbabilisticStudy", Qt::UserRole);
-  item->setEditable(false);
-  newPhysicalModelItem->appendRow(item);
-
-  // Probabilistic model item
-  if (physicalModel.hasStochasticInputs())
-  {
-    ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(physicalModel);
-    item->appendRow(newProbabilisticModelItem);
-    connect(newProbabilisticModelItem, SIGNAL(probabilisticModelRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
-    emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
-  }
-
-  // Designs of experiment item
-  item = new QStandardItem(tr("Designs of experiment"));
-  item->setData("DesignOfExperimentList", Qt::UserRole);
-  item->setEditable(false);
-  newPhysicalModelItem->appendRow(item);
-
+  // signal for StudyTreeView to create the window
   emit newPhysicalModelItemCreated(newPhysicalModelItem);
+
+  // Add sub items
+  newPhysicalModelItem->fill();
 }
 
 
 void OTStudyItem::addDesignOfExperimentItem(DesignOfExperiment & design)
 {
-  DesignOfExperimentItem * newItem = new DesignOfExperimentItem(design);
+  // search PhysicalModelDiagram observer
+  PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(design.getPhysicalModel().getImplementation().get()->getObserver("PhysicalModelDiagram"));
+  if (!pmItem)
+  {
+    qDebug() << "In OTStudyItem::addDesignOfExperimentItem: No item added for the design of experiment named " << design.getName().data() << "\n"
+           << "No physical model matches the given name " << design.getPhysicalModel().getName().data() << "\n";
+    return;
+  }
 
-  for (int i=0; i<rowCount(); ++i)
-    if (child(i)->text().toStdString() == design.getPhysicalModel().getName())
-    {
-      child(i)->child(2)->appendRow(newItem);
-      emit newDesignOfExperimentItemCreated(newItem);
-      connect(newItem, SIGNAL(designOfExperimentRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
-      connect(newItem, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), this, SLOT(updateDesignOfExperiment(DesignOfExperiment)));
-      return;
-    }
-  throw InvalidArgumentException(HERE) << "No physical model matches the given name " << design.getPhysicalModel().getName();
+  // append item for design
+  pmItem->appendDesignOfExperimentItem(design);
 }
 
 
 void OTStudyItem::addLimitStateItem(LimitState & limitState)
 {
-  LimitStateItem * newItem = new LimitStateItem(limitState);
+  // search PhysicalModelDiagram observer
+  PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(limitState.getPhysicalModel().getImplementation().get()->getObserver("PhysicalModelDiagram"));
+  if (!pmItem)
+  {
+    qDebug() << "In OTStudyItem::addLimitStateItem: No item added for the limit state named " << limitState.getName().data() << "\n"
+            << "No physical model matches the name " << limitState.getPhysicalModel().getName().data() << "\n";
+    return;
+  }
 
-  for (int i=0; i<rowCount(); ++i)
-    if (child(i)->text().toStdString() == limitState.getPhysicalModel().getName())
-    {
-      if (!limitState.getPhysicalModel().hasStochasticInputs() && !child(i)->child(1)->hasChildren())
-      {
-        ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(limitState.getPhysicalModel());
-        limitState.getPhysicalModel().addObserver(newProbabilisticModelItem);
-        child(i)->child(1)->appendRow(newProbabilisticModelItem);
-        emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
-      }
-      limitState.getPhysicalModel().addObserver(newItem);
-      child(i)->child(1)->appendRow(newItem);
-      emit newLimitStateItemCreated(newItem);
-      connect(newItem, SIGNAL(limitStateRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
-      return;
-    }
-  throw InvalidArgumentException(HERE) << "No physical model matches the name " << limitState.getPhysicalModel().getName();
+  // append item for limitState
+  pmItem->appendLimitStateItem(limitState);
 }
 
 
 void OTStudyItem::addAnalysisItem(Analysis & analysis)
 {
-  String analysisName = analysis.getImplementation()->getClassName();
-  AnalysisItem * newItem = new AnalysisItem(analysis, analysisName);
-
-  if (analysisName == "ModelEvaluation")
+  if (dynamic_cast<PhysicalModelAnalysis*>(analysis.getImplementation().get()))
   {
-    addDeterministicAnalysisItem(analysis, newItem);
-  }
-  else if (analysisName == "MonteCarloAnalysis" || analysisName == "TaylorExpansionMomentsAnalysis" ||
-           analysisName == "SobolAnalysis"      || analysisName == "SRCAnalysis")
-  {
-    addProbabilisticAnalysisItem(analysis, newItem);
-  }
-  else if (analysisName == "MonteCarloReliabilityAnalysis" ||
-           analysisName == "FORMImportanceSamplingAnalysis" ||
-           analysisName == "ImportanceSamplingAnalysis" ||
-           analysisName == "FORMAnalysis"
-          )
-  {
-    addReliabilityAnalysisItem(analysis, newItem);
-  }
-  else if (analysisName == "DataAnalysis"      ||
-           analysisName == "FunctionalChaosAnalysis" || analysisName == "KrigingAnalysis" ||
-           analysisName == "InferenceAnalysis" || analysisName == "CopulaInferenceAnalysis")
-  {
-    addDesignOfExperimentAnalysisItem(analysis, newItem);
-  }
-  else
-  {
-    throw InvalidArgumentException(HERE) << "In OTStudyItem::addAnalysisItem: Impossible to add an item for the analysis of type " << analysisName;
-  }
-  connect(newItem, SIGNAL(analysisChanged(Analysis)), this, SLOT(updateAnalysis(Analysis)));
-  connect(newItem, SIGNAL(analysisRemoved(QStandardItem*)), this, SLOT(removeItem(QStandardItem*)));
-  if (analysis.analysisLaunched())
-    analysis.getImplementation()->notify("analysisFinished");
-  else
-    analysis.getImplementation()->notify("analysisBadlyFinished");
-}
-
-
-void OTStudyItem::addDeterministicAnalysisItem(Analysis & analysis, AnalysisItem * item)
-{
-  for (int i=0; i<rowCount(); ++i)
-    if (child(i)->text().toStdString() == analysis.getModelName())
+    PhysicalModel model(dynamic_cast<PhysicalModelAnalysis*>(analysis.getImplementation().get())->getPhysicalModel());
+  // search PhysicalModelDiagram observer
+    PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(model.getImplementation().get()->getObserver("PhysicalModelDiagram"));
+    if (!pmItem)
     {
-      child(i)->child(0)->appendRow(item);
-      emit newAnalysisItemCreated(item);
+      qDebug() << "In OTStudyItem::addAnalysisItem: No item added for the analysis named " << analysis.getName().data() << ". Physical model item not found.\n";
       return;
     }
-  qDebug() << "In OTStudyItem::addDeterministicAnalysisItem: No item added for the deterministic analysis named " << analysis.getName().data() << "\n";
-}
-
-
-void OTStudyItem::addProbabilisticAnalysisItem(Analysis & analysis, AnalysisItem * item)
-{
-  for (int i=0; i<rowCount(); ++i)
-    if (child(i)->text().toStdString() == analysis.getModelName())
+    // append item for analysis
+    pmItem->appendAnalysisItem(analysis);
+  }
+  else if (dynamic_cast<DesignOfExperimentAnalysis*>(analysis.getImplementation().get()))
+  {
+    DesignOfExperiment design(dynamic_cast<DesignOfExperimentAnalysis*>(analysis.getImplementation().get())->getDesignOfExperiment());
+  // search DesignOfExperiment observer
+    DesignOfExperimentItem * doeItem;
+    if (design.hasPhysicalModel())
+      doeItem = dynamic_cast<DesignOfExperimentItem*>(design.getImplementation().get()->getObserver("DesignOfExperimentDefinition"));
+    else
+      doeItem = dynamic_cast<DesignOfExperimentItem*>(design.getImplementation().get()->getObserver("DataModelDiagram"));
+    if (!doeItem)
     {
-      if (!child(i)->child(1)->hasChildren())
-      {
-        PhysicalModel physicalModel(dynamic_cast<PhysicalModelAnalysis*>(&*analysis.getImplementation())->getPhysicalModel());
-        ProbabilisticModelItem * newProbabilisticModelItem = new ProbabilisticModelItem(physicalModel);
-        physicalModel.addObserver(newProbabilisticModelItem);
-        child(i)->child(1)->appendRow(newProbabilisticModelItem);
-        emit newProbabilisticModelItemCreated(newProbabilisticModelItem);
-      }
-      child(i)->child(1)->appendRow(item);
-      emit newAnalysisItemCreated(item);
+      qDebug() << "In OTStudyItem::addAnalysisItem: Impossible to add an item for the analysis " << analysis.getName().data() << ". Design of experiment item not found.\n";
       return;
     }
-  qDebug() << "In OTStudyItem::addProbabilisticAnalysisItem: No item added for the probabilistic analysis named " << analysis.getName().data() << "\n";
-}
-
-
-void OTStudyItem::addReliabilityAnalysisItem(Analysis & analysis, AnalysisItem * item)
-{
-  if (!dynamic_cast<ReliabilityAnalysis*>(&*analysis.getImplementation()))
-    throw InvalidArgumentException(HERE) << "In OTStudyItem::addReliabilityAnalysisItem: Impossible to add an item for the analysis " << analysis.getName();
-
-  String limitStateName = dynamic_cast<ReliabilityAnalysis*>(&*analysis.getImplementation())->getLimitState().getName();
-  for (int i=0; i<rowCount(); ++i)
-    if (child(i)->text().toStdString() == analysis.getModelName())
-    {
-      QStandardItem * probabilisticStudyItem = child(i)->child(1);
-      for (int j=0; j<probabilisticStudyItem->rowCount(); ++j)
-        if (probabilisticStudyItem->child(j)->text().toStdString() == limitStateName)
-        {
-          probabilisticStudyItem->child(j)->appendRow(item);
-          emit newAnalysisItemCreated(item);
-          return;
-        }
-    }
-  qDebug() << "In OTStudyItem::addReliabilityAnalysisItem: No item added for the reliability analysis named " << analysis.getName().data() << "\n";
-}
-
-
-void OTStudyItem::addDesignOfExperimentAnalysisItem(Analysis& analysis, AnalysisItem* item)
-{
-  if (!dynamic_cast<DesignOfExperimentAnalysis*>(&*analysis.getImplementation()))
-    throw InvalidArgumentException(HERE) << "In OTStudyItem::addDesignOfExperimentAnalysisItem: Impossible to add an item for the analysis " << analysis.getName();
-
-  connect(item, SIGNAL(metaModelCreated(PhysicalModel)), this, SLOT(addMetaModelItem(PhysicalModel)));
-
-  // DataModel
-  if (!dynamic_cast<DesignOfExperimentAnalysis*>(&*analysis.getImplementation())->getDesignOfExperiment().hasPhysicalModel())
-  {
-    for (int i=0; i<rowCount(); ++i)
-    {
-      DesignOfExperimentItem * DOEItem = dynamic_cast<DesignOfExperimentItem*>(child(i));
-      if (DOEItem)
-      {
-        if (DOEItem->text().toStdString() == analysis.getModelName())
-        {
-          DOEItem->appendRow(item);
-          connect(DOEItem, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), item, SLOT(setDesignOfExperiment(DesignOfExperiment)));
-          emit newAnalysisItemCreated(item);
-          return;
-        }
-      }
-    }
+    // append item for analysis
+    doeItem->appendAnalysisItem(analysis);
   }
-  // DOE
   else
-  {
-    for (int i=0; i<rowCount(); ++i)
-    {
-      if (child(i)->text().toStdString() == dynamic_cast<DesignOfExperimentAnalysis*>(&*analysis.getImplementation())->getDesignOfExperiment().getPhysicalModel().getName())
-      {
-        for (int j=0; j<child(i)->child(2)->rowCount(); ++j)
-        {
-          DesignOfExperimentItem * DOEItem = dynamic_cast<DesignOfExperimentItem*>(child(i)->child(2)->child(j));
-          if (DOEItem)
-          {
-            if (DOEItem->text().toStdString() == analysis.getModelName())
-            {
-              DOEItem->appendRow(item);
-              connect(DOEItem, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), item, SLOT(setDesignOfExperiment(DesignOfExperiment)));
-              emit newAnalysisItemCreated(item);
-              return;
-            }
-          }
-        }
-      }
-    }
-    throw InvalidArgumentException(HERE) << "In OTStudyItem::addDesignOfExperimentAnalysisItem: Impossible to add an item for the analysis " << analysis.getName();
-  }
-  throw InvalidArgumentException(HERE) << "In OTStudyItem::addDesignOfExperimentAnalysisItem: Impossible to add an item for the analysis " << analysis.getName();
+    qDebug() << "In OTStudyItem::addAnalysisItem: No item added for the analysis named " << analysis.getName().data() << "\n";
 }
 
 
@@ -366,13 +388,6 @@ void OTStudyItem::addMetaModelItem(PhysicalModel metaModel)
   const String availableName = otStudy_.getAvailablePhysicalModelName(metaModel.getName());
   metaModel.setName(availableName);
   otStudy_.add(metaModel);
-}
-
-
-void OTStudyItem::removeItem(QStandardItem * item)
-{
-  emit itemRemoved(item);
-  item->QStandardItem::parent()->removeRow(item->row());
 }
 
 
@@ -392,5 +407,13 @@ void OTStudyItem::setData(const QVariant & value, int role)
 OTStudy OTStudyItem::getOTStudy() const
 {
   return otStudy_;
+}
+
+
+void OTStudyItem::requestRemove()
+{
+  emit removeWindowRequested();
+  if (model())
+    model()->invisibleRootItem()->removeRow(row());
 }
 }

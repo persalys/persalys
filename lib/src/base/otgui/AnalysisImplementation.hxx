@@ -44,6 +44,8 @@ public:
 
   bool isReliabilityAnalysis() const;
 
+  bool isRunning() const;
+
   OT::Description getInterestVariables() const;
   virtual void setInterestVariables(const OT::Description& variablesNames);
 
@@ -64,6 +66,7 @@ protected:
 
 protected:
   bool isReliabilityAnalysis_;
+  bool isRunning_;
   OT::String informationMessage_;
   OT::String errorMessage_;
   bool stopRequested_;

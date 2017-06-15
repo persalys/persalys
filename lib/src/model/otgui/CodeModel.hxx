@@ -39,6 +39,9 @@ public:
   bool setData(const QModelIndex & index, const QVariant & value, int role);
   Qt::ItemFlags flags(const QModelIndex & index) const;
 
+signals:
+  void variablesChanged();
+
 private:
   PhysicalModel physicalModel_;
 };

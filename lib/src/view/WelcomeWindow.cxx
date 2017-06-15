@@ -20,9 +20,10 @@
  */
 #include "otgui/WelcomeWindow.hxx"
 
-#include <QGridLayout>
+#include <QVBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QPainter>
 
 namespace OTGUI {
 
@@ -36,7 +37,9 @@ WelcomeWindow::WelcomeWindow()
 void WelcomeWindow::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
-  mainLayout->addWidget(new QLabel(tr("To get started, select one action by pressing the corresponding button below.")), 0, Qt::AlignCenter);
+  QLabel * textLabel = new QLabel(tr("To get started, select one action by pressing the corresponding button below."));
+  textLabel->setStyleSheet("font: bold;");
+  mainLayout->addWidget(textLabel , 0, Qt::AlignCenter);
 
   QHBoxLayout * hlayout = new QHBoxLayout;
   hlayout->addStretch();
@@ -65,5 +68,19 @@ void WelcomeWindow::buildInterface()
   hlayout->addStretch();
 
   mainLayout->addLayout(hlayout);
+
+  // OT image
+  QLabel * imageLabel = new QLabel;
+  QPixmap pixmap(":/images/OT_image256x256.png");
+  QImage image(pixmap.size(), QImage::Format_ARGB32_Premultiplied);
+  image.fill(Qt::transparent);
+  QPainter p(&image);
+  p.setOpacity(0.4);
+  p.drawPixmap(0, 0, pixmap);
+  p.end();
+  QPixmap imagePixmap = QPixmap::fromImage(image);
+  imageLabel->setPixmap(imagePixmap);
+
+  mainLayout->addWidget(imageLabel, 0, Qt::AlignCenter);
 }
 }

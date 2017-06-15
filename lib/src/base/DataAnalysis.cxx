@@ -60,6 +60,7 @@ DataAnalysis* DataAnalysis::clone() const
 
 void DataAnalysis::run()
 {
+  isRunning_ = true;
   try
   {
     // clear result
@@ -216,17 +217,20 @@ void DataAnalysis::run()
     }
 
     // input sample
-    if (result_.getMin().getSize() <= designOfExperiment_.getInputSample().getDimension())
+    if (designOfExperiment_.getInputSample().getSize())
     {
-      Indices inputIndices(result_.getMin().getSize());
-      inputIndices.fill();
-      result_.setInputSample(designOfExperiment_.getInputSample().getMarginal(inputIndices));
+      if (result_.getMin().getSize() <= designOfExperiment_.getInputSample().getDimension())
+      {
+        Indices inputIndices(result_.getMin().getSize());
+        inputIndices.fill();
+        result_.setInputSample(designOfExperiment_.getInputSample().getMarginal(inputIndices));
+      }
+      else
+        result_.setInputSample(designOfExperiment_.getInputSample());
     }
-    else
-      result_.setInputSample(designOfExperiment_.getInputSample());
 
     // output sample
-    const int nbAnalysedOutputs = result_.getMin().getSize() - designOfExperiment_.getInputSample().getDimension();
+    const int nbAnalysedOutputs = result_.getMin().getSize() - (designOfExperiment_.getInputSample().getSize() > 0 ? designOfExperiment_.getInputSample().getDimension() : 0);
 
     if (nbAnalysedOutputs > 0)
     {
@@ -242,6 +246,7 @@ void DataAnalysis::run()
     errorMessage_ = ex.what();
     notify("analysisBadlyFinished");
   }
+  isRunning_ = false;
 }
 
 

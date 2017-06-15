@@ -33,8 +33,7 @@ class OTGUI_API ModelEvaluationWizard : public AnalysisWizard
   Q_OBJECT
 
 public:
-  ModelEvaluationWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel, QWidget* parent=0);
-  ModelEvaluationWizard(const Analysis & analysis, QWidget* parent=0);
+  ModelEvaluationWizard(const Analysis& analysis, QWidget* parent=0);
 
   virtual bool validateCurrentPage();
 

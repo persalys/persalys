@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to import sample to define data model
+ *  @brief QWizard to select a design of experiment
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,33 +18,29 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_IMPORTDATAMODELPAGE_HXX
-#define OTGUI_IMPORTDATAMODELPAGE_HXX
+#ifndef OTGUI_DESIGNOFEXPERIMENTSELECTIONWIZARD_HXX
+#define OTGUI_DESIGNOFEXPERIMENTSELECTIONWIZARD_HXX
 
-#include "otgui/ImportDataPage.hxx"
-#include "otgui/DataModelTableModel.hxx"
+#include "otgui/DesignOfExperimentDefinitionItem.hxx"
+#include "otgui/OTguiWizard.hxx"
+
+#include <QStandardItem>
+#include <QComboBox>
 
 namespace OTGUI {
-class OTGUI_API ImportDataModelPage : public ImportDataPage
+
+class OTGUI_API DesignOfExperimentSelectionWizard : public OTguiWizard
 {
   Q_OBJECT
 
 public:
-  ImportDataModelPage(const DataModel& dataModel, QWidget* parent = 0);
+  DesignOfExperimentSelectionWizard(QList<QStandardItem*> listDOE);
 
-  bool validatePage();
-
-protected:
-  virtual void setTable(const QString& fileName);
-
-public slots:
-  void updateErrorMessage(const QString& message);
-signals:
-  void dataModelChanged(const DataModel& dataModel);
+  DesignOfExperimentDefinitionItem* getSelectedDesignOfExperimentItem();
 
 private:
-  DataModel dataModel_;
-  DataModelTableModel * tableModel_;
+  QComboBox * comboBox_;
+  QStandardItemModel * comboModel_;
 };
 }
 #endif

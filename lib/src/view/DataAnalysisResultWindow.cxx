@@ -29,10 +29,10 @@ namespace OTGUI {
 DataAnalysisResultWindow::DataAnalysisResultWindow(AnalysisItem * item)
   : DataAnalysisWindow(item)
 {
-  if (dynamic_cast<DataAnalysis*>(&*item->getAnalysis().getImplementation()))
-    initialize(item);
-  else
+  if (!dynamic_cast<DataAnalysis*>(&*item->getAnalysis().getImplementation()))
     throw InvalidArgumentException (HERE) << "Can NOT build the DataAnalysisResultWindow: The analysis of the item is not valid";
+
+  initialize(item);
 
   buildInterface();
 
@@ -48,12 +48,15 @@ void DataAnalysisResultWindow::initialize(AnalysisItem* item)
   result_ = dynamic_cast<DataAnalysis*>(&*item->getAnalysis().getImplementation())->getResult();
 
   // inputs
-  for (UnsignedInteger i=0; i<result_.getInputSample().getDimension(); ++i)
+  if (result_.getInputSample().getSize())
   {
-    const String inputName = result_.getInputSample().getDescription()[i];
-    stochInputNames_ << QString::fromUtf8(inputName.c_str());
+    for (UnsignedInteger i=0; i<result_.getInputSample().getDimension(); ++i)
+    {
+      const String inputName = result_.getInputSample().getDescription()[i];
+      stochInputNames_ << QString::fromUtf8(inputName.c_str());
+    }
+    inAxisTitles_ = stochInputNames_;
   }
-  inAxisTitles_ = stochInputNames_;
 
   // outputs
   if (result_.getOutputSample().getSize())

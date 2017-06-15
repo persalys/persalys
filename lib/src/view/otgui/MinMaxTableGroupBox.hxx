@@ -43,7 +43,6 @@ public slots:
 
 private:
   ResizableStackedWidget * stackedWidget_;
-  bool onlyOutput_;
 };
 }
 #endif

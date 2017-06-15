@@ -21,37 +21,24 @@
 #ifndef OTGUI_PHYSICALMODELITEM_HXX
 #define OTGUI_PHYSICALMODELITEM_HXX
 
-#include "otgui/InputTableModel.hxx"
-#include "otgui/OutputTableModel.hxx"
 #include "otgui/PhysicalModel.hxx"
-
-#include <QStandardItem>
+#include "otgui/OTguiItem.hxx"
 
 namespace OTGUI {
-class OTGUI_API PhysicalModelItem : public QObject, public QStandardItem, public Observer
+class OTGUI_API PhysicalModelItem : public OTguiItem, public Observer
 {
   Q_OBJECT
 
 public:
-  PhysicalModelItem(const PhysicalModel & physicalModel);
+  PhysicalModelItem(const PhysicalModel & physicalModel, const OT::String observerType);
 
   PhysicalModel getPhysicalModel() const;
 
-  void setData(const QVariant & value, int role);
-
-  virtual void update(Observable * source, const OT::String & message);
-
-public slots:
 signals:
-  void inputChanged();
-  void modelInputsChanged();
-  void outputChanged();
-  void codeChanged();
-  void physicalModelRemoved(QStandardItem*);
-  void parallelizeStatusChanged();
-  void wantedMachineChanged();
+  void inputListDefinitionChanged();
+  void inputListDifferentiationChanged();
 
-private:
+protected:
   PhysicalModel physicalModel_;
 };
 }

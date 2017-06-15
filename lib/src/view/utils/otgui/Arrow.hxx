@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizard to import a data model
+ *  @brief QGraphicsLineItem to draw arrows
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,32 +18,41 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_DATAMODELWIZARD_HXX
-#define OTGUI_DATAMODELWIZARD_HXX
+#ifndef OTGUI_ARROW_HXX
+#define OTGUI_ARROW_HXX
 
-#include "otgui/OTguiWizard.hxx"
-#include "otgui/DesignOfExperiment.hxx"
-#include "otgui/DataModel.hxx"
+#include "otgui/OTGuiprivate.hxx"
+
+#include <QGraphicsLineItem>
+#include <QPainter>
+#include <QStyleOptionGraphicsItem>
 
 namespace OTGUI {
-
-class OTGUI_API DataModelWizard : public OTguiWizard
+class OTGUI_API Arrow : public QObject, public QGraphicsLineItem
 {
   Q_OBJECT
 
 public:
-  DataModelWizard(const DesignOfExperiment & designOfExperiment, QWidget* parent=0);
+  enum { Type = UserType + 4 };
 
-  DataModel getDataModel() const;
+  Arrow(QPointF startP, QPointF endP, QGraphicsItem* parent = 0);
+
+  virtual int type() const;
+  virtual QRectF boundingRect() const;
+  virtual QPainterPath shape() const;
+  void setColor(const QColor &color);
 
 protected:
-  void buildInterface();
+  virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
 public slots:
-  void setDataModel(const DataModel & dataModel);
+  void setValidity(bool);
 
 private:
-  DataModel dataModel_;
+  QPointF startP_;
+  QPointF endP_;
+  QColor color_;
+  QPolygonF arrowHead_;
 };
 }
 #endif

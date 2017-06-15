@@ -22,13 +22,8 @@
 #define OTGUI_CENTRALTENDENCYWIZARD_HXX
 
 #include "otgui/AnalysisWizard.hxx"
-#include "otgui/StopCriteriaGroupBox.hxx"
-#include "otgui/BlockSizeGroupBox.hxx"
-#include "otgui/OutputsSelectionGroupBox.hxx"
-#include "otgui/TaylorExpansionMomentsAnalysis.hxx"
-#include "otgui/MonteCarloAnalysis.hxx"
-
-#include <QLabel>
+#include "otgui/IntroCentralTendencyPage.hxx"
+#include "otgui/MonteCarloPage.hxx"
 
 namespace OTGUI {
 class OTGUI_API CentralTendencyWizard : public AnalysisWizard
@@ -36,36 +31,19 @@ class OTGUI_API CentralTendencyWizard : public AnalysisWizard
   Q_OBJECT
 
 public:
-  enum Method {MonteCarlo, TaylorExpansionMoments};
+  enum {Page_Intro, Page_MonteCarlo};
 
-  CentralTendencyWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel, QWidget* parent=0);
-  CentralTendencyWizard(const Analysis & analysis, QWidget* parent=0);
+  CentralTendencyWizard(const Analysis& analysis, QWidget* parent=0);
 
-  virtual bool validateCurrentPage();
+  virtual Analysis getAnalysis() const;
+  virtual int nextId() const;
 
 protected:
   void buildInterface();
 
-public slots:
-  void updateMethodWidgets(int);
-  void maxiCoefficientOfVariationChanged(double);
-  void maxiTimeChanged(int);
-  void maxiCallsChanged(double);
-  void confidenceIntervalRequired(bool);
-  void levelConfidenceIntervalChanged(double);
-  void seedChanged(int);
-  void blockSizeChanged(double);
-  void setInterestVariables(QStringList);
-
 private:
-  MonteCarloAnalysis MCAnalysis_;
-  TaylorExpansionMomentsAnalysis taylorAnalysis_;
-  OutputsSelectionGroupBox * outputsGroupBox_;
-  QWidget * monteCarloWidget_;
-  StopCriteriaGroupBox * stopCriteriaGroupBox_;
-  BlockSizeGroupBox * blockSizeGroupBox_;
-  QWidget * TaylorExpansionsWidget_;
-  QLabel * errorMessageLabel_;
+  IntroCentralTendencyPage * introPage_;
+  MonteCarloPage * monteCarloPage_;
 };
 }
 #endif

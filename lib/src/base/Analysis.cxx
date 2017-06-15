@@ -75,6 +75,12 @@ bool Analysis::isReliabilityAnalysis() const
 }
 
 
+bool Analysis::isRunning() const
+{
+  return getImplementation()->isRunning();
+}
+
+
 String Analysis::getInformationMessage() const
 {
   return getImplementation()->getInformationMessage();

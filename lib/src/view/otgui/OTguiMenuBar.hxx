@@ -41,14 +41,13 @@ public slots:
   void updateRecentFilesList(const QString & fileName);
   void updateRecentFilesActionsList();
   void clearRecentFilesActions();
-  void changeActionsAvailability(const bool availability);
+  void updateActionsAvailability(const bool analysisInProgress);
 signals:
   void createNewOTStudy();
   void openOTStudy();
   void openOTStudy(QString);
   void saveOTStudy();
   void saveAsOTStudy();
-  void exportPython();
   void importPython();
   void closeOTStudy();
   void closeWindow();

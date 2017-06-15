@@ -32,17 +32,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-ModelEvaluationWizard::ModelEvaluationWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel, QWidget* parent)
-  : AnalysisWizard(ModelEvaluation(otStudy.getAvailableAnalysisName("evaluation_"), physicalModel), parent)
-  , table_(0)
-  , outputsGroupBox_(0)
-  , errorMessageLabel_(new QLabel)
-{
-  buildInterface();
-}
-
-
-ModelEvaluationWizard::ModelEvaluationWizard(const Analysis & analysis, QWidget* parent)
+ModelEvaluationWizard::ModelEvaluationWizard(const Analysis& analysis, QWidget* parent)
   : AnalysisWizard(analysis, parent)
   , errorMessageLabel_(new QLabel)
 {

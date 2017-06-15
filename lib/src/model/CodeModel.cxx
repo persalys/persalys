@@ -64,8 +64,11 @@ bool CodeModel::setData(const QModelIndex & index, const QVariant & value, int r
 
   if (role == Qt::EditRole)
   {
+    physicalModel_.blockNotification("PhysicalModelDefinition");
     dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get())->setCode(value.toString().toLocal8Bit().data());
+    physicalModel_.blockNotification();
     emit dataChanged(index, index);
+    emit variablesChanged();
     return true;
   }
   return false;

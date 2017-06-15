@@ -19,72 +19,23 @@
  *
  */
 #include "otgui/PhysicalModelItem.hxx"
-#include "otgui/PythonPhysicalModel.hxx"
 
 using namespace OT;
 
 namespace OTGUI {
 
-PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel)
-  : QObject()
-  , QStandardItem(QString::fromUtf8(physicalModel.getName().c_str()))
-  , Observer("PhysicalModel")
+PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel, const String observerType)
+  : OTguiItem("Unnamed", "NoUserRole")
+  , Observer(observerType)
   , physicalModel_(physicalModel)
 {
+  setData(observerType.c_str(), Qt::UserRole);
   physicalModel_.addObserver(this);
-  setData("PhysicalModel", Qt::UserRole);
-}
-
-
-void PhysicalModelItem::setData(const QVariant & value, int role)
-{
-  if (role == Qt::EditRole)
-    physicalModel_.getImplementation()->setName(value.toString().toLocal8Bit().data());
-
-  QStandardItem::setData(value, role);
 }
 
 
 PhysicalModel PhysicalModelItem::getPhysicalModel() const
 {
   return physicalModel_;
-}
-
-
-void PhysicalModelItem::update(Observable* source, const String & message)
-{
-  if (message == "inputNameChanged" || message == "inputDescriptionChanged" ||
-      message == "inputAdded" || message == "inputRemoved" || message == "inputValueChanged" ||
-      message == "inputStepChanged")
-  {
-    emit inputChanged();
-  }
-  else if (message == "modelInputsChanged")
-  {
-    emit modelInputsChanged();
-    emit outputChanged();
-  }
-  else if (message == "outputNameChanged" || message == "outputAdded" ||
-           message == "outputRemoved" || message == "outputValueChanged" ||
-           message == "outputDescriptionChanged")
-  {
-    emit outputChanged();
-  }
-  else if (message == "codeChanged")
-  {
-    emit codeChanged();
-  }
-  else if (message == "parallelizeStatusChanged")
-  {
-    emit parallelizeStatusChanged();
-  }
-  else if (message == "wantedMachineChanged")
-  {
-    emit wantedMachineChanged();
-  }
-  else if (message == "physicalModelRemoved")
-  {
-    emit physicalModelRemoved(this);
-  }
 }
 }

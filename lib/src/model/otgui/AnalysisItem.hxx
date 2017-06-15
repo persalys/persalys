@@ -21,19 +21,18 @@
 #ifndef OTGUI_ANALYSISITEM_HXX
 #define OTGUI_ANALYSISITEM_HXX
 
+#include "otgui/OTguiItem.hxx"
 #include "otgui/Analysis.hxx"
 #include "otgui/MetaModel.hxx"
 #include "otgui/DesignOfExperiment.hxx"
 
-#include <QStandardItem>
-
 namespace OTGUI {
-class OTGUI_API AnalysisItem : public QObject, public QStandardItem, public Observer
+class OTGUI_API AnalysisItem : public OTguiItem, public Observer
 {
   Q_OBJECT
 
 public:
-  AnalysisItem(const Analysis & analysis, const OT::String & typeAnalysis="Analysis");
+  AnalysisItem(const Analysis & analysis);
 
   void setData(const QVariant & value, int role);
 
@@ -41,21 +40,33 @@ public:
 
   virtual void update(Observable * source, const OT::String & message);
 
+  static void GetAnalysisParameters(const Analysis& analysis, QStringList& namesList, QStringList& valuesList);
+
+protected:
+  void buildActions();
+  QStandardItem * getParentItem(const QString itemType);
+
 public slots:
+  void processLaunched();
+  void processFinished();
   void updateAnalysis(const Analysis & analysis);
   void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
   void stopAnalysis();
+  void modifyAnalysis();
+  void removeAnalysis();
 signals:
   void analysisFinished(AnalysisItem*);
-  void analysisBadlyFinished(AnalysisItem*, QString);
+  void analysisBadlyFinished(AnalysisItem*);
   void analysisRemoved(QStandardItem*);
-  void analysisChanged(const Analysis&);
   void metaModelCreated(PhysicalModel);
   void messageChanged(QString);
   void progressValueChanged(int);
+  void modifyAnalysisRequested(AnalysisItem*);
 
 private:
   Analysis analysis_;
+  QAction * modifyAnalysis_;
+  QAction * removeAnalysis_;
 };
 }
 #endif

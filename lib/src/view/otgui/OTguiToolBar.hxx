@@ -36,7 +36,7 @@ protected:
   void buildActions();
 
 public slots:
-  void changeActionsAvailability(const bool availability);
+  void updateActionsAvailability(const bool analysisInProgress);
 signals:
   void createNewOTStudy();
   void openOTStudy();

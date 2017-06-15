@@ -59,6 +59,7 @@ FORMImportanceSamplingAnalysis* FORMImportanceSamplingAnalysis::clone() const
 
 void FORMImportanceSamplingAnalysis::run()
 {
+  isRunning_ = true;
   // No section try/except here as for the other analyses
   // because this section is directly in FORMAnalysis/IS::run
 
@@ -76,6 +77,7 @@ void FORMImportanceSamplingAnalysis::run()
   if (!formAnalysis.getErrorMessage().empty() || designPoint.getSize() == 0)
   {
     errorMessage_ = "Error when processing the FORM analysis.\n" + formAnalysis.getErrorMessage();
+    isRunning_ = false;
     notify("analysisBadlyFinished");
     return;
   }
@@ -86,6 +88,7 @@ void FORMImportanceSamplingAnalysis::run()
   // Importance sampling
   setStandardSpaceDesignPoint(designPoint);
   ImportanceSamplingAnalysis::run();
+  isRunning_ = false;
 }
 
 

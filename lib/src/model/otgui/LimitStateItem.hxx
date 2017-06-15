@@ -22,11 +22,10 @@
 #define OTGUI_LIMITSTATEITEM_HXX
 
 #include "otgui/LimitState.hxx"
-
-#include <QStandardItem>
+#include "otgui/AnalysisItem.hxx"
 
 namespace OTGUI {
-class OTGUI_API LimitStateItem : public QObject, public QStandardItem, public Observer
+class OTGUI_API LimitStateItem : public OTguiItem, public Observer
 {
   Q_OBJECT
 
@@ -39,16 +38,24 @@ public:
 
   virtual void update(Observable * source, const OT::String & message);
 
+  void appendAnalysisItem(Analysis& analysis);
+
+protected:
+  void buildActions();
+
 public slots:
+  void createNewThresholdExceedance();
+  void removeLimitState();
 signals:
-  void outputChanged();
-  void outputNameChanged();
+  void outputListChanged();
   void operatorChanged();
   void thresholdChanged();
-  void limitStateRemoved(QStandardItem*);
+  void newAnalysisItemCreated(AnalysisItem*);
 
 private:
   LimitState limitState_;
+  QAction * newThresholdExceedance_;
+  QAction * removeLimitState_;
 };
 }
 #endif

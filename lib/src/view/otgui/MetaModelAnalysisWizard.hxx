@@ -22,14 +22,10 @@
 #define OTGUI_METAMODELANALYSISWIZARD_HXX
 
 #include "otgui/AnalysisWizard.hxx"
-#include "otgui/FunctionalChaosAnalysis.hxx"
-#include "otgui/KrigingAnalysis.hxx"
-#include "otgui/CollapsibleGroupBox.hxx"
-#include "otgui/OutputsSelectionGroupBox.hxx"
-#include "otgui/DoubleSpinBox.hxx"
-
-#include <QLabel>
-#include <QLineEdit>
+#include "otgui/OTguiItem.hxx"
+#include "otgui/IntroMetaModelPage.hxx"
+#include "otgui/KrigingPage.hxx"
+#include "otgui/FunctionalChaosPage.hxx"
 
 namespace OTGUI {
 class OTGUI_API MetaModelAnalysisWizard : public AnalysisWizard
@@ -38,45 +34,21 @@ class OTGUI_API MetaModelAnalysisWizard : public AnalysisWizard
 
 public:
   enum Method {chaos, kriging};
+  enum {Page_Intro, Page_KrigingMethod, Page_ChaosMethod};
 
-  MetaModelAnalysisWizard(const OTStudy& otStudy, const DesignOfExperiment& designOfExperiment, QWidget* parent=0);
-  MetaModelAnalysisWizard(const Analysis& analysis, QWidget* parent=0);
+  MetaModelAnalysisWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard=false, QWidget* parent=0);
 
+  virtual int nextId() const;
   virtual bool validateCurrentPage();
 
 protected:
   void buildInterface();
-  void updateScaleLineEdit();
-
-public slots:
-  void updateMethodWidgets(int);
-  void chaosDegreeChanged(int);
-  void sparseChaosChanged(bool);
-  void looValidationChanged(bool);
-  void setInterestVariables(QStringList);
-  void openScaleDefinitionWizard();
-  void updateCovarianceModel(int);
-  void updateOptimizeParameters(bool);
-  void updateAmplitude(double);
-  void updateMaternParameterNu(double);
-  void updateGeneralizedModelParameterP(double);
-  void updateBasis(int);
 
 private:
-  FunctionalChaosAnalysis chaos_;
-  KrigingAnalysis kriging_;
-  OutputsSelectionGroupBox * outputsGroupBox_;
-  QGroupBox * chaosParametersBox_;
-  CollapsibleGroupBox * chaosAdvancedParamGroupBox_;
-  QGroupBox * krigingParametersBox_;
-  CollapsibleGroupBox * krigingAdvancedParamGroupBox_;
-  QLineEdit * scaleLineEdit_;
-  DoubleSpinBox * amplitudeSpinBox_;
-  QLabel * maternParameterNuLabel_;
-  DoubleSpinBox * maternParameterNuSpinBox_;
-  QLabel * generalizedModelParameterPLabel_;
-  DoubleSpinBox * generalizedModelParameterPSpinBox_;
-  QLabel * errorMessageLabel_;
+  QList<DesignOfExperiment> doeList_;
+  IntroMetaModelPage * introPage_;
+  KrigingPage * krigingPage_;
+  FunctionalChaosPage * functionalChaosPage_;
 };
 }
 #endif

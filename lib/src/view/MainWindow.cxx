@@ -60,14 +60,6 @@ void MainWindow::buildInterface()
   leftSideSplitter->addWidget(studyTree_);
   leftSideSplitter->setStretchFactor(0, 8);
 
-  dockControllerWidget_ = new QDockWidget(tr("Current analysis"));
-  dockControllerWidget_->setFeatures(QDockWidget::NoDockWidgetFeatures);
-  connect(studyTree_, SIGNAL(showControllerWidget(QWidget*)), this, SLOT(showControllerWidget(QWidget*)));
-  connect(studyTree_, SIGNAL(analysisFinished()), dockControllerWidget_, SLOT(close()));
-  leftSideSplitter->addWidget(dockControllerWidget_);
-  dockControllerWidget_->close();
-  leftSideSplitter->setStretchFactor(1, 2);
-
   configurationDock_ = new QDockWidget(tr("Graph settings"));
   configurationDock_->setFeatures(QDockWidget::NoDockWidgetFeatures);
   connect(studyTree_, SIGNAL(graphWindowActivated(QWidget*)), this, SLOT(showGraphConfigurationTabWidget(QWidget*)));
@@ -125,14 +117,13 @@ void MainWindow::buildInterface()
   connect(menuBar, SIGNAL(createNewOTStudy()), studyTree_, SLOT(createNewOTStudy()));
   connect(menuBar, SIGNAL(openOTStudy()), studyTree_, SLOT(openOTStudy()));
   connect(menuBar, SIGNAL(openOTStudy(QString)), studyTree_, SLOT(openOTStudy(QString)));
-  connect(menuBar, SIGNAL(saveOTStudy()), studyTree_, SLOT(saveOTStudy()));
-  connect(menuBar, SIGNAL(saveAsOTStudy()), studyTree_, SLOT(saveAsOTStudy()));
-  connect(menuBar, SIGNAL(exportPython()), studyTree_, SLOT(exportPython()));
+  connect(menuBar, SIGNAL(saveOTStudy()), studyTree_, SLOT(saveCurrentOTStudy()));
+  connect(menuBar, SIGNAL(saveAsOTStudy()), studyTree_, SLOT(saveAsCurrentOTStudy()));
   connect(menuBar, SIGNAL(importPython()), this, SLOT(importPython()));
   connect(menuBar, SIGNAL(closeOTStudy()), studyTree_, SLOT(closeOTStudy()));
   connect(menuBar, SIGNAL(closeWindow()), this, SLOT(exitApplication()));
   connect(studyTree_, SIGNAL(recentFilesListChanged(QString)), menuBar, SLOT(updateRecentFilesList(QString)));
-  connect(studyTree_, SIGNAL(actionsAvailabilityChanged(bool)), menuBar, SLOT(changeActionsAvailability(bool)));
+  connect(studyTree_, SIGNAL(analysisInProgressStatusChanged(bool)), menuBar, SLOT(updateActionsAvailability(bool)));
   setMenuBar(menuBar);
 
   // tool bar
@@ -140,8 +131,8 @@ void MainWindow::buildInterface()
   connect(toolBar, SIGNAL(createNewOTStudy()), studyTree_, SLOT(createNewOTStudy()));
   connect(toolBar, SIGNAL(openOTStudy()), studyTree_, SLOT(openOTStudy()));
   connect(toolBar, SIGNAL(importPython()), this, SLOT(importPython()));
-  connect(toolBar, SIGNAL(saveOTStudy()), studyTree_, SLOT(saveOTStudy()));
-  connect(studyTree_, SIGNAL(actionsAvailabilityChanged(bool)), toolBar, SLOT(changeActionsAvailability(bool)));
+  connect(toolBar, SIGNAL(saveOTStudy()), studyTree_, SLOT(saveCurrentOTStudy()));
+  connect(studyTree_, SIGNAL(analysisInProgressStatusChanged(bool)), toolBar, SLOT(updateActionsAvailability(bool)));
   addToolBar(toolBar);
 
   // status bar
@@ -165,7 +156,7 @@ void MainWindow::buildActions()
 
   action = new QAction(tr("Save"), this);
   action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_S));
-  connect(action, SIGNAL(triggered()), studyTree_, SLOT(saveOTStudy()));
+  connect(action, SIGNAL(triggered()), studyTree_, SLOT(saveCurrentOTStudy()));
   addAction(action);
 
   action = new QAction(QIcon(":/images/window-close.png"), tr("E&xit"), this);
@@ -225,14 +216,6 @@ void MainWindow::showGraphConfigurationTabWidget(QWidget * graph)
 {
   configurationDock_->setWidget(graph);
   configurationDock_->show();
-}
-
-
-void MainWindow::showControllerWidget(QWidget* widget)
-{
-  dockControllerWidget_->setWidget(widget);
-  dockControllerWidget_->show();
-  configurationDock_->close();
 }
 
 

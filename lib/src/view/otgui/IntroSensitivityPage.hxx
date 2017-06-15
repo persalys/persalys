@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Base class for otgui error window
+ *  @brief QWizardPage to define the method of sensitivity analysis
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,24 +18,38 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_ANALYSISEXECUTIONFAILEDWINDOW_HXX
-#define OTGUI_ANALYSISEXECUTIONFAILEDWINDOW_HXX
+#ifndef OTGUI_INTROSENSITIVITYPAGE_HXX
+#define OTGUI_INTROSENSITIVITYPAGE_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
-#include "otgui/AnalysisItem.hxx"
+#include "otgui/Analysis.hxx"
+#include "otgui/OutputsSelectionGroupBox.hxx"
+
+#include <QWizardPage>
+#include <QLabel>
+#include <QButtonGroup>
 
 namespace OTGUI {
-class OTGUI_API AnalysisExecutionFailedWindow : public OTguiSubWindow
+
+class OTGUI_API IntroSensitivityPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  AnalysisExecutionFailedWindow(AnalysisItem * item, const QString & errorMessage);
+  enum Method {Sobol, SRC};
 
-protected:
-  void buildInterface();
+  IntroSensitivityPage(QWidget* parent=0);
+
+  void initialize(const Analysis& analysis);
+  OT::Description getInterestVariables() const;
+
+  virtual int nextId() const;
+  virtual bool validatePage();
+
 private:
-  QString analysisErrorMessage_;
+  OutputsSelectionGroupBox * outputsSelectionGroupBox_;
+  QButtonGroup * methodGroup_;
+  QLabel * errorMessageLabel_;
+  OT::Description interestVariables_;
 };
 }
 #endif

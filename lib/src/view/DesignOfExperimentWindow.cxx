@@ -22,6 +22,7 @@
 
 #include "otgui/MinMaxTableGroupBox.hxx"
 #include "otgui/ParametersTableView.hxx"
+#include "otgui/DesignOfExperimentAnalysis.hxx"
 
 #include <QVBoxLayout>
 #include <QScrollArea>
@@ -49,6 +50,34 @@ DesignOfExperimentWindow::DesignOfExperimentWindow(DesignOfExperimentItem * item
   , plotMatrix_X_X_ConfigurationWidget_(0)
   , plotMatrixConfigurationWidget_(0)
 {
+  buildInterface();
+  connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
+}
+
+
+DesignOfExperimentWindow::DesignOfExperimentWindow(AnalysisItem* item)
+  : OTguiSubWindow(item)
+  , designOfExperiment_()
+  , variablesGroupBox_(0)
+  , variablesListWidget_(0)
+  , tabWidget_(0)
+  , tablesTabWidget_(0)
+  , scatterPlotsTabWidget_(0)
+  , tableView_(0)
+  , tableModel_(0)
+  , failedPointsTableView_(0)
+  , failedPointsTableModel_(0)
+  , notEvaluatedTableView_(0)
+  , notEvaluatedTableModel_(0)
+  , scatterPlotsConfigurationWidget_(0)
+  , plotMatrix_X_X_ConfigurationWidget_(0)
+  , plotMatrixConfigurationWidget_(0)
+{
+  if (!dynamic_cast<DesignOfExperimentAnalysis*>(item->getAnalysis().getImplementation().get()))
+    throw InvalidArgumentException (HERE) << "The analysis must be a DesignOfExperimentAnalysis";
+
+  designOfExperiment_ = dynamic_cast<DesignOfExperimentAnalysis*>(item->getAnalysis().getImplementation().get())->getDesignOfExperiment();
+
   buildInterface();
   connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
 }
@@ -244,7 +273,7 @@ void DesignOfExperimentWindow::addTabsForOutputs()
   tabLayout->addWidget(aGroupBox);
 
   // min/max table
-  MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(*dynamic_cast<DataSample*>(&*designOfExperiment_.getImplementation()));
+  MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(*dynamic_cast<DataSample*>(designOfExperiment_.getImplementation().get()));
   tabLayout->addWidget(minMaxTableGroupBox);
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
 
@@ -303,15 +332,19 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const Numeric
 {
   QVector<PlotWidget*> listScatterPlotWidgets;
 
-  const UnsignedInteger nbInputs = inS.getDimension();
-  const UnsignedInteger nbOutputs = outS.getSize()? outS.getDimension() : 0;
+  const UnsignedInteger nbInputs = inS.getSize() ? inS.getDimension() : 0;
+  const UnsignedInteger nbOutputs = outS.getSize() ? outS.getDimension() : 0;
   const QPen pen = QPen(Qt::blue, 4);
   const QPen notValidPen = QPen(Qt::red, 4);
 
-  const NumericalSample inSrank(inS.rank() / (inS.getSize()));
+  // in rank
+  NumericalSample inSrank;
+  if (nbInputs)
+    inSrank = inS.rank() / (inS.getSize());
   NumericalSample notValidInSrank;
   if (notValidInS.getSize())
     notValidInSrank = notValidInS.rank() / (notValidInS.getSize());
+  // out rank
   NumericalSample outSrank;
   if (nbOutputs)
     outSrank = outS.rank() / (outS.getSize());

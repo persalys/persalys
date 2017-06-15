@@ -112,8 +112,7 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
   // update finite difference step
   updateFiniteDifferenceSteps();
 
-  notify("inputAdded");
-  notify("modelInputsChanged");
+  notify("inputNumberChanged");
 }
 
 
@@ -132,7 +131,6 @@ void PhysicalModelImplementation::setInputName(const OT::String & inputName, con
 
   getInputByName(inputName).setName(newName);
   notify("inputNameChanged");
-  notify("modelInputsChanged");
 }
 
 
@@ -149,7 +147,6 @@ void PhysicalModelImplementation::setInputValue(const String & inputName, const 
   for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
     getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
   notify("inputValueChanged");
-  notify("modelInputsChanged");
 }
 
 
@@ -160,8 +157,8 @@ void PhysicalModelImplementation::setDistribution(const String & inputName, cons
   getInputByName(inputName).setDistribution(distribution);
 
   // update copula if need
-  if ((!inputOldStateIsStochastic && distribution.getImplementation()->getClassName()!="Dirac") ||
-      (inputOldStateIsStochastic && distribution.getImplementation()->getClassName()=="Dirac"))
+  if ((!inputOldStateIsStochastic && distribution.getImplementation()->getClassName() != "Dirac") ||
+      (inputOldStateIsStochastic && distribution.getImplementation()->getClassName() == "Dirac"))
     updateCopula();
 
   notify("inputDistributionChanged");
@@ -192,8 +189,7 @@ void PhysicalModelImplementation::addInput(const Input & input)
   // update finite difference step
   updateFiniteDifferenceSteps();
 
-  notify("inputAdded");
-  notify("modelInputsChanged");
+  notify("inputNumberChanged");
 }
 
 
@@ -223,8 +219,7 @@ void PhysicalModelImplementation::removeInput(const String & inputName)
         for (UnsignedInteger j=0; j<getOutputs().getSize(); ++j)
           getOutputByName(getOutputs()[j].getName()).setHasBeenComputed(false);
 
-        notify("inputRemoved");
-        notify("modelInputsChanged");
+        notify("inputNumberChanged");
         break;
       }
     }
@@ -242,6 +237,7 @@ void PhysicalModelImplementation::updateCopula()
   if (!stochasticInputNames.getSize())
   {
     copula_ = Copula();
+    notify("copulaChanged");
     return;
   }
 
@@ -359,8 +355,7 @@ void PhysicalModelImplementation::setOutputs(const OutputCollection & outputs)
     throw InvalidArgumentException(HERE) << "Two outputs can not have the same name.";
 
   outputs_ = outputs;
-  notify("outputAdded");
-  notify("modelOutputsChanged");
+  notify("outputNumberChanged");
 }
 
 
@@ -379,7 +374,6 @@ void PhysicalModelImplementation::setOutputName(const OT::String & outputName, c
 
   getOutputByName(outputName).setName(newName);
   notify("outputNameChanged");
-  notify("modelOutputsChanged");
 }
 
 
@@ -411,8 +405,7 @@ void PhysicalModelImplementation::addOutput(const Output & output)
     throw InvalidArgumentException(HERE) << "The physical model already contains an output named " << output.getName(); 
 
   outputs_.add(output);
-  notify("outputAdded");
-  notify("modelOutputsChanged");
+  notify("outputNumberChanged");
 }
 
 
@@ -424,8 +417,7 @@ void PhysicalModelImplementation::removeOutput(const String & outputName)
       if (outputs_[i].getName() == outputName)
       {
         outputs_.erase(outputs_.begin() + i);
-        notify("outputRemoved");
-        notify("modelOutputsChanged");
+        notify("outputNumberChanged");
         break;
       }
   }
@@ -593,6 +585,7 @@ void PhysicalModelImplementation::setCopula(const Copula & copula)
 
   copula_ = copula;
   copula_.setDescription(getStochasticInputNames());
+  notify("copulaChanged");
 }
 
 

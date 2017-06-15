@@ -22,9 +22,14 @@
 #define OTGUI_APPROXIMATIONRELIABILITYPAGE_HXX
 
 #include "otgui/LimitState.hxx"
-#include "otgui/OptimizationWidget.hxx"
+#include "otgui/Analysis.hxx"
+#include "otgui/LogDoubleSpinBox.hxx"
+#include "otgui/UIntSpinBox.hxx"
+
+#include <openturns/OptimizationSolver.hxx>
 
 #include <QWizardPage>
+#include <QLineEdit>
 #include <QButtonGroup>
 
 namespace OTGUI {
@@ -33,11 +38,13 @@ class OTGUI_API ApproximationReliabilityPage : public QWizardPage
   Q_OBJECT
 
 public:
-  enum Method {FORM};
+  enum Method {FORM = 3};
+  enum OptimAlgo {AbdoRackwitzAlgo, CobylaAlgo, SQPAlgo};
 
   ApproximationReliabilityPage(QWidget* parent=0);
 
   void initialize(const Analysis& analysis);
+  OT::OptimizationSolver getOptimizationAlgorithm() const;
   Analysis getAnalysis(const OT::String& name, const LimitState& limitState) const;
 
   virtual int nextId() const;
@@ -45,10 +52,21 @@ public:
 
 protected:
   void buildInterface();
+  void updatePointLineEdit();
+
+public slots:
+  void openPointDefinitionWizard();
 
 private:
-  QButtonGroup * methodGroup_;
-  OptimizationWidget * optimWidget_;
+  OT::Description inputNames_;
+  OT::NumericalPoint startingPoint_;
+  QLineEdit * pointLineEdit_;
+  QButtonGroup * algoChoice_;
+  UIntSpinBox * iterationsSpinBox_;
+  LogDoubleSpinBox * absoluteErrSpinBox_;
+  LogDoubleSpinBox * relativeErrSpinBox_;
+  LogDoubleSpinBox * residualErrSpinBox_;
+  LogDoubleSpinBox * constraintErrSpinBox_;
 };
 }
 #endif

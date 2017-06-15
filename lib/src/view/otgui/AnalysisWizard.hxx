@@ -31,7 +31,7 @@ public:
   AnalysisWizard(const Analysis & analysis, QWidget * parent=0);
 
   // analysis accessor
-  Analysis getAnalysis() const;
+  virtual Analysis getAnalysis() const;
 
 protected:
   Analysis analysis_;

@@ -58,7 +58,7 @@ void OTguiMenuBar::buildActions()
     recentFileActions_[i]->setVisible(false);
     connect(recentFileActions_[i], SIGNAL(triggered()), this, SLOT(openRecentFile()));
   }
-  recentFilesMenu_ = fileMenu->addMenu(tr("Open Recent"));
+  recentFilesMenu_ = fileMenu->addMenu(QIcon(":/images/document-open-recent.png"), tr("Open Recent"));
   for(int i=0; i<NbMaxRecentFiles; ++i)
     recentFilesMenu_->addAction(recentFileActions_[i]);
   updateRecentFilesActionsList();
@@ -88,12 +88,6 @@ void OTguiMenuBar::buildActions()
   importPythonAction_->setStatusTip(tr("Import a Python Script"));
   connect(importPythonAction_, SIGNAL(triggered()), this, SIGNAL(importPython()));
   fileMenu->addAction(importPythonAction_);
-
-  
-  action = new QAction(QIcon(":/images/document-export.png"), tr("Export Python"), this);
-  action->setStatusTip(tr("Export the current OTStudy in a Python Script"));
-  connect(action, SIGNAL(triggered()), this, SIGNAL(exportPython()));
-  fileMenu->addAction(action);
 
   addSeparator();
 
@@ -178,8 +172,9 @@ void OTguiMenuBar::clearRecentFilesActions()
 }
 
 
-void OTguiMenuBar::changeActionsAvailability(const bool availability)
+void OTguiMenuBar::updateActionsAvailability(const bool analysisInProgress)
 {
-  importPythonAction_->setEnabled(availability);
+  // can not import a Python script when an analysis is running
+  importPythonAction_->setDisabled(analysisInProgress);
 }
 }

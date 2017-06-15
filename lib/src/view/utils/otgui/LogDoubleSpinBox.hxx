@@ -21,14 +21,11 @@
 #ifndef OTGUI_LOGDOUBLESPINBOX_HXX
 #define OTGUI_LOGDOUBLESPINBOX_HXX
 
-#include "otgui/OTGuiprivate.hxx"
+#include "otgui/DoubleSpinBox.hxx"
 
-#include "DoubleSpinBox.hxx"
-
-#include<QContextMenuEvent>
+#include <QContextMenuEvent>
 
 namespace OTGUI {
-
 class OTGUI_API LogDoubleSpinBox : public DoubleSpinBox
 {
   Q_OBJECT

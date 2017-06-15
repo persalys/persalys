@@ -129,9 +129,9 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
     Output output(physicalModel_.getOutputs()[index.row()]);
 
     // update the output
-    physicalModel_.blockNotification(true);
+    physicalModel_.blockNotification("PhysicalModelDefinition");
     physicalModel_.selectOutput(output.getName(), value.toBool());
-    physicalModel_.blockNotification(false);
+    physicalModel_.blockNotification();
     emit dataChanged(index, this->index(index.row(), 1));
     emit selectedOutputsChanged();
     bool allChecked = physicalModel_.getOutputNames().getSize() == physicalModel_.getSelectedOutputsNames().getSize();
@@ -151,7 +151,7 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
           return true;
         if (value.toString().isEmpty())
           return false;
-        physicalModel_.blockNotification(true, "modelOutputsChanged");
+        physicalModel_.blockNotification("PhysicalModelDefinition");
         emit errorMessageChanged("");
         try
         {
@@ -167,14 +167,14 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
       {
         if (output.getDescription() == value.toString().toUtf8().constData())
           return true;
-        physicalModel_.blockNotification(true);
+        physicalModel_.blockNotification("PhysicalModelDefinition");
         emit errorMessageChanged("");
         physicalModel_.setOutputDescription(output.getName(), value.toString().toUtf8().constData());
         break;
       }
       case 2:
       {
-        SymbolicPhysicalModel * model = dynamic_cast<SymbolicPhysicalModel*>(&*physicalModel_.getImplementation());
+        SymbolicPhysicalModel * model = dynamic_cast<SymbolicPhysicalModel*>(physicalModel_.getImplementation().get());
         if (model)
         {
           if (model->getFormula(output.getName()) == value.toString().toUtf8().constData())
@@ -183,13 +183,13 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
         else
           return false;
         // TODO test if value.toString() ok
-        physicalModel_.blockNotification(true);
+        physicalModel_.blockNotification("PhysicalModelDefinition");
         emit errorMessageChanged("");
         model->setFormula(output.getName(), value.toString().toUtf8().constData());
         break;
       }
     }
-    physicalModel_.blockNotification(false);
+    physicalModel_.blockNotification();
     emit dataChanged(index, index);
     return true;
   }
@@ -219,9 +219,9 @@ void OutputTableModel::addLine()
   int i = 0;
   while (physicalModel_.hasOutputNamed('Y' + (OSS()<<i).str()))
     ++i;
-  physicalModel_.blockNotification(true, "modelOutputsChanged");
+  physicalModel_.blockNotification("PhysicalModelDefinition");
   physicalModel_.addOutput(Output('Y'+(OSS()<<i).str()));
-  physicalModel_.blockNotification(false);  
+  physicalModel_.blockNotification();
   //
   QModelIndex lastIndex = index(rowCount()-1, 0);
   beginInsertRows(lastIndex.parent(), lastIndex.row(), lastIndex.row());
@@ -237,9 +237,9 @@ void OutputTableModel::removeLine(const QModelIndex & index)
 {
   beginRemoveRows(index.parent(), index.row(), index.row());
   removeRows(index.row(), 1, index.parent());
-  physicalModel_.blockNotification(true, "modelOutputsChanged");
+  physicalModel_.blockNotification("PhysicalModelDefinition");
   physicalModel_.removeOutput(physicalModel_.getOutputs()[index.row()].getName());
-  physicalModel_.blockNotification(false);
+  physicalModel_.blockNotification();
   endRemoveRows();
   bool allChecked = physicalModel_.getOutputNames().getSize() == physicalModel_.getSelectedOutputsNames().getSize();
   emit checked(allChecked && physicalModel_.getOutputNames().getSize());

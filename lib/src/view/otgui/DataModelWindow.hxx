@@ -21,8 +21,12 @@
 #ifndef OTGUI_DATAMODELWINDOW_HXX
 #define OTGUI_DATAMODELWINDOW_HXX
 
-#include "OTguiSubWindow.hxx"
-#include "otgui/DesignOfExperimentItem.hxx"
+#include "otgui/DataModelDefinitionItem.hxx"
+#include "otgui/DataModelTableModel.hxx"
+#include "otgui/ExportableTableView.hxx"
+#include "otgui/OTguiSubWindow.hxx"
+
+#include <QLineEdit>
 
 namespace OTGUI {
 
@@ -31,13 +35,26 @@ class OTGUI_API DataModelWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  DataModelWindow(DesignOfExperimentItem * item);
+  DataModelWindow(DataModelDefinitionItem * item);
+
+  virtual ~DataModelWindow();
 
 protected:
   void buildInterface();
+  void importSample(const QString& fileName);
+  void updateTable(const QString& fileName);
+
+public slots:
+  void openFileRequested();
+  void refreshTable();
+  void updateTableView(const OT::NumericalSample& sample=OT::NumericalSample());
 
 private:
-  DesignOfExperiment designOfExperiment_;
+  DataModel * dataModel_;
+  QLineEdit * filePathLineEdit_;
+  QPalette defaultLineEditPalette_;
+  ExportableTableView * dataTableView_;
+  DataModelTableModel * dataTableModel_;
 };
 }
 #endif

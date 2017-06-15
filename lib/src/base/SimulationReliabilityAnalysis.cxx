@@ -85,6 +85,7 @@ SimulationInterface SimulationReliabilityAnalysis::getSimulationAlgorithm(const 
 
 void SimulationReliabilityAnalysis::run()
 {
+  isRunning_ = true;
   try
   {
     // clear result
@@ -150,6 +151,7 @@ void SimulationReliabilityAnalysis::run()
     errorMessage_ = ex.what();
     notify("analysisBadlyFinished");
   }
+  isRunning_ = false;
 }
 
 

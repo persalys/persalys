@@ -13,10 +13,10 @@ ot_add_source_file ( OTguiMenuBar.cxx )
 ot_add_source_file ( OTguiStatusBar.cxx )
 ot_add_source_file ( OTguiSubWindow.cxx )
 ot_add_source_file ( OTguiWizard.cxx )
+ot_add_source_file ( PhysicalModelDiagramWindow.cxx )
+ot_add_source_file ( DataModelDiagramWindow.cxx )
 ot_add_source_file ( ImportDataPage.cxx )
-ot_add_source_file ( ImportDataModelPage.cxx )
 ot_add_source_file ( ImportDesignOfExperimentPage.cxx )
-ot_add_source_file ( DataModelWizard.cxx )
 ot_add_source_file ( DataModelWindow.cxx )
 ot_add_source_file ( DataAnalysisWindow.cxx )
 ot_add_source_file ( DataAnalysisResultWindow.cxx )
@@ -30,7 +30,7 @@ ot_add_source_file ( MomentsEstimatesTableGroupBox.cxx )
 ot_add_source_file ( OutputsSelectionGroupBox.cxx )
 ot_add_source_file ( ParametersWidget.cxx )
 ot_add_source_file ( ResultWindow.cxx )
-ot_add_source_file ( AnalysisExecutionFailedWindow.cxx )
+ot_add_source_file ( AnalysisWindow.cxx )
 ot_add_source_file ( DeterministicDesignPage.cxx )
 ot_add_source_file ( ProbabilisticDesignPage.cxx )
 ot_add_source_file ( PhysicalModelWindowWidget.cxx )
@@ -42,18 +42,24 @@ if (SalomeYACS_FOUND)
 endif ()
 ot_add_source_file ( ProbabilisticModelWindow.cxx )
 ot_add_source_file ( DesignOfExperimentWizard.cxx )
+ot_add_source_file ( DesignOfExperimentInputWindow.cxx )
 ot_add_source_file ( DesignOfExperimentWindow.cxx )
 ot_add_source_file ( StudyTreeView.cxx )
 ot_add_source_file ( ModelEvaluationWizard.cxx )
 ot_add_source_file ( ModelEvaluationResultWindow.cxx )
+ot_add_source_file ( IntroCentralTendencyPage.cxx )
+ot_add_source_file ( MonteCarloPage.cxx )
 ot_add_source_file ( CentralTendencyWizard.cxx )
 ot_add_source_file ( MonteCarloResultWindow.cxx )
 ot_add_source_file ( TaylorExpansionMomentsResultWindow.cxx )
 ot_add_source_file ( SobolResultWindow.cxx )
 ot_add_source_file ( SRCResultWindow.cxx )
+ot_add_source_file ( IntroSensitivityPage.cxx )
+ot_add_source_file ( SobolPage.cxx )
+ot_add_source_file ( SRCPage.cxx )
 ot_add_source_file ( SensitivityAnalysisWizard.cxx )
 ot_add_source_file ( LimitStateWindow.cxx )
-ot_add_source_file ( OptimizationWidget.cxx )
+ot_add_source_file ( IntroReliabilityPage.cxx )
 ot_add_source_file ( SimulationReliabilityPage.cxx )
 ot_add_source_file ( ApproximationReliabilityPage.cxx )
 ot_add_source_file ( ReliabilityAnalysisWizard.cxx )
@@ -62,6 +68,9 @@ ot_add_source_file ( ApproximationResultWindow.cxx )
 ot_add_source_file ( ApproximationResultTabWidget.cxx )
 ot_add_source_file ( StopCriteriaGroupBox.cxx )
 ot_add_source_file ( ParametersDefinitionWizard.cxx )
+ot_add_source_file ( IntroMetaModelPage.cxx )
+ot_add_source_file ( KrigingPage.cxx )
+ot_add_source_file ( FunctionalChaosPage.cxx )
 ot_add_source_file ( MetaModelAnalysisWizard.cxx )
 ot_add_source_file ( FunctionalChaosResultWindow.cxx )
 ot_add_source_file ( KrigingResultWindow.cxx )
@@ -73,6 +82,7 @@ ot_add_source_file ( InferenceResultWidget.cxx )
 ot_add_source_file ( CopulaParametersTabWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWindow.cxx )
+ot_add_source_file ( DesignOfExperimentSelectionWizard.cxx )
 
 ot_install_header_file ( MainWindow.hxx )
 ot_install_header_file ( OTguiToolBar.hxx )
@@ -83,22 +93,28 @@ ot_install_header_file ( AnalysisWizard.hxx )
 ot_install_header_file ( OTguiMdiArea.hxx )
 ot_install_header_file ( WelcomeWindow.hxx )
 ot_install_header_file ( OTStudyWindow.hxx )
+ot_install_header_file ( PhysicalModelDiagramWindow.hxx )
+ot_install_header_file ( DataModelDiagramWindow.hxx )
 ot_install_header_file ( ResultWindow.hxx )
 ot_install_header_file ( BlockSizeGroupBox.hxx )
 ot_install_header_file ( MinMaxTableGroupBox.hxx )
 ot_install_header_file ( MomentsEstimatesTableGroupBox.hxx )
 ot_install_header_file ( OutputsSelectionGroupBox.hxx )
 ot_install_header_file ( ParametersWidget.hxx )
-ot_install_header_file ( DataModelWizard.hxx )
 ot_install_header_file ( DataModelWindow.hxx )
 ot_install_header_file ( DataAnalysisWindow.hxx )
 ot_install_header_file ( DataAnalysisResultWindow.hxx )
-ot_install_header_file ( AnalysisExecutionFailedWindow.hxx )
+ot_install_header_file ( AnalysisWindow.hxx )
 ot_install_header_file ( ModelEvaluationWizard.hxx )
+ot_install_header_file ( IntroCentralTendencyPage.hxx )
+ot_install_header_file ( MonteCarloPage.hxx )
 ot_install_header_file ( CentralTendencyWizard.hxx )
+ot_install_header_file ( IntroSensitivityPage.hxx )
+ot_install_header_file ( SobolPage.hxx )
+ot_install_header_file ( SRCPage.hxx )
 ot_install_header_file ( SensitivityAnalysisWizard.hxx )
 ot_install_header_file ( LimitStateWindow.hxx )
-ot_install_header_file ( OptimizationWidget.hxx )
+ot_install_header_file ( IntroReliabilityPage.hxx )
 ot_install_header_file ( SimulationReliabilityPage.hxx )
 ot_install_header_file ( ApproximationReliabilityPage.hxx )
 ot_install_header_file ( ReliabilityAnalysisWizard.hxx )
@@ -112,6 +128,7 @@ if (SalomeYACS_FOUND)
 endif ()
 ot_install_header_file ( ProbabilisticModelWindow.hxx )
 ot_install_header_file ( DesignOfExperimentWizard.hxx )
+ot_install_header_file ( DesignOfExperimentInputWindow.hxx )
 ot_install_header_file ( DesignOfExperimentWindow.hxx )
 ot_install_header_file ( ModelEvaluationResultWindow.hxx )
 ot_install_header_file ( MonteCarloResultWindow.hxx )
@@ -127,6 +144,9 @@ ot_install_header_file ( DeterministicDesignPage.hxx )
 ot_install_header_file ( ProbabilisticDesignPage.hxx )
 ot_install_header_file ( StopCriteriaGroupBox.hxx )
 ot_install_header_file ( ParametersDefinitionWizard.hxx )
+ot_install_header_file ( IntroMetaModelPage.hxx )
+ot_install_header_file ( KrigingPage.hxx )
+ot_install_header_file ( FunctionalChaosPage.hxx )
 ot_install_header_file ( MetaModelAnalysisWizard.hxx )
 ot_install_header_file ( MetaModelValidationWidget.hxx )
 ot_install_header_file ( FunctionalChaosResultWindow.hxx )
@@ -139,6 +159,7 @@ ot_install_header_file ( ControllerWidget.hxx )
 ot_install_header_file ( CopulaInferenceResultWidget.hxx )
 ot_install_header_file ( CopulaInferenceResultWindow.hxx )
 ot_install_header_file ( CopulaParametersTabWidget.hxx )
+ot_install_header_file ( DesignOfExperimentSelectionWizard.hxx )
 
 qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/OTguiToolBar.hxx
@@ -149,16 +170,16 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/OTguiMdiArea.hxx
                                   otgui/WelcomeWindow.hxx
                                   otgui/OTStudyWindow.hxx
+                                  otgui/PhysicalModelDiagramWindow.hxx
+                                  otgui/DataModelDiagramWindow.hxx
                                   otgui/ResultWindow.hxx
-                                  otgui/AnalysisExecutionFailedWindow.hxx
+                                  otgui/AnalysisWindow.hxx
                                   otgui/BlockSizeGroupBox.hxx
                                   otgui/MinMaxTableGroupBox.hxx
                                   otgui/MomentsEstimatesTableGroupBox.hxx
                                   otgui/OutputsSelectionGroupBox.hxx
                                   otgui/ImportDataPage.hxx
-                                  otgui/ImportDataModelPage.hxx
                                   otgui/ImportDesignOfExperimentPage.hxx
-                                  otgui/DataModelWizard.hxx
                                   otgui/DataModelWindow.hxx
                                   otgui/DataAnalysisWindow.hxx
                                   otgui/DataAnalysisResultWindow.hxx
@@ -171,18 +192,24 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/MetaModelWindow.hxx
                                   otgui/ProbabilisticModelWindow.hxx
                                   otgui/DesignOfExperimentWizard.hxx
+                                  otgui/DesignOfExperimentInputWindow.hxx
                                   otgui/DesignOfExperimentWindow.hxx
                                   otgui/ModelEvaluationWizard.hxx
                                   otgui/ModelEvaluationResultWindow.hxx
+                                  otgui/IntroCentralTendencyPage.hxx
+                                  otgui/MonteCarloPage.hxx
                                   otgui/CentralTendencyWizard.hxx
                                   otgui/MonteCarloResultWindow.hxx
                                   otgui/TaylorExpansionMomentsResultWindow.hxx
                                   otgui/SensitivityResultWidget.hxx
                                   otgui/SobolResultWindow.hxx
                                   otgui/SRCResultWindow.hxx
+                                  otgui/IntroSensitivityPage.hxx
+                                  otgui/SobolPage.hxx
+                                  otgui/SRCPage.hxx
                                   otgui/SensitivityAnalysisWizard.hxx
                                   otgui/LimitStateWindow.hxx
-                                  otgui/OptimizationWidget.hxx
+                                  otgui/IntroReliabilityPage.hxx
                                   otgui/SimulationReliabilityPage.hxx
                                   otgui/ApproximationReliabilityPage.hxx
                                   otgui/ReliabilityAnalysisWizard.hxx
@@ -191,6 +218,9 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/ApproximationResultWindow.hxx
                                   otgui/StopCriteriaGroupBox.hxx
                                   otgui/ParametersDefinitionWizard.hxx
+                                  otgui/IntroMetaModelPage.hxx
+                                  otgui/KrigingPage.hxx
+                                  otgui/FunctionalChaosPage.hxx
                                   otgui/MetaModelAnalysisWizard.hxx
                                   otgui/MetaModelValidationWidget.hxx
                                   otgui/FunctionalChaosResultWindow.hxx
@@ -205,6 +235,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/CopulaInferenceResultWidget.hxx
                                   otgui/CopulaInferenceResultWindow.hxx
                                   otgui/CopulaParametersTabWidget.hxx
+                                  otgui/DesignOfExperimentSelectionWizard.hxx
                                   )
 
 

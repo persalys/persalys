@@ -105,6 +105,7 @@ void KrigingAnalysis::setOptimizeParameters(const bool optimize)
 
 void KrigingAnalysis::run()
 {
+  isRunning_ = true;
   try
   {
     // clear result
@@ -118,7 +119,7 @@ void KrigingAnalysis::run()
     if (designOfExperiment_.getInputSample().getSize() != designOfExperiment_.getOutputSample().getSize())
       throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
     if (!getInterestVariables().getSize())
-      throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
+      throw InvalidDimensionException(HERE) << "You have not defined output variable to be analysed. Set the list of interest variables.";
 
     // get effective samples
     const NumericalSample effectiveInputSample(getEffectiveInputSample());
@@ -162,11 +163,15 @@ void KrigingAnalysis::run()
         MetaModelAnalysisResult result_i;
         result_i.outputSample_ = effectiveOutputSample.getMarginal(i);
         validateMetaModelResult(result_i, effectiveInputSample);
-        for (UnsignedInteger j=0; j<size; ++j)
+
+        if (!stopRequested_)
+        {
+          for (UnsignedInteger j=0; j<size; ++j)
           metaModelLOO[j][i] = result_i.metaModelOutputSampleLOO_[j][0];
 
-        q2LOO[i] = result_i.q2LOO_[0];
-        errorQ2LOO[i] = result_i.errorQ2LOO_[0];
+          q2LOO[i] = result_i.q2LOO_[0];
+          errorQ2LOO[i] = result_i.errorQ2LOO_[0];
+        }
       }
     }
 
@@ -201,6 +206,7 @@ void KrigingAnalysis::run()
     errorMessage_ = ex.what();
     notify("analysisBadlyFinished");
   }
+  isRunning_ = false;
 }
 
 

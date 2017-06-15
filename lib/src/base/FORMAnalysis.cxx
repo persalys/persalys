@@ -57,6 +57,7 @@ FORMAnalysis* FORMAnalysis::clone() const
 
 void FORMAnalysis::run()
 {
+  isRunning_ = true;
   try
   {
     // clear result
@@ -89,6 +90,7 @@ void FORMAnalysis::run()
     errorMessage_ = ex.what();
     notify("analysisBadlyFinished");
   }
+  isRunning_ = false;
 }
 
 

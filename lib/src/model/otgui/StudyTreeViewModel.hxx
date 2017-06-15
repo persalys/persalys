@@ -33,29 +33,14 @@ class OTGUI_API StudyTreeViewModel : public QStandardItemModel, public Observer
 public:
   StudyTreeViewModel(QObject *parent = 0);
 
-  void addOTStudyItem(const OTStudy & otStudy);
-  void addProbabilisticModelItem(const QModelIndex & parentIndex);
-  void addLimitStateItem(const QModelIndex & parentIndex);
+  virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-  OTStudyItem * getOTStudyItem(const QModelIndex & childIndex);
-  PhysicalModelItem * getPhysicalModelItem(const QModelIndex & childIndex);
-  DesignOfExperimentItem * getDesignOfExperimentItem(const QModelIndex& childIndex);
-  LimitStateItem * getLimitStateItem(const QModelIndex & childIndex);
-  AnalysisItem * getAnalysisItem(OTStudyItem * otStudyItem, const QString & analysisName);
+  void addOTStudyItem(const OTStudy & otStudy);
 
   virtual void update(Observable * source, const OT::String & message);
 
-public slots:
-  void removeOTStudyItem(QStandardItem * item);
 signals:
   void newOTStudyCreated(OTStudyItem*);
-  void newDataModelCreated(DesignOfExperimentItem*);
-  void newPhysicalModelCreated(PhysicalModelItem*);
-  void newProbabilisticModelCreated(ProbabilisticModelItem*);
-  void newDesignOfExperimentCreated(DesignOfExperimentItem*);
-  void newLimitStateCreated(LimitStateItem*);
-  void newAnalysisCreated(AnalysisItem*);
-  void itemRemoved(QStandardItem*);
 };
 }
 #endif

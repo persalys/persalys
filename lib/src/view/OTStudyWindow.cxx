@@ -19,18 +19,21 @@
  *
  */
 #include "otgui/OTStudyWindow.hxx"
+#include "otgui/DiagramPushButton.hxx"
 
-#include <QGridLayout>
+#include <QVBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QPainter>
 
 namespace OTGUI {
 
 OTStudyWindow::OTStudyWindow(OTStudyItem * item)
   : OTguiSubWindow(item)
+  , otStudyItem_(item)
 {
   buildInterface();
-  setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint & ~Qt::WindowMinimizeButtonHint);
+  setWindowFlags(Qt::FramelessWindowHint);
 }
 
 
@@ -38,42 +41,87 @@ void OTStudyWindow::buildInterface()
 {
   QWidget * mainWidget = new QWidget;
   QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
-  mainLayout->addWidget(new QLabel(tr("To get started, select one model type.")), 0, Qt::AlignCenter);
 
-  QHBoxLayout * hlayout = new QHBoxLayout;
-  hlayout->addStretch();
+  // title
+  QLabel * title = new QLabel(tr("Select a physical model to add in the current study"));
+  title->setStyleSheet("font: bold;");
+  mainLayout->addWidget(title);
+
+  // spacer
+  mainLayout->addSpacing(30);
+
+
   QGridLayout * layout = new QGridLayout;
 
-  QPushButton * button = new QPushButton(tr("New symbolic physical model"));
+  // left side
+
+  QPushButton * button = new DiagramPushButton(tr("Symbolic model"));
   button->setStatusTip(tr("Create a physical model with outputs defined by analytical formulae"));
-  connect(button, SIGNAL(pressed()), this, SIGNAL(createNewSymbolicPhysicalModel()));
+  connect(button, SIGNAL(pressed()), otStudyItem_, SLOT(createNewSymbolicPhysicalModel()));
   layout->addWidget(button, 0, 0);
 
-  button = new QPushButton(tr("New Python physical model"));
+  button = new DiagramPushButton(tr("Python model"));
   button->setStatusTip(tr("Create a physical model defined with a Python script"));
-  connect(button, SIGNAL(pressed()), this, SIGNAL(createNewPythonPhysicalModel()));
+  connect(button, SIGNAL(pressed()), otStudyItem_, SLOT(createNewPythonPhysicalModel()));
   layout->addWidget(button, 1, 0);
 
   int row = 2;
 #ifdef OTGUI_HAVE_YACS
-  button = new QPushButton(tr("New YACS physical model"));
+  button = new DiagramPushButton(tr("YACS model"));
   button->setStatusTip(tr("Create a physical model defined with an YACS file"));
-  connect(button, SIGNAL(pressed()), this, SIGNAL(createNewYACSPhysicalModel()));
+  connect(button, SIGNAL(pressed()), otStudyItem_, SLOT(createNewYACSPhysicalModel()));
   layout->addWidget(button, row, 0);
   ++row;
 #endif
 
-  button = new QPushButton(tr("New data model"));
+  QLabel * textEdit = new QLabel;
+  textEdit->setText("Available functionalities :");
+  textEdit->setStyleSheet("font: bold;");
+  layout->addWidget(textEdit, row, 0);
+
+  textEdit = new QLabel;
+  textEdit->setText("- Evaluation\n- Design of experiment\n- Central dispersion\n- Sensitivity\n- Reliability\n- Metamodel");
+  layout->addWidget(textEdit, row+1, 0, Qt::AlignHCenter|Qt::AlignTop);
+
+  // vertical line
+
+  QFrame * buttonsFrame = new QFrame;
+  buttonsFrame->setFrameShape(QFrame::VLine);
+  layout->addWidget(buttonsFrame, 0, 1, row+2, 1);
+
+  // right side
+
+  button = new DiagramPushButton(tr("Data model"));
   button->setStatusTip(tr("Import a sample to create a model"));
-  connect(button, SIGNAL(pressed()), this, SIGNAL(createNewDataModel()));
-  layout->addWidget(button, row, 0);
-  ++row;
+  connect(button, SIGNAL(pressed()), otStudyItem_, SLOT(createNewDataModel()));
+  layout->addWidget(button, 0, 2);
 
-  layout->setRowStretch(row, 1);
-  hlayout->addLayout(layout);
-  hlayout->addStretch();
+  textEdit = new QLabel;
+  textEdit->setText("Available functionalities :");
+  textEdit->setStyleSheet("font: bold;");
+  layout->addWidget(textEdit, row, 2);
 
-  mainLayout->addLayout(hlayout);
+  textEdit = new QLabel;
+  textEdit->setText("- Data analysis\n- Inference\n- Dependencies inference\n- Metamodel");
+  layout->addWidget(textEdit, row+1, 2, Qt::AlignHCenter|Qt::AlignTop);
+
+  // set widget
+  mainLayout->addLayout(layout);
+  mainLayout->addStretch();
+
+  // OT image
+  QLabel * imageLabel = new QLabel;
+  QPixmap pixmap(":/images/OT_image256x256.png");
+  QImage image(pixmap.size(), QImage::Format_ARGB32_Premultiplied);
+  image.fill(Qt::transparent);
+  QPainter p(&image);
+  p.setOpacity(0.4);
+  p.drawPixmap(0, 0, pixmap);
+  p.end();
+  QPixmap imagePixmap = QPixmap::fromImage(image);
+  imageLabel->setPixmap(imagePixmap);
+
+  mainLayout->addWidget(imageLabel, 0, Qt::AlignCenter);
 
   setWidget(mainWidget);
 }

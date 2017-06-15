@@ -51,7 +51,10 @@ ProbabilisticModelWindow::ProbabilisticModelWindow(const OTStudy& otStudy, Proba
   , pdf_cdfPlotsConfigurationWidget_(0)
   , paramEditor_(0)
 {
-  connect(item, SIGNAL(inputChanged()), this, SLOT(updateProbabilisticModel()));
+  connect(item, SIGNAL(stochasticInputListChanged()), this, SLOT(updateProbabilisticModel()));
+  connect(item, SIGNAL(inputListCorrelationChanged()), this, SLOT(updateCorrelationTable()));
+  connect(item, SIGNAL(inputListDefinitionChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
+
   buildInterface();
   connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
 }
@@ -265,9 +268,6 @@ void ProbabilisticModelWindow::updateProbabilisticModel()
   }
   else
     updateDistributionWidgets(inputTableModel_->index(-1, 0));
-
-  // update correlation table
-  updateCorrelationTable();
 }
 
 
@@ -583,14 +583,14 @@ void ProbabilisticModelWindow::distributionParametersChanged()
         newTruncatedDistribution.setUpperBound(truncatedDistribution.getUpperBound()); // FiniteUpperBound = true
 
       // update input distribution
-      physicalModel_.blockNotification(true);
+      physicalModel_.blockNotification("ProbabilisticModel");
       physicalModel_.setDistribution(input.getName(), newTruncatedDistribution);
-      physicalModel_.blockNotification(false);
+      physicalModel_.blockNotification();
       updatePlots();
     }
     catch(std::exception & ex)
     {
-      physicalModel_.blockNotification(false);
+      physicalModel_.blockNotification();
       qDebug() << "ProbabilisticModelWindow::distributionParametersChanged invalid parameters:"
                << parameters.__str__().data() << " for distribution:" << distributionName.data();
       updateDistributionParametersWidgets(index);
@@ -613,14 +613,14 @@ void ProbabilisticModelWindow::distributionParametersChanged()
         return;
 
       DistributionDictionary::UpdateDistribution(inputDistribution, parameters, parametersType);
-      physicalModel_.blockNotification(true);
+      physicalModel_.blockNotification("ProbabilisticModel");
       physicalModel_.setDistribution(input.getName(), inputDistribution);
-      physicalModel_.blockNotification(false);
+      physicalModel_.blockNotification();
       updatePlots();
     }
     catch(std::exception & ex)
     {
-      physicalModel_.blockNotification(false);
+      physicalModel_.blockNotification();
       qDebug() << "ProbabilisticModelWindow::distributionParametersChanged invalid parameters:"
                << parameters.__str__().data() << " for distribution:" << distributionName.data();
       updateDistributionParametersWidgets(index);
@@ -656,9 +656,9 @@ void ProbabilisticModelWindow::truncationParametersChanged()
       if (upperBoundCheckBox_->isChecked())
         dist.setB(upperBoundLineEdit_->value());
 
-      physicalModel_.blockNotification(true);
+      physicalModel_.blockNotification("ProbabilisticModel");
       physicalModel_.setDistribution(input.getName(), dist);
-      physicalModel_.blockNotification(false);
+      physicalModel_.blockNotification();
     }
     else
     {
@@ -668,16 +668,16 @@ void ProbabilisticModelWindow::truncationParametersChanged()
       if (upperBoundCheckBox_->isChecked())
         truncatedDistribution.setUpperBound(upperBoundLineEdit_->value());
 
-      physicalModel_.blockNotification(true);
+      physicalModel_.blockNotification("ProbabilisticModel");
       physicalModel_.setDistribution(input.getName(), truncatedDistribution);
-      physicalModel_.blockNotification(false);
+      physicalModel_.blockNotification();
     }
 
     updatePlots();
   }
   catch (std::exception & ex)
   {
-    physicalModel_.blockNotification(false);
+    physicalModel_.blockNotification();
     qDebug() << "Error: ProbabilisticModelWindow::truncationParametersChanged\n";
     updateTruncationParametersWidgets(index);
     setTemporaryErrorMessage(ex.what());
@@ -715,9 +715,9 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
       else
         throw;
 
-      physicalModel_.blockNotification(true);
+      physicalModel_.blockNotification("ProbabilisticModel");
       physicalModel_.setDistribution(input.getName(), inputDistribution);
-      physicalModel_.blockNotification(false);
+      physicalModel_.blockNotification();
 
       // update plots
       updatePlots();
@@ -808,9 +808,9 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
       else
         truncatedDistribution = TruncatedDistribution(distribution, truncatureInterval.getLowerBound()[0], truncatureInterval.getUpperBound()[0]);
 
-      physicalModel_.blockNotification(true);
+      physicalModel_.blockNotification("ProbabilisticModel");
       physicalModel_.setDistribution(input.getName(), truncatedDistribution);
-      physicalModel_.blockNotification(false);
+      physicalModel_.blockNotification();
 
       // update plots
       updatePlots();
@@ -818,7 +818,7 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
   }
   catch (std::exception & ex)
   {
-    physicalModel_.blockNotification(false);
+    physicalModel_.blockNotification();
     qDebug() << "Error: ProbabilisticModelWindow::truncationParametersStateChanged\n";
     updateTruncationParametersWidgets(index);
     setTemporaryErrorMessage(ex.what());
@@ -854,10 +854,10 @@ void ProbabilisticModelWindow::openWizardToChooseInferenceResult(const QModelInd
     {
       // update the input
       const Input input(physicalModel_.getInputs()[inputIndex.row()]);
-      physicalModel_.blockNotification(true);
+      physicalModel_.blockNotification("ProbabilisticModel");
       physicalModel_.setDistribution(input.getName(), wizard->getDistribution());
       physicalModel_.setDistributionParametersType(input.getName(), 0);
-      physicalModel_.blockNotification(false);
+      physicalModel_.blockNotification();
       updateDistributionWidgets(inputIndex);
     }
   }

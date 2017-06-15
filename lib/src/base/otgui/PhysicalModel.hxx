@@ -42,7 +42,7 @@ public:
   virtual PhysicalModel * clone() const;
 
   void addObserver(Observer * observer);
-  void blockNotification(bool block, const OT::String & notBlockedMessage="");
+  void blockNotification(const OT::String & blockedObserverType="");
 
   InputCollection getInputs() const;
   Input & getInputByName(const OT::String & inputName);

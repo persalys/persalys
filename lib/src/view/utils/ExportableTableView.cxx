@@ -43,7 +43,7 @@ ExportableTableView::ExportableTableView(QWidget* parent)
 void ExportableTableView::contextMenu(const QPoint & pos)
 {
   QMenu * contextMenu(new QMenu(this));
-  QAction * exportData = new QAction(tr("Export"), this);
+  QAction * exportData = new QAction(QIcon(":/images/document-export-table.png"), tr("Export"), this);
   exportData->setStatusTip(tr("Export the data"));
   connect(exportData, SIGNAL(triggered()), this, SLOT(exportData()));
   contextMenu->addAction(exportData);
@@ -57,9 +57,10 @@ void ExportableTableView::exportData()
   QString currentDir = settings.value("currentDir").toString();
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
-  QString fileName = QFileDialog::getSaveFileName(this, tr("Export model as..."),
-                     currentDir,
-                     tr("CSV source files (*.csv)"));
+  QString fileName = QFileDialog::getSaveFileName(this,
+                                                  tr("Export model as..."),
+                                                  currentDir + QDir::separator() + tr("data"),
+                                                  tr("CSV source files (*.csv)"));
 
   if (!fileName.isEmpty())
   {

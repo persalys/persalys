@@ -95,6 +95,7 @@ void ModelEvaluation::updateParameters()
 
 void ModelEvaluation::run()
 {
+  isRunning_ = true;
   try
   {
     // clear result
@@ -128,6 +129,7 @@ void ModelEvaluation::run()
     errorMessage_ = ex.what();
     notify("analysisBadlyFinished");
   }
+  isRunning_ = false;
 }
 
 
