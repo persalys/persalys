@@ -35,6 +35,8 @@ public:
   PhysicalModel getPhysicalModel() const;
 
 signals:
+  void numberInputsChanged();
+  void numberOutputsChanged();
   void inputListDefinitionChanged();
   void inputListDifferentiationChanged();
 
