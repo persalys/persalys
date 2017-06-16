@@ -27,7 +27,7 @@
 
 namespace OTGUI {
 
-DesignOfExperimentSelectionWizard::DesignOfExperimentSelectionWizard(QList< QStandardItem* > listDOE)
+DesignOfExperimentSelectionWizard::DesignOfExperimentSelectionWizard(QList< QStandardItem* > listDOE, QWidget *parent)
   : OTguiWizard()
   , comboBox_(new QComboBox)
   , comboModel_(new QStandardItemModel)

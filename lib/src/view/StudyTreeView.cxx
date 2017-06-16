@@ -271,7 +271,7 @@ void StudyTreeView::createNewDesignOfExperiment(OTguiItem* item, const DesignOfE
   if (!item)
     return;
 
-  DesignOfExperimentWizard wizard(design);
+  DesignOfExperimentWizard wizard(design, this);
 
   if (wizard.exec())
     item->getParentOTStudyItem()->getOTStudy().add(wizard.getDesignOfExperiment());
@@ -280,7 +280,7 @@ void StudyTreeView::createNewDesignOfExperiment(OTguiItem* item, const DesignOfE
 
 void StudyTreeView::createNewDesignOfExperimentEvaluation(QList<QStandardItem*> listDOE)
 {
-  DesignOfExperimentSelectionWizard wizard(listDOE);
+  DesignOfExperimentSelectionWizard wizard(listDOE, this);
 
   if (wizard.exec())
   {
@@ -651,7 +651,7 @@ void StudyTreeView::modifyDesignOfExperiment(DesignOfExperimentDefinitionItem* i
   if (!item)
     return;
 
-  DesignOfExperimentWizard wizard(item->getDesignOfExperiment());
+  DesignOfExperimentWizard wizard(item->getDesignOfExperiment(), this);
 
   if (wizard.exec())
   {

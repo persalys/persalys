@@ -34,7 +34,7 @@ class OTGUI_API DesignOfExperimentSelectionWizard : public OTguiWizard
   Q_OBJECT
 
 public:
-  DesignOfExperimentSelectionWizard(QList<QStandardItem*> listDOE);
+  DesignOfExperimentSelectionWizard(QList<QStandardItem*> listDOE, QWidget *parent=0);
 
   DesignOfExperimentDefinitionItem* getSelectedDesignOfExperimentItem();
 
