@@ -92,14 +92,6 @@ int IntroPage::nextId() const
 }
 
 
-DesignOfExperimentWizard::DesignOfExperimentWizard(const OTStudy& otStudy, const PhysicalModel & physicalModel, QWidget* parent)
-  : OTguiWizard(parent)
-  , designOfExperiment_(DesignOfExperiment(otStudy.getAvailableDesignOfExperimentName(), physicalModel))
-{
-  buildInterface();
-}
-
-
 DesignOfExperimentWizard::DesignOfExperimentWizard(const DesignOfExperiment & designOfExperiment, QWidget *parent)
   : OTguiWizard(parent)
   , designOfExperiment_(designOfExperiment.getImplementation()->clone())
