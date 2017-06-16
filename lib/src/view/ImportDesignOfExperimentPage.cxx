@@ -52,7 +52,7 @@ void ImportDesignOfExperimentPage::setTable(const QString& fileName)
 
   // check sample From File
   Sample sample(designOfExperiment_.getSampleFromFile());
-  if (!designOfExperiment_.getInputColumns().check(sample.getDimension()-1))
+  if (!designOfExperiment_.getInputColumns().check(sample.getDimension()))
     throw InvalidArgumentException(HERE) << tr("Impossible to load sample marginals").toLocal8Bit().data();
 
   const Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
