@@ -84,11 +84,13 @@ String Output::getPythonScript() const
   OSS oss;
   oss.setPrecision(12);
 
-  oss << getName() << " = otguibase.Output('" << getName() << "', '" << getEscapedDescription() << "')\n";
+  String pythonName(getName());
+  std::replace(pythonName.begin(), pythonName.end(), '.', '_');
+  oss << pythonName << " = otguibase.Output('" << getName() << "', '" << getEscapedDescription() << "')\n";
   if (hasBeenComputed_)
-    oss << getName() << ".setValue(" << getValue() << ")\n";
+    oss << pythonName << ".setValue(" << getValue() << ")\n";
   if (!isSelected_)
-    oss << getName() << ".setIsSelected(False)\n";
+    oss << pythonName << ".setIsSelected(False)\n";
 
   return oss;
 }

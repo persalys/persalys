@@ -50,6 +50,10 @@ if (SalomeYACS_FOUND)
   list (APPEND SWIG_MODULE_otguibase_EXTRA_FLAGS -DOTGUI_HAVE_YACS=1)
 endif ()
 
+if (OTFMI_FOUND)
+  list (APPEND SWIG_MODULE_otguibase_EXTRA_FLAGS -DOTGUI_HAVE_OTFMI=1)
+endif ()
+
 ot_add_python_module (otguibase otguibase_module.i
                       Observer.i
                       Observable.i
@@ -63,6 +67,8 @@ ot_add_python_module (otguibase otguibase_module.i
                       MetaModel.i MetaModel_doc.i.in
                       PhysicalModel.i PhysicalModel_doc.i.in
                       YACSPhysicalModel.i YACSPhysicalModel_doc.i.in
+                      FMIPhysicalModel.i FMIPhysicalModel_doc.i.in
+                      FMUInfo.i FMUInfo_doc.i.in
                       LimitStateImplementation.i LimitStateImplementation_doc.i.in
                       LimitState.i LimitState_doc.i.in
                       AnalysisImplementation.i AnalysisImplementation_doc.i.in

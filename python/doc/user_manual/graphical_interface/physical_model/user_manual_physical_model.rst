@@ -158,7 +158,38 @@ The **Evaluate** button calculates the value of the outputs based on the input v
 and the YACS scheme. It shall be used to test the physical model. In order to get evaluations which can be saved,
 the user should use :ref:`the deterministic study <deterministicStudy>`.
 
-4 - Differentiation tab
+4- "FMI physical model": define a physical model from an FMU file
+=================================================================
+
+A physical model can be defined by loading an FMU file, previously generated 
+by OpenModelica for example.
+
+The first tab allows to select the fmu file and display some properties of the
+file.
+
+.. image:: /user_manual/graphical_interface/physical_model/FMIPhysicalModel1.png
+    :align: center
+
+Then a second tab is open and describes the model variables.
+The variables exposed by the model are listed in the main array.
+While the variability and causality are read-only FMI attributes,
+one may want to change whether how variables are used regarding the physical
+model: disabled, input or output in the *I/O* column under these constraints:
+
+- A variable of causality *Input* cannot be disabled
+- A variable of causality *Output* or *Local* cannot be used as input
+- A variable of causality *Input* or *Parameter* cannot be used as output
+
+.. image:: /user_manual/graphical_interface/physical_model/FMIPhysicalModel2.png
+    :align: center
+
+By default all the variables appear in the array and some filters allow
+to alter the currently listed variables.
+
+The **Evaluate** runs the model once.
+The output values are displayed in the *value* column.
+
+5 - Differentiation tab
 =======================
 
 .. image:: /user_manual/graphical_interface/physical_model/differentiation_tab.png

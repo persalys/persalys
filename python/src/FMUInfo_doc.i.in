@@ -1,0 +1,153 @@
+%feature("docstring") OTGUI::FMUInfo
+"Retrieve information from an FMU file."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMUInfo::getVariableNames
+"Variable names accessor.
+
+Returns
+-------
+description : :py:class:`openturns.Description`
+    Variable names"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMUInfo::getFileName
+"File name accessor.
+
+Returns
+-------
+fn : str
+    FMU file name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMUInfo::getVariability
+"Variability accessor.
+
+Returns
+-------
+variability : :py:class:`openturns.Indices`
+    Variability values"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMUInfo::getCausality
+"Causality accessor.
+
+Returns
+-------
+causality : :py:class:`openturns.Indices`
+    Causality values"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMUInfo::getAuthor
+"Author accessor.
+
+Returns
+-------
+author : str
+    Author name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMUInfo::getCopyright
+"Copyright accessor.
+
+Returns
+-------
+copyright : str
+    Copyright text"
+
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMUInfo::getDateTime
+"Date/Time accessor.
+
+Returns
+-------
+dateTime : str
+    Date and time"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMUInfo::getFMIVersion
+"FMI version accessor.
+
+Returns
+-------
+fmiVersion : str
+    FMI specification version string"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMUInfo::getVersion
+"Model version accessor.
+
+Returns
+-------
+version : str
+    Model version string"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMUInfo::getPlatform
+"Platform accessor.
+
+Returns
+-------
+platform : str
+    Platform string"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMUInfo::getIdentifier
+"Model identifier accessor.
+
+Returns
+-------
+identifier : str
+    Model identifier string"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMUInfo::getGUID
+"GUID accessor.
+
+Returns
+-------
+guid : str
+    Globally Unique Identifier string"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMUInfo::getTool
+"Tool identifier accessor.
+
+Returns
+-------
+tool : str
+    Generation tool identifier string"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMUInfo::getStartKeys
+"Variables with values: names accessor.
+
+Returns
+-------
+startKeys : :py:class:`openturns.Description`
+    Variables names"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FMUInfo::getStartValues
+"Variables with values: values accessor.
+
+Returns
+-------
+startValues : :py:class:`openturns.NumericalPoint`
+    Default values"

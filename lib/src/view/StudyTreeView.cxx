@@ -27,6 +27,10 @@
 #ifdef OTGUI_HAVE_YACS
 #include "otgui/YACSPhysicalModelWindow.hxx"
 #endif
+#ifdef OTGUI_HAVE_OTFMI
+#include "otgui/FMIPhysicalModel.hxx"
+#include "otgui/FMIPhysicalModelWindow.hxx"
+#endif
 #include "otgui/SymbolicPhysicalModelWindow.hxx"
 #include "otgui/PythonPhysicalModelWindow.hxx"
 #include "otgui/MetaModelWindow.hxx"
@@ -442,7 +446,10 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelDefinitionItem* it
   else if (physicalModelType == "YACSPhysicalModel")
     window = new YACSPhysicalModelWindow(item);
 #endif
-
+#ifdef OTGUI_HAVE_OTFMI
+  else if (physicalModelType == "FMIPhysicalModel")
+    window = new FMIPhysicalModelWindow(item);
+#endif
   if (!window)
   {
     qDebug() << "Error: In : impossible to create PhysicalModelWindow\n";

@@ -7,7 +7,13 @@ include_directories (${CMAKE_SOURCE_DIR}/lib/src/model)
 include_directories (${CMAKE_SOURCE_DIR}/lib/src/view)
 include_directories (${CMAKE_SOURCE_DIR}/lib/src/view/PyConsole)
 
-add_executable (otgui WIN32 main.cxx)
+if (OTFMI_FOUND)
+  # fmi make gui application crash, so use a console application
+  add_executable (otgui main.cxx)
+else ()
+  add_executable (otgui WIN32 main.cxx)
+endif ()
+
 target_link_libraries (otgui otguiview)
 
 if (UNIX AND NOT APPLE)

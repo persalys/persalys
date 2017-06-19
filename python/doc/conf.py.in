@@ -60,6 +60,12 @@ except ImportError:
     # See http://sphinx-doc.org/latest/ext/math.html#confval-pngmath_use_preview
     pngmath_use_preview = True
 
+if '@SalomeYACS_FOUND@' == 'TRUE':
+    tags.add('yacs')
+
+if '@OTFMI_FOUND@' == 'TRUE':
+    tags.add('otfmi')
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 

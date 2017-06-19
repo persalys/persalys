@@ -74,6 +74,14 @@ void OTStudyWindow::buildInterface()
   ++row;
 #endif
 
+#ifdef OTGUI_HAVE_OTFMI
+  button = new DiagramPushButton(tr("FMI model"));
+  button->setStatusTip(tr("Create a physical model defined with an FMU file"));
+  connect(button, SIGNAL(pressed()), otStudyItem_, SLOT(createNewFMIPhysicalModel()));
+  layout->addWidget(button, row, 0);
+  ++ row;
+#endif
+
   QLabel * textEdit = new QLabel;
   textEdit->setText("Available functionalities :");
   textEdit->setStyleSheet("font: bold;");

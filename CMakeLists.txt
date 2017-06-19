@@ -5,6 +5,7 @@ option ( BUILD_GUI                    "Build the GUI"                           
 option ( LINK_PYTHON_LIBRARY          "Link python modules against python library"                            ON )
 option ( BUILD_SHARED_LIBS            "Build shared libraries"                                                ON )
 option (USE_SALOME "use salome" ON)
+option (USE_OTFMI "use otfmi" ON)
 option (USE_SPHINX "use sphinx" ON)
 option (USE_QT5 "use Qt5" ON)
 
@@ -71,6 +72,14 @@ if (USE_SALOME)
     list (APPEND OTGUI_DEFINITIONS ${YACS_DEFINITIONS})
     list (APPEND OTGUI_DEFINITIONS -DOTGUI_HAVE_YACS)
     include_directories (${YACS_INCLUDE_DIRS}) 
+  endif ()
+endif ()
+
+if (USE_OTFMI)
+  include (FindPythonModule)
+  find_python_module (otfmi)
+  if (OTFMI_FOUND)
+    list (APPEND OTGUI_DEFINITIONS -DOTGUI_HAVE_OTFMI)
   endif ()
 endif ()
 

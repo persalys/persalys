@@ -55,6 +55,9 @@ public slots:
 #ifdef OTGUI_HAVE_YACS
   void createNewYACSPhysicalModel();
 #endif
+#ifdef OTGUI_HAVE_OTFMI
+  void createNewFMIPhysicalModel();
+#endif
   void createNewDataModel();
   bool saveOTStudy();
   bool saveOTStudy(QString);
@@ -78,6 +81,9 @@ private:
   QAction * newPythonPhysicalModel_;
 #ifdef OTGUI_HAVE_YACS
   QAction * newYACSPhysicalModel_;
+#endif
+#ifdef OTGUI_HAVE_OTFMI
+  QAction * newFMIPhysicalModel_;
 #endif
   QAction * newDataModel_;
   QAction * exportOTStudy_;
