@@ -301,7 +301,7 @@ First order mean Second order mean Standard deviation Variance
 Graphical validation
 --------------------
 
-Find here the procedure to validate the graphical interface:
+Find here the procedure to validate the graphical interface
 
 Open
 ``````
@@ -311,6 +311,9 @@ Open
   - there are a Menu bar, a Tool bar, a Python console, a status bar
 
   - a window with 3 buttons (New study/Open study/Import Python script) appears
+
+  .. image:: /developer_manual/validation/welcomeWindow.png
+      :align: center
 
 Console Python
 ````````````````
@@ -338,6 +341,9 @@ New OTStudy
 
   - a window with 3(+1) buttons (New symbolic physical model/New Python physical model(+New YACS physical model)/New data model) appears
 
+  .. image:: /developer_manual/validation/otstudyWindow.png
+      :align: center
+
 - click Menu->File->New
 
   - item OTStudy_1 appears in the tree view
@@ -363,10 +369,6 @@ Rename OTStudy
 
   - the item is renamed
 
-- click on New symbolic physical model button of the mdiArea
-
-  - a new Symbolic physical model window and the item PhysicalModel_0 appears
-
 Save/open OTStudy
 ````````````````````
 
@@ -381,7 +383,7 @@ Save/open OTStudy
 Export/Import OTStudy
 `````````````````````
 
-- export myOTStudy3 with Menu->File->Export Python, name the file test.py
+- export myOTStudy3 with right click + Export Python, name the file test.py
 
 - close the interface with Menu->File->Exit
 
@@ -418,16 +420,16 @@ Models
 
 - Import the file python/test/test_analyses.py
 
-- click on model1 item
+- click on 'Definition' child item of 'model1' item
 
   .. image:: /developer_manual/validation/model1.png
       :align: center
 
-- click on Evaluate button
+- click on 'Evaluate' button bellow the outputs table
 
   - only y0 and y1 are evaluated
 
-- select lines 1 and 3
+- select lines 1 and 3 of the outputs table
 
   - first header item is checked
 
@@ -441,24 +443,24 @@ Models
 
 - uncheck all
 
-- click on Evaluate button
+- click on 'Evaluate' button
 
   - nothing appends
 
 - check fake_var + change its formula to 'x1 +'
 
-- click on Evaluate button
+- click on 'Evaluate' button
 
   - error message 'Impossible to evaluate etc.'
 
 - unselect fake_var + select y0, fake_y0 and y1
 
-- click on model2 item
+- click on 'Definition' child item of 'model2' item
 
   .. image:: /developer_manual/validation/model2.png
       :align: center
 
-- click on model3 item
+- click on 'Definition' child item of 'model3' item
 
   .. image:: /developer_manual/validation/model3.png
       :align: center
@@ -593,20 +595,22 @@ Designs of experiment
 
         - check the design of experiment window is updated : check the values of x2 have changed
 
-  - right click on design_3 and choose New metamodel :
+  - right click on design_3, choose Evaluate :
 
-    - error message box : 'The model must have at least one output
+    - an item 'Evaluation' appears in the tree view
 
-  - right click on design_3 and choose Evaluate :
+    - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
 
-    - the valuation is launched, a widget with a progress bar appears at the bottom of the tree view
+    - click on the run button
+
+    - the evaluation is launched
 
   - check result window :
 
     .. image:: /developer_manual/validation/design_3_Table.png
         :align: center
 
-    - 3 tabs Table - Min/Max - Scatter plots
+    - 3 tabs : Table - Min/Max - Scatter plots
 
     - Min/Max tab :
 
@@ -616,27 +620,33 @@ Designs of experiment
 
     - Scatter plots tab :
 
-      - 3 sub-tabs Scatter plots - Plot matrix X-X - Plot matrix Y-X
+      - 3 sub-tabs : Scatter plots - Plot matrix X-X - Plot matrix Y-X
 
-      - when clicking on the tab, the list view is hidden
+      - when clicking on the tab, the list view has been hidden
 
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
 
-- right click on Design of experiment of model2 and choose New design of experiment :
+- right click on 'Definition' sub-item of model2 item and choose New design of experiment :
 
   - a wizard appears, click on the Continue button of the first page then on the Finish button of the second page
 
     .. image:: /developer_manual/validation/DOE_wizard_model2.png
         :align: center
 
-  - right click on the item which appeared and choose Evaluate :
+  - right click on the item which has appeared and choose Evaluate :
+
+    - an item 'Evaluation' appears in the tree view
+
+    - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
+
+    - click on 'Run' button
 
     - check result window :
 
       .. image:: /developer_manual/validation/DOE_result_model2_one_point.png
           :align: center
 
-      - 2 tabs Table - Min/Max
+      - 2 tabs : Table - Min/Max
 
       - Min/Max tab :
 
@@ -646,9 +656,11 @@ Designs of experiment
 Analyses
 `````````````
 
-- Launch all the analyses -> Right click on each item and choose Run :
+- Each analysis item is associated with a window with a table of parameters (optional), a progress bar and a button 'Run' and a disabled button 'Stop'
 
-  - Evaluation
+- Check all the analyses wizards -> Right click on each item and choose Modify :
+
+  - Evaluation : item evaluation1
 
     .. image:: /developer_manual/validation/evaluation_wizard.png
         :align: center
@@ -657,7 +669,12 @@ Analyses
 
     - click on the Finish button
 
-      - widget with a progress bar appears at the bottom of the tree view
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
+
+      - click on the 'Run' button
+
+      .. image:: /developer_manual/validation/evaluation_window.png
+          :align: center
 
     - check result window
 
@@ -666,16 +683,23 @@ Analyses
 
       - results only for y0 and y1
 
-  - Monte Carlo
+  - Monte Carlo : MonteCarlo item
 
-    .. image:: /developer_manual/validation/monteCarlo_central_tendency_wizard.png
-        :align: center
+    - First page check the values :
 
-    - check the values:
+      .. image:: /developer_manual/validation/monteCarlo_central_tendency_wizard_1st_page.png
+          :align: center
 
-      - selected outputs: y1 and y0
+      - method : Monte-Carlo
 
-      - method : Monte Carlo
+      - selected outputs : y0 and y1
+
+      - continue
+
+    - Second page check the values :
+
+      .. image:: /developer_manual/validation/monteCarlo_central_tendency_wizard_2nd_page.png
+          :align: center
 
       - Accuracy disable : 0.01
 
@@ -691,82 +715,89 @@ Analyses
 
     - click on the Finish button
 
-      - widget with a progress bar appears at the bottom of the tree view
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
+
+      - click on the 'Run' button
 
     - check result window :
 
       .. image:: /developer_manual/validation/monteCarlo_central_tendency_result.png
           :align: center
 
-      - left side: 4 variables in the list view
+      - left side : 4 variables in the list view
 
-      - right side: 6 tabs Summary - PDF/CDF - Box plots - Scatter plots - Table - Parameters
+      - right side, 6 tabs : Summary - PDF/CDF - Box plots - Scatter plots - Table - Parameters
 
       - when changing the variable, the tabs are updated
 
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
 
-      - Summary tab:
+      - Summary tab :
 
-        - 2 types of extrema tables: one for the output y1 and one for inputs x1 and x2
+        - 2 types of extrema tables: one for the outputs y0 and y1 and one for the inputs x1 and x2
 
         .. image:: /developer_manual/validation/monteCarlo_central_tendency_result_input_table.png
             :align: center
 
-        - Moments estimates table has only 2 columns: Estimate and Value
+        - Moments estimates table has only 2 columns : Estimate and Value
 
       - Scatter plots tab:
 
-        - 3 sub-tabs Scatter plots - Plot matrix X-X - Plot matrix Y-X
+        - 3 sub-tabs : Scatter plots - Plot matrix X-X - Plot matrix Y-X
 
-        - when clicking on the tab, the list view is hidden
+        - when clicking on the Scatter plots tab, the list view is hidden
 
       - check tables are well drawn
 
-  - Taylor
+  - Taylor : Taylor item
 
     .. image:: /developer_manual/validation/taylor_central_tendency_wizard.png
         :align: center
 
     - check the values:
 
-      - selected outputs: y1 and y0
+      - selected outputs : y1 and y0
 
       - method : Taylor expansion
 
     - click on the Finish button
 
-      - widget with a progress bar appears at the bottom of the tree view
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
+
+      - click on the 'Run' button
 
     - check result window :
 
       .. image:: /developer_manual/validation/taylor_central_tendency_result.png
           :align: center
 
-      - left side: 2 variables in the list view
+      - left side : 2 variables in the list view
 
-      - right side: 1 Summary tab
+      - right side : 1 Summary tab
 
       - check table is well drawn
 
       - when changing the variable, the tabs are updated
 
-  - Monte Carlo reliability
+  - Monte Carlo reliability : MonteCarloReliability item
 
-    - First page check the values:
+    - First page check the values :
 
-      - checked: Simulation methods
+      .. image:: /developer_manual/validation/monteCarlo_reliability_wizard_1st_page.png
+          :align: center
+
+      - limit state : aLimitState
+
+      - method : Monte-Carlo
 
       - continue
 
-    - Second page check the values:
+    - Second page check the values :
 
-      .. image:: /developer_manual/validation/monteCarlo_reliability_wizard.png
+      .. image:: /developer_manual/validation/monteCarlo_reliability_wizard_2nd_page.png
           :align: center
 
-      - method : Monte Carlo
-
-      - Accuracy disable : 0.01
+      - Accuracy is disabled : 0.01
 
       - max time : 16m40s
 
@@ -778,37 +809,40 @@ Analyses
 
     - click on the Finish button
 
-      - widget with a progress bar appears at the bottom of the tree view
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
+
+      - click on the 'Run' button
 
     - check result window :
 
       .. image:: /developer_manual/validation/monteCarlo_reliability_result.png
           :align: center
 
-      - left side: 1 variable in the list view
+      - left side : 1 variable in the list view
 
-      - right side: 4 tabs Summary - Histogram - Covergence graph - Parameters
+      - right side, 4 tabs : Summary - Histogram - Convergence graph - Parameters
 
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
 
       - check tables are well drawn
 
-  - FORM IS reliability
+  - FORM IS reliability : FORM_IS item
 
-    - First page check the values:
+    - First page check the values :
 
-      - checked: Simulation methods
-
-      - continue
-
-    - Second page check the values:
-
-      .. image:: /developer_manual/validation/FORM_IS_reliability_wizard.png
+      .. image:: /developer_manual/validation/FORM_IS_reliability_1st_page.png
           :align: center
 
       - method : FORM - Importance sampling
 
-      - Accuracy disable : 0.01
+      - continue
+
+    - Second page check the values :
+
+      .. image:: /developer_manual/validation/FORM_IS_reliability_2nd_page.png
+          :align: center
+
+      - Accuracy is disabled : 0.01
 
       - max time : 16m40s
 
@@ -822,7 +856,7 @@ Analyses
 
     - Third page check the values:
 
-      .. image:: /developer_manual/validation/FORM_IS_optimization_page_wizard.png
+      .. image:: /developer_manual/validation/FORM_IS_reliability_3rd_page.png
           :align: center
 
       - Algorithm : Abdo-Rackwitz
@@ -848,20 +882,22 @@ Analyses
 
     - click on the Finish button
 
-      - widget with a progress bar appears at the bottom of the tree view
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
+
+      - click on the 'Run' button
 
     - check result window :
 
       .. image:: /developer_manual/validation/FORM_IS_reliability_result.png
           :align: center
 
-      - left side: 1 variable in the list view
+      - left side : 1 variable in the list view
 
-      - right side: 5 tabs Summary - Histogram - Covergence graph - FORM results - Parameters
+      - right side, 5 tabs : Summary - Histogram - Covergence graph - FORM results - Parameters
 
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
 
-      - tab FORM results:
+      - FORM results tab :
 
         .. image:: /developer_manual/validation/FORM_IS_reliability_FORM_results_tab.png
             :align: center
@@ -870,20 +906,21 @@ Analyses
 
       - check tables are well drawn
 
-  - FORM
+  - FORM : FORM item
 
-    .. image:: /developer_manual/validation/FORM_wizard.png
-        :align: center
+    - First page check the values :
 
-    - First page check the values:
+      .. image:: /developer_manual/validation/FORM_wizard_1st_page.png
+          :align: center
 
-      - checked: Approximation method
+      - method : FORM
 
       - continue
 
-    - Second page check the values:
+    - Second page check the values :
 
-      - Method : FORM
+      .. image:: /developer_manual/validation/FORM_wizard_2nd_page.png
+          :align: center
 
       - Algorithm : Abdo-Rackwitz
 
@@ -897,29 +934,48 @@ Analyses
 
     - click on the Finish button
 
-      - widget with a progress bar appears at the bottom of the tree view
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
+
+      - click on the 'Run' button
 
     - check result window :
 
       .. image:: /developer_manual/validation/FORM_result.png
           :align: center
 
-      - left side: 1 variable in the list view
+      - left side : 1 variable in the list view
 
-      - right side: 4 tabs Summary - Design point - Sensitivities - Parameters
+      - right side, 4 tabs : Summary - Design point - Sensitivities - Parameters
 
       - check tables are well drawn
 
-  - Sobol
+  - Sobol : Sobol item
 
-    .. image:: /developer_manual/validation/sobol_wizard.png
-        :align: center
+    - Pop-up with an error message appears : 'The model must have an independant copula etc'
 
-    - check the values:
+    - click on the 'Probabilistic model' item
 
-      - selected output: y1
+      - click on the 'Correlation' tab of the window which appears
+
+      - in the cell x1-x2 : write 0, press enter
+
+      - click on the Sobol item, right click on it and choose Modify
+
+    - First page check the values :
+
+      .. image:: /developer_manual/validation/sobol_wizard_1st_page.png
+          :align: center
+
+      - selected outputs : y0 and y1
 
       - method : Sobol
+
+      - continue
+
+    - Second page check the values :
+
+      .. image:: /developer_manual/validation/sobol_wizard_2nd_page.png
+          :align: center
 
       - Accuracy disable : 0.01
 
@@ -935,48 +991,55 @@ Analyses
 
     - click on the Finish button
 
-      - widget with a progress bar appears at the bottom of the tree view
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
+
+      - click on the 'Run' button
 
     - check result window :
 
       .. image:: /developer_manual/validation/sobol_result.png
           :align: center
 
-      - left side: 1 variable in the list view
+      - left side : 2 variables in the list view
 
-      - right side: 3 tabs Indices - Summary - Parameters
+      - right side, 3 tabs : Indices - Summary - Parameters
 
       - when changing the variable, the Indices tab is updated
 
       - when indices plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
 
-      - tab Indices:
+      - Indices tab :
 
         - can not zoom the plot
 
         - Total indices and Interactions are associated with a warning icon with Tooltip
 
-        - Click on the 2 last sections headers of the table:
+        - Click on the 2 last sections headers of the table :
 
           - the table values are sorted
 
           - the plot is updated
 
-        - At the bottom: error message 'The model has not independant copula, the result could be false.'
-
       - check tables are well drawn
 
 
-  - SRC
+  - SRC : SRC item
 
-    .. image:: /developer_manual/validation/src_wizard.png
-        :align: center
+    - First page check the values:
 
-    - check the values:
+      .. image:: /developer_manual/validation/src_wizard_1st_page.png
+          :align: center
 
-      - selected output: y1
+      - selected outputs : y0 and y1
 
       - method : SRC
+
+      - continue
+
+    - Second page check the values :
+
+      .. image:: /developer_manual/validation/src_wizard_2nd_page.png
+          :align: center
 
       - sample size : 1000
 
@@ -984,16 +1047,18 @@ Analyses
 
     - click on the Finish button
 
-      - widget with a progress bar appears at the bottom of the tree view
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
+
+      - click on the 'Run' button
 
     - check result window :
 
       .. image:: /developer_manual/validation/src_result.png
           :align: center
 
-      - left side: 1 variable in the list view
+      - left side : 2 variables in the list view
 
-      - right side: 2 tabs Indices - Parameters
+      - right side, 2 tabs : Indices - Parameters
 
       - when changing the variable, the Indices tab is updated
 
@@ -1009,18 +1074,25 @@ Analyses
 
           - the plot is updated
 
-        - At the bottom: error message 'The model has not independant copula, the result could be false.'
+  - Kriging : kriging item
 
-  - Kriging
+    - First page check the values:
 
-    .. image:: /developer_manual/validation/kriging_wizard.png
-        :align: center
+      .. image:: /developer_manual/validation/kriging_wizard_1st_page.png
+          :align: center
 
-    - check the values:
+      - design of experiment : design_1
 
-      - selected outputs : y0 and y1
+      - selected outputs : y0, y1
 
       - method : Kriging
+
+      - continue
+
+    - Second page check the values :
+
+      .. image:: /developer_manual/validation/kriging_wizard_2nd_page.png
+          :align: center
 
       - covariance model : Matérn
 
@@ -1036,7 +1108,7 @@ Analyses
 
       - amplitude : 1
 
-    - on the line Scale click on the button ...
+    - on the line Scale click on the button '...'
 
       - a wizard appears : stochastic inputs x1 and x2 are listed
 
@@ -1052,11 +1124,13 @@ Analyses
 
     - click on the Finish button
 
-      - widget with a progress bar appears at the bottom of the tree view
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
 
-    - a new item MetaModel_kriging_0 appears in the tree view
+      - click on the 'Run' button
 
-      - click on it
+    - a new item MetaModel_0 appears in the tree view
+
+      - click on its sub-item named 'Definition'
 
       - change the value of x2 to 1.6
 
@@ -1065,14 +1139,14 @@ Analyses
       .. image:: /developer_manual/validation/kriging_new_model.png
           :align: center
 
-    - check result window :
+    - check the Kriging result window :
 
       .. image:: /developer_manual/validation/kriging_result.png
           :align: center
 
-      - left side: 1 variable in the list view
+      - left side : 2 variables in the list view
 
-      - right side: 4 tabs MetaModel - Results - Validation - Parameters
+      - right side, 4 tabs : MetaModel - Results - Validation - Parameters
 
       - when changing the variable, the tabs are updated
 
@@ -1083,30 +1157,41 @@ Analyses
       - check tables are well drawn
 
 
-    - right click on design_3 and choose New metamodel
+    - right click on the sub-item of design_3 named 'Evaluation' and choose New metamodel
 
-      - choose the Kriging method and click on the Finish button
+      - choose the Kriging method and click on Continue button then the Finish button
 
       .. image:: /developer_manual/validation/design_3_kriging_wizard.png
           :align: center
 
-      - a widget with a progress bar appears at the bottom of the tree view : click immediately on the Stop button
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
+
+      - click on the 'Run' button and click immediately on the Stop button
 
       - there is only y0 in the list view at the left side of the result window
 
       .. image:: /developer_manual/validation/design_3_result.png
           :align: center
 
-  - chaos_1
+  - Functional chaos : chaos_1 item
 
-    .. image:: /developer_manual/validation/chaos_wizard.png
-        :align: center
+    - First page check the values :
 
-    - check the values:
+      .. image:: /developer_manual/validation/chaos_1_wizard_1st_page.png
+          :align: center
 
-      - selected output : y1
+      - design of experiment : design_1
+
+      - selected outputs : y1
 
       - method : Functional chaos
+
+      - continue
+
+    - Second page check the values :
+
+      .. image:: /developer_manual/validation/chaos_1_wizard_2nd_page.png
+          :align: center
 
       - degree : 2
 
@@ -1116,7 +1201,9 @@ Analyses
 
     - click on the Finish button
 
-      - widget with a progress bar appears at the bottom of the tree view
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
+
+      - click on the 'Run' button
 
     - a new model appears in the tree view
 
@@ -1127,16 +1214,11 @@ Analyses
       .. image:: /developer_manual/validation/chaos_result.png
           :align: center
 
-      - left side: 1 variable in the list view
+      - left side : 1 variable in the list view
 
-      - right side: 4 tabs MetaModel - Moments - Sobol indices - Parameters
+      - right side, 4 tabs : MetaModel - Moments - Sobol indices - Parameters
 
       - Metamodel tab : plot + R2 table
-
-      - Moments and Sobol indices tabs : error message 'Impossible to compute Sobol indices and moments etc.'
-
-        .. image:: /developer_manual/validation/chaos_result_tab_moments_error_message.png
-            :align: center
 
       - when changing the variable, the tabs are updated
 
@@ -1147,22 +1229,30 @@ Analyses
 
   - chaos_2
 
-    - error message box : 'The model must have at least one output'
+    - click on the 'Run' button
 
-    - right click on the item design_2 and click on Evaluate
+    - error message : 'No results are available...'
 
-    - right click on the item chaos_2 and click on Run
+    - right click on the item design_2 and choose Evaluate
+
+    - a window appears, click on the 'Run' button
+
+    - right click on the item chaos_2 and click on Modify
 
     .. image:: /developer_manual/validation/chaos_2_wizard.png
         :align: center
 
-    - check the values:
+    - First page check the values :
+
+      - design of experiment : design_2
 
       - selected outputs : y0, fake_y0, y1
 
         - uncheck fake_y0
 
       - method : Functional chaos
+
+    - Second page check the values :
 
       - degree : 2
 
@@ -1172,7 +1262,9 @@ Analyses
 
     - click on the Finish button
 
-      - widget with a progress bar appears at the bottom of the tree view
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
+
+      - click on the 'Run' button
 
     - check result window :
 
@@ -1185,15 +1277,13 @@ Analyses
 
       - Metamodel tab : plot + R2 table
 
-      - Moments and Sobol indices tabs : error message 'Imposible to compute Sobol indices and moments etc.'
-
       - when changing the variable, the tabs are updated
 
       - when metamodel plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
 
       - check tables are well drawn
 
-  - Data analysis
+  - Data analysis : DataAnalysis item
 
     - check result window :
 
@@ -1204,7 +1294,7 @@ Analyses
 
         - x_1 the output is the first item of the list
 
-      - right side: 4 tabs Summary - PDF/CDF - Box plots - Scatter plots
+      - right side, 4 tabs : Summary - PDF/CDF - Box plots - Scatter plots
 
       - when changing the variable, the tabs are updated
 
@@ -1216,24 +1306,24 @@ Analyses
 
         - 2 types of extrema tables: one for the output x_1 and one for inputs x_0, x_1 and x_3
 
-        - Moments estimates table has 4 columns: Estimate - Value - Lower bound - Upper bound
+        - Moments estimates table has 4 columns : Estimate - Value - Lower bound - Upper bound
 
-        - bounds only for Mean and Standard deviation
+        - there are bounds only for Mean and Standard deviation
 
         - check probability and quantile spinboxes behavior
 
       - Scatter plots tab:
 
-        - 3 sub-tabs Scatter plots - Plot matrix X-X - Plot matrix Y-X
+        - 3 sub-tabs : Scatter plots - Plot matrix X-X - Plot matrix Y-X
 
         - when clicking on the tab, the list view is hidden
 
-  - Inference analysis
+  - Inference analysis : inference item
 
     .. image:: /developer_manual/validation/inference_wizard.png
         :align: center
 
-    - check the wizard behavior :
+    - right click on the item 'inference' and choose 'Modify'. Check the wizard behavior :
 
       - check all / uncheck all
 
@@ -1257,16 +1347,18 @@ Analyses
 
     - click on the Finish button
 
-      - widget with a progress bar appears at the bottom of the tree view
+      - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
+
+      - click on the 'Run' button
 
     - check result window :
 
       .. image:: /developer_manual/validation/inference_result.png
           :align: center
 
-      - left side: 2 variables in the list view
+      - left side : 2 variables in the list view
 
-      - right side: 2 tabs Summary - Parameters
+      - right side, 2 tabs : Summary - Parameters
 
       - when changing the variable, the tabs are updated
 
@@ -1289,7 +1381,7 @@ Analyses
         .. image:: /developer_manual/validation/inference_result_error.png
             :align: center
 
-  - Copula inference
+  - Copula inference : copulaInference item
 
     - check result window :
 
@@ -1298,11 +1390,11 @@ Analyses
 
       - left side: 2 sets of variables in the list view
 
-      - right side: 1 tab Summary
+      - right side, 1 tab : Summary
 
       - when changing the set of variables, the tabs are updated
 
-      - the right side of the window contains 2 parts : a copulas list and 3 tabs PDF/CDF - Kendall Plot - Parameters
+      - the right side of the window contains 2 parts : a copulas list and 3 tabs : PDF/CDF - Kendall Plot - Parameters
 
       - when selecting a copula, the tab widget is updated
 
@@ -1310,10 +1402,110 @@ Analyses
 
       - check tables are well drawn
 
-- check the study tree is as follows:
+- save the study, close it, reopen it
 
-.. image:: /developer_manual/validation/studyTreeView_at_the_end.png
-          :align: center
+  - check the study tree is as follows :
 
-- save the study, close it, reopen it and check all is here
+  .. image:: /developer_manual/validation/studyTreeView_at_the_end.png
+            :align: center
 
+Diagrams
+`````````
+
+- open the interface
+
+- create a new OTStudy
+
+- click on 'Symbolic model' button of the window of myOTStudy
+
+  - the item PhysicalModel_0 appears in the tree view
+
+  - a new Physical model diagram window appears in the mdiArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
+
+  - only the 'Model definition' button is enabled
+
+  .. image:: /developer_manual/validation/physicalModelDiagramWindow.png
+      :align: center
+
+- click on 'Model definition' button of the diagram : an item 'Definition' appears
+
+  - add an input and an output, set the formula of y0 to X0
+
+  - the 'Model evaluation', 'Design of experiment creation' and 'Probabilistic model definition' buttons of the diagram are enabled
+
+- click on the 'Model evaluation' button of the diagram
+
+  - a wizard appears, click on Cancel
+
+- click twice on the 'Design of experiment creation' button of the diagram
+
+  - a wizard appears, click on Continue button on the first page
+
+  - on the second page : select X0, write 20 in the 'Levels' column, click on Finish
+
+  - the 'Design of experiment evaluation' button of the diagram is enabled
+
+- click on the 'Design of experiment evaluation' button of the diagram
+
+  - a wizard appears, there are 2 items in the combo box in Design of experiment group box, click on Finish, an item 'Evaluation' appears, click on it
+
+  - click on the 'Run' button
+
+  - the 'MetaModel creation' button of the diagram is enabled
+
+- re-click on the 'Design of experiment evaluation' button of the diagram
+
+  - an error message appears : 'All the designs of experiment have already been evaluated'
+
+- click on the 'MetaModel creation' button of the diagram
+
+  - a wizard appears, click on Continue button then on Finish button
+
+- click on the 'Probabilistic model definition' button of the diagram
+
+  - a window appears, select X0
+
+  - the 'Sensitivity', 'Central tendency' and 'Limit state definition' buttons of the diagram are enabled
+
+- click on the 'Sensitivity' button of the diagram
+
+  - a wizard appears, click on Cancel
+
+- click on the 'Central tendency' button of the diagram
+
+  - a wizard appears, click on Cancel
+
+- click twice on the 'Limit state definition' button of the diagram
+
+  - 2 windows appears
+
+  - the 'Reliability' button of the diagram is enabled
+
+- click on the 'Reliability' button of the diagram
+
+  - a wizard appears, there are 2 items in the combo box in Limit state group box, click on Cancel
+
+- click on 'Data model' button of the window of myOTStudy
+
+  - the item dataModel_0 appears in the tree view
+
+  - a new Data model diagram window appears in the mdiArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
+
+  - only the 'Model definition' button is enabled
+
+  .. image:: /developer_manual/validation/dataModelDiagramWindow.png
+      :align: center
+
+- click on 'Model definition' button of the diagram : an item 'Definition' appears
+
+  - click on the '...' button, import the file data.csv
+
+  - the first three columns are inputs and the last one is an output
+
+  - all the buttons are enabled in the diagram
+
+  - if there are outputs and one or zero input, 'Dependencies inference' buttons is disabled
+
+  - if there are outputs and zero input, 'Metamodel creation' button is disabled
+
+  - if all the combo boxes are set to 'Disable', all the buttons of the diagram are disabled
