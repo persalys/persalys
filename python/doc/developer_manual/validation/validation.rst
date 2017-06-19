@@ -1509,3 +1509,7 @@ Diagrams
   - if there are outputs and zero input, 'Metamodel creation' button is disabled
 
   - if all the combo boxes are set to 'Disable', all the buttons of the diagram are disabled
+
+- save the current study, reopen
+
+  - in the window of the 'Definition' item of the data model : click on the reload button
