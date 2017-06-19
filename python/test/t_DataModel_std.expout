@@ -574,5 +574,4 @@ myDataModel3 = otguibase.DataModel('myDataModel3', 'data.csv', inputColumns, out
 myStudy.add(myDataModel3)
 aDataAnalysis = otguibase.DataAnalysis('aDataAnalysis', myDataModel)
 myStudy.add(aDataAnalysis)
-aDataAnalysis.run()
 
