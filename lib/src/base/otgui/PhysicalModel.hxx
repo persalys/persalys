@@ -43,7 +43,6 @@ public:
 
   void addObserver(Observer * observer);
   void blockNotification(const OT::String & blockedObserverType="");
-  void blockNotification(const bool block);
 
   InputCollection getInputs() const;
   Input & getInputByName(const OT::String & inputName);
