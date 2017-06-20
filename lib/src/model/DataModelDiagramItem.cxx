@@ -36,7 +36,7 @@ DataModelDiagramItem::DataModelDiagramItem(const DesignOfExperiment& designOfExp
 void DataModelDiagramItem::buildActions()
 {
   // define data model action
-  defineDataModel_ = new QAction(tr("Define"), this);
+  defineDataModel_ = new QAction(tr("Define the model"), this);
   defineDataModel_->setStatusTip(tr("Define the data model"));
   connect(defineDataModel_, SIGNAL(triggered(bool)), this, SLOT(appendDataModelItem()));
 

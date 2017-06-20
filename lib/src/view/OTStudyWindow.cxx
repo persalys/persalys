@@ -83,12 +83,12 @@ void OTStudyWindow::buildInterface()
 #endif
 
   QLabel * textEdit = new QLabel;
-  textEdit->setText("Available functionalities :");
+  textEdit->setText(tr("Available functionalities :"));
   textEdit->setStyleSheet("font: bold;");
   layout->addWidget(textEdit, row, 0);
 
   textEdit = new QLabel;
-  textEdit->setText("- Evaluation\n- Design of experiment\n- Central dispersion\n- Sensitivity\n- Reliability\n- Metamodel");
+  textEdit->setText(tr("- Evaluation\n- Design of experiment\n- Central tendency\n- Sensitivity\n- Reliability\n- Metamodel"));
   layout->addWidget(textEdit, row+1, 0, Qt::AlignHCenter|Qt::AlignTop);
 
   // vertical line
@@ -105,12 +105,12 @@ void OTStudyWindow::buildInterface()
   layout->addWidget(button, 0, 2);
 
   textEdit = new QLabel;
-  textEdit->setText("Available functionalities :");
+  textEdit->setText(tr("Available functionalities :"));
   textEdit->setStyleSheet("font: bold;");
   layout->addWidget(textEdit, row, 2);
 
   textEdit = new QLabel;
-  textEdit->setText("- Data analysis\n- Inference\n- Dependencies inference\n- Metamodel");
+  textEdit->setText(tr("- Data analysis\n- Inference\n- Dependencies inference\n- Metamodel"));
   layout->addWidget(textEdit, row+1, 2, Qt::AlignHCenter|Qt::AlignTop);
 
   // set widget
