@@ -52,9 +52,11 @@ PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelDefinitionItem
   , removeOutputLineButton_(0)
   , evaluateOutputsButton_(0)
 {
-  connect(item, SIGNAL(inputListDefinitionChanged()), this, SLOT(updateInputTableModel()));
+  connect(item, SIGNAL(numberInputsChanged()), this, SLOT(updateInputTableModel()));
+  connect(item, SIGNAL(inputListDefinitionChanged()), this, SLOT(updateInputDataTableModel()));
   connect(item, SIGNAL(inputListDifferentiationChanged()), this, SLOT(updateDifferentiationTableModel()));
-  connect(item, SIGNAL(outputChanged()), this, SLOT(updateOutputTableModel()));
+  connect(item, SIGNAL(numberOutputsChanged()), this, SLOT(updateOutputTableModel()));
+  connect(item, SIGNAL(outputChanged()), this, SLOT(updateOutputDataTableModel()));
 
   buildInterface();
 }
@@ -237,6 +239,7 @@ void PhysicalModelWindowWidget::updateInputTableModel()
   connect(inputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
   connect(inputTableModel_, SIGNAL(inputNumberChanged()), this, SLOT(updateDifferentiationTableModel()));
   connect(inputTableModel_, SIGNAL(inputNameChanged()), this, SLOT(updateDifferentiationTableModel()));
+  connect(this, SIGNAL(inputTableModelDataChanged(QModelIndex,QModelIndex)), inputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)));
 }
 
 
@@ -253,6 +256,7 @@ void PhysicalModelWindowWidget::updateDifferentiationTableModel()
   differentiationTableView_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
   differentiationTableView_->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
 #endif
+  connect(this, SIGNAL(differentiationTableModelDataChanged(QModelIndex,QModelIndex)), differentiationTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)));
 }
 
 
@@ -281,6 +285,47 @@ void PhysicalModelWindowWidget::updateOutputTableModel()
   outputTableHeaderView_->setChecked(allChecked);
   connect(outputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
   connect(outputTableModel_, SIGNAL(checked(bool)), outputTableHeaderView_, SLOT(setChecked(bool)));
+  connect(this, SIGNAL(outputTableModelDataChanged(QModelIndex,QModelIndex)), outputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)));
+}
+
+
+void PhysicalModelWindowWidget::updateInputDataTableModel()
+{
+  if (!inputTableModel_)
+    return;
+  if (!inputTableModel_->rowCount())
+    return;
+  // refresh values
+  QModelIndex topleft = inputTableModel_->index(0, 0);
+  QModelIndex bottomright = inputTableModel_->index(inputTableModel_->rowCount(), inputTableModel_->columnCount());
+  emit inputTableModelDataChanged(topleft, bottomright);
+}
+
+
+void PhysicalModelWindowWidget::updateDifferentiationDataTableModel()
+{
+  if (!differentiationTableModel_)
+    return;
+  if (!differentiationTableModel_->rowCount())
+    return;
+  // refresh values
+  QModelIndex topleft = differentiationTableModel_->index(0, 0);
+  QModelIndex bottomright = differentiationTableModel_->index(differentiationTableModel_->rowCount(), differentiationTableModel_->columnCount());
+  emit differentiationTableModelDataChanged(topleft, bottomright);
+
+}
+
+
+void PhysicalModelWindowWidget::updateOutputDataTableModel()
+{
+  if (!outputTableModel_)
+    return;
+  if (!outputTableModel_->rowCount())
+    return;
+  // refresh values
+  QModelIndex topleft = outputTableModel_->index(0, 0);
+  QModelIndex bottomright = outputTableModel_->index(outputTableModel_->rowCount(), outputTableModel_->columnCount());
+  emit outputTableModelDataChanged(topleft, bottomright);
 }
 
 

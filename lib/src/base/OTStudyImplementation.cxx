@@ -573,8 +573,6 @@ String OTStudyImplementation::getPythonScript()
   {
     result += (*it).getPythonScript();
     result += getName() + ".add(" + (*it).getName() + ")\n";
-    if ((*it).getImplementation()->getClassName() == "DataAnalysis")
-      result += (*it).getName() + ".run()\n";
   }
   return result;
 }

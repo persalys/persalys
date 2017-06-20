@@ -117,7 +117,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   DiagramPushButton * sensitivityButton = new DiagramPushButton;
   sensitivityButton->setText(tr("Sensitivity"));
   sensitivityButton->setWhatsThis(tr("Two methods : Sobol and SRC"));
-  sensitivityButton->setErrorMessage(tr("Define independant input variables and output variables in the model"));
+  sensitivityButton->setErrorMessage(tr("Define independent input variables and output variables in the model"));
   QGraphicsProxyWidget * sensitivityProxy = new QGraphicsProxyWidget;
   sensitivityProxy->setWidget(sensitivityButton);
   scene->addItem(sensitivityProxy);
@@ -153,7 +153,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   DiagramPushButton * metamodelButton = new DiagramPushButton;
   metamodelButton->setText(tr("Metamodel\ncreation"));
   metamodelButton->setWhatsThis(tr("Two methods : Kriging and Functional chaos"));
-  metamodelButton->setErrorMessage(tr("At least one design of experiment must contains output values"));
+  metamodelButton->setErrorMessage(tr("At least one design of experiment must contain output values"));
   QGraphicsProxyWidget * metamodelProxy = new QGraphicsProxyWidget;
   metamodelProxy->setWidget(metamodelButton);
   scene->addItem(metamodelProxy);

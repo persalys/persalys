@@ -125,7 +125,6 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
       {
         if (input.getValue() == value.toDouble())
           return true;
-        physicalModel_.blockNotification("PhysicalModelDefinition");
         emit errorMessageChanged("");
         physicalModel_.setInputValue(input.getName(), value.toDouble());
         break;

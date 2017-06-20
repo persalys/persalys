@@ -34,7 +34,7 @@ model1.setCopula(ot.NormalCopula(R))
 myStudy.add(model1)
 
 ## model 2 ##
-code = 'from math import cos, sin\n\ndef _exec(x1, x2, x3):\n    y0 = cos(0.5*x1) + sin(x2) + x3\n    return [y0]\n'
+code = 'from math import cos, sin\n\ndef _exec(x1, x2, x3):\n    y0 = cos(0.5*x1) + sin(x2) + x3\n    return y0\n'
 model2 = otguibase.PythonPhysicalModel('model2', [x1, x2, x3], [y0], code)
 myStudy.add(model2)
 

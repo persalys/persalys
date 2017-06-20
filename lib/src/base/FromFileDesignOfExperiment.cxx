@@ -78,13 +78,20 @@ void FromFileDesignOfExperiment::setFileName(const String& fileName)
 
   if (fileName_ != fileName)
   {
-    Sample importedSample(ImportSample(fileName));
-    fileName_ = fileName;
-    sampleFromFile_ = importedSample;
-    // reinitialization
-    setInputSample(Sample());
-    initialize();
-    inputColumns_ = Indices();
+    const String oldFileName = fileName_;
+    try
+    {
+      fileName_ = fileName;
+      getSampleFromFile();
+      // reinitialization
+      setInputSample(Sample());
+      initialize();
+      inputColumns_ = Indices();
+    }
+    catch (std::exception)
+    {
+      fileName_ = oldFileName;
+    }
   }
   else
   {
@@ -127,7 +134,20 @@ void FromFileDesignOfExperiment::setInputColumns(const Indices& inputColumns)
 Sample FromFileDesignOfExperiment::getSampleFromFile()
 {
   if (!sampleFromFile_.getSize())
+  {
     sampleFromFile_ = ImportSample(fileName_);
+
+    // check the sample description
+    const Description sampleDescription(sampleFromFile_.getDescription());
+    Description descriptionToCheck;
+    for (UnsignedInteger i=0; i<sampleDescription.getSize(); ++i)
+      if (!descriptionToCheck.contains(sampleDescription[i]) && !sampleDescription[i].empty())
+        descriptionToCheck.add(sampleDescription[i]);
+
+    // if empty name or at least two same names
+    if (descriptionToCheck.getSize() != sampleDescription.getSize())
+      sampleFromFile_.setDescription(Description::BuildDefault(sampleDescription.getSize(), "data_"));
+  }
   return sampleFromFile_;
 }
 

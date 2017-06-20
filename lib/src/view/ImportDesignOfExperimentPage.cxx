@@ -52,7 +52,7 @@ void ImportDesignOfExperimentPage::setTable(const QString& fileName)
 
   // check sample From File
   Sample sample(designOfExperiment_.getSampleFromFile());
-  if (!designOfExperiment_.getInputColumns().check(sample.getDimension()-1))
+  if (!designOfExperiment_.getInputColumns().check(sample.getDimension()))
     throw InvalidArgumentException(HERE) << tr("Impossible to load sample marginals").toLocal8Bit().data();
 
   const Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
@@ -125,7 +125,7 @@ void ImportDesignOfExperimentPage::columnNameChanged()
   if (columns != columns2)
   {
     QString message = tr("Each variable must be associated with one column.");
-    message = QString("%1%2%3").arg("<font color=red>").arg(message).arg("</font>");
+    message = QString("<font color=red>%1</font>").arg(message);
     errorMessageLabel_->setText(message);
     pageValidity_ = false;
     return;
@@ -140,7 +140,7 @@ void ImportDesignOfExperimentPage::columnNameChanged()
   catch(InvalidArgumentException & ex)
   {
     QString message = tr("Each variable must be associated with one column.");
-    message = QString("%1%2%3").arg("<font color=red>").arg(message).arg("</font>");
+    message = QString("<font color=red>%1</font>").arg(message);
     errorMessageLabel_->setText(message);
     pageValidity_ = false;
   }

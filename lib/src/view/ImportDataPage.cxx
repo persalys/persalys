@@ -25,7 +25,7 @@
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QPushButton>
+#include <QToolButton>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QSettings>
@@ -57,7 +57,8 @@ void ImportDataPage::buildInterface()
   filePathLineEdit_ = new QLineEdit;
   hboxLayout->addWidget(filePathLineEdit_);
 
-  QPushButton * openFileButton = new QPushButton(tr("Import..."));
+  QToolButton * openFileButton = new QToolButton;
+  openFileButton->setText("...");
   connect(openFileButton, SIGNAL(clicked()), this, SLOT(openFileRequested()));
   hboxLayout->addWidget(openFileButton);
 
@@ -87,9 +88,10 @@ void ImportDataPage::openFileRequested()
   QString currentDir = settings.value("currentDir").toString();
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Data to import..."),
-                     currentDir,
-                     tr("Data files (*.csv *.txt)"));
+  QString fileName = QFileDialog::getOpenFileName(this,
+                                                  tr("Data to import..."),
+                                                  currentDir,
+                                                  tr("Data files (*.csv *.txt)"));
 
   if (!fileName.isEmpty())
   {
@@ -99,7 +101,8 @@ void ImportDataPage::openFileRequested()
     // check
     if (!file.open(QFile::ReadOnly))
     {
-      QMessageBox::warning(this, tr("Warning"),
+      QMessageBox::warning(this,
+                           tr("Warning"),
                            tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
     }
     else
@@ -122,7 +125,7 @@ void ImportDataPage::setData(const QString& fileName)
   catch (std::exception & ex)
   {
     QString message = tr("Impossible to load the file.") + "\n";
-    message = QString("%1%2%3%4").arg("<font color=red>").arg(message).arg(ex.what()).arg("</font>");
+    message = QString("<font color=red>%1%2</font>").arg(message).arg(ex.what());
     errorMessageLabel_->setText(message);
     pageValidity_ = false;
   }

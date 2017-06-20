@@ -136,25 +136,24 @@ void DataModel::setColumns(const Indices& inputColumns,
   {
     if (inputColumns.getSize() != inputNames.getSize())
       throw InvalidArgumentException(HERE) << "The dimension of the inputs names list has to be equal to the dimension of the inputs columns list.";
-
-    std::set<String> inputNamesSet;
-    for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
-      inputNamesSet.insert(inputNames[i]);
-    if (inputNamesSet.size() != inputNames.getSize())
-      throw InvalidArgumentException(HERE) << "Two inputs can not have the same name.";
   }
-
   // - check output
   if (outputNames.getSize())
   {
     if (outputColumns.getSize() != outputNames.getSize())
       throw InvalidArgumentException(HERE) << "The dimension of the outputs names list has to be equal to the dimension of the outputs columns list.";
-
-    std::set<String> outputNamesSet;
+  }
+  // - check unicity of the variables names
+  if ((inputNames.getSize() + outputNames.getSize()) > 0)
+  {
+    std::set<String> variableNamesSet;
+    for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
+      variableNamesSet.insert(inputNames[i]);
     for (UnsignedInteger i=0; i<outputNames.getSize(); ++i)
-      outputNamesSet.insert(outputNames[i]);
-    if (outputNamesSet.size() != outputNames.getSize())
-      throw InvalidArgumentException(HERE) << "Two outputs can not have the same name.";
+      variableNamesSet.insert(outputNames[i]);
+
+    if (variableNamesSet.size() != (inputNames.getSize() + outputNames.getSize()))
+      throw InvalidArgumentException(HERE) << "Two variables can not have the same name.";
   }
 
   // set attributs
@@ -189,6 +188,8 @@ Description DataModel::getInputNames()
   if (!inputNames_.getSize())
   {
     const Description sampleDescription(getSampleFromFile().getDescription());
+
+    // set input names
     inputNames_ = Description(inputColumns_.getSize());
     for (UnsignedInteger i=0; i<inputColumns_.getSize(); ++i)
       inputNames_[i] = sampleDescription[inputColumns_[i]];
@@ -202,6 +203,8 @@ Description DataModel::getOutputNames()
   if (!outputNames_.getSize())
   {
     const Description sampleDescription(getSampleFromFile().getDescription());
+
+    // set output names
     outputNames_ = Description(outputColumns_.getSize());
     for (UnsignedInteger i=0; i<outputColumns_.getSize(); ++i)
       outputNames_[i] = sampleDescription[outputColumns_[i]];

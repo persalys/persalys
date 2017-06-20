@@ -69,27 +69,35 @@ void PhysicalModelDefinitionItem::update(Observable* source, const String & mess
   // emit signals to PhysicalModelWindowWidget
 
   // input signals
-  if (message == "inputNameChanged" ||
-      message == "inputNumberChanged"
-     )
+  if (message == "inputNumberChanged")
+  {
+    emit numberInputsChanged();
+  }
+  else if (message == "inputNameChanged")
   {
     emit inputListDifferentiationChanged();
     emit inputListDefinitionChanged();
   }
-  else if (message == "inputDescriptionChanged" ||
-           message == "inputValueChanged"
-          )
+  else if (message == "inputDescriptionChanged")
   {
     emit inputListDefinitionChanged();
+  }
+  else if (message == "inputValueChanged")
+  {
+    emit inputListDefinitionChanged();
+    emit outputChanged();
   }
   else if (message == "inputStepChanged")
   {
     emit inputListDifferentiationChanged();
   }
   // output signals
+  else if (message == "outputNumberChanged")
+  {
+    emit numberOutputsChanged();
+  }
   else if (message == "outputNameChanged" ||
            message == "outputDescriptionChanged" ||
-           message == "outputNumberChanged" ||
            message == "outputFormulaChanged" ||
            message == "outputSelectionChanged" ||
            message == "outputValueChanged"

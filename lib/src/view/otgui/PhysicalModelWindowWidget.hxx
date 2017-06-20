@@ -51,12 +51,18 @@ public slots:
   void updateInputTableModel();
   void updateDifferentiationTableModel();
   void updateOutputTableModel();
+  void updateInputDataTableModel();
+  void updateDifferentiationDataTableModel();
+  void updateOutputDataTableModel();
   void resizeInputTable();
   void resizeOutputTable();
   void applyDifferentiationStepToAllInputs(double);
 
 signals:
   void errorMessageChanged(QString);
+  void inputTableModelDataChanged(QModelIndex, QModelIndex);
+  void differentiationTableModelDataChanged(QModelIndex, QModelIndex);
+  void outputTableModelDataChanged(QModelIndex, QModelIndex);
 
 private:
   PhysicalModel physicalModel_;
