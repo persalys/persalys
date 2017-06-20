@@ -24,8 +24,13 @@
 
 #include "otgui/MainWindow.hxx"
 #include "otgui/PythonEnvironment.hxx"
+
 #ifdef OTGUI_HAVE_YACS
 #include "otgui/YACSEvalSessionSingleton.hxx"
+#endif
+
+#ifdef OTGUI_HAVE_PARAVIEW
+#include <pqPVApplicationCore.h>
 #endif
 
 using namespace OTGUI;
@@ -38,6 +43,13 @@ int main(int argc, char *argv[])
   {
   // Application
   QApplication app(argc, argv);
+
+#ifdef OTGUI_HAVE_PARAVIEW
+  pqPVApplicationCore appPV(argc, argv);
+  QApplication::instance()->installEventFilter(&appPV);
+  appPV.loadConfiguration(":/lib/src/view/plot/paraview/ParaViewSources.xml");
+#endif
+
   // Settings
   QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EDF_Phimeca", "OTgui");
   settings.setValue("currentDir", QSettings().fileName());
@@ -56,7 +68,7 @@ int main(int argc, char *argv[])
   window.resize(1024, 768);
   window.show();
 
-  ret=app.exec();
+  ret = app.exec();
 #ifdef OTGUI_HAVE_YACS
   YACSEvalSessionSingleton::Reset();
 #endif

@@ -1,3 +1,7 @@
+if (ParaView_FOUND)
+  add_subdirectory (paraview)
+endif ()
+
 set (SOURCEFILES "" CACHE STRING "" FORCE)
 
 ot_add_current_dir_to_include_dirs ()
@@ -48,6 +52,9 @@ target_link_libraries ( otguiplot otguiutils )
 include_directories (${QWT_INCLUDE_DIRS})
 target_link_libraries (otguiplot ${QT_LIBRARIES})
 target_link_libraries (otguiplot ${QWT_LIBRARIES})
+if (ParaView_FOUND)
+  target_link_libraries (otguiplot otguiplotparaview)
+endif ()
 
 install ( TARGETS otguiplot
   RUNTIME DESTINATION bin
