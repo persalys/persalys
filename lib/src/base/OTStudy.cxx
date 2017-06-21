@@ -23,12 +23,13 @@
 #include <openturns/Study.hxx>
 #include <openturns/XMLStorageManager.hxx>
 
+#include <boost/filesystem.hpp>
+
 using namespace OT;
 
 namespace OTGUI {
 
 CLASSNAMEINIT(OTStudy);
-
 
 PersistentCollection<OTStudy > OTStudy::OTStudies_;
 Observer * OTStudy::OTStudyObserver_ = 0;
@@ -84,6 +85,9 @@ void OTStudy::Add(const OTStudy& otstudy)
 
 void OTStudy::Remove(const OTStudy& otstudy)
 {
+  if (!OTStudies_.contains(otstudy))
+    return;
+
   otstudy.getImplementation().get()->clear();
 
   if (OTStudyObserver_)
@@ -104,12 +108,19 @@ void OTStudy::Remove(const OTStudy& otstudy)
 
 void OTStudy::Open(const String & xmlFileName)
 {
+  // check path
+  boost::filesystem::path canonicalPath = boost::filesystem::canonical(xmlFileName);
+
+  if (GetFileNames().contains(canonicalPath.string()))
+    throw InvalidArgumentException (HERE) << "This study is already opened";
+
+  // open study
   Study study;
   study.setStorageManager(XMLStorageManager(xmlFileName));
   study.load();
   OTStudy openedStudy;
   study.fillObject("otstudy", openedStudy);
-  openedStudy.getImplementation()->setFileName(xmlFileName);
+  openedStudy.getImplementation()->setFileName(canonicalPath.string());
   Add(openedStudy);
 }
 
