@@ -54,6 +54,12 @@ void Observable::removeObserver(Observer * observer)
 }
 
 
+void Observable::removeObserver(const String& observerType)
+{
+  removeObserver(getObserver(observerType));
+}
+
+
 void Observable::notify(const String & message)
 {
   // do not use for (std::vector<Observer*>::iterator it = observers_.begin(); it != observers_.end(); ++it)
