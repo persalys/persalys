@@ -40,6 +40,10 @@ public:
   /** Constructor from implementation pointer */
   Analysis(AnalysisImplementation * p_implementation);
 
+  /** Comparison operators */
+  OT::Bool operator ==(const Analysis & other) const;
+  OT::Bool operator !=(const Analysis & other) const;
+
   void addObserver(Observer * observer);
 
   OT::String getModelName() const;

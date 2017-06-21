@@ -47,6 +47,10 @@ public:
   /** Constructor from implementation pointer */
   LimitState(LimitStateImplementation * p_implementation); 
 
+  /** Comparison operator */
+  OT::Bool operator ==(const LimitState & other) const;
+  OT::Bool operator !=(const LimitState & other) const;
+
   void addObserver(Observer * observer);
   void blockNotification(const OT::String & blockedObserverType="");
 

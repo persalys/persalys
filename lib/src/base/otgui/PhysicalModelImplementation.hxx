@@ -44,6 +44,10 @@ public:
   /** Virtual constructor */
   virtual PhysicalModelImplementation * clone() const;
 
+  /** Comparison operators */
+  OT::Bool operator ==(const PhysicalModelImplementation & other) const;
+  OT::Bool operator !=(const PhysicalModelImplementation & other) const;
+
   InputCollection getInputs() const;
   Input & getInputByName(const OT::String & inputName);
   Input getInputByName(const OT::String & inputName) const;

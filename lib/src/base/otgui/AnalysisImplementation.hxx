@@ -36,6 +36,10 @@ public:
   /** Virtual constructor */
   virtual AnalysisImplementation * clone() const;
 
+  /** Comparison operators */
+  OT::Bool operator ==(const AnalysisImplementation & other) const;
+  OT::Bool operator !=(const AnalysisImplementation & other) const;
+
   virtual OT::String getModelName() const;
 
   virtual void run();

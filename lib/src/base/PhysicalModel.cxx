@@ -64,6 +64,19 @@ PhysicalModel* PhysicalModel::clone() const
 }
 
 
+Bool PhysicalModel::operator==(const PhysicalModel& other) const
+{
+  if (this == &other) return true;
+  return *getImplementation() == *other.getImplementation();
+}
+
+
+Bool PhysicalModel::operator!=(const PhysicalModel& other) const
+{
+  return !operator==(other);
+}
+
+
 void PhysicalModel::addObserver(Observer * observer)
 {
   getImplementation()->addObserver(observer);

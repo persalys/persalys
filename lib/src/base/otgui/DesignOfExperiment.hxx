@@ -43,6 +43,10 @@ public:
   /** Constructor from implementation pointer */
   DesignOfExperiment(DesignOfExperimentImplementation * p_implementation);
 
+  /** Comparison operator */
+  OT::Bool operator ==(const DesignOfExperiment & other) const;
+  OT::Bool operator !=(const DesignOfExperiment & other) const;
+
   void addObserver(Observer * observer);
 
   bool hasPhysicalModel() const;

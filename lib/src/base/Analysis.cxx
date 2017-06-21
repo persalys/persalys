@@ -57,6 +57,19 @@ Analysis::Analysis(AnalysisImplementation * p_implementation)
 }
 
 
+Bool Analysis::operator==(const Analysis& other) const
+{
+  if (this == &other) return true;
+  return *getImplementation() == *other.getImplementation();
+}
+
+
+Bool Analysis::operator!=(const Analysis& other) const
+{
+  return !operator==(other);
+}
+
+
 void Analysis::addObserver(Observer * observer)
 {
   getImplementation()->addObserver(observer);

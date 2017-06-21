@@ -60,6 +60,20 @@ AnalysisImplementation* AnalysisImplementation::clone() const
 }
 
 
+Bool AnalysisImplementation::operator==(const AnalysisImplementation& other) const
+{
+  if (this == &other)
+    return true;
+  return false;
+}
+
+
+Bool AnalysisImplementation::operator!=(const AnalysisImplementation& other) const
+{
+  return !operator==(other);
+}
+
+
 void AnalysisImplementation::initialize()
 {
   informationMessage_ = "";
