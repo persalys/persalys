@@ -163,4 +163,11 @@ void DesignOfExperiment::load(Advocate& adv)
 {
   getImplementation()->load(adv);
 }
+
+
+void DesignOfExperiment::setImplementationAsPersistentObject(const ImplementationAsPersistentObject& obj)
+{
+  TypedInterfaceObject< DesignOfExperimentImplementation >::setImplementationAsPersistentObject(obj);
+  getImplementation()->notify("implementationModified");
+}
 }

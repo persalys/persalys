@@ -121,4 +121,11 @@ void Analysis::stop()
 {
   getImplementation()->stop();
 }
+
+
+void Analysis::setImplementationAsPersistentObject(const ImplementationAsPersistentObject& obj)
+{
+  TypedInterfaceObject< AnalysisImplementation >::setImplementationAsPersistentObject(obj);
+  getImplementation()->notify("implementationModified");
+}
 }

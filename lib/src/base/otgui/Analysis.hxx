@@ -57,6 +57,9 @@ public:
   bool analysisLaunched() const;
 
   void stop();
+
+  /** override this method in order to emit a notification */
+  virtual void setImplementationAsPersistentObject(const ImplementationAsPersistentObject& obj);
 };
 }
 #endif

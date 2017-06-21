@@ -69,6 +69,9 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
+
+  /** override this method in order to emit a notification */
+  virtual void setImplementationAsPersistentObject(const ImplementationAsPersistentObject& obj);
 };
 }
 #endif
