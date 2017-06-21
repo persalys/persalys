@@ -107,7 +107,7 @@ void OTStudy::Open(const String & xmlFileName)
   study.load();
   OTStudy openedStudy;
   study.fillObject("otstudy", openedStudy);
-  openedStudy.setFileName(xmlFileName);
+  openedStudy.getImplementation()->setFileName(xmlFileName);
   Add(openedStudy);
 }
 
@@ -177,12 +177,6 @@ void OTStudy::addObserver(Observer * observer)
 String OTStudy::getFileName() const
 {
   return getImplementation()->getFileName();
-}
-
-
-void OTStudy::setFileName(const String& fileName)
-{
-  getImplementation()->setFileName(fileName);
 }
 
 

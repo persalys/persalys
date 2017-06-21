@@ -45,6 +45,8 @@ static Factory<PersistentCollection<Analysis> > RegisteredFactory_CollAn;
 OTStudyImplementation::OTStudyImplementation(const String& name)
   : PersistentObject()
   , Observable()
+  , Observer("OTStudy")
+  , modified_(true)
 {
   setName(name);
 }
@@ -64,6 +66,27 @@ OTStudyImplementation::~OTStudyImplementation()
 OTStudyImplementation* OTStudyImplementation::clone() const
 {
   return new OTStudyImplementation(*this);
+}
+
+
+void OTStudyImplementation::update(Observable* source, const String& message)
+{
+  if (message == "informationMessageUpdated" ||
+      message == "progressValueChanged")
+    return;
+
+  const bool oldModifiedValue = modified_;
+  modified_ = true;
+
+  // notification for AnalysisItem to update its Icon
+  if (modified_ != oldModifiedValue)
+    notify("statusChanged");
+}
+
+
+bool OTStudyImplementation::hasBeenModified() const
+{
+  return modified_;
 }
 
 
@@ -88,18 +111,23 @@ void OTStudyImplementation::clear()
   // remove all the analyses
   for (UnsignedInteger i=0; i<analyses_.getSize(); ++i)
   {
-    analyses_[i].getImplementation().get()->notify("analysisRemoved");
+    analyses_[i].getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
+    analyses_[i].getImplementation().get()->notifyAndRemove("analysisRemoved", "OTStudy");
   }
 
   // remove all the limit states
   for (UnsignedInteger i=0; i<limitStates_.getSize(); ++i)
-    limitStates_[i].getImplementation().get()->notify("limitStateRemoved");
+  {
+    limitStates_[i].getImplementation().get()->notifyAndRemove("limitStateRemoved", "LimitState");
+    limitStates_[i].getImplementation().get()->notifyAndRemove("limitStateRemoved", "OTStudy");
+  }
 
   // remove all the design Of Experiments
   for (UnsignedInteger i=0; i<designOfExperiments_.getSize(); ++i)
   {
     designOfExperiments_[i].getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
-    designOfExperiments_[i].getImplementation().get()->notify("designOfExperimentRemoved");
+    designOfExperiments_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DesignOfExperimentDefinition");
+    designOfExperiments_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "OTStudy");
   }
 
   // remove all the physical models
@@ -108,6 +136,7 @@ void OTStudyImplementation::clear()
     physicalModels_[i].getImplementation().get()->notifyAndRemove("probabilisticModelRemoved", "ProbabilisticModel");
     physicalModels_[i].getImplementation().get()->notifyAndRemove("physicalModelRemoved", "PhysicalModelDefinition");
     physicalModels_[i].getImplementation().get()->notifyAndRemove("physicalModelRemoved", "PhysicalModelDiagram");
+    physicalModels_[i].getImplementation().get()->notifyAndRemove("physicalModelRemoved", "OTStudy");
   }
 
   // remove all the datamodels
@@ -115,6 +144,7 @@ void OTStudyImplementation::clear()
   {
     dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDefinition");
     dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDiagram");
+    dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "OTStudy");
   }
 }
 
@@ -175,7 +205,8 @@ void OTStudyImplementation::clear(const DesignOfExperiment& designOfExperiment)
   {
     if ((*iterAnalysis).getModelName() == designOfExperiment.getName())
     {
-      (*iterAnalysis).getImplementation().get()->notify("analysisRemoved");
+      (*iterAnalysis).getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
+      (*iterAnalysis).getImplementation().get()->notifyAndRemove("analysisRemoved", "OTStudy");
       iterAnalysis = analyses_.erase(iterAnalysis);
     }
     else
@@ -211,7 +242,7 @@ bool OTStudyImplementation::hasPhysicalModelNamed(const String& physicalModelNam
 }
 
 
-String OTStudyImplementation::getAvailablePhysicalModelName(const OT::String& physicalModelRootName) const
+String OTStudyImplementation::getAvailablePhysicalModelName(const String& physicalModelRootName) const
 {
   int i = 0;
   while (hasPhysicalModelNamed(physicalModelRootName + (OSS()<<i).str()))
@@ -227,6 +258,10 @@ void OTStudyImplementation::add(const PhysicalModel& physicalModel)
 
   physicalModels_.add(physicalModel);
   notify("addPhysicalModel");
+
+  physicalModel.getImplementation().get()->addObserver(this);
+  modified_ = true;
+  notify("statusChanged");
 }
 
 
@@ -240,7 +275,8 @@ void OTStudyImplementation::clear(const PhysicalModel& physicalModel)
     {
       clear(*iter);
       physicalModel.getImplementation().get()->removeObserver((*iter).getImplementation().get()->getObserver("LimitState"));
-      (*iter).getImplementation().get()->notify("limitStateRemoved");
+      (*iter).getImplementation().get()->notifyAndRemove("limitStateRemoved", "LimitState");
+      (*iter).getImplementation().get()->notifyAndRemove("limitStateRemoved", "OTStudy");
       iter = limitStates_.erase(iter);
     }
     else
@@ -255,7 +291,8 @@ void OTStudyImplementation::clear(const PhysicalModel& physicalModel)
   {
     if ((*iterAnalysis).getModelName() == physicalModel.getName())
     {
-      (*iterAnalysis).getImplementation().get()->notify("analysisRemoved");
+      (*iterAnalysis).getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
+      (*iterAnalysis).getImplementation().get()->notifyAndRemove("analysisRemoved", "OTStudy");
       iterAnalysis = analyses_.erase(iterAnalysis);
     }
     else
@@ -272,7 +309,8 @@ void OTStudyImplementation::clear(const PhysicalModel& physicalModel)
     {
       clear(*iterDOE);
       (*iterDOE).getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
-      (*iterDOE).getImplementation().get()->notify("designOfExperimentRemoved");
+      (*iterDOE).getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DesignOfExperimentDefinition");
+      (*iterDOE).getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "OTStudy");
       iterDOE = designOfExperiments_.erase(iterDOE);
     }
     else
@@ -290,6 +328,7 @@ void OTStudyImplementation::remove(const PhysicalModel& physicalModel)
   physicalModel.getImplementation().get()->notifyAndRemove("probabilisticModelRemoved", "ProbabilisticModel");
   physicalModel.getImplementation().get()->notifyAndRemove("physicalModelRemoved", "PhysicalModelDefinition");
   physicalModel.getImplementation().get()->notifyAndRemove("physicalModelRemoved", "PhysicalModelDiagram");
+  physicalModel.getImplementation().get()->notifyAndRemove("physicalModelRemoved", "OTStudy");
 
   for (UnsignedInteger i=0; i<physicalModels_.getSize(); ++i)
     if (physicalModels_[i].getName() == physicalModel.getName())
@@ -312,7 +351,7 @@ DesignOfExperiment& OTStudyImplementation::getDesignOfExperimentByName(const Str
   for (UnsignedInteger i=0; i<designOfExperiments_.getSize(); ++i)
     if (designOfExperiments_[i].getName() == designOfExperimentName)
       return designOfExperiments_[i];
-  throw InvalidArgumentException(HERE) << "The given name " << designOfExperimentName <<" does not correspond to an design of experiments of the study.\n"; 
+  throw InvalidArgumentException(HERE) << "The given name " << designOfExperimentName <<" does not correspond to a design of experiments of the study.\n";
 }
 
 
@@ -356,6 +395,10 @@ void OTStudyImplementation::add(const DesignOfExperiment& designOfExperiment)
     dataModels_.add(designOfExperiment);
     notify("addDataModel");
   }
+
+  designOfExperiment.getImplementation().get()->addObserver(this);
+  modified_ = true;
+  notify("statusChanged");
 }
 
 
@@ -372,6 +415,7 @@ void OTStudyImplementation::remove(const DesignOfExperiment& designOfExperiment)
         break;
       }
     designOfExperiment.getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
+    designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DesignOfExperimentDefinition");
   }
   else // datamodel
   {
@@ -384,8 +428,9 @@ void OTStudyImplementation::remove(const DesignOfExperiment& designOfExperiment)
       }
     }
     designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDefinition");
+    designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDiagram");
   }
-  designOfExperiment.getImplementation().get()->notify("designOfExperimentRemoved");
+  designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "OTStudy");
 }
 
 
@@ -438,6 +483,10 @@ void OTStudyImplementation::add(const Analysis& analysis)
 
   analyses_.add(analysis);
   notify("addAnalysis");
+
+  analysis.getImplementation().get()->addObserver(this);
+  modified_ = true;
+  notify("statusChanged");
 }
 
 
@@ -449,7 +498,9 @@ void OTStudyImplementation::remove(const Analysis& analysis)
       analyses_.erase(analyses_.begin() + i);
       break;
     }
-  analysis.getImplementation().get()->notify("analysisRemoved");
+
+  analysis.getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
+  analysis.getImplementation().get()->notifyAndRemove("analysisRemoved", "OTStudy");
 }
 
 
@@ -489,6 +540,10 @@ void OTStudyImplementation::add(const LimitState& limitState)
 
   limitStates_.add(limitState);
   notify("addLimitState");
+
+  limitState.getImplementation().get()->addObserver(this);
+  modified_ = true;
+  notify("statusChanged");
 }
 
 
@@ -502,7 +557,8 @@ void OTStudyImplementation::clear(const LimitState& limitState)
     {
       if (dynamic_cast<ReliabilityAnalysis*>(&*(*iter).getImplementation())->getLimitState().getName() == limitState.getName())
       {
-        (*iter).getImplementation().get()->notify("analysisRemoved");
+        (*iter).getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
+        (*iter).getImplementation().get()->notifyAndRemove("analysisRemoved", "OTStudy");
         iter = analyses_.erase(iter);
       }
       else
@@ -525,12 +581,13 @@ void OTStudyImplementation::remove(const LimitState& limitState)
   for (UnsignedInteger i=0; i<limitStates_.getSize(); ++i)
     if (limitStates_[i].getName() == limitState.getName())
     {
-      limitStates_[i].getPhysicalModel().getImplementation().get()->removeObserver(limitStates_[i].getImplementation().get()->getObserver("LimitState"));
+      limitStates_[i].getPhysicalModel().getImplementation().get()->removeObserver("LimitState");
 
       limitStates_.erase(limitStates_.begin() + i);
       break;
     }
-  limitState.getImplementation().get()->notify("limitStateRemoved");
+  limitState.getImplementation().get()->notifyAndRemove("limitStateRemoved", "LimitState");
+  limitState.getImplementation().get()->notifyAndRemove("limitStateRemoved", "OTStudy");
 }
 
 
@@ -585,6 +642,8 @@ void OTStudyImplementation::save(const String& xmlFileName)
   study.add("otstudy", this->clone());
   study.save();
   setFileName(xmlFileName);
+  modified_ = false;
+  notify("statusChanged");
 }
 
 
@@ -609,5 +668,8 @@ void OTStudyImplementation::load(Advocate& adv)
   adv.loadAttribute("designOfExperiments_", designOfExperiments_);
   adv.loadAttribute("limitStates_", limitStates_);
   adv.loadAttribute("analyses_", analyses_);
+
+  modified_ = false;
+  notify("statusChanged");
 }
 }

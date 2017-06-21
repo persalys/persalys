@@ -46,10 +46,11 @@ OTStudyItem::OTStudyItem(const OTStudy& otStudy)
 {
   parentOTStudyItem_ = this;
   otStudy_.addObserver(this);
-  if (!otStudy_.getFileName().empty())
-    setToolTip(QString::fromUtf8(otStudy_.getFileName().c_str()));
+  update(0, "fileNameChanged");
+  updateIcon();
 
   buildActions();
+  connect(this, SIGNAL(otStudyStatusChanged()), this, SLOT(updateIcon()));
 }
 
 
@@ -142,10 +143,26 @@ void OTStudyItem::update(Observable * source, const String & message)
     if (!otStudy_.getFileName().empty())
       setToolTip(QString::fromUtf8(otStudy_.getFileName().c_str()));
   }
+  else if (message == "statusChanged")
+  {
+    // emit signal to change the updateIcon
+    // do NOT call directly updateIcon because is not 'thread safe'
+    // (some notifications are emitted when the analyses are running)
+    emit otStudyStatusChanged();
+  }
   else
   {
     qDebug() << "In OTStudyItem::update: not recognized message: " << message.data() << "\n";
   }
+}
+
+
+void OTStudyItem::updateIcon()
+{
+  if (otStudy_.getImplementation()->hasBeenModified())
+    setData(QIcon(":/images/document-save.png"), Qt::DecorationRole);
+  else
+    setData(QIcon(), Qt::DecorationRole);
 }
 
 
@@ -289,7 +306,11 @@ bool OTStudyItem::closeOTStudy()
 
   // if there are modifications
   bool canClose = false;
-  emit otStudyCloseRequested(this, &canClose);
+
+  if (otStudy_.getImplementation().get()->hasBeenModified())
+    emit otStudyCloseRequested(this, &canClose);
+  else
+    canClose = true;
 
   if (canClose)
     OTStudy::Remove(otStudy_);

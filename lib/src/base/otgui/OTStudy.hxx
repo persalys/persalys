@@ -60,7 +60,6 @@ public:
   void addObserver(Observer * observer);
 
   OT::String getFileName() const;
-  void setFileName(const OT::String& fileName);
 
   OT::Collection<DesignOfExperiment> getDataModels() const;
   DesignOfExperiment& getDataModelByName(const OT::String& dataModelName);

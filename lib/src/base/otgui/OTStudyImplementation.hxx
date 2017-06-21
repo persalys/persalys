@@ -28,7 +28,7 @@
 #include "Observer.hxx"
 
 namespace OTGUI {
-class OTGUI_API OTStudyImplementation : public OT::PersistentObject, public Observable
+class OTGUI_API OTStudyImplementation : public OT::PersistentObject, public Observable, public Observer
 {
   CLASSNAME;
 
@@ -41,6 +41,11 @@ public:
 
   /** Virtual constructor */
   virtual OTStudyImplementation * clone() const;
+
+  // Observer method override
+  virtual void update(Observable * source, const OT::String & message);
+
+  bool hasBeenModified() const;
 
   /** Comparison operators */
   OT::Bool operator ==(const OTStudyImplementation & other) const;
@@ -99,6 +104,7 @@ private:
   void clear(const LimitState & limitState);
 
 protected:
+  bool modified_;
   OT::String fileName_;
   OT::PersistentCollection<DesignOfExperiment> dataModels_;
   OT::PersistentCollection<PhysicalModel> physicalModels_;

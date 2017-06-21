@@ -104,10 +104,12 @@ Analysis AnalysisItem::getAnalysis() const
 void AnalysisItem::updateAnalysis(const Analysis & analysis)
 {
   // update analysis_
+  analysis_.getImplementation().get()->removeObserver("OTStudy");
   analysis_.getImplementation().get()->removeObserver(this);
   analysis_ = analysis;
   if (!analysis_.getImplementation().get()->getObservers().size())
     analysis_.addObserver(this);
+  analysis_.addObserver(getParentOTStudyItem()->getOTStudy().getImplementation().get());
 
   // update analysis type
   setData(analysis_.getImplementation()->getClassName().c_str(), Qt::UserRole);
