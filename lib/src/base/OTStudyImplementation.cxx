@@ -22,9 +22,9 @@
 
 #include "otgui/ReliabilityAnalysis.hxx"
 
-#include "openturns/PersistentObjectFactory.hxx"
-#include "openturns/Study.hxx"
-#include "openturns/XMLStorageManager.hxx"
+#include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/Study.hxx>
+#include <openturns/XMLStorageManager.hxx>
 
 using namespace OT;
 

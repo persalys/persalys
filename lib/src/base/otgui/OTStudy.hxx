@@ -100,7 +100,6 @@ public:
 
 private:
   static OT::PersistentCollection<OTStudy > OTStudies_;
-  static OT::Description OTStudiesFileNames_;
   static Observer * OTStudyObserver_;
 };
 }

@@ -20,8 +20,8 @@
  */
 #include "otgui/OTStudy.hxx"
 
-#include "openturns/Study.hxx"
-#include "openturns/XMLStorageManager.hxx"
+#include <openturns/Study.hxx>
+#include <openturns/XMLStorageManager.hxx>
 
 using namespace OT;
 
@@ -31,7 +31,6 @@ CLASSNAMEINIT(OTStudy);
 
 
 PersistentCollection<OTStudy > OTStudy::OTStudies_;
-Description OTStudy::OTStudiesFileNames_;
 Observer * OTStudy::OTStudyObserver_ = 0;
 
 
@@ -43,7 +42,12 @@ Collection<OTStudy> OTStudy::GetInstances()
 
 Description OTStudy::GetFileNames()
 {
-  return OTStudiesFileNames_;
+  Description otStudiesFileNames;
+  for (UnsignedInteger i = 0; i < OTStudies_.getSize(); ++ i)
+    if (!OTStudies_[i].getFileName().empty())
+      otStudiesFileNames.add(OTStudies_[i].getFileName());
+
+  return otStudiesFileNames;
 }
 
 
@@ -73,7 +77,6 @@ void OTStudy::Add(const OTStudy& otstudy)
     if (OTStudies_.contains(otstudy))
       throw InvalidArgumentException(HERE) << "The OTStudy already exists\n";
     OTStudies_.add(otstudy);
-    OTStudiesFileNames_.add(otstudy.getFileName());
     OTStudyObserver_->update(otstudy.getImplementation().get(), "addStudy");
   }
 }
@@ -91,7 +94,6 @@ void OTStudy::Remove(const OTStudy& otstudy)
     {
       if (OTStudies_[i] == otstudy)
       {
-        OTStudiesFileNames_.erase(OTStudiesFileNames_.begin() + i);
         OTStudies_.erase(OTStudies_.begin() + i);
         break;
       }
