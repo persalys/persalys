@@ -273,7 +273,7 @@ void PhysicalModelDiagramItem::appendPhysicalModelItem()
 void PhysicalModelDiagramItem::appendProbabilisticModelItem()
 {
   // do nothing if the item already exists
-  QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "ProbabilisticModel", -1, Qt::MatchRecursive);
+  QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "ProbabilisticModel", 1, Qt::MatchRecursive);
   if (listIndexes.size() == 1)
   {
     emit changeCurrentItemRequested(listIndexes[0]);
