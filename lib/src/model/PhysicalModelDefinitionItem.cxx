@@ -43,17 +43,17 @@ PhysicalModelDefinitionItem::PhysicalModelDefinitionItem(const PhysicalModel & p
 void PhysicalModelDefinitionItem::buildActions()
 {
   // new probabilistic model action
-  newProbabilisticModel_ = new QAction(tr("New probabilistic model"), this);
+  newProbabilisticModel_ = new QAction(tr("Probabilistic model"), this);
   newProbabilisticModel_->setStatusTip(tr("Create a new probabilistic model"));
   connect(newProbabilisticModel_, SIGNAL(triggered()), this, SLOT(createProbabilisticModel()));
 
   // new design of experiment action
-  newDesignOfExperiment_ = new QAction(QIcon(":/images/designOfExperiment.png"), tr("New design of experiment"), this);
+  newDesignOfExperiment_ = new QAction(QIcon(":/images/designOfExperiment.png"), tr("Design of experiment"), this);
   newDesignOfExperiment_->setStatusTip(tr("Create a new design of experiment"));
   connect(newDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(createNewDesignOfExperiment()));
 
   // new analysis actions
-  newModelEvaluation_ = new QAction(QIcon(":/images/modelEvaluation.png"), tr("New model evaluation"), this);
+  newModelEvaluation_ = new QAction(QIcon(":/images/modelEvaluation.png"), tr("Evaluation"), this);
   newModelEvaluation_->setStatusTip(tr("Create a new model evaluation"));
   connect(newModelEvaluation_, SIGNAL(triggered()), this, SLOT(createNewModelEvaluation()));
 

@@ -53,7 +53,7 @@ void DesignOfExperimentDefinitionItem::buildActions()
   connect(evaluateDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(appendEvaluationItem()));
 
   // new metamodel action
-  newMetaModel_ = new QAction(QIcon(":/images/metaModel.png"), tr("New metamodel"), this);
+  newMetaModel_ = new QAction(QIcon(":/images/metaModel.png"), tr("Metamodel"), this);
   newMetaModel_->setStatusTip(tr("Create a new metamodel"));
   connect(newMetaModel_, SIGNAL(triggered()), this, SLOT(createNewMetaModel()));
 

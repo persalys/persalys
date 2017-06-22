@@ -327,7 +327,7 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
     if (!analysisTypeItem->getActions().size())
     {
       // context menu actions
-      QAction * newEvaluation = new QAction(QIcon(":/images/modelEvaluation.png"), tr("New model evaluation"), this);
+      QAction * newEvaluation = new QAction(QIcon(":/images/modelEvaluation.png"), tr("New evaluation"), this);
       newEvaluation->setStatusTip(tr("Create a new model evaluation"));
       connect(newEvaluation, SIGNAL(triggered()), this, SIGNAL(evaluationModelRequested()));
       analysisTypeItem->appendAction(newEvaluation);
@@ -342,7 +342,7 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
     if (!analysisTypeItem->getActions().size())
     {
       // context menu actions
-      QAction * newCentralTendency = new QAction(QIcon(":/images/centralTendency.png"), tr("New central tendency"), this);
+      QAction * newCentralTendency = new QAction(QIcon(":/images/centralTendency.png"), tr("New analysis"), this);
       newCentralTendency->setStatusTip(tr("Create a new central tendency"));
       connect(newCentralTendency, SIGNAL(triggered()), this, SIGNAL(centralTendencyRequested()));
       analysisTypeItem->appendAction(newCentralTendency);
@@ -357,7 +357,7 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
     if (!analysisTypeItem->getActions().size())
     {
       // context menu actions
-      QAction * newSensitivityAnalysis = new QAction(QIcon(":/images/sensitivity.png"), tr("New sensitivity analysis"), this);
+      QAction * newSensitivityAnalysis = new QAction(QIcon(":/images/sensitivity.png"), tr("New analysis"), this);
       newSensitivityAnalysis->setStatusTip(tr("Create a new sensitivity analysis"));
       connect(newSensitivityAnalysis, SIGNAL(triggered()), this, SIGNAL(sensitivityRequested()));
       analysisTypeItem->appendAction(newSensitivityAnalysis);

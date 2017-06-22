@@ -45,19 +45,19 @@ DataModelDefinitionItem::DataModelDefinitionItem(const DesignOfExperiment & desi
 void DataModelDefinitionItem::buildActions()
 {
   // new data analyses
-  newDataAnalysis_ = new QAction(tr("New data analysis"), this);
+  newDataAnalysis_ = new QAction(tr("Data analysis"), this);
   newDataAnalysis_->setStatusTip(tr("Analyse the data sample"));
   connect(newDataAnalysis_, SIGNAL(triggered()), this, SLOT(createNewDataAnalysis()));
 
-  newInferenceAnalysis_ = new QAction(tr("New inference analysis"), this);
+  newInferenceAnalysis_ = new QAction(tr("Inference"), this);
   newInferenceAnalysis_->setStatusTip(tr("Inference"));
   connect(newInferenceAnalysis_, SIGNAL(triggered()), this, SLOT(createNewInferenceAnalysis()));
 
-  newCopulaInferenceAnalysis_ = new QAction(tr("Dependencies inference analysis"), this);
+  newCopulaInferenceAnalysis_ = new QAction(tr("Dependencies inference"), this);
   newCopulaInferenceAnalysis_->setStatusTip(tr("Dependencies inference"));
   connect(newCopulaInferenceAnalysis_, SIGNAL(triggered()), this, SLOT(createNewCopulaInferenceAnalysis()));
 
-  newMetaModel_ = new QAction(tr("New metamodel"), this);
+  newMetaModel_ = new QAction(tr("Metamodel"), this);
   newMetaModel_->setStatusTip(tr("Create a new metamodel"));
   connect(newMetaModel_, SIGNAL(triggered()), this, SLOT(createNewMetaModel()));
 
