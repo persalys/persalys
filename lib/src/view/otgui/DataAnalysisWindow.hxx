@@ -44,7 +44,6 @@ public:
 protected:
   virtual void initialize(AnalysisItem * item) = 0;
   void buildInterface();
-  void setParameters(const Analysis & analysis) {};
   QWidget* getPDF_CDFWidget();
   QWidget* getBoxPlotWidget();
   QWidget* getScatterPlotsWidget();

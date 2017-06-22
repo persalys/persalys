@@ -34,50 +34,25 @@ namespace OTGUI {
   
 SobolResultWindow::SobolResultWindow(AnalysisItem * item)
   : ResultWindow(item)
-  , result_(dynamic_cast<SobolAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , result_()
   , outputsListWidget_(0)
   , tabWidget_(0)
   , warningMessage_("")
 {
-  setParameters(item->getAnalysis());
-  buildInterface();
-}
+  const SobolAnalysis * sobolAnalysis = dynamic_cast<const SobolAnalysis*>(item->getAnalysis().getImplementation().get());
+  if (!sobolAnalysis)
+    throw InvalidArgumentException(HERE) << "SobolResultWindow: the analysis is not a SobolAnalysis";
 
-
-void SobolResultWindow::setParameters(const Analysis & analysis)
-{
-  const SobolAnalysis * sobolAnalysis = dynamic_cast<const SobolAnalysis*>(&*analysis.getImplementation());
+  result_ = sobolAnalysis->getResult();
 
   // add warning if the model has not an independent copula
   if (!sobolAnalysis->getPhysicalModel().getComposedDistribution().hasIndependentCopula())
-  {
     warningMessage_ = tr("The model has not an independent copula, the result could be false.");
-  }
 
-  // ParametersWidget
-  QStringList namesList;
-  namesList << tr("Algorithm");
-  namesList << tr("Maximum coefficient of variation");
-  namesList << tr("Maximum elapsed time");
-  namesList << tr("Maximum calls");
-  namesList << tr("Block size");
-  namesList << tr("Seed");
+  // parameters widget
+  setParameters(item->getAnalysis(), tr("Sensitivity analysis parameters"));
 
-  QStringList valuesList;
-  valuesList << tr("Sobol");
-  valuesList << QString::number(sobolAnalysis->getMaximumCoefficientOfVariation());
-  if (sobolAnalysis->getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
-    valuesList << QString::number(sobolAnalysis->getMaximumElapsedTime()) + "(s)";
-  else
-    valuesList << "- (s)";
-  if (sobolAnalysis->getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
-    valuesList << QString::number(sobolAnalysis->getMaximumCalls());
-  else
-    valuesList << "-";
-  valuesList << QString::number(sobolAnalysis->getBlockSize());
-  valuesList << QString::number(sobolAnalysis->getSeed());
-
-  parametersWidget_ = new ParametersWidget(tr("Sensitivity analysis parameters"), namesList, valuesList);
+  buildInterface();
 }
 
 
@@ -145,20 +120,25 @@ void SobolResultWindow::buildInterface()
   // second tab --------------------------------
   if (result_.getElapsedTime() > 0. && result_.getCallsNumber())
   {
+    QWidget * paramWidget = new QWidget;
+    QGridLayout * paramWidgetLayout = new QGridLayout(paramWidget);
+
     // stop criteria
     QStringList namesList;
-    namesList << tr("Elapsed time");
-    namesList << tr("Number of calls");
-    namesList << tr("Coefficient of variation");
+    namesList << tr("Elapsed time")
+              << tr("Number of calls")
+              << tr("Coefficient of variation");
 
     QStringList valuesList;
-    valuesList << QString::number(result_.getElapsedTime()) + " s";
-    valuesList << QString::number(result_.getCallsNumber());
-    valuesList << QString::number(result_.getCoefficientOfVariation());
+    valuesList << QString::number(result_.getElapsedTime()) + " s"
+               << QString::number(result_.getCallsNumber())
+               << QString::number(result_.getCoefficientOfVariation());
 
     ParametersWidget * parametersWidget = new ParametersWidget(tr("Stop criteria"), namesList, valuesList, true, true);
+    paramWidgetLayout->addWidget(parametersWidget);
+    paramWidgetLayout->setRowStretch(1, 1);
 
-    tabWidget_->addTab(parametersWidget, tr("Summary"));
+    tabWidget_->addTab(paramWidget, tr("Summary"));
   }
 
   // third tab --------------------------------

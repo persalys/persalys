@@ -95,51 +95,21 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
 
   sampleSizeTitle_ = tr("Number of calls") + " ";
 
-  setParameters(item->getAnalysis());
+  // parameters widget
+  setParameters(item->getAnalysis(), tr("Central tendency parameters"));
 
   showTable_ = true;
 
   for (UnsignedInteger j=0; j<result_.getSample().getSize(); ++j)
+  {
     for (UnsignedInteger i=0; i<result_.getSample().getDimension(); ++i)
+    {
       if (std::isnan(result_.getSample()[j][i]))
       {
         resultsSampleIsValid_ = false;
         break;
       }
-}
-
-
-void MonteCarloResultWindow::setParameters(const Analysis & analysis)
-{
-  const MonteCarloAnalysis MCanalysis(*dynamic_cast<const MonteCarloAnalysis*>(&*analysis.getImplementation()));
-
-  // ParametersWidget
-  QStringList namesList;
-  namesList << tr("Algorithm");
-  if (MCanalysis.isConfidenceIntervalRequired())
-    namesList << tr("Confidence level");
-  namesList << tr("Maximum coefficient of variation");
-  namesList << tr("Maximum elapsed time");
-  namesList << tr("Maximum calls");
-  namesList << tr("Block size");
-  namesList << tr("Seed");
-
-  QStringList valuesList;
-  valuesList << tr("Monte Carlo");
-  if (MCanalysis.isConfidenceIntervalRequired())
-    valuesList << QString::number(MCanalysis.getLevelConfidenceInterval()*100) + "\%";
-  valuesList << QString::number(MCanalysis.getMaximumCoefficientOfVariation());
-  if (MCanalysis.getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
-    valuesList << QString::number(MCanalysis.getMaximumElapsedTime()) + "(s)";
-  else
-    valuesList << "- (s)";
-  if (MCanalysis.getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
-    valuesList << QString::number(MCanalysis.getMaximumCalls());
-  else
-    valuesList << "-";
-  valuesList << QString::number(MCanalysis.getBlockSize());
-  valuesList << QString::number(MCanalysis.getSeed());
-
-  parametersWidget_ = new ParametersWidget(tr("Central tendency parameters"), namesList, valuesList);
+    }
+  }
 }
 }

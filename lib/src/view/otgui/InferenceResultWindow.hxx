@@ -36,7 +36,6 @@ public:
   InferenceResultWindow(AnalysisItem * item);
 
 protected:
-  void setParameters(const Analysis & analysis);
   void buildInterface();
 
 public slots:

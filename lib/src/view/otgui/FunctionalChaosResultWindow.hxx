@@ -43,7 +43,6 @@ public:
   FunctionalChaosResultWindow(AnalysisItem * item);
 
 protected:
-  void setParameters(const Analysis & analysis);
   void buildInterface();
 
 public slots:
@@ -54,6 +53,8 @@ signals:
 
 private:
   FunctionalChaosAnalysisResult result_;
+  OT::UnsignedInteger maxDegree_;
+  bool sparse_;
   QListWidget * outputsListWidget_;
   QTabWidget * tabWidget_;
   QString errorMessage_;

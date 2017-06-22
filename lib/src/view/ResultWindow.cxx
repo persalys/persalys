@@ -20,7 +20,7 @@
  */
 #include "otgui/ResultWindow.hxx"
 
-#include <QTextEdit>
+#include <QGridLayout>
 
 using namespace OT;
 
@@ -34,9 +34,18 @@ ResultWindow::ResultWindow(AnalysisItem * item)
 }
 
 
-void ResultWindow::setParameters(const Analysis& analysis)
+void ResultWindow::setParameters(const Analysis& analysis, const QString& title)
 {
-  // do nothing
+  QStringList paramNames;
+  QStringList paramValues;
+  AnalysisItem::GetAnalysisParameters(analysis, paramNames, paramValues);
+
+  if (!paramNames.isEmpty() && paramNames.size() == paramValues.size())
+  {
+    parametersWidget_ = new QWidget;
+    QGridLayout * parametersWidgetLayout = new QGridLayout(parametersWidget_);
+    parametersWidgetLayout->addWidget(new ParametersWidget(title, paramNames, paramValues));
+  }
 }
 
 

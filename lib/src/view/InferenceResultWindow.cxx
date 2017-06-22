@@ -42,25 +42,10 @@ InferenceResultWindow::InferenceResultWindow(AnalysisItem* item)
   : ResultWindow(item)
   , result_(dynamic_cast<InferenceAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
 {
-  setParameters(item->getAnalysis());
+  // parameters widget
+  setParameters(item->getAnalysis(), tr("Inference analysis parameters"));
+
   buildInterface();
-}
-
-
-void InferenceResultWindow::setParameters(const Analysis& analysis)
-{
-  const InferenceAnalysis * inferenceAnalysis = dynamic_cast<const InferenceAnalysis*>(&*analysis.getImplementation());
-
-  // ParametersWidget
-  QStringList namesList;
-  namesList << tr("Method");
-  namesList << tr("Level");
-
-  QStringList valuesList;
-  valuesList << tr("Kolmogorov Smirnov");
-  valuesList << QString::number(inferenceAnalysis->getLevel());
-
-  parametersWidget_ = new ParametersWidget(tr("Inference analysis parameters"), namesList, valuesList);
 }
 
 

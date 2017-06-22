@@ -37,7 +37,7 @@ namespace OTGUI {
 
 TaylorExpansionMomentsResultWindow::TaylorExpansionMomentsResultWindow(AnalysisItem * item)
   : ResultWindow(item)
-  , result_(dynamic_cast<TaylorExpansionMomentsAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , result_(dynamic_cast<TaylorExpansionMomentsAnalysis*>(item->getAnalysis().getImplementation().get())->getResult())
 {
   buildInterface();
 }

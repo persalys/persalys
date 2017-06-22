@@ -38,9 +38,9 @@ ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item)
   , result_()
 {
   // FORM result widget
-  if (dynamic_cast<const FORMAnalysis*>(&*item->getAnalysis().getImplementation()))
+  if (dynamic_cast<const FORMAnalysis*>(item->getAnalysis().getImplementation().get()))
   {
-    FORMAnalysis analysis = *dynamic_cast<const FORMAnalysis*>(&*item->getAnalysis().getImplementation());
+    FORMAnalysis analysis = *dynamic_cast<const FORMAnalysis*>(item->getAnalysis().getImplementation().get());
     result_ = analysis.getResult();
     tabWidget_ = new ApproximationResultTabWidget(result_, analysis, this);
   }

@@ -36,7 +36,7 @@ public:
   TaylorExpansionMomentsResultWindow(AnalysisItem * item);
 
 protected:
-  void setParameters(const Analysis & analysis){/*has not yet parameters*/};
+  virtual void setParameters(const Analysis& analysis, const QString& title){/*has not yet parameters*/};
   void buildInterface();
 
 private:

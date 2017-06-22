@@ -34,7 +34,7 @@ public:
   ResultWindow(AnalysisItem * item);
 
 protected:
-  virtual void setParameters(const Analysis & analysis);
+  virtual void setParameters(const Analysis& analysis, const QString& title);
 
 public slots:
   virtual void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);

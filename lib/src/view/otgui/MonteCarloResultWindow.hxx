@@ -33,7 +33,6 @@ public:
 
 protected:
   virtual void initialize(AnalysisItem* item);
-  void setParameters(const Analysis & analysis);
 };
 }
 #endif
