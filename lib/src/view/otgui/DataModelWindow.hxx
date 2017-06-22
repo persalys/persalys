@@ -27,8 +27,28 @@
 #include "otgui/OTguiSubWindow.hxx"
 
 #include <QLineEdit>
+#include <QSortFilterProxyModel>
 
 namespace OTGUI {
+
+// custom QSortFilterProxyModel
+class OTGUI_API DataModelProxModel : public QSortFilterProxyModel
+{
+public:
+  DataModelProxModel(QObject * parent = 0)
+    : QSortFilterProxyModel(parent)
+  {
+  }
+
+  bool lessThan(const QModelIndex& left, const QModelIndex& right) const
+  {
+    if (left.row() < 2 || right.row() < 2)
+      return false;
+    else
+      return QSortFilterProxyModel::lessThan(left, right);
+  }
+};
+
 
 class OTGUI_API DataModelWindow : public OTguiSubWindow
 {
@@ -55,6 +75,7 @@ private:
   QPalette defaultLineEditPalette_;
   ExportableTableView * dataTableView_;
   DataModelTableModel * dataTableModel_;
+  DataModelProxModel * proxyModel_;
 };
 }
 #endif

@@ -20,8 +20,6 @@
  */
 #include "otgui/MonteCarloResultWindow.hxx"
 
-#include "otgui/ExportableTableView.hxx"
-#include "otgui/SampleTableModel.hxx"
 #include "otgui/MonteCarloAnalysis.hxx"
 
 #include <QVBoxLayout>

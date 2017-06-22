@@ -28,6 +28,7 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QApplication>
+#include <QSortFilterProxyModel>
 
 namespace OTGUI {
 
@@ -71,9 +72,22 @@ void ExportableTableView::exportData()
 
     try
     {
-      if (!dynamic_cast<SampleTableModel*>(model()))
+      if (dynamic_cast<SampleTableModel*>(model()))
+      {
+        dynamic_cast<SampleTableModel*>(model())->exportData(fileName);
+      }
+      else if (dynamic_cast<QSortFilterProxyModel*>(model()))
+      {
+        QAbstractItemModel * sourceModel = dynamic_cast<QSortFilterProxyModel*>(model())->sourceModel();
+        if (dynamic_cast<SampleTableModel*>(sourceModel))
+          dynamic_cast<SampleTableModel*>(sourceModel)->exportData(fileName);
+        else
+          throw SimpleException(tr("Internal exception"));
+      }
+      else
+      {
         throw SimpleException(tr("Internal exception"));
-      dynamic_cast<SampleTableModel*>(model())->exportData(fileName);
+      }
     }
     catch (std::exception & ex)
     {

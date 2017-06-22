@@ -24,8 +24,6 @@
 #include "OTguiSubWindow.hxx"
 #include "otgui/DesignOfExperimentItem.hxx"
 #include "otgui/AnalysisItem.hxx"
-#include "otgui/ExportableTableView.hxx"
-#include "otgui/SampleTableModel.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
 
@@ -71,12 +69,6 @@ private:
   QTabWidget * tabWidget_;
   QTabWidget * tablesTabWidget_;
   QTabWidget * scatterPlotsTabWidget_;
-  ExportableTableView * tableView_;
-  SampleTableModel * tableModel_;
-  ExportableTableView * failedPointsTableView_;
-  SampleTableModel * failedPointsTableModel_;
-  ExportableTableView * notEvaluatedTableView_;
-  SampleTableModel * notEvaluatedTableModel_;
   GraphConfigurationWidget * scatterPlotsConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;

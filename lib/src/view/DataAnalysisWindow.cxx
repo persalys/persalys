@@ -26,11 +26,14 @@
 #include "otgui/MomentsEstimatesTableGroupBox.hxx"
 #include "otgui/PlotWidgetWithGraphSetting.hxx"
 #include "otgui/ParametersTableView.hxx"
+#include "otgui/ExportableTableView.hxx"
+#include "otgui/SampleTableModel.hxx"
 
 #include <QVBoxLayout>
 #include <QScrollArea>
 #include <QHeaderView>
 #include <QSplitter>
+#include <QSortFilterProxyModel>
 
 using namespace OT;
 
@@ -291,9 +294,17 @@ void DataAnalysisWindow::buildInterface()
   {
     QWidget * tab = new QWidget;
     QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+
     ExportableTableView * tabResultView = new ExportableTableView;
+    tabResultView->setSortingEnabled(true);
+
     SampleTableModel * tabResultModel = new SampleTableModel(result_.getSample(), tabResultView);
-    tabResultView->setModel(tabResultModel);
+    QSortFilterProxyModel * proxyModel = new QSortFilterProxyModel(tabResultView);
+    proxyModel->setSourceModel(tabResultModel);
+
+    tabResultView->setModel(proxyModel);
+    tabResultView->sortByColumn(0, Qt::AscendingOrder);
+
     tabLayout->addWidget(tabResultView);
 
     tabWidget_->addTab(tab, tr("Table"));
