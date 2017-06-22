@@ -441,7 +441,7 @@ Models
 
   - outputs values are reinitialized
 
-- uncheck all
+- unselect all
 
 - click on 'Evaluate' button
 
@@ -487,11 +487,11 @@ Designs of experiment
       .. image:: /developer_manual/validation/design_1_wizard_2nd_page.png
           :align: center
 
-      - no checked line
+      - no selected line
 
       - first and second columns are not editable
 
-      - 3 last columns are disable
+      - 3 last columns are disabled
 
       - all levels are equal to 1
 
@@ -503,7 +503,7 @@ Designs of experiment
 
         - first header item : check all
 
-          - third column is disable
+          - third column is disabled
 
           - 3 last columns are enabled
 
@@ -701,7 +701,7 @@ Analyses
       .. image:: /developer_manual/validation/monteCarlo_central_tendency_wizard_2nd_page.png
           :align: center
 
-      - Accuracy disable : 0.01
+      - Accuracy disabled : 0.01
 
       - max time : 16m40s
 
@@ -709,7 +709,7 @@ Analyses
 
       - block size : 100
 
-      - confidence interval disable : 0.95
+      - confidence interval disabled : 0.95
 
       - seed : 2
 
@@ -977,7 +977,7 @@ Analyses
       .. image:: /developer_manual/validation/sobol_wizard_2nd_page.png
           :align: center
 
-      - Accuracy disable : 0.01
+      - Accuracy disabled : 0.01
 
       - max time : 16m40s
 
@@ -1329,7 +1329,7 @@ Analyses
 
       - no wheel event on Add button
 
-      - an uncheck line == right side of the wizard disable
+      - an uncheck line == right side of the wizard disabled
 
       - choose item 'All' in the list of Add button => add all distributions in the list
 
@@ -1374,12 +1374,31 @@ Analyses
 
       - select ChiSquare/InverseNormal/LogUniform/Student :
 
-        - PDF/CDF and Q-Q Plot tabs are disable
+        - PDF/CDF and Q-Q Plot tabs are disabled
 
         - the Parameters tab contains an error message
 
         .. image:: /developer_manual/validation/inference_result_error.png
             :align: center
+
+    - check the reuse of the inference result by the Probabilistic model :
+
+      - go on the Probabilistic model window of model1
+
+      - select the x3 variable
+
+      - choose Inference result in the combo box of the variable x_3
+
+      - a wizard appears, check its behavior (update of the tables when changing the items selection, etc.)
+
+        .. image:: /developer_manual/validation/inferenceResultWizard.png
+            :align: center
+
+      - choose inference/x_0/Weibull, click on Finish
+
+      - check that the distribution of x_3 is Weibull now
+
+      - unselect x_3
 
   - Copula inference : copulaInference item
 
