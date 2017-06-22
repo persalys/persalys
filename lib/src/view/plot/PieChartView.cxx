@@ -67,6 +67,22 @@ using namespace OT;
 
 namespace OTGUI {
 
+// not editable model
+class PieChartModel : public QStandardItemModel
+{
+public:
+  PieChartModel(int rows, int columns, QObject * parent = 0)
+  : QStandardItemModel(rows, columns, parent)
+  {
+  }
+
+  Qt::ItemFlags flags(const QModelIndex & index) const
+  {
+    return QStandardItemModel::flags(index) & ~Qt::ItemIsEditable;
+  }
+};
+
+
 PieChartView::PieChartView(const PointWithDescription& data, QWidget *parent)
   : QAbstractItemView(parent)
   , margin_(8)
@@ -127,7 +143,7 @@ void PieChartView::setData(const PointWithDescription& valuesAndDescription)
   colors = generateSegmentsColors((int)data.getSize());
 
   // model
-  QStandardItemModel * standardItemModel = new QStandardItemModel(size, 2, this);
+  PieChartModel * standardItemModel = new PieChartModel(size, 2, this);
 
   QFontMetrics fm(font());
   int maxTextWidth = 0;
