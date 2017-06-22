@@ -65,7 +65,7 @@ public:
     }
 
     // plot widget
-    PlotWidget * plot = new PlotWidget;
+    PlotWidget * plot = new PlotWidget(tr("metaModel"));
     plot->plotScatter(outputSample, metaModelSample);
     OT::Sample lineSample(outputSample);
     lineSample.stack(lineSample);

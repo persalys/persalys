@@ -196,6 +196,7 @@ void ApproximationResultTabWidget::buildInterface()
   groupBox = new QGroupBox(tr("Importance factors pie chart"));
   groupBoxLayout = new QVBoxLayout(groupBox);
   PieChartView * pieChart = new PieChartView(importanceFactors);
+  pieChart->setPlotName(tr("importanceFactors"));
   groupBoxLayout->addWidget(pieChart, 0, Qt::AlignCenter);
   tabLayout->addWidget(groupBox);
 

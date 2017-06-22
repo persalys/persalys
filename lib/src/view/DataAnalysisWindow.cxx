@@ -346,7 +346,7 @@ QWidget* DataAnalysisWindow::getPDF_CDFWidget()
   {
     QVector<PlotWidget*> listPlotWidgets;
 
-    PlotWidget * plot = new PlotWidget("distributionPDF");
+    PlotWidget * plot = new PlotWidget(tr("distributionPDF"));
     // PDF
     plot->plotHistogram(result_.getSample().getMarginal(ind[i]));
     if (result_.getPDF()[ind[i]].getSize())
@@ -358,7 +358,7 @@ QWidget* DataAnalysisWindow::getPDF_CDFWidget()
     listPlotWidgets.append(plot);
 
     // CDF
-    plot = new PlotWidget("distributionCDF");
+    plot = new PlotWidget(tr("distributionCDF"));
     plot->plotHistogram(result_.getSample().getMarginal(ind[i]), 1);
     if (result_.getCDF()[ind[i]].getSize())
       plot->plotCurve(result_.getCDF()[ind[i]]);
@@ -404,7 +404,7 @@ QWidget* DataAnalysisWindow::getBoxPlotWidget()
   {
     QVector<PlotWidget*> listBoxPlotWidgets;
 
-    PlotWidget * plot = new PlotWidget("boxplot");
+    PlotWidget * plot = new PlotWidget(tr("boxplot"));
 
     const double median = result_.getMedian()[ind[i]][0];
     const double Q1 = result_.getFirstQuartile()[ind[i]][0];

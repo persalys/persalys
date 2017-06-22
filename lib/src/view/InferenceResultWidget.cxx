@@ -106,10 +106,10 @@ void InferenceResultWidget::buildInterface()
     // tab PDF/CDF
     ResizableStackedWidget * pdf_cdfStackedWidget = new ResizableStackedWidget;
     // --- pdf
-    pdfPlot_ = new PlotWidget;
+    pdfPlot_ = new PlotWidget(tr("distributionPDF"));
     pdf_cdfStackedWidget->addWidget(pdfPlot_);
     // --- cdf
-    cdfPlot_ = new PlotWidget;
+    cdfPlot_ = new PlotWidget(tr("distributionCDF"));
     pdf_cdfStackedWidget->addWidget(cdfPlot_);
     // --- GraphConfigurationWidget
     QVector<PlotWidget*> listpdf_cdfPlot;
@@ -126,7 +126,7 @@ void InferenceResultWidget::buildInterface()
     QHBoxLayout * qqPlotTabLayout = new QHBoxLayout(qqPlotTab);
 
     // --- qq plot
-    qqPlot_ = new PlotWidget;
+    qqPlot_ = new PlotWidget(tr("qqPlot"));
     qqPlotTabLayout->addWidget(qqPlot_);
     // --- GraphConfigurationWidget
     QVector<PlotWidget*> listPlot;

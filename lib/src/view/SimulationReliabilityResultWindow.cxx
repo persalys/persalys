@@ -274,7 +274,7 @@ QWidget* SimulationReliabilityResultWindow::getHistogramTab()
 
   // plot histogram
   QVector<PlotWidget*> listHistogram;
-  PlotWidget * plot = new PlotWidget("histogram");
+  PlotWidget * plot = new PlotWidget(tr("histogram"));
   plot->plotHistogram(result_.getOutputSample(), 2, 0, tr("%1 distribution").arg(outputName));
 
   // plot threshold
@@ -305,7 +305,7 @@ QWidget* SimulationReliabilityResultWindow::getConvergenceTab()
   ResizableStackedWidget * tab = new ResizableStackedWidget;
 
   QVector<PlotWidget*> listConvergenceGraph;
-  PlotWidget * plot = new PlotWidget("convergence");
+  PlotWidget * plot = new PlotWidget(tr("convergence"));
   // plot pf convergence
   plot->plotCurve(result_.getConvergenceSample(), QPen(Qt::red), QwtPlotCurve::Lines, 0, tr("Probability estimate"));
   // plot lower bound

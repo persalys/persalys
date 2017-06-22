@@ -86,7 +86,7 @@ void CopulaParametersTabWidget::buildInterface()
         marginals[1] = j;
 
         //pdf
-        PlotWidget * plotWidget = new PlotWidget;
+        PlotWidget * plotWidget = new PlotWidget(tr("copulaPDF"));
         //  use rank of the Sample to have the points in [0, 1]*[0, 1]
         plotWidget->plotCurve(sampleRanks.getMarginal(marginals), pen, QwtPlotCurve::Dots);
         plotWidget->plotContour(distribution_.getMarginal(marginals));
@@ -97,7 +97,7 @@ void CopulaParametersTabWidget::buildInterface()
         listPlot.append(plotWidget);
 
         // cdf
-        plotWidget = new PlotWidget;
+        plotWidget = new PlotWidget(tr("copulaCDF"));
         plotWidget->plotContour(distribution_.getMarginal(marginals), false);
         plotWidget->setTitle(tr("CDF") + " " + distributionName.c_str() + " copula");
         plotWidget->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(sample_.getDescription()[i].c_str()));
@@ -131,7 +131,7 @@ void CopulaParametersTabWidget::buildInterface()
   for (UnsignedInteger i=0; i<kendallPlotData_.getSize(); ++i)
   {
     //pdf
-    PlotWidget * plotWidget = new PlotWidget;
+    PlotWidget * plotWidget = new PlotWidget(tr("kendallPlot"));
 
     plotWidget->plotCurve(kendallPlotData_[i], pen);
     plotWidget->plotCurve(dataDiagonal);
