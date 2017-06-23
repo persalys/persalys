@@ -487,17 +487,37 @@ String OTStudyImplementation::getAvailableAnalysisName(const String& rootName) c
 
 void OTStudyImplementation::add(const Analysis& analysis)
 {
+  // check
   if (hasAnalysisNamed(analysis.getName()))
     throw InvalidArgumentException(HERE) << "The study already contains an analysis named " << analysis.getName();
 
-  if (dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get()))
-    if (!hasPhysicalModelNamed(analysis.getModelName()))
+  const PhysicalModelAnalysis * pm_analysis_ptr = dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get());
+  if (pm_analysis_ptr)
+  {
+    if (!physicalModels_.contains(pm_analysis_ptr->getPhysicalModel()))
       throw InvalidArgumentException(HERE) << "The analysis has been created with a physical model not belonging to the study.";
+  }
+
+  const DesignOfExperimentAnalysis * dm_analysis_ptr = dynamic_cast<const DesignOfExperimentAnalysis*>(analysis.getImplementation().get());
+  if (dm_analysis_ptr)
+  {
+    if (dm_analysis_ptr->getDesignOfExperiment().hasPhysicalModel())
+    {
+      if (!designOfExperiments_.contains(dm_analysis_ptr->getDesignOfExperiment()))
+        throw InvalidArgumentException(HERE) << "The analysis has been created with a design of experiment not belonging to the study.";
+    }
+    else
+    {
+      if (!dataModels_.contains(dm_analysis_ptr->getDesignOfExperiment()))
+        throw InvalidArgumentException(HERE) << "The analysis has been created with a data model not belonging to the study.";
+    }
+  }
 
   if (analysis.isReliabilityAnalysis())
     if (!hasLimitStateNamed(dynamic_cast<const ReliabilityAnalysis*>(analysis.getImplementation().get())->getLimitState().getName()))
       throw InvalidArgumentException(HERE) << "The analysis has been created with a limit state not belonging to the study.";
 
+  // add analysis
   analyses_.add(analysis);
   notify("addAnalysis");
 
