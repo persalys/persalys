@@ -46,8 +46,6 @@ public:
 
   void addObserver(Observer * observer);
 
-  OT::String getModelName() const;
-
   bool isReliabilityAnalysis() const;
 
   bool isRunning() const;

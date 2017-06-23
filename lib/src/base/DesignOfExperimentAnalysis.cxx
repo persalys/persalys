@@ -59,12 +59,6 @@ void DesignOfExperimentAnalysis::setDesignOfExperiment(const DesignOfExperiment 
 }
 
 
-String DesignOfExperimentAnalysis::getModelName() const
-{
-  return designOfExperiment_.getName();
-}
-
-
 void DesignOfExperimentAnalysis::setInterestVariables(const Description& variablesNames)
 {
   if (!variablesNames.getSize())

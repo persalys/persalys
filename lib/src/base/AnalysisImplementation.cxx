@@ -83,12 +83,6 @@ void AnalysisImplementation::initialize()
 }
 
 
-String AnalysisImplementation::getModelName() const
-{
-  return "";
-}
-
-
 bool AnalysisImplementation::isReliabilityAnalysis() const
 {
   return isReliabilityAnalysis_;

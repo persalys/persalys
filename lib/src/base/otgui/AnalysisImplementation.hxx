@@ -40,8 +40,6 @@ public:
   OT::Bool operator ==(const AnalysisImplementation & other) const;
   OT::Bool operator !=(const AnalysisImplementation & other) const;
 
-  virtual OT::String getModelName() const;
-
   virtual void run();
   virtual OT::String getPythonScript() const;
   virtual bool analysisLaunched() const;

@@ -76,12 +76,6 @@ void Analysis::addObserver(Observer * observer)
 }
 
 
-String Analysis::getModelName() const
-{
-  return getImplementation()->getModelName();
-}
-
-
 bool Analysis::isReliabilityAnalysis() const
 {
   return getImplementation()->isReliabilityAnalysis();
