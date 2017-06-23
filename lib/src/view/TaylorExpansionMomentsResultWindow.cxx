@@ -27,9 +27,8 @@
 
 #include <QVBoxLayout>
 #include <QGroupBox>
-#include <QHeaderView>
 #include <QSplitter>
-#include <QListWidget>
+#include <QHeaderView>
 
 using namespace OT;
 
@@ -60,7 +59,7 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
   QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  QListWidget * outputsListWidget = new QListWidget;
+  OTguiListWidget * outputsListWidget = new OTguiListWidget;
   outputsListWidget->addItems(outputNames);
   outputsLayoutGroupBox->addWidget(outputsListWidget);
 

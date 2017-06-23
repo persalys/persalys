@@ -23,11 +23,9 @@
 #include "otgui/ApproximationResultTabWidget.hxx"
 #include "otgui/FORMAnalysis.hxx"
 
-#include <QGroupBox>
 #include <QSplitter>
 #include <QVBoxLayout>
 #include <QDebug>
-#include <QListWidget>
 
 using namespace OT;
 
@@ -68,8 +66,9 @@ void ApproximationResultWindow::buildInterface()
   QGroupBox * outputsGroupBox = new QGroupBox(tr("Output"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  QListWidget * outputsListWidget = new QListWidget;
+  OTguiListWidget * outputsListWidget = new OTguiListWidget;
   outputsListWidget->addItems(QStringList() << outputName);
+  outputsListWidget->setCurrentRow(0);
   outputsLayoutGroupBox->addWidget(outputsListWidget);
 
   mainWidget->addWidget(outputsGroupBox);

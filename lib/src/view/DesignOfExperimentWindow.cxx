@@ -96,7 +96,7 @@ void DesignOfExperimentWindow::buildInterface()
   variablesGroupBox_ = new QGroupBox(tr("Variables"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(variablesGroupBox_);
 
-  variablesListWidget_ = new QListWidget;
+  variablesListWidget_ = new OTguiListWidget;
   outputsLayoutGroupBox->addWidget(variablesListWidget_);
 
   mainWidget->addWidget(variablesGroupBox_);

@@ -23,9 +23,6 @@
 
 #include "otgui/ResultWindow.hxx"
 #include "otgui/CopulaInferenceResult.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
-#include "otgui/CopulaInferenceResultWidget.hxx"
 
 namespace OTGUI {
 class OTGUI_API CopulaInferenceResultWindow : public ResultWindow

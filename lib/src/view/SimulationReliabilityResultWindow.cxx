@@ -32,7 +32,6 @@
 
 #include <QScrollArea>
 #include <QSplitter>
-#include <QListWidget>
 #include <QGroupBox>
 
 using namespace OT;
@@ -84,8 +83,9 @@ void SimulationReliabilityResultWindow::buildInterface()
   QGroupBox * outputsGroupBox = new QGroupBox(tr("Output"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  QListWidget * outputsListWidget = new QListWidget;
+  OTguiListWidget * outputsListWidget = new OTguiListWidget;
   outputsListWidget->addItems(QStringList() << outputName);
+  outputsListWidget->setCurrentRow(0);
   outputsLayoutGroupBox->addWidget(outputsListWidget);
 
   mainWidget->addWidget(outputsGroupBox);

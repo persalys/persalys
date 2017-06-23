@@ -21,7 +21,7 @@
 #ifndef OTGUI_DESIGNOFEXPERIMENTWINDOW_HXX
 #define OTGUI_DESIGNOFEXPERIMENTWINDOW_HXX
 
-#include "OTguiSubWindow.hxx"
+#include "ResultWindow.hxx"
 #include "otgui/DesignOfExperimentItem.hxx"
 #include "otgui/AnalysisItem.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
@@ -29,7 +29,6 @@
 
 #include <QTabWidget>
 #include <QPushButton>
-#include <QListWidget>
 #include <QGroupBox>
 
 namespace OTGUI {
@@ -65,7 +64,7 @@ public slots:
 private:
   DesignOfExperiment designOfExperiment_;
   QGroupBox * variablesGroupBox_;
-  QListWidget * variablesListWidget_;
+  OTguiListWidget * variablesListWidget_;
   QTabWidget * tabWidget_;
   QTabWidget * tablesTabWidget_;
   QTabWidget * scatterPlotsTabWidget_;

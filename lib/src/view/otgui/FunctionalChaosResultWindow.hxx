@@ -23,15 +23,6 @@
 
 #include "otgui/ResultWindow.hxx"
 #include "otgui/FunctionalChaosAnalysisResult.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
-
-#include <QGroupBox>
-#include <QVBoxLayout>
-#include <QHeaderView>
-#include <QListWidget>
 
 namespace OTGUI {
 
@@ -55,7 +46,7 @@ private:
   FunctionalChaosAnalysisResult result_;
   OT::UnsignedInteger maxDegree_;
   bool sparse_;
-  QListWidget * outputsListWidget_;
+  OTguiListWidget * outputsListWidget_;
   QTabWidget * tabWidget_;
   QString errorMessage_;
 };

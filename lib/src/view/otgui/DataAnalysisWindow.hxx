@@ -27,8 +27,6 @@
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
 #include "otgui/DoubleSpinBox.hxx"
 
-#include <QComboBox>
-#include <QListWidget>
 #include <QGroupBox>
 
 namespace OTGUI {
@@ -71,7 +69,7 @@ protected:
   bool showTable_;
 private:
   QGroupBox * variablesGroupBox_;
-  QListWidget * variablesListWidget_;
+  OTguiListWidget * variablesListWidget_;
   QTabWidget * tabWidget_;
   QTabWidget * scatterPlotsTabWidget_;
   GraphConfigurationWidget * scatterPlotsConfigurationWidget_;

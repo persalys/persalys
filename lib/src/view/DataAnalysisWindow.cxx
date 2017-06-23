@@ -87,7 +87,7 @@ void DataAnalysisWindow::buildInterface()
   variablesGroupBox_ = new QGroupBox(tr("Variables"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(variablesGroupBox_);
 
-  variablesListWidget_ = new QListWidget;
+  variablesListWidget_ = new OTguiListWidget;
   variablesListWidget_->addItems(variablesNames);
   variablesListWidget_->setCurrentRow(0);
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), this, SLOT(updateSpinBoxes(int)));
