@@ -252,8 +252,19 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
 void StudyTreeView::selectedItemChanged(const QModelIndex& currentIndex, const QModelIndex& previousIndex)
 {
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(currentIndex);
+
   if (!selectedItem)
     return;
+
+  if (selectedItem->data(Qt::UserRole).toString().contains("Title") && selectedItem->hasChildren())
+  {
+    OTguiItem * otguiItem = dynamic_cast<OTguiItem*>(selectedItem);
+    if (otguiItem)
+    {
+      setCurrentIndex(otguiItem->getParentOTStudyItem()->index());
+      return;
+    }
+  }
 
   emit itemSelected(selectedItem);
 }
