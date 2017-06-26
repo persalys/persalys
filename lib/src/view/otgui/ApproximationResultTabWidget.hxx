@@ -21,7 +21,7 @@
 #ifndef OTGUI_APPROXIMATIONRESULTTABWIDGET_HXX
 #define OTGUI_APPROXIMATIONRESULTTABWIDGET_HXX
 
-#include "otgui/ApproximationAnalysis.hxx"
+#include "otgui/ReliabilityAnalysis.hxx"
 
 #include <openturns/FORMResult.hxx>
 
@@ -34,7 +34,7 @@ class OTGUI_API ApproximationResultTabWidget : public QTabWidget
 
 public:
   ApproximationResultTabWidget(const OT::FORMResult& result,
-                               const ApproximationAnalysis& analysis,
+                               const ReliabilityAnalysis& analysis,
                                QWidget* parent = 0);
 
 protected:

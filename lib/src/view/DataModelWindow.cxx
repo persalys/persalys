@@ -43,6 +43,7 @@ DataModelWindow::DataModelWindow(DataModelDefinitionItem * item)
   , defaultLineEditPalette_()
   , dataTableView_(0)
   , dataTableModel_(0)
+  , proxyModel_(0)
 {
   dataModel_ = dynamic_cast<DataModel*>(&*item->getDesignOfExperiment().getImplementation());
   if (!dataModel_)
@@ -106,10 +107,11 @@ void DataModelWindow::buildInterface()
   gridLayout->setContentsMargins(11, 11, 11, 11);
 
   dataTableView_ = new ExportableTableView(groupBox);
-  dataTableView_->horizontalHeader()->hide();
+  dataTableView_->setSortingEnabled(true);
   dataTableView_->setEditTriggers(QTableView::AllEditTriggers);
   const QStringList comboBoxItems = QStringList() << tr("Input") << tr("Output") << tr("Disable");
   dataTableView_->setItemDelegateForRow(1, new ComboBoxDelegate(comboBoxItems));
+
   gridLayout->addWidget(dataTableView_, 0, 0, 1, 1);
 
   mainGridLayout->addWidget(groupBox, 1, 0, 1, 1);
@@ -222,6 +224,8 @@ void DataModelWindow::updateTableView(const Sample& sample)
   // set table model
   if (dataTableModel_)
     delete dataTableModel_;
+  if (proxyModel_)
+    delete proxyModel_;
 
   Sample fullSample(sample);
   if (!sample.getSize())
@@ -231,12 +235,16 @@ void DataModelWindow::updateTableView(const Sample& sample)
   connect(dataTableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
   connect(dataTableModel_, SIGNAL(temporaryErrorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
 
+  proxyModel_ = new DataModelProxModel(dataTableView_);
+  proxyModel_->setSourceModel(dataTableModel_);
+
   // set table view
-  dataTableView_->setModel(dataTableModel_);
+  dataTableView_->setModel(proxyModel_);
+  dataTableView_->sortByColumn(0, Qt::AscendingOrder);
   dataTableView_->clearSpans();
 
   if (sample.getSize() < 1)
-    for (int i=0; i<dataTableModel_->columnCount(); ++i)
-      dataTableView_->openPersistentEditor(dataTableModel_->index(1, i));
+    for (int i=0; i<proxyModel_->columnCount(); ++i)
+      dataTableView_->openPersistentEditor(proxyModel_->index(1, i));
 }
 }

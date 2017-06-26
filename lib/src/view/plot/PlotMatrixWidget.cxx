@@ -94,7 +94,7 @@ PlotMatrixWidget::PlotMatrixWidget(const OT::Sample & inputSample, const OT::Sam
     {
       QWidget * cellMatrixWidget = new QWidget;
       QVBoxLayout * cellMatrixLayout = new QVBoxLayout(cellMatrixWidget);
-      PlotWidget * plot = new PlotWidget("plotmatrix"+typeNameSuffix);
+      PlotWidget * plot = new PlotWidget(tr("plotmatrix") + typeNameSuffix);
       if (isPlotMatrixXX && i == j)
         plot->plotHistogram(inputSample.getMarginal(j));
       else

@@ -42,7 +42,7 @@ LimitStateItem::LimitStateItem(const LimitState & limitState)
 void LimitStateItem::buildActions()
 {
   // new threshold exceedance action
-  newThresholdExceedance_ = new QAction(tr("New threshold exceedance"), this);
+  newThresholdExceedance_ = new QAction(tr("Threshold exceedance"), this);
   newThresholdExceedance_->setStatusTip(tr("Create a new threshold exceedance"));
   connect(newThresholdExceedance_, SIGNAL(triggered()), this, SLOT(createNewThresholdExceedance()));
 

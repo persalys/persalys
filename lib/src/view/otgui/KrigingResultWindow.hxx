@@ -24,8 +24,6 @@
 #include "otgui/ResultWindow.hxx"
 #include "otgui/KrigingAnalysisResult.hxx"
 
-#include <QListWidget>
-
 namespace OTGUI {
 class OTGUI_API KrigingResultWindow : public ResultWindow
 {
@@ -35,7 +33,6 @@ public:
   KrigingResultWindow(AnalysisItem* item);
 
 protected:
-  void setParameters(const Analysis& analysis);
   void buildInterface();
 
 public slots:
@@ -47,7 +44,7 @@ signals:
 private:
   KrigingAnalysisResult result_;
   bool optimizeParameters_;
-  QListWidget * outputsListWidget_;
+  OTguiListWidget * outputsListWidget_;
   QTabWidget * tabWidget_;
 };
 }

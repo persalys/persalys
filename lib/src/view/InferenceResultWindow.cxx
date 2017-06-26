@@ -21,18 +21,10 @@
 #include "otgui/InferenceResultWindow.hxx"
 
 #include "otgui/InferenceAnalysis.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/ResizableStackedWidget.hxx"
 
-#include <openturns/VisualTest.hxx>
-
-#include <QHBoxLayout>
-#include <QListWidget>
+#include <QVBoxLayout>
 #include <QGroupBox>
-#include <QHeaderView>
 #include <QSplitter>
-#include <QScrollArea>
 
 using namespace OT;
 
@@ -40,27 +32,12 @@ namespace OTGUI {
 
 InferenceResultWindow::InferenceResultWindow(AnalysisItem* item)
   : ResultWindow(item)
-  , result_(dynamic_cast<InferenceAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , result_(dynamic_cast<InferenceAnalysis*>(item->getAnalysis().getImplementation().get())->getResult())
 {
-  setParameters(item->getAnalysis());
+  // parameters widget
+  setParameters(item->getAnalysis(), tr("Inference analysis parameters"));
+
   buildInterface();
-}
-
-
-void InferenceResultWindow::setParameters(const Analysis& analysis)
-{
-  const InferenceAnalysis * inferenceAnalysis = dynamic_cast<const InferenceAnalysis*>(&*analysis.getImplementation());
-
-  // ParametersWidget
-  QStringList namesList;
-  namesList << tr("Method");
-  namesList << tr("Level");
-
-  QStringList valuesList;
-  valuesList << tr("Kolmogorov Smirnov");
-  valuesList << QString::number(inferenceAnalysis->getLevel());
-
-  parametersWidget_ = new ParametersWidget(tr("Inference analysis parameters"), namesList, valuesList);
 }
 
 
@@ -78,7 +55,7 @@ void InferenceResultWindow::buildInterface()
   QGroupBox * variablesGroupBox = new QGroupBox(tr("Variables"));
   QVBoxLayout * variablesLayoutGroupBox = new QVBoxLayout(variablesGroupBox);
 
-  QListWidget * listVariables = new QListWidget;
+  OTguiListWidget * listVariables = new OTguiListWidget;
   listVariables->addItems(variablesNames);
   connect(listVariables, SIGNAL(currentTextChanged(QString)), this, SLOT(updateInferenceResultWidget(QString)));
   variablesLayoutGroupBox->addWidget(listVariables);

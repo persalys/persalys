@@ -25,7 +25,6 @@
 #include "openturns/Exception.hxx"
 
 #include <QVBoxLayout>
-#include <QGroupBox>
 
 using namespace OT;
 
@@ -38,27 +37,21 @@ ParametersWidget::ParametersWidget(const QString title,           // table title
                                    const bool namesHasHeaderType, // parameters names display has table header
                                    QWidget * parent
                                   )
-  : QWidget(parent)
+  : QGroupBox(parent)
 {
   if (names.size() != values.size() || names.size() * values.size() == 0)
     throw InvalidArgumentException(HERE) << "To build the ParametersWidget, the data vectors must have the same (not null) dimension\n";
 
-  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
-
-  QGroupBox * groupBox = new QGroupBox;
-  QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
+  QVBoxLayout * groupBoxLayout = new QVBoxLayout(this);
 
   // title
   if (!title.isEmpty())
-    groupBox->setTitle(title);
+    setTitle(title);
 
   // table view
   ParametersTableView * table = new ParametersTableView(names, values, showGrid, namesHasHeaderType);
   groupBoxLayout->addWidget(table);
 
   groupBoxLayout->addStretch();
-
-  // fill layout
-  widgetLayout->addWidget(groupBox);
 }
 }

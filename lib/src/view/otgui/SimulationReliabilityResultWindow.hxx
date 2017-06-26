@@ -36,7 +36,6 @@ public:
   virtual ~SimulationReliabilityResultWindow();
 
 protected:
-  void setParameters(const Analysis & analysis);
   void buildInterface();
   QWidget * getSummaryTab();
   QWidget * getHistogramTab();

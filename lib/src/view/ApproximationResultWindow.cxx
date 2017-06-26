@@ -23,11 +23,9 @@
 #include "otgui/ApproximationResultTabWidget.hxx"
 #include "otgui/FORMAnalysis.hxx"
 
-#include <QGroupBox>
 #include <QSplitter>
 #include <QVBoxLayout>
 #include <QDebug>
-#include <QListWidget>
 
 using namespace OT;
 
@@ -38,9 +36,9 @@ ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item)
   , result_()
 {
   // FORM result widget
-  if (dynamic_cast<const FORMAnalysis*>(&*item->getAnalysis().getImplementation()))
+  if (dynamic_cast<const FORMAnalysis*>(item->getAnalysis().getImplementation().get()))
   {
-    FORMAnalysis analysis = *dynamic_cast<const FORMAnalysis*>(&*item->getAnalysis().getImplementation());
+    FORMAnalysis analysis = *dynamic_cast<const FORMAnalysis*>(item->getAnalysis().getImplementation().get());
     result_ = analysis.getResult();
     tabWidget_ = new ApproximationResultTabWidget(result_, analysis, this);
   }
@@ -68,8 +66,9 @@ void ApproximationResultWindow::buildInterface()
   QGroupBox * outputsGroupBox = new QGroupBox(tr("Output"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  QListWidget * outputsListWidget = new QListWidget;
+  OTguiListWidget * outputsListWidget = new OTguiListWidget;
   outputsListWidget->addItems(QStringList() << outputName);
+  outputsListWidget->setCurrentRow(0);
   outputsLayoutGroupBox->addWidget(outputsListWidget);
 
   mainWidget->addWidget(outputsGroupBox);

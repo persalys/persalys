@@ -81,6 +81,7 @@ void FromFileDesignOfExperiment::setFileName(const String& fileName)
     const String oldFileName = fileName_;
     try
     {
+      sampleFromFile_.clear();
       fileName_ = fileName;
       getSampleFromFile();
       // reinitialization

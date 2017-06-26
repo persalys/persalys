@@ -25,7 +25,6 @@
 #include "otgui/MetaModelValidationWidget.hxx"
 #include "otgui/SensitivityResultWidget.hxx"
 
-#include <QGroupBox>
 #include <QSplitter>
 #include <QScrollArea>
 
@@ -35,34 +34,25 @@ namespace OTGUI {
 
 FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item)
   : ResultWindow(item)
-  , result_(dynamic_cast<FunctionalChaosAnalysis*>(item->getAnalysis().getImplementation().get())->getResult())
+  , result_()
+  , maxDegree_(0)
+  , sparse_(false)
   , outputsListWidget_(0)
   , tabWidget_(0)
   , errorMessage_(item->getAnalysis().getErrorMessage().c_str())
 {
-  setParameters(item->getAnalysis());
+  const FunctionalChaosAnalysis * chaos(dynamic_cast<const FunctionalChaosAnalysis*>(item->getAnalysis().getImplementation().get()));
+  if (!chaos)
+    throw InvalidArgumentException(HERE) << "FunctionalChaosResultWindow: the analysis is not a FunctionalChaosAnalysis";
+
+  result_ = chaos->getResult();
+  maxDegree_ = chaos->getChaosDegree();
+  sparse_ = chaos->getSparseChaos();
+
+  // parameters widget
+  setParameters(item->getAnalysis(), tr("Metamodel creation parameters"));
+
   buildInterface();
-}
-
-
-void FunctionalChaosResultWindow::setParameters(const Analysis & analysis)
-{
-  const FunctionalChaosAnalysis chaos(*dynamic_cast<const FunctionalChaosAnalysis*>(analysis.getImplementation().get()));
-
-  // ParametersWidget
-  QStringList namesList;
-  namesList << tr("Algorithm");
-  namesList << tr("Chaos degree");
-  namesList << tr("Sparse");
-  namesList << tr("Leave-one-out validation");
-
-  QStringList valuesList;
-  valuesList << tr("Functional chaos");
-  valuesList << QString::number(chaos.getChaosDegree());
-  valuesList << (chaos.getSparseChaos()? tr("yes") : tr("no"));
-  valuesList << (chaos.isLeaveOneOutValidation()? tr("yes") : tr("no"));
-
-  parametersWidget_ = new ParametersWidget(tr("Metamodel creation parameters"), namesList, valuesList);
 }
 
 
@@ -83,7 +73,7 @@ void FunctionalChaosResultWindow::buildInterface()
   QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  outputsListWidget_ = new QListWidget;
+  outputsListWidget_ = new OTguiListWidget;
   outputsListWidget_->addItems(outputNames);
   outputsLayoutGroupBox->addWidget(outputsListWidget_);
 
@@ -121,8 +111,10 @@ void FunctionalChaosResultWindow::buildInterface()
   // second tab : MOMENTS --------------------------------
   if (result_.getMean().getSize() == outputDimension && result_.getVariance().getSize() == outputDimension)
   {
-    QWidget * momentsWidget = new QWidget;
-    QVBoxLayout * momentsWidgetLayout = new QVBoxLayout(momentsWidget);
+    QWidget * summaryWidget = new QWidget;
+    QGridLayout * summaryWidgetLayout = new QGridLayout(summaryWidget);
+
+    // moments estimates
     QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimates"));
     QVBoxLayout * momentsGroupBoxLayout = new QVBoxLayout(momentsGroupBox);
     ResizableStackedWidget * momentsStackedWidget = new ResizableStackedWidget;
@@ -138,11 +130,13 @@ void FunctionalChaosResultWindow::buildInterface()
       momentsEstimationsTable->setNotEditableHeaderItem(0, 0, tr("Estimate"));
       momentsEstimationsTable->setNotEditableHeaderItem(1, 0, tr("Mean"));
       momentsEstimationsTable->setNotEditableHeaderItem(2, 0, tr("Variance"));
+      momentsEstimationsTable->setNotEditableHeaderItem(3, 0, tr("Standard deviation"));
       // - horizontal header
       momentsEstimationsTable->setNotEditableHeaderItem(0, 1, tr("Value"));
       // - moments values
       momentsEstimationsTable->setNotEditableItem(1, 1, result_.getMean()[outputIndex]);
       momentsEstimationsTable->setNotEditableItem(2, 1, result_.getVariance()[outputIndex]);
+      momentsEstimationsTable->setNotEditableItem(3, 1, std::sqrt(result_.getVariance()[outputIndex]));
 
       momentsEstimationsTableView->resizeToContents();
 
@@ -152,20 +146,68 @@ void FunctionalChaosResultWindow::buildInterface()
 
     connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), momentsStackedWidget, SLOT(setCurrentIndex(int)));
 
-    momentsWidgetLayout->addWidget(momentsGroupBox);
+    summaryWidgetLayout->addWidget(momentsGroupBox);
 
-    tabWidget_->addTab(momentsWidget, tr("Moments"));
+    // chaos result
+    QGroupBox * basisGroupBox = new QGroupBox(tr("Polynomial basis"));
+    QVBoxLayout * basisGroupBoxLayout = new QVBoxLayout(basisGroupBox);
+    ResizableStackedWidget * basisStackedWidget = new ResizableStackedWidget;
+
+    if (result_.getFunctionalChaosResult().getCoefficients().getDimension() != outputDimension)
+      qDebug() << "Error: FunctionalChaosResultWindow chaos coefficients sample has not a dimension equal to the number of outputs\n";
+
+    for (UnsignedInteger outputIndex=0; outputIndex<outputDimension; ++outputIndex)
+    {
+      // parameters names
+      QStringList namesList;
+      namesList << tr("Dimension")
+                << tr("Maximum degree");
+      namesList << (sparse_? tr("Full basis size") : tr("Basis size"));
+
+      // parameters values
+      const UnsignedInteger dim = result_.getFunctionalChaosResult().getDistribution().getDimension();
+      const UnsignedInteger maxSize = FunctionalChaosAnalysis::BinomialCoefficient(dim + maxDegree_, maxDegree_);
+
+      QStringList valuesList;
+      valuesList << QString::number(dim)
+                 << QString::number(maxDegree_)
+                 << QString::number(maxSize);
+
+      if (sparse_)
+      {
+        namesList << tr("Basis size");
+
+        UnsignedInteger notNullCoefCounter = 0;
+        for (UnsignedInteger coefIndex=0; coefIndex<result_.getFunctionalChaosResult().getCoefficients().getSize(); ++coefIndex)
+          if (result_.getFunctionalChaosResult().getCoefficients()[coefIndex][outputIndex] != 0.0)
+            ++notNullCoefCounter;
+        valuesList << QString::number(notNullCoefCounter);
+      }
+
+      // table view
+      ParametersTableView * basisTableView = new ParametersTableView(namesList, valuesList, true, true);
+      basisStackedWidget->addWidget(basisTableView);
+    }
+    basisGroupBoxLayout->addWidget(basisStackedWidget);
+
+    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), basisStackedWidget, SLOT(setCurrentIndex(int)));
+
+    summaryWidgetLayout->addWidget(basisGroupBox);
+//     summaryWidgetLayout->addStretch();
+    summaryWidgetLayout->setRowStretch(2, 1);
+
+    tabWidget_->addTab(summaryWidget, tr("Summary"));
   }
   else
   {
     if (!errorMessage_.isEmpty())
     {
-      QWidget * momentsWidget = new QWidget;
-      QVBoxLayout * momentsWidgetLayout = new QVBoxLayout(momentsWidget);
+      QWidget * summaryWidget = new QWidget;
+      QVBoxLayout * summaryWidgetLayout = new QVBoxLayout(summaryWidget);
       QLabel * errorLabel = new QLabel(errorMessage_);
-      momentsWidgetLayout->addWidget(errorLabel);
-      momentsWidgetLayout->addStretch();
-      tabWidget_->addTab(momentsWidget, tr("Moments"));
+      summaryWidgetLayout->addWidget(errorLabel);
+      summaryWidgetLayout->addStretch();
+      tabWidget_->addTab(summaryWidget, tr("Summary"));
     }
   }
 

@@ -24,8 +24,6 @@
 #include "otgui/ResultWindow.hxx"
 #include "otgui/SobolResult.hxx"
 
-#include <QListWidget>
-
 namespace OTGUI {
 class OTGUI_API SobolResultWindow : public ResultWindow
 {
@@ -35,7 +33,6 @@ public:
   SobolResultWindow(AnalysisItem * item);
 
 protected:
-  void setParameters(const Analysis & analysis);
   void buildInterface();
 
 public slots:
@@ -46,7 +43,7 @@ signals:
 
 private:
   SobolResult result_;
-  QListWidget * outputsListWidget_;
+  OTguiListWidget * outputsListWidget_;
   QTabWidget * tabWidget_;
   QString warningMessage_;
 };

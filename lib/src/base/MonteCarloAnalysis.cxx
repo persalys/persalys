@@ -151,21 +151,23 @@ void MonteCarloAnalysis::run()
       outputSample.add(blockOutputSample);
 
       // stop criteria
-      if ((getMaximumCoefficientOfVariation() != -1) &&
-          (getBlockSize() != 1 || (getBlockSize() == 1 && outerSampling)))
+      if (getBlockSize() != 1 || (getBlockSize() == 1 && outerSampling))
       {
         const Point empiricalMean(outputSample.computeMean());
         const Point empiricalStd(outputSample.computeStandardDeviationPerComponent());
+
         Scalar coefOfVar(0.);
         for (UnsignedInteger i=0; i<outputSample.getDimension(); ++i)
         {
-          if (std::abs(empiricalMean[i])  < SpecFunc::Precision)
-            throw InvalidValueException(HERE) << "Impossible to continue the analysis.\
-                                                  Impossible to compute the coefficient of variation because the mean of an output is too close to zero.\
-                                                  Do not use the coefficient of variation as criteria to stop the algorithm";
-
-          const Scalar sigma_i = empiricalStd[i] / sqrt(outputSample.getSize());
-          coefOfVar = std::max(sigma_i / std::abs(empiricalMean[i]), coefOfVar);
+          if (std::abs(empiricalMean[i]) > SpecFunc::Precision)
+          {
+            const Scalar sigma_i = empiricalStd[i] / sqrt(outputSample.getSize());
+            coefOfVar = std::max(sigma_i / std::abs(empiricalMean[i]), coefOfVar);
+          }
+          else
+          {
+            coefOfVar = -1;
+          }
         }
         coefficientOfVariation = coefOfVar;
       }

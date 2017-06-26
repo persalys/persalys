@@ -32,7 +32,6 @@
 
 #include <QScrollArea>
 #include <QSplitter>
-#include <QListWidget>
 #include <QGroupBox>
 
 using namespace OT;
@@ -41,20 +40,22 @@ namespace OTGUI {
 
 SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisItem * item)
   : ResultWindow(item)
-  , result_(dynamic_cast<SimulationReliabilityAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , result_(dynamic_cast<SimulationReliabilityAnalysis*>(item->getAnalysis().getImplementation().get())->getResult())
   , tabWidget_(0)
   , formTabWidget_(0)
   , histogramConfigurationWidget_(0)
   , convergenceGraphConfigurationWidget_(0)
 {
   // FORM result widget
-  if (dynamic_cast<const FORMImportanceSamplingAnalysis*>(&*item->getAnalysis().getImplementation()))
+  if (dynamic_cast<const FORMImportanceSamplingAnalysis*>(item->getAnalysis().getImplementation().get()))
   {
-    FORMImportanceSamplingAnalysis analysis = *dynamic_cast<const FORMImportanceSamplingAnalysis*>(&*item->getAnalysis().getImplementation());
+    FORMImportanceSamplingAnalysis analysis = *dynamic_cast<const FORMImportanceSamplingAnalysis*>(item->getAnalysis().getImplementation().get());
     formTabWidget_ = new ApproximationResultTabWidget(analysis.getFORMResult(), analysis, this);
   }
 
-  setParameters(item->getAnalysis());
+  // parameters widget
+  setParameters(item->getAnalysis(), tr("Threshold exceedance parameters"));
+
   buildInterface();
 }
 
@@ -65,69 +66,6 @@ SimulationReliabilityResultWindow::~SimulationReliabilityResultWindow()
   delete convergenceGraphConfigurationWidget_;
   histogramConfigurationWidget_ = 0;
   convergenceGraphConfigurationWidget_ = 0;
-}
-
-
-void SimulationReliabilityResultWindow::setParameters(const Analysis & analysis)
-{
-  const SimulationReliabilityAnalysis * simuAnalysis = dynamic_cast<const SimulationReliabilityAnalysis*>(&*analysis.getImplementation());
-
-  // - parameters names
-  QStringList namesList;
-  namesList << tr("Algorithm");
-  if (dynamic_cast<const ImportanceSamplingAnalysis*>(&*analysis.getImplementation()))
-    namesList << tr("Design point (standard space)");
-  namesList << tr("Maximum coefficient of variation");
-  namesList << tr("Maximum elapsed time");
-  namesList << tr("Maximum calls");
-  namesList << tr("Block size");
-  namesList << tr("Seed");
-
-  // - parameters values
-  QStringList valuesList;
-
-  // algo
-  if (dynamic_cast<const MonteCarloReliabilityAnalysis*>(&*analysis.getImplementation()))
-    valuesList << tr("Monte Carlo");
-  else if (dynamic_cast<const ImportanceSamplingAnalysis*>(&*analysis.getImplementation()))
-  {
-    if (dynamic_cast<const FORMImportanceSamplingAnalysis*>(&*analysis.getImplementation()))
-      valuesList << tr("FORM - Importance sampling");
-    else
-      valuesList << tr("Importance sampling");
-
-    // starting point
-    const Point startingPoint(dynamic_cast<const ImportanceSamplingAnalysis*>(&*analysis.getImplementation())->getStandardSpaceDesignPoint());
-    QString startingPointText = "[";
-    for (UnsignedInteger i=0; i<startingPoint.getDimension(); ++i)
-    {
-      startingPointText += QString::number(startingPoint[i]);
-      if (i < startingPoint.getDimension()-1)
-        startingPointText += "; ";
-    }
-    startingPointText += "]";
-    valuesList << startingPointText;
-  }
-  else
-    return;
-
-  // stop criteria
-  valuesList << QString::number(simuAnalysis->getMaximumCoefficientOfVariation());
-  if (simuAnalysis->getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
-    valuesList << QString::number(simuAnalysis->getMaximumElapsedTime()) + "(s)";
-  else
-    valuesList << "- (s)";
-  if (simuAnalysis->getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
-    valuesList << QString::number(simuAnalysis->getMaximumCalls());
-  else
-    valuesList << "-";
-  valuesList << QString::number(simuAnalysis->getBlockSize());
-
-  // seed
-  valuesList << QString::number(simuAnalysis->getSeed()); 
-
-  if (namesList.size() == valuesList.size())
-    parametersWidget_ = new ParametersWidget(tr("Threshold exceedance parameters"), namesList, valuesList);
 }
 
 
@@ -145,8 +83,9 @@ void SimulationReliabilityResultWindow::buildInterface()
   QGroupBox * outputsGroupBox = new QGroupBox(tr("Output"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  QListWidget * outputsListWidget = new QListWidget;
+  OTguiListWidget * outputsListWidget = new OTguiListWidget;
   outputsListWidget->addItems(QStringList() << outputName);
+  outputsListWidget->setCurrentRow(0);
   outputsLayoutGroupBox->addWidget(outputsListWidget);
 
   mainWidget->addWidget(outputsGroupBox);
@@ -274,7 +213,7 @@ QWidget* SimulationReliabilityResultWindow::getHistogramTab()
 
   // plot histogram
   QVector<PlotWidget*> listHistogram;
-  PlotWidget * plot = new PlotWidget("histogram");
+  PlotWidget * plot = new PlotWidget(tr("histogram"));
   plot->plotHistogram(result_.getOutputSample(), 2, 0, tr("%1 distribution").arg(outputName));
 
   // plot threshold
@@ -305,7 +244,7 @@ QWidget* SimulationReliabilityResultWindow::getConvergenceTab()
   ResizableStackedWidget * tab = new ResizableStackedWidget;
 
   QVector<PlotWidget*> listConvergenceGraph;
-  PlotWidget * plot = new PlotWidget("convergence");
+  PlotWidget * plot = new PlotWidget(tr("convergence"));
   // plot pf convergence
   plot->plotCurve(result_.getConvergenceSample(), QPen(Qt::red), QwtPlotCurve::Lines, 0, tr("Probability estimate"));
   // plot lower bound

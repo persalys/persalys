@@ -35,6 +35,7 @@
 #include "otgui/SimulationReliabilityAnalysis.hxx"
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
 #include "otgui/FORMImportanceSamplingAnalysis.hxx"
+#include "otgui/InferenceAnalysis.hxx"
 
 #include <openturns/OTBase.hxx>
 
@@ -540,7 +541,7 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
   {
     const SimulationReliabilityAnalysis simuAnalysis(*dynamic_cast<const SimulationReliabilityAnalysis*>(&*analysis.getImplementation()));
 
-    // - parameters names
+    // Parameters names
     namesList << tr("Algorithm");
     if (dynamic_cast<const ImportanceSamplingAnalysis*>(&*analysis.getImplementation()))
       namesList << tr("Design point (standard space)");
@@ -588,6 +589,18 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
 
     // seed
     valuesList << QString::number(simuAnalysis.getSeed());
+  }
+  else if (analysisType == "InferenceAnalysis")
+  {
+    const InferenceAnalysis inferenceAnalysis(*dynamic_cast<const InferenceAnalysis*>(&*analysis.getImplementation()));
+
+    // Parameters names
+    namesList << tr("Method")
+              << tr("Level");
+
+    // Parameters values
+    valuesList << tr("Kolmogorov Smirnov")
+               << QString::number(inferenceAnalysis.getLevel());
   }
 }
 }

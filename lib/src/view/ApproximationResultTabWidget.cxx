@@ -20,13 +20,12 @@
  */
 #include "otgui/ApproximationResultTabWidget.hxx"
 
+#include "otgui/AnalysisItem.hxx"
 #include "otgui/ParametersTableView.hxx"
 #include "otgui/ParametersWidget.hxx"
 #include "otgui/PieChartView.hxx"
 
 #include <QScrollArea>
-#include <QVBoxLayout>
-#include <QGroupBox>
 #include <QHeaderView>
 
 using namespace OT;
@@ -34,47 +33,23 @@ using namespace OT;
 namespace OTGUI {
 
 ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& result,
-                                                           const ApproximationAnalysis& analysis,
+                                                           const ReliabilityAnalysis& analysis,
                                                            QWidget* parent)
   : QTabWidget(parent)
   , result_(result)
   , parametersWidget_(0)
 {
   // parameters widget
-  QStringList namesList;
-  namesList << tr("Algorithm");
-  namesList << tr("Optimization algorithm");
-  namesList << tr("Physical starting point");
-  namesList << tr("Maximum iterations number");
-  namesList << tr("Maximum absolute error");
-  namesList << tr("Maximum relative error");
-  namesList << tr("Maximum residual error");
-  namesList << tr("Maximum constraint error");
+  QStringList paramNames;
+  QStringList paramValues;
+  AnalysisItem::GetAnalysisParameters(analysis, paramNames, paramValues);
 
-  QStringList valuesList;
-  valuesList << tr("FORM");
-  valuesList << QString(analysis.getOptimizationAlgorithm().getImplementation()->getClassName().c_str());
-
-  // starting point
-  const Point startingPoint(analysis.getPhysicalStartingPoint());
-  QString startingPointText = "[";
-  for (UnsignedInteger i=0; i<startingPoint.getDimension(); ++i)
+  if (!paramNames.isEmpty() && paramNames.size() == paramValues.size())
   {
-    startingPointText += QString::number(startingPoint[i]);
-    if (i < startingPoint.getDimension()-1)
-      startingPointText += "; ";
+    parametersWidget_ = new QWidget;
+    QGridLayout * parametersWidgetLayout = new QGridLayout(parametersWidget_);
+    parametersWidgetLayout->addWidget(new ParametersWidget(tr("Threshold exceedance parameters"), paramNames, paramValues));
   }
-  startingPointText += "]";
-  valuesList << startingPointText;
-
-  // optimization algo parameters
-  valuesList << QString::number(analysis.getOptimizationAlgorithm().getMaximumIterationNumber());
-  valuesList << QString::number(analysis.getOptimizationAlgorithm().getMaximumAbsoluteError());
-  valuesList << QString::number(analysis.getOptimizationAlgorithm().getMaximumRelativeError());
-  valuesList << QString::number(analysis.getOptimizationAlgorithm().getMaximumResidualError());
-  valuesList << QString::number(analysis.getOptimizationAlgorithm().getMaximumConstraintError());
-
-  parametersWidget_ = new ParametersWidget(tr("Threshold exceedance parameters"), namesList, valuesList);
 
   buildInterface();
 }
@@ -93,44 +68,36 @@ void ApproximationResultTabWidget::buildInterface()
   tabLayout->setSizeConstraint(QLayout::SetFixedSize);
 
   // failure probability table
-  QGroupBox * groupBox = new QGroupBox(tr("Failure probability"));
-  QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
-
   QStringList namesList;
-  namesList << tr("Failure probability");
-  namesList << tr("Hasofer reliability index");
+  namesList << tr("Failure probability")
+            << tr("Hasofer reliability index");
 
   QStringList valuesList;
-  valuesList << QString::number(result_.getEventProbability());
-  valuesList << QString::number(result_.getHasoferReliabilityIndex());
+  valuesList << QString::number(result_.getEventProbability())
+             << QString::number(result_.getHasoferReliabilityIndex());
 
-  ParametersTableView * parametersTable = new ParametersTableView(namesList, valuesList, true, true);
-  groupBoxLayout->addWidget(parametersTable);
-  tabLayout->addWidget(groupBox);
+  ParametersWidget * parametersTable = new ParametersWidget(tr("Failure probability"), namesList, valuesList, true, true);
+  tabLayout->addWidget(parametersTable);
 
   // optimization result table
-  groupBox = new QGroupBox(tr("Optimization result"));
-  groupBoxLayout = new QVBoxLayout(groupBox);
-
   namesList.clear();
-  namesList << tr("Iterations number");
-  namesList << tr("Calls number");
-  namesList << tr("Absolute error");
-  namesList << tr("Relative error");
-  namesList << tr("Residual error");
-  namesList << tr("Constraint error");
+  namesList << tr("Iterations number")
+            << tr("Calls number")
+            << tr("Absolute error")
+            << tr("Relative error")
+            << tr("Residual error")
+            << tr("Constraint error");
 
   valuesList.clear();
-  valuesList << QString::number(result_.getOptimizationResult().getIterationNumber());
-  valuesList << QString::number(result_.getLimitStateVariable().getFunction().getCallsNumber());
-  valuesList << QString::number(result_.getOptimizationResult().getAbsoluteError());
-  valuesList << QString::number(result_.getOptimizationResult().getRelativeError());
-  valuesList << QString::number(result_.getOptimizationResult().getResidualError());
-  valuesList << QString::number(result_.getOptimizationResult().getConstraintError());
+  valuesList << QString::number(result_.getOptimizationResult().getIterationNumber())
+             << QString::number(result_.getLimitStateVariable().getFunction().getCallsNumber())
+             << QString::number(result_.getOptimizationResult().getAbsoluteError())
+             << QString::number(result_.getOptimizationResult().getRelativeError())
+             << QString::number(result_.getOptimizationResult().getResidualError())
+             << QString::number(result_.getOptimizationResult().getConstraintError());
   
-  parametersTable = new ParametersTableView(namesList, valuesList, true, true);
-  groupBoxLayout->addWidget(parametersTable);
-  tabLayout->addWidget(groupBox);
+  parametersTable = new ParametersWidget(tr("Optimization result"), namesList, valuesList, true, true);
+  tabLayout->addWidget(parametersTable);
 
   scrollArea->setWidget(tab);
 
@@ -144,8 +111,8 @@ void ApproximationResultTabWidget::buildInterface()
   scrollArea->setWidgetResizable(true);
   tabLayout->setSizeConstraint(QLayout::SetFixedSize);
 
-  groupBox = new QGroupBox(tr("Design point"));
-  groupBoxLayout = new QVBoxLayout(groupBox);
+  QGroupBox * groupBox = new QGroupBox(tr("Design point"));
+  QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
 
   ResizableTableViewWithoutScrollBar * resultsTable = new ResizableTableViewWithoutScrollBar;
   resultsTable->horizontalHeader()->hide();
@@ -196,6 +163,7 @@ void ApproximationResultTabWidget::buildInterface()
   groupBox = new QGroupBox(tr("Importance factors pie chart"));
   groupBoxLayout = new QVBoxLayout(groupBox);
   PieChartView * pieChart = new PieChartView(importanceFactors);
+  pieChart->setPlotName(tr("importanceFactors"));
   groupBoxLayout->addWidget(pieChart, 0, Qt::AlignCenter);
   tabLayout->addWidget(groupBox);
 

@@ -22,9 +22,9 @@
 
 #include "otgui/CopulaInferenceAnalysis.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
+#include "otgui/CopulaInferenceResultWidget.hxx"
 
 #include <QVBoxLayout>
-#include <QListWidget>
 #include <QGroupBox>
 #include <QSplitter>
 
@@ -55,7 +55,7 @@ void CopulaInferenceResultWindow::buildInterface()
   QGroupBox * variablesGroupBox = new QGroupBox(tr("Variables"));
   QVBoxLayout * variablesLayoutGroupBox = new QVBoxLayout(variablesGroupBox);
 
-  QListWidget * listSetOfVariables = new QListWidget;
+  OTguiListWidget * listSetOfVariables = new OTguiListWidget;
   listSetOfVariables->addItems(setOfVariablesNames);
   variablesLayoutGroupBox->addWidget(listSetOfVariables);
 

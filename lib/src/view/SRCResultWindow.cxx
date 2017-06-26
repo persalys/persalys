@@ -34,37 +34,24 @@ namespace OTGUI {
   
 SRCResultWindow::SRCResultWindow(AnalysisItem * item)
   : ResultWindow(item)
-  , result_(dynamic_cast<SRCAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , result_()
   , outputsListWidget_(0)
   , tabWidget_(0)
 {
-  setParameters(item->getAnalysis());
-  buildInterface();
-}
+  const SRCAnalysis * SRCanalysis = dynamic_cast<const SRCAnalysis*>(item->getAnalysis().getImplementation().get());
+  if (!SRCanalysis)
+    throw InvalidArgumentException(HERE) << "SRCResultWindow: the analysis is not a SRCAnalysis";
 
-
-void SRCResultWindow::setParameters(const Analysis & analysis)
-{
-  const SRCAnalysis * SRCanalysis = dynamic_cast<const SRCAnalysis*>(&*analysis.getImplementation());
+  result_ = SRCanalysis->getResult();
 
   // add warning if the model has not an independent copula
   if (!SRCanalysis->getPhysicalModel().getComposedDistribution().hasIndependentCopula())
-  {
     warningMessage_ = tr("The model has not an independent copula, the result could be false.");
-  }
 
-  // ParametersWidget
-  QStringList namesList;
-  namesList << tr("Algorithm");
-  namesList << tr("Sample size");
-  namesList << tr("Seed");
+  // parameters widget
+  setParameters(item->getAnalysis(), tr("Sensitivity analysis parameters"));
 
-  QStringList valuesList;
-  valuesList << tr("Standardized Regression Coefficients");
-  valuesList << QString::number(SRCanalysis->getSimulationsNumber());
-  valuesList << QString::number(SRCanalysis->getSeed());
-
-  parametersWidget_ = new ParametersWidget(tr("Sensitivity analysis parameters"), namesList, valuesList);
+  buildInterface();
 }
 
 
@@ -85,7 +72,7 @@ void SRCResultWindow::buildInterface()
   QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  outputsListWidget_ = new QListWidget;
+  outputsListWidget_ = new OTguiListWidget;
   outputsListWidget_->addItems(outputNames);
   outputsLayoutGroupBox->addWidget(outputsListWidget_);
 

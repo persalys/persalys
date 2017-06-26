@@ -23,15 +23,6 @@
 
 #include "otgui/ResultWindow.hxx"
 #include "otgui/FunctionalChaosAnalysisResult.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
-
-#include <QGroupBox>
-#include <QVBoxLayout>
-#include <QHeaderView>
-#include <QListWidget>
 
 namespace OTGUI {
 
@@ -43,7 +34,6 @@ public:
   FunctionalChaosResultWindow(AnalysisItem * item);
 
 protected:
-  void setParameters(const Analysis & analysis);
   void buildInterface();
 
 public slots:
@@ -54,7 +44,9 @@ signals:
 
 private:
   FunctionalChaosAnalysisResult result_;
-  QListWidget * outputsListWidget_;
+  OT::UnsignedInteger maxDegree_;
+  bool sparse_;
+  OTguiListWidget * outputsListWidget_;
   QTabWidget * tabWidget_;
   QString errorMessage_;
 };

@@ -62,13 +62,13 @@ public:
     if (type == SensitivityResultWidget::Sobol)
     {
       graphTitle = tr("Sobol sensitivity indices:");
-      defaultFileName = "sensitivitySobol";
+      defaultFileName = tr("sensitivitySobol");
       tableTitles << tr("Input") << tr("First order index") << tr("Total index");
     }
     else if (type == SensitivityResultWidget::SRC)
     {
       graphTitle = tr("SRC sensitivity indices:");
-      defaultFileName = "sensitivitySRC";
+      defaultFileName = tr("sensitivitySRC");
       tableTitles << tr("Input") << tr("Index");
     }
     // plot

@@ -23,6 +23,8 @@
 #include "otgui/SampleTableModel.hxx"
 #include "otgui/ExportableTableView.hxx"
 
+#include <QSortFilterProxyModel>
+
 using namespace OT;
 
 namespace OTGUI {
@@ -40,8 +42,14 @@ void DesignOfExperimentInputWindow::buildInterface()
   setWindowTitle(tr("Design of experiment"));
 
   ExportableTableView * tableView_ = new ExportableTableView;
+  tableView_->setSortingEnabled(true);
+
   SampleTableModel * tableModel = new SampleTableModel(designOfExperiment_.getInputSample(), tableView_);
-  tableView_->setModel(tableModel);
+  QSortFilterProxyModel * proxyModel = new QSortFilterProxyModel(tableView_);
+  proxyModel->setSourceModel(tableModel);
+
+  tableView_->setModel(proxyModel);
+  tableView_->sortByColumn(0, Qt::AscendingOrder);
 
   setWidget(tableView_);
 }

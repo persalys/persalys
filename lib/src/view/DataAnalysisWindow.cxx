@@ -26,11 +26,14 @@
 #include "otgui/MomentsEstimatesTableGroupBox.hxx"
 #include "otgui/PlotWidgetWithGraphSetting.hxx"
 #include "otgui/ParametersTableView.hxx"
+#include "otgui/ExportableTableView.hxx"
+#include "otgui/SampleTableModel.hxx"
 
 #include <QVBoxLayout>
 #include <QScrollArea>
 #include <QHeaderView>
 #include <QSplitter>
+#include <QSortFilterProxyModel>
 
 using namespace OT;
 
@@ -84,7 +87,7 @@ void DataAnalysisWindow::buildInterface()
   variablesGroupBox_ = new QGroupBox(tr("Variables"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(variablesGroupBox_);
 
-  variablesListWidget_ = new QListWidget;
+  variablesListWidget_ = new OTguiListWidget;
   variablesListWidget_->addItems(variablesNames);
   variablesListWidget_->setCurrentRow(0);
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), this, SLOT(updateSpinBoxes(int)));
@@ -291,9 +294,17 @@ void DataAnalysisWindow::buildInterface()
   {
     QWidget * tab = new QWidget;
     QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+
     ExportableTableView * tabResultView = new ExportableTableView;
+    tabResultView->setSortingEnabled(true);
+
     SampleTableModel * tabResultModel = new SampleTableModel(result_.getSample(), tabResultView);
-    tabResultView->setModel(tabResultModel);
+    QSortFilterProxyModel * proxyModel = new QSortFilterProxyModel(tabResultView);
+    proxyModel->setSourceModel(tabResultModel);
+
+    tabResultView->setModel(proxyModel);
+    tabResultView->sortByColumn(0, Qt::AscendingOrder);
+
     tabLayout->addWidget(tabResultView);
 
     tabWidget_->addTab(tab, tr("Table"));
@@ -335,7 +346,7 @@ QWidget* DataAnalysisWindow::getPDF_CDFWidget()
   {
     QVector<PlotWidget*> listPlotWidgets;
 
-    PlotWidget * plot = new PlotWidget("distributionPDF");
+    PlotWidget * plot = new PlotWidget(tr("distributionPDF"));
     // PDF
     plot->plotHistogram(result_.getSample().getMarginal(ind[i]));
     if (result_.getPDF()[ind[i]].getSize())
@@ -347,7 +358,7 @@ QWidget* DataAnalysisWindow::getPDF_CDFWidget()
     listPlotWidgets.append(plot);
 
     // CDF
-    plot = new PlotWidget("distributionCDF");
+    plot = new PlotWidget(tr("distributionCDF"));
     plot->plotHistogram(result_.getSample().getMarginal(ind[i]), 1);
     if (result_.getCDF()[ind[i]].getSize())
       plot->plotCurve(result_.getCDF()[ind[i]]);
@@ -393,7 +404,7 @@ QWidget* DataAnalysisWindow::getBoxPlotWidget()
   {
     QVector<PlotWidget*> listBoxPlotWidgets;
 
-    PlotWidget * plot = new PlotWidget("boxplot");
+    PlotWidget * plot = new PlotWidget(tr("boxplot"));
 
     const double median = result_.getMedian()[ind[i]][0];
     const double Q1 = result_.getFirstQuartile()[ind[i]][0];

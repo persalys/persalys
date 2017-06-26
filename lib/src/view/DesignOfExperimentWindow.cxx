@@ -23,10 +23,13 @@
 #include "otgui/MinMaxTableGroupBox.hxx"
 #include "otgui/ParametersTableView.hxx"
 #include "otgui/DesignOfExperimentAnalysis.hxx"
+#include "otgui/ExportableTableView.hxx"
+#include "otgui/SampleTableModel.hxx"
 
 #include <QVBoxLayout>
 #include <QScrollArea>
 #include <QSplitter>
+#include <QSortFilterProxyModel>
 
 using namespace OT;
 
@@ -40,12 +43,6 @@ DesignOfExperimentWindow::DesignOfExperimentWindow(DesignOfExperimentItem * item
   , tabWidget_(0)
   , tablesTabWidget_(0)
   , scatterPlotsTabWidget_(0)
-  , tableView_(0)
-  , tableModel_(0)
-  , failedPointsTableView_(0)
-  , failedPointsTableModel_(0)
-  , notEvaluatedTableView_(0)
-  , notEvaluatedTableModel_(0)
   , scatterPlotsConfigurationWidget_(0)
   , plotMatrix_X_X_ConfigurationWidget_(0)
   , plotMatrixConfigurationWidget_(0)
@@ -63,12 +60,6 @@ DesignOfExperimentWindow::DesignOfExperimentWindow(AnalysisItem* item)
   , tabWidget_(0)
   , tablesTabWidget_(0)
   , scatterPlotsTabWidget_(0)
-  , tableView_(0)
-  , tableModel_(0)
-  , failedPointsTableView_(0)
-  , failedPointsTableModel_(0)
-  , notEvaluatedTableView_(0)
-  , notEvaluatedTableModel_(0)
   , scatterPlotsConfigurationWidget_(0)
   , plotMatrix_X_X_ConfigurationWidget_(0)
   , plotMatrixConfigurationWidget_(0)
@@ -105,7 +96,7 @@ void DesignOfExperimentWindow::buildInterface()
   variablesGroupBox_ = new QGroupBox(tr("Variables"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(variablesGroupBox_);
 
-  variablesListWidget_ = new QListWidget;
+  variablesListWidget_ = new OTguiListWidget;
   outputsLayoutGroupBox->addWidget(variablesListWidget_);
 
   mainWidget->addWidget(variablesGroupBox_);
@@ -119,8 +110,6 @@ void DesignOfExperimentWindow::buildInterface()
 
   // first tab --------------------------------
   tablesTabWidget_ = new QTabWidget;
-  tableView_ = new ExportableTableView;
-  tablesTabWidget_->addTab(tableView_, tr("DOE"));
 
   tabWidget_->addTab(tablesTabWidget_, tr("Table"));
   tabLayout->addWidget(tabWidget_);
@@ -133,7 +122,7 @@ void DesignOfExperimentWindow::buildInterface()
   mainWidget->addWidget(tab);
   mainWidget->setStretchFactor(1, 10);
 
-  // if needed: fill other tabs
+  // fill Table tab
   updateTable();
 
   setWidget(mainWidget);
@@ -155,36 +144,47 @@ void DesignOfExperimentWindow::evaluateOutputs()
 
 void DesignOfExperimentWindow::updateTable()
 {
-  if (tableModel_)
-    delete tableModel_;
-  if (failedPointsTableModel_)
-    delete failedPointsTableModel_;
-  if (notEvaluatedTableModel_)
-    delete notEvaluatedTableModel_;
-
   // tab with well evaluated points
-  tableModel_ = new SampleTableModel(designOfExperiment_.getSample(), tableView_);
-  tableView_->setModel(tableModel_);
+  ExportableTableView * tableView = new ExportableTableView;
+  tableView->setSortingEnabled(true);
+
+  SampleTableModel * tableModel = new SampleTableModel(designOfExperiment_.getSample(), tableView);
+  QSortFilterProxyModel * proxyModel = new QSortFilterProxyModel(tableView);
+  proxyModel->setSourceModel(tableModel);
+  tableView->setModel(proxyModel);
+  tableView->sortByColumn(0, Qt::AscendingOrder);
+
+  tablesTabWidget_->addTab(tableView, tr("DOE"));
 
   // tab with failed points
   if (designOfExperiment_.getFailedInputSample().getSize())
   {
-    failedPointsTableModel_ = new SampleTableModel(designOfExperiment_.getFailedInputSample(), failedPointsTableView_);
-    failedPointsTableView_ = new ExportableTableView;
-    failedPointsTableView_->setModel(failedPointsTableModel_);
-    tablesTabWidget_->addTab(failedPointsTableView_, tr("Failed points"));
+    tableView = new ExportableTableView;
+    tableView->setSortingEnabled(true);
+    tableModel = new SampleTableModel(designOfExperiment_.getFailedInputSample(), tableView);
+    proxyModel = new QSortFilterProxyModel(tableView);
+    proxyModel->setSourceModel(tableModel);
+    tableView->setModel(proxyModel);
+    tableView->sortByColumn(0, Qt::AscendingOrder);
+
+    tablesTabWidget_->addTab(tableView, tr("Failed points"));
   }
   // tab with not evaluated points
   if (designOfExperiment_.getNotEvaluatedInputSample().getSize())
   {
-    notEvaluatedTableModel_ = new SampleTableModel(designOfExperiment_.getNotEvaluatedInputSample(), notEvaluatedTableView_);
-    notEvaluatedTableView_ = new ExportableTableView;
-    notEvaluatedTableView_->setModel(notEvaluatedTableModel_);
-    tablesTabWidget_->addTab(notEvaluatedTableView_, tr("Not evaluated points"));
+    tableView = new ExportableTableView;
+    tableView->setSortingEnabled(true);
+    tableModel = new SampleTableModel(designOfExperiment_.getNotEvaluatedInputSample(), tableView);
+    proxyModel = new QSortFilterProxyModel(tableView);
+    proxyModel->setSourceModel(tableModel);
+    tableView->setModel(proxyModel);
+    tableView->sortByColumn(0, Qt::AscendingOrder);
+
+    tablesTabWidget_->addTab(tableView, tr("Not evaluated points"));
   }
 
   // tabs with results
-  if (designOfExperiment_.getOutputSample().getSize() && tableModel_->sampleIsValid())
+  if (designOfExperiment_.getOutputSample().getSize() && tableModel->sampleIsValid())
     addTabsForOutputs();
 }
 
@@ -353,13 +353,13 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const Sample&
   {
     for (UnsignedInteger i=0; i<nbOutputs; ++i)
     {
-      PlotWidget * plot = new PlotWidget("scatterplot");
+      PlotWidget * plot = new PlotWidget(tr("scatterplot"));
       plot->plotScatter(inS.getMarginal(j), outS.getMarginal(i), pen, inAxisNames[j], outAxisNames[i]);
       plot->setTitle(tr("Scatter plot:") + " " + outNames[i] + " " + tr("vs") + " " + inNames[j]);
       listScatterPlotWidgets.append(plot);
 
       // ranks
-      plot = new PlotWidget("scatterplot");
+      plot = new PlotWidget(tr("scatterplot"));
       plot->plotScatter(inSrank.getMarginal(j), outSrank.getMarginal(i), pen, inAxisNames[j], outAxisNames[i]);
       plot->setTitle(tr("Scatter plot:") + " " + outNames[i] + " " + tr("vs") + " " + inNames[j]);
       listScatterPlotWidgets.append(plot);
@@ -368,7 +368,7 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const Sample&
     {
       if (i != j)
       {
-        PlotWidget * plot = new PlotWidget("scatterplot");
+        PlotWidget * plot = new PlotWidget(tr("scatterplot"));
         plot->plotScatter(inS.getMarginal(j), inS.getMarginal(i), pen, inAxisNames[j], inAxisNames[i]);
         if (notValidInS.getSize())
           plot->plotScatter(notValidInS.getMarginal(j), notValidInS.getMarginal(i), notValidPen, inAxisNames[j], inAxisNames[i]);
@@ -376,7 +376,7 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const Sample&
         listScatterPlotWidgets.append(plot);
 
         // ranks
-        plot = new PlotWidget("scatterplot");
+        plot = new PlotWidget(tr("scatterplot"));
         plot->plotScatter(inSrank.getMarginal(j), inSrank.getMarginal(i), pen, inAxisNames[j], inAxisNames[i]);
         if (notValidInS.getSize())
           plot->plotScatter(notValidInSrank.getMarginal(j), notValidInSrank.getMarginal(i), notValidPen, inAxisNames[j], inAxisNames[i]);
@@ -391,13 +391,13 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const Sample&
     {
       if (i != j)
       {
-        PlotWidget * plot = new PlotWidget("scatterplot");
+        PlotWidget * plot = new PlotWidget(tr("scatterplot"));
         plot->plotScatter(outS.getMarginal(j), outS.getMarginal(i), pen, outAxisNames[j], outAxisNames[i]);
         plot->setTitle(tr("Scatter plot:") + " " + outNames[i] + " " + tr("vs") + " " + outNames[j]);
         listScatterPlotWidgets.append(plot);
 
         // ranks
-        plot = new PlotWidget("scatterplot");
+        plot = new PlotWidget(tr("scatterplot"));
         plot->plotScatter(outSrank.getMarginal(j), outSrank.getMarginal(i), pen, outAxisNames[j], outAxisNames[i]);
         plot->setTitle(tr("Scatter plot:") + " " + outNames[i] + " " + tr("vs") + " " + outNames[j]);
         listScatterPlotWidgets.append(plot);
@@ -405,13 +405,13 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const Sample&
     }
     for (UnsignedInteger i=0; i<nbInputs; ++i)
     {
-      PlotWidget * plot = new PlotWidget("scatterplot");
+      PlotWidget * plot = new PlotWidget(tr("scatterplot"));
       plot->plotScatter(outS.getMarginal(j), inS.getMarginal(i), pen, outAxisNames[j], inAxisNames[i]);
       plot->setTitle(tr("Scatter plot:") + " " + inNames[i] + " " + tr("vs") + " " + outNames[j]);
       listScatterPlotWidgets.append(plot);
 
       // ranks
-      plot = new PlotWidget("scatterplot");
+      plot = new PlotWidget(tr("scatterplot"));
       plot->plotScatter(outSrank.getMarginal(j), inSrank.getMarginal(i), pen, outAxisNames[j], inAxisNames[i]);
       plot->setTitle(tr("Scatter plot:") + " " + inNames[i] + " " + tr("vs") + " " + outNames[j]);
       listScatterPlotWidgets.append(plot);

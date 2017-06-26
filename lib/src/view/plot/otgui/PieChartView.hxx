@@ -69,6 +69,7 @@ public:
   PieChartView(const OT::PointWithDescription& data, QWidget* parent = 0);
 
   void setData(const OT::PointWithDescription& data);
+  void setPlotName(const QString& plotName);
 
   virtual QModelIndex indexAt(const QPoint &point) const;
   virtual QRect visualRect(const QModelIndex &index) const;
@@ -114,6 +115,7 @@ private:
   double totalValue_;
   QPoint origin_;
   QRubberBand *rubberBand_;
+  QString plotName_;
 };
 }
 #endif

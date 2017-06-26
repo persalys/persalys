@@ -27,8 +27,6 @@
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
 #include "otgui/DoubleSpinBox.hxx"
 
-#include <QComboBox>
-#include <QListWidget>
 #include <QGroupBox>
 
 namespace OTGUI {
@@ -44,7 +42,6 @@ public:
 protected:
   virtual void initialize(AnalysisItem * item) = 0;
   void buildInterface();
-  void setParameters(const Analysis & analysis) {};
   QWidget* getPDF_CDFWidget();
   QWidget* getBoxPlotWidget();
   QWidget* getScatterPlotsWidget();
@@ -72,7 +69,7 @@ protected:
   bool showTable_;
 private:
   QGroupBox * variablesGroupBox_;
-  QListWidget * variablesListWidget_;
+  OTguiListWidget * variablesListWidget_;
   QTabWidget * tabWidget_;
   QTabWidget * scatterPlotsTabWidget_;
   GraphConfigurationWidget * scatterPlotsConfigurationWidget_;

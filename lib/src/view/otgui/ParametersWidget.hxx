@@ -23,10 +23,10 @@
 
 #include "otgui/OTGuiprivate.hxx"
 
-#include <QWidget>
+#include <QGroupBox>
 
 namespace OTGUI {
-class OTGUI_API ParametersWidget : public QWidget
+class OTGUI_API ParametersWidget : public QGroupBox
 {
 public:
   ParametersWidget(const QString title,                 // table title

@@ -67,6 +67,22 @@ using namespace OT;
 
 namespace OTGUI {
 
+// not editable model
+class PieChartModel : public QStandardItemModel
+{
+public:
+  PieChartModel(int rows, int columns, QObject * parent = 0)
+  : QStandardItemModel(rows, columns, parent)
+  {
+  }
+
+  Qt::ItemFlags flags(const QModelIndex & index) const
+  {
+    return QStandardItemModel::flags(index) & ~Qt::ItemIsEditable;
+  }
+};
+
+
 PieChartView::PieChartView(const PointWithDescription& data, QWidget *parent)
   : QAbstractItemView(parent)
   , margin_(8)
@@ -75,6 +91,7 @@ PieChartView::PieChartView(const PointWithDescription& data, QWidget *parent)
   , validItems_(0)
   , totalValue_(0.0)
   , rubberBand_(0)
+  , plotName_("")
 {
   // fixed size
   setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -126,7 +143,7 @@ void PieChartView::setData(const PointWithDescription& valuesAndDescription)
   colors = generateSegmentsColors((int)data.getSize());
 
   // model
-  QStandardItemModel * standardItemModel = new QStandardItemModel(size, 2, this);
+  PieChartModel * standardItemModel = new PieChartModel(size, 2, this);
 
   QFontMetrics fm(font());
   int maxTextWidth = 0;
@@ -153,6 +170,12 @@ void PieChartView::setData(const PointWithDescription& valuesAndDescription)
   const int width = totalSize_ + maxTextWidth + iconSize + 2 * margin_;
   const int height = qMax(totalSize_, itemRect(standardItemModel->index(size-1, 0, QModelIndex())).bottomRight().y());
   setFixedSize(width, height);
+}
+
+
+void PieChartView::setPlotName(const QString& plotName)
+{
+  plotName_ = plotName;
 }
 
 
@@ -633,7 +656,7 @@ void PieChartView::exportPlot()
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
   QString fileName = QFileDialog::getSaveFileName(this, tr("Export plot"),
-                     currentDir,
+                     currentDir + QDir::separator() + plotName_,
                      tr("Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)"));
 
   if (!fileName.isEmpty())

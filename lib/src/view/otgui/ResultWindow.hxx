@@ -25,7 +25,26 @@
 #include "otgui/AnalysisItem.hxx"
 #include "otgui/ParametersWidget.hxx"
 
+#include <QListWidget>
+
 namespace OTGUI {
+
+// custom QListWidget for all result windows
+class OTGUI_API OTguiListWidget : public QListWidget
+{
+public:
+  OTguiListWidget(QWidget * parent = 0)
+  : QListWidget(parent)
+  {
+    // style sheet
+    const QString styleSheet = "QListWidget::item:selected { background-color: #a5d3a1;\
+                                                             color: doubledarkgray; }";
+
+    setStyleSheet(styleSheet);
+  }
+};
+
+// base class for all result windows
 class OTGUI_API ResultWindow : public OTguiSubWindow
 {
   Q_OBJECT
@@ -34,7 +53,7 @@ public:
   ResultWindow(AnalysisItem * item);
 
 protected:
-  virtual void setParameters(const Analysis & analysis);
+  virtual void setParameters(const Analysis& analysis, const QString& title);
 
 public slots:
   virtual void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);

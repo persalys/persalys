@@ -57,22 +57,22 @@ OTStudyItem::OTStudyItem(const OTStudy& otStudy)
 void OTStudyItem::buildActions()
 {
   // new model actions
-  newSymbolicPhysicalModel_ = new QAction(tr("New symbolic physical model"), this);
+  newSymbolicPhysicalModel_ = new QAction(tr("Symbolic model"), this);
   connect(newSymbolicPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewSymbolicPhysicalModel()));
 
-  newPythonPhysicalModel_ = new QAction(tr("New Python physical model"), this);
+  newPythonPhysicalModel_ = new QAction(tr("Python model"), this);
   connect(newPythonPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewPythonPhysicalModel()));
 
 #ifdef OTGUI_HAVE_YACS
-  newYACSPhysicalModel_ = new QAction(tr("New YACS physical model"), this);
+  newYACSPhysicalModel_ = new QAction(tr("YACS model"), this);
   connect(newYACSPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewYACSPhysicalModel()));
 #endif
 #ifdef OTGUI_HAVE_OTFMI
-  newFMIPhysicalModel_ = new QAction(tr("New FMI physical model"), this);
+  newFMIPhysicalModel_ = new QAction(tr("FMI model"), this);
   connect(newFMIPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewFMIPhysicalModel()));
 #endif
 
-  newDataModel_ = new QAction(tr("New data model"), this);
+  newDataModel_ = new QAction(tr("Data model"), this);
   connect(newDataModel_, SIGNAL(triggered()), this, SLOT(createNewDataModel()));
 
   // export action

@@ -37,83 +37,22 @@ namespace OTGUI {
 
 KrigingResultWindow::KrigingResultWindow(AnalysisItem * item)
   : ResultWindow(item)
-  , result_(dynamic_cast<KrigingAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
+  , result_()
   , optimizeParameters_(true)
   , outputsListWidget_(0)
   , tabWidget_(0)
 {
-  setParameters(item->getAnalysis());
+  const KrigingAnalysis * kriging = dynamic_cast<const KrigingAnalysis*>(item->getAnalysis().getImplementation().get());
+  if (!kriging)
+    throw InvalidArgumentException(HERE) << "KrigingResultWindow: the analysis is not a KrigingAnalysis";
+
+  result_ = kriging->getResult();
+  optimizeParameters_ = kriging->getOptimizeParameters();
+
+  // parameters widget
+  setParameters(item->getAnalysis(), tr("Metamodel creation parameters"));
+
   buildInterface();
-}
-
-
-void KrigingResultWindow::setParameters(const Analysis& analysis)
-{
-  const KrigingAnalysis kriging = *dynamic_cast<const KrigingAnalysis*>(&*analysis.getImplementation());
-  optimizeParameters_ = kriging.getOptimizeParameters();
-
-  // ParametersWidget
-  QStringList namesList;
-  namesList << tr("Algorithm");
-  namesList << tr("Covariance model");
-  if (kriging.getCovarianceModel().getImplementation()->getClassName() == "MaternModel")
-    namesList << tr("nu");
-  else if (kriging.getCovarianceModel().getImplementation()->getClassName() == "GeneralizedExponential")
-    namesList << tr("p");
-  namesList << tr("Parameters optimization");
-  namesList << tr("Scale");
-  namesList << tr("Amplitude");
-  namesList << tr("Trend basis");
-  namesList << tr("Leave-one-out validation");
-
-  QStringList valuesList;
-  valuesList << tr("Kriging");
-  valuesList << QString(kriging.getCovarianceModel().getImplementation()->getClassName().c_str());
-  // covariance model parameters
-  if (kriging.getCovarianceModel().getImplementation()->getClassName() == "MaternModel")
-  {
-    double nu = dynamic_cast<MaternModel*>(&*kriging.getCovarianceModel().getImplementation())->getNu();
-    valuesList << QString::number(nu);
-  }
-  else if (kriging.getCovarianceModel().getImplementation()->getClassName() == "GeneralizedExponential")
-  {
-    double p = dynamic_cast<GeneralizedExponential*>(&*kriging.getCovarianceModel().getImplementation())->getP();
-    valuesList << QString::number(p);
-  }
-
-  // Optimize parameters
-  valuesList << (kriging.getOptimizeParameters()? tr("yes") : tr("no"));
-
-  // scale
-  QString scaleText;
-  for (UnsignedInteger i=0; i<kriging.getCovarianceModel().getScale().getSize(); ++i)
-  {
-    scaleText += QString::number(kriging.getCovarianceModel().getScale()[i]);
-    if (i < kriging.getCovarianceModel().getScale().getSize()-1)
-      scaleText += "; ";
-  }
-  valuesList << scaleText;
-  // amplitude
-  QString amplitudeText;
-  for (UnsignedInteger i=0; i<kriging.getCovarianceModel().getAmplitude().getSize(); ++i)
-  {
-    amplitudeText += QString::number(kriging.getCovarianceModel().getAmplitude()[i]);
-    if (i < kriging.getCovarianceModel().getAmplitude().getSize()-1)
-      amplitudeText += "; ";
-  }
-  valuesList << amplitudeText;
-  // basis
-  QString basisType(tr("Constant"));
-  const UnsignedInteger dim = kriging.getBasis().getDimension();
-  if (kriging.getBasis().getSize() == (dim+1))
-    basisType = tr("Linear");
-  else if (kriging.getBasis().getSize() == ((dim+1)*(dim+2)/2))
-    basisType = tr("Quadratic");
-  valuesList << basisType;
-
-  valuesList << (kriging.isLeaveOneOutValidation()? tr("yes") : tr("no"));
-
-  parametersWidget_ = new ParametersWidget(tr("Metamodel creation parameters"), namesList, valuesList);
 }
 
 
@@ -135,7 +74,7 @@ void KrigingResultWindow::buildInterface()
   QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  outputsListWidget_ = new QListWidget;
+  outputsListWidget_ = new OTguiListWidget;
   outputsListWidget_->addItems(outputNames);
   outputsLayoutGroupBox->addWidget(outputsListWidget_);
 
@@ -169,28 +108,24 @@ void KrigingResultWindow::buildInterface()
   tabWidget_->addTab(tab, tr("Metamodel"));
 
   // second tab : METAMODEL RESULT --------------------------------
-  tab = new QWidget;
-  tabLayout = new QVBoxLayout(tab);
-
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  tabLayout->setSizeConstraint(QLayout::SetFixedSize);
 
-  if (optimizeParameters_) // covariance model parameters has been optimized
+  ResizableStackedWidget * resultStackedWidget = new ResizableStackedWidget;
+
+  for (UnsignedInteger i=0; i<outputDimension; ++i)
   {
-    // covariance model optimized parameters
-    QGroupBox * parametersGroupBox = new QGroupBox(tr("Optimized covariance model parameters"));
-    QVBoxLayout * parametersGroupBoxLayout = new QVBoxLayout(parametersGroupBox);
+    QWidget * resultWidget = new QWidget;
+    QGridLayout * resultWidgetLayout = new QGridLayout(resultWidget);
 
-    ResizableStackedWidget * parametersStackedWidget = new ResizableStackedWidget;
-    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), parametersStackedWidget, SLOT(setCurrentIndex(int)));
-
-    QStringList namesList;
-    namesList << tr("Scale");
-    namesList << tr("Amplitude");
-
-    for (UnsignedInteger i=0; i<outputDimension; ++i)
+    // if covariance model parameters has been optimized
+    if (optimizeParameters_)
     {
+      // covariance model optimized parameters
+      QStringList namesList;
+      namesList << tr("Scale")
+                << tr("Amplitude");
+
       QStringList valuesList;
       // scale
       QString scaleText;
@@ -212,22 +147,10 @@ void KrigingResultWindow::buildInterface()
       }
       valuesList << amplitudeText;
 
-      ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
-      parametersStackedWidget->addWidget(table);
+      ParametersWidget * table = new ParametersWidget(tr("Optimized covariance model parameters"), namesList, valuesList, true, true);
+      resultWidgetLayout->addWidget(table);
     }
-    parametersGroupBoxLayout->addWidget(parametersStackedWidget);
-    tabLayout->addWidget(parametersGroupBox);
-  }
 
-  // trend coefficients
-  QGroupBox * trendGroupBox = new QGroupBox(tr("Trend"));
-  QVBoxLayout * trendGroupBoxLayout = new QVBoxLayout(trendGroupBox);
-
-  ResizableStackedWidget * trendStackedWidget = new ResizableStackedWidget;
-  connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), trendStackedWidget, SLOT(setCurrentIndex(int)));
-
-  for (UnsignedInteger i=0; i<outputDimension; ++i)
-  {
     QString trendCoefText;
     for (UnsignedInteger j=0; j<result_.getKrigingResultCollection()[i].getTrendCoefficients()[0].getSize(); ++j)
     {
@@ -235,14 +158,16 @@ void KrigingResultWindow::buildInterface()
       if (j < result_.getKrigingResultCollection()[i].getTrendCoefficients()[0].getSize()-1)
         trendCoefText += "; ";
     }
-    ParametersTableView * trendCoefTable = new ParametersTableView(QStringList() << tr("Trend coefficients"), QStringList() << trendCoefText, true, true);
-    trendStackedWidget->addWidget(trendCoefTable);
+    ParametersWidget * trendCoefTable = new ParametersWidget(tr("Trend"), QStringList() << tr("Trend coefficients"), QStringList() << trendCoefText, true, true);
+    resultWidgetLayout->addWidget(trendCoefTable);
+    resultWidgetLayout->setRowStretch(optimizeParameters_ ? 2 : 1, 1);
+
+    resultStackedWidget->addWidget(resultWidget);
   }
 
-  trendGroupBoxLayout->addWidget(trendStackedWidget);
-  tabLayout->addWidget(trendGroupBox);
+  connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), resultStackedWidget, SLOT(setCurrentIndex(int)));
 
-  scrollArea->setWidget(tab);
+  scrollArea->setWidget(resultStackedWidget);
   tabWidget_->addTab(scrollArea, tr("Results"));
 
   // third tab : GRAPH METAMODEL LOO --------------------------------

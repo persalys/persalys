@@ -21,17 +21,14 @@
 #ifndef OTGUI_DESIGNOFEXPERIMENTWINDOW_HXX
 #define OTGUI_DESIGNOFEXPERIMENTWINDOW_HXX
 
-#include "OTguiSubWindow.hxx"
+#include "ResultWindow.hxx"
 #include "otgui/DesignOfExperimentItem.hxx"
 #include "otgui/AnalysisItem.hxx"
-#include "otgui/ExportableTableView.hxx"
-#include "otgui/SampleTableModel.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
 
 #include <QTabWidget>
 #include <QPushButton>
-#include <QListWidget>
 #include <QGroupBox>
 
 namespace OTGUI {
@@ -67,16 +64,10 @@ public slots:
 private:
   DesignOfExperiment designOfExperiment_;
   QGroupBox * variablesGroupBox_;
-  QListWidget * variablesListWidget_;
+  OTguiListWidget * variablesListWidget_;
   QTabWidget * tabWidget_;
   QTabWidget * tablesTabWidget_;
   QTabWidget * scatterPlotsTabWidget_;
-  ExportableTableView * tableView_;
-  SampleTableModel * tableModel_;
-  ExportableTableView * failedPointsTableView_;
-  SampleTableModel * failedPointsTableModel_;
-  ExportableTableView * notEvaluatedTableView_;
-  SampleTableModel * notEvaluatedTableModel_;
   GraphConfigurationWidget * scatterPlotsConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
   PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
