@@ -69,6 +69,20 @@ PhysicalModelImplementation* PhysicalModelImplementation::clone() const
 }
 
 
+Bool PhysicalModelImplementation::operator==(const PhysicalModelImplementation& other) const
+{
+  if (this == &other)
+    return true;
+  return false;
+}
+
+
+Bool PhysicalModelImplementation::operator!=(const PhysicalModelImplementation& other) const
+{
+  return !operator==(other);
+}
+
+
 InputCollection PhysicalModelImplementation::getInputs() const
 {
   return inputs_;

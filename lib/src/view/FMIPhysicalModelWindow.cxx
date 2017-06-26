@@ -672,7 +672,7 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
       if (description == descriptions_[index.row()]) return false;
       descriptions_[index.row()] = description;
       String varName(variableNames_[index.row()]);
-      physicalModel_.blockNotification(true);
+      physicalModel_.blockNotification("PhysicalModelDefinition");
       if (physicalModel_.hasInputNamed(varName))
       {
         physicalModel_.setInputDescription(varName, description);
@@ -681,7 +681,7 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
       {
         physicalModel_.setOutputDescription(varName, description);
       }
-      physicalModel_.blockNotification(false);
+      physicalModel_.blockNotification();
       break;
     }
     case 4://input/output
@@ -702,7 +702,7 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
 
       String varName(variableNames_[index.row()]);
 
-      physicalModel_.blockNotification(true);
+      physicalModel_.blockNotification("PhysicalModelDefinition");
       dynamic_cast<FMIPhysicalModel*>(physicalModel_.getImplementation().get())->reassignVariables(getInputVariableNames(), getOutputVariableNames());
       if (physicalModel_.hasInputNamed(varName) && startKeys_.contains(varName))
       {
@@ -734,7 +734,7 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
           physicalModel_.setOutputDescription(varName, descriptions_[index.row()]);
         }
       }
-      physicalModel_.blockNotification(false);
+      physicalModel_.blockNotification();
 
       emit ioCountChanged();
 
@@ -744,12 +744,12 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
     {
       const double dvalue = value.toDouble();
       String varName(variableNames_[index.row()]);
-      physicalModel_.blockNotification(true);
+      physicalModel_.blockNotification("PhysicalModelDefinition");
       if (physicalModel_.hasInputNamed(varName))
         physicalModel_.getInputByName(varName).setValue(dvalue);
       else if (physicalModel_.hasOutputNamed(varName))
         physicalModel_.getOutputByName(varName).setValue(dvalue);
-      physicalModel_.blockNotification(false);
+      physicalModel_.blockNotification();
       break;
     }
   }

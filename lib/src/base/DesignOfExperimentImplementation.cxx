@@ -65,6 +65,20 @@ DesignOfExperimentImplementation* DesignOfExperimentImplementation::clone() cons
 }
 
 
+Bool DesignOfExperimentImplementation::operator==(const DesignOfExperimentImplementation& other) const
+{
+  if (this == &other)
+    return true;
+  return false;
+}
+
+
+Bool DesignOfExperimentImplementation::operator!=(const DesignOfExperimentImplementation& other) const
+{
+  return !operator==(other);
+}
+
+
 bool DesignOfExperimentImplementation::hasPhysicalModel() const
 {
   return hasPhysicalModel_;

@@ -20,8 +20,10 @@
  */
 #include "otgui/OTStudy.hxx"
 
-#include "openturns/Study.hxx"
-#include "openturns/XMLStorageManager.hxx"
+#include <openturns/Study.hxx>
+#include <openturns/XMLStorageManager.hxx>
+
+#include <boost/filesystem.hpp>
 
 using namespace OT;
 
@@ -29,9 +31,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(OTStudy);
 
-
 PersistentCollection<OTStudy > OTStudy::OTStudies_;
-Description OTStudy::OTStudiesFileNames_;
 Observer * OTStudy::OTStudyObserver_ = 0;
 
 
@@ -43,7 +43,12 @@ Collection<OTStudy> OTStudy::GetInstances()
 
 Description OTStudy::GetFileNames()
 {
-  return OTStudiesFileNames_;
+  Description otStudiesFileNames;
+  for (UnsignedInteger i = 0; i < OTStudies_.getSize(); ++ i)
+    if (!OTStudies_[i].getFileName().empty())
+      otStudiesFileNames.add(OTStudies_[i].getFileName());
+
+  return otStudiesFileNames;
 }
 
 
@@ -73,7 +78,6 @@ void OTStudy::Add(const OTStudy& otstudy)
     if (OTStudies_.contains(otstudy))
       throw InvalidArgumentException(HERE) << "The OTStudy already exists\n";
     OTStudies_.add(otstudy);
-    OTStudiesFileNames_.add(otstudy.getFileName());
     OTStudyObserver_->update(otstudy.getImplementation().get(), "addStudy");
   }
 }
@@ -81,6 +85,9 @@ void OTStudy::Add(const OTStudy& otstudy)
 
 void OTStudy::Remove(const OTStudy& otstudy)
 {
+  if (!OTStudies_.contains(otstudy))
+    return;
+
   otstudy.getImplementation().get()->clear();
 
   if (OTStudyObserver_)
@@ -91,7 +98,6 @@ void OTStudy::Remove(const OTStudy& otstudy)
     {
       if (OTStudies_[i] == otstudy)
       {
-        OTStudiesFileNames_.erase(OTStudiesFileNames_.begin() + i);
         OTStudies_.erase(OTStudies_.begin() + i);
         break;
       }
@@ -102,12 +108,19 @@ void OTStudy::Remove(const OTStudy& otstudy)
 
 void OTStudy::Open(const String & xmlFileName)
 {
+  // check path
+  boost::filesystem::path canonicalPath = boost::filesystem::canonical(xmlFileName);
+
+  if (GetFileNames().contains(canonicalPath.string()))
+    throw InvalidArgumentException (HERE) << "This study is already opened";
+
+  // open study
   Study study;
   study.setStorageManager(XMLStorageManager(xmlFileName));
   study.load();
   OTStudy openedStudy;
   study.fillObject("otstudy", openedStudy);
-  openedStudy.setFileName(xmlFileName);
+  openedStudy.getImplementation()->setFileName(canonicalPath.string());
   Add(openedStudy);
 }
 
@@ -177,12 +190,6 @@ void OTStudy::addObserver(Observer * observer)
 String OTStudy::getFileName() const
 {
   return getImplementation()->getFileName();
-}
-
-
-void OTStudy::setFileName(const String& fileName)
-{
-  getImplementation()->setFileName(fileName);
 }
 
 

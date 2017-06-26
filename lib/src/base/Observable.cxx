@@ -30,7 +30,6 @@ namespace OTGUI {
 Observable::Observable()
   : observers_()
   , blockedObserverType_("")
-  , block_(false)
 {
 }
 
@@ -39,7 +38,6 @@ Observable::Observable()
 Observable::Observable(const Observable & other)
   : observers_()
   , blockedObserverType_("")
-  , block_(false)
 {
 }
 
@@ -56,17 +54,22 @@ void Observable::removeObserver(Observer * observer)
 }
 
 
+void Observable::removeObserver(const String& observerType)
+{
+  removeObserver(getObserver(observerType));
+}
+
+
 void Observable::notify(const String & message)
 {
-  if (!block_)
+  // do not use for (std::vector<Observer*>::iterator it = observers_.begin(); it != observers_.end(); ++it)
+  // avoid problem if an observer is added in the list observers_ in the update function
+  const int nbObservers = observers_.size();
+  for (int i=0; i<nbObservers; ++i)
   {
-    // do not use for (std::vector<Observer*>::iterator it = observers_.begin(); it != observers_.end(); ++it)
-    // avoid problem if an observer is added in the list observers_ in the update function
-    const int nbObservers = observers_.size();
-    for (int i=0; i<nbObservers; ++i)
+    if (observers_[i]->getType() != blockedObserverType_)
     {
-      if (observers_[i]->getType() != blockedObserverType_)
-        observers_[i]->update(this, message);
+      observers_[i]->update(this, message);
     }
   }
 }
@@ -86,15 +89,9 @@ void Observable::notifyAndRemove(const String & message, const String & type)
 }
 
 
-void Observable::blockNotification(const String & blockedObserverType)
+void Observable::blockNotification(const String& blockedObserverType)
 {
   blockedObserverType_ = blockedObserverType;
-}
-
-
-void Observable::blockNotification(const bool block)
-{
-  block_ = block;
 }
 
 

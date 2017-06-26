@@ -4,7 +4,6 @@
 #include "otgui/AnalysisImplementation.hxx"
 %}
 
-%ignore *::getModelName;
 %ignore *::getInformationMessage;
 %ignore *::getProgressValue;
 %ignore *::stop;

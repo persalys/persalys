@@ -41,6 +41,10 @@ public:
   /** Virtual constructor */
   virtual LimitStateImplementation * clone() const;
 
+  /** Comparison operators */
+  OT::Bool operator ==(const LimitStateImplementation & other) const;
+  OT::Bool operator !=(const LimitStateImplementation & other) const;
+
   PhysicalModel getPhysicalModel() const;
 
   OT::String getOutputName() const;

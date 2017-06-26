@@ -40,9 +40,11 @@ public:
   /** Constructor from implementation pointer */
   Analysis(AnalysisImplementation * p_implementation);
 
-  void addObserver(Observer * observer);
+  /** Comparison operators */
+  OT::Bool operator ==(const Analysis & other) const;
+  OT::Bool operator !=(const Analysis & other) const;
 
-  OT::String getModelName() const;
+  void addObserver(Observer * observer);
 
   bool isReliabilityAnalysis() const;
 
@@ -57,6 +59,9 @@ public:
   bool analysisLaunched() const;
 
   void stop();
+
+  /** override this method in order to emit a notification */
+  virtual void setImplementationAsPersistentObject(const ImplementationAsPersistentObject& obj);
 };
 }
 #endif

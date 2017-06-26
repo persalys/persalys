@@ -40,8 +40,6 @@ public:
   DesignOfExperiment getDesignOfExperiment() const;
   virtual void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
 
-  OT::String getModelName() const;
-
   virtual void setInterestVariables(const OT::Description& variablesNames);
 
   /** String converter */

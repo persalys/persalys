@@ -69,6 +69,19 @@ LimitState::LimitState(LimitStateImplementation* p_implementation)
 }
 
 
+Bool LimitState::operator==(const LimitState& other) const
+{
+  if (this == &other) return true;
+  return *getImplementation() == *other.getImplementation();
+}
+
+
+Bool LimitState::operator!=(const LimitState& other) const
+{
+  return !operator==(other);
+}
+
+
 void LimitState::addObserver(Observer* observer)
 {
   getImplementation()->addObserver(observer);

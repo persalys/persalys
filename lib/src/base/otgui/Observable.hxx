@@ -39,17 +39,16 @@ public:
 
   void addObserver(Observer * observer);
   void removeObserver(Observer * observer);
+  void removeObserver(const OT::String & observerType);
   void notify(const OT::String & message);
   void notifyAndRemove(const OT::String & message, const OT::String & type);
   void blockNotification(const OT::String & blockedObserverType="");
-  void blockNotification(const bool block);
   std::vector<Observer *> getObservers() const;
   Observer * getObserver(const OT::String & type);
 
 private:
   std::vector<Observer *> observers_;
   OT::String blockedObserverType_;
-  bool block_;
 };
 }
 #endif

@@ -36,7 +36,9 @@ public:
   /** Virtual constructor */
   virtual AnalysisImplementation * clone() const;
 
-  virtual OT::String getModelName() const;
+  /** Comparison operators */
+  OT::Bool operator ==(const AnalysisImplementation & other) const;
+  OT::Bool operator !=(const AnalysisImplementation & other) const;
 
   virtual void run();
   virtual OT::String getPythonScript() const;

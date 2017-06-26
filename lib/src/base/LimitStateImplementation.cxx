@@ -71,6 +71,20 @@ LimitStateImplementation* LimitStateImplementation::clone() const
 }
 
 
+Bool LimitStateImplementation::operator==(const LimitStateImplementation& other) const
+{
+  if (this == &other)
+    return true;
+  return false;
+}
+
+
+Bool LimitStateImplementation::operator!=(const LimitStateImplementation& other) const
+{
+  return !operator==(other);
+}
+
+
 PhysicalModel LimitStateImplementation::getPhysicalModel() const
 {
   return physicalModel_;

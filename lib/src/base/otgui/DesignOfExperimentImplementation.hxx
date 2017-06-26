@@ -38,6 +38,10 @@ public:
   /** Virtual constructor */
   virtual DesignOfExperimentImplementation * clone() const;
 
+  /** Comparison operators */
+  OT::Bool operator ==(const DesignOfExperimentImplementation & other) const;
+  OT::Bool operator !=(const DesignOfExperimentImplementation & other) const;
+
   bool hasPhysicalModel() const;
 
   PhysicalModel getPhysicalModel() const;

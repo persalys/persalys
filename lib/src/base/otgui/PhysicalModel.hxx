@@ -41,9 +41,12 @@ public:
   /** Virtual constructor */
   virtual PhysicalModel * clone() const;
 
+  /** Comparison operator */
+  OT::Bool operator ==(const PhysicalModel & other) const;
+  OT::Bool operator !=(const PhysicalModel & other) const;
+
   void addObserver(Observer * observer);
   void blockNotification(const OT::String & blockedObserverType="");
-  void blockNotification(const bool block);
 
   InputCollection getInputs() const;
   Input & getInputByName(const OT::String & inputName);

@@ -50,6 +50,7 @@ protected slots:
   virtual void requestRemove();
 
 public slots:
+  void updateIcon();
   void createNewSymbolicPhysicalModel();
   void createNewPythonPhysicalModel();
 #ifdef OTGUI_HAVE_YACS
@@ -64,6 +65,7 @@ public slots:
   bool closeOTStudy();
   void addMetaModelItem(PhysicalModel metaModel);
 signals:
+  void otStudyStatusChanged();
   void otStudyExportRequested();
   void otStudySaveAsRequested();
   void otStudySaveAsRequested(OTStudyItem* item, bool* notcancel);

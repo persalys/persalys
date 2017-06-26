@@ -73,6 +73,8 @@ void DesignOfExperimentDefinitionItem::updateDesignOfExperiment(const DesignOfEx
 {
   // remove Evaluation item
   designOfExperiment_.getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
+  designOfExperiment_.getImplementation().get()->removeObserver("OTStudy");
+
   evaluateDesignOfExperiment_->setEnabled(true);
   // remove last observer
   designOfExperiment_.getImplementation().get()->removeObserver(this);
@@ -80,6 +82,7 @@ void DesignOfExperimentDefinitionItem::updateDesignOfExperiment(const DesignOfEx
   // update designOfExperiment_
   designOfExperiment_ = doe;
   designOfExperiment_.addObserver(this);
+  designOfExperiment_.addObserver(getParentOTStudyItem()->getOTStudy().getImplementation().get());
 
   // update the implementation of the design of experiment stored in OTStudy
   getParentOTStudyItem()->getOTStudy().getDesignOfExperimentByName(doe.getName()).setImplementationAsPersistentObject(doe.getImplementation());

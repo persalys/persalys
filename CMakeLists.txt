@@ -28,7 +28,7 @@ if (NOT BUILD_SHARED_LIBS)
   list ( APPEND OTGUI_DEFINITIONS "-DOTGUI_STATIC" )
 endif ()
 
-find_package (Boost COMPONENTS regex REQUIRED)
+find_package (Boost COMPONENTS regex filesystem REQUIRED)
 include_directories (${Boost_INCLUDE_DIRS})
 
 find_package (PythonInterp)

@@ -43,6 +43,10 @@ public:
   /** Constructor from implementation pointer */
   DesignOfExperiment(DesignOfExperimentImplementation * p_implementation);
 
+  /** Comparison operator */
+  OT::Bool operator ==(const DesignOfExperiment & other) const;
+  OT::Bool operator !=(const DesignOfExperiment & other) const;
+
   void addObserver(Observer * observer);
 
   bool hasPhysicalModel() const;
@@ -69,6 +73,9 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
+
+  /** override this method in order to emit a notification */
+  virtual void setImplementationAsPersistentObject(const ImplementationAsPersistentObject& obj);
 };
 }
 #endif

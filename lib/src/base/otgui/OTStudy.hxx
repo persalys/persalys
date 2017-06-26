@@ -60,7 +60,6 @@ public:
   void addObserver(Observer * observer);
 
   OT::String getFileName() const;
-  void setFileName(const OT::String& fileName);
 
   OT::Collection<DesignOfExperiment> getDataModels() const;
   DesignOfExperiment& getDataModelByName(const OT::String& dataModelName);
@@ -101,7 +100,6 @@ public:
 
 private:
   static OT::PersistentCollection<OTStudy > OTStudies_;
-  static OT::Description OTStudiesFileNames_;
   static Observer * OTStudyObserver_;
 };
 }

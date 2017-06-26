@@ -4,6 +4,8 @@
 #include "otgui/OTStudyImplementation.hxx"
 %}
 
+%ignore OTGUI::OTStudyImplementation::setFileName;
+
 %include otgui/OTStudyImplementation.hxx
 namespace OTGUI {
 

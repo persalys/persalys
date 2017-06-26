@@ -67,6 +67,19 @@ DesignOfExperiment::DesignOfExperiment(DesignOfExperimentImplementation* p_imple
 }
 
 
+Bool DesignOfExperiment::operator==(const DesignOfExperiment& other) const
+{
+  if (this == &other) return true;
+  return *getImplementation() == *other.getImplementation();
+}
+
+
+Bool DesignOfExperiment::operator!=(const DesignOfExperiment& other) const
+{
+  return !operator==(other);
+}
+
+
 void DesignOfExperiment::addObserver(Observer* observer)
 {
   getImplementation()->addObserver(observer);
@@ -162,5 +175,12 @@ void DesignOfExperiment::save(Advocate& adv) const
 void DesignOfExperiment::load(Advocate& adv)
 {
   getImplementation()->load(adv);
+}
+
+
+void DesignOfExperiment::setImplementationAsPersistentObject(const ImplementationAsPersistentObject& obj)
+{
+  TypedInterfaceObject< DesignOfExperimentImplementation >::setImplementationAsPersistentObject(obj);
+  getImplementation()->notify("implementationModified");
 }
 }

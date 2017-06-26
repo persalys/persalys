@@ -57,15 +57,22 @@ Analysis::Analysis(AnalysisImplementation * p_implementation)
 }
 
 
-void Analysis::addObserver(Observer * observer)
+Bool Analysis::operator==(const Analysis& other) const
 {
-  getImplementation()->addObserver(observer);
+  if (this == &other) return true;
+  return *getImplementation() == *other.getImplementation();
 }
 
 
-String Analysis::getModelName() const
+Bool Analysis::operator!=(const Analysis& other) const
 {
-  return getImplementation()->getModelName();
+  return !operator==(other);
+}
+
+
+void Analysis::addObserver(Observer * observer)
+{
+  getImplementation()->addObserver(observer);
 }
 
 
@@ -120,5 +127,12 @@ String Analysis::getPythonScript() const
 void Analysis::stop()
 {
   getImplementation()->stop();
+}
+
+
+void Analysis::setImplementationAsPersistentObject(const ImplementationAsPersistentObject& obj)
+{
+  TypedInterfaceObject< AnalysisImplementation >::setImplementationAsPersistentObject(obj);
+  getImplementation()->notify("implementationModified");
 }
 }
