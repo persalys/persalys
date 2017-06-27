@@ -49,6 +49,8 @@ DataAnalysis::DataAnalysis(const String & name, const DesignOfExperiment & desig
   , isConfidenceIntervalRequired_(true)
   , levelConfidenceInterval_(0.95)
 {
+  if (designOfExperiment_.getSample().getSize())
+    setInterestVariables(designOfExperiment_.getSample().getDescription());
 }
 
 

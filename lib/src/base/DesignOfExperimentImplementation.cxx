@@ -148,11 +148,14 @@ void DesignOfExperimentImplementation::initialize()
 
 void DesignOfExperimentImplementation::run()
 {
-  if (!hasPhysicalModel())
-    throw InvalidArgumentException(HERE) << "The design of experiment must be built from a physical model";
 
   try
   {
+    if (!hasPhysicalModel())
+      throw InvalidArgumentException(HERE) << "The design of experiment must be built from a physical model";
+    if (!getPhysicalModel().getSelectedOutputsNames().getSize())
+      throw InvalidDimensionException(HERE) << "You have not defined output variable to be analysed. Select outputs in the physical model.";
+
     // clear result
     initialize();
 
