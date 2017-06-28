@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(FMUInfo);
 
-static Factory<FMUInfo> RegisteredFactory;
+static Factory<FMUInfo> Factory_FMUInfo;
 
 /* Default constructor */
 FMUInfo::FMUInfo()

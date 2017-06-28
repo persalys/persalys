@@ -31,7 +31,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(FMIPhysicalModel);
 
-static Factory<FMIPhysicalModel> RegisteredFactory;
+static Factory<FMIPhysicalModel> Factory_FMIPhysicalModel;
 
 /* Default constructor */
 FMIPhysicalModel::FMIPhysicalModel(const String & name)
