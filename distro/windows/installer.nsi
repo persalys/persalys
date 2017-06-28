@@ -331,7 +331,7 @@ Section "!${MODULE_NAME} DLL & doc" SEC01
 
   !insertmacro PRINT "Install binary files in $MODULE_INSTALL_PATH."
   SetOutPath "$MODULE_INSTALL_PATH"
-  CopyFiles $MODULE_INSTALL_PATH\..\openturns\*.dll $MODULE_INSTALL_PATH
+  CopyFiles /SILENT $MODULE_INSTALL_PATH\..\openturns\*.dll $MODULE_INSTALL_PATH
   File /r "${MODULE_PREFIX}\bin\*.*"
   ; ! not working: __init__ will override  ot __init__
   File /r "${MODULE_PREFIX}\Lib\site-packages\${MODULE_NAME_LOWERCASE}base\*.*"
