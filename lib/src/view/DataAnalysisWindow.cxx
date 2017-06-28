@@ -89,6 +89,11 @@ void DataAnalysisWindow::buildInterface()
 
   variablesListWidget_ = new OTguiListWidget;
   variablesListWidget_->addItems(variablesNames);
+  for (int i=0; i<outputNames_.size(); ++i)
+    variablesListWidget_->item(i)->setData(Qt::UserRole, stochInputNames_.size() + i);
+  for (int i=0; i<stochInputNames_.size(); ++i)
+    variablesListWidget_->item(outputNames_.size() + i)->setData(Qt::UserRole, i);
+
   variablesListWidget_->setCurrentRow(0);
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), this, SLOT(updateSpinBoxes(int)));
   outputsLayoutGroupBox->addWidget(variablesListWidget_);
@@ -454,37 +459,50 @@ QWidget* DataAnalysisWindow::getScatterPlotsWidget()
 }
 
 
-void DataAnalysisWindow::updateSpinBoxes(int indexOutput)
+void DataAnalysisWindow::updateSpinBoxes(int indexList)
 {
   SignalBlocker blocker(quantileSpinBox_);
+
+  // index of the variable in result_
+  const UnsignedInteger indexVar = variablesListWidget_->item(indexList)->data(Qt::UserRole).toInt();
+
   if (result_.getMin().getSize() && result_.getMax().getSize())
   {
-    const double min = result_.getMin()[indexOutput][0];
-    const double max = result_.getMax()[indexOutput][0];
+    const double min = result_.getMin()[indexVar][0];
+    const double max = result_.getMax()[indexVar][0];
 
     quantileSpinBox_->setMinimum(min);
     quantileSpinBox_->setMaximum(max);
     quantileSpinBox_->setSingleStep((max-min)/100);
   }
   probaSpinBox_->setValue(0.5);
+  // if the previous value of probaSpinBox_ was 0.5, the signal valueChanged is not emitted
+  probaValueChanged(0.5);
 }
 
 
 void DataAnalysisWindow::probaValueChanged(double proba)
 {
   SignalBlocker blocker(quantileSpinBox_);
-  quantileSpinBox_->setValue(result_.getSample().getMarginal(variablesListWidget_->currentRow()).computeQuantile(proba)[0]);
+
+  // index of the variable in result_
+  const UnsignedInteger indexVar = variablesListWidget_->item(variablesListWidget_->currentRow())->data(Qt::UserRole).toInt();
+  quantileSpinBox_->setValue(result_.getSample().getMarginal(indexVar).computeQuantile(proba)[0]);
 }
 
 
 void DataAnalysisWindow::quantileValueChanged(double quantile)
 {
   SignalBlocker blocker(probaSpinBox_);
+
+  // index of the variable in result_
+  const UnsignedInteger indexVar = variablesListWidget_->item(variablesListWidget_->currentRow())->data(Qt::UserRole).toInt();
+
   double cdf = 0.0;
   const double p = 1.0 / double(result_.getSample().getSize());
 
   for (UnsignedInteger j=0; j<result_.getSample().getSize(); ++j)
-    if (result_.getSample()[j][variablesListWidget_->currentRow()] < quantile)
+    if (result_.getSample()[j][indexVar] < quantile)
       cdf += p;
 
   probaSpinBox_->setValue(cdf);
