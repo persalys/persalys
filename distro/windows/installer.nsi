@@ -267,8 +267,12 @@ Function .onInit
 
   ${If} $Python_INSTALL_PATH == ""
     MessageBox MB_OK|MB_ICONEXCLAMATION "Python ${PYBASEVER} installation directory not found!$\rEnter manually the Python installation directory." /SD IDOK
-    ; abort if silent install
+    ; abort if silent install and not FORCE flag
     IfSilent 0 end_abort
+    ${GetParameters} $R1
+    ClearErrors
+    ${GetOptions} $R1 '/FORCE' $R0
+    IfErrors 0 +2
     Abort
     end_abort:
   ${Else} 
