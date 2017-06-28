@@ -722,16 +722,17 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
             break;
           }
       }
-      // if we enable a var, pick up description
-      if (oldInputOutput == 0)
+      // refresh descriptions
+      for (int i = 0; i < rowCount(); ++ i)
       {
-        if (physicalModel_.hasInputNamed(varName))
+        const String varName_i(variableNames_[i]);
+        if (physicalModel_.hasInputNamed(varName_i))
         {
-          physicalModel_.setInputDescription(varName, descriptions_[index.row()]);
+          physicalModel_.setInputDescription(varName_i, descriptions_[i]);
         }
-        else if (physicalModel_.hasOutputNamed(varName))
+        else if (physicalModel_.hasOutputNamed(varName_i))
         {
-          physicalModel_.setOutputDescription(varName, descriptions_[index.row()]);
+          physicalModel_.setOutputDescription(varName_i, descriptions_[i]);
         }
       }
       physicalModel_.blockNotification();
