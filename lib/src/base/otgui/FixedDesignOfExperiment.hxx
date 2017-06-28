@@ -36,12 +36,17 @@ public:
   /** Constructor with parameters */
   FixedDesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel);
   /** Constructor with parameters */
-  FixedDesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel,
-                     const OT::Point & lowerBounds, const OT::Point & upperBounds,
-                     const OT::Indices & nbValues, const OT::Point & values=OT::Point(0));
+  FixedDesignOfExperiment(const OT::String & name,
+                          const PhysicalModel & physicalModel,
+                          const OT::Point & lowerBounds,
+                          const OT::Point & upperBounds,
+                          const OT::Indices & nbValues,
+                          const OT::Point & values=OT::Point(0));
 
   /** Virtual constructor */
   virtual FixedDesignOfExperiment * clone() const;
+
+  virtual OT::Sample getInputSample() const;
 
   Type getTypeDesignOfExperiment() const;
 
@@ -72,7 +77,11 @@ public:
 
 protected:
   void initializeParameters();
-  void generateInputSample();
+  static OT::Sample GenerateInputSample(const OT::Point& lowerBounds,
+                                        const OT::Point& upperBounds,
+                                        const OT::Indices& levels,
+                                        const OT::Point& values,
+                                        const OT::Description& inputNames);
 
 private:
   Type type_;

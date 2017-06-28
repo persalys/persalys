@@ -2,9 +2,9 @@
 "Design of experiment.
 
 Available constructors:
-    DesignOfExperiment(*name, physicalModel*)
+    FixedDesignOfExperiment(*name, physicalModel*)
 
-    DesignOfExperiment(*name, physicalModel, lowerBound, upperBound, nbValues, values*)
+    FixedDesignOfExperiment(*name, physicalModel, lowerBound, upperBound, nbValues, values*)
 
 Parameters
 ----------
@@ -60,8 +60,8 @@ type : int
 
 Returns
 -------
-size : :py:class:`openturns.Point`
-   Values"
+values : :py:class:`openturns.Point`
+   Inputs values used in the case where there is at least a constant variable."
 
 // ---------------------------------------------------------------------
 
@@ -70,8 +70,8 @@ size : :py:class:`openturns.Point`
 
 Parameters
 ----------
-size : :py:class:`openturns.Point`
-   Values"
+values : :py:class:`openturns.Point`
+   Inputs values used in the case where there is at least a constant variable."
 
 // ---------------------------------------------------------------------
 

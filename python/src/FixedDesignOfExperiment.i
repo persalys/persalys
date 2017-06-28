@@ -6,7 +6,7 @@
 
 %include FixedDesignOfExperiment_doc.i
 
-%ignore *::updateParameters;
+%ignore OTGUI::FixedDesignOfExperiment::updateParameters;
 
 %include otgui/FixedDesignOfExperiment.hxx
 namespace OTGUI {
