@@ -51,13 +51,17 @@ IntroPage::IntroPage(const DesignOfExperiment & designOfExperiment, QWidget *par
   methodGroup_->addButton(buttonToChooseMethod, IntroPage::deterministic);
   methodLayout->addWidget(buttonToChooseMethod);
 
-//   TODO
-//   buttonToChooseMethod = new QRadioButton(tr("Probabilistic"));
-//   buttonToChooseMethod->setEnabled(designOfExperiment.getPhysicalModel().hasStochasticInputs());
-//   if (designOfExperiment.getImplementation()->getClassName() == "GeneratedProbabilisticDesignOfExperiment")
-//     buttonToChooseMethod->setChecked(true);
-//   methodGroup_->addButton(buttonToChooseMethod, IntroPage::probabilistic);
-//   methodLayout->addWidget(buttonToChooseMethod);
+  buttonToChooseMethod = new QRadioButton(tr("Probabilistic"));
+  if (!designOfExperiment.getPhysicalModel().hasStochasticInputs())
+  {
+    buttonToChooseMethod->setToolTip(tr("The physical model has no stochastic inputs"));
+    buttonToChooseMethod->setEnabled(false);
+  }
+  if (designOfExperiment.getImplementation()->getClassName() == "ProbabilisticDesignOfExperiment")
+    buttonToChooseMethod->setChecked(true);
+  methodGroup_->addButton(buttonToChooseMethod, IntroPage::probabilistic);
+  methodLayout->addWidget(buttonToChooseMethod);
+
   buttonToChooseMethod = new QRadioButton(tr("Import data"));
   if (designOfExperiment.getImplementation()->getClassName() == "FromFileDesignOfExperiment")
     buttonToChooseMethod->setChecked(true);
@@ -76,11 +80,10 @@ int IntroPage::nextId() const
     {
       return DesignOfExperimentWizard::Page_Deterministic;
     }
-//     TODO
-//     case IntroPage::probabilistic:
-//     {
-//       return DesignOfExperimentWizard::Page_Probabilistic;
-//     }
+    case IntroPage::probabilistic:
+    {
+      return DesignOfExperimentWizard::Page_Probabilistic;
+    }
     case IntroPage::import:
     {
       return DesignOfExperimentWizard::Page_Import;
@@ -110,8 +113,11 @@ void DesignOfExperimentWizard::buildInterface()
   DeterministicDesignPage * deterministicDesignPage = new DeterministicDesignPage(designOfExperiment_.getImplementation());
   connect(deterministicDesignPage, SIGNAL(designOfExperimentChanged(const DesignOfExperiment&)), this, SLOT(setDesignOfExperiment(const DesignOfExperiment&)));
   setPage(Page_Deterministic, deterministicDesignPage);
-  // TODO
-//   setPage(Page_Probabilistic, new ProbabilisticDesignPage(designOfExperiment_));
+
+  probaPage_ = new ProbabilisticDesignPage;
+  probaPage_->initialize(designOfExperiment_);
+  setPage(Page_Probabilistic, probaPage_);
+
   ImportDesignOfExperimentPage * importPage = new ImportDesignOfExperimentPage(designOfExperiment_.getImplementation());
   connect(importPage, SIGNAL(designOfExperimentChanged(const DesignOfExperiment&)), this, SLOT(setDesignOfExperiment(const DesignOfExperiment&)));
   setPage(Page_Import, importPage);
@@ -127,8 +133,7 @@ int DesignOfExperimentWizard::nextId() const
     case Page_Intro:
       return introPage_->nextId();
     case Page_Deterministic:
-  // TODO
-//     case Page_Probabilistic:
+    case Page_Probabilistic:
     case Page_Import:
     default:
       return -1;
@@ -138,6 +143,12 @@ int DesignOfExperimentWizard::nextId() const
 
 DesignOfExperiment DesignOfExperimentWizard::getDesignOfExperiment() const
 {
+  if (currentId() == Page_Probabilistic)
+  {
+    DesignOfExperiment experiment = probaPage_->getDesignOfExperiment(designOfExperiment_.getName(), designOfExperiment_.getPhysicalModel());
+    return experiment;
+  }
+
   return designOfExperiment_;
 }
 

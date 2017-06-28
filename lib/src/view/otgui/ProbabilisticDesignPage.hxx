@@ -22,8 +22,10 @@
 #define OTGUI_PROBABILISTICDESIGNPAGE_HXX
 
 #include "otgui/DesignOfExperiment.hxx"
+#include "otgui/LogSpinBox.hxx"
 
 #include <QWizardPage>
+#include <QButtonGroup>
 
 namespace OTGUI {
 class OTGUI_API ProbabilisticDesignPage : public QWizardPage
@@ -31,22 +33,24 @@ class OTGUI_API ProbabilisticDesignPage : public QWizardPage
   Q_OBJECT
 
 public:
-  ProbabilisticDesignPage(const DesignOfExperiment & designOfExperiment, QWidget *parent = 0);
+  enum design {LHS, MonteCarlo, QuasiMonteCarlo};
 
-  bool validatePage();
+  ProbabilisticDesignPage(QWidget* parent = 0);
+
+  void initialize(const DesignOfExperiment& designOfExperiment);
+  DesignOfExperiment getDesignOfExperiment(const OT::String& name, const PhysicalModel& model) const;
 
 protected:
   void buildInterface();
 
 public slots:
-  void setDesignOfExperiment(DesignOfExperiment &);
 signals:
   void designOfExperimentChanged(const DesignOfExperiment & designOfExperiment);
 
 private:
-  DesignOfExperiment designOfExperiment_;
-  bool pageValidity_;
-  QWidget * designsWidget_ ;
+  QButtonGroup * designsGroup_;
+  LogSpinBox * sampleSizeSpinbox_;
+  QSpinBox * seedSpinbox_;
 };
 }
 #endif

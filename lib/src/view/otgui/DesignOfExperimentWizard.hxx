@@ -23,6 +23,7 @@
 
 #include "otgui/OTStudy.hxx"
 #include "otgui/OTguiWizard.hxx"
+#include "otgui/ProbabilisticDesignPage.hxx"
 
 #include <QButtonGroup>
 
@@ -65,6 +66,7 @@ public slots:
 
 private:
   IntroPage * introPage_;
+  ProbabilisticDesignPage * probaPage_;
   DesignOfExperiment designOfExperiment_;
 };
 }

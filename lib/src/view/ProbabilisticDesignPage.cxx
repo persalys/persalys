@@ -20,59 +20,129 @@
  */
 #include "otgui/ProbabilisticDesignPage.hxx"
 
-#include <QVBoxLayout>
+#include "otgui/ProbabilisticDesignOfExperiment.hxx"
+#include "otgui/CollapsibleGroupBox.hxx"
+
+#include <QGridLayout>
 #include <QRadioButton>
 #include <QGroupBox>
-#include <QButtonGroup>
+#include <QLabel>
 
 using namespace OT;
 
 namespace OTGUI {
 
-ProbabilisticDesignPage::ProbabilisticDesignPage(const DesignOfExperiment & designOfExperiment, QWidget* parent)
+ProbabilisticDesignPage::ProbabilisticDesignPage(QWidget* parent)
   : QWizardPage(parent)
-  , designOfExperiment_(designOfExperiment)
 {
   buildInterface();
 }
+
 
 void ProbabilisticDesignPage::buildInterface()
 {
   setTitle(tr("Probabilistic design of experiment"));
 
-  QVBoxLayout * pageLayout = new QVBoxLayout(this);
+  QGridLayout * pageLayout = new QGridLayout(this);
 
-  QGroupBox * methodGroup = new QGroupBox(tr("Designs"));
-  QVBoxLayout * methodLayout = new QVBoxLayout(methodGroup);
-  QButtonGroup * designsGroup = new QButtonGroup;
-  designsWidget_ = new QWidget;
-  QVBoxLayout * designsLayout = new QVBoxLayout(designsWidget_);
-  QRadioButton * buttonToChooseDesign = new QRadioButton(tr("Latin Hypercube Sampling"));
+  QGroupBox * designGroupBox = new QGroupBox(tr("Designs"));
+  QGridLayout * designGroupBoxLayout = new QGridLayout(designGroupBox);
+  designsGroup_ = new QButtonGroup;
+
+  QRadioButton * buttonToChooseDesign = new QRadioButton(tr("LHS"));
+  buttonToChooseDesign->setToolTip(tr("Latin Hypercube Sampling"));
   buttonToChooseDesign->setChecked(true);
-  designsGroup->addButton(buttonToChooseDesign);
-  designsLayout->addWidget(buttonToChooseDesign);
-
-  buttonToChooseDesign = new QRadioButton(tr("Quasi-Monte Carlo"));
-  designsGroup->addButton(buttonToChooseDesign);
-  designsLayout->addWidget(buttonToChooseDesign);
+  designsGroup_->addButton(buttonToChooseDesign, ProbabilisticDesignPage::LHS);
+  designGroupBoxLayout->addWidget(buttonToChooseDesign);
 
   buttonToChooseDesign = new QRadioButton(tr("Monte Carlo"));
-  designsGroup->addButton(buttonToChooseDesign);
-  designsLayout->addWidget(buttonToChooseDesign);
+  designsGroup_->addButton(buttonToChooseDesign, ProbabilisticDesignPage::MonteCarlo);
+  designGroupBoxLayout->addWidget(buttonToChooseDesign);
 
-  methodLayout->addWidget(designsWidget_);
-  pageLayout->addWidget(methodGroup);
+  buttonToChooseDesign = new QRadioButton(tr("Quasi-Monte Carlo"));
+  designsGroup_->addButton(buttonToChooseDesign, ProbabilisticDesignPage::QuasiMonteCarlo);
+  designGroupBoxLayout->addWidget(buttonToChooseDesign);
+
+  pageLayout->addWidget(designGroupBox);
+
+  // sample size
+  QGroupBox * sampleSizeGroupBox = new QGroupBox(tr("Generation parameter"));
+  QGridLayout * sampleSizeLayout = new QGridLayout(sampleSizeGroupBox);
+
+  QLabel * sampleSizeLabel = new QLabel(tr("Sample size"));
+  sampleSizeLayout->addWidget(sampleSizeLabel, 0, 0);
+
+  sampleSizeSpinbox_ = new LogSpinBox;
+  sampleSizeSpinbox_->setMinimum(1);
+  sampleSizeSpinbox_->setMaximum(std::numeric_limits<int>::max());
+  sampleSizeLabel->setBuddy(sampleSizeSpinbox_);
+  sampleSizeLayout->addWidget(sampleSizeSpinbox_, 0, 1);
+
+  pageLayout->addWidget(sampleSizeGroupBox);
+
+  // advanced parameters
+  CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
+  advancedParamGroupBox->setTitle(tr("Advanced parameters"));
+  QGridLayout * advancedParamGroupBoxLayout = new QGridLayout(advancedParamGroupBox);
+
+  // seed
+  QLabel * seedLabel = new QLabel(tr("Seed"));
+  advancedParamGroupBoxLayout->addWidget(seedLabel, 0, 0);
+
+  seedSpinbox_ = new QSpinBox;
+  seedSpinbox_->setMaximum(std::numeric_limits<int>::max());
+  seedLabel->setBuddy(seedSpinbox_);
+  advancedParamGroupBoxLayout->addWidget(seedSpinbox_, 0, 1);
+
+  advancedParamGroupBox->setExpanded(false);
+  pageLayout->addWidget(advancedParamGroupBox);
+  pageLayout->setRowStretch(3, 1);
+
+  initialize(ProbabilisticDesignOfExperiment());
 }
 
 
-void ProbabilisticDesignPage::setDesignOfExperiment(DesignOfExperiment & designOfExperiment)
+void ProbabilisticDesignPage::initialize(const DesignOfExperiment& designOfExperiment)
 {
-  designOfExperiment_ = designOfExperiment;
+  const bool independentCopula = designOfExperiment.getPhysicalModel().getComposedDistribution().hasIndependentCopula();
+  if (!independentCopula)
+  {
+    designsGroup_->button(ProbabilisticDesignPage::LHS)->setEnabled(false);
+    designsGroup_->button(ProbabilisticDesignPage::LHS)->setToolTip(tr("The physical model has not an independent copula"));
+    designsGroup_->button(ProbabilisticDesignPage::QuasiMonteCarlo)->setEnabled(false);
+    designsGroup_->button(ProbabilisticDesignPage::QuasiMonteCarlo)->setToolTip(tr("The physical model has not an independent copula"));
+    designsGroup_->button(ProbabilisticDesignPage::MonteCarlo)->click();
+  }
+
+  const ProbabilisticDesignOfExperiment * doe_ptr = dynamic_cast<const ProbabilisticDesignOfExperiment*>(designOfExperiment.getImplementation().get());
+
+  if (!doe_ptr)
+    return;
+
+  if (doe_ptr->getDesignName() == "LHS")
+    designsGroup_->button(ProbabilisticDesignPage::LHS)->click();
+  else if (doe_ptr->getDesignName() == "MONTE_CARLO")
+    designsGroup_->button(ProbabilisticDesignPage::MonteCarlo)->click();
+  else
+    designsGroup_->button(ProbabilisticDesignPage::QuasiMonteCarlo)->click();
+
+  sampleSizeSpinbox_->setValue(doe_ptr->getSize());
+  seedSpinbox_->setValue(doe_ptr->getSeed());
 }
 
 
-bool ProbabilisticDesignPage::validatePage()
+DesignOfExperiment ProbabilisticDesignPage::getDesignOfExperiment(const String& name, const PhysicalModel& model) const
 {
-  return pageValidity_;
+  ProbabilisticDesignOfExperiment design(name, model);
+  String designType = "LHS";
+  if (designsGroup_->checkedId() == ProbabilisticDesignPage::MonteCarlo)
+    designType = "MONTE_CARLO";
+  else if (designsGroup_->checkedId() == ProbabilisticDesignPage::QuasiMonteCarlo)
+    designType = "QUASI_MONTE_CARLO";
+  design.setDesignName(designType);
+  design.setSize(sampleSizeSpinbox_->value());
+  design.setSeed(seedSpinbox_->value());
+
+  return design;
 }
 }
