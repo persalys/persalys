@@ -85,6 +85,7 @@ ot_add_python_module (otguibase otguibase_module.i
                       DesignOfExperiment.i DesignOfExperiment_doc.i.in
                       FixedDesignOfExperiment.i FixedDesignOfExperiment_doc.i.in
                       FromFileDesignOfExperiment.i FromFileDesignOfExperiment_doc.i.in
+                      ProbabilisticDesignOfExperiment.i ProbabilisticDesignOfExperiment_doc.i.in
                       DataModel.i DataModel_doc.i.in
                       MonteCarloAnalysis.i MonteCarloAnalysis_doc.i.in
                       TaylorExpansionMomentsResult.i TaylorExpansionMomentsResult_doc.i.in
