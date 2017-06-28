@@ -42,10 +42,12 @@ public slots:
   void createNewCentralTendency();
   void createNewSensitivityAnalysis();
 signals:
+  void designOfExperimentRequested();
   void stochasticInputListChanged();
   void inputListCorrelationChanged();
 
 private:
+  QAction * newDesignOfExperiment_;
   QAction * newLimitState_;
   QAction * newCentralTendency_;
   QAction * newSensitivityAnalysis_;
