@@ -798,9 +798,15 @@ void DataTableModel::loadData(const FMUInfo & info)
     ++ causalityCount[causality];
 
     if (physicalModel_.hasInputNamed(variableNames_[i]))
+    {
       inputOutput_[i] = 1;
+      descriptions_[i] = physicalModel_.getInputByName(variableNames_[i]).getDescription();
+    }
     else if (physicalModel_.hasOutputNamed(variableNames_[i]))
+    {
       inputOutput_[i] = 2;
+      descriptions_[i] = physicalModel_.getOutputByName(variableNames_[i]).getDescription();
+    }
   }
   properties_.clear();
   properties_.add(info.getIdentifier());
