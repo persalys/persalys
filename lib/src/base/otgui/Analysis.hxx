@@ -24,6 +24,8 @@
 #include "AnalysisImplementation.hxx"
 
 namespace OTGUI {
+class LaunchParametersVisitor;
+
 class OTGUI_API Analysis : public OT::TypedInterfaceObject<AnalysisImplementation>
 {
   CLASSNAME;
@@ -62,6 +64,8 @@ public:
 
   /** override this method in order to emit a notification */
   virtual void setImplementationAsPersistentObject(const ImplementationAsPersistentObject& obj);
+
+  void acceptLaunchParameters(LaunchParametersVisitor* visitor);
 };
 }
 #endif

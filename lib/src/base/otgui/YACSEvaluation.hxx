@@ -26,6 +26,7 @@
 #include "openturns/EvaluationImplementation.hxx"
 
 #include <YACSEvalYFX.hxx>
+#include <SalomeResourceModel.hxx>
 
 namespace OTGUI {
 
@@ -77,16 +78,8 @@ public:
   OT::String getXMLFileName() const;
   void setXMLFileName(const OT::String & xmlFileName);
 
-  /** Accessor to the parallelize status */
-  bool getParallelizeStatus() const;
-  void setParallelizeStatus(const bool & status);
-
-  /** Accessor to the fitting machines */
-  OT::Description getFittingMachines() const;
-
-  /** Accessor to the wanted machine */
-  OT::String getWantedMachine() const;
-  void setWantedMachine(const OT::String & machine);
+  /** Accessor to launching resource properties */
+  AbstractResourceModel* getResourceModel();
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -97,12 +90,10 @@ public:
 private:
   OT::String xmlFileName_;
   OT::Pointer<YACSEvalYFX> efx_;
+  SalomeResourceModel resourceModel_;
   OT::Point inputValues_;
   OT::Description inDescription_;
   OT::Description outDescription_;
-  bool parallelizeStatus_;
-  OT::Description fittingMachines_;
-  OT::String wantedMachine_;
 };
 }
 #endif

@@ -7,6 +7,7 @@
 %ignore *::getInformationMessage;
 %ignore *::getProgressValue;
 %ignore *::stop;
+%ignore *::acceptLaunchParameters;
 
 %include AnalysisImplementation_doc.i
 

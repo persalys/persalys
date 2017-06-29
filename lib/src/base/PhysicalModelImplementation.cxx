@@ -246,6 +246,12 @@ void PhysicalModelImplementation::removeInput(const String & inputName)
 }
 
 
+void PhysicalModelImplementation::clearInputs()
+{
+  inputs_.clear();
+}
+
+
 void PhysicalModelImplementation::updateCopula()
 {
   Description stochasticInputNames = getStochasticInputNames();
@@ -438,6 +444,12 @@ void PhysicalModelImplementation::removeOutput(const String & outputName)
   }
   else
     throw InvalidArgumentException(HERE) << "The given output name " << outputName <<" does not correspond to an output of the physical model\n";
+}
+
+
+void PhysicalModelImplementation::clearOutputs()
+{
+  outputs_.clear();
 }
 
 
@@ -744,4 +756,11 @@ void PhysicalModelImplementation::load(Advocate & adv)
   adv.loadAttribute("outputs_", outputs_);
   adv.loadAttribute("copula_", copula_);
 }
+
+
+/* Nothing to do at this level. Overloaded in child classes if needed.*/
+void PhysicalModelImplementation::acceptLaunchParameters(LaunchParametersVisitor* visitor)
+{
+}
+
 }

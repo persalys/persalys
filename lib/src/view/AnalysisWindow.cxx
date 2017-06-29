@@ -25,6 +25,11 @@
 
 #include <QHBoxLayout>
 
+#ifdef OTGUI_HAVE_YACS
+#include "otgui/YACSPhysicalModel.hxx"
+#include <ResourceWidget.hxx>
+#endif
+
 namespace OTGUI {
 
 AnalysisWindow::AnalysisWindow(AnalysisItem* item, const bool analysisInProgress)
@@ -95,6 +100,13 @@ void AnalysisWindow::buildInterface()
   connect(analysisItem_, SIGNAL(messageChanged(QString)), messageLabel_, SLOT(setText(QString)));
 
   mainLayout->setRowStretch(4, 1);
+
+  launchParameters_ = 0;
+  analysisItem_->getAnalysis().acceptLaunchParameters(this);
+  if(launchParameters_)
+  {
+    mainLayout->addWidget(launchParameters_, 4, 0);
+  }
 
   // initialization
   initializeWidgets();
@@ -180,4 +192,13 @@ void AnalysisWindow::stopAnalysis()
   // stop the analysis
   analysisItem_->stopAnalysis();
 }
+
+#ifdef OTGUI_HAVE_YACS
+void AnalysisWindow::visitYACS(YACSPhysicalModel* model)
+{
+  ResourceWidget* rw = new ResourceWidget(model->getResourceModel());
+  launchParameters_ = rw;
+}
+#endif
+
 }

@@ -50,9 +50,13 @@ YACSEvaluation::YACSEvaluation(const String & fileName)
   : EvaluationImplementation()
   , xmlFileName_(fileName)
   , efx_(0)
-  , parallelizeStatus_(true)
-  , wantedMachine_("localhost")
+  , resourceModel_()
 {
+  // Always initialize the session.
+  YACSEvalSession * session = YACSEvalSessionSingleton::Get();
+  if (!session->isLaunched())
+    session->launch();
+
   if (!xmlFileName_.empty())
     loadData();
 }
@@ -95,11 +99,6 @@ String YACSEvaluation::__str__(const String & offset) const
 /* Method loadData() loads the data from the xmlFileName */
 void YACSEvaluation::loadData()
 {
-  YACSEvalSession * session = YACSEvalSessionSingleton::Get();
-  // need the session here: do not launch session in operator()
-  if (!session->isLaunched())
-    session->launch();
-
   // read file
   efx_ = YACSEvalYFX::BuildFromFile(xmlFileName_);
 
@@ -119,15 +118,6 @@ void YACSEvaluation::loadData()
 
   for (int i=0; i<outps.size(); ++i)
     outDescription_[i] = outps[i]->getName();
-
-  // get parameters
-  parallelizeStatus_ = efx_->getParallelizeStatus();
-
-  AutoYELocker ayel(efx_.get(), inps, outps);
-  YACSEvalListOfResources *rss(efx_->giveResources());
-  fittingMachines_ = Description(rss->getAllFittingMachines().size());
-  for (int i=0; i<rss->getAllFittingMachines().size(); ++i)
-    fittingMachines_[i] = rss->getAllFittingMachines()[i];
 }
 
 
@@ -184,8 +174,21 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   result.setDescription(getOutputVariablesNames());
 
   AutoYELocker ayel(efx_.get(), inps, outps);
-  efx_.get()->setParallelizeStatus(parallelizeStatus_);
-  efx_.get()->giveResources()->setWantedMachine(wantedMachine_);
+  efx_.get()->setParallelizeStatus(resourceModel_.getParallelizeStatus());
+  YACSEvalListOfResources * resources = efx_.get()->giveResources();
+  std::string wantedMachine = resourceModel_.getWantedMachine();
+  resources->setWantedMachine(wantedMachine);
+  if(!resources->isMachineInteractive(wantedMachine))
+  {
+    YACSEvalParamsForCluster& clp(resources->getAddParamsForCluster());
+    clp.setRemoteWorkingDir(resourceModel_.getRemoteDir());
+    clp.setLocalWorkingDir(resourceModel_.getLocalDir());
+    clp.setWCKey(resourceModel_.getWckey());
+    clp.setMaxDuration(resourceModel_.getMaxDuration());
+    clp.setNbProcs(resourceModel_.getNbprocs());
+    clp.getInFiles().assign(resourceModel_.getInFiles().begin(),
+                            resourceModel_.getInFiles().end());
+  }
 
   int b = 0;
   bool a(efx_.get()->run(YACSEvalSessionSingleton::Get(), b));
@@ -254,38 +257,10 @@ UnsignedInteger YACSEvaluation::getOutputDimension() const
 }
 
 
-/* Accessor to the parallelize status */
-bool YACSEvaluation::getParallelizeStatus() const
+/* Accessor to launching resource properties */
+AbstractResourceModel* YACSEvaluation::getResourceModel()
 {
-  return parallelizeStatus_;
-}
-
-
-/* Accessor to the parallelize status */
-void YACSEvaluation::setParallelizeStatus(const bool & status)
-{
-  parallelizeStatus_ = status;
-}
-
-
-/* Accessor to the fitting machines */
-Description YACSEvaluation::getFittingMachines() const
-{
-  return fittingMachines_;
-}
-
-
-/* Accessor to the wanted machine */
-String YACSEvaluation::getWantedMachine() const
-{
-  return wantedMachine_;
-}
-
-
-/* Accessor to the wanted machine */
-void YACSEvaluation::setWantedMachine(const String & machine)
-{
-  wantedMachine_ = machine;
+  return &resourceModel_;
 }
 
 
@@ -307,8 +282,6 @@ void YACSEvaluation::save(Advocate & adv) const
 {
   EvaluationImplementation::save(adv);
   adv.saveAttribute("xmlFileName_", xmlFileName_);
-  adv.saveAttribute("parallelizeStatus_", parallelizeStatus_);
-  adv.saveAttribute("wantedMachine_", wantedMachine_);
 }
 
 
@@ -319,7 +292,5 @@ void YACSEvaluation::load(Advocate & adv)
   adv.loadAttribute("xmlFileName_", xmlFileName_);
   if (!xmlFileName_.empty())
     loadData();
-  adv.loadAttribute("parallelizeStatus_", parallelizeStatus_);
-  adv.loadAttribute("wantedMachine_", wantedMachine_);
 }
 }

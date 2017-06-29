@@ -22,6 +22,7 @@
 #define OTGUI_ANALYSISIMPLEMENTATION_HXX
 
 #include "PhysicalModel.hxx"
+#include "LaunchParametersVisitor.hxx"
 
 namespace OTGUI {
 class OTGUI_API AnalysisImplementation : public OT::PersistentObject, public Observable
@@ -62,6 +63,8 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
+
+  virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
 
 protected:
   void initialize();
