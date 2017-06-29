@@ -21,21 +21,22 @@
 #include "otgui/AnalysisItem.hxx"
 
 #include "otgui/ModelEvaluation.hxx"
+#include "otgui/DesignOfExperimentEvaluation.hxx"
 #include "otgui/FunctionalChaosAnalysis.hxx"
 #include "otgui/KrigingAnalysis.hxx"
-
-#include "otgui/PhysicalModelItem.hxx"
-#include "otgui/DesignOfExperimentItem.hxx"
-#include "otgui/LimitStateItem.hxx"
-#include "otgui/OTStudyItem.hxx"
 #include "otgui/SobolAnalysis.hxx"
 #include "otgui/SRCAnalysis.hxx"
-#include "otgui/ApproximationAnalysis.hxx"
+#include "otgui/FORMAnalysis.hxx"
 #include "otgui/MonteCarloAnalysis.hxx"
 #include "otgui/SimulationReliabilityAnalysis.hxx"
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
 #include "otgui/FORMImportanceSamplingAnalysis.hxx"
 #include "otgui/InferenceAnalysis.hxx"
+
+#include "otgui/PhysicalModelItem.hxx"
+#include "otgui/DesignOfExperimentItem.hxx"
+#include "otgui/LimitStateItem.hxx"
+#include "otgui/OTStudyItem.hxx"
 
 #include <openturns/OTBase.hxx>
 
@@ -326,10 +327,11 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
 
   if (analysisType == "ModelEvaluation")
   {
-    const ModelEvaluation evaluation(*dynamic_cast<const ModelEvaluation*>(&*analysis.getImplementation()));
+    const ModelEvaluation evaluation(*dynamic_cast<const ModelEvaluation*>(analysis.getImplementation().get()));
 
     // Parameters names
-    namesList << tr("Point to be evaluated");
+    namesList << tr("Point")
+              << tr("Outputs of interest");
 
     // Parameters values
     const Point point(evaluation.getInputValues());
@@ -341,21 +343,36 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
         pointText += "; ";
     }
     pointText += "]";
-    valuesList << pointText;
+    valuesList << pointText
+               << analysis.getImplementation()->getInterestVariables().__str__().c_str();
+  }
+  else if (analysisType == "DesignOfExperimentEvaluation")
+  {
+    const DesignOfExperimentEvaluation doeEvaluation(*dynamic_cast<const DesignOfExperimentEvaluation*>(analysis.getImplementation().get()));
+
+    // Parameters names
+    namesList << tr("Sample size")
+              << tr("Outputs to be evaluated");
+    // Parameters values
+    valuesList << QString::number(doeEvaluation.getDesignOfExperiment().getInputSample().getSize());
+    valuesList << doeEvaluation.getDesignOfExperiment().getPhysicalModel().getSelectedOutputsNames().__str__().c_str();
   }
   else if (analysisType == "TaylorExpansionMomentsAnalysis")
   {
     // Parameters names
-    namesList << tr("Algorithm");
+    namesList << tr("Algorithm")
+              << tr("Outputs of interest");
     // Parameters values
-    valuesList << tr("Taylor expansion moments");
+    valuesList << tr("Taylor expansion moments")
+               << analysis.getImplementation()->getInterestVariables().__str__().c_str();
   }
   else if (analysisType == "MonteCarloAnalysis")
   {
-    const MonteCarloAnalysis MCanalysis(*dynamic_cast<const MonteCarloAnalysis*>(&*analysis.getImplementation()));
+    const MonteCarloAnalysis MCanalysis(*dynamic_cast<const MonteCarloAnalysis*>(analysis.getImplementation().get()));
 
     // Parameters names
-    namesList << tr("Algorithm");
+    namesList << tr("Algorithm")
+              << tr("Outputs of interest");
     if (MCanalysis.isConfidenceIntervalRequired())
       namesList << tr("Confidence level");
     namesList << tr("Maximum coefficient of variation")
@@ -365,7 +382,8 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
               << tr("Seed");
 
     // Parameters values
-    valuesList << tr("Monte Carlo");
+    valuesList << tr("Monte Carlo")
+               << MCanalysis.getInterestVariables().__str__().c_str();
     if (MCanalysis.isConfidenceIntervalRequired())
       valuesList << QString::number(MCanalysis.getLevelConfidenceInterval()*100) + "\%";
     valuesList << QString::number(MCanalysis.getMaximumCoefficientOfVariation());
@@ -382,10 +400,11 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
   }
   else if (analysisType == "KrigingAnalysis")
   {
-    const KrigingAnalysis kriging(*dynamic_cast<const KrigingAnalysis*>(&*analysis.getImplementation()));
+    const KrigingAnalysis kriging(*dynamic_cast<const KrigingAnalysis*>(analysis.getImplementation().get()));
 
     // Parameters names
     namesList << tr("Algorithm")
+              << tr("Outputs of interest")
               << tr("Covariance model");
     if (kriging.getCovarianceModel().getImplementation()->getClassName() == "MaternModel")
       namesList << tr("nu");
@@ -399,6 +418,7 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
 
     // Parameters values
     valuesList << tr("Kriging")
+               << kriging.getInterestVariables().__str__().c_str()
                << QString(kriging.getCovarianceModel().getImplementation()->getClassName().c_str());
     // covariance model parameters
     if (kriging.getCovarianceModel().getImplementation()->getClassName() == "MaternModel")
@@ -446,26 +466,29 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
   }
   else if (analysisType == "FunctionalChaosAnalysis")
   {
-    const FunctionalChaosAnalysis chaos(*dynamic_cast<const FunctionalChaosAnalysis*>(&*analysis.getImplementation()));
+    const FunctionalChaosAnalysis chaos(*dynamic_cast<const FunctionalChaosAnalysis*>(analysis.getImplementation().get()));
 
     // Parameters names
     namesList << tr("Algorithm")
+              << tr("Outputs of interest")
               << tr("Chaos degree")
               << tr("Sparse")
               << tr("Leave-one-out validation");
 
     // Parameters values
     valuesList << tr("Functional chaos")
+               << chaos.getInterestVariables().__str__().c_str()
                << QString::number(chaos.getChaosDegree())
                << (chaos.getSparseChaos()? tr("yes") : tr("no"))
                << (chaos.isLeaveOneOutValidation()? tr("yes") : tr("no"));
   }
   else if (analysisType == "SobolAnalysis")
   {
-    const SobolAnalysis sobolAnalysis(*dynamic_cast<const SobolAnalysis*>(&*analysis.getImplementation()));
+    const SobolAnalysis sobolAnalysis(*dynamic_cast<const SobolAnalysis*>(analysis.getImplementation().get()));
 
     // Parameters names
     namesList << tr("Algorithm")
+              << tr("Outputs of interest")
               << tr("Maximum coefficient of variation")
               << tr("Maximum elapsed time")
               << tr("Maximum calls")
@@ -474,6 +497,7 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
 
     // Parameters values
     valuesList << tr("Sobol")
+               << sobolAnalysis.getInterestVariables().__str__().c_str()
                << QString::number(sobolAnalysis.getMaximumCoefficientOfVariation());
     if (sobolAnalysis.getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
       valuesList << QString::number(sobolAnalysis.getMaximumElapsedTime()) + "(s)";
@@ -488,24 +512,27 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
   }
   else if (analysisType == "SRCAnalysis")
   {
-    const SRCAnalysis srcAnalysis(*dynamic_cast<const SRCAnalysis*>(&*analysis.getImplementation()));
+    const SRCAnalysis srcAnalysis(*dynamic_cast<const SRCAnalysis*>(analysis.getImplementation().get()));
 
     // Parameters names
     namesList << tr("Algorithm")
+              << tr("Outputs of interest")
               << tr("Sample size")
               << tr("Seed");
 
     // Parameters values
     valuesList << tr("Standardized Regression Coefficients")
+               << srcAnalysis.getInterestVariables().__str__().c_str()
                << QString::number(srcAnalysis.getSimulationsNumber())
                << QString::number(srcAnalysis.getSeed());
   }
   else if (analysisType == "FORMAnalysis")
   {
-    const ApproximationAnalysis approxAnalysis(*dynamic_cast<const ApproximationAnalysis*>(&*analysis.getImplementation().get()));
+    const FORMAnalysis approxAnalysis(*dynamic_cast<const FORMAnalysis*>(analysis.getImplementation().get()));
 
     // Parameters names
     namesList << tr("Algorithm")
+              << tr("Output of interest")
               << tr("Optimization algorithm")
               << tr("Physical starting point")
               << tr("Maximum iterations number")
@@ -516,6 +543,7 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
 
     // Parameters values
     valuesList << tr("FORM")
+               << approxAnalysis.getLimitState().getOutputName().c_str()
                << QString(approxAnalysis.getOptimizationAlgorithm().getImplementation()->getClassName().c_str());
 
     // starting point
@@ -537,13 +565,14 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
                << QString::number(approxAnalysis.getOptimizationAlgorithm().getMaximumResidualError())
                << QString::number(approxAnalysis.getOptimizationAlgorithm().getMaximumConstraintError());
   }
-  else if (dynamic_cast<const SimulationReliabilityAnalysis*>(&*analysis.getImplementation()))
+  else if (dynamic_cast<const SimulationReliabilityAnalysis*>(analysis.getImplementation().get()))
   {
-    const SimulationReliabilityAnalysis simuAnalysis(*dynamic_cast<const SimulationReliabilityAnalysis*>(&*analysis.getImplementation()));
+    const SimulationReliabilityAnalysis simuAnalysis(*dynamic_cast<const SimulationReliabilityAnalysis*>(analysis.getImplementation().get()));
 
     // Parameters names
-    namesList << tr("Algorithm");
-    if (dynamic_cast<const ImportanceSamplingAnalysis*>(&*analysis.getImplementation()))
+    namesList << tr("Algorithm")
+              << tr("Output of interest");
+    if (dynamic_cast<const ImportanceSamplingAnalysis*>(analysis.getImplementation().get()))
       namesList << tr("Design point (standard space)");
     namesList << tr("Maximum coefficient of variation")
               << tr("Maximum elapsed time")
@@ -553,17 +582,22 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
 
     // Parameters values
     // algo
-    if (dynamic_cast<const MonteCarloReliabilityAnalysis*>(&*analysis.getImplementation()))
-      valuesList << tr("Monte Carlo");
-    else if (dynamic_cast<const ImportanceSamplingAnalysis*>(&*analysis.getImplementation()))
+    if (dynamic_cast<const MonteCarloReliabilityAnalysis*>(analysis.getImplementation().get()))
     {
-      if (dynamic_cast<const FORMImportanceSamplingAnalysis*>(&*analysis.getImplementation()))
+      valuesList << tr("Monte Carlo")
+                 << simuAnalysis.getLimitState().getOutputName().c_str();
+    }
+    else if (dynamic_cast<const ImportanceSamplingAnalysis*>(analysis.getImplementation().get()))
+    {
+      if (dynamic_cast<const FORMImportanceSamplingAnalysis*>(analysis.getImplementation().get()))
         valuesList << tr("FORM - Importance sampling");
       else
         valuesList << tr("Importance sampling");
 
+      valuesList << simuAnalysis.getLimitState().getOutputName().c_str();
+
       // starting point
-      const Point startingPoint(dynamic_cast<const ImportanceSamplingAnalysis*>(&*analysis.getImplementation())->getStandardSpaceDesignPoint());
+      const Point startingPoint(dynamic_cast<const ImportanceSamplingAnalysis*>(analysis.getImplementation().get())->getStandardSpaceDesignPoint());
       QString startingPointText = "[";
       for (UnsignedInteger i=0; i<startingPoint.getDimension(); ++i)
       {
@@ -592,7 +626,7 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
   }
   else if (analysisType == "InferenceAnalysis")
   {
-    const InferenceAnalysis inferenceAnalysis(*dynamic_cast<const InferenceAnalysis*>(&*analysis.getImplementation()));
+    const InferenceAnalysis inferenceAnalysis(*dynamic_cast<const InferenceAnalysis*>(analysis.getImplementation().get()));
 
     // Parameters names
     namesList << tr("Method")

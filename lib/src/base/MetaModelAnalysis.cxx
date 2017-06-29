@@ -43,7 +43,8 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const DesignOfExperimen
   , isDistributionComputed_(false)
   , leaveOneOutValidation_(false)
 {
-  setInterestVariables(designOfExperiment_.getOutputSample().getDescription());
+  if (designOfExperiment_.getOutputSample().getSize())
+    setInterestVariables(designOfExperiment_.getOutputSample().getDescription());
 }
 
 

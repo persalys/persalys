@@ -8,7 +8,7 @@ import os
 anOTStudy = otguibase.OTStudy('anOTStudy')
 
 ## Model
-X0 = otguibase.Input('X0', 1)
+X0 = otguibase.Input('X0', 1, ot.Normal())
 X1 = otguibase.Input('X1', 2)
 Y0 = otguibase.Output('Y0')
 
@@ -34,7 +34,15 @@ anOTStudy.add(aDesign2)
 aDesign2.run()
 print('outs=', aDesign2.getOutputSample())
 
-## script
+## Design of Experiment ##
+aDesign3 = otguibase.ProbabilisticDesignOfExperiment('aDesign_3', model, 10, 'QUASI_MONTE_CARLO')
+anOTStudy.add(aDesign3)
+
+aDesign3.run()
+print('outs=', aDesign3.getOutputSample())
+
+
+# script
 script = anOTStudy.getPythonScript()
 print(script)
 exec(script)

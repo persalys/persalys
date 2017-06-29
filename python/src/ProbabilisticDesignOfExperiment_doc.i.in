@@ -1,0 +1,111 @@
+%feature("docstring") OTGUI::ProbabilisticDesignOfExperiment
+"Probabilistic design of experiment.
+
+Available constructors:
+    ProbabilisticDesignOfExperiment(*name, physicalModel*)
+
+    ProbabilisticDesignOfExperiment(*name, physicalModel, size, designName*)
+
+Parameters
+----------
+name : str
+    Name
+physicalModel : :class:`~otguibase.PhysicalModel`
+    Physical model with at least a stochastic input variable.
+size : positive int
+    Number of points in the design.
+designName : str
+    Name of the design. Use :func:`GetDesignNames()` to list available names.
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+
+Create the model:
+
+>>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
+>>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> G = otguibase.Output('G', 'deviation')
+>>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(_pi*100.0)'])
+
+Create the design of experiment:
+
+>>> myDOE = otguibase.ProbabilisticDesignOfExperiment('myDOE', myPhysicalModel, 10, 'MONTE_CARLO')"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ProbabilisticDesignOfExperiment::setDesignName
+"Accessor to the design name.
+
+Parameters
+----------
+designName : str
+    The design name. Use :func:`GetDesignNames()` to list available names."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ProbabilisticDesignOfExperiment::getDesignName
+"Accessor to the design name.
+
+Returns
+-------
+designName : str
+    The design name."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ProbabilisticDesignOfExperiment::GetDesignNames
+"Accessor to the list of designs provided by ProbabilisticDesignOfExperiment.
+
+Returns
+-------
+names : :py:class:`openturns.Description`
+    List of design names provided by ProbabilisticDesignOfExperiment.
+
+Examples
+--------
+>>> import otguibase
+>>> print(otguibase.ProbabilisticDesignOfExperiment.GetDesignNames())
+[LHS,MONTE_CARLO,QUASI_MONTE_CARLO]
+"
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ProbabilisticDesignOfExperiment::setSeed
+"Initialize the random generator seed.
+
+Parameters
+----------
+seed : int
+    Seed value."
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ProbabilisticDesignOfExperiment::getSeed
+"Random generator seed accessor.
+
+Returns
+-------
+seed : int
+    Seed value."
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ProbabilisticDesignOfExperiment::setSize
+"Accessor to the size of the generated sample.
+
+Parameters
+----------
+size : positive int
+    Number of points in the design."
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ProbabilisticDesignOfExperiment::getSize
+"Accessor to the size of the generated sample.
+
+Returns
+-------
+size : positive int
+    Number of points in the design."

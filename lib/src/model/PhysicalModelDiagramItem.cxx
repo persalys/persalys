@@ -287,6 +287,7 @@ void PhysicalModelDiagramItem::appendProbabilisticModelItem()
   insertRow(1, probaItem);
 
   // connections
+  connect(probaItem, SIGNAL(designOfExperimentRequested()), this, SIGNAL(designOfExperimentRequested()));
   connect(this, SIGNAL(limitStateRequested()), probaItem, SLOT(createNewLimitState()));
   connect(this, SIGNAL(centralTendencyRequested()), probaItem, SLOT(createNewCentralTendency()));
   connect(this, SIGNAL(sensitivityRequested()), probaItem, SLOT(createNewSensitivityAnalysis()));

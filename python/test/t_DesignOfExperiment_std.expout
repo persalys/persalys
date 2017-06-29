@@ -14,6 +14,17 @@ outs=     [ Y0        ]
 7 : [  -6.42253 ]
 8 : [   3.26745 ]
 9 : [  -5.27323 ]
+outs=     [ Y0      ]
+0 : [ 16      ]
+1 : [ 16.6245 ]
+2 : [ 15.3755 ]
+3 : [ 15.6867 ]
+4 : [ 16.9129 ]
+5 : [ 16.3133 ]
+6 : [ 15.0871 ]
+7 : [ 15.2247 ]
+8 : [ 16.4695 ]
+9 : [ 16.9993 ]
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -23,7 +34,8 @@ import otguibase
 
 anOTStudy = otguibase.OTStudy('anOTStudy')
 otguibase.OTStudy.Add(anOTStudy)
-X0 = otguibase.Input('X0', 1, '')
+dist_X0 = ot.Normal(0, 1)
+X0 = otguibase.Input('X0', 1, dist_X0, '')
 X1 = otguibase.Input('X1', 2, '')
 Y0 = otguibase.Output('Y0', '')
 inputs = [X0, X1]
@@ -42,4 +54,8 @@ inputColumns = [0, 2]
 aDesign_2 = otguibase.FromFileDesignOfExperiment('aDesign_2', aModelPhys, 'normal.csv', inputColumns)
 anOTStudy.add(aDesign_2)
 aDesign_2.run()
+aDesign_3 = otguibase.ProbabilisticDesignOfExperiment('aDesign_3', aModelPhys, 10, 'QUASI_MONTE_CARLO')
+aDesign_3.setSeed(0)
+anOTStudy.add(aDesign_3)
+aDesign_3.run()
 

@@ -22,7 +22,8 @@
 #define OTGUI_DATASAMPLE_HXX
 
 #include "otgui/OTGuiprivate.hxx"
-#include "openturns/OTType.hxx"
+
+#include <openturns/OTType.hxx>
 
 namespace OTGUI {
 class OTGUI_API DataSample : public OT::PersistentObject
@@ -38,7 +39,7 @@ public:
   /** Virtual constructor */
   virtual DataSample * clone() const;
 
-  OT::Sample getInputSample() const;
+  virtual OT::Sample getInputSample() const;
   virtual void setInputSample(const OT::Sample & sample);
 
   OT::Sample getOutputSample() const;
@@ -58,8 +59,9 @@ public:
 private:
   void searchMinMax() const;
 
+protected:
+  mutable OT::Sample inputSample_;
 private:
-  OT::Sample inputSample_;
   OT::Sample outputSample_;
   mutable OT::Sample sample_;
   mutable OT::PersistentCollection<OT::Sample> listXMin_;

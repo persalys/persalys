@@ -50,6 +50,9 @@ InferenceAnalysis::InferenceAnalysis(const String& name, const DesignOfExperimen
   , distFactoriesForEachInterestVar_()
   , level_(0.95)
 {
+  if (designOfExperiment_.getSample().getSize())
+    setInterestVariables(designOfExperiment_.getSample().getDescription());
+
   // by default we test the Normal distribution for all the variables of the DOE
   for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
   {

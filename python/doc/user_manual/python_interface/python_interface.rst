@@ -99,6 +99,7 @@ Design of experiment
     DesignOfExperiment
     FixedDesignOfExperiment
     FromFileDesignOfExperiment
+    ProbabilisticDesignOfExperiment
 
 Data analysis
 -------------

@@ -20,9 +20,12 @@
  */
 #include "otgui/DesignOfExperimentInputWindow.hxx"
 
+#include "otgui/ProbabilisticDesignOfExperiment.hxx"
 #include "otgui/SampleTableModel.hxx"
 #include "otgui/ExportableTableView.hxx"
+#include "otgui/ParametersWidget.hxx"
 
+#include <QVBoxLayout>
 #include <QSortFilterProxyModel>
 
 using namespace OT;
@@ -41,16 +44,44 @@ void DesignOfExperimentInputWindow::buildInterface()
 {
   setWindowTitle(tr("Design of experiment"));
 
-  ExportableTableView * tableView_ = new ExportableTableView;
-  tableView_->setSortingEnabled(true);
+  QWidget * mainWidget = new QWidget;
+  QVBoxLayout * mainWidgetLayout = new QVBoxLayout(mainWidget);
 
-  SampleTableModel * tableModel = new SampleTableModel(designOfExperiment_.getInputSample(), tableView_);
-  QSortFilterProxyModel * proxyModel = new QSortFilterProxyModel(tableView_);
+  // parameters
+  QStringList namesList;
+  namesList << tr("Sample size");
+  QStringList valuesList;
+  valuesList << QString::number(designOfExperiment_.getInputSample().getSize());
+  const ProbabilisticDesignOfExperiment * doe_ptr = dynamic_cast<const ProbabilisticDesignOfExperiment*>(designOfExperiment_.getImplementation().get());
+  if (doe_ptr)
+  {
+    namesList << tr("Design name");
+    namesList << tr("Seed");
+    const String designName = doe_ptr->getDesignName();
+    if (designName == "LHS")
+      valuesList << tr("LHS");
+    else if (designName == "MONTE_CARLO")
+      valuesList << tr("Monte Carlo");
+    else if (designName == "QUASI_MONTE_CARLO")
+      valuesList << tr("Quasi-Monte Carlo");
+    valuesList << QString::number(doe_ptr->getSeed());
+  }
+
+  ParametersWidget * table = new ParametersWidget("", namesList, valuesList, true, true);
+  mainWidgetLayout->addWidget(table);
+
+  // sample table
+  ExportableTableView * tableView = new ExportableTableView;
+  tableView->setSortingEnabled(true);
+
+  SampleTableModel * tableModel = new SampleTableModel(designOfExperiment_.getInputSample(), tableView);
+  QSortFilterProxyModel * proxyModel = new QSortFilterProxyModel(tableView);
   proxyModel->setSourceModel(tableModel);
 
-  tableView_->setModel(proxyModel);
-  tableView_->sortByColumn(0, Qt::AscendingOrder);
+  tableView->setModel(proxyModel);
+  tableView->sortByColumn(0, Qt::AscendingOrder);
+  mainWidgetLayout->addWidget(tableView, 1);
 
-  setWidget(tableView_);
+  setWidget(mainWidget);
 }
 }

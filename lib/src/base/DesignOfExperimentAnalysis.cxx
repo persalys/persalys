@@ -36,7 +36,6 @@ DesignOfExperimentAnalysis::DesignOfExperimentAnalysis(const String & name, cons
   : AnalysisImplementation(name)
   , designOfExperiment_(designOfExperiment)
 {
-  setInterestVariables(designOfExperiment_.getSample().getDescription());
 }
 
 
