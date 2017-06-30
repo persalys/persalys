@@ -267,8 +267,12 @@ Function .onInit
 
   ${If} $Python_INSTALL_PATH == ""
     MessageBox MB_OK|MB_ICONEXCLAMATION "Python ${PYBASEVER} installation directory not found!$\rEnter manually the Python installation directory." /SD IDOK
-    ; abort if silent install
+    ; abort if silent install and not FORCE flag
     IfSilent 0 end_abort
+    ${GetParameters} $R1
+    ClearErrors
+    ${GetOptions} $R1 '/FORCE' $R0
+    IfErrors 0 +2
     Abort
     end_abort:
   ${Else} 
@@ -327,7 +331,7 @@ Section "!${MODULE_NAME} DLL & doc" SEC01
 
   !insertmacro PRINT "Install binary files in $MODULE_INSTALL_PATH."
   SetOutPath "$MODULE_INSTALL_PATH"
-  CopyFiles $MODULE_INSTALL_PATH\..\openturns\*.dll $MODULE_INSTALL_PATH
+  CopyFiles /SILENT $MODULE_INSTALL_PATH\..\openturns\*.dll $MODULE_INSTALL_PATH
   File /r "${MODULE_PREFIX}\bin\*.*"
   ; ! not working: __init__ will override  ot __init__
   File /r "${MODULE_PREFIX}\Lib\site-packages\${MODULE_NAME_LOWERCASE}base\*.*"
