@@ -22,13 +22,10 @@
 #define OTGUI_DESIGNOFEXPERIMENTWINDOW_HXX
 
 #include "ResultWindow.hxx"
-#include "otgui/DesignOfExperimentItem.hxx"
 #include "otgui/AnalysisItem.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/PlotMatrixConfigurationWidget.hxx"
+#include "otgui/PlotWidget.hxx"
 
 #include <QTabWidget>
-#include <QPushButton>
 #include <QGroupBox>
 
 namespace OTGUI {
@@ -37,10 +34,7 @@ class OTGUI_API DesignOfExperimentWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  DesignOfExperimentWindow(DesignOfExperimentItem * item);
-  DesignOfExperimentWindow(AnalysisItem * item);
-
-  virtual ~DesignOfExperimentWindow();
+  DesignOfExperimentWindow(AnalysisItem * item, QWidget * parent=0);
 
   static QVector<PlotWidget*> GetListScatterPlots(const OT::Sample& inS,
                                                   const OT::Sample& notValidInS,
@@ -52,25 +46,27 @@ public:
 
 protected:
   void buildInterface();
-  void addTabsForOutputs();
+  void addMinMaxTab();
+#ifdef OTGUI_HAVE_PARAVIEW
+  void addParaviewWidgetsTabs();
+#endif
+  void addTablesTab();
+  void addPlotMatrixTab();
+  void addScatterPlotsTab();
+  void getScatterPlotLabels(const OT::Sample& inS,
+                            QStringList& inNames,
+                            QStringList& inAxisNames,
+                            QStringList& outNames,
+                            QStringList& outAxisNames);
 
 public slots:
-  void evaluateOutputs();
-  void updateTable();
-  void scatterPlotsTabWidgetIndexChanged();
-  void showHideGraphConfigurationWidget(int indexTab);
-  void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+  void updateVariablesListVisibility(int indexTab);
 
 private:
   DesignOfExperiment designOfExperiment_;
   QGroupBox * variablesGroupBox_;
   OTguiListWidget * variablesListWidget_;
   QTabWidget * tabWidget_;
-  QTabWidget * tablesTabWidget_;
-  QTabWidget * scatterPlotsTabWidget_;
-  GraphConfigurationWidget * scatterPlotsConfigurationWidget_;
-  PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
-  PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
 };
 }
 #endif

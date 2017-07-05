@@ -591,7 +591,7 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
   if (analysisType == "ModelEvaluation")
     resultWindow = new ModelEvaluationResultWindow(item, this);
   else if (analysisType == "MonteCarloAnalysis")
-    resultWindow = new MonteCarloResultWindow(item);
+    resultWindow = new MonteCarloResultWindow(item, this);
   else if (analysisType == "TaylorExpansionMomentsAnalysis")
     resultWindow = new TaylorExpansionMomentsResultWindow(item);
   else if (analysisType == "SobolAnalysis")
@@ -605,7 +605,7 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
   else if (analysisType == "FORMAnalysis")
     resultWindow = new ApproximationResultWindow(item, this);
   else if (analysisType == "DataAnalysis")
-    resultWindow = new DataAnalysisResultWindow(item);
+    resultWindow = new DataAnalysisResultWindow(item, this);
   else if (analysisType == "FunctionalChaosAnalysis")
     resultWindow = new FunctionalChaosResultWindow(item, this);
   else if (analysisType == "KrigingAnalysis")

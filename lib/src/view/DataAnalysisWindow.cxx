@@ -28,6 +28,22 @@
 #include "otgui/ParametersTableView.hxx"
 #include "otgui/ExportableTableView.hxx"
 #include "otgui/SampleTableModel.hxx"
+#include "otgui/WidgetBoundToDockWidget.hxx"
+#include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/PlotMatrixConfigurationWidget.hxx"
+
+#ifdef OTGUI_HAVE_PARAVIEW
+#include "otgui/PVServerManagerInterface.hxx"
+#include "otgui/PVSpreadSheetViewWidget.hxx"
+#include "otgui/PVParCooViewWidget.hxx"
+#include "otgui/PVMatrixPlotViewWidget.hxx"
+#include "otgui/PVPlotSettingWidget.hxx"
+#include "otgui/PVXYChartViewWidget.hxx"
+#include "otgui/PVXYChartSettingWidget.hxx"
+
+#include <pqLinksModel.h>
+#include <pqApplicationCore.h>
+#endif
 
 #include <QVBoxLayout>
 #include <QScrollArea>
@@ -39,8 +55,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-DataAnalysisWindow::DataAnalysisWindow(AnalysisItem * item)
-  : ResultWindow(item)
+DataAnalysisWindow::DataAnalysisWindow(AnalysisItem * item, QWidget * parent)
+  : ResultWindow(item, parent)
   , result_()
   , resultsSampleIsValid_(true)
   , sampleSizeTitle_(tr("Sample size"))
@@ -54,24 +70,9 @@ DataAnalysisWindow::DataAnalysisWindow(AnalysisItem * item)
   , variablesGroupBox_(0)
   , variablesListWidget_(0)
   , tabWidget_(new QTabWidget)
-  , scatterPlotsTabWidget_(0)
-  , scatterPlotsConfigurationWidget_(0)
-  , plotMatrixConfigurationWidget_(0)
-  , plotMatrix_X_X_ConfigurationWidget_(0)
   , probaSpinBox_(0)
   , quantileSpinBox_(0)
 {
-}
-
-
-DataAnalysisWindow::~DataAnalysisWindow()
-{
-  delete plotMatrixConfigurationWidget_;
-  delete plotMatrix_X_X_ConfigurationWidget_;
-  delete scatterPlotsConfigurationWidget_;
-  plotMatrixConfigurationWidget_ = 0;
-  plotMatrix_X_X_ConfigurationWidget_ = 0;
-  scatterPlotsConfigurationWidget_ = 0;
 }
 
 
@@ -99,228 +100,33 @@ void DataAnalysisWindow::buildInterface()
   outputsLayoutGroupBox->addWidget(variablesListWidget_);
 
   mainWidget->addWidget(variablesGroupBox_);
-  variablesGroupBox_->hide();
   mainWidget->setStretchFactor(0, 1);
 
-  // first tab: Summary -----------------------------
-  QWidget * tab = new QWidget;
-  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
-
-  // if the sample is valid:
-  if (resultsSampleIsValid_)
-  {
-    QScrollArea * scrollArea = new QScrollArea;
-    scrollArea->setWidgetResizable(true);
-    tabLayout->setSizeConstraint(QLayout::SetFixedSize);
-
-    // -- results --
-    QVBoxLayout * vbox = new QVBoxLayout;
-
-    // stop criteria
-    QString groupBoxTitle = (result_.getElapsedTime() > 0.)? tr("Stop criteria") : tr("");
-    QGroupBox * parametersGroupBox = new QGroupBox(groupBoxTitle);
-    QVBoxLayout * parametersGroupBoxLayout = new QVBoxLayout(parametersGroupBox);
-
-    QStringList namesList;
-    // elapsed time
-    if (result_.getElapsedTime() > 0.)
-      namesList << tr("Elapsed time");
-    // sample size
-    namesList << sampleSizeTitle_;
-
-    QStringList valuesList;
-    if (result_.getElapsedTime() > 0.)
-      valuesList << QString::number(result_.getElapsedTime()) + " s";
-    valuesList << QString::number(result_.getSample().getSize());
-
-    ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
-    parametersGroupBoxLayout->addWidget(table);
-    parametersGroupBoxLayout->addStretch();
-    vbox->addWidget(parametersGroupBox);
-
-    // min/max table
-    MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(result_, false);
-    vbox->addWidget(minMaxTableGroupBox);
-    connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
-
-    // moments estimation
-    try
-    {
-      MomentsEstimatesTableGroupBox * estimatesGroupBox = new MomentsEstimatesTableGroupBox(result_, isConfidenceIntervalRequired_, levelConfidenceInterval_);
-      vbox->addWidget(estimatesGroupBox);
-      connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), estimatesGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
-    }
-    catch (std::exception & ex)
-    {
-      qDebug() << "Error: In DataAnalysisWindow::buildInterface when creating the MomentsEstimatesTableGroupBox " << ex.what();
-    }
-
-    // quantiles
-    QGridLayout * quantLayout = new QGridLayout;
-
-    // Probability
-    QLabel * label = new QLabel(tr("Probability"));
-    label->setStyleSheet("font: bold;");
-    quantLayout->addWidget(label, 0, 0);
-    probaSpinBox_ = new DoubleSpinBox;
-    label->setBuddy(probaSpinBox_);
-    probaSpinBox_->setMinimum(0.0);
-    probaSpinBox_->setMaximum(1.0);
-    probaSpinBox_->setSingleStep(0.01);
-    quantLayout->addWidget(probaSpinBox_, 0, 1);
-    // Quantile
-    label = new QLabel(tr("Quantile"));
-    label->setStyleSheet("font: bold;");
-    quantLayout->addWidget(label, 1, 0);
-    quantileSpinBox_ = new DoubleSpinBox;
-    label->setBuddy(quantileSpinBox_);
-    quantileSpinBox_->setDecimals(8);
-    quantLayout->addWidget(quantileSpinBox_, 1, 1);
-
-    connect(probaSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(probaValueChanged(double)));
-    connect(quantileSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(quantileValueChanged(double)));
-
-    vbox->addLayout(quantLayout);
-    updateSpinBoxes();
-
-    tabLayout->addLayout(vbox);
-    tabLayout->addStretch();
-
-    scrollArea->setWidget(tab);
-    tabWidget_->addTab(scrollArea, tr("Summary"));
-  }
-  // if the results sample contains NAN
-  else
-  {
-    QLabel * summaryErrorMessage = new QLabel(tr("Computation failed. Some results are not available."));
-    summaryErrorMessage->setWordWrap(true);
-    tabLayout->addWidget(summaryErrorMessage);
-    tabLayout->addStretch();
-    tabWidget_->addTab(tab, tr("Summary"));
-  }
-
-  // second tab: PDF/CDF ------------------------------
-
-  // if the sample is valid:
-  if (resultsSampleIsValid_)
-  {
-    tab = getPDF_CDFWidget();
-  }
-  // if the results sample contains NAN
-  else
-  {
-    tab = new QWidget;
-    tabLayout = new QVBoxLayout(tab);
-    QLabel * summaryErrorMessage = new QLabel(tr("Computation failed. Some results are not available."));
-    summaryErrorMessage->setWordWrap(true);
-    tabLayout->addWidget(summaryErrorMessage);
-    tabLayout->addStretch();
-  }
-  tabWidget_->addTab(tab, tr("PDF/CDF"));
-
-  // third tab: box plots ---------------------------
-
-  // if the sample is valid:
-  if (resultsSampleIsValid_)
-  {
-    tab = getBoxPlotWidget();
-  }
-  // if the results sample contains NAN
-  else
-  {
-    tab = new QWidget;
-    tabLayout = new QVBoxLayout(tab);
-    QLabel * summaryErrorMessage = new QLabel(tr("Computation failed. Some results are not available."));
-    summaryErrorMessage->setWordWrap(true);
-    tabLayout->addWidget(summaryErrorMessage);
-    tabLayout->addStretch();
-  }
-  tabWidget_->addTab(tab, tr("Box plots"));
-
-  // fourth tab: scatter plots ------------------------
-
-  scatterPlotsTabWidget_ = new QTabWidget;
-
-  // if the sample is valid:
-  if (resultsSampleIsValid_)
-  {
-    tab = getScatterPlotsWidget();
-  }
-  // if the results sample contains NAN
-  else
-  {
-    tab = new QWidget;
-    tabLayout = new QVBoxLayout(tab);
-    QLabel * summaryErrorMessage = new QLabel(tr("Computation failed. Some results are not available."));
-    summaryErrorMessage->setWordWrap(true);
-    tabLayout->addWidget(summaryErrorMessage);
-    tabLayout->addStretch();
-  }
-  scatterPlotsTabWidget_->addTab(tab, tr("Scatter plots"));
-
-  // fourth tab: plot matrix X-X ----------------------
-
-  if (result_.getInputSample().getSize())
-  {
-    tab = new PlotMatrixWidget(result_.getInputSample(), result_.getInputSample());
-    plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
-
-    scatterPlotsTabWidget_->addTab(tab, tr("Plot matrix X-X"));
-
-  // fourth tab: plot matrix Y-X ----------------------
-
-    if (result_.getOutputSample().getSize())
-    {
-      // if the sample is valid:
-      if (resultsSampleIsValid_)
-      {
-        tab = new PlotMatrixWidget(result_.getInputSample(), result_.getOutputSample());
-        plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
-      }
-      // if the results sample contains NAN
-      else
-      {
-        tab = new QWidget;
-        tabLayout = new QVBoxLayout(tab);
-        QLabel * summaryErrorMessage = new QLabel(tr("Computation failed. Some results are not available."));
-        summaryErrorMessage->setWordWrap(true);
-        tabLayout->addWidget(summaryErrorMessage);
-        tabLayout->addStretch();
-      }
-      scatterPlotsTabWidget_->addTab(tab, tr("Plot matrix Y-X"));
-    }
-    connect(scatterPlotsTabWidget_, SIGNAL(currentChanged(int)), this, SLOT(scatterPlotsTabWidgetIndexChanged()));
-    tabWidget_->addTab(scatterPlotsTabWidget_, tr("Scatter plots"));
-  }
-
-  // fifth tab: Table --------------------------------
+  // tab: Summary
+  addSummaryTab();
+  // tab: PDF/CDF
+  addPDF_CDFTab();
+  // tab: box plots
+  addBoxPlotTab();
+#ifdef OTGUI_HAVE_PARAVIEW
+  addParaviewWidgetsTabs();
+#else
+  // tab: Table --------------------------------
   // table if MonteCarlo result
   if (showTable_)
-  {
-    QWidget * tab = new QWidget;
-    QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+    addTableTab();
+  // tab: plot matrix
+  addPlotMatrixTab();
+  // tab: scatter plots
+  addScatterPlotsTab();
+#endif
 
-    ExportableTableView * tabResultView = new ExportableTableView;
-    tabResultView->setSortingEnabled(true);
-
-    SampleTableModel * tabResultModel = new SampleTableModel(result_.getSample(), tabResultView);
-    QSortFilterProxyModel * proxyModel = new QSortFilterProxyModel(tabResultView);
-    proxyModel->setSourceModel(tabResultModel);
-
-    tabResultView->setModel(proxyModel);
-    tabResultView->sortByColumn(0, Qt::AscendingOrder);
-
-    tabLayout->addWidget(tabResultView);
-
-    tabWidget_->addTab(tab, tr("Table"));
-  }
-
-  // sixth tab --------------------------------
+  // tab: Parameters --------------------------------
   if (parametersWidget_)
     tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 
   //
-  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
+  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(updateVariablesListVisibility(int)));
 
   mainWidget->addWidget(tabWidget_);
   mainWidget->setStretchFactor(1, 10);
@@ -329,7 +135,94 @@ void DataAnalysisWindow::buildInterface()
 }
 
 
-QWidget* DataAnalysisWindow::getPDF_CDFWidget()
+void DataAnalysisWindow::addSummaryTab()
+{
+  QWidget * tab = new QWidget;
+  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+  tabLayout->setSizeConstraint(QLayout::SetFixedSize);
+
+  // -- results --
+  QVBoxLayout * vbox = new QVBoxLayout;
+
+  // stop criteria
+  QString groupBoxTitle = (result_.getElapsedTime() > 0.) ? tr("Stop criteria") : tr("");
+  QGroupBox * parametersGroupBox = new QGroupBox(groupBoxTitle);
+  QVBoxLayout * parametersGroupBoxLayout = new QVBoxLayout(parametersGroupBox);
+
+  QStringList namesList;
+  // elapsed time
+  if (result_.getElapsedTime() > 0.)
+    namesList << tr("Elapsed time");
+  // sample size
+  namesList << sampleSizeTitle_;
+
+  QStringList valuesList;
+  if (result_.getElapsedTime() > 0.)
+    valuesList << QString::number(result_.getElapsedTime()) + " s";
+  valuesList << QString::number(result_.getSample().getSize());
+
+  ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
+  parametersGroupBoxLayout->addWidget(table);
+  parametersGroupBoxLayout->addStretch();
+  vbox->addWidget(parametersGroupBox);
+
+  // min/max table
+  MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(result_, false);
+  vbox->addWidget(minMaxTableGroupBox);
+  connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
+
+  // moments estimation
+  try
+  {
+    MomentsEstimatesTableGroupBox * estimatesGroupBox = new MomentsEstimatesTableGroupBox(result_, isConfidenceIntervalRequired_, levelConfidenceInterval_);
+    vbox->addWidget(estimatesGroupBox);
+    connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), estimatesGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
+  }
+  catch (std::exception & ex)
+  {
+    qDebug() << "Error: In DataAnalysisWindow::buildInterface when creating the MomentsEstimatesTableGroupBox " << ex.what();
+  }
+
+  // quantiles
+  QGridLayout * quantLayout = new QGridLayout;
+
+  // Probability
+  QLabel * label = new QLabel(tr("Probability"));
+  label->setStyleSheet("font: bold;");
+  quantLayout->addWidget(label, 0, 0);
+  probaSpinBox_ = new DoubleSpinBox;
+  label->setBuddy(probaSpinBox_);
+  probaSpinBox_->setMinimum(0.0);
+  probaSpinBox_->setMaximum(1.0);
+  probaSpinBox_->setSingleStep(0.01);
+  quantLayout->addWidget(probaSpinBox_, 0, 1);
+  // Quantile
+  label = new QLabel(tr("Quantile"));
+  label->setStyleSheet("font: bold;");
+  quantLayout->addWidget(label, 1, 0);
+  quantileSpinBox_ = new DoubleSpinBox;
+  label->setBuddy(quantileSpinBox_);
+  quantileSpinBox_->setDecimals(8);
+  quantLayout->addWidget(quantileSpinBox_, 1, 1);
+
+  connect(probaSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(probaValueChanged(double)));
+  connect(quantileSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(quantileValueChanged(double)));
+
+  vbox->addLayout(quantLayout);
+  updateSpinBoxes();
+
+  tabLayout->addLayout(vbox);
+  tabLayout->addStretch();
+
+  scrollArea->setWidget(tab);
+  tabWidget_->addTab(scrollArea, tr("Summary"));
+}
+
+
+void DataAnalysisWindow::addPDF_CDFTab()
 {
   ResizableStackedWidget * tabStackedWidget = new ResizableStackedWidget;
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), tabStackedWidget, SLOT(setCurrentIndex(int)));
@@ -347,47 +240,57 @@ QWidget* DataAnalysisWindow::getPDF_CDFWidget()
   // indices with good order
   ind.add(inInd);
 
-  for (int i=0; i<variablesNames.size(); ++i)
+  for (int i = 0; i < variablesNames.size(); ++i)
   {
-    QVector<PlotWidget*> listPlotWidgets;
+    WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
+    QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
-    PlotWidget * plot = new PlotWidget(tr("distributionPDF"));
+    ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
+
     // PDF
-    plot->plotHistogram(result_.getSample().getMarginal(ind[i]));
+    PlotWidget * pdfPlot = new PlotWidget(tr("distributionPDF"));
+    pdfPlot->plotHistogram(result_.getSample().getMarginal(ind[i]));
     if (result_.getPDF()[ind[i]].getSize())
-      plot->plotCurve(result_.getPDF()[ind[i]]);
-    plot->setTitle(tr("PDF:") + " " + variablesNames[i]);
-    plot->setAxisTitle(QwtPlot::xBottom, variablesAxisTitles[i]);
-    plot->setAxisTitle(QwtPlot::yLeft, tr("Density"));
+      pdfPlot->plotCurve(result_.getPDF()[ind[i]]);
+    pdfPlot->setTitle(tr("PDF:") + " " + variablesNames[i]);
+    pdfPlot->setAxisTitle(QwtPlot::xBottom, variablesAxisTitles[i]);
+    pdfPlot->setAxisTitle(QwtPlot::yLeft, tr("Density"));
 
-    listPlotWidgets.append(plot);
+    stackedWidget->addWidget(pdfPlot);
 
     // CDF
-    plot = new PlotWidget(tr("distributionCDF"));
-    plot->plotHistogram(result_.getSample().getMarginal(ind[i]), 1);
+    PlotWidget * cdfPlot = new PlotWidget(tr("distributionCDF"));
+    cdfPlot->plotHistogram(result_.getSample().getMarginal(ind[i]), 1);
     if (result_.getCDF()[ind[i]].getSize())
-      plot->plotCurve(result_.getCDF()[ind[i]]);
-    plot->setTitle(tr("CDF:") + " " + variablesNames[i]);
-    plot->setAxisTitle(QwtPlot::xBottom, variablesAxisTitles[i]);
-    plot->setAxisTitle(QwtPlot::yLeft, tr("CDF"));
+      cdfPlot->plotCurve(result_.getCDF()[ind[i]]);
+    cdfPlot->setTitle(tr("CDF:") + " " + variablesNames[i]);
+    cdfPlot->setAxisTitle(QwtPlot::xBottom, variablesAxisTitles[i]);
+    cdfPlot->setAxisTitle(QwtPlot::yLeft, tr("CDF"));
 
-    listPlotWidgets.append(plot);
+    stackedWidget->addWidget(cdfPlot);
 
-    // PlotWidgetWithGraphSetting
-    PlotWidgetWithGraphSetting * plotWidget = new PlotWidgetWithGraphSetting(i, listPlotWidgets, GraphConfigurationWidget::PDFResult);
+    // Graph Setting
+    QVector<PlotWidget*> listPlotWidgets;
+    listPlotWidgets.append(pdfPlot);
+    listPlotWidgets.append(cdfPlot);
+    GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(listPlotWidgets,
+                                                                           QStringList(),
+                                                                           QStringList(),
+                                                                           GraphConfigurationWidget::PDFResult,
+                                                                           this);
+    connect(graphSetting, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
-    connect(plotWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-    connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), plotWidget, SLOT(showHideGraphConfigurationWidget(int)));
-    connect(this, SIGNAL(stateChanged(int)), plotWidget, SLOT(showHideGraphConfigurationWidget(int)));
+    plotWidget->setDockWidget(graphSetting);
+    plotWidgetLayout->addWidget(stackedWidget);
 
     tabStackedWidget->addWidget(plotWidget);
   }
 
-  return tabStackedWidget;
+  tabWidget_->addTab(tabStackedWidget, tr("PDF/CDF"));
 }
 
 
-QWidget* DataAnalysisWindow::getBoxPlotWidget()
+void DataAnalysisWindow::addBoxPlotTab()
 {
   ResizableStackedWidget * tabStackedWidget = new ResizableStackedWidget;
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), tabStackedWidget, SLOT(setCurrentIndex(int)));
@@ -405,38 +308,59 @@ QWidget* DataAnalysisWindow::getBoxPlotWidget()
   // indices with good order
   ind.add(inInd);
 
-  for (int i=0; i<variablesNames.size(); ++i)
+  for (int i = 0; i < variablesNames.size(); ++i)
   {
-    QVector<PlotWidget*> listBoxPlotWidgets;
+    WidgetBoundToDockWidget * boxPlotWidget = new WidgetBoundToDockWidget(this);
+    QVBoxLayout * boxPlotWidgetLayout = new QVBoxLayout(boxPlotWidget);
 
     PlotWidget * plot = new PlotWidget(tr("boxplot"));
 
     const double median = result_.getMedian()[ind[i]][0];
     const double Q1 = result_.getFirstQuartile()[ind[i]][0];
     const double Q3 = result_.getThirdQuartile()[ind[i]][0];
-    plot->plotBoxPlot(median, Q1, Q3, Q1 - 1.5*(Q3-Q1), Q3 + 1.5*(Q3-Q1), result_.getOutliers()[ind[i]]);
+    plot->plotBoxPlot(median, Q1, Q3, Q1 - 1.5 * (Q3 - Q1), Q3 + 1.5 * (Q3 - Q1), result_.getOutliers()[ind[i]]);
     plot->setTitle(tr("Box plot:") + " " + variablesNames[i]);
     plot->setAxisTitle(QwtPlot::yLeft, variablesAxisTitles[i]);
 
+    boxPlotWidgetLayout->addWidget(plot);
+
+    // Graph Setting
+    QVector<PlotWidget*> listBoxPlotWidgets;
     listBoxPlotWidgets.append(plot);
+    GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(listBoxPlotWidgets,
+                                                                           QStringList(),
+                                                                           QStringList(),
+                                                                           GraphConfigurationWidget::NoType,
+                                                                           this);
+    boxPlotWidget->setDockWidget(graphSetting);
 
-    // PlotWidgetWithGraphSetting
-    PlotWidgetWithGraphSetting * plotWidget = new PlotWidgetWithGraphSetting(i, listBoxPlotWidgets, GraphConfigurationWidget::NoType);
-    connect(plotWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-    connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), plotWidget, SLOT(showHideGraphConfigurationWidget(int)));
-    connect(this, SIGNAL(stateChanged(int)), plotWidget, SLOT(showHideGraphConfigurationWidget(int)));
-
-    tabStackedWidget->addWidget(plotWidget);
+    tabStackedWidget->addWidget(boxPlotWidget);
   }
 
-  return tabStackedWidget;
+  tabWidget_->addTab(tabStackedWidget, tr("Box plots"));
 }
 
 
-QWidget* DataAnalysisWindow::getScatterPlotsWidget()
+void DataAnalysisWindow::addPlotMatrixTab()
 {
-  QWidget * tab = new QWidget;
-  QVBoxLayout * scatterPlotLayout = new QVBoxLayout(tab);
+  WidgetBoundToDockWidget * matrixTabWidget = new WidgetBoundToDockWidget(this);
+  QVBoxLayout * matrixTabWidgetLayout = new QVBoxLayout(matrixTabWidget);
+  PlotMatrixWidget * plotMatrixWidget = new PlotMatrixWidget(result_.getSample(), result_.getSample());
+  plotMatrixWidget->setInputNames(stochInputNames_);
+  plotMatrixWidget->setOutputNames(outputNames_);
+  matrixTabWidgetLayout->addWidget(plotMatrixWidget);
+
+  PlotMatrixConfigurationWidget * plotMatrixSettingWidget = new PlotMatrixConfigurationWidget(plotMatrixWidget, this);
+  matrixTabWidget->setDockWidget(plotMatrixSettingWidget);
+
+  tabWidget_->addTab(matrixTabWidget, tr("Plot matrix"));
+}
+
+
+void DataAnalysisWindow::addScatterPlotsTab()
+{
+  WidgetBoundToDockWidget * scatterWidget = new WidgetBoundToDockWidget;
+  QVBoxLayout * scatterWidgetLayout = new QVBoxLayout(scatterWidget);
 
   QVector<PlotWidget*> listScatterPlotWidgets =
     DesignOfExperimentWindow::GetListScatterPlots(result_.getInputSample(),
@@ -451,12 +375,127 @@ QWidget* DataAnalysisWindow::getScatterPlotsWidget()
   for (int i=0; i<listScatterPlotWidgets.size(); ++i)
     stackedWidget->addWidget(listScatterPlotWidgets[i]);
 
-  scatterPlotLayout->addWidget(stackedWidget);
-  scatterPlotsConfigurationWidget_ = new GraphConfigurationWidget(listScatterPlotWidgets, stochInputNames_, outputNames_, GraphConfigurationWidget::Scatter);
-  connect(scatterPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+  GraphConfigurationWidget * scatterSettingWidget = new GraphConfigurationWidget(listScatterPlotWidgets,
+                                                                                 stochInputNames_,
+                                                                                 outputNames_,
+                                                                                 GraphConfigurationWidget::Scatter,
+                                                                                 this);
+  scatterWidget->setDockWidget(scatterSettingWidget);
+  connect(scatterSettingWidget, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
-  return tab;
+  scatterWidgetLayout->addWidget(stackedWidget);
+  tabWidget_->addTab(scatterWidget, tr("Scatter plots"));
 }
+
+
+void DataAnalysisWindow::addTableTab()
+{
+  QWidget * tab = new QWidget;
+  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+
+  ExportableTableView * tabResultView = new ExportableTableView;
+  tabResultView->setSortingEnabled(true);
+
+  SampleTableModel * tabResultModel = new SampleTableModel(result_.getSample(), tabResultView);
+  QSortFilterProxyModel * proxyModel = new QSortFilterProxyModel(tabResultView);
+  proxyModel->setSourceModel(tabResultModel);
+
+  tabResultView->setModel(proxyModel);
+  tabResultView->sortByColumn(0, Qt::AscendingOrder);
+
+  tabLayout->addWidget(tabResultView);
+
+  tabWidget_->addTab(tab, tr("Table"));
+}
+
+
+#ifdef OTGUI_HAVE_PARAVIEW
+void DataAnalysisWindow::addParaviewWidgetsTabs()
+{
+  // table tab
+  // with paraview the table is always shown in order to use the selection behavior
+  PVSpreadSheetViewWidget * pvSpreadSheetWidget = new PVSpreadSheetViewWidget(this, new PVServerManagerInterface);
+  pvSpreadSheetWidget->setData(result_.getSample());
+
+  tabWidget_->addTab(pvSpreadSheetWidget, tr("Table"));
+
+  // if only one variable : do not need the following graphs
+  if (result_.getSample().getDimension() < 2)
+    return;
+
+  // cobweb tab --------------------------------
+  WidgetBoundToDockWidget * cobwebTabWidget = new WidgetBoundToDockWidget(this);
+  QVBoxLayout * cobwebTabWidgetLayout = new QVBoxLayout(cobwebTabWidget);
+  PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, new PVServerManagerInterface);
+  cobwebWidget->setData(result_.getSample());
+  cobwebTabWidgetLayout->addWidget(cobwebWidget);
+
+  PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget, this);
+  cobwebTabWidget->setDockWidget(cobwebSettingWidget);
+
+  tabWidget_->addTab(cobwebTabWidget, tr("Cobweb plot"));
+
+  // plot matrix tab --------------------------------
+  WidgetBoundToDockWidget * matrixTabWidget = new WidgetBoundToDockWidget(this);
+  QVBoxLayout * matrixTabWidgetLayout = new QVBoxLayout(matrixTabWidget);
+  PVMatrixPlotViewWidget * pvmatrixWidget = new PVMatrixPlotViewWidget(this, new PVServerManagerInterface);
+  pvmatrixWidget->setData(result_.getSample());
+  // the variables are automatically sorted : use setAxisToShow with the order of the sample
+  pvmatrixWidget->setAxisToShow(result_.getSample().getDescription());
+  matrixTabWidgetLayout->addWidget(pvmatrixWidget);
+
+  tabWidget_->addTab(matrixTabWidget, tr("Plot matrix"));
+
+  // setting widget
+  PVPlotSettingWidget * matrixSettingWidget = new PVPlotSettingWidget(pvmatrixWidget, this);
+  matrixTabWidget->setDockWidget(matrixSettingWidget);
+
+  // scatter plots tab --------------------------------
+  WidgetBoundToDockWidget * scatterTabWidget = new WidgetBoundToDockWidget(this);
+  QVBoxLayout * scatterTabWidgetLayout = new QVBoxLayout(scatterTabWidget);
+
+  // sample
+  PVXYChartViewWidget * sampleScatterPlotWidget = new PVXYChartViewWidget(this, new PVServerManagerInterface);
+  sampleScatterPlotWidget->PVViewWidget::setData(result_.getSample());
+  if ((stochInputNames_ + outputNames_) != (inAxisTitles_ + outAxisTitles_))
+    sampleScatterPlotWidget->setAxisTitles(stochInputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);
+  scatterTabWidgetLayout->addWidget(sampleScatterPlotWidget);
+
+  // sample rank
+  const Sample sampleRank(result_.getSample().rank() / result_.getSample().getSize());
+  PVXYChartViewWidget * sampleRankScatterPlotWidget = new PVXYChartViewWidget(this, new PVServerManagerInterface);
+  sampleRankScatterPlotWidget->PVViewWidget::setData(sampleRank);
+  if ((stochInputNames_ + outputNames_) != (inAxisTitles_ + outAxisTitles_))
+    sampleRankScatterPlotWidget->setAxisTitles(stochInputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);
+  scatterTabWidgetLayout->addWidget(sampleRankScatterPlotWidget);
+
+  PVXYChartSettingWidget * scatterSettingWidget = new PVXYChartSettingWidget(sampleScatterPlotWidget,
+                                                                             sampleRankScatterPlotWidget,
+                                                                             stochInputNames_,
+                                                                             outputNames_,
+                                                                             PVXYChartSettingWidget::Scatter,
+                                                                             this);
+  scatterTabWidget->setDockWidget(scatterSettingWidget);
+
+  tabWidget_->addTab(scatterTabWidget, tr("Scatter plots"));
+
+  // links model
+  pqLinksModel * linksModel = pqApplicationCore::instance()->getLinksModel();
+
+  // There are selection behavior errors if windows use the same links names: a link name must be unique.
+  // The pointers are uniques, so we use them to create an unique name...find a better and easier way.
+  String aStr = (OSS() << cobwebWidget->getProxy() << pvmatrixWidget->getProxy()).str();
+  linksModel->addSelectionLink(aStr.c_str(), cobwebWidget->getProxy(), pvmatrixWidget->getProxy());
+  aStr = (OSS() << pvSpreadSheetWidget->getProxy() << pvmatrixWidget->getProxy()).str();
+  linksModel->addSelectionLink(aStr.c_str(), pvSpreadSheetWidget->getProxy(), pvmatrixWidget->getProxy());
+  aStr = (OSS() << cobwebWidget->getProxy() << pvSpreadSheetWidget->getProxy()).str();
+  linksModel->addSelectionLink(aStr.c_str(), cobwebWidget->getProxy(), pvSpreadSheetWidget->getProxy());
+  aStr = (OSS() << sampleScatterPlotWidget->getProxy() << pvSpreadSheetWidget->getProxy()).str();
+  linksModel->addSelectionLink(aStr.c_str(), sampleScatterPlotWidget->getProxy(), pvSpreadSheetWidget->getProxy());
+  aStr = (OSS() << sampleRankScatterPlotWidget->getProxy() << pvSpreadSheetWidget->getProxy()).str();
+  linksModel->addSelectionLink(aStr.c_str(), sampleRankScatterPlotWidget->getProxy(), pvSpreadSheetWidget->getProxy());
+}
+#endif
 
 
 void DataAnalysisWindow::updateSpinBoxes(int indexList)
@@ -509,62 +548,8 @@ void DataAnalysisWindow::quantileValueChanged(double quantile)
 }
 
 
-void DataAnalysisWindow::scatterPlotsTabWidgetIndexChanged()
+void DataAnalysisWindow::updateVariablesListVisibility(int indexTab)
 {
-  showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-}
-
-
-void DataAnalysisWindow::showHideGraphConfigurationWidget(int indexTab)
-{
-  switch (indexTab)
-  {
-    // if a plotWidget is visible
-    case 1: // PDF-CDF graph
-    case 2: // box plot
-      emit stateChanged(variablesListWidget_->currentRow());
-      variablesGroupBox_->show();
-      break;
-    case 3: // scatter plots
-      if (scatterPlotsTabWidget_->currentIndex() == 0) // scatter plots
-      {
-        if (scatterPlotsConfigurationWidget_)
-          if (!scatterPlotsConfigurationWidget_->isVisible())
-            emit graphWindowActivated(scatterPlotsConfigurationWidget_);
-      }
-      else if (scatterPlotsTabWidget_->currentIndex() == 1) // plot matrix X-X
-      {
-        if (plotMatrix_X_X_ConfigurationWidget_)
-          if (!plotMatrix_X_X_ConfigurationWidget_->isVisible())
-            emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
-      }
-      else if (scatterPlotsTabWidget_->currentIndex() == 2) // plot matrix Y-X
-      {
-        if (plotMatrixConfigurationWidget_)
-          if (!plotMatrixConfigurationWidget_->isVisible())
-            emit graphWindowActivated(plotMatrixConfigurationWidget_);
-      }
-      variablesGroupBox_->hide();
-      break;
-    // if no plotWidget is visible. Summary; Table; Parameters
-    default:
-    {
-      emit graphWindowDeactivated();
-      variablesGroupBox_->show();
-      break;
-    }
-  }
-}
-
-
-void DataAnalysisWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
-{
-  if (oldState == Qt::WindowMaximized)
-    return;
-
-  if (newState == Qt::WindowFullScreen || newState == (Qt::WindowActive|Qt::WindowMaximized))
-    showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-  else if (newState == Qt::WindowNoState || newState == Qt::WindowMinimized || newState == (Qt::WindowActive|Qt::WindowMinimized))
-    showHideGraphConfigurationWidget(-1);
+  variablesGroupBox_->setVisible(indexTab == 0 || indexTab == 1 || indexTab == 2);
 }
 }

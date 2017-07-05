@@ -25,6 +25,23 @@
 #include "otgui/DesignOfExperimentAnalysis.hxx"
 #include "otgui/ExportableTableView.hxx"
 #include "otgui/SampleTableModel.hxx"
+#include "otgui/WidgetBoundToDockWidget.hxx"
+#include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/PlotMatrixConfigurationWidget.hxx"
+#include "otgui/QtTools.hxx"
+
+#ifdef OTGUI_HAVE_PARAVIEW
+#include "otgui/PVServerManagerInterface.hxx"
+#include "otgui/PVSpreadSheetViewWidget.hxx"
+#include "otgui/PVParCooViewWidget.hxx"
+#include "otgui/PVMatrixPlotViewWidget.hxx"
+#include "otgui/PVXYChartViewWidget.hxx"
+#include "otgui/PVXYChartSettingWidget.hxx"
+#include "otgui/PVPlotSettingWidget.hxx"
+
+#include <pqLinksModel.h>
+#include <pqApplicationCore.h>
+#endif
 
 #include <QVBoxLayout>
 #include <QScrollArea>
@@ -35,59 +52,34 @@ using namespace OT;
 
 namespace OTGUI {
 
-DesignOfExperimentWindow::DesignOfExperimentWindow(DesignOfExperimentItem * item)
-  : OTguiSubWindow(item)
-  , designOfExperiment_(item->getDesignOfExperiment())
-  , variablesGroupBox_(0)
-  , variablesListWidget_(0)
-  , tabWidget_(0)
-  , tablesTabWidget_(0)
-  , scatterPlotsTabWidget_(0)
-  , scatterPlotsConfigurationWidget_(0)
-  , plotMatrix_X_X_ConfigurationWidget_(0)
-  , plotMatrixConfigurationWidget_(0)
-{
-  buildInterface();
-  connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
-}
-
-
-DesignOfExperimentWindow::DesignOfExperimentWindow(AnalysisItem* item)
-  : OTguiSubWindow(item)
+DesignOfExperimentWindow::DesignOfExperimentWindow(AnalysisItem* item, QWidget * parent)
+  : OTguiSubWindow(item, parent)
   , designOfExperiment_()
   , variablesGroupBox_(0)
   , variablesListWidget_(0)
   , tabWidget_(0)
-  , tablesTabWidget_(0)
-  , scatterPlotsTabWidget_(0)
-  , scatterPlotsConfigurationWidget_(0)
-  , plotMatrix_X_X_ConfigurationWidget_(0)
-  , plotMatrixConfigurationWidget_(0)
 {
-  if (!dynamic_cast<DesignOfExperimentAnalysis*>(item->getAnalysis().getImplementation().get()))
+  DesignOfExperimentAnalysis * analysis_ptr = dynamic_cast<DesignOfExperimentAnalysis*>(item->getAnalysis().getImplementation().get());
+  if (!analysis_ptr)
     throw InvalidArgumentException (HERE) << "The analysis must be a DesignOfExperimentAnalysis";
 
-  designOfExperiment_ = dynamic_cast<DesignOfExperimentAnalysis*>(item->getAnalysis().getImplementation().get())->getDesignOfExperiment();
+  designOfExperiment_ = analysis_ptr->getDesignOfExperiment();
 
   buildInterface();
-  connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
-}
-
-
-DesignOfExperimentWindow::~DesignOfExperimentWindow()
-{
-  delete scatterPlotsConfigurationWidget_;
-  delete plotMatrix_X_X_ConfigurationWidget_;
-  delete plotMatrixConfigurationWidget_;
-  scatterPlotsConfigurationWidget_ = 0;
-  plotMatrix_X_X_ConfigurationWidget_ = 0;
-  plotMatrixConfigurationWidget_ = 0;
 }
 
 
 void DesignOfExperimentWindow::buildInterface()
 {
   setWindowTitle(tr("Design of experiment"));
+
+  // output names/descriptions
+  const Description outputDescription(designOfExperiment_.getOutputSample().getDescription());
+  QStringList outputNames;
+  for (UnsignedInteger i = 0; i < outputDescription.getSize(); ++i)
+  {
+    outputNames << QString::fromUtf8(outputDescription[i].c_str());
+  }
 
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
@@ -97,53 +89,275 @@ void DesignOfExperimentWindow::buildInterface()
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(variablesGroupBox_);
 
   variablesListWidget_ = new OTguiListWidget;
+  variablesListWidget_->addItems(outputNames);
   outputsLayoutGroupBox->addWidget(variablesListWidget_);
 
   mainWidget->addWidget(variablesGroupBox_);
-  variablesGroupBox_->hide();
   mainWidget->setStretchFactor(0, 1);
 
-  QWidget * tab = new QWidget;
-  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
-
+  // - tabWidget
   tabWidget_ = new QTabWidget;
 
-  // first tab --------------------------------
-  tablesTabWidget_ = new QTabWidget;
+  // -- min/max tab --------------------------------
+  addMinMaxTab();
+  variablesListWidget_->setCurrentRow(0);
 
-  tabWidget_->addTab(tablesTabWidget_, tr("Table"));
-  tabLayout->addWidget(tabWidget_);
+  // -- other tabs
+#ifdef OTGUI_HAVE_PARAVIEW
+  addParaviewWidgetsTabs();
+#else
+  addTablesTab();
+  addPlotMatrixTab();
+  addScatterPlotsTab();
+#endif
 
-  // error message label
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
-  tabLayout->addWidget(errorMessageLabel_);
+  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(updateVariablesListVisibility(int)));
 
-  mainWidget->addWidget(tab);
+  mainWidget->addWidget(tabWidget_);
   mainWidget->setStretchFactor(1, 10);
-
-  // fill Table tab
-  updateTable();
 
   setWidget(mainWidget);
 }
 
 
-void DesignOfExperimentWindow::evaluateOutputs()
+void DesignOfExperimentWindow::addMinMaxTab()
 {
-  try
-  {
-    designOfExperiment_.run();
-  }
-  catch (std::exception & ex)
-  {
-    setTemporaryErrorMessage(ex.what());
-  }
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+
+  QWidget * tab = new QWidget;
+  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+  tabLayout->setSizeConstraint(QLayout::SetFixedSize);
+
+  // number of simulations
+  QGroupBox * aGroupBox = new QGroupBox;
+  QVBoxLayout * aGroupBoxLayout = new QVBoxLayout(aGroupBox);
+
+  const UnsignedInteger sampleSize = designOfExperiment_.getOutputSample().getSize();
+  ParametersTableView * table = new ParametersTableView(QStringList() << tr("Sample size"),
+                                                        QStringList() << QString::number(sampleSize),
+                                                        true,
+                                                        true);
+  aGroupBoxLayout->addWidget(table);
+  tabLayout->addWidget(aGroupBox);
+
+  // min/max table
+  MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(*dynamic_cast<DataSample*>(designOfExperiment_.getImplementation().get()));
+  tabLayout->addWidget(minMaxTableGroupBox);
+  connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
+
+  scrollArea->setWidget(tab);
+  tabWidget_->addTab(scrollArea, tr("Min/Max"));
 }
 
 
-void DesignOfExperimentWindow::updateTable()
+#ifdef OTGUI_HAVE_PARAVIEW
+void DesignOfExperimentWindow::addParaviewWidgetsTabs()
 {
+  // input names/descriptions
+  QStringList inputNames;
+  QStringList inAxisTitles;
+  // output names/descriptions
+  QStringList outputNames;
+  QStringList outAxisTitles;
+
+  // get labels
+  getScatterPlotLabels(designOfExperiment_.getInputSample(), inputNames, inAxisTitles, outputNames, outAxisTitles);
+
+  // tables tab ------------------------------------------
+  QTabWidget * tablesTabWidget = new QTabWidget;
+
+  // -- doe tab
+  PVSpreadSheetViewWidget * spreadSheetWidget = new PVSpreadSheetViewWidget(this, new PVServerManagerInterface);
+  spreadSheetWidget->setData(designOfExperiment_.getSample());
+
+  tablesTabWidget->addTab(spreadSheetWidget, tr("DOE"));
+
+  PVXYChartViewWidget * sampleScatterPlotWidget = 0;
+  PVXYChartViewWidget * sampleRankScatterPlotWidget = 0;
+
+  const int failedInSampleSize = designOfExperiment_.getFailedInputSample().getSize();
+  const int notEvalInSampleSize = designOfExperiment_.getNotEvaluatedInputSample().getSize();
+
+  if (failedInSampleSize || notEvalInSampleSize)
+  {
+    // allInputsSample : input sample + failed input sample + not evaluated input sample
+    Sample allInputsSample(designOfExperiment_.getInputSample());
+    const UnsignedInteger inSampleSize = designOfExperiment_.getInputSample().getSize();
+
+    if (failedInSampleSize)
+      allInputsSample.add(designOfExperiment_.getFailedInputSample());
+    if (notEvalInSampleSize)
+      allInputsSample.add(designOfExperiment_.getNotEvaluatedInputSample());
+
+    // allInputsSample rank
+    const Sample allInputsSampleRank(allInputsSample.rank() / allInputsSample.getSize());
+
+    // --- data for scatter plots tab
+    // sample scatter plot
+    sampleScatterPlotWidget = new PVXYChartViewWidget(this, new PVServerManagerInterface);
+    sampleScatterPlotWidget->setData(designOfExperiment_.getInputSample(), Qt::green);
+
+    // sample rank scatter plot
+    const Sample inputsRank(allInputsSampleRank, 0, inSampleSize);
+    sampleRankScatterPlotWidget = new PVXYChartViewWidget(this, new PVServerManagerInterface);
+    sampleRankScatterPlotWidget->setData(inputsRank, Qt::green);
+
+    // labels for the legend
+    std::list<QString> inSLabelsList(designOfExperiment_.getInputSample().getDimension(), tr("Succeed points"));
+    sampleScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(inSLabelsList), 0);
+    sampleRankScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(inSLabelsList), 0);
+
+    // -- failed points tab
+    if (failedInSampleSize)
+    {
+      // --- table tab
+      PVSpreadSheetViewWidget * failedPointsTable = new PVSpreadSheetViewWidget(this, new PVServerManagerInterface);
+      failedPointsTable->setData(designOfExperiment_.getFailedInputSample());
+      tablesTabWidget->addTab(failedPointsTable, tr("Failed points"));
+
+      // --- data for scatter plots tab
+      // sample scatter plot
+      sampleScatterPlotWidget->setData(designOfExperiment_.getFailedInputSample(), Qt::red);
+
+      // sample rank scatter plot
+      const Sample failedInputsRank(allInputsSampleRank, inSampleSize, inSampleSize + failedInSampleSize);
+      sampleRankScatterPlotWidget->setData(failedInputsRank, Qt::red);
+
+      // labels for the legend
+      std::list<QString> failedInSLabelsList(designOfExperiment_.getInputSample().getDimension(), tr("Failed points"));
+      sampleScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(failedInSLabelsList), 1);
+      sampleRankScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(failedInSLabelsList), 1);
+    }
+    // -- not evaluated points tab
+    if (notEvalInSampleSize)
+    {
+      // --- table tab
+      PVSpreadSheetViewWidget * notEvaluatedPointsTable = new PVSpreadSheetViewWidget(this, new PVServerManagerInterface);
+      notEvaluatedPointsTable->setData(designOfExperiment_.getNotEvaluatedInputSample());
+      tablesTabWidget->addTab(notEvaluatedPointsTable, tr("Not evaluated points"));
+
+      // --- data for scatter plots tab
+      // sample scatter plot
+      sampleScatterPlotWidget->setData(designOfExperiment_.getNotEvaluatedInputSample(), Qt::blue);
+      // sample rank scatter plot
+      const Sample notEvaluatedInputsRank(allInputsSampleRank, inSampleSize + failedInSampleSize, allInputsSampleRank.getSize());
+      sampleRankScatterPlotWidget->setData(notEvaluatedInputsRank, Qt::blue);
+      // labels for the legend
+      std::list<QString> notEvaluatedInSLabelsList(designOfExperiment_.getInputSample().getDimension(), tr("Not evaluated points"));
+      sampleScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(notEvaluatedInSLabelsList), failedInSampleSize > 0 ? 2 : 1);
+      sampleRankScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(notEvaluatedInSLabelsList), failedInSampleSize > 0 ? 2 : 1);
+    }
+  }
+
+  // scatter plots tab
+  if (sampleScatterPlotWidget)
+  {
+    // add in tab widget
+    WidgetBoundToDockWidget * scatterTabWidget = new WidgetBoundToDockWidget(this);
+    QVBoxLayout * scatterTabWidgetLayout = new QVBoxLayout(scatterTabWidget);
+    sampleScatterPlotWidget->setAxisTitles(inputNames, inAxisTitles);
+    if (inputNames != inAxisTitles)
+      sampleRankScatterPlotWidget->setAxisTitles(inputNames, inAxisTitles);
+    scatterTabWidgetLayout->addWidget(sampleScatterPlotWidget);
+    scatterTabWidgetLayout->addWidget(sampleRankScatterPlotWidget);
+    tablesTabWidget->addTab(scatterTabWidget, tr("Scatter plots"));
+
+    // setting widget
+    PVXYChartSettingWidget * inSampleSettingWidget = new PVXYChartSettingWidget(sampleScatterPlotWidget,
+                                                                                sampleRankScatterPlotWidget,
+                                                                                inputNames,
+                                                                                QStringList(),
+                                                                                PVXYChartSettingWidget::Scatter,
+                                                                                this);
+    scatterTabWidget->setDockWidget(inSampleSettingWidget);
+  }
+
+  tabWidget_->addTab(tablesTabWidget, tr("Table"));
+
+  // cobweb tab ------------------------------------------
+  WidgetBoundToDockWidget * cobwebTabWidget = new WidgetBoundToDockWidget(this);
+  QVBoxLayout * cobwebTabWidgetLayout = new QVBoxLayout(cobwebTabWidget);
+
+  PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, new PVServerManagerInterface);
+  cobwebWidget->setData(designOfExperiment_.getSample());
+  cobwebTabWidgetLayout->addWidget(cobwebWidget);
+
+  PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget, this);
+  cobwebTabWidget->setDockWidget(cobwebSettingWidget);
+
+  tabWidget_->addTab(cobwebTabWidget, tr("Cobweb plot"));
+
+  // plot matrix tab -------------------------------------
+  WidgetBoundToDockWidget * matrixTabWidget = new WidgetBoundToDockWidget(this);
+  QVBoxLayout * matrixTabWidgetLayout = new QVBoxLayout(matrixTabWidget);
+
+  PVMatrixPlotViewWidget * pvmatrixWidget = new PVMatrixPlotViewWidget(this, new PVServerManagerInterface);
+  pvmatrixWidget->setData(designOfExperiment_.getSample());
+  pvmatrixWidget->setAxisToShow(designOfExperiment_.getSample().getDescription());
+  matrixTabWidgetLayout->addWidget(pvmatrixWidget);
+
+  tabWidget_->addTab(matrixTabWidget, tr("Plot matrix"));
+
+  // setting widget
+  PVPlotSettingWidget * matrixSettingWidget = new PVPlotSettingWidget(pvmatrixWidget, this);
+  matrixTabWidget->setDockWidget(matrixSettingWidget);
+
+  // X-Y scatter plots tab --------------------------------
+
+  // build widgets
+  WidgetBoundToDockWidget * xyScatterTabWidget = new WidgetBoundToDockWidget(this);
+  QVBoxLayout * xyScatterTabWidgetLayout = new QVBoxLayout(xyScatterTabWidget);
+
+  // sample
+  PVXYChartViewWidget * pvXYChartWidget = new PVXYChartViewWidget(this, new PVServerManagerInterface);
+  pvXYChartWidget->PVViewWidget::setData(designOfExperiment_.getSample());
+  if ((inputNames + outputNames) != (inAxisTitles + outAxisTitles))
+    pvXYChartWidget->setAxisTitles(inputNames + outputNames, inAxisTitles + outAxisTitles);
+  xyScatterTabWidgetLayout->addWidget(pvXYChartWidget);
+
+  // sample rank
+  const Sample sampleRank(designOfExperiment_.getSample().rank() / designOfExperiment_.getSample().getSize());
+  PVXYChartViewWidget * rankPvXYChartWidget = new PVXYChartViewWidget(this, new PVServerManagerInterface);
+  rankPvXYChartWidget->PVViewWidget::setData(sampleRank);
+  if ((inputNames + outputNames) != (inAxisTitles + outAxisTitles))
+    rankPvXYChartWidget->setAxisTitles(inputNames + outputNames, inAxisTitles + outAxisTitles);
+  xyScatterTabWidgetLayout->addWidget(rankPvXYChartWidget);
+
+  tabWidget_->addTab(xyScatterTabWidget, tr("Scatter plots"));
+
+  // setting widget
+  PVXYChartSettingWidget * inOutSampleSettingWidget = new PVXYChartSettingWidget(pvXYChartWidget,
+                                                                                 rankPvXYChartWidget,
+                                                                                 inputNames,
+                                                                                 outputNames,
+                                                                                 PVXYChartSettingWidget::Scatter,
+                                                                                 this);
+  xyScatterTabWidget->setDockWidget(inOutSampleSettingWidget);
+
+  // links model
+  pqLinksModel * linksModel = pqApplicationCore::instance()->getLinksModel();
+
+  // There are selection behavior errors if windows use the same links names: a link name must be unique.
+  // The pointers are uniques, so we use them to create an unique name...find a better and easier way.
+  String aStr = (OSS() << cobwebWidget->getProxy() << pvmatrixWidget->getProxy()).str();
+  linksModel->addSelectionLink(aStr.c_str(), cobwebWidget->getProxy(), pvmatrixWidget->getProxy());
+  aStr = (OSS() << spreadSheetWidget->getProxy() << pvmatrixWidget->getProxy()).str();
+  linksModel->addSelectionLink(aStr.c_str(), spreadSheetWidget->getProxy(), pvmatrixWidget->getProxy());
+  aStr = (OSS() << cobwebWidget->getProxy() << spreadSheetWidget->getProxy()).str();
+  linksModel->addSelectionLink(aStr.c_str(), cobwebWidget->getProxy(), spreadSheetWidget->getProxy());
+  aStr = (OSS() << pvXYChartWidget->getProxy() << spreadSheetWidget->getProxy()).str();
+  linksModel->addSelectionLink(aStr.c_str(), pvXYChartWidget->getProxy(), spreadSheetWidget->getProxy());
+  aStr = (OSS() << rankPvXYChartWidget->getProxy() << spreadSheetWidget->getProxy()).str();
+  linksModel->addSelectionLink(aStr.c_str(), rankPvXYChartWidget->getProxy(), spreadSheetWidget->getProxy());
+}
+#endif
+
+
+void DesignOfExperimentWindow::addTablesTab()
+{
+  QTabWidget * tablesTabWidget = new QTabWidget;
+
   // tab with well evaluated points
   ExportableTableView * tableView = new ExportableTableView;
   tableView->setSortingEnabled(true);
@@ -154,7 +368,7 @@ void DesignOfExperimentWindow::updateTable()
   tableView->setModel(proxyModel);
   tableView->sortByColumn(0, Qt::AscendingOrder);
 
-  tablesTabWidget_->addTab(tableView, tr("DOE"));
+  tablesTabWidget->addTab(tableView, tr("DOE"));
 
   // tab with failed points
   if (designOfExperiment_.getFailedInputSample().getSize())
@@ -167,7 +381,7 @@ void DesignOfExperimentWindow::updateTable()
     tableView->setModel(proxyModel);
     tableView->sortByColumn(0, Qt::AscendingOrder);
 
-    tablesTabWidget_->addTab(tableView, tr("Failed points"));
+    tablesTabWidget->addTab(tableView, tr("Failed points"));
   }
   // tab with not evaluated points
   if (designOfExperiment_.getNotEvaluatedInputSample().getSize())
@@ -180,36 +394,44 @@ void DesignOfExperimentWindow::updateTable()
     tableView->setModel(proxyModel);
     tableView->sortByColumn(0, Qt::AscendingOrder);
 
-    tablesTabWidget_->addTab(tableView, tr("Not evaluated points"));
+    tablesTabWidget->addTab(tableView, tr("Not evaluated points"));
   }
 
-  // tabs with results
-  if (designOfExperiment_.getOutputSample().getSize() && tableModel->sampleIsValid())
-    addTabsForOutputs();
+  tabWidget_->addTab(tablesTabWidget, tr("Table"));
 }
 
 
-void DesignOfExperimentWindow::addTabsForOutputs()
+void DesignOfExperimentWindow::addPlotMatrixTab()
 {
-  const UnsignedInteger nbInputs = designOfExperiment_.getVariableInputNames().getSize();
-  Indices ind(nbInputs);
-  for (UnsignedInteger i=0; i<nbInputs; ++i)
-    for (UnsignedInteger j=0; j<designOfExperiment_.getInputSample().getDimension(); ++j)
-      if (designOfExperiment_.getVariableInputNames()[i] == designOfExperiment_.getInputSample().getDescription()[j])
-      {
-        ind[i] = j;
-        break;
-      }
+  WidgetBoundToDockWidget * matrixTabWidget = new WidgetBoundToDockWidget(this);
+  QVBoxLayout * matrixTabWidgetLayout = new QVBoxLayout(matrixTabWidget);
 
-  // sample of the variable inputs
-  const Sample inS = designOfExperiment_.getInputSample().getMarginal(ind);
+  // - plot matrix X-X --------------------------------
+  PlotMatrixWidget * plotMatrix = new PlotMatrixWidget(designOfExperiment_.getSample(), designOfExperiment_.getSample());
+  plotMatrix->setInputNames(QtOT::DescriptionToStringList(designOfExperiment_.getInputSample().getDescription()));
+  plotMatrix->setOutputNames(QtOT::DescriptionToStringList(designOfExperiment_.getOutputSample().getDescription()));
+
+  PlotMatrixConfigurationWidget * plotMatrixSettingWidget = new PlotMatrixConfigurationWidget(plotMatrix, this);
+  matrixTabWidget->setDockWidget(plotMatrixSettingWidget);
+
+  matrixTabWidgetLayout->addWidget(plotMatrix);
+
+  tabWidget_->addTab(matrixTabWidget, tr("Plot matrix"));
+}
+
+
+void DesignOfExperimentWindow::getScatterPlotLabels(const Sample& inS,
+                                                    QStringList& inNames,
+                                                    QStringList& inAxisNames,
+                                                    QStringList& outNames,
+                                                    QStringList& outAxisNames)
+{
+  // 1 - input sample
   // input names/descriptions
-  QStringList inputNames;
-  QStringList inAxisTitles;
-  for (UnsignedInteger i=0; i<nbInputs; ++i)
+  for (UnsignedInteger i = 0; i < inS.getDimension(); ++i)
   {
     const String inputName = inS.getDescription()[i];
-    inputNames << QString::fromUtf8(inputName.c_str());
+    inNames << QString::fromUtf8(inputName.c_str());
 
     QString inputDescription;
     try
@@ -221,20 +443,18 @@ void DesignOfExperimentWindow::addTabsForOutputs()
       //do nothing
     }
     if (!inputDescription.isEmpty())
-      inAxisTitles << inputDescription;
+      inAxisNames << inputDescription;
     else
-      inAxisTitles << inputNames.last();
+      inAxisNames << inNames.last();
   }
 
-  // sample of the outputs
-  const Sample outS = designOfExperiment_.getOutputSample();
+  // 2 - output sample
+  const Sample outS(designOfExperiment_.getOutputSample());
   // output names/descriptions
-  QStringList outputNames;
-  QStringList outAxisTitles;
-  for (UnsignedInteger i=0; i<outS.getDimension(); ++i)
+  for (UnsignedInteger i = 0; i < outS.getDimension(); ++i)
   {
     const String outputName = outS.getDescription()[i];
-    outputNames << QString::fromUtf8(outputName.c_str());
+    outNames << QString::fromUtf8(outputName.c_str());
     QString outputDescription;
     try
     {
@@ -245,79 +465,70 @@ void DesignOfExperimentWindow::addTabsForOutputs()
       //do nothing
     }
     if (!outputDescription.isEmpty())
-      outAxisTitles << outputDescription;
+      outAxisNames << outputDescription;
     else
-      outAxisTitles << outputNames.last();
+      outAxisNames << outNames.last();
   }
+}
 
-  // first tab --------------------------------
-  QWidget * tab = new QWidget;
-  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
-  QScrollArea * scrollArea = new QScrollArea;
-  scrollArea->setWidgetResizable(true);
-  tabLayout->setSizeConstraint(QLayout::SetFixedSize);
-
-  // -- outputs names --
-  variablesListWidget_->addItems(outputNames);
-  variablesListWidget_->setCurrentRow(0);
-
-  // -- results --
-
-  // number of simulations
-  QGroupBox * aGroupBox = new QGroupBox;
-  QVBoxLayout * aGroupBoxLayout = new QVBoxLayout(aGroupBox);
-
-  ParametersTableView * table = new ParametersTableView(QStringList() << tr("Sample size"), QStringList() << QString::number(inS.getSize()), true, true);
-  aGroupBoxLayout->addWidget(table);
-  tabLayout->addWidget(aGroupBox);
-
-  // min/max table
-  MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(*dynamic_cast<DataSample*>(designOfExperiment_.getImplementation().get()));
-  tabLayout->addWidget(minMaxTableGroupBox);
-  connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
-
-  scrollArea->setWidget(tab);
-  tabWidget_->addTab(scrollArea, tr("Min/Max"));
-
-  // second tab --------------------------------
-  // if no variable inputs : no graph
-  if (nbInputs)
+void DesignOfExperimentWindow::addScatterPlotsTab()
+{
+  // 1 - get variable inputs indices
+  const UnsignedInteger nbInputs = designOfExperiment_.getVariableInputNames().getSize();
+  Indices ind(nbInputs);
+  for (UnsignedInteger i = 0; i < nbInputs; ++i)
   {
-    scatterPlotsTabWidget_ = new QTabWidget;
-
-    // - scatter plots
-    tab = new QWidget;
-    tabLayout = new QVBoxLayout(tab);
-    ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
-    QVector<PlotWidget*> listScatterPlotWidgets = GetListScatterPlots(inS, outS, designOfExperiment_.getFailedInputSample(),
-                                                                      inputNames, inAxisTitles, outputNames, outAxisTitles);
-    for (int i=0; i<listScatterPlotWidgets.size(); ++i)
-      stackedWidget->addWidget(listScatterPlotWidgets[i]);
-
-    tabLayout->addWidget(stackedWidget);
-    scatterPlotsConfigurationWidget_ = new GraphConfigurationWidget(listScatterPlotWidgets, inputNames, outputNames, GraphConfigurationWidget::Scatter);
-    connect(scatterPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
-
-    scatterPlotsTabWidget_->addTab(tab, tr("Scatter plots"));
-
-    // - plot matrix X-X --------------------------------
-    tab = new PlotMatrixWidget(inS, inS);
-    plotMatrix_X_X_ConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
-
-    scatterPlotsTabWidget_->addTab(tab, tr("Plot matrix X-X"));
-
-    // - plot matrix Y-X --------------------------------
-    tab = new PlotMatrixWidget(inS, outS);
-    plotMatrixConfigurationWidget_ = new PlotMatrixConfigurationWidget(dynamic_cast<PlotMatrixWidget*>(tab));
-
-    scatterPlotsTabWidget_->addTab(tab, tr("Plot matrix Y-X"));
-
-    connect(scatterPlotsTabWidget_, SIGNAL(currentChanged(int)), this, SLOT(scatterPlotsTabWidgetIndexChanged()));
-    tabWidget_->addTab(scatterPlotsTabWidget_, tr("Scatter plots"));
+    for (UnsignedInteger j = 0; j < designOfExperiment_.getInputSample().getDimension(); ++j)
+    {
+      if (designOfExperiment_.getVariableInputNames()[i] == designOfExperiment_.getInputSample().getDescription()[j])
+      {
+        ind[i] = j;
+        break;
+      }
+    }
   }
 
-  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
+  // 2 - input sample
+  const Sample inS(designOfExperiment_.getInputSample().getMarginal(ind));
+  // input names/descriptions
+  QStringList inputNames;
+  QStringList inAxisTitles;
+ 
+  // 3 - output sample
+  const Sample outS(designOfExperiment_.getOutputSample());
+  // output names/descriptions
+  QStringList outputNames;
+  QStringList outAxisTitles;
+
+  // get labels
+  getScatterPlotLabels(inS, inputNames, inAxisTitles, outputNames, outAxisTitles);
+
+  // 4 - scatter plots
+  WidgetBoundToDockWidget * scatterWidget = new WidgetBoundToDockWidget;
+  QVBoxLayout * scatterWidgetLayout = new QVBoxLayout(scatterWidget);
+
+  ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
+  QVector<PlotWidget*> listScatterPlotWidgets = GetListScatterPlots(inS,
+                                                                    outS,
+                                                                    designOfExperiment_.getFailedInputSample(),
+                                                                    inputNames,
+                                                                    inAxisTitles,
+                                                                    outputNames,
+                                                                    outAxisTitles);
+  for (int i = 0; i < listScatterPlotWidgets.size(); ++i)
+    stackedWidget->addWidget(listScatterPlotWidgets[i]);
+
+  GraphConfigurationWidget * scatterPlotsSettingWidget = new GraphConfigurationWidget(listScatterPlotWidgets,
+                                                                                      inputNames,
+                                                                                      outputNames,
+                                                                                      GraphConfigurationWidget::Scatter,
+                                                                                      this);
+  connect(scatterPlotsSettingWidget, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+  scatterWidget->setDockWidget(scatterPlotsSettingWidget);
+  scatterWidgetLayout->addWidget(stackedWidget);
+
+  tabWidget_->addTab(scatterWidget, tr("Scatter plots"));
 }
 
 
@@ -334,24 +545,24 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const Sample&
 
   const UnsignedInteger nbInputs = inS.getSize() ? inS.getDimension() : 0;
   const UnsignedInteger nbOutputs = outS.getSize() ? outS.getDimension() : 0;
-  const QPen pen = QPen(Qt::blue, 4);
-  const QPen notValidPen = QPen(Qt::red, 4);
+  const QPen pen(Qt::blue, 4);
+  const QPen notValidPen(Qt::red, 4);
 
   // in rank
   Sample inSrank;
   if (nbInputs)
-    inSrank = inS.rank() / (inS.getSize());
+    inSrank = inS.rank() / inS.getSize();
   Sample notValidInSrank;
   if (notValidInS.getSize())
-    notValidInSrank = notValidInS.rank() / (notValidInS.getSize());
+    notValidInSrank = notValidInS.rank() / notValidInS.getSize();
   // out rank
   Sample outSrank;
   if (nbOutputs)
-    outSrank = outS.rank() / (outS.getSize());
+    outSrank = outS.rank() / outS.getSize();
 
-  for (UnsignedInteger j=0; j<nbInputs; ++j)
+  for (UnsignedInteger j = 0; j < nbInputs; ++j)
   {
-    for (UnsignedInteger i=0; i<nbOutputs; ++i)
+    for (UnsignedInteger i = 0; i < nbOutputs; ++i)
     {
       PlotWidget * plot = new PlotWidget(tr("scatterplot"));
       plot->plotScatter(inS.getMarginal(j), outS.getMarginal(i), pen, inAxisNames[j], outAxisNames[i]);
@@ -364,7 +575,7 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const Sample&
       plot->setTitle(tr("Scatter plot:") + " " + outNames[i] + " " + tr("vs") + " " + inNames[j]);
       listScatterPlotWidgets.append(plot);
     }
-    for (UnsignedInteger i=0; i<nbInputs; ++i)
+    for (UnsignedInteger i = 0; i < nbInputs; ++i)
     {
       if (i != j)
       {
@@ -385,9 +596,9 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const Sample&
       }
     }
   }
-  for (UnsignedInteger j=0; j<nbOutputs; ++j)
+  for (UnsignedInteger j = 0; j < nbOutputs; ++j)
   {
-    for (UnsignedInteger i=0; i<nbOutputs; ++i)
+    for (UnsignedInteger i = 0; i < nbOutputs; ++i)
     {
       if (i != j)
       {
@@ -403,7 +614,7 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const Sample&
         listScatterPlotWidgets.append(plot);
       }
     }
-    for (UnsignedInteger i=0; i<nbInputs; ++i)
+    for (UnsignedInteger i = 0; i < nbInputs; ++i)
     {
       PlotWidget * plot = new PlotWidget(tr("scatterplot"));
       plot->plotScatter(outS.getMarginal(j), inS.getMarginal(i), pen, outAxisNames[j], inAxisNames[i]);
@@ -421,57 +632,9 @@ QVector<PlotWidget*> DesignOfExperimentWindow::GetListScatterPlots(const Sample&
 }
 
 
-void DesignOfExperimentWindow::scatterPlotsTabWidgetIndexChanged()
+void DesignOfExperimentWindow::updateVariablesListVisibility(int indexTab)
 {
-  showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-}
-
-
-void DesignOfExperimentWindow::showHideGraphConfigurationWidget(int indexTab)
-{
-  // if scatter plots are visible
-  if (indexTab == 2) // scatter plots
-  {
-    if (scatterPlotsTabWidget_->currentIndex() == 0) // scatter plots
-    {
-      if (scatterPlotsConfigurationWidget_)
-        if (!scatterPlotsConfigurationWidget_->isVisible())
-          emit graphWindowActivated(scatterPlotsConfigurationWidget_);
-    }
-    else if (scatterPlotsTabWidget_->currentIndex() == 1) // plot matrix X-X
-    {
-      if (plotMatrix_X_X_ConfigurationWidget_)
-        if (!plotMatrix_X_X_ConfigurationWidget_->isVisible())
-          emit graphWindowActivated(plotMatrix_X_X_ConfigurationWidget_);
-    }
-    else if (scatterPlotsTabWidget_->currentIndex() == 2) // plot matrix Y-X
-    {
-      if (plotMatrixConfigurationWidget_)
-        if (!plotMatrixConfigurationWidget_->isVisible())
-          emit graphWindowActivated(plotMatrixConfigurationWidget_);
-    }
-    variablesGroupBox_->hide();
-  }
-  // if not tab with scatter plots
-  else
-  {
-    emit graphWindowDeactivated();
-    if (indexTab == 1) // tab summary
-      variablesGroupBox_->show();
-    else
-      variablesGroupBox_->hide();
-  }
-}
-
-
-void DesignOfExperimentWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
-{
-  if (oldState == Qt::WindowMaximized)
-    return;
-
-  if (newState == Qt::WindowFullScreen || newState == (Qt::WindowActive|Qt::WindowMaximized))
-    showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-  else if (newState == Qt::WindowNoState || newState == Qt::WindowMinimized || newState == (Qt::WindowActive|Qt::WindowMinimized))
-    showHideGraphConfigurationWidget(-1);
+  // if indextab == summary : variablesGroupBox_ is visible
+  variablesGroupBox_->setVisible(indexTab == 0);
 }
 }
