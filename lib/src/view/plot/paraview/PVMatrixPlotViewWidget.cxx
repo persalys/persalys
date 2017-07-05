@@ -1,13 +1,17 @@
 #include "otgui/PVMatrixPlotViewWidget.hxx"
 
-const char PVMatrixPlotViewWidget::PV_VIEW_TYPE[]="PlotMatrixView";
+namespace OTGUI {
+const char PVMatrixPlotViewWidget::PV_VIEW_TYPE[] = "PlotMatrixView";
 
-const char PVMatrixPlotViewWidget::PV_REPRESENTATION_TYPE[]="PlotMatrixRepresentation";
+const char PVMatrixPlotViewWidget::PV_REPRESENTATION_TYPE[] = "PlotMatrixRepresentation";
 
-PVMatrixPlotViewWidget::PVMatrixPlotViewWidget(QWidget *parent, PVServerManagerInterface *smb):PVViewWidget(parent,smb,PV_VIEW_TYPE)
+PVMatrixPlotViewWidget::PVMatrixPlotViewWidget(QWidget *parent, PVServerManagerInterface *smb)
+  : PVViewWidget(parent, smb, PV_VIEW_TYPE)
 {
 }
 
+
 PVMatrixPlotViewWidget::~PVMatrixPlotViewWidget()
 {
+}
 }

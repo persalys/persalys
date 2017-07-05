@@ -4,6 +4,7 @@
 #include "PVViewWidget.hxx"
 #include "otgui/OTGuiprivate.hxx"
 
+namespace OTGUI {
 class OTGUI_API PVParCooViewWidget : public PVViewWidget
 {
   Q_OBJECT
@@ -15,5 +16,5 @@ public:
   static const char PV_VIEW_TYPE[];
   static const char PV_REPRESENTATION_TYPE[];
 };
-
+}
 #endif
