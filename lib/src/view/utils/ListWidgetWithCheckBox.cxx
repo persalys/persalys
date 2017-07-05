@@ -58,13 +58,10 @@ void ListWidgetWithCheckBox::setCheckedNames(QStringList selectedItemNames)
 {
   for (int i = 0; i < itemNames_.size(); ++ i)
   {
-    if (selectedItemNames.contains(itemNames_[i]))
-    {
-      QListWidgetItem * item_i = item(i + 1);// skip first item
-      QWidget * widget_i = itemWidget(item_i);
-      QCheckBox * box = qobject_cast<QCheckBox *>(widget_i);
-      box->setCheckState(Qt::Checked);
-    }
+    QListWidgetItem * item_i = item(i + 1);// skip first item
+    QWidget * widget_i = itemWidget(item_i);
+    QCheckBox * box = qobject_cast<QCheckBox *>(widget_i);
+    box->setChecked(selectedItemNames.contains(itemNames_[i]));
   }
 }
 
