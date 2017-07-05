@@ -4,17 +4,20 @@ ot_add_current_dir_to_include_dirs ()
 
 ot_add_source_file (PVViewWidget.cxx)
 ot_add_source_file (PVParCooViewWidget.cxx)
+ot_add_source_file (PVSpreadSheetViewWidget.cxx)
 ot_add_source_file (PVMatrixPlotViewWidget.cxx)
 
 ot_install_header_file (PVMatrixPlotViewWidget.hxx)
 ot_install_header_file (PVMatrixPlotViewWidget.hxx)
 ot_install_header_file (PVParCooViewWidget.hxx)
+ot_install_header_file (PVSpreadSheetViewWidget.hxx)
 ot_install_header_file (PVViewWidget.hxx)
 ot_install_header_file (PVServerManagerInterface.hxx)
 
 qt5_wrap_cpp (OTGUI_PLOTPARAVIEW_MOC_SRCS
               otgui/PVMatrixPlotViewWidget.hxx
               otgui/PVParCooViewWidget.hxx
+              otgui/PVSpreadSheetViewWidget.hxx
               otgui/PVViewWidget.hxx)
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
