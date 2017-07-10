@@ -11,7 +11,7 @@ linux:
     - cmake -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_CXX_FLAGS="-Wall"
         -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so
         -DOpenTURNS_DIR=$PWD/openturns/install/lib/cmake/openturns -DUSE_SALOME=OFF -DQWT_LIBRARY=/usr/lib/libqwt-qt5.so 
-        -DUSE_COTIRE=ON -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" .
+        -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" .
     - make install -j8
     - make tests -j8
     - xvfb-run ctest --output-on-failure --timeout 100
