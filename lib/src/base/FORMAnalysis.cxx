@@ -29,7 +29,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(FORMAnalysis);
 
-static Factory<FORMAnalysis> RegisteredFactory;
+static Factory<FORMAnalysis> Factory_FORMAnalysis;
 
 /* Default constructor */
 FORMAnalysis::FORMAnalysis()

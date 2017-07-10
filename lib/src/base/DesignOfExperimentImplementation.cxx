@@ -29,7 +29,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(DesignOfExperimentImplementation);
 
-static Factory<DesignOfExperimentImplementation> RegisteredFactory;
+static Factory<DesignOfExperimentImplementation> Factory_DesignOfExperimentImplementation;
 
 /* Default constructor */
 DesignOfExperimentImplementation::DesignOfExperimentImplementation()

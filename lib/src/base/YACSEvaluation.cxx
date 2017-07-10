@@ -43,7 +43,7 @@ private:
   YACSEvalYFX *_efx;
 };
 
-static Factory<YACSEvaluation> RegisteredFactory;
+static Factory<YACSEvaluation> Factory_YACSEvaluation;
 
 /* Default constructor */
 YACSEvaluation::YACSEvaluation(const String & fileName)

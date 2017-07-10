@@ -33,13 +33,12 @@ namespace OTGUI {
 
 CLASSNAMEINIT(OTStudyImplementation);
 
-static Factory<OTStudyImplementation> RegisteredFactory;
+static Factory<OTStudyImplementation> Factory_OTStudyImplementation;
 
-static Factory<PersistentCollection<DesignOfExperiment> > RegisteredFactory_CollDM;
-static Factory<PersistentCollection<PhysicalModel> > RegisteredFactory_CollPM;
-static Factory<PersistentCollection<DesignOfExperiment> > RegisteredFactory_CollDOE;
-static Factory<PersistentCollection<LimitState> > RegisteredFactory_CollLS;
-static Factory<PersistentCollection<Analysis> > RegisteredFactory_CollAn;
+static Factory<PersistentCollection<PhysicalModel> > Factory_PersistentCollection_PhysicalModel;
+static Factory<PersistentCollection<DesignOfExperiment> > Factory_PersistentCollection_DesignOfExperiment;
+static Factory<PersistentCollection<LimitState> > Factory_PersistentCollection_LimitState;
+static Factory<PersistentCollection<Analysis> > Factory_PersistentCollection_Analysis;
 
 
 /* Default constructor */

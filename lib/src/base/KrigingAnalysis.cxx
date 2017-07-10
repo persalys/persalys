@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(KrigingAnalysis);
 
-static Factory<KrigingAnalysis> RegisteredFactory;
+static Factory<KrigingAnalysis> Factory_KrigingAnalysis;
 
 /* Default constructor */
 KrigingAnalysis::KrigingAnalysis()

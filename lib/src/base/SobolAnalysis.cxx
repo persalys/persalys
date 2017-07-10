@@ -31,7 +31,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(SobolAnalysis);
 
-static Factory<SobolAnalysis> RegisteredFactory;
+static Factory<SobolAnalysis> Factory_SobolAnalysis;
 
 /* Default constructor */
 SobolAnalysis::SobolAnalysis()

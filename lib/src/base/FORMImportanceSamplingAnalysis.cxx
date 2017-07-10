@@ -30,7 +30,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(FORMImportanceSamplingAnalysis);
 
-static Factory<FORMImportanceSamplingAnalysis> RegisteredFactory;
+static Factory<FORMImportanceSamplingAnalysis> Factory_FORMImportanceSamplingAnalysis;
 
 /* Default constructor */
 FORMImportanceSamplingAnalysis::FORMImportanceSamplingAnalysis()

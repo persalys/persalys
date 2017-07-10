@@ -29,7 +29,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(LimitStateImplementation);
 
-static Factory<LimitStateImplementation> RegisteredFactory;
+static Factory<LimitStateImplementation> Factory_LimitStateImplementation;
 
 /* Default constructor */
 LimitStateImplementation::LimitStateImplementation()

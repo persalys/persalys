@@ -29,7 +29,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(TaylorExpansionMomentsAnalysis);
 
-static Factory<TaylorExpansionMomentsAnalysis> RegisteredFactory;
+static Factory<TaylorExpansionMomentsAnalysis> Factory_TaylorExpansionMomentsAnalysis;
 
 /* Default constructor */
 TaylorExpansionMomentsAnalysis::TaylorExpansionMomentsAnalysis()

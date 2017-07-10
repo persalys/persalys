@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(MetaModelAnalysisResult);
 
-static Factory<MetaModelAnalysisResult> RegisteredFactory;
+static Factory<MetaModelAnalysisResult> Factory_MetaModelAnalysisResult;
 
 MetaModelAnalysisResult::MetaModelAnalysisResult()
   : PersistentObject()

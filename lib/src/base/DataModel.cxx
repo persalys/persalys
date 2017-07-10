@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(DataModel);
 
-static Factory<DataModel> RegisteredFactory;
+static Factory<DataModel> Factory_DataModel;
 
 /* Default constructor */
 DataModel::DataModel(const String& name)

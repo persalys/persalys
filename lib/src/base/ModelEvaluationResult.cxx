@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(ModelEvaluationResult);
 
-static Factory<ModelEvaluationResult> RegisteredFactory;
+static Factory<ModelEvaluationResult> Factory_ModelEvaluationResult;
 
 /* Default constructor */
 ModelEvaluationResult::ModelEvaluationResult()

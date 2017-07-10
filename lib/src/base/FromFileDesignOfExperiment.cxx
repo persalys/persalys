@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(FromFileDesignOfExperiment);
 
-static Factory<FromFileDesignOfExperiment> RegisteredFactory;
+static Factory<FromFileDesignOfExperiment> Factory_FromFileDesignOfExperiment;
 
 /* Default constructor */
 FromFileDesignOfExperiment::FromFileDesignOfExperiment()

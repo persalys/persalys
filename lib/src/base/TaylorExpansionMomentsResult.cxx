@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(TaylorExpansionMomentsResult);
 
-static Factory<TaylorExpansionMomentsResult> RegisteredFactory;
+static Factory<TaylorExpansionMomentsResult> Factory_TaylorExpansionMomentsResult;
 
 /* Default constructor */
 TaylorExpansionMomentsResult::TaylorExpansionMomentsResult()

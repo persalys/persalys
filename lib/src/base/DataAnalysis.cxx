@@ -32,7 +32,7 @@ namespace OTGUI{
 
 CLASSNAMEINIT(DataAnalysis);
 
-static Factory<DataAnalysis> RegisteredFactory;
+static Factory<DataAnalysis> Factory_DataAnalysis;
 
 /* Default constructor */
 DataAnalysis::DataAnalysis()
