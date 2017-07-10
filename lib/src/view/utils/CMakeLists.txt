@@ -75,7 +75,7 @@ qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
              )
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
-add_library (otguiutils ${SOURCEFILES} ${OTGUI_UTILS_MOC_SRCS})
+otgui_add_library (otguiutils ${SOURCEFILES} ${OTGUI_UTILS_MOC_SRCS})
 
 if ( BUILD_SHARED_LIBS )
   set_target_properties ( otguiutils PROPERTIES COMPILE_DEFINITIONS "OTGUI_DLL_EXPORTS" )

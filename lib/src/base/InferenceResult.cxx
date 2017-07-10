@@ -28,8 +28,8 @@ namespace OTGUI {
 
 CLASSNAMEINIT(InferenceResult);
 
-static Factory<InferenceResult> RegisteredFactory;
-static Factory<PersistentCollection<FittingTestResult> > RegisteredFactory_CollFittingTestResult;
+static Factory<InferenceResult> Factory_InferenceResult;
+static Factory<PersistentCollection<FittingTestResult> > Factory_PersistentCollection_FittingTestResult;
 
 /* Default constructor */
 InferenceResult::InferenceResult()

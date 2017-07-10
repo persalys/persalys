@@ -19,6 +19,7 @@
  *
  */
 #include "otgui/FMUInfo.hxx"
+#include "otgui/InterpreterUnlocker.hxx"
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/PythonWrappingFunctions.hxx>
 
@@ -52,15 +53,6 @@ FMUInfo * FMUInfo::clone() const
 {
   return new FMUInfo(*this);
 }
-
-class InterpreterUnlocker
-{
-public:
-  InterpreterUnlocker() { gstate_ = PyGILState_Ensure(); }
-  ~InterpreterUnlocker() { PyGILState_Release(gstate_); }
-private:
-  PyGILState_STATE gstate_;
-};
 
 void FMUInfo::initialize()
 {

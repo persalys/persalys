@@ -28,8 +28,8 @@ namespace OTGUI {
 
 CLASSNAMEINIT(CopulaInferenceResult);
 
-static Factory<CopulaInferenceResult> RegisteredFactory;
-static Factory<PersistentCollection<CopulaInferenceSetResult> > RegisteredFactory_CollInfSetResult;
+static Factory<CopulaInferenceResult> Factory_CopulaInferenceResult;
+static Factory<PersistentCollection<CopulaInferenceSetResult> > Factory_PersistentCollection_CopulaInferenceSetResult;
 
 /* Default constructor */
 CopulaInferenceResult::CopulaInferenceResult()

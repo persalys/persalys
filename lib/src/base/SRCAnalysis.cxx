@@ -30,7 +30,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(SRCAnalysis);
 
-static Factory<SRCAnalysis> RegisteredFactory;
+static Factory<SRCAnalysis> Factory_SRCAnalysis;
 
 /* Default constructor */
 SRCAnalysis::SRCAnalysis()

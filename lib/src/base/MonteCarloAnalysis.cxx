@@ -33,7 +33,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(MonteCarloAnalysis);
 
-static Factory<MonteCarloAnalysis> RegisteredFactory;
+static Factory<MonteCarloAnalysis> Factory_MonteCarloAnalysis;
 
 /* Default constructor */
 MonteCarloAnalysis::MonteCarloAnalysis()

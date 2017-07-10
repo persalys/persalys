@@ -135,7 +135,7 @@ if (SalomeYACS_FOUND)
 endif ()
 
 
-add_library (otguibase ${BASE_SOURCEFILES})
+otgui_add_library (otguibase ${BASE_SOURCEFILES})
 
 if ( BUILD_SHARED_LIBS )
   set_target_properties ( otguibase PROPERTIES COMPILE_DEFINITIONS "OTGUI_DLL_EXPORTS" )

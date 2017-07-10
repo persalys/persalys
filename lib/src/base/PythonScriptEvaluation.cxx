@@ -19,7 +19,7 @@
  *
  */
 #include "otgui/PythonScriptEvaluation.hxx"
-
+#include "otgui/InterpreterUnlocker.hxx"
 #include "openturns/PersistentObjectFactory.hxx"
 #include "openturns/PythonWrappingFunctions.hxx"
 
@@ -29,7 +29,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(PythonScriptEvaluation);
 
-static Factory<PythonScriptEvaluation> RegisteredFactory;
+static Factory<PythonScriptEvaluation> Factory_PythonScriptEvaluation;
 
 /* Default constructor */
 PythonScriptEvaluation::PythonScriptEvaluation()
@@ -104,14 +104,6 @@ UnsignedInteger PythonScriptEvaluation::getOutputDimension() const
   return outputDimension_;
 }
 
-class InterpreterUnlocker
-{
-public:
-  InterpreterUnlocker() { gstate_ = PyGILState_Ensure(); }
-  ~InterpreterUnlocker() { PyGILState_Release(gstate_); }
-private:
-  PyGILState_STATE gstate_;
-};
 
 /* Operator () */
 Point PythonScriptEvaluation::operator() (const Point & inP) const

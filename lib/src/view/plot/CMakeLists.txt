@@ -29,7 +29,7 @@ qt5_wrap_cpp (OTGUI_PLOT_MOC_SRCS
               otgui/PlotWidgetWithGraphSetting.hxx)
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
-add_library (otguiplot ${SOURCEFILES} ${OTGUI_PLOT_MOC_SRCS})
+otgui_add_library (otguiplot ${SOURCEFILES} ${OTGUI_PLOT_MOC_SRCS})
 
 if ( BUILD_SHARED_LIBS )
   set_target_properties ( otguiplot PROPERTIES COMPILE_DEFINITIONS "OTGUI_DLL_EXPORTS" )

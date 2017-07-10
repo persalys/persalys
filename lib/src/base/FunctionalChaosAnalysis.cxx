@@ -40,7 +40,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(FunctionalChaosAnalysis);
 
-static Factory<FunctionalChaosAnalysis> RegisteredFactory;
+static Factory<FunctionalChaosAnalysis> Factory_FunctionalChaosAnalysis;
 
 /* Default constructor */
 FunctionalChaosAnalysis::FunctionalChaosAnalysis()

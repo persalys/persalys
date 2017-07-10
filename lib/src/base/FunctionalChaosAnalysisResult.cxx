@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(FunctionalChaosAnalysisResult);
 
-static Factory<FunctionalChaosAnalysisResult> RegisteredFactory;
+static Factory<FunctionalChaosAnalysisResult> Factory_FunctionalChaosAnalysisResult;
 
 FunctionalChaosAnalysisResult::FunctionalChaosAnalysisResult()
   : MetaModelAnalysisResult()

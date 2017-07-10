@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(Output);
 
-static Factory<Output> RegisteredFactory;
+static Factory<Output> Factory_Output;
 
 /* Default constructor */
 Output::Output()

@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(SobolResult);
 
-static Factory<SobolResult> RegisteredFactory;
+static Factory<SobolResult> Factory_SobolResult;
 
 /* Default constructor */
 SobolResult::SobolResult()

@@ -62,6 +62,7 @@ VERBOSE=ON
 JOBS=$(shell getconf _NPROCESSORS_ONLN)
 JOBS_PYTHON=$(JOBS)
 JOBS_TEST=$(JOBS)
+JOBS_COTIRE=$(JOBS)
 export PATH := $(MINGW_PREFIX)/bin:$(PATH)
 
 DEBUG_OT=n
@@ -104,6 +105,7 @@ mod-config: mod-check-compiler
 	  -DSITE_PACKAGE=Lib/site-packages \
 	  -DUSE_SALOME=OFF \
 	  -DUSE_QT5=OFF \
+	  -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j$(JOBS_COTIRE)" \
 	$(MOD_SRC)
 	touch mod-config
 

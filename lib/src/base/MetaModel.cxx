@@ -29,7 +29,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(MetaModel);
 
-static Factory<MetaModel> RegisteredFactory;
+static Factory<MetaModel> Factory_MetaModel;
 
 /* Default constructor */
 MetaModel::MetaModel(const String& name)

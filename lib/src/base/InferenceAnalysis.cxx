@@ -32,8 +32,8 @@ namespace OTGUI {
 
 CLASSNAMEINIT(InferenceAnalysis);
 
-static Factory<InferenceAnalysis> RegisteredFactory;
-static Factory<PersistentCollection<Description> > RegisteredFactory_CollDesc;
+static Factory<InferenceAnalysis> Factory_InferenceAnalysis;
+static Factory<PersistentCollection<Description> > Factory_PersistentCollection_Description;
 
 /* Default constructor */
 InferenceAnalysis::InferenceAnalysis()

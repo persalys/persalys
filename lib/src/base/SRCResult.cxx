@@ -28,7 +28,7 @@ namespace OTGUI {
 
 CLASSNAMEINIT(SRCResult);
 
-static Factory<SRCResult> RegisteredFactory;
+static Factory<SRCResult> Factory_SRCResult;
 
 /* Default constructor */
 SRCResult::SRCResult()
