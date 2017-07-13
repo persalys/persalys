@@ -249,6 +249,16 @@ void PhysicalModelImplementation::removeInput(const String & inputName)
 void PhysicalModelImplementation::clearInputs()
 {
   inputs_.clear();
+  // reset outputs values
+  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
+    getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
+
+  // update copula
+  updateCopula();
+
+  // update finite difference step
+  updateFiniteDifferenceSteps();
+
   notify("inputNumberChanged");
 }
 
