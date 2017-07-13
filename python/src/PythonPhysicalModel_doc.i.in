@@ -15,7 +15,7 @@ code : str
 Notes
 -----
 The code string must contain a function named '_exec' that takes float
-arguments and return a sequence of floats.
+arguments and return a float or a sequence of floats.
 
 Examples
 --------

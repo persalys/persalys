@@ -117,13 +117,13 @@ It consists in defining the physical model as a Python function **_exec**
 .. image:: /user_manual/graphical_interface/physical_model/pythonPhysicalModel.png
     :align: center
 
-This function takes floating point arguments and returns a sequence of floating points.
+This function takes floating point arguments and returns a float or a sequence of floats.
 
 Input variables names are detected from the function definition.
 The value of the input variables can be set by the user and are expected
 to be floating points or integers. By default they are equal to 0.
 
-The variables listed in the return sequence are detected as output variables.
+The variables listed in the return are detected as output variables.
 
 Other statements which may be used by the **_exec** function can be defined in the Python editor.
 
