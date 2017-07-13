@@ -120,6 +120,9 @@ protected:
   void updateFiniteDifferenceSteps() const;
 
 private:
+  void notifyInputNumberChanged();
+
+private:
   OT::PersistentCollection<Input> inputs_;
   OT::PersistentCollection<Output> outputs_;
   OT::Copula copula_;

@@ -116,18 +116,7 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
     throw InvalidArgumentException(HERE) << "Two inputs can not have the same name."; 
 
   inputs_ = inputs;
-
-  // reset outputs values
-  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
-    getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
-
-  // update copula
-  updateCopula();
-
-  // update finite difference step
-  updateFiniteDifferenceSteps();
-
-  notify("inputNumberChanged");
+  notifyInputNumberChanged();
 }
 
 
@@ -249,6 +238,12 @@ void PhysicalModelImplementation::removeInput(const String & inputName)
 void PhysicalModelImplementation::clearInputs()
 {
   inputs_.clear();
+  notifyInputNumberChanged();
+}
+
+
+void PhysicalModelImplementation::notifyInputNumberChanged()
+{
   // reset outputs values
   for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
     getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
