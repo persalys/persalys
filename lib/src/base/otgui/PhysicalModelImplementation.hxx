@@ -120,7 +120,7 @@ protected:
   void updateFiniteDifferenceSteps() const;
 
 private:
-  void notifyInputNumberChanged();
+  void inputsChanged();
 
 private:
   OT::PersistentCollection<Input> inputs_;
