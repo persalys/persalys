@@ -129,7 +129,6 @@ void YACSPhysicalModel::updateData()
     Input newInput(evaluation_.getInputVariablesNames()[i], evaluation_.getInputValues()[i]);
     PhysicalModelImplementation::addInput(newInput);
   }
-  notify("inputChanged");
 
   PhysicalModelImplementation::clearOutputs();
   for (UnsignedInteger i=0; i<evaluation_.getOutputDimension(); ++i)
@@ -137,7 +136,6 @@ void YACSPhysicalModel::updateData()
     Output newOutput(evaluation_.getOutputVariablesNames()[i]);
     PhysicalModelImplementation::addOutput(newOutput);
   }
-  notify("outputChanged");
 }
 
 

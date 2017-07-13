@@ -249,6 +249,7 @@ void PhysicalModelImplementation::removeInput(const String & inputName)
 void PhysicalModelImplementation::clearInputs()
 {
   inputs_.clear();
+  notify("inputNumberChanged");
 }
 
 
@@ -450,6 +451,7 @@ void PhysicalModelImplementation::removeOutput(const String & outputName)
 void PhysicalModelImplementation::clearOutputs()
 {
   outputs_.clear();
+  notify("outputNumberChanged");
 }
 
 
