@@ -30,6 +30,7 @@ template <>
 
 %ignore *::addObserver;
 %ignore *::blockNotification;
+%ignore *::acceptLaunchParameters;
 
 %include PhysicalModel_doc.i
 

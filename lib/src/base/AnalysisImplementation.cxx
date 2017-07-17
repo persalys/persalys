@@ -166,4 +166,9 @@ void AnalysisImplementation::load(Advocate & adv)
   adv.loadAttribute("isReliabilityAnalysis_", isReliabilityAnalysis_);
   adv.loadAttribute("interestVariables_", interestVariables_);
 }
+
+/* To be implemented in child classes. */
+void AnalysisImplementation::acceptLaunchParameters(LaunchParametersVisitor* visitor)
+{
+}
 }

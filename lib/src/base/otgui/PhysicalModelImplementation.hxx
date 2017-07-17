@@ -24,6 +24,7 @@
 #include "Input.hxx"
 #include "Output.hxx"
 #include "Observable.hxx"
+#include "LaunchParametersVisitor.hxx"
 
 #include <openturns/Function.hxx>
 #include <openturns/RandomVector.hxx>
@@ -60,6 +61,7 @@ public:
   void setFiniteDifferenceStep(const OT::String& inputName, const double& step);
   virtual void addInput(const Input & input);
   virtual void removeInput(const OT::String & inputName);
+  void clearInputs();
   OT::Description getInputNames() const;
   OT::Description getStochasticInputNames() const;
   bool hasInputNamed(const OT::String & inputName) const;
@@ -75,6 +77,7 @@ public:
   void selectOutput(const OT::String & outputName, const bool selected);
   virtual void addOutput(const Output & output);
   virtual void removeOutput(const OT::String & outputName);
+  void clearOutputs();
   OT::Description getOutputNames() const;
   bool hasOutputNamed(const OT::String & outputName) const;
   OT::Description getSelectedOutputsNames() const;
@@ -104,6 +107,8 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
+  
+  virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
 
 protected:
   virtual OT::Function generateFunction(const OT::Description & outputNames) const;
@@ -113,6 +118,9 @@ protected:
   OT::String getCopulaPythonScript() const;
   OT::Point getFiniteDifferenceSteps() const;
   void updateFiniteDifferenceSteps() const;
+
+private:
+  void inputsChanged();
 
 private:
   OT::PersistentCollection<Input> inputs_;

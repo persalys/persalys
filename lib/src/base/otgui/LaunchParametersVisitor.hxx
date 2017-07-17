@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow to define a yacs physical model
+ *  @brief LaunchParametersVisitor defines launching parameters.
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,32 +18,24 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_YACSPHYSICALMODELWINDOW_HXX
-#define OTGUI_YACSPHYSICALMODELWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
-#include "otgui/PhysicalModelDefinitionItem.hxx"
-
-#include <QLineEdit>
-#include <QCheckBox>
-#include <QComboBox>
+#ifndef OTGUI_LAUNCHPARAMETERSVISITOR_HXX
+#define OTGUI_LAUNCHPARAMETERSVISITOR_HXX
 
 namespace OTGUI {
-  
-class OTGUI_API YACSPhysicalModelWindow : public OTguiSubWindow
+#ifdef OTGUI_HAVE_YACS
+class YACSPhysicalModel;
+#endif
+
+class LaunchParametersVisitor
 {
-  Q_OBJECT
+  public:
+    LaunchParametersVisitor(){}
+    ~LaunchParametersVisitor(){}
+#ifdef OTGUI_HAVE_YACS
+    virtual void visitYACS(YACSPhysicalModel* model)=0;
+#endif
 
-public :
-  YACSPhysicalModelWindow(PhysicalModelDefinitionItem * item);
-
-public slots:
-  void selectImportFileDialogRequested();
-  void buildSchemaDialogRequested();
-
-private:
-  PhysicalModel physicalModel_;
-  QLineEdit * XMLfileNameEdit_;
 };
 }
-#endif
+#endif // OTGUI_LAUNCHPARAMETERSVISITOR_HXX

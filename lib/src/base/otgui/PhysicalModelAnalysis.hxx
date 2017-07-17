@@ -49,6 +49,8 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
+  virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
+
 private:
   PhysicalModel physicalModel_;
 };

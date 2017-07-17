@@ -99,4 +99,13 @@ void DesignOfExperimentAnalysis::load(Advocate & adv)
   if (!getInterestVariables().getSize())
     setInterestVariables(designOfExperiment_.getOutputSample().getDescription());
 }
+
+
+void DesignOfExperimentAnalysis::acceptLaunchParameters(LaunchParametersVisitor* visitor)
+{
+  if(designOfExperiment_.hasPhysicalModel())
+  {
+    designOfExperiment_.getPhysicalModel().getImplementation()->acceptLaunchParameters(visitor);
+  }
+}
 }

@@ -135,4 +135,10 @@ void Analysis::setImplementationAsPersistentObject(const ImplementationAsPersist
   TypedInterfaceObject< AnalysisImplementation >::setImplementationAsPersistentObject(obj);
   getImplementation()->notify("implementationModified");
 }
+
+
+void Analysis::acceptLaunchParameters(LaunchParametersVisitor* visitor)
+{
+  getImplementation()->acceptLaunchParameters(visitor);
+}
 }

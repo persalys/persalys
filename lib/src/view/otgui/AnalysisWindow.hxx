@@ -23,12 +23,13 @@
 
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/AnalysisItem.hxx"
+#include "otgui/LaunchParametersVisitor.hxx"
 
 #include <QPushButton>
 #include <QProgressBar>
 
 namespace OTGUI {
-class OTGUI_API AnalysisWindow : public OTguiSubWindow
+class OTGUI_API AnalysisWindow : public OTguiSubWindow, LaunchParametersVisitor
 {
   Q_OBJECT
 
@@ -40,6 +41,9 @@ public:
 protected:
   void buildInterface();
   void initializeWidgets();
+#ifdef OTGUI_HAVE_YACS
+  virtual void visitYACS(YACSPhysicalModel* model);
+#endif
 
 public slots:
   void updateRunButtonAvailability(bool);
@@ -55,6 +59,7 @@ private:
   QPushButton * runButton_;
   QPushButton * stopButton_;
   QLabel * messageLabel_;
+  QWidget * launchParameters_;
 };
 }
 #endif

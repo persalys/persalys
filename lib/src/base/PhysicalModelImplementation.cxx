@@ -116,18 +116,7 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
     throw InvalidArgumentException(HERE) << "Two inputs can not have the same name."; 
 
   inputs_ = inputs;
-
-  // reset outputs values
-  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
-    getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
-
-  // update copula
-  updateCopula();
-
-  // update finite difference step
-  updateFiniteDifferenceSteps();
-
-  notify("inputNumberChanged");
+  inputsChanged();
 }
 
 
@@ -243,6 +232,29 @@ void PhysicalModelImplementation::removeInput(const String & inputName)
   }
   else
     throw InvalidArgumentException(HERE) << "The given input name " << inputName <<" does not correspond to an input of the physical model.\n";
+}
+
+
+void PhysicalModelImplementation::clearInputs()
+{
+  inputs_.clear();
+  inputsChanged();
+}
+
+
+void PhysicalModelImplementation::inputsChanged()
+{
+  // reset outputs values
+  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
+    getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
+
+  // update copula
+  updateCopula();
+
+  // update finite difference step
+  updateFiniteDifferenceSteps();
+
+  notify("inputNumberChanged");
 }
 
 
@@ -438,6 +450,13 @@ void PhysicalModelImplementation::removeOutput(const String & outputName)
   }
   else
     throw InvalidArgumentException(HERE) << "The given output name " << outputName <<" does not correspond to an output of the physical model\n";
+}
+
+
+void PhysicalModelImplementation::clearOutputs()
+{
+  outputs_.clear();
+  notify("outputNumberChanged");
 }
 
 
@@ -744,4 +763,11 @@ void PhysicalModelImplementation::load(Advocate & adv)
   adv.loadAttribute("outputs_", outputs_);
   adv.loadAttribute("copula_", copula_);
 }
+
+
+/* Nothing to do at this level. Overloaded in child classes if needed.*/
+void PhysicalModelImplementation::acceptLaunchParameters(LaunchParametersVisitor* visitor)
+{
+}
+
 }

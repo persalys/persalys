@@ -33,7 +33,7 @@ static Factory<YACSPhysicalModel> Factory_YACSPhysicalModel;
 /* Default constructor */
 YACSPhysicalModel::YACSPhysicalModel(const String & name)
   : PhysicalModelImplementation(name)
-  , evaluation_(YACSEvaluation())
+  , evaluation_()
 {
 }
 
@@ -41,7 +41,7 @@ YACSPhysicalModel::YACSPhysicalModel(const String & name)
 /* Constructor with parameters */
 YACSPhysicalModel::YACSPhysicalModel(const String & name, const String & fileName)
   : PhysicalModelImplementation(name)
-  , evaluation_(YACSEvaluation(fileName))
+  , evaluation_(fileName)
 {
   setXMLFileName(fileName);
 }
@@ -90,40 +90,9 @@ void YACSPhysicalModel::removeOutput(const String & outputName)
 }
 
 
-/* Accessor to the parallelize status */
-bool YACSPhysicalModel::getParallelizeStatus() const
+AbstractResourceModel* YACSPhysicalModel::getResourceModel()
 {
-  return evaluation_.getParallelizeStatus();
-}
-
-
-/* Accessor to the parallelize status */
-void YACSPhysicalModel::setParallelizeStatus(const bool & status)
-{
-  evaluation_.setParallelizeStatus(status);
-  notify("parallelizeStatusChanged");
-}
-
-
-/* Accessor to the fitting machines */
-Description YACSPhysicalModel::getFittingMachines() const
-{
-  return evaluation_.getFittingMachines();
-}
-
-
-/* Accessor to the wanted machine */
-String YACSPhysicalModel::getWantedMachine() const
-{
-  return evaluation_.getWantedMachine();
-}
-
-
-/* Accessor to the wanted machine */
-void YACSPhysicalModel::setWantedMachine(const String & machine)
-{
-  evaluation_.setWantedMachine(machine);
-  notify("wantedMachineChanged");
+  return evaluation_.getResourceModel();
 }
 
 
@@ -154,19 +123,19 @@ void YACSPhysicalModel::setXMLFileName(const String & fileName)
 
 void YACSPhysicalModel::updateData()
 {
+  PhysicalModelImplementation::clearInputs();
   for (UnsignedInteger i=0; i<evaluation_.getInputDimension(); ++i)
   {
     Input newInput(evaluation_.getInputVariablesNames()[i], evaluation_.getInputValues()[i]);
     PhysicalModelImplementation::addInput(newInput);
   }
-  notify("inputChanged");
 
+  PhysicalModelImplementation::clearOutputs();
   for (UnsignedInteger i=0; i<evaluation_.getOutputDimension(); ++i)
   {
     Output newOutput(evaluation_.getOutputVariablesNames()[i]);
     PhysicalModelImplementation::addOutput(newOutput);
   }
-  notify("outputChanged");
 }
 
 
@@ -219,5 +188,11 @@ void YACSPhysicalModel::load(Advocate & adv)
   PhysicalModelImplementation::load(adv);
   adv.loadAttribute("xmlFileName_", xmlFileName_);
   adv.loadAttribute("evaluation_", evaluation_);
+}
+
+
+void YACSPhysicalModel::acceptLaunchParameters(LaunchParametersVisitor* visitor)
+{
+  visitor->visitYACS(this);
 }
 }

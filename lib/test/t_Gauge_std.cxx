@@ -48,8 +48,6 @@ int main(int argc, char *argv[])
 
     YACSPhysicalModel myPhysicalModel("myPhysicalModel", fileName);
     myPhysicalModel.setInputDistribution("Conductivity", Normal(0.5, 0.01));
-    myPhysicalModel.setParallelizeStatus(false);
-    myPhysicalModel.setWantedMachine("localhost");
     myStudy.add(myPhysicalModel);
 
     // Model evaluation
