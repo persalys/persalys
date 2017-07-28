@@ -96,6 +96,7 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   //
   scrollArea->setWidget(frame);
   mainLayout->addWidget(scrollArea);
+  setVisible(false);
 }
 
 
