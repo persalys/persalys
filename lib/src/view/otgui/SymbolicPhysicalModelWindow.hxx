@@ -31,7 +31,7 @@ class OTGUI_API SymbolicPhysicalModelWindow : public OTguiSubWindow
   Q_OBJECT
 
 public :
-  SymbolicPhysicalModelWindow(PhysicalModelDefinitionItem * item);
+  SymbolicPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent=0);
 };
 }
 #endif

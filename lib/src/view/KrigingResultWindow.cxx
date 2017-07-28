@@ -35,8 +35,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-KrigingResultWindow::KrigingResultWindow(AnalysisItem * item)
-  : ResultWindow(item)
+KrigingResultWindow::KrigingResultWindow(AnalysisItem * item, QWidget * parent)
+  : ResultWindow(item, parent)
   , result_()
   , optimizeParameters_(true)
   , outputsListWidget_(0)

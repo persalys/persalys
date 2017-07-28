@@ -31,8 +31,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-ModelEvaluationResultWindow::ModelEvaluationResultWindow(AnalysisItem * item)
-  : ResultWindow(item)
+ModelEvaluationResultWindow::ModelEvaluationResultWindow(AnalysisItem * item, QWidget * parent)
+  : ResultWindow(item, parent)
   , result_(dynamic_cast<ModelEvaluation*>(&*item->getAnalysis().getImplementation())->getResult())
 {
   buildInterface();

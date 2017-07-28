@@ -50,7 +50,7 @@ class OTGUI_API ResultWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  ResultWindow(AnalysisItem * item);
+  ResultWindow(AnalysisItem * item, QWidget * parent=0);
 
 protected:
   virtual void setParameters(const Analysis& analysis, const QString& title);

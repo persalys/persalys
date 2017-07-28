@@ -26,8 +26,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-DataAnalysisResultWindow::DataAnalysisResultWindow(AnalysisItem * item)
-  : DataAnalysisWindow(item)
+DataAnalysisResultWindow::DataAnalysisResultWindow(AnalysisItem * item, QWidget * parent)
+  : DataAnalysisWindow(item, parent)
 {
   if (!dynamic_cast<DataAnalysis*>(&*item->getAnalysis().getImplementation()))
     throw InvalidArgumentException (HERE) << "Can NOT build the DataAnalysisResultWindow: The analysis of the item is not valid";

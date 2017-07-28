@@ -40,8 +40,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * item)
-  : OTguiSubWindow(item)
+YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
+  : OTguiSubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
 {
   setWindowTitle(tr("YACS physical model"));

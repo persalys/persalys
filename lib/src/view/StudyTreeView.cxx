@@ -341,7 +341,7 @@ void StudyTreeView::createNewOTStudyWindow(OTStudyItem* item)
   connect(item, SIGNAL(recentFilesListChanged(QString)), this, SIGNAL(recentFilesListChanged(QString)));
 
   // window
-  OTStudyWindow * window = new OTStudyWindow(item);
+  OTStudyWindow * window = new OTStudyWindow(item, this);
 
   emit showWindow(window);
   setCurrentIndex(item->index());
@@ -361,7 +361,7 @@ void StudyTreeView::createNewDataModelDiagramWindow(DataModelDiagramItem* item)
   connect(item, SIGNAL(analysisRequested(OTguiItem*,Analysis, bool)), this, SLOT(createNewAnalysis(OTguiItem*,Analysis, bool)));
 
   // window
-  DataModelDiagramWindow * window = new DataModelDiagramWindow(item);
+  DataModelDiagramWindow * window = new DataModelDiagramWindow(item, this);
 
   if (!window)
   {
@@ -388,7 +388,7 @@ void StudyTreeView::createNewDataModelWindow(DataModelDefinitionItem* item, cons
   }
 
   // window
-		DataModelWindow * window = new DataModelWindow(item);
+		DataModelWindow * window = new DataModelWindow(item, this);
 
   if (!window)
   {
@@ -419,7 +419,7 @@ void StudyTreeView::createNewPhysicalModelDiagramWindow(PhysicalModelDiagramItem
   connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis, bool)), this, SLOT(createNewAnalysis(OTguiItem*, Analysis, bool)));
 
   // window
-  PhysicalModelDiagramWindow * window = new PhysicalModelDiagramWindow(item);
+  PhysicalModelDiagramWindow * window = new PhysicalModelDiagramWindow(item, this);
 
   if (!window)
   {
@@ -448,18 +448,18 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelDefinitionItem* it
   String physicalModelType = item->getPhysicalModel().getImplementation()->getClassName();
 
   if (physicalModelType == "SymbolicPhysicalModel")
-    window = new SymbolicPhysicalModelWindow(item);
+    window = new SymbolicPhysicalModelWindow(item, this);
   else if (physicalModelType == "PythonPhysicalModel")
-    window = new PythonPhysicalModelWindow(item);
+    window = new PythonPhysicalModelWindow(item, this);
   else if (physicalModelType == "MetaModel")
-    window = new MetaModelWindow(item);
+    window = new MetaModelWindow(item, this);
 #ifdef OTGUI_HAVE_YACS
   else if (physicalModelType == "YACSPhysicalModel")
-    window = new YACSPhysicalModelWindow(item);
+    window = new YACSPhysicalModelWindow(item, this);
 #endif
 #ifdef OTGUI_HAVE_OTFMI
   else if (physicalModelType == "FMIPhysicalModel")
-    window = new FMIPhysicalModelWindow(item);
+    window = new FMIPhysicalModelWindow(item, this);
 #endif
   if (!window)
   {
@@ -487,7 +487,7 @@ void StudyTreeView::createNewProbabilisticModelWindow(ProbabilisticModelItem* it
     return;
 
   // window
-  ProbabilisticModelWindow * window = new ProbabilisticModelWindow(otStudyItem->getOTStudy(), item);
+  ProbabilisticModelWindow * window = new ProbabilisticModelWindow(otStudyItem->getOTStudy(), item, this);
 
   if (!window)
   {
@@ -514,7 +514,7 @@ void StudyTreeView::createNewLimitStateWindow(LimitStateItem* item)
   connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
 
   // window
-  LimitStateWindow * window = new LimitStateWindow(item);
+  LimitStateWindow * window = new LimitStateWindow(item, this);
 
   if (!window)
   {
@@ -543,7 +543,7 @@ void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentDefiniti
   }
 
   // window
-  DesignOfExperimentInputWindow * window = new DesignOfExperimentInputWindow(item);
+  DesignOfExperimentInputWindow * window = new DesignOfExperimentInputWindow(item, this);
 
   if (!window)
   {
@@ -589,33 +589,33 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
   const QString analysisType = item->data(Qt::UserRole).toString();
 
   if (analysisType == "ModelEvaluation")
-    resultWindow = new ModelEvaluationResultWindow(item);
+    resultWindow = new ModelEvaluationResultWindow(item, this);
   else if (analysisType == "MonteCarloAnalysis")
     resultWindow = new MonteCarloResultWindow(item);
   else if (analysisType == "TaylorExpansionMomentsAnalysis")
     resultWindow = new TaylorExpansionMomentsResultWindow(item);
   else if (analysisType == "SobolAnalysis")
-    resultWindow = new SobolResultWindow(item);
+    resultWindow = new SobolResultWindow(item, this);
   else if (analysisType == "SRCAnalysis")
-    resultWindow = new SRCResultWindow(item);
+    resultWindow = new SRCResultWindow(item, this);
   else if (analysisType == "MonteCarloReliabilityAnalysis" ||
            analysisType == "FORMImportanceSamplingAnalysis" ||
            analysisType == "ImportanceSamplingAnalysis")
-    resultWindow = new SimulationReliabilityResultWindow(item);
+    resultWindow = new SimulationReliabilityResultWindow(item, this);
   else if (analysisType == "FORMAnalysis")
-    resultWindow = new ApproximationResultWindow(item);
+    resultWindow = new ApproximationResultWindow(item, this);
   else if (analysisType == "DataAnalysis")
     resultWindow = new DataAnalysisResultWindow(item);
   else if (analysisType == "FunctionalChaosAnalysis")
-    resultWindow = new FunctionalChaosResultWindow(item);
+    resultWindow = new FunctionalChaosResultWindow(item, this);
   else if (analysisType == "KrigingAnalysis")
-    resultWindow = new KrigingResultWindow(item);
+    resultWindow = new KrigingResultWindow(item, this);
   else if (analysisType == "InferenceAnalysis")
-    resultWindow = new InferenceResultWindow(item);
+    resultWindow = new InferenceResultWindow(item, this);
   else if (analysisType == "CopulaInferenceAnalysis")
-    resultWindow = new CopulaInferenceResultWindow(item);
+    resultWindow = new CopulaInferenceResultWindow(item, this);
   else if (analysisType == "DesignOfExperimentEvaluation")
-    resultWindow = new DesignOfExperimentWindow(item);
+    resultWindow = new DesignOfExperimentWindow(item, this);
 
   if (!resultWindow)
   {
@@ -642,7 +642,7 @@ void StudyTreeView::createAnalysisWindow(AnalysisItem* item)
   // do removeSubWindow if the analysis run method has been launched from a Python script
   emit removeSubWindow(item); // need?
 
-  AnalysisWindow * window = new AnalysisWindow(item, analysisInProgress_);
+  AnalysisWindow * window = new AnalysisWindow(item, analysisInProgress_, this);
 
   if (!window)
   {

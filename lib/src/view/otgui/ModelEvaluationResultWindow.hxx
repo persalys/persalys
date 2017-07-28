@@ -31,7 +31,7 @@ class OTGUI_API ModelEvaluationResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  ModelEvaluationResultWindow(AnalysisItem * item);
+  ModelEvaluationResultWindow(AnalysisItem * item, QWidget * parent=0);
 
 protected:
   virtual void setParameters(const Analysis& analysis, const QString& title) {/*has not parameters*/};

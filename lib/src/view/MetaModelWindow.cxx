@@ -24,8 +24,8 @@
 
 namespace OTGUI {
 
-MetaModelWindow::MetaModelWindow(PhysicalModelDefinitionItem * item)
-  : OTguiSubWindow(item)
+MetaModelWindow::MetaModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
+  : OTguiSubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
 {
   PhysicalModelWindowWidget * widget = new PhysicalModelWindowWidget(item);

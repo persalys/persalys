@@ -34,7 +34,7 @@ class OTGUI_API AnalysisWindow : public OTguiSubWindow, LaunchParametersVisitor
   Q_OBJECT
 
 public:
-  AnalysisWindow(AnalysisItem* item, const bool analysisInProgress=false);
+  AnalysisWindow(AnalysisItem* item, const bool analysisInProgress=false, QWidget * parent=0);
 
   virtual ~AnalysisWindow();
 

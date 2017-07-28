@@ -28,8 +28,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-MonteCarloResultWindow::MonteCarloResultWindow(AnalysisItem * item)
-  : DataAnalysisWindow(item)
+MonteCarloResultWindow::MonteCarloResultWindow(AnalysisItem * item, QWidget * parent)
+  : DataAnalysisWindow(item, parent)
 {
   if (dynamic_cast<MonteCarloAnalysis*>(item->getAnalysis().getImplementation().get()))
     initialize(item);

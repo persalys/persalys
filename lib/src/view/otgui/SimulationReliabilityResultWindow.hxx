@@ -31,7 +31,7 @@ class OTGUI_API SimulationReliabilityResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  SimulationReliabilityResultWindow(AnalysisItem * item);
+  SimulationReliabilityResultWindow(AnalysisItem * item, QWidget * parent=0);
 
   virtual ~SimulationReliabilityResultWindow();
 

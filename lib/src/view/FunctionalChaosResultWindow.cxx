@@ -32,8 +32,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item)
-  : ResultWindow(item)
+FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item, QWidget * parent)
+  : ResultWindow(item, parent)
   , result_()
   , maxDegree_(0)
   , sparse_(false)

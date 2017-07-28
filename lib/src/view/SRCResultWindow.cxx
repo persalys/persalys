@@ -32,8 +32,8 @@ using namespace OT;
 
 namespace OTGUI {
   
-SRCResultWindow::SRCResultWindow(AnalysisItem * item)
-  : ResultWindow(item)
+SRCResultWindow::SRCResultWindow(AnalysisItem * item, QWidget * parent)
+  : ResultWindow(item, parent)
   , result_()
   , outputsListWidget_(0)
   , tabWidget_(0)

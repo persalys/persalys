@@ -32,8 +32,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-LimitStateWindow::LimitStateWindow(LimitStateItem * item)
-  : OTguiSubWindow(item)
+LimitStateWindow::LimitStateWindow(LimitStateItem * item, QWidget * parent)
+  : OTguiSubWindow(item, parent)
   , limitState_(item->getLimitState())
 {
   buildInterface();

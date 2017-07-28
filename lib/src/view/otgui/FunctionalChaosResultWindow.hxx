@@ -31,7 +31,7 @@ class OTGUI_API FunctionalChaosResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  FunctionalChaosResultWindow(AnalysisItem * item);
+  FunctionalChaosResultWindow(AnalysisItem * item, QWidget * parent=0);
 
 protected:
   void buildInterface();

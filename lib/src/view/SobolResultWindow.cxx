@@ -32,8 +32,8 @@ using namespace OT;
 
 namespace OTGUI {
   
-SobolResultWindow::SobolResultWindow(AnalysisItem * item)
-  : ResultWindow(item)
+SobolResultWindow::SobolResultWindow(AnalysisItem * item, QWidget * parent)
+  : ResultWindow(item, parent)
   , result_()
   , outputsListWidget_(0)
   , tabWidget_(0)

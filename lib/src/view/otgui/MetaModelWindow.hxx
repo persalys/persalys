@@ -30,7 +30,7 @@ class OTGUI_API MetaModelWindow : public OTguiSubWindow
   Q_OBJECT
 
 public :
-  MetaModelWindow(PhysicalModelDefinitionItem * item);
+  MetaModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent=0);
 
 private:
   PhysicalModel physicalModel_;

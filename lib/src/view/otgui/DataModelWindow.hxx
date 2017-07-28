@@ -55,7 +55,7 @@ class OTGUI_API DataModelWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  DataModelWindow(DataModelDefinitionItem * item);
+  DataModelWindow(DataModelDefinitionItem * item, QWidget * parent=0);
 
   virtual ~DataModelWindow();
 

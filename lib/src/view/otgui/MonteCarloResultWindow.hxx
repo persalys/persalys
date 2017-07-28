@@ -29,7 +29,7 @@ class OTGUI_API MonteCarloResultWindow : public DataAnalysisWindow
   Q_OBJECT
 
 public:
-  MonteCarloResultWindow(AnalysisItem * item);
+  MonteCarloResultWindow(AnalysisItem * item, QWidget * parent=0);
 
 protected:
   virtual void initialize(AnalysisItem* item);

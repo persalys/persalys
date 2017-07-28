@@ -33,7 +33,7 @@ class OTGUI_API InferenceResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  InferenceResultWindow(AnalysisItem * item);
+  InferenceResultWindow(AnalysisItem * item, QWidget * parent=0);
 
 protected:
   void buildInterface();

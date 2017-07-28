@@ -33,7 +33,7 @@ class OTGUI_API ApproximationResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  ApproximationResultWindow(AnalysisItem * item);
+  ApproximationResultWindow(AnalysisItem * item, QWidget * parent=0);
 
 protected:
   void buildInterface();

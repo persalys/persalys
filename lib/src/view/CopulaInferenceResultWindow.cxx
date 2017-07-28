@@ -32,8 +32,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-CopulaInferenceResultWindow::CopulaInferenceResultWindow(AnalysisItem* item)
-  : ResultWindow(item)
+CopulaInferenceResultWindow::CopulaInferenceResultWindow(AnalysisItem* item, QWidget * parent)
+  : ResultWindow(item, parent)
   , result_(dynamic_cast<CopulaInferenceAnalysis*>(&*item->getAnalysis().getImplementation())->getResult())
   , currentResultsTab_(0)
 {

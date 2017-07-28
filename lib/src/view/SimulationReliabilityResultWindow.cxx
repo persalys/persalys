@@ -38,8 +38,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisItem * item)
-  : ResultWindow(item)
+SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisItem * item, QWidget * parent)
+  : ResultWindow(item, parent)
   , result_(dynamic_cast<SimulationReliabilityAnalysis*>(item->getAnalysis().getImplementation().get())->getResult())
   , tabWidget_(0)
   , formTabWidget_(0)

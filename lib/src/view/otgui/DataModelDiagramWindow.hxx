@@ -30,7 +30,7 @@ class OTGUI_API DataModelDiagramWindow : public OTguiSubWindow
   Q_OBJECT
 
 public :
-  DataModelDiagramWindow(DataModelDiagramItem * item);
+  DataModelDiagramWindow(DataModelDiagramItem * item, QWidget * parent=0);
 };
 }
 #endif

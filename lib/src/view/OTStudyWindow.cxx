@@ -28,8 +28,8 @@
 
 namespace OTGUI {
 
-OTStudyWindow::OTStudyWindow(OTStudyItem * item)
-  : OTguiSubWindow(item)
+OTStudyWindow::OTStudyWindow(OTStudyItem * item, QWidget * parent)
+  : OTguiSubWindow(item, parent)
   , otStudyItem_(item)
 {
   buildInterface();
