@@ -47,7 +47,6 @@ int main(int argc, char *argv[])
 #ifdef OTGUI_HAVE_PARAVIEW
   pqPVApplicationCore appPV(argc, argv);
   QApplication::instance()->installEventFilter(&appPV);
-  appPV.loadConfiguration(":/lib/src/view/plot/paraview/ParaViewSources.xml");
 #endif
 
   // Settings
