@@ -8,6 +8,7 @@ ot_add_source_file (PVSpreadSheetViewWidget.cxx)
 ot_add_source_file (PVMatrixPlotViewWidget.cxx)
 ot_add_source_file (PVXYChartSettingWidget.cxx)
 ot_add_source_file (PVXYChartViewWidget.cxx)
+ot_add_source_file (PVPlotSettingWidget.cxx)
 
 ot_install_header_file (PVMatrixPlotViewWidget.hxx)
 ot_install_header_file (PVMatrixPlotViewWidget.hxx)
@@ -17,6 +18,7 @@ ot_install_header_file (PVViewWidget.hxx)
 ot_install_header_file (PVServerManagerInterface.hxx)
 ot_install_header_file (PVXYChartSettingWidget.hxx)
 ot_install_header_file (PVXYChartViewWidget.hxx)
+ot_install_header_file (PVPlotSettingWidget.hxx)
 
 qt5_wrap_cpp (OTGUI_PLOTPARAVIEW_MOC_SRCS
               otgui/PVMatrixPlotViewWidget.hxx
@@ -24,7 +26,8 @@ qt5_wrap_cpp (OTGUI_PLOTPARAVIEW_MOC_SRCS
               otgui/PVSpreadSheetViewWidget.hxx
               otgui/PVViewWidget.hxx
               otgui/PVXYChartSettingWidget.hxx
-              otgui/PVXYChartViewWidget.hxx)
+              otgui/PVXYChartViewWidget.hxx
+              otgui/PVPlotSettingWidget.hxx)
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
 add_library (otguiplotparaview ${SOURCEFILES} ${OTGUI_PLOTPARAVIEW_MOC_SRCS})
