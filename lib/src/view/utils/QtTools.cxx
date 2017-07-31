@@ -20,6 +20,8 @@
  */
 #include "otgui/QtTools.hxx"
 
+using namespace OT;
+
 namespace OTGUI {
 
 // SignalBlocker class
@@ -54,5 +56,17 @@ QString SimpleException::text() const
 const char *SimpleException::what() const throw()
 {
   return text_.toStdString().c_str();
+}
+
+
+QStringList QtOT::DescriptionToStringList(const Description& description)
+{
+  UnsignedInteger size(description.getSize());
+  QStringList result;
+  for (UnsignedInteger i = 0; i < size; ++i)
+  {
+    result.append(QString::fromUtf8(description[i].c_str()));
+  }
+  return result;
 }
 }
