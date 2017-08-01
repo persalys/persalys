@@ -22,10 +22,8 @@
 #define OTGUI_DATAANALYSISRESULT_HXX
 
 #include "DataSample.hxx"
-#include "otgui/OTGuiprivate.hxx"
 
-#include "openturns/OTType.hxx"
-#include "openturns/Distribution.hxx"
+#include <openturns/Distribution.hxx>
 
 namespace OTGUI {
 class OTGUI_API DataAnalysisResult : public DataSample
@@ -41,9 +39,6 @@ public:
 
   /** Default constructor */
   DataAnalysisResult();
-  /** Constructor with parameters */
-  DataAnalysisResult(const OT::Sample & inputSample,
-                     const OT::Sample & outputSample);
 
   /** Virtual constructor */
   virtual DataAnalysisResult * clone() const;
