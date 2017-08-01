@@ -55,9 +55,9 @@ DataModelTableModel::DataModelTableModel(const Sample& data, DataModel* dataMode
 
   if (!indices.check(data_.getDimension()) || !indices.getSize())
   {
-    inputColumns_ = Indices(data_.getDimension() > 1? data_.getDimension()-1 : 1);
+    inputColumns_ = Indices(data_.getDimension() > 1 ? data_.getDimension() - 1 : 1);
     inputColumns_.fill();
-    outputColumns_ = Indices(data_.getDimension() > 1? 1 : 0, data_.getDimension()-1);
+    outputColumns_ = Indices(data_.getDimension() > 1 ? 1 : 0, data_.getDimension() - 1);
     dataModel->blockNotification("DataModelDefinition");
     dataModel->setColumns(inputColumns_, outputColumns_);
     dataModel->blockNotification();
@@ -67,12 +67,12 @@ DataModelTableModel::DataModelTableModel(const Sample& data, DataModel* dataMode
     Description dataDescription(data_.getDescription());
     if (dataModel_->getInputNames().getSize() == inputColumns_.getSize())
     {
-      for (UnsignedInteger i=0; i<dataModel_->getInputNames().getSize(); ++i)
+      for (UnsignedInteger i = 0; i < dataModel_->getInputNames().getSize(); ++i)
         dataDescription[inputColumns_[i]] = dataModel_->getInputNames()[i];
     }
     if (dataModel_->getOutputNames().getSize() == outputColumns_.getSize())
     {
-      for (UnsignedInteger i=0; i<dataModel_->getOutputNames().getSize(); ++i)
+      for (UnsignedInteger i = 0; i < dataModel_->getOutputNames().getSize(); ++i)
         dataDescription[outputColumns_[i]] = dataModel_->getOutputNames()[i];
     }
     data_.setDescription(dataDescription);
@@ -107,7 +107,7 @@ QVariant DataModelTableModel::headerData(int section, Qt::Orientation orientatio
     else if (section == 1)
       return tr("Type");
     else
-      return section-1;
+      return section - 1;
   }
   return QAbstractTableModel::headerData(section, orientation, role);
 }
@@ -118,16 +118,21 @@ QVariant DataModelTableModel::data(const QModelIndex & index, int role) const
   if (!index.isValid())
     return QVariant();
 
-  if (index.row() == 0) // variable name
+  // variable name
+  if (index.row() == 0)
   {
+    // text
     if (role == Qt::DisplayRole || role == Qt::EditRole)
       return QString::fromUtf8(data_.getDescription()[index.column()].c_str());
 
+    // alignment
     else if (role == Qt::TextAlignmentRole)
       return Qt::AlignCenter;
   }
-  else if (index.row() == 1) // variable type
+  // variable type
+  else if (index.row() == 1)
   {
+    // text
     if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
       if (inputColumns_.contains(index.column()))
@@ -138,9 +143,11 @@ QVariant DataModelTableModel::data(const QModelIndex & index, int role) const
         return tr("Disable");
     }
 
+    // alignment
     else if (role == Qt::TextAlignmentRole)
       return Qt::AlignCenter;
 
+    // font
     else if (role == Qt::FontRole)
     {
       QFont font;
@@ -148,16 +155,20 @@ QVariant DataModelTableModel::data(const QModelIndex & index, int role) const
       return font;
     }
   }
-  else // variable value
+  // variable value
+  else
   {
+    // text
     if (role == Qt::DisplayRole || role == Qt::EditRole)
-      return QString::number(data_[index.row()-2][index.column()], 'g', 15);
+      return QString::number(data_[index.row() - 2][index.column()], 'g', 15);
 
+    // alignment
     else if (role == Qt::TextAlignmentRole)
       return int(Qt::AlignRight | Qt::AlignVCenter);
 
+    // background
     else if (role == Qt::BackgroundRole)
-      if (std::isnan(data_[index.row()-2][index.column()]))
+      if (std::isnan(data_[index.row() - 2][index.column()]))
         return QColor(Qt::red);
   }
   return QVariant();
@@ -169,86 +180,107 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
   if (!index.isValid())
     return false;
 
-  if (role == Qt::EditRole)
+  if (role != Qt::EditRole)
+    return true;
+
+  // change name
+  if (index.row() == 0)
   {
-    // change name
-    if (index.row() == 0)
+    // if name not valid : reset
+    if (value.toString().isEmpty())
+      return false;
+
+    // if the variable is already named like value : do nothing
+    Description description = data_.getDescription();
+    if (description[index.column()] == value.toString().toUtf8().constData())
+      return true;
+
+    // if another variable is named like value : reset
+    if (description.contains(value.toString().toUtf8().constData()))
     {
-      if (value.toString().isEmpty())
-        return false;
-
-      Description description = data_.getDescription();
-      if (description[index.column()] == value.toString().toUtf8().constData())
-        return true;
-
-      if (description.contains(value.toString().toUtf8().constData()))
-      {
-        emit temporaryErrorMessageChanged(tr("The name %2 is already used by another variable").arg(value.toString()));
-        return false;
-      }
-      description[index.column()] = value.toString().toUtf8().constData();
-      data_.setDescription(description);
+      emit temporaryErrorMessageChanged(tr("The name %2 is already used by another variable").arg(value.toString()));
+      return false;
     }
-    // change type
-    else if (index.row() == 1)
-    {
-      if (value.toString() == tr("Input"))
-      {
-        if (inputColumns_.contains(index.column()))
-          return true;
-        else if (outputColumns_.contains(index.column()))
-        {
-          for (UnsignedInteger i=0; i<outputColumns_.getSize(); ++i)
-            if ((int)outputColumns_[i] == index.column())
-              outputColumns_.erase(outputColumns_.begin() + i);
-        }
-        inputColumns_.add(index.column());
-      }
-      else if (value.toString() == tr("Output"))
-      {
-        if (outputColumns_.contains(index.column()))
-          return true;
-        else if (inputColumns_.contains(index.column()))
-        {
-          for (UnsignedInteger i=0; i<inputColumns_.getSize(); ++i)
-            if ((int)inputColumns_[i] == index.column())
-              inputColumns_.erase(inputColumns_.begin() + i);
-        }
-        outputColumns_.add(index.column());
-      }
-      else
-      {
-        if (inputColumns_.contains(index.column()))
-        {
-          for (UnsignedInteger i=0; i<inputColumns_.getSize(); ++i)
-            if ((int)inputColumns_[i] == index.column())
-              inputColumns_.erase(inputColumns_.begin() + i);
-        }
-        else if (outputColumns_.contains(index.column()))
-        {
-          for (UnsignedInteger i=0; i<outputColumns_.getSize(); ++i)
-            if ((int)outputColumns_[i] == index.column())
-              outputColumns_.erase(outputColumns_.begin() + i);
-        }
-      }
-    }
-
-    Description inNames;
-    if (inputColumns_.getSize())
-      inNames = data_.getMarginal(inputColumns_).getDescription();
-    Description outNames;
-    if (outputColumns_.getSize())
-      outNames = data_.getMarginal(outputColumns_).getDescription();
-
-    dataModel_->blockNotification("DataModelDefinition");
-    dataModel_->setColumns(inputColumns_, outputColumns_, inNames, outNames);
-    emit dataChanged(index, index);
-    emit errorMessageChanged("");
-    if (!inputColumns_.getSize() && !outputColumns_.getSize())
-      emit errorMessageChanged(tr("Define at least a variable"));
-
-    dataModel_->blockNotification();
+    // update the variable name
+    description[index.column()] = value.toString().toUtf8().constData();
+    data_.setDescription(description);
   }
+
+  // change type
+  else if (index.row() == 1)
+  {
+    // Input
+    if (value.toString() == tr("Input"))
+    {
+      // if already in inputColumns_ : do nothing
+      if (inputColumns_.contains(index.column()))
+        return true;
+      // if it was an output before : rm index from outputColumns_
+      else if (outputColumns_.contains(index.column()))
+      {
+        for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++i)
+          if ((int)outputColumns_[i] == index.column())
+            outputColumns_.erase(outputColumns_.begin() + i);
+      }
+      // update inputColumns_
+      inputColumns_.add(index.column());
+    }
+    // Output
+    else if (value.toString() == tr("Output"))
+    {
+      // if already in outputColumns_ : do nothing
+      if (outputColumns_.contains(index.column()))
+        return true;
+      // if it was an input before : rm index from inputColumns_
+      else if (inputColumns_.contains(index.column()))
+      {
+        for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++i)
+          if ((int)inputColumns_[i] == index.column())
+            inputColumns_.erase(inputColumns_.begin() + i);
+      }
+      // update outputColumns_
+      outputColumns_.add(index.column());
+    }
+    // Disable
+    else
+    {
+      // if it was an input before : rm index from inputColumns_
+      if (inputColumns_.contains(index.column()))
+      {
+        for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++i)
+          if ((int)inputColumns_[i] == index.column())
+            inputColumns_.erase(inputColumns_.begin() + i);
+      }
+      // if it was an output before : rm index from outputColumns_
+      else if (outputColumns_.contains(index.column()))
+      {
+        for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++i)
+          if ((int)outputColumns_[i] == index.column())
+            outputColumns_.erase(outputColumns_.begin() + i);
+      }
+    }
+  }
+
+  // update dataModel_
+  Description inNames;
+  if (inputColumns_.getSize())
+    inNames = data_.getMarginal(inputColumns_).getDescription();
+  Description outNames;
+  if (outputColumns_.getSize())
+    outNames = data_.getMarginal(outputColumns_).getDescription();
+
+  dataModel_->blockNotification("DataModelDefinition");
+  dataModel_->setColumns(inputColumns_, outputColumns_, inNames, outNames);
+
+  // emit error if all variables are disabled
+  emit errorMessageChanged("");
+  if (!inputColumns_.getSize() && !outputColumns_.getSize())
+    emit errorMessageChanged(tr("Define at least a variable"));
+
+  dataModel_->blockNotification();
+
+  // do not emit dataChanged : otherwise there is a display error because of QSortFilterProxyModel
+
   return true;
 }
 }
