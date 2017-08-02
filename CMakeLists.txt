@@ -16,7 +16,10 @@ if ( NOT DEFINED CMAKE_BUILD_TYPE )
    set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 endif ()
 
-project ( OTGui CXX )
+project (OTGui CXX)
+
+cmake_policy (SET CMP0020 NEW)
+cmake_policy (SET CMP0053 OLD)
 
 string ( TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME )
 

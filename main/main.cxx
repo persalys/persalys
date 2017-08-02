@@ -37,6 +37,11 @@ using namespace OTGUI;
 
 int main(int argc, char *argv[])
 {
+  // look for platform plugin qwindows.dll in the current dir
+#ifdef _WIN32
+  qputenv("QT_QPA_PLATFORM_PLUGIN_PATH", ".");
+#endif
+
   int ret(0);
   // Python Environment
   PythonEnvironment env;

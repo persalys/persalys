@@ -39,6 +39,26 @@ mingw:
     - master
     - tags
 
+mingw-qt4:
+  script:
+    - git clone https://github.com/openturns/openturns.git
+    - pushd openturns
+    - git checkout 1.9
+    - pushd distro/windows
+    - tar xzf /usr/share/openturns-developers-windeps-1.8.tar.gz
+    - pushd openturns-developers-windeps
+    - rm -r mingw-w64-x86_64
+    - tar xzf /usr/share/mingw-w64-x86_64.tar.gz
+    - popd
+    - if test -d /tmp/ot-mingw-install; then mkdir -p ../../build-i686-w64-mingw32 && cp -r /tmp/ot-mingw-install ../../build-i686-w64-mingw32/install; else make ot-install JOBS=4 && cp -r ../../build-i686-w64-mingw32/install /tmp/ot-mingw-install; fi
+    - popd
+    - popd
+    - pushd distro/windows
+    - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install JOBS=8 USE_QT5=OFF
+  except:
+    - master
+    - tags
+
 mingw-tag:
   script:
     - git clone https://github.com/openturns/openturns.git

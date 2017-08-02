@@ -66,7 +66,14 @@ JOBS_COTIRE=$(JOBS)
 export PATH := $(MINGW_PREFIX)/bin:$(PATH)
 
 DEBUG_OT=n
-OTFMI=n
+USE_OTFMI=OFF
+USE_QT5=ON
+ifeq ($(USE_QT5),ON)
+QWT_LIB=qwt
+else
+QWT_LIB=qwt-qt4
+endif
+USE_PARAVIEW=$(USE_QT5)
 
 ###############################################################################
 # rules:
@@ -76,15 +83,20 @@ OTFMI=n
 
 all: mod-installer
 
+reloc-toolchain:
+	ln -sf /usr/lib/x86_64-linux-gnu/qt5/bin/moc $(MINGW_PREFIX)/$(TARGET)/lib/qt/bin/moc
+	ln -sf /usr/lib/x86_64-linux-gnu/qt5/bin/rcc $(MINGW_PREFIX)/$(TARGET)/lib/qt/bin/rcc
+	sed -i "s|/usr/$(TARGET)|$(MINGW_PREFIX)/$(TARGET)|g" $(MINGW_PREFIX)/$(TARGET)/lib/cmake/paraview-*/ParaViewTargets*.cmake $(MINGW_PREFIX)/$(TARGET)/lib/cmake/paraview-*/VTKConfig.cmake $(MINGW_PREFIX)/$(TARGET)/lib/cmake/paraview-*/Modules/vtk*.cmake
+	touch reloc-toolchain
 
-mod-check-compiler:
+mod-check-compiler: reloc-toolchain
 	@echo -n "Check OpenTURNS compilation dependencies: "
 	@ls $(MOD_SRC) $(PYTHON_EXECUTABLE) > /dev/null
 	@echo "ok"
-	touch mod-check-compiler
-ifeq ($(OTFMI),y)
+ifeq ($(USE_OTFMI),ON)
 	echo "__version__='0'" > $(MINGW_PREFIX)/$(TARGET)/lib/python$(PYBASEVER_NODOT)/otfmi.py
 endif
+	touch mod-check-compiler
 
 mod-config: mod-check-compiler
 	-mkdir -p $(MOD_BUILD)
@@ -104,7 +116,18 @@ mod-config: mod-check-compiler
 	  -DCMAKE_INSTALL_PREFIX=$(MOD_PREFIX) \
 	  -DSITE_PACKAGE=Lib/site-packages \
 	  -DUSE_SALOME=OFF \
-	  -DUSE_QT5=OFF \
+	  -DUSE_SPHINX=OFF \
+	  -DUSE_OTFMI=$(USE_OTFMI) \
+	  -DUSE_QT5=$(USE_QT5) \
+	  -DQt5Gui_DIR=$(MINGW_PREFIX)/$(TARGET)/lib/cmake/Qt5Gui \
+	  -DQt5Core_DIR=$(MINGW_PREFIX)/$(TARGET)/lib/cmake/Qt5Core \
+	  -DQt5Widgets_DIR=$(MINGW_PREFIX)/$(TARGET)/lib/cmake/Qt5Widgets \
+	  -DQt5Test_DIR=$(MINGW_PREFIX)/$(TARGET)/lib/cmake/Qt5Test \
+	  -DQt5Help_DIR=$(MINGW_PREFIX)/$(TARGET)/lib/cmake/Qt5Help \
+	  -DQt5Sql_DIR=$(MINGW_PREFIX)/$(TARGET)/lib/cmake/Qt5Sql \
+	  -DQt5Network_DIR=$(MINGW_PREFIX)/$(TARGET)/lib/cmake/Qt5Network \
+	  -DQWT_LIBRARY=$(MINGW_PREFIX)/$(TARGET)/lib/lib$(QWT_LIB).dll.a \
+	  -DUSE_PARAVIEW=$(USE_PARAVIEW) \
 	  -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j$(JOBS_COTIRE)" \
 	$(MOD_SRC)
 	touch mod-config
@@ -121,6 +144,7 @@ ifeq ($(DEBUG_OT),n)
 	$(TARGET)-strip --strip-unneeded $(MOD_PREFIX)/Lib/site-packages/*/*.pyd
 	$(TARGET)-strip $(MOD_PREFIX)/bin/*.exe
 endif
+	# boost libs
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/libboost_regex-mt.dll $(MOD_PREFIX)/bin
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/libboost_system-mt.dll $(MOD_PREFIX)/bin
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/libboost_filesystem-mt.dll $(MOD_PREFIX)/bin
@@ -128,13 +152,52 @@ endif
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/libpng*.dll $(MOD_PREFIX)/bin
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/libexpat*.dll $(MOD_PREFIX)/bin
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/libjpeg*.dll $(MOD_PREFIX)/bin
-	cp $(MINGW_PREFIX)/$(TARGET)/bin/libtiff*.dll $(MOD_PREFIX)/bin
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/libdbus*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libsqlite*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libssl*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libcrypto*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libtiff*.dll $(MOD_PREFIX)/bin
+ifeq ($(USE_QT5),ON)
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/*eay32.dll $(MOD_PREFIX)/bin
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/libsqlite*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libintl*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libbz2*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libpcre-*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libpcre2*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libharfbuzz*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libfreetype*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libglib-2.0*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libgraphite2*.dll $(MOD_PREFIX)/bin
+endif
 	# qt libs
-	cp $(MINGW_PREFIX)/$(TARGET)/bin/Qt*.dll $(MOD_PREFIX)/bin
-	cp $(MINGW_PREFIX)/$(TARGET)/bin/qwt*.dll $(MOD_PREFIX)/bin
+ifeq ($(USE_QT5),ON)
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/Qt5*.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/lib/qt/plugins/platforms/qwindows.dll $(MOD_PREFIX)/bin
+else
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/Qt*4.dll $(MOD_PREFIX)/bin
+endif
+	# qwt
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/$(QWT_LIB).dll $(MOD_PREFIX)/bin
+
+ifeq ($(USE_PARAVIEW),ON)
+	# paraview deps
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libpugixml.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libjsoncpp.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libprotobuf.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/liblz4.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libnetcdf-11.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libnetcdf_c++-4.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libhdf5.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libhdf5_hl.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libQtTesting.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libcurl-4.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libidn2-0.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libssh2-1.dll $(MOD_PREFIX)/bin
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libunistring-2.dll $(MOD_PREFIX)/bin
+
+	# paraview libs
+	cp $(MINGW_PREFIX)/$(TARGET)/bin/libvtk*5.4.dll $(MOD_PREFIX)/bin
+endif
 	touch mod-install
 
 mod-test: mod-install
