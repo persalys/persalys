@@ -24,9 +24,13 @@
 
 namespace OTGUI {
 
-OTguiToolBar::OTguiToolBar()
-  : QToolBar()
+OTguiToolBar::OTguiToolBar(QWidget * parent)
+  : QToolBar(parent)
 {
+  // we set the object name to avoid the following warning
+  // when closing the interface :
+  // QMainWindow::saveState(): 'objectName' not set for QToolBar ...
+  setObjectName("OTguiToolBar");
   buildActions();
 }
 

@@ -30,7 +30,7 @@ class OTGUI_API OTguiToolBar : public QToolBar
   Q_OBJECT
 
 public:
-  OTguiToolBar();
+  OTguiToolBar(QWidget * parent=0);
 
 protected:
   void buildActions();
