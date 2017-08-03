@@ -21,8 +21,9 @@
 #ifndef OTGUI_COPULAPARAMETERSTABWIDGET_HXX
 #define OTGUI_COPULAPARAMETERSTABWIDGET_HXX
 
-#include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/DataSample.hxx"
+
+#include <openturns/Distribution.hxx>
 
 #include <QTabWidget>
 #include <QLabel>
@@ -41,21 +42,10 @@ public:
 protected:
   void buildInterface();
 
-public slots:
-  void stateChanged();
-  void currentTabChanged(int);
-  void showHideGraphConfigurationWidget(int index);
-
-signals:
-  void graphWindowActivated(QWidget*);
-  void graphWindowDeactivated();
-
 private:
   OT::Distribution distribution_;
   OT::Sample sample_;
   OT::PersistentCollection<OT::Sample> kendallPlotData_;
-  GraphConfigurationWidget * pdf_cdfPlotGraphConfigWidget_;
-  GraphConfigurationWidget * kendallPlotGraphConfigWidget_;
   QLabel * analysisErrorMessageLabel_;
 };
 }

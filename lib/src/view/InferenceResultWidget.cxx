@@ -22,6 +22,8 @@
 
 #include "otgui/ResizableStackedWidget.hxx"
 #include "otgui/RadioButtonDelegate.hxx"
+#include "otgui/WidgetBoundToDockWidget.hxx"
+#include "otgui/GraphConfigurationWidget.hxx"
 
 #include <openturns/VisualTest.hxx>
 
@@ -104,7 +106,10 @@ void InferenceResultWidget::buildInterface()
     tabWidget_ = new QTabWidget;
 
     // tab PDF/CDF
+    WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
+    QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
     ResizableStackedWidget * pdf_cdfStackedWidget = new ResizableStackedWidget;
+
     // --- pdf
     pdfPlot_ = new PlotWidget(tr("distributionPDF"));
     pdf_cdfStackedWidget->addWidget(pdfPlot_);
@@ -115,26 +120,37 @@ void InferenceResultWidget::buildInterface()
     QVector<PlotWidget*> listpdf_cdfPlot;
     listpdf_cdfPlot.append(pdfPlot_);
     listpdf_cdfPlot.append(cdfPlot_);
-    pdf_cdfPlotGraphConfigWidget_ = new GraphConfigurationWidget(listpdf_cdfPlot, QStringList(), QStringList(), GraphConfigurationWidget::PDF, this);
-    pdf_cdfPlotGraphConfigWidget_->hide();
-    connect(pdf_cdfPlotGraphConfigWidget_, SIGNAL(currentPlotChanged(int)), pdf_cdfStackedWidget, SLOT(setCurrentIndex(int)));
+    GraphConfigurationWidget * pdf_cdfPlotSettingWidget = new GraphConfigurationWidget(listpdf_cdfPlot,
+                                                                                       QStringList(),
+                                                                                       QStringList(),
+                                                                                       GraphConfigurationWidget::PDF,
+                                                                                       this);
+    pdf_cdfPlotSettingWidget->hide();
+    plotWidget->setDockWidget(pdf_cdfPlotSettingWidget);
+    connect(pdf_cdfPlotSettingWidget, SIGNAL(currentPlotChanged(int)), pdf_cdfStackedWidget, SLOT(setCurrentIndex(int)));
 
-    tabWidget_->addTab(pdf_cdfStackedWidget, tr("PDF/CDF"));
+    plotWidgetLayout->addWidget(pdf_cdfStackedWidget);
+    tabWidget_->addTab(plotWidget, tr("PDF/CDF"));
 
     // tab QQ plot
-    QWidget * qqPlotTab = new QWidget;
-    QHBoxLayout * qqPlotTabLayout = new QHBoxLayout(qqPlotTab);
+    plotWidget = new WidgetBoundToDockWidget(this);
+    plotWidgetLayout = new QVBoxLayout(plotWidget);
 
     // --- qq plot
     qqPlot_ = new PlotWidget(tr("qqPlot"));
-    qqPlotTabLayout->addWidget(qqPlot_);
+    plotWidgetLayout->addWidget(qqPlot_);
     // --- GraphConfigurationWidget
     QVector<PlotWidget*> listPlot;
     listPlot.append(qqPlot_);
-    qqPlotGraphConfigWidget_ = new GraphConfigurationWidget(listPlot, QStringList(), QStringList(), GraphConfigurationWidget::NoType, this);
-    qqPlotGraphConfigWidget_->hide();
+    GraphConfigurationWidget * qqPlotSettingWidget = new GraphConfigurationWidget(listPlot,
+                                                                                  QStringList(),
+                                                                                  QStringList(),
+                                                                                  GraphConfigurationWidget::NoType,
+                                                                                  this);
+    qqPlotSettingWidget->hide();
+    plotWidget->setDockWidget(qqPlotSettingWidget);
 
-    tabWidget_->addTab(qqPlotTab, tr("Q-Q Plot"));
+    tabWidget_->addTab(plotWidget, tr("Q-Q Plot"));
 
     // tab Parameters
     QWidget * paramWidget = new QWidget;
@@ -146,8 +162,6 @@ void InferenceResultWidget::buildInterface()
     paramGroupBoxLayout->addStretch();
 
     tabWidget_->addTab(paramWidget, tr("Parameters"));
-
-    connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
 
     distTabListWidgetLayout->addWidget(tabWidget_, 1);
   }
@@ -182,7 +196,7 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
   analysisErrorMessageLabel_->clear();
 
   // horizontal header
-  distTableModel_->setNotEditableHeaderItem(0, 0, tr("Distributions"));
+  distTableModel_->setNotEditableHeaderItem(0, 0, tr("Distribution"));
   distTableModel_->setNotEditableHeaderItem(0, 1, tr("Kolmogorov Smirnov"));
   distTableModel_->setNotEditableHeaderItem(1, 1, tr("p-value"));
   distTableModel_->setNotEditableHeaderItem(1, 2, tr("Acceptation"));
@@ -191,27 +205,30 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
   // table
   // -- get results of the variable
   currentFittingTestResult_ = result.getFittingTestResultForVariable(variableName.toStdString());
+  // number of tests
+  const UnsignedInteger nbTests = currentFittingTestResult_.getKolmogorovTestResults().getSize();
 
-  Point pValues(currentFittingTestResult_.getKolmogorovTestResults().getSize());
-  for (UnsignedInteger i=0; i<currentFittingTestResult_.getKolmogorovTestResults().getSize(); ++i)
+  // p-values
+  Point pValues(nbTests);
+  for (UnsignedInteger i = 0; i < nbTests; ++i)
     pValues[i] = currentFittingTestResult_.getKolmogorovTestResults()[i].getPValue();
 
   // -- sort indices list
-  Indices indices(pValues.getSize());
-  if (pValues.getSize() > 1)
+  Indices indices(nbTests);
+  if (nbTests > 1)
   {
     indices.fill();
-    for (int i=(pValues.getSize()-1); i>=0; --i)
+    for (int i = (nbTests - 1); i >= 0; --i)
     {
-      for (int l=1; l<=i; ++l)
+      for (int l = 1; l <= i; ++l)
       {
         if (pValues[l-1] < pValues[l])
         {
           Scalar temp = pValues[l-1];
-          pValues[l-1] = pValues[l];
+          pValues[l - 1] = pValues[l];
           pValues[l] = temp;
-          UnsignedInteger ind_temp = indices[l-1];
-          indices[l-1] = indices[l];
+          const UnsignedInteger ind_temp = indices[l - 1];
+          indices[l - 1] = indices[l];
           indices[l] = ind_temp;
         }
       }
@@ -219,11 +236,12 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
   }
 
   // -- fill table
-  for (UnsignedInteger i=0; i<pValues.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < nbTests; ++i)
   {
-    distTableModel_->setNotEditableItem(i+2, 0, currentFittingTestResult_.getTestedDistributions()[indices[i]].getImplementation()->getClassName().c_str());
-    distTableModel_->setData(distTableModel_->index(i+2, 0), (int)indices[i], Qt::UserRole);
-    distTableModel_->setNotEditableItem(i+2, 1, pValues[i], 3);
+    const int cellRow = i+2; // because of 2 rows of titles
+    distTableModel_->setNotEditableItem(cellRow, 0, currentFittingTestResult_.getTestedDistributions()[indices[i]].getImplementation()->getClassName().c_str());
+    distTableModel_->setData(distTableModel_->index(cellRow, 0), (int)indices[i], Qt::UserRole);
+    distTableModel_->setNotEditableItem(cellRow, 1, pValues[i], 3);
     const bool isAccepted = currentFittingTestResult_.getKolmogorovTestResults()[indices[i]].getBinaryQualityMeasure();
     QString text = tr("yes");
     QColor color = Qt::green;
@@ -237,13 +255,14 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
       text = tr("failed");
       color = Qt::red;
     }
-    distTableModel_->setNotEditableItem(i+2, 2, text, color);
+    distTableModel_->setNotEditableItem(cellRow, 2, text, color);
   }
   // -- update parameters table
-  distTableView_->selectRow(0+2);
-  updateParametersTable(distTableModel_->index(0+2, 0));
-  updateGraphs(distTableModel_->index(0+2, 0));
-  distTableModel_->setData(distTableModel_->index(0+2, 0), true, Qt::CheckStateRole);
+  const int firstDistIndex = 0 + 2; // because of the 2 rows of titles
+  distTableView_->selectRow(firstDistIndex);
+  updateParametersTable(distTableModel_->index(firstDistIndex, 0));
+  updateGraphs(distTableModel_->index(firstDistIndex, 0));
+  distTableModel_->setData(distTableModel_->index(firstDistIndex, 0), true, Qt::CheckStateRole);
 
   // resize
   distTableView_->resizeColumnsToContents();
@@ -273,7 +292,7 @@ void InferenceResultWidget::updateRadioButtonsDistributionTable(QModelIndex curr
     return;
 
   // set CheckStateRole of distTableModel_
-  for (int i=2; i<distTableModel_->rowCount(); ++i)
+  for (int i = 2; i < distTableModel_->rowCount(); ++i)
   {
     if (distTableModel_->index(i, 0).row() == current.row())
       distTableModel_->setData(distTableModel_->index(i, 0), true, Qt::CheckStateRole);
@@ -305,7 +324,7 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
     const String testResultMessage = currentFittingTestResult_.getErrorMessages()[resultIndex];
     if (!testResultMessage.empty())
     {
-      const QString message = QString("%1%2%3").arg("<font color=red>").arg(QString::fromUtf8(testResultMessage.c_str())).arg("</font>");
+      const QString message = QString("<font color=red>%1</font>").arg(QString::fromUtf8(testResultMessage.c_str()));
       analysisErrorMessageLabel_->setText(message);
       analysisErrorMessageLabel_->show();
       distParamTableView_->hide();
@@ -339,20 +358,20 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
     // -- get distribution
     const QVariant variant = distTableModel_->data(distTableModel_->index(current.row(), 0), Qt::UserRole);
     Distribution distribution = currentFittingTestResult_.getTestedDistributions()[variant.value<int>()];
+    const String distClassName = distribution.getImplementation()->getClassName();
+    // number of parameters
+    // for Student : display only nu (mean and std already displayed)
+    const UnsignedInteger nbParam = distClassName == "Student" ? 1 : distribution.getParameterDescription().getSize();
 
     // -- set titles
-    if (distribution.getImplementation()->getClassName() != "Normal") // mean and std already displayed
+    if (distClassName != "Normal") // mean and std already displayed for the Normal distribution
     {
-      UnsignedInteger nbParamDesc = distribution.getParameterDescription().getSize();
-      if (distribution.getImplementation()->getClassName() == "Student")
-        nbParamDesc = 1; // display only nu (mean and std already displayed)
-
       distParamTableModel_->setNotEditableItem(5, 0, tr("Native parameters"));
       distParamTableView_->setSpan(5, 0, 1, 2);
       distParamTableModel_->setData(distParamTableModel_->index(5, 0), font, Qt::FontRole);
 
-      for (UnsignedInteger i=0; i<nbParamDesc; ++i)
-        distParamTableModel_->setNotEditableHeaderItem(6+i, 0, distribution.getParameterDescription()[i].c_str());
+      for (UnsignedInteger i = 0; i < nbParam; ++i)
+        distParamTableModel_->setNotEditableHeaderItem(6 + i, 0, distribution.getParameterDescription()[i].c_str());
     }
 
     // -- set parameters values
@@ -375,20 +394,16 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
       distParamTableModel_->setNotEditableItem(4, 1, tr("-"));
     }
 
-    if (distribution.getImplementation()->getClassName() != "Normal") // mean and std already displayed
+    if (distClassName != "Normal") // mean and std already displayed for the Normal distribution
     {
-      UnsignedInteger nbParamVal = distribution.getParameterDescription().getSize();
-      if (distribution.getImplementation()->getClassName() == "Student")
-        nbParamVal = 1; // display only nu (mean and std already displayed)
-
-      for (UnsignedInteger i=0; i<nbParamVal; ++i)
-        distParamTableModel_->setNotEditableItem(6+i, 1, distribution.getParameter()[i]);
+      for (UnsignedInteger i = 0; i < nbParam; ++i)
+        distParamTableModel_->setNotEditableItem(6 + i, 1, distribution.getParameter()[i]);
     }
   }
   else
   {
-    for (UnsignedInteger i=0; i<4; ++i)
-     distParamTableModel_->setNotEditableItem(1+i, 1, tr("-"));
+    for (UnsignedInteger i = 0; i < 4; ++i)
+     distParamTableModel_->setNotEditableItem(1 + i, 1, tr("-"));
   }
   // resize
   distParamTableView_->resizeToContents();
@@ -424,22 +439,23 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
 
   // -- get distribution
   const Distribution distribution = currentFittingTestResult_.getTestedDistributions()[resultIndex];
+  const char* distName = distribution.getImplementation()->getName().c_str();
 
   // -- pdf
   pdfPlot_->plotHistogram(currentFittingTestResult_.getValues());
   pdfPlot_->plotPDFCurve(distribution);
-  pdfPlot_->setTitle(tr("PDF") + " " + distribution.getImplementation()->getName().c_str());
+  pdfPlot_->setTitle(tr("PDF") + " " + distName);
 
   // -- cdf
   cdfPlot_->plotHistogram(currentFittingTestResult_.getValues(), 1);
   cdfPlot_->plotCDFCurve(distribution);
-  cdfPlot_->setTitle(tr("CDF") + " " + distribution.getImplementation()->getName().c_str());
+  cdfPlot_->setTitle(tr("CDF") + " " + distName);
 
   // -- qq plot
   Graph qqPlotGraph(VisualTest::DrawQQplot(currentFittingTestResult_.getValues(), distribution));
-  qqPlot_->setTitle(tr("Q-Q Plot") + " " + distribution.getImplementation()->getName().c_str());
+  qqPlot_->setTitle(tr("Q-Q Plot") + " " + distName);
   qqPlot_->setAxisTitle(QwtPlot::yLeft, tr("Data quantiles"));
-  qqPlot_->setAxisTitle(QwtPlot::xBottom, tr("%1 theoretical quantiles").arg(distribution.getImplementation()->getName().c_str()));
+  qqPlot_->setAxisTitle(QwtPlot::xBottom, tr("%1 theoretical quantiles").arg(distName));
   qqPlot_->plotCurve(qqPlotGraph.getDrawable(1).getData(), QPen(Qt::blue, 5), QwtPlotCurve::Dots);
   qqPlot_->plotCurve(qqPlotGraph.getDrawable(0).getData());
 }
@@ -478,7 +494,7 @@ bool InferenceResultWidget::isSelectedDistributionValid() const
   // get current distribution
   // loop begins at 2 because the two first rows are the table titles
   QModelIndex selectedDistributionIndex;
-  for (int i=2; i<distTableModel_->rowCount(); ++i)
+  for (int i = 2; i < distTableModel_->rowCount(); ++i)
   {
     if (distTableModel_->data(distTableModel_->index(i, 0), Qt::CheckStateRole).toBool())
     {
@@ -493,36 +509,5 @@ bool InferenceResultWidget::isSelectedDistributionValid() const
     }
   }
   return false;
-}
-
-
-void InferenceResultWidget::showHideGraphConfigurationWidget()
-{
-  showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-}
-
-
-void InferenceResultWidget::showHideGraphConfigurationWidget(int indexTab)
-{
-  switch (indexTab)
-  {
-    // if a plotWidget is visible
-    case 0: // PDF-CDF graph
-      if (pdf_cdfPlotGraphConfigWidget_)
-        if (!pdf_cdfPlotGraphConfigWidget_->isVisible())
-          emit graphWindowActivated(pdf_cdfPlotGraphConfigWidget_);
-      break;
-    case 1: // qq plot
-      if (qqPlotGraphConfigWidget_)
-        if (!qqPlotGraphConfigWidget_->isVisible())
-          emit graphWindowActivated(qqPlotGraphConfigWidget_);
-      break;
-    // if no plotWidget is visible
-    default:
-    {
-      emit graphWindowDeactivated();
-      break;
-    }
-  }
 }
 }

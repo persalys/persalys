@@ -73,14 +73,6 @@ void DesignOfExperimentWindow::buildInterface()
 {
   setWindowTitle(tr("Design of experiment"));
 
-  // output names/descriptions
-  const Description outputDescription(designOfExperiment_.getOutputSample().getDescription());
-  QStringList outputNames;
-  for (UnsignedInteger i = 0; i < outputDescription.getSize(); ++i)
-  {
-    outputNames << QString::fromUtf8(outputDescription[i].c_str());
-  }
-
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
@@ -89,7 +81,7 @@ void DesignOfExperimentWindow::buildInterface()
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(variablesGroupBox_);
 
   variablesListWidget_ = new OTguiListWidget;
-  variablesListWidget_->addItems(outputNames);
+  variablesListWidget_->addItems(QtOT::DescriptionToStringList(designOfExperiment_.getOutputSample().getDescription()));
   outputsLayoutGroupBox->addWidget(variablesListWidget_);
 
   mainWidget->addWidget(variablesGroupBox_);

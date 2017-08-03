@@ -22,11 +22,15 @@
 
 #include "otgui/FunctionalChaosAnalysis.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
+#include "otgui/ParametersTableView.hxx"
 #include "otgui/MetaModelValidationWidget.hxx"
 #include "otgui/SensitivityResultWidget.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <QSplitter>
 #include <QScrollArea>
+#include <QVBoxLayout>
+#include <QHeaderView>
 
 using namespace OT;
 
@@ -37,8 +41,6 @@ FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item, QW
   , result_()
   , maxDegree_(0)
   , sparse_(false)
-  , outputsListWidget_(0)
-  , tabWidget_(0)
   , errorMessage_(item->getAnalysis().getErrorMessage().c_str())
 {
   const FunctionalChaosAnalysis * chaos(dynamic_cast<const FunctionalChaosAnalysis*>(item->getAnalysis().getImplementation().get()));
@@ -60,56 +62,49 @@ void FunctionalChaosResultWindow::buildInterface()
 {
   setWindowTitle(tr("Functional chaos results"));
 
-  // get output info
-  const UnsignedInteger outputDimension = result_.getOutputSample().getDescription().getSize();
-  QStringList outputNames;
-  for (UnsignedInteger i=0; i<outputDimension; ++i)
-    outputNames << QString::fromUtf8(result_.getOutputSample().getDescription()[i].c_str());
+  // get number of outputs
+  const UnsignedInteger nbOutputs = result_.getOutputSample().getDescription().getSize();
 
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
   // - list outputs
-  QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
+  QGroupBox * outputsGroupBox = new QGroupBox(tr("Output(s)", "", nbOutputs));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  outputsListWidget_ = new OTguiListWidget;
-  outputsListWidget_->addItems(outputNames);
-  outputsLayoutGroupBox->addWidget(outputsListWidget_);
+  OTguiListWidget * outputsListWidget = new OTguiListWidget;
+  outputsListWidget->addItems(QtOT::DescriptionToStringList(result_.getOutputSample().getDescription()));
+  outputsLayoutGroupBox->addWidget(outputsListWidget);
 
   mainWidget->addWidget(outputsGroupBox);
   mainWidget->setStretchFactor(0, 1);
 
   // - tab widget
-  tabWidget_ = new QTabWidget;
+  QTabWidget * tabWidget = new QTabWidget;
 
   // first tab : METAMODEL GRAPH --------------------------------
   QWidget * tab = new QWidget;
   QVBoxLayout * metaModelPlotLayout = new QVBoxLayout(tab);
 
   ResizableStackedWidget * plotsStackedWidget = new ResizableStackedWidget;
-  connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
-  for (UnsignedInteger i=0; i<outputDimension; ++i)
+  connect(outputsListWidget, SIGNAL(currentRowChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
+  for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
-    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(i,
-                                                                                 result_.getMetaModelOutputSample().getMarginal(i),
+    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSample().getMarginal(i),
                                                                                  result_.getOutputSample().getMarginal(i),
                                                                                  result_.getFunctionalChaosResult().getResiduals()[i],
                                                                                  result_.getFunctionalChaosResult().getRelativeErrors()[i],
-                                                                                 tr("R2")
-                                                                                );
+                                                                                 tr("R2"),
+                                                                                 this);
 
     plotsStackedWidget->addWidget(validationWidget);
-    connect(validationWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
-    connect(this, SIGNAL(stateChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
   }
   metaModelPlotLayout->addWidget(plotsStackedWidget);
 
-  tabWidget_->addTab(tab, tr("Metamodel"));
+  tabWidget->addTab(tab, tr("Metamodel"));
 
   // second tab : MOMENTS --------------------------------
-  if (result_.getMean().getSize() == outputDimension && result_.getVariance().getSize() == outputDimension)
+  if (result_.getMean().getSize() == nbOutputs && result_.getVariance().getSize() == nbOutputs)
   {
     QWidget * summaryWidget = new QWidget;
     QGridLayout * summaryWidgetLayout = new QGridLayout(summaryWidget);
@@ -119,7 +114,7 @@ void FunctionalChaosResultWindow::buildInterface()
     QVBoxLayout * momentsGroupBoxLayout = new QVBoxLayout(momentsGroupBox);
     ResizableStackedWidget * momentsStackedWidget = new ResizableStackedWidget;
 
-    for (UnsignedInteger outputIndex=0; outputIndex<outputDimension; ++outputIndex)
+    for (UnsignedInteger outputIndex = 0; outputIndex < nbOutputs; ++outputIndex)
     {
       ResizableTableViewWithoutScrollBar * momentsEstimationsTableView = new ResizableTableViewWithoutScrollBar;
       momentsEstimationsTableView->horizontalHeader()->hide();
@@ -144,7 +139,7 @@ void FunctionalChaosResultWindow::buildInterface()
     }
     momentsGroupBoxLayout->addWidget(momentsStackedWidget);
 
-    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), momentsStackedWidget, SLOT(setCurrentIndex(int)));
+    connect(outputsListWidget, SIGNAL(currentRowChanged(int)), momentsStackedWidget, SLOT(setCurrentIndex(int)));
 
     summaryWidgetLayout->addWidget(momentsGroupBox);
 
@@ -153,10 +148,10 @@ void FunctionalChaosResultWindow::buildInterface()
     QVBoxLayout * basisGroupBoxLayout = new QVBoxLayout(basisGroupBox);
     ResizableStackedWidget * basisStackedWidget = new ResizableStackedWidget;
 
-    if (result_.getFunctionalChaosResult().getCoefficients().getDimension() != outputDimension)
+    if (result_.getFunctionalChaosResult().getCoefficients().getDimension() != nbOutputs)
       qDebug() << "Error: FunctionalChaosResultWindow chaos coefficients sample has not a dimension equal to the number of outputs\n";
 
-    for (UnsignedInteger outputIndex=0; outputIndex<outputDimension; ++outputIndex)
+    for (UnsignedInteger outputIndex = 0; outputIndex < nbOutputs; ++outputIndex)
     {
       // parameters names
       QStringList namesList;
@@ -178,7 +173,7 @@ void FunctionalChaosResultWindow::buildInterface()
         namesList << tr("Basis size");
 
         UnsignedInteger notNullCoefCounter = 0;
-        for (UnsignedInteger coefIndex=0; coefIndex<result_.getFunctionalChaosResult().getCoefficients().getSize(); ++coefIndex)
+        for (UnsignedInteger coefIndex = 0; coefIndex < result_.getFunctionalChaosResult().getCoefficients().getSize(); ++coefIndex)
           if (result_.getFunctionalChaosResult().getCoefficients()[coefIndex][outputIndex] != 0.0)
             ++notNullCoefCounter;
         valuesList << QString::number(notNullCoefCounter);
@@ -190,13 +185,13 @@ void FunctionalChaosResultWindow::buildInterface()
     }
     basisGroupBoxLayout->addWidget(basisStackedWidget);
 
-    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), basisStackedWidget, SLOT(setCurrentIndex(int)));
+    connect(outputsListWidget, SIGNAL(currentRowChanged(int)), basisStackedWidget, SLOT(setCurrentIndex(int)));
 
     summaryWidgetLayout->addWidget(basisGroupBox);
 //     summaryWidgetLayout->addStretch();
     summaryWidgetLayout->setRowStretch(2, 1);
 
-    tabWidget_->addTab(summaryWidget, tr("Summary"));
+    tabWidget->addTab(summaryWidget, tr("Summary"));
   }
   else
   {
@@ -207,36 +202,32 @@ void FunctionalChaosResultWindow::buildInterface()
       QLabel * errorLabel = new QLabel(errorMessage_);
       summaryWidgetLayout->addWidget(errorLabel);
       summaryWidgetLayout->addStretch();
-      tabWidget_->addTab(summaryWidget, tr("Summary"));
+      tabWidget->addTab(summaryWidget, tr("Summary"));
     }
   }
 
   // third tab : SOBOL INDICES --------------------------------
-  if (result_.getSobolResult().getOutputNames().getSize() == outputDimension)
+  if (result_.getSobolResult().getOutputNames().getSize() == nbOutputs)
   {
     QScrollArea * sobolScrollArea = new QScrollArea;
     sobolScrollArea->setWidgetResizable(true);
     QWidget * widget = new QWidget;
     QVBoxLayout * vbox = new QVBoxLayout(widget);
     ResizableStackedWidget * sobolStackedWidget = new ResizableStackedWidget;
-    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), sobolStackedWidget, SLOT(setCurrentIndex(int)));
-    for (UnsignedInteger i=0; i<outputDimension; ++i)
+    connect(outputsListWidget, SIGNAL(currentRowChanged(int)), sobolStackedWidget, SLOT(setCurrentIndex(int)));
+    for (UnsignedInteger i = 0; i < nbOutputs; ++i)
     {
-      SensitivityResultWidget * sobolResultWidget = new SensitivityResultWidget(i,
-                                                                                result_.getSobolResult().getFirstOrderIndices()[i],
+      SensitivityResultWidget * sobolResultWidget = new SensitivityResultWidget(result_.getSobolResult().getFirstOrderIndices()[i],
                                                                                 result_.getSobolResult().getTotalIndices()[i],
                                                                                 result_.getSobolResult().getInputNames(),
                                                                                 result_.getSobolResult().getOutputNames()[i],
-                                                                                SensitivityResultWidget::Sobol
-                                                                              );
+                                                                                SensitivityResultWidget::Sobol,
+                                                                                this);
       sobolStackedWidget->addWidget(sobolResultWidget);
-      connect(sobolResultWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-      connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), sobolResultWidget, SLOT(showHideGraphConfigurationWidget(int)));
-      connect(this, SIGNAL(stateChanged(int)), sobolResultWidget, SLOT(showHideGraphConfigurationWidget(int)));
     }
     vbox->addWidget(sobolStackedWidget);
     sobolScrollArea->setWidget(widget);
-    tabWidget_->addTab(sobolScrollArea, tr("Sobol indices"));
+    tabWidget->addTab(sobolScrollArea, tr("Sobol indices"));
   }
   else
   {
@@ -247,7 +238,7 @@ void FunctionalChaosResultWindow::buildInterface()
       QLabel * errorLabel = new QLabel(errorMessage_);
       indicesWidgetLayout->addWidget(errorLabel);
       indicesWidgetLayout->addStretch();
-      tabWidget_->addTab(indicesWidget, tr("Sobol indices"));
+      tabWidget->addTab(indicesWidget, tr("Sobol indices"));
     }
   }
 
@@ -260,62 +251,31 @@ void FunctionalChaosResultWindow::buildInterface()
     metaModelPlotLayout = new QVBoxLayout(tab);
 
     ResizableStackedWidget * plotsLOOStackedWidget = new ResizableStackedWidget;
-    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), plotsLOOStackedWidget, SLOT(setCurrentIndex(int)));
-    for (UnsignedInteger i=0; i<outputDimension; ++i)
+    connect(outputsListWidget, SIGNAL(currentRowChanged(int)), plotsLOOStackedWidget, SLOT(setCurrentIndex(int)));
+    for (UnsignedInteger i = 0; i < nbOutputs; ++i)
     {
-      MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(i,
-                                                                                   result_.getMetaModelOutputSampleLeaveOneOut().getMarginal(i),
+      MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSampleLeaveOneOut().getMarginal(i),
                                                                                    result_.getOutputSample().getMarginal(i),
                                                                                    result_.getErrorQ2LeaveOneOut()[i],
                                                                                    result_.getQ2LeaveOneOut()[i],
-                                                                                   tr("Q2")
-                                                                                  );
+                                                                                   tr("Q2"),
+                                                                                   this);
       plotsLOOStackedWidget->addWidget(validationWidget);
-  
-      connect(validationWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-      connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
-      connect(this, SIGNAL(stateChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
     }
     metaModelPlotLayout->addWidget(plotsLOOStackedWidget);
 
     validationTabWidget->addTab(plotsLOOStackedWidget, tr("Leave-one-out"));
-    tabWidget_->addTab(validationTabWidget, tr("Validation"));
+    tabWidget->addTab(validationTabWidget, tr("Validation"));
   }
 
   // fourth/fifth tab : PARAMETERS --------------------------------
   if (parametersWidget_)
-    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
+    tabWidget->addTab(parametersWidget_, tr("Parameters"));
 
   // set widgets
-  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
-
-  mainWidget->addWidget(tabWidget_);
+  mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
-  outputsListWidget_->setCurrentRow(0);
+  outputsListWidget->setCurrentRow(0);
   setWidget(mainWidget);
-}
-
-
-void FunctionalChaosResultWindow::showHideGraphConfigurationWidget(int indexTab)
-{
-  if (indexTab == 0 || // metamodel
-      indexTab == 2 || // sobol
-      indexTab == 3    // validation
-     )
-    emit stateChanged(outputsListWidget_->currentRow());
-  else
-    emit graphWindowDeactivated();
-}
-
-
-void FunctionalChaosResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
-{
-  if (oldState == Qt::WindowMaximized)
-    return;
-
-  if (newState == Qt::WindowFullScreen || newState == (Qt::WindowActive|Qt::WindowMaximized))
-    showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-  else if (newState == Qt::WindowNoState || newState == Qt::WindowMinimized || newState == (Qt::WindowActive|Qt::WindowMinimized))
-    emit graphWindowDeactivated();
 }
 }

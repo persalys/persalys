@@ -22,15 +22,13 @@ ot_install_header_file ( PieChartView.hxx )
 ot_install_header_file ( PlotMatrixWidget.hxx )
 ot_install_header_file ( GraphConfigurationWidget.hxx )
 ot_install_header_file ( PlotMatrixConfigurationWidget.hxx )
-ot_install_header_file ( PlotWidgetWithGraphSetting.hxx )
 
 qt5_wrap_cpp (OTGUI_PLOT_MOC_SRCS
               otgui/PlotWidget.hxx
               otgui/PieChartView.hxx
               otgui/PlotMatrixWidget.hxx
               otgui/GraphConfigurationWidget.hxx
-              otgui/PlotMatrixConfigurationWidget.hxx
-              otgui/PlotWidgetWithGraphSetting.hxx)
+              otgui/PlotMatrixConfigurationWidget.hxx)
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
 otgui_add_library (otguiplot ${SOURCEFILES} ${OTGUI_PLOT_MOC_SRCS})

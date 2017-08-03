@@ -388,7 +388,7 @@ void StudyTreeView::createNewDataModelWindow(DataModelDefinitionItem* item, cons
   }
 
   // window
-		DataModelWindow * window = new DataModelWindow(item, this);
+  DataModelWindow * window = new DataModelWindow(item, this);
 
   if (!window)
   {
@@ -396,7 +396,7 @@ void StudyTreeView::createNewDataModelWindow(DataModelDefinitionItem* item, cons
     return;
   }
 
-		emit showWindow(window);
+  emit showWindow(window);
   setCurrentIndex(item->index());
   setExpanded(item->index().parent(), true);
 }
@@ -410,7 +410,7 @@ void StudyTreeView::createNewPhysicalModelDiagramWindow(PhysicalModelDiagramItem
   // connections
   connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(changeCurrentItemRequested(QModelIndex)), this, SLOT(setCurrentIndex(QModelIndex)));
-		connect(item, SIGNAL(modelDefinitionWindowRequested(PhysicalModelDefinitionItem*)), this, SLOT(createNewPhysicalModelWindow(PhysicalModelDefinitionItem*)));
+  connect(item, SIGNAL(modelDefinitionWindowRequested(PhysicalModelDefinitionItem*)), this, SLOT(createNewPhysicalModelWindow(PhysicalModelDefinitionItem*)));
   connect(item, SIGNAL(newProbabilisticModelItemCreated(ProbabilisticModelItem*)), this, SLOT(createNewProbabilisticModelWindow(ProbabilisticModelItem*)));
   connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
   connect(item, SIGNAL(newLimitStateCreated(LimitStateItem*)), this, SLOT(createNewLimitStateWindow(LimitStateItem*)));
@@ -494,9 +494,6 @@ void StudyTreeView::createNewProbabilisticModelWindow(ProbabilisticModelItem* it
     qDebug() << "Error: In createNewProbabilisticModelWindow: impossible to create ProbabilisticModelWindow\n";
     return;
   }
-
-  connect(window, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-  connect(window, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
 
   emit showWindow(window);
   setCurrentIndex(item->index());
@@ -623,14 +620,8 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
     return;
   }
 
-  connect(resultWindow, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-  connect(resultWindow, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
-
   emit showWindow(resultWindow);
   setCurrentIndex(item->index());
-
-  if (analysisType == "SobolAnalysis" || analysisType == "SRCAnalysis")
-    dynamic_cast<ResultWindow*>(resultWindow)->showHideGraphConfigurationWidget(Qt::WindowNoState, Qt::WindowFullScreen);
 }
 
 

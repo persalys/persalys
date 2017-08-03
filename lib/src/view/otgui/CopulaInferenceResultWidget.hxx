@@ -45,13 +45,7 @@ public slots:
   void updateRadioButtonsDistributionTable(const QModelIndex& = QModelIndex());
   void updateParametersTable(const QModelIndex& = QModelIndex());
 signals:
-  void currentResultsTabChanged(int);
-  void currentResultsTabChangedFromAnother(int);
-  void stateChanged(int);
-  void stateChanged();
   void distributionChanged(int);
-  void graphWindowActivated(QWidget*);
-  void graphWindowDeactivated();
 
 private:
   CopulaInferenceSetResult currentSetResult_;

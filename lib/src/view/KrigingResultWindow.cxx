@@ -24,12 +24,14 @@
 #include "otgui/ResizableStackedWidget.hxx"
 #include "otgui/MetaModelValidationWidget.hxx"
 #include "otgui/ParametersTableView.hxx"
+#include "otgui/QtTools.hxx"
 
-#include "openturns/OTBase.hxx"
+#include <openturns/OTBase.hxx>
 
 #include <QGroupBox>
 #include <QScrollArea>
 #include <QSplitter>
+#include <QVBoxLayout>
 
 using namespace OT;
 
@@ -39,8 +41,6 @@ KrigingResultWindow::KrigingResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
   , result_()
   , optimizeParameters_(true)
-  , outputsListWidget_(0)
-  , tabWidget_(0)
 {
   const KrigingAnalysis * kriging = dynamic_cast<const KrigingAnalysis*>(item->getAnalysis().getImplementation().get());
   if (!kriging)
@@ -60,52 +60,47 @@ void KrigingResultWindow::buildInterface()
 {
   setWindowTitle(tr("Kriging results"));
 
-  // get output info
-  const UnsignedInteger outputDimension = result_.getOutputSample().getDimension();
-  QStringList outputNames;
-  for (UnsignedInteger i=0; i<outputDimension; ++i)
-    outputNames << QString::fromUtf8(result_.getOutputSample().getDescription()[i].c_str());
+  // get number of outputs
+  const UnsignedInteger nbOutputs = result_.getOutputSample().getDimension();
 
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
-  tabWidget_ = new QTabWidget;
 
   // list outputs
-  QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
+  QGroupBox * outputsGroupBox = new QGroupBox(tr("Output(s)", "", nbOutputs));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  outputsListWidget_ = new OTguiListWidget;
-  outputsListWidget_->addItems(outputNames);
-  outputsLayoutGroupBox->addWidget(outputsListWidget_);
+  OTguiListWidget * outputsListWidget = new OTguiListWidget;
+  outputsListWidget->addItems(QtOT::DescriptionToStringList(result_.getOutputSample().getDescription()));
+  outputsLayoutGroupBox->addWidget(outputsListWidget);
 
   mainWidget->addWidget(outputsGroupBox);
   mainWidget->setStretchFactor(0, 1);
 
   // tab widget
-  tabWidget_ = new QTabWidget;
+  QTabWidget * tabWidget = new QTabWidget;
 
   // first tab : METAMODEL GRAPH --------------------------------
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
   ResizableStackedWidget * plotsStackedWidget = new ResizableStackedWidget;
-  connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
+  connect(outputsListWidget, SIGNAL(currentRowChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
 
-  for (UnsignedInteger i=0; i<outputDimension; ++i)
+  for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
-    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(i,
-                                                                                 result_.getMetaModelOutputSample().getMarginal(i),
-                                                                                 result_.getOutputSample().getMarginal(i)
-                                                                                );
+    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSample().getMarginal(i),
+                                                                                 result_.getOutputSample().getMarginal(i),
+                                                                                 -1.0,
+                                                                                 -1.0,
+                                                                                 "",
+                                                                                 this);
 
     plotsStackedWidget->addWidget(validationWidget);
-    connect(validationWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
-    connect(this, SIGNAL(stateChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
   }
   tabLayout->addWidget(plotsStackedWidget);
 
-  tabWidget_->addTab(tab, tr("Metamodel"));
+  tabWidget->addTab(tab, tr("Metamodel"));
 
   // second tab : METAMODEL RESULT --------------------------------
   QScrollArea * scrollArea = new QScrollArea;
@@ -113,7 +108,7 @@ void KrigingResultWindow::buildInterface()
 
   ResizableStackedWidget * resultStackedWidget = new ResizableStackedWidget;
 
-  for (UnsignedInteger i=0; i<outputDimension; ++i)
+  for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
     QWidget * resultWidget = new QWidget;
     QGridLayout * resultWidgetLayout = new QGridLayout(resultWidget);
@@ -129,7 +124,7 @@ void KrigingResultWindow::buildInterface()
       QStringList valuesList;
       // scale
       QString scaleText;
-      for (UnsignedInteger j=0; j<result_.getKrigingResultCollection()[i].getCovarianceModel().getScale().getSize(); ++j)
+      for (UnsignedInteger j = 0; j < result_.getKrigingResultCollection()[i].getCovarianceModel().getScale().getSize(); ++j)
       {
         scaleText += QString::number(result_.getKrigingResultCollection()[i].getCovarianceModel().getScale()[j]);
         if (j < result_.getKrigingResultCollection()[i].getCovarianceModel().getScale().getSize()-1)
@@ -139,7 +134,7 @@ void KrigingResultWindow::buildInterface()
 
       // amplitude
       QString amplitudeText;
-      for (UnsignedInteger j=0; j<result_.getKrigingResultCollection()[i].getCovarianceModel().getAmplitude().getSize(); ++j)
+      for (UnsignedInteger j = 0; j < result_.getKrigingResultCollection()[i].getCovarianceModel().getAmplitude().getSize(); ++j)
       {
         amplitudeText += QString::number(result_.getKrigingResultCollection()[i].getCovarianceModel().getAmplitude()[j]);
         if (j < result_.getKrigingResultCollection()[i].getCovarianceModel().getAmplitude().getSize()-1)
@@ -152,7 +147,7 @@ void KrigingResultWindow::buildInterface()
     }
 
     QString trendCoefText;
-    for (UnsignedInteger j=0; j<result_.getKrigingResultCollection()[i].getTrendCoefficients()[0].getSize(); ++j)
+    for (UnsignedInteger j = 0; j < result_.getKrigingResultCollection()[i].getTrendCoefficients()[0].getSize(); ++j)
     {
       trendCoefText += QString::number(result_.getKrigingResultCollection()[i].getTrendCoefficients()[0][j]);
       if (j < result_.getKrigingResultCollection()[i].getTrendCoefficients()[0].getSize()-1)
@@ -165,10 +160,10 @@ void KrigingResultWindow::buildInterface()
     resultStackedWidget->addWidget(resultWidget);
   }
 
-  connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), resultStackedWidget, SLOT(setCurrentIndex(int)));
+  connect(outputsListWidget, SIGNAL(currentRowChanged(int)), resultStackedWidget, SLOT(setCurrentIndex(int)));
 
   scrollArea->setWidget(resultStackedWidget);
-  tabWidget_->addTab(scrollArea, tr("Results"));
+  tabWidget->addTab(scrollArea, tr("Results"));
 
   // third tab : GRAPH METAMODEL LOO --------------------------------
   if (result_.getMetaModelOutputSampleLeaveOneOut().getSize())
@@ -179,63 +174,32 @@ void KrigingResultWindow::buildInterface()
     tabLayout = new QVBoxLayout(tab);
 
     ResizableStackedWidget * plotsLOOStackedWidget = new ResizableStackedWidget;
-    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), plotsLOOStackedWidget, SLOT(setCurrentIndex(int)));
+    connect(outputsListWidget, SIGNAL(currentRowChanged(int)), plotsLOOStackedWidget, SLOT(setCurrentIndex(int)));
 
-    for (UnsignedInteger i=0; i<outputDimension; ++i)
+    for (UnsignedInteger i = 0; i < nbOutputs; ++i)
     {
-      MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(i,
-                                                                                   result_.getMetaModelOutputSampleLeaveOneOut().getMarginal(i),
+      MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSampleLeaveOneOut().getMarginal(i),
                                                                                    result_.getOutputSample().getMarginal(i),
                                                                                    result_.getErrorQ2LeaveOneOut()[i],
                                                                                    result_.getQ2LeaveOneOut()[i],
-                                                                                   tr("Q2")
-                                                                                  );
+                                                                                   tr("Q2"),
+                                                                                   this);
       plotsLOOStackedWidget->addWidget(validationWidget);
-
-      connect(validationWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-      connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
-      connect(this, SIGNAL(stateChanged(int)), validationWidget, SLOT(showHideGraphConfigurationWidget(int)));
     }
     tabLayout->addWidget(plotsLOOStackedWidget);
 
     validationTabWidget->addTab(plotsLOOStackedWidget, tr("Leave-one-out"));
-    tabWidget_->addTab(validationTabWidget, tr("Validation"));
+    tabWidget->addTab(validationTabWidget, tr("Validation"));
   }
 
   // fourth tab : PARAMETERS --------------------------------
   if (parametersWidget_)
-    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
+    tabWidget->addTab(parametersWidget_, tr("Parameters"));
 
   // set widgets
-  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
-
-  mainWidget->addWidget(tabWidget_);
+  mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
-  outputsListWidget_->setCurrentRow(0);
+  outputsListWidget->setCurrentRow(0);
   setWidget(mainWidget);
-}
-
-
-void KrigingResultWindow::showHideGraphConfigurationWidget(int indexTab)
-{
-
-  if (indexTab == 0 || // metamodel
-      indexTab == 2    // validation
-     )
-    emit stateChanged(outputsListWidget_->currentRow());
-  else
-    emit graphWindowDeactivated();
-}
-
-
-void KrigingResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
-{
-  if (oldState == Qt::WindowMaximized)
-    return;
-
-  if (newState == Qt::WindowFullScreen || newState == (Qt::WindowActive|Qt::WindowMaximized))
-    showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-  else if (newState == Qt::WindowNoState || newState == Qt::WindowMinimized || newState == (Qt::WindowActive|Qt::WindowMinimized))
-    showHideGraphConfigurationWidget(-1);
 }
 }

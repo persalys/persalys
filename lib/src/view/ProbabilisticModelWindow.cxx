@@ -29,10 +29,12 @@
 #include "otgui/QtTools.hxx"
 #include "otgui/InferenceResultWizard.hxx"
 #include "otgui/InferenceAnalysis.hxx"
+#include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/WidgetBoundToDockWidget.hxx"
 
-#include "openturns/Normal.hxx"
-#include "openturns/TruncatedDistribution.hxx"
-#include "openturns/TruncatedNormal.hxx"
+#include <openturns/Normal.hxx>
+#include <openturns/TruncatedDistribution.hxx>
+#include <openturns/TruncatedNormal.hxx>
 
 #include <QSplitter>
 #include <QScrollArea>
@@ -48,7 +50,6 @@ ProbabilisticModelWindow::ProbabilisticModelWindow(const OTStudy& otStudy, Proba
   : OTguiSubWindow(item, parent)
   , otStudy_(otStudy)
   , physicalModel_(item->getPhysicalModel())
-  , pdf_cdfPlotsConfigurationWidget_(0)
   , paramEditor_(0)
 {
   connect(item, SIGNAL(stochasticInputListChanged()), this, SLOT(updateProbabilisticModel()));
@@ -56,14 +57,6 @@ ProbabilisticModelWindow::ProbabilisticModelWindow(const OTStudy& otStudy, Proba
   connect(item, SIGNAL(inputListDefinitionChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
 
   buildInterface();
-  connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
-}
-
-
-ProbabilisticModelWindow::~ProbabilisticModelWindow()
-{
-  delete pdf_cdfPlotsConfigurationWidget_;
-  pdf_cdfPlotsConfigurationWidget_ = 0;
 }
 
 
@@ -105,7 +98,7 @@ void ProbabilisticModelWindow::buildInterface()
   // - delegate for distributions list
   QStringList items;
   Description listDistributions = DistributionDictionary::GetAvailableDistributions();
-  for (UnsignedInteger i=0; i<listDistributions.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < listDistributions.getSize(); ++i)
     items << tr(listDistributions[i].c_str());
   items << tr("Inference result");
 
@@ -153,30 +146,32 @@ void ProbabilisticModelWindow::buildInterface()
   QVBoxLayout * rightFrameLayout = new QVBoxLayout(rightFrame);
 
   //  PDF and CDF graphs
+  WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
+  QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
+
   QStackedWidget * plotStackedWidget = new QStackedWidget;
+  plotStackedWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
   QVector<PlotWidget*> listPlotWidgets;
-  QWidget * widget = new QWidget;
-  QVBoxLayout * vBox = new QVBoxLayout(widget);
+
   pdfPlot_ = new PlotWidget(tr("distributionPDF"));
-  pdfPlot_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-  vBox->addWidget(pdfPlot_, 0, Qt::AlignHCenter|Qt::AlignTop);
-  plotStackedWidget->addWidget(widget);
+  plotStackedWidget->addWidget(pdfPlot_);
   listPlotWidgets.append(pdfPlot_);
 
-  widget = new QWidget;
-  vBox = new QVBoxLayout(widget);
   cdfPlot_ = new PlotWidget(tr("distributionCDF"));
-  cdfPlot_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-  vBox->addWidget(cdfPlot_, 0, Qt::AlignHCenter|Qt::AlignTop);
-  plotStackedWidget->addWidget(widget);
+  plotStackedWidget->addWidget(cdfPlot_);
   listPlotWidgets.append(cdfPlot_);
 
-  rightFrameLayout->addWidget(plotStackedWidget);
+  plotWidgetLayout->addWidget(plotStackedWidget, 0, Qt::AlignHCenter|Qt::AlignTop);
 
-  pdf_cdfPlotsConfigurationWidget_ = new GraphConfigurationWidget(listPlotWidgets, QStringList(), QStringList(), GraphConfigurationWidget::PDF);
-  connect(pdf_cdfPlotsConfigurationWidget_, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
-  connect(rootTab, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
+  GraphConfigurationWidget * pdf_cdfPlotsSettingWidget = new GraphConfigurationWidget(listPlotWidgets,
+                                                                                      QStringList(),
+                                                                                      QStringList(),
+                                                                                      GraphConfigurationWidget::PDF,
+                                                                                      this);
+  plotWidget->setDockWidget(pdf_cdfPlotsSettingWidget);
+  connect(pdf_cdfPlotsSettingWidget, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
+  rightFrameLayout->addWidget(plotWidget);
 
   //  parameters
   parameterLayout_ = new QVBoxLayout;
@@ -277,7 +272,7 @@ void ProbabilisticModelWindow::updateStochasticInputsTable()
   inputTableModel_ = new InputTableProbabilisticModel(physicalModel_, inputTableView_);
 
   inputTableView_->setModel(inputTableModel_);
-  for (int i=0; i<inputTableModel_->rowCount(); ++i)
+  for (int i = 0; i < inputTableModel_->rowCount(); ++i)
     inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
 
   const bool headerViewIsChecked = (physicalModel_.hasStochasticInputs() && (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize()));
@@ -346,7 +341,6 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
   if (distributionName == "Dirac")
   {
     rightSideOfSplitterStackedWidget_->setCurrentIndex(1);
-    showHideGraphConfigurationWidget(-1);
     valueForDeterministicVariable_->setValue(input.getValue(), false);
   }
   // If the selected variable is stochastic
@@ -363,7 +357,6 @@ void ProbabilisticModelWindow::updateDistributionWidgets(const QModelIndex & ind
 
     // update plots
     updatePlots();
-    showHideGraphConfigurationWidget(0);
   }
 }
 
@@ -421,7 +414,7 @@ void ProbabilisticModelWindow::updateDistributionParametersWidgets(const QModelI
   QLabel * label = new QLabel(tr("Type"));
   lay->addWidget(label, 0, 0);
   QComboBox * selectParametersTypeCombo = new QComboBox;
-  for (UnsignedInteger i=0; i<parameters.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < parameters.getSize(); ++i)
   {
     QStringList parametersNamesList;
     for (UnsignedInteger j=0; j<parameters[i].getDescription().getSize(); ++j)
@@ -435,7 +428,7 @@ void ProbabilisticModelWindow::updateDistributionParametersWidgets(const QModelI
 
   // lineEdits to set the distribution parameters
   Description parametersName = parameters[parametersType].getDescription();
-  for (UnsignedInteger i=0; i<nbParameters; ++i)
+  for (UnsignedInteger i = 0; i < nbParameters; ++i)
   {
     parameterValuesLabel_[i] = new QLabel(parametersName[i].c_str());
     parameterValuesEdit_[i] = new ValueLineEdit(parameters[parametersType][i]);
@@ -496,44 +489,6 @@ void ProbabilisticModelWindow::updateTruncationParametersWidgets(const QModelInd
 }
 
 
-void ProbabilisticModelWindow::showHideGraphConfigurationWidget(int indexTab)
-{
-  if (indexTab != -1)
-    currentIndexTab_ = indexTab;
-
-  switch (indexTab)
-  {
-    case 0: // distribution graph
-    {
-      if (pdf_cdfPlotsConfigurationWidget_)
-      {
-        if (rightSideOfSplitterStackedWidget_->currentIndex() == 2
-            && (windowState() == Qt::WindowFullScreen || windowState() == (Qt::WindowActive|Qt::WindowMaximized)))
-          emit graphWindowActivated(pdf_cdfPlotsConfigurationWidget_);
-        else
-          emit graphWindowDeactivated();
-      }
-      break;
-    }
-    default:
-      emit graphWindowDeactivated();
-      break;
-  }
-}
-
-
-void ProbabilisticModelWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
-{
-  if (oldState == Qt::WindowMaximized)
-    return;
-
-  if (newState == Qt::WindowFullScreen || newState == (Qt::WindowActive|Qt::WindowMaximized))
-    showHideGraphConfigurationWidget(currentIndexTab_);
-  else if (newState == Qt::WindowNoState || newState == Qt::WindowMinimized || newState == (Qt::WindowActive|Qt::WindowMinimized))
-    showHideGraphConfigurationWidget(-1);
-}
-
-
 void ProbabilisticModelWindow::updatePlots()
 {
   QModelIndex index = inputTableView_->currentIndex();
@@ -562,7 +517,7 @@ void ProbabilisticModelWindow::distributionParametersChanged()
     PointWithDescription parameters = DistributionDictionary::GetParametersCollection(distribution)[parametersType];
     try
     {
-      for (UnsignedInteger i=0; i<parameters.getSize(); ++i)
+      for (UnsignedInteger i = 0; i < parameters.getSize(); ++i)
         parameters[i] = parameterValuesEdit_[i]->value();
 
       if (parameters == DistributionDictionary::GetParametersCollection(distribution)[parametersType])
@@ -606,7 +561,7 @@ void ProbabilisticModelWindow::distributionParametersChanged()
 
     try
     {
-      for (UnsignedInteger i=0; i<nbParameters; ++i)
+      for (UnsignedInteger i = 0; i < nbParameters; ++i)
         parameters[i] = parameterValuesEdit_[i]->value();
 
       if (parameters == DistributionDictionary::GetParametersCollection(inputDistribution)[parametersType])
@@ -830,7 +785,7 @@ void ProbabilisticModelWindow::openWizardToChooseInferenceResult(const QModelInd
 {
   bool otStudyHasInferenceResults = false;
   // we need at least one inference analysis result to open the wizard
-  for (UnsignedInteger i=0; i<otStudy_.getAnalyses().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < otStudy_.getAnalyses().getSize(); ++i)
   {
     if (otStudy_.getAnalyses()[i].getImplementation()->getClassName() == "InferenceAnalysis")
     {

@@ -77,21 +77,21 @@ void CopulaInferenceResultWidget::buildInterface()
   // horizontal header
   distTableModel_->setNotEditableHeaderItem(0, 0, tr("Copulas"));
   // distributions list
-  for (UnsignedInteger i=0; i<currentSetResult_.getTestedDistributions().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < currentSetResult_.getTestedDistributions().getSize(); ++i)
   {
     String distributionName = currentSetResult_.getTestedDistributions()[i].getImplementation()->getClassName();
     distributionName = distributionName.substr(0, distributionName.find("Copula"));
-    distTableModel_->setNotEditableItem(i+1, 0, distributionName.c_str());
+    distTableModel_->setNotEditableItem(i + 1, 0, distributionName.c_str());
     const QVariant aVariant = QVariant::fromValue(currentSetResult_.getTestedDistributions()[i]);
-    distTableModel_->setData(distTableModel_->index(i+1, 0), aVariant, Qt::UserRole);
+    distTableModel_->setData(distTableModel_->index(i + 1, 0), aVariant, Qt::UserRole);
   }
   distTableView_->setModel(distTableModel_);
-  distTableModel_->setData(distTableModel_->index(0+1, 0), true, Qt::CheckStateRole);
+  distTableModel_->setData(distTableModel_->index(0 + 1, 0), true, Qt::CheckStateRole);
   distTableView_->resizeToContents();
 
   connect(distTableView_, SIGNAL(clicked(QModelIndex)), this, SLOT(updateParametersTable(QModelIndex)));
   connect(distTableView_, SIGNAL(clicked(QModelIndex)), this, SLOT(updateRadioButtonsDistributionTable(QModelIndex)));
-  distTableView_->selectRow(0+1);
+  distTableView_->selectRow(0 + 1);
 
   distGroupBoxLayout->addWidget(distTableView_);
   distGroupBoxLayout->addStretch();
@@ -100,27 +100,32 @@ void CopulaInferenceResultWidget::buildInterface()
 
   // -- for each copula, display PDF-CDF/parameters
   ResizableStackedWidget * paramStackWidget = new ResizableStackedWidget;
-  for (UnsignedInteger i=0; i<currentSetResult_.getTestedDistributions().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < currentSetResult_.getTestedDistributions().getSize(); ++i)
   {
+    // if valid copula
     if (currentSetResult_.getErrorMessages()[i].empty())
     {
-      CopulaParametersTabWidget * paramWidget = new CopulaParametersTabWidget(currentSetResult_.getTestedDistributions()[i], sample_, currentSetResult_.getKendallPlotData()[i]);
+      CopulaParametersTabWidget * paramWidget = new CopulaParametersTabWidget(currentSetResult_.getTestedDistributions()[i],
+                                                                              sample_,
+                                                                              currentSetResult_.getKendallPlotData()[i],
+                                                                              this);
       paramStackWidget->addWidget(paramWidget);
-
-      connect(this, SIGNAL(stateChanged()), paramWidget, SLOT(stateChanged()));
-      connect(paramWidget, SIGNAL(currentChanged(int)), this, SIGNAL(currentResultsTabChanged(int)));
-      connect(this, SIGNAL(currentResultsTabChangedFromAnother(int)), paramWidget, SLOT(currentTabChanged(int)));
-      connect(paramWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-      connect(paramWidget, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
     }
+    // if not valid copula
     else
     {
       QTabWidget * paramWidget = new QTabWidget;
+
+      // PDF/CDF tab
       QWidget * aWidget = new QWidget;
       paramWidget->addTab(aWidget, tr("PDF/CDF"));
+      paramWidget->setTabEnabled(0, false);
+      // Kendall tab
       aWidget = new QWidget;
       paramWidget->addTab(aWidget, tr("Kendall plot"));
-      const QString message = QString("%1%2%3").arg("<font color=red>").arg(QString::fromUtf8(currentSetResult_.getErrorMessages()[i].c_str())).arg("</font>");
+      paramWidget->setTabEnabled(1, false);
+      // Parameters tab
+      const QString message = QString("<font color=red>%1</font>").arg(QString::fromUtf8(currentSetResult_.getErrorMessages()[i].c_str()));
       aWidget = new QWidget;
       QVBoxLayout * aWidgetLayout = new QVBoxLayout(aWidget);
       QLabel * errorMessageLabel = new QLabel(message);
@@ -128,8 +133,7 @@ void CopulaInferenceResultWidget::buildInterface()
       aWidgetLayout->addWidget(errorMessageLabel);
       aWidgetLayout->addStretch();
       paramWidget->addTab(aWidget, tr("Parameters"));
-      paramWidget->setTabEnabled(0, false);
-      paramWidget->setTabEnabled(1, false);
+
       paramStackWidget->addWidget(paramWidget);
     }
   }
@@ -150,7 +154,7 @@ void CopulaInferenceResultWidget::updateRadioButtonsDistributionTable(const QMod
 
   // set CheckStateRole of distTableModel_
   // loop begins at 1 because the first row is the table title
-  for (int i=1; i<distTableModel_->rowCount(); ++i)
+  for (int i = 1; i < distTableModel_->rowCount(); ++i)
   {
     if (distTableModel_->index(i, 0).row() == current.row())
       distTableModel_->setData(distTableModel_->index(i, 0), true, Qt::CheckStateRole);
@@ -168,30 +172,6 @@ void CopulaInferenceResultWidget::updateParametersTable(const QModelIndex& curre
   if (current.row() < 1)
     return;
 
-  emit distributionChanged(current.row()-1);
-  emit stateChanged();
+  emit distributionChanged(current.row() - 1);
 }
-
-
-// Distribution CopulaInferenceResultWidget::getDistribution() const
-// {
-//   // check
-//   if (!(distTableModel_ && distTableView_))
-//     throw InternalException(HERE) << "Error in CopulaInferenceResultWidget::getDistribution";
-// 
-//   // get current distribution
-//   QModelIndex selectedDistributionIndex;
-//   for (int i=2; i<distTableModel_->rowCount(); ++i)
-//     if (distTableModel_->data(distTableModel_->index(i, 0), Qt::CheckStateRole).toBool())
-//       selectedDistributionIndex = distTableModel_->index(i, 0);
-// 
-//   Distribution distribution;
-//   if (selectedDistributionIndex.isValid())
-//   {
-//     const QVariant variant = distTableModel_->data(selectedDistributionIndex, Qt::UserRole);
-//     distribution = variant.value<Distribution>();
-//   }
-// 
-//   return distribution;
-// }
 }

@@ -83,8 +83,6 @@ signals:
   void showWindow(OTguiSubWindow*);
   void itemSelected(QStandardItem*);
   void removeSubWindow(QStandardItem*);
-  void graphWindowActivated(QWidget*);
-  void graphWindowDeactivated();
   void recentFilesListChanged(const QString& recentFileName);
   void analysisInProgressStatusChanged(bool analysisInProgress);
 

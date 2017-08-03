@@ -23,7 +23,6 @@
 
 #include "otgui/ResultWindow.hxx"
 #include "otgui/SimulationReliabilityResult.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
 
 namespace OTGUI {
 class OTGUI_API SimulationReliabilityResultWindow : public ResultWindow
@@ -33,24 +32,15 @@ class OTGUI_API SimulationReliabilityResultWindow : public ResultWindow
 public:
   SimulationReliabilityResultWindow(AnalysisItem * item, QWidget * parent=0);
 
-  virtual ~SimulationReliabilityResultWindow();
-
 protected:
   void buildInterface();
   QWidget * getSummaryTab();
   QWidget * getHistogramTab();
   QWidget * getConvergenceTab();
 
-public slots:
-  void showHideGraphConfigurationWidget(int indexTab);
-  void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
-
 private:
   SimulationReliabilityResult result_;
-  QTabWidget * tabWidget_;
   QTabWidget * formTabWidget_;
-  GraphConfigurationWidget * histogramConfigurationWidget_;
-  GraphConfigurationWidget * convergenceGraphConfigurationWidget_;
 };
 }
 #endif

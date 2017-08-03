@@ -26,6 +26,8 @@
 #include "otgui/ParametersTableView.hxx"
 #include "otgui/ApproximationResultTabWidget.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
+#include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/WidgetBoundToDockWidget.hxx"
 
 #include <qwt_legend.h>
 #include <qwt_scale_engine.h>
@@ -41,10 +43,7 @@ namespace OTGUI {
 SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
   , result_(dynamic_cast<SimulationReliabilityAnalysis*>(item->getAnalysis().getImplementation().get())->getResult())
-  , tabWidget_(0)
   , formTabWidget_(0)
-  , histogramConfigurationWidget_(0)
-  , convergenceGraphConfigurationWidget_(0)
 {
   // FORM result widget
   if (dynamic_cast<const FORMImportanceSamplingAnalysis*>(item->getAnalysis().getImplementation().get()))
@@ -57,15 +56,6 @@ SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisIte
   setParameters(item->getAnalysis(), tr("Threshold exceedance parameters"));
 
   buildInterface();
-}
-
-
-SimulationReliabilityResultWindow::~SimulationReliabilityResultWindow()
-{
-  delete histogramConfigurationWidget_;
-  delete convergenceGraphConfigurationWidget_;
-  histogramConfigurationWidget_ = 0;
-  convergenceGraphConfigurationWidget_ = 0;
 }
 
 
@@ -92,28 +82,27 @@ void SimulationReliabilityResultWindow::buildInterface()
   mainWidget->setStretchFactor(0, 1);
 
   // tab widget
-  tabWidget_ = new QTabWidget;
+  QTabWidget * tabWidget = new QTabWidget;
 
   // first tab : summary --------------------------------
-  tabWidget_->addTab(getSummaryTab(), tr("Summary"));
+  tabWidget->addTab(getSummaryTab(), tr("Summary"));
 
   // second tab : output histogram --------------------------------
-  tabWidget_->addTab(getHistogramTab(), tr("Histogram"));
+  tabWidget->addTab(getHistogramTab(), tr("Histogram"));
 
   // third tab : convergence --------------------------------
-  tabWidget_->addTab(getConvergenceTab(), tr("Convergence graph"));
+  tabWidget->addTab(getConvergenceTab(), tr("Convergence graph"));
 
   // fourth tab : FORM result --------------------------------
   if (formTabWidget_)
-    tabWidget_->addTab(formTabWidget_, tr("FORM results"));
+    tabWidget->addTab(formTabWidget_, tr("FORM results"));
 
   // fifth tab : parameters --------------------------------
   if (parametersWidget_)
-    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
+    tabWidget->addTab(parametersWidget_, tr("Parameters"));
 
   //
-  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
-  mainWidget->addWidget(tabWidget_);
+  mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
 
   setWidget(mainWidget);
@@ -205,8 +194,8 @@ QWidget* SimulationReliabilityResultWindow::getSummaryTab()
 
 QWidget* SimulationReliabilityResultWindow::getHistogramTab()
 {
-  QWidget * tab = new QWidget;
-  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+  WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
+  QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
   // get output info
   QString outputName(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
@@ -217,7 +206,7 @@ QWidget* SimulationReliabilityResultWindow::getHistogramTab()
   plot->plotHistogram(result_.getOutputSample(), 2, 0, tr("%1 distribution").arg(outputName));
 
   // plot threshold
-  Sample threshold = Sample(2, 2);
+  Sample threshold(2, 2);
   threshold[0][0] = result_.getSimulationResult().getEvent().getThreshold();
   threshold[1][0] = plot->axisInterval(QwtPlot::yLeft).minValue();
   threshold[1][0] = result_.getSimulationResult().getEvent().getThreshold();
@@ -230,18 +219,26 @@ QWidget* SimulationReliabilityResultWindow::getHistogramTab()
   plot->setTitle(tr("%1 output distribution").arg(outputName));
 
   listHistogram.append(plot);
-  tabLayout->addWidget(plot);
+  plotWidgetLayout->addWidget(plot);
 
-  histogramConfigurationWidget_ = new GraphConfigurationWidget(listHistogram);
+  GraphConfigurationWidget * histogramSettingWidget = new GraphConfigurationWidget(listHistogram,
+                                                                                   QStringList(),
+                                                                                   QStringList(),
+                                                                                   GraphConfigurationWidget::NoType,
+                                                                                   this);
+  plotWidget->setDockWidget(histogramSettingWidget);
 
-  return tab;
+  return plotWidget;
 }
 
 
 QWidget* SimulationReliabilityResultWindow::getConvergenceTab()
 {
+  WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
+  QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
+
   // do not use a simple QWidget here otherwise it is not possible to resize the window
-  ResizableStackedWidget * tab = new ResizableStackedWidget;
+  ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
 
   QVector<PlotWidget*> listConvergenceGraph;
   PlotWidget * plot = new PlotWidget(tr("convergence"));
@@ -266,47 +263,16 @@ QWidget* SimulationReliabilityResultWindow::getConvergenceTab()
   plot->setAxisScaleEngine(QwtPlot::xBottom, scaleEngin);
 
   listConvergenceGraph.append(plot);
-  tab->addWidget(plot);
+  stackedWidget->addWidget(plot);
 
-  convergenceGraphConfigurationWidget_ = new GraphConfigurationWidget(listConvergenceGraph);
+  GraphConfigurationWidget * convergenceGraphSettingWidget = new GraphConfigurationWidget(listConvergenceGraph,
+                                                                                          QStringList(),
+                                                                                          QStringList(),
+                                                                                          GraphConfigurationWidget::NoType,
+                                                                                          this);
+  plotWidget->setDockWidget(convergenceGraphSettingWidget);
+  plotWidgetLayout->addWidget(stackedWidget);
 
-  return tab;
-}
-
-
-void SimulationReliabilityResultWindow::showHideGraphConfigurationWidget(int indexTab)
-{
-  switch (indexTab)
-  {
-    // if a plotWidget is visible
-    case 1: // histogram
-      if (histogramConfigurationWidget_)
-        if (!histogramConfigurationWidget_->isVisible())
-          emit graphWindowActivated(histogramConfigurationWidget_);
-      break;
-    case 2: // convergence graph
-      if (convergenceGraphConfigurationWidget_)
-        if (!convergenceGraphConfigurationWidget_->isVisible())
-          emit graphWindowActivated(convergenceGraphConfigurationWidget_);
-      break;
-    // if no plotWidget is visible
-    default:
-    {
-      emit graphWindowDeactivated();
-      break;
-    }
-  }
-}
-
-
-void SimulationReliabilityResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
-{
-  if (oldState == Qt::WindowMaximized)
-    return;
-
-  if (newState == Qt::WindowFullScreen || newState == (Qt::WindowActive|Qt::WindowMaximized))
-    showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-  else if (newState == Qt::WindowNoState || newState == Qt::WindowMinimized || newState == (Qt::WindowActive|Qt::WindowMinimized))
-    showHideGraphConfigurationWidget(-1);
+  return plotWidget;
 }
 }
