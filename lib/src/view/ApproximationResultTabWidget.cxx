@@ -20,6 +20,8 @@
  */
 #include "otgui/ApproximationResultTabWidget.hxx"
 
+#include "otgui/FORMAnalysis.hxx"
+#include "otgui/FORMImportanceSamplingAnalysis.hxx"
 #include "otgui/AnalysisItem.hxx"
 #include "otgui/ParametersTableView.hxx"
 #include "otgui/ParametersWidget.hxx"
@@ -27,6 +29,7 @@
 
 #include <QScrollArea>
 #include <QHeaderView>
+#include <QAbstractItemModel>
 
 using namespace OT;
 
@@ -38,12 +41,33 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& res
   : QTabWidget(parent)
   , result_(result)
   , parametersWidget_(0)
+  , maximumIterationNumber_(0)
 {
-  // parameters widget
+  // analysis parameters
   QStringList paramNames;
   QStringList paramValues;
-  AnalysisItem::GetAnalysisParameters(analysis, paramNames, paramValues);
 
+  const FORMAnalysis * formAnalysis(dynamic_cast<const FORMAnalysis*>(&analysis));
+  if (formAnalysis)
+  {
+    // Maximum iteration number : to add a warning if needed
+    maximumIterationNumber_ = formAnalysis->getOptimizationAlgorithm().getMaximumIterationNumber();
+    // analysis parameters
+    AnalysisItem::GetAnalysisParameters(analysis, paramNames, paramValues);
+  }
+  const FORMImportanceSamplingAnalysis * formISAnalysis(dynamic_cast<const FORMImportanceSamplingAnalysis*>(&analysis));
+  if (formISAnalysis)
+  {
+    // Maximum iteration number : to add a warning if needed
+    maximumIterationNumber_ = formISAnalysis->getOptimizationAlgorithm().getMaximumIterationNumber();
+    // analysis parameters
+    FORMAnalysis aFakeAnalysis("Unnamed", formISAnalysis->getLimitState());
+    aFakeAnalysis.setOptimizationAlgorithm(formISAnalysis->getOptimizationAlgorithm());
+    aFakeAnalysis.setPhysicalStartingPoint(formISAnalysis->getPhysicalStartingPoint());
+    AnalysisItem::GetAnalysisParameters(aFakeAnalysis, paramNames, paramValues);
+  }
+
+  // set parameters widget
   if (!paramNames.isEmpty() && paramNames.size() == paramValues.size())
   {
     parametersWidget_ = new QWidget;
@@ -80,6 +104,8 @@ void ApproximationResultTabWidget::buildInterface()
   tabLayout->addWidget(parametersTable);
 
   // optimization result table
+  QGroupBox * groupBox = new QGroupBox(tr("Optimization result"));
+  QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
   namesList.clear();
   namesList << tr("Iterations number")
             << tr("Calls number")
@@ -95,9 +121,18 @@ void ApproximationResultTabWidget::buildInterface()
              << QString::number(result_.getOptimizationResult().getRelativeError())
              << QString::number(result_.getOptimizationResult().getResidualError())
              << QString::number(result_.getOptimizationResult().getConstraintError());
-  
-  parametersTable = new ParametersWidget(tr("Optimization result"), namesList, valuesList, true, true);
-  tabLayout->addWidget(parametersTable);
+
+  ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
+
+  // add warning if Maximum iteration number reached
+  if (result_.getOptimizationResult().getIterationNumber() == maximumIterationNumber_)
+  {
+    table->model()->setData(table->model()->index(0, 1), QIcon(":/images/task-attention.png"), Qt::DecorationRole);
+    table->model()->setData(table->model()->index(0, 1), tr("Maximum iterations number reached"), Qt::ToolTipRole);
+  }
+  groupBoxLayout->addWidget(table);
+
+  tabLayout->addWidget(groupBox);
 
   scrollArea->setWidget(tab);
 
@@ -111,8 +146,8 @@ void ApproximationResultTabWidget::buildInterface()
   scrollArea->setWidgetResizable(true);
   tabLayout->setSizeConstraint(QLayout::SetFixedSize);
 
-  QGroupBox * groupBox = new QGroupBox(tr("Design point"));
-  QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
+  groupBox = new QGroupBox(tr("Design point"));
+  groupBoxLayout = new QVBoxLayout(groupBox);
 
   ResizableTableViewWithoutScrollBar * resultsTable = new ResizableTableViewWithoutScrollBar;
   resultsTable->horizontalHeader()->hide();
@@ -137,7 +172,7 @@ void ApproximationResultTabWidget::buildInterface()
   importanceFactors.setDescription(inDescription);
 
   // set values
-  for (UnsignedInteger i=0; i<inDimension; ++i)
+  for (UnsignedInteger i = 0; i < inDimension; ++i)
   {
     // variable name
     resultsTableModel->setNotEditableItem(i+2, 0, QString::fromUtf8(inDescription[i].c_str()));
@@ -197,7 +232,7 @@ void ApproximationResultTabWidget::buildInterface()
 
   // set values
   int row = 1;
-  for (UnsignedInteger i=0; i<inDimension; ++i)
+  for (UnsignedInteger i = 0; i < inDimension; ++i)
   {
     // variable name
     const int varRow = row;
@@ -206,7 +241,7 @@ void ApproximationResultTabWidget::buildInterface()
     PointWithDescription pfSensitivity(result_.getEventProbabilitySensitivity()[i]);
     const PointWithDescription betaSensitivity(result_.getHasoferReliabilityIndexSensitivity()[i]);
 
-    for (UnsignedInteger j=0; j<betaSensitivity.getDimension(); ++j)
+    for (UnsignedInteger j = 0; j < betaSensitivity.getDimension(); ++j)
     {
       int col = 0;
       // distribution parameter name
