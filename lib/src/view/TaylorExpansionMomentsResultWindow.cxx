@@ -115,7 +115,7 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
   momentsVbox->addWidget(momentsTablesWidget);
   tabLayout->addWidget(momentsGroupBox);
 
-  tabWidget->addTab(tab, "Summary");
+  tabWidget->addTab(tab, tr("Summary"));
 
   //
   mainWidget->addWidget(tabWidget);
