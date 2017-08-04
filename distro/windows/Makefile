@@ -209,7 +209,7 @@ ifeq ($(CHECK_OT),y)
 	cp $(OT_PREFIX)/bin/*.dll $(MOD_BUILD)/python/test
 	cp $(MOD_PREFIX)/bin/*.dll $(MOD_BUILD)/python/test
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/python$(PYBASEVER_NODOT).dll $(MOD_BUILD)/python/test
-	cd $(MOD_BUILD) && xvfb-run ctest -j$(JOBS_TEST) --output-on-failure --timeout 1000
+	cd $(MOD_BUILD) && xvfb-run ctest -j$(JOBS_TEST) --output-on-failure --timeout 180
 endif
 	touch mod-test
 
