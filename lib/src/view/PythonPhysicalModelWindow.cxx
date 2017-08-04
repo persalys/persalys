@@ -30,8 +30,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item)
-  : OTguiSubWindow(item)
+PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
+  : OTguiSubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
   , codeModel_(0)
   , codeView_(0)

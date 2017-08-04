@@ -21,8 +21,9 @@
 #ifndef OTGUI_QTTOOLS_HXX
 #define OTGUI_QTTOOLS_HXX
 
-#include <QObject>
 #include "otgui/OTGuiprivate.hxx"
+#include <QObject>
+#include <openturns/OTType.hxx>
 
 namespace OTGUI {
 /**
@@ -47,6 +48,12 @@ public :
   virtual ~SimpleException() throw();
   QString text() const;
   virtual const char* what() const throw();
+};
+
+class OTGUI_API QtOT
+{
+public:
+  static QStringList DescriptionToStringList(const OT::Description & description);
 };
 }
 #endif

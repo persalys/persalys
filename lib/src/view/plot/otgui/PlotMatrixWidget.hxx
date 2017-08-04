@@ -33,18 +33,22 @@ class OTGUI_API PlotMatrixWidget : public QWidget
   Q_OBJECT
 
 public:
-  PlotMatrixWidget(const OT::Sample & inputSample, const OT::Sample & outputSample, QWidget * parent = 0);
+  PlotMatrixWidget(const OT::Sample & sample1, const OT::Sample & sample2, QWidget * parent = 0);
 
   QString getTitle() const;
   void setTitle(const QString & title);
   QStringList getInputNames() const;
   QStringList getOutputNames() const;
+  void setInputNames(const QStringList inputNames);
+  void setOutputNames(const QStringList outputNames);
+  QStringList getColumnsNames() const;
+  QStringList getRowsNames() const;
   QImage getMatrixImage();
 
 public slots:
   void exportPlot();
-  void setInputsToDisplay(QStringList inputs);
-  void setOutputsToDisplay(QStringList outputs);
+  void setColumnsToDisplay(QStringList columns);
+  void setRowsToDisplay(QStringList rows);
 
 private:
   QTableWidget * tableWidget_;
@@ -52,9 +56,11 @@ private:
   QImage matrixImage_;
   QStringList inputNames_;
   QStringList outputNames_;
+  QStringList columnsNames_;
+  QStringList rowsNames_;
   QLabel * matrixTitleLabel_;
-  int nbInputsToDisplay_;
-  int nbOutputsToDisplay_;
+  int nbColumnsToDisplay_;
+  int nbRowsToDisplay_;
 };
 }
 #endif

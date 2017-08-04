@@ -36,14 +36,28 @@
 
 #include <PyConsole_Interp.h>
 
+#ifdef OTGUI_HAVE_PARAVIEW
+#include <vtkSMProxyManager.h>
+#include <vtkSMWriterFactory.h>
+#include <pqParaViewBehaviors.h>
+#endif
+
 namespace OTGUI {
 
 MainWindow::MainWindow()
   : QMainWindow()
   , studyTree_(new StudyTreeView(this))
+  , graphSettingDockWidget_(0)
+  , pythonConsole_(0)
 {
   setWindowTitle("OTGui");
   setWindowIcon(QIcon(":/images/OT_icon32x32.png"));
+
+#ifdef OTGUI_HAVE_PARAVIEW
+  new pqParaViewBehaviors(this, this);
+  // UpdateAvailableWriters : to be able to export the data from spread sheets
+  vtkSMProxyManager::GetProxyManager()->GetWriterFactory()->UpdateAvailableWriters();
+#endif
 
   buildInterface();
   buildActions();
@@ -60,12 +74,12 @@ void MainWindow::buildInterface()
   leftSideSplitter->addWidget(studyTree_);
   leftSideSplitter->setStretchFactor(0, 8);
 
-  configurationDock_ = new QDockWidget(tr("Graph settings"));
-  configurationDock_->setFeatures(QDockWidget::NoDockWidgetFeatures);
-  connect(studyTree_, SIGNAL(graphWindowActivated(QWidget*)), this, SLOT(showGraphConfigurationTabWidget(QWidget*)));
-  connect(studyTree_, SIGNAL(graphWindowDeactivated()), configurationDock_, SLOT(close()));
-  leftSideSplitter->addWidget(configurationDock_);
-  configurationDock_->close();
+  graphSettingDockWidget_ = new QDockWidget(tr("Graph setting"));
+  graphSettingDockWidget_->setFeatures(QDockWidget::NoDockWidgetFeatures);
+  connect(studyTree_, SIGNAL(graphWindowActivated(QWidget*)), this, SLOT(showGraphSettingDockWidget(QWidget*)));
+  connect(studyTree_, SIGNAL(graphWindowDeactivated()), graphSettingDockWidget_, SLOT(close()));
+  leftSideSplitter->addWidget(graphSettingDockWidget_);
+  graphSettingDockWidget_->close();
   leftSideSplitter->setStretchFactor(1, 2);
 
   mainSplitter->addWidget(leftSideSplitter);
@@ -212,10 +226,18 @@ void MainWindow::importPython()
 }
 
 
-void MainWindow::showGraphConfigurationTabWidget(QWidget * graph)
+void MainWindow::showGraphSettingDockWidget(QWidget * graph)
 {
-  configurationDock_->setWidget(graph);
-  configurationDock_->show();
+  graphSettingDockWidget_->setWidget(graph);
+  graphSettingDockWidget_->show();
+}
+
+
+void MainWindow::hideGraphSettingDockWidget(QWidget* widgetToBeHidden)
+{
+  // if the current dock widget is not widgetToBeHidden : do nothing
+  if (graphSettingDockWidget_->widget() == widgetToBeHidden)
+    graphSettingDockWidget_->close();
 }
 
 

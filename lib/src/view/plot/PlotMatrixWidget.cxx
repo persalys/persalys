@@ -38,25 +38,28 @@ using namespace OT;
 
 namespace OTGUI {
 
-PlotMatrixWidget::PlotMatrixWidget(const OT::Sample & inputSample, const OT::Sample & outputSample, QWidget* parent)
+PlotMatrixWidget::PlotMatrixWidget(const OT::Sample & sample1, const OT::Sample & sample2, QWidget* parent)
   : QWidget(parent)
   , inputNames_()
   , outputNames_()
+  , columnsNames_()
+  , rowsNames_()
 {
-  int nbInputs = inputSample.getDimension();
-  int nbOutputs = outputSample.getDimension();
+  const int nbColumns = sample1.getDimension();
+  const int nbRows = sample2.getDimension();
+
   QString typeNameSuffix = "XX";
   bool isPlotMatrixXX = true;
-  if (inputSample != outputSample)
+  if (sample1 != sample2)
   {
     isPlotMatrixXX = false;
     typeNameSuffix = "YX";
   }
 
-  for (int i=0; i<nbInputs; ++i)
-    inputNames_ << QString::fromUtf8(inputSample.getDescription()[i].c_str());
-  for (int i=0; i<nbOutputs; ++i)
-    outputNames_ << QString::fromUtf8(outputSample.getDescription()[i].c_str());
+  for (int  i= 0; i < nbColumns; ++i)
+    columnsNames_ << QString::fromUtf8(sample1.getDescription()[i].c_str());
+  for (int i = 0; i < nbRows; ++i)
+    rowsNames_ << QString::fromUtf8(sample2.getDescription()[i].c_str());
 
   QVBoxLayout * plotMatrixLayout = new QVBoxLayout(this);
 
@@ -68,14 +71,15 @@ PlotMatrixWidget::PlotMatrixWidget(const OT::Sample & inputSample, const OT::Sam
   plotMatrixLayout->addLayout(tableWidgetTitleLayout);
 
   // matrix
-  nbInputsToDisplay_ = nbInputs;
-  nbOutputsToDisplay_ = nbOutputs;
+  nbColumnsToDisplay_ = nbColumns;
+  nbRowsToDisplay_ = nbRows;
+
   const int sizePixmap = 200;
 
-  tableWidget_ = new QTableWidget(nbOutputs, nbInputs);
+  tableWidget_ = new QTableWidget(nbRows, nbColumns);
   tableWidget_->setSelectionMode(QAbstractItemView::NoSelection);
-  tableWidget_->setHorizontalHeaderLabels(inputNames_);
-  tableWidget_->setVerticalHeaderLabels(outputNames_);
+  tableWidget_->setHorizontalHeaderLabels(columnsNames_);
+  tableWidget_->setVerticalHeaderLabels(rowsNames_);
 #if QT_VERSION >= 0x050000
   tableWidget_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
   tableWidget_->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
@@ -88,17 +92,17 @@ PlotMatrixWidget::PlotMatrixWidget(const OT::Sample & inputSample, const OT::Sam
 
   // fill matrix and create images of the plotWidgets
   QPen scatterPen = QPen(Qt::blue, 1);
-  for (int i=0; i<nbOutputs; ++i)
+  for (int i = 0; i < nbRows; ++i)
   {
-    for (int j=0; j<nbInputs; ++j)
+    for (int j = 0; j < nbColumns; ++j)
     {
       QWidget * cellMatrixWidget = new QWidget;
       QVBoxLayout * cellMatrixLayout = new QVBoxLayout(cellMatrixWidget);
       PlotWidget * plot = new PlotWidget(tr("plotmatrix") + typeNameSuffix);
       if (isPlotMatrixXX && i == j)
-        plot->plotHistogram(inputSample.getMarginal(j));
+        plot->plotHistogram(sample1.getMarginal(j));
       else
-        plot->plotScatter(inputSample.getMarginal(j), outputSample.getMarginal(i), scatterPen);
+        plot->plotScatter(sample1.getMarginal(j), sample2.getMarginal(i), scatterPen);
       plot->enableAxis(QwtPlot::xBottom, false);
       plot->enableAxis(QwtPlot::yLeft, false);
       // hide borders: #f6f7fa is white
@@ -140,71 +144,110 @@ QStringList PlotMatrixWidget::getOutputNames() const
   return outputNames_;
 }
 
+void PlotMatrixWidget::setInputNames(const QStringList inputNames)
+{
+  inputNames_ = inputNames;
+}
+
+
+void PlotMatrixWidget::setOutputNames(const QStringList outputNames)
+{
+  outputNames_ = outputNames;
+}
+
+
+QStringList PlotMatrixWidget::getColumnsNames() const
+{
+  return columnsNames_;
+}
+
+
+QStringList PlotMatrixWidget::getRowsNames() const
+{
+  return rowsNames_;
+}
+
 
 QImage PlotMatrixWidget::getMatrixImage()
 {
-  int width = matrixImages_[0].width();
-  int height = matrixImages_[0].height();
+  const int width = matrixImages_[0].width();
+  const int height = matrixImages_[0].height();
 
-  int nbInputs = tableWidget_->columnCount();
-  int nbOutputs = tableWidget_->rowCount();
+  const int nbColumns = tableWidget_->columnCount();
+  const int nbRows = tableWidget_->rowCount();
 
   // total width of the table (width of an image * number of plotwidgets + width of the vertical header)
   // the width of the vertical header is set to the half of an image width
-  int totalWidth = width*(nbInputsToDisplay_+0.5);
+  const int totalWidth = width * (nbColumnsToDisplay_ + 0.5);
   // total height of the table (height of an image * number of plotwidgets + height of the horizontal header)
   // the height of the horizontal header is set to the half of an image height
-  int totalHeight = height*(nbOutputsToDisplay_+0.5);
+  const int totalHeight = height * (nbRowsToDisplay_ + 0.5);
 
   // determine the height of the optimal rectangle being able to contain the title
-  int aFakeHeight = 1;
-  QImage aFakeImage(QSize(totalWidth+5, aFakeHeight), QImage::Format_ARGB32_Premultiplied);
+  const int aFakeHeight = 1;
+  QImage aFakeImage(QSize(totalWidth + 5, aFakeHeight), QImage::Format_ARGB32_Premultiplied);
   QPainter aFakePainter(&aFakeImage);
-  QRectF titleRect = aFakePainter.boundingRect(QRectF(QPointF(0, 0), QSizeF(totalWidth+5, aFakeHeight)), Qt::TextWordWrap|Qt::AlignHCenter, getTitle());
-  int alpha = titleRect.height();
+  const QRectF titleRect = aFakePainter.boundingRect(QRectF(QPointF(0, 0), QSizeF(totalWidth + 5, aFakeHeight)),
+                                                     Qt::TextWordWrap|Qt::AlignHCenter,
+                                                     getTitle());
+  const int alpha = titleRect.height();
 
   // create the image of the matrix
-  QImage resultImage(QSize(totalWidth+5, totalHeight+5+alpha), QImage::Format_ARGB32_Premultiplied);
+  QImage resultImage(QSize(totalWidth + 5, totalHeight + 5 + alpha), QImage::Format_ARGB32_Premultiplied);
   resultImage.fill(Qt::white);
 
   QPainter painter(&resultImage);
   painter.setPen(QPen(Qt::black, 0.5));
 
   // add title
-  painter.drawText(QRectF(QPointF(0, 0), QSizeF(totalWidth, alpha)), getTitle(), QTextOption(Qt::AlignCenter));
+  painter.drawText(QRectF(QPointF(0, 0), QSizeF(totalWidth, alpha)),
+                   getTitle(),
+                   QTextOption(Qt::AlignCenter));
 
   int it_i = 0;
   int it_j = 0;
-  for (int i=0; i<nbOutputs; ++i)
+  for (int i = 0; i < nbRows; ++i)
   {
     if (!tableWidget_->isRowHidden(i))
     {
       // add output names
-      painter.drawText(QRectF(QPointF(0, height*(it_i+0.5)+alpha), QSizeF(width*0.5, height)), outputNames_[i], QTextOption(Qt::AlignCenter));
+      painter.drawText(QRectF(QPointF(0, height * (it_i + 0.5) + alpha), QSizeF(width * 0.5, height)),
+                       rowsNames_[i],
+                       QTextOption(Qt::AlignCenter));
       it_j = 0;
-      for(int j=0; j<nbInputs; ++j)
+      for(int j = 0; j < nbColumns; ++j)
       {
         if (!tableWidget_->isColumnHidden(j))
         {
           // add plotWidget image
-          painter.drawImage(width*(it_j+0.5), height*(it_i+0.5)+alpha, matrixImages_[j+nbInputs*i]);
+          painter.drawImage(width * (it_j + 0.5),
+                            height * (it_i + 0.5) + alpha,
+                            matrixImages_[j + nbColumns * i]);
           ++it_j;
         }
       }
       // add horizontal lines
-      painter.drawLine(0, height*(it_i+0.5)+alpha, totalWidth, height*(it_i+0.5)+alpha);
+      painter.drawLine(0,
+                       height * (it_i + 0.5) + alpha,
+                       totalWidth,
+                       height * (it_i + 0.5) + alpha);
       ++it_i;
     }
   }
   it_j = 0;
-  for(int j=0; j<nbInputs; ++j)
+  for(int j = 0; j < nbColumns; ++j)
   {
     if (!tableWidget_->isColumnHidden(j))
     {
       // add input names
-      painter.drawText(QRectF(QPointF(width*(it_j+0.5), alpha), QSizeF(width, height*0.5)), inputNames_[j], QTextOption(Qt::AlignCenter));
+      painter.drawText(QRectF(QPointF(width * (it_j + 0.5), alpha), QSizeF(width, height * 0.5)),
+                       columnsNames_[j],
+                       QTextOption(Qt::AlignCenter));
       // add vertical lines
-      painter.drawLine(width*(it_j+0.5), alpha, width*(it_j+0.5), totalHeight+alpha);
+      painter.drawLine(width * (it_j + 0.5),
+                       alpha,
+                       width * (it_j + 0.5),
+                       totalHeight + alpha);
       ++it_j;
     }
   }
@@ -216,14 +259,14 @@ QImage PlotMatrixWidget::getMatrixImage()
 }
 
 
-void PlotMatrixWidget::setInputsToDisplay(QStringList inputs)
+void PlotMatrixWidget::setColumnsToDisplay(QStringList columns)
 {
-  nbInputsToDisplay_ = 0;
-  for (int i=0; i<inputNames_.size(); ++i)
+  nbColumnsToDisplay_ = 0;
+  for (int i = 0; i < columnsNames_.size(); ++i)
   {
-    if (inputs.contains(inputNames_[i]))
+    if (columns.contains(columnsNames_[i]))
     {
-      ++nbInputsToDisplay_;
+      ++nbColumnsToDisplay_;
       tableWidget_->showColumn(i);
     }
     else
@@ -232,14 +275,14 @@ void PlotMatrixWidget::setInputsToDisplay(QStringList inputs)
 }
 
 
-void PlotMatrixWidget::setOutputsToDisplay(QStringList outputs)
+void PlotMatrixWidget::setRowsToDisplay(QStringList rows)
 {
-  nbOutputsToDisplay_ = 0;
-  for (int i=0; i<outputNames_.size(); ++i)
+  nbRowsToDisplay_ = 0;
+  for (int i = 0; i < rowsNames_.size(); ++i)
   {
-    if (outputs.contains(outputNames_[i]))
+    if (rows.contains(rowsNames_[i]))
     {
-      ++nbOutputsToDisplay_;
+      ++nbRowsToDisplay_;
       tableWidget_->showRow(i);
     }
     else
@@ -254,9 +297,10 @@ void PlotMatrixWidget::exportPlot()
   QString currentDir = settings.value("currentDir").toString();
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
-  QString fileName = QFileDialog::getSaveFileName(this, tr("Export plot"),
-                     currentDir,
-                     tr("Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)"));
+  QString fileName = QFileDialog::getSaveFileName(this,
+                                                  tr("Export plot"),
+                                                  currentDir,
+                                                  tr("Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)"));
 
   if (!fileName.isEmpty())
   {

@@ -35,7 +35,7 @@ class OTGUI_API LimitStateWindow : public OTguiSubWindow
 public:
   enum Operator {LessOperator, LessOrEqualOperator, GreaterOperator, GreaterOrEqualOperator};
 
-  LimitStateWindow(LimitStateItem * item);
+  LimitStateWindow(LimitStateItem * item, QWidget * parent=0);
 
 protected:
   void buildInterface();

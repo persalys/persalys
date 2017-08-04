@@ -33,7 +33,7 @@ class OTGUI_API TaylorExpansionMomentsResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  TaylorExpansionMomentsResultWindow(AnalysisItem * item);
+  TaylorExpansionMomentsResultWindow(AnalysisItem * item, QWidget * parent=0);
 
 protected:
   virtual void setParameters(const Analysis& analysis, const QString& title){/*has not yet parameters*/};

@@ -257,7 +257,7 @@ class OTGUI_API FMIPhysicalModelWindow : public OTguiSubWindow
   Q_OBJECT
 
 public :
-  FMIPhysicalModelWindow(PhysicalModelItem * item);
+  FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent=0);
 
 public slots:
   void selectImportFileDialogRequested();

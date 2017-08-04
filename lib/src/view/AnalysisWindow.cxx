@@ -32,8 +32,8 @@
 
 namespace OTGUI {
 
-AnalysisWindow::AnalysisWindow(AnalysisItem* item, const bool analysisInProgress)
-  : OTguiSubWindow(item)
+AnalysisWindow::AnalysisWindow(AnalysisItem* item, const bool analysisInProgress, QWidget * parent)
+  : OTguiSubWindow(item, parent)
   , analysisInProgress_(analysisInProgress)
   , analysisItem_(item)
   , progressBar_(0)
@@ -193,6 +193,7 @@ void AnalysisWindow::stopAnalysis()
   analysisItem_->stopAnalysis();
 }
 
+
 #ifdef OTGUI_HAVE_YACS
 void AnalysisWindow::visitYACS(YACSPhysicalModel* model)
 {
@@ -200,5 +201,4 @@ void AnalysisWindow::visitYACS(YACSPhysicalModel* model)
   launchParameters_ = rw;
 }
 #endif
-
 }

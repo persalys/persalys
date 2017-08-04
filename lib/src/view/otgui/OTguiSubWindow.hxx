@@ -34,7 +34,7 @@ class OTGUI_API OTguiSubWindow : public QMdiSubWindow
   Q_OBJECT
 
 public:
-  OTguiSubWindow(OTguiItem * item);
+  OTguiSubWindow(OTguiItem * item, QWidget * parent=0);
 
   virtual ~OTguiSubWindow();
 

@@ -26,8 +26,8 @@
 
 namespace OTGUI {
 
-OTguiSubWindow::OTguiSubWindow(OTguiItem * item)
-  : QMdiSubWindow()
+OTguiSubWindow::OTguiSubWindow(OTguiItem * item, QWidget * parent)
+  : QMdiSubWindow(parent)
   , errorMessageLabel_(0)
   , item_(item)
 {

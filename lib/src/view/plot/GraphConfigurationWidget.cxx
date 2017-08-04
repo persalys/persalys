@@ -215,6 +215,7 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   //
   scrollArea->setWidget(frame);
   mainLayout->addWidget(scrollArea);
+  setVisible(false);
 }
 
 

@@ -31,8 +31,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item)
-  : ResultWindow(item)
+ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget * parent)
+  : ResultWindow(item, parent)
   , result_()
 {
   // FORM result widget

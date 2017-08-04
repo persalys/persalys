@@ -9,13 +9,17 @@ option (USE_OTFMI "use otfmi" ON)
 option (USE_SPHINX "use sphinx" ON)
 option (USE_QT5 "use Qt5" ON)
 option (USE_COTIRE "Use cotire for unity builds" OFF)
+option (USE_PARAVIEW "use ParaView" ON)
 
 # By default, build in Release mode. Must appear before project() command
 if ( NOT DEFINED CMAKE_BUILD_TYPE )
    set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 endif ()
 
-project ( OTGui CXX )
+project (OTGui CXX)
+
+cmake_policy (SET CMP0020 NEW)
+cmake_policy (SET CMP0053 OLD)
 
 string ( TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME )
 
@@ -91,6 +95,21 @@ if (BUILD_GUI)
   endif ()
 
   find_package (Qwt 6 REQUIRED)
+
+  if (USE_PARAVIEW)
+    find_package (ParaView 5.4 NO_MODULE)
+    if (ParaView_FOUND)
+      if (PARAVIEW_BUILD_QT_GUI)
+        message(STATUS "Found ParaView: ${VTK_INSTALL_PREFIX} (${PARAVIEW_VERSION_FULL})")
+        include (${PARAVIEW_USE_FILE})
+        list (APPEND OTGUI_DEFINITIONS -DOTGUI_HAVE_PARAVIEW)
+      else ()
+        set (ParaView_FOUND FALSE CACHE BOOL "")
+        message (WARNING "ParaView must be compiled with PARAVIEW_BUILD_QT_GUI enabled")
+      endif ()
+    endif ()
+  endif ()
+
 endif ()
 
 if (USE_SALOME)

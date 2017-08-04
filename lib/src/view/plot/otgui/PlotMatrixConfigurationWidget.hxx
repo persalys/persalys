@@ -22,6 +22,7 @@
 #define OTGUI_PLOTMATRIXCONFIGURATIONWIDGET_HXX
 
 #include "otgui/PlotMatrixWidget.hxx"
+#include "otgui/ListWidgetWithCheckBox.hxx"
 
 #include <QLineEdit>
 
@@ -35,6 +36,7 @@ public:
   PlotMatrixConfigurationWidget(PlotMatrixWidget * plotMatrix, QWidget* parent=0);
 
 public slots:
+  void showXY(bool);
   void updateLineEdits();
   void updateTitle();
   void exportPlot();
@@ -42,6 +44,8 @@ public slots:
 private:
   PlotMatrixWidget * plotMatrix_;
   QLineEdit * titleLineEdit_;
+  ListWidgetWithCheckBox * columnsListWidget_;
+  ListWidgetWithCheckBox * rowsListWidget_;
 };
 }
 #endif

@@ -44,8 +44,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-ProbabilisticModelWindow::ProbabilisticModelWindow(const OTStudy& otStudy, ProbabilisticModelItem * item)
-  : OTguiSubWindow(item)
+ProbabilisticModelWindow::ProbabilisticModelWindow(const OTStudy& otStudy, ProbabilisticModelItem * item, QWidget * parent)
+  : OTguiSubWindow(item, parent)
   , otStudy_(otStudy)
   , physicalModel_(item->getPhysicalModel())
   , pdf_cdfPlotsConfigurationWidget_(0)

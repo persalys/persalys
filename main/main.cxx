@@ -24,20 +24,36 @@
 
 #include "otgui/MainWindow.hxx"
 #include "otgui/PythonEnvironment.hxx"
+
 #ifdef OTGUI_HAVE_YACS
 #include "otgui/YACSEvalSessionSingleton.hxx"
+#endif
+
+#ifdef OTGUI_HAVE_PARAVIEW
+#include <pqPVApplicationCore.h>
 #endif
 
 using namespace OTGUI;
 
 int main(int argc, char *argv[])
 {
+  // look for platform plugin qwindows.dll in the current dir
+#ifdef _WIN32
+  qputenv("QT_QPA_PLATFORM_PLUGIN_PATH", ".");
+#endif
+
   int ret(0);
   // Python Environment
   PythonEnvironment env;
   {
   // Application
   QApplication app(argc, argv);
+
+#ifdef OTGUI_HAVE_PARAVIEW
+  pqPVApplicationCore appPV(argc, argv);
+  QApplication::instance()->installEventFilter(&appPV);
+#endif
+
   // Settings
   QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EDF_Phimeca", "OTgui");
   settings.setValue("currentDir", QSettings().fileName());
@@ -56,7 +72,7 @@ int main(int argc, char *argv[])
   window.resize(1024, 768);
   window.show();
 
-  ret=app.exec();
+  ret = app.exec();
 #ifdef OTGUI_HAVE_YACS
   YACSEvalSessionSingleton::Reset();
 #endif

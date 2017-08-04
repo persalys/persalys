@@ -34,8 +34,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-TaylorExpansionMomentsResultWindow::TaylorExpansionMomentsResultWindow(AnalysisItem * item)
-  : ResultWindow(item)
+TaylorExpansionMomentsResultWindow::TaylorExpansionMomentsResultWindow(AnalysisItem * item, QWidget * parent)
+  : ResultWindow(item, parent)
   , result_(dynamic_cast<TaylorExpansionMomentsAnalysis*>(item->getAnalysis().getImplementation().get())->getResult())
 {
   buildInterface();

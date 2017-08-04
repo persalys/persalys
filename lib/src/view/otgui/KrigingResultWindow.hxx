@@ -30,7 +30,7 @@ class OTGUI_API KrigingResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  KrigingResultWindow(AnalysisItem* item);
+  KrigingResultWindow(AnalysisItem* item, QWidget * parent=0);
 
 protected:
   void buildInterface();

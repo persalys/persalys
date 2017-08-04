@@ -33,8 +33,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelDiagramItem)
-  : OTguiSubWindow(dataModelDiagramItem)
+DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelDiagramItem, QWidget * parent)
+  : OTguiSubWindow(dataModelDiagramItem, parent)
 {
   setWindowTitle(tr("Data model diagram"));
 

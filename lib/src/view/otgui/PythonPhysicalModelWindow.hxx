@@ -34,7 +34,7 @@ class OTGUI_API PythonPhysicalModelWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item);
+  PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent=0);
 
 public slots:
   void updateCodeModel();

@@ -26,8 +26,8 @@ using namespace OT;
 
 namespace OTGUI {
   
-ResultWindow::ResultWindow(AnalysisItem * item)
-  : OTguiSubWindow(item)
+ResultWindow::ResultWindow(AnalysisItem * item, QWidget * parent)
+  : OTguiSubWindow(item, parent)
   , parametersWidget_(0)
 {
   connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));

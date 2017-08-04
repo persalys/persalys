@@ -30,8 +30,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-InferenceResultWindow::InferenceResultWindow(AnalysisItem* item)
-  : ResultWindow(item)
+InferenceResultWindow::InferenceResultWindow(AnalysisItem* item, QWidget * parent)
+  : ResultWindow(item, parent)
   , result_(dynamic_cast<InferenceAnalysis*>(item->getAnalysis().getImplementation().get())->getResult())
 {
   // parameters widget

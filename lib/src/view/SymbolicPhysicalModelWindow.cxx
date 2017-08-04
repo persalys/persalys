@@ -28,8 +28,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelDefinitionItem * item)
-  : OTguiSubWindow(item)
+SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
+  : OTguiSubWindow(item, parent)
 {
   setWindowTitle(tr("Symbolic physical model"));
 

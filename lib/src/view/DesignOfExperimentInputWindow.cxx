@@ -32,8 +32,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-DesignOfExperimentInputWindow::DesignOfExperimentInputWindow(DesignOfExperimentItem * item)
-  : OTguiSubWindow(item)
+DesignOfExperimentInputWindow::DesignOfExperimentInputWindow(DesignOfExperimentItem * item, QWidget * parent)
+  : OTguiSubWindow(item, parent)
   , designOfExperiment_(item->getDesignOfExperiment())
 {
   buildInterface();

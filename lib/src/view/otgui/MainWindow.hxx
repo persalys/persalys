@@ -38,7 +38,8 @@ public:
   MainWindow();
 
 public slots:
-  void showGraphConfigurationTabWidget(QWidget*);
+  void showGraphSettingDockWidget(QWidget*);
+  void hideGraphSettingDockWidget(QWidget*);
   void exitApplication();
 
 protected:
@@ -51,7 +52,7 @@ private slots:
 
 private:
   StudyTreeView * studyTree_;
-  QDockWidget * configurationDock_;
+  QDockWidget * graphSettingDockWidget_;
   PyConsole_Console * pythonConsole_;
 };
 }

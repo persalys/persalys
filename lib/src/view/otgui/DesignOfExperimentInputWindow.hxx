@@ -30,7 +30,7 @@ class OTGUI_API DesignOfExperimentInputWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  DesignOfExperimentInputWindow(DesignOfExperimentItem * item);
+  DesignOfExperimentInputWindow(DesignOfExperimentItem * item, QWidget * parent=0);
 
 protected:
   void buildInterface();

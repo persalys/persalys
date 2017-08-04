@@ -30,7 +30,7 @@ class OTGUI_API OTStudyWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  OTStudyWindow(OTStudyItem * item);
+  OTStudyWindow(OTStudyItem * item, QWidget * parent=0);
 
   void buildInterface();
 

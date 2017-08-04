@@ -23,8 +23,6 @@
 
 #include "otgui/ResultWindow.hxx"
 #include "otgui/DataAnalysisResult.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/PlotMatrixConfigurationWidget.hxx"
 #include "otgui/DoubleSpinBox.hxx"
 
 #include <QGroupBox>
@@ -35,24 +33,26 @@ class OTGUI_API DataAnalysisWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  DataAnalysisWindow(AnalysisItem * item);
-
-  virtual ~DataAnalysisWindow();
+  DataAnalysisWindow(AnalysisItem * item, QWidget * parent=0);
 
 protected:
   virtual void initialize(AnalysisItem * item) = 0;
   void buildInterface();
-  QWidget* getPDF_CDFWidget();
-  QWidget* getBoxPlotWidget();
-  QWidget* getScatterPlotsWidget();
+  void addSummaryTab();
+  void addPDF_CDFTab();
+  void addBoxPlotTab();
+#ifdef OTGUI_HAVE_PARAVIEW
+  void addParaviewWidgetsTabs();
+#endif
+  void addPlotMatrixTab();
+  void addScatterPlotsTab();
+  void addTableTab();
 
 public slots:
   void updateSpinBoxes(int indexOutput=0);
   void probaValueChanged(double proba);
   void quantileValueChanged(double quantile);
-  void scatterPlotsTabWidgetIndexChanged();
-  void showHideGraphConfigurationWidget(int indexTab);
-  void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
+  void updateVariablesListVisibility(int indexTab);
 signals:
   void stateChanged(int);
 
@@ -71,10 +71,6 @@ private:
   QGroupBox * variablesGroupBox_;
   OTguiListWidget * variablesListWidget_;
   QTabWidget * tabWidget_;
-  QTabWidget * scatterPlotsTabWidget_;
-  GraphConfigurationWidget * scatterPlotsConfigurationWidget_;
-  PlotMatrixConfigurationWidget * plotMatrixConfigurationWidget_;
-  PlotMatrixConfigurationWidget * plotMatrix_X_X_ConfigurationWidget_;
   DoubleSpinBox * probaSpinBox_;
   DoubleSpinBox * quantileSpinBox_;
 };

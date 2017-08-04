@@ -29,7 +29,7 @@ class OTGUI_API DataAnalysisResultWindow : public DataAnalysisWindow
   Q_OBJECT
 
 public:
-  DataAnalysisResultWindow(AnalysisItem * item);
+  DataAnalysisResultWindow(AnalysisItem * item, QWidget * parent=0);
 
 protected:
   virtual void initialize(AnalysisItem* item);

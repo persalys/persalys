@@ -30,7 +30,7 @@ class OTGUI_API PhysicalModelDiagramWindow : public OTguiSubWindow
   Q_OBJECT
 
 public :
-  PhysicalModelDiagramWindow(PhysicalModelDiagramItem * item);
+  PhysicalModelDiagramWindow(PhysicalModelDiagramItem * item, QWidget * parent=0);
 };
 }
 #endif

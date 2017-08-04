@@ -36,8 +36,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-DataModelWindow::DataModelWindow(DataModelDefinitionItem * item)
-  : OTguiSubWindow(item)
+DataModelWindow::DataModelWindow(DataModelDefinitionItem * item, QWidget * parent)
+  : OTguiSubWindow(item, parent)
   , dataModel_(0)
   , filePathLineEdit_(0)
   , defaultLineEditPalette_()

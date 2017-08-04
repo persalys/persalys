@@ -33,8 +33,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem * physicalModelDiagramItem)
-  : OTguiSubWindow(physicalModelDiagramItem)
+PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem * physicalModelDiagramItem, QWidget * parent)
+  : OTguiSubWindow(physicalModelDiagramItem, parent)
 {
   setWindowTitle(tr("Physical model diagram"));
 

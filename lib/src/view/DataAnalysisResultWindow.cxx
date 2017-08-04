@@ -21,15 +21,16 @@
 #include "otgui/DataAnalysisResultWindow.hxx"
 
 #include "otgui/DataAnalysis.hxx"
+#include "otgui/QtTools.hxx"
 
 using namespace OT;
 
 namespace OTGUI {
 
-DataAnalysisResultWindow::DataAnalysisResultWindow(AnalysisItem * item)
-  : DataAnalysisWindow(item)
+DataAnalysisResultWindow::DataAnalysisResultWindow(AnalysisItem * item, QWidget * parent)
+  : DataAnalysisWindow(item, parent)
 {
-  if (!dynamic_cast<DataAnalysis*>(&*item->getAnalysis().getImplementation()))
+  if (!dynamic_cast<DataAnalysis*>(item->getAnalysis().getImplementation().get()))
     throw InvalidArgumentException (HERE) << "Can NOT build the DataAnalysisResultWindow: The analysis of the item is not valid";
 
   initialize(item);
@@ -42,30 +43,22 @@ DataAnalysisResultWindow::DataAnalysisResultWindow(AnalysisItem * item)
 
 void DataAnalysisResultWindow::initialize(AnalysisItem* item)
 {
-  isConfidenceIntervalRequired_ = dynamic_cast<DataAnalysis*>(&*item->getAnalysis().getImplementation())->isConfidenceIntervalRequired();
-  levelConfidenceInterval_ = dynamic_cast<DataAnalysis*>(&*item->getAnalysis().getImplementation())->getLevelConfidenceInterval();
+  isConfidenceIntervalRequired_ = dynamic_cast<DataAnalysis*>(item->getAnalysis().getImplementation().get())->isConfidenceIntervalRequired();
+  levelConfidenceInterval_ = dynamic_cast<DataAnalysis*>(item->getAnalysis().getImplementation().get())->getLevelConfidenceInterval();
 
-  result_ = dynamic_cast<DataAnalysis*>(&*item->getAnalysis().getImplementation())->getResult();
+  result_ = dynamic_cast<DataAnalysis*>(item->getAnalysis().getImplementation().get())->getResult();
 
   // inputs
   if (result_.getInputSample().getSize())
   {
-    for (UnsignedInteger i=0; i<result_.getInputSample().getDimension(); ++i)
-    {
-      const String inputName = result_.getInputSample().getDescription()[i];
-      stochInputNames_ << QString::fromUtf8(inputName.c_str());
-    }
+    stochInputNames_ = QtOT::DescriptionToStringList(result_.getInputSample().getDescription());
     inAxisTitles_ = stochInputNames_;
   }
 
   // outputs
   if (result_.getOutputSample().getSize())
   {
-    for (UnsignedInteger i=0; i<result_.getOutputSample().getDimension(); ++i)
-    {
-      const String outputName = result_.getOutputSample().getDescription()[i];
-      outputNames_ << QString::fromUtf8(outputName.c_str());
-    }
+    outputNames_ = QtOT::DescriptionToStringList(result_.getOutputSample().getDescription());
     outAxisTitles_ = outputNames_;
   }
 }

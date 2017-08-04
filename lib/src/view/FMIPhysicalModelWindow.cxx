@@ -44,8 +44,8 @@ using namespace OT;
 
 namespace OTGUI {
 
-FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item)
-  : OTguiSubWindow(item)
+FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent)
+  : OTguiSubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
   , variablesTableModel_(0)
   , differentiationTableView_(0)
