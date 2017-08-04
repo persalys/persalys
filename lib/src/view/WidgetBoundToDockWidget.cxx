@@ -28,7 +28,9 @@ namespace OTGUI {
 
 WidgetBoundToDockWidget::WidgetBoundToDockWidget(QWidget* parent)
   : QWidget(parent)
+  , dockWidget_(0)
   , dockWidgetAlreadyShown_(false)
+  , parentSubWindow_(0)
 {
   MainWindow * mainWindow = findMainWindowInHierachy();
   if (!mainWindow)
