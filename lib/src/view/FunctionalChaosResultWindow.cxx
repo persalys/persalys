@@ -94,7 +94,7 @@ void FunctionalChaosResultWindow::buildInterface()
                                                                                  result_.getOutputSample().getMarginal(i),
                                                                                  result_.getFunctionalChaosResult().getResiduals()[i],
                                                                                  result_.getFunctionalChaosResult().getRelativeErrors()[i],
-                                                                                 tr("R2"),
+                                                                                 tr("Relative error"),
                                                                                  this);
 
     plotsStackedWidget->addWidget(validationWidget);
