@@ -92,7 +92,7 @@ macro (ot_qt_check_test TESTNAME)
   add_dependencies (tests ${TESTNAME_TGT} )
   target_link_libraries (${TESTNAME_TGT} otguiview)
   add_test (NAME cppcheck_${TESTNAME} COMMAND ${TESTNAME_TGT})
-  set_tests_properties (cppcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${CHECK_ENVIRONMENT}")
+  set_tests_properties (cppcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${CHECK_ENVIRONMENT};QT_QPA_PLATFORM_PLUGIN_PATH=.")
 endmacro ()
 
 
