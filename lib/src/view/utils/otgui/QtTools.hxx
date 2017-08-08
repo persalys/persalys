@@ -54,6 +54,7 @@ class OTGUI_API QtOT
 {
 public:
   static QStringList DescriptionToStringList(const OT::Description & description);
+  static OT::Description StringListToDescription(const QStringList& stringList);
 };
 }
 #endif
