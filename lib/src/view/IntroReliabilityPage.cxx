@@ -47,7 +47,7 @@ IntroReliabilityPage::IntroReliabilityPage(QWidget * parent)
   limitStatesComboBox_ = new QComboBox;
   limitStateLayout->addWidget(limitStatesComboBox_);
   connect(limitStatesComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(changeLimitStateLabel(int)));
-  limitStatesComboBoxModel_ = new QStandardItemModel;
+  limitStatesComboBoxModel_ = new QStandardItemModel(limitStatesComboBox_);
   limitStatesComboBox_->setModel(limitStatesComboBoxModel_);
 
   limitStateLabel_ = new QLabel;
@@ -101,7 +101,7 @@ IntroReliabilityPage::IntroReliabilityPage(QWidget * parent)
 void IntroReliabilityPage::initialize(const Analysis& analysis, QList<LimitState> limitStatesList)
 {
   // limit state
-  for (int i=0; i<limitStatesList.count(); ++i)
+  for (int i = 0; i < limitStatesList.count(); ++i)
   {
     QStandardItem * item = new QStandardItem(limitStatesList[i].getName().c_str());
     item->setData(qVariantFromValue(limitStatesList[i]));
@@ -140,6 +140,7 @@ LimitState IntroReliabilityPage::getLimitState() const
   const int itemRow = limitStatesComboBox_->currentIndex();
   if (itemRow < 0)
     return 0;
+
   const QVariant variant = limitStatesComboBoxModel_->item(itemRow)->data();
   if (variant.canConvert<LimitState>())
     return variant.value<LimitState>();
@@ -151,6 +152,7 @@ void IntroReliabilityPage::changeLimitStateLabel(int index)
 {
   if (index < 0)
     return;
+
   const QVariant variant = limitStatesComboBoxModel_->item(index)->data();
   if (variant.canConvert<LimitState>())
   {
