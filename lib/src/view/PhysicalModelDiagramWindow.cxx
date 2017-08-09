@@ -117,7 +117,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   DiagramPushButton * sensitivityButton = new DiagramPushButton;
   sensitivityButton->setText(tr("Sensitivity"));
   sensitivityButton->setWhatsThis(tr("Two methods : Sobol and SRC"));
-  sensitivityButton->setErrorMessage(tr("Define independent input variables and output variables in the model"));
+  sensitivityButton->setErrorMessage(tr("Define independent stochastic input variables and output variables in the model"));
   QGraphicsProxyWidget * sensitivityProxy = new QGraphicsProxyWidget;
   sensitivityProxy->setWidget(sensitivityButton);
   scene->addItem(sensitivityProxy);
@@ -129,7 +129,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   DiagramPushButton * centralTendencyButton = new DiagramPushButton;
   centralTendencyButton->setText(tr("Central\ntendency"));
   centralTendencyButton->setWhatsThis(tr("Two methods : Monte Carlo and Taylor expansion"));
-  centralTendencyButton->setErrorMessage(tr("Define input and output variables in the model"));
+  centralTendencyButton->setErrorMessage(tr("Define stochastic input variables and output variables in the model"));
   QGraphicsProxyWidget * centralTendencyProxy = new QGraphicsProxyWidget;
   centralTendencyProxy->setWidget(centralTendencyButton);
   scene->addItem(centralTendencyProxy);
@@ -153,7 +153,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   DiagramPushButton * metamodelButton = new DiagramPushButton;
   metamodelButton->setText(tr("Metamodel\ncreation"));
   metamodelButton->setWhatsThis(tr("Two methods : Kriging and Functional chaos"));
-  metamodelButton->setErrorMessage(tr("At least one design of experiment must contain output values"));
+  metamodelButton->setErrorMessage(tr("Define at least a design of experiment which contains output values"));
   QGraphicsProxyWidget * metamodelProxy = new QGraphicsProxyWidget;
   metamodelProxy->setWidget(metamodelButton);
   scene->addItem(metamodelProxy);
@@ -165,7 +165,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   DiagramPushButton * reliabilityButton = new DiagramPushButton;
   reliabilityButton->setText(tr("Reliability"));
   reliabilityButton->setWhatsThis(tr("Three methods : Monte Carlo, FORM-Importance Sampling, FORM"));
-  reliabilityButton->setErrorMessage(tr("Define output variables in the model"));
+  reliabilityButton->setErrorMessage(tr("Define output variables in the model and at least a limit state"));
   QGraphicsProxyWidget * reliabilityProxy = new QGraphicsProxyWidget;
   reliabilityProxy->setWidget(reliabilityButton);
   scene->addItem(reliabilityProxy);

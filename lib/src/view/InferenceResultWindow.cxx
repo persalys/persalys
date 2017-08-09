@@ -52,7 +52,7 @@ void InferenceResultWindow::buildInterface()
   for (UnsignedInteger i=0; i<result_.getFittingTestResultCollection().getSize(); ++i)
     variablesNames << QString::fromUtf8(result_.getFittingTestResultCollection()[i].getVariableName().c_str());
 
-  QGroupBox * variablesGroupBox = new QGroupBox(tr("Variables"));
+  QGroupBox * variablesGroupBox = new QGroupBox(tr("Variable(s)", "", variablesNames.size()));
   QVBoxLayout * variablesLayoutGroupBox = new QVBoxLayout(variablesGroupBox);
 
   OTguiListWidget * listVariables = new OTguiListWidget;
@@ -68,12 +68,8 @@ void InferenceResultWindow::buildInterface()
 
   inferenceResultWidget_ = new InferenceResultWidget(true, this);
 
-  connect(inferenceResultWidget_, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-  connect(inferenceResultWidget_, SIGNAL(graphWindowDeactivated()), this, SIGNAL(graphWindowDeactivated()));
-
   tabWidget->addTab(inferenceResultWidget_, tr("Summary"));
   tabWidget->addTab(parametersWidget_, tr("Parameters"));
-  connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
   
   listVariables->setCurrentRow(0);
 
@@ -90,31 +86,5 @@ void InferenceResultWindow::updateInferenceResultWidget(QString variableName)
     return;
 
   inferenceResultWidget_->updateDistributionTable(result_, variableName);
-}
-
-
-void InferenceResultWindow::showHideGraphConfigurationWidget(int indexTab)
-{
-  if (indexTab == 0)
-    inferenceResultWidget_->showHideGraphConfigurationWidget();
-  else
-    emit graphWindowDeactivated();
-}
-
-
-void InferenceResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
-{
-  if (oldState == Qt::WindowMaximized)
-    return;
-
-  if (newState == Qt::WindowFullScreen || newState == (Qt::WindowActive|Qt::WindowMaximized))
-  {
-    if (parametersWidget_->isVisible())
-      showHideGraphConfigurationWidget(1);
-    else
-      showHideGraphConfigurationWidget(0);
-  }
-  else if (newState == Qt::WindowNoState || newState == Qt::WindowMinimized || newState == (Qt::WindowActive|Qt::WindowMinimized))
-    showHideGraphConfigurationWidget(-1);
 }
 }

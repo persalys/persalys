@@ -35,17 +35,9 @@ public:
 protected:
   void buildInterface();
 
-public slots:
-  void showHideGraphConfigurationWidget(int indexTab);
-  void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
-signals:
-  void stateChanged(int);
-
 private:
   KrigingAnalysisResult result_;
   bool optimizeParameters_;
-  OTguiListWidget * outputsListWidget_;
-  QTabWidget * tabWidget_;
 };
 }
 #endif

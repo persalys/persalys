@@ -53,7 +53,7 @@ using namespace OT;
 namespace OTGUI {
 
 DesignOfExperimentWindow::DesignOfExperimentWindow(AnalysisItem* item, QWidget * parent)
-  : OTguiSubWindow(item, parent)
+  : ResultWindow(item, parent)
   , designOfExperiment_()
   , variablesGroupBox_(0)
   , variablesListWidget_(0)
@@ -65,6 +65,9 @@ DesignOfExperimentWindow::DesignOfExperimentWindow(AnalysisItem* item, QWidget *
 
   designOfExperiment_ = analysis_ptr->getDesignOfExperiment();
 
+  // parameters widget
+  setParameters(item->getAnalysis(), tr("Design of experiment evaluation parameters"));
+
   buildInterface();
 }
 
@@ -72,14 +75,6 @@ DesignOfExperimentWindow::DesignOfExperimentWindow(AnalysisItem* item, QWidget *
 void DesignOfExperimentWindow::buildInterface()
 {
   setWindowTitle(tr("Design of experiment"));
-
-  // output names/descriptions
-  const Description outputDescription(designOfExperiment_.getOutputSample().getDescription());
-  QStringList outputNames;
-  for (UnsignedInteger i = 0; i < outputDescription.getSize(); ++i)
-  {
-    outputNames << QString::fromUtf8(outputDescription[i].c_str());
-  }
 
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
@@ -89,7 +84,7 @@ void DesignOfExperimentWindow::buildInterface()
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(variablesGroupBox_);
 
   variablesListWidget_ = new OTguiListWidget;
-  variablesListWidget_->addItems(outputNames);
+  variablesListWidget_->addItems(QtOT::DescriptionToStringList(designOfExperiment_.getOutputSample().getDescription()));
   outputsLayoutGroupBox->addWidget(variablesListWidget_);
 
   mainWidget->addWidget(variablesGroupBox_);
@@ -110,6 +105,8 @@ void DesignOfExperimentWindow::buildInterface()
   addPlotMatrixTab();
   addScatterPlotsTab();
 #endif
+  if (parametersWidget_)
+    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(updateVariablesListVisibility(int)));
 

@@ -30,7 +30,6 @@ ResultWindow::ResultWindow(AnalysisItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
   , parametersWidget_(0)
 {
-  connect(this, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)));
 }
 
 
@@ -46,11 +45,5 @@ void ResultWindow::setParameters(const Analysis& analysis, const QString& title)
     QGridLayout * parametersWidgetLayout = new QGridLayout(parametersWidget_);
     parametersWidgetLayout->addWidget(new ParametersWidget(title, paramNames, paramValues));
   }
-}
-
-
-void ResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates)
-{
-  // to overwrite
 }
 }

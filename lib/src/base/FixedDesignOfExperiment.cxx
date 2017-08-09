@@ -62,7 +62,8 @@ FixedDesignOfExperiment::FixedDesignOfExperiment(const String & name,
   , inputNames_(physicalModel.getInputNames())
   , values_(values)
 {
-  if (!physicalModel.getInputs().getSize())
+  const UnsignedInteger nbInputs = physicalModel.getInputs().getSize();
+  if (!nbInputs)
     throw InvalidArgumentException(HERE) << "The physical model does not have input variables";
 
   setLowerBounds(lowerBounds);
@@ -71,8 +72,8 @@ FixedDesignOfExperiment::FixedDesignOfExperiment(const String & name,
 
   if (!values_.getSize())
   {
-    values_ = Point(physicalModel.getInputs().getSize());
-    for (UnsignedInteger i=0; i<physicalModel.getInputs().getSize(); ++i)
+    values_ = Point(nbInputs);
+    for (UnsignedInteger i = 0; i < nbInputs; ++i)
       values_[i] = physicalModel.getInputs()[i].getValue();
   }
 //   TODO: check if lowerBounds[i] <= upperBounds[i]
@@ -86,12 +87,12 @@ FixedDesignOfExperiment* FixedDesignOfExperiment::clone() const
 }
 
 
-Sample FixedDesignOfExperiment::getInputSample() const
+Sample FixedDesignOfExperiment::getOriginalInputSample() const
 {
-  if (!inputSample_.getSize())
-    inputSample_ = GenerateInputSample(getLowerBounds(), getUpperBounds(), getLevels(), getValues(), inputNames_);
+  if (!originalInputSample_.getSize())
+    originalInputSample_ = GenerateInputSample(getLowerBounds(), getUpperBounds(), getLevels(), getValues(), inputNames_);
 
-  return inputSample_;
+  return originalInputSample_;
 }
 
 
@@ -104,20 +105,20 @@ FixedDesignOfExperiment::Type FixedDesignOfExperiment::getTypeDesignOfExperiment
 void FixedDesignOfExperiment::initializeParameters()
 {
   // clear samples
-  inputSample_.clear();
+  originalInputSample_.clear();
   initialize();
 
   inputNames_ = getPhysicalModel().getInputNames();
   const InputCollection inputs = getPhysicalModel().getInputs();
 
-  const UnsignedInteger inputSize = inputs.getSize();
-  values_ = Point(inputSize);
-  lowerBounds_ = Point(inputSize);
-  upperBounds_ = Point(inputSize);
-  levels_ = Indices(inputSize, 1);
-  deltas_ = Point(inputSize);
+  const UnsignedInteger nbInputs = inputs.getSize();
+  values_ = Point(nbInputs);
+  lowerBounds_ = Point(nbInputs);
+  upperBounds_ = Point(nbInputs);
+  levels_ = Indices(nbInputs, 1);
+  deltas_ = Point(nbInputs);
 
-  for (UnsignedInteger i=0; i<inputSize; ++i)
+  for (UnsignedInteger i = 0; i < nbInputs; ++i)
   {
     values_[i] = inputs[i].getValue();
     if (!inputs[i].isStochastic())
@@ -167,7 +168,7 @@ Sample FixedDesignOfExperiment::GenerateInputSample(const Point& lowerBounds,
                                                     const Point& upperBounds,
                                                     const Indices& levels,
                                                     const Point& values,
-                                                    const OT::Description& inputNames)
+                                                    const Description& inputNames)
 {
   const UnsignedInteger nbInputs = inputNames.getSize();
 
@@ -180,12 +181,15 @@ Sample FixedDesignOfExperiment::GenerateInputSample(const Point& lowerBounds,
     throw InvalidArgumentException(HERE) << "All the arguments must have the same size";
   }
 
+  if (!nbInputs)
+    return Sample();
+
   Point scale;
   Point transvec;
   Point otLevels;
   Indices variableInputsIndices;
 
-  for (UnsignedInteger i=0; i<nbInputs; ++i)
+  for (UnsignedInteger i = 0; i < nbInputs; ++i)
   {
     if (levels[i] > 1)
     {
@@ -291,7 +295,7 @@ void FixedDesignOfExperiment::setValues(const Point & values)
   values_ = values;
 
   // clear samples
-  inputSample_.clear();
+  originalInputSample_.clear();
   initialize();
 }
 
@@ -315,7 +319,7 @@ void FixedDesignOfExperiment::setLowerBounds(const Point & lowerBounds)
   lowerBounds_ = lowerBounds;
 
   // clear samples
-  inputSample_.clear();
+  originalInputSample_.clear();
   initialize();
 }
 
@@ -339,7 +343,7 @@ void FixedDesignOfExperiment::setUpperBounds(const Point & upperBounds)
   upperBounds_ = upperBounds;
 
   // clear samples
-  inputSample_.clear();
+  originalInputSample_.clear();
   initialize();
 }
 
@@ -361,7 +365,7 @@ void FixedDesignOfExperiment::setLevels(const Indices & levels)
   }
 
   Point deltas(physicalModel_.getInputs().getSize());
-  for (UnsignedInteger i=0; i<levels.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < levels.getSize(); ++i)
   {
     if (levels[i] == 1)
       deltas[i] = 0;
@@ -370,7 +374,7 @@ void FixedDesignOfExperiment::setLevels(const Indices & levels)
       if (upperBounds_.getSize() != physicalModel_.getInputs().getSize() ||
           lowerBounds_.getSize() != physicalModel_.getInputs().getSize())
         throw InvalidValueException(HERE) << "Set the upper bounds and the lower bounds before this step";
-      deltas[i] = (upperBounds_[i] - lowerBounds_[i])/(levels[i]-1);
+      deltas[i] = (upperBounds_[i] - lowerBounds_[i]) / (levels[i] - 1);
     }
   }
 
@@ -379,7 +383,7 @@ void FixedDesignOfExperiment::setLevels(const Indices & levels)
   deltas_ = deltas;
 
   // clear samples
-  inputSample_.clear();
+  originalInputSample_.clear();
   initialize();
 }
 
@@ -400,12 +404,12 @@ void FixedDesignOfExperiment::setDeltas(const Point & deltas)
     throw InvalidArgumentException(HERE) << oss.str();
   }
 
-  for (UnsignedInteger i=0; i<deltas.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < deltas.getSize(); ++i)
     if (deltas[i] < 0.)
       throw InvalidArgumentException(HERE) << "FixedDesignOfExperiment::setDeltas : All the deltas must be superior or equal to 0.";
 
   Indices levels(physicalModel_.getInputs().getSize());
-  for (UnsignedInteger i=0; i<deltas.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < deltas.getSize(); ++i)
   {
     if (deltas[i] > 0.)
     {
@@ -423,7 +427,7 @@ void FixedDesignOfExperiment::setDeltas(const Point & deltas)
   levels_ = levels;
 
   // clear samples
-  inputSample_.clear();
+  originalInputSample_.clear();
   initialize();
 }
 
@@ -434,7 +438,7 @@ Description FixedDesignOfExperiment::getVariableInputNames() const
     return inputNames_;
 
   Description variableInputsNames;
-  for (UnsignedInteger i=0; i<inputNames_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++i)
     if (levels_[i] > 1)
       variableInputsNames.add(inputNames_[i]);
   return variableInputsNames;
@@ -478,7 +482,7 @@ String FixedDesignOfExperiment::getPythonScript() const
   }
   oss << "]\n";
 
-  oss << getName()+ " = otguibase.FixedDesignOfExperiment('" + getName() + "', "+getPhysicalModel().getName()+", ";
+  oss << getName() << " = otguibase.FixedDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", ";
   oss << "lowerBounds, upperBounds, levels, values)\n";
 
   return oss;

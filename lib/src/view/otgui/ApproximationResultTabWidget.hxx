@@ -43,6 +43,7 @@ protected:
 private:
   OT::FORMResult result_;
   QWidget * parametersWidget_;
+  OT::UnsignedInteger maximumIterationNumber_;
 };
 }
 #endif

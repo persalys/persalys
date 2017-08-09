@@ -28,7 +28,7 @@ myStudy.add(model)
 aDesign = otguibase.DesignOfExperimentImplementation('design', model)
 inputSample = ot.LHSExperiment(model.getComposedDistribution(), 50).generate()
 inputSample.stack(ot.Sample(50, [0.5]))
-aDesign.setInputSample(inputSample)
+aDesign.setOriginalInputSample(inputSample)
 myStudy.add(aDesign)
 
 aDesign.run()

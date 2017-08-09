@@ -20,7 +20,7 @@
  */
 #include "otgui/ModelEvaluation.hxx"
 
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
@@ -72,7 +72,7 @@ void ModelEvaluation::initializeParameters(const InputCollection & inputs)
   UnsignedInteger inputSize = inputs.getSize();
   inputValues_ = Point(inputSize);
 
-  for (UnsignedInteger i=0; i<inputSize; ++i)
+  for (UnsignedInteger i = 0; i < inputSize; ++i)
     inputValues_[i] = inputs[i].getValue();
 }
 
@@ -84,7 +84,7 @@ void ModelEvaluation::updateParameters()
 
   initializeParameters(getPhysicalModel().getInputs());
 
-  for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++i)
   {
     const Description::const_iterator it = std::find(inputNames.begin(), inputNames.end(), inputNames_[i]);
     if (it != inputNames.end())
@@ -106,22 +106,10 @@ void ModelEvaluation::run()
     Sample inputSample(1, getInputValues());
     inputSample.setDescription(inputNames_);
 
-    Sample outputSample(1, 0);
-    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
-    {
-      try
-      {
-        outputSample.stack(getPhysicalModel().getFunction(getInterestVariables()[i])(inputSample));
-      }
-      catch (std::exception & ex)
-      {
-        throw AnalysisExecutionFailedException(HERE) << "Impossible to evaluate the output "
-                                                    << getInterestVariables()[i]
-                                                    << ".\n" << ex.what();
-      }
-    }
+    Sample outputSample = getPhysicalModel().getFunction(getInterestVariables())(inputSample);
     outputSample.setDescription(getInterestVariables());
     result_ = ModelEvaluationResult(inputSample, outputSample);
+
     notify("analysisFinished");
   }
   catch (std::exception & ex)
@@ -139,9 +127,11 @@ Point ModelEvaluation::getInputValues() const
 }
 
 
-void ModelEvaluation::setInputValue(const int & index, const double & value)
+void ModelEvaluation::setInputValue(const UnsignedInteger index, const double value)
 {
-  // TODO error if index > nbInputs
+  if (index >= inputValues_.getSize())
+    throw InvalidArgumentException(HERE) << "Wrong index value. Must be inferior to " << inputValues_.getSize();
+
   inputValues_[index] = value;
 }
 
@@ -158,17 +148,18 @@ String ModelEvaluation::getPythonScript() const
 
   OSS oss;
   oss << "values = [";
-  for (UnsignedInteger i=0; i<inputValues_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < inputValues_.getSize(); ++i)
   {
     oss << inputValues_[i];
-    if (i < inputValues_.getSize()-1)
+    if (i < inputValues_.getSize() - 1)
       oss << ", ";
   }
   oss << "]\n";
-  result += oss.str();
-  result += getName()+ " = otguibase.ModelEvaluation('" + getName() + "', " + getPhysicalModel().getName();
-  result += ", values)\n";
-  return result;
+  oss << oss.str();
+  oss << getName() << " = otguibase.ModelEvaluation('" << getName() << "', " << getPhysicalModel().getName();
+  oss << ", values)\n";
+
+  return oss;
 }
 
 

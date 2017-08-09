@@ -46,7 +46,7 @@ public:
   /** Virtual constructor */
   virtual FixedDesignOfExperiment * clone() const;
 
-  virtual OT::Sample getInputSample() const;
+  virtual OT::Sample getOriginalInputSample() const;
 
   Type getTypeDesignOfExperiment() const;
 

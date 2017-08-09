@@ -20,7 +20,7 @@
  */
 #include "otgui/KrigingAnalysis.hxx"
 
-#include "openturns/OTBase.hxx"
+#include <openturns/OTBase.hxx>
 
 using namespace OT;
 
@@ -138,7 +138,7 @@ void KrigingAnalysis::run()
 
     // for each output:
     // because with all outputs KrigingAlgorithm is not reliable
-    for (UnsignedInteger i=0; i<outputDimension; ++i)
+    for (UnsignedInteger i = 0; i < outputDimension; ++i)
     {
       if (stopRequested_)
        break;
@@ -198,7 +198,6 @@ void KrigingAnalysis::run()
       result_.errorQ2LOO_ = errorQ2LOO;
     }
 
-    notify("metaModelCreated");
     notify("analysisFinished");
   }
   catch (std::exception & ex)
@@ -260,7 +259,7 @@ String KrigingAnalysis::getPythonScript() const
   if (getInterestVariables().getSize() < getDesignOfExperiment().getOutputSample().getDimension())
   {
     oss << "interestVariables = [";
-    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+    for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
     {
       oss << "'" << getInterestVariables()[i] << "'";
       if (i < getInterestVariables().getSize()-1)
@@ -274,9 +273,9 @@ String KrigingAnalysis::getPythonScript() const
   const UnsignedInteger basisDim = getBasis().getDimension();
 
   oss << getName() << ".setBasis(";
-  if (getBasis().getSize() == (basisDim+1))
+  if (getBasis().getSize() == (basisDim + 1))
     oss << "ot.LinearBasisFactory(" << effectiveInputDim << ").build()";
-  else if (getBasis().getSize() == ((basisDim+1)*(basisDim+2)/2))
+  else if (getBasis().getSize() == ((basisDim + 1) * (basisDim + 2) / 2))
     oss << "ot.QuadraticBasisFactory(" << effectiveInputDim << ").build()";
   else
     oss << "ot.ConstantBasisFactory(" << effectiveInputDim << ").build()";
@@ -288,15 +287,15 @@ String KrigingAnalysis::getPythonScript() const
       << getCovarianceModel().getAmplitude().__str__();
 
   if (getCovarianceModel().getImplementation()->getClassName() == "MaternModel")
-    oss << ", " << dynamic_cast<MaternModel*>(&*getCovarianceModel().getImplementation())->getNu();
+    oss << ", " << dynamic_cast<MaternModel*>(getCovarianceModel().getImplementation().get())->getNu();
   else if (getCovarianceModel().getImplementation()->getClassName() == "GeneralizedExponential")
-    oss << ", " << dynamic_cast<GeneralizedExponential*>(&*getCovarianceModel().getImplementation())->getP();
+    oss << ", " << dynamic_cast<GeneralizedExponential*>(getCovarianceModel().getImplementation().get())->getP();
   oss << "))\n";
 
-  oss << getName() << ".setOptimizeParameters(" <<(getOptimizeParameters()? "True" : "False") << ")\n";
+  oss << getName() << ".setOptimizeParameters(" <<(getOptimizeParameters() ? "True" : "False") << ")\n";
 
   // validation
-  oss << getName() << ".setLeaveOneOutValidation(" << (isLeaveOneOutValidation()? "True" : "False") << ")\n";
+  oss << getName() << ".setLeaveOneOutValidation(" << (isLeaveOneOutValidation() ? "True" : "False") << ")\n";
 
   return oss;
 }

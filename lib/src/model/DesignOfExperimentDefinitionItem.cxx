@@ -50,7 +50,7 @@ void DesignOfExperimentDefinitionItem::buildActions()
   // evaluate design of experiment action
   evaluateDesignOfExperiment_ = new QAction(QIcon(":/images/system-run.png"), tr("Evaluate"), this);
   evaluateDesignOfExperiment_->setStatusTip(tr("Evaluate the design of experiment"));
-  connect(evaluateDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(appendEvaluationItem()));
+  connect(evaluateDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(createNewEvaluation()));
 
   // new metamodel action
   newMetaModel_ = new QAction(QIcon(":/images/metaModel.png"), tr("Metamodel"), this);
@@ -99,6 +99,10 @@ void DesignOfExperimentDefinitionItem::update(Observable* source, const String &
     // emit signal to PhysicalModelDiagramItem to update the diagram
     emit designEvaluationAppended();
   }
+  else if (message == "evaluationRequested")
+  {
+    appendEvaluationItem();
+  }
   else if (message == "designOfExperimentRemoved")
   {
     // emit signal to PhysicalModelDiagramItem to update the diagram
@@ -118,14 +122,42 @@ void DesignOfExperimentDefinitionItem::modifyDesignOfExperiment()
 }
 
 
-void DesignOfExperimentDefinitionItem::appendEvaluationItem()
+void DesignOfExperimentDefinitionItem::createNewEvaluation()
 {
   // check
-  if (!designOfExperiment_.getInputSample().getSize())
+  if (!designOfExperiment_.getOriginalInputSample().getSize())
   {
     emit emitErrorMessageRequested(tr("The input sample is empty."));
     return;
   }
+  // new analysis
+  DesignOfExperimentEvaluation * evaluation = new DesignOfExperimentEvaluation(designOfExperiment_);
+
+  // emit signal to StudyTreeView to open a wizard
+  emit evaluationRequested(this, evaluation);
+}
+
+
+void DesignOfExperimentDefinitionItem::appendEvaluationItem()
+{
+  // check
+  if (!designOfExperiment_.getOriginalInputSample().getSize())
+  {
+    emit emitErrorMessageRequested(tr("The input sample is empty."));
+    return;
+  }
+  // check if there is already an Evaluation item
+  for (int i = 0; i < rowCount(); ++i)
+  {
+    if (child(i)->data(Qt::UserRole).toString() == "DesignOfExperimentEvaluation")
+    {
+      AnalysisItem * analysisItem = dynamic_cast<AnalysisItem*>(child(i));
+      // emit signal to StudyTreeView to update the window bound to analysisItem
+      emit updateEvaluationWindowRequested(analysisItem);
+      return;
+    }
+  }
+
   // new analysis
   DesignOfExperimentEvaluation * evaluation = new DesignOfExperimentEvaluation(DesignOfExperiment(designOfExperiment_));
 
@@ -146,7 +178,7 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
   insertRow(0, evaluationItem);
 
   // emit signal to StudyTreeView to create a window
-  emit designOfExperimentEvaluationRequested(evaluationItem);
+  emit newAnalysisItemCreated(evaluationItem);
 
   // disable the evaluation action
   evaluateDesignOfExperiment_->setDisabled(true);

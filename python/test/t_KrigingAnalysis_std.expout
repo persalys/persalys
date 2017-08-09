@@ -47,7 +47,10 @@ inputSample = [
 [5.9556, 7.47295, 0.5],
 [3.25986, 9.66134, 0.5],
 [8.48977, 1.46852, 0.5]]
-design.setInputSample(inputSample)
+design.setOriginalInputSample(inputSample)
+design.setBlockSize(1)
+interestVariables = ['y0', 'y1']
+design.setInterestVariables(interestVariables)
 myStudy.add(design)
 design.run()
 kriging_0 = otguibase.KrigingAnalysis('kriging_0', design)

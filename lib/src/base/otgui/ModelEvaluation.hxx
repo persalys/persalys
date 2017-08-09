@@ -43,7 +43,7 @@ public:
   void updateParameters();
 
   OT::Point getInputValues() const;
-  void setInputValue(const int & index, const double & value);
+  void setInputValue(const OT::UnsignedInteger index, const double value);
 
   ModelEvaluationResult getResult() const;
 

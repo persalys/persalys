@@ -41,7 +41,7 @@ public:
   /** Virtual constructor */
   virtual ProbabilisticDesignOfExperiment * clone() const;
 
-  virtual OT::Sample getInputSample() const;
+  virtual OT::Sample getOriginalInputSample() const;
 
   OT::String getDesignName() const;
   void setDesignName(const OT::String& name);

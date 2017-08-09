@@ -41,11 +41,15 @@ protected:
 
 public slots:
   void modifyDesignOfExperiment();
+  void createNewEvaluation();
   void appendEvaluationItem();
 signals:
   void modifyDesignOfExperimentRequested(DesignOfExperimentDefinitionItem*);
+  void evaluationRequested(OTguiItem*, const Analysis&, const bool isGeneralWizard=false);
   void numberDesignEvaluationChanged(bool);
   void designEvaluationAppended();
+
+  void updateEvaluationWindowRequested(AnalysisItem*);
 
 private:
   QAction * modifyDesignOfExperiment_;

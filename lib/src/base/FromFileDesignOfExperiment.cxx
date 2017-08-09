@@ -20,7 +20,7 @@
  */
 #include "otgui/FromFileDesignOfExperiment.hxx"
 
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
@@ -85,7 +85,7 @@ void FromFileDesignOfExperiment::setFileName(const String& fileName)
       fileName_ = fileName;
       getSampleFromFile();
       // reinitialization
-      setInputSample(Sample());
+      setOriginalInputSample(Sample());
       initialize();
       inputColumns_ = Indices();
     }
@@ -125,7 +125,7 @@ void FromFileDesignOfExperiment::setInputColumns(const Indices& inputColumns)
   // generate input sample
   Sample inS(getSampleFromFile().getMarginal(inputColumns_));
   inS.setDescription(physicalModel_.getInputNames());
-  setInputSample(inS);
+  setOriginalInputSample(inS);
 
   // reinitialize
   initialize();
@@ -141,7 +141,7 @@ Sample FromFileDesignOfExperiment::getSampleFromFile()
     // check the sample description
     const Description sampleDescription(sampleFromFile_.getDescription());
     Description descriptionToCheck;
-    for (UnsignedInteger i=0; i<sampleDescription.getSize(); ++i)
+    for (UnsignedInteger i = 0; i < sampleDescription.getSize(); ++i)
       if (!descriptionToCheck.contains(sampleDescription[i]) && !sampleDescription[i].empty())
         descriptionToCheck.add(sampleDescription[i]);
 
@@ -188,10 +188,10 @@ String FromFileDesignOfExperiment::getPythonScript() const
   }
   oss << "]\n";
 
-  oss << getName()+ " = otguibase.FromFileDesignOfExperiment('" + getName() + "', "+getPhysicalModel().getName()+", ";
-  oss << "'"+fileName_+"', inputColumns)\n";
+  oss << getName() << " = otguibase.FromFileDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", ";
+  oss << "'" << fileName_ << "', inputColumns)\n";
 
-  return oss.str();
+  return oss;
 }
 
 

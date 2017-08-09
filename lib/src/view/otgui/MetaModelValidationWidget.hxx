@@ -21,85 +21,24 @@
 #ifndef OTGUI_METAMODELVALIDATIONWIDGET_HXX
 #define OTGUI_METAMODELVALIDATIONWIDGET_HXX
 
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/ParametersTableView.hxx"
+#include "otgui/OTGuiprivate.hxx"
 
 #include <openturns/Sample.hxx>
 
-#include <QVBoxLayout>
+#include <QWidget>
 
 namespace OTGUI {
-
 class OTGUI_API MetaModelValidationWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  MetaModelValidationWidget(const int indexWidget,
-                            const OT::Sample& metaModelSample,
+  MetaModelValidationWidget(const OT::Sample& metaModelSample,
                             const OT::Sample& outputSample,
                             const double error=-1.0,
                             const double value=-1.0,
-                            const QString measure=""
-                           )
-    : QWidget()
-    , graphConfigWidget_(0)
-    , indexWidget_(indexWidget)
-  {
-    QVBoxLayout * widgetLayout = new QVBoxLayout(this);
-
-    if (!measure.isEmpty())
-    {
-      // validation table view
-      QStringList namesList;
-      namesList << tr("Residual");
-      namesList << measure;
-
-      QStringList valuesList;
-      valuesList << QString::number(error);
-      valuesList << QString::number(value);
-
-      ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
-
-      widgetLayout->addWidget(table);
-    }
-
-    // plot widget
-    PlotWidget * plot = new PlotWidget(tr("metaModel"));
-    plot->plotScatter(outputSample, metaModelSample);
-    OT::Sample lineSample(outputSample);
-    lineSample.stack(lineSample);
-    plot->plotCurve(lineSample, QPen(Qt::black, 1));
-    plot->setTitle(tr("Metamodel:") + " " + QString::fromUtf8(outputSample.getDescription()[0].c_str()));
-    plot->setAxisTitle(QwtPlot::xBottom, tr("Physical model"));
-    plot->setAxisTitle(QwtPlot::yLeft, tr("Metamodel"));
-    widgetLayout->addWidget(plot);
-
-    // GraphConfigurationWidget
-    QVector<PlotWidget*> listPlot;
-    listPlot.append(plot);
-    graphConfigWidget_ = new GraphConfigurationWidget(listPlot);
-  }
-
-  virtual ~MetaModelValidationWidget()
-  {
-    delete graphConfigWidget_;
-    graphConfigWidget_ = 0;
-  }
-
-public slots:
-  void showHideGraphConfigurationWidget(int index)
-  {
-    if (index == indexWidget_ && isVisible())
-      emit graphWindowActivated(graphConfigWidget_);
-  }
-
-signals:
-  void graphWindowActivated(QWidget*);
-
-private:
-  GraphConfigurationWidget * graphConfigWidget_;
-  int indexWidget_;
+                            const QString measure="",
+                            QWidget * parent=0);
 };
 }
 #endif

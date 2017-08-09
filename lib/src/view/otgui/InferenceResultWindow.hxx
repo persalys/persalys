@@ -40,10 +40,6 @@ protected:
 
 public slots:
   void updateInferenceResultWidget(QString);
-  void showHideGraphConfigurationWidget(int indexTab);
-  void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
-signals:
-  void windowActivated();
 
 private:
   InferenceResult result_;

@@ -89,7 +89,10 @@ inputSample = [
 [2.62915, 2.65628, 0.5],
 [6.24613, 4.36552, 0.5],
 [4.87803, 6.04996, 0.5]]
-design.setInputSample(inputSample)
+design.setOriginalInputSample(inputSample)
+design.setBlockSize(1)
+interestVariables = ['y0', 'y1']
+design.setInterestVariables(interestVariables)
 myStudy.add(design)
 design.run()
 chaos_0 = otguibase.FunctionalChaosAnalysis('chaos_0', design)

@@ -125,13 +125,11 @@ void DataModelWindow::buildInterface()
     updateTableView(dataModel_->getSample());
 
     // table span
-    UnsignedInteger nbInputs = 0;
-    if (dataModel_->getInputSample().getSize())
-    {
-      nbInputs = dataModel_->getInputSample().getDimension();
+    const UnsignedInteger nbInputs = dataModel_->getInputSample().getSize() ? dataModel_->getInputSample().getDimension() : 0;
+    if (nbInputs > 1)
       dataTableView_->setSpan(1, 0, 1, nbInputs);
-    }
-    if (dataModel_->getOutputSample().getSize())
+
+    if (dataModel_->getOutputSample().getSize() && dataModel_->getOutputSample().getDimension() > 1)
       dataTableView_->setSpan(1, nbInputs, 1, dataModel_->getSample().getDimension());
   }
 

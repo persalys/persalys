@@ -63,7 +63,6 @@ void DesignOfExperimentItem::appendAnalysisItem(Analysis& analysis)
   connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SIGNAL(analysisInProgressStatusChanged(bool)));
   if (getParentOTStudyItem())
   {
-    connect(newItem, SIGNAL(metaModelCreated(PhysicalModel)), getParentOTStudyItem(), SLOT(addMetaModelItem(PhysicalModel)));
     connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
   }
   connect(this, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), newItem, SLOT(setDesignOfExperiment(DesignOfExperiment)));

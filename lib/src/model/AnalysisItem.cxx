@@ -50,6 +50,7 @@ AnalysisItem::AnalysisItem(const Analysis & analysis)
   : OTguiItem(QString::fromUtf8(analysis.getName().c_str()), analysis.getImplementation()->getClassName().c_str())
   , Observer("Analysis")
   , analysis_(analysis)
+  , addMetaModel_(0)
   , modifyAnalysis_(0)
   , removeAnalysis_(0)
 {
@@ -76,6 +77,16 @@ void AnalysisItem::buildActions()
     connect(modifyAnalysis_, SIGNAL(triggered()), this, SLOT(modifyAnalysis()));
 
     appendAction(modifyAnalysis_);
+  }
+  if (analysisType == "FunctionalChaosAnalysis" ||
+      analysisType == "KrigingAnalysis")
+  {
+    addMetaModel_ = new QAction(tr("Convert metamodel into physical model"), this);
+    addMetaModel_->setStatusTip(tr("Add the metamodel in the study tree"));
+    connect(addMetaModel_, SIGNAL(triggered()), this, SLOT(addMetaModelItem()));
+    appendAction(addMetaModel_);
+    if (!analysis_.getImplementation()->analysisLaunched())
+      addMetaModel_->setEnabled(false);
   }
 
   // remove analysis action
@@ -118,6 +129,10 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
 
   // update the implementation of the analysis stored in OTStudy
   getParentOTStudyItem()->getOTStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
+
+  // the analysis has not result: disable addMetaModel_ action
+  if (addMetaModel_)
+    addMetaModel_->setEnabled(false);
 }
 
 
@@ -216,6 +231,21 @@ void AnalysisItem::modifyAnalysis()
 }
 
 
+void AnalysisItem::addMetaModelItem()
+{
+  FunctionalChaosAnalysis * chaos = dynamic_cast<FunctionalChaosAnalysis*>(analysis_.getImplementation().get());
+  KrigingAnalysis * kriging = dynamic_cast<KrigingAnalysis*>(analysis_.getImplementation().get());
+  if (chaos)
+  {
+    getParentOTStudyItem()->addMetaModelItem(chaos->getResult().getMetaModel());
+  }
+  else if (kriging)
+  {
+    getParentOTStudyItem()->addMetaModelItem(kriging->getResult().getMetaModel());
+  }
+}
+
+
 void AnalysisItem::removeAnalysis()
 {
   // check if the analysis is running
@@ -259,33 +289,15 @@ void AnalysisItem::update(Observable* source, const String& message)
   {
     // emit signal to the StudyTreeView to create a window
     emit analysisFinished(this);
+
+    // if MetaModelAnalysis : enable addMetaModel_ action
+    if (addMetaModel_)
+      addMetaModel_->setEnabled(true);
   }
   else if (message == "analysisBadlyFinished")
   {
     // emit signal to the StudyTreeView to create a window
     emit analysisBadlyFinished(this);
-  }
-  else if (message == "metaModelCreated")
-  {
-    if (dynamic_cast<FunctionalChaosAnalysis*>(analysis_.getImplementation().get()))
-    {
-      PhysicalModel metaModel(dynamic_cast<FunctionalChaosAnalysis*>(analysis_.getImplementation().get())->getResult().getMetaModel());
-    // emit signal to OTStudyItem to add metaModel in study_
-      emit metaModelCreated(metaModel);
-    }
-    else if (dynamic_cast<KrigingAnalysis*>(analysis_.getImplementation().get()))
-    {
-      PhysicalModel metaModel(dynamic_cast<KrigingAnalysis*>(analysis_.getImplementation().get())->getResult().getMetaModel());
-    // emit signal to OTStudyItem to add metaModel in study_
-      emit metaModelCreated(metaModel);
-    }
-    // can NOT write here : getParentOTStudyItem()->getOTStudy().add(metaModel);
-    // "add" operation implies the creation of a new QStandardItem
-    // but notify("metaModelCreated") is called in a sub-thread...
-    else
-    {
-      qDebug() << "Can not add the metamodel in the tree view. The metamodel analysis is not recognized.";
-    }
   }
   else if (message == "informationMessageUpdated")
   {
@@ -352,10 +364,12 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
 
     // Parameters names
     namesList << tr("Sample size")
-              << tr("Outputs to be evaluated");
+              << tr("Outputs to be evaluated")
+              << tr("Block size");
     // Parameters values
-    valuesList << QString::number(doeEvaluation.getDesignOfExperiment().getInputSample().getSize());
-    valuesList << doeEvaluation.getDesignOfExperiment().getPhysicalModel().getSelectedOutputsNames().__str__().c_str();
+    valuesList << QString::number(doeEvaluation.getDesignOfExperiment().getOriginalInputSample().getSize())
+               << doeEvaluation.getDesignOfExperiment().getInterestVariables().__str__().c_str()
+               << QString::number(doeEvaluation.getDesignOfExperiment().getBlockSize());
   }
   else if (analysisType == "TaylorExpansionMomentsAnalysis")
   {

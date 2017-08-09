@@ -57,7 +57,7 @@ Qt::ItemFlags VariablesInferenceTableModel::flags(const QModelIndex& index) cons
 QVariant VariablesInferenceTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (role == Qt::DisplayRole && orientation == Qt::Horizontal && section == 0)
-    return tr("Variables");
+    return tr("Variable(s)", "", variablesNames_.getSize());
   return QAbstractTableModel::headerData(section, orientation, role);
 }
 
@@ -66,9 +66,9 @@ bool VariablesInferenceTableModel::setHeaderData(int section, Qt::Orientation or
 {
   if (role == Qt::CheckStateRole && orientation == Qt::Horizontal)
   {
-    for (int i=0; i<rowCount(); ++i)
+    for (int i = 0; i < rowCount(); ++i)
       if (data(index(i, 0), role).toInt() != (value.toBool() ? Qt::Checked : Qt::Unchecked))
-        setData(index(i, 0), value.toBool()? Qt::Checked:Qt::Unchecked, role);
+        setData(index(i, 0), value.toBool() ? Qt::Checked : Qt::Unchecked, role);
   }
   return QAbstractTableModel::setHeaderData(section, orientation, value, role);
 }
@@ -100,7 +100,7 @@ bool VariablesInferenceTableModel::setData(const QModelIndex& index, const QVari
   {
     isVariablesChecked_[index.row()] = ((value.toInt() == Qt::Checked) ? true : false);
     Description checkedVariables;
-    for (UnsignedInteger i=0; i<isVariablesChecked_.getSize(); ++i)
+    for (UnsignedInteger i = 0; i < isVariablesChecked_.getSize(); ++i)
       if (isVariablesChecked_[i])
         checkedVariables.add(variablesNames_[i]);
     emit dataChanged(index, this->index(index.row(), 1));

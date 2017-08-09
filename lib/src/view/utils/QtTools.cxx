@@ -69,4 +69,15 @@ QStringList QtOT::DescriptionToStringList(const Description& description)
   }
   return result;
 }
+
+
+Description QtOT::StringListToDescription(const QStringList& stringList)
+{
+  Description result(stringList.size());
+  for (int i = 0; i < stringList.size(); ++i)
+  {
+    result[i] = stringList[i].toUtf8().constData();
+  }
+  return result;
+}
 }

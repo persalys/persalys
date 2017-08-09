@@ -24,6 +24,7 @@
 #include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -46,21 +47,18 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
 {
   setWindowTitle(tr("Taylor expansion moments results"));
 
-  // get output info
-  const UnsignedInteger outputDimension = result_.getOutputNames().getSize();
-  QStringList outputNames;
-  for (UnsignedInteger i=0; i<outputDimension; ++i)
-    outputNames << QString::fromUtf8(result_.getOutputNames()[i].c_str());
+  // get number of outputs
+  const UnsignedInteger nbOutputs = result_.getOutputNames().getSize();
 
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
   // - list outputs
-  QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
+  QGroupBox * outputsGroupBox = new QGroupBox(tr("Output(s)", "", nbOutputs));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
   OTguiListWidget * outputsListWidget = new OTguiListWidget;
-  outputsListWidget->addItems(outputNames);
+  outputsListWidget->addItems(QtOT::DescriptionToStringList(result_.getOutputNames()));
   outputsLayoutGroupBox->addWidget(outputsListWidget);
 
   mainWidget->addWidget(outputsGroupBox);
@@ -83,7 +81,7 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
   connect(outputsListWidget, SIGNAL(currentRowChanged(int)), momentsTablesWidget, SLOT(setCurrentIndex(int)));
 
   // loop on all the outputs
-  for (UnsignedInteger i=0; i<outputDimension; ++i)
+  for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
     ResizableTableViewWithoutScrollBar * momentsEstimationsTable = new ResizableTableViewWithoutScrollBar;
     momentsEstimationsTable->horizontalHeader()->hide();
@@ -117,7 +115,7 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
   momentsVbox->addWidget(momentsTablesWidget);
   tabLayout->addWidget(momentsGroupBox);
 
-  tabWidget->addTab(tab, "Summary");
+  tabWidget->addTab(tab, tr("Summary"));
 
   //
   mainWidget->addWidget(tabWidget);

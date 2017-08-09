@@ -50,7 +50,8 @@ void ModelEvaluationResultWindow::buildInterface()
   QHBoxLayout * tabLayout = new QHBoxLayout(tab);
 
   // inputs table
-  QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
+  const UnsignedInteger inputDimension = result_.getInputSample().getDimension();
+  QGroupBox * inputsBox = new QGroupBox(tr("Input(s)", "", inputDimension));
   QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
 
   CopyableTableView * inputTable = new CopyableTableView;
@@ -59,11 +60,11 @@ void ModelEvaluationResultWindow::buildInterface()
 #else
   inputTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 #endif
-  CustomStandardItemModel * model = new CustomStandardItemModel(result_.getInputSample().getDimension(), 2, inputTable);
+  CustomStandardItemModel * model = new CustomStandardItemModel(inputDimension, 2, inputTable);
   model->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Value"));
   inputTable->setModel(model);
 
-  for (UnsignedInteger i=0; i<result_.getInputSample().getDimension(); ++i)
+  for (UnsignedInteger i = 0; i < inputDimension; ++i)
   {
     model->setNotEditableItem(i, 0, QString::fromUtf8(result_.getInputSample().getDescription()[i].c_str()));
     model->setNotEditableItem(i, 1, result_.getInputSample()[0][i], 12);
@@ -72,7 +73,8 @@ void ModelEvaluationResultWindow::buildInterface()
   tabLayout->addWidget(inputsBox);
 
   // outputs table
-  QGroupBox * outputsBox = new QGroupBox(tr("Outputs"));
+  const UnsignedInteger nbOutputs = result_.getOutputSample().getDimension();
+  QGroupBox * outputsBox = new QGroupBox(tr("Output(s)", "", nbOutputs));
   QVBoxLayout * outputsLayout = new QVBoxLayout(outputsBox);
 
   CopyableTableView * outputTable = new CopyableTableView;
@@ -81,11 +83,11 @@ void ModelEvaluationResultWindow::buildInterface()
 #else
   outputTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 #endif
-  model = new CustomStandardItemModel(result_.getOutputSample().getDimension(), 2, outputTable);
+  model = new CustomStandardItemModel(nbOutputs, 2, outputTable);
   model->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Value"));
   outputTable->setModel(model);
 
-  for (UnsignedInteger i=0; i<result_.getOutputSample().getDimension(); ++i)
+  for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
     model->setNotEditableItem(i, 0, QString::fromUtf8(result_.getOutputSample().getDescription()[i].c_str()));
     model->setNotEditableItem(i, 1, result_.getOutputSample()[0][i]);

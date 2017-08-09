@@ -53,18 +53,19 @@ public slots:
   void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
   void stopAnalysis();
   void modifyAnalysis();
+  void addMetaModelItem();
   void removeAnalysis();
 signals:
   void analysisFinished(AnalysisItem*);
   void analysisBadlyFinished(AnalysisItem*);
   void analysisRemoved(QStandardItem*);
-  void metaModelCreated(PhysicalModel);
   void messageChanged(QString);
   void progressValueChanged(int);
   void modifyAnalysisRequested(AnalysisItem*);
 
 private:
   Analysis analysis_;
+  QAction * addMetaModel_;
   QAction * modifyAnalysis_;
   QAction * removeAnalysis_;
 };

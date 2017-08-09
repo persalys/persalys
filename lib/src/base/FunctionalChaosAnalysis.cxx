@@ -22,17 +22,17 @@
 
 #include "otgui/MetaModel.hxx"
 
-#include "openturns/LinearEnumerateFunction.hxx"
-#include "openturns/FixedStrategy.hxx"
-#include "openturns/LeastSquaresStrategy.hxx"
-#include "openturns/BasisSequenceFactory.hxx"
-#include "openturns/LeastSquaresMetaModelSelectionFactory.hxx"
-#include "openturns/LegendreFactory.hxx"
-#include "openturns/LARS.hxx"
-#include "openturns/Uniform.hxx"
-#include "openturns/StandardDistributionPolynomialFactory.hxx"
-#include "openturns/FunctionalChaosRandomVector.hxx"
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/LinearEnumerateFunction.hxx>
+#include <openturns/FixedStrategy.hxx>
+#include <openturns/LeastSquaresStrategy.hxx>
+#include <openturns/BasisSequenceFactory.hxx>
+#include <openturns/LeastSquaresMetaModelSelectionFactory.hxx>
+#include <openturns/LegendreFactory.hxx>
+#include <openturns/LARS.hxx>
+#include <openturns/Uniform.hxx>
+#include <openturns/StandardDistributionPolynomialFactory.hxx>
+#include <openturns/FunctionalChaosRandomVector.hxx>
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
@@ -106,7 +106,7 @@ OrthogonalProductPolynomialFactory::PolynomialFamilyCollection FunctionalChaosAn
     ComposedDistribution distribution(getDistribution());
 
     // adaptiveStrategy
-    for (UnsignedInteger i=0; i<distribution.getDimension(); ++i)
+    for (UnsignedInteger i = 0; i < distribution.getDimension(); ++i)
     {
       const Distribution marginal(distribution.getMarginal(i));
       const StandardDistributionPolynomialFactory factory(marginal);
@@ -135,8 +135,8 @@ void FunctionalChaosAnalysis::run()
       throw InvalidDimensionException(HERE) << "You have not defined output variable to be analysed. Set the list of interest variables.";
 
     // get effective samples
-    Sample effectiveInputSample(getEffectiveInputSample());
-    Sample effectiveOutputSample(getEffectiveOutputSample());
+    const Sample effectiveInputSample(getEffectiveInputSample());
+    const Sample effectiveOutputSample(getEffectiveOutputSample());
 
     // check chaos degree
     if (!getSparseChaos())
@@ -181,7 +181,6 @@ void FunctionalChaosAnalysis::run()
     // validation
     validateMetaModelResult(result_, effectiveInputSample);
 
-    notify("metaModelCreated");
     notify("analysisFinished");
   }
   catch (std::exception & ex)
@@ -246,7 +245,7 @@ void FunctionalChaosAnalysis::postProcessFunctionalChaosResult(const Sample& inp
   const UnsignedInteger outputDimension = result_.outputSample_.getDimension();
 
   // get FunctionalChaosRandomVector
-  FunctionalChaosRandomVector vector(result_.functionalChaosResult_);
+  const FunctionalChaosRandomVector vector(result_.functionalChaosResult_);
 
   // mean
   result_.mean_ = vector.getMean();
@@ -257,11 +256,11 @@ void FunctionalChaosAnalysis::postProcessFunctionalChaosResult(const Sample& inp
   firstOrderIndices.setDescription(inputSample.getDescription());
   Sample totalIndices(outputDimension, inputDimension);
 
-  for (UnsignedInteger i=0; i<outputDimension; ++i)
+  for (UnsignedInteger i = 0; i < outputDimension; ++i)
   {
     variance[i] = vector.getCovariance()(i, i);
 
-    for (UnsignedInteger j=0; j<inputDimension; ++j)
+    for (UnsignedInteger j = 0; j < inputDimension; ++j)
     {
       firstOrderIndices[i][j] = vector.getSobolIndex(j, i);
       totalIndices[i][j] = vector.getSobolTotalIndex(j, i);
@@ -285,18 +284,18 @@ String FunctionalChaosAnalysis::getPythonScript() const
   if (getInterestVariables().getSize() < getDesignOfExperiment().getOutputSample().getDimension())
   {
     oss << "interestVariables = [";
-    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+    for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
     {
       oss << "'" << getInterestVariables()[i] << "'";
-      if (i < getInterestVariables().getSize()-1)
+      if (i < getInterestVariables().getSize() - 1)
         oss << ", ";
     }
     oss << "]\n";
     oss << getName() << ".setInterestVariables(interestVariables)\n";
   }
   oss << getName() << ".setChaosDegree(" << getChaosDegree() << ")\n";
-  oss << getName() << ".setSparseChaos(" << (getSparseChaos()? "True" : "False") << ")\n";
-  oss << getName() << ".setLeaveOneOutValidation(" << (isLeaveOneOutValidation()? "True" : "False") << ")\n";
+  oss << getName() << ".setSparseChaos(" << (getSparseChaos() ? "True" : "False") << ")\n";
+  oss << getName() << ".setLeaveOneOutValidation(" << (isLeaveOneOutValidation() ? "True" : "False") << ")\n";
 
   return oss;
 }

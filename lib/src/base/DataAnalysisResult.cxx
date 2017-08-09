@@ -20,10 +20,7 @@
  */
 #include "otgui/DataAnalysisResult.hxx"
 
-#include "openturns/Normal.hxx"
-#include "openturns/ChiSquare.hxx"
-#include "openturns/KernelSmoothing.hxx"
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
@@ -39,33 +36,6 @@ DataAnalysisResult::DataAnalysisResult()
   , elapsedTime_(0.)
 {
 
-}
-
-
-DataAnalysisResult::DataAnalysisResult(const Sample& inputSample, const Sample& outputSample)
-  : DataSample(inputSample, outputSample)
-  , min_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
-  , max_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
-  , mean_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
-  , coefficientOfVariation_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
-  , median_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
-  , standardDeviation_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
-  , variance_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
-  , skewness_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
-  , kurtosis_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
-  , firstQuartile_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
-  , thirdQuartile_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
-  , meanConfidenceInterval_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
-  , stdConfidenceInterval_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
-  , outliers_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
-  , pdf_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
-  , cdf_(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0))
-  , elapsedTime_(0.)
-{
-  meanConfidenceInterval_.setFiniteLowerBound(Interval::BoolCollection(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0), false));
-  meanConfidenceInterval_.setFiniteUpperBound(Interval::BoolCollection(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0), false));
-  stdConfidenceInterval_.setFiniteLowerBound(Interval::BoolCollection(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0), false));
-  stdConfidenceInterval_.setFiniteUpperBound(Interval::BoolCollection(inputSample.getDimension()+(outputSample.getSize()?outputSample.getDimension():0), false));
 }
 
 

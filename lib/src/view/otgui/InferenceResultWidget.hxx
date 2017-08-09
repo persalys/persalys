@@ -24,7 +24,7 @@
 #include "otgui/InferenceResult.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/PlotWidget.hxx"
 
 #include <QTabWidget>
 #include <QLabel>
@@ -50,12 +50,8 @@ public slots:
   void updateRadioButtonsDistributionTable(QModelIndex);
   void updateParametersTable(QModelIndex=QModelIndex());
   void updateGraphs(QModelIndex=QModelIndex());
-  void showHideGraphConfigurationWidget(int indexTab);
-  void showHideGraphConfigurationWidget();
 signals:
   void currentDistributionChanged();
-  void graphWindowActivated(QWidget*);
-  void graphWindowDeactivated();
 
 private:
   bool displayPDF_QQPlot_;
@@ -68,9 +64,7 @@ private:
   QLabel * analysisErrorMessageLabel_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
-  GraphConfigurationWidget * pdf_cdfPlotGraphConfigWidget_;
   PlotWidget * qqPlot_;
-  GraphConfigurationWidget * qqPlotGraphConfigWidget_;
 };
 }
 #endif

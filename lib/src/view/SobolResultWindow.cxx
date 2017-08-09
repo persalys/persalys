@@ -23,9 +23,11 @@
 #include "otgui/SobolAnalysis.hxx"
 #include "otgui/SensitivityResultWidget.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <QGroupBox>
 #include <QScrollArea>
+#include <QVBoxLayout>
 #include <QSplitter>
 
 using namespace OT;
@@ -35,8 +37,6 @@ namespace OTGUI {
 SobolResultWindow::SobolResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
   , result_()
-  , outputsListWidget_(0)
-  , tabWidget_(0)
   , warningMessage_("")
 {
   const SobolAnalysis * sobolAnalysis = dynamic_cast<const SobolAnalysis*>(item->getAnalysis().getImplementation().get());
@@ -60,28 +60,25 @@ void SobolResultWindow::buildInterface()
 {
   setWindowTitle(tr("Sobol' analysis results"));
 
-  // get output info
-  const UnsignedInteger outputDimension = result_.getOutputNames().getSize();
-  QStringList outputNames;
-  for (UnsignedInteger i=0; i<outputDimension; ++i)
-    outputNames << QString::fromUtf8(result_.getOutputNames()[i].c_str());
+  // get number of outputs
+  const UnsignedInteger nbOutputs = result_.getOutputNames().getSize();
 
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
   // - list outputs
-  QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
+  QGroupBox * outputsGroupBox = new QGroupBox(tr("Output(s)", "", nbOutputs));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  outputsListWidget_ = new OTguiListWidget;
-  outputsListWidget_->addItems(outputNames);
-  outputsLayoutGroupBox->addWidget(outputsListWidget_);
+  OTguiListWidget * outputsListWidget = new OTguiListWidget;
+  outputsListWidget->addItems(QtOT::DescriptionToStringList(result_.getOutputNames()));
+  outputsLayoutGroupBox->addWidget(outputsListWidget);
 
   mainWidget->addWidget(outputsGroupBox);
   mainWidget->setStretchFactor(0, 1);
 
   // - tab widget
-  tabWidget_ = new QTabWidget;
+  QTabWidget * tabWidget = new QTabWidget;
 
   // first tab --------------------------------
   QScrollArea * scrollArea = new QScrollArea;
@@ -90,21 +87,17 @@ void SobolResultWindow::buildInterface()
   QVBoxLayout * vbox = new QVBoxLayout(widget);
 
   ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
-  connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+  connect(outputsListWidget, SIGNAL(currentRowChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
-  for (UnsignedInteger i=0; i<result_.getOutputNames().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
-    SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(i,
-                                                                                result_.getFirstOrderIndices()[i],
+    SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(result_.getFirstOrderIndices()[i],
                                                                                 result_.getTotalIndices()[i],
                                                                                 result_.getInputNames(),
                                                                                 result_.getOutputNames()[i],
-                                                                                SensitivityResultWidget::Sobol
-                                                                               );
+                                                                                SensitivityResultWidget::Sobol,
+                                                                                this);
     stackedWidget->addWidget(indicesResultWidget);
-    connect(indicesResultWidget, SIGNAL(graphWindowActivated(QWidget*)), this, SIGNAL(graphWindowActivated(QWidget*)));
-    connect(outputsListWidget_, SIGNAL(currentRowChanged(int)), indicesResultWidget, SLOT(showHideGraphConfigurationWidget(int)));
-    connect(this, SIGNAL(stateChanged(int)), indicesResultWidget, SLOT(showHideGraphConfigurationWidget(int)));
   }
   vbox->addWidget(stackedWidget);
 
@@ -115,7 +108,7 @@ void SobolResultWindow::buildInterface()
     vbox->addWidget(warningLabel);
   }
   scrollArea->setWidget(widget);
-  tabWidget_->addTab(scrollArea, tr("Indices"));
+  tabWidget->addTab(scrollArea, tr("Indices"));
 
   // second tab --------------------------------
   if (result_.getElapsedTime() > 0. && result_.getCallsNumber())
@@ -138,40 +131,17 @@ void SobolResultWindow::buildInterface()
     paramWidgetLayout->addWidget(parametersWidget);
     paramWidgetLayout->setRowStretch(1, 1);
 
-    tabWidget_->addTab(paramWidget, tr("Summary"));
+    tabWidget->addTab(paramWidget, tr("Summary"));
   }
 
   // third tab --------------------------------
   if (parametersWidget_)
-    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
+    tabWidget->addTab(parametersWidget_, tr("Parameters"));
 
   // set widgets
-  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(showHideGraphConfigurationWidget(int)));
-
-  mainWidget->addWidget(tabWidget_);
+  mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
-  outputsListWidget_->setCurrentRow(0);
+  outputsListWidget->setCurrentRow(0);
   setWidget(mainWidget);
-}
-
-
-void SobolResultWindow::showHideGraphConfigurationWidget(int indexTab)
-{
-  if (indexTab == 0) // indices
-    emit stateChanged(outputsListWidget_->currentRow());
-  else
-    emit graphWindowDeactivated();
-}
-
-
-void SobolResultWindow::showHideGraphConfigurationWidget(Qt::WindowStates oldState, Qt::WindowStates newState)
-{
-  if (oldState == Qt::WindowMaximized)
-    return;
-
-  if (newState == Qt::WindowFullScreen || newState == (Qt::WindowActive|Qt::WindowMaximized))
-    showHideGraphConfigurationWidget(tabWidget_->currentIndex());
-  else if (newState == Qt::WindowNoState || newState == Qt::WindowMinimized || newState == (Qt::WindowActive|Qt::WindowMinimized))
-    showHideGraphConfigurationWidget(-1);
 }
 }

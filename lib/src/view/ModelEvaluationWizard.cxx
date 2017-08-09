@@ -56,24 +56,27 @@ void ModelEvaluationWizard::buildInterface()
   connect(outputsGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), this, SLOT(setInterestVariables(QStringList)));
   pageLayout->addWidget(outputsGroupBox_);
 
-  QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
+  const UnsignedInteger nbInputs = model.getInputs().getSize();
+  QGroupBox * inputsBox = new QGroupBox(tr("Input(s)", "", nbInputs));
   QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
 
-  table_ = new QTableWidget(model.getInputs().getSize(), 3);
+  table_ = new QTableWidget(nbInputs, 3);
   table_->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Description") << tr("Value"));
 
-  for (UnsignedInteger i=0; i<model.getInputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < nbInputs; ++i)
   {
+    // input name
     QTableWidgetItem * item = new QTableWidgetItem(QString::fromUtf8(model.getInputNames()[i].c_str()));
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     table_->setItem(i, 0, item);
+    // input description
     item = new QTableWidgetItem(QString::fromUtf8(model.getInputs()[i].getDescription().c_str()));
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     table_->setItem(i, 1, item);
-      
+    // input value
     double defaultValue = dynamic_cast<ModelEvaluation*>(analysis_.getImplementation().get())->getInputValues()[i];
-    double delta(0.1*fabs(defaultValue));
-    double step(delta > 1e-12 ? 0.5*delta : 0.1);
+    double delta(0.1 * fabs(defaultValue));
+    double step(delta > 1e-12 ? 0.5 * delta : 0.1);
 
     DoubleSpinBox * valueSpinBox = new DoubleSpinBox;
     valueSpinBox->setMinimum(-std::numeric_limits<double>::max());
@@ -109,7 +112,7 @@ void ModelEvaluationWizard::buildInterface()
 void ModelEvaluationWizard::inputValueChanged(double value)
 {
   DoubleSpinBox * spinBox = qobject_cast<DoubleSpinBox *>(sender());
-  for (int i=0; i<table_->rowCount(); ++i)
+  for (int i = 0; i < table_->rowCount(); ++i)
   {
     QWidget * cellWidget = table_->cellWidget(i, 2);
     if (cellWidget == spinBox)
@@ -126,7 +129,7 @@ void ModelEvaluationWizard::setInterestVariables(QStringList outputsList)
   errorMessageLabel_->setText("");
 
   Description desc(outputsList.size());
-  for (int i=0; i<outputsList.size(); ++i)
+  for (int i = 0; i < outputsList.size(); ++i)
     desc[i] = outputsList[i].toUtf8().constData();
 
   try
@@ -145,7 +148,7 @@ bool ModelEvaluationWizard::validateCurrentPage()
   errorMessageLabel_->setText("");
   if (!outputsGroupBox_->getSelectedOutputsNames().size())
   {
-    errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(tr("At least one output must be selected")).arg("</font>"));
+    errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(tr("At least one output must be selected")));
     return false;
   }
 

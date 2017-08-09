@@ -80,12 +80,12 @@ ProbabilisticDesignOfExperiment* ProbabilisticDesignOfExperiment::clone() const
 }
 
 
-Sample ProbabilisticDesignOfExperiment::getInputSample() const
+Sample ProbabilisticDesignOfExperiment::getOriginalInputSample() const
 {
-  if (!inputSample_.getSize())
-    inputSample_ = GenerateInputSample(getDesignName(), getSize(), getPhysicalModel(), getSeed());
+  if (!originalInputSample_.getSize())
+    originalInputSample_ = GenerateInputSample(getDesignName(), getSize(), getPhysicalModel(), getSeed());
 
-  return inputSample_;
+  return originalInputSample_;
 }
 
 
@@ -103,7 +103,7 @@ void ProbabilisticDesignOfExperiment::setDesignName(const String& name)
   designName_ = name;
 
   // clear samples
-  inputSample_.clear();
+  originalInputSample_.clear();
   initialize();
 }
 
@@ -122,7 +122,7 @@ void ProbabilisticDesignOfExperiment::setSize(const UnsignedInteger size)
   size_ = size;
 
   // clear samples
-  inputSample_.clear();
+  originalInputSample_.clear();
   initialize();
 }
 
@@ -138,7 +138,7 @@ void ProbabilisticDesignOfExperiment::setSeed(const UnsignedInteger seed)
   seed_ = seed;
 
   // clear samples
-  inputSample_.clear();
+  originalInputSample_.clear();
   initialize();
 }
 

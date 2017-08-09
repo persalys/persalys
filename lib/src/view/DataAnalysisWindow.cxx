@@ -24,7 +24,6 @@
 #include "otgui/DesignOfExperimentWindow.hxx"
 #include "otgui/MinMaxTableGroupBox.hxx"
 #include "otgui/MomentsEstimatesTableGroupBox.hxx"
-#include "otgui/PlotWidgetWithGraphSetting.hxx"
 #include "otgui/ParametersTableView.hxx"
 #include "otgui/ExportableTableView.hxx"
 #include "otgui/SampleTableModel.hxx"
@@ -85,18 +84,19 @@ void DataAnalysisWindow::buildInterface()
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
   // - list outputs
-  variablesGroupBox_ = new QGroupBox(tr("Variables"));
+  variablesGroupBox_ = new QGroupBox(tr("Variable(s)", "", variablesNames.size()));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(variablesGroupBox_);
 
   variablesListWidget_ = new OTguiListWidget;
   variablesListWidget_->addItems(variablesNames);
-  for (int i=0; i<outputNames_.size(); ++i)
+  for (int i = 0; i < outputNames_.size(); ++i)
     variablesListWidget_->item(i)->setData(Qt::UserRole, stochInputNames_.size() + i);
-  for (int i=0; i<stochInputNames_.size(); ++i)
+  for (int i = 0; i < stochInputNames_.size(); ++i)
     variablesListWidget_->item(outputNames_.size() + i)->setData(Qt::UserRole, i);
 
   variablesListWidget_->setCurrentRow(0);
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), this, SLOT(updateSpinBoxes(int)));
+
   outputsLayoutGroupBox->addWidget(variablesListWidget_);
 
   mainWidget->addWidget(variablesGroupBox_);

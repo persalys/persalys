@@ -27,7 +27,6 @@
 #include "otgui/InputTableProbabilisticModel.hxx"
 #include "otgui/CorrelationTableModel.hxx"
 #include "otgui/CopyableTableView.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/ValueLineEdit.hxx"
 #include "otgui/CheckableHeaderView.hxx"
@@ -49,8 +48,6 @@ class OTGUI_API ProbabilisticModelWindow : public OTguiSubWindow
 public :
   ProbabilisticModelWindow(const OTStudy& otStudy, ProbabilisticModelItem * item, QWidget * parent=0);
 
-  virtual ~ProbabilisticModelWindow();
-
 protected:
   void buildInterface();
   void updateStochasticInputsTable();
@@ -68,8 +65,6 @@ public slots:
   void typeDistributionParametersChanged(int);
   void truncationParametersChanged();
   void truncationParametersStateChanged();
-  void showHideGraphConfigurationWidget(int indexTab);
-  void showHideGraphConfigurationWidget(Qt::WindowStates, Qt::WindowStates);
   void reInitCorrelationErrorMessage(QTimeLine::State);
   void openWizardToChooseInferenceResult(const QModelIndex&);
 
@@ -84,7 +79,6 @@ private:
   ValueLineEdit * valueForDeterministicVariable_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
-  GraphConfigurationWidget * pdf_cdfPlotsConfigurationWidget_;
   QGroupBox * paramEditor_;
   QVBoxLayout * parameterLayout_;
   QLabel * parameterValuesLabel_[5];

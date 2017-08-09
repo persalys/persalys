@@ -28,7 +28,7 @@ aDesign = otguibase.DesignOfExperimentImplementation('design', model)
 validationInputSample = ot.LHSExperiment(model.getComposedDistribution(), 10).generate()
 inputSample = ot.Sample(validationInputSample)
 inputSample.stack(ot.Sample(10, [0.5]))
-aDesign.setInputSample(inputSample)
+aDesign.setOriginalInputSample(inputSample)
 myStudy.add(aDesign)
 
 aDesign.run()
@@ -41,13 +41,13 @@ myStudy.add(analysis)
 print(analysis)
 
 analysis.run()
-
 metaModel = analysis.getResult().getResultForVariable('y0').getMetaModel()
 openturns.testing.assert_almost_equal(aDesign.getOutputSample(), metaModel(validationInputSample), 3.0e-5, 3.0e-5)
 
 ## Design of Experiment ##
 model.addOutput(otguibase.Output('y1'))
 model.setFormula('y1', formula_y0 + ' + xi3')
+aDesign.setInterestVariables(['y0', 'y1'])
 aDesign.run()
 
 ## Kriging ##
