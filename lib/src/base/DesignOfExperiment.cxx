@@ -104,6 +104,12 @@ Description DesignOfExperiment::getVariableInputNames() const
 }
 
 
+Sample DesignOfExperiment::getOriginalInputSample() const
+{
+  return getImplementation()->getOriginalInputSample();
+}
+
+
 Sample DesignOfExperiment::getInputSample() const
 {
   return getImplementation()->getInputSample();
@@ -143,6 +149,36 @@ String DesignOfExperiment::getErrorMessage() const
 int DesignOfExperiment::getProgressValue() const
 {
   return getImplementation()->getProgressValue();
+}
+
+
+UnsignedInteger DesignOfExperiment::getBlockSize() const
+{
+  return getImplementation()->getBlockSize();
+}
+
+
+void DesignOfExperiment::setBlockSize(const UnsignedInteger size)
+{
+  getImplementation()->setBlockSize(size);
+}
+
+
+Description DesignOfExperiment::getInterestVariables() const
+{
+  return getImplementation()->getInterestVariables();
+}
+
+
+void DesignOfExperiment::setInterestVariables(const Description& variablesNames)
+{
+  getImplementation()->setInterestVariables(variablesNames);
+}
+
+
+void DesignOfExperiment::requestEvaluation()
+{
+   getImplementation()->notify("evaluationRequested");
 }
 
 

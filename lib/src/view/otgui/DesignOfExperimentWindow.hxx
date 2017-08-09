@@ -29,7 +29,7 @@
 #include <QGroupBox>
 
 namespace OTGUI {
-class OTGUI_API DesignOfExperimentWindow : public OTguiSubWindow
+class OTGUI_API DesignOfExperimentWindow : public ResultWindow
 {
   Q_OBJECT
 

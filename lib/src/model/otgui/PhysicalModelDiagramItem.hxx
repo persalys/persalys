@@ -25,9 +25,6 @@
 #include "otgui/ProbabilisticModelItem.hxx"
 #include "otgui/LimitStateItem.hxx"
 #include "otgui/DesignOfExperimentDefinitionItem.hxx"
-#include <QMetaType> // mandatory to specify it to avoid windows compilation problem
-
-Q_DECLARE_METATYPE(OTGUI::DesignOfExperimentDefinitionItem*)
 
 namespace OTGUI {
 class OTGUI_API PhysicalModelDiagramItem : public PhysicalModelItem
@@ -75,7 +72,7 @@ signals:
   void sensitivityRequested();
   void limitStateRequested();
   void designOfExperimentRequested();
-  void designOfExperimentEvaluationRequested(QList<QStandardItem*>);
+  void designOfExperimentEvaluationRequested(OTguiItem*, const Analysis&, const bool isGeneralWizard=false);
 
   void modelDefinitionWindowRequested(PhysicalModelDefinitionItem*);
   void newProbabilisticModelItemCreated(ProbabilisticModelItem*);

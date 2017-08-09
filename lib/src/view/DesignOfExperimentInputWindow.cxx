@@ -51,7 +51,7 @@ void DesignOfExperimentInputWindow::buildInterface()
   QStringList namesList;
   namesList << tr("Sample size");
   QStringList valuesList;
-  valuesList << QString::number(designOfExperiment_.getInputSample().getSize());
+  valuesList << QString::number(designOfExperiment_.getOriginalInputSample().getSize());
   const ProbabilisticDesignOfExperiment * doe_ptr = dynamic_cast<const ProbabilisticDesignOfExperiment*>(designOfExperiment_.getImplementation().get());
   if (doe_ptr)
   {
@@ -74,7 +74,7 @@ void DesignOfExperimentInputWindow::buildInterface()
   ExportableTableView * tableView = new ExportableTableView;
   tableView->setSortingEnabled(true);
 
-  SampleTableModel * tableModel = new SampleTableModel(designOfExperiment_.getInputSample(), tableView);
+  SampleTableModel * tableModel = new SampleTableModel(designOfExperiment_.getOriginalInputSample(), tableView);
   QSortFilterProxyModel * proxyModel = new QSortFilterProxyModel(tableView);
   proxyModel->setSourceModel(tableModel);
 

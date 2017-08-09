@@ -55,6 +55,7 @@ public:
 
   OT::Description getVariableInputNames() const;
 
+  OT::Sample getOriginalInputSample() const;
   OT::Sample getInputSample() const;
   OT::Sample getFailedInputSample() const;
   OT::Sample getNotEvaluatedInputSample() const;
@@ -64,6 +65,13 @@ public:
   OT::String getErrorMessage() const;
   int getProgressValue() const;
 
+  OT::UnsignedInteger getBlockSize() const;
+  virtual void setBlockSize(const OT::UnsignedInteger size);
+
+  OT::Description getInterestVariables() const;
+  virtual void setInterestVariables(const OT::Description& variablesNames);
+
+  void requestEvaluation();
   void run();
   OT::String getPythonScript() const;
   void stop();

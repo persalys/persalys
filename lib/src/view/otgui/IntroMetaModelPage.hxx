@@ -30,9 +30,6 @@
 #include <QComboBox>
 #include <QStandardItemModel>
 #include <QButtonGroup>
-#include <QMetaType> // mandatory to specify it to avoid windows compilation problem
-
-Q_DECLARE_METATYPE(OTGUI::DesignOfExperiment)
 
 namespace OTGUI {
 

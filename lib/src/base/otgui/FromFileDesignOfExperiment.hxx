@@ -34,8 +34,10 @@ public:
   /** Constructor with parameters */
   FromFileDesignOfExperiment(const OT::String& name, const PhysicalModel& physicalModel);
   /** Constructor with parameters */
-  FromFileDesignOfExperiment(const OT::String& name, const PhysicalModel& physicalModel,
-                             const OT::String& fileName, const OT::Indices& inputColumns);
+  FromFileDesignOfExperiment(const OT::String& name,
+                             const PhysicalModel& physicalModel,
+                             const OT::String& fileName,
+                             const OT::Indices& inputColumns);
 
   /** Virtual constructor */
   virtual FromFileDesignOfExperiment * clone() const;

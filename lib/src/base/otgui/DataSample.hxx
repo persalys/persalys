@@ -59,9 +59,8 @@ public:
 private:
   void searchMinMax() const;
 
-protected:
-  mutable OT::Sample inputSample_;
 private:
+  OT::Sample inputSample_;
   OT::Sample outputSample_;
   mutable OT::Sample sample_;
   mutable OT::PersistentCollection<OT::Sample> listXMin_;

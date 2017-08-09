@@ -289,19 +289,14 @@ void StudyTreeView::createNewDesignOfExperiment(OTguiItem* item, const DesignOfE
 }
 
 
-void StudyTreeView::createNewDesignOfExperimentEvaluation(QList<QStandardItem*> listDOE)
+void StudyTreeView::createNewDesignOfExperimentEvaluation(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard)
 {
-  DesignOfExperimentSelectionWizard wizard(listDOE, this);
+  DesignOfExperimentSelectionWizard wizard(item, analysis, isGeneralWizard, this);
 
   if (wizard.exec())
   {
-    DesignOfExperimentDefinitionItem * currentDOEItem = wizard.getSelectedDesignOfExperimentItem();
-    if (!currentDOEItem)
-    {
-      qDebug() << "Error: In createNewDesignOfExperimentEvaluation: DOE item not found\n";
-      return;
-    }
-    currentDOEItem->appendEvaluationItem();
+    DesignOfExperiment doe = wizard.getDesignOfExperiment();
+    doe.requestEvaluation();
   }
 }
 
@@ -415,7 +410,7 @@ void StudyTreeView::createNewPhysicalModelDiagramWindow(PhysicalModelDiagramItem
   connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
   connect(item, SIGNAL(newLimitStateCreated(LimitStateItem*)), this, SLOT(createNewLimitStateWindow(LimitStateItem*)));
   connect(item, SIGNAL(newDesignOfExperimentCreated(DesignOfExperimentDefinitionItem*)), this, SLOT(createNewDesignOfExperimentWindow(DesignOfExperimentDefinitionItem*)));
-  connect(item, SIGNAL(designOfExperimentEvaluationRequested(QList<QStandardItem*>)), this, SLOT(createNewDesignOfExperimentEvaluation(QList<QStandardItem*>)));
+  connect(item, SIGNAL(designOfExperimentEvaluationRequested(OTguiItem*, Analysis, bool)), this, SLOT(createNewDesignOfExperimentEvaluation(OTguiItem*, Analysis, bool)));
   connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis, bool)), this, SLOT(createNewAnalysis(OTguiItem*, Analysis, bool)));
 
   // window
@@ -533,10 +528,11 @@ void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentDefiniti
   if (createConnections)
   {
     connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
-    connect(item, SIGNAL(designOfExperimentEvaluationRequested(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
     connect(item, SIGNAL(modifyDesignOfExperimentRequested(DesignOfExperimentDefinitionItem*)), this, SLOT(modifyDesignOfExperiment(DesignOfExperimentDefinitionItem*)));
     connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
     connect(item, SIGNAL(analysisRequested(OTguiItem*,Analysis)), this, SLOT(createNewAnalysis(OTguiItem*,Analysis)));
+    connect(item, SIGNAL(evaluationRequested(OTguiItem*,Analysis)), this, SLOT(createNewDesignOfExperimentEvaluation(OTguiItem*,Analysis)));
+    connect(item, SIGNAL(updateEvaluationWindowRequested(AnalysisItem*)), this, SLOT(modifyDesignOfExperimentEvaluation(AnalysisItem*)));
   }
 
   // window
@@ -661,6 +657,19 @@ void StudyTreeView::modifyDesignOfExperiment(DesignOfExperimentDefinitionItem* i
     item->updateDesignOfExperiment(wizard.getDesignOfExperiment());
     createNewDesignOfExperimentWindow(item, false);
   }
+}
+
+
+void StudyTreeView::modifyDesignOfExperimentEvaluation(AnalysisItem* item)
+{
+  if (!item)
+    return;
+
+  // update window
+  emit removeSubWindow(item);
+  createAnalysisWindow(item);
+
+  emit itemSelected(item);
 }
 
 

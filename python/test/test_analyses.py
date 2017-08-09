@@ -53,7 +53,7 @@ ot.RandomGenerator.SetSeed(0)
 design_1 = otguibase.DesignOfExperimentImplementation('design_1', model1)
 inputSample = ot.LHSExperiment(ot.ComposedDistribution([ot.Uniform(0., 10.), ot.Uniform(0., 10.)]), 10).generate()
 inputSample.stack(ot.Sample(10, [0.5]))
-design_1.setInputSample(inputSample)
+design_1.setOriginalInputSample(inputSample)
 design_1.run()
 myStudy.add(design_1)
 

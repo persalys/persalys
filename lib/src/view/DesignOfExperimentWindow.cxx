@@ -53,7 +53,7 @@ using namespace OT;
 namespace OTGUI {
 
 DesignOfExperimentWindow::DesignOfExperimentWindow(AnalysisItem* item, QWidget * parent)
-  : OTguiSubWindow(item, parent)
+  : ResultWindow(item, parent)
   , designOfExperiment_()
   , variablesGroupBox_(0)
   , variablesListWidget_(0)
@@ -64,6 +64,9 @@ DesignOfExperimentWindow::DesignOfExperimentWindow(AnalysisItem* item, QWidget *
     throw InvalidArgumentException (HERE) << "The analysis must be a DesignOfExperimentAnalysis";
 
   designOfExperiment_ = analysis_ptr->getDesignOfExperiment();
+
+  // parameters widget
+  setParameters(item->getAnalysis(), tr("Design of experiment evaluation parameters"));
 
   buildInterface();
 }
@@ -102,6 +105,8 @@ void DesignOfExperimentWindow::buildInterface()
   addPlotMatrixTab();
   addScatterPlotsTab();
 #endif
+  if (parametersWidget_)
+    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(updateVariablesListVisibility(int)));
 

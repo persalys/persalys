@@ -22,8 +22,12 @@
 #define OTGUI_OTGUIWIZARD_HXX
 
 #include "otgui/Analysis.hxx"
+#include "otgui/DesignOfExperiment.hxx"
 
 #include <QWizard>
+#include <QMetaType> // mandatory to specify it to avoid windows compilation problem
+
+Q_DECLARE_METATYPE(OTGUI::DesignOfExperiment)
 
 namespace OTGUI {
 class OTGUI_API OTguiWizard : public QWizard

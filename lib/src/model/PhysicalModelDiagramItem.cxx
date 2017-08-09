@@ -23,6 +23,7 @@
 #include "otgui/OTStudyItem.hxx"
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
 #include "otgui/FunctionalChaosAnalysis.hxx"
+#include "otgui/DesignOfExperimentEvaluation.hxx"
 
 #include <QDebug>
 
@@ -131,47 +132,45 @@ void PhysicalModelDiagramItem::requestDesignOfExperimentEvaluation()
     emit emitErrorMessageRequested(tr("There is no design of experiment."));
     return;
   }
-  // find all the designs of experiment which have not been evaluated
-  QList<QStandardItem*> listDOEItems;
-  for (UnsignedInteger i=0; i<getParentOTStudyItem()->getOTStudy().getDesignOfExperiments().getSize(); ++i)
+  // find the first design of experiment which have not been evaluated
+  DesignOfExperiment design;
+  for (UnsignedInteger i = 0; i < getParentOTStudyItem()->getOTStudy().getDesignOfExperiments().getSize(); ++i)
   {
     DesignOfExperiment doe_i(getParentOTStudyItem()->getOTStudy().getDesignOfExperiments()[i]);
     if (doe_i.getPhysicalModel().getImplementation().get() == physicalModel_.getImplementation().get() &&
-        !doe_i.getOutputSample().getSize()
+       !doe_i.getOutputSample().getSize()
        )
     {
-      DesignOfExperimentDefinitionItem * doeItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doe_i.getImplementation().get()->getObserver("DesignOfExperimentDefinition"));
-      if (doeItem)
-      {
-        QStandardItem * item = new QStandardItem(doe_i.getName().c_str());
-        item->setData(qVariantFromValue(doeItem));
-        listDOEItems.append(item);
-      }
+      design = doe_i;
+      break;
     }
   }
 
-		// check
-  if (listDOEItems.isEmpty())
+  // check
+  if (!design.getOriginalInputSample().getSize())
   {
-    emit emitErrorMessageRequested(tr("All the designs of experiment have already been evaluated."));
+    emit emitErrorMessageRequested(tr("All the designs of experiment have already been evaluated.\n"));
     return;
   }
 
-  // emit signal to StudyTreeView to open a wizard (with the list of designs of experiment)
-  emit designOfExperimentEvaluationRequested(listDOEItems);
+  // new analysis
+  DesignOfExperimentEvaluation analysis(design);
+  // emit signal to StudyTreeView to open a 'general' wizard (with a list of designs of experiment)
+  emit designOfExperimentEvaluationRequested(this, analysis, true);
 }
 
 
 void PhysicalModelDiagramItem::requestMetaModelCreation()
 {
   DesignOfExperiment design;
-  for (UnsignedInteger i=0; i<getParentOTStudyItem()->getOTStudy().getDesignOfExperiments().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getParentOTStudyItem()->getOTStudy().getDesignOfExperiments().getSize(); ++i)
   {
-    if (getParentOTStudyItem()->getOTStudy().getDesignOfExperiments()[i].getPhysicalModel().getImplementation().get() == physicalModel_.getImplementation().get() &&
-        getParentOTStudyItem()->getOTStudy().getDesignOfExperiments()[i].getOutputSample().getSize()
+    DesignOfExperiment doe_i(getParentOTStudyItem()->getOTStudy().getDesignOfExperiments()[i]);
+    if (doe_i.getPhysicalModel().getImplementation().get() == physicalModel_.getImplementation().get() &&
+        doe_i.getOutputSample().getSize()
        )
     {
-      design = getParentOTStudyItem()->getOTStudy().getDesignOfExperiments()[i];
+      design = doe_i;
       break;
     }
   }
@@ -192,7 +191,7 @@ void PhysicalModelDiagramItem::requestMetaModelCreation()
 void PhysicalModelDiagramItem::requestReliabilityCreation()
 {
   LimitState limitState;
-  for (UnsignedInteger i=0; i<getParentOTStudyItem()->getOTStudy().getLimitStates().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getParentOTStudyItem()->getOTStudy().getLimitStates().getSize(); ++i)
   {
     if (getParentOTStudyItem()->getOTStudy().getLimitStates()[i].getPhysicalModel().getImplementation().get() == physicalModel_.getImplementation().get())
     {

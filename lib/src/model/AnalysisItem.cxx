@@ -364,10 +364,12 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
 
     // Parameters names
     namesList << tr("Sample size")
-              << tr("Outputs to be evaluated");
+              << tr("Outputs to be evaluated")
+              << tr("Block size");
     // Parameters values
-    valuesList << QString::number(doeEvaluation.getDesignOfExperiment().getInputSample().getSize());
-    valuesList << doeEvaluation.getDesignOfExperiment().getPhysicalModel().getSelectedOutputsNames().__str__().c_str();
+    valuesList << QString::number(doeEvaluation.getDesignOfExperiment().getOriginalInputSample().getSize())
+               << doeEvaluation.getDesignOfExperiment().getInterestVariables().__str__().c_str()
+               << QString::number(doeEvaluation.getDesignOfExperiment().getBlockSize());
   }
   else if (analysisType == "TaylorExpansionMomentsAnalysis")
   {

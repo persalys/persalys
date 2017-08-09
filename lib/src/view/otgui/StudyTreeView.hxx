@@ -49,8 +49,8 @@ public slots:
   // create objects
   void createNewOTStudy();
   void createNewDesignOfExperiment(OTguiItem* item, const DesignOfExperiment& design);
-  void createNewDesignOfExperimentEvaluation(QList<QStandardItem*> items);
   void createNewAnalysis(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard=false);
+  void createNewDesignOfExperimentEvaluation(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard=false);
 
   // create windows
   void createNewOTStudyWindow(OTStudyItem* item);
@@ -67,6 +67,7 @@ public slots:
 
   // modify objects
   void modifyDesignOfExperiment(DesignOfExperimentDefinitionItem* item);
+  void modifyDesignOfExperimentEvaluation(AnalysisItem* item);
   void modifyAnalysis(AnalysisItem* item);
 
   // export/save/clos otstudy

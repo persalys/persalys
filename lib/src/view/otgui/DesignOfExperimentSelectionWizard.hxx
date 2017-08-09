@@ -23,9 +23,12 @@
 
 #include "otgui/DesignOfExperimentDefinitionItem.hxx"
 #include "otgui/OTguiWizard.hxx"
+#include "otgui/OutputsSelectionGroupBox.hxx"
+#include "otgui/BlockSizeGroupBox.hxx"
 
 #include <QStandardItem>
 #include <QComboBox>
+#include <QLabel>
 
 namespace OTGUI {
 
@@ -34,13 +37,23 @@ class OTGUI_API DesignOfExperimentSelectionWizard : public OTguiWizard
   Q_OBJECT
 
 public:
-  DesignOfExperimentSelectionWizard(QList<QStandardItem*> listDOE, QWidget *parent=0);
+  DesignOfExperimentSelectionWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard, QWidget* parent=0);
 
-  DesignOfExperimentDefinitionItem* getSelectedDesignOfExperimentItem();
+  DesignOfExperiment getCurrentDesignOfExperiment() const;
+  DesignOfExperiment getDesignOfExperiment() const;
+  virtual bool validateCurrentPage();
+
+protected slots:
+  void clearErrorMessage();
+  void updateWidgets(int index);
 
 private:
-  QComboBox * comboBox_;
-  QStandardItemModel * comboModel_;
+  QComboBox * doesComboBox_;
+  QStandardItemModel * doesComboBoxModel_;
+  QLabel * doeLabel_;
+  OutputsSelectionGroupBox * outputsSelectionGroupBox_;
+  BlockSizeGroupBox * blockSizeGroupBox_;
+  QLabel * errorMessageLabel_;
 };
 }
 #endif
