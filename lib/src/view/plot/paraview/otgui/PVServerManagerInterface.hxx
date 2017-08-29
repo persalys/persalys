@@ -14,18 +14,18 @@ class OTGUI_API PVServerManagerInterface
 public:
   virtual pqServer *fetchServer(bool *isRemote=0)
   {
-  pqServer *ret(pqActiveObjects::instance().activeServer());
-  if(!ret)
-    throw OT::InvalidArgumentException(HERE) << "Ooops no server !";
-  if(isRemote)
-    {
-      if(!ret)
-        *isRemote=false;
-      else
-        *isRemote=ret->isRemote();
-    }
-  return ret;
-}
+    pqServer *ret(pqActiveObjects::instance().activeServer());
+    if(!ret)
+      throw OT::InvalidArgumentException(HERE) << "Ooops no server !";
+    if(isRemote)
+      {
+        if(!ret)
+          *isRemote=false;
+        else
+          *isRemote=ret->isRemote();
+      }
+    return ret;
+  }
 };
 }
 #endif

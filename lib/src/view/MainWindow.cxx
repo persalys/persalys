@@ -40,6 +40,8 @@
 #include <vtkSMProxyManager.h>
 #include <vtkSMWriterFactory.h>
 #include <pqParaViewBehaviors.h>
+#include "otgui/PVServerManagerInterface.hxx"
+#include "otgui/PVServerManagerSingleton.hxx"
 #endif
 
 namespace OTGUI {
@@ -56,6 +58,7 @@ MainWindow::MainWindow()
   new pqParaViewBehaviors(this, this);
   // UpdateAvailableWriters : to be able to export the data from spread sheets
   vtkSMProxyManager::GetProxyManager()->GetWriterFactory()->UpdateAvailableWriters();
+  PVServerManagerSingleton::Init(new PVServerManagerInterface);
 #endif
 
   buildInterface();

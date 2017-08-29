@@ -33,6 +33,7 @@
 
 #ifdef OTGUI_HAVE_PARAVIEW
 #include "otgui/PVServerManagerInterface.hxx"
+#include "otgui/PVServerManagerSingleton.hxx"
 #include "otgui/PVSpreadSheetViewWidget.hxx"
 #include "otgui/PVParCooViewWidget.hxx"
 #include "otgui/PVMatrixPlotViewWidget.hxx"
@@ -423,7 +424,7 @@ void DataAnalysisWindow::addPlotMatrixTab()
 
 void DataAnalysisWindow::addScatterPlotsTab()
 {
-  WidgetBoundToDockWidget * scatterWidget = new WidgetBoundToDockWidget;
+  WidgetBoundToDockWidget * scatterWidget = new WidgetBoundToDockWidget(this);
   QVBoxLayout * scatterWidgetLayout = new QVBoxLayout(scatterWidget);
 
   QVector<PlotWidget*> listScatterPlotWidgets = PlotWidget::GetListScatterPlots(designOfExperiment_.getInputSample(),
@@ -477,7 +478,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
 {
   // table tab
   // with paraview the table is always shown in order to use the selection behavior
-  PVSpreadSheetViewWidget * pvSpreadSheetWidget = new PVSpreadSheetViewWidget(this, new PVServerManagerInterface);
+  PVSpreadSheetViewWidget * pvSpreadSheetWidget = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
   pvSpreadSheetWidget->setData(designOfExperiment_.getSample());
 
   tabWidget_->addTab(pvSpreadSheetWidget, tr("Table"));
@@ -489,7 +490,8 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   // cobweb tab --------------------------------
   WidgetBoundToDockWidget * cobwebTabWidget = new WidgetBoundToDockWidget(this);
   QVBoxLayout * cobwebTabWidgetLayout = new QVBoxLayout(cobwebTabWidget);
-  PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, new PVServerManagerInterface);
+
+  PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, PVServerManagerSingleton::Get());
   cobwebWidget->setData(designOfExperiment_.getSample());
   cobwebTabWidgetLayout->addWidget(cobwebWidget);
 
@@ -501,7 +503,8 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   // plot matrix tab --------------------------------
   WidgetBoundToDockWidget * matrixTabWidget = new WidgetBoundToDockWidget(this);
   QVBoxLayout * matrixTabWidgetLayout = new QVBoxLayout(matrixTabWidget);
-  PVMatrixPlotViewWidget * pvmatrixWidget = new PVMatrixPlotViewWidget(this, new PVServerManagerInterface);
+
+  PVMatrixPlotViewWidget * pvmatrixWidget = new PVMatrixPlotViewWidget(this, PVServerManagerSingleton::Get());
   pvmatrixWidget->setData(designOfExperiment_.getSample());
   // the variables are automatically sorted : use setAxisToShow with the order of the sample
   pvmatrixWidget->setAxisToShow(designOfExperiment_.getSample().getDescription());
@@ -518,7 +521,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   QVBoxLayout * scatterTabWidgetLayout = new QVBoxLayout(scatterTabWidget);
 
   // sample
-  PVXYChartViewWidget * sampleScatterPlotWidget = new PVXYChartViewWidget(this, new PVServerManagerInterface);
+  PVXYChartViewWidget * sampleScatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
   sampleScatterPlotWidget->PVViewWidget::setData(designOfExperiment_.getSample());
   if ((inputNames_ + outputNames_) != (inAxisTitles_ + outAxisTitles_))
     sampleScatterPlotWidget->setAxisTitles(inputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);
@@ -526,7 +529,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
 
   // sample rank
   const Sample sampleRank(designOfExperiment_.getSample().rank() / designOfExperiment_.getSample().getSize());
-  PVXYChartViewWidget * sampleRankScatterPlotWidget = new PVXYChartViewWidget(this, new PVServerManagerInterface);
+  PVXYChartViewWidget * sampleRankScatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
   sampleRankScatterPlotWidget->PVViewWidget::setData(sampleRank);
   if ((inputNames_ + outputNames_) != (inAxisTitles_ + outAxisTitles_))
     sampleRankScatterPlotWidget->setAxisTitles(inputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);
