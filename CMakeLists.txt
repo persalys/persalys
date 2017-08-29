@@ -114,6 +114,8 @@ endif ()
 
 if (USE_SALOME)
   find_package (SalomeKERNEL NO_MODULE)
+  find_package (Qt5WebEngine NO_MODULE)
+  find_package (Qt5WebEngineWidgets NO_MODULE)
   find_package (SalomeGUI NO_MODULE)
   find_package (SalomeYACS NO_MODULE)
   if (SalomeYACS_FOUND)
