@@ -32,7 +32,7 @@ WidgetBoundToDockWidget::WidgetBoundToDockWidget(QWidget* parent)
   , dockWidgetAlreadyShown_(false)
   , parentSubWindow_(0)
 {
-  MainWindow * mainWindow = findMainWindowInHierachy();
+  MainWidget * mainWindow = findMainWindowInHierachy();
   if (!mainWindow)
     throw InvalidArgumentException(HERE) << "Internal error : No main window found !";
 
@@ -46,12 +46,12 @@ WidgetBoundToDockWidget::WidgetBoundToDockWidget(QWidget* parent)
 }
 
 
-MainWindow * WidgetBoundToDockWidget::findMainWindowInHierachy()
+MainWidget * WidgetBoundToDockWidget::findMainWindowInHierachy()
 {
   QObject * curPar(parent());
   while (curPar)
   {
-    MainWindow * isMW(qobject_cast<MainWindow *>(curPar));
+    MainWidget * isMW(qobject_cast<MainWidget *>(curPar));
     if (isMW)
       return isMW;
     curPar = curPar->parent();

@@ -26,31 +26,21 @@
 
 namespace OTGUI {
 
-OTguiMenuBar::OTguiMenuBar()
+OTguiMenuBar::OTguiMenuBar(const OTguiActions* actions)
   : QMenuBar()
 {
-  buildActions();
+  buildActions(actions);
 }
 
 
-void OTguiMenuBar::buildActions()
+void OTguiMenuBar::buildActions(const OTguiActions* actions)
 {
   // File menu
   QMenu * fileMenu = new QMenu(tr("&File"));
+  QAction* action;
 
-  QAction * action = new QAction(QIcon(":/images/document-new.png"), tr("&New"), this);
-  action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
-  action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-  action->setStatusTip(tr("Create a new OTStudy"));
-  connect(action, SIGNAL(triggered()), this, SIGNAL(createNewOTStudy()));
-  fileMenu->addAction(action);
-
-  action = new QAction(QIcon(":/images/document-open.png"), tr("&Open..."), this);
-  action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_O));
-  action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-  action->setStatusTip(tr("Open an existing OTStudy"));
-  connect(action, SIGNAL(triggered()), this, SIGNAL(openOTStudy()));
-  fileMenu->addAction(action);
+  fileMenu->addAction(actions->newAction());
+  fileMenu->addAction(actions->openAction());
 
   for (int i=0; i<NbMaxRecentFiles; ++i)
   {
@@ -70,37 +60,17 @@ void OTguiMenuBar::buildActions()
 
   addSeparator();
 
-  action = new QAction(QIcon(":/images/document-save.png"), tr("Save"), this);
-  action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_S));
-  action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-  action->setStatusTip(tr("Save the current OTStudy"));
-  connect(action, SIGNAL(triggered()), this, SIGNAL(saveOTStudy()));
-  fileMenu->addAction(action);
-
-  action = new QAction(QIcon(":/images/document-save-as.png"), tr("Save As..."), this);
-  action->setStatusTip(tr("Save the current OTStudy with a new name"));
-  connect(action, SIGNAL(triggered()), this, SIGNAL(saveAsOTStudy()));
-  fileMenu->addAction(action);
+  fileMenu->addAction(actions->saveAction());
+  fileMenu->addAction(actions->saveAsAction());
 
   addSeparator();
 
-  importPythonAction_ = new QAction(QIcon(":/images/document-import.png"), tr("&Import Python..."), this);
-  importPythonAction_->setStatusTip(tr("Import a Python Script"));
-  connect(importPythonAction_, SIGNAL(triggered()), this, SIGNAL(importPython()));
-  fileMenu->addAction(importPythonAction_);
+  fileMenu->addAction(actions->importPyAction());
 
   addSeparator();
 
-  action = new QAction(QIcon(":/images/window-close.png"), tr("Close"), this);
-  action->setStatusTip(tr("Close the current OTStudy"));
-  connect(action, SIGNAL(triggered()), this, SIGNAL(closeOTStudy()));
-  fileMenu->addAction(action);
-
-  action = new QAction(QIcon(":/images/window-close.png"), tr("E&xit"), this);
-  action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Q));
-  action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-  connect(action, SIGNAL(triggered()), this, SIGNAL(closeWindow()));
-  fileMenu->addAction(action);
+  fileMenu->addAction(actions->closeAction());
+  fileMenu->addAction(actions->exitAction());
 
   addMenu(fileMenu);
 
@@ -171,10 +141,10 @@ void OTguiMenuBar::clearRecentFilesActions()
   updateRecentFilesActionsList();
 }
 
-
+/*
 void OTguiMenuBar::updateActionsAvailability(const bool analysisInProgress)
 {
   // can not import a Python script when an analysis is running
   importPythonAction_->setDisabled(analysisInProgress);
-}
+}*/
 }

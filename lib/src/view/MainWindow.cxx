@@ -46,9 +46,8 @@ namespace OTGUI {
 
 MainWindow::MainWindow()
   : QMainWindow()
-  , studyTree_(new StudyTreeView(this))
-  , graphSettingDockWidget_(0)
-  , pythonConsole_(0)
+  , mainWidget_(new MainWidget(this))
+  , pythonConsole_(new PyConsole_Console(this))
 {
   setWindowTitle("OTGui");
   setWindowIcon(QIcon(":/images/OT_icon32x32.png"));
@@ -67,47 +66,13 @@ MainWindow::MainWindow()
 void MainWindow::buildInterface()
 {
   // main widget
-  QSplitter * mainSplitter = new QSplitter(Qt::Horizontal);
+  QSplitter * mainSplitter = new QSplitter(Qt::Vertical);
 
-  // left side of the mainSplitter
-  QSplitter * leftSideSplitter = new QSplitter(Qt::Vertical);
-  leftSideSplitter->addWidget(studyTree_);
-  leftSideSplitter->setStretchFactor(0, 8);
-
-  graphSettingDockWidget_ = new QDockWidget(tr("Graph setting"));
-  graphSettingDockWidget_->setFeatures(QDockWidget::NoDockWidgetFeatures);
-  leftSideSplitter->addWidget(graphSettingDockWidget_);
-  graphSettingDockWidget_->close();
-  leftSideSplitter->setStretchFactor(1, 2);
-
-  mainSplitter->addWidget(leftSideSplitter);
-  mainSplitter->setStretchFactor(0, 0);
-
-  // right side of the mainSplitter
-  QSplitter * rightSideSplitter = new QSplitter(Qt::Vertical);
-
-  // welcome page
-  WelcomeWindow * welcomeWindow = new WelcomeWindow;
-  rightSideSplitter->addWidget(welcomeWindow);
-  connect(welcomeWindow, SIGNAL(createNewOTStudy()), studyTree_, SLOT(createNewOTStudy()));
-  connect(welcomeWindow, SIGNAL(openOTStudy()), studyTree_, SLOT(openOTStudy()));
-  connect(welcomeWindow, SIGNAL(importPython()), this, SLOT(importPython()));
-  rightSideSplitter->setStretchFactor(0, 5);
-
-  // MdiArea
-  OTguiMdiArea * mdiArea = new OTguiMdiArea;
-  connect(studyTree_, SIGNAL(showWindow(OTguiSubWindow *)), mdiArea, SLOT(showSubWindow(OTguiSubWindow *)));
-  connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), mdiArea, SLOT(showSubWindow(QStandardItem *)));
-  connect(studyTree_, SIGNAL(removeSubWindow(QStandardItem *)), mdiArea, SLOT(removeSubWindow(QStandardItem *)));
-  rightSideSplitter->addWidget(mdiArea);
-  mdiArea->hide();
-  rightSideSplitter->setStretchFactor(1, 4);
-
-  connect(mdiArea, SIGNAL(mdiAreaEmpty(bool)), welcomeWindow, SLOT(setVisible(bool)));
-  connect(mdiArea, SIGNAL(mdiAreaEmpty(bool)), mdiArea, SLOT(setHidden(bool)));
+  // Main widget
+  mainSplitter->addWidget(mainWidget_);
+  //mainSplitter->setStretchFactor(0, 0);
 
   // Python Console
-  pythonConsole_ = new PyConsole_Console(this);
   pythonConsole_->getInterp()->decrRef();
   pythonConsole_->setIsShowBanner(false);
   pythonConsole_->setAutoCompletion(true);
@@ -115,72 +80,41 @@ void MainWindow::buildInterface()
   QDockWidget * pythonConsoleDock = new QDockWidget(tr("Python Console"));
   pythonConsoleDock->setWidget(pythonConsole_);
   pythonConsoleDock->setFeatures(QDockWidget::DockWidgetClosable);
-  rightSideSplitter->addWidget(pythonConsoleDock);
-  rightSideSplitter->setStretchFactor(2, 1);
+  mainSplitter->addWidget(pythonConsoleDock);
+  mainSplitter->setStretchFactor(2, 1);
 
-  mainSplitter->addWidget(rightSideSplitter);
-  mainSplitter->setStretchFactor(1, 3);
   setCentralWidget(mainSplitter);
 
   // menu bar
-  OTguiMenuBar * menuBar = new OTguiMenuBar;
+  OTguiActions* actions = mainWidget_->getActions();
+  OTguiMenuBar * menuBar = new OTguiMenuBar(actions);
   connect(pythonConsoleDock, SIGNAL(visibilityChanged(bool)), menuBar, SIGNAL(pythonConsoleVisibilityChanged(bool)));
   connect(menuBar, SIGNAL(showHidePythonConsole(bool)), pythonConsoleDock, SLOT(setVisible(bool)));
-  connect(menuBar, SIGNAL(createNewOTStudy()), studyTree_, SLOT(createNewOTStudy()));
-  connect(menuBar, SIGNAL(openOTStudy()), studyTree_, SLOT(openOTStudy()));
-  connect(menuBar, SIGNAL(openOTStudy(QString)), studyTree_, SLOT(openOTStudy(QString)));
-  connect(menuBar, SIGNAL(saveOTStudy()), studyTree_, SLOT(saveCurrentOTStudy()));
-  connect(menuBar, SIGNAL(saveAsOTStudy()), studyTree_, SLOT(saveAsCurrentOTStudy()));
-  connect(menuBar, SIGNAL(importPython()), this, SLOT(importPython()));
-  connect(menuBar, SIGNAL(closeOTStudy()), studyTree_, SLOT(closeOTStudy()));
-  connect(menuBar, SIGNAL(closeWindow()), this, SLOT(exitApplication()));
-  connect(studyTree_, SIGNAL(recentFilesListChanged(QString)), menuBar, SLOT(updateRecentFilesList(QString)));
-  connect(studyTree_, SIGNAL(analysisInProgressStatusChanged(bool)), menuBar, SLOT(updateActionsAvailability(bool)));
+  connect(menuBar, SIGNAL(openOTStudy(QString)), mainWidget_->getStudyTree(), SLOT(openOTStudy(QString)));
+  connect(actions->importPyAction(), SIGNAL(triggered()), this, SLOT(importPython()));
+  connect(actions->exitAction(), SIGNAL(triggered()), this, SLOT(exitApplication()));
+  connect(mainWidget_->getStudyTree(), SIGNAL(recentFilesListChanged(QString)), menuBar, SLOT(updateRecentFilesList(QString)));
   setMenuBar(menuBar);
 
   // tool bar
-  OTguiToolBar * toolBar = new OTguiToolBar;
-  connect(toolBar, SIGNAL(createNewOTStudy()), studyTree_, SLOT(createNewOTStudy()));
-  connect(toolBar, SIGNAL(openOTStudy()), studyTree_, SLOT(openOTStudy()));
-  connect(toolBar, SIGNAL(importPython()), this, SLOT(importPython()));
-  connect(toolBar, SIGNAL(saveOTStudy()), studyTree_, SLOT(saveCurrentOTStudy()));
-  connect(studyTree_, SIGNAL(analysisInProgressStatusChanged(bool)), toolBar, SLOT(updateActionsAvailability(bool)));
+  OTguiToolBar * toolBar = new OTguiToolBar(actions);
   addToolBar(toolBar);
 
   // status bar
   OTguiStatusBar * statusBar = new OTguiStatusBar;
-  connect(mdiArea, SIGNAL(errorMessageChanged(QString)), statusBar, SLOT(showErrorMessage(QString)));
+  connect(mainWidget_->getMdiArea(), SIGNAL(errorMessageChanged(QString)), statusBar, SLOT(showErrorMessage(QString)));
   setStatusBar(statusBar);
 }
 
 
 void MainWindow::buildActions()
 {
-  QAction * action = new QAction(tr("&New"), this);
-  action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
-  connect(action, SIGNAL(triggered()), studyTree_, SLOT(createNewOTStudy()));
-  addAction(action);
-
-  action = new QAction(tr("&Open..."), this);
-  action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_O));
-  connect(action, SIGNAL(triggered()), studyTree_, SLOT(openOTStudy()));
-  addAction(action);
-
-  action = new QAction(tr("Save"), this);
-  action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_S));
-  connect(action, SIGNAL(triggered()), studyTree_, SLOT(saveCurrentOTStudy()));
-  addAction(action);
-
-  action = new QAction(QIcon(":/images/window-close.png"), tr("E&xit"), this);
-  action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Q));
-  connect(action, SIGNAL(triggered()), this, SLOT(exitApplication()));
-  addAction(action);
 }
 
 
 void MainWindow::importPython()
 {
-  if (studyTree_->model()->rowCount())
+  if (mainWidget_->getStudyTree()->model()->rowCount())
   {
     int ret = QMessageBox::warning(this, tr("Warning"),
                                    tr("Cannot import a Python script when other studies are opened.\nDo you want to continue and close the other studies?"),
@@ -188,7 +122,7 @@ void MainWindow::importPython()
                                    QMessageBox::Ok);
     if (ret == QMessageBox::Ok)
     {
-      bool allStudiesClosed = studyTree_->closeAllOTStudies();
+      bool allStudiesClosed = mainWidget_->getStudyTree()->closeAllOTStudies();
       if (!allStudiesClosed)
         return;
     }
@@ -224,24 +158,9 @@ void MainWindow::importPython()
 }
 
 
-void MainWindow::showGraphSettingDockWidget(QWidget * graph)
-{
-  graphSettingDockWidget_->setWidget(graph);
-  graphSettingDockWidget_->show();
-}
-
-
-void MainWindow::hideGraphSettingDockWidget(QWidget* widgetToBeHidden)
-{
-  // if the current dock widget is not widgetToBeHidden : do nothing
-  if (graphSettingDockWidget_->widget() == widgetToBeHidden)
-    graphSettingDockWidget_->close();
-}
-
-
 void MainWindow::closeEvent(QCloseEvent * event)
 {
-  int notCanceled = studyTree_->closeAllOTStudies();
+  int notCanceled = mainWidget_->getStudyTree()->closeAllOTStudies();
 
   if (notCanceled)
   {
@@ -257,7 +176,7 @@ void MainWindow::closeEvent(QCloseEvent * event)
 
 void MainWindow::exitApplication()
 {
-  int ret = studyTree_->closeAllOTStudies();
+  int ret = mainWidget_->getStudyTree()->closeAllOTStudies();
   if (ret)
     close();
 }

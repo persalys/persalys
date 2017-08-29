@@ -22,6 +22,8 @@
 #define OTGUI_OTGUIMENUBAR_HXX
 
 #include "otgui/OTGuiprivate.hxx"
+#include "otgui/OTguiActions.hxx"
+
 #include <QMenuBar>
 
 namespace OTGUI {
@@ -31,33 +33,24 @@ class OTGUI_API OTguiMenuBar : public QMenuBar
 
 public:
   enum { NbMaxRecentFiles = 5 };
-  OTguiMenuBar();
+  OTguiMenuBar(const OTguiActions* actions);
 
 protected:
-  void buildActions();
+  void buildActions(const OTguiActions* actions);
 
 public slots:
   void openRecentFile();
   void updateRecentFilesList(const QString & fileName);
   void updateRecentFilesActionsList();
   void clearRecentFilesActions();
-  void updateActionsAvailability(const bool analysisInProgress);
 signals:
-  void createNewOTStudy();
-  void openOTStudy();
   void openOTStudy(QString);
-  void saveOTStudy();
-  void saveAsOTStudy();
-  void importPython();
-  void closeOTStudy();
-  void closeWindow();
   void showHidePythonConsole(bool);
   void pythonConsoleVisibilityChanged(bool);
 
 private:
   QMenu * recentFilesMenu_;
   QAction * recentFileActions_[NbMaxRecentFiles];
-  QAction * importPythonAction_;
 };
 }
 #endif

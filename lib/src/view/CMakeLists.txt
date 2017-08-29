@@ -8,7 +8,9 @@ set (SOURCEFILES "" CACHE STRING "" FORCE)
 ot_add_current_dir_to_include_dirs ()
 
 ot_add_source_file ( MainWindow.cxx )
+ot_add_source_file ( MainWidget.cxx )
 ot_add_source_file ( OTguiToolBar.cxx )
+ot_add_source_file ( OTguiActions.cxx )
 ot_add_source_file ( OTguiMenuBar.cxx )
 ot_add_source_file ( OTguiStatusBar.cxx )
 ot_add_source_file ( OTguiSubWindow.cxx )
@@ -91,6 +93,8 @@ ot_add_source_file ( CopulaInferenceResultWindow.cxx )
 ot_add_source_file ( WidgetBoundToDockWidget.cxx )
 
 ot_install_header_file ( MainWindow.hxx )
+ot_install_header_file ( MainWidget.hxx )
+ot_install_header_file ( OTguiActions.hxx )
 ot_install_header_file ( OTguiToolBar.hxx )
 ot_install_header_file ( OTguiMenuBar.hxx )
 ot_install_header_file ( OTguiStatusBar.hxx )
@@ -174,6 +178,8 @@ ot_install_header_file ( CopulaParametersTabWidget.hxx )
 ot_install_header_file ( WidgetBoundToDockWidget.hxx )
 
 qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
+                                  otgui/MainWidget.hxx
+                                  otgui/OTguiActions.hxx
                                   otgui/OTguiToolBar.hxx
                                   otgui/OTguiMenuBar.hxx
                                   otgui/OTguiStatusBar.hxx

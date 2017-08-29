@@ -22,6 +22,7 @@
 #define OTGUI_OTGUITOOLBAR_HXX
 
 #include "otgui/OTGuiprivate.hxx"
+#include "otgui/OTguiActions.hxx"
 #include <QToolBar>
 
 namespace OTGUI {
@@ -30,21 +31,21 @@ class OTGUI_API OTguiToolBar : public QToolBar
   Q_OBJECT
 
 public:
-  OTguiToolBar(QWidget * parent=0);
+  OTguiToolBar(const OTguiActions* actions, QWidget * parent=0);
 
 protected:
-  void buildActions();
-
+  void buildActions(const OTguiActions* actions);
+/*
 public slots:
   void updateActionsAvailability(const bool analysisInProgress);
-signals:
+/*signals:
   void createNewOTStudy();
   void openOTStudy();
   void importPython();
   void saveOTStudy();
 
 private:
-  QAction * importPythonAction_;
+  QAction * importPythonAction_;*/
 };
 }
 #endif
