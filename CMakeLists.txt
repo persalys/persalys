@@ -141,17 +141,21 @@ set ( OTGUI_EXAMPLE_PATH ${OTGUI_DATA_PATH}/${PACKAGE_NAME}/examples )
 set ( OTGUI_CONFIG_CMAKE_PATH lib${LIB_SUFFIX}/cmake/otgui )
 set ( DOC_INSTALL_PATH share/${PACKAGE_NAME}/doc )
 
-if ( BUILD_PYTHON )
+if (BUILD_PYTHON)
   # workaround for cmake bug #0013449
-  if ( NOT DEFINED CMAKE_FIND_ROOT_PATH )
-    find_package ( SWIG )
-  else ()
-    find_program ( SWIG_EXECUTABLE NAMES swig2.0 swig )
-    if ( SWIG_EXECUTABLE )
-      set ( SWIG_USE_FILE ${CMAKE_ROOT}/Modules/UseSWIG.cmake )
-      set ( SWIG_FOUND TRUE )
+  if (CMAKE_VERSION VERSION_LESS 3 AND DEFINED CMAKE_FIND_ROOT_PATH)
+    find_program (SWIG_EXECUTABLE NAMES swig2.0 swig)
+    if (SWIG_EXECUTABLE)
+      set (SWIG_USE_FILE ${CMAKE_ROOT}/Modules/UseSWIG.cmake)
+      set (SWIG_FOUND TRUE)
     endif ()
+  else ()
+    find_package (SWIG)
   endif ()
+  if (SWIG_FOUND)
+    include (${SWIG_USE_FILE})
+  endif ()
+
   include (FindPythonModule)
 
   if (USE_SPHINX)
@@ -204,17 +208,13 @@ foreach ( _var PYTHON_MODULE_PATH LIBRARY_PATH INCLUDE_PATH CONFIG_CMAKE_PATH)
   set ( ${_var} ${OTGUI_${_var}} )
 endforeach ( _var )
 
-if (CMAKE_INSTALL_PREFIX MATCHES "^/usr")
-  set (SYSTEM_INSTALL ON)
-else ()
-  set (SYSTEM_INSTALL OFF)
-endif ()
-
-# Selectively add or remove RPATH from executable
-if (NOT SYSTEM_INSTALL)
-  set (CMAKE_INSTALL_RPATH ${LIBRARY_PATH})
-  set (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-endif ()
+# RPATH settings
+set (CMAKE_INSTALL_RPATH ${LIBRARY_PATH})
+set (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+if(POLICY CMP0042)
+  # Set MACOSX_RPATH to ON
+  cmake_policy(SET CMP0042 NEW)
+endif()
 
 # Some useful macros to ease CMakeLists.txt file writing
 set ( SOURCEFILES "" CACHE INTERNAL "List of source files to compile" )
