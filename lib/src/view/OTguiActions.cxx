@@ -36,17 +36,17 @@ OTguiActions::OTguiActions(QObject * parent):
 {
   new_ = new QAction(QIcon(":/images/document-new.png"), tr("&New"), parent);
   new_->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
-  new_->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  new_->setShortcutContext(Qt::ApplicationShortcut);
   new_->setStatusTip(tr("Create a new OTStudy"));
 
   open_ = new QAction(QIcon(":/images/document-open.png"), tr("&Open..."), parent);
   open_->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_O));
-  open_->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  open_->setShortcutContext(Qt::ApplicationShortcut);
   open_->setStatusTip(tr("Open an existing OTStudy"));
 
   save_ = new QAction(QIcon(":/images/document-save.png"), tr("Save"), parent);
   save_->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_S));
-  save_->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  save_->setShortcutContext(Qt::ApplicationShortcut);
   save_->setStatusTip(tr("Save the current OTStudy"));
 
   saveAs_ = new QAction(QIcon(":/images/document-save-as.png"), tr("Save As..."), parent);
@@ -60,7 +60,7 @@ OTguiActions::OTguiActions(QObject * parent):
 
   exit_ = new QAction(QIcon(":/images/window-close.png"), tr("E&xit"), parent);
   exit_->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Q));
-  exit_->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  exit_->setShortcutContext(Qt::ApplicationShortcut);
   
 }
 
