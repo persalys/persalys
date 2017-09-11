@@ -37,40 +37,45 @@ public:
 
 protected:
   virtual void initialize(AnalysisItem * item) = 0;
+  void initializeVariablesNames();
   void buildInterface();
-  void addSummaryTab();
+  virtual void fillListWidget();
+  virtual void fillTabWidget();
+  virtual void addSummaryTab();
   void addPDF_CDFTab();
   void addBoxPlotTab();
 #ifdef OTGUI_HAVE_PARAVIEW
-  void addParaviewWidgetsTabs();
+  virtual void addParaviewWidgetsTabs();
 #endif
   void addPlotMatrixTab();
   void addScatterPlotsTab();
-  void addTableTab();
+  virtual void addTableTab();
 
 public slots:
   void updateSpinBoxes(int indexOutput=0);
   void probaValueChanged(double proba);
   void quantileValueChanged(double quantile);
-  void updateVariablesListVisibility(int indexTab);
+  virtual void updateVariablesListVisibility(int indexTab);
 signals:
   void stateChanged(int);
 
 protected:
+  DesignOfExperiment designOfExperiment_;
   DataAnalysisResult result_;
+  OT::Sample failedInputSample_;
   bool resultsSampleIsValid_;
   QString sampleSizeTitle_;
-  QStringList stochInputNames_;
+  QStringList inputNames_;
   QStringList inAxisTitles_;
   QStringList outputNames_;
   QStringList outAxisTitles_;
   bool isConfidenceIntervalRequired_;
   double levelConfidenceInterval_;
   bool showTable_;
-private:
   QGroupBox * variablesGroupBox_;
   OTguiListWidget * variablesListWidget_;
   QTabWidget * tabWidget_;
+private:
   DoubleSpinBox * probaSpinBox_;
   DoubleSpinBox * quantileSpinBox_;
 };

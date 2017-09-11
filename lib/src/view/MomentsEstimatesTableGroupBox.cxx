@@ -33,31 +33,19 @@ namespace OTGUI {
 MomentsEstimatesTableGroupBox::MomentsEstimatesTableGroupBox(const DataAnalysisResult& result,
                                                              const bool isConfidenceIntervalRequired,
                                                              const double levelConfidenceInterval,
+                                                             const Indices& variablesIndices,
                                                              QWidget* parent)
   : QGroupBox(tr("Moments estimates"), parent)
   , isConfidenceIntervalRequired_(isConfidenceIntervalRequired)
   , levelConfidenceInterval_(levelConfidenceInterval)
 {
+  Q_ASSERT(variablesIndices.check(result.getMean().getSize()));
+
   QVBoxLayout * estimatesGroupBoxLayout = new QVBoxLayout(this);
   stackedWidget_ = new ResizableStackedWidget;
 
-  // we want to display output results before the input results
-  // input indices
-  Indices inInd(result.getInputSample().getSize() > 0 ? result.getInputSample().getDimension() : 0);
-  inInd.fill();
-
-  // ouput indices
-  Indices ind(inInd);
-  if (result.getOutputSample().getSize())
-  {
-    ind = Indices(result.getOutputSample().getDimension());
-    ind.fill(result.getInputSample().getSize() > 0 ? result.getInputSample().getDimension() : 0);
-    // indices with good order
-    ind.add(inInd);
-  }
-
-  for (UnsignedInteger variableIndex=0; variableIndex<result.getMean().getSize(); ++variableIndex)
-    stackedWidget_->addWidget(getMomentsEstimateTableView(result, ind[variableIndex]));
+  for (UnsignedInteger i = 0; i < result.getMean().getSize(); ++i)
+    stackedWidget_->addWidget(getMomentsEstimateTableView(result, variablesIndices[i]));
 
   estimatesGroupBoxLayout->addWidget(stackedWidget_);
 }

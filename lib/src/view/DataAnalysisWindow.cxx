@@ -56,10 +56,12 @@ namespace OTGUI {
 
 DataAnalysisWindow::DataAnalysisWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
+  , designOfExperiment_()
   , result_()
+  , failedInputSample_()
   , resultsSampleIsValid_(true)
   , sampleSizeTitle_(tr("Sample size"))
-  , stochInputNames_(QStringList())
+  , inputNames_(QStringList())
   , inAxisTitles_(QStringList())
   , outputNames_(QStringList())
   , outAxisTitles_(QStringList())
@@ -68,40 +70,96 @@ DataAnalysisWindow::DataAnalysisWindow(AnalysisItem * item, QWidget * parent)
   , showTable_(false)
   , variablesGroupBox_(0)
   , variablesListWidget_(0)
-  , tabWidget_(new QTabWidget)
+  , tabWidget_(0)
   , probaSpinBox_(0)
   , quantileSpinBox_(0)
 {
 }
 
 
+void DataAnalysisWindow::initializeVariablesNames()
+{
+  PhysicalModel model(designOfExperiment_.getPhysicalModel());
+
+  // inputs
+  for (UnsignedInteger i = 0; i < designOfExperiment_.getInputSample().getDimension(); ++i)
+  {
+    const String inputName = designOfExperiment_.getInputSample().getDescription()[i];
+    inputNames_ << QString::fromUtf8(inputName.c_str());
+    QString inputDescription;
+    if (model.hasInputNamed(inputName))
+    {
+      inputDescription = QString::fromUtf8(model.getInputByName(inputName).getDescription().c_str());
+    }
+    if (!inputDescription.isEmpty())
+      inAxisTitles_ << inputDescription;
+    else
+      inAxisTitles_ << inputNames_.last();
+  }
+
+  // outputs
+  for (UnsignedInteger i = 0; i < designOfExperiment_.getOutputSample().getDimension(); ++i)
+  {
+    const String outputName = designOfExperiment_.getOutputSample().getDescription()[i];
+    outputNames_ << QString::fromUtf8(outputName.c_str());
+    QString outputDescription;
+    if (model.hasOutputNamed(outputName))
+    {
+      outputDescription = QString::fromUtf8(model.getOutputByName(outputName).getDescription().c_str());
+    }
+    if (!outputDescription.isEmpty())
+      outAxisTitles_ << outputDescription;
+    else
+      outAxisTitles_ << outputNames_.last();
+  }
+}
+
+
 void DataAnalysisWindow::buildInterface()
 {
   // get output info
-  QStringList variablesNames = outputNames_ + stochInputNames_;
+  initializeVariablesNames();
+  QStringList variablesNames = outputNames_ + inputNames_;
 
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
   // - list outputs
   variablesGroupBox_ = new QGroupBox(tr("Variable(s)", "", variablesNames.size()));
-  QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(variablesGroupBox_);
+  QVBoxLayout * groupBoxLayout = new QVBoxLayout(variablesGroupBox_);
 
   variablesListWidget_ = new OTguiListWidget;
-  variablesListWidget_->addItems(variablesNames);
-  for (int i = 0; i < outputNames_.size(); ++i)
-    variablesListWidget_->item(i)->setData(Qt::UserRole, stochInputNames_.size() + i);
-  for (int i = 0; i < stochInputNames_.size(); ++i)
-    variablesListWidget_->item(outputNames_.size() + i)->setData(Qt::UserRole, i);
-
-  variablesListWidget_->setCurrentRow(0);
-  connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), this, SLOT(updateSpinBoxes(int)));
-
-  outputsLayoutGroupBox->addWidget(variablesListWidget_);
+  fillListWidget();
+  groupBoxLayout->addWidget(variablesListWidget_);
 
   mainWidget->addWidget(variablesGroupBox_);
   mainWidget->setStretchFactor(0, 1);
 
+  tabWidget_ = new QTabWidget;
+  fillTabWidget();
+
+  mainWidget->addWidget(tabWidget_);
+  mainWidget->setStretchFactor(1, 10);
+
+  setWidget(mainWidget);
+}
+
+
+void DataAnalysisWindow::fillListWidget()
+{
+  variablesListWidget_->addItems(outputNames_ + inputNames_);
+  for (int i = 0; i < outputNames_.size(); ++i)
+    variablesListWidget_->item(i)->setData(Qt::UserRole, inputNames_.size() + i);
+  for (int i = 0; i < inputNames_.size(); ++i)
+    variablesListWidget_->item(outputNames_.size() + i)->setData(Qt::UserRole, i);
+
+  variablesListWidget_->setCurrentRow(0);
+  connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), this, SLOT(updateSpinBoxes(int)));
+}
+
+
+void DataAnalysisWindow::fillTabWidget()
+{
   // tab: Summary
   addSummaryTab();
   // tab: PDF/CDF
@@ -112,9 +170,7 @@ void DataAnalysisWindow::buildInterface()
   addParaviewWidgetsTabs();
 #else
   // tab: Table --------------------------------
-  // table if MonteCarlo result
-  if (showTable_)
-    addTableTab();
+  addTableTab();
   // tab: plot matrix
   addPlotMatrixTab();
   // tab: scatter plots
@@ -127,11 +183,6 @@ void DataAnalysisWindow::buildInterface()
 
   //
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(updateVariablesListVisibility(int)));
-
-  mainWidget->addWidget(tabWidget_);
-  mainWidget->setStretchFactor(1, 10);
-
-  setWidget(mainWidget);
 }
 
 
@@ -162,7 +213,7 @@ void DataAnalysisWindow::addSummaryTab()
   QStringList valuesList;
   if (result_.getElapsedTime() > 0.)
     valuesList << QString::number(result_.getElapsedTime()) + " s";
-  valuesList << QString::number(result_.getSample().getSize());
+  valuesList << QString::number(designOfExperiment_.getSample().getSize());
 
   ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
   parametersGroupBoxLayout->addWidget(table);
@@ -170,14 +221,27 @@ void DataAnalysisWindow::addSummaryTab()
   vbox->addWidget(parametersGroupBox);
 
   // min/max table
-  MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(result_, false);
+  MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(designOfExperiment_, false);
   vbox->addWidget(minMaxTableGroupBox);
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
 
   // moments estimation
   try
   {
-    MomentsEstimatesTableGroupBox * estimatesGroupBox = new MomentsEstimatesTableGroupBox(result_, isConfidenceIntervalRequired_, levelConfidenceInterval_);
+    // we want to display output results before the input results
+    // input indices
+    Indices inInd(inputNames_.size());
+    inInd.fill();
+    // ouput indices
+    Indices ind(outputNames_.size());
+    ind.fill(inputNames_.size());
+    // indices with good order
+    ind.add(inInd);
+
+    MomentsEstimatesTableGroupBox * estimatesGroupBox = new MomentsEstimatesTableGroupBox(result_,
+                                                                                          isConfidenceIntervalRequired_,
+                                                                                          levelConfidenceInterval_,
+                                                                                          ind);
     vbox->addWidget(estimatesGroupBox);
     connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), estimatesGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
   }
@@ -227,16 +291,16 @@ void DataAnalysisWindow::addPDF_CDFTab()
   ResizableStackedWidget * tabStackedWidget = new ResizableStackedWidget;
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), tabStackedWidget, SLOT(setCurrentIndex(int)));
 
-  const QStringList variablesNames = outputNames_ + stochInputNames_;
+  const QStringList variablesNames = outputNames_ + inputNames_;
   const QStringList variablesAxisTitles = outAxisTitles_ + inAxisTitles_;
 
   // we want to display output results before the input results
   // input indices
-  Indices inInd(stochInputNames_.size());
+  Indices inInd(inputNames_.size());
   inInd.fill();
   // ouput indices
   Indices ind(outputNames_.size());
-  ind.fill(stochInputNames_.size());
+  ind.fill(inputNames_.size());
   // indices with good order
   ind.add(inInd);
 
@@ -249,7 +313,7 @@ void DataAnalysisWindow::addPDF_CDFTab()
 
     // PDF
     PlotWidget * pdfPlot = new PlotWidget(tr("distributionPDF"));
-    pdfPlot->plotHistogram(result_.getSample().getMarginal(ind[i]));
+    pdfPlot->plotHistogram(designOfExperiment_.getSample().getMarginal(ind[i]));
     if (result_.getPDF()[ind[i]].getSize())
       pdfPlot->plotCurve(result_.getPDF()[ind[i]]);
     pdfPlot->setTitle(tr("PDF:") + " " + variablesNames[i]);
@@ -260,7 +324,7 @@ void DataAnalysisWindow::addPDF_CDFTab()
 
     // CDF
     PlotWidget * cdfPlot = new PlotWidget(tr("distributionCDF"));
-    cdfPlot->plotHistogram(result_.getSample().getMarginal(ind[i]), 1);
+    cdfPlot->plotHistogram(designOfExperiment_.getSample().getMarginal(ind[i]), 1);
     if (result_.getCDF()[ind[i]].getSize())
       cdfPlot->plotCurve(result_.getCDF()[ind[i]]);
     cdfPlot->setTitle(tr("CDF:") + " " + variablesNames[i]);
@@ -295,16 +359,16 @@ void DataAnalysisWindow::addBoxPlotTab()
   ResizableStackedWidget * tabStackedWidget = new ResizableStackedWidget;
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), tabStackedWidget, SLOT(setCurrentIndex(int)));
 
-  const QStringList variablesNames = outputNames_ + stochInputNames_;
+  const QStringList variablesNames = outputNames_ + inputNames_;
   const QStringList variablesAxisTitles = outAxisTitles_ + inAxisTitles_;
 
   // we want to display output results before the input results
   // input indices
-  Indices inInd(stochInputNames_.size());
+  Indices inInd(inputNames_.size());
   inInd.fill();
   // ouput indices
   Indices ind(outputNames_.size());
-  ind.fill(stochInputNames_.size());
+  ind.fill(inputNames_.size());
   // indices with good order
   ind.add(inInd);
 
@@ -345,8 +409,8 @@ void DataAnalysisWindow::addPlotMatrixTab()
 {
   WidgetBoundToDockWidget * matrixTabWidget = new WidgetBoundToDockWidget(this);
   QVBoxLayout * matrixTabWidgetLayout = new QVBoxLayout(matrixTabWidget);
-  PlotMatrixWidget * plotMatrixWidget = new PlotMatrixWidget(result_.getSample(), result_.getSample());
-  plotMatrixWidget->setInputNames(stochInputNames_);
+  PlotMatrixWidget * plotMatrixWidget = new PlotMatrixWidget(designOfExperiment_.getSample(), designOfExperiment_.getSample());
+  plotMatrixWidget->setInputNames(inputNames_);
   plotMatrixWidget->setOutputNames(outputNames_);
   matrixTabWidgetLayout->addWidget(plotMatrixWidget);
 
@@ -362,21 +426,20 @@ void DataAnalysisWindow::addScatterPlotsTab()
   WidgetBoundToDockWidget * scatterWidget = new WidgetBoundToDockWidget;
   QVBoxLayout * scatterWidgetLayout = new QVBoxLayout(scatterWidget);
 
-  QVector<PlotWidget*> listScatterPlotWidgets =
-    DesignOfExperimentWindow::GetListScatterPlots(result_.getInputSample(),
-                                                  result_.getOutputSample(),
-                                                  Sample(),
-                                                  stochInputNames_,
-                                                  inAxisTitles_,
-                                                  outputNames_,
-                                                  outAxisTitles_);
+  QVector<PlotWidget*> listScatterPlotWidgets = PlotWidget::GetListScatterPlots(designOfExperiment_.getInputSample(),
+                                                                                designOfExperiment_.getOutputSample(),
+                                                                                failedInputSample_,
+                                                                                inputNames_,
+                                                                                inAxisTitles_,
+                                                                                outputNames_,
+                                                                                outAxisTitles_);
 
   ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
-  for (int i=0; i<listScatterPlotWidgets.size(); ++i)
+  for (int i = 0; i < listScatterPlotWidgets.size(); ++i)
     stackedWidget->addWidget(listScatterPlotWidgets[i]);
 
   GraphConfigurationWidget * scatterSettingWidget = new GraphConfigurationWidget(listScatterPlotWidgets,
-                                                                                 stochInputNames_,
+                                                                                 inputNames_,
                                                                                  outputNames_,
                                                                                  GraphConfigurationWidget::Scatter,
                                                                                  this);
@@ -396,7 +459,7 @@ void DataAnalysisWindow::addTableTab()
   ExportableTableView * tabResultView = new ExportableTableView;
   tabResultView->setSortingEnabled(true);
 
-  SampleTableModel * tabResultModel = new SampleTableModel(result_.getSample(), tabResultView);
+  SampleTableModel * tabResultModel = new SampleTableModel(designOfExperiment_.getSample(), tabResultView);
   QSortFilterProxyModel * proxyModel = new QSortFilterProxyModel(tabResultView);
   proxyModel->setSourceModel(tabResultModel);
 
@@ -415,19 +478,19 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   // table tab
   // with paraview the table is always shown in order to use the selection behavior
   PVSpreadSheetViewWidget * pvSpreadSheetWidget = new PVSpreadSheetViewWidget(this, new PVServerManagerInterface);
-  pvSpreadSheetWidget->setData(result_.getSample());
+  pvSpreadSheetWidget->setData(designOfExperiment_.getSample());
 
   tabWidget_->addTab(pvSpreadSheetWidget, tr("Table"));
 
   // if only one variable : do not need the following graphs
-  if (result_.getSample().getDimension() < 2)
+  if (designOfExperiment_.getSample().getDimension() < 2)
     return;
 
   // cobweb tab --------------------------------
   WidgetBoundToDockWidget * cobwebTabWidget = new WidgetBoundToDockWidget(this);
   QVBoxLayout * cobwebTabWidgetLayout = new QVBoxLayout(cobwebTabWidget);
   PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, new PVServerManagerInterface);
-  cobwebWidget->setData(result_.getSample());
+  cobwebWidget->setData(designOfExperiment_.getSample());
   cobwebTabWidgetLayout->addWidget(cobwebWidget);
 
   PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget, this);
@@ -439,9 +502,9 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   WidgetBoundToDockWidget * matrixTabWidget = new WidgetBoundToDockWidget(this);
   QVBoxLayout * matrixTabWidgetLayout = new QVBoxLayout(matrixTabWidget);
   PVMatrixPlotViewWidget * pvmatrixWidget = new PVMatrixPlotViewWidget(this, new PVServerManagerInterface);
-  pvmatrixWidget->setData(result_.getSample());
+  pvmatrixWidget->setData(designOfExperiment_.getSample());
   // the variables are automatically sorted : use setAxisToShow with the order of the sample
-  pvmatrixWidget->setAxisToShow(result_.getSample().getDescription());
+  pvmatrixWidget->setAxisToShow(designOfExperiment_.getSample().getDescription());
   matrixTabWidgetLayout->addWidget(pvmatrixWidget);
 
   tabWidget_->addTab(matrixTabWidget, tr("Plot matrix"));
@@ -456,22 +519,22 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
 
   // sample
   PVXYChartViewWidget * sampleScatterPlotWidget = new PVXYChartViewWidget(this, new PVServerManagerInterface);
-  sampleScatterPlotWidget->PVViewWidget::setData(result_.getSample());
-  if ((stochInputNames_ + outputNames_) != (inAxisTitles_ + outAxisTitles_))
-    sampleScatterPlotWidget->setAxisTitles(stochInputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);
+  sampleScatterPlotWidget->PVViewWidget::setData(designOfExperiment_.getSample());
+  if ((inputNames_ + outputNames_) != (inAxisTitles_ + outAxisTitles_))
+    sampleScatterPlotWidget->setAxisTitles(inputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);
   scatterTabWidgetLayout->addWidget(sampleScatterPlotWidget);
 
   // sample rank
-  const Sample sampleRank(result_.getSample().rank() / result_.getSample().getSize());
+  const Sample sampleRank(designOfExperiment_.getSample().rank() / designOfExperiment_.getSample().getSize());
   PVXYChartViewWidget * sampleRankScatterPlotWidget = new PVXYChartViewWidget(this, new PVServerManagerInterface);
   sampleRankScatterPlotWidget->PVViewWidget::setData(sampleRank);
-  if ((stochInputNames_ + outputNames_) != (inAxisTitles_ + outAxisTitles_))
-    sampleRankScatterPlotWidget->setAxisTitles(stochInputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);
+  if ((inputNames_ + outputNames_) != (inAxisTitles_ + outAxisTitles_))
+    sampleRankScatterPlotWidget->setAxisTitles(inputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);
   scatterTabWidgetLayout->addWidget(sampleRankScatterPlotWidget);
 
   PVXYChartSettingWidget * scatterSettingWidget = new PVXYChartSettingWidget(sampleScatterPlotWidget,
                                                                              sampleRankScatterPlotWidget,
-                                                                             stochInputNames_,
+                                                                             inputNames_,
                                                                              outputNames_,
                                                                              PVXYChartSettingWidget::Scatter,
                                                                              this);
@@ -512,7 +575,7 @@ void DataAnalysisWindow::updateSpinBoxes(int indexList)
 
     quantileSpinBox_->setMinimum(min);
     quantileSpinBox_->setMaximum(max);
-    quantileSpinBox_->setSingleStep((max-min)/100);
+    quantileSpinBox_->setSingleStep((max - min)/100);
   }
   probaSpinBox_->setValue(0.5);
   // if the previous value of probaSpinBox_ was 0.5, the signal valueChanged is not emitted
@@ -526,7 +589,7 @@ void DataAnalysisWindow::probaValueChanged(double proba)
 
   // index of the variable in result_
   const UnsignedInteger indexVar = variablesListWidget_->item(variablesListWidget_->currentRow())->data(Qt::UserRole).toInt();
-  quantileSpinBox_->setValue(result_.getSample().getMarginal(indexVar).computeQuantile(proba)[0]);
+  quantileSpinBox_->setValue(designOfExperiment_.getSample().getMarginal(indexVar).computeQuantile(proba)[0]);
 }
 
 
@@ -538,10 +601,10 @@ void DataAnalysisWindow::quantileValueChanged(double quantile)
   const UnsignedInteger indexVar = variablesListWidget_->item(variablesListWidget_->currentRow())->data(Qt::UserRole).toInt();
 
   double cdf = 0.0;
-  const double p = 1.0 / double(result_.getSample().getSize());
+  const double p = 1.0 / double(designOfExperiment_.getSample().getSize());
 
-  for (UnsignedInteger j=0; j<result_.getSample().getSize(); ++j)
-    if (result_.getSample()[j][indexVar] < quantile)
+  for (UnsignedInteger j = 0; j < designOfExperiment_.getSample().getSize(); ++j)
+    if (designOfExperiment_.getSample()[j][indexVar] < quantile)
       cdf += p;
 
   probaSpinBox_->setValue(cdf);

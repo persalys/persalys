@@ -43,23 +43,12 @@ DataAnalysisResultWindow::DataAnalysisResultWindow(AnalysisItem * item, QWidget 
 
 void DataAnalysisResultWindow::initialize(AnalysisItem* item)
 {
-  isConfidenceIntervalRequired_ = dynamic_cast<DataAnalysis*>(item->getAnalysis().getImplementation().get())->isConfidenceIntervalRequired();
-  levelConfidenceInterval_ = dynamic_cast<DataAnalysis*>(item->getAnalysis().getImplementation().get())->getLevelConfidenceInterval();
+  DataAnalysis analysis(*dynamic_cast<DataAnalysis*>(item->getAnalysis().getImplementation().get()));
 
-  result_ = dynamic_cast<DataAnalysis*>(item->getAnalysis().getImplementation().get())->getResult();
+  isConfidenceIntervalRequired_ = analysis.isConfidenceIntervalRequired();
+  levelConfidenceInterval_ = analysis.getLevelConfidenceInterval();
 
-  // inputs
-  if (result_.getInputSample().getSize())
-  {
-    stochInputNames_ = QtOT::DescriptionToStringList(result_.getInputSample().getDescription());
-    inAxisTitles_ = stochInputNames_;
-  }
-
-  // outputs
-  if (result_.getOutputSample().getSize())
-  {
-    outputNames_ = QtOT::DescriptionToStringList(result_.getOutputSample().getDescription());
-    outAxisTitles_ = outputNames_;
-  }
+  result_ = analysis.getResult();
+  designOfExperiment_ = result_.getDesignOfExperiment();
 }
 }

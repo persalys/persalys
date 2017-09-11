@@ -21,52 +21,30 @@
 #ifndef OTGUI_DESIGNOFEXPERIMENTWINDOW_HXX
 #define OTGUI_DESIGNOFEXPERIMENTWINDOW_HXX
 
-#include "ResultWindow.hxx"
-#include "otgui/AnalysisItem.hxx"
-#include "otgui/PlotWidget.hxx"
-
-#include <QTabWidget>
-#include <QGroupBox>
+#include "DataAnalysisWindow.hxx"
 
 namespace OTGUI {
-class OTGUI_API DesignOfExperimentWindow : public ResultWindow
+class OTGUI_API DesignOfExperimentWindow : public DataAnalysisWindow
 {
   Q_OBJECT
 
 public:
   DesignOfExperimentWindow(AnalysisItem * item, QWidget * parent=0);
 
-  static QVector<PlotWidget*> GetListScatterPlots(const OT::Sample& inS,
-                                                  const OT::Sample& notValidInS,
-                                                  const OT::Sample& outS,
-                                                  const QStringList inNames,
-                                                  const QStringList inAxisNames,
-                                                  const QStringList outNames,
-                                                  const QStringList outAxisNames);
-
 protected:
-  void buildInterface();
-  void addMinMaxTab();
+  virtual void initialize(AnalysisItem* item);
+  virtual void fillListWidget();
+  virtual void fillTabWidget();
+  virtual void addSummaryTab();
 #ifdef OTGUI_HAVE_PARAVIEW
-  void addParaviewWidgetsTabs();
+  virtual void addParaviewWidgetsTabs();
 #endif
-  void addTablesTab();
-  void addPlotMatrixTab();
-  void addScatterPlotsTab();
-  void getScatterPlotLabels(const OT::Sample& inS,
-                            QStringList& inNames,
-                            QStringList& inAxisNames,
-                            QStringList& outNames,
-                            QStringList& outAxisNames);
+  virtual void addTableTab();
 
 public slots:
-  void updateVariablesListVisibility(int indexTab);
-
+  virtual void updateVariablesListVisibility(int indexTab);
 private:
-  DesignOfExperiment designOfExperiment_;
-  QGroupBox * variablesGroupBox_;
-  OTguiListWidget * variablesListWidget_;
-  QTabWidget * tabWidget_;
+  OT::Sample notEvaluatedInputSample_;
 };
 }
 #endif

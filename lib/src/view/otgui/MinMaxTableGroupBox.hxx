@@ -21,7 +21,8 @@
 #ifndef OTGUI_MINMAXTABLEGROUPBOX_HXX
 #define OTGUI_MINMAXTABLEGROUPBOX_HXX
 
-#include "otgui/DataSample.hxx"
+#include "otgui/DesignOfExperiment.hxx"
+#include "otgui/DataAnalysisResult.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
 
 #include <QGroupBox>
@@ -32,11 +33,11 @@ class OTGUI_API MinMaxTableGroupBox : public QGroupBox
   Q_OBJECT
 
 public:
-  MinMaxTableGroupBox(const DataSample& result, const bool onlyOutput=true, QWidget* parent=0);
+  MinMaxTableGroupBox(const DesignOfExperiment& doe, const bool onlyOutput=true, QWidget* parent=0);
 
 protected:
-  QWidget * getForOutputMinMaxTableView(const DataSample & result, const OT::UnsignedInteger outputIndex);
-  QWidget * getForInputMinMaxTableView(const DataSample & result, const OT::UnsignedInteger inputIndex);
+  QWidget * getForInputMinMaxTableView(const DesignOfExperiment& doe, const OT::UnsignedInteger inputIndex);
+  QWidget * getForOutputMinMaxTableView(const DesignOfExperiment& doe, const OT::UnsignedInteger outputIndex);
 
 public slots:
   void setCurrentIndexStackedWidget(int index);
