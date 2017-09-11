@@ -37,7 +37,6 @@ public:
 
   void addDataModelItem(DesignOfExperiment & dataModel);
   void addPhysicalModelItem(PhysicalModel & physicalModel);
-  void addDesignOfExperimentItem(DesignOfExperiment & design);
   void addLimitStateItem(LimitState & limitState);
   void addAnalysisItem(Analysis & analysis);
 

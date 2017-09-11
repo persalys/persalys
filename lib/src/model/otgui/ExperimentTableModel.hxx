@@ -21,7 +21,7 @@
 #ifndef OTGUI_EXPERIMENTTABLEMODEL_HXX
 #define OTGUI_EXPERIMENTTABLEMODEL_HXX
 
-#include "otgui/FixedDesignOfExperiment.hxx"
+#include "otgui/GridDesignOfExperiment.hxx"
 
 #include <QAbstractTableModel>
 
@@ -31,7 +31,7 @@ class OTGUI_API ExperimentTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  ExperimentTableModel(const FixedDesignOfExperiment & designOfExperiment, QObject * parent = 0);
+  ExperimentTableModel(const GridDesignOfExperiment & designOfExperiment, QObject * parent = 0);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
@@ -39,7 +39,7 @@ public:
   QVariant data(const QModelIndex & index, int role) const;
   bool setData(const QModelIndex & index, const QVariant & value, int role);
   Qt::ItemFlags flags(const QModelIndex & index) const;
-  FixedDesignOfExperiment getDesignOfExperiment() const;
+  GridDesignOfExperiment getDesignOfExperiment() const;
 
 public slots:
 signals:
@@ -47,7 +47,7 @@ signals:
   void doeSizeChanged(QString);
 
 private:
-  FixedDesignOfExperiment designOfExperiment_;
+  GridDesignOfExperiment designOfExperiment_;
   bool firstColumnChecked_;
 };
 }

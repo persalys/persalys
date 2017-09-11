@@ -41,6 +41,7 @@ public slots:
   void createNewDataAnalysis();
   void createNewInferenceAnalysis();
   void createNewCopulaInferenceAnalysis();
+  void createNewMetaModel();
 signals:
   void variablesChanged();
 
@@ -49,7 +50,6 @@ private:
   QAction * newInferenceAnalysis_;
   QAction * newCopulaInferenceAnalysis_;
   QAction * newMetaModel_;
-  QAction * removeDataModel_;
 };
 }
 #endif

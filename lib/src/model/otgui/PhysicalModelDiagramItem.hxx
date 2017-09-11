@@ -41,7 +41,6 @@ public:
   void fill();
   void appendAnalysisItem(Analysis& analysis);
   void appendLimitStateItem(const LimitState& limitState);
-  void appendDesignOfExperimentItem(const DesignOfExperiment& designOfExperiment);
 
 public slots:
   void appendPhysicalModelItem();
@@ -72,13 +71,13 @@ signals:
   void sensitivityRequested();
   void limitStateRequested();
   void designOfExperimentRequested();
-  void designOfExperimentEvaluationRequested(OTguiItem*, const Analysis&, const bool isGeneralWizard=false);
+  void designOfExperimentEvaluationRequested(const Analysis&, const bool isGeneralWizard=false);
 
   void modelDefinitionWindowRequested(PhysicalModelDefinitionItem*);
   void newProbabilisticModelItemCreated(ProbabilisticModelItem*);
+  void newDOEAnalysisItemCreated(DesignOfExperimentDefinitionItem*);
   void newAnalysisItemCreated(AnalysisItem*);
   void newLimitStateCreated(LimitStateItem*);
-  void newDesignOfExperimentCreated(DesignOfExperimentDefinitionItem*);
 
   void changeCurrentItemRequested(QModelIndex);
 

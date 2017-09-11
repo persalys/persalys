@@ -118,6 +118,8 @@ void PhysicalModelDiagramItem::update(Observable* source, const String & message
   }
   else if (message == "physicalModelRemoved")
   {
+    if (hasChildren())
+      qDebug() << "PhysicalModelDiagramItem::update(physicalModelRemoved) has not to contain child\n";
     emit removeRequested(row());
   }
 }
@@ -132,59 +134,55 @@ void PhysicalModelDiagramItem::requestDesignOfExperimentEvaluation()
     emit emitErrorMessageRequested(tr("There is no design of experiment."));
     return;
   }
-  // find the first design of experiment which have not been evaluated
-  DesignOfExperiment design;
-  for (UnsignedInteger i = 0; i < getParentOTStudyItem()->getOTStudy().getDesignOfExperiments().getSize(); ++i)
+  // check if there is already an Evaluation item
+  QStandardItem * doeTitleItem = this->model()->itemFromIndex(listIndexes[0]);
+  for (int i = 0; i < doeTitleItem->rowCount(); ++i)
   {
-    DesignOfExperiment doe_i(getParentOTStudyItem()->getOTStudy().getDesignOfExperiments()[i]);
-    if (doe_i.getPhysicalModel().getImplementation().get() == physicalModel_.getImplementation().get() &&
-       !doe_i.getOutputSample().getSize()
-       )
+    if (doeTitleItem->child(i)->data(Qt::UserRole).toString() == "DesignOfExperimentDefinitionItem")
     {
-      design = doe_i;
-      break;
+      DesignOfExperimentDefinitionItem * analysisItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeTitleItem->child(i));
+      if (!analysisItem->getAnalysis().analysisLaunched())
+      {
+        emit designOfExperimentEvaluationRequested(analysisItem->getAnalysis(), true);
+        return;
+      }
     }
   }
-
-  // check
-  if (!design.getOriginalInputSample().getSize())
-  {
-    emit emitErrorMessageRequested(tr("All the designs of experiment have already been evaluated.\n"));
-    return;
-  }
-
-  // new analysis
-  DesignOfExperimentEvaluation analysis(design);
-  // emit signal to StudyTreeView to open a 'general' wizard (with a list of designs of experiment)
-  emit designOfExperimentEvaluationRequested(this, analysis, true);
+  // emit error message
+  emit emitErrorMessageRequested(tr("All the designs of experiment have already been evaluated.\n"));
 }
 
 
 void PhysicalModelDiagramItem::requestMetaModelCreation()
 {
-  DesignOfExperiment design;
-  for (UnsignedInteger i = 0; i < getParentOTStudyItem()->getOTStudy().getDesignOfExperiments().getSize(); ++i)
+  // check if there is at least a design of experiment
+  QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "DesignsOfExperimentTitle", 1, Qt::MatchRecursive);
+  if (listIndexes.size() < 1)
   {
-    DesignOfExperiment doe_i(getParentOTStudyItem()->getOTStudy().getDesignOfExperiments()[i]);
-    if (doe_i.getPhysicalModel().getImplementation().get() == physicalModel_.getImplementation().get() &&
-        doe_i.getOutputSample().getSize()
-       )
-    {
-      design = doe_i;
-      break;
-    }
-  }
-  // check
-  if (!design.getOutputSample().getSize())
-  {
-    emit emitErrorMessageRequested(tr("We have not found a design of experiment with an output sample.\n"));
+    emit emitErrorMessageRequested(tr("There is no design of experiment."));
     return;
   }
+  // check if there is already an Evaluation item
+  QStandardItem * doeTitleItem = this->model()->itemFromIndex(listIndexes[0]);
+  for (int i = 0; i < doeTitleItem->rowCount(); ++i)
+  {
+    if (doeTitleItem->child(i)->data(Qt::UserRole).toString() == "DesignOfExperimentDefinitionItem")
+    {
+      DesignOfExperimentDefinitionItem * analysisItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeTitleItem->child(i));
+      if (analysisItem->getAnalysis().analysisLaunched())
+      {
+        // new analysis
+        DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysisItem->getAnalysis().getImplementation().get());
+        FunctionalChaosAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("metamodel_"), *doeEval);
+        // emit signal to StudyTreeView to open a 'general' wizard (with a list of designs of experiment)
+        emit analysisRequested(this, analysis, true);
+        return;
+      }
+    }
+  }
 
-  // new analysis
-  FunctionalChaosAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("metamodel_"), design);
-  // emit signal to StudyTreeView to open a 'general' wizard (with a list of designs of experiment)
-  emit analysisRequested(this, analysis, true);
+  // emit error message
+  emit emitErrorMessageRequested(tr("We have not found a design of experiment with an output sample.\n"));
 }
 
 
@@ -275,6 +273,7 @@ void PhysicalModelDiagramItem::appendProbabilisticModelItem()
   QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "ProbabilisticModel", 1, Qt::MatchRecursive);
   if (listIndexes.size() == 1)
   {
+    // emit signal to the study tree to display the window
     emit changeCurrentItemRequested(listIndexes[0]);
     return;
   }
@@ -317,7 +316,56 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
   // parent item of the new analysis item
   OTguiItem * analysisTypeItem = 0;
 
-  const String analysisName = analysis.getImplementation()->getClassName();
+  const QString analysisName = analysis.getImplementation()->getClassName().c_str();
+
+  // If a DesignOfExperimentEvaluation
+
+  // if DesignOfExperimentEvaluation GridDesignOfExperiment ImportedDesignOfExperiment ProbabilisticDesignOfExperiment
+  if (analysisName.contains("DesignOfExperiment"))
+  {
+    // search DesignsOfExperiment title
+    // parent item of the new doe item
+    analysisTypeItem = getTitleItemNamed(tr("Designs of experiment"), "DesignsOfExperimentTitle");
+
+    // context menu actions
+    if (!analysisTypeItem->getActions().size())
+    {
+      QAction * newDesignOfExperiment = new QAction(QIcon(":/images/designOfExperiment.png"), tr("New design of experiment"), this);
+      newDesignOfExperiment->setStatusTip(tr("Create a new design of experiment"));
+      connect(newDesignOfExperiment, SIGNAL(triggered()), this, SIGNAL(designOfExperimentRequested()));
+      analysisTypeItem->appendAction(newDesignOfExperiment);
+    }
+    Q_ASSERT(analysisTypeItem);
+
+    // new analysis item
+    DesignOfExperimentDefinitionItem * newItem = new DesignOfExperimentDefinitionItem(analysis);
+
+    // connections
+    connect(newItem, SIGNAL(numberDesignEvaluationChanged(bool)),this, SLOT(requestDesignOfExperimentRemoval(bool)));
+    connect(newItem, SIGNAL(designEvaluationAppended()), this , SLOT(incrementDesignEvaluationCounter()));
+    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
+
+    // append item
+    analysisTypeItem->appendRow(newItem);
+
+    // emit signal to StudyTreeView to create a window
+    emit newDOEAnalysisItemCreated(newItem);
+
+    // signal for diagram window : update diagram
+    ++doeCounter_[0];
+    if (newItem->getAnalysis().analysisLaunched())
+      ++doeCounter_[1];
+
+    emit designOfExperimentNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
+    emit designOfExperimentEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
+
+    // add Evaluation item if needed
+    newItem->fill();
+
+    return;
+  }
+
+  // If not a DesignOfExperimentEvaluation
 
   // Evaluation title
   if (analysisName == "ModelEvaluation")
@@ -364,7 +412,6 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
     }
   }
   ///
-
   if (!analysisTypeItem)
   {
     qDebug() << "In PhysicalModelDiagramItem::appendAnalysisItem: No item added for the analysis named " << analysis.getName().data() << ".\n";
@@ -417,47 +464,6 @@ void PhysicalModelDiagramItem::appendLimitStateItem(const LimitState& limitState
   // signal for diagram window : update diagram
   ++limitStateCounter_;
   emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
-}
-
-
-void PhysicalModelDiagramItem::appendDesignOfExperimentItem(const DesignOfExperiment& designOfExperiment)
-{
-  // parent item of the new doe item
-  OTguiItem * typeItem = getTitleItemNamed(tr("Designs of experiment"), "DesignsOfExperimentTitle");
-
-  // context menu actions
-  if (!typeItem->getActions().size())
-  {
-    QAction * newDesignOfExperiment = new QAction(QIcon(":/images/designOfExperiment.png"), tr("New design of experiment"), this);
-    newDesignOfExperiment->setStatusTip(tr("Create a new design of experiment"));
-    connect(newDesignOfExperiment, SIGNAL(triggered()), this, SIGNAL(designOfExperimentRequested()));
-    typeItem->appendAction(newDesignOfExperiment);
-  }
-
-  // new doe item
-  DesignOfExperimentDefinitionItem * newItem = new DesignOfExperimentDefinitionItem(designOfExperiment);
-
-  // connections
-  connect(newItem, SIGNAL(numberDesignEvaluationChanged(bool)),this, SLOT(requestDesignOfExperimentRemoval(bool)));
-  connect(newItem, SIGNAL(designEvaluationAppended()), this , SLOT(incrementDesignEvaluationCounter()));
-  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
-
-  // append item
-  typeItem->appendRow(newItem);
-
-  // emit signal to StudyTreeView to create a window
-  emit newDesignOfExperimentCreated(newItem);
-
-  // signal for diagram window : update diagram
-  ++doeCounter_[0];
-  if (designOfExperiment.getOutputSample().getSize())
-    ++doeCounter_[1];
-
-  emit designOfExperimentNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
-  emit designOfExperimentEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
-
-  // Add sub items
-  newItem->fill();
 }
 
 

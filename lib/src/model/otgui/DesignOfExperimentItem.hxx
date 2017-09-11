@@ -21,8 +21,8 @@
 #ifndef OTGUI_DESIGNOFEXPERIMENTITEM_HXX
 #define OTGUI_DESIGNOFEXPERIMENTITEM_HXX
 
+#include "otgui/OTguiItem.hxx"
 #include "otgui/DesignOfExperiment.hxx"
-#include "otgui/AnalysisItem.hxx"
 
 namespace OTGUI {
 class OTGUI_API DesignOfExperimentItem : public OTguiItem, public Observer
@@ -30,24 +30,11 @@ class OTGUI_API DesignOfExperimentItem : public OTguiItem, public Observer
   Q_OBJECT
 
 public:
-  DesignOfExperimentItem(const DesignOfExperiment & designOfExperiment, const OT::String observerType);
+  DesignOfExperimentItem(const DesignOfExperiment& designOfExperiment, const OT::String observerType);
 
   DesignOfExperiment getDesignOfExperiment() const;
 
   void setData(const QVariant & value, int role);
-
-  void appendAnalysisItem(Analysis& analysis);
-
-public slots:
-  void removeDesignOfExperiment();
-  void createNewMetaModel();
-signals:
-  void newAnalysisItemCreated(AnalysisItem*);
-  void designOfExperimentChanged(const DesignOfExperiment&);
-  void analysisFinished();
-  void analysisBadlyFinished(QString);
-  void evaluateDesignOfExperimentRequested(DesignOfExperimentItem*);
-  void designOfExperimentEvaluationRequested(AnalysisItem*);
 
 protected:
   DesignOfExperiment designOfExperiment_;

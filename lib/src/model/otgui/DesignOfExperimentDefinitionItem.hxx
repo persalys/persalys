@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItem, observer of designs of experiments
+ *  @brief QStandardItem, observer of design of experiment
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -21,41 +21,50 @@
 #ifndef OTGUI_DESIGNOFEXPERIMENTDEFINITIONITEM_HXX
 #define OTGUI_DESIGNOFEXPERIMENTDEFINITIONITEM_HXX
 
-#include "otgui/DesignOfExperimentItem.hxx"
+#include "otgui/AnalysisItem.hxx"
 
 namespace OTGUI {
-class OTGUI_API DesignOfExperimentDefinitionItem : public DesignOfExperimentItem
+class OTGUI_API DesignOfExperimentDefinitionItem : public OTguiItem, public Observer
 {
   Q_OBJECT
 
 public:
-  DesignOfExperimentDefinitionItem(const DesignOfExperiment & designOfExperiment);
+  DesignOfExperimentDefinitionItem(const Analysis& analysis);
 
-  virtual void updateDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
+  OT::Sample getOriginalInputSample() const;
+  Analysis getAnalysis() const;
+  void updateAnalysis(const Analysis & analysis);
+
+  void appendAnalysisItem(Analysis& analysis);
+
   virtual void update(Observable * source, const OT::String & message);
-
   void fill();
 
 protected:
   void buildActions();
 
 public slots:
-  void modifyDesignOfExperiment();
-  void createNewEvaluation();
   void appendEvaluationItem();
+  void createNewMetaModel();
+  void modifyAnalysis();
+  void createNewEvaluation();
+  void removeAnalysis();
+
 signals:
-  void modifyDesignOfExperimentRequested(DesignOfExperimentDefinitionItem*);
-  void evaluationRequested(OTguiItem*, const Analysis&, const bool isGeneralWizard=false);
+  void modifyAnalysisRequested(DesignOfExperimentDefinitionItem*);
+  void DOEEvaluationRequested(const Analysis&, const bool isGeneralWizard=false);
+  void updateEvaluationWindowRequested(AnalysisItem*);
+  void newAnalysisItemCreated(AnalysisItem*);
+
   void numberDesignEvaluationChanged(bool);
   void designEvaluationAppended();
 
-  void updateEvaluationWindowRequested(AnalysisItem*);
-
 private:
-  QAction * modifyDesignOfExperiment_;
-  QAction * evaluateDesignOfExperiment_;
+  Analysis analysis_;
   QAction * newMetaModel_;
-  QAction * removeDesignOfExperiment_;
+  QAction * modifyAnalysis_;
+  QAction * evaluateDesignOfExperiment_;
+  QAction * removeAnalysis_;
 };
 }
 #endif

@@ -22,6 +22,7 @@
 #define OTGUI_DATAMODELDIAGRAMITEM_HXX
 
 #include "otgui/DataModelDefinitionItem.hxx"
+#include "otgui/AnalysisItem.hxx"
 
 namespace OTGUI {
 class OTGUI_API DataModelDiagramItem : public DesignOfExperimentItem
@@ -34,15 +35,18 @@ public:
   virtual void update(Observable* source, const OT::String& message);
 
   void fill();
+  void appendAnalysisItem(Analysis& analysis);
 
 protected:
   void buildActions();
 
 public slots:
   void appendDataModelItem();
+  void removeDesignOfExperiment();
 signals:
   // signals for StudyTreeview
   void modelDefinitionWindowRequested(DataModelDefinitionItem*);
+  void newAnalysisItemCreated(AnalysisItem*);
   void dataAnalysisRequested();
   void inferenceRequested();
   void copulaInferenceRequested();
