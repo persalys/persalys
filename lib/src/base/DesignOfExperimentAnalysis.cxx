@@ -27,6 +27,15 @@ namespace OTGUI {
 /* Default constructor */
 DesignOfExperimentAnalysis::DesignOfExperimentAnalysis()
   : AnalysisImplementation()
+  , designOfExperiment_()
+{
+}
+
+
+/* Constructor with parameters */
+DesignOfExperimentAnalysis::DesignOfExperimentAnalysis(const String & name)
+  : AnalysisImplementation(name)
+  , designOfExperiment_()
 {
 }
 
@@ -49,12 +58,6 @@ DesignOfExperimentAnalysis* DesignOfExperimentAnalysis::clone() const
 DesignOfExperiment DesignOfExperimentAnalysis::getDesignOfExperiment() const
 {
   return designOfExperiment_;
-}
-
-
-void DesignOfExperimentAnalysis::setDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
-{
-  designOfExperiment_ = designOfExperiment;
 }
 
 

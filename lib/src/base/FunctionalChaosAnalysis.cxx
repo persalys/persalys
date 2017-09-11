@@ -45,17 +45,32 @@ static Factory<FunctionalChaosAnalysis> Factory_FunctionalChaosAnalysis;
 /* Default constructor */
 FunctionalChaosAnalysis::FunctionalChaosAnalysis()
   : MetaModelAnalysis()
+  , polynomialFamilyCollection_()
   , chaosDegree_(2)
   , sparseChaos_(false)
+  , result_()
 {
 }
 
 
 /* Constructor with parameters */
-FunctionalChaosAnalysis::FunctionalChaosAnalysis(const String & name, const DesignOfExperiment & designOfExperiment)
+FunctionalChaosAnalysis::FunctionalChaosAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
   : MetaModelAnalysis(name, designOfExperiment)
+  , polynomialFamilyCollection_()
   , chaosDegree_(2)
   , sparseChaos_(false)
+  , result_()
+{
+}
+
+
+/* Constructor with parameters */
+FunctionalChaosAnalysis::FunctionalChaosAnalysis(const String& name, const Analysis& analysis)
+  : MetaModelAnalysis(name, analysis)
+  , polynomialFamilyCollection_()
+  , chaosDegree_(2)
+  , sparseChaos_(false)
+  , result_()
 {
 }
 
@@ -91,13 +106,6 @@ void FunctionalChaosAnalysis::setSparseChaos(const bool sparse)
 }
 
 
-void FunctionalChaosAnalysis::setDesignOfExperiment(const DesignOfExperiment& designOfExperiment)
-{
-  polynomialFamilyCollection_.clear();
-  MetaModelAnalysis::setDesignOfExperiment(designOfExperiment);
-}
-
-
 OrthogonalProductPolynomialFactory::PolynomialFamilyCollection FunctionalChaosAnalysis::getPolynomialFamilyCollection()
 {
   if (polynomialFamilyCollection_.isEmpty())
@@ -127,12 +135,10 @@ void FunctionalChaosAnalysis::run()
     result_ = FunctionalChaosAnalysisResult();
 
     // check
-    if (designOfExperiment_.getInputSample().getSize()*designOfExperiment_.getOutputSample().getSize() == 0)
+    if (designOfExperiment_.getInputSample().getSize() * designOfExperiment_.getOutputSample().getSize() == 0)
       throw InvalidArgumentException(HERE) << "The design of experiment must contains not empty input AND output samples";
     if (designOfExperiment_.getInputSample().getSize() != designOfExperiment_.getOutputSample().getSize())
       throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
-    if (!getInterestVariables().getSize())
-      throw InvalidDimensionException(HERE) << "You have not defined output variable to be analysed. Set the list of interest variables.";
 
     // get effective samples
     const Sample effectiveInputSample(getEffectiveInputSample());

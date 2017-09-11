@@ -24,8 +24,8 @@
 #include "MetaModelAnalysis.hxx"
 #include "FunctionalChaosAnalysisResult.hxx"
 
-#include "openturns/OrthogonalProductPolynomialFactory.hxx"
-#include "openturns/FunctionalChaosAlgorithm.hxx"
+#include <openturns/OrthogonalProductPolynomialFactory.hxx>
+#include <openturns/FunctionalChaosAlgorithm.hxx>
 
 namespace OTGUI {
 class OTGUI_API FunctionalChaosAnalysis : public MetaModelAnalysis
@@ -36,12 +36,11 @@ public:
   /** Default constructor */
   FunctionalChaosAnalysis();
   /** Constructor with parameters */
-  FunctionalChaosAnalysis(const OT::String & name, const DesignOfExperiment & designOfExperiment);
+  FunctionalChaosAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment);
+  FunctionalChaosAnalysis(const OT::String& name, const Analysis& analysis);
 
   /** Virtual constructor */
   virtual FunctionalChaosAnalysis * clone() const;
-
-  virtual void setDesignOfExperiment(const DesignOfExperiment& designOfExperiment);
 
   OT::UnsignedInteger getChaosDegree() const;
   void setChaosDegree(const OT::UnsignedInteger degree);
