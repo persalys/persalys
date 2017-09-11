@@ -25,7 +25,7 @@ values = [300, 75000]
 lowerBounds = [253.34, 66775.7]
 upperBounds = [351.737, 83224.3]
 levels = [2, 2]
-design = otguibase.FixedDesignOfExperiment('design', myPhysicalModel, lowerBounds, upperBounds, levels, values)
+design = otguibase.GridDesignOfExperiment('design', myPhysicalModel, lowerBounds, upperBounds, levels, values)
 myStudy.add(design)
 design.run()
 myTaylorExpansionMoments = otguibase.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', myPhysicalModel)

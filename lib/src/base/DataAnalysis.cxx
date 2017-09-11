@@ -20,11 +20,11 @@
  */
 #include "otgui/DataAnalysis.hxx"
 
-#include "openturns/Normal.hxx"
-#include "openturns/ChiSquare.hxx"
-#include "openturns/KernelSmoothing.hxx"
-#include "openturns/PersistentObjectFactory.hxx"
-#include "openturns/SpecFunc.hxx"
+#include <openturns/Normal.hxx>
+#include <openturns/ChiSquare.hxx>
+#include <openturns/KernelSmoothing.hxx>
+#include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/SpecFunc.hxx>
 
 using namespace OT;
 
@@ -39,6 +39,7 @@ DataAnalysis::DataAnalysis()
   : DesignOfExperimentAnalysis()
   , isConfidenceIntervalRequired_(true)
   , levelConfidenceInterval_(0.95)
+  , result_()
 {
 
 }
@@ -48,6 +49,7 @@ DataAnalysis::DataAnalysis(const String & name, const DesignOfExperiment & desig
   : DesignOfExperimentAnalysis(name, designOfExperiment)
   , isConfidenceIntervalRequired_(true)
   , levelConfidenceInterval_(0.95)
+  , result_()
 {
   if (designOfExperiment_.getSample().getSize())
     setInterestVariables(designOfExperiment_.getSample().getDescription());
@@ -75,7 +77,7 @@ void DataAnalysis::run()
     if (!sample.getSize())
       throw InvalidDimensionException(HERE) << "The sample is empty";
 
-    for (UnsignedInteger i=0; i<sample.getDimension(); ++i)
+    for (UnsignedInteger i = 0; i < sample.getDimension(); ++i)
     {
       if (stopRequested_)
         break;
@@ -128,7 +130,7 @@ void DataAnalysis::run()
         meanFiniteLowerBounds.add(false);
         meanFiniteUpperBounds.add(false);
 
-        result_.meanConfidenceInterval_ = Interval(result_.getMin().getSize());
+        result_.meanConfidenceInterval_ = Interval(result_.min_.getSize());
 
         if (result_.standardDeviation_[i].getDimension())
         {
@@ -158,7 +160,7 @@ void DataAnalysis::run()
         stdFiniteLowerBounds.add(false);
         stdFiniteUpperBounds.add(false);
 
-        result_.stdConfidenceInterval_ = Interval(result_.getMin().getSize());
+        result_.stdConfidenceInterval_ = Interval(result_.min_.getSize());
 
         if (result_.variance_[i].getDimension() && sample.getSize() > 1)
         {
@@ -189,7 +191,7 @@ void DataAnalysis::run()
       result_.outliers_.add(Point());
       const double lowerBound(result_.firstQuartile_[i][0] - 1.5 * (result_.thirdQuartile_[i][0] - result_.firstQuartile_[i][0]));
       const double upperBound(result_.thirdQuartile_[i][0] + 1.5 * (result_.thirdQuartile_[i][0] - result_.firstQuartile_[i][0]));
-      for (UnsignedInteger j=0; j<sample.getSize(); ++j)
+      for (UnsignedInteger j = 0; j < sample.getSize(); ++j)
         if (sample[j][i] < lowerBound || sample[j][i] > upperBound)
           result_.outliers_[i].add(sample[j][i]);
 
@@ -207,40 +209,50 @@ void DataAnalysis::run()
       {
       }
     }
+
+    // post processing
+    const UnsignedInteger nbAnalysedVar = result_.min_.getSize();
+
     // initialisation C.I
     if (!isConfidenceIntervalRequired_)
     {
-      result_.meanConfidenceInterval_ = Interval(result_.getMin().getSize());
-      result_.meanConfidenceInterval_.setFiniteLowerBound(Interval::BoolCollection(result_.getMin().getSize(), false));
-      result_.meanConfidenceInterval_.setFiniteUpperBound(Interval::BoolCollection(result_.getMin().getSize(), false));
-      result_.stdConfidenceInterval_ = Interval(result_.getMin().getSize());
-      result_.stdConfidenceInterval_.setFiniteLowerBound(Interval::BoolCollection(result_.getMin().getSize(), false));
-      result_.stdConfidenceInterval_.setFiniteUpperBound(Interval::BoolCollection(result_.getMin().getSize(), false));
+      result_.meanConfidenceInterval_ = Interval(nbAnalysedVar);
+      result_.meanConfidenceInterval_.setFiniteLowerBound(Interval::BoolCollection(nbAnalysedVar, false));
+      result_.meanConfidenceInterval_.setFiniteUpperBound(Interval::BoolCollection(nbAnalysedVar, false));
+      result_.stdConfidenceInterval_ = Interval(nbAnalysedVar);
+      result_.stdConfidenceInterval_.setFiniteLowerBound(Interval::BoolCollection(nbAnalysedVar, false));
+      result_.stdConfidenceInterval_.setFiniteUpperBound(Interval::BoolCollection(nbAnalysedVar, false));
     }
 
-    // input sample
-    if (designOfExperiment_.getInputSample().getSize())
+    if (nbAnalysedVar == sample.getDimension())
     {
-      if (result_.getMin().getSize() <= designOfExperiment_.getInputSample().getDimension())
+      result_.designOfExperiment_ = getDesignOfExperiment();
+    }
+    else
+    {
+      // input sample
+      if (designOfExperiment_.getInputSample().getSize())
       {
-        Indices inputIndices(result_.getMin().getSize());
-        inputIndices.fill();
-        result_.setInputSample(designOfExperiment_.getInputSample().getMarginal(inputIndices));
+        if (nbAnalysedVar <= designOfExperiment_.getInputSample().getDimension())
+        {
+          Indices inputIndices(nbAnalysedVar);
+          inputIndices.fill();
+          result_.designOfExperiment_.setInputSample(designOfExperiment_.getInputSample().getMarginal(inputIndices));
+        }
+        else
+          result_.designOfExperiment_.setInputSample(designOfExperiment_.getInputSample());
       }
-      else
-        result_.setInputSample(designOfExperiment_.getInputSample());
+
+      // output sample
+      const int nbAnalysedOutputs = nbAnalysedVar - (designOfExperiment_.getInputSample().getSize() > 0 ? designOfExperiment_.getInputSample().getDimension() : 0);
+
+      if (nbAnalysedOutputs > 0)
+      {
+        Indices outputIndices(nbAnalysedOutputs);
+        outputIndices.fill();
+        result_.designOfExperiment_.setOutputSample(designOfExperiment_.getOutputSample().getMarginal(outputIndices));
+      }
     }
-
-    // output sample
-    const int nbAnalysedOutputs = result_.getMin().getSize() - (designOfExperiment_.getInputSample().getSize() > 0 ? designOfExperiment_.getInputSample().getDimension() : 0);
-
-    if (nbAnalysedOutputs > 0)
-    {
-      Indices outputIndices(nbAnalysedOutputs);
-      outputIndices.fill();
-      result_.setOutputSample(designOfExperiment_.getOutputSample().getMarginal(outputIndices));
-    }
-
     notify("analysisFinished");
   }
   catch (std::exception & ex)

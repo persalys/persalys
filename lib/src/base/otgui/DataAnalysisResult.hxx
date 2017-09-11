@@ -21,12 +21,12 @@
 #ifndef OTGUI_DATAANALYSISRESULT_HXX
 #define OTGUI_DATAANALYSISRESULT_HXX
 
-#include "DataSample.hxx"
+#include "DesignOfExperiment.hxx"
 
 #include <openturns/Distribution.hxx>
 
 namespace OTGUI {
-class OTGUI_API DataAnalysisResult : public DataSample
+class OTGUI_API DataAnalysisResult : public OT::PersistentObject
 {
   CLASSNAME;
 
@@ -43,6 +43,7 @@ public:
   /** Virtual constructor */
   virtual DataAnalysisResult * clone() const;
 
+  DesignOfExperiment getDesignOfExperiment() const;
   PointCollection getMin() const;
   PointCollection getMax() const;
 
@@ -74,6 +75,7 @@ public:
   void load(OT::Advocate & adv);
 
 private:
+  DesignOfExperiment designOfExperiment_;
   OT::PersistentCollection<OT::Point> min_;
   OT::PersistentCollection<OT::Point> max_;
   OT::PersistentCollection<OT::Point> mean_;

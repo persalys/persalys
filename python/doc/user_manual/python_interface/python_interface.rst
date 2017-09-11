@@ -98,7 +98,8 @@ Design of experiment
 
     DesignOfExperiment
     FixedDesignOfExperiment
-    FromFileDesignOfExperiment
+    GridDesignOfExperiment
+    ImportedDesignOfExperiment
     ProbabilisticDesignOfExperiment
 
 Data analysis

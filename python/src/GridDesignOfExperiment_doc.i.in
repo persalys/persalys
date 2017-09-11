@@ -1,0 +1,154 @@
+%feature("docstring") OTGUI::GridDesignOfExperiment
+"Design of experiment.
+
+Available constructors:
+    GridDesignOfExperiment(*name, physicalModel*)
+
+    GridDesignOfExperiment(*name, physicalModel, lowerBound, upperBound, nbValues, values*)
+
+Parameters
+----------
+name : str
+    Name
+physicalModel : :class:`~otguibase.PhysicalModel`
+    Physical model
+lowerBound : sequence of float
+    Lower bound
+upperBound : sequence of float
+    Upper bound
+nbValues : sequence of int
+    Number of values along each direction
+values : sequence of float
+    Values of the constant variables (optional)
+
+Notes
+-----
+The sequences must have a dimension equal to the number of inputs in the
+physical model.
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+
+Create the model:
+
+>>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
+>>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> G = otguibase.Output('G', 'deviation')
+>>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(_pi*100.0)'])
+
+Create the design of experiment:
+
+>>> myDOE = otguibase.GridDesignOfExperiment('myDOE', myPhysicalModel)"
+
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::GridDesignOfExperiment::getTypeDesignOfExperiment
+"Design type accessor.
+
+Returns
+-------
+type : int
+    Design type"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::GridDesignOfExperiment::getValues
+"Values accessor.
+
+Returns
+-------
+values : :py:class:`openturns.Point`
+   Inputs values used in the case where there is at least a constant variable."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::GridDesignOfExperiment::setValues
+"Values accessor.
+
+Parameters
+----------
+values : :py:class:`openturns.Point`
+   Inputs values used in the case where there is at least a constant variable."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::GridDesignOfExperiment::getLowerBounds
+"Lower bounds accessor.
+
+Returns
+-------
+bounds : :py:class:`openturns.Point`
+   Lower bounds"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::GridDesignOfExperiment::setLowerBounds
+"Lower bounds accessor.
+
+Parameters
+----------
+bounds : :py:class:`openturns.Point`
+   Lower bounds"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::GridDesignOfExperiment::getUpperBounds
+"Upper bounds accessor.
+
+Returns
+-------
+bounds : :py:class:`openturns.Point`
+   Upper bounds"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::GridDesignOfExperiment::setUpperBounds
+"Upper bounds accessor.
+
+Parameters
+----------
+bounds : :py:class:`openturns.Point`
+   Upper bounds"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::GridDesignOfExperiment::getLevels
+"Levels accessor.
+
+Returns
+-------
+levels : :py:class:`openturns.Indices`
+   Levels"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::GridDesignOfExperiment::setLevels
+"Levels accessor.
+
+Parameters
+----------
+levels : :py:class:`openturns.Indices`
+   Levels"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::GridDesignOfExperiment::getDeltas
+"Deltas accessor.
+
+Returns
+-------
+deltas : :py:class:`openturns.Point`
+   Deltas"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::GridDesignOfExperiment::setDeltas
+"Deltas accessor.
+
+Parameters
+----------
+deltas : :py:class:`openturns.Point`
+   Deltas"

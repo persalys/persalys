@@ -16,7 +16,8 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      PythonScriptEvaluation.cxx
                      DesignOfExperimentImplementation.cxx DesignOfExperiment.cxx
                      FixedDesignOfExperiment.cxx
-                     FromFileDesignOfExperiment.cxx
+                     GridDesignOfExperiment.cxx
+                     ImportedDesignOfExperiment.cxx
                      ProbabilisticDesignOfExperiment.cxx
                      AnalysisImplementation.cxx Analysis.cxx SimulationAnalysis.cxx
                      PhysicalModelAnalysis.cxx DesignOfExperimentAnalysis.cxx
@@ -73,7 +74,8 @@ ot_install_header_file ( MetaModel.hxx )
 ot_install_header_file ( DesignOfExperimentImplementation.hxx )
 ot_install_header_file ( DesignOfExperiment.hxx )
 ot_install_header_file ( FixedDesignOfExperiment.hxx )
-ot_install_header_file ( FromFileDesignOfExperiment.hxx )
+ot_install_header_file ( GridDesignOfExperiment.hxx )
+ot_install_header_file ( ImportedDesignOfExperiment.hxx )
 ot_install_header_file ( ProbabilisticDesignOfExperiment.hxx )
 ot_install_header_file ( DataModel.hxx )
 ot_install_header_file ( AnalysisImplementation.hxx )

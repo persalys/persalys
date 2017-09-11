@@ -83,6 +83,7 @@ ot_add_python_module (otguibase otguibase_module.i
                       Analysis.i Analysis_doc.i.in
                       WithStopCriteriaAnalysis.i WithStopCriteriaAnalysis_doc.i.in
                       SimulationAnalysis.i SimulationAnalysis_doc.i.in
+                      DesignOfExperimentEvaluation.i
                       DataAnalysisResult.i DataAnalysisResult_doc.i.in
                       DataAnalysis.i DataAnalysis_doc.i.in
                       ModelEvaluationResult.i ModelEvaluationResult_doc.i.in
@@ -90,7 +91,8 @@ ot_add_python_module (otguibase otguibase_module.i
                       DesignOfExperimentImplementation.i DesignOfExperimentImplementation_doc.i.in
                       DesignOfExperiment.i DesignOfExperiment_doc.i.in
                       FixedDesignOfExperiment.i FixedDesignOfExperiment_doc.i.in
-                      FromFileDesignOfExperiment.i FromFileDesignOfExperiment_doc.i.in
+                      GridDesignOfExperiment.i GridDesignOfExperiment_doc.i.in
+                      ImportedDesignOfExperiment.i ImportedDesignOfExperiment_doc.i.in
                       ProbabilisticDesignOfExperiment.i ProbabilisticDesignOfExperiment_doc.i.in
                       DataModel.i DataModel_doc.i.in
                       MonteCarloAnalysis.i MonteCarloAnalysis_doc.i.in

@@ -20,21 +20,33 @@
  */
 #include "otgui/DesignOfExperimentEvaluation.hxx"
 
+#include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/SpecFunc.hxx>
+
 using namespace OT;
 
 namespace OTGUI {
 
 CLASSNAMEINIT(DesignOfExperimentEvaluation);
 
-/* Constructor with parameters */
-DesignOfExperimentEvaluation::DesignOfExperimentEvaluation(const DesignOfExperiment& design)
-  : DesignOfExperimentAnalysis("evaluation", design)
-  , Observer()
-{
-  if (!design.hasPhysicalModel())
-    throw InvalidArgumentException(HERE) << "The design of experiment must be built from a physical model";
+static Factory<DesignOfExperimentEvaluation> Factory_DesignOfExperimentEvaluation;
 
-  AnalysisImplementation::setInterestVariables(design.getPhysicalModel().getSelectedOutputsNames());
+/* Default constructor */
+DesignOfExperimentEvaluation::DesignOfExperimentEvaluation()
+  : SimulationAnalysis()
+  , originalInputSample_()
+  , failedInputSample_()
+{
+}
+
+
+/* Constructor with parameters */
+DesignOfExperimentEvaluation::DesignOfExperimentEvaluation(const String& name, const PhysicalModel& physicalModel)
+  : SimulationAnalysis(name, physicalModel)
+  , originalInputSample_()
+  , failedInputSample_()
+{
+
 }
 
 
@@ -45,44 +57,171 @@ DesignOfExperimentEvaluation* DesignOfExperimentEvaluation::clone() const
 }
 
 
+void DesignOfExperimentEvaluation::setDesignOfExperiment(const DesignOfExperiment& designOfExperiment)
+{
+  designOfExperiment_ = designOfExperiment;
+  initialize();
+}
+
+
+Sample DesignOfExperimentEvaluation::getOriginalInputSample() const
+{
+  if (!originalInputSample_.getSize())
+    originalInputSample_ = generateInputSample(0);
+  return originalInputSample_;
+}
+
+
 void DesignOfExperimentEvaluation::run()
 {
   isRunning_ = true;
-  getDesignOfExperiment().getImplementation()->addObserver(this);
-  getDesignOfExperiment().run();
-  getDesignOfExperiment().getImplementation()->removeObserver(this);
-  errorMessage_ = getDesignOfExperiment().getErrorMessage();
+  try
+  {
+    // clear result
+    initialize();
+
+    // check
+    if (!getInterestVariables().getSize())
+      throw InvalidDimensionException(HERE) << "You have not defined output variable to be analysed. Set interest variables.";
+
+    const UnsignedInteger inputSampleSize = getOriginalInputSample().getSize();
+    if (!inputSampleSize)
+      throw InvalidArgumentException(HERE) << "The design of experiment input sample is empty";
+
+    if (getBlockSize() > inputSampleSize)
+      throw InvalidValueException(HERE) << "The block size (" << getBlockSize()
+                                        << ") can not be superior to the input sample size (" << inputSampleSize << ")";
+
+    // input sample
+    Sample inputSample = Sample(0, getOriginalInputSample().getDimension());
+    inputSample.setDescription(getOriginalInputSample().getDescription());
+
+    // failed input sample
+    failedInputSample_ = Sample(0, getOriginalInputSample().getDimension());
+    failedInputSample_.setDescription(getOriginalInputSample().getDescription());
+
+    // number of iterations
+    const UnsignedInteger nbIter = static_cast<UnsignedInteger>(ceil(1.0 * inputSampleSize / getBlockSize()));
+    // last block size
+    const UnsignedInteger modulo = inputSampleSize % getBlockSize();
+    const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
+
+    // output = f(input)
+    Sample outputSample(0, getInterestVariables().getSize());
+    outputSample.setDescription(getInterestVariables());
+
+    // iterations
+    for (UnsignedInteger i = 0; i < nbIter; ++i)
+    {
+      if (stopRequested_)
+        break;
+
+      progressValue_ = (int) (i * 100 / nbIter);
+      notify("progressValueChanged");
+
+      // the last block can be smaller
+      const UnsignedInteger effectiveBlockSize = i < (nbIter - 1) ? getBlockSize() : lastBlockSize;
+
+      // get input sample of size effectiveBlockSize
+      const UnsignedInteger blockFirstIndex =  i * getBlockSize();
+      const Sample blockInputSample(Sample(getOriginalInputSample(), blockFirstIndex, blockFirstIndex + effectiveBlockSize));
+
+      // Perform a block of simulations
+      Sample blockOutputSample;
+      Sample failedSample;
+      try
+      {
+        blockOutputSample = getPhysicalModel().getFunction(getInterestVariables())(blockInputSample);
+      }
+      catch (InternalException & ex)
+      {
+        failedSample = blockInputSample;
+      }
+
+      // if SymbolicPhysicalModel find NaN and inf
+      // for ex: in case of zero division the Symbolic models do not raise error
+      if (!failedSample.getSize() && getPhysicalModel().getImplementation()->getClassName() == "SymbolicPhysicalModel")
+      {
+        bool nanFound = false;
+        for (UnsignedInteger j = 0; j < blockInputSample.getSize(); ++j)
+        {
+          for (UnsignedInteger k = 0; k < getInterestVariables().getSize(); ++k)
+          {
+            if (!SpecFunc::IsNormal(blockOutputSample[j][k]))
+            {
+              failedSample = blockInputSample;
+              nanFound = true;
+              break;
+            }
+          }
+          if (nanFound)
+            break;
+        }
+      }
+
+      if (!failedSample.getSize())
+      {
+        outputSample.add(blockOutputSample);
+        inputSample.add(blockInputSample);
+      }
+      else
+      {
+        failedInputSample_.add(failedSample);
+      }
+    }
+
+    if (!outputSample.getSize())
+      throw InvalidRangeException(HERE) << "All the evaluations have failed. Check the model.";
+
+    // set design of experiment
+    designOfExperiment_.setInputSample(inputSample);
+    designOfExperiment_.setOutputSample(outputSample);
+
+    blockNotification("DesignOfExperimentDefinition");
+    notify("analysisFinished");
+    blockNotification();
+  }
+  catch (std::exception & ex)
+  {
+    errorMessage_ = ex.what();
+    notify("analysisBadlyFinished");
+  }
   isRunning_ = false;
 }
 
 
-bool DesignOfExperimentEvaluation::analysisLaunched() const
+Sample DesignOfExperimentEvaluation::getFailedInputSample() const
 {
-  return getDesignOfExperiment().getOutputSample().getSize() > 0;
+  return failedInputSample_;
 }
 
 
-void DesignOfExperimentEvaluation::stop()
+Sample DesignOfExperimentEvaluation::getNotEvaluatedInputSample() const
 {
-  getDesignOfExperiment().stop();
+  const UnsignedInteger originalInputSampleSize = originalInputSample_.getSize();
+  const UnsignedInteger inputSampleSize = designOfExperiment_.getInputSample().getSize();
+  const UnsignedInteger failedInputSampleSize = failedInputSample_.getSize();
+  if ((inputSampleSize + failedInputSampleSize) < originalInputSampleSize)
+    return Sample(originalInputSample_, inputSampleSize + failedInputSampleSize, originalInputSampleSize);
+
+  return Sample();
 }
 
 
-void DesignOfExperimentEvaluation::update(Observable* source, const String& message)
+/* Method save() stores the object through the StorageManager */
+void DesignOfExperimentEvaluation::save(Advocate& adv) const
 {
-  if (message == "analysisFinished")
-  {
-    notify("analysisFinished");
-  }
-  else if (message == "analysisBadlyFinished")
-  {
-    errorMessage_ = getDesignOfExperiment().getErrorMessage();
-    notify("analysisBadlyFinished");
-  }
-  else if (message == "progressValueChanged")
-  {
-    progressValue_ = designOfExperiment_.getProgressValue();
-    notify("progressValueChanged");
-  }
+  SimulationAnalysis::save(adv);
+  adv.saveAttribute("originalInputSample_", originalInputSample_);
+  adv.saveAttribute("failedInputSample_", failedInputSample_);
+}
+
+
+/* Method load() reloads the object from the StorageManager */
+void DesignOfExperimentEvaluation::load(Advocate& adv)
+{
+  SimulationAnalysis::load(adv);
+  adv.loadAttribute("originalInputSample_", originalInputSample_);
+  adv.loadAttribute("failedInputSample_", failedInputSample_);
 }
 }

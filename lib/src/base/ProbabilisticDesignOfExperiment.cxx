@@ -52,10 +52,9 @@ Description ProbabilisticDesignOfExperiment::GetDesignNames()
 
 
 ProbabilisticDesignOfExperiment::ProbabilisticDesignOfExperiment()
-  : DesignOfExperimentImplementation()
+  : DesignOfExperimentEvaluation()
   , designName_("LHS")
   , size_(ResourceMap::GetAsUnsignedInteger("WeightedExperiment-DefaultSize"))
-  , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
 }
 
@@ -64,10 +63,9 @@ ProbabilisticDesignOfExperiment::ProbabilisticDesignOfExperiment(const String& n
                                                                  const PhysicalModel& physicalModel,
                                                                  const UnsignedInteger size,
                                                                  const String& designName)
-  : DesignOfExperimentImplementation(name, physicalModel)
+  : DesignOfExperimentEvaluation(name, physicalModel)
   , designName_("")
   , size_(0)
-  , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
   setDesignName(designName);
   setSize(size);
@@ -77,15 +75,6 @@ ProbabilisticDesignOfExperiment::ProbabilisticDesignOfExperiment(const String& n
 ProbabilisticDesignOfExperiment* ProbabilisticDesignOfExperiment::clone() const
 {
   return new ProbabilisticDesignOfExperiment(*this);
-}
-
-
-Sample ProbabilisticDesignOfExperiment::getOriginalInputSample() const
-{
-  if (!originalInputSample_.getSize())
-    originalInputSample_ = GenerateInputSample(getDesignName(), getSize(), getPhysicalModel(), getSeed());
-
-  return originalInputSample_;
 }
 
 
@@ -127,15 +116,9 @@ void ProbabilisticDesignOfExperiment::setSize(const UnsignedInteger size)
 }
 
 
-UnsignedInteger ProbabilisticDesignOfExperiment::getSeed() const
-{
-  return seed_;
-}
-
-
 void ProbabilisticDesignOfExperiment::setSeed(const UnsignedInteger seed)
 {
-  seed_ = seed;
+  SimulationAnalysis::setSeed(seed);
 
   // clear samples
   originalInputSample_.clear();
@@ -143,50 +126,47 @@ void ProbabilisticDesignOfExperiment::setSeed(const UnsignedInteger seed)
 }
 
 
-Sample ProbabilisticDesignOfExperiment::GenerateInputSample(const String& name,
-                                                            const UnsignedInteger size,
-                                                            const PhysicalModel& model,
-                                                            const UnsignedInteger seed)
+Sample ProbabilisticDesignOfExperiment::generateInputSample(const UnsignedInteger /*nbSimu*/) const
 {
   Sample sample;
 
-  RandomGenerator::SetSeed(seed);
+  RandomGenerator::SetSeed(getSeed());
 
-  if (name == "LHS")
-    sample = LHSExperiment(model.getComposedDistribution(), size).generate();
-  else if (name == "MONTE_CARLO")
-    sample = MonteCarloExperiment(model.getComposedDistribution(), size).generate();
-  else if (name == "QUASI_MONTE_CARLO")
-    sample = LowDiscrepancyExperiment(SobolSequence(model.getStochasticInputNames().getSize()), model.getComposedDistribution(), size).generate();
+  if (designName_ == "LHS")
+    sample = LHSExperiment(getPhysicalModel().getComposedDistribution(), size_).generate();
+  else if (designName_ == "MONTE_CARLO")
+    sample = MonteCarloExperiment(getPhysicalModel().getComposedDistribution(), size_).generate();
+  else if (designName_ == "QUASI_MONTE_CARLO")
+    sample = LowDiscrepancyExperiment(SobolSequence(getPhysicalModel().getStochasticInputNames().getSize()), getPhysicalModel().getComposedDistribution(), size_).generate();
   else
-    throw InvalidArgumentException(HERE) << "Error: GenerateInputSample design name unknown";
+    throw InvalidArgumentException(HERE) << "Error: generateInputSample design name unknown";
 
   // if there is at least a deterministic variable
-  if (model.getStochasticInputNames().getSize() < model.getInputNames().getSize())
+  if (getPhysicalModel().getStochasticInputNames().getSize() < getPhysicalModel().getInputNames().getSize())
   {
-    Point inValues(model.getInputs().getSize());
+    Point inValues(getPhysicalModel().getInputs().getSize());
     Indices variableInputsIndices;
-    for (UnsignedInteger i=0; i<inValues.getSize(); ++i)
+    for (UnsignedInteger i = 0; i < inValues.getSize(); ++i)
     {
-      inValues[i] = model.getInputs()[i].getValue();
-      if (model.getInputs()[i].isStochastic())
+      inValues[i] = getPhysicalModel().getInputs()[i].getValue();
+      if (getPhysicalModel().getInputs()[i].isStochastic())
         variableInputsIndices.add(i);
     }
 
-    Sample inputSample(size, inValues);
-    for (UnsignedInteger i=0; i<size; ++i)
+    Sample inputSample(size_, inValues);
+    for (UnsignedInteger i = 0; i < size_; ++i)
     {
-      for (UnsignedInteger j=0; j<variableInputsIndices.getSize(); ++j)
+      for (UnsignedInteger j = 0; j < variableInputsIndices.getSize(); ++j)
       {
         inputSample[i][variableInputsIndices[j]] = sample[i][j];
       }
     }
-    inputSample.setDescription(model.getInputNames());
+    inputSample.setDescription(getPhysicalModel().getInputNames());
     return inputSample;
   }
   else
   {
-    sample.setDescription(model.getInputNames());
+    sample.setDescription(getPhysicalModel().getInputNames());
     return sample;
   }
 }
@@ -195,9 +175,20 @@ Sample ProbabilisticDesignOfExperiment::GenerateInputSample(const String& name,
 String ProbabilisticDesignOfExperiment::getPythonScript() const
 {
   OSS oss;
-  oss << getName() + " = otguibase.ProbabilisticDesignOfExperiment('" + getName() + "', "+getPhysicalModel().getName()+", ";
+  oss << getName() << " = otguibase.ProbabilisticDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", ";
   oss << getSize() << ", '" << getDesignName() << "')\n";
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
+
+  oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
+  oss << "interestVariables = [";
+  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
+  {
+    oss << "'" << getInterestVariables()[i] << "'";
+    if (i < getInterestVariables().getSize()-1)
+      oss << ", ";
+  }
+  oss << "]\n";
+  oss << getName() << ".setInterestVariables(interestVariables)\n";
 
   return oss;
 }
@@ -212,7 +203,8 @@ String ProbabilisticDesignOfExperiment::__repr__() const
       << " physicalModel=" << getPhysicalModel().getName()
       << " design name=" << getDesignName()
       << " size= " << getSize()
-      << " seed= " << getSeed();
+      << " seed= " << getSeed()
+      << " blockSize=" << getBlockSize();
 
   return oss;
 }
@@ -221,19 +213,17 @@ String ProbabilisticDesignOfExperiment::__repr__() const
 /* Method save() stores the object through the StorageManager */
 void ProbabilisticDesignOfExperiment::save(Advocate& adv) const
 {
-  DesignOfExperimentImplementation::save(adv);
+  DesignOfExperimentEvaluation::save(adv);
   adv.saveAttribute("designName_", designName_);
   adv.saveAttribute("size_", size_);
-  adv.saveAttribute("seed_", seed_);
 }
 
 
 /* Method load() reloads the object from the StorageManager */
 void ProbabilisticDesignOfExperiment::load(Advocate& adv)
 {
-  DesignOfExperimentImplementation::load(adv);
+  DesignOfExperimentEvaluation::load(adv);
   adv.loadAttribute("designName_", designName_);
   adv.loadAttribute("size_", size_);
-  adv.loadAttribute("seed_", seed_);
 }
 }

@@ -1,8 +1,8 @@
-%feature("docstring") OTGUI::FromFileDesignOfExperiment
+%feature("docstring") OTGUI::ImportedDesignOfExperiment
 "Design of experiment.
 
 Available constructors:
-    FromFileDesignOfExperiment(*name, physicalModel, fileName, columns*)
+    ImportedDesignOfExperiment(*name, physicalModel, fileName, columns*)
 
 Parameters
 ----------
@@ -32,11 +32,11 @@ Create the design of experiment:
 
 >>> filename = 'normal.csv'
 >>> ot.Normal(3).getSample(10).exportToCSVFile(filename)
->>> aDesign = otguibase.FromFileDesignOfExperiment('aDesign', model, filename, [0, 2])"
+>>> aDesign = otguibase.ImportedDesignOfExperiment('aDesign', model, filename, [0, 2])"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FromFileDesignOfExperiment::ImportSample
+%feature("docstring") OTGUI::ImportedDesignOfExperiment::ImportSample
 "Import a sample from a file.
 
 Parameters
@@ -51,7 +51,7 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FromFileDesignOfExperiment::getFileName
+%feature("docstring") OTGUI::ImportedDesignOfExperiment::getFileName
 "File name accessor.
 
 Returns
@@ -61,7 +61,7 @@ fileName : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FromFileDesignOfExperiment::setFileName
+%feature("docstring") OTGUI::ImportedDesignOfExperiment::setFileName
 "File name accessor.
 
 Parameters
@@ -71,7 +71,7 @@ fileName : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FromFileDesignOfExperiment::getInputColumns
+%feature("docstring") OTGUI::ImportedDesignOfExperiment::getInputColumns
 "Input columns accessor.
 
 Returns
@@ -81,7 +81,7 @@ columns : :py:class:`openturns.Indices`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FromFileDesignOfExperiment::setInputColumns
+%feature("docstring") OTGUI::ImportedDesignOfExperiment::setInputColumns
 "Input columns accessor.
 
 Parameters

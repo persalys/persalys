@@ -20,8 +20,6 @@
  */
 #include "otgui/DesignOfExperiment.hxx"
 
-#include "otgui/FixedDesignOfExperiment.hxx"
-
 using namespace OT;
 
 namespace OTGUI {
@@ -30,14 +28,14 @@ CLASSNAMEINIT(DesignOfExperiment);
 
 /* Default constructor */
 DesignOfExperiment::DesignOfExperiment()
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(new FixedDesignOfExperiment())
+  : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation())
 {
 }
 
 
 /* Constructor with parameters */
 DesignOfExperiment::DesignOfExperiment(const String& name, const PhysicalModel& physicalModel)
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(new FixedDesignOfExperiment(name, physicalModel))
+  : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation(name, physicalModel))
 {
 }
 
@@ -98,33 +96,9 @@ PhysicalModel DesignOfExperiment::getPhysicalModel() const
 }
 
 
-Description DesignOfExperiment::getVariableInputNames() const
-{
-  return getImplementation()->getVariableInputNames();
-}
-
-
-Sample DesignOfExperiment::getOriginalInputSample() const
-{
-  return getImplementation()->getOriginalInputSample();
-}
-
-
 Sample DesignOfExperiment::getInputSample() const
 {
   return getImplementation()->getInputSample();
-}
-
-
-Sample DesignOfExperiment::getFailedInputSample() const
-{
-  return getImplementation()->getFailedInputSample();
-}
-
-
-Sample DesignOfExperiment::getNotEvaluatedInputSample() const
-{
-  return getImplementation()->getNotEvaluatedInputSample();
 }
 
 
@@ -140,63 +114,21 @@ Sample DesignOfExperiment::getSample() const
 }
 
 
-String DesignOfExperiment::getErrorMessage() const
+void DesignOfExperiment::setInputSample(const Sample& sample)
 {
-  return getImplementation()->getErrorMessage();
+  getImplementation()->setInputSample(sample);
 }
 
 
-int DesignOfExperiment::getProgressValue() const
+void DesignOfExperiment::setOutputSample(const Sample& sample)
 {
-  return getImplementation()->getProgressValue();
-}
-
-
-UnsignedInteger DesignOfExperiment::getBlockSize() const
-{
-  return getImplementation()->getBlockSize();
-}
-
-
-void DesignOfExperiment::setBlockSize(const UnsignedInteger size)
-{
-  getImplementation()->setBlockSize(size);
-}
-
-
-Description DesignOfExperiment::getInterestVariables() const
-{
-  return getImplementation()->getInterestVariables();
-}
-
-
-void DesignOfExperiment::setInterestVariables(const Description& variablesNames)
-{
-  getImplementation()->setInterestVariables(variablesNames);
-}
-
-
-void DesignOfExperiment::requestEvaluation()
-{
-   getImplementation()->notify("evaluationRequested");
-}
-
-
-void DesignOfExperiment::run()
-{
-  getImplementation()->run();
+  getImplementation()->setOutputSample(sample);
 }
 
 
 String DesignOfExperiment::getPythonScript() const
 {
   return getImplementation()->getPythonScript();
-}
-
-
-void DesignOfExperiment::stop()
-{
-  getImplementation()->stop();
 }
 
 

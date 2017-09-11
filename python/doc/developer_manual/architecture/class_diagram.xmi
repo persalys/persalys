@@ -835,7 +835,7 @@
         <UML:Generalization xmi.idref="bnpKH4sb72ao"/>
        </UML:GeneralizableElement.generalization>
       </UML:Class>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="eTZa2CU5O6bP" name="FixedDesignOfExperiment">
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="eTZa2CU5O6bP" name="GridDesignOfExperiment">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="SPb5ypA9IdoM"/>
        </UML:GeneralizableElement.generalization>
@@ -1522,7 +1522,7 @@
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="65SZeqvbCaMe" xmi.id="g4Wgu0hV4X78" parent="LhqWeeJ1FdIE" name=""/>
       <UML:Generalization discriminator="" visibility="public" isSpecification="false" namespace="Logical View" child="b6qc4uLA0lic" xmi.id="CRvHx0NLRgjb" parent="LhqWeeJ1FdIE" name=""/>
       <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="DcpqlQbvbhVG" name="PyConsole_Console"/>
-      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="YlyaNNyyqaAn" name="DesignOfExperimentSelectionWizard">
+      <UML:Class visibility="public" isSpecification="false" namespace="Logical View" isAbstract="false" isLeaf="false" isRoot="false" xmi.id="YlyaNNyyqaAn" name="DesignOfExperimentEvaluationWizard">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="G0Wo56VepTCA"/>
        </UML:GeneralizableElement.generalization>

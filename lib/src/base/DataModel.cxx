@@ -20,7 +20,9 @@
  */
 #include "otgui/DataModel.hxx"
 
-#include "openturns/PersistentObjectFactory.hxx"
+#include "otgui/ImportedDesignOfExperiment.hxx"
+
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
@@ -32,7 +34,7 @@ static Factory<DataModel> Factory_DataModel;
 
 /* Default constructor */
 DataModel::DataModel(const String& name)
-  : FromFileDesignOfExperiment()
+  : DesignOfExperimentImplementation()
 {
   setName(name);
   hasPhysicalModel_ = false;
@@ -46,7 +48,7 @@ DataModel::DataModel(const String& name,
                      const Indices& outputColumns,
                      const Description& inputNames,
                      const Description& outputNames)
-  : FromFileDesignOfExperiment()
+  : DesignOfExperimentImplementation()
 {
   setName(name);
   hasPhysicalModel_ = false;
@@ -59,7 +61,7 @@ DataModel::DataModel(const String& name,
 DataModel::DataModel(const String& name,
                      const Sample& inSample,
                      const Sample& outSample)
-  : FromFileDesignOfExperiment()
+  : DesignOfExperimentImplementation()
   , inputNames_(inSample.getDescription())
   , outputNames_(outSample.getDescription())
 {
@@ -85,10 +87,40 @@ DataModel* DataModel::clone() const
 }
 
 
+String DataModel::getFileName() const
+{
+  return fileName_;
+}
+
+
 void DataModel::setFileName(const String& fileName)
 {
   const String oldName = fileName_;
-  FromFileDesignOfExperiment::setFileName(fileName);
+
+  if (fileName.empty())
+    throw InvalidArgumentException(HERE) << "The file name can not be empty";
+
+  if (fileName_ != fileName)
+  {
+    const String oldFileName = fileName_;
+    try
+    {
+      sampleFromFile_.clear();
+      fileName_ = fileName;
+      getSampleFromFile();
+      // reinitialization
+      initialize();
+      inputColumns_ = Indices();
+    }
+    catch (std::exception)
+    {
+      fileName_ = oldFileName;
+    }
+  }
+  else
+  {
+    getSampleFromFile();
+  }
 
   // reinitialization
   if (oldName != fileName)
@@ -97,6 +129,12 @@ void DataModel::setFileName(const String& fileName)
     inputNames_ = Description();
     outputNames_ = Description();
   }
+}
+
+
+Indices DataModel::getInputColumns() const
+{
+  return inputColumns_;
 }
 
 
@@ -147,9 +185,9 @@ void DataModel::setColumns(const Indices& inputColumns,
   if ((inputNames.getSize() + outputNames.getSize()) > 0)
   {
     std::set<String> variableNamesSet;
-    for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
+    for (UnsignedInteger i = 0; i < inputNames.getSize(); ++i)
       variableNamesSet.insert(inputNames[i]);
-    for (UnsignedInteger i=0; i<outputNames.getSize(); ++i)
+    for (UnsignedInteger i = 0; i < outputNames.getSize(); ++i)
       variableNamesSet.insert(outputNames[i]);
 
     if (variableNamesSet.size() != (inputNames.getSize() + outputNames.getSize()))
@@ -191,7 +229,7 @@ Description DataModel::getInputNames()
 
     // set input names
     inputNames_ = Description(inputColumns_.getSize());
-    for (UnsignedInteger i=0; i<inputColumns_.getSize(); ++i)
+    for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++i)
       inputNames_[i] = sampleDescription[inputColumns_[i]];
   }
   return inputNames_;
@@ -206,10 +244,31 @@ Description DataModel::getOutputNames()
 
     // set output names
     outputNames_ = Description(outputColumns_.getSize());
-    for (UnsignedInteger i=0; i<outputColumns_.getSize(); ++i)
+    for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++i)
       outputNames_[i] = sampleDescription[outputColumns_[i]];
   }
   return outputNames_;
+}
+
+
+Sample DataModel::getSampleFromFile()
+{
+  if (!sampleFromFile_.getSize())
+  {
+    sampleFromFile_ = ImportedDesignOfExperiment::ImportSample(fileName_);
+
+    // check the sample description
+    const Description sampleDescription(sampleFromFile_.getDescription());
+    Description descriptionToCheck;
+    for (UnsignedInteger i = 0; i < sampleDescription.getSize(); ++i)
+      if (!descriptionToCheck.contains(sampleDescription[i]) && !sampleDescription[i].empty())
+        descriptionToCheck.add(sampleDescription[i]);
+
+    // if empty name or at least two same names
+    if (descriptionToCheck.getSize() != sampleDescription.getSize())
+      sampleFromFile_.setDescription(Description::BuildDefault(sampleDescription.getSize(), "data_"));
+  }
+  return sampleFromFile_;
 }
 
 
@@ -254,7 +313,7 @@ String DataModel::getPythonScript() const
   oss << "]\n";
 
   oss << getName()+ " = otguibase.DataModel('" + getName() + "', ";
-  oss << "'"+getFileName()+"', inputColumns, outputColumns, inputNames, outputNames)\n";
+  oss << "'" << getFileName() << "', inputColumns, outputColumns, inputNames, outputNames)\n";
 
   return oss.str();
 }
@@ -278,7 +337,9 @@ String DataModel::__repr__() const
 /* Method save() stores the object through the StorageManager */
 void DataModel::save(Advocate & adv) const
 {
-  FromFileDesignOfExperiment::save(adv);
+  DesignOfExperimentImplementation::save(adv);
+  adv.saveAttribute("fileName_", fileName_);
+  adv.saveAttribute("inputColumns_", inputColumns_);
   adv.saveAttribute("outputColumns_", outputColumns_);
   adv.saveAttribute("inputNames_", inputNames_);
   adv.saveAttribute("outputNames_", outputNames_);
@@ -288,7 +349,9 @@ void DataModel::save(Advocate & adv) const
 /* Method load() reloads the object from the StorageManager */
 void DataModel::load(Advocate & adv)
 {
-  FromFileDesignOfExperiment::load(adv);
+  DesignOfExperimentImplementation::load(adv);
+  adv.loadAttribute("fileName_", fileName_);
+  adv.loadAttribute("inputColumns_", inputColumns_);
   adv.loadAttribute("outputColumns_", outputColumns_);
   adv.loadAttribute("inputNames_", inputNames_);
   adv.loadAttribute("outputNames_", outputNames_);

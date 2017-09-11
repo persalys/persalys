@@ -46,30 +46,11 @@ public:
 
   PhysicalModel getPhysicalModel() const;
 
-  virtual OT::Description getVariableInputNames() const;
-
-  OT::Sample getFailedInputSample() const;
-  OT::Sample getNotEvaluatedInputSample() const;
-
-  virtual OT::Sample getOriginalInputSample() const;
-  void setOriginalInputSample(const OT::Sample & sample);
-
-  virtual void setInputSample(const OT::Sample & sample);
-
-  OT::String getErrorMessage() const;
-  int getProgressValue() const;
-
-  OT::UnsignedInteger getBlockSize() const;
-  void setBlockSize(const OT::UnsignedInteger size);
-
-  OT::Description getInterestVariables() const;
-  void setInterestVariables(const OT::Description& variablesNames);
-
   void initialize();
+  virtual void setInputSample(const OT::Sample & sample);
+  virtual void setOutputSample(const OT::Sample & sample);
 
-  void run();
   virtual OT::String getPythonScript() const;
-  void stop();
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -80,13 +61,6 @@ public:
 protected:
   bool hasPhysicalModel_;
   PhysicalModel physicalModel_;
-  OT::Description interestVariables_;
-  OT::String errorMessage_;
-  bool stopRequested_;
-  int progressValue_;
-  mutable OT::Sample originalInputSample_;
-  mutable OT::Sample failedInputSample_;
-  OT::UnsignedInteger blockSize_;
 };
 }
 #endif
