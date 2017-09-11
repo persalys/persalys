@@ -21,11 +21,13 @@
 #ifndef OTGUI_DETERMINISTICDESIGNPAGE_HXX
 #define OTGUI_DETERMINISTICDESIGNPAGE_HXX
 
-#include "otgui/DesignOfExperiment.hxx"
+#include "otgui/Analysis.hxx"
+#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 #include "otgui/ExperimentTableModel.hxx"
 
 #include <QWizardPage>
 #include <QLabel>
+#include <QVBoxLayout>
 
 namespace OTGUI {
 class OTGUI_API DeterministicDesignPage : public QWizardPage
@@ -33,21 +35,20 @@ class OTGUI_API DeterministicDesignPage : public QWizardPage
   Q_OBJECT
 
 public:
-  DeterministicDesignPage(const DesignOfExperiment & designOfExperiment, QWidget *parent = 0);
+  DeterministicDesignPage(QWidget *parent = 0);
 
-  bool validatePage();
+  void initialize(const Analysis& analysis);
+  Analysis getAnalysis();
 
 protected:
   void buildInterface();
 
-public slots:
-signals:
-  void designOfExperimentChanged(const DesignOfExperiment & designOfExperiment);
-
 private:
-  ExperimentTableModel * model_;
-  QLabel * errorMessageLabel_;
+  QVBoxLayout * groupBoxLayout_;
+  ResizableTableViewWithoutScrollBar * tableView_;
+  ExperimentTableModel * tableModel_;
   QLabel * DOESizeLabel_;
+  QLabel * errorMessageLabel_;
 };
 }
 #endif

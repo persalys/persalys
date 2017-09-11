@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to import sample to define designs of experiments
+ *  @brief QWizardPage to define the type of design of experiment
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,40 +18,31 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_IMPORTDATAPAGE_HXX
-#define OTGUI_IMPORTDATAPAGE_HXX
+#ifndef OTGUI_INTRODESIGNOFEXPERIMENTPAGE_HXX
+#define OTGUI_INTRODESIGNOFEXPERIMENTPAGE_HXX
 
-#include "otgui/ExportableTableView.hxx"
-
-#include "openturns/Sample.hxx"
+#include "otgui/Analysis.hxx"
 
 #include <QWizardPage>
-#include <QLineEdit>
-#include <QLabel>
+#include <QButtonGroup>
 
 namespace OTGUI {
-class OTGUI_API ImportDataPage : public QWizardPage
+
+class OTGUI_API IntroDesignOfExperimentPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  ImportDataPage(QWidget *parent = 0);
+  enum Method {deterministic, probabilistic, import};
 
-  bool validatePage() = 0;
+  IntroDesignOfExperimentPage(QWidget* parent=0);
 
-protected:
-  void buildInterface();
-  virtual void setTable(const QString& fileName) = 0;
-  void setData(const QString & fileName);
+  virtual int nextId() const;
 
-public slots:
-  void openFileRequested();
+  void initialize(const Analysis& analysis);
 
-protected:
-  bool pageValidity_;
-  QLineEdit * filePathLineEdit_;
-  ExportableTableView * dataPreviewTableView_;
-  QLabel * errorMessageLabel_;
+private:
+  QButtonGroup * methodGroup_;
 };
 }
 #endif

@@ -24,23 +24,129 @@
 #include "otgui/SampleTableModel.hxx"
 
 #include <QScrollBar>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QToolButton>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QSettings>
+#include <QMessageBox>
 
 using namespace OT;
 
 namespace OTGUI {
 
-ImportDesignOfExperimentPage::ImportDesignOfExperimentPage(const DesignOfExperiment& designOfExperiment, QWidget* parent)
-  : ImportDataPage(parent)
+ImportDesignOfExperimentPage::ImportDesignOfExperimentPage(QWidget* parent)
+  : QWizardPage(parent)
+  , designOfExperiment_()
+  , pageValidity_(false)
+  , filePathLineEdit_(0)
+  , dataPreviewTableView_(0)
+  , DOESizeLabel_(0)
+  , errorMessageLabel_(0)
 {
-  if (designOfExperiment.getImplementation()->getClassName() == "FromFileDesignOfExperiment")
+  buildInterface();
+}
+
+
+void ImportDesignOfExperimentPage::buildInterface()
+{
+  setWindowTitle(tr("Import table from file"));
+
+  QGridLayout * mainGridLayout = new QGridLayout(this);
+
+  // file path
+  QHBoxLayout * hboxLayout = new QHBoxLayout;
+  QLabel * label = new QLabel(tr("Data file"));
+  hboxLayout->addWidget(label);
+
+  filePathLineEdit_ = new QLineEdit;
+  hboxLayout->addWidget(filePathLineEdit_);
+
+  QToolButton * openFileButton = new QToolButton;
+  openFileButton->setText("...");
+  connect(openFileButton, SIGNAL(clicked()), this, SLOT(openFileRequested()));
+  hboxLayout->addWidget(openFileButton);
+
+  mainGridLayout->addLayout(hboxLayout, 0, 0, 1, 3);
+
+  // file preview
+  QGroupBox * groupBox = new QGroupBox(tr("File Preview"));
+  QGridLayout * gridLayout = new QGridLayout(groupBox);
+  gridLayout->setSpacing(6);
+  gridLayout->setContentsMargins(11, 11, 11, 11);
+
+  dataPreviewTableView_ = new ExportableTableView(groupBox);
+  gridLayout->addWidget(dataPreviewTableView_, 0, 0, 1, 1);
+
+  mainGridLayout->addWidget(groupBox, 1, 0, 1, 1);
+
+  // error message
+  errorMessageLabel_ = new QLabel;
+  errorMessageLabel_->setWordWrap(true);
+  mainGridLayout->addWidget(errorMessageLabel_, 2, 0, 1, 1);
+
+  // DOE size
+  QHBoxLayout * sizeLayout = new QHBoxLayout;
+  QLabel * sizeLabel = new QLabel(tr("Size of the design of experiment:") + " ");
+  sizeLayout->addWidget(sizeLabel);
+  DOESizeLabel_ = new QLabel(QString::number(0));
+  sizeLayout->addWidget(DOESizeLabel_);
+  sizeLayout->addStretch();
+  mainGridLayout->addLayout(sizeLayout, 3, 0);
+
+  // register field
+  registerField("ImportedDOESize", DOESizeLabel_, "text", SIGNAL(textChanged()));
+}
+
+
+void ImportDesignOfExperimentPage::openFileRequested()
+{
+  QSettings settings;
+  QString currentDir = settings.value("currentDir").toString();
+  if (currentDir.isEmpty())
+    currentDir = QDir::homePath();
+  QString fileName = QFileDialog::getOpenFileName(this,
+                                                  tr("Data to import..."),
+                                                  currentDir,
+                                                  tr("Data files (*.csv *.txt)"));
+
+  if (!fileName.isEmpty())
   {
-    designOfExperiment_ = *dynamic_cast<const FromFileDesignOfExperiment*>(&*designOfExperiment.getImplementation());
-    if (designOfExperiment_.getFileName().size())
-      setData(QString::fromUtf8(designOfExperiment_.getFileName().c_str()));
+    QFile file(fileName);
+    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+
+    // check
+    if (!file.open(QFile::ReadOnly))
+    {
+      QMessageBox::warning(this,
+                           tr("Warning"),
+                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
+    }
+    else
+    {
+      setData(fileName);
+    }
   }
-  else
+}
+
+
+void ImportDesignOfExperimentPage::setData(const QString& fileName)
+{
+  filePathLineEdit_->setText(fileName);
+  try
   {
-    designOfExperiment_ = FromFileDesignOfExperiment(designOfExperiment.getName(), designOfExperiment.getPhysicalModel());
+    errorMessageLabel_->setText("");
+    setTable(fileName);
+    pageValidity_ = true;
+  }
+  catch (std::exception & ex)
+  {
+    QString message = tr("Impossible to load the file.") + "\n";
+    message = QString("<font color=red>%1%2</font>").arg(message).arg(ex.what());
+    errorMessageLabel_->setText(message);
+    pageValidity_ = false;
   }
 }
 
@@ -73,7 +179,7 @@ void ImportDesignOfExperimentPage::setTable(const QString& fileName)
 
   // set sample description
   Description desc(sample.getDimension());
-  for (UnsignedInteger i=0; i<columns.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < columns.getSize(); ++i)
     desc[columns[i]] = inputNames[i];
   sample.setDescription(desc);
 
@@ -83,13 +189,13 @@ void ImportDesignOfExperimentPage::setTable(const QString& fileName)
 
   // set comboboxes items: each of them contains the input Names and an empty item
   QStringList comboBoxItems;
-  for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++i)
     comboBoxItems << QString::fromUtf8(inputNames[i].c_str());
   comboBoxItems << "";
 
   // set horizontal header view
   QVector<int> columnsWithCombo(sample.getDimension());
-  for (int i=0; i<columnsWithCombo.size(); ++i)
+  for (int i = 0; i < columnsWithCombo.size(); ++i)
     columnsWithCombo[i] = i;
   HorizontalHeaderViewWithCombobox * header = new HorizontalHeaderViewWithCombobox(comboBoxItems, columnsWithCombo, dataPreviewTableView_);
   dataPreviewTableView_->setHorizontalHeader(header);
@@ -100,6 +206,9 @@ void ImportDesignOfExperimentPage::setTable(const QString& fileName)
 #else
   dataPreviewTableView_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
 #endif
+
+  // DOE size
+  DOESizeLabel_->setText(QString::number(sample.getSize()));
 }
 
 
@@ -108,8 +217,8 @@ void ImportDesignOfExperimentPage::columnNameChanged()
   const Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
   // test the unicity of each variable
   Indices columns;
-  for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
-    for (int j=0; j<dataPreviewTableView_->model()->columnCount(); ++j)
+  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++i)
+    for (int j = 0; j < dataPreviewTableView_->model()->columnCount(); ++j)
       if (inputNames[i] == dataPreviewTableView_->model()->headerData(j, Qt::Horizontal).toString().toStdString())
       {
         columns.add(j);
@@ -117,8 +226,8 @@ void ImportDesignOfExperimentPage::columnNameChanged()
       }
   // test the presence of all variables
   Indices columns2;
-  for (UnsignedInteger i=0; i<inputNames.getSize(); ++i)
-    for (int j=0; j<dataPreviewTableView_->model()->columnCount(); ++j)
+  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++i)
+    for (int j = 0; j < dataPreviewTableView_->model()->columnCount(); ++j)
       if (inputNames[i] == dataPreviewTableView_->model()->headerData(j, Qt::Horizontal).toString().toStdString())
         columns2.add(j);
 
@@ -131,6 +240,7 @@ void ImportDesignOfExperimentPage::columnNameChanged()
     return;
   }
 
+  // update the design of experiment
   try
   {
     designOfExperiment_.setInputColumns(columns);
@@ -147,10 +257,33 @@ void ImportDesignOfExperimentPage::columnNameChanged()
 }
 
 
+void ImportDesignOfExperimentPage::initialize(const Analysis& analysis)
+{
+  ImportedDesignOfExperiment * analysis_ptr = dynamic_cast<ImportedDesignOfExperiment*>(analysis.getImplementation().get());
+
+  // if already a ImportedDesignOfExperiment
+  if (analysis_ptr)
+  {
+    designOfExperiment_ = *analysis_ptr;
+    setData(QString::fromUtf8(designOfExperiment_.getFileName().c_str()));
+  }
+  else
+  {
+    // create a new analysis
+    PhysicalModel physicalModel = dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get())->getPhysicalModel();
+    designOfExperiment_ = ImportedDesignOfExperiment(analysis.getName(), physicalModel);
+  }
+}
+
+
+Analysis ImportDesignOfExperimentPage::getAnalysis()
+{
+  return designOfExperiment_;
+}
+
+
 bool ImportDesignOfExperimentPage::validatePage()
 {
-  if (pageValidity_)
-    emit designOfExperimentChanged(designOfExperiment_);
   return pageValidity_;
 }
 }

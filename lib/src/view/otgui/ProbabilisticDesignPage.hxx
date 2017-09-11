@@ -21,7 +21,7 @@
 #ifndef OTGUI_PROBABILISTICDESIGNPAGE_HXX
 #define OTGUI_PROBABILISTICDESIGNPAGE_HXX
 
-#include "otgui/DesignOfExperiment.hxx"
+#include "otgui/Analysis.hxx"
 #include "otgui/LogSpinBox.hxx"
 
 #include <QWizardPage>
@@ -37,15 +37,15 @@ public:
 
   ProbabilisticDesignPage(QWidget* parent = 0);
 
-  void initialize(const DesignOfExperiment& designOfExperiment);
-  DesignOfExperiment getDesignOfExperiment(const OT::String& name, const PhysicalModel& model) const;
+  void initialize(const Analysis& designOfExperiment);
+  Analysis getAnalysis(const OT::String& name, const PhysicalModel& model) const;
 
 protected:
   void buildInterface();
 
 public slots:
 signals:
-  void designOfExperimentChanged(const DesignOfExperiment & designOfExperiment);
+  void designOfExperimentChanged(const Analysis & designOfExperiment);
 
 private:
   QButtonGroup * designsGroup_;

@@ -18,34 +18,34 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_DESIGNOFEXPERIMENTSELECTIONWIZARD_HXX
-#define OTGUI_DESIGNOFEXPERIMENTSELECTIONWIZARD_HXX
+#ifndef OTGUI_DESIGNOFEXPERIMENTEVALUATIONWIZARD_HXX
+#define OTGUI_DESIGNOFEXPERIMENTEVALUATIONWIZARD_HXX
 
 #include "otgui/DesignOfExperimentDefinitionItem.hxx"
 #include "otgui/OTguiWizard.hxx"
 #include "otgui/OutputsSelectionGroupBox.hxx"
 #include "otgui/BlockSizeGroupBox.hxx"
+#include "otgui/Analysis.hxx"
 
-#include <QStandardItem>
+#include <QStandardItemModel>
 #include <QComboBox>
 #include <QLabel>
 
 namespace OTGUI {
 
-class OTGUI_API DesignOfExperimentSelectionWizard : public OTguiWizard
+class OTGUI_API DesignOfExperimentEvaluationWizard : public OTguiWizard
 {
   Q_OBJECT
 
 public:
-  DesignOfExperimentSelectionWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard, QWidget* parent=0);
+  DesignOfExperimentEvaluationWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget* parent=0);
 
-  DesignOfExperiment getCurrentDesignOfExperiment() const;
-  DesignOfExperiment getDesignOfExperiment() const;
+  DesignOfExperimentDefinitionItem * getDesignOfExperimentDefinitionItem() const;
   virtual bool validateCurrentPage();
 
 protected slots:
   void clearErrorMessage();
-  void updateWidgets(int index);
+  void updateWidgets();
 
 private:
   QComboBox * doesComboBox_;

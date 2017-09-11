@@ -21,53 +21,36 @@
 #ifndef OTGUI_DESIGNOFEXPERIMENTWIZARD_HXX
 #define OTGUI_DESIGNOFEXPERIMENTWIZARD_HXX
 
-#include "otgui/OTStudy.hxx"
-#include "otgui/OTguiWizard.hxx"
+#include "otgui/AnalysisWizard.hxx"
+#include "otgui/IntroDesignOfExperimentPage.hxx"
+#include "otgui/DeterministicDesignPage.hxx"
 #include "otgui/ProbabilisticDesignPage.hxx"
+#include "otgui/ImportDesignOfExperimentPage.hxx"
 
 #include <QButtonGroup>
 
 namespace OTGUI {
-
-class OTGUI_API IntroPage : public QWizardPage
-{
-    Q_OBJECT
-
-public:
-  enum Method {deterministic, probabilistic, import};
-
-  IntroPage(const DesignOfExperiment & designOfExperiment, QWidget *parent = 0);
-
-  int nextId() const;
-
-private:
-  QButtonGroup * methodGroup_;
-};
-
-
-class OTGUI_API DesignOfExperimentWizard : public OTguiWizard
+class OTGUI_API DesignOfExperimentWizard : public AnalysisWizard
 {
   Q_OBJECT
 
 public:
 
-  enum {Page_Intro, Page_Deterministic, Page_Probabilistic, Page_Import};
+  enum {Page_Intro, Page_Deterministic, Page_Probabilistic, Page_Import, Page_Evaluation};
 
-  DesignOfExperimentWizard(const DesignOfExperiment & designOfExperiment, QWidget *parent=0);
+  DesignOfExperimentWizard(const Analysis & designOfExperiment, QWidget *parent=0);
 
   int nextId() const;
-  DesignOfExperiment getDesignOfExperiment() const;
+  virtual Analysis getAnalysis() const;
 
 protected:
   void buildInterface();
 
-public slots:
-  void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
-
 private:
-  IntroPage * introPage_;
+  IntroDesignOfExperimentPage * introPage_;
+  DeterministicDesignPage * gridPage_;
   ProbabilisticDesignPage * probaPage_;
-  DesignOfExperiment designOfExperiment_;
+  ImportDesignOfExperimentPage * importPage_;
 };
 }
 #endif
