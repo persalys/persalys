@@ -21,6 +21,7 @@
 #include "otgui/SpinBoxDelegate.hxx"
 
 #include "otgui/LogDoubleSpinBox.hxx"
+#include "otgui/OTguiException.hxx"
 
 namespace OTGUI {
 
@@ -33,28 +34,31 @@ SpinBoxDelegate::SpinBoxDelegate(QObject *parent)
 
 QWidget* SpinBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &) const
 {
-  if (type_ == SpinBoxDelegate::noType)
+  switch(type_)
   {
-    return new QSpinBox(parent);
-  }
-  else if (type_ == SpinBoxDelegate::correlation)
-  {
-    DoubleSpinBox * editor = new DoubleSpinBox(parent);
-    editor->setFrame(false);
-    editor->setMinimum(-1.0);
-    editor->setMaximum(1.0);
-    editor->setSingleStep(0.05);
-    editor->setDecimals(15);
-    return editor;
-  }
-  else if (type_ == SpinBoxDelegate::differentiationStep)
-  {
-    LogDoubleSpinBox * editor = new LogDoubleSpinBox(parent);
-    editor->setFrame(false);
-    editor->setDecimals(15);
-    editor->setApplyToAllInContextMenu(true);
-    connect(editor, SIGNAL(applyToAllRequested(double)), this, SIGNAL(applyToAllRequested(double)));
-    return editor;
+    case SpinBoxDelegate::noType:
+      return new QSpinBox(parent);
+    case SpinBoxDelegate::correlation:
+    {
+      DoubleSpinBox * editor = new DoubleSpinBox(parent);
+      editor->setFrame(false);
+      editor->setMinimum(-1.0);
+      editor->setMaximum(1.0);
+      editor->setSingleStep(0.05);
+      editor->setDecimals(15);
+      return editor;
+    }
+    case SpinBoxDelegate::differentiationStep:
+    {
+      LogDoubleSpinBox * editor = new LogDoubleSpinBox(parent);
+      editor->setFrame(false);
+      editor->setDecimals(15);
+      editor->setApplyToAllInContextMenu(true);
+      connect(editor, SIGNAL(applyToAllRequested(double)), this, SIGNAL(applyToAllRequested(double)));
+      return editor;
+    }
+    default:
+      throw InvalidValueException(HERE) << "Invalid type";
   }
 }
 

@@ -64,20 +64,6 @@ protected:
   virtual SimulationInterface getSimulationAlgorithm(const OT::Event& event);
   static void UpdateProgressValue(double percent, void* data);
 
-  struct AnalysisStruct
-  {
-    AnalysisStruct(SimulationReliabilityAnalysis* analysis, SimulationInterface simulation)
-    : analysis_(analysis)
-    , simulation_(simulation)
-    {
-    };
-
-    virtual ~AnalysisStruct(){};
-
-    SimulationReliabilityAnalysis * analysis_;
-    SimulationInterface simulation_;
-  };
-
 private:
   OT::UnsignedInteger seed_;
   TimeCriteria timeCriteria_;
