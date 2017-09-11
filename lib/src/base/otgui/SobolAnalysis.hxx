@@ -39,9 +39,6 @@ public:
   /** Virtual constructor */
   virtual SobolAnalysis * clone() const;
 
-  virtual void setMaximumCalls(const OT::UnsignedInteger maxi);
-  virtual void setBlockSize(const OT::UnsignedInteger size);
-
   SobolResult getResult() const;
 
   virtual void run();

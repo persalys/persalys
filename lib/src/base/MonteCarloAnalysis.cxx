@@ -41,18 +41,19 @@ MonteCarloAnalysis::MonteCarloAnalysis()
   , WithStopCriteriaAnalysis()
   , isConfidenceIntervalRequired_(true)
   , levelConfidenceInterval_(0.95)
+  , result_()
 {
 }
 
 
 /* Constructor with parameters */
-MonteCarloAnalysis::MonteCarloAnalysis(const String & name, const PhysicalModel & physicalModel)
+MonteCarloAnalysis::MonteCarloAnalysis(const String& name, const PhysicalModel& physicalModel)
   : SimulationAnalysis(name, physicalModel)
   , WithStopCriteriaAnalysis()
   , isConfidenceIntervalRequired_(true)
   , levelConfidenceInterval_(0.95)
+  , result_()
 {
-//TODO ctr with outputNames (pas OutputCollection!) optionnel par défaut prendrait tous les outputs
 }
 
 
@@ -99,8 +100,13 @@ void MonteCarloAnalysis::run()
     result_ = DataAnalysisResult();
 
     // check
+    if (getMaximumCalls() < getBlockSize())
+      throw InvalidValueException(HERE) << "The maximum calls number (" << getMaximumCalls()
+                                        << ") can not be inferior to the block size (" << getBlockSize() << ")";
     if (!getPhysicalModel().getRestrictedFunction(getInterestVariables()).getOutputDescription().getSize())
-      throw InvalidDimensionException(HERE) << "The outputs to be analysed "  << getInterestVariables() <<" are not outputs of the model " << getPhysicalModel().getOutputNames();
+      throw InvalidDimensionException(HERE) << "The outputs to be analysed "
+                                            << getInterestVariables() <<" are not outputs of the model "
+                                            << getPhysicalModel().getOutputNames();
 
     // initialization
     RandomGenerator::SetSeed(getSeed());
@@ -122,12 +128,12 @@ void MonteCarloAnalysis::run()
 
     // We loop if there remains some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
     while (!stopRequested_
-      && (outerSampling < maximumOuterSampling)
-      && ((coefficientOfVariation == -1.0) || (coefficientOfVariation > getMaximumCoefficientOfVariation()))
-      &&  (static_cast<UnsignedInteger>(elapsedTime) < getMaximumElapsedTime() * CLOCKS_PER_SEC))
+       && (outerSampling < maximumOuterSampling)
+       && (coefficientOfVariation == -1.0 || coefficientOfVariation > getMaximumCoefficientOfVariation())
+       && (static_cast<UnsignedInteger>(elapsedTime) < getMaximumElapsedTime() * CLOCKS_PER_SEC))
     {
       // progress
-      if (getMaximumCalls()< (UnsignedInteger)std::numeric_limits<int>::max())
+      if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
       {
         progressValue_ = (int) (outerSampling * 100 / maximumOuterSampling);
         notify("progressValueChanged");
@@ -157,7 +163,7 @@ void MonteCarloAnalysis::run()
         const Point empiricalStd(outputSample.computeStandardDeviationPerComponent());
 
         Scalar coefOfVar(0.);
-        for (UnsignedInteger i=0; i<outputSample.getDimension(); ++i)
+        for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++i)
         {
           if (std::abs(empiricalMean[i]) > SpecFunc::Precision)
           {
@@ -178,10 +184,15 @@ void MonteCarloAnalysis::run()
     // set results
     if (outputSample.getSize())
     {
-      DataAnalysis dataAnalysis("", DataModel("", effectiveInputSample, outputSample));
+      // set design of experiment
+      designOfExperiment_.setInputSample(effectiveInputSample);
+      designOfExperiment_.setOutputSample(outputSample);
+      // compute data analysis
+      DataAnalysis dataAnalysis("", designOfExperiment_);
       dataAnalysis.setIsConfidenceIntervalRequired(isConfidenceIntervalRequired());
       dataAnalysis.setLevelConfidenceInterval(levelConfidenceInterval_);
       dataAnalysis.run();
+      // set result
       result_ = dataAnalysis.getResult();
       result_.elapsedTime_ = (float) elapsedTime / CLOCKS_PER_SEC;
 
@@ -213,7 +224,7 @@ String MonteCarloAnalysis::getPythonScript() const
   if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {
     oss << "interestVariables = [";
-    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+    for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
     {
       oss << "'" << getInterestVariables()[i] << "'";
       if (i < getInterestVariables().getSize()-1)
@@ -234,12 +245,6 @@ String MonteCarloAnalysis::getPythonScript() const
 }
 
 
-bool MonteCarloAnalysis::analysisLaunched() const
-{
-  return result_.getOutputSample().getSize() != 0;
-}
-
-
 /* String converter */
 String MonteCarloAnalysis::__repr__() const
 {
@@ -248,7 +253,8 @@ String MonteCarloAnalysis::__repr__() const
       << " isConfidenceIntervalRequired=" << isConfidenceIntervalRequired()
       << " levelConfidenceInterval=" << getLevelConfidenceInterval()
       << WithStopCriteriaAnalysis::__repr__()
-      << " seed=" << getSeed();
+      << " seed=" << getSeed()
+      << " blockSize=" << getBlockSize();
   return oss;
 }
 

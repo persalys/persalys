@@ -32,7 +32,6 @@ WithStopCriteriaAnalysis::WithStopCriteriaAnalysis()
   : maximumCalls_(std::numeric_limits<int>::max())
   , maximumCoefficientOfVariation_(0.01)
   , maximumElapsedTime_(60) // in seconds
-  , blockSize_(ResourceMap::GetAsScalar("Simulation-DefaultBlockSize"))
 {
 }
 
@@ -63,8 +62,7 @@ void WithStopCriteriaAnalysis::setMaximumCalls(const UnsignedInteger maxi)
 {
   if (maxi < 1)
     throw InvalidValueException(HERE) << "The maximum calls number can not be null";
-  if (maxi < blockSize_)
-    throw InvalidValueException(HERE) << "The maximum calls number can not be inferior to the block size " << blockSize_;
+
   maximumCalls_ = maxi;
 }
 
@@ -95,22 +93,6 @@ void WithStopCriteriaAnalysis::setMaximumElapsedTime(const UnsignedInteger secon
 }
 
 
-UnsignedInteger WithStopCriteriaAnalysis::getBlockSize() const
-{
-  return blockSize_;
-}
-
-
-void WithStopCriteriaAnalysis::setBlockSize(const UnsignedInteger size)
-{
-  if (size < 1)
-    throw InvalidValueException(HERE) << "The block size must be superior to 0";
-  if (size > maximumCalls_)
-    throw InvalidValueException(HERE) << "The block size can not be superior to the maximum calls " << maximumCalls_;
-  blockSize_ = size;
-}
-
-
 /* String converter */
 String WithStopCriteriaAnalysis::__repr__() const
 {
@@ -126,7 +108,6 @@ String WithStopCriteriaAnalysis::__repr__() const
     oss << getMaximumElapsedTime();
   else
     oss << "inf";
-  oss << " blockSize=" << getBlockSize();
 
   return oss;
 }
@@ -138,7 +119,6 @@ void WithStopCriteriaAnalysis::save(Advocate & adv) const
   adv.saveAttribute("maximumCalls_", maximumCalls_);
   adv.saveAttribute("maximumCoefficientOfVariation_", maximumCoefficientOfVariation_);
   adv.saveAttribute("maximumElapsedTime_", maximumElapsedTime_);
-  adv.saveAttribute("blockSize_", blockSize_);
 }
 
 
@@ -148,6 +128,5 @@ void WithStopCriteriaAnalysis::load(Advocate & adv)
   adv.loadAttribute("maximumCalls_", maximumCalls_);
   adv.loadAttribute("maximumCoefficientOfVariation_", maximumCoefficientOfVariation_);
   adv.loadAttribute("maximumElapsedTime_", maximumElapsedTime_);
-  adv.loadAttribute("blockSize_", blockSize_);
 }
 }

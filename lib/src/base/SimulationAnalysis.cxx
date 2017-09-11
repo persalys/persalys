@@ -27,6 +27,8 @@ namespace OTGUI {
 /* Default constructor */
 SimulationAnalysis::SimulationAnalysis()
   : PhysicalModelAnalysis()
+  , designOfExperiment_()
+  , blockSize_(1)
   , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
 }
@@ -35,12 +37,14 @@ SimulationAnalysis::SimulationAnalysis()
 /* Constructor with parameters */
 SimulationAnalysis::SimulationAnalysis(const String & name, const PhysicalModel & physicalModel)
   : PhysicalModelAnalysis(name, physicalModel)
+  , designOfExperiment_(name, physicalModel)
+  , blockSize_(1)
   , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
 }
 
 
-Sample SimulationAnalysis::generateInputSample(const UnsignedInteger nbSimu)
+Sample SimulationAnalysis::generateInputSample(const UnsignedInteger nbSimu) const
 {
   Sample inputSample(getPhysicalModel().getInputRandomVector().getSample(nbSimu));
   inputSample.setDescription(getPhysicalModel().getStochasticInputNames());
@@ -61,6 +65,21 @@ Sample SimulationAnalysis::computeOutputSample(const Point& inputValues) const
 }
 
 
+UnsignedInteger SimulationAnalysis::getBlockSize() const
+{
+  return blockSize_;
+}
+
+
+void SimulationAnalysis::setBlockSize(const UnsignedInteger size)
+{
+  if (size < 1)
+    throw InvalidValueException(HERE) << "The block size must be superior to 0";
+
+  blockSize_ = size;
+}
+
+
 UnsignedInteger SimulationAnalysis::getSeed() const
 {
   return seed_;
@@ -73,10 +92,31 @@ void SimulationAnalysis::setSeed(const UnsignedInteger seed)
 }
 
 
+void SimulationAnalysis::initialize()
+{
+  PhysicalModelAnalysis::initialize();
+  designOfExperiment_.getImplementation()->initialize();
+}
+
+
+DesignOfExperiment SimulationAnalysis::getDesignOfExperiment() const
+{
+  return designOfExperiment_;
+}
+
+
+bool SimulationAnalysis::analysisLaunched() const
+{
+  return designOfExperiment_.getOutputSample().getSize() != 0;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void SimulationAnalysis::save(Advocate & adv) const
 {
   PhysicalModelAnalysis::save(adv);
+  adv.saveAttribute("designOfExperiment_", designOfExperiment_);
+  adv.saveAttribute("blockSize_", blockSize_);
   adv.saveAttribute("seed_", seed_);
 }
 
@@ -85,6 +125,8 @@ void SimulationAnalysis::save(Advocate & adv) const
 void SimulationAnalysis::load(Advocate & adv)
 {
   PhysicalModelAnalysis::load(adv);
+  adv.loadAttribute("designOfExperiment_", designOfExperiment_);
+  adv.loadAttribute("blockSize_", blockSize_);
   adv.loadAttribute("seed_", seed_);
 }
 }

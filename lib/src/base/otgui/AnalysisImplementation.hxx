@@ -67,7 +67,7 @@ public:
   virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
 
 protected:
-  void initialize();
+  virtual void initialize();
 
 protected:
   bool isReliabilityAnalysis_;

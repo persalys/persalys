@@ -37,15 +37,16 @@ static Factory<SobolAnalysis> Factory_SobolAnalysis;
 SobolAnalysis::SobolAnalysis()
   : SimulationAnalysis()
   , WithStopCriteriaAnalysis()
+  , result_()
 {
 }
 
 
 /* Constructor with parameters */
-SobolAnalysis::SobolAnalysis(const String & name, const PhysicalModel & physicalModel)
+SobolAnalysis::SobolAnalysis(const String& name, const PhysicalModel& physicalModel)
   : SimulationAnalysis(name, physicalModel)
+  , result_()
 {
-//TODO ctr with outputNames (pas OutputCollection!) optionnel par défaut prendrait tous les outputs
 }
 
 
@@ -65,6 +66,14 @@ void SobolAnalysis::run()
     initialize();
     result_ = SobolResult();
 
+    // check
+    if (getMaximumCalls() < (getBlockSize() * (getPhysicalModel().getStochasticInputNames().getSize() + 2)))
+      throw InvalidValueException(HERE) << "The block size (" << getBlockSize()
+                                        << ") can not be superior to: max_calls (" << getMaximumCalls()
+                                        << ") / (number_of_inputs (" << getPhysicalModel().getStochasticInputNames().getSize()
+                                        << ") + 2)="
+                                        << (getMaximumCalls() / (getPhysicalModel().getStochasticInputNames().getSize() + 2));
+
     // initialization
     RandomGenerator::SetSeed(getSeed());
 
@@ -72,8 +81,8 @@ void SobolAnalysis::run()
     const UnsignedInteger nbOutputs(getInterestVariables().getSize());
 
     const bool maximumOuterSamplingSpecified = getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max();
-    const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / (getBlockSize()*(2+nbInputs)))) : (UnsignedInteger)std::numeric_limits<int>::max();
-    const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getMaximumCalls() % (getBlockSize()*(2+nbInputs)) : 0;
+    const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / (getBlockSize() * (2 + nbInputs)))) : (UnsignedInteger)std::numeric_limits<int>::max();
+    const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getMaximumCalls() % (getBlockSize() * (2 + nbInputs)) : 0;
     const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : (modulo/(2+nbInputs));
 
     Scalar coefficientOfVariation = -1.0;
@@ -175,7 +184,7 @@ void SobolAnalysis::run()
         {
           algoSaltelli = SaltelliSensitivityAlgorithm(inputDesign, outputDesign, sampleSize);
 
-          for (UnsignedInteger i=0; i<nbOutputs; ++i)
+          for (UnsignedInteger i = 0; i < nbOutputs; ++i)
           {
             allFirstOrderIndices[i].add(algoSaltelli.getFirstOrderIndices(i));
             allTotalIndices[i].add(algoSaltelli.getTotalOrderIndices(i));
@@ -192,14 +201,14 @@ void SobolAnalysis::run()
       if ((getMaximumCoefficientOfVariation() != -1) && (allFirstOrderIndices[0].getSize() > 1))
       {
         Scalar coefOfVar(0.);
-        for (UnsignedInteger i=0; i<nbOutputs; ++i)
+        for (UnsignedInteger i = 0; i < nbOutputs; ++i)
         {
           if (!allFirstOrderIndices[i].getSize())
             throw InvalidValueException(HERE) << "An error happened when computing the coefficient of variation";
 
           const Point empiricalMean(allFirstOrderIndices[i].computeMean());
           const Point empiricalStd(allFirstOrderIndices[i].computeStandardDeviationPerComponent());
-          for (UnsignedInteger j=0; j<nbInputs; ++j)
+          for (UnsignedInteger j = 0; j < nbInputs; ++j)
           {
             if (std::abs(empiricalMean[j])  < SpecFunc::Precision)
               throw InvalidValueException(HERE) << "Impossible to compute the coefficient of variation because the mean of an indice is too close to zero.\
@@ -220,7 +229,7 @@ void SobolAnalysis::run()
     Sample firstOrderIndices(0, nbInputs);
     firstOrderIndices.setDescription(getPhysicalModel().getStochasticInputNames());
     Sample totalIndices(0, nbInputs);
-    for (UnsignedInteger i=0; i<nbOutputs; ++i)
+    for (UnsignedInteger i = 0; i < nbOutputs; ++i)
     {
       if (!(allFirstOrderIndices[i].getSize()*allTotalIndices[i].getSize()))
         throw InvalidValueException(HERE) << "No result. Try to increase the block size and/or the maximum calls.";
@@ -235,8 +244,8 @@ void SobolAnalysis::run()
 
     // fill result_
     result_ = SobolResult(firstOrderIndices, totalIndices, getInterestVariables());
-    result_.callsNumber_ = X1.getSize()*(2+nbInputs);
-    result_.elapsedTime_ = (float) elapsedTime/CLOCKS_PER_SEC;
+    result_.callsNumber_ = X1.getSize() * (2 + nbInputs);
+    result_.elapsedTime_ = (float) elapsedTime / CLOCKS_PER_SEC;
     result_.coefficientOfVariation_ = coefficientOfVariation;
 
     // add warning if the model has not an independent copula
@@ -256,24 +265,6 @@ void SobolAnalysis::run()
 }
 
 
-void SobolAnalysis::setMaximumCalls(const UnsignedInteger maxi)
-{
-  if (maxi < (getBlockSize()*(getPhysicalModel().getStochasticInputNames().getSize() + 2)))
-    throw InvalidValueException(HERE) << "The maximum calls can not be inferior to: block_size*(number_of_inputs + 2)="
-                                      << getBlockSize()*(getPhysicalModel().getStochasticInputNames().getSize() + 2);
-  WithStopCriteriaAnalysis::setMaximumCalls(maxi);
-}
-
-
-void SobolAnalysis::setBlockSize(const UnsignedInteger size)
-{
-  if (getMaximumCalls() < (size*(getPhysicalModel().getStochasticInputNames().getSize() + 2)))
-    throw InvalidValueException(HERE) << "The block size can not be superior to: max_calls/(number_of_inputs + 2)="
-                                      << (getMaximumCalls()/(getPhysicalModel().getStochasticInputNames().getSize() + 2));
-  WithStopCriteriaAnalysis::setBlockSize(size);
-}
-
-
 SobolResult SobolAnalysis::getResult() const
 {
   return result_;
@@ -287,7 +278,7 @@ String SobolAnalysis::getPythonScript() const
   if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {
     oss << "interestVariables = [";
-    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+    for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
     {
       oss << "'" << getInterestVariables()[i] << "'";
       if (i < getInterestVariables().getSize()-1)
@@ -320,7 +311,8 @@ String SobolAnalysis::__repr__() const
   OSS oss;
   oss << PhysicalModelAnalysis::__repr__()
       << WithStopCriteriaAnalysis::__repr__()
-      << " seed=" << getSeed();
+      << " seed=" << getSeed()
+      << " blockSize=" << getBlockSize();
   return oss;
 }
 

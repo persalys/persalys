@@ -31,6 +31,7 @@ SimulationReliabilityAnalysis::SimulationReliabilityAnalysis()
   : ReliabilityAnalysis()
   , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
+  , blockSize_(ResourceMap::GetAsScalar("Simulation-DefaultBlockSize"))
   , timeCriteria_()
 {
 }
@@ -42,6 +43,7 @@ SimulationReliabilityAnalysis::SimulationReliabilityAnalysis(const String& name,
   : ReliabilityAnalysis(name, limitState)
   , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
+  , blockSize_(ResourceMap::GetAsScalar("Simulation-DefaultBlockSize"))
   , timeCriteria_()
 {
 }
@@ -80,6 +82,34 @@ void SimulationReliabilityAnalysis::UpdateProgressValue(double percent, void * d
 SimulationInterface SimulationReliabilityAnalysis::getSimulationAlgorithm(const OT::Event& event)
 {
   throw NotYetImplementedException(HERE) << "In SimulationReliabilityAnalysis::getSimulationAlgorithm()";
+}
+
+
+UnsignedInteger SimulationReliabilityAnalysis::getSeed() const
+{
+  return seed_;
+}
+
+
+void SimulationReliabilityAnalysis::setSeed(const UnsignedInteger seed)
+{
+  seed_ = seed;
+}
+
+
+UnsignedInteger SimulationReliabilityAnalysis::getBlockSize() const
+{
+  return blockSize_;
+}
+
+
+void SimulationReliabilityAnalysis::setBlockSize(const UnsignedInteger size)
+{
+  if (size < 1)
+    throw InvalidValueException(HERE) << "The block size must be superior to 0";
+  if (size > getMaximumCalls())
+    throw InvalidValueException(HERE) << "The block size can not be superior to the maximum calls " << getMaximumCalls();
+  blockSize_ = size;
 }
 
 
@@ -162,18 +192,6 @@ void SimulationReliabilityAnalysis::stop()
 }
 
 
-UnsignedInteger SimulationReliabilityAnalysis::getSeed() const
-{
-  return seed_;
-}
-
-
-void SimulationReliabilityAnalysis::setSeed(const UnsignedInteger seed)
-{
-  seed_ = seed;
-}
-
-
 SimulationReliabilityResult SimulationReliabilityAnalysis::getResult() const
 {
   return result_;
@@ -211,7 +229,8 @@ String SimulationReliabilityAnalysis::__repr__() const
   OSS oss;
   oss << ReliabilityAnalysis::__repr__()
       << WithStopCriteriaAnalysis::__repr__()
-      << " seed=" << getSeed();
+      << " seed=" << getSeed()
+      << " blockSize=" << getBlockSize();
   return oss;
 }
 
@@ -222,6 +241,7 @@ void SimulationReliabilityAnalysis::save(Advocate & adv) const
   ReliabilityAnalysis::save(adv);
   WithStopCriteriaAnalysis::save(adv);
   adv.saveAttribute("seed_", seed_);
+  adv.saveAttribute("blockSize_", blockSize_);
   adv.saveAttribute("result_", result_);
 }
 
@@ -232,6 +252,7 @@ void SimulationReliabilityAnalysis::load(Advocate & adv)
   ReliabilityAnalysis::load(adv);
   WithStopCriteriaAnalysis::load(adv);
   adv.loadAttribute("seed_", seed_);
+  adv.loadAttribute("blockSize_", blockSize_);
   adv.loadAttribute("result_", result_);
 }
 }
