@@ -37,7 +37,7 @@ myStudy.add(aDesign)
 aDesign.run()
 
 # Comparaison
-openturns.testing.assert_almost_equal(outputSample, aDesign.getOutputSample(), 1e-16)
+openturns.testing.assert_almost_equal(outputSample, aDesign.getDesignOfExperiment().getOutputSample(), 1e-16)
 
 ## Taylor Expansions ##
 taylorExpansionsMoments = otguibase.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', model)

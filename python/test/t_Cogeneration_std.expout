@@ -24,15 +24,10 @@ lowerBounds = [10035.5, 2975.33, 3901.31]
 upperBounds = [10364.5, 3024.67, 4098.69]
 levels = [2, 2, 2]
 aDesign_0 = otguibase.GridDesignOfExperiment('aDesign_0', myPhysicalModel, lowerBounds, upperBounds, levels, values)
+aDesign_0.setBlockSize(1)
+interestVariables = ['Ep']
+aDesign_0.setInterestVariables(interestVariables)
 myStudy.add(aDesign_0)
-aDesign_0.run()
-values = [10200, 3000, 4000]
-lowerBounds = [10035.5, 2975.33, 3901.31]
-upperBounds = [10364.5, 3024.67, 4098.69]
-levels = [10, 10, 10]
-aDesign_1 = otguibase.GridDesignOfExperiment('aDesign_1', myPhysicalModel, lowerBounds, upperBounds, levels, values)
-myStudy.add(aDesign_1)
-aDesign_1.run()
 myTaylorExpansionMoments = otguibase.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', myPhysicalModel)
 myStudy.add(myTaylorExpansionMoments)
 myMonteCarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel)
@@ -50,8 +45,18 @@ mySobol.setBlockSize(200)
 mySobol.setSeed(0)
 myStudy.add(mySobol)
 mySRC = otguibase.SRCAnalysis('mySRC', myPhysicalModel, 10000)
+mySRC.setBlockSize(1)
 mySRC.setSeed(0)
 myStudy.add(mySRC)
+values = [10200, 3000, 4000]
+lowerBounds = [10035.5, 2975.33, 3901.31]
+upperBounds = [10364.5, 3024.67, 4098.69]
+levels = [10, 10, 10]
+aDesign_1 = otguibase.GridDesignOfExperiment('aDesign_1', myPhysicalModel, lowerBounds, upperBounds, levels, values)
+aDesign_1.setBlockSize(1)
+interestVariables = ['Ep']
+aDesign_1.setInterestVariables(interestVariables)
+myStudy.add(aDesign_1)
 chaos_0 = otguibase.FunctionalChaosAnalysis('chaos_0', aDesign_1)
 chaos_0.setChaosDegree(2)
 chaos_0.setSparseChaos(False)

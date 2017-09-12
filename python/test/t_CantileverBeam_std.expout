@@ -26,13 +26,6 @@ correlationMatrix[2, 3] = -0.2
 copula = ot.NormalCopula(ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(correlationMatrix))
 myPhysicalModel.setCopula(copula)
 myStudy.add(myPhysicalModel)
-values = [3e+07, 30000, 250, 400]
-lowerBounds = [2.83502e+07, 20166.6, 250.5, 342.975]
-upperBounds = [4.24148e+07, 47021.3, 259.5, 441.262]
-levels = [2, 2, 2, 2]
-aDesign = otguibase.GridDesignOfExperiment('aDesign', myPhysicalModel, lowerBounds, upperBounds, levels, values)
-myStudy.add(aDesign)
-aDesign.run()
 limitState1 = otguibase.LimitState('limitState1', myPhysicalModel, 'y', ot.Greater(), 30)
 myStudy.add(limitState1)
 mySobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel)
@@ -43,8 +36,18 @@ mySobol.setBlockSize(166)
 mySobol.setSeed(0)
 myStudy.add(mySobol)
 mySRC = otguibase.SRCAnalysis('mySRC', myPhysicalModel, 1000)
+mySRC.setBlockSize(1)
 mySRC.setSeed(0)
 myStudy.add(mySRC)
+values = [3e+07, 30000, 250, 400]
+lowerBounds = [2.83502e+07, 20166.6, 250.5, 342.975]
+upperBounds = [4.24148e+07, 47021.3, 259.5, 441.262]
+levels = [2, 2, 2, 2]
+aDesign = otguibase.GridDesignOfExperiment('aDesign', myPhysicalModel, lowerBounds, upperBounds, levels, values)
+aDesign.setBlockSize(1)
+interestVariables = ['y']
+aDesign.setInterestVariables(interestVariables)
+myStudy.add(aDesign)
 myTaylorExpansionMoments = otguibase.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', myPhysicalModel)
 myStudy.add(myTaylorExpansionMoments)
 myMonteCarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel)

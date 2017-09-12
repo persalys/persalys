@@ -26,8 +26,10 @@ lowerBounds = [253.34, 66775.7]
 upperBounds = [351.737, 83224.3]
 levels = [2, 2]
 design = otguibase.GridDesignOfExperiment('design', myPhysicalModel, lowerBounds, upperBounds, levels, values)
+design.setBlockSize(1)
+interestVariables = ['G']
+design.setInterestVariables(interestVariables)
 myStudy.add(design)
-design.run()
 myTaylorExpansionMoments = otguibase.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', myPhysicalModel)
 myStudy.add(myTaylorExpansionMoments)
 myMonteCarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel)
@@ -45,6 +47,7 @@ mySobol.setBlockSize(250)
 mySobol.setSeed(0)
 myStudy.add(mySobol)
 mySRC = otguibase.SRCAnalysis('mySRC', myPhysicalModel, 1000)
+mySRC.setBlockSize(1)
 mySRC.setSeed(0)
 myStudy.add(mySRC)
 
