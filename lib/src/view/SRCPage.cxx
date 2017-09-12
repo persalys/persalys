@@ -46,20 +46,29 @@ void SRCPage::buildInterface()
 
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 
-  // sample size
-  QGroupBox * sampleSizeGroupBox = new QGroupBox(tr("Evaluation parameter"));
-  QGridLayout * sampleSizeLayout = new QGridLayout(sampleSizeGroupBox);
+  // evaluation parameters
+  QGroupBox * evalParamGroupBox = new QGroupBox(tr("Evaluation parameters"));
+  QGridLayout * evalParamGroupBoxLayout = new QGridLayout(evalParamGroupBox);
 
+  // sample size
   QLabel * sampleSizeLabel = new QLabel(tr("Sample size"));
-  sampleSizeLayout->addWidget(sampleSizeLabel, 0, 0);
+  evalParamGroupBoxLayout->addWidget(sampleSizeLabel, 0, 0);
 
   sampleSizeSpinbox_ = new LogSpinBox;
   sampleSizeSpinbox_->setMinimum(2);
   sampleSizeSpinbox_->setMaximum(std::numeric_limits<int>::max());
   sampleSizeLabel->setBuddy(sampleSizeSpinbox_);
-  sampleSizeLayout->addWidget(sampleSizeSpinbox_, 0, 1);
+  evalParamGroupBoxLayout->addWidget(sampleSizeSpinbox_, 0, 1);
 
-  pageLayout->addWidget(sampleSizeGroupBox);
+  // block size
+  QLabel * blockSizeLabel = new QLabel(tr("Block size"));
+  evalParamGroupBoxLayout->addWidget(blockSizeLabel, 1, 0);
+
+  blockSizeSpinbox_ = new UIntSpinBox;
+  blockSizeLabel->setBuddy(blockSizeSpinbox_);
+  evalParamGroupBoxLayout->addWidget(blockSizeSpinbox_, 1, 1);
+
+  pageLayout->addWidget(evalParamGroupBox);
 
   // advanced parameters
   CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
@@ -90,6 +99,7 @@ void SRCPage::initialize(const Analysis& analysis)
     return;
 
   sampleSizeSpinbox_->setValue(analysis_ptr->getSimulationsNumber());
+  blockSizeSpinbox_->setValue(analysis_ptr->getBlockSize());
   seedSpinbox_->setValue(analysis_ptr->getSeed());
 }
 
@@ -98,6 +108,7 @@ Analysis SRCPage::getAnalysis(const String& name, const PhysicalModel& physicalM
 {
   SRCAnalysis analysis(name, physicalModel);
   analysis.setSimulationsNumber(sampleSizeSpinbox_->value());
+  analysis.setBlockSize(blockSizeSpinbox_->value());
   analysis.setSeed(seedSpinbox_->value());
 
   return analysis;

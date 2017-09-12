@@ -110,7 +110,7 @@ void SRCAnalysis::run()
 
       // get input sample of size effectiveBlockSize
       const UnsignedInteger blockFirstIndex =  i * getBlockSize();
-      const Sample blockInputSample(Sample(inputSample, blockFirstIndex, blockFirstIndex + effectiveBlockSize));
+      const Sample blockInputSample(inputSample, blockFirstIndex, blockFirstIndex + effectiveBlockSize);
 
       // Perform a block of simulations
       outputSample.add(computeOutputSample(blockInputSample));

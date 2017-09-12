@@ -554,12 +554,14 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
     namesList << tr("Algorithm")
               << tr("Outputs of interest")
               << tr("Sample size")
+              << tr("Block size")
               << tr("Seed");
 
     // Parameters values
     valuesList << tr("Standardized Regression Coefficients")
                << srcAnalysis.getInterestVariables().__str__().c_str()
                << QString::number(srcAnalysis.getSimulationsNumber())
+               << QString::number(srcAnalysis.getBlockSize())
                << QString::number(srcAnalysis.getSeed());
   }
   else if (analysisType == "FORMAnalysis")
