@@ -4,7 +4,7 @@
 Available constructors:
     FixedDesignOfExperiment(*name, physicalModel*)
 
-    FixedDesignOfExperiment(*name, physicalModel, lowerBound, upperBound, nbValues, values*)
+    FixedDesignOfExperiment(*name, physicalModel, sample*)
 
 Parameters
 ----------
@@ -12,19 +12,9 @@ name : str
     Name
 physicalModel : :class:`~otguibase.PhysicalModel`
     Physical model
-lowerBound : sequence of float
-    Lower bound
-upperBound : sequence of float
-    Upper bound
-nbValues : sequence of int
-    Number of values along each direction
-values : sequence of float
-    Values of the constant variables (optional)
-
-Notes
------
-The sequences must have a dimension equal to the number of inputs in the
-physical model.
+sample : :py:class:`openturns.Sample`
+    Input sample. The sample must have a dimension equal to the number of
+    inputs in the physical model (optional)
 
 Examples
 --------
@@ -43,6 +33,13 @@ Create the design of experiment:
 >>> myDOE = otguibase.FixedDesignOfExperiment('myDOE', myPhysicalModel)"
 
 
-// ---------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
+%feature("docstring") OTGUI::FixedDesignOfExperiment::setOriginalInputSample
+"Input sample accessor.
 
+Parameters
+----------
+sample : :py:class:`openturns.Sample`
+    Input sample. The sample must have a dimension equal to the number of
+    inputs in the physical model"

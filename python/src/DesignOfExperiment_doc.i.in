@@ -2,28 +2,14 @@
 
 %feature("docstring") OTGUI::DesignOfExperiment
 OTGUI_DesignOfExperiment_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getErrorMessage
-OTGUI_DesignOfExperiment_getErrorMessage_doc
 %feature("docstring") OTGUI::DesignOfExperiment::getPhysicalModel
 OTGUI_DesignOfExperiment_getPhysicalModel_doc
 %feature("docstring") OTGUI::DesignOfExperiment::getPythonScript
 OTGUI_DesignOfExperiment_getPythonScript_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getVariableInputNames
-OTGUI_DesignOfExperiment_getVariableInputNames_doc
-%feature("docstring") OTGUI::DesignOfExperiment::run
-OTGUI_DesignOfExperiment_run_doc
 %feature("docstring") OTGUI::DesignOfExperiment::hasPhysicalModel
 OTGUI_DesignOfExperiment_hasPhysicalModel_doc
-%feature("docstring") OTGUI::DesignOfExperiment::initialize
-OTGUI_DesignOfExperiment_initialize_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getSampleFromFile
-OTGUI_DesignOfExperiment_getSampleFromFile_doc
 %feature("docstring") OTGUI::DesignOfExperiment::getInputSample
 OTGUI_DesignOfExperiment_getInputSample_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getFailedInputSample
-OTGUI_DesignOfExperiment_getFailedInputSample_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getNotEvaluatedInputSample
-OTGUI_DesignOfExperiment_getNotEvaluatedInputSample_doc
 %feature("docstring") OTGUI::DesignOfExperiment::setInputSample
 OTGUI_DesignOfExperiment_setInputSample_doc
 %feature("docstring") OTGUI::DesignOfExperiment::getOutputSample

@@ -93,7 +93,7 @@ OTGUI_LimitState_getThreshold_doc
 Returns
 -------
 script : str
-    Python script to replay the analysis"
+    Python script to rebuild the limit state"
 %enddef
 %feature("docstring") OTGUI::LimitStateImplementation::getPythonScript
 OTGUI_LimitState_getPythonScript_doc

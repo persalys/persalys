@@ -28,6 +28,8 @@ template <>
 }
 %}
 
+%ignore OTGUI::DesignOfExperiment::setImplementationAsPersistentObject;
+
 %include DesignOfExperiment_doc.i
 
 OTGUITypedInterfaceObjectHelper(DesignOfExperiment)

@@ -25,9 +25,9 @@ Create the model:
 
 Create the design of experiment:
 
->>> aDesign = otguibase.DesignOfExperimentImplementation('aDesign', myPhysicalModel)
+>>> aDesign = otguibase.FixedDesignOfExperiment('aDesign', myPhysicalModel)
 >>> inputSample = ot.LHSExperiment(myPhysicalModel.getComposedDistribution(), 250).generate()
->>> aDesign.setInputSample(inputSample)
+>>> aDesign.setOriginalInputSample(inputSample)
 >>> aDesign.run()
 
 Create the Functional Chaos Analysis:

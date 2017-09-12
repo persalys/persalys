@@ -4,8 +4,6 @@
 #include "otgui/DesignOfExperimentAnalysis.hxx"
 %}
 
-%ignore *::setDesignOfExperiment;
-
 %include DesignOfExperimentAnalysis_doc.i
 
 %include otgui/DesignOfExperimentAnalysis.hxx

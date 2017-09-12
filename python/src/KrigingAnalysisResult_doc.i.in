@@ -19,7 +19,7 @@ results : sequence of :class:`openturns.KrigingResult`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::KrigingAnalysisResult::getKrigingResultForVariable
+%feature("docstring") OTGUI::KrigingAnalysisResult::getResultForVariable
 "Get the kriging result of a variable.
 
 Parameters

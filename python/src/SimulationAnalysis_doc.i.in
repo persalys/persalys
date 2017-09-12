@@ -61,3 +61,35 @@ Returns
 sample : :py:class:`openturns.Description`
     Output variable names"
 
+// ----------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationAnalysis::getBlockSize
+"Block size accessor.
+
+Returns
+-------
+blockSize : positive int
+    Number of terms analysed together.
+    It is set by default to 1."
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationAnalysis::setBlockSize
+"Block size accessor.
+
+Parameters
+----------
+blockSize : positive int
+    Number of terms analysed together.
+    It is set by default to 1."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SimulationAnalysis::getDesignOfExperiment
+"Design of experiment accessor.
+
+Returns
+-------
+design : :class:`~otguibase.DesignOfExperiment`
+    Design of experiment, result of the analysis"
+

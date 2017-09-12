@@ -7,6 +7,7 @@
 %include GridDesignOfExperiment_doc.i
 
 %ignore OTGUI::GridDesignOfExperiment::updateParameters;
+%ignore OTGUI::GridDesignOfExperiment::setDesignOfExperiment;
 
 %include otgui/GridDesignOfExperiment.hxx
 namespace OTGUI {

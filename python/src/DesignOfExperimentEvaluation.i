@@ -4,6 +4,9 @@
 #include "otgui/DesignOfExperimentEvaluation.hxx"
 %}
 
+%ignore OTGUI::DesignOfExperimentEvaluation::setDesignOfExperiment;
+
+%include DesignOfExperimentEvaluation_doc.i
 
 %include otgui/DesignOfExperimentEvaluation.hxx
 namespace OTGUI {

@@ -40,3 +40,14 @@ Returns
 -------
 results : sequence of :py:class:`openturns.TestResult`
     Results of the Kolmogorov goodness-of-fit test for all the distributions"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FittingTestResult::getErrorMessages
+"Get the sequence of error messages.
+
+Returns
+-------
+messages : sequence of :py:class:`openturns.Description`
+    Error message for each tested distributions. The error message is empty
+    if the distribution has been well tested"
