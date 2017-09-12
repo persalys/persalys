@@ -33,13 +33,19 @@ static Factory<ModelEvaluation> Factory_ModelEvaluation;
 /* Default constructor */
 ModelEvaluation::ModelEvaluation()
   : PhysicalModelAnalysis()
+  , inputNames_()
+  , inputValues_()
+  , designOfExperiment_()
 {
 }
 
 
 /* Constructor with parameters */
-ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & physicalModel)
+ModelEvaluation::ModelEvaluation(const String& name, const PhysicalModel& physicalModel)
   : PhysicalModelAnalysis(name, physicalModel)
+  , inputNames_()
+  , inputValues_()
+  , designOfExperiment_(name, physicalModel)
 {
   initializeParameters(physicalModel.getInputs());
   setInterestVariables(getPhysicalModel().getSelectedOutputsNames());
@@ -47,11 +53,13 @@ ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & phys
 
 
 /* Constructor with parameters */
-ModelEvaluation::ModelEvaluation(const String & name, const PhysicalModel & physicalModel,
-                                 const Point & inputsValues)
+ModelEvaluation::ModelEvaluation(const String& name,
+                                 const PhysicalModel& physicalModel,
+                                 const Point& inputsValues)
   : PhysicalModelAnalysis(name, physicalModel)
   , inputNames_(getPhysicalModel().getInputNames())
   , inputValues_(inputsValues)
+  , designOfExperiment_(name, physicalModel)
 {
   setInterestVariables(getPhysicalModel().getSelectedOutputsNames());
 }
@@ -64,7 +72,7 @@ ModelEvaluation* ModelEvaluation::clone() const
 }
 
 
-void ModelEvaluation::initializeParameters(const InputCollection & inputs)
+void ModelEvaluation::initializeParameters(const InputCollection& inputs)
 {
   inputValues_.clear();
   inputNames_ = getPhysicalModel().getInputNames();
@@ -100,7 +108,7 @@ void ModelEvaluation::run()
   {
     // clear result
     initialize();
-    result_ = ModelEvaluationResult();
+    designOfExperiment_.getImplementation()->initialize();
 
     // output = f(input)
     Sample inputSample(1, getInputValues());
@@ -108,7 +116,10 @@ void ModelEvaluation::run()
 
     Sample outputSample = getPhysicalModel().getFunction(getInterestVariables())(inputSample);
     outputSample.setDescription(getInterestVariables());
-    result_ = ModelEvaluationResult(inputSample, outputSample);
+
+    // set design of experiment
+    designOfExperiment_.setInputSample(inputSample);
+    designOfExperiment_.setOutputSample(outputSample);
 
     notify("analysisFinished");
   }
@@ -136,9 +147,17 @@ void ModelEvaluation::setInputValue(const UnsignedInteger index, const double va
 }
 
 
-ModelEvaluationResult ModelEvaluation::getResult() const
+DesignOfExperiment ModelEvaluation::getDesignOfExperiment() const
 {
-  return result_;
+  return designOfExperiment_;
+}
+
+
+Point ModelEvaluation::getOutputValues() const
+{
+  if (analysisLaunched())
+    return getDesignOfExperiment().getOutputSample()[0];
+  return Point();
 }
 
 
@@ -165,7 +184,7 @@ String ModelEvaluation::getPythonScript() const
 
 bool ModelEvaluation::analysisLaunched() const
 {
-  return getResult().getOutputSample().getSize() != 0;
+  return getDesignOfExperiment().getOutputSample().getSize() != 0;
 }
 
 
@@ -185,9 +204,8 @@ String ModelEvaluation::__repr__() const
 void ModelEvaluation::save(Advocate & adv) const
 {
   PhysicalModelAnalysis::save(adv);
-  adv.saveAttribute("inputNames_", inputNames_);
   adv.saveAttribute("inputValues_", inputValues_);
-  adv.saveAttribute("result_", result_);
+  adv.saveAttribute("designOfExperiment_", designOfExperiment_);
 }
 
 
@@ -195,8 +213,8 @@ void ModelEvaluation::save(Advocate & adv) const
 void ModelEvaluation::load(Advocate & adv)
 {
   PhysicalModelAnalysis::load(adv);
-  adv.loadAttribute("inputNames_", inputNames_);
   adv.loadAttribute("inputValues_", inputValues_);
-  adv.loadAttribute("result_", result_);
+  adv.loadAttribute("designOfExperiment_", designOfExperiment_);
+  inputNames_ = getPhysicalModel().getInputNames();
 }
 }

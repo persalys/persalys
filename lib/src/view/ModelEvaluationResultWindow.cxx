@@ -33,7 +33,7 @@ namespace OTGUI {
 
 ModelEvaluationResultWindow::ModelEvaluationResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
-  , result_(dynamic_cast<ModelEvaluation*>(&*item->getAnalysis().getImplementation())->getResult())
+  , designOfExperiment_(dynamic_cast<ModelEvaluation*>(item->getAnalysis().getImplementation().get())->getDesignOfExperiment())
 {
   buildInterface();
 }
@@ -50,7 +50,7 @@ void ModelEvaluationResultWindow::buildInterface()
   QHBoxLayout * tabLayout = new QHBoxLayout(tab);
 
   // inputs table
-  const UnsignedInteger inputDimension = result_.getInputSample().getDimension();
+  const UnsignedInteger inputDimension = designOfExperiment_.getInputSample().getDimension();
   QGroupBox * inputsBox = new QGroupBox(tr("Input(s)", "", inputDimension));
   QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
 
@@ -66,14 +66,14 @@ void ModelEvaluationResultWindow::buildInterface()
 
   for (UnsignedInteger i = 0; i < inputDimension; ++i)
   {
-    model->setNotEditableItem(i, 0, QString::fromUtf8(result_.getInputSample().getDescription()[i].c_str()));
-    model->setNotEditableItem(i, 1, result_.getInputSample()[0][i], 12);
+    model->setNotEditableItem(i, 0, QString::fromUtf8(designOfExperiment_.getInputSample().getDescription()[i].c_str()));
+    model->setNotEditableItem(i, 1, designOfExperiment_.getInputSample()[0][i], 12);
   }
   inputsLayout->addWidget(inputTable);
   tabLayout->addWidget(inputsBox);
 
   // outputs table
-  const UnsignedInteger nbOutputs = result_.getOutputSample().getDimension();
+  const UnsignedInteger nbOutputs = designOfExperiment_.getOutputSample().getDimension();
   QGroupBox * outputsBox = new QGroupBox(tr("Output(s)", "", nbOutputs));
   QVBoxLayout * outputsLayout = new QVBoxLayout(outputsBox);
 
@@ -89,8 +89,8 @@ void ModelEvaluationResultWindow::buildInterface()
 
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
-    model->setNotEditableItem(i, 0, QString::fromUtf8(result_.getOutputSample().getDescription()[i].c_str()));
-    model->setNotEditableItem(i, 1, result_.getOutputSample()[0][i]);
+    model->setNotEditableItem(i, 0, QString::fromUtf8(designOfExperiment_.getOutputSample().getDescription()[i].c_str()));
+    model->setNotEditableItem(i, 1, designOfExperiment_.getOutputSample()[0][i]);
   }
   outputsLayout->addWidget(outputTable);
   tabLayout->addWidget(outputsBox);

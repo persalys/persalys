@@ -163,7 +163,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
 
   tree_model_ = new TreeModel("");
 
-  QTreeView *view = new DeselectableTreeView;
+  QTreeView * view = new DeselectableTreeView;
   view->setModel(tree_model_);
   connect(view->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(treeSelect(QModelIndex, QModelIndex)));
   variablesLayout->addWidget(view);
@@ -176,7 +176,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
 
   // button Evaluate outputs
   ioCountLabel_ = new QLabel;
-  QPushButton *evaluateOutputsButton = new QPushButton(QIcon(":/images/run-build.png"), tr("Evaluate"));
+  QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/run-build.png"), tr("Evaluate"));
   evaluateOutputsButton->setToolTip(tr("Evaluate the value of the outputs"));
   connect(evaluateOutputsButton, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
   QHBoxLayout * evaluationLayout = new QHBoxLayout;
@@ -283,7 +283,7 @@ void FMIPhysicalModelWindow::evaluateOutputs()
   eval.run();
 
   // get result
-  Sample outputSample(eval.getResult().getOutputSample());
+  Sample outputSample(eval.getDesignOfExperiment().getOutputSample());
 
   // check
   if (!eval.getErrorMessage().empty())
