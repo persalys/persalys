@@ -6,7 +6,7 @@ set -e
 
 git clone https://gitlab.kitware.com/paraview/paraview.git
 cd paraview
-git checkout 95fe92d907a8702b1669b68d5aecf777ae72bcda # 5.4.0
+git checkout v5.4.1
 git submodule init
 git submodule update
 
