@@ -54,7 +54,7 @@ macro (otgui_add_library name)
   endif ()
 endmacro ()
 
-find_package (OpenTURNS 1.9 NO_MODULE REQUIRED)
+find_package (OpenTURNS 1.10 NO_MODULE REQUIRED)
 include ( ${OPENTURNS_USE_FILE} )
 set ( OTGUI_DEFINITIONS ${OPENTURNS_DEFINITIONS} )
 if (NOT BUILD_SHARED_LIBS)

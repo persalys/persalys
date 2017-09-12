@@ -64,10 +64,6 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
-  // TODO remove it when OT version 1.8
-  // Binomial coefficient
-  static OT::UnsignedInteger BinomialCoefficient(const OT::UnsignedInteger n,
-      const OT::UnsignedInteger k);
 protected:
   virtual OT::Function runAlgo(const OT::Sample& inputSample, const OT::Sample& outputSample);
   OT::FunctionalChaosAlgorithm buildFunctionalChaosAlgorithm(const OT::Sample & inputSample, const OT::Sample & outputSample);

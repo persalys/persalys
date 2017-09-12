@@ -20,8 +20,9 @@
  */
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
 
-#include <openturns/MonteCarlo.hxx>
+#include <openturns/ProbabilitySimulationAlgorithm.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/MonteCarloExperiment.hxx>
 
 using namespace OT;
 
@@ -56,6 +57,7 @@ MonteCarloReliabilityAnalysis* MonteCarloReliabilityAnalysis::clone() const
 
 SimulationInterface MonteCarloReliabilityAnalysis::getSimulationAlgorithm(const Event& event)
 {
-  return MonteCarlo(event);
+  const MonteCarloExperiment experiment;
+  return ProbabilitySimulationAlgorithm(event, experiment);
 }
 }

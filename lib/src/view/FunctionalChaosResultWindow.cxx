@@ -27,6 +27,8 @@
 #include "otgui/SensitivityResultWidget.hxx"
 #include "otgui/QtTools.hxx"
 
+#include <openturns/SpecFunc.hxx>
+
 #include <QSplitter>
 #include <QScrollArea>
 #include <QVBoxLayout>
@@ -162,7 +164,7 @@ void FunctionalChaosResultWindow::buildInterface()
 
       // parameters values
       const UnsignedInteger dim = result_.getFunctionalChaosResult().getDistribution().getDimension();
-      const UnsignedInteger maxSize = FunctionalChaosAnalysis::BinomialCoefficient(dim + maxDegree_, maxDegree_);
+      const UnsignedInteger maxSize = SpecFunc::BinomialCoefficient(dim + maxDegree_, maxDegree_);
 
       QStringList valuesList;
       valuesList << QString::number(dim)
