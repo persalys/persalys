@@ -36,7 +36,8 @@ PhysicalModelAnalysis::PhysicalModelAnalysis(const String & name, const Physical
   : AnalysisImplementation(name)
   , physicalModel_(physicalModel)
 {
-  setInterestVariables(physicalModel.getSelectedOutputsNames());
+  if (physicalModel.getSelectedOutputsNames().getSize())
+    setInterestVariables(physicalModel.getSelectedOutputsNames());
 }
 
 
