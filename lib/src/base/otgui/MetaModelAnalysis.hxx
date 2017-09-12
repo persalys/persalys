@@ -35,8 +35,6 @@ public:
   MetaModelAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment);
   MetaModelAnalysis(const OT::String& name, const Analysis& analysis);
 
-  virtual void setInterestVariables(const OT::Description& variablesNames);
-
   bool isLeaveOneOutValidation() const;
   void setLeaveOneOutValidation(const bool validation);
 

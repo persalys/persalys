@@ -44,11 +44,8 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const DesignOfExperimen
   , isDistributionComputed_(false)
   , leaveOneOutValidation_(false)
 {
-  if (!designOfExperiment_.getOutputSample().getSize())
-  {
-    throw InvalidArgumentException(HERE) << "The given design of experiment does not contain output values";
-  }
-  setInterestVariables(designOfExperiment_.getOutputSample().getDescription());
+  if (designOfExperiment_.getOutputSample().getSize())
+    setInterestVariables(designOfExperiment_.getOutputSample().getDescription());
 }
 
 
@@ -65,16 +62,7 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const Analysis& analysi
     throw InvalidArgumentException(HERE) << "The given analysis does not contain any design of experiment";
   }
   designOfExperiment_ = analysis_ptr->getDesignOfExperiment();
-  AnalysisImplementation::setInterestVariables(analysis_ptr->getInterestVariables());
-}
-
-
-void MetaModelAnalysis::setInterestVariables(const Description& variablesNames)
-{
-  if (!variablesNames.getSize())
-    throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
-
-  AnalysisImplementation::setInterestVariables(variablesNames);
+  setInterestVariables(analysis_ptr->getInterestVariables());
 }
 
 
@@ -96,11 +84,9 @@ Sample MetaModelAnalysis::getEffectiveInputSample() const
   if (!designOfExperiment_.hasPhysicalModel())
     return designOfExperiment_.getInputSample();
 
-  const Sample effectiveInputSample(designOfExperiment_.getInputSample());
-
   // if only deterministic inputs
-  if (!designOfExperiment_.getPhysicalModel().hasStochasticInputs() || !effectiveInputSample.getSize())
-    return effectiveInputSample;
+  if (!designOfExperiment_.getPhysicalModel().hasStochasticInputs() || !designOfExperiment_.getInputSample().getSize())
+    return designOfExperiment_.getInputSample();
 
   // if the physical model has stochastic variables: we do not take into account the deterministic variables
   Indices inputIndices;
@@ -108,7 +94,13 @@ Sample MetaModelAnalysis::getEffectiveInputSample() const
     if (designOfExperiment_.getPhysicalModel().getInputs()[i].isStochastic())
       inputIndices.add(i);
 
-  return effectiveInputSample.getMarginal(inputIndices);
+  if (!inputIndices.check(designOfExperiment_.getInputSample().getDimension()))
+    throw InvalidArgumentException(HERE) << "The design of experiment input sample dimension ("
+                                         << designOfExperiment_.getInputSample().getDimension()
+                                         << ") does not match the number of stochastic inputs in the physical model ("
+                                         << inputIndices.getSize() << ")";
+
+  return designOfExperiment_.getInputSample().getMarginal(inputIndices);
 }
 
 

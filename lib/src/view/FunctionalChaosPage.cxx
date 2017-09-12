@@ -101,8 +101,16 @@ void FunctionalChaosPage::initialize(const Analysis& analysis)
   if (!analysis_ptr)
     return;
 
-  inputSampleSize_ = analysis_ptr->getEffectiveInputSample().getSize();
-  inputSampleDimension_ = analysis_ptr->getEffectiveInputSample().getDimension();
+  inputSampleSize_ = analysis_ptr->getDesignOfExperiment().getSample().getSize();
+  UnsignedInteger inputDimension = analysis_ptr->getDesignOfExperiment().getInputSample().getDimension();
+  if (analysis_ptr->getDesignOfExperiment().hasPhysicalModel())
+  {
+    if (analysis_ptr->getDesignOfExperiment().getPhysicalModel().hasStochasticInputs())
+      inputDimension = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getStochasticInputNames().getSize();
+    else
+      inputDimension = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getInputNames().getSize();
+  }
+  inputSampleDimension_ = inputDimension;
 
   chaosDegreeSpinbox_->setValue(analysis_ptr->getChaosDegree());
   leaveOneOutCheckBox_->setChecked(analysis_ptr->isLeaveOneOutValidation());

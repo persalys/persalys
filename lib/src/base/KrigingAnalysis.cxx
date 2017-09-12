@@ -20,6 +20,8 @@
  */
 #include "otgui/KrigingAnalysis.hxx"
 
+#include "otgui/SimulationAnalysis.hxx"
+
 #include <openturns/OTBase.hxx>
 
 using namespace OT;
@@ -33,6 +35,10 @@ static Factory<KrigingAnalysis> Factory_KrigingAnalysis;
 /* Default constructor */
 KrigingAnalysis::KrigingAnalysis()
   : MetaModelAnalysis()
+  , basis_()
+  , covarianceModel_()
+  , result_()
+  , optimizeParameters_(true)
 {
 
 }
@@ -41,26 +47,46 @@ KrigingAnalysis::KrigingAnalysis()
 /* Constructor with parameters */
 KrigingAnalysis::KrigingAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
   : MetaModelAnalysis(name, designOfExperiment)
+  , basis_()
+  , covarianceModel_()
+  , result_()
   , optimizeParameters_(true)
 {
-  const Sample effectiveInputSample(getEffectiveInputSample());
-  if (effectiveInputSample.getSize())
+  UnsignedInteger inputDimension = designOfExperiment.getInputSample().getDimension();
+  if (designOfExperiment.hasPhysicalModel())
   {
-    const UnsignedInteger inputDimension = effectiveInputSample.getDimension();
-    // basis
-    setBasis(ConstantBasisFactory(inputDimension).build());
-    // cov model
-    setCovarianceModel(SquaredExponential(inputDimension));
+    if (designOfExperiment.getPhysicalModel().hasStochasticInputs())
+      inputDimension = designOfExperiment.getPhysicalModel().getStochasticInputNames().getSize();
+    else
+      inputDimension = designOfExperiment.getPhysicalModel().getInputNames().getSize();
   }
+
+  // basis
+  setBasis(ConstantBasisFactory(inputDimension).build());
+  // cov model
+  setCovarianceModel(SquaredExponential(inputDimension));
 }
 
 
 /* Constructor with parameters */
 KrigingAnalysis::KrigingAnalysis(const String& name, const Analysis& analysis)
   : MetaModelAnalysis(name, analysis)
+  , basis_()
+  , covarianceModel_()
+  , result_()
   , optimizeParameters_(true)
 {
-  const UnsignedInteger inputDimension = getEffectiveInputSample().getDimension();
+  SimulationAnalysis * analysis_ptr = dynamic_cast<SimulationAnalysis*>(analysis.getImplementation().get());
+
+  UnsignedInteger inputDimension = analysis_ptr->getDesignOfExperiment().getInputSample().getDimension();
+  if (analysis_ptr->getDesignOfExperiment().hasPhysicalModel())
+  {
+    if (analysis_ptr->getDesignOfExperiment().getPhysicalModel().hasStochasticInputs())
+      inputDimension = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getStochasticInputNames().getSize();
+    else
+      inputDimension = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getInputNames().getSize();
+  }
+
   // basis
   setBasis(ConstantBasisFactory(inputDimension).build());
   // cov model
