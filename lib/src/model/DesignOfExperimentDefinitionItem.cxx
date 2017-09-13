@@ -143,6 +143,14 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
   evaluationItem->setEditable(false);
   evaluationItem->appendAction(newMetaModel_);
 
+  // connections
+  // - signal for the PhysicalModelDiagramItem
+  connect(evaluationItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SIGNAL(analysisInProgressStatusChanged(bool)));
+  if (getParentOTStudyItem())
+  {
+    connect(evaluationItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
+  }
+
   // insert item
   insertRow(0, evaluationItem);
 
@@ -223,6 +231,12 @@ void DesignOfExperimentDefinitionItem::removeAnalysis()
   if (analysis_.isRunning())
   {
     emit emitErrorMessageRequested(tr("Can not remove a running analysis."));
+    return;
+  }
+  // check
+  if (analysisInProgress_)
+  {
+    emit emitErrorMessageRequested(tr("Can not remove a design of experiment when an analysis is running."));
     return;
   }
 

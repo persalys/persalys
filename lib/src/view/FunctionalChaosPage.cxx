@@ -142,7 +142,7 @@ bool FunctionalChaosPage::validatePage()
   errorMessageLabel_->setText("");
 
   const UnsignedInteger degree = chaosDegreeSpinbox_->value();
-  const UnsignedInteger n = degree + inputSampleDimension_;//use getEffectiveInputSample instead
+  const UnsignedInteger n = degree + inputSampleDimension_;
   // compute binomial coefficient
   const UnsignedInteger minimumSize  = FunctionalChaosAnalysis::BinomialCoefficient(n, degree);
   if (inputSampleSize_ < minimumSize)

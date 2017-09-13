@@ -177,9 +177,7 @@ void DesignOfExperimentEvaluation::run()
     designOfExperiment_.setInputSample(inputSample);
     designOfExperiment_.setOutputSample(outputSample);
 
-    blockNotification("DesignOfExperimentDefinition");
     notify("analysisFinished");
-    blockNotification();
   }
   catch (std::exception & ex)
   {

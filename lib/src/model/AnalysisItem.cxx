@@ -197,19 +197,22 @@ void AnalysisItem::modifyAnalysis()
   DesignOfExperimentAnalysis * dmAnalysis_ptr = dynamic_cast<DesignOfExperimentAnalysis*>(analysis_.getImplementation().get());
   if (dmAnalysis_ptr)
   {
-    // must have at least a point
-    if (!dmAnalysis_ptr->getDesignOfExperiment().getSample().getSize())
-    {
-      emit emitErrorMessageRequested(tr("The sample is empty."));
-      return;
-    }
     // if meta model analysis
     if (analysisType == "FunctionalChaosAnalysis" || analysisType == "KrigingAnalysis")
     {
       // must have output data
       if (!dmAnalysis_ptr->getDesignOfExperiment().getOutputSample().getSize())
       {
-        emit emitErrorMessageRequested(tr("The model must have at least one output."));
+        emit emitErrorMessageRequested(tr("The sample must not be empty and must contain output values."));
+        return;
+      }
+    }
+    // must have at least a point
+    else
+    {
+      if (!dmAnalysis_ptr->getDesignOfExperiment().getSample().getSize())
+      {
+        emit emitErrorMessageRequested(tr("The sample is empty."));
         return;
       }
     }
