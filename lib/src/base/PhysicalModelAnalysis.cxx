@@ -54,20 +54,6 @@ PhysicalModel PhysicalModelAnalysis::getPhysicalModel() const
 }
 
 
-void PhysicalModelAnalysis::setInterestVariables(const Description& outputsNames)
-{
-  if (!outputsNames.getSize())
-    throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
-
-  const Description modelOutputsNames(physicalModel_.getOutputNames());
-  for (UnsignedInteger i=0; i<outputsNames.getSize(); ++i)
-    if (!modelOutputsNames.contains(outputsNames[i]))
-      throw InvalidArgumentException(HERE) << "The name " << outputsNames[i] << " does not match an output name of the model";
-
-  AnalysisImplementation::setInterestVariables(outputsNames);
-}
-
-
 String PhysicalModelAnalysis::__repr__() const
 {
   OSS oss;
