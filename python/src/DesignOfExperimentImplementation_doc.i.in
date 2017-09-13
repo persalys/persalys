@@ -122,3 +122,8 @@ sample : :py:class:`openturns.Sample`
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::getSample
 OTGUI_DesignOfExperiment_getSample_doc
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::initialize
+"Empty the input and output samples."

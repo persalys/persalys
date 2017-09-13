@@ -3,6 +3,9 @@
 
 The OTGui allows the user to load data samples and analyse them. They are considered as data models.
 
+    DataModel(*name, fileName, inputColumns, outputColumns, inputNames, outputNames*)
+    DataModel(*name, inputSample, outputSample*)
+
 Parameters
 ----------
 name : str
@@ -17,6 +20,10 @@ inputNames : sequence of str
     Names of the input variables (optional)
 outputNames : sequence of str
     Names of the output variables (optional)
+inputSample : :py:class:`openturns.Sample`
+    Input sample
+outputSample : :py:class:`openturns.Sample`
+    Output sample (optional)
 
 Examples
 --------
@@ -83,3 +90,33 @@ Returns
 -------
 names : :py:class:`openturns.Description`
    Names of the output variables"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataModel::getFileName
+"File name accessor.
+
+Returns
+-------
+fileName : str
+   File name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataModel::setFileName
+"File name accessor.
+
+Parameters
+----------
+fileName : str
+   File name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataModel::getSampleFromFile
+"Sample from the file accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.Sample`
+   Sample from the file"

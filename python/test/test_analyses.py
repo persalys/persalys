@@ -75,6 +75,10 @@ design_4 = otguibase.ProbabilisticDesignOfExperiment('design_4', model1, 10, "MO
 design_4.run()
 myStudy.add(design_4)
 
+## model 4 ##
+model4 = otguibase.DataModel('model4', inputSample, design_1.getDesignOfExperiment().getOutputSample())
+myStudy.add(model4)
+
 ## 0- models evaluations
 
 ## 0-a evaluation model1 ##
