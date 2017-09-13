@@ -49,13 +49,12 @@ public:
   virtual DataModel * clone() const;
 
   OT::String getFileName() const;
-  virtual void setFileName(const OT::String& fileName);
+  void setFileName(const OT::String& fileName);
 
   OT::Indices getInputColumns() const;
-  virtual void setInputColumns(const OT::Indices & inputColumns);
   OT::Indices getOutputColumns() const;
   void setColumns(const OT::Indices & inputColumns,
-                  const OT::Indices & outputColumns,
+                  const OT::Indices & outputColumns=OT::Indices(),
                   const OT::Description & inputNames=OT::Description(),
                   const OT::Description & outputNames=OT::Description());
 

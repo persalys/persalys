@@ -58,6 +58,7 @@ DataModel::DataModel(const String& name,
 }
 
 
+/* Constructor with parameters */
 DataModel::DataModel(const String& name,
                      const Sample& inSample,
                      const Sample& outSample)
@@ -95,22 +96,23 @@ String DataModel::getFileName() const
 
 void DataModel::setFileName(const String& fileName)
 {
-  const String oldName = fileName_;
-
   if (fileName.empty())
     throw InvalidArgumentException(HERE) << "The file name can not be empty";
 
   if (fileName_ != fileName)
   {
     const String oldFileName = fileName_;
+    sampleFromFile_.clear();
     try
     {
-      sampleFromFile_.clear();
       fileName_ = fileName;
       getSampleFromFile();
       // reinitialization
       initialize();
       inputColumns_ = Indices();
+      outputColumns_ = Indices();
+      inputNames_ = Description();
+      outputNames_ = Description();
     }
     catch (std::exception)
     {
@@ -121,26 +123,12 @@ void DataModel::setFileName(const String& fileName)
   {
     getSampleFromFile();
   }
-
-  // reinitialization
-  if (oldName != fileName)
-  {
-    outputColumns_ = Indices();
-    inputNames_ = Description();
-    outputNames_ = Description();
-  }
 }
 
 
 Indices DataModel::getInputColumns() const
 {
   return inputColumns_;
-}
-
-
-void DataModel::setInputColumns(const Indices& inputColumns)
-{
-  setColumns(inputColumns, outputColumns_, inputNames_, outputNames_);
 }
 
 
@@ -280,7 +268,7 @@ String DataModel::getPythonScript() const
   for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++ i)
   {
     oss << inputColumns_[i];
-    if (i < inputColumns_.getSize()-1)
+    if (i < inputColumns_.getSize() - 1)
       oss << ", ";
   }
   oss << "]\n";
@@ -289,7 +277,7 @@ String DataModel::getPythonScript() const
   for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++ i)
   {
     oss << outputColumns_[i];
-    if (i < outputColumns_.getSize()-1)
+    if (i < outputColumns_.getSize() - 1)
       oss << ", ";
   }
   oss << "]\n";
@@ -298,7 +286,7 @@ String DataModel::getPythonScript() const
   for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++ i)
   {
     oss << "'" << inputNames_[i] << "'";
-    if (i < inputNames_.getSize()-1)
+    if (i < inputNames_.getSize() - 1)
       oss << ", ";
   }
   oss << "]\n";
@@ -307,7 +295,7 @@ String DataModel::getPythonScript() const
   for (UnsignedInteger i = 0; i < outputNames_.getSize(); ++ i)
   {
     oss << "'" << outputNames_[i] << "'";
-    if (i < outputNames_.getSize()-1)
+    if (i < outputNames_.getSize() - 1)
       oss << ", ";
   }
   oss << "]\n";
