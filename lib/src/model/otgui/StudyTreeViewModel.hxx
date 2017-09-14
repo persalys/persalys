@@ -41,6 +41,9 @@ public:
 
 signals:
   void newOTStudyCreated(OTStudyItem*);
+
+public:
+  static const int DEFAULT_SIGNIFICANT_DIGITS;
 };
 }
 #endif

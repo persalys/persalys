@@ -24,6 +24,8 @@ using namespace OT;
 
 namespace OTGUI {
 
+const int StudyTreeViewModel::DEFAULT_SIGNIFICANT_DIGITS = 12;
+
 StudyTreeViewModel::StudyTreeViewModel(QObject *parent)
   : QStandardItemModel(parent)
   , Observer()

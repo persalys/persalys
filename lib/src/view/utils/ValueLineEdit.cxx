@@ -22,6 +22,7 @@
 #include "otgui/ValueLineEdit.hxx"
 
 #include "otgui/OTguiException.hxx"
+#include "otgui/StudyTreeViewModel.hxx"
 
 #include <QDoubleValidator>
 
@@ -39,7 +40,7 @@ ValueLineEdit::ValueLineEdit(const double value, QWidget *parent)
 
 void ValueLineEdit::setValue(const double value, const bool enabled)
 {
-  setText(QString::number(value, 'g', 15));
+  setText(QString::number(value, 'g', StudyTreeViewModel::DEFAULT_SIGNIFICANT_DIGITS));
   //TODO setText(QString::number(value, 'g', precision_));
   setEnabled(enabled);
 }
