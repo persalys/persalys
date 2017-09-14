@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMainWindow, main window of the interface
+ *  @brief QAction
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,39 +18,37 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_MAINWINDOW_HXX
-#define OTGUI_MAINWINDOW_HXX
+#ifndef OTGUI_OTGUIACTIONS_HXX
+#define OTGUI_OTGUIACTIONS_HXX
 
-#include "otgui/MainWidget.hxx"
-
-#include <QMainWindow>
-#include <QDockWidget>
-#include <QCloseEvent>
-
-#include <PyConsole_Console.h>
+#include <QAction>
 
 namespace OTGUI {
-class OTGUI_API MainWindow : public QMainWindow
+class OTguiActions : public QObject
 {
   Q_OBJECT
 
 public:
-  MainWindow();
+  OTguiActions(QObject * parent);
+  QAction * newAction() const;
+  QAction * openAction() const;
+  QAction * saveAction() const;
+  QAction * saveAsAction() const;
+  QAction * importPyAction() const;
+  QAction * closeAction() const;
+  QAction * exitAction() const;
 
 public slots:
-  void exitApplication();
-
-protected:
-  void buildInterface();
-  void buildActions();
-
-private slots:
-  void importPython();
-  virtual void closeEvent(QCloseEvent * event);
+  void updateActionsAvailability(bool analysisInProgress);
 
 private:
-  MainWidget * mainWidget_;
-  PyConsole_Console * pythonConsole_;
+  QAction * new_;
+  QAction * open_;
+  QAction * save_;
+  QAction * saveAs_;
+  QAction * importPy_;
+  QAction * close_;
+  QAction * exit_;
 };
 }
 #endif

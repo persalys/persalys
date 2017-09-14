@@ -30,6 +30,7 @@
 
 #ifdef OTGUI_HAVE_PARAVIEW
 #include "otgui/PVServerManagerInterface.hxx"
+#include "otgui/PVServerManagerSingleton.hxx"
 #include "otgui/PVSpreadSheetViewWidget.hxx"
 #include "otgui/PVParCooViewWidget.hxx"
 #include "otgui/PVMatrixPlotViewWidget.hxx"
@@ -147,7 +148,7 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
   QTabWidget * tablesTabWidget = new QTabWidget;
 
   // -- doe tab
-  PVSpreadSheetViewWidget * spreadSheetWidget = new PVSpreadSheetViewWidget(this, new PVServerManagerInterface);
+  PVSpreadSheetViewWidget * spreadSheetWidget = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
   spreadSheetWidget->setData(designOfExperiment_.getSample());
 
   tablesTabWidget->addTab(spreadSheetWidget, tr("DOE"));
@@ -174,12 +175,12 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
 
     // --- data for scatter plots tab
     // sample scatter plot
-    sampleScatterPlotWidget = new PVXYChartViewWidget(this, new PVServerManagerInterface);
+    sampleScatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
     sampleScatterPlotWidget->setData(designOfExperiment_.getInputSample(), Qt::green);
 
     // sample rank scatter plot
     const Sample inputsRank(allInputsSampleRank, 0, inSampleSize);
-    sampleRankScatterPlotWidget = new PVXYChartViewWidget(this, new PVServerManagerInterface);
+    sampleRankScatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
     sampleRankScatterPlotWidget->setData(inputsRank, Qt::green);
 
     // labels for the legend
@@ -191,8 +192,9 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
     if (failedInSampleSize)
     {
       // --- table tab
-      PVSpreadSheetViewWidget * failedPointsTable = new PVSpreadSheetViewWidget(this, new PVServerManagerInterface);
+      PVSpreadSheetViewWidget * failedPointsTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
       failedPointsTable->setData(failedInputSample_);
+
       tablesTabWidget->addTab(failedPointsTable, tr("Failed points"));
 
       // --- data for scatter plots tab
@@ -212,8 +214,9 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
     if (notEvalInSampleSize)
     {
       // --- table tab
-      PVSpreadSheetViewWidget * notEvaluatedPointsTable = new PVSpreadSheetViewWidget(this, new PVServerManagerInterface);
+      PVSpreadSheetViewWidget * notEvaluatedPointsTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
       notEvaluatedPointsTable->setData(notEvaluatedInputSample_);
+
       tablesTabWidget->addTab(notEvaluatedPointsTable, tr("Not evaluated points"));
 
       // --- data for scatter plots tab
@@ -258,7 +261,7 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
   WidgetBoundToDockWidget * cobwebTabWidget = new WidgetBoundToDockWidget(this);
   QVBoxLayout * cobwebTabWidgetLayout = new QVBoxLayout(cobwebTabWidget);
 
-  PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, new PVServerManagerInterface);
+  PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, PVServerManagerSingleton::Get());
   cobwebWidget->setData(designOfExperiment_.getSample());
   cobwebTabWidgetLayout->addWidget(cobwebWidget);
 
@@ -271,7 +274,7 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
   WidgetBoundToDockWidget * matrixTabWidget = new WidgetBoundToDockWidget(this);
   QVBoxLayout * matrixTabWidgetLayout = new QVBoxLayout(matrixTabWidget);
 
-  PVMatrixPlotViewWidget * pvmatrixWidget = new PVMatrixPlotViewWidget(this, new PVServerManagerInterface);
+  PVMatrixPlotViewWidget * pvmatrixWidget = new PVMatrixPlotViewWidget(this, PVServerManagerSingleton::Get());
   pvmatrixWidget->setData(designOfExperiment_.getSample());
   pvmatrixWidget->setAxisToShow(designOfExperiment_.getSample().getDescription());
   matrixTabWidgetLayout->addWidget(pvmatrixWidget);
@@ -289,7 +292,7 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
   QVBoxLayout * xyScatterTabWidgetLayout = new QVBoxLayout(xyScatterTabWidget);
 
   // sample
-  PVXYChartViewWidget * pvXYChartWidget = new PVXYChartViewWidget(this, new PVServerManagerInterface);
+  PVXYChartViewWidget * pvXYChartWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
   pvXYChartWidget->PVViewWidget::setData(designOfExperiment_.getSample());
   if ((inputNames_ + outputNames_) != (inAxisTitles_ + outAxisTitles_))
     pvXYChartWidget->setAxisTitles(inputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);
@@ -297,7 +300,7 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
 
   // sample rank
   const Sample sampleRank(designOfExperiment_.getSample().rank() / designOfExperiment_.getSample().getSize());
-  PVXYChartViewWidget * rankPvXYChartWidget = new PVXYChartViewWidget(this, new PVServerManagerInterface);
+  PVXYChartViewWidget * rankPvXYChartWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
   rankPvXYChartWidget->PVViewWidget::setData(sampleRank);
   if ((inputNames_ + outputNames_) != (inAxisTitles_ + outAxisTitles_))
     rankPvXYChartWidget->setAxisTitles(inputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);

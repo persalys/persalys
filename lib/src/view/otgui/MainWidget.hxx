@@ -18,39 +18,38 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_MAINWINDOW_HXX
-#define OTGUI_MAINWINDOW_HXX
+#ifndef OTGUI_MAINWIDGET_HXX
+#define OTGUI_MAINWIDGET_HXX
 
-#include "otgui/MainWidget.hxx"
+#include "otgui/StudyTreeView.hxx"
+#include "otgui/OTguiMdiArea.hxx"
+#include "otgui/OTguiActions.hxx"
 
-#include <QMainWindow>
 #include <QDockWidget>
-#include <QCloseEvent>
-
-#include <PyConsole_Console.h>
 
 namespace OTGUI {
-class OTGUI_API MainWindow : public QMainWindow
+class OTGUI_API MainWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  MainWindow();
+  MainWidget(QWidget * parent=0);
+  StudyTreeView * getStudyTree() const;
+  OTguiMdiArea * getMdiArea() const;
+  OTguiActions * getActions() const;
 
 public slots:
-  void exitApplication();
+  void showGraphSettingDockWidget(QWidget*);
+  void hideGraphSettingDockWidget(QWidget*);
 
 protected:
   void buildInterface();
-  void buildActions();
-
-private slots:
-  void importPython();
-  virtual void closeEvent(QCloseEvent * event);
 
 private:
-  MainWidget * mainWidget_;
-  PyConsole_Console * pythonConsole_;
+  StudyTreeView * studyTree_;
+  OTguiMdiArea * mdiArea_;
+  QDockWidget * graphSettingDockWidget_;
+  OTguiActions * actions_;
 };
 }
 #endif

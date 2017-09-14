@@ -46,9 +46,6 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * i
 {
   setWindowTitle(tr("YACS physical model"));
 
-  connect(item, SIGNAL(parallelizeStatusChanged()), this, SLOT(updateParallelizeStatusWidget()));
-  connect(item, SIGNAL(wantedMachineChanged()), this, SLOT(updateWantedMachineWidget()));
-
   QWidget * mainWidget = new QWidget;
   QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
 

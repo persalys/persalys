@@ -32,12 +32,12 @@ WidgetBoundToDockWidget::WidgetBoundToDockWidget(QWidget* parent)
   , dockWidgetAlreadyShown_(false)
   , parentSubWindow_(0)
 {
-  MainWindow * mainWindow = findMainWindowInHierachy();
-  if (!mainWindow)
+  MainWidget * mainWidget = findMainWidgetInHierachy();
+  if (!mainWidget)
     throw InvalidArgumentException(HERE) << "Internal error : No main window found !";
 
-  connect(this, SIGNAL(showDockWidgetRequested(QWidget*)), mainWindow, SLOT(showGraphSettingDockWidget(QWidget*)));
-  connect(this, SIGNAL(hideDockWidgetRequested(QWidget*)), mainWindow, SLOT(hideGraphSettingDockWidget(QWidget*)));
+  connect(this, SIGNAL(showDockWidgetRequested(QWidget*)), mainWidget, SLOT(showGraphSettingDockWidget(QWidget*)));
+  connect(this, SIGNAL(hideDockWidgetRequested(QWidget*)), mainWidget, SLOT(hideGraphSettingDockWidget(QWidget*)));
 
   parentSubWindow_ = findSubWindowInHierachy();
   if (!parentSubWindow_)
@@ -46,12 +46,12 @@ WidgetBoundToDockWidget::WidgetBoundToDockWidget(QWidget* parent)
 }
 
 
-MainWindow * WidgetBoundToDockWidget::findMainWindowInHierachy()
+MainWidget * WidgetBoundToDockWidget::findMainWidgetInHierachy()
 {
   QObject * curPar(parent());
   while (curPar)
   {
-    MainWindow * isMW(qobject_cast<MainWindow *>(curPar));
+    MainWidget * isMW(qobject_cast<MainWidget *>(curPar));
     if (isMW)
       return isMW;
     curPar = curPar->parent();
@@ -97,7 +97,8 @@ void WidgetBoundToDockWidget::showDockWidget()
   if (!dockWidget_)
     return;
 
-  if (parentSubWindow_->windowState() == Qt::WindowActive || parentSubWindow_->windowState() == (Qt::WindowActive|Qt::WindowMaximized))
+  if (parentSubWindow_->windowState() == Qt::WindowActive ||
+      parentSubWindow_->windowState() == (Qt::WindowActive | Qt::WindowMaximized))
   {
     dockWidgetAlreadyShown_ = true;
     emit showDockWidgetRequested(dockWidget_);
@@ -117,11 +118,14 @@ void WidgetBoundToDockWidget::hideDockWidget()
 
 void WidgetBoundToDockWidget::updateDockWidgetVisibility(Qt::WindowStates /*oldState*/, Qt::WindowStates newState)
 {
-  if ((newState == Qt::WindowActive || newState == (Qt::WindowActive|Qt::WindowMaximized)) && !dockWidgetAlreadyShown_ && isVisible())
+  if ((newState == Qt::WindowActive || newState == (Qt::WindowActive | Qt::WindowMaximized)) &&
+       !dockWidgetAlreadyShown_ &&
+       isVisible())
   {
     showDockWidget();
   }
-  else if (newState == Qt::WindowNoState && dockWidgetAlreadyShown_)
+  else if (newState == Qt::WindowNoState &&
+           dockWidgetAlreadyShown_)
   {
     hideDockWidget();
   }

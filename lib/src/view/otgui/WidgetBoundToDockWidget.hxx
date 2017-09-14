@@ -21,7 +21,7 @@
 #ifndef OTGUI_WIDGETBOUNDTODOCKWIDGET_HXX
 #define OTGUI_WIDGETBOUNDTODOCKWIDGET_HXX
 
-#include "otgui/MainWindow.hxx"
+#include "otgui/MainWidget.hxx"
 #include "otgui/OTGuiprivate.hxx"
 
 #include <QMdiSubWindow>
@@ -34,7 +34,7 @@ class OTGUI_API WidgetBoundToDockWidget : public QWidget
 public:
   WidgetBoundToDockWidget(QWidget* parent=0);
 
-  MainWindow * findMainWindowInHierachy();
+  MainWidget * findMainWidgetInHierachy();
   QMdiSubWindow * findSubWindowInHierachy();
 
   void setDockWidget(QWidget*);

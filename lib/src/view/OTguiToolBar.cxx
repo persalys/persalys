@@ -24,44 +24,29 @@
 
 namespace OTGUI {
 
-OTguiToolBar::OTguiToolBar(QWidget * parent)
+OTguiToolBar::OTguiToolBar(const OTguiActions* actions, QWidget * parent)
   : QToolBar(parent)
 {
   // we set the object name to avoid the following warning
   // when closing the interface :
   // QMainWindow::saveState(): 'objectName' not set for QToolBar ...
   setObjectName("OTguiToolBar");
-  buildActions();
+  buildActions(actions);
 }
 
 
-void OTguiToolBar::buildActions()
+void OTguiToolBar::buildActions(const OTguiActions* actions)
 {
-  QAction * action = new QAction(QIcon(":/images/document-new22x22.png"), tr("&New OTStudy"), this);
-  action->setStatusTip(tr("Create a new OTStudy"));
-  connect(action, SIGNAL(triggered()), this, SIGNAL(createNewOTStudy()));
-  addAction(action);
-
-  action = new QAction(QIcon(":/images/document-open22x22.png"), tr("&Open an OTStudy"), this);
-  action->setStatusTip(tr("Open an existing OTStudy"));
-  connect(action, SIGNAL(triggered()), this, SIGNAL(openOTStudy()));
-  addAction(action);
-
-  importPythonAction_ = new QAction(QIcon(":/images/document-import22x22.png"), tr("&Import Python"), this);
-  importPythonAction_->setStatusTip(tr("Import a Python Script"));
-  connect(importPythonAction_, SIGNAL(triggered()), this, SIGNAL(importPython()));
-  addAction(importPythonAction_);
-
-  action = new QAction(QIcon(":/images/document-save22x22.png"), tr("&Save the OTStudy"), this);
-  action->setStatusTip(tr("Save the current OTStudy"));
-  connect(action, SIGNAL(triggered()), this, SIGNAL(saveOTStudy()));
-  addAction(action);
+  addAction(actions->newAction());
+  addAction(actions->openAction());
+  addAction(actions->importPyAction());
+  addAction(actions->saveAction());
 }
 
-
+/*
 void OTguiToolBar::updateActionsAvailability(const bool analysisInProgress)
 {
   // can not import a Python script when an analysis is running
   importPythonAction_->setDisabled(analysisInProgress);
-}
+}*/
 }
