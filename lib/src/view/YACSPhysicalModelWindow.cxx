@@ -22,13 +22,11 @@
 
 #include "otgui/YACSPhysicalModel.hxx"
 #include "otgui/PhysicalModelWindowWidget.hxx"
-#include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/QtTools.hxx"
 
 #include "Py2YacsDialog.hxx"
 
 #include <QFileDialog>
-#include <QHeaderView>
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QFileInfo>
@@ -43,6 +41,7 @@ namespace OTGUI {
 YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
+  , XMLfileNameEdit_(0)
 {
   setWindowTitle(tr("YACS physical model"));
 
@@ -55,7 +54,7 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * i
   fieldsLayout->addWidget(new QLabel("Data file"));
 
   XMLfileNameEdit_ = new QLineEdit;
-  XMLfileNameEdit_->setText(QString::fromUtf8(dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->getXMLFileName().c_str()));
+  XMLfileNameEdit_->setText(QString::fromUtf8(dynamic_cast<YACSPhysicalModel*>(physicalModel_.getImplementation().get())->getXMLFileName().c_str()));
   fieldsLayout->addWidget(XMLfileNameEdit_);
 
   QPushButton * selectFileButton = new QPushButton(tr("Search file"));
@@ -89,9 +88,10 @@ void YACSPhysicalModelWindow::selectImportFileDialogRequested()
   QString currentDir = settings.value("currentDir").toString();
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Data to import..."),
-                     currentDir,
-                     tr("Data files (*.xml);;"));
+  QString fileName = QFileDialog::getOpenFileName(this,
+                                                  tr("Data to import..."),
+                                                  currentDir,
+                                                  tr("Data files (*.xml);;"));
 
   if (!fileName.isEmpty())
   {
@@ -101,7 +101,8 @@ void YACSPhysicalModelWindow::selectImportFileDialogRequested()
     // check
     if (!file.open(QFile::ReadOnly))
     {
-      QMessageBox::warning(this, tr("Warning"),
+      QMessageBox::warning(this,
+                           tr("Warning"),
                            tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
     }
     else
@@ -109,7 +110,7 @@ void YACSPhysicalModelWindow::selectImportFileDialogRequested()
       XMLfileNameEdit_->setText(fileName);
       try
       {
-        dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->setXMLFileName(fileName.toLocal8Bit().data());
+        dynamic_cast<YACSPhysicalModel*>(physicalModel_.getImplementation().get())->setXMLFileName(fileName.toLocal8Bit().data());
 
         setErrorMessage("");
       }
@@ -130,7 +131,7 @@ void YACSPhysicalModelWindow::buildSchemaDialogRequested()
     currentDir = QDir::homePath();
 
   Py2YacsDialog yacsDialog;
-  if(yacsDialog.exec())
+  if (yacsDialog.exec())
   {
     QString fileName = yacsDialog.getYacsFile();
     QFile file(fileName);
@@ -138,7 +139,8 @@ void YACSPhysicalModelWindow::buildSchemaDialogRequested()
     // check
     if (!file.open(QFile::ReadOnly))
     {
-      QMessageBox::warning(this, tr("Warning"),
+      QMessageBox::warning(this,
+                           tr("Warning"),
                            tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
     }
     else
@@ -146,7 +148,7 @@ void YACSPhysicalModelWindow::buildSchemaDialogRequested()
       XMLfileNameEdit_->setText(fileName);
       try
       {
-        dynamic_cast<YACSPhysicalModel*>(&*physicalModel_.getImplementation())->setXMLFileName(fileName.toLocal8Bit().data());
+        dynamic_cast<YACSPhysicalModel*>(physicalModel_.getImplementation().get())->setXMLFileName(fileName.toLocal8Bit().data());
 
         setErrorMessage("");
       }

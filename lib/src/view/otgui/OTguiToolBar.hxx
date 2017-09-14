@@ -21,8 +21,8 @@
 #ifndef OTGUI_OTGUITOOLBAR_HXX
 #define OTGUI_OTGUITOOLBAR_HXX
 
-#include "otgui/OTGuiprivate.hxx"
 #include "otgui/OTguiActions.hxx"
+
 #include <QToolBar>
 
 namespace OTGUI {
@@ -35,17 +35,6 @@ public:
 
 protected:
   void buildActions(const OTguiActions* actions);
-/*
-public slots:
-  void updateActionsAvailability(const bool analysisInProgress);
-/*signals:
-  void createNewOTStudy();
-  void openOTStudy();
-  void importPython();
-  void saveOTStudy();
-
-private:
-  QAction * importPythonAction_;*/
 };
 }
 #endif

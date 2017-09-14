@@ -20,7 +20,6 @@
  */
 #include "otgui/OTguiMenuBar.hxx"
 
-#include <QAction>
 #include <QSettings>
 #include <QFileInfo>
 
@@ -28,6 +27,8 @@ namespace OTGUI {
 
 OTguiMenuBar::OTguiMenuBar(const OTguiActions* actions)
   : QMenuBar()
+  , recentFilesMenu_(0)
+  , recentFileActions_()
 {
   buildActions(actions);
 }
@@ -37,19 +38,19 @@ void OTguiMenuBar::buildActions(const OTguiActions* actions)
 {
   // File menu
   QMenu * fileMenu = new QMenu(tr("&File"));
-  QAction* action;
+  QAction * action;
 
   fileMenu->addAction(actions->newAction());
   fileMenu->addAction(actions->openAction());
 
-  for (int i=0; i<NbMaxRecentFiles; ++i)
+  for (int i = 0; i < NbMaxRecentFiles; ++i)
   {
     recentFileActions_[i] = new QAction(this);
     recentFileActions_[i]->setVisible(false);
     connect(recentFileActions_[i], SIGNAL(triggered()), this, SLOT(openRecentFile()));
   }
   recentFilesMenu_ = fileMenu->addMenu(QIcon(":/images/document-open-recent.png"), tr("Open Recent"));
-  for(int i=0; i<NbMaxRecentFiles; ++i)
+  for(int i = 0; i < NbMaxRecentFiles; ++i)
     recentFilesMenu_->addAction(recentFileActions_[i]);
   updateRecentFilesActionsList();
 
@@ -97,7 +98,6 @@ void OTguiMenuBar::openRecentFile()
 }
 
 
-
 void OTguiMenuBar::updateRecentFilesList(const QString & fileName)
 {
   QSettings settings;
@@ -119,7 +119,7 @@ void OTguiMenuBar::updateRecentFilesActionsList()
 
   int numRecentFiles = qMin(files.size(), (int)NbMaxRecentFiles);
 
-  for (int i=0; i<numRecentFiles; ++i)
+  for (int i = 0; i < numRecentFiles; ++i)
   {
     QFileInfo info = QFileInfo(files[i]);
     QString text = QString("%1  [%2]").arg(info.baseName()).arg(info.absoluteFilePath());;
@@ -127,7 +127,7 @@ void OTguiMenuBar::updateRecentFilesActionsList()
     recentFileActions_[i]->setData(files[i]);
     recentFileActions_[i]->setVisible(true);
   }
-  for (int i=numRecentFiles; i<NbMaxRecentFiles; ++i)
+  for (int i = numRecentFiles; i < NbMaxRecentFiles; ++i)
     recentFileActions_[i]->setVisible(false);
 
   recentFilesMenu_->setEnabled(numRecentFiles > 0);
@@ -140,11 +140,4 @@ void OTguiMenuBar::clearRecentFilesActions()
   settings.setValue("recentFilesList", QStringList());
   updateRecentFilesActionsList();
 }
-
-/*
-void OTguiMenuBar::updateActionsAvailability(const bool analysisInProgress)
-{
-  // can not import a Python script when an analysis is running
-  importPythonAction_->setDisabled(analysisInProgress);
-}*/
 }

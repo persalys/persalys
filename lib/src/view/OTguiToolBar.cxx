@@ -20,8 +20,6 @@
  */
 #include "otgui/OTguiToolBar.hxx"
 
-#include <QAction>
-
 namespace OTGUI {
 
 OTguiToolBar::OTguiToolBar(const OTguiActions* actions, QWidget * parent)
@@ -42,11 +40,4 @@ void OTguiToolBar::buildActions(const OTguiActions* actions)
   addAction(actions->importPyAction());
   addAction(actions->saveAction());
 }
-
-/*
-void OTguiToolBar::updateActionsAvailability(const bool analysisInProgress)
-{
-  // can not import a Python script when an analysis is running
-  importPythonAction_->setDisabled(analysisInProgress);
-}*/
 }
