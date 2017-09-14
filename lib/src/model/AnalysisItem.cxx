@@ -675,7 +675,7 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
 
     // Parameters values
     valuesList << tr("Kolmogorov Smirnov")
-               << QString::number(inferenceAnalysis.getLevel());
+               << QString::number(1 - inferenceAnalysis.getLevel());
   }
 }
 }

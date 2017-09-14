@@ -20,14 +20,10 @@
  */
 #include "otgui/InferenceWizard.hxx"
 
-#include "otgui/SymbolicPhysicalModel.hxx"
-#include "otgui/InputTableProbabilisticModel.hxx"
 #include "otgui/CheckableHeaderView.hxx"
 #include "otgui/DistributionDictionary.hxx"
 #include "otgui/DistributionsForInferenceWidget.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
-#include "otgui/VariablesInferenceTableModel.hxx"
 #include "otgui/DoubleSpinBox.hxx"
 
 #include <openturns/OTDistribution.hxx>
@@ -39,25 +35,11 @@ using namespace OT;
 
 namespace OTGUI {
 
-InferenceWizard::InferenceWizard(const OTStudy& otStudy, const DesignOfExperiment& designOfExperiment, QWidget* parent)
-  : AnalysisWizard(InferenceAnalysis(otStudy.getAvailableAnalysisName("inference_"), designOfExperiment), parent)
-  , currentVariableName_(designOfExperiment.getSample().getDescription()[0])
-  , inference_(*dynamic_cast<InferenceAnalysis*>(analysis_.getImplementation().get()))
-  , interestVariables_()
-  , errorMessageLabel_(new QLabel)
-  , pageValidity_(true)
-{
-  initialize();
-
-  buildInterface();
-}
-
-
 InferenceWizard::InferenceWizard(const Analysis& analysis, QWidget* parent)
   : AnalysisWizard(analysis, parent)
-  , inference_(*dynamic_cast<InferenceAnalysis*>(analysis_.getImplementation().get()))
-  , interestVariables_()
-  , errorMessageLabel_(new QLabel)
+  , inference_()
+  , interestVar_()
+  , errorMessageLabel_(0)
   , pageValidity_(true)
 {
   initialize();
@@ -68,19 +50,22 @@ InferenceWizard::InferenceWizard(const Analysis& analysis, QWidget* parent)
 
 void InferenceWizard::initialize()
 {
-  interestVariables_ = inference_.getInterestVariables();
+  InferenceAnalysis * analysis_ptr = dynamic_cast<InferenceAnalysis*>(analysis_.getImplementation().get());
+  Q_ASSERT(analysis_ptr);
+  inference_ = *analysis_ptr;
+  interestVar_ = inference_.getInterestVariables();
 
-  const Description doeVariablesNames(inference_.getDesignOfExperiment().getSample().getDescription());
+  const Description doeVarNames(inference_.getDesignOfExperiment().getSample().getDescription());
 
-  currentVariableName_ = doeVariablesNames[0];
+  currentVarName_ = doeVarNames[0];
 
-  for (UnsignedInteger i=0; i<doeVariablesNames.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < doeVarNames.getSize(); ++i)
   {
-    const String variableName = doeVariablesNames[i];
-    if (inference_.getInterestVariables().contains(variableName))
-      distFactoriesForEachInterestVar_[variableName] = inference_.getDistributionsFactories(variableName);
+    const String varName = doeVarNames[i];
+    if (inference_.getInterestVariables().contains(varName))
+      distFactoriesForEachInterestVar_[varName] = inference_.getDistributionsFactories(varName);
     else
-      distFactoriesForEachInterestVar_[variableName] = FittingTest::DistributionFactoryCollection();
+      distFactoriesForEachInterestVar_[varName] = FittingTest::DistributionFactoryCollection();
   }
 }
 
@@ -94,67 +79,67 @@ void InferenceWizard::buildInterface()
   QHBoxLayout * splitter = new QHBoxLayout;
 
   // table view
-  QTableView * variablesTableView = new QTableView;
-  variablesTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-  variablesTableView->setSelectionMode(QAbstractItemView::SingleSelection);
-  variablesTableView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  variablesTableView->setShowGrid(false);
+  QTableView * varTableView = new QTableView;
+  varTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+  varTableView->setSelectionMode(QAbstractItemView::SingleSelection);
+  varTableView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  varTableView->setShowGrid(false);
 
   // - model
-  const Description variablesNames(inference_.getDesignOfExperiment().getSample().getDescription());
-  Interval::BoolCollection isVariablesChecked(variablesNames.getSize());
-  for (UnsignedInteger i=0; i<variablesNames.getSize(); ++i)
-    isVariablesChecked[i] = inference_.getInterestVariables().contains(variablesNames[i]);
+  const Description varNames(inference_.getDesignOfExperiment().getSample().getDescription());
+  Interval::BoolCollection isVarChecked(varNames.getSize());
+  for (UnsignedInteger i = 0; i < varNames.getSize(); ++i)
+    isVarChecked[i] = inference_.getInterestVariables().contains(varNames[i]);
 
-  variablesInferenceTableModel_ = new VariablesInferenceTableModel(variablesNames, isVariablesChecked, variablesTableView);
-  variablesTableView->setModel(variablesInferenceTableModel_);
+  varTableModel_ = new VariablesInferenceTableModel(varNames, isVarChecked, varTableView);
+  varTableView->setModel(varTableModel_);
 
-  connect(variablesTableView, SIGNAL(clicked(QModelIndex)), variablesTableView, SLOT(setCurrentIndex(QModelIndex)));
-  connect(variablesInferenceTableModel_, SIGNAL(selectionChanged(OT::Description, OT::String)), this, SLOT(updateInterestVariables(OT::Description, OT::String)));
-  connect(variablesTableView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectedVariableChanged(QModelIndex,QModelIndex)));
+  connect(varTableView, SIGNAL(clicked(QModelIndex)), varTableView, SLOT(setCurrentIndex(QModelIndex)));
+  connect(varTableModel_, SIGNAL(selectionChanged(OT::Description, OT::String)), this, SLOT(updateInterestVar(OT::Description, OT::String)));
+  connect(varTableView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectedVarChanged(QModelIndex,QModelIndex)));
 
   // - header
-  CheckableHeaderView * variablesTableHeaderView = new CheckableHeaderView;
-  variablesTableView->setHorizontalHeader(variablesTableHeaderView);
-  variablesTableView->verticalHeader()->hide();
-  variablesTableHeaderView->setChecked(!isVariablesChecked.contains(false));
-  connect(variablesInferenceTableModel_, SIGNAL(checked(bool)), variablesTableHeaderView, SLOT(setChecked(bool)));
+  CheckableHeaderView * varTableHeaderView = new CheckableHeaderView;
+  varTableView->setHorizontalHeader(varTableHeaderView);
+  varTableView->verticalHeader()->hide();
+  varTableHeaderView->setChecked(!isVarChecked.contains(false));
+  connect(varTableModel_, SIGNAL(checked(bool)), varTableHeaderView, SLOT(setChecked(bool)));
 
   // - resize table
-  int w = variablesTableView->horizontalHeader()->length();
-  variablesTableView->resizeColumnToContents(0);
-  if (variablesTableView->horizontalHeader()->length() > w)
-    w = variablesTableView->horizontalHeader()->length();
+  int w = varTableView->horizontalHeader()->length();
+  varTableView->resizeColumnToContents(0);
+  if (varTableView->horizontalHeader()->length() > w)
+    w = varTableView->horizontalHeader()->length();
   int x1, y1, x2, y2;
-  variablesTableView->getContentsMargins(&x1, &y1, &x2, &y2);
-  variablesTableView->setFixedWidth(w+x1+x2);
-  variablesTableView->horizontalHeader()->resizeSection(0, w+x1+x2);
+  varTableView->getContentsMargins(&x1, &y1, &x2, &y2);
+  varTableView->setFixedWidth(w + x1 + x2);
+  varTableView->horizontalHeader()->resizeSection(0, w + x1 + x2);
 
-  splitter->addWidget(variablesTableView);
+  splitter->addWidget(varTableView);
 
-  // list distributions
+  // list dist
   ResizableStackedWidget * stackWidget = new ResizableStackedWidget;
-  for (UnsignedInteger i=0; i<variablesNames.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < varNames.getSize(); ++i)
   {
-    QStringList distributions;
-    if (inference_.getInterestVariables().contains(variablesNames[i]))
+    QStringList dist;
+    if (inference_.getInterestVariables().contains(varNames[i]))
     {
-      FittingTest::DistributionFactoryCollection collection(inference_.getDistributionsFactories(variablesNames[i]));
-      for (UnsignedInteger j=0; j<collection.getSize(); ++j)
+      FittingTest::DistributionFactoryCollection collection(inference_.getDistributionsFactories(varNames[i]));
+      for (UnsignedInteger j = 0; j < collection.getSize(); ++j)
       {
         String str = collection[j].getImplementation()->getClassName();
-        distributions << str.substr(0, str.find("Factory")).c_str();
+        dist << str.substr(0, str.find("Factory")).c_str();
       }
     }
 
-    DistributionsForInferenceWidget * distributionsWidget = new DistributionsForInferenceWidget(distributions, this);
-    connect(distributionsWidget, SIGNAL(distributionsListChanged(QStringList)), this, SLOT(updateDistributionsListForVariable(QStringList)));
+    DistributionsForInferenceWidget * distWidget = new DistributionsForInferenceWidget(dist, this);
+    connect(distWidget, SIGNAL(distributionsListChanged(QStringList)), this, SLOT(updateDistListForVar(QStringList)));
 
-    stackWidget->addWidget(distributionsWidget);
+    stackWidget->addWidget(distWidget);
   }
   splitter->addWidget(stackWidget);
-  connect(this, SIGNAL(currentVariableChanged(int)), stackWidget, SLOT(setCurrentIndex(int)));
-  connect(this, SIGNAL(currentVariableChecked(bool)), stackWidget, SLOT(setEnabled(bool)));
+  connect(this, SIGNAL(currentVarChanged(int)), stackWidget, SLOT(setCurrentIndex(int)));
+  connect(this, SIGNAL(currentVarChecked(bool)), stackWidget, SLOT(setEnabled(bool)));
 
   pageLayout->addLayout(splitter);
 
@@ -162,17 +147,19 @@ void InferenceWizard::buildInterface()
   QGridLayout * levelLayout = new QGridLayout;
   QLabel * levelLabel = new QLabel(tr("Level"));
   levelLayout->addWidget(levelLabel, 0, 0);
+
   DoubleSpinBox * levelSpinbox = new DoubleSpinBox;
-  levelSpinbox->setRange(0.0+1.e-6, 1.-1.e-6);
-  levelSpinbox->setSingleStep(0.01);
-  levelSpinbox->setValue(inference_.getLevel());
+  levelSpinbox->setRange(0.0 + 1.e-6, 1. - 1.e-6);
+  levelSpinbox->setSingleStep(0.1);
+  // display alpha
+  levelSpinbox->setValue(1 - inference_.getLevel());
   connect(levelSpinbox, SIGNAL(valueChanged(double)), this, SLOT(levelChanged(double)));
   levelLayout->addWidget(levelSpinbox, 0, 1);
   levelLayout->setColumnStretch(1, 10);
 
   pageLayout->addLayout(levelLayout);
 
-  variablesTableView->selectRow(0);
+  varTableView->selectRow(0);
 
   // error message
   errorMessageLabel_ = new QLabel;
@@ -183,52 +170,52 @@ void InferenceWizard::buildInterface()
 }
 
 
-void InferenceWizard::selectedVariableChanged(QModelIndex current, QModelIndex previous)
+void InferenceWizard::selectedVarChanged(QModelIndex current, QModelIndex /*previous*/)
 {
   const int currentRow = current.row();
-  currentVariableName_ = inference_.getDesignOfExperiment().getSample().getDescription()[currentRow];
+  currentVarName_ = inference_.getDesignOfExperiment().getSample().getDescription()[currentRow];
 
-  const bool isChecked = interestVariables_.contains(currentVariableName_);
+  const bool isChecked = interestVar_.contains(currentVarName_);
 
-  emit currentVariableChanged(currentRow);
-  emit currentVariableChecked(isChecked);
+  emit currentVarChanged(currentRow);
+  emit currentVarChecked(isChecked);
 }
 
 
-void InferenceWizard::updateDistributionsListForVariable(QStringList distributions)
+void InferenceWizard::updateDistListForVar(QStringList dist)
 {
   errorMessageLabel_->setText("");
 
   FittingTest::DistributionFactoryCollection distCollection;
-  for (int i=0; i<distributions.size(); ++i)
-    distCollection.add(DistributionDictionary::BuildDistributionFactory(distributions[i].toStdString()));
+  for (int i = 0; i < dist.size(); ++i)
+    distCollection.add(DistributionDictionary::BuildDistributionFactory(dist[i].toStdString()));
 
-  distFactoriesForEachInterestVar_[currentVariableName_] = distCollection;
+  distFactoriesForEachInterestVar_[currentVarName_] = distCollection;
 
   if (!distCollection.getSize())
   {
-    Description variables = inference_.getDesignOfExperiment().getSample().getDescription();
-    const Description::const_iterator it = std::find(variables.begin(), variables.end(), currentVariableName_);
-    variablesInferenceTableModel_->setData(variablesInferenceTableModel_->index(it - variables.begin(), 0), Qt::Unchecked, Qt::CheckStateRole);
+    Description vars = inference_.getDesignOfExperiment().getSample().getDescription();
+    const Description::const_iterator it = std::find(vars.begin(), vars.end(), currentVarName_);
+    varTableModel_->setData(varTableModel_->index(it - vars.begin(), 0), Qt::Unchecked, Qt::CheckStateRole);
   }
 }
 
 
-void InferenceWizard::updateInterestVariables(Description interestVariables, String varName)
+void InferenceWizard::updateInterestVar(Description interestVar, String varName)
 {
   errorMessageLabel_->setText("");
   pageValidity_ = true;
 
-  interestVariables_ = interestVariables;
+  interestVar_ = interestVar;
 
-  if (!interestVariables.getSize())
+  if (!interestVar.getSize())
   {
     pageValidity_ = false;
-    QString errorMessage = tr("Select at least one variable");
-    errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(errorMessage).arg("</font>"));
+    const QString errorMessage = tr("Select at least one variable");
+    errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
   }
 
-  emit currentVariableChecked(interestVariables.contains(varName));
+  emit currentVarChecked(interestVar.contains(varName));
 }
 
 
@@ -236,7 +223,7 @@ void InferenceWizard::levelChanged(double level)
 {
   try
   {
-    inference_.setLevel(level);
+    inference_.setLevel(1 - level);
   }
   catch (std::exception& ex)
   {
@@ -250,21 +237,21 @@ bool InferenceWizard::validateCurrentPage()
   if (!pageValidity_)
     return false;
 
-  inference_.setInterestVariables(interestVariables_);
+  inference_.setInterestVariables(interestVar_);
 
-  for (UnsignedInteger i=0; i<interestVariables_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < interestVar_.getSize(); ++i)
   {
-    if (distFactoriesForEachInterestVar_.find(interestVariables_[i]) != distFactoriesForEachInterestVar_.end())
+    if (distFactoriesForEachInterestVar_.find(interestVar_[i]) != distFactoriesForEachInterestVar_.end())
     {
-      FittingTest::DistributionFactoryCollection factoryCollection(distFactoriesForEachInterestVar_.find(interestVariables_[i])->second);
+      FittingTest::DistributionFactoryCollection factoryCollection(distFactoriesForEachInterestVar_.find(interestVar_[i])->second);
       if (factoryCollection.getSize())
       {
-        inference_.setDistributionsFactories(interestVariables_[i], factoryCollection);
+        inference_.setDistributionsFactories(interestVar_[i], factoryCollection);
       }
       else
       {
-        QString errorMessage = tr("At least one distribution must be tested for the selected variable '%1'").arg(interestVariables_[i].c_str());
-        errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(errorMessage).arg("</font>"));
+        const QString errorMessage = tr("At least one distribution must be tested for the selected variable '%1'").arg(interestVar_[i].c_str());
+        errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
         return false;
       }
     }
