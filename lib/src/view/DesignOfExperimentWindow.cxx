@@ -156,8 +156,8 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
   PVXYChartViewWidget * sampleScatterPlotWidget = 0;
   PVXYChartViewWidget * sampleRankScatterPlotWidget = 0;
 
-  const int failedInSampleSize = failedInputSample_.getSize();
-  const int notEvalInSampleSize = notEvaluatedInputSample_.getSize();
+  const UnsignedInteger failedInSampleSize = failedInputSample_.getSize();
+  const UnsignedInteger notEvalInSampleSize = notEvaluatedInputSample_.getSize();
 
   if (failedInSampleSize || notEvalInSampleSize)
   {
@@ -196,6 +196,30 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
       failedPointsTable->setData(failedInputSample_);
 
       tablesTabWidget->addTab(failedPointsTable, tr("Failed points"));
+
+      // --- Cobweb tab
+      WidgetBoundToDockWidget * cobwebTabWidget = new WidgetBoundToDockWidget(this);
+      QVBoxLayout * cobwebTabWidgetLayout = new QVBoxLayout(cobwebTabWidget);
+
+      PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, PVServerManagerSingleton::Get());
+      Sample succeedInS(designOfExperiment_.getInputSample());
+      succeedInS.stack(Sample(inSampleSize, Point(1, 1.0)));
+
+      Sample failedInS(failedInputSample_);
+      failedInS.stack(Sample(failedInSampleSize, 1));
+
+      Sample succeedAndFailedInS(succeedInS);
+      succeedAndFailedInS.add(failedInS);
+      Description desc(designOfExperiment_.getInputSample().getDescription());
+      desc.add(tr("Status").toUtf8().constData());
+      succeedAndFailedInS.setDescription(desc);
+      cobwebWidget->setData(succeedAndFailedInS);
+      cobwebTabWidgetLayout->addWidget(cobwebWidget);
+
+      PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget, this);
+      cobwebTabWidget->setDockWidget(cobwebSettingWidget);
+
+      tablesTabWidget->addTab(cobwebTabWidget, tr("Cobweb plot"));
 
       // --- data for scatter plots tab
       // sample scatter plot
