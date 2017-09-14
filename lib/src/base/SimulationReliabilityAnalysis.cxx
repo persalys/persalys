@@ -56,9 +56,23 @@ SimulationReliabilityAnalysis* SimulationReliabilityAnalysis::clone() const
 }
 
 
+struct AnalysisStruct
+{
+  AnalysisStruct(SimulationReliabilityAnalysis* analysis, SimulationInterface simulation)
+  : analysis_(analysis)
+  , simulation_(simulation)
+  {
+  };
+
+  virtual ~AnalysisStruct(){};
+
+  SimulationReliabilityAnalysis * analysis_;
+  SimulationInterface simulation_;
+};
+
 void SimulationReliabilityAnalysis::UpdateProgressValue(double percent, void * data)
 {
-  AnalysisStruct * analysisStruct = (AnalysisStruct*) data;
+  AnalysisStruct * analysisStruct = static_cast<AnalysisStruct*>(data);
   if (!analysisStruct)
     return;
 
