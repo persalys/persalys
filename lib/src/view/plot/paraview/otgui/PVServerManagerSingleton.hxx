@@ -1,5 +1,6 @@
 #ifndef __PVSERVERMANAGERSINGLETON_HXX__
 #define __PVSERVERMANAGERSINGLETON_HXX__
+
 #include "otgui/OTGuiprivate.hxx"
 
 #include "otgui/PVServerManagerInterface.hxx"
@@ -17,4 +18,4 @@ private:
   static PVServerManagerInterface * singleton_;
 };
 }
-#endif // __PVSERVERMANAGERSINGLETON_HXX__
+#endif

@@ -25,9 +25,7 @@
 #include "otgui/OTguiMdiArea.hxx"
 #include "otgui/OTguiActions.hxx"
 
-#include <QMainWindow>
 #include <QDockWidget>
-#include <QCloseEvent>
 
 namespace OTGUI {
 class OTGUI_API MainWidget : public QWidget
@@ -35,7 +33,7 @@ class OTGUI_API MainWidget : public QWidget
   Q_OBJECT
 
 public:
-  MainWidget(QWidget* parent=0);
+  MainWidget(QWidget * parent=0);
   StudyTreeView * getStudyTree() const;
   OTguiMdiArea * getMdiArea() const;
   OTguiActions * getActions() const;
@@ -43,15 +41,9 @@ public:
 public slots:
   void showGraphSettingDockWidget(QWidget*);
   void hideGraphSettingDockWidget(QWidget*);
-//  void exitApplication();
-//  void importPython();
 
 protected:
   void buildInterface();
-  void buildActions();
-
-//private slots:
-//  virtual void closeEvent(QCloseEvent * event);
 
 private:
   StudyTreeView * studyTree_;

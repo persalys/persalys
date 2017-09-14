@@ -20,26 +20,10 @@
  */
 #include "otgui/MainWidget.hxx"
 
-#include "otgui/OTguiMenuBar.hxx"
-#include "otgui/OTguiToolBar.hxx"
-#include "otgui/OTguiStatusBar.hxx"
-#include "otgui/OTguiMdiArea.hxx"
 #include "otgui/WelcomeWindow.hxx"
 
 #include <QSplitter>
-#include <QDockWidget>
-#include <QMessageBox>
-#include <QPushButton>
-#include <QFileDialog>
-#include <QFileInfo>
-#include <QSettings>
 #include <QVBoxLayout>
-
-#ifdef OTGUI_HAVE_PARAVIEW
-#include <vtkSMProxyManager.h>
-#include <vtkSMWriterFactory.h>
-#include <pqParaViewBehaviors.h>
-#endif
 
 namespace OTGUI {
 
@@ -50,11 +34,7 @@ MainWidget::MainWidget(QWidget* parent)
   , graphSettingDockWidget_(0)
   , actions_(new OTguiActions(this))
 {
-  setWindowTitle("OTGui");
-  setWindowIcon(QIcon(":/images/OT_icon32x32.png"));
-
   buildInterface();
-  buildActions();
 }
 
 
@@ -133,11 +113,6 @@ OTguiActions * MainWidget::getActions() const
 }
 
 
-void MainWidget::buildActions()
-{
-}
-
-
 void MainWidget::showGraphSettingDockWidget(QWidget * graph)
 {
   graphSettingDockWidget_->setWidget(graph);
@@ -145,34 +120,10 @@ void MainWidget::showGraphSettingDockWidget(QWidget * graph)
 }
 
 
-void MainWidget::hideGraphSettingDockWidget(QWidget* widgetToBeHidden)
+void MainWidget::hideGraphSettingDockWidget(QWidget * widgetToBeHidden)
 {
   // if the current dock widget is not widgetToBeHidden : do nothing
   if (graphSettingDockWidget_->widget() == widgetToBeHidden)
     graphSettingDockWidget_->close();
 }
-
-/*
-void MainWidget::closeEvent(QCloseEvent * event)
-{
-  int notCanceled = studyTree_->closeAllOTStudies();
-
-  if (notCanceled)
-  {
-    event->accept();
-    QWidget::closeEvent(event);
-  }
-  else
-  {
-    event->ignore();
-  }
-}
-
-
-void MainWidget::exitApplication()
-{
-  int ret = studyTree_->closeAllOTStudies();
-  if (ret)
-    close();
-}*/
 }

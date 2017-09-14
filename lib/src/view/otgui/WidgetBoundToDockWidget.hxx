@@ -34,7 +34,7 @@ class OTGUI_API WidgetBoundToDockWidget : public QWidget
 public:
   WidgetBoundToDockWidget(QWidget* parent=0);
 
-  MainWidget * findMainWindowInHierachy();
+  MainWidget * findMainWidgetInHierachy();
   QMdiSubWindow * findSubWindowInHierachy();
 
   void setDockWidget(QWidget*);

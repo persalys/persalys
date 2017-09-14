@@ -18,21 +18,19 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include "otgui/OTguiActions.hxx"
-
-#include <QAction>
 
 namespace OTGUI {
 
-OTguiActions::OTguiActions(QObject * parent):
-  new_(0)
-  ,open_(0)
-  ,save_(0)
-  ,saveAs_(0)
-  ,importPy_(0)
-  ,close_(0)
-  ,exit_(0)
+OTguiActions::OTguiActions(QObject * parent)
+  : QObject(parent)
+  , new_(0)
+  , open_(0)
+  , save_(0)
+  , saveAs_(0)
+  , importPy_(0)
+  , close_(0)
+  , exit_(0)
 {
   new_ = new QAction(QIcon(":/images/document-new.png"), tr("&New"), parent);
   new_->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
@@ -61,35 +59,46 @@ OTguiActions::OTguiActions(QObject * parent):
   exit_ = new QAction(QIcon(":/images/window-close.png"), tr("E&xit"), parent);
   exit_->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Q));
   exit_->setShortcutContext(Qt::ApplicationShortcut);
-  
 }
 
 
-QAction * OTguiActions::newAction()const
+QAction * OTguiActions::newAction() const
 {
   return new_;
 }
-QAction * OTguiActions::openAction()const
+
+
+QAction * OTguiActions::openAction() const
 {
   return open_;
 }
-QAction * OTguiActions::saveAction()const
+
+
+QAction * OTguiActions::saveAction() const
 {
   return save_;
 }
-QAction * OTguiActions::saveAsAction()const
+
+
+QAction * OTguiActions::saveAsAction() const
 {
   return saveAs_;
 }
-QAction * OTguiActions::importPyAction()const
+
+
+QAction * OTguiActions::importPyAction() const
 {
   return importPy_;
 }
-QAction * OTguiActions::closeAction()const
+
+
+QAction * OTguiActions::closeAction() const
 {
   return close_;
 }
-QAction * OTguiActions::exitAction()const
+
+
+QAction * OTguiActions::exitAction() const
 {
   return exit_;
 }

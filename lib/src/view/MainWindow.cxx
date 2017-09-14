@@ -73,7 +73,6 @@ void MainWindow::buildInterface()
 
   // Main widget
   mainSplitter->addWidget(mainWidget_);
-  //mainSplitter->setStretchFactor(0, 0);
 
   // Python Console
   pythonConsole_->getInterp()->decrRef();
@@ -84,12 +83,11 @@ void MainWindow::buildInterface()
   pythonConsoleDock->setWidget(pythonConsole_);
   pythonConsoleDock->setFeatures(QDockWidget::DockWidgetClosable);
   mainSplitter->addWidget(pythonConsoleDock);
-  mainSplitter->setStretchFactor(2, 1);
 
   setCentralWidget(mainSplitter);
 
   // menu bar
-  OTguiActions* actions = mainWidget_->getActions();
+  OTguiActions * actions = mainWidget_->getActions();
   OTguiMenuBar * menuBar = new OTguiMenuBar(actions);
   connect(pythonConsoleDock, SIGNAL(visibilityChanged(bool)), menuBar, SIGNAL(pythonConsoleVisibilityChanged(bool)));
   connect(menuBar, SIGNAL(showHidePythonConsole(bool)), pythonConsoleDock, SLOT(setVisible(bool)));
