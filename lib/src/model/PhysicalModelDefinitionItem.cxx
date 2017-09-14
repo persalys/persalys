@@ -21,7 +21,10 @@
 #include "otgui/PhysicalModelDefinitionItem.hxx"
 
 #include "otgui/ModelEvaluation.hxx"
+#include "otgui/GridDesignOfExperiment.hxx"
 #include "otgui/OTStudyItem.hxx"
+
+#include <QDebug>
 
 using namespace OT;
 
@@ -119,6 +122,8 @@ void PhysicalModelDefinitionItem::update(Observable* source, const String & mess
   }
   else if (message == "physicalModelRemoved")
   {
+    if (hasChildren())
+      qDebug() << "PhysicalModelDefinitionItem::update(physicalModelRemoved) has not to contain child\n";
     emit removeRequested(row());
   }
 }
@@ -163,9 +168,9 @@ void PhysicalModelDefinitionItem::createNewDesignOfExperiment()
   }
 
   // new design
-  DesignOfExperiment design(getParentOTStudyItem()->getOTStudy().getAvailableDesignOfExperimentName(), physicalModel_);
+  GridDesignOfExperiment design(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("design_"), physicalModel_);
   // emit signal to StudyTreeView to open a wizard
-  emit designOfExperimentRequested(this, design);
+  emit analysisRequested(this, design);
 }
 
 

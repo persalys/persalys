@@ -1,6 +1,6 @@
-class=SRCAnalysis name=aSRC physicalModel=aModel interestVariables=[y0] simulationsNumber=1000 seed=2
+class=SRCAnalysis name=aSRC physicalModel=aModel interestVariables=[y0] simulationsNumber=1000 seed=2 blockSize=1
 result= class=SRCResult name=Unnamed outputNames=[y0] indices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.905999,0.0940007]]
-class=SRCAnalysis name=aSRC2 physicalModel=aModel interestVariables=[y1] simulationsNumber=1000 seed=2
+class=SRCAnalysis name=aSRC2 physicalModel=aModel interestVariables=[y1] simulationsNumber=1000 seed=2 blockSize=1
 result= class=SRCResult name=Unnamed outputNames=[y1] indices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.905999,0.0940007]]
 #!/usr/bin/env python
 # coding: utf-8
@@ -28,11 +28,13 @@ myStudy.add(aModel)
 aSRC = otguibase.SRCAnalysis('aSRC', aModel, 1000)
 interestVariables = ['y0']
 aSRC.setInterestVariables(interestVariables)
+aSRC.setBlockSize(1)
 aSRC.setSeed(2)
 myStudy.add(aSRC)
 aSRC2 = otguibase.SRCAnalysis('aSRC2', aModel, 1000)
 interestVariables = ['y1']
 aSRC2.setInterestVariables(interestVariables)
+aSRC2.setBlockSize(1)
 aSRC2.setSeed(2)
 myStudy.add(aSRC2)
 

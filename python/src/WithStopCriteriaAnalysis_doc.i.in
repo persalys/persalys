@@ -62,25 +62,3 @@ Parameters
 ----------
 maxTime : positive int
     The maximum elapsed time in seconds. It is set by default to 60 seconds."
-
-// ----------------------------------------------------------------------
-
-%feature("docstring") OTGUI::WithStopCriteriaAnalysis::getBlockSize
-"Block size accessor.
-
-Returns
--------
-blockSize : positive int
-    Number of terms analysed together.
-    It is set by default to 1."
-
-// ----------------------------------------------------------------------
-
-%feature("docstring") OTGUI::WithStopCriteriaAnalysis::setBlockSize
-"Block size accessor.
-
-Parameters
-----------
-blockSize : positive int
-    Number of terms analysed together.
-    It is set by default to 1."

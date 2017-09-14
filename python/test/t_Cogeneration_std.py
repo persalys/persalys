@@ -31,13 +31,13 @@ outputSample = [[0.060036508072],
 
 
 ## Design of Experiment - Parametric analysis ##
-aDesign = otguibase.FixedDesignOfExperiment('aDesign_0', model)
+aDesign = otguibase.GridDesignOfExperiment('aDesign_0', model)
 aDesign.setLevels([2, 2, 2])
 myStudy.add(aDesign)
 aDesign.run()
 
 # Comparaison
-openturns.testing.assert_almost_equal(outputSample, aDesign.getOutputSample(), 1e-16)
+openturns.testing.assert_almost_equal(outputSample, aDesign.getDesignOfExperiment().getOutputSample(), 1e-16)
 
 ## Taylor Expansions ##
 taylorExpansionsMoments = otguibase.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', model)
@@ -98,7 +98,7 @@ values = [10200, 3000, 4000]
 lowerBounds = [10035.5, 2975.33, 3901.31]
 upperBounds = [10364.5, 3024.67, 4098.69]
 levels = [10, 10, 10]
-design_1 = otguibase.FixedDesignOfExperiment('aDesign_1', model, lowerBounds, upperBounds, levels, values)
+design_1 = otguibase.GridDesignOfExperiment('aDesign_1', model, lowerBounds, upperBounds, levels, values)
 design_1.run()
 myStudy.add(design_1)
 

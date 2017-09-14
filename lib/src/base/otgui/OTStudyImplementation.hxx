@@ -60,6 +60,8 @@ public:
   DesignOfExperiment & getDataModelByName(const OT::String & dataModelName);
   bool hasDataModelNamed(const OT::String & dataModelName) const;
   OT::String getAvailableDataModelName() const;
+  void add(const DesignOfExperiment & designOfExperiment);
+  void remove(const DesignOfExperiment & designOfExperiment);
 
   OT::Collection<PhysicalModel> getPhysicalModels() const;
   PhysicalModel & getPhysicalModelByName(const OT::String & physicalModelName);
@@ -67,13 +69,6 @@ public:
   OT::String getAvailablePhysicalModelName(const OT::String & physicalModelRootName="PhysicalModel_") const;
   void add(const PhysicalModel & physicalModel);
   void remove(const PhysicalModel & physicalModel);
-
-  OT::Collection<DesignOfExperiment> getDesignOfExperiments() const;
-  DesignOfExperiment & getDesignOfExperimentByName(const OT::String & designOfExperimentName);
-  bool hasDesignOfExperimentNamed(const OT::String & designOfExperimentName) const;
-  OT::String getAvailableDesignOfExperimentName() const;
-  void add(const DesignOfExperiment & designOfExperiment);
-  void remove(const DesignOfExperiment & designOfExperiment);
 
   OT::Collection<Analysis> getAnalyses() const;
   Analysis & getAnalysisByName(const OT::String & analysisName);
@@ -102,13 +97,13 @@ private:
   void clear(const DesignOfExperiment & designOfExperiment);
   void clear(const PhysicalModel & physicalModel);
   void clear(const LimitState & limitState);
+  void clear(const Analysis & analysis);
 
 protected:
   bool modified_;
   OT::String fileName_;
   OT::PersistentCollection<DesignOfExperiment> dataModels_;
   OT::PersistentCollection<PhysicalModel> physicalModels_;
-  OT::PersistentCollection<DesignOfExperiment> designOfExperiments_;
   OT::PersistentCollection<Analysis> analyses_;
   OT::PersistentCollection<LimitState> limitStates_;
 };

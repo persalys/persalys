@@ -35,6 +35,7 @@ public:
   MomentsEstimatesTableGroupBox(const DataAnalysisResult & result,
                                 const bool isConfidenceIntervalRequired,
                                 const double levelConfidenceInterval,
+                                const OT::Indices& variablesIndices,
                                 QWidget* parent=0);
 
 protected:

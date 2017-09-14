@@ -51,7 +51,7 @@ void StudyTreeViewModel::update(Observable * source, const String & message)
 {
   if (message == "addStudy")
   {
-    addOTStudyItem(OTStudy::GetInstances()[OTStudy::GetInstances().getSize()-1]);
+    addOTStudyItem(OTStudy::GetInstances()[OTStudy::GetInstances().getSize() - 1]);
   }
 }
 
@@ -67,31 +67,25 @@ void StudyTreeViewModel::addOTStudyItem(const OTStudy & otStudy)
   emit newOTStudyCreated(otStudyItem);
 
   // add sub items
-  for (UnsignedInteger i=0; i<otStudy.getDataModels().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < otStudy.getDataModels().getSize(); ++i)
   {
     otStudyItem->addDataModelItem(otStudy.getDataModels()[i]);
     otStudy.getDataModels()[i].addObserver(otStudy.getImplementation().get());
   }
 
-  for (UnsignedInteger i=0; i<otStudy.getPhysicalModels().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < otStudy.getPhysicalModels().getSize(); ++i)
   {
     otStudyItem->addPhysicalModelItem(otStudy.getPhysicalModels()[i]);
     otStudy.getPhysicalModels()[i].addObserver(otStudy.getImplementation().get());
   }
 
-  for (UnsignedInteger i=0; i<otStudy.getLimitStates().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < otStudy.getLimitStates().getSize(); ++i)
   {
     otStudyItem->addLimitStateItem(otStudy.getLimitStates()[i]);
     otStudy.getLimitStates()[i].addObserver(otStudy.getImplementation().get());
   }
 
-  for (UnsignedInteger i=0; i<otStudy.getDesignOfExperiments().getSize(); ++i)
-  {
-    otStudyItem->addDesignOfExperimentItem(otStudy.getDesignOfExperiments()[i]);
-    otStudy.getDesignOfExperiments()[i].addObserver(otStudy.getImplementation().get());
-  }
-
-  for (UnsignedInteger i=0; i<otStudy.getAnalyses().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < otStudy.getAnalyses().getSize(); ++i)
   {
     otStudyItem->addAnalysisItem(otStudy.getAnalyses()[i]);
     otStudy.getAnalyses()[i].addObserver(otStudy.getImplementation().get());

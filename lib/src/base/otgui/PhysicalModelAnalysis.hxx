@@ -38,8 +38,6 @@ public:
 
   PhysicalModel getPhysicalModel() const;
 
-  virtual void setInterestVariables(const OT::Description& outputsNames);
-
   /** String converter */
   virtual OT::String __repr__() const;
 

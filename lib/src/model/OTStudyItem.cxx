@@ -119,11 +119,6 @@ void OTStudyItem::update(Observable * source, const String & message)
     PhysicalModel addedPhysicalModel = otStudy_.getPhysicalModels()[otStudy_.getPhysicalModels().getSize()-1];
     addPhysicalModelItem(addedPhysicalModel);
   }
-  else if (message == "addDesignOfExperiment")
-  {
-    DesignOfExperiment addedDesignOfExperiment = otStudy_.getDesignOfExperiments()[otStudy_.getDesignOfExperiments().getSize()-1];
-    addDesignOfExperimentItem(addedDesignOfExperiment);
-  }
   else if (message == "addLimitState")
   {
     LimitState addedLimitState = otStudy_.getLimitStates()[otStudy_.getLimitStates().getSize()-1];
@@ -353,22 +348,6 @@ void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
 }
 
 
-void OTStudyItem::addDesignOfExperimentItem(DesignOfExperiment & design)
-{
-  // search PhysicalModelDiagram observer
-  PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(design.getPhysicalModel().getImplementation().get()->getObserver("PhysicalModelDiagram"));
-  if (!pmItem)
-  {
-    qDebug() << "In OTStudyItem::addDesignOfExperimentItem: No item added for the design of experiment named " << design.getName().data() << "\n"
-           << "No physical model matches the given name " << design.getPhysicalModel().getName().data() << "\n";
-    return;
-  }
-
-  // append item for design
-  pmItem->appendDesignOfExperimentItem(design);
-}
-
-
 void OTStudyItem::addLimitStateItem(LimitState & limitState)
 {
   // search PhysicalModelDiagram observer
@@ -390,7 +369,7 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis)
   if (dynamic_cast<PhysicalModelAnalysis*>(analysis.getImplementation().get()))
   {
     PhysicalModel model(dynamic_cast<PhysicalModelAnalysis*>(analysis.getImplementation().get())->getPhysicalModel());
-  // search PhysicalModelDiagram observer
+    // search PhysicalModelDiagram observer
     PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(model.getImplementation().get()->getObserver("PhysicalModelDiagram"));
     if (!pmItem)
     {
@@ -403,19 +382,21 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis)
   else if (dynamic_cast<DesignOfExperimentAnalysis*>(analysis.getImplementation().get()))
   {
     DesignOfExperiment design(dynamic_cast<DesignOfExperimentAnalysis*>(analysis.getImplementation().get())->getDesignOfExperiment());
-  // search DesignOfExperiment observer
-    DesignOfExperimentItem * doeItem;
+    // search DesignOfExperiment observer
     if (design.hasPhysicalModel())
-      doeItem = dynamic_cast<DesignOfExperimentItem*>(design.getImplementation().get()->getObserver("DesignOfExperimentDefinition"));
-    else
-      doeItem = dynamic_cast<DesignOfExperimentItem*>(design.getImplementation().get()->getObserver("DataModelDiagram"));
-    if (!doeItem)
     {
-      qDebug() << "In OTStudyItem::addAnalysisItem: Impossible to add an item for the analysis " << analysis.getName().data() << ". Design of experiment item not found.\n";
-      return;
+      DesignOfExperimentDefinitionItem * doeItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(design.getImplementation().get()->getObserver("DesignOfExperimentDefinition"));
+      Q_ASSERT(doeItem);
+      // append item for analysis
+      doeItem->appendAnalysisItem(analysis);
     }
-    // append item for analysis
-    doeItem->appendAnalysisItem(analysis);
+    else
+    {
+      DataModelDiagramItem * doeItem = dynamic_cast<DataModelDiagramItem*>(design.getImplementation().get()->getObserver("DataModelDiagram"));
+      Q_ASSERT(doeItem);
+      // append item for analysis
+      doeItem->appendAnalysisItem(analysis);
+    }
   }
   else
     qDebug() << "In OTStudyItem::addAnalysisItem: No item added for the analysis named " << analysis.getName().data() << "\n";

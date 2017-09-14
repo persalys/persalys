@@ -25,7 +25,7 @@ model = otguibase.SymbolicPhysicalModel('model', [xi1, xi2, xi3], [y00, y0, y1],
 myStudy.add(model)
 
 ## Design of Experiment ##
-aDesign = otguibase.DesignOfExperimentImplementation('design', model)
+aDesign = otguibase.FixedDesignOfExperiment('design', model)
 inputSample = ot.LHSExperiment(model.getComposedDistribution(), 50).generate()
 inputSample.stack(ot.Sample(50, [0.5]))
 aDesign.setOriginalInputSample(inputSample)

@@ -20,6 +20,10 @@
  */
 #include "otgui/DataModelDiagramItem.hxx"
 
+#include "otgui/OTStudyItem.hxx"
+
+#include <QDebug>
+
 using namespace OT;
 
 namespace OTGUI {
@@ -68,6 +72,8 @@ void DataModelDiagramItem::update(Observable* source, const String& message)
   }
   else if (message == "designOfExperimentRemoved")
   {
+    if (hasChildren())
+      qDebug() << "DataModelDiagramItem::update(designOfExperimentRemoved) has not to contain child\n";
     emit removeRequested(row());
   }
 }
@@ -111,5 +117,41 @@ void DataModelDiagramItem::appendDataModelItem()
 
   // disable the definition action
   defineDataModel_->setDisabled(true);
+}
+
+
+void DataModelDiagramItem::appendAnalysisItem(Analysis& analysis)
+{
+  // new item
+  AnalysisItem * newItem = new AnalysisItem(analysis);
+
+  // connections
+  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
+  // - signal for the PhysicalModelDiagramItem
+  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SIGNAL(analysisInProgressStatusChanged(bool)));
+  if (getParentOTStudyItem())
+  {
+    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
+  }
+
+  // append item
+  appendRow(newItem);
+
+  // emit signal to StudyTreeView to create a window
+  emit newAnalysisItemCreated(newItem);
+}
+
+
+void DataModelDiagramItem::removeDesignOfExperiment()
+{
+  // check
+  if (analysisInProgress_)
+  {
+    emit emitErrorMessageRequested(tr("Can not remove a design of experiment when an analysis is running."));
+    return;
+  }
+  // remove
+  if (getParentOTStudyItem())
+    getParentOTStudyItem()->getOTStudy().remove(DesignOfExperiment(designOfExperiment_));
 }
 }

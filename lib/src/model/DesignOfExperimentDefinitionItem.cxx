@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItem, observer of designs of experiments
+ *  @brief QStandardItem, observer of a design of experiment
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -21,6 +21,7 @@
 #include "otgui/DesignOfExperimentDefinitionItem.hxx"
 
 #include "otgui/DesignOfExperimentEvaluation.hxx"
+#include "otgui/FunctionalChaosAnalysis.hxx"
 #include "otgui/OTStudyItem.hxx"
 
 #include <QDebug>
@@ -29,119 +30,93 @@ using namespace OT;
 
 namespace OTGUI {
 
-DesignOfExperimentDefinitionItem::DesignOfExperimentDefinitionItem(const DesignOfExperiment & designOfExperiment)
-  : DesignOfExperimentItem(designOfExperiment, "DesignOfExperimentDefinition")
-  , modifyDesignOfExperiment_(0)
-  , evaluateDesignOfExperiment_(0)
+DesignOfExperimentDefinitionItem::DesignOfExperimentDefinitionItem(const Analysis& analysis)
+  : OTguiItem(QString::fromUtf8(analysis.getName().c_str()), "DesignOfExperimentDefinitionItem")
+  , Observer("DesignOfExperimentDefinition")
+  , analysis_(analysis)
   , newMetaModel_(0)
-  , removeDesignOfExperiment_(0)
+  , modifyAnalysis_(0)
+  , removeAnalysis_(0)
 {
+  analysis_.addObserver(this);
+
+  // this item must be an observer of the design of experiment:
+  // it is used in OTStudyItem to know where adding a DesignOfExperimentAnalysis based
+  // on this design of experiment
+  const DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(analysis_.getImplementation().get());
+  Q_ASSERT(doeEval);
+  doeEval->getDesignOfExperiment().addObserver(this);
+
   buildActions();
 }
 
 
 void DesignOfExperimentDefinitionItem::buildActions()
 {
-  // run design of experiment action
-  modifyDesignOfExperiment_ = new QAction(QIcon(":/images/run-build.png"), tr("Modify"), this);
-  modifyDesignOfExperiment_->setStatusTip(tr("Modify the design of experiment"));
-  connect(modifyDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(modifyDesignOfExperiment()));
+  modifyAnalysis_ = new QAction(QIcon(":/images/run-build.png"), tr("Modify"), this);
+  modifyAnalysis_->setStatusTip(tr("Modify the analysis"));
+  connect(modifyAnalysis_, SIGNAL(triggered()), this, SLOT(modifyAnalysis()));
+
+  appendAction(modifyAnalysis_);
 
   // evaluate design of experiment action
   evaluateDesignOfExperiment_ = new QAction(QIcon(":/images/system-run.png"), tr("Evaluate"), this);
   evaluateDesignOfExperiment_->setStatusTip(tr("Evaluate the design of experiment"));
   connect(evaluateDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(createNewEvaluation()));
 
+  appendAction(evaluateDesignOfExperiment_);
+
   // new metamodel action
   newMetaModel_ = new QAction(QIcon(":/images/metaModel.png"), tr("Metamodel"), this);
   newMetaModel_->setStatusTip(tr("Create a new metamodel"));
   connect(newMetaModel_, SIGNAL(triggered()), this, SLOT(createNewMetaModel()));
 
-  // remove design of experiment action
-  removeDesignOfExperiment_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
-  removeDesignOfExperiment_->setStatusTip(tr("Remove the design of experiment"));
-  connect(removeDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(removeDesignOfExperiment()));
+  // remove analysis action
+  removeAnalysis_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
+  removeAnalysis_->setStatusTip(tr("Remove the analysis"));
+  connect(removeAnalysis_, SIGNAL(triggered()), this, SLOT(removeAnalysis()));
 
-  // add actions
-  appendAction(modifyDesignOfExperiment_);
-  appendAction(evaluateDesignOfExperiment_);
-  appendAction(removeDesignOfExperiment_);
+  appendAction(removeAnalysis_);
 }
 
 
-void DesignOfExperimentDefinitionItem::updateDesignOfExperiment(const DesignOfExperiment & doe)
+Analysis DesignOfExperimentDefinitionItem::getAnalysis() const
 {
-  // remove Evaluation item
-  designOfExperiment_.getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
-  designOfExperiment_.getImplementation().get()->removeObserver("OTStudy");
-
-  evaluateDesignOfExperiment_->setEnabled(true);
-  // remove last observer
-  designOfExperiment_.getImplementation().get()->removeObserver(this);
-
-  // update designOfExperiment_
-  designOfExperiment_ = doe;
-  designOfExperiment_.addObserver(this);
-  designOfExperiment_.addObserver(getParentOTStudyItem()->getOTStudy().getImplementation().get());
-
-  // update the implementation of the design of experiment stored in OTStudy
-  getParentOTStudyItem()->getOTStudy().getDesignOfExperimentByName(doe.getName()).setImplementationAsPersistentObject(doe.getImplementation());
-
-  // emit signal to all analysisItem children to update the doe of the analyses
-  emit designOfExperimentChanged(designOfExperiment_);
+  return analysis_;
 }
 
 
-void DesignOfExperimentDefinitionItem::update(Observable* source, const String & message)
+Sample DesignOfExperimentDefinitionItem::getOriginalInputSample() const
+{
+  const DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(analysis_.getImplementation().get());
+  Q_ASSERT(doeEval);
+  return doeEval->getOriginalInputSample();
+}
+
+
+void DesignOfExperimentDefinitionItem::update(Observable* source, const String& message)
 {
   if (message == "analysisFinished")
   {
     // emit signal to PhysicalModelDiagramItem to update the diagram
     emit designEvaluationAppended();
   }
-  else if (message == "evaluationRequested")
-  {
-    appendEvaluationItem();
-  }
-  else if (message == "designOfExperimentRemoved")
+  else if (message == "analysisRemoved")
   {
     // emit signal to PhysicalModelDiagramItem to update the diagram
-    emit numberDesignEvaluationChanged(designOfExperiment_.getOutputSample().getSize() > 0);
+    emit numberDesignEvaluationChanged(getAnalysis().analysisLaunched());
     if (hasChildren())
-      qDebug() << "DesignOfExperimentDefinitionItem::update(designOfExperimentRemoved) has not to contain child\n";
+      qDebug() << "DesignOfExperimentDefinitionItem::update(analysisRemoved) has not to contain child\n";
 
     emit removeRequested(row());
   }
 }
 
 
-void DesignOfExperimentDefinitionItem::modifyDesignOfExperiment()
-{
-  // emit signal to StudyTreeView to open a wizard
-  emit modifyDesignOfExperimentRequested(this);
-}
-
-
-void DesignOfExperimentDefinitionItem::createNewEvaluation()
-{
-  // check
-  if (!designOfExperiment_.getOriginalInputSample().getSize())
-  {
-    emit emitErrorMessageRequested(tr("The input sample is empty."));
-    return;
-  }
-  // new analysis
-  DesignOfExperimentEvaluation * evaluation = new DesignOfExperimentEvaluation(designOfExperiment_);
-
-  // emit signal to StudyTreeView to open a wizard
-  emit evaluationRequested(this, evaluation);
-}
-
-
 void DesignOfExperimentDefinitionItem::appendEvaluationItem()
 {
   // check
-  if (!designOfExperiment_.getOriginalInputSample().getSize())
+  if (!getOriginalInputSample().getSize())
   {
     emit emitErrorMessageRequested(tr("The input sample is empty."));
     return;
@@ -149,7 +124,7 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
   // check if there is already an Evaluation item
   for (int i = 0; i < rowCount(); ++i)
   {
-    if (child(i)->data(Qt::UserRole).toString() == "DesignOfExperimentEvaluation")
+    if (child(i)->data(Qt::UserRole).toString().contains("DesignOfExperiment"))
     {
       AnalysisItem * analysisItem = dynamic_cast<AnalysisItem*>(child(i));
       // emit signal to StudyTreeView to update the window bound to analysisItem
@@ -158,21 +133,23 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
     }
   }
 
-  // new analysis
-  DesignOfExperimentEvaluation * evaluation = new DesignOfExperimentEvaluation(DesignOfExperiment(designOfExperiment_));
-
   // new analysis item
-  AnalysisItem * evaluationItem = new AnalysisItem(evaluation);
+  AnalysisItem * evaluationItem = new AnalysisItem(analysis_);
 
   evaluationItem->setData(tr("Evaluation"), Qt::DisplayRole);
   QFont font;
   font.setWeight(font.weight() + 10);
   evaluationItem->setData(font, Qt::FontRole);
   evaluationItem->setEditable(false);
-  evaluationItem->insertAction(1, newMetaModel_);
+  evaluationItem->appendAction(newMetaModel_);
 
-  // the new item is an observer of designOfExperiment_
-  getDesignOfExperiment().addObserver(evaluationItem);
+  // connections
+  // - signal for the PhysicalModelDiagramItem
+  connect(evaluationItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SIGNAL(analysisInProgressStatusChanged(bool)));
+  if (getParentOTStudyItem())
+  {
+    connect(evaluationItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
+  }
 
   // insert item
   insertRow(0, evaluationItem);
@@ -185,10 +162,110 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
 }
 
 
+void DesignOfExperimentDefinitionItem::appendAnalysisItem(Analysis& analysis)
+{
+  // new item
+  AnalysisItem * newItem = new AnalysisItem(analysis);
+
+  // connections
+  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
+  // - signal for the PhysicalModelDiagramItem
+  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SIGNAL(analysisInProgressStatusChanged(bool)));
+  if (getParentOTStudyItem())
+  {
+    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
+  }
+
+  // append item
+  appendRow(newItem);
+
+  // emit signal to StudyTreeView to create a window
+  emit newAnalysisItemCreated(newItem);
+}
+
+
+void DesignOfExperimentDefinitionItem::modifyAnalysis()
+{
+  // emit signal to StudyTreeView to open the wizard
+  emit modifyAnalysisRequested(this);
+}
+
+
+void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
+{
+  // remove Evaluation item
+  analysis_.getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
+  analysis_.getImplementation().get()->removeObserver("OTStudy");
+
+  evaluateDesignOfExperiment_->setEnabled(true);
+  // remove last observer
+  analysis_.getImplementation().get()->removeObserver(this);
+
+  // update analysis_
+  analysis_ = analysis;
+  analysis_.addObserver(this);
+  analysis_.addObserver(getParentOTStudyItem()->getOTStudy().getImplementation().get());
+
+  // update the implementation of the design of experiment stored in OTStudy
+  getParentOTStudyItem()->getOTStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
+}
+
+
+void DesignOfExperimentDefinitionItem::createNewEvaluation()
+{
+  // check
+  if (!getOriginalInputSample().getSize())
+  {
+    emit emitErrorMessageRequested(tr("The input sample is empty."));
+    return;
+  }
+
+  // emit signal to StudyTreeView to open a wizard
+  emit DOEEvaluationRequested(analysis_);
+}
+
+
+void DesignOfExperimentDefinitionItem::removeAnalysis()
+{
+  // check if the analysis is running
+  if (analysis_.isRunning())
+  {
+    emit emitErrorMessageRequested(tr("Can not remove a running analysis."));
+    return;
+  }
+  // check
+  if (analysisInProgress_)
+  {
+    emit emitErrorMessageRequested(tr("Can not remove a design of experiment when an analysis is running."));
+    return;
+  }
+
+  // remove
+  if (getParentOTStudyItem())
+    getParentOTStudyItem()->getOTStudy().remove(Analysis(analysis_));
+}
+
+
+void DesignOfExperimentDefinitionItem::createNewMetaModel()
+{
+  // check
+  if (!getAnalysis().analysisLaunched())
+  {
+    emit emitErrorMessageRequested(tr("The model must have at least one output. Evaluate the design of experiment"));
+    return;
+  }
+
+  // new analysis
+  FunctionalChaosAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("metaModel_"), getAnalysis());
+  // emit signal to StudyTreeView to open a wizard
+  emit analysisRequested(this, analysis);
+}
+
+
 void DesignOfExperimentDefinitionItem::fill()
 {
   // append Evaluation item
-  if (designOfExperiment_.getOutputSample().getSize())
+  if (getAnalysis().analysisLaunched())
     appendEvaluationItem();
 }
 }

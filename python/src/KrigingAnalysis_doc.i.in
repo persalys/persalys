@@ -27,9 +27,7 @@ Create the model:
 
 Create the design of experiment:
 
->>> aDesign = otguibase.DesignOfExperimentImplementation('aDesign', myPhysicalModel)
->>> inputSample = ot.LHSExperiment(myPhysicalModel.getComposedDistribution(), 50).generate()
->>> aDesign.setInputSample(inputSample)
+>>> aDesign = otguibase.ProbabilisticDesignOfExperiment('aDesign', myPhysicalModel, 100, 'LHS')
 >>> aDesign.run()
 
 Create the Kriging Analysis:

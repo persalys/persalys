@@ -23,6 +23,8 @@
 #include "otgui/OTStudyWindow.hxx"
 #include "otgui/DataAnalysisResultWindow.hxx"
 #include "otgui/DataModelDiagramWindow.hxx"
+#include "otgui/DesignOfExperimentInputWindow.hxx"
+#include "otgui/DesignOfExperimentEvaluationWizard.hxx"
 #include "otgui/PhysicalModelDiagramWindow.hxx"
 #ifdef OTGUI_HAVE_YACS
 #include "otgui/YACSPhysicalModelWindow.hxx"
@@ -37,7 +39,6 @@
 #include "otgui/ProbabilisticModelWindow.hxx"
 #include "otgui/LimitStateWindow.hxx"
 #include "otgui/DataModelWindow.hxx"
-#include "otgui/DesignOfExperimentInputWindow.hxx"
 #include "otgui/DesignOfExperimentWindow.hxx"
 #include "otgui/AnalysisWindow.hxx"
 #include "otgui/ModelEvaluationResultWindow.hxx"
@@ -59,7 +60,6 @@
 #include "otgui/SensitivityAnalysisWizard.hxx"
 #include "otgui/ReliabilityAnalysisWizard.hxx"
 #include "otgui/MetaModelAnalysisWizard.hxx"
-#include "otgui/DesignOfExperimentSelectionWizard.hxx"
 
 #include "otgui/LineEditWithQValidatorDelegate.hxx"
 
@@ -277,26 +277,16 @@ void StudyTreeView::createNewOTStudy()
 }
 
 
-void StudyTreeView::createNewDesignOfExperiment(OTguiItem* item, const DesignOfExperiment& design)
+void StudyTreeView::createNewDesignOfExperimentEvaluation(const Analysis& analysis, const bool isGeneralWizard)
 {
-  if (!item)
-    return;
+  DesignOfExperimentEvaluationWizard * wizard = new DesignOfExperimentEvaluationWizard(analysis, isGeneralWizard, this);
 
-  DesignOfExperimentWizard wizard(design, this);
-
-  if (wizard.exec())
-    item->getParentOTStudyItem()->getOTStudy().add(wizard.getDesignOfExperiment());
-}
-
-
-void StudyTreeView::createNewDesignOfExperimentEvaluation(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard)
-{
-  DesignOfExperimentSelectionWizard wizard(item, analysis, isGeneralWizard, this);
-
-  if (wizard.exec())
+  if (wizard)
   {
-    DesignOfExperiment doe = wizard.getDesignOfExperiment();
-    doe.requestEvaluation();
+    if (wizard->exec())
+    {
+      wizard->getDesignOfExperimentDefinitionItem()->appendEvaluationItem();
+    }
   }
 }
 
@@ -409,8 +399,8 @@ void StudyTreeView::createNewPhysicalModelDiagramWindow(PhysicalModelDiagramItem
   connect(item, SIGNAL(newProbabilisticModelItemCreated(ProbabilisticModelItem*)), this, SLOT(createNewProbabilisticModelWindow(ProbabilisticModelItem*)));
   connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
   connect(item, SIGNAL(newLimitStateCreated(LimitStateItem*)), this, SLOT(createNewLimitStateWindow(LimitStateItem*)));
-  connect(item, SIGNAL(newDesignOfExperimentCreated(DesignOfExperimentDefinitionItem*)), this, SLOT(createNewDesignOfExperimentWindow(DesignOfExperimentDefinitionItem*)));
-  connect(item, SIGNAL(designOfExperimentEvaluationRequested(OTguiItem*, Analysis, bool)), this, SLOT(createNewDesignOfExperimentEvaluation(OTguiItem*, Analysis, bool)));
+  connect(item, SIGNAL(designOfExperimentEvaluationRequested(Analysis, bool)), this, SLOT(createNewDesignOfExperimentEvaluation(Analysis, bool)));
+  connect(item, SIGNAL(newDOEAnalysisItemCreated(DesignOfExperimentDefinitionItem*)), this, SLOT(createNewDesignOfExperimentWindow(DesignOfExperimentDefinitionItem*)));
   connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis, bool)), this, SLOT(createNewAnalysis(OTguiItem*, Analysis, bool)));
 
   // window
@@ -436,7 +426,6 @@ void StudyTreeView::createNewPhysicalModelWindow(PhysicalModelDefinitionItem* it
   // connections
   connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(analysisRequested(OTguiItem*, const Analysis&)), this, SLOT(createNewAnalysis(OTguiItem*, const Analysis&)));
-  connect(item, SIGNAL(designOfExperimentRequested(OTguiItem*,DesignOfExperiment)), this, SLOT(createNewDesignOfExperiment(OTguiItem*,DesignOfExperiment)));
 
   // window
   OTguiSubWindow * window = 0;
@@ -528,11 +517,11 @@ void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentDefiniti
   if (createConnections)
   {
     connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
-    connect(item, SIGNAL(modifyDesignOfExperimentRequested(DesignOfExperimentDefinitionItem*)), this, SLOT(modifyDesignOfExperiment(DesignOfExperimentDefinitionItem*)));
+    connect(item, SIGNAL(modifyAnalysisRequested(DesignOfExperimentDefinitionItem*)), this, SLOT(modifyDesignOfExperiment(DesignOfExperimentDefinitionItem*)));
     connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
     connect(item, SIGNAL(analysisRequested(OTguiItem*,Analysis)), this, SLOT(createNewAnalysis(OTguiItem*,Analysis)));
-    connect(item, SIGNAL(evaluationRequested(OTguiItem*,Analysis)), this, SLOT(createNewDesignOfExperimentEvaluation(OTguiItem*,Analysis)));
-    connect(item, SIGNAL(updateEvaluationWindowRequested(AnalysisItem*)), this, SLOT(modifyDesignOfExperimentEvaluation(AnalysisItem*)));
+    connect(item, SIGNAL(DOEEvaluationRequested(Analysis)), this, SLOT(createNewDesignOfExperimentEvaluation(Analysis)));
+    connect(item, SIGNAL(updateEvaluationWindowRequested(AnalysisItem*)), this, SLOT(modifyDesignOfExperimentEvaluationWindow(AnalysisItem*)));
   }
 
   // window
@@ -561,6 +550,7 @@ void StudyTreeView::createNewAnalysisWindow(AnalysisItem * item)
   connect(item, SIGNAL(analysisFinished(AnalysisItem *)), this, SLOT(createAnalysisResultWindow(AnalysisItem*)));
   connect(item, SIGNAL(analysisBadlyFinished(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
   connect(item, SIGNAL(modifyAnalysisRequested(AnalysisItem*)), this, SLOT(modifyAnalysis(AnalysisItem*)));
+  connect(item, SIGNAL(modifyDesignOfExperimentEvaluation(Analysis, bool)), this, SLOT(createNewDesignOfExperimentEvaluation(Analysis, bool)));
 
   // window
   if (item->getAnalysis().analysisLaunched())
@@ -607,7 +597,8 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
     resultWindow = new InferenceResultWindow(item, this);
   else if (analysisType == "CopulaInferenceAnalysis")
     resultWindow = new CopulaInferenceResultWindow(item, this);
-  else if (analysisType == "DesignOfExperimentEvaluation")
+  else if (analysisType.contains("DesignOfExperiment"))
+    // if DesignOfExperimentEvaluation GridDesignOfExperiment ImportedDesignOfExperiment ProbabilisticDesignOfExperiment
     resultWindow = new DesignOfExperimentWindow(item, this);
 
   if (!resultWindow)
@@ -649,18 +640,23 @@ void StudyTreeView::modifyDesignOfExperiment(DesignOfExperimentDefinitionItem* i
   if (!item)
     return;
 
-  DesignOfExperimentWizard wizard(item->getDesignOfExperiment(), this);
+  DesignOfExperimentWizard * wizard = new DesignOfExperimentWizard(item->getAnalysis().getImplementation(), this);
 
-  if (wizard.exec())
+  if (wizard)
   {
-    emit removeSubWindow(item);
-    item->updateDesignOfExperiment(wizard.getDesignOfExperiment());
-    createNewDesignOfExperimentWindow(item, false);
+    if (wizard->exec())
+    {
+      emit removeSubWindow(item);
+      item->updateAnalysis(wizard->getAnalysis());
+      createNewDesignOfExperimentWindow(item, false);
+      delete wizard;
+      wizard = 0;
+    }
   }
 }
 
 
-void StudyTreeView::modifyDesignOfExperimentEvaluation(AnalysisItem* item)
+void StudyTreeView::modifyDesignOfExperimentEvaluationWindow(AnalysisItem* item)
 {
   if (!item)
     return;
@@ -925,7 +921,7 @@ AnalysisWizard* StudyTreeView::getWizard(OTguiItem* item, const Analysis& analys
   else if (analysisName == "FunctionalChaosAnalysis" ||
            analysisName == "KrigingAnalysis")
   {
-    wizard = new MetaModelAnalysisWizard(item, analysis, isGeneralWizard, this);
+    wizard = new MetaModelAnalysisWizard(analysis, isGeneralWizard, this);
   }
   else if (analysisName == "InferenceAnalysis")
   {
@@ -946,6 +942,12 @@ AnalysisWizard* StudyTreeView::getWizard(OTguiItem* item, const Analysis& analys
            analysisName == "FORMAnalysis")
   {
     wizard = new ReliabilityAnalysisWizard(item, analysis, isGeneralWizard, this);
+  }
+  else if (analysisName == "ImportedDesignOfExperiment" ||
+           analysisName == "GridDesignOfExperiment" ||
+           analysisName == "ProbabilisticDesignOfExperiment")
+  {
+    wizard = new DesignOfExperimentWizard(analysis, this);
   }
   else
   {

@@ -172,7 +172,7 @@ void PhysicalModelWindowWidget::applyDifferentiationStepToAllInputs(double value
 {
   if (differentiationTableModel_)
   {
-    for (int i=0; i<differentiationTableModel_->rowCount(); ++i)
+    for (int i = 0; i < differentiationTableModel_->rowCount(); ++i)
     {
       differentiationTableModel_->setData(differentiationTableModel_->index(i, 1), value, Qt::EditRole);
     }
@@ -349,7 +349,7 @@ void PhysicalModelWindowWidget::removeInputLine()
     inputTableModel_->removeLine(index);
     const int lastRow = inputTableModel_->rowCount()-1;
 
-    if (lastRow+1)
+    if (lastRow + 1)
       inputTableView_->selectRow(lastRow);
   }
 }
@@ -373,7 +373,7 @@ void PhysicalModelWindowWidget::evaluateOutputs()
   eval.run();
 
   // get result
-  Sample outputSample(eval.getResult().getOutputSample());
+  Sample outputSample(eval.getDesignOfExperiment().getOutputSample());
 
   // check
   if (!eval.getErrorMessage().empty())

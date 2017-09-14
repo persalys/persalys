@@ -18,18 +18,6 @@ DesignOfExperiment is the base class of :class:`~otguibase.DataModel`"
 %feature("docstring") OTGUI::DesignOfExperimentImplementation
 OTGUI_DesignOfExperiment_doc
 
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_getErrorMessage_doc
-"Error message accessor.
-
-Returns
--------
-message : str
-    Error message if the evaluation of the design of experiment failed"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getErrorMessage
-OTGUI_DesignOfExperiment_getErrorMessage_doc
 
 // ---------------------------------------------------------------------
 
@@ -52,31 +40,10 @@ OTGUI_DesignOfExperiment_getPhysicalModel_doc
 Returns
 -------
 script : str
-    Python script to replay the calculus"
+    Python script to rebuild the design of experiment"
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::getPythonScript
 OTGUI_DesignOfExperiment_getPythonScript_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_getVariableInputNames_doc
-"Variable input names accessor.
-
-Returns
--------
-names : :py:class:`openturns.Description`
-    Variable input names"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getVariableInputNames
-OTGUI_DesignOfExperiment_getVariableInputNames_doc
-
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_run_doc
-"Evaluate design."
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::run
-OTGUI_DesignOfExperiment_run_doc
 
 // ---------------------------------------------------------------------
 
@@ -91,30 +58,6 @@ hasPhysicalModel : bool
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::hasPhysicalModel
 OTGUI_DesignOfExperiment_hasPhysicalModel_doc
 
-// ---------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_initialize_doc
-"Initialize the design of experiment.
-
-Empty the output sample, the failed input sample and the not evaluated input sample.
-Reset the error message."
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::initialize
-OTGUI_DesignOfExperiment_initialize_doc
-
-// ----------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_getSampleFromFile_doc
-"Sample from the file accessor.
-
-Returns
--------
-sample : :py:class:`openturns.Sample`
-    Sample from the file"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getSampleFromFile
-OTGUI_DesignOfExperiment_getSampleFromFile_doc
-
 // ----------------------------------------------------------------------
 
 %define OTGUI_DesignOfExperiment_getInputSample_doc
@@ -127,32 +70,6 @@ sample : :py:class:`openturns.Sample`
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::getInputSample
 OTGUI_DesignOfExperiment_getInputSample_doc
-
-// ----------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_getFailedInputSample_doc
-"Failed input sample accessor.
-
-Returns
--------
-sample : :py:class:`openturns.Sample`
-    Points of the design of experiment which could not be evaluated"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getFailedInputSample
-OTGUI_DesignOfExperiment_getFailedInputSample_doc
-
-// ----------------------------------------------------------------------
-
-%define OTGUI_DesignOfExperiment_getNotEvaluatedInputSample_doc
-"Not evaluated input sample accessor.
-
-Returns
--------
-sample : :py:class:`openturns.Sample`
-    Points of the design of experiment which were not evaluated"
-%enddef
-%feature("docstring") OTGUI::DesignOfExperimentImplementation::getNotEvaluatedInputSample
-OTGUI_DesignOfExperiment_getNotEvaluatedInputSample_doc
 
 // ----------------------------------------------------------------------
 
@@ -205,3 +122,8 @@ sample : :py:class:`openturns.Sample`
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::getSample
 OTGUI_DesignOfExperiment_getSample_doc
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DesignOfExperimentImplementation::initialize
+"Empty the input and output samples."

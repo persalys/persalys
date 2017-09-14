@@ -21,9 +21,7 @@
 #include "otgui/DeterministicDesignPage.hxx"
 
 #include "otgui/ComboBoxDelegate.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 
-#include <QVBoxLayout>
 #include <QGroupBox>
 #include <QHeaderView>
 #include <QScrollBar>
@@ -32,26 +30,17 @@ using namespace OT;
 
 namespace OTGUI {
 
-DeterministicDesignPage::DeterministicDesignPage(const DesignOfExperiment & designOfExperiment, QWidget* parent)
+DeterministicDesignPage::DeterministicDesignPage(QWidget* parent)
   : QWizardPage(parent)
+  , groupBoxLayout_(0)
+  , tableView_(0)
+  , tableModel_(0)
+  , DOESizeLabel_(0)
+  , errorMessageLabel_(0)
 {
-  FixedDesignOfExperiment fixedDesignOfExperiment;
-  if (designOfExperiment.getImplementation()->getClassName() == "FixedDesignOfExperiment")
-    fixedDesignOfExperiment = *dynamic_cast<const FixedDesignOfExperiment*>(&*designOfExperiment.getImplementation());
-  else
-    fixedDesignOfExperiment = FixedDesignOfExperiment(designOfExperiment.getName(), designOfExperiment.getPhysicalModel());
-
-  model_ = new ExperimentTableModel(fixedDesignOfExperiment, this);
-  // DOE size
-  DOESizeLabel_ = new QLabel(QString::number(fixedDesignOfExperiment.getInputSample().getSize()));
-  connect(model_, SIGNAL(doeSizeChanged(QString)), DOESizeLabel_, SLOT(setText(QString)));
-  // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
-  connect(model_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setText(QString)));
-
   buildInterface();
 }
+
 
 void DeterministicDesignPage::buildInterface()
 {
@@ -59,37 +48,14 @@ void DeterministicDesignPage::buildInterface()
 
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 
-  QGroupBox * groupBox = new QGroupBox(tr("Define manually"));
-  QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
+  QGroupBox * groupBox = new QGroupBox(tr("Define a grid"));
+  groupBoxLayout_ = new QVBoxLayout(groupBox);
 
-  ResizableTableViewWithoutScrollBar * tableView = new ResizableTableViewWithoutScrollBar;
-  tableView->setEditTriggers(QTableView::AllEditTriggers);
-  tableView->setModel(model_);
+  tableView_ = new ResizableTableViewWithoutScrollBar;
+  tableView_->setEditTriggers(QTableView::AllEditTriggers);
+  tableView_->horizontalHeader()->hide();
 
-  const QStringList items = QStringList() << tr("Levels") << tr("Delta");
-  const QPair<int, int> cellWithComboBox(0, 5);
-
-  tableView->horizontalHeader()->hide();
-  tableView->setItemDelegateForColumn(5, new ComboBoxDelegate(items, cellWithComboBox));
-  tableView->openPersistentEditor(model_->index(0, 5));
-
-  groupBoxLayout->addWidget(tableView);
-
-  // resize table
-  if (tableView->model()->rowCount() > 15) // if too many variables: no fixed height + use scrollbar
-  {
-    tableView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    tableView->resizeColumnsToContents();
-    const int w = tableView->horizontalHeader()->length() + tableView->verticalHeader()->width() + tableView->verticalScrollBar()->sizeHint().width();
-    int x1, y1, x2, y2;
-    tableView->getContentsMargins(&x1, &y1, &x2, &y2);
-    tableView->setFixedWidth(w+x1+x2);
-  }
-  else
-  {
-    tableView->resizeToContents();
-    groupBoxLayout->addStretch();
-  }
+  groupBoxLayout_->addWidget(tableView_);
 
   pageLayout->addWidget(groupBox);
 
@@ -97,19 +63,74 @@ void DeterministicDesignPage::buildInterface()
   QHBoxLayout * sizeLayout = new QHBoxLayout;
   QLabel * sizeLabel = new QLabel(tr("Size of the design of experiment:") + " ");
   sizeLayout->addWidget(sizeLabel);
+  DOESizeLabel_ = new QLabel;
   sizeLayout->addWidget(DOESizeLabel_);
   sizeLayout->addStretch();
   pageLayout->addLayout(sizeLayout);
 
   // error message
-  pageLayout->addWidget(errorMessageLabel_);
+  errorMessageLabel_ = new QLabel;
+  errorMessageLabel_->setWordWrap(true);
+  pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
+
+  // register field
+  registerField("GridDOESize", DOESizeLabel_, "text", SIGNAL(textChanged()));
 }
 
 
-bool DeterministicDesignPage::validatePage()
+void DeterministicDesignPage::initialize(const Analysis& analysis)
 {
-  emit designOfExperimentChanged(model_->getDesignOfExperiment());
+  // get the analysis
+  GridDesignOfExperiment * analysis_ptr = dynamic_cast<GridDesignOfExperiment*>(analysis.getImplementation().get());
 
-  return true;
+  GridDesignOfExperiment doe;
+  if (analysis_ptr)
+  {
+    // if already a GridDesignOfExperiment
+    doe = *analysis_ptr;
+  }
+  else
+  {
+    // create a new analysis
+    PhysicalModel physicalModel = dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get())->getPhysicalModel();
+    doe = GridDesignOfExperiment(analysis.getName(), physicalModel);
+  }
+
+  // fill table
+  tableModel_ = new ExperimentTableModel(doe, this);
+  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setText(QString)));
+  tableView_->setModel(tableModel_);
+
+  const QStringList items = QStringList() << tr("Levels") << tr("Delta");
+  const QPair<int, int> cellWithComboBox(0, 5);
+  tableView_->setItemDelegateForColumn(5, new ComboBoxDelegate(items, cellWithComboBox));
+  tableView_->openPersistentEditor(tableModel_->index(0, 5));
+
+  // resize table
+  if (tableView_->model()->rowCount() > 15) // if too many variables: no fixed height + use scrollbar
+  {
+    tableView_->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    tableView_->resizeColumnsToContents();
+    const int w = tableView_->horizontalHeader()->length() + tableView_->verticalHeader()->width() + tableView_->verticalScrollBar()->sizeHint().width();
+    int x1, y1, x2, y2;
+    tableView_->getContentsMargins(&x1, &y1, &x2, &y2);
+    tableView_->setFixedWidth(w + x1 + x2);
+  }
+  else
+  {
+    tableView_->resizeToContents();
+    groupBoxLayout_->addStretch();
+  }
+
+  // set DOE size label
+  DOESizeLabel_->setText(QString::number(doe.getOriginalInputSample().getSize()));
+  connect(tableModel_, SIGNAL(doeSizeChanged(QString)), DOESizeLabel_, SLOT(setText(QString)));
+}
+
+
+Analysis DeterministicDesignPage::getAnalysis()
+{
+  Q_ASSERT(tableModel_);
+  return tableModel_->getDesignOfExperiment();
 }
 }

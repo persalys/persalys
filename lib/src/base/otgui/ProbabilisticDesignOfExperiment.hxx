@@ -21,10 +21,10 @@
 #ifndef OTGUI_PROBABILISTICDESIGNOFEXPERIMENT_HXX
 #define OTGUI_PROBABILISTICDESIGNOFEXPERIMENT_HXX
 
-#include "DesignOfExperimentImplementation.hxx"
+#include "DesignOfExperimentEvaluation.hxx"
 
 namespace OTGUI {
-class OTGUI_API ProbabilisticDesignOfExperiment : public DesignOfExperimentImplementation
+class OTGUI_API ProbabilisticDesignOfExperiment : public DesignOfExperimentEvaluation
 {
   CLASSNAME;
 
@@ -41,7 +41,7 @@ public:
   /** Virtual constructor */
   virtual ProbabilisticDesignOfExperiment * clone() const;
 
-  virtual OT::Sample getOriginalInputSample() const;
+  virtual void setSeed(const OT::UnsignedInteger seed);
 
   OT::String getDesignName() const;
   void setDesignName(const OT::String& name);
@@ -50,9 +50,6 @@ public:
 
   OT::UnsignedInteger getSize() const;
   void setSize(const OT::UnsignedInteger size);
-
-  OT::UnsignedInteger getSeed() const;
-  void setSeed(const OT::UnsignedInteger seed);
   
   virtual OT::String getPythonScript() const;
 
@@ -66,17 +63,13 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  static OT::Sample GenerateInputSample(const OT::String& name,
-                                        const OT::UnsignedInteger size,
-                                        const PhysicalModel& model,
-                                        const OT::UnsignedInteger seed);
+  virtual OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const;
 
   static OT::Description DesignNames_;
 
 private:
   OT::String designName_;
   OT::UnsignedInteger size_;
-  OT::UnsignedInteger seed_;
 };
 }
 #endif

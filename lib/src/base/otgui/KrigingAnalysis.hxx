@@ -22,6 +22,7 @@
 #define OTGUI_KRIGINGANALYSIS_HXX
 
 #include "MetaModelAnalysis.hxx"
+#include "Analysis.hxx"
 #include "KrigingAnalysisResult.hxx"
 
 #include "openturns/KrigingAlgorithm.hxx"
@@ -36,6 +37,7 @@ public:
   KrigingAnalysis();
   /** Constructor with parameters */
   KrigingAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment);
+  KrigingAnalysis(const OT::String& name, const Analysis& designOfExperimentAnalysis);
 
   /** Virtual constructor */
   virtual KrigingAnalysis * clone() const;

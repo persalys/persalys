@@ -212,6 +212,18 @@ String OTStudy::getAvailableDataModelName() const
 }
 
 
+void OTStudy::add(const DesignOfExperiment& designOfExperiment)
+{
+  getImplementation()->add(designOfExperiment);
+}
+
+
+void OTStudy::remove(const DesignOfExperiment& designOfExperiment)
+{
+  getImplementation()->remove(designOfExperiment);
+}
+
+
 // ----- PHYSICAL MODEL -----
 Collection<PhysicalModel> OTStudy::getPhysicalModels() const
 {
@@ -240,37 +252,6 @@ void OTStudy::add(const PhysicalModel& physicalModel)
 void OTStudy::remove(const PhysicalModel& physicalModel)
 {
   getImplementation()->remove(physicalModel);
-}
-
-
-// ----- DESIGN OF EXPERIMENT -----
-Collection<DesignOfExperiment> OTStudy::getDesignOfExperiments() const
-{
-  return getImplementation()->getDesignOfExperiments();
-}
-
-
-DesignOfExperiment& OTStudy::getDesignOfExperimentByName(const String& designOfExperimentName)
-{
-  return getImplementation()->getDesignOfExperimentByName(designOfExperimentName);
-}
-
-
-String OTStudy::getAvailableDesignOfExperimentName() const
-{
-  return getImplementation()->getAvailableDesignOfExperimentName();
-}
-
-
-void OTStudy::add(const DesignOfExperiment& designOfExperiment)
-{
-  getImplementation()->add(designOfExperiment);
-}
-
-
-void OTStudy::remove(const DesignOfExperiment& designOfExperiment)
-{
-  getImplementation()->remove(designOfExperiment);
 }
 
 

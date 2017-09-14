@@ -24,6 +24,9 @@
 #include "otgui/InferenceAnalysis.hxx"
 #include "otgui/DataAnalysis.hxx"
 #include "otgui/CopulaInferenceAnalysis.hxx"
+#include "otgui/FunctionalChaosAnalysis.hxx"
+
+#include <QDebug>
 
 using namespace OT;
 
@@ -34,7 +37,7 @@ DataModelDefinitionItem::DataModelDefinitionItem(const DesignOfExperiment & desi
 {
   setData(tr("Definition"), Qt::DisplayRole);
   QFont font;
-  font.setWeight(font.weight()+10);
+  font.setWeight(font.weight() + 10);
   setData(font, Qt::FontRole);
   setEditable(false);
 
@@ -61,17 +64,11 @@ void DataModelDefinitionItem::buildActions()
   newMetaModel_->setStatusTip(tr("Create a new metamodel"));
   connect(newMetaModel_, SIGNAL(triggered()), this, SLOT(createNewMetaModel()));
 
-  // remove data model
-  removeDataModel_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
-  removeDataModel_->setStatusTip(tr("Remove the data model"));
-  connect(removeDataModel_, SIGNAL(triggered()), this, SLOT(removeDesignOfExperiment()));
-
   // add actions
   appendAction(newDataAnalysis_);
   appendAction(newInferenceAnalysis_);
   appendAction(newCopulaInferenceAnalysis_);
   appendAction(newMetaModel_);
-  appendAction(removeDataModel_);
 }
 
 
@@ -84,6 +81,8 @@ void DataModelDefinitionItem::update(Observable* source, const String& message)
   }
   else if (message == "designOfExperimentRemoved")
   {
+    if (hasChildren())
+      qDebug() << "DataModelDefinitionItem::update(designOfExperimentRemoved) has not to contain child\n";
     emit removeRequested(row());
   }
 }
@@ -140,5 +139,21 @@ void DataModelDefinitionItem::createNewCopulaInferenceAnalysis()
   // new analysis
   CopulaInferenceAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("DependenciesInference_"), designOfExperiment_);
   getParentOTStudyItem()->getOTStudy().add(analysis);
+}
+
+
+void DataModelDefinitionItem::createNewMetaModel()
+{
+  // check
+  if (!designOfExperiment_.getOutputSample().getSize())
+  {
+    emit emitErrorMessageRequested(tr("The model must have at least one output."));
+    return;
+  }
+
+  // new analysis
+  FunctionalChaosAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("metaModel_"), designOfExperiment_);
+  // emit signal to StudyTreeView to open a wizard
+  emit analysisRequested(this, analysis);
 }
 }

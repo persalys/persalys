@@ -21,76 +21,35 @@
 #ifndef OTGUI_FIXEDDESIGNOFEXPERIMENT_HXX
 #define OTGUI_FIXEDDESIGNOFEXPERIMENT_HXX
 
-#include "DesignOfExperimentImplementation.hxx"
+#include "DesignOfExperimentEvaluation.hxx"
 
 namespace OTGUI {
-class OTGUI_API FixedDesignOfExperiment : public DesignOfExperimentImplementation
+class OTGUI_API FixedDesignOfExperiment : public DesignOfExperimentEvaluation
 {
   CLASSNAME;
 
 public:
-  enum Type {FromBoundsAndLevels, FromBoundsAndDeltas};
-
   /** Default constructor */
   FixedDesignOfExperiment();
   /** Constructor with parameters */
-  FixedDesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel);
+  FixedDesignOfExperiment(const OT::String& name, const PhysicalModel& physicalModel);
   /** Constructor with parameters */
-  FixedDesignOfExperiment(const OT::String & name,
-                          const PhysicalModel & physicalModel,
-                          const OT::Point & lowerBounds,
-                          const OT::Point & upperBounds,
-                          const OT::Indices & nbValues,
-                          const OT::Point & values=OT::Point(0));
+  FixedDesignOfExperiment(const OT::String& name,
+                          const PhysicalModel& physicalModel,
+                          const OT::Sample& inputSample);
 
   /** Virtual constructor */
   virtual FixedDesignOfExperiment * clone() const;
 
-  virtual OT::Sample getOriginalInputSample() const;
-
-  Type getTypeDesignOfExperiment() const;
-
-  OT::Point getValues() const;
-  void setValues(const OT::Point & values);
-  OT::Point getLowerBounds() const;
-  void setLowerBounds(const OT::Point & lowerBounds);
-  OT::Point getUpperBounds() const;
-  void setUpperBounds(const OT::Point & upperBounds);
-  OT::Indices getLevels() const;
-  void setLevels(const OT::Indices & nbValues);
-  OT::Point getDeltas() const;
-  void setDeltas(const OT::Point & deltas);
-  OT::Description getVariableInputNames() const;
-
-  void updateParameters();
+  void setOriginalInputSample(const OT::Sample & sample);
 
   virtual OT::String getPythonScript() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
 
-  /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
-
-  /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
-
 protected:
-  void initializeParameters();
-  static OT::Sample GenerateInputSample(const OT::Point& lowerBounds,
-                                        const OT::Point& upperBounds,
-                                        const OT::Indices& levels,
-                                        const OT::Point& values,
-                                        const OT::Description& inputNames);
-
-private:
-  Type type_;
-  OT::Description inputNames_;
-  OT::Point values_;
-  OT::Point lowerBounds_;
-  OT::Point upperBounds_;
-  OT::Indices levels_;
-  OT::Point deltas_;
+  virtual OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const;
 };
 }
 #endif

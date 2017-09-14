@@ -29,7 +29,6 @@ Model evaluation
     :template: class.rst_t
 
     ModelEvaluation
-    ModelEvaluationResult
 
 Probabilistic studies
 ---------------------
@@ -98,7 +97,8 @@ Design of experiment
 
     DesignOfExperiment
     FixedDesignOfExperiment
-    FromFileDesignOfExperiment
+    GridDesignOfExperiment
+    ImportedDesignOfExperiment
     ProbabilisticDesignOfExperiment
 
 Data analysis

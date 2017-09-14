@@ -31,7 +31,7 @@ Examples
 Returns
 -------
 formulas : :py:class:`openturns.Description`
-    Output fomulas"
+    Output formulas"
 
 // ---------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ formulas : :py:class:`openturns.Description`
 Parameters
 ----------
 formulas : sequence of str
-    Output fomulas"
+    Output formulas"
 
 // ---------------------------------------------------------------------
 
@@ -69,5 +69,3 @@ name : str
     Variable name
 formula : str
     Formula text"
-
-

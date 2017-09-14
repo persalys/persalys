@@ -21,30 +21,42 @@
 #ifndef OTGUI_IMPORTDESIGNOFEXPERIMENTPAGE_HXX
 #define OTGUI_IMPORTDESIGNOFEXPERIMENTPAGE_HXX
 
-#include "otgui/ImportDataPage.hxx"
-#include "otgui/DesignOfExperiment.hxx"
-#include "otgui/FromFileDesignOfExperiment.hxx"
+#include "otgui/Analysis.hxx"
+#include "otgui/ImportedDesignOfExperiment.hxx"
+#include "otgui/ExportableTableView.hxx"
+
+#include <QWizardPage>
+#include <QLabel>
+#include <QLineEdit>
 
 namespace OTGUI {
-class OTGUI_API ImportDesignOfExperimentPage : public ImportDataPage
+class OTGUI_API ImportDesignOfExperimentPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  ImportDesignOfExperimentPage(const DesignOfExperiment & designOfExperiment, QWidget *parent = 0);
+  ImportDesignOfExperimentPage(QWidget *parent = 0);
 
+  void initialize(const Analysis& analysis);
+  Analysis getAnalysis();
   bool validatePage();
 
 protected:
+  void buildInterface();
   virtual void setTable(const QString& fileName);
+  void setData(const QString & fileName);
 
 public slots:
+  void openFileRequested();
   void columnNameChanged();
-signals:
-  void designOfExperimentChanged(const DesignOfExperiment & designOfExperiment);
 
 private:
-  FromFileDesignOfExperiment designOfExperiment_;
+  ImportedDesignOfExperiment designOfExperiment_;
+  bool pageValidity_;
+  QLineEdit * filePathLineEdit_;
+  ExportableTableView * dataPreviewTableView_;
+  QLabel * DOESizeLabel_;
+  QLabel * errorMessageLabel_;
 };
 }
 #endif

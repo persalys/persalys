@@ -21,10 +21,10 @@
 #ifndef OTGUI_DATAMODEL_HXX
 #define OTGUI_DATAMODEL_HXX
 
-#include "FromFileDesignOfExperiment.hxx"
+#include "DesignOfExperimentImplementation.hxx"
 
 namespace OTGUI {
-class OTGUI_API DataModel : public FromFileDesignOfExperiment
+class OTGUI_API DataModel : public DesignOfExperimentImplementation
 {
   CLASSNAME;
 
@@ -48,17 +48,20 @@ public:
   /** Virtual constructor */
   virtual DataModel * clone() const;
 
-  virtual void setFileName(const OT::String & fileName);
+  OT::String getFileName() const;
+  void setFileName(const OT::String& fileName);
 
+  OT::Indices getInputColumns() const;
   OT::Indices getOutputColumns() const;
-  virtual void setInputColumns(const OT::Indices & inputColumns);
   void setColumns(const OT::Indices & inputColumns,
-                  const OT::Indices & outputColumns,
+                  const OT::Indices & outputColumns=OT::Indices(),
                   const OT::Description & inputNames=OT::Description(),
                   const OT::Description & outputNames=OT::Description());
 
   OT::Description getInputNames();
   OT::Description getOutputNames();
+
+  OT::Sample getSampleFromFile();
 
   virtual OT::String getPythonScript() const;
 
@@ -72,9 +75,12 @@ public:
   void load(OT::Advocate & adv);
 
 private:
+  OT::String fileName_;
   OT::Description inputNames_;
   OT::Description outputNames_;
   OT::Indices outputColumns_;
+  OT::Indices inputColumns_;
+  OT::Sample sampleFromFile_;
 };
 }
 #endif

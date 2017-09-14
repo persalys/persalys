@@ -166,7 +166,15 @@ void KrigingPage::initialize(const Analysis& analysis)
   if (!analysis_ptr)
     return;
 
-  inputsNames_ = analysis_ptr->getEffectiveInputSample().getDescription();
+  Description inputNames = analysis_ptr->getDesignOfExperiment().getInputSample().getDescription();
+  if (analysis_ptr->getDesignOfExperiment().hasPhysicalModel())
+  {
+    if (analysis_ptr->getDesignOfExperiment().getPhysicalModel().hasStochasticInputs())
+      inputNames = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getStochasticInputNames();
+    else
+      inputNames = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getInputNames();
+  }
+  inputsNames_ = inputNames;
 
   // covariance model
   const CovarianceModel covModel(analysis_ptr->getCovarianceModel());
@@ -200,9 +208,9 @@ void KrigingPage::initialize(const Analysis& analysis)
   // basis
   const UnsignedInteger basisDim = analysis_ptr->getBasis().getDimension();
   const UnsignedInteger basisSize = analysis_ptr->getBasis().getSize();
-  if (basisSize == (basisDim+1))
+  if (basisSize == (basisDim + 1))
     basisTypeComboBox_->setCurrentIndex(1);
-  else if (basisSize == ((basisDim+1)*(basisDim+2)/2))
+  else if (basisSize == ((basisDim + 1) * (basisDim + 2) / 2))
     basisTypeComboBox_->setCurrentIndex(2);
   else
     basisTypeComboBox_->setCurrentIndex(0);
@@ -225,10 +233,10 @@ void KrigingPage::initialize(const Analysis& analysis)
 void KrigingPage::updateScaleLineEdit()
 {
   QString scaleText;
-  for (UnsignedInteger i=0; i<scales_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < scales_.getSize(); ++i)
   {
     scaleText += QString::number(scales_[i]);
-    if (i < scales_.getSize()-1)
+    if (i < scales_.getSize() - 1)
       scaleText += "; ";
   }
   scaleLineEdit_->setText(scaleText);
@@ -290,7 +298,14 @@ Analysis KrigingPage::getAnalysis(const String& name, const DesignOfExperiment& 
   }
 
   // basis
-  const UnsignedInteger inputDimension = analysis.getEffectiveInputSample().getDimension();
+  UnsignedInteger inputDimension = doe.getInputSample().getDimension();
+  if (doe.hasPhysicalModel())
+  {
+    if (doe.getPhysicalModel().hasStochasticInputs())
+      inputDimension = doe.getPhysicalModel().getStochasticInputNames().getSize();
+    else
+      inputDimension = doe.getPhysicalModel().getInputNames().getSize();
+  }
 
   switch (basisTypeComboBox_->currentIndex())
   {

@@ -27,6 +27,11 @@ namespace OTGUI {
 /* Default constructor */
 DataSample::DataSample()
   : PersistentObject()
+  , inputSample_()
+  , outputSample_()
+  , sample_()
+  , listXMin_()
+  , listXMax_()
 {
 }
 
@@ -36,6 +41,9 @@ DataSample::DataSample(const Sample & inSample, const Sample & outSample)
   : PersistentObject()
   , inputSample_(inSample)
   , outputSample_(outSample)
+  , sample_()
+  , listXMin_()
+  , listXMax_()
 {
   if (getInputSample().getSize() * getOutputSample().getSize())
     if (getInputSample().getSize() != getOutputSample().getSize())

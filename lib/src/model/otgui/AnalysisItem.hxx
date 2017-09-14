@@ -44,13 +44,11 @@ public:
 
 protected:
   void buildActions();
-  QStandardItem * getParentItem(const QString itemType);
 
 public slots:
   void processLaunched();
   void processFinished();
   void updateAnalysis(const Analysis & analysis);
-  void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
   void stopAnalysis();
   void modifyAnalysis();
   void addMetaModelItem();
@@ -62,6 +60,7 @@ signals:
   void messageChanged(QString);
   void progressValueChanged(int);
   void modifyAnalysisRequested(AnalysisItem*);
+  void modifyDesignOfExperimentEvaluation(Analysis, bool);
 
 private:
   Analysis analysis_;

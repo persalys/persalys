@@ -20,7 +20,6 @@
  */
 #include "otgui/DesignOfExperimentInputWindow.hxx"
 
-#include "otgui/ProbabilisticDesignOfExperiment.hxx"
 #include "otgui/SampleTableModel.hxx"
 #include "otgui/ExportableTableView.hxx"
 #include "otgui/ParametersWidget.hxx"
@@ -32,9 +31,9 @@ using namespace OT;
 
 namespace OTGUI {
 
-DesignOfExperimentInputWindow::DesignOfExperimentInputWindow(DesignOfExperimentItem * item, QWidget * parent)
+DesignOfExperimentInputWindow::DesignOfExperimentInputWindow(DesignOfExperimentDefinitionItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
-  , designOfExperiment_(item->getDesignOfExperiment())
+  , originalInputSample_(item->getOriginalInputSample())
 {
   buildInterface();
 }
@@ -51,21 +50,7 @@ void DesignOfExperimentInputWindow::buildInterface()
   QStringList namesList;
   namesList << tr("Sample size");
   QStringList valuesList;
-  valuesList << QString::number(designOfExperiment_.getOriginalInputSample().getSize());
-  const ProbabilisticDesignOfExperiment * doe_ptr = dynamic_cast<const ProbabilisticDesignOfExperiment*>(designOfExperiment_.getImplementation().get());
-  if (doe_ptr)
-  {
-    namesList << tr("Design name");
-    namesList << tr("Seed");
-    const String designName = doe_ptr->getDesignName();
-    if (designName == "LHS")
-      valuesList << tr("LHS");
-    else if (designName == "MONTE_CARLO")
-      valuesList << tr("Monte Carlo");
-    else if (designName == "QUASI_MONTE_CARLO")
-      valuesList << tr("Quasi-Monte Carlo");
-    valuesList << QString::number(doe_ptr->getSeed());
-  }
+  valuesList << QString::number(originalInputSample_.getSize());
 
   ParametersWidget * table = new ParametersWidget("", namesList, valuesList, true, true);
   mainWidgetLayout->addWidget(table);
@@ -74,7 +59,7 @@ void DesignOfExperimentInputWindow::buildInterface()
   ExportableTableView * tableView = new ExportableTableView;
   tableView->setSortingEnabled(true);
 
-  SampleTableModel * tableModel = new SampleTableModel(designOfExperiment_.getOriginalInputSample(), tableView);
+  SampleTableModel * tableModel = new SampleTableModel(originalInputSample_, tableView);
   QSortFilterProxyModel * proxyModel = new QSortFilterProxyModel(tableView);
   proxyModel->setSourceModel(tableModel);
 

@@ -103,7 +103,7 @@ void AnalysisWindow::buildInterface()
 
   launchParameters_ = 0;
   analysisItem_->getAnalysis().acceptLaunchParameters(this);
-  if(launchParameters_)
+  if (launchParameters_)
   {
     mainLayout->addWidget(launchParameters_, 4, 0);
   }
@@ -155,13 +155,16 @@ void AnalysisWindow::initializeWidgets()
 void AnalysisWindow::updateRunButtonAvailability(bool analysisInProgress)
 {
   // impossible to launch an analysis when another one is already running
-  if (!analysisItem_->getAnalysis().isRunning())
-    runButton_->setDisabled(analysisInProgress);
+  runButton_->setDisabled(analysisInProgress);
 }
 
 
 void AnalysisWindow::launchAnalysis()
 {
+  // re re re check
+  if (analysisItem_->getAnalysis().isRunning())
+    return;
+
   // enable stop button
   stopButton_->setEnabled(true);
   // start indefinite/busy progress bar

@@ -15,8 +15,6 @@ ot_add_source_file ( OTguiSubWindow.cxx )
 ot_add_source_file ( OTguiWizard.cxx )
 ot_add_source_file ( PhysicalModelDiagramWindow.cxx )
 ot_add_source_file ( DataModelDiagramWindow.cxx )
-ot_add_source_file ( ImportDataPage.cxx )
-ot_add_source_file ( ImportDesignOfExperimentPage.cxx )
 ot_add_source_file ( DataModelWindow.cxx )
 ot_add_source_file ( DataAnalysisWindow.cxx )
 ot_add_source_file ( DataAnalysisResultWindow.cxx )
@@ -31,8 +29,12 @@ ot_add_source_file ( OutputsSelectionGroupBox.cxx )
 ot_add_source_file ( ParametersWidget.cxx )
 ot_add_source_file ( ResultWindow.cxx )
 ot_add_source_file ( AnalysisWindow.cxx )
+ot_add_source_file ( IntroDesignOfExperimentPage.cxx )
 ot_add_source_file ( DeterministicDesignPage.cxx )
 ot_add_source_file ( ProbabilisticDesignPage.cxx )
+ot_add_source_file ( DesignOfExperimentInputWindow.cxx )
+ot_add_source_file ( DesignOfExperimentEvaluationWizard.cxx )
+ot_add_source_file ( ImportDesignOfExperimentPage.cxx )
 ot_add_source_file ( PhysicalModelWindowWidget.cxx )
 ot_add_source_file ( SymbolicPhysicalModelWindow.cxx )
 ot_add_source_file ( PythonPhysicalModelWindow.cxx )
@@ -45,7 +47,6 @@ if (USE_OTFMI)
 endif ()
 ot_add_source_file ( ProbabilisticModelWindow.cxx )
 ot_add_source_file ( DesignOfExperimentWizard.cxx )
-ot_add_source_file ( DesignOfExperimentInputWindow.cxx )
 ot_add_source_file ( DesignOfExperimentWindow.cxx )
 ot_add_source_file ( StudyTreeView.cxx )
 ot_add_source_file ( ModelEvaluationWizard.cxx )
@@ -87,7 +88,6 @@ ot_add_source_file ( InferenceResultWidget.cxx )
 ot_add_source_file ( CopulaParametersTabWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWindow.cxx )
-ot_add_source_file ( DesignOfExperimentSelectionWizard.cxx )
 ot_add_source_file ( WidgetBoundToDockWidget.cxx )
 
 ot_install_header_file ( MainWindow.hxx )
@@ -137,7 +137,6 @@ if (USE_OTFMI)
 endif ()
 ot_install_header_file ( ProbabilisticModelWindow.hxx )
 ot_install_header_file ( DesignOfExperimentWizard.hxx )
-ot_install_header_file ( DesignOfExperimentInputWindow.hxx )
 ot_install_header_file ( DesignOfExperimentWindow.hxx )
 ot_install_header_file ( ModelEvaluationResultWindow.hxx )
 ot_install_header_file ( MonteCarloResultWindow.hxx )
@@ -149,8 +148,12 @@ ot_install_header_file ( SimulationReliabilityResultWindow.hxx )
 ot_install_header_file ( ApproximationResultWindow.hxx )
 ot_install_header_file ( ApproximationResultTabWidget.hxx )
 ot_install_header_file ( StudyTreeView.hxx )
+ot_install_header_file ( IntroDesignOfExperimentPage.hxx )
 ot_install_header_file ( DeterministicDesignPage.hxx )
 ot_install_header_file ( ProbabilisticDesignPage.hxx )
+ot_install_header_file ( ImportDesignOfExperimentPage.hxx )
+ot_install_header_file ( DesignOfExperimentInputWindow.hxx )
+ot_install_header_file ( DesignOfExperimentEvaluationWizard.hxx )
 ot_install_header_file ( StopCriteriaGroupBox.hxx )
 ot_install_header_file ( ParametersDefinitionWizard.hxx )
 ot_install_header_file ( IntroMetaModelPage.hxx )
@@ -168,7 +171,6 @@ ot_install_header_file ( ControllerWidget.hxx )
 ot_install_header_file ( CopulaInferenceResultWidget.hxx )
 ot_install_header_file ( CopulaInferenceResultWindow.hxx )
 ot_install_header_file ( CopulaParametersTabWidget.hxx )
-ot_install_header_file ( DesignOfExperimentSelectionWizard.hxx )
 ot_install_header_file ( WidgetBoundToDockWidget.hxx )
 
 qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
@@ -188,21 +190,22 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/MinMaxTableGroupBox.hxx
                                   otgui/MomentsEstimatesTableGroupBox.hxx
                                   otgui/OutputsSelectionGroupBox.hxx
-                                  otgui/ImportDataPage.hxx
-                                  otgui/ImportDesignOfExperimentPage.hxx
                                   otgui/DataModelWindow.hxx
                                   otgui/DataAnalysisWindow.hxx
                                   otgui/DataAnalysisResultWindow.hxx
                                   otgui/StudyTreeView.hxx
+                                  otgui/IntroDesignOfExperimentPage.hxx
                                   otgui/DeterministicDesignPage.hxx
                                   otgui/ProbabilisticDesignPage.hxx
+                                  otgui/ImportDesignOfExperimentPage.hxx
+                                  otgui/DesignOfExperimentInputWindow.hxx
+                                  otgui/DesignOfExperimentEvaluationWizard.hxx
                                   otgui/PhysicalModelWindowWidget.hxx
                                   otgui/SymbolicPhysicalModelWindow.hxx
                                   otgui/PythonPhysicalModelWindow.hxx
                                   otgui/MetaModelWindow.hxx
                                   otgui/ProbabilisticModelWindow.hxx
                                   otgui/DesignOfExperimentWizard.hxx
-                                  otgui/DesignOfExperimentInputWindow.hxx
                                   otgui/DesignOfExperimentWindow.hxx
                                   otgui/ModelEvaluationWizard.hxx
                                   otgui/ModelEvaluationResultWindow.hxx
@@ -245,7 +248,6 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/CopulaInferenceResultWidget.hxx
                                   otgui/CopulaInferenceResultWindow.hxx
                                   otgui/CopulaParametersTabWidget.hxx
-                                  otgui/DesignOfExperimentSelectionWizard.hxx
                                   otgui/WidgetBoundToDockWidget.hxx
                                   )
 

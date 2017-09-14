@@ -32,7 +32,24 @@ static Factory<DataAnalysisResult> Factory_DataAnalysisResult;
 
 /* Default constructor */
 DataAnalysisResult::DataAnalysisResult()
-  : DataSample()
+  : PersistentObject()
+  , designOfExperiment_()
+  , min_()
+  , max_()
+  , mean_()
+  , coefficientOfVariation_()
+  , median_()
+  , standardDeviation_()
+  , variance_()
+  , skewness_()
+  , kurtosis_()
+  , firstQuartile_()
+  , thirdQuartile_()
+  , meanConfidenceInterval_()
+  , stdConfidenceInterval_()
+  , outliers_()
+  , pdf_()
+  , cdf_()
   , elapsedTime_(0.)
 {
 
@@ -42,6 +59,12 @@ DataAnalysisResult::DataAnalysisResult()
 DataAnalysisResult* DataAnalysisResult::clone() const
 {
   return new DataAnalysisResult(*this);
+}
+
+
+DesignOfExperiment DataAnalysisResult::getDesignOfExperiment() const
+{
+  return designOfExperiment_;
 }
 
 
@@ -173,7 +196,8 @@ String DataAnalysisResult::__repr__() const
 /* Method save() stores the object through the StorageManager */
 void DataAnalysisResult::save(Advocate & adv) const
 {
-  DataSample::save(adv);
+  PersistentObject::save(adv);
+  adv.saveAttribute("designOfExperiment_", designOfExperiment_);
   adv.saveAttribute("min_", min_);
   adv.saveAttribute("max_", max_);
   adv.saveAttribute("mean_", mean_);
@@ -197,8 +221,9 @@ void DataAnalysisResult::save(Advocate & adv) const
 /* Method load() reloads the object from the StorageManager */
 void DataAnalysisResult::load(Advocate & adv)
 {
-  DataSample::load(adv);
+  PersistentObject::load(adv);
   adv.loadAttribute("min_", min_);
+  adv.loadAttribute("designOfExperiment_", designOfExperiment_);
   adv.loadAttribute("max_", max_);
   adv.loadAttribute("mean_", mean_);
   adv.loadAttribute("median_", median_);

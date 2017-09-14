@@ -26,6 +26,8 @@
 namespace OTGUI {
 class OTGUI_API PhysicalModel : public OT::TypedInterfaceObject<PhysicalModelImplementation>
 {
+  CLASSNAME;
+
 public:
   typedef OT::Pointer<PhysicalModelImplementation> Implementation;
 

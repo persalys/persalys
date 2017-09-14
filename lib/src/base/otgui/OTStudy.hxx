@@ -64,18 +64,14 @@ public:
   OT::Collection<DesignOfExperiment> getDataModels() const;
   DesignOfExperiment& getDataModelByName(const OT::String& dataModelName);
   OT::String getAvailableDataModelName() const;
+  void add(const DesignOfExperiment& designOfExperiment);
+  void remove(const DesignOfExperiment& designOfExperiment);
 
   OT::Collection<PhysicalModel> getPhysicalModels() const;
   PhysicalModel& getPhysicalModelByName(const OT::String& physicalModelName);
   OT::String getAvailablePhysicalModelName(const OT::String& physicalModelRootName="PhysicalModel_") const;
   void add(const PhysicalModel& physicalModel);
   void remove(const PhysicalModel& physicalModel);
-
-  OT::Collection<DesignOfExperiment> getDesignOfExperiments() const;
-  DesignOfExperiment& getDesignOfExperimentByName(const OT::String& designOfExperimentName);
-  OT::String getAvailableDesignOfExperimentName() const;
-  void add(const DesignOfExperiment& designOfExperiment);
-  void remove(const DesignOfExperiment& designOfExperiment);
 
   OT::Collection<Analysis> getAnalyses() const;
   Analysis& getAnalysisByName(const OT::String& analysisName);

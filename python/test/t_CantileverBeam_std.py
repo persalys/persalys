@@ -51,7 +51,7 @@ copula = ot.NormalCopula(R)
 model.setCopula(copula)
 
 ## Design of Experiment - Parametric analysis ##
-aDesign = otguibase.FixedDesignOfExperiment('aDesign', model)
+aDesign = otguibase.GridDesignOfExperiment('aDesign', model)
 aDesign.setLevels([2, 2, 2, 2])
 myStudy.add(aDesign)
 aDesign.run()

@@ -4,7 +4,7 @@
 Available constructors:
     FixedDesignOfExperiment(*name, physicalModel*)
 
-    FixedDesignOfExperiment(*name, physicalModel, lowerBound, upperBound, nbValues, values*)
+    FixedDesignOfExperiment(*name, physicalModel, sample*)
 
 Parameters
 ----------
@@ -12,19 +12,9 @@ name : str
     Name
 physicalModel : :class:`~otguibase.PhysicalModel`
     Physical model
-lowerBound : sequence of float
-    Lower bound
-upperBound : sequence of float
-    Upper bound
-nbValues : sequence of int
-    Number of values along each direction
-values : sequence of float
-    Values of the constant variables (optional)
-
-Notes
------
-The sequences must have a dimension equal to the number of inputs in the
-physical model.
+sample : :py:class:`openturns.Sample`
+    Input sample. The sample must have a dimension equal to the number of
+    inputs in the physical model (optional)
 
 Examples
 --------
@@ -43,112 +33,13 @@ Create the design of experiment:
 >>> myDOE = otguibase.FixedDesignOfExperiment('myDOE', myPhysicalModel)"
 
 
-// ---------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FixedDesignOfExperiment::getTypeDesignOfExperiment
-"Design type accessor.
-
-Returns
--------
-type : int
-    Design type"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::FixedDesignOfExperiment::getValues
-"Values accessor.
-
-Returns
--------
-values : :py:class:`openturns.Point`
-   Inputs values used in the case where there is at least a constant variable."
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::FixedDesignOfExperiment::setValues
-"Values accessor.
+%feature("docstring") OTGUI::FixedDesignOfExperiment::setOriginalInputSample
+"Input sample accessor.
 
 Parameters
 ----------
-values : :py:class:`openturns.Point`
-   Inputs values used in the case where there is at least a constant variable."
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::FixedDesignOfExperiment::getLowerBounds
-"Lower bounds accessor.
-
-Returns
--------
-bounds : :py:class:`openturns.Point`
-   Lower bounds"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::FixedDesignOfExperiment::setLowerBounds
-"Lower bounds accessor.
-
-Parameters
-----------
-bounds : :py:class:`openturns.Point`
-   Lower bounds"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::FixedDesignOfExperiment::getUpperBounds
-"Upper bounds accessor.
-
-Returns
--------
-bounds : :py:class:`openturns.Point`
-   Upper bounds"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::FixedDesignOfExperiment::setUpperBounds
-"Upper bounds accessor.
-
-Parameters
-----------
-bounds : :py:class:`openturns.Point`
-   Upper bounds"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::FixedDesignOfExperiment::getLevels
-"Levels accessor.
-
-Returns
--------
-levels : :py:class:`openturns.Indices`
-   Levels"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::FixedDesignOfExperiment::setLevels
-"Levels accessor.
-
-Parameters
-----------
-levels : :py:class:`openturns.Indices`
-   Levels"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::FixedDesignOfExperiment::getDeltas
-"Deltas accessor.
-
-Returns
--------
-deltas : :py:class:`openturns.Point`
-   Deltas"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::FixedDesignOfExperiment::setDeltas
-"Deltas accessor.
-
-Parameters
-----------
-deltas : :py:class:`openturns.Point`
-   Deltas"
+sample : :py:class:`openturns.Sample`
+    Input sample. The sample must have a dimension equal to the number of
+    inputs in the physical model"

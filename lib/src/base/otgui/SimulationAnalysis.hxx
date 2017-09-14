@@ -21,6 +21,7 @@
 #ifndef OTGUI_SIMULATIONANALYSIS_HXX
 #define OTGUI_SIMULATIONANALYSIS_HXX
 
+#include "DesignOfExperiment.hxx"
 #include "PhysicalModelAnalysis.hxx"
 
 namespace OTGUI {
@@ -36,10 +37,15 @@ public:
   /** Virtual constructor */
   virtual SimulationAnalysis * clone() const = 0;
 
-  OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu);
+  DesignOfExperiment getDesignOfExperiment() const;
+
+  OT::UnsignedInteger getBlockSize() const;
+  virtual void setBlockSize(const OT::UnsignedInteger size);
 
   OT::UnsignedInteger getSeed() const;
-  void setSeed(const OT::UnsignedInteger seed);
+  virtual void setSeed(const OT::UnsignedInteger seed);
+
+  virtual bool analysisLaunched() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -48,10 +54,15 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
+  virtual void initialize();
+  virtual OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const;
   OT::Sample computeOutputSample(const OT::Sample& inputSample) const;
   OT::Sample computeOutputSample(const OT::Point& inputValues) const;
 
+protected:
+  DesignOfExperiment designOfExperiment_;
 private:
+  OT::UnsignedInteger blockSize_;
   OT::UnsignedInteger seed_;
 };
 }

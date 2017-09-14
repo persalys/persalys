@@ -24,7 +24,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-ExperimentTableModel::ExperimentTableModel(const FixedDesignOfExperiment & designOfExperiment, QObject * parent)
+ExperimentTableModel::ExperimentTableModel(const GridDesignOfExperiment & designOfExperiment, QObject * parent)
   : QAbstractTableModel(parent)
   , designOfExperiment_(designOfExperiment)
   , firstColumnChecked_(!designOfExperiment.getLevels().contains(1))
@@ -116,7 +116,7 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
         case 4:
           return tr("Upper bound");
         case 5:
-          if (designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndLevels)
+          if (designOfExperiment_.getTypeDesignOfExperiment() == GridDesignOfExperiment::FromBoundsAndLevels)
             return tr("Levels");
           else
             return tr("Delta");
@@ -149,7 +149,7 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
           return QString::number(designOfExperiment_.getUpperBounds()[indexInput], 'g', 15);
         case 5:
         {
-          if (designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndLevels)
+          if (designOfExperiment_.getTypeDesignOfExperiment() == GridDesignOfExperiment::FromBoundsAndLevels)
             return QString::number(int(designOfExperiment_.getLevels()[indexInput]));
           else
             return QString::number(designOfExperiment_.getDeltas()[indexInput], 'g', 15);
@@ -186,16 +186,16 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
     {
       try
       {
-        if (value.toString() == tr("Levels") && designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndDeltas)
+        if (value.toString() == tr("Levels") && designOfExperiment_.getTypeDesignOfExperiment() == GridDesignOfExperiment::FromBoundsAndDeltas)
           designOfExperiment_.setLevels(designOfExperiment_.getLevels());
-        else if (value.toString() == tr("Delta") && designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndLevels)
+        else if (value.toString() == tr("Delta") && designOfExperiment_.getTypeDesignOfExperiment() == GridDesignOfExperiment::FromBoundsAndLevels)
           designOfExperiment_.setDeltas(designOfExperiment_.getDeltas());
         else
           return false;
       }
       catch (std::exception & ex)
       {
-        emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+        emit errorMessageChanged(QString("<font color=red>%1</font>").arg(ex.what()));
       }
       emit dataChanged(this->index(1, 5), this->index(rowCount()-1, 5));
     }
@@ -208,7 +208,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
     {
       const int indexInput = index.row() - 1;
       // doe defined with levels
-      if (designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndLevels)
+      if (designOfExperiment_.getTypeDesignOfExperiment() == GridDesignOfExperiment::FromBoundsAndLevels)
       {
         Indices levels = designOfExperiment_.getLevels();
         if (value.toInt() == Qt::Checked)
@@ -223,7 +223,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
         }
         catch (std::exception & ex)
         {
-          emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+          emit errorMessageChanged(QString("<font color=red>%1</font>").arg(ex.what()));
         }
       }
       // doe defined with deltas
@@ -242,7 +242,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
         }
         catch (std::exception & ex)
         {
-          emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+          emit errorMessageChanged(QString("<font color=red>%1</font>").arg(ex.what()));
         }
       }
       firstColumnChecked_ = !designOfExperiment_.getLevels().contains(1);
@@ -270,7 +270,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           }
           catch (std::exception & ex)
           {
-            emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+            emit errorMessageChanged(QString("<font color=red>%1</font>").arg(ex.what()));
           }
           break;
         }
@@ -278,7 +278,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
         {
           if (value.toDouble() >= designOfExperiment_.getUpperBounds()[indexInput])
           {
-            emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(tr("The lower bound must be inferior to the upper bound")).arg("</font>"));
+            emit errorMessageChanged(QString("<font color=red>%1</font>").arg(tr("The lower bound must be inferior to the upper bound")));
             return false;
           }
           Point lowerBounds = designOfExperiment_.getLowerBounds();
@@ -291,7 +291,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           }
           catch (std::exception & ex)
           {
-            emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+            emit errorMessageChanged(QString("<font color=red>%1</font>").arg(ex.what()));
           }
           break;
         }
@@ -299,7 +299,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
         {
           if (value.toDouble() <= designOfExperiment_.getLowerBounds()[indexInput])
           {
-            emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(tr("The upper bound must be superior to the lower bound")).arg("</font>"));
+            emit errorMessageChanged(QString("<font color=red>%1</font>").arg(tr("The upper bound must be superior to the lower bound")));
             return false;
           }
           Point upperBounds = designOfExperiment_.getUpperBounds();
@@ -312,14 +312,14 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           }
           catch (std::exception & ex)
           {
-            emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+            emit errorMessageChanged(QString("<font color=red>%1</font>").arg(ex.what()));
           }
           break;
         }
         case 5: // levels or deltas
         {
           // levels
-          if (designOfExperiment_.getTypeDesignOfExperiment() == FixedDesignOfExperiment::FromBoundsAndLevels)
+          if (designOfExperiment_.getTypeDesignOfExperiment() == GridDesignOfExperiment::FromBoundsAndLevels)
           {
             if (value.toInt() < 2)
               return false;
@@ -333,7 +333,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
             }
             catch (std::exception & ex)
             {
-              emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+              emit errorMessageChanged(QString("<font color=red>%1</font>").arg(ex.what()));
             }
             break;
           }
@@ -352,12 +352,12 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
               }
               catch (std::exception & ex)
               {
-                emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(ex.what()).arg("</font>"));
+                emit errorMessageChanged(QString("<font color=red>%1</font>").arg(ex.what()));
               }
             }
             else
             {
-              emit errorMessageChanged(QString("%1%2%3").arg("<font color=red>").arg(tr("Delta must be inferior to the upper bound - the lower bound")).arg("</font>"));
+              emit errorMessageChanged(QString("<font color=red>%1</font>").arg(tr("Delta must be inferior to the upper bound - the lower bound")));
               return false;
             }
             break;
@@ -368,12 +368,12 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
       }
     }
   }
-  emit doeSizeChanged(QString::number(designOfExperiment_.getInputSample().getSize()));
+  emit doeSizeChanged(QString::number(designOfExperiment_.getOriginalInputSample().getSize()));
   return true;
 }
 
 
-FixedDesignOfExperiment ExperimentTableModel::getDesignOfExperiment() const
+GridDesignOfExperiment ExperimentTableModel::getDesignOfExperiment() const
 {
   return designOfExperiment_;
 }

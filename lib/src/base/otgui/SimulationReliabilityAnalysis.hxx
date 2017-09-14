@@ -43,6 +43,9 @@ public:
   OT::UnsignedInteger getSeed() const;
   void setSeed(const OT::UnsignedInteger seed);
 
+  OT::UnsignedInteger getBlockSize() const;
+  virtual void setBlockSize(const OT::UnsignedInteger size);
+
   SimulationReliabilityResult getResult() const;
 
   virtual void run();
@@ -80,6 +83,7 @@ protected:
 
 private:
   OT::UnsignedInteger seed_;
+  OT::UnsignedInteger blockSize_;
   TimeCriteria timeCriteria_;
 protected:
   SimulationReliabilityResult result_;

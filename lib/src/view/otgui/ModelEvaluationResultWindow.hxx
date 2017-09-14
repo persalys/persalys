@@ -23,7 +23,7 @@
 
 #include "ResultWindow.hxx"
 #include "otgui/AnalysisItem.hxx"
-#include "otgui/ModelEvaluationResult.hxx"
+#include "otgui/DesignOfExperiment.hxx"
 
 namespace OTGUI {
 class OTGUI_API ModelEvaluationResultWindow : public ResultWindow
@@ -38,7 +38,7 @@ protected:
   void buildInterface();
 
 private:
-  ModelEvaluationResult result_;
+  DesignOfExperiment designOfExperiment_;
 };
 }
 #endif

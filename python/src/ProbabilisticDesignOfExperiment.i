@@ -4,6 +4,8 @@
 #include "otgui/ProbabilisticDesignOfExperiment.hxx"
 %}
 
+%ignore OTGUI::ProbabilisticDesignOfExperiment::setDesignOfExperiment;
+
 %include ProbabilisticDesignOfExperiment_doc.i
 
 %include otgui/ProbabilisticDesignOfExperiment.hxx

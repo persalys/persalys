@@ -26,6 +26,8 @@ using namespace OT;
 
 namespace OTGUI {
 
+CLASSNAMEINIT(PhysicalModel);
+
 /* Default constructor */
 PhysicalModel::PhysicalModel(const String & name)
   : TypedInterfaceObject<PhysicalModelImplementation>(new SymbolicPhysicalModel(name))

@@ -36,14 +36,16 @@ static Factory<SRCAnalysis> Factory_SRCAnalysis;
 SRCAnalysis::SRCAnalysis()
   : SimulationAnalysis()
   , simulationsNumber_(10000)
+  , result_()
 {
 }
 
 
 /* Constructor with parameters */
-SRCAnalysis::SRCAnalysis(const String & name, const PhysicalModel & physicalModel, const OT::UnsignedInteger nbSimu)
+SRCAnalysis::SRCAnalysis(const String & name, const PhysicalModel & physicalModel, const UnsignedInteger nbSimu)
   : SimulationAnalysis(name, physicalModel)
   , simulationsNumber_(nbSimu)
+  , result_()
 {
 }
 
@@ -52,6 +54,18 @@ SRCAnalysis::SRCAnalysis(const String & name, const PhysicalModel & physicalMode
 SRCAnalysis* SRCAnalysis::clone() const
 {
   return new SRCAnalysis(*this);
+}
+
+
+UnsignedInteger SRCAnalysis::getSimulationsNumber() const
+{
+  return simulationsNumber_;
+}
+
+
+void SRCAnalysis::setSimulationsNumber(const UnsignedInteger number)
+{
+  simulationsNumber_ = number;
 }
 
 
@@ -64,27 +78,49 @@ void SRCAnalysis::run()
     initialize();
     result_ = SRCResult();
 
+    // check
+    if (getBlockSize() > getSimulationsNumber())
+      throw InvalidValueException(HERE) << "The block size (" << getBlockSize()
+                                        << ") can not be superior to the input sample size (" << getSimulationsNumber() << ")";
+
+    // initialization
     RandomGenerator::SetSeed(getSeed());
 
-    Sample inputSample(generateInputSample(simulationsNumber_));
+    const Sample inputSample(generateInputSample(getSimulationsNumber()));
+    const UnsignedInteger inputSampleSize = inputSample.getSize();
+
+    // number of iterations
+    const UnsignedInteger nbIter = static_cast<UnsignedInteger>(ceil(1.0 * inputSampleSize / getBlockSize()));
+    // last block size
+    const UnsignedInteger modulo = inputSampleSize % getBlockSize();
+    const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
 
     // evaluate model
     Sample outputSample(0, getInterestVariables().getSize());
-    for (UnsignedInteger i=0; i<simulationsNumber_; ++i)
+    for (UnsignedInteger i = 0; i < nbIter; ++i)
     {
       if (stopRequested_ && i > 1)
         break;
 
-      progressValue_ = (int) (i * 100 / simulationsNumber_);
+      progressValue_ = (int) (i * 100 / nbIter);
       notify("progressValueChanged");
 
-      outputSample.add(computeOutputSample(inputSample[i]));
+      // the last block can be smaller
+      const UnsignedInteger effectiveBlockSize = i < (nbIter - 1) ? getBlockSize() : lastBlockSize;
+
+      // get input sample of size effectiveBlockSize
+      const UnsignedInteger blockFirstIndex =  i * getBlockSize();
+      const Sample blockInputSample(inputSample, blockFirstIndex, blockFirstIndex + effectiveBlockSize);
+
+      // Perform a block of simulations
+      outputSample.add(computeOutputSample(blockInputSample));
     }
 
+    // compute SRC indices
     Sample indices(0, inputSample.getDimension());
 
     const Sample effectiveInputSample(inputSample, 0, outputSample.getSize());
-    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+    for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
     {
       Description outputName(1);
       outputName[0] = getInterestVariables()[i];
@@ -113,18 +149,6 @@ void SRCAnalysis::run()
 }
 
 
-UnsignedInteger SRCAnalysis::getSimulationsNumber() const
-{
-  return simulationsNumber_;
-}
-
-
-void SRCAnalysis::setSimulationsNumber(const UnsignedInteger number)
-{
-  simulationsNumber_ = number;
-}
-
-
 SRCResult SRCAnalysis::getResult() const
 {
   return result_;
@@ -139,15 +163,16 @@ String SRCAnalysis::getPythonScript() const
   if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {
     oss << "interestVariables = [";
-    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+    for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
     {
       oss << "'" << getInterestVariables()[i] << "'";
-      if (i < getInterestVariables().getSize()-1)
+      if (i < getInterestVariables().getSize() - 1)
         oss << ", ";
     }
     oss << "]\n";
     oss << getName() << ".setInterestVariables(interestVariables)\n";
   }
+  oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
 
   return oss;
@@ -166,7 +191,8 @@ String SRCAnalysis::__repr__() const
   OSS oss;
   oss << PhysicalModelAnalysis::__repr__()
       << " simulationsNumber=" << getSimulationsNumber()
-      << " seed=" << getSeed();
+      << " seed=" << getSeed()
+      << " blockSize=" << getBlockSize();
   return oss;
 }
 

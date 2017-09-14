@@ -37,7 +37,7 @@ outputs = [fake_y0, y0, y1]
 formulas = ['xi1', 'cos(0.5*xi1) + sin(xi2)', 'cos(0.5*xi1) + sin(xi2) + xi3']
 model = otguibase.SymbolicPhysicalModel('model', inputs, outputs, formulas)
 myStudy.add(model)
-design = otguibase.DesignOfExperimentImplementation('design', model)
+design = otguibase.FixedDesignOfExperiment('design', model)
 inputSample = [
 [0.981558, 9.34995, 0.5],
 [9.70026, 0.30288, 0.5],
@@ -94,7 +94,6 @@ design.setBlockSize(1)
 interestVariables = ['y0', 'y1']
 design.setInterestVariables(interestVariables)
 myStudy.add(design)
-design.run()
 chaos_0 = otguibase.FunctionalChaosAnalysis('chaos_0', design)
 chaos_0.setChaosDegree(4)
 chaos_0.setSparseChaos(True)

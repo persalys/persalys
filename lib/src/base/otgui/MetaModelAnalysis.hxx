@@ -22,6 +22,7 @@
 #define OTGUI_METAMODELANALYSIS_HXX
 
 #include "DesignOfExperimentAnalysis.hxx"
+#include "Analysis.hxx"
 #include "MetaModelAnalysisResult.hxx"
 
 namespace OTGUI {
@@ -32,9 +33,7 @@ public:
   MetaModelAnalysis();
   /** Constructor with parameters */
   MetaModelAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment);
-
-  virtual void setDesignOfExperiment(const DesignOfExperiment& designOfExperiment);
-  virtual void setInterestVariables(const OT::Description& variablesNames);
+  MetaModelAnalysis(const OT::String& name, const Analysis& analysis);
 
   bool isLeaveOneOutValidation() const;
   void setLeaveOneOutValidation(const bool validation);

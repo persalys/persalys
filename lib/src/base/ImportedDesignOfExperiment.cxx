@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/FromFileDesignOfExperiment.hxx"
+#include "otgui/ImportedDesignOfExperiment.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
@@ -26,32 +26,39 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(FromFileDesignOfExperiment);
+CLASSNAMEINIT(ImportedDesignOfExperiment);
 
-static Factory<FromFileDesignOfExperiment> Factory_FromFileDesignOfExperiment;
+static Factory<ImportedDesignOfExperiment> Factory_ImportedDesignOfExperiment;
 
 /* Default constructor */
-FromFileDesignOfExperiment::FromFileDesignOfExperiment()
-  : DesignOfExperimentImplementation()
+ImportedDesignOfExperiment::ImportedDesignOfExperiment()
+  : DesignOfExperimentEvaluation()
   , fileName_("")
+  , inputColumns_()
+  , sampleFromFile_()
 {
 }
 
 
 /* Constructor with parameters */
-FromFileDesignOfExperiment::FromFileDesignOfExperiment(const String& name, const PhysicalModel& physicalModel)
-  : DesignOfExperimentImplementation(name, physicalModel)
+ImportedDesignOfExperiment::ImportedDesignOfExperiment(const String& name, const PhysicalModel& physicalModel)
+  : DesignOfExperimentEvaluation(name, physicalModel)
   , fileName_("")
+  , inputColumns_()
+  , sampleFromFile_()
 {
 }
 
 
 /* Constructor with parameters */
-FromFileDesignOfExperiment::FromFileDesignOfExperiment(const String& name,
+ImportedDesignOfExperiment::ImportedDesignOfExperiment(const String& name,
                                                        const PhysicalModel& physicalModel,
                                                        const String& fileName,
                                                        const Indices& inputColumns)
-  : DesignOfExperimentImplementation(name, physicalModel)
+  : DesignOfExperimentEvaluation(name, physicalModel)
+  , fileName_("")
+  , inputColumns_()
+  , sampleFromFile_()
 {
   setFileName(fileName);
   setInputColumns(inputColumns);
@@ -59,19 +66,27 @@ FromFileDesignOfExperiment::FromFileDesignOfExperiment(const String& name,
 
 
 /* Virtual constructor */
-FromFileDesignOfExperiment* FromFileDesignOfExperiment::clone() const
+ImportedDesignOfExperiment* ImportedDesignOfExperiment::clone() const
 {
-  return new FromFileDesignOfExperiment(*this);
+  return new ImportedDesignOfExperiment(*this);
 }
 
 
-String FromFileDesignOfExperiment::getFileName() const
+Sample ImportedDesignOfExperiment::generateInputSample(const UnsignedInteger /*nbSimu*/) const
+{
+  Sample inS(getSampleFromFile().getMarginal(inputColumns_));
+  inS.setDescription(getPhysicalModel().getInputNames());
+  return inS;
+}
+
+
+String ImportedDesignOfExperiment::getFileName() const
 {
   return fileName_;
 }
 
 
-void FromFileDesignOfExperiment::setFileName(const String& fileName)
+void ImportedDesignOfExperiment::setFileName(const String& fileName)
 {
   if (fileName.empty())
     throw InvalidArgumentException(HERE) << "The file name can not be empty";
@@ -85,7 +100,7 @@ void FromFileDesignOfExperiment::setFileName(const String& fileName)
       fileName_ = fileName;
       getSampleFromFile();
       // reinitialization
-      setOriginalInputSample(Sample());
+      originalInputSample_.clear();
       initialize();
       inputColumns_ = Indices();
     }
@@ -101,19 +116,19 @@ void FromFileDesignOfExperiment::setFileName(const String& fileName)
 }
 
 
-Indices FromFileDesignOfExperiment::getInputColumns() const
+Indices ImportedDesignOfExperiment::getInputColumns() const
 {
   return inputColumns_;
 }
 
 
-void FromFileDesignOfExperiment::setInputColumns(const Indices& inputColumns)
+void ImportedDesignOfExperiment::setInputColumns(const Indices& inputColumns)
 {
-  if (inputColumns.getSize() != physicalModel_.getInputs().getSize())
+  if (inputColumns.getSize() != getPhysicalModel().getInputs().getSize())
   {
     OSS oss;
     oss << "The dimension of the list of the column numbers has to be equal to the number of inputs of the physical model: ";
-    oss << physicalModel_.getInputs().getSize();
+    oss << getPhysicalModel().getInputs().getSize();
     throw InvalidArgumentException(HERE) << oss.str();
   }
 
@@ -122,17 +137,13 @@ void FromFileDesignOfExperiment::setInputColumns(const Indices& inputColumns)
 
   inputColumns_ = inputColumns;
 
-  // generate input sample
-  Sample inS(getSampleFromFile().getMarginal(inputColumns_));
-  inS.setDescription(physicalModel_.getInputNames());
-  setOriginalInputSample(inS);
-
   // reinitialize
+  originalInputSample_.clear();
   initialize();
 }
 
 
-Sample FromFileDesignOfExperiment::getSampleFromFile()
+Sample ImportedDesignOfExperiment::getSampleFromFile() const
 {
   if (!sampleFromFile_.getSize())
   {
@@ -153,7 +164,7 @@ Sample FromFileDesignOfExperiment::getSampleFromFile()
 }
 
 
-Sample FromFileDesignOfExperiment::ImportSample(const String& fileName)
+Sample ImportedDesignOfExperiment::ImportSample(const String& fileName)
 {
   std::vector< String > separatorsList(3);
   separatorsList[0] = " ";
@@ -175,7 +186,7 @@ Sample FromFileDesignOfExperiment::ImportSample(const String& fileName)
 }
 
 
-String FromFileDesignOfExperiment::getPythonScript() const
+String ImportedDesignOfExperiment::getPythonScript() const
 {
   OSS oss;
 
@@ -183,44 +194,56 @@ String FromFileDesignOfExperiment::getPythonScript() const
   for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++ i)
   {
     oss << inputColumns_[i];
-    if (i < inputColumns_.getSize()-1)
+    if (i < inputColumns_.getSize() - 1)
       oss << ", ";
   }
   oss << "]\n";
 
-  oss << getName() << " = otguibase.FromFileDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", ";
+  oss << getName() << " = otguibase.ImportedDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", ";
   oss << "'" << fileName_ << "', inputColumns)\n";
+
+  oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
+  oss << "interestVariables = [";
+  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
+  {
+    oss << "'" << getInterestVariables()[i] << "'";
+    if (i < getInterestVariables().getSize()-1)
+      oss << ", ";
+  }
+  oss << "]\n";
+  oss << getName() << ".setInterestVariables(interestVariables)\n";
 
   return oss;
 }
 
 
 /* String converter */
-String FromFileDesignOfExperiment::__repr__() const
+String ImportedDesignOfExperiment::__repr__() const
 {
   OSS oss;
   oss << "class=" << GetClassName()
       << " name=" << getName()
       << " physicalModel=" << getPhysicalModel().getName()
       << " fileName=" << getFileName()
-      << " inputColumns=" << getInputColumns();
+      << " inputColumns=" << getInputColumns()
+      << " blockSize=" << getBlockSize();
   return oss;
 }
 
 
 /* Method save() stores the object through the StorageManager */
-void FromFileDesignOfExperiment::save(Advocate& adv) const
+void ImportedDesignOfExperiment::save(Advocate& adv) const
 {
-  DesignOfExperimentImplementation::save(adv);
+  DesignOfExperimentEvaluation::save(adv);
   adv.saveAttribute("fileName_", fileName_);
   adv.saveAttribute("inputColumns_", inputColumns_);
 }
 
 
 /* Method load() reloads the object from the StorageManager */
-void FromFileDesignOfExperiment::load(Advocate& adv)
+void ImportedDesignOfExperiment::load(Advocate& adv)
 {
-  DesignOfExperimentImplementation::load(adv);
+  DesignOfExperimentEvaluation::load(adv);
   adv.loadAttribute("fileName_", fileName_);
   adv.loadAttribute("inputColumns_", inputColumns_);
 }

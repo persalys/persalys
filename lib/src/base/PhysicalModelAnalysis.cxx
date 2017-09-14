@@ -36,7 +36,8 @@ PhysicalModelAnalysis::PhysicalModelAnalysis(const String & name, const Physical
   : AnalysisImplementation(name)
   , physicalModel_(physicalModel)
 {
-  setInterestVariables(physicalModel.getSelectedOutputsNames());
+  if (physicalModel.getSelectedOutputsNames().getSize())
+    setInterestVariables(physicalModel.getSelectedOutputsNames());
 }
 
 
@@ -50,20 +51,6 @@ PhysicalModelAnalysis* PhysicalModelAnalysis::clone() const
 PhysicalModel PhysicalModelAnalysis::getPhysicalModel() const
 {
   return physicalModel_;
-}
-
-
-void PhysicalModelAnalysis::setInterestVariables(const Description& outputsNames)
-{
-  if (!outputsNames.getSize())
-    throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
-
-  const Description modelOutputsNames(physicalModel_.getOutputNames());
-  for (UnsignedInteger i=0; i<outputsNames.getSize(); ++i)
-    if (!modelOutputsNames.contains(outputsNames[i]))
-      throw InvalidArgumentException(HERE) << "The name " << outputsNames[i] << " does not match an output name of the model";
-
-  AnalysisImplementation::setInterestVariables(outputsNames);
 }
 
 

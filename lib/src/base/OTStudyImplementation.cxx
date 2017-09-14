@@ -22,6 +22,7 @@
 
 #include "otgui/ReliabilityAnalysis.hxx"
 #include "otgui/DesignOfExperimentAnalysis.hxx"
+#include "otgui/DesignOfExperimentEvaluation.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/Study.hxx>
@@ -56,7 +57,6 @@ OTStudyImplementation::~OTStudyImplementation()
 {
   analyses_.clear();
   limitStates_.clear();
-  designOfExperiments_.clear();
   physicalModels_.clear();
   dataModels_.clear();
 }
@@ -78,7 +78,7 @@ void OTStudyImplementation::update(Observable* source, const String& message)
   const bool oldModifiedValue = modified_;
   modified_ = true;
 
-  // notification for AnalysisItem to update its Icon
+  // notification for OTStudyItem to update its Icon
   if (modified_ != oldModifiedValue)
     notify("statusChanged");
 }
@@ -109,30 +109,40 @@ Bool OTStudyImplementation::operator !=(const OTStudyImplementation& other) cons
 void OTStudyImplementation::clear()
 {
   // remove all the analyses
-  for (UnsignedInteger i=0; i<analyses_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < analyses_.getSize(); ++i)
   {
-    analyses_[i].getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
-    analyses_[i].getImplementation().get()->notifyAndRemove("analysisRemoved", "OTStudy");
+    DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(analyses_[i].getImplementation().get());
+    // we do not want to remove the design of experiment for now
+    // some analyses can be dependant of the design of experiment: we need to remove them before the design of experiment
+    if (!doeEval)
+    {
+      analyses_[i].getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
+      analyses_[i].getImplementation().get()->notifyAndRemove("analysisRemoved", "OTStudy");
+    }
+  }
+  // remove all the analyses
+  for (UnsignedInteger i = 0; i < analyses_.getSize(); ++i)
+  {
+    DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(analyses_[i].getImplementation().get());
+    // remove the design of experiment for now
+    if (doeEval)
+    {
+      doeEval->notifyAndRemove("analysisRemoved", "Analysis");
+      doeEval->notifyAndRemove("analysisRemoved", "DesignOfExperimentDefinition");
+      doeEval->notifyAndRemove("analysisRemoved", "OTStudy");
+    }
   }
 
   // remove all the limit states
-  for (UnsignedInteger i=0; i<limitStates_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < limitStates_.getSize(); ++i)
   {
     limitStates_[i].getPhysicalModel().getImplementation().get()->removeObserver(limitStates_[i].getImplementation().get()->getObserver("LimitState"));
     limitStates_[i].getImplementation().get()->notifyAndRemove("limitStateRemoved", "LimitState");
     limitStates_[i].getImplementation().get()->notifyAndRemove("limitStateRemoved", "OTStudy");
   }
 
-  // remove all the design Of Experiments
-  for (UnsignedInteger i=0; i<designOfExperiments_.getSize(); ++i)
-  {
-    designOfExperiments_[i].getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
-    designOfExperiments_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DesignOfExperimentDefinition");
-    designOfExperiments_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "OTStudy");
-  }
-
   // remove all the physical models
-  for (UnsignedInteger i=0; i<physicalModels_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < physicalModels_.getSize(); ++i)
   {
     physicalModels_[i].getImplementation().get()->notifyAndRemove("probabilisticModelRemoved", "ProbabilisticModel");
     physicalModels_[i].getImplementation().get()->notifyAndRemove("physicalModelRemoved", "PhysicalModelDefinition");
@@ -141,7 +151,7 @@ void OTStudyImplementation::clear()
   }
 
   // remove all the datamodels
-  for (UnsignedInteger i=0; i<dataModels_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < dataModels_.getSize(); ++i)
   {
     dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDefinition");
     dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDiagram");
@@ -172,7 +182,7 @@ Collection< DesignOfExperiment > OTStudyImplementation::getDataModels() const
 
 DesignOfExperiment& OTStudyImplementation::getDataModelByName(const String& dataModelName)
 {
-  for (UnsignedInteger i=0; i<dataModels_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < dataModels_.getSize(); ++i)
     if (dataModels_[i].getName() == dataModelName)
       return dataModels_[i];
   throw InvalidArgumentException(HERE) << "The given name " << dataModelName <<" does not correspond to a data model of the study.\n"; 
@@ -181,7 +191,7 @@ DesignOfExperiment& OTStudyImplementation::getDataModelByName(const String& data
 
 bool OTStudyImplementation::hasDataModelNamed(const String& dataModelName) const
 {
-  for (UnsignedInteger i=0; i<dataModels_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < dataModels_.getSize(); ++i)
     if (dataModels_[i].getName() == dataModelName)
       return true;
   return false;
@@ -192,9 +202,39 @@ String OTStudyImplementation::getAvailableDataModelName() const
 {
   int i = 0;
   String rootName = "dataModel_";
-  while (hasDataModelNamed(rootName + (OSS()<<i).str()))
+  while (hasDataModelNamed(rootName + (OSS() << i).str()))
     ++i;
-  return rootName + (OSS()<<i).str();
+  return rootName + (OSS() << i).str();
+}
+
+
+void OTStudyImplementation::add(const DesignOfExperiment& designOfExperiment)
+{
+  if (hasDataModelNamed(designOfExperiment.getName()))
+    throw InvalidArgumentException(HERE) << "The study already contains a data model named " << designOfExperiment.getName();
+
+  dataModels_.add(designOfExperiment);
+  notify("addDataModel");
+
+  designOfExperiment.getImplementation().get()->addObserver(this);
+  modified_ = true;
+  notify("statusChanged");
+}
+
+
+void OTStudyImplementation::remove(const DesignOfExperiment& designOfExperiment)
+{
+  if (!dataModels_.contains(designOfExperiment))
+    return;
+
+  // remove analyses depending on designOfExperiment
+  clear(designOfExperiment);
+
+  designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDefinition");
+  designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDiagram");
+  designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "OTStudy");
+
+  dataModels_.erase(std::remove(dataModels_.begin(), dataModels_.end(), designOfExperiment), dataModels_.end());
 }
 
 
@@ -235,7 +275,7 @@ Collection<PhysicalModel> OTStudyImplementation::getPhysicalModels() const
 
 PhysicalModel& OTStudyImplementation::getPhysicalModelByName(const String& physicalModelName)
 {
-  for (UnsignedInteger i=0; i<physicalModels_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < physicalModels_.getSize(); ++i)
     if (physicalModels_[i].getName() == physicalModelName)
       return physicalModels_[i];
   throw InvalidArgumentException(HERE) << "The given name " << physicalModelName <<" does not correspond to a physical model of the study.\n"; 
@@ -244,7 +284,7 @@ PhysicalModel& OTStudyImplementation::getPhysicalModelByName(const String& physi
 
 bool OTStudyImplementation::hasPhysicalModelNamed(const String& physicalModelName) const
 {
-  for (UnsignedInteger i=0; i<physicalModels_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < physicalModels_.getSize(); ++i)
     if (physicalModels_[i].getName() == physicalModelName)
       return true;
   return false;
@@ -254,9 +294,9 @@ bool OTStudyImplementation::hasPhysicalModelNamed(const String& physicalModelNam
 String OTStudyImplementation::getAvailablePhysicalModelName(const String& physicalModelRootName) const
 {
   int i = 0;
-  while (hasPhysicalModelNamed(physicalModelRootName + (OSS()<<i).str()))
+  while (hasPhysicalModelNamed(physicalModelRootName + (OSS() << i).str()))
     ++i;
-  return physicalModelRootName + (OSS()<<i).str();
+  return physicalModelRootName + (OSS() << i).str();
 }
 
 
@@ -303,7 +343,9 @@ void OTStudyImplementation::clear(const PhysicalModel& physicalModel)
     {
       if (analysis_ptr->getPhysicalModel() == physicalModel)
       {
+        clear(*analysis_ptr);
         analysis_ptr->notifyAndRemove("analysisRemoved", "Analysis");
+        analysis_ptr->notifyAndRemove("analysisRemoved", "DesignOfExperimentDefinition");
         analysis_ptr->notifyAndRemove("analysisRemoved", "OTStudy");
         iterAnalysis = analyses_.erase(iterAnalysis);
       }
@@ -315,24 +357,6 @@ void OTStudyImplementation::clear(const PhysicalModel& physicalModel)
     else
     {
       ++iterAnalysis;
-    }
-  }
-
-  // remove all the design Of Experiments
-  PersistentCollection<DesignOfExperiment>::iterator iterDOE = designOfExperiments_.begin();
-  while (iterDOE != designOfExperiments_.end())
-  {
-    if ((*iterDOE).getPhysicalModel() == physicalModel)
-    {
-      clear(*iterDOE);
-      (*iterDOE).getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
-      (*iterDOE).getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DesignOfExperimentDefinition");
-      (*iterDOE).getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "OTStudy");
-      iterDOE = designOfExperiments_.erase(iterDOE);
-    }
-    else
-    {
-      ++iterDOE;
     }
   }
 }
@@ -356,100 +380,6 @@ void OTStudyImplementation::remove(const PhysicalModel& physicalModel)
 }
 
 
-// ----- DESIGN OF EXPERIMENT -----
-Collection<DesignOfExperiment> OTStudyImplementation::getDesignOfExperiments() const
-{
-  return designOfExperiments_;
-}
-
-
-DesignOfExperiment& OTStudyImplementation::getDesignOfExperimentByName(const String& designOfExperimentName)
-{
-  for (UnsignedInteger i=0; i<designOfExperiments_.getSize(); ++i)
-    if (designOfExperiments_[i].getName() == designOfExperimentName)
-      return designOfExperiments_[i];
-  throw InvalidArgumentException(HERE) << "The given name " << designOfExperimentName <<" does not correspond to a design of experiments of the study.\n";
-}
-
-
-bool OTStudyImplementation::hasDesignOfExperimentNamed(const String& designOfExperimentName) const
-{
-  for (UnsignedInteger i=0; i<designOfExperiments_.getSize(); ++i)
-    if (designOfExperiments_[i].getName() == designOfExperimentName)
-      return true;
-  return false;
-}
-
-
-String OTStudyImplementation::getAvailableDesignOfExperimentName() const
-{
-  int i = 0;
-  String rootName = "design_";
-  while (hasDesignOfExperimentNamed(rootName + (OSS()<<i).str()))
-    ++i;
-  return rootName + (OSS()<<i).str();
-}
-
-
-void OTStudyImplementation::add(const DesignOfExperiment& designOfExperiment)
-{
-  if (designOfExperiment.hasPhysicalModel())
-  {
-    if (hasDesignOfExperimentNamed(designOfExperiment.getName()))
-      throw InvalidArgumentException(HERE) << "The study already contains a design of experiment named " << designOfExperiment.getName();
-
-    if (!hasPhysicalModelNamed(designOfExperiment.getPhysicalModel().getName()))
-      throw InvalidArgumentException(HERE) << "The design of experiment has been created with a physical model not belonging to the study.";
-
-    designOfExperiments_.add(designOfExperiment);
-    notify("addDesignOfExperiment");
-  }
-  else
-  {
-    if (hasDataModelNamed(designOfExperiment.getName()))
-      throw InvalidArgumentException(HERE) << "The study already contains a data model named " << designOfExperiment.getName();
-
-    dataModels_.add(designOfExperiment);
-    notify("addDataModel");
-  }
-
-  designOfExperiment.getImplementation().get()->addObserver(this);
-  modified_ = true;
-  notify("statusChanged");
-}
-
-
-void OTStudyImplementation::remove(const DesignOfExperiment& designOfExperiment)
-{
-  if (!designOfExperiments_.contains(designOfExperiment) && !dataModels_.contains(designOfExperiment))
-    return;
-
-  // remove analyses depending on designOfExperiment
-  clear(designOfExperiment);
-
-  // remove designOfExperiment
-
-  // design of experiment
-  if (designOfExperiment.hasPhysicalModel())
-  {
-    designOfExperiment.getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
-    designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DesignOfExperimentDefinition");
-    designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "OTStudy");
-
-    designOfExperiments_.erase(std::remove(designOfExperiments_.begin(), designOfExperiments_.end(), designOfExperiment), designOfExperiments_.end());
-  }
-  // datamodel
-  else
-  {
-    designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDefinition");
-    designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDiagram");
-    designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "OTStudy");
-
-    dataModels_.erase(std::remove(dataModels_.begin(), dataModels_.end(), designOfExperiment), dataModels_.end());
-  }
-}
-
-
 // ----- ANALYSIS -----
 Collection<Analysis> OTStudyImplementation::getAnalyses() const
 {
@@ -459,7 +389,7 @@ Collection<Analysis> OTStudyImplementation::getAnalyses() const
 
 Analysis& OTStudyImplementation::getAnalysisByName(const String& analysisName)
 {
-  for (UnsignedInteger i=0; i<analyses_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < analyses_.getSize(); ++i)
     if (analyses_[i].getName() == analysisName)
       return analyses_[i];
   throw InvalidArgumentException(HERE) << "The given name " << analysisName <<" does not correspond to an analysis of the study.\n"; 
@@ -468,7 +398,7 @@ Analysis& OTStudyImplementation::getAnalysisByName(const String& analysisName)
 
 bool OTStudyImplementation::hasAnalysisNamed(const String& analysisName) const
 {
-  for (UnsignedInteger i=0; i<analyses_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < analyses_.getSize(); ++i)
     if (analyses_[i].getName() == analysisName)
       return true;
   return false;
@@ -478,9 +408,9 @@ bool OTStudyImplementation::hasAnalysisNamed(const String& analysisName) const
 String OTStudyImplementation::getAvailableAnalysisName(const String& rootName) const
 {
   int i = 0;
-  while (hasAnalysisNamed(rootName + (OSS()<<i).str()))
+  while (hasAnalysisNamed(rootName + (OSS() << i).str()))
     ++i;
-  return rootName + (OSS()<<i).str();
+  return rootName + (OSS() << i).str();
 }
 
 
@@ -502,7 +432,20 @@ void OTStudyImplementation::add(const Analysis& analysis)
   {
     if (dm_analysis_ptr->getDesignOfExperiment().hasPhysicalModel())
     {
-      if (!designOfExperiments_.contains(dm_analysis_ptr->getDesignOfExperiment()))
+      bool doeFound = false;
+      for (UnsignedInteger i = 0; i < analyses_.getSize(); ++i)
+      {
+        DesignOfExperimentEvaluation * doe_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(analyses_[i].getImplementation().get());
+        if (doe_ptr)
+        {
+          if (doe_ptr->getDesignOfExperiment() == dm_analysis_ptr->getDesignOfExperiment())
+          {
+            doeFound = true;
+            break;
+          }
+        }
+      }
+      if (!doeFound)
         throw InvalidArgumentException(HERE) << "The analysis has been created with a design of experiment not belonging to the study.";
     }
     else
@@ -531,10 +474,44 @@ void OTStudyImplementation::remove(const Analysis& analysis)
   if (!analyses_.contains(analysis))
     return;
 
+  clear(analysis);
   analysis.getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
+  analysis.getImplementation().get()->notifyAndRemove("analysisRemoved", "DesignOfExperimentDefinition");
   analysis.getImplementation().get()->notifyAndRemove("analysisRemoved", "OTStudy");
 
   analyses_.erase(std::remove(analyses_.begin(), analyses_.end(), analysis), analyses_.end());
+}
+
+
+void OTStudyImplementation::clear(const Analysis& analysis)
+{
+  DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(analysis.getImplementation().get());
+  if (!doeEval)
+    return;
+
+  // remove all the analyses
+  PersistentCollection<Analysis>::iterator iterAnalysis = analyses_.begin();
+  while (iterAnalysis != analyses_.end())
+  {
+    DesignOfExperimentAnalysis * analysis_ptr = dynamic_cast<DesignOfExperimentAnalysis*>((*iterAnalysis).getImplementation().get());
+    if (analysis_ptr)
+    {
+      if (analysis_ptr->getDesignOfExperiment() == doeEval->getDesignOfExperiment())
+      {
+        analysis_ptr->notifyAndRemove("analysisRemoved", "Analysis");
+        analysis_ptr->notifyAndRemove("analysisRemoved", "OTStudy");
+        iterAnalysis = analyses_.erase(iterAnalysis);
+      }
+      else
+      {
+        ++iterAnalysis;
+      }
+    }
+    else
+    {
+      ++iterAnalysis;
+    }
+  }
 }
 
 
@@ -547,7 +524,7 @@ Collection<LimitState> OTStudyImplementation::getLimitStates() const
 
 bool OTStudyImplementation::hasLimitStateNamed(const String& limitStateName) const
 {
-  for (UnsignedInteger i=0; i<limitStates_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < limitStates_.getSize(); ++i)
     if (limitStates_[i].getName() == limitStateName)
       return true;
   return false;
@@ -558,9 +535,9 @@ String OTStudyImplementation::getAvailableLimitStateName() const
 {
   int i = 0;
   String rootName = "limitState_";
-  while (hasLimitStateNamed(rootName + (OSS()<<i).str()))
+  while (hasLimitStateNamed(rootName + (OSS() << i).str()))
     ++i;
-  return rootName + (OSS()<<i).str();
+  return rootName + (OSS() << i).str();
 }
 
 
@@ -632,13 +609,13 @@ String OTStudyImplementation::getPythonScript()
   result += getName() + " = otguibase.OTStudy('" + getName() + "')\n";
   result += "otguibase.OTStudy.Add(" + getName() + ")\n";
 
-  for (Collection<DesignOfExperiment>::iterator it=dataModels_.begin(); it!= dataModels_.end(); ++it)
+  for (Collection<DesignOfExperiment>::iterator it = dataModels_.begin(); it != dataModels_.end(); ++it)
   {
     result += (*it).getPythonScript();
     result += getName() + ".add(" + (*it).getName() + ")\n";
   }
 
-  for (Collection<PhysicalModel>::iterator it=physicalModels_.begin(); it!= physicalModels_.end(); ++it)
+  for (Collection<PhysicalModel>::iterator it = physicalModels_.begin(); it != physicalModels_.end(); ++it)
   {
     if ((*it).getImplementation()->getClassName() != "MetaModel")
     {
@@ -646,19 +623,12 @@ String OTStudyImplementation::getPythonScript()
       result += getName() + ".add(" + (*it).getName() + ")\n";
     }
   }
-  for (Collection<DesignOfExperiment>::iterator it=designOfExperiments_.begin(); it!= designOfExperiments_.end(); ++it)
-  {
-    result += (*it).getPythonScript();
-    result += getName() + ".add(" + (*it).getName() + ")\n";
-    if ((*it).getOutputSample().getSize())
-      result += (*it).getName() + ".run()\n";
-  }
-  for (Collection<LimitState>::iterator it=limitStates_.begin(); it!= limitStates_.end(); ++it)
+  for (Collection<LimitState>::iterator it = limitStates_.begin(); it != limitStates_.end(); ++it)
   {
     result += (*it).getPythonScript();
     result += getName() + ".add(" + (*it).getName() + ")\n";
   }
-  for (Collection<Analysis>::iterator it=analyses_.begin(); it!= analyses_.end(); ++it)
+  for (Collection<Analysis>::iterator it = analyses_.begin(); it != analyses_.end(); ++it)
   {
     result += (*it).getPythonScript();
     result += getName() + ".add(" + (*it).getName() + ")\n";
@@ -685,7 +655,6 @@ void OTStudyImplementation::save(Advocate& adv) const
   PersistentObject::save(adv);
   adv.saveAttribute("dataModels_", dataModels_);
   adv.saveAttribute("physicalModels_", physicalModels_);
-  adv.saveAttribute("designOfExperiments_", designOfExperiments_);
   adv.saveAttribute("limitStates_", limitStates_);
   adv.saveAttribute("analyses_", analyses_);
 }
@@ -697,7 +666,6 @@ void OTStudyImplementation::load(Advocate& adv)
   PersistentObject::load(adv);
   adv.loadAttribute("dataModels_", dataModels_);
   adv.loadAttribute("physicalModels_", physicalModels_);
-  adv.loadAttribute("designOfExperiments_", designOfExperiments_);
   adv.loadAttribute("limitStates_", limitStates_);
   adv.loadAttribute("analyses_", analyses_);
 

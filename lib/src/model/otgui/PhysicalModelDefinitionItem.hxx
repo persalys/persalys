@@ -22,7 +22,7 @@
 #define OTGUI_PHYSICALMODELDEFINITIONITEM_HXX
 
 #include "otgui/PhysicalModelItem.hxx"
-#include "otgui/DesignOfExperiment.hxx"
+#include "otgui/Analysis.hxx"
 
 namespace OTGUI {
 class OTGUI_API PhysicalModelDefinitionItem : public PhysicalModelItem
@@ -41,7 +41,6 @@ public slots:
   void updateProbaActionAvailability();
 signals:
   void probabilisticModelRequested(PhysicalModelItem*);
-  void designOfExperimentRequested(OTguiItem*, const DesignOfExperiment&);
   void outputChanged();
   void codeChanged();
   void physicalModelRemoved(QStandardItem*);

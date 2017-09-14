@@ -22,7 +22,7 @@
 #define OTGUI_DESIGNOFEXPERIMENTINPUTWINDOW_HXX
 
 #include "OTguiSubWindow.hxx"
-#include "otgui/DesignOfExperimentItem.hxx"
+#include "otgui/DesignOfExperimentDefinitionItem.hxx"
 
 namespace OTGUI {
 class OTGUI_API DesignOfExperimentInputWindow : public OTguiSubWindow
@@ -30,13 +30,13 @@ class OTGUI_API DesignOfExperimentInputWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  DesignOfExperimentInputWindow(DesignOfExperimentItem * item, QWidget * parent=0);
+  DesignOfExperimentInputWindow(DesignOfExperimentDefinitionItem * item, QWidget * parent=0);
 
 protected:
   void buildInterface();
 
 private:
-  DesignOfExperiment designOfExperiment_;
+  OT::Sample originalInputSample_;
 };
 }
 #endif

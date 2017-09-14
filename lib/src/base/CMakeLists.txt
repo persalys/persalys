@@ -16,13 +16,14 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      PythonScriptEvaluation.cxx
                      DesignOfExperimentImplementation.cxx DesignOfExperiment.cxx
                      FixedDesignOfExperiment.cxx
-                     FromFileDesignOfExperiment.cxx
+                     GridDesignOfExperiment.cxx
+                     ImportedDesignOfExperiment.cxx
                      ProbabilisticDesignOfExperiment.cxx
                      AnalysisImplementation.cxx Analysis.cxx SimulationAnalysis.cxx
                      PhysicalModelAnalysis.cxx DesignOfExperimentAnalysis.cxx
                      WithStopCriteriaAnalysis.cxx
                      DataAnalysisResult.cxx DataAnalysis.cxx
-                     ModelEvaluationResult.cxx ModelEvaluation.cxx
+                     ModelEvaluation.cxx
                      DesignOfExperimentEvaluation.cxx
                      MonteCarloAnalysis.cxx TaylorExpansionMomentsResult.cxx
                      TaylorExpansionMomentsAnalysis.cxx SobolResult.cxx SobolAnalysis.cxx
@@ -73,7 +74,8 @@ ot_install_header_file ( MetaModel.hxx )
 ot_install_header_file ( DesignOfExperimentImplementation.hxx )
 ot_install_header_file ( DesignOfExperiment.hxx )
 ot_install_header_file ( FixedDesignOfExperiment.hxx )
-ot_install_header_file ( FromFileDesignOfExperiment.hxx )
+ot_install_header_file ( GridDesignOfExperiment.hxx )
+ot_install_header_file ( ImportedDesignOfExperiment.hxx )
 ot_install_header_file ( ProbabilisticDesignOfExperiment.hxx )
 ot_install_header_file ( DataModel.hxx )
 ot_install_header_file ( AnalysisImplementation.hxx )
@@ -86,7 +88,6 @@ ot_install_header_file ( DataAnalysisResult.hxx )
 ot_install_header_file ( DataAnalysis.hxx )
 ot_install_header_file ( DesignOfExperimentEvaluation.hxx )
 ot_install_header_file ( ModelEvaluation.hxx )
-ot_install_header_file ( ModelEvaluationResult.hxx )
 ot_install_header_file ( MonteCarloAnalysis.hxx )
 ot_install_header_file ( TaylorExpansionMomentsAnalysis.hxx )
 ot_install_header_file ( TaylorExpansionMomentsResult.hxx )

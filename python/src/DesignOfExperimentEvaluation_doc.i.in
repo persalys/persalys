@@ -1,0 +1,33 @@
+%feature("docstring") OTGUI::DesignOfExperimentEvaluation
+"Base class of design of experiment.
+"
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DesignOfExperimentEvaluation::getOriginalInputSample
+"Input sample accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.Sample`
+    Input sample."
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DesignOfExperimentEvaluation::getFailedInputSample
+"Failed input sample accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.Sample`
+    Points of the design of experiment which could not be evaluated"
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DesignOfExperimentEvaluation::getNotEvaluatedInputSample
+"Not evaluated input sample accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.Sample`
+    Points of the design of experiment which were not evaluated"

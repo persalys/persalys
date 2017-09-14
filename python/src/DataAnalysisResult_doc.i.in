@@ -189,3 +189,13 @@ Returns
 -------
 time : int
     Elapsed time in seconds to perform the analysis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataAnalysisResult::getDesignOfExperiment
+"Design of experiment accessor.
+
+Returns
+-------
+design : :class:`~otguibase.DesignOfExperiment`
+    Design of experiment containing the points really analysed"

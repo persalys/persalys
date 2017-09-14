@@ -21,7 +21,9 @@
 #include "otgui/AnalysisItem.hxx"
 
 #include "otgui/ModelEvaluation.hxx"
-#include "otgui/DesignOfExperimentEvaluation.hxx"
+#include "otgui/GridDesignOfExperiment.hxx"
+#include "otgui/ProbabilisticDesignOfExperiment.hxx"
+#include "otgui/ImportedDesignOfExperiment.hxx"
 #include "otgui/FunctionalChaosAnalysis.hxx"
 #include "otgui/KrigingAnalysis.hxx"
 #include "otgui/SobolAnalysis.hxx"
@@ -64,9 +66,6 @@ void AnalysisItem::buildActions()
 {
   const QString analysisType = data(Qt::UserRole).toString();
 
-  if (analysisType == "DesignOfExperimentEvaluation") // no action for this analysis
-    return;
-
   // modify analysis action
   if (analysisType != "DataAnalysis" &&
       analysisType != "CopulaInferenceAnalysis" &&
@@ -88,6 +87,10 @@ void AnalysisItem::buildActions()
     if (!analysis_.getImplementation()->analysisLaunched())
       addMetaModel_->setEnabled(false);
   }
+
+  // no remove action for these analyses
+  if (analysisType.contains("DesignOfExperiment"))
+    return;
 
   // remove analysis action
   removeAnalysis_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
@@ -136,14 +139,6 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
 }
 
 
-void AnalysisItem::setDesignOfExperiment(const DesignOfExperiment& designOfExperiment)
-{
-  // update the design of experiment
-  if (dynamic_cast<DesignOfExperimentAnalysis*>(getAnalysis().getImplementation().get()))
-    dynamic_cast<DesignOfExperimentAnalysis*>(getAnalysis().getImplementation().get())->setDesignOfExperiment(designOfExperiment);
-}
-
-
 void AnalysisItem::stopAnalysis()
 {
   analysis_.stop();
@@ -164,14 +159,11 @@ void AnalysisItem::modifyAnalysis()
   // -- IF PhysicalModelAnalysis
 
   // check physical model
-  if (dynamic_cast<PhysicalModelAnalysis*>(analysis_.getImplementation().get()))
+  PhysicalModelAnalysis * pmAnalysis_ptr = dynamic_cast<PhysicalModelAnalysis*>(analysis_.getImplementation().get());
+  if (pmAnalysis_ptr)
   {
-    PhysicalModelItem * item = static_cast<PhysicalModelItem*>(getParentItem("PhysicalModelDiagram"));
-    if (!item)
-      return;
-
     // must have in/outputs
-    if (!item->getPhysicalModel().isValid())
+    if (!pmAnalysis_ptr->getPhysicalModel().isValid())
     {
       emit emitErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
       return;
@@ -180,7 +172,7 @@ void AnalysisItem::modifyAnalysis()
     if (analysisType != "ModelEvaluation")
     {
       // must have stochastic variables
-      if (!item->getPhysicalModel().hasStochasticInputs())
+      if (!pmAnalysis_ptr->getPhysicalModel().hasStochasticInputs())
       {
         emit emitErrorMessageRequested(tr("The physical model must have stochastic inputs."));
         return;
@@ -189,7 +181,7 @@ void AnalysisItem::modifyAnalysis()
       if (analysisType == "SobolAnalysis" || analysisType == "SRCAnalysis")
       {
         // must have an independent copula
-        if (!item->getPhysicalModel().getComposedDistribution().hasIndependentCopula())
+        if (!pmAnalysis_ptr->getPhysicalModel().getComposedDistribution().hasIndependentCopula())
         {
           emit emitErrorMessageRequested(tr("The model must have an independent copula to compute a sensitivity analysis but here the inputs are correlated."));
           return;
@@ -202,32 +194,39 @@ void AnalysisItem::modifyAnalysis()
   // -- IF DesignOfExperimentAnalysis
 
   // check data model
-  else if (dynamic_cast<DesignOfExperimentAnalysis*>(analysis_.getImplementation().get()))
+  DesignOfExperimentAnalysis * dmAnalysis_ptr = dynamic_cast<DesignOfExperimentAnalysis*>(analysis_.getImplementation().get());
+  if (dmAnalysis_ptr)
   {
-    DesignOfExperimentItem * item = static_cast<DesignOfExperimentItem*>(getParentItem("DesignOfExperiment"));
-    if (!item)
-      return;
-
-    // must have at least a point
-    if (!item->getDesignOfExperiment().getSample().getSize())
-    {
-      emit emitErrorMessageRequested(tr("The sample is empty."));
-      return;
-    }
     // if meta model analysis
     if (analysisType == "FunctionalChaosAnalysis" || analysisType == "KrigingAnalysis")
     {
       // must have output data
-      if (!item->getDesignOfExperiment().getOutputSample().getSize())
+      if (!dmAnalysis_ptr->getDesignOfExperiment().getOutputSample().getSize())
       {
-        emit emitErrorMessageRequested(tr("The model must have at least one output."));
+        emit emitErrorMessageRequested(tr("The sample must not be empty and must contain output values."));
+        return;
+      }
+    }
+    // must have at least a point
+    else
+    {
+      if (!dmAnalysis_ptr->getDesignOfExperiment().getSample().getSize())
+      {
+        emit emitErrorMessageRequested(tr("The sample is empty."));
         return;
       }
     }
   }
 
-  // emit signal to StudyTreeView to open the wizard
-  emit modifyAnalysisRequested(this);
+  if (analysisType.contains("DesignOfExperiment"))
+  {
+    emit modifyDesignOfExperimentEvaluation(getAnalysis(), false);
+  }
+  else
+  {
+    // emit signal to StudyTreeView to open the wizard
+    emit modifyAnalysisRequested(this);
+  }
 }
 
 
@@ -311,22 +310,10 @@ void AnalysisItem::update(Observable* source, const String& message)
   }
   else if (message == "analysisRemoved")
   {
+    if (hasChildren())
+      qDebug() << "AnalysisItem::update(analysisRemoved) has not to contain child\n";
     emit removeRequested(row());
   }
-}
-
-
-QStandardItem* AnalysisItem::getParentItem(const QString itemType)
-{
-  // get the parent item with the type itemType
-  QModelIndex seekRoot = index();
-  while(seekRoot.parent() != QModelIndex())
-  {
-    seekRoot = seekRoot.parent();
-    if (model()->itemFromIndex(seekRoot)->data(Qt::UserRole).toString() == itemType)
-      return model()->itemFromIndex(seekRoot);
-  }
-  return 0;
 }
 
 
@@ -358,18 +345,56 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
     valuesList << pointText
                << analysis.getImplementation()->getInterestVariables().__str__().c_str();
   }
-  else if (analysisType == "DesignOfExperimentEvaluation")
+  else if (analysisType == "GridDesignOfExperiment")
   {
-    const DesignOfExperimentEvaluation doeEvaluation(*dynamic_cast<const DesignOfExperimentEvaluation*>(analysis.getImplementation().get()));
+    const GridDesignOfExperiment design = *dynamic_cast<const GridDesignOfExperiment*>(analysis.getImplementation().get());
+
+    // Parameters names
+    namesList << tr("Sample size")
+              << tr("Outputs to be evaluated")
+              << tr("Block size");
+
+    // Parameters values
+    valuesList << QString::number(design.getOriginalInputSample().getSize())
+               << design.getInterestVariables().__str__().c_str()
+               << QString::number(design.getBlockSize());
+  }
+  else if (analysisType == "ImportedDesignOfExperiment" || analysisType == "FixedDesignOfExperiment")
+  {
+    const DesignOfExperimentEvaluation design = *dynamic_cast<const DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
 
     // Parameters names
     namesList << tr("Sample size")
               << tr("Outputs to be evaluated")
               << tr("Block size");
     // Parameters values
-    valuesList << QString::number(doeEvaluation.getDesignOfExperiment().getOriginalInputSample().getSize())
-               << doeEvaluation.getDesignOfExperiment().getInterestVariables().__str__().c_str()
-               << QString::number(doeEvaluation.getDesignOfExperiment().getBlockSize());
+    valuesList << QString::number(design.getOriginalInputSample().getSize())
+               << design.getInterestVariables().__str__().c_str()
+               << QString::number(design.getBlockSize());
+  }
+  else if (analysisType == "ProbabilisticDesignOfExperiment")
+  {
+    const ProbabilisticDesignOfExperiment design = *dynamic_cast<const ProbabilisticDesignOfExperiment*>(analysis.getImplementation().get());
+
+    // Parameters names
+    namesList << tr("Design name")
+              << tr("Seed")
+              << tr("Sample size")
+              << tr("Outputs to be evaluated")
+              << tr("Block size");
+
+    // Parameters values
+    const String designName = design.getDesignName();
+    if (designName == "LHS")
+      valuesList << tr("LHS");
+    else if (designName == "MONTE_CARLO")
+      valuesList << tr("Monte Carlo");
+    else if (designName == "QUASI_MONTE_CARLO")
+      valuesList << tr("Quasi-Monte Carlo");
+    valuesList << QString::number(design.getSeed())
+               << QString::number(design.getOriginalInputSample().getSize())
+               << design.getInterestVariables().__str__().c_str()
+               << QString::number(design.getBlockSize());
   }
   else if (analysisType == "TaylorExpansionMomentsAnalysis")
   {
@@ -532,12 +557,14 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
     namesList << tr("Algorithm")
               << tr("Outputs of interest")
               << tr("Sample size")
+              << tr("Block size")
               << tr("Seed");
 
     // Parameters values
     valuesList << tr("Standardized Regression Coefficients")
                << srcAnalysis.getInterestVariables().__str__().c_str()
                << QString::number(srcAnalysis.getSimulationsNumber())
+               << QString::number(srcAnalysis.getBlockSize())
                << QString::number(srcAnalysis.getSeed());
   }
   else if (analysisType == "FORMAnalysis")

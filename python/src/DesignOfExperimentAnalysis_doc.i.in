@@ -10,13 +10,3 @@ Returns
 -------
 model : :class:`~otguibase.DesignOfExperiment`
     Design of experiment"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::DesignOfExperimentAnalysis::setDesignOfExperiment
-"Design of experiment accessor.
-
-Parameters
-----------
-model : :class:`~otguibase.DesignOfExperiment`
-    Design of experiment"

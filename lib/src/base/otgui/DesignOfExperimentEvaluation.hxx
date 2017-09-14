@@ -21,26 +21,41 @@
 #ifndef OTGUI_DESIGNOFEXPERIMENTEVALUATION_HXX
 #define OTGUI_DESIGNOFEXPERIMENTEVALUATION_HXX
 
-#include "DesignOfExperimentAnalysis.hxx"
+#include "SimulationAnalysis.hxx"
 
 namespace OTGUI {
-class OTGUI_API DesignOfExperimentEvaluation : public DesignOfExperimentAnalysis, public Observer
+class OTGUI_API DesignOfExperimentEvaluation : public SimulationAnalysis
 {
   CLASSNAME;
-  /** Fake analysis to be enable to launch the evaluation of the DOE in a separate thread from StudyTreeView */
 
 public:
+  /** Default constructor */
+  DesignOfExperimentEvaluation();
+
   /** Constructor with parameters */
-  DesignOfExperimentEvaluation(const DesignOfExperiment& design);
+  DesignOfExperimentEvaluation(const OT::String& name, const PhysicalModel& physicalModel);
 
   /** Virtual constructor */
   virtual DesignOfExperimentEvaluation * clone() const;
 
-  virtual void run();
-  virtual bool analysisLaunched() const;
-  virtual void stop();
+  virtual OT::Sample getOriginalInputSample() const;
+  void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
 
-  virtual void update(Observable * source, const OT::String & message);
+  OT::Sample getFailedInputSample() const;
+  OT::Sample getNotEvaluatedInputSample() const;
+
+  virtual void run();
+
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv);
+
+protected:
+  mutable OT::Sample originalInputSample_;
+private:
+  OT::Sample failedInputSample_;
 };
 }
 #endif

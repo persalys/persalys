@@ -36,7 +36,7 @@ public:
   enum Method {chaos, kriging};
   enum {Page_Intro, Page_KrigingMethod, Page_ChaosMethod};
 
-  MetaModelAnalysisWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard=false, QWidget* parent=0);
+  MetaModelAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard=false, QWidget* parent=0);
 
   virtual int nextId() const;
   virtual bool validateCurrentPage();

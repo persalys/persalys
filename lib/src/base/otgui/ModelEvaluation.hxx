@@ -22,7 +22,7 @@
 #define OTGUI_MODELEVALUATION_HXX
 
 #include "PhysicalModelAnalysis.hxx"
-#include "ModelEvaluationResult.hxx"
+#include "DesignOfExperiment.hxx"
 
 namespace OTGUI {
 class OTGUI_API ModelEvaluation : public PhysicalModelAnalysis
@@ -45,7 +45,8 @@ public:
   OT::Point getInputValues() const;
   void setInputValue(const OT::UnsignedInteger index, const double value);
 
-  ModelEvaluationResult getResult() const;
+  DesignOfExperiment getDesignOfExperiment() const;
+  OT::Point getOutputValues() const;
 
   virtual void run();
   virtual OT::String getPythonScript() const;
@@ -66,7 +67,7 @@ protected:
 private:
   OT::Description inputNames_;
   OT::Point inputValues_;
-  ModelEvaluationResult result_;
+  DesignOfExperiment designOfExperiment_;
 };
 }
 #endif

@@ -41,9 +41,6 @@ public:
   OT::UnsignedInteger getMaximumElapsedTime() const;
   void setMaximumElapsedTime(const OT::UnsignedInteger seconds);
 
-  OT::UnsignedInteger getBlockSize() const;
-  virtual void setBlockSize(const OT::UnsignedInteger size);
-
   /** String converter */
   virtual OT::String __repr__() const;
 
@@ -84,7 +81,6 @@ private:
   OT::UnsignedInteger maximumCalls_;
   double maximumCoefficientOfVariation_;
   OT::UnsignedInteger maximumElapsedTime_;
-  OT::UnsignedInteger blockSize_;
 };
 }
 #endif

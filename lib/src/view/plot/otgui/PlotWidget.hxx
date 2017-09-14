@@ -63,6 +63,14 @@ public:
   void clear();
   void replot();
 
+  static QVector<PlotWidget*> GetListScatterPlots(const OT::Sample& inS,
+                                                  const OT::Sample& notValidInS,
+                                                  const OT::Sample& outS,
+                                                  const QStringList inNames,
+                                                  const QStringList inAxisNames,
+                                                  const QStringList outNames,
+                                                  const QStringList outAxisNames);
+
 public slots:
   void contextMenu(const QPoint & pos);
   void exportPlot();

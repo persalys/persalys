@@ -22,3 +22,25 @@ Returns
 -------
 distributions : sequence of :py:class:`openturns.Distribution`
     Tested distributions"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::CopulaInferenceSetResult::getErrorMessages
+"Get the sequence of error messages.
+
+Returns
+-------
+messages : sequence of :py:class:`openturns.Description`
+    Error message for each tested distributions. The error message is empty
+    if the distribution has been well tested"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::CopulaInferenceSetResult::getKendallPlotData
+"Data of the Kendall plot.
+
+Returns
+-------
+data : 2D sequence of :py:class:`openturns.Sample`
+    Data of the Kendall plot for each tested distribution and for each pair
+    of variables"

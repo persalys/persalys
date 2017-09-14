@@ -21,6 +21,7 @@
 #include "otgui/MetaModelAnalysis.hxx"
 
 #include "otgui/MetaModel.hxx"
+#include "otgui/DesignOfExperimentEvaluation.hxx"
 
 #include <openturns/Uniform.hxx>
 
@@ -48,24 +49,20 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const DesignOfExperimen
 }
 
 
-void MetaModelAnalysis::setDesignOfExperiment(const DesignOfExperiment& designOfExperiment)
+/* Constructor with parameters */
+MetaModelAnalysis::MetaModelAnalysis(const String& name, const Analysis& analysis)
+  : DesignOfExperimentAnalysis(name)
+  , isDistributionComputed_(false)
+  , leaveOneOutValidation_(false)
 {
-  isDistributionComputed_ = false;
-  DesignOfExperimentAnalysis::setDesignOfExperiment(designOfExperiment);
-}
+  SimulationAnalysis * analysis_ptr = dynamic_cast<SimulationAnalysis*>(analysis.getImplementation().get());
 
-
-void MetaModelAnalysis::setInterestVariables(const Description& variablesNames)
-{
-  if (!variablesNames.getSize())
-    throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
-
-  const Description modelVariablesNames(designOfExperiment_.getOutputSample().getDescription());
-  for (UnsignedInteger i=0; i<variablesNames.getSize(); ++i)
-    if (!modelVariablesNames.contains(variablesNames[i]))
-      throw InvalidArgumentException(HERE) << "The name " << variablesNames[i] << " does not match an output name of the model " << designOfExperiment_.getName();
-
-  AnalysisImplementation::setInterestVariables(variablesNames);
+  if (!analysis_ptr)
+  {
+    throw InvalidArgumentException(HERE) << "The given analysis does not contain any design of experiment";
+  }
+  designOfExperiment_ = analysis_ptr->getDesignOfExperiment();
+  setInterestVariables(analysis_ptr->getInterestVariables());
 }
 
 
@@ -87,31 +84,39 @@ Sample MetaModelAnalysis::getEffectiveInputSample() const
   if (!designOfExperiment_.hasPhysicalModel())
     return designOfExperiment_.getInputSample();
 
-  Sample effectiveInputSample(designOfExperiment_.getInputSample());
-
   // if only deterministic inputs
-  if (!designOfExperiment_.getPhysicalModel().hasStochasticInputs())
-    return effectiveInputSample;
+  if (!designOfExperiment_.getPhysicalModel().hasStochasticInputs() || !designOfExperiment_.getInputSample().getSize())
+    return designOfExperiment_.getInputSample();
 
   // if the physical model has stochastic variables: we do not take into account the deterministic variables
   Indices inputIndices;
-  for (UnsignedInteger i=0; i<designOfExperiment_.getPhysicalModel().getInputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < designOfExperiment_.getPhysicalModel().getInputs().getSize(); ++i)
     if (designOfExperiment_.getPhysicalModel().getInputs()[i].isStochastic())
       inputIndices.add(i);
 
-  return effectiveInputSample.getMarginal(inputIndices);
+  if (!inputIndices.check(designOfExperiment_.getInputSample().getDimension()))
+    throw InvalidArgumentException(HERE) << "The design of experiment input sample dimension ("
+                                         << designOfExperiment_.getInputSample().getDimension()
+                                         << ") does not match the number of stochastic inputs in the physical model ("
+                                         << inputIndices.getSize() << ")";
+
+  return designOfExperiment_.getInputSample().getMarginal(inputIndices);
 }
 
 
 Sample MetaModelAnalysis::getEffectiveOutputSample() const
 {
+  if (!getInterestVariables().getSize())
+    throw InvalidDimensionException(HERE) << "You have not defined output variable to be analysed. Set the list of interest variables.";
+
+  const Description modelOutputsNames(designOfExperiment_.getOutputSample().getDescription());
   Indices outputIndices;
-  for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
   {
     bool outputFound = false;
-    for (UnsignedInteger j=0; j<designOfExperiment_.getOutputSample().getDescription().getSize(); ++j)
+    for (UnsignedInteger j = 0; j < modelOutputsNames.getSize(); ++j)
     {
-      if (designOfExperiment_.getOutputSample().getDescription()[j] == getInterestVariables()[i])
+      if (modelOutputsNames[j] == getInterestVariables()[i])
       {
         outputIndices.add(j);
         outputFound = true;
@@ -119,7 +124,9 @@ Sample MetaModelAnalysis::getEffectiveOutputSample() const
       }
     }
     if (!outputFound)
-      throw InvalidArgumentException(HERE) << "The output to analyze "  << getInterestVariables()[i] <<" is not an output of the model " << designOfExperiment_.getOutputSample().getDescription();
+      throw InvalidArgumentException(HERE) << "The output to analyze "  << getInterestVariables()[i]
+                                           << " is not an output of the model " << modelOutputsNames
+                                           << ". Check the list of interest variables.";
   }
 
   Sample effectiveOutputSample(designOfExperiment_.getOutputSample().getMarginal(outputIndices));
@@ -150,7 +157,7 @@ ComposedDistribution MetaModelAnalysis::getDistribution()
 
       // build Uniform
       ComposedDistribution::DistributionCollection distributionCollection;
-      for (UnsignedInteger i=0; i<designOfExperiment_.getInputSample().getDimension(); ++i)
+      for (UnsignedInteger i = 0; i < designOfExperiment_.getInputSample().getDimension(); ++i)
         distributionCollection.add(Uniform(min[i], max[i]));
 
       distribution_ = ComposedDistribution(distributionCollection);
@@ -169,7 +176,7 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Fu
   const Description outputsNames(function.getOutputDescription());
 
   // inputs
-  for (UnsignedInteger i=0; i<inputsNames.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < inputsNames.getSize(); ++i)
   {
     if (designOfExperiment_.getPhysicalModel().getInputNames().contains(inputsNames[i]))
       metaModel.addInput(designOfExperiment_.getPhysicalModel().getInputByName(inputsNames[i]));
@@ -178,7 +185,7 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Fu
   }
 
   // outputs
-  for (UnsignedInteger i=0; i<outputsNames.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < outputsNames.getSize(); ++i)
   {
     if (designOfExperiment_.getPhysicalModel().getOutputNames().contains(outputsNames[i]))
     {
@@ -220,11 +227,11 @@ void MetaModelAnalysis::computeError(const Sample& metaOutSample, const Sample& 
   error = Point(dimension);
   q2 = Point(dimension);
 
-  for (UnsignedInteger i=0; i<dimension; ++i)
+  for (UnsignedInteger i = 0; i < dimension; ++i)
   {
     // sum[ (ŷ_j/j - y_j)^2 ]
     double quadraticResidual = 0.;
-    for (UnsignedInteger j=0; j<size; ++j)
+    for (UnsignedInteger j = 0; j < size; ++j)
     {
       const double diff = metaOutSample[j][i] - outSample[j][i];
       quadraticResidual += diff * diff;
@@ -251,7 +258,7 @@ void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result,
 
     Sample outputSampleLOO(inputSample.getSize(), result.outputSample_.getDimension());
 
-    for (UnsignedInteger i=0; i<inputSample.getSize(); ++i)
+    for (UnsignedInteger i = 0; i < inputSample.getSize(); ++i)
     {
       if (stopRequested_)
       {
@@ -275,7 +282,7 @@ void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result,
       Point outputValuesForInput_i(function(inputSample[i]));
 
       // fill sample
-      for (UnsignedInteger j=0; j<result.outputSample_.getDimension(); ++j)
+      for (UnsignedInteger j = 0; j < result.outputSample_.getDimension(); ++j)
         outputSampleLOO[i][j] = outputValuesForInput_i[j];
     }
     result.metaModelOutputSampleLOO_ = outputSampleLOO;

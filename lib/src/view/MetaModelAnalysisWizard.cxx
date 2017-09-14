@@ -21,31 +21,51 @@
 #include "otgui/MetaModelAnalysisWizard.hxx"
 
 #include "otgui/OTStudyItem.hxx"
+#include "otgui/DesignOfExperimentEvaluation.hxx"
 #include "otgui/DesignOfExperimentAnalysis.hxx"
 
 using namespace OT;
 
 namespace OTGUI {
 
-MetaModelAnalysisWizard::MetaModelAnalysisWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard, QWidget* parent)
+MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget* parent)
   : AnalysisWizard(analysis, parent)
   , doeList_()
   , introPage_(0)
   , krigingPage_(0)
   , functionalChaosPage_(0)
 {
-  // set list of designs of experiment
   const DesignOfExperiment doe = dynamic_cast<DesignOfExperimentAnalysis*>(analysis_.getImplementation().get())->getDesignOfExperiment();
+
+  // set list of design of experiment items
+  QList < DesignOfExperimentDefinitionItem* > doeList;
   if (isGeneralWizard)
   {
-    for (UnsignedInteger i=0; i<item->getParentOTStudyItem()->getOTStudy().getDesignOfExperiments().getSize(); ++i)
+    Q_ASSERT(doe.hasPhysicalModel());
+    PhysicalModel model(doe.getPhysicalModel());
+
+    PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(model.getImplementation().get()->getObserver("PhysicalModelDiagram"));
+    Q_ASSERT(pmItem);
+
+    QModelIndexList listIndexes = pmItem->model()->match(pmItem->index(), Qt::UserRole, "DesignsOfExperimentTitle", 1, Qt::MatchRecursive);
+    Q_ASSERT(listIndexes.size() == 1);
+
+    QStandardItem * doeTitleItem = pmItem->model()->itemFromIndex(listIndexes[0]);
+    Q_ASSERT(doeTitleItem);
+    for (int i = 0; i < doeTitleItem->rowCount(); ++i)
     {
-      const DesignOfExperiment design_i = item->getParentOTStudyItem()->getOTStudy().getDesignOfExperiments()[i];
-      if (design_i.getPhysicalModel().getImplementation().get() == doe.getPhysicalModel().getImplementation().get() &&
-          design_i.getOutputSample().getSize()
-         )
+      QStandardItem * doeItem = doeTitleItem->child(i);
+      Q_ASSERT(doeItem);
+      if (doeItem->data(Qt::UserRole).toString().contains("DesignOfExperiment"))
       {
-        doeList_.append(design_i);
+        DesignOfExperimentDefinitionItem * doeEvalItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeItem);
+        Q_ASSERT(doeEvalItem);
+        if (doeEvalItem->getAnalysis().analysisLaunched())
+        {
+          const DesignOfExperimentEvaluation * analysis_ptr = dynamic_cast<const DesignOfExperimentEvaluation*>(doeEvalItem->getAnalysis().getImplementation().get());
+          Q_ASSERT(analysis_ptr);
+          doeList_.append(analysis_ptr->getDesignOfExperiment());
+        }
       }
     }
   }

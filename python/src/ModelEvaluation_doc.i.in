@@ -7,6 +7,8 @@ name : str
     Name
 physicalModel : :class:`~otguibase.PhysicalModel`
     Physical model
+values : :py:class:`openturns.Point`
+    Input values (optional)
 
 Examples
 --------
@@ -27,8 +29,7 @@ Create the Model evaluation:
 
 Get the result:
 
->>> result = analysis.getResult()
->>> outputValue = result.getOutputSample()"
+>>> outputValues = analysis.getOutputValues()"
 
 // ---------------------------------------------------------------------
 
@@ -39,6 +40,16 @@ Returns
 -------
 values : :py:class:`openturns.Point`
     Input values."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ModelEvaluation::getOutputValues
+"Output values accessor.
+
+Returns
+-------
+values : :py:class:`openturns.Point`
+    Output values."
 
 // ---------------------------------------------------------------------
 
@@ -54,10 +65,10 @@ value : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ModelEvaluation::getResult
-"Input values accessor.
+%feature("docstring") OTGUI::ModelEvaluation::getDesignOfExperiment
+"DesignOfExperiment accessor.
 
 Returns
 -------
-values : :class:`~otguibase.ModelEvaluationResult`
-    Input values."
+design : :class:`~otguibase.DesignOfExperiment`
+    Contains input and output values."

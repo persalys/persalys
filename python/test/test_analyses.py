@@ -50,7 +50,7 @@ myStudy.add(model3)
 
 ## design 1 ##
 ot.RandomGenerator.SetSeed(0)
-design_1 = otguibase.DesignOfExperimentImplementation('design_1', model1)
+design_1 = otguibase.FixedDesignOfExperiment('design_1', model1)
 inputSample = ot.LHSExperiment(ot.ComposedDistribution([ot.Uniform(0., 10.), ot.Uniform(0., 10.)]), 10).generate()
 inputSample.stack(ot.Sample(10, [0.5]))
 design_1.setOriginalInputSample(inputSample)
@@ -62,13 +62,22 @@ values = [0, 0, 1]
 lowerBounds = [0.5, 0.5, 0.9]
 upperBounds = [9.5, 9.5, 1.1]
 levels = [7, 7, 1]
-design_2 = otguibase.FixedDesignOfExperiment('design_2', model1, lowerBounds, upperBounds, levels, values)
+design_2 = otguibase.GridDesignOfExperiment('design_2', model1, lowerBounds, upperBounds, levels, values)
 myStudy.add(design_2)
 
 ## design 3 ##
-design_3 = otguibase.FromFileDesignOfExperiment('design_3', model1, 'data.csv', [0, 2, 3])
+design_3 = otguibase.ImportedDesignOfExperiment('design_3', model1, 'data.csv', [0, 2, 3])
 design_3.run()
 myStudy.add(design_3)
+
+## design 4 ##
+design_4 = otguibase.ProbabilisticDesignOfExperiment('design_4', model1, 10, "MONTE_CARLO")
+design_4.run()
+myStudy.add(design_4)
+
+## model 4 ##
+model4 = otguibase.DataModel('model4', inputSample, design_1.getDesignOfExperiment().getOutputSample())
+myStudy.add(model4)
 
 ## 0- models evaluations
 

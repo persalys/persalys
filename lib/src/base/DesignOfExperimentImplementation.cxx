@@ -37,13 +37,6 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation()
   , Observable()
   , hasPhysicalModel_(true)
   , physicalModel_()
-  , interestVariables_()
-  , errorMessage_("")
-  , stopRequested_(false)
-  , progressValue_(0)
-  , originalInputSample_()
-  , failedInputSample_()
-  , blockSize_(1)
 {
 }
 
@@ -54,13 +47,6 @@ DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String&
   , Observable()
   , hasPhysicalModel_(true)
   , physicalModel_(physicalModel)
-  , interestVariables_(physicalModel.getSelectedOutputsNames())
-  , errorMessage_("")
-  , stopRequested_(false)
-  , progressValue_(0)
-  , originalInputSample_()
-  , failedInputSample_()
-  , blockSize_(1)
 {
   setName(name);
 }
@@ -99,232 +85,40 @@ PhysicalModel DesignOfExperimentImplementation::getPhysicalModel() const
 }
 
 
-Description DesignOfExperimentImplementation::getVariableInputNames() const
-{
-  return physicalModel_.getInputNames();
-}
-
-
-Sample DesignOfExperimentImplementation::getFailedInputSample() const
-{
-  return failedInputSample_;
-}
-
-
-Sample DesignOfExperimentImplementation::getNotEvaluatedInputSample() const
-{
-  if ((getInputSample().getSize() + failedInputSample_.getSize()) < originalInputSample_.getSize())
-    return Sample(originalInputSample_, getInputSample().getSize() + failedInputSample_.getSize(), originalInputSample_.getSize());
-
-  return Sample();
-}
-
-
-Sample DesignOfExperimentImplementation::getOriginalInputSample() const
-{
-  return originalInputSample_;
-}
-
-
-void DesignOfExperimentImplementation::setOriginalInputSample(const Sample& sample)
-{
-  Sample newsample(sample);
-  if (newsample.getSize() && hasPhysicalModel())
-  {
-    if (physicalModel_.getInputs().getSize() != sample.getDimension())
-      throw InvalidArgumentException(HERE) << "The sample dimension must be equal to the number of inputs in the physical model " << physicalModel_.getInputs().getSize();
-
-    newsample.setDescription(physicalModel_.getInputNames());
-  }
-  originalInputSample_ = newsample;
-}
-
-
-void DesignOfExperimentImplementation::setInputSample(const Sample& sample)
-{
-  Sample newsample(sample);
-  if (newsample.getSize() && hasPhysicalModel())
-  {
-    if (physicalModel_.getInputs().getSize() != sample.getDimension())
-      throw InvalidArgumentException(HERE) << "The sample dimension must be equal to the number of inputs in the physical model " << physicalModel_.getInputs().getSize();
-
-    newsample.setDescription(physicalModel_.getInputNames());
-  }
-  DataSample::setInputSample(newsample);
-}
-
-
-String DesignOfExperimentImplementation::getErrorMessage() const
-{
-  return errorMessage_;
-}
-
-
-int DesignOfExperimentImplementation::getProgressValue() const
-{
-  return progressValue_;
-}
-
-
-UnsignedInteger DesignOfExperimentImplementation::getBlockSize() const
-{
-  return blockSize_;
-}
-
-
-void DesignOfExperimentImplementation::setBlockSize(const UnsignedInteger size)
-{
-  if (size < 1)
-    throw InvalidValueException(HERE) << "The block size must be superior to 0";
-  if (size > getOriginalInputSample().getSize())
-    throw InvalidValueException(HERE) << "The block size can not be superior to the input sample size " << getOriginalInputSample().getSize();
-  blockSize_ = size;
-}
-
-
-Description DesignOfExperimentImplementation::getInterestVariables() const
-{
-  return interestVariables_;
-}
-
-
-void DesignOfExperimentImplementation::setInterestVariables(const Description& variablesNames)
-{
-  if (!variablesNames.getSize())
-    throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
-
-  if (hasPhysicalModel())
-  {
-    const Description modelVariablesNames(getPhysicalModel().getSelectedOutputsNames());
-    for (UnsignedInteger i = 0; i < variablesNames.getSize(); ++i)
-      if (!modelVariablesNames.contains(variablesNames[i]))
-        throw InvalidArgumentException(HERE) << "The name " << variablesNames[i] << " does not match an ouput variable name of the model";
-  }
-
-  interestVariables_ = variablesNames;
-}
-
-
 void DesignOfExperimentImplementation::initialize()
 {
-  errorMessage_ = "";
-  stopRequested_ = false;
-  progressValue_ = 0;
-  failedInputSample_ = Sample();
   setInputSample(Sample());
   setOutputSample(Sample());
 }
 
 
-void DesignOfExperimentImplementation::run()
+void DesignOfExperimentImplementation::setInputSample(const Sample& sample)
 {
-  try
+  if (sample.getSize() && hasPhysicalModel())
   {
-    // check
-    if (!hasPhysicalModel())
-      throw InvalidArgumentException(HERE) << "The design of experiment must be built from a physical model";
-    if (!interestVariables_.getSize())
-      throw InvalidDimensionException(HERE) << "You have not defined output variable to be analysed. Set interest variables.";
-
-    const UnsignedInteger inputSampleSize = getOriginalInputSample().getSize();
-    if (!inputSampleSize)
-      throw InvalidArgumentException(HERE) << "The design of experiment input sample is empty";
-
-    // clear result
-    initialize();
-
-    // input sample
-    Sample inputSample = Sample(0, getOriginalInputSample().getDimension());
-    inputSample.setDescription(getOriginalInputSample().getDescription());
-
-    // failed input sample
-    failedInputSample_ = Sample(0, getOriginalInputSample().getDimension());
-    failedInputSample_.setDescription(getOriginalInputSample().getDescription());
-
-    // number of iterations
-    const UnsignedInteger nbIter = static_cast<UnsignedInteger>(ceil(1.0 * inputSampleSize / getBlockSize()));
-    // last block size
-    const UnsignedInteger modulo = inputSampleSize % getBlockSize();
-    const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
-
-    // output = f(input)
-    Sample outputSample(0, interestVariables_.getSize());
-    outputSample.setDescription(interestVariables_);
-
-    // iterations
-    for (UnsignedInteger i = 0; i < nbIter; ++i)
+    const Description sampleDescription = sample.getDescription();
+    for (UnsignedInteger i = 0; i < sampleDescription.getSize(); ++i)
     {
-      if (stopRequested_)
-        break;
-
-      progressValue_ = (int) (i * 100 / nbIter);
-      notify("progressValueChanged");
-
-      // the last block can be smaller
-      const UnsignedInteger effectiveBlockSize = i < (nbIter - 1) ? getBlockSize() : lastBlockSize;
-
-      // get input sample of size effectiveBlockSize
-      const UnsignedInteger blockFirstIndex =  i * getBlockSize();
-      const Sample blockInputSample(Sample(getOriginalInputSample(), blockFirstIndex, blockFirstIndex + effectiveBlockSize));
-
-      // Perform a block of simulations
-      Sample blockOutputSample;
-      Sample failedSample;
-      try
-      {
-        blockOutputSample = getPhysicalModel().getFunction(interestVariables_)(blockInputSample);
-      }
-      catch (InternalException & ex)
-      {
-        failedSample = blockInputSample;
-      }
-
-      // if SymbolicPhysicalModel find NaN and inf
-      // for ex: in case of zero division the Symbolic models do not raise error
-      if (!failedSample.getSize() && getPhysicalModel().getImplementation()->getClassName() == "SymbolicPhysicalModel")
-      {
-        bool nanFound = false;
-        for (UnsignedInteger j = 0; j < blockInputSample.getSize(); ++j)
-        {
-          for (UnsignedInteger k = 0; k < interestVariables_.getSize(); ++k)
-          {
-            if (!SpecFunc::IsNormal(blockOutputSample[j][k]))
-            {
-              failedSample = blockInputSample;
-              nanFound = true;
-              break;
-            }
-          }
-          if (nanFound)
-            break;
-        }
-      }
-
-      if (!failedSample.getSize())
-      {
-        outputSample.add(blockOutputSample);
-        inputSample.add(blockInputSample);
-      }
-      else
-      {
-        failedInputSample_.add(failedSample);
-      }
+      if (!physicalModel_.getInputNames().contains(sampleDescription[i]))
+        throw InvalidArgumentException(HERE) << "The physical model does not contain an input named " << sampleDescription[i];
     }
-
-    if (!outputSample.getSize())
-      throw InvalidRangeException(HERE) << "All the evaluations have failed. Check the model.";
-
-    // set samples
-    setInputSample(inputSample);
-    setOutputSample(outputSample);
-
-    notify("analysisFinished");
   }
-  catch (std::exception & ex)
+  DataSample::setInputSample(sample);
+}
+
+
+void DesignOfExperimentImplementation::setOutputSample(const Sample& sample)
+{
+  if (sample.getSize() && hasPhysicalModel())
   {
-    errorMessage_ = ex.what();
-    notify("analysisBadlyFinished");
+    const Description sampleDescription = sample.getDescription();
+    for (UnsignedInteger i = 0; i < sampleDescription.getSize(); ++i)
+    {
+      if (!physicalModel_.getOutputNames().contains(sampleDescription[i]))
+        throw InvalidArgumentException(HERE) << "The physical model does not contain an output named " << sampleDescription[i];
+    }
   }
+  DataSample::setOutputSample(sample);
 }
 
 
@@ -350,25 +144,9 @@ String DesignOfExperimentImplementation::getPythonScript() const
   }
   oss << "]\n";
 
-  oss << getName() << ".setOriginalInputSample(inputSample)\n";
-  oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
-  oss << "interestVariables = [";
-  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
-  {
-    oss << "'" << getInterestVariables()[i] << "'";
-    if (i < getInterestVariables().getSize()-1)
-      oss << ", ";
-  }
-  oss << "]\n";
-  oss << getName() << ".setInterestVariables(interestVariables)\n";
+  oss << getName() << ".setInputSample(inputSample)\n";
 
   return oss;
-}
-
-
-void DesignOfExperimentImplementation::stop()
-{
-  stopRequested_ = true;
 }
 
 
@@ -378,11 +156,6 @@ void DesignOfExperimentImplementation::save(Advocate& adv) const
   DataSample::save(adv);
   adv.saveAttribute("hasPhysicalModel_", hasPhysicalModel_);
   adv.saveAttribute("physicalModel_", physicalModel_);
-  adv.saveAttribute("errorMessage_", errorMessage_);
-  adv.saveAttribute("originalInputSample_", originalInputSample_);
-  adv.saveAttribute("failedInputSample_", failedInputSample_);
-  adv.saveAttribute("blockSize_", blockSize_);
-  adv.saveAttribute("interestVariables_", interestVariables_);
 }
 
 
@@ -392,10 +165,5 @@ void DesignOfExperimentImplementation::load(Advocate& adv)
   DataSample::load(adv);
   adv.loadAttribute("hasPhysicalModel_", hasPhysicalModel_);
   adv.loadAttribute("physicalModel_", physicalModel_);
-  adv.loadAttribute("errorMessage_", errorMessage_);
-  adv.loadAttribute("originalInputSample_", originalInputSample_);
-  adv.loadAttribute("failedInputSample_", failedInputSample_);
-  adv.loadAttribute("blockSize_", blockSize_);
-  adv.loadAttribute("interestVariables_", interestVariables_);
 }
 }

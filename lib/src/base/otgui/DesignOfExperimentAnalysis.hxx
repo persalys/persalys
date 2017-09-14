@@ -32,15 +32,13 @@ public:
   DesignOfExperimentAnalysis();
 
   /** Constructor with parameters */
+  DesignOfExperimentAnalysis(const OT::String & name);
   DesignOfExperimentAnalysis(const OT::String & name, const DesignOfExperiment & designOfExperiment);
 
   /** Virtual constructor */
   virtual DesignOfExperimentAnalysis * clone() const;
 
   DesignOfExperiment getDesignOfExperiment() const;
-  virtual void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
-
-  virtual void setInterestVariables(const OT::Description& variablesNames);
 
   /** String converter */
   virtual OT::String __repr__() const;

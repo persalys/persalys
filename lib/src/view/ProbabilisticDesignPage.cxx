@@ -102,9 +102,15 @@ void ProbabilisticDesignPage::buildInterface()
 }
 
 
-void ProbabilisticDesignPage::initialize(const DesignOfExperiment& designOfExperiment)
+void ProbabilisticDesignPage::initialize(const Analysis& analysis)
 {
-  const bool independentCopula = designOfExperiment.getPhysicalModel().getComposedDistribution().hasIndependentCopula();
+  const DesignOfExperimentEvaluation * doe_ptr = dynamic_cast<const DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
+
+  if (!doe_ptr)
+    return;
+
+  // check the independence of the copula
+  const bool independentCopula = doe_ptr->getPhysicalModel().getComposedDistribution().hasIndependentCopula();
   if (!independentCopula)
   {
     designsGroup_->button(ProbabilisticDesignPage::LHS)->setEnabled(false);
@@ -114,24 +120,24 @@ void ProbabilisticDesignPage::initialize(const DesignOfExperiment& designOfExper
     designsGroup_->button(ProbabilisticDesignPage::MonteCarlo)->click();
   }
 
-  const ProbabilisticDesignOfExperiment * doe_ptr = dynamic_cast<const ProbabilisticDesignOfExperiment*>(designOfExperiment.getImplementation().get());
-
-  if (!doe_ptr)
+  // initialize widgets if the analysis is already a ProbabilisticDesignOfExperiment
+  const ProbabilisticDesignOfExperiment * probaDoe_ptr = dynamic_cast<const ProbabilisticDesignOfExperiment*>(doe_ptr);
+  if (!probaDoe_ptr)
     return;
 
-  if (doe_ptr->getDesignName() == "LHS")
+  if (probaDoe_ptr->getDesignName() == "LHS" && independentCopula)
     designsGroup_->button(ProbabilisticDesignPage::LHS)->click();
-  else if (doe_ptr->getDesignName() == "MONTE_CARLO")
-    designsGroup_->button(ProbabilisticDesignPage::MonteCarlo)->click();
-  else
+  else if (probaDoe_ptr->getDesignName() == "QUASI_MONTE_CARLO" && independentCopula)
     designsGroup_->button(ProbabilisticDesignPage::QuasiMonteCarlo)->click();
+  else
+    designsGroup_->button(ProbabilisticDesignPage::MonteCarlo)->click();
 
-  sampleSizeSpinbox_->setValue(doe_ptr->getSize());
-  seedSpinbox_->setValue(doe_ptr->getSeed());
+  sampleSizeSpinbox_->setValue(probaDoe_ptr->getSize());
+  seedSpinbox_->setValue(probaDoe_ptr->getSeed());
 }
 
 
-DesignOfExperiment ProbabilisticDesignPage::getDesignOfExperiment(const String& name, const PhysicalModel& model) const
+Analysis ProbabilisticDesignPage::getAnalysis(const String& name, const PhysicalModel& model) const
 {
   ProbabilisticDesignOfExperiment design(name, model);
   String designType = "LHS";

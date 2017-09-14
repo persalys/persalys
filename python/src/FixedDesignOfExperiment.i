@@ -4,9 +4,9 @@
 #include "otgui/FixedDesignOfExperiment.hxx"
 %}
 
-%include FixedDesignOfExperiment_doc.i
+%ignore OTGUI::FixedDesignOfExperiment::setDesignOfExperiment;
 
-%ignore OTGUI::FixedDesignOfExperiment::updateParameters;
+%include FixedDesignOfExperiment_doc.i
 
 %include otgui/FixedDesignOfExperiment.hxx
 namespace OTGUI {

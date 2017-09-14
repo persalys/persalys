@@ -20,6 +20,8 @@
  */
 #include "otgui/KrigingAnalysis.hxx"
 
+#include "otgui/SimulationAnalysis.hxx"
+
 #include <openturns/OTBase.hxx>
 
 using namespace OT;
@@ -33,6 +35,10 @@ static Factory<KrigingAnalysis> Factory_KrigingAnalysis;
 /* Default constructor */
 KrigingAnalysis::KrigingAnalysis()
   : MetaModelAnalysis()
+  , basis_()
+  , covarianceModel_()
+  , result_()
+  , optimizeParameters_(true)
 {
 
 }
@@ -41,9 +47,46 @@ KrigingAnalysis::KrigingAnalysis()
 /* Constructor with parameters */
 KrigingAnalysis::KrigingAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
   : MetaModelAnalysis(name, designOfExperiment)
+  , basis_()
+  , covarianceModel_()
+  , result_()
   , optimizeParameters_(true)
 {
-  const UnsignedInteger inputDimension = getEffectiveInputSample().getDimension();
+  UnsignedInteger inputDimension = designOfExperiment.getInputSample().getDimension();
+  if (designOfExperiment.hasPhysicalModel())
+  {
+    if (designOfExperiment.getPhysicalModel().hasStochasticInputs())
+      inputDimension = designOfExperiment.getPhysicalModel().getStochasticInputNames().getSize();
+    else
+      inputDimension = designOfExperiment.getPhysicalModel().getInputNames().getSize();
+  }
+
+  // basis
+  setBasis(ConstantBasisFactory(inputDimension).build());
+  // cov model
+  setCovarianceModel(SquaredExponential(inputDimension));
+}
+
+
+/* Constructor with parameters */
+KrigingAnalysis::KrigingAnalysis(const String& name, const Analysis& analysis)
+  : MetaModelAnalysis(name, analysis)
+  , basis_()
+  , covarianceModel_()
+  , result_()
+  , optimizeParameters_(true)
+{
+  SimulationAnalysis * analysis_ptr = dynamic_cast<SimulationAnalysis*>(analysis.getImplementation().get());
+
+  UnsignedInteger inputDimension = analysis_ptr->getDesignOfExperiment().getInputSample().getDimension();
+  if (analysis_ptr->getDesignOfExperiment().hasPhysicalModel())
+  {
+    if (analysis_ptr->getDesignOfExperiment().getPhysicalModel().hasStochasticInputs())
+      inputDimension = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getStochasticInputNames().getSize();
+    else
+      inputDimension = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getInputNames().getSize();
+  }
+
   // basis
   setBasis(ConstantBasisFactory(inputDimension).build());
   // cov model
@@ -66,9 +109,6 @@ Basis KrigingAnalysis::getBasis() const
 
 void KrigingAnalysis::setBasis(const Basis& basis)
 {
-  if (getEffectiveInputSample().getDimension() != basis.getDimension())
-    throw InvalidArgumentException(HERE) << "The basis dimension must be equal to the number of effective inputs " << getEffectiveInputSample().getDimension();
-
   basis_ = basis;
 }
 
@@ -81,9 +121,6 @@ CovarianceModel KrigingAnalysis::getCovarianceModel() const
 
 void KrigingAnalysis::setCovarianceModel(const CovarianceModel& model)
 {
-  const UnsignedInteger inputDimension = getEffectiveInputSample().getDimension();
-  if (model.getSpatialDimension() != inputDimension)
-    throw InvalidArgumentException(HERE) << "The covariance model spatial dimension must be equal to the number of effective inputs " << inputDimension;
   if (model.getDimension() != 1)
     throw InvalidArgumentException(HERE) << "The covariance model dimension must be equal to 1 ";
 
@@ -113,19 +150,24 @@ void KrigingAnalysis::run()
     result_ = KrigingAnalysisResult();
     optimalCovarianceModel_ = CovarianceModel();
 
-    // check
-    if (designOfExperiment_.getInputSample().getSize()*designOfExperiment_.getOutputSample().getSize() == 0)
-      throw InvalidArgumentException(HERE) << "The design of experiment must contains not empty input AND output samples";
-    if (designOfExperiment_.getInputSample().getSize() != designOfExperiment_.getOutputSample().getSize())
-      throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
-    if (!getInterestVariables().getSize())
-      throw InvalidDimensionException(HERE) << "You have not defined output variable to be analysed. Set the list of interest variables.";
-
     // get effective samples
     const Sample effectiveInputSample(getEffectiveInputSample());
     const Sample effectiveOutputSample(getEffectiveOutputSample());
+    const UnsignedInteger inputDimension = effectiveInputSample.getDimension();
     const UnsignedInteger size = effectiveInputSample.getSize();
     const UnsignedInteger outputDimension = effectiveOutputSample.getDimension();
+
+    // check
+    if (designOfExperiment_.getInputSample().getSize() * designOfExperiment_.getOutputSample().getSize() == 0)
+      throw InvalidArgumentException(HERE) << "The design of experiment must contains not empty input AND output samples";
+    if (designOfExperiment_.getInputSample().getSize() != designOfExperiment_.getOutputSample().getSize())
+      throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
+    if (getCovarianceModel().getSpatialDimension() != inputDimension)
+      throw InvalidArgumentException(HERE) << "The covariance model spatial dimension (" << getCovarianceModel().getSpatialDimension()
+                                           << ") must be equal to the number of effective inputs (" << inputDimension <<")";
+    if (getBasis().getDimension() != inputDimension)
+      throw InvalidArgumentException(HERE) << "The basis dimension (" << getBasis().getDimension()
+                                           << ") must be equal to the number of effective inputs (" << inputDimension <<")";
 
     // Kriging
     Collection<KrigingResult> krigingResultCollection;

@@ -18,36 +18,36 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_FROMFILEDESIGNOFEXPERIMENT_HXX
-#define OTGUI_FROMFILEDESIGNOFEXPERIMENT_HXX
+#ifndef OTGUI_IMPORTEDDESIGNOFEXPERIMENT_HXX
+#define OTGUI_IMPORTEDDESIGNOFEXPERIMENT_HXX
 
-#include "DesignOfExperimentImplementation.hxx"
+#include "DesignOfExperimentEvaluation.hxx"
 
 namespace OTGUI {
-class OTGUI_API FromFileDesignOfExperiment : public DesignOfExperimentImplementation
+class OTGUI_API ImportedDesignOfExperiment : public DesignOfExperimentEvaluation
 {
   CLASSNAME;
 
 public:
   /** Default constructor */
-  FromFileDesignOfExperiment();
+  ImportedDesignOfExperiment();
   /** Constructor with parameters */
-  FromFileDesignOfExperiment(const OT::String& name, const PhysicalModel& physicalModel);
+  ImportedDesignOfExperiment(const OT::String& name, const PhysicalModel& physicalModel);
   /** Constructor with parameters */
-  FromFileDesignOfExperiment(const OT::String& name,
+  ImportedDesignOfExperiment(const OT::String& name,
                              const PhysicalModel& physicalModel,
                              const OT::String& fileName,
                              const OT::Indices& inputColumns);
 
   /** Virtual constructor */
-  virtual FromFileDesignOfExperiment * clone() const;
+  virtual ImportedDesignOfExperiment * clone() const;
 
   OT::String getFileName() const;
-  virtual void setFileName(const OT::String& fileName);
+  void setFileName(const OT::String& fileName);
   OT::Indices getInputColumns() const;
-  virtual void setInputColumns(const OT::Indices& inputColumns);
+  void setInputColumns(const OT::Indices& inputColumns);
 
-  OT::Sample getSampleFromFile();
+  OT::Sample getSampleFromFile() const;
   static OT::Sample ImportSample(const OT::String& fileName);
 
   virtual OT::String getPythonScript() const;
@@ -62,9 +62,12 @@ public:
   void load(OT::Advocate& adv);
 
 protected:
+  virtual OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const;
+
+protected:
   OT::String fileName_;
   OT::Indices inputColumns_;
-  OT::Sample sampleFromFile_;
+  mutable OT::Sample sampleFromFile_;
 };
 }
 #endif

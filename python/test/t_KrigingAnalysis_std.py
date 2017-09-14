@@ -24,7 +24,7 @@ model = otguibase.SymbolicPhysicalModel('model', [xi1, xi2, xi3], [y00, y0], [fo
 myStudy.add(model)
 
 ## Design of Experiment ##
-aDesign = otguibase.DesignOfExperimentImplementation('design', model)
+aDesign = otguibase.FixedDesignOfExperiment('design', model)
 validationInputSample = ot.LHSExperiment(model.getComposedDistribution(), 10).generate()
 inputSample = ot.Sample(validationInputSample)
 inputSample.stack(ot.Sample(10, [0.5]))
@@ -42,7 +42,7 @@ print(analysis)
 
 analysis.run()
 metaModel = analysis.getResult().getResultForVariable('y0').getMetaModel()
-openturns.testing.assert_almost_equal(aDesign.getOutputSample(), metaModel(validationInputSample), 3.0e-5, 3.0e-5)
+openturns.testing.assert_almost_equal(aDesign.getDesignOfExperiment().getOutputSample(), metaModel(validationInputSample), 3.0e-5, 3.0e-5)
 
 ## Design of Experiment ##
 model.addOutput(otguibase.Output('y1'))
@@ -61,7 +61,7 @@ analysis2.run()
 
 result2 = analysis2.getResult()
 metaModel2 = result2.getResultForVariable('y1').getMetaModel()
-openturns.testing.assert_almost_equal(aDesign.getOutputSample().getMarginal(1), metaModel2(validationInputSample), 3.0e-5, 3.0e-5)
+openturns.testing.assert_almost_equal(aDesign.getDesignOfExperiment().getOutputSample().getMarginal(1), metaModel2(validationInputSample), 3.0e-5, 3.0e-5)
 openturns.testing.assert_almost_equal(result2.getQ2LeaveOneOut(), [0.832447,0.832278], 1e-3, 1e-3)
 
 ## Kriging ##
@@ -77,7 +77,7 @@ result3 = analysis3.getResult()
 print("result=", result3)
 
 metaModel3 = result3.getResultForVariable('y0').getMetaModel()
-openturns.testing.assert_almost_equal(aDesign.getOutputSample().getMarginal(0), metaModel3(validationInputSample), 3.0e-5, 3.0e-5)
+openturns.testing.assert_almost_equal(aDesign.getDesignOfExperiment().getOutputSample().getMarginal(0), metaModel3(validationInputSample), 3.0e-5, 3.0e-5)
 
 # script
 script = myStudy.getPythonScript()

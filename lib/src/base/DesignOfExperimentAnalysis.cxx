@@ -27,6 +27,15 @@ namespace OTGUI {
 /* Default constructor */
 DesignOfExperimentAnalysis::DesignOfExperimentAnalysis()
   : AnalysisImplementation()
+  , designOfExperiment_()
+{
+}
+
+
+/* Constructor with parameters */
+DesignOfExperimentAnalysis::DesignOfExperimentAnalysis(const String & name)
+  : AnalysisImplementation(name)
+  , designOfExperiment_()
 {
 }
 
@@ -49,26 +58,6 @@ DesignOfExperimentAnalysis* DesignOfExperimentAnalysis::clone() const
 DesignOfExperiment DesignOfExperimentAnalysis::getDesignOfExperiment() const
 {
   return designOfExperiment_;
-}
-
-
-void DesignOfExperimentAnalysis::setDesignOfExperiment(const DesignOfExperiment & designOfExperiment)
-{
-  designOfExperiment_ = designOfExperiment;
-}
-
-
-void DesignOfExperimentAnalysis::setInterestVariables(const Description& variablesNames)
-{
-  if (!variablesNames.getSize())
-    throw InvalidDimensionException(HERE) << "The number of outputs to analyse must be superior to 0";
-
-  const Description modelVariablesNames(designOfExperiment_.getSample().getDescription());
-  for (UnsignedInteger i=0; i<variablesNames.getSize(); ++i)
-    if (!modelVariablesNames.contains(variablesNames[i]))
-      throw InvalidArgumentException(HERE) << "The name " << variablesNames[i] << " does not match a variable name of the model";
-
-  AnalysisImplementation::setInterestVariables(variablesNames);
 }
 
 
