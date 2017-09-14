@@ -150,7 +150,6 @@ void ProbabilisticModelWindow::buildInterface()
   QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
   QStackedWidget * plotStackedWidget = new QStackedWidget;
-  plotStackedWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
   QVector<PlotWidget*> listPlotWidgets;
 
@@ -162,7 +161,7 @@ void ProbabilisticModelWindow::buildInterface()
   plotStackedWidget->addWidget(cdfPlot_);
   listPlotWidgets.append(cdfPlot_);
 
-  plotWidgetLayout->addWidget(plotStackedWidget, 0, Qt::AlignHCenter|Qt::AlignTop);
+  plotWidgetLayout->addWidget(plotStackedWidget);
 
   GraphConfigurationWidget * pdf_cdfPlotsSettingWidget = new GraphConfigurationWidget(listPlotWidgets,
                                                                                       QStringList(),
