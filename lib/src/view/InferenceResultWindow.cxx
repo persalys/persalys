@@ -49,10 +49,10 @@ void InferenceResultWindow::buildInterface()
 
   // table variables
   QStringList variablesNames;
-  for (UnsignedInteger i=0; i<result_.getFittingTestResultCollection().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < result_.getFittingTestResultCollection().getSize(); ++i)
     variablesNames << QString::fromUtf8(result_.getFittingTestResultCollection()[i].getVariableName().c_str());
 
-  QGroupBox * variablesGroupBox = new QGroupBox(tr("Variable(s)", "", variablesNames.size()));
+  QGroupBox * variablesGroupBox = new QGroupBox(tr("Variables"));
   QVBoxLayout * variablesLayoutGroupBox = new QVBoxLayout(variablesGroupBox);
 
   OTguiListWidget * listVariables = new OTguiListWidget;

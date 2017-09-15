@@ -78,7 +78,7 @@ void DesignOfExperimentWindow::initialize(AnalysisItem* item)
 
 void DesignOfExperimentWindow::fillListWidget()
 {
-  variablesGroupBox_->setTitle(tr("Output(s)", "", outputNames_.size()));
+  variablesGroupBox_->setTitle(tr("Outputs"));
   variablesListWidget_->addItems(QtOT::DescriptionToStringList(designOfExperiment_.getOutputSample().getDescription()));
   variablesListWidget_->setCurrentRow(0);
 }

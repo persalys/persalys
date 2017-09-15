@@ -51,7 +51,7 @@ void CopulaInferenceResultWindow::buildInterface()
   for (UnsignedInteger i = 0; i < result_.getCopulaInferenceSetResultCollection().getSize(); ++i)
     setOfVariablesNames << QString::fromUtf8(result_.getCopulaInferenceSetResultCollection()[i].getSetOfVariablesNames().__str__().c_str());
 
-  QGroupBox * variablesGroupBox = new QGroupBox(tr("Set(s) of variables", "", setOfVariablesNames.size()));
+  QGroupBox * variablesGroupBox = new QGroupBox(tr("Sets of variables"));
   QVBoxLayout * variablesLayoutGroupBox = new QVBoxLayout(variablesGroupBox);
 
   OTguiListWidget * listSetOfVariables = new OTguiListWidget;

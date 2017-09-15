@@ -57,7 +57,7 @@ void ModelEvaluationWizard::buildInterface()
   pageLayout->addWidget(outputsGroupBox_);
 
   const UnsignedInteger nbInputs = model.getInputs().getSize();
-  QGroupBox * inputsBox = new QGroupBox(tr("Input(s)", "", nbInputs));
+  QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
   QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
 
   table_ = new QTableWidget(nbInputs, 3);

@@ -66,7 +66,7 @@ void SRCResultWindow::buildInterface()
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
   // - list outputs
-  QGroupBox * outputsGroupBox = new QGroupBox(tr("Output(s)", "", nbOutputs));
+  QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
   OTguiListWidget * outputsListWidget = new OTguiListWidget;

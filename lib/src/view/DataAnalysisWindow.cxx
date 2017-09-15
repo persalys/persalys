@@ -126,7 +126,7 @@ void DataAnalysisWindow::buildInterface()
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
   // - list outputs
-  variablesGroupBox_ = new QGroupBox(tr("Variable(s)", "", variablesNames.size()));
+  variablesGroupBox_ = new QGroupBox(tr("Variables"));
   QVBoxLayout * groupBoxLayout = new QVBoxLayout(variablesGroupBox_);
 
   variablesListWidget_ = new OTguiListWidget;
