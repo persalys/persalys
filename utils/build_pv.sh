@@ -79,6 +79,7 @@ cmake \
   -DVTK_INSTALL_DATA_DIR="share/paraview" \
   -DVTK_INSTALL_DOC_DIR="share/doc/paraview" \
   -DVTK_INSTALL_PACKAGE_DIR="lib/cmake/paraview" \
+  -DVTK_USE_SYSTEM_PROTOBUF=ON \
   -DPARAVIEW_INSTALL_DEVELOPMENT_FILES:BOOL=ON \
   ..
 make install -j8

@@ -1,4 +1,4 @@
-sudo aptitude install libhdf5-dev libtheora-dev libnetcdf-dev libglew-dev libexpat-dev libfreetype6-dev libjpeg8-dev libqt5x11extras5-dev libtiff-dev qttools5-dev
+sudo aptitude install libhdf5-dev libtheora-dev libnetcdf-dev libglew-dev libexpat-dev libfreetype6-dev libjpeg8-dev libqt5x11extras5-dev libtiff-dev qttools5-dev protobuf-c-compiler protobuf-compiler
 
 # see utils/build_pv.sh
 
