@@ -31,11 +31,12 @@ public:
 
   virtual void setData(const std::vector< std::vector<double> >& valuesByColumn, const std::vector<std::string>& columnNames);
   void setData(const OT::Sample& sample);
-  vtkTable *getTable() const { return table_; }
-  vtkSMProxy *getProxy(const int i=0) const { if (i >= producerBases_.size())return 0; return producerBases_[i]; }
+  vtkTable * getTable(const OT::UnsignedInteger repr_ind=0) const;
+  vtkSMProxy * getProxy(const OT::UnsignedInteger repr_ind=0) const;
   void setAxisToShow(const std::vector<std::string>& axis);
   void setAxisToShow(const OT::Description& sampleDescription);
   virtual const char *getRepresentationName() const = 0;
+  void updateTable(const OT::Sample& sample, const OT::UnsignedInteger repr_ind=0);
 
 public slots:
   void setAxisToShow(const QStringList& variablesNames);
@@ -55,9 +56,8 @@ private:
   PVServerManagerInterface * smb_;
   pqView * view_;
   vtkAbstractContextItem * contextItem_;
-  vtkSmartPointer<vtkTable> table_;
-  vtkSMProxy * producerBase_;
-  QList< vtkSMProxy * > producerBases_;
+  QList< vtkSmartPointer<vtkTable> > tables_;
+  QList< vtkSmartPointer<vtkSMProxy> > producerBases_;
 public:
   static const char SERIES_VISIBILITY_PROP[];
 };
