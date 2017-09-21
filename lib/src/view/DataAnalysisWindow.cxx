@@ -83,35 +83,41 @@ void DataAnalysisWindow::initializeVariablesNames()
   PhysicalModel model(designOfExperiment_.getPhysicalModel());
 
   // inputs
-  for (UnsignedInteger i = 0; i < designOfExperiment_.getInputSample().getDimension(); ++i)
+  if (designOfExperiment_.getInputSample().getSize())
   {
-    const String inputName = designOfExperiment_.getInputSample().getDescription()[i];
-    inputNames_ << QString::fromUtf8(inputName.c_str());
-    QString inputDescription;
-    if (model.hasInputNamed(inputName))
+    for (UnsignedInteger i = 0; i < designOfExperiment_.getInputSample().getDimension(); ++i)
     {
-      inputDescription = QString::fromUtf8(model.getInputByName(inputName).getDescription().c_str());
+      const String inputName = designOfExperiment_.getInputSample().getDescription()[i];
+      inputNames_ << QString::fromUtf8(inputName.c_str());
+      QString inputDescription;
+      if (model.hasInputNamed(inputName))
+      {
+        inputDescription = QString::fromUtf8(model.getInputByName(inputName).getDescription().c_str());
+      }
+      if (!inputDescription.isEmpty())
+        inAxisTitles_ << inputDescription;
+      else
+        inAxisTitles_ << inputNames_.last();
     }
-    if (!inputDescription.isEmpty())
-      inAxisTitles_ << inputDescription;
-    else
-      inAxisTitles_ << inputNames_.last();
   }
 
   // outputs
-  for (UnsignedInteger i = 0; i < designOfExperiment_.getOutputSample().getDimension(); ++i)
+  if (designOfExperiment_.getOutputSample().getSize())
   {
-    const String outputName = designOfExperiment_.getOutputSample().getDescription()[i];
-    outputNames_ << QString::fromUtf8(outputName.c_str());
-    QString outputDescription;
-    if (model.hasOutputNamed(outputName))
+    for (UnsignedInteger i = 0; i < designOfExperiment_.getOutputSample().getDimension(); ++i)
     {
-      outputDescription = QString::fromUtf8(model.getOutputByName(outputName).getDescription().c_str());
+      const String outputName = designOfExperiment_.getOutputSample().getDescription()[i];
+      outputNames_ << QString::fromUtf8(outputName.c_str());
+      QString outputDescription;
+      if (model.hasOutputNamed(outputName))
+      {
+        outputDescription = QString::fromUtf8(model.getOutputByName(outputName).getDescription().c_str());
+      }
+      if (!outputDescription.isEmpty())
+        outAxisTitles_ << outputDescription;
+      else
+        outAxisTitles_ << outputNames_.last();
     }
-    if (!outputDescription.isEmpty())
-      outAxisTitles_ << outputDescription;
-    else
-      outAxisTitles_ << outputNames_.last();
   }
 }
 
@@ -483,8 +489,8 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
 
   tabWidget_->addTab(pvSpreadSheetWidget, tr("Table"));
 
-  // if only one variable : do not need the following graphs
-  if (designOfExperiment_.getSample().getDimension() < 2)
+  // if only one variable or if only one point : do not need the following graphs
+  if (designOfExperiment_.getSample().getDimension() < 2 || designOfExperiment_.getSample().getSize() < 2)
     return;
 
   // cobweb tab --------------------------------
