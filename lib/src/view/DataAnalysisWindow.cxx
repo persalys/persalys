@@ -493,9 +493,14 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
 
   PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, PVServerManagerSingleton::Get());
   cobwebWidget->setData(designOfExperiment_.getSample());
+  cobwebWidget->setAxisToShow(designOfExperiment_.getSample().getDescription());
   cobwebTabWidgetLayout->addWidget(cobwebWidget);
 
-  PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget, this);
+  const Sample sampleRank(designOfExperiment_.getSample().rank() / designOfExperiment_.getSample().getSize());
+  PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget,
+                                                                      designOfExperiment_.getSample(),
+                                                                      sampleRank,
+                                                                      this);
   cobwebTabWidget->setDockWidget(cobwebSettingWidget);
 
   tabWidget_->addTab(cobwebTabWidget, tr("Cobweb plot"));
@@ -527,16 +532,9 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
     sampleScatterPlotWidget->setAxisTitles(inputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);
   scatterTabWidgetLayout->addWidget(sampleScatterPlotWidget);
 
-  // sample rank
-  const Sample sampleRank(designOfExperiment_.getSample().rank() / designOfExperiment_.getSample().getSize());
-  PVXYChartViewWidget * sampleRankScatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
-  sampleRankScatterPlotWidget->PVViewWidget::setData(sampleRank);
-  if ((inputNames_ + outputNames_) != (inAxisTitles_ + outAxisTitles_))
-    sampleRankScatterPlotWidget->setAxisTitles(inputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);
-  scatterTabWidgetLayout->addWidget(sampleRankScatterPlotWidget);
-
   PVXYChartSettingWidget * scatterSettingWidget = new PVXYChartSettingWidget(sampleScatterPlotWidget,
-                                                                             sampleRankScatterPlotWidget,
+                                                                             designOfExperiment_.getSample(),
+                                                                             sampleRank,
                                                                              inputNames_,
                                                                              outputNames_,
                                                                              PVXYChartSettingWidget::Scatter,
@@ -558,8 +556,6 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   linksModel->addSelectionLink(aStr.c_str(), cobwebWidget->getProxy(), pvSpreadSheetWidget->getProxy());
   aStr = (OSS() << sampleScatterPlotWidget->getProxy() << pvSpreadSheetWidget->getProxy()).str();
   linksModel->addSelectionLink(aStr.c_str(), sampleScatterPlotWidget->getProxy(), pvSpreadSheetWidget->getProxy());
-  aStr = (OSS() << sampleRankScatterPlotWidget->getProxy() << pvSpreadSheetWidget->getProxy()).str();
-  linksModel->addSelectionLink(aStr.c_str(), sampleRankScatterPlotWidget->getProxy(), pvSpreadSheetWidget->getProxy());
 }
 #endif
 

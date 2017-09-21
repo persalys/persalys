@@ -40,7 +40,6 @@ public:
   void setRepresentationLabels(const QStringList& labels, const int reprIndex=0);
   QStringList getRepresentationLabels(const int reprIndex=0) const;
   void setMarkerStyle(const int markerStyle);
-  void setMarkerSize(const int markerSize);
   void setShowLegend(const bool show);
   int getNumberOfRepresentations() const;
   void setRepresentationVisibility(const bool visibility, const int reprIndex=0);
@@ -52,6 +51,7 @@ public slots:
   virtual void showChart(const QString& varX, const QString& varY);
   virtual void setXLogScale(const bool scale);
   virtual void setYLogScale(const bool scale);
+  void setMarkerSize(const int markerSize);
 
 public:
   static const char PV_VIEW_TYPE[];

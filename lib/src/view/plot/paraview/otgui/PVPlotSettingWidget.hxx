@@ -33,13 +33,23 @@ class OTGUI_API PVPlotSettingWidget : public QWidget
   Q_OBJECT
 
 public:
-  PVPlotSettingWidget(PVViewWidget * pvViewWidget, QWidget* parent=0);
+  PVPlotSettingWidget(PVViewWidget* pvViewWidget, QWidget* parent=0);
+  PVPlotSettingWidget(PVViewWidget* pvViewWidget,
+                      const OT::Sample& sample,
+                      const OT::Sample& sampleRank,
+                      QWidget* parent=0);
+
+protected:
+  void buildInterface();
 
 public slots:
+  void modifyData(bool);
   void exportPlot();
 
 private:
   PVViewWidget * pvViewWidget_;
+  OT::Sample sample_;
+  OT::Sample sampleRank_;
 };
 }
 #endif

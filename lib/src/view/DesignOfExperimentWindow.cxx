@@ -138,7 +138,15 @@ void DesignOfExperimentWindow::addSummaryTab()
 #ifdef OTGUI_HAVE_PARAVIEW
 void DesignOfExperimentWindow::addParaviewWidgetsTabs()
 {
-  if (!failedInputSample_.getSize() && !notEvaluatedInputSample_.getSize())
+  // get data info
+  const UnsignedInteger failedInSampleSize = failedInputSample_.getSize();
+  const UnsignedInteger notEvalInSampleSize = notEvaluatedInputSample_.getSize();
+  const UnsignedInteger inSampleSize = designOfExperiment_.getInputSample().getSize();
+  const UnsignedInteger inSampleDim = designOfExperiment_.getInputSample().getDimension();
+
+  // if no failed points and no not evaluated points:
+  // use the DataAnalysisWindow tabs
+  if (!failedInSampleSize && !notEvalInSampleSize)
   {
     DataAnalysisWindow::addParaviewWidgetsTabs();
     return;
@@ -153,131 +161,117 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
 
   tablesTabWidget->addTab(spreadSheetWidget, tr("DOE"));
 
-  PVXYChartViewWidget * sampleScatterPlotWidget = 0;
-  PVXYChartViewWidget * sampleRankScatterPlotWidget = 0;
+  // --- data for scatter plots tab
+  // sample scatter plot
+  PVXYChartViewWidget * sampleScatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
+  sampleScatterPlotWidget->setData(designOfExperiment_.getInputSample(), Qt::green);
 
-  const UnsignedInteger failedInSampleSize = failedInputSample_.getSize();
-  const UnsignedInteger notEvalInSampleSize = notEvaluatedInputSample_.getSize();
+  // labels for the legend
+  std::list<QString> inSLabelsList(inSampleDim, tr("Succeed points"));
+  sampleScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(inSLabelsList), 0);
 
-  if (failedInSampleSize || notEvalInSampleSize)
+  // -- failed points tab
+  if (failedInSampleSize)
   {
-    // allInputsSample : input sample + failed input sample + not evaluated input sample
-    Sample allInputsSample(designOfExperiment_.getInputSample());
-    const UnsignedInteger inSampleSize = designOfExperiment_.getInputSample().getSize();
+    // --- table tab
+    PVSpreadSheetViewWidget * failedPointsTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
+    failedPointsTable->setData(failedInputSample_);
 
-    if (failedInSampleSize)
-      allInputsSample.add(failedInputSample_);
-    if (notEvalInSampleSize)
-      allInputsSample.add(notEvaluatedInputSample_);
+    tablesTabWidget->addTab(failedPointsTable, tr("Failed points"));
 
-    // allInputsSample rank
-    const Sample allInputsSampleRank(allInputsSample.rank() / allInputsSample.getSize());
+    // --- Cobweb tab
+    WidgetBoundToDockWidget * cobwebTabWidget = new WidgetBoundToDockWidget(this);
+    QVBoxLayout * cobwebTabWidgetLayout = new QVBoxLayout(cobwebTabWidget);
+
+    PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, PVServerManagerSingleton::Get());
+
+    // input sample + failed input sample
+    Sample succeedAndFailedInS(designOfExperiment_.getInputSample());
+    succeedAndFailedInS.add(failedInputSample_);
+
+    Sample succeedAndFailedInSRank(succeedAndFailedInS.rank() / succeedAndFailedInS.getSize());
+
+    // add a status column
+    // 0. : failed point
+    // 1. : succeeded point
+    Sample statusColumnSample(inSampleSize, Point(1, 1.0));
+    statusColumnSample.add(Sample(failedInSampleSize, 1));
+    succeedAndFailedInS.stack(statusColumnSample);
+    succeedAndFailedInSRank.stack(statusColumnSample);
+
+    // set columns name
+    Description desc(designOfExperiment_.getInputSample().getDescription());
+    desc.add(tr("Status").toUtf8().constData());
+    succeedAndFailedInS.setDescription(desc);
+
+    cobwebWidget->setData(succeedAndFailedInS);
+    cobwebWidget->setAxisToShow(desc);
+    cobwebTabWidgetLayout->addWidget(cobwebWidget);
+
+    // cobweb setting widget
+    PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget, succeedAndFailedInS, succeedAndFailedInSRank, this);
+    cobwebTabWidget->setDockWidget(cobwebSettingWidget);
+
+    tablesTabWidget->addTab(cobwebTabWidget, tr("Cobweb plot"));
 
     // --- data for scatter plots tab
     // sample scatter plot
-    sampleScatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
-    sampleScatterPlotWidget->setData(designOfExperiment_.getInputSample(), Qt::green);
-
-    // sample rank scatter plot
-    const Sample inputsRank(allInputsSampleRank, 0, inSampleSize);
-    sampleRankScatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
-    sampleRankScatterPlotWidget->setData(inputsRank, Qt::green);
+    sampleScatterPlotWidget->setData(failedInputSample_, Qt::red);
 
     // labels for the legend
-    std::list<QString> inSLabelsList(designOfExperiment_.getInputSample().getDimension(), tr("Succeed points"));
-    sampleScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(inSLabelsList), 0);
-    sampleRankScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(inSLabelsList), 0);
+    std::list<QString> failedInSLabelsList(inSampleDim, tr("Failed points"));
+    sampleScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(failedInSLabelsList), 1);
+  }
+  // -- not evaluated points tab
+  if (notEvalInSampleSize)
+  {
+    // --- table tab
+    PVSpreadSheetViewWidget * notEvaluatedPointsTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
+    notEvaluatedPointsTable->setData(notEvaluatedInputSample_);
 
-    // -- failed points tab
-    if (failedInSampleSize)
-    {
-      // --- table tab
-      PVSpreadSheetViewWidget * failedPointsTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
-      failedPointsTable->setData(failedInputSample_);
+    tablesTabWidget->addTab(notEvaluatedPointsTable, tr("Not evaluated points"));
 
-      tablesTabWidget->addTab(failedPointsTable, tr("Failed points"));
+    // --- data for scatter plots tab
+    // sample scatter plot
+    sampleScatterPlotWidget->setData(notEvaluatedInputSample_, Qt::blue);
 
-      // --- Cobweb tab
-      WidgetBoundToDockWidget * cobwebTabWidget = new WidgetBoundToDockWidget(this);
-      QVBoxLayout * cobwebTabWidgetLayout = new QVBoxLayout(cobwebTabWidget);
-
-      PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, PVServerManagerSingleton::Get());
-      Sample succeedInS(designOfExperiment_.getInputSample());
-      succeedInS.stack(Sample(inSampleSize, Point(1, 1.0)));
-
-      Sample failedInS(failedInputSample_);
-      failedInS.stack(Sample(failedInSampleSize, 1));
-
-      Sample succeedAndFailedInS(succeedInS);
-      succeedAndFailedInS.add(failedInS);
-      Description desc(designOfExperiment_.getInputSample().getDescription());
-      desc.add(tr("Status").toUtf8().constData());
-      succeedAndFailedInS.setDescription(desc);
-      cobwebWidget->setData(succeedAndFailedInS);
-      cobwebTabWidgetLayout->addWidget(cobwebWidget);
-
-      PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget, this);
-      cobwebTabWidget->setDockWidget(cobwebSettingWidget);
-
-      tablesTabWidget->addTab(cobwebTabWidget, tr("Cobweb plot"));
-
-      // --- data for scatter plots tab
-      // sample scatter plot
-      sampleScatterPlotWidget->setData(failedInputSample_, Qt::red);
-
-      // sample rank scatter plot
-      const Sample failedInputsRank(allInputsSampleRank, inSampleSize, inSampleSize + failedInSampleSize);
-      sampleRankScatterPlotWidget->setData(failedInputsRank, Qt::red);
-
-      // labels for the legend
-      std::list<QString> failedInSLabelsList(designOfExperiment_.getInputSample().getDimension(), tr("Failed points"));
-      sampleScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(failedInSLabelsList), 1);
-      sampleRankScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(failedInSLabelsList), 1);
-    }
-    // -- not evaluated points tab
-    if (notEvalInSampleSize)
-    {
-      // --- table tab
-      PVSpreadSheetViewWidget * notEvaluatedPointsTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
-      notEvaluatedPointsTable->setData(notEvaluatedInputSample_);
-
-      tablesTabWidget->addTab(notEvaluatedPointsTable, tr("Not evaluated points"));
-
-      // --- data for scatter plots tab
-      // sample scatter plot
-      sampleScatterPlotWidget->setData(notEvaluatedInputSample_, Qt::blue);
-      // sample rank scatter plot
-      const Sample notEvaluatedInputsRank(allInputsSampleRank, inSampleSize + failedInSampleSize, allInputsSampleRank.getSize());
-      sampleRankScatterPlotWidget->setData(notEvaluatedInputsRank, Qt::blue);
-      // labels for the legend
-      std::list<QString> notEvaluatedInSLabelsList(designOfExperiment_.getInputSample().getDimension(), tr("Not evaluated points"));
-      sampleScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(notEvaluatedInSLabelsList), failedInSampleSize > 0 ? 2 : 1);
-      sampleRankScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(notEvaluatedInSLabelsList), failedInSampleSize > 0 ? 2 : 1);
-    }
+    // labels for the legend
+    std::list<QString> notEvaluatedInSLabelsList(inSampleDim, tr("Not evaluated points"));
+    sampleScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(notEvaluatedInSLabelsList), failedInSampleSize > 0 ? 2 : 1);
   }
 
   // scatter plots tab
-  if (sampleScatterPlotWidget)
-  {
-    // add in tab widget
-    WidgetBoundToDockWidget * scatterTabWidget = new WidgetBoundToDockWidget(this);
-    QVBoxLayout * scatterTabWidgetLayout = new QVBoxLayout(scatterTabWidget);
-    sampleScatterPlotWidget->setAxisTitles(inputNames_, inAxisTitles_);
-    if (inputNames_ != inAxisTitles_)
-      sampleRankScatterPlotWidget->setAxisTitles(inputNames_, inAxisTitles_);
-    scatterTabWidgetLayout->addWidget(sampleScatterPlotWidget);
-    scatterTabWidgetLayout->addWidget(sampleRankScatterPlotWidget);
-    tablesTabWidget->addTab(scatterTabWidget, tr("Scatter plots"));
+  WidgetBoundToDockWidget * scatterTabWidget = new WidgetBoundToDockWidget(this);
+  QVBoxLayout * scatterTabWidgetLayout = new QVBoxLayout(scatterTabWidget);
+  sampleScatterPlotWidget->setAxisTitles(inputNames_, inAxisTitles_);
+  scatterTabWidgetLayout->addWidget(sampleScatterPlotWidget);
+  tablesTabWidget->addTab(scatterTabWidget, tr("Scatter plots"));
 
-    // setting widget
-    PVXYChartSettingWidget * inSampleSettingWidget = new PVXYChartSettingWidget(sampleScatterPlotWidget,
-                                                                                sampleRankScatterPlotWidget,
-                                                                                inputNames_,
-                                                                                QStringList(),
-                                                                                PVXYChartSettingWidget::Scatter,
-                                                                                this);
-    scatterTabWidget->setDockWidget(inSampleSettingWidget);
-  }
+  // samples rank
+  // allInputsSample : input sample + failed input sample + not evaluated input sample
+  Sample allInputsSample(designOfExperiment_.getInputSample());
+  if (failedInSampleSize)
+    allInputsSample.add(failedInputSample_);
+  if (notEvalInSampleSize)
+    allInputsSample.add(notEvaluatedInputSample_);
+
+  // allInputsSample rank
+  const Sample allInputsSampleRank(allInputsSample.rank() / allInputsSample.getSize());
+  const Sample inputsRank(allInputsSampleRank, 0, inSampleSize);
+  const Sample failedInputsRank(allInputsSampleRank, inSampleSize, inSampleSize + failedInSampleSize);
+  const Sample notEvaluatedInputsRank(allInputsSampleRank, inSampleSize + failedInSampleSize, allInputsSampleRank.getSize());
+
+  // scatter plots setting widget
+  PVXYChartSettingWidget * inSampleSettingWidget = new PVXYChartSettingWidget(sampleScatterPlotWidget,
+                                                                              designOfExperiment_.getInputSample(),
+                                                                              inputsRank,
+                                                                              failedInputSample_,
+                                                                              failedInputsRank,
+                                                                              notEvaluatedInputSample_,
+                                                                              notEvaluatedInputsRank,
+                                                                              PVXYChartSettingWidget::Scatter,
+                                                                              this);
+  scatterTabWidget->setDockWidget(inSampleSettingWidget);
 
   tabWidget_->addTab(tablesTabWidget, tr("Table"));
 
@@ -287,9 +281,14 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
 
   PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, PVServerManagerSingleton::Get());
   cobwebWidget->setData(designOfExperiment_.getSample());
+  cobwebWidget->setAxisToShow(designOfExperiment_.getSample().getDescription());
   cobwebTabWidgetLayout->addWidget(cobwebWidget);
 
-  PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget, this);
+  const Sample sampleRank(designOfExperiment_.getSample().rank() / designOfExperiment_.getSample().getSize());
+  PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget,
+                                                                      designOfExperiment_.getSample(),
+                                                                      sampleRank,
+                                                                      this);
   cobwebTabWidget->setDockWidget(cobwebSettingWidget);
 
   tabWidget_->addTab(cobwebTabWidget, tr("Cobweb plot"));
@@ -322,19 +321,12 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
     pvXYChartWidget->setAxisTitles(inputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);
   xyScatterTabWidgetLayout->addWidget(pvXYChartWidget);
 
-  // sample rank
-  const Sample sampleRank(designOfExperiment_.getSample().rank() / designOfExperiment_.getSample().getSize());
-  PVXYChartViewWidget * rankPvXYChartWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
-  rankPvXYChartWidget->PVViewWidget::setData(sampleRank);
-  if ((inputNames_ + outputNames_) != (inAxisTitles_ + outAxisTitles_))
-    rankPvXYChartWidget->setAxisTitles(inputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);
-  xyScatterTabWidgetLayout->addWidget(rankPvXYChartWidget);
-
   tabWidget_->addTab(xyScatterTabWidget, tr("Scatter plots"));
 
   // setting widget
   PVXYChartSettingWidget * inOutSampleSettingWidget = new PVXYChartSettingWidget(pvXYChartWidget,
-                                                                                 rankPvXYChartWidget,
+                                                                                 designOfExperiment_.getSample(),
+                                                                                 sampleRank,
                                                                                  inputNames_,
                                                                                  outputNames_,
                                                                                  PVXYChartSettingWidget::Scatter,
@@ -354,8 +346,6 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
   linksModel->addSelectionLink(aStr.c_str(), cobwebWidget->getProxy(), spreadSheetWidget->getProxy());
   aStr = (OSS() << pvXYChartWidget->getProxy() << spreadSheetWidget->getProxy()).str();
   linksModel->addSelectionLink(aStr.c_str(), pvXYChartWidget->getProxy(), spreadSheetWidget->getProxy());
-  aStr = (OSS() << rankPvXYChartWidget->getProxy() << spreadSheetWidget->getProxy()).str();
-  linksModel->addSelectionLink(aStr.c_str(), rankPvXYChartWidget->getProxy(), spreadSheetWidget->getProxy());
 }
 #endif
 
