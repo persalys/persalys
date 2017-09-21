@@ -34,7 +34,7 @@ model1.setCopula(ot.NormalCopula(R))
 myStudy.add(model1)
 
 ## model 2 ##
-code = 'from math import cos, sin\n\ndef _exec(x1, x2, x3):\n    y0 = cos(0.5*x1) + sin(x2) + x3\n    return y0\n'
+code = 'from math import cos, sin, sqrt\n\ndef _exec(x1, x2, x3):\n    y0 = cos(0.5*x1) + sin(x2) + sqrt(x3)\n    return y0\n'
 model2 = otguibase.PythonPhysicalModel('model2', [x1, x2, x3], [y0], code)
 myStudy.add(model2)
 
@@ -74,6 +74,17 @@ myStudy.add(design_3)
 design_4 = otguibase.ProbabilisticDesignOfExperiment('design_4', model1, 10, "MONTE_CARLO")
 design_4.run()
 myStudy.add(design_4)
+
+## design 5 ##
+design_5 = otguibase.GridDesignOfExperiment('design_5', model2)
+myStudy.add(design_5)
+
+## design 6 ##
+lowerBounds = [0., 0., -0.2]
+upperBounds = [0., 0., 1.]
+levels = [1, 1, 2]
+design_6 = otguibase.GridDesignOfExperiment('design_6', model2, lowerBounds, upperBounds, levels)
+myStudy.add(design_6)
 
 ## model 4 ##
 model4 = otguibase.DataModel('model4', inputSample, design_1.getDesignOfExperiment().getOutputSample())

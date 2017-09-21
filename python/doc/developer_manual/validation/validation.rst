@@ -184,8 +184,8 @@ The analysis is performed with the Monte Carlo method with the following paramet
 ================================ ========
 Name                             Value
 ================================ ========
-Maximum outer sampling           10000
-Maximum coefficient of variation 0.1
+Maximum calls                    10000
+Maximum coefficient of variation 0.01
 Seed                             0
 Block size                       1
 ================================ ========
@@ -426,32 +426,26 @@ Models
       :align: center
 
 - click on 'Evaluate' button bellow the outputs table
-
-  - only y0 and y1 are evaluated
+    - only y0 and y1 are evaluated
 
 - select lines 1 and 3 of the outputs table
-
-  - first header item is checked
+    - first header item is checked
 
 - click on Evaluate button
-
-  - fake_var and fake_y0 are evaluated
+    - fake_var and fake_y0 are evaluated
 
 - change x2 value to 1.5 + press enter
+    - outputs values are reinitialized
 
-  - outputs values are reinitialized
-
-- unselect all
+- unselect all outputs
 
 - click on 'Evaluate' button
-
-  - nothing appends
+    - nothing appends
 
 - check fake_var + change its formula to 'x1 +'
 
 - click on 'Evaluate' button
-
-  - error message 'Impossible to evaluate etc.'
+    - error message 'Impossible to evaluate etc.'
 
 - unselect fake_var + select y0, fake_y0 and y1
 
@@ -488,13 +482,9 @@ Designs of experiment
           :align: center
 
       - no selected line
-
       - first and second columns are not editable
-
       - 3 last columns are disabled
-
       - all levels are equal to 1
-
       - check wizard behavior :
 
         - fifth header item : change combo box item to Delta
@@ -504,7 +494,6 @@ Designs of experiment
         - first header item : check all
 
           - third column is disabled
-
           - 3 last columns are enabled
 
         - fifth header item : change combo box item to Levels
@@ -524,7 +513,6 @@ Designs of experiment
           - error message : 'The upper bound be superior to the lower bound'
 
         - fifth header item : change combo box item to Delta
-
         - line 2 : change delta to 15, press enter
 
           - error message : 'Delta must be inferior to the upper bound - the lower bound'
@@ -536,7 +524,6 @@ Designs of experiment
         - check all lines one by one :
 
           - fifth header item is checked
-
           - size of the design of experiment : 76
 
       - cancel
@@ -544,10 +531,8 @@ Designs of experiment
   - right click on design_2 and choose Modify :
 
     - First page :
-
-      - type : Deterministic
-
-      - continue
+        - type : Deterministic
+        - continue
 
     - Second page :
 
@@ -555,28 +540,19 @@ Designs of experiment
           :align: center
 
       - x1 and x2 checked
-
       - lower bounds : [0.5, 0.5]
-
       - upper bounds : [9.5, 9.5]
-
       - levels : [7, 7]
-
-      - fifth header item : change combo box item to Delta :
-
-        - deltas : [1.5, 1.5]
-
+      - fifth header item: change combo box item to Delta
+          - deltas : [1.5, 1.5]
       - size of the design of experiment : 49
-
       - cancel
 
   - right click on design_3 and choose Modify :
 
     - First page :
-
-      - type : Import data
-
-      - continue
+        - type : Import data
+        - continue
 
     - Second page :
 
@@ -584,73 +560,89 @@ Designs of experiment
           :align: center
 
       - Data file : data.csv
-
       - header items : ['x1', '', 'x2', 'x3']
-
       - when changing a combo box item : the error message 'Each variable must be associated with one column' appears
-
       - set the second header item to 'x2' and the third one to ''
-
       - finish
+      - check the design of experiment window is updated : check the values of x2 have changed
 
-        - check the design of experiment window is updated : check the values of x2 have changed
+  - right click on design_4 and choose Modify :
+
+    - First page :
+        - type : Probabilistic
+        - continue
+
+    - Second page :
+
+      .. image:: /developer_manual/validation/design_4_wizard_2nd_page.png
+          :align: center
+
+      - Monte Carlo selected
+      - LHS and Quasi-Monte Carlo disabled: check the tooltip is 'The physical model has not an independent copula'
+      - sample size : 10
+      - seed : 0
+      - cancel
+
+- check the evaluation result window :
 
   - right click on design_3, choose Evaluate :
 
+    .. image:: /developer_manual/validation/design_3_evaluation_wizard.png
+        :align: center
+
+    - click on the Finish button
     - an item 'Evaluation' appears in the tree view
-
     - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
-
     - click on the run button
-
     - the evaluation is launched
-
-  - check result window :
-
-    .. image:: /developer_manual/validation/design_3_Table.png
-        :align: center
-
-    - 3 tabs : Table - Min/Max - Scatter plots
-
-    - Min/Max tab :
-
-      - a list view with 3 variables appears at the left side of the window
-
-      - when changing the variable, the Min/Max tab is updated
-
-    - Scatter plots tab :
-
-      - 3 sub-tabs : Scatter plots - Plot matrix X-X - Plot matrix Y-X
-
-      - when clicking on the tab, the list view has been hidden
-
-      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-
-- right click on 'Definition' sub-item of model2 item and choose New design of experiment :
-
-  - a wizard appears, click on the Continue button of the first page then on the Finish button of the second page
-
-    .. image:: /developer_manual/validation/DOE_wizard_model2.png
-        :align: center
-
-  - right click on the item which has appeared and choose Evaluate :
-
-    - an item 'Evaluation' appears in the tree view
-
-    - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
-
-    - click on 'Run' button
-
     - check result window :
 
-      .. image:: /developer_manual/validation/DOE_result_model2_one_point.png
+      .. image:: /developer_manual/validation/design_3_Table.png
           :align: center
 
-      - 2 tabs : Table - Min/Max
-
+      - 6 tabs : Min/Max - Table - Cobweb plot - Plot matrix - Scatter plots - Parameters
       - Min/Max tab :
 
-        - a list view with a variable appears at the left side of the window
+        - when changing the variable, the Min/Max tab is updated
+
+      - Plots tabs and Table tab :
+
+        - when clicking on the tab, the list view has been hidden
+        - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+        - check the tabs are linked (do several selections in a tab and check the selection is the same in the others tabs)
+
+  - right click on design_5, choose Evaluate :
+
+      - a wizard appears, click on the Finish button
+      - an item 'Evaluation' appears in the tree view
+      - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
+      - click on 'Run' button
+      - check result window :
+
+        .. image:: /developer_manual/validation/DOE_result_model2_one_point.png
+            :align: center
+
+        - 3 tabs : Min/Max - Table - Parameters
+
+        - Min/Max tab :
+
+          - a list view with a variable appears at the left side of the window
+
+  - right click on design_6, choose Evaluate :
+
+      - a wizard appears, click on the Finish button
+      - an item 'Evaluation' appears in the tree view
+      - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
+      - click on 'Run' button
+      - check result window :
+
+        .. image:: /developer_manual/validation/DOE_result_model2_two_points.png
+            :align: center
+
+        - 3 tabs : Min/Max - Table - Parameters
+        - Min/Max tab :
+
+          - a list view with a variable appears at the left side of the window
 
 
 Analyses
@@ -670,7 +662,6 @@ Analyses
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
-
       - click on the 'Run' button
 
       .. image:: /developer_manual/validation/evaluation_window.png
@@ -691,9 +682,7 @@ Analyses
           :align: center
 
       - method : Monte-Carlo
-
       - selected outputs : y0 and y1
-
       - continue
 
     - Second page check the values :
@@ -702,21 +691,15 @@ Analyses
           :align: center
 
       - Accuracy disabled : 0.01
-
       - max time : 16m40s
-
       - max calls : 1000
-
       - block size : 100
-
       - confidence interval disabled : 0.95
-
       - seed : 2
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
-
       - click on the 'Run' button
 
     - check result window :
@@ -725,13 +708,11 @@ Analyses
           :align: center
 
       - left side : 4 variables in the list view
-
-      - right side, 6 tabs : Summary - PDF/CDF - Box plots - Scatter plots - Table - Parameters
-
+      - right side, 8 tabs : Summary - PDF/CDF - Box plots - Table - Cobweb plot - Plot matrix - Scatter plots - Parameters
       - when changing the variable, the tabs are updated
-
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-
+      - check the tabs (Table - Cobweb plot - Plot matrix - Scatter plots) are linked :
+        do several selections in a tab and check the selection is the same in the others tabs
       - Summary tab :
 
         - 2 types of extrema tables: one for the outputs y0 and y1 and one for the inputs x1 and x2
@@ -741,12 +722,7 @@ Analyses
 
         - Moments estimates table has only 2 columns : Estimate and Value
 
-      - Scatter plots tab:
-
-        - 3 sub-tabs : Scatter plots - Plot matrix X-X - Plot matrix Y-X
-
-        - when clicking on the Scatter plots tab, the list view is hidden
-
+      - check on the tabs (Table - Cobweb plot - Plot matrix - Scatter plots - Parameters) : the list view is hidden
       - check tables are well drawn
 
   - Taylor : Taylor item
@@ -757,13 +733,11 @@ Analyses
     - check the values:
 
       - selected outputs : y1 and y0
-
       - method : Taylor expansion
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
-
       - click on the 'Run' button
 
     - check result window :
@@ -772,11 +746,8 @@ Analyses
           :align: center
 
       - left side : 2 variables in the list view
-
       - right side : 1 Summary tab
-
       - check table is well drawn
-
       - when changing the variable, the tabs are updated
 
   - Monte Carlo reliability : MonteCarloReliability item
@@ -787,9 +758,7 @@ Analyses
           :align: center
 
       - limit state : aLimitState
-
       - method : Monte-Carlo
-
       - continue
 
     - Second page check the values :
@@ -798,19 +767,14 @@ Analyses
           :align: center
 
       - Accuracy is disabled : 0.01
-
       - max time : 16m40s
-
       - max calls : 1000
-
       - block size : 100
-
       - seed : 2
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
-
       - click on the 'Run' button
 
     - check result window :
@@ -843,15 +807,10 @@ Analyses
           :align: center
 
       - Accuracy is disabled : 0.01
-
       - max time : 16m40s
-
       - max calls : 1000
-
       - block size : 100
-
       - seed : 2
-
       - continue
 
     - Third page check the values:
@@ -864,26 +823,20 @@ Analyses
       - Physical starting point : 5; 5
 
         - click on button '...'
-
         - set the value of x2 to 5.5
-
         - press Finish button
-
         - Physical starting point : 5; 5.5
 
         .. image:: /developer_manual/validation/FORM_IS_reliability_starting_point_wizard.png
             :align: center
 
       - Number of iterations : 150
-
       - Absolute error : 0.001
-
       - Relative/Residual/Constraint error : 1e-5
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
-
       - click on the 'Run' button
 
     - check result window :
@@ -892,11 +845,8 @@ Analyses
           :align: center
 
       - left side : 1 variable in the list view
-
-      - right side, 5 tabs : Summary - Histogram - Covergence graph - FORM results - Parameters
-
+      - right side, 5 tabs : Summary - Histogram - Convergence graph - FORM results - Parameters
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-
       - FORM results tab :
 
         .. image:: /developer_manual/validation/FORM_IS_reliability_FORM_results_tab.png
@@ -914,7 +864,6 @@ Analyses
           :align: center
 
       - method : FORM
-
       - continue
 
     - Second page check the values :
@@ -923,19 +872,14 @@ Analyses
           :align: center
 
       - Algorithm : Abdo-Rackwitz
-
       - Physical starting point : 5; 5
-
       - Number of iterations : 150
-
       - Absolute error : 0.001
-
       - Relative/Residual/Constraint error : 1e-5
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
-
       - click on the 'Run' button
 
     - check result window :
@@ -944,9 +888,7 @@ Analyses
           :align: center
 
       - left side : 1 variable in the list view
-
       - right side, 4 tabs : Summary - Design point - Sensitivities - Parameters
-
       - check tables are well drawn
 
   - Sobol : Sobol item
@@ -956,9 +898,7 @@ Analyses
     - click on the 'Probabilistic model' item
 
       - click on the 'Correlation' tab of the window which appears
-
       - in the cell x1-x2 : write 0, press enter
-
       - click on the Sobol item, right click on it and choose Modify
 
     - First page check the values :
@@ -967,9 +907,7 @@ Analyses
           :align: center
 
       - selected outputs : y0 and y1
-
       - method : Sobol
-
       - continue
 
     - Second page check the values :
@@ -978,21 +916,15 @@ Analyses
           :align: center
 
       - Accuracy disabled : 0.01
-
       - max time : 16m40s
-
       - max calls : 1000
-
       - block size : 100
-
       - number of calls by iteration : 400
-
       - seed : 2
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
-
       - click on the 'Run' button
 
     - check result window :
@@ -1001,19 +933,13 @@ Analyses
           :align: center
 
       - left side : 2 variables in the list view
-
       - right side, 3 tabs : Indices - Summary - Parameters
-
       - when changing the variable, the Indices tab is updated
-
       - when indices plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-
       - Indices tab :
 
         - can not zoom the plot
-
         - Total indices and Interactions are associated with a warning icon with Tooltip
-
         - Click on the 2 last sections headers of the table :
 
           - the table values are sorted
@@ -1031,9 +957,7 @@ Analyses
           :align: center
 
       - selected outputs : y0 and y1
-
       - method : SRC
-
       - continue
 
     - Second page check the values :
@@ -1042,13 +966,12 @@ Analyses
           :align: center
 
       - sample size : 1000
-
+      - block size : 1
       - seed : 2
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
-
       - click on the 'Run' button
 
     - check result window :
@@ -1057,21 +980,15 @@ Analyses
           :align: center
 
       - left side : 2 variables in the list view
-
       - right side, 2 tabs : Indices - Parameters
-
       - when changing the variable, the Indices tab is updated
-
       - when indices plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-
       - Indices tab :
 
         - can not zoom the plot
-
         - click on the last section header of the table:
 
           - the table values are sorted
-
           - the plot is updated
 
   - Kriging : kriging item
@@ -1082,11 +999,8 @@ Analyses
           :align: center
 
       - design of experiment : design_1
-
       - selected outputs : y0, y1
-
       - method : Kriging
-
       - continue
 
     - Second page check the values :
@@ -1095,17 +1009,11 @@ Analyses
           :align: center
 
       - covariance model : Matérn
-
       - nu : 1.5
-
       - trend : Linear
-
       - compute Q2 : checked
-
       - optimize covariance model parameters : checked
-
       - scale : 1; 1
-
       - amplitude : 1
 
     - on the line Scale click on the button '...'
@@ -1125,19 +1033,7 @@ Analyses
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
-
       - click on the 'Run' button
-
-    - a new item MetaModel_0 appears in the tree view
-
-      - click on its sub-item named 'Definition'
-
-      - change the value of x2 to 1.6
-
-      - click on the Evaluate button
-
-      .. image:: /developer_manual/validation/kriging_new_model.png
-          :align: center
 
     - check the Kriging result window :
 
@@ -1145,17 +1041,21 @@ Analyses
           :align: center
 
       - left side : 2 variables in the list view
-
       - right side, 4 tabs : MetaModel - Results - Validation - Parameters
-
       - when changing the variable, the tabs are updated
-
       - Metamodel tab : only the plot on the tab
-
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-
       - check tables are well drawn
 
+    - right click on the kriging item : choose 'Convert metamodel into physical model'
+
+      - a new item MetaModel_0 appears in the tree view
+      - click on its sub-item named 'Definition'
+      - change the value of x2 to 1.6
+      - click on the Evaluate button
+
+      .. image:: /developer_manual/validation/kriging_new_model.png
+          :align: center
 
     - right click on the sub-item of design_3 named 'Evaluation' and choose New metamodel
 
@@ -1165,9 +1065,7 @@ Analyses
           :align: center
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
-
       - click on the 'Run' button and click immediately on the Stop button
-
       - there is only y0 in the list view at the left side of the result window
 
       .. image:: /developer_manual/validation/design_3_result.png
@@ -1181,11 +1079,8 @@ Analyses
           :align: center
 
       - design of experiment : design_1
-
       - selected outputs : y1
-
       - method : Functional chaos
-
       - continue
 
     - Second page check the values :
@@ -1194,20 +1089,13 @@ Analyses
           :align: center
 
       - degree : 2
-
       - compute Q2 : unchecked
-
       - sparse : checked
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
-
       - click on the 'Run' button
-
-    - a new model appears in the tree view
-
-      - Evaluate it
 
     - check result window :
 
@@ -1215,28 +1103,20 @@ Analyses
           :align: center
 
       - left side : 1 variable in the list view
-
       - right side, 4 tabs : MetaModel - Moments - Sobol indices - Parameters
-
-      - Metamodel tab : plot + R2 table
-
+      - Metamodel tab : plot + Relative error table
       - when changing the variable, the tabs are updated
-
       - when metamodel plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-
       - check tables are well drawn
 
 
   - chaos_2
 
     - click on the 'Run' button
-
     - error message : 'No results are available...'
-
     - right click on the item design_2 and choose Evaluate
-
+    - a wizard appears, click one the Finish button
     - a window appears, click on the 'Run' button
-
     - right click on the item chaos_2 and click on Modify
 
     .. image:: /developer_manual/validation/chaos_2_wizard.png
@@ -1245,25 +1125,18 @@ Analyses
     - First page check the values :
 
       - design of experiment : design_2
-
-      - selected outputs : y0, fake_y0, y1
-
-        - uncheck fake_y0
-
+      - selected outputs : y0, y1
       - method : Functional chaos
 
     - Second page check the values :
 
       - degree : 2
-
       - compute Q2 : unchecked
-
       - sparse : checked
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
-
       - click on the 'Run' button
 
     - check result window :
@@ -1271,16 +1144,11 @@ Analyses
       .. image:: /developer_manual/validation/chaos_2_result.png
           :align: center
 
-      - left side: 1 variable in the list view
-
-      - right side: 4 tabs MetaModel - Moments - Sobol indices - Parameters
-
-      - Metamodel tab : plot + R2 table
-
+      - left side: 2 variables in the list view
+      - right side: 4 tabs MetaModel - Summary - Sobol indices - Parameters
+      - Metamodel tab : plot + Relative error table
       - when changing the variable, the tabs are updated
-
       - when metamodel plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-
       - check tables are well drawn
 
   - Data analysis : DataAnalysis item
@@ -1294,29 +1162,19 @@ Analyses
 
         - x_1 the output is the first item of the list
 
-      - right side, 4 tabs : Summary - PDF/CDF - Box plots - Scatter plots
-
-      - when changing the variable, the tabs are updated
-
+      - right side, 7 tabs : Summary - PDF/CDF - Box plots - Table - Cobweb plot - Plot matrix - Scatter plots
+      - when changing the variable, the tabs (Summary - PDF/CDF - Box plots) are updated
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-
+      - check the tabs (Table - Cobweb plot - Plot matrix - Scatter plots) are linked :
+        do several selections in a tab and check the selection is the same in the others tabs
+      - check on the tabs (Table - Cobweb plot - Plot matrix - Scatter plots - Parameters) : the list view is hidden
       - Summary tab:
 
         - check tables are well drawn
-
         - 2 types of extrema tables: one for the output x_1 and one for inputs x_0, x_1 and x_3
-
         - Moments estimates table has 4 columns : Estimate - Value - Lower bound - Upper bound
-
         - there are bounds only for Mean and Standard deviation
-
         - check probability and quantile spinboxes behavior
-
-      - Scatter plots tab:
-
-        - 3 sub-tabs : Scatter plots - Plot matrix X-X - Plot matrix Y-X
-
-        - when clicking on the tab, the list view is hidden
 
   - Inference analysis : inference item
 
@@ -1326,29 +1184,21 @@ Analyses
     - right click on the item 'inference' and choose 'Modify'. Check the wizard behavior :
 
       - check all / uncheck all
-
       - no wheel event on Add button
-
       - an uncheck line == right side of the wizard disabled
-
       - choose item 'All' in the list of Add button => add all distributions in the list
-
       - remove items in the distributions table : use ctrl key (to select items one by one), use shift key (to select adjacent items)
-
       - select a variable + empty the distributions list + click on Finish
 
         - error message 'At least one distribution etc.'
 
       - unselect all
-
       - select x_0 and add all the distributions
-
       - select x_1 and add the Beta distribution
 
     - click on the Finish button
 
       - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
-
       - click on the 'Run' button
 
     - check result window :
@@ -1357,25 +1207,16 @@ Analyses
           :align: center
 
       - left side : 2 variables in the list view
-
       - right side, 2 tabs : Summary - Parameters
-
       - when changing the variable, the tabs are updated
-
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-
       - the right side of the window contains 2 parts : a distributions list and 3 tabs PDF/CDF - Q-Q Plot - Parameters
-
       - when selecting a distribution, the tab widget is updated
-
       - check tables are well drawn
-
       - select x_0
-
       - select ChiSquare/InverseNormal/LogUniform/Student :
 
         - PDF/CDF and Q-Q Plot tabs are disabled
-
         - the Parameters tab contains an error message
 
         .. image:: /developer_manual/validation/inference_result_error.png
@@ -1384,20 +1225,15 @@ Analyses
     - check the reuse of the inference result by the Probabilistic model :
 
       - go on the Probabilistic model window of model1
-
       - select the x3 variable
-
       - choose Inference result in the combo box of the variable x_3
-
       - a wizard appears, check its behavior (update of the tables when changing the items selection, etc.)
 
         .. image:: /developer_manual/validation/inferenceResultWizard.png
             :align: center
 
       - choose inference/x_0/Weibull, click on Finish
-
       - check that the distribution of x_3 is Weibull now
-
       - unselect x_3
 
   - Copula inference : copulaInference item
@@ -1408,127 +1244,87 @@ Analyses
           :align: center
 
       - left side: 2 sets of variables in the list view
-
       - right side, 1 tab : Summary
-
       - when changing the set of variables, the tabs are updated
-
       - the right side of the window contains 2 parts : a copulas list and 3 tabs : PDF/CDF - Kendall Plot - Parameters
-
       - when selecting a copula, the tab widget is updated
-
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-
       - check tables are well drawn
 
 - save the study, close it, reopen it
-
-  - check the study tree is as follows :
-
-  .. image:: /developer_manual/validation/studyTreeView_at_the_end.png
-            :align: center
 
 Diagrams
 `````````
 
 - open the interface
-
 - create a new OTStudy
-
 - click on 'Symbolic model' button of the window of myOTStudy
-
-  - the item PhysicalModel_0 appears in the tree view
-
-  - a new Physical model diagram window appears in the mdiArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
-
-  - only the 'Model definition' button is enabled
+    - the item PhysicalModel_0 appears in the tree view
+    - a new Physical model diagram window appears in the mdiArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
+    - only the 'Model definition' button is enabled
 
   .. image:: /developer_manual/validation/physicalModelDiagramWindow.png
       :align: center
 
-- click on 'Model definition' button of the diagram : an item 'Definition' appears
-
-  - add an input and an output, set the formula of y0 to X0
-
-  - the 'Model evaluation', 'Design of experiment creation' and 'Probabilistic model definition' buttons of the diagram are enabled
+- click on 'Model definition' button of the diagram: an item 'Definition' appears
+    - add an input and an output, set the formula of y0 to X0
+    - the 'Model evaluation', 'Design of experiment creation' and 'Probabilistic model definition' buttons of the diagram are enabled
 
 - click on the 'Model evaluation' button of the diagram
-
-  - a wizard appears, click on Cancel
+    - a wizard appears, click on Cancel
 
 - click twice on the 'Design of experiment creation' button of the diagram
-
-  - a wizard appears, click on Continue button on the first page
-
-  - on the second page : select X0, write 20 in the 'Levels' column, click on Finish
-
-  - the 'Design of experiment evaluation' button of the diagram is enabled
+    - a wizard appears, click on Continue button on the first page
+    - on the second page : select X0, write 20 in the 'Levels' column, click on Finish
+    - the 'Design of experiment evaluation' button of the diagram is enabled
 
 - click on the 'Design of experiment evaluation' button of the diagram
+    - a wizard appears, there are 2 items in the combo box in Design of experiment group box, click on Finish, an item 'Evaluation' appears, click on it
+    - click on the 'Run' button
+    - the 'MetaModel creation' button of the diagram is enabled
 
-  - a wizard appears, there are 2 items in the combo box in Design of experiment group box, click on Finish, an item 'Evaluation' appears, click on it
+- click on the 'Design of experiment evaluation' button of the diagram
+    - a wizard appears, there is 1 item in the combo box in Design of experiment group box, click on Finish, an item 'Evaluation' appears, click on it
+    - click on the 'Run' button
 
-  - click on the 'Run' button
-
-  - the 'MetaModel creation' button of the diagram is enabled
-
-- re-click on the 'Design of experiment evaluation' button of the diagram
-
-  - an error message appears : 'All the designs of experiment have already been evaluated'
+- click on the 'Design of experiment evaluation' button of the diagram
+    - an error message appears : 'All the designs of experiment have already been evaluated'
 
 - click on the 'MetaModel creation' button of the diagram
-
-  - a wizard appears, click on Continue button then on Finish button
+    - a wizard appears, click on Continue button then on Finish button
 
 - click on the 'Probabilistic model definition' button of the diagram
-
-  - a window appears, select X0
-
-  - the 'Sensitivity', 'Central tendency' and 'Limit state definition' buttons of the diagram are enabled
+    - a window appears, select X0
+    - the 'Sensitivity', 'Central tendency' and 'Limit state definition' buttons of the diagram are enabled
 
 - click on the 'Sensitivity' button of the diagram
-
-  - a wizard appears, click on Cancel
+    - a wizard appears, click on Cancel
 
 - click on the 'Central tendency' button of the diagram
-
-  - a wizard appears, click on Cancel
+    - a wizard appears, click on Cancel
 
 - click twice on the 'Limit state definition' button of the diagram
-
-  - 2 windows appears
-
-  - the 'Reliability' button of the diagram is enabled
+    - 2 windows appears
+    - the 'Reliability' button of the diagram is enabled
 
 - click on the 'Reliability' button of the diagram
-
-  - a wizard appears, there are 2 items in the combo box in Limit state group box, click on Cancel
+    - a wizard appears, there are 2 items in the combo box in Limit state group box, click on Cancel
 
 - click on 'Data model' button of the window of myOTStudy
-
-  - the item dataModel_0 appears in the tree view
-
-  - a new Data model diagram window appears in the mdiArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
-
-  - only the 'Model definition' button is enabled
+    - the item dataModel_0 appears in the tree view
+    - a new Data model diagram window appears in the mdiArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
+    - only the 'Model definition' button is enabled
 
   .. image:: /developer_manual/validation/dataModelDiagramWindow.png
       :align: center
 
-- click on 'Model definition' button of the diagram : an item 'Definition' appears
-
-  - click on the '...' button, import the file data.csv
-
-  - the first three columns are inputs and the last one is an output
-
-  - all the buttons are enabled in the diagram
-
-  - if there are outputs and one or zero input, 'Dependencies inference' buttons is disabled
-
-  - if there are outputs and zero input, 'Metamodel creation' button is disabled
-
-  - if all the combo boxes are set to 'Disable', all the buttons of the diagram are disabled
+- click on 'Model definition' button of the diagram: an item 'Definition' appears
+    - click on the '...' button, import the file data.csv
+    - the first three columns are inputs and the last one is an output
+    - all the buttons are enabled in the diagram
+    - check that 'Dependencies inference' button is enabled only if there are more than one input
+    - check that 'Metamodel creation' button is enabled only if there are at least one output and one input
+    - if all the combo boxes are set to 'Disable', all the buttons of the diagram are disabled
 
 - save the current study, reopen
-
-  - in the window of the 'Definition' item of the data model : click on the reload button
+    - in the window of the 'Definition' item of the data model : click on the reload button
