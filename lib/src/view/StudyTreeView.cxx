@@ -129,6 +129,7 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   OTStudy::SetInstanceObserver(treeViewModel_);
   setModel(treeViewModel_);
   connect(treeViewModel_, SIGNAL(newOTStudyCreated(OTStudyItem*)), this, SLOT(createNewOTStudyWindow(OTStudyItem*)));
+  connect(treeViewModel_, SIGNAL(otStudySubItemsAdded(OTStudyItem*)), this, SLOT(modifyStudySubItemsExpansion(OTStudyItem*)));
 
   // forbid the user to define not valid item's name
 #if QT_VERSION >= 0x050000
@@ -685,6 +686,22 @@ void StudyTreeView::modifyAnalysis(AnalysisItem* item)
       createAnalysisWindow(item);
       delete wizard;
       wizard = 0;
+    }
+  }
+}
+
+
+void StudyTreeView::modifyStudySubItemsExpansion(OTStudyItem* item)
+{
+  setCurrentIndex(item->index());
+  setExpanded(item->index(), true);
+  for (int i = 0; i < item->rowCount(); ++i)
+  {
+    setExpanded(item->child(i)->index(), true);
+    for (int j = 0; j < item->child(i)->rowCount(); ++j)
+    {
+      // collapse models items
+      setExpanded(item->child(i)->child(j)->index(), false);
     }
   }
 }

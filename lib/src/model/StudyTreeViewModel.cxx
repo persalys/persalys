@@ -92,5 +92,7 @@ void StudyTreeViewModel::addOTStudyItem(const OTStudy & otStudy)
     otStudyItem->addAnalysisItem(otStudy.getAnalyses()[i]);
     otStudy.getAnalyses()[i].addObserver(otStudy.getImplementation().get());
   }
+  // signal for StudyTreeView to collapse models items
+  emit otStudySubItemsAdded(otStudyItem);
 }
 }
