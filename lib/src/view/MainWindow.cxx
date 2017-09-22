@@ -23,8 +23,6 @@
 #include "otgui/OTguiMenuBar.hxx"
 #include "otgui/OTguiToolBar.hxx"
 #include "otgui/OTguiStatusBar.hxx"
-#include "otgui/OTguiMdiArea.hxx"
-#include "otgui/WelcomeWindow.hxx"
 
 #include <QSplitter>
 #include <QDockWidget>
@@ -33,6 +31,7 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QSettings>
+#include <QApplication>
 
 #include <PyConsole_Interp.h>
 
@@ -152,8 +151,10 @@ void MainWindow::importPython()
     }
     // load
     {
+      QApplication::setOverrideCursor(Qt::WaitCursor);
       const QString command("execfile(\"" + fileName + "\")");
       pythonConsole_->execAndWait(command);
+      QApplication::restoreOverrideCursor();
     }
   }
 }
