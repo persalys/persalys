@@ -54,6 +54,7 @@ protected:
   void updatePlots();
 
 public slots:
+  void openUrl();
   void updateDistributionWidgets(const QModelIndex & index);
   void updateCurrentVariableDistributionWidgets();
   void updateDistributionParametersWidgets(const QModelIndex & index);

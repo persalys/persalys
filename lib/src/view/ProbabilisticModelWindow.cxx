@@ -41,6 +41,8 @@
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QMessageBox>
+#include <QToolButton>
+#include <QDesktopServices>
 
 using namespace OT;
 
@@ -172,6 +174,13 @@ void ProbabilisticModelWindow::buildInterface()
   connect(pdf_cdfPlotsSettingWidget, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
   rightFrameLayout->addWidget(plotWidget);
 
+  // button to open the OT documentation
+  QToolButton * infoButton = new QToolButton;
+  infoButton->setIcon(QIcon(":/images/documentinfo.png"));
+  infoButton->setToolTip(tr("Open OpenTURNS documentation about the current distribution"));
+  connect(infoButton, SIGNAL(clicked()), this, SLOT(openUrl()));
+  rightFrameLayout->addWidget(infoButton);
+
   //  parameters
   parameterLayout_ = new QVBoxLayout;
   parameterLayout_->addWidget(new QWidget);
@@ -246,6 +255,24 @@ void ProbabilisticModelWindow::buildInterface()
 
   currentIndexTab_ = rootTab->currentIndex();
   setWidget(rootTab);
+}
+
+
+void ProbabilisticModelWindow::openUrl()
+{
+  if (!inputTableView_->currentIndex().isValid())
+    return;
+  const int currentRow = inputTableView_->currentIndex().row();
+  if (currentRow > physicalModel_.getInputs().getSize() || currentRow < 0)
+    return;
+
+  // get current distribution
+  const Input input = physicalModel_.getInputs()[currentRow];
+  const String distributionName = input.getDistribution().getImplementation()->getClassName();
+
+  // open url
+  const QString link = "http://doc.openturns.org/openturns-1.8/sphinx/user_manual/_generated/openturns." + QString(distributionName.c_str()) + ".html";
+  QDesktopServices::openUrl(QUrl(link));
 }
 
 
