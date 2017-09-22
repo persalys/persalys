@@ -169,10 +169,13 @@ void DataAnalysisWindow::fillTabWidget()
 {
   // tab: Summary
   addSummaryTab();
-  // tab: PDF/CDF
-  addPDF_CDFTab();
-  // tab: box plots
-  addBoxPlotTab();
+  if (designOfExperiment_.getSample().getSize() > 1)
+  {
+    // tab: PDF/CDF
+    addPDF_CDFTab();
+    // tab: box plots
+    addBoxPlotTab();
+  }
 #ifdef OTGUI_HAVE_PARAVIEW
   addParaviewWidgetsTabs();
 #else
