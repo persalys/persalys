@@ -58,7 +58,7 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem
   QVBoxLayout * vBoxLayout = new QVBoxLayout(rightSideWidget);
 
   tablesWidget_ = new PhysicalModelWindowWidget(item);
-  connect(tablesWidget_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
+  connect(tablesWidget_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
   vBoxLayout->addWidget(tablesWidget_);
 
   errorMessageLabel_ = new QLabel;

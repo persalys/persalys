@@ -69,7 +69,7 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * i
 
   // variables tables
   PhysicalModelWindowWidget * widget = new PhysicalModelWindowWidget(item);
-  connect(widget, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
+  connect(widget, SIGNAL(errorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
   mainLayout->addWidget(widget);
 
   // error message
