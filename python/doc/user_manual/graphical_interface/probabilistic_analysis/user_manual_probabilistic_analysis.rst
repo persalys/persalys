@@ -169,7 +169,7 @@ For the two simulation methods the user has to define the stop criteria of the a
 - The maximum sampling size, by default equal to 10000 if this criterion is chosen,
   expected to be an integer.
 
-At least one criteria must be selected to validate the window.
+At least one criterion must be selected to validate the window.
 
 In the section **Evaluation parameter** the user can define:
 
@@ -339,7 +339,7 @@ The user has to define the stop criteria of the algorithm.
 - The maximum sampling size, by default equal to 10000 if this criterion is chosen,
   expected to be an integer.
 
-At least one criteria must be selected to validate the window.
+At least one criterion must be selected to validate the window.
 
 In the section **Evaluation parameter** the user can define:
 
@@ -572,9 +572,9 @@ The user has to define the stop criteria of the algorithm.
   expected to be a floating point or an integer, in the interval :math:`\left[0;1 \right]`;
 - The maximum computation time, by default equal to one minute
   (d means days, h means hours, m means minutes, s means seconds);
-- The maximum sampling size, by default equal to 10000 if this criterion is chosen, expected to be an integer.
+- The maximum calls, by default equal to 10000 if this criterion is chosen, expected to be an integer.
 
-At least one criteria must be selected to validate the window.
+At least one criterion must be selected to validate the window.
 
 In the section **Evaluation parameter** the user can define:
 
@@ -585,6 +585,18 @@ In the section **Evaluation parameter** the user can define:
 In the advanced parameters (default: hidden), the user can set:
 
 - The seed of the random generator (default: 0, positive integer expected).
+
+The label number of calls by iteration is updated according to the given value
+of the block size.
+The algorithm build two input samples with a size equal to the block size value
+and combined these samples to build nbInputs other samples
+(nbInputs is the number of input variables).
+
+Number of calls by iteration = (nbInputs + 2) * blockSize
+
+If the maximum calls is a stop criteria, at the last iteration we compute a value of the
+block size according to not exceed the maximum calls.
+See the :ref:`Sensitivity <SobolExample>` section in the example guide.
 
 SRC indices
 ~~~~~~~~~~~
