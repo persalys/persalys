@@ -51,6 +51,16 @@ DesignOfExperimentDefinitionItem::DesignOfExperimentDefinitionItem(const Analysi
 }
 
 
+void DesignOfExperimentDefinitionItem::setData(const QVariant & value, int role)
+{
+  // rename
+  if (role == Qt::EditRole)
+    analysis_.getImplementation()->setName(value.toString().toLocal8Bit().data());
+
+  QStandardItem::setData(value, role);
+}
+
+
 void DesignOfExperimentDefinitionItem::buildActions()
 {
   modifyAnalysis_ = new QAction(QIcon(":/images/run-build.png"), tr("Modify"), this);

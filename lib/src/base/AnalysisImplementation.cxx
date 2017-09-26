@@ -60,6 +60,13 @@ AnalysisImplementation* AnalysisImplementation::clone() const
 }
 
 
+/* Object name accessor */
+void AnalysisImplementation::setName(const String& name)
+{
+  PersistentObject::setName(name);
+}
+
+
 Bool AnalysisImplementation::operator==(const AnalysisImplementation& other) const
 {
   if (this == &other)

@@ -38,6 +38,9 @@ public:
   /** Virtual constructor */
   virtual DesignOfExperimentEvaluation * clone() const;
 
+  /** Object name accessor */
+  virtual void setName(const OT::String& name);
+
   virtual OT::Sample getOriginalInputSample() const;
   void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
 

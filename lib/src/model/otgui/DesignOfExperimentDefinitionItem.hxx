@@ -31,6 +31,8 @@ class OTGUI_API DesignOfExperimentDefinitionItem : public OTguiItem, public Obse
 public:
   DesignOfExperimentDefinitionItem(const Analysis& analysis);
 
+  void setData(const QVariant & value, int role);
+
   OT::Sample getOriginalInputSample() const;
   Analysis getAnalysis() const;
   void updateAnalysis(const Analysis & analysis);

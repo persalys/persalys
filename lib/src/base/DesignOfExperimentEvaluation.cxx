@@ -57,6 +57,15 @@ DesignOfExperimentEvaluation* DesignOfExperimentEvaluation::clone() const
 }
 
 
+/** Object name accessor */
+void DesignOfExperimentEvaluation::setName(const String& name)
+{
+  PersistentObject::setName(name);
+  // the analysis and designOfExperiment_ must have the same name
+  designOfExperiment_.getImplementation()->setName(name);
+}
+
+
 void DesignOfExperimentEvaluation::setDesignOfExperiment(const DesignOfExperiment& designOfExperiment)
 {
   designOfExperiment_ = designOfExperiment;

@@ -37,6 +37,9 @@ public:
   /** Virtual constructor */
   virtual AnalysisImplementation * clone() const;
 
+  /** Object name accessor */
+  virtual void setName(const OT::String& name);
+
   /** Comparison operators */
   OT::Bool operator ==(const AnalysisImplementation & other) const;
   OT::Bool operator !=(const AnalysisImplementation & other) const;
