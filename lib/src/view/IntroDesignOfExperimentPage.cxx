@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to define the type of design of experiment
+ *  @brief QWizardPage to define the type of design of experiments
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -39,7 +39,7 @@ IntroDesignOfExperimentPage::IntroDesignOfExperimentPage(QWidget* parent)
 
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 
-  QGroupBox * methodBox = new QGroupBox(tr("Type of design of experiment"));
+  QGroupBox * methodBox = new QGroupBox(tr("Type of design of experiments"));
   QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
 
   methodGroup_ = new QButtonGroup;

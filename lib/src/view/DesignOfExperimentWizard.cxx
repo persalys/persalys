@@ -35,7 +35,7 @@ DesignOfExperimentWizard::DesignOfExperimentWizard(const Analysis & designOfExpe
 
 void DesignOfExperimentWizard::buildInterface()
 {
-  setWindowTitle(tr("Design of experiment"));
+  setWindowTitle(tr("Design of experiments"));
 
   introPage_ = new IntroDesignOfExperimentPage(this);
   introPage_->initialize(analysis_);

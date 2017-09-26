@@ -57,7 +57,7 @@ DesignOfExperimentWindow::DesignOfExperimentWindow(AnalysisItem* item, QWidget *
 {
   initialize(item);
 
-  setWindowTitle(tr("Design of experiment"));
+  setWindowTitle(tr("Design of experiments"));
 
   buildInterface();
 }
@@ -72,7 +72,7 @@ void DesignOfExperimentWindow::initialize(AnalysisItem* item)
   notEvaluatedInputSample_ = analysis.getNotEvaluatedInputSample();
 
   // parameters widget
-  setParameters(item->getAnalysis(), tr("Design of experiment evaluation parameters"));
+  setParameters(item->getAnalysis(), tr("Design of experiments evaluation parameters"));
 }
 
 

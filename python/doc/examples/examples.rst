@@ -253,8 +253,8 @@ see the OpenTURNS documentation.
 4-1 Definition
 ''''''''''''''
 
-To perform a Min/Max study, choose **New design of experiment** in the
-context menu of the designs of experiment item in the study tree.
+To perform a Min/Max study, choose **New design of experiments** in the
+context menu of the designs of experiments item in the study tree.
 
 .. image:: contextual_menu_DOE.png
     :align: center
@@ -267,7 +267,7 @@ Check the radio button **Deterministic** in the wizard which appears and click o
 
 After clicking a table appears.
 
-By default all the lines are unchecked. Thus the design of experiment contains
+By default all the lines are unchecked. Thus the design of experiments contains
 only one point. Check the **Name** column to make all the inputs variable.
 
 .. image:: deterministic_design_of_experiment.png
@@ -287,7 +287,7 @@ tree and a window with a table is created.
 4-2-1 Input variables
 *********************
 
-The results window contains the design of experiment.
+The results window contains the design of experiments.
 
 .. image:: DOE_inputs.png
     :align: center
@@ -297,7 +297,7 @@ This deterministic design of experiments has 16 points obtained by regularly dis
 the pavement
 :math:`[28350160, 42414817] \times [20166.601, 47021.278] \times [250.5, 259.5] \times [342.97477, 441.26225]`.
 
-Click on **Evaluate** in the context menu of the design of experiment item.
+Click on **Evaluate** in the context menu of the design of experiments item.
 Click on the **Finish** button of the window which appears.
 
 .. image:: doe_eval_wizard.png
@@ -638,7 +638,7 @@ of experiments.
 7-1 Design of experiments
 '''''''''''''''''''''''''
 
-Create a design of experiment by choosing **New design of experiments** in the
+Create a design of experiments by choosing **New design of experiments** in the
 context menu of the **Designs of experiments** item.
 
 .. image:: DOE_proba_wizard.png

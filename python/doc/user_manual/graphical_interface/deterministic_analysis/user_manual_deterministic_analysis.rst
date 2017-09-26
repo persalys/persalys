@@ -5,7 +5,7 @@ User manual - Deterministic analyses
 The OTGui allows the user to launch two types of deterministic analyses:
 
 - Deterministic studies for defined model evaluations;
-- Designs of experiment for model evaluations on a set of input values.
+- Designs of experiments for model evaluations on a set of input values.
 
 .. _deterministicStudy:
 
@@ -65,17 +65,17 @@ the evaluation point and the corresponding output values.
     :align: center
 
 
-2- Designs of experiment
-========================
-Designs of experiment consist in evaluations of the physical model for a defined
+2- Designs of experiments
+=========================
+Designs of experiments consist in evaluations of the physical model for a defined
 set of input values.
 
-New design of experiment can be created through:
+New design of experiments can be created through:
 
 - the context menu of the relevant model in the study tree (item **Definition** and
   item **Probabilistic model** if it exists);
-- the **Design of experiment creation** box of the model diagram
-- the context menu of the **Designs of experiment** item (if it already exists).
+- the **Design of experiments creation** box of the model diagram
+- the context menu of the **Designs of experiments** item (if it already exists).
 
 In the resulting window, the user has to choose between three types of design prior to
 click on the **Continue** button:
@@ -129,7 +129,7 @@ If input variables are correlated, only the Monte Carlo design is available.
 
 The user may set:
 
-- the size of the design of experiment;
+- the size of the design of experiments;
 - the seed the random generator (default: 0, positive integer expected).
 
 2-3 Import data
@@ -138,38 +138,38 @@ The user may set:
 .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentImport.png
     :align: center
 
-The user may also use an external file to import a design of experiment.
+The user may also use an external file to import a design of experiments.
 The user has to set the link between the columns of the imported design and
 the input variables of the physical model by clicking on the column name
 (default : first column for the first input
 variable, second column for the second input variable, etc...)
 
-2-4 Design of experiment input sample
-'''''''''''''''''''''''''''''''''''''
+2-4 Design of experiments input sample
+''''''''''''''''''''''''''''''''''''''
 
 When validating the previous window, a new item is added in the study tree below an item named
-**Designs of experiment**. This item is associated with a window where the input sample of
-the design of experiment appears in a table.
+**Designs of experiments**. This item is associated with a window where the input sample of
+the design of experiments appears in a table.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTableX.png
     :align: center
 
-The context menu of this new item proposes to modify the design of experiment, to evaluate it,
+The context menu of this new item proposes to modify the design of experiments, to evaluate it,
 or to remove it.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentContextMenu.png
     :align: center
 
-2-4 Design of experiment evaluation
-'''''''''''''''''''''''''''''''''''
+2-4 Design of experiments evaluation
+''''''''''''''''''''''''''''''''''''
 
 Definition
 ~~~~~~~~~~
 
-New design of experiment can be evaluated through:
+New design of experiments can be evaluated through:
 
 - the context menu of the relevant design in the study tree;
-- the **Design of experiment evaluation** box of the model diagram
+- the **Design of experiments evaluation** box of the model diagram
 
 When requiring an evaluation a window appears to set:
 
@@ -182,11 +182,11 @@ When requiring an evaluation a window appears to set:
 
 
 When clicking on the box of the model diagram, if the physical model contains several
-not evaluated design of experiment, this window lists all of them in the combo box of the
-**Design of experiment** section.
+not evaluated design of experiments, this window lists all of them in the combo box of the
+**Design of experiments** section.
 
 When validating this window, a new item named **Evaluation** is added in the study tree below
-the design of experiment item.
+the design of experiments item.
 
 Its context menu has two actions:
   - **Modify**: Reopen the setting window to change the evaluation parameters;
@@ -202,7 +202,7 @@ progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
     :align: center
 
 Click on **Start** launches the model evaluation on all the points defined in the
-design of experiment. The user can stop the evaluation by clicking on the **Stop** button.
+design of experiments. The user can stop the evaluation by clicking on the **Stop** button.
 
 Result
 ~~~~~~
@@ -212,7 +212,7 @@ When the analysis is finished or stopped, the following window appears.
 .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentMinMax.png
     :align: center
 
-Tabs present the design of experiment and the analysis of the outputs.
+Tabs present the design of experiments and the analysis of the outputs.
 The **Table** tab, the **Cobweb plot** tab, the **Plot matrix** tab and the **Scatter plots** tab
 are linked. That is to say when the user select some points on one of these representations,
 these points are automatically selected on the others.
@@ -232,7 +232,7 @@ these points are automatically selected on the others.
 
     - The **Failed points** tab containing a table with all the failed points;
 
-    - The **Cobweb plot** tab displaying all the points of the design of experiment.
+    - The **Cobweb plot** tab displaying all the points of the design of experiments.
       Its last column named **Status**, says if the point has failed (status=0) or not (status=1).
 
       .. image:: /user_manual/graphical_interface/deterministic_analysis/failedPointsCobweb.png

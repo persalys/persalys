@@ -53,7 +53,7 @@ When the definition is requiring, a new item named **Definition** appears in the
 Its context menu proposes these actions:
   - **Probabilistic model**: Create stochastic input variables and correlation
   - **Evaluation**: Evaluate the model at a point
-  - **Design of experiment**: Create a new design of experiment
+  - **Design of experiments**: Create a new design of experiments
 
 .. image:: /user_manual/graphical_interface/physical_model/physicalModelDefinitionContextMenu.png
     :align: center

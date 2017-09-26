@@ -201,7 +201,7 @@ Sample GridDesignOfExperiment::generateInputSample(const UnsignedInteger /*nbSim
     }
     catch (std::exception & ex)
     {
-      throw InvalidValueException(HERE) << "Impossible to generate the design of experiment\n " << ex.what();
+      throw InvalidValueException(HERE) << "Impossible to generate the design of experiments\n " << ex.what();
     }
 
     sample *= scale;

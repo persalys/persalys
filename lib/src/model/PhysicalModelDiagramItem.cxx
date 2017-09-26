@@ -127,11 +127,11 @@ void PhysicalModelDiagramItem::update(Observable* source, const String & message
 
 void PhysicalModelDiagramItem::requestDesignOfExperimentEvaluation()
 {
-  // check if there is at least a design of experiment
+  // check if there is at least a design of experiments
   QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "DesignsOfExperimentTitle", 1, Qt::MatchRecursive);
   if (listIndexes.size() < 1)
   {
-    emit emitErrorMessageRequested(tr("There is no design of experiment."));
+    emit emitErrorMessageRequested(tr("There is no design of experiments."));
     return;
   }
   // check if there is already an Evaluation item
@@ -149,17 +149,17 @@ void PhysicalModelDiagramItem::requestDesignOfExperimentEvaluation()
     }
   }
   // emit error message
-  emit emitErrorMessageRequested(tr("All the designs of experiment have already been evaluated.\n"));
+  emit emitErrorMessageRequested(tr("All the designs of experiments have already been evaluated.\n"));
 }
 
 
 void PhysicalModelDiagramItem::requestMetaModelCreation()
 {
-  // check if there is at least a design of experiment
+  // check if there is at least a design of experiments
   QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "DesignsOfExperimentTitle", 1, Qt::MatchRecursive);
   if (listIndexes.size() < 1)
   {
-    emit emitErrorMessageRequested(tr("There is no design of experiment."));
+    emit emitErrorMessageRequested(tr("There is no design of experiments."));
     return;
   }
   // check if there is already an Evaluation item
@@ -174,7 +174,7 @@ void PhysicalModelDiagramItem::requestMetaModelCreation()
         // new analysis
         DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysisItem->getAnalysis().getImplementation().get());
         FunctionalChaosAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("metamodel_"), *doeEval);
-        // emit signal to StudyTreeView to open a 'general' wizard (with a list of designs of experiment)
+        // emit signal to StudyTreeView to open a 'general' wizard (with a list of designs of experiments)
         emit analysisRequested(this, analysis, true);
         return;
       }
@@ -182,7 +182,7 @@ void PhysicalModelDiagramItem::requestMetaModelCreation()
   }
 
   // emit error message
-  emit emitErrorMessageRequested(tr("We have not found a design of experiment with an output sample.\n"));
+  emit emitErrorMessageRequested(tr("We have not found a design of experiments with an output sample.\n"));
 }
 
 
@@ -325,13 +325,13 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
   {
     // search DesignsOfExperiment title
     // parent item of the new doe item
-    analysisTypeItem = getTitleItemNamed(tr("Designs of experiment"), "DesignsOfExperimentTitle");
+    analysisTypeItem = getTitleItemNamed(tr("Designs of experiments"), "DesignsOfExperimentTitle");
 
     // context menu actions
     if (!analysisTypeItem->getActions().size())
     {
-      QAction * newDesignOfExperiment = new QAction(QIcon(":/images/designOfExperiment.png"), tr("New design of experiment"), this);
-      newDesignOfExperiment->setStatusTip(tr("Create a new design of experiment"));
+      QAction * newDesignOfExperiment = new QAction(QIcon(":/images/designOfExperiment.png"), tr("New design of experiments"), this);
+      newDesignOfExperiment->setStatusTip(tr("Create a new design of experiments"));
       connect(newDesignOfExperiment, SIGNAL(triggered()), this, SIGNAL(designOfExperimentRequested()));
       analysisTypeItem->appendAction(newDesignOfExperiment);
     }

@@ -50,9 +50,9 @@ void PhysicalModelDefinitionItem::buildActions()
   newProbabilisticModel_->setStatusTip(tr("Create a new probabilistic model"));
   connect(newProbabilisticModel_, SIGNAL(triggered()), this, SLOT(createProbabilisticModel()));
 
-  // new design of experiment action
-  newDesignOfExperiment_ = new QAction(QIcon(":/images/designOfExperiment.png"), tr("Design of experiment"), this);
-  newDesignOfExperiment_->setStatusTip(tr("Create a new design of experiment"));
+  // new design of experiments action
+  newDesignOfExperiment_ = new QAction(QIcon(":/images/designOfExperiment.png"), tr("Design of experiments"), this);
+  newDesignOfExperiment_->setStatusTip(tr("Create a new design of experiments"));
   connect(newDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(createNewDesignOfExperiment()));
 
   // new analysis actions

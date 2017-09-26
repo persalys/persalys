@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizard to select a design of experiment
+ *  @brief QWizard to select a design of experiments
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -77,15 +77,15 @@ DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Ana
   }
 
   // set window title
-  setWindowTitle(tr("Design of experiment evaluation"));
+  setWindowTitle(tr("Design of experiments evaluation"));
 
   // create a page
   QWizardPage * page = new QWizardPage(this); // create a class QWidget with the doesComboBox_ to reuse it in metamodel wizard
-  page->setTitle(tr("Design of experiment evaluation"));
+  page->setTitle(tr("Design of experiments evaluation"));
   QVBoxLayout * pageLayout = new QVBoxLayout(page);
 
   // label
-  QGroupBox * groupBox = new QGroupBox(tr("Design of experiment"));
+  QGroupBox * groupBox = new QGroupBox(tr("Design of experiments"));
   QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
   pageLayout->addWidget(groupBox);
 

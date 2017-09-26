@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Evaluates the design of experiment
+ *  @brief Evaluates the design of experiments
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *

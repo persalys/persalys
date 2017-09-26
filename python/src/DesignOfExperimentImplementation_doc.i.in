@@ -1,5 +1,5 @@
 %define OTGUI_DesignOfExperiment_doc
-"Design of experiment base class.
+"Design of experiments base class.
 
 Available constructors:
     DesignOfExperiment(*name, physicalModel*)
@@ -40,7 +40,7 @@ OTGUI_DesignOfExperiment_getPhysicalModel_doc
 Returns
 -------
 script : str
-    Python script to rebuild the design of experiment"
+    Python script to rebuild the design of experiments"
 %enddef
 %feature("docstring") OTGUI::DesignOfExperimentImplementation::getPythonScript
 OTGUI_DesignOfExperiment_getPythonScript_doc

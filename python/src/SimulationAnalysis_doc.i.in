@@ -86,10 +86,10 @@ blockSize : positive int
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::SimulationAnalysis::getDesignOfExperiment
-"Design of experiment accessor.
+"Design of experiments accessor.
 
 Returns
 -------
 design : :class:`~otguibase.DesignOfExperiment`
-    Design of experiment, result of the analysis"
+    Design of experiments, result of the analysis"
 

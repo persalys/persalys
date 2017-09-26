@@ -6,7 +6,7 @@ Parameters
 name : str
     Name
 design : :class:`~otguibase.DesignOfExperiment`
-    Design of experiment
+    Design of experiments
 
 Examples
 --------

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItem, observer of design of experiment
+ *  @brief QStandardItem, observer of design of experiments
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *

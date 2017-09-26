@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizard to select a design of experiment
+ *  @brief QWizard to select a design of experiments
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *

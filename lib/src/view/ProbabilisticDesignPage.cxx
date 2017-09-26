@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to define a probabilistic design of experiment
+ *  @brief QWizardPage to define a probabilistic design of experiments
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -41,7 +41,7 @@ ProbabilisticDesignPage::ProbabilisticDesignPage(QWidget* parent)
 
 void ProbabilisticDesignPage::buildInterface()
 {
-  setTitle(tr("Probabilistic design of experiment"));
+  setTitle(tr("Probabilistic design of experiments"));
 
   QGridLayout * pageLayout = new QGridLayout(this);
 

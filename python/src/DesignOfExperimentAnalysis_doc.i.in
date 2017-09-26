@@ -1,12 +1,12 @@
 %feature("docstring") OTGUI::DesignOfExperimentAnalysis
-"Analysis using a design of experiment"
+"Analysis using a design of experiments"
 
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::DesignOfExperimentAnalysis::getDesignOfExperiment
-"Design of experiment accessor.
+"Design of experiments accessor.
 
 Returns
 -------
 model : :class:`~otguibase.DesignOfExperiment`
-    Design of experiment"
+    Design of experiments"

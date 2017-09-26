@@ -179,7 +179,7 @@ continuous distributions.
 .. image:: /user_manual/graphical_interface/data_analysis/inference_wizard.png
     :align: center
 
-The user needs to choose the variables of interest of the design of experiment by checking
+The user needs to choose the variables of interest of the design of experiments by checking
 the corresponding lines in the table at the left side of the window. By default, all of them
 are selected. To validate the window, at least one variable must be selected.
 
@@ -363,10 +363,10 @@ The results window gathers the **Summary** tab for each set of variables.
 
 A new metamodel can be created thanks to:
   - the context menu of a data model **Definition** item;
-  - the context menu of a design of experiment item;
+  - the context menu of a design of experiments item;
   - the **Metamodel creation** box of a model diagram.
 
-The data model or the design of experiment must contain an output sample.
+The data model or the design of experiments must contain an output sample.
 
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_wizard.png
     :align: center
@@ -447,7 +447,7 @@ Kriging
 '''''''''''
 
 When validating the previous window, a new element appears in the study tree below the
-data model item or the design of experiment item.
+data model item or the design of experiments item.
 
 The context menu of this item contains three actions:
   - **Modify**: Reopen the setting window to change the analysis parameters;

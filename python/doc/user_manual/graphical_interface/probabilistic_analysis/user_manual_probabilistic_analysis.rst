@@ -19,7 +19,7 @@ When requiring a probabilistic model, a new item named **Probabilistic model** i
 study tree below the physical model item.
 
 Its context menu contains four actions:
-  - **Design of experiment**: Create a new design of experiment;
+  - **Design of experiments**: Create a new design of experiments;
   - **Limit state**: Create a new limit state;
   - **Central tendency**: Create a new central tendency analysis;
   - **Sensitivity**: Create a new sensitivity analysis;

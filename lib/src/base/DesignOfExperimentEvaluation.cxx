@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Evaluates the design of experiment
+ *  @brief Evaluates the design of experiments
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -86,7 +86,7 @@ void DesignOfExperimentEvaluation::run()
 
     const UnsignedInteger inputSampleSize = getOriginalInputSample().getSize();
     if (!inputSampleSize)
-      throw InvalidArgumentException(HERE) << "The design of experiment input sample is empty";
+      throw InvalidArgumentException(HERE) << "The design of experiments input sample is empty";
 
     if (getBlockSize() > inputSampleSize)
       throw InvalidValueException(HERE) << "The block size (" << getBlockSize()
@@ -173,7 +173,7 @@ void DesignOfExperimentEvaluation::run()
     if (!outputSample.getSize())
       throw InvalidRangeException(HERE) << "All the evaluations have failed. Check the model.";
 
-    // set design of experiment
+    // set design of experiments
     designOfExperiment_.setInputSample(inputSample);
     designOfExperiment_.setOutputSample(outputSample);
 

@@ -177,7 +177,7 @@ void ProbabilisticModelWindow::buildInterface()
   // button to open the OT documentation
   QToolButton * infoButton = new QToolButton;
   infoButton->setIcon(QIcon(":/images/documentinfo.png"));
-  infoButton->setToolTip(tr("Open OpenTURNS documentation about the current distribution"));
+  infoButton->setToolTip(tr("Open the OpenTURNS documentation"));
   connect(infoButton, SIGNAL(clicked()), this, SLOT(openUrl()));
   rightFrameLayout->addWidget(infoButton);
 

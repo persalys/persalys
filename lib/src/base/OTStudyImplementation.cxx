@@ -112,8 +112,8 @@ void OTStudyImplementation::clear()
   for (UnsignedInteger i = 0; i < analyses_.getSize(); ++i)
   {
     DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(analyses_[i].getImplementation().get());
-    // we do not want to remove the design of experiment for now
-    // some analyses can be dependant of the design of experiment: we need to remove them before the design of experiment
+    // we do not want to remove the design of experiments for now
+    // some analyses can be dependant of the design of experiments: we need to remove them before the design of experiments
     if (!doeEval)
     {
       analyses_[i].getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
@@ -124,7 +124,7 @@ void OTStudyImplementation::clear()
   for (UnsignedInteger i = 0; i < analyses_.getSize(); ++i)
   {
     DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(analyses_[i].getImplementation().get());
-    // remove the design of experiment for now
+    // remove the design of experiments for now
     if (doeEval)
     {
       doeEval->notifyAndRemove("analysisRemoved", "Analysis");
@@ -446,7 +446,7 @@ void OTStudyImplementation::add(const Analysis& analysis)
         }
       }
       if (!doeFound)
-        throw InvalidArgumentException(HERE) << "The analysis has been created with a design of experiment not belonging to the study.";
+        throw InvalidArgumentException(HERE) << "The analysis has been created with a design of experiments not belonging to the study.";
     }
     else
     {

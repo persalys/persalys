@@ -44,9 +44,9 @@ ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel & physicalMod
 
 void ProbabilisticModelItem::buildActions()
 {
-  // new design of experiment action
-  newDesignOfExperiment_ = new QAction(QIcon(":/images/designOfExperiment.png"), tr("Design of experiment"), this);
-  newDesignOfExperiment_->setStatusTip(tr("Create a new design of experiment"));
+  // new design of experiments action
+  newDesignOfExperiment_ = new QAction(QIcon(":/images/designOfExperiment.png"), tr("Design of experiments"), this);
+  newDesignOfExperiment_->setStatusTip(tr("Create a new design of experiments"));
   connect(newDesignOfExperiment_, SIGNAL(triggered()), this, SIGNAL(designOfExperimentRequested()));
 
   // new limit state action

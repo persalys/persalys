@@ -37,7 +37,7 @@ MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis& analysis, const
 {
   const DesignOfExperiment doe = dynamic_cast<DesignOfExperimentAnalysis*>(analysis_.getImplementation().get())->getDesignOfExperiment();
 
-  // set list of design of experiment items
+  // set list of design of experiments items
   QList < DesignOfExperimentDefinitionItem* > doeList;
   if (isGeneralWizard)
   {

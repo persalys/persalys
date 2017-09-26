@@ -460,8 +460,8 @@ Models
       :align: center
 
 
-Designs of experiment
-`````````````````````
+Designs of experiments
+``````````````````````
 
 - check the wizards:
 
@@ -519,12 +519,12 @@ Designs of experiment
 
         - line 2 : change delta to 0.5, press enter
 
-          - size of the design of experiment : 19
+          - size of the design of experiments : 19
 
         - check all lines one by one :
 
           - fifth header item is checked
-          - size of the design of experiment : 76
+          - size of the design of experiments : 76
 
       - cancel
 
@@ -545,7 +545,7 @@ Designs of experiment
       - levels : [7, 7]
       - fifth header item: change combo box item to Delta
           - deltas : [1.5, 1.5]
-      - size of the design of experiment : 49
+      - size of the design of experiments : 49
       - cancel
 
   - right click on design_3 and choose Modify :
@@ -564,7 +564,7 @@ Designs of experiment
       - when changing a combo box item : the error message 'Each variable must be associated with one column' appears
       - set the second header item to 'x2' and the third one to ''
       - finish
-      - check the design of experiment window is updated : check the values of x2 have changed
+      - check the design of experiments window is updated : check the values of x2 have changed
 
   - right click on design_4 and choose Modify :
 
@@ -998,7 +998,7 @@ Analyses
       .. image:: /developer_manual/validation/kriging_wizard_1st_page.png
           :align: center
 
-      - design of experiment : design_1
+      - design of experiments : design_1
       - selected outputs : y0, y1
       - method : Kriging
       - continue
@@ -1078,7 +1078,7 @@ Analyses
       .. image:: /developer_manual/validation/chaos_1_wizard_1st_page.png
           :align: center
 
-      - design of experiment : design_1
+      - design of experiments : design_1
       - selected outputs : y1
       - method : Functional chaos
       - continue
@@ -1124,7 +1124,7 @@ Analyses
 
     - First page check the values :
 
-      - design of experiment : design_2
+      - design of experiments : design_2
       - selected outputs : y0, y1
       - method : Functional chaos
 
@@ -1268,27 +1268,27 @@ Diagrams
 
 - click on 'Model definition' button of the diagram: an item 'Definition' appears
     - add an input and an output, set the formula of y0 to X0
-    - the 'Model evaluation', 'Design of experiment creation' and 'Probabilistic model definition' buttons of the diagram are enabled
+    - the 'Model evaluation', 'Design of experiments creation' and 'Probabilistic model definition' buttons of the diagram are enabled
 
 - click on the 'Model evaluation' button of the diagram
     - a wizard appears, click on Cancel
 
-- click twice on the 'Design of experiment creation' button of the diagram
+- click twice on the 'Design of experiments creation' button of the diagram
     - a wizard appears, click on Continue button on the first page
     - on the second page : select X0, write 20 in the 'Levels' column, click on Finish
-    - the 'Design of experiment evaluation' button of the diagram is enabled
+    - the 'Design of experiments evaluation' button of the diagram is enabled
 
-- click on the 'Design of experiment evaluation' button of the diagram
-    - a wizard appears, there are 2 items in the combo box in Design of experiment group box, click on Finish, an item 'Evaluation' appears, click on it
+- click on the 'Design of experiments evaluation' button of the diagram
+    - a wizard appears, there are 2 items in the combo box in Design of experiments group box, click on Finish, an item 'Evaluation' appears, click on it
     - click on the 'Run' button
     - the 'MetaModel creation' button of the diagram is enabled
 
-- click on the 'Design of experiment evaluation' button of the diagram
-    - a wizard appears, there is 1 item in the combo box in Design of experiment group box, click on Finish, an item 'Evaluation' appears, click on it
+- click on the 'Design of experiments evaluation' button of the diagram
+    - a wizard appears, there is 1 item in the combo box in Design of experiments group box, click on Finish, an item 'Evaluation' appears, click on it
     - click on the 'Run' button
 
-- click on the 'Design of experiment evaluation' button of the diagram
-    - an error message appears : 'All the designs of experiment have already been evaluated'
+- click on the 'Design of experiments evaluation' button of the diagram
+    - an error message appears : 'All the designs of experiments have already been evaluated'
 
 - click on the 'MetaModel creation' button of the diagram
     - a wizard appears, click on Continue button then on Finish button

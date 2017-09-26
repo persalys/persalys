@@ -35,9 +35,9 @@ result : :class:`~otguibase.CopulaInferenceSetResult`
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::CopulaInferenceResult::getDesignOfExperiment
-"Design of experiment accessor.
+"Design of experiments accessor.
 
 Returns
 -------
 design : :class:`~otguibase.DesignOfExperiment`
-    Design of experiment"
+    Design of experiments"

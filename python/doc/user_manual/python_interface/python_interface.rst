@@ -86,8 +86,8 @@ Reliability analysis
     FORMAnalysis
     SimulationReliabilityResult
 
-Design of experiment
---------------------
+Design of experiments
+---------------------
 
 .. currentmodule:: otguibase
 

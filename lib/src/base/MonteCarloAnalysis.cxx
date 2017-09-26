@@ -184,7 +184,7 @@ void MonteCarloAnalysis::run()
     // set results
     if (outputSample.getSize())
     {
-      // set design of experiment
+      // set design of experiments
       designOfExperiment_.setInputSample(effectiveInputSample);
       designOfExperiment_.setOutputSample(outputSample);
       // compute data analysis

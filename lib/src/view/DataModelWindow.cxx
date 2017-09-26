@@ -47,7 +47,7 @@ DataModelWindow::DataModelWindow(DataModelDefinitionItem * item, QWidget * paren
 {
   dataModel_ = dynamic_cast<DataModel*>(&*item->getDesignOfExperiment().getImplementation());
   if (!dataModel_)
-    throw InvalidArgumentException(HERE) << "DataModelWindow: the design of experiment must be a DataModel";
+    throw InvalidArgumentException(HERE) << "DataModelWindow: the design of experiments must be a DataModel";
 
   connect(item, SIGNAL(variablesChanged()), this, SLOT(updateTableView()));
 
