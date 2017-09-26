@@ -27,7 +27,6 @@
 #include <QSplitter>
 #include <QDockWidget>
 #include <QMessageBox>
-#include <QPushButton>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QSettings>
@@ -61,7 +60,6 @@ MainWindow::MainWindow()
 #endif
 
   buildInterface();
-  buildActions();
 }
 
 
@@ -107,16 +105,12 @@ void MainWindow::buildInterface()
 }
 
 
-void MainWindow::buildActions()
-{
-}
-
-
 void MainWindow::importPython()
 {
   if (mainWidget_->getStudyTree()->model()->rowCount())
   {
-    int ret = QMessageBox::warning(this, tr("Warning"),
+    int ret = QMessageBox::warning(this,
+                                   tr("Warning"),
                                    tr("Cannot import a Python script when other studies are opened.\nDo you want to continue and close the other studies?"),
                                    QMessageBox::Cancel | QMessageBox::Ok,
                                    QMessageBox::Ok);
@@ -134,9 +128,10 @@ void MainWindow::importPython()
   QString currentDir = settings.value("currentDir").toString();
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
-  const QString fileName = QFileDialog::getOpenFileName(this, tr("Import Python..."),
-                           currentDir,
-                           tr("Python source files (*.py)"));
+  const QString fileName = QFileDialog::getOpenFileName(this,
+                                                        tr("Import Python..."),
+                                                        currentDir,
+                                                        tr("Python source files (*.py)"));
 
   if (!fileName.isEmpty())
   {
@@ -146,7 +141,8 @@ void MainWindow::importPython()
     // check
     if (!file.open(QFile::ReadOnly))
     {
-      QMessageBox::warning(this, tr("Warning"),
+      QMessageBox::warning(this,
+                           tr("Warning"),
                            tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
     }
     // load
