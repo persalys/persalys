@@ -152,7 +152,7 @@ The window proposes two simulation methods:
   - FORM - Importance sampling : the FORM algorithm starts from the result of the Importance sampling analysis
 
 and one approximation method:
-  - First order analysis (FORM)
+  - First Order Reliability Method (FORM)
 
 Simulation methods
 ~~~~~~~~~~~~~~~~~~
