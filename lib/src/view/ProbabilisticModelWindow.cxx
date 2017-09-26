@@ -43,6 +43,7 @@
 #include <QMessageBox>
 #include <QToolButton>
 #include <QDesktopServices>
+#include <QUrl> // for qt4
 
 using namespace OT;
 
@@ -263,7 +264,7 @@ void ProbabilisticModelWindow::openUrl()
   if (!inputTableView_->currentIndex().isValid())
     return;
   const int currentRow = inputTableView_->currentIndex().row();
-  if (currentRow > physicalModel_.getInputs().getSize() || currentRow < 0)
+  if (currentRow > (int)physicalModel_.getInputs().getSize() || currentRow < 0)
     return;
 
   // get current distribution
