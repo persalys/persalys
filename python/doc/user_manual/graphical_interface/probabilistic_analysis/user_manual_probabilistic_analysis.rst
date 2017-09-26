@@ -48,6 +48,10 @@ This item is associated with a window which has two tabs:
     If a wrong value is used, it will return to its previous value and an error message will appear at the bottom
     of the window.
 
+    .. |infoButton| image:: /user_manual/graphical_interface/probabilistic_analysis/documentinfo.png
+
+    The icon |infoButton| is an hyperlink to the OpenTURNS documentation.
+
     There are different ways to set the parameters of the LogNormal, Weibull and Gumbel distributions.
     To select the good one, click on the **Type** select button.
 
