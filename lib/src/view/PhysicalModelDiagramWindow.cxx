@@ -300,6 +300,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 
   // -- text area --
   QTextEdit * textArea = new QTextEdit;
+  textArea->setReadOnly(true);
   connect(modelDefinitionButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   connect(modelEvaluationButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   connect(doeCreationButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
