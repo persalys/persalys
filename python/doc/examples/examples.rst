@@ -18,14 +18,14 @@ a- Inputs
 
 - Stochastic variables:
 
-====== ======================== ===============================
+====== ======================== ==============================================
  Name  Description              Distribution
-====== ======================== ===============================
-E      Young's modulus          Beta(0.93, 3.2, 2.8e7, 4.8e7)
-F      Charge applied           LogNormal(30000., 9000., 15000)
-L      Length                   Uniform(250, 260)
-I      Section modulus          Beta(2.5, 4., 3.1e2, 4.5e2))
-====== ======================== ===============================
+====== ======================== ==============================================
+E      Young's modulus          Beta(r=0.93, t=3.2, a=2.8e7, b=4.8e7)
+F      Charge applied           LogNormal(mu=30000., sigma=9000., gamma=15000)
+L      Length                   Uniform(a=250, b=260)
+I      Section modulus          Beta(r=2.5, t=4., a=3.1e2, b=4.5e2))
+====== ======================== ==============================================
 
 The input variables :math:`L` and :math:`I` are dependent. The dependence structure
 is modelised by a Normal copula (the only copula available for now in the GUI).
@@ -88,24 +88,21 @@ in the physical model.
     :align: center
 
 Fill the tables and rename variables to correspond to the physical model.
+Click on the **Evaluate** button below the output variables table in order to check
+if the formula is not badly defined.
+
+.. _evaluationresult:
 
 .. image:: good_defined_physicalModel.png
     :align: center
 
-.. _evaluationresult:
 
-Click on the **Evaluate** button below the output variables table in order to check
-if the formula is not badly defined.
-
-.. image:: evaluation_output_PM_window.png
-    :align: center
-
-The value of the output :math:`y` must be :math:`13.0208` if:
+The value of the output :math:`y` must be :math:`13.8178` if:
 
 ======= ======= ======= =======
 E       F       L       I
 ======= ======= ======= =======
-3e7     3e4     250     400
+3e7     3e4     255     400
 ======= ======= ======= =======
 
 
@@ -223,7 +220,7 @@ Click on the **Continue** button to parametrize the Monte Carlo method.
 .. image:: mc_2nd_page_wizard.png
     :align: center
 
-To see advanced parameters, collapse the **Advanced parameters** group.
+To see advanced parameters, expand the **Advanced parameters** group.
 
 Click on **Finish** button. A new item with a default name appears in the study
 tree and a window is created.
@@ -253,8 +250,8 @@ see the OpenTURNS documentation.
 4-1 Definition
 ''''''''''''''
 
-To perform a Min/Max study, choose **New design of experiments** in the
-context menu of the designs of experiments item in the study tree.
+To perform a Min/Max study, choose **Design of experiments** in the
+context menu of the probabilistic model item in the study tree.
 
 .. image:: contextual_menu_DOE.png
     :align: center
@@ -334,7 +331,7 @@ see the OpenTURNS documentation.
 5-1-1 Definition
 ****************
 
-To perform a sensibility analysis with the Sobol method, the input variables must
+To perform a sensitivity analysis with the Sobol method, the input variables must
 be independent (In the Correlation tab of the probabilistic model window replace
 -0.2 by 0). Choose **Sensitivity** in the
 context menu of the probabilistic model item in the study tree.
@@ -348,7 +345,7 @@ Check the radio button **Sobol** in the wizard which appears.
     :align: center
 
 Click on **Continue** button. The new page enables to parametrize the Sobol
-method. To see advanced parameters, collapse the **Advanced parameters** group.
+method. To see advanced parameters, expand the **Advanced parameters** group.
 
 .. image:: sobol_parameters.png
     :align: center
@@ -413,8 +410,9 @@ see the OpenTURNS documentation.
 5-1-1 Definition
 ****************
 
-To perform a sensitivity analysis with the SRC method, choose
-**Sensitivity** in the
+To perform a sensitivity analysis with the SRC method, the input variables must
+be independent (In the Correlation tab of the probabilistic model window replace
+-0.2 by 0), then choose **Sensitivity** in the
 context menu of the probabilistic model item in the study tree.
 
 .. image:: contextual_menu_proba_model.png
@@ -426,7 +424,7 @@ Check the radio button **SRC** in the wizard which appears.
     :align: center
 
 Click on **Continue** button. The new page enables to parametrize the SRC
-method. To see advanced parameters, collapse the **Advanced parameters** group.
+method. To see advanced parameters, expand the **Advanced parameters** group.
 
 .. image:: SRC_parameters.png
     :align: center
@@ -447,10 +445,10 @@ for each variable. These values are plotted in a graphic.
 .. image:: SRC_results_window.png
     :align: center
 
-To perform the following analyses use again a Gaussian copula.
-
 6- Threshold exceedance
 ```````````````````````
+
+To perform the following analyses use again a Gaussian copula.
 
 6-1 Limit state
 '''''''''''''''
@@ -649,6 +647,9 @@ Select **Probabilistic** and click on **Continue** button.
 .. image:: DOE_probaParamPage.png
     :align: center
 
+The methods LHS and Quasi-Monte Carlo are not available because the model
+contains dependent stochastic input variables.
+
 Keep the default values. Click on **Finish** button 
 
 Choose **Evaluate** in the context menu of the new design of experiments item.
@@ -662,6 +663,10 @@ appears.
 For more details on the computation of a metamodel by the method of
 `Functional chaos <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid6.xhtml#docref_SurfRep_PCBasis>`_
 see the OpenTURNS documentation.
+
+The functional chaos enables to compute the Sobol indices.
+But these indices are not usable if the stochastic variables are correlated.
+So in the Correlation tab of the probabilistic model window replace -0.2 by 0.
 
 7-2-1 Definition
 ****************
@@ -769,5 +774,102 @@ the trend coefficients.
 
 .. image:: kriging_result.png
     :align: center
+
+
+8- Data analysis
+````````````````
+
+8-1 Data
+''''''''
+
+Use again a Gaussian copula.
+Create a design of experiments by choosing **New design of experiments** in the
+context menu of the **Designs of experiments** item.
+
+.. image:: DOE_proba_wizard.png
+    :align: center
+
+Select **Probabilistic** and click on **Continue** button.
+
+.. image:: DOE_probaParamPage.png
+    :align: center
+
+Set the sample size to 1000. Click on **Finish** button 
+
+Right click on the generated table. Choose on **Export** on the context menu which appears.
+Save the data.
+
+8-2 Data model
+''''''''''''''
+
+On the study window (or in the context menu of the study item), click on **Data model**.
+
+A new item and a new window appear:
+
+.. image:: dataModel_diagram.png
+    :align: center
+
+Click on the **Model definition** box of the diagram.
+
+A window is created to define the model. Click on the **...** button and load
+the file. Define the last variable as an input by finding the right item
+in the combo box on the line **Type**.
+
+.. image:: dataModel_definition.png
+    :align: center
+
+8-3 Analysis
+''''''''''''
+
+Choose **Data analysis** in the context menu of the sub-item **Definition** of the model.
+
+Launch the analysis.
+
+The following window appears.
+
+.. image:: dataAnalysisResult.png
+    :align: center
+
+
+9- Inference
+````````````
+
+9-1 Definition
+''''''''''''''
+
+Choose **Inference** in the context menu of the sub-item **Definition** of the model.
+
+In the window, uncheck the variable **L**. Add all the distributions for the other
+variables by choosing the **All** item in the combo box **Add**.
+
+.. image:: inferenceWizard.png
+    :align: center
+
+Click on the **Finish** button.
+
+Launch the analysis.
+
+9-2 Results
+'''''''''''
+
+.. image:: inferenceResultWindow.png
+    :align: center
+
+We can see the Beta distribution is the first accepted distribution for the variable **E**.
+(and its the distribution which has enabled to generate the sample of **E**)
+
+
+10- Dependencies inference
+``````````````````````````
+
+Choose **Dependencies inference** in the context menu of the sub-item **Definition** of the model.
+
+.. image:: dep_inferenceResultWindow.png
+    :align: center
+
+.. image:: dep_inferenceParamResult.png
+    :align: center
+
+We can see in the **Parameters** tab that the variables **L** and **I** are correlated.
 
 
