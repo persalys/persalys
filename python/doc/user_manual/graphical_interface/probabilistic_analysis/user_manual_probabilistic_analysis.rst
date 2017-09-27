@@ -13,9 +13,9 @@ New probabilistic model can be created through:
 - the context menu of the **Definition** item of the relevant physical model in the study tree;
 - the **Probabilistic model definition** box of the model diagram
 
-A physical model can contained only one probabilistic model.
+A physical model can contain only one probabilistic model.
 
-When requiring a probabilistic model, a new item named **Probabilistic model** is added in the
+At the creation of a probabilistic model, a new item named **Probabilistic model** is added in the
 study tree below the physical model item.
 
 Its context menu contains four actions:
@@ -43,7 +43,7 @@ This item is associated with a window which has two tabs:
         :align: center
 
     The right side of the probabilistic model window is updated depending of the selected variable and
-    ites distribution. It presents the parameters of the distribution together with truncation parameters.
+    its distribution. It shows the parameters of the distribution together with truncation parameters.
     The values are expected to be floating points or integers, with respect to the distribution support.
     If a wrong value is used, it will return to its previous value and an error message will appear at the bottom
     of the window.
@@ -76,7 +76,7 @@ This item is associated with a window which has two tabs:
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/inference_resultWizard.png
         :align: center
 
-    The user can search the wanted analysis result with the **Inference analysis** combo box.
+    The user can look for an analysis result with the **Inference analysis** combo box.
     Then the user can choose a result of a variable with the **Variable** combo box.
     The user can choose one distribution in the displayed list. The right side of the window displays
     the current distribution parameters.
@@ -116,7 +116,7 @@ When creating a limit state a new element is added in the study tree below the i
     :align: center
 
 Its context menu contains two actions:
-  - **Threshold exceedance**: Create a nex threshold exceedance analysis;
+  - **Threshold exceedance**: Create a new threshold exceedance analysis;
   - **Remove**: Remove the limit state and all the analyses depending on it
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateContextMenu.png
@@ -146,7 +146,7 @@ The user can require a computation of the probability of failure relative to the
   - the context menu of the relevant limit state;
   - the **Reliability** box of the physical model diagram.
 
-When requiring this analysis the following window appears to define its paremeters.
+When requiring this analysis the following window appears to define its parameters.
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilityAnalysis.png
     :align: center
@@ -189,14 +189,14 @@ Approximation method
 
 For the FORM method the user has to define optimization parameters:
 
-- The algortihm method: Abdo-Rackwitz, Cobyla (default), SQP
+- The algorithm method: Abdo-Rackwitz, Cobyla (default), SQP
 - The starting point: by default it is the means of the distributions of the stochastic inputs
 
 In the advanced parameters (default: hidden), the user may also set the stop criteria of the
-optimisation:
+optimization:
 
 - The maximum number of iterations (default: 100, positive integer expected)
-- The errors: Absolute, relative, residual and constraint errors (default: 1e-5, positive float expected)
+- The errors: absolute, relative, residual and constraint errors (default: 1e-5, positive float expected)
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilityApprox.png
     :align: center
@@ -269,7 +269,7 @@ The result window has 4 tabs:
     - The failure probability and the Hasofer reliability index
     - The optimization stop criteria value: 
         - The number of iterations;
-        - The errors: Absolute, relative, residual and constraint errors.
+        - The errors: absolute, relative, residual and constraint errors.
     - The number of calls of the model
 
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilityFORMSummary.png
@@ -311,16 +311,16 @@ New central tendency analysis can be created thanks to:
   - the **Central tendency** box of the physical model diagram;
   - the context menu of the **Central tendency** item (if it already exists).
 
-When requiring this analysis the following window appears to define its paremeters.
+When requiring this analysis the following window appears to define its parameters.
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendency.png
     :align: center
 
 Two methods are available:
-  - Monte carlo sampling;
+  - Monte Carlo sampling;
   - Taylor expansions (second order).
 
-The user can choose the ouputs to analyse by clicking on the button **-- Select Outputs --**
+The user can choose the outputs to analyse by clicking on the button **-- Select Outputs --**
 at the top of the window:
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png
@@ -390,7 +390,7 @@ Monte Carlo
 ~~~~~~~~~~~
 
 The **Table** tab, the **Cobweb plot** tab, the **Plot matrix** tab and the **Scatter plots** tab
-are linked. That is to say when the user select some points on one of these representations,
+are linked. It means that when the user select some points on one of these representations,
 these points are automatically selected on the others.
 
 At the left of the result window the section **Variables** enables the user to choose the result to display.
@@ -548,7 +548,7 @@ New sensitivity analysis can be created thanks to:
 
 The input variables must be independent to perform a sensitivity analysis.
 
-When requiring this analysis the following window appears to define its paremeters.
+When requiring this analysis the following window appears to define its parameters.
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisMethods.png
     :align: center
@@ -558,7 +558,7 @@ Two types of sensitivity indices are available:
 - Sobol
 - SRC (Standardised Regression Coefficient)
 
-The user can choose the ouputs to analyse by clicking on the button **-- Select Outputs --**
+The user can choose the outputs to analyse by clicking on the button **-- Select Outputs --**
 at the top of the window:
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png
@@ -592,7 +592,7 @@ In the advanced parameters (default: hidden), the user can set:
 
 The label number of calls by iteration is updated according to the given value
 of the block size.
-The algorithm build two input samples with a size equal to the block size value
+The algorithm generates two input samples with a size equal to the block size value
 and combined these samples to build nbInputs other samples
 (nbInputs is the number of input variables).
 

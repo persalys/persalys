@@ -29,7 +29,7 @@ for which the evaluation has to be performed. The values are expected
 to be floating points or integer. The default values are the ones defined in the physical
 model window.
 
-The user can choose the ouputs to evaluate by clicking on the button **-- Select outputs --**
+The user can choose the outputs to evaluate by clicking on the button **-- Select outputs --**
 at the top of the window:
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png
@@ -214,7 +214,7 @@ When the analysis is finished or stopped, the following window appears.
 
 Tabs present the design of experiments and the analysis of the outputs.
 The **Table** tab, the **Cobweb plot** tab, the **Plot matrix** tab and the **Scatter plots** tab
-are linked. That is to say when the user select some points on one of these representations,
+are linked. It means that when the user select some points on one of these representations,
 these points are automatically selected on the others.
 
 - The **Min/Max** tab summarizes the result of the design. The minimum and maximum values

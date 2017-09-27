@@ -78,7 +78,7 @@ QVariant DifferentiationTableModel::data(const QModelIndex& index, int role) con
     if (index.column() == 0)
       return QString::fromUtf8(physicalModel_.getInputs()[index.row()].getName().c_str());
     else if (index.column() == 1)
-      return QString::number(physicalModel_.getInputs()[index.row()].getFiniteDifferenceStep(), 'g', StudyTreeViewModel::DEFAULT_SIGNIFICANT_DIGITS);
+      return QString::number(physicalModel_.getInputs()[index.row()].getFiniteDifferenceStep(), 'g', StudyTreeViewModel::DefaultSignificantDigits);
   }
 
   return QVariant();

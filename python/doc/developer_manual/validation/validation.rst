@@ -155,7 +155,7 @@ This test-case originates from [ProtoOTGUI2014]_ and can be found in python/test
 ====== ======================== ===================================
 Q      River flow               Gumbel(alpha=0.00179211, beta=1013)
 Ks     Manning-Strickler factor Normal(30, 7.5)
-Zm     River's depth uptream    Uniform(54,56)
+Zm     River's depth upstream   Uniform(54,56)
 Zv     River's depth downstream Uniform(49, 51)
 ====== ======================== ===================================
 

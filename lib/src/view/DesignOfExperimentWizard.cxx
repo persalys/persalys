@@ -63,9 +63,11 @@ int DesignOfExperimentWizard::nextId() const
   {
     case Page_Intro:
       return introPage_->nextId();
-    case Page_Deterministic:
-    case Page_Probabilistic:
+    case Page_Deterministic:/* Falls through. */
+    case Page_Probabilistic:/* Falls through. */
     case Page_Import:
+      return -1;
+    default:
       return -1;
   }
 }

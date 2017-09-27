@@ -45,7 +45,7 @@ When the analysis is finished or stopped, the below window appears.
 At the left of the result window the section **Variables** enables the user to choose the result to display.
 The right side of the window contains 4 tabs presenting the analysis of the outputs.
 The **Table** tab, the **Cobweb plot** tab, the **Plot matrix** tab and the **Scatter plots** tab
-are linked. That is to say when the user select some points on one of these representations,
+are linked. It means that when the user select some points on one of these representations,
 these points are automatically selected on the others.
 
 - The **Summary** tab includes, for a selected variable:
@@ -325,7 +325,7 @@ clicking on the **Stop** button.
 The results window gathers the **Summary** tab for each set of variables.
 
 - The **Summary** tab includes, for a selected set of variables, a table of all the tested
-  copulae. The right side of this tab is updated according to the distribution which is selected.
+  copulas. The right side of this tab is updated according to the distribution which is selected.
 
   This section contains 2 tabs:
 
@@ -375,7 +375,7 @@ Two methods are available:
   - Functional chaos
   - Kriging
 
-The user can choose the ouputs to analyse by clicking on the button **-- Select Outputs --**
+The user can choose the outputs to analyse by clicking on the button **-- Select Outputs --**
 at the top of the window:
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png

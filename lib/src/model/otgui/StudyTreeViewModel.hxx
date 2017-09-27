@@ -44,7 +44,7 @@ signals:
   void otStudySubItemsAdded(OTStudyItem*);
 
 public:
-  static const int DEFAULT_SIGNIFICANT_DIGITS;
+  static const int DefaultSignificantDigits;
 };
 }
 #endif

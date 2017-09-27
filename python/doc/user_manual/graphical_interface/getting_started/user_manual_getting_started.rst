@@ -76,7 +76,7 @@ The file menu gathers the following shortcuts:
   to load. The loaded study will become the current
   study.
 
-- **Open Recent**: Display a list of studies recently used for opening fastly one of them
+- **Open Recent**: Display a list of studies recently used for opening quickly one of them
 
 - **Save**: Save the current study
 

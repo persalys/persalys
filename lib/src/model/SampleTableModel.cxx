@@ -86,7 +86,7 @@ QVariant SampleTableModel::data(const QModelIndex & index, int role) const
   if (role == Qt::TextAlignmentRole)
     return int(Qt::AlignRight | Qt::AlignVCenter);
   else if (role == Qt::DisplayRole)
-    return QString::number(data_[index.row()][index.column()], 'g', StudyTreeViewModel::DEFAULT_SIGNIFICANT_DIGITS);
+    return QString::number(data_[index.row()][index.column()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
   else if (role == Qt::BackgroundRole)
   {
     if (std::isnan(data_[index.row()][index.column()]))

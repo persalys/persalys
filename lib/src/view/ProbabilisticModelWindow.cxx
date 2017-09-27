@@ -272,7 +272,7 @@ void ProbabilisticModelWindow::openUrl()
   const String distributionName = input.getDistribution().getImplementation()->getClassName();
 
   // open url
-  const QString link = "http://doc.openturns.org/openturns-1.8/sphinx/user_manual/_generated/openturns." + QString(distributionName.c_str()) + ".html";
+  const QString link = "http://openturns.github.io/openturns/master/user_manual/_generated/openturns." + QString(distributionName.c_str()) + ".html";
   QDesktopServices::openUrl(QUrl(link));
 }
 

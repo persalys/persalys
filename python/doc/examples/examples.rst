@@ -27,7 +27,7 @@ L      Length                   Uniform(250, 260)
 I      Section modulus          Beta(2.5, 4., 3.1e2, 4.5e2))
 ====== ======================== ===============================
 
-The input variables :math:`L` and :math:`I` are dependent. The dependence struture
+The input variables :math:`L` and :math:`I` are dependent. The dependence structure
 is modelised by a Normal copula (the only copula available for now in the GUI).
 The Spearman correlation matrix of the input random vector :math:`E, F, L, I` is :
 
@@ -328,7 +328,7 @@ The first tab must contain the following values:
 5-1 Sobol' indices
 ''''''''''''''''''
 
-For more details on the computation of the `Sobol' indices <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid5.xhtml#uid949>`_
+For more details on the computation of the `Sobol' indices <http://openturns.github.io/openturns/master/theory/reliability_sensitivity/sensitivity_sobol.html>`_
 see the OpenTURNS documentation.
 
 5-1-1 Definition
@@ -479,7 +479,7 @@ the following limit state window:
 '''''''''''''''
 
 For more details on the computation of the failure probability by the method of
-`Monte Carlo <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid4.xhtml#docref_C321_MonteCarloStd>`_
+`Monte Carlo <http://openturns.github.io/openturns/master/theory/reliability_sensitivity/monte_carlo_simulation.html>`_
 see the OpenTURNS documentation.
 
 6-2-1 Definition
