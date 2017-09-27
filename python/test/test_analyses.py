@@ -207,7 +207,7 @@ inference = otguibase.InferenceAnalysis('inference', model3)
 inference.setInterestVariables(['x_0', 'x_3'])
 factories = [ot.NormalFactory(), ot.GumbelFactory()]
 inference.setDistributionsFactories('x_3', factories)
-inference.setLevel(0.9)
+inference.setLevel(0.1)
 myStudy.add(inference)
 
 ## 5-c Copula inference ##

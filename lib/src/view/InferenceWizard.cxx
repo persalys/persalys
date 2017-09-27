@@ -152,7 +152,7 @@ void InferenceWizard::buildInterface()
   levelSpinbox->setRange(0.0 + 1.e-6, 1. - 1.e-6);
   levelSpinbox->setSingleStep(0.1);
   // display alpha
-  levelSpinbox->setValue(1 - inference_.getLevel());
+  levelSpinbox->setValue(inference_.getLevel());
   connect(levelSpinbox, SIGNAL(valueChanged(double)), this, SLOT(levelChanged(double)));
   levelLayout->addWidget(levelSpinbox, 0, 1);
   levelLayout->setColumnStretch(1, 10);
@@ -223,7 +223,7 @@ void InferenceWizard::levelChanged(double level)
 {
   try
   {
-    inference_.setLevel(1 - level);
+    inference_.setLevel(level);
   }
   catch (std::exception& ex)
   {

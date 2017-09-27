@@ -27,7 +27,7 @@ variables = ["X0", "X3"]
 analysis.setInterestVariables(variables)
 factories = [ot.NormalFactory(), ot.GumbelFactory()]
 analysis.setDistributionsFactories("X3", factories)
-analysis.setLevel(0.9)
+analysis.setLevel(0.1)
 myStudy.add(analysis)
 print(analysis)
 

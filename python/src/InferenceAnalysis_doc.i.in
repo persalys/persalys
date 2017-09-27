@@ -39,8 +39,7 @@ Get the result:
 Returns
 -------
 level : float, :math:`0 < {\rm level} < 1`, optional
-    This is the value such that :math:`\alpha = 1 - {\rm level}` is the risk of
-    committing a Type I error, that is an incorrect rejection of a true
+    The risk of committing a Type I error, that is an incorrect rejection of a true
     null hypothesis"
 
 // ---------------------------------------------------------------------
@@ -51,8 +50,7 @@ level : float, :math:`0 < {\rm level} < 1`, optional
 Parameters
 ----------
 level : float, :math:`0 < {\rm level} < 1`, optional
-    This is the value such that :math:`\alpha = 1 - {\rm level}` is the risk of
-    committing a Type I error, that is an incorrect rejection of a true
+    The risk of committing a Type I error, that is an incorrect rejection of a true
     null hypothesis"
 
 // ---------------------------------------------------------------------

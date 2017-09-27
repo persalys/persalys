@@ -39,7 +39,7 @@ static Factory<PersistentCollection<Description> > Factory_PersistentCollection_
 InferenceAnalysis::InferenceAnalysis()
   : DesignOfExperimentAnalysis()
   , distFactoriesForEachInterestVar_()
-  , level_(0.95)
+  , level_(0.05)
 {
 }
 
@@ -48,13 +48,13 @@ InferenceAnalysis::InferenceAnalysis()
 InferenceAnalysis::InferenceAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
   : DesignOfExperimentAnalysis(name, designOfExperiment)
   , distFactoriesForEachInterestVar_()
-  , level_(0.95)
+  , level_(0.05)
 {
   if (designOfExperiment_.getSample().getSize())
     setInterestVariables(designOfExperiment_.getSample().getDescription());
 
   // by default we test the Normal distribution for all the variables of the DOE
-  for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
   {
     DistributionFactoryCollection collectionVariable_i;
     collectionVariable_i.add(NormalFactory());
@@ -91,7 +91,7 @@ void InferenceAnalysis::setDistributionsFactories(const String& variableName, co
   if (!designOfExperiment_.getSample().getDescription().contains(variableName))
     throw InvalidArgumentException(HERE) << "Error: the given variable name does not match a variable of the model";
 
-  for (UnsignedInteger i=0; i<distributionsFactories.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < distributionsFactories.getSize(); ++i)
     if (distributionsFactories[i].getImplementation()->getClassName().find("Copula") != std::string::npos)
       throw InvalidArgumentException(HERE) << "Error: the inference is performed with 1-d distribution.";
 
@@ -125,7 +125,7 @@ void InferenceAnalysis::setInterestVariables(const Description& variablesNames)
   DesignOfExperimentAnalysis::setInterestVariables(variablesNames);
 
   std::map<String, DistributionFactoryCollection>::iterator it;
-  for (it=distFactoriesForEachInterestVar_.begin(); it!=distFactoriesForEachInterestVar_.end(); ++it)
+  for (it = distFactoriesForEachInterestVar_.begin(); it != distFactoriesForEachInterestVar_.end(); ++it)
     if (!variablesNames.contains(it->first))
       distFactoriesForEachInterestVar_.erase(it->first);
 }
@@ -145,7 +145,7 @@ void InferenceAnalysis::run()
       throw InvalidDimensionException(HERE) << "The number of variables to analyse must be superior to 0";
 
     std::map<String, DistributionFactoryCollection>::iterator it;
-    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+    for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
     {
       it = distFactoriesForEachInterestVar_.find(getInterestVariables()[i]);
       if (it == distFactoriesForEachInterestVar_.end())
@@ -154,10 +154,10 @@ void InferenceAnalysis::run()
 
     // get marginals
     Indices indices;
-    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+    for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
     {
       bool outputFound = false;
-      for (UnsignedInteger j=0; j<designOfExperiment_.getSample().getDescription().getSize(); ++j)
+      for (UnsignedInteger j = 0; j < designOfExperiment_.getSample().getDescription().getSize(); ++j)
       {
         if (designOfExperiment_.getSample().getDescription()[j] == getInterestVariables()[i])
         {
@@ -167,13 +167,14 @@ void InferenceAnalysis::run()
         }
       }
       if (!outputFound)
-        throw InvalidArgumentException(HERE) << "The variable to analyse "  << getInterestVariables()[i] <<" is not a variable of the model " << designOfExperiment_.getSample().getDescription();
+        throw InvalidArgumentException(HERE) << "The variable to analyse " << getInterestVariables()[i]
+                                             << " is not a variable of the model " << designOfExperiment_.getSample().getDescription();
     }
 
     const Sample sample(designOfExperiment_.getSample().getMarginal(indices));
 
     // inference
-    for (UnsignedInteger i=0; i<sample.getDimension(); ++i)
+    for (UnsignedInteger i = 0; i < sample.getDimension(); ++i)
     {
       progressValue_ = (int) (i * 100 / sample.getSize());
       notify("progressValueChanged");
@@ -183,14 +184,14 @@ void InferenceAnalysis::run()
       fittingTestResult.values_ = sample.getMarginal(i);
       fittingTestResult.errorMessages_ = Description(distFactoriesForEachInterestVar_[sample.getDescription()[i]].getSize());
 
-      for (UnsignedInteger j=0; j<distFactoriesForEachInterestVar_[sample.getDescription()[i]].getSize(); ++j)
+      for (UnsignedInteger j = 0; j < distFactoriesForEachInterestVar_[sample.getDescription()[i]].getSize(); ++j)
       {
         try
         {
           Distribution distribution(distFactoriesForEachInterestVar_[sample.getDescription()[i]][j].build(sample.getMarginal(i)));
 
           // Kolmogorov test
-          TestResult testResult(FittingTest::Kolmogorov(sample.getMarginal(i), distribution, level_, distribution.getParameterDimension()));
+          TestResult testResult(FittingTest::Kolmogorov(sample.getMarginal(i), distribution, 1 - level_, distribution.getParameterDimension()));
 
           // set fittingTestResult
           fittingTestResult.testedDistributions_.add(distribution);
@@ -239,23 +240,23 @@ String InferenceAnalysis::getPythonScript() const
   oss.setPrecision(12);
   oss << getName() << " = otguibase.InferenceAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
   oss << "interestVariables = [";
-  for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
   {
     oss << "'" << getInterestVariables()[i] << "'";
-    if (i < getInterestVariables().getSize()-1)
+    if (i < getInterestVariables().getSize() - 1)
       oss << ", ";
   }
   oss << "]\n";
   oss << getName() << ".setInterestVariables(interestVariables)\n";
 
-  for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
   {
     oss << "factories = [";
     DistributionFactoryCollection collection(getDistributionsFactories(getInterestVariables()[i]));
-    for (UnsignedInteger j=0; j<collection.getSize(); ++j)
+    for (UnsignedInteger j = 0; j < collection.getSize(); ++j)
     {
       oss << "ot." << collection[j].getImplementation()->getClassName() << "()";
-      if (j < collection.getSize()-1)
+      if (j < collection.getSize() - 1)
         oss << ", ";
     }
     oss << "]\n";
@@ -278,7 +279,7 @@ String InferenceAnalysis::__repr__() const
   OSS oss;
   oss << DesignOfExperimentAnalysis::__repr__()
       << " level=" << getLevel();
-      for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+      for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
       {
         oss << " interestVariable " << getInterestVariables()[i]
             << " distributionFactories=" << getDistributionsFactories(getInterestVariables()[i]);
@@ -295,11 +296,11 @@ void InferenceAnalysis::save(Advocate& adv) const
 // TODO with new version of OT (where DistributionFactory can be saved)
 //   DistributionFactoryCollectionCollection collection;
   PersistentCollection<Description> collection;
-  for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
   {
     DistributionFactoryCollection factoryCollection(distFactoriesForEachInterestVar_.find(getInterestVariables()[i])->second);
     Description listFactoriesNames(factoryCollection.getSize());
-    for (UnsignedInteger j=0; j<factoryCollection.getSize(); ++j)
+    for (UnsignedInteger j = 0; j < factoryCollection.getSize(); ++j)
     {
       String str = factoryCollection[j].getImplementation()->getClassName();
       listFactoriesNames[j] = str.substr(0, str.find("Factory"));
@@ -321,11 +322,11 @@ void InferenceAnalysis::load(Advocate& adv)
   adv.loadAttribute("level_", level_);
   adv.loadAttribute("result_", result_);
 
-  for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
   {
     DistributionFactoryCollection factoryCollection;
     if (collection.getSize() == getInterestVariables().getSize())
-      for (UnsignedInteger j=0; j<collection[i].getSize(); ++j)
+      for (UnsignedInteger j = 0; j < collection[i].getSize(); ++j)
         factoryCollection.add(DistributionDictionary::BuildDistributionFactory(collection[i][j]));
     distFactoriesForEachInterestVar_[getInterestVariables()[i]] = factoryCollection;
   }
