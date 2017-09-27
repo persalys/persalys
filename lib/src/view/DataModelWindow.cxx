@@ -25,7 +25,6 @@
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QPushButton>
-#include <QToolButton>
 #include <QGroupBox>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -41,6 +40,7 @@ DataModelWindow::DataModelWindow(DataModelDefinitionItem * item, QWidget * paren
   , dataModel_(0)
   , filePathLineEdit_(0)
   , defaultLineEditPalette_()
+  , reloadButton_(0)
   , dataTableView_(0)
   , dataTableModel_(0)
   , proxyModel_(0)
@@ -87,11 +87,11 @@ void DataModelWindow::buildInterface()
   hboxLayout->addWidget(openFileButton);
 
   // reload button
-  QToolButton * reloadButton = new QToolButton;
-  reloadButton->setEnabled(false);
-  reloadButton->setIcon(QIcon(":/images/view-refresh.png"));
-  connect(reloadButton, SIGNAL(clicked()), this, SLOT(refreshTable()));
-  hboxLayout->addWidget(reloadButton);
+  reloadButton_ = new QToolButton;
+  reloadButton_->setEnabled(false);
+  reloadButton_->setIcon(QIcon(":/images/view-refresh.png"));
+  connect(reloadButton_, SIGNAL(clicked()), this, SLOT(refreshTable()));
+  hboxLayout->addWidget(reloadButton_);
 
   mainGridLayout->addLayout(hboxLayout, 0, 0, 1, 3);
 
@@ -99,7 +99,7 @@ void DataModelWindow::buildInterface()
   errorMessageLabel_ = new QLabel;
   errorMessageLabel_->setWordWrap(true);
   mainGridLayout->addWidget(errorMessageLabel_, 2, 0, 1, 1);
-;
+
   // file preview
   QGroupBox * groupBox = new QGroupBox(tr("Sample"));
   QGridLayout * gridLayout = new QGridLayout(groupBox);
@@ -119,7 +119,7 @@ void DataModelWindow::buildInterface()
   // if the model has a sample: fill the table
   if (dataModel_->getSample().getSize())
   {
-    reloadButton->setEnabled(true);
+    reloadButton_->setEnabled(true);
 
     // table view
     updateTableView(dataModel_->getSample());
@@ -155,6 +155,9 @@ void DataModelWindow::updateTable(const QString& fileName)
   {
     // update file name
     dataModel_->setFileName(fileName.toLocal8Bit().data());
+
+    // update table view
+    updateTableView();
   }
   catch (std::exception& ex)
   {
@@ -167,11 +170,8 @@ void DataModelWindow::updateTable(const QString& fileName)
     QPalette palette = filePathLineEdit_->palette();
     palette.setColor(QPalette::Text, Qt::red);
     filePathLineEdit_->setPalette(palette);
-    return;
   }
-
-  // update table view
-  updateTableView();
+  reloadButton_->setEnabled(false);
 }
 
 
@@ -181,9 +181,10 @@ void DataModelWindow::openFileRequested()
   QString currentDir = settings.value("currentDir").toString();
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
-  const QString fileName = QFileDialog::getOpenFileName(this, tr("Data to import..."),
-                           currentDir,
-                           tr("Data files (*.csv *.txt)"));
+  const QString fileName = QFileDialog::getOpenFileName(this,
+                                                        tr("Data to import..."),
+                                                        currentDir,
+                                                        tr("Data files (*.csv *.txt)"));
 
   if (!fileName.isEmpty())
   {
@@ -242,7 +243,7 @@ void DataModelWindow::updateTableView(const Sample& sample)
   dataTableView_->clearSpans();
 
   if (sample.getSize() < 1)
-    for (int i=0; i<proxyModel_->columnCount(); ++i)
+    for (int i = 0; i < proxyModel_->columnCount(); ++i)
       dataTableView_->openPersistentEditor(proxyModel_->index(1, i));
 }
 }
