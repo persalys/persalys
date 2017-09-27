@@ -123,11 +123,15 @@ void InferenceAnalysis::setLevel(const double level)
 void InferenceAnalysis::setInterestVariables(const Description& variablesNames)
 {
   DesignOfExperimentAnalysis::setInterestVariables(variablesNames);
-
+  // list vars to remove
+  Description toRemove;
   std::map<String, DistributionFactoryCollection>::iterator it;
   for (it = distFactoriesForEachInterestVar_.begin(); it != distFactoriesForEachInterestVar_.end(); ++it)
     if (!variablesNames.contains(it->first))
-      distFactoriesForEachInterestVar_.erase(it->first);
+      toRemove.add(it->first);
+  // remove vars
+  for (UnsignedInteger i = 0; i < toRemove.getSize(); ++ i)
+    distFactoriesForEachInterestVar_.erase(toRemove[i]);
 }
 
 
