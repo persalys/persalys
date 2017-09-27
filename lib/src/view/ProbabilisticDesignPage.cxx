@@ -114,9 +114,9 @@ void ProbabilisticDesignPage::initialize(const Analysis& analysis)
   if (!independentCopula)
   {
     designsGroup_->button(ProbabilisticDesignPage::LHS)->setEnabled(false);
-    designsGroup_->button(ProbabilisticDesignPage::LHS)->setToolTip(tr("The physical model has not an independent copula"));
+    designsGroup_->button(ProbabilisticDesignPage::LHS)->setToolTip(tr("The physical model does not have an independent copula"));
     designsGroup_->button(ProbabilisticDesignPage::QuasiMonteCarlo)->setEnabled(false);
-    designsGroup_->button(ProbabilisticDesignPage::QuasiMonteCarlo)->setToolTip(tr("The physical model has not an independent copula"));
+    designsGroup_->button(ProbabilisticDesignPage::QuasiMonteCarlo)->setToolTip(tr("The physical model does not have an independent copula"));
     designsGroup_->button(ProbabilisticDesignPage::MonteCarlo)->click();
   }
 

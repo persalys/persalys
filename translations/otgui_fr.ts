@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>OTGUI::AnalysisItem</name>
     <message>
@@ -1196,27 +1196,27 @@ métamodèle</translation>
         <translation>Désactiver</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="162"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="165"/>
         <source>Impossible to update the table.</source>
         <translation>Impossible de mettre à jour le tableau.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="184"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="185"/>
         <source>Data to import...</source>
         <translation>Importer des données...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="186"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="187"/>
         <source>Data files (*.csv *.txt)</source>
         <translation>Fichiers de données (*.csv *.txt)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="197"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="198"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="198"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="199"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1 :
@@ -1321,68 +1321,68 @@ métamodèle</translation>
 <context>
     <name>OTGUI::DesignOfExperimentDefinitionItem</name>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="56"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="66"/>
         <source>Modify</source>
         <translation>Modifier</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="57"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="67"/>
         <source>Modify the analysis</source>
         <translation>Modifier l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="63"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="73"/>
         <source>Evaluate</source>
         <translation>Evaluer</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="64"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="74"/>
         <source>Evaluate the design of experiments</source>
         <translation>Evaluer le plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="70"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="80"/>
         <source>Metamodel</source>
         <translation>Métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="71"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="81"/>
         <source>Create a new metamodel</source>
         <translation>Créer un nouveau métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="75"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="85"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="76"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="86"/>
         <source>Remove the analysis</source>
         <translation>Supprimer l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="233"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="243"/>
         <source>Can not remove a running analysis.</source>
         <translation>Impossible de supprimer une analyse en cours d&apos;exécution.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="239"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="249"/>
         <source>Can not remove a design of experiments when an analysis is running.</source>
         <translation>Impossible de supprimer un plan d&apos;expériences lorsqu&apos;une analyse est en cours d&apos;exécution.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="254"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="264"/>
         <source>The model must have at least one output. Evaluate the design of experiments</source>
         <translation>Le modèle doit avoir au moins une variable de sortie. Evaluer le plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="121"/>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="219"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="131"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="229"/>
         <source>The input sample is empty.</source>
         <translation>L&apos;échantillon d&apos;entrée  est vide.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="139"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="149"/>
         <source>Evaluation</source>
         <translation>Evaluation</translation>
     </message>
@@ -2951,35 +2951,35 @@ métamodèle</translation>
 <context>
     <name>OTGUI::MainWindow</name>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="81"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="79"/>
         <source>Python Console</source>
         <translation>Console Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="119"/>
-        <location filename="../lib/src/view/MainWindow.cxx" line="149"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="113"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="145"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="120"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="114"/>
         <source>Cannot import a Python script when other studies are opened.
 Do you want to continue and close the other studies?</source>
         <translation>Impossible d&apos;importer un script Python lorsque d&apos;autres études sont ouvertes.
 Voulez-vous continuer et fermer les autres études ?</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="137"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="132"/>
         <source>Import Python...</source>
         <translation>Import Python...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="139"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="134"/>
         <source>Python source files (*.py)</source>
         <translation>Fichiers Python (*.py)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="150"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="146"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1 :
@@ -4463,7 +4463,7 @@ métamodèle</translation>
     <message>
         <location filename="../lib/src/view/ProbabilisticDesignPage.cxx" line="117"/>
         <location filename="../lib/src/view/ProbabilisticDesignPage.cxx" line="119"/>
-        <source>The physical model has not an independent copula</source>
+        <source>The physical model does not have an independent copula</source>
         <translation>Le modèle n&apos;a pas de copule indépendante</translation>
     </message>
     <message>
@@ -4538,83 +4538,83 @@ métamodèle</translation>
 <context>
     <name>OTGUI::ProbabilisticModelWindow</name>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="67"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="68"/>
         <source>Probabilistic model</source>
         <translation>Modèle probabiliste</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="105"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="106"/>
         <source>Inference result</source>
         <translation>Résultat d&apos;inférence</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="133"/>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="436"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="134"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="437"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="135"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="136"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="158"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="159"/>
         <source>distributionPDF</source>
         <translation>distributionPDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="162"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="163"/>
         <source>distributionCDF</source>
         <translation>distributionCDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="180"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="181"/>
         <source>Open the OpenTURNS documentation</source>
         <translation>Ouvrir la documentation OpenTURNS</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="191"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="192"/>
         <source>Truncation parameters</source>
         <translation>Paramètres de troncature</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="195"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="196"/>
         <source>Lower bound</source>
         <translation>Borne inférieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="197"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="198"/>
         <source>Upper bound</source>
         <translation>Borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="231"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="232"/>
         <source>Marginals</source>
         <translation>Marginales</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="237"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="238"/>
         <source>Spearman&apos;s rank (Gaussian Copula)</source>
         <translation>Rang de Spearman (copule Gaussienne)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="254"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="255"/>
         <source>Correlation</source>
         <translation>Corrélation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="440"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="441"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="828"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="829"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="828"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="829"/>
         <source>The current study has not inference analyses results.</source>
         <translation>L&apos;étude courante n&apos;a aucun résultat d&apos;inférence.</translation>
     </message>
@@ -4672,7 +4672,7 @@ métamodèle</translation>
     <name>OTGUI::SRCResultWindow</name>
     <message>
         <location filename="../lib/src/view/SRCResultWindow.cxx" line="49"/>
-        <source>The model has not an independent copula, the result could be false.</source>
+        <source>The model does not have an independent copula, the result could be false.</source>
         <translation>Le modèle n&apos;a pas de copule indépendante, le résultat pourrait être faux.</translation>
     </message>
     <message>
@@ -5009,7 +5009,7 @@ métamodèle</translation>
     <name>OTGUI::SobolResultWindow</name>
     <message>
         <location filename="../lib/src/view/SobolResultWindow.cxx" line="50"/>
-        <source>The model has not an independent copula, the result could be false.</source>
+        <source>The model does not have an independent copula, the result could be false.</source>
         <translation>Le modèle n&apos;a pas de copule indépendante, le résultat pourrait être faux.</translation>
     </message>
     <message>

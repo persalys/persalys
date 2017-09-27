@@ -578,7 +578,7 @@ Designs of experiments
           :align: center
 
       - Monte Carlo selected
-      - LHS and Quasi-Monte Carlo disabled: check the tooltip is 'The physical model has not an independent copula'
+      - LHS and Quasi-Monte Carlo disabled: check the tooltip is 'The physical model does not have an independent copula'
       - sample size : 10
       - seed : 0
       - cancel
