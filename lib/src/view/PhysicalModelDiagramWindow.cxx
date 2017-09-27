@@ -179,6 +179,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   modelDefinitionButton->resize(boxWidth, boxHeight);
   modelEvaluationButton->resize(boxWidth, boxHeight);
   doeCreationButton->resize(boxWidth, boxHeight);
+  probaModelButton->resize(boxWidth, boxHeight);
   doeEvaluationButton->resize(boxWidth, boxHeight);
   sensitivityButton->resize(boxWidth, boxHeight);
   centralTendencyButton->resize(boxWidth, boxHeight);
