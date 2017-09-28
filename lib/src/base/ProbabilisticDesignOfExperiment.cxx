@@ -87,7 +87,7 @@ String ProbabilisticDesignOfExperiment::getDesignName() const
 void ProbabilisticDesignOfExperiment::setDesignName(const String& name)
 {
   if (!GetDesignNames().contains(name))
-    throw InvalidArgumentException(HERE) << "Error: the given design of experiment name=" << name << " is unknown.";
+    throw InvalidArgumentException(HERE) << "Error: the given design of experiments name=" << name << " is unknown.";
 
   designName_ = name;
 

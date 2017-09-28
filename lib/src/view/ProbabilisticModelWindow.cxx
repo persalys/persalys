@@ -41,6 +41,9 @@
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QMessageBox>
+#include <QToolButton>
+#include <QDesktopServices>
+#include <QUrl> // for qt4
 
 using namespace OT;
 
@@ -150,7 +153,6 @@ void ProbabilisticModelWindow::buildInterface()
   QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
   QStackedWidget * plotStackedWidget = new QStackedWidget;
-  plotStackedWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
   QVector<PlotWidget*> listPlotWidgets;
 
@@ -162,7 +164,7 @@ void ProbabilisticModelWindow::buildInterface()
   plotStackedWidget->addWidget(cdfPlot_);
   listPlotWidgets.append(cdfPlot_);
 
-  plotWidgetLayout->addWidget(plotStackedWidget, 0, Qt::AlignHCenter|Qt::AlignTop);
+  plotWidgetLayout->addWidget(plotStackedWidget);
 
   GraphConfigurationWidget * pdf_cdfPlotsSettingWidget = new GraphConfigurationWidget(listPlotWidgets,
                                                                                       QStringList(),
@@ -172,6 +174,13 @@ void ProbabilisticModelWindow::buildInterface()
   plotWidget->setDockWidget(pdf_cdfPlotsSettingWidget);
   connect(pdf_cdfPlotsSettingWidget, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
   rightFrameLayout->addWidget(plotWidget);
+
+  // button to open the OT documentation
+  QToolButton * infoButton = new QToolButton;
+  infoButton->setIcon(QIcon(":/images/documentinfo.png"));
+  infoButton->setToolTip(tr("Open the OpenTURNS documentation"));
+  connect(infoButton, SIGNAL(clicked()), this, SLOT(openUrl()));
+  rightFrameLayout->addWidget(infoButton);
 
   //  parameters
   parameterLayout_ = new QVBoxLayout;
@@ -247,6 +256,24 @@ void ProbabilisticModelWindow::buildInterface()
 
   currentIndexTab_ = rootTab->currentIndex();
   setWidget(rootTab);
+}
+
+
+void ProbabilisticModelWindow::openUrl()
+{
+  if (!inputTableView_->currentIndex().isValid())
+    return;
+  const int currentRow = inputTableView_->currentIndex().row();
+  if (currentRow > (int)physicalModel_.getInputs().getSize() || currentRow < 0)
+    return;
+
+  // get current distribution
+  const Input input = physicalModel_.getInputs()[currentRow];
+  const String distributionName = input.getDistribution().getImplementation()->getClassName();
+
+  // open url
+  const QString link = "http://openturns.github.io/openturns/master/user_manual/_generated/openturns." + QString(distributionName.c_str()) + ".html";
+  QDesktopServices::openUrl(QUrl(link));
 }
 
 

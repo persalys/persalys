@@ -79,8 +79,8 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   boxHeight = std::max(boxHeight, modelEvaluationButton->height());
 
   DiagramPushButton * doeCreationButton = new DiagramPushButton;
-  doeCreationButton->setText(tr("Design of\nexperiment\ncreation"));
-  doeCreationButton->setWhatsThis(tr("Create manually a design of experiment or import one"));
+  doeCreationButton->setText(tr("Design of\nexperiments\ncreation"));
+  doeCreationButton->setWhatsThis(tr("Create manually a design of experiments or import one"));
   doeCreationButton->setErrorMessage(tr("Define at least an input variable"));
   QGraphicsProxyWidget * doeCreationProxy = new QGraphicsProxyWidget;
   doeCreationProxy->setWidget(doeCreationButton);
@@ -103,9 +103,9 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   boxHeight = std::max(boxHeight, probaModelButton->height());
 
   DiagramPushButton * doeEvaluationButton = new DiagramPushButton;
-  doeEvaluationButton->setText(tr("Design of\nexperiment\nevaluation"));
-  doeEvaluationButton->setWhatsThis(tr("Evaluate the model at the points of the design of experiment"));
-  doeEvaluationButton->setErrorMessage(tr("Create at least a design of experiment and define output variables in the model"));
+  doeEvaluationButton->setText(tr("Design of\nexperiments\nevaluation"));
+  doeEvaluationButton->setWhatsThis(tr("Evaluate the model at the points of the design of experiments"));
+  doeEvaluationButton->setErrorMessage(tr("Create at least a design of experiments and define output variables in the model"));
   QGraphicsProxyWidget * doeEvaluationProxy = new QGraphicsProxyWidget;
   doeEvaluationProxy->setWidget(doeEvaluationButton);
   scene->addItem(doeEvaluationProxy);
@@ -153,7 +153,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   DiagramPushButton * metamodelButton = new DiagramPushButton;
   metamodelButton->setText(tr("Metamodel\ncreation"));
   metamodelButton->setWhatsThis(tr("Two methods : Kriging and Functional chaos"));
-  metamodelButton->setErrorMessage(tr("Define at least a design of experiment which contains output values"));
+  metamodelButton->setErrorMessage(tr("Define at least a design of experiments which contains output values"));
   QGraphicsProxyWidget * metamodelProxy = new QGraphicsProxyWidget;
   metamodelProxy->setWidget(metamodelButton);
   scene->addItem(metamodelProxy);
@@ -179,6 +179,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   modelDefinitionButton->resize(boxWidth, boxHeight);
   modelEvaluationButton->resize(boxWidth, boxHeight);
   doeCreationButton->resize(boxWidth, boxHeight);
+  probaModelButton->resize(boxWidth, boxHeight);
   doeEvaluationButton->resize(boxWidth, boxHeight);
   sensitivityButton->resize(boxWidth, boxHeight);
   centralTendencyButton->resize(boxWidth, boxHeight);
@@ -300,6 +301,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 
   // -- text area --
   QTextEdit * textArea = new QTextEdit;
+  textArea->setReadOnly(true);
   connect(modelDefinitionButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   connect(modelEvaluationButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   connect(doeCreationButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));

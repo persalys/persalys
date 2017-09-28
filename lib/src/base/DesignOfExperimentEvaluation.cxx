@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Evaluates the design of experiment
+ *  @brief Evaluates the design of experiments
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -57,6 +57,15 @@ DesignOfExperimentEvaluation* DesignOfExperimentEvaluation::clone() const
 }
 
 
+/** Object name accessor */
+void DesignOfExperimentEvaluation::setName(const String& name)
+{
+  PersistentObject::setName(name);
+  // the analysis and designOfExperiment_ must have the same name
+  designOfExperiment_.getImplementation()->setName(name);
+}
+
+
 void DesignOfExperimentEvaluation::setDesignOfExperiment(const DesignOfExperiment& designOfExperiment)
 {
   designOfExperiment_ = designOfExperiment;
@@ -86,7 +95,7 @@ void DesignOfExperimentEvaluation::run()
 
     const UnsignedInteger inputSampleSize = getOriginalInputSample().getSize();
     if (!inputSampleSize)
-      throw InvalidArgumentException(HERE) << "The design of experiment input sample is empty";
+      throw InvalidArgumentException(HERE) << "The design of experiments input sample is empty";
 
     if (getBlockSize() > inputSampleSize)
       throw InvalidValueException(HERE) << "The block size (" << getBlockSize()
@@ -173,7 +182,7 @@ void DesignOfExperimentEvaluation::run()
     if (!outputSample.getSize())
       throw InvalidRangeException(HERE) << "All the evaluations have failed. Check the model.";
 
-    // set design of experiment
+    // set design of experiments
     designOfExperiment_.setInputSample(inputSample);
     designOfExperiment_.setOutputSample(outputSample);
 

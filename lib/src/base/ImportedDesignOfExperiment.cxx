@@ -180,7 +180,7 @@ Sample ImportedDesignOfExperiment::ImportSample(const String& fileName)
       break;
   }
   if (!sampleFromFile.getSize())
-    throw InvalidArgumentException(HERE) << "The sample is empty.";
+    throw InvalidArgumentException(HERE) << "The file " << fileName << " does not contain a sample.";
 
   return sampleFromFile;
 }

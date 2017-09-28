@@ -194,12 +194,12 @@ analyses : sequence of :class:`~otguibase.Analysis`
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::OTStudy::getDesignOfExperiments
-"Designs of experiment accessor.
+"Designs of experiments accessor.
 
 Returns
 -------
 designs : sequence of :class:`~otguibase.DesignOfExperiment`
-    Designs of experiment"
+    Designs of experiments"
 
 // ---------------------------------------------------------------------
 
@@ -229,17 +229,17 @@ model : :class:`~otguibase.PhysicalModel`
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::OTStudy::getDesignOfExperimentByName
-"Design of experiment accessor.
+"Design of experiments accessor.
 
 Parameters
 ----------
 name : str
-    The design of experiment name
+    The design of experiments name
 
 Returns
 -------
 design : :class:`~otguibase.DesignOfExperiment`
-    Design of experiment"
+    Design of experiments"
 
 // ---------------------------------------------------------------------
 
@@ -294,12 +294,12 @@ name : str
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::OTStudy::getAvailableDesignOfExperimentName
-"Available name for a design of experiment accessor.
+"Available name for a design of experiments accessor.
 
 Returns
 -------
 name : str
-    Available name for a design of experiment"
+    Available name for a design of experiments"
 
 // ---------------------------------------------------------------------
 
@@ -369,17 +369,17 @@ contains : bool
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::OTStudy::hasDesignOfExperimentNamed
-"Whether it contains a design of experiment named with the given name.
+"Whether it contains a design of experiments named with the given name.
 
 Parameters
 ----------
 name : str
-    A design of experiment name
+    A design of experiments name
 
 Returns
 -------
 contains : bool
-    Whether it contains a design of experiment named with the given name"
+    Whether it contains a design of experiments named with the given name"
 
 // ---------------------------------------------------------------------
 

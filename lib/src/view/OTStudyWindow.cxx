@@ -88,7 +88,7 @@ void OTStudyWindow::buildInterface()
   layout->addWidget(textEdit, row, 0);
 
   textEdit = new QLabel;
-  textEdit->setText(tr("- Evaluation\n- Design of experiment\n- Central tendency\n- Sensitivity\n- Reliability\n- Metamodel"));
+  textEdit->setText(tr("- Evaluation\n- Design of experiments\n- Central tendency\n- Sensitivity\n- Reliability\n- Metamodel"));
   layout->addWidget(textEdit, row+1, 0, Qt::AlignHCenter|Qt::AlignTop);
 
   // vertical line

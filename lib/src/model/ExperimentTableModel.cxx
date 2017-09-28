@@ -20,6 +20,8 @@
  */
 #include "otgui/ExperimentTableModel.hxx"
 
+#include "otgui/StudyTreeViewModel.hxx"
+
 using namespace OT;
 
 namespace OTGUI {
@@ -142,17 +144,17 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
         case 1:
           return QString::fromUtf8(designOfExperiment_.getPhysicalModel().getInputs()[indexInput].getDescription().c_str());
         case 2:
-          return QString::number(designOfExperiment_.getValues()[indexInput], 'g', 15);
+          return QString::number(designOfExperiment_.getValues()[indexInput], 'g', StudyTreeViewModel::DefaultSignificantDigits);
         case 3:
-          return QString::number(designOfExperiment_.getLowerBounds()[indexInput], 'g', 15);
+          return QString::number(designOfExperiment_.getLowerBounds()[indexInput], 'g', StudyTreeViewModel::DefaultSignificantDigits);
         case 4:
-          return QString::number(designOfExperiment_.getUpperBounds()[indexInput], 'g', 15);
+          return QString::number(designOfExperiment_.getUpperBounds()[indexInput], 'g', StudyTreeViewModel::DefaultSignificantDigits);
         case 5:
         {
           if (designOfExperiment_.getTypeDesignOfExperiment() == GridDesignOfExperiment::FromBoundsAndLevels)
             return QString::number(int(designOfExperiment_.getLevels()[indexInput]));
           else
-            return QString::number(designOfExperiment_.getDeltas()[indexInput], 'g', 15);
+            return QString::number(designOfExperiment_.getDeltas()[indexInput], 'g', StudyTreeViewModel::DefaultSignificantDigits);
         }
         default:
           return QVariant();

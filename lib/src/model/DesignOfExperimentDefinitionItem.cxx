@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItem, observer of a design of experiment
+ *  @brief QStandardItem, observer of a design of experiments
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -40,14 +40,24 @@ DesignOfExperimentDefinitionItem::DesignOfExperimentDefinitionItem(const Analysi
 {
   analysis_.addObserver(this);
 
-  // this item must be an observer of the design of experiment:
+  // this item must be an observer of the design of experiments:
   // it is used in OTStudyItem to know where adding a DesignOfExperimentAnalysis based
-  // on this design of experiment
+  // on this design of experiments
   const DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(analysis_.getImplementation().get());
   Q_ASSERT(doeEval);
   doeEval->getDesignOfExperiment().addObserver(this);
 
   buildActions();
+}
+
+
+void DesignOfExperimentDefinitionItem::setData(const QVariant & value, int role)
+{
+  // rename
+  if (role == Qt::EditRole)
+    analysis_.getImplementation()->setName(value.toString().toLocal8Bit().data());
+
+  QStandardItem::setData(value, role);
 }
 
 
@@ -59,9 +69,9 @@ void DesignOfExperimentDefinitionItem::buildActions()
 
   appendAction(modifyAnalysis_);
 
-  // evaluate design of experiment action
+  // evaluate design of experiments action
   evaluateDesignOfExperiment_ = new QAction(QIcon(":/images/system-run.png"), tr("Evaluate"), this);
-  evaluateDesignOfExperiment_->setStatusTip(tr("Evaluate the design of experiment"));
+  evaluateDesignOfExperiment_->setStatusTip(tr("Evaluate the design of experiments"));
   connect(evaluateDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(createNewEvaluation()));
 
   appendAction(evaluateDesignOfExperiment_);
@@ -206,7 +216,7 @@ void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
   analysis_.addObserver(this);
   analysis_.addObserver(getParentOTStudyItem()->getOTStudy().getImplementation().get());
 
-  // update the implementation of the design of experiment stored in OTStudy
+  // update the implementation of the design of experiments stored in OTStudy
   getParentOTStudyItem()->getOTStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
 }
 
@@ -236,7 +246,7 @@ void DesignOfExperimentDefinitionItem::removeAnalysis()
   // check
   if (analysisInProgress_)
   {
-    emit emitErrorMessageRequested(tr("Can not remove a design of experiment when an analysis is running."));
+    emit emitErrorMessageRequested(tr("Can not remove a design of experiments when an analysis is running."));
     return;
   }
 
@@ -251,7 +261,7 @@ void DesignOfExperimentDefinitionItem::createNewMetaModel()
   // check
   if (!getAnalysis().analysisLaunched())
   {
-    emit emitErrorMessageRequested(tr("The model must have at least one output. Evaluate the design of experiment"));
+    emit emitErrorMessageRequested(tr("The model must have at least one output. Evaluate the design of experiments"));
     return;
   }
 

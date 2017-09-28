@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::ImportedDesignOfExperiment
-"Design of experiment.
+"Design of experiments.
 
 Available constructors:
     ImportedDesignOfExperiment(*name, physicalModel, fileName, columns*)
@@ -28,7 +28,7 @@ Create the model:
 >>> Y0 = otguibase.Output('Y0')
 >>> model = otguibase.SymbolicPhysicalModel('aModelPhys', [X0, X1], [Y0], ['sin(X0)+8*X1'])
 
-Create the design of experiment:
+Create the design of experiments:
 
 >>> filename = 'normal.csv'
 >>> ot.Normal(3).getSample(10).exportToCSVFile(filename)

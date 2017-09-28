@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Top-level class for all analysis with design of experiment
+ *  @brief Top-level class for all analysis with design of experiments
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *

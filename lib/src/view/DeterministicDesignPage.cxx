@@ -44,7 +44,7 @@ DeterministicDesignPage::DeterministicDesignPage(QWidget* parent)
 
 void DeterministicDesignPage::buildInterface()
 {
-  setTitle(tr("Deterministic design of experiment"));
+  setTitle(tr("Deterministic design of experiments"));
 
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 
@@ -61,7 +61,7 @@ void DeterministicDesignPage::buildInterface()
 
   // DOE size
   QHBoxLayout * sizeLayout = new QHBoxLayout;
-  QLabel * sizeLabel = new QLabel(tr("Size of the design of experiment:") + " ");
+  QLabel * sizeLabel = new QLabel(tr("Size of the design of experiments:") + " ");
   sizeLayout->addWidget(sizeLabel);
   DOESizeLabel_ = new QLabel;
   sizeLayout->addWidget(DOESizeLabel_);

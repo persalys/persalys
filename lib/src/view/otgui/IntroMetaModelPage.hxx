@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to define the design of experiment and the method of metamodel analysis
+ *  @brief QWizardPage to define the design of experiments and the method of metamodel analysis
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *

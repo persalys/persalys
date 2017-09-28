@@ -4,6 +4,7 @@
 The OTGui allows the user to load data samples and analyse them. They are considered as data models.
 
     DataModel(*name, fileName, inputColumns, outputColumns, inputNames, outputNames*)
+
     DataModel(*name, inputSample, outputSample*)
 
 Parameters

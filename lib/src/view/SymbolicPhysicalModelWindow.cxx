@@ -38,7 +38,7 @@ SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelDefinition
   QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
 
   PhysicalModelWindowWidget * widget = new PhysicalModelWindowWidget(item);
-  connect(widget, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
+  connect(widget, SIGNAL(errorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
   mainLayout->addWidget(widget);
 
   errorMessageLabel_ = new QLabel;

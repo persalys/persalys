@@ -21,9 +21,9 @@ windows (model definition or result window) open, surrounded by:
 
   It contains the study and all subsequent models defined and analysis performed.
   The name of each element created by can be modified by the user by double-click on the element.
-  The element **Deterministic study**, **Probabilistic study** and **Designs of experiment**
+  The elements in bold (such as **Physical models**, **Evaluation**, **Definition**, etc)
   cannot be renamed.
-  The right click on these elements gives access the context menu of the elements. Any element
+  The right click on these elements gives access to the context menu of the elements. Any element
   can be removed through this context menu.
 
 - The main menubar and toolbar (on top).
@@ -51,15 +51,12 @@ windows (model definition or result window) open, surrounded by:
     :align: center
 
 A window appears when the OTGui is started. It contains 3 items:
-
-- New: Create a new OTStudy
-
-- Open: Display a dialog box for choosing a study
-  to load. The loaded study will become the current
-  study.
-
-- Import Python...: Display a dialog box for loading an OTGui Python script.
-  It is impossible to load a study when another one is already opened.
+  - **New study**: Create a new OTStudy
+  - **Open study**: Display a dialog box for choosing a study
+    to load. The loaded study will become the current
+    study.
+  - **Import Python script**: Display a dialog box for loading an OTGui Python script.
+    It is impossible to load a study when another one is already opened.
 
 
 1-3 Menus
@@ -73,24 +70,24 @@ File Menu
 
 The file menu gathers the following shortcuts:
 
-- New OTStudy : Create a new study
+- **New**: Create a new study
 
-- Open OTStudy : Display a dialog box for choosing a study
+- **Open...**: Display a dialog box for choosing a study
   to load. The loaded study will become the current
   study.
 
-- Save: Save the current study
+- **Open Recent**: Display a list of studies recently used for opening quickly one of them
 
-- Save As...: Display a dialog box for choosing the directory to save the current project.
+- **Save**: Save the current study
 
-- Export Python: Display a dialog box for choosing the directory to export the study as an OTGui Python script.
+- **Save As...**: Display a dialog box for choosing the directory to save the current project.
 
-- Import Python...: Display a dialog box for loading an OTGui Python script.
+- **Import Python...**: Display a dialog box for loading an OTGui Python script.
 
-- Close: Close the current OTStudy. A pop-up dialog window will appear if the current OTStudy has not been saved.
+- **Close**: Close the current OTStudy. A pop-up dialog window will appear if the current OTStudy has not been saved.
   Any OTStudy may also be closed through its context menu.
 
-- Exit: Quit OTGui
+- **Exit**: Quit OTGui
 
 View Menu
 ~~~~~~~~~
@@ -111,7 +108,7 @@ There are three ways to create a new study:
 
 - Click on |newButton| in the tool bar;
 
-- Click on **New OTStudy** in the file menu.
+- Click on **New** in the file menu.
 
 When a study is created, an item appears in the study tree. This item is associated with a window
 which provides ways to define models:
@@ -119,3 +116,12 @@ which provides ways to define models:
 .. image:: /user_manual/graphical_interface/getting_started/window_OTStudy_startUp.png
     :align: center
 
+The context menu of study item gathers the same actions as the window:
+  - **Symbolic model**: Define a physical model with analytical formulas
+  - **Python model**: Define a physical model with a Python script
+  - **Data model**: Define a physical model with samples
+
+and the following actions:
+  - **Export Python**: Display a dialog box for choosing the directory to export the study as an OTGui Python script.
+  - **Save**: Save the study
+  - **Close**: Close the study. A pop-up dialog window will appear if the study has not been saved.

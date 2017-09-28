@@ -117,7 +117,7 @@ void ModelEvaluation::run()
     Sample outputSample = getPhysicalModel().getFunction(getInterestVariables())(inputSample);
     outputSample.setDescription(getInterestVariables());
 
-    // set design of experiment
+    // set design of experiments
     designOfExperiment_.setInputSample(inputSample);
     designOfExperiment_.setOutputSample(outputSample);
 

@@ -6,6 +6,8 @@ OTGUI_Analysis_doc
 OTGUI_Analysis_run_doc
 %feature("docstring") OTGUI::Analysis::getErrorMessage
 OTGUI_Analysis_getErrorMessage_doc
+%feature("docstring") OTGUI::Analysis::getWarningMessage
+OTGUI_Analysis_getWarningMessage_doc
 %feature("docstring") OTGUI::Analysis::getPythonScript
 OTGUI_Analysis_getPythonScript_doc
 %feature("docstring") OTGUI::Analysis::isReliabilityAnalysis

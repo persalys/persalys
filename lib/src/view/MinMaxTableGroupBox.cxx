@@ -110,7 +110,7 @@ QWidget* MinMaxTableGroupBox::getForOutputMinMaxTableView(const DesignOfExperime
   if (nbInputs)
   {
     // vertical header
-    const QString rowTitle = tr("Input(s) at\nextremum", "", nbInputs);
+    const QString rowTitle = tr("Inputs at\nextremum");
     minMaxTable->setNotEditableHeaderItem(1, 0, rowTitle);
 
     if (nbInputs > 1)

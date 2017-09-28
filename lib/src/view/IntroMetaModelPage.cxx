@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to define the design of experiment and the method of metamodel analysis
+ *  @brief QWizardPage to define the design of experiments and the method of metamodel analysis
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -44,7 +44,7 @@ IntroMetaModelPage::IntroMetaModelPage(QWidget* parent)
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 
   // choose the limit state
-  QGroupBox * doeBox = new QGroupBox(tr("Design of experiment"));
+  QGroupBox * doeBox = new QGroupBox(tr("Design of experiments"));
   QVBoxLayout * doeLayout = new QVBoxLayout(doeBox);
 
   doesComboBox_ = new QComboBox;
@@ -92,8 +92,8 @@ IntroMetaModelPage::IntroMetaModelPage(QWidget* parent)
 
 void IntroMetaModelPage::initialize(const Analysis& analysis, QList< DesignOfExperiment > doesList)
 {
-  // design of experiment
-  for (int i=0; i<doesList.count(); ++i)
+  // design of experiments
+  for (int i = 0; i < doesList.count(); ++i)
   {
     QStandardItem * item = new QStandardItem(doesList[i].getName().c_str());
     item->setData(qVariantFromValue(doesList[i]));
@@ -101,8 +101,9 @@ void IntroMetaModelPage::initialize(const Analysis& analysis, QList< DesignOfExp
   }
   // interest variables
   interestVariables_ = analysis.getImplementation()->getInterestVariables();
+
   // update outputsGroupBox_
-  doesComboBox_->setCurrentIndex(0);
+  updateDesignOfExperiment(0);
 
   // method
   const String analysisName = analysis.getImplementation()->getClassName();

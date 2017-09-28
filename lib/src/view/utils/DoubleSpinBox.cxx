@@ -29,6 +29,10 @@ namespace OTGUI {
 
 DoubleSpinBox::DoubleSpinBox(QWidget * parent)
   : QDoubleSpinBox(parent)
+  , dispDecimals(15)
+  , delimiter(' ')
+  , thousand(' ')
+  , v(0)
 {
   initLocalValues(parent);
 

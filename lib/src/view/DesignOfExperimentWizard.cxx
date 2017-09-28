@@ -35,7 +35,7 @@ DesignOfExperimentWizard::DesignOfExperimentWizard(const Analysis & designOfExpe
 
 void DesignOfExperimentWizard::buildInterface()
 {
-  setWindowTitle(tr("Design of experiment"));
+  setWindowTitle(tr("Design of experiments"));
 
   introPage_ = new IntroDesignOfExperimentPage(this);
   introPage_->initialize(analysis_);
@@ -63,9 +63,11 @@ int DesignOfExperimentWizard::nextId() const
   {
     case Page_Intro:
       return introPage_->nextId();
-    case Page_Deterministic:
-    case Page_Probabilistic:
+    case Page_Deterministic:/* Falls through. */
+    case Page_Probabilistic:/* Falls through. */
     case Page_Import:
+      return -1;
+    default:
       return -1;
   }
 }

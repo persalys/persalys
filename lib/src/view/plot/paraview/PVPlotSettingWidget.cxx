@@ -34,15 +34,40 @@
 #include <QCheckBox>
 #include <QLabel>
 
+using namespace OT;
+
 namespace OTGUI {
 
-PVPlotSettingWidget::PVPlotSettingWidget(PVViewWidget * pvViewWidget, QWidget* parent)
+PVPlotSettingWidget::PVPlotSettingWidget(PVViewWidget* pvViewWidget, QWidget* parent)
   : QWidget(parent)
   , pvViewWidget_(pvViewWidget)
+  , sample_()
+  , sampleRank_()
+{
+  buildInterface();
+}
+
+
+PVPlotSettingWidget::PVPlotSettingWidget(PVViewWidget* pvViewWidget,
+                                         const Sample& sample,
+                                         const Sample& sampleRank,
+                                         QWidget* parent)
+  : QWidget(parent)
+  , pvViewWidget_(pvViewWidget)
+  , sample_(sample)
+  , sampleRank_(sampleRank)
+{
+  buildInterface();
+}
+
+
+void PVPlotSettingWidget::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
+
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
+
   QFrame * frame = new QFrame;
   QGridLayout * mainGridLayout = new QGridLayout(frame);
   int rowGrid = 0;
@@ -51,9 +76,9 @@ PVPlotSettingWidget::PVPlotSettingWidget(PVViewWidget * pvViewWidget, QWidget* p
 
   // variables names
   QStringList names;
-  for (int cc = 0; cc < (int)pvViewWidget->getTable()->GetNumberOfColumns(); cc++)
+  for (int cc = 0; cc < (int)pvViewWidget_->getTable()->GetNumberOfColumns(); cc++)
   {
-    names << pvViewWidget->getTable()->GetColumnName(cc);
+    names << pvViewWidget_->getTable()->GetColumnName(cc);
   }
 
   // variables to display
@@ -62,11 +87,20 @@ PVPlotSettingWidget::PVPlotSettingWidget(PVViewWidget * pvViewWidget, QWidget* p
 
   // combobox to select the variables to display
   NoWheelEventComboBox * varComboBox = new NoWheelEventComboBox;
-  ListWidgetWithCheckBox * varListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", names, names, this);
-  connect(varListWidget_, SIGNAL(checkedItemsChanged(QStringList)), pvViewWidget_, SLOT(setAxisToShow(QStringList)));
-  varComboBox->setModel(varListWidget_->model());
-  varComboBox->setView(varListWidget_);
+  ListWidgetWithCheckBox * varListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", names, names, this);
+  connect(varListWidget, SIGNAL(checkedItemsChanged(QStringList)), pvViewWidget_, SLOT(setAxisToShow(QStringList)));
+  varComboBox->setModel(varListWidget->model());
+  varComboBox->setView(varListWidget);
   mainGridLayout->addWidget(varComboBox, rowGrid, 1, 1, 1);
+
+  // rank checkbox
+  if (sample_.getSize() && sampleRank_.getSize())
+  {
+    QCheckBox * rankCheckBox = new QCheckBox(tr("Ranks"));
+    mainGridLayout->addWidget(rankCheckBox, ++rowGrid, 0, 1, 2);
+    connect(rankCheckBox, SIGNAL(clicked(bool)), this, SLOT(modifyData(bool)));
+    rankCheckBox->click();
+  }
 
   // pushbutton to export the plot
   QHBoxLayout * hboxForBottomButtons = new QHBoxLayout;
@@ -83,6 +117,12 @@ PVPlotSettingWidget::PVPlotSettingWidget(PVViewWidget * pvViewWidget, QWidget* p
   scrollArea->setWidget(frame);
   mainLayout->addWidget(scrollArea);
   setVisible(false);
+}
+
+
+void PVPlotSettingWidget::modifyData(bool isRankRequired)
+{
+  pvViewWidget_->updateTable(isRankRequired ? sampleRank_ : sample_);
 }
 
 

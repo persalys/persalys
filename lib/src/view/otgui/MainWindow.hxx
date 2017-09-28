@@ -24,7 +24,6 @@
 #include "otgui/MainWidget.hxx"
 
 #include <QMainWindow>
-#include <QDockWidget>
 #include <QCloseEvent>
 
 #include <PyConsole_Console.h>
@@ -42,7 +41,6 @@ public slots:
 
 protected:
   void buildInterface();
-  void buildActions();
 
 private slots:
   void importPython();

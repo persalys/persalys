@@ -2,22 +2,66 @@
 User manual - Define a physical model
 =====================================
 
+1- Creation
+===========
 
-The context menu (right click) of the OTStudy or its window provides three ways to define a physical model:
+A physical model can be created through:
+  - the context menu of the study item;
+  - a button of the study window.
 
-- New symbolic physical model
-- New Python physical model
-- New YACS physical model
+The context menu of the OTStudy or its window provides three types of physical model:
+  - Symbolic model
+  - Python model
+  - YACS model
 
-The creation of a physical model adds a physicalModel item in the study tree which gathers three
-items:
+The creation of a physical model adds a new element in the study tree below an item named **Physical models**.
 
-- Deterministic study
-- Probabilistic study
-- Designs of experiment
+Its context menu has two actions:
+  - **Define the model**: Open a new window to define the model
+  - **Remove**: Remove the model from the study
 
-1- "Symbolic physical model": define a physical model with analytical formulas
-================================================================================
+.. image:: /user_manual/graphical_interface/physical_model/physicalModelNameContextMenu.png
+    :align: center
+
+The item is associated with a 'Physical model diagram' window containing an **Use pattern**.
+
+.. image:: /user_manual/graphical_interface/physical_model/physicalModelDiagram.png
+    :align: center
+
+This diagram displays the possible actions that the user can perform in real time.
+An action is active when its box is in dark green and disabled when its box is in light green.
+A box is active when the previous one is valid.
+When passing the cursor on each box, an information message appears at the bottom of the window
+in order to specify what sort of actions the box proposes. If the box is disabled the message
+indicates why the previous one is not valid.
+
+On the above screenshot, the cursor has been on the **Probabilistic model definition** box.
+The text explains that this box enables to define stochastic input variables and correlation,
+but these actions are possible only if the user has defined at least an input variable in the
+physical model.
+So, here the only option of the user is to complete the model.
+
+2- Definition
+=============
+
+New physical model can be defined through:
+  - the context menu of the physical model item;
+  - the **Model definition** box of the model diagram.
+
+When the definition is requiring, a new item named **Definition** appears in the study tree.
+
+Its context menu proposes these actions:
+  - **Probabilistic model**: Create stochastic input variables and correlation
+  - **Evaluation**: Evaluate the model at a point
+  - **Design of experiments**: Create a new design of experiments
+
+.. image:: /user_manual/graphical_interface/physical_model/physicalModelDefinitionContextMenu.png
+    :align: center
+
+This item is associated with a window depending of the type of the chosen physical model.
+
+2-1 "Symbolic physical model": define a physical model with analytical formulas
+-------------------------------------------------------------------------------
 
 It consists in listing manually all the input and output variables by adding
 lines in the two tables "Inputs" and "Outputs".
@@ -109,8 +153,8 @@ Available constants
 - _pi
 
 
-2- "Python physical model": define a physical model with a Python editor
-========================================================================
+2-2 "Python physical model": define a physical model with a Python editor
+-------------------------------------------------------------------------
 
 It consists in defining the physical model as a Python function **_exec**
 
@@ -131,8 +175,8 @@ The **Evaluate** button calculates the value of the outputs based on the input v
 and the Python code. It shall be used to test the physical model. In order to get evaluations which can be saved,
 the user should use :ref:`the deterministic study <deterministicStudy>`.
 
-3- "YACS physical model": define a physical model with an XML file
-==================================================================
+2-3 "YACS physical model": define a physical model with an XML file
+-------------------------------------------------------------------
 
 A physical model can be defined by loading an XML file, previously generated for example with Salome,
 which contains:
@@ -158,8 +202,8 @@ The **Evaluate** button calculates the value of the outputs based on the input v
 and the YACS scheme. It shall be used to test the physical model. In order to get evaluations which can be saved,
 the user should use :ref:`the deterministic study <deterministicStudy>`.
 
-4- "FMI physical model": define a physical model from an FMU file
-=================================================================
+2-4 "FMI physical model": define a physical model from an FMU file
+------------------------------------------------------------------
 
 A physical model can be defined by loading an FMU file, previously generated 
 by OpenModelica for example.
@@ -189,8 +233,8 @@ to alter the currently listed variables.
 The **Evaluate** runs the model once.
 The output values are displayed in the *value* column.
 
-5 - Differentiation tab
-=======================
+2-5 Differentiation tab
+-----------------------
 
 .. image:: /user_manual/graphical_interface/physical_model/differentiation_tab.png
     :align: center

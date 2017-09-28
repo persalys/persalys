@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to define a probabilistic design of experiment
+ *  @brief QWizardPage to define a probabilistic design of experiments
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -41,7 +41,7 @@ ProbabilisticDesignPage::ProbabilisticDesignPage(QWidget* parent)
 
 void ProbabilisticDesignPage::buildInterface()
 {
-  setTitle(tr("Probabilistic design of experiment"));
+  setTitle(tr("Probabilistic design of experiments"));
 
   QGridLayout * pageLayout = new QGridLayout(this);
 
@@ -114,9 +114,9 @@ void ProbabilisticDesignPage::initialize(const Analysis& analysis)
   if (!independentCopula)
   {
     designsGroup_->button(ProbabilisticDesignPage::LHS)->setEnabled(false);
-    designsGroup_->button(ProbabilisticDesignPage::LHS)->setToolTip(tr("The physical model has not an independent copula"));
+    designsGroup_->button(ProbabilisticDesignPage::LHS)->setToolTip(tr("The physical model does not have an independent copula"));
     designsGroup_->button(ProbabilisticDesignPage::QuasiMonteCarlo)->setEnabled(false);
-    designsGroup_->button(ProbabilisticDesignPage::QuasiMonteCarlo)->setToolTip(tr("The physical model has not an independent copula"));
+    designsGroup_->button(ProbabilisticDesignPage::QuasiMonteCarlo)->setToolTip(tr("The physical model does not have an independent copula"));
     designsGroup_->button(ProbabilisticDesignPage::MonteCarlo)->click();
   }
 

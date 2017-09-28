@@ -40,5 +40,6 @@
         <file>images/sensitivity.png</file>
         <file>images/limitstate.png</file>
         <file>images/green-arrow-right.png</file>
+        <file>images/documentinfo.png</file>
     </qresource>
 </RCC>

@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::ProbabilisticDesignOfExperiment
-"Probabilistic design of experiment.
+"Probabilistic design of experiments.
 
 Available constructors:
     ProbabilisticDesignOfExperiment(*name, physicalModel*)
@@ -29,7 +29,7 @@ Create the model:
 >>> G = otguibase.Output('G', 'deviation')
 >>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(_pi*100.0)'])
 
-Create the design of experiment:
+Create the design of experiments:
 
 >>> myDOE = otguibase.ProbabilisticDesignOfExperiment('myDOE', myPhysicalModel, 10, 'MONTE_CARLO')"
 

@@ -100,6 +100,12 @@ String Analysis::getErrorMessage() const
 }
 
 
+String Analysis::getWarningMessage() const
+{
+  return getImplementation()->getWarningMessage();
+}
+
+
 int Analysis::getProgressValue() const
 {
   return getImplementation()->getProgressValue();

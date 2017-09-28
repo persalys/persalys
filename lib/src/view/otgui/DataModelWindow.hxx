@@ -27,6 +27,7 @@
 #include "otgui/OTguiSubWindow.hxx"
 
 #include <QLineEdit>
+#include <QToolButton>
 #include <QSortFilterProxyModel>
 
 namespace OTGUI {
@@ -73,6 +74,7 @@ private:
   DataModel * dataModel_;
   QLineEdit * filePathLineEdit_;
   QPalette defaultLineEditPalette_;
+  QToolButton * reloadButton_;
   ExportableTableView * dataTableView_;
   DataModelTableModel * dataTableModel_;
   DataModelProxModel * proxyModel_;

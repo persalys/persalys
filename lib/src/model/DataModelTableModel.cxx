@@ -20,6 +20,8 @@
  */
 #include "otgui/DataModelTableModel.hxx"
 
+#include "otgui/StudyTreeViewModel.hxx"
+
 #include <QColor>
 
 using namespace OT;
@@ -160,7 +162,7 @@ QVariant DataModelTableModel::data(const QModelIndex & index, int role) const
   {
     // text
     if (role == Qt::DisplayRole || role == Qt::EditRole)
-      return QString::number(data_[index.row() - 2][index.column()], 'g', 15);
+      return QString::number(data_[index.row() - 2][index.column()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
 
     // alignment
     else if (role == Qt::TextAlignmentRole)

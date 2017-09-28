@@ -68,8 +68,9 @@ public slots:
   void modifyDesignOfExperiment(DesignOfExperimentDefinitionItem* item);
   void modifyDesignOfExperimentEvaluationWindow(AnalysisItem* item);
   void modifyAnalysis(AnalysisItem* item);
+  void modifyStudySubItemsExpansion(OTStudyItem* item);
 
-  // export/save/clos otstudy
+  // export/save/close otstudy
   void exportOTStudy();
   void saveCurrentOTStudy();
   void saveAsCurrentOTStudy();

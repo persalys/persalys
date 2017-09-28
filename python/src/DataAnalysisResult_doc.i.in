@@ -193,9 +193,9 @@ time : int
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::DataAnalysisResult::getDesignOfExperiment
-"Design of experiment accessor.
+"Design of experiments accessor.
 
 Returns
 -------
 design : :class:`~otguibase.DesignOfExperiment`
-    Design of experiment containing the points really analysed"
+    Design of experiments containing the points really analysed"

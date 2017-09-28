@@ -21,7 +21,6 @@
 #ifndef OTGUI_OTGUIMENUBAR_HXX
 #define OTGUI_OTGUIMENUBAR_HXX
 
-#include "otgui/OTGuiprivate.hxx"
 #include "otgui/OTguiActions.hxx"
 
 #include <QMenuBar>

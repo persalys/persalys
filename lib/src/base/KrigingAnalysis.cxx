@@ -159,7 +159,7 @@ void KrigingAnalysis::run()
 
     // check
     if (designOfExperiment_.getInputSample().getSize() * designOfExperiment_.getOutputSample().getSize() == 0)
-      throw InvalidArgumentException(HERE) << "The design of experiment must contains not empty input AND output samples";
+      throw InvalidArgumentException(HERE) << "The design of experiments must contains not empty input AND output samples";
     if (designOfExperiment_.getInputSample().getSize() != designOfExperiment_.getOutputSample().getSize())
       throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
     if (getCovarianceModel().getSpatialDimension() != inputDimension)

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Evaluates the design of experiment
+ *  @brief Evaluates the design of experiments
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -37,6 +37,9 @@ public:
 
   /** Virtual constructor */
   virtual DesignOfExperimentEvaluation * clone() const;
+
+  /** Object name accessor */
+  virtual void setName(const OT::String& name);
 
   virtual OT::Sample getOriginalInputSample() const;
   void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);

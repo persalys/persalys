@@ -39,14 +39,22 @@ using namespace OT;
 namespace OTGUI {
 
 PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidget,
-                                               PVXYChartViewWidget * rankPvViewWidget,
+                                               const Sample& sample,
+                                               const Sample& sampleRank,
                                                QStringList inputNames,
                                                QStringList outputNames,
                                                PVXYChartSettingWidget::Type plotType,
                                                QWidget * parent)
   : QWidget(parent)
   , pvViewWidget_(pvViewWidget)
-  , rankPvViewWidget_(rankPvViewWidget)
+  , sample_(sample)
+  , sampleRank_(sampleRank)
+  , failedSample_()
+  , failedSampleRank_()
+  , notEvalSample_()
+  , notEvalSampleRank_()
+  , inputNames_(inputNames)
+  , outputNames_(outputNames)
   , plotType_(plotType)
   , xAxisComboBox_(0)
   , yAxisComboBox_(0)
@@ -63,15 +71,59 @@ PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidge
   , markerStyles_(0)
   , reprListWidget_(0)
 {
+  Q_ASSERT(sample.getSize());
   if (!pvViewWidget_)
     throw InvalidArgumentException(HERE) << "PVXYChartSettingWidget: No pvViewWidget !";
 
   connect(pvViewWidget_, SIGNAL(plotChanged()), this, SLOT(updateLineEdits()));
 
-  if (rankPvViewWidget_)
-    connect(rankPvViewWidget_, SIGNAL(plotChanged()), this, SLOT(updateLineEdits()));
+  buildInterface();
+}
 
-  // buildInterface
+
+PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget* pvViewWidget,
+                                               const Sample& sample,
+                                               const Sample& sampleRank,
+                                               const Sample& failedSample,
+                                               const Sample& failedSampleRank,
+                                               const Sample& notEvalSample,
+                                               const Sample& notEvalSampleRank,
+                                               Type plotType,
+                                               QWidget * parent)
+  : QWidget(parent)
+  , pvViewWidget_(pvViewWidget)
+  , sample_(sample)
+  , sampleRank_(sampleRank)
+  , failedSample_(failedSample)
+  , failedSampleRank_(failedSampleRank)
+  , notEvalSample_(notEvalSample)
+  , notEvalSampleRank_(notEvalSampleRank)
+  , inputNames_()
+  , outputNames_()
+  , plotType_(plotType)
+  , xAxisComboBox_(0)
+  , yAxisComboBox_(0)
+  , titleLineEdit_(0)
+  , xlabelLineEdit_(0)
+  , xmin_(0)
+  , xmax_(0)
+  , xlogScaleCheckBox_(0)
+  , ylabelLineEdit_(0)
+  , ymin_(0)
+  , ymax_(0)
+  , ylogScaleCheckBox_(0)
+  , colorButton_(0)
+  , markerStyles_(0)
+  , reprListWidget_(0)
+{
+  inputNames_ = QtOT::DescriptionToStringList(sample_.getDescription());
+  connect(pvViewWidget_, SIGNAL(plotChanged()), this, SLOT(updateLineEdits()));
+  buildInterface();
+}
+
+
+void PVXYChartSettingWidget::buildInterface()
+{
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
@@ -96,11 +148,11 @@ PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidge
 
     xAxisComboBox_ = new QComboBox;
 
-    for (int i=0; i<inputNames.size(); ++i)
-      xAxisComboBox_->addItem(inputNames[i], true);
+    for (int i = 0; i < inputNames_.size(); ++i)
+      xAxisComboBox_->addItem(inputNames_[i], true);
 
-    for (int i=0; i<outputNames.size(); ++i)
-      xAxisComboBox_->addItem(outputNames[i], false);
+    for (int i = 0; i < outputNames_.size(); ++i)
+      xAxisComboBox_->addItem(outputNames_[i], false);
 
     mainGridLayout->addWidget(xAxisComboBox_, rowGrid, 1, 1, 1);
     connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateYComboBox()));
@@ -115,14 +167,11 @@ PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidge
   }
 
   // rank checkbox
-  QCheckBox * rankCheckBox = 0;
-  if (plotType_ == PVXYChartSettingWidget::Scatter && rankPvViewWidget_)
+  if (sampleRank_.getSize())
   {
-    rankPvViewWidget_->setVisible(false);
-    rankCheckBox = new QCheckBox(tr("Ranks"));
+    QCheckBox * rankCheckBox = new QCheckBox(tr("Ranks"));
     mainGridLayout->addWidget(rankCheckBox, ++rowGrid, 0, 1, 2);
-    connect(rankCheckBox, SIGNAL(clicked(bool)), rankPvViewWidget_, SLOT(setVisible(bool)));
-    connect(rankCheckBox, SIGNAL(clicked(bool)), pvViewWidget_, SLOT(setHidden(bool)));
+    connect(rankCheckBox, SIGNAL(clicked(bool)), this, SLOT(modifyData(bool)));
   }
 
   // representation
@@ -180,8 +229,6 @@ PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidge
   // log scale
   xlogScaleCheckBox_ = new QCheckBox(tr("Log scale"));
   connect(xlogScaleCheckBox_, SIGNAL(clicked(bool)), pvViewWidget_, SLOT(setXLogScale(bool)));
-  if (rankCheckBox)
-    connect(rankCheckBox, SIGNAL(clicked(bool)), xlogScaleCheckBox_, SLOT(setHidden(bool)));
   gridLayoutTab->addWidget(xlogScaleCheckBox_, 3, 0, 1, 2);
 
   gridLayoutTab->setRowStretch(4, 1);
@@ -218,8 +265,6 @@ PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidge
   // log scale
   ylogScaleCheckBox_ = new QCheckBox(tr("Log scale"));
   connect(ylogScaleCheckBox_, SIGNAL(clicked(bool)), pvViewWidget_, SLOT(setYLogScale(bool)));
-  if (rankCheckBox)
-    connect(rankCheckBox, SIGNAL(clicked(bool)), ylogScaleCheckBox_, SLOT(setHidden(bool)));
   gridLayoutTab->addWidget(ylogScaleCheckBox_, 3, 0, 1, 2);
 
   gridLayoutTab->setRowStretch(4, 1);
@@ -268,9 +313,9 @@ PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidge
   markerSize->setMinimum(1);
   markerSize->setMaximum(10);
   markerSize->setValue(2);
-  connect(markerSize, SIGNAL(valueChanged(int)), this, SLOT(setMarkerSize(int)));
+  connect(markerSize, SIGNAL(valueChanged(int)), pvViewWidget_, SLOT(setMarkerSize(int)));
   propertiesTabLayout->addWidget(markerSize, 2, 1, 1, 1);
-  
+
   propertiesTabLayout->setRowStretch(3, 1);
   tabWidget->addTab(propertiesTab, tr("Plot style"));
 
@@ -281,7 +326,7 @@ PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidge
   QHBoxLayout * hboxForBottomButtons = new QHBoxLayout;
   hboxForBottomButtons->addStretch();
   QPushButton * button = new QPushButton(tr("Export"));
-  connect(button, SIGNAL(clicked()), this, SLOT(exportPlot()));
+  connect(button, SIGNAL(clicked()), pvViewWidget_, SLOT(exportPlot()));
   hboxForBottomButtons->addWidget(button);
 
   mainGridLayout->addLayout(hboxForBottomButtons, ++rowGrid, 1, 1, 1);
@@ -298,18 +343,21 @@ PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidge
 }
 
 
+void PVXYChartSettingWidget::modifyData(bool isRankRequired)
+{
+  pvViewWidget_->updateTable(isRankRequired ? sampleRank_ : sample_, 0);
+  if (failedSample_.getSize())
+    pvViewWidget_->updateTable(isRankRequired ? failedSampleRank_ : failedSample_, 1);
+  if (notEvalSample_.getSize())
+    pvViewWidget_->updateTable(isRankRequired ? notEvalSampleRank_ : notEvalSample_, failedSample_.getSize() ? 2 : 1);
+}
+
+
 void PVXYChartSettingWidget::updateLineEdits()
 {
-  PVXYChartViewWidget * chartWidget = 0;
-  if (pvViewWidget_)
-    if (pvViewWidget_->isVisible())
-      chartWidget = pvViewWidget_;
-  if (rankPvViewWidget_)
-    if (rankPvViewWidget_->isVisible())
-      chartWidget = rankPvViewWidget_;
-
-  if (!chartWidget || !xAxisComboBox_ || !yAxisComboBox_)
-    return;
+  Q_ASSERT(xAxisComboBox_ && yAxisComboBox_ && titleLineEdit_);
+  Q_ASSERT(xlabelLineEdit_ && xmin_ && xmax_);
+  Q_ASSERT(ylabelLineEdit_ && ymin_ && ymax_);
 
   SignalBlocker xlabelLineEditBlocker(xlabelLineEdit_);
   SignalBlocker xminBlocker(xmin_);
@@ -319,18 +367,18 @@ void PVXYChartSettingWidget::updateLineEdits()
   SignalBlocker ylabelLineEditBlocker(ylabelLineEdit_);
   SignalBlocker titleLineEditBlocker(titleLineEdit_);
 
-  titleLineEdit_->setText(chartWidget->getChartTitle(xAxisComboBox_->currentText(), yAxisComboBox_->currentText()));
-  xlabelLineEdit_->setText(chartWidget->getXAxisTitle(xAxisComboBox_->currentText(), yAxisComboBox_->currentText()));
-  xmin_->setValue(chartWidget->getXAxisRangeMinimum());
-  xmax_->setValue(chartWidget->getXAxisRangeMaximum());
-  ylabelLineEdit_->setText(chartWidget->getYAxisTitle(xAxisComboBox_->currentText(), yAxisComboBox_->currentText()));
-  ymin_->setValue(chartWidget->getYAxisRangeMinimum());
-  ymax_->setValue(chartWidget->getYAxisRangeMaximum());
+  titleLineEdit_->setText(pvViewWidget_->getChartTitle(xAxisComboBox_->currentText(), yAxisComboBox_->currentText()));
+  xlabelLineEdit_->setText(pvViewWidget_->getXAxisTitle(xAxisComboBox_->currentText(), yAxisComboBox_->currentText()));
+  xmin_->setValue(pvViewWidget_->getXAxisRangeMinimum());
+  xmax_->setValue(pvViewWidget_->getXAxisRangeMaximum());
+  ylabelLineEdit_->setText(pvViewWidget_->getYAxisTitle(xAxisComboBox_->currentText(), yAxisComboBox_->currentText()));
+  ymin_->setValue(pvViewWidget_->getYAxisRangeMinimum());
+  ymax_->setValue(pvViewWidget_->getYAxisRangeMaximum());
 
   if (xlogScaleCheckBox_ && ylogScaleCheckBox_)
   {
-    xlogScaleCheckBox_->setEnabled(chartWidget->logScalingValidForXAxis());
-    ylogScaleCheckBox_->setEnabled(chartWidget->logScalingValidForYAxis());
+    xlogScaleCheckBox_->setEnabled(pvViewWidget_->logScalingValidForXAxis());
+    ylogScaleCheckBox_->setEnabled(pvViewWidget_->logScalingValidForYAxis());
     if (!xlogScaleCheckBox_->isEnabled())
       xlogScaleCheckBox_->setToolTip(tr("X-Axis bounds must be positive"));
     if (!ylogScaleCheckBox_->isEnabled())
@@ -341,8 +389,7 @@ void PVXYChartSettingWidget::updateLineEdits()
 
 void PVXYChartSettingWidget::updateYComboBox()
 {
-  if (!xAxisComboBox_ || !yAxisComboBox_)
-    return;
+  Q_ASSERT(xAxisComboBox_ && yAxisComboBox_);
 
   SignalBlocker blocker(yAxisComboBox_);
   yAxisComboBox_->clear();
@@ -350,7 +397,7 @@ void PVXYChartSettingWidget::updateYComboBox()
   QStringList inputNames;
   QStringList outputNames;
 
-  for (int i=0; i<xAxisComboBox_->count(); ++i)
+  for (int i = 0; i < xAxisComboBox_->count(); ++i)
   {
     if (i != xAxisComboBox_->currentIndex()) // must have x != y
     {
@@ -372,82 +419,46 @@ void PVXYChartSettingWidget::updateYComboBox()
 
 void PVXYChartSettingWidget::plotChanged()
 {
-  if (!xAxisComboBox_ || !yAxisComboBox_)
-    return;
-
+  Q_ASSERT(xAxisComboBox_ && yAxisComboBox_);
   xlogScaleCheckBox_->setChecked(false);
   ylogScaleCheckBox_->setChecked(false);
 
-  if (pvViewWidget_)
-    pvViewWidget_->showChart(xAxisComboBox_->currentText(), yAxisComboBox_->currentText());
-  if (rankPvViewWidget_)
-    rankPvViewWidget_->showChart(xAxisComboBox_->currentText(), yAxisComboBox_->currentText());
+  pvViewWidget_->showChart(xAxisComboBox_->currentText(), yAxisComboBox_->currentText());
 }
 
 
 void PVXYChartSettingWidget::updateTitle()
 {
-  if (!xAxisComboBox_ || !yAxisComboBox_ || !titleLineEdit_)
-    return;
-  if (pvViewWidget_)
-    pvViewWidget_->setChartTitle(xAxisComboBox_->currentText(), yAxisComboBox_->currentText(), titleLineEdit_->text());
-  if (rankPvViewWidget_)
-    rankPvViewWidget_->setChartTitle(xAxisComboBox_->currentText(), yAxisComboBox_->currentText(), titleLineEdit_->text());
+  Q_ASSERT(xAxisComboBox_ && yAxisComboBox_ && titleLineEdit_);
+  pvViewWidget_->setChartTitle(xAxisComboBox_->currentText(), yAxisComboBox_->currentText(), titleLineEdit_->text());
 }
 
 
 void PVXYChartSettingWidget::updateXLabel()
 {
-  if (!xAxisComboBox_ || !yAxisComboBox_ || !xlabelLineEdit_)
-    return;
-  if (pvViewWidget_ && xAxisComboBox_ && yAxisComboBox_ && xlabelLineEdit_)
-    pvViewWidget_->setXAxisTitle(xAxisComboBox_->currentText(), yAxisComboBox_->currentText(), xlabelLineEdit_->text());
-  if (rankPvViewWidget_ )
-    rankPvViewWidget_->setXAxisTitle(xAxisComboBox_->currentText(), yAxisComboBox_->currentText(), xlabelLineEdit_->text());
+  Q_ASSERT(xAxisComboBox_ && yAxisComboBox_ && xlabelLineEdit_);
+  pvViewWidget_->setXAxisTitle(xAxisComboBox_->currentText(), yAxisComboBox_->currentText(), xlabelLineEdit_->text());
 }
 
 
 void PVXYChartSettingWidget::updateYLabel()
 {
-  if (!xAxisComboBox_ || !yAxisComboBox_ || !ylabelLineEdit_)
-    return;
-  if (pvViewWidget_)
-    pvViewWidget_->setYAxisTitle(xAxisComboBox_->currentText(), yAxisComboBox_->currentText(), ylabelLineEdit_->text());
-  if (rankPvViewWidget_)
-    rankPvViewWidget_->setYAxisTitle(xAxisComboBox_->currentText(), yAxisComboBox_->currentText(), ylabelLineEdit_->text());
+  Q_ASSERT(xAxisComboBox_ && yAxisComboBox_ && ylabelLineEdit_);
+  pvViewWidget_->setYAxisTitle(xAxisComboBox_->currentText(), yAxisComboBox_->currentText(), ylabelLineEdit_->text());
 }
 
 
 void PVXYChartSettingWidget::updateXrange()
 {
-  if (pvViewWidget_)
-    pvViewWidget_->setXAxisRange(xmin_->value(), xmax_->value());
-  if (rankPvViewWidget_)
-    rankPvViewWidget_->setXAxisRange(xmin_->value(), xmax_->value());
+  Q_ASSERT(xmin_ && xmax_);
+  pvViewWidget_->setXAxisRange(xmin_->value(), xmax_->value());
 }
 
 
 void PVXYChartSettingWidget::updateYrange()
 {
-  if (pvViewWidget_)
-    pvViewWidget_->setYAxisRange(ymin_->value(), ymax_->value());
-  if (rankPvViewWidget_)
-    rankPvViewWidget_->setYAxisRange(ymin_->value(), ymax_->value());
-}
-
-
-void PVXYChartSettingWidget::exportPlot()
-{
-  if (pvViewWidget_)
-  {
-    if (pvViewWidget_->isVisible())
-      pvViewWidget_->exportPlot();
-  }
-  if (rankPvViewWidget_)
-  {
-    if (rankPvViewWidget_->isVisible())
-      rankPvViewWidget_->exportPlot();
-  }
+  Q_ASSERT(ymin_ && ymax_);
+  pvViewWidget_->setYAxisRange(ymin_->value(), ymax_->value());
 }
 
 
@@ -457,10 +468,7 @@ void PVXYChartSettingWidget::setColor()
 
   if (color.isValid())
   {
-    if (pvViewWidget_)
-      pvViewWidget_->setRepresentationColor(color);
-    if (rankPvViewWidget_)
-      rankPvViewWidget_->setRepresentationColor(color);
+    pvViewWidget_->setRepresentationColor(color);
 
     // update button color
     QPixmap px(20, 20);
@@ -473,19 +481,7 @@ void PVXYChartSettingWidget::setColor()
 void PVXYChartSettingWidget::setMarkerStyle(const int index)
 {
   const int style = markerStyles_->itemData(index).toInt();
-  if (pvViewWidget_)
-    pvViewWidget_->setMarkerStyle(style);
-  if (rankPvViewWidget_)
-    rankPvViewWidget_->setMarkerStyle(style);
-}
-
-
-void PVXYChartSettingWidget::setMarkerSize(const int size)
-{
-  if (pvViewWidget_)
-    pvViewWidget_->setMarkerSize(size);
-  if (rankPvViewWidget_)
-    rankPvViewWidget_->setMarkerSize(size);
+  pvViewWidget_->setMarkerStyle(style);
 }
 
 
@@ -496,8 +492,6 @@ void PVXYChartSettingWidget::setRepresentationToDisplay()
   {
     const QString itemName = reprListWidget_->getItemNames()[i];
     pvViewWidget_->setRepresentationVisibility(checkedItemNames.contains(itemName), i);
-    if (rankPvViewWidget_)
-      rankPvViewWidget_->setRepresentationVisibility(checkedItemNames.contains(itemName), i);
   }
 }
 }

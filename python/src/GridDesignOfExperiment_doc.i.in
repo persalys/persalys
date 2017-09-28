@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::GridDesignOfExperiment
-"Design of experiment.
+"Design of experiments.
 
 Available constructors:
     GridDesignOfExperiment(*name, physicalModel*)
@@ -38,7 +38,7 @@ Create the model:
 >>> G = otguibase.Output('G', 'deviation')
 >>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(_pi*100.0)'])
 
-Create the design of experiment:
+Create the design of experiments:
 
 >>> myDOE = otguibase.GridDesignOfExperiment('myDOE', myPhysicalModel)"
 

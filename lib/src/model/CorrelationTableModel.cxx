@@ -20,7 +20,9 @@
  */
 #include "otgui/CorrelationTableModel.hxx"
 
-#include "openturns/NormalCopula.hxx"
+#include "otgui/StudyTreeViewModel.hxx"
+
+#include <openturns/NormalCopula.hxx>
 
 #include <QBrush>
 
@@ -71,7 +73,7 @@ QVariant CorrelationTableModel::data(const QModelIndex & index, int role) const
     return QVariant();
 
   if (role == Qt::DisplayRole || role == Qt::EditRole)
-    return QString::number(physicalModel_.getCopula().getSpearmanCorrelation()(index.row(), index.column()), 'g', 15);
+    return QString::number(physicalModel_.getCopula().getSpearmanCorrelation()(index.row(), index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
 
   else if (role == Qt::BackgroundRole && index.row() >= index.column())
     return QBrush(Qt::lightGray);

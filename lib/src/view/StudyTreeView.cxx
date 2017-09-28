@@ -129,6 +129,7 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   OTStudy::SetInstanceObserver(treeViewModel_);
   setModel(treeViewModel_);
   connect(treeViewModel_, SIGNAL(newOTStudyCreated(OTStudyItem*)), this, SLOT(createNewOTStudyWindow(OTStudyItem*)));
+  connect(treeViewModel_, SIGNAL(otStudySubItemsAdded(OTStudyItem*)), this, SLOT(modifyStudySubItemsExpansion(OTStudyItem*)));
 
   // forbid the user to define not valid item's name
 #if QT_VERSION >= 0x050000
@@ -571,40 +572,50 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
   OTguiSubWindow * resultWindow = 0;
   const QString analysisType = item->data(Qt::UserRole).toString();
 
-  if (analysisType == "ModelEvaluation")
-    resultWindow = new ModelEvaluationResultWindow(item, this);
-  else if (analysisType == "MonteCarloAnalysis")
-    resultWindow = new MonteCarloResultWindow(item, this);
-  else if (analysisType == "TaylorExpansionMomentsAnalysis")
-    resultWindow = new TaylorExpansionMomentsResultWindow(item);
-  else if (analysisType == "SobolAnalysis")
-    resultWindow = new SobolResultWindow(item, this);
-  else if (analysisType == "SRCAnalysis")
-    resultWindow = new SRCResultWindow(item, this);
-  else if (analysisType == "MonteCarloReliabilityAnalysis" ||
-           analysisType == "FORMImportanceSamplingAnalysis" ||
-           analysisType == "ImportanceSamplingAnalysis")
-    resultWindow = new SimulationReliabilityResultWindow(item, this);
-  else if (analysisType == "FORMAnalysis")
-    resultWindow = new ApproximationResultWindow(item, this);
-  else if (analysisType == "DataAnalysis")
-    resultWindow = new DataAnalysisResultWindow(item, this);
-  else if (analysisType == "FunctionalChaosAnalysis")
-    resultWindow = new FunctionalChaosResultWindow(item, this);
-  else if (analysisType == "KrigingAnalysis")
-    resultWindow = new KrigingResultWindow(item, this);
-  else if (analysisType == "InferenceAnalysis")
-    resultWindow = new InferenceResultWindow(item, this);
-  else if (analysisType == "CopulaInferenceAnalysis")
-    resultWindow = new CopulaInferenceResultWindow(item, this);
-  else if (analysisType.contains("DesignOfExperiment"))
-    // if DesignOfExperimentEvaluation GridDesignOfExperiment ImportedDesignOfExperiment ProbabilisticDesignOfExperiment
-    resultWindow = new DesignOfExperimentWindow(item, this);
-
-  if (!resultWindow)
+  try
   {
-    qDebug() << "Error: In createAnalysisResultWindow: analysisType " << analysisType << " not recognized.\n";
-    return;
+    if (analysisType == "ModelEvaluation")
+      resultWindow = new ModelEvaluationResultWindow(item, this);
+    else if (analysisType == "MonteCarloAnalysis")
+      resultWindow = new MonteCarloResultWindow(item, this);
+    else if (analysisType == "TaylorExpansionMomentsAnalysis")
+      resultWindow = new TaylorExpansionMomentsResultWindow(item);
+    else if (analysisType == "SobolAnalysis")
+      resultWindow = new SobolResultWindow(item, this);
+    else if (analysisType == "SRCAnalysis")
+      resultWindow = new SRCResultWindow(item, this);
+    else if (analysisType == "MonteCarloReliabilityAnalysis" ||
+            analysisType == "FORMImportanceSamplingAnalysis" ||
+            analysisType == "ImportanceSamplingAnalysis")
+      resultWindow = new SimulationReliabilityResultWindow(item, this);
+    else if (analysisType == "FORMAnalysis")
+      resultWindow = new ApproximationResultWindow(item, this);
+    else if (analysisType == "DataAnalysis")
+      resultWindow = new DataAnalysisResultWindow(item, this);
+    else if (analysisType == "FunctionalChaosAnalysis")
+      resultWindow = new FunctionalChaosResultWindow(item, this);
+    else if (analysisType == "KrigingAnalysis")
+      resultWindow = new KrigingResultWindow(item, this);
+    else if (analysisType == "InferenceAnalysis")
+      resultWindow = new InferenceResultWindow(item, this);
+    else if (analysisType == "CopulaInferenceAnalysis")
+      resultWindow = new CopulaInferenceResultWindow(item, this);
+    else if (analysisType.contains("DesignOfExperiment"))
+      // if DesignOfExperimentEvaluation FixedDesignOfExperiment GridDesignOfExperiment
+      // ImportedDesignOfExperiment ProbabilisticDesignOfExperiment
+      resultWindow = new DesignOfExperimentWindow(item, this);
+    else
+    {
+      qDebug() << "Error: In createAnalysisResultWindow: analysisType " << analysisType << " not recognized.\n";
+      return;
+    }
+  }
+  catch (std::exception& ex)
+  {
+    AnalysisWindow * analysisWindow = new AnalysisWindow(item, analysisInProgress_, this);
+    analysisWindow->setMessage(tr("Impossible to create a result window for this analysis. Try to launch again the analysis."));
+    resultWindow = analysisWindow;
+    resultWindow->setErrorMessage(tr("Impossible to create a result window"));
   }
 
   emit showWindow(resultWindow);
@@ -685,6 +696,22 @@ void StudyTreeView::modifyAnalysis(AnalysisItem* item)
       createAnalysisWindow(item);
       delete wizard;
       wizard = 0;
+    }
+  }
+}
+
+
+void StudyTreeView::modifyStudySubItemsExpansion(OTStudyItem* item)
+{
+  setCurrentIndex(item->index());
+  setExpanded(item->index(), true);
+  for (int i = 0; i < item->rowCount(); ++i)
+  {
+    setExpanded(item->child(i)->index(), true);
+    for (int j = 0; j < item->child(i)->rowCount(); ++j)
+    {
+      // collapse models items
+      setExpanded(item->child(i)->child(j)->index(), false);
     }
   }
 }

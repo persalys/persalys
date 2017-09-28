@@ -40,8 +40,8 @@ PVViewWidget::PVViewWidget(QWidget *parent, PVServerManagerInterface *smb, const
   , smb_(smb)
   , view_(0)
   , contextItem_(0)
-  , table_(0)
-  , producerBase_(0)
+  , tables_()
+  , producerBases_()
 {
   QMainWindow * mw(findMWInHierachy());
   if(!mw)
@@ -71,7 +71,21 @@ PVViewWidget::~PVViewWidget()
 }
 
 
-QMainWindow *PVViewWidget::findMWInHierachy()
+vtkTable * PVViewWidget::getTable(const UnsignedInteger repr_ind) const
+{
+  Q_ASSERT(repr_ind <= tables_.size());
+  return tables_[repr_ind];
+}
+
+
+vtkSMProxy * PVViewWidget::getProxy(const UnsignedInteger repr_ind) const
+{
+  Q_ASSERT(repr_ind <= producerBases_.size());
+  return producerBases_[repr_ind];
+}
+
+
+QMainWindow * PVViewWidget::findMWInHierachy()
 {
   QObject * curPar(parent());
   while (curPar)
@@ -122,12 +136,11 @@ void PVViewWidget::setData(const std::vector< std::vector<double> >& valuesByCol
   // create a new source
   pqActiveObjects::instance().setActiveView(view_);
   pqPipelineSource * mySourceProducer(builder->createSource("sources", "PVTrivialProducer", serv));
-  producerBase_ = mySourceProducer->getProxy();
   producerBases_.append(mySourceProducer->getProxy());
   vtkSMSourceProxy * producer(vtkSMSourceProxy::SafeDownCast(mySourceProducer->getProxy()));
   vtkObjectBase * clientSideObject(producer->GetClientSideObject());
   vtkPVTrivialProducer * realProducer(vtkPVTrivialProducer::SafeDownCast(clientSideObject));
-  realProducer->SetOutput(table_);
+  realProducer->SetOutput(tables_[tables_.size() - 1]);
   mySourceProducer->updatePipeline();
   // create a new representation
   pqDataRepresentation * newRepr(builder->createDataRepresentation(mySourceProducer->getOutputPort(0), view_, getRepresentationName()));
@@ -156,9 +169,12 @@ void PVViewWidget::setData(const Sample& sample)
 }
 
 
-void PVViewWidget::buildTableFrom(const std::vector< std::vector<double> >& valuesByColumn, const std::vector<std::string>& columnNames)
+void PVViewWidget::buildTableFrom(const std::vector< std::vector<double> >& valuesByColumn,
+                                        const std::vector<std::string>& columnNames)
 {
-  table_.TakeReference(vtkTable::New());
+  vtkSmartPointer<vtkTable> table;
+  table.TakeReference(vtkTable::New());
+  tables_.append(table);
 
   const std::size_t sz(valuesByColumn.size());
 
@@ -186,7 +202,7 @@ void PVViewWidget::buildTableFrom(const std::vector< std::vector<double> >& valu
     arr->SetNumberOfComponents(1);
     double * pt(arr->GetPointer(0));
     std::copy(valuesByColumn[i].begin(), valuesByColumn[i].end(), pt);
-    table_->AddColumn(arr);
+    table->AddColumn(arr);
   }
 }
 
@@ -266,5 +282,31 @@ void PVViewWidget::setAxisToShow(const QStringList& variablesNames)
   }
 
   setAxisToShow(varNames);
+}
+
+
+void PVViewWidget::updateTable(const Sample& sample, const UnsignedInteger repr_ind)
+{
+  // values of each variable
+  std::vector< std::vector<double> > varData(sample.getDimension(), std::vector<double>(sample.getSize()));
+  for (UnsignedInteger i = 0; i < sample.getSize(); ++i)
+    for (UnsignedInteger j = 0; j < sample.getDimension(); ++j)
+      varData[j][i] = sample[i][j];
+
+  vtkIdType nbCols(getTable(repr_ind)->GetNumberOfColumns());
+  Q_ASSERT(sample.getDimension() == nbCols);
+
+  for (vtkIdType i = 0; i < nbCols; i++)
+  {
+    vtkAbstractArray * col(getTable(repr_ind)->GetColumn(i));
+    vtkDoubleArray * cold(vtkDoubleArray::SafeDownCast(col));
+    double * pt(cold->GetPointer(0));
+    std::copy(varData[i].begin(), varData[i].end(), pt);
+    cold->SetTuple(2, pt);
+  }
+
+  // update view
+  getProxy(repr_ind)->MarkModified(NULL);
+  view_->resetDisplay();
 }
 }

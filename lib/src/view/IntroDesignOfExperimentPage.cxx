@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to define the type of design of experiment
+ *  @brief QWizardPage to define the type of design of experiments
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -39,7 +39,7 @@ IntroDesignOfExperimentPage::IntroDesignOfExperimentPage(QWidget* parent)
 
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 
-  QGroupBox * methodBox = new QGroupBox(tr("Type of design of experiment"));
+  QGroupBox * methodBox = new QGroupBox(tr("Type of design of experiments"));
   QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
 
   methodGroup_ = new QButtonGroup;
@@ -83,12 +83,12 @@ void IntroDesignOfExperimentPage::initialize(const Analysis& analysis)
   // method
   const String analysisName = analysis.getImplementation()->getClassName();
 
-  if (analysisName == "GridDesignOfExperiment" || !analysis_ptr->getPhysicalModel().hasStochasticInputs())
-    methodGroup_->button(IntroDesignOfExperimentPage::deterministic)->click();
-  else if (analysisName == "ProbabilisticDesignOfExperiment")
+  if (analysisName == "ProbabilisticDesignOfExperiment")
     methodGroup_->button(IntroDesignOfExperimentPage::probabilistic)->click();
   else if (analysisName == "ImportedDesignOfExperiment" && analysis_ptr->getPhysicalModel().hasStochasticInputs())
-    methodGroup_->button(IntroDesignOfExperimentPage::import)->click(); 
+    methodGroup_->button(IntroDesignOfExperimentPage::import)->click();
+  else
+    methodGroup_->button(IntroDesignOfExperimentPage::deterministic)->click();
 }
 
 

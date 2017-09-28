@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>OTGUI::AnalysisItem</name>
     <message>
@@ -24,259 +24,260 @@
         <translation>Ajouter le métamodèle dans l&apos;arbre d&apos;étude</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="98"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="96"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="99"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="97"/>
         <source>Remove the analysis</source>
         <translation>Supprimer l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="155"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="153"/>
         <source>Can not modify a running analysis.</source>
         <translation>Impossible de modifier une analyse en cours d&apos;exécution.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="170"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="168"/>
         <source>The physical model must have inputs AND at least one selected output.</source>
         <translation>Le modèle physique doit avoir des entrées ET au moins une sortie sélectionnée.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="179"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="177"/>
         <source>The physical model must have stochastic inputs.</source>
         <translation>Le modèle physique doit avoir des entrées stochastiques.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="188"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="186"/>
         <source>The model must have an independent copula to compute a sensitivity analysis but here the inputs are correlated.</source>
         <translation>Le modèle doit avoir une copule indépendante pour réaliser une analyse de sensibilité mais ici les entrées sont corrélées.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="205"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="215"/>
         <source>The sample is empty.</source>
         <translation>L&apos;échantillon est vide.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="214"/>
-        <source>The model must have at least one output.</source>
-        <translation>Le modèle doit avoir au moins une sortie.</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="254"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="253"/>
         <source>Can not remove a running analysis.</source>
         <translation>Impossible de supprimer une analyse en cours d&apos;exécution.</translation>
     </message>
     <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="402"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="413"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="445"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="511"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="529"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="557"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="575"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="614"/>
+        <source>Algorithm</source>
+        <translation>Algorithme</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="405"/>
+        <source>Taylor expansion moments</source>
+        <translation>Décomposition de Taylor</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="416"/>
+        <source>Confidence level</source>
+        <translation>Niveau de l&apos;intervalle de confiance</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="417"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="531"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="618"/>
+        <source>Maximum coefficient of variation</source>
+        <translation>Coefficient de variation maximum</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="418"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="532"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="619"/>
+        <source>Maximum elapsed time</source>
+        <translation>Durée maximale</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="419"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="533"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="620"/>
+        <source>Maximum calls</source>
+        <translation>Nombre d&apos;appels maximum</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="355"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="369"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="384"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="420"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="534"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="560"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="621"/>
+        <source>Block size</source>
+        <translation>Taille de bloc</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="206"/>
+        <source>The sample must not be empty and must contain output values.</source>
+        <translation>L&apos;échantillon ne doit pas être vide et doit contenir des valeurs de sortie.</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="380"/>
+        <source>Design name</source>
+        <translation>Nom du plan</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="381"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="421"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="535"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="561"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="622"/>
+        <source>Seed</source>
+        <translation>Graine</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="389"/>
+        <source>LHS</source>
+        <translation>LHS</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="391"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="424"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="628"/>
+        <source>Monte Carlo</source>
+        <translation>Monte-Carlo</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="393"/>
+        <source>Quasi-Monte Carlo</source>
+        <translation>Quasi Monte-Carlo</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="447"/>
+        <source>Covariance model</source>
+        <translation>Modèle de covariance</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="449"/>
+        <source>nu</source>
+        <translation>nu</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="451"/>
+        <source>p</source>
+        <translation>p</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="452"/>
+        <source>Parameters optimization</source>
+        <translation>Optimisation des paramètres</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="453"/>
+        <source>Scale</source>
+        <translation>Echelle</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="454"/>
+        <source>Amplitude</source>
+        <translation>Amplitude</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="455"/>
+        <source>Trend basis</source>
+        <translation>Type de la tendance</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="456"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="515"/>
+        <source>Leave-one-out validation</source>
+        <translation>Validation par Leave-one-out</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="459"/>
+        <source>Kriging</source>
+        <translation>Krigeage</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="475"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="504"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="521"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="522"/>
+        <source>yes</source>
+        <translation>oui</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="475"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="504"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="521"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="522"/>
+        <source>no</source>
+        <translation>non</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="494"/>
+        <source>Constant</source>
+        <translation>Constante</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="497"/>
+        <source>Linear</source>
+        <translation>Linéaire</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="499"/>
+        <source>Quadratic</source>
+        <translation>Quadratique</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="513"/>
+        <source>Chaos degree</source>
+        <translation>Degrée du polynôme</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="514"/>
+        <source>Sparse</source>
+        <translation>Creux</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="518"/>
+        <source>Functional chaos</source>
+        <translation>Chaos fonctionnel</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="538"/>
+        <source>Sobol</source>
+        <translation>Sobol</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="353"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="367"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="382"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="559"/>
+        <source>Sample size</source>
+        <translation>Taille d&apos;échantillon</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="332"/>
+        <source>Point</source>
+        <translation>Point</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="333"/>
         <location filename="../lib/src/model/AnalysisItem.cxx" line="403"/>
         <location filename="../lib/src/model/AnalysisItem.cxx" line="414"/>
         <location filename="../lib/src/model/AnalysisItem.cxx" line="446"/>
         <location filename="../lib/src/model/AnalysisItem.cxx" line="512"/>
         <location filename="../lib/src/model/AnalysisItem.cxx" line="530"/>
         <location filename="../lib/src/model/AnalysisItem.cxx" line="558"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="574"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="613"/>
-        <source>Algorithm</source>
-        <translation>Algorithme</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="406"/>
-        <source>Taylor expansion moments</source>
-        <translation>Décomposition de Taylor</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="417"/>
-        <source>Confidence level</source>
-        <translation>Niveau de l&apos;intervalle de confiance</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="418"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="532"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="617"/>
-        <source>Maximum coefficient of variation</source>
-        <translation>Coefficient de variation maximum</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="419"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="533"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="618"/>
-        <source>Maximum elapsed time</source>
-        <translation>Durée maximale</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="420"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="534"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="619"/>
-        <source>Maximum calls</source>
-        <translation>Nombre d&apos;appels maximum</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="356"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="370"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="385"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="421"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="535"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="620"/>
-        <source>Block size</source>
-        <translation>Taille de bloc</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="381"/>
-        <source>Design name</source>
-        <translation>Nom du plan</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="382"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="422"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="536"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="561"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="621"/>
-        <source>Seed</source>
-        <translation>Graine</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="390"/>
-        <source>LHS</source>
-        <translation>LHS</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="392"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="425"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="627"/>
-        <source>Monte Carlo</source>
-        <translation>Monte-Carlo</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="394"/>
-        <source>Quasi-Monte Carlo</source>
-        <translation>Quasi Monte-Carlo</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="448"/>
-        <source>Covariance model</source>
-        <translation>Modèle de covariance</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="450"/>
-        <source>nu</source>
-        <translation>nu</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="452"/>
-        <source>p</source>
-        <translation>p</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="453"/>
-        <source>Parameters optimization</source>
-        <translation>Optimisation des paramètres</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="454"/>
-        <source>Scale</source>
-        <translation>Echelle</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="455"/>
-        <source>Amplitude</source>
-        <translation>Amplitude</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="456"/>
-        <source>Trend basis</source>
-        <translation>Type de la tendance</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="457"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="516"/>
-        <source>Leave-one-out validation</source>
-        <translation>Validation par Leave-one-out</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="460"/>
-        <source>Kriging</source>
-        <translation>Krigeage</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="476"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="505"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="522"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="523"/>
-        <source>yes</source>
-        <translation>oui</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="476"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="505"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="522"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="523"/>
-        <source>no</source>
-        <translation>non</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="495"/>
-        <source>Constant</source>
-        <translation>Constante</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="498"/>
-        <source>Linear</source>
-        <translation>Linéaire</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="500"/>
-        <source>Quadratic</source>
-        <translation>Quadratique</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="514"/>
-        <source>Chaos degree</source>
-        <translation>Degrée du polynôme</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="515"/>
-        <source>Sparse</source>
-        <translation>Creux</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="519"/>
-        <source>Functional chaos</source>
-        <translation>Chaos fonctionnel</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="539"/>
-        <source>Sobol</source>
-        <translation>Sobol</translation>
+        <source>Outputs of interest</source>
+        <translation>Sorties d&apos;intérêt</translation>
     </message>
     <message>
         <location filename="../lib/src/model/AnalysisItem.cxx" line="354"/>
         <location filename="../lib/src/model/AnalysisItem.cxx" line="368"/>
         <location filename="../lib/src/model/AnalysisItem.cxx" line="383"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="560"/>
-        <source>Sample size</source>
-        <translation>Taille d&apos;échantillon</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="333"/>
-        <source>Point</source>
-        <translation>Point</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="334"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="404"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="415"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="447"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="513"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="531"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="559"/>
-        <source>Outputs of interest</source>
-        <translation>Sorties d&apos;intérêt</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="355"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="369"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="384"/>
         <source>Outputs to be evaluated</source>
         <translation>Sorties à évaluer</translation>
     </message>
@@ -286,78 +287,78 @@
         <translation>Standardized Regression Coefficients</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="575"/>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="614"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="576"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="615"/>
         <source>Output of interest</source>
         <translation>Sortie d&apos;intérêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="576"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="577"/>
         <source>Optimization algorithm</source>
         <translation>Algorithme d&apos;optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="577"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="578"/>
         <source>Physical starting point</source>
         <translation>Point de départ physique</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="578"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="579"/>
         <source>Maximum iterations number</source>
         <translation>Nombre d&apos;itérations maximum</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="579"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="580"/>
         <source>Maximum absolute error</source>
         <translation>Erreur absolue maximale</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="580"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="581"/>
         <source>Maximum relative error</source>
         <translation>Erreur relative maximale</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="581"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="582"/>
         <source>Maximum residual error</source>
         <translation>Erreur sur les résidus maximale</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="582"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="583"/>
         <source>Maximum constraint error</source>
         <translation>Erreur sur la contrainte maximale</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="585"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="586"/>
         <source>FORM</source>
         <translation>FORM</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="616"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="617"/>
         <source>Design point (standard space)</source>
         <translation>Point de conception (espace standard)</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="633"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="634"/>
         <source>FORM - Importance sampling</source>
         <translation>FORM - Tirages d&apos;importance</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="635"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="636"/>
         <source>Importance sampling</source>
         <translation>Tirages d&apos;importance</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="672"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="673"/>
         <source>Method</source>
         <translation>Méthode</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="673"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="674"/>
         <source>Level</source>
         <translation>Niveau</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="676"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="677"/>
         <source>Kolmogorov Smirnov</source>
         <translation>Kolmogorov Smirnov</translation>
     </message>
@@ -405,12 +406,12 @@
         <translation>Prête à être lancée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="171"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="181"/>
         <source>The analysis is running</source>
         <translation>L&apos;analyse est en cours d&apos;exécution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="187"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="197"/>
         <source>Stop in progress</source>
         <translation>Arrêt en cours</translation>
     </message>
@@ -497,132 +498,142 @@
 <context>
     <name>OTGUI::ApproximationResultTabWidget</name>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="75"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="76"/>
         <source>Threshold exceedance parameters</source>
         <translation>Paramètres du calcul de probabilité de dépassement de seuil</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="84"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="85"/>
         <source>Threshold exceedance results</source>
         <translation>Résultats de calcul de probabilité de dépassement de seuil</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="96"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="103"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="230"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="97"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="104"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="237"/>
         <source>Failure probability</source>
         <translation>Probabilité de défaillance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="97"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="98"/>
         <source>Hasofer reliability index</source>
         <translation>Indice de fiabilité Hasofer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="107"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="108"/>
         <source>Optimization result</source>
         <translation>Résultat de l&apos;optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="110"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="111"/>
         <source>Iterations number</source>
         <translation>Nombre d&apos;itérations</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="111"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="112"/>
         <source>Calls number</source>
         <translation>Nombre d&apos;appels</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="112"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="113"/>
         <source>Absolute error</source>
         <translation>Erreur absolue</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="113"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="114"/>
         <source>Relative error</source>
         <translation>Erreur relative</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="114"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="115"/>
         <source>Residual error</source>
         <translation>Erreur sur les résidus</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="115"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="116"/>
         <source>Constraint error</source>
         <translation>Erreur sur la contrainte</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="131"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="132"/>
         <source>Maximum iterations number reached</source>
         <translation>Nombre d&apos;itérations maximum atteint</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="139"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="140"/>
         <source>Summary</source>
         <translation>Résumé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="149"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="207"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="150"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="208"/>
         <source>Design point</source>
         <translation>Point de conception</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="162"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="228"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="163"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="235"/>
         <source>Variable</source>
         <translation>Variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="164"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="165"/>
         <source>Importance factors</source>
         <translation>Facteurs d&apos;importance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="166"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="167"/>
         <source>Coordinates</source>
         <translation>Coordonnées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="167"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="168"/>
         <source>Standard space</source>
         <translation>Espace standard</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="168"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="169"/>
         <source>Physical space</source>
         <translation>Espace physique</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="198"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="199"/>
         <source>Importance factors pie chart</source>
         <translation>Diagrammes des facteurs d&apos;importance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="201"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="202"/>
         <source>importanceFactors</source>
         <translation>facteursImportance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="217"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="273"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="224"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="280"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="291"/>
         <source>Sensitivities</source>
         <translation>Sensibilités</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="229"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="236"/>
         <source>Distribution parameters</source>
         <translation>Paramètres de distribution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="231"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="238"/>
         <source>Reliability index</source>
         <translation>Indice de fiabilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="277"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="286"/>
+        <source>Internal error during the computation of the sensitivities.
+
+%1</source>
+        <translation>Erreur interne durant le calcul des sensibilités.
+
+%1</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="296"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -722,13 +733,10 @@ Début : %2.</translation>
         <source>Dependencies inference results</source>
         <translation>Résultats d&apos;inférence des dépendances</translation>
     </message>
-    <message numerus="yes">
+    <message>
         <location filename="../lib/src/view/CopulaInferenceResultWindow.cxx" line="54"/>
-        <source>Set(s) of variables</source>
-        <translation>
-            <numerusform>Série de variables</numerusform>
-            <numerusform>Séries de variables</numerusform>
-        </translation>
+        <source>Sets of variables</source>
+        <translation>Séries de variables</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CopulaInferenceResultWindow.cxx" line="91"/>
@@ -811,7 +819,7 @@ Début : %2.</translation>
 <context>
     <name>OTGUI::CorrelationTableModel</name>
     <message>
-        <location filename="../lib/src/model/CorrelationTableModel.cxx" line="110"/>
+        <location filename="../lib/src/model/CorrelationTableModel.cxx" line="112"/>
         <source>The correlation between %1 and %2 can not be equal to &apos;%3&apos;. %4</source>
         <translation>La corrélation entre %1 et %2 ne peut pas être égale à &apos;%3&apos;. %4</translation>
     </message>
@@ -836,118 +844,115 @@ Début : %2.</translation>
 <context>
     <name>OTGUI::DataAnalysisWindow</name>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="63"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="64"/>
         <source>Sample size</source>
         <translation>Taille d&apos;échantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="202"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="135"/>
+        <source>Variables</source>
+        <translation>Variables</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="212"/>
         <source>Stop criteria</source>
         <translation>Critère d&apos;arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="209"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="219"/>
         <source>Elapsed time</source>
         <translation>Durée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="257"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="267"/>
         <source>Probability</source>
         <translation>Probabilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="267"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="277"/>
         <source>Quantile</source>
         <translation>Quantile</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="285"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="295"/>
         <source>Summary</source>
         <translation>Résumé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="353"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="363"/>
         <source>PDF/CDF</source>
         <translation>PDF/CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="404"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="414"/>
         <source>Box plots</source>
         <translation>Boîtes à moustaches</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="420"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="510"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="430"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="527"/>
         <source>Plot matrix</source>
         <translation>Tableau de diagrammes de dispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="450"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="543"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="460"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="553"/>
         <source>Scatter plots</source>
         <translation>Diagrammes de dispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="471"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="483"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="481"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="493"/>
         <source>Table</source>
         <translation>Table</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="182"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="192"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
-    <message numerus="yes">
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="128"/>
-        <source>Variable(s)</source>
-        <translation>
-            <numerusform>Variable</numerusform>
-            <numerusform>Variables</numerusform>
-        </translation>
-    </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="315"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="325"/>
         <source>distributionPDF</source>
         <translation>distributionPDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="319"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="329"/>
         <source>PDF:</source>
         <translation>PDF :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="321"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="331"/>
         <source>Density</source>
         <translation>Densité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="326"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="336"/>
         <source>distributionCDF</source>
         <translation>distributionCDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="330"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="340"/>
         <source>CDF:</source>
         <translation>CDF :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="332"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="342"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="380"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="390"/>
         <source>boxplot</source>
         <translation>boiteAmoustaches</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="386"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="396"/>
         <source>Box plot:</source>
         <translation>Boîte à moustaches :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="499"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="515"/>
         <source>Cobweb plot</source>
         <translation>Graphique Cobweb</translation>
     </message>
@@ -1031,8 +1036,8 @@ Début : %2.</translation>
     </message>
     <message>
         <location filename="../lib/src/model/DataModelDiagramItem.cxx" line="150"/>
-        <source>Can not remove a design of experiment when an analysis is running.</source>
-        <translation>Impossible de supprimer un plan d&apos;expérience lorsqu&apos;une analyse est en cours d&apos;exécution.</translation>
+        <source>Can not remove a design of experiments when an analysis is running.</source>
+        <translation>Impossible de supprimer un plan d&apos;expériences lorsqu&apos;une analyse est en cours d&apos;exécution.</translation>
     </message>
 </context>
 <context>
@@ -1131,39 +1136,39 @@ métamodèle</translation>
 <context>
     <name>OTGUI::DataModelTableModel</name>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="106"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="108"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="108"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="110"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="139"/>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="213"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="141"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="215"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="141"/>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="229"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="143"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="231"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="143"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="145"/>
         <source>Disable</source>
         <translation>Désactiver</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="201"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="203"/>
         <source>The name %2 is already used by another variable</source>
         <translation>Le nom %2 est déjà utilisé par une autre variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="278"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="280"/>
         <source>Define at least a variable</source>
         <translation>Définir au moins une variable</translation>
     </message>
@@ -1201,27 +1206,27 @@ métamodèle</translation>
         <translation>Désactiver</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="162"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="165"/>
         <source>Impossible to update the table.</source>
         <translation>Impossible de mettre à jour le tableau.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="184"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="185"/>
         <source>Data to import...</source>
         <translation>Importer des données...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="186"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="187"/>
         <source>Data files (*.csv *.txt)</source>
         <translation>Fichiers de données (*.csv *.txt)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="197"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="198"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="198"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="199"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1 :
@@ -1326,280 +1331,201 @@ métamodèle</translation>
 <context>
     <name>OTGUI::DesignOfExperimentDefinitionItem</name>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="55"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="66"/>
         <source>Modify</source>
         <translation>Modifier</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="56"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="67"/>
         <source>Modify the analysis</source>
         <translation>Modifier l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="62"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="73"/>
         <source>Evaluate</source>
         <translation>Evaluer</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="63"/>
-        <source>Evaluate the design of experiment</source>
-        <translation>Evaluer le plan d&apos;expérience</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="69"/>
-        <source>Metamodel</source>
-        <translation>Métamodèle</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="70"/>
-        <source>Create a new metamodel</source>
-        <translation>Créer un nouveau métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="74"/>
-        <source>Remove</source>
-        <translation>Supprimer</translation>
+        <source>Evaluate the design of experiments</source>
+        <translation>Evaluer le plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="75"/>
-        <source>Remove the analysis</source>
-        <translation>Supprimer l&apos;analyse</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="224"/>
-        <source>Can not remove a running analysis.</source>
-        <translation>Impossible de supprimer une analyse en cours d&apos;exécution.</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="239"/>
-        <source>The model must have at least one output. Evaluate the design of experiment</source>
-        <translation>Le modèle doit avoir au moins une variable de sortie. Evaluer le plan d&apos;expérience</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="120"/>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="210"/>
-        <source>The input sample is empty.</source>
-        <translation>L&apos;échantillon d&apos;entrée  est vide.</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="138"/>
-        <source>Evaluation</source>
-        <translation>Evaluation</translation>
-    </message>
-</context>
-<context>
-    <name>OTGUI::DesignOfExperimentEvaluationItem</name>
-    <message>
-        <location filename="../lib/src/model/DesignOfExperimentEvaluationItem.cxx" line="50"/>
-        <source>Modify</source>
-        <translation>Modifier</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/DesignOfExperimentEvaluationItem.cxx" line="51"/>
-        <source>Modify the analysis</source>
-        <translation>Modifier l&apos;analyse</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/DesignOfExperimentEvaluationItem.cxx" line="57"/>
-        <source>Evaluate</source>
-        <translation>Evaluer</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/DesignOfExperimentEvaluationItem.cxx" line="58"/>
-        <source>Evaluate the design of experiment</source>
-        <translation>Evaluer le plan d&apos;expérience</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/DesignOfExperimentEvaluationItem.cxx" line="64"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="80"/>
         <source>Metamodel</source>
         <translation>Métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentEvaluationItem.cxx" line="65"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="81"/>
         <source>Create a new metamodel</source>
         <translation>Créer un nouveau métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentEvaluationItem.cxx" line="69"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="85"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentEvaluationItem.cxx" line="70"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="86"/>
         <source>Remove the analysis</source>
         <translation>Supprimer l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentEvaluationItem.cxx" line="117"/>
-        <location filename="../lib/src/model/DesignOfExperimentEvaluationItem.cxx" line="207"/>
-        <source>The input sample is empty.</source>
-        <translation>L&apos;échantillon d&apos;entrée  est vide.</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/DesignOfExperimentEvaluationItem.cxx" line="135"/>
-        <source>Evaluation</source>
-        <translation>Evaluation</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/DesignOfExperimentEvaluationItem.cxx" line="221"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="243"/>
         <source>Can not remove a running analysis.</source>
         <translation>Impossible de supprimer une analyse en cours d&apos;exécution.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentEvaluationItem.cxx" line="236"/>
-        <source>The model must have at least one output. Evaluate the design of experiment</source>
-        <translation>Le modèle doit avoir au moins une variable de sortie. Evaluer le plan d&apos;expérience</translation>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="249"/>
+        <source>Can not remove a design of experiments when an analysis is running.</source>
+        <translation>Impossible de supprimer un plan d&apos;expériences lorsqu&apos;une analyse est en cours d&apos;exécution.</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="264"/>
+        <source>The model must have at least one output. Evaluate the design of experiments</source>
+        <translation>Le modèle doit avoir au moins une variable de sortie. Evaluer le plan d&apos;expériences</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="131"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="229"/>
+        <source>The input sample is empty.</source>
+        <translation>L&apos;échantillon d&apos;entrée  est vide.</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="149"/>
+        <source>Evaluation</source>
+        <translation>Evaluation</translation>
     </message>
 </context>
 <context>
-    <name>OTGUI::DesignOfExperimentEvaluationPage</name>
+    <name>OTGUI::DesignOfExperimentEvaluationWizard</name>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentEvaluationPage.cxx" line="46"/>
-        <source>Output sample evaluation parameters</source>
-        <translation>Paramètres d&apos;évaluation de l&apos;échantillon de sortie</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DesignOfExperimentEvaluationPage.cxx" line="52"/>
-        <source>Size of the design of experiment:</source>
-        <translation>Taille du plan d&apos;expérience :</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DesignOfExperimentEvaluationPage.cxx" line="66"/>
-        <source>Evaluation parameter</source>
-        <translation>Paramètre d&apos;évaluation</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DesignOfExperimentEvaluationPage.cxx" line="138"/>
-        <source>At least one output must be selected</source>
-        <translation>Au moins une sortie doit être sélectionnée</translation>
-    </message>
-</context>
-<context>
-    <name>OTGUI::DesignOfExperimentInputWindow</name>
-    <message>
-        <location filename="../lib/src/view/DesignOfExperimentInputWindow.cxx" line="46"/>
-        <source>Design of experiment</source>
-        <translation>Plan d&apos;expérience</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DesignOfExperimentInputWindow.cxx" line="53"/>
-        <source>Sample size</source>
-        <translation>Taille de l&apos;échantillon</translation>
-    </message>
-</context>
-<context>
-    <name>OTGUI::DesignOfExperimentSelectionWizard</name>
-    <message>
-        <location filename="../lib/src/view/DesignOfExperimentSelectionWizard.cxx" line="80"/>
-        <location filename="../lib/src/view/DesignOfExperimentSelectionWizard.cxx" line="84"/>
-        <source>Design of experiment evaluation</source>
+        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="80"/>
+        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="84"/>
+        <source>Design of experiments evaluation</source>
         <translation>Evaluation du plan d&apos;experience</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentSelectionWizard.cxx" line="88"/>
-        <source>Design of experiment</source>
-        <translation>Plan d&apos;expérience</translation>
+        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="88"/>
+        <source>Design of experiments</source>
+        <translation>Plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentSelectionWizard.cxx" line="116"/>
+        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="116"/>
         <source>Evaluation parameter</source>
         <translation>Paramètre d&apos;évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentSelectionWizard.cxx" line="149"/>
+        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="149"/>
         <source>Input sample size = </source>
         <translation>Taille de l&apos;échantillon d&apos;entrée = </translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentSelectionWizard.cxx" line="193"/>
+        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="193"/>
         <source>At least one output must be selected</source>
         <translation>Au moins une sortie doit être sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentSelectionWizard.cxx" line="197"/>
+        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="197"/>
         <source>The block size must be inferior or equal to the size of the input sample</source>
         <translation>La taille de bloc doit être inférieure ou égale à la taille de l&apos;échantillon d&apos;entrée</translation>
     </message>
 </context>
 <context>
-    <name>OTGUI::DesignOfExperimentWindow</name>
+    <name>OTGUI::DesignOfExperimentInputWindow</name>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="61"/>
-        <source>Design of experiment</source>
-        <translation>Plan d&apos;expérience</translation>
+        <location filename="../lib/src/view/DesignOfExperimentInputWindow.cxx" line="44"/>
+        <source>Design of experiments</source>
+        <translation>Plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="155"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="358"/>
+        <location filename="../lib/src/view/DesignOfExperimentInputWindow.cxx" line="51"/>
+        <source>Sample size</source>
+        <translation>Taille de l&apos;échantillon</translation>
+    </message>
+</context>
+<context>
+    <name>OTGUI::DesignOfExperimentWindow</name>
+    <message>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="60"/>
+        <source>Design of experiments</source>
+        <translation>Plan d&apos;expériences</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="81"/>
+        <source>Outputs</source>
+        <translation>Sorties</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="162"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="380"/>
         <source>DOE</source>
         <translation>PEX</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="188"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="229"/>
         <source>Succeed points</source>
         <translation>Points réussis</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="257"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="387"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="279"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="409"/>
         <source>Table</source>
         <translation>Table</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="270"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="216"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="301"/>
         <source>Cobweb plot</source>
         <translation>Graphique Cobweb</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="281"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="312"/>
         <source>Plot matrix</source>
         <translation>Tableau de diagrammes de dispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="198"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="209"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="371"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="170"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="235"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="393"/>
         <source>Failed points</source>
         <translation>Points échoués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="219"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="228"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="384"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="178"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="242"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="406"/>
         <source>Not evaluated points</source>
         <translation>Points non évalués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="122"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="121"/>
         <source>Sample size</source>
         <translation>Taille d&apos;échantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="76"/>
-        <source>Design of experiment evaluation parameters</source>
-        <translation>Paramètres d&apos;évaluation du plan d&apos;expérience</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="82"/>
-        <source>Output(s)</source>
-        <translation>
-            <numerusform>Sortie</numerusform>
-            <numerusform>Sorties</numerusform>
-        </translation>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="75"/>
+        <source>Design of experiments evaluation parameters</source>
+        <translation>Paramètres d&apos;évaluation du plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="102"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="101"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="135"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="134"/>
         <source>Min/Max</source>
         <translation>Min/Max</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="245"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="308"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="205"/>
+        <source>Status</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="276"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="331"/>
         <source>Scatter plots</source>
         <translation>Diagrammes de dispersion</translation>
     </message>
@@ -1608,16 +1534,16 @@ métamodèle</translation>
     <name>OTGUI::DesignOfExperimentWizard</name>
     <message>
         <location filename="../lib/src/view/DesignOfExperimentWizard.cxx" line="38"/>
-        <source>Design of experiment</source>
-        <translation>Plan d&apos;expérience</translation>
+        <source>Design of experiments</source>
+        <translation>Plan d&apos;expériences</translation>
     </message>
 </context>
 <context>
     <name>OTGUI::DeterministicDesignPage</name>
     <message>
         <location filename="../lib/src/view/DeterministicDesignPage.cxx" line="47"/>
-        <source>Deterministic design of experiment</source>
-        <translation>Plan d&apos;expérience déterministe</translation>
+        <source>Deterministic design of experiments</source>
+        <translation>Plan d&apos;expériences déterministe</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DeterministicDesignPage.cxx" line="51"/>
@@ -1636,19 +1562,19 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DeterministicDesignPage.cxx" line="64"/>
-        <source>Size of the design of experiment:</source>
-        <translation>Taille du plan d&apos;expérience :</translation>
+        <source>Size of the design of experiments:</source>
+        <translation>Taille du plan d&apos;expériences :</translation>
     </message>
 </context>
 <context>
     <name>OTGUI::DifferentiationTableModel</name>
     <message>
-        <location filename="../lib/src/model/DifferentiationTableModel.cxx" line="60"/>
+        <location filename="../lib/src/model/DifferentiationTableModel.cxx" line="62"/>
         <source>Variable</source>
         <translation>Variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DifferentiationTableModel.cxx" line="62"/>
+        <location filename="../lib/src/model/DifferentiationTableModel.cxx" line="64"/>
         <source>Step</source>
         <translation>Pas</translation>
     </message>
@@ -1689,54 +1615,54 @@ métamodèle</translation>
 <context>
     <name>OTGUI::ExperimentTableModel</name>
     <message>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="109"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="111"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="111"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="113"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="113"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="115"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="115"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="117"/>
         <source>Lower bound</source>
         <translation>Borne inférieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="117"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="119"/>
         <source>Upper bound</source>
         <translation>Borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="120"/>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="189"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="122"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="191"/>
         <source>Levels</source>
         <translation>Niveaux</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="122"/>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="191"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="124"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="193"/>
         <source>Delta</source>
         <translation>Incrément</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="281"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="283"/>
         <source>The lower bound must be inferior to the upper bound</source>
         <translation>La borne inférieure doit être inférieure à la borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="302"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="304"/>
         <source>The upper bound must be superior to the lower bound</source>
         <translation>La borne supérieure doit être supérieure à la borne inférieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="360"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="362"/>
         <source>Delta must be inferior to the upper bound - the lower bound</source>
         <translation>L&apos;incrément doit être inférieur à la borne supérieure - la borne inférieure</translation>
     </message>
@@ -2069,9 +1995,9 @@ métamodèle</translation>
         <translation>Creux</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="142"/>
-        <source>Design of experiment size too small : %1. It must be superior or equal to C(degree+nbInputs, degree) = %2</source>
-        <translation>La taille du plan d&apos;expérience est trop petite : %1. Elle doit être supérieure ou égale à C(degree+nbInputs, degree) = %2</translation>
+        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="150"/>
+        <source>Design of experiments size too small : %1. It must be superior or equal to C(degree+nbInputs, degree) = %2</source>
+        <translation>La taille du plan d&apos;expériences est trop petite : %1. Elle doit être supérieure ou égale à C(degree+nbInputs, degree) = %2</translation>
     </message>
 </context>
 <context>
@@ -2080,14 +2006,6 @@ métamodèle</translation>
         <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="55"/>
         <source>Metamodel creation parameters</source>
         <translation>Paramètres de création du métamodèle</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="72"/>
-        <source>Output(s)</source>
-        <translation>
-            <numerusform>Sortie</numerusform>
-            <numerusform>Sorties</numerusform>
-        </translation>
     </message>
     <message>
         <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="97"/>
@@ -2103,6 +2021,11 @@ métamodèle</translation>
         <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="63"/>
         <source>Functional chaos results</source>
         <translation>Résults de chaos fonctionnel</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="72"/>
+        <source>Outputs</source>
+        <translation>Sorties</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="113"/>
@@ -2248,50 +2171,6 @@ métamodèle</translation>
     </message>
 </context>
 <context>
-    <name>OTGUI::ImportDataPage</name>
-    <message>
-        <location filename="../lib/src/view/ImportDataPage.cxx" line="48"/>
-        <source>Import table from file</source>
-        <translation>Importer une table d&apos;un fichier</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/ImportDataPage.cxx" line="54"/>
-        <source>Data file</source>
-        <translation>Fichier de données</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/ImportDataPage.cxx" line="73"/>
-        <source>File Preview</source>
-        <translation>Prévisualisation du fichier</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/ImportDataPage.cxx" line="92"/>
-        <source>Data to import...</source>
-        <translation>Importer des données...</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/ImportDataPage.cxx" line="94"/>
-        <source>Data files (*.csv *.txt)</source>
-        <translation>Fichiers de données (*.csv *.txt)</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/ImportDataPage.cxx" line="105"/>
-        <source>Warning</source>
-        <translation>Attention</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/ImportDataPage.cxx" line="106"/>
-        <source>Cannot read file %1:
-%2</source>
-        <translation>Impossible de lire le fichier %1: %2</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/ImportDataPage.cxx" line="127"/>
-        <source>Impossible to load the file.</source>
-        <translation>Impossible de charger les données. </translation>
-    </message>
-</context>
-<context>
     <name>OTGUI::ImportDesignOfExperimentPage</name>
     <message>
         <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="55"/>
@@ -2310,8 +2189,8 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="92"/>
-        <source>Size of the design of experiment:</source>
-        <translation>Taille du plan d&apos;expérience :</translation>
+        <source>Size of the design of experiments:</source>
+        <translation>Taille du plan d&apos;expériences :</translation>
     </message>
     <message>
         <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="111"/>
@@ -2506,13 +2385,10 @@ métamodèle</translation>
         <source>Inference analysis results</source>
         <translation>Résultats de l&apos;inférence</translation>
     </message>
-    <message numerus="yes">
+    <message>
         <location filename="../lib/src/view/InferenceResultWindow.cxx" line="55"/>
-        <source>Variable(s)</source>
-        <translation>
-            <numerusform>Variable</numerusform>
-            <numerusform>Variables</numerusform>
-        </translation>
+        <source>Variables</source>
+        <translation>Variables</translation>
     </message>
     <message>
         <location filename="../lib/src/view/InferenceResultWindow.cxx" line="71"/>
@@ -2556,22 +2432,22 @@ métamodèle</translation>
 <context>
     <name>OTGUI::InferenceWizard</name>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="90"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="75"/>
         <source>Inference</source>
         <translation>Inférence</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="163"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="148"/>
         <source>Level</source>
         <translation>Niveau</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="227"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="214"/>
         <source>Select at least one variable</source>
         <translation>Sélectionner au moins une variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="266"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="253"/>
         <source>At least one distribution must be tested for the selected variable &apos;%1&apos;</source>
         <translation>Au moins une distribution doit être testée pour la variable sélectionnée &apos;%1&apos;</translation>
     </message>
@@ -2579,17 +2455,17 @@ métamodèle</translation>
 <context>
     <name>OTGUI::InputTableModel</name>
     <message>
-        <location filename="../lib/src/model/InputTableModel.cxx" line="53"/>
+        <location filename="../lib/src/model/InputTableModel.cxx" line="55"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/InputTableModel.cxx" line="55"/>
+        <location filename="../lib/src/model/InputTableModel.cxx" line="57"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/InputTableModel.cxx" line="57"/>
+        <location filename="../lib/src/model/InputTableModel.cxx" line="59"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
@@ -2649,8 +2525,8 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/IntroDesignOfExperimentPage.cxx" line="42"/>
-        <source>Type of design of experiment</source>
-        <translation>Type du plan d&apos;expérience</translation>
+        <source>Type of design of experiments</source>
+        <translation>Type du plan d&apos;expériences</translation>
     </message>
     <message>
         <location filename="../lib/src/view/IntroDesignOfExperimentPage.cxx" line="48"/>
@@ -2682,8 +2558,8 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/IntroMetaModelPage.cxx" line="47"/>
-        <source>Design of experiment</source>
-        <translation>Plan d&apos;expérience</translation>
+        <source>Design of experiments</source>
+        <translation>Plan d&apos;expériences</translation>
     </message>
     <message>
         <location filename="../lib/src/view/IntroMetaModelPage.cxx" line="67"/>
@@ -2701,12 +2577,12 @@ métamodèle</translation>
         <translation>Krigeage</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/IntroMetaModelPage.cxx" line="167"/>
+        <location filename="../lib/src/view/IntroMetaModelPage.cxx" line="168"/>
         <source>Sample size :</source>
         <translation>Taille d&apos;échantillon :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/IntroMetaModelPage.cxx" line="190"/>
+        <location filename="../lib/src/view/IntroMetaModelPage.cxx" line="191"/>
         <source>At least one output must be selected</source>
         <translation>Au moins une sortie doit être sélectionnée</translation>
     </message>
@@ -2750,8 +2626,8 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/IntroReliabilityPage.cxx" line="89"/>
-        <source>First order analysis (FORM)</source>
-        <translation>Analyse du premier ordre (FORM)</translation>
+        <source>First Order Reliability Method (FORM)</source>
+        <translation>Méthode de fiabilité du premier ordre (FORM)</translation>
     </message>
 </context>
 <context>
@@ -2871,8 +2747,8 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/KrigingPage.cxx" line="136"/>
-        <location filename="../lib/src/view/KrigingPage.cxx" line="256"/>
-        <location filename="../lib/src/view/KrigingPage.cxx" line="258"/>
+        <location filename="../lib/src/view/KrigingPage.cxx" line="264"/>
+        <location filename="../lib/src/view/KrigingPage.cxx" line="266"/>
         <source>Scale</source>
         <translation>Echelle</translation>
     </message>
@@ -2882,7 +2758,7 @@ métamodèle</translation>
         <translation>Amplitude</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/KrigingPage.cxx" line="256"/>
+        <location filename="../lib/src/view/KrigingPage.cxx" line="264"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
@@ -2909,13 +2785,10 @@ métamodèle</translation>
         <source>Kriging results</source>
         <translation>Résultats de krigeage</translation>
     </message>
-    <message numerus="yes">
+    <message>
         <location filename="../lib/src/view/KrigingResultWindow.cxx" line="70"/>
-        <source>Output(s)</source>
-        <translation>
-            <numerusform>Sortie</numerusform>
-            <numerusform>Sorties</numerusform>
-        </translation>
+        <source>Outputs</source>
+        <translation>Sorties</translation>
     </message>
     <message>
         <location filename="../lib/src/view/KrigingResultWindow.cxx" line="103"/>
@@ -3078,62 +2951,45 @@ métamodèle</translation>
     </message>
 </context>
 <context>
-    <name>OTGUI::MainWindow</name>
+    <name>OTGUI::MainWidget</name>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="79"/>
+        <location filename="../lib/src/view/MainWidget.cxx" line="51"/>
         <source>Graph setting</source>
         <translation>Configuration du graphique</translation>
     </message>
+</context>
+<context>
+    <name>OTGUI::MainWindow</name>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="117"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="79"/>
         <source>Python Console</source>
         <translation>Console Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="161"/>
-        <source>&amp;New</source>
-        <translation>&amp;Nouveau</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="166"/>
-        <source>&amp;Open...</source>
-        <translation>&amp;Ouvrir...</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="171"/>
-        <source>Save</source>
-        <translation>Sauvegarder</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="176"/>
-        <source>E&amp;xit</source>
-        <translation>Q&amp;uitter</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="187"/>
-        <location filename="../lib/src/view/MainWindow.cxx" line="217"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="113"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="145"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="188"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="114"/>
         <source>Cannot import a Python script when other studies are opened.
 Do you want to continue and close the other studies?</source>
         <translation>Impossible d&apos;importer un script Python lorsque d&apos;autres études sont ouvertes.
 Voulez-vous continuer et fermer les autres études ?</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="205"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="132"/>
         <source>Import Python...</source>
         <translation>Import Python...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="207"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="134"/>
         <source>Python source files (*.py)</source>
         <translation>Fichiers Python (*.py)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="218"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="146"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1 :
@@ -3211,16 +3067,12 @@ Voulez-vous continuer et fermer les autres études ?</translation>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
-    <message numerus="yes">
+    <message>
         <location filename="../lib/src/view/MinMaxTableGroupBox.cxx" line="113"/>
-        <source>Input(s) at
+        <source>Inputs at
 extremum</source>
-        <translation>
-            <numerusform>Entrée à
-l&apos;extremum</numerusform>
-            <numerusform>Entrées à
-l&apos;extremum</numerusform>
-        </translation>
+        <translation>Entrées à l&apos;
+extremum</translation>
     </message>
     <message>
         <location filename="../lib/src/view/MinMaxTableGroupBox.cxx" line="127"/>
@@ -3236,40 +3088,34 @@ l&apos;extremum</numerusform>
 <context>
     <name>OTGUI::ModelEvaluationResultWindow</name>
     <message>
-        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="44"/>
+        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="45"/>
         <source>Model evaluation result</source>
         <translation>Résultat de l&apos;évaluation du modèle</translation>
     </message>
-    <message numerus="yes">
-        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="54"/>
-        <source>Input(s)</source>
-        <translation>
-            <numerusform>Entrée</numerusform>
-            <numerusform>Entrées</numerusform>
-        </translation>
+    <message>
+        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="55"/>
+        <source>Inputs</source>
+        <translation>Entrées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="64"/>
-        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="87"/>
+        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="65"/>
+        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="88"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="64"/>
-        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="87"/>
+        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="65"/>
+        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="88"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
-    <message numerus="yes">
-        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="77"/>
-        <source>Output(s)</source>
-        <translation>
-            <numerusform>Sortie</numerusform>
-            <numerusform>Sorties</numerusform>
-        </translation>
+    <message>
+        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="78"/>
+        <source>Outputs</source>
+        <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="98"/>
+        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="99"/>
         <source>Result</source>
         <translation>Résultat</translation>
     </message>
@@ -3281,13 +3127,10 @@ l&apos;extremum</numerusform>
         <source>Model evaluation</source>
         <translation>Evaluation du modèle</translation>
     </message>
-    <message numerus="yes">
+    <message>
         <location filename="../lib/src/view/ModelEvaluationWizard.cxx" line="60"/>
-        <source>Input(s)</source>
-        <translation>
-            <numerusform>Entrée</numerusform>
-            <numerusform>Entrées</numerusform>
-        </translation>
+        <source>Inputs</source>
+        <translation>Entrées</translation>
     </message>
     <message>
         <location filename="../lib/src/view/ModelEvaluationWizard.cxx" line="64"/>
@@ -3318,63 +3161,63 @@ l&apos;extremum</numerusform>
         <translation>Estimations des moments</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="69"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="70"/>
         <source>Estimate</source>
         <translation>Estimation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="75"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="76"/>
         <source>Mean</source>
         <translation>Moyenne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="76"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="77"/>
         <source>Standard deviation</source>
         <translation>Écart type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="77"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="78"/>
         <source>Coefficient of variation</source>
         <translation>Coefficient de variation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="78"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="79"/>
         <source>Skewness</source>
         <translation>Asymétrie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="79"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="80"/>
         <source>Kurtosis</source>
         <translation>Aplatissement</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="80"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="81"/>
         <source>First quartile</source>
         <translation>Premier quartile</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="81"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="82"/>
         <source>Third quartile</source>
         <translation>Troisième quartile</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="85"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="86"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="89"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="90"/>
         <source>Lower bound</source>
         <translation>Borne inférieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="90"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="91"/>
         <source>Upper bound</source>
         <translation>Borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="158"/>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="172"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="159"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="173"/>
         <source>Confidence interval at</source>
         <translation>Intervalle de confiance à</translation>
     </message>
@@ -3593,13 +3436,13 @@ l&apos;extremum</numerusform>
     <message>
         <location filename="../lib/src/view/OTStudyWindow.cxx" line="91"/>
         <source>- Evaluation
-- Design of experiment
+- Design of experiments
 - Central tendency
 - Sensitivity
 - Reliability
 - Metamodel</source>
         <translation>- Evaluation
-- Plan d&apos;expérience
+- Plan d&apos;expériences
 - Tendance centrale
 - Sensibilité
 - Fiabilité
@@ -3612,144 +3455,104 @@ l&apos;extremum</numerusform>
     </message>
 </context>
 <context>
-    <name>OTGUI::OTguiMenuBar</name>
+    <name>OTGUI::OTguiActions</name>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="39"/>
-        <source>&amp;File</source>
-        <translation>&amp;Fichier</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="41"/>
+        <location filename="../lib/src/view/OTguiActions.cxx" line="35"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="44"/>
+        <location filename="../lib/src/view/OTguiActions.cxx" line="38"/>
         <source>Create a new OTStudy</source>
         <translation>Créer une nouvelle étude</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="48"/>
+        <location filename="../lib/src/view/OTguiActions.cxx" line="40"/>
         <source>&amp;Open...</source>
         <translation>&amp;Ouvrir...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="51"/>
+        <location filename="../lib/src/view/OTguiActions.cxx" line="43"/>
         <source>Open an existing OTStudy</source>
         <translation>Ouvrir une étude existante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="61"/>
-        <source>Open Recent</source>
-        <translation>Fichiers récents</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="67"/>
-        <source>Clear list</source>
-        <translation>Vider la liste</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="73"/>
+        <location filename="../lib/src/view/OTguiActions.cxx" line="45"/>
         <source>Save</source>
         <translation>Sauvegarder</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="76"/>
+        <location filename="../lib/src/view/OTguiActions.cxx" line="48"/>
         <source>Save the current OTStudy</source>
         <translation>Sauvegarder l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="80"/>
+        <location filename="../lib/src/view/OTguiActions.cxx" line="50"/>
         <source>Save As...</source>
         <translation>Sauvegarder sous...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="81"/>
+        <location filename="../lib/src/view/OTguiActions.cxx" line="51"/>
         <source>Save the current OTStudy with a new name</source>
         <translation>Sauvegarder l&apos;étude courante avec un nouveau nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="87"/>
+        <location filename="../lib/src/view/OTguiActions.cxx" line="53"/>
         <source>&amp;Import Python...</source>
         <translation>&amp;Import Python...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="88"/>
+        <location filename="../lib/src/view/OTguiActions.cxx" line="54"/>
         <source>Import a Python Script</source>
         <translation>Importer un script Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="94"/>
+        <location filename="../lib/src/view/OTguiActions.cxx" line="56"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="95"/>
+        <location filename="../lib/src/view/OTguiActions.cxx" line="57"/>
         <source>Close the current OTStudy</source>
         <translation>Fermer l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="99"/>
+        <location filename="../lib/src/view/OTguiActions.cxx" line="59"/>
         <source>E&amp;xit</source>
         <translation>Q&amp;uitter</translation>
     </message>
+</context>
+<context>
+    <name>OTGUI::OTguiMenuBar</name>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="108"/>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="40"/>
+        <source>&amp;File</source>
+        <translation>&amp;Fichier</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="52"/>
+        <source>Open Recent</source>
+        <translation>Fichiers récents</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="58"/>
+        <source>Clear list</source>
+        <translation>Vider la liste</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="79"/>
         <source>&amp;View</source>
         <translation>&amp;Vue</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="109"/>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="80"/>
         <source>W&amp;indow</source>
         <translation>&amp;Fenêtre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="110"/>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="81"/>
         <source>Python Console</source>
         <translation>Console Python</translation>
-    </message>
-</context>
-<context>
-    <name>OTGUI::OTguiToolBar</name>
-    <message>
-        <location filename="../lib/src/view/OTguiToolBar.cxx" line="40"/>
-        <source>&amp;New OTStudy</source>
-        <translation>&amp;Nouvelle étude</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OTguiToolBar.cxx" line="41"/>
-        <source>Create a new OTStudy</source>
-        <translation>Créer une nouvelle étude</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OTguiToolBar.cxx" line="45"/>
-        <source>&amp;Open an OTStudy</source>
-        <translation>&amp;Ouvrir une étude</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OTguiToolBar.cxx" line="46"/>
-        <source>Open an existing OTStudy</source>
-        <translation>Ouvrir une étude existante</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OTguiToolBar.cxx" line="50"/>
-        <source>&amp;Import Python</source>
-        <translation>&amp;Import Python</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OTguiToolBar.cxx" line="51"/>
-        <source>Import a Python Script</source>
-        <translation>Importer un script Python</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OTguiToolBar.cxx" line="55"/>
-        <source>&amp;Save the OTStudy</source>
-        <translation>&amp;Sauvegarder l&apos;étude</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OTguiToolBar.cxx" line="56"/>
-        <source>Save the current OTStudy</source>
-        <translation>Sauvegarder l&apos;étude courante</translation>
     </message>
 </context>
 <context>
@@ -3773,22 +3576,22 @@ l&apos;extremum</numerusform>
 <context>
     <name>OTGUI::OutputTableModel</name>
     <message>
-        <location filename="../lib/src/model/OutputTableModel.cxx" line="57"/>
+        <location filename="../lib/src/model/OutputTableModel.cxx" line="58"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/OutputTableModel.cxx" line="59"/>
+        <location filename="../lib/src/model/OutputTableModel.cxx" line="60"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/OutputTableModel.cxx" line="61"/>
+        <location filename="../lib/src/model/OutputTableModel.cxx" line="62"/>
         <source>Formula</source>
         <translation>Formule</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/OutputTableModel.cxx" line="63"/>
+        <location filename="../lib/src/model/OutputTableModel.cxx" line="64"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
@@ -3810,17 +3613,22 @@ l&apos;extremum</numerusform>
 <context>
     <name>OTGUI::PVPlotSettingWidget</name>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVPlotSettingWidget.cxx" line="60"/>
+        <location filename="../lib/src/view/plot/paraview/PVPlotSettingWidget.cxx" line="85"/>
         <source>Variables</source>
         <translation>Variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVPlotSettingWidget.cxx" line="65"/>
+        <location filename="../lib/src/view/plot/paraview/PVPlotSettingWidget.cxx" line="90"/>
         <source>Select</source>
         <translation>Sélectionner</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVPlotSettingWidget.cxx" line="74"/>
+        <location filename="../lib/src/view/plot/paraview/PVPlotSettingWidget.cxx" line="99"/>
+        <source>Ranks</source>
+        <translation>Espace des rangs</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/plot/paraview/PVPlotSettingWidget.cxx" line="108"/>
         <source>Export</source>
         <translation>Exporter</translation>
     </message>
@@ -3836,120 +3644,120 @@ l&apos;extremum</numerusform>
 <context>
     <name>OTGUI::PVXYChartSettingWidget</name>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="83"/>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="157"/>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="195"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="135"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="206"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="242"/>
         <source>Title</source>
         <translation>Titre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="94"/>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="188"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="146"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="235"/>
         <source>X-axis</source>
         <translation>Axe X</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="109"/>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="226"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="161"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="271"/>
         <source>Y-axis</source>
         <translation>Axe Y</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="122"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="172"/>
         <source>Ranks</source>
         <translation>Espace des rangs</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="131"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="180"/>
         <source>Data</source>
         <translation>Données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="141"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="190"/>
         <source>Select</source>
         <translation>Sélectionner</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="165"/>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="203"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="214"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="250"/>
         <source>Min</source>
         <translation>Min</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="173"/>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="211"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="222"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="258"/>
         <source>Max</source>
         <translation>Max</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="181"/>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="219"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="230"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="266"/>
         <source>Log scale</source>
         <translation>Echelle log</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="236"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="281"/>
         <source>Plot color</source>
         <translation>Couleur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="248"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="293"/>
         <source>Marker style</source>
         <translation>Style du marqueur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="252"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="297"/>
         <source>Cross</source>
         <translation>Croix</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="253"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="298"/>
         <source>Plus</source>
         <translation>Plus</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="254"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="299"/>
         <source>Square</source>
         <translation>Carré</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="255"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="300"/>
         <source>Circle</source>
         <translation>Cercle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="256"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="301"/>
         <source>Diamond</source>
         <translation>Diamant</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="261"/>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="275"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="306"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="320"/>
         <source>Plot style</source>
         <translation>Style</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="264"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="309"/>
         <source>Marker size</source>
         <translation>Taille du marqueur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="283"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="328"/>
         <source>Export</source>
         <translation>Exporter</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="335"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="383"/>
         <source>X-Axis bounds must be positive</source>
         <translation>Les bornes de l&apos;axe X doivent être positives</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="337"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="385"/>
         <source>Y-Axis bounds must be positive</source>
         <translation>Les bornes de l&apos;axe Y doivent être positives</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="456"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="467"/>
         <source>Select Color</source>
         <translation>Sélectionner une couleur</translation>
     </message>
@@ -3999,8 +3807,8 @@ l&apos;extremum</numerusform>
     </message>
     <message>
         <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="55"/>
-        <source>Create a new design of experiment</source>
-        <translation>Créer un nouveau plan d&apos;expérience</translation>
+        <source>Create a new design of experiments</source>
+        <translation>Créer un nouveau plan d&apos;expériences</translation>
     </message>
     <message>
         <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="49"/>
@@ -4009,8 +3817,8 @@ l&apos;extremum</numerusform>
     </message>
     <message>
         <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="54"/>
-        <source>Design of experiment</source>
-        <translation>Plan d&apos;expérience</translation>
+        <source>Design of experiments</source>
+        <translation>Plan d&apos;expériences</translation>
     </message>
     <message>
         <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="59"/>
@@ -4059,14 +3867,14 @@ l&apos;extremum</numerusform>
     <message>
         <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="134"/>
         <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="162"/>
-        <source>There is no design of experiment.</source>
-        <translation>Il n&apos;y a aucun plan d&apos;expérience.</translation>
+        <source>There is no design of experiments.</source>
+        <translation>Il n&apos;y a aucun plan d&apos;expériences.</translation>
     </message>
     <message>
         <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="185"/>
-        <source>We have not found a design of experiment with an output sample.
+        <source>We have not found a design of experiments with an output sample.
 </source>
-        <translation>Nous n&apos;avons pas trouvé de plan d&apos;expérience avec un échantillon de sortie.
+        <translation>Nous n&apos;avons pas trouvé de plan d&apos;expériences avec un échantillon de sortie.
 </translation>
     </message>
     <message>
@@ -4097,9 +3905,9 @@ l&apos;extremum</numerusform>
     </message>
     <message>
         <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="152"/>
-        <source>All the designs of experiment have already been evaluated.
+        <source>All the designs of experiments have already been evaluated.
 </source>
-        <translation>Tous les plans d&apos;expérience ont déjà été évalués.</translation>
+        <translation>Tous les plans d&apos;expériences ont déjà été évalués.</translation>
     </message>
     <message>
         <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="388"/>
@@ -4138,18 +3946,18 @@ l&apos;extremum</numerusform>
     </message>
     <message>
         <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="328"/>
-        <source>Designs of experiment</source>
-        <translation>Plans d&apos;expérience</translation>
+        <source>Designs of experiments</source>
+        <translation>Plans d&apos;expériences</translation>
     </message>
     <message>
         <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="333"/>
-        <source>New design of experiment</source>
-        <translation>Nouveau plan d&apos;expérience</translation>
+        <source>New design of experiments</source>
+        <translation>Nouveau plan d&apos;expériences</translation>
     </message>
     <message>
         <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="334"/>
-        <source>Create a new design of experiment</source>
-        <translation>Créer un nouveau plan d&apos;expérience</translation>
+        <source>Create a new design of experiments</source>
+        <translation>Créer un nouveau plan d&apos;expériences</translation>
     </message>
 </context>
 <context>
@@ -4178,7 +3986,7 @@ modèle</translation>
         <translation>Définir les variables d&apos;entrée et de sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="69"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="70"/>
         <source>Model
 evaluation</source>
         <translation>Evaluation
@@ -4186,38 +3994,38 @@ du
 modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="70"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="71"/>
         <source>Evaluate the model at a given point</source>
         <translation>Evaluer le modèle à un point donné</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="71"/>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="137"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="72"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="144"/>
         <source>Define input and output variables in the model</source>
         <translation>Définir des variables d&apos;entrée et de sortie dans le modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="80"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="82"/>
         <source>Design of
-experiment
+experiments
 creation</source>
         <translation>Création
 d&apos;un plan
-d&apos;expérience</translation>
+d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="81"/>
-        <source>Create manually a design of experiment or import one</source>
-        <translation>Créer manuellement un plan d&apos;expérience ou en importer un</translation>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="83"/>
+        <source>Create manually a design of experiments or import one</source>
+        <translation>Créer manuellement un plan d&apos;expériences ou en importer un</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="82"/>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="93"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="84"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="96"/>
         <source>Define at least an input variable</source>
         <translation>Définir au moins une variable d&apos;entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="91"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="94"/>
         <source>Probabilistic
 model
 definition</source>
@@ -4226,56 +4034,56 @@ du modèle
 probabiliste</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="92"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="95"/>
         <source>Define the stochastic input variables and the dependencies</source>
         <translation>Définir les variables d&apos;entrée stochastiques et les dépendances</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="102"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="106"/>
         <source>Design of
-experiment
+experiments
 evaluation</source>
         <translation>Evaluation
 d&apos;un plan
-d&apos;expérience</translation>
+d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="103"/>
-        <source>Evaluate the model at the points of the design of experiment</source>
-        <translation>Evaluer le modèle aux points du plan d&apos;expérience</translation>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="107"/>
+        <source>Evaluate the model at the points of the design of experiments</source>
+        <translation>Evaluer le modèle aux points du plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="104"/>
-        <source>Create at least a design of experiment and define output variables in the model</source>
-        <translation>Créer au moins un plan d&apos;expérience et définir des variables de sortie dans le modèle</translation>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="108"/>
+        <source>Create at least a design of experiments and define output variables in the model</source>
+        <translation>Créer au moins un plan d&apos;expériences et définir des variables de sortie dans le modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="113"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="118"/>
         <source>Sensitivity</source>
         <translation>Sensibilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="114"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="119"/>
         <source>Two methods : Sobol and SRC</source>
         <translation>Deux méthodes : Sobol et SRC</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="115"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="120"/>
         <source>Define independent stochastic input variables and output variables in the model</source>
         <translation>Définir des variables d&apos;entrée stochastiques et indépendantes et des variables de sortie dans le modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="148"/>
-        <source>Define at least a design of experiment which contains output values</source>
-        <translation>Définir au moins un plan d&apos;expérience qui contient des valeurs de sortie</translation>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="156"/>
+        <source>Define at least a design of experiments which contains output values</source>
+        <translation>Définir au moins un plan d&apos;expériences qui contient des valeurs de sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="159"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="168"/>
         <source>Define output variables in the model and at least a limit state</source>
         <translation>Définir des variables de sortie et au moins un état limite</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="124"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="130"/>
         <source>Central
 tendency</source>
         <translation>Analyse
@@ -4283,17 +4091,17 @@ en tendance
 centrale</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="125"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="131"/>
         <source>Two methods : Monte Carlo and Taylor expansion</source>
         <translation>Deux méthodes : Monté-Carlo et Décomposition de Taylor</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="126"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="132"/>
         <source>Define stochastic input variables and output variables in the model</source>
         <translation>Définir des variables d&apos;entrée stochastiques et des variables de sortie dans le modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="135"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="142"/>
         <source>Limit state
 definition</source>
         <translation>Définition
@@ -4301,12 +4109,12 @@ d&apos;un
 état limite</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="136"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="143"/>
         <source>Define a limit state to perform threshold exceedance analysis</source>
         <translation>Définir un état limite pour réaliser un calcul de dépassement de seuil</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="146"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="154"/>
         <source>Metamodel
 creation</source>
         <translation>Création
@@ -4314,17 +4122,17 @@ d&apos;un
 métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="147"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="155"/>
         <source>Two methods : Kriging and Functional chaos</source>
         <translation>Deux méthodes : Krigeage et chaos fonctionnel</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="157"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="166"/>
         <source>Reliability</source>
         <translation>Fiabilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="158"/>
+        <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="167"/>
         <source>Three methods : Monte Carlo, FORM-Importance Sampling, FORM</source>
         <translation>Trois méthodes : Monté-Carlo, FORM-Tirage d&apos;importance, FORM</translation>
     </message>
@@ -4389,17 +4197,17 @@ métamodèle</translation>
         <translation>Définition</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="153"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="155"/>
         <source>Finite difference step definition</source>
         <translation>Définition du pas de différence finie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="167"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="169"/>
         <source>Differentiation</source>
         <translation>Différentiation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="386"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="389"/>
         <source>Not possible to evaluate the outputs</source>
         <translation>Impossible d&apos;évaluer les sorties</translation>
     </message>
@@ -4619,8 +4427,8 @@ métamodèle</translation>
     <name>OTGUI::ProbabilisticDesignPage</name>
     <message>
         <location filename="../lib/src/view/ProbabilisticDesignPage.cxx" line="44"/>
-        <source>Probabilistic design of experiment</source>
-        <translation>Plan d&apos;expérience probabiliste</translation>
+        <source>Probabilistic design of experiments</source>
+        <translation>Plan d&apos;expériences probabiliste</translation>
     </message>
     <message>
         <location filename="../lib/src/view/ProbabilisticDesignPage.cxx" line="48"/>
@@ -4663,9 +4471,9 @@ métamodèle</translation>
         <translation>Graine</translation>
     </message>
     <message>
+        <location filename="../lib/src/view/ProbabilisticDesignPage.cxx" line="117"/>
         <location filename="../lib/src/view/ProbabilisticDesignPage.cxx" line="119"/>
-        <location filename="../lib/src/view/ProbabilisticDesignPage.cxx" line="121"/>
-        <source>The physical model has not an independent copula</source>
+        <source>The physical model does not have an independent copula</source>
         <translation>Le modèle n&apos;a pas de copule indépendante</translation>
     </message>
     <message>
@@ -4698,13 +4506,13 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/model/ProbabilisticModelItem.cxx" line="48"/>
-        <source>Design of experiment</source>
-        <translation>Plan d&apos;expérience</translation>
+        <source>Design of experiments</source>
+        <translation>Plan d&apos;expériences</translation>
     </message>
     <message>
         <location filename="../lib/src/model/ProbabilisticModelItem.cxx" line="49"/>
-        <source>Create a new design of experiment</source>
-        <translation>Créer un nouveau plan d&apos;expérience</translation>
+        <source>Create a new design of experiments</source>
+        <translation>Créer un nouveau plan d&apos;expériences</translation>
     </message>
     <message>
         <location filename="../lib/src/model/ProbabilisticModelItem.cxx" line="58"/>
@@ -4740,78 +4548,83 @@ métamodèle</translation>
 <context>
     <name>OTGUI::ProbabilisticModelWindow</name>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="65"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="68"/>
         <source>Probabilistic model</source>
         <translation>Modèle probabiliste</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="103"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="106"/>
         <source>Inference result</source>
         <translation>Résultat d&apos;inférence</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="131"/>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="410"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="134"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="437"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="133"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="136"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="157"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="159"/>
         <source>distributionPDF</source>
         <translation>distributionPDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="161"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="163"/>
         <source>distributionCDF</source>
         <translation>distributionCDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="183"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="181"/>
+        <source>Open the OpenTURNS documentation</source>
+        <translation>Ouvrir la documentation OpenTURNS</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="192"/>
         <source>Truncation parameters</source>
         <translation>Paramètres de troncature</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="187"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="196"/>
         <source>Lower bound</source>
         <translation>Borne inférieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="189"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="198"/>
         <source>Upper bound</source>
         <translation>Borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="223"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="232"/>
         <source>Marginals</source>
         <translation>Marginales</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="229"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="238"/>
         <source>Spearman&apos;s rank (Gaussian Copula)</source>
         <translation>Rang de Spearman (copule Gaussienne)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="246"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="255"/>
         <source>Correlation</source>
         <translation>Corrélation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="414"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="441"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="802"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="829"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="802"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="829"/>
         <source>The current study has not inference analyses results.</source>
         <translation>L&apos;étude courante n&apos;a aucun résultat d&apos;inférence.</translation>
     </message>
@@ -4841,21 +4654,26 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SRCPage.cxx" line="50"/>
-        <source>Evaluation parameter</source>
-        <translation>Paramètre d&apos;évaluation</translation>
+        <source>Evaluation parameters</source>
+        <translation>Paramètres d&apos;évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCPage.cxx" line="53"/>
+        <location filename="../lib/src/view/SRCPage.cxx" line="54"/>
         <source>Sample size</source>
         <translation>Taille d&apos;échantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCPage.cxx" line="66"/>
+        <location filename="../lib/src/view/SRCPage.cxx" line="64"/>
+        <source>Block size</source>
+        <translation>Taille de bloc</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SRCPage.cxx" line="75"/>
         <source>Advanced parameters</source>
         <translation>Paramètres avancés</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCPage.cxx" line="70"/>
+        <location filename="../lib/src/view/SRCPage.cxx" line="79"/>
         <source>Seed</source>
         <translation>Graine</translation>
     </message>
@@ -4864,21 +4682,13 @@ métamodèle</translation>
     <name>OTGUI::SRCResultWindow</name>
     <message>
         <location filename="../lib/src/view/SRCResultWindow.cxx" line="49"/>
-        <source>The model has not an independent copula, the result could be false.</source>
+        <source>The model does not have an independent copula, the result could be false.</source>
         <translation>Le modèle n&apos;a pas de copule indépendante, le résultat pourrait être faux.</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SRCResultWindow.cxx" line="52"/>
         <source>Sensitivity analysis parameters</source>
         <translation>Paramètres de l&apos;analyse de sensibilité</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../lib/src/view/SRCResultWindow.cxx" line="69"/>
-        <source>Output(s)</source>
-        <translation>
-            <numerusform>Sortie</numerusform>
-            <numerusform>Sorties</numerusform>
-        </translation>
     </message>
     <message>
         <location filename="../lib/src/view/SRCResultWindow.cxx" line="110"/>
@@ -4889,6 +4699,11 @@ métamodèle</translation>
         <location filename="../lib/src/view/SRCResultWindow.cxx" line="60"/>
         <source>SRC analysis results</source>
         <translation>Résultats d&apos;analyse SRC</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SRCResultWindow.cxx" line="69"/>
+        <source>Outputs</source>
+        <translation>Sorties</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SRCResultWindow.cxx" line="114"/>
@@ -5204,21 +5019,13 @@ métamodèle</translation>
     <name>OTGUI::SobolResultWindow</name>
     <message>
         <location filename="../lib/src/view/SobolResultWindow.cxx" line="50"/>
-        <source>The model has not an independent copula, the result could be false.</source>
+        <source>The model does not have an independent copula, the result could be false.</source>
         <translation>Le modèle n&apos;a pas de copule indépendante, le résultat pourrait être faux.</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SobolResultWindow.cxx" line="53"/>
         <source>Sensitivity analysis parameters</source>
         <translation>Paramètres de l&apos;analyse de sensibilité</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="70"/>
-        <source>Output(s)</source>
-        <translation>
-            <numerusform>Sortie</numerusform>
-            <numerusform>Sorties</numerusform>
-        </translation>
     </message>
     <message>
         <location filename="../lib/src/view/SobolResultWindow.cxx" line="111"/>
@@ -5249,6 +5056,11 @@ métamodèle</translation>
         <location filename="../lib/src/view/SobolResultWindow.cxx" line="61"/>
         <source>Sobol&apos; analysis results</source>
         <translation>Résultats d&apos;analyse de Sobol</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="70"/>
+        <source>Outputs</source>
+        <translation>Sorties</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SobolResultWindow.cxx" line="134"/>
@@ -5287,32 +5099,37 @@ métamodèle</translation>
 <context>
     <name>OTGUI::StudyTreeView</name>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="222"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="223"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="700"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="618"/>
+        <source>Impossible to create a result window</source>
+        <translation>Impossible de créer une fenêtre de résultat</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="727"/>
         <source>Can not export the current study</source>
         <translation>Impossible d&apos;exporter l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="710"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="737"/>
         <source>Export Python...</source>
         <translation>Export Python...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="712"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="739"/>
         <source>Python source files (*.py)</source>
         <translation>Fichiers Python (*.py)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="759"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="786"/>
         <source>Can not save the current study as</source>
         <translation>Impossible de sauvegarder sous l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="841"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="868"/>
         <source>An error has occured when reading the file &apos;%1&apos;. 
 Maybe objects are not opened.
 </source>
@@ -5320,38 +5137,43 @@ Maybe objects are not opened.
 Des objets ne sont peut être pas ouverts.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="854"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="881"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="778"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="805"/>
         <source>Save OTStudy...</source>
         <translation>Sauvegarder l&apos;étude...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="780"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="812"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="616"/>
+        <source>Impossible to create a result window for this analysis. Try to launch again the analysis.</source>
+        <translation>Impossible de créer une fenêtre de résultat pour cette analyse. Essayer de lancer à nouveau l&apos;analyse.</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="807"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="839"/>
         <source>XML files (*.xml)</source>
         <translation>Fichiers XML (*.xml)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="810"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="837"/>
         <source>Open an existing OTStudy</source>
         <translation>Ouvrir une étude existante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="822"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="849"/>
         <source>The file &apos;%1&apos; does not exist.</source>
         <translation>Le fichier &apos;%1&apos; n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="827"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="854"/>
         <source>The file &apos;%1&apos; is already opened.</source>
         <translation>Le fichier &apos;%1&apos; est déjà ouvert.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="855"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="882"/>
         <source>Do you want to save the OTStudy &apos;%1&apos; [%2]?</source>
         <translation>Voulez-vous sauvegarder l&apos;étude &apos;%1&apos; [%2] ?</translation>
     </message>
@@ -5359,7 +5181,7 @@ Des objets ne sont peut être pas ouverts.</translation>
 <context>
     <name>OTGUI::StudyTreeViewModel</name>
     <message>
-        <location filename="../lib/src/model/StudyTreeViewModel.cxx" line="40"/>
+        <location filename="../lib/src/model/StudyTreeViewModel.cxx" line="42"/>
         <source>Studies</source>
         <translation>Etudes</translation>
     </message>
@@ -5379,13 +5201,10 @@ Des objets ne sont peut être pas ouverts.</translation>
         <source>Taylor expansion moments results</source>
         <translation>Résultats de décomposition de Taylor</translation>
     </message>
-    <message numerus="yes">
+    <message>
         <location filename="../lib/src/view/TaylorExpansionMomentsResultWindow.cxx" line="57"/>
-        <source>Output(s)</source>
-        <translation>
-            <numerusform>Sortie</numerusform>
-            <numerusform>Sorties</numerusform>
-        </translation>
+        <source>Outputs</source>
+        <translation>Sorties</translation>
     </message>
     <message>
         <location filename="../lib/src/view/TaylorExpansionMomentsResultWindow.cxx" line="77"/>
@@ -5438,13 +5257,10 @@ Des objets ne sont peut être pas ouverts.</translation>
 </context>
 <context>
     <name>OTGUI::VariablesInferenceTableModel</name>
-    <message numerus="yes">
+    <message>
         <location filename="../lib/src/model/VariablesInferenceTableModel.cxx" line="60"/>
-        <source>Variable(s)</source>
-        <translation>
-            <numerusform>Variable</numerusform>
-            <numerusform>Variable</numerusform>
-        </translation>
+        <source>Variable</source>
+        <translation>Variable</translation>
     </message>
 </context>
 <context>
@@ -5488,39 +5304,39 @@ Des objets ne sont peut être pas ouverts.</translation>
 <context>
     <name>OTGUI::YACSPhysicalModelWindow</name>
     <message>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="47"/>
+        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="46"/>
         <source>YACS physical model</source>
         <translation>Modèle physique YACS</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="64"/>
+        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="60"/>
         <source>Search file</source>
         <translation>Chercher fichier</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="68"/>
+        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="64"/>
         <source>Build YACS schema</source>
         <translation>Création du schéma YACS</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="95"/>
+        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="92"/>
         <source>Data to import...</source>
         <translation>Importer des données...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="97"/>
+        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="94"/>
         <source>Data files (*.xml);;</source>
         <translation>Fichiers de données (*.xml);;</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="107"/>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="144"/>
+        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="105"/>
+        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="143"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="108"/>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="145"/>
+        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="106"/>
+        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="144"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1 : %2</translation>

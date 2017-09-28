@@ -21,6 +21,8 @@
 #ifndef OTGUI_OTGUIACTIONS_HXX
 #define OTGUI_OTGUIACTIONS_HXX
 
+#include "otgui/OTGuiprivate.hxx"
+
 #include <QAction>
 
 namespace OTGUI {

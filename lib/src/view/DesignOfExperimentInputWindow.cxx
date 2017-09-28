@@ -41,7 +41,7 @@ DesignOfExperimentInputWindow::DesignOfExperimentInputWindow(DesignOfExperimentD
 
 void DesignOfExperimentInputWindow::buildInterface()
 {
-  setWindowTitle(tr("Design of experiment"));
+  setWindowTitle(tr("Design of experiments"));
 
   QWidget * mainWidget = new QWidget;
   QVBoxLayout * mainWidgetLayout = new QVBoxLayout(mainWidget);

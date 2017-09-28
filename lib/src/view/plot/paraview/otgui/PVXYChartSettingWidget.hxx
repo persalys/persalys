@@ -38,15 +38,30 @@ public:
   enum Type {NoType, Scatter};
 
   PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidget,
-                         PVXYChartViewWidget * rankPvViewWidget,
+                         const OT::Sample& sample,
+                         const OT::Sample& sampleRank,
                          QStringList inputNames=QStringList(),
                          QStringList outputNames=QStringList(),
                          Type plotType=NoType,
                          QWidget * parent=0);
 
+  PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidget,
+                         const OT::Sample& sample,
+                         const OT::Sample& sampleRank,
+                         const OT::Sample& failedSample,
+                         const OT::Sample& failedSampleRank,
+                         const OT::Sample& notEvalSample,
+                         const OT::Sample& notEvalSampleRank,
+                         Type plotType=NoType,
+                         QWidget * parent=0);
+
   int getCurrentPlotIndex() const;
 
+protected:
+  void buildInterface();
+
 public slots:
+  void modifyData(bool);
   void updateLineEdits();
   void updateYComboBox();
   void plotChanged();
@@ -55,17 +70,22 @@ public slots:
   void updateYLabel();
   void updateXrange();
   void updateYrange();
-  void exportPlot();
   void setColor();
   void setMarkerStyle(const int);
-  void setMarkerSize(const int);
   void setRepresentationToDisplay();
 signals:
   void currentPlotChanged(QString varX, QString varY);
 
 private:
   PVXYChartViewWidget * pvViewWidget_;
-  PVXYChartViewWidget * rankPvViewWidget_;
+  OT::Sample sample_;
+  OT::Sample sampleRank_;
+  OT::Sample failedSample_;
+  OT::Sample failedSampleRank_;
+  OT::Sample notEvalSample_;
+  OT::Sample notEvalSampleRank_;
+  QStringList inputNames_;
+  QStringList outputNames_;
   Type plotType_;
   QComboBox * xAxisComboBox_;
   QComboBox * yAxisComboBox_;

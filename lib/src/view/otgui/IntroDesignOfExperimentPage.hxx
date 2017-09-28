@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to define the type of design of experiment
+ *  @brief QWizardPage to define the type of design of experiments
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *

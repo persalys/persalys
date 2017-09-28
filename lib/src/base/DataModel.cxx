@@ -114,9 +114,10 @@ void DataModel::setFileName(const String& fileName)
       inputNames_ = Description();
       outputNames_ = Description();
     }
-    catch (std::exception)
+    catch (std::exception& ex)
     {
       fileName_ = oldFileName;
+      throw InvalidArgumentException(HERE) << ex.what();
     }
   }
   else

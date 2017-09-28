@@ -59,7 +59,7 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const Analysis& analysi
 
   if (!analysis_ptr)
   {
-    throw InvalidArgumentException(HERE) << "The given analysis does not contain any design of experiment";
+    throw InvalidArgumentException(HERE) << "The given analysis does not contain any design of experiments";
   }
   designOfExperiment_ = analysis_ptr->getDesignOfExperiment();
   setInterestVariables(analysis_ptr->getInterestVariables());
@@ -95,7 +95,7 @@ Sample MetaModelAnalysis::getEffectiveInputSample() const
       inputIndices.add(i);
 
   if (!inputIndices.check(designOfExperiment_.getInputSample().getDimension()))
-    throw InvalidArgumentException(HERE) << "The design of experiment input sample dimension ("
+    throw InvalidArgumentException(HERE) << "The design of experiments input sample dimension ("
                                          << designOfExperiment_.getInputSample().getDimension()
                                          << ") does not match the number of stochastic inputs in the physical model ("
                                          << inputIndices.getSize() << ")";

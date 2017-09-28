@@ -424,7 +424,7 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
     valuesList << tr("Monte Carlo")
                << MCanalysis.getInterestVariables().__str__().c_str();
     if (MCanalysis.isConfidenceIntervalRequired())
-      valuesList << QString::number(MCanalysis.getLevelConfidenceInterval()*100) + "\%";
+      valuesList << QString::number(MCanalysis.getLevelConfidenceInterval() * 100) + "%";
     valuesList << QString::number(MCanalysis.getMaximumCoefficientOfVariation());
     if (MCanalysis.getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
       valuesList << QString::number(MCanalysis.getMaximumElapsedTime()) + "(s)";

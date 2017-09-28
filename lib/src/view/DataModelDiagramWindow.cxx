@@ -187,6 +187,7 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
 
   // -- text area --
   QTextEdit * textArea = new QTextEdit;
+  textArea->setReadOnly(true);
   connect(modelDefinitionButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   connect(dataAnalysisButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   connect(inferenceButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));

@@ -147,24 +147,27 @@ void PhysicalModelWindowWidget::buildInterface()
   addTab(tab, tr("Definition"));
 
   // differentiation
-  tab = new QWidget;
-  vbox = new QVBoxLayout(tab);
+  if (physicalModel_.getImplementation()->getClassName() != "MetaModel")
+  {
+    tab = new QWidget;
+    vbox = new QVBoxLayout(tab);
 
-  QLabel * label = new QLabel(tr("Finite difference step definition"));
-  label->setStyleSheet("font: bold;");
-  vbox->addWidget(label);
+    QLabel * label = new QLabel(tr("Finite difference step definition"));
+    label->setStyleSheet("font: bold;");
+    vbox->addWidget(label);
 
-  differentiationTableView_ = new CopyableTableView;
-  SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate;
-  spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::differentiationStep);
-  connect(spinBoxDelegate, SIGNAL(applyToAllRequested(double)), this, SLOT(applyDifferentiationStepToAllInputs(double)));
-  differentiationTableView_->setItemDelegateForColumn(1, spinBoxDelegate);
-  differentiationTableView_->setEditTriggers(QTableView::AllEditTriggers);
-  vbox->addWidget(differentiationTableView_);
+    differentiationTableView_ = new CopyableTableView;
+    SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate;
+    spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::differentiationStep);
+    connect(spinBoxDelegate, SIGNAL(applyToAllRequested(double)), this, SLOT(applyDifferentiationStepToAllInputs(double)));
+    differentiationTableView_->setItemDelegateForColumn(1, spinBoxDelegate);
+    differentiationTableView_->setEditTriggers(QTableView::AllEditTriggers);
+    vbox->addWidget(differentiationTableView_);
 
-  updateDifferentiationTableModel();
+    updateDifferentiationTableModel();
 
-  addTab(tab, tr("Differentiation"));
+    addTab(tab, tr("Differentiation"));
+  }
 }
 
 

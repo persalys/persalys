@@ -86,7 +86,7 @@ IntroReliabilityPage::IntroReliabilityPage(QWidget * parent)
   methodLayout->addWidget(approxLabel);
 
   // - FORM
-  buttonToChooseMethod = new QRadioButton(tr("First order analysis (FORM)"));
+  buttonToChooseMethod = new QRadioButton(tr("First Order Reliability Method (FORM)"));
   buttonToChooseMethod->setChecked(true);
   methodGroup_->addButton(buttonToChooseMethod, ApproximationReliabilityPage::FORM);
   methodLayout->addWidget(buttonToChooseMethod);

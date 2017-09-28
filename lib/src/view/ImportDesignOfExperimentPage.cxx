@@ -89,7 +89,7 @@ void ImportDesignOfExperimentPage::buildInterface()
 
   // DOE size
   QHBoxLayout * sizeLayout = new QHBoxLayout;
-  QLabel * sizeLabel = new QLabel(tr("Size of the design of experiment:") + " ");
+  QLabel * sizeLabel = new QLabel(tr("Size of the design of experiments:") + " ");
   sizeLayout->addWidget(sizeLabel);
   DOESizeLabel_ = new QLabel(QString::number(0));
   sizeLayout->addWidget(DOESizeLabel_);
@@ -240,7 +240,7 @@ void ImportDesignOfExperimentPage::columnNameChanged()
     return;
   }
 
-  // update the design of experiment
+  // update the design of experiments
   try
   {
     designOfExperiment_.setInputColumns(columns);

@@ -147,8 +147,15 @@ void AnalysisWindow::initializeWidgets()
       statusBarMessage = tr("Ready to be launched");
     }
   }
-  messageLabel_->setText(informationMessage);
+  setMessage(informationMessage);
   setErrorMessage(statusBarMessage);
+}
+
+
+void AnalysisWindow::setMessage(const QString& message)
+{
+  if (messageLabel_)
+    messageLabel_->setText(message);
 }
 
 

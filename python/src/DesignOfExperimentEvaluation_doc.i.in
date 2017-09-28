@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::DesignOfExperimentEvaluation
-"Base class of design of experiment.
+"Base class of design of experiments.
 "
 
 // ----------------------------------------------------------------------
@@ -20,7 +20,7 @@ sample : :py:class:`openturns.Sample`
 Returns
 -------
 sample : :py:class:`openturns.Sample`
-    Points of the design of experiment which could not be evaluated"
+    Points of the design of experiments which could not be evaluated"
 
 // ----------------------------------------------------------------------
 
@@ -30,4 +30,4 @@ sample : :py:class:`openturns.Sample`
 Returns
 -------
 sample : :py:class:`openturns.Sample`
-    Points of the design of experiment which were not evaluated"
+    Points of the design of experiments which were not evaluated"

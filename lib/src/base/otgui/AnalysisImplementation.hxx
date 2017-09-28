@@ -37,6 +37,9 @@ public:
   /** Virtual constructor */
   virtual AnalysisImplementation * clone() const;
 
+  /** Object name accessor */
+  virtual void setName(const OT::String& name);
+
   /** Comparison operators */
   OT::Bool operator ==(const AnalysisImplementation & other) const;
   OT::Bool operator !=(const AnalysisImplementation & other) const;
@@ -54,6 +57,7 @@ public:
 
   OT::String getInformationMessage() const;
   OT::String getErrorMessage() const;
+  OT::String getWarningMessage() const;
   int getProgressValue() const;
 
   virtual void stop();
@@ -74,6 +78,7 @@ protected:
   bool isRunning_;
   OT::String informationMessage_;
   OT::String errorMessage_;
+  OT::String warningMessage_;
   bool stopRequested_;
   int progressValue_;
 

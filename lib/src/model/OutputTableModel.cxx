@@ -21,6 +21,7 @@
 #include "otgui/OutputTableModel.hxx"
 
 #include "otgui/SymbolicPhysicalModel.hxx"
+#include "otgui/StudyTreeViewModel.hxx"
 
 #include <QDebug>
 
@@ -111,7 +112,7 @@ QVariant OutputTableModel::data(const QModelIndex & index, int role) const
       {
         if (!physicalModel_.getOutputs()[index.row()].hasBeenComputed())
           return QString("?");
-        return QString::number(physicalModel_.getOutputs()[index.row()].getValue(), 'g', 15);
+        return QString::number(physicalModel_.getOutputs()[index.row()].getValue(), 'g', StudyTreeViewModel::DefaultSignificantDigits);
       }
     }
   }

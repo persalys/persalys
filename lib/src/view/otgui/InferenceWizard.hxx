@@ -23,7 +23,6 @@
 
 #include "otgui/AnalysisWizard.hxx"
 #include "otgui/InferenceAnalysis.hxx"
-#include "otgui/DistributionsForInferenceWidget.hxx"
 #include "otgui/VariablesInferenceTableModel.hxx"
 
 #include <openturns/FittingTest.hxx>
@@ -37,7 +36,6 @@ class OTGUI_API InferenceWizard : public AnalysisWizard
   Q_OBJECT
 
 public :
-  InferenceWizard(const OTStudy& otStudy, const DesignOfExperiment & designOfExperiment, QWidget* parent=0);
   InferenceWizard(const Analysis& analysis, QWidget* parent=0);
 
   virtual bool validateCurrentPage();
@@ -47,22 +45,22 @@ protected:
   void buildInterface();
 
 public slots:
-  void selectedVariableChanged(QModelIndex, QModelIndex);
-  void updateDistributionsListForVariable(QStringList);
-  void updateInterestVariables(OT::Description, OT::String);
+  void selectedVarChanged(QModelIndex, QModelIndex);
+  void updateDistListForVar(QStringList);
+  void updateInterestVar(OT::Description, OT::String);
   void levelChanged(double);
 signals:
-  void currentVariableChanged(int);
-  void currentVariableChecked(bool);
+  void currentVarChanged(int);
+  void currentVarChecked(bool);
 
 private:
-  OT::String currentVariableName_;
+  OT::String currentVarName_;
   InferenceAnalysis inference_;
-  OT::Description interestVariables_;
+  OT::Description interestVar_;
   std::map<OT::String, OT::FittingTest::DistributionFactoryCollection> distFactoriesForEachInterestVar_;
   QLabel * errorMessageLabel_;
   bool pageValidity_;
-  VariablesInferenceTableModel * variablesInferenceTableModel_;
+  VariablesInferenceTableModel * varTableModel_;
 };
 }
 #endif
