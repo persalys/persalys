@@ -30,6 +30,7 @@
 #include <QScrollArea>
 #include <QHeaderView>
 #include <QAbstractItemModel>
+#include <QLabel>
 
 using namespace OT;
 
@@ -210,67 +211,85 @@ void ApproximationResultTabWidget::buildInterface()
   tab = new QWidget;
   tabLayout = new QVBoxLayout(tab);
 
-  scrollArea = new QScrollArea;
-  scrollArea->setWidgetResizable(true);
-  tabLayout->setSizeConstraint(QLayout::SetFixedSize);
-
-  groupBox = new QGroupBox(tr("Sensitivities"));
-  groupBoxLayout = new QVBoxLayout(groupBox);
-
-  resultsTable = new ResizableTableViewWithoutScrollBar;
-  resultsTable->horizontalHeader()->hide();
-  resultsTable->verticalHeader()->hide();
-
-  resultsTableModel = new CustomStandardItemModel(inDimension + 2, 4, resultsTable);
-  resultsTable->setModel(resultsTableModel);
-
-  // horizontal header
-  resultsTableModel->setNotEditableHeaderItem(0, 0, tr("Variable"));
-  resultsTableModel->setNotEditableHeaderItem(0, 1, tr("Distribution parameters"));
-  resultsTableModel->setNotEditableHeaderItem(0, 2, tr("Failure probability"));
-  resultsTableModel->setNotEditableHeaderItem(0, 3, tr("Reliability index"));
-
-  // set values
-  int row = 1;
-  for (UnsignedInteger i = 0; i < inDimension; ++i)
+  try
   {
-    // variable name
-    const int varRow = row;
-    resultsTableModel->setNotEditableItem(row, 0, inDescription[i].c_str());
+    // compute sensitivities
+    AnalyticalResult::Sensitivity eventProbaSensitivity(result_.getEventProbabilitySensitivity());
+    AnalyticalResult::Sensitivity hasoferIndexSensitivity(result_.getHasoferReliabilityIndexSensitivity());
 
-    PointWithDescription pfSensitivity(result_.getEventProbabilitySensitivity()[i]);
-    const PointWithDescription betaSensitivity(result_.getHasoferReliabilityIndexSensitivity()[i]);
+    // if the computation of sensitivities has succeeded
+    scrollArea = new QScrollArea;
+    scrollArea->setWidgetResizable(true);
+    tabLayout->setSizeConstraint(QLayout::SetFixedSize);
+    groupBox = new QGroupBox(tr("Sensitivities"));
+    groupBoxLayout = new QVBoxLayout(groupBox);
 
-    for (UnsignedInteger j = 0; j < betaSensitivity.getDimension(); ++j)
+    resultsTable = new ResizableTableViewWithoutScrollBar;
+    resultsTable->horizontalHeader()->hide();
+    resultsTable->verticalHeader()->hide();
+
+    resultsTableModel = new CustomStandardItemModel(inDimension + 2, 4, resultsTable);
+    resultsTable->setModel(resultsTableModel);
+
+    // horizontal header
+    resultsTableModel->setNotEditableHeaderItem(0, 0, tr("Variable"));
+    resultsTableModel->setNotEditableHeaderItem(0, 1, tr("Distribution parameters"));
+    resultsTableModel->setNotEditableHeaderItem(0, 2, tr("Failure probability"));
+    resultsTableModel->setNotEditableHeaderItem(0, 3, tr("Reliability index"));
+
+    // set values
+    int row = 1;
+    for (UnsignedInteger i = 0; i < inDimension; ++i)
     {
-      int col = 0;
-      // distribution parameter name
-      String parameterName = betaSensitivity.getDescription()[j];
-      parameterName = parameterName.substr(0, betaSensitivity.getDescription()[j].find("_marginal"));
-      parameterName = parameterName.substr(0, betaSensitivity.getDescription()[j].find("_0"));
-      resultsTableModel->setNotEditableItem(row, ++col, QString::fromUtf8(parameterName.c_str()));
+      // variable name
+      const int varRow = row;
+      resultsTableModel->setNotEditableItem(row, 0, inDescription[i].c_str());
 
-      // sensitivity value pf
-      if (pfSensitivity.getSize())
-        resultsTableModel->setNotEditableItem(row, ++col, pfSensitivity[j]);
+      PointWithDescription pfSensitivity(eventProbaSensitivity[i]);
+      const PointWithDescription betaSensitivity(hasoferIndexSensitivity[i]);
 
-      // sensitivity value beta
-      resultsTableModel->setNotEditableItem(row, ++col, betaSensitivity[j]);
+      for (UnsignedInteger j = 0; j < betaSensitivity.getDimension(); ++j)
+      {
+        int col = 0;
+        // distribution parameter name
+        String parameterName = betaSensitivity.getDescription()[j];
+        parameterName = parameterName.substr(0, betaSensitivity.getDescription()[j].find("_marginal"));
+        parameterName = parameterName.substr(0, betaSensitivity.getDescription()[j].find("_0"));
+        resultsTableModel->setNotEditableItem(row, ++col, QString::fromUtf8(parameterName.c_str()));
 
-      ++row;
+        // sensitivity value pf
+        if (pfSensitivity.getSize())
+          resultsTableModel->setNotEditableItem(row, ++col, pfSensitivity[j]);
+
+        // sensitivity value beta
+        resultsTableModel->setNotEditableItem(row, ++col, betaSensitivity[j]);
+
+        ++row;
+      }
+      resultsTable->setSpan(varRow, 0, betaSensitivity.getDimension(), 1);
     }
-    resultsTable->setSpan(varRow, 0, betaSensitivity.getDimension(), 1);
+
+    // resize to contents
+    resultsTable->resizeToContents();
+
+    groupBoxLayout->addWidget(resultsTable);
+    tabLayout->addWidget(groupBox);
+
+    scrollArea->setWidget(tab);
+
+    addTab(scrollArea, tr("Sensitivities"));
   }
+  catch (std::exception& ex)
+  {
+    QLabel * errorLabel = new QLabel;
+    errorLabel->setStyleSheet("QLabel { color : red; }");
+    errorLabel->setText(tr("Internal error during the computation of the sensitivities.\n\n%1").arg(ex.what()));
+    errorLabel->setWordWrap(true);
 
-  // resize to contents
-  resultsTable->resizeToContents();
-
-  groupBoxLayout->addWidget(resultsTable);
-  tabLayout->addWidget(groupBox);
-
-  scrollArea->setWidget(tab);
-
-  addTab(scrollArea, tr("Sensitivities"));
+    tabLayout->addWidget(errorLabel);
+    tabLayout->addStretch();
+    addTab(tab, tr("Sensitivities"));
+  }
 
   // parameters widget --------------------
   if (parametersWidget_)

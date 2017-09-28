@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>OTGUI::AnalysisItem</name>
     <message>
@@ -498,132 +498,142 @@
 <context>
     <name>OTGUI::ApproximationResultTabWidget</name>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="75"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="76"/>
         <source>Threshold exceedance parameters</source>
         <translation>Paramètres du calcul de probabilité de dépassement de seuil</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="84"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="85"/>
         <source>Threshold exceedance results</source>
         <translation>Résultats de calcul de probabilité de dépassement de seuil</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="96"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="103"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="230"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="97"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="104"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="237"/>
         <source>Failure probability</source>
         <translation>Probabilité de défaillance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="97"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="98"/>
         <source>Hasofer reliability index</source>
         <translation>Indice de fiabilité Hasofer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="107"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="108"/>
         <source>Optimization result</source>
         <translation>Résultat de l&apos;optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="110"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="111"/>
         <source>Iterations number</source>
         <translation>Nombre d&apos;itérations</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="111"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="112"/>
         <source>Calls number</source>
         <translation>Nombre d&apos;appels</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="112"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="113"/>
         <source>Absolute error</source>
         <translation>Erreur absolue</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="113"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="114"/>
         <source>Relative error</source>
         <translation>Erreur relative</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="114"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="115"/>
         <source>Residual error</source>
         <translation>Erreur sur les résidus</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="115"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="116"/>
         <source>Constraint error</source>
         <translation>Erreur sur la contrainte</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="131"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="132"/>
         <source>Maximum iterations number reached</source>
         <translation>Nombre d&apos;itérations maximum atteint</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="139"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="140"/>
         <source>Summary</source>
         <translation>Résumé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="149"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="207"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="150"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="208"/>
         <source>Design point</source>
         <translation>Point de conception</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="162"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="228"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="163"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="235"/>
         <source>Variable</source>
         <translation>Variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="164"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="165"/>
         <source>Importance factors</source>
         <translation>Facteurs d&apos;importance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="166"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="167"/>
         <source>Coordinates</source>
         <translation>Coordonnées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="167"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="168"/>
         <source>Standard space</source>
         <translation>Espace standard</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="168"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="169"/>
         <source>Physical space</source>
         <translation>Espace physique</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="198"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="199"/>
         <source>Importance factors pie chart</source>
         <translation>Diagrammes des facteurs d&apos;importance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="201"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="202"/>
         <source>importanceFactors</source>
         <translation>facteursImportance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="217"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="273"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="224"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="280"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="291"/>
         <source>Sensitivities</source>
         <translation>Sensibilités</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="229"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="236"/>
         <source>Distribution parameters</source>
         <translation>Paramètres de distribution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="231"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="238"/>
         <source>Reliability index</source>
         <translation>Indice de fiabilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="277"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="286"/>
+        <source>Internal error during the computation of the sensitivities.
+
+%1</source>
+        <translation>Erreur interne durant le calcul des sensibilités.
+
+%1</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="296"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
