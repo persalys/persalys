@@ -26,7 +26,7 @@
 namespace OTGUI {
 class OTGUI_API DesignOfExperiment : public OT::TypedInterfaceObject<DesignOfExperimentImplementation>
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   typedef OT::Pointer<DesignOfExperimentImplementation>       Implementation;

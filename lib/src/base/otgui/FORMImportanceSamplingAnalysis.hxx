@@ -29,7 +29,7 @@
 namespace OTGUI {
 class OTGUI_API FORMImportanceSamplingAnalysis : public ImportanceSamplingAnalysis, public ApproximationAnalysis
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

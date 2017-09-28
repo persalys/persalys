@@ -28,7 +28,7 @@
 namespace OTGUI {
 class OTGUI_API CopulaInferenceSetResult : public OT::PersistentObject
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   friend class CopulaInferenceAnalysis;

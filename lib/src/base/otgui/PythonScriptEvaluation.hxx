@@ -35,7 +35,7 @@ namespace OTGUI {
  */
 class OTGUI_API PythonScriptEvaluation : public OT::EvaluationImplementation
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

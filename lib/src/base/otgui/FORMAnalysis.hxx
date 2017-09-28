@@ -29,7 +29,7 @@
 namespace OTGUI {
 class OTGUI_API FORMAnalysis : public ReliabilityAnalysis, public ApproximationAnalysis
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

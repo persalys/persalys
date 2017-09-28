@@ -24,7 +24,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(DesignOfExperiment);
+CLASSNAMEINIT(DesignOfExperiment)
 
 /* Default constructor */
 DesignOfExperiment::DesignOfExperiment()

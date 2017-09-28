@@ -28,7 +28,7 @@
 namespace OTGUI {
 class OTGUI_API Input : public Variable
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

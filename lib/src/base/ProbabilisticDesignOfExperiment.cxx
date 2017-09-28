@@ -31,7 +31,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(ProbabilisticDesignOfExperiment);
+CLASSNAMEINIT(ProbabilisticDesignOfExperiment)
 
 static Factory<ProbabilisticDesignOfExperiment> Factory_ProbabilisticDesignOfExperiment;
 

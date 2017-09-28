@@ -26,7 +26,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(MetaModelAnalysisResult);
+CLASSNAMEINIT(MetaModelAnalysisResult)
 
 static Factory<MetaModelAnalysisResult> Factory_MetaModelAnalysisResult;
 

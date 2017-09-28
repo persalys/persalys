@@ -30,7 +30,7 @@
 namespace OTGUI {
 class OTGUI_API OTStudyImplementation : public OT::PersistentObject, public Observable, public Observer
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

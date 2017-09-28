@@ -26,7 +26,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(SimulationReliabilityResult);
+CLASSNAMEINIT(SimulationReliabilityResult)
 
 static Factory<SimulationReliabilityResult> Factory_SimulationReliabilityResult;
 

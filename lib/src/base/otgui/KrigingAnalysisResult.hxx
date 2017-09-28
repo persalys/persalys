@@ -28,7 +28,7 @@
 namespace OTGUI {
 class OTGUI_API KrigingAnalysisResult : public MetaModelAnalysisResult
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
 

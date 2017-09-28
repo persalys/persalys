@@ -27,7 +27,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(PythonScriptEvaluation);
+CLASSNAMEINIT(PythonScriptEvaluation)
 
 static Factory<PythonScriptEvaluation> Factory_PythonScriptEvaluation;
 

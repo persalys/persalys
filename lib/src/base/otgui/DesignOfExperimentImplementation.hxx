@@ -27,7 +27,7 @@
 namespace OTGUI {
 class OTGUI_API DesignOfExperimentImplementation : public DataSample, public Observable
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

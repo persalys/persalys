@@ -30,7 +30,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(PythonPhysicalModel);
+CLASSNAMEINIT(PythonPhysicalModel)
 
 static Factory<PythonPhysicalModel> Factory_PythonPhysicalModel;
 

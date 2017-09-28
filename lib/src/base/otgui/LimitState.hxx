@@ -28,7 +28,7 @@
 namespace OTGUI {
 class OTGUI_API LimitState : public OT::TypedInterfaceObject<LimitStateImplementation>
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   typedef OT::Pointer<LimitStateImplementation>       Implementation;

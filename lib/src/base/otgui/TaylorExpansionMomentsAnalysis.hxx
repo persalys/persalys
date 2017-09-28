@@ -27,7 +27,7 @@
 namespace OTGUI {
 class OTGUI_API TaylorExpansionMomentsAnalysis : public PhysicalModelAnalysis
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

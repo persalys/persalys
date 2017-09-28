@@ -37,7 +37,7 @@ namespace OTGUI {
  */
 class OTGUI_API YACSEvaluation : public OT::EvaluationImplementation
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

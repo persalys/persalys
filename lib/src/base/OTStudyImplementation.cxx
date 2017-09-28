@@ -32,7 +32,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(OTStudyImplementation);
+CLASSNAMEINIT(OTStudyImplementation)
 
 static Factory<OTStudyImplementation> Factory_OTStudyImplementation;
 

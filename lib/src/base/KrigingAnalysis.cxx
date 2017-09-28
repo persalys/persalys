@@ -28,7 +28,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(KrigingAnalysis);
+CLASSNAMEINIT(KrigingAnalysis)
 
 static Factory<KrigingAnalysis> Factory_KrigingAnalysis;
 

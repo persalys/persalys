@@ -28,7 +28,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(SRCAnalysis);
+CLASSNAMEINIT(SRCAnalysis)
 
 static Factory<SRCAnalysis> Factory_SRCAnalysis;
 

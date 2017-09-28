@@ -24,7 +24,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(Analysis);
+CLASSNAMEINIT(Analysis)
 
 /* Default constructor */
 Analysis::Analysis()

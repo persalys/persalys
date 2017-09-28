@@ -30,7 +30,7 @@
 namespace OTGUI {
 class OTGUI_API KrigingAnalysis : public MetaModelAnalysis
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

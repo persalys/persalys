@@ -27,7 +27,7 @@
 namespace OTGUI {
 class OTGUI_API SobolResult : public OT::PersistentObject
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
 

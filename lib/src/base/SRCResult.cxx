@@ -26,7 +26,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(SRCResult);
+CLASSNAMEINIT(SRCResult)
 
 static Factory<SRCResult> Factory_SRCResult;
 

@@ -26,7 +26,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(CopulaInferenceSetResult);
+CLASSNAMEINIT(CopulaInferenceSetResult)
 
 static Factory<CopulaInferenceSetResult> Factory_CopulaInferenceSetResult;
 static Factory<PersistentCollection<PersistentCollection<Sample > > > Factory_CollectionCollectionSample;

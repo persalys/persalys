@@ -27,7 +27,7 @@
 namespace OTGUI {
 class OTGUI_API FMIPhysicalModel : public PythonPhysicalModel
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
 

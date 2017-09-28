@@ -28,7 +28,7 @@
 namespace OTGUI {
 class OTGUI_API DataAnalysisResult : public OT::PersistentObject
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   typedef OT::Collection<OT::Point> PointCollection;

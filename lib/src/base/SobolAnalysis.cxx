@@ -29,7 +29,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(SobolAnalysis);
+CLASSNAMEINIT(SobolAnalysis)
 
 static Factory<SobolAnalysis> Factory_SobolAnalysis;
 

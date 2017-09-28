@@ -27,7 +27,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(FMUInfo);
+CLASSNAMEINIT(FMUInfo)
 
 static Factory<FMUInfo> Factory_FMUInfo;
 

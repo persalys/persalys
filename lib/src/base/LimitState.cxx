@@ -24,7 +24,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(LimitState);
+CLASSNAMEINIT(LimitState)
 
 /* Default constructor */
 LimitState::LimitState()

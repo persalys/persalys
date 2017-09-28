@@ -26,7 +26,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(YACSPhysicalModel);
+CLASSNAMEINIT(YACSPhysicalModel)
 
 static Factory<YACSPhysicalModel> Factory_YACSPhysicalModel;
 

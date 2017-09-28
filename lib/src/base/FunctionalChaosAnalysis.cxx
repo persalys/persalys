@@ -38,7 +38,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(FunctionalChaosAnalysis);
+CLASSNAMEINIT(FunctionalChaosAnalysis)
 
 static Factory<FunctionalChaosAnalysis> Factory_FunctionalChaosAnalysis;
 

@@ -29,7 +29,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(FMIPhysicalModel);
+CLASSNAMEINIT(FMIPhysicalModel)
 
 static Factory<FMIPhysicalModel> Factory_FMIPhysicalModel;
 

@@ -26,7 +26,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(PhysicalModel);
+CLASSNAMEINIT(PhysicalModel)
 
 /* Default constructor */
 PhysicalModel::PhysicalModel(const String & name)

@@ -27,7 +27,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(LimitStateImplementation);
+CLASSNAMEINIT(LimitStateImplementation)
 
 static Factory<LimitStateImplementation> Factory_LimitStateImplementation;
 

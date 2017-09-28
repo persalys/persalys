@@ -27,7 +27,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(TaylorExpansionMomentsAnalysis);
+CLASSNAMEINIT(TaylorExpansionMomentsAnalysis)
 
 static Factory<TaylorExpansionMomentsAnalysis> Factory_TaylorExpansionMomentsAnalysis;
 

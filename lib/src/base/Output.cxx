@@ -26,7 +26,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(Output);
+CLASSNAMEINIT(Output)
 
 static Factory<Output> Factory_Output;
 

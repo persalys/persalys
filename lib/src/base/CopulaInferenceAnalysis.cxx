@@ -32,7 +32,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(CopulaInferenceAnalysis);
+CLASSNAMEINIT(CopulaInferenceAnalysis)
 
 static Factory<CopulaInferenceAnalysis> Factory_CopulaInferenceAnalysis;
 static Factory<PersistentCollection<Description> > Factory_CollectionDescription;

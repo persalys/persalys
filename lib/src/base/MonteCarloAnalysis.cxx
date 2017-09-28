@@ -31,7 +31,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(MonteCarloAnalysis);
+CLASSNAMEINIT(MonteCarloAnalysis)
 
 static Factory<MonteCarloAnalysis> Factory_MonteCarloAnalysis;
 

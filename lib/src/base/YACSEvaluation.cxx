@@ -32,7 +32,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(YACSEvaluation);
+CLASSNAMEINIT(YACSEvaluation)
 
 class AutoYELocker
 {

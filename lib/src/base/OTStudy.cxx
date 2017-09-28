@@ -29,7 +29,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(OTStudy);
+CLASSNAMEINIT(OTStudy)
 
 PersistentCollection<OTStudy > OTStudy::OTStudies_;
 Observer * OTStudy::OTStudyObserver_ = 0;

@@ -28,7 +28,7 @@
 namespace OTGUI {
 class OTGUI_API MetaModelAnalysisResult : public OT::PersistentObject
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
 

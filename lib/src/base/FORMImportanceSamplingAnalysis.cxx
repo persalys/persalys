@@ -28,7 +28,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(FORMImportanceSamplingAnalysis);
+CLASSNAMEINIT(FORMImportanceSamplingAnalysis)
 
 static Factory<FORMImportanceSamplingAnalysis> Factory_FORMImportanceSamplingAnalysis;
 

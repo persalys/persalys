@@ -26,7 +26,7 @@
 namespace OTGUI {
 class OTGUI_API LimitStateImplementation : public OT::PersistentObject, public Observable
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   typedef OT::Pointer<LimitStateImplementation>       Implementation;

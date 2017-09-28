@@ -26,7 +26,7 @@
 namespace OTGUI {
 class OTGUI_API SymbolicPhysicalModel : public PhysicalModelImplementation
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

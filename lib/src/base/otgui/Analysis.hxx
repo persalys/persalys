@@ -28,7 +28,7 @@ class LaunchParametersVisitor;
 
 class OTGUI_API Analysis : public OT::TypedInterfaceObject<AnalysisImplementation>
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   typedef OT::Pointer<AnalysisImplementation> Implementation;

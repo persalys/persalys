@@ -28,7 +28,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(DataModel);
+CLASSNAMEINIT(DataModel)
 
 static Factory<DataModel> Factory_DataModel;
 

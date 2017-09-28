@@ -27,7 +27,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(MetaModel);
+CLASSNAMEINIT(MetaModel)
 
 static Factory<MetaModel> Factory_MetaModel;
 

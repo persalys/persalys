@@ -29,7 +29,7 @@
 namespace OTGUI {
 class OTGUI_API FittingTestResult : public OT::PersistentObject
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   friend class InferenceAnalysis;

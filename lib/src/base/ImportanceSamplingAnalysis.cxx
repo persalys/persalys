@@ -29,7 +29,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(ImportanceSamplingAnalysis);
+CLASSNAMEINIT(ImportanceSamplingAnalysis)
 
 static Factory<ImportanceSamplingAnalysis> Factory_ImportanceSamplingAnalysis;
 

@@ -26,7 +26,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(KrigingAnalysisResult);
+CLASSNAMEINIT(KrigingAnalysisResult)
 
 static Factory<KrigingAnalysisResult> Factory_KrigingAnalysisResult;
 static Factory<PersistentCollection<KrigingResult> > Factory_PersistentCollection_KrigingResult;

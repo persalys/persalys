@@ -27,7 +27,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(DesignOfExperimentEvaluation);
+CLASSNAMEINIT(DesignOfExperimentEvaluation)
 
 static Factory<DesignOfExperimentEvaluation> Factory_DesignOfExperimentEvaluation;
 

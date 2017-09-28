@@ -26,7 +26,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(FittingTestResult);
+CLASSNAMEINIT(FittingTestResult)
 
 static Factory<FittingTestResult> Factory_FittingTestResult;
 static Factory<PersistentCollection<TestResult> > Factory_PersistentCollection_TestResult;

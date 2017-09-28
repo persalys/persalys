@@ -29,7 +29,7 @@
 namespace OTGUI {
 class OTGUI_API CopulaInferenceAnalysis : public DesignOfExperimentAnalysis
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   typedef OT::Collection<OT::DistributionFactory> DistributionFactoryCollection;

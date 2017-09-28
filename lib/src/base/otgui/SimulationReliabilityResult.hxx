@@ -28,7 +28,7 @@
 namespace OTGUI {
 class OTGUI_API SimulationReliabilityResult : public OT::PersistentObject
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   friend class SimulationReliabilityAnalysis;

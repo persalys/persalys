@@ -27,7 +27,7 @@
 namespace OTGUI {
 class OTGUI_API YACSPhysicalModel : public PhysicalModelImplementation
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /* Default constructor */

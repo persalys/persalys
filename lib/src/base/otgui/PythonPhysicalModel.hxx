@@ -26,7 +26,7 @@
 namespace OTGUI {
 class OTGUI_API PythonPhysicalModel : public PhysicalModelImplementation
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

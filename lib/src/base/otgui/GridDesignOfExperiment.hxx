@@ -26,7 +26,7 @@
 namespace OTGUI {
 class OTGUI_API GridDesignOfExperiment : public DesignOfExperimentEvaluation
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   enum Type {FromBoundsAndLevels, FromBoundsAndDeltas};

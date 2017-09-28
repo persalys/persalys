@@ -26,7 +26,7 @@
 namespace OTGUI {
 class OTGUI_API FixedDesignOfExperiment : public DesignOfExperimentEvaluation
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

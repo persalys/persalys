@@ -29,7 +29,7 @@
 namespace OTGUI {
 class OTGUI_API DataAnalysis : public DesignOfExperimentAnalysis
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

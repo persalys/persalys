@@ -31,7 +31,7 @@ namespace OTGUI {
   
 class OTGUI_API FMUInfo : public OT::PersistentObject
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

@@ -30,7 +30,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(InferenceAnalysis);
+CLASSNAMEINIT(InferenceAnalysis)
 
 static Factory<InferenceAnalysis> Factory_InferenceAnalysis;
 static Factory<PersistentCollection<Description> > Factory_PersistentCollection_Description;

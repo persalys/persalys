@@ -26,7 +26,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(ModelEvaluation);
+CLASSNAMEINIT(ModelEvaluation)
 
 static Factory<ModelEvaluation> Factory_ModelEvaluation;
 

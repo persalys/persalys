@@ -27,7 +27,7 @@
 namespace OTGUI {
 class OTGUI_API Variable : public OT::PersistentObject
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

@@ -27,7 +27,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(MonteCarloReliabilityAnalysis);
+CLASSNAMEINIT(MonteCarloReliabilityAnalysis)
 
 static Factory<MonteCarloReliabilityAnalysis> Factory_MonteCarloReliabilityAnalysis;
 

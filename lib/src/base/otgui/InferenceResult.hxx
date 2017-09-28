@@ -26,7 +26,7 @@
 namespace OTGUI {
 class OTGUI_API InferenceResult : public OT::PersistentObject
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   typedef OT::Collection<FittingTestResult> FittingTestResultCollection;

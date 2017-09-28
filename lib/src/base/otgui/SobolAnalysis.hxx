@@ -28,7 +28,7 @@
 namespace OTGUI {
 class OTGUI_API SobolAnalysis : public SimulationAnalysis, public WithStopCriteriaAnalysis
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

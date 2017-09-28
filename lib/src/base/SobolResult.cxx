@@ -26,7 +26,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(SobolResult);
+CLASSNAMEINIT(SobolResult)
 
 static Factory<SobolResult> Factory_SobolResult;
 

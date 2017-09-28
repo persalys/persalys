@@ -24,7 +24,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(Variable);
+CLASSNAMEINIT(Variable)
 
 /* Default constructor */
 Variable::Variable()

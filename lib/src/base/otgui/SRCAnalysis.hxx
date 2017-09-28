@@ -27,7 +27,7 @@
 namespace OTGUI {
 class OTGUI_API SRCAnalysis : public SimulationAnalysis
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

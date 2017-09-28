@@ -29,7 +29,7 @@
 namespace OTGUI {
 class OTGUI_API FunctionalChaosAnalysisResult : public MetaModelAnalysisResult
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
 

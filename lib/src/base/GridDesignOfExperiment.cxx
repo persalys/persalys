@@ -29,7 +29,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(GridDesignOfExperiment);
+CLASSNAMEINIT(GridDesignOfExperiment)
 
 static Factory<GridDesignOfExperiment> Factory_GridDesignOfExperiment;
 

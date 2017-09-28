@@ -30,7 +30,7 @@ using namespace OT;
 
 namespace OTGUI{
 
-CLASSNAMEINIT(DataAnalysis);
+CLASSNAMEINIT(DataAnalysis)
 
 static Factory<DataAnalysis> Factory_DataAnalysis;
 

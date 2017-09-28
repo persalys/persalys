@@ -26,7 +26,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(FunctionalChaosAnalysisResult);
+CLASSNAMEINIT(FunctionalChaosAnalysisResult)
 
 static Factory<FunctionalChaosAnalysisResult> Factory_FunctionalChaosAnalysisResult;
 

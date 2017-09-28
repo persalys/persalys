@@ -30,7 +30,7 @@
 namespace OTGUI {
 class OTGUI_API FunctionalChaosAnalysis : public MetaModelAnalysis
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */

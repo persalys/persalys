@@ -26,7 +26,7 @@ using namespace OT;
 
 namespace OTGUI{
 
-CLASSNAMEINIT(DataAnalysisResult);
+CLASSNAMEINIT(DataAnalysisResult)
 
 static Factory<DataAnalysisResult> Factory_DataAnalysisResult;
 

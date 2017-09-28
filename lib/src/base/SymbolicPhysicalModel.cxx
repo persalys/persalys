@@ -27,7 +27,7 @@ using namespace OT;
 
 namespace OTGUI {
 
-CLASSNAMEINIT(SymbolicPhysicalModel);
+CLASSNAMEINIT(SymbolicPhysicalModel)
 
 static Factory<SymbolicPhysicalModel> Factory_SymbolicPhysicalModel;
 

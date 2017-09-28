@@ -28,7 +28,7 @@
 namespace OTGUI {
 class OTGUI_API TaylorExpansionMomentsResult : public OT::PersistentObject
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   /** Default constructor */
