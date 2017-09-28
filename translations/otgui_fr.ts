@@ -406,12 +406,12 @@
         <translation>Prête à être lancée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="174"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="181"/>
         <source>The analysis is running</source>
         <translation>L&apos;analyse est en cours d&apos;exécution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="190"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="197"/>
         <source>Stop in progress</source>
         <translation>Arrêt en cours</translation>
     </message>
@@ -3071,7 +3071,7 @@ Voulez-vous continuer et fermer les autres études ?</translation>
         <location filename="../lib/src/view/MinMaxTableGroupBox.cxx" line="113"/>
         <source>Inputs at
 extremum</source>
-        <translation>Sorties à l&apos;
+        <translation>Entrées à l&apos;
 extremum</translation>
     </message>
     <message>
@@ -3161,63 +3161,63 @@ extremum</translation>
         <translation>Estimations des moments</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="69"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="70"/>
         <source>Estimate</source>
         <translation>Estimation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="75"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="76"/>
         <source>Mean</source>
         <translation>Moyenne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="76"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="77"/>
         <source>Standard deviation</source>
         <translation>Écart type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="77"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="78"/>
         <source>Coefficient of variation</source>
         <translation>Coefficient de variation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="78"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="79"/>
         <source>Skewness</source>
         <translation>Asymétrie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="79"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="80"/>
         <source>Kurtosis</source>
         <translation>Aplatissement</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="80"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="81"/>
         <source>First quartile</source>
         <translation>Premier quartile</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="81"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="82"/>
         <source>Third quartile</source>
         <translation>Troisième quartile</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="85"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="86"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="89"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="90"/>
         <source>Lower bound</source>
         <translation>Borne inférieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="90"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="91"/>
         <source>Upper bound</source>
         <translation>Borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="158"/>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="172"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="159"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="173"/>
         <source>Confidence interval at</source>
         <translation>Intervalle de confiance à</translation>
     </message>
@@ -5104,27 +5104,32 @@ métamodèle</translation>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="717"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="618"/>
+        <source>Impossible to create a result window</source>
+        <translation>Impossible de créer une fenêtre de résultat</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="727"/>
         <source>Can not export the current study</source>
         <translation>Impossible d&apos;exporter l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="727"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="737"/>
         <source>Export Python...</source>
         <translation>Export Python...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="729"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="739"/>
         <source>Python source files (*.py)</source>
         <translation>Fichiers Python (*.py)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="776"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="786"/>
         <source>Can not save the current study as</source>
         <translation>Impossible de sauvegarder sous l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="858"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="868"/>
         <source>An error has occured when reading the file &apos;%1&apos;. 
 Maybe objects are not opened.
 </source>
@@ -5132,38 +5137,43 @@ Maybe objects are not opened.
 Des objets ne sont peut être pas ouverts.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="871"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="881"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="795"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="805"/>
         <source>Save OTStudy...</source>
         <translation>Sauvegarder l&apos;étude...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="797"/>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="829"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="616"/>
+        <source>Impossible to create a result window for this analysis. Try to launch again the analysis.</source>
+        <translation>Impossible de créer une fenêtre de résultat pour cette analyse. Essayer de lancer à nouveau l&apos;analyse.</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="807"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="839"/>
         <source>XML files (*.xml)</source>
         <translation>Fichiers XML (*.xml)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="827"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="837"/>
         <source>Open an existing OTStudy</source>
         <translation>Ouvrir une étude existante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="839"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="849"/>
         <source>The file &apos;%1&apos; does not exist.</source>
         <translation>Le fichier &apos;%1&apos; n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="844"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="854"/>
         <source>The file &apos;%1&apos; is already opened.</source>
         <translation>Le fichier &apos;%1&apos; est déjà ouvert.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="872"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="882"/>
         <source>Do you want to save the OTStudy &apos;%1&apos; [%2]?</source>
         <translation>Voulez-vous sauvegarder l&apos;étude &apos;%1&apos; [%2] ?</translation>
     </message>
