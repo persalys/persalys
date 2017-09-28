@@ -28,7 +28,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 IntroCentralTendencyPage::IntroCentralTendencyPage(QWidget* parent)
   : QWizardPage(parent)
@@ -96,7 +97,7 @@ void IntroCentralTendencyPage::initialize(const Analysis& analysis)
 int IntroCentralTendencyPage::nextId() const
 {
   if (methodGroup_->checkedId() == IntroCentralTendencyPage::MonteCarlo)
-   return CentralTendencyWizard::Page_MonteCarlo;
+    return CentralTendencyWizard::Page_MonteCarlo;
 
   return -1;
 }
@@ -113,7 +114,7 @@ Description IntroCentralTendencyPage::getInterestVariables() const
   const QStringList outputsList = outputsSelectionGroupBox_->getSelectedOutputsNames();
 
   Description outputNames(outputsList.size());
-  for (int i=0; i<outputsList.size(); ++i)
+  for (int i = 0; i < outputsList.size(); ++i)
     outputNames[i] = outputsList[i].toUtf8().constData();
 
   return outputNames;

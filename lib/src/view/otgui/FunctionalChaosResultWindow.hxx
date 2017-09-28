@@ -24,14 +24,15 @@
 #include "otgui/ResultWindow.hxx"
 #include "otgui/FunctionalChaosAnalysisResult.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 class OTGUI_API FunctionalChaosResultWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
-  FunctionalChaosResultWindow(AnalysisItem * item, QWidget * parent=0);
+  FunctionalChaosResultWindow(AnalysisItem * item, QWidget * parent = 0);
 
 protected:
   void buildInterface();

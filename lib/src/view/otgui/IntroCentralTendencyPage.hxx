@@ -28,7 +28,8 @@
 #include <QLabel>
 #include <QButtonGroup>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 class OTGUI_API IntroCentralTendencyPage : public QWizardPage
 {
@@ -37,7 +38,7 @@ class OTGUI_API IntroCentralTendencyPage : public QWizardPage
 public:
   enum Method {MonteCarlo, TaylorExpansionMoments};
 
-  IntroCentralTendencyPage(QWidget* parent=0);
+  IntroCentralTendencyPage(QWidget* parent = 0);
 
   void initialize(const Analysis& analysis);
   OT::Description getInterestVariables() const;

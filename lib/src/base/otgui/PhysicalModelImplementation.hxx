@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Abstract top-level class for all physical models 
+ *  @brief Abstract top-level class for all physical models
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -30,7 +30,8 @@
 #include <openturns/RandomVector.hxx>
 #include <openturns/ComposedDistribution.hxx>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API PhysicalModelImplementation : public OT::PersistentObject, public Observable
 {
 public:
@@ -107,7 +108,7 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
-  
+
   virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
 
 protected:

@@ -25,11 +25,12 @@
 
 #include <QContextMenuEvent>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API LogDoubleSpinBox : public DoubleSpinBox
 {
   Q_OBJECT
-  
+
 public:
   LogDoubleSpinBox(QWidget *parent = 0);
 

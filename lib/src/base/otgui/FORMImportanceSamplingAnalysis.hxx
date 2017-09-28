@@ -26,7 +26,8 @@
 
 #include <openturns/FORMResult.hxx>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API FORMImportanceSamplingAnalysis : public ImportanceSamplingAnalysis, public ApproximationAnalysis
 {
   CLASSNAME

@@ -25,7 +25,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(DesignOfExperimentImplementation)
 
@@ -140,7 +141,7 @@ String DesignOfExperimentImplementation::getPythonScript() const
     }
     oss << "]";
     if (i < (getInputSample().getSize() - 1))
-       oss << ",\n";
+      oss << ",\n";
   }
   oss << "]\n";
 

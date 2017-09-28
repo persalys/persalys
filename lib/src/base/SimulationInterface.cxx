@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Abstract top-level class for all physical models 
+ *  @brief Abstract top-level class for all physical models
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 /* Default constructor */
 SimulationInterface::SimulationInterface()
@@ -37,7 +38,7 @@ SimulationInterface::SimulationInterface()
 SimulationInterface::SimulationInterface(const Simulation & implementation)
   : TypedInterfaceObject<Simulation>(implementation.clone())
 {
-  
+
 }
 
 

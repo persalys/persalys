@@ -24,7 +24,8 @@
 #include <QAction>
 #include <QClipboard>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CopyableTableView::CopyableTableView(QWidget * parent)
   : QTableView(parent)

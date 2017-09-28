@@ -31,13 +31,14 @@
 Q_DECLARE_METATYPE(OTGUI::DesignOfExperiment)
 Q_DECLARE_METATYPE(OTGUI::DesignOfExperimentDefinitionItem*)
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API OTguiWizard : public QWizard
 {
   Q_OBJECT
 
 public:
-  OTguiWizard(QWidget * parent=0);
+  OTguiWizard(QWidget * parent = 0);
 
 public slots:
 signals:

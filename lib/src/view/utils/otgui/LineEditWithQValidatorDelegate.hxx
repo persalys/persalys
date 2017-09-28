@@ -24,7 +24,8 @@
 #include <QStyledItemDelegate>
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API LineEditWithQValidatorDelegate : public QStyledItemDelegate
 {
   Q_OBJECT

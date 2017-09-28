@@ -25,7 +25,8 @@
 
 #include <QAction>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTguiActions : public QObject
 {
   Q_OBJECT

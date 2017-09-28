@@ -5,7 +5,8 @@
 
 #include "otgui/PVServerManagerInterface.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API PVServerManagerSingleton
 {
 public:
@@ -14,7 +15,7 @@ public:
   static void Init(PVServerManagerInterface * pvsm);
 
 private:
-  PVServerManagerSingleton(){}
+  PVServerManagerSingleton() {}
   static PVServerManagerInterface * singleton_;
 };
 }

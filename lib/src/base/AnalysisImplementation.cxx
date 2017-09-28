@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Abstract top-level class for all analysis 
+ *  @brief Abstract top-level class for all analysis
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -22,7 +22,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 /* Default constructor */
 AnalysisImplementation::AnalysisImplementation()

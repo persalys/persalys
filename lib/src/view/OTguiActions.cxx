@@ -20,7 +20,8 @@
  */
 #include "otgui/OTguiActions.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 OTguiActions::OTguiActions(QObject * parent)
   : QObject(parent)

@@ -24,14 +24,15 @@
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/PhysicalModelDefinitionItem.hxx"
 
-namespace OTGUI {
-  
+namespace OTGUI
+{
+
 class OTGUI_API SymbolicPhysicalModelWindow : public OTguiSubWindow
 {
   Q_OBJECT
 
 public :
-  SymbolicPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent=0);
+  SymbolicPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent = 0);
 };
 }
 #endif

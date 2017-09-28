@@ -28,7 +28,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CorrelationTableModel::CorrelationTableModel(const PhysicalModel & physicalModel, QObject * parent)
   : QAbstractTableModel(parent)

@@ -27,13 +27,14 @@
 
 #include <QTabWidget>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ApproximationResultWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
-  ApproximationResultWindow(AnalysisItem * item, QWidget * parent=0);
+  ApproximationResultWindow(AnalysisItem * item, QWidget * parent = 0);
 
 protected:
   void buildInterface();

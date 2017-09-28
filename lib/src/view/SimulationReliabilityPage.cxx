@@ -29,7 +29,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 SimulationReliabilityPage::SimulationReliabilityPage(QWidget* parent)
   : QWizardPage(parent)

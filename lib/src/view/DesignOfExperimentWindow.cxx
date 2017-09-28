@@ -49,7 +49,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 DesignOfExperimentWindow::DesignOfExperimentWindow(AnalysisItem* item, QWidget * parent)
   : DataAnalysisWindow(item, parent)
@@ -119,9 +120,9 @@ void DesignOfExperimentWindow::addSummaryTab()
 
   const UnsignedInteger sampleSize = designOfExperiment_.getOutputSample().getSize();
   ParametersTableView * table = new ParametersTableView(QStringList() << tr("Sample size"),
-                                                        QStringList() << QString::number(sampleSize),
-                                                        true,
-                                                        true);
+      QStringList() << QString::number(sampleSize),
+      true,
+      true);
   aGroupBoxLayout->addWidget(table);
   tabLayout->addWidget(aGroupBox);
 
@@ -218,8 +219,8 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
 
   // -- scatter plots tab
   const bool canBuildScatterPlot = (inSampleSize > 1 &&
-                                   (failedInSampleSize == 0 || failedInSampleSize > 1) &&
-                                   (notEvalInSampleSize == 0 || notEvalInSampleSize > 1));
+                                    (failedInSampleSize == 0 || failedInSampleSize > 1) &&
+                                    (notEvalInSampleSize == 0 || notEvalInSampleSize > 1));
   // if one representation has only one point => paraview error => segfault
   if (canBuildScatterPlot)
   {
@@ -263,14 +264,14 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
 
     // scatter plots setting widget
     PVXYChartSettingWidget * inSampleSettingWidget = new PVXYChartSettingWidget(sampleScatterPlotWidget,
-                                                                                designOfExperiment_.getInputSample(),
-                                                                                inputsRank,
-                                                                                failedInputSample_,
-                                                                                failedInputsRank,
-                                                                                notEvaluatedInputSample_,
-                                                                                notEvaluatedInputsRank,
-                                                                                PVXYChartSettingWidget::Scatter,
-                                                                                this);
+        designOfExperiment_.getInputSample(),
+        inputsRank,
+        failedInputSample_,
+        failedInputsRank,
+        notEvaluatedInputSample_,
+        notEvaluatedInputsRank,
+        PVXYChartSettingWidget::Scatter,
+        this);
     scatterTabWidget->setDockWidget(inSampleSettingWidget);
 
     tablesTabWidget->addTab(scatterTabWidget, tr("Scatter plots"));
@@ -293,9 +294,9 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
 
   const Sample sampleRank(designOfExperiment_.getSample().rank() / designOfExperiment_.getSample().getSize());
   PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget,
-                                                                      designOfExperiment_.getSample(),
-                                                                      sampleRank,
-                                                                      this);
+      designOfExperiment_.getSample(),
+      sampleRank,
+      this);
   cobwebTabWidget->setDockWidget(cobwebSettingWidget);
 
   tabWidget_->addTab(cobwebTabWidget, tr("Cobweb plot"));
@@ -332,12 +333,12 @@ void DesignOfExperimentWindow::addParaviewWidgetsTabs()
 
   // setting widget
   PVXYChartSettingWidget * inOutSampleSettingWidget = new PVXYChartSettingWidget(pvXYChartWidget,
-                                                                                 designOfExperiment_.getSample(),
-                                                                                 sampleRank,
-                                                                                 inputNames_,
-                                                                                 outputNames_,
-                                                                                 PVXYChartSettingWidget::Scatter,
-                                                                                 this);
+      designOfExperiment_.getSample(),
+      sampleRank,
+      inputNames_,
+      outputNames_,
+      PVXYChartSettingWidget::Scatter,
+      this);
   xyScatterTabWidget->setDockWidget(inOutSampleSettingWidget);
 
   // links model

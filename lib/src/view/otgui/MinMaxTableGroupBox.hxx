@@ -27,13 +27,14 @@
 
 #include <QGroupBox>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API MinMaxTableGroupBox : public QGroupBox
 {
   Q_OBJECT
 
 public:
-  MinMaxTableGroupBox(const DesignOfExperiment& doe, const bool onlyOutput=true, QWidget* parent=0);
+  MinMaxTableGroupBox(const DesignOfExperiment& doe, const bool onlyOutput = true, QWidget* parent = 0);
 
 protected:
   QWidget * getForInputMinMaxTableView(const DesignOfExperiment& doe, const OT::UnsignedInteger inputIndex);

@@ -25,7 +25,8 @@
 
 #include <qwt_scale_draw.h>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API CustomScaleDraw : public QwtScaleDraw
 {
 public:

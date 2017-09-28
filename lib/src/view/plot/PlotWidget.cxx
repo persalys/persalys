@@ -44,7 +44,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 // -- custom class CustomHorizontalScaleDraw --
 class CustomHorizontalScaleDraw: public QwtScaleDraw
@@ -243,7 +244,7 @@ void PlotWidget::plotPDFCurve(const Distribution & distribution, const QPen pen)
   plotCurve(dataPDF, pen);
   // Add margin at the top to avoid to cut the curve
   const double yMax = dataPDF.getMax()[1];
-  setAxisScale(QwtPlot::yLeft, 0, yMax * (1+0.02));
+  setAxisScale(QwtPlot::yLeft, 0, yMax * (1 + 0.02));
   replot();
 }
 
@@ -259,7 +260,7 @@ void PlotWidget::plotCDFCurve(const Distribution & distribution, const QPen pen)
   plotCurve(dataCDF, pen);
   // Add margin at the top to avoid to cut the curve
   const double yMax = dataCDF.getMax()[1];
-  setAxisScale(QwtPlot::yLeft, 0, yMax * (1+0.02));
+  setAxisScale(QwtPlot::yLeft, 0, yMax * (1 + 0.02));
   replot();
 }
 
@@ -287,11 +288,11 @@ void PlotWidget::plotHistogram(const Sample & sample, const UnsignedInteger grap
 
   Point histogramData(barNumber);
 
-  for (int i=0; i<size; ++i)
+  for (int i = 0; i < size; ++i)
   {
     int index = static_cast< int >((sample[i][0] - sampleMin) / width);
     // x=xmax -> index=barnumber, so bound it
-    index = std::min(index, barNumber-1);
+    index = std::min(index, barNumber - 1);
     if (!(index > barNumber || index < 0))
       ++ histogramData[index];
   }
@@ -299,8 +300,8 @@ void PlotWidget::plotHistogram(const Sample & sample, const UnsignedInteger grap
   // if PDF or CDF
   if (graphType < 2)
   {
-    double inverseArea = 1. / (size*width);
-    for (int i=0; i<barNumber; ++i)
+    double inverseArea = 1. / (size * width);
+    for (int i = 0; i < barNumber; ++i)
       histogramData[i] *= inverseArea;
   }
 
@@ -309,10 +310,10 @@ void PlotWidget::plotHistogram(const Sample & sample, const UnsignedInteger grap
   if (graphType == 1)
   {
     sum = histogramData[0];
-    for (int i=1; i<barNumber; i++)
+    for (int i = 1; i < barNumber; i++)
     {
       sum += histogramData[i];
-      histogramData[i] += histogramData[i-1];
+      histogramData[i] += histogramData[i - 1];
     }
   }
 
@@ -321,10 +322,10 @@ void PlotWidget::plotHistogram(const Sample & sample, const UnsignedInteger grap
   histogram->setBrush(QBrush(DefaultHistogramColor));
 
   QVector<QwtIntervalSample> samples(barNumber);
-  for (int i=0; i<barNumber; i++)
+  for (int i = 0; i < barNumber; i++)
   {
-    QwtInterval interval(sampleMin+i*width, sampleMin+(i+1)*width);
-    samples[i] = QwtIntervalSample(histogramData[i]/sum, interval);
+    QwtInterval interval(sampleMin + i * width, sampleMin + (i + 1)*width);
+    samples[i] = QwtIntervalSample(histogramData[i] / sum, interval);
   }
 
   histogram->setData(new QwtIntervalSeriesData(samples));
@@ -376,7 +377,7 @@ void PlotWidget::plotBoxPlot(double median, double lowerQuartile, double upperQu
   double * xOutliers = new double[dim];
   double * yOutliers = new double[dim];
 
-  for (int i=0; i<dim; ++i)
+  for (int i = 0; i < dim; ++i)
   {
     xOutliers[i] = 1.;
     yOutliers[i] = outliers_[i];
@@ -406,7 +407,7 @@ void PlotWidget::plotSensitivityIndices(const Point firstOrderIndices, const Poi
   static const char *colors[] = {"DarkOrchid", "SteelBlue"};
 
   const UnsignedInteger size = firstOrderIndices.getSize();
-  
+
   double *xData = new double[size];
   double *yData = new double[size];
 
@@ -416,9 +417,9 @@ void PlotWidget::plotSensitivityIndices(const Point firstOrderIndices, const Poi
 
   double yMin = 0.;
   double yMax = 0.;
-  for (UnsignedInteger i=0 ; i<size ; ++i)
+  for (UnsignedInteger i = 0 ; i < size ; ++i)
   {
-    xData[i] = (i-width);
+    xData[i] = (i - width);
     yData[i] = firstOrderIndices[i];
     yMin = std::min(yMin, firstOrderIndices[i]);
     yMax = std::max(yMax, firstOrderIndices[i]);
@@ -432,9 +433,9 @@ void PlotWidget::plotSensitivityIndices(const Point firstOrderIndices, const Poi
     xData = new double[size];
     yData = new double[size];
 
-    for (UnsignedInteger i=0 ; i<size ; ++i)
+    for (UnsignedInteger i = 0 ; i < size ; ++i)
     {
-      xData[i] = (i+width) ;
+      xData[i] = (i + width) ;
       yData[i] = totalIndices[i];
       yMin = std::min(yMin, totalIndices[i]);
       yMax = std::max(yMax, totalIndices[i]);
@@ -448,7 +449,7 @@ void PlotWidget::plotSensitivityIndices(const Point firstOrderIndices, const Poi
   delete[] yData;
 
   // scales
-  setAxisScale(QwtPlot::xBottom, -0.5, firstOrderIndices.getSize()-0.5, 1.0);
+  setAxisScale(QwtPlot::xBottom, -0.5, firstOrderIndices.getSize() - 0.5, 1.0);
   setAxisMaxMinor(QwtPlot::xBottom, 0);
   setAxisScaleDraw(QwtPlot::xBottom, new CustomHorizontalScaleDraw(inputNames));
 
@@ -496,7 +497,7 @@ void PlotWidget::plotContour(const Distribution& distribution, const bool isPdf)
 
   // levels
   QList<double> contourLevels;
-  for (UnsignedInteger i=0; i<contour.getLevels().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < contour.getLevels().getSize(); ++i)
     contourLevels += contour.getLevels()[i];
   spectrogram->setContourLevels(contourLevels);
 
@@ -513,7 +514,7 @@ void PlotWidget::updateScaleParameters(const Distribution & distribution)
   const double qmax = ResourceMap::GetAsScalar("Distribution-QMax");
   double x1 = distribution.computeQuantile(qmin)[0];
   double x2 = distribution.computeQuantile(qmax)[0];
-  const double delta = 2.0 *(x2 - x1) *(1.0 - 0.5 *(qmax - qmin));
+  const double delta = 2.0 * (x2 - x1) * (1.0 - 0.5 * (qmax - qmin));
   x1 -= delta;
   x2 -= delta;
 
@@ -529,7 +530,7 @@ void PlotWidget::clear()
 {
   detachItems();
   setAxisAutoScale(QwtPlot::xBottom);
-  enableAxis(QwtPlot::xBottom); 
+  enableAxis(QwtPlot::xBottom);
   setAxisAutoScale(QwtPlot::yLeft);
   enableAxis(QwtPlot::yLeft);
   // TODO initialize grid
@@ -546,13 +547,13 @@ void PlotWidget::replot()
 
 
 QVector<PlotWidget*> PlotWidget::GetListScatterPlots(const Sample& inS,
-                                                     const Sample& outS,
-                                                     const Sample& notValidInS,
-                                                     const QStringList inNames,
-                                                     const QStringList inAxisNames,
-                                                     const QStringList outNames,
-                                                     const QStringList outAxisNames
-                                                     )
+    const Sample& outS,
+    const Sample& notValidInS,
+    const QStringList inNames,
+    const QStringList inAxisNames,
+    const QStringList outNames,
+    const QStringList outAxisNames
+                                                    )
 {
   QVector<PlotWidget*> listScatterPlotWidgets;
 

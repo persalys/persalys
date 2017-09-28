@@ -27,7 +27,8 @@
 
 #include "openturns/KrigingAlgorithm.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API KrigingAnalysis : public MetaModelAnalysis
 {
   CLASSNAME
@@ -69,8 +70,8 @@ public:
 private:
   virtual OT::Function runAlgo(const OT::Sample& inputSample, const OT::Sample& outputSample);
   OT::KrigingAlgorithm buildKrigingAlgorithm(const OT::Sample& inputSample,
-                                             const OT::Sample& outputSample,
-                                             const bool useOptimalCovModel=false);
+      const OT::Sample& outputSample,
+      const bool useOptimalCovModel = false);
 
 private:
   OT::Basis basis_;

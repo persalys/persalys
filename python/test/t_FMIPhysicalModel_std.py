@@ -12,8 +12,8 @@ myStudy = otguibase.OTStudy('myStudy')
 key_platform = (platform.system(), platform.architecture()[0])
 # Call to either 'platform.system' or 'platform.architecture' *after*
 # importing pyfmi causes a segfault.
-dict_platform = {('Linux', '64bit'):'linux64',
-                ('Windows', '32bit'):'win32'}
+dict_platform = {('Linux', '64bit'): 'linux64',
+                 ('Windows', '32bit'): 'win32'}
 
 path_here = os.path.dirname(os.path.abspath(__file__))
 try:
@@ -31,10 +31,11 @@ y = otguibase.Output('y', 'deviation')
 
 inputs = [E, F, I, L]
 outputs = [y]
-model = otguibase.FMIPhysicalModel('myPhysicalModel', inputs, outputs, path_fmu)
+model = otguibase.FMIPhysicalModel(
+    'myPhysicalModel', inputs, outputs, path_fmu)
 myStudy.add(model)
 
-#print(model.getCode())
+# print(model.getCode())
 
 E_d = ot.Beta(0.93, 3.2, 28000000.0, 48000000.0)
 F_d = ot.LogNormalMuSigma(30000.0, 9000.0, 15000.0).getDistribution()
@@ -48,7 +49,7 @@ f = model.getFunction()
 y = f(x)
 ott.assert_almost_equal(y, [12.3369])
 
-## script
+# script
 script = myStudy.getPythonScript()
 print('script=', script)
 exec(script)
@@ -59,13 +60,12 @@ if 0:
     import pyfmi
     import otfmi
 
-    #print(path_fmu)
+    # print(path_fmu)
     model_fmu = model_fmu = otfmi.FMUFunction(
-                    path_fmu, inputs_fmu=['E', 'F', 'I', 'L'], outputs_fmu='y')
-
+        path_fmu, inputs_fmu=['E', 'F', 'I', 'L'], outputs_fmu='y')
 
     ml = pyfmi.load_fmu(path_fmu)
     vars = ml.get_model_variables()
     for var in vars.values():
         print(var.name, var.value_reference)
-        #print(ml.get_real(var.value_reference))
+        # print(ml.get_real(var.value_reference))

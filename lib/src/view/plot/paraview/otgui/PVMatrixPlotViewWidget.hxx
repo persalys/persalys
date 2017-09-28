@@ -4,14 +4,18 @@
 #include "PVViewWidget.hxx"
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API PVMatrixPlotViewWidget : public PVViewWidget
 {
   Q_OBJECT
 public:
   PVMatrixPlotViewWidget(QWidget *parent, PVServerManagerInterface *smb);
   ~PVMatrixPlotViewWidget();
-  virtual const char *getRepresentationName() const { return PV_REPRESENTATION_TYPE; }
+  virtual const char *getRepresentationName() const
+  {
+    return PV_REPRESENTATION_TYPE;
+  }
 public:
   static const char PV_VIEW_TYPE[];
   static const char PV_REPRESENTATION_TYPE[];

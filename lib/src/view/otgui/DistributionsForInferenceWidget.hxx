@@ -26,13 +26,14 @@
 
 #include <QTableView>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DistributionsForInferenceWidget : public QWidget
 {
   Q_OBJECT
 
 public :
-  DistributionsForInferenceWidget(const QStringList & distributions, QWidget* parent=0);
+  DistributionsForInferenceWidget(const QStringList & distributions, QWidget* parent = 0);
 
 protected:
   void buildInterface();

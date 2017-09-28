@@ -24,7 +24,8 @@
 #include "qwt_scale_engine.h"
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 class OTGUI_API CustomScaleEngine : public QwtLinearScaleEngine
 {

@@ -26,14 +26,15 @@
 
 #include <QLineEdit>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 class OTGUI_API PlotMatrixConfigurationWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  PlotMatrixConfigurationWidget(PlotMatrixWidget * plotMatrix, QWidget* parent=0);
+  PlotMatrixConfigurationWidget(PlotMatrixWidget * plotMatrix, QWidget* parent = 0);
 
 public slots:
   void showXY(bool);

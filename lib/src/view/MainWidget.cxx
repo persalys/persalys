@@ -25,7 +25,8 @@
 #include <QSplitter>
 #include <QVBoxLayout>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 MainWidget::MainWidget(QWidget* parent)
   : QWidget(parent)

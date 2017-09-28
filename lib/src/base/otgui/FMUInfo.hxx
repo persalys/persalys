@@ -27,8 +27,9 @@
 
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
-  
+namespace OTGUI
+{
+
 class OTGUI_API FMUInfo : public OT::PersistentObject
 {
   CLASSNAME

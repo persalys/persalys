@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis& analysis, QWidget* parent)
   : AnalysisWizard(analysis, parent)

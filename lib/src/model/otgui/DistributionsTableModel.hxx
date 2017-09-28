@@ -26,13 +26,14 @@
 #include <QAbstractTableModel>
 #include <QWidget>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DistributionsTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 
 public:
-  DistributionsTableModel(const QStringList & distributions, QWidget* parent=0);
+  DistributionsTableModel(const QStringList & distributions, QWidget* parent = 0);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;

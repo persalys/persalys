@@ -30,7 +30,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 LimitStateWindow::LimitStateWindow(LimitStateItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
@@ -100,7 +101,7 @@ void LimitStateWindow::updateOutputsList()
   SignalBlocker blocker(outputsComboBox_);
   outputsComboBox_->clear();
   QStringList items;
-  for (UnsignedInteger i=0; i<limitState_.getPhysicalModel().getSelectedOutputsNames().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < limitState_.getPhysicalModel().getSelectedOutputsNames().getSize(); ++i)
     items << QString::fromUtf8(limitState_.getPhysicalModel().getSelectedOutputsNames()[i].c_str());
   outputsComboBox_->addItems(items);
 

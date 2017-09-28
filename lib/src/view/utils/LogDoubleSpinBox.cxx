@@ -26,8 +26,9 @@
 #include <limits>
 #include <cmath>
 
-namespace OTGUI {
-  
+namespace OTGUI
+{
+
 LogDoubleSpinBox::LogDoubleSpinBox(QWidget * parent)
   : DoubleSpinBox(parent)
 {

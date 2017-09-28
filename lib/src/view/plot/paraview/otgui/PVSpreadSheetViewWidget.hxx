@@ -3,14 +3,18 @@
 
 #include "PVViewWidget.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API PVSpreadSheetViewWidget : public PVViewWidget
 {
   Q_OBJECT
 public:
   PVSpreadSheetViewWidget(QWidget *parent, PVServerManagerInterface *smb);
   ~PVSpreadSheetViewWidget();
-  virtual const char *getRepresentationName() const { return PV_REPRESENTATION_TYPE; }
+  virtual const char *getRepresentationName() const
+  {
+    return PV_REPRESENTATION_TYPE;
+  }
 public slots:
   void contextMenu(const QPoint & pos);
   void exportData();

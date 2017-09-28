@@ -31,7 +31,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 KrigingPage::KrigingPage(QWidget* parent)
   : QWizardPage(parent)
@@ -66,9 +67,9 @@ void KrigingPage::buildInterface()
   parametersLayout->addWidget(new QLabel(tr("Covariance model")), 0, 0, 1, 2);
   covarianceModelComboBox_ = new QComboBox;
   covarianceModelComboBox_->addItems(QStringList() << tr("Squared exponential")
-                                                   << tr("Absolute exponential")
-                                                   << tr("Generalized exponential")
-                                                   << QString::fromUtf8("Matérn"));
+                                     << tr("Absolute exponential")
+                                     << tr("Generalized exponential")
+                                     << QString::fromUtf8("Matérn"));
   parametersLayout->addWidget(covarianceModelComboBox_, 0, 1, 1, 2);
 
   connect(covarianceModelComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCovarianceModel(int)));
@@ -99,8 +100,8 @@ void KrigingPage::buildInterface()
   parametersLayout->addWidget(new QLabel(tr("Trend basis type")), 3, 0);
   basisTypeComboBox_ = new QComboBox;
   basisTypeComboBox_->addItems(QStringList() << tr("Constant")
-                                             << tr("Linear")
-                                             << tr("Quadratic"));
+                               << tr("Linear")
+                               << tr("Quadratic"));
   parametersLayout->addWidget(basisTypeComboBox_, 3, 1, 1, 2);
   basisTypeComboBox_->setCurrentIndex(0);
 

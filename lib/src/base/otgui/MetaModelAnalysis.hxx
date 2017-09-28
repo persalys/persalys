@@ -25,7 +25,8 @@
 #include "Analysis.hxx"
 #include "MetaModelAnalysisResult.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API MetaModelAnalysis : public DesignOfExperimentAnalysis
 {
 public:

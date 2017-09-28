@@ -30,7 +30,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 ProbabilisticDesignPage::ProbabilisticDesignPage(QWidget* parent)
   : QWizardPage(parent)

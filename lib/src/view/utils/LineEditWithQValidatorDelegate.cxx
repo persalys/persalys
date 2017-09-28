@@ -22,7 +22,8 @@
 
 #include <QLineEdit>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 LineEditWithQValidatorDelegate::LineEditWithQValidatorDelegate(QObject *parent)
   : QStyledItemDelegate(parent)
@@ -78,7 +79,7 @@ void LineEditWithQValidatorDelegate::updateEditorGeometry(QWidget * editor, cons
     QRect checkBoxRect = editor->style()->subElementRect(QStyle::SE_CheckBoxIndicator, &checkBoxStyleOption);
     QPoint checkBoxPoint(option.rect.x() + 3 + checkBoxRect.width(), option.rect.y());
 
-    editor->setGeometry(QRect(checkBoxPoint, QSize(option.rect.width()-3-checkBoxRect.width(), option.rect.height())));
+    editor->setGeometry(QRect(checkBoxPoint, QSize(option.rect.width() - 3 - checkBoxRect.width(), option.rect.height())));
   }
   else
   {

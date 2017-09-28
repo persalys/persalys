@@ -27,7 +27,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(OTStudy)
 
@@ -54,7 +55,7 @@ Description OTStudy::GetFileNames()
 
 bool OTStudy::HasInstanceNamed(const String & otStudyName)
 {
-  for (PersistentCollection<OTStudy >::iterator it=OTStudies_.begin(); it!=OTStudies_.end(); ++it)
+  for (PersistentCollection<OTStudy >::iterator it = OTStudies_.begin(); it != OTStudies_.end(); ++it)
     if ((*it).getImplementation().get()->getName() == otStudyName)
       return true;
   return false;
@@ -65,9 +66,9 @@ String OTStudy::GetAvailableName()
 {
   int i = 0;
   String rootName = "OTStudy_";
-  while (HasInstanceNamed(rootName + (OSS()<<i).str()))
+  while (HasInstanceNamed(rootName + (OSS() << i).str()))
     ++i;
-  return rootName + (OSS()<<i).str();
+  return rootName + (OSS() << i).str();
 }
 
 
@@ -94,7 +95,7 @@ void OTStudy::Remove(const OTStudy& otstudy)
   {
     otstudy.getImplementation().get()->notifyAndRemove("otStudyRemoved", "OTStudy");
 
-    for (UnsignedInteger i=0; i < OTStudies_.getSize(); ++ i)
+    for (UnsignedInteger i = 0; i < OTStudies_.getSize(); ++ i)
     {
       if (OTStudies_[i] == otstudy)
       {
@@ -154,7 +155,7 @@ OTStudy::OTStudy(const Implementation& p_implementation)
 
 /** Constructor from implementation pointer */
 OTStudy::OTStudy(OTStudyImplementation * p_implementation)
-: TypedInterfaceObject<OTStudyImplementation>(p_implementation)
+  : TypedInterfaceObject<OTStudyImplementation>(p_implementation)
 {
 }
 

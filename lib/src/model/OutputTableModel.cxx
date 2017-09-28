@@ -27,7 +27,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 OutputTableModel::OutputTableModel(const PhysicalModel & physicalModel, QObject * parent)
   : QAbstractTableModel(parent)
@@ -72,9 +73,9 @@ bool OutputTableModel::setHeaderData(int section, Qt::Orientation orientation, c
 {
   if (role == Qt::CheckStateRole && orientation == Qt::Horizontal)
   {
-    for (int i=0; i<rowCount(); ++i)
-      if (data(index(i, 0), role).toInt() != (value.toBool()? Qt::Checked:Qt::Unchecked))
-        setData(index(i, 0), value.toBool()? Qt::Checked:Qt::Unchecked, role);
+    for (int i = 0; i < rowCount(); ++i)
+      if (data(index(i, 0), role).toInt() != (value.toBool() ? Qt::Checked : Qt::Unchecked))
+        setData(index(i, 0), value.toBool() ? Qt::Checked : Qt::Unchecked, role);
     emit selectedOutputsChanged();
   }
 
@@ -205,8 +206,8 @@ Qt::ItemFlags OutputTableModel::flags(const QModelIndex & index) const
   else if (index.column() == 0 && physicalModel_.getImplementation()->getClassName() != "SymbolicPhysicalModel")
     return QAbstractTableModel::flags(index) | Qt::ItemIsUserCheckable;
   else if (index.column() == 1
-      && (physicalModel_.getImplementation()->getClassName() == "YACSPhysicalModel" ||
-          physicalModel_.getImplementation()->getClassName() == "MetaModel"))
+           && (physicalModel_.getImplementation()->getClassName() == "YACSPhysicalModel" ||
+               physicalModel_.getImplementation()->getClassName() == "MetaModel"))
     return QAbstractTableModel::flags(index);
   else if (index.column() == 3)
     return QAbstractTableModel::flags(index);
@@ -218,16 +219,16 @@ Qt::ItemFlags OutputTableModel::flags(const QModelIndex & index) const
 void OutputTableModel::addLine()
 {
   int i = 0;
-  while (physicalModel_.hasOutputNamed('Y' + (OSS()<<i).str()))
+  while (physicalModel_.hasOutputNamed('Y' + (OSS() << i).str()))
     ++i;
   physicalModel_.blockNotification("PhysicalModelDefinition");
-  physicalModel_.addOutput(Output('Y'+(OSS()<<i).str()));
+  physicalModel_.addOutput(Output('Y' + (OSS() << i).str()));
   physicalModel_.blockNotification();
   //
-  QModelIndex lastIndex = index(rowCount()-1, 0);
+  QModelIndex lastIndex = index(rowCount() - 1, 0);
   beginInsertRows(lastIndex.parent(), lastIndex.row(), lastIndex.row());
   insertRow(lastIndex.row());
-  
+
   endInsertRows();
   bool allChecked = physicalModel_.getOutputNames().getSize() == physicalModel_.getSelectedOutputsNames().getSize();
   emit checked(allChecked);

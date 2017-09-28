@@ -25,12 +25,13 @@
 #include <QComboBox>
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API NoWheelEventComboBox : public QComboBox
 {
 public:
   NoWheelEventComboBox(QWidget * parent = 0)
-  : QComboBox(parent)
+    : QComboBox(parent)
   {
   }
 

@@ -30,7 +30,8 @@
 
 #include <QPushButton>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API PhysicalModelWindowWidget : public QTabWidget
 {
   Q_OBJECT

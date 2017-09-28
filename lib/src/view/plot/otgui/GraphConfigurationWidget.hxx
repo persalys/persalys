@@ -28,7 +28,8 @@
 #include <QButtonGroup>
 #include <QCheckBox>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 class OTGUI_API GraphConfigurationWidget : public QWidget
 {
@@ -38,10 +39,10 @@ public:
   enum Type {NoType, Kendall, Scatter, PDF, CDF, PDFResult, SensitivityIndices, Copula};
 
   GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets,
-                           QStringList inputNames=QStringList(),
-                           QStringList outputNames=QStringList(),
-                           Type plotType=NoType,
-                           QWidget * parent=0);
+                           QStringList inputNames = QStringList(),
+                           QStringList outputNames = QStringList(),
+                           Type plotType = NoType,
+                           QWidget * parent = 0);
 
   int getCurrentPlotIndex() const;
 

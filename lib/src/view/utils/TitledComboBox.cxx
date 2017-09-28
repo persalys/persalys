@@ -22,8 +22,9 @@
 
 #include <QPainter>
 
-namespace OTGUI {
-  
+namespace OTGUI
+{
+
 TitledComboBox::TitledComboBox(const QString & title, QWidget * parent)
   : QComboBox(parent)
   , title_(title)

@@ -24,7 +24,8 @@
 #include <QLineEdit>
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API TimeLineEdit : public QLineEdit
 {
   Q_OBJECT

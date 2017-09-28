@@ -25,7 +25,8 @@
 #include "WithStopCriteriaAnalysis.hxx"
 #include "SobolResult.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SobolAnalysis : public SimulationAnalysis, public WithStopCriteriaAnalysis
 {
   CLASSNAME

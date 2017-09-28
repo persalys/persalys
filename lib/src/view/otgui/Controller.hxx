@@ -28,10 +28,11 @@
 #include <QThread>
 #include <QMetaType> // mandatory to specify it to avoid windows compilation problem
 
-namespace OTGUI {
+namespace OTGUI
+{
 class Worker : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public slots:
   void process(Analysis analysis)

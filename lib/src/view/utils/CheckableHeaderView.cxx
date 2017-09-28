@@ -20,7 +20,8 @@
  */
 #include "otgui/CheckableHeaderView.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CheckableHeaderView::CheckableHeaderView(QWidget* parent)
   : QHeaderView(Qt::Horizontal, parent)
@@ -106,7 +107,7 @@ void CheckableHeaderView::mousePressEvent(QMouseEvent* event)
       updateSection(0);
       model()->setHeaderData(0, Qt::Horizontal, isChecked_, Qt::CheckStateRole);
 
-      setToolTip(isChecked_? tr("Unselect all") : tr("Select all"));
+      setToolTip(isChecked_ ? tr("Unselect all") : tr("Select all"));
       return;
     }
   }
@@ -121,7 +122,7 @@ void CheckableHeaderView::setChecked(bool checked)
   {
     isChecked_ = checked;
     updateSection(0);
-    setToolTip(isChecked_? tr("Unselect all") : tr("Select all"));
+    setToolTip(isChecked_ ? tr("Unselect all") : tr("Select all"));
   }
 }
 }

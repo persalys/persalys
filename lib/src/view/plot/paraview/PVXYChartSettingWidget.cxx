@@ -36,15 +36,16 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidget,
-                                               const Sample& sample,
-                                               const Sample& sampleRank,
-                                               QStringList inputNames,
-                                               QStringList outputNames,
-                                               PVXYChartSettingWidget::Type plotType,
-                                               QWidget * parent)
+    const Sample& sample,
+    const Sample& sampleRank,
+    QStringList inputNames,
+    QStringList outputNames,
+    PVXYChartSettingWidget::Type plotType,
+    QWidget * parent)
   : QWidget(parent)
   , pvViewWidget_(pvViewWidget)
   , sample_(sample)
@@ -82,14 +83,14 @@ PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidge
 
 
 PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget* pvViewWidget,
-                                               const Sample& sample,
-                                               const Sample& sampleRank,
-                                               const Sample& failedSample,
-                                               const Sample& failedSampleRank,
-                                               const Sample& notEvalSample,
-                                               const Sample& notEvalSampleRank,
-                                               Type plotType,
-                                               QWidget * parent)
+    const Sample& sample,
+    const Sample& sampleRank,
+    const Sample& failedSample,
+    const Sample& failedSampleRank,
+    const Sample& notEvalSample,
+    const Sample& notEvalSampleRank,
+    Type plotType,
+    QWidget * parent)
   : QWidget(parent)
   , pvViewWidget_(pvViewWidget)
   , sample_(sample)

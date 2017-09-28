@@ -5,7 +5,8 @@
 
 #include <QMenu>
 
-namespace OTGUI {
+namespace OTGUI
+{
 const char PVSpreadSheetViewWidget::PV_VIEW_TYPE[] = "SpreadSheetView";
 
 const char PVSpreadSheetViewWidget::PV_REPRESENTATION_TYPE[] = "SpreadSheetRepresentation";

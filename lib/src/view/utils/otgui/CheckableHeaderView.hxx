@@ -27,7 +27,8 @@
 #include <QPainter>
 #include <QMouseEvent>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API CheckableHeaderView : public QHeaderView
 {
   Q_OBJECT

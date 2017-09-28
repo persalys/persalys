@@ -24,13 +24,14 @@
 #include "otgui/ResultWindow.hxx"
 #include "otgui/KrigingAnalysisResult.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API KrigingResultWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
-  KrigingResultWindow(AnalysisItem* item, QWidget * parent=0);
+  KrigingResultWindow(AnalysisItem* item, QWidget * parent = 0);
 
 protected:
   void buildInterface();

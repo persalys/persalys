@@ -25,7 +25,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(MonteCarloReliabilityAnalysis)
 
@@ -40,7 +41,7 @@ MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis()
 
 /* Constructor with parameters */
 MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis(const String& name,
-                                                             const LimitState& limitState)
+    const LimitState& limitState)
   : SimulationReliabilityAnalysis(name, limitState)
 {
 }

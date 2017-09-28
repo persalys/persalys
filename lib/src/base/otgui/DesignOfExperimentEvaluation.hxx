@@ -23,7 +23,8 @@
 
 #include "SimulationAnalysis.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DesignOfExperimentEvaluation : public SimulationAnalysis
 {
   CLASSNAME

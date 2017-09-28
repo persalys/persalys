@@ -22,7 +22,8 @@
 
 #include "otgui/PhysicalModelWindowWidget.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 MetaModelWindow::MetaModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)

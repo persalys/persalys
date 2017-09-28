@@ -27,7 +27,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 BlockSizeGroupBox::BlockSizeGroupBox(const QString &title, QWidget* parent)
   : QGroupBox(title, parent)

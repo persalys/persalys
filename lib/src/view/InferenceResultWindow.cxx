@@ -28,7 +28,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 InferenceResultWindow::InferenceResultWindow(AnalysisItem* item, QWidget * parent)
   : ResultWindow(item, parent)
@@ -70,7 +71,7 @@ void InferenceResultWindow::buildInterface()
 
   tabWidget->addTab(inferenceResultWidget_, tr("Summary"));
   tabWidget->addTab(parametersWidget_, tr("Parameters"));
-  
+
   listVariables->setCurrentRow(0);
 
   mainWidget->addWidget(tabWidget);

@@ -26,7 +26,8 @@
 
 #include <QDoubleValidator>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 ValueLineEdit::ValueLineEdit(const double value, QWidget *parent)
   : QLineEdit(parent)

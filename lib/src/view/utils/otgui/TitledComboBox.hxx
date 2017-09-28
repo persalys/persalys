@@ -26,7 +26,8 @@
 #include <QComboBox>
 #include <QPaintEvent>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API TitledComboBox : public QComboBox
 {
   Q_OBJECT

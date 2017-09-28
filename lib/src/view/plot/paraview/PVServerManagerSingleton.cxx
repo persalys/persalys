@@ -1,6 +1,7 @@
 #include "otgui/PVServerManagerSingleton.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 PVServerManagerInterface * PVServerManagerSingleton::singleton_ = 0;
 
 PVServerManagerInterface * PVServerManagerSingleton::Get()

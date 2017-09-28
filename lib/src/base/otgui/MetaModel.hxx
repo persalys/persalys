@@ -23,14 +23,15 @@
 
 #include "PhysicalModelImplementation.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API MetaModel : public PhysicalModelImplementation
 {
   CLASSNAME
 
 public:
   /** Default constructor */
-  MetaModel(const OT::String & name="Unnamed");
+  MetaModel(const OT::String & name = "Unnamed");
   /** Constructor with parameters */
   MetaModel(const OT::String & name,
             const OT::Function & function);

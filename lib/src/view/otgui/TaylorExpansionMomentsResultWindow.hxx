@@ -27,16 +27,20 @@
 
 #include <QComboBox>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API TaylorExpansionMomentsResultWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
-  TaylorExpansionMomentsResultWindow(AnalysisItem * item, QWidget * parent=0);
+  TaylorExpansionMomentsResultWindow(AnalysisItem * item, QWidget * parent = 0);
 
 protected:
-  virtual void setParameters(const Analysis& analysis, const QString& title){/*has not yet parameters*/};
+  virtual void setParameters(const Analysis& analysis, const QString& title)
+  {
+    /*has not yet parameters*/
+  };
   void buildInterface();
 
 private:

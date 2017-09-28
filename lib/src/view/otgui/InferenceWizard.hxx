@@ -30,13 +30,14 @@
 #include <QModelIndex>
 #include <QLabel>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API InferenceWizard : public AnalysisWizard
 {
   Q_OBJECT
 
 public :
-  InferenceWizard(const Analysis& analysis, QWidget* parent=0);
+  InferenceWizard(const Analysis& analysis, QWidget* parent = 0);
 
   virtual bool validateCurrentPage();
 

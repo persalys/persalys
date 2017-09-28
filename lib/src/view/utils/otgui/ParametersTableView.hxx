@@ -29,17 +29,18 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ParametersTableView : public ResizableTableViewWithoutScrollBar
 {
 public:
   ParametersTableView(const QStringList names,             // parameters names
                       const QStringList values,            // parameters values
-                      const bool showGrid=false,           // show the grid of the table
-                      const bool namesHasHeaderType=false, // parameters names display has table header
-                      QWidget * parent=0
+                      const bool showGrid = false,         // show the grid of the table
+                      const bool namesHasHeaderType = false, // parameters names display has table header
+                      QWidget * parent = 0
                      )
-  : ResizableTableViewWithoutScrollBar(parent)
+    : ResizableTableViewWithoutScrollBar(parent)
   {
     if (!names.size() * values.size() > 0)
       throw OT::InvalidArgumentException(HERE) << "To build the ParametersTableView, the data vectors must have the same (not null) dimension\n";
@@ -53,7 +54,7 @@ public:
     setModel(tableModel);
 
     // vertical header
-    for (int i=0; i<names.size(); ++i)
+    for (int i = 0; i < names.size(); ++i)
     {
       if (namesHasHeaderType)
         tableModel->setNotEditableHeaderItem(i, 0, names[i]);

@@ -42,7 +42,8 @@
 #include "otgui/PVServerManagerSingleton.hxx"
 #endif
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 MainWindow::MainWindow()
   : QMainWindow()
@@ -129,9 +130,9 @@ void MainWindow::importPython()
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
   const QString fileName = QFileDialog::getOpenFileName(this,
-                                                        tr("Import Python..."),
-                                                        currentDir,
-                                                        tr("Python source files (*.py)"));
+                           tr("Import Python..."),
+                           currentDir,
+                           tr("Python source files (*.py)"));
 
   if (!fileName.isEmpty())
   {

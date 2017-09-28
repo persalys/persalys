@@ -23,13 +23,14 @@
 
 #include "otgui/DataAnalysisWindow.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DataAnalysisResultWindow : public DataAnalysisWindow
 {
   Q_OBJECT
 
 public:
-  DataAnalysisResultWindow(AnalysisItem * item, QWidget * parent=0);
+  DataAnalysisResultWindow(AnalysisItem * item, QWidget * parent = 0);
 
 protected:
   virtual void initialize(AnalysisItem* item);

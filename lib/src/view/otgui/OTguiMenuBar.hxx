@@ -25,7 +25,8 @@
 
 #include <QMenuBar>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API OTguiMenuBar : public QMenuBar
 {
   Q_OBJECT

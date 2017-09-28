@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 /* Default constructor */
 SimulationReliabilityAnalysis::SimulationReliabilityAnalysis()
@@ -39,7 +40,7 @@ SimulationReliabilityAnalysis::SimulationReliabilityAnalysis()
 
 /* Constructor with parameters */
 SimulationReliabilityAnalysis::SimulationReliabilityAnalysis(const String& name,
-                                                             const LimitState& limitState)
+    const LimitState& limitState)
   : ReliabilityAnalysis(name, limitState)
   , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
@@ -59,12 +60,12 @@ SimulationReliabilityAnalysis* SimulationReliabilityAnalysis::clone() const
 struct AnalysisStruct
 {
   AnalysisStruct(SimulationReliabilityAnalysis* analysis, SimulationInterface simulation)
-  : analysis_(analysis)
-  , simulation_(simulation)
+    : analysis_(analysis)
+    , simulation_(simulation)
   {
   };
 
-  virtual ~AnalysisStruct(){};
+  virtual ~AnalysisStruct() {};
 
   SimulationReliabilityAnalysis * analysis_;
   SimulationInterface simulation_;

@@ -24,7 +24,8 @@
 #include "otgui/DataModelDefinitionItem.hxx"
 #include "otgui/AnalysisItem.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DataModelDiagramItem : public DesignOfExperimentItem
 {
   Q_OBJECT

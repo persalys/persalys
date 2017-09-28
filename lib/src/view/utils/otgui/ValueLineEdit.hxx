@@ -25,14 +25,15 @@
 #include <QKeyEvent>
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ValueLineEdit : public QLineEdit
 {
   Q_OBJECT
 
 public:
   // value constructor
-  ValueLineEdit(const double value=0., QWidget *parent = 0);
+  ValueLineEdit(const double value = 0., QWidget *parent = 0);
 
   // value accessors
   void setValue(const double value, const bool enabled = true);

@@ -23,7 +23,8 @@
 #include <cmath>
 #include "qwt_math.h"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CustomScaleEngine::CustomScaleEngine()
   : QwtLinearScaleEngine()

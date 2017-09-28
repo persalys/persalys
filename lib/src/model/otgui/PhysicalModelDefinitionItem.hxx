@@ -24,7 +24,8 @@
 #include "otgui/PhysicalModelItem.hxx"
 #include "otgui/Analysis.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API PhysicalModelDefinitionItem : public PhysicalModelItem
 {
   Q_OBJECT

@@ -27,7 +27,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 StopCriteriaGroupBox::StopCriteriaGroupBox(QWidget* parent)
   : QGroupBox(tr("Stop criteria"), parent)
@@ -88,7 +89,7 @@ UnsignedInteger StopCriteriaGroupBox::getMaximumCalls() const
 
 void StopCriteriaGroupBox::setMaximumCalls(const UnsignedInteger maxCalls)
 {
-  maxiCallsSpinbox_->setValue(maxCalls < (UnsignedInteger)std::numeric_limits<int>::max()? maxCalls : 10000);
+  maxiCallsSpinbox_->setValue(maxCalls < (UnsignedInteger)std::numeric_limits<int>::max() ? maxCalls : 10000);
   maxiCallsCheckBox_->setChecked(maxCalls < (UnsignedInteger)std::numeric_limits<int>::max());
   maxiCallsSpinbox_->setEnabled(maxCalls < (UnsignedInteger)std::numeric_limits<int>::max());
 }
@@ -120,7 +121,7 @@ UnsignedInteger StopCriteriaGroupBox::getMaximumElapsedTime() const
 
 void StopCriteriaGroupBox::setMaximumElapsedTime(const UnsignedInteger maxTime)
 {
-  maxTimeLineEdit_->setSeconds(maxTime < (UnsignedInteger)std::numeric_limits<int>::max()? maxTime : 60);
+  maxTimeLineEdit_->setSeconds(maxTime < (UnsignedInteger)std::numeric_limits<int>::max() ? maxTime : 60);
   maxiTimeCheckBox_->setChecked(maxTime < (UnsignedInteger)std::numeric_limits<int>::max());
   maxTimeLineEdit_->setEnabled(maxTime < (UnsignedInteger)std::numeric_limits<int>::max());
 }

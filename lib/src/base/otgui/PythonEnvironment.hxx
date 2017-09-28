@@ -23,9 +23,10 @@
 
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
-class OTGUI_API PythonEnvironment 
+class OTGUI_API PythonEnvironment
 {
 public:
   /** Default constructor */

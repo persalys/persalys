@@ -23,7 +23,8 @@
 
 #include "otgui/AnalysisItem.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DesignOfExperimentDefinitionItem : public OTguiItem, public Observer
 {
   Q_OBJECT
@@ -54,7 +55,7 @@ public slots:
 
 signals:
   void modifyAnalysisRequested(DesignOfExperimentDefinitionItem*);
-  void DOEEvaluationRequested(const Analysis&, const bool isGeneralWizard=false);
+  void DOEEvaluationRequested(const Analysis&, const bool isGeneralWizard = false);
   void updateEvaluationWindowRequested(AnalysisItem*);
   void newAnalysisItemCreated(AnalysisItem*);
 

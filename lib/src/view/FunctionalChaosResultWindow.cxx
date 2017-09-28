@@ -34,7 +34,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
@@ -91,11 +92,11 @@ void FunctionalChaosResultWindow::buildInterface()
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
     MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSample().getMarginal(i),
-                                                                                 result_.getOutputSample().getMarginal(i),
-                                                                                 result_.getFunctionalChaosResult().getResiduals()[i],
-                                                                                 result_.getFunctionalChaosResult().getRelativeErrors()[i],
-                                                                                 tr("Relative error"),
-                                                                                 this);
+        result_.getOutputSample().getMarginal(i),
+        result_.getFunctionalChaosResult().getResiduals()[i],
+        result_.getFunctionalChaosResult().getRelativeErrors()[i],
+        tr("Relative error"),
+        this);
 
     plotsStackedWidget->addWidget(validationWidget);
   }
@@ -157,7 +158,7 @@ void FunctionalChaosResultWindow::buildInterface()
       QStringList namesList;
       namesList << tr("Dimension")
                 << tr("Maximum degree");
-      namesList << (sparse_? tr("Full basis size") : tr("Basis size"));
+      namesList << (sparse_ ? tr("Full basis size") : tr("Basis size"));
 
       // parameters values
       const UnsignedInteger dim = result_.getFunctionalChaosResult().getDistribution().getDimension();
@@ -218,11 +219,11 @@ void FunctionalChaosResultWindow::buildInterface()
     for (UnsignedInteger i = 0; i < nbOutputs; ++i)
     {
       SensitivityResultWidget * sobolResultWidget = new SensitivityResultWidget(result_.getSobolResult().getFirstOrderIndices()[i],
-                                                                                result_.getSobolResult().getTotalIndices()[i],
-                                                                                result_.getSobolResult().getInputNames(),
-                                                                                result_.getSobolResult().getOutputNames()[i],
-                                                                                SensitivityResultWidget::Sobol,
-                                                                                this);
+          result_.getSobolResult().getTotalIndices()[i],
+          result_.getSobolResult().getInputNames(),
+          result_.getSobolResult().getOutputNames()[i],
+          SensitivityResultWidget::Sobol,
+          this);
       sobolStackedWidget->addWidget(sobolResultWidget);
     }
     vbox->addWidget(sobolStackedWidget);
@@ -255,11 +256,11 @@ void FunctionalChaosResultWindow::buildInterface()
     for (UnsignedInteger i = 0; i < nbOutputs; ++i)
     {
       MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSampleLeaveOneOut().getMarginal(i),
-                                                                                   result_.getOutputSample().getMarginal(i),
-                                                                                   result_.getErrorQ2LeaveOneOut()[i],
-                                                                                   result_.getQ2LeaveOneOut()[i],
-                                                                                   tr("Q2"),
-                                                                                   this);
+          result_.getOutputSample().getMarginal(i),
+          result_.getErrorQ2LeaveOneOut()[i],
+          result_.getQ2LeaveOneOut()[i],
+          tr("Q2"),
+          this);
       plotsLOOStackedWidget->addWidget(validationWidget);
     }
     metaModelPlotLayout->addWidget(plotsLOOStackedWidget);

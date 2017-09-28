@@ -25,16 +25,20 @@
 #include "otgui/AnalysisItem.hxx"
 #include "otgui/DesignOfExperiment.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ModelEvaluationResultWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
-  ModelEvaluationResultWindow(AnalysisItem * item, QWidget * parent=0);
+  ModelEvaluationResultWindow(AnalysisItem * item, QWidget * parent = 0);
 
 protected:
-  virtual void setParameters(const Analysis& analysis, const QString& title) {/*has not parameters*/};
+  virtual void setParameters(const Analysis& analysis, const QString& title)
+  {
+    /*has not parameters*/
+  };
   void buildInterface();
 
 private:

@@ -28,7 +28,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 IntroSensitivityPage::IntroSensitivityPage(QWidget* parent)
   : QWizardPage(parent)
@@ -96,9 +97,9 @@ void IntroSensitivityPage::initialize(const Analysis& analysis)
 int IntroSensitivityPage::nextId() const
 {
   if (methodGroup_->checkedId() == IntroSensitivityPage::Sobol)
-   return SensitivityAnalysisWizard::Page_Sobol;
+    return SensitivityAnalysisWizard::Page_Sobol;
   else if (methodGroup_->checkedId() == IntroSensitivityPage::SRC)
-   return SensitivityAnalysisWizard::Page_SRC;
+    return SensitivityAnalysisWizard::Page_SRC;
 
   return -1;
 }
@@ -109,7 +110,7 @@ Description IntroSensitivityPage::getInterestVariables() const
   const QStringList outputsList = outputsSelectionGroupBox_->getSelectedOutputsNames();
 
   Description outputNames(outputsList.size());
-  for (int i=0; i<outputsList.size(); ++i)
+  for (int i = 0; i < outputsList.size(); ++i)
     outputNames[i] = outputsList[i].toUtf8().constData();
 
   return outputNames;

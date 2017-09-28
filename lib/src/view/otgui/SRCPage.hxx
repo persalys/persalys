@@ -27,13 +27,14 @@
 
 #include <QWizardPage>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SRCPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  SRCPage(QWidget* parent=0);
+  SRCPage(QWidget* parent = 0);
 
   void initialize(const Analysis& analysis);
   Analysis getAnalysis(const OT::String& name, const PhysicalModel& physicalModel) const;

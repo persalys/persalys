@@ -7,7 +7,7 @@ from math import pi
 
 myStudy = otguibase.OTStudy('myStudy')
 
-## Model
+# Model
 x0 = otguibase.Input('x0', ot.Normal())
 x1 = otguibase.Input('x1', ot.Normal())
 y00 = otguibase.Output('fake_y0')
@@ -16,10 +16,11 @@ y0 = otguibase.Output('y0')
 
 formula_y00 = 'x0'
 formula_y0 = '10+3*x0+x1'
-model = otguibase.SymbolicPhysicalModel('aModel', [x0, x1], [y00, y0], [formula_y00, formula_y0])
+model = otguibase.SymbolicPhysicalModel('aModel', [x0, x1], [y00, y0], [
+                                        formula_y00, formula_y0])
 myStudy.add(model)
 
-## Sobol ##
+# Sobol ##
 analysis = otguibase.SobolAnalysis('aSobol', model)
 analysis.setMaximumCalls(1000)
 analysis.setMaximumCoefficientOfVariation(-1)
@@ -33,7 +34,7 @@ analysis.run()
 
 print("result=", analysis.getResult())
 
-## Sobol ##
+# Sobol ##
 analysis2 = otguibase.SobolAnalysis('aSobol2', model)
 analysis2.setMaximumCoefficientOfVariation(0.02)
 analysis2.setMaximumElapsedTime(100000)
@@ -44,7 +45,7 @@ analysis2.run()
 
 print("result=", analysis2.getResult())
 
-## Sobol ##
+# Sobol ##
 X2 = otguibase.Input('x2', 10)
 model.addInput(X2)
 model.addOutput(otguibase.Output('y1'))
@@ -63,7 +64,7 @@ analysis3.run()
 result3 = analysis3.getResult()
 print("result=", result3)
 
-## script
+# script
 script = myStudy.getPythonScript()
 print(script)
 exec(script)

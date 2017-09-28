@@ -24,13 +24,14 @@
 #include "otgui/ResultWindow.hxx"
 #include "otgui/SobolResult.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SobolResultWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
-  SobolResultWindow(AnalysisItem * item, QWidget * parent=0);
+  SobolResultWindow(AnalysisItem * item, QWidget * parent = 0);
 
 protected:
   void buildInterface();

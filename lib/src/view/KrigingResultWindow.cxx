@@ -35,7 +35,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 KrigingResultWindow::KrigingResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
@@ -90,11 +91,11 @@ void KrigingResultWindow::buildInterface()
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
     MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSample().getMarginal(i),
-                                                                                 result_.getOutputSample().getMarginal(i),
-                                                                                 -1.0,
-                                                                                 -1.0,
-                                                                                 "",
-                                                                                 this);
+        result_.getOutputSample().getMarginal(i),
+        -1.0,
+        -1.0,
+        "",
+        this);
 
     plotsStackedWidget->addWidget(validationWidget);
   }
@@ -127,7 +128,7 @@ void KrigingResultWindow::buildInterface()
       for (UnsignedInteger j = 0; j < result_.getKrigingResultCollection()[i].getCovarianceModel().getScale().getSize(); ++j)
       {
         scaleText += QString::number(result_.getKrigingResultCollection()[i].getCovarianceModel().getScale()[j]);
-        if (j < result_.getKrigingResultCollection()[i].getCovarianceModel().getScale().getSize()-1)
+        if (j < result_.getKrigingResultCollection()[i].getCovarianceModel().getScale().getSize() - 1)
           scaleText += "; ";
       }
       valuesList << scaleText;
@@ -137,7 +138,7 @@ void KrigingResultWindow::buildInterface()
       for (UnsignedInteger j = 0; j < result_.getKrigingResultCollection()[i].getCovarianceModel().getAmplitude().getSize(); ++j)
       {
         amplitudeText += QString::number(result_.getKrigingResultCollection()[i].getCovarianceModel().getAmplitude()[j]);
-        if (j < result_.getKrigingResultCollection()[i].getCovarianceModel().getAmplitude().getSize()-1)
+        if (j < result_.getKrigingResultCollection()[i].getCovarianceModel().getAmplitude().getSize() - 1)
           amplitudeText += "; ";
       }
       valuesList << amplitudeText;
@@ -150,7 +151,7 @@ void KrigingResultWindow::buildInterface()
     for (UnsignedInteger j = 0; j < result_.getKrigingResultCollection()[i].getTrendCoefficients()[0].getSize(); ++j)
     {
       trendCoefText += QString::number(result_.getKrigingResultCollection()[i].getTrendCoefficients()[0][j]);
-      if (j < result_.getKrigingResultCollection()[i].getTrendCoefficients()[0].getSize()-1)
+      if (j < result_.getKrigingResultCollection()[i].getTrendCoefficients()[0].getSize() - 1)
         trendCoefText += "; ";
     }
     ParametersWidget * trendCoefTable = new ParametersWidget(tr("Trend"), QStringList() << tr("Trend coefficients"), QStringList() << trendCoefText, true, true);
@@ -179,11 +180,11 @@ void KrigingResultWindow::buildInterface()
     for (UnsignedInteger i = 0; i < nbOutputs; ++i)
     {
       MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSampleLeaveOneOut().getMarginal(i),
-                                                                                   result_.getOutputSample().getMarginal(i),
-                                                                                   result_.getErrorQ2LeaveOneOut()[i],
-                                                                                   result_.getQ2LeaveOneOut()[i],
-                                                                                   tr("Q2"),
-                                                                                   this);
+          result_.getOutputSample().getMarginal(i),
+          result_.getErrorQ2LeaveOneOut()[i],
+          result_.getQ2LeaveOneOut()[i],
+          tr("Q2"),
+          this);
       plotsLOOStackedWidget->addWidget(validationWidget);
     }
     tabLayout->addWidget(plotsLOOStackedWidget);

@@ -25,7 +25,8 @@
 
 #include <QAbstractTableModel>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API CorrelationTableModel : public QAbstractTableModel
 {
   Q_OBJECT

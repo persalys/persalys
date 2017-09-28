@@ -30,7 +30,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 DataModelDefinitionItem::DataModelDefinitionItem(const DesignOfExperiment & designOfExperiment)
   : DesignOfExperimentItem(designOfExperiment, "DataModelDefinition")

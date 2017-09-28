@@ -22,7 +22,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 // SignalBlocker class
 SignalBlocker::SignalBlocker(QObject *blockedObject, bool block)
@@ -44,7 +45,7 @@ SimpleException::SimpleException(const QString &text)
 }
 
 
-SimpleException::~SimpleException() throw(){}
+SimpleException::~SimpleException() throw() {}
 
 
 QString SimpleException::text() const

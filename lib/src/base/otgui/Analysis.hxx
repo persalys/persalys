@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Abstract top-level class for all analysis 
+ *  @brief Abstract top-level class for all analysis
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -23,7 +23,8 @@
 
 #include "AnalysisImplementation.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class LaunchParametersVisitor;
 
 class OTGUI_API Analysis : public OT::TypedInterfaceObject<AnalysisImplementation>

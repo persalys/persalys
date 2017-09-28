@@ -31,14 +31,15 @@
 #include <QComboBox>
 #include <QLabel>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 class OTGUI_API DesignOfExperimentEvaluationWizard : public OTguiWizard
 {
   Q_OBJECT
 
 public:
-  DesignOfExperimentEvaluationWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget* parent=0);
+  DesignOfExperimentEvaluationWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget* parent = 0);
 
   DesignOfExperimentDefinitionItem * getDesignOfExperimentDefinitionItem() const;
   virtual bool validateCurrentPage();

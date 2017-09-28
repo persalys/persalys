@@ -27,7 +27,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 DistributionsForInferenceWidget::DistributionsForInferenceWidget(const QStringList & distributions, QWidget* parent)
   : QWidget(parent)
@@ -44,7 +45,7 @@ void DistributionsForInferenceWidget::buildInterface()
   // list distributions
   QStringList allDistributions;
   Description listDistributions = DistributionDictionary::GetAvailableDistributions();
-  for (UnsignedInteger i=0; i<listDistributions.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < listDistributions.getSize(); ++i)
     if (!distributions_.contains(tr(listDistributions[i].c_str())))
       allDistributions << tr(listDistributions[i].c_str());
   allDistributions << tr("All");
@@ -90,8 +91,8 @@ void DistributionsForInferenceWidget::removeSelectedDistribution()
   QModelIndexList indexList = distributionsTableView_->selectionModel()->selectedRows();
 
   Description listDistributions = DistributionDictionary::GetAvailableDistributions();
-  addDistributionCombox_->removeItem(addDistributionCombox_->count()-1);
-  for (int i=indexList.size()-1; i>=0; --i)
+  addDistributionCombox_->removeItem(addDistributionCombox_->count() - 1);
+  for (int i = indexList.size() - 1; i >= 0; --i)
   {
     QString selectedDistribution = tableModel_->data(indexList[i], Qt::DisplayRole).toString();
     if (listDistributions.contains(selectedDistribution.toStdString()))
@@ -101,7 +102,7 @@ void DistributionsForInferenceWidget::removeSelectedDistribution()
   addDistributionCombox_->addItem(tr("All"));
 
   QStringList distributions;
-  for (UnsignedInteger i=0; i<listDistributions.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < listDistributions.getSize(); ++i)
     if (addDistributionCombox_->findText(tr(listDistributions[i].c_str())) == -1)
       distributions << tr(listDistributions[i].c_str());
 
@@ -118,7 +119,7 @@ void DistributionsForInferenceWidget::removeSelectedDistribution()
 
 void DistributionsForInferenceWidget::addSelectedDistribution(int index)
 {
-  if (index < addDistributionCombox_->count()-1)
+  if (index < addDistributionCombox_->count() - 1)
   {
     addDistributionCombox_->removeItem(index);
   }

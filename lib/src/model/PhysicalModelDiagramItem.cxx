@@ -29,7 +29,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 PhysicalModelDiagramItem::PhysicalModelDiagramItem(const PhysicalModel & physicalModel)
   : PhysicalModelItem(physicalModel, "PhysicalModelDiagram")
@@ -341,7 +342,7 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
     DesignOfExperimentDefinitionItem * newItem = new DesignOfExperimentDefinitionItem(analysis);
 
     // connections
-    connect(newItem, SIGNAL(numberDesignEvaluationChanged(bool)),this, SLOT(requestDesignOfExperimentRemoval(bool)));
+    connect(newItem, SIGNAL(numberDesignEvaluationChanged(bool)), this, SLOT(requestDesignOfExperimentRemoval(bool)));
     connect(newItem, SIGNAL(designEvaluationAppended()), this , SLOT(incrementDesignEvaluationCounter()));
     connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
 

@@ -35,7 +35,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelDefinitionItem * item)
   : QTabWidget()
@@ -198,8 +199,8 @@ void PhysicalModelWindowWidget::resizeEvent(QResizeEvent* event)
 void PhysicalModelWindowWidget::resizeInputTable()
 {
   const int width = inputTableView_->horizontalHeader()->width();
-  inputTableView_->horizontalHeader()->resizeSection(0, width*1/5);
-  inputTableView_->horizontalHeader()->resizeSection(1, width*3/5);
+  inputTableView_->horizontalHeader()->resizeSection(0, width * 1 / 5);
+  inputTableView_->horizontalHeader()->resizeSection(1, width * 3 / 5);
 }
 
 
@@ -210,13 +211,13 @@ void PhysicalModelWindowWidget::resizeOutputTable()
   {
     outputTableView_->setColumnHidden(2, true);
     outputTableView_->horizontalHeader()->resizeSection(0, outputTableHeaderView_->minimumSectionSize());
-    outputTableView_->horizontalHeader()->resizeSection(1, width - 2*(outputTableHeaderView_->minimumSectionSize()));
+    outputTableView_->horizontalHeader()->resizeSection(1, width - 2 * (outputTableHeaderView_->minimumSectionSize()));
   }
   else
   {
     outputTableView_->horizontalHeader()->resizeSection(0, outputTableHeaderView_->minimumSectionSize());
-    outputTableView_->horizontalHeader()->resizeSection(1, width*3/10);
-    outputTableView_->horizontalHeader()->resizeSection(2, width*4/10);
+    outputTableView_->horizontalHeader()->resizeSection(1, width * 3 / 10);
+    outputTableView_->horizontalHeader()->resizeSection(2, width * 4 / 10);
   }
 }
 
@@ -242,7 +243,7 @@ void PhysicalModelWindowWidget::updateInputTableModel()
   connect(inputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
   connect(inputTableModel_, SIGNAL(inputNumberChanged()), this, SLOT(updateDifferentiationTableModel()));
   connect(inputTableModel_, SIGNAL(inputNameChanged()), this, SLOT(updateDifferentiationTableModel()));
-  connect(this, SIGNAL(inputTableModelDataChanged(QModelIndex,QModelIndex)), inputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)));
+  connect(this, SIGNAL(inputTableModelDataChanged(QModelIndex, QModelIndex)), inputTableModel_, SIGNAL(dataChanged(QModelIndex, QModelIndex)));
 }
 
 
@@ -259,7 +260,7 @@ void PhysicalModelWindowWidget::updateDifferentiationTableModel()
   differentiationTableView_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
   differentiationTableView_->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
 #endif
-  connect(this, SIGNAL(differentiationTableModelDataChanged(QModelIndex,QModelIndex)), differentiationTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)));
+  connect(this, SIGNAL(differentiationTableModelDataChanged(QModelIndex, QModelIndex)), differentiationTableModel_, SIGNAL(dataChanged(QModelIndex, QModelIndex)));
 }
 
 
@@ -279,7 +280,7 @@ void PhysicalModelWindowWidget::updateOutputTableModel()
   outputTableView_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
   outputTableView_->horizontalHeader()->setResizeMode(1, QHeaderView::Interactive);
   outputTableView_->horizontalHeader()->setResizeMode(2, QHeaderView::Interactive);
-  outputTableView_->horizontalHeader()->setResizeMode(3, QHeaderView::Stretch); 
+  outputTableView_->horizontalHeader()->setResizeMode(3, QHeaderView::Stretch);
 #endif
   resizeOutputTable();
   // table header view
@@ -288,7 +289,7 @@ void PhysicalModelWindowWidget::updateOutputTableModel()
   outputTableHeaderView_->setChecked(allChecked);
   connect(outputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
   connect(outputTableModel_, SIGNAL(checked(bool)), outputTableHeaderView_, SLOT(setChecked(bool)));
-  connect(this, SIGNAL(outputTableModelDataChanged(QModelIndex,QModelIndex)), outputTableModel_, SIGNAL(dataChanged(QModelIndex,QModelIndex)));
+  connect(this, SIGNAL(outputTableModelDataChanged(QModelIndex, QModelIndex)), outputTableModel_, SIGNAL(dataChanged(QModelIndex, QModelIndex)));
 }
 
 
@@ -350,7 +351,7 @@ void PhysicalModelWindowWidget::removeInputLine()
   {
     QModelIndex index = inputTableView_->selectionModel()->currentIndex();
     inputTableModel_->removeLine(index);
-    const int lastRow = inputTableModel_->rowCount()-1;
+    const int lastRow = inputTableModel_->rowCount() - 1;
 
     if (lastRow + 1)
       inputTableView_->selectRow(lastRow);

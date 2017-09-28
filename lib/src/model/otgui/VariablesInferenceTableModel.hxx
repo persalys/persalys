@@ -27,7 +27,8 @@
 
 #include <QAbstractTableModel>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API VariablesInferenceTableModel : public QAbstractTableModel
 {
   Q_OBJECT

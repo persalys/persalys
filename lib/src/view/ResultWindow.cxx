@@ -24,8 +24,9 @@
 
 using namespace OT;
 
-namespace OTGUI {
-  
+namespace OTGUI
+{
+
 ResultWindow::ResultWindow(AnalysisItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
   , parametersWidget_(0)

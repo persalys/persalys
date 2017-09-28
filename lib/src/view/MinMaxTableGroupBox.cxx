@@ -28,7 +28,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 MinMaxTableGroupBox::MinMaxTableGroupBox(const DesignOfExperiment& doe, const bool onlyOutput, QWidget* parent)
   : QGroupBox(tr("Minimum and Maximum"), parent)
@@ -41,7 +42,7 @@ MinMaxTableGroupBox::MinMaxTableGroupBox(const DesignOfExperiment& doe, const bo
     for (UnsignedInteger outputIndex = 0; outputIndex < doe.getOutputSample().getDimension(); ++outputIndex)
       stackedWidget_->addWidget(getForOutputMinMaxTableView(doe, outputIndex));
 
-    // table for inputs
+  // table for inputs
   if (!onlyOutput && doe.getInputSample().getSize())
     for (UnsignedInteger inputIndex = 0; inputIndex < doe.getInputSample().getDimension(); ++inputIndex)
       stackedWidget_->addWidget(getForInputMinMaxTableView(doe, inputIndex));
@@ -61,9 +62,9 @@ QWidget* MinMaxTableGroupBox::getForInputMinMaxTableView(const DesignOfExperimen
 
   // horizontal header
   minMaxTable->setHorizontalHeaderLabels(QStringList() << tr("")
-                                                       << tr("Variable")
-                                                       << tr("Minimum")
-                                                       << tr("Maximum"));
+                                         << tr("Variable")
+                                         << tr("Minimum")
+                                         << tr("Maximum"));
 
   // vertical header
   minMaxTable->setNotEditableHeaderItem(0, 0, tr("Input"));
@@ -93,9 +94,9 @@ QWidget* MinMaxTableGroupBox::getForOutputMinMaxTableView(const DesignOfExperime
 
   // horizontal header
   minMaxTable->setHorizontalHeaderLabels(QStringList() << tr("")
-                                                       << tr("Variable")
-                                                       << tr("Minimum")
-                                                       << tr("Maximum"));
+                                         << tr("Variable")
+                                         << tr("Minimum")
+                                         << tr("Maximum"));
 
   // vertical header
   minMaxTable->setNotEditableHeaderItem(0, 0, tr("Output"));

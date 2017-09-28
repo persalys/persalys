@@ -23,19 +23,20 @@
 
 #include "PhysicalModelImplementation.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SymbolicPhysicalModel : public PhysicalModelImplementation
 {
   CLASSNAME
 
 public:
   /** Default constructor */
-  SymbolicPhysicalModel(const OT::String& name="Unnamed");
+  SymbolicPhysicalModel(const OT::String& name = "Unnamed");
   /** Constructor with parameters */
   SymbolicPhysicalModel(const OT::String& name,
-                          const InputCollection& inputs,
-                          const OutputCollection& outputs,
-                          const OT::Description& formulas);
+                        const InputCollection& inputs,
+                        const OutputCollection& outputs,
+                        const OT::Description& formulas);
 
   /** Virtual constructor */
   virtual SymbolicPhysicalModel * clone() const;

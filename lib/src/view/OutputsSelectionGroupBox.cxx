@@ -26,7 +26,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 OutputsSelectionGroupBox::OutputsSelectionGroupBox(QWidget* parent)
   : QGroupBox(tr("Outputs to analyse"), parent)
@@ -71,11 +72,11 @@ void OutputsSelectionGroupBox::updateComboBoxModel(const Description& outputsNam
   }
 
   QStringList outputsList;
-  for (UnsignedInteger i=0; i<outputsNames.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < outputsNames.getSize(); ++i)
     outputsList << QString::fromUtf8(outputsNames[i].c_str());
 
   QStringList variablesStringList;
-  for (UnsignedInteger i=0; i<interestVariables.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < interestVariables.getSize(); ++i)
     if (outputsList.contains(QString::fromUtf8(interestVariables[i].c_str())))
       variablesStringList << QString::fromUtf8(interestVariables[i].c_str());
 

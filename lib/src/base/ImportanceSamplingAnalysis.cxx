@@ -27,7 +27,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(ImportanceSamplingAnalysis)
 
@@ -43,7 +44,7 @@ ImportanceSamplingAnalysis::ImportanceSamplingAnalysis()
 
 /* Constructor with parameters */
 ImportanceSamplingAnalysis::ImportanceSamplingAnalysis(const String& name,
-                                                       const LimitState& limitState)
+    const LimitState& limitState)
   : SimulationReliabilityAnalysis(name, limitState)
   , standardSpaceDesignPoint_(Point(limitState.getPhysicalModel().getStochasticInputNames().getSize()))
 {

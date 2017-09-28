@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 /* Default constructor */
 Observable::Observable()
@@ -65,7 +66,7 @@ void Observable::notify(const String & message)
   // do not use for (std::vector<Observer*>::iterator it = observers_.begin(); it != observers_.end(); ++it)
   // avoid problem if an observer is added in the list observers_ in the update function
   const int nbObservers = observers_.size();
-  for (int i=0; i<nbObservers; ++i)
+  for (int i = 0; i < nbObservers; ++i)
   {
     if (observers_[i]->getType() != blockedObserverType_)
     {

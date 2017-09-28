@@ -26,9 +26,10 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
- ParametersTableModel::ParametersTableModel(const Description& names, const Point& values, const QStringList& labels, QObject* parent)
+ParametersTableModel::ParametersTableModel(const Description& names, const Point& values, const QStringList& labels, QObject* parent)
   : QStandardItemModel(names.getSize(), 2, parent)
   , names_(names)
   , values_(values)

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Computes Monte Carlo analysis 
+ *  @brief Computes Monte Carlo analysis
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -29,7 +29,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(MonteCarloAnalysis)
 
@@ -85,7 +86,7 @@ double MonteCarloAnalysis::getLevelConfidenceInterval() const
 void MonteCarloAnalysis::setLevelConfidenceInterval(const double levelConfidenceInterval)
 {
   if (levelConfidenceInterval < 0. || levelConfidenceInterval >= 1.)
-      throw InvalidArgumentException(HERE) << "MonteCarloAnalysis::setLevelConfidenceInterval : the level of the confidence interval must be superior or equal to 0. and inferior to 1.";
+    throw InvalidArgumentException(HERE) << "MonteCarloAnalysis::setLevelConfidenceInterval : the level of the confidence interval must be superior or equal to 0. and inferior to 1.";
   levelConfidenceInterval_ = levelConfidenceInterval;
 }
 
@@ -105,7 +106,7 @@ void MonteCarloAnalysis::run()
                                         << ") can not be inferior to the block size (" << getBlockSize() << ")";
     if (!getPhysicalModel().getRestrictedFunction(getInterestVariables()).getOutputDescription().getSize())
       throw InvalidDimensionException(HERE) << "The outputs to be analysed "
-                                            << getInterestVariables() <<" are not outputs of the model "
+                                            << getInterestVariables() << " are not outputs of the model "
                                             << getPhysicalModel().getOutputNames();
 
     // initialization
@@ -128,9 +129,9 @@ void MonteCarloAnalysis::run()
 
     // We loop if there remains some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
     while (!stopRequested_
-       && (outerSampling < maximumOuterSampling)
-       && (coefficientOfVariation == -1.0 || coefficientOfVariation > getMaximumCoefficientOfVariation())
-       && (static_cast<UnsignedInteger>(elapsedTime) < getMaximumElapsedTime() * CLOCKS_PER_SEC))
+           && (outerSampling < maximumOuterSampling)
+           && (coefficientOfVariation == -1.0 || coefficientOfVariation > getMaximumCoefficientOfVariation())
+           && (static_cast<UnsignedInteger>(elapsedTime) < getMaximumElapsedTime() * CLOCKS_PER_SEC))
     {
       // progress
       if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
@@ -227,7 +228,7 @@ String MonteCarloAnalysis::getPythonScript() const
     for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
     {
       oss << "'" << getInterestVariables()[i] << "'";
-      if (i < getInterestVariables().getSize()-1)
+      if (i < getInterestVariables().getSize() - 1)
         oss << ", ";
     }
     oss << "]\n";

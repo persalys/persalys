@@ -24,14 +24,15 @@
 #include "openturns/OTtypes.hxx"
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class Observable;
 
 class OTGUI_API Observer
 {
 public:
   /** Default constructor */
-  Observer(const OT::String & type="");
+  Observer(const OT::String & type = "");
 
   virtual ~Observer() {};
 

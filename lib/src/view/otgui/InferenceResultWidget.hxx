@@ -31,13 +31,14 @@
 
 Q_DECLARE_METATYPE(OT::Distribution)
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API InferenceResultWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  InferenceResultWidget(const bool displayPDF_QQPlot=true, QWidget* parent=0);
+  InferenceResultWidget(const bool displayPDF_QQPlot = true, QWidget* parent = 0);
 
   OT::Distribution getDistribution() const;
   bool isSelectedDistributionValid() const;
@@ -48,8 +49,8 @@ protected:
 public slots:
   void updateDistributionTable(const InferenceResult& result, const QString& variableName);
   void updateRadioButtonsDistributionTable(QModelIndex);
-  void updateParametersTable(QModelIndex=QModelIndex());
-  void updateGraphs(QModelIndex=QModelIndex());
+  void updateParametersTable(QModelIndex = QModelIndex());
+  void updateGraphs(QModelIndex = QModelIndex());
 signals:
   void currentDistributionChanged();
 

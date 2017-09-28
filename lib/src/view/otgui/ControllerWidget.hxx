@@ -28,14 +28,15 @@
 #include <QLabel>
 #include <QScrollArea>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class ControllerWidget : public QWidget
 {
   Q_OBJECT
 
 public:
   ControllerWidget(const QString& analysisName, QWidget* parent = 0)
-  : QWidget(parent)
+    : QWidget(parent)
   {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     QVBoxLayout * widgetLayout = new QVBoxLayout(this);

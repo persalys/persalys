@@ -30,7 +30,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(OTStudyImplementation)
 
@@ -185,7 +186,7 @@ DesignOfExperiment& OTStudyImplementation::getDataModelByName(const String& data
   for (UnsignedInteger i = 0; i < dataModels_.getSize(); ++i)
     if (dataModels_[i].getName() == dataModelName)
       return dataModels_[i];
-  throw InvalidArgumentException(HERE) << "The given name " << dataModelName <<" does not correspond to a data model of the study.\n"; 
+  throw InvalidArgumentException(HERE) << "The given name " << dataModelName << " does not correspond to a data model of the study.\n";
 }
 
 
@@ -278,7 +279,7 @@ PhysicalModel& OTStudyImplementation::getPhysicalModelByName(const String& physi
   for (UnsignedInteger i = 0; i < physicalModels_.getSize(); ++i)
     if (physicalModels_[i].getName() == physicalModelName)
       return physicalModels_[i];
-  throw InvalidArgumentException(HERE) << "The given name " << physicalModelName <<" does not correspond to a physical model of the study.\n"; 
+  throw InvalidArgumentException(HERE) << "The given name " << physicalModelName << " does not correspond to a physical model of the study.\n";
 }
 
 
@@ -392,7 +393,7 @@ Analysis& OTStudyImplementation::getAnalysisByName(const String& analysisName)
   for (UnsignedInteger i = 0; i < analyses_.getSize(); ++i)
     if (analyses_[i].getName() == analysisName)
       return analyses_[i];
-  throw InvalidArgumentException(HERE) << "The given name " << analysisName <<" does not correspond to an analysis of the study.\n"; 
+  throw InvalidArgumentException(HERE) << "The given name " << analysisName << " does not correspond to an analysis of the study.\n";
 }
 
 

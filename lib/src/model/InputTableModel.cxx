@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 InputTableModel::InputTableModel(const PhysicalModel & physicalModel, QObject * parent)
   : QAbstractTableModel(parent)
@@ -151,13 +152,13 @@ Qt::ItemFlags InputTableModel::flags(const QModelIndex & index) const
 void InputTableModel::addLine()
 {
   int i = 0;
-  while (physicalModel_.hasInputNamed('X' + (OSS()<<i).str()))
+  while (physicalModel_.hasInputNamed('X' + (OSS() << i).str()))
     ++i;
   physicalModel_.blockNotification("PhysicalModelDefinition");
-  physicalModel_.addInput(Input('X'+(OSS()<<i).str()));
+  physicalModel_.addInput(Input('X' + (OSS() << i).str()));
   emit inputNumberChanged();
   physicalModel_.blockNotification();
-  QModelIndex lastIndex = index(rowCount()-1, 0);
+  QModelIndex lastIndex = index(rowCount() - 1, 0);
   beginInsertRows(lastIndex.parent(), lastIndex.row(), lastIndex.row());
   endInsertRows();
 }

@@ -25,7 +25,8 @@
 
 #include <openturns/SimulationResult.hxx>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SimulationReliabilityResult : public OT::PersistentObject
 {
   CLASSNAME

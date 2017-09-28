@@ -28,7 +28,8 @@
 
 #include <PyConsole_Console.h>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API MainWindow : public QMainWindow
 {
   Q_OBJECT

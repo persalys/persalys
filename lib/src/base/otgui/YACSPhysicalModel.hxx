@@ -24,14 +24,15 @@
 #include "PhysicalModelImplementation.hxx"
 #include "YACSEvaluation.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API YACSPhysicalModel : public PhysicalModelImplementation
 {
   CLASSNAME
 
 public:
   /* Default constructor */
-  YACSPhysicalModel(const OT::String & name="Unnamed");
+  YACSPhysicalModel(const OT::String & name = "Unnamed");
   /* Constructor with parameters */
   YACSPhysicalModel(const OT::String & name, const OT::String & fileName);
 
@@ -63,9 +64,9 @@ public:
 
   /** String converter */
   virtual OT::String __repr__() const;
-  
+
   virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
-  
+
 protected:
   void updateData();
 

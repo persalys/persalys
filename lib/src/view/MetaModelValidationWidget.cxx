@@ -28,14 +28,15 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 MetaModelValidationWidget::MetaModelValidationWidget(const Sample& metaModelSample,
-                                                     const Sample& outputSample,
-                                                     const double error,
-                                                     const double value,
-                                                     const QString measure,
-                                                     QWidget * parent
+    const Sample& outputSample,
+    const double error,
+    const double value,
+    const QString measure,
+    QWidget * parent
                                                     )
   : QWidget(parent)
 {
@@ -75,10 +76,10 @@ MetaModelValidationWidget::MetaModelValidationWidget(const Sample& metaModelSamp
   QVector<PlotWidget*> listPlot;
   listPlot.append(plot);
   GraphConfigurationWidget * graphSettingWidget = new GraphConfigurationWidget(listPlot,
-                                                                               QStringList(),
-                                                                               QStringList(),
-                                                                               GraphConfigurationWidget::NoType,
-                                                                               this);
+      QStringList(),
+      QStringList(),
+      GraphConfigurationWidget::NoType,
+      this);
   plotWidget->setDockWidget(graphSettingWidget);
   widgetLayout->addWidget(plotWidget);
 }

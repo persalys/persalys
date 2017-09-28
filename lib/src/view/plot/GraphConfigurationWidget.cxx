@@ -35,13 +35,14 @@
 
 #include <qwt_plot_renderer.h>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets,
-                                                   QStringList inputNames,
-                                                   QStringList outputNames,
-                                                   GraphConfigurationWidget::Type plotType,
-                                                   QWidget * parent)
+    QStringList inputNames,
+    QStringList outputNames,
+    GraphConfigurationWidget::Type plotType,
+    QWidget * parent)
   : QWidget(parent)
   , plotWidgets_(plotWidgets)
   , plotType_(plotType)
@@ -58,7 +59,7 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   , ymin_(0)
   , ymax_(0)
 {
-  for (int i=0; i<plotWidgets_.size(); ++i)
+  for (int i = 0; i < plotWidgets_.size(); ++i)
     connect(plotWidgets_[i], SIGNAL(plotChanged()), this, SLOT(updateLineEdits()));
 
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
@@ -87,10 +88,10 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
 
     xAxisComboBox_ = new QComboBox;
 
-    for (int i=0; i<inputNames.size(); ++i)
+    for (int i = 0; i < inputNames.size(); ++i)
       xAxisComboBox_->addItem(inputNames[i], true);
 
-    for (int i=0; i<outputNames.size(); ++i)
+    for (int i = 0; i < outputNames.size(); ++i)
       xAxisComboBox_->addItem(outputNames[i], false);
 
     mainGridLayout->addWidget(xAxisComboBox_, rowGrid, 1, 1, 1);
@@ -265,7 +266,7 @@ void GraphConfigurationWidget::updateYComboBox()
   QStringList inputNames;
   QStringList outputNames;
 
-  for (int i=0; i<xAxisComboBox_->count(); ++i)
+  for (int i = 0; i < xAxisComboBox_->count(); ++i)
   {
     if (i != xAxisComboBox_->currentIndex()) // must have x != y
     {
@@ -279,9 +280,9 @@ void GraphConfigurationWidget::updateYComboBox()
   }
 
   if (plotType_ == GraphConfigurationWidget::Scatter)
-    yAxisComboBox_->addItems(outputNames+inputNames);
+    yAxisComboBox_->addItems(outputNames + inputNames);
   else if (plotType_ == GraphConfigurationWidget::Copula)
-    yAxisComboBox_->addItems(inputNames+outputNames);
+    yAxisComboBox_->addItems(inputNames + outputNames);
 
   plotChanged();
 }

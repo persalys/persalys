@@ -20,7 +20,8 @@
  */
 #include "otgui/ResizableStackedWidget.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 ResizableStackedWidget::ResizableStackedWidget(QWidget * parent)
   : QStackedWidget(parent)

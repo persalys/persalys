@@ -26,7 +26,8 @@
 #include <QPushButton>
 #include <QPainter>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 OTStudyWindow::OTStudyWindow(OTStudyItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
@@ -89,13 +90,13 @@ void OTStudyWindow::buildInterface()
 
   textEdit = new QLabel;
   textEdit->setText(tr("- Evaluation\n- Design of experiments\n- Central tendency\n- Sensitivity\n- Reliability\n- Metamodel"));
-  layout->addWidget(textEdit, row+1, 0, Qt::AlignHCenter|Qt::AlignTop);
+  layout->addWidget(textEdit, row + 1, 0, Qt::AlignHCenter | Qt::AlignTop);
 
   // vertical line
 
   QFrame * buttonsFrame = new QFrame;
   buttonsFrame->setFrameShape(QFrame::VLine);
-  layout->addWidget(buttonsFrame, 0, 1, row+2, 1);
+  layout->addWidget(buttonsFrame, 0, 1, row + 2, 1);
 
   // right side
 
@@ -111,7 +112,7 @@ void OTStudyWindow::buildInterface()
 
   textEdit = new QLabel;
   textEdit->setText(tr("- Data analysis\n- Inference\n- Dependencies inference\n- Metamodel"));
-  layout->addWidget(textEdit, row+1, 2, Qt::AlignHCenter|Qt::AlignTop);
+  layout->addWidget(textEdit, row + 1, 2, Qt::AlignHCenter | Qt::AlignTop);
 
   // set widget
   mainLayout->addLayout(layout);

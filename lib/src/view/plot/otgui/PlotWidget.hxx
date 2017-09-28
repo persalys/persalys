@@ -30,7 +30,8 @@
 #include <openturns/Distribution.hxx>
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API PlotWidget : public QwtPlot
 {
   Q_OBJECT
@@ -43,33 +44,33 @@ public:
   PlotWidget(const QString plotTypeName = "", const bool isIndicesPlot = false, QWidget * parent = 0);
 
   /// plot a curve
-  void plotCurve(double * x, double * y, int size, const QPen pen=QPen(Qt::black, 2),
-                 QwtPlotCurve::CurveStyle style=QwtPlotCurve::Lines, QwtSymbol* symbol=0, QString title="");
-  void plotCurve(const OT::Sample & data, const QPen pen=QPen(Qt::black, 2),
-                 QwtPlotCurve::CurveStyle style=QwtPlotCurve::Lines, QwtSymbol* symbol=0, QString title="");
+  void plotCurve(double * x, double * y, int size, const QPen pen = QPen(Qt::black, 2),
+                 QwtPlotCurve::CurveStyle style = QwtPlotCurve::Lines, QwtSymbol* symbol = 0, QString title = "");
+  void plotCurve(const OT::Sample & data, const QPen pen = QPen(Qt::black, 2),
+                 QwtPlotCurve::CurveStyle style = QwtPlotCurve::Lines, QwtSymbol* symbol = 0, QString title = "");
 
-  void plotPDFCurve(const OT::Distribution & distribution, const QPen pen=QPen(Qt::black, 2));
-  void plotCDFCurve(const OT::Distribution & distribution, const QPen pen=QPen(Qt::black, 2));
-  void plotHistogram(const OT::Sample & sample, const OT::UnsignedInteger graphType=0, int barNumber=0, QString title="");
+  void plotPDFCurve(const OT::Distribution & distribution, const QPen pen = QPen(Qt::black, 2));
+  void plotCDFCurve(const OT::Distribution & distribution, const QPen pen = QPen(Qt::black, 2));
+  void plotHistogram(const OT::Sample & sample, const OT::UnsignedInteger graphType = 0, int barNumber = 0, QString title = "");
   void plotScatter(const OT::Sample & input, const OT::Sample & output,
-                   QPen pen=QPen(Qt::blue, 4), QString Xtitle="", QString Ytitle="");
+                   QPen pen = QPen(Qt::blue, 4), QString Xtitle = "", QString Ytitle = "");
   void plotBoxPlot(double median, double lowerQuartile, double upperQuartile,
                    double lowerBound, double upperBound, OT::Point outliers_);
   void plotSensitivityIndices(const OT::Point firstOrderIndices, const OT::Point totalIndices,
                               const OT::Description inputNames);
-  void plotContour(const OT::Distribution& distribution, const bool isPdf=true);
+  void plotContour(const OT::Distribution& distribution, const bool isPdf = true);
 
   /// clear plot
   void clear();
   void replot();
 
   static QVector<PlotWidget*> GetListScatterPlots(const OT::Sample& inS,
-                                                  const OT::Sample& notValidInS,
-                                                  const OT::Sample& outS,
-                                                  const QStringList inNames,
-                                                  const QStringList inAxisNames,
-                                                  const QStringList outNames,
-                                                  const QStringList outAxisNames);
+      const OT::Sample& notValidInS,
+      const OT::Sample& outS,
+      const QStringList inNames,
+      const QStringList inAxisNames,
+      const QStringList outNames,
+      const QStringList outAxisNames);
 
 public slots:
   void contextMenu(const QPoint & pos);

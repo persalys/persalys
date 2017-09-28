@@ -28,7 +28,8 @@
 
 using namespace OT;
 
-namespace OTGUI{
+namespace OTGUI
+{
 
 CLASSNAMEINIT(DataAnalysis)
 
@@ -134,7 +135,7 @@ void DataAnalysis::run()
 
         if (result_.standardDeviation_[i].getDimension())
         {
-          const Normal X(0,1);
+          const Normal X(0, 1);
           const double f = X.computeQuantile((1 - levelConfidenceInterval_) / 2, true)[0];
           double delta(f * result_.standardDeviation_[i][0] / sqrt(sample.getSize()));
 
@@ -166,7 +167,7 @@ void DataAnalysis::run()
         {
           // TODO : use Normal Distribution?
           const UnsignedInteger nbSimu = sample.getSize();
-          const ChiSquare X(nbSimu-1);
+          const ChiSquare X(nbSimu - 1);
           // low
           const double f1 = X.computeQuantile((1 - levelConfidenceInterval_) / 2, true)[0];
           // up

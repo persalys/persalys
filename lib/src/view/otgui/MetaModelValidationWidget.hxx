@@ -27,7 +27,8 @@
 
 #include <QWidget>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API MetaModelValidationWidget : public QWidget
 {
   Q_OBJECT
@@ -35,10 +36,10 @@ class OTGUI_API MetaModelValidationWidget : public QWidget
 public:
   MetaModelValidationWidget(const OT::Sample& metaModelSample,
                             const OT::Sample& outputSample,
-                            const double error=-1.0,
-                            const double value=-1.0,
-                            const QString measure="",
-                            QWidget * parent=0);
+                            const double error = -1.0,
+                            const double value = -1.0,
+                            const QString measure = "",
+                            QWidget * parent = 0);
 };
 }
 #endif

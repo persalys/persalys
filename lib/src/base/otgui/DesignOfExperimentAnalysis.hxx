@@ -24,7 +24,8 @@
 #include "AnalysisImplementation.hxx"
 #include "DesignOfExperiment.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DesignOfExperimentAnalysis : public AnalysisImplementation
 {
 public:

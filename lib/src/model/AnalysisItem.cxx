@@ -46,7 +46,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 AnalysisItem::AnalysisItem(const Analysis & analysis)
   : OTguiItem(QString::fromUtf8(analysis.getName().c_str()), analysis.getImplementation()->getClassName().c_str())
@@ -188,7 +189,7 @@ void AnalysisItem::modifyAnalysis()
         }
       }
     }
-  // TODO check limitstate?
+    // TODO check limitstate?
   }
 
   // -- IF DesignOfExperimentAnalysis
@@ -335,10 +336,10 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
     // Parameters values
     const Point point(evaluation.getInputValues());
     QString pointText = "[";
-    for (UnsignedInteger i=0; i<point.getDimension(); ++i)
+    for (UnsignedInteger i = 0; i < point.getDimension(); ++i)
     {
       pointText += QString::number(point[i]);
-      if (i < point.getDimension()-1)
+      if (i < point.getDimension() - 1)
         pointText += "; ";
     }
     pointText += "]";
@@ -472,36 +473,36 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
     }
 
     // Optimize parameters
-    valuesList << (kriging.getOptimizeParameters()? tr("yes") : tr("no"));
+    valuesList << (kriging.getOptimizeParameters() ? tr("yes") : tr("no"));
 
     // scale
     QString scaleText;
-    for (UnsignedInteger i=0; i<kriging.getCovarianceModel().getScale().getSize(); ++i)
+    for (UnsignedInteger i = 0; i < kriging.getCovarianceModel().getScale().getSize(); ++i)
     {
       scaleText += QString::number(kriging.getCovarianceModel().getScale()[i]);
-      if (i < kriging.getCovarianceModel().getScale().getSize()-1)
+      if (i < kriging.getCovarianceModel().getScale().getSize() - 1)
         scaleText += "; ";
     }
     // amplitude
     QString amplitudeText;
-    for (UnsignedInteger i=0; i<kriging.getCovarianceModel().getAmplitude().getSize(); ++i)
+    for (UnsignedInteger i = 0; i < kriging.getCovarianceModel().getAmplitude().getSize(); ++i)
     {
       amplitudeText += QString::number(kriging.getCovarianceModel().getAmplitude()[i]);
-      if (i < kriging.getCovarianceModel().getAmplitude().getSize()-1)
+      if (i < kriging.getCovarianceModel().getAmplitude().getSize() - 1)
         amplitudeText += "; ";
     }
     // basis
     QString basisType(tr("Constant"));
     const UnsignedInteger dim = kriging.getBasis().getDimension();
-    if (kriging.getBasis().getSize() == (dim+1))
+    if (kriging.getBasis().getSize() == (dim + 1))
       basisType = tr("Linear");
-    else if (kriging.getBasis().getSize() == ((dim+1)*(dim+2)/2))
+    else if (kriging.getBasis().getSize() == ((dim + 1) * (dim + 2) / 2))
       basisType = tr("Quadratic");
 
     valuesList << scaleText
                << amplitudeText
                << basisType
-               << (kriging.isLeaveOneOutValidation()? tr("yes") : tr("no"));
+               << (kriging.isLeaveOneOutValidation() ? tr("yes") : tr("no"));
   }
   else if (analysisType == "FunctionalChaosAnalysis")
   {
@@ -518,8 +519,8 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
     valuesList << tr("Functional chaos")
                << chaos.getInterestVariables().__str__().c_str()
                << QString::number(chaos.getChaosDegree())
-               << (chaos.getSparseChaos()? tr("yes") : tr("no"))
-               << (chaos.isLeaveOneOutValidation()? tr("yes") : tr("no"));
+               << (chaos.getSparseChaos() ? tr("yes") : tr("no"))
+               << (chaos.isLeaveOneOutValidation() ? tr("yes") : tr("no"));
   }
   else if (analysisType == "SobolAnalysis")
   {
@@ -590,10 +591,10 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
     // starting point
     const Point startingPoint(approxAnalysis.getPhysicalStartingPoint());
     QString startingPointText = "[";
-    for (UnsignedInteger i=0; i<startingPoint.getDimension(); ++i)
+    for (UnsignedInteger i = 0; i < startingPoint.getDimension(); ++i)
     {
       startingPointText += QString::number(startingPoint[i]);
-      if (i < startingPoint.getDimension()-1)
+      if (i < startingPoint.getDimension() - 1)
         startingPointText += "; ";
     }
     startingPointText += "]";
@@ -640,10 +641,10 @@ void AnalysisItem::GetAnalysisParameters(const Analysis& analysis, QStringList& 
       // starting point
       const Point startingPoint(dynamic_cast<const ImportanceSamplingAnalysis*>(analysis.getImplementation().get())->getStandardSpaceDesignPoint());
       QString startingPointText = "[";
-      for (UnsignedInteger i=0; i<startingPoint.getDimension(); ++i)
+      for (UnsignedInteger i = 0; i < startingPoint.getDimension(); ++i)
       {
         startingPointText += QString::number(startingPoint[i]);
-        if (i < startingPoint.getDimension()-1)
+        if (i < startingPoint.getDimension() - 1)
           startingPointText += "; ";
       }
       startingPointText += "]";

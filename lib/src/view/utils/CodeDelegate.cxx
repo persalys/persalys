@@ -29,7 +29,8 @@
 #include <iostream>
 
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CodeEditor::CodeEditor(QWidget * parent)
   : QPlainTextEdit(parent)

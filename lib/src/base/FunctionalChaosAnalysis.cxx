@@ -36,7 +36,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(FunctionalChaosAnalysis)
 
@@ -152,9 +153,9 @@ void FunctionalChaosAnalysis::run()
       const UnsignedInteger minimumSize  = BinomialCoefficient(chaosDegree_ + inputDimension, chaosDegree_);
       if (size < minimumSize)
         throw InvalidArgumentException(HERE) << "Design of experiments size too small : "
-                                            << size
-                                            << ". It must be superior or equal to C(degree+nbInputs, degree) = "
-                                            << minimumSize << ")\n";
+                                             << size
+                                             << ". It must be superior or equal to C(degree+nbInputs, degree) = "
+                                             << minimumSize << ")\n";
     }
 
     // create FunctionalChaosAlgorithm and run it
@@ -224,15 +225,15 @@ FunctionalChaosAlgorithm FunctionalChaosAnalysis::buildFunctionalChaosAlgorithm(
     BasisSequenceFactory basisSequenceFactory = LARS();
     basisSequenceFactory.setMaximumRelativeConvergence(-1.0);
     projectionStrategy = LeastSquaresMetaModelSelectionFactory(basisSequenceFactory,
-                                                               CorrectedLeaveOneOut());
+                         CorrectedLeaveOneOut());
   }
 
   // FunctionalChaosAlgorithm
   FunctionalChaosAlgorithm functionalChaos(inputSample,
-                                           outputSample,
-                                           getDistribution(),
-                                           adaptiveStrategy,
-                                           projectionStrategy);
+      outputSample,
+      getDistribution(),
+      adaptiveStrategy,
+      projectionStrategy);
 
   return functionalChaos;
 }
@@ -345,7 +346,7 @@ void FunctionalChaosAnalysis::load(Advocate& adv)
 
 
 UnsignedInteger FunctionalChaosAnalysis::BinomialCoefficient(const UnsignedInteger n,
-                                                             const UnsignedInteger k)
+    const UnsignedInteger k)
 {
   if (k > n) return 0; // by convention
   UnsignedInteger value = 1;

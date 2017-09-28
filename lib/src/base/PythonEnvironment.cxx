@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Python environment handling 
+ *  @brief Python environment handling
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -21,7 +21,8 @@
 #include "otgui/PythonEnvironment.hxx"
 #include <Python.h>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 PythonEnvironment::PythonEnvironment()
 {

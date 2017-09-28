@@ -20,7 +20,8 @@
  */
 #include "otgui/OTguiStatusBar.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 OTguiStatusBar::OTguiStatusBar(QWidget *parent)
   : QStatusBar(parent)

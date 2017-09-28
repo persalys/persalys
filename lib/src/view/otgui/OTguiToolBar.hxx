@@ -25,13 +25,14 @@
 
 #include <QToolBar>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API OTguiToolBar : public QToolBar
 {
   Q_OBJECT
 
 public:
-  OTguiToolBar(const OTguiActions* actions, QWidget * parent=0);
+  OTguiToolBar(const OTguiActions* actions, QWidget * parent = 0);
 
 protected:
   void buildActions(const OTguiActions* actions);

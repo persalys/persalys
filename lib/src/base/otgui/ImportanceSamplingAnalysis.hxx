@@ -23,7 +23,8 @@
 
 #include "SimulationReliabilityAnalysis.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ImportanceSamplingAnalysis : public SimulationReliabilityAnalysis
 {
   CLASSNAME

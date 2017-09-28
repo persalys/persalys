@@ -34,7 +34,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 InferenceResultWidget::InferenceResultWidget(const bool displayPDF_QQPlot, QWidget* parent)
   : QWidget(parent)
@@ -121,10 +122,10 @@ void InferenceResultWidget::buildInterface()
     listpdf_cdfPlot.append(pdfPlot_);
     listpdf_cdfPlot.append(cdfPlot_);
     GraphConfigurationWidget * pdf_cdfPlotSettingWidget = new GraphConfigurationWidget(listpdf_cdfPlot,
-                                                                                       QStringList(),
-                                                                                       QStringList(),
-                                                                                       GraphConfigurationWidget::PDF,
-                                                                                       this);
+        QStringList(),
+        QStringList(),
+        GraphConfigurationWidget::PDF,
+        this);
     pdf_cdfPlotSettingWidget->hide();
     plotWidget->setDockWidget(pdf_cdfPlotSettingWidget);
     connect(pdf_cdfPlotSettingWidget, SIGNAL(currentPlotChanged(int)), pdf_cdfStackedWidget, SLOT(setCurrentIndex(int)));
@@ -143,10 +144,10 @@ void InferenceResultWidget::buildInterface()
     QVector<PlotWidget*> listPlot;
     listPlot.append(qqPlot_);
     GraphConfigurationWidget * qqPlotSettingWidget = new GraphConfigurationWidget(listPlot,
-                                                                                  QStringList(),
-                                                                                  QStringList(),
-                                                                                  GraphConfigurationWidget::NoType,
-                                                                                  this);
+        QStringList(),
+        QStringList(),
+        GraphConfigurationWidget::NoType,
+        this);
     qqPlotSettingWidget->hide();
     plotWidget->setDockWidget(qqPlotSettingWidget);
 
@@ -222,9 +223,9 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
     {
       for (int l = 1; l <= i; ++l)
       {
-        if (pValues[l-1] < pValues[l])
+        if (pValues[l - 1] < pValues[l])
         {
-          Scalar temp = pValues[l-1];
+          Scalar temp = pValues[l - 1];
           pValues[l - 1] = pValues[l];
           pValues[l] = temp;
           const UnsignedInteger ind_temp = indices[l - 1];
@@ -238,7 +239,7 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
   // -- fill table
   for (UnsignedInteger i = 0; i < nbTests; ++i)
   {
-    const int cellRow = i+2; // because of 2 rows of titles
+    const int cellRow = i + 2; // because of 2 rows of titles
     distTableModel_->setNotEditableItem(cellRow, 0, currentFittingTestResult_.getTestedDistributions()[indices[i]].getImplementation()->getClassName().c_str());
     distTableModel_->setData(distTableModel_->index(cellRow, 0), (int)indices[i], Qt::UserRole);
     distTableModel_->setNotEditableItem(cellRow, 1, pValues[i], 3);
@@ -403,7 +404,7 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
   else
   {
     for (UnsignedInteger i = 0; i < 4; ++i)
-     distParamTableModel_->setNotEditableItem(1 + i, 1, tr("-"));
+      distParamTableModel_->setNotEditableItem(1 + i, 1, tr("-"));
   }
   // resize
   distParamTableView_->resizeToContents();
@@ -470,7 +471,7 @@ Distribution InferenceResultWidget::getDistribution() const
   // get current distribution
   // loop begins at 2 because the two first rows are the table titles
   QModelIndex selectedDistributionIndex;
-  for (int i=2; i<distTableModel_->rowCount(); ++i)
+  for (int i = 2; i < distTableModel_->rowCount(); ++i)
     if (distTableModel_->data(distTableModel_->index(i, 0), Qt::CheckStateRole).toBool())
       selectedDistributionIndex = distTableModel_->index(i, 0);
 

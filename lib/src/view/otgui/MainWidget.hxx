@@ -27,13 +27,14 @@
 
 #include <QDockWidget>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API MainWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  MainWidget(QWidget * parent=0);
+  MainWidget(QWidget * parent = 0);
   StudyTreeView * getStudyTree() const;
   OTguiMdiArea * getMdiArea() const;
   OTguiActions * getActions() const;

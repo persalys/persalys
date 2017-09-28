@@ -37,12 +37,13 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CopulaParametersTabWidget::CopulaParametersTabWidget(const Distribution& distribution,
-                                                     const Sample& sample,
-                                                     const DataSample::SampleCollection& kendallPlotData,
-                                                     QWidget* parent)
+    const Sample& sample,
+    const DataSample::SampleCollection& kendallPlotData,
+    QWidget* parent)
   : QTabWidget(parent)
   , distribution_(distribution)
   , sample_(sample)
@@ -113,10 +114,10 @@ void CopulaParametersTabWidget::buildInterface()
 
   // -- GraphConfigurationWidget
   GraphConfigurationWidget * pdf_cdfPlotSettingWidget = new GraphConfigurationWidget(listPlot,
-                                                                                     variablesNames,
-                                                                                     QStringList(),
-                                                                                     GraphConfigurationWidget::Copula,
-                                                                                     this);
+      variablesNames,
+      QStringList(),
+      GraphConfigurationWidget::Copula,
+      this);
   plotWidget->setDockWidget(pdf_cdfPlotSettingWidget);
   connect(pdf_cdfPlotSettingWidget, SIGNAL(currentPlotChanged(int)), pdf_StackedWidget, SLOT(setCurrentIndex(int)));
 
@@ -158,10 +159,10 @@ void CopulaParametersTabWidget::buildInterface()
 
   // -- GraphConfigurationWidget
   GraphConfigurationWidget * kendallPlotSettingWidget = new GraphConfigurationWidget(listKendallPlots,
-                                                                                     variablesPairsNames,
-                                                                                     QStringList(),
-                                                                                     GraphConfigurationWidget::Kendall,
-                                                                                     this);
+      variablesPairsNames,
+      QStringList(),
+      GraphConfigurationWidget::Kendall,
+      this);
   plotWidget->setDockWidget(kendallPlotSettingWidget);
   connect(kendallPlotSettingWidget, SIGNAL(currentPlotChanged(int)), kendall_StackedWidget, SLOT(setCurrentIndex(int)));
 

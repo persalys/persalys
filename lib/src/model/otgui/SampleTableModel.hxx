@@ -27,7 +27,8 @@
 
 #include <QStandardItem>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SampleTableModel : public QAbstractTableModel
 {
 public:

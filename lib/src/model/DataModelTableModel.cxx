@@ -26,7 +26,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 DataModelTableModel::DataModelTableModel(const Sample& data, DataModel* dataModel, const bool useColumns, QObject* parent)
   : SampleTableModel(data, parent)
@@ -84,7 +85,7 @@ DataModelTableModel::DataModelTableModel(const Sample& data, DataModel* dataMode
 
 int DataModelTableModel::rowCount(const QModelIndex& parent) const
 {
-  return data_.getSize()+2;
+  return data_.getSize() + 2;
 }
 
 

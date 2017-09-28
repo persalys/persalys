@@ -27,13 +27,14 @@
 
 #include <QGroupBox>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DataAnalysisWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
-  DataAnalysisWindow(AnalysisItem * item, QWidget * parent=0);
+  DataAnalysisWindow(AnalysisItem * item, QWidget * parent = 0);
 
 protected:
   virtual void initialize(AnalysisItem * item) = 0;
@@ -52,7 +53,7 @@ protected:
   virtual void addTableTab();
 
 public slots:
-  void updateSpinBoxes(int indexOutput=0);
+  void updateSpinBoxes(int indexOutput = 0);
   void probaValueChanged(double proba);
   void quantileValueChanged(double quantile);
   virtual void updateVariablesListVisibility(int indexTab);

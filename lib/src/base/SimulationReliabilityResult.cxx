@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(SimulationReliabilityResult)
 
@@ -40,10 +41,10 @@ SimulationReliabilityResult::SimulationReliabilityResult()
 
 /* Constructor with parameters */
 SimulationReliabilityResult::SimulationReliabilityResult(const SimulationResult& simulationResults,
-                                                         const Sample& outputSample,
-                                                         const Sample& convergenceSample,
-                                                         const Sample& convergenceSampleLowerBound,
-                                                         const Sample& convergenceSampleUpperBound
+    const Sample& outputSample,
+    const Sample& convergenceSample,
+    const Sample& convergenceSampleLowerBound,
+    const Sample& convergenceSampleUpperBound
                                                         )
   : PersistentObject()
   , simulationResult_(simulationResults)

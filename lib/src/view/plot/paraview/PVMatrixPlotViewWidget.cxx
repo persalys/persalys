@@ -1,6 +1,7 @@
 #include "otgui/PVMatrixPlotViewWidget.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 const char PVMatrixPlotViewWidget::PV_VIEW_TYPE[] = "PlotMatrixView";
 
 const char PVMatrixPlotViewWidget::PV_REPRESENTATION_TYPE[] = "PlotMatrixRepresentation";

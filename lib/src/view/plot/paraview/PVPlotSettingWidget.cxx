@@ -36,7 +36,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 PVPlotSettingWidget::PVPlotSettingWidget(PVViewWidget* pvViewWidget, QWidget* parent)
   : QWidget(parent)
@@ -49,9 +50,9 @@ PVPlotSettingWidget::PVPlotSettingWidget(PVViewWidget* pvViewWidget, QWidget* pa
 
 
 PVPlotSettingWidget::PVPlotSettingWidget(PVViewWidget* pvViewWidget,
-                                         const Sample& sample,
-                                         const Sample& sampleRank,
-                                         QWidget* parent)
+    const Sample& sample,
+    const Sample& sampleRank,
+    QWidget* parent)
   : QWidget(parent)
   , pvViewWidget_(pvViewWidget)
   , sample_(sample)

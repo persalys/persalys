@@ -25,7 +25,8 @@
 
 #include <openturns/Distribution.hxx>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API CopulaInferenceSetResult : public OT::PersistentObject
 {
   CLASSNAME

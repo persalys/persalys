@@ -24,11 +24,12 @@
 #include "otgui/OTguiWizard.hxx"
 #include "otgui/OTStudy.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API AnalysisWizard : public OTguiWizard
 {
 public:
-  AnalysisWizard(const Analysis & analysis, QWidget * parent=0);
+  AnalysisWizard(const Analysis & analysis, QWidget * parent = 0);
 
   // analysis accessor
   virtual Analysis getAnalysis() const;

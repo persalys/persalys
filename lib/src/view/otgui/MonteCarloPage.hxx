@@ -28,13 +28,14 @@
 #include <QWizardPage>
 #include <QLabel>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API MonteCarloPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  MonteCarloPage(QWidget* parent=0);
+  MonteCarloPage(QWidget* parent = 0);
 
   void initialize(const Analysis& analysis);
   Analysis getAnalysis(const OT::String& name, const PhysicalModel& physicalModel) const;

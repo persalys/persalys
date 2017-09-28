@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(FixedDesignOfExperiment)
 
@@ -45,8 +46,8 @@ FixedDesignOfExperiment::FixedDesignOfExperiment(const String& name, const Physi
 
 
 FixedDesignOfExperiment::FixedDesignOfExperiment(const String& name,
-                                                 const PhysicalModel& physicalModel,
-                                                 const Sample& inputSample)
+    const PhysicalModel& physicalModel,
+    const Sample& inputSample)
   : DesignOfExperimentEvaluation(name, physicalModel)
 {
   setOriginalInputSample(inputSample);
@@ -100,7 +101,7 @@ String FixedDesignOfExperiment::getPythonScript() const
     }
     oss << "]";
     if (i < (getOriginalInputSample().getSize() - 1))
-       oss << ",\n";
+      oss << ",\n";
   }
   oss << "]\n";
 

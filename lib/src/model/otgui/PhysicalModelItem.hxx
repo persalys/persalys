@@ -24,7 +24,8 @@
 #include "otgui/PhysicalModel.hxx"
 #include "otgui/OTguiItem.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API PhysicalModelItem : public OTguiItem, public Observer
 {
   Q_OBJECT

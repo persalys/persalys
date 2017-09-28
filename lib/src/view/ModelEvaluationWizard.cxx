@@ -30,7 +30,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 ModelEvaluationWizard::ModelEvaluationWizard(const Analysis& analysis, QWidget* parent)
   : AnalysisWizard(analysis, parent)

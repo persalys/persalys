@@ -34,11 +34,12 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& result,
-                                                           const ReliabilityAnalysis& analysis,
-                                                           QWidget* parent)
+    const ReliabilityAnalysis& analysis,
+    QWidget* parent)
   : QTabWidget(parent)
   , result_(result)
   , parametersWidget_(0)
@@ -176,16 +177,16 @@ void ApproximationResultTabWidget::buildInterface()
   for (UnsignedInteger i = 0; i < inDimension; ++i)
   {
     // variable name
-    resultsTableModel->setNotEditableItem(i+2, 0, QString::fromUtf8(inDescription[i].c_str()));
+    resultsTableModel->setNotEditableItem(i + 2, 0, QString::fromUtf8(inDescription[i].c_str()));
 
     // importance factor
-    resultsTableModel->setNotEditableItem(i+2, 1, importanceFactors[i]);
+    resultsTableModel->setNotEditableItem(i + 2, 1, importanceFactors[i]);
 
     // design point standard space
-    resultsTableModel->setNotEditableItem(i+2, 2, result_.getStandardSpaceDesignPoint()[i]);
+    resultsTableModel->setNotEditableItem(i + 2, 2, result_.getStandardSpaceDesignPoint()[i]);
 
     // design point physical space
-    resultsTableModel->setNotEditableItem(i+2, 3, result_.getPhysicalSpaceDesignPoint()[i]);
+    resultsTableModel->setNotEditableItem(i + 2, 3, result_.getPhysicalSpaceDesignPoint()[i]);
   }
 
   // resize to contents

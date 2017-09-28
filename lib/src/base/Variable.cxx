@@ -22,7 +22,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(Variable)
 
@@ -70,9 +71,10 @@ String Variable::getEscapedDescription() const
 {
   String description(getDescription());
   size_t start_pos = description.find("'");
-  while (start_pos != std::string::npos) {
+  while (start_pos != std::string::npos)
+  {
     description.replace(start_pos, 1, "\\'");
-    start_pos = description.find("'", start_pos+2);
+    start_pos = description.find("'", start_pos + 2);
   }
   return description;
 }

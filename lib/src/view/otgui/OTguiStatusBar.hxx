@@ -26,10 +26,11 @@
 #include <QStatusBar>
 #include <QLabel>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API OTguiStatusBar : public QStatusBar
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
   OTguiStatusBar(QWidget *parent = 0);
@@ -41,7 +42,7 @@ public slots:
 
 private:
   QLabel* messageLabel_;
-    
+
 };
 }
 #endif

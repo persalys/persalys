@@ -31,14 +31,15 @@
 #include <QComboBox>
 #include <QCheckBox>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 class OTGUI_API KrigingPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  KrigingPage(QWidget* parent=0);
+  KrigingPage(QWidget* parent = 0);
 
   void initialize(const Analysis& analysis);
   Analysis getAnalysis(const OT::String& name, const DesignOfExperiment& doe) const;

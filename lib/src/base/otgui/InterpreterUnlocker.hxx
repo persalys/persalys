@@ -18,19 +18,26 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_INTERPRETERUNLOCKER_HXX 
+#ifndef OTGUI_INTERPRETERUNLOCKER_HXX
 #define OTGUI_INTERPRETERUNLOCKER_HXX
 
 #include "otgui/OTGuiprivate.hxx"
 #include <Python.h>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 class InterpreterUnlocker
 {
 public:
-  InterpreterUnlocker() { gstate_ = PyGILState_Ensure(); }
-  ~InterpreterUnlocker() { PyGILState_Release(gstate_); }
+  InterpreterUnlocker()
+  {
+    gstate_ = PyGILState_Ensure();
+  }
+  ~InterpreterUnlocker()
+  {
+    PyGILState_Release(gstate_);
+  }
 private:
   PyGILState_STATE gstate_;
 };

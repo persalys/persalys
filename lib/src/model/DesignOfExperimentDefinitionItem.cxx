@@ -28,7 +28,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 DesignOfExperimentDefinitionItem::DesignOfExperimentDefinitionItem(const Analysis& analysis)
   : OTguiItem(QString::fromUtf8(analysis.getName().c_str()), "DesignOfExperimentDefinitionItem")

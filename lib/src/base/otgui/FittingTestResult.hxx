@@ -26,7 +26,8 @@
 #include <openturns/Distribution.hxx>
 #include "openturns/TestResult.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API FittingTestResult : public OT::PersistentObject
 {
   CLASSNAME

@@ -24,7 +24,8 @@
 #include <QTimer>
 #include <QTimeLine>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 OTguiSubWindow::OTguiSubWindow(OTguiItem * item, QWidget * parent)
   : QMdiSubWindow(parent)
@@ -60,7 +61,7 @@ void OTguiSubWindow::setErrorMessage(QString message)
   errorMessage_ = message;
   if (errorMessageLabel_)
     errorMessageLabel_->setText(message);
-  if (windowState() == Qt::WindowFullScreen || windowState() == Qt::WindowActive || windowState() == (Qt::WindowActive|Qt::WindowMaximized))
+  if (windowState() == Qt::WindowFullScreen || windowState() == Qt::WindowActive || windowState() == (Qt::WindowActive | Qt::WindowMaximized))
     emit errorMessageChanged(message);
 }
 

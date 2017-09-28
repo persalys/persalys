@@ -32,12 +32,13 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CopulaInferenceResultWidget::CopulaInferenceResultWidget(const CopulaInferenceSetResult& currentSetResult,
-                                                         const Sample& sample,
-                                                         const bool displayPDF,
-                                                         QWidget* parent)
+    const Sample& sample,
+    const bool displayPDF,
+    QWidget* parent)
   : QWidget(parent)
   , currentSetResult_(currentSetResult)
   , sample_(sample)
@@ -72,7 +73,7 @@ void CopulaInferenceResultWidget::buildInterface()
   distTableView_->horizontalHeader()->hide();
 
   // --- table model
-  distTableModel_ = new CustomStandardItemModel(currentSetResult_.getTestedDistributions().getSize()+1, 1, distTableView_);
+  distTableModel_ = new CustomStandardItemModel(currentSetResult_.getTestedDistributions().getSize() + 1, 1, distTableView_);
   // --- fill table
   // horizontal header
   distTableModel_->setNotEditableHeaderItem(0, 0, tr("Copulas"));
@@ -106,9 +107,9 @@ void CopulaInferenceResultWidget::buildInterface()
     if (currentSetResult_.getErrorMessages()[i].empty())
     {
       CopulaParametersTabWidget * paramWidget = new CopulaParametersTabWidget(currentSetResult_.getTestedDistributions()[i],
-                                                                              sample_,
-                                                                              currentSetResult_.getKendallPlotData()[i],
-                                                                              this);
+          sample_,
+          currentSetResult_.getKendallPlotData()[i],
+          this);
       paramStackWidget->addWidget(paramWidget);
     }
     // if not valid copula

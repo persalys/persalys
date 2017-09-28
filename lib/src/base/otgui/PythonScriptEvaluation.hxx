@@ -26,7 +26,8 @@
 #include "openturns/EvaluationImplementation.hxx"
 #include "openturns/Pointer.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 /**
  * @class PythonScriptEvaluation
@@ -42,8 +43,8 @@ public:
   PythonScriptEvaluation();
   /** Constructor with parameters */
   PythonScriptEvaluation(const OT::UnsignedInteger & inputDimension,
-                   const OT::UnsignedInteger & ouputDimension,
-                   const OT::String & code);
+                         const OT::UnsignedInteger & ouputDimension,
+                         const OT::String & code);
 
   /** Virtual constructor */
   virtual PythonScriptEvaluation * clone() const;
@@ -64,10 +65,10 @@ public:
   virtual OT::Point operator() (const OT::Point & inP) const;
 //   virtual OT::Sample operator() (const OT::Sample & inS) const;
 
-   /** Accessor for input point dimension */
+  /** Accessor for input point dimension */
   OT::UnsignedInteger getInputDimension() const;
   OT::UnsignedInteger getOutputDimension() const;
-  
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
@@ -80,7 +81,7 @@ private:
   OT::UnsignedInteger inputDimension_;
   OT::UnsignedInteger outputDimension_;
   OT::String code_;
- 
+
 };
 }
 #endif

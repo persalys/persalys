@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class to define otgui Exceptions 
+ *  @brief Class to define otgui Exceptions
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *

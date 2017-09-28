@@ -33,7 +33,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 DataModelWindow::DataModelWindow(DataModelDefinitionItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
@@ -182,9 +183,9 @@ void DataModelWindow::openFileRequested()
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
   const QString fileName = QFileDialog::getOpenFileName(this,
-                                                        tr("Data to import..."),
-                                                        currentDir,
-                                                        tr("Data files (*.csv *.txt)"));
+                           tr("Data to import..."),
+                           currentDir,
+                           tr("Data files (*.csv *.txt)"));
 
   if (!fileName.isEmpty())
   {

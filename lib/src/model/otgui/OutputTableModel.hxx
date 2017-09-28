@@ -26,7 +26,8 @@
 #include <QAbstractTableModel>
 #include <QModelIndex>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API OutputTableModel : public QAbstractTableModel
 {
   Q_OBJECT
@@ -46,7 +47,7 @@ public:
   bool isValid();
 
 public slots:
-    void addLine();
+  void addLine();
 signals:
   void errorMessageChanged(QString);
   void checked(const bool) const;

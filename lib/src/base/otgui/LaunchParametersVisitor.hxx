@@ -22,18 +22,19 @@
 #ifndef OTGUI_LAUNCHPARAMETERSVISITOR_HXX
 #define OTGUI_LAUNCHPARAMETERSVISITOR_HXX
 
-namespace OTGUI {
+namespace OTGUI
+{
 #ifdef OTGUI_HAVE_YACS
 class YACSPhysicalModel;
 #endif
 
 class LaunchParametersVisitor
 {
-  public:
-    LaunchParametersVisitor(){}
-    ~LaunchParametersVisitor(){}
+public:
+  LaunchParametersVisitor() {}
+  ~LaunchParametersVisitor() {}
 #ifdef OTGUI_HAVE_YACS
-    virtual void visitYACS(YACSPhysicalModel* model)=0;
+  virtual void visitYACS(YACSPhysicalModel* model) = 0;
 #endif
 
 };

@@ -24,13 +24,14 @@
 #include "otgui/ResultWindow.hxx"
 #include "otgui/CopulaInferenceResult.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API CopulaInferenceResultWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
-  CopulaInferenceResultWindow(AnalysisItem * item, QWidget * parent=0);
+  CopulaInferenceResultWindow(AnalysisItem * item, QWidget * parent = 0);
 
 protected:
   void buildInterface();

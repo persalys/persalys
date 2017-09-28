@@ -24,7 +24,8 @@
 #include "DesignOfExperiment.hxx"
 #include "PhysicalModelAnalysis.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SimulationAnalysis : public PhysicalModelAnalysis
 {
 protected:

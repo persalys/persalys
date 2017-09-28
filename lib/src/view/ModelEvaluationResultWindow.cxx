@@ -30,7 +30,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 ModelEvaluationResultWindow::ModelEvaluationResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)

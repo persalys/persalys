@@ -30,7 +30,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(CopulaInferenceAnalysis)
 
@@ -70,7 +71,7 @@ CopulaInferenceAnalysis* CopulaInferenceAnalysis::clone() const
 
 CopulaInferenceAnalysis::DistributionFactoryCollection CopulaInferenceAnalysis::getDistributionsFactories(const Description& variablesNames) const
 {
-  for (UnsignedInteger i=0; i<variablesNames.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < variablesNames.getSize(); ++i)
     if (!designOfExperiment_.getSample().getDescription().contains(variablesNames[i]))
       throw InvalidArgumentException(HERE) << "Error: the variable name " << variablesNames[i] << " does not match a variable of the model";
 
@@ -89,14 +90,14 @@ void CopulaInferenceAnalysis::setDistributionsFactories(const Description& varia
   if (!distributionsFactories.getSize())
     throw InvalidArgumentException(HERE) << "Error: the list of distribution factories is empty";
 
-  for (UnsignedInteger i=0; i<variablesNames.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < variablesNames.getSize(); ++i)
     if (!designOfExperiment_.getSample().getDescription().contains(variablesNames[i]))
       throw InvalidArgumentException(HERE) << "Error: the variable name " << variablesNames[i] << " does not match a variable of the model";
 
   if (variablesNames.getSize() < 2)
     throw InvalidArgumentException(HERE) << "Error: the dependency inference is performed with at least 2 variables";
 
-  for (UnsignedInteger i=0; i<distributionsFactories.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < distributionsFactories.getSize(); ++i)
     if (distributionsFactories[i].getImplementation()->getClassName().find("Copula") == std::string::npos)
       throw InvalidArgumentException(HERE) << "Error: the dependency inference is performed with copulae.";
 
@@ -119,14 +120,14 @@ void CopulaInferenceAnalysis::run()
 
     // inference
     std::map<Description, DistributionFactoryCollection>::iterator it;
-    for (it=distFactoriesForSetVar_.begin(); it!=distFactoriesForSetVar_.end(); ++it)
+    for (it = distFactoriesForSetVar_.begin(); it != distFactoriesForSetVar_.end(); ++it)
     {
       Description variablesNames(it->first);
       Indices indices;
-      for (UnsignedInteger i=0; i<variablesNames.getSize(); ++i)
+      for (UnsignedInteger i = 0; i < variablesNames.getSize(); ++i)
       {
         bool varFound = false;
-        for (UnsignedInteger j=0; j<designOfExperiment_.getSample().getDescription().getSize(); ++j)
+        for (UnsignedInteger j = 0; j < designOfExperiment_.getSample().getDescription().getSize(); ++j)
         {
           if (designOfExperiment_.getSample().getDescription()[j] == variablesNames[i])
           {
@@ -136,7 +137,7 @@ void CopulaInferenceAnalysis::run()
           }
         }
         if (!varFound)
-          throw InvalidArgumentException(HERE) << "The variable "  << variablesNames[i] <<" is not a variable of the model " << designOfExperiment_.getSample().getDescription();
+          throw InvalidArgumentException(HERE) << "The variable "  << variablesNames[i] << " is not a variable of the model " << designOfExperiment_.getSample().getDescription();
       }
 
       const Sample sample(designOfExperiment_.getSample().getMarginal(indices));
@@ -151,7 +152,7 @@ void CopulaInferenceAnalysis::run()
       if (sample.getSize() > sizeKendall)
         Sample otherSample = splitSample.split(sizeKendall);
 
-      for (UnsignedInteger i=0; i<it->second.getSize(); ++i)
+      for (UnsignedInteger i = 0; i < it->second.getSize(); ++i)
       {
         try
         {
@@ -160,7 +161,7 @@ void CopulaInferenceAnalysis::run()
 
           Description description(2);
           Collection<Sample> kendallPlotDataCollection;
-          for (UnsignedInteger j=0; j<pairs.getSize(); ++j)
+          for (UnsignedInteger j = 0; j < pairs.getSize(); ++j)
           {
             const Graph graph = VisualTest::DrawKendallPlot(splitSample.getMarginal(pairs[j]), distribution.getMarginal(pairs[j]));
             Sample kendallPlotData(graph.getDrawable(1).getData());
@@ -175,12 +176,12 @@ void CopulaInferenceAnalysis::run()
           String str = it->second[i].getImplementation()->getClassName();
           const String distributionName = str.substr(0, str.find("Copula"));
           const String message = OSS() << "Error when building the "
-                                       << distributionName
-                                       << " copula with the sample of the variables "
-                                       << sample.getDescription()
-                                       << ". "
-                                       << ex.what()
-                                       << "\n";
+                                 << distributionName
+                                 << " copula with the sample of the variables "
+                                 << sample.getDescription()
+                                 << ". "
+                                 << ex.what()
+                                 << "\n";
           // set fittingTestResult
           inferenceSetResult.testedDistributions_.add(DistributionDictionary::BuildDistribution(distributionName, 0));
           Collection<Sample> kendallPlotDataCollection;
@@ -214,23 +215,23 @@ String CopulaInferenceAnalysis::getPythonScript() const
   oss << getName() << " = otguibase.CopulaInferenceAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
 
   std::map<Description, DistributionFactoryCollection>::const_iterator it;
-  for (it=distFactoriesForSetVar_.begin(); it!=distFactoriesForSetVar_.end(); ++it)
+  for (it = distFactoriesForSetVar_.begin(); it != distFactoriesForSetVar_.end(); ++it)
   {
     // variables list
     oss << "variablesSet = [";
-    for (UnsignedInteger j=0; j<it->first.getSize(); ++j)
+    for (UnsignedInteger j = 0; j < it->first.getSize(); ++j)
     {
       oss << "'" << it->first[j] << "'";
-      if (j < it->first.getSize()-1)
+      if (j < it->first.getSize() - 1)
         oss << ", ";
     }
     oss << "]\n";
     // factories list
     oss << "factories = [";
-    for (UnsignedInteger j=0; j<it->second.getSize(); ++j)
+    for (UnsignedInteger j = 0; j < it->second.getSize(); ++j)
     {
       oss << "ot." << it->second[j].getImplementation()->getClassName() << "()";
-      if (j < it->second.getSize()-1)
+      if (j < it->second.getSize() - 1)
         oss << ", ";
     }
     oss << "]\n";
@@ -253,7 +254,7 @@ String CopulaInferenceAnalysis::__repr__() const
   oss << DesignOfExperimentAnalysis::__repr__();
 
   std::map<Description, DistributionFactoryCollection>::const_iterator it;
-  for (it=distFactoriesForSetVar_.begin(); it!=distFactoriesForSetVar_.end(); ++it)
+  for (it = distFactoriesForSetVar_.begin(); it != distFactoriesForSetVar_.end(); ++it)
   {
     oss << " setOfVariables " << it->first
         << " distributionFactories=" << it->second;
@@ -275,11 +276,11 @@ void CopulaInferenceAnalysis::save(Advocate& adv) const
   PersistentCollection<Description> collection;
 
   std::map<Description, DistributionFactoryCollection>::const_iterator it;
-  for (it=distFactoriesForSetVar_.begin(); it!=distFactoriesForSetVar_.end(); ++it)
+  for (it = distFactoriesForSetVar_.begin(); it != distFactoriesForSetVar_.end(); ++it)
   {
     listSets.add(it->first);
     Description listFactoriesNames(it->second.getSize());
-    for (UnsignedInteger j=0; j<it->second.getSize(); ++j)
+    for (UnsignedInteger j = 0; j < it->second.getSize(); ++j)
     {
       String str = it->second[j].getImplementation()->getClassName();
       listFactoriesNames[j] = str.substr(0, str.find("CopulaFactory"));
@@ -302,10 +303,10 @@ void CopulaInferenceAnalysis::load(Advocate& adv)
   adv.loadAttribute("distFactoriesCollection_", collection);
   adv.loadAttribute("result_", result_);
 
-  for (UnsignedInteger i=0; i<listSets.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < listSets.getSize(); ++i)
   {
     DistributionFactoryCollection factoryCollection;
-    for (UnsignedInteger j=0; j<collection[i].getSize(); ++j)
+    for (UnsignedInteger j = 0; j < collection[i].getSize(); ++j)
       factoryCollection.add(DistributionDictionary::BuildCopulaFactory(collection[i][j]));
     distFactoriesForSetVar_[listSets[i]] = factoryCollection;
   }

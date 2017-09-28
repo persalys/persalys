@@ -26,7 +26,8 @@
 #include <QStandardItem>
 #include <QAction>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTStudyItem;
 class OTGUI_API OTguiItem : public QObject, public QStandardItem
 {
@@ -53,7 +54,7 @@ protected slots:
   void setAnalysisInProgress(bool);
 signals:
   void emitErrorMessageRequested(QString);
-  void analysisRequested(OTguiItem*, const Analysis&, const bool isGeneralWizard=false);
+  void analysisRequested(OTguiItem*, const Analysis&, const bool isGeneralWizard = false);
   void removeRequested(int);
   void removeWindowRequested();
   void analysisInProgressStatusChanged(bool);

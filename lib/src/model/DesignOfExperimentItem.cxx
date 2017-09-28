@@ -25,7 +25,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 DesignOfExperimentItem::DesignOfExperimentItem(const DesignOfExperiment& designOfExperiment, const OT::String observerType)
   : OTguiItem(QString::fromUtf8(designOfExperiment.getName().c_str()), "DesignOfExperiment")

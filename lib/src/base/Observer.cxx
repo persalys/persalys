@@ -20,7 +20,8 @@
  */
 #include "otgui/Observer.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 /* Default constructor */
 Observer::Observer(const OT::String & type)

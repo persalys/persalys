@@ -23,7 +23,8 @@
 
 #include "FittingTestResult.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API InferenceResult : public OT::PersistentObject
 {
   CLASSNAME

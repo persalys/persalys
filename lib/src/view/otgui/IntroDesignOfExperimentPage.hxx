@@ -26,7 +26,8 @@
 #include <QWizardPage>
 #include <QButtonGroup>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 class OTGUI_API IntroDesignOfExperimentPage : public QWizardPage
 {
@@ -35,7 +36,7 @@ class OTGUI_API IntroDesignOfExperimentPage : public QWizardPage
 public:
   enum Method {deterministic, probabilistic, import};
 
-  IntroDesignOfExperimentPage(QWidget* parent=0);
+  IntroDesignOfExperimentPage(QWidget* parent = 0);
 
   virtual int nextId() const;
 

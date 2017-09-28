@@ -24,7 +24,8 @@
 #include "PhysicalModelAnalysis.hxx"
 #include "LimitState.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ReliabilityAnalysis : public PhysicalModelAnalysis
 {
 public:

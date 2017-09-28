@@ -26,7 +26,8 @@
 
 #include <QGroupBox>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API MomentsEstimatesTableGroupBox : public QGroupBox
 {
   Q_OBJECT
@@ -36,7 +37,7 @@ public:
                                 const bool isConfidenceIntervalRequired,
                                 const double levelConfidenceInterval,
                                 const OT::Indices& variablesIndices,
-                                QWidget* parent=0);
+                                QWidget* parent = 0);
 
 protected:
   QWidget * getMomentsEstimateTableView(const DataAnalysisResult& result, const OT::UnsignedInteger outputIndex);

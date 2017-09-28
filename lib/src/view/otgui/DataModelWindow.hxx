@@ -30,7 +30,8 @@
 #include <QToolButton>
 #include <QSortFilterProxyModel>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 // custom QSortFilterProxyModel
 class OTGUI_API DataModelProxModel : public QSortFilterProxyModel
@@ -56,7 +57,7 @@ class OTGUI_API DataModelWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  DataModelWindow(DataModelDefinitionItem * item, QWidget * parent=0);
+  DataModelWindow(DataModelDefinitionItem * item, QWidget * parent = 0);
 
   virtual ~DataModelWindow();
 
@@ -68,7 +69,7 @@ protected:
 public slots:
   void openFileRequested();
   void refreshTable();
-  void updateTableView(const OT::Sample& sample=OT::Sample());
+  void updateTableView(const OT::Sample& sample = OT::Sample());
 
 private:
   DataModel * dataModel_;

@@ -35,7 +35,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 ImportDesignOfExperimentPage::ImportDesignOfExperimentPage(QWidget* parent)
   : QWizardPage(parent)
@@ -108,9 +109,9 @@ void ImportDesignOfExperimentPage::openFileRequested()
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
   QString fileName = QFileDialog::getOpenFileName(this,
-                                                  tr("Data to import..."),
-                                                  currentDir,
-                                                  tr("Data files (*.csv *.txt)"));
+                     tr("Data to import..."),
+                     currentDir,
+                     tr("Data files (*.csv *.txt)"));
 
   if (!fileName.isEmpty())
   {
@@ -185,7 +186,7 @@ void ImportDesignOfExperimentPage::setTable(const QString& fileName)
 
   // set table model
   dataPreviewTableView_->setModel(new SampleTableModel(sample, dataPreviewTableView_));
-  connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this, SLOT(columnNameChanged()));
+  connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation, int, int)), this, SLOT(columnNameChanged()));
 
   // set comboboxes items: each of them contains the input Names and an empty item
   QStringList comboBoxItems;

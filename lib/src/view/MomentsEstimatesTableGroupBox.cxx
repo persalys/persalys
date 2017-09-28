@@ -28,13 +28,14 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 MomentsEstimatesTableGroupBox::MomentsEstimatesTableGroupBox(const DataAnalysisResult& result,
-                                                             const bool isConfidenceIntervalRequired,
-                                                             const double levelConfidenceInterval,
-                                                             const Indices& variablesIndices,
-                                                             QWidget* parent)
+    const bool isConfidenceIntervalRequired,
+    const double levelConfidenceInterval,
+    const Indices& variablesIndices,
+    QWidget* parent)
   : QGroupBox(tr("Moments estimates"), parent)
   , isConfidenceIntervalRequired_(isConfidenceIntervalRequired)
   , levelConfidenceInterval_(levelConfidenceInterval)
@@ -155,7 +156,7 @@ QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const DataAn
   int titleWidth = 0;
   if (isConfidenceIntervalRequired_)
   {
-    momentsEstimationsTable->setNotEditableHeaderItem(0, 2, tr("Confidence interval at") + " " + QString::number(levelConfidenceInterval_*100) + "%");
+    momentsEstimationsTable->setNotEditableHeaderItem(0, 2, tr("Confidence interval at") + " " + QString::number(levelConfidenceInterval_ * 100) + "%");
     momentsEstimationsTableView->resizeColumnsToContents();
     titleWidth = momentsEstimationsTableView->horizontalHeader()->sectionSize(2);
 
@@ -169,7 +170,7 @@ QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const DataAn
 
   if (isConfidenceIntervalRequired_)
   {
-    momentsEstimationsTable->setNotEditableHeaderItem(0, 2, tr("Confidence interval at") + " " + QString::number(levelConfidenceInterval_*100) + "%");
+    momentsEstimationsTable->setNotEditableHeaderItem(0, 2, tr("Confidence interval at") + " " + QString::number(levelConfidenceInterval_ * 100) + "%");
     momentsEstimationsTableView->setSpan(0, 2, 1, 2);
     const int subTitlesWidth = momentsEstimationsTableView->horizontalHeader()->sectionSize(2) + momentsEstimationsTableView->horizontalHeader()->sectionSize(3);
     const int widthCorrection = titleWidth - subTitlesWidth;

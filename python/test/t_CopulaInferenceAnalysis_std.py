@@ -8,7 +8,7 @@ import os
 
 myStudy = otguibase.OTStudy('myStudy')
 
-## Model
+# Model
 filename = 'data2.csv'
 ot.RandomGenerator_SetSeed(0)
 sample = ot.Normal(3).getSample(300)
@@ -21,7 +21,7 @@ model = otguibase.DataModel('myDataModel', "data2.csv", columns)
 myStudy.add(model)
 print(model)
 
-## Dependencies inference analysis ##
+# Dependencies inference analysis ##
 analysis = otguibase.CopulaInferenceAnalysis('analysis', model)
 variables = ["X0", "X3"]
 factories = [ot.NormalCopulaFactory(), ot.GumbelCopulaFactory()]
@@ -35,7 +35,7 @@ result = analysis.getResult()
 print("result=", result)
 print(result.getCopulaInferenceSetResult(variables))
 
-## script
+# script
 script = myStudy.getPythonScript()
 print(script)
 exec(script)

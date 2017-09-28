@@ -22,7 +22,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 /* Default constructor */
 DataSample::DataSample()
@@ -118,7 +119,7 @@ void DataSample::searchMinMax() const
   Sample sample(getInputSample());
   sample.stack(getOutputSample());
 
-  for (UnsignedInteger i=numberInputs; i<sample.getDimension(); ++i)
+  for (UnsignedInteger i = numberInputs; i < sample.getDimension(); ++i)
   {
     Sample orderedSample(sample.sortAccordingToAComponent(i));
 
@@ -135,24 +136,26 @@ void DataSample::searchMinMax() const
         tempSample.add(point);
       ++it;
       value = orderedSample[it][i];
-    } while (value == minValue && it < size);
+    }
+    while (value == minValue && it < size);
 
     listXMin_.add(tempSample);
 
     // Search max value of the ith output and the corresponding set of inputs X
-    const double maxValue = orderedSample[size-1][i];
+    const double maxValue = orderedSample[size - 1][i];
 
     it = 0;
-    value = orderedSample[size-1-it][i];
+    value = orderedSample[size - 1 - it][i];
     tempSample = Sample(0, numberInputs);
     do
     {
-      const Point point(orderedSample.getMarginal(indicesInputs)[size-1-it]);
+      const Point point(orderedSample.getMarginal(indicesInputs)[size - 1 - it]);
       if (!tempSample.contains(point))
         tempSample.add(point);
       ++it;
-      value = orderedSample[size-1-it][i];
-    } while (value == maxValue && it < size);
+      value = orderedSample[size - 1 - it][i];
+    }
+    while (value == maxValue && it < size);
 
     listXMax_.add(tempSample);
   }

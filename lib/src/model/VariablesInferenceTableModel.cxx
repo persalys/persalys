@@ -22,7 +22,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 VariablesInferenceTableModel::VariablesInferenceTableModel(const Description& variablesNames, const Interval::BoolCollection& isVariablesChecked, QObject* parent)
   : QAbstractTableModel(parent)

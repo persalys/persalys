@@ -22,7 +22,8 @@
 
 #include <QHeaderView>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 ResizableTableViewWithoutScrollBar::ResizableTableViewWithoutScrollBar(QWidget * parent)
   : CopyableTableView(parent)
@@ -63,6 +64,6 @@ void ResizableTableViewWithoutScrollBar::resizeToContents()
   const int h = verticalHeader()->length() + horizontalHeader()->height();
   int x1, y1, x2, y2;
   getContentsMargins(&x1, &y1, &x2, &y2);
-  setFixedSize(w+x1+x2, h+y1+y2);
+  setFixedSize(w + x1 + x2, h + y1 + y2);
 }
 }

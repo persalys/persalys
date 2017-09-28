@@ -27,13 +27,14 @@
 #include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/InferenceResultWidget.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API InferenceResultWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
-  InferenceResultWindow(AnalysisItem * item, QWidget * parent=0);
+  InferenceResultWindow(AnalysisItem * item, QWidget * parent = 0);
 
 protected:
   void buildInterface();

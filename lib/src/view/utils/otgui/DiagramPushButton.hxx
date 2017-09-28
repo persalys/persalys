@@ -26,13 +26,14 @@
 #include <QPushButton>
 #include <QPaintEvent>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DiagramPushButton : public QPushButton
 {
   Q_OBJECT
 
 public:
-  DiagramPushButton(const QString& text="", QWidget* parent=0);
+  DiagramPushButton(const QString& text = "", QWidget* parent = 0);
 
   void setErrorMessage(const QString& text);
 

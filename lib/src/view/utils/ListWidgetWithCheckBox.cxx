@@ -21,13 +21,14 @@
 #include "otgui/ListWidgetWithCheckBox.hxx"
 #include <QCheckBox>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 ListWidgetWithCheckBox::ListWidgetWithCheckBox(QString title, QStringList itemNames, QStringList selectedItemNames, QWidget * parent)
   : QListWidget(parent)
   , itemNames_(itemNames)
   , checkedItemNames_(selectedItemNames)
-{ 
+{
   setViewMode(QListWidget::ListMode);
   setSelectionMode(QAbstractItemView::NoSelection);
 
@@ -37,8 +38,8 @@ ListWidgetWithCheckBox::ListWidgetWithCheckBox(QString title, QStringList itemNa
   insertItem(model()->rowCount(), item);
 
   // other items associated to a checkBox
-  for (int i=0; i<itemNames_.size(); ++i) 
-  { 
+  for (int i = 0; i < itemNames_.size(); ++i)
+  {
     item = new QListWidgetItem;
     item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
 

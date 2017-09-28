@@ -24,7 +24,8 @@
 #include "otgui/OTGuiprivate.hxx"
 #include <YACSEvalSession.hxx>
 
-namespace OTGUI {
+namespace OTGUI
+{
 /**
  * @class YACSEvalSessionSingleton
  *

@@ -33,14 +33,15 @@
 
 Q_DECLARE_METATYPE(OTGUI::LimitState)
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 class OTGUI_API IntroReliabilityPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  IntroReliabilityPage(QWidget* parent=0);
+  IntroReliabilityPage(QWidget* parent = 0);
 
   virtual int nextId() const;
 

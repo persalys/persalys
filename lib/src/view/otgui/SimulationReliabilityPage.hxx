@@ -29,7 +29,8 @@
 #include <QWizardPage>
 #include <QLabel>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SimulationReliabilityPage : public QWizardPage
 {
   Q_OBJECT
@@ -37,7 +38,7 @@ class OTGUI_API SimulationReliabilityPage : public QWizardPage
 public:
   enum Method {MonteCarlo = 1, FORM_IS = 2};
 
-  SimulationReliabilityPage(QWidget* parent=0);
+  SimulationReliabilityPage(QWidget* parent = 0);
 
   void initialize(const Analysis& analysis);
   Analysis getAnalysis(const OT::String& name, const LimitState& limitState) const;

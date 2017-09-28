@@ -27,14 +27,15 @@
 
 #include <QListWidget>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 // custom QListWidget for all result windows
 class OTGUI_API OTguiListWidget : public QListWidget
 {
 public:
   OTguiListWidget(QWidget * parent = 0)
-  : QListWidget(parent)
+    : QListWidget(parent)
   {
     // style sheet
     const QString styleSheet = "QListWidget::item:selected { background-color: #a5d3a1;\
@@ -50,7 +51,7 @@ class OTGUI_API ResultWindow : public OTguiSubWindow
   Q_OBJECT
 
 public:
-  ResultWindow(AnalysisItem * item, QWidget * parent=0);
+  ResultWindow(AnalysisItem * item, QWidget * parent = 0);
 
 protected:
   virtual void setParameters(const Analysis& analysis, const QString& title);

@@ -24,7 +24,8 @@
 #include <openturns/PersistentObject.hxx>
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API Variable : public OT::PersistentObject
 {
   CLASSNAME
@@ -33,7 +34,7 @@ public:
   /** Default constructor */
   Variable();
   /** Constructor with parameters */
-  Variable(const OT::String & name, const double & value=0., const OT::String & description="");
+  Variable(const OT::String & name, const double & value = 0., const OT::String & description = "");
 
   /** String converter */
   virtual OT::String __repr__() const;

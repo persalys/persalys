@@ -25,7 +25,8 @@
 
 #include <limits>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 DoubleSpinBox::DoubleSpinBox(QWidget * parent)
   : QDoubleSpinBox(parent)
@@ -88,7 +89,7 @@ QString DoubleSpinBox::textFromValue(double value) const
 {
   // convert to string -> Using exponential display with internal decimals
   QString str = locale().toString(value, 'g', dispDecimals);
-    // remove thousand sign
+  // remove thousand sign
   if (qAbs(value) >= 1000.0)
   {
     str.remove(thousand);
@@ -136,7 +137,7 @@ bool DoubleSpinBox::isIntermediateValue(const QString &str) const
 //   qDebug() << "input is" << str << minimum() << maximum();
   qint64 dec = 1;
 
-  for (int i=0; i < decimals(); ++i)
+  for (int i = 0; i < decimals(); ++i)
     dec *= 10;
 
   const QLatin1Char dot('.');
@@ -153,9 +154,9 @@ bool DoubleSpinBox::isIntermediateValue(const QString &str) const
   qint64 max_left = maxstr.left(maxstr.indexOf(dot)).toLongLong();
   qint64 max_right = maxstr.mid(maxstr.indexOf(dot) + 1).toLongLong();
 
-/*!
-  * determine left and right long values (left and right of delimiter)
-  */
+  /*!
+    * determine left and right long values (left and right of delimiter)
+    */
   const int dotindex = str.indexOf(delimiter);
   const bool negative = maximum() < 0;
   qint64 left = 0, right = 0;
@@ -195,7 +196,8 @@ bool DoubleSpinBox::isIntermediateValue(const QString &str) const
   {
     left = str.left(dotindex).toLongLong();
     if (dotindex == str.size() - 1)
-    { // nothing right of Separator
+    {
+      // nothing right of Separator
       doright = false;
     }
     else
@@ -205,8 +207,8 @@ bool DoubleSpinBox::isIntermediateValue(const QString &str) const
   }
   // left > 0, with max < 0 and no '-'
   if ((left >= 0 && max_left < 0 && !str.startsWith(QLatin1Char('-')))
-    // left > 0, with min > 0
-    || (left < 0 && min_left >= 0))
+      // left > 0, with min > 0
+      || (left < 0 && min_left >= 0))
   {
 //     qDebug("returns false");
     return false;
@@ -226,15 +228,15 @@ bool DoubleSpinBox::isIntermediateValue(const QString &str) const
       if (min_left == max_left)
       {
         const bool ret = isIntermediateValueHelper(qAbs(left),
-                                                    negative ? max_right : min_right,
-                                                    negative ? min_right : max_right);
+                         negative ? max_right : min_right,
+                         negative ? min_right : max_right);
 //         qDebug() << __FILE__ << __LINE__ << "returns" << ret;
         return ret;
       }
       else if (qAbs(max_left - min_left) == 1)
       {
         const bool ret = isIntermediateValueHelper(qAbs(left), min_right, negative ? 0 : dec)
-                          || isIntermediateValueHelper(qAbs(left), negative ? dec : 0, max_right);
+                         || isIntermediateValueHelper(qAbs(left), negative ? dec : 0, max_right);
 //         qDebug() << __FILE__ << __LINE__ << "returns" << ret;
         return ret;
       }
@@ -271,8 +273,8 @@ bool DoubleSpinBox::isIntermediateValue(const QString &str) const
 */
 // reimplemented function, copied from QDoubleSpinBoxPrivate::validateAndInterpret
 QVariant DoubleSpinBox::validateAndInterpret(QString &input,
-                                             int &pos,
-                                             QValidator::State &state) const
+    int &pos,
+    QValidator::State &state) const
 {
   /*! return 'cachedText' if
    *   input = cachedText, or input Empty
@@ -318,8 +320,8 @@ QVariant DoubleSpinBox::validateAndInterpret(QString &input,
     case 1:
       // if only char is '+' or '-'
       if (copy.at(0) == delimiter
-        || (plus && copy.at(0) == QLatin1Char('+'))
-        || (minus && copy.at(0) == QLatin1Char('-')))
+          || (plus && copy.at(0) == QLatin1Char('+'))
+          || (minus && copy.at(0) == QLatin1Char('-')))
       {
         state = QValidator::Intermediate;
         goto end;
@@ -328,13 +330,14 @@ QVariant DoubleSpinBox::validateAndInterpret(QString &input,
     case 2:
       // if only chars are '+' or '-' followed by Comma separator (delimiter)
       if (copy.at(1) == delimiter
-        && ((plus && copy.at(0) == QLatin1Char('+')) || (minus && copy.at(0) == QLatin1Char('-'))))
+          && ((plus && copy.at(0) == QLatin1Char('+')) || (minus && copy.at(0) == QLatin1Char('-'))))
       {
         state = QValidator::Intermediate;
         goto end;
       }
       break;
-    default: break;
+    default:
+      break;
   } // end switch
 
 
@@ -365,7 +368,7 @@ QVariant DoubleSpinBox::validateAndInterpret(QString &input,
         goto end;
       }
       // after decimal separator no thousand char
-      for (int i=dec + 1; i<copy.size(); ++i)
+      for (int i = dec + 1; i < copy.size(); ++i)
       {
         if (copy.at(i).isSpace() || copy.at(i) == thousand)
         {
@@ -374,7 +377,7 @@ QVariant DoubleSpinBox::validateAndInterpret(QString &input,
           goto end;
         }
       }
-    // if no decimal separator exists
+      // if no decimal separator exists
     }
     else
     {
@@ -418,14 +421,14 @@ QVariant DoubleSpinBox::validateAndInterpret(QString &input,
         // something else is responable -> Invalid
         if (max < 1000 && min > -1000 && copy.contains(thousand))
         {
-            state = QValidator::Invalid;
+          state = QValidator::Invalid;
 //             qDebug() << __FILE__ << __LINE__<< "state is set to Invalid";
-            goto end;
+          goto end;
         }
 
         // two thousand-chars after one other are not valid
         len = copy.size();
-        for (int i=0; i<len- 1; ++i)
+        for (int i = 0; i < len - 1; ++i)
         {
           if (copy.at(i) == thousand && copy.at(i + 1) == thousand)
           {
@@ -506,7 +509,7 @@ QVariant DoubleSpinBox::validateAndInterpret(QString &input,
   }
 
 end:
-    // if something went wrong, set num to something valid
+  // if something went wrong, set num to something valid
   if (state != QValidator::Acceptable)
   {
     num = max > 0 ? min : max;
@@ -584,7 +587,7 @@ bool DoubleSpinBox::isIntermediateValueHelper(qint64 num, qint64 min, qint64 max
   else
   {
     tmp = qAbs(num);
-    for (int i=0; tmp > 0; ++i)
+    for (int i = 0; tmp > 0; ++i)
     {
       digits[numDigits++] = tmp % 10;
       tmp /= 10;
@@ -593,10 +596,10 @@ bool DoubleSpinBox::isIntermediateValueHelper(qint64 num, qint64 min, qint64 max
 
   int failures = 0;
   qint64 number;
-  for (number=max; number>=min; --number)
+  for (number = max; number >= min; --number)
   {
     tmp = qAbs(number);
-    for (int i=0; tmp > 0;)
+    for (int i = 0; tmp > 0;)
     {
       if (digits[i] == (tmp % 10))
       {
@@ -611,7 +614,8 @@ bool DoubleSpinBox::isIntermediateValueHelper(qint64 num, qint64 min, qint64 max
       tmp /= 10;
     }
     if (failures++ == 500000)
-    { //upper bound
+    {
+      //upper bound
       if (match)
         *match = num;
 //       qDebug("returns true 2");

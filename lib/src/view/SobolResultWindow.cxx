@@ -32,8 +32,9 @@
 
 using namespace OT;
 
-namespace OTGUI {
-  
+namespace OTGUI
+{
+
 SobolResultWindow::SobolResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
   , result_()
@@ -92,11 +93,11 @@ void SobolResultWindow::buildInterface()
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
     SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(result_.getFirstOrderIndices()[i],
-                                                                                result_.getTotalIndices()[i],
-                                                                                result_.getInputNames(),
-                                                                                result_.getOutputNames()[i],
-                                                                                SensitivityResultWidget::Sobol,
-                                                                                this);
+        result_.getTotalIndices()[i],
+        result_.getInputNames(),
+        result_.getOutputNames()[i],
+        SensitivityResultWidget::Sobol,
+        this);
     stackedWidget->addWidget(indicesResultWidget);
   }
   vbox->addWidget(stackedWidget);

@@ -22,7 +22,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel, const String observerType)
   : OTguiItem("Unnamed", "NoUserRole")

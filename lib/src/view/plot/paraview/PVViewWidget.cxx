@@ -31,7 +31,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 const char PVViewWidget::SERIES_VISIBILITY_PROP[] = "SeriesVisibility";
 
@@ -170,7 +171,7 @@ void PVViewWidget::setData(const Sample& sample)
 
 
 void PVViewWidget::buildTableFrom(const std::vector< std::vector<double> >& valuesByColumn,
-                                        const std::vector<std::string>& columnNames)
+                                  const std::vector<std::string>& columnNames)
 {
   vtkSmartPointer<vtkTable> table;
   table.TakeReference(vtkTable::New());

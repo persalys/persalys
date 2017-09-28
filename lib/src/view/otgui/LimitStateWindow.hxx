@@ -27,7 +27,8 @@
 
 #include <QComboBox>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API LimitStateWindow : public OTguiSubWindow
 {
   Q_OBJECT
@@ -35,7 +36,7 @@ class OTGUI_API LimitStateWindow : public OTguiSubWindow
 public:
   enum Operator {LessOperator, LessOrEqualOperator, GreaterOperator, GreaterOrEqualOperator};
 
-  LimitStateWindow(LimitStateItem * item, QWidget * parent=0);
+  LimitStateWindow(LimitStateItem * item, QWidget * parent = 0);
 
 protected:
   void buildInterface();

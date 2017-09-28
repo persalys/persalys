@@ -20,7 +20,8 @@
  */
 #include "otgui/LogSpinBox.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 LogSpinBox::LogSpinBox(int base, QWidget * parent)
   : UIntSpinBox(parent)

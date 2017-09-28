@@ -24,7 +24,8 @@
 
 #include <QFile>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CustomStandardItemModel::CustomStandardItemModel(int nbRows, int nbColumns, QObject * parent)
   : QStandardItemModel(nbRows, nbColumns, parent)
@@ -70,12 +71,12 @@ void CustomStandardItemModel::exportData(const QString & fileName)
 
   for(int i = 0; i < rowCount(); ++i)
   {
-    for (int j = 0; j < columnCount()-1; ++j)
+    for (int j = 0; j < columnCount() - 1; ++j)
     {
       result.append(data(index(i, j)).toString());
       result.append('\t');
     }
-    result.append(data(index(i, columnCount()-1)).toString());
+    result.append(data(index(i, columnCount() - 1)).toString());
     result.append('\n');
   }
   file.write(result.toStdString().c_str());

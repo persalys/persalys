@@ -28,7 +28,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)

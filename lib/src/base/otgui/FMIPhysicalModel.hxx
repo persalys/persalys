@@ -24,7 +24,8 @@
 #include "PythonPhysicalModel.hxx"
 #include "FMUInfo.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API FMIPhysicalModel : public PythonPhysicalModel
 {
   CLASSNAME
@@ -32,7 +33,7 @@ class OTGUI_API FMIPhysicalModel : public PythonPhysicalModel
 public:
 
   /* Default constructor */
-  FMIPhysicalModel(const OT::String & name="Unnamed");
+  FMIPhysicalModel(const OT::String & name = "Unnamed");
 
   /* Constructor with parameters */
   FMIPhysicalModel(const OT::String & name,

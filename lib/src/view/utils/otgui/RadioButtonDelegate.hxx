@@ -28,7 +28,8 @@
 #include <QPainter>
 #include <QRadioButton>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API RadioButtonDelegate : public QStyledItemDelegate
 {
 public:
@@ -39,8 +40,8 @@ public:
   }
 
 
-  void paint(QPainter* painter, 
-             const QStyleOptionViewItem& option, 
+  void paint(QPainter* painter,
+             const QStyleOptionViewItem& option,
              const QModelIndex& index) const
   {
     if (index.row() < firstRowWithButton_)

@@ -27,7 +27,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 InputTableProbabilisticModel::InputTableProbabilisticModel(const PhysicalModel & physicalModel, QObject * parent)
   : QAbstractTableModel(parent)
@@ -88,9 +89,9 @@ bool InputTableProbabilisticModel::setHeaderData(int section, Qt::Orientation or
 {
   if (role == Qt::CheckStateRole && orientation == Qt::Horizontal)
   {
-    for (int i=0; i<rowCount(); ++i)
-      if (data(index(i, 0), role).toInt() != (value.toBool()? Qt::Checked:Qt::Unchecked))
-        setData(index(i, 0), value.toBool()? Qt::Checked:Qt::Unchecked, role);
+    for (int i = 0; i < rowCount(); ++i)
+      if (data(index(i, 0), role).toInt() != (value.toBool() ? Qt::Checked : Qt::Unchecked))
+        setData(index(i, 0), value.toBool() ? Qt::Checked : Qt::Unchecked, role);
     emit distributionsChanged();
   }
   return QAbstractTableModel::setHeaderData(section, orientation, value, role);

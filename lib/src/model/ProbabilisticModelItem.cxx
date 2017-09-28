@@ -27,14 +27,15 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel & physicalModel)
   : PhysicalModelItem(physicalModel, "ProbabilisticModel")
 {
   setData(tr("Probabilistic model"), Qt::DisplayRole);
   QFont font;
-  font.setWeight(font.weight()+10);
+  font.setWeight(font.weight() + 10);
   setData(font, Qt::FontRole);
   setEditable(false);
 

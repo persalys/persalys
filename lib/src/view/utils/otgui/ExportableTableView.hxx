@@ -23,13 +23,14 @@
 
 #include "otgui/CopyableTableView.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ExportableTableView : public CopyableTableView
 {
   Q_OBJECT
 
 public:
-  ExportableTableView(QWidget * parent=0);
+  ExportableTableView(QWidget * parent = 0);
 
 public slots:
   void contextMenu(const QPoint & pos);

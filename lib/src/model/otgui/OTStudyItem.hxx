@@ -25,7 +25,8 @@
 #include "otgui/DataModelDiagramItem.hxx"
 #include "otgui/OTStudy.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API OTStudyItem : public OTguiItem, public Observer
 {
   Q_OBJECT

@@ -26,7 +26,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 DataModelDiagramItem::DataModelDiagramItem(const DesignOfExperiment& designOfExperiment)
   : DesignOfExperimentItem(designOfExperiment, "DataModelDiagram")

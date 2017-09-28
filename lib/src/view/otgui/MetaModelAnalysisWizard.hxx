@@ -27,7 +27,8 @@
 #include "otgui/KrigingPage.hxx"
 #include "otgui/FunctionalChaosPage.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API MetaModelAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
@@ -36,7 +37,7 @@ public:
   enum Method {chaos, kriging};
   enum {Page_Intro, Page_KrigingMethod, Page_ChaosMethod};
 
-  MetaModelAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard=false, QWidget* parent=0);
+  MetaModelAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard = false, QWidget* parent = 0);
 
   virtual int nextId() const;
   virtual bool validateCurrentPage();

@@ -7,7 +7,8 @@
 #include <vtkContextScene.h>
 
 #include <vtkSMPropertyHelper.h>
-namespace OTGUI {
+namespace OTGUI
+{
 const char PVParCooViewWidget::PV_VIEW_TYPE[] = "ParallelCoordinatesChartView";
 
 const char PVParCooViewWidget::PV_REPRESENTATION_TYPE[] = "ParallelCoordinatesRepresentation";

@@ -35,10 +35,12 @@ int main(int argc, char *argv[])
   TESTPREAMBLE;
   OStream fullprint(std::cout);
   char *fileName = 0;
-  if (argc > 1) {
+  if (argc > 1)
+  {
     fileName = argv[1];
   }
-  else {
+  else
+  {
     std::cerr << "Schema file (path to gauge.xml) not provided" << std::endl;
     return -1;
   }

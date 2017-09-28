@@ -26,7 +26,8 @@
 #include "otgui/LimitStateItem.hxx"
 #include "otgui/DesignOfExperimentDefinitionItem.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API PhysicalModelDiagramItem : public PhysicalModelItem
 {
   Q_OBJECT
@@ -71,7 +72,7 @@ signals:
   void sensitivityRequested();
   void limitStateRequested();
   void designOfExperimentRequested();
-  void designOfExperimentEvaluationRequested(const Analysis&, const bool isGeneralWizard=false);
+  void designOfExperimentEvaluationRequested(const Analysis&, const bool isGeneralWizard = false);
 
   void modelDefinitionWindowRequested(PhysicalModelDefinitionItem*);
   void newProbabilisticModelItemCreated(ProbabilisticModelItem*);

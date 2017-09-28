@@ -23,7 +23,8 @@
 #include <QStyleOptionButton>
 #include <QPainter>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 DiagramPushButton::DiagramPushButton(const QString& text, QWidget* parent)
   : QPushButton(text, parent)
@@ -73,7 +74,7 @@ void DiagramPushButton::enterEvent(QEvent* event)
 {
   // emit message to update the QTextEdit of the diagram window
   const QString errorMessage = "<p>" + whatsThis() + QString("<p><font color=red>%1</font>").arg(errorMessage_);
-  emit messageChanged(valid_? whatsThis() : errorMessage);
+  emit messageChanged(valid_ ? whatsThis() : errorMessage);
 
   // override cursor
   if (!valid_)

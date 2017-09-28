@@ -25,7 +25,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(PythonScriptEvaluation)
 
@@ -42,8 +43,8 @@ PythonScriptEvaluation::PythonScriptEvaluation()
 
 /* Constructor with parameters */
 PythonScriptEvaluation::PythonScriptEvaluation(const UnsignedInteger & inputDimension,
-                                   const UnsignedInteger & outputDimension,
-                                   const String & code)
+    const UnsignedInteger & outputDimension,
+    const String & code)
   : EvaluationImplementation()
   , inputDimension_(inputDimension)
   , outputDimension_(outputDimension)
@@ -164,7 +165,7 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
 /* Operator () */
 // Sample PythonScriptEvaluation::operator() (const Sample & inS) const
 // {
-//   
+//
 // }
 
 /* Method save() stores the object through the StorageManager */

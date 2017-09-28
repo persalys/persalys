@@ -28,7 +28,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 ParametersWidget::ParametersWidget(const QString title,           // table title
                                    const QStringList names,       // parameters names

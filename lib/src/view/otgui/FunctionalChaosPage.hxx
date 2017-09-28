@@ -29,14 +29,15 @@
 #include <QCheckBox>
 #include <QSpinBox>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 class OTGUI_API FunctionalChaosPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  FunctionalChaosPage(QWidget* parent=0);
+  FunctionalChaosPage(QWidget* parent = 0);
 
   void initialize(const Analysis& analysis);
   Analysis getAnalysis(const OT::String& name, const DesignOfExperiment& doe) const;

@@ -25,7 +25,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(LimitStateImplementation)
 
@@ -42,10 +43,10 @@ LimitStateImplementation::LimitStateImplementation()
 
 /* Constructor with parameters */
 LimitStateImplementation::LimitStateImplementation(const String& name,
-                                                   const PhysicalModel& physicalModel,
-                                                   const String& outputName,
-                                                   const ComparisonOperator& comparisonOperator,
-                                                   const double& threshold)
+    const PhysicalModel& physicalModel,
+    const String& outputName,
+    const ComparisonOperator& comparisonOperator,
+    const double& threshold)
   : PersistentObject()
   , Observable()
   , physicalModel_(physicalModel)
@@ -100,7 +101,7 @@ String LimitStateImplementation::getOutputName() const
 void LimitStateImplementation::setOutputName(const String& outputName)
 {
   if (!physicalModel_.hasOutputNamed(outputName))
-    throw InvalidArgumentException(HERE) << "The physical model does not contain an output named '" << outputName <<"'.";
+    throw InvalidArgumentException(HERE) << "The physical model does not contain an output named '" << outputName << "'.";
 
   outputName_ = outputName;
   notify("outputNameChanged");
@@ -147,8 +148,8 @@ bool LimitStateImplementation::isValid() const
 String LimitStateImplementation::getPythonScript() const
 {
   String result;
-  result += getName()+ " = otguibase.LimitState('" + getName() + "', " + getPhysicalModel().getName();
-  result += ", '" + outputName_ + "', ot."+ operator_.getImplementation()->getClassName() + "(), ";
+  result += getName() + " = otguibase.LimitState('" + getName() + "', " + getPhysicalModel().getName();
+  result += ", '" + outputName_ + "', ot." + operator_.getImplementation()->getClassName() + "(), ";
   OSS oss;
   oss.setPrecision(12);
   oss << threshold_;

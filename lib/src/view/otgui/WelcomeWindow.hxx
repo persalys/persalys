@@ -24,7 +24,8 @@
 #include "otgui/OTGuiprivate.hxx"
 #include <QWidget>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API WelcomeWindow : public QWidget
 {
   Q_OBJECT

@@ -24,7 +24,8 @@
 
 #include <limits>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 UIntSpinBox::UIntSpinBox(QWidget* parent)
   : DoubleSpinBox(parent)

@@ -29,7 +29,8 @@
 #include <QGroupBox>
 #include <QCheckBox>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API StopCriteriaGroupBox : public QGroupBox
 {
   Q_OBJECT

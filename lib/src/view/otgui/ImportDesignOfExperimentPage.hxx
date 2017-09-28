@@ -29,7 +29,8 @@
 #include <QLabel>
 #include <QLineEdit>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ImportDesignOfExperimentPage : public QWizardPage
 {
   Q_OBJECT

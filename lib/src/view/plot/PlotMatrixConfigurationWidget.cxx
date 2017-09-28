@@ -30,7 +30,8 @@
 #include <QScrollArea>
 #include <QCheckBox>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * plotMatrix, QWidget* parent)
   : QWidget(parent)

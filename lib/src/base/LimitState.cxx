@@ -22,7 +22,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(LimitState)
 
@@ -138,7 +139,7 @@ void LimitState::setThreshold(const double& threshold)
 
 bool LimitState::isValid() const
 {
-  return getImplementation()->isValid();  
+  return getImplementation()->isValid();
 }
 
 

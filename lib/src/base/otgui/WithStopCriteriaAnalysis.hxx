@@ -23,7 +23,8 @@
 
 #include "SimulationAnalysis.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API WithStopCriteriaAnalysis
 {
 public:
@@ -54,7 +55,7 @@ protected:
   struct TimeCriteria
   {
     TimeCriteria() : startTime_(0.), maxElapsedTime_(0.), stopRequested_(false) {};
-    virtual ~TimeCriteria(){};
+    virtual ~TimeCriteria() {};
 
     clock_t startTime_;
     clock_t elapsedTime_;
@@ -67,7 +68,7 @@ protected:
     }
     void setMaxElapsedTime(const int seconds)
     {
-      maxElapsedTime_ = seconds*CLOCKS_PER_SEC;
+      maxElapsedTime_ = seconds * CLOCKS_PER_SEC;
     }
     void stop()
     {

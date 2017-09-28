@@ -26,7 +26,8 @@
 #include <QWizard>
 #include <QStandardItemModel>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class ParametersTableModel: public QStandardItemModel
 {
 public:
@@ -38,8 +39,8 @@ public:
   OT::Point getValues() const;
 
 private:
-    OT::Description names_;
-    OT::Point values_;
+  OT::Description names_;
+  OT::Point values_;
 };
 
 class ParametersDefinitionWizard: public QWizard
@@ -47,7 +48,7 @@ class ParametersDefinitionWizard: public QWizard
   Q_OBJECT
 
 public:
-  ParametersDefinitionWizard(const OT::Description& names, const OT::Point& values, const QStringList& labels, QWidget* parent=0);
+  ParametersDefinitionWizard(const OT::Description& names, const OT::Point& values, const QStringList& labels, QWidget* parent = 0);
 
   OT::Point getValues() const;
 

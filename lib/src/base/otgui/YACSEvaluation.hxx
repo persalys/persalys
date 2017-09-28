@@ -28,7 +28,8 @@
 #include <YACSEvalYFX.hxx>
 #include <SalomeResourceModel.hxx>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 /**
  * @class YACSEvaluation

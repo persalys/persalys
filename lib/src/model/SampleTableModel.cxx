@@ -26,15 +26,16 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 SampleTableModel::SampleTableModel(const Sample & data, QObject * parent)
   : QAbstractTableModel(parent)
   , data_(data)
   , sampleIsValid_(true)
 {
-  for (UnsignedInteger j=0; j<data_.getSize(); ++j)
-    for (UnsignedInteger i=0; i<data_.getDimension(); ++i)
+  for (UnsignedInteger j = 0; j < data_.getSize(); ++j)
+    for (UnsignedInteger i = 0; i < data_.getDimension(); ++i)
       if (std::isnan(data_[j][i]))
       {
         sampleIsValid_ = false;

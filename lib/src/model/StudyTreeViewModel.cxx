@@ -22,7 +22,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 const int StudyTreeViewModel::DefaultSignificantDigits = 12;
 

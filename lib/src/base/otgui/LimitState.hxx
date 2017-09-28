@@ -25,7 +25,8 @@
 
 #include <openturns/Less.hxx>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API LimitState : public OT::TypedInterfaceObject<LimitStateImplementation>
 {
   CLASSNAME
@@ -37,22 +38,22 @@ public:
   LimitState();
   /** Constructor with parameters */
   LimitState(const OT::String & name, const PhysicalModel & physicalModel,
-             const OT::String & outputName="",
-             const OT::ComparisonOperator & failure=OT::Less(),
-             const double & threshold=0.);
+             const OT::String & outputName = "",
+             const OT::ComparisonOperator & failure = OT::Less(),
+             const double & threshold = 0.);
   /** Default constructor */
   LimitState(const LimitStateImplementation & implementation);
   /** Constructor from implementation */
   LimitState(const Implementation & p_implementation);
   /** Constructor from implementation pointer */
-  LimitState(LimitStateImplementation * p_implementation); 
+  LimitState(LimitStateImplementation * p_implementation);
 
   /** Comparison operator */
   OT::Bool operator ==(const LimitState & other) const;
   OT::Bool operator !=(const LimitState & other) const;
 
   void addObserver(Observer * observer);
-  void blockNotification(const OT::String & blockedObserverType="");
+  void blockNotification(const OT::String & blockedObserverType = "");
 
   PhysicalModel getPhysicalModel() const;
 

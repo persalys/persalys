@@ -22,7 +22,8 @@
 
 #include <QString>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CustomScaleDraw::CustomScaleDraw()
   : QwtScaleDraw()

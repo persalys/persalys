@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Abstract top-level class for all physical models 
+ *  @brief Abstract top-level class for all physical models
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -29,7 +29,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 static Factory<PersistentCollection<Input> > Factory_PersistentCollectionInput;
 static Factory<PersistentCollection<Output> > Factory_PersistentCollectionOutput;
@@ -45,8 +46,8 @@ PhysicalModelImplementation::PhysicalModelImplementation(const String & name)
 
 /* Constructor with parameters */
 PhysicalModelImplementation::PhysicalModelImplementation(const String & name,
-                                                         const InputCollection & inputs,
-                                                         const OutputCollection & outputs)
+    const InputCollection & inputs,
+    const OutputCollection & outputs)
   : PersistentObject()
   , Observable()
   , inputs_(inputs)
@@ -91,29 +92,29 @@ InputCollection PhysicalModelImplementation::getInputs() const
 
 Input & PhysicalModelImplementation::getInputByName(const String & inputName)
 {
-  for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < inputs_.getSize(); ++i)
     if (inputs_[i].getName() == inputName)
       return inputs_[i];
-  throw InvalidArgumentException(HERE) << "The given input name " << inputName <<" does not correspond to an input of the physical model.\n";
+  throw InvalidArgumentException(HERE) << "The given input name " << inputName << " does not correspond to an input of the physical model.\n";
 }
 
 
 Input PhysicalModelImplementation::getInputByName(const String & inputName) const
 {
-  for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < inputs_.getSize(); ++i)
     if (inputs_[i].getName() == inputName)
       return inputs_[i];
-  throw InvalidArgumentException(HERE) << "The given input name " << inputName <<" does not correspond to an input of the physical model.\n";
+  throw InvalidArgumentException(HERE) << "The given input name " << inputName << " does not correspond to an input of the physical model.\n";
 }
 
 
 void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
 {
   std::set<String> inputNames;
-  for (UnsignedInteger i=0; i<inputs.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < inputs.getSize(); ++i)
     inputNames.insert(inputs[i].getName());
   if (inputNames.size() != inputs.getSize())
-    throw InvalidArgumentException(HERE) << "Two inputs can not have the same name."; 
+    throw InvalidArgumentException(HERE) << "Two inputs can not have the same name.";
 
   inputs_ = inputs;
   inputsChanged();
@@ -127,7 +128,7 @@ void PhysicalModelImplementation::setInputName(const OT::String & inputName, con
 
   std::set<String> inputNames;
   inputNames.insert(newName);
-  for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < inputs_.getSize(); ++i)
     if (inputs_[i].getName() != inputName)
       inputNames.insert(inputs_[i].getName());
   if (inputNames.size() != inputs_.getSize())
@@ -148,7 +149,7 @@ void PhysicalModelImplementation::setInputDescription(const String & inputName, 
 void PhysicalModelImplementation::setInputValue(const String & inputName, const double & value)
 {
   getInputByName(inputName).setValue(value);
-  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++i)
     getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
   notify("inputValueChanged");
 }
@@ -178,7 +179,7 @@ void PhysicalModelImplementation::setDistributionParametersType(const OT::String
 void PhysicalModelImplementation::addInput(const Input & input)
 {
   if (hasInputNamed(input.getName()))
-    throw InvalidArgumentException(HERE) << "The physical model already contains an input named " << input.getName(); 
+    throw InvalidArgumentException(HERE) << "The physical model already contains an input named " << input.getName();
 
   inputs_.add(input);
 
@@ -187,7 +188,7 @@ void PhysicalModelImplementation::addInput(const Input & input)
     updateCopula();
 
   // reset outputs values
-  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++i)
     getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
 
   // update finite difference step
@@ -212,7 +213,7 @@ void PhysicalModelImplementation::removeInput(const String & inputName)
 {
   if (hasInputNamed(inputName))
   {
-    for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
+    for (UnsignedInteger i = 0; i < inputs_.getSize(); ++i)
     {
       if (inputs_[i].getName() == inputName)
       {
@@ -220,7 +221,7 @@ void PhysicalModelImplementation::removeInput(const String & inputName)
         inputs_.erase(inputs_.begin() + i);
         if (inputIsStochastic)
           updateCopula();
-        for (UnsignedInteger j=0; j<getOutputs().getSize(); ++j)
+        for (UnsignedInteger j = 0; j < getOutputs().getSize(); ++j)
           getOutputByName(getOutputs()[j].getName()).setHasBeenComputed(false);
 
         notify("inputNumberChanged");
@@ -231,7 +232,7 @@ void PhysicalModelImplementation::removeInput(const String & inputName)
     updateFiniteDifferenceSteps();
   }
   else
-    throw InvalidArgumentException(HERE) << "The given input name " << inputName <<" does not correspond to an input of the physical model.\n";
+    throw InvalidArgumentException(HERE) << "The given input name " << inputName << " does not correspond to an input of the physical model.\n";
 }
 
 
@@ -245,7 +246,7 @@ void PhysicalModelImplementation::clearInputs()
 void PhysicalModelImplementation::inputsChanged()
 {
   // reset outputs values
-  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++i)
     getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
 
   // update copula
@@ -274,21 +275,21 @@ void PhysicalModelImplementation::updateCopula()
     Description oldStochasticInputNames(copula_.getDescription());
     UnsignedInteger size = oldStochasticInputNames.getSize();
     CorrelationMatrix oldSpearmanCorrelation(copula_.getSpearmanCorrelation());
-    for (UnsignedInteger row=0; row<size; ++row)
-      for (UnsignedInteger col=row+1; col<size; ++col)
+    for (UnsignedInteger row = 0; row < size; ++row)
+      for (UnsignedInteger col = row + 1; col < size; ++col)
+      {
+        Collection<String>::iterator it1;
+        it1 = std::find(stochasticInputNames.begin(), stochasticInputNames.end(), oldStochasticInputNames[row]);
+        Collection<String>::iterator it2;
+        it2 = std::find(stochasticInputNames.begin(), stochasticInputNames.end(), oldStochasticInputNames[col]);
+        if (it1 != stochasticInputNames.end() &&  it2 != stochasticInputNames.end())
         {
-          Collection<String>::iterator it1;
-          it1 = std::find(stochasticInputNames.begin(), stochasticInputNames.end(), oldStochasticInputNames[row]);
-          Collection<String>::iterator it2;
-          it2 = std::find(stochasticInputNames.begin(), stochasticInputNames.end(), oldStochasticInputNames[col]);
-          if (it1 != stochasticInputNames.end() &&  it2 != stochasticInputNames.end())
-          {
-            const UnsignedInteger newRow = it1 - stochasticInputNames.begin();
-            const UnsignedInteger newCol = it2 - stochasticInputNames.begin();
-            newSpearmanCorrelation(newRow, newCol) = oldSpearmanCorrelation(row, col);
-            newSpearmanCorrelation(newCol, newRow) = oldSpearmanCorrelation(row, col);
-          }
+          const UnsignedInteger newRow = it1 - stochasticInputNames.begin();
+          const UnsignedInteger newCol = it2 - stochasticInputNames.begin();
+          newSpearmanCorrelation(newRow, newCol) = oldSpearmanCorrelation(row, col);
+          newSpearmanCorrelation(newCol, newRow) = oldSpearmanCorrelation(row, col);
         }
+      }
   }
 
   CorrelationMatrix correlationMatrix(NormalCopula::GetCorrelationFromSpearmanCorrelation(newSpearmanCorrelation));
@@ -299,7 +300,7 @@ void PhysicalModelImplementation::updateCopula()
 Description PhysicalModelImplementation::getInputNames() const
 {
   Description inputNames(inputs_.getSize());
-  for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < inputs_.getSize(); ++i)
     inputNames[i] = inputs_[i].getName();
   return inputNames;
 }
@@ -308,7 +309,7 @@ Description PhysicalModelImplementation::getInputNames() const
 void PhysicalModelImplementation::updateFiniteDifferenceSteps() const
 {
   finiteDifferenceSteps_ = Point(getInputs().getSize());
-  for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getInputs().getSize(); ++i)
     finiteDifferenceSteps_[i] = getInputs()[i].getFiniteDifferenceStep();
 }
 
@@ -325,7 +326,7 @@ Point PhysicalModelImplementation::getFiniteDifferenceSteps() const
 Description PhysicalModelImplementation::getStochasticInputNames() const
 {
   Description stochasticInputNames;
-  for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < inputs_.getSize(); ++i)
     if (inputs_[i].isStochastic())
       stochasticInputNames.add(inputs_[i].getName());
   return stochasticInputNames;
@@ -334,7 +335,7 @@ Description PhysicalModelImplementation::getStochasticInputNames() const
 
 bool PhysicalModelImplementation::hasInputNamed(const String & inputName) const
 {
-  for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < inputs_.getSize(); ++i)
     if (inputs_[i].getName() == inputName)
       return true;
   return false;
@@ -351,19 +352,19 @@ bool PhysicalModelImplementation::hasStochasticInputs() const
 
 Output & PhysicalModelImplementation::getOutputByName(const String & outputName)
 {
-  for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < outputs_.getSize(); ++i)
     if (outputs_[i].getName() == outputName)
       return outputs_[i];
-  throw InvalidArgumentException(HERE) << "The given output name " << outputName <<" does not correspond to an output of the physical model.\n";
+  throw InvalidArgumentException(HERE) << "The given output name " << outputName << " does not correspond to an output of the physical model.\n";
 }
 
 
 Output PhysicalModelImplementation::getOutputByName(const String & outputName) const
 {
-  for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < outputs_.getSize(); ++i)
     if (outputs_[i].getName() == outputName)
       return outputs_[i];
-  throw InvalidArgumentException(HERE) << "The given output name " << outputName <<" does not correspond to an output of the physical model.\n";
+  throw InvalidArgumentException(HERE) << "The given output name " << outputName << " does not correspond to an output of the physical model.\n";
 }
 
 
@@ -376,7 +377,7 @@ OutputCollection PhysicalModelImplementation::getOutputs() const
 void PhysicalModelImplementation::setOutputs(const OutputCollection & outputs)
 {
   std::set<String> outputNames;
-  for (UnsignedInteger i=0; i<outputs.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < outputs.getSize(); ++i)
     outputNames.insert(outputs[i].getName());
   if (outputNames.size() != outputs.getSize())
     throw InvalidArgumentException(HERE) << "Two outputs can not have the same name.";
@@ -393,7 +394,7 @@ void PhysicalModelImplementation::setOutputName(const OT::String & outputName, c
 
   std::set<String> outputNames;
   outputNames.insert(newName);
-  for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < outputs_.getSize(); ++i)
     if (outputs_[i].getName() != outputName)
       outputNames.insert(outputs_[i].getName());
   if (outputNames.size() != outputs_.getSize())
@@ -429,7 +430,7 @@ void PhysicalModelImplementation::selectOutput(const String& outputName, const b
 void PhysicalModelImplementation::addOutput(const Output & output)
 {
   if (hasOutputNamed(output.getName()))
-    throw InvalidArgumentException(HERE) << "The physical model already contains an output named " << output.getName(); 
+    throw InvalidArgumentException(HERE) << "The physical model already contains an output named " << output.getName();
 
   outputs_.add(output);
   notify("outputNumberChanged");
@@ -440,7 +441,7 @@ void PhysicalModelImplementation::removeOutput(const String & outputName)
 {
   if (hasOutputNamed(outputName))
   {
-    for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
+    for (UnsignedInteger i = 0; i < outputs_.getSize(); ++i)
       if (outputs_[i].getName() == outputName)
       {
         outputs_.erase(outputs_.begin() + i);
@@ -449,7 +450,7 @@ void PhysicalModelImplementation::removeOutput(const String & outputName)
       }
   }
   else
-    throw InvalidArgumentException(HERE) << "The given output name " << outputName <<" does not correspond to an output of the physical model\n";
+    throw InvalidArgumentException(HERE) << "The given output name " << outputName << " does not correspond to an output of the physical model\n";
 }
 
 
@@ -463,7 +464,7 @@ void PhysicalModelImplementation::clearOutputs()
 Description PhysicalModelImplementation::getOutputNames() const
 {
   Description outputNames(outputs_.getSize());
-  for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < outputs_.getSize(); ++i)
     outputNames[i] = outputs_[i].getName();
   return outputNames;
 }
@@ -471,7 +472,7 @@ Description PhysicalModelImplementation::getOutputNames() const
 
 bool PhysicalModelImplementation::hasOutputNamed(const String & outputName) const
 {
-  for (UnsignedInteger i=0; i<outputs_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < outputs_.getSize(); ++i)
     if (outputs_[i].getName() == outputName)
       return true;
   return false;
@@ -481,7 +482,7 @@ bool PhysicalModelImplementation::hasOutputNamed(const String & outputName) cons
 Description PhysicalModelImplementation::getSelectedOutputsNames() const
 {
   Description selectedOutputsNames;
-  for (UnsignedInteger i=0; i<getOutputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++i)
     if (getOutputs()[i].isSelected())
       selectedOutputsNames.add(getOutputs()[i].getName());
   return selectedOutputsNames;
@@ -491,7 +492,7 @@ Description PhysicalModelImplementation::getSelectedOutputsNames() const
 ComposedDistribution PhysicalModelImplementation::getComposedDistribution() const
 {
   ComposedDistribution::DistributionCollection marginales;
-  for (UnsignedInteger i=0; i<inputs_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < inputs_.getSize(); ++i)
     if (inputs_[i].isStochastic())
       marginales.add(inputs_[i].getDistribution());
   if (marginales.getSize())
@@ -552,8 +553,8 @@ Function PhysicalModelImplementation::getFunction(const Description & outputName
 
   // search interest outputs indices
   Indices indices;
-  for (UnsignedInteger i=0; i<outputNames.getSize(); ++i)
-    for (UnsignedInteger j=0; j<getOutputs().getSize(); ++j)
+  for (UnsignedInteger i = 0; i < outputNames.getSize(); ++i)
+    for (UnsignedInteger j = 0; j < getOutputs().getSize(); ++j)
       if (getOutputs()[j].getName() == outputNames[i])
       {
         indices.add(j);
@@ -584,7 +585,7 @@ Function PhysicalModelImplementation::getRestrictedFunction(const Description& o
   // search deterministic inputs
   Indices deterministicInputsIndices;
   Point inputsValues;
-  for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getInputs().getSize(); ++i)
   {
     if (!getInputs()[i].isStochastic())
     {
@@ -639,7 +640,7 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
 {
   String result;
 
-  for (UnsignedInteger i=0; i<getInputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getInputs().getSize(); ++i)
   {
     if (getInputs()[i].isStochastic())
     {
@@ -656,7 +657,7 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
       {
         oss << "dist_" << inputPythonName << " = ot." << distributionName << "(";
         PointWithDescription parameters = distribution.getParametersCollection()[0];
-        for (UnsignedInteger j=0; j<parameters.getSize(); ++ j)
+        for (UnsignedInteger j = 0; j < parameters.getSize(); ++ j)
         {
           oss << parameters[j];
           if (j < parameters.getSize() - 1)
@@ -670,7 +671,7 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
         distribution = truncatedDistribution.getDistribution();
         oss << "dist_" << inputPythonName << " = ot." << distribution.getImplementation()->getClassName() << "(";
         PointWithDescription parameters = distribution.getParametersCollection()[0];
-        for (UnsignedInteger j=0; j < parameters.getSize(); ++ j)
+        for (UnsignedInteger j = 0; j < parameters.getSize(); ++ j)
         {
           oss << parameters[j];
           if (j < parameters.getSize() - 1)
@@ -688,7 +689,7 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
             oss << truncatedDistribution.getUpperBound() << ", ot.TruncatedDistribution.UPPER)\n";
         }
         else  // both sides truncation
-          oss << truncatedDistribution.getUpperBound() << ", " << truncatedDistribution.getUpperBound() <<")\n";
+          oss << truncatedDistribution.getUpperBound() << ", " << truncatedDistribution.getUpperBound() << ")\n";
       }
 
       result += oss.str();
@@ -712,8 +713,8 @@ String PhysicalModelImplementation::getCopulaPythonScript() const
   oss << "correlationMatrix = ot.CorrelationMatrix(" << correlationMatrix.getNbRows() << ")\n";
 
   bool hasCorrelation = false;
-  for (UnsignedInteger i=0; i<correlationMatrix.getNbRows(); ++i)
-    for (UnsignedInteger j=i+1; j<correlationMatrix.getNbRows(); ++j)
+  for (UnsignedInteger i = 0; i < correlationMatrix.getNbRows(); ++i)
+    for (UnsignedInteger j = i + 1; j < correlationMatrix.getNbRows(); ++j)
       if (correlationMatrix(i, j) != 0.0)
       {
         hasCorrelation = true;

@@ -24,13 +24,14 @@
 #include "otgui/ResultWindow.hxx"
 #include "otgui/SimulationReliabilityResult.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SimulationReliabilityResultWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
-  SimulationReliabilityResultWindow(AnalysisItem * item, QWidget * parent=0);
+  SimulationReliabilityResultWindow(AnalysisItem * item, QWidget * parent = 0);
 
 protected:
   void buildInterface();

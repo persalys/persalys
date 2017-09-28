@@ -29,7 +29,8 @@
 #include <QButtonGroup>
 #include <QCheckBox>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API PVXYChartSettingWidget : public QWidget
 {
   Q_OBJECT
@@ -40,10 +41,10 @@ public:
   PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidget,
                          const OT::Sample& sample,
                          const OT::Sample& sampleRank,
-                         QStringList inputNames=QStringList(),
-                         QStringList outputNames=QStringList(),
-                         Type plotType=NoType,
-                         QWidget * parent=0);
+                         QStringList inputNames = QStringList(),
+                         QStringList outputNames = QStringList(),
+                         Type plotType = NoType,
+                         QWidget * parent = 0);
 
   PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidget,
                          const OT::Sample& sample,
@@ -52,8 +53,8 @@ public:
                          const OT::Sample& failedSampleRank,
                          const OT::Sample& notEvalSample,
                          const OT::Sample& notEvalSampleRank,
-                         Type plotType=NoType,
-                         QWidget * parent=0);
+                         Type plotType = NoType,
+                         QWidget * parent = 0);
 
   int getCurrentPlotIndex() const;
 

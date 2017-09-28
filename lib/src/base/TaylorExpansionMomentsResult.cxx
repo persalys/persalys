@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(TaylorExpansionMomentsResult)
 
@@ -39,10 +40,10 @@ TaylorExpansionMomentsResult::TaylorExpansionMomentsResult()
 
 /* Constructor with parameters */
 TaylorExpansionMomentsResult::TaylorExpansionMomentsResult(const OT::Description & outputNames,
-                                                             const OT::Point & meanFirstOrder,
-                                                             const OT::Point & meanSecondOrder,
-                                                             const OT::Point & standardDeviation,
-                                                             const OT::Point & variance)
+    const OT::Point & meanFirstOrder,
+    const OT::Point & meanSecondOrder,
+    const OT::Point & standardDeviation,
+    const OT::Point & variance)
   : PersistentObject()
   , outputNames_(outputNames)
   , meanFirstOrder_(meanFirstOrder)

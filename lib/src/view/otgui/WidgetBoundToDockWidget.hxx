@@ -26,13 +26,14 @@
 
 #include <QMdiSubWindow>
 
-namespace OTGUI {
-class OTGUI_API WidgetBoundToDockWidget : public QWidget 
-{ 
+namespace OTGUI
+{
+class OTGUI_API WidgetBoundToDockWidget : public QWidget
+{
   Q_OBJECT
 
 public:
-  WidgetBoundToDockWidget(QWidget* parent=0);
+  WidgetBoundToDockWidget(QWidget* parent = 0);
 
   MainWidget * findMainWidgetInHierachy();
   QMdiSubWindow * findSubWindowInHierachy();
@@ -53,9 +54,9 @@ signals:
   void hideDockWidgetRequested(QWidget*);
 
 private:
- QWidget * dockWidget_;
- bool dockWidgetAlreadyShown_;
- QMdiSubWindow * parentSubWindow_;
+  QWidget * dockWidget_;
+  bool dockWidgetAlreadyShown_;
+  QMdiSubWindow * parentSubWindow_;
 };
 }
 #endif

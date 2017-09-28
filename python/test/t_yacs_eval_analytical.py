@@ -16,7 +16,7 @@ myPhysicalModel = otguibase.YACSPhysicalModel('myPhysicalModel', XMLfilename)
 
 myStudy.addPhysicalModel(myPhysicalModel)
 
-inputSample = ot.Sample(3, 3);
+inputSample = ot.Sample(3, 3)
 inputSample[0] = [1, 2, 4]
 inputSample[1] = [2, 3, 5]
 inputSample[2] = [6, 1, 3]

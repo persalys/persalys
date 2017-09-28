@@ -74,7 +74,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 // define QStyledItemDelegate
 class TreeItemDelegate : public LineEditWithQValidatorDelegate
@@ -102,7 +103,7 @@ public:
     else
       QApplication::style()->drawControl(QStyle::CE_ItemViewItem, &optionButton, painter);
 #else
-      QApplication::style()->drawControl(QStyle::CE_ItemViewItem, &optionButton, painter);
+    QApplication::style()->drawControl(QStyle::CE_ItemViewItem, &optionButton, painter);
 #endif
 
     // draw a line at the bottom of the OTStudyItem
@@ -323,7 +324,7 @@ void StudyTreeView::createNewOTStudyWindow(OTStudyItem* item)
   connect(item, SIGNAL(otStudyExportRequested()), this, SLOT(exportOTStudy()));
   connect(item, SIGNAL(otStudySaveAsRequested()), this, SLOT(saveAsOTStudy()));
   connect(item, SIGNAL(otStudySaveAsRequested(OTStudyItem*, bool*)), this, SLOT(saveAsOTStudy(OTStudyItem*, bool*)));
-  connect(item, SIGNAL(otStudyCloseRequested(OTStudyItem*,bool*)), this, SLOT(closeNotSavedOTStudyRequest(OTStudyItem*,bool*)));
+  connect(item, SIGNAL(otStudyCloseRequested(OTStudyItem*, bool*)), this, SLOT(closeNotSavedOTStudyRequest(OTStudyItem*, bool*)));
   connect(item, SIGNAL(recentFilesListChanged(QString)), this, SIGNAL(recentFilesListChanged(QString)));
 
   // window
@@ -344,7 +345,7 @@ void StudyTreeView::createNewDataModelDiagramWindow(DataModelDiagramItem* item)
   connect(item, SIGNAL(changeCurrentItemRequested(QModelIndex)), this, SLOT(setCurrentIndex(QModelIndex)));
   connect(item, SIGNAL(modelDefinitionWindowRequested(DataModelDefinitionItem*)), this, SLOT(createNewDataModelWindow(DataModelDefinitionItem*)));
   connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
-  connect(item, SIGNAL(analysisRequested(OTguiItem*,Analysis, bool)), this, SLOT(createNewAnalysis(OTguiItem*,Analysis, bool)));
+  connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis, bool)), this, SLOT(createNewAnalysis(OTguiItem*, Analysis, bool)));
 
   // window
   DataModelDiagramWindow * window = new DataModelDiagramWindow(item, this);
@@ -520,7 +521,7 @@ void StudyTreeView::createNewDesignOfExperimentWindow(DesignOfExperimentDefiniti
     connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
     connect(item, SIGNAL(modifyAnalysisRequested(DesignOfExperimentDefinitionItem*)), this, SLOT(modifyDesignOfExperiment(DesignOfExperimentDefinitionItem*)));
     connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
-    connect(item, SIGNAL(analysisRequested(OTguiItem*,Analysis)), this, SLOT(createNewAnalysis(OTguiItem*,Analysis)));
+    connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis)), this, SLOT(createNewAnalysis(OTguiItem*, Analysis)));
     connect(item, SIGNAL(DOEEvaluationRequested(Analysis)), this, SLOT(createNewDesignOfExperimentEvaluation(Analysis)));
     connect(item, SIGNAL(updateEvaluationWindowRequested(AnalysisItem*)), this, SLOT(modifyDesignOfExperimentEvaluationWindow(AnalysisItem*)));
   }
@@ -585,8 +586,8 @@ void StudyTreeView::createAnalysisResultWindow(AnalysisItem* item)
     else if (analysisType == "SRCAnalysis")
       resultWindow = new SRCResultWindow(item, this);
     else if (analysisType == "MonteCarloReliabilityAnalysis" ||
-            analysisType == "FORMImportanceSamplingAnalysis" ||
-            analysisType == "ImportanceSamplingAnalysis")
+             analysisType == "FORMImportanceSamplingAnalysis" ||
+             analysisType == "ImportanceSamplingAnalysis")
       resultWindow = new SimulationReliabilityResultWindow(item, this);
     else if (analysisType == "FORMAnalysis")
       resultWindow = new ApproximationResultWindow(item, this);
@@ -734,9 +735,9 @@ void StudyTreeView::exportOTStudy()
     currentDir = QDir::homePath();
 
   const QString fileName = QFileDialog::getSaveFileName(this,
-                                                        tr("Export Python..."),
-                                                        currentDir + QDir::separator() + item->data(Qt::DisplayRole).toString(),
-                                                        tr("Python source files (*.py)"));
+                           tr("Export Python..."),
+                           currentDir + QDir::separator() + item->data(Qt::DisplayRole).toString(),
+                           tr("Python source files (*.py)"));
 
   if (!fileName.isEmpty())
     item->exportOTStudy(fileName);
@@ -802,9 +803,9 @@ void StudyTreeView::saveAsOTStudy(OTStudyItem* item, bool* notcancel)
     currentDir = QDir::homePath();
 
   const QString fileName = QFileDialog::getSaveFileName(this,
-                                                        tr("Save OTStudy..."),
-                                                        currentDir + QDir::separator() + item->data(Qt::DisplayRole).toString(),
-                                                        tr("XML files (*.xml)"));
+                           tr("Save OTStudy..."),
+                           currentDir + QDir::separator() + item->data(Qt::DisplayRole).toString(),
+                           tr("XML files (*.xml)"));
 
   if (fileName.isEmpty())
   {
@@ -880,7 +881,7 @@ void StudyTreeView::closeNotSavedOTStudyRequest(OTStudyItem* item, bool* canClos
   const int ret = QMessageBox::warning(this,
                                        tr("Warning"),
                                        tr("Do you want to save the OTStudy '%1' [%2]?").arg(item->getOTStudy().getName().c_str())
-                                                                                       .arg(item->getOTStudy().getFileName().c_str()),
+                                       .arg(item->getOTStudy().getFileName().c_str()),
                                        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                                        QMessageBox::Save);
   if (ret == QMessageBox::Save)

@@ -42,7 +42,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
@@ -124,7 +125,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
 
   // variability filter
   QStringList variabilityFields;
-  variabilityFields << tr("Constant") << tr("Fixed") << tr("Tunable") << tr("Discrete") << tr("Continuous") << tr("Unknown");  
+  variabilityFields << tr("Constant") << tr("Fixed") << tr("Tunable") << tr("Discrete") << tr("Continuous") << tr("Unknown");
   variabilityField_ = new ListWidgetWithCheckBox(tr("Variability") + QString("     "), variabilityFields, variabilityFields);
   NoWheelEventComboBox * variabilityFieldComboBox = new NoWheelEventComboBox;
   variabilityFieldComboBox->setModel(variabilityField_->model());
@@ -249,7 +250,7 @@ void FMIPhysicalModelWindow::applyDifferentiationStepToAllInputs(double value)
 {
   if (differentiationTableModel_)
   {
-    for (int i=0; i<differentiationTableModel_->rowCount(); ++i)
+    for (int i = 0; i < differentiationTableModel_->rowCount(); ++i)
     {
       differentiationTableModel_->setData(differentiationTableModel_->index(i, 1), value, Qt::EditRole);
     }
@@ -361,7 +362,7 @@ void FMIPhysicalModelWindow::loadModel(const FMUInfo & info)
   updateIOCount();
   filterTextEdit_->setText("");
   tabWidget_->setCurrentIndex(1);
-  
+
 }
 
 
@@ -507,12 +508,12 @@ void FMIPhysicalModelWindow::updateVariablesTableModel()
   variablesTableView_->horizontalHeader()->setResizeMode(5, QHeaderView::Stretch);
 #endif
   int width = variablesTableView_->horizontalHeader()->width();
-  variablesTableView_->horizontalHeader()->resizeSection(0, width*1/8);
-  variablesTableView_->horizontalHeader()->resizeSection(1, width*3/8);//description
-  variablesTableView_->horizontalHeader()->resizeSection(2, width*1/8);
-  variablesTableView_->horizontalHeader()->resizeSection(3, width*1/8);
-  variablesTableView_->horizontalHeader()->resizeSection(4, width*1/8);
-  variablesTableView_->horizontalHeader()->resizeSection(5, width*1/8);
+  variablesTableView_->horizontalHeader()->resizeSection(0, width * 1 / 8);
+  variablesTableView_->horizontalHeader()->resizeSection(1, width * 3 / 8); //description
+  variablesTableView_->horizontalHeader()->resizeSection(2, width * 1 / 8);
+  variablesTableView_->horizontalHeader()->resizeSection(3, width * 1 / 8);
+  variablesTableView_->horizontalHeader()->resizeSection(4, width * 1 / 8);
+  variablesTableView_->horizontalHeader()->resizeSection(5, width * 1 / 8);
 }
 
 
@@ -590,13 +591,26 @@ QVariant DataTableModel::data(const QModelIndex & index, int role) const
         {
           switch(variability_[index.row()])
           {
-            case 0: return tr("Constant"); break;
-            case 1: return tr("Fixed"); break;
-            case 2: return tr("Tunable"); break;
-            case 3: return tr("Discrete"); break;
-            case 4: return tr("Continuous"); break;
-            case 5: return tr("Unknown"); break;
-            default: break;
+            case 0:
+              return tr("Constant");
+              break;
+            case 1:
+              return tr("Fixed");
+              break;
+            case 2:
+              return tr("Tunable");
+              break;
+            case 3:
+              return tr("Discrete");
+              break;
+            case 4:
+              return tr("Continuous");
+              break;
+            case 5:
+              return tr("Unknown");
+              break;
+            default:
+              break;
           }
         }
         return static_cast<int>(variability_[index.row()]);
@@ -607,11 +621,20 @@ QVariant DataTableModel::data(const QModelIndex & index, int role) const
         {
           switch(causality_[index.row()])
           {
-            case 2: return tr("Input"); break;
-            case 0: return tr("Parameter"); break;
-            case 3: return tr("Output"); break;
-            case 4: return tr("Local"); break;
-            default: break;
+            case 2:
+              return tr("Input");
+              break;
+            case 0:
+              return tr("Parameter");
+              break;
+            case 3:
+              return tr("Output");
+              break;
+            case 4:
+              return tr("Local");
+              break;
+            default:
+              break;
           }
         }
         return static_cast<int>(causality_[index.row()]);
@@ -622,10 +645,17 @@ QVariant DataTableModel::data(const QModelIndex & index, int role) const
         {
           switch(inputOutput_[index.row()])
           {
-            case 0: return tr("Disabled"); break;
-            case 1: return tr("Input"); break;
-            case 2: return tr("Output"); break;
-            default: break;
+            case 0:
+              return tr("Disabled");
+              break;
+            case 1:
+              return tr("Input");
+              break;
+            case 2:
+              return tr("Output");
+              break;
+            default:
+              break;
           }
         }
         return static_cast<int>(inputOutput_[index.row()]);
@@ -861,7 +891,7 @@ Description DataTableModel::getOutputVariableNames() const
 }
 
 DataFilterProxyModel::DataFilterProxyModel(QObject *parent)
-: QSortFilterProxyModel(parent)
+  : QSortFilterProxyModel(parent)
 {
   // fill all
   for (int i = 0; i < 8; ++ i)
@@ -891,7 +921,7 @@ void DataFilterProxyModel::setIOFilter(const QList<int> & ioFilter)
 }
 
 bool DataFilterProxyModel::filterAcceptsRow(int sourceRow,
-                                            const QModelIndex & sourceParent) const
+    const QModelIndex & sourceParent) const
 {
   // matches text regex
   QModelIndex index01 = sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent);
@@ -936,39 +966,39 @@ void TreeItem::appendChild(TreeItem *item)
 
 TreeItem *TreeItem::child(int row)
 {
-    return m_childItems.value(row);
+  return m_childItems.value(row);
 }
 
 int TreeItem::childCount() const
 {
-    return m_childItems.count();
+  return m_childItems.count();
 }
 
 int TreeItem::columnCount() const
 {
-    return m_itemData.count();
+  return m_itemData.count();
 }
 
 QVariant TreeItem::data(int column) const
 {
-    return m_itemData.value(column);
+  return m_itemData.value(column);
 }
 
 TreeItem *TreeItem::parentItem()
 {
-    return m_parentItem;
+  return m_parentItem;
 }
 
 int TreeItem::row() const
 {
-    if (m_parentItem)
-        return m_parentItem->m_childItems.indexOf(const_cast<TreeItem*>(this));
+  if (m_parentItem)
+    return m_parentItem->m_childItems.indexOf(const_cast<TreeItem*>(this));
 
-    return 0;
+  return 0;
 }
 
 TreeModel::TreeModel(const QString &file, QObject *parent)
-    : QAbstractItemModel(parent)
+  : QAbstractItemModel(parent)
 {
   QList<QVariant> rootData;
   rootData << tr("Variables");
@@ -991,88 +1021,88 @@ TreeModel::~TreeModel()
 
 int TreeModel::columnCount(const QModelIndex &parent) const
 {
-    if (parent.isValid())
-        return static_cast<TreeItem*>(parent.internalPointer())->columnCount();
-    else
-        return rootItem_->columnCount();
+  if (parent.isValid())
+    return static_cast<TreeItem*>(parent.internalPointer())->columnCount();
+  else
+    return rootItem_->columnCount();
 }
 
 QVariant TreeModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
-        return QVariant();
+  if (!index.isValid())
+    return QVariant();
 
-    if (role != Qt::DisplayRole)
-        return QVariant();
+  if (role != Qt::DisplayRole)
+    return QVariant();
 
-    TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+  TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
 
-    return item->data(index.column());
+  return item->data(index.column());
 }
 
 Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 {
-    if (!index.isValid())
-        return 0;
+  if (!index.isValid())
+    return 0;
 
-    return QAbstractItemModel::flags(index);
+  return QAbstractItemModel::flags(index);
 }
 
 QVariant TreeModel::headerData(int section, Qt::Orientation orientation,
                                int role) const
 {
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-        return rootItem_->data(section);
+  if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+    return rootItem_->data(section);
 
-    return QVariant();
+  return QVariant();
 }
 
 QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent)
-            const
+const
 {
-    if (!hasIndex(row, column, parent))
-        return QModelIndex();
+  if (!hasIndex(row, column, parent))
+    return QModelIndex();
 
-    TreeItem *parentItem;
+  TreeItem *parentItem;
 
-    if (!parent.isValid())
-        parentItem = rootItem_;
-    else
-        parentItem = static_cast<TreeItem*>(parent.internalPointer());
+  if (!parent.isValid())
+    parentItem = rootItem_;
+  else
+    parentItem = static_cast<TreeItem*>(parent.internalPointer());
 
-    TreeItem *childItem = parentItem->child(row);
-    if (childItem)
-        return createIndex(row, column, childItem);
-    else
-        return QModelIndex();
+  TreeItem *childItem = parentItem->child(row);
+  if (childItem)
+    return createIndex(row, column, childItem);
+  else
+    return QModelIndex();
 }
 
 QModelIndex TreeModel::parent(const QModelIndex &index) const
 {
-    if (!index.isValid())
-        return QModelIndex();
+  if (!index.isValid())
+    return QModelIndex();
 
-    TreeItem *childItem = static_cast<TreeItem*>(index.internalPointer());
-    TreeItem *parentItem = childItem->parentItem();
+  TreeItem *childItem = static_cast<TreeItem*>(index.internalPointer());
+  TreeItem *parentItem = childItem->parentItem();
 
-    if (parentItem == rootItem_)
-        return QModelIndex();
+  if (parentItem == rootItem_)
+    return QModelIndex();
 
-    return createIndex(parentItem->row(), 0, parentItem);
+  return createIndex(parentItem->row(), 0, parentItem);
 }
 
 int TreeModel::rowCount(const QModelIndex &parent) const
 {
-    TreeItem *parentItem;
-    if (parent.column() > 0)
-        return 0;
+  TreeItem *parentItem;
+  if (parent.column() > 0)
+    return 0;
 
-    if (!parent.isValid())
-        parentItem = rootItem_;
-    else
-        parentItem = static_cast<TreeItem*>(parent.internalPointer());
+  if (!parent.isValid())
+    parentItem = rootItem_;
+  else
+    parentItem = static_cast<TreeItem*>(parent.internalPointer());
 
-    return parentItem->childCount();
+  return parentItem->childCount();
 }
 
 void TreeModel::setupModelData(const Description & variableNames)
@@ -1102,7 +1132,8 @@ void TreeModel::setupModelData(const Description & variableNames)
         // reuse node
         newChild = currentParent->child(rows - 1);
       }
-      else {
+      else
+      {
         // create new node
         QList<QVariant> columnData;
         columnData << chunk;

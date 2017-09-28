@@ -24,7 +24,8 @@
 #include "Variable.hxx"
 #include "openturns/Collection.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API Output : public Variable
 {
   CLASSNAME
@@ -33,7 +34,7 @@ public:
   /** Default constructor */
   Output();
   /** Constructor with parameters */
-  Output(const OT::String& name, const OT::String& description="");
+  Output(const OT::String& name, const OT::String& description = "");
 
   /** Virtual constructor */
   virtual Output * clone() const;

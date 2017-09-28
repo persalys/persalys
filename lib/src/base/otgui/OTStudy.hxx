@@ -23,7 +23,8 @@
 
 #include "OTStudyImplementation.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API OTStudy : public OT::TypedInterfaceObject<OTStudyImplementation>
 {
   CLASSNAME
@@ -42,7 +43,7 @@ public:
   static void SetInstanceObserver(Observer * observer);
 
   /** Default constructor */
-  explicit OTStudy(const OT::String& name="Unnamed");
+  explicit OTStudy(const OT::String& name = "Unnamed");
   /** Default constructor */
   OTStudy(const OTStudyImplementation& implementation);
   /** Constructor from implementation */
@@ -69,7 +70,7 @@ public:
 
   OT::Collection<PhysicalModel> getPhysicalModels() const;
   PhysicalModel& getPhysicalModelByName(const OT::String& physicalModelName);
-  OT::String getAvailablePhysicalModelName(const OT::String& physicalModelRootName="PhysicalModel_") const;
+  OT::String getAvailablePhysicalModelName(const OT::String& physicalModelRootName = "PhysicalModel_") const;
   void add(const PhysicalModel& physicalModel);
   void remove(const PhysicalModel& physicalModel);
 

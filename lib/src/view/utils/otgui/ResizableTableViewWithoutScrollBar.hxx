@@ -23,7 +23,8 @@
 
 #include "otgui/CopyableTableView.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ResizableTableViewWithoutScrollBar : public CopyableTableView
 {
   Q_OBJECT

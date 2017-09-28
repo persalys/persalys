@@ -27,7 +27,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 IntroMetaModelPage::IntroMetaModelPage(QWidget* parent)
   : QWizardPage(parent)
@@ -146,7 +147,7 @@ Description IntroMetaModelPage::getInterestVariables() const
   const QStringList outputsList = outputsSelectionGroupBox_->getSelectedOutputsNames();
 
   Description desc(outputsList.size());
-  for (int i=0; i<outputsList.size(); ++i)
+  for (int i = 0; i < outputsList.size(); ++i)
     desc[i] = outputsList[i].toUtf8().constData();
 
   return desc;
@@ -177,7 +178,7 @@ void IntroMetaModelPage::updateDesignOfExperiment(int index)
 void IntroMetaModelPage::updateInterestVariables(QStringList outputsList)
 {
   interestVariables_ = Description(outputsList.size());
-  for (int i=0; i<outputsList.size(); ++i)
+  for (int i = 0; i < outputsList.size(); ++i)
     interestVariables_[i] = outputsList[i].toUtf8().constData();
 }
 

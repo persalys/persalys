@@ -24,7 +24,8 @@
 #include "PhysicalModelAnalysis.hxx"
 #include "DesignOfExperiment.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ModelEvaluation : public PhysicalModelAnalysis
 {
   CLASSNAME

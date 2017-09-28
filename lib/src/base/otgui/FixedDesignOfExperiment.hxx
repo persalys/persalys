@@ -23,7 +23,8 @@
 
 #include "DesignOfExperimentEvaluation.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API FixedDesignOfExperiment : public DesignOfExperimentEvaluation
 {
   CLASSNAME

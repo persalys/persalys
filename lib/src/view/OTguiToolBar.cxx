@@ -20,7 +20,8 @@
  */
 #include "otgui/OTguiToolBar.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 OTguiToolBar::OTguiToolBar(const OTguiActions* actions, QWidget * parent)
   : QToolBar(parent)

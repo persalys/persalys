@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Abstract top-level class for all physical models 
+ *  @brief Abstract top-level class for all physical models
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -23,7 +23,8 @@
 
 #include "PhysicalModelImplementation.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API PhysicalModel : public OT::TypedInterfaceObject<PhysicalModelImplementation>
 {
   CLASSNAME
@@ -32,7 +33,7 @@ public:
   typedef OT::Pointer<PhysicalModelImplementation> Implementation;
 
   /** Default constructor */
-  explicit PhysicalModel(const OT::String & name="Unnamed");
+  explicit PhysicalModel(const OT::String & name = "Unnamed");
   /** Default constructor */
   PhysicalModel(const PhysicalModelImplementation & implementation);
   /** Constructor from implementation */
@@ -48,7 +49,7 @@ public:
   OT::Bool operator !=(const PhysicalModel & other) const;
 
   void addObserver(Observer * observer);
-  void blockNotification(const OT::String & blockedObserverType="");
+  void blockNotification(const OT::String & blockedObserverType = "");
 
   InputCollection getInputs() const;
   Input & getInputByName(const OT::String & inputName);

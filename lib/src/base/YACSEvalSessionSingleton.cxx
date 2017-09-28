@@ -23,7 +23,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 YACSEvalSessionSingleton * YACSEvalSessionSingleton::singleton_ = 0;
 

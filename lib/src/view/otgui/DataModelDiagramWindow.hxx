@@ -24,13 +24,14 @@
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/DataModelDiagramItem.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DataModelDiagramWindow : public OTguiSubWindow
 {
   Q_OBJECT
 
 public :
-  DataModelDiagramWindow(DataModelDiagramItem * item, QWidget * parent=0);
+  DataModelDiagramWindow(DataModelDiagramItem * item, QWidget * parent = 0);
 };
 }
 #endif

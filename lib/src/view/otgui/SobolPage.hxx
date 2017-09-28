@@ -28,13 +28,14 @@
 #include <QWizardPage>
 #include <QLabel>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SobolPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  SobolPage(QWidget* parent=0);
+  SobolPage(QWidget* parent = 0);
 
   void initialize(const Analysis& analysis);
   Analysis getAnalysis(const OT::String& name, const PhysicalModel& physicalModel) const;

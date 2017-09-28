@@ -32,7 +32,8 @@
 #include <QLineEdit>
 #include <QButtonGroup>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ApproximationReliabilityPage : public QWizardPage
 {
   Q_OBJECT
@@ -41,7 +42,7 @@ public:
   enum Method {FORM = 3};
   enum OptimAlgo {AbdoRackwitzAlgo, CobylaAlgo, SQPAlgo};
 
-  ApproximationReliabilityPage(QWidget* parent=0);
+  ApproximationReliabilityPage(QWidget* parent = 0);
 
   void initialize(const Analysis& analysis);
   OT::OptimizationAlgorithm getOptimizationAlgorithm() const;

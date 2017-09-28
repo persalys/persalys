@@ -24,13 +24,14 @@
 #include <QListWidget>
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
-class OTGUI_API ListWidgetWithCheckBox : public QListWidget 
-{ 
+namespace OTGUI
+{
+class OTGUI_API ListWidgetWithCheckBox : public QListWidget
+{
   Q_OBJECT
 
 public:
-  ListWidgetWithCheckBox(QString title, QStringList itemNames, QStringList selectedItemNames, QWidget * parent=0);
+  ListWidgetWithCheckBox(QString title, QStringList itemNames, QStringList selectedItemNames, QWidget * parent = 0);
 
   QStringList getCheckedItemNames() const;
   QStringList getItemNames() const;
@@ -42,9 +43,9 @@ public slots:
 signals:
   void checkedItemsChanged(QStringList itemsNames);
 
-private: 
- QStringList itemNames_;
- QStringList checkedItemNames_;
+private:
+  QStringList itemNames_;
+  QStringList checkedItemNames_;
 };
 }
 #endif

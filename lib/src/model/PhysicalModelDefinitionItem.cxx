@@ -28,14 +28,15 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 PhysicalModelDefinitionItem::PhysicalModelDefinitionItem(const PhysicalModel & physicalModel)
   : PhysicalModelItem(physicalModel, "PhysicalModelDefinition")
 {
   setData(tr("Definition"), Qt::DisplayRole);
   QFont font;
-  font.setWeight(font.weight()+10);
+  font.setWeight(font.weight() + 10);
   setData(font, Qt::FontRole);
   setEditable(false);
 

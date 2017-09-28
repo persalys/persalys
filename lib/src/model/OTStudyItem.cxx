@@ -37,7 +37,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 OTStudyItem::OTStudyItem(const OTStudy& otStudy)
   : OTguiItem(QString::fromUtf8(otStudy.getName().c_str()), "OTStudy")
@@ -111,22 +112,22 @@ void OTStudyItem::update(Observable * source, const String & message)
 {
   if (message == "addDataModel")
   {
-    DesignOfExperiment addedDataModel = otStudy_.getDataModels()[otStudy_.getDataModels().getSize()-1];
+    DesignOfExperiment addedDataModel = otStudy_.getDataModels()[otStudy_.getDataModels().getSize() - 1];
     addDataModelItem(addedDataModel);
   }
   else if (message == "addPhysicalModel")
   {
-    PhysicalModel addedPhysicalModel = otStudy_.getPhysicalModels()[otStudy_.getPhysicalModels().getSize()-1];
+    PhysicalModel addedPhysicalModel = otStudy_.getPhysicalModels()[otStudy_.getPhysicalModels().getSize() - 1];
     addPhysicalModelItem(addedPhysicalModel);
   }
   else if (message == "addLimitState")
   {
-    LimitState addedLimitState = otStudy_.getLimitStates()[otStudy_.getLimitStates().getSize()-1];
+    LimitState addedLimitState = otStudy_.getLimitStates()[otStudy_.getLimitStates().getSize() - 1];
     addLimitStateItem(addedLimitState);
   }
   else if (message == "addAnalysis")
   {
-    Analysis addedAnalysis = otStudy_.getAnalyses()[otStudy_.getAnalyses().getSize()-1];
+    Analysis addedAnalysis = otStudy_.getAnalyses()[otStudy_.getAnalyses().getSize() - 1];
     addAnalysisItem(addedAnalysis);
   }
   else if (message == "otStudyRemoved")
@@ -225,7 +226,7 @@ void OTStudyItem::exportOTStudy(QString fileName)
   QTextStream out(&file);
   out.setCodec("UTF-8");
   out << QString::fromUtf8(otStudy_.getPythonScript().c_str());
-  file.setPermissions(QFile::ReadUser|QFile::WriteUser|QFile::ExeUser|QFile::ReadGroup|QFile::ExeGroup|QFile::ReadOther|QFile::ExeOther);
+  file.setPermissions(QFile::ReadUser | QFile::WriteUser | QFile::ExeUser | QFile::ReadGroup | QFile::ExeGroup | QFile::ReadOther | QFile::ExeOther);
   file.close();
 
   // update QSettings
@@ -355,7 +356,7 @@ void OTStudyItem::addLimitStateItem(LimitState & limitState)
   if (!pmItem)
   {
     qDebug() << "In OTStudyItem::addLimitStateItem: No item added for the limit state named " << limitState.getName().data() << "\n"
-            << "No physical model matches the name " << limitState.getPhysicalModel().getName().data() << "\n";
+             << "No physical model matches the name " << limitState.getPhysicalModel().getName().data() << "\n";
     return;
   }
 

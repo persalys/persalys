@@ -23,7 +23,8 @@
 #include <QComboBox>
 #include <QStandardItemModel>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 ComboBoxDelegate::ComboBoxDelegate(QStringList items, QPair<int, int> cell, QObject * parent)
   : QItemDelegate(parent)

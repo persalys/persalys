@@ -25,7 +25,8 @@
 
 #include <openturns/OptimizationAlgorithm.hxx>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ApproximationAnalysis
 {
 public:

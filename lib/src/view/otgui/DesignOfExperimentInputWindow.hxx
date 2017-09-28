@@ -24,13 +24,14 @@
 #include "OTguiSubWindow.hxx"
 #include "otgui/DesignOfExperimentDefinitionItem.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DesignOfExperimentInputWindow : public OTguiSubWindow
 {
   Q_OBJECT
 
 public:
-  DesignOfExperimentInputWindow(DesignOfExperimentDefinitionItem * item, QWidget * parent=0);
+  DesignOfExperimentInputWindow(DesignOfExperimentDefinitionItem * item, QWidget * parent = 0);
 
 protected:
   void buildInterface();

@@ -22,7 +22,8 @@
 
 #include <QIcon>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 OTguiWizard::OTguiWizard(QWidget * parent)
   : QWizard(parent)

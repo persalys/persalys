@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 ExperimentTableModel::ExperimentTableModel(const GridDesignOfExperiment & designOfExperiment, QObject * parent)
   : QAbstractTableModel(parent)
@@ -162,7 +163,7 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
     }
     else if (role == Qt::CheckStateRole && index.column() == 0)
     {
-      return designOfExperiment_.getLevels()[index.row()-1] == 1 ? Qt::Unchecked : Qt::Checked;
+      return designOfExperiment_.getLevels()[index.row() - 1] == 1 ? Qt::Unchecked : Qt::Checked;
     }
   }
   return QVariant();
@@ -179,9 +180,9 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
     // first column : select variables
     if (role == Qt::CheckStateRole && index.column() == 0)
     {
-      for (int i=1; i<rowCount(); ++i)
-        if (data(this->index(i, 0), role).toInt() != (value.toBool()? Qt::Checked:Qt::Unchecked))
-          setData(this->index(i, 0), value.toBool()? Qt::Checked:Qt::Unchecked, role);
+      for (int i = 1; i < rowCount(); ++i)
+        if (data(this->index(i, 0), role).toInt() != (value.toBool() ? Qt::Checked : Qt::Unchecked))
+          setData(this->index(i, 0), value.toBool() ? Qt::Checked : Qt::Unchecked, role);
     }
     // fifth column : select levels or deltas
     else if (role == Qt::EditRole && index.column() == 5)
@@ -199,7 +200,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
       {
         emit errorMessageChanged(QString("<font color=red>%1</font>").arg(ex.what()));
       }
-      emit dataChanged(this->index(1, 5), this->index(rowCount()-1, 5));
+      emit dataChanged(this->index(1, 5), this->index(rowCount() - 1, 5));
     }
   }
   // not header

@@ -28,7 +28,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(PythonPhysicalModel)
 
@@ -44,9 +45,9 @@ PythonPhysicalModel::PythonPhysicalModel(const String & name)
 
 /* Constructor with parameters */
 PythonPhysicalModel::PythonPhysicalModel(const String & name,
-                                         const InputCollection & inputs,
-                                         const OutputCollection & outputs,
-                                         const String & code)
+    const InputCollection & inputs,
+    const OutputCollection & outputs,
+    const String & code)
   : PhysicalModelImplementation(name, inputs, outputs)
 {
   setCode(code);
@@ -167,13 +168,13 @@ String PythonPhysicalModel::getPythonScript() const
   result += "inputCollection = []\n";
   for (UnsignedInteger i = 0; i < getInputs().getSize(); ++ i)
   {
-    result += "inputCollection.append("+getInputs()[i].getName()+")\n";
+    result += "inputCollection.append(" + getInputs()[i].getName() + ")\n";
   }
 
   result += "outputCollection = []\n";
   for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++ i)
   {
-    result += "outputCollection.append("+getOutputs()[i].getName()+")\n";
+    result += "outputCollection.append(" + getOutputs()[i].getName() + ")\n";
   }
 
   // escape quotes, eols

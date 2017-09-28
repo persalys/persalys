@@ -60,7 +60,8 @@
 #include <QRubberBand>
 #include <QPainter>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API PieChartView: public QAbstractItemView
 {
   Q_OBJECT
@@ -85,7 +86,7 @@ protected:
   virtual void mouseReleaseEvent(QMouseEvent *event);
 
   virtual QModelIndex moveCursor(QAbstractItemView::CursorAction cursorAction,
-                          Qt::KeyboardModifiers modifiers);
+                                 Qt::KeyboardModifiers modifiers);
 
   virtual void draw(QPainter& devicePainter);
   virtual void paintEvent(QPaintEvent *event);

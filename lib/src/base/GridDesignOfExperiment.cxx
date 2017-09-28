@@ -27,7 +27,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(GridDesignOfExperiment)
 
@@ -52,11 +53,11 @@ GridDesignOfExperiment::GridDesignOfExperiment(const String& name, const Physica
 
 /* Constructor with parameters */
 GridDesignOfExperiment::GridDesignOfExperiment(const String& name,
-                                               const PhysicalModel& physicalModel,
-                                               const Point& lowerBounds,
-                                               const Point& upperBounds,
-                                               const Indices& levels,
-                                               const Point& values)
+    const PhysicalModel& physicalModel,
+    const Point& lowerBounds,
+    const Point& upperBounds,
+    const Indices& levels,
+    const Point& values)
   : DesignOfExperimentEvaluation(name, physicalModel)
   , type_(GridDesignOfExperiment::FromBoundsAndLevels)
   , inputNames_(physicalModel.getInputNames())
@@ -126,7 +127,7 @@ void GridDesignOfExperiment::initializeParameters()
     {
       const Distribution distribution = inputs[i].getDistribution();
       const String distributionName = distribution.getImplementation()->getClassName();
-      
+
       if (distributionName == "TruncatedDistribution")
       {
         const TruncatedDistribution truncatedDist = *dynamic_cast<TruncatedDistribution*>(distribution.getImplementation().get());
@@ -440,7 +441,7 @@ String GridDesignOfExperiment::getPythonScript() const
   for (UnsignedInteger i = 0; i < values_.getSize(); ++ i)
   {
     oss << values_[i];
-    if (i < values_.getSize()-1)
+    if (i < values_.getSize() - 1)
       oss << ", ";
   }
   oss << "]\n";
@@ -448,7 +449,7 @@ String GridDesignOfExperiment::getPythonScript() const
   for (UnsignedInteger i = 0; i < lowerBounds_.getSize(); ++ i)
   {
     oss << lowerBounds_[i];
-    if (i < lowerBounds_.getSize()-1)
+    if (i < lowerBounds_.getSize() - 1)
       oss << ", ";
   }
   oss << "]\n";
@@ -456,7 +457,7 @@ String GridDesignOfExperiment::getPythonScript() const
   for (UnsignedInteger i = 0; i < upperBounds_.getSize(); ++ i)
   {
     oss << upperBounds_[i];
-    if (i < upperBounds_.getSize()-1)
+    if (i < upperBounds_.getSize() - 1)
       oss << ", ";
   }
   oss << "]\n";
@@ -464,7 +465,7 @@ String GridDesignOfExperiment::getPythonScript() const
   for (UnsignedInteger i = 0; i < levels_.getSize(); ++ i)
   {
     oss << levels_[i];
-    if (i < levels_.getSize()-1)
+    if (i < levels_.getSize() - 1)
       oss << ", ";
   }
   oss << "]\n";
@@ -477,7 +478,7 @@ String GridDesignOfExperiment::getPythonScript() const
   for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
   {
     oss << "'" << getInterestVariables()[i] << "'";
-    if (i < getInterestVariables().getSize()-1)
+    if (i < getInterestVariables().getSize() - 1)
       oss << ", ";
   }
   oss << "]\n";

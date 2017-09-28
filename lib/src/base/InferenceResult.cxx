@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(InferenceResult)
 
@@ -56,7 +57,7 @@ FittingTestResult InferenceResult::getFittingTestResultForVariable(const String&
   if (!fittingTestResultCollection_.getSize())
     throw InvalidArgumentException(HERE) << "There is no FittingTest result";
 
-  for (UnsignedInteger i=0; i<fittingTestResultCollection_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < fittingTestResultCollection_.getSize(); ++i)
   {
     if (fittingTestResultCollection_[i].getVariableName() == variableName)
       return fittingTestResultCollection_[i];

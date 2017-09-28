@@ -30,7 +30,8 @@
 #include <ResourceWidget.hxx>
 #endif
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 AnalysisWindow::AnalysisWindow(AnalysisItem* item, const bool analysisInProgress, QWidget * parent)
   : OTguiSubWindow(item, parent)

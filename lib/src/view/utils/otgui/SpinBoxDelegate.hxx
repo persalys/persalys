@@ -24,7 +24,8 @@
 #include <QStyledItemDelegate>
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SpinBoxDelegate : public QStyledItemDelegate
 {
   Q_OBJECT
@@ -33,7 +34,7 @@ public:
   enum spinboxType {noType, correlation, differentiationStep};
 
   SpinBoxDelegate(QObject * parent = 0);
- 
+
   QWidget * createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
   void setEditorData(QWidget * editor, const QModelIndex & index) const;
   void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const;

@@ -30,7 +30,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CopulaInferenceResultWindow::CopulaInferenceResultWindow(AnalysisItem* item, QWidget * parent)
   : ResultWindow(item, parent)
@@ -82,9 +83,9 @@ void CopulaInferenceResultWindow::buildInterface()
 
     // - create a CopulaInferenceResultWidget
     CopulaInferenceResultWidget * inferenceResultWidget_i =  new CopulaInferenceResultWidget(result_.getCopulaInferenceSetResultCollection()[i],
-                                                                                             result_.getDesignOfExperiment().getSample().getMarginal(indices),
-                                                                                             true,
-                                                                                             this);
+        result_.getDesignOfExperiment().getSample().getMarginal(indices),
+        true,
+        this);
 
     inferenceResultStackWidget->addWidget(inferenceResultWidget_i);
   }

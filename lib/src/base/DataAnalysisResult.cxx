@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI{
+namespace OTGUI
+{
 
 CLASSNAMEINIT(DataAnalysisResult)
 

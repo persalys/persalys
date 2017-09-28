@@ -24,14 +24,15 @@
 #include <QItemDelegate>
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ComboBoxDelegate : public QItemDelegate
 {
   Q_OBJECT
 
 public:
-  ComboBoxDelegate(QStringList items, QPair<int, int> cell=QPair<int, int>(), QObject * parent = 0);
- 
+  ComboBoxDelegate(QStringList items, QPair<int, int> cell = QPair<int, int>(), QObject * parent = 0);
+
   QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
   void setEditorData(QWidget * editor, const QModelIndex & index) const;
   void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const;

@@ -25,7 +25,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 /* Default constructor */
 WithStopCriteriaAnalysis::WithStopCriteriaAnalysis()
@@ -44,7 +45,7 @@ WithStopCriteriaAnalysis::~WithStopCriteriaAnalysis()
 bool WithStopCriteriaAnalysis::Stop(void * p)
 {
   TimeCriteria * arg = (TimeCriteria*)p;
-  arg->elapsedTime_ = clock()-arg->startTime_;
+  arg->elapsedTime_ = clock() - arg->startTime_;
   // stop algorithm when the elapsed time is superior to the max elapsed time
   if (arg->stopRequested_ || (arg->elapsedTime_ > arg->maxElapsedTime_))
     return true;

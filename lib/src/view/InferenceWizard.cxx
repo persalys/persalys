@@ -33,7 +33,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 InferenceWizard::InferenceWizard(const Analysis& analysis, QWidget* parent)
   : AnalysisWizard(analysis, parent)
@@ -96,7 +97,7 @@ void InferenceWizard::buildInterface()
 
   connect(varTableView, SIGNAL(clicked(QModelIndex)), varTableView, SLOT(setCurrentIndex(QModelIndex)));
   connect(varTableModel_, SIGNAL(selectionChanged(OT::Description, OT::String)), this, SLOT(updateInterestVar(OT::Description, OT::String)));
-  connect(varTableView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectedVarChanged(QModelIndex,QModelIndex)));
+  connect(varTableView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex, QModelIndex)), this, SLOT(selectedVarChanged(QModelIndex, QModelIndex)));
 
   // - header
   CheckableHeaderView * varTableHeaderView = new CheckableHeaderView;

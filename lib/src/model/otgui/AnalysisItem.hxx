@@ -26,7 +26,8 @@
 #include "otgui/MetaModel.hxx"
 #include "otgui/DesignOfExperiment.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API AnalysisItem : public OTguiItem, public Observer
 {
   Q_OBJECT

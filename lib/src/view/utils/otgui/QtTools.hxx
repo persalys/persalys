@@ -25,7 +25,8 @@
 #include <QObject>
 #include <openturns/OTType.hxx>
 
-namespace OTGUI {
+namespace OTGUI
+{
 /**
  * @class SignalBlocker
  *

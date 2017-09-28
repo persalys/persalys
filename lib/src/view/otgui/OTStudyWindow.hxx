@@ -24,13 +24,14 @@
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/OTStudyItem.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API OTStudyWindow : public OTguiSubWindow
 {
   Q_OBJECT
 
 public:
-  OTStudyWindow(OTStudyItem * item, QWidget * parent=0);
+  OTStudyWindow(OTStudyItem * item, QWidget * parent = 0);
 
   void buildInterface();
 

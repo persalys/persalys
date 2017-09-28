@@ -25,7 +25,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard, QWidget* parent)
   : AnalysisWizard(analysis, parent)
@@ -38,7 +39,7 @@ ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(OTguiItem* item, const Anal
   const LimitState limitState = dynamic_cast<ReliabilityAnalysis*>(analysis_.getImplementation().get())->getLimitState();
   if (isGeneralWizard)
   {
-    for (UnsignedInteger i=0; i<item->getParentOTStudyItem()->getOTStudy().getLimitStates().getSize(); ++i)
+    for (UnsignedInteger i = 0; i < item->getParentOTStudyItem()->getOTStudy().getLimitStates().getSize(); ++i)
     {
       const LimitState limitState_i = item->getParentOTStudyItem()->getOTStudy().getLimitStates()[i];
       if (limitState_i.getPhysicalModel().getImplementation().get() == limitState.getPhysicalModel().getImplementation().get())

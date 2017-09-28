@@ -26,7 +26,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)

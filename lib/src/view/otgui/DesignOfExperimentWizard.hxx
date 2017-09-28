@@ -29,7 +29,8 @@
 
 #include <QButtonGroup>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DesignOfExperimentWizard : public AnalysisWizard
 {
   Q_OBJECT
@@ -38,7 +39,7 @@ public:
 
   enum {Page_Intro, Page_Deterministic, Page_Probabilistic, Page_Import, Page_Evaluation};
 
-  DesignOfExperimentWizard(const Analysis & designOfExperiment, QWidget *parent=0);
+  DesignOfExperimentWizard(const Analysis & designOfExperiment, QWidget *parent = 0);
 
   int nextId() const;
   virtual Analysis getAnalysis() const;

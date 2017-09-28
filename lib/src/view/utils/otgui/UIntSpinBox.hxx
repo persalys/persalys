@@ -23,7 +23,8 @@
 
 #include "otgui/DoubleSpinBox.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API UIntSpinBox : public DoubleSpinBox
 {
   Q_OBJECT

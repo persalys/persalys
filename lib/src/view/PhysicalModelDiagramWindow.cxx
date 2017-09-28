@@ -31,7 +31,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem * physicalModelDiagramItem, QWidget * parent)
   : OTguiSubWindow(physicalModelDiagramItem, parent)
@@ -221,22 +222,22 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   // -- arrows positions --
   // arrows start points
   const int buttonMargin = 3;
-  const QPointF modelDefinition_rightPoint(boxWidth + buttonMargin, boxHeight/2);
-  const QPointF doeCreation_rightPoint(column1pos + boxWidth + buttonMargin, line1pos + boxHeight/2);
-  const QPointF doeEval_rightPoint(column2pos + boxWidth + buttonMargin, line1pos + boxHeight/2);
-  const QPointF probaModel_rightPoint(column1pos + boxWidth + buttonMargin, line2pos + boxHeight/2);
-  const QPointF limitState_rightPoint(column2pos + boxWidth + buttonMargin, line4pos + boxHeight/2);
+  const QPointF modelDefinition_rightPoint(boxWidth + buttonMargin, boxHeight / 2);
+  const QPointF doeCreation_rightPoint(column1pos + boxWidth + buttonMargin, line1pos + boxHeight / 2);
+  const QPointF doeEval_rightPoint(column2pos + boxWidth + buttonMargin, line1pos + boxHeight / 2);
+  const QPointF probaModel_rightPoint(column1pos + boxWidth + buttonMargin, line2pos + boxHeight / 2);
+  const QPointF limitState_rightPoint(column2pos + boxWidth + buttonMargin, line4pos + boxHeight / 2);
 
   // arrows ending points
-  const QPointF modelEval_leftPoint(column1pos, boxHeight/2);
-  const QPointF doeCreation_leftPoint(column1pos, line1pos + boxHeight/2);
-  const QPointF probaModel_leftPoint(column1pos, line2pos + boxHeight/2);
-  const QPointF doeEval_leftPoint(column2pos, line1pos + boxHeight/2);
-  const QPointF sensitivity_leftPoint(column2pos, line2pos + boxHeight/2);
-  const QPointF centralTendency_leftPoint(column2pos, line3pos + boxHeight/2);
-  const QPointF limitState_leftPoint(column2pos, line4pos + boxHeight/2);
-  const QPointF metamodel_leftPoint(column3pos, line1pos + boxHeight/2);
-  const QPointF reliability_leftPoint(column3pos, line4pos + boxHeight/2);
+  const QPointF modelEval_leftPoint(column1pos, boxHeight / 2);
+  const QPointF doeCreation_leftPoint(column1pos, line1pos + boxHeight / 2);
+  const QPointF probaModel_leftPoint(column1pos, line2pos + boxHeight / 2);
+  const QPointF doeEval_leftPoint(column2pos, line1pos + boxHeight / 2);
+  const QPointF sensitivity_leftPoint(column2pos, line2pos + boxHeight / 2);
+  const QPointF centralTendency_leftPoint(column2pos, line3pos + boxHeight / 2);
+  const QPointF limitState_leftPoint(column2pos, line4pos + boxHeight / 2);
+  const QPointF metamodel_leftPoint(column3pos, line1pos + boxHeight / 2);
+  const QPointF reliability_leftPoint(column3pos, line4pos + boxHeight / 2);
 
   // -- Arrows --
 
@@ -248,7 +249,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 
   // arrow model definition -> doe creation
   Arrow * modelDef_doeCreation = new Arrow(modelDefinition_rightPoint,
-                                           doeCreation_leftPoint);
+      doeCreation_leftPoint);
   scene->addItem(modelDef_doeCreation);
   connect(doeCreationButton, SIGNAL(enabledChanged(bool)), modelDef_doeCreation, SLOT(setValidity(bool)));
 
@@ -266,19 +267,19 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 
   // arrow proba model definition -> sensitivity
   Arrow * probaModel_sensitivity = new Arrow(probaModel_rightPoint,
-                                             sensitivity_leftPoint);
+      sensitivity_leftPoint);
   scene->addItem(probaModel_sensitivity);
   connect(sensitivityButton, SIGNAL(enabledChanged(bool)), probaModel_sensitivity, SLOT(setValidity(bool)));
 
   // arrow proba model definition -> central tendency
   Arrow * probaModel_centralTendency = new Arrow(probaModel_rightPoint,
-                                                 centralTendency_leftPoint);
+      centralTendency_leftPoint);
   scene->addItem(probaModel_centralTendency);
   connect(centralTendencyButton, SIGNAL(enabledChanged(bool)), probaModel_centralTendency, SLOT(setValidity(bool)));
 
   // arrow proba model definition -> limit state
   Arrow * probaModel_limitState = new Arrow(probaModel_rightPoint,
-                                            limitState_leftPoint);
+      limitState_leftPoint);
   scene->addItem(probaModel_limitState);
   connect(limitStateButton, SIGNAL(enabledChanged(bool)), probaModel_limitState, SLOT(setValidity(bool)));
 
@@ -290,7 +291,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 
   // arrow limit state -> reliability
   Arrow * limitState_reliability = new Arrow(limitState_rightPoint,
-                                             reliability_leftPoint);
+      reliability_leftPoint);
   scene->addItem(limitState_reliability);
   connect(reliabilityButton, SIGNAL(enabledChanged(bool)), limitState_reliability, SLOT(setValidity(bool)));
 

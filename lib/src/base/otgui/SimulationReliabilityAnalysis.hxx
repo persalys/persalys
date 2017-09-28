@@ -28,7 +28,8 @@
 
 #include <openturns/Simulation.hxx>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SimulationReliabilityAnalysis : public ReliabilityAnalysis, public WithStopCriteriaAnalysis
 {
 public:

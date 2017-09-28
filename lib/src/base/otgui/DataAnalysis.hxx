@@ -26,7 +26,8 @@
 
 #include "openturns/OTType.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DataAnalysis : public DesignOfExperimentAnalysis
 {
   CLASSNAME

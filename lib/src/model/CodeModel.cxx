@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CodeModel::CodeModel(const PhysicalModel & physicalModel, QObject* parent)
   : QAbstractTableModel(parent)
@@ -51,7 +52,7 @@ QVariant CodeModel::data(const QModelIndex & index, int role) const
   if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
     PythonPhysicalModel *pyModel = dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get());
-    return pyModel? QString::fromUtf8(pyModel->getCode().c_str()) : "";
+    return pyModel ? QString::fromUtf8(pyModel->getCode().c_str()) : "";
   }
   return QVariant();
 }

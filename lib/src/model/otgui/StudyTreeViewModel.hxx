@@ -25,7 +25,8 @@
 
 #include <QStandardItemModel>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API StudyTreeViewModel : public QStandardItemModel, public Observer
 {
   Q_OBJECT

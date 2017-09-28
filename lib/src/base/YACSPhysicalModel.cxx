@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(YACSPhysicalModel)
 
@@ -124,14 +125,14 @@ void YACSPhysicalModel::setXMLFileName(const String & fileName)
 void YACSPhysicalModel::updateData()
 {
   PhysicalModelImplementation::clearInputs();
-  for (UnsignedInteger i=0; i<evaluation_.getInputDimension(); ++i)
+  for (UnsignedInteger i = 0; i < evaluation_.getInputDimension(); ++i)
   {
     Input newInput(evaluation_.getInputVariablesNames()[i], evaluation_.getInputValues()[i]);
     PhysicalModelImplementation::addInput(newInput);
   }
 
   PhysicalModelImplementation::clearOutputs();
-  for (UnsignedInteger i=0; i<evaluation_.getOutputDimension(); ++i)
+  for (UnsignedInteger i = 0; i < evaluation_.getOutputDimension(); ++i)
   {
     Output newOutput(evaluation_.getOutputVariablesNames()[i]);
     PhysicalModelImplementation::addOutput(newOutput);
@@ -152,7 +153,7 @@ String YACSPhysicalModel::getPythonScript() const
 {
   String result;
 
-  result += getName()+ " = otguibase.YACSPhysicalModel('" + getName() + "', '";
+  result += getName() + " = otguibase.YACSPhysicalModel('" + getName() + "', '";
   result += getXMLFileName() + "')\n";
 
   result += getProbaModelPythonScript();

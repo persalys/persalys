@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(CopulaInferenceResult)
 
@@ -55,7 +56,7 @@ CopulaInferenceSetResult CopulaInferenceResult::getCopulaInferenceSetResult(cons
 {
   Description setOfVariables(variablesNames);
   setOfVariables.sort();
-  for (UnsignedInteger i=0; i<copulaInferenceSetResultCollection_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < copulaInferenceSetResultCollection_.getSize(); ++i)
   {
     if (copulaInferenceSetResultCollection_[i].getSetOfVariablesNames() == setOfVariables)
       return copulaInferenceSetResultCollection_[i];

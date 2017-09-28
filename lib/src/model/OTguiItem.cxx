@@ -20,7 +20,8 @@
  */
 #include "otgui/OTguiItem.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 OTguiItem::OTguiItem(const QString& name, const QString& type)
   : QObject()

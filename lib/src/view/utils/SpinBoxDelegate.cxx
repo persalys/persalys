@@ -23,7 +23,8 @@
 #include "otgui/LogDoubleSpinBox.hxx"
 #include "otgui/OTguiException.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 SpinBoxDelegate::SpinBoxDelegate(QObject *parent)
   : QStyledItemDelegate(parent)

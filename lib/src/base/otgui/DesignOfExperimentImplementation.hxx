@@ -24,7 +24,8 @@
 #include "PhysicalModel.hxx"
 #include "DataSample.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DesignOfExperimentImplementation : public DataSample, public Observable
 {
   CLASSNAME

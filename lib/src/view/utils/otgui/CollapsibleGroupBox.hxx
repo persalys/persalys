@@ -25,7 +25,8 @@
 #include <QTimeLine>
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 class CollapsibleGroupBoxPrivate;
 
@@ -39,81 +40,81 @@ class CollapsibleGroupBoxPrivate;
  *
  * @since 5.16
  */
-  
+
 class OTGUI_API CollapsibleGroupBox : public QWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit CollapsibleGroupBox(QWidget *parent = 0);
-    virtual ~CollapsibleGroupBox();
+  explicit CollapsibleGroupBox(QWidget *parent = 0);
+  virtual ~CollapsibleGroupBox();
 
-    /**
-     * Set the title that will be permanently shown at the top of the collapsing box
-     * Mnemonics are supported
-     */
-    void setTitle(const QString &title);
+  /**
+   * Set the title that will be permanently shown at the top of the collapsing box
+   * Mnemonics are supported
+   */
+  void setTitle(const QString &title);
 
-    /**
-     * The title
-     */
-    QString title() const;
+  /**
+   * The title
+   */
+  QString title() const;
 
-    /**
-     * Set whether contents are shown
-     *
-     * The default is false until the user clicks
-     */
-    void setExpanded(bool expanded);
+  /**
+   * Set whether contents are shown
+   *
+   * The default is false until the user clicks
+   */
+  void setExpanded(bool expanded);
 
-    /**
-     * Whether contents are shown
-     * During animations, this will reflect the target state at the end of the animation
-     */
-    bool isExpanded() const;
+  /**
+   * Whether contents are shown
+   * During animations, this will reflect the target state at the end of the animation
+   */
+  bool isExpanded() const;
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
+  QSize sizeHint() const;
+  QSize minimumSizeHint() const;
 
 public Q_SLOTS:
-    /**
-     * Expands if collapsed and vice versa
-     */
-    void toggle();
+  /**
+   * Expands if collapsed and vice versa
+   */
+  void toggle();
 
-    /**
-     * Equivalent to setExpanded(true)
-     */
-    void expand();
+  /**
+   * Equivalent to setExpanded(true)
+   */
+  void expand();
 
-    /**
-     * Equivalent to setExpanded(false)
-     */
-    void collapse();
+  /**
+   * Equivalent to setExpanded(false)
+   */
+  void collapse();
 
 Q_SIGNALS:
-    /**
-     * Emitted when the title is changed
-     */
-    void titleChanged();
+  /**
+   * Emitted when the title is changed
+   */
+  void titleChanged();
 
-    /**
-     * Emitted when the widget expands or collapsed
-     */
-    void expandedChanged();
+  /**
+   * Emitted when the widget expands or collapsed
+   */
+  void expandedChanged();
 
 protected:
-    void paintEvent(QPaintEvent*);
+  void paintEvent(QPaintEvent*);
 
-    bool event(QEvent*);
-    void mousePressEvent(QMouseEvent*);
-    void mouseMoveEvent(QMouseEvent*);
-    void leaveEvent(QEvent*);
-    void keyPressEvent(QKeyEvent*);
-    void resizeEvent(QResizeEvent*);
+  bool event(QEvent*);
+  void mousePressEvent(QMouseEvent*);
+  void mouseMoveEvent(QMouseEvent*);
+  void leaveEvent(QEvent*);
+  void keyPressEvent(QKeyEvent*);
+  void resizeEvent(QResizeEvent*);
 
 private:
-    CollapsibleGroupBoxPrivate *const d;
+  CollapsibleGroupBoxPrivate *const d;
 };
 }
 #endif

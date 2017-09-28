@@ -25,16 +25,17 @@
 
 #include <QGroupBox>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ParametersWidget : public QGroupBox
 {
 public:
   ParametersWidget(const QString title,                 // table title
                    const QStringList names,             // parameters names
                    const QStringList values,            // parameters values
-                   const bool showGrid=false,           // show the grid of the table
-                   const bool namesHasHeaderType=false, // parameters names display has table header
-                   QWidget * parent=0
+                   const bool showGrid = false,         // show the grid of the table
+                   const bool namesHasHeaderType = false, // parameters names display has table header
+                   QWidget * parent = 0
                   );
 };
 }

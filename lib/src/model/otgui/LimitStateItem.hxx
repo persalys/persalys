@@ -24,7 +24,8 @@
 #include "otgui/LimitState.hxx"
 #include "otgui/AnalysisItem.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API LimitStateItem : public OTguiItem, public Observer
 {
   Q_OBJECT

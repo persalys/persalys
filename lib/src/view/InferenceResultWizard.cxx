@@ -32,7 +32,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 InferenceResultWizard::InferenceResultWizard(const OTStudy& otStudy, QWidget* parent)
   : OTguiWizard(parent)
@@ -58,7 +59,7 @@ void InferenceResultWizard::buildInterface()
   mainLayout->addWidget(new QLabel(tr("Inference analysis")), 0, 0);
   mainLayout->addWidget(inferenceResultsComboBox_ , 0, 1);
 
-  for (UnsignedInteger i=0; i<otStudy_.getAnalyses().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < otStudy_.getAnalyses().getSize(); ++i)
     if (otStudy_.getAnalyses()[i].getImplementation()->getClassName() == "InferenceAnalysis")
       if (dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[i].getImplementation().get())->analysisLaunched())
         inferenceResultsComboBox_->addItem(QString::fromUtf8(otStudy_.getAnalyses()[i].getName().c_str()), (int)i);
@@ -103,7 +104,7 @@ void InferenceResultWizard::updateVariablesComboBox(int currentAnalysis)
     InferenceResult result(dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
     Collection< FittingTestResult > fittingTestResultCollection(result.getFittingTestResultCollection());
 
-    for (UnsignedInteger i=0; i<fittingTestResultCollection.getSize(); ++i)
+    for (UnsignedInteger i = 0; i < fittingTestResultCollection.getSize(); ++i)
       variablesNames << QString::fromUtf8(fittingTestResultCollection[i].getVariableName().c_str());
   }
   variablesComboBox_->addItems(variablesNames);

@@ -24,7 +24,8 @@
 #include <QTableView>
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 class OTGUI_API CopyableTableView : public QTableView
 {
@@ -33,7 +34,7 @@ class OTGUI_API CopyableTableView : public QTableView
 public:
   /** Default constructor */
   CopyableTableView(QWidget * parent = 0);
-  
+
 public slots:
   void copy();
 

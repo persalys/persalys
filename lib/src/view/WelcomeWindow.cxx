@@ -26,7 +26,8 @@
 #include <QLabel>
 #include <QPainter>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 WelcomeWindow::WelcomeWindow()
   : QWidget()

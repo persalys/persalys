@@ -9,7 +9,7 @@ ot.RandomGenerator.SetSeed(0)
 
 myStudy = otguibase.OTStudy('myStudy')
 
-## Model
+# Model
 xi1 = otguibase.Input('xi1', ot.Uniform(0., 10.))
 xi2 = otguibase.Input('xi2', ot.Uniform(0., 10.))
 xi3 = otguibase.Input('xi3', 0.5)
@@ -21,10 +21,11 @@ y1 = otguibase.Output('y1')
 formula_y00 = "xi1"
 formula_y0 = "cos(0.5*xi1) + sin(xi2)"
 formula_y1 = "cos(0.5*xi1) + sin(xi2) + xi3"
-model = otguibase.SymbolicPhysicalModel('model', [xi1, xi2, xi3], [y00, y0, y1], [formula_y00, formula_y0, formula_y1])
+model = otguibase.SymbolicPhysicalModel('model', [xi1, xi2, xi3], [y00, y0, y1], [
+                                        formula_y00, formula_y0, formula_y1])
 myStudy.add(model)
 
-## Design of Experiment ##
+# Design of Experiment ##
 aDesign = otguibase.FixedDesignOfExperiment('design', model)
 inputSample = ot.LHSExperiment(model.getComposedDistribution(), 50).generate()
 inputSample.stack(ot.Sample(50, [0.5]))
@@ -33,7 +34,7 @@ myStudy.add(aDesign)
 
 aDesign.run()
 
-## Chaos 1 ##
+# Chaos 1 ##
 analysis = otguibase.FunctionalChaosAnalysis('chaos_0', aDesign)
 analysis.setChaosDegree(4)
 analysis.setSparseChaos(True)
@@ -50,15 +51,18 @@ print("functionalChaosResult", chaosResult.getFunctionalChaosResult())
 # Comparaison
 mean = [0, 0.4885327735406139]
 variance = [0.8727523923767868, 0.8729938152031875]
-firstOrderIndices = [[ 0.5218735936795287, 0.4781264063204713 ], [ 0.5216496993795265, 0.4783503006204734 ]]
-totalIndices = [[ 0.5218735936795287, 0.4781264063204713 ], [ 0.5216496993795265, 0.4783503006204734 ]]
+firstOrderIndices = [[0.5218735936795287, 0.4781264063204713],
+                     [0.5216496993795265, 0.4783503006204734]]
+totalIndices = [[0.5218735936795287, 0.4781264063204713],
+                [0.5216496993795265, 0.4783503006204734]]
 
 ott.assert_almost_equal(mean, chaosResult.getMean(), 1e-16)
 ott.assert_almost_equal(variance, chaosResult.getVariance(), 1e-16)
-ott.assert_almost_equal(firstOrderIndices, sobolResult.getFirstOrderIndices(), 1e-16)
+ott.assert_almost_equal(
+    firstOrderIndices, sobolResult.getFirstOrderIndices(), 1e-16)
 ott.assert_almost_equal(totalIndices, sobolResult.getTotalIndices(), 1e-16)
 
-## Chaos 2 ##
+# Chaos 2 ##
 analysis2 = otguibase.FunctionalChaosAnalysis('chaos_1', aDesign)
 analysis2.setChaosDegree(4)
 analysis2.setLeaveOneOutValidation(True)
@@ -73,7 +77,8 @@ sobolResult2 = chaosResult2.getSobolResult()
 print("result=", chaosResult2)
 print("functionalChaosResult", chaosResult2.getFunctionalChaosResult())
 
-ott.assert_almost_equal([0.9223441081335271], chaosResult2.getQ2LeaveOneOut(), 1e-16)
+ott.assert_almost_equal(
+    [0.9223441081335271], chaosResult2.getQ2LeaveOneOut(), 1e-16)
 
 # extract metamodel
 metamodel = chaosResult2.getMetaModel()
@@ -82,7 +87,7 @@ ott.assert_almost_equal(metamodel.getFunction().getOutputDimension(), 1)
 ott.assert_almost_equal(metamodel.getFunction()([0.5] * 2), [2.17011])
 
 
-## script
+# script
 script = myStudy.getPythonScript()
 print(script)
 exec(script)

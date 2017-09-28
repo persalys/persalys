@@ -31,7 +31,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelDiagramItem, QWidget * parent)
   : OTguiSubWindow(dataModelDiagramItem, parent)
@@ -144,21 +145,21 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
   // -- arrows positions --
   // arrows start points
   const int buttonMargin = 3;
-  const QPointF modelDefinition_rightPoint(boxWidth + buttonMargin, boxHeight/2);
-  const QPointF startCopulaInferencePoint(boxWidth + buttonMargin, line1pos + boxHeight/2);
-  const QPointF startMetaModelPoint(boxWidth + buttonMargin, line2pos + boxHeight/2);
+  const QPointF modelDefinition_rightPoint(boxWidth + buttonMargin, boxHeight / 2);
+  const QPointF startCopulaInferencePoint(boxWidth + buttonMargin, line1pos + boxHeight / 2);
+  const QPointF startMetaModelPoint(boxWidth + buttonMargin, line2pos + boxHeight / 2);
 
   // arrows ending points
-  const QPointF dataAnalysis_leftPoint(column1pos, boxHeight/2);
-  const QPointF inference_leftPoint(column1pos, line1pos + boxHeight/2);
-  const QPointF copulaInference_leftPoint(column1pos, line2pos + boxHeight/2);
-  const QPointF metamodel_leftPoint(column1pos, line3pos + boxHeight/2);
+  const QPointF dataAnalysis_leftPoint(column1pos, boxHeight / 2);
+  const QPointF inference_leftPoint(column1pos, line1pos + boxHeight / 2);
+  const QPointF copulaInference_leftPoint(column1pos, line2pos + boxHeight / 2);
+  const QPointF metamodel_leftPoint(column1pos, line3pos + boxHeight / 2);
 
   // -- Arrows --
 
   // arrow model definition -> data analysis
   Arrow * modelDef_dataAnalysis = new Arrow(modelDefinition_rightPoint,
-                                            dataAnalysis_leftPoint);
+      dataAnalysis_leftPoint);
   scene->addItem(modelDef_dataAnalysis);
   connect(dataAnalysisButton, SIGNAL(enabledChanged(bool)), modelDef_dataAnalysis, SLOT(setValidity(bool)));
 
@@ -170,7 +171,7 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
 
   // arrow model definition -> copula inference
   Arrow * modelDef_copulaInference = new Arrow(startCopulaInferencePoint,
-                                               copulaInference_leftPoint);
+      copulaInference_leftPoint);
   scene->addItem(modelDef_copulaInference);
   connect(copulaInferenceButton, SIGNAL(enabledChanged(bool)), modelDef_copulaInference, SLOT(setValidity(bool)));
 

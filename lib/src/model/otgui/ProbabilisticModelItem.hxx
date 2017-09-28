@@ -23,7 +23,8 @@
 
 #include "otgui/PhysicalModelItem.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ProbabilisticModelItem : public PhysicalModelItem
 {
   Q_OBJECT

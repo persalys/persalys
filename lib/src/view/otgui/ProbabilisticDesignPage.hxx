@@ -27,7 +27,8 @@
 #include <QWizardPage>
 #include <QButtonGroup>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ProbabilisticDesignPage : public QWizardPage
 {
   Q_OBJECT

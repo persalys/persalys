@@ -25,7 +25,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 /* Get the list of the available distributions */
 Description DistributionDictionary::GetAvailableDistributions()
@@ -185,7 +186,7 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     }
     else if (distributionName == "Beta")
     {
-      return BetaMuSigma(mu, sigma, mu-3*sigma, mu+3*sigma).getDistribution();
+      return BetaMuSigma(mu, sigma, mu - 3 * sigma, mu + 3 * sigma).getDistribution();
     }
     else if (distributionName == "ChiSquare")
     {
@@ -193,7 +194,7 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     }
     else if (distributionName == "Gamma")
     {
-      return GammaMuSigma(mu, sigma, mu-10.0*sigma).getDistribution(); // arbitrary gamma
+      return GammaMuSigma(mu, sigma, mu - 10.0 * sigma).getDistribution(); // arbitrary gamma
     }
     else if (distributionName == "Gumbel")
     {
@@ -201,25 +202,25 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     }
     else if (distributionName == "Exponential")
     {
-      return Exponential(1.0/sigma, mu-sigma);
+      return Exponential(1.0 / sigma, mu - sigma);
     }
     else if (distributionName == "InverseNormal")
     {
       if (mu <= 0)
         return InverseNormal(0.01, 0.1);
-      return InverseNormal(mu*mu*mu/(sigma*sigma), mu);
+      return InverseNormal(mu * mu * mu / (sigma * sigma), mu);
     }
     else if (distributionName == "Laplace")
     {
-      return Laplace(sqrt(2.0)/sigma, mu);
+      return Laplace(sqrt(2.0) / sigma, mu);
     }
     else if (distributionName == "Logistic")
     {
-      return Logistic(mu, sigma/SpecFunc::PI_SQRT3);
+      return Logistic(mu, sigma / SpecFunc::PI_SQRT3);
     }
     else if (distributionName == "LogNormal")
     {
-      return LogNormalMuSigma(mu, sigma, mu-10.0*sigma).getDistribution(); // arbitrary gamma
+      return LogNormalMuSigma(mu, sigma, mu - 10.0 * sigma).getDistribution(); // arbitrary gamma
     }
     else if (distributionName == "LogUniform")
     {
@@ -230,11 +231,11 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
         mu2 = sqrt(3.);
         sigma2 = 1.;
       }
-      double deltaSquareRoot = sqrt(mu2*mu2+sigma2*sigma2);
-      double muLog = log(mu2*mu2/deltaSquareRoot);
-      double sigmaLog = sqrt(2*log(deltaSquareRoot/mu2));
+      double deltaSquareRoot = sqrt(mu2 * mu2 + sigma2 * sigma2);
+      double muLog = log(mu2 * mu2 / deltaSquareRoot);
+      double sigmaLog = sqrt(2 * log(deltaSquareRoot / mu2));
 
-      return LogUniform(muLog-sqrt(3.0)*sigmaLog, muLog+sqrt(3.0)*sigmaLog);
+      return LogUniform(muLog - sqrt(3.0) * sigmaLog, muLog + sqrt(3.0) * sigmaLog);
     }
     else if (distributionName == "Normal")
     {
@@ -242,7 +243,7 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     }
     else if (distributionName == "Rayleigh")
     {
-      return Rayleigh(sigma/0.6551363775620335530939357, mu-sigma*1.253314137315500251207882/0.6551363775620335530939357);
+      return Rayleigh(sigma / 0.6551363775620335530939357, mu - sigma * 1.253314137315500251207882 / 0.6551363775620335530939357);
     }
     else if (distributionName == "Student")
     {
@@ -250,19 +251,19 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     }
     else if (distributionName == "Trapezoidal")
     {
-      return Trapezoidal(mu-2.0*sigma, mu-sigma, mu+sigma, mu+2.0*sigma);
+      return Trapezoidal(mu - 2.0 * sigma, mu - sigma, mu + sigma, mu + 2.0 * sigma);
     }
     else if (distributionName == "Triangular")
     {
-      return Triangular(mu-sqrt(6.0)*sigma, mu, mu+sqrt(6.0)*sigma);
+      return Triangular(mu - sqrt(6.0) * sigma, mu, mu + sqrt(6.0) * sigma);
     }
     else if (distributionName == "Uniform")
     {
-      return Uniform(mu-sigma*sqrt(3.0), mu+sigma*sqrt(3.0));
+      return Uniform(mu - sigma * sqrt(3.0), mu + sigma * sqrt(3.0));
     }
     else if (distributionName == "Weibull")
     {
-      return WeibullMuSigma(mu, sigma, mu-10.0*sigma).getDistribution(); // arbitrary gamma
+      return WeibullMuSigma(mu, sigma, mu - 10.0 * sigma).getDistribution(); // arbitrary gamma
     }
     else
     {
@@ -366,8 +367,8 @@ Distribution::PointWithDescriptionCollection DistributionDictionary::GetParamete
 
 /* Update de distribution */
 void DistributionDictionary::UpdateDistribution(Distribution & distribution,
-                                                const PointWithDescription & description,
-                                                UnsignedInteger parametersType)
+    const PointWithDescription & description,
+    UnsignedInteger parametersType)
 {
   String distributionName = distribution.getImplementation()->getClassName();
 
@@ -420,7 +421,7 @@ void DistributionDictionary::UpdateDistribution(Distribution & distribution,
 /* Compute standard deviation from mean */
 double DistributionDictionary::ComputeSigmaFromMu(const double mu)
 {
-  double sigma = 0.1*fabs(mu);
+  double sigma = 0.1 * fabs(mu);
   if (sigma < 1e-3)
     sigma = 1.0;
   return sigma;

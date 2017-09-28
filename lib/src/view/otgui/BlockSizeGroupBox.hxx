@@ -26,13 +26,14 @@
 
 #include <QGroupBox>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API BlockSizeGroupBox : public QGroupBox
 {
   Q_OBJECT
 
 public:
-  BlockSizeGroupBox(const QString &title, QWidget* parent=0);
+  BlockSizeGroupBox(const QString &title, QWidget* parent = 0);
 
   OT::UnsignedInteger getBlockSizeValue() const;
   void setBlockSizeValue(const OT::UnsignedInteger value);

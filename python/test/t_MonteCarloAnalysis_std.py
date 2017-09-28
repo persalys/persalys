@@ -6,7 +6,7 @@ import otguibase
 
 myStudy = otguibase.OTStudy('myStudy')
 
-## Model
+# Model
 X0 = otguibase.Input('X0', ot.Normal(1, 1))
 X1 = otguibase.Input('X1', ot.Normal(1, 1))
 Y00 = otguibase.Output('fake_Y0')
@@ -15,10 +15,11 @@ Y0 = otguibase.Output('Y0')
 
 formula_Y00 = 'X0'
 formula_Y0 = 'sin(X0) + 8*X1'
-model = otguibase.SymbolicPhysicalModel('aModelPhys', [X0, X1], [Y00, Y0], [formula_Y00, formula_Y0])
+model = otguibase.SymbolicPhysicalModel('aModelPhys', [X0, X1], [Y00, Y0], [
+                                        formula_Y00, formula_Y0])
 myStudy.add(model)
 
-## Monte Carlo ##
+# Monte Carlo ##
 analysis = otguibase.MonteCarloAnalysis('myMonteCarlo', model)
 analysis.setLevelConfidenceInterval(0.93)
 analysis.setMaximumCalls(1000)
@@ -36,7 +37,7 @@ print("PDF=", result.getPDF())
 print("CDF=", result.getCDF())
 print("outliers=", result.getOutliers())
 
-## Monte Carlo ##
+# Monte Carlo ##
 analysis2 = otguibase.MonteCarloAnalysis('myMonteCarlo2', model)
 analysis2.setIsConfidenceIntervalRequired(False)
 analysis2.setMaximumCoefficientOfVariation(0.02)
@@ -53,7 +54,7 @@ print("PDF=", result2.getPDF())
 print("CDF=", result2.getCDF())
 print("outliers=", result2.getOutliers())
 
-## Monte Carlo ##
+# Monte Carlo ##
 X2 = otguibase.Input('X2', 2)
 model.addInput(X2)
 model.addOutput(otguibase.Output('Y1'))
@@ -70,7 +71,7 @@ analysis3.run()
 result3 = analysis3.getResult()
 print("result=", result3)
 
-## script
+# script
 script = myStudy.getPythonScript()
 print(script)
 exec(script)

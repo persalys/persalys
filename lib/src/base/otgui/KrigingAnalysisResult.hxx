@@ -25,7 +25,8 @@
 
 #include "openturns/KrigingResult.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API KrigingAnalysisResult : public MetaModelAnalysisResult
 {
   CLASSNAME

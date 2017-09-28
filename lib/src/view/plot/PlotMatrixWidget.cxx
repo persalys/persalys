@@ -36,7 +36,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 PlotMatrixWidget::PlotMatrixWidget(const OT::Sample & sample1, const OT::Sample & sample2, QWidget* parent)
   : QWidget(parent)
@@ -56,7 +57,7 @@ PlotMatrixWidget::PlotMatrixWidget(const OT::Sample & sample1, const OT::Sample 
     typeNameSuffix = "YX";
   }
 
-  for (int  i= 0; i < nbColumns; ++i)
+  for (int  i = 0; i < nbColumns; ++i)
     columnsNames_ << QString::fromUtf8(sample1.getDescription()[i].c_str());
   for (int i = 0; i < nbRows; ++i)
     rowsNames_ << QString::fromUtf8(sample2.getDescription()[i].c_str());
@@ -188,8 +189,8 @@ QImage PlotMatrixWidget::getMatrixImage()
   QImage aFakeImage(QSize(totalWidth + 5, aFakeHeight), QImage::Format_ARGB32_Premultiplied);
   QPainter aFakePainter(&aFakeImage);
   const QRectF titleRect = aFakePainter.boundingRect(QRectF(QPointF(0, 0), QSizeF(totalWidth + 5, aFakeHeight)),
-                                                     Qt::TextWordWrap|Qt::AlignHCenter,
-                                                     getTitle());
+                           Qt::TextWordWrap | Qt::AlignHCenter,
+                           getTitle());
   const int alpha = titleRect.height();
 
   // create the image of the matrix
@@ -298,9 +299,9 @@ void PlotMatrixWidget::exportPlot()
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
   QString fileName = QFileDialog::getSaveFileName(this,
-                                                  tr("Export plot"),
-                                                  currentDir,
-                                                  tr("Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)"));
+                     tr("Export plot"),
+                     currentDir,
+                     tr("Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)"));
 
   if (!fileName.isEmpty())
   {

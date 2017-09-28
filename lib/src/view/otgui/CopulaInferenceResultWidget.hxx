@@ -25,7 +25,8 @@
 #include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API CopulaInferenceResultWidget : public QWidget
 {
   Q_OBJECT
@@ -33,8 +34,8 @@ class OTGUI_API CopulaInferenceResultWidget : public QWidget
 public:
   CopulaInferenceResultWidget(const CopulaInferenceSetResult& currentSetResult,
                               const OT::Sample& sample,
-                              const bool displayPDF=true,
-                              QWidget* parent=0);
+                              const bool displayPDF = true,
+                              QWidget* parent = 0);
 
 //   TODO: OT::Distribution getDistribution() const;
 

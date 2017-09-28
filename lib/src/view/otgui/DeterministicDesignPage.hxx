@@ -29,7 +29,8 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DeterministicDesignPage : public QWizardPage
 {
   Q_OBJECT

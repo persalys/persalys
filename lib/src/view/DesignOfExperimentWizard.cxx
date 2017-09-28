@@ -20,7 +20,8 @@
  */
 #include "otgui/DesignOfExperimentWizard.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 DesignOfExperimentWizard::DesignOfExperimentWizard(const Analysis & designOfExperiment, QWidget *parent)
   : AnalysisWizard(designOfExperiment, parent)

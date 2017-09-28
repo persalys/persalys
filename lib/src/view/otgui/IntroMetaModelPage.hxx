@@ -31,14 +31,15 @@
 #include <QStandardItemModel>
 #include <QButtonGroup>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 class OTGUI_API IntroMetaModelPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  IntroMetaModelPage(QWidget* parent=0);
+  IntroMetaModelPage(QWidget* parent = 0);
 
   virtual int nextId() const;
 

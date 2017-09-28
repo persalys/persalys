@@ -26,7 +26,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 MonteCarloResultWindow::MonteCarloResultWindow(AnalysisItem * item, QWidget * parent)
   : DataAnalysisWindow(item, parent)

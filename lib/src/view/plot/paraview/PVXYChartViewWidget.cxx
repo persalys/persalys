@@ -19,7 +19,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 const char PVXYChartViewWidget::PV_VIEW_TYPE[] = "XYChartView";
 
 const char PVXYChartViewWidget::PV_REPRESENTATION_TYPE[] = "XYChartRepresentation";
@@ -80,7 +81,7 @@ void PVXYChartViewWidget::setData(const Sample& sample, const QColor color)
   // set data
   PVViewWidget::setData(sample);
   // set color
-  setRepresentationColor(color, getView()->getNumberOfRepresentations()-1);
+  setRepresentationColor(color, getView()->getNumberOfRepresentations() - 1);
 }
 
 
@@ -179,7 +180,7 @@ void PVXYChartViewWidget::setScatterPlotStyle()
 
     vtkSMPropertyHelper * smphLineStyle(new vtkSMPropertyHelper(idvpLineStyle));
 
-    for (int cc = 0; cc < lineStyles.size()/2; cc++)
+    for (int cc = 0; cc < lineStyles.size() / 2; cc++)
     {
       smphLineStyle->Set(2 * cc + 1, 0);
     }
@@ -210,7 +211,7 @@ void PVXYChartViewWidget::setScatterPlotStyle()
 
   // set color
   reprColors_.append(DEFAULT_SCATTER_PLOT_COLOR);
-  setRepresentationColor(DEFAULT_SCATTER_PLOT_COLOR, getView()->getNumberOfRepresentations()-1);
+  setRepresentationColor(DEFAULT_SCATTER_PLOT_COLOR, getView()->getNumberOfRepresentations() - 1);
 }
 
 
@@ -392,7 +393,7 @@ void PVXYChartViewWidget::setRepresentationColor(const QColor& color, const int 
   vtkSMPropertyHelper * smph(new vtkSMPropertyHelper(idvp));
   QList<QVariant> colors = pqSMAdaptor::getMultipleElementProperty(idvp);
 
-  for (int cc = 0; cc < colors.size()/4; cc++)
+  for (int cc = 0; cc < colors.size() / 4; cc++)
   {
     smph->Set(4 * cc + 1, (OSS() << color.redF()).str().c_str());
     smph->Set(4 * cc + 2, (OSS() << color.greenF()).str().c_str());
@@ -445,17 +446,17 @@ void PVXYChartViewWidget::setRepresentationLabels(const QStringList& newLabels, 
   QList<QVariant> labels = pqSMAdaptor::getMultipleElementProperty(idvp);
 
   // check labels
-  if (newLabels.size() != labels.size()/2)
+  if (newLabels.size() != labels.size() / 2)
   {
     OSS oss;
     oss << "PVXYChartViewWidget::setRepresentationLabels: the number of given labels "
         << newLabels.size()
         << " does not match the number of variables of the representation "
-        << labels.size()/2;
+        << labels.size() / 2;
     throw InvalidArgumentException(HERE) << oss.str();
   }
 
-  for (int cc = 0; cc < labels.size()/2; cc++)
+  for (int cc = 0; cc < labels.size() / 2; cc++)
   {
     smph->Set(2 * cc + 1, newLabels[cc].toStdString().c_str());
   }
@@ -485,7 +486,7 @@ QStringList PVXYChartViewWidget::getRepresentationLabels(const int reprIndex) co
   QList<QVariant> labelsVariant = pqSMAdaptor::getMultipleElementProperty(idvp);
 
   QStringList labels;
-  for (int cc = 0; cc < labelsVariant.size()/2; cc++)
+  for (int cc = 0; cc < labelsVariant.size() / 2; cc++)
   {
     labels << labelsVariant[2 * cc + 1].toString();
   }
@@ -507,7 +508,7 @@ void PVXYChartViewWidget::setMarkerStyle(const int markerStyle)
 
     vtkSMPropertyHelper * smph(new vtkSMPropertyHelper(idvp));
 
-    for (int cc = 0; cc < markerStyles.size()/2; cc++)
+    for (int cc = 0; cc < markerStyles.size() / 2; cc++)
     {
       smph->Set(2 * cc + 1, markerStyle);
     }
@@ -531,7 +532,7 @@ void PVXYChartViewWidget::setMarkerSize(const int markerSize)
 
     vtkSMPropertyHelper * smph(new vtkSMPropertyHelper(idvp));
 
-    for (int cc = 0; cc < markerSizes.size()/2; cc++)
+    for (int cc = 0; cc < markerSizes.size() / 2; cc++)
     {
       smph->Set(2 * cc + 1, markerSize);
     }

@@ -65,14 +65,15 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 // not editable model
 class PieChartModel : public QStandardItemModel
 {
 public:
   PieChartModel(int rows, int columns, QObject * parent = 0)
-  : QStandardItemModel(rows, columns, parent)
+    : QStandardItemModel(rows, columns, parent)
   {
   }
 
@@ -132,7 +133,7 @@ void PieChartView::setData(const PointWithDescription& valuesAndDescription)
   }
 
   // normalize
-  for (UnsignedInteger i=0; i<size; ++i)
+  for (UnsignedInteger i = 0; i < size; ++i)
   {
     data[i] /= l1Norm;
     data[i] *= 100;
@@ -148,13 +149,13 @@ void PieChartView::setData(const PointWithDescription& valuesAndDescription)
   QFontMetrics fm(font());
   int maxTextWidth = 0;
 
-  for (UnsignedInteger i=0; i<size; ++i)
+  for (UnsignedInteger i = 0; i < size; ++i)
   {
     const QString text = QString::fromUtf8(data.getDescription()[i].c_str());
     const int textWidth = fm.width(text);
     if (textWidth > maxTextWidth)
       maxTextWidth = textWidth;
-    
+
     standardItemModel->setData(standardItemModel->index(i, 0, QModelIndex()), text);
     standardItemModel->setData(standardItemModel->index(i, 1, QModelIndex()), QString::number(data[i]));
     standardItemModel->setData(standardItemModel->index(i, 0, QModelIndex()), colors[i], Qt::DecorationRole);
@@ -166,9 +167,9 @@ void PieChartView::setData(const PointWithDescription& valuesAndDescription)
   viewport()->update();
 
   // resize
-  const int iconSize = itemRect(standardItemModel->index(size-1, 0, QModelIndex())).height();
+  const int iconSize = itemRect(standardItemModel->index(size - 1, 0, QModelIndex())).height();
   const int width = totalSize_ + maxTextWidth + iconSize + 2 * margin_;
-  const int height = qMax(totalSize_, itemRect(standardItemModel->index(size-1, 0, QModelIndex())).bottomRight().y());
+  const int height = qMax(totalSize_, itemRect(standardItemModel->index(size - 1, 0, QModelIndex())).bottomRight().y());
   setFixedSize(width, height);
 }
 
@@ -272,7 +273,7 @@ QRect PieChartView::itemRect(const QModelIndex &index) const
     return QRect();
 
   int listItem = 0;
-  for (int row = index.row()-1; row >= 0; --row)
+  for (int row = index.row() - 1; row >= 0; --row)
   {
     if (model()->data(model()->index(row, 1, rootIndex())).toDouble() > 0.0)
       listItem++;
@@ -282,15 +283,15 @@ QRect PieChartView::itemRect(const QModelIndex &index) const
 
   switch (index.column())
   {
-  case 0:
-    itemHeight = QFontMetrics(viewOptions().font).height();
+    case 0:
+      itemHeight = QFontMetrics(viewOptions().font).height();
 
-    return QRect(totalSize_,
-                 int(margin_ + listItem*itemHeight),
-                 totalSize_ - margin_,
-                 int(itemHeight));
-  case 1:
-    return viewport()->rect();
+      return QRect(totalSize_,
+                   int(margin_ + listItem * itemHeight),
+                   totalSize_ - margin_,
+                   int(itemHeight));
+    case 1:
+      return viewport()->rect();
   }
   return QRect();
 }
@@ -321,7 +322,7 @@ QRegion PieChartView::itemRegion(const QModelIndex &index) const
       {
         QPainterPath slicePath;
         slicePath.moveTo(totalSize_ / 2, totalSize_ / 2);
-        slicePath.arcTo(margin_, margin_, margin_+pieSize_, margin_+pieSize_, startAngle, angle);
+        slicePath.arcTo(margin_, margin_, margin_ + pieSize_, margin_ + pieSize_, startAngle, angle);
         slicePath.closeSubpath();
 
         return QRegion(slicePath.toFillPolygon().toPolygon());
@@ -337,7 +338,7 @@ QRegion PieChartView::itemRegion(const QModelIndex &index) const
 
 bool PieChartView::isIndexHidden(const QModelIndex & /*index*/) const
 {
-    return false;
+  return false;
 }
 
 
@@ -403,7 +404,7 @@ QModelIndex PieChartView::moveCursor(QAbstractItemView::CursorAction cursorActio
         current = model()->index(rows(current) - 1, current.column(), rootIndex());
       break;
     default:
-        break;
+      break;
   }
 
   viewport()->update();
@@ -444,7 +445,7 @@ void PieChartView::draw(QPainter& painter)
 
     if (value > 0.0)
     {
-      double angle = 360*value/totalValue_;
+      double angle = 360 * value / totalValue_;
 
       QModelIndex colorIndex = model()->index(row, 0, rootIndex());
       QColor color = QColor(model()->data(colorIndex, Qt::DecorationRole).toString());
@@ -456,7 +457,7 @@ void PieChartView::draw(QPainter& painter)
       else
         painter.setBrush(QBrush(color));
 
-      painter.drawPie(0, 0, pieSize_, pieSize_, int(startAngle*16), int(angle*16));
+      painter.drawPie(0, 0, pieSize_, pieSize_, int(startAngle * 16), int(angle * 16));
 
       startAngle += angle;
     }
@@ -627,9 +628,9 @@ QVector<QColor> PieChartView::generateSegmentsColors(const int nbColors) const
 
   // get colors
   QStringList colorNames = QColor::colorNames();
-  for (int i=0; i<nbColors; i++)
+  for (int i = 0; i < nbColors; i++)
   {
-    QColor col(colorNames.at(colorPos%colorNames.count()));
+    QColor col(colorNames.at(colorPos % colorNames.count()));
     colorPos++;
     colors.append(col);
   }
@@ -679,7 +680,7 @@ void PieChartView::exportPlot()
 
       // save image
       bool saveOperationSucceed = image.save(fileName, format.toLatin1());
-      
+
       if (!saveOperationSucceed)
         QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Impossible to export the plot."));
     }

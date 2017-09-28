@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 DifferentiationTableModel::DifferentiationTableModel(const PhysicalModel& physicalModel, QObject* parent)
   : QAbstractTableModel(parent)

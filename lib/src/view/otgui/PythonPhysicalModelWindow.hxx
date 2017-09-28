@@ -28,13 +28,14 @@
 
 #include <QTableView>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API PythonPhysicalModelWindow : public OTguiSubWindow
 {
   Q_OBJECT
 
 public:
-  PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent=0);
+  PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent = 0);
 
 public slots:
   void updateCodeModel();

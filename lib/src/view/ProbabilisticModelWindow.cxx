@@ -47,7 +47,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 ProbabilisticModelWindow::ProbabilisticModelWindow(const OTStudy& otStudy, ProbabilisticModelItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
@@ -68,7 +69,7 @@ void ProbabilisticModelWindow::buildInterface()
   setWindowTitle(tr("Probabilistic model"));
 
   QTabWidget * rootTab = new QTabWidget;
-  
+
   // First Tab: marginals
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
@@ -90,7 +91,7 @@ void ProbabilisticModelWindow::buildInterface()
   if (physicalModel_.hasStochasticInputs() && (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize()))
     inputTableHeaderView_->setChecked(true);
 
-  #if QT_VERSION >= 0x050000
+#if QT_VERSION >= 0x050000
   inputTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
   inputTableView_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
 #else
@@ -167,10 +168,10 @@ void ProbabilisticModelWindow::buildInterface()
   plotWidgetLayout->addWidget(plotStackedWidget);
 
   GraphConfigurationWidget * pdf_cdfPlotsSettingWidget = new GraphConfigurationWidget(listPlotWidgets,
-                                                                                      QStringList(),
-                                                                                      QStringList(),
-                                                                                      GraphConfigurationWidget::PDF,
-                                                                                      this);
+      QStringList(),
+      QStringList(),
+      GraphConfigurationWidget::PDF,
+      this);
   plotWidget->setDockWidget(pdf_cdfPlotsSettingWidget);
   connect(pdf_cdfPlotsSettingWidget, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
   rightFrameLayout->addWidget(plotWidget);
@@ -304,7 +305,7 @@ void ProbabilisticModelWindow::updateStochasticInputsTable()
 
   const bool headerViewIsChecked = (physicalModel_.hasStochasticInputs() && (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize()));
   inputTableHeaderView_->setChecked(headerViewIsChecked);
-    
+
   connect(inputTableModel_, SIGNAL(distributionChanged(const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
   connect(inputTableModel_, SIGNAL(distributionsChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
@@ -444,7 +445,7 @@ void ProbabilisticModelWindow::updateDistributionParametersWidgets(const QModelI
   for (UnsignedInteger i = 0; i < parameters.getSize(); ++i)
   {
     QStringList parametersNamesList;
-    for (UnsignedInteger j=0; j<parameters[i].getDescription().getSize(); ++j)
+    for (UnsignedInteger j = 0; j < parameters[i].getDescription().getSize(); ++j)
       parametersNamesList << QString::fromUtf8(parameters[i].getDescription()[j].c_str());
 
     selectParametersTypeCombo->addItem(parametersNamesList.join(", "));
@@ -461,8 +462,8 @@ void ProbabilisticModelWindow::updateDistributionParametersWidgets(const QModelI
     parameterValuesEdit_[i] = new ValueLineEdit(parameters[parametersType][i]);
     connect(parameterValuesEdit_[i], SIGNAL(editingFinished()), this, SLOT(distributionParametersChanged()));
     parameterValuesLabel_[i]->setBuddy(parameterValuesEdit_[i]);
-    lay->addWidget(parameterValuesLabel_[i], i+1, 0);
-    lay->addWidget(parameterValuesEdit_[i], i+1, 1);
+    lay->addWidget(parameterValuesLabel_[i], i + 1, 0);
+    lay->addWidget(parameterValuesEdit_[i], i + 1, 1);
   }
   parameterLayout_->insertWidget(0, paramEditor_);
 }

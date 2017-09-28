@@ -53,7 +53,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 DataAnalysisWindow::DataAnalysisWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
@@ -249,9 +250,9 @@ void DataAnalysisWindow::addSummaryTab()
     ind.add(inInd);
 
     MomentsEstimatesTableGroupBox * estimatesGroupBox = new MomentsEstimatesTableGroupBox(result_,
-                                                                                          isConfidenceIntervalRequired_,
-                                                                                          levelConfidenceInterval_,
-                                                                                          ind);
+        isConfidenceIntervalRequired_,
+        levelConfidenceInterval_,
+        ind);
     vbox->addWidget(estimatesGroupBox);
     connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), estimatesGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
   }
@@ -348,10 +349,10 @@ void DataAnalysisWindow::addPDF_CDFTab()
     listPlotWidgets.append(pdfPlot);
     listPlotWidgets.append(cdfPlot);
     GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(listPlotWidgets,
-                                                                           QStringList(),
-                                                                           QStringList(),
-                                                                           GraphConfigurationWidget::PDFResult,
-                                                                           this);
+        QStringList(),
+        QStringList(),
+        GraphConfigurationWidget::PDFResult,
+        this);
     connect(graphSetting, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
     plotWidget->setDockWidget(graphSetting);
@@ -402,10 +403,10 @@ void DataAnalysisWindow::addBoxPlotTab()
     QVector<PlotWidget*> listBoxPlotWidgets;
     listBoxPlotWidgets.append(plot);
     GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(listBoxPlotWidgets,
-                                                                           QStringList(),
-                                                                           QStringList(),
-                                                                           GraphConfigurationWidget::NoType,
-                                                                           this);
+        QStringList(),
+        QStringList(),
+        GraphConfigurationWidget::NoType,
+        this);
     boxPlotWidget->setDockWidget(graphSetting);
 
     tabStackedWidget->addWidget(boxPlotWidget);
@@ -437,22 +438,22 @@ void DataAnalysisWindow::addScatterPlotsTab()
   QVBoxLayout * scatterWidgetLayout = new QVBoxLayout(scatterWidget);
 
   QVector<PlotWidget*> listScatterPlotWidgets = PlotWidget::GetListScatterPlots(designOfExperiment_.getInputSample(),
-                                                                                designOfExperiment_.getOutputSample(),
-                                                                                failedInputSample_,
-                                                                                inputNames_,
-                                                                                inAxisTitles_,
-                                                                                outputNames_,
-                                                                                outAxisTitles_);
+      designOfExperiment_.getOutputSample(),
+      failedInputSample_,
+      inputNames_,
+      inAxisTitles_,
+      outputNames_,
+      outAxisTitles_);
 
   ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
   for (int i = 0; i < listScatterPlotWidgets.size(); ++i)
     stackedWidget->addWidget(listScatterPlotWidgets[i]);
 
   GraphConfigurationWidget * scatterSettingWidget = new GraphConfigurationWidget(listScatterPlotWidgets,
-                                                                                 inputNames_,
-                                                                                 outputNames_,
-                                                                                 GraphConfigurationWidget::Scatter,
-                                                                                 this);
+      inputNames_,
+      outputNames_,
+      GraphConfigurationWidget::Scatter,
+      this);
   scatterWidget->setDockWidget(scatterSettingWidget);
   connect(scatterSettingWidget, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
@@ -507,9 +508,9 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
 
   const Sample sampleRank(designOfExperiment_.getSample().rank() / designOfExperiment_.getSample().getSize());
   PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget,
-                                                                      designOfExperiment_.getSample(),
-                                                                      sampleRank,
-                                                                      this);
+      designOfExperiment_.getSample(),
+      sampleRank,
+      this);
   cobwebTabWidget->setDockWidget(cobwebSettingWidget);
 
   tabWidget_->addTab(cobwebTabWidget, tr("Cobweb plot"));
@@ -542,12 +543,12 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   scatterTabWidgetLayout->addWidget(sampleScatterPlotWidget);
 
   PVXYChartSettingWidget * scatterSettingWidget = new PVXYChartSettingWidget(sampleScatterPlotWidget,
-                                                                             designOfExperiment_.getSample(),
-                                                                             sampleRank,
-                                                                             inputNames_,
-                                                                             outputNames_,
-                                                                             PVXYChartSettingWidget::Scatter,
-                                                                             this);
+      designOfExperiment_.getSample(),
+      sampleRank,
+      inputNames_,
+      outputNames_,
+      PVXYChartSettingWidget::Scatter,
+      this);
   scatterTabWidget->setDockWidget(scatterSettingWidget);
 
   tabWidget_->addTab(scatterTabWidget, tr("Scatter plots"));
@@ -583,7 +584,7 @@ void DataAnalysisWindow::updateSpinBoxes(int indexList)
 
     quantileSpinBox_->setMinimum(min);
     quantileSpinBox_->setMaximum(max);
-    quantileSpinBox_->setSingleStep((max - min)/100);
+    quantileSpinBox_->setSingleStep((max - min) / 100);
   }
   probaSpinBox_->setValue(0.5);
   // if the previous value of probaSpinBox_ was 0.5, the signal valueChanged is not emitted

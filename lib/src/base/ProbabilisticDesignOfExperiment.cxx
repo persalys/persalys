@@ -29,7 +29,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(ProbabilisticDesignOfExperiment)
 
@@ -60,9 +61,9 @@ ProbabilisticDesignOfExperiment::ProbabilisticDesignOfExperiment()
 
 
 ProbabilisticDesignOfExperiment::ProbabilisticDesignOfExperiment(const String& name,
-                                                                 const PhysicalModel& physicalModel,
-                                                                 const UnsignedInteger size,
-                                                                 const String& designName)
+    const PhysicalModel& physicalModel,
+    const UnsignedInteger size,
+    const String& designName)
   : DesignOfExperimentEvaluation(name, physicalModel)
   , designName_("")
   , size_(0)
@@ -184,7 +185,7 @@ String ProbabilisticDesignOfExperiment::getPythonScript() const
   for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
   {
     oss << "'" << getInterestVariables()[i] << "'";
-    if (i < getInterestVariables().getSize()-1)
+    if (i < getInterestVariables().getSize() - 1)
       oss << ", ";
   }
   oss << "]\n";

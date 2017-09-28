@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 DistributionsTableModel::DistributionsTableModel(const QStringList& distributions, QWidget* parent)
   : QAbstractTableModel(parent)
@@ -73,7 +74,7 @@ void DistributionsTableModel::appendDistribution(const QString& distributionName
     const Description listDistributions = DistributionDictionary::GetAvailableDistributions();
     if (listDistributions.getSize() == (UnsignedInteger)distributions_.size())
       return;
-    for (UnsignedInteger i=0; i<listDistributions.getSize(); ++i)
+    for (UnsignedInteger i = 0; i < listDistributions.getSize(); ++i)
     {
       const QString distName = tr(listDistributions[i].c_str());
       if (!distributions_.contains(distName))
@@ -89,8 +90,8 @@ void DistributionsTableModel::appendDistribution(const QString& distributionName
     distributions_ << distributionName;
   }
   distributions_.sort();
-  QModelIndex lastIndex = index(rowCount()-1, 0);
-  beginInsertRows(lastIndex.parent(), lastIndex.row(), lastIndex.row()+nbRow);
+  QModelIndex lastIndex = index(rowCount() - 1, 0);
+  beginInsertRows(lastIndex.parent(), lastIndex.row(), lastIndex.row() + nbRow);
   endInsertRows();
   emit distributionsListChanged(distributions_);
 }

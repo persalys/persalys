@@ -27,7 +27,8 @@
 #include <openturns/OrthogonalProductPolynomialFactory.hxx>
 #include <openturns/FunctionalChaosAlgorithm.hxx>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API FunctionalChaosAnalysis : public MetaModelAnalysis
 {
   CLASSNAME
@@ -66,7 +67,7 @@ public:
   // TODO remove it when OT version 1.8
   // Binomial coefficient
   static OT::UnsignedInteger BinomialCoefficient(const OT::UnsignedInteger n,
-                                                 const OT::UnsignedInteger k);
+      const OT::UnsignedInteger k);
 protected:
   virtual OT::Function runAlgo(const OT::Sample& inputSample, const OT::Sample& outputSample);
   OT::FunctionalChaosAlgorithm buildFunctionalChaosAlgorithm(const OT::Sample & inputSample, const OT::Sample & outputSample);

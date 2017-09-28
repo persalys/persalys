@@ -27,7 +27,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(SobolAnalysis)
 
@@ -83,7 +84,7 @@ void SobolAnalysis::run()
     const bool maximumOuterSamplingSpecified = getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max();
     const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / (getBlockSize() * (2 + nbInputs)))) : (UnsignedInteger)std::numeric_limits<int>::max();
     const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getMaximumCalls() % (getBlockSize() * (2 + nbInputs)) : 0;
-    const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : (modulo/(2+nbInputs));
+    const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : (modulo / (2 + nbInputs));
 
     Scalar coefficientOfVariation = -1.0;
     clock_t elapsedTime = 0;
@@ -100,18 +101,18 @@ void SobolAnalysis::run()
 
     Collection<Sample> allFirstOrderIndices(nbOutputs, Sample(0, nbInputs));
     Collection<Sample> allTotalIndices(nbOutputs, Sample(0, nbInputs));
-  //   Interval firstOrderIndicesInterval;
-  //   Interval totalIndicesInterval;
+    //   Interval firstOrderIndicesInterval;
+    //   Interval totalIndicesInterval;
     SaltelliSensitivityAlgorithm algoSaltelli;
 
     // We loop if there remains time, some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
     while (!stopRequested_
-      && (outerSampling < maximumOuterSampling)
-      && ((coefficientOfVariation == -1.0) || (coefficientOfVariation > getMaximumCoefficientOfVariation()))
-      &&  (static_cast<UnsignedInteger>(elapsedTime) < getMaximumElapsedTime() * CLOCKS_PER_SEC))
+           && (outerSampling < maximumOuterSampling)
+           && ((coefficientOfVariation == -1.0) || (coefficientOfVariation > getMaximumCoefficientOfVariation()))
+           &&  (static_cast<UnsignedInteger>(elapsedTime) < getMaximumElapsedTime() * CLOCKS_PER_SEC))
     {
       // progress
-      if (getMaximumCalls()< (UnsignedInteger)std::numeric_limits<int>::max())
+      if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
       {
         progressValue_ = (int) (outerSampling * 100 / maximumOuterSampling);
         notify("progressValueChanged");
@@ -166,8 +167,8 @@ void SobolAnalysis::run()
       if (getBlockSize() != 1 || (getBlockSize() == 1 && outerSampling)) // must have at least two values
       {
         const UnsignedInteger sampleSize(outerSampling < (maximumOuterSampling - 1) ?
-                                        getBlockSize()*(outerSampling+1) :
-                                        getBlockSize()*outerSampling+lastBlockSize);
+                                         getBlockSize() * (outerSampling + 1) :
+                                         getBlockSize()*outerSampling + lastBlockSize);
 
         // information message
         OSS oss;
@@ -233,14 +234,14 @@ void SobolAnalysis::run()
     {
       if (!(allFirstOrderIndices[i].getSize()*allTotalIndices[i].getSize()))
         throw InvalidValueException(HERE) << "No result. Try to increase the block size and/or the maximum calls.";
-      firstOrderIndices.add(allFirstOrderIndices[i][allFirstOrderIndices[i].getSize()-1]);
-      totalIndices.add(allTotalIndices[i][allTotalIndices[i].getSize()-1]);
+      firstOrderIndices.add(allFirstOrderIndices[i][allFirstOrderIndices[i].getSize() - 1]);
+      totalIndices.add(allTotalIndices[i][allTotalIndices[i].getSize() - 1]);
     }
 
     // compute indices interval
-  //   algoSaltelli.setBootstrapSize(1000);
-  //   firstOrderIndicesInterval = algoSaltelli.getFirstOrderIndicesInterval();
-  //   totalIndicesInterval = algoSaltelli.getTotalOrderIndicesInterval();
+    //   algoSaltelli.setBootstrapSize(1000);
+    //   firstOrderIndicesInterval = algoSaltelli.getFirstOrderIndicesInterval();
+    //   totalIndicesInterval = algoSaltelli.getTotalOrderIndicesInterval();
 
     // fill result_
     result_ = SobolResult(firstOrderIndices, totalIndices, getInterestVariables());
@@ -282,7 +283,7 @@ String SobolAnalysis::getPythonScript() const
     for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
     {
       oss << "'" << getInterestVariables()[i] << "'";
-      if (i < getInterestVariables().getSize()-1)
+      if (i < getInterestVariables().getSize() - 1)
         oss << ", ";
     }
     oss << "]\n";

@@ -20,10 +20,11 @@
  */
 #include "otgui/HorizontalHeaderViewWithCombobox.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 HorizontalHeaderViewWithCombobox::HorizontalHeaderViewWithCombobox(QStringList comboBoxItems,
-                                                                   QVector<int> columns, QWidget * parent)
+    QVector<int> columns, QWidget * parent)
   : QHeaderView(Qt::Horizontal, parent)
   , comboBoxItems_(comboBoxItems)
   , columnsWithComboBox_(columns)
@@ -40,7 +41,7 @@ HorizontalHeaderViewWithCombobox::HorizontalHeaderViewWithCombobox(QStringList c
 
 void HorizontalHeaderViewWithCombobox::showEvent(QShowEvent * e)
 {
-  for (int i=0; i<columnsWithComboBox_.size(); ++i)
+  for (int i = 0; i < columnsWithComboBox_.size(); ++i)
   {
     int j = columnsWithComboBox_[i];
     if (!boxes_[j])
@@ -60,7 +61,7 @@ void HorizontalHeaderViewWithCombobox::showEvent(QShowEvent * e)
 
 void HorizontalHeaderViewWithCombobox::handleSectionResized(int j)
 {
-  for (int i=0; i<columnsWithComboBox_.size(); ++i)
+  for (int i = 0; i < columnsWithComboBox_.size(); ++i)
   {
     int logical = logicalIndex(columnsWithComboBox_[i]);
     boxes_[logical]->setGeometry(sectionViewportPosition(logical), 0, sectionSize(logical) - 1, height());
@@ -69,7 +70,7 @@ void HorizontalHeaderViewWithCombobox::handleSectionResized(int j)
 
 void HorizontalHeaderViewWithCombobox::handleSectionMoved(int logical2, int oldVisualIndex, int newVisualIndex)
 {
-  for (int i=qMin(oldVisualIndex, newVisualIndex); i<count(); ++i)
+  for (int i = qMin(oldVisualIndex, newVisualIndex); i < count(); ++i)
   {
     int logical = logicalIndex(columnsWithComboBox_[i]);
     boxes_[logical]->setGeometry(sectionViewportPosition(logical), 0, sectionSize(logical) - 1, height());
@@ -102,7 +103,7 @@ void HorizontalHeaderViewWithCombobox::scrollContentsBy(int dx, int dy)
 
 void HorizontalHeaderViewWithCombobox::fixComboPositions()
 {
-  for (int i=0; i<columnsWithComboBox_.size(); ++i)
+  for (int i = 0; i < columnsWithComboBox_.size(); ++i)
   {
     int j = columnsWithComboBox_[i];
     boxes_[j]->setGeometry(sectionViewportPosition(j), 0, sectionSize(j) - 1, height());

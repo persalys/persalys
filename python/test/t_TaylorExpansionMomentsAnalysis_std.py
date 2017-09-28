@@ -14,10 +14,11 @@ Y0 = otguibase.Output('Y0')
 
 formula_Y00 = 'X0'
 formula_Y0 = 'sin(X0) + 8*X1'
-model = otguibase.SymbolicPhysicalModel('aModelPhys', [X0, X1], [Y00, Y0], [formula_Y00, formula_Y0])
+model = otguibase.SymbolicPhysicalModel('aModelPhys', [X0, X1], [Y00, Y0], [
+                                        formula_Y00, formula_Y0])
 myStudy.add(model)
 
-## Taylor Expansion ##
+# Taylor Expansion ##
 analysis = otguibase.TaylorExpansionMomentsAnalysis('aTaylor', model)
 myStudy.add(analysis)
 print(analysis)
@@ -27,7 +28,7 @@ analysis.run()
 print("result=", analysis.getResult())
 print("\n")
 
-## Taylor Expansion ##
+# Taylor Expansion ##
 # test with a deterministic variable
 X2 = otguibase.Input('X2', 10)
 model.addInput(X2)
@@ -44,7 +45,7 @@ analysis2.run()
 print("result=", analysis2.getResult())
 print("\n")
 
-## Taylor Expansion ##
+# Taylor Expansion ##
 # test definition gradient with PythonPhysicalModel
 code = 'from math import sin\n\ndef _exec(X0, X1):\n    Y0 = sin(X0) + 8*X1\n    fake_Y0 = X0\n    return Y0, fake_Y0\n'
 model2 = otguibase.PythonPhysicalModel('myPhysicalModel', [X0, X1], [Y0], code)
@@ -74,7 +75,7 @@ analysis4.run()
 
 print("result=", analysis4.getResult())
 
-## script
+# script
 script = myStudy.getPythonScript()
 print(script)
 exec(script)

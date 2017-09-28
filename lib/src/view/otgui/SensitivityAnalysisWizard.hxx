@@ -26,7 +26,8 @@
 #include "otgui/SobolPage.hxx"
 #include "otgui/SRCPage.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SensitivityAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
@@ -35,7 +36,7 @@ public:
   enum {Page_Intro, Page_Sobol, Page_SRC};
   enum Method {Sobol, SRC};
 
-  SensitivityAnalysisWizard(const Analysis& analysis, QWidget* parent=0);
+  SensitivityAnalysisWizard(const Analysis& analysis, QWidget* parent = 0);
 
   virtual Analysis getAnalysis() const;
   virtual int nextId() const;

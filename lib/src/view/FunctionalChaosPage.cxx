@@ -28,7 +28,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 FunctionalChaosPage::FunctionalChaosPage(QWidget* parent)
   : QWizardPage(parent)

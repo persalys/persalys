@@ -27,7 +27,8 @@
 
 #include <QTabWidget>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ApproximationResultTabWidget : public QTabWidget
 {
   Q_OBJECT

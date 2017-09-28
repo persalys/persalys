@@ -23,7 +23,8 @@
 
 #include "DesignOfExperimentEvaluation.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API GridDesignOfExperiment : public DesignOfExperimentEvaluation
 {
   CLASSNAME
@@ -41,7 +42,7 @@ public:
                          const OT::Point & lowerBounds,
                          const OT::Point & upperBounds,
                          const OT::Indices & nbValues,
-                         const OT::Point & values=OT::Point(0));
+                         const OT::Point & values = OT::Point(0));
 
   /** Virtual constructor */
   virtual GridDesignOfExperiment * clone() const;

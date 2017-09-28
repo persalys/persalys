@@ -8,7 +8,7 @@ import os
 
 myStudy = otguibase.OTStudy('myStudy')
 
-## Model
+# Model
 filename = 'data1.csv'
 ot.RandomGenerator_SetSeed(0)
 sample = ot.Normal(3).getSample(300)
@@ -21,7 +21,7 @@ model = otguibase.DataModel('myDataModel', "data1.csv", columns)
 myStudy.add(model)
 print(model)
 
-## Inference analysis ##
+# Inference analysis ##
 analysis = otguibase.InferenceAnalysis('analysis', model)
 variables = ["X0", "X3"]
 analysis.setInterestVariables(variables)
@@ -37,7 +37,7 @@ result = analysis.getResult()
 print("result=", result)
 print(result.getFittingTestResultForVariable('X3'))
 
-## script
+# script
 script = myStudy.getPythonScript()
 print(script)
 exec(script)

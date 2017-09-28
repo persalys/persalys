@@ -25,7 +25,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 LimitStateItem::LimitStateItem(const LimitState & limitState)
   : OTguiItem(QString::fromUtf8(limitState.getName().c_str()), "LimitState")

@@ -24,7 +24,8 @@
 
 #include <QDebug>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 OTguiMdiArea::OTguiMdiArea()
   : QMdiArea()
@@ -49,7 +50,7 @@ void OTguiMdiArea::showSubWindow(QStandardItem * item)
 {
   if (!item)
     return;
-  for (int i=0; i<subWindowList().size(); ++i)
+  for (int i = 0; i < subWindowList().size(); ++i)
   {
     OTguiSubWindow * win = static_cast<OTguiSubWindow*>(subWindowList().at(i));
     if (win->getItem()->data(Qt::UserRole).toString() == "OTStudy")
@@ -79,7 +80,7 @@ void OTguiMdiArea::removeSubWindow(OTguiSubWindow* win)
 
 void OTguiMdiArea::removeSubWindow(QStandardItem* item)
 {
-  for (int i=0; i<subWindowList().size(); ++i)
+  for (int i = 0; i < subWindowList().size(); ++i)
   {
     OTguiSubWindow * win = static_cast<OTguiSubWindow*>(subWindowList().at(i));
     if (win->getItem() == item)

@@ -28,7 +28,8 @@
 #include <QTabWidget>
 #include <QLabel>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API CopulaParametersTabWidget : public QTabWidget
 {
   Q_OBJECT

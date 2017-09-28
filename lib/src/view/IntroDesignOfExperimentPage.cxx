@@ -29,7 +29,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 IntroDesignOfExperimentPage::IntroDesignOfExperimentPage(QWidget* parent)
   : QWizardPage(parent)

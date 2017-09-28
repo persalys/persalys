@@ -28,7 +28,8 @@
 
 #include <QWidget>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SensitivityResultWidget : public QWidget
 {
   Q_OBJECT
@@ -41,7 +42,7 @@ public:
                           const OT::Description& inputNames,
                           const OT::String& outputName,
                           const Type type,
-                          QWidget * parent=0);
+                          QWidget * parent = 0);
 
 public slots:
   void updateIndicesPlot(int, Qt::SortOrder);

@@ -24,13 +24,14 @@
 #include "otgui/ResultWindow.hxx"
 #include "otgui/SRCResult.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SRCResultWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
-  SRCResultWindow(AnalysisItem * item, QWidget * parent=0);
+  SRCResultWindow(AnalysisItem * item, QWidget * parent = 0);
 
 protected:
   void buildInterface();

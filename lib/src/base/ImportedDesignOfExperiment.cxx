@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(ImportedDesignOfExperiment)
 
@@ -52,9 +53,9 @@ ImportedDesignOfExperiment::ImportedDesignOfExperiment(const String& name, const
 
 /* Constructor with parameters */
 ImportedDesignOfExperiment::ImportedDesignOfExperiment(const String& name,
-                                                       const PhysicalModel& physicalModel,
-                                                       const String& fileName,
-                                                       const Indices& inputColumns)
+    const PhysicalModel& physicalModel,
+    const String& fileName,
+    const Indices& inputColumns)
   : DesignOfExperimentEvaluation(name, physicalModel)
   , fileName_("")
   , inputColumns_()
@@ -207,7 +208,7 @@ String ImportedDesignOfExperiment::getPythonScript() const
   for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
   {
     oss << "'" << getInterestVariables()[i] << "'";
-    if (i < getInterestVariables().getSize()-1)
+    if (i < getInterestVariables().getSize() - 1)
       oss << ", ";
   }
   oss << "]\n";

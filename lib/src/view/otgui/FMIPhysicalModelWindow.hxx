@@ -40,7 +40,8 @@
 #include <QTreeView>
 #include <QMouseEvent>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 
 class OTGUI_API DataTableModel : public QAbstractTableModel
@@ -82,7 +83,7 @@ private:
   OT::Indices variability_;
   OT::Indices causality_;
   OT::Indices inputOutput_;//0:none; 1:input; 2:output
-  
+
   OT::Description startKeys_;
   OT::Point startValues_;
 };
@@ -161,7 +162,7 @@ public:
 
 class DataFilterProxyModel : public QSortFilterProxyModel
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
   DataFilterProxyModel(QObject *parent = 0);
@@ -257,7 +258,7 @@ class OTGUI_API FMIPhysicalModelWindow : public OTguiSubWindow
   Q_OBJECT
 
 public :
-  FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent=0);
+  FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent = 0);
 
 public slots:
   void selectImportFileDialogRequested();

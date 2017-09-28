@@ -28,14 +28,15 @@
 #include <QCheckBox>
 #include <QComboBox>
 
-namespace OTGUI {
-  
+namespace OTGUI
+{
+
 class OTGUI_API YACSPhysicalModelWindow : public OTguiSubWindow
 {
   Q_OBJECT
 
 public :
-  YACSPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent=0);
+  YACSPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent = 0);
 
 public slots:
   void selectImportFileDialogRequested();

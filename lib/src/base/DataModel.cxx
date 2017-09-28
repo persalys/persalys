@@ -26,7 +26,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(DataModel)
 
@@ -301,7 +302,7 @@ String DataModel::getPythonScript() const
   }
   oss << "]\n";
 
-  oss << getName()+ " = otguibase.DataModel('" + getName() + "', ";
+  oss << getName() + " = otguibase.DataModel('" + getName() + "', ";
   oss << "'" << getFileName() << "', inputColumns, outputColumns, inputNames, outputNames)\n";
 
   return oss.str();

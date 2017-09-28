@@ -30,13 +30,14 @@
 #include <QComboBox>
 #include <QLabel>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API InferenceResultWizard : public OTguiWizard
 {
   Q_OBJECT
 
 public:
-  InferenceResultWizard(const OTStudy& otStudy, QWidget* parent=0);
+  InferenceResultWizard(const OTStudy& otStudy, QWidget* parent = 0);
 
   OT::Distribution getDistribution() const;
 

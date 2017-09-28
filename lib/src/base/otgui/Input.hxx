@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class to define inputs for the physical models 
+ *  @brief Class to define inputs for the physical models
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -25,7 +25,8 @@
 
 #include <openturns/Distribution.hxx>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API Input : public Variable
 {
   CLASSNAME
@@ -36,11 +37,11 @@ public:
   /** Constructor with parameters */
   Input(const OT::String& name);
   /** Constructor with parameters */
-  Input(const OT::String& name, const double& value, const OT::Distribution& distribution, const OT::String& description="");
+  Input(const OT::String& name, const double& value, const OT::Distribution& distribution, const OT::String& description = "");
   /** Constructor with parameters */
-  Input(const OT::String& name, const OT::Distribution& distribution, const OT::String& description="");
+  Input(const OT::String& name, const OT::Distribution& distribution, const OT::String& description = "");
   /** Constructor with parameters */
-  Input(const OT::String& name, const double& value, const OT::String& description="");
+  Input(const OT::String& name, const double& value, const OT::String& description = "");
 
   /** Virtual constructor */
   virtual Input * clone() const;

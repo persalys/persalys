@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Abstract top-level class for all analysis 
+ *  @brief Abstract top-level class for all analysis
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -24,7 +24,8 @@
 #include "PhysicalModel.hxx"
 #include "LaunchParametersVisitor.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API AnalysisImplementation : public OT::PersistentObject, public Observable
 {
 public:

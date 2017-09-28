@@ -24,7 +24,8 @@
 #include "CopulaInferenceSetResult.hxx"
 #include "DesignOfExperiment.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API CopulaInferenceResult : public OT::PersistentObject
 {
   CLASSNAME

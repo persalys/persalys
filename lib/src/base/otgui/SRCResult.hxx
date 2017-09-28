@@ -24,7 +24,8 @@
 #include "otgui/OTGuiprivate.hxx"
 #include "openturns/Sample.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SRCResult : public OT::PersistentObject
 {
   CLASSNAME

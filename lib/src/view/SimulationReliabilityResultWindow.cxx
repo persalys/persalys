@@ -38,7 +38,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
@@ -177,7 +178,7 @@ QWidget* SimulationReliabilityResultWindow::getSummaryTab()
 
   // resize to contents
   resultsTable->resizeToContents();
-  
+
   // Confidence interval: do it after resizeToContents
   resultsTableModel->setNotEditableHeaderItem(0, 2, tr("Confidence interval at 95%"));
   resultsTable->setSpan(0, 2, 1, 2);
@@ -222,10 +223,10 @@ QWidget* SimulationReliabilityResultWindow::getHistogramTab()
   plotWidgetLayout->addWidget(plot);
 
   GraphConfigurationWidget * histogramSettingWidget = new GraphConfigurationWidget(listHistogram,
-                                                                                   QStringList(),
-                                                                                   QStringList(),
-                                                                                   GraphConfigurationWidget::NoType,
-                                                                                   this);
+      QStringList(),
+      QStringList(),
+      GraphConfigurationWidget::NoType,
+      this);
   plotWidget->setDockWidget(histogramSettingWidget);
 
   return plotWidget;
@@ -266,10 +267,10 @@ QWidget* SimulationReliabilityResultWindow::getConvergenceTab()
   stackedWidget->addWidget(plot);
 
   GraphConfigurationWidget * convergenceGraphSettingWidget = new GraphConfigurationWidget(listConvergenceGraph,
-                                                                                          QStringList(),
-                                                                                          QStringList(),
-                                                                                          GraphConfigurationWidget::NoType,
-                                                                                          this);
+      QStringList(),
+      QStringList(),
+      GraphConfigurationWidget::NoType,
+      this);
   plotWidget->setDockWidget(convergenceGraphSettingWidget);
   plotWidgetLayout->addWidget(stackedWidget);
 

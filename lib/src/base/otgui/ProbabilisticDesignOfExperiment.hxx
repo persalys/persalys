@@ -23,7 +23,8 @@
 
 #include "DesignOfExperimentEvaluation.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ProbabilisticDesignOfExperiment : public DesignOfExperimentEvaluation
 {
   CLASSNAME
@@ -50,7 +51,7 @@ public:
 
   OT::UnsignedInteger getSize() const;
   void setSize(const OT::UnsignedInteger size);
-  
+
   virtual OT::String getPythonScript() const;
 
   /** String converter */

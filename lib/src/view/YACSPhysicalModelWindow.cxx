@@ -36,7 +36,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
@@ -89,9 +90,9 @@ void YACSPhysicalModelWindow::selectImportFileDialogRequested()
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
   QString fileName = QFileDialog::getOpenFileName(this,
-                                                  tr("Data to import..."),
-                                                  currentDir,
-                                                  tr("Data files (*.xml);;"));
+                     tr("Data to import..."),
+                     currentDir,
+                     tr("Data files (*.xml);;"));
 
   if (!fileName.isEmpty())
   {

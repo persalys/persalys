@@ -30,7 +30,8 @@
 #include <QApplication>
 #include <QSortFilterProxyModel>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 ExportableTableView::ExportableTableView(QWidget* parent)
   : CopyableTableView(parent)
@@ -59,9 +60,9 @@ void ExportableTableView::exportData()
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
   QString fileName = QFileDialog::getSaveFileName(this,
-                                                  tr("Export model as..."),
-                                                  currentDir + QDir::separator() + tr("data"),
-                                                  tr("CSV source files (*.csv)"));
+                     tr("Export model as..."),
+                     currentDir + QDir::separator() + tr("data"),
+                     tr("CSV source files (*.csv)"));
 
   if (!fileName.isEmpty())
   {
@@ -91,7 +92,7 @@ void ExportableTableView::exportData()
     }
     catch (std::exception & ex)
     {
-      QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Impossible to export the data. ")+ex.what());
+      QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Impossible to export the data. ") + ex.what());
     }
   }
 }

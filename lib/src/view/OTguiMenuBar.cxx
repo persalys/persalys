@@ -23,7 +23,8 @@
 #include <QSettings>
 #include <QFileInfo>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 OTguiMenuBar::OTguiMenuBar(const OTguiActions* actions)
   : QMenuBar()

@@ -25,7 +25,8 @@
 
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API MetaModelAnalysisResult : public OT::PersistentObject
 {
   CLASSNAME

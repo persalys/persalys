@@ -20,7 +20,8 @@
  */
 #include "otgui/AnalysisWizard.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 AnalysisWizard::AnalysisWizard(const Analysis & analysis, QWidget * parent)
   : OTguiWizard(parent)

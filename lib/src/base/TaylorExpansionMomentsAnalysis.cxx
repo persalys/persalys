@@ -25,7 +25,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(TaylorExpansionMomentsAnalysis)
 
@@ -69,10 +70,10 @@ void TaylorExpansionMomentsAnalysis::run()
     Point meanFirstOrder = algoTaylorExpansionMoments.getMeanFirstOrder();
     Point meanSecondOrder = algoTaylorExpansionMoments.getMeanSecondOrder();
     Point variance = Point(algoTaylorExpansionMoments.getCovariance().getDimension());
-    for (UnsignedInteger i=0; i<variance.getDimension(); ++i)
-      variance[i] = algoTaylorExpansionMoments.getCovariance()(i,i);
+    for (UnsignedInteger i = 0; i < variance.getDimension(); ++i)
+      variance[i] = algoTaylorExpansionMoments.getCovariance()(i, i);
     Point standardDeviation(variance.getDimension());
-    for (UnsignedInteger i=0; i<variance.getDimension(); ++i)
+    for (UnsignedInteger i = 0; i < variance.getDimension(); ++i)
       standardDeviation[i] = sqrt(variance[i]);
 
     result_ = TaylorExpansionMomentsResult(getInterestVariables(), meanFirstOrder, meanSecondOrder, standardDeviation, variance);
@@ -101,10 +102,10 @@ String TaylorExpansionMomentsAnalysis::getPythonScript() const
   if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {
     oss << "interestVariables = [";
-    for (UnsignedInteger i=0; i<getInterestVariables().getSize(); ++i)
+    for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
     {
       oss << "'" << getInterestVariables()[i] << "'";
-      if (i < getInterestVariables().getSize()-1)
+      if (i < getInterestVariables().getSize() - 1)
         oss << ", ";
     }
     oss << "]\n";

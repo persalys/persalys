@@ -7,7 +7,7 @@ import otguibase
 
 myStudy = otguibase.OTStudy('myStudy')
 
-## Model
+# Model
 dist_R = ot.LogNormalMuSigma(300., 30.).getDistribution()
 dist_F = ot.Normal(75000., 5000.)
 
@@ -20,21 +20,22 @@ model = otguibase.PythonPhysicalModel('myPhysicalModel', [R, F], [G], code)
 myStudy.add(model)
 
 f = model.getFunction()
-print(f([300.,75000.]))
+print(f([300., 75000.]))
 
-## Design of Experiment - Parametric analysis ##
+# Design of Experiment - Parametric analysis ##
 aDesign = otguibase.GridDesignOfExperiment('design', model)
 aDesign.setLevels([2, 2])
 myStudy.add(aDesign)
 aDesign.run()
 
-## Taylor Expansion ##
-taylorExpansionsMoments = otguibase.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', model)
+# Taylor Expansion ##
+taylorExpansionsMoments = otguibase.TaylorExpansionMomentsAnalysis(
+    'myTaylorExpansionMoments', model)
 myStudy.add(taylorExpansionsMoments)
 taylorExpansionsMoments.run()
 taylorExpansionsMomentsResult = taylorExpansionsMoments.getResult()
 
-## Monte Carlo ##
+# Monte Carlo ##
 montecarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', model)
 montecarlo.setMaximumCalls(1000)
 myStudy.add(montecarlo)
@@ -44,7 +45,7 @@ montecarloResult = montecarlo.getResult()
 meanCI = montecarloResult.getMeanConfidenceInterval()
 stdCi = montecarloResult.getStdConfidenceInterval()
 
-## Sobol ##
+# Sobol ##
 sobol = otguibase.SobolAnalysis('mySobol', model)
 sobol.setMaximumCoefficientOfVariation(-1)
 sobol.setMaximumCalls(1000)
@@ -53,13 +54,13 @@ myStudy.add(sobol)
 sobol.run()
 sobolResult = sobol.getResult()
 
-## SRC ##
+# SRC ##
 src = otguibase.SRCAnalysis('mySRC', model, 1000)
 myStudy.add(src)
 src.run()
 srcResult = src.getResult()
 
-## script
+# script
 script = myStudy.getPythonScript()
 print(script)
 exec(script)

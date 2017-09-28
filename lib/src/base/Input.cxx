@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class to define inputs for the physical models 
+ *  @brief Class to define inputs for the physical models
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -26,7 +26,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(Input)
 
@@ -179,7 +180,7 @@ String Input::getDistributionPythonScript() const
         oss << truncatedDistribution.getUpperBound() << ", ot.TruncatedDistribution.UPPER)\n";
     }
     else  // both sides truncation
-      oss << truncatedDistribution.getUpperBound() << ", " << truncatedDistribution.getUpperBound() <<")\n";
+      oss << truncatedDistribution.getUpperBound() << ", " << truncatedDistribution.getUpperBound() << ")\n";
   }
   return oss;
 }

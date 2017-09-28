@@ -23,7 +23,8 @@
 
 #include "otgui/DesignOfExperimentItem.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DataModelDefinitionItem : public DesignOfExperimentItem
 {
   Q_OBJECT

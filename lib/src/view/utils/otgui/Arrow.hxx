@@ -27,7 +27,8 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API Arrow : public QObject, public QGraphicsLineItem
 {
   Q_OBJECT

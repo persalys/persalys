@@ -23,13 +23,14 @@
 
 #include "DataAnalysisWindow.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DesignOfExperimentWindow : public DataAnalysisWindow
 {
   Q_OBJECT
 
 public:
-  DesignOfExperimentWindow(AnalysisItem * item, QWidget * parent=0);
+  DesignOfExperimentWindow(AnalysisItem * item, QWidget * parent = 0);
 
 protected:
   virtual void initialize(AnalysisItem* item);

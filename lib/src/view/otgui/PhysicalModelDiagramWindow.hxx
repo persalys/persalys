@@ -24,13 +24,14 @@
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/PhysicalModelDiagramItem.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API PhysicalModelDiagramWindow : public OTguiSubWindow
 {
   Q_OBJECT
 
 public :
-  PhysicalModelDiagramWindow(PhysicalModelDiagramItem * item, QWidget * parent=0);
+  PhysicalModelDiagramWindow(PhysicalModelDiagramItem * item, QWidget * parent = 0);
 };
 }
 #endif

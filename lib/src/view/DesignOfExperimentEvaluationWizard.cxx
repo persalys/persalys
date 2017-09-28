@@ -30,11 +30,12 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Analysis& analysis,
-                                                                       const bool isGeneralWizard,
-                                                                       QWidget* parent)
+    const bool isGeneralWizard,
+    QWidget* parent)
   : OTguiWizard(parent)
   , doesComboBox_(0)
   , doesComboBoxModel_(0)
@@ -151,7 +152,7 @@ void DesignOfExperimentEvaluationWizard::updateWidgets()
 
   // update interest variables list
   outputsSelectionGroupBox_->updateComboBoxModel(analysis_ptr->getPhysicalModel().getSelectedOutputsNames(),
-                                                 analysis_ptr->getInterestVariables());
+      analysis_ptr->getInterestVariables());
   // update block size
   blockSizeGroupBox_->setBlockSizeValue(analysis_ptr->getBlockSize());
 }

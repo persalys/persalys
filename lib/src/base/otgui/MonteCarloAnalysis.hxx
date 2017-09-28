@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Computes Monte Carlo analysis 
+ *  @brief Computes Monte Carlo analysis
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -25,7 +25,8 @@
 #include "WithStopCriteriaAnalysis.hxx"
 #include "DataAnalysisResult.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API MonteCarloAnalysis : public SimulationAnalysis, public WithStopCriteriaAnalysis
 {
   CLASSNAME

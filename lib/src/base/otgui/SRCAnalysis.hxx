@@ -24,7 +24,8 @@
 #include "SimulationAnalysis.hxx"
 #include "SRCResult.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SRCAnalysis : public SimulationAnalysis
 {
   CLASSNAME
@@ -33,7 +34,7 @@ public:
   /** Default constructor */
   SRCAnalysis();
   /** Constructor with parameters */
-  SRCAnalysis(const OT::String & name, const PhysicalModel & physicalModel, const OT::UnsignedInteger nbSimu=10000);
+  SRCAnalysis(const OT::String & name, const PhysicalModel & physicalModel, const OT::UnsignedInteger nbSimu = 10000);
 
   /** Virtual constructor */
   virtual SRCAnalysis * clone() const;

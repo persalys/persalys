@@ -27,7 +27,8 @@
 #include <QAction>
 #include <QMouseEvent>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 class CollapsibleGroupBoxPrivate
 {
@@ -208,7 +209,7 @@ bool CollapsibleGroupBox::event(QEvent *event)
   switch (event->type())
   {
     case QEvent::StyleChange:
-      /*fall through*/
+    /*fall through*/
     case QEvent::FontChange:
       d->recalculateHeaderSize();
       break;
@@ -310,7 +311,7 @@ void CollapsibleGroupBoxPrivate::recalculateHeaderSize()
   option.initFrom(q);
 
   QSize textSize = q->style()->itemTextRect(option.fontMetrics, QRect(), Qt::TextShowMnemonic, false,
-                                    title).size();
+                   title).size();
 
   headerSize = q->style()->sizeFromContents(QStyle::CT_CheckBox, &option, textSize, q);
   q->setContentsMargins(q->style()->pixelMetric(QStyle::PM_LayoutLeftMargin), headerSize.height(), 0, 0);
@@ -333,7 +334,7 @@ QSize CollapsibleGroupBoxPrivate::contentSize() const
   if (q->layout())
     return q->layout()->sizeHint();
 
-  return QSize(0,0);
+  return QSize(0, 0);
 }
 
 
@@ -342,6 +343,6 @@ QSize CollapsibleGroupBoxPrivate::contentMinimumSize() const
   if (q->layout())
     return q->layout()->minimumSize();
 
-  return QSize(0,0);
+  return QSize(0, 0);
 }
 }

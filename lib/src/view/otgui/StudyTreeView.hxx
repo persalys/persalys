@@ -30,7 +30,8 @@
 #include <QTreeView>
 #include <QMouseEvent>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API StudyTreeView : public QTreeView
 {
   Q_OBJECT
@@ -48,17 +49,17 @@ public slots:
 
   // create objects
   void createNewOTStudy();
-  void createNewAnalysis(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard=false);
-  void createNewDesignOfExperimentEvaluation(const Analysis& analysis, const bool isGeneralWizard=false);
+  void createNewAnalysis(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard = false);
+  void createNewDesignOfExperimentEvaluation(const Analysis& analysis, const bool isGeneralWizard = false);
 
   // create windows
   void createNewOTStudyWindow(OTStudyItem* item);
   void createNewDataModelDiagramWindow(DataModelDiagramItem*);
-  void createNewDataModelWindow(DataModelDefinitionItem* item, const bool createConnections=true);
+  void createNewDataModelWindow(DataModelDefinitionItem* item, const bool createConnections = true);
   void createNewPhysicalModelDiagramWindow(PhysicalModelDiagramItem* item);
   void createNewPhysicalModelWindow(PhysicalModelDefinitionItem* item);
   void createNewProbabilisticModelWindow(ProbabilisticModelItem* item);
-  void createNewDesignOfExperimentWindow(DesignOfExperimentDefinitionItem* item, const bool createConnections=true);
+  void createNewDesignOfExperimentWindow(DesignOfExperimentDefinitionItem* item, const bool createConnections = true);
   void createNewLimitStateWindow(LimitStateItem* item);
   void createNewAnalysisWindow(AnalysisItem* item);
   void createAnalysisResultWindow(AnalysisItem* item);
@@ -75,8 +76,8 @@ public slots:
   void saveCurrentOTStudy();
   void saveAsCurrentOTStudy();
   void saveAsOTStudy();
-  void saveAsOTStudy(OTStudyItem* item, bool* notcancel=0);
-  void openOTStudy(const QString& fileName="");
+  void saveAsOTStudy(OTStudyItem* item, bool* notcancel = 0);
+  void openOTStudy(const QString& fileName = "");
   void closeNotSavedOTStudyRequest(OTStudyItem* item, bool* canClose);
   bool closeOTStudy();
   bool closeAllOTStudies();
@@ -88,7 +89,7 @@ signals:
   void analysisInProgressStatusChanged(bool analysisInProgress);
 
 protected:
-  AnalysisWizard * getWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard=false);
+  AnalysisWizard * getWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard = false);
 
 private:
   StudyTreeViewModel * treeViewModel_;

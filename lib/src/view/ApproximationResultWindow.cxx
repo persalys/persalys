@@ -29,7 +29,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget * parent)
   : ResultWindow(item, parent)

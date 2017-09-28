@@ -79,28 +79,28 @@ int main(int argc, char *argv[])
 
 
     ComposedDistribution::DistributionCollection distributions;
-    distributions.add(Normal(10200,100));
-    distributions.add(Normal(3000,15));
-    distributions.add(Normal(4000,60));
+    distributions.add(Normal(10200, 100));
+    distributions.add(Normal(3000, 15));
+    distributions.add(Normal(4000, 60));
 
     Point scale(3);
     Point transvec(3);
     Point otLevels(3, 0.);
 
-    for (int i=0; i<3; ++i)
+    for (int i = 0; i < 3; ++i)
     {
       double a = distributions[i].computeQuantile(0.05)[0];
       double b = distributions[i].computeQuantile(0.95)[0];
-      scale[i] = b-a;
+      scale[i] = b - a;
       transvec[i] = a;
     }
 
     Box box(otLevels);
     Sample inputSample(box.generate());
-    inputSample*=scale;
-    inputSample+=transvec;
+    inputSample *= scale;
+    inputSample += transvec;
 
-    Sample outputSample=f(inputSample);
+    Sample outputSample = f(inputSample);
 
     // Comparaison
     assert_almost_equal(outputSample, resultSample1, 1e-16);

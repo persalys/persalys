@@ -25,13 +25,14 @@
 
 #include <QAbstractTableModel>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DifferentiationTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 
 public:
-  DifferentiationTableModel(const PhysicalModel& physicalModel, QObject* parent=0);
+  DifferentiationTableModel(const PhysicalModel& physicalModel, QObject* parent = 0);
 
   int columnCount(const QModelIndex& parent = QModelIndex()) const;
   int rowCount(const QModelIndex& parent = QModelIndex()) const;

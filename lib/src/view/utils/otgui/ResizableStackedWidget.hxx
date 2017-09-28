@@ -24,7 +24,8 @@
 #include <QStackedWidget>
 #include "otgui/OTGuiprivate.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ResizableStackedWidget : public QStackedWidget
 {
   Q_OBJECT

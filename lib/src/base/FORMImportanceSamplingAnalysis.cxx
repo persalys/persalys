@@ -26,7 +26,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(FORMImportanceSamplingAnalysis)
 
@@ -42,7 +43,7 @@ FORMImportanceSamplingAnalysis::FORMImportanceSamplingAnalysis()
 
 /* Constructor with parameters */
 FORMImportanceSamplingAnalysis::FORMImportanceSamplingAnalysis(const String& name,
-                                                               const LimitState& limitState)
+    const LimitState& limitState)
   : ImportanceSamplingAnalysis(name, limitState)
   , ApproximationAnalysis()
 {

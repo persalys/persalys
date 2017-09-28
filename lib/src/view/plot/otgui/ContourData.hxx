@@ -25,7 +25,8 @@
 
 #include <qwt_raster_data.h>
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 class OTGUI_API ContourData: public QwtRasterData
 {

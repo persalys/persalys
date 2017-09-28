@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Abstract top-level class for all physical models 
+ *  @brief Abstract top-level class for all physical models
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(PhysicalModel)
 
@@ -39,7 +40,7 @@ PhysicalModel::PhysicalModel(const String & name)
 PhysicalModel::PhysicalModel(const PhysicalModelImplementation & implementation)
   : TypedInterfaceObject<PhysicalModelImplementation>(implementation.clone())
 {
-  
+
 }
 
 

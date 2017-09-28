@@ -30,15 +30,22 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(YACSEvaluation)
 
 class AutoYELocker
 {
 public:
-  AutoYELocker(YACSEvalYFX *efx, const std::vector< YACSEvalInputPort * >& inps, const std::vector< YACSEvalOutputPort * >& outps):_efx(efx) { _efx->lockPortsForEvaluation(inps, outps); }
-  ~AutoYELocker() { _efx->unlockAll(); }
+  AutoYELocker(YACSEvalYFX *efx, const std::vector< YACSEvalInputPort * >& inps, const std::vector< YACSEvalOutputPort * >& outps): _efx(efx)
+  {
+    _efx->lockPortsForEvaluation(inps, outps);
+  }
+  ~AutoYELocker()
+  {
+    _efx->unlockAll();
+  }
 private:
   YACSEvalYFX *_efx;
 };
@@ -110,13 +117,13 @@ void YACSEvaluation::loadData()
   inDescription_ = Description(inps.size());
   outDescription_ = Description(outps.size());
 
-  for (int i=0; i<inps.size(); ++i)
+  for (int i = 0; i < inps.size(); ++i)
   {
     inputValues_[i] = inps[i]->getDefaultValueDefined()->toDouble();
     inDescription_[i] = inps[i]->getName();
   }
 
-  for (int i=0; i<outps.size(); ++i)
+  for (int i = 0; i < outps.size(); ++i)
     outDescription_[i] = outps[i]->getName();
 }
 
@@ -145,7 +152,7 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   if (getOutputDimension() == outps0.size())
     outps = outps0;
   else
-    for (UnsignedInteger i=0; i<getOutputDimension(); ++i)
+    for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
       for (std::vector<YACSEvalOutputPort *>::iterator it = outps0.begin(); it != outps0.end(); it++)
         if (getOutputVariablesNames()[i] == (*it)->getName())
         {
@@ -159,12 +166,12 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
     throw InvalidArgumentException(HERE) << "The dimension of the output sample " << getOutputDimension() << " is not valid";
   }
 
-  for (UnsignedInteger i=0; i<inS.getDimension(); ++i)
+  for (UnsignedInteger i = 0; i < inS.getDimension(); ++i)
   {
     std::vector<double> tab(inS.getSize());
-    for (UnsignedInteger j=0; j<inS.getSize(); ++j)
+    for (UnsignedInteger j = 0; j < inS.getSize(); ++j)
       tab[j] = inS[j][i];
-    
+
     YACSEvalSeqAnyDouble ds(tab);
     inps[i]->setSequenceOfValuesToEval(&ds);
   }
@@ -201,10 +208,10 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   // get results
   std::vector<YACSEvalSeqAny *> res(efx_->getResults());
 
-  for (int k=0; k<outps.size(); ++k)
+  for (int k = 0; k < outps.size(); ++k)
   {
     YACSEvalSeqAnyDouble *res_k(dynamic_cast<YACSEvalSeqAnyDouble *>(res[k]));
-    for (int h=0; h<res_k->size(); ++h)
+    for (int h = 0; h < res_k->size(); ++h)
       result[h][k] = res_k->getInternal()->at(h);
   }
   return result;

@@ -26,7 +26,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(KrigingAnalysis)
 
@@ -164,10 +165,10 @@ void KrigingAnalysis::run()
       throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
     if (getCovarianceModel().getSpatialDimension() != inputDimension)
       throw InvalidArgumentException(HERE) << "The covariance model spatial dimension (" << getCovarianceModel().getSpatialDimension()
-                                           << ") must be equal to the number of effective inputs (" << inputDimension <<")";
+                                           << ") must be equal to the number of effective inputs (" << inputDimension << ")";
     if (getBasis().getDimension() != inputDimension)
       throw InvalidArgumentException(HERE) << "The basis dimension (" << getBasis().getDimension()
-                                           << ") must be equal to the number of effective inputs (" << inputDimension <<")";
+                                           << ") must be equal to the number of effective inputs (" << inputDimension << ")";
 
     // Kriging
     Collection<KrigingResult> krigingResultCollection;
@@ -183,7 +184,7 @@ void KrigingAnalysis::run()
     for (UnsignedInteger i = 0; i < outputDimension; ++i)
     {
       if (stopRequested_)
-       break;
+        break;
 
       informationMessage_ = "Creation of a meta model for the variable " + effectiveOutputSample.getDescription()[i] + " in progress.\n";
       notify("informationMessageUpdated");
@@ -208,8 +209,8 @@ void KrigingAnalysis::run()
 
         if (!stopRequested_)
         {
-          for (UnsignedInteger j=0; j<size; ++j)
-          metaModelLOO[j][i] = result_i.metaModelOutputSampleLOO_[j][0];
+          for (UnsignedInteger j = 0; j < size; ++j)
+            metaModelLOO[j][i] = result_i.metaModelOutputSampleLOO_[j][0];
 
           q2LOO[i] = result_i.q2LOO_[0];
           errorQ2LOO[i] = result_i.errorQ2LOO_[0];
@@ -265,8 +266,8 @@ Function KrigingAnalysis::runAlgo(const Sample& inputSample, const Sample& outpu
 
 
 KrigingAlgorithm KrigingAnalysis::buildKrigingAlgorithm(const Sample& inputSample,
-                                                        const Sample& outputSample,
-                                                        const bool useOptimalCovModel)
+    const Sample& outputSample,
+    const bool useOptimalCovModel)
 {
   if (outputSample.getDimension() != 1)
     throw InternalException(HERE) << "KrigingAnalysis::buildKrigingAlgorithm: the output sample must have a dimension of 1";
@@ -276,7 +277,7 @@ KrigingAlgorithm KrigingAnalysis::buildKrigingAlgorithm(const Sample& inputSampl
   KrigingAlgorithm algo(inputSample,
                         getDistribution().getIsoProbabilisticTransformation(),
                         outputSample,
-                        useOptimalCovModel? optimalCovarianceModel_ : covarianceModel_,
+                        useOptimalCovModel ? optimalCovarianceModel_ : covarianceModel_,
                         getBasis());
 
   algo.setOptimizeParameters(optimizeParameters_);
@@ -304,7 +305,7 @@ String KrigingAnalysis::getPythonScript() const
     for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
     {
       oss << "'" << getInterestVariables()[i] << "'";
-      if (i < getInterestVariables().getSize()-1)
+      if (i < getInterestVariables().getSize() - 1)
         oss << ", ";
     }
     oss << "]\n";
@@ -334,7 +335,7 @@ String KrigingAnalysis::getPythonScript() const
     oss << ", " << dynamic_cast<GeneralizedExponential*>(getCovarianceModel().getImplementation().get())->getP();
   oss << "))\n";
 
-  oss << getName() << ".setOptimizeParameters(" <<(getOptimizeParameters() ? "True" : "False") << ")\n";
+  oss << getName() << ".setOptimizeParameters(" << (getOptimizeParameters() ? "True" : "False") << ")\n";
 
   // validation
   oss << getName() << ".setLeaveOneOutValidation(" << (isLeaveOneOutValidation() ? "True" : "False") << ")\n";

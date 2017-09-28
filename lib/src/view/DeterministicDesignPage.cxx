@@ -28,7 +28,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 DeterministicDesignPage::DeterministicDesignPage(QWidget* parent)
   : QWizardPage(parent)

@@ -28,7 +28,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(InferenceAnalysis)
 
@@ -206,12 +207,12 @@ void InferenceAnalysis::run()
           String str = distFactoriesForEachInterestVar_[sample.getDescription()[i]][j].getImplementation()->getClassName();
           const String distributionName = str.substr(0, str.find("Factory"));
           const String message = OSS() << "Error when building the "
-                                       << distributionName
-                                       << " distribution with the sample of the variable "
-                                       << sample.getDescription()[i]
-                                       << ". "
-                                       << ex.what()
-                                       << "\n";
+                                 << distributionName
+                                 << " distribution with the sample of the variable "
+                                 << sample.getDescription()[i]
+                                 << ". "
+                                 << ex.what()
+                                 << "\n";
           // set fittingTestResult
           fittingTestResult.testedDistributions_.add(DistributionDictionary::BuildDistribution(distributionName, 0));
           TestResult testResult;
@@ -283,11 +284,11 @@ String InferenceAnalysis::__repr__() const
   OSS oss;
   oss << DesignOfExperimentAnalysis::__repr__()
       << " level=" << getLevel();
-      for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
-      {
-        oss << " interestVariable " << getInterestVariables()[i]
-            << " distributionFactories=" << getDistributionsFactories(getInterestVariables()[i]);
-      }
+  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
+  {
+    oss << " interestVariable " << getInterestVariables()[i]
+        << " distributionFactories=" << getDistributionsFactories(getInterestVariables()[i]);
+  }
   return oss;
 }
 

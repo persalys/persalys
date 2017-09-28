@@ -40,13 +40,14 @@
 #include <QLabel>
 #include <QStackedWidget>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API ProbabilisticModelWindow : public OTguiSubWindow
 {
   Q_OBJECT
 
 public :
-  ProbabilisticModelWindow(const OTStudy& otStudy, ProbabilisticModelItem * item, QWidget * parent=0);
+  ProbabilisticModelWindow(const OTStudy& otStudy, ProbabilisticModelItem * item, QWidget * parent = 0);
 
 protected:
   void buildInterface();

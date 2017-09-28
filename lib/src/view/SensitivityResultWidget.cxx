@@ -34,14 +34,15 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
-                                                 const Point& totalIndices,
-                                                 const Description& inputNames,
-                                                 const String& outputName,
-                                                 const Type type,
-                                                 QWidget * parent
+    const Point& totalIndices,
+    const Description& inputNames,
+    const String& outputName,
+    const Type type,
+    QWidget * parent
                                                 )
   : QWidget(parent)
   , plot_(0)
@@ -78,10 +79,10 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   QVector< PlotWidget* > listPlotWidget;
   listPlotWidget.append(plot_);
   GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(listPlotWidget,
-                                                                         QStringList(),
-                                                                         QStringList(),
-                                                                         GraphConfigurationWidget::SensitivityIndices,
-                                                                         this);
+      QStringList(),
+      QStringList(),
+      GraphConfigurationWidget::SensitivityIndices,
+      this);
   plotWidget->setDockWidget(graphSetting);
 
   mainSplitter->addWidget(plotWidget);

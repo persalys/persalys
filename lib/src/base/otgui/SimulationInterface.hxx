@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Abstract top-level class for ot simulation 
+ *  @brief Abstract top-level class for ot simulation
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -25,7 +25,8 @@
 
 #include <openturns/Simulation.hxx>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API SimulationInterface : public OT::TypedInterfaceObject<OT::Simulation>
 {
 public:

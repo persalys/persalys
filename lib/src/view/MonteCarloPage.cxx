@@ -27,7 +27,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 MonteCarloPage::MonteCarloPage(QWidget* parent)
   : QWizardPage(parent)

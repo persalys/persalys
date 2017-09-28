@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(KrigingAnalysisResult)
 
@@ -56,7 +57,7 @@ KrigingResult KrigingAnalysisResult::getResultForVariable(const String& variable
   if (!krigingResultCollection_.getSize())
     throw InvalidArgumentException(HERE) << "There is no kriging result";
 
-  for (UnsignedInteger i=0; i<krigingResultCollection_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < krigingResultCollection_.getSize(); ++i)
     if (krigingResultCollection_[i].getModel().getOutputDescription()[0] == variableName)
       return krigingResultCollection_[i];
 

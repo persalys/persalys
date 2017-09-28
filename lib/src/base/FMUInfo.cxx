@@ -25,7 +25,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(FMUInfo)
 
@@ -136,9 +137,9 @@ void FMUInfo::initialize()
 String FMUInfo::__repr__() const
 {
   return OSS() << "class=" << getClassName()
-               << " variables=" << variableNames_
-               << " causality=" << causality_
-               << " variability_=" << variability_;
+         << " variables=" << variableNames_
+         << " causality=" << causality_
+         << " variability_=" << variability_;
 }
 
 

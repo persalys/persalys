@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CentralTendencyWizard::CentralTendencyWizard(const Analysis& analysis, QWidget* parent)
   : AnalysisWizard(analysis, parent)

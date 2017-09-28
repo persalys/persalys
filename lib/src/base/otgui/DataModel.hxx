@@ -23,22 +23,23 @@
 
 #include "DesignOfExperimentImplementation.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API DataModel : public DesignOfExperimentImplementation
 {
   CLASSNAME
 
 public:
   /** Default constructor */
-  DataModel(const OT::String & name="Unnamed");
+  DataModel(const OT::String & name = "Unnamed");
 
   /** Constructor with parameters */
   DataModel(const OT::String & name,
             const OT::String & fileName,
             const OT::Indices & inputColumns,
-            const OT::Indices & outputColumns=OT::Indices(),
-            const OT::Description & inputNames=OT::Description(),
-            const OT::Description & outputNames=OT::Description());
+            const OT::Indices & outputColumns = OT::Indices(),
+            const OT::Description & inputNames = OT::Description(),
+            const OT::Description & outputNames = OT::Description());
 
   /** Constructor with parameters */
   DataModel(const OT::String & name,
@@ -54,9 +55,9 @@ public:
   OT::Indices getInputColumns() const;
   OT::Indices getOutputColumns() const;
   void setColumns(const OT::Indices & inputColumns,
-                  const OT::Indices & outputColumns=OT::Indices(),
-                  const OT::Description & inputNames=OT::Description(),
-                  const OT::Description & outputNames=OT::Description());
+                  const OT::Indices & outputColumns = OT::Indices(),
+                  const OT::Description & inputNames = OT::Description(),
+                  const OT::Description & outputNames = OT::Description());
 
   OT::Description getInputNames();
   OT::Description getOutputNames();

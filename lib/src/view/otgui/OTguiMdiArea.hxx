@@ -26,7 +26,8 @@
 #include <QMdiArea>
 #include <QStandardItem>
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API OTguiMdiArea : public QMdiArea
 {
   Q_OBJECT

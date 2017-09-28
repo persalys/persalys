@@ -25,7 +25,8 @@
 #include "otgui/IntroCentralTendencyPage.hxx"
 #include "otgui/MonteCarloPage.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API CentralTendencyWizard : public AnalysisWizard
 {
   Q_OBJECT
@@ -33,7 +34,7 @@ class OTGUI_API CentralTendencyWizard : public AnalysisWizard
 public:
   enum {Page_Intro, Page_MonteCarlo};
 
-  CentralTendencyWizard(const Analysis& analysis, QWidget* parent=0);
+  CentralTendencyWizard(const Analysis& analysis, QWidget* parent = 0);
 
   virtual Analysis getAnalysis() const;
   virtual int nextId() const;

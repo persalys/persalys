@@ -25,7 +25,8 @@
 
 #include "openturns/Sample.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API TaylorExpansionMomentsResult : public OT::PersistentObject
 {
   CLASSNAME
@@ -35,9 +36,9 @@ public:
   TaylorExpansionMomentsResult();
   /** Constructor with parameters */
   TaylorExpansionMomentsResult(const OT::Description & outputNames, const OT::Point & meanFirstOrder,
-                                const OT::Point & meanSecondOrder,
-                                const OT::Point & standardDeviation,
-                                const OT::Point & variance);
+                               const OT::Point & meanSecondOrder,
+                               const OT::Point & standardDeviation,
+                               const OT::Point & variance);
 
   /** Virtual constructor */
   virtual TaylorExpansionMomentsResult * clone() const;

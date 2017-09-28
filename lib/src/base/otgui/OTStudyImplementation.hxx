@@ -27,14 +27,15 @@
 #include "LimitState.hxx"
 #include "Observer.hxx"
 
-namespace OTGUI {
+namespace OTGUI
+{
 class OTGUI_API OTStudyImplementation : public OT::PersistentObject, public Observable, public Observer
 {
   CLASSNAME
 
 public:
   /** Default constructor */
-  OTStudyImplementation(const OT::String & name="Unnamed");
+  OTStudyImplementation(const OT::String & name = "Unnamed");
 
   /** Destructor */
   virtual ~OTStudyImplementation();
@@ -66,7 +67,7 @@ public:
   OT::Collection<PhysicalModel> getPhysicalModels() const;
   PhysicalModel & getPhysicalModelByName(const OT::String & physicalModelName);
   bool hasPhysicalModelNamed(const OT::String & physicalModelName) const;
-  OT::String getAvailablePhysicalModelName(const OT::String & physicalModelRootName="PhysicalModel_") const;
+  OT::String getAvailablePhysicalModelName(const OT::String & physicalModelRootName = "PhysicalModel_") const;
   void add(const PhysicalModel & physicalModel);
   void remove(const PhysicalModel & physicalModel);
 

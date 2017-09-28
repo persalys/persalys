@@ -24,7 +24,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 WidgetBoundToDockWidget::WidgetBoundToDockWidget(QWidget* parent)
   : QWidget(parent)
@@ -119,8 +120,8 @@ void WidgetBoundToDockWidget::hideDockWidget()
 void WidgetBoundToDockWidget::updateDockWidgetVisibility(Qt::WindowStates /*oldState*/, Qt::WindowStates newState)
 {
   if ((newState == Qt::WindowActive || newState == (Qt::WindowActive | Qt::WindowMaximized)) &&
-       !dockWidgetAlreadyShown_ &&
-       isVisible())
+      !dockWidgetAlreadyShown_ &&
+      isVisible())
   {
     showDockWidget();
   }

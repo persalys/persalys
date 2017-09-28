@@ -25,7 +25,8 @@
 
 #include <QSpinBox>
 
-namespace OTGUI {
+namespace OTGUI
+{
 /// This SpinBox has a logarithmic increment : e.g. value=base*value
 /// when clicking on the up arrow
 /// by default base=10

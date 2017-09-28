@@ -27,7 +27,8 @@
 
 using namespace OT;
 
-namespace OTGUI {
+namespace OTGUI
+{
 
 CLASSNAMEINIT(FMIPhysicalModel)
 
@@ -133,7 +134,7 @@ FMUInfo FMIPhysicalModel::getFMUInfo() const
 
 
 void FMIPhysicalModel::reassignVariables(const Description & inputNames,
-                                         const Description & outputNames)
+    const Description & outputNames)
 {
   // replace dots by underscores in variables names
   Description inputNamesUnderscore;
@@ -163,7 +164,7 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
       code << ", ";
   }
   code << "):\n";
-  code << "    path_fmu = '" << fmuFileName_<< "'\n";
+  code << "    path_fmu = '" << fmuFileName_ << "'\n";
   code << "    inputs = [";
   for (UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
   {
@@ -175,7 +176,7 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
   code << "    outputs = [";
   for (UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
   {
-    code << "'" << outputNames[i]<< "'";
+    code << "'" << outputNames[i] << "'";
     if (i < outputNames.getSize() - 1)
       code << ", ";
   }
@@ -216,7 +217,8 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
   {
     String oldName(inputNames[i]);
     String newName(inputNamesUnderscore[i]);
-    if (newName != oldName) {
+    if (newName != oldName)
+    {
       getInputByName(newName).setName(oldName);
     }
   }
@@ -224,7 +226,8 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
   {
     String oldName(outputNames[i]);
     String newName(outputNamesUnderscore[i]);
-    if (newName != oldName) {
+    if (newName != oldName)
+    {
       getOutputByName(newName).setName(oldName);
     }
   }
@@ -248,14 +251,14 @@ String FMIPhysicalModel::getPythonScript() const
 {
   OSS oss;
 
-  for (UnsignedInteger i = 0; i<getInputs().getSize(); ++ i)
+  for (UnsignedInteger i = 0; i < getInputs().getSize(); ++ i)
     oss << getInputs()[i].getPythonScript();
 
-  for (UnsignedInteger i = 0; i<getOutputs().getSize(); ++ i)
+  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++ i)
     oss << getOutputs()[i].getPythonScript();
 
   oss << "inputs = [";
-  for (UnsignedInteger i = 0; i<getInputs().getSize(); ++ i)
+  for (UnsignedInteger i = 0; i < getInputs().getSize(); ++ i)
   {
     String inputName(getInputs()[i].getName());
     std::replace(inputName.begin(), inputName.end(), '.', '_');
@@ -277,7 +280,7 @@ String FMIPhysicalModel::getPythonScript() const
   oss << "]\n";
 
   oss << "fmuFile = '" + getFMUFileName() + "'\n";
-  oss << getName()+ " = otguibase.FMIPhysicalModel('" + getName() + "', inputs, outputs, fmuFile)\n";
+  oss << getName() + " = otguibase.FMIPhysicalModel('" + getName() + "', inputs, outputs, fmuFile)\n";
 
   oss << PhysicalModelImplementation::getCopulaPythonScript();
 
