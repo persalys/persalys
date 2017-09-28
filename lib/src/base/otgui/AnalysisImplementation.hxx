@@ -57,6 +57,7 @@ public:
 
   OT::String getInformationMessage() const;
   OT::String getErrorMessage() const;
+  OT::String getWarningMessage() const;
   int getProgressValue() const;
 
   virtual void stop();
@@ -77,6 +78,7 @@ protected:
   bool isRunning_;
   OT::String informationMessage_;
   OT::String errorMessage_;
+  OT::String warningMessage_;
   bool stopRequested_;
   int progressValue_;
 

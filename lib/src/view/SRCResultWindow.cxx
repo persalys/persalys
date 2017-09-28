@@ -45,7 +45,7 @@ SRCResultWindow::SRCResultWindow(AnalysisItem * item, QWidget * parent)
   result_ = SRCanalysis->getResult();
 
   // add warning if the model does not have an independent copula
-  if (!SRCanalysis->getPhysicalModel().getComposedDistribution().hasIndependentCopula())
+  if (!SRCanalysis->getWarningMessage().empty())
     warningMessage_ = tr("The model does not have an independent copula, the result could be false.");
 
   // parameters widget

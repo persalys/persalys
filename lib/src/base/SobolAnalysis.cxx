@@ -252,6 +252,7 @@ void SobolAnalysis::run()
     if (!getPhysicalModel().getComposedDistribution().hasIndependentCopula())
     {
       LOGWARN("The model does not have an independent copula, the result of the sensitivity analysis could be false.");
+      warningMessage_ = "The model does not have an independent copula, the result of the sensitivity analysis could be false.";
     }
 
     notify("analysisFinished");

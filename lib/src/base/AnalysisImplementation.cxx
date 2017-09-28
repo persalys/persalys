@@ -32,6 +32,7 @@ AnalysisImplementation::AnalysisImplementation()
   , isRunning_(false)
   , informationMessage_("")
   , errorMessage_("")
+  , warningMessage_("")
   , stopRequested_(false)
   , progressValue_(0)
 {
@@ -46,6 +47,7 @@ AnalysisImplementation::AnalysisImplementation(const String & name)
   , isRunning_(false)
   , informationMessage_("")
   , errorMessage_("")
+  , warningMessage_("")
   , stopRequested_(false)
   , progressValue_(0)
 {
@@ -85,6 +87,7 @@ void AnalysisImplementation::initialize()
 {
   informationMessage_ = "";
   errorMessage_ = "";
+  warningMessage_ = "";
   stopRequested_ = false;
   progressValue_ = 0;
 }
@@ -131,6 +134,12 @@ String AnalysisImplementation::getErrorMessage() const
 }
 
 
+String AnalysisImplementation::getWarningMessage() const
+{
+  return warningMessage_;
+}
+
+
 int AnalysisImplementation::getProgressValue() const
 {
   return progressValue_;
@@ -160,6 +169,7 @@ void AnalysisImplementation::save(Advocate & adv) const
 {
   PersistentObject::save(adv);
   adv.saveAttribute("errorMessage_", errorMessage_);
+  adv.saveAttribute("warningMessage_", warningMessage_);
   adv.saveAttribute("isReliabilityAnalysis_", isReliabilityAnalysis_);
   adv.saveAttribute("interestVariables_", interestVariables_);
 }
@@ -170,9 +180,11 @@ void AnalysisImplementation::load(Advocate & adv)
 {
   PersistentObject::load(adv);
   adv.loadAttribute("errorMessage_", errorMessage_);
+  adv.loadAttribute("warningMessage_", warningMessage_);
   adv.loadAttribute("isReliabilityAnalysis_", isReliabilityAnalysis_);
   adv.loadAttribute("interestVariables_", interestVariables_);
 }
+
 
 /* To be implemented in child classes. */
 void AnalysisImplementation::acceptLaunchParameters(LaunchParametersVisitor* visitor)

@@ -54,6 +54,7 @@ public:
 
   OT::String getInformationMessage() const;
   OT::String getErrorMessage() const;
+  OT::String getWarningMessage() const;
   int getProgressValue() const;
 
   void run();

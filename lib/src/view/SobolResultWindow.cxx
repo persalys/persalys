@@ -46,7 +46,7 @@ SobolResultWindow::SobolResultWindow(AnalysisItem * item, QWidget * parent)
   result_ = sobolAnalysis->getResult();
 
   // add warning if the model does not have an independent copula
-  if (!sobolAnalysis->getPhysicalModel().getComposedDistribution().hasIndependentCopula())
+  if (!sobolAnalysis->getWarningMessage().empty())
     warningMessage_ = tr("The model does not have an independent copula, the result could be false.");
 
   // parameters widget

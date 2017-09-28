@@ -19,6 +19,19 @@ OTGUI_Analysis_getErrorMessage_doc
 
 // ---------------------------------------------------------------------
 
+%define OTGUI_Analysis_getWarningMessage_doc
+"Warning message accessor.
+
+Returns
+-------
+message : str
+    Warning message which can appear during the analysis computation"
+%enddef
+%feature("docstring") OTGUI::AnalysisImplementation::getWarningMessage
+OTGUI_Analysis_getWarningMessage_doc
+
+// ---------------------------------------------------------------------
+
 %define OTGUI_Analysis_getPythonScript_doc
 "Physical model accessor.
 
