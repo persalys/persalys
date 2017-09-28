@@ -2627,7 +2627,7 @@ métamodèle</translation>
     <message>
         <location filename="../lib/src/view/IntroReliabilityPage.cxx" line="89"/>
         <source>First Order Reliability Method (FORM)</source>
-        <translation>Méthode de fiabilité du premier ordre</translation>
+        <translation>Méthode de fiabilité du premier ordre (FORM)</translation>
     </message>
 </context>
 <context>
