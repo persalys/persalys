@@ -190,7 +190,8 @@ void CopulaInferenceAnalysis::run()
         }
       }
       result_.copulaInferenceSetResultCollection_.add(inferenceSetResult);
-      result_.designOfExperiment_ = getDesignOfExperiment();
+      result_.designOfExperiment_.setInputSample(designOfExperiment_.getInputSample());
+      result_.designOfExperiment_.setOutputSample(designOfExperiment_.getOutputSample());
     }
     notify("analysisFinished");
   }
