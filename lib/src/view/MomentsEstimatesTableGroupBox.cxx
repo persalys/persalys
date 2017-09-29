@@ -40,12 +40,13 @@ MomentsEstimatesTableGroupBox::MomentsEstimatesTableGroupBox(const DataAnalysisR
   , isConfidenceIntervalRequired_(isConfidenceIntervalRequired)
   , levelConfidenceInterval_(levelConfidenceInterval)
 {
-  Q_ASSERT(variablesIndices.check(result.getMean().getSize()));
+  if (!variablesIndices.check(result.getMean().getSize()))
+    throw InvalidArgumentException(HERE) << "The result dimension does not match the sample dimension";
 
   QVBoxLayout * estimatesGroupBoxLayout = new QVBoxLayout(this);
   stackedWidget_ = new ResizableStackedWidget;
 
-  for (UnsignedInteger i = 0; i < result.getMean().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < variablesIndices.getSize(); ++i)
     stackedWidget_->addWidget(getMomentsEstimateTableView(result, variablesIndices[i]));
 
   estimatesGroupBoxLayout->addWidget(stackedWidget_);

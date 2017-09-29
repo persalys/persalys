@@ -227,9 +227,10 @@ void DataAnalysis::run()
 
     if (nbAnalysedVar == sample.getDimension())
     {
-      result_.designOfExperiment_ = getDesignOfExperiment();
+      result_.designOfExperiment_.setInputSample(designOfExperiment_.getInputSample());
+      result_.designOfExperiment_.setOutputSample(designOfExperiment_.getOutputSample());
     }
-    else
+    else // if the user stops the analysis before the end
     {
       // input sample
       if (designOfExperiment_.getInputSample().getSize())
