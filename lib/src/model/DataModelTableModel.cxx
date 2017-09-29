@@ -68,15 +68,21 @@ DataModelTableModel::DataModelTableModel(const Sample& data, DataModel* dataMode
   else // the indices are ok so we can use the variables names stored in the model
   {
     Description dataDescription(data_.getDescription());
-    if (dataModel_->getInputNames().getSize() == inputColumns_.getSize())
+    if (inputColumns_.getSize())
     {
-      for (UnsignedInteger i = 0; i < dataModel_->getInputNames().getSize(); ++i)
-        dataDescription[inputColumns_[i]] = dataModel_->getInputNames()[i];
+      if (dataModel_->getInputNames().getSize() == inputColumns_.getSize())
+      {
+        for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++i)
+          dataDescription[inputColumns_[i]] = dataModel_->getInputNames()[i];
+      }
     }
-    if (dataModel_->getOutputNames().getSize() == outputColumns_.getSize())
+    if (outputColumns_.getSize())
     {
-      for (UnsignedInteger i = 0; i < dataModel_->getOutputNames().getSize(); ++i)
-        dataDescription[outputColumns_[i]] = dataModel_->getOutputNames()[i];
+      if (dataModel_->getOutputNames().getSize() == outputColumns_.getSize())
+      {
+        for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++i)
+          dataDescription[outputColumns_[i]] = dataModel_->getOutputNames()[i];
+      }
     }
     data_.setDescription(dataDescription);
   }
