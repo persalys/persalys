@@ -191,7 +191,10 @@ void AnalysisItem::modifyAnalysis()
       return;
     }
     // if proba analysis
-    if (analysisType != "ModelEvaluation" && analysisType != "MorrisAnalysis" && !analysisType.contains("DesignOfExperiment"))
+    if (analysisType != "ModelEvaluation" &&
+        analysisType != "MorrisAnalysis" &&
+        analysisType != "OptimizationAnalysis" &&
+        !analysisType.contains("DesignOfExperiment"))
     {
       // must have stochastic variables
       if (!pmAnalysis_ptr->getPhysicalModel().hasStochasticInputs())

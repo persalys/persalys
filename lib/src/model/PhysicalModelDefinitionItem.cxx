@@ -26,6 +26,7 @@
 #ifdef OTGUI_HAVE_OTMORRIS
 #include "otgui/MorrisAnalysis.hxx"
 #endif
+#include "otgui/OptimizationAnalysis.hxx"
 
 #include <QDebug>
 
@@ -63,7 +64,7 @@ void PhysicalModelDefinitionItem::buildActions()
   newDesignOfExperiment_->setStatusTip(tr("Create a new design of experiments"));
   connect(newDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(createDesignOfExperiment()));
 
-  // new analysis actions
+  // new evaluation action
   newModelEvaluation_ = new QAction(QIcon(":/images/modelEvaluation.png"), tr("Evaluation"), this);
   newModelEvaluation_->setStatusTip(tr("Create a new model evaluation"));
   connect(newModelEvaluation_, SIGNAL(triggered()), this, SLOT(createModelEvaluation()));
@@ -73,6 +74,10 @@ void PhysicalModelDefinitionItem::buildActions()
   newScreening_->setStatusTip(tr("Create a new screening"));
   connect(newScreening_, SIGNAL(triggered()), this, SLOT(createScreening()));
 #endif
+  // new optimization action
+  newOptimization_ = new QAction(QIcon(":/images/optimize.png"), tr("Optimization"), this);
+  newOptimization_->setStatusTip(tr("Create a new model optimization"));
+  connect(newOptimization_, SIGNAL(triggered()), this, SLOT(createOptimization()));
 
   // add actions
   appendAction(newProbabilisticModel_);
@@ -81,6 +86,7 @@ void PhysicalModelDefinitionItem::buildActions()
   appendAction(newModelEvaluation_);
   if (newScreening_)
     appendAction(newScreening_);
+  appendAction(newOptimization_);
 }
 
 
@@ -193,6 +199,22 @@ void PhysicalModelDefinitionItem::createScreening()
   emit analysisRequested(this, analysis);
 }
 #endif
+
+
+void PhysicalModelDefinitionItem::createOptimization()
+{
+  // check
+  if (!physicalModel_.isValid())
+  {
+    emit emitErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
+    return;
+  }
+
+  // new analysis
+  OptimizationAnalysis optimization(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("optimization_").toStdString()), physicalModel_);
+  // emit signal to StudyTreeView to open a wizard
+  emit analysisRequested(this, optimization);
+}
 
 
 void PhysicalModelDefinitionItem::createDesignOfExperiment()

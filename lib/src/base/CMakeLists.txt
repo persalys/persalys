@@ -52,6 +52,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      CopulaInferenceSetResult.cxx
                      CopulaInferenceResult.cxx
                      CopulaInferenceAnalysis.cxx
+                     OptimizationAnalysis.cxx
                      PythonEnvironment.cxx)
 if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx YACSEvalSessionSingleton.cxx)
@@ -131,6 +132,7 @@ ot_install_header_file ( InferenceAnalysis.hxx )
 ot_install_header_file ( CopulaInferenceSetResult.hxx )
 ot_install_header_file ( CopulaInferenceResult.hxx )
 ot_install_header_file ( CopulaInferenceAnalysis.hxx )
+ot_install_header_file ( OptimizationAnalysis.hxx )
 ot_install_header_file ( PythonEnvironment.hxx )
 ot_install_header_file ( LaunchParametersVisitor.hxx )
 

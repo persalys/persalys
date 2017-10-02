@@ -1,0 +1,77 @@
+%feature("docstring") OTGUI::OptimizationAnalysis
+"Optimization of a model.
+
+Parameters
+----------
+name : str
+    Name
+physicalModel : :class:`~otguibase.PhysicalModel`
+    Physical model
+solverName : str
+    Optimization algorithm name (optional)
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+
+Create the model:
+
+>>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
+>>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> G = otguibase.Output('G', 'deviation')
+>>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(_pi*100.0)'])
+
+Create the Model evaluation:
+
+>>> analysis = otguibase.OptimizationAnalysis('anAnalysis', myPhysicalModel, 'TNC')
+>>> analysis.setInterestVariables(['G'])
+>>> analysis.run()
+
+Get the result:
+
+>>> result = analysis.getResult()
+>>> x = result.getOptimalPoint()
+>>> y = result.getOptimalValue()"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::getInputValues
+"Input values accessor.
+
+Returns
+-------
+values : :py:class:`openturns.Point`
+    Input values."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::getOutputValues
+"Output values accessor.
+
+Returns
+-------
+values : :py:class:`openturns.Point`
+    Output values."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::setInputValue
+"Input values accessor.
+
+Parameters
+----------
+index : int
+    Input index
+value : float
+    Input value"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::getDesignOfExperiment
+"DesignOfExperiment accessor.
+
+Returns
+-------
+design : :class:`~otguibase.DesignOfExperiment`
+    Contains input and output values."

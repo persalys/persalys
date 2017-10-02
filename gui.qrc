@@ -43,5 +43,6 @@
         <file>images/documentinfo.png</file>
         <file>images/edit-delete.png</file>
         <file>images/dialog-ok-apply.png</file>
+        <file>images/optimize.png</file>
     </qresource>
 </RCC>

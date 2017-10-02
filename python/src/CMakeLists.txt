@@ -130,6 +130,7 @@ ot_add_python_module (otguibase otguibase_module.i
                       CopulaInferenceSetResult.i CopulaInferenceSetResult_doc.i.in
                       CopulaInferenceResult.i CopulaInferenceResult_doc.i.in
                       CopulaInferenceAnalysis.i CopulaInferenceAnalysis_doc.i.in
+                      OptimizationAnalysis.i OptimizationAnalysis_doc.i.in
                       OTStudyImplementation.i
                       OTStudy.i OTStudy_doc.i.in
                     )

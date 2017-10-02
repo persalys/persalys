@@ -264,6 +264,7 @@ void PhysicalModelDiagramItem::appendPhysicalModelItem()
 #endif
   connect(this, SIGNAL(designOfExperimentRequested()), pmItem, SLOT(createDesignOfExperiment()));
   connect(this, SIGNAL(probabilisticModelItemCreated(ProbabilisticModelItem*)), pmItem, SLOT(updateProbaActionAvailability()));
+  connect(this, SIGNAL(optimizationRequested()), pmItem, SLOT(createOptimization()));
 
   // append item
   appendRow(pmItem);
@@ -432,7 +433,20 @@ void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
       QAction * newScreeningAnalysis = new QAction(QIcon(":/images/sensitivity.png"), tr("New analysis"), this);
       newScreeningAnalysis->setStatusTip(tr("Create a new screening analysis"));
       connect(newScreeningAnalysis, SIGNAL(triggered()), this, SIGNAL(screeningRequested()));
-      titleItem->appendAction(newScreeningAnalysis);
+    }
+  }
+  // Optimization title
+  else if (analysisName == "OptimizationAnalysis")
+  {
+    titleItem = getTitleItemNamed(tr("Optimization"), "OptimizationTitle");
+
+    if (!titleItem->getActions().size())
+    {
+      // context menu actions
+      QAction * newOptimizationAnalysis = new QAction(QIcon(":/images/optimize.png"), tr("New analysis"), this);
+      newOptimizationAnalysis->setStatusTip(tr("Create a new optimization analysis"));
+      connect(newOptimizationAnalysis, SIGNAL(triggered()), this, SIGNAL(optimizationRequested()));
+      titleItem->appendAction(newOptimizationAnalysis);
     }
   }
   ///
