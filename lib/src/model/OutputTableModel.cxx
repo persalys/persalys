@@ -205,10 +205,6 @@ Qt::ItemFlags OutputTableModel::flags(const QModelIndex & index) const
     return QAbstractTableModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
   else if (index.column() == 0 && physicalModel_.getImplementation()->getClassName() != "SymbolicPhysicalModel")
     return QAbstractTableModel::flags(index) | Qt::ItemIsUserCheckable;
-  else if (index.column() == 1
-           && (physicalModel_.getImplementation()->getClassName() == "YACSPhysicalModel" ||
-               physicalModel_.getImplementation()->getClassName() == "MetaModel"))
-    return QAbstractTableModel::flags(index);
   else if (index.column() == 3)
     return QAbstractTableModel::flags(index);
   else
