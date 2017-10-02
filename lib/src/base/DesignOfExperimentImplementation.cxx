@@ -36,7 +36,7 @@ static Factory<DesignOfExperimentImplementation> Factory_DesignOfExperimentImple
 DesignOfExperimentImplementation::DesignOfExperimentImplementation()
   : DataSample()
   , Observable()
-  , hasPhysicalModel_(true)
+  , hasPhysicalModel_(false)
   , physicalModel_()
 {
 }

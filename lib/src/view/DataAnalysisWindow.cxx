@@ -237,29 +237,22 @@ void DataAnalysisWindow::addSummaryTab()
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
 
   // moments estimation
-  try
-  {
-    // we want to display output results before the input results
-    // input indices
-    Indices inInd(inputNames_.size());
-    inInd.fill();
-    // ouput indices
-    Indices ind(outputNames_.size());
-    ind.fill(inputNames_.size());
-    // indices with good order
-    ind.add(inInd);
+  // we want to display output results before the input results
+  // input indices
+  Indices inInd(inputNames_.size());
+  inInd.fill();
+  // ouput indices
+  Indices ind(outputNames_.size());
+  ind.fill(inputNames_.size());
+  // indices with good order
+  ind.add(inInd);
 
-    MomentsEstimatesTableGroupBox * estimatesGroupBox = new MomentsEstimatesTableGroupBox(result_,
-        isConfidenceIntervalRequired_,
-        levelConfidenceInterval_,
-        ind);
-    vbox->addWidget(estimatesGroupBox);
-    connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), estimatesGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
-  }
-  catch (std::exception & ex)
-  {
-    qDebug() << "Error: In DataAnalysisWindow::buildInterface when creating the MomentsEstimatesTableGroupBox " << ex.what();
-  }
+  MomentsEstimatesTableGroupBox * estimatesGroupBox = new MomentsEstimatesTableGroupBox(result_,
+                                                                                        isConfidenceIntervalRequired_,
+                                                                                        levelConfidenceInterval_,
+                                                                                        ind);
+  vbox->addWidget(estimatesGroupBox);
+  connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), estimatesGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
 
   // quantiles
   QGridLayout * quantLayout = new QGridLayout;
@@ -576,6 +569,10 @@ void DataAnalysisWindow::updateSpinBoxes(int indexList)
 
   // index of the variable in result_
   const UnsignedInteger indexVar = variablesListWidget_->item(indexList)->data(Qt::UserRole).toInt();
+
+  // check
+  if (indexVar >= result_.getMin().getSize() || indexVar >= result_.getMax().getSize())
+    throw InvalidArgumentException(HERE) << "The result dimension does not match the sample dimension";
 
   if (result_.getMin().getSize() && result_.getMax().getSize())
   {
