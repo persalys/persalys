@@ -63,6 +63,8 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
     connect(plotWidgets_[i], SIGNAL(plotChanged()), this, SLOT(updateLineEdits()));
 
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
+
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
   QFrame * frame = new QFrame;

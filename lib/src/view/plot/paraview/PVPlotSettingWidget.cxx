@@ -65,6 +65,7 @@ PVPlotSettingWidget::PVPlotSettingWidget(PVViewWidget* pvViewWidget,
 void PVPlotSettingWidget::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
 
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
