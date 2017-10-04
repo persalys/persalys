@@ -126,6 +126,8 @@ PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget* pvViewWidget
 void PVXYChartSettingWidget::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
+
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
   QFrame * frame = new QFrame;

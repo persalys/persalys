@@ -38,6 +38,8 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   , plotMatrix_(plotMatrix)
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
+
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
   QFrame * frame = new QFrame;
@@ -58,7 +60,7 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   mainGridLayout->addWidget(outputVsInputCheckBox, ++rowGrid, 0, 1, 2);
 
   // columns label
-  label = new QLabel(tr("Colums"));
+  label = new QLabel(tr("Columns"));
   mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
   // combobox to select the columns to display
