@@ -60,7 +60,7 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   mainGridLayout->addWidget(outputVsInputCheckBox, ++rowGrid, 0, 1, 2);
 
   // columns label
-  label = new QLabel(tr("Colums"));
+  label = new QLabel(tr("Columns"));
   mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
   // combobox to select the columns to display
