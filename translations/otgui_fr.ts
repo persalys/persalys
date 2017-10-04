@@ -3415,7 +3415,7 @@ extremum</translation>
 - Metamodel</source>
         <translation>- Analyse de données
 - Inférence
-- Inférence des dépendences
+- Inférence des dépendances
 - Métamodèle</translation>
     </message>
     <message>
