@@ -18,11 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include <otgui/DistributionsTableModel.hxx>
+#include "otgui/DistributionsTableModel.hxx"
 
-#include <otgui/DistributionDictionary.hxx>
-
-using namespace OT;
+#include "otgui/TranslationManager.hxx"
 
 namespace OTGUI
 {
@@ -62,6 +60,7 @@ QVariant DistributionsTableModel::data(const QModelIndex& index, int role) const
 
   if (role == Qt::DisplayRole && index.column() == 0)
     return distributions_[index.row()];
+
   return QVariant();
 }
 
@@ -71,16 +70,15 @@ void DistributionsTableModel::appendDistribution(const QString& distributionName
   int nbRow = 0;
   if (distributionName == tr("All"))
   {
-    const Description listDistributions = DistributionDictionary::GetAvailableDistributions();
-    if (listDistributions.getSize() == (UnsignedInteger)distributions_.size())
+    const QStringList listDistributions = TranslationManager::GetAvailableDistributions();
+    if (listDistributions.size() == distributions_.size())
       return;
-    for (UnsignedInteger i = 0; i < listDistributions.getSize(); ++i)
+    for (int i = 0; i < listDistributions.size(); ++i)
     {
-      const QString distName = tr(listDistributions[i].c_str());
-      if (!distributions_.contains(distName))
+      if (!distributions_.contains(listDistributions[i]))
       {
         ++nbRow;
-        distributions_ << distName;
+        distributions_ << listDistributions[i];
       }
     }
     --nbRow;

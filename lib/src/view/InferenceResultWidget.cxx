@@ -24,6 +24,7 @@
 #include "otgui/RadioButtonDelegate.hxx"
 #include "otgui/WidgetBoundToDockWidget.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/TranslationManager.hxx"
 
 #include <openturns/VisualTest.hxx>
 
@@ -240,7 +241,8 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
   for (UnsignedInteger i = 0; i < nbTests; ++i)
   {
     const int cellRow = i + 2; // because of 2 rows of titles
-    distTableModel_->setNotEditableItem(cellRow, 0, currentFittingTestResult_.getTestedDistributions()[indices[i]].getImplementation()->getClassName().c_str());
+    const QString distName = TranslationManager::GetTranslatedDistributionName(currentFittingTestResult_.getTestedDistributions()[indices[i]].getImplementation()->getClassName());
+    distTableModel_->setNotEditableItem(cellRow, 0, distName);
     distTableModel_->setData(distTableModel_->index(cellRow, 0), (int)indices[i], Qt::UserRole);
     distTableModel_->setNotEditableItem(cellRow, 1, pValues[i], 3);
     const bool isAccepted = currentFittingTestResult_.getKolmogorovTestResults()[indices[i]].getBinaryQualityMeasure();
@@ -440,7 +442,7 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
 
   // -- get distribution
   const Distribution distribution = currentFittingTestResult_.getTestedDistributions()[resultIndex];
-  const char* distName = distribution.getImplementation()->getName().c_str();
+  const QString distName = TranslationManager::GetTranslatedDistributionName(distribution.getImplementation()->getName());
 
   // -- pdf
   pdfPlot_->plotHistogram(currentFittingTestResult_.getValues());

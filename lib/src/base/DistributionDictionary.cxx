@@ -28,32 +28,6 @@ using namespace OT;
 namespace OTGUI
 {
 
-/* Get the list of the available distributions */
-Description DistributionDictionary::GetAvailableDistributions()
-{
-  Description listDistributions(18);
-  listDistributions[0] = "Arcsine";
-  listDistributions[1] = "Beta";
-  listDistributions[2] = "ChiSquare";
-  listDistributions[3] = "Exponential";
-  listDistributions[4] = "Gamma";
-  listDistributions[5] = "Gumbel";
-  listDistributions[6] = "InverseNormal";
-  listDistributions[7] = "Laplace";
-  listDistributions[8] = "Logistic";
-  listDistributions[9] = "LogNormal";
-  listDistributions[10] = "LogUniform";
-  listDistributions[11] = "Normal";
-  listDistributions[12] = "Rayleigh";
-  listDistributions[13] = "Student";
-  listDistributions[14] = "Trapezoidal";
-  listDistributions[15] = "Triangular";
-  listDistributions[16] = "Uniform";
-  listDistributions[17] = "Weibull";
-  return listDistributions;
-}
-
-
 /* Build a distribution factory */
 DistributionFactory DistributionDictionary::BuildDistributionFactory(const String & distributionName)
 {
@@ -267,7 +241,7 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     }
     else
     {
-      throw InvalidArgumentException(HERE) << "The given distribution " << distributionName << "is not available.";
+      throw InvalidArgumentException(HERE) << "The given distribution " << distributionName << " is not available.";
     }
   }
   catch (InvalidArgumentException & ex)

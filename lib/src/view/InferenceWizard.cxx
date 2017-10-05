@@ -25,6 +25,7 @@
 #include "otgui/DistributionsForInferenceWidget.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
 #include "otgui/DoubleSpinBox.hxx"
+#include "otgui/TranslationManager.hxx"
 
 #include <openturns/OTDistribution.hxx>
 #include <openturns/FittingTest.hxx>
@@ -129,7 +130,7 @@ void InferenceWizard::buildInterface()
       for (UnsignedInteger j = 0; j < collection.getSize(); ++j)
       {
         String str = collection[j].getImplementation()->getClassName();
-        dist << str.substr(0, str.find("Factory")).c_str();
+        dist << TranslationManager::GetTranslatedDistributionName(str.substr(0, str.find("Factory")));
       }
     }
 
@@ -189,7 +190,10 @@ void InferenceWizard::updateDistListForVar(QStringList dist)
 
   FittingTest::DistributionFactoryCollection distCollection;
   for (int i = 0; i < dist.size(); ++i)
-    distCollection.add(DistributionDictionary::BuildDistributionFactory(dist[i].toStdString()));
+  {
+    const String distName = TranslationManager::GetDistributionName(dist[i]);
+    distCollection.add(DistributionDictionary::BuildDistributionFactory(distName));
+  }
 
   distFactoriesForEachInterestVar_[currentVarName_] = distCollection;
 

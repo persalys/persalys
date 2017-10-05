@@ -181,7 +181,7 @@ void InferenceAnalysis::run()
     // inference
     for (UnsignedInteger i = 0; i < sample.getDimension(); ++i)
     {
-      progressValue_ = (int) (i * 100 / sample.getSize());
+      progressValue_ = (int) (i * 100 / sample.getDimension());
       notify("progressValueChanged");
 
       FittingTestResult fittingTestResult;

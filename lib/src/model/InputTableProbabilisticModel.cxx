@@ -21,6 +21,7 @@
 #include "otgui/InputTableProbabilisticModel.hxx"
 
 #include "otgui/DistributionDictionary.hxx"
+#include "otgui/TranslationManager.hxx"
 
 #include <openturns/TruncatedDistribution.hxx>
 #include <openturns/Dirac.hxx>
@@ -121,14 +122,15 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
       {
         String distributionName = input.getDistribution().getImplementation()->getClassName();
         if (distributionName == "TruncatedNormal")
-          return "Normal";
+        {
+          distributionName = "Normal";
+        }
         else if (distributionName == "TruncatedDistribution")
         {
           TruncatedDistribution dist = *dynamic_cast<TruncatedDistribution*>(input.getDistribution().getImplementation().get());
-          return dist.getDistribution().getImplementation()->getClassName().c_str();
+          distributionName = dist.getDistribution().getImplementation()->getClassName();
         }
-        else
-          return input.getDistribution().getImplementation()->getClassName().c_str();
+        return TranslationManager::GetTranslatedDistributionName(distributionName);
       }
       default:
         return QVariant();
@@ -170,28 +172,34 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
   }
   else if (role == Qt::EditRole && index.column() == 1)
   {
-    if (value.toString() != tr("Inference result"))
+    const QString newName = value.toString();
+    if (newName != tr("Inference result"))
     {
       const Input input(physicalModel_.getInputs()[index.row()]);
 
       String distributionName = input.getDistribution().getImplementation()->getClassName();
       if (distributionName == "TruncatedNormal")
+      {
         distributionName = "Normal";
+      }
       else if (distributionName == "TruncatedDistribution")
       {
         TruncatedDistribution dist = *dynamic_cast<TruncatedDistribution*>(input.getDistribution().getImplementation().get());
         distributionName = dist.getDistribution().getImplementation()->getClassName();
       }
 
-      if (value.toString().toStdString() != distributionName)
+      if (newName != TranslationManager::GetTranslatedDistributionName(distributionName))
       {
         Distribution distribution;
-        if (value.toString().isEmpty())
+        if (newName.isEmpty())
+        {
           distribution = Dirac(input.getValue());
+        }
         else
         {
           // search the distribution corresponding to 'value'
-          distribution = DistributionDictionary::BuildDistribution(value.toString().toStdString(), input.getValue());
+          const String newDist = TranslationManager::GetDistributionName(newName);
+          distribution = DistributionDictionary::BuildDistribution(newDist, input.getValue());
         }
         // update the input
         physicalModel_.blockNotification("ProbabilisticModel");
