@@ -183,7 +183,7 @@ void CopulaInferenceAnalysis::run()
                                  << ex.what()
                                  << "\n";
           // set fittingTestResult
-          inferenceSetResult.testedDistributions_.add(DistributionDictionary::BuildDistribution(distributionName, 0));
+          inferenceSetResult.testedDistributions_.add(DistributionDictionary::BuildCopulaFactory(distributionName).build());
           Collection<Sample> kendallPlotDataCollection;
           inferenceSetResult.kendallPlotData_.add(kendallPlotDataCollection);
           inferenceSetResult.errorMessages_[i] = message;
