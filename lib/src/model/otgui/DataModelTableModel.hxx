@@ -32,13 +32,17 @@ class OTGUI_API DataModelTableModel : public SampleTableModel
   Q_OBJECT
 
 public:
-  DataModelTableModel(const OT::Sample & data, DataModel* dataModel, const bool useColumns = false, QObject* parent = 0);
+  DataModelTableModel(DataModel* dataModel, QObject* parent = 0);
 
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
   Qt::ItemFlags flags(const QModelIndex & index) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
   QVariant data(const QModelIndex & index, int role) const;
   bool setData(const QModelIndex & index, const QVariant & value, int role);
+  void updateData(const OT::Sample& data, const bool isReloadAction = false, const bool useColumns = false);
+
+protected:
+  void updatePrivateData(const bool isReloadAction, const bool useColumns);
 
 signals:
   void errorMessageChanged(const QString & message);

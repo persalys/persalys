@@ -63,13 +63,12 @@ public:
 
 protected:
   void buildInterface();
-  void importSample(const QString& fileName);
-  void updateTable(const QString& fileName);
+  void updateTable(const QString& fileName, const bool isReloadAction);
 
 public slots:
   void openFileRequested();
   void refreshTable();
-  void updateTableView(const OT::Sample& sample = OT::Sample());
+  void updateTableView(const bool isReloadAction = true, const bool useSampleFromFile = true);
 
 private:
   DataModel * dataModel_;
