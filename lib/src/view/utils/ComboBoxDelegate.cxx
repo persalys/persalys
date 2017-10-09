@@ -22,9 +22,27 @@
 
 #include <QComboBox>
 #include <QStandardItemModel>
+#include <QWheelEvent>
 
 namespace OTGUI
 {
+
+// CustomComboBox with no wheel event if it has no focus
+class CustomComboBox : public QComboBox
+{
+public:
+  CustomComboBox(QWidget *parent)
+  : QComboBox(parent) {}
+
+  virtual void wheelEvent(QWheelEvent *e)
+  {
+    // if no focus : no signal currentIndexChanged emitted -> wrong behavior
+    // so if no focus : do nothing
+    if (hasFocus())
+      QComboBox::wheelEvent(e);
+  }
+};
+
 
 ComboBoxDelegate::ComboBoxDelegate(QStringList items, QPair<int, int> cell, QObject * parent)
   : QItemDelegate(parent)
@@ -40,7 +58,7 @@ QWidget *ComboBoxDelegate::createEditor(QWidget * parent, const QStyleOptionView
     if (index.row() != cell_.first || index.column() != cell_.second)
       return QItemDelegate::createEditor(parent, option, index);
 
-  QComboBox * editor = new QComboBox(parent);
+  CustomComboBox * editor = new CustomComboBox(parent);
   // for probabilisticModelWindow:
   if (cell_ == QPair<int, int>())
   {
