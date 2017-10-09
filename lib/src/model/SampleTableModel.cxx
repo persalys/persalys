@@ -46,7 +46,9 @@ SampleTableModel::SampleTableModel(const Sample & data, QObject * parent)
 
 int SampleTableModel::columnCount(const QModelIndex& parent) const
 {
-  return data_.getDimension();
+  if (data_.getSize())
+    return data_.getDimension();
+  return 0;
 }
 
 
