@@ -24,7 +24,9 @@
 
 #include <QObject>
 
+#ifndef Q_MOC_RUN
 #include <boost/bimap.hpp>
+#endif
 
 namespace OTGUI
 {
@@ -33,8 +35,10 @@ class OTGUI_API TranslationManager : public QObject
   Q_OBJECT
 
 public:
+#ifndef Q_MOC_RUN
   typedef boost::bimap< QString, QString > bimap_type;
   typedef bimap_type::value_type type;
+#endif
 
   static QString GetTranslatedDistributionName(const std::string& name);
   static QString GetTranslatedDistributionParameterName(const std::string& name);
@@ -44,8 +48,10 @@ public:
 private:
   static void InitializeDistributionsNames();
   static void InitializeDistributionsParametersNames();
+#ifndef Q_MOC_RUN
   static bimap_type DistributionsNames_;
   static bimap_type DistributionsParametersNames_;
+#endif
 };
 }
 #endif
