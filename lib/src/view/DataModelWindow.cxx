@@ -46,7 +46,7 @@ DataModelWindow::DataModelWindow(DataModelDefinitionItem * item, QWidget * paren
   , dataTableModel_(0)
   , proxyModel_(0)
 {
-  dataModel_ = dynamic_cast<DataModel*>(&*item->getDesignOfExperiment().getImplementation());
+  dataModel_ = dynamic_cast<DataModel*>(item->getDesignOfExperiment().getImplementation().get());
   if (!dataModel_)
     throw InvalidArgumentException(HERE) << "DataModelWindow: the design of experiments must be a DataModel";
 
@@ -107,11 +107,24 @@ void DataModelWindow::buildInterface()
   gridLayout->setSpacing(6);
   gridLayout->setContentsMargins(11, 11, 11, 11);
 
+  // - table view
   dataTableView_ = new ExportableTableView(groupBox);
   dataTableView_->setSortingEnabled(true);
-  dataTableView_->setEditTriggers(QTableView::AllEditTriggers);
+  dataTableView_->setEditTriggers(QTableView::SelectedClicked);
   const QStringList comboBoxItems = QStringList() << tr("Input") << tr("Output") << tr("Disable");
   dataTableView_->setItemDelegateForRow(1, new ComboBoxDelegate(comboBoxItems));
+
+  // - table model
+  dataTableModel_ = new DataModelTableModel(dataModel_, dataTableView_);
+  connect(dataTableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
+  connect(dataTableModel_, SIGNAL(temporaryErrorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
+
+  // - QSortFilterProxyModel
+  proxyModel_ = new DataModelProxModel(dataTableView_);
+  proxyModel_->setSourceModel(dataTableModel_);
+
+  // - set model
+  dataTableView_->setModel(proxyModel_);
 
   gridLayout->addWidget(dataTableView_, 0, 0, 1, 1);
 
@@ -123,32 +136,18 @@ void DataModelWindow::buildInterface()
     reloadButton_->setEnabled(true);
 
     // table view
-    updateTableView(dataModel_->getSample());
-
-    // table span
-    const UnsignedInteger nbInputs = dataModel_->getInputSample().getSize() ? dataModel_->getInputSample().getDimension() : 0;
-    if (nbInputs > 1)
-      dataTableView_->setSpan(1, 0, 1, nbInputs);
-
-    if (dataModel_->getOutputSample().getSize() && dataModel_->getOutputSample().getDimension() > 1)
-      dataTableView_->setSpan(1, nbInputs, 1, dataModel_->getSample().getDimension());
+    updateTableView(false, false);
   }
 
   setWidget(mainWidget);
 }
 
 
-void DataModelWindow::importSample(const QString& fileName)
-{
-  filePathLineEdit_->setText(fileName);
-  updateTable(fileName);
-}
-
-
-void DataModelWindow::updateTable(const QString& fileName)
+void DataModelWindow::updateTable(const QString& fileName, const bool isReloadAction)
 {
   // re-initialization
-  errorMessageLabel_->setText("");
+  setErrorMessage("");
+  filePathLineEdit_->setText(fileName);
   filePathLineEdit_->setPalette(defaultLineEditPalette_);
 
   // try to retrieve data from the selected file
@@ -158,7 +157,7 @@ void DataModelWindow::updateTable(const QString& fileName)
     dataModel_->setFileName(fileName.toLocal8Bit().data());
 
     // update table view
-    updateTableView();
+    updateTableView(isReloadAction, true);
   }
   catch (std::exception& ex)
   {
@@ -201,7 +200,7 @@ void DataModelWindow::openFileRequested()
     }
     else
     {
-      importSample(fileName);
+      updateTable(fileName, false);
     }
   }
 }
@@ -214,37 +213,46 @@ void DataModelWindow::refreshTable()
     if (sender())
       if (sender()->isWidgetType())
         qobject_cast<QWidget*>(sender())->setEnabled(false);
-    updateTable(QString::fromUtf8(dataModel_->getFileName().c_str()));
+    updateTable(QString::fromUtf8(dataModel_->getFileName().c_str()), true);
   }
 }
 
 
-void DataModelWindow::updateTableView(const Sample& sample)
+void DataModelWindow::updateTableView(const bool isReloadAction, const bool useSampleFromFile)
 {
-  // set table model
-  if (dataTableModel_)
-    delete dataTableModel_;
-  if (proxyModel_)
-    delete proxyModel_;
-
-  Sample fullSample(sample);
-  if (!sample.getSize())
-    fullSample = dataModel_->getSampleFromFile();
-
-  dataTableModel_ = new DataModelTableModel(fullSample, dataModel_, (sample.getSize() < 1), dataTableView_);
-  connect(dataTableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
-  connect(dataTableModel_, SIGNAL(temporaryErrorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
-
-  proxyModel_ = new DataModelProxModel(dataTableView_);
-  proxyModel_->setSourceModel(dataTableModel_);
-
-  // set table view
-  dataTableView_->setModel(proxyModel_);
-  dataTableView_->sortByColumn(0, Qt::AscendingOrder);
+  // clear table
   dataTableView_->clearSpans();
+  dataTableView_->clearSelection();
 
-  if (sample.getSize() < 1)
+  // get the sample to display
+  Sample fullSample;
+  if (useSampleFromFile)
+    fullSample = dataModel_->getSampleFromFile();
+  else
+    fullSample = dataModel_->getSample();
+
+  // block signal of the selection model to avoid a crash in DataModelTableModel::endResetModel()
+  const bool block = dataTableView_->selectionModel()->blockSignals(true);
+  dataTableModel_->updateData(fullSample, isReloadAction, useSampleFromFile);
+  dataTableView_->selectionModel()->blockSignals(block);
+
+  dataTableView_->sortByColumn(0, Qt::AscendingOrder);
+
+  // use comboboxes to define the variable type
+  if (useSampleFromFile)
+  {
     for (int i = 0; i < proxyModel_->columnCount(); ++i)
       dataTableView_->openPersistentEditor(proxyModel_->index(1, i));
+  }
+  else
+  {
+    // table span
+    const UnsignedInteger nbInputs = dataModel_->getInputSample().getSize() ? dataModel_->getInputSample().getDimension() : 0;
+    if (nbInputs > 1)
+      dataTableView_->setSpan(1, 0, 1, nbInputs);
+
+    if (dataModel_->getOutputSample().getSize() && dataModel_->getOutputSample().getDimension() > 1)
+      dataTableView_->setSpan(1, nbInputs, 1, dataModel_->getSample().getDimension());
+  }
 }
 }

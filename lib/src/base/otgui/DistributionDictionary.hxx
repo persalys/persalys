@@ -21,17 +21,15 @@
 #ifndef OTGUI_DISTRIBUTIONDICTIONARY_HXX
 #define OTGUI_DISTRIBUTIONDICTIONARY_HXX
 
-#include "openturns/DistributionFactory.hxx"
 #include "otgui/OTGuiprivate.hxx"
+
+#include <openturns/DistributionFactory.hxx>
 
 namespace OTGUI
 {
 class OTGUI_API DistributionDictionary
 {
 public:
-  /** Get the list of the available distributions */
-  static OT::Description GetAvailableDistributions();
-
   /** Build a distribution factory */
   static OT::DistributionFactory BuildDistributionFactory(const OT::String & distributionName);
 

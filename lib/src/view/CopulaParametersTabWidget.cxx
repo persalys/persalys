@@ -26,6 +26,7 @@
 #include "otgui/QtTools.hxx"
 #include "otgui/WidgetBoundToDockWidget.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/TranslationManager.hxx"
 
 #include <openturns/NormalCopula.hxx>
 #include <openturns/VisualTest.hxx>
@@ -64,6 +65,7 @@ void CopulaParametersTabWidget::buildInterface()
   // get distribution name
   String distributionName = distribution_.getImplementation()->getClassName();
   distributionName = distributionName.substr(0, distributionName.find("Copula"));
+  const QString distName = TranslationManager::GetTranslatedDistributionName(distributionName);
 
   const QPen pen(Qt::blue, 2);
 
@@ -94,7 +96,7 @@ void CopulaParametersTabWidget::buildInterface()
         //  use rank of the Sample to have the points in [0, 1]*[0, 1]
         pdfPlot->plotCurve(sampleRanks.getMarginal(marginals), pen, QwtPlotCurve::Dots);
         pdfPlot->plotContour(distribution_.getMarginal(marginals));
-        pdfPlot->setTitle(tr("PDF") + " " + distributionName.c_str() + " copula");
+        pdfPlot->setTitle(tr("PDF") + " " + tr("%1 copula").arg(distName));
         pdfPlot->setAxisTitle(QwtPlot::xBottom, variablesNames[i]);
         pdfPlot->setAxisTitle(QwtPlot::yLeft, variablesNames[j]);
         pdf_StackedWidget->addWidget(pdfPlot);
@@ -103,7 +105,7 @@ void CopulaParametersTabWidget::buildInterface()
         // cdf
         PlotWidget * cdfPlot = new PlotWidget(tr("copulaCDF"));
         cdfPlot->plotContour(distribution_.getMarginal(marginals), false);
-        cdfPlot->setTitle(tr("CDF") + " " + distributionName.c_str() + " copula");
+        cdfPlot->setTitle(tr("CDF") + " " + tr("%1 copula").arg(distName));
         cdfPlot->setAxisTitle(QwtPlot::xBottom, variablesNames[i]);
         cdfPlot->setAxisTitle(QwtPlot::yLeft, variablesNames[j]);
         pdf_StackedWidget->addWidget(cdfPlot);
@@ -147,8 +149,8 @@ void CopulaParametersTabWidget::buildInterface()
 
     kendallPlot->plotCurve(kendallPlotData_[i], pen);
     kendallPlot->plotCurve(dataDiagonal);
-    kendallPlot->setTitle(tr("Kendall plot") + ": " + distributionName.c_str() + " copula");
-    kendallPlot->setAxisTitle(QwtPlot::xBottom, tr("%1 copula").arg(distributionName.c_str()));
+    kendallPlot->setTitle(tr("Kendall plot") + ": " + tr("%1 copula").arg(distName));
+    kendallPlot->setAxisTitle(QwtPlot::xBottom, tr("%1 copula").arg(distName));
     const QString pairNames = QString::fromUtf8(kendallPlotData_[i].getDescription()[0].c_str());
     kendallPlot->setAxisTitle(QwtPlot::yLeft, tr("Data") + " " + pairNames);
     variablesPairsNames << pairNames;

@@ -53,12 +53,15 @@ void OTguiMdiArea::showSubWindow(QStandardItem * item)
   for (int i = 0; i < subWindowList().size(); ++i)
   {
     OTguiSubWindow * win = static_cast<OTguiSubWindow*>(subWindowList().at(i));
+    Q_ASSERT(win);
+    Q_ASSERT(win->getItem());
     if (win->getItem()->data(Qt::UserRole).toString() == "OTStudy")
     {
       win->close();
     }
     if (win->getItem() == item)
     {
+      Q_ASSERT(win->widget());
       win->widget()->showMaximized();
       setActiveSubWindow(win);
       emit errorMessageChanged(win->getErrorMessage());

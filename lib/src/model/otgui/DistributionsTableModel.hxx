@@ -21,7 +21,7 @@
 #ifndef OTGUI_DISTRIBUTIONSTABLEMODEL_HXX
 #define OTGUI_DISTRIBUTIONSTABLEMODEL_HXX
 
-#include "otgui/DistributionDictionary.hxx"
+#include "otgui/OTGuiprivate.hxx"
 
 #include <QAbstractTableModel>
 #include <QWidget>

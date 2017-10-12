@@ -31,6 +31,7 @@
 #include "otgui/InferenceAnalysis.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/WidgetBoundToDockWidget.hxx"
+#include "otgui/TranslationManager.hxx"
 
 #include <openturns/Normal.hxx>
 #include <openturns/TruncatedDistribution.hxx>
@@ -100,10 +101,7 @@ void ProbabilisticModelWindow::buildInterface()
 #endif
 
   // - delegate for distributions list
-  QStringList items;
-  Description listDistributions = DistributionDictionary::GetAvailableDistributions();
-  for (UnsignedInteger i = 0; i < listDistributions.getSize(); ++i)
-    items << tr(listDistributions[i].c_str());
+  QStringList items = TranslationManager::GetAvailableDistributions();
   items << tr("Inference result");
 
   ComboBoxDelegate * delegate = new ComboBoxDelegate(items);
@@ -411,11 +409,11 @@ void ProbabilisticModelWindow::updateDistributionParametersWidgets(const QModelI
 
   Input input = physicalModel_.getInputs()[index.row()];
   Distribution inputDistribution = input.getDistribution();
-  String distributionName = inputDistribution.getImplementation()->getClassName();
   Distribution::PointWithDescriptionCollection parameters = DistributionDictionary::GetParametersCollection(inputDistribution);
-  UnsignedInteger parametersType = input.getDistributionParametersType();
+  const UnsignedInteger parametersType = input.getDistributionParametersType();
   UnsignedInteger nbParameters = parameters[parametersType].getSize();
 
+  const String distributionName = inputDistribution.getImplementation()->getClassName();
   if (distributionName == "TruncatedDistribution")
   {
     TruncatedDistribution dist(*dynamic_cast<TruncatedDistribution*>(inputDistribution.getImplementation().get()));
@@ -446,7 +444,7 @@ void ProbabilisticModelWindow::updateDistributionParametersWidgets(const QModelI
   {
     QStringList parametersNamesList;
     for (UnsignedInteger j = 0; j < parameters[i].getDescription().getSize(); ++j)
-      parametersNamesList << QString::fromUtf8(parameters[i].getDescription()[j].c_str());
+      parametersNamesList << TranslationManager::GetTranslatedDistributionParameterName(parameters[i].getDescription()[j]);
 
     selectParametersTypeCombo->addItem(parametersNamesList.join(", "));
   }
@@ -458,7 +456,7 @@ void ProbabilisticModelWindow::updateDistributionParametersWidgets(const QModelI
   Description parametersName = parameters[parametersType].getDescription();
   for (UnsignedInteger i = 0; i < nbParameters; ++i)
   {
-    parameterValuesLabel_[i] = new QLabel(parametersName[i].c_str());
+    parameterValuesLabel_[i] = new QLabel(TranslationManager::GetTranslatedDistributionParameterName(parametersName[i]));
     parameterValuesEdit_[i] = new ValueLineEdit(parameters[parametersType][i]);
     connect(parameterValuesEdit_[i], SIGNAL(editingFinished()), this, SLOT(distributionParametersChanged()));
     parameterValuesLabel_[i]->setBuddy(parameterValuesEdit_[i]);

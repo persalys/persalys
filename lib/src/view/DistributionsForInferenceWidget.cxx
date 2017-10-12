@@ -20,12 +20,12 @@
  */
 #include "otgui/DistributionsForInferenceWidget.hxx"
 
+#include "otgui/TranslationManager.hxx"
+
 #include <QTableView>
 #include <QHeaderView>
 #include <QPushButton>
 #include <QVBoxLayout>
-
-using namespace OT;
 
 namespace OTGUI
 {
@@ -43,12 +43,14 @@ void DistributionsForInferenceWidget::buildInterface()
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
   // list distributions
-  QStringList allDistributions;
-  Description listDistributions = DistributionDictionary::GetAvailableDistributions();
-  for (UnsignedInteger i = 0; i < listDistributions.getSize(); ++i)
-    if (!distributions_.contains(tr(listDistributions[i].c_str())))
-      allDistributions << tr(listDistributions[i].c_str());
-  allDistributions << tr("All");
+  QStringList notUsedDistributions;
+  const QStringList allDistributions = TranslationManager::GetAvailableDistributions();
+  for (int i = 0; i < allDistributions.size(); ++i)
+  {
+    if (!distributions_.contains(allDistributions[i]))
+      notUsedDistributions << allDistributions[i];
+  }
+  notUsedDistributions << tr("All");
 
   distributionsTableView_ = new QTableView;
 #if QT_VERSION >= 0x050000
@@ -71,7 +73,7 @@ void DistributionsForInferenceWidget::buildInterface()
   QHBoxLayout * buttonsLayout = new QHBoxLayout;
   buttonsLayout->addStretch();
   addDistributionCombox_ = new TitledComboBox(QIcon(":/images/list-add.png"), tr("Add"));
-  addDistributionCombox_->addItems(allDistributions);
+  addDistributionCombox_->addItems(notUsedDistributions);
 
   buttonsLayout->addWidget(addDistributionCombox_);
   connect(addDistributionCombox_, SIGNAL(textActivated(QString)), tableModel_, SLOT(appendDistribution(QString)));
@@ -90,21 +92,22 @@ void DistributionsForInferenceWidget::removeSelectedDistribution()
 {
   QModelIndexList indexList = distributionsTableView_->selectionModel()->selectedRows();
 
-  Description listDistributions = DistributionDictionary::GetAvailableDistributions();
+  const QStringList allDistributions = TranslationManager::GetAvailableDistributions();
+
   addDistributionCombox_->removeItem(addDistributionCombox_->count() - 1);
   for (int i = indexList.size() - 1; i >= 0; --i)
   {
     QString selectedDistribution = tableModel_->data(indexList[i], Qt::DisplayRole).toString();
-    if (listDistributions.contains(selectedDistribution.toStdString()))
+    if (allDistributions.contains(selectedDistribution))
       addDistributionCombox_->addItem(selectedDistribution);
   }
   addDistributionCombox_->model()->sort(0);
   addDistributionCombox_->addItem(tr("All"));
 
   QStringList distributions;
-  for (UnsignedInteger i = 0; i < listDistributions.getSize(); ++i)
-    if (addDistributionCombox_->findText(tr(listDistributions[i].c_str())) == -1)
-      distributions << tr(listDistributions[i].c_str());
+  for (int i = 0; i < allDistributions.size(); ++i)
+    if (addDistributionCombox_->findText(allDistributions[i]) == -1)
+      distributions << allDistributions[i];
 
   delete tableModel_;
   tableModel_ = new DistributionsTableModel(distributions, distributionsTableView_);

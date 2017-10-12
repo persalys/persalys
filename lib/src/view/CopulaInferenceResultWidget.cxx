@@ -24,6 +24,7 @@
 #include "otgui/CopulaParametersTabWidget.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
 #include "otgui/InferenceResultWidget.hxx" // for Q_DECLARE_METATYPE(OT::Distribution)
+#include "otgui/TranslationManager.hxx"
 
 #include <QScrollArea>
 #include <QVBoxLayout>
@@ -82,7 +83,7 @@ void CopulaInferenceResultWidget::buildInterface()
   {
     String distributionName = currentSetResult_.getTestedDistributions()[i].getImplementation()->getClassName();
     distributionName = distributionName.substr(0, distributionName.find("Copula"));
-    distTableModel_->setNotEditableItem(i + 1, 0, distributionName.c_str());
+    distTableModel_->setNotEditableItem(i + 1, 0, TranslationManager::GetTranslatedDistributionName(distributionName));
     const QVariant aVariant = QVariant::fromValue(currentSetResult_.getTestedDistributions()[i]);
     distTableModel_->setData(distTableModel_->index(i + 1, 0), aVariant, Qt::UserRole);
   }

@@ -96,9 +96,8 @@ GridDesignOfExperiment::Type GridDesignOfExperiment::getTypeDesignOfExperiment()
 
 void GridDesignOfExperiment::initializeParameters()
 {
-  // clear samples
+  // clear sample
   originalInputSample_.clear();
-  initialize();
 
   inputNames_ = getPhysicalModel().getInputNames();
   const InputCollection inputs = getPhysicalModel().getInputs();
@@ -282,9 +281,8 @@ void GridDesignOfExperiment::setValues(const Point & values)
 
   values_ = values;
 
-  // clear samples
+  // clear sample
   originalInputSample_.clear();
-  initialize();
 }
 
 
@@ -306,9 +304,8 @@ void GridDesignOfExperiment::setLowerBounds(const Point & lowerBounds)
 
   lowerBounds_ = lowerBounds;
 
-  // clear samples
+  // clear sample
   originalInputSample_.clear();
-  initialize();
 }
 
 
@@ -330,9 +327,8 @@ void GridDesignOfExperiment::setUpperBounds(const Point & upperBounds)
 
   upperBounds_ = upperBounds;
 
-  // clear samples
+  // clear sample
   originalInputSample_.clear();
-  initialize();
 }
 
 
@@ -370,9 +366,8 @@ void GridDesignOfExperiment::setLevels(const Indices & levels)
   levels_ = levels;
   deltas_ = deltas;
 
-  // clear samples
+  // clear sample
   originalInputSample_.clear();
-  initialize();
 }
 
 
@@ -414,9 +409,8 @@ void GridDesignOfExperiment::setDeltas(const Point & deltas)
   deltas_ = deltas;
   levels_ = levels;
 
-  // clear samples
+  // clear sample
   originalInputSample_.clear();
-  initialize();
 }
 
 

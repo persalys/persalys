@@ -265,6 +265,13 @@ void DesignOfExperimentDefinitionItem::createNewMetaModel()
     emit emitErrorMessageRequested(tr("The model must have at least one output. Evaluate the design of experiments"));
     return;
   }
+  const DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(analysis_.getImplementation().get());
+  Q_ASSERT(doeEval);
+  if (doeEval->getDesignOfExperiment().getSample().getSize() < 2)
+  {
+    emit emitErrorMessageRequested(tr("The design of experiments must contain at least two points."));
+    return;
+  }
 
   // new analysis
   FunctionalChaosAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("metaModel_"), getAnalysis());

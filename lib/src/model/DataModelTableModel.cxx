@@ -29,69 +29,85 @@ using namespace OT;
 namespace OTGUI
 {
 
-DataModelTableModel::DataModelTableModel(const Sample& data, DataModel* dataModel, const bool useColumns, QObject* parent)
-  : SampleTableModel(data, parent)
+DataModelTableModel::DataModelTableModel(DataModel* dataModel, QObject* parent)
+  : SampleTableModel(Sample(), parent)
   , dataModel_(dataModel)
   , inputColumns_()
   , outputColumns_()
 {
-  if (useColumns)
-  {
-    inputColumns_ = dataModel->getInputColumns();
-    outputColumns_ = dataModel->getOutputColumns();
-  }
-  else
+}
+
+
+void DataModelTableModel::updateData(const Sample& data, const bool isReloadAction, const bool useColumns)
+{
+  data_ = data;
+  updatePrivateData(isReloadAction, useColumns);
+  beginResetModel();
+  endResetModel();
+}
+
+
+void DataModelTableModel::updatePrivateData(const bool isReloadAction, const bool useColumns)
+{
+  // data_ is the sample of dataModel which can be smaller than the sample from the file
+  // so we can not use getIn/OutputColumns()
+  if (!useColumns)
   {
     // condition used when opening a data model: we use dataModel.getSample() and not the sample from the file
     // so we can not use getInputColumns and getOutputColumns.
     // In dataModel.getSample(): we put first the input sample, then the output sample
     // so we can retrieve easily the indices
-    inputColumns_ = Indices(dataModel->getInputSample().getSize() > 0 ? dataModel->getInputSample().getDimension() : 0);
+    inputColumns_ = Indices(dataModel_->getInputSample().getSize() > 0 ? dataModel_->getInputSample().getDimension() : 0);
     inputColumns_.fill();
-    outputColumns_ = Indices(dataModel->getOutputSample().getSize() > 0 ? dataModel->getOutputSample().getDimension() : 0);
+    outputColumns_ = Indices(dataModel_->getOutputSample().getSize() > 0 ? dataModel_->getOutputSample().getDimension() : 0);
     outputColumns_.fill(inputColumns_.getSize());
   }
-
-  // data model
-  Indices indices(inputColumns_);
-  indices.add(outputColumns_);
-
-  if (!indices.check(data_.getDimension()) || !indices.getSize())
+  else
   {
-    inputColumns_ = Indices(data_.getDimension() > 1 ? data_.getDimension() - 1 : 1);
-    inputColumns_.fill();
-    outputColumns_ = Indices(data_.getDimension() > 1 ? 1 : 0, data_.getDimension() - 1);
-    dataModel->blockNotification("DataModelDefinition");
-    dataModel->setColumns(inputColumns_, outputColumns_);
-    dataModel->blockNotification();
-  }
-  else // the indices are ok so we can use the variables names stored in the model
-  {
-    Description dataDescription(data_.getDescription());
-    if (inputColumns_.getSize())
+    // data_ is the sample from the file
+    // so we can use getIn/OutputColumns()
+    if (isReloadAction)
     {
-      if (dataModel_->getInputNames().getSize() == inputColumns_.getSize())
+      inputColumns_ = dataModel_->getInputColumns();
+      outputColumns_ = dataModel_->getOutputColumns();
+      // update data_ description
+      Description dataDescription(data_.getDescription());
+      if (inputColumns_.getSize())
       {
-        for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++i)
-          dataDescription[inputColumns_[i]] = dataModel_->getInputNames()[i];
+        if (dataModel_->getInputNames().getSize() == inputColumns_.getSize())
+        {
+          for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++i)
+            dataDescription[inputColumns_[i]] = dataModel_->getInputNames()[i];
+        }
       }
+      if (outputColumns_.getSize())
+      {
+        if (dataModel_->getOutputNames().getSize() == outputColumns_.getSize())
+        {
+          for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++i)
+            dataDescription[outputColumns_[i]] = dataModel_->getOutputNames()[i];
+        }
+      }
+      data_.setDescription(dataDescription);
     }
-    if (outputColumns_.getSize())
+    else
     {
-      if (dataModel_->getOutputNames().getSize() == outputColumns_.getSize())
-      {
-        for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++i)
-          dataDescription[outputColumns_[i]] = dataModel_->getOutputNames()[i];
-      }
+      inputColumns_ = Indices(data_.getDimension() > 1 ? data_.getDimension() - 1 : 1);
+      inputColumns_.fill();
+      outputColumns_ = Indices(data_.getDimension() > 1 ? 1 : 0, data_.getDimension() - 1);
+      dataModel_->blockNotification("DataModelDefinition");
+      dataModel_->setColumns(inputColumns_, outputColumns_);
+      dataModel_->blockNotification();
     }
-    data_.setDescription(dataDescription);
   }
 }
 
 
 int DataModelTableModel::rowCount(const QModelIndex& parent) const
 {
-  return data_.getSize() + 2;
+  if (data_.getSize())
+    return data_.getSize() + 2;
+  return 0;
 }
 
 
@@ -132,7 +148,9 @@ QVariant DataModelTableModel::data(const QModelIndex & index, int role) const
   {
     // text
     if (role == Qt::DisplayRole || role == Qt::EditRole)
+    {
       return QString::fromUtf8(data_.getDescription()[index.column()].c_str());
+    }
 
     // alignment
     else if (role == Qt::TextAlignmentRole)
