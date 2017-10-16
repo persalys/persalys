@@ -22,6 +22,7 @@
 
 #include "otgui/DistributionDictionary.hxx"
 
+#include <openturns/SpecFunc.hxx>
 #include <openturns/FittingTest.hxx>
 #include <openturns/NormalFactory.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
@@ -184,27 +185,34 @@ void InferenceAnalysis::run()
       progressValue_ = (int) (i * 100 / sample.getDimension());
       notify("progressValueChanged");
 
+      const UnsignedInteger nbDist = distFactoriesForEachInterestVar_[sample.getDescription()[i]].getSize();
+
       FittingTestResult fittingTestResult;
       fittingTestResult.variableName_ = sample.getDescription()[i];
       fittingTestResult.values_ = sample.getMarginal(i);
-      fittingTestResult.errorMessages_ = Description(distFactoriesForEachInterestVar_[sample.getDescription()[i]].getSize());
+      fittingTestResult.errorMessages_ = Description(nbDist);
 
-      for (UnsignedInteger j = 0; j < distFactoriesForEachInterestVar_[sample.getDescription()[i]].getSize(); ++j)
+      for (UnsignedInteger j = 0; j < nbDist; ++j)
       {
+        DistributionFactory distFactory(distFactoriesForEachInterestVar_[sample.getDescription()[i]][j]);
         try
         {
-          Distribution distribution(distFactoriesForEachInterestVar_[sample.getDescription()[i]][j].build(sample.getMarginal(i)));
+          Distribution distribution(distFactory.build(sample.getMarginal(i)));
 
           // Kolmogorov test
           TestResult testResult(FittingTest::Kolmogorov(sample.getMarginal(i), distribution, 1 - level_, distribution.getParameterDimension()));
 
+          // BIC test
+          const NumericalScalar bicResult = FittingTest::BIC(sample.getMarginal(i), distribution, distribution.getParameterDimension());
+
           // set fittingTestResult
           fittingTestResult.testedDistributions_.add(distribution);
           fittingTestResult.kolmogorovTestResults_.add(testResult);
+          fittingTestResult.bicResults_.add(bicResult);
         }
         catch (std::exception & ex)
         {
-          String str = distFactoriesForEachInterestVar_[sample.getDescription()[i]][j].getImplementation()->getClassName();
+          String str = distFactory.getImplementation()->getClassName();
           const String distributionName = str.substr(0, str.find("Factory"));
           const String message = OSS() << "Error when building the "
                                  << distributionName
@@ -217,6 +225,7 @@ void InferenceAnalysis::run()
           fittingTestResult.testedDistributions_.add(DistributionDictionary::BuildDistribution(distributionName, 0));
           TestResult testResult;
           fittingTestResult.kolmogorovTestResults_.add(testResult);
+          fittingTestResult.bicResults_.add(SpecFunc::MaxScalar);
           fittingTestResult.errorMessages_[j] = message;
         }
       }
