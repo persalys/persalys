@@ -23,6 +23,8 @@
 #include "otgui/FunctionalChaosAnalysis.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
 
+#include <openturns/SpecFunc.hxx>
+
 #include <QVBoxLayout>
 #include <QGroupBox>
 
@@ -145,7 +147,7 @@ bool FunctionalChaosPage::validatePage()
   const UnsignedInteger degree = chaosDegreeSpinbox_->value();
   const UnsignedInteger n = degree + inputSampleDimension_;
   // compute binomial coefficient
-  const UnsignedInteger minimumSize  = FunctionalChaosAnalysis::BinomialCoefficient(n, degree);
+  const UnsignedInteger minimumSize = SpecFunc::BinomialCoefficient(n, degree);
   if (inputSampleSize_ < minimumSize)
   {
     const QString errorMessage = tr("Design of experiments size too small : %1. It must be superior or equal to C(degree+nbInputs, degree) = %2")

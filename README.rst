@@ -4,7 +4,7 @@ Qt GUI module for OpenTURNS
 
 Dependencies
 ------------
-- OpenTURNS >= 1.9
+- OpenTURNS >= 1.10
 - Qt >= 4
 - Qwt >= 6
 - Python >= 2.7, < 3

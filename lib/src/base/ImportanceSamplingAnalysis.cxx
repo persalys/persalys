@@ -20,10 +20,11 @@
  */
 #include "otgui/ImportanceSamplingAnalysis.hxx"
 
-#include <openturns/ImportanceSampling.hxx>
+#include <openturns/ProbabilitySimulationAlgorithm.hxx>
 #include <openturns/Normal.hxx>
 #include <openturns/StandardEvent.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/ImportanceSamplingExperiment.hxx>
 
 using namespace OT;
 
@@ -62,8 +63,9 @@ SimulationInterface ImportanceSamplingAnalysis::getSimulationAlgorithm(const Eve
 {
   const UnsignedInteger inDimension = standardSpaceDesignPoint_.getSize();
   const Normal conditionalDistribution(standardSpaceDesignPoint_, Point(inDimension, 1.), CorrelationMatrix(inDimension));
+  const ImportanceSamplingExperiment experiment(conditionalDistribution);
 
-  return ImportanceSampling(StandardEvent(event), conditionalDistribution);
+  return ProbabilitySimulationAlgorithm(StandardEvent(event), experiment);
 }
 
 

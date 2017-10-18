@@ -33,6 +33,7 @@
 #include <openturns/StandardDistributionPolynomialFactory.hxx>
 #include <openturns/FunctionalChaosRandomVector.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/SpecFunc.hxx>
 
 using namespace OT;
 
@@ -150,7 +151,7 @@ void FunctionalChaosAnalysis::run()
     {
       const UnsignedInteger inputDimension = effectiveInputSample.getDimension();
       const UnsignedInteger size = designOfExperiment_.getOutputSample().getSize();
-      const UnsignedInteger minimumSize  = BinomialCoefficient(chaosDegree_ + inputDimension, chaosDegree_);
+      const UnsignedInteger minimumSize  = SpecFunc::BinomialCoefficient(chaosDegree_ + inputDimension, chaosDegree_);
       if (size < minimumSize)
         throw InvalidArgumentException(HERE) << "Design of experiments size too small : "
                                              << size
@@ -224,8 +225,8 @@ FunctionalChaosAlgorithm FunctionalChaosAnalysis::buildFunctionalChaosAlgorithm(
   {
     BasisSequenceFactory basisSequenceFactory = LARS();
     basisSequenceFactory.setMaximumRelativeConvergence(-1.0);
-    projectionStrategy = LeastSquaresMetaModelSelectionFactory(basisSequenceFactory,
-                         CorrectedLeaveOneOut());
+    projectionStrategy = LeastSquaresStrategy(LeastSquaresMetaModelSelectionFactory(basisSequenceFactory,
+                                                               CorrectedLeaveOneOut()));
   }
 
   // FunctionalChaosAlgorithm
@@ -345,16 +346,4 @@ void FunctionalChaosAnalysis::load(Advocate& adv)
 }
 
 
-UnsignedInteger FunctionalChaosAnalysis::BinomialCoefficient(const UnsignedInteger n,
-    const UnsignedInteger k)
-{
-  if (k > n) return 0; // by convention
-  UnsignedInteger value = 1;
-  for (UnsignedInteger i = 0; i < std::min(k, n - k); ++ i)
-  {
-    value *= n - i;
-    value /= i + 1;
-  }
-  return value;
-}
 }

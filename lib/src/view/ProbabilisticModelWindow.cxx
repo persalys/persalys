@@ -777,17 +777,7 @@ void ProbabilisticModelWindow::truncationParametersStateChanged()
       }
 
       // update Distribution
-      //TODO after fixing problem with CTR of TruncatedDistribution(Distribution, Interval) in OT do:
-      // truncatedDistribution = TruncatedDistribution(distribution, truncatureInterval)
-      if (!(truncatureInterval.getFiniteLowerBound()[0] && truncatureInterval.getFiniteUpperBound()[0]))
-      {
-        if (truncatureInterval.getFiniteLowerBound()[0])
-          truncatedDistribution = TruncatedDistribution(distribution, truncatureInterval.getLowerBound()[0]);
-        else
-          truncatedDistribution = TruncatedDistribution(distribution, truncatureInterval.getUpperBound()[0], TruncatedDistribution::UPPER);
-      }
-      else
-        truncatedDistribution = TruncatedDistribution(distribution, truncatureInterval.getLowerBound()[0], truncatureInterval.getUpperBound()[0]);
+      truncatedDistribution = TruncatedDistribution(distribution, truncatureInterval);
 
       physicalModel_.blockNotification("ProbabilisticModel");
       physicalModel_.setDistribution(input.getName(), truncatedDistribution);

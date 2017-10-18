@@ -20,7 +20,7 @@
  */
 #include "otgui/SimulationInterface.hxx"
 
-#include <openturns/MonteCarlo.hxx>
+#include <openturns/ProbabilitySimulationAlgorithm.hxx>
 
 using namespace OT;
 
@@ -29,7 +29,7 @@ namespace OTGUI
 
 /* Default constructor */
 SimulationInterface::SimulationInterface()
-  : TypedInterfaceObject<Simulation>(new OT::MonteCarlo())
+  : TypedInterfaceObject<Simulation>(new OT::ProbabilitySimulationAlgorithm())
 {
 }
 
