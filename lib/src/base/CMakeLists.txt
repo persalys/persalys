@@ -39,6 +39,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      FORMAnalysis.cxx
                      FORMImportanceSamplingAnalysis.cxx
                      MetaModelAnalysis.cxx
+                     MetaModelValidationResult.cxx
                      MetaModelAnalysisResult.cxx
                      FunctionalChaosAnalysisResult.cxx
                      FunctionalChaosAnalysis.cxx
@@ -110,6 +111,7 @@ ot_install_header_file ( ImportanceSamplingAnalysis.hxx )
 ot_install_header_file ( ApproximationAnalysis.hxx )
 ot_install_header_file ( FORMAnalysis.hxx )
 ot_install_header_file ( FORMImportanceSamplingAnalysis.hxx )
+ot_install_header_file ( MetaModelValidationResult.hxx )
 ot_install_header_file ( MetaModelAnalysisResult.hxx )
 ot_install_header_file ( MetaModelAnalysis.hxx )
 ot_install_header_file ( FunctionalChaosAnalysisResult.hxx )
