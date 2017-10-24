@@ -44,13 +44,16 @@ public:
   static QString GetTranslatedDistributionParameterName(const std::string& name);
   static std::string GetDistributionName(const QString& name);
   static QStringList GetAvailableDistributions();
+  static QString GetTranslatedParameterName(const std::string& name);
 
 private:
   static void InitializeDistributionsNames();
   static void InitializeDistributionsParametersNames();
+  static void InitializeParametersNames();
 #ifndef Q_MOC_RUN
   static bimap_type DistributionsNames_;
   static bimap_type DistributionsParametersNames_;
+  static bimap_type ParametersNames_;
 #endif
 };
 }
