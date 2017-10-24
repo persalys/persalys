@@ -54,6 +54,7 @@ public:
 
   KrigingAnalysisResult getResult() const;
 
+  virtual Parameters getParameters() const;
   virtual void run();
   virtual OT::String getPythonScript() const;
   virtual bool analysisLaunched() const;
@@ -72,6 +73,10 @@ private:
   OT::KrigingAlgorithm buildKrigingAlgorithm(const OT::Sample& inputSample,
       const OT::Sample& outputSample,
       const bool useOptimalCovModel = false);
+
+protected:
+  void validateMetaModelResult(OT::Collection<KrigingAnalysisResult> results, const OT::Sample& inputSample);
+  virtual void computeAnalyticalValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample);
 
 private:
   OT::Basis basis_;

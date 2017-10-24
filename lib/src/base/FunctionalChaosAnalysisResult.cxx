@@ -76,9 +76,7 @@ String FunctionalChaosAnalysisResult::__repr__() const
       << " name=" << getName()
       << " mean=" << getMean()
       << " variance=" << getVariance()
-      << " sobolResult=" << getSobolResult()
-      << " errorQ2LOO=" << getErrorQ2LeaveOneOut()
-      << " q2LOO=" << getQ2LeaveOneOut();
+      << " sobolResult=" << getSobolResult();
   return oss;
 }
 

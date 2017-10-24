@@ -70,9 +70,7 @@ String KrigingAnalysisResult::__repr__() const
 {
   OSS oss;
   oss << "class=" << GetClassName()
-      << " krigingResultCollection=" << getKrigingResultCollection()
-      << " errorQ2LOO=" << getErrorQ2LeaveOneOut()
-      << " q2LOO=" << getQ2LeaveOneOut();
+      << " krigingResultCollection=" << getKrigingResultCollection();
   return oss;
 }
 

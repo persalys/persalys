@@ -36,8 +36,29 @@ public:
   MetaModelAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment);
   MetaModelAnalysis(const OT::String& name, const Analysis& analysis);
 
-  bool isLeaveOneOutValidation() const;
+  bool analyticalValidation() const;
+  void setAnalyticalValidation(const bool validation);
+
+  bool testSampleValidation() const;
+  void setTestSampleValidation(const bool validation);
+
+  bool kFoldValidation() const;
+  void setKFoldValidation(const bool validation);
+
+  bool leaveOneOutValidation() const;
   void setLeaveOneOutValidation(const bool validation);
+
+  void setTestSampleValidationParameters(const OT::UnsignedInteger percentage = 20,
+                                         const OT::UnsignedInteger seed = OT::ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"));
+  OT::PointWithDescription getTestSampleValidationParameters() const;
+  OT::UnsignedInteger getTestSampleValidationPercentageOfPoints() const;
+  OT::UnsignedInteger getTestSampleValidationSeed() const;
+
+  void setKFoldValidationParameters(const OT::UnsignedInteger nbFolds,
+                                    const OT::UnsignedInteger seed = OT::ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"));
+  OT::PointWithDescription getKFoldValidationParameters() const;
+  OT::UnsignedInteger getKFoldValidationNumberOfFolds() const;
+  OT::UnsignedInteger getKFoldValidationSeed() const;
 
   OT::Sample getEffectiveInputSample() const;
   OT::Sample getEffectiveOutputSample() const;
@@ -58,11 +79,22 @@ protected:
   void buildMetaModel(MetaModelAnalysisResult& result, const OT::Function& function);
   void computeError(const OT::Sample& metaOutSample, const OT::Sample& outSample, OT::Point& error, OT::Point& q2);
   void validateMetaModelResult(MetaModelAnalysisResult& result, const OT::Sample& inputSample);
+  virtual void computeAnalyticalValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample);
+  void computeTestSampleValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample);
+  void computeKFoldValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample);
+  void computeLOOValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample);
 
 protected:
   OT::ComposedDistribution distribution_;
   bool isDistributionComputed_;
+  bool analyticalValidation_;
+  bool testSampleValidation_;
+  bool kFoldValidation_;
   bool leaveOneOutValidation_;
+  OT::UnsignedInteger percentageTestSample_;
+  OT::UnsignedInteger seedTestSample_;
+  OT::UnsignedInteger nbFolds_;
+  OT::UnsignedInteger seedKFold_;
 };
 }
 #endif

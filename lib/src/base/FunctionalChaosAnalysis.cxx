@@ -141,6 +141,11 @@ void FunctionalChaosAnalysis::run()
       throw InvalidArgumentException(HERE) << "The design of experiments must contains not empty input AND output samples";
     if (designOfExperiment_.getInputSample().getSize() != designOfExperiment_.getOutputSample().getSize())
       throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
+    if (testSampleValidation() && (designOfExperiment_.getInputSample().getSize() * getTestSampleValidationPercentageOfPoints() / 100 < 3))
+      throw InvalidArgumentException(HERE) << "Test sample validation: The test sample must contain at least three points. Here size * k / 100 = " << (designOfExperiment_.getInputSample().getSize() * getTestSampleValidationPercentageOfPoints() / 100);
+    if (kFoldValidation() && (designOfExperiment_.getInputSample().getSize() / getKFoldValidationNumberOfFolds() < 3))
+      throw InvalidArgumentException(HERE) << "K-Fold validation: each fold must contain at least three points. Here size / k = " << (designOfExperiment_.getInputSample().getSize() / getKFoldValidationNumberOfFolds());
+
 
     // get effective samples
     const Sample effectiveInputSample(getEffectiveInputSample());
@@ -279,9 +284,103 @@ void FunctionalChaosAnalysis::postProcessFunctionalChaosResult(const Sample& inp
 }
 
 
+void FunctionalChaosAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& result, const Sample& inputSample)
+{
+  if (stopRequested_)
+  {
+    analyticalValidation_ = false;
+    return;
+  }
+  informationMessage_ = "The analytical validation is running.";
+  notify("informationMessageUpdated");
+
+  // retrieve chaos result
+  FunctionalChaosAnalysisResult chaosResult(*dynamic_cast<FunctionalChaosAnalysisResult*>(&result));
+
+  // get metamodel result
+  Function metamodel(chaosResult.getFunctionalChaosResult().getMetaModel());
+  // get polynom basis
+  Basis reducedBasis(chaosResult.getFunctionalChaosResult().getReducedBasis());
+  // get marginals transformation
+  const Function transformation(chaosResult.getFunctionalChaosResult().getTransformation());
+
+  // compute basis matrix at the points of inputSample
+  const UnsignedInteger basisDim = reducedBasis.getSize();
+  Matrix A(inputSample.getSize(), basisDim);
+  for (UnsignedInteger i = 0; i < basisDim; ++i)
+  {
+    Sample outSample_i(reducedBasis[i](transformation(inputSample)));
+    for (UnsignedInteger j = 0; j < inputSample.getSize(); ++j)
+    {
+      A(j, i) = outSample_i[j][0];
+    }
+  }
+
+  // (A^t.A)
+  CovarianceMatrix AtA(A.computeGram(true));
+
+  // (A^t.A)^{-1}
+  const Matrix AtA_inv(AtA.solveLinearSystem(IdentityMatrix(basisDim)).getImplementation());
+
+  // A.(A^t.A)^{-1}.A^t
+  const Matrix H(A * AtA_inv * A.transpose());
+
+  Point Hdiag(H.getNbColumns());
+  for (UnsignedInteger i = 0; i < H.getNbColumns(); ++i)
+    Hdiag[i] = H(i, i);
+
+  // compute Q2
+  Point q2(result.outputSample_.getDimension());
+  const Point variance(result.outputSample_.computeVariance());
+
+  for (UnsignedInteger i = 0; i < result.outputSample_.getDimension(); ++i)
+  {
+    // sum[ ((ŷ_j - y_j) / (1 - h_j))^2 ]
+    double quadraticResidual = 0.;
+    for (UnsignedInteger j = 0; j < result.outputSample_.getSize(); ++j)
+    {
+      const double diff = (result.metaModelOutputSample_[j][i] - result.outputSample_[j][i]) / (1 - Hdiag[j]);
+      quadraticResidual += diff * diff;
+    }
+    // 1 - sum[ ((ŷ_j - y_j) / (1 - h_j))^2 ] / (n-1) / Var Y
+    q2[i] = 1.0 - (quadraticResidual / (result.outputSample_.getSize() - 1)) / variance[i];
+  }
+  result.analyticalValidation_.q2_ = q2;
+}
+
+
 FunctionalChaosAnalysisResult FunctionalChaosAnalysis::getResult() const
 {
   return result_;
+}
+
+
+Parameters FunctionalChaosAnalysis::getParameters() const
+{
+  Parameters param;
+
+  param.add("Algorithm", "Functional chaos");
+  param.add("Outputs of interest", getInterestVariables().__str__());
+
+  param.add("Chaos degree", getChaosDegree());
+  param.add("Sparse", getSparseChaos() ? "yes" : "no");
+
+  param.add("Analytical validation", analyticalValidation() ? "yes" : "no");
+  param.add("Test sample validation", testSampleValidation() ? "yes" : "no");
+  if (testSampleValidation())
+  {
+    param.add("Percentage", getTestSampleValidationPercentageOfPoints());
+    param.add("Seed", getTestSampleValidationSeed());
+  }
+  param.add("KFold validation", kFoldValidation() ? "yes" : "no");
+  if (kFoldValidation())
+  {
+    param.add("Number of folds", getKFoldValidationNumberOfFolds());
+    param.add("Seed", getKFoldValidationSeed());
+  }
+  param.add("Leave-one-out validation", leaveOneOutValidation() ? "yes" : "no");
+
+  return param;
 }
 
 
@@ -291,19 +390,19 @@ String FunctionalChaosAnalysis::getPythonScript() const
   oss << getName() << " = otguibase.FunctionalChaosAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
   if (getInterestVariables().getSize() < getDesignOfExperiment().getOutputSample().getDimension())
   {
-    oss << "interestVariables = [";
-    for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
-    {
-      oss << "'" << getInterestVariables()[i] << "'";
-      if (i < getInterestVariables().getSize() - 1)
-        oss << ", ";
-    }
-    oss << "]\n";
+    oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables());
     oss << getName() << ".setInterestVariables(interestVariables)\n";
   }
   oss << getName() << ".setChaosDegree(" << getChaosDegree() << ")\n";
   oss << getName() << ".setSparseChaos(" << (getSparseChaos() ? "True" : "False") << ")\n";
-  oss << getName() << ".setLeaveOneOutValidation(" << (isLeaveOneOutValidation() ? "True" : "False") << ")\n";
+
+  // validation
+  oss << getName() << ".setAnalyticalValidation(" << (analyticalValidation() ? "True" : "False") << ")\n";
+  oss << getName() << ".setTestSampleValidation(" << (testSampleValidation() ? "True" : "False") << ")\n";
+  oss << getName() << ".setTestSampleValidationParameters(" << getTestSampleValidationPercentageOfPoints() << ", " << getTestSampleValidationSeed() << ")\n";
+  oss << getName() << ".setKFoldValidation(" << (kFoldValidation() ? "True" : "False") << ")\n";
+  oss << getName() << ".setKFoldValidationParameters(" << getKFoldValidationNumberOfFolds() << ", " << getKFoldValidationSeed() << ")\n";
+  oss << getName() << ".setLeaveOneOutValidation(" << (leaveOneOutValidation() ? "True" : "False") << ")\n";
 
   return oss;
 }
@@ -329,7 +428,7 @@ String FunctionalChaosAnalysis::__repr__() const
 /* Method save() stores the object through the StorageManager */
 void FunctionalChaosAnalysis::save(Advocate& adv) const
 {
-  DesignOfExperimentAnalysis::save(adv);
+  MetaModelAnalysis::save(adv);
   adv.saveAttribute("chaosDegree_", chaosDegree_);
   adv.saveAttribute("sparseChaos_", sparseChaos_);
   adv.saveAttribute("result_", result_);
@@ -339,7 +438,7 @@ void FunctionalChaosAnalysis::save(Advocate& adv) const
 /* Method load() reloads the object from the StorageManager */
 void FunctionalChaosAnalysis::load(Advocate& adv)
 {
-  DesignOfExperimentAnalysis::load(adv);
+  MetaModelAnalysis::load(adv);
   adv.loadAttribute("chaosDegree_", chaosDegree_);
   adv.loadAttribute("sparseChaos_", sparseChaos_);
   adv.loadAttribute("result_", result_);
