@@ -28,6 +28,8 @@
 #include "otgui/QtTools.hxx"
 
 #include <openturns/SpecFunc.hxx>
+#include <openturns/RandomGenerator.hxx>
+#include <openturns/KPermutationsDistribution.hxx>
 
 #include <QSplitter>
 #include <QScrollArea>
@@ -87,22 +89,24 @@ void FunctionalChaosResultWindow::buildInterface()
 
   // first tab : METAMODEL GRAPH --------------------------------
   QWidget * tab = new QWidget;
-  QVBoxLayout * metaModelPlotLayout = new QVBoxLayout(tab);
+  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
   ResizableStackedWidget * plotsStackedWidget = new ResizableStackedWidget;
   connect(outputsListWidget, SIGNAL(currentRowChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
-    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSample().getMarginal(i),
-        result_.getOutputSample().getMarginal(i),
-        result_.getFunctionalChaosResult().getResiduals()[i],
-        result_.getFunctionalChaosResult().getRelativeErrors()[i],
-        tr("Relative error"),
-        this);
+    MetaModelValidationResult fakeResu(result_.getMetaModelOutputSample(),
+                                       result_.getFunctionalChaosResult().getRelativeErrors(),
+                                       result_.getFunctionalChaosResult().getResiduals());
+    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(fakeResu,
+                                                                                 result_.getOutputSample(),
+                                                                                 i,
+                                                                                 tr("Relative error"),
+                                                                                 this);
 
     plotsStackedWidget->addWidget(validationWidget);
   }
-  metaModelPlotLayout->addWidget(plotsStackedWidget);
+  tabLayout->addWidget(plotsStackedWidget);
 
   tabWidget->addTab(tab, tr("Metamodel"));
 
@@ -246,28 +250,60 @@ void FunctionalChaosResultWindow::buildInterface()
   }
 
   // fourth tab : VALIDATION --------------------------------
-  if (result_.getMetaModelOutputSampleLeaveOneOut().getSize())
+  if (result_.getValidations().size())
   {
     QTabWidget * validationTabWidget = new QTabWidget;
 
-    tab = new QWidget;
-    metaModelPlotLayout = new QVBoxLayout(tab);
-
-    ResizableStackedWidget * plotsLOOStackedWidget = new ResizableStackedWidget;
-    connect(outputsListWidget, SIGNAL(currentRowChanged(int)), plotsLOOStackedWidget, SLOT(setCurrentIndex(int)));
-    for (UnsignedInteger i = 0; i < nbOutputs; ++i)
+    for (UnsignedInteger i = 0; i < result_.getValidations().size(); ++i)
     {
-      MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSampleLeaveOneOut().getMarginal(i),
-          result_.getOutputSample().getMarginal(i),
-          result_.getErrorQ2LeaveOneOut()[i],
-          result_.getQ2LeaveOneOut()[i],
-          tr("Q2"),
-          this);
-      plotsLOOStackedWidget->addWidget(validationWidget);
-    }
-    metaModelPlotLayout->addWidget(plotsLOOStackedWidget);
+      tab = new QWidget;
+      tabLayout = new QVBoxLayout(tab);
 
-    validationTabWidget->addTab(plotsLOOStackedWidget, tr("Leave-one-out"));
+      ResizableStackedWidget * plotStackedWidget = new ResizableStackedWidget;
+      connect(outputsListWidget, SIGNAL(currentRowChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
+
+      // retrieve the output sample
+      Sample outputSample(result_.getOutputSample());
+      if (result_.getValidations()[i].getName() == "Test sample")
+      {
+        // search seed: we know the index of the seed but this method is more robust
+        UnsignedInteger seed = 0;
+        bool parameterFound = false;
+        for (UnsignedInteger j = 0; j < result_.getValidations()[i].getParameters().getSize(); ++j)
+        {
+          if (result_.getValidations()[i].getParameters().getDescription()[j] == "Seed")
+          {
+            seed = result_.getValidations()[i].getParameters()[j];
+            parameterFound = true;
+          }
+        }
+        Q_ASSERT(parameterFound);
+        RandomGenerator::SetSeed(seed);
+        const UnsignedInteger testSampleSize = result_.getValidations()[i].getMetaModelOutputSample().getSize();
+        Point indicesTestSample(KPermutationsDistribution(testSampleSize, outputSample.getSize()).getRealization());
+        outputSample = Sample(testSampleSize, nbOutputs);
+        std::sort(indicesTestSample.begin(), indicesTestSample.end());
+
+        for (UnsignedInteger j = 0; j < testSampleSize; ++j)
+        {
+          outputSample[j] = result_.getOutputSample()[indicesTestSample[j]];
+        }
+      }
+      // validation widget
+      for (UnsignedInteger j = 0; j < nbOutputs; ++j)
+      {
+        MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getValidations()[i],
+                                                                                    outputSample,
+                                                                                    j,
+                                                                                    tr("Q2"),
+                                                                                    this);
+        plotStackedWidget->addWidget(validationWidget);
+      }
+      tabLayout->addWidget(plotStackedWidget);
+
+      validationTabWidget->addTab(plotStackedWidget, result_.getValidations()[i].getName().c_str());
+    }
+
     tabWidget->addTab(validationTabWidget, tr("Validation"));
   }
 

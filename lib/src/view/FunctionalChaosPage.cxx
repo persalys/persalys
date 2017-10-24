@@ -37,7 +37,6 @@ FunctionalChaosPage::FunctionalChaosPage(QWidget* parent)
   : QWizardPage(parent)
   , inputSampleSize_(0)
   , inputSampleDimension_(0)
-  , leaveOneOutCheckBox_(0)
   , chaosDegreeSpinbox_(0)
   , sparseCheckBox_(0)
   , errorMessageLabel_(0)
@@ -63,17 +62,6 @@ void FunctionalChaosPage::buildInterface()
   chaosParametersLayout->addWidget(chaosDegreeSpinbox_);
 
   pageLayout->addWidget(parametersBox);
-
-  // Metamodel validation
-  QGroupBox * validationGroupBox = new QGroupBox(tr("Validation"));
-  QGridLayout * validationLayout = new QGridLayout(validationGroupBox);
-
-  // -- LOO
-  leaveOneOutCheckBox_ = new QCheckBox;
-  validationLayout->addWidget(leaveOneOutCheckBox_, 0, 0);
-  validationLayout->addWidget(new QLabel(tr("Compute Q2 by Leave-one-out")), 0, 1);
-  validationLayout->setColumnStretch(2, 1);
-  pageLayout->addWidget(validationGroupBox);
 
   // functional chaos advanced parameters
   CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
@@ -116,7 +104,6 @@ void FunctionalChaosPage::initialize(const Analysis& analysis)
   inputSampleDimension_ = inputDimension;
 
   chaosDegreeSpinbox_->setValue(analysis_ptr->getChaosDegree());
-  leaveOneOutCheckBox_->setChecked(analysis_ptr->isLeaveOneOutValidation());
   sparseCheckBox_->setChecked(analysis_ptr->getSparseChaos());
 }
 
@@ -126,7 +113,6 @@ Analysis FunctionalChaosPage::getAnalysis(const String& name, const DesignOfExpe
   FunctionalChaosAnalysis analysis(name, doe);
 
   analysis.setChaosDegree(chaosDegreeSpinbox_->value());
-  analysis.setLeaveOneOutValidation(leaveOneOutCheckBox_->isChecked());
   analysis.setSparseChaos(sparseCheckBox_->isChecked());
 
   return analysis;
@@ -153,7 +139,7 @@ bool FunctionalChaosPage::validatePage()
     const QString errorMessage = tr("Design of experiments size too small : %1. It must be superior or equal to C(degree+nbInputs, degree) = %2")
                                  .arg(inputSampleSize_)
                                  .arg(minimumSize);
-    errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(errorMessage).arg("</font>"));
+    errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
     return false;
   }
   return QWizardPage::validatePage();

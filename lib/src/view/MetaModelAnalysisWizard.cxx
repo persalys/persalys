@@ -99,6 +99,12 @@ void MetaModelAnalysisWizard::buildInterface()
   setPage(Page_KrigingMethod, krigingPage_);
   connect(introPage_, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), krigingPage_, SLOT(updateCovarianceModel(DesignOfExperiment)));
 
+  // validation page
+  validationPage_ = new MetaModelValidationPage(this);
+  validationPage_->initialize(analysis_);
+  setPage(Page_Validation, validationPage_);
+  connect(introPage_, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), validationPage_, SLOT(updateInputSampleSize(DesignOfExperiment)));
+
   // initialization
   introPage_->initialize(analysis_, doeList_);
   krigingPage_->initialize(analysis_);
@@ -113,6 +119,9 @@ int MetaModelAnalysisWizard::nextId() const
   {
     case Page_Intro:
       return introPage_->nextId();
+    case Page_ChaosMethod:
+    case Page_KrigingMethod:
+      return Page_Validation;
     default:
       return -1;
   }
@@ -132,6 +141,9 @@ bool MetaModelAnalysisWizard::validateCurrentPage()
 
     analysis_.getImplementation()->setInterestVariables(introPage_->getInterestVariables());
   }
+  if (currentId() == Page_Validation)
+    validationPage_->updateMetamodelValidation(analysis_);
+
   return QWizard::validateCurrentPage();
 }
 }

@@ -53,7 +53,6 @@ public slots:
 private:
   OT::UnsignedInteger inputSampleSize_;
   OT::UnsignedInteger inputSampleDimension_;
-  QCheckBox * leaveOneOutCheckBox_;
   QSpinBox * chaosDegreeSpinbox_;
   QCheckBox * sparseCheckBox_;
   QLabel * errorMessageLabel_;

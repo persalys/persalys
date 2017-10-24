@@ -27,6 +27,8 @@
 #include "otgui/QtTools.hxx"
 
 #include <openturns/OTBase.hxx>
+#include <openturns/RandomGenerator.hxx>
+#include <openturns/KPermutationsDistribution.hxx>
 
 #include <QGroupBox>
 #include <QScrollArea>
@@ -90,12 +92,14 @@ void KrigingResultWindow::buildInterface()
 
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
-    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSample().getMarginal(i),
-        result_.getOutputSample().getMarginal(i),
-        -1.0,
-        -1.0,
-        "",
-        this);
+    MetaModelValidationResult fakeResu(result_.getMetaModelOutputSample(),
+                                       Point(1, -1.),
+                                       Point(1, -1.));
+    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(fakeResu,
+                                                                                 result_.getOutputSample(),
+                                                                                 i,
+                                                                                 "",
+                                                                                 this);
 
     plotsStackedWidget->addWidget(validationWidget);
   }
@@ -123,37 +127,15 @@ void KrigingResultWindow::buildInterface()
                 << tr("Amplitude");
 
       QStringList valuesList;
-      // scale
-      QString scaleText;
-      for (UnsignedInteger j = 0; j < result_.getKrigingResultCollection()[i].getCovarianceModel().getScale().getSize(); ++j)
-      {
-        scaleText += QString::number(result_.getKrigingResultCollection()[i].getCovarianceModel().getScale()[j]);
-        if (j < result_.getKrigingResultCollection()[i].getCovarianceModel().getScale().getSize() - 1)
-          scaleText += "; ";
-      }
-      valuesList << scaleText;
-
-      // amplitude
-      QString amplitudeText;
-      for (UnsignedInteger j = 0; j < result_.getKrigingResultCollection()[i].getCovarianceModel().getAmplitude().getSize(); ++j)
-      {
-        amplitudeText += QString::number(result_.getKrigingResultCollection()[i].getCovarianceModel().getAmplitude()[j]);
-        if (j < result_.getKrigingResultCollection()[i].getCovarianceModel().getAmplitude().getSize() - 1)
-          amplitudeText += "; ";
-      }
-      valuesList << amplitudeText;
+      valuesList << QtOT::PointToString(result_.getKrigingResultCollection()[i].getCovarianceModel().getScale())
+                 << QtOT::PointToString(result_.getKrigingResultCollection()[i].getCovarianceModel().getAmplitude());
 
       ParametersWidget * table = new ParametersWidget(tr("Optimized covariance model parameters"), namesList, valuesList, true, true);
       resultWidgetLayout->addWidget(table);
     }
 
-    QString trendCoefText;
-    for (UnsignedInteger j = 0; j < result_.getKrigingResultCollection()[i].getTrendCoefficients()[0].getSize(); ++j)
-    {
-      trendCoefText += QString::number(result_.getKrigingResultCollection()[i].getTrendCoefficients()[0][j]);
-      if (j < result_.getKrigingResultCollection()[i].getTrendCoefficients()[0].getSize() - 1)
-        trendCoefText += "; ";
-    }
+    // trend coef
+    QString trendCoefText = QtOT::PointToString(result_.getKrigingResultCollection()[i].getTrendCoefficients()[0]);
     ParametersWidget * trendCoefTable = new ParametersWidget(tr("Trend"), QStringList() << tr("Trend coefficients"), QStringList() << trendCoefText, true, true);
     resultWidgetLayout->addWidget(trendCoefTable);
     resultWidgetLayout->setRowStretch(optimizeParameters_ ? 2 : 1, 1);
@@ -166,30 +148,61 @@ void KrigingResultWindow::buildInterface()
   scrollArea->setWidget(resultStackedWidget);
   tabWidget->addTab(scrollArea, tr("Results"));
 
-  // third tab : GRAPH METAMODEL LOO --------------------------------
-  if (result_.getMetaModelOutputSampleLeaveOneOut().getSize())
+  // third tab : VALIDATION --------------------------------
+  if (result_.getValidations().size())
   {
     QTabWidget * validationTabWidget = new QTabWidget;
 
-    tab = new QWidget;
-    tabLayout = new QVBoxLayout(tab);
-
-    ResizableStackedWidget * plotsLOOStackedWidget = new ResizableStackedWidget;
-    connect(outputsListWidget, SIGNAL(currentRowChanged(int)), plotsLOOStackedWidget, SLOT(setCurrentIndex(int)));
-
-    for (UnsignedInteger i = 0; i < nbOutputs; ++i)
+    // for each validation
+    for (UnsignedInteger i = 0; i < result_.getValidations().size(); ++i)
     {
-      MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getMetaModelOutputSampleLeaveOneOut().getMarginal(i),
-          result_.getOutputSample().getMarginal(i),
-          result_.getErrorQ2LeaveOneOut()[i],
-          result_.getQ2LeaveOneOut()[i],
-          tr("Q2"),
-          this);
-      plotsLOOStackedWidget->addWidget(validationWidget);
-    }
-    tabLayout->addWidget(plotsLOOStackedWidget);
+      tab = new QWidget;
+      tabLayout = new QVBoxLayout(tab);
 
-    validationTabWidget->addTab(plotsLOOStackedWidget, tr("Leave-one-out"));
+      ResizableStackedWidget * plotStackedWidget = new ResizableStackedWidget;
+      connect(outputsListWidget, SIGNAL(currentRowChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
+
+      // retrieve the output sample
+      Sample outputSample(result_.getOutputSample());
+      if (result_.getValidations()[i].getName() == "Test sample")
+      {
+        // search seed: we know the index of the seed but this method is more robust
+        UnsignedInteger seed = 0;
+        bool parameterFound = false;
+        for (UnsignedInteger j = 0; j < result_.getValidations()[i].getParameters().getSize(); ++j)
+        {
+          if (result_.getValidations()[i].getParameters().getDescription()[j] == "Seed")
+          {
+            seed = result_.getValidations()[i].getParameters()[j];
+            parameterFound = true;
+          }
+        }
+        Q_ASSERT(parameterFound);
+        RandomGenerator::SetSeed(seed);
+        const UnsignedInteger testSampleSize = result_.getValidations()[i].getMetaModelOutputSample().getSize();
+        Point indicesTestSample(KPermutationsDistribution(testSampleSize, outputSample.getSize()).getRealization());
+        outputSample = Sample(testSampleSize, nbOutputs);
+        std::sort(indicesTestSample.begin(), indicesTestSample.end());
+
+        for (UnsignedInteger j = 0; j < testSampleSize; ++j)
+        {
+          outputSample[j] = result_.getOutputSample()[indicesTestSample[j]];
+        }
+      }
+      // validation widget
+      for (UnsignedInteger j = 0; j < nbOutputs; ++j)
+      {
+        MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getValidations()[i],
+                                                                                     outputSample,
+                                                                                     j,
+                                                                                     tr("Q2"),
+                                                                                     this);
+        plotStackedWidget->addWidget(validationWidget);
+      }
+      tabLayout->addWidget(plotStackedWidget);
+
+      validationTabWidget->addTab(plotStackedWidget, result_.getValidations()[i].getName().c_str());
+    }
     tabWidget->addTab(validationTabWidget, tr("Validation"));
   }
 
