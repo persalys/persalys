@@ -21,7 +21,7 @@
 #ifndef OTGUI_PARAMETERSWIDGET_HXX
 #define OTGUI_PARAMETERSWIDGET_HXX
 
-#include "otgui/OTGuiprivate.hxx"
+#include "otgui/OTTools.hxx"
 
 #include <QGroupBox>
 
@@ -35,6 +35,10 @@ public:
                    const QStringList values,            // parameters values
                    const bool showGrid = false,         // show the grid of the table
                    const bool namesHasHeaderType = false, // parameters names display has table header
+                   QWidget * parent = 0
+                  );
+  ParametersWidget(const QString title,                  // table title
+                   const Parameters& analysisParameters, // parameters names and values
                    QWidget * parent = 0
                   );
 };
