@@ -431,51 +431,16 @@ String GridDesignOfExperiment::getPythonScript() const
 {
   OSS oss;
 
-  oss << "values = [";
-  for (UnsignedInteger i = 0; i < values_.getSize(); ++ i)
-  {
-    oss << values_[i];
-    if (i < values_.getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
-  oss << "lowerBounds = [";
-  for (UnsignedInteger i = 0; i < lowerBounds_.getSize(); ++ i)
-  {
-    oss << lowerBounds_[i];
-    if (i < lowerBounds_.getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
-  oss << "upperBounds = [";
-  for (UnsignedInteger i = 0; i < upperBounds_.getSize(); ++ i)
-  {
-    oss << upperBounds_[i];
-    if (i < upperBounds_.getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
-  oss << "levels = [";
-  for (UnsignedInteger i = 0; i < levels_.getSize(); ++ i)
-  {
-    oss << levels_[i];
-    if (i < levels_.getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
+  oss << "values = " << values_.__str__() << "\n";
+  oss << "lowerBounds = " << lowerBounds_.__str__() << "\n";
+  oss << "upperBounds = " << upperBounds_.__str__() << "\n";
+  oss << "levels = " << levels_.__str__() << "\n";
 
   oss << getName() << " = otguibase.GridDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", ";
   oss << "lowerBounds, upperBounds, levels, values)\n";
 
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
-  oss << "interestVariables = [";
-  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
-  {
-    oss << "'" << getInterestVariables()[i] << "'";
-    if (i < getInterestVariables().getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
+  oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
   oss << getName() << ".setInterestVariables(interestVariables)\n";
 
   return oss;

@@ -458,7 +458,7 @@ String KrigingAnalysis::getPythonScript() const
   // interest outputs
   if (getInterestVariables().getSize() < getDesignOfExperiment().getOutputSample().getDimension())
   {
-    oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables());
+    oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
     oss << getName() << ".setInterestVariables(interestVariables)\n";
   }
   // basis

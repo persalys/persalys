@@ -390,7 +390,7 @@ String FunctionalChaosAnalysis::getPythonScript() const
   oss << getName() << " = otguibase.FunctionalChaosAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
   if (getInterestVariables().getSize() < getDesignOfExperiment().getOutputSample().getDimension())
   {
-    oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables());
+    oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
     oss << getName() << ".setInterestVariables(interestVariables)\n";
   }
   oss << getName() << ".setChaosDegree(" << getChaosDegree() << ")\n";

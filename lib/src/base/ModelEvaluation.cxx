@@ -162,22 +162,30 @@ Point ModelEvaluation::getOutputValues() const
 }
 
 
+Parameters ModelEvaluation::getParameters() const
+{
+  Parameters param;
+
+  param.add("Outputs of interest", getInterestVariables().__str__());
+  param.add("Point", getInputValues());
+
+  return param;
+}
+
+
 String ModelEvaluation::getPythonScript() const
 {
   String result;
 
   OSS oss;
-  oss << "values = [";
-  for (UnsignedInteger i = 0; i < inputValues_.getSize(); ++i)
-  {
-    oss << inputValues_[i];
-    if (i < inputValues_.getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
-  oss << oss.str();
+  oss << "values = " << inputValues_.__str__() << "\n";
   oss << getName() << " = otguibase.ModelEvaluation('" << getName() << "', " << getPhysicalModel().getName();
   oss << ", values)\n";
+  if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
+  {
+    oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
+    oss << getName() << ".setInterestVariables(interestVariables)\n";
+  }
 
   return oss;
 }

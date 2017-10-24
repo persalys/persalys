@@ -81,6 +81,29 @@ void ImportanceSamplingAnalysis::setStandardSpaceDesignPoint(const Point& point)
 }
 
 
+Parameters ImportanceSamplingAnalysis::getParameters() const
+{
+  Parameters param;
+
+  param.add("Algorithm", "Importance sampling");
+  param.add("Output of interest", getLimitState().getOutputName());
+  param.add("Design point (standard space)", getStandardSpaceDesignPoint());
+  param.add("Maximum coefficient of variation", getMaximumCoefficientOfVariation());
+  String time = "- (s)";
+  if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
+    time = (OSS() << getMaximumElapsedTime()).str() + "(s)";
+  param.add("Maximum elapsed time", time);
+  String maxCalls = "-";
+  if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
+    maxCalls = (OSS() << getMaximumCalls()).str();
+  param.add("Maximum calls", maxCalls);
+  param.add("Block size", getBlockSize());
+  param.add("Seed", getSeed());
+
+  return param;
+}
+
+
 String ImportanceSamplingAnalysis::getPythonScript() const
 {
   OSS oss;

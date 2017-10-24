@@ -48,6 +48,7 @@ public:
   OT::Sample getFailedInputSample() const;
   OT::Sample getNotEvaluatedInputSample() const;
 
+  virtual Parameters getParameters() const;
   virtual void run();
 
   /** Method save() stores the object through the StorageManager */

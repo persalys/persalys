@@ -219,14 +219,8 @@ String CopulaInferenceAnalysis::getPythonScript() const
   for (it = distFactoriesForSetVar_.begin(); it != distFactoriesForSetVar_.end(); ++it)
   {
     // variables list
-    oss << "variablesSet = [";
-    for (UnsignedInteger j = 0; j < it->first.getSize(); ++j)
-    {
-      oss << "'" << it->first[j] << "'";
-      if (j < it->first.getSize() - 1)
-        oss << ", ";
-    }
-    oss << "]\n";
+    oss << "variablesSet = " << Parameters::GetOTDescriptionStr(it->first) << "\n";
+
     // factories list
     oss << "factories = [";
     for (UnsignedInteger j = 0; j < it->second.getSize(); ++j)

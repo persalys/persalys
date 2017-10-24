@@ -191,27 +191,13 @@ String ImportedDesignOfExperiment::getPythonScript() const
 {
   OSS oss;
 
-  oss << "inputColumns = [";
-  for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++ i)
-  {
-    oss << inputColumns_[i];
-    if (i < inputColumns_.getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
+  oss << "inputColumns = " << inputColumns_.__str__() << "\n";
 
   oss << getName() << " = otguibase.ImportedDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", ";
   oss << "'" << fileName_ << "', inputColumns)\n";
 
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
-  oss << "interestVariables = [";
-  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
-  {
-    oss << "'" << getInterestVariables()[i] << "'";
-    if (i < getInterestVariables().getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
+  oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
   oss << getName() << ".setInterestVariables(interestVariables)\n";
 
   return oss;

@@ -123,9 +123,6 @@ void SRCAnalysis::run()
     const Sample effectiveInputSample(inputSample, 0, outputSample.getSize());
     for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
     {
-      Description outputName(1);
-      outputName[0] = getInterestVariables()[i];
-
       indices.add(CorrelationAnalysis::SRC(effectiveInputSample, outputSample.getMarginal(i)));
     }
 
@@ -157,6 +154,20 @@ SRCResult SRCAnalysis::getResult() const
 }
 
 
+Parameters SRCAnalysis::getParameters() const
+{
+  Parameters param;
+
+  param.add("Algorithm", "Standardized Regression Coefficients");
+  param.add("Outputs of interest", getInterestVariables().__str__());
+  param.add("Sample size", getSimulationsNumber());
+  param.add("Block size", getBlockSize());
+  param.add("Seed", getSeed());
+
+  return param;
+}
+
+
 String SRCAnalysis::getPythonScript() const
 {
   OSS oss;
@@ -164,14 +175,7 @@ String SRCAnalysis::getPythonScript() const
   oss << ", " << getSimulationsNumber() << ")\n";
   if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {
-    oss << "interestVariables = [";
-    for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
-    {
-      oss << "'" << getInterestVariables()[i] << "'";
-      if (i < getInterestVariables().getSize() - 1)
-        oss << ", ";
-    }
-    oss << "]\n";
+    oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
     oss << getName() << ".setInterestVariables(interestVariables)\n";
   }
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";

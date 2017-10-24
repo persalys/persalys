@@ -49,6 +49,7 @@ public:
   DesignOfExperiment getDesignOfExperiment() const;
   OT::Point getOutputValues() const;
 
+  virtual Parameters getParameters() const;
   virtual void run();
   virtual OT::String getPythonScript() const;
   virtual bool analysisLaunched() const;
