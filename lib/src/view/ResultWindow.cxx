@@ -20,6 +20,8 @@
  */
 #include "otgui/ResultWindow.hxx"
 
+#include "otgui/TranslationManager.hxx"
+
 #include <QGridLayout>
 
 using namespace OT;
@@ -36,15 +38,12 @@ ResultWindow::ResultWindow(AnalysisItem * item, QWidget * parent)
 
 void ResultWindow::setParameters(const Analysis& analysis, const QString& title)
 {
-  QStringList paramNames;
-  QStringList paramValues;
-  AnalysisItem::GetAnalysisParameters(analysis, paramNames, paramValues);
-
-  if (!paramNames.isEmpty() && paramNames.size() == paramValues.size())
+  const Parameters analysisParameters(analysis.getImplementation()->getParameters());
+  if (analysisParameters.getSize())
   {
     parametersWidget_ = new QWidget;
     QGridLayout * parametersWidgetLayout = new QGridLayout(parametersWidget_);
-    parametersWidgetLayout->addWidget(new ParametersWidget(title, paramNames, paramValues));
+    parametersWidgetLayout->addWidget(new ParametersWidget(title, analysisParameters));
   }
 }
 }

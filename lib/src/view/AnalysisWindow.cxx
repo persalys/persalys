@@ -22,6 +22,7 @@
 
 #include "otgui/Controller.hxx"
 #include "otgui/ParametersWidget.hxx"
+#include "otgui/TranslationManager.hxx"
 
 #include <QHBoxLayout>
 
@@ -60,12 +61,10 @@ void AnalysisWindow::buildInterface()
   QGridLayout * mainLayout = new QGridLayout(mainWidget);
 
   // analysis parameters widget
-  QStringList paramNames;
-  QStringList paramValues;
-  AnalysisItem::GetAnalysisParameters(analysisItem_->getAnalysis(), paramNames, paramValues);
-  if (!paramNames.isEmpty())
+  const Parameters analysisParameters(analysisItem_->getAnalysis().getImplementation()->getParameters());
+  if (analysisParameters.getSize())
   {
-    ParametersWidget * parametersWidget_ = new ParametersWidget(tr("Analysis parameters"), paramNames, paramValues);
+    ParametersWidget * parametersWidget_ = new ParametersWidget(tr("Analysis parameters"), analysisParameters);
     mainLayout->addWidget(parametersWidget_, 0, 0);
   }
 
