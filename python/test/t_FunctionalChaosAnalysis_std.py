@@ -78,7 +78,7 @@ print("result=", chaosResult2)
 print("functionalChaosResult", chaosResult2.getFunctionalChaosResult())
 
 ott.assert_almost_equal(
-    [0.9223441081335271], chaosResult2.getQ2LeaveOneOut(), 1e-16)
+    [0.9223441081335271], chaosResult2.getLeaveOneOutValidation().getQ2(), 1e-16)
 
 # extract metamodel
 metamodel = chaosResult2.getMetaModel()
