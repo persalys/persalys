@@ -484,6 +484,7 @@ void DataAnalysisWindow::addTableTab()
   SampleTableModel * tableModel = new SampleTableModel(designOfExperiment_.getSample(), tableView);
   QSortFilterProxyModel * proxyModel = new QSortFilterProxyModel(tableView);
   proxyModel->setSourceModel(tableModel);
+  proxyModel->setSortRole(Qt::UserRole);
 
   tableView->setModel(proxyModel);
   tableView->sortByColumn(0, Qt::AscendingOrder);
@@ -512,6 +513,7 @@ void DataAnalysisWindow::addTableTab()
       tableModel = new SampleTableModel(failedInputSample_, tableView);
       proxyModel = new QSortFilterProxyModel(tableView);
       proxyModel->setSourceModel(tableModel);
+      proxyModel->setSortRole(Qt::UserRole);
       tableView->setModel(proxyModel);
       tableView->sortByColumn(0, Qt::AscendingOrder);
 
@@ -525,6 +527,7 @@ void DataAnalysisWindow::addTableTab()
       tableModel = new SampleTableModel(notEvaluatedInputSample_, tableView);
       proxyModel = new QSortFilterProxyModel(tableView);
       proxyModel->setSourceModel(tableModel);
+      proxyModel->setSortRole(Qt::UserRole);
       tableView->setModel(proxyModel);
       tableView->sortByColumn(0, Qt::AscendingOrder);
 
