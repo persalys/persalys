@@ -59,6 +59,8 @@ DataAnalysisWindow::DataAnalysisWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
   , designOfExperiment_()
   , result_()
+  , analysisStopCriteriaMessage_()
+  , analysisErrorMessage_()
   , failedInputSample_()
   , notEvaluatedInputSample_()
   , resultsSampleIsValid_(true)
@@ -210,21 +212,36 @@ void DataAnalysisWindow::addSummaryTab()
   QVBoxLayout * vbox = new QVBoxLayout;
 
   // stop criteria
-  QString groupBoxTitle = (result_.getElapsedTime() > 0.) ? tr("Stop criteria") : tr("");
+  const QString groupBoxTitle = (analysisStopCriteriaMessage_.isEmpty()) ? tr("") : tr("Stop criteria");
   QGroupBox * parametersGroupBox = new QGroupBox(groupBoxTitle);
   QVBoxLayout * parametersGroupBoxLayout = new QVBoxLayout(parametersGroupBox);
 
-  QStringList namesList;
-  // elapsed time
-  if (result_.getElapsedTime() > 0.)
-    namesList << tr("Elapsed time");
-  // sample size
-  namesList << sampleSizeTitle_;
+  // - if algo with a stop criteria
+  if (!analysisStopCriteriaMessage_.isEmpty())
+  {
+    QLabel * stopCriteriaLabel = new QLabel(analysisStopCriteriaMessage_);
+    parametersGroupBoxLayout->addWidget(stopCriteriaLabel);
+  }
+  // - if algo with a error message
+  if (!analysisErrorMessage_.isEmpty())
+  {
+    QLabel * analysisErrorMessageLabel = new QLabel(QString("<font color=red>%1</font>").arg(analysisErrorMessage_));
+    analysisErrorMessageLabel->setWordWrap(true);
+    parametersGroupBoxLayout->addWidget(analysisErrorMessageLabel);
+  }
 
+  // parameters values
+  QStringList namesList;
   QStringList valuesList;
-  if (result_.getElapsedTime() > 0.)
-    valuesList << QString::number(result_.getElapsedTime()) + " s";
+  // - sample size
+  namesList << sampleSizeTitle_;
   valuesList << QString::number(designOfExperiment_.getSample().getSize());
+  // - elapsed time
+  if (result_.getElapsedTime() > 0.)
+  {
+    namesList << tr("Elapsed time");
+    valuesList << QString::number(result_.getElapsedTime()) + " s";
+  }
 
   ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
   parametersGroupBoxLayout->addWidget(table);
@@ -498,7 +515,7 @@ void DataAnalysisWindow::addTableTab()
       tableView->setModel(proxyModel);
       tableView->sortByColumn(0, Qt::AscendingOrder);
 
-      tablesTabWidget->addTab(tableView, tr("Failed points"));
+      tablesTabWidget->addTab(tableView, tr("Failed blocks"));
     }
     // tab with not evaluated points
     if (notEvaluatedInputSample_.getSize())
@@ -587,7 +604,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
 
       // set columns name
       Description desc(designOfExperiment_.getInputSample().getDescription());
-      desc.add(tr("Status").toUtf8().constData());
+      desc.add(tr("Status\n0: failed; 1: ok").toUtf8().constData());
       succeedAndFailedInS.setDescription(desc);
 
       cobwebWidget->setData(succeedAndFailedInS);

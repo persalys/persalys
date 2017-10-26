@@ -68,6 +68,8 @@ signals:
 protected:
   DesignOfExperiment designOfExperiment_;
   DataAnalysisResult result_;
+  QString analysisStopCriteriaMessage_;
+  QString analysisErrorMessage_;
   OT::Sample failedInputSample_;
   OT::Sample notEvaluatedInputSample_;
   bool resultsSampleIsValid_;
