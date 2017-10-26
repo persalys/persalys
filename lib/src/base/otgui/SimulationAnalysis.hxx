@@ -39,6 +39,7 @@ public:
   virtual SimulationAnalysis * clone() const = 0;
 
   DesignOfExperiment getDesignOfExperiment() const;
+  OT::Sample getFailedInputSample() const;
 
   OT::UnsignedInteger getBlockSize() const;
   virtual void setBlockSize(const OT::UnsignedInteger size);
@@ -62,6 +63,7 @@ protected:
 
 protected:
   DesignOfExperiment designOfExperiment_;
+  OT::Sample failedInputSample_;
 private:
   OT::UnsignedInteger blockSize_;
   OT::UnsignedInteger seed_;

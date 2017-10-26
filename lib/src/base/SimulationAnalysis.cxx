@@ -29,6 +29,7 @@ namespace OTGUI
 SimulationAnalysis::SimulationAnalysis()
   : PhysicalModelAnalysis()
   , designOfExperiment_()
+  , failedInputSample_()
   , blockSize_(1)
   , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
@@ -39,30 +40,22 @@ SimulationAnalysis::SimulationAnalysis()
 SimulationAnalysis::SimulationAnalysis(const String & name, const PhysicalModel & physicalModel)
   : PhysicalModelAnalysis(name, physicalModel)
   , designOfExperiment_(name, physicalModel)
+  , failedInputSample_()
   , blockSize_(1)
   , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
 }
 
 
-Sample SimulationAnalysis::generateInputSample(const UnsignedInteger nbSimu) const
+DesignOfExperiment SimulationAnalysis::getDesignOfExperiment() const
 {
-  Sample inputSample(getPhysicalModel().getInputRandomVector().getSample(nbSimu));
-  inputSample.setDescription(getPhysicalModel().getStochasticInputNames());
-  return inputSample;
+  return designOfExperiment_;
 }
 
 
-Sample SimulationAnalysis::computeOutputSample(const Sample& inputSample) const
+Sample SimulationAnalysis::getFailedInputSample() const
 {
-  Sample outputSample(getPhysicalModel().getRestrictedFunction(getInterestVariables())(inputSample));
-  return outputSample;
-}
-
-
-Sample SimulationAnalysis::computeOutputSample(const Point& inputValues) const
-{
-  return computeOutputSample(Sample(1, inputValues));
+  return failedInputSample_;
 }
 
 
@@ -93,16 +86,31 @@ void SimulationAnalysis::setSeed(const UnsignedInteger seed)
 }
 
 
+Sample SimulationAnalysis::generateInputSample(const UnsignedInteger nbSimu) const
+{
+  Sample inputSample(getPhysicalModel().getInputRandomVector().getSample(nbSimu));
+  inputSample.setDescription(getPhysicalModel().getStochasticInputNames());
+  return inputSample;
+}
+
+
+Sample SimulationAnalysis::computeOutputSample(const Sample& inputSample) const
+{
+  Sample outputSample(getPhysicalModel().getRestrictedFunction(getInterestVariables())(inputSample));
+  return outputSample;
+}
+
+
+Sample SimulationAnalysis::computeOutputSample(const Point& inputValues) const
+{
+  return computeOutputSample(Sample(1, inputValues));
+}
+
+
 void SimulationAnalysis::initialize()
 {
   PhysicalModelAnalysis::initialize();
   designOfExperiment_.getImplementation()->initialize();
-}
-
-
-DesignOfExperiment SimulationAnalysis::getDesignOfExperiment() const
-{
-  return designOfExperiment_;
 }
 
 
@@ -117,6 +125,7 @@ void SimulationAnalysis::save(Advocate & adv) const
 {
   PhysicalModelAnalysis::save(adv);
   adv.saveAttribute("designOfExperiment_", designOfExperiment_);
+  adv.saveAttribute("failedInputSample_", failedInputSample_);
   adv.saveAttribute("blockSize_", blockSize_);
   adv.saveAttribute("seed_", seed_);
 }
@@ -127,6 +136,7 @@ void SimulationAnalysis::load(Advocate & adv)
 {
   PhysicalModelAnalysis::load(adv);
   adv.loadAttribute("designOfExperiment_", designOfExperiment_);
+  adv.loadAttribute("failedInputSample_", failedInputSample_);
   adv.loadAttribute("blockSize_", blockSize_);
   adv.loadAttribute("seed_", seed_);
 }
