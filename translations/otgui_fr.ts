@@ -1674,32 +1674,32 @@ métamodèle</translation>
 <context>
     <name>OTGUI::FunctionalChaosPage</name>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="48"/>
+        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="50"/>
         <source>Functional chaos parameters</source>
         <translation>Paramètres du chaos fonctionnel</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="53"/>
+        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="55"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="57"/>
+        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="59"/>
         <source>Polynomial degree</source>
         <translation>Degrée du polynôme</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="66"/>
+        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="68"/>
         <source>Advanced parameters</source>
         <translation>Paramètres avancés</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="69"/>
+        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="71"/>
         <source>Sparse</source>
         <translation>Creux</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="137"/>
+        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="139"/>
         <source>Design of experiments size too small : %1. It must be superior or equal to C(degree+nbInputs, degree) = %2</source>
         <translation>La taille du plan d&apos;expériences est trop petite : %1. Elle doit être supérieure ou égale à C(degree+nbInputs, degree) = %2</translation>
     </message>
@@ -1707,110 +1707,110 @@ métamodèle</translation>
 <context>
     <name>OTGUI::FunctionalChaosResultWindow</name>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="59"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="60"/>
         <source>Metamodel creation parameters</source>
         <translation>Paramètres de création du métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="103"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="104"/>
         <source>Relative error</source>
         <translation>Erreur relative</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="110"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="111"/>
         <source>Metamodel</source>
         <translation>Métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="67"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="68"/>
         <source>Functional chaos results</source>
         <translation>Résults de chaos fonctionnel</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="76"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="77"/>
         <source>Outputs</source>
         <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="119"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="120"/>
         <source>Moments estimates</source>
         <translation>Estimations des moments</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="131"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="132"/>
         <source>Estimate</source>
         <translation>Estimation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="132"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="133"/>
         <source>Mean</source>
         <translation>Moyenne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="133"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="134"/>
         <source>Variance</source>
         <translation>Variance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="134"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="135"/>
         <source>Standard deviation</source>
         <translation>Écart type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="136"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="137"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="153"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="154"/>
         <source>Polynomial basis</source>
         <translation>Base polynômiale</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="164"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="165"/>
         <source>Dimension</source>
         <translation>Dimension</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="165"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="166"/>
         <source>Maximum degree</source>
         <translation>Degré maximum</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="166"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="167"/>
         <source>Full basis size</source>
         <translation>Taille de la base complète</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="166"/>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="179"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="167"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="180"/>
         <source>Basis size</source>
         <translation>Taille de la base</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="200"/>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="211"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="201"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="212"/>
         <source>Summary</source>
         <translation>Résumé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="236"/>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="247"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="237"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="248"/>
         <source>Sobol indices</source>
         <translation>Indices de Sobol</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="297"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="298"/>
         <source>Q2</source>
         <translation>Q2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="306"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="307"/>
         <source>Validation</source>
         <translation>Validation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="311"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="312"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -2729,7 +2729,7 @@ Voulez-vous continuer et fermer les autres études ?</translation>
     </message>
     <message>
         <location filename="../lib/src/view/MetaModelValidationPage.cxx" line="77"/>
-        <location filename="../lib/src/view/MetaModelValidationPage.cxx" line="98"/>
+        <location filename="../lib/src/view/MetaModelValidationPage.cxx" line="97"/>
         <source>Seed</source>
         <translation>Graine</translation>
     </message>
@@ -2744,14 +2744,24 @@ Voulez-vous continuer et fermer les autres études ?</translation>
         <translation>Nombre de plis</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelValidationPage.cxx" line="107"/>
+        <location filename="../lib/src/view/MetaModelValidationPage.cxx" line="106"/>
         <source>By Leave-one-out method</source>
         <translation>Par la méthode de Leave-one-out</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelValidationPage.cxx" line="126"/>
+        <location filename="../lib/src/view/MetaModelValidationPage.cxx" line="133"/>
         <source>Training sample size :</source>
         <translation>Taille de l&apos;échantillon d&apos;apprentissage :</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MetaModelValidationPage.cxx" line="182"/>
+        <source>Test sample validation: The test sample must contain at least three points. Here size * k / 100 = %1</source>
+        <translation>Validation avec échantillon de test : l&apos;échantillon de test doit contenir au moins trois points. Ici taille * k / 100 = %1</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MetaModelValidationPage.cxx" line="190"/>
+        <source>K-Fold validation: each fold must contain at least three points. Here size / k = %1</source>
+        <translation>Validation K-Fold : chaque pli doit contenir au moins trois points. Ici taille / k = %1</translation>
     </message>
 </context>
 <context>
@@ -4374,12 +4384,12 @@ métamodèle</translation>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="828"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="818"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="828"/>
+        <location filename="../lib/src/view/ProbabilisticModelWindow.cxx" line="818"/>
         <source>The current study has not inference analyses results.</source>
         <translation>L&apos;étude courante n&apos;a aucun résultat d&apos;inférence.</translation>
     </message>
