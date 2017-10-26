@@ -49,6 +49,7 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
 
   result_ = analysis.getResult();
   designOfExperiment_ = result_.getDesignOfExperiment();
+  failedInputSample_ = analysis.getFailedInputSample();
 
   isConfidenceIntervalRequired_ = analysis.isConfidenceIntervalRequired();
   levelConfidenceInterval_ = analysis.getLevelConfidenceInterval();
