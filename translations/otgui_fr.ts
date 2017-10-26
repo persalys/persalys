@@ -553,117 +553,155 @@ Début : %2.</translation>
 <context>
     <name>OTGUI::DataAnalysisWindow</name>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="65"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="67"/>
         <source>Sample size</source>
         <translation>Taille d&apos;échantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="136"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="138"/>
         <source>Variables</source>
         <translation>Variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="213"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="215"/>
         <source>Stop criteria</source>
         <translation>Critère d&apos;arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="220"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="242"/>
         <source>Elapsed time</source>
         <translation>Durée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="261"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="280"/>
         <source>Probability</source>
         <translation>Probabilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="271"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="290"/>
         <source>Quantile</source>
         <translation>Quantile</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="289"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="309"/>
         <source>Summary</source>
         <translation>Résumé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="357"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="377"/>
         <source>PDF/CDF</source>
         <translation>PDF/CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="408"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="428"/>
         <source>Box plots</source>
         <translation>Boîtes à moustaches</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="424"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="521"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="444"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="728"/>
         <source>Plot matrix</source>
         <translation>Tableau de diagrammes de dispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="454"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="547"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="474"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="678"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="750"/>
         <source>Scatter plots</source>
         <translation>Diagrammes de dispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="475"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="487"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="499"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="534"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="557"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="564"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="681"/>
         <source>Table</source>
         <translation>Table</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="193"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="195"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="319"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="339"/>
         <source>distributionPDF</source>
         <translation>distributionPDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="323"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="343"/>
         <source>PDF:</source>
         <translation>PDF :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="325"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="345"/>
         <source>Density</source>
         <translation>Densité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="330"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="350"/>
         <source>distributionCDF</source>
         <translation>distributionCDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="334"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="354"/>
         <source>CDF:</source>
         <translation>CDF :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="336"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="356"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="384"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="404"/>
         <source>boxplot</source>
         <translation>boiteAmoustaches</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="390"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="410"/>
         <source>Box plot:</source>
         <translation>Boîte à moustaches :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="509"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="505"/>
+        <source>Points</source>
+        <translation>Points</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="518"/>
+        <source>Failed blocks</source>
+        <translation>Blocs échoués</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="531"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="580"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="644"/>
+        <source>Not evaluated points</source>
+        <translation>Points non évalués</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="572"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="637"/>
+        <source>Failed points</source>
+        <translation>Points échoués</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="607"/>
+        <source>Status</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="618"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="712"/>
         <source>Cobweb plot</source>
         <translation>Graphique Cobweb</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="631"/>
+        <source>Succeed points</source>
+        <translation>Points réussis</translation>
     </message>
 </context>
 <context>
@@ -1161,87 +1199,24 @@ métamodèle</translation>
 <context>
     <name>OTGUI::DesignOfExperimentWindow</name>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="61"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="60"/>
         <source>Design of experiments</source>
         <translation>Plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="82"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="81"/>
         <source>Outputs</source>
         <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="163"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="381"/>
-        <source>DOE</source>
-        <translation>PEX</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="230"/>
-        <source>Succeed points</source>
-        <translation>Points réussis</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="280"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="410"/>
-        <source>Table</source>
-        <translation>Table</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="217"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="302"/>
-        <source>Cobweb plot</source>
-        <translation>Graphique Cobweb</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="313"/>
-        <source>Plot matrix</source>
-        <translation>Tableau de diagrammes de dispersion</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="171"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="236"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="394"/>
-        <source>Failed points</source>
-        <translation>Points échoués</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="179"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="243"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="407"/>
-        <source>Not evaluated points</source>
-        <translation>Points non évalués</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="122"/>
-        <source>Sample size</source>
-        <translation>Taille d&apos;échantillon</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="76"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="75"/>
         <source>Design of experiments evaluation parameters</source>
         <translation>Paramètres d&apos;évaluation du plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="102"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="101"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="135"/>
-        <source>Min/Max</source>
-        <translation>Min/Max</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="206"/>
-        <source>Status</source>
-        <translation>Status</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="277"/>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="332"/>
-        <source>Scatter plots</source>
-        <translation>Diagrammes de dispersion</translation>
     </message>
 </context>
 <context>
@@ -2754,12 +2729,12 @@ Voulez-vous continuer et fermer les autres études ?</translation>
         <translation>Taille de l&apos;échantillon d&apos;apprentissage :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelValidationPage.cxx" line="182"/>
+        <location filename="../lib/src/view/MetaModelValidationPage.cxx" line="184"/>
         <source>Test sample validation: The test sample must contain at least three points. Here size * k / 100 = %1</source>
         <translation>Validation avec échantillon de test : l&apos;échantillon de test doit contenir au moins trois points. Ici taille * k / 100 = %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelValidationPage.cxx" line="190"/>
+        <location filename="../lib/src/view/MetaModelValidationPage.cxx" line="192"/>
         <source>K-Fold validation: each fold must contain at least three points. Here size / k = %1</source>
         <translation>Validation K-Fold : chaque pli doit contenir au moins trois points. Ici taille / k = %1</translation>
     </message>
@@ -3038,12 +3013,32 @@ extremum</translation>
         <translation>Résultats d&apos;analyse de Monte-Carlo</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="56"/>
+        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="55"/>
+        <source>Maximum elapsed time reached</source>
+        <translation>Durée maximale atteinte</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="57"/>
+        <source>Maximum calls reached</source>
+        <translation>Nombre d&apos;appels maximum atteint</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="59"/>
+        <source>An error has occured during the execution of the analysis</source>
+        <translation>Une erreur est survenue durant l&apos;exécution de l&apos;analyse</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="63"/>
+        <source>Maximum coefficient of variation reached</source>
+        <translation>Coefficient de variation maximum atteint</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="70"/>
         <source>Number of calls</source>
         <translation>Nombre d&apos;appels</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="59"/>
+        <location filename="../lib/src/view/MonteCarloResultWindow.cxx" line="73"/>
         <source>Central tendency parameters</source>
         <translation>Paramètres de l&apos;analyse en tendance centrale</translation>
     </message>
@@ -4121,69 +4116,69 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/plot/PlotWidget.cxx" line="240"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="256"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="257"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="254"/>
         <location filename="../lib/src/view/plot/PlotWidget.cxx" line="255"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="256"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="403"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="405"/>
         <source>Index</source>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="404"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="406"/>
         <source>Inputs</source>
         <translation>Entrées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="429"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="431"/>
         <source>First order index</source>
         <translation>Indice du premier ordre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="444"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="446"/>
         <source>Total index</source>
         <translation>Indice total</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="581"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="587"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="596"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="604"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="619"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="625"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="633"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="639"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="583"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="589"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="598"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="606"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="621"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="627"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="635"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="641"/>
         <source>scatterplot</source>
         <translation>diagrammeDispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="583"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="589"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="600"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="608"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="621"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="627"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="635"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="641"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="585"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="591"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="602"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="610"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="623"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="629"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="637"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="643"/>
         <source>Scatter plot:</source>
         <translation>Diagramme de dispersion :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="583"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="589"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="600"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="608"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="621"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="627"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="635"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="641"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="585"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="591"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="602"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="610"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="623"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="629"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="637"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="643"/>
         <source>vs</source>
         <translation>vs</translation>
     </message>
