@@ -40,6 +40,12 @@ public:
   /** Virtual constructor */
   virtual SobolAnalysis * clone() const;
 
+  OT::UnsignedInteger getBootstrapSize() const;
+  void setBootstrapSize(const OT::UnsignedInteger size);
+
+  double getBootstrapConfidenceLevel() const;
+  void setBootstrapConfidenceLevel(const double level);
+
   SobolResult getResult() const;
 
   virtual Parameters getParameters() const;
@@ -57,6 +63,8 @@ public:
   void load(OT::Advocate & adv);
 
 private:
+  OT::UnsignedInteger bootstrapSize_;
+  double bootstrapConfidenceLevel_;
   SobolResult result_;
 };
 }
