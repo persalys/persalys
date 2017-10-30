@@ -23,9 +23,7 @@
 
 #include <qwt_plot_curve.h>
 #include <qwt_plot.h>
-#include <qwt_plot_grid.h>
 #include <qwt_symbol.h>
-#include <qwt_scale_draw.h>
 
 #include <openturns/Distribution.hxx>
 #include "otgui/OTGuiprivate.hxx"
@@ -54,10 +52,17 @@ public:
   void plotHistogram(const OT::Sample & sample, const OT::UnsignedInteger graphType = 0, int barNumber = 0, QString title = "");
   void plotScatter(const OT::Sample & input, const OT::Sample & output,
                    QPen pen = QPen(Qt::blue, 4), QString Xtitle = "", QString Ytitle = "");
-  void plotBoxPlot(double median, double lowerQuartile, double upperQuartile,
-                   double lowerBound, double upperBound, OT::Point outliers_);
-  void plotSensitivityIndices(const OT::Point firstOrderIndices, const OT::Point totalIndices,
-                              const OT::Description inputNames);
+  void plotBoxPlot(const double median,
+                   const double lowerQuartile,
+                   const double upperQuartile,
+                   const double lowerBound,
+                   const double upperBound,
+                   const OT::Point& outliers);
+  void plotSensitivityIndices(const OT::Point& firstOrderIndices,
+                              const OT::Point& totalIndices,
+                              const OT::Description& inputNames,
+                              const OT::Interval& firstOrderIndicesIntervals = OT::Interval(),
+                              const OT::Interval& totalIndicesIntervals = OT::Interval());
   void plotContour(const OT::Distribution& distribution, const bool isPdf = true);
 
   /// clear plot
@@ -75,9 +80,9 @@ public:
 public slots:
   void contextMenu(const QPoint & pos);
   void exportPlot();
+
 signals:
   void plotChanged();
-
 private:
   void updateScaleParameters(const OT::Distribution & distribution);
 

@@ -26,10 +26,30 @@
 
 #include <openturns/Point.hxx>
 
-#include <QWidget>
+#include <QSortFilterProxyModel>
 
 namespace OTGUI
 {
+
+// custom QSortFilterProxyModel
+class OTGUI_API IndicesProxyModel : public QSortFilterProxyModel
+{
+public:
+  IndicesProxyModel(QObject * parent = 0)
+    : QSortFilterProxyModel(parent)
+  {
+  }
+
+  bool lessThan(const QModelIndex& left, const QModelIndex& right) const
+  {
+    if (!sourceModel()->data(left, Qt::UserRole).toBool())
+      return false;
+    else
+      return QSortFilterProxyModel::lessThan(left, right);
+  }
+};
+
+
 class OTGUI_API SensitivityResultWidget : public QWidget
 {
   Q_OBJECT
@@ -38,7 +58,9 @@ public:
   enum Type {Sobol, SRC};
 
   SensitivityResultWidget(const OT::Point& firstIndices,
+                          const OT::Interval& firstIndicesIntervals,
                           const OT::Point& totalIndices,
+                          const OT::Interval& totalIndicesIntervals,
                           const OT::Description& inputNames,
                           const OT::String& outputName,
                           const Type type,
@@ -49,7 +71,7 @@ public slots:
 
 private:
   PlotWidget * plot_;
-  CustomStandardItemModel * indicesTableModel_;
+  IndicesProxyModel * proxyModel_;
 };
 }
 #endif

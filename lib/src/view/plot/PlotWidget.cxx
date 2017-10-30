@@ -181,8 +181,15 @@ void PlotWidget::plotCurve(double * x, double * y, int size, const QPen pen, Qwt
   if (symbol)
     curve->setSymbol(symbol);
   if (!title.isEmpty())
+  {
     curve->setTitle(title);
+  }
+  else
+  {
+    curve->setItemAttribute(QwtPlotItem::Legend, false);
+  }
   curve->attach(this);
+
   replot();
 }
 
@@ -339,8 +346,12 @@ void PlotWidget::plotHistogram(const Sample & sample, const UnsignedInteger grap
 }
 
 
-void PlotWidget::plotBoxPlot(double median, double lowerQuartile, double upperQuartile,
-                             double lowerBound, double upperBound, Point outliers_)
+void PlotWidget::plotBoxPlot(const double median,
+                             const double lowerQuartile,
+                             const double upperQuartile,
+                             const double lowerBound,
+                             const double upperBound,
+                             const Point& outliers)
 {
   // draw median
   double xMedian[2] = {0.9, 1.1};
@@ -375,14 +386,14 @@ void PlotWidget::plotBoxPlot(double median, double lowerQuartile, double upperQu
   plotCurve(xWhiskersBars, yUpperWhiskersBar, 2);
 
   // draw outliers
-  const int dim = outliers_.getDimension();
+  const int dim = outliers.getDimension();
   double * xOutliers = new double[dim];
   double * yOutliers = new double[dim];
 
   for (int i = 0; i < dim; ++i)
   {
     xOutliers[i] = 1.;
-    yOutliers[i] = outliers_[i];
+    yOutliers[i] = outliers[i];
   }
 
   plotCurve(xOutliers, yOutliers, dim, QPen(Qt::blue), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::blue), QSize(5, 5)));
@@ -400,7 +411,11 @@ void PlotWidget::plotBoxPlot(double median, double lowerQuartile, double upperQu
 }
 
 
-void PlotWidget::plotSensitivityIndices(const Point firstOrderIndices, const Point totalIndices, const Description inputNames)
+void PlotWidget::plotSensitivityIndices(const Point& firstOrderIndices,
+                                        const Point& totalIndices,
+                                        const Description& inputNames,
+                                        const Interval& firstOrderIndicesIntervals,
+                                        const Interval& totalIndicesIntervals)
 {
   setAxisTitle(QwtPlot::yLeft, tr("Index"));
   setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
@@ -426,6 +441,15 @@ void PlotWidget::plotSensitivityIndices(const Point firstOrderIndices, const Poi
     yMin = std::min(yMin, firstOrderIndices[i]);
     yMax = std::max(yMax, firstOrderIndices[i]);
     //qDebug() << "x= " << xData[i] << " , y= " << yData[i];
+    if (firstOrderIndicesIntervals.getDimension() == size)
+    {
+      double xInterval[2] = {(i - width), (i - width)};
+      double yInterval[2] = {firstOrderIndicesIntervals.getLowerBound()[i], firstOrderIndicesIntervals.getUpperBound()[i]};
+      plotCurve(xInterval, yInterval, 2, QPen(colors[0]));
+
+      yMin = std::min(yMin, firstOrderIndicesIntervals.getLowerBound()[i]);
+      yMax = std::max(yMax, firstOrderIndicesIntervals.getUpperBound()[i]);
+    }
   }
 
   plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Ellipse, QBrush(colors[0]), QPen(colors[0]), QSize(5, 5)), tr("First order index"));
@@ -442,6 +466,15 @@ void PlotWidget::plotSensitivityIndices(const Point firstOrderIndices, const Poi
       yMin = std::min(yMin, totalIndices[i]);
       yMax = std::max(yMax, totalIndices[i]);
       //qDebug() << "x= " << xData[i] << " , y= " << yData[i];
+      if (totalIndicesIntervals.getDimension() == size)
+      {
+        double xInterval[2] = {(i + width), (i + width)};
+        double yInterval[2] = {totalIndicesIntervals.getLowerBound()[i], totalIndicesIntervals.getUpperBound()[i]};
+        plotCurve(xInterval, yInterval, 2, QPen(colors[1]));
+
+        yMin = std::min(yMin, totalIndicesIntervals.getLowerBound()[i]);
+        yMax = std::max(yMax, totalIndicesIntervals.getUpperBound()[i]);
+      }
     }
     plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Rect, QBrush(colors[1]), QPen(colors[1]), QSize(5, 5)), tr("Total index"));
 
@@ -456,12 +489,8 @@ void PlotWidget::plotSensitivityIndices(const Point firstOrderIndices, const Poi
   setAxisScaleDraw(QwtPlot::xBottom, new CustomHorizontalScaleDraw(inputNames));
 
   // rescale to avoid to cut points
-  yMin = 0.9 * yMin;
-  if (yMin < 0.01)
-    yMin = -0.05;
-  yMax = 1.1 * yMax;
-  if (yMax > 0.95)
-    yMax = 1.05;
+  yMin = yMin - (std::abs(0.05 * yMin) < 0.01 ? 0.05 : std::abs(0.05 * yMin));
+  yMax = yMax + std::abs(0.05 * yMax);
   setAxisScale(QwtPlot::yLeft, yMin, yMax);
 
   replot();

@@ -225,11 +225,13 @@ void FunctionalChaosResultWindow::buildInterface()
     for (UnsignedInteger i = 0; i < nbOutputs; ++i)
     {
       SensitivityResultWidget * sobolResultWidget = new SensitivityResultWidget(result_.getSobolResult().getFirstOrderIndices()[i],
-          result_.getSobolResult().getTotalIndices()[i],
-          result_.getSobolResult().getInputNames(),
-          result_.getSobolResult().getOutputNames()[i],
-          SensitivityResultWidget::Sobol,
-          this);
+                                                                                Interval(),
+                                                                                result_.getSobolResult().getTotalIndices()[i],
+                                                                                Interval(),
+                                                                                result_.getSobolResult().getInputNames(),
+                                                                                result_.getSobolResult().getOutputNames()[i],
+                                                                                SensitivityResultWidget::Sobol,
+                                                                                this);
       sobolStackedWidget->addWidget(sobolResultWidget);
     }
     vbox->addWidget(sobolStackedWidget);

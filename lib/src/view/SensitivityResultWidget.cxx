@@ -38,7 +38,9 @@ namespace OTGUI
 {
 
 SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
+    const Interval& firstIndicesIntervals,
     const Point& totalIndices,
+    const Interval& totalIndicesIntervals,
     const Description& inputNames,
     const String& outputName,
     const Type type,
@@ -46,7 +48,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
                                                 )
   : QWidget(parent)
   , plot_(0)
-  , indicesTableModel_(0)
+  , proxyModel_(0)
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
   QSplitter * mainSplitter = new QSplitter(Qt::Vertical);
@@ -59,7 +61,16 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   {
     graphTitle = tr("Sobol sensitivity indices:");
     defaultFileName = tr("sensitivitySobol");
-    tableTitles << tr("Input") << tr("First order index") << tr("Total index");
+    tableTitles << tr("Input") << tr("First order index");
+    if (firstIndicesIntervals.getDimension() == firstIndices.getSize())
+    {
+      tableTitles << tr("First order index\nconfidence interval");
+    }
+    tableTitles << tr("Total index");
+    if (firstIndicesIntervals.getDimension() == firstIndices.getSize())
+    {
+      tableTitles << tr("Total index\nconfidence interval");
+    }
   }
   else if (type == SensitivityResultWidget::SRC)
   {
@@ -72,7 +83,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
   plot_ = new PlotWidget(defaultFileName, true);
-  plot_->plotSensitivityIndices(firstIndices, totalIndices, inputNames);
+  plot_->plotSensitivityIndices(firstIndices, totalIndices, inputNames, firstIndicesIntervals, totalIndicesIntervals);
   plot_->setTitle(graphTitle + " " + QString::fromUtf8(outputName.c_str()));
   plotWidgetLayout->addWidget(plot_);
 
@@ -94,39 +105,74 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   // table of first order (+ total order indices + interactions)
   CopyableTableView * tableView = new CopyableTableView;
   tableView->verticalHeader()->hide();
-#if QT_VERSION >= 0x050000
-  tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-#else
-  tableView->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-#endif
   tableView->setSortingEnabled(true);
 
-  indicesTableModel_ = new CustomStandardItemModel(inputNames.getSize(), 0, tableView);
-  indicesTableModel_->setHorizontalHeaderLabels(tableTitles);
+  CustomStandardItemModel * indicesTableModel = new CustomStandardItemModel(inputNames.getSize(), 0, tableView);
+  indicesTableModel->setHorizontalHeaderLabels(tableTitles);
 
   // fill table
   Scalar interactionsValue = 0.;
   for (UnsignedInteger j = 0; j < inputNames.getSize(); ++j)
   {
-    indicesTableModel_->setNotEditableItem(j, 0, QString::fromUtf8(inputNames[j].c_str()));
-    indicesTableModel_->setNotEditableItem(j, 1, firstIndices[j]);
+    int col = 0;
+    indicesTableModel->setNotEditableItem(j, col, QString::fromUtf8(inputNames[j].c_str()));
+    indicesTableModel->setData(indicesTableModel->index(j, col), true, Qt::UserRole);
+
+    // first order index
+    indicesTableModel->setNotEditableItem(j, ++col, firstIndices[j]);
+    indicesTableModel->setData(indicesTableModel->index(j, col), true, Qt::UserRole);
+
+    // confidence interval
+    if (firstIndicesIntervals.getDimension() == inputNames.getSize())
+    {
+      const Interval foInterval(firstIndicesIntervals.getLowerBound()[j], firstIndicesIntervals.getUpperBound()[j]);
+      indicesTableModel->setNotEditableItem(j, ++col, foInterval.__str__().c_str());
+      indicesTableModel->setData(indicesTableModel->index(j, col), false, Qt::UserRole);
+      indicesTableModel->setData(indicesTableModel->index(j, col), foInterval.getLowerBound()[0], Qt::UserRole + 1);
+      indicesTableModel->setData(indicesTableModel->index(j, col), foInterval.getUpperBound()[0], Qt::UserRole + 2);
+    }
 
     if (totalIndices.getSize())
     {
-      indicesTableModel_->setNotEditableItem(j, 2, totalIndices[j]);
-
+      // total index
+      indicesTableModel->setNotEditableItem(j, ++col, totalIndices[j]);
+      indicesTableModel->setData(indicesTableModel->index(j, col), true, Qt::UserRole);
       if (totalIndices[j] < firstIndices[j])
       {
-        indicesTableModel_->setData(indicesTableModel_->index(j, 2), tr("Warning: The total index is inferior to the first order index."), Qt::ToolTipRole);
-        indicesTableModel_->setData(indicesTableModel_->index(j, 2), QIcon(":/images/task-attention.png"), Qt::DecorationRole);
+        indicesTableModel->setData(indicesTableModel->index(j, col), tr("Warning: The total index is inferior to the first order index."), Qt::ToolTipRole);
+        indicesTableModel->setData(indicesTableModel->index(j, col), QIcon(":/images/task-attention.png"), Qt::DecorationRole);
+      }
+
+      // confidence interval
+      if (totalIndicesIntervals.getDimension() == inputNames.getSize())
+      {
+        const Interval toInterval(totalIndicesIntervals.getLowerBound()[j], totalIndicesIntervals.getUpperBound()[j]);
+        indicesTableModel->setNotEditableItem(j, ++col, toInterval.__str__().c_str());
+        indicesTableModel->setData(indicesTableModel->index(j, col), false, Qt::UserRole);
+        indicesTableModel->setData(indicesTableModel->index(j, col), toInterval.getLowerBound()[0], Qt::UserRole + 1);
+        indicesTableModel->setData(indicesTableModel->index(j, col), toInterval.getUpperBound()[0], Qt::UserRole + 2);
       }
 
       // compute interactions for the ith output
       interactionsValue += (totalIndices[j] - firstIndices[j]);
     }
   }
-  tableView->setModel(indicesTableModel_);
+  proxyModel_ = new IndicesProxyModel;
+  proxyModel_->setSourceModel(indicesTableModel);
+  tableView->setModel(proxyModel_);
   subWidgetLayout->addWidget(tableView);
+
+  // resize table
+  tableView->resizeColumnsToContents();
+#if QT_VERSION >= 0x050000
+  tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+  tableView->horizontalHeader()->setSectionResizeMode(proxyModel_->columnCount() - 1, QHeaderView::Stretch);
+#else
+  tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
+  tableView->horizontalHeader()->setResizeMode(proxyModel_->columnCount() - 1, QHeaderView::Stretch);
+#endif
+
+  // if the table is sorted : we sort the points in the graph too
   connect(tableView->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
 
   // Interactions widgets
@@ -158,23 +204,35 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
 
 void SensitivityResultWidget::updateIndicesPlot(int, Qt::SortOrder)
 {
-  if (!indicesTableModel_)
+  if (!proxyModel_)
     throw InternalException(HERE) << "SensitivityResultWidget::updateIndicesPlot: not defined table\n";
 
-  const UnsignedInteger nbInputs = indicesTableModel_->rowCount();
-  Point currentFirstOrderIndices(nbInputs);
-  Point currentTotalIndices;
+  const UnsignedInteger nbInputs = proxyModel_->rowCount();
+  Point sortedFirstOrderIndices(nbInputs);
+  Point sortedTotalIndices;
   Description sortedInputNames(nbInputs);
+  Point sortedFOIntervalLowerBounds;
+  Point sortedFOIntervalUpperBounds;
+  Point sortedTOIntervalLowerBounds;
+  Point sortedTOIntervalUpperBounds;
 
   for (UnsignedInteger i = 0; i < nbInputs; ++i)
   {
-    sortedInputNames[i] = indicesTableModel_->data(indicesTableModel_->index(i, 0)).toString().toStdString();
-    currentFirstOrderIndices[i] = indicesTableModel_->data(indicesTableModel_->index(i, 1)).toDouble();
-    if (indicesTableModel_->columnCount() == 3)
-      currentTotalIndices.add(indicesTableModel_->data(indicesTableModel_->index(i, 2)).toDouble());
+    sortedInputNames[i] = proxyModel_->data(proxyModel_->index(i, 0)).toString().toStdString();
+    sortedFirstOrderIndices[i] = proxyModel_->data(proxyModel_->index(i, 1)).toDouble();
+    if (proxyModel_->columnCount() == 5)
+    {
+      sortedFOIntervalLowerBounds.add(proxyModel_->data(proxyModel_->index(i, 2), Qt::UserRole + 1).toDouble());
+      sortedFOIntervalUpperBounds.add(proxyModel_->data(proxyModel_->index(i, 2), Qt::UserRole + 2).toDouble());
+      sortedTotalIndices.add(proxyModel_->data(proxyModel_->index(i, 3)).toDouble());
+      sortedTOIntervalLowerBounds.add(proxyModel_->data(proxyModel_->index(i, 4), Qt::UserRole + 1).toDouble());
+      sortedTOIntervalUpperBounds.add(proxyModel_->data(proxyModel_->index(i, 4), Qt::UserRole + 2).toDouble());
+    }
   }
 
   plot_->clear();
-  plot_->plotSensitivityIndices(currentFirstOrderIndices, currentTotalIndices, sortedInputNames);
+  const Interval foInterval(sortedFOIntervalLowerBounds, sortedFOIntervalUpperBounds);
+  const Interval toInterval(sortedTOIntervalLowerBounds, sortedTOIntervalUpperBounds);
+  plot_->plotSensitivityIndices(sortedFirstOrderIndices, sortedTotalIndices, sortedInputNames, foInterval, toInterval);
 }
 }

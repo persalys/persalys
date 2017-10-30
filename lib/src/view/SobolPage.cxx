@@ -36,6 +36,8 @@ SobolPage::SobolPage(QWidget* parent)
   , stopCriteriaGroupBox_(0)
   , blockSizeGroupBox_(0)
   , totalNbSimuLabel_(0)
+  , bootstrapSizeSpinBox_(0)
+  , confidenceLevelSpinbox_(0)
   , seedSpinbox_(0)
   , errorMessageLabel_(0)
 {
@@ -80,14 +82,26 @@ void SobolPage::buildInterface()
   advancedParamGroupBox->setTitle(tr("Advanced parameters"));
   QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedParamGroupBox);
 
+  // bootstrap size
+  advancedWidgetsLayout->addWidget(new QLabel(tr("Bootstrap sampling size")), 0, 0);
+  bootstrapSizeSpinBox_ = new UIntSpinBox;
+  advancedWidgetsLayout->addWidget(bootstrapSizeSpinBox_, 0, 1);
+
+  // confidence interval level
+  advancedWidgetsLayout->addWidget(new QLabel(tr("Confidence level")), 1, 0);
+  confidenceLevelSpinbox_ = new DoubleSpinBox;
+  confidenceLevelSpinbox_->setRange(0.0, 0.99);
+  confidenceLevelSpinbox_->setSingleStep(0.01);
+  advancedWidgetsLayout->addWidget(confidenceLevelSpinbox_, 1, 1);
+
   // seed
   QLabel * seedLabel = new QLabel(tr("Seed"));
-  advancedWidgetsLayout->addWidget(seedLabel, 1, 0);
+  advancedWidgetsLayout->addWidget(seedLabel, 2, 0);
 
   seedSpinbox_ = new QSpinBox;
   seedSpinbox_->setMaximum(std::numeric_limits<int>::max());
   seedLabel->setBuddy(seedSpinbox_);
-  advancedWidgetsLayout->addWidget(seedSpinbox_, 1, 1);
+  advancedWidgetsLayout->addWidget(seedSpinbox_, 2, 1);
 
   pageLayout->addWidget(advancedParamGroupBox);
 
@@ -114,6 +128,8 @@ void SobolPage::initialize(const Analysis& analysis)
   stopCriteriaGroupBox_->setMaximumElapsedTime(analysis_ptr->getMaximumElapsedTime());
   stopCriteriaGroupBox_->setMaximumCalls(analysis_ptr->getMaximumCalls());
   blockSizeGroupBox_->setBlockSizeValue(analysis_ptr->getBlockSize());
+  bootstrapSizeSpinBox_->setValue(analysis_ptr->getBootstrapSize());
+  confidenceLevelSpinbox_->setValue(analysis_ptr->getBootstrapConfidenceLevel());
   seedSpinbox_->setValue(analysis_ptr->getSeed());
 
   updateNumberSimulations(analysis_ptr->getBlockSize());
@@ -136,6 +152,8 @@ Analysis SobolPage::getAnalysis(const String& name, const PhysicalModel& physica
   analysis.setMaximumCoefficientOfVariation(stopCriteriaGroupBox_->getMaximumCoefficientOfVariation());
   analysis.setMaximumElapsedTime(stopCriteriaGroupBox_->getMaximumElapsedTime());
   analysis.setBlockSize(blockSizeGroupBox_->getBlockSizeValue());
+  analysis.setBootstrapSize(bootstrapSizeSpinBox_->value());
+  analysis.setBootstrapConfidenceLevel(confidenceLevelSpinbox_->value());
   analysis.setSeed(seedSpinbox_->value());
 
   return analysis;
