@@ -125,31 +125,17 @@ void GridDesignOfExperiment::initializeParameters()
     else
     {
       const Distribution distribution = inputs[i].getDistribution();
-      const String distributionName = distribution.getImplementation()->getClassName();
 
-      if (distributionName == "TruncatedDistribution")
-      {
-        const TruncatedDistribution truncatedDist = *dynamic_cast<TruncatedDistribution*>(distribution.getImplementation().get());
-        if (truncatedDist.getFiniteLowerBound())
-          lowerBounds_[i] = truncatedDist.getLowerBound();
-        else
-          lowerBounds_[i] = distribution.computeQuantile(0.05)[0];
-        if (truncatedDist.getFiniteUpperBound())
-          upperBounds_[i] = truncatedDist.getUpperBound();
-        else
-          upperBounds_[i] = distribution.computeQuantile(0.95)[0];
-      }
-      else if (distributionName == "TruncatedNormal")
-      {
-        const TruncatedNormal truncatedDist = *dynamic_cast<TruncatedNormal*>(distribution.getImplementation().get());
-        lowerBounds_[i] = truncatedDist.getA();
-        upperBounds_[i] = truncatedDist.getB();
-      }
+      // lower bound
+      if (distribution.getRange().getFiniteLowerBound()[0])
+        lowerBounds_[i] = distribution.getRange().getLowerBound()[0];
       else
-      {
         lowerBounds_[i] = distribution.computeQuantile(0.05)[0];
+      // upper bound
+      if (distribution.getRange().getFiniteUpperBound()[0])
+        upperBounds_[i] = distribution.getRange().getUpperBound()[0];
+      else
         upperBounds_[i] = distribution.computeQuantile(0.95)[0];
-      }
     }
   }
 }
