@@ -138,11 +138,16 @@ void MetaModelAnalysis::setLeaveOneOutValidation(const bool validation)
 }
 
 
-void MetaModelAnalysis::setTestSampleValidationParameters(const UnsignedInteger percentage, const UnsignedInteger seed)
+void MetaModelAnalysis::setTestSampleValidationPercentageOfPoints(const UnsignedInteger percentage)
 {
   if (percentage == 0 || percentage >= 100)
     throw InvalidArgumentException(HERE) << "The percentage must be superior to 0 and inferior to 100";
   percentageTestSample_ = percentage;
+}
+
+
+void MetaModelAnalysis::setTestSampleValidationSeed(const UnsignedInteger seed)
+{
   seedTestSample_ = seed;
 }
 
@@ -172,11 +177,16 @@ UnsignedInteger MetaModelAnalysis::getTestSampleValidationSeed() const
 }
 
 
-void MetaModelAnalysis::setKFoldValidationParameters(const UnsignedInteger nbFolds, const UnsignedInteger seed)
+void MetaModelAnalysis::setKFoldValidationNumberOfFolds(const UnsignedInteger nbFolds)
 {
   if (nbFolds_ < 2)
     throw InvalidArgumentException(HERE) << "The number of folds must be superior to 1 ";
   nbFolds_ = nbFolds;
+}
+
+
+void MetaModelAnalysis::setKFoldValidationSeed(const UnsignedInteger seed)
+{
   seedKFold_ = seed;
 }
 
@@ -533,7 +543,6 @@ void MetaModelAnalysis::computeKFoldValidation(MetaModelAnalysisResult& result, 
     Point tempResiduals;
     Point tempQ2;
     computeError(tempMetaModelSample, testOutputSample, tempResiduals, tempQ2);
-std::cout<<"dans kfold "<<i<<" "<<beginIndex<<" "<<endIndex<<" "<<tempResiduals<<" "<<tempQ2<<std::endl;
     residuals += tempResiduals;
     q2 += tempQ2;
   }
@@ -543,7 +552,6 @@ std::cout<<"dans kfold "<<i<<" "<<beginIndex<<" "<<endIndex<<" "<<tempResiduals<
   // compute the mean of the q2
   result.kFoldValidation_.residuals_ = residuals / nbFolds_;
   result.kFoldValidation_.q2_ = q2 / nbFolds_;
-std::cout<<"dans kfold resu "<<" "<<residuals<<" "<<result.kFoldValidation_.residuals_<<" "<<result.kFoldValidation_.q2_<<" "<<q2<<std::endl;
 
   result.kFoldValidation_.parameters_ = getKFoldValidationParameters();
 }

@@ -490,9 +490,17 @@ String KrigingAnalysis::getPythonScript() const
   // validation
   oss << getName() << ".setAnalyticalValidation(" << (analyticalValidation() ? "True" : "False") << ")\n";
   oss << getName() << ".setTestSampleValidation(" << (testSampleValidation() ? "True" : "False") << ")\n";
-  oss << getName() << ".setTestSampleValidationParameters(" << getTestSampleValidationPercentageOfPoints() << ", " << getTestSampleValidationSeed() << ")\n";
+  if (testSampleValidation())
+  {
+    oss << getName() << ".setTestSampleValidationPercentageOfPoints(" << getTestSampleValidationPercentageOfPoints() << ")\n";
+    oss << getName() << ".setTestSampleValidationSeed(" << getTestSampleValidationSeed() << ")\n";
+  }
   oss << getName() << ".setKFoldValidation(" << (kFoldValidation() ? "True" : "False") << ")\n";
-  oss << getName() << ".setKFoldValidationParameters(" << getKFoldValidationNumberOfFolds() << ", " << getKFoldValidationSeed() << ")\n";
+  if (kFoldValidation())
+  {
+    oss << getName() << ".setKFoldValidationNumberOfFolds(" << getKFoldValidationNumberOfFolds() << ")\n";
+    oss << getName() << ".setKFoldValidationSeed(" << getKFoldValidationSeed() << ")\n";
+  }
   oss << getName() << ".setLeaveOneOutValidation(" << (leaveOneOutValidation() ? "True" : "False") << ")\n";
 
   return oss;

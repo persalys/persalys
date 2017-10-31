@@ -168,8 +168,10 @@ void MetaModelValidationPage::updateMetamodelValidation(Analysis& analysis)
   analysis_ptr->setTestSampleValidation(testSampleCheckBox_->isChecked());
   analysis_ptr->setKFoldValidation(kFoldCheckBox_->isChecked());
   analysis_ptr->setLeaveOneOutValidation(looCheckBox_->isChecked());
-  analysis_ptr->setTestSampleValidationParameters(percentageOfPointsSpinBox_->value(), seedTestSampleSpinBox_->value());
-  analysis_ptr->setKFoldValidationParameters(nbFoldsSpinBox_->value(), seedKFoldSpinBox_->value());
+  analysis_ptr->setTestSampleValidationPercentageOfPoints(percentageOfPointsSpinBox_->value());
+  analysis_ptr->setTestSampleValidationSeed(seedTestSampleSpinBox_->value());
+  analysis_ptr->setKFoldValidationNumberOfFolds(nbFoldsSpinBox_->value());
+  analysis_ptr->setKFoldValidationSeed(seedKFoldSpinBox_->value());
 }
 
 

@@ -48,14 +48,14 @@ public:
   bool leaveOneOutValidation() const;
   void setLeaveOneOutValidation(const bool validation);
 
-  void setTestSampleValidationParameters(const OT::UnsignedInteger percentage = 20,
-                                         const OT::UnsignedInteger seed = OT::ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"));
+  void setTestSampleValidationSeed(const OT::UnsignedInteger seed);
+  void setTestSampleValidationPercentageOfPoints(const OT::UnsignedInteger percentage);
   OT::PointWithDescription getTestSampleValidationParameters() const;
   OT::UnsignedInteger getTestSampleValidationPercentageOfPoints() const;
   OT::UnsignedInteger getTestSampleValidationSeed() const;
 
-  void setKFoldValidationParameters(const OT::UnsignedInteger nbFolds,
-                                    const OT::UnsignedInteger seed = OT::ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"));
+  void setKFoldValidationNumberOfFolds(const OT::UnsignedInteger nbFolds);
+  void setKFoldValidationSeed(const OT::UnsignedInteger seed);
   OT::PointWithDescription getKFoldValidationParameters() const;
   OT::UnsignedInteger getKFoldValidationNumberOfFolds() const;
   OT::UnsignedInteger getKFoldValidationSeed() const;
