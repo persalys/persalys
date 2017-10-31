@@ -134,6 +134,10 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include SobolAnalysis.i
 %include SRCResult.i
 %include SRCAnalysis.i
+#ifdef OTGUI_HAVE_OTMORRIS
+%include MorrisResult.i
+%include MorrisAnalysis.i
+#endif
 %include ReliabilityAnalysis.i
 %include SimulationReliabilityResult.i
 %include SimulationReliabilityAnalysis.i

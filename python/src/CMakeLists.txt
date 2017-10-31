@@ -60,6 +60,10 @@ if (OTFMI_FOUND)
   list (APPEND SWIG_MODULE_otguibase_EXTRA_FLAGS -DOTGUI_HAVE_OTFMI=1)
 endif ()
 
+if (OTMORRIS_FOUND)
+  list (APPEND SWIG_MODULE_otguibase_EXTRA_FLAGS -DOTGUI_HAVE_OTMORRIS=1)
+endif ()
+
 ot_add_python_module (otguibase otguibase_module.i
                       Observer.i
                       Observable.i
@@ -101,6 +105,8 @@ ot_add_python_module (otguibase otguibase_module.i
                       SobolAnalysis.i SobolAnalysis_doc.i.in
                       SRCResult.i SRCResult_doc.i.in
                       SRCAnalysis.i SRCAnalysis_doc.i.in
+                      MorrisResult.i
+                      MorrisAnalysis.i
                       ReliabilityAnalysis.i ReliabilityAnalysis_doc.i.in
                       SimulationReliabilityAnalysis.i SimulationReliabilityAnalysis_doc.i.in
                       SimulationReliabilityResult.i SimulationReliabilityResult_doc.i.in
