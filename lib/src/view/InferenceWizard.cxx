@@ -31,6 +31,7 @@
 #include <openturns/FittingTest.hxx>
 
 #include <QHBoxLayout>
+#include <QGroupBox>
 
 using namespace OT;
 
@@ -146,7 +147,8 @@ void InferenceWizard::buildInterface()
   pageLayout->addLayout(splitter);
 
   // level
-  QGridLayout * levelLayout = new QGridLayout;
+  QGroupBox * ksGroupBox = new QGroupBox(tr("Kolmogorov-Smirnov"));
+  QGridLayout * levelLayout = new QGridLayout(ksGroupBox);
   QLabel * levelLabel = new QLabel(tr("Level"));
   levelLayout->addWidget(levelLabel, 0, 0);
 
@@ -159,7 +161,7 @@ void InferenceWizard::buildInterface()
   levelLayout->addWidget(levelSpinbox, 0, 1);
   levelLayout->setColumnStretch(1, 10);
 
-  pageLayout->addLayout(levelLayout);
+  pageLayout->addWidget(ksGroupBox);
 
   varTableView->selectRow(0);
 

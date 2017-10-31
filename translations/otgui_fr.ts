@@ -1139,39 +1139,39 @@ métamodèle</translation>
 <context>
     <name>OTGUI::DataModelTableModel</name>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="115"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="131"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="117"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="133"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="148"/>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="222"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="166"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="240"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="150"/>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="238"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="168"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="256"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="152"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="170"/>
         <source>Disable</source>
         <translation>Désactiver</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="210"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="228"/>
         <source>The name %2 is already used by another variable</source>
         <translation>Le nom %2 est déjà utilisé par une autre variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="287"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="305"/>
         <source>Define at least a variable</source>
         <translation>Définir au moins une variable</translation>
     </message>
@@ -1194,42 +1194,42 @@ métamodèle</translation>
         <translation>Echantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="113"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="114"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="113"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="114"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="113"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="114"/>
         <source>Disable</source>
         <translation>Désactiver</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="166"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="165"/>
         <source>Impossible to update the table.</source>
         <translation>Impossible de mettre à jour le tableau.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="186"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="185"/>
         <source>Data to import...</source>
         <translation>Importer des données...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="188"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="187"/>
         <source>Data files (*.csv *.txt)</source>
         <translation>Fichiers de données (*.csv *.txt)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="199"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="198"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="200"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="199"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1 :
@@ -1387,6 +1387,11 @@ métamodèle</translation>
         <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="265"/>
         <source>The model must have at least one output. Evaluate the design of experiments</source>
         <translation>Le modèle doit avoir au moins une variable de sortie. Evaluer le plan d&apos;expériences</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="272"/>
+        <source>The design of experiments must contain at least two points.</source>
+        <translation>Le plan d&apos;expériences doit contenir au moins deux points.</translation>
     </message>
     <message>
         <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="132"/>
@@ -2268,7 +2273,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/InferenceResultWidget.cxx" line="155"/>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="459"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="463"/>
         <source>Q-Q Plot</source>
         <translation>Diagramme Q-Q</translation>
     </message>
@@ -2289,89 +2294,91 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/InferenceResultWidget.cxx" line="202"/>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="278"/>
-        <source>Kolmogorov Smirnov</source>
-        <translation>Kolmogorov Smirnov</translation>
+        <source>Bayesian
+Information
+Criterion</source>
+        <translation>Critère
+d&apos;information
+bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/InferenceResultWidget.cxx" line="203"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="282"/>
+        <source>Kolmogorov-Smirnov</source>
+        <translation>Kolmogorov-Smirnov</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="204"/>
         <source>p-value</source>
         <translation>p-valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="204"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="205"/>
         <source>Acceptation</source>
         <translation>Acceptation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="249"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="253"/>
         <source>yes</source>
         <translation>oui</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="253"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="257"/>
         <source>no</source>
         <translation>non</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="258"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="264"/>
         <source>failed</source>
         <translation>échoué</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="349"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="353"/>
         <source>Moments</source>
         <translation>Moments</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="353"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="357"/>
         <source>Mean</source>
         <translation>Moyenne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="354"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="358"/>
         <source>Standard deviation</source>
         <translation>Écart type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="355"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="359"/>
         <source>Skewness</source>
         <translation>Asymétrie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="356"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="360"/>
         <source>Kurtosis</source>
         <translation>Aplatissement</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="372"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="376"/>
         <source>Native parameters</source>
         <translation>Paramètres natifs</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="389"/>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="397"/>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="409"/>
-        <source>-</source>
-        <translation>-</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="450"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="454"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="455"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="459"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="460"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="464"/>
         <source>Data quantiles</source>
         <translation>Quantiles des données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="461"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="465"/>
         <source>%1 theoretical quantiles</source>
         <translation>Quantiles théoriques de %1</translation>
     </message>
@@ -2435,22 +2442,27 @@ métamodèle</translation>
 <context>
     <name>OTGUI::InferenceWizard</name>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="77"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="78"/>
         <source>Inference</source>
         <translation>Inférence</translation>
     </message>
     <message>
         <location filename="../lib/src/view/InferenceWizard.cxx" line="150"/>
+        <source>Kolmogorov-Smirnov</source>
+        <translation>Kolmogorov-Smirnov</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="152"/>
         <source>Level</source>
         <translation>Niveau</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="219"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="221"/>
         <source>Select at least one variable</source>
         <translation>Sélectionner au moins une variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="258"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="260"/>
         <source>At least one distribution must be tested for the selected variable &apos;%1&apos;</source>
         <translation>Au moins une distribution doit être testée pour la variable sélectionnée &apos;%1&apos;</translation>
     </message>

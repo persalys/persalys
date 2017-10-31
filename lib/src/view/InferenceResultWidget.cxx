@@ -83,7 +83,7 @@ void InferenceResultWidget::buildInterface()
   connect(distTableView_, SIGNAL(clicked(QModelIndex)), this, SLOT(updateRadioButtonsDistributionTable(QModelIndex)));
 
   // --- table model
-  distTableModel_ = new CustomStandardItemModel(0, 3, distTableView_);
+  distTableModel_ = new CustomStandardItemModel(0, 4, distTableView_);
   distTableView_->setModel(distTableModel_);
 
   distGroupBoxLayout->addWidget(distTableView_);
@@ -199,21 +199,20 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
 
   // horizontal header
   distTableModel_->setNotEditableHeaderItem(0, 0, tr("Distribution"));
-  distTableModel_->setNotEditableHeaderItem(0, 1, tr("Kolmogorov Smirnov"));
-  distTableModel_->setNotEditableHeaderItem(1, 1, tr("p-value"));
-  distTableModel_->setNotEditableHeaderItem(1, 2, tr("Acceptation"));
+  distTableModel_->setNotEditableHeaderItem(0, 1, tr("Bayesian\nInformation\nCriterion"));
+  distTableModel_->setNotEditableHeaderItem(0, 2, tr("Kolmogorov-Smirnov"));
+  distTableModel_->setNotEditableHeaderItem(1, 2, tr("p-value"));
+  distTableModel_->setNotEditableHeaderItem(1, 3, tr("Acceptation"));
   distTableView_->setSpan(0, 0, 2, 1);
+  distTableView_->setSpan(0, 1, 2, 1);
 
   // table
   // -- get results of the variable
   currentFittingTestResult_ = result.getFittingTestResultForVariable(variableName.toStdString());
+  // BIC values
+  Point bicValues(currentFittingTestResult_.getBICResults());
   // number of tests
-  const UnsignedInteger nbTests = currentFittingTestResult_.getKolmogorovTestResults().getSize();
-
-  // p-values
-  Point pValues(nbTests);
-  for (UnsignedInteger i = 0; i < nbTests; ++i)
-    pValues[i] = currentFittingTestResult_.getKolmogorovTestResults()[i].getPValue();
+  const UnsignedInteger nbTests = bicValues.getSize();
 
   // -- sort indices list
   Indices indices(nbTests);
@@ -224,11 +223,11 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
     {
       for (int l = 1; l <= i; ++l)
       {
-        if (pValues[l - 1] < pValues[l])
+        if (bicValues[l - 1] > bicValues[l])
         {
-          Scalar temp = pValues[l - 1];
-          pValues[l - 1] = pValues[l];
-          pValues[l] = temp;
+          Scalar temp = bicValues[l - 1];
+          bicValues[l - 1] = bicValues[l];
+          bicValues[l] = temp;
           const UnsignedInteger ind_temp = indices[l - 1];
           indices[l - 1] = indices[l];
           indices[l] = ind_temp;
@@ -244,21 +243,26 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
     const QString distName = TranslationManager::GetTranslatedDistributionName(currentFittingTestResult_.getTestedDistributions()[indices[i]].getImplementation()->getClassName());
     distTableModel_->setNotEditableItem(cellRow, 0, distName);
     distTableModel_->setData(distTableModel_->index(cellRow, 0), (int)indices[i], Qt::UserRole);
-    distTableModel_->setNotEditableItem(cellRow, 1, pValues[i], 3);
-    const bool isAccepted = currentFittingTestResult_.getKolmogorovTestResults()[indices[i]].getBinaryQualityMeasure();
-    QString text = tr("yes");
-    QColor color = Qt::green;
-    if (!isAccepted && currentFittingTestResult_.getErrorMessages()[indices[i]].empty())
+    if (currentFittingTestResult_.getErrorMessages()[indices[i]].empty())
     {
-      text = tr("no");
-      color = QColor();
+      distTableModel_->setNotEditableItem(cellRow, 1, bicValues[i], 3);
+      distTableModel_->setNotEditableItem(cellRow, 2, currentFittingTestResult_.getKolmogorovTestResults()[indices[i]].getPValue(), 3);
+      // if accepted
+      if (currentFittingTestResult_.getKolmogorovTestResults()[indices[i]].getBinaryQualityMeasure())
+      {
+        distTableModel_->setNotEditableItem(cellRow, 3, tr("yes"), Qt::green);
+      }
+      else
+      {
+        distTableModel_->setNotEditableItem(cellRow, 3, tr("no"), QColor());
+      }
     }
-    else if (!isAccepted && !currentFittingTestResult_.getErrorMessages()[indices[i]].empty())
+    else
     {
-      text = tr("failed");
-      color = Qt::red;
+      distTableModel_->setNotEditableItem(cellRow, 1, "-");
+      distTableModel_->setNotEditableItem(cellRow, 2, "-");
+      distTableModel_->setNotEditableItem(cellRow, 3, tr("failed"), Qt::red);
     }
-    distTableModel_->setNotEditableItem(cellRow, 2, text, color);
   }
   // -- update parameters table
   const int firstDistIndex = 0 + 2; // because of the 2 rows of titles
@@ -270,13 +274,13 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
   // resize
   distTableView_->resizeColumnsToContents();
   int titleWidth = distTableView_->horizontalHeader()->sectionSize(1);
-  // first: clear item at (0,1) because the text is too wide:
-  // resizeColumnsToContents takes into account the text of item at (0,1)
-  // to resize the column 1, even if there is a setSpan(0, 1, 1, 2)
-  distTableModel_->setItem(0, 1, new QStandardItem);
+  // first: clear item at (0,2) because the text is too wide:
+  // resizeColumnsToContents takes into account the text of item at (0,2)
+  // to resize the column 2, even if there is a setSpan(0, 2, 1, 2)
+  distTableModel_->setItem(0, 2, new QStandardItem);
   distTableView_->resizeToContents();
-  distTableModel_->setNotEditableHeaderItem(0, 1, tr("Kolmogorov Smirnov"));
-  distTableView_->setSpan(0, 1, 1, 2);
+  distTableModel_->setNotEditableHeaderItem(0, 2, tr("Kolmogorov-Smirnov"));
+  distTableView_->setSpan(0, 2, 1, 2);
   const int subTitlesWidth = distTableView_->horizontalHeader()->sectionSize(1) + distTableView_->horizontalHeader()->sectionSize(2);
   const int widthCorrection = titleWidth - subTitlesWidth;
   if (widthCorrection > 0)
@@ -386,7 +390,7 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
     }
     catch (std::exception & ex)
     {
-      distParamTableModel_->setNotEditableItem(3, 1, tr("-"));
+      distParamTableModel_->setNotEditableItem(3, 1, "-");
     }
     try
     {
@@ -394,7 +398,7 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
     }
     catch (std::exception & ex)
     {
-      distParamTableModel_->setNotEditableItem(4, 1, tr("-"));
+      distParamTableModel_->setNotEditableItem(4, 1, "-");
     }
 
     if (distClassName != "Normal") // mean and std already displayed for the Normal distribution
@@ -406,7 +410,7 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
   else
   {
     for (UnsignedInteger i = 0; i < 4; ++i)
-      distParamTableModel_->setNotEditableItem(1 + i, 1, tr("-"));
+      distParamTableModel_->setNotEditableItem(1 + i, 1, "-");
   }
   // resize
   distParamTableView_->resizeToContents();
