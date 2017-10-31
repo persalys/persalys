@@ -244,7 +244,8 @@ void PlotWidget::plotPDFCurve(const Distribution & distribution, const QPen pen)
   plotCurve(dataPDF, pen);
   // Add margin at the top to avoid to cut the curve
   const double yMax = dataPDF.getMax()[1];
-  setAxisScale(QwtPlot::yLeft, 0, yMax * (1 + 0.02));
+  if (axisInterval(QwtPlot::yLeft).maxValue() < (yMax * (1 + 0.02)))
+    setAxisScale(QwtPlot::yLeft, 0, yMax * (1 + 0.02));
   replot();
 }
 
@@ -260,7 +261,8 @@ void PlotWidget::plotCDFCurve(const Distribution & distribution, const QPen pen)
   plotCurve(dataCDF, pen);
   // Add margin at the top to avoid to cut the curve
   const double yMax = dataCDF.getMax()[1];
-  setAxisScale(QwtPlot::yLeft, 0, yMax * (1 + 0.02));
+  if (axisInterval(QwtPlot::yLeft).maxValue() < (yMax * (1 + 0.02)))
+    setAxisScale(QwtPlot::yLeft, 0, yMax * (1 + 0.02));
   replot();
 }
 
