@@ -299,7 +299,7 @@ String InferenceAnalysis::__repr__() const
       << " level=" << getLevel();
   for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
   {
-    oss << " interestVariables " << getInterestVariables()[i]
+    oss << " interestVariable " << getInterestVariables()[i]
         << " distributionFactories=" << getDistributionsFactories(getInterestVariables()[i]);
   }
   return oss;
