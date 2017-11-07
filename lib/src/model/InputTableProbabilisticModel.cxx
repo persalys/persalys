@@ -73,6 +73,7 @@ Qt::ItemFlags InputTableProbabilisticModel::flags(const QModelIndex & index) con
 QVariant InputTableProbabilisticModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
+  {
     switch (section)
     {
       case 0:
@@ -82,6 +83,12 @@ QVariant InputTableProbabilisticModel::headerData(int section, Qt::Orientation o
       default:
         return QVariant();
     }
+  }
+  else if (role == Qt::ToolTipRole && section == 0 && rowCount())
+  {
+    const bool allChecked = physicalModel_.getStochasticInputNames().getSize() == physicalModel_.getInputs().getSize();
+    return allChecked ? tr("Unselect all") : tr("Select all");
+  }
   return QAbstractTableModel::headerData(section, orientation, role);
 }
 

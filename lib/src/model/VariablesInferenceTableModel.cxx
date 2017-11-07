@@ -59,6 +59,9 @@ QVariant VariablesInferenceTableModel::headerData(int section, Qt::Orientation o
 {
   if (role == Qt::DisplayRole && orientation == Qt::Horizontal && section == 0)
     return tr("Variable");
+  else if (role == Qt::ToolTipRole && section == 0 && rowCount())
+    return isVariablesChecked_.contains(false) ? tr("Select all") : tr("Unselect all");
+
   return QAbstractTableModel::headerData(section, orientation, role);
 }
 

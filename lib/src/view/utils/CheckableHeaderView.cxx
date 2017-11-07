@@ -32,8 +32,6 @@ CheckableHeaderView::CheckableHeaderView(QWidget* parent)
 #else
   setClickable(true);
 #endif
-
-  setToolTip(tr("Select all"));
 }
 
 
@@ -112,8 +110,6 @@ void CheckableHeaderView::mousePressEvent(QMouseEvent* event)
       isChecked_ = !isChecked_;
       updateSection(0);
       model()->setHeaderData(0, Qt::Horizontal, isChecked_, Qt::CheckStateRole);
-
-      setToolTip(isChecked_ ? tr("Unselect all") : tr("Select all"));
       return;
     }
   }
@@ -128,7 +124,6 @@ void CheckableHeaderView::setChecked(bool checked)
   {
     isChecked_ = checked;
     updateSection(0);
-    setToolTip(isChecked_ ? tr("Unselect all") : tr("Select all"));
   }
 }
 }

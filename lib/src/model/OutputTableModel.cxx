@@ -65,6 +65,11 @@ QVariant OutputTableModel::headerData(int section, Qt::Orientation orientation, 
         return tr("Value");
     }
   }
+  else if (role == Qt::ToolTipRole && section == 0 && rowCount())
+  {
+    const bool allChecked = physicalModel_.getOutputNames().getSize() == physicalModel_.getSelectedOutputsNames().getSize();
+    return allChecked ? tr("Unselect all") : tr("Select all");
+  }
   return QAbstractTableModel::headerData(section, orientation, role);
 }
 
