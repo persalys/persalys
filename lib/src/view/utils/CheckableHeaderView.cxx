@@ -60,10 +60,16 @@ int CheckableHeaderView::getMinimumSectionSize() const
   const int labelSpacing = style()->pixelMetric(QStyle::PM_CheckBoxLabelSpacing);
   const int indicatorWidth = style()->subElementRect(QStyle::SE_CheckBoxIndicator, &option).width();
 
+  const int sortIndicatorSize = style()->pixelMetric(QStyle::PM_HeaderMarkSize);
+  const int sortIndicatorMargin = style()->pixelMetric(QStyle::PM_HeaderMargin);
+
   // before the text we need the size: (buttonMargin + labelSpacing + indicatorWidth)
   // the text is at the middle of the cell
   // so we also need the size (buttonMargin + labelSpacing + indicatorWidth) after the text
-  return textWidth + 2 * (buttonMargin + labelSpacing + indicatorWidth);
+  const int minSectionSize = textWidth + 2 * (buttonMargin + labelSpacing + indicatorWidth);
+
+  // if the sort indicator is shown: add sortIndicatorSize + sortIndicatorMargin
+  return isSortIndicatorShown() ? (minSectionSize + sortIndicatorSize + sortIndicatorMargin) : minSectionSize;
 }
 
 
