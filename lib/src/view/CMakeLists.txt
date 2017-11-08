@@ -94,6 +94,9 @@ ot_add_source_file ( CopulaParametersTabWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWindow.cxx )
 ot_add_source_file ( WidgetBoundToDockWidget.cxx )
+if (OTMORRIS_FOUND)
+  ot_add_source_file ( MorrisResultWindow.cxx )
+endif ()
 
 ot_install_header_file ( MainWindow.hxx )
 ot_install_header_file ( MainWidget.hxx )
@@ -183,6 +186,10 @@ ot_install_header_file ( CopulaInferenceResultWindow.hxx )
 ot_install_header_file ( CopulaParametersTabWidget.hxx )
 ot_install_header_file ( WidgetBoundToDockWidget.hxx )
 
+if (OTMORRIS_FOUND)
+  ot_install_header_file ( MorrisResultWindow.hxx )
+endif ()
+
 qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/MainWidget.hxx
                                   otgui/OTguiActions.hxx
@@ -271,6 +278,9 @@ if (SalomeYACS_FOUND)
 endif ()
 if (USE_OTFMI)
   qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/FMIPhysicalModelWindow.hxx)
+endif ()
+if (OTMORRIS_FOUND)
+  qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MorrisResultWindow.hxx)
 endif ()
 
 set(RESOURCES ${CMAKE_SOURCE_DIR}/gui.qrc)
