@@ -1,0 +1,88 @@
+[class=Input name=x1 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x2 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x3 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x4 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x5 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x6 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x7 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x8 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x9 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x10 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x11 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x12 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x13 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x14 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x15 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x16 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x17 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x18 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x19 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07, class=Input name=x20 value=0 description= distribution=class=Uniform name=Uniform dimension=1 a=0 b=1 finiteDifferenceStep=1e-07]
+class=MorrisAnalysis name=aMorris physicalModel=MorrisModel interestVariables=[y] number of trajectories=4 bounds=class=Interval name=Unnamed dimension=20 lower bound=class=Point name=Unnamed dimension=20 values=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] upper bound=class=Point name=Unnamed dimension=20 values=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1] finite lower bound=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1] finite upper bound=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1] level=4 seed=2
+error message= 
+result= class=MorrisResult name=Unnamed inputs selections =[[0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0]] no effect boundaries=class=Point name=Unnamed dimension=1 values=[29.7056]
+meanAbsEE = [29.0088,37.4852,58.9486,41.0215,53.248,38.2683,33.5152,38.6917,38.9525,39.1264,4.69057,1.89721,3.19124,2.03802,1.04338,0.869486,1.14162,0.462561,3.22376,1.42377]#20
+#!/usr/bin/env python
+# coding: utf-8
+
+from __future__ import print_function
+import openturns as ot
+import otguibase
+
+myStudy = otguibase.OTStudy('myStudy')
+otguibase.OTStudy.Add(myStudy)
+dist_x1 = ot.Uniform(0, 1)
+x1 = otguibase.Input('x1', 0, dist_x1, '')
+dist_x2 = ot.Uniform(0, 1)
+x2 = otguibase.Input('x2', 0, dist_x2, '')
+dist_x3 = ot.Uniform(0, 1)
+x3 = otguibase.Input('x3', 0, dist_x3, '')
+dist_x4 = ot.Uniform(0, 1)
+x4 = otguibase.Input('x4', 0, dist_x4, '')
+dist_x5 = ot.Uniform(0, 1)
+x5 = otguibase.Input('x5', 0, dist_x5, '')
+dist_x6 = ot.Uniform(0, 1)
+x6 = otguibase.Input('x6', 0, dist_x6, '')
+dist_x7 = ot.Uniform(0, 1)
+x7 = otguibase.Input('x7', 0, dist_x7, '')
+dist_x8 = ot.Uniform(0, 1)
+x8 = otguibase.Input('x8', 0, dist_x8, '')
+dist_x9 = ot.Uniform(0, 1)
+x9 = otguibase.Input('x9', 0, dist_x9, '')
+dist_x10 = ot.Uniform(0, 1)
+x10 = otguibase.Input('x10', 0, dist_x10, '')
+dist_x11 = ot.Uniform(0, 1)
+x11 = otguibase.Input('x11', 0, dist_x11, '')
+dist_x12 = ot.Uniform(0, 1)
+x12 = otguibase.Input('x12', 0, dist_x12, '')
+dist_x13 = ot.Uniform(0, 1)
+x13 = otguibase.Input('x13', 0, dist_x13, '')
+dist_x14 = ot.Uniform(0, 1)
+x14 = otguibase.Input('x14', 0, dist_x14, '')
+dist_x15 = ot.Uniform(0, 1)
+x15 = otguibase.Input('x15', 0, dist_x15, '')
+dist_x16 = ot.Uniform(0, 1)
+x16 = otguibase.Input('x16', 0, dist_x16, '')
+dist_x17 = ot.Uniform(0, 1)
+x17 = otguibase.Input('x17', 0, dist_x17, '')
+dist_x18 = ot.Uniform(0, 1)
+x18 = otguibase.Input('x18', 0, dist_x18, '')
+dist_x19 = ot.Uniform(0, 1)
+x19 = otguibase.Input('x19', 0, dist_x19, '')
+dist_x20 = ot.Uniform(0, 1)
+x20 = otguibase.Input('x20', 0, dist_x20, '')
+y = otguibase.Output('y', '')
+inputCollection = []
+inputCollection.append(x1)
+inputCollection.append(x2)
+inputCollection.append(x3)
+inputCollection.append(x4)
+inputCollection.append(x5)
+inputCollection.append(x6)
+inputCollection.append(x7)
+inputCollection.append(x8)
+inputCollection.append(x9)
+inputCollection.append(x10)
+inputCollection.append(x11)
+inputCollection.append(x12)
+inputCollection.append(x13)
+inputCollection.append(x14)
+inputCollection.append(x15)
+inputCollection.append(x16)
+inputCollection.append(x17)
+inputCollection.append(x18)
+inputCollection.append(x19)
+inputCollection.append(x20)
+outputCollection = []
+outputCollection.append(y)
+code='\nimport openturns as ot\ndef _exec(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20):\n    ot.RandomGenerator.SetSeed(123)\n    b0 = ot.DistFunc.rNormal()\n    alpha = ot.DistFunc.rNormal(10)\n    beta =  ot.DistFunc.rNormal(6*14)\n    gamma =  ot.DistFunc.rNormal(20*14)\n\n    # b1\n    b1 = [20] * 10 + list(alpha)\n\n    # b2\n    b2 = [[0] *20] * 20\n    for i in range(6):\n        for j in range(6):\n            b2[i][j] = -15.0\n\n    # Tae into account beta\n    k = 0\n    for i in range(6):\n        for j in range(14):\n            b2[i][j + 6] = beta[k]\n            k = k + 1\n\n    # Take into account gamma\n    k = 0\n    for i in range(6, 20):\n        for j in range(20):\n            b2[i][j] = gamma[k]\n\n    # b3\n    b3 = [[[0]*20]*20]*20\n    for i in range(5):\n        for j in range(5):\n            for k in range(5):\n                b3[i][j][k] = -10.0\n\n    # b4\n    b4 = [[[[0]*20]*20]*20]*20\n    for i in range(4):\n        for j in range(4):\n            for k in range(4):\n                for l in range(4):\n                    b4[i][j][k][l] = 5\n\n    # X is a list, transform it into array\n    X = ot.Point([x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20])\n    w = (X - [0.5]*20)*2\n    for k in [2,4,6]:\n        w[k] = 2.0 * (1.1 * X[k] / (X[k] + 0.1) - 0.5)\n\n    y = 0.0\n    y = ot.dot(w, b1)\n\n    # Morris function\n    for i in range(19):\n        for j in range(i + 1, 20):\n            y +=  b2[i][j] * w[i] * w[j]\n    for i in range(18):\n        for j in range(i + 1, 19):\n            for k in range(j + 1, 20):\n                y += b3[i][j][k] * w[i] * w[j] * w[k]\n\n    for i in range(17):\n        for j in range(i + 1, 18):\n            for k in range(j + 1, 20):\n                for l in range(k + 1, 20):\n                    y += b4[i][j][k][l] * w[i] * w[j] * w[k] * w[l]\n\n    y = y + b0\n    y_fake = 0.\n\n    return y\n\n'
+MorrisModel = otguibase.PythonPhysicalModel('MorrisModel', inputCollection, outputCollection, code)
+myStudy.add(MorrisModel)
+aMorris = otguibase.MorrisAnalysis('aMorris', MorrisModel)
+aMorris.setTrajectoriesNumber(4)
+aMorris.setBounds(ot.Interval([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]))
+aMorris.setLevel(4)
+aMorris.setSeed(2)
+myStudy.add(aMorris)
+
