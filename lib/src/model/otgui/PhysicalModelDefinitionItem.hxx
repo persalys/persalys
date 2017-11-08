@@ -39,6 +39,9 @@ public slots:
   void createProbabilisticModel();
   void createDesignOfExperiment();
   void createModelEvaluation();
+#ifdef OTGUI_HAVE_OTMORRIS
+  void createScreening();
+#endif
   void updateProbaActionAvailability();
 signals:
   void probabilisticModelRequested(PhysicalModelItem*);
@@ -54,6 +57,7 @@ protected:
 private:
   QAction * newProbabilisticModel_;
   QAction * newModelEvaluation_;
+  QAction * newScreening_;
   QAction * newDesignOfExperiment_;
 };
 }

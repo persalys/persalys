@@ -57,6 +57,7 @@ public slots:
 signals:
   // signal for diagram
   void inputNumberValidityChanged(bool);
+  void twoInputsValidityChanged(bool);
   void outputNumberValidityChanged(bool);
   void physicalModelValidityChanged(bool);
   void probabilisticModelValidityChanged(bool);
@@ -65,8 +66,9 @@ signals:
   void doeNumberValidityChanged(bool);
   void doeEvaluationNumberValidityChanged(bool);
 
-  // signals for StudyTreeview
+  // signals for StudyManager
   void evaluationModelRequested();
+  void screeningRequested();
   void probabilisticModelRequested();
   void centralTendencyRequested();
   void sensitivityRequested();
