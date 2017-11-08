@@ -24,12 +24,14 @@
 #include <qwt_plot_curve.h>
 #include <qwt_plot.h>
 #include <qwt_symbol.h>
+#include <qwt_plot_marker.h>
 
 #include <openturns/Distribution.hxx>
 #include "otgui/OTGuiprivate.hxx"
 
 namespace OTGUI
 {
+
 class OTGUI_API PlotWidget : public QwtPlot
 {
   Q_OBJECT
@@ -42,6 +44,8 @@ public:
   PlotWidget(const QString plotTypeName = "", const bool isIndicesPlot = false, QWidget * parent = 0);
 
   /// plot a curve
+  void plotCurve(QVector<QPointF> points, const QPen pen = QPen(Qt::black, 2),
+                 QwtPlotCurve::CurveStyle style = QwtPlotCurve::Lines, QwtSymbol* symbol = 0, QString title = "", bool isStatic = false);
   void plotCurve(double * x, double * y, int size, const QPen pen = QPen(Qt::black, 2),
                  QwtPlotCurve::CurveStyle style = QwtPlotCurve::Lines, QwtSymbol* symbol = 0, QString title = "");
   void plotCurve(const OT::Sample & data, const QPen pen = QPen(Qt::black, 2),
@@ -64,10 +68,10 @@ public:
                               const OT::Interval& firstOrderIndicesIntervals = OT::Interval(),
                               const OT::Interval& totalIndicesIntervals = OT::Interval());
   void plotContour(const OT::Distribution& distribution, const bool isPdf = true);
+  void setMorrisPlotType(const QPointF& initialMarkersCoord);
 
   /// clear plot
   void clear();
-  void replot();
 
   static QVector<PlotWidget*> GetListScatterPlots(const OT::Sample& inS,
       const OT::Sample& notValidInS,
@@ -77,19 +81,28 @@ public:
       const QStringList outNames,
       const QStringList outAxisNames);
 
+protected:
+  virtual bool eventFilter(QObject *obj, QEvent *event);
+
 public slots:
   void contextMenu(const QPoint & pos);
+  virtual void replot();
   void exportPlot();
+  void selectPoints(const QRectF&);
 
 signals:
   void plotChanged();
+  void verticalMarkerPositionChanged(double);
+  void selectedPointsChanged();
+  void selectedPointsChanged(const OT::Indices& ind);
+
 private:
   void updateScaleParameters(const OT::Distribution & distribution);
 
 private:
 // TODO  QwtPlotGrid * grid_;
   QString plotTypeName_;
-  QAction * exportPlotAction_;
+  QwtPlotMarker *  verticalMarker_;
 };
 }
 #endif
