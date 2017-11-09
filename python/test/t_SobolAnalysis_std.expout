@@ -1,9 +1,17 @@
-class=SobolAnalysis name=aSobol physicalModel=aModel interestVariables=[y0] maximumCalls=1000 maximumCoefficientOfVariation=-1 maximumElapsedTime=30 seed=2 blockSize=250
-result= class=SobolResult name=Unnamed outputNames=[y0] firstOrderIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.907378,0.104983]] totalIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 data=[[0.986434,0.0980133]] callsNumber=1000 coefficientOfVariation=-1
-class=SobolAnalysis name=aSobol2 physicalModel=aModel interestVariables=[y0] maximumCalls=inf maximumCoefficientOfVariation=0.02 maximumElapsedTime=100000 seed=0 blockSize=1
-result= class=SobolResult name=Unnamed outputNames=[y0] firstOrderIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.753579,0.0727707]] totalIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 data=[[0.926134,0.0714451]] callsNumber=740 coefficientOfVariation=0.0199719
-class=SobolAnalysis name=aSobol3 physicalModel=aModel interestVariables=[y0,y1] maximumCalls=1000 maximumCoefficientOfVariation=0.01 maximumElapsedTime=60 seed=2 blockSize=250
-result= class=SobolResult name=Unnamed outputNames=[y0,y1] firstOrderIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=2 dimension=2 description=[x0,x1] data=[[0.907378,0.104983],[0.907378,0.104983]] totalIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=2 dimension=2 data=[[0.986434,0.0980133],[0.986434,0.0980133]] callsNumber=1000 coefficientOfVariation=-1
+class=SobolAnalysis name=aSobol physicalModel=aModel interestVariables=[y0] maximumCalls=1000 maximumCoefficientOfVariation=-1 maximumElapsedTime=30 seed=2 blockSize=250 bootstrapSize=100 bootstrapConfidenceLevel=0.95
+result= class=SobolResult name=Unnamed outputNames=[y0] firstOrderIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.907378,0.104983]] totalIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 data=[[0.986434,0.0980133]] firstOrderIndicesInterval=[[0.649326, 1.13005]
+[0.0441517, 0.153533]] totalIndicesInterval=[[0.774613, 1.15009]
+[-0.107297, 0.257803]] callsNumber=1000 coefficientOfVariation=-1
+class=SobolAnalysis name=aSobol2 physicalModel=aModel interestVariables=[y0] maximumCalls=inf maximumCoefficientOfVariation=0.02 maximumElapsedTime=100000 seed=0 blockSize=1 bootstrapSize=100 bootstrapConfidenceLevel=0.95
+result= class=SobolResult name=Unnamed outputNames=[y0] firstOrderIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.753579,0.0727707]] totalIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 data=[[0.926134,0.0714451]] firstOrderIndicesInterval=[[0.5289, 0.991903]
+[0.0080538, 0.124042]] totalIndicesInterval=[[0.676971, 1.11489]
+[-0.150943, 0.2453]] callsNumber=740 coefficientOfVariation=0.0199719
+class=SobolAnalysis name=aSobol3 physicalModel=aModel interestVariables=[y0,y1] maximumCalls=1000 maximumCoefficientOfVariation=0.01 maximumElapsedTime=60 seed=2 blockSize=250 bootstrapSize=100 bootstrapConfidenceLevel=0.95
+result= class=SobolResult name=Unnamed outputNames=[y0,y1] firstOrderIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=2 dimension=2 description=[x0,x1] data=[[0.907378,0.104983],[0.907378,0.104983]] totalIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=2 dimension=2 data=[[0.986434,0.0980133],[0.986434,0.0980133]] firstOrderIndicesInterval=[[0.649326, 1.13005]
+[0.0441517, 0.153533],[0.617818, 1.06598]
+[0.0457901, 0.159175]] totalIndicesInterval=[[0.774613, 1.15009]
+[-0.107297, 0.257803],[0.776924, 1.12359]
+[-0.0899238, 0.246705]] callsNumber=1000 coefficientOfVariation=-1
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -35,6 +43,8 @@ aSobol.setMaximumCoefficientOfVariation(-1)
 aSobol.setMaximumElapsedTime(30)
 aSobol.setBlockSize(250)
 aSobol.setSeed(2)
+aSobol.setBootstrapSize(100)
+aSobol.setBootstrapConfidenceLevel(0.95)
 myStudy.add(aSobol)
 aSobol2 = otguibase.SobolAnalysis('aSobol2', aModel)
 interestVariables = ['y0']
@@ -43,6 +53,8 @@ aSobol2.setMaximumCoefficientOfVariation(0.02)
 aSobol2.setMaximumElapsedTime(100000)
 aSobol2.setBlockSize(1)
 aSobol2.setSeed(0)
+aSobol2.setBootstrapSize(100)
+aSobol2.setBootstrapConfidenceLevel(0.95)
 myStudy.add(aSobol2)
 aSobol3 = otguibase.SobolAnalysis('aSobol3', aModel)
 aSobol3.setMaximumCalls(1000)
@@ -50,5 +62,7 @@ aSobol3.setMaximumCoefficientOfVariation(0.01)
 aSobol3.setMaximumElapsedTime(60)
 aSobol3.setBlockSize(250)
 aSobol3.setSeed(2)
+aSobol3.setBootstrapSize(100)
+aSobol3.setBootstrapConfidenceLevel(0.95)
 myStudy.add(aSobol3)
 

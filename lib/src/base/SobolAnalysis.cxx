@@ -336,6 +336,8 @@ Parameters SobolAnalysis::getParameters() const
   param.add("Maximum calls", maxCalls);
   param.add("Block size", getBlockSize());
   param.add("Seed", getSeed());
+  param.add("Bootstrap size", getBootstrapSize());
+  param.add("Bootstrap confidence level", getBootstrapConfidenceLevel());
 
   return param;
 }
@@ -357,6 +359,8 @@ String SobolAnalysis::getPythonScript() const
     oss << getName() << ".setMaximumElapsedTime(" << getMaximumElapsedTime() << ")\n";
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
+  oss << getName() << ".setBootstrapSize(" << getBootstrapSize() << ")\n";
+  oss << getName() << ".setBootstrapConfidenceLevel(" << getBootstrapConfidenceLevel() << ")\n";
 
   return oss;
 }
