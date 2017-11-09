@@ -21,7 +21,7 @@
 #ifndef OTGUI_METAMODELVALIDATIONWIDGET_HXX
 #define OTGUI_METAMODELVALIDATIONWIDGET_HXX
 
-#include "otgui/OTGuiprivate.hxx"
+#include "otgui/MetaModelValidationResult.hxx"
 
 #include <openturns/Sample.hxx>
 
@@ -34,10 +34,9 @@ class OTGUI_API MetaModelValidationWidget : public QWidget
   Q_OBJECT
 
 public:
-  MetaModelValidationWidget(const OT::Sample& metaModelSample,
+  MetaModelValidationWidget(const MetaModelValidationResult& result,
                             const OT::Sample& outputSample,
-                            const double error = -1.0,
-                            const double value = -1.0,
+                            const OT::UnsignedInteger indexOutput,
                             const QString measure = "",
                             QWidget * parent = 0);
 };

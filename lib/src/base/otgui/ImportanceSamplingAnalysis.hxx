@@ -41,6 +41,7 @@ public:
   OT::Point getStandardSpaceDesignPoint() const;
   void setStandardSpaceDesignPoint(const OT::Point& point);
 
+  virtual Parameters getParameters() const;
   virtual OT::String getPythonScript() const;
 
   /** String converter */

@@ -20,7 +20,7 @@
  */
 #include "otgui/MetaModelAnalysisResult.hxx"
 
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
@@ -34,6 +34,10 @@ static Factory<MetaModelAnalysisResult> Factory_MetaModelAnalysisResult;
 MetaModelAnalysisResult::MetaModelAnalysisResult()
   : PersistentObject()
   , metaModel_()
+  , analyticalValidation_("Analytical")
+  , testSampleValidation_("Test sample")
+  , kFoldValidation_("K-Fold")
+  , looValidation_("Leave-one-out")
 {
 
 }
@@ -63,21 +67,42 @@ Sample MetaModelAnalysisResult::getMetaModelOutputSample() const
 }
 
 
-Sample MetaModelAnalysisResult::getMetaModelOutputSampleLeaveOneOut() const
+MetaModelValidationResult MetaModelAnalysisResult::getAnalyticalValidation() const
 {
-  return metaModelOutputSampleLOO_;
-}
+  return analyticalValidation_;
+};
 
 
-Point MetaModelAnalysisResult::getErrorQ2LeaveOneOut() const
+MetaModelValidationResult MetaModelAnalysisResult::getTestSampleValidation() const
 {
-  return errorQ2LOO_;
-}
+  return testSampleValidation_;
+};
 
 
-Point MetaModelAnalysisResult::getQ2LeaveOneOut() const
+MetaModelValidationResult MetaModelAnalysisResult::getKFoldValidation() const
 {
-  return q2LOO_;
+  return kFoldValidation_;
+};
+
+
+MetaModelValidationResult MetaModelAnalysisResult::getLeaveOneOutValidation() const
+{
+  return looValidation_;
+};
+
+
+std::vector<MetaModelValidationResult> MetaModelAnalysisResult::getValidations() const
+{
+  std::vector<MetaModelValidationResult> validations;
+  if (analyticalValidation_.getQ2().getSize())
+    validations.push_back(analyticalValidation_);
+  if (testSampleValidation_.getQ2().getSize())
+    validations.push_back(testSampleValidation_);
+  if (kFoldValidation_.getQ2().getSize())
+    validations.push_back(kFoldValidation_);
+  if (looValidation_.getQ2().getSize())
+    validations.push_back(looValidation_);
+  return validations;
 }
 
 
@@ -86,9 +111,7 @@ String MetaModelAnalysisResult::__repr__() const
 {
   OSS oss;
   oss << "class=" << GetClassName()
-      << " metaModel_=" << getMetaModel()
-      << " errorQ2LOO=" << getErrorQ2LeaveOneOut()
-      << " q2LOO=" << getQ2LeaveOneOut();
+      << " metaModel_=" << getMetaModel();
   return oss;
 }
 
@@ -100,9 +123,10 @@ void MetaModelAnalysisResult::save(Advocate& adv) const
   adv.saveAttribute("metaModel_", metaModel_);
   adv.saveAttribute("outputSample_", outputSample_);
   adv.saveAttribute("metaModelOutputSample_", metaModelOutputSample_);
-  adv.saveAttribute("metaModelOutputSampleLOO_", metaModelOutputSampleLOO_);
-  adv.saveAttribute("errorQ2LOO_", errorQ2LOO_);
-  adv.saveAttribute("q2LOO_", q2LOO_);
+  adv.saveAttribute("analyticalValidation_", analyticalValidation_);
+  adv.saveAttribute("testSampleValidation_", testSampleValidation_);
+  adv.saveAttribute("kFoldValidation_", kFoldValidation_);
+  adv.saveAttribute("looValidation_", looValidation_);
 }
 
 
@@ -113,8 +137,9 @@ void MetaModelAnalysisResult::load(Advocate& adv)
   adv.loadAttribute("metaModel_", metaModel_);
   adv.loadAttribute("outputSample_", outputSample_);
   adv.loadAttribute("metaModelOutputSample_", metaModelOutputSample_);
-  adv.loadAttribute("metaModelOutputSampleLOO_", metaModelOutputSampleLOO_);
-  adv.loadAttribute("errorQ2LOO_", errorQ2LOO_);
-  adv.loadAttribute("q2LOO_", q2LOO_);
+  adv.loadAttribute("analyticalValidation_", analyticalValidation_);
+  adv.loadAttribute("testSampleValidation_", testSampleValidation_);
+  adv.loadAttribute("kFoldValidation_", kFoldValidation_);
+  adv.loadAttribute("looValidation_", looValidation_);
 }
 }

@@ -23,6 +23,8 @@
 #include "otgui/MetaModel.hxx"
 #include "otgui/DesignOfExperimentEvaluation.hxx"
 
+#include <openturns/KPermutationsDistribution.hxx>
+#include <openturns/RandomGenerator.hxx>
 #include <openturns/Uniform.hxx>
 
 using namespace OT;
@@ -34,7 +36,14 @@ namespace OTGUI
 MetaModelAnalysis::MetaModelAnalysis()
   : DesignOfExperimentAnalysis()
   , isDistributionComputed_(false)
+  , analyticalValidation_(true)
+  , testSampleValidation_(false)
+  , kFoldValidation_(false)
   , leaveOneOutValidation_(false)
+  , percentageTestSample_(20)
+  , seedTestSample_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
+  , nbFolds_(3)
+  , seedKFold_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
 }
 
@@ -43,7 +52,14 @@ MetaModelAnalysis::MetaModelAnalysis()
 MetaModelAnalysis::MetaModelAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
   : DesignOfExperimentAnalysis(name, designOfExperiment)
   , isDistributionComputed_(false)
+  , analyticalValidation_(true)
+  , testSampleValidation_(false)
+  , kFoldValidation_(false)
   , leaveOneOutValidation_(false)
+  , percentageTestSample_(20)
+  , seedTestSample_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
+  , nbFolds_(3)
+  , seedKFold_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
   if (designOfExperiment_.getOutputSample().getSize())
     setInterestVariables(designOfExperiment_.getOutputSample().getDescription());
@@ -54,7 +70,14 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const DesignOfExperimen
 MetaModelAnalysis::MetaModelAnalysis(const String& name, const Analysis& analysis)
   : DesignOfExperimentAnalysis(name)
   , isDistributionComputed_(false)
+  , analyticalValidation_(true)
+  , testSampleValidation_(false)
+  , kFoldValidation_(false)
   , leaveOneOutValidation_(false)
+  , percentageTestSample_(20)
+  , seedTestSample_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
+  , nbFolds_(3)
+  , seedKFold_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
   SimulationAnalysis * analysis_ptr = dynamic_cast<SimulationAnalysis*>(analysis.getImplementation().get());
 
@@ -67,7 +90,43 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const Analysis& analysi
 }
 
 
-bool MetaModelAnalysis::isLeaveOneOutValidation() const
+bool MetaModelAnalysis::analyticalValidation() const
+{
+  return analyticalValidation_;
+}
+
+
+void MetaModelAnalysis::setAnalyticalValidation(const bool validation)
+{
+  analyticalValidation_ = validation;
+}
+
+
+bool MetaModelAnalysis::testSampleValidation() const
+{
+  return testSampleValidation_;
+}
+
+
+void MetaModelAnalysis::setTestSampleValidation(const bool validation)
+{
+  testSampleValidation_ = validation;
+}
+
+
+bool MetaModelAnalysis::kFoldValidation() const
+{
+  return kFoldValidation_;
+}
+
+
+void MetaModelAnalysis::setKFoldValidation(const bool validation)
+{
+  kFoldValidation_ = validation;
+}
+
+
+bool MetaModelAnalysis::leaveOneOutValidation() const
 {
   return leaveOneOutValidation_;
 }
@@ -76,6 +135,84 @@ bool MetaModelAnalysis::isLeaveOneOutValidation() const
 void MetaModelAnalysis::setLeaveOneOutValidation(const bool validation)
 {
   leaveOneOutValidation_ = validation;
+}
+
+
+void MetaModelAnalysis::setTestSampleValidationPercentageOfPoints(const UnsignedInteger percentage)
+{
+  if (percentage == 0 || percentage >= 100)
+    throw InvalidArgumentException(HERE) << "The percentage must be superior to 0 and inferior to 100";
+  percentageTestSample_ = percentage;
+}
+
+
+void MetaModelAnalysis::setTestSampleValidationSeed(const UnsignedInteger seed)
+{
+  seedTestSample_ = seed;
+}
+
+
+PointWithDescription MetaModelAnalysis::getTestSampleValidationParameters() const
+{
+  PointWithDescription resu(2);
+  resu[0] = percentageTestSample_;
+  resu[1] = seedTestSample_;
+  Description resuDescription(2);
+  resuDescription[0] = "Percentage";
+  resuDescription[1] = "Seed";
+  resu.setDescription(resuDescription);
+  return resu;
+}
+
+
+UnsignedInteger MetaModelAnalysis::getTestSampleValidationPercentageOfPoints() const
+{
+  return percentageTestSample_;
+}
+
+
+UnsignedInteger MetaModelAnalysis::getTestSampleValidationSeed() const
+{
+  return seedTestSample_;
+}
+
+
+void MetaModelAnalysis::setKFoldValidationNumberOfFolds(const UnsignedInteger nbFolds)
+{
+  if (nbFolds_ < 2)
+    throw InvalidArgumentException(HERE) << "The number of folds must be superior to 1 ";
+  nbFolds_ = nbFolds;
+}
+
+
+void MetaModelAnalysis::setKFoldValidationSeed(const UnsignedInteger seed)
+{
+  seedKFold_ = seed;
+}
+
+
+PointWithDescription MetaModelAnalysis::getKFoldValidationParameters() const
+{
+  PointWithDescription resu(2);
+  resu[0] = nbFolds_;
+  resu[1] = seedKFold_;
+  Description resuDescription(2);
+  resuDescription[0] = "Number of folds";
+  resuDescription[1] = "Seed";
+  resu.setDescription(resuDescription);
+  return resu;
+}
+
+
+UnsignedInteger MetaModelAnalysis::getKFoldValidationNumberOfFolds() const
+{
+  return nbFolds_;
+}
+
+
+UnsignedInteger MetaModelAnalysis::getKFoldValidationSeed() const
+{
+  return seedKFold_;
 }
 
 
@@ -149,7 +286,7 @@ ComposedDistribution MetaModelAnalysis::getDistribution()
     }
     // use Uniform distributions:
     // if the physical model has only deterministic variables
-    // else if data model
+    // or if data model
     else
     {
       // get min/max inputSample
@@ -213,7 +350,7 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Fu
 }
 
 
-void MetaModelAnalysis::computeError(const Sample& metaOutSample, const Sample& outSample, Point& error, Point& q2)
+void MetaModelAnalysis::computeError(const Sample& metaOutSample, const Sample& outSample, Point& residuals, Point& q2)
 {
   // check
   if (!outSample.getSize())
@@ -223,9 +360,11 @@ void MetaModelAnalysis::computeError(const Sample& metaOutSample, const Sample& 
 
   const UnsignedInteger size = outSample.getSize();
   const UnsignedInteger dimension = outSample.getDimension();
+
+  // var Y
   const Point variance(outSample.computeVariance());
 
-  error = Point(dimension);
+  residuals = Point(dimension);
   q2 = Point(dimension);
 
   for (UnsignedInteger i = 0; i < dimension; ++i)
@@ -237,9 +376,9 @@ void MetaModelAnalysis::computeError(const Sample& metaOutSample, const Sample& 
       const double diff = metaOutSample[j][i] - outSample[j][i];
       quadraticResidual += diff * diff;
     }
-    // sqrt ( sum[ (ŷ_j/j - y_j)^2 ] )
-    error[i] = sqrt(quadraticResidual) / size;
-    // 1 - sum[ (ŷ_j/j - y_j)^2 ] / (n-1) / Var
+    // sqrt ( sum[ (ŷ_j/j - y_j)^2 ] ) / n
+    residuals[i] = sqrt(quadraticResidual) / size;
+    // 1 - sum[ (ŷ_j/j - y_j)^2 ] / (n-1) / Var Y
     q2[i] = 1.0 - (quadraticResidual / (size - 1.0)) / variance[i];
   }
 }
@@ -247,50 +386,214 @@ void MetaModelAnalysis::computeError(const Sample& metaOutSample, const Sample& 
 
 void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result, const Sample& inputSample)
 {
-  // validation: leave-one-out
-  if (leaveOneOutValidation_)
+  // check
+  if (analyticalValidation_ || testSampleValidation_ || kFoldValidation_ || leaveOneOutValidation_)
   {
-    // check
     if (!result.outputSample_.getSize())
-      throw InvalidValueException(HERE) << "Problem during the creation of the metamodel: The outputSample is empty.\n";
+      throw InvalidValueException(HERE) << "Problem during the validation of the metamodel: The outputSample is empty.\n";
+  }
+  else // no validation requested
+    return;
 
-    informationMessage_ = "Meta model has been created.\nThe validation is running.";
+  // validation: Analytical
+  if (analyticalValidation_)
+    computeAnalyticalValidation(result, inputSample);
+
+  // validation: Test sample
+  if (testSampleValidation_)
+    computeTestSampleValidation(result, inputSample);
+
+  // validation: K-Fold
+  if (kFoldValidation_)
+    computeKFoldValidation(result, inputSample);
+
+  // validation: Leave-one-out
+  if (leaveOneOutValidation_)
+    computeLOOValidation(result, inputSample);
+}
+
+
+void MetaModelAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& result, const Sample& inputSample)
+{
+  throw NotYetImplementedException(HERE) << "Analytical validation not available";
+}
+
+
+void MetaModelAnalysis::computeTestSampleValidation(MetaModelAnalysisResult& result, const Sample& inputSample)
+{
+  if (stopRequested_)
+  {
+    testSampleValidation_ = false;
+    return;
+  }
+  informationMessage_ = "The Test sample validation is running.";
+  notify("informationMessageUpdated");
+
+  // dimensions
+  const UnsignedInteger nbPoints = result.outputSample_.getSize();
+  const UnsignedInteger testSampleSize = (nbPoints * percentageTestSample_ / 100 > 0 ? nbPoints * percentageTestSample_ / 100 : 1);
+
+  // take randomly testSampleSize points in the DOE to use them for the validation
+  RandomGenerator::SetSeed(seedTestSample_);
+  const Point indicesTestSample(KPermutationsDistribution(testSampleSize, nbPoints).getRealization());
+
+  // initialize samples
+  Sample learningInSample(0, inputSample.getDimension());
+  Sample learningOutSample(0, result.outputSample_.getDimension());
+  Sample testInputSample(0, inputSample.getDimension());
+  Sample testOutputSample(0, result.outputSample_.getDimension());
+
+  for (UnsignedInteger i = 0; i < inputSample.getSize(); ++i)
+  {
+    if (!indicesTestSample.contains(i))
+    {
+      // points used to create the metamodel
+      learningInSample.add(inputSample[i]);
+      learningOutSample.add(result.outputSample_[i]);
+    }
+    else
+    {
+      // points used to validate the metamodel
+      testInputSample.add(inputSample[i]);
+      testOutputSample.add(result.outputSample_[i]);
+    }
+  }
+
+  // build and run MetaModel Algorithm
+  const Function function(runAlgo(learningInSample, learningOutSample));
+
+  // fill result
+  result.testSampleValidation_.metaModelSample_ = function(testInputSample);
+  result.testSampleValidation_.parameters_ = getTestSampleValidationParameters();
+
+  // compute Q2
+  computeError(result.testSampleValidation_.metaModelSample_, testOutputSample, result.testSampleValidation_.residuals_, result.testSampleValidation_.q2_);
+}
+
+
+void MetaModelAnalysis::computeKFoldValidation(MetaModelAnalysisResult& result, const Sample& inputSample)
+{
+  if (stopRequested_)
+  {
+    kFoldValidation_ = false;
+    return;
+  }
+  informationMessage_ = "The K-Fold validation is running.";
+  notify("informationMessageUpdated");
+
+  // dimensions
+  const UnsignedInteger nbPoints = inputSample.getSize();
+  const UnsignedInteger outDim = result.outputSample_.getDimension();
+
+  // initialize result
+  Sample metaModelSample(nbPoints, outDim);
+  Point residuals(outDim);
+  Point q2(outDim);
+
+  // we mix the samples points
+  RandomGenerator::SetSeed(seedKFold_);
+  const Point indices(KPermutationsDistribution(nbPoints, nbPoints).getRealization());
+  Sample shuffledInSample(nbPoints, inputSample.getDimension());
+  Sample shuffledOutSample(nbPoints, result.outputSample_.getDimension());
+  for (UnsignedInteger i = 0; i < nbPoints; ++i)
+  {
+    shuffledInSample[i] = inputSample[indices[i]];
+    shuffledOutSample[i] = result.outputSample_[indices[i]];
+  }
+
+  // for each fold:
+  for (UnsignedInteger i = 0; i < nbFolds_; ++i)
+  {
+    if (stopRequested_)
+    {
+      kFoldValidation_ = false;
+      return;
+    }
+
+    const int progressValue = (int) (i * 100 / nbFolds_);
+    informationMessage_ = "The K-Fold validation is running.\nProgression: " + (OSS() << progressValue).str() + "%";
     notify("informationMessageUpdated");
 
-    Sample outputSampleLOO(inputSample.getSize(), result.outputSample_.getDimension());
+    // get bounds of the fold_i
+    const UnsignedInteger beginIndex = nbPoints / nbFolds_ * i;
+    // if nbPoints%nbFolds != 0, we take the last values
+    const UnsignedInteger endIndex = (i != nbFolds_ - 1 ? nbPoints / nbFolds_ * (i + 1) : nbPoints);
 
-    for (UnsignedInteger i = 0; i < inputSample.getSize(); ++i)
+    // learning samples
+    Sample learningInSample(shuffledInSample);
+    learningInSample.erase(beginIndex, endIndex);
+    Sample learningOutSample(shuffledOutSample);
+    learningOutSample.erase(beginIndex, endIndex);
+
+    // build and run MetaModel Algorithm
+    const Function function(runAlgo(learningInSample, learningOutSample));
+
+    // test samples
+    const Sample testInputSample(shuffledInSample, beginIndex, endIndex);
+    const Sample testOutputSample(shuffledOutSample, beginIndex, endIndex);
+
+    // fill result
+    const Sample tempMetaModelSample = function(testInputSample);
+    for (UnsignedInteger j = 0; j < (endIndex - beginIndex); ++j)
     {
-      if (stopRequested_)
-      {
-        leaveOneOutValidation_ = false;
-        return;
-      }
-
-      progressValue_ = (int) (i * 100 / inputSample.getSize());
-      notify("progressValueChanged");
-
-      // remove input_i
-      Sample inLearnSample(inputSample);
-      inLearnSample.erase(i);
-      Sample outLearnSample(result.outputSample_);
-      outLearnSample.erase(i);
-
-      // build and run OT::MetaModel Algorithm
-      Function function(runAlgo(inLearnSample, outLearnSample));
-
-      // evaluate output at input_i
-      Point outputValuesForInput_i(function(inputSample[i]));
-
-      // fill sample
-      for (UnsignedInteger j = 0; j < result.outputSample_.getDimension(); ++j)
-        outputSampleLOO[i][j] = outputValuesForInput_i[j];
+      metaModelSample[indices[beginIndex + j]] = tempMetaModelSample[j];
     }
-    result.metaModelOutputSampleLOO_ = outputSampleLOO;
 
     // compute Q2
-    computeError(result.metaModelOutputSampleLOO_, result.outputSample_, result.errorQ2LOO_, result.q2LOO_);
+    Point tempResiduals;
+    Point tempQ2;
+    computeError(tempMetaModelSample, testOutputSample, tempResiduals, tempQ2);
+    residuals += tempResiduals;
+    q2 += tempQ2;
   }
+
+  // fill result
+  result.kFoldValidation_.metaModelSample_ = metaModelSample;
+  // compute the mean of the q2
+  result.kFoldValidation_.residuals_ = residuals / nbFolds_;
+  result.kFoldValidation_.q2_ = q2 / nbFolds_;
+
+  result.kFoldValidation_.parameters_ = getKFoldValidationParameters();
+}
+
+
+void MetaModelAnalysis::computeLOOValidation(MetaModelAnalysisResult& result, const Sample& inputSample)
+{
+  informationMessage_ = "The Leave-one-out validation is running.";
+  notify("informationMessageUpdated");
+
+  // initialize result
+  Sample metaModelSample(inputSample.getSize(), result.outputSample_.getDimension());
+
+  for (UnsignedInteger i = 0; i < inputSample.getSize(); ++i)
+  {
+    if (stopRequested_)
+    {
+      leaveOneOutValidation_ = false;
+      return;
+    }
+
+    const int progressValue = (int) (i * 100 / inputSample.getSize());
+    informationMessage_ = "The Leave-one-out validation is running.\nProgression: " + (OSS() << progressValue).str() + "%";
+    notify("informationMessageUpdated");
+
+    // learning samples : remove input_i
+    Sample learningInSample(inputSample);
+    learningInSample.erase(i);
+    Sample learningOutSample(result.outputSample_);
+    learningOutSample.erase(i);
+
+    // build and run MetaModel Algorithm
+    const Function function(runAlgo(learningInSample, learningOutSample));
+
+    // evaluate output at input_i
+    metaModelSample[i] = function(inputSample[i]);
+  }
+  // fill result
+  result.looValidation_.metaModelSample_ = metaModelSample;
+
+  // compute Q2
+  computeError(result.looValidation_.metaModelSample_, result.outputSample_, result.looValidation_.residuals_, result.looValidation_.q2_);
 }
 
 
@@ -299,7 +602,12 @@ String MetaModelAnalysis::__repr__() const
 {
   OSS oss;
   oss << DesignOfExperimentAnalysis::__repr__()
-      << " leaveOneOutValidation=" << isLeaveOneOutValidation();
+      << " analyticalValidation=" << analyticalValidation()
+      << " testSampleValidation=" << testSampleValidation()
+      << " kFoldValidation=" << kFoldValidation()
+      << " leaveOneOutValidation=" << leaveOneOutValidation()
+      << " test sample parameters=" << getTestSampleValidationParameters()
+      << " k-Fold parameters=" << getKFoldValidationParameters();
   return oss;
 }
 
@@ -308,7 +616,14 @@ String MetaModelAnalysis::__repr__() const
 void MetaModelAnalysis::save(Advocate& adv) const
 {
   DesignOfExperimentAnalysis::save(adv);
+  adv.saveAttribute("analyticalValidation_", analyticalValidation_);
+  adv.saveAttribute("testSampleValidation_", testSampleValidation_);
+  adv.saveAttribute("kFoldValidation_", kFoldValidation_);
   adv.saveAttribute("leaveOneOutValidation_", leaveOneOutValidation_);
+  adv.saveAttribute("percentageTestSample_", percentageTestSample_);
+  adv.saveAttribute("seedTestSample_", seedTestSample_);
+  adv.saveAttribute("nbFolds_", nbFolds_);
+  adv.saveAttribute("seedKFold_", seedKFold_);
 }
 
 
@@ -316,6 +631,13 @@ void MetaModelAnalysis::save(Advocate& adv) const
 void MetaModelAnalysis::load(Advocate& adv)
 {
   DesignOfExperimentAnalysis::load(adv);
+  adv.loadAttribute("analyticalValidation_", analyticalValidation_);
+  adv.loadAttribute("testSampleValidation_", testSampleValidation_);
+  adv.loadAttribute("kFoldValidation_", kFoldValidation_);
   adv.loadAttribute("leaveOneOutValidation_", leaveOneOutValidation_);
+  adv.loadAttribute("percentageTestSample_", percentageTestSample_);
+  adv.loadAttribute("seedTestSample_", seedTestSample_);
+  adv.loadAttribute("nbFolds_", nbFolds_);
+  adv.loadAttribute("seedKFold_", seedKFold_);
 }
 }

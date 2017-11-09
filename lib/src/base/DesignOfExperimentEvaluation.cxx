@@ -216,6 +216,18 @@ Sample DesignOfExperimentEvaluation::getNotEvaluatedInputSample() const
 }
 
 
+Parameters DesignOfExperimentEvaluation::getParameters() const
+{
+  Parameters param;
+
+  param.add("Outputs of interest", getInterestVariables().__str__());
+  param.add("Sample size", getOriginalInputSample().getSize());
+  param.add("Block size", getBlockSize());
+
+  return param;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void DesignOfExperimentEvaluation::save(Advocate& adv) const
 {

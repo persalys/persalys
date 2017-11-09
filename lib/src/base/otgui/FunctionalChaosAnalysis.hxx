@@ -51,6 +51,7 @@ public:
 
   FunctionalChaosAnalysisResult getResult() const;
 
+  virtual Parameters getParameters() const;
   virtual void run();
   virtual OT::String getPythonScript() const;
   virtual bool analysisLaunched() const;
@@ -69,6 +70,7 @@ protected:
   OT::FunctionalChaosAlgorithm buildFunctionalChaosAlgorithm(const OT::Sample & inputSample, const OT::Sample & outputSample);
   void postProcessFunctionalChaosResult(const OT::Sample& inputSample);
   OT::OrthogonalProductPolynomialFactory::PolynomialFamilyCollection getPolynomialFamilyCollection();
+  virtual void computeAnalyticalValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample);
 
 private:
   OT::OrthogonalProductPolynomialFactory::PolynomialFamilyCollection polynomialFamilyCollection_;

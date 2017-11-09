@@ -23,6 +23,7 @@
 #include "otgui/FORMAnalysis.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/ParametersDefinitionWizard.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <openturns/Cobyla.hxx>
 #include <openturns/AbdoRackwitz.hxx>
@@ -200,14 +201,7 @@ void ApproximationReliabilityPage::initialize(const Analysis& analysis)
 
 void ApproximationReliabilityPage::updatePointLineEdit()
 {
-  QString pointText;
-  for (UnsignedInteger i = 0; i < startingPoint_.getSize(); ++i)
-  {
-    pointText += QString::number(startingPoint_[i]);
-    if (i < startingPoint_.getSize() - 1)
-      pointText += "; ";
-  }
-  pointLineEdit_->setText(pointText);
+  pointLineEdit_->setText(QtOT::PointToString(startingPoint_));
 }
 
 

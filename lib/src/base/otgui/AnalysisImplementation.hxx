@@ -22,6 +22,7 @@
 #define OTGUI_ANALYSISIMPLEMENTATION_HXX
 
 #include "PhysicalModel.hxx"
+#include "OTTools.hxx"
 #include "LaunchParametersVisitor.hxx"
 
 namespace OTGUI
@@ -45,6 +46,7 @@ public:
   OT::Bool operator ==(const AnalysisImplementation & other) const;
   OT::Bool operator !=(const AnalysisImplementation & other) const;
 
+  virtual Parameters getParameters() const;
   virtual void run();
   virtual OT::String getPythonScript() const;
   virtual bool analysisLaunched() const;

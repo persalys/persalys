@@ -81,4 +81,17 @@ Description QtOT::StringListToDescription(const QStringList& stringList)
   }
   return result;
 }
+
+
+QString QtOT::PointToString(const Point& point)
+{
+  QString resu;
+  for (UnsignedInteger j = 0; j < point.getSize(); ++j)
+  {
+    resu += QString::number(point[j]);
+    if (j < point.getSize() - 1)
+      resu += "; ";
+  }
+  return resu;
+}
 }

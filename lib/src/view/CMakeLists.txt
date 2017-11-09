@@ -79,6 +79,7 @@ ot_add_source_file ( IntroMetaModelPage.cxx )
 ot_add_source_file ( KrigingPage.cxx )
 ot_add_source_file ( FunctionalChaosPage.cxx )
 ot_add_source_file ( MetaModelAnalysisWizard.cxx )
+ot_add_source_file ( MetaModelValidationPage.cxx )
 ot_add_source_file ( MetaModelValidationWidget.cxx )
 ot_add_source_file ( FunctionalChaosResultWindow.cxx )
 ot_add_source_file ( KrigingResultWindow.cxx )
@@ -164,6 +165,7 @@ ot_install_header_file ( IntroMetaModelPage.hxx )
 ot_install_header_file ( KrigingPage.hxx )
 ot_install_header_file ( FunctionalChaosPage.hxx )
 ot_install_header_file ( MetaModelAnalysisWizard.hxx )
+ot_install_header_file ( MetaModelValidationPage.hxx )
 ot_install_header_file ( MetaModelValidationWidget.hxx )
 ot_install_header_file ( FunctionalChaosResultWindow.hxx )
 ot_install_header_file ( KrigingResultWindow.hxx )
@@ -238,6 +240,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/StopCriteriaGroupBox.hxx
                                   otgui/ParametersDefinitionWizard.hxx
                                   otgui/IntroMetaModelPage.hxx
+                                  otgui/MetaModelValidationPage.hxx
                                   otgui/KrigingPage.hxx
                                   otgui/FunctionalChaosPage.hxx
                                   otgui/MetaModelAnalysisWizard.hxx

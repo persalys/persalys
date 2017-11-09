@@ -101,6 +101,24 @@ FORMResult FORMAnalysis::getResult() const
 }
 
 
+Parameters FORMAnalysis::getParameters() const
+{
+  Parameters param;
+
+  param.add("Algorithm", "FORM");
+  param.add("Output of interest", getLimitState().getOutputName());
+  param.add("Optimization algorithm", getOptimizationAlgorithm().getImplementation()->getClassName());
+  param.add("Physical starting point", getPhysicalStartingPoint());
+  param.add("Maximum iterations number", getOptimizationAlgorithm().getMaximumIterationNumber());
+  param.add("Maximum absolute error", getOptimizationAlgorithm().getMaximumAbsoluteError());
+  param.add("Maximum relative error", getOptimizationAlgorithm().getMaximumRelativeError());
+  param.add("Maximum residual error", getOptimizationAlgorithm().getMaximumResidualError());
+  param.add("Maximum constraint error", getOptimizationAlgorithm().getMaximumConstraintError());
+
+  return param;
+}
+
+
 String FORMAnalysis::getPythonScript() const
 {
   OSS oss;

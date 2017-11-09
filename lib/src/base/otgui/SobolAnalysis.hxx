@@ -42,6 +42,7 @@ public:
 
   SobolResult getResult() const;
 
+  virtual Parameters getParameters() const;
   virtual void run();
   virtual OT::String getPythonScript() const;
   virtual bool analysisLaunched() const;

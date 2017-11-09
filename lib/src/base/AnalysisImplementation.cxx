@@ -118,6 +118,12 @@ void AnalysisImplementation::setInterestVariables(const Description& variablesNa
 }
 
 
+Parameters AnalysisImplementation::getParameters() const
+{
+  return Parameters();
+}
+
+
 void AnalysisImplementation::run()
 {
 }

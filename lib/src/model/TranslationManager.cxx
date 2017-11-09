@@ -25,6 +25,7 @@ namespace OTGUI
 
 boost::bimap< QString, QString > TranslationManager::DistributionsNames_;
 boost::bimap< QString, QString > TranslationManager::DistributionsParametersNames_;
+boost::bimap< QString, QString > TranslationManager::ParametersNames_;
 
 
 void TranslationManager::InitializeDistributionsNames()
@@ -57,6 +58,61 @@ void TranslationManager::InitializeDistributionsParametersNames()
 }
 
 
+void TranslationManager::InitializeParametersNames()
+{
+  ParametersNames_.insert(type("Seed", tr("Seed")));
+  ParametersNames_.insert(type("Algorithm", tr("Algorithm")));
+  ParametersNames_.insert(type("Taylor expansion moments", tr("Taylor expansion moments")));
+  ParametersNames_.insert(type("Confidence level", tr("Confidence level")));
+  ParametersNames_.insert(type("Maximum coefficient of variation", tr("Maximum coefficient of variation")));
+  ParametersNames_.insert(type("Maximum elapsed time", tr("Maximum elapsed time")));
+  ParametersNames_.insert(type("Maximum calls", tr("Maximum calls")));
+  ParametersNames_.insert(type("Block size", tr("Block size")));
+  ParametersNames_.insert(type("Design name", tr("Design name")));
+  ParametersNames_.insert(type("Monte Carlo", tr("Monte Carlo")));
+  ParametersNames_.insert(type("Quasi-Monte Carlo", tr("Quasi-Monte Carlo")));
+  ParametersNames_.insert(type("Covariance model", tr("Covariance model")));
+  ParametersNames_.insert(type("nu", tr("nu")));
+  ParametersNames_.insert(type("p", tr("p")));
+  ParametersNames_.insert(type("Parameters optimization", tr("Parameters optimization")));
+  ParametersNames_.insert(type("Scale", tr("Scale")));
+  ParametersNames_.insert(type("Amplitude", tr("Amplitude")));
+  ParametersNames_.insert(type("Trend basis", tr("Trend basis")));
+  ParametersNames_.insert(type("Leave-one-out validation", tr("Leave-one-out validation")));
+  ParametersNames_.insert(type("Kriging", tr("Kriging")));
+  ParametersNames_.insert(type("yes", tr("yes")));
+  ParametersNames_.insert(type("no", tr("no")));
+  ParametersNames_.insert(type("Constant", tr("Constant")));
+  ParametersNames_.insert(type("Linear", tr("Linear")));
+  ParametersNames_.insert(type("Quadratic", tr("Quadratic")));
+  ParametersNames_.insert(type("Chaos degree", tr("Chaos degree")));
+  ParametersNames_.insert(type("Sparse", tr("Sparse")));
+  ParametersNames_.insert(type("Functional chaos", tr("Functional chaos")));
+  ParametersNames_.insert(type("Sobol", tr("Sobol")));
+  ParametersNames_.insert(type("Sample size", tr("Sample size")));
+  ParametersNames_.insert(type("Point", tr("Point")));
+  ParametersNames_.insert(type("Outputs of interest", tr("Outputs of interest")));
+  ParametersNames_.insert(type("Output of interest", tr("Outputs of interest")));
+  ParametersNames_.insert(type("Standardized Regression Coefficients", tr("Standardized Regression Coefficients")));
+  ParametersNames_.insert(type("Optimization algorithm", tr("Optimization algorithm")));
+  ParametersNames_.insert(type("Physical starting point", tr("Physical starting point")));
+  ParametersNames_.insert(type("Maximum iterations number", tr("Maximum iterations number")));
+  ParametersNames_.insert(type("Maximum absolute error", tr("Maximum absolute error")));
+  ParametersNames_.insert(type("Maximum relative error", tr("Maximum relative error")));
+  ParametersNames_.insert(type("Maximum residual error", tr("Maximum residual error")));
+  ParametersNames_.insert(type("Maximum constraint error", tr("Maximum constraint error")));
+  ParametersNames_.insert(type("FORM", tr("FORM")));
+  ParametersNames_.insert(type("Design point (standard space)", tr("Design point (standard space)")));
+  ParametersNames_.insert(type("FORM - Importance sampling", tr("FORM - Importance sampling")));
+  ParametersNames_.insert(type("Importance sampling", tr("Importance sampling")));
+  ParametersNames_.insert(type("Method", tr("Method")));
+  ParametersNames_.insert(type("Level", tr("Level")));
+  ParametersNames_.insert(type("Kolmogorov-Smirnov", tr("Kolmogorov-Smirnov")));
+  ParametersNames_.insert(type("Number of folds", tr("Number of folds")));
+  ParametersNames_.insert(type("Percentage", tr("Percentage")));
+}
+
+
 QString TranslationManager::GetTranslatedDistributionName(const std::string& name)
 {
   if (DistributionsNames_.empty())
@@ -79,6 +135,20 @@ QString TranslationManager::GetTranslatedDistributionParameterName(const std::st
   bimap_type::left_const_iterator left_iter = DistributionsParametersNames_.left.find(name.c_str());
 
   if (left_iter != DistributionsParametersNames_.left.end())
+    return left_iter->second;
+
+  return name.c_str();
+}
+
+
+QString TranslationManager::GetTranslatedParameterName(const std::string& name)
+{
+  if (ParametersNames_.empty())
+    InitializeParametersNames();
+
+  bimap_type::left_const_iterator left_iter = ParametersNames_.left.find(name.c_str());
+
+  if (left_iter != ParametersNames_.left.end())
     return left_iter->second;
 
   return name.c_str();

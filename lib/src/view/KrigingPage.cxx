@@ -23,6 +23,7 @@
 #include "otgui/ParametersDefinitionWizard.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/KrigingAnalysis.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <openturns/OTBase.hxx>
 
@@ -42,7 +43,6 @@ KrigingPage::KrigingPage(QWidget* parent)
   , generalizedModelParameterPLabel_(0)
   , generalizedModelParameterPSpinBox_(0)
   , basisTypeComboBox_(0)
-  , leaveOneOutCheckBox_(0)
   , optimizationCheckBox_(0)
   , scaleLineEdit_(0)
   , inputsNames_()
@@ -108,18 +108,6 @@ void KrigingPage::buildInterface()
   parametersLayout->setColumnStretch(0, 1);
   parametersLayout->setColumnStretch(2, 2);
   pageLayout->addWidget(parametersBox);
-
-  // Metamodel validation
-  QGroupBox * validationGroupBox = new QGroupBox(tr("Validation"));
-  QGridLayout * validationLayout = new QGridLayout(validationGroupBox);
-
-  // -- LOO
-  leaveOneOutCheckBox_ = new QCheckBox;
-  validationLayout->addWidget(leaveOneOutCheckBox_, 0, 0);
-  validationLayout->addWidget(new QLabel(tr("Compute Q2 by Leave-one-out")), 0, 1);
-  validationLayout->setColumnStretch(2, 1);
-  pageLayout->addWidget(validationGroupBox);
-
 
   // Advanced parameters
 
@@ -216,9 +204,6 @@ void KrigingPage::initialize(const Analysis& analysis)
   else
     basisTypeComboBox_->setCurrentIndex(0);
 
-  // validation
-  leaveOneOutCheckBox_->setChecked(analysis_ptr->isLeaveOneOutValidation());
-
   // optimization
   optimizationCheckBox_->setChecked(analysis_ptr->getOptimizeParameters());
 
@@ -233,14 +218,7 @@ void KrigingPage::initialize(const Analysis& analysis)
 
 void KrigingPage::updateScaleLineEdit()
 {
-  QString scaleText;
-  for (UnsignedInteger i = 0; i < scales_.getSize(); ++i)
-  {
-    scaleText += QString::number(scales_[i]);
-    if (i < scales_.getSize() - 1)
-      scaleText += "; ";
-  }
-  scaleLineEdit_->setText(scaleText);
+  scaleLineEdit_->setText(QtOT::PointToString(scales_));
 }
 
 
@@ -322,8 +300,7 @@ Analysis KrigingPage::getAnalysis(const String& name, const DesignOfExperiment& 
     default:
       throw InvalidArgumentException(HERE) << "The basis type is not recognized";
   }
-  // validation
-  analysis.setLeaveOneOutValidation(leaveOneOutCheckBox_->isChecked());
+
   // optimization
   analysis.setOptimizeParameters(optimizationCheckBox_->isChecked());
 

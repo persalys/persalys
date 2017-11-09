@@ -38,6 +38,8 @@ public:
   /** Virtual constructor */
   virtual MonteCarloReliabilityAnalysis * clone() const;
 
+  virtual Parameters getParameters() const;
+
 protected:
   virtual SimulationInterface getSimulationAlgorithm(const OT::Event& event);
 };

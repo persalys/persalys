@@ -23,6 +23,7 @@
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/ParametersTableView.hxx"
 #include "otgui/WidgetBoundToDockWidget.hxx"
+#include "otgui/TranslationManager.hxx"
 
 #include <QVBoxLayout>
 
@@ -31,56 +32,76 @@ using namespace OT;
 namespace OTGUI
 {
 
-MetaModelValidationWidget::MetaModelValidationWidget(const Sample& metaModelSample,
-    const Sample& outputSample,
-    const double error,
-    const double value,
-    const QString measure,
-    QWidget * parent
+MetaModelValidationWidget::MetaModelValidationWidget(const MetaModelValidationResult& result,
+                                                     const Sample& outSample,
+                                                     const UnsignedInteger indexOutput,
+                                                     const QString measure,
+                                                     QWidget * parent
                                                     )
   : QWidget(parent)
 {
+
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
-  QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
+  WidgetBoundToDockWidget * mainWidget = new WidgetBoundToDockWidget(this);
+  QVBoxLayout * mainWidgetLayout = new QVBoxLayout(mainWidget);
 
   if (!measure.isEmpty())
   {
     // validation table view
     QStringList namesList;
-    namesList << tr("Residual");
-    namesList << measure;
-
     QStringList valuesList;
-    valuesList << QString::number(error);
-    valuesList << QString::number(value);
+
+    namesList << tr("Number of points");
+    valuesList << QString::number(outSample.getSize());
+
+    for (UnsignedInteger i = 0; i < result.getParameters().getSize(); ++i)
+    {
+      namesList << TranslationManager::GetTranslatedParameterName(result.getParameters().getDescription()[i]);
+      valuesList << QString::number(result.getParameters()[i]);
+    }
+    if (result.getResiduals().getSize() == outSample.getDimension())
+    {
+      namesList << tr("Residual");
+      valuesList << QString::number(result.getResiduals()[indexOutput]);
+    }
+    Q_ASSERT(indexOutput < result.getQ2().getSize());
+    namesList << measure;
+    valuesList << QString::number(result.getQ2()[indexOutput]);
 
     ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
 
-    plotWidgetLayout->addWidget(table);
+    mainWidgetLayout->addWidget(table, 0, Qt::AlignTop);
   }
 
   // plot widget
-  PlotWidget * plot = new PlotWidget(tr("metaModel"));
-  plot->plotScatter(outputSample, metaModelSample);
-  Sample lineSample(outputSample);
-  lineSample.stack(lineSample);
-  plot->plotCurve(lineSample, QPen(Qt::black, 1));
-  plot->setTitle(tr("Metamodel:") + " " + QString::fromUtf8(outputSample.getDescription()[0].c_str()));
-  plot->setAxisTitle(QwtPlot::xBottom, tr("Physical model"));
-  plot->setAxisTitle(QwtPlot::yLeft, tr("Metamodel"));
-  plotWidgetLayout->addWidget(plot);
+  if (result.getMetaModelOutputSample().getSize())
+  {
+    Q_ASSERT(indexOutput < result.getMetaModelOutputSample().getDimension());
+    Q_ASSERT(indexOutput < outSample.getDimension());
 
-  // GraphConfigurationWidget
-  QVector<PlotWidget*> listPlot;
-  listPlot.append(plot);
-  GraphConfigurationWidget * graphSettingWidget = new GraphConfigurationWidget(listPlot,
-      QStringList(),
-      QStringList(),
-      GraphConfigurationWidget::NoType,
-      this);
-  plotWidget->setDockWidget(graphSettingWidget);
-  widgetLayout->addWidget(plotWidget);
+    const Sample outputSample(outSample.getMarginal(indexOutput));
+
+    PlotWidget * plot = new PlotWidget(tr("metaModel"));
+    plot->plotScatter(outputSample, result.getMetaModelOutputSample().getMarginal(indexOutput));
+    Sample lineSample(outputSample);
+    lineSample.stack(lineSample);
+    plot->plotCurve(lineSample, QPen(Qt::black, 1));
+    plot->setTitle(tr("Metamodel:") + " " + QString::fromUtf8(outputSample.getDescription()[0].c_str()));
+    plot->setAxisTitle(QwtPlot::xBottom, tr("Physical model"));
+    plot->setAxisTitle(QwtPlot::yLeft, tr("Metamodel"));
+    mainWidgetLayout->addWidget(plot);
+
+    // GraphConfigurationWidget
+    QVector<PlotWidget*> listPlot;
+    listPlot.append(plot);
+    GraphConfigurationWidget * graphSettingWidget = new GraphConfigurationWidget(listPlot,
+                                                                                QStringList(),
+                                                                                QStringList(),
+                                                                                GraphConfigurationWidget::NoType,
+                                                                                this);
+    mainWidget->setDockWidget(graphSettingWidget);
+  }
+  widgetLayout->addWidget(mainWidget);
 }
 }

@@ -23,7 +23,7 @@
 
 #include "PhysicalModel.hxx"
 
-#include "otgui/OTGuiprivate.hxx"
+#include "MetaModelValidationResult.hxx"
 
 namespace OTGUI
 {
@@ -49,10 +49,12 @@ public:
 
   OT::Sample getMetaModelOutputSample() const;
 
-  OT::Sample getMetaModelOutputSampleLeaveOneOut() const;
+  MetaModelValidationResult getAnalyticalValidation() const;
+  MetaModelValidationResult getTestSampleValidation() const;
+  MetaModelValidationResult getKFoldValidation() const;
+  MetaModelValidationResult getLeaveOneOutValidation() const;
 
-  OT::Point getErrorQ2LeaveOneOut() const;
-  OT::Point getQ2LeaveOneOut() const;
+  std::vector<MetaModelValidationResult> getValidations() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -65,11 +67,12 @@ public:
 
 protected:
   PhysicalModel metaModel_;
+  MetaModelValidationResult analyticalValidation_;
+  MetaModelValidationResult testSampleValidation_;
+  MetaModelValidationResult kFoldValidation_;
+  MetaModelValidationResult looValidation_;
   OT::Sample outputSample_;
   OT::Sample metaModelOutputSample_;
-  OT::Sample metaModelOutputSampleLOO_;
-  OT::Point errorQ2LOO_;
-  OT::Point q2LOO_;
 };
 }
 #endif

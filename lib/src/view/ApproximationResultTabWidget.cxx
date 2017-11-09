@@ -46,35 +46,36 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& res
   , maximumIterationNumber_(0)
 {
   // analysis parameters
-  QStringList paramNames;
-  QStringList paramValues;
+  Parameters analysisParameters;
 
   const FORMAnalysis * formAnalysis(dynamic_cast<const FORMAnalysis*>(&analysis));
   if (formAnalysis)
   {
     // Maximum iteration number : to add a warning if needed
     maximumIterationNumber_ = formAnalysis->getOptimizationAlgorithm().getMaximumIterationNumber();
+
     // analysis parameters
-    AnalysisItem::GetAnalysisParameters(analysis, paramNames, paramValues);
+    analysisParameters = analysis.getParameters();
   }
   const FORMImportanceSamplingAnalysis * formISAnalysis(dynamic_cast<const FORMImportanceSamplingAnalysis*>(&analysis));
   if (formISAnalysis)
   {
     // Maximum iteration number : to add a warning if needed
     maximumIterationNumber_ = formISAnalysis->getOptimizationAlgorithm().getMaximumIterationNumber();
+
     // analysis parameters
     FORMAnalysis aFakeAnalysis("Unnamed", formISAnalysis->getLimitState());
     aFakeAnalysis.setOptimizationAlgorithm(formISAnalysis->getOptimizationAlgorithm());
     aFakeAnalysis.setPhysicalStartingPoint(formISAnalysis->getPhysicalStartingPoint());
-    AnalysisItem::GetAnalysisParameters(aFakeAnalysis, paramNames, paramValues);
+    analysisParameters = aFakeAnalysis.getParameters();
   }
 
   // set parameters widget
-  if (!paramNames.isEmpty() && paramNames.size() == paramValues.size())
+  if (analysisParameters.getSize())
   {
     parametersWidget_ = new QWidget;
     QGridLayout * parametersWidgetLayout = new QGridLayout(parametersWidget_);
-    parametersWidgetLayout->addWidget(new ParametersWidget(tr("Threshold exceedance parameters"), paramNames, paramValues));
+    parametersWidgetLayout->addWidget(new ParametersWidget(tr("Threshold exceedance parameters"), analysisParameters));
   }
 
   buildInterface();

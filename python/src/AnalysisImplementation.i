@@ -8,6 +8,7 @@
 %ignore *::getProgressValue;
 %ignore *::stop;
 %ignore *::acceptLaunchParameters;
+%ignore OTGUI::AnalysisImplementation::getParameters;
 
 %include AnalysisImplementation_doc.i
 

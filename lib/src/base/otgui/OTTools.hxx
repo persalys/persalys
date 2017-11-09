@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Qt tools
+ *  @brief OT tools
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,45 +18,33 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_QTTOOLS_HXX
-#define OTGUI_QTTOOLS_HXX
+#ifndef OTGUI_OTTOOLS_HXX
+#define OTGUI_OTTOOLS_HXX
 
 #include "otgui/OTGuiprivate.hxx"
-#include <QObject>
+
 #include <openturns/OTType.hxx>
 
 namespace OTGUI
 {
-/**
- * @class SignalBlocker
- *
- * Class to block signals of widgets.
- */
-class OTGUI_API SignalBlocker
-{
-  QObject* blockedObject_;
-  bool previousBlockingStatus_;
-public :
-  SignalBlocker(QObject* blockedObject, bool block = true);
-  ~SignalBlocker();
-};
-
-class OTGUI_API SimpleException : public std::exception
-{
-  const QString text_;
-public :
-  SimpleException(const QString& text);
-  virtual ~SimpleException() throw();
-  QString text() const;
-  virtual const char* what() const throw();
-};
-
-class OTGUI_API QtOT
+// class to build a collection of parameters
+class OTGUI_API Parameters
 {
 public:
-  static QStringList DescriptionToStringList(const OT::Description & description);
-  static OT::Description StringListToDescription(const QStringList& stringList);
-  static QString PointToString(const OT::Point& point);
+  Parameters();
+  virtual ~Parameters();
+
+  void add(const OT::String& name, const OT::String& value);
+  void add(const OT::String& name, const double& value);
+  void add(const OT::String& name, const OT::UnsignedInteger& value);
+  void add(const OT::String& name, const OT::Point& values);
+  OT::UnsignedInteger getSize() const;
+  std::pair<OT::String, OT::String> operator[](const OT::UnsignedInteger index) const;
+  static OT::String GetOTPointStr(const OT::Point& values);
+  static OT::String GetOTDescriptionStr(const OT::Description& values);
+
+private:
+  OT::Collection<std::pair<OT::String, OT::String> > pairsCollection_;
 };
 }
 #endif

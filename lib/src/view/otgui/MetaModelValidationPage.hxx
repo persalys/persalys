@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizard to define a functional chaos analysis
+ *  @brief QWizardPage for meta model validation
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,29 +18,28 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_FUNCTIONALCHAOSPAGE_HXX
-#define OTGUI_FUNCTIONALCHAOSPAGE_HXX
+#ifndef OTGUI_METAMODELVALIDATIONPAGE_HXX
+#define OTGUI_METAMODELVALIDATIONPAGE_HXX
 
 #include "otgui/Analysis.hxx"
 #include "otgui/DesignOfExperiment.hxx"
+#include "otgui/UIntSpinBox.hxx"
 
 #include <QWizardPage>
-#include <QLabel>
 #include <QCheckBox>
-#include <QSpinBox>
+#include <QLabel>
 
 namespace OTGUI
 {
-
-class OTGUI_API FunctionalChaosPage : public QWizardPage
+class OTGUI_API MetaModelValidationPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  FunctionalChaosPage(QWidget* parent = 0);
+  MetaModelValidationPage(QWidget* parent = 0);
 
   void initialize(const Analysis& analysis);
-  Analysis getAnalysis(const OT::String& name, const DesignOfExperiment& doe) const;
+  void updateMetamodelValidation(Analysis& analysis);
 
   virtual bool validatePage();
 
@@ -49,12 +48,19 @@ protected:
 
 public slots:
   void updateInputSampleSize(DesignOfExperiment);
+  void percentageValueChanged(double);
 
 private:
   OT::UnsignedInteger inputSampleSize_;
-  OT::UnsignedInteger inputSampleDimension_;
-  QSpinBox * chaosDegreeSpinbox_;
-  QCheckBox * sparseCheckBox_;
+  QCheckBox * analyticalCheckBox_;
+  QCheckBox * kFoldCheckBox_;
+  QCheckBox * testSampleCheckBox_;
+  QLabel * trainingSampleSize_;
+  QCheckBox * looCheckBox_;
+  UIntSpinBox * percentageOfPointsSpinBox_;
+  UIntSpinBox * seedTestSampleSpinBox_;
+  UIntSpinBox * nbFoldsSpinBox_;
+  UIntSpinBox * seedKFoldSpinBox_;
   QLabel * errorMessageLabel_;
 };
 }

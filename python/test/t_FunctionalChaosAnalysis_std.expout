@@ -1,13 +1,13 @@
-class=FunctionalChaosAnalysis name=chaos_0 designOfExperiment=design interestVariables=[y0,y1] leaveOneOutValidation=false chaosDegree=4 sparseChaos=true
-result= class=FunctionalChaosAnalysisResult name=Unnamed mean=class=Point name=Unnamed dimension=2 values=[0,0.488533] variance=class=Point name=Unnamed dimension=2 values=[0.872752,0.872994] sobolResult=class=SobolResult name=Unnamed outputNames=[y0,y1] firstOrderIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=2 dimension=2 description=[xi1,xi2] data=[[0.521874,0.478126],[0.52165,0.47835]] totalIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=2 dimension=2 data=[[0.521874,0.478126],[0.52165,0.47835]] callsNumber=0 coefficientOfVariation=-1 errorQ2LOO=class=Point name=Unnamed dimension=0 values=[] q2LOO=class=Point name=Unnamed dimension=0 values=[]
+class=FunctionalChaosAnalysis name=chaos_0 designOfExperiment=design interestVariables=[y0,y1] analyticalValidation=true testSampleValidation=false kFoldValidation=false leaveOneOutValidation=false test sample parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Percentage,Seed] values=[20,0] k-Fold parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Number of folds,Seed] values=[3,0] chaosDegree=4 sparseChaos=true
+result= class=FunctionalChaosAnalysisResult name=Unnamed mean=class=Point name=Unnamed dimension=2 values=[0,0.488533] variance=class=Point name=Unnamed dimension=2 values=[0.872752,0.872994] sobolResult=class=SobolResult name=Unnamed outputNames=[y0,y1] firstOrderIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=2 dimension=2 description=[xi1,xi2] data=[[0.521874,0.478126],[0.52165,0.47835]] totalIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=2 dimension=2 data=[[0.521874,0.478126],[0.52165,0.47835]] callsNumber=0 coefficientOfVariation=-1
 functionalChaosResult meta model=([0,0.488533] + [-0.419403,-0.41936] * (1.73205 * x0) + [0.491507,0.49132] * (-1.11803 + 3.3541 * x0^2) + [0.276217,0.276347] * (-1.11803 + 3.3541 * x1^2) + [0.172873,0.173142] * (-3.96863 * x0 + 6.61438 * x0^3) + [-0.177483,-0.177699] * (-3.96863 * x1 + 6.61438 * x1^3) + [-0.0900192,-0.090336] * (1.125 - 11.25 * x0^2 + 13.125 * x0^4) + [-0.556318,-0.556464] * (1.125 - 11.25 * x1^2 + 13.125 * x1^4))o((| y0 = Normal(mu = 0, sigma = 1) -> y0 : Uniform(a = -1, b = 1)
 | y1 = Normal(mu = 0, sigma = 1) -> y1 : Uniform(a = -1, b = 1)
 )o(| y0 = Uniform(a = 0, b = 10) -> y0 : Normal(mu = 0, sigma = 1)
 | y1 = Uniform(a = 0, b = 10) -> y1 : Normal(mu = 0, sigma = 1)
 ))
 orthogonal basis=class=OrthogonalProductPolynomialFactory univariate polynomial collection=[class=OrthogonalUniVariatePolynomialFamily implementation=class=StandardDistributionPolynomialFactory hasSpecificFamily=true specificFamily=class=OrthogonalUniVariatePolynomialFamily implementation=class=LegendreFactory measure=class=Uniform name=Uniform dimension=1 a=-1 b=1,class=OrthogonalUniVariatePolynomialFamily implementation=class=StandardDistributionPolynomialFactory hasSpecificFamily=true specificFamily=class=OrthogonalUniVariatePolynomialFamily implementation=class=LegendreFactory measure=class=Uniform name=Uniform dimension=1 a=-1 b=1] measure=class=ComposedDistribution name=ComposedDistribution dimension=2 copula=class=IndependentCopula name=IndependentCopula dimension=2 marginal[0]=class=Uniform name=Uniform dimension=1 a=-1 b=1 marginal[1]=class=Uniform name=Uniform dimension=1 a=-1 b=1
-class=FunctionalChaosAnalysis name=chaos_1 designOfExperiment=design interestVariables=[y1] leaveOneOutValidation=true chaosDegree=4 sparseChaos=false
-result= class=FunctionalChaosAnalysisResult name=Unnamed mean=class=Point name=Unnamed dimension=1 values=[0.479245] variance=class=Point name=Unnamed dimension=1 values=[0.930686] sobolResult=class=SobolResult name=Unnamed outputNames=[y1] firstOrderIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 description=[xi1,xi2] data=[[0.474121,0.512988]] totalIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 data=[[0.487012,0.525879]] callsNumber=0 coefficientOfVariation=-1 errorQ2LOO=class=Point name=Unnamed dimension=1 values=[0.0369742] q2LOO=class=Point name=Unnamed dimension=1 values=[0.922344]
+class=FunctionalChaosAnalysis name=chaos_1 designOfExperiment=design interestVariables=[y1] analyticalValidation=true testSampleValidation=true kFoldValidation=true leaveOneOutValidation=true test sample parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Percentage,Seed] values=[30,2] k-Fold parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Number of folds,Seed] values=[4,2] chaosDegree=4 sparseChaos=false
+result= class=FunctionalChaosAnalysisResult name=Unnamed mean=class=Point name=Unnamed dimension=1 values=[0.479245] variance=class=Point name=Unnamed dimension=1 values=[0.930686] sobolResult=class=SobolResult name=Unnamed outputNames=[y1] firstOrderIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 description=[xi1,xi2] data=[[0.474121,0.512988]] totalIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 data=[[0.487012,0.525879]] callsNumber=0 coefficientOfVariation=-1
 functionalChaosResult meta model=(0.479245 - 0.38203 * (1.73205 * x0) - 0.0562303 * (1.73205 * x1) + 0.494897 * (-1.11803 + 3.3541 * x0^2) + 0.0534577 * ((1.73205 * x0) * (1.73205 * x1)) + 0.259244 * (-1.11803 + 3.3541 * x1^2) + 0.207598 * (-3.96863 * x0 + 6.61438 * x0^3) + 0.047602 * ((-1.11803 + 3.3541 * x0^2) * (1.73205 * x1)) + 0.0282647 * ((1.73205 * x0) * (-1.11803 + 3.3541 * x1^2)) - 0.207633 * (-3.96863 * x1 + 6.61438 * x1^3) - 0.0853881 * (1.125 - 11.25 * x0^2 + 13.125 * x0^4) + 0.0381849 * ((-3.96863 * x0 + 6.61438 * x0^3) * (1.73205 * x1)) + 0.0478029 * ((-1.11803 + 3.3541 * x0^2) * (-1.11803 + 3.3541 * x1^2)) + 0.0482908 * ((1.73205 * x0) * (-3.96863 * x1 + 6.61438 * x1^3)) - 0.603282 * (1.125 - 11.25 * x1^2 + 13.125 * x1^4))o((| y0 = Normal(mu = 0, sigma = 1) -> y0 : Uniform(a = -1, b = 1)
 | y1 = Normal(mu = 0, sigma = 1) -> y1 : Uniform(a = -1, b = 1)
 )o(| y0 = Uniform(a = 0, b = 10) -> y0 : Normal(mu = 0, sigma = 1)
@@ -97,6 +97,9 @@ myStudy.add(design)
 chaos_0 = otguibase.FunctionalChaosAnalysis('chaos_0', design)
 chaos_0.setChaosDegree(4)
 chaos_0.setSparseChaos(True)
+chaos_0.setAnalyticalValidation(True)
+chaos_0.setTestSampleValidation(False)
+chaos_0.setKFoldValidation(False)
 chaos_0.setLeaveOneOutValidation(False)
 myStudy.add(chaos_0)
 chaos_1 = otguibase.FunctionalChaosAnalysis('chaos_1', design)
@@ -104,6 +107,13 @@ interestVariables = ['y1']
 chaos_1.setInterestVariables(interestVariables)
 chaos_1.setChaosDegree(4)
 chaos_1.setSparseChaos(False)
+chaos_1.setAnalyticalValidation(True)
+chaos_1.setTestSampleValidation(True)
+chaos_1.setTestSampleValidationPercentageOfPoints(30)
+chaos_1.setTestSampleValidationSeed(2)
+chaos_1.setKFoldValidation(True)
+chaos_1.setKFoldValidationNumberOfFolds(4)
+chaos_1.setKFoldValidationSeed(2)
 chaos_1.setLeaveOneOutValidation(True)
 myStudy.add(chaos_1)
 

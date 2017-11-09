@@ -52,6 +52,7 @@ public:
   OT::UnsignedInteger getSize() const;
   void setSize(const OT::UnsignedInteger size);
 
+  virtual Parameters getParameters() const;
   virtual OT::String getPythonScript() const;
 
   /** String converter */

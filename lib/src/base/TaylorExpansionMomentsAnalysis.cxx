@@ -95,20 +95,24 @@ TaylorExpansionMomentsResult TaylorExpansionMomentsAnalysis::getResult() const
 }
 
 
+Parameters TaylorExpansionMomentsAnalysis::getParameters() const
+{
+  Parameters param;
+
+  param.add("Algorithm", "Taylor expansion moments");
+  param.add("Outputs of interest", getInterestVariables().__str__());
+
+  return param;
+}
+
+
 String TaylorExpansionMomentsAnalysis::getPythonScript() const
 {
   OSS oss;
   oss << getName() << " = otguibase.TaylorExpansionMomentsAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
   if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {
-    oss << "interestVariables = [";
-    for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
-    {
-      oss << "'" << getInterestVariables()[i] << "'";
-      if (i < getInterestVariables().getSize() - 1)
-        oss << ", ";
-    }
-    oss << "]\n";
+    oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
     oss << getName() << ".setInterestVariables(interestVariables)\n";
   }
 

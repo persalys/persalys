@@ -43,6 +43,7 @@ public:
 
   OT::FORMResult getFORMResult() const;
 
+  virtual Parameters getParameters() const;
   virtual void run();
   virtual OT::String getPythonScript() const;
 

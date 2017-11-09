@@ -39,6 +39,7 @@ protected:
 private:
   KrigingAnalysisResult result_;
   bool optimizeParameters_;
+  OT::UnsignedInteger seedTestSample_;
 };
 }
 #endif

@@ -5,6 +5,7 @@ include_directories (${PYTHON_INCLUDE_DIRS})
 ot_add_current_dir_to_include_dirs ()
 
 set(BASE_SOURCEFILES DistributionDictionary.cxx
+                     OTTools.cxx
                      OTguiException.cxx
                      Observer.cxx Observable.cxx OTStudy.cxx OTStudyImplementation.cxx
                      Variable.cxx Input.cxx Output.cxx
@@ -39,6 +40,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      FORMAnalysis.cxx
                      FORMImportanceSamplingAnalysis.cxx
                      MetaModelAnalysis.cxx
+                     MetaModelValidationResult.cxx
                      MetaModelAnalysisResult.cxx
                      FunctionalChaosAnalysisResult.cxx
                      FunctionalChaosAnalysis.cxx
@@ -60,6 +62,7 @@ if (USE_OTFMI)
 endif ()
 
 ot_install_header_file ( DistributionDictionary.hxx )
+ot_install_header_file ( OTTools.hxx )
 ot_install_header_file ( OTguiException.hxx )
 ot_install_header_file ( Variable.hxx )
 ot_install_header_file ( Input.hxx )
@@ -110,6 +113,7 @@ ot_install_header_file ( ImportanceSamplingAnalysis.hxx )
 ot_install_header_file ( ApproximationAnalysis.hxx )
 ot_install_header_file ( FORMAnalysis.hxx )
 ot_install_header_file ( FORMImportanceSamplingAnalysis.hxx )
+ot_install_header_file ( MetaModelValidationResult.hxx )
 ot_install_header_file ( MetaModelAnalysisResult.hxx )
 ot_install_header_file ( MetaModelAnalysis.hxx )
 ot_install_header_file ( FunctionalChaosAnalysisResult.hxx )

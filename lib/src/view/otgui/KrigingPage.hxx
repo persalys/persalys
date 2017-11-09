@@ -60,7 +60,6 @@ private:
   QLabel * generalizedModelParameterPLabel_;
   DoubleSpinBox * generalizedModelParameterPSpinBox_;
   QComboBox * basisTypeComboBox_;
-  QCheckBox * leaveOneOutCheckBox_;
   QCheckBox * optimizationCheckBox_;
   QLineEdit * scaleLineEdit_;
   OT::Description inputsNames_;

@@ -109,6 +109,7 @@ ot_add_python_module (otguibase otguibase_module.i
                       ApproximationAnalysis.i ApproximationAnalysis_doc.i.in
                       FORMAnalysis.i FORMAnalysis_doc.i.in
                       FORMImportanceSamplingAnalysis.i FORMImportanceSamplingAnalysis_doc.i.in
+                      MetaModelValidationResult.i MetaModelValidationResult_doc.i.in
                       MetaModelAnalysisResult.i MetaModelAnalysisResult_doc.i.in
                       MetaModelAnalysis.i MetaModelAnalysis_doc.i.in
                       FunctionalChaosAnalysisResult.i FunctionalChaosAnalysisResult_doc.i.in

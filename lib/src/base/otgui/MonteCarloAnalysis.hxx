@@ -48,6 +48,7 @@ public:
 
   DataAnalysisResult getResult() const;
 
+  virtual Parameters getParameters() const;
   virtual void run();
   virtual OT::String getPythonScript() const;
 

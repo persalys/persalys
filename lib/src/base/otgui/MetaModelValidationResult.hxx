@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Analysis FORM
+ *  @brief Class to define metamodel validation result
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,35 +18,42 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_FORMANALYSIS_HXX
-#define OTGUI_FORMANALYSIS_HXX
+#ifndef OTGUI_METAMODELVALIDATIONRESULT_HXX
+#define OTGUI_METAMODELVALIDATIONRESULT_HXX
 
-#include "ApproximationAnalysis.hxx"
-#include "ReliabilityAnalysis.hxx"
+#include "otgui/OTGuiprivate.hxx"
 
-#include <openturns/FORMResult.hxx>
+#include <openturns/OTType.hxx>
 
 namespace OTGUI
 {
-class OTGUI_API FORMAnalysis : public ReliabilityAnalysis, public ApproximationAnalysis
+class OTGUI_API MetaModelValidationResult : public OT::PersistentObject
 {
   CLASSNAME
 
 public:
+
+  friend class FunctionalChaosAnalysis;
+  friend class KrigingAnalysis;
+  friend class MetaModelAnalysis;
+
   /** Default constructor */
-  FORMAnalysis();
+  MetaModelValidationResult();
   /** Constructor with parameters */
-  FORMAnalysis(const OT::String& name, const LimitState& limitState);
+  MetaModelValidationResult(const OT::String& name);
+  MetaModelValidationResult(const OT::Sample& metaModelSample,
+                            const OT::Point& q2,
+                            const OT::Point& residuals);
 
   /** Virtual constructor */
-  virtual FORMAnalysis * clone() const;
+  virtual MetaModelValidationResult * clone() const;
 
-  OT::FORMResult getResult() const;
-
-  virtual Parameters getParameters() const;
-  virtual void run();
-  virtual OT::String getPythonScript() const;
-  virtual bool analysisLaunched() const;
+  // attributs accessors
+  OT::String getName() const;
+  OT::PointWithDescription getParameters() const;
+  OT::Sample getMetaModelOutputSample() const;
+  OT::Point getResiduals() const;
+  OT::Point getQ2() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -57,8 +64,15 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
-private:
-  OT::FORMResult result_;
+protected:
+  void add(const MetaModelValidationResult& other);
+
+protected:
+  OT::String name_;
+  OT::PointWithDescription parameters_;
+  OT::Sample metaModelSample_;
+  OT::Point q2_;
+  OT::Point residuals_;
 };
 }
 #endif

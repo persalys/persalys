@@ -41,8 +41,6 @@ public:
 
   virtual void update(Observable * source, const OT::String & message);
 
-  static void GetAnalysisParameters(const Analysis& analysis, QStringList& namesList, QStringList& valuesList);
-
 protected:
   void buildActions();
 

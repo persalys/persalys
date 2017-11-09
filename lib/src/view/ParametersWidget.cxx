@@ -21,8 +21,7 @@
 #include "otgui/ParametersWidget.hxx"
 
 #include "otgui/ParametersTableView.hxx"
-
-#include "openturns/Exception.hxx"
+#include "otgui/TranslationManager.hxx"
 
 #include <QVBoxLayout>
 
@@ -51,6 +50,33 @@ ParametersWidget::ParametersWidget(const QString title,           // table title
 
   // table view
   ParametersTableView * table = new ParametersTableView(names, values, showGrid, namesHasHeaderType);
+  groupBoxLayout->addWidget(table);
+
+  groupBoxLayout->addStretch();
+}
+
+
+ParametersWidget::ParametersWidget(const QString title,                  // table title
+                                   const Parameters& analysisParameters, // parameters names and values
+                                   QWidget * parent
+                                  )
+  : QGroupBox(parent)
+{
+  QStringList names;
+  QStringList values;
+  for (UnsignedInteger i = 0; i < analysisParameters.getSize(); ++i)
+  {
+    names << TranslationManager::GetTranslatedParameterName(analysisParameters[i].first);
+    values << TranslationManager::GetTranslatedParameterName(analysisParameters[i].second);
+  }
+
+  QVBoxLayout * groupBoxLayout = new QVBoxLayout(this);
+
+  // title
+  setTitle(title);
+
+  // table view
+  ParametersTableView * table = new ParametersTableView(names, values, false, false);
   groupBoxLayout->addWidget(table);
 
   groupBoxLayout->addStretch();

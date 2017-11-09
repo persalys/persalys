@@ -22,10 +22,10 @@
 #define OTGUI_METAMODELANALYSISWIZARD_HXX
 
 #include "otgui/AnalysisWizard.hxx"
-#include "otgui/OTguiItem.hxx"
 #include "otgui/IntroMetaModelPage.hxx"
 #include "otgui/KrigingPage.hxx"
 #include "otgui/FunctionalChaosPage.hxx"
+#include "otgui/MetaModelValidationPage.hxx"
 
 namespace OTGUI
 {
@@ -35,7 +35,7 @@ class OTGUI_API MetaModelAnalysisWizard : public AnalysisWizard
 
 public:
   enum Method {chaos, kriging};
-  enum {Page_Intro, Page_KrigingMethod, Page_ChaosMethod};
+  enum {Page_Intro, Page_KrigingMethod, Page_ChaosMethod, Page_Validation};
 
   MetaModelAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard = false, QWidget* parent = 0);
 
@@ -50,6 +50,7 @@ private:
   IntroMetaModelPage * introPage_;
   KrigingPage * krigingPage_;
   FunctionalChaosPage * functionalChaosPage_;
+  MetaModelValidationPage * validationPage_;
 };
 }
 #endif

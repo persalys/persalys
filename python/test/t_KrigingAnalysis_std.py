@@ -55,6 +55,7 @@ aDesign.run()
 
 # Kriging ##
 analysis2 = otguibase.KrigingAnalysis('kriging_1', aDesign)
+analysis2.setAnalyticalValidation(True)
 analysis2.setLeaveOneOutValidation(True)
 analysis2.setInterestVariables(['y1', 'y0'])
 myStudy.add(analysis2)
@@ -67,7 +68,9 @@ metaModel2 = result2.getResultForVariable('y1').getMetaModel()
 openturns.testing.assert_almost_equal(
     aDesign.getDesignOfExperiment().getOutputSample().getMarginal(1), metaModel2(validationInputSample), 3.0e-5, 3.0e-5)
 openturns.testing.assert_almost_equal(
-    result2.getQ2LeaveOneOut(), [0.832447, 0.832278], 1e-3, 1e-3)
+    result2.getAnalyticalValidation().getQ2(), [0.8322798149785174,0.8322781778862545], 1e-4, 1e-4)
+openturns.testing.assert_almost_equal(
+    result2.getLeaveOneOutValidation().getQ2(), [0.832447, 0.832278], 1e-3, 1e-3)
 
 # Kriging ##
 analysis3 = otguibase.KrigingAnalysis('kriging_2', aDesign)

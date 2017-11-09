@@ -173,6 +173,25 @@ Sample ProbabilisticDesignOfExperiment::generateInputSample(const UnsignedIntege
 }
 
 
+Parameters ProbabilisticDesignOfExperiment::getParameters() const
+{
+  Parameters param;
+
+  String designName = "LHS";
+  if (getDesignName() == "MONTE_CARLO")
+    designName = "Monte Carlo";
+  else if (getDesignName() == "QUASI_MONTE_CARLO")
+    designName = "Quasi-Monte Carlo";
+  param.add("Design name", designName);
+  param.add("Outputs of interest", getInterestVariables().__str__());
+  param.add("Sample size", getOriginalInputSample().getSize());
+  param.add("Block size", getBlockSize());
+  param.add("Seed", getSeed());
+
+  return param;
+}
+
+
 String ProbabilisticDesignOfExperiment::getPythonScript() const
 {
   OSS oss;

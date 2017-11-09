@@ -65,6 +65,13 @@ ott.assert_almost_equal(totalIndices, sobolResult.getTotalIndices(), 1e-16)
 # Chaos 2 ##
 analysis2 = otguibase.FunctionalChaosAnalysis('chaos_1', aDesign)
 analysis2.setChaosDegree(4)
+analysis2.setAnalyticalValidation(True)
+analysis2.setTestSampleValidation(True)
+analysis2.setTestSampleValidationPercentageOfPoints(30)
+analysis2.setTestSampleValidationSeed(2)
+analysis2.setKFoldValidation(True)
+analysis2.setKFoldValidationNumberOfFolds(4)
+analysis2.setKFoldValidationSeed(2)
 analysis2.setLeaveOneOutValidation(True)
 analysis2.setInterestVariables(['y1'])
 myStudy.add(analysis2)
@@ -78,7 +85,13 @@ print("result=", chaosResult2)
 print("functionalChaosResult", chaosResult2.getFunctionalChaosResult())
 
 ott.assert_almost_equal(
-    [0.9223441081335271], chaosResult2.getQ2LeaveOneOut(), 1e-16)
+    [0.9223441081335272], chaosResult2.getAnalyticalValidation().getQ2(), 1e-16)
+ott.assert_almost_equal(
+    [0.9457431125210048], chaosResult2.getTestSampleValidation().getQ2(), 1e-16)
+ott.assert_almost_equal(
+    [0.9143738630455855], chaosResult2.getKFoldValidation().getQ2(), 1e-16)
+ott.assert_almost_equal(
+    [0.9223441081335274], chaosResult2.getLeaveOneOutValidation().getQ2(), 1e-16)
 
 # extract metamodel
 metamodel = chaosResult2.getMetaModel()

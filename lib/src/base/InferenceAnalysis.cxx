@@ -248,19 +248,23 @@ InferenceResult InferenceAnalysis::getResult() const
 }
 
 
+Parameters InferenceAnalysis::getParameters() const
+{
+  Parameters param;
+
+  param.add("Method", "Kolmogorov-Smirnov");
+  param.add("Level", getLevel());
+
+  return param;
+}
+
+
 String InferenceAnalysis::getPythonScript() const
 {
   OSS oss;
   oss.setPrecision(12);
   oss << getName() << " = otguibase.InferenceAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
-  oss << "interestVariables = [";
-  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
-  {
-    oss << "'" << getInterestVariables()[i] << "'";
-    if (i < getInterestVariables().getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
+  oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
   oss << getName() << ".setInterestVariables(interestVariables)\n";
 
   for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)

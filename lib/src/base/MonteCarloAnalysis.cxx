@@ -217,6 +217,30 @@ DataAnalysisResult MonteCarloAnalysis::getResult() const
 }
 
 
+Parameters MonteCarloAnalysis::getParameters() const
+{
+  Parameters param;
+
+  param.add("Algorithm", "Monte Carlo");
+  param.add("Outputs of interest", getInterestVariables().__str__());
+  if (isConfidenceIntervalRequired())
+    param.add("Confidence level", (OSS() << getLevelConfidenceInterval() * 100).str() + "%");
+  param.add("Maximum coefficient of variation", getMaximumCoefficientOfVariation());
+  String time = "- (s)";
+  if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
+    time = (OSS() << getMaximumElapsedTime()).str() + "(s)";
+  param.add("Maximum elapsed time", time);
+  String maxCalls = "-";
+  if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
+    maxCalls = (OSS() << getMaximumCalls()).str();
+  param.add("Maximum calls", maxCalls);
+  param.add("Block size", getBlockSize());
+  param.add("Seed", getSeed());
+
+  return param;
+}
+
+
 String MonteCarloAnalysis::getPythonScript() const
 {
   OSS oss;
@@ -224,14 +248,7 @@ String MonteCarloAnalysis::getPythonScript() const
   oss << getName() << " = otguibase.MonteCarloAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
   if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {
-    oss << "interestVariables = [";
-    for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
-    {
-      oss << "'" << getInterestVariables()[i] << "'";
-      if (i < getInterestVariables().getSize() - 1)
-        oss << ", ";
-    }
-    oss << "]\n";
+    oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
     oss << getName() << ".setInterestVariables(interestVariables)\n";
   }
   if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
