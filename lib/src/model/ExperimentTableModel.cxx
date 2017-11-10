@@ -131,6 +131,14 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
     {
       return firstColumnChecked_ ? Qt::Checked : Qt::Unchecked;
     }
+    else if (role == Qt::BackgroundRole)
+    {
+      return QBrush("#f2f1f0");
+    }
+    else if (role == Qt::TextAlignmentRole)
+    {
+      return Qt::AlignCenter;
+    }
   }
   // not header
   else

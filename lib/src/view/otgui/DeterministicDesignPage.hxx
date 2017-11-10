@@ -22,7 +22,7 @@
 #define OTGUI_DETERMINISTICDESIGNPAGE_HXX
 
 #include "otgui/Analysis.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/ResizableHeaderlessTableView.hxx"
 #include "otgui/ExperimentTableModel.hxx"
 
 #include <QWizardPage>
@@ -43,10 +43,11 @@ public:
 
 protected:
   void buildInterface();
+  virtual void resizeEvent(QResizeEvent * event);
 
 private:
   QVBoxLayout * groupBoxLayout_;
-  ResizableTableViewWithoutScrollBar * tableView_;
+  ResizableHeaderlessTableView * tableView_;
   ExperimentTableModel * tableModel_;
   QLabel * DOESizeLabel_;
   QLabel * errorMessageLabel_;

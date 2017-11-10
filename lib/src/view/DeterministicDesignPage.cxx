@@ -21,9 +21,9 @@
 #include "otgui/DeterministicDesignPage.hxx"
 
 #include "otgui/ComboBoxDelegate.hxx"
+#include "otgui/SpinBoxDelegate.hxx"
 
 #include <QGroupBox>
-#include <QHeaderView>
 #include <QScrollBar>
 
 using namespace OT;
@@ -52,22 +52,21 @@ void DeterministicDesignPage::buildInterface()
   QGroupBox * groupBox = new QGroupBox(tr("Define a grid"));
   groupBoxLayout_ = new QVBoxLayout(groupBox);
 
-  tableView_ = new ResizableTableViewWithoutScrollBar;
+  tableView_ = new ResizableHeaderlessTableView;
   tableView_->setEditTriggers(QTableView::AllEditTriggers);
   tableView_->horizontalHeader()->hide();
-
-  groupBoxLayout_->addWidget(tableView_);
 
   pageLayout->addWidget(groupBox);
 
   // DOE size
-  QHBoxLayout * sizeLayout = new QHBoxLayout;
+  QWidget * aWidget = new QWidget;
+  QHBoxLayout * sizeLayout = new QHBoxLayout(aWidget);
   QLabel * sizeLabel = new QLabel(tr("Size of the design of experiments:") + " ");
   sizeLayout->addWidget(sizeLabel);
   DOESizeLabel_ = new QLabel;
   sizeLayout->addWidget(DOESizeLabel_);
   sizeLayout->addStretch();
-  pageLayout->addLayout(sizeLayout);
+  pageLayout->addWidget(aWidget, 0, Qt::AlignBottom);
 
   // error message
   errorMessageLabel_ = new QLabel;
@@ -107,25 +106,40 @@ void DeterministicDesignPage::initialize(const Analysis& analysis)
   tableView_->setItemDelegateForColumn(5, new ComboBoxDelegate(items, cellWithComboBox));
   tableView_->openPersistentEditor(tableModel_->index(0, 5));
 
+  SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate;
+  spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::doubleValue);
+  for (int i = 1; i < tableModel_->rowCount(); ++i)
+    tableView_->setItemDelegateForRow(i, spinBoxDelegate);
+
   // resize table
-  if (tableView_->model()->rowCount() > 15) // if too many variables: no fixed height + use scrollbar
+  tableView_->resizeWithOptimalWidth();
+  if (tableView_->model()->rowCount() < 15) // if too many variables: no fixed height + use scrollbar
   {
-    tableView_->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    tableView_->resizeColumnsToContents();
-    const int w = tableView_->horizontalHeader()->length() + tableView_->verticalHeader()->width() + tableView_->verticalScrollBar()->sizeHint().width();
-    int x1, y1, x2, y2;
-    tableView_->getContentsMargins(&x1, &y1, &x2, &y2);
-    tableView_->setFixedWidth(w + x1 + x2);
+    tableView_->resizeWithOptimalHeight();
+    groupBoxLayout_->addWidget(tableView_, 0, Qt::AlignTop);
   }
   else
   {
-    tableView_->resizeToContents();
-    groupBoxLayout_->addStretch();
+    groupBoxLayout_->addWidget(tableView_);
   }
 
   // set DOE size label
   DOESizeLabel_->setText(QString::number(doe.getOriginalInputSample().getSize()));
   connect(tableModel_, SIGNAL(doeSizeChanged(QString)), DOESizeLabel_, SLOT(setText(QString)));
+}
+
+
+void DeterministicDesignPage::resizeEvent(QResizeEvent* event)
+{
+  QWizardPage::resizeEvent(event);
+
+  if (event->oldSize().width() > 0 && tableView_ && tableModel_)
+  {
+    // tableView_->resizeWithOptimalWidth() : fixes the width -> the table is not resizable
+    // when resizing the wizard, we want to resize the table too
+    tableView_->horizontalHeader()->setStretchLastSection(true);
+    tableView_->setFixedWidth(QWIDGETSIZE_MAX); // remove constraints
+  }
 }
 
 
