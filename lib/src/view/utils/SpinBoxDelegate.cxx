@@ -39,6 +39,13 @@ QWidget* SpinBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewIt
   {
     case SpinBoxDelegate::noType:
       return new QSpinBox(parent);
+    case SpinBoxDelegate::doubleValue:
+    {
+      DoubleSpinBox * editor = new DoubleSpinBox(parent);
+      editor->setFrame(false);
+      editor->setDecimals(15);
+      return editor;
+    }
     case SpinBoxDelegate::correlation:
     {
       DoubleSpinBox * editor = new DoubleSpinBox(parent);
