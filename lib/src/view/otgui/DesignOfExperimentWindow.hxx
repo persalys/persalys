@@ -36,16 +36,9 @@ protected:
   virtual void initialize(AnalysisItem* item);
   virtual void fillListWidget();
   virtual void fillTabWidget();
-  virtual void addSummaryTab();
-#ifdef OTGUI_HAVE_PARAVIEW
-  virtual void addParaviewWidgetsTabs();
-#endif
-  virtual void addTableTab();
 
 public slots:
   virtual void updateVariablesListVisibility(int indexTab);
-private:
-  OT::Sample notEvaluatedInputSample_;
 };
 }
 #endif

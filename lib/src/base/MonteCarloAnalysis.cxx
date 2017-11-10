@@ -150,12 +150,57 @@ void MonteCarloAnalysis::run()
       // the last block can be smaller
       const UnsignedInteger effectiveBlockSize = outerSampling < (maximumOuterSampling - 1) ? getBlockSize() : lastBlockSize;
 
-      // Perform a block of simulation
+      // get block input sample
       const Sample blockInputSample(generateInputSample(effectiveBlockSize));
-      effectiveInputSample.add(blockInputSample);
 
-      const Sample blockOutputSample(computeOutputSample(blockInputSample));
-      outputSample.add(blockOutputSample);
+      // Perform a block of simulations
+      Sample blockOutputSample;
+      try
+      {
+        blockOutputSample = computeOutputSample(blockInputSample);
+      }
+      catch (std::exception & ex)
+      {
+        failedInputSample_ = blockInputSample;
+        errorMessage_ = ex.what();
+      }
+
+      // if SymbolicPhysicalModel find NaN and inf
+      // for ex: in case of zero division the Symbolic models do not raise error
+      // TODO rm this section with the next OT version (cf: https://github.com/openturns/openturns/pull/600)
+      if (!failedInputSample_.getSize() && getPhysicalModel().getImplementation()->getClassName() == "SymbolicPhysicalModel")
+      {
+        for (UnsignedInteger j = 0; j < blockInputSample.getSize(); ++j)
+        {
+          for (UnsignedInteger k = 0; k < getInterestVariables().getSize(); ++k)
+          {
+            if (!SpecFunc::IsNormal(blockOutputSample[j][k]))
+            {
+              failedInputSample_ = blockInputSample;
+              errorMessage_ = "At least a point failed. "
+                              + getInterestVariables()[k]
+                              + Point(blockInputSample[j]).__str__()
+                              + " = "
+                              + (OSS() << blockOutputSample[j][k]).str();
+              break;
+            }
+          }
+          if (failedInputSample_.getSize())
+            break;
+        }
+      }
+
+      if (!failedInputSample_.getSize())
+      {
+        // if succeed fill samples
+        outputSample.add(blockOutputSample);
+        effectiveInputSample.add(blockInputSample);
+      }
+      else
+      {
+        // exit the while section. Stop the analysis
+        break;
+      }
 
       // stop criteria
       if (getBlockSize() != 1 || (getBlockSize() == 1 && outerSampling))
@@ -200,7 +245,7 @@ void MonteCarloAnalysis::run()
       notify("analysisFinished");
     }
     else
-      throw InvalidValueException(HERE) << "MonteCarloAnalysis::run : The output sample is empty";
+      throw InvalidValueException(HERE) << "Monte Carlo Analysis failed. The output sample is empty. " << errorMessage_;
   }
   catch (std::exception & ex)
   {

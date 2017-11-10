@@ -49,6 +49,20 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
 
   result_ = analysis.getResult();
   designOfExperiment_ = result_.getDesignOfExperiment();
+  failedInputSample_ = analysis.getFailedInputSample();
+
+  if (result_.getElapsedTime() >= analysis.getMaximumElapsedTime())
+    analysisStopCriteriaMessage_ = tr("Maximum elapsed time reached");
+  if (designOfExperiment_.getOutputSample().getSize() == analysis.getMaximumCalls())
+    analysisStopCriteriaMessage_ = tr("Maximum calls reached");
+  if (!analysis.getErrorMessage().empty())
+    analysisStopCriteriaMessage_ = tr("An error has occured during the execution of the analysis");
+
+  // if not one of the previous criteria
+  if (analysisStopCriteriaMessage_.isEmpty())
+    analysisStopCriteriaMessage_ = tr("Maximum coefficient of variation reached");
+
+  analysisErrorMessage_ = analysis.getErrorMessage().c_str();
 
   isConfidenceIntervalRequired_ = analysis.isConfidenceIntervalRequired();
   levelConfidenceInterval_ = analysis.getLevelConfidenceInterval();

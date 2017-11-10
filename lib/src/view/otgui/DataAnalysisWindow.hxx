@@ -25,6 +25,10 @@
 #include "otgui/DataAnalysisResult.hxx"
 #include "otgui/DoubleSpinBox.hxx"
 
+#ifdef OTGUI_HAVE_PARAVIEW
+#include "otgui/PVSpreadSheetViewWidget.hxx"
+#endif
+
 #include <QGroupBox>
 
 namespace OTGUI
@@ -47,6 +51,7 @@ protected:
   void addBoxPlotTab();
 #ifdef OTGUI_HAVE_PARAVIEW
   virtual void addParaviewWidgetsTabs();
+  virtual void addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget* pvSpreadSheet=0);
 #endif
   void addPlotMatrixTab();
   void addScatterPlotsTab();
@@ -63,7 +68,10 @@ signals:
 protected:
   DesignOfExperiment designOfExperiment_;
   DataAnalysisResult result_;
+  QString analysisStopCriteriaMessage_;
+  QString analysisErrorMessage_;
   OT::Sample failedInputSample_;
+  OT::Sample notEvaluatedInputSample_;
   bool resultsSampleIsValid_;
   QString sampleSizeTitle_;
   QStringList inputNames_;

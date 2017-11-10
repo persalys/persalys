@@ -36,7 +36,6 @@ static Factory<DesignOfExperimentEvaluation> Factory_DesignOfExperimentEvaluatio
 DesignOfExperimentEvaluation::DesignOfExperimentEvaluation()
   : SimulationAnalysis()
   , originalInputSample_()
-  , failedInputSample_()
 {
 }
 
@@ -45,7 +44,6 @@ DesignOfExperimentEvaluation::DesignOfExperimentEvaluation()
 DesignOfExperimentEvaluation::DesignOfExperimentEvaluation(const String& name, const PhysicalModel& physicalModel)
   : SimulationAnalysis(name, physicalModel)
   , originalInputSample_()
-  , failedInputSample_()
 {
 
 }
@@ -198,12 +196,6 @@ void DesignOfExperimentEvaluation::run()
 }
 
 
-Sample DesignOfExperimentEvaluation::getFailedInputSample() const
-{
-  return failedInputSample_;
-}
-
-
 Sample DesignOfExperimentEvaluation::getNotEvaluatedInputSample() const
 {
   const UnsignedInteger originalInputSampleSize = originalInputSample_.getSize();
@@ -233,7 +225,6 @@ void DesignOfExperimentEvaluation::save(Advocate& adv) const
 {
   SimulationAnalysis::save(adv);
   adv.saveAttribute("originalInputSample_", originalInputSample_);
-  adv.saveAttribute("failedInputSample_", failedInputSample_);
 }
 
 
@@ -242,6 +233,5 @@ void DesignOfExperimentEvaluation::load(Advocate& adv)
 {
   SimulationAnalysis::load(adv);
   adv.loadAttribute("originalInputSample_", originalInputSample_);
-  adv.loadAttribute("failedInputSample_", failedInputSample_);
 }
 }

@@ -45,7 +45,6 @@ public:
   virtual OT::Sample getOriginalInputSample() const;
   void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
 
-  OT::Sample getFailedInputSample() const;
   OT::Sample getNotEvaluatedInputSample() const;
 
   virtual Parameters getParameters() const;
@@ -59,8 +58,6 @@ public:
 
 protected:
   mutable OT::Sample originalInputSample_;
-private:
-  OT::Sample failedInputSample_;
 };
 }
 #endif
