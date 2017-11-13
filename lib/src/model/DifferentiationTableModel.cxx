@@ -106,4 +106,20 @@ bool DifferentiationTableModel::setData(const QModelIndex& index, const QVariant
   }
   return false;
 }
+
+
+void DifferentiationTableModel::updateData()
+{
+  beginResetModel();
+  endResetModel();
+}
+
+
+void DifferentiationTableModel::applyValueToAll(double value)
+{
+  for (int i = 0; i < rowCount(); ++i)
+  {
+    setData(index(i, 1), value, Qt::EditRole);
+  }
+}
 }

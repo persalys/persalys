@@ -44,6 +44,7 @@ public:
   PhysicalModel getPhysicalModel() const;
 
 public slots:
+  void updateData();
 signals:
   void distributionChanged(const QModelIndex&);
   void correlationToChange();

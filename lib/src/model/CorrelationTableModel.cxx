@@ -117,6 +117,13 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
 }
 
 
+void CorrelationTableModel::updateData()
+{
+  beginResetModel();
+  endResetModel();
+}
+
+
 PhysicalModel CorrelationTableModel::getPhysicalModel() const
 {
   return physicalModel_;

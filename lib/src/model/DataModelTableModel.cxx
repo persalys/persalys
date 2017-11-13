@@ -40,9 +40,9 @@ DataModelTableModel::DataModelTableModel(DataModel* dataModel, QObject* parent)
 
 void DataModelTableModel::updateData(const Sample& data, const bool isReloadAction, const bool useColumns)
 {
+  beginResetModel();
   data_ = data;
   updatePrivateData(isReloadAction, useColumns);
-  beginResetModel();
   endResetModel();
 }
 

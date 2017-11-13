@@ -42,8 +42,7 @@ public:
 
 public slots:
   void appendDistribution(const QString & distributionName);
-
-public slots:
+  void updateData(const QStringList & distributions);
 signals:
   void distributionsListChanged(QStringList);
 

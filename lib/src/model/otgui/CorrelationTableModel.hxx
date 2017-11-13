@@ -43,6 +43,7 @@ public:
   PhysicalModel getPhysicalModel() const;
 
 public slots:
+  void updateData();
 signals:
   void errorMessageChanged(const QString & errorMessage);
 

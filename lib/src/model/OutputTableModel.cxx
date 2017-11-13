@@ -212,6 +212,14 @@ Qt::ItemFlags OutputTableModel::flags(const QModelIndex & index) const
 }
 
 
+void OutputTableModel::updateData()
+{
+  beginResetModel();
+  endResetModel();
+  emit checked(physicalModel_.getOutputNames().getSize() == physicalModel_.getSelectedOutputsNames().getSize());
+}
+
+
 void OutputTableModel::addLine()
 {
   int i = 0;
@@ -226,8 +234,7 @@ void OutputTableModel::addLine()
   insertRow(lastIndex.row());
 
   endInsertRows();
-  bool allChecked = physicalModel_.getOutputNames().getSize() == physicalModel_.getSelectedOutputsNames().getSize();
-  emit checked(allChecked);
+  emit checked(physicalModel_.getOutputNames().getSize() == physicalModel_.getSelectedOutputsNames().getSize());
 }
 
 
