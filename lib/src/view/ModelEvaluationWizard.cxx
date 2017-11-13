@@ -88,15 +88,7 @@ void ModelEvaluationWizard::buildInterface()
     connect(valueSpinBox, SIGNAL(valueChanged(double)), this, SLOT(inputValueChanged(double)));
   }
 
-#if QT_VERSION >= 0x050000
-  table_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
-  table_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
-  table_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
-#else
-  table_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
-  table_->horizontalHeader()->setResizeMode(1, QHeaderView::Interactive);
-  table_->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
-#endif
+  table_->horizontalHeader()->setStretchLastSection(true);
 
   inputsLayout->addWidget(table_);
   pageLayout->addWidget(inputsBox);

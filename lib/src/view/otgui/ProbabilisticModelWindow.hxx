@@ -25,11 +25,9 @@
 #include "otgui/ProbabilisticModelItem.hxx"
 #include "otgui/PlotWidget.hxx"
 #include "otgui/InputTableProbabilisticModel.hxx"
-#include "otgui/CorrelationTableModel.hxx"
 #include "otgui/CopyableTableView.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/ValueLineEdit.hxx"
-#include "otgui/CheckableHeaderView.hxx"
 #include "otgui/OTStudy.hxx"
 
 #include <QGroupBox>
@@ -51,7 +49,6 @@ public :
 
 protected:
   void buildInterface();
-  void updateStochasticInputsTable();
   void updatePlots();
 
 public slots:
@@ -61,7 +58,6 @@ public slots:
   void updateDistributionParametersWidgets(const QModelIndex & index);
   void updateTruncationParametersWidgets(const QModelIndex & index);
   void updateProbabilisticModel();
-  void updateCorrelationTable();
   void setCorrelationTabErrorMessage(const QString &);
   void distributionParametersChanged();
   void typeDistributionParametersChanged(int);
@@ -69,6 +65,8 @@ public slots:
   void truncationParametersStateChanged();
   void reInitCorrelationErrorMessage(QTimeLine::State);
   void openWizardToChooseInferenceResult(const QModelIndex&);
+signals:
+  void updateCorrelationTableData();
 
 private:
   OTStudy otStudy_;
@@ -76,7 +74,6 @@ private:
   int currentIndexTab_;
   QTableView * inputTableView_;
   InputTableProbabilisticModel * inputTableModel_;
-  CheckableHeaderView * inputTableHeaderView_;
   QStackedWidget * rightSideOfSplitterStackedWidget_;
   ValueLineEdit * valueForDeterministicVariable_;
   PlotWidget * pdfPlot_;
@@ -90,8 +87,6 @@ private:
   QCheckBox * upperBoundCheckBox_;
   ValueLineEdit * lowerBoundLineEdit_;
   ValueLineEdit * upperBoundLineEdit_;
-  CorrelationTableModel * correlationTableModel_;
-  CopyableTableView * correlationTableView_;
   QLabel * correlationErrorMessage_;
   QList<QTimeLine*> qtimelineList_;
 };

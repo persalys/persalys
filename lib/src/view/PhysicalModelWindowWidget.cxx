@@ -25,6 +25,9 @@
 #include "otgui/LineEditWithQValidatorDelegate.hxx"
 #include "otgui/CheckableHeaderView.hxx"
 #include "otgui/SpinBoxDelegate.hxx"
+#include "otgui/InputTableModel.hxx"
+#include "otgui/OutputTableModel.hxx"
+#include "otgui/DifferentiationTableModel.hxx"
 
 #include <QHeaderView>
 #include <QSplitter>
@@ -32,6 +35,7 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QPushButton>
 
 using namespace OT;
 
@@ -41,23 +45,18 @@ namespace OTGUI
 PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelDefinitionItem * item)
   : QTabWidget()
   , physicalModel_(item->getPhysicalModel())
+  , isFirstPaint_(true)
   , inputTableView_(0)
-  , inputTableModel_(0)
-  , addInputLineButton_(0)
-  , removeInputLineButton_(0)
-  , differentiationTableView_(0)
-  , differentiationTableModel_(0)
   , outputTableView_(0)
-  , outputTableModel_(0)
-  , addOutputLineButton_(0)
-  , removeOutputLineButton_(0)
-  , evaluateOutputsButton_(0)
 {
-  connect(item, SIGNAL(numberInputsChanged()), this, SLOT(updateInputTableModel()));
-  connect(item, SIGNAL(inputListDefinitionChanged()), this, SLOT(updateInputDataTableModel()));
-  connect(item, SIGNAL(inputListDifferentiationChanged()), this, SLOT(updateDifferentiationTableModel()));
-  connect(item, SIGNAL(numberOutputsChanged()), this, SLOT(updateOutputTableModel()));
-  connect(item, SIGNAL(outputChanged()), this, SLOT(updateOutputDataTableModel()));
+  connect(item, SIGNAL(numberInputsChanged()), this, SIGNAL(updateInputTableData()));
+  connect(item, SIGNAL(inputListDefinitionChanged()), this, SIGNAL(updateInputTableData()));
+
+  connect(item, SIGNAL(numberOutputsChanged()), this, SIGNAL(updateOutputTableData()));
+  connect(item, SIGNAL(outputChanged()), this, SIGNAL(updateOutputTableData()));
+
+  connect(item, SIGNAL(inputListDifferentiationChanged()), this, SIGNAL(updateDifferentiationTableData()));
+  connect(item, SIGNAL(numberInputsChanged()), this, SIGNAL(updateDifferentiationTableData()));
 
   buildInterface();
 }
@@ -70,45 +69,71 @@ void PhysicalModelWindowWidget::buildInterface()
 
   QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
 
-  // Table Inputs
+  // Table Inputs -------------------------------------------
   QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
   QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
 
   inputTableView_ = new CopyableTableView;
   inputTableView_->setEditTriggers(QTableView::AllEditTriggers);
   inputTableView_->setItemDelegateForColumn(0, new LineEditWithQValidatorDelegate(inputTableView_));
+  inputTableView_->horizontalHeader()->setStretchLastSection(true);
+
+  InputTableModel * inputTableModel = new InputTableModel(physicalModel_, inputTableView_);
+  inputTableView_->setModel(inputTableModel);
+
+  // connections
+  connect(this, SIGNAL(updateInputTableData()), inputTableModel, SLOT(updateData()));
+  connect(inputTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
+
   inputsLayout->addWidget(inputTableView_);
 
   // buttons Add/Remove input
   if (physicalModel_.getImplementation()->getClassName() == "SymbolicPhysicalModel")
   {
-    addInputLineButton_ = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
-    addInputLineButton_->setToolTip(tr("Add an input"));
-    connect(addInputLineButton_, SIGNAL(clicked(bool)), this, SLOT(addInputLine()));
+    QPushButton * addInputLineButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
+    addInputLineButton->setToolTip(tr("Add an input"));
+    connect(addInputLineButton, SIGNAL(clicked(bool)), inputTableModel, SLOT(addLine()));
 
-    removeInputLineButton_ = new QPushButton(QIcon(":/images/list-remove.png"), tr("Remove"));
-    removeInputLineButton_->setToolTip(tr("Remove the selected input"));
-    connect(removeInputLineButton_, SIGNAL(clicked(bool)), this, SLOT(removeInputLine()));
+    QPushButton * removeInputLineButton = new QPushButton(QIcon(":/images/list-remove.png"), tr("Remove"));
+    removeInputLineButton->setToolTip(tr("Remove the selected input"));
+    connect(removeInputLineButton, SIGNAL(clicked(bool)), this, SLOT(removeInputLine()));
+    connect(this, SIGNAL(removeInputLine(QModelIndex)), inputTableModel, SLOT(removeLine(QModelIndex)));
 
     QHBoxLayout * buttonsLayout = new QHBoxLayout;
     buttonsLayout->addStretch();
-    buttonsLayout->addWidget(addInputLineButton_);
-    buttonsLayout->addWidget(removeInputLineButton_);
+    buttonsLayout->addWidget(addInputLineButton);
+    buttonsLayout->addWidget(removeInputLineButton);
     inputsLayout->addLayout(buttonsLayout);
   }
 
   verticalSplitter->addWidget(inputsBox);
   verticalSplitter->setStretchFactor(0, 5);
 
-  // Table Outputs
+  // Table Outputs -------------------------------------------
   QGroupBox * outputsBox = new QGroupBox(tr("Outputs"));
   QVBoxLayout * outputsLayout = new QVBoxLayout(outputsBox);
 
+  // table view
   outputTableView_ = new CopyableTableView;
   outputTableView_->setEditTriggers(QTableView::AllEditTriggers);
-  outputTableHeaderView_ = new CheckableHeaderView;
-  outputTableView_->setHorizontalHeader(outputTableHeaderView_);
   outputTableView_->setItemDelegateForColumn(0, new LineEditWithQValidatorDelegate(true, outputTableView_));
+
+  OutputTableModel * outputTableModel = new OutputTableModel(physicalModel_, outputTableView_);
+  outputTableView_->setModel(outputTableModel);
+
+  // table header view
+  CheckableHeaderView * outputTableHeaderView = new CheckableHeaderView;
+  outputTableView_->setHorizontalHeader(outputTableHeaderView);
+  outputTableView_->horizontalHeader()->setStretchLastSection(true);
+  const UnsignedInteger nbOutputs = physicalModel_.getOutputNames().getSize();
+  const bool allChecked = (nbOutputs && (nbOutputs == physicalModel_.getSelectedOutputsNames().getSize()));
+  outputTableHeaderView->setChecked(allChecked);
+
+  // connections
+  connect(outputTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
+  connect(outputTableModel, SIGNAL(checked(bool)), outputTableHeaderView, SLOT(setChecked(bool)));
+  connect(this, SIGNAL(updateOutputTableData()), outputTableModel, SLOT(updateData()));
+
   outputsLayout->addWidget(outputTableView_);
 
   // buttons Add/Remove output
@@ -117,23 +142,24 @@ void PhysicalModelWindowWidget::buildInterface()
 
   if (physicalModel_.getImplementation()->getClassName() == "SymbolicPhysicalModel")
   {
-    addOutputLineButton_ = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
-    addOutputLineButton_->setToolTip(tr("Add an output"));
-    connect(addOutputLineButton_, SIGNAL(clicked(bool)), this, SLOT(addOutputLine()));
+    QPushButton * addOutputLineButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
+    addOutputLineButton->setToolTip(tr("Add an output"));
+    connect(addOutputLineButton, SIGNAL(clicked(bool)), outputTableModel, SLOT(addLine()));
 
-    removeOutputLineButton_ = new QPushButton(QIcon(":/images/list-remove.png"), tr("Remove"));
-    removeOutputLineButton_->setToolTip(tr("Remove the selected output"));
-    connect(removeOutputLineButton_, SIGNAL(clicked(bool)), this, SLOT(removeOutputLine()));
+    QPushButton * removeOutputLineButton = new QPushButton(QIcon(":/images/list-remove.png"), tr("Remove"));
+    removeOutputLineButton->setToolTip(tr("Remove the selected output"));
+    connect(removeOutputLineButton, SIGNAL(clicked(bool)), this, SLOT(removeOutputLine()));
+    connect(this, SIGNAL(removeOutputLine(QModelIndex)), outputTableModel, SLOT(removeLine(QModelIndex)));
 
-    outputButtonsLayout->addWidget(addOutputLineButton_);
-    outputButtonsLayout->addWidget(removeOutputLineButton_);
+    outputButtonsLayout->addWidget(addOutputLineButton);
+    outputButtonsLayout->addWidget(removeOutputLineButton);
   }
 
-  // button Evaluate outputs
-  evaluateOutputsButton_ = new QPushButton(QIcon(":/images/system-run.png"), tr("Evaluate"));
-  evaluateOutputsButton_->setToolTip(tr("Evaluate the value of the outputs"));
-  connect(evaluateOutputsButton_, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
-  outputButtonsLayout->addWidget(evaluateOutputsButton_);
+  // button Evaluate outputs -------------------------------------------
+  QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Evaluate"));
+  evaluateOutputsButton->setToolTip(tr("Evaluate the value of the outputs"));
+  connect(evaluateOutputsButton, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
+  outputButtonsLayout->addWidget(evaluateOutputsButton);
 
   outputsLayout->addLayout(outputButtonsLayout);
 
@@ -141,9 +167,6 @@ void PhysicalModelWindowWidget::buildInterface()
   verticalSplitter->setStretchFactor(1, 3);
 
   vbox->addWidget(verticalSplitter);
-
-  updateInputTableModel();
-  updateOutputTableModel();
 
   addTab(tab, tr("Definition"));
 
@@ -157,29 +180,26 @@ void PhysicalModelWindowWidget::buildInterface()
     label->setStyleSheet("font: bold;");
     vbox->addWidget(label);
 
-    differentiationTableView_ = new CopyableTableView;
+    CopyableTableView * differentiationTableView = new CopyableTableView;
+    differentiationTableView->horizontalHeader()->setStretchLastSection(true);
+
     SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate;
     spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::differentiationStep);
-    connect(spinBoxDelegate, SIGNAL(applyToAllRequested(double)), this, SLOT(applyDifferentiationStepToAllInputs(double)));
-    differentiationTableView_->setItemDelegateForColumn(1, spinBoxDelegate);
-    differentiationTableView_->setEditTriggers(QTableView::AllEditTriggers);
-    vbox->addWidget(differentiationTableView_);
+    differentiationTableView->setItemDelegateForColumn(1, spinBoxDelegate);
+    differentiationTableView->setEditTriggers(QTableView::AllEditTriggers);
 
-    updateDifferentiationTableModel();
+    DifferentiationTableModel * differentiationTableModel  = new DifferentiationTableModel(physicalModel_, differentiationTableView);
+    differentiationTableView->setModel(differentiationTableModel);
+
+    // connections
+    connect(spinBoxDelegate, SIGNAL(applyToAllRequested(double)), differentiationTableModel, SLOT(applyValueToAll(double)));
+    connect(this, SIGNAL(updateInputTableData()), differentiationTableModel, SLOT(updateData()));
+    connect(inputTableModel, SIGNAL(inputNumberChanged()), differentiationTableModel, SLOT(updateData()));
+    connect(inputTableModel, SIGNAL(inputNameChanged()), differentiationTableModel, SLOT(updateData()));
+
+    vbox->addWidget(differentiationTableView);
 
     addTab(tab, tr("Differentiation"));
-  }
-}
-
-
-void PhysicalModelWindowWidget::applyDifferentiationStepToAllInputs(double value)
-{
-  if (differentiationTableModel_)
-  {
-    for (int i = 0; i < differentiationTableModel_->rowCount(); ++i)
-    {
-      differentiationTableModel_->setData(differentiationTableModel_->index(i, 1), value, Qt::EditRole);
-    }
   }
 }
 
@@ -196,6 +216,20 @@ void PhysicalModelWindowWidget::resizeEvent(QResizeEvent* event)
 }
 
 
+void PhysicalModelWindowWidget::paintEvent(QPaintEvent * event)
+{
+  QTabWidget::paintEvent(event);
+
+  // initialize tables size
+  if (isFirstPaint_)
+  {
+    resizeInputTable();
+    resizeOutputTable();
+    isFirstPaint_ = false;
+  }
+}
+
+
 void PhysicalModelWindowWidget::resizeInputTable()
 {
   const int width = inputTableView_->horizontalHeader()->width();
@@ -207,141 +241,20 @@ void PhysicalModelWindowWidget::resizeInputTable()
 void PhysicalModelWindowWidget::resizeOutputTable()
 {
   const int width = outputTableView_->horizontalHeader()->width();
+
+  const int minSectionSize = outputTableView_->horizontalHeader()->minimumSectionSize();
+  outputTableView_->horizontalHeader()->resizeSection(0, minSectionSize);
+
   if (physicalModel_.getImplementation()->getClassName() != "SymbolicPhysicalModel")
   {
-    outputTableView_->setColumnHidden(2, true);
-    outputTableView_->horizontalHeader()->resizeSection(0, outputTableHeaderView_->minimumSectionSize());
-    outputTableView_->horizontalHeader()->resizeSection(1, width - 2 * (outputTableHeaderView_->minimumSectionSize()));
+    outputTableView_->setColumnHidden(2, true); // hide formula section
+    outputTableView_->horizontalHeader()->resizeSection(1, width - 2 * minSectionSize);
   }
   else
   {
-    outputTableView_->horizontalHeader()->resizeSection(0, outputTableHeaderView_->minimumSectionSize());
     outputTableView_->horizontalHeader()->resizeSection(1, width * 3 / 10);
     outputTableView_->horizontalHeader()->resizeSection(2, width * 4 / 10);
   }
-}
-
-
-void PhysicalModelWindowWidget::updateInputTableModel()
-{
-  if (inputTableModel_)
-    delete inputTableModel_;
-  inputTableModel_ = new InputTableModel(physicalModel_, inputTableView_);
-  inputTableView_->setModel(inputTableModel_);
-#if QT_VERSION >= 0x050000
-  inputTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
-  inputTableView_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
-  inputTableView_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
-#else
-  inputTableView_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
-  inputTableView_->horizontalHeader()->setResizeMode(1, QHeaderView::Interactive);
-  inputTableView_->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
-#endif
-  resizeInputTable();
-
-  // connections
-  connect(inputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
-  connect(inputTableModel_, SIGNAL(inputNumberChanged()), this, SLOT(updateDifferentiationTableModel()));
-  connect(inputTableModel_, SIGNAL(inputNameChanged()), this, SLOT(updateDifferentiationTableModel()));
-  connect(this, SIGNAL(inputTableModelDataChanged(QModelIndex, QModelIndex)), inputTableModel_, SIGNAL(dataChanged(QModelIndex, QModelIndex)));
-}
-
-
-void PhysicalModelWindowWidget::updateDifferentiationTableModel()
-{
-  if (differentiationTableModel_)
-    delete differentiationTableModel_;
-  differentiationTableModel_  = new DifferentiationTableModel(physicalModel_, differentiationTableView_);
-  differentiationTableView_->setModel(differentiationTableModel_);
-#if QT_VERSION >= 0x050000
-  differentiationTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
-  differentiationTableView_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-#else
-  differentiationTableView_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
-  differentiationTableView_->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
-#endif
-  connect(this, SIGNAL(differentiationTableModelDataChanged(QModelIndex, QModelIndex)), differentiationTableModel_, SIGNAL(dataChanged(QModelIndex, QModelIndex)));
-}
-
-
-void PhysicalModelWindowWidget::updateOutputTableModel()
-{
-  if (outputTableModel_)
-    delete outputTableModel_;
-  outputTableModel_ = new OutputTableModel(physicalModel_, outputTableView_);
-  // table view
-  outputTableView_->setModel(outputTableModel_);
-#if QT_VERSION >= 0x050000
-  outputTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
-  outputTableView_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
-  outputTableView_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Interactive);
-  outputTableView_->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
-#else
-  outputTableView_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
-  outputTableView_->horizontalHeader()->setResizeMode(1, QHeaderView::Interactive);
-  outputTableView_->horizontalHeader()->setResizeMode(2, QHeaderView::Interactive);
-  outputTableView_->horizontalHeader()->setResizeMode(3, QHeaderView::Stretch);
-#endif
-  resizeOutputTable();
-  // table header view
-  const UnsignedInteger nbOutputs = physicalModel_.getOutputNames().getSize();
-  const bool allChecked = (nbOutputs && (nbOutputs == physicalModel_.getSelectedOutputsNames().getSize()));
-  outputTableHeaderView_->setChecked(allChecked);
-  connect(outputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
-  connect(outputTableModel_, SIGNAL(checked(bool)), outputTableHeaderView_, SLOT(setChecked(bool)));
-  connect(this, SIGNAL(outputTableModelDataChanged(QModelIndex, QModelIndex)), outputTableModel_, SIGNAL(dataChanged(QModelIndex, QModelIndex)));
-}
-
-
-void PhysicalModelWindowWidget::updateInputDataTableModel()
-{
-  if (!inputTableModel_)
-    return;
-  if (!inputTableModel_->rowCount())
-    return;
-  // refresh values
-  QModelIndex topleft = inputTableModel_->index(0, 0);
-  QModelIndex bottomright = inputTableModel_->index(inputTableModel_->rowCount(), inputTableModel_->columnCount());
-  emit inputTableModelDataChanged(topleft, bottomright);
-}
-
-
-void PhysicalModelWindowWidget::updateDifferentiationDataTableModel()
-{
-  if (!differentiationTableModel_)
-    return;
-  if (!differentiationTableModel_->rowCount())
-    return;
-  // refresh values
-  QModelIndex topleft = differentiationTableModel_->index(0, 0);
-  QModelIndex bottomright = differentiationTableModel_->index(differentiationTableModel_->rowCount(), differentiationTableModel_->columnCount());
-  emit differentiationTableModelDataChanged(topleft, bottomright);
-
-}
-
-
-void PhysicalModelWindowWidget::updateOutputDataTableModel()
-{
-  if (!outputTableModel_)
-    return;
-  if (!outputTableModel_->rowCount())
-    return;
-  // refresh values
-  QModelIndex topleft = outputTableModel_->index(0, 0);
-  QModelIndex bottomright = outputTableModel_->index(outputTableModel_->rowCount(), outputTableModel_->columnCount());
-  emit outputTableModelDataChanged(topleft, bottomright);
-}
-
-
-void PhysicalModelWindowWidget::addInputLine()
-{
-  inputTableModel_->addLine();
-}
-
-
-void PhysicalModelWindowWidget::addOutputLine()
-{
-  outputTableModel_->addLine();
 }
 
 
@@ -350,8 +263,8 @@ void PhysicalModelWindowWidget::removeInputLine()
   if (inputTableView_->selectionModel()->hasSelection())
   {
     QModelIndex index = inputTableView_->selectionModel()->currentIndex();
-    inputTableModel_->removeLine(index);
-    const int lastRow = inputTableModel_->rowCount() - 1;
+    emit removeInputLine(index);
+    const int lastRow = inputTableView_->model()->rowCount() - 1;
 
     if (lastRow + 1)
       inputTableView_->selectRow(lastRow);
@@ -362,7 +275,7 @@ void PhysicalModelWindowWidget::removeInputLine()
 void PhysicalModelWindowWidget::removeOutputLine()
 {
   if (outputTableView_->selectionModel()->hasSelection())
-    outputTableModel_->removeLine(outputTableView_->selectionModel()->currentIndex());
+    emit removeOutputLine(outputTableView_->selectionModel()->currentIndex());
 }
 
 
