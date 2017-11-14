@@ -50,7 +50,6 @@ private:
   OutputsSelectionGroupBox * outputsSelectionGroupBox_;
   QButtonGroup * methodGroup_;
   QLabel * errorMessageLabel_;
-  OT::Description interestVariables_;
 };
 }
 #endif

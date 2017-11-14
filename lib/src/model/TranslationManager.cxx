@@ -110,6 +110,8 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert(type("Kolmogorov-Smirnov", tr("Kolmogorov-Smirnov")));
   ParametersNames_.insert(type("Number of folds", tr("Number of folds")));
   ParametersNames_.insert(type("Percentage", tr("Percentage")));
+  ParametersNames_.insert(type("Bootstrap size", tr("Bootstrap size")));
+  ParametersNames_.insert(type("Bootstrap confidence level", tr("Bootstrap confidence level")));
 }
 
 

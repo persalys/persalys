@@ -22,6 +22,7 @@
 
 #include "otgui/SensitivityAnalysisWizard.hxx"
 #include "otgui/PhysicalModelAnalysis.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <QVBoxLayout>
 #include <QRadioButton>
@@ -36,7 +37,6 @@ IntroSensitivityPage::IntroSensitivityPage(QWidget* parent)
   , outputsSelectionGroupBox_(0)
   , methodGroup_(0)
   , errorMessageLabel_(0)
-  , interestVariables_()
 {
   setTitle(tr("Sensitivity methods"));
 
@@ -51,16 +51,15 @@ IntroSensitivityPage::IntroSensitivityPage(QWidget* parent)
   QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
 
   methodGroup_ = new QButtonGroup;
-//   connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SLOT(updateFinalPage()));
 
-  // Chaos
+  // Sobol
   QRadioButton * buttonToChooseMethodSobol = new QRadioButton(tr("Sobol"));
   buttonToChooseMethodSobol->setChecked(true);
   methodGroup_->addButton(buttonToChooseMethodSobol, IntroSensitivityPage::Sobol);
   methodLayout->addWidget(buttonToChooseMethodSobol);
 
-  // Kriging
-  QRadioButton * buttonToChooseMethodSRC = new QRadioButton(tr("SRC"));
+  // SRC
+  QRadioButton * buttonToChooseMethodSRC = new QRadioButton(tr("Standard Regression Coefficient (SRC)"));
   methodGroup_->addButton(buttonToChooseMethodSRC, IntroSensitivityPage::SRC);
   methodLayout->addWidget(buttonToChooseMethodSRC);
 
@@ -107,13 +106,7 @@ int IntroSensitivityPage::nextId() const
 
 Description IntroSensitivityPage::getInterestVariables() const
 {
-  const QStringList outputsList = outputsSelectionGroupBox_->getSelectedOutputsNames();
-
-  Description outputNames(outputsList.size());
-  for (int i = 0; i < outputsList.size(); ++i)
-    outputNames[i] = outputsList[i].toUtf8().constData();
-
-  return outputNames;
+  return QtOT::StringListToDescription(outputsSelectionGroupBox_->getSelectedOutputsNames());
 }
 
 

@@ -20,10 +20,11 @@
  */
 #include "otgui/SobolAnalysis.hxx"
 
-#include "openturns/RandomGenerator.hxx"
-#include "openturns/SaltelliSensitivityAlgorithm.hxx"
-#include "openturns/PersistentObjectFactory.hxx"
-#include "openturns/SpecFunc.hxx"
+#include <openturns/RandomGenerator.hxx>
+#include <openturns/SaltelliSensitivityAlgorithm.hxx>
+#include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/SpecFunc.hxx>
+#include <openturns/ResourceMap.hxx>
 
 using namespace OT;
 
@@ -38,6 +39,8 @@ static Factory<SobolAnalysis> Factory_SobolAnalysis;
 SobolAnalysis::SobolAnalysis()
   : SimulationAnalysis()
   , WithStopCriteriaAnalysis()
+  , bootstrapSize_(ResourceMap::GetAsUnsignedInteger("SobolIndicesAlgorithm-DefaultBootstrapSize"))
+  , bootstrapConfidenceLevel_(ResourceMap::GetAsScalar("SobolIndicesAlgorithm-DefaultBootstrapConfidenceLevel"))
   , result_()
 {
 }
@@ -46,6 +49,8 @@ SobolAnalysis::SobolAnalysis()
 /* Constructor with parameters */
 SobolAnalysis::SobolAnalysis(const String& name, const PhysicalModel& physicalModel)
   : SimulationAnalysis(name, physicalModel)
+  , bootstrapSize_(ResourceMap::GetAsUnsignedInteger("SobolIndicesAlgorithm-DefaultBootstrapSize"))
+  , bootstrapConfidenceLevel_(ResourceMap::GetAsScalar("SobolIndicesAlgorithm-DefaultBootstrapConfidenceLevel"))
   , result_()
 {
 }
@@ -55,6 +60,34 @@ SobolAnalysis::SobolAnalysis(const String& name, const PhysicalModel& physicalMo
 SobolAnalysis* SobolAnalysis::clone() const
 {
   return new SobolAnalysis(*this);
+}
+
+
+UnsignedInteger SobolAnalysis::getBootstrapSize() const
+{
+  return bootstrapSize_;
+}
+
+
+void SobolAnalysis::setBootstrapSize(const UnsignedInteger size)
+{
+  if (size < 1)
+    throw InvalidArgumentException(HERE) << "Bootstrap sampling size should be positive. Here, bootstrapSize=" << size;
+  bootstrapSize_ = size;
+}
+
+
+double SobolAnalysis::getBootstrapConfidenceLevel() const
+{
+  return bootstrapConfidenceLevel_;
+}
+
+
+void SobolAnalysis::setBootstrapConfidenceLevel(const double level)
+{
+  if (!(level >= 0.0) || !(level < 1.0))
+    throw InvalidArgumentException(HERE) << "Confidence level value should be in ]0,1[. Here, confidence level=" << level;
+  bootstrapConfidenceLevel_ = level;
 }
 
 
@@ -91,6 +124,9 @@ void SobolAnalysis::run()
     const clock_t startTime = clock();
     UnsignedInteger outerSampling = 0;
 
+    Sample inputDesign;
+    Sample outputDesign;
+
     Sample X1(0, nbInputs);
     Sample X2(0, nbInputs);
     Collection<Sample> crossX1(nbInputs, Sample(0, nbInputs));
@@ -101,9 +137,6 @@ void SobolAnalysis::run()
 
     Collection<Sample> allFirstOrderIndices(nbOutputs, Sample(0, nbInputs));
     Collection<Sample> allTotalIndices(nbOutputs, Sample(0, nbInputs));
-    //   Interval firstOrderIndicesInterval;
-    //   Interval totalIndicesInterval;
-    SaltelliSensitivityAlgorithm algoSaltelli;
 
     // We loop if there remains time, some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
     while (!stopRequested_
@@ -130,9 +163,9 @@ void SobolAnalysis::run()
       X2.add(blockInputSample2);
 
       // fill samples, inputs of the sensitivity analysis algo
-      Sample inputDesign(X1);
+      inputDesign = X1;
       inputDesign.add(X2);
-      Sample outputDesign(0, nbOutputs);
+      outputDesign = Sample(0, nbOutputs);
 
       try
       {
@@ -151,7 +184,7 @@ void SobolAnalysis::run()
         {
           Sample x(blockInputSample1);
           for (UnsignedInteger j = 0; j < effectiveBlockSize; ++j)
-            x[j][i] = blockInputSample2[j][i];
+            x(j, i) = blockInputSample2(j, i);
           crossX1[i].add(x);
           inputDesign.add(crossX1[i]);
           crossY1[i].add(computeOutputSample(x));
@@ -168,7 +201,7 @@ void SobolAnalysis::run()
       {
         const UnsignedInteger sampleSize(outerSampling < (maximumOuterSampling - 1) ?
                                          getBlockSize() * (outerSampling + 1) :
-                                         getBlockSize()*outerSampling + lastBlockSize);
+                                         getBlockSize() * outerSampling + lastBlockSize);
 
         // information message
         OSS oss;
@@ -183,8 +216,10 @@ void SobolAnalysis::run()
 
         try
         {
-          algoSaltelli = SaltelliSensitivityAlgorithm(inputDesign, outputDesign, sampleSize);
+          // build algo
+          SaltelliSensitivityAlgorithm algoSaltelli(inputDesign, outputDesign, sampleSize);
 
+          // compute indices
           for (UnsignedInteger i = 0; i < nbOutputs; ++i)
           {
             allFirstOrderIndices[i].add(algoSaltelli.getFirstOrderIndices(i));
@@ -211,7 +246,7 @@ void SobolAnalysis::run()
           const Point empiricalStd(allFirstOrderIndices[i].computeStandardDeviationPerComponent());
           for (UnsignedInteger j = 0; j < nbInputs; ++j)
           {
-            if (std::abs(empiricalMean[j])  < SpecFunc::Precision)
+            if (std::abs(empiricalMean[j]) < SpecFunc::Precision)
               throw InvalidValueException(HERE) << "Impossible to compute the coefficient of variation because the mean of an indice is too close to zero.\
                                                     Do not use the coefficient of variation as criteria to stop the algorithm";
 
@@ -232,19 +267,30 @@ void SobolAnalysis::run()
     Sample totalIndices(0, nbInputs);
     for (UnsignedInteger i = 0; i < nbOutputs; ++i)
     {
-      if (!(allFirstOrderIndices[i].getSize()*allTotalIndices[i].getSize()))
+      if (!(allFirstOrderIndices[i].getSize() * allTotalIndices[i].getSize()))
         throw InvalidValueException(HERE) << "No result. Try to increase the block size and/or the maximum calls.";
       firstOrderIndices.add(allFirstOrderIndices[i][allFirstOrderIndices[i].getSize() - 1]);
       totalIndices.add(allTotalIndices[i][allTotalIndices[i].getSize() - 1]);
     }
 
     // compute indices interval
-    //   algoSaltelli.setBootstrapSize(1000);
-    //   firstOrderIndicesInterval = algoSaltelli.getFirstOrderIndicesInterval();
-    //   totalIndicesInterval = algoSaltelli.getTotalOrderIndicesInterval();
+    const UnsignedInteger sampleSize = inputDesign.getSize() / (2 + nbInputs);
+
+    Collection<Interval> foIntervals;
+    Collection<Interval> toIntervals;
+    for (UnsignedInteger i = 0; i < nbOutputs; ++i)
+    {
+      SaltelliSensitivityAlgorithm algoSaltelli(inputDesign, outputDesign.getMarginal(i), sampleSize);
+      algoSaltelli.setBootstrapSize(bootstrapSize_);
+      algoSaltelli.setBootstrapConfidenceLevel(bootstrapConfidenceLevel_);
+      foIntervals.add(algoSaltelli.getFirstOrderIndicesInterval());
+      toIntervals.add(algoSaltelli.getTotalOrderIndicesInterval());
+    }
 
     // fill result_
     result_ = SobolResult(firstOrderIndices, totalIndices, getInterestVariables());
+    result_.firstOrderIndicesInterval_ = foIntervals;
+    result_.totalIndicesInterval_ = toIntervals;
     result_.callsNumber_ = X1.getSize() * (2 + nbInputs);
     result_.elapsedTime_ = (float) elapsedTime / CLOCKS_PER_SEC;
     result_.coefficientOfVariation_ = coefficientOfVariation;
@@ -290,6 +336,8 @@ Parameters SobolAnalysis::getParameters() const
   param.add("Maximum calls", maxCalls);
   param.add("Block size", getBlockSize());
   param.add("Seed", getSeed());
+  param.add("Bootstrap size", getBootstrapSize());
+  param.add("Bootstrap confidence level", getBootstrapConfidenceLevel());
 
   return param;
 }
@@ -311,6 +359,8 @@ String SobolAnalysis::getPythonScript() const
     oss << getName() << ".setMaximumElapsedTime(" << getMaximumElapsedTime() << ")\n";
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
+  oss << getName() << ".setBootstrapSize(" << getBootstrapSize() << ")\n";
+  oss << getName() << ".setBootstrapConfidenceLevel(" << getBootstrapConfidenceLevel() << ")\n";
 
   return oss;
 }
@@ -329,7 +379,9 @@ String SobolAnalysis::__repr__() const
   oss << PhysicalModelAnalysis::__repr__()
       << WithStopCriteriaAnalysis::__repr__()
       << " seed=" << getSeed()
-      << " blockSize=" << getBlockSize();
+      << " blockSize=" << getBlockSize()
+      << " bootstrapSize=" << getBootstrapSize()
+      << " bootstrapConfidenceLevel=" << getBootstrapConfidenceLevel();
   return oss;
 }
 
@@ -339,6 +391,8 @@ void SobolAnalysis::save(Advocate & adv) const
 {
   SimulationAnalysis::save(adv);
   WithStopCriteriaAnalysis::save(adv);
+  adv.saveAttribute("bootstrapSize_", bootstrapSize_);
+  adv.saveAttribute("bootstrapConfidenceLevel_", bootstrapConfidenceLevel_);
   adv.saveAttribute("result_", result_);
 }
 
@@ -348,6 +402,8 @@ void SobolAnalysis::load(Advocate & adv)
 {
   SimulationAnalysis::load(adv);
   WithStopCriteriaAnalysis::load(adv);
+  adv.loadAttribute("bootstrapSize_", bootstrapSize_);
+  adv.loadAttribute("bootstrapConfidenceLevel_", bootstrapConfidenceLevel_);
   adv.loadAttribute("result_", result_);
 }
 }

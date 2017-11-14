@@ -30,10 +30,16 @@ namespace OTGUI
 CLASSNAMEINIT(SobolResult)
 
 static Factory<SobolResult> Factory_SobolResult;
+static Factory<PersistentCollection<Interval> > Factory_IntervalColl;
 
 /* Default constructor */
 SobolResult::SobolResult()
   : PersistentObject()
+  , outputNames_()
+  , firstOrderIndices_()
+  , totalIndices_()
+  , firstOrderIndicesInterval_()
+  , totalIndicesInterval_()
   , callsNumber_(0)
   , elapsedTime_(0.)
   , coefficientOfVariation_(-1.)
@@ -42,18 +48,20 @@ SobolResult::SobolResult()
 
 
 /* Constructor with parameters */
-SobolResult::SobolResult(const Sample firstOrderIndices,
-                         const Sample totalIndices,
-                         const Description & outputNames)
+SobolResult::SobolResult(const Sample& firstOrderIndices,
+                         const Sample& totalIndices,
+                         const Description& outputNames)
   : PersistentObject()
   , outputNames_(outputNames)
   , firstOrderIndices_(firstOrderIndices)
   , totalIndices_(totalIndices)
+  , firstOrderIndicesInterval_()
+  , totalIndicesInterval_()
   , callsNumber_(0)
   , elapsedTime_(0.)
   , coefficientOfVariation_(-1.)
 {
-  if (!(firstOrderIndices.getDimension() * totalIndices.getDimension() *outputNames.getSize()))
+  if (!(firstOrderIndices.getDimension() * totalIndices.getDimension() * outputNames.getSize()))
     throw InvalidArgumentException(HERE) << "SobolResult: All the arguments must have the same non-zero dimension";
   if (firstOrderIndices.getDimension() != totalIndices.getDimension())
     throw InvalidArgumentException(HERE) << "SobolResult: The list of first order indices and the list of total indices must have the same dimension";
@@ -95,6 +103,18 @@ Sample SobolResult::getTotalIndices() const
 }
 
 
+Collection<Interval> SobolResult::getFirstOrderIndicesInterval() const
+{
+  return firstOrderIndicesInterval_;
+}
+
+
+Collection<Interval> SobolResult::getTotalIndicesInterval() const
+{
+  return totalIndicesInterval_;
+}
+
+
 UnsignedInteger SobolResult::getCallsNumber() const
 {
   return callsNumber_;
@@ -122,6 +142,8 @@ String SobolResult::__repr__() const
       << " outputNames=" << getOutputNames()
       << " firstOrderIndices=" << getFirstOrderIndices()
       << " totalIndices=" << getTotalIndices()
+      << " firstOrderIndicesInterval=" << getFirstOrderIndicesInterval()
+      << " totalIndicesInterval=" << getTotalIndicesInterval()
       << " callsNumber=" << getCallsNumber()
       << " coefficientOfVariation=" << getCoefficientOfVariation();
   return oss;
@@ -135,6 +157,8 @@ void SobolResult::save(Advocate & adv) const
   adv.saveAttribute("outputNames_", outputNames_);
   adv.saveAttribute("firstOrderIndices_", firstOrderIndices_);
   adv.saveAttribute("totalIndices_", totalIndices_);
+  adv.saveAttribute("firstOrderIndicesInterval_", firstOrderIndicesInterval_);
+  adv.saveAttribute("totalIndicesInterval_", totalIndicesInterval_);
   adv.saveAttribute("elapsedTime_", elapsedTime_);
   adv.saveAttribute("callsNumber_", callsNumber_);
   adv.saveAttribute("coefficientOfVariation_", coefficientOfVariation_);
@@ -148,6 +172,8 @@ void SobolResult::load(Advocate & adv)
   adv.loadAttribute("outputNames_", outputNames_);
   adv.loadAttribute("firstOrderIndices_", firstOrderIndices_);
   adv.loadAttribute("totalIndices_", totalIndices_);
+  adv.loadAttribute("firstOrderIndicesInterval_", firstOrderIndicesInterval_);
+  adv.loadAttribute("totalIndicesInterval_", totalIndicesInterval_);
   adv.loadAttribute("elapsedTime_", elapsedTime_);
   adv.loadAttribute("callsNumber_", callsNumber_);
   adv.loadAttribute("coefficientOfVariation_", coefficientOfVariation_);

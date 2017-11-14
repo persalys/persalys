@@ -689,8 +689,10 @@ Début : %2.</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="607"/>
-        <source>Status</source>
-        <translation>Status</translation>
+        <source>Status
+0: failed; 1: ok</source>
+        <translation>Statut
+0: échoué; 1: ok</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="618"/>
@@ -1769,23 +1771,23 @@ métamodèle</translation>
         <translation>Résumé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="237"/>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="248"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="239"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="250"/>
         <source>Sobol indices</source>
         <translation>Indices de Sobol</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="298"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="300"/>
         <source>Q2</source>
         <translation>Q2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="307"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="309"/>
         <source>Validation</source>
         <translation>Validation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="312"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="314"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -2324,17 +2326,17 @@ bayésien (BIC)</translation>
         <translation>Méthode</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/IntroSensitivityPage.cxx" line="57"/>
+        <location filename="../lib/src/view/IntroSensitivityPage.cxx" line="56"/>
         <source>Sobol</source>
         <translation>Sobol</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/IntroSensitivityPage.cxx" line="63"/>
-        <source>SRC</source>
-        <translation>SRC</translation>
+        <location filename="../lib/src/view/IntroSensitivityPage.cxx" line="62"/>
+        <source>Standard Regression Coefficient (SRC)</source>
+        <translation>Standard Regression Coefficient (SRC)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/IntroSensitivityPage.cxx" line="126"/>
+        <location filename="../lib/src/view/IntroSensitivityPage.cxx" line="119"/>
         <source>At least one output must be selected</source>
         <translation>Au moins une sortie doit être sélectionnée</translation>
     </message>
@@ -3967,7 +3969,7 @@ métamodèle</translation>
         <translation>Différentiation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="390"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="384"/>
         <source>Not possible to evaluate the outputs</source>
         <translation>Impossible d&apos;évaluer les sorties</translation>
     </message>
@@ -4105,80 +4107,80 @@ métamodèle</translation>
         <translation>Format non supporté.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="238"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="245"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="239"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="246"/>
         <source>Density</source>
         <translation>Densité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="240"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="257"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="247"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="264"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="255"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="256"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="262"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="263"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="405"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="420"/>
         <source>Index</source>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="406"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="421"/>
         <source>Inputs</source>
         <translation>Entrées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="431"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="455"/>
         <source>First order index</source>
         <translation>Indice du premier ordre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="446"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="479"/>
         <source>Total index</source>
         <translation>Indice total</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="583"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="589"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="598"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="606"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="621"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="612"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="618"/>
         <location filename="../lib/src/view/plot/PlotWidget.cxx" line="627"/>
         <location filename="../lib/src/view/plot/PlotWidget.cxx" line="635"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="641"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="650"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="656"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="664"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="670"/>
         <source>scatterplot</source>
         <translation>diagrammeDispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="585"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="591"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="602"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="610"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="623"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="629"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="637"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="643"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="614"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="620"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="631"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="639"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="652"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="658"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="666"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="672"/>
         <source>Scatter plot:</source>
         <translation>Diagramme de dispersion :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="585"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="591"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="602"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="610"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="623"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="629"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="637"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="643"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="614"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="620"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="631"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="639"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="652"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="658"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="666"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="672"/>
         <source>vs</source>
         <translation>vs</translation>
     </message>
@@ -4451,7 +4453,7 @@ métamodèle</translation>
         <translation>Paramètres de l&apos;analyse de sensibilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCResultWindow.cxx" line="111"/>
+        <location filename="../lib/src/view/SRCResultWindow.cxx" line="113"/>
         <source>Indices</source>
         <translation>Indices</translation>
     </message>
@@ -4466,7 +4468,7 @@ métamodèle</translation>
         <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCResultWindow.cxx" line="115"/>
+        <location filename="../lib/src/view/SRCResultWindow.cxx" line="117"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -4482,58 +4484,72 @@ métamodèle</translation>
 <context>
     <name>OTGUI::SensitivityResultWidget</name>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="60"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="62"/>
         <source>Sobol sensitivity indices:</source>
         <translation>Indices de sensibilité Sobol :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="61"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="63"/>
         <source>sensitivitySobol</source>
         <translation>sensibilitéSobol</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="62"/>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="68"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="64"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="79"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="62"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="64"/>
         <source>First order index</source>
         <translation>Indice du premier ordre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="62"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="67"/>
+        <source>First order index
+confidence interval</source>
+        <translation>Intervalle de confiance
+de l&apos;indice du premier ordre</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="69"/>
         <source>Total index</source>
         <translation>Indice total</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="66"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="72"/>
+        <source>Total index
+confidence interval</source>
+        <translation>Intervalle de confiance
+de l&apos;indice total</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="77"/>
         <source>SRC sensitivity indices:</source>
         <translation>Indices de sensibilité SRC :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="67"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="78"/>
         <source>sensitivitySRC</source>
         <translation>sensibilitéSRC</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="68"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="79"/>
         <source>Index</source>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="120"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="142"/>
         <source>Warning: The total index is inferior to the first order index.</source>
         <translation>Attention : L&apos;indice total est inférieur à l&apos;indice du premier ordre.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="137"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="183"/>
         <source>Interactions</source>
         <translation>Interactions</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="146"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="192"/>
         <source>Warning: The sum of the second order indices is not in the range [0, 1].</source>
         <translation>Attention : La somme des indices du second ordre n&apos;est pas comprise dans l&apos;intervalle [0, 1].</translation>
     </message>
@@ -4730,47 +4746,57 @@ métamodèle</translation>
 <context>
     <name>OTGUI::SobolPage</name>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="48"/>
+        <location filename="../lib/src/view/SobolPage.cxx" line="50"/>
         <source>Sobol parameters</source>
         <translation>Paramètres de Sobol</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="62"/>
+        <location filename="../lib/src/view/SobolPage.cxx" line="64"/>
         <source>Evaluation parameter</source>
         <translation>Paramètre d&apos;évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="68"/>
+        <location filename="../lib/src/view/SobolPage.cxx" line="70"/>
         <source>Number of calls by iteration</source>
         <translation>Nombre d&apos;appels par itération</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="69"/>
+        <location filename="../lib/src/view/SobolPage.cxx" line="71"/>
         <source>= block_size * ( number_of_inputs + 2 )</source>
         <translation>= taille_bloc * (nombre_d_entrées + 2 )</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="80"/>
+        <location filename="../lib/src/view/SobolPage.cxx" line="82"/>
         <source>Advanced parameters</source>
         <translation>Paramètres avancés</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="84"/>
+        <location filename="../lib/src/view/SobolPage.cxx" line="86"/>
+        <source>Bootstrap sampling size</source>
+        <translation>Taille de rééchantillonnage Bootstrap</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SobolPage.cxx" line="91"/>
+        <source>Confidence level</source>
+        <translation>Niveau de l&apos;intervalle de confiance</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SobolPage.cxx" line="98"/>
         <source>Seed</source>
         <translation>Graine</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="163"/>
+        <location filename="../lib/src/view/SobolPage.cxx" line="181"/>
         <source>Please select at least one stop criteria</source>
         <translation>Sélectionner au moins un critère d&apos;arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="167"/>
+        <location filename="../lib/src/view/SobolPage.cxx" line="185"/>
         <source>The maximum time must not be null</source>
         <translation>Le temps maximum ne doit pas être nul</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="170"/>
+        <location filename="../lib/src/view/SobolPage.cxx" line="188"/>
         <source>The maximum calls can not be inferior to: block_size*(number_of_inputs + 2)</source>
         <translation>Le nombre d&apos;appels ne peut pas être inférieur à : taille_bloc*(nombre_entrées + 2) </translation>
     </message>
@@ -4788,27 +4814,27 @@ métamodèle</translation>
         <translation>Paramètres de l&apos;analyse de sensibilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="112"/>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="123"/>
         <source>Indices</source>
         <translation>Indices</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="122"/>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="133"/>
         <source>Elapsed time</source>
         <translation>Durée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="123"/>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="134"/>
         <source>Number of calls</source>
         <translation>Nombre d&apos;appels</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="124"/>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="135"/>
         <source>Coefficient of variation</source>
         <translation>Coefficient de variation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="131"/>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="142"/>
         <source>Stop criteria</source>
         <translation>Critère d&apos;arrêt</translation>
     </message>
@@ -4823,12 +4849,12 @@ métamodèle</translation>
         <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="135"/>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="146"/>
         <source>Summary</source>
         <translation>Résumé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="140"/>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="151"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -5354,6 +5380,16 @@ Des objets ne sont peut être pas ouverts.</translation>
         <location filename="../lib/src/model/TranslationManager.cxx" line="112"/>
         <source>Percentage</source>
         <translation>Pourcentage</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/TranslationManager.cxx" line="113"/>
+        <source>Bootstrap size</source>
+        <translation>Taille Bootstrap</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/TranslationManager.cxx" line="114"/>
+        <source>Bootstrap confidence level</source>
+        <translation>Niveau de l&apos;intervalle de confiance Bootstrap</translation>
     </message>
 </context>
 <context>
