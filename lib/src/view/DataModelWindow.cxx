@@ -122,6 +122,7 @@ void DataModelWindow::buildInterface()
   // - QSortFilterProxyModel
   proxyModel_ = new DataModelProxModel(dataTableView_);
   proxyModel_->setSourceModel(dataTableModel_);
+  proxyModel_->setSortRole(Qt::UserRole);
 
   // - set model
   dataTableView_->setModel(proxyModel_);

@@ -189,6 +189,9 @@ QVariant DataModelTableModel::data(const QModelIndex & index, int role) const
     if (role == Qt::DisplayRole || role == Qt::EditRole)
       return QString::number(data_[index.row() - 2][index.column()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
 
+    if (role == Qt::UserRole)
+      return data_[index.row() - 2][index.column()];
+
     // alignment
     else if (role == Qt::TextAlignmentRole)
       return int(Qt::AlignRight | Qt::AlignVCenter);
