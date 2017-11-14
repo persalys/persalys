@@ -32,6 +32,8 @@
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/WidgetBoundToDockWidget.hxx"
 #include "otgui/TranslationManager.hxx"
+#include "otgui/CorrelationTableModel.hxx"
+#include "otgui/CheckableHeaderView.hxx"
 
 #include <openturns/Normal.hxx>
 #include <openturns/TruncatedDistribution.hxx>
@@ -58,7 +60,7 @@ ProbabilisticModelWindow::ProbabilisticModelWindow(const OTStudy& otStudy, Proba
   , paramEditor_(0)
 {
   connect(item, SIGNAL(stochasticInputListChanged()), this, SLOT(updateProbabilisticModel()));
-  connect(item, SIGNAL(inputListCorrelationChanged()), this, SLOT(updateCorrelationTable()));
+  connect(item, SIGNAL(inputListCorrelationChanged()), this, SIGNAL(updateCorrelationTableData()));
   connect(item, SIGNAL(inputListDefinitionChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
 
   buildInterface();
@@ -87,18 +89,9 @@ void ProbabilisticModelWindow::buildInterface()
   inputTableView_->setModel(inputTableModel_);
 
   // - header view
-  inputTableHeaderView_ = new CheckableHeaderView;
-  inputTableView_->setHorizontalHeader(inputTableHeaderView_);
-  if (physicalModel_.hasStochasticInputs() && (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize()))
-    inputTableHeaderView_->setChecked(true);
-
-#if QT_VERSION >= 0x050000
-  inputTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
-  inputTableView_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-#else
-  inputTableView_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
-  inputTableView_->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
-#endif
+  CheckableHeaderView * inputTableHeaderView = new CheckableHeaderView;
+  inputTableView_->setHorizontalHeader(inputTableHeaderView);
+  inputTableView_->horizontalHeader()->setStretchLastSection(true);
 
   // - delegate for distributions list
   QStringList items = TranslationManager::GetAvailableDistributions();
@@ -107,16 +100,12 @@ void ProbabilisticModelWindow::buildInterface()
   ComboBoxDelegate * delegate = new ComboBoxDelegate(items);
   inputTableView_->setItemDelegateForColumn(1, delegate);
 
-  // - show combo box
-  for (int i = 0; i < inputTableModel_->rowCount(); ++i)
-    inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
-
   // - connections
   connect(inputTableView_, SIGNAL(clicked(QModelIndex)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(distributionChanged(const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
-  connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
+  connect(inputTableModel_, SIGNAL(correlationToChange()), this, SIGNAL(updateCorrelationTableData()));
   connect(inputTableModel_, SIGNAL(distributionsChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
-  connect(inputTableModel_, SIGNAL(checked(bool)), inputTableHeaderView_, SLOT(setChecked(bool)));
+  connect(inputTableModel_, SIGNAL(checked(bool)), inputTableHeaderView, SLOT(setChecked(bool)));
   connect(inputTableModel_, SIGNAL(inferenceResultRequested(const QModelIndex&)), this, SLOT(openWizardToChooseInferenceResult(const QModelIndex&)));
 
   horizontalSplitter->addWidget(inputTableView_);
@@ -219,14 +208,6 @@ void ProbabilisticModelWindow::buildInterface()
   horizontalSplitter->addWidget(rightSideOfSplitterStackedWidget_);
   horizontalSplitter->setStretchFactor(1, 3);
 
-  if (inputTableModel_->rowCount())
-  {
-    inputTableView_->selectRow(0);
-    updateDistributionWidgets(inputTableView_->currentIndex());
-  }
-  else
-    updateDistributionWidgets(inputTableModel_->index(-1, 0));
-
   tabLayout->addWidget(horizontalSplitter);
   rootTab->addTab(tab, tr("Marginals"));
 
@@ -236,25 +217,31 @@ void ProbabilisticModelWindow::buildInterface()
 
   QGroupBox * groupBox = new QGroupBox(tr("Spearman's rank (Gaussian Copula)"));
   QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
-  correlationTableView_ = new CopyableTableView;
+
+  CopyableTableView * correlationTableView = new CopyableTableView;
   SpinBoxDelegate * correlationDelegate = new SpinBoxDelegate;
   correlationDelegate->setSpinBoxType(SpinBoxDelegate::correlation);
-  correlationTableView_->setItemDelegate(correlationDelegate);
-  correlationTableModel_ = new CorrelationTableModel(physicalModel_, correlationTableView_);
-  correlationTableView_->setModel(correlationTableModel_);
-  correlationTableView_->setEditTriggers(QAbstractItemView::AllEditTriggers);
-  groupBoxLayout->addWidget(correlationTableView_);
+  correlationTableView->setItemDelegate(correlationDelegate);
+  correlationTableView->setEditTriggers(QAbstractItemView::AllEditTriggers);
+
+  CorrelationTableModel * correlationTableModel = new CorrelationTableModel(physicalModel_, correlationTableView);
+  correlationTableView->setModel(correlationTableModel);
+  connect(correlationTableModel, SIGNAL(errorMessageChanged(QString)), this, SLOT(setCorrelationTabErrorMessage(QString)));
+  connect(this, SIGNAL(updateCorrelationTableData()), correlationTableModel, SLOT(updateData()));
+
+  groupBoxLayout->addWidget(correlationTableView);
   tabLayout->addWidget(groupBox);
 
   correlationErrorMessage_ = new QLabel;
   correlationErrorMessage_->setWordWrap(true);
   tabLayout->addWidget(correlationErrorMessage_);
-  connect(correlationTableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setCorrelationTabErrorMessage(QString)));
 
   rootTab->addTab(tab, tr("Correlation"));
 
   currentIndexTab_ = rootTab->currentIndex();
   setWidget(rootTab);
+
+  updateProbabilisticModel();
 }
 
 
@@ -278,8 +265,15 @@ void ProbabilisticModelWindow::openUrl()
 
 void ProbabilisticModelWindow::updateProbabilisticModel()
 {
+  if (!inputTableModel_)
+    return;
+
   // update stochastic inputs table
-  updateStochasticInputsTable();
+  inputTableModel_->updateData();
+
+  // - show combo box
+  for (int i = 0; i < inputTableModel_->rowCount(); ++i)
+    inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
 
   // update plots and truncation widgets
   if (inputTableModel_->rowCount())
@@ -288,42 +282,13 @@ void ProbabilisticModelWindow::updateProbabilisticModel()
     updateDistributionWidgets(inputTableView_->currentIndex());
   }
   else
-    updateDistributionWidgets(inputTableModel_->index(-1, 0));
-}
-
-
-void ProbabilisticModelWindow::updateStochasticInputsTable()
-{
-  delete inputTableModel_;
-  inputTableModel_ = new InputTableProbabilisticModel(physicalModel_, inputTableView_);
-
-  inputTableView_->setModel(inputTableModel_);
-  for (int i = 0; i < inputTableModel_->rowCount(); ++i)
-    inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
-
-  const bool headerViewIsChecked = (physicalModel_.hasStochasticInputs() && (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize()));
-  inputTableHeaderView_->setChecked(headerViewIsChecked);
-
-  connect(inputTableModel_, SIGNAL(distributionChanged(const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
-  connect(inputTableModel_, SIGNAL(correlationToChange()), this, SLOT(updateCorrelationTable()));
-  connect(inputTableModel_, SIGNAL(distributionsChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
-  connect(inputTableModel_, SIGNAL(checked(bool)), inputTableHeaderView_, SLOT(setChecked(bool)));
-  connect(inputTableModel_, SIGNAL(inferenceResultRequested(const QModelIndex&)), this, SLOT(openWizardToChooseInferenceResult(const QModelIndex&)));
-}
-
-
-void ProbabilisticModelWindow::updateCorrelationTable()
-{
-  delete correlationTableModel_;
-  correlationTableModel_ = new CorrelationTableModel(physicalModel_, correlationTableView_);
-  correlationTableView_->setModel(correlationTableModel_);
-  connect(correlationTableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setCorrelationTabErrorMessage(QString)));
+    updateDistributionWidgets(inputTableView_->model()->index(-1, 0));
 }
 
 
 void ProbabilisticModelWindow::setCorrelationTabErrorMessage(const QString & message)
 {
-  correlationErrorMessage_->setText(QString("%1%2%3").arg("<font color=red>").arg(message).arg("</font>"));
+  correlationErrorMessage_->setText(QString("<font color=red>%1</font>").arg(message));
   QTimeLine * time = new QTimeLine(7000, this);
   qtimelineList_.push_back(time);
   connect(time, SIGNAL(stateChanged(QTimeLine::State)), this, SLOT(reInitCorrelationErrorMessage(QTimeLine::State)));

@@ -31,7 +31,7 @@ class OTGUI_API SpinBoxDelegate : public QStyledItemDelegate
   Q_OBJECT
 
 public:
-  enum spinboxType {noType, correlation, differentiationStep};
+  enum spinboxType {noType, doubleValue, correlation, differentiationStep};
 
   SpinBoxDelegate(QObject * parent = 0);
 

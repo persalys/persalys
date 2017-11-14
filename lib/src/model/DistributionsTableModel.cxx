@@ -93,4 +93,12 @@ void DistributionsTableModel::appendDistribution(const QString& distributionName
   endInsertRows();
   emit distributionsListChanged(distributions_);
 }
+
+
+void DistributionsTableModel::updateData(const QStringList & distributions)
+{
+  beginResetModel();
+  distributions_ = distributions;
+  endResetModel();
+}
 }

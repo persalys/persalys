@@ -164,10 +164,8 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
     physicalModel_.blockNotification();
     emit dataChanged(index, this->index(index.row(), 1));
     emit correlationToChange();
-    if (physicalModel_.hasStochasticInputs() && (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize()))
-      emit checked(true);
-    else
-      emit checked(false);
+    emit checked(physicalModel_.hasStochasticInputs() && (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize()));
+
     return true;
   }
   else if (role == Qt::EditRole && index.column() == 1)
@@ -217,6 +215,14 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
     }
   }
   return false;
+}
+
+
+void InputTableProbabilisticModel::updateData()
+{
+  beginResetModel();
+  endResetModel();
+  emit checked(physicalModel_.hasStochasticInputs() && (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize()));
 }
 
 

@@ -22,7 +22,6 @@
 
 #include "otgui/TranslationManager.hxx"
 
-#include <QTableView>
 #include <QHeaderView>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -52,24 +51,23 @@ void DistributionsForInferenceWidget::buildInterface()
   }
   notUsedDistributions << tr("All");
 
+  // distributions table
+  // - table view
   distributionsTableView_ = new QTableView;
-#if QT_VERSION >= 0x050000
-  distributionsTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-#else
-  distributionsTableView_->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-#endif
+  distributionsTableView_->horizontalHeader()->setStretchLastSection(true);
+  distributionsTableView_->verticalHeader()->hide();
   distributionsTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
   distributionsTableView_->setSelectionMode(QAbstractItemView::ExtendedSelection);
-  distributionsTableView_->verticalHeader()->hide();
+  mainLayout->addWidget(distributionsTableView_);
 
+  // - table model
   tableModel_ = new DistributionsTableModel(distributions_, distributionsTableView_);
-  tableModel_->setHeaderData(0, Qt::Vertical, "aName", Qt::UserRole);
   connect(tableModel_, SIGNAL(distributionsListChanged(QStringList)), this, SIGNAL(distributionsListChanged(QStringList)));
 
   distributionsTableView_->setModel(tableModel_);
   distributionsTableView_->selectRow(0);
-  mainLayout->addWidget(distributionsTableView_);
 
+  // Add button
   QHBoxLayout * buttonsLayout = new QHBoxLayout;
   buttonsLayout->addStretch();
   addDistributionCombox_ = new TitledComboBox(QIcon(":/images/list-add.png"), tr("Add"));
@@ -79,6 +77,7 @@ void DistributionsForInferenceWidget::buildInterface()
   connect(addDistributionCombox_, SIGNAL(textActivated(QString)), tableModel_, SLOT(appendDistribution(QString)));
   connect(addDistributionCombox_, SIGNAL(activated(int)), this, SLOT(addSelectedDistribution(int)));
 
+  // Remove button
   QPushButton * removeDistributionButton = new QPushButton(tr("Remove"));
   removeDistributionButton->setIcon(QIcon(":/images/list-remove.png"));
   connect(removeDistributionButton, SIGNAL(pressed()), this, SLOT(removeSelectedDistribution()));
@@ -90,10 +89,11 @@ void DistributionsForInferenceWidget::buildInterface()
 
 void DistributionsForInferenceWidget::removeSelectedDistribution()
 {
-  QModelIndexList indexList = distributionsTableView_->selectionModel()->selectedRows();
+  const QModelIndexList indexList = distributionsTableView_->selectionModel()->selectedRows();
 
   const QStringList allDistributions = TranslationManager::GetAvailableDistributions();
 
+  // update Add button items
   addDistributionCombox_->removeItem(addDistributionCombox_->count() - 1);
   for (int i = indexList.size() - 1; i >= 0; --i)
   {
@@ -104,18 +104,16 @@ void DistributionsForInferenceWidget::removeSelectedDistribution()
   addDistributionCombox_->model()->sort(0);
   addDistributionCombox_->addItem(tr("All"));
 
+  // update distributions table model
   QStringList distributions;
   for (int i = 0; i < allDistributions.size(); ++i)
     if (addDistributionCombox_->findText(allDistributions[i]) == -1)
       distributions << allDistributions[i];
 
-  delete tableModel_;
-  tableModel_ = new DistributionsTableModel(distributions, distributionsTableView_);
-  tableModel_->setHeaderData(0, Qt::Vertical, "aName", Qt::UserRole);
-  connect(tableModel_, SIGNAL(distributionsListChanged(QStringList)), this, SIGNAL(distributionsListChanged(QStringList)));
-  connect(addDistributionCombox_, SIGNAL(textActivated(QString)), tableModel_, SLOT(appendDistribution(QString)));
-  distributionsTableView_->setModel(tableModel_);
+  tableModel_->updateData(distributions);
   distributionsTableView_->selectRow(0);
+
+  // emit signal to parent widget
   emit distributionsListChanged(distributions);
 }
 

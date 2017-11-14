@@ -28,6 +28,7 @@
 #include "otgui/ParametersTableView.hxx"
 #include "otgui/NoWheelEventComboBox.hxx"
 #include "otgui/SpinBoxDelegate.hxx"
+#include "otgui/DifferentiationTableModel.hxx"
 
 #include <QFileDialog>
 #include <QHeaderView>
@@ -49,8 +50,6 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   : OTguiSubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
   , variablesTableModel_(0)
-  , differentiationTableView_(0)
-  , differentiationTableModel_(0)
 {
   setWindowTitle(tr("FMI physical model"));
 
@@ -62,7 +61,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   // Widgets to load XML file
   QHBoxLayout * fieldsLayout = new QHBoxLayout;
 
-  fieldsLayout->addWidget(new QLabel("FMU file"));
+  fieldsLayout->addWidget(new QLabel(tr("FMU file")));
 
   FMUfileNameEdit_ = new QLineEdit;
   FMUfileNameEdit_->setText(QString::fromUtf8(getFMIPhysicalModel()->getFMUFileName().c_str()));
@@ -201,18 +200,22 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   label->setStyleSheet("font: bold;");
   vbox->addWidget(label);
 
-  differentiationTableView_ = new CopyableTableView;
+  CopyableTableView * differentiationTableView = new CopyableTableView;
+  differentiationTableView->horizontalHeader()->setStretchLastSection(true);
+
   SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate;
   spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::differentiationStep);
-  connect(spinBoxDelegate, SIGNAL(applyToAllRequested(double)), this, SLOT(applyDifferentiationStepToAllInputs(double)));
-  differentiationTableView_->setItemDelegateForColumn(1, spinBoxDelegate);
-  differentiationTableView_->setEditTriggers(QTableView::AllEditTriggers);
-  vbox->addWidget(differentiationTableView_);
+  differentiationTableView->setItemDelegateForColumn(1, spinBoxDelegate);
+  differentiationTableView->setEditTriggers(QTableView::AllEditTriggers);
 
-  updateDifferentiationTableModel();
+  DifferentiationTableModel * differentiationTableModel  = new DifferentiationTableModel(physicalModel_, differentiationTableView);
+  connect(spinBoxDelegate, SIGNAL(applyToAllRequested(double)), differentiationTableModel, SLOT(applyValueToAll(double)));
+  connect(item, SIGNAL(inputListDefinitionChanged()), differentiationTableModel, SLOT(updateData()));
+  differentiationTableView->setModel(differentiationTableModel);
+
+  vbox->addWidget(differentiationTableView);
 
   tabWidget_->addTab(diff_tab, tr("Differentiation"));
-
 
   ////////////////
   setWidget(tabWidget_);
@@ -223,37 +226,6 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   if (!fmiModel->getFMUInfo().getFileName().empty())
   {
     loadModel(fmiModel->getFMUInfo());
-  }
-
-  connect(item, SIGNAL(inputListDefinitionChanged()), this, SLOT(updateDifferentiationTableModel()));
-
-  updateDifferentiationTableModel();
-}
-
-
-void FMIPhysicalModelWindow::updateDifferentiationTableModel()
-{
-  if (differentiationTableModel_)
-    delete differentiationTableModel_;
-  differentiationTableModel_  = new DifferentiationTableModel(physicalModel_, differentiationTableView_);
-  differentiationTableView_->setModel(differentiationTableModel_);
-#if QT_VERSION >= 0x050000
-  differentiationTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
-  differentiationTableView_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-#else
-  differentiationTableView_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
-  differentiationTableView_->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
-#endif
-}
-
-void FMIPhysicalModelWindow::applyDifferentiationStepToAllInputs(double value)
-{
-  if (differentiationTableModel_)
-  {
-    for (int i = 0; i < differentiationTableModel_->rowCount(); ++i)
-    {
-      differentiationTableModel_->setData(differentiationTableModel_->index(i, 1), value, Qt::EditRole);
-    }
   }
 }
 
@@ -362,7 +334,6 @@ void FMIPhysicalModelWindow::loadModel(const FMUInfo & info)
   updateIOCount();
   filterTextEdit_->setText("");
   tabWidget_->setCurrentIndex(1);
-
 }
 
 
@@ -492,21 +463,8 @@ void FMIPhysicalModelWindow::updateVariablesTableModel()
   QItemDelegate * fdelegate = new FloatDelegate;
   variablesTableView_->setItemDelegateForColumn(5, fdelegate);
 
-#if QT_VERSION >= 0x050000
-  variablesTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
-  variablesTableView_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
-  variablesTableView_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Interactive);
-  variablesTableView_->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Interactive);
-  variablesTableView_->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Interactive);
-  variablesTableView_->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
-#else
-  variablesTableView_->horizontalHeader()->setResizeMode(0, QHeaderView::Interactive);
-  variablesTableView_->horizontalHeader()->setResizeMode(1, QHeaderView::Interactive);
-  variablesTableView_->horizontalHeader()->setResizeMode(2, QHeaderView::Interactive);
-  variablesTableView_->horizontalHeader()->setResizeMode(3, QHeaderView::Interactive);
-  variablesTableView_->horizontalHeader()->setResizeMode(4, QHeaderView::Interactive);
-  variablesTableView_->horizontalHeader()->setResizeMode(5, QHeaderView::Stretch);
-#endif
+  variablesTableView_->horizontalHeader()->setStretchLastSection(true);
+
   int width = variablesTableView_->horizontalHeader()->width();
   variablesTableView_->horizontalHeader()->resizeSection(0, width * 1 / 8);
   variablesTableView_->horizontalHeader()->resizeSection(1, width * 3 / 8); //description

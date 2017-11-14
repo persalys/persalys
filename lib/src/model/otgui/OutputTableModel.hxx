@@ -43,11 +43,12 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
   bool setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role);
 
-  void removeLine(const QModelIndex & index);
   bool isValid();
 
 public slots:
+  void updateData();
   void addLine();
+  void removeLine(const QModelIndex & index);
 signals:
   void errorMessageChanged(QString);
   void checked(const bool) const;

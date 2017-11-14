@@ -28,7 +28,6 @@
 #include "otgui/FMUInfo.hxx"
 #include "otgui/FMIPhysicalModel.hxx"
 #include "otgui/DoubleSpinBox.hxx"
-#include "otgui/DifferentiationTableModel.hxx"
 
 #include <QLineEdit>
 #include <QCheckBox>
@@ -269,8 +268,6 @@ public slots:
   void treeSelect(const QModelIndex & current, const QModelIndex & previous);
   void updateVariablesTableModel();
   void evaluateOutputs();
-  void updateDifferentiationTableModel();
-  void applyDifferentiationStepToAllInputs(double);
 
 private:
   FMIPhysicalModel * getFMIPhysicalModel() const;
@@ -293,7 +290,6 @@ private:
   QTabWidget * tabWidget_;
 
   CopyableTableView * differentiationTableView_;
-  DifferentiationTableModel * differentiationTableModel_;
 };
 }
 #endif

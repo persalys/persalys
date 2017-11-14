@@ -23,12 +23,6 @@
 
 #include "otgui/PhysicalModelDefinitionItem.hxx"
 #include "otgui/CopyableTableView.hxx"
-#include "otgui/CheckableHeaderView.hxx"
-#include "otgui/InputTableModel.hxx"
-#include "otgui/OutputTableModel.hxx"
-#include "otgui/DifferentiationTableModel.hxx"
-
-#include <QPushButton>
 
 namespace OTGUI
 {
@@ -42,43 +36,28 @@ public :
 protected:
   void buildInterface();
   virtual void resizeEvent(QResizeEvent * event);
+  virtual void paintEvent(QPaintEvent * event);
 
 public slots:
-  void addInputLine();
-  void addOutputLine();
   void removeInputLine();
   void removeOutputLine();
   void evaluateOutputs();
-  void updateInputTableModel();
-  void updateDifferentiationTableModel();
-  void updateOutputTableModel();
-  void updateInputDataTableModel();
-  void updateDifferentiationDataTableModel();
-  void updateOutputDataTableModel();
   void resizeInputTable();
   void resizeOutputTable();
-  void applyDifferentiationStepToAllInputs(double);
 
 signals:
   void errorMessageChanged(QString);
-  void inputTableModelDataChanged(QModelIndex, QModelIndex);
-  void differentiationTableModelDataChanged(QModelIndex, QModelIndex);
-  void outputTableModelDataChanged(QModelIndex, QModelIndex);
+  void updateInputTableData();
+  void updateOutputTableData();
+  void updateDifferentiationTableData();
+  void removeInputLine(QModelIndex);
+  void removeOutputLine(QModelIndex);
 
 private:
   PhysicalModel physicalModel_;
+  bool isFirstPaint_;
   CopyableTableView * inputTableView_;
-  InputTableModel * inputTableModel_;
-  QPushButton * addInputLineButton_;
-  QPushButton * removeInputLineButton_;
-  CopyableTableView * differentiationTableView_;
-  DifferentiationTableModel * differentiationTableModel_;
   CopyableTableView * outputTableView_;
-  CheckableHeaderView * outputTableHeaderView_;
-  OutputTableModel * outputTableModel_;
-  QPushButton * addOutputLineButton_;
-  QPushButton * removeOutputLineButton_;
-  QPushButton * evaluateOutputsButton_;
 };
 }
 #endif

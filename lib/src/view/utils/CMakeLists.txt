@@ -24,6 +24,7 @@ ot_add_source_file (ResizableStackedWidget.cxx)
 ot_add_source_file (TitledComboBox.cxx)
 ot_add_source_file (Arrow.cxx)
 ot_add_source_file (DiagramPushButton.cxx)
+ot_add_source_file (ResizableHeaderlessTableView.cxx)
 
 ot_install_header_file ( ListWidgetWithCheckBox.hxx )
 ot_install_header_file ( TimeLineEdit.hxx )
@@ -49,6 +50,7 @@ ot_install_header_file ( NoWheelEventComboBox.hxx )
 ot_install_header_file ( ParametersTableView.hxx )
 ot_install_header_file ( Arrow.hxx )
 ot_install_header_file ( DiagramPushButton.hxx )
+ot_install_header_file ( ResizableHeaderlessTableView.hxx )
 
 qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
               otgui/ListWidgetWithCheckBox.hxx

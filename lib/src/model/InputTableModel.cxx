@@ -149,6 +149,13 @@ Qt::ItemFlags InputTableModel::flags(const QModelIndex & index) const
 }
 
 
+void InputTableModel::updateData()
+{
+  beginResetModel();
+  endResetModel();
+}
+
+
 void InputTableModel::addLine()
 {
   int i = 0;

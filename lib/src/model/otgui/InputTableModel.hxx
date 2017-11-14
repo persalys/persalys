@@ -41,11 +41,12 @@ public:
   Qt::ItemFlags flags(const QModelIndex & index) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-  void removeLine(const QModelIndex & index);
   bool isValid();
 
 public slots:
+  void updateData();
   void addLine();
+  void removeLine(const QModelIndex & index);
 signals:
   void errorMessageChanged(QString);
   void inputNumberChanged();
