@@ -21,6 +21,8 @@
 #include "otgui/PythonPhysicalModelWindow.hxx"
 
 #include "otgui/CodeDelegate.hxx"
+#include "otgui/PhysicalModelWindowWidget.hxx"
+#include "otgui/CodeModel.hxx"
 
 #include <QVBoxLayout>
 #include <QHeaderView>
@@ -34,33 +36,38 @@ namespace OTGUI
 PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
-  , codeModel_(0)
-  , codeView_(0)
-  , tablesWidget_(0)
 {
-  connect(item, SIGNAL(codeChanged()), this, SLOT(updateCodeModel()));
-
   setWindowTitle(tr("Python physical model"));
 
   setFocusPolicy(Qt::ClickFocus);
 
   QSplitter * horizontalSplitter = new QSplitter(Qt::Horizontal);
 
-  codeView_ = new QTableView;
-  codeView_->setEditTriggers(QTableView::AllEditTriggers);
-  codeView_->horizontalHeader()->setStretchLastSection(true);
-  codeView_->verticalHeader()->setStretchLastSection(true);
-  codeView_->horizontalHeader()->hide();
-  codeView_->verticalHeader()->hide();
-  codeView_->setItemDelegate(new CodeDelegate);
-  horizontalSplitter->addWidget(codeView_);
+  // left side: code editor
+  QTableView * codeView = new QTableView;
+  codeView->setEditTriggers(QTableView::AllEditTriggers);
+  codeView->horizontalHeader()->setStretchLastSection(true);
+  codeView->verticalHeader()->setStretchLastSection(true);
+  codeView->horizontalHeader()->hide();
+  codeView->verticalHeader()->hide();
+  codeView->setItemDelegate(new CodeDelegate);
 
+  CodeModel * codeModel = new CodeModel(physicalModel_, codeView);
+  codeView->setModel(codeModel);
+  codeView->openPersistentEditor(codeModel->index(0, 0));
+  connect(item, SIGNAL(codeChanged()), codeModel, SLOT(updateData()));
+
+  horizontalSplitter->addWidget(codeView);
+
+  // right side: tables
   QWidget * rightSideWidget = new QWidget;
   QVBoxLayout * vBoxLayout = new QVBoxLayout(rightSideWidget);
 
-  tablesWidget_ = new PhysicalModelWindowWidget(item);
-  connect(tablesWidget_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
-  vBoxLayout->addWidget(tablesWidget_);
+  PhysicalModelWindowWidget * tablesWidget = new PhysicalModelWindowWidget(item);
+  connect(tablesWidget, SIGNAL(errorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
+  connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(updateInputTableData()));
+  connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(updateOutputTableData()));
+  vBoxLayout->addWidget(tablesWidget);
 
   errorMessageLabel_ = new QLabel;
   errorMessageLabel_->setWordWrap(true);
@@ -70,18 +77,5 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem
 
   ////////////////
   setWidget(horizontalSplitter);
-  updateCodeModel();
-}
-
-
-void PythonPhysicalModelWindow::updateCodeModel()
-{
-  if (codeModel_)
-    delete codeModel_;
-  codeModel_ = new CodeModel(physicalModel_, codeView_);
-  codeView_->setModel(codeModel_);
-  codeView_->openPersistentEditor(codeModel_->index(0, 0));
-  connect(codeModel_, SIGNAL(variablesChanged()), tablesWidget_, SLOT(updateInputTableModel()));
-  connect(codeModel_, SIGNAL(variablesChanged()), tablesWidget_, SLOT(updateOutputTableModel()));
 }
 }

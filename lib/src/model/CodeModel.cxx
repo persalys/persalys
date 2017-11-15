@@ -33,6 +33,7 @@ CodeModel::CodeModel(const PhysicalModel & physicalModel, QObject* parent)
 {
 }
 
+
 int CodeModel::columnCount(const QModelIndex & parent) const
 {
   return 1;
@@ -43,6 +44,7 @@ int CodeModel::rowCount(const QModelIndex & parent) const
 {
   return 1;
 }
+
 
 QVariant CodeModel::data(const QModelIndex & index, int role) const
 {
@@ -82,4 +84,9 @@ Qt::ItemFlags CodeModel::flags(const QModelIndex & index) const
 }
 
 
+void CodeModel::updateData()
+{
+  beginResetModel();
+  endResetModel();
+}
 }

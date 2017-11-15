@@ -37,14 +37,8 @@ class OTGUI_API PythonPhysicalModelWindow : public OTguiSubWindow
 public:
   PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent = 0);
 
-public slots:
-  void updateCodeModel();
-
 private:
   PhysicalModel physicalModel_;
-  CodeModel * codeModel_;
-  QTableView * codeView_;
-  PhysicalModelWindowWidget * tablesWidget_;
 };
 }
 #endif
