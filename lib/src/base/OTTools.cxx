@@ -103,6 +103,20 @@ String Parameters::GetOTDescriptionStr(const Description& values)
 }
 
 
+String Parameters::GetOTBoolCollectionStr(const Interval::BoolCollection& values)
+{
+  String valuesStr = "[";
+  for (UnsignedInteger i = 0; i < values.getSize(); ++i)
+  {
+    valuesStr += values[i] ? "True" : "False";
+    if (i < values.getSize() - 1)
+      valuesStr += ", ";
+  }
+  valuesStr += "]";
+  return valuesStr;
+}
+
+
 Description Parameters::GetOTIntervalDescription(const Interval& interval)
 {
   Description resu(interval.getDimension());
