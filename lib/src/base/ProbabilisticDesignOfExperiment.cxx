@@ -200,14 +200,7 @@ String ProbabilisticDesignOfExperiment::getPythonScript() const
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
 
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
-  oss << "interestVariables = [";
-  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
-  {
-    oss << "'" << getInterestVariables()[i] << "'";
-    if (i < getInterestVariables().getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
+  oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
   oss << getName() << ".setInterestVariables(interestVariables)\n";
 
   return oss;

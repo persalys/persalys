@@ -20,6 +20,8 @@
  */
 #include "otgui/FixedDesignOfExperiment.hxx"
 
+#include "otgui/OTTools.hxx"
+
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
@@ -107,14 +109,7 @@ String FixedDesignOfExperiment::getPythonScript() const
 
   oss << getName() << ".setOriginalInputSample(inputSample)\n";
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
-  oss << "interestVariables = [";
-  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
-  {
-    oss << "'" << getInterestVariables()[i] << "'";
-    if (i < getInterestVariables().getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
+  oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
   oss << getName() << ".setInterestVariables(interestVariables)\n";
 
   return oss;

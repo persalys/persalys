@@ -20,6 +20,8 @@
  */
 #include "otgui/SymbolicPhysicalModel.hxx"
 
+#include "otgui/OTTools.hxx"
+
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SymbolicFunction.hxx>
 
@@ -201,14 +203,7 @@ String SymbolicPhysicalModel::getPythonScript() const
   }
   oss << "]\n";
 
-  oss << "formulas = [";
-  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++i)
-  {
-    oss << "'" << getFormula(getOutputs()[i].getName()) << "'";
-    if (i < getOutputs().getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
+  oss << "formulas = " << Parameters::GetOTDescriptionStr(getFormulas()) << "\n";
 
   oss << getName() + " = otguibase.SymbolicPhysicalModel('" + getName() + "', inputs, outputs, formulas)\n";
 
