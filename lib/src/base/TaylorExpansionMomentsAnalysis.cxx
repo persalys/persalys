@@ -20,8 +20,8 @@
  */
 #include "otgui/TaylorExpansionMomentsAnalysis.hxx"
 
-#include "openturns/TaylorExpansionMoments.hxx"
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/TaylorExpansionMoments.hxx>
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 

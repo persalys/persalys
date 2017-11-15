@@ -21,9 +21,9 @@
 #ifndef OTGUI_TAYLOREXPANSIONMOMENTSRESULT_HXX
 #define OTGUI_TAYLOREXPANSIONMOMENTSRESULT_HXX
 
-#include "Output.hxx"
+#include "otgui/OTGuiprivate.hxx"
 
-#include "openturns/Sample.hxx"
+#include <openturns/OTType.hxx>
 
 namespace OTGUI
 {

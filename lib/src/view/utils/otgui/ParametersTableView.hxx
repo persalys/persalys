@@ -24,9 +24,8 @@
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
 
-#include "openturns/Exception.hxx"
+#include <openturns/Exception.hxx>
 
-#include <QVBoxLayout>
 #include <QHeaderView>
 
 namespace OTGUI

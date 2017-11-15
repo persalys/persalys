@@ -24,7 +24,7 @@
 #include "otgui/OTGuiprivate.hxx"
 
 #include <openturns/Distribution.hxx>
-#include "openturns/TestResult.hxx"
+#include <openturns/TestResult.hxx>
 
 namespace OTGUI
 {

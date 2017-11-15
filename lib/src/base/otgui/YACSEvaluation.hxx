@@ -23,7 +23,7 @@
 
 #include "otgui/OTGuiprivate.hxx"
 
-#include "openturns/EvaluationImplementation.hxx"
+#include <openturns/EvaluationImplementation.hxx>
 
 #include <YACSEvalYFX.hxx>
 #include <SalomeResourceModel.hxx>

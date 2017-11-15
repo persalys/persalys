@@ -20,32 +20,8 @@
  */
 #include "otgui/DesignOfExperimentWindow.hxx"
 
-#include "otgui/MinMaxTableGroupBox.hxx"
-#include "otgui/ParametersTableView.hxx"
 #include "otgui/DesignOfExperimentEvaluation.hxx"
-#include "otgui/ExportableTableView.hxx"
-#include "otgui/SampleTableModel.hxx"
-#include "otgui/WidgetBoundToDockWidget.hxx"
 #include "otgui/QtTools.hxx"
-
-#ifdef OTGUI_HAVE_PARAVIEW
-#include "otgui/PVServerManagerInterface.hxx"
-#include "otgui/PVServerManagerSingleton.hxx"
-#include "otgui/PVSpreadSheetViewWidget.hxx"
-#include "otgui/PVParCooViewWidget.hxx"
-#include "otgui/PVMatrixPlotViewWidget.hxx"
-#include "otgui/PVXYChartViewWidget.hxx"
-#include "otgui/PVXYChartSettingWidget.hxx"
-#include "otgui/PVPlotSettingWidget.hxx"
-
-#include <pqLinksModel.h>
-#include <pqApplicationCore.h>
-#endif
-
-#include <QVBoxLayout>
-#include <QScrollArea>
-#include <QSplitter>
-#include <QSortFilterProxyModel>
 
 using namespace OT;
 

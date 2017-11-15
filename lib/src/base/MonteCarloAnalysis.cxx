@@ -23,9 +23,9 @@
 #include "otgui/DataAnalysis.hxx"
 #include "otgui/DataModel.hxx"
 
-#include "openturns/RandomGenerator.hxx"
-#include "openturns/PersistentObjectFactory.hxx"
-#include "openturns/SpecFunc.hxx"
+#include <openturns/RandomGenerator.hxx>
+#include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/SpecFunc.hxx>
 
 using namespace OT;
 

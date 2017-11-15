@@ -22,9 +22,9 @@
 
 #include "otgui/QtTools.hxx"
 
-#include "openturns/Greater.hxx"
-#include "openturns/GreaterOrEqual.hxx"
-#include "openturns/LessOrEqual.hxx"
+#include <openturns/Greater.hxx>
+#include <openturns/GreaterOrEqual.hxx>
+#include <openturns/LessOrEqual.hxx>
 
 #include <QGridLayout>
 

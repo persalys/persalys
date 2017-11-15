@@ -25,7 +25,7 @@
 #include "Analysis.hxx"
 #include "KrigingAnalysisResult.hxx"
 
-#include "openturns/KrigingAlgorithm.hxx"
+#include <openturns/KrigingAlgorithm.hxx>
 
 namespace OTGUI
 {

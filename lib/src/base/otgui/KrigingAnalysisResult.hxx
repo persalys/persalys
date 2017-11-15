@@ -23,7 +23,7 @@
 
 #include "MetaModelAnalysisResult.hxx"
 
-#include "openturns/KrigingResult.hxx"
+#include <openturns/KrigingResult.hxx>
 
 namespace OTGUI
 {

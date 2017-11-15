@@ -20,7 +20,7 @@
  */
 #include "otgui/FunctionalChaosAnalysisResult.hxx"
 
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 

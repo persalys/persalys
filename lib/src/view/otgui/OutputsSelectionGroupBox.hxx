@@ -24,10 +24,9 @@
 #include "otgui/ListWidgetWithCheckBox.hxx"
 #include "otgui/NoWheelEventComboBox.hxx"
 
-#include "openturns/Description.hxx"
+#include <openturns/Description.hxx>
 
 #include <QGroupBox>
-#include <QWheelEvent>
 
 namespace OTGUI
 {
@@ -42,7 +41,6 @@ public:
   QStringList getSelectedOutputsNames() const;
   void updateComboBoxModel(const OT::Description& outputsNames, const OT::Description& interestVariables);
 
-public slots:
 signals:
   void outputsSelectionChanged(QStringList);
 

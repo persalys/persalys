@@ -32,6 +32,7 @@
 #include <qwt_legend.h>
 #include <qwt_scale_engine.h>
 
+#include <QVBoxLayout>
 #include <QScrollArea>
 #include <QSplitter>
 #include <QGroupBox>

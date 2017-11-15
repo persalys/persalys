@@ -20,8 +20,8 @@
  */
 #include "otgui/LimitStateImplementation.hxx"
 
-#include "openturns/Equal.hxx"
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/Equal.hxx>
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 

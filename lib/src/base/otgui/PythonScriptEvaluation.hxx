@@ -23,12 +23,10 @@
 
 #include "otgui/OTGuiprivate.hxx"
 
-#include "openturns/EvaluationImplementation.hxx"
-#include "openturns/Pointer.hxx"
+#include <openturns/EvaluationImplementation.hxx>
 
 namespace OTGUI
 {
-
 /**
  * @class PythonScriptEvaluation
  *
@@ -63,7 +61,6 @@ protected:
 public:
   /** Operator () */
   virtual OT::Point operator() (const OT::Point & inP) const;
-//   virtual OT::Sample operator() (const OT::Sample & inS) const;
 
   /** Accessor for input point dimension */
   OT::UnsignedInteger getInputDimension() const;
@@ -75,13 +72,10 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
-protected:
-
 private:
   OT::UnsignedInteger inputDimension_;
   OT::UnsignedInteger outputDimension_;
   OT::String code_;
-
 };
 }
 #endif

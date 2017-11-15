@@ -20,9 +20,9 @@
  */
 #include "otgui/SRCAnalysis.hxx"
 
-#include "openturns/RandomGenerator.hxx"
-#include "openturns/CorrelationAnalysis.hxx"
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/RandomGenerator.hxx>
+#include <openturns/CorrelationAnalysis.hxx>
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 

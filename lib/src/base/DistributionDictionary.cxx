@@ -20,8 +20,8 @@
  */
 #include "otgui/DistributionDictionary.hxx"
 
-#include "openturns/SpecFunc.hxx"
-#include "openturns/OTDistribution.hxx"
+#include <openturns/SpecFunc.hxx>
+#include <openturns/OTDistribution.hxx>
 
 using namespace OT;
 

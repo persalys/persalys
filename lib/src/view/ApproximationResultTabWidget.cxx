@@ -22,11 +22,11 @@
 
 #include "otgui/FORMAnalysis.hxx"
 #include "otgui/FORMImportanceSamplingAnalysis.hxx"
-#include "otgui/AnalysisItem.hxx"
 #include "otgui/ParametersTableView.hxx"
 #include "otgui/ParametersWidget.hxx"
 #include "otgui/PieChartView.hxx"
 
+#include <QVBoxLayout>
 #include <QScrollArea>
 #include <QHeaderView>
 #include <QAbstractItemModel>

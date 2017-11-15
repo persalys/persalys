@@ -24,7 +24,7 @@
 #include "otgui/TimeLineEdit.hxx"
 #include "otgui/LogSpinBox.hxx"
 
-#include "openturns/OTType.hxx"
+#include <openturns/OTType.hxx>
 
 #include <QGroupBox>
 #include <QCheckBox>
