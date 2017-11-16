@@ -35,6 +35,7 @@ class OTGUI_API AnalysisItem : public OTguiItem, public Observer
 public:
   AnalysisItem(const Analysis & analysis);
 
+  virtual QVariant data(int role) const;
   void setData(const QVariant & value, int role);
 
   Analysis getAnalysis() const;

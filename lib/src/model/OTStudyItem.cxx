@@ -48,7 +48,6 @@ OTStudyItem::OTStudyItem(const OTStudy& otStudy)
   parentOTStudyItem_ = this;
   otStudy_.addObserver(this);
   update(0, "fileNameChanged");
-  updateIcon();
 
   buildActions();
   connect(this, SIGNAL(otStudyStatusChanged()), this, SLOT(updateIcon()));
@@ -155,10 +154,7 @@ void OTStudyItem::update(Observable * source, const String & message)
 
 void OTStudyItem::updateIcon()
 {
-  if (otStudy_.getImplementation()->hasBeenModified())
-    setData(QIcon(":/images/document-save.png"), Qt::DecorationRole);
-  else
-    setData(QIcon(), Qt::DecorationRole);
+  emitDataChanged();
 }
 
 
@@ -409,6 +405,21 @@ void OTStudyItem::addMetaModelItem(PhysicalModel metaModel)
   const String availableName = otStudy_.getAvailablePhysicalModelName(metaModel.getName());
   metaModel.setName(availableName);
   otStudy_.add(metaModel);
+}
+
+
+QVariant OTStudyItem::data(int role) const
+{
+  // set icon
+  if (role == Qt::DecorationRole)
+  {
+    if (otStudy_.getImplementation()->hasBeenModified())
+      return QIcon(":/images/document-save.png");
+    else
+      return QIcon();
+  }
+  else
+    return OTguiItem::data(role);
 }
 
 

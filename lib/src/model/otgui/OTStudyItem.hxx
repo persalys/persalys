@@ -41,6 +41,7 @@ public:
   void addLimitStateItem(LimitState & limitState);
   void addAnalysisItem(Analysis & analysis);
 
+  virtual QVariant data(int role) const;
   void setData(const QVariant & value, int role);
   OTStudy getOTStudy() const;
 

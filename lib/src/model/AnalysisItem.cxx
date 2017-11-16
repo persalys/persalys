@@ -103,6 +103,25 @@ void AnalysisItem::buildActions()
 }
 
 
+QVariant AnalysisItem::data(int role) const
+{
+  // set icon
+  if (role == Qt::DecorationRole)
+  {
+    if (analysis_.analysisLaunched())
+      return QIcon(":/images/dialog-ok-apply.png");
+    else if (!analysis_.getErrorMessage().empty())
+      return QIcon(":/images/edit-delete.png");
+    else if (analysis_.isRunning())
+      return QIcon(":/images/green-arrow-right.png");
+    else
+      return QIcon(":/images/run-build.png");
+  }
+  else
+    return OTguiItem::data(role);
+}
+
+
 void AnalysisItem::setData(const QVariant & value, int role)
 {
   // rename
@@ -265,7 +284,7 @@ void AnalysisItem::removeAnalysis()
 void AnalysisItem::processLaunched()
 {
   // change icon
-  setData(QIcon(":/images/green-arrow-right.png"), Qt::DecorationRole);
+  emitDataChanged();
 
   // emit signal to disable run analysis/close study/import script...
   // warn the other objects that an analysis is running
@@ -276,7 +295,7 @@ void AnalysisItem::processLaunched()
 void AnalysisItem::processFinished()
 {
   // change icon
-  setData(QVariant(), Qt::DecorationRole);
+  emitDataChanged();
 
   // emit signal to enable run analysis/close study/import script...
   // warn the other objects that an analysis is finished
