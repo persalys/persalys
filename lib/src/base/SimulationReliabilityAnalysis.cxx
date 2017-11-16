@@ -232,7 +232,7 @@ String SimulationReliabilityAnalysis::getPythonScript() const
 }
 
 
-bool SimulationReliabilityAnalysis::analysisLaunched() const
+bool SimulationReliabilityAnalysis::hasValidResult() const
 {
   return getResult().getSimulationResult().getOuterSampling() != 0;
 }

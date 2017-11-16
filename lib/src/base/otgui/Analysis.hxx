@@ -60,7 +60,7 @@ public:
 
   void run();
   OT::String getPythonScript() const;
-  bool analysisLaunched() const;
+  bool hasValidResult() const;
 
   void stop();
 

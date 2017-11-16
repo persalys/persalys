@@ -286,7 +286,7 @@ String InferenceAnalysis::getPythonScript() const
 }
 
 
-bool InferenceAnalysis::analysisLaunched() const
+bool InferenceAnalysis::hasValidResult() const
 {
   return result_.getFittingTestResultCollection().getSize() != 0;
 }

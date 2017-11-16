@@ -153,7 +153,7 @@ int AnalysisImplementation::getProgressValue() const
 }
 
 
-bool AnalysisImplementation::analysisLaunched() const
+bool AnalysisImplementation::hasValidResult() const
 {
   return false;
 }

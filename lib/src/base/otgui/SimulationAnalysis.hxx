@@ -47,7 +47,7 @@ public:
   OT::UnsignedInteger getSeed() const;
   virtual void setSeed(const OT::UnsignedInteger seed);
 
-  virtual bool analysisLaunched() const;
+  virtual bool hasValidResult() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;

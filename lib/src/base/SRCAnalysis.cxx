@@ -185,7 +185,7 @@ String SRCAnalysis::getPythonScript() const
 }
 
 
-bool SRCAnalysis::analysisLaunched() const
+bool SRCAnalysis::hasValidResult() const
 {
   return result_.getIndices().getSize() != 0;
 }

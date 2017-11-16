@@ -52,7 +52,7 @@ public:
   virtual Parameters getParameters() const;
   virtual void run();
   virtual OT::String getPythonScript() const;
-  virtual bool analysisLaunched() const;
+  virtual bool hasValidResult() const;
 
   /** String converter */
   virtual OT::String __repr__() const;

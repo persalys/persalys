@@ -142,7 +142,7 @@ void PhysicalModelDiagramItem::requestDesignOfExperimentEvaluation()
     if (doeTitleItem->child(i)->data(Qt::UserRole).toString() == "DesignOfExperimentDefinitionItem")
     {
       DesignOfExperimentDefinitionItem * analysisItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeTitleItem->child(i));
-      if (!analysisItem->getAnalysis().analysisLaunched())
+      if (!analysisItem->getAnalysis().hasValidResult())
       {
         emit designOfExperimentEvaluationRequested(analysisItem->getAnalysis(), true);
         return;
@@ -170,7 +170,7 @@ void PhysicalModelDiagramItem::requestMetaModelCreation()
     if (doeTitleItem->child(i)->data(Qt::UserRole).toString() == "DesignOfExperimentDefinitionItem")
     {
       DesignOfExperimentDefinitionItem * analysisItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeTitleItem->child(i));
-      if (analysisItem->getAnalysis().analysisLaunched())
+      if (analysisItem->getAnalysis().hasValidResult())
       {
         // new analysis
         DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysisItem->getAnalysis().getImplementation().get());
@@ -354,7 +354,7 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
 
     // signal for diagram window : update diagram
     ++doeCounter_[0];
-    if (newItem->getAnalysis().analysisLaunched())
+    if (newItem->getAnalysis().hasValidResult())
       ++doeCounter_[1];
 
     emit designOfExperimentNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);

@@ -51,7 +51,7 @@ public:
 
   virtual void run();
   virtual OT::String getPythonScript() const;
-  virtual bool analysisLaunched() const;
+  virtual bool hasValidResult() const;
 
   virtual void stop();
 

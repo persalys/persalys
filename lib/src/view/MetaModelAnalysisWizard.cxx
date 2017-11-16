@@ -61,7 +61,7 @@ MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis& analysis, const
       {
         DesignOfExperimentDefinitionItem * doeEvalItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeItem);
         Q_ASSERT(doeEvalItem);
-        if (doeEvalItem->getAnalysis().analysisLaunched())
+        if (doeEvalItem->getAnalysis().hasValidResult())
         {
           const DesignOfExperimentEvaluation * analysis_ptr = dynamic_cast<const DesignOfExperimentEvaluation*>(doeEvalItem->getAnalysis().getImplementation().get());
           Q_ASSERT(analysis_ptr);

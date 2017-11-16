@@ -86,7 +86,7 @@ void AnalysisItem::buildActions()
     addMetaModel_->setStatusTip(tr("Add the metamodel in the study tree"));
     connect(addMetaModel_, SIGNAL(triggered()), this, SLOT(addMetaModelItem()));
     appendAction(addMetaModel_);
-    if (!analysis_.getImplementation()->analysisLaunched())
+    if (!analysis_.getImplementation()->hasValidResult())
       addMetaModel_->setEnabled(false);
   }
 
@@ -108,7 +108,7 @@ QVariant AnalysisItem::data(int role) const
   // set icon
   if (role == Qt::DecorationRole)
   {
-    if (analysis_.analysisLaunched())
+    if (analysis_.hasValidResult())
       return QIcon(":/images/dialog-ok-apply.png");
     else if (!analysis_.getErrorMessage().empty())
       return QIcon(":/images/edit-delete.png");
@@ -155,7 +155,7 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
   getParentOTStudyItem()->getOTStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
 
   // the analysis has not result: disable addMetaModel_ action
-  if (addMetaModel_)
+  if (!analysis_.hasValidResult())
     addMetaModel_->setEnabled(false);
 }
 

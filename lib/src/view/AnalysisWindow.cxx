@@ -136,7 +136,7 @@ void AnalysisWindow::initializeWidgets()
   else // if no error
   {
     // if no result <=> has not been launched yet
-    if (!analysisItem_->getAnalysis().analysisLaunched())
+    if (!analysisItem_->getAnalysis().hasValidResult())
     {
       // progress bar value
       progressBar_->setValue(0);

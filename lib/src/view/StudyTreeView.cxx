@@ -555,7 +555,7 @@ void StudyTreeView::createNewAnalysisWindow(AnalysisItem * item)
   connect(item, SIGNAL(modifyDesignOfExperimentEvaluation(Analysis, bool)), this, SLOT(createNewDesignOfExperimentEvaluation(Analysis, bool)));
 
   // window
-  if (item->getAnalysis().analysisLaunched())
+  if (item->getAnalysis().hasValidResult())
     createAnalysisResultWindow(item);
   else
     createAnalysisWindow(item);

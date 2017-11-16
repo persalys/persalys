@@ -61,7 +61,7 @@ void InferenceResultWizard::buildInterface()
 
   for (UnsignedInteger i = 0; i < otStudy_.getAnalyses().getSize(); ++i)
     if (otStudy_.getAnalyses()[i].getImplementation()->getClassName() == "InferenceAnalysis")
-      if (dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[i].getImplementation().get())->analysisLaunched())
+      if (dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[i].getImplementation().get())->hasValidResult())
         inferenceResultsComboBox_->addItem(QString::fromUtf8(otStudy_.getAnalyses()[i].getName().c_str()), (int)i);
 
   // choose variable

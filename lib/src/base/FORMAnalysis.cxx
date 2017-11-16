@@ -138,7 +138,7 @@ String FORMAnalysis::getPythonScript() const
 }
 
 
-bool FORMAnalysis::analysisLaunched() const
+bool FORMAnalysis::hasValidResult() const
 {
   return result_.getStandardSpaceDesignPoint().getDimension() != 0;
 }

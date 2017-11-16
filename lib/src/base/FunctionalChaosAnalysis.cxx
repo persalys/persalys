@@ -416,7 +416,7 @@ String FunctionalChaosAnalysis::getPythonScript() const
 }
 
 
-bool FunctionalChaosAnalysis::analysisLaunched() const
+bool FunctionalChaosAnalysis::hasValidResult() const
 {
   return getResult().getMetaModelOutputSample().getSize();
 }

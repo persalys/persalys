@@ -114,7 +114,7 @@ void SimulationAnalysis::initialize()
 }
 
 
-bool SimulationAnalysis::analysisLaunched() const
+bool SimulationAnalysis::hasValidResult() const
 {
   return designOfExperiment_.getOutputSample().getSize() != 0;
 }

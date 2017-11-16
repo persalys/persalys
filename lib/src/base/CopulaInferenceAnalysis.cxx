@@ -237,7 +237,7 @@ String CopulaInferenceAnalysis::getPythonScript() const
 }
 
 
-bool CopulaInferenceAnalysis::analysisLaunched() const
+bool CopulaInferenceAnalysis::hasValidResult() const
 {
   return result_.getCopulaInferenceSetResultCollection().getSize() != 0;
 }

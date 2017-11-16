@@ -770,7 +770,7 @@ void ProbabilisticModelWindow::openWizardToChooseInferenceResult(const QModelInd
   {
     if (otStudy_.getAnalyses()[i].getImplementation()->getClassName() == "InferenceAnalysis")
     {
-      if (dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[i].getImplementation().get())->analysisLaunched())
+      if (dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[i].getImplementation().get())->hasValidResult())
       {
         otStudyHasInferenceResults = true;
         break;

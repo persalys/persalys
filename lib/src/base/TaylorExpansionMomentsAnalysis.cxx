@@ -120,7 +120,7 @@ String TaylorExpansionMomentsAnalysis::getPythonScript() const
 }
 
 
-bool TaylorExpansionMomentsAnalysis::analysisLaunched() const
+bool TaylorExpansionMomentsAnalysis::hasValidResult() const
 {
   return getResult().getOutputNames().getSize() != 0;
 }

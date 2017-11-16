@@ -305,7 +305,7 @@ String DataAnalysis::getPythonScript() const
 }
 
 
-bool DataAnalysis::analysisLaunched() const
+bool DataAnalysis::hasValidResult() const
 {
   return getResult().getMean().getSize() != 0;
 }

@@ -366,7 +366,7 @@ String SobolAnalysis::getPythonScript() const
 }
 
 
-bool SobolAnalysis::analysisLaunched() const
+bool SobolAnalysis::hasValidResult() const
 {
   return result_.getFirstOrderIndices().getSize() != 0;
 }

@@ -507,7 +507,7 @@ String KrigingAnalysis::getPythonScript() const
 }
 
 
-bool KrigingAnalysis::analysisLaunched() const
+bool KrigingAnalysis::hasValidResult() const
 {
   return result_.outputSample_.getSize();
 }

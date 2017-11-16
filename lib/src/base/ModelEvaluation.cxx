@@ -156,7 +156,7 @@ DesignOfExperiment ModelEvaluation::getDesignOfExperiment() const
 
 Point ModelEvaluation::getOutputValues() const
 {
-  if (analysisLaunched())
+  if (hasValidResult())
     return getDesignOfExperiment().getOutputSample()[0];
   return Point();
 }
@@ -191,7 +191,7 @@ String ModelEvaluation::getPythonScript() const
 }
 
 
-bool ModelEvaluation::analysisLaunched() const
+bool ModelEvaluation::hasValidResult() const
 {
   return getDesignOfExperiment().getOutputSample().getSize() != 0;
 }

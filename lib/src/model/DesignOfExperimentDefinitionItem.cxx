@@ -115,7 +115,7 @@ void DesignOfExperimentDefinitionItem::update(Observable* source, const String& 
   else if (message == "analysisRemoved")
   {
     // emit signal to PhysicalModelDiagramItem to update the diagram
-    emit numberDesignEvaluationChanged(getAnalysis().analysisLaunched());
+    emit numberDesignEvaluationChanged(getAnalysis().hasValidResult());
     if (hasChildren())
       qDebug() << "DesignOfExperimentDefinitionItem::update(analysisRemoved) has not to contain child\n";
 
@@ -260,7 +260,7 @@ void DesignOfExperimentDefinitionItem::removeAnalysis()
 void DesignOfExperimentDefinitionItem::createNewMetaModel()
 {
   // check
-  if (!getAnalysis().analysisLaunched())
+  if (!getAnalysis().hasValidResult())
   {
     emit emitErrorMessageRequested(tr("The model must have at least one output. Evaluate the design of experiments"));
     return;
@@ -283,7 +283,7 @@ void DesignOfExperimentDefinitionItem::createNewMetaModel()
 void DesignOfExperimentDefinitionItem::fill()
 {
   // append Evaluation item
-  if (getAnalysis().analysisLaunched())
+  if (getAnalysis().hasValidResult())
     appendEvaluationItem();
 }
 }

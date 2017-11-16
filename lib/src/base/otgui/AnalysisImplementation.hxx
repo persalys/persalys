@@ -49,7 +49,7 @@ public:
   virtual Parameters getParameters() const;
   virtual void run();
   virtual OT::String getPythonScript() const;
-  virtual bool analysisLaunched() const;
+  virtual bool hasValidResult() const;
 
   bool isReliabilityAnalysis() const;
 
