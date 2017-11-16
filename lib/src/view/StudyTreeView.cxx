@@ -106,8 +106,12 @@ public:
     QApplication::style()->drawControl(QStyle::CE_ItemViewItem, &optionButton, painter);
 #endif
 
-    // draw a line at the bottom of the OTStudyItem
-    if (index.data(Qt::UserRole).toString().contains("OTStudy"))
+    // draw a line at the bottom of items
+    if (index.data(Qt::UserRole).toString() == "OTStudy" ||
+        index.data(Qt::UserRole).toString().contains("ModelDiagram") ||
+        index.data(Qt::UserRole).toString() == "DesignOfExperimentDefinitionItem" ||
+        index.data(Qt::UserRole).toString() == "LimitState"
+    )
     {
       QLineF aLine(optionButton.rect.bottomLeft(), optionButton.rect.bottomRight());
       QPen pen("#0a5205");

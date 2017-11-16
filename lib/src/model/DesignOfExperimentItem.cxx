@@ -29,7 +29,7 @@ namespace OTGUI
 {
 
 DesignOfExperimentItem::DesignOfExperimentItem(const DesignOfExperiment& designOfExperiment, const OT::String observerType)
-  : OTguiItem(QString::fromUtf8(designOfExperiment.getName().c_str()), "DesignOfExperiment")
+  : OTguiItem(QString::fromUtf8(designOfExperiment.getName().c_str()), observerType.c_str())
   , Observer(observerType)
   , designOfExperiment_(designOfExperiment)
 {
