@@ -52,7 +52,6 @@ public:
   FunctionalChaosAnalysisResult getResult() const;
 
   virtual Parameters getParameters() const;
-  virtual void run();
   virtual OT::String getPythonScript() const;
   virtual bool hasValidResult() const;
 
@@ -66,6 +65,8 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
+  virtual void initialize();
+  virtual void launch();
   virtual OT::Function runAlgo(const OT::Sample& inputSample, const OT::Sample& outputSample);
   OT::FunctionalChaosAlgorithm buildFunctionalChaosAlgorithm(const OT::Sample & inputSample, const OT::Sample & outputSample);
   void postProcessFunctionalChaosResult(const OT::Sample& inputSample);

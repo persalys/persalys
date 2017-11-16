@@ -70,81 +70,72 @@ void SRCAnalysis::setSimulationsNumber(const UnsignedInteger number)
 }
 
 
-void SRCAnalysis::run()
+void SRCAnalysis::initialize()
 {
-  isRunning_ = true;
-  try
+  SimulationAnalysis::initialize();
+  result_ = SRCResult();
+}
+
+
+void SRCAnalysis::launch()
+{
+  // check
+  if (getBlockSize() > getSimulationsNumber())
+    throw InvalidValueException(HERE) << "The block size (" << getBlockSize()
+                                      << ") can not be superior to the input sample size (" << getSimulationsNumber() << ")";
+
+  // initialization
+  RandomGenerator::SetSeed(getSeed());
+
+  const Sample inputSample(generateInputSample(getSimulationsNumber()));
+  const UnsignedInteger inputSampleSize = inputSample.getSize();
+
+  // number of iterations
+  const UnsignedInteger nbIter = static_cast<UnsignedInteger>(ceil(1.0 * inputSampleSize / getBlockSize()));
+  // last block size
+  const UnsignedInteger modulo = inputSampleSize % getBlockSize();
+  const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
+
+  // evaluate model
+  Sample outputSample(0, getInterestVariables().getSize());
+  for (UnsignedInteger i = 0; i < nbIter; ++i)
   {
-    // clear result
-    initialize();
-    result_ = SRCResult();
+    if (stopRequested_ && i > 1)
+      break;
 
-    // check
-    if (getBlockSize() > getSimulationsNumber())
-      throw InvalidValueException(HERE) << "The block size (" << getBlockSize()
-                                        << ") can not be superior to the input sample size (" << getSimulationsNumber() << ")";
+    progressValue_ = (int) (i * 100 / nbIter);
+    notify("progressValueChanged");
 
-    // initialization
-    RandomGenerator::SetSeed(getSeed());
+    // the last block can be smaller
+    const UnsignedInteger effectiveBlockSize = i < (nbIter - 1) ? getBlockSize() : lastBlockSize;
 
-    const Sample inputSample(generateInputSample(getSimulationsNumber()));
-    const UnsignedInteger inputSampleSize = inputSample.getSize();
+    // get input sample of size effectiveBlockSize
+    const UnsignedInteger blockFirstIndex =  i * getBlockSize();
+    const Sample blockInputSample(inputSample, blockFirstIndex, blockFirstIndex + effectiveBlockSize);
 
-    // number of iterations
-    const UnsignedInteger nbIter = static_cast<UnsignedInteger>(ceil(1.0 * inputSampleSize / getBlockSize()));
-    // last block size
-    const UnsignedInteger modulo = inputSampleSize % getBlockSize();
-    const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
-
-    // evaluate model
-    Sample outputSample(0, getInterestVariables().getSize());
-    for (UnsignedInteger i = 0; i < nbIter; ++i)
-    {
-      if (stopRequested_ && i > 1)
-        break;
-
-      progressValue_ = (int) (i * 100 / nbIter);
-      notify("progressValueChanged");
-
-      // the last block can be smaller
-      const UnsignedInteger effectiveBlockSize = i < (nbIter - 1) ? getBlockSize() : lastBlockSize;
-
-      // get input sample of size effectiveBlockSize
-      const UnsignedInteger blockFirstIndex =  i * getBlockSize();
-      const Sample blockInputSample(inputSample, blockFirstIndex, blockFirstIndex + effectiveBlockSize);
-
-      // Perform a block of simulations
-      outputSample.add(computeOutputSample(blockInputSample));
-    }
-
-    // compute SRC indices
-    Sample indices(0, inputSample.getDimension());
-
-    const Sample effectiveInputSample(inputSample, 0, outputSample.getSize());
-    for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
-    {
-      indices.add(CorrelationAnalysis::SRC(effectiveInputSample, outputSample.getMarginal(i)));
-    }
-
-    indices.setDescription(inputSample.getDescription());
-    // set results
-    result_ = SRCResult(indices, getInterestVariables());
-
-    // add warning if the model does not have an independent copula
-    if (!getPhysicalModel().getComposedDistribution().hasIndependentCopula())
-    {
-      LOGWARN("The model does not have an independent copula, the result of the sensitivity analysis could be false.");
-      warningMessage_ = "The model does not have an independent copula, the result of the sensitivity analysis could be false.";
-    }
-
-    notify("analysisFinished");
+    // Perform a block of simulations
+    outputSample.add(computeOutputSample(blockInputSample));
   }
-  catch (std::exception & ex)
+
+  // compute SRC indices
+  Sample indices(0, inputSample.getDimension());
+
+  const Sample effectiveInputSample(inputSample, 0, outputSample.getSize());
+  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
   {
-    errorMessage_ = ex.what();
-    notify("analysisBadlyFinished");
+    indices.add(CorrelationAnalysis::SRC(effectiveInputSample, outputSample.getMarginal(i)));
   }
-  isRunning_ = false;
+
+  indices.setDescription(inputSample.getDescription());
+  // set results
+  result_ = SRCResult(indices, getInterestVariables());
+
+  // add warning if the model does not have an independent copula
+  if (!getPhysicalModel().getComposedDistribution().hasIndependentCopula())
+  {
+    LOGWARN("The model does not have an independent copula, the result of the sensitivity analysis could be false.");
+    warningMessage_ = "The model does not have an independent copula, the result of the sensitivity analysis could be false.";
+  }
 }
 
 

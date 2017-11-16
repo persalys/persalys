@@ -42,7 +42,6 @@ public:
   TaylorExpansionMomentsResult getResult() const;
 
   virtual Parameters getParameters() const;
-  virtual void run();
   virtual OT::String getPythonScript() const;
   virtual bool hasValidResult() const;
 
@@ -54,6 +53,10 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
+
+protected:
+  virtual void initialize();
+  virtual void launch();
 
 private:
   TaylorExpansionMomentsResult result_;

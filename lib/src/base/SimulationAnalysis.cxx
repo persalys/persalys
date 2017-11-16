@@ -111,6 +111,7 @@ void SimulationAnalysis::initialize()
 {
   PhysicalModelAnalysis::initialize();
   designOfExperiment_.getImplementation()->initialize();
+  failedInputSample_.clear();
 }
 
 

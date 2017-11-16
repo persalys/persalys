@@ -37,7 +37,13 @@ class Worker : public QObject
 public slots:
   void process(Analysis analysis)
   {
-    analysis.run();
+    try
+    {
+      analysis.run();
+    }
+    catch (std::exception &ex)
+    {
+    }
     emit processFinished();
   }
 

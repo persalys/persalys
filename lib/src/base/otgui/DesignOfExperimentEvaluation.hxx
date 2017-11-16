@@ -48,13 +48,15 @@ public:
   OT::Sample getNotEvaluatedInputSample() const;
 
   virtual Parameters getParameters() const;
-  virtual void run();
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
+
+protected:
+  virtual void launch();
 
 protected:
   mutable OT::Sample originalInputSample_;

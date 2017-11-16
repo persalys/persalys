@@ -54,38 +54,29 @@ TaylorExpansionMomentsAnalysis* TaylorExpansionMomentsAnalysis::clone() const
 }
 
 
-void TaylorExpansionMomentsAnalysis::run()
+void TaylorExpansionMomentsAnalysis::initialize()
 {
-  isRunning_ = true;
-  try
-  {
-    // clear result
-    initialize();
-    result_ = TaylorExpansionMomentsResult();
+  AnalysisImplementation::initialize();
+  result_ = TaylorExpansionMomentsResult();
+}
 
-    // set analysis
-    TaylorExpansionMoments algoTaylorExpansionMoments(getPhysicalModel().getOutputRandomVector(getInterestVariables()));
 
-    // set results
-    Point meanFirstOrder = algoTaylorExpansionMoments.getMeanFirstOrder();
-    Point meanSecondOrder = algoTaylorExpansionMoments.getMeanSecondOrder();
-    Point variance = Point(algoTaylorExpansionMoments.getCovariance().getDimension());
-    for (UnsignedInteger i = 0; i < variance.getDimension(); ++i)
-      variance[i] = algoTaylorExpansionMoments.getCovariance()(i, i);
-    Point standardDeviation(variance.getDimension());
-    for (UnsignedInteger i = 0; i < variance.getDimension(); ++i)
-      standardDeviation[i] = sqrt(variance[i]);
+void TaylorExpansionMomentsAnalysis::launch()
+{
+  // set analysis
+  TaylorExpansionMoments algoTaylorExpansionMoments(getPhysicalModel().getOutputRandomVector(getInterestVariables()));
 
-    result_ = TaylorExpansionMomentsResult(getInterestVariables(), meanFirstOrder, meanSecondOrder, standardDeviation, variance);
+  // set results
+  Point meanFirstOrder = algoTaylorExpansionMoments.getMeanFirstOrder();
+  Point meanSecondOrder = algoTaylorExpansionMoments.getMeanSecondOrder();
+  Point variance = Point(algoTaylorExpansionMoments.getCovariance().getDimension());
+  for (UnsignedInteger i = 0; i < variance.getDimension(); ++i)
+    variance[i] = algoTaylorExpansionMoments.getCovariance()(i, i);
+  Point standardDeviation(variance.getDimension());
+  for (UnsignedInteger i = 0; i < variance.getDimension(); ++i)
+    standardDeviation[i] = sqrt(variance[i]);
 
-    notify("analysisFinished");
-  }
-  catch (std::exception & ex)
-  {
-    errorMessage_ = ex.what();
-    notify("analysisBadlyFinished");
-  }
-  isRunning_ = false;
+  result_ = TaylorExpansionMomentsResult(getInterestVariables(), meanFirstOrder, meanSecondOrder, standardDeviation, variance);
 }
 
 

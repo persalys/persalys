@@ -107,100 +107,98 @@ void CopulaInferenceAnalysis::setDistributionsFactories(const Description& varia
 }
 
 
-void CopulaInferenceAnalysis::run()
+void CopulaInferenceAnalysis::initialize()
 {
-  isRunning_ = true;
-  try
+  AnalysisImplementation::initialize();
+  result_ = CopulaInferenceResult();
+}
+
+
+void CopulaInferenceAnalysis::launch()
+{
+  const UnsignedInteger sizeKendall = 100;
+
+  // for each set:
+  std::map<Description, DistributionFactoryCollection>::iterator it;
+  for (it = distFactoriesForSetVar_.begin(); it != distFactoriesForSetVar_.end(); ++it)
   {
-    // clear result
-    initialize();
-    result_ = CopulaInferenceResult();
-
-    const UnsignedInteger sizeKendall = 100;
-
-    // inference
-    std::map<Description, DistributionFactoryCollection>::iterator it;
-    for (it = distFactoriesForSetVar_.begin(); it != distFactoriesForSetVar_.end(); ++it)
+    // get sample
+    Description variablesNames(it->first);
+    Indices indices;
+    for (UnsignedInteger i = 0; i < variablesNames.getSize(); ++i)
     {
-      Description variablesNames(it->first);
-      Indices indices;
-      for (UnsignedInteger i = 0; i < variablesNames.getSize(); ++i)
+      bool varFound = false;
+      for (UnsignedInteger j = 0; j < designOfExperiment_.getSample().getDescription().getSize(); ++j)
       {
-        bool varFound = false;
-        for (UnsignedInteger j = 0; j < designOfExperiment_.getSample().getDescription().getSize(); ++j)
+        if (designOfExperiment_.getSample().getDescription()[j] == variablesNames[i])
         {
-          if (designOfExperiment_.getSample().getDescription()[j] == variablesNames[i])
-          {
-            indices.add(j);
-            varFound = true;
-            break;
-          }
-        }
-        if (!varFound)
-          throw InvalidArgumentException(HERE) << "The variable "  << variablesNames[i] << " is not a variable of the model " << designOfExperiment_.getSample().getDescription();
-      }
-
-      const Sample sample(designOfExperiment_.getSample().getMarginal(indices));
-
-      CopulaInferenceSetResult inferenceSetResult;
-      inferenceSetResult.setOfVariablesNames_ = it->first;
-      inferenceSetResult.errorMessages_ = Description(it->second.getSize());
-
-      CombinatorialGeneratorImplementation::IndicesCollection pairs(Combinations(2, it->first.getSize()).generate());
-
-      Sample splitSample(sample);
-      if (sample.getSize() > sizeKendall)
-        Sample otherSample = splitSample.split(sizeKendall);
-
-      for (UnsignedInteger i = 0; i < it->second.getSize(); ++i)
-      {
-        try
-        {
-          const Distribution distribution(it->second[i].build(sample));
-          inferenceSetResult.testedDistributions_.add(distribution);
-
-          Description description(2);
-          Collection<Sample> kendallPlotDataCollection;
-          for (UnsignedInteger j = 0; j < pairs.getSize(); ++j)
-          {
-            const Graph graph = VisualTest::DrawKendallPlot(splitSample.getMarginal(pairs[j]), distribution.getMarginal(pairs[j]));
-            Sample kendallPlotData(graph.getDrawable(1).getData());
-            description[0] = sample.getDescription()[pairs[j][0]] + " - " + sample.getDescription()[pairs[j][1]];
-            kendallPlotData.setDescription(description);
-            kendallPlotDataCollection.add(kendallPlotData);
-          }
-          inferenceSetResult.kendallPlotData_.add(kendallPlotDataCollection);
-        }
-        catch (std::exception & ex)
-        {
-          String str = it->second[i].getImplementation()->getClassName();
-          const String distributionName = str.substr(0, str.find("Copula"));
-          const String message = OSS() << "Error when building the "
-                                 << distributionName
-                                 << " copula with the sample of the variables "
-                                 << sample.getDescription()
-                                 << ". "
-                                 << ex.what()
-                                 << "\n";
-          // set fittingTestResult
-          inferenceSetResult.testedDistributions_.add(DistributionDictionary::BuildCopulaFactory(distributionName).build());
-          Collection<Sample> kendallPlotDataCollection;
-          inferenceSetResult.kendallPlotData_.add(kendallPlotDataCollection);
-          inferenceSetResult.errorMessages_[i] = message;
+          indices.add(j);
+          varFound = true;
+          break;
         }
       }
-      result_.copulaInferenceSetResultCollection_.add(inferenceSetResult);
-      result_.designOfExperiment_.setInputSample(designOfExperiment_.getInputSample());
-      result_.designOfExperiment_.setOutputSample(designOfExperiment_.getOutputSample());
+      if (!varFound)
+        throw InvalidArgumentException(HERE) << "The variable "  << variablesNames[i] << " is not a variable of the model " << designOfExperiment_.getSample().getDescription();
     }
-    notify("analysisFinished");
+
+    const Sample sample(designOfExperiment_.getSample().getMarginal(indices));
+
+    Sample splitSample(sample);
+    if (sample.getSize() > sizeKendall)
+      Sample otherSample = splitSample.split(sizeKendall);
+
+    // CopulaInferenceSetResult
+    CopulaInferenceSetResult inferenceSetResult;
+    inferenceSetResult.setOfVariablesNames_ = it->first;
+    inferenceSetResult.errorMessages_ = Description(it->second.getSize());
+
+    CombinatorialGeneratorImplementation::IndicesCollection pairs(Combinations(2, it->first.getSize()).generate());
+
+    // for each copula:
+    for (UnsignedInteger i = 0; i < it->second.getSize(); ++i)
+    {
+      try
+      {
+        // build distribution
+        const Distribution distribution(it->second[i].build(sample));
+        inferenceSetResult.testedDistributions_.add(distribution);
+
+        // get Kendall plot data
+        Description description(2);
+        Collection<Sample> kendallPlotDataCollection;
+        for (UnsignedInteger j = 0; j < pairs.getSize(); ++j)
+        {
+          const Graph graph = VisualTest::DrawKendallPlot(splitSample.getMarginal(pairs[j]), distribution.getMarginal(pairs[j]));
+          Sample kendallPlotData(graph.getDrawable(1).getData());
+          description[0] = sample.getDescription()[pairs[j][0]] + " - " + sample.getDescription()[pairs[j][1]];
+          kendallPlotData.setDescription(description);
+          kendallPlotDataCollection.add(kendallPlotData);
+        }
+        inferenceSetResult.kendallPlotData_.add(kendallPlotDataCollection);
+      }
+      catch (std::exception & ex)
+      {
+        String str = it->second[i].getImplementation()->getClassName();
+        const String distributionName = str.substr(0, str.find("Copula"));
+        const String message = OSS() << "Error when building the "
+                                << distributionName
+                                << " copula with the sample of the variables "
+                                << sample.getDescription()
+                                << ". "
+                                << ex.what()
+                                << "\n";
+        // set fittingTestResult
+        inferenceSetResult.testedDistributions_.add(DistributionDictionary::BuildCopulaFactory(distributionName).build());
+        Collection<Sample> kendallPlotDataCollection;
+        inferenceSetResult.kendallPlotData_.add(kendallPlotDataCollection);
+        inferenceSetResult.errorMessages_[i] = message;
+      }
+    }
+    // set result_
+    result_.copulaInferenceSetResultCollection_.add(inferenceSetResult);
+    result_.designOfExperiment_.setInputSample(designOfExperiment_.getInputSample());
+    result_.designOfExperiment_.setOutputSample(designOfExperiment_.getOutputSample());
   }
-  catch (std::exception & ex)
-  {
-    errorMessage_ = ex.what();
-    notify("analysisBadlyFinished");
-  }
-  isRunning_ = false;
 }
 
 

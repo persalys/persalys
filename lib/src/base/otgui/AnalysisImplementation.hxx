@@ -47,7 +47,7 @@ public:
   OT::Bool operator !=(const AnalysisImplementation & other) const;
 
   virtual Parameters getParameters() const;
-  virtual void run();
+  void run();
   virtual OT::String getPythonScript() const;
   virtual bool hasValidResult() const;
 
@@ -75,17 +75,18 @@ public:
 
 protected:
   virtual void initialize();
+  virtual void launch();
 
 protected:
   bool isReliabilityAnalysis_;
-  bool isRunning_;
   OT::String informationMessage_;
-  OT::String errorMessage_;
   OT::String warningMessage_;
   bool stopRequested_;
   int progressValue_;
 
 private:
+  bool isRunning_;
+  OT::String errorMessage_;
   OT::Description interestVariables_;
 };
 }

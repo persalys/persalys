@@ -102,34 +102,25 @@ void ModelEvaluation::updateParameters()
 }
 
 
-void ModelEvaluation::run()
+void ModelEvaluation::initialize()
 {
-  isRunning_ = true;
-  try
-  {
-    // clear result
-    initialize();
-    designOfExperiment_.getImplementation()->initialize();
+  AnalysisImplementation::initialize();
+  designOfExperiment_.getImplementation()->initialize();
+}
 
-    // output = f(input)
-    Sample inputSample(1, getInputValues());
-    inputSample.setDescription(inputNames_);
 
-    Sample outputSample = getPhysicalModel().getFunction(getInterestVariables())(inputSample);
-    outputSample.setDescription(getInterestVariables());
+void ModelEvaluation::launch()
+{
+  // output = f(input)
+  Sample inputSample(1, getInputValues());
+  inputSample.setDescription(inputNames_);
 
-    // set design of experiments
-    designOfExperiment_.setInputSample(inputSample);
-    designOfExperiment_.setOutputSample(outputSample);
+  Sample outputSample = getPhysicalModel().getFunction(getInterestVariables())(inputSample);
+  outputSample.setDescription(getInterestVariables());
 
-    notify("analysisFinished");
-  }
-  catch (std::exception & ex)
-  {
-    errorMessage_ = ex.what();
-    notify("analysisBadlyFinished");
-  }
-  isRunning_ = false;
+  // set design of experiments
+  designOfExperiment_.setInputSample(inputSample);
+  designOfExperiment_.setOutputSample(outputSample);
 }
 
 

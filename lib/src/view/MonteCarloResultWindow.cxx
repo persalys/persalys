@@ -62,7 +62,7 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
   if (analysisStopCriteriaMessage_.isEmpty())
     analysisStopCriteriaMessage_ = tr("Maximum coefficient of variation reached");
 
-  analysisErrorMessage_ = analysis.getErrorMessage().c_str();
+  analysisErrorMessage_ = analysis.getWarningMessage().c_str();
 
   isConfidenceIntervalRequired_ = analysis.isConfidenceIntervalRequired();
   levelConfidenceInterval_ = analysis.getLevelConfidenceInterval();

@@ -30,12 +30,13 @@ AnalysisImplementation::AnalysisImplementation()
   : PersistentObject()
   , Observable()
   , isReliabilityAnalysis_(false)
-  , isRunning_(false)
   , informationMessage_("")
-  , errorMessage_("")
   , warningMessage_("")
   , stopRequested_(false)
   , progressValue_(0)
+  , isRunning_(false)
+  , errorMessage_("")
+  , interestVariables_()
 {
 }
 
@@ -45,12 +46,13 @@ AnalysisImplementation::AnalysisImplementation(const String & name)
   : PersistentObject()
   , Observable()
   , isReliabilityAnalysis_(false)
-  , isRunning_(false)
   , informationMessage_("")
-  , errorMessage_("")
   , warningMessage_("")
   , stopRequested_(false)
   , progressValue_(0)
+  , isRunning_(false)
+  , errorMessage_("")
+  , interestVariables_()
 {
   setName(name);
 }
@@ -84,16 +86,6 @@ Bool AnalysisImplementation::operator!=(const AnalysisImplementation& other) con
 }
 
 
-void AnalysisImplementation::initialize()
-{
-  informationMessage_ = "";
-  errorMessage_ = "";
-  warningMessage_ = "";
-  stopRequested_ = false;
-  progressValue_ = 0;
-}
-
-
 bool AnalysisImplementation::isReliabilityAnalysis() const
 {
   return isReliabilityAnalysis_;
@@ -124,8 +116,40 @@ Parameters AnalysisImplementation::getParameters() const
 }
 
 
+void AnalysisImplementation::initialize()
+{
+  informationMessage_ = "";
+  errorMessage_ = "";
+  warningMessage_ = "";
+  stopRequested_ = false;
+  progressValue_ = 0;
+}
+
+
+void AnalysisImplementation::launch()
+{
+}
+
+
 void AnalysisImplementation::run()
 {
+  isRunning_ = true;
+  try
+  {
+    initialize();
+
+    launch();
+
+    isRunning_ = false;
+    notify("analysisFinished");
+  }
+  catch (std::exception & ex)
+  {
+    errorMessage_ +=  ex.what();
+    isRunning_ = false;
+    notify("analysisBadlyFinished");
+    throw;
+  }
 }
 
 

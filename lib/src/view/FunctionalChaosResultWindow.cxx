@@ -46,7 +46,7 @@ FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item, QW
   , result_()
   , maxDegree_(0)
   , sparse_(false)
-  , errorMessage_(item->getAnalysis().getErrorMessage().c_str())
+  , errorMessage_(item->getAnalysis().getWarningMessage().c_str())
 {
   const FunctionalChaosAnalysis * chaos(dynamic_cast<const FunctionalChaosAnalysis*>(item->getAnalysis().getImplementation().get()));
   if (!chaos)

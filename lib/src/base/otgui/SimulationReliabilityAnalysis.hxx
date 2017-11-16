@@ -49,7 +49,6 @@ public:
 
   SimulationReliabilityResult getResult() const;
 
-  virtual void run();
   virtual OT::String getPythonScript() const;
   virtual bool hasValidResult() const;
 
@@ -65,6 +64,8 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
+  virtual void initialize();
+  virtual void launch();
   virtual SimulationInterface getSimulationAlgorithm(const OT::Event& event);
   static void UpdateProgressValue(double percent, void* data);
 
