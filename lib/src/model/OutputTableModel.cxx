@@ -45,7 +45,7 @@ int OutputTableModel::columnCount(const QModelIndex & parent) const
 
 int OutputTableModel::rowCount(const QModelIndex & parent) const
 {
-  return physicalModel_.getOutputs().getSize();
+  return physicalModel_.getOutputDimension();
 }
 
 
@@ -67,7 +67,7 @@ QVariant OutputTableModel::headerData(int section, Qt::Orientation orientation, 
   }
   else if (role == Qt::ToolTipRole && section == 0 && rowCount())
   {
-    const bool allChecked = physicalModel_.getOutputNames().getSize() == physicalModel_.getSelectedOutputsNames().getSize();
+    const bool allChecked = physicalModel_.getOutputDimension() == physicalModel_.getSelectedOutputsNames().getSize();
     return allChecked ? tr("Unselect all") : tr("Select all");
   }
   return QAbstractTableModel::headerData(section, orientation, role);
@@ -141,7 +141,7 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
     physicalModel_.blockNotification();
     emit dataChanged(index, this->index(index.row(), 1));
     emit selectedOutputsChanged();
-    bool allChecked = physicalModel_.getOutputNames().getSize() == physicalModel_.getSelectedOutputsNames().getSize();
+    bool allChecked = physicalModel_.getOutputDimension() == physicalModel_.getSelectedOutputsNames().getSize();
     emit checked(allChecked);
 
     return true;
@@ -221,7 +221,7 @@ void OutputTableModel::updateData()
 {
   beginResetModel();
   endResetModel();
-  emit checked(physicalModel_.getOutputNames().getSize() == physicalModel_.getSelectedOutputsNames().getSize());
+  emit checked(physicalModel_.getOutputDimension() == physicalModel_.getSelectedOutputsNames().getSize());
 }
 
 
@@ -239,7 +239,7 @@ void OutputTableModel::addLine()
   insertRow(lastIndex.row());
 
   endInsertRows();
-  emit checked(physicalModel_.getOutputNames().getSize() == physicalModel_.getSelectedOutputsNames().getSize());
+  emit checked(physicalModel_.getOutputDimension() == physicalModel_.getSelectedOutputsNames().getSize());
 }
 
 
@@ -251,7 +251,7 @@ void OutputTableModel::removeLine(const QModelIndex & index)
   physicalModel_.removeOutput(physicalModel_.getOutputs()[index.row()].getName());
   physicalModel_.blockNotification();
   endRemoveRows();
-  bool allChecked = physicalModel_.getOutputNames().getSize() == physicalModel_.getSelectedOutputsNames().getSize();
-  emit checked(allChecked && physicalModel_.getOutputNames().getSize());
+  bool allChecked = physicalModel_.getOutputDimension() == physicalModel_.getSelectedOutputsNames().getSize();
+  emit checked(allChecked && physicalModel_.getOutputDimension());
 }
 }

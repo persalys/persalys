@@ -50,6 +50,7 @@ public:
   OT::Bool operator ==(const PhysicalModelImplementation & other) const;
   OT::Bool operator !=(const PhysicalModelImplementation & other) const;
 
+  OT::UnsignedInteger getInputDimension() const;
   InputCollection getInputs() const;
   Input & getInputByName(const OT::String & inputName);
   Input getInputByName(const OT::String & inputName) const;
@@ -68,6 +69,7 @@ public:
   bool hasInputNamed(const OT::String & inputName) const;
   bool hasStochasticInputs() const;
 
+  OT::UnsignedInteger getOutputDimension() const;
   OutputCollection getOutputs() const;
   Output & getOutputByName(const OT::String & outputName);
   Output getOutputByName(const OT::String & outputName) const;

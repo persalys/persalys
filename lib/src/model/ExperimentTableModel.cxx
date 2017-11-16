@@ -45,7 +45,7 @@ int ExperimentTableModel::columnCount(const QModelIndex & parent) const
 int ExperimentTableModel::rowCount(const QModelIndex & parent) const
 {
   // +1 for the header
-  return designOfExperiment_.getPhysicalModel().getInputs().getSize() + 1;
+  return designOfExperiment_.getPhysicalModel().getInputDimension() + 1;
 }
 
 

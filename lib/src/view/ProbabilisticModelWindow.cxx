@@ -250,7 +250,7 @@ void ProbabilisticModelWindow::openUrl()
   if (!inputTableView_->currentIndex().isValid())
     return;
   const int currentRow = inputTableView_->currentIndex().row();
-  if (currentRow > (int)physicalModel_.getInputs().getSize() || currentRow < 0)
+  if (currentRow > (int)physicalModel_.getInputDimension() || currentRow < 0)
     return;
 
   // get current distribution

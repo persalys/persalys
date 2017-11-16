@@ -85,7 +85,7 @@ void PhysicalModelDiagramItem::update(Observable* source, const String & message
       fill();
       return;
     }
-    emit inputNumberValidityChanged(physicalModel_.getInputs().getSize());
+    emit inputNumberValidityChanged(physicalModel_.getInputDimension());
     emit physicalModelValidityChanged(physicalModel_.isValid());
     emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
     emit dependencyValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getComposedDistribution().hasIndependentCopula());
@@ -223,14 +223,14 @@ void PhysicalModelDiagramItem::removePhysicalModel()
 void PhysicalModelDiagramItem::fill()
 {
   // model definition item
-  if (physicalModel_.getInputs().getSize() || physicalModel_.getOutputs().getSize())
+  if (physicalModel_.getInputDimension() || physicalModel_.getOutputDimension())
     appendPhysicalModelItem();
   // probabilistic model item
   if (physicalModel_.hasStochasticInputs())
     appendProbabilisticModelItem();
 
   // update diagram (arrow color and button availability)
-  emit inputNumberValidityChanged(physicalModel_.getInputs().getSize());
+  emit inputNumberValidityChanged(physicalModel_.getInputDimension());
   emit physicalModelValidityChanged(physicalModel_.isValid());
   emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
   emit dependencyValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getComposedDistribution().hasIndependentCopula());

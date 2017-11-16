@@ -228,7 +228,7 @@ Sample MetaModelAnalysis::getEffectiveInputSample() const
 
   // if the physical model has stochastic variables: we do not take into account the deterministic variables
   Indices inputIndices;
-  for (UnsignedInteger i = 0; i < designOfExperiment_.getPhysicalModel().getInputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < designOfExperiment_.getPhysicalModel().getInputDimension(); ++i)
     if (designOfExperiment_.getPhysicalModel().getInputs()[i].isStochastic())
       inputIndices.add(i);
 

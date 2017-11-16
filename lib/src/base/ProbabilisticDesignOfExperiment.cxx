@@ -143,9 +143,9 @@ Sample ProbabilisticDesignOfExperiment::generateInputSample(const UnsignedIntege
     throw InvalidArgumentException(HERE) << "Error: generateInputSample design name unknown";
 
   // if there is at least a deterministic variable
-  if (getPhysicalModel().getStochasticInputNames().getSize() < getPhysicalModel().getInputNames().getSize())
+  if (getPhysicalModel().getStochasticInputNames().getSize() < getPhysicalModel().getInputDimension())
   {
-    Point inValues(getPhysicalModel().getInputs().getSize());
+    Point inValues(getPhysicalModel().getInputDimension());
     Indices variableInputsIndices;
     for (UnsignedInteger i = 0; i < inValues.getSize(); ++i)
     {

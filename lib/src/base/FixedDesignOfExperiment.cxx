@@ -68,9 +68,9 @@ void FixedDesignOfExperiment::setOriginalInputSample(const Sample& sample)
   Sample newsample(sample);
   if (newsample.getSize())
   {
-    if (getPhysicalModel().getInputs().getSize() != sample.getDimension())
+    if (getPhysicalModel().getInputDimension() != sample.getDimension())
       throw InvalidArgumentException(HERE) << "The sample dimension (" << sample.getDimension()
-                                           << ") must be equal to the number of inputs in the physical model " << getPhysicalModel().getInputs().getSize();
+                                           << ") must be equal to the number of inputs in the physical model " << getPhysicalModel().getInputDimension();
 
     newsample.setDescription(getPhysicalModel().getInputNames());
   }

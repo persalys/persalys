@@ -125,11 +125,11 @@ Indices ImportedDesignOfExperiment::getInputColumns() const
 
 void ImportedDesignOfExperiment::setInputColumns(const Indices& inputColumns)
 {
-  if (inputColumns.getSize() != getPhysicalModel().getInputs().getSize())
+  if (inputColumns.getSize() != getPhysicalModel().getInputDimension())
   {
     OSS oss;
     oss << "The dimension of the list of the column numbers has to be equal to the number of inputs of the physical model: ";
-    oss << getPhysicalModel().getInputs().getSize();
+    oss << getPhysicalModel().getInputDimension();
     throw InvalidArgumentException(HERE) << oss.str();
   }
 

@@ -42,7 +42,7 @@ int InputTableModel::columnCount(const QModelIndex & parent) const
 
 int InputTableModel::rowCount(const QModelIndex & parent) const
 {
-  return physicalModel_.getInputs().getSize();
+  return physicalModel_.getInputDimension();
 }
 
 

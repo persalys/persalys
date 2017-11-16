@@ -236,12 +236,12 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
 
 Function FMIPhysicalModel::getFunction() const
 {
-  if (!getInputs().getSize())
+  if (!getInputDimension())
     throw PhysicalModelNotValidException(HERE) << "The physical model has no inputs.";
-  if (!getOutputs().getSize())
+  if (!getOutputDimension())
     throw PhysicalModelNotValidException(HERE) << "The physical model has no outputs.";
 
-  Function function(PythonScriptEvaluation(getInputs().getSize(), getOutputs().getSize(), getCode()));
+  Function function(PythonScriptEvaluation(getInputDimension(), getOutputDimension(), getCode()));
   function.enableCache();
   return function;
 }
@@ -251,30 +251,30 @@ String FMIPhysicalModel::getPythonScript() const
 {
   OSS oss;
 
-  for (UnsignedInteger i = 0; i < getInputs().getSize(); ++ i)
+  for (UnsignedInteger i = 0; i < getInputDimension(); ++ i)
     oss << getInputs()[i].getPythonScript();
 
-  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++ i)
+  for (UnsignedInteger i = 0; i < getOutputDimension(); ++ i)
     oss << getOutputs()[i].getPythonScript();
 
   oss << "inputs = [";
-  for (UnsignedInteger i = 0; i < getInputs().getSize(); ++ i)
+  for (UnsignedInteger i = 0; i < getInputDimension(); ++ i)
   {
     String inputName(getInputs()[i].getName());
     std::replace(inputName.begin(), inputName.end(), '.', '_');
     oss << inputName;
-    if (i < getInputs().getSize() - 1)
+    if (i < getInputDimension() - 1)
       oss << ", ";
   }
   oss << "]\n";
 
   oss << "outputs = [";
-  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++ i)
+  for (UnsignedInteger i = 0; i < getOutputDimension(); ++ i)
   {
     String outputName(getOutputs()[i].getName());
     std::replace(outputName.begin(), outputName.end(), '.', '_');
     oss << outputName;
-    if (i < getOutputs().getSize() - 1)
+    if (i < getOutputDimension() - 1)
       oss << ", ";
   }
   oss << "]\n";

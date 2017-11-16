@@ -238,7 +238,7 @@ FMIPhysicalModel * FMIPhysicalModelWindow::getFMIPhysicalModel() const
 
 void FMIPhysicalModelWindow::evaluateOutputs()
 {
-  if (!physicalModel_.getInputNames().getSize())
+  if (!physicalModel_.getInputDimension())
   {
     errorMessageChanged(tr("No inputs"));
     return;

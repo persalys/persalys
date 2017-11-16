@@ -60,7 +60,7 @@ KrigingAnalysis::KrigingAnalysis(const String& name, const DesignOfExperiment& d
     if (designOfExperiment.getPhysicalModel().hasStochasticInputs())
       inputDimension = designOfExperiment.getPhysicalModel().getStochasticInputNames().getSize();
     else
-      inputDimension = designOfExperiment.getPhysicalModel().getInputNames().getSize();
+      inputDimension = designOfExperiment.getPhysicalModel().getInputDimension();
   }
 
   // basis
@@ -86,7 +86,7 @@ KrigingAnalysis::KrigingAnalysis(const String& name, const Analysis& analysis)
     if (analysis_ptr->getDesignOfExperiment().getPhysicalModel().hasStochasticInputs())
       inputDimension = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getStochasticInputNames().getSize();
     else
-      inputDimension = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getInputNames().getSize();
+      inputDimension = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getInputDimension();
   }
 
   // basis

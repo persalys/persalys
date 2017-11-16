@@ -148,7 +148,7 @@ Function PythonPhysicalModel::generateFunction(const Description &) const
 {
   if (!functionCache_.getEvaluation()->isActualImplementation())
   {
-    functionCache_ = Function(PythonScriptEvaluation(getInputs().getSize(), getOutputs().getSize(), getCode()));
+    functionCache_ = Function(PythonScriptEvaluation(getInputDimension(), getOutputDimension(), getCode()));
     functionCache_.enableCache();
   }
   return functionCache_;
@@ -159,20 +159,20 @@ String PythonPhysicalModel::getPythonScript() const
 {
   String result;
 
-  for (UnsignedInteger i = 0; i < getInputs().getSize(); ++ i)
+  for (UnsignedInteger i = 0; i < getInputDimension(); ++ i)
     result += getInputs()[i].getPythonScript();
 
-  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++ i)
+  for (UnsignedInteger i = 0; i < getOutputDimension(); ++ i)
     result += getOutputs()[i].getPythonScript();
 
   result += "inputCollection = []\n";
-  for (UnsignedInteger i = 0; i < getInputs().getSize(); ++ i)
+  for (UnsignedInteger i = 0; i < getInputDimension(); ++ i)
   {
     result += "inputCollection.append(" + getInputs()[i].getName() + ")\n";
   }
 
   result += "outputCollection = []\n";
-  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++ i)
+  for (UnsignedInteger i = 0; i < getOutputDimension(); ++ i)
   {
     result += "outputCollection.append(" + getOutputs()[i].getName() + ")\n";
   }

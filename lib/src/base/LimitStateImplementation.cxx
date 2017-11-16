@@ -52,7 +52,7 @@ LimitStateImplementation::LimitStateImplementation(const String& name,
   , physicalModel_(physicalModel)
   , threshold_(threshold)
 {
-  if (!physicalModel.getOutputs().getSize())
+  if (!physicalModel.getOutputDimension())
     throw InvalidArgumentException(HERE) << "The physical model does not contain output";
 
   setName(name);

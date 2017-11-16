@@ -99,7 +99,7 @@ void FunctionalChaosPage::initialize(const Analysis& analysis)
     if (analysis_ptr->getDesignOfExperiment().getPhysicalModel().hasStochasticInputs())
       inputDimension = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getStochasticInputNames().getSize();
     else
-      inputDimension = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getInputNames().getSize();
+      inputDimension = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getInputDimension();
   }
   inputSampleDimension_ = inputDimension;
 

@@ -57,7 +57,7 @@ void ModelEvaluationWizard::buildInterface()
   connect(outputsGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), this, SLOT(setInterestVariables(QStringList)));
   pageLayout->addWidget(outputsGroupBox_);
 
-  const UnsignedInteger nbInputs = model.getInputs().getSize();
+  const UnsignedInteger nbInputs = model.getInputDimension();
   QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
   QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
 

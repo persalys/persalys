@@ -42,7 +42,7 @@ int DifferentiationTableModel::columnCount(const QModelIndex& parent) const
 
 int DifferentiationTableModel::rowCount(const QModelIndex& parent) const
 {
-  return physicalModel_.getInputNames().getSize();
+  return physicalModel_.getInputDimension();
 }
 
 

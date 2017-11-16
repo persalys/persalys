@@ -125,7 +125,7 @@ void PhysicalModelWindowWidget::buildInterface()
   CheckableHeaderView * outputTableHeaderView = new CheckableHeaderView;
   outputTableView_->setHorizontalHeader(outputTableHeaderView);
   outputTableView_->horizontalHeader()->setStretchLastSection(true);
-  const UnsignedInteger nbOutputs = physicalModel_.getOutputNames().getSize();
+  const UnsignedInteger nbOutputs = physicalModel_.getOutputDimension();
   const bool allChecked = (nbOutputs && (nbOutputs == physicalModel_.getSelectedOutputsNames().getSize()));
   outputTableHeaderView->setChecked(allChecked);
 
