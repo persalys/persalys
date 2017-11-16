@@ -41,5 +41,7 @@
         <file>images/limitstate.png</file>
         <file>images/green-arrow-right.png</file>
         <file>images/documentinfo.png</file>
+        <file>images/edit-delete.png</file>
+        <file>images/dialog-ok-apply.png</file>
     </qresource>
 </RCC>
