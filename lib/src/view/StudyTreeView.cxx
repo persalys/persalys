@@ -248,10 +248,27 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
   if (!actions.size())
     return;
 
+  // if the item is editable:
+  // add rename action at the first position
+  QAction * renameAction = 0;
+  if (otguiItem->isEditable())
+  {
+    renameAction = new QAction(tr("Rename"), this);
+    actions.insert(0, renameAction);
+  }
+
   // build the context menu
-  QMenu * contextMenu = new QMenu(this);
-  contextMenu->addActions(actions);
-  contextMenu->exec(viewport()->mapToGlobal(point));
+  QMenu contextMenu(this);
+  contextMenu.addActions(actions);
+  QAction * triggeredAction = contextMenu.exec(viewport()->mapToGlobal(point));
+
+  // if rename action
+  if (triggeredAction && triggeredAction == renameAction)
+  {
+    // start editing the item
+    emit edit(index);
+    delete renameAction;
+  }
 }
 
 
