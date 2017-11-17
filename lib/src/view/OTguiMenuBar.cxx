@@ -60,16 +60,16 @@ void OTguiMenuBar::buildActions(const OTguiActions* actions)
   connect(action, SIGNAL(triggered()), this, SLOT(clearRecentFilesActions()));
   recentFilesMenu_->addAction(action);
 
-  addSeparator();
+  fileMenu->addSeparator();
 
   fileMenu->addAction(actions->saveAction());
   fileMenu->addAction(actions->saveAsAction());
 
-  addSeparator();
+  fileMenu->addSeparator();
 
   fileMenu->addAction(actions->importPyAction());
 
-  addSeparator();
+  fileMenu->addSeparator();
 
   fileMenu->addAction(actions->closeAction());
   fileMenu->addAction(actions->exitAction());
