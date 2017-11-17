@@ -315,6 +315,12 @@ void OTStudyItem::addDataModelItem(DesignOfExperiment & dataModel)
 {
   OTguiItem * item = getTitleItemNamed(tr("Data models"), "DataModelsTitle");
 
+  // context menu actions
+  if (!item->getActions().size())
+  {
+    item->appendAction(newDataModel_);
+  }
+
   // new Data model item
   DataModelDiagramItem * newDataModelItem = new DataModelDiagramItem(dataModel);
   item->appendRow(newDataModelItem);
@@ -332,6 +338,19 @@ void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
   const QString title = (physicalModel.getImplementation()->getClassName() == "MetaModel") ? tr("Metamodels") : tr("Physical models");
   const QString titleType = (physicalModel.getImplementation()->getClassName() == "MetaModel") ? "MetaModelsTitle" : "PhysicalModelsTitle";
   OTguiItem * item = getTitleItemNamed(title, titleType);
+
+  // context menu actions
+  if (!item->getActions().size())
+  {
+    item->appendAction(newSymbolicPhysicalModel_);
+    item->appendAction(newPythonPhysicalModel_);
+#ifdef OTGUI_HAVE_YACS
+    item->appendAction(newYACSPhysicalModel_);
+#endif
+#ifdef OTGUI_HAVE_OTFMI
+    item->appendAction(newFMIPhysicalModel_);
+#endif
+  }
 
   // new Physical model item
   PhysicalModelDiagramItem * newPhysicalModelItem = new PhysicalModelDiagramItem(physicalModel);
