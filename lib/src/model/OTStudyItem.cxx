@@ -92,6 +92,7 @@ void OTStudyItem::buildActions()
   connect(closeOTStudy_, SIGNAL(triggered()), this, SLOT(closeOTStudy()));
 
   // add actions
+  appendSeparator(tr("Model"));
   appendAction(newSymbolicPhysicalModel_);
   appendAction(newPythonPhysicalModel_);
 #ifdef OTGUI_HAVE_YACS
@@ -101,8 +102,10 @@ void OTStudyItem::buildActions()
   appendAction(newFMIPhysicalModel_);
 #endif
   appendAction(newDataModel_);
+  appendSeparator();
   appendAction(exportOTStudy_);
   appendAction(saveOTStudy_);
+  appendSeparator();
   appendAction(closeOTStudy_);
 }
 

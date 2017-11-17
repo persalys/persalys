@@ -59,6 +59,7 @@ void PhysicalModelDiagramItem::buildActions()
 
   // add actions
   appendAction(definePhysicalModel_);
+  appendSeparator();
   appendAction(removePhysicalModel_);
 }
 

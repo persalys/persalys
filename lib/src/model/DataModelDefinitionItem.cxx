@@ -66,6 +66,7 @@ void DataModelDefinitionItem::buildActions()
   connect(newMetaModel_, SIGNAL(triggered()), this, SLOT(createNewMetaModel()));
 
   // add actions
+  appendSeparator(tr("Analysis"));
   appendAction(newDataAnalysis_);
   appendAction(newInferenceAnalysis_);
   appendAction(newCopulaInferenceAnalysis_);

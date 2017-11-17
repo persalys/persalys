@@ -63,8 +63,9 @@ void PhysicalModelDefinitionItem::buildActions()
 
   // add actions
   appendAction(newProbabilisticModel_);
-  appendAction(newModelEvaluation_);
   appendAction(newDesignOfExperiment_);
+  appendSeparator(tr("Analysis"));
+  appendAction(newModelEvaluation_);
 }
 
 

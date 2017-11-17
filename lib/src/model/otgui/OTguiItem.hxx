@@ -40,6 +40,7 @@ public:
 
   QList< QAction* > getActions();
   void appendAction(QAction* action);
+  void appendSeparator(const QString& text = "");
   void insertAction(int i, QAction* action);
 
   virtual QVariant data(int role) const;

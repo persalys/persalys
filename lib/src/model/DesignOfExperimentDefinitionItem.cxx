@@ -70,6 +70,8 @@ void DesignOfExperimentDefinitionItem::buildActions()
 
   appendAction(modifyAnalysis_);
 
+  appendSeparator(tr("Analysis"));
+
   // evaluate design of experiments action
   evaluateDesignOfExperiment_ = new QAction(QIcon(":/images/system-run.png"), tr("Evaluate"), this);
   evaluateDesignOfExperiment_->setStatusTip(tr("Evaluate the design of experiments"));
@@ -81,6 +83,8 @@ void DesignOfExperimentDefinitionItem::buildActions()
   newMetaModel_ = new QAction(QIcon(":/images/metaModel.png"), tr("Metamodel"), this);
   newMetaModel_->setStatusTip(tr("Create a new metamodel"));
   connect(newMetaModel_, SIGNAL(triggered()), this, SLOT(createNewMetaModel()));
+
+  appendSeparator();
 
   // remove analysis action
   removeAnalysis_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
@@ -152,6 +156,7 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
   font.setWeight(font.weight() + 10);
   evaluationItem->setData(font, Qt::FontRole);
   evaluationItem->setEditable(false);
+  evaluationItem->appendSeparator(tr("Analysis"));
   evaluationItem->appendAction(newMetaModel_);
 
   // connections

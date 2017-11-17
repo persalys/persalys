@@ -94,6 +94,8 @@ void AnalysisItem::buildActions()
   if (analysisType.contains("DesignOfExperiment"))
     return;
 
+  appendSeparator();
+
   // remove analysis action
   removeAnalysis_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
   removeAnalysis_->setStatusTip(tr("Remove the analysis"));

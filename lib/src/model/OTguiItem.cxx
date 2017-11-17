@@ -64,6 +64,16 @@ void OTguiItem::appendAction(QAction* action)
 }
 
 
+void OTguiItem::appendSeparator(const QString& text)
+{
+  QAction * separator = new QAction(this);
+  separator->setSeparator(true);
+  if (!text.isEmpty())
+    separator->setText(text);
+  appendAction(separator);
+}
+
+
 void OTguiItem::insertAction(int i, QAction* action)
 {
   menuActions_.insert(i, action);
