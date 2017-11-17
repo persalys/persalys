@@ -184,10 +184,13 @@ void DataAnalysisWindow::fillTabWidget()
 #else
   // tab: Table --------------------------------
   addTableTab();
-  // tab: plot matrix
-  addPlotMatrixTab();
-  // tab: scatter plots
-  addScatterPlotsTab();
+  if (designOfExperiment_.getSample().getDimension() > 1 && designOfExperiment_.getSample().getSize() > 1)
+  {
+    // tab: plot matrix
+    addPlotMatrixTab();
+    // tab: scatter plots
+    addScatterPlotsTab();
+  }
 #endif
 
   // tab: Parameters --------------------------------
@@ -685,7 +688,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   }
 
   // if only one variable or if only one point : do not need the following graphs
-  if (designOfExperiment_.getSample().getDimension() > 1 || designOfExperiment_.getSample().getSize() > 1)
+  if (designOfExperiment_.getSample().getDimension() > 1 && designOfExperiment_.getSample().getSize() > 1)
     addParaviewPlotWidgetsTabs(pvSpreadSheetWidget);
 }
 
