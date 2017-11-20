@@ -50,7 +50,7 @@ IntroCentralTendencyPage::IntroCentralTendencyPage(QWidget* parent)
   QGroupBox * methodBox = new QGroupBox(tr("Method"));
   QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
 
-  methodGroup_ = new QButtonGroup;
+  methodGroup_ = new QButtonGroup(this);
   connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SLOT(updateFinalPage()));
 
   // Chaos

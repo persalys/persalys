@@ -43,7 +43,7 @@ IntroDesignOfExperimentPage::IntroDesignOfExperimentPage(QWidget* parent)
   QGroupBox * methodBox = new QGroupBox(tr("Type of design of experiments"));
   QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
 
-  methodGroup_ = new QButtonGroup;
+  methodGroup_ = new QButtonGroup(this);
 
   // Deterministic
   QRadioButton * deterministicButton = new QRadioButton(tr("Deterministic"));

@@ -53,8 +53,8 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
   // Widgets
   QSplitter * splitter = new QSplitter(Qt::Vertical);
 
-  QGraphicsView * graphView = new QGraphicsView;
-  QGraphicsScene * scene = new QGraphicsScene;
+  QGraphicsView * graphView = new QGraphicsView(this);
+  QGraphicsScene * scene = new QGraphicsScene(this);
 
   // -- Buttons --
   DiagramPushButton * modelDefinitionButton = new DiagramPushButton;

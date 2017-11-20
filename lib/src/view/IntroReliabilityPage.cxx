@@ -60,7 +60,7 @@ IntroReliabilityPage::IntroReliabilityPage(QWidget * parent)
   QGroupBox * methodBox = new QGroupBox(tr("Method"));
   QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
 
-  methodGroup_ = new QButtonGroup;
+  methodGroup_ = new QButtonGroup(this);
   OSS styleText;
   styleText << "margin-left: " << style()->pixelMetric(QStyle::PM_LayoutLeftMargin) << "px;";
 

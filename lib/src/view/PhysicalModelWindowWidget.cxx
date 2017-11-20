@@ -183,7 +183,7 @@ void PhysicalModelWindowWidget::buildInterface()
     CopyableTableView * differentiationTableView = new CopyableTableView;
     differentiationTableView->horizontalHeader()->setStretchLastSection(true);
 
-    SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate;
+    SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate(differentiationTableView);
     spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::differentiationStep);
     differentiationTableView->setItemDelegateForColumn(1, spinBoxDelegate);
     differentiationTableView->setEditTriggers(QTableView::AllEditTriggers);

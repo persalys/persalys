@@ -203,7 +203,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   CopyableTableView * differentiationTableView = new CopyableTableView;
   differentiationTableView->horizontalHeader()->setStretchLastSection(true);
 
-  SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate;
+  SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate(differentiationTableView);
   spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::differentiationStep);
   differentiationTableView->setItemDelegateForColumn(1, spinBoxDelegate);
   differentiationTableView->setEditTriggers(QTableView::AllEditTriggers);
@@ -457,10 +457,10 @@ void FMIPhysicalModelWindow::updateVariablesTableModel()
   proxyModel_->setDynamicSortFilter(true);
 
   variablesTableView_->setModel(proxyModel_);
-  QItemDelegate * delegate = new EnumDelegate(QStringList() << tr("Disabled") << tr("Input") << tr("Output"));
+  QItemDelegate * delegate = new EnumDelegate(QStringList() << tr("Disabled") << tr("Input") << tr("Output"), variablesTableView_);
   variablesTableView_->setItemDelegateForColumn(4, delegate);
 
-  QItemDelegate * fdelegate = new FloatDelegate;
+  QItemDelegate * fdelegate = new FloatDelegate(variablesTableView_);
   variablesTableView_->setItemDelegateForColumn(5, fdelegate);
 
   variablesTableView_->horizontalHeader()->setStretchLastSection(true);

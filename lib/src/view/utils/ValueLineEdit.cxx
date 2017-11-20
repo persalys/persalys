@@ -32,7 +32,7 @@ namespace OTGUI
 ValueLineEdit::ValueLineEdit(const double value, QWidget *parent)
   : QLineEdit(parent)
 {
-  QDoubleValidator * validator = new QDoubleValidator;
+  QDoubleValidator * validator = new QDoubleValidator(this);
   validator->setLocale(QLocale::C);
   setValidator(validator);
   setValue(value);

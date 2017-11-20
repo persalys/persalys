@@ -157,7 +157,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
       interactionsValue += (totalIndices[j] - firstIndices[j]);
     }
   }
-  proxyModel_ = new IndicesProxyModel;
+  proxyModel_ = new IndicesProxyModel(tableView);
   proxyModel_->setSourceModel(indicesTableModel);
   tableView->setModel(proxyModel_);
   subWidgetLayout->addWidget(tableView);

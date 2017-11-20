@@ -51,7 +51,7 @@ IntroMetaModelPage::IntroMetaModelPage(QWidget* parent)
   doesComboBox_ = new QComboBox;
   doeLayout->addWidget(doesComboBox_);
   connect(doesComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDesignOfExperiment(int)));
-  doesComboBoxModel_ = new QStandardItemModel;
+  doesComboBoxModel_ = new QStandardItemModel(doesComboBox_);
   doesComboBox_->setModel(doesComboBoxModel_);
 
   doeLabel_ = new QLabel;
@@ -68,7 +68,7 @@ IntroMetaModelPage::IntroMetaModelPage(QWidget* parent)
   QGroupBox * methodBox = new QGroupBox(tr("Method"));
   QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
 
-  methodGroup_ = new QButtonGroup;
+  methodGroup_ = new QButtonGroup(this);
 
   // Chaos
   QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Functional Chaos"));

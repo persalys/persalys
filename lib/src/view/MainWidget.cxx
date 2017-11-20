@@ -91,7 +91,7 @@ void MainWidget::buildInterface()
   connect(actions_->openAction(), SIGNAL(triggered()), studyTree_, SLOT(openOTStudy()));
   connect(actions_->saveAction(), SIGNAL(triggered()), studyTree_, SLOT(saveCurrentOTStudy()));
   connect(actions_->saveAsAction(), SIGNAL(triggered()), studyTree_, SLOT(saveAsCurrentOTStudy()));
-  connect(actions_->closeAction(), SIGNAL(triggered()), studyTree_, SLOT(closeOTStudy()));
+  connect(actions_->closeAction(), SIGNAL(triggered()), studyTree_, SLOT(closeCurrentOTStudy()));
   connect(studyTree_, SIGNAL(analysisInProgressStatusChanged(bool)), actions_, SLOT(updateActionsAvailability(bool)));
 }
 

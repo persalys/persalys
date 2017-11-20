@@ -48,7 +48,7 @@ void ProbabilisticDesignPage::buildInterface()
 
   QGroupBox * designGroupBox = new QGroupBox(tr("Designs"));
   QGridLayout * designGroupBoxLayout = new QGridLayout(designGroupBox);
-  designsGroup_ = new QButtonGroup;
+  designsGroup_ = new QButtonGroup(this);
 
   QRadioButton * buttonToChooseDesign = new QRadioButton(tr("LHS"));
   buttonToChooseDesign->setToolTip(tr("Latin Hypercube Sampling"));

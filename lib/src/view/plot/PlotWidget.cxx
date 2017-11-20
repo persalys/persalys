@@ -453,6 +453,8 @@ void PlotWidget::plotSensitivityIndices(const Point& firstOrderIndices,
   }
 
   plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Ellipse, QBrush(colors[0]), QPen(colors[0]), QSize(5, 5)), tr("First order index"));
+  delete[] xData;
+  delete[] yData;
 
   if (totalIndices.getSize())
   {
@@ -479,9 +481,9 @@ void PlotWidget::plotSensitivityIndices(const Point& firstOrderIndices,
     plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Rect, QBrush(colors[1]), QPen(colors[1]), QSize(5, 5)), tr("Total index"));
 
     insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
+    delete[] xData;
+    delete[] yData;
   }
-  delete[] xData;
-  delete[] yData;
 
   // scales
   setAxisScale(QwtPlot::xBottom, -0.5, firstOrderIndices.getSize() - 0.5, 1.0);

@@ -141,7 +141,7 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   // draw a line at the bottom of the OTStudyItem
   setItemDelegate(new TreeItemDelegate(this));
 #else
-  setItemDelegate(new LineEditWithQValidatorDelegate(QString("[a-zA-Z_][a-zA-Z_0-9]*")));
+  setItemDelegate(new LineEditWithQValidatorDelegate(QString("[a-zA-Z_][a-zA-Z_0-9]*"), this));
 #endif
 
   // context menu

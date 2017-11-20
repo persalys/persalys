@@ -50,7 +50,7 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem
   codeView->verticalHeader()->setStretchLastSection(true);
   codeView->horizontalHeader()->hide();
   codeView->verticalHeader()->hide();
-  codeView->setItemDelegate(new CodeDelegate);
+  codeView->setItemDelegate(new CodeDelegate(codeView));
 
   CodeModel * codeModel = new CodeModel(physicalModel_, codeView);
   codeView->setModel(codeModel);

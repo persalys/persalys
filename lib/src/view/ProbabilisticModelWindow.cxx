@@ -97,7 +97,7 @@ void ProbabilisticModelWindow::buildInterface()
   QStringList items = TranslationManager::GetAvailableDistributions();
   items << tr("Inference result");
 
-  ComboBoxDelegate * delegate = new ComboBoxDelegate(items);
+  ComboBoxDelegate * delegate = new ComboBoxDelegate(items, QPair<int, int>(), inputTableView_);
   inputTableView_->setItemDelegateForColumn(1, delegate);
 
   // - connections
@@ -219,7 +219,7 @@ void ProbabilisticModelWindow::buildInterface()
   QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
 
   CopyableTableView * correlationTableView = new CopyableTableView;
-  SpinBoxDelegate * correlationDelegate = new SpinBoxDelegate;
+  SpinBoxDelegate * correlationDelegate = new SpinBoxDelegate(correlationTableView);
   correlationDelegate->setSpinBoxType(SpinBoxDelegate::correlation);
   correlationTableView->setItemDelegate(correlationDelegate);
   correlationTableView->setEditTriggers(QAbstractItemView::AllEditTriggers);
