@@ -43,7 +43,7 @@ OTguiSubWindow::~OTguiSubWindow()
 }
 
 
-QStandardItem * OTguiSubWindow::getItem()const
+OTguiItem * OTguiSubWindow::getItem() const
 {
   return item_;
 }
