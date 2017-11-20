@@ -158,19 +158,7 @@ void IntroReliabilityPage::changeLimitStateLabel(int index)
   if (variant.canConvert<LimitState>())
   {
     const LimitState limitState = variant.value<LimitState>();
-    OSS labelTextOss;
-    String operatorLabel;
-    const String operatorName = limitState.getOperator().getImplementation()->getClassName();
-    if (operatorName == "Less")
-      operatorLabel = "<";
-    else if (operatorName == "LessOrEqual")
-      operatorLabel = "<=";
-    else if (operatorName == "Greater")
-      operatorLabel = ">";
-    else if (operatorName == "GreaterOrEqual")
-      operatorLabel = ">=";
-    labelTextOss << limitState.getOutputName() << " " << operatorLabel << " " << limitState.getThreshold();
-    limitStateLabel_->setText(labelTextOss.str().c_str());
+    limitStateLabel_->setText(limitState.__str__().c_str());
   }
 }
 }

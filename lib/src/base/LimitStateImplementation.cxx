@@ -171,6 +171,27 @@ String LimitStateImplementation::__repr__() const
 }
 
 
+String LimitStateImplementation::__str__(const String & offset) const
+{
+  OSS oss(false);
+  oss << getOutputName();
+
+  const String operatorName = getOperator().getImplementation()->getClassName();
+  if (operatorName == "Less")
+    oss <<  " < ";
+  else if (operatorName == "LessOrEqual")
+    oss <<  " <= ";
+  else if (operatorName == "Greater")
+    oss <<  " > ";
+  else if (operatorName == "GreaterOrEqual")
+    oss <<  " >= ";
+
+   oss << getThreshold();
+
+  return oss;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void LimitStateImplementation::save(Advocate& adv) const
 {
