@@ -57,6 +57,18 @@ void ReliabilityAnalysis::setInterestVariables(const Description& outputsNames)
 }
 
 
+void ReliabilityAnalysis::run()
+{
+  PhysicalModelAnalysis::run();
+  OSS oss;
+  oss << "<h3>Limit state</h3>";
+  oss << "<p>";
+  oss << getLimitState().__str__();
+  oss << "</p>";
+  modelHtmlDescription_ += oss;
+}
+
+
 /* String converter */
 String ReliabilityAnalysis::__repr__() const
 {

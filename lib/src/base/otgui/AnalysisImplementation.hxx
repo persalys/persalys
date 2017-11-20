@@ -47,7 +47,7 @@ public:
   OT::Bool operator !=(const AnalysisImplementation & other) const;
 
   virtual Parameters getParameters() const;
-  void run();
+  virtual void run();
   virtual OT::String getPythonScript() const;
   virtual bool hasValidResult() const;
 
@@ -62,6 +62,7 @@ public:
   OT::String getErrorMessage() const;
   OT::String getWarningMessage() const;
   int getProgressValue() const;
+  OT::String getHtmlDescription() const;
 
   virtual void stop();
 
@@ -83,6 +84,7 @@ protected:
   OT::String warningMessage_;
   bool stopRequested_;
   int progressValue_;
+  OT::String modelHtmlDescription_;
 
 private:
   bool isRunning_;

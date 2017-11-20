@@ -39,6 +39,8 @@ public:
 
   PhysicalModel getPhysicalModel() const;
 
+  virtual void run();
+
   /** String converter */
   virtual OT::String __repr__() const;
 

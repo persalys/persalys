@@ -52,6 +52,7 @@ public:
   OT::String getFormula(const OT::String& outputName) const;
   void setFormula(const OT::String& outputName, const OT::String& formula);
 
+  virtual OT::String getHtmlDescription() const;
   OT::String getPythonScript() const;
 
   /** String converter */

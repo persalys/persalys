@@ -102,6 +102,7 @@ public:
 
   bool isValid() const;
 
+  virtual OT::String getHtmlDescription() const;
   virtual OT::String getPythonScript() const;
 
   /** String converter */

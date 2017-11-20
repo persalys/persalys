@@ -118,6 +118,10 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
 
   tabWidget->addTab(tab, tr("Summary"));
 
+  // tab : model description --------------------------------
+  if (modelDescriptionWidget_)
+    tabWidget->addTab(modelDescriptionWidget_, tr("Model"));
+
   //
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);

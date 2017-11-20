@@ -34,6 +34,7 @@ AnalysisImplementation::AnalysisImplementation()
   , warningMessage_("")
   , stopRequested_(false)
   , progressValue_(0)
+  , modelHtmlDescription_("")
   , isRunning_(false)
   , errorMessage_("")
   , interestVariables_()
@@ -50,6 +51,7 @@ AnalysisImplementation::AnalysisImplementation(const String & name)
   , warningMessage_("")
   , stopRequested_(false)
   , progressValue_(0)
+  , modelHtmlDescription_("")
   , isRunning_(false)
   , errorMessage_("")
   , interestVariables_()
@@ -123,6 +125,7 @@ void AnalysisImplementation::initialize()
   warningMessage_ = "";
   stopRequested_ = false;
   progressValue_ = 0;
+  modelHtmlDescription_ = "";
 }
 
 
@@ -189,6 +192,12 @@ String AnalysisImplementation::getPythonScript() const
 }
 
 
+String AnalysisImplementation::getHtmlDescription() const
+{
+  return modelHtmlDescription_;
+}
+
+
 void AnalysisImplementation::stop()
 {
   stopRequested_ = true;
@@ -203,6 +212,7 @@ void AnalysisImplementation::save(Advocate & adv) const
   adv.saveAttribute("warningMessage_", warningMessage_);
   adv.saveAttribute("isReliabilityAnalysis_", isReliabilityAnalysis_);
   adv.saveAttribute("interestVariables_", interestVariables_);
+  adv.saveAttribute("modelHtmlDescription_", modelHtmlDescription_);
 }
 
 
@@ -214,6 +224,7 @@ void AnalysisImplementation::load(Advocate & adv)
   adv.loadAttribute("warningMessage_", warningMessage_);
   adv.loadAttribute("isReliabilityAnalysis_", isReliabilityAnalysis_);
   adv.loadAttribute("interestVariables_", interestVariables_);
+  adv.loadAttribute("modelHtmlDescription_", modelHtmlDescription_);
 }
 
 

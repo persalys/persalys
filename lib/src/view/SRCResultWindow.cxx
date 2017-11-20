@@ -116,6 +116,10 @@ void SRCResultWindow::buildInterface()
   if (parametersWidget_)
     tabWidget->addTab(parametersWidget_, tr("Parameters"));
 
+  // tab : model description --------------------------------
+  if (modelDescriptionWidget_)
+    tabWidget->addTab(modelDescriptionWidget_, tr("Model"));
+
   // set widgets
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
