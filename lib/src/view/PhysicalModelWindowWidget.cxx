@@ -249,6 +249,7 @@ void PhysicalModelWindowWidget::resizeOutputTable()
   {
     outputTableView_->setColumnHidden(2, true); // hide formula section
     outputTableView_->horizontalHeader()->resizeSection(1, width - 2 * minSectionSize);
+    outputTableView_->horizontalHeader()->resizeSection(3, minSectionSize);
   }
   else
   {
