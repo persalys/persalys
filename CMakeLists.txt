@@ -18,8 +18,12 @@ endif ()
 
 project (OTGui CXX)
 
-cmake_policy (SET CMP0020 NEW)
-cmake_policy (SET CMP0053 OLD)
+if (POLICY CMP0020)
+  cmake_policy (SET CMP0020 NEW)
+endif ()
+if (POLICY CMP0053)
+  cmake_policy (SET CMP0053 OLD)
+endif ()
 
 string ( TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME )
 
