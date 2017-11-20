@@ -58,6 +58,7 @@ void DesignOfExperimentInputWindow::buildInterface()
 
   // sample table
   ExportableTableView * tableView = new ExportableTableView;
+  connect(getItem(), SIGNAL(dataExportRequested()), tableView, SLOT(exportData()));
   tableView->setSortingEnabled(true);
 
   SampleTableModel * tableModel = new SampleTableModel(originalInputSample_, tableView);

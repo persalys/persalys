@@ -64,6 +64,7 @@ signals:
 
 private:
   Analysis analysis_;
+  QAction * exportData_;
   QAction * newMetaModel_;
   QAction * modifyAnalysis_;
   QAction * evaluateDesignOfExperiment_;

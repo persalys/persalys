@@ -482,6 +482,7 @@ void DataAnalysisWindow::addTableTab()
 {
   // Well evaluated points
   ExportableTableView * tableView = new ExportableTableView;
+  connect(getItem(), SIGNAL(dataExportRequested()), tableView, SLOT(exportData()));
   tableView->setSortingEnabled(true);
 
   SampleTableModel * tableModel = new SampleTableModel(designOfExperiment_.getSample(), tableView);
@@ -554,6 +555,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   // with paraview the table is always shown in order to use the selection behavior
   PVSpreadSheetViewWidget * pvSpreadSheetWidget = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
   pvSpreadSheetWidget->setData(designOfExperiment_.getSample());
+  connect(getItem(), SIGNAL(dataExportRequested()), pvSpreadSheetWidget, SLOT(exportData()));
 
   // table tab
 

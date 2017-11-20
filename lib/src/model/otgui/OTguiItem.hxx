@@ -54,6 +54,7 @@ protected slots:
   void requestRemoveChild(int);
   void setAnalysisInProgress(bool);
 signals:
+  void dataExportRequested();
   void emitErrorMessageRequested(QString);
   void analysisRequested(OTguiItem*, const Analysis&, const bool isGeneralWizard = false);
   void removeRequested(int);
