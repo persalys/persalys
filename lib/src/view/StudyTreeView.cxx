@@ -149,7 +149,6 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenu(const QPoint &)));
 
   // connections
-  connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(setCurrentIndex(QModelIndex)));
   connect(this->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(selectedItemChanged(QModelIndex, QModelIndex)));
 
   setExpandsOnDoubleClick(false);
@@ -343,9 +342,10 @@ void StudyTreeView::createNewOTStudyWindow(OTStudyItem* item)
   connect(item, SIGNAL(newDataModelItemCreated(DataModelDiagramItem*)), this, SLOT(createNewDataModelDiagramWindow(DataModelDiagramItem*)));
   connect(item, SIGNAL(newPhysicalModelItemCreated(PhysicalModelDiagramItem*)), this, SLOT(createNewPhysicalModelDiagramWindow(PhysicalModelDiagramItem*)));
   connect(item, SIGNAL(otStudyExportRequested()), this, SLOT(exportOTStudy()));
-  connect(item, SIGNAL(otStudySaveAsRequested()), this, SLOT(saveAsOTStudy()));
-  connect(item, SIGNAL(otStudySaveAsRequested(OTStudyItem*, bool*)), this, SLOT(saveAsOTStudy(OTStudyItem*, bool*)));
-  connect(item, SIGNAL(otStudyCloseRequested(OTStudyItem*, bool*)), this, SLOT(closeNotSavedOTStudyRequest(OTStudyItem*, bool*)));
+  connect(item, SIGNAL(otStudySaveRequested(OTStudyItem*)), this, SLOT(saveOTStudy(OTStudyItem*)));
+  connect(item, SIGNAL(otStudySaveAsRequested(OTStudyItem*)), this, SLOT(saveAsOTStudy(OTStudyItem*)));
+  connect(item, SIGNAL(otStudyCloseRequested(OTStudyItem*)), this, SLOT(closeOTStudy(OTStudyItem*)));
+
   connect(item, SIGNAL(recentFilesListChanged(QString)), this, SIGNAL(recentFilesListChanged(QString)));
 
   // window
@@ -774,14 +774,7 @@ void StudyTreeView::saveCurrentOTStudy()
     return;
   }
 
-  OTStudyItem * studyItem = item->getParentOTStudyItem();
-  if (!studyItem)
-  {
-    qDebug() << "StudyTreeView::saveCurrentOTStudy : studyItem NULL\n";
-    return;
-  }
-
-  studyItem->saveOTStudy();
+  saveOTStudy(item->getParentOTStudyItem());
 }
 
 
@@ -798,25 +791,36 @@ void StudyTreeView::saveAsCurrentOTStudy()
 }
 
 
-void StudyTreeView::saveAsOTStudy()
+bool StudyTreeView::saveOTStudy(OTStudyItem* studyItem)
 {
-  OTStudyItem * item = qobject_cast<OTStudyItem*>(sender());
-
-  if (!item)
+  if (!studyItem)
   {
-    qDebug() << "StudyTreeView::saveAsOTStudy : item NULL\n";
-    showErrorMessage(tr("Can not save the current study as"));
-    return;
+    qDebug() << "StudyTreeView::saveOTStudy : item NULL\n";
+    showErrorMessage(tr("Can not save the current study"));
+    return false;
   }
-
-  saveAsOTStudy(item);
+  if (QFileInfo(QString::fromUtf8(studyItem->getOTStudy().getFileName().c_str())).exists())
+  {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    studyItem->getOTStudy().save(studyItem->getOTStudy().getFileName());
+    QApplication::restoreOverrideCursor();
+    return true;
+  }
+  else
+  {
+    return saveAsOTStudy(studyItem);
+  }
 }
 
 
-void StudyTreeView::saveAsOTStudy(OTStudyItem* item, bool* notcancel)
+bool StudyTreeView::saveAsOTStudy(OTStudyItem* studyItem)
 {
-  if (!item)
-    return;
+  if (!studyItem)
+  {
+    qDebug() << "StudyTreeView::saveAsOTStudy : item NULL\n";
+    showErrorMessage(tr("Can not save the current study as"));
+    return false;
+  }
 
   QSettings settings;
   QString currentDir = settings.value("currentDir").toString();
@@ -825,20 +829,15 @@ void StudyTreeView::saveAsOTStudy(OTStudyItem* item, bool* notcancel)
 
   const QString fileName = QFileDialog::getSaveFileName(this,
                            tr("Save OTStudy..."),
-                           currentDir + QDir::separator() + item->data(Qt::DisplayRole).toString(),
+                           currentDir + QDir::separator() + studyItem->data(Qt::DisplayRole).toString(),
                            tr("XML files (*.xml)"));
 
   if (fileName.isEmpty())
   {
-    if (notcancel)
-      *notcancel = false;
-    return;
+    return false;
   }
 
-  item->saveOTStudy(fileName);
-
-  if (notcancel)
-    *notcancel = true;
+  return studyItem->saveOTStudy(fileName);
 }
 
 
@@ -897,42 +896,57 @@ void StudyTreeView::openOTStudy(const QString& recentFileName)
 }
 
 
-void StudyTreeView::closeNotSavedOTStudyRequest(OTStudyItem* item, bool* canClose)
+bool StudyTreeView::closeOTStudy(OTStudyItem* studyItem)
 {
-  const int ret = QMessageBox::warning(this,
-                                       tr("Warning"),
-                                       tr("Do you want to save the OTStudy '%1' [%2]?").arg(item->getOTStudy().getName().c_str())
-                                       .arg(item->getOTStudy().getFileName().c_str()),
-                                       QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
-                                       QMessageBox::Save);
-  if (ret == QMessageBox::Save)
+  if (!studyItem)
   {
-    if (!item->saveOTStudy())
-      return;
+    qDebug() << "StudyTreeView::closeOTStudy : item NULL\n";
+    showErrorMessage(tr("Can not close the current study"));
+    return false;
   }
+  // check if the analysis is running
+  if (analysisInProgress_)
+  {
+    showErrorMessage(tr("Can not remove a study when an analysis is running."));
+    return false;
+  }
+  if (studyItem->getOTStudy().getImplementation().get()->hasBeenModified())
+  {
+    const int ret = QMessageBox::warning(this,
+                                        tr("Warning"),
+                                        tr("Do you want to save the OTStudy '%1' [%2]?").arg(studyItem->getOTStudy().getName().c_str())
+                                        .arg(studyItem->getOTStudy().getFileName().c_str()),
+                                        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+                                        QMessageBox::Save);
+    if (ret == QMessageBox::Cancel)
+    {
+      return false;
+    }
+    else if (ret == QMessageBox::Save)
+    {
+      if (!saveOTStudy(studyItem))
+      {
+        return false;
+      }
+    }
+  }
+  // remove instance
+  OTStudy::Remove(studyItem->getOTStudy());
 
-  if (canClose)
-    *canClose = (ret != QMessageBox::Cancel);
+  return true;
 }
 
 
-bool StudyTreeView::closeOTStudy()
+bool StudyTreeView::closeCurrentOTStudy()
 {
   OTguiItem * item = dynamic_cast<OTguiItem*>(treeViewModel_->itemFromIndex(selectionModel()->currentIndex()));
   if (!item)
   {
-    qDebug() << "StudyTreeView::closeOTStudy : item NULL\n";
+    qDebug() << "StudyTreeView::closeCurrentOTStudy : item NULL\n";
     return false;
   }
 
-  OTStudyItem * studyItem = item->getParentOTStudyItem();
-  if (!studyItem)
-  {
-    qDebug() << "StudyTreeView::closeOTStudy : studyItem NULL\n";
-    return false;
-  }
-
-  return studyItem->closeOTStudy();
+  return closeOTStudy(item->getParentOTStudyItem());
 }
 
 
@@ -946,7 +960,7 @@ bool StudyTreeView::closeAllOTStudies()
   while (rootItem->hasChildren())
   {
     setCurrentIndex(rootItem->child(0)->index());
-    const int ret = closeOTStudy();
+    const int ret = closeCurrentOTStudy();
     if (!ret)
       return false;
   }

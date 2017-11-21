@@ -85,7 +85,7 @@ void OTStudyItem::buildActions()
 
   // save as  action
   saveAsOTStudy_ = new QAction(QIcon(":/images/document-save-as.png"), tr("Save As..."), this);
-  connect(saveAsOTStudy_, SIGNAL(triggered()), this, SIGNAL(otStudySaveAsRequested()));
+  connect(saveAsOTStudy_, SIGNAL(triggered()), this, SLOT(saveAsOTStudy()));
 
   // close action
   closeOTStudy_ = new QAction(QIcon(":/images/window-close.png"), tr("Close"), this);
@@ -234,23 +234,15 @@ void OTStudyItem::exportOTStudy(QString fileName)
 }
 
 
-bool OTStudyItem::saveOTStudy()
+void OTStudyItem::saveOTStudy()
 {
-  if (!QFileInfo(QString::fromUtf8(otStudy_.getFileName().c_str())).exists())
-  {
-    bool notcancel = true;
-    emit otStudySaveAsRequested(this, &notcancel);
+  emit otStudySaveRequested(this);
+}
 
-    if (!notcancel)
-      return false;
 
-    return true;
-  }
-
-  QApplication::setOverrideCursor(Qt::WaitCursor);
-  otStudy_.save(otStudy_.getFileName());
-  QApplication::restoreOverrideCursor();
-  return true;
+void OTStudyItem::saveAsOTStudy()
+{
+  emit otStudySaveAsRequested(this);
 }
 
 
@@ -290,27 +282,9 @@ bool OTStudyItem::saveOTStudy(QString fileName)
 }
 
 
-bool OTStudyItem::closeOTStudy()
+void OTStudyItem::closeOTStudy()
 {
-  // check if the analysis is running
-  if (analysisInProgress_)
-  {
-    emit emitErrorMessageRequested(tr("Can not remove a study when an analysis is running."));
-    return false;
-  }
-
-  // if there are modifications
-  bool canClose = false;
-
-  if (otStudy_.getImplementation().get()->hasBeenModified())
-    emit otStudyCloseRequested(this, &canClose);
-  else
-    canClose = true;
-
-  if (canClose)
-    OTStudy::Remove(otStudy_);
-
-  return canClose;
+  emit otStudyCloseRequested(this);
 }
 
 
