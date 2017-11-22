@@ -135,7 +135,7 @@ String DesignOfExperimentImplementation::getPythonScript() const
     oss << "[";
     for (UnsignedInteger j = 0; j < getInputSample().getDimension(); ++j)
     {
-      oss << getInputSample()[i][j];
+      oss << getInputSample()(i, j);
       if (j < (getInputSample().getDimension() - 1))
         oss << ", ";
     }

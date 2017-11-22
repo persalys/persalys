@@ -202,8 +202,8 @@ void PlotWidget::plotCurve(const Sample & data, const QPen pen, QwtPlotCurve::Cu
 
   for (int i = 0; i < size; ++ i)
   {
-    x[i] = data[i][0];
-    y[i] = data[i][1];
+    x[i] = data(i, 0);
+    y[i] = data(i, 1);
   }
   plotCurve(x, y, size, pen, style, symbol, title);
   delete[] x;
@@ -299,7 +299,7 @@ void PlotWidget::plotHistogram(const Sample & sample, const UnsignedInteger grap
 
   for (int i = 0; i < size; ++i)
   {
-    int index = static_cast< int >((sample[i][0] - sampleMin) / width);
+    int index = static_cast< int >((sample(i, 0) - sampleMin) / width);
     // x=xmax -> index=barnumber, so bound it
     index = std::min(index, barNumber - 1);
     if (!(index > barNumber || index < 0))

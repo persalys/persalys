@@ -266,8 +266,8 @@ void FunctionalChaosAnalysis::postProcessFunctionalChaosResult(const Sample& inp
 
     for (UnsignedInteger j = 0; j < inputDimension; ++j)
     {
-      firstOrderIndices[i][j] = vector.getSobolIndex(j, i);
-      totalIndices[i][j] = vector.getSobolTotalIndex(j, i);
+      firstOrderIndices(i, j) = vector.getSobolIndex(j, i);
+      totalIndices(i, j) = vector.getSobolTotalIndex(j, i);
     }
   }
   result_.variance_ = variance;
@@ -330,7 +330,7 @@ void FunctionalChaosAnalysis::computeAnalyticalValidation(MetaModelAnalysisResul
     double quadraticResidual = 0.;
     for (UnsignedInteger j = 0; j < result.outputSample_.getSize(); ++j)
     {
-      const double diff = (result.metaModelOutputSample_[j][i] - result.outputSample_[j][i]) / (1 - Hdiag[j]);
+      const double diff = (result.metaModelOutputSample_(j, i) - result.outputSample_(j, i)) / (1 - Hdiag[j]);
       quadraticResidual += diff * diff;
     }
     // 1 - sum[ ((ŷ_j - y_j) / (1 - h_j))^2 ] / (n-1) / Var Y

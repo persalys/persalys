@@ -181,7 +181,7 @@ void FunctionalChaosResultWindow::buildInterface()
 
         UnsignedInteger notNullCoefCounter = 0;
         for (UnsignedInteger coefIndex = 0; coefIndex < result_.getFunctionalChaosResult().getCoefficients().getSize(); ++coefIndex)
-          if (result_.getFunctionalChaosResult().getCoefficients()[coefIndex][outputIndex] != 0.0)
+          if (result_.getFunctionalChaosResult().getCoefficients()(coefIndex, outputIndex) != 0.0)
             ++notNullCoefCounter;
         valuesList << QString::number(notNullCoefCounter);
       }

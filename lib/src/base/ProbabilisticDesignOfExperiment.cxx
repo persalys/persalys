@@ -159,7 +159,7 @@ Sample ProbabilisticDesignOfExperiment::generateInputSample(const UnsignedIntege
     {
       for (UnsignedInteger j = 0; j < variableInputsIndices.getSize(); ++j)
       {
-        inputSample[i][variableInputsIndices[j]] = sample[i][j];
+        inputSample(i, variableInputsIndices[j]) = sample(i, j);
       }
     }
     inputSample.setDescription(getPhysicalModel().getInputNames());

@@ -273,7 +273,7 @@ void FMIPhysicalModelWindow::evaluateOutputs()
   // set output value
   for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++ i)
   {
-    physicalModel_.setOutputValue(outputSample.getDescription()[i], outputSample[0][i]);
+    physicalModel_.setOutputValue(outputSample.getDescription()[i], outputSample(0, i));
   }
   errorMessageChanged("");
 }

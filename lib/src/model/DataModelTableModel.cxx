@@ -187,10 +187,10 @@ QVariant DataModelTableModel::data(const QModelIndex & index, int role) const
   {
     // text
     if (role == Qt::DisplayRole || role == Qt::EditRole)
-      return QString::number(data_[index.row() - 2][index.column()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+      return QString::number(data_(index.row() - 2, index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
 
     if (role == Qt::UserRole)
-      return data_[index.row() - 2][index.column()];
+      return data_(index.row() - 2, index.column());
 
     // alignment
     else if (role == Qt::TextAlignmentRole)
@@ -198,7 +198,7 @@ QVariant DataModelTableModel::data(const QModelIndex & index, int role) const
 
     // background
     else if (role == Qt::BackgroundRole)
-      if (std::isnan(data_[index.row() - 2][index.column()]))
+      if (std::isnan(data_(index.row() - 2, index.column())))
         return QColor(Qt::red);
   }
   return QVariant();

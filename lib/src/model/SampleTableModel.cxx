@@ -36,7 +36,7 @@ SampleTableModel::SampleTableModel(const Sample & data, QObject * parent)
 {
   for (UnsignedInteger j = 0; j < data_.getSize(); ++j)
     for (UnsignedInteger i = 0; i < data_.getDimension(); ++i)
-      if (std::isnan(data_[j][i]))
+      if (std::isnan(data_(j, i)))
       {
         sampleIsValid_ = false;
         break;
@@ -89,12 +89,12 @@ QVariant SampleTableModel::data(const QModelIndex & index, int role) const
   if (role == Qt::TextAlignmentRole)
     return int(Qt::AlignRight | Qt::AlignVCenter);
   else if (role == Qt::DisplayRole)
-    return QString::number(data_[index.row()][index.column()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+    return QString::number(data_(index.row(), index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
   else if (role == Qt::UserRole)
-    return data_[index.row()][index.column()];
+    return data_(index.row(), index.column());
   else if (role == Qt::BackgroundRole)
   {
-    if (std::isnan(data_[index.row()][index.column()]))
+    if (std::isnan(data_(index.row(), index.column())))
       return QColor(Qt::red);
     return QVariant();
   }

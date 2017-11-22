@@ -149,7 +149,7 @@ void DesignOfExperimentEvaluation::launch()
       {
         for (UnsignedInteger k = 0; k < getInterestVariables().getSize(); ++k)
         {
-          if (!SpecFunc::IsNormal(blockOutputSample[j][k]))
+          if (!SpecFunc::IsNormal(blockOutputSample(j, k)))
           {
             failedSample = blockInputSample;
             nanFound = true;

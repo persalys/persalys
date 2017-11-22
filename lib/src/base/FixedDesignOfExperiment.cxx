@@ -97,7 +97,7 @@ String FixedDesignOfExperiment::getPythonScript() const
     oss << "[";
     for (UnsignedInteger j = 0; j < getOriginalInputSample().getDimension(); ++j)
     {
-      oss << getOriginalInputSample()[i][j];
+      oss << getOriginalInputSample()(i, j);
       if (j < (getOriginalInputSample().getDimension() - 1))
         oss << ", ";
     }

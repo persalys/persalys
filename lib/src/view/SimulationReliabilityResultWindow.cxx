@@ -209,10 +209,10 @@ QWidget* SimulationReliabilityResultWindow::getHistogramTab()
 
   // plot threshold
   Sample threshold(2, 2);
-  threshold[0][0] = result_.getSimulationResult().getEvent().getThreshold();
-  threshold[1][0] = plot->axisInterval(QwtPlot::yLeft).minValue();
-  threshold[1][0] = result_.getSimulationResult().getEvent().getThreshold();
-  threshold[1][1] = plot->axisInterval(QwtPlot::yLeft).maxValue();
+  threshold(0, 0) = result_.getSimulationResult().getEvent().getThreshold();
+  threshold(1, 0) = plot->axisInterval(QwtPlot::yLeft).minValue();
+  threshold(1, 0) = result_.getSimulationResult().getEvent().getThreshold();
+  threshold(1, 1) = plot->axisInterval(QwtPlot::yLeft).maxValue();
   plot->plotCurve(threshold, QPen(Qt::red), QwtPlotCurve::Lines, 0, tr("Threshold"));
 
   plot->setAxisTitle(QwtPlot::xBottom, tr("Values"));

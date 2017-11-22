@@ -174,14 +174,14 @@ void MonteCarloAnalysis::launch()
       {
         for (UnsignedInteger k = 0; k < getInterestVariables().getSize(); ++k)
         {
-          if (!SpecFunc::IsNormal(blockOutputSample[j][k]))
+          if (!SpecFunc::IsNormal(blockOutputSample(j, k)))
           {
             failedInputSample_ = blockInputSample;
             warningMessage_ = "At least a point failed. "
                             + getInterestVariables()[k]
                             + Point(blockInputSample[j]).__str__()
                             + " = "
-                            + (OSS() << blockOutputSample[j][k]).str();
+                            + (OSS() << blockOutputSample(j, k)).str();
             break;
           }
         }

@@ -193,8 +193,8 @@ void DataAnalysis::launch()
     const double lowerBound(result_.firstQuartile_[i][0] - 1.5 * (result_.thirdQuartile_[i][0] - result_.firstQuartile_[i][0]));
     const double upperBound(result_.thirdQuartile_[i][0] + 1.5 * (result_.thirdQuartile_[i][0] - result_.firstQuartile_[i][0]));
     for (UnsignedInteger j = 0; j < sample.getSize(); ++j)
-      if (sample[j][i] < lowerBound || sample[j][i] > upperBound)
-        result_.outliers_[i].add(sample[j][i]);
+      if (sample(j, i) < lowerBound || sample(j, i) > upperBound)
+        result_.outliers_[i].add(sample(j, i));
 
     // pdf/cdf
     result_.pdf_.add(Sample());

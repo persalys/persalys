@@ -171,7 +171,7 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   {
     std::vector<double> tab(inS.getSize());
     for (UnsignedInteger j = 0; j < inS.getSize(); ++j)
-      tab[j] = inS[j][i];
+      tab[j] = inS(j, i);
 
     YACSEvalSeqAnyDouble ds(tab);
     inps[i]->setSequenceOfValuesToEval(&ds);
@@ -213,7 +213,7 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   {
     YACSEvalSeqAnyDouble *res_k(dynamic_cast<YACSEvalSeqAnyDouble *>(res[k]));
     for (int h = 0; h < res_k->size(); ++h)
-      result[h][k] = res_k->getInternal()->at(h);
+      result(h, k) = res_k->getInternal()->at(h);
   }
   return result;
 }

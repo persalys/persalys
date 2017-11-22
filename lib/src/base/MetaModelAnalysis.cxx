@@ -373,7 +373,7 @@ void MetaModelAnalysis::computeError(const Sample& metaOutSample, const Sample& 
     double quadraticResidual = 0.;
     for (UnsignedInteger j = 0; j < size; ++j)
     {
-      const double diff = metaOutSample[j][i] - outSample[j][i];
+      const double diff = metaOutSample(j, i) - outSample(j, i);
       quadraticResidual += diff * diff;
     }
     // sqrt ( sum[ (ŷ_j/j - y_j)^2 ] ) / n

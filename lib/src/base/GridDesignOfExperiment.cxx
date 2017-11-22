@@ -206,7 +206,7 @@ Sample GridDesignOfExperiment::generateInputSample(const UnsignedInteger /*nbSim
       {
         for (UnsignedInteger i = 0; i < variableInputsIndices.getSize(); ++i)
         {
-          inputSample[j][variableInputsIndices[i]] = sample[j][i];
+          inputSample(j, variableInputsIndices[i]) = sample(j, i);
         }
       }
     }

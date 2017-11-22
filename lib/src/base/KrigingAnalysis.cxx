@@ -366,8 +366,8 @@ void KrigingAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& resul
 
     for (UnsignedInteger j = 0; j < basisDim; ++j)
     {
-      S(size + j, i) = F[i][j];
-      S(i, size + j) = F[i][j];
+      S(size + j, i) = F(i, j);
+      S(i, size + j) = F(i, j);
     }
   }
 
@@ -379,7 +379,7 @@ void KrigingAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& resul
   for (UnsignedInteger i = 0; i < size; ++i)
     for (UnsignedInteger j = 0; j < size; ++j)
       if (i != j)
-        result.analyticalValidation_.metaModelSample_[i][0] -= S_inv(i, j) / S_inv(i, i) * result.outputSample_[j][0];
+        result.analyticalValidation_.metaModelSample_(i, 0) -= S_inv(i, j) / S_inv(i, i) * result.outputSample_(j, 0);
 
   // Compute Q2
   computeError(result.analyticalValidation_.metaModelSample_, result.outputSample_, result.analyticalValidation_.residuals_, result.analyticalValidation_.q2_);
