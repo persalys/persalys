@@ -146,27 +146,23 @@ double PVXYChartViewWidget::getYAxisRangeMaximum()
 
 void PVXYChartViewWidget::setXAxisRange(const double minValue, const double maxValue)
 {
-  // set internal parameter to be able to update automatically the plot
-  chartXY_->GetScene()->SetDirty(true);
-
   // set range
   chartXY_->GetAxis(vtkAxis::BOTTOM)->SetBehavior(1);
   chartXY_->GetAxis(vtkAxis::BOTTOM)->SetMinimum(minValue);
   chartXY_->GetAxis(vtkAxis::BOTTOM)->SetMaximum(maxValue);
-  getView()->widget()->repaint();
+
+  getView()->resetDisplay();
 }
 
 
 void PVXYChartViewWidget::setYAxisRange(const double minValue, const double maxValue)
 {
-  // set internal parameter to be able to update automatically the plot
-  chartXY_->GetScene()->SetDirty(true);
-
   // set range
   chartXY_->GetAxis(vtkAxis::LEFT)->SetBehavior(1);
   chartXY_->GetAxis(vtkAxis::LEFT)->SetMinimum(minValue);
   chartXY_->GetAxis(vtkAxis::LEFT)->SetMaximum(maxValue);
-  getView()->widget()->repaint();
+
+  getView()->resetDisplay();
 }
 
 

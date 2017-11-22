@@ -48,18 +48,14 @@ signals:
 protected:
   QMainWindow *findMWInHierachy();
   bool eventFilter(QObject *obj, QEvent *event);
-  pqView *getView() const
-  {
-    return view_;
-  }
+  pqView *getView() const;
 
 private:
   void buildTableFrom(const std::vector< std::vector<double> >& valuesByColumn, const std::vector<std::string>& columnNames);
 
 private:
   PVServerManagerInterface * smb_;
-  pqView * view_;
-  vtkAbstractContextItem * contextItem_;
+  OT::Pointer<pqView> view_;
   QList< vtkSmartPointer<vtkTable> > tables_;
   QList< vtkSmartPointer<vtkSMProxy> > producerBases_;
 public:
