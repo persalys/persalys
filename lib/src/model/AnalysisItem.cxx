@@ -157,7 +157,7 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
   getParentOTStudyItem()->getOTStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
 
   // the analysis has not result: disable addMetaModel_ action
-  if (!analysis_.hasValidResult())
+  if (addMetaModel_ && !analysis_.hasValidResult())
     addMetaModel_->setEnabled(false);
 }
 
