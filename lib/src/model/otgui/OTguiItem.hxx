@@ -38,6 +38,9 @@ public:
 
   virtual ~OTguiItem();
 
+  void emitShowWindowRequested();
+  void emitRemoveWindowRequested();
+
   QList< QAction* > getActions();
   void appendAction(QAction* action);
   void appendSeparator(const QString& text = "");
@@ -49,11 +52,13 @@ public:
   virtual void removeRow(int row);
 
   OTStudyItem * getParentOTStudyItem();
+  bool analysisInProgress() const;
 
 protected slots:
   void requestRemoveChild(int);
   void setAnalysisInProgress(bool);
 signals:
+  void showWindowRequested();
   void dataExportRequested();
   void emitErrorMessageRequested(QString);
   void analysisRequested(OTguiItem*, const Analysis&, const bool isGeneralWizard = false);

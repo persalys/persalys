@@ -46,6 +46,18 @@ OTguiItem::~OTguiItem()
 }
 
 
+void OTguiItem::emitShowWindowRequested()
+{
+  emit showWindowRequested();
+}
+
+
+void OTguiItem::emitRemoveWindowRequested()
+{
+  emit removeWindowRequested();
+}
+
+
 OTStudyItem* OTguiItem::getParentOTStudyItem()
 {
   return parentOTStudyItem_;
@@ -153,6 +165,12 @@ void OTguiItem::requestRemoveChild(int row)
 void OTguiItem::setAnalysisInProgress(bool inProgress)
 {
   analysisInProgress_ = inProgress;
+}
+
+
+bool OTguiItem::analysisInProgress() const
+{
+  return analysisInProgress_;
 }
 
 
