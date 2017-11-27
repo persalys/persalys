@@ -70,25 +70,25 @@ Sample MetaModelAnalysisResult::getMetaModelOutputSample() const
 MetaModelValidationResult MetaModelAnalysisResult::getAnalyticalValidation() const
 {
   return analyticalValidation_;
-};
+}
 
 
 MetaModelValidationResult MetaModelAnalysisResult::getTestSampleValidation() const
 {
   return testSampleValidation_;
-};
+}
 
 
 MetaModelValidationResult MetaModelAnalysisResult::getKFoldValidation() const
 {
   return kFoldValidation_;
-};
+}
 
 
 MetaModelValidationResult MetaModelAnalysisResult::getLeaveOneOutValidation() const
 {
   return looValidation_;
-};
+}
 
 
 std::vector<MetaModelValidationResult> MetaModelAnalysisResult::getValidations() const

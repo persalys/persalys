@@ -136,14 +136,14 @@ void OTStudy::SetInstanceObserver(Observer * observer)
 OTStudy::OTStudy(const String& name)
   : TypedInterfaceObject<OTStudyImplementation>(new OTStudyImplementation(name))
 {
-};
+}
 
 
 /** Default constructor */
 OTStudy::OTStudy(const OTStudyImplementation& implementation)
   : TypedInterfaceObject<OTStudyImplementation>(implementation.clone())
 {
-};
+}
 
 
 /** Constructor from implementation */
