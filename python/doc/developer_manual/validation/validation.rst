@@ -259,7 +259,7 @@ An average temperature on the superior surface 'temptop'.
 2- XML file loading
 ````````````````````
 
-When loading the XML file the window illustrated bellow is completed. When clicking
+When loading the XML file the window illustrated below is completed. When clicking
 on the **Evaluate** button, the computed output value must be :math:`1906.79`.
 
 2-1 Figure
@@ -374,7 +374,7 @@ Save/open OTStudy
 
 - save myOTStudy with Menu->File->save, close with Menu->File->close, reopen with Menu->File->open
 
-- rename myOTStudy by myOTStudy1, save myOTStudy1 with the icon of the tool bar, close with right click + close, reopen with the icon of the tool bar
+- right click on myOTStudy, choose rename, rename myOTStudy by myOTStudy1, save myOTStudy1 with the icon of the tool bar, close with right click + close, reopen with the icon of the tool bar
 
 - rename myOTStudy1 by myOTStudy2, save myOTStudy2 in pressing CTRL + S, close with right click + close, reopen with press keys CTRL + O
 
@@ -425,7 +425,7 @@ Models
   .. image:: /developer_manual/validation/model1.png
       :align: center
 
-- click on 'Evaluate' button bellow the outputs table
+- click on 'Evaluate' button below the outputs table
     - only y0 and y1 are evaluated
 
 - select lines 1 and 3 of the outputs table
@@ -445,7 +445,7 @@ Models
 - check fake_var + change its formula to 'x1 +'
 
 - click on 'Evaluate' button
-    - error message 'Impossible to evaluate etc.'
+    - error message 'Unexpected etc.'
 
 - unselect fake_var + select y0, fake_y0 and y1
 
@@ -519,12 +519,12 @@ Designs of experiments
 
         - line 2 : change delta to 0.5, press enter
 
-          - size of the design of experiments : 19
+          - size of the design of experiments : 21
 
         - check all lines one by one :
 
           - fifth header item is checked
-          - size of the design of experiments : 76
+          - size of the design of experiments : 84
 
       - cancel
 
@@ -893,7 +893,7 @@ Analyses
 
   - Sobol : Sobol item
 
-    - Pop-up with an error message appears : 'The model must have an independant copula etc'
+    - Pop-up with an error message appears : 'The model must have an independent copula etc'
 
     - click on the 'Probabilistic model' item
 
@@ -1011,7 +1011,6 @@ Analyses
       - covariance model : Matérn
       - nu : 1.5
       - trend : Linear
-      - compute Q2 : checked
       - optimize covariance model parameters : checked
       - scale : 1; 1
       - amplitude : 1
@@ -1029,6 +1028,12 @@ Analyses
 
       .. image:: /developer_manual/validation/kriging_wizard_scale_amplitude_updated.png
           :align: center
+
+    - continue
+
+    - Third page check the values :
+
+      - only Analytically/By Leave-one-out method are checked
 
     - click on the Finish button
 
@@ -1089,8 +1094,12 @@ Analyses
           :align: center
 
       - degree : 2
-      - compute Q2 : unchecked
       - sparse : checked
+      - continue
+
+    - Third page check the values :
+
+      - only Analytically is checked
 
     - click on the Finish button
 
@@ -1131,8 +1140,12 @@ Analyses
     - Second page check the values :
 
       - degree : 2
-      - compute Q2 : unchecked
       - sparse : checked
+      - continue
+
+    - Third page check the values :
+
+      - only Analytically is checked
 
     - click on the Finish button
 
