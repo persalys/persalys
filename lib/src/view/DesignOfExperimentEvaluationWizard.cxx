@@ -65,7 +65,7 @@ DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Ana
       {
         DesignOfExperimentDefinitionItem * doeDefItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeItem);
         Q_ASSERT(doeDefItem);
-        if (!doeDefItem->getAnalysis().analysisLaunched())
+        if (!doeDefItem->getAnalysis().hasValidResult())
           doeList.append(doeDefItem);
       }
     }

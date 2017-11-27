@@ -21,6 +21,7 @@
 #include "otgui/DataModel.hxx"
 
 #include "otgui/ImportedDesignOfExperiment.hxx"
+#include "otgui/OTTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
@@ -284,23 +285,8 @@ String DataModel::getPythonScript() const
   }
   oss << "]\n";
 
-  oss << "inputNames = [";
-  for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++ i)
-  {
-    oss << "'" << inputNames_[i] << "'";
-    if (i < inputNames_.getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
-
-  oss << "outputNames = [";
-  for (UnsignedInteger i = 0; i < outputNames_.getSize(); ++ i)
-  {
-    oss << "'" << outputNames_[i] << "'";
-    if (i < outputNames_.getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
+  oss << "inputNames = " << Parameters::GetOTDescriptionStr(inputNames_) << "\n";
+  oss << "outputNames = " << Parameters::GetOTDescriptionStr(outputNames_) << "\n";
 
   oss << getName() + " = otguibase.DataModel('" + getName() + "', ";
   oss << "'" << getFileName() << "', inputColumns, outputColumns, inputNames, outputNames)\n";

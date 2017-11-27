@@ -34,6 +34,6 @@ UIntSpinBox::UIntSpinBox(QWidget* parent)
   setMaximum(std::numeric_limits<int>::max());
   setSingleStep(1);
   // can not write a "-" or a "." : allow numbers in [1, max]
-  lineEdit()->setValidator(new QRegExpValidator(QRegExp("[0-9]+[eE][+]?[0-9]+")));
+  lineEdit()->setValidator(new QRegExpValidator(QRegExp("[0-9]+[eE][+]?[0-9]+"), this));
 }
 }

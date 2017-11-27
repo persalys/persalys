@@ -56,42 +56,34 @@ FORMAnalysis* FORMAnalysis::clone() const
 }
 
 
-void FORMAnalysis::run()
+void FORMAnalysis::initialize()
 {
-  isRunning_ = true;
-  try
-  {
-    // clear result
-    initialize();
-    result_ = FORMResult();
+  // clear result
+  AnalysisImplementation::initialize();
+  result_ = FORMResult();
+}
 
-    Description outputName(1);
-    outputName[0] = getLimitState().getOutputName();
 
-    // get function
-    Function function(getPhysicalModel().getRestrictedFunction(outputName));
+void FORMAnalysis::launch()
+{
+  Description outputName(1);
+  outputName[0] = getLimitState().getOutputName();
 
-    // create OT::Event
-    Event event(RandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
-    event.setDescription(outputName);
+  // get function
+  Function function(getPhysicalModel().getRestrictedFunction(outputName));
 
-    // create OT::FORM
-    FORM algo(getOptimizationAlgorithm(), event, getPhysicalStartingPoint());
+  // create OT::Event
+  Event event(RandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
+  event.setDescription(outputName);
 
-    // run algo
-    algo.run();
+  // create OT::FORM
+  FORM algo(getOptimizationAlgorithm(), event, getPhysicalStartingPoint());
 
-    // set result
-    result_ = algo.getResult();
+  // run algo
+  algo.run();
 
-    notify("analysisFinished");
-  }
-  catch (std::exception & ex)
-  {
-    errorMessage_ = ex.what();
-    notify("analysisBadlyFinished");
-  }
-  isRunning_ = false;
+  // set result
+  result_ = algo.getResult();
 }
 
 
@@ -138,7 +130,7 @@ String FORMAnalysis::getPythonScript() const
 }
 
 
-bool FORMAnalysis::analysisLaunched() const
+bool FORMAnalysis::hasValidResult() const
 {
   return result_.getStandardSpaceDesignPoint().getDimension() != 0;
 }

@@ -60,7 +60,7 @@ KrigingAnalysis::KrigingAnalysis(const String& name, const DesignOfExperiment& d
     if (designOfExperiment.getPhysicalModel().hasStochasticInputs())
       inputDimension = designOfExperiment.getPhysicalModel().getStochasticInputNames().getSize();
     else
-      inputDimension = designOfExperiment.getPhysicalModel().getInputNames().getSize();
+      inputDimension = designOfExperiment.getPhysicalModel().getInputDimension();
   }
 
   // basis
@@ -86,7 +86,7 @@ KrigingAnalysis::KrigingAnalysis(const String& name, const Analysis& analysis)
     if (analysis_ptr->getDesignOfExperiment().getPhysicalModel().hasStochasticInputs())
       inputDimension = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getStochasticInputNames().getSize();
     else
-      inputDimension = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getInputNames().getSize();
+      inputDimension = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getInputDimension();
   }
 
   // basis
@@ -142,103 +142,94 @@ void KrigingAnalysis::setOptimizeParameters(const bool optimize)
 }
 
 
-void KrigingAnalysis::run()
+void KrigingAnalysis::initialize()
 {
-  isRunning_ = true;
-  try
+  AnalysisImplementation::initialize();
+  result_ = KrigingAnalysisResult();
+  optimalCovarianceModel_ = CovarianceModel();
+}
+
+
+void KrigingAnalysis::launch()
+{
+  // get effective samples
+  const Sample effectiveInputSample(getEffectiveInputSample());
+  const Sample effectiveOutputSample(getEffectiveOutputSample());
+  const UnsignedInteger inputSize = effectiveInputSample.getSize();
+  const UnsignedInteger inputDimension = effectiveInputSample.getDimension();
+  const UnsignedInteger outputDimension = effectiveOutputSample.getDimension();
+
+  // check
+  if (inputSize * designOfExperiment_.getOutputSample().getSize() == 0)
+    throw InvalidArgumentException(HERE) << "The design of experiments must contains not empty input AND output samples";
+  if (inputSize != designOfExperiment_.getOutputSample().getSize())
+    throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
+  if (getCovarianceModel().getSpatialDimension() != inputDimension)
+    throw InvalidArgumentException(HERE) << "The covariance model spatial dimension (" << getCovarianceModel().getSpatialDimension()
+                                          << ") must be equal to the number of effective inputs (" << inputDimension << ")";
+  if (getBasis().getDimension() != inputDimension)
+    throw InvalidArgumentException(HERE) << "The basis dimension (" << getBasis().getDimension()
+                                          << ") must be equal to the number of effective inputs (" << inputDimension << ")";
+  if (testSampleValidation() && inputSize * getTestSampleValidationPercentageOfPoints() / 100 < 3)
+    throw InvalidArgumentException(HERE) << "Test sample validation: The test sample must contain at least three points. Here size * k / 100 = " << (inputSize * getTestSampleValidationPercentageOfPoints() / 100);
+  if (kFoldValidation() && inputSize / getKFoldValidationNumberOfFolds() < 3)
+    throw InvalidArgumentException(HERE) << "K-Fold validation: each fold must contain at least three points. Here size / k = " << (inputSize / getKFoldValidationNumberOfFolds());
+
+  // Kriging
+
+  // temp
+  Collection<KrigingAnalysisResult> allResults;
+
+  // for each output:
+  // because with all outputs KrigingAlgorithm is not reliable
+  for (UnsignedInteger i = 0; i < outputDimension; ++i)
   {
-    // clear result
-    initialize();
-    result_ = KrigingAnalysisResult();
-    optimalCovarianceModel_ = CovarianceModel();
+    if (stopRequested_)
+      break;
 
-    // get effective samples
-    const Sample effectiveInputSample(getEffectiveInputSample());
-    const Sample effectiveOutputSample(getEffectiveOutputSample());
-    const UnsignedInteger inputSize = effectiveInputSample.getSize();
-    const UnsignedInteger inputDimension = effectiveInputSample.getDimension();
-    const UnsignedInteger outputDimension = effectiveOutputSample.getDimension();
+    informationMessage_ = "Creation of a meta model for the variable " + effectiveOutputSample.getDescription()[i] + " in progress.\n";
+    notify("informationMessageUpdated");
 
-    // check
-    if (inputSize * designOfExperiment_.getOutputSample().getSize() == 0)
-      throw InvalidArgumentException(HERE) << "The design of experiments must contains not empty input AND output samples";
-    if (inputSize != designOfExperiment_.getOutputSample().getSize())
-      throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
-    if (getCovarianceModel().getSpatialDimension() != inputDimension)
-      throw InvalidArgumentException(HERE) << "The covariance model spatial dimension (" << getCovarianceModel().getSpatialDimension()
-                                           << ") must be equal to the number of effective inputs (" << inputDimension << ")";
-    if (getBasis().getDimension() != inputDimension)
-      throw InvalidArgumentException(HERE) << "The basis dimension (" << getBasis().getDimension()
-                                           << ") must be equal to the number of effective inputs (" << inputDimension << ")";
-    if (testSampleValidation() && inputSize * getTestSampleValidationPercentageOfPoints() / 100 < 3)
-      throw InvalidArgumentException(HERE) << "Test sample validation: The test sample must contain at least three points. Here size * k / 100 = " << (inputSize * getTestSampleValidationPercentageOfPoints() / 100);
-    if (kFoldValidation() && inputSize / getKFoldValidationNumberOfFolds() < 3)
-      throw InvalidArgumentException(HERE) << "K-Fold validation: each fold must contain at least three points. Here size / k = " << (inputSize / getKFoldValidationNumberOfFolds());
+    // build algo
+    KrigingAlgorithm kriging(buildKrigingAlgorithm(effectiveInputSample, effectiveOutputSample.getMarginal(i)));
 
-    // Kriging
+    // run algo
+    kriging.run();
 
-    // temp
-    Collection<KrigingAnalysisResult> allResults;
+    // get results
+    KrigingAnalysisResult result_i;
+    result_i.outputSample_ = effectiveOutputSample.getMarginal(i);
+    result_i.krigingResultCollection_.add(kriging.getResult());
 
-    // for each output:
-    // because with all outputs KrigingAlgorithm is not reliable
-    for (UnsignedInteger i = 0; i < outputDimension; ++i)
-    {
-      if (stopRequested_)
-        break;
+    optimalCovarianceModel_ = kriging.getResult().getCovarianceModel();
 
-      informationMessage_ = "Creation of a meta model for the variable " + effectiveOutputSample.getDescription()[i] + " in progress.\n";
-      notify("informationMessageUpdated");
-
-      // build algo
-      KrigingAlgorithm kriging(buildKrigingAlgorithm(effectiveInputSample, effectiveOutputSample.getMarginal(i)));
-
-      // run algo
-      kriging.run();
-
-      // get results
-      KrigingAnalysisResult result_i;
-      result_i.outputSample_ = effectiveOutputSample.getMarginal(i);
-      result_i.krigingResultCollection_.add(kriging.getResult());
-
-      optimalCovarianceModel_ = kriging.getResult().getCovarianceModel();
-
-      allResults.add(result_i);
-    }
-
-    const UnsignedInteger effectiveDim = allResults.getSize();
-
-    // set result_
-    Function::FunctionCollection metaModelCollection;
-    Indices computedOutputIndices(effectiveDim);
-    computedOutputIndices.fill();
-    result_.outputSample_ = effectiveOutputSample.getMarginal(computedOutputIndices);
-    for (UnsignedInteger i = 0; i < effectiveDim; ++i)
-    {
-      result_.krigingResultCollection_.add(allResults[i].krigingResultCollection_[0]);
-      metaModelCollection.add(allResults[i].krigingResultCollection_[0].getMetaModel());
-    }
-
-    // build metamodel
-    AggregatedFunction metamodelFunction(metaModelCollection);
-    Description variablesNames(effectiveInputSample.getDescription());
-    variablesNames.add(result_.outputSample_.getDescription());
-    metamodelFunction.setDescription(variablesNames);
-
-    buildMetaModel(result_, metamodelFunction);
-    result_.metaModelOutputSample_ = metamodelFunction(effectiveInputSample);
-
-    // validations
-    validateMetaModelResult(allResults, effectiveInputSample);
-
-    notify("analysisFinished");
+    allResults.add(result_i);
   }
-  catch (std::exception & ex)
+
+  const UnsignedInteger effectiveDim = allResults.getSize();
+
+  // set result_
+  Function::FunctionCollection metaModelCollection;
+  Indices computedOutputIndices(effectiveDim);
+  computedOutputIndices.fill();
+  result_.outputSample_ = effectiveOutputSample.getMarginal(computedOutputIndices);
+  for (UnsignedInteger i = 0; i < effectiveDim; ++i)
   {
-    errorMessage_ = ex.what();
-    notify("analysisBadlyFinished");
+    result_.krigingResultCollection_.add(allResults[i].krigingResultCollection_[0]);
+    metaModelCollection.add(allResults[i].krigingResultCollection_[0].getMetaModel());
   }
-  isRunning_ = false;
+
+  // build metamodel
+  AggregatedFunction metamodelFunction(metaModelCollection);
+  Description variablesNames(effectiveInputSample.getDescription());
+  variablesNames.add(result_.outputSample_.getDescription());
+  metamodelFunction.setDescription(variablesNames);
+
+  buildMetaModel(result_, metamodelFunction);
+  result_.metaModelOutputSample_ = metamodelFunction(effectiveInputSample);
+
+  // validations
+  validateMetaModelResult(allResults, effectiveInputSample);
 }
 
 
@@ -375,8 +366,8 @@ void KrigingAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& resul
 
     for (UnsignedInteger j = 0; j < basisDim; ++j)
     {
-      S(size + j, i) = F[i][j];
-      S(i, size + j) = F[i][j];
+      S(size + j, i) = F(i, j);
+      S(i, size + j) = F(i, j);
     }
   }
 
@@ -388,7 +379,7 @@ void KrigingAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& resul
   for (UnsignedInteger i = 0; i < size; ++i)
     for (UnsignedInteger j = 0; j < size; ++j)
       if (i != j)
-        result.analyticalValidation_.metaModelSample_[i][0] -= S_inv(i, j) / S_inv(i, i) * result.outputSample_[j][0];
+        result.analyticalValidation_.metaModelSample_(i, 0) -= S_inv(i, j) / S_inv(i, i) * result.outputSample_(j, 0);
 
   // Compute Q2
   computeError(result.analyticalValidation_.metaModelSample_, result.outputSample_, result.analyticalValidation_.residuals_, result.analyticalValidation_.q2_);
@@ -507,7 +498,7 @@ String KrigingAnalysis::getPythonScript() const
 }
 
 
-bool KrigingAnalysis::analysisLaunched() const
+bool KrigingAnalysis::hasValidResult() const
 {
   return result_.outputSample_.getSize();
 }

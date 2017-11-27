@@ -52,6 +52,7 @@ void DataModelDiagramItem::buildActions()
 
   // add actions
   appendAction(defineDataModel_);
+  appendSeparator();
   appendAction(removeDataModel_);
 }
 

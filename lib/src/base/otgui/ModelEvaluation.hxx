@@ -50,9 +50,8 @@ public:
   OT::Point getOutputValues() const;
 
   virtual Parameters getParameters() const;
-  virtual void run();
   virtual OT::String getPythonScript() const;
-  virtual bool analysisLaunched() const;
+  virtual bool hasValidResult() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -64,6 +63,8 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
+  virtual void initialize();
+  virtual void launch();
   void initializeParameters(const InputCollection & inputs);
 
 private:

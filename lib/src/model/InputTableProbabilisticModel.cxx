@@ -46,7 +46,7 @@ int InputTableProbabilisticModel::columnCount(const QModelIndex & parent) const
 
 int InputTableProbabilisticModel::rowCount(const QModelIndex & parent) const
 {
-  return getPhysicalModel().getInputNames().getSize();
+  return getPhysicalModel().getInputDimension();
 }
 
 
@@ -73,6 +73,7 @@ Qt::ItemFlags InputTableProbabilisticModel::flags(const QModelIndex & index) con
 QVariant InputTableProbabilisticModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
+  {
     switch (section)
     {
       case 0:
@@ -82,6 +83,12 @@ QVariant InputTableProbabilisticModel::headerData(int section, Qt::Orientation o
       default:
         return QVariant();
     }
+  }
+  else if (role == Qt::ToolTipRole && section == 0 && rowCount())
+  {
+    const bool allChecked = physicalModel_.getStochasticInputNames().getSize() == physicalModel_.getInputDimension();
+    return allChecked ? tr("Unselect all") : tr("Select all");
+  }
   return QAbstractTableModel::headerData(section, orientation, role);
 }
 
@@ -164,7 +171,7 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
     physicalModel_.blockNotification();
     emit dataChanged(index, this->index(index.row(), 1));
     emit correlationToChange();
-    emit checked(physicalModel_.hasStochasticInputs() && (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize()));
+    emit checked(rowCount() && physicalModel_.getStochasticInputNames() == physicalModel_.getInputNames());
 
     return true;
   }
@@ -222,7 +229,7 @@ void InputTableProbabilisticModel::updateData()
 {
   beginResetModel();
   endResetModel();
-  emit checked(physicalModel_.hasStochasticInputs() && (physicalModel_.getComposedDistribution().getDimension() == physicalModel_.getInputs().getSize()));
+  emit checked(rowCount() && physicalModel_.getStochasticInputNames() == physicalModel_.getInputNames());
 }
 
 

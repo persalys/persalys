@@ -97,7 +97,7 @@ void ProbabilisticModelWindow::buildInterface()
   QStringList items = TranslationManager::GetAvailableDistributions();
   items << tr("Inference result");
 
-  ComboBoxDelegate * delegate = new ComboBoxDelegate(items);
+  ComboBoxDelegate * delegate = new ComboBoxDelegate(items, QPair<int, int>(), inputTableView_);
   inputTableView_->setItemDelegateForColumn(1, delegate);
 
   // - connections
@@ -219,7 +219,7 @@ void ProbabilisticModelWindow::buildInterface()
   QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
 
   CopyableTableView * correlationTableView = new CopyableTableView;
-  SpinBoxDelegate * correlationDelegate = new SpinBoxDelegate;
+  SpinBoxDelegate * correlationDelegate = new SpinBoxDelegate(correlationTableView);
   correlationDelegate->setSpinBoxType(SpinBoxDelegate::correlation);
   correlationTableView->setItemDelegate(correlationDelegate);
   correlationTableView->setEditTriggers(QAbstractItemView::AllEditTriggers);
@@ -250,7 +250,7 @@ void ProbabilisticModelWindow::openUrl()
   if (!inputTableView_->currentIndex().isValid())
     return;
   const int currentRow = inputTableView_->currentIndex().row();
-  if (currentRow > (int)physicalModel_.getInputs().getSize() || currentRow < 0)
+  if (currentRow > (int)physicalModel_.getInputDimension() || currentRow < 0)
     return;
 
   // get current distribution
@@ -770,7 +770,7 @@ void ProbabilisticModelWindow::openWizardToChooseInferenceResult(const QModelInd
   {
     if (otStudy_.getAnalyses()[i].getImplementation()->getClassName() == "InferenceAnalysis")
     {
-      if (dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[i].getImplementation().get())->analysisLaunched())
+      if (dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[i].getImplementation().get())->hasValidResult())
       {
         otStudyHasInferenceResults = true;
         break;

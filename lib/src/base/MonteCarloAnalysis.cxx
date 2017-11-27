@@ -23,9 +23,9 @@
 #include "otgui/DataAnalysis.hxx"
 #include "otgui/DataModel.hxx"
 
-#include "openturns/RandomGenerator.hxx"
-#include "openturns/PersistentObjectFactory.hxx"
-#include "openturns/SpecFunc.hxx"
+#include <openturns/RandomGenerator.hxx>
+#include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/SpecFunc.hxx>
 
 using namespace OT;
 
@@ -91,168 +91,159 @@ void MonteCarloAnalysis::setLevelConfidenceInterval(const double levelConfidence
 }
 
 
-void MonteCarloAnalysis::run()
+void MonteCarloAnalysis::initialize()
 {
-  isRunning_ = true;
-  try
+  SimulationAnalysis::initialize();
+  result_ = DataAnalysisResult();
+}
+
+
+void MonteCarloAnalysis::launch()
+{
+  // check
+  if (getMaximumCalls() < getBlockSize())
+    throw InvalidValueException(HERE) << "The maximum calls number (" << getMaximumCalls()
+                                      << ") can not be inferior to the block size (" << getBlockSize() << ")";
+  if (!getPhysicalModel().getRestrictedFunction(getInterestVariables()).getOutputDescription().getSize())
+    throw InvalidDimensionException(HERE) << "The outputs to be analysed "
+                                          << getInterestVariables() << " are not outputs of the model "
+                                          << getPhysicalModel().getOutputNames();
+
+  // initialization
+  RandomGenerator::SetSeed(getSeed());
+
+  Sample effectiveInputSample(0, getPhysicalModel().getStochasticInputNames().getSize());
+  effectiveInputSample.setDescription(getPhysicalModel().getStochasticInputNames());
+  Sample outputSample(0, getInterestVariables().getSize());
+  outputSample.setDescription(getInterestVariables());
+
+  const bool maximumOuterSamplingSpecified = getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max();
+  const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize())) : (UnsignedInteger)std::numeric_limits<int>::max();
+  const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getMaximumCalls() % getBlockSize() : 0;
+  const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
+
+  Scalar coefficientOfVariation = -1.0;
+  clock_t elapsedTime = 0;
+  const clock_t startTime = clock();
+  UnsignedInteger outerSampling = 0;
+
+  // We loop if there remains some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
+  while (!stopRequested_
+          && (outerSampling < maximumOuterSampling)
+          && (coefficientOfVariation == -1.0 || coefficientOfVariation > getMaximumCoefficientOfVariation())
+          && (static_cast<UnsignedInteger>(elapsedTime) < getMaximumElapsedTime() * CLOCKS_PER_SEC))
   {
-    // clear result
-    initialize();
-    result_ = DataAnalysisResult();
-
-    // check
-    if (getMaximumCalls() < getBlockSize())
-      throw InvalidValueException(HERE) << "The maximum calls number (" << getMaximumCalls()
-                                        << ") can not be inferior to the block size (" << getBlockSize() << ")";
-    if (!getPhysicalModel().getRestrictedFunction(getInterestVariables()).getOutputDescription().getSize())
-      throw InvalidDimensionException(HERE) << "The outputs to be analysed "
-                                            << getInterestVariables() << " are not outputs of the model "
-                                            << getPhysicalModel().getOutputNames();
-
-    // initialization
-    RandomGenerator::SetSeed(getSeed());
-
-    Sample effectiveInputSample(0, getPhysicalModel().getStochasticInputNames().getSize());
-    effectiveInputSample.setDescription(getPhysicalModel().getStochasticInputNames());
-    Sample outputSample(0, getInterestVariables().getSize());
-    outputSample.setDescription(getInterestVariables());
-
-    const bool maximumOuterSamplingSpecified = getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max();
-    const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize())) : (UnsignedInteger)std::numeric_limits<int>::max();
-    const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getMaximumCalls() % getBlockSize() : 0;
-    const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
-
-    Scalar coefficientOfVariation = -1.0;
-    clock_t elapsedTime = 0;
-    const clock_t startTime = clock();
-    UnsignedInteger outerSampling = 0;
-
-    // We loop if there remains some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
-    while (!stopRequested_
-           && (outerSampling < maximumOuterSampling)
-           && (coefficientOfVariation == -1.0 || coefficientOfVariation > getMaximumCoefficientOfVariation())
-           && (static_cast<UnsignedInteger>(elapsedTime) < getMaximumElapsedTime() * CLOCKS_PER_SEC))
+    // progress
+    if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
     {
-      // progress
-      if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
-      {
-        progressValue_ = (int) (outerSampling * 100 / maximumOuterSampling);
-        notify("progressValueChanged");
-      }
-      // information message
-      OSS oss;
-      oss << "Number of iterations = " << outputSample.getSize() << "\n";
-      oss << "Coefficient of variation = " << coefficientOfVariation << "\n";
-      oss << "Elapsed time = " << (float) elapsedTime / CLOCKS_PER_SEC << " s\n";
-      informationMessage_ = oss;
-      notify("informationMessageUpdated");
+      progressValue_ = (int) (outerSampling * 100 / maximumOuterSampling);
+      notify("progressValueChanged");
+    }
+    // information message
+    OSS oss;
+    oss << "Number of iterations = " << outputSample.getSize() << "\n";
+    oss << "Coefficient of variation = " << coefficientOfVariation << "\n";
+    oss << "Elapsed time = " << (float) elapsedTime / CLOCKS_PER_SEC << " s\n";
+    informationMessage_ = oss;
+    notify("informationMessageUpdated");
 
-      // the last block can be smaller
-      const UnsignedInteger effectiveBlockSize = outerSampling < (maximumOuterSampling - 1) ? getBlockSize() : lastBlockSize;
+    // the last block can be smaller
+    const UnsignedInteger effectiveBlockSize = outerSampling < (maximumOuterSampling - 1) ? getBlockSize() : lastBlockSize;
 
-      // get block input sample
-      const Sample blockInputSample(generateInputSample(effectiveBlockSize));
+    // get block input sample
+    const Sample blockInputSample(generateInputSample(effectiveBlockSize));
 
-      // Perform a block of simulations
-      Sample blockOutputSample;
-      try
-      {
-        blockOutputSample = computeOutputSample(blockInputSample);
-      }
-      catch (std::exception & ex)
-      {
-        failedInputSample_ = blockInputSample;
-        errorMessage_ = ex.what();
-      }
-
-      // if SymbolicPhysicalModel find NaN and inf
-      // for ex: in case of zero division the Symbolic models do not raise error
-      // TODO rm this section with the next OT version (cf: https://github.com/openturns/openturns/pull/600)
-      if (!failedInputSample_.getSize() && getPhysicalModel().getImplementation()->getClassName() == "SymbolicPhysicalModel")
-      {
-        for (UnsignedInteger j = 0; j < blockInputSample.getSize(); ++j)
-        {
-          for (UnsignedInteger k = 0; k < getInterestVariables().getSize(); ++k)
-          {
-            if (!SpecFunc::IsNormal(blockOutputSample[j][k]))
-            {
-              failedInputSample_ = blockInputSample;
-              errorMessage_ = "At least a point failed. "
-                              + getInterestVariables()[k]
-                              + Point(blockInputSample[j]).__str__()
-                              + " = "
-                              + (OSS() << blockOutputSample[j][k]).str();
-              break;
-            }
-          }
-          if (failedInputSample_.getSize())
-            break;
-        }
-      }
-
-      if (!failedInputSample_.getSize())
-      {
-        // if succeed fill samples
-        outputSample.add(blockOutputSample);
-        effectiveInputSample.add(blockInputSample);
-      }
-      else
-      {
-        // exit the while section. Stop the analysis
-        break;
-      }
-
-      // stop criteria
-      if (getBlockSize() != 1 || (getBlockSize() == 1 && outerSampling))
-      {
-        const Point empiricalMean(outputSample.computeMean());
-        const Point empiricalStd(outputSample.computeStandardDeviationPerComponent());
-
-        Scalar coefOfVar(0.);
-        for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++i)
-        {
-          if (std::abs(empiricalMean[i]) > SpecFunc::Precision)
-          {
-            const Scalar sigma_i = empiricalStd[i] / sqrt(outputSample.getSize());
-            coefOfVar = std::max(sigma_i / std::abs(empiricalMean[i]), coefOfVar);
-          }
-          else
-          {
-            coefOfVar = -1;
-          }
-        }
-        coefficientOfVariation = coefOfVar;
-      }
-      elapsedTime = clock() - startTime;
-      ++outerSampling;
+    // Perform a block of simulations
+    Sample blockOutputSample;
+    try
+    {
+      blockOutputSample = computeOutputSample(blockInputSample);
+    }
+    catch (std::exception & ex)
+    {
+      failedInputSample_ = blockInputSample;
+      warningMessage_ = ex.what();
     }
 
-    // set results
-    if (outputSample.getSize())
+    // if SymbolicPhysicalModel find NaN and inf
+    // for ex: in case of zero division the Symbolic models do not raise error
+    // TODO rm this section with the next OT version (cf: https://github.com/openturns/openturns/pull/600)
+    if (!failedInputSample_.getSize() && getPhysicalModel().getImplementation()->getClassName() == "SymbolicPhysicalModel")
     {
-      // set design of experiments
-      designOfExperiment_.setInputSample(effectiveInputSample);
-      designOfExperiment_.setOutputSample(outputSample);
-      // compute data analysis
-      DataAnalysis dataAnalysis("", designOfExperiment_);
-      dataAnalysis.setIsConfidenceIntervalRequired(isConfidenceIntervalRequired());
-      dataAnalysis.setLevelConfidenceInterval(levelConfidenceInterval_);
-      dataAnalysis.run();
-      // set result
-      result_ = dataAnalysis.getResult();
-      result_.elapsedTime_ = (float) elapsedTime / CLOCKS_PER_SEC;
+      for (UnsignedInteger j = 0; j < blockInputSample.getSize(); ++j)
+      {
+        for (UnsignedInteger k = 0; k < getInterestVariables().getSize(); ++k)
+        {
+          if (!SpecFunc::IsNormal(blockOutputSample(j, k)))
+          {
+            failedInputSample_ = blockInputSample;
+            warningMessage_ = "At least a point failed. "
+                            + getInterestVariables()[k]
+                            + Point(blockInputSample[j]).__str__()
+                            + " = "
+                            + (OSS() << blockOutputSample(j, k)).str();
+            break;
+          }
+        }
+        if (failedInputSample_.getSize())
+          break;
+      }
+    }
 
-      notify("analysisFinished");
+    if (!failedInputSample_.getSize())
+    {
+      // if succeed fill samples
+      outputSample.add(blockOutputSample);
+      effectiveInputSample.add(blockInputSample);
     }
     else
-      throw InvalidValueException(HERE) << "Monte Carlo Analysis failed. The output sample is empty. " << errorMessage_;
+    {
+      // exit the while section. Stop the analysis
+      break;
+    }
+
+    // stop criteria
+    if (getBlockSize() != 1 || (getBlockSize() == 1 && outerSampling))
+    {
+      const Point empiricalMean(outputSample.computeMean());
+      const Point empiricalStd(outputSample.computeStandardDeviationPerComponent());
+
+      Scalar coefOfVar(0.);
+      for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++i)
+      {
+        if (std::abs(empiricalMean[i]) > SpecFunc::Precision)
+        {
+          const Scalar sigma_i = empiricalStd[i] / sqrt(outputSample.getSize());
+          coefOfVar = std::max(sigma_i / std::abs(empiricalMean[i]), coefOfVar);
+        }
+        else
+        {
+          coefOfVar = -1;
+        }
+      }
+      coefficientOfVariation = coefOfVar;
+    }
+    elapsedTime = clock() - startTime;
+    ++outerSampling;
   }
-  catch (std::exception & ex)
-  {
-    errorMessage_ = ex.what();
-    notify("analysisBadlyFinished");
-  }
-  isRunning_ = false;
+
+  // check
+  if (!outputSample.getSize())
+    throw InvalidValueException(HERE) << "Monte Carlo Analysis failed. The output sample is empty. " << warningMessage_;
+
+  // set design of experiments
+  designOfExperiment_.setInputSample(effectiveInputSample);
+  designOfExperiment_.setOutputSample(outputSample);
+
+  // compute data analysis
+  DataAnalysis dataAnalysis("", designOfExperiment_);
+  dataAnalysis.setIsConfidenceIntervalRequired(isConfidenceIntervalRequired());
+  dataAnalysis.setLevelConfidenceInterval(levelConfidenceInterval_);
+  dataAnalysis.run();
+
+  // set result
+  result_ = dataAnalysis.getResult();
+  result_.elapsedTime_ = (float) elapsedTime / CLOCKS_PER_SEC;
 }
 
 

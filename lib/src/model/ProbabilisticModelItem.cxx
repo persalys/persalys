@@ -67,6 +67,7 @@ void ProbabilisticModelItem::buildActions()
   // add actions
   appendAction(newDesignOfExperiment_);
   appendAction(newLimitState_);
+  appendSeparator(tr("Analysis"));
   appendAction(newCentralTendency_);
   appendAction(newSensitivityAnalysis_);
 }

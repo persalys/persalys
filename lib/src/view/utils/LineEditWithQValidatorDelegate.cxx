@@ -52,7 +52,7 @@ LineEditWithQValidatorDelegate::LineEditWithQValidatorDelegate(const QString & r
 QWidget* LineEditWithQValidatorDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &) const
 {
   QLineEdit * editor = new QLineEdit(parent);
-  editor->setValidator(new QRegExpValidator(QRegExp(regex_)));
+  editor->setValidator(new QRegExpValidator(QRegExp(regex_), editor));
   return editor;
 }
 

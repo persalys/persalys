@@ -84,6 +84,12 @@ Bool PhysicalModelImplementation::operator!=(const PhysicalModelImplementation& 
 }
 
 
+UnsignedInteger PhysicalModelImplementation::getInputDimension() const
+{
+  return inputs_.getSize();
+}
+
+
 InputCollection PhysicalModelImplementation::getInputs() const
 {
   return inputs_;
@@ -149,7 +155,7 @@ void PhysicalModelImplementation::setInputDescription(const String & inputName, 
 void PhysicalModelImplementation::setInputValue(const String & inputName, const double & value)
 {
   getInputByName(inputName).setValue(value);
-  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
     getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
   notify("inputValueChanged");
 }
@@ -188,7 +194,7 @@ void PhysicalModelImplementation::addInput(const Input & input)
     updateCopula();
 
   // reset outputs values
-  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
     getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
 
   // update finite difference step
@@ -221,7 +227,7 @@ void PhysicalModelImplementation::removeInput(const String & inputName)
         inputs_.erase(inputs_.begin() + i);
         if (inputIsStochastic)
           updateCopula();
-        for (UnsignedInteger j = 0; j < getOutputs().getSize(); ++j)
+        for (UnsignedInteger j = 0; j < getOutputDimension(); ++j)
           getOutputByName(getOutputs()[j].getName()).setHasBeenComputed(false);
 
         notify("inputNumberChanged");
@@ -246,7 +252,7 @@ void PhysicalModelImplementation::clearInputs()
 void PhysicalModelImplementation::inputsChanged()
 {
   // reset outputs values
-  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
     getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
 
   // update copula
@@ -308,8 +314,8 @@ Description PhysicalModelImplementation::getInputNames() const
 
 void PhysicalModelImplementation::updateFiniteDifferenceSteps() const
 {
-  finiteDifferenceSteps_ = Point(getInputs().getSize());
-  for (UnsignedInteger i = 0; i < getInputs().getSize(); ++i)
+  finiteDifferenceSteps_ = Point(getInputDimension());
+  for (UnsignedInteger i = 0; i < getInputDimension(); ++i)
     finiteDifferenceSteps_[i] = getInputs()[i].getFiniteDifferenceStep();
 }
 
@@ -365,6 +371,12 @@ Output PhysicalModelImplementation::getOutputByName(const String & outputName) c
     if (outputs_[i].getName() == outputName)
       return outputs_[i];
   throw InvalidArgumentException(HERE) << "The given output name " << outputName << " does not correspond to an output of the physical model.\n";
+}
+
+
+UnsignedInteger PhysicalModelImplementation::getOutputDimension() const
+{
+  return outputs_.getSize();
 }
 
 
@@ -482,7 +494,7 @@ bool PhysicalModelImplementation::hasOutputNamed(const String & outputName) cons
 Description PhysicalModelImplementation::getSelectedOutputsNames() const
 {
   Description selectedOutputsNames;
-  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
     if (getOutputs()[i].isSelected())
       selectedOutputsNames.add(getOutputs()[i].getName());
   return selectedOutputsNames;
@@ -528,9 +540,9 @@ Function PhysicalModelImplementation::getFunction() const
 
 Function PhysicalModelImplementation::getFunction(const Description & outputNames) const
 {
-  if (!getInputs().getSize())
+  if (!getInputDimension())
     throw PhysicalModelNotValidException(HERE) << "The physical model has no inputs.";
-  if (!getOutputs().getSize())
+  if (!getOutputDimension())
     throw PhysicalModelNotValidException(HERE) << "The physical model has no outputs.";
 
   Function function(generateFunction(outputNames));
@@ -554,7 +566,7 @@ Function PhysicalModelImplementation::getFunction(const Description & outputName
   // search interest outputs indices
   Indices indices;
   for (UnsignedInteger i = 0; i < outputNames.getSize(); ++i)
-    for (UnsignedInteger j = 0; j < getOutputs().getSize(); ++j)
+    for (UnsignedInteger j = 0; j < getOutputDimension(); ++j)
       if (getOutputs()[j].getName() == outputNames[i])
       {
         indices.add(j);
@@ -573,7 +585,7 @@ Function PhysicalModelImplementation::getFunction(const String & outputName) con
 
 Function PhysicalModelImplementation::getRestrictedFunction() const
 {
-  if (getInputs().getSize() == getStochasticInputNames().getSize())
+  if (getInputDimension() == getStochasticInputNames().getSize())
     return getFunction();
 
   return getRestrictedFunction(getOutputNames());
@@ -585,7 +597,7 @@ Function PhysicalModelImplementation::getRestrictedFunction(const Description& o
   // search deterministic inputs
   Indices deterministicInputsIndices;
   Point inputsValues;
-  for (UnsignedInteger i = 0; i < getInputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getInputDimension(); ++i)
   {
     if (!getInputs()[i].isStochastic())
     {
@@ -626,7 +638,7 @@ void PhysicalModelImplementation::setCopula(const Copula & copula)
 
 bool PhysicalModelImplementation::isValid() const
 {
-  return getSelectedOutputsNames().getSize() && getInputs().getSize();
+  return getSelectedOutputsNames().getSize() && getInputDimension();
 }
 
 
@@ -640,7 +652,7 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
 {
   String result;
 
-  for (UnsignedInteger i = 0; i < getInputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getInputDimension(); ++i)
   {
     if (getInputs()[i].isStochastic())
     {

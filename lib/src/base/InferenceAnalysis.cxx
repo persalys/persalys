@@ -137,108 +137,100 @@ void InferenceAnalysis::setInterestVariables(const Description& variablesNames)
 }
 
 
-void InferenceAnalysis::run()
+void InferenceAnalysis::initialize()
 {
-  isRunning_ = true;
-  try
+  AnalysisImplementation::initialize();
+  result_ = InferenceResult();
+}
+
+
+void InferenceAnalysis::launch()
+{
+  // check
+  if (!getInterestVariables().getSize())
+    throw InvalidDimensionException(HERE) << "The number of variables to analyse must be superior to 0";
+
+  std::map<String, DistributionFactoryCollection>::iterator it;
+  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
   {
-    // clear result
-    initialize();
-    result_ = InferenceResult();
-
-    // check
-    if (!getInterestVariables().getSize())
-      throw InvalidDimensionException(HERE) << "The number of variables to analyse must be superior to 0";
-
-    std::map<String, DistributionFactoryCollection>::iterator it;
-    for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
-    {
-      it = distFactoriesForEachInterestVar_.find(getInterestVariables()[i]);
-      if (it == distFactoriesForEachInterestVar_.end())
-        throw InvalidArgumentException(HERE) << "Error: no distribution factories set for the variable " << getInterestVariables()[i];
-    }
-
-    // get marginals
-    Indices indices;
-    for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
-    {
-      bool outputFound = false;
-      for (UnsignedInteger j = 0; j < designOfExperiment_.getSample().getDescription().getSize(); ++j)
-      {
-        if (designOfExperiment_.getSample().getDescription()[j] == getInterestVariables()[i])
-        {
-          indices.add(j);
-          outputFound = true;
-          break;
-        }
-      }
-      if (!outputFound)
-        throw InvalidArgumentException(HERE) << "The variable to analyse " << getInterestVariables()[i]
-                                             << " is not a variable of the model " << designOfExperiment_.getSample().getDescription();
-    }
-
-    const Sample sample(designOfExperiment_.getSample().getMarginal(indices));
-
-    // inference
-    for (UnsignedInteger i = 0; i < sample.getDimension(); ++i)
-    {
-      progressValue_ = (int) (i * 100 / sample.getDimension());
-      notify("progressValueChanged");
-
-      const UnsignedInteger nbDist = distFactoriesForEachInterestVar_[sample.getDescription()[i]].getSize();
-
-      FittingTestResult fittingTestResult;
-      fittingTestResult.variableName_ = sample.getDescription()[i];
-      fittingTestResult.values_ = sample.getMarginal(i);
-      fittingTestResult.errorMessages_ = Description(nbDist);
-
-      for (UnsignedInteger j = 0; j < nbDist; ++j)
-      {
-        DistributionFactory distFactory(distFactoriesForEachInterestVar_[sample.getDescription()[i]][j]);
-        try
-        {
-          Distribution distribution(distFactory.build(sample.getMarginal(i)));
-
-          // Kolmogorov test
-          TestResult testResult(FittingTest::Kolmogorov(sample.getMarginal(i), distribution, 1 - level_, distribution.getParameterDimension()));
-
-          // BIC test
-          const NumericalScalar bicResult = FittingTest::BIC(sample.getMarginal(i), distribution, distribution.getParameterDimension());
-
-          // set fittingTestResult
-          fittingTestResult.testedDistributions_.add(distribution);
-          fittingTestResult.kolmogorovTestResults_.add(testResult);
-          fittingTestResult.bicResults_.add(bicResult);
-        }
-        catch (std::exception & ex)
-        {
-          String str = distFactory.getImplementation()->getClassName();
-          const String distributionName = str.substr(0, str.find("Factory"));
-          const String message = OSS() << "Error when building the "
-                                 << distributionName
-                                 << " distribution with the sample of the variable "
-                                 << sample.getDescription()[i]
-                                 << ". "
-                                 << ex.what()
-                                 << "\n";
-          // set fittingTestResult
-          fittingTestResult.testedDistributions_.add(DistributionDictionary::BuildDistribution(distributionName, 0));
-          TestResult testResult;
-          fittingTestResult.kolmogorovTestResults_.add(testResult);
-          fittingTestResult.bicResults_.add(SpecFunc::MaxScalar);
-          fittingTestResult.errorMessages_[j] = message;
-        }
-      }
-      result_.fittingTestResultCollection_.add(fittingTestResult);
-    }
-    notify("analysisFinished");
+    it = distFactoriesForEachInterestVar_.find(getInterestVariables()[i]);
+    if (it == distFactoriesForEachInterestVar_.end())
+      throw InvalidArgumentException(HERE) << "Error: no distribution factories set for the variable " << getInterestVariables()[i];
   }
-  catch (std::exception & ex)
+
+  // get marginals
+  Indices indices;
+  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
   {
-    errorMessage_ = ex.what();
-    notify("analysisBadlyFinished");
+    bool outputFound = false;
+    for (UnsignedInteger j = 0; j < designOfExperiment_.getSample().getDescription().getSize(); ++j)
+    {
+      if (designOfExperiment_.getSample().getDescription()[j] == getInterestVariables()[i])
+      {
+        indices.add(j);
+        outputFound = true;
+        break;
+      }
+    }
+    if (!outputFound)
+      throw InvalidArgumentException(HERE) << "The variable to analyse " << getInterestVariables()[i]
+                                            << " is not a variable of the model " << designOfExperiment_.getSample().getDescription();
   }
-  isRunning_ = false;
+
+  const Sample sample(designOfExperiment_.getSample().getMarginal(indices));
+
+  // inference
+  for (UnsignedInteger i = 0; i < sample.getDimension(); ++i)
+  {
+    progressValue_ = (int) (i * 100 / sample.getDimension());
+    notify("progressValueChanged");
+
+    const UnsignedInteger nbDist = distFactoriesForEachInterestVar_[sample.getDescription()[i]].getSize();
+
+    FittingTestResult fittingTestResult;
+    fittingTestResult.variableName_ = sample.getDescription()[i];
+    fittingTestResult.values_ = sample.getMarginal(i);
+    fittingTestResult.errorMessages_ = Description(nbDist);
+
+    for (UnsignedInteger j = 0; j < nbDist; ++j)
+    {
+      DistributionFactory distFactory(distFactoriesForEachInterestVar_[sample.getDescription()[i]][j]);
+      try
+      {
+        Distribution distribution(distFactory.build(sample.getMarginal(i)));
+
+        // Kolmogorov test
+        TestResult testResult(FittingTest::Kolmogorov(sample.getMarginal(i), distribution, 1 - level_, distribution.getParameterDimension()));
+
+        // BIC test
+        const NumericalScalar bicResult = FittingTest::BIC(sample.getMarginal(i), distribution, distribution.getParameterDimension());
+
+        // set fittingTestResult
+        fittingTestResult.testedDistributions_.add(distribution);
+        fittingTestResult.kolmogorovTestResults_.add(testResult);
+        fittingTestResult.bicResults_.add(bicResult);
+      }
+      catch (std::exception & ex)
+      {
+        String str = distFactory.getImplementation()->getClassName();
+        const String distributionName = str.substr(0, str.find("Factory"));
+        const String message = OSS() << "Error when building the "
+                                << distributionName
+                                << " distribution with the sample of the variable "
+                                << sample.getDescription()[i]
+                                << ". "
+                                << ex.what()
+                                << "\n";
+        // set fittingTestResult
+        fittingTestResult.testedDistributions_.add(DistributionDictionary::BuildDistribution(distributionName, 0));
+        TestResult testResult;
+        fittingTestResult.kolmogorovTestResults_.add(testResult);
+        fittingTestResult.bicResults_.add(SpecFunc::MaxScalar);
+        fittingTestResult.errorMessages_[j] = message;
+      }
+    }
+    result_.fittingTestResultCollection_.add(fittingTestResult);
+  }
 }
 
 
@@ -286,7 +278,7 @@ String InferenceAnalysis::getPythonScript() const
 }
 
 
-bool InferenceAnalysis::analysisLaunched() const
+bool InferenceAnalysis::hasValidResult() const
 {
   return result_.getFittingTestResultCollection().getSize() != 0;
 }

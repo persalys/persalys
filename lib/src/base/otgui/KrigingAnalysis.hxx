@@ -25,7 +25,7 @@
 #include "Analysis.hxx"
 #include "KrigingAnalysisResult.hxx"
 
-#include "openturns/KrigingAlgorithm.hxx"
+#include <openturns/KrigingAlgorithm.hxx>
 
 namespace OTGUI
 {
@@ -55,9 +55,8 @@ public:
   KrigingAnalysisResult getResult() const;
 
   virtual Parameters getParameters() const;
-  virtual void run();
   virtual OT::String getPythonScript() const;
-  virtual bool analysisLaunched() const;
+  virtual bool hasValidResult() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -75,6 +74,8 @@ private:
       const bool useOptimalCovModel = false);
 
 protected:
+  virtual void initialize();
+  virtual void launch();
   void validateMetaModelResult(OT::Collection<KrigingAnalysisResult> results, const OT::Sample& inputSample);
   virtual void computeAnalyticalValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample);
 

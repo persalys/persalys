@@ -20,6 +20,8 @@
  */
 #include "otgui/SymbolicPhysicalModel.hxx"
 
+#include "otgui/OTTools.hxx"
+
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SymbolicFunction.hxx>
 
@@ -99,10 +101,10 @@ void SymbolicPhysicalModel::setOutputName(const String& outputName, const String
 
   std::set<String> outputNames;
   outputNames.insert(newName);
-  for (UnsignedInteger i = 0; i < getOutputNames().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
     if (getOutputNames()[i] != outputName)
       outputNames.insert(getOutputNames()[i]);
-  if (outputNames.size() != getOutputNames().getSize())
+  if (outputNames.size() != getOutputDimension())
     throw InvalidArgumentException(HERE) << "The proposed name " << newName << " is not valid. Two outputs can not have the same name.";
 
   const String outputFormula = formulaForEachOutput_[outputName];
@@ -116,7 +118,7 @@ void SymbolicPhysicalModel::setOutputName(const String& outputName, const String
 Description SymbolicPhysicalModel::getFormulas() const
 {
   Description formulas;
-  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
   {
     std::map<String, String>::const_iterator it(formulaForEachOutput_.find(getOutputs()[i].getName()));
     if (it != formulaForEachOutput_.end())
@@ -128,11 +130,11 @@ Description SymbolicPhysicalModel::getFormulas() const
 
 void SymbolicPhysicalModel::setFormulas(const Description& formulas)
 {
-  if (formulas.getSize() != getOutputs().getSize())
+  if (formulas.getSize() != getOutputDimension())
     throw InvalidArgumentException(HERE) << "The list of formulas must have the same dimension as the list of outputs";
 
   formulaForEachOutput_.clear();
-  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
     formulaForEachOutput_[getOutputs()[i].getName()] = formulas[i];
 
   notify("outputFormulaChanged");
@@ -177,38 +179,31 @@ String SymbolicPhysicalModel::getPythonScript() const
 {
   OSS oss;
 
-  for (UnsignedInteger i = 0; i < getInputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getInputDimension(); ++i)
     oss << getInputs()[i].getPythonScript();
 
-  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
     oss << getOutputs()[i].getPythonScript();
 
   oss << "inputs = [";
-  for (UnsignedInteger i = 0; i < getInputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getInputDimension(); ++i)
   {
     oss << getInputs()[i].getName();
-    if (i < getInputs().getSize() - 1)
+    if (i < getInputDimension() - 1)
       oss << ", ";
   }
   oss << "]\n";
 
   oss << "outputs = [";
-  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
   {
     oss << getOutputs()[i].getName();
-    if (i < getOutputs().getSize() - 1)
+    if (i < getOutputDimension() - 1)
       oss << ", ";
   }
   oss << "]\n";
 
-  oss << "formulas = [";
-  for (UnsignedInteger i = 0; i < getOutputs().getSize(); ++i)
-  {
-    oss << "'" << getFormula(getOutputs()[i].getName()) << "'";
-    if (i < getOutputs().getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
+  oss << "formulas = " << Parameters::GetOTDescriptionStr(getFormulas()) << "\n";
 
   oss << getName() + " = otguibase.SymbolicPhysicalModel('" + getName() + "', inputs, outputs, formulas)\n";
 

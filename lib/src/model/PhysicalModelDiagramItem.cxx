@@ -59,6 +59,7 @@ void PhysicalModelDiagramItem::buildActions()
 
   // add actions
   appendAction(definePhysicalModel_);
+  appendSeparator();
   appendAction(removePhysicalModel_);
 }
 
@@ -85,7 +86,7 @@ void PhysicalModelDiagramItem::update(Observable* source, const String & message
       fill();
       return;
     }
-    emit inputNumberValidityChanged(physicalModel_.getInputs().getSize());
+    emit inputNumberValidityChanged(physicalModel_.getInputDimension());
     emit physicalModelValidityChanged(physicalModel_.isValid());
     emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
     emit dependencyValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getComposedDistribution().hasIndependentCopula());
@@ -142,7 +143,7 @@ void PhysicalModelDiagramItem::requestDesignOfExperimentEvaluation()
     if (doeTitleItem->child(i)->data(Qt::UserRole).toString() == "DesignOfExperimentDefinitionItem")
     {
       DesignOfExperimentDefinitionItem * analysisItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeTitleItem->child(i));
-      if (!analysisItem->getAnalysis().analysisLaunched())
+      if (!analysisItem->getAnalysis().hasValidResult())
       {
         emit designOfExperimentEvaluationRequested(analysisItem->getAnalysis(), true);
         return;
@@ -170,7 +171,7 @@ void PhysicalModelDiagramItem::requestMetaModelCreation()
     if (doeTitleItem->child(i)->data(Qt::UserRole).toString() == "DesignOfExperimentDefinitionItem")
     {
       DesignOfExperimentDefinitionItem * analysisItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeTitleItem->child(i));
-      if (analysisItem->getAnalysis().analysisLaunched())
+      if (analysisItem->getAnalysis().hasValidResult())
       {
         // new analysis
         DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysisItem->getAnalysis().getImplementation().get());
@@ -223,14 +224,14 @@ void PhysicalModelDiagramItem::removePhysicalModel()
 void PhysicalModelDiagramItem::fill()
 {
   // model definition item
-  if (physicalModel_.getInputs().getSize() || physicalModel_.getOutputs().getSize())
+  if (physicalModel_.getInputDimension() || physicalModel_.getOutputDimension())
     appendPhysicalModelItem();
   // probabilistic model item
   if (physicalModel_.hasStochasticInputs())
     appendProbabilisticModelItem();
 
   // update diagram (arrow color and button availability)
-  emit inputNumberValidityChanged(physicalModel_.getInputs().getSize());
+  emit inputNumberValidityChanged(physicalModel_.getInputDimension());
   emit physicalModelValidityChanged(physicalModel_.isValid());
   emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
   emit dependencyValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getComposedDistribution().hasIndependentCopula());
@@ -354,7 +355,7 @@ void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
 
     // signal for diagram window : update diagram
     ++doeCounter_[0];
-    if (newItem->getAnalysis().analysisLaunched())
+    if (newItem->getAnalysis().hasValidResult())
       ++doeCounter_[1];
 
     emit designOfExperimentNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);

@@ -63,206 +63,198 @@ DataAnalysis* DataAnalysis::clone() const
 }
 
 
-void DataAnalysis::run()
+void DataAnalysis::initialize()
 {
-  isRunning_ = true;
-  try
+  AnalysisImplementation::initialize();
+  result_ = DataAnalysisResult();
+}
+
+
+void DataAnalysis::launch()
+{
+  // get sample to analyse
+  const Sample sample(getDesignOfExperiment().getSample());
+
+  if (!sample.getSize())
+    throw InvalidDimensionException(HERE) << "The sample is empty";
+
+  for (UnsignedInteger i = 0; i < sample.getDimension(); ++i)
   {
-    // clear result
-    initialize();
-    result_ = DataAnalysisResult();
+    if (stopRequested_)
+      break;
 
-    // get sample to analyse
-    const Sample sample(getDesignOfExperiment().getSample());
+    progressValue_ = (int) (i * 100 / sample.getSize());
+    notify("progressValueChanged");
 
-    if (!sample.getSize())
-      throw InvalidDimensionException(HERE) << "The sample is empty";
+    // min/max
+    result_.min_.add(sample.getMarginal(i).getMin());
+    result_.max_.add(sample.getMarginal(i).getMax());
 
-    for (UnsignedInteger i = 0; i < sample.getDimension(); ++i)
+    // moments
+    result_.mean_.add(sample.getMarginal(i).computeMean());
+    result_.median_.add(sample.getMarginal(i).computeMedian());
+
+    result_.standardDeviation_.add(Point());
+    result_.coefficientOfVariation_.add(Point());
+    result_.variance_.add(Point());
+    result_.skewness_.add(Point());
+    result_.kurtosis_.add(Point());
+    try
     {
-      if (stopRequested_)
-        break;
+      result_.standardDeviation_[i] = sample.getMarginal(i).computeStandardDeviationPerComponent();
+      if (std::abs(result_.mean_[i][0]) > SpecFunc::Precision)
+        result_.coefficientOfVariation_[i] = result_.standardDeviation_[i] / sqrt(sample.getSize()) / std::abs(result_.mean_[i][0]);
+      result_.variance_[i] = sample.getMarginal(i).computeVariance();
+      result_.skewness_[i] = sample.getMarginal(i).computeSkewness();
+      result_.kurtosis_[i] = sample.getMarginal(i).computeKurtosis();
+    }
+    catch (std::exception)
+    {
+      // nothing
+    }
 
-      progressValue_ = (int) (i * 100 / sample.getSize());
-      notify("progressValueChanged");
+    // quartiles
+    result_.firstQuartile_.add(sample.getMarginal(i).computeQuantilePerComponent(0.25));
+    result_.thirdQuartile_.add(sample.getMarginal(i).computeQuantilePerComponent(0.75));
 
-      // min/max
-      result_.min_.add(sample.getMarginal(i).getMin());
-      result_.max_.add(sample.getMarginal(i).getMax());
+    // Confidence Intervals
+    if (isConfidenceIntervalRequired_)
+    {
+      // mean Confidence Interval
+      Point meanLowerBounds(result_.meanConfidenceInterval_.getLowerBound());
+      Point meanUpperBounds(result_.meanConfidenceInterval_.getUpperBound());
+      meanLowerBounds.add(0.);
+      meanUpperBounds.add(1.);
 
-      // moments
-      result_.mean_.add(sample.getMarginal(i).computeMean());
-      result_.median_.add(sample.getMarginal(i).computeMedian());
+      Interval::BoolCollection meanFiniteLowerBounds(result_.meanConfidenceInterval_.getFiniteLowerBound());
+      Interval::BoolCollection meanFiniteUpperBounds(result_.meanConfidenceInterval_.getFiniteUpperBound());
+      meanFiniteLowerBounds.add(false);
+      meanFiniteUpperBounds.add(false);
 
-      result_.standardDeviation_.add(Point());
-      result_.coefficientOfVariation_.add(Point());
-      result_.variance_.add(Point());
-      result_.skewness_.add(Point());
-      result_.kurtosis_.add(Point());
-      try
+      result_.meanConfidenceInterval_ = Interval(result_.min_.getSize());
+
+      if (result_.standardDeviation_[i].getDimension())
       {
-        result_.standardDeviation_[i] = sample.getMarginal(i).computeStandardDeviationPerComponent();
-        if (std::abs(result_.mean_[i][0]) > SpecFunc::Precision)
-          result_.coefficientOfVariation_[i] = result_.standardDeviation_[i] / sqrt(sample.getSize()) / std::abs(result_.mean_[i][0]);
-        result_.variance_[i] = sample.getMarginal(i).computeVariance();
-        result_.skewness_[i] = sample.getMarginal(i).computeSkewness();
-        result_.kurtosis_[i] = sample.getMarginal(i).computeKurtosis();
-      }
-      catch (std::exception)
-      {
-        // nothing
-      }
+        const Normal X(0, 1);
+        const double f = X.computeQuantile((1 - levelConfidenceInterval_) / 2, true)[0];
+        double delta(f * result_.standardDeviation_[i][0] / sqrt(sample.getSize()));
 
-      // quartiles
-      result_.firstQuartile_.add(sample.getMarginal(i).computeQuantilePerComponent(0.25));
-      result_.thirdQuartile_.add(sample.getMarginal(i).computeQuantilePerComponent(0.75));
+        meanLowerBounds[i] = result_.mean_[i][0] - delta;
+        meanUpperBounds[i] = result_.mean_[i][0] + delta;
+        result_.meanConfidenceInterval_.setLowerBound(meanLowerBounds);
+        result_.meanConfidenceInterval_.setUpperBound(meanUpperBounds);
 
-      // Confidence Intervals
-      if (isConfidenceIntervalRequired_)
-      {
-        // mean Confidence Interval
-        Point meanLowerBounds(result_.meanConfidenceInterval_.getLowerBound());
-        Point meanUpperBounds(result_.meanConfidenceInterval_.getUpperBound());
-        meanLowerBounds.add(0.);
-        meanUpperBounds.add(1.);
-
-        Interval::BoolCollection meanFiniteLowerBounds(result_.meanConfidenceInterval_.getFiniteLowerBound());
-        Interval::BoolCollection meanFiniteUpperBounds(result_.meanConfidenceInterval_.getFiniteUpperBound());
-        meanFiniteLowerBounds.add(false);
-        meanFiniteUpperBounds.add(false);
-
-        result_.meanConfidenceInterval_ = Interval(result_.min_.getSize());
-
-        if (result_.standardDeviation_[i].getDimension())
-        {
-          const Normal X(0, 1);
-          const double f = X.computeQuantile((1 - levelConfidenceInterval_) / 2, true)[0];
-          double delta(f * result_.standardDeviation_[i][0] / sqrt(sample.getSize()));
-
-          meanLowerBounds[i] = result_.mean_[i][0] - delta;
-          meanUpperBounds[i] = result_.mean_[i][0] + delta;
-          result_.meanConfidenceInterval_.setLowerBound(meanLowerBounds);
-          result_.meanConfidenceInterval_.setUpperBound(meanUpperBounds);
-
-          meanFiniteLowerBounds[i] = true;
-          meanFiniteUpperBounds[i] = true;
-          result_.meanConfidenceInterval_.setFiniteLowerBound(meanFiniteLowerBounds);
-          result_.meanConfidenceInterval_.setFiniteUpperBound(meanFiniteUpperBounds);
-        }
-
-        // std Confidence Interval
-        Point stdLowerBounds(result_.stdConfidenceInterval_.getLowerBound());
-        Point stdUpperBounds(result_.stdConfidenceInterval_.getUpperBound());
-        stdLowerBounds.add(0.);
-        stdUpperBounds.add(1.);
-
-        Interval::BoolCollection stdFiniteLowerBounds(result_.stdConfidenceInterval_.getFiniteLowerBound());
-        Interval::BoolCollection stdFiniteUpperBounds(result_.stdConfidenceInterval_.getFiniteUpperBound());
-        stdFiniteLowerBounds.add(false);
-        stdFiniteUpperBounds.add(false);
-
-        result_.stdConfidenceInterval_ = Interval(result_.min_.getSize());
-
-        if (result_.variance_[i].getDimension() && sample.getSize() > 1)
-        {
-          // TODO : use Normal Distribution?
-          const UnsignedInteger nbSimu = sample.getSize();
-          const ChiSquare X(nbSimu - 1);
-          // low
-          const double f1 = X.computeQuantile((1 - levelConfidenceInterval_) / 2, true)[0];
-          // up
-          const double f2 = X.computeQuantile((1 - levelConfidenceInterval_) / 2, false)[0];
-
-          //low
-          stdLowerBounds[i] = sqrt((nbSimu - 1) * result_.variance_[i][0] / f1);
-          //up
-          stdUpperBounds[i] = sqrt((nbSimu - 1) * result_.variance_[i][0] / f2);
-
-          result_.stdConfidenceInterval_.setLowerBound(stdLowerBounds);
-          result_.stdConfidenceInterval_.setUpperBound(stdUpperBounds);
-
-          stdFiniteLowerBounds[i] = true;
-          stdFiniteUpperBounds[i] = true;
-          result_.stdConfidenceInterval_.setFiniteLowerBound(stdFiniteLowerBounds);
-          result_.stdConfidenceInterval_.setFiniteUpperBound(stdFiniteUpperBounds);
-        }
+        meanFiniteLowerBounds[i] = true;
+        meanFiniteUpperBounds[i] = true;
+        result_.meanConfidenceInterval_.setFiniteLowerBound(meanFiniteLowerBounds);
+        result_.meanConfidenceInterval_.setFiniteUpperBound(meanFiniteUpperBounds);
       }
 
-      // outliers
-      result_.outliers_.add(Point());
-      const double lowerBound(result_.firstQuartile_[i][0] - 1.5 * (result_.thirdQuartile_[i][0] - result_.firstQuartile_[i][0]));
-      const double upperBound(result_.thirdQuartile_[i][0] + 1.5 * (result_.thirdQuartile_[i][0] - result_.firstQuartile_[i][0]));
-      for (UnsignedInteger j = 0; j < sample.getSize(); ++j)
-        if (sample[j][i] < lowerBound || sample[j][i] > upperBound)
-          result_.outliers_[i].add(sample[j][i]);
+      // std Confidence Interval
+      Point stdLowerBounds(result_.stdConfidenceInterval_.getLowerBound());
+      Point stdUpperBounds(result_.stdConfidenceInterval_.getUpperBound());
+      stdLowerBounds.add(0.);
+      stdUpperBounds.add(1.);
 
-      // pdf/cdf
-      result_.pdf_.add(Sample());
-      result_.cdf_.add(Sample());
-      try
+      Interval::BoolCollection stdFiniteLowerBounds(result_.stdConfidenceInterval_.getFiniteLowerBound());
+      Interval::BoolCollection stdFiniteUpperBounds(result_.stdConfidenceInterval_.getFiniteUpperBound());
+      stdFiniteLowerBounds.add(false);
+      stdFiniteUpperBounds.add(false);
+
+      result_.stdConfidenceInterval_ = Interval(result_.min_.getSize());
+
+      if (result_.variance_[i].getDimension() && sample.getSize() > 1)
       {
-        KernelSmoothing gaussianKernel;
-        Distribution fittedDistribution(gaussianKernel.build(sample.getMarginal(i)));
-        result_.pdf_[i] = fittedDistribution.drawPDF().getDrawable(0).getData();
-        result_.cdf_[i] = fittedDistribution.drawCDF().getDrawable(0).getData();
-      }
-      catch (std::exception)
-      {
+        // TODO : use Normal Distribution?
+        const UnsignedInteger nbSimu = sample.getSize();
+        const ChiSquare X(nbSimu - 1);
+        // low
+        const double f1 = X.computeQuantile((1 - levelConfidenceInterval_) / 2, true)[0];
+        // up
+        const double f2 = X.computeQuantile((1 - levelConfidenceInterval_) / 2, false)[0];
+
+        //low
+        stdLowerBounds[i] = sqrt((nbSimu - 1) * result_.variance_[i][0] / f1);
+        //up
+        stdUpperBounds[i] = sqrt((nbSimu - 1) * result_.variance_[i][0] / f2);
+
+        result_.stdConfidenceInterval_.setLowerBound(stdLowerBounds);
+        result_.stdConfidenceInterval_.setUpperBound(stdUpperBounds);
+
+        stdFiniteLowerBounds[i] = true;
+        stdFiniteUpperBounds[i] = true;
+        result_.stdConfidenceInterval_.setFiniteLowerBound(stdFiniteLowerBounds);
+        result_.stdConfidenceInterval_.setFiniteUpperBound(stdFiniteUpperBounds);
       }
     }
 
-    // post processing
-    const UnsignedInteger nbAnalysedVar = result_.min_.getSize();
+    // outliers
+    result_.outliers_.add(Point());
+    const double lowerBound(result_.firstQuartile_[i][0] - 1.5 * (result_.thirdQuartile_[i][0] - result_.firstQuartile_[i][0]));
+    const double upperBound(result_.thirdQuartile_[i][0] + 1.5 * (result_.thirdQuartile_[i][0] - result_.firstQuartile_[i][0]));
+    for (UnsignedInteger j = 0; j < sample.getSize(); ++j)
+      if (sample(j, i) < lowerBound || sample(j, i) > upperBound)
+        result_.outliers_[i].add(sample(j, i));
 
-    // initialisation C.I
-    if (!isConfidenceIntervalRequired_)
+    // pdf/cdf
+    result_.pdf_.add(Sample());
+    result_.cdf_.add(Sample());
+    try
     {
-      result_.meanConfidenceInterval_ = Interval(nbAnalysedVar);
-      result_.meanConfidenceInterval_.setFiniteLowerBound(Interval::BoolCollection(nbAnalysedVar, false));
-      result_.meanConfidenceInterval_.setFiniteUpperBound(Interval::BoolCollection(nbAnalysedVar, false));
-      result_.stdConfidenceInterval_ = Interval(nbAnalysedVar);
-      result_.stdConfidenceInterval_.setFiniteLowerBound(Interval::BoolCollection(nbAnalysedVar, false));
-      result_.stdConfidenceInterval_.setFiniteUpperBound(Interval::BoolCollection(nbAnalysedVar, false));
+      KernelSmoothing gaussianKernel;
+      Distribution fittedDistribution(gaussianKernel.build(sample.getMarginal(i)));
+      result_.pdf_[i] = fittedDistribution.drawPDF().getDrawable(0).getData();
+      result_.cdf_[i] = fittedDistribution.drawCDF().getDrawable(0).getData();
     }
-
-    if (nbAnalysedVar == sample.getDimension())
+    catch (std::exception)
     {
-      result_.designOfExperiment_.setInputSample(designOfExperiment_.getInputSample());
-      result_.designOfExperiment_.setOutputSample(designOfExperiment_.getOutputSample());
     }
-    else // if the user stops the analysis before the end
-    {
-      // input sample
-      if (designOfExperiment_.getInputSample().getSize())
-      {
-        if (nbAnalysedVar <= designOfExperiment_.getInputSample().getDimension())
-        {
-          Indices inputIndices(nbAnalysedVar);
-          inputIndices.fill();
-          result_.designOfExperiment_.setInputSample(designOfExperiment_.getInputSample().getMarginal(inputIndices));
-        }
-        else
-          result_.designOfExperiment_.setInputSample(designOfExperiment_.getInputSample());
-      }
-
-      // output sample
-      const int nbAnalysedOutputs = nbAnalysedVar - (designOfExperiment_.getInputSample().getSize() > 0 ? designOfExperiment_.getInputSample().getDimension() : 0);
-
-      if (nbAnalysedOutputs > 0)
-      {
-        Indices outputIndices(nbAnalysedOutputs);
-        outputIndices.fill();
-        result_.designOfExperiment_.setOutputSample(designOfExperiment_.getOutputSample().getMarginal(outputIndices));
-      }
-    }
-    notify("analysisFinished");
   }
-  catch (std::exception & ex)
+
+  // post processing
+  const UnsignedInteger nbAnalysedVar = result_.min_.getSize();
+
+  // initialisation C.I
+  if (!isConfidenceIntervalRequired_)
   {
-    errorMessage_ = ex.what();
-    notify("analysisBadlyFinished");
+    result_.meanConfidenceInterval_ = Interval(nbAnalysedVar);
+    result_.meanConfidenceInterval_.setFiniteLowerBound(Interval::BoolCollection(nbAnalysedVar, false));
+    result_.meanConfidenceInterval_.setFiniteUpperBound(Interval::BoolCollection(nbAnalysedVar, false));
+    result_.stdConfidenceInterval_ = Interval(nbAnalysedVar);
+    result_.stdConfidenceInterval_.setFiniteLowerBound(Interval::BoolCollection(nbAnalysedVar, false));
+    result_.stdConfidenceInterval_.setFiniteUpperBound(Interval::BoolCollection(nbAnalysedVar, false));
   }
-  isRunning_ = false;
+
+  if (nbAnalysedVar == sample.getDimension())
+  {
+    result_.designOfExperiment_.setInputSample(designOfExperiment_.getInputSample());
+    result_.designOfExperiment_.setOutputSample(designOfExperiment_.getOutputSample());
+  }
+  else // if the user stops the analysis before the end
+  {
+    // input sample
+    if (designOfExperiment_.getInputSample().getSize())
+    {
+      if (nbAnalysedVar <= designOfExperiment_.getInputSample().getDimension())
+      {
+        Indices inputIndices(nbAnalysedVar);
+        inputIndices.fill();
+        result_.designOfExperiment_.setInputSample(designOfExperiment_.getInputSample().getMarginal(inputIndices));
+      }
+      else
+        result_.designOfExperiment_.setInputSample(designOfExperiment_.getInputSample());
+    }
+
+    // output sample
+    const int nbAnalysedOutputs = nbAnalysedVar - (designOfExperiment_.getInputSample().getSize() > 0 ? designOfExperiment_.getInputSample().getDimension() : 0);
+
+    if (nbAnalysedOutputs > 0)
+    {
+      Indices outputIndices(nbAnalysedOutputs);
+      outputIndices.fill();
+      result_.designOfExperiment_.setOutputSample(designOfExperiment_.getOutputSample().getMarginal(outputIndices));
+    }
+  }
 }
 
 
@@ -305,7 +297,7 @@ String DataAnalysis::getPythonScript() const
 }
 
 
-bool DataAnalysis::analysisLaunched() const
+bool DataAnalysis::hasValidResult() const
 {
   return getResult().getMean().getSize() != 0;
 }

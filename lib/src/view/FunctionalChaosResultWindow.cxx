@@ -46,7 +46,7 @@ FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item, QW
   , result_()
   , maxDegree_(0)
   , sparse_(false)
-  , errorMessage_(item->getAnalysis().getErrorMessage().c_str())
+  , errorMessage_(item->getAnalysis().getWarningMessage().c_str())
 {
   const FunctionalChaosAnalysis * chaos(dynamic_cast<const FunctionalChaosAnalysis*>(item->getAnalysis().getImplementation().get()));
   if (!chaos)
@@ -181,7 +181,7 @@ void FunctionalChaosResultWindow::buildInterface()
 
         UnsignedInteger notNullCoefCounter = 0;
         for (UnsignedInteger coefIndex = 0; coefIndex < result_.getFunctionalChaosResult().getCoefficients().getSize(); ++coefIndex)
-          if (result_.getFunctionalChaosResult().getCoefficients()[coefIndex][outputIndex] != 0.0)
+          if (result_.getFunctionalChaosResult().getCoefficients()(coefIndex, outputIndex) != 0.0)
             ++notNullCoefCounter;
         valuesList << QString::number(notNullCoefCounter);
       }

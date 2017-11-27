@@ -24,7 +24,7 @@
 #include "MetaModelAnalysisResult.hxx"
 #include "SobolResult.hxx"
 
-#include "openturns/FunctionalChaosResult.hxx"
+#include <openturns/FunctionalChaosResult.hxx>
 
 namespace OTGUI
 {

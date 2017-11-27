@@ -52,8 +52,8 @@ public:
     minX_ = contour.getX().getMin()[0];
     minY_ = contour.getY().getMin()[0];
 
-    deltaX_ = contour.getX()[1][0] - contour.getX()[0][0];
-    deltaY_ = contour.getY()[1][0] - contour.getY()[0][0];
+    deltaX_ = contour.getX()(1, 0) - contour.getX()(0, 0);
+    deltaY_ = contour.getY()(1, 0) - contour.getY()(0, 0);
 
     setInterval(Qt::XAxis, QwtInterval(minX_, contour.getX().getMax()[0]));
     setInterval(Qt::YAxis, QwtInterval(minY_, contour.getY().getMax()[0]));
@@ -78,7 +78,7 @@ public:
     if (xpos_inf != xpos_sup)
     {
       dx_delta_x = (x - (xpos_inf * deltaX_)) / deltaX_;
-      delta_f_x = Zvalues_[pos3][0] - Zvalues_[pos1][0];
+      delta_f_x = Zvalues_(pos3, 0) - Zvalues_(pos1, 0);
     }
 
     double delta_f_y = 0.;
@@ -86,12 +86,12 @@ public:
     if (ypos_inf != ypos_sup)
     {
       dy_delta_y = (y - (ypos_inf * deltaY_)) / deltaY_;
-      delta_f_y = Zvalues_[pos2][0] - Zvalues_[pos1][0];
+      delta_f_y = Zvalues_(pos2, 0) - Zvalues_(pos1, 0);
     }
 
-    const double delta_f_xy = Zvalues_[pos1][0] + Zvalues_[pos4][0] - Zvalues_[pos3][0] - Zvalues_[pos2][0];
+    const double delta_f_xy = Zvalues_(pos1, 0) + Zvalues_(pos4, 0) - Zvalues_(pos3, 0) - Zvalues_(pos2, 0);
 
-    return delta_f_x * dx_delta_x + delta_f_y * dy_delta_y + delta_f_xy * dx_delta_x * dy_delta_y + Zvalues_[pos1][0];
+    return delta_f_x * dx_delta_x + delta_f_y * dy_delta_y + delta_f_xy * dx_delta_x * dy_delta_y + Zvalues_(pos1, 0);
   }
 
 protected:

@@ -92,6 +92,12 @@ void PhysicalModel::blockNotification(const String & blockedObserverType)
 }
 
 
+UnsignedInteger PhysicalModel::getInputDimension() const
+{
+  return getImplementation()->getInputDimension();
+}
+
+
 InputCollection PhysicalModel::getInputs() const
 {
   return getImplementation()->getInputs();
@@ -197,6 +203,12 @@ Output & PhysicalModel::getOutputByName(const String & outputName)
 Output PhysicalModel::getOutputByName(const String & outputName) const
 {
   return getImplementation()->getOutputByName(outputName);
+}
+
+
+UnsignedInteger PhysicalModel::getOutputDimension() const
+{
+  return getImplementation()->getOutputDimension();
 }
 
 

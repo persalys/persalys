@@ -69,7 +69,7 @@ void ModelEvaluationResultWindow::buildInterface()
   for (UnsignedInteger i = 0; i < inputDimension; ++i)
   {
     model->setNotEditableItem(i, 0, QString::fromUtf8(designOfExperiment_.getInputSample().getDescription()[i].c_str()));
-    model->setNotEditableItem(i, 1, designOfExperiment_.getInputSample()[0][i], StudyTreeViewModel::DefaultSignificantDigits);
+    model->setNotEditableItem(i, 1, designOfExperiment_.getInputSample()(0, i), StudyTreeViewModel::DefaultSignificantDigits);
   }
   inputsLayout->addWidget(inputTable);
   tabLayout->addWidget(inputsBox);
@@ -92,7 +92,7 @@ void ModelEvaluationResultWindow::buildInterface()
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
     model->setNotEditableItem(i, 0, QString::fromUtf8(designOfExperiment_.getOutputSample().getDescription()[i].c_str()));
-    model->setNotEditableItem(i, 1, designOfExperiment_.getOutputSample()[0][i], StudyTreeViewModel::DefaultSignificantDigits);
+    model->setNotEditableItem(i, 1, designOfExperiment_.getOutputSample()(0, i), StudyTreeViewModel::DefaultSignificantDigits);
   }
   outputsLayout->addWidget(outputTable);
   tabLayout->addWidget(outputsBox);

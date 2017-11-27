@@ -119,9 +119,9 @@ void Analysis::run()
 }
 
 
-bool Analysis::analysisLaunched() const
+bool Analysis::hasValidResult() const
 {
-  return getImplementation()->analysisLaunched();
+  return getImplementation()->hasValidResult();
 }
 
 

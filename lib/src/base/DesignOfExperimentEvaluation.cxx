@@ -80,119 +80,104 @@ Sample DesignOfExperimentEvaluation::getOriginalInputSample() const
 }
 
 
-void DesignOfExperimentEvaluation::run()
+void DesignOfExperimentEvaluation::launch()
 {
-  isRunning_ = true;
-  try
+  // check
+  if (!getInterestVariables().getSize())
+    throw InvalidDimensionException(HERE) << "You have not defined output variable to be analysed. Set interest variables.";
+
+  const UnsignedInteger inputSampleSize = getOriginalInputSample().getSize();
+  if (!inputSampleSize)
+    throw InvalidArgumentException(HERE) << "The design of experiments input sample is empty";
+
+  if (getBlockSize() > inputSampleSize)
+    throw InvalidValueException(HERE) << "The block size (" << getBlockSize()
+                                      << ") can not be superior to the input sample size (" << inputSampleSize << ")";
+
+  // input sample
+  Sample inputSample = Sample(0, getOriginalInputSample().getDimension());
+  inputSample.setDescription(getOriginalInputSample().getDescription());
+
+  // failed input sample
+  failedInputSample_ = Sample(0, getOriginalInputSample().getDimension());
+  failedInputSample_.setDescription(getOriginalInputSample().getDescription());
+
+  // number of iterations
+  const UnsignedInteger nbIter = static_cast<UnsignedInteger>(ceil(1.0 * inputSampleSize / getBlockSize()));
+  // last block size
+  const UnsignedInteger modulo = inputSampleSize % getBlockSize();
+  const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
+
+  // output = f(input)
+  Sample outputSample(0, getInterestVariables().getSize());
+  outputSample.setDescription(getInterestVariables());
+
+  // iterations
+  for (UnsignedInteger i = 0; i < nbIter; ++i)
   {
-    // clear result
-    initialize();
+    if (stopRequested_)
+      break;
 
-    // check
-    if (!getInterestVariables().getSize())
-      throw InvalidDimensionException(HERE) << "You have not defined output variable to be analysed. Set interest variables.";
+    progressValue_ = (int) (i * 100 / nbIter);
+    notify("progressValueChanged");
 
-    const UnsignedInteger inputSampleSize = getOriginalInputSample().getSize();
-    if (!inputSampleSize)
-      throw InvalidArgumentException(HERE) << "The design of experiments input sample is empty";
+    // the last block can be smaller
+    const UnsignedInteger effectiveBlockSize = i < (nbIter - 1) ? getBlockSize() : lastBlockSize;
 
-    if (getBlockSize() > inputSampleSize)
-      throw InvalidValueException(HERE) << "The block size (" << getBlockSize()
-                                        << ") can not be superior to the input sample size (" << inputSampleSize << ")";
+    // get input sample of size effectiveBlockSize
+    const UnsignedInteger blockFirstIndex =  i * getBlockSize();
+    const Sample blockInputSample(Sample(getOriginalInputSample(), blockFirstIndex, blockFirstIndex + effectiveBlockSize));
 
-    // input sample
-    Sample inputSample = Sample(0, getOriginalInputSample().getDimension());
-    inputSample.setDescription(getOriginalInputSample().getDescription());
-
-    // failed input sample
-    failedInputSample_ = Sample(0, getOriginalInputSample().getDimension());
-    failedInputSample_.setDescription(getOriginalInputSample().getDescription());
-
-    // number of iterations
-    const UnsignedInteger nbIter = static_cast<UnsignedInteger>(ceil(1.0 * inputSampleSize / getBlockSize()));
-    // last block size
-    const UnsignedInteger modulo = inputSampleSize % getBlockSize();
-    const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
-
-    // output = f(input)
-    Sample outputSample(0, getInterestVariables().getSize());
-    outputSample.setDescription(getInterestVariables());
-
-    // iterations
-    for (UnsignedInteger i = 0; i < nbIter; ++i)
+    // Perform a block of simulations
+    Sample blockOutputSample;
+    Sample failedSample;
+    try
     {
-      if (stopRequested_)
-        break;
+      blockOutputSample = getPhysicalModel().getFunction(getInterestVariables())(blockInputSample);
+    }
+    catch (InternalException & ex)
+    {
+      failedSample = blockInputSample;
+    }
 
-      progressValue_ = (int) (i * 100 / nbIter);
-      notify("progressValueChanged");
-
-      // the last block can be smaller
-      const UnsignedInteger effectiveBlockSize = i < (nbIter - 1) ? getBlockSize() : lastBlockSize;
-
-      // get input sample of size effectiveBlockSize
-      const UnsignedInteger blockFirstIndex =  i * getBlockSize();
-      const Sample blockInputSample(Sample(getOriginalInputSample(), blockFirstIndex, blockFirstIndex + effectiveBlockSize));
-
-      // Perform a block of simulations
-      Sample blockOutputSample;
-      Sample failedSample;
-      try
+    // if SymbolicPhysicalModel find NaN and inf
+    // for ex: in case of zero division the Symbolic models do not raise error
+    if (!failedSample.getSize() && getPhysicalModel().getImplementation()->getClassName() == "SymbolicPhysicalModel")
+    {
+      bool nanFound = false;
+      for (UnsignedInteger j = 0; j < blockInputSample.getSize(); ++j)
       {
-        blockOutputSample = getPhysicalModel().getFunction(getInterestVariables())(blockInputSample);
-      }
-      catch (InternalException & ex)
-      {
-        failedSample = blockInputSample;
-      }
-
-      // if SymbolicPhysicalModel find NaN and inf
-      // for ex: in case of zero division the Symbolic models do not raise error
-      if (!failedSample.getSize() && getPhysicalModel().getImplementation()->getClassName() == "SymbolicPhysicalModel")
-      {
-        bool nanFound = false;
-        for (UnsignedInteger j = 0; j < blockInputSample.getSize(); ++j)
+        for (UnsignedInteger k = 0; k < getInterestVariables().getSize(); ++k)
         {
-          for (UnsignedInteger k = 0; k < getInterestVariables().getSize(); ++k)
+          if (!SpecFunc::IsNormal(blockOutputSample(j, k)))
           {
-            if (!SpecFunc::IsNormal(blockOutputSample[j][k]))
-            {
-              failedSample = blockInputSample;
-              nanFound = true;
-              break;
-            }
-          }
-          if (nanFound)
+            failedSample = blockInputSample;
+            nanFound = true;
             break;
+          }
         }
-      }
-
-      if (!failedSample.getSize())
-      {
-        outputSample.add(blockOutputSample);
-        inputSample.add(blockInputSample);
-      }
-      else
-      {
-        failedInputSample_.add(failedSample);
+        if (nanFound)
+          break;
       }
     }
 
-    if (!outputSample.getSize())
-      throw InvalidRangeException(HERE) << "All the evaluations have failed. Check the model.";
-
-    // set design of experiments
-    designOfExperiment_.setInputSample(inputSample);
-    designOfExperiment_.setOutputSample(outputSample);
-
-    notify("analysisFinished");
+    if (!failedSample.getSize())
+    {
+      outputSample.add(blockOutputSample);
+      inputSample.add(blockInputSample);
+    }
+    else
+    {
+      failedInputSample_.add(failedSample);
+    }
   }
-  catch (std::exception & ex)
-  {
-    errorMessage_ = ex.what();
-    notify("analysisBadlyFinished");
-  }
-  isRunning_ = false;
+
+  if (!outputSample.getSize())
+    throw InvalidRangeException(HERE) << "All the evaluations have failed. Check the model.";
+
+  // set design of experiments
+  designOfExperiment_.setInputSample(inputSample);
+  designOfExperiment_.setOutputSample(outputSample);
 }
 
 

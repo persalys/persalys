@@ -53,7 +53,9 @@ void LimitStateItem::buildActions()
   connect(removeLimitState_, SIGNAL(triggered()), this, SLOT(removeLimitState()));
 
   // add actions
+  appendSeparator(tr("Analysis"));
   appendAction(newThresholdExceedance_);
+  appendSeparator();
   appendAction(removeLimitState_);
 }
 

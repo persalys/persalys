@@ -20,6 +20,8 @@
  */
 #include "otgui/FixedDesignOfExperiment.hxx"
 
+#include "otgui/OTTools.hxx"
+
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
@@ -66,9 +68,9 @@ void FixedDesignOfExperiment::setOriginalInputSample(const Sample& sample)
   Sample newsample(sample);
   if (newsample.getSize())
   {
-    if (getPhysicalModel().getInputs().getSize() != sample.getDimension())
+    if (getPhysicalModel().getInputDimension() != sample.getDimension())
       throw InvalidArgumentException(HERE) << "The sample dimension (" << sample.getDimension()
-                                           << ") must be equal to the number of inputs in the physical model " << getPhysicalModel().getInputs().getSize();
+                                           << ") must be equal to the number of inputs in the physical model " << getPhysicalModel().getInputDimension();
 
     newsample.setDescription(getPhysicalModel().getInputNames());
   }
@@ -95,7 +97,7 @@ String FixedDesignOfExperiment::getPythonScript() const
     oss << "[";
     for (UnsignedInteger j = 0; j < getOriginalInputSample().getDimension(); ++j)
     {
-      oss << getOriginalInputSample()[i][j];
+      oss << getOriginalInputSample()(i, j);
       if (j < (getOriginalInputSample().getDimension() - 1))
         oss << ", ";
     }
@@ -107,14 +109,7 @@ String FixedDesignOfExperiment::getPythonScript() const
 
   oss << getName() << ".setOriginalInputSample(inputSample)\n";
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
-  oss << "interestVariables = [";
-  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
-  {
-    oss << "'" << getInterestVariables()[i] << "'";
-    if (i < getInterestVariables().getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
+  oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
   oss << getName() << ".setInterestVariables(interestVariables)\n";
 
   return oss;

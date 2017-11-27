@@ -184,10 +184,13 @@ void DataAnalysisWindow::fillTabWidget()
 #else
   // tab: Table --------------------------------
   addTableTab();
-  // tab: plot matrix
-  addPlotMatrixTab();
-  // tab: scatter plots
-  addScatterPlotsTab();
+  if (designOfExperiment_.getSample().getDimension() > 1 && designOfExperiment_.getSample().getSize() > 1)
+  {
+    // tab: plot matrix
+    addPlotMatrixTab();
+    // tab: scatter plots
+    addScatterPlotsTab();
+  }
 #endif
 
   // tab: Parameters --------------------------------
@@ -479,6 +482,7 @@ void DataAnalysisWindow::addTableTab()
 {
   // Well evaluated points
   ExportableTableView * tableView = new ExportableTableView;
+  connect(getItem(), SIGNAL(dataExportRequested()), tableView, SLOT(exportData()));
   tableView->setSortingEnabled(true);
 
   SampleTableModel * tableModel = new SampleTableModel(designOfExperiment_.getSample(), tableView);
@@ -551,6 +555,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   // with paraview the table is always shown in order to use the selection behavior
   PVSpreadSheetViewWidget * pvSpreadSheetWidget = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
   pvSpreadSheetWidget->setData(designOfExperiment_.getSample());
+  connect(getItem(), SIGNAL(dataExportRequested()), pvSpreadSheetWidget, SLOT(exportData()));
 
   // table tab
 
@@ -685,7 +690,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   }
 
   // if only one variable or if only one point : do not need the following graphs
-  if (designOfExperiment_.getSample().getDimension() > 1 || designOfExperiment_.getSample().getSize() > 1)
+  if (designOfExperiment_.getSample().getDimension() > 1 && designOfExperiment_.getSample().getSize() > 1)
     addParaviewPlotWidgetsTabs(pvSpreadSheetWidget);
 }
 

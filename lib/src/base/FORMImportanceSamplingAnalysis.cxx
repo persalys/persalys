@@ -58,38 +58,39 @@ FORMImportanceSamplingAnalysis* FORMImportanceSamplingAnalysis::clone() const
 }
 
 
-void FORMImportanceSamplingAnalysis::run()
+void FORMImportanceSamplingAnalysis::initialize()
 {
-  isRunning_ = true;
-  // No section try/except here as for the other analyses
-  // because this section is directly in FORMAnalysis/IS::run
-
-  // clear result
-  initialize();
+  ImportanceSamplingAnalysis::initialize();
   result_ = SimulationReliabilityResult();
+}
 
+
+void FORMImportanceSamplingAnalysis::launch()
+{
   // FORM analysis
   FORMAnalysis formAnalysis("aFORMAnalysis", getLimitState());
   formAnalysis.setOptimizationAlgorithm(getOptimizationAlgorithm());
   formAnalysis.setPhysicalStartingPoint(getPhysicalStartingPoint());
-  formAnalysis.run();
 
-  const Point designPoint(formAnalysis.getResult().getStandardSpaceDesignPoint());
-  if (!formAnalysis.getErrorMessage().empty() || designPoint.getSize() == 0)
+  // launch FORM analysis
+  try
   {
-    errorMessage_ = "Error when processing the FORM analysis.\n" + formAnalysis.getErrorMessage();
-    isRunning_ = false;
-    notify("analysisBadlyFinished");
-    return;
+    formAnalysis.run();
+
+    if (!formAnalysis.hasValidResult())
+      throw InternalException(HERE) << "FORM result empty.\n";
+
+    // set FORM result
+    FORMResult_ = formAnalysis.getResult();
+  }
+  catch (std::exception &ex)
+  {
+    throw InternalException(HERE) << "Error when processing the FORM analysis.\n" << ex.what();
   }
 
-  // set FORM result
-  FORMResult_ = formAnalysis.getResult();
-
   // Importance sampling
-  setStandardSpaceDesignPoint(designPoint);
-  ImportanceSamplingAnalysis::run();
-  isRunning_ = false;
+  setStandardSpaceDesignPoint(FORMResult_.getStandardSpaceDesignPoint());
+  ImportanceSamplingAnalysis::launch();
 }
 
 

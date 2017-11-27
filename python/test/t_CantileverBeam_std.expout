@@ -42,8 +42,8 @@ mySRC.setBlockSize(1)
 mySRC.setSeed(0)
 myStudy.add(mySRC)
 values = [3e+07,30000,250,400]
-lowerBounds = [2.83502e+07,20166.6,250.5,342.975]
-upperBounds = [4.24148e+07,47021.3,259.5,441.262]
+lowerBounds = [2.8e+07,15000,250,310]
+upperBounds = [4.8e+07,47021.3,260,450]
 levels = [2,2,2,2]
 aDesign = otguibase.GridDesignOfExperiment('aDesign', myPhysicalModel, lowerBounds, upperBounds, levels, values)
 aDesign.setBlockSize(1)

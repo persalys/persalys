@@ -64,7 +64,7 @@ void ApproximationReliabilityPage::buildInterface()
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 
   // optimization algorithm ---------- ----------
-  algoChoice_ = new QButtonGroup;
+  algoChoice_ = new QButtonGroup(this);
 
   QGroupBox * optimAlgoGroup = new QGroupBox(tr("Algorithm"));
   QVBoxLayout * optimAlgoGroupLayout = new QVBoxLayout(optimAlgoGroup);

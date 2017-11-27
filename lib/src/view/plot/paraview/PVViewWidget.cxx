@@ -40,7 +40,6 @@ PVViewWidget::PVViewWidget(QWidget *parent, PVServerManagerInterface *smb, const
   : QWidget(parent)
   , smb_(smb)
   , view_(0)
-  , contextItem_(0)
   , tables_()
   , producerBases_()
 {
@@ -56,19 +55,21 @@ PVViewWidget::PVViewWidget(QWidget *parent, PVServerManagerInterface *smb, const
   view_ = builder->createView(QString(viewType), serv, true);
 
   this->installEventFilter(this);
-  QWidget * pvWid(view_->widget());
+  QWidget * pvWid(getView()->widget());
   pvWid->installEventFilter(this);
   QVBoxLayout * lay = new QVBoxLayout(this);
   lay->addWidget(pvWid);
-
-  pqContextView * viewC(dynamic_cast<pqContextView *>(view_));
-  if (viewC)
-    contextItem_ = viewC->getContextViewProxy()->GetContextItem();
 }
 
 
 PVViewWidget::~PVViewWidget()
 {
+}
+
+
+pqView * PVViewWidget::getView() const
+{
+  return view_.get();
 }
 
 
@@ -111,9 +112,9 @@ bool PVViewWidget::eventFilter(QObject *obj, QEvent *event)
     QWidget * wdg = qobject_cast<QWidget*>(obj);
     if (wdg && this->isAncestorOf(wdg))
     {
-      if (pqActiveObjects::instance().activeView() != view_)
+      if (pqActiveObjects::instance().activeView() != getView())
       {
-        pqActiveObjects::instance().setActiveView(view_);
+        pqActiveObjects::instance().setActiveView(getView());
       }
     }
   }
@@ -123,7 +124,7 @@ bool PVViewWidget::eventFilter(QObject *obj, QEvent *event)
 
 void PVViewWidget::exportPlot()
 {
-  pqActiveObjects::instance().setActiveView(view_);
+  pqActiveObjects::instance().setActiveView(getView());
   pqSaveScreenshotReaction::saveScreenshot();
 }
 
@@ -135,7 +136,7 @@ void PVViewWidget::setData(const std::vector< std::vector<double> >& valuesByCol
   // create a new table
   buildTableFrom(valuesByColumn, columnNames);
   // create a new source
-  pqActiveObjects::instance().setActiveView(view_);
+  pqActiveObjects::instance().setActiveView(getView());
   pqPipelineSource * mySourceProducer(builder->createSource("sources", "PVTrivialProducer", serv));
   producerBases_.append(mySourceProducer->getProxy());
   vtkSMSourceProxy * producer(vtkSMSourceProxy::SafeDownCast(mySourceProducer->getProxy()));
@@ -144,11 +145,11 @@ void PVViewWidget::setData(const std::vector< std::vector<double> >& valuesByCol
   realProducer->SetOutput(tables_[tables_.size() - 1]);
   mySourceProducer->updatePipeline();
   // create a new representation
-  pqDataRepresentation * newRepr(builder->createDataRepresentation(mySourceProducer->getOutputPort(0), view_, getRepresentationName()));
+  pqDataRepresentation * newRepr(builder->createDataRepresentation(mySourceProducer->getOutputPort(0), getView(), getRepresentationName()));
   newRepr->setVisible(1);
   // update view
-  view_->resetDisplay();
-  view_->render();
+  getView()->resetDisplay();
+  getView()->render();
 }
 
 
@@ -158,7 +159,7 @@ void PVViewWidget::setData(const Sample& sample)
   std::vector< std::vector<double> > varData(sample.getDimension(), std::vector<double>(sample.getSize()));
   for (UnsignedInteger i = 0; i < sample.getSize(); ++i)
     for (UnsignedInteger j = 0; j < sample.getDimension(); ++j)
-      varData[j][i] = sample[i][j];
+      varData[j][i] = sample(i, j);
 
   // name of each variable
   Description desc(sample.getDescription());
@@ -210,14 +211,10 @@ void PVViewWidget::buildTableFrom(const std::vector< std::vector<double> >& valu
 
 void PVViewWidget::setAxisToShow(const std::vector<std::string>& axis)
 {
-  // Mark the scene as dirty
-  if (contextItem_)
-    contextItem_->GetScene()->SetDirty(true);
-
-  for (int repr_ind = 0; repr_ind < view_->getNumberOfRepresentations(); repr_ind++)
+  for (int repr_ind = 0; repr_ind < getView()->getNumberOfRepresentations(); repr_ind++)
   {
     // get property
-    vtkSMProperty* idvp(view_->getRepresentation(repr_ind)->getProxy()->GetProperty(SERIES_VISIBILITY_PROP));
+    vtkSMProperty* idvp(getView()->getRepresentation(repr_ind)->getProxy()->GetProperty(SERIES_VISIBILITY_PROP));
     QList<QVariant> value = pqSMAdaptor::getMultipleElementProperty(idvp);
 
     // get columns names
@@ -259,9 +256,10 @@ void PVViewWidget::setAxisToShow(const std::vector<std::string>& axis)
     }
 
     // update property
-    view_->getRepresentation(repr_ind)->getProxy()->UpdateProperty("SeriesVisibility");
+    getView()->getRepresentation(repr_ind)->getProxy()->UpdateProperty("SeriesVisibility");
     delete smph;
   }
+  getView()->resetDisplay();
 }
 
 
@@ -308,6 +306,6 @@ void PVViewWidget::updateTable(const Sample& sample, const UnsignedInteger repr_
 
   // update view
   getProxy(repr_ind)->MarkModified(NULL);
-  view_->resetDisplay();
+  getView()->resetDisplay();
 }
 }

@@ -63,6 +63,7 @@ public:
 
   /** String converter */
   virtual OT::String __repr__() const;
+  virtual OT::String __str__(const OT::String & offset) const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;

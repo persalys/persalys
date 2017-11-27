@@ -44,7 +44,6 @@ public:
   OT::FORMResult getFORMResult() const;
 
   virtual Parameters getParameters() const;
-  virtual void run();
   virtual OT::String getPythonScript() const;
 
   /** String converter */
@@ -55,6 +54,10 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
+
+protected:
+  virtual void initialize();
+  virtual void launch();
 
 private:
   OT::FORMResult FORMResult_;

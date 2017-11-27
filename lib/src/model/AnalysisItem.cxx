@@ -86,7 +86,7 @@ void AnalysisItem::buildActions()
     addMetaModel_->setStatusTip(tr("Add the metamodel in the study tree"));
     connect(addMetaModel_, SIGNAL(triggered()), this, SLOT(addMetaModelItem()));
     appendAction(addMetaModel_);
-    if (!analysis_.getImplementation()->analysisLaunched())
+    if (!analysis_.getImplementation()->hasValidResult())
       addMetaModel_->setEnabled(false);
   }
 
@@ -94,12 +94,33 @@ void AnalysisItem::buildActions()
   if (analysisType.contains("DesignOfExperiment"))
     return;
 
+  appendSeparator();
+
   // remove analysis action
   removeAnalysis_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
   removeAnalysis_->setStatusTip(tr("Remove the analysis"));
   connect(removeAnalysis_, SIGNAL(triggered()), this, SLOT(removeAnalysis()));
 
   appendAction(removeAnalysis_);
+}
+
+
+QVariant AnalysisItem::data(int role) const
+{
+  // set icon
+  if (role == Qt::DecorationRole)
+  {
+    if (analysis_.hasValidResult())
+      return QIcon(":/images/dialog-ok-apply.png");
+    else if (!analysis_.getErrorMessage().empty())
+      return QIcon(":/images/edit-delete.png");
+    else if (analysis_.isRunning())
+      return QIcon(":/images/green-arrow-right.png");
+    else
+      return QIcon(":/images/run-build.png");
+  }
+  else
+    return OTguiItem::data(role);
 }
 
 
@@ -136,7 +157,7 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
   getParentOTStudyItem()->getOTStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
 
   // the analysis has not result: disable addMetaModel_ action
-  if (addMetaModel_)
+  if (!analysis_.hasValidResult())
     addMetaModel_->setEnabled(false);
 }
 
@@ -265,7 +286,7 @@ void AnalysisItem::removeAnalysis()
 void AnalysisItem::processLaunched()
 {
   // change icon
-  setData(QIcon(":/images/green-arrow-right.png"), Qt::DecorationRole);
+  emitDataChanged();
 
   // emit signal to disable run analysis/close study/import script...
   // warn the other objects that an analysis is running
@@ -276,7 +297,7 @@ void AnalysisItem::processLaunched()
 void AnalysisItem::processFinished()
 {
   // change icon
-  setData(QVariant(), Qt::DecorationRole);
+  emitDataChanged();
 
   // emit signal to enable run analysis/close study/import script...
   // warn the other objects that an analysis is finished

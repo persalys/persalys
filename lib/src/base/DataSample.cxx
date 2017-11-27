@@ -124,10 +124,10 @@ void DataSample::searchMinMax() const
     Sample orderedSample(sample.sortAccordingToAComponent(i));
 
     // Search min value of the ith output and the corresponding set of inputs X
-    const double minValue = orderedSample[0][i];
+    const double minValue = orderedSample(0, i);
 
     UnsignedInteger it = 0;
-    double value = orderedSample[it][i];
+    double value = orderedSample(it, i);
     Sample tempSample(0, numberInputs);
     do
     {
@@ -135,17 +135,17 @@ void DataSample::searchMinMax() const
       if (!tempSample.contains(point))
         tempSample.add(point);
       ++it;
-      value = orderedSample[it][i];
+      value = orderedSample(it, i);
     }
     while (value == minValue && it < size);
 
     listXMin_.add(tempSample);
 
     // Search max value of the ith output and the corresponding set of inputs X
-    const double maxValue = orderedSample[size - 1][i];
+    const double maxValue = orderedSample(size - 1, i);
 
     it = 0;
-    value = orderedSample[size - 1 - it][i];
+    value = orderedSample(size - 1 - it, i);
     tempSample = Sample(0, numberInputs);
     do
     {
@@ -153,7 +153,7 @@ void DataSample::searchMinMax() const
       if (!tempSample.contains(point))
         tempSample.add(point);
       ++it;
-      value = orderedSample[size - 1 - it][i];
+      value = orderedSample(size - 1 - it, i);
     }
     while (value == maxValue && it < size);
 

@@ -40,6 +40,7 @@ public:
 
   QList< QAction* > getActions();
   void appendAction(QAction* action);
+  void appendSeparator(const QString& text = "");
   void insertAction(int i, QAction* action);
 
   virtual QVariant data(int role) const;
@@ -53,6 +54,7 @@ protected slots:
   void requestRemoveChild(int);
   void setAnalysisInProgress(bool);
 signals:
+  void dataExportRequested();
   void emitErrorMessageRequested(QString);
   void analysisRequested(OTguiItem*, const Analysis&, const bool isGeneralWizard = false);
   void removeRequested(int);

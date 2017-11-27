@@ -63,7 +63,7 @@ GridDesignOfExperiment::GridDesignOfExperiment(const String& name,
   , inputNames_(physicalModel.getInputNames())
   , values_(values)
 {
-  const UnsignedInteger nbInputs = physicalModel.getInputs().getSize();
+  const UnsignedInteger nbInputs = physicalModel.getInputDimension();
   if (!nbInputs)
     throw InvalidArgumentException(HERE) << "The physical model does not have input variables";
 
@@ -125,31 +125,17 @@ void GridDesignOfExperiment::initializeParameters()
     else
     {
       const Distribution distribution = inputs[i].getDistribution();
-      const String distributionName = distribution.getImplementation()->getClassName();
 
-      if (distributionName == "TruncatedDistribution")
-      {
-        const TruncatedDistribution truncatedDist = *dynamic_cast<TruncatedDistribution*>(distribution.getImplementation().get());
-        if (truncatedDist.getFiniteLowerBound())
-          lowerBounds_[i] = truncatedDist.getLowerBound();
-        else
-          lowerBounds_[i] = distribution.computeQuantile(0.05)[0];
-        if (truncatedDist.getFiniteUpperBound())
-          upperBounds_[i] = truncatedDist.getUpperBound();
-        else
-          upperBounds_[i] = distribution.computeQuantile(0.95)[0];
-      }
-      else if (distributionName == "TruncatedNormal")
-      {
-        const TruncatedNormal truncatedDist = *dynamic_cast<TruncatedNormal*>(distribution.getImplementation().get());
-        lowerBounds_[i] = truncatedDist.getA();
-        upperBounds_[i] = truncatedDist.getB();
-      }
+      // lower bound
+      if (distribution.getRange().getFiniteLowerBound()[0])
+        lowerBounds_[i] = distribution.getRange().getLowerBound()[0];
       else
-      {
         lowerBounds_[i] = distribution.computeQuantile(0.05)[0];
+      // upper bound
+      if (distribution.getRange().getFiniteUpperBound()[0])
+        upperBounds_[i] = distribution.getRange().getUpperBound()[0];
+      else
         upperBounds_[i] = distribution.computeQuantile(0.95)[0];
-      }
     }
   }
 }
@@ -220,7 +206,7 @@ Sample GridDesignOfExperiment::generateInputSample(const UnsignedInteger /*nbSim
       {
         for (UnsignedInteger i = 0; i < variableInputsIndices.getSize(); ++i)
         {
-          inputSample[j][variableInputsIndices[i]] = sample[j][i];
+          inputSample(j, variableInputsIndices[i]) = sample(j, i);
         }
       }
     }
@@ -271,11 +257,11 @@ Point GridDesignOfExperiment::getValues() const
 
 void GridDesignOfExperiment::setValues(const Point & values)
 {
-  if (values.getSize() != getPhysicalModel().getInputs().getSize())
+  if (values.getSize() != getPhysicalModel().getInputDimension())
   {
     OSS oss;
     oss << "GridDesignOfExperiment::setValues : The dimension of the list of the values has to be equal to the number of inputs of the physical model: ";
-    oss << getPhysicalModel().getInputs().getSize();
+    oss << getPhysicalModel().getInputDimension();
     throw InvalidArgumentException(HERE) << oss.str();
   }
 
@@ -294,11 +280,11 @@ Point GridDesignOfExperiment::getLowerBounds() const
 
 void GridDesignOfExperiment::setLowerBounds(const Point & lowerBounds)
 {
-  if (lowerBounds.getSize() != getPhysicalModel().getInputs().getSize())
+  if (lowerBounds.getSize() != getPhysicalModel().getInputDimension())
   {
     OSS oss;
     oss << "GridDesignOfExperiment::setLowerBounds : The dimension of the list of the lower bounds has to be equal to the number of inputs of the physical model: ";
-    oss << getPhysicalModel().getInputs().getSize();
+    oss << getPhysicalModel().getInputDimension();
     throw InvalidArgumentException(HERE) << oss.str();
   }
 
@@ -317,11 +303,11 @@ Point GridDesignOfExperiment::getUpperBounds() const
 
 void GridDesignOfExperiment::setUpperBounds(const Point & upperBounds)
 {
-  if (upperBounds.getSize() != getPhysicalModel().getInputs().getSize())
+  if (upperBounds.getSize() != getPhysicalModel().getInputDimension())
   {
     OSS oss;
     oss << "GridDesignOfExperiment::setUpperBounds : The dimension of the list of the upper bounds has to be equal to the number of inputs of the physical model: ";
-    oss << getPhysicalModel().getInputs().getSize();
+    oss << getPhysicalModel().getInputDimension();
     throw InvalidArgumentException(HERE) << oss.str();
   }
 
@@ -340,23 +326,23 @@ Indices GridDesignOfExperiment::getLevels() const
 
 void GridDesignOfExperiment::setLevels(const Indices & levels)
 {
-  if (levels.getSize() != getPhysicalModel().getInputs().getSize())
+  if (levels.getSize() != getPhysicalModel().getInputDimension())
   {
     OSS oss;
     oss << "GridDesignOfExperiment::setLevels : The dimension of the list of the levels has to be equal to the number of inputs of the physical model: ";
-    oss << getPhysicalModel().getInputs().getSize();
+    oss << getPhysicalModel().getInputDimension();
     throw InvalidArgumentException(HERE) << oss.str();
   }
 
-  Point deltas(getPhysicalModel().getInputs().getSize());
+  Point deltas(getPhysicalModel().getInputDimension());
   for (UnsignedInteger i = 0; i < levels.getSize(); ++i)
   {
     if (levels[i] == 1)
       deltas[i] = 0;
     else
     {
-      if (upperBounds_.getSize() != getPhysicalModel().getInputs().getSize() ||
-          lowerBounds_.getSize() != getPhysicalModel().getInputs().getSize())
+      if (upperBounds_.getSize() != getPhysicalModel().getInputDimension() ||
+          lowerBounds_.getSize() != getPhysicalModel().getInputDimension())
         throw InvalidValueException(HERE) << "Set the upper bounds and the lower bounds before this step";
       deltas[i] = (upperBounds_[i] - lowerBounds_[i]) / (levels[i] - 1);
     }
@@ -379,11 +365,11 @@ Point GridDesignOfExperiment::getDeltas() const
 
 void GridDesignOfExperiment::setDeltas(const Point & deltas)
 {
-  if (deltas.getSize() != getPhysicalModel().getInputs().getSize())
+  if (deltas.getSize() != getPhysicalModel().getInputDimension())
   {
     OSS oss;
     oss << "GridDesignOfExperiment::setDeltas : The dimension of the list of the deltas has to be equal to the number of inputs of the physical model: ";
-    oss << getPhysicalModel().getInputs().getSize();
+    oss << getPhysicalModel().getInputDimension();
     throw InvalidArgumentException(HERE) << oss.str();
   }
 
@@ -391,13 +377,13 @@ void GridDesignOfExperiment::setDeltas(const Point & deltas)
     if (deltas[i] < 0.)
       throw InvalidArgumentException(HERE) << "GridDesignOfExperiment::setDeltas : All the deltas must be superior or equal to 0.";
 
-  Indices levels(getPhysicalModel().getInputs().getSize());
+  Indices levels(getPhysicalModel().getInputDimension());
   for (UnsignedInteger i = 0; i < deltas.getSize(); ++i)
   {
     if (deltas[i] > 0.)
     {
-      if (upperBounds_.getSize() != getPhysicalModel().getInputs().getSize() ||
-          lowerBounds_.getSize() != getPhysicalModel().getInputs().getSize())
+      if (upperBounds_.getSize() != getPhysicalModel().getInputDimension() ||
+          lowerBounds_.getSize() != getPhysicalModel().getInputDimension())
         throw InvalidValueException(HERE) << "Set the upper bounds and the lower bounds before this step";
       levels[i] = (upperBounds_[i] - lowerBounds_[i]) / deltas[i] + 1;
     }

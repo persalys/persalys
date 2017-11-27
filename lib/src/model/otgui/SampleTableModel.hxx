@@ -21,11 +21,11 @@
 #ifndef OTGUI_SAMPLETABLEMODEL_HXX
 #define OTGUI_SAMPLETABLEMODEL_HXX
 
-#include "openturns/Sample.hxx"
-
 #include "otgui/OTGuiprivate.hxx"
 
-#include <QStandardItem>
+#include <openturns/Sample.hxx>
+
+#include <QAbstractTableModel>
 
 namespace OTGUI
 {

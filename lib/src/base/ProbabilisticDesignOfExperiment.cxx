@@ -143,9 +143,9 @@ Sample ProbabilisticDesignOfExperiment::generateInputSample(const UnsignedIntege
     throw InvalidArgumentException(HERE) << "Error: generateInputSample design name unknown";
 
   // if there is at least a deterministic variable
-  if (getPhysicalModel().getStochasticInputNames().getSize() < getPhysicalModel().getInputNames().getSize())
+  if (getPhysicalModel().getStochasticInputNames().getSize() < getPhysicalModel().getInputDimension())
   {
-    Point inValues(getPhysicalModel().getInputs().getSize());
+    Point inValues(getPhysicalModel().getInputDimension());
     Indices variableInputsIndices;
     for (UnsignedInteger i = 0; i < inValues.getSize(); ++i)
     {
@@ -159,7 +159,7 @@ Sample ProbabilisticDesignOfExperiment::generateInputSample(const UnsignedIntege
     {
       for (UnsignedInteger j = 0; j < variableInputsIndices.getSize(); ++j)
       {
-        inputSample[i][variableInputsIndices[j]] = sample[i][j];
+        inputSample(i, variableInputsIndices[j]) = sample(i, j);
       }
     }
     inputSample.setDescription(getPhysicalModel().getInputNames());
@@ -200,14 +200,7 @@ String ProbabilisticDesignOfExperiment::getPythonScript() const
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
 
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
-  oss << "interestVariables = [";
-  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
-  {
-    oss << "'" << getInterestVariables()[i] << "'";
-    if (i < getInterestVariables().getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
+  oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
   oss << getName() << ".setInterestVariables(interestVariables)\n";
 
   return oss;

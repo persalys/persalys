@@ -136,9 +136,9 @@ QWidget* MinMaxTableGroupBox::getForOutputMinMaxTableView(const DesignOfExperime
     for (UnsignedInteger i = 0; i < doe.getInputSample().getDimension(); ++i)
     {
       // XMin
-      minMaxTable->setNotEditableItem(i + 1, 2, doe.getImplementation()->getListXMin()[outputIndex][0][i]);
+      minMaxTable->setNotEditableItem(i + 1, 2, doe.getImplementation()->getListXMin()[outputIndex](0, i));
       // XMax
-      minMaxTable->setNotEditableItem(i + 1, 3, doe.getImplementation()->getListXMax()[outputIndex][0][i]);
+      minMaxTable->setNotEditableItem(i + 1, 3, doe.getImplementation()->getListXMax()[outputIndex](0, i));
     }
   }
 

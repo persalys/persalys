@@ -41,6 +41,7 @@ public:
   void addLimitStateItem(LimitState & limitState);
   void addAnalysisItem(Analysis & analysis);
 
+  virtual QVariant data(int role) const;
   void setData(const QVariant & value, int role);
   OTStudy getOTStudy() const;
 
@@ -60,16 +61,20 @@ public slots:
   void createNewFMIPhysicalModel();
 #endif
   void createNewDataModel();
-  bool saveOTStudy();
+  void saveOTStudy();
+  void saveAsOTStudy();
   bool saveOTStudy(QString);
-  bool closeOTStudy();
+  void closeOTStudy();
   void addMetaModelItem(PhysicalModel metaModel);
 signals:
   void otStudyStatusChanged();
   void otStudyExportRequested();
+  void otStudyExportRequested(OTStudyItem* item);
+  void otStudySaveRequested();
   void otStudySaveAsRequested();
-  void otStudySaveAsRequested(OTStudyItem* item, bool* notcancel);
-  void otStudyCloseRequested(OTStudyItem* item, bool* canClose);
+  void otStudySaveRequested(OTStudyItem* item);
+  void otStudySaveAsRequested(OTStudyItem* item);
+  void otStudyCloseRequested(OTStudyItem* item);
   void newDataModelItemCreated(DataModelDiagramItem*);
   void newPhysicalModelItemCreated(PhysicalModelDiagramItem*);
   void recentFilesListChanged(const QString & recentFileName);

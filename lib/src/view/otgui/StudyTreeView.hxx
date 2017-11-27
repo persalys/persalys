@@ -75,11 +75,11 @@ public slots:
   void exportOTStudy();
   void saveCurrentOTStudy();
   void saveAsCurrentOTStudy();
-  void saveAsOTStudy();
-  void saveAsOTStudy(OTStudyItem* item, bool* notcancel = 0);
+  bool saveOTStudy(OTStudyItem* item);
+  bool saveAsOTStudy(OTStudyItem* item);
   void openOTStudy(const QString& fileName = "");
-  void closeNotSavedOTStudyRequest(OTStudyItem* item, bool* canClose);
-  bool closeOTStudy();
+  bool closeOTStudy(OTStudyItem* item);
+  bool closeCurrentOTStudy();
   bool closeAllOTStudies();
 signals:
   void showWindow(OTguiSubWindow*);

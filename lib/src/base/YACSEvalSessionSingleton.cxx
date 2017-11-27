@@ -19,9 +19,6 @@
  *
  */
 #include "otgui/YACSEvalSessionSingleton.hxx"
-#include "openturns/Exception.hxx"
-
-using namespace OT;
 
 namespace OTGUI
 {
@@ -52,6 +49,7 @@ YACSEvalSession * YACSEvalSessionSingleton::Get()
   }
   return singleton_->session_;
 }
+
 
 void YACSEvalSessionSingleton::Reset()
 {

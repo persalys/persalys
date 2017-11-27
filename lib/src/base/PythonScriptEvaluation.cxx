@@ -20,8 +20,9 @@
  */
 #include "otgui/PythonScriptEvaluation.hxx"
 #include "otgui/InterpreterUnlocker.hxx"
-#include "openturns/PersistentObjectFactory.hxx"
-#include "openturns/PythonWrappingFunctions.hxx"
+
+#include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/PythonWrappingFunctions.hxx>
 
 using namespace OT;
 
@@ -161,12 +162,6 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
   return outP;
 }
 
-
-/* Operator () */
-// Sample PythonScriptEvaluation::operator() (const Sample & inS) const
-// {
-//
-// }
 
 /* Method save() stores the object through the StorageManager */
 void PythonScriptEvaluation::save(Advocate & adv) const

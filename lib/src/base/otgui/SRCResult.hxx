@@ -22,7 +22,8 @@
 #define OTGUI_SRCRESULT_HXX
 
 #include "otgui/OTGuiprivate.hxx"
-#include "openturns/Sample.hxx"
+
+#include <openturns/OTType.hxx>
 
 namespace OTGUI
 {

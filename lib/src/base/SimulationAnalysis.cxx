@@ -111,10 +111,11 @@ void SimulationAnalysis::initialize()
 {
   PhysicalModelAnalysis::initialize();
   designOfExperiment_.getImplementation()->initialize();
+  failedInputSample_.clear();
 }
 
 
-bool SimulationAnalysis::analysisLaunched() const
+bool SimulationAnalysis::hasValidResult() const
 {
   return designOfExperiment_.getOutputSample().getSize() != 0;
 }

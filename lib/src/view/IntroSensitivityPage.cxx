@@ -50,7 +50,7 @@ IntroSensitivityPage::IntroSensitivityPage(QWidget* parent)
   QGroupBox * methodBox = new QGroupBox(tr("Method"));
   QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
 
-  methodGroup_ = new QButtonGroup;
+  methodGroup_ = new QButtonGroup(this);
 
   // Sobol
   QRadioButton * buttonToChooseMethodSobol = new QRadioButton(tr("Sobol"));

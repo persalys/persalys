@@ -125,7 +125,7 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
       plotType_ == GraphConfigurationWidget::PDFResult ||
       plotType_ == GraphConfigurationWidget::Copula)
   {
-    pdf_cdfGroup_ = new QButtonGroup;
+    pdf_cdfGroup_ = new QButtonGroup(this);
     QRadioButton * buttonToChoosePDForCDF = new QRadioButton(tr("PDF"));
     buttonToChoosePDForCDF->setChecked(true);
     pdf_cdfGroup_->addButton(buttonToChoosePDForCDF, GraphConfigurationWidget::PDF);

@@ -39,7 +39,7 @@ public:
 
   virtual ~OTguiSubWindow();
 
-  QStandardItem * getItem()const;
+  OTguiItem * getItem() const;
 
   QString getErrorMessage() const;
 
@@ -57,7 +57,7 @@ protected:
   QLabel * errorMessageLabel_;
 
 private:
-  QStandardItem * item_;
+  OTguiItem * item_;
   QString errorMessage_;
   QList<QTimeLine*> qtimelineList_;
 };

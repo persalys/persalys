@@ -127,81 +127,72 @@ OrthogonalProductPolynomialFactory::PolynomialFamilyCollection FunctionalChaosAn
 }
 
 
-void FunctionalChaosAnalysis::run()
+void FunctionalChaosAnalysis::initialize()
 {
-  isRunning_ = true;
+  AnalysisImplementation::initialize();
+  result_ = FunctionalChaosAnalysisResult();
+}
+
+
+void FunctionalChaosAnalysis::launch()
+{
+  // check
+  if (designOfExperiment_.getInputSample().getSize() * designOfExperiment_.getOutputSample().getSize() == 0)
+    throw InvalidArgumentException(HERE) << "The design of experiments must contains not empty input AND output samples";
+  if (designOfExperiment_.getInputSample().getSize() != designOfExperiment_.getOutputSample().getSize())
+    throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
+  if (testSampleValidation() && (designOfExperiment_.getInputSample().getSize() * getTestSampleValidationPercentageOfPoints() / 100 < 3))
+    throw InvalidArgumentException(HERE) << "Test sample validation: The test sample must contain at least three points. Here size * k / 100 = " << (designOfExperiment_.getInputSample().getSize() * getTestSampleValidationPercentageOfPoints() / 100);
+  if (kFoldValidation() && (designOfExperiment_.getInputSample().getSize() / getKFoldValidationNumberOfFolds() < 3))
+    throw InvalidArgumentException(HERE) << "K-Fold validation: each fold must contain at least three points. Here size / k = " << (designOfExperiment_.getInputSample().getSize() / getKFoldValidationNumberOfFolds());
+
+
+  // get effective samples
+  const Sample effectiveInputSample(getEffectiveInputSample());
+  const Sample effectiveOutputSample(getEffectiveOutputSample());
+
+  // check chaos degree
+  if (!getSparseChaos())
+  {
+    const UnsignedInteger inputDimension = effectiveInputSample.getDimension();
+    const UnsignedInteger size = designOfExperiment_.getOutputSample().getSize();
+    const UnsignedInteger minimumSize  = SpecFunc::BinomialCoefficient(chaosDegree_ + inputDimension, chaosDegree_);
+    if (size < minimumSize)
+      throw InvalidArgumentException(HERE) << "Design of experiments size too small : "
+                                            << size
+                                            << ". It must be superior or equal to C(degree+nbInputs, degree) = "
+                                            << minimumSize << ")\n";
+  }
+
+  // create FunctionalChaosAlgorithm and run it
+  FunctionalChaosAlgorithm functionalChaos(buildFunctionalChaosAlgorithm(effectiveInputSample, effectiveOutputSample));
+  functionalChaos.run();
+
+  // set result_
+  result_.outputSample_ = effectiveOutputSample;
+  result_.functionalChaosResult_ = functionalChaos.getResult();
+
+  // build metamodel
+  Function metamodelFunction(result_.functionalChaosResult_.getMetaModel());
+  Description variablesNames(effectiveInputSample.getDescription());
+  variablesNames.add(effectiveOutputSample.getDescription());
+  metamodelFunction.setDescription(variablesNames);
+  buildMetaModel(result_, metamodelFunction);
+
+  result_.metaModelOutputSample_ = metamodelFunction(effectiveInputSample);
+
+  // post process
   try
   {
-    // clear result
-    initialize();
-    result_ = FunctionalChaosAnalysisResult();
-
-    // check
-    if (designOfExperiment_.getInputSample().getSize() * designOfExperiment_.getOutputSample().getSize() == 0)
-      throw InvalidArgumentException(HERE) << "The design of experiments must contains not empty input AND output samples";
-    if (designOfExperiment_.getInputSample().getSize() != designOfExperiment_.getOutputSample().getSize())
-      throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
-    if (testSampleValidation() && (designOfExperiment_.getInputSample().getSize() * getTestSampleValidationPercentageOfPoints() / 100 < 3))
-      throw InvalidArgumentException(HERE) << "Test sample validation: The test sample must contain at least three points. Here size * k / 100 = " << (designOfExperiment_.getInputSample().getSize() * getTestSampleValidationPercentageOfPoints() / 100);
-    if (kFoldValidation() && (designOfExperiment_.getInputSample().getSize() / getKFoldValidationNumberOfFolds() < 3))
-      throw InvalidArgumentException(HERE) << "K-Fold validation: each fold must contain at least three points. Here size / k = " << (designOfExperiment_.getInputSample().getSize() / getKFoldValidationNumberOfFolds());
-
-
-    // get effective samples
-    const Sample effectiveInputSample(getEffectiveInputSample());
-    const Sample effectiveOutputSample(getEffectiveOutputSample());
-
-    // check chaos degree
-    if (!getSparseChaos())
-    {
-      const UnsignedInteger inputDimension = effectiveInputSample.getDimension();
-      const UnsignedInteger size = designOfExperiment_.getOutputSample().getSize();
-      const UnsignedInteger minimumSize  = SpecFunc::BinomialCoefficient(chaosDegree_ + inputDimension, chaosDegree_);
-      if (size < minimumSize)
-        throw InvalidArgumentException(HERE) << "Design of experiments size too small : "
-                                             << size
-                                             << ". It must be superior or equal to C(degree+nbInputs, degree) = "
-                                             << minimumSize << ")\n";
-    }
-
-    // create FunctionalChaosAlgorithm and run it
-    FunctionalChaosAlgorithm functionalChaos(buildFunctionalChaosAlgorithm(effectiveInputSample, effectiveOutputSample));
-    functionalChaos.run();
-
-    // set result_
-    result_.outputSample_ = effectiveOutputSample;
-    result_.functionalChaosResult_ = functionalChaos.getResult();
-
-    // build metamodel
-    Function metamodelFunction(result_.functionalChaosResult_.getMetaModel());
-    Description variablesNames(effectiveInputSample.getDescription());
-    variablesNames.add(effectiveOutputSample.getDescription());
-    metamodelFunction.setDescription(variablesNames);
-    buildMetaModel(result_, metamodelFunction);
-
-    result_.metaModelOutputSample_ = metamodelFunction(effectiveInputSample);
-
-    // post process
-    try
-    {
-      postProcessFunctionalChaosResult(effectiveInputSample);
-    }
-    catch (std::exception & ex)
-    {
-      errorMessage_ = OSS() << "Impossible to compute Sobol indices and moments.\n" << ex.what() << "\nTry to increase the size of the design of experiments.";
-    }
-
-    // validation
-    validateMetaModelResult(result_, effectiveInputSample);
-
-    notify("analysisFinished");
+    postProcessFunctionalChaosResult(effectiveInputSample);
   }
   catch (std::exception & ex)
   {
-    errorMessage_ =  OSS() << errorMessage_ << ex.what();
-    notify("analysisBadlyFinished");
+    warningMessage_ = OSS() << "Impossible to compute Sobol indices and moments.\n" << ex.what() << "\nTry to increase the size of the design of experiments.";
   }
-  isRunning_ = false;
+
+  // validation
+  validateMetaModelResult(result_, effectiveInputSample);
 }
 
 
@@ -275,8 +266,8 @@ void FunctionalChaosAnalysis::postProcessFunctionalChaosResult(const Sample& inp
 
     for (UnsignedInteger j = 0; j < inputDimension; ++j)
     {
-      firstOrderIndices[i][j] = vector.getSobolIndex(j, i);
-      totalIndices[i][j] = vector.getSobolTotalIndex(j, i);
+      firstOrderIndices(i, j) = vector.getSobolIndex(j, i);
+      totalIndices(i, j) = vector.getSobolTotalIndex(j, i);
     }
   }
   result_.variance_ = variance;
@@ -339,7 +330,7 @@ void FunctionalChaosAnalysis::computeAnalyticalValidation(MetaModelAnalysisResul
     double quadraticResidual = 0.;
     for (UnsignedInteger j = 0; j < result.outputSample_.getSize(); ++j)
     {
-      const double diff = (result.metaModelOutputSample_[j][i] - result.outputSample_[j][i]) / (1 - Hdiag[j]);
+      const double diff = (result.metaModelOutputSample_(j, i) - result.outputSample_(j, i)) / (1 - Hdiag[j]);
       quadraticResidual += diff * diff;
     }
     // 1 - sum[ ((ŷ_j - y_j) / (1 - h_j))^2 ] / (n-1) / Var Y
@@ -416,7 +407,7 @@ String FunctionalChaosAnalysis::getPythonScript() const
 }
 
 
-bool FunctionalChaosAnalysis::analysisLaunched() const
+bool FunctionalChaosAnalysis::hasValidResult() const
 {
   return getResult().getMetaModelOutputSample().getSize();
 }

@@ -20,8 +20,8 @@
  */
 #include "otgui/LimitStateImplementation.hxx"
 
-#include "openturns/Equal.hxx"
-#include "openturns/PersistentObjectFactory.hxx"
+#include <openturns/Equal.hxx>
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
@@ -52,7 +52,7 @@ LimitStateImplementation::LimitStateImplementation(const String& name,
   , physicalModel_(physicalModel)
   , threshold_(threshold)
 {
-  if (!physicalModel.getOutputs().getSize())
+  if (!physicalModel.getOutputDimension())
     throw InvalidArgumentException(HERE) << "The physical model does not contain output";
 
   setName(name);
@@ -167,6 +167,27 @@ String LimitStateImplementation::__repr__() const
       << " outputName=" << getOutputName()
       << " operator=" << getOperator()
       << " threshold=" << getThreshold();
+  return oss;
+}
+
+
+String LimitStateImplementation::__str__(const String & offset) const
+{
+  OSS oss(false);
+  oss << getOutputName();
+
+  const String operatorName = getOperator().getImplementation()->getClassName();
+  if (operatorName == "Less")
+    oss <<  " < ";
+  else if (operatorName == "LessOrEqual")
+    oss <<  " <= ";
+  else if (operatorName == "Greater")
+    oss <<  " > ";
+  else if (operatorName == "GreaterOrEqual")
+    oss <<  " >= ";
+
+   oss << getThreshold();
+
   return oss;
 }
 

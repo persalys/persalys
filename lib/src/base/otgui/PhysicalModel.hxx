@@ -51,6 +51,7 @@ public:
   void addObserver(Observer * observer);
   void blockNotification(const OT::String & blockedObserverType = "");
 
+  OT::UnsignedInteger getInputDimension() const;
   InputCollection getInputs() const;
   Input & getInputByName(const OT::String & inputName);
   Input getInputByName(const OT::String & inputName) const;
@@ -68,6 +69,7 @@ public:
   bool hasInputNamed(const OT::String & inputName) const;
   bool hasStochasticInputs() const;
 
+  OT::UnsignedInteger getOutputDimension() const;
   OutputCollection getOutputs() const;
   Output & getOutputByName(const OT::String & outputName);
   Output getOutputByName(const OT::String & outputName) const;

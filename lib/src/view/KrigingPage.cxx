@@ -283,7 +283,7 @@ Analysis KrigingPage::getAnalysis(const String& name, const DesignOfExperiment& 
     if (doe.getPhysicalModel().hasStochasticInputs())
       inputDimension = doe.getPhysicalModel().getStochasticInputNames().getSize();
     else
-      inputDimension = doe.getPhysicalModel().getInputNames().getSize();
+      inputDimension = doe.getPhysicalModel().getInputDimension();
   }
 
   switch (basisTypeComboBox_->currentIndex())

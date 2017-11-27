@@ -79,16 +79,16 @@ OTGUI_Analysis_run_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_Analysis_analysisLaunched_doc
+%define OTGUI_Analysis_hasValidResult_doc
 "Whether the analysis has been run.
 
 Returns
 -------
-analysisLaunched : bool
+hasValidResult : bool
     Whether the analysis has already been run"
 %enddef
-%feature("docstring") OTGUI::AnalysisImplementation::analysisLaunched
-OTGUI_Analysis_analysisLaunched_doc
+%feature("docstring") OTGUI::AnalysisImplementation::hasValidResult
+OTGUI_Analysis_hasValidResult_doc
 
 // ---------------------------------------------------------------------
 

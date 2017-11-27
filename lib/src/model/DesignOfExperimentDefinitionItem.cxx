@@ -70,6 +70,13 @@ void DesignOfExperimentDefinitionItem::buildActions()
 
   appendAction(modifyAnalysis_);
 
+  exportData_ = new QAction(QIcon(":/images/document-export.png"), tr("Export data"), this);
+  exportData_->setStatusTip(tr("Export the data in a file"));
+  connect(exportData_, SIGNAL(triggered()), this, SIGNAL(dataExportRequested()));
+  appendAction(exportData_);
+
+  appendSeparator(tr("Analysis"));
+
   // evaluate design of experiments action
   evaluateDesignOfExperiment_ = new QAction(QIcon(":/images/system-run.png"), tr("Evaluate"), this);
   evaluateDesignOfExperiment_->setStatusTip(tr("Evaluate the design of experiments"));
@@ -81,6 +88,8 @@ void DesignOfExperimentDefinitionItem::buildActions()
   newMetaModel_ = new QAction(QIcon(":/images/metaModel.png"), tr("Metamodel"), this);
   newMetaModel_->setStatusTip(tr("Create a new metamodel"));
   connect(newMetaModel_, SIGNAL(triggered()), this, SLOT(createNewMetaModel()));
+
+  appendSeparator();
 
   // remove analysis action
   removeAnalysis_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
@@ -115,7 +124,7 @@ void DesignOfExperimentDefinitionItem::update(Observable* source, const String& 
   else if (message == "analysisRemoved")
   {
     // emit signal to PhysicalModelDiagramItem to update the diagram
-    emit numberDesignEvaluationChanged(getAnalysis().analysisLaunched());
+    emit numberDesignEvaluationChanged(getAnalysis().hasValidResult());
     if (hasChildren())
       qDebug() << "DesignOfExperimentDefinitionItem::update(analysisRemoved) has not to contain child\n";
 
@@ -152,6 +161,7 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
   font.setWeight(font.weight() + 10);
   evaluationItem->setData(font, Qt::FontRole);
   evaluationItem->setEditable(false);
+  evaluationItem->appendSeparator(tr("Analysis"));
   evaluationItem->appendAction(newMetaModel_);
 
   // connections
@@ -260,7 +270,7 @@ void DesignOfExperimentDefinitionItem::removeAnalysis()
 void DesignOfExperimentDefinitionItem::createNewMetaModel()
 {
   // check
-  if (!getAnalysis().analysisLaunched())
+  if (!getAnalysis().hasValidResult())
   {
     emit emitErrorMessageRequested(tr("The model must have at least one output. Evaluate the design of experiments"));
     return;
@@ -283,7 +293,7 @@ void DesignOfExperimentDefinitionItem::createNewMetaModel()
 void DesignOfExperimentDefinitionItem::fill()
 {
   // append Evaluation item
-  if (getAnalysis().analysisLaunched())
+  if (getAnalysis().hasValidResult())
     appendEvaluationItem();
 }
 }

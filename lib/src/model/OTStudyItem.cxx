@@ -48,7 +48,6 @@ OTStudyItem::OTStudyItem(const OTStudy& otStudy)
   parentOTStudyItem_ = this;
   otStudy_.addObserver(this);
   update(0, "fileNameChanged");
-  updateIcon();
 
   buildActions();
   connect(this, SIGNAL(otStudyStatusChanged()), this, SLOT(updateIcon()));
@@ -86,13 +85,14 @@ void OTStudyItem::buildActions()
 
   // save as  action
   saveAsOTStudy_ = new QAction(QIcon(":/images/document-save-as.png"), tr("Save As..."), this);
-  connect(saveAsOTStudy_, SIGNAL(triggered()), this, SIGNAL(otStudySaveAsRequested()));
+  connect(saveAsOTStudy_, SIGNAL(triggered()), this, SLOT(saveAsOTStudy()));
 
   // close action
   closeOTStudy_ = new QAction(QIcon(":/images/window-close.png"), tr("Close"), this);
   connect(closeOTStudy_, SIGNAL(triggered()), this, SLOT(closeOTStudy()));
 
   // add actions
+  appendSeparator(tr("Model"));
   appendAction(newSymbolicPhysicalModel_);
   appendAction(newPythonPhysicalModel_);
 #ifdef OTGUI_HAVE_YACS
@@ -102,8 +102,10 @@ void OTStudyItem::buildActions()
   appendAction(newFMIPhysicalModel_);
 #endif
   appendAction(newDataModel_);
+  appendSeparator();
   appendAction(exportOTStudy_);
   appendAction(saveOTStudy_);
+  appendSeparator();
   appendAction(closeOTStudy_);
 }
 
@@ -155,10 +157,7 @@ void OTStudyItem::update(Observable * source, const String & message)
 
 void OTStudyItem::updateIcon()
 {
-  if (otStudy_.getImplementation()->hasBeenModified())
-    setData(QIcon(":/images/document-save.png"), Qt::DecorationRole);
-  else
-    setData(QIcon(), Qt::DecorationRole);
+  emitDataChanged();
 }
 
 
@@ -235,23 +234,15 @@ void OTStudyItem::exportOTStudy(QString fileName)
 }
 
 
-bool OTStudyItem::saveOTStudy()
+void OTStudyItem::saveOTStudy()
 {
-  if (!QFileInfo(QString::fromUtf8(otStudy_.getFileName().c_str())).exists())
-  {
-    bool notcancel = true;
-    emit otStudySaveAsRequested(this, &notcancel);
+  emit otStudySaveRequested(this);
+}
 
-    if (!notcancel)
-      return false;
 
-    return true;
-  }
-
-  QApplication::setOverrideCursor(Qt::WaitCursor);
-  otStudy_.save(otStudy_.getFileName());
-  QApplication::restoreOverrideCursor();
-  return true;
+void OTStudyItem::saveAsOTStudy()
+{
+  emit otStudySaveAsRequested(this);
 }
 
 
@@ -291,33 +282,21 @@ bool OTStudyItem::saveOTStudy(QString fileName)
 }
 
 
-bool OTStudyItem::closeOTStudy()
+void OTStudyItem::closeOTStudy()
 {
-  // check if the analysis is running
-  if (analysisInProgress_)
-  {
-    emit emitErrorMessageRequested(tr("Can not remove a study when an analysis is running."));
-    return false;
-  }
-
-  // if there are modifications
-  bool canClose = false;
-
-  if (otStudy_.getImplementation().get()->hasBeenModified())
-    emit otStudyCloseRequested(this, &canClose);
-  else
-    canClose = true;
-
-  if (canClose)
-    OTStudy::Remove(otStudy_);
-
-  return canClose;
+  emit otStudyCloseRequested(this);
 }
 
 
 void OTStudyItem::addDataModelItem(DesignOfExperiment & dataModel)
 {
   OTguiItem * item = getTitleItemNamed(tr("Data models"), "DataModelsTitle");
+
+  // context menu actions
+  if (!item->getActions().size())
+  {
+    item->appendAction(newDataModel_);
+  }
 
   // new Data model item
   DataModelDiagramItem * newDataModelItem = new DataModelDiagramItem(dataModel);
@@ -336,6 +315,19 @@ void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
   const QString title = (physicalModel.getImplementation()->getClassName() == "MetaModel") ? tr("Metamodels") : tr("Physical models");
   const QString titleType = (physicalModel.getImplementation()->getClassName() == "MetaModel") ? "MetaModelsTitle" : "PhysicalModelsTitle";
   OTguiItem * item = getTitleItemNamed(title, titleType);
+
+  // context menu actions
+  if (!item->getActions().size())
+  {
+    item->appendAction(newSymbolicPhysicalModel_);
+    item->appendAction(newPythonPhysicalModel_);
+#ifdef OTGUI_HAVE_YACS
+    item->appendAction(newYACSPhysicalModel_);
+#endif
+#ifdef OTGUI_HAVE_OTFMI
+    item->appendAction(newFMIPhysicalModel_);
+#endif
+  }
 
   // new Physical model item
   PhysicalModelDiagramItem * newPhysicalModelItem = new PhysicalModelDiagramItem(physicalModel);
@@ -409,6 +401,21 @@ void OTStudyItem::addMetaModelItem(PhysicalModel metaModel)
   const String availableName = otStudy_.getAvailablePhysicalModelName(metaModel.getName());
   metaModel.setName(availableName);
   otStudy_.add(metaModel);
+}
+
+
+QVariant OTStudyItem::data(int role) const
+{
+  // set icon
+  if (role == Qt::DecorationRole)
+  {
+    if (otStudy_.getImplementation()->hasBeenModified())
+      return QIcon(":/images/document-save.png");
+    else
+      return QIcon();
+  }
+  else
+    return OTguiItem::data(role);
 }
 
 

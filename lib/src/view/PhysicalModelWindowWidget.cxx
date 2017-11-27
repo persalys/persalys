@@ -125,7 +125,7 @@ void PhysicalModelWindowWidget::buildInterface()
   CheckableHeaderView * outputTableHeaderView = new CheckableHeaderView;
   outputTableView_->setHorizontalHeader(outputTableHeaderView);
   outputTableView_->horizontalHeader()->setStretchLastSection(true);
-  const UnsignedInteger nbOutputs = physicalModel_.getOutputNames().getSize();
+  const UnsignedInteger nbOutputs = physicalModel_.getOutputDimension();
   const bool allChecked = (nbOutputs && (nbOutputs == physicalModel_.getSelectedOutputsNames().getSize()));
   outputTableHeaderView->setChecked(allChecked);
 
@@ -183,7 +183,7 @@ void PhysicalModelWindowWidget::buildInterface()
     CopyableTableView * differentiationTableView = new CopyableTableView;
     differentiationTableView->horizontalHeader()->setStretchLastSection(true);
 
-    SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate;
+    SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate(differentiationTableView);
     spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::differentiationStep);
     differentiationTableView->setItemDelegateForColumn(1, spinBoxDelegate);
     differentiationTableView->setEditTriggers(QTableView::AllEditTriggers);
@@ -249,6 +249,7 @@ void PhysicalModelWindowWidget::resizeOutputTable()
   {
     outputTableView_->setColumnHidden(2, true); // hide formula section
     outputTableView_->horizontalHeader()->resizeSection(1, width - 2 * minSectionSize);
+    outputTableView_->horizontalHeader()->resizeSection(3, minSectionSize);
   }
   else
   {
@@ -306,7 +307,7 @@ void PhysicalModelWindowWidget::evaluateOutputs()
 
   // set output value
   for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++ i)
-    physicalModel_.setOutputValue(outputSample.getDescription()[i], outputSample[0][i]);
+    physicalModel_.setOutputValue(outputSample.getDescription()[i], outputSample(0, i));
 
   emit errorMessageChanged("");
 }

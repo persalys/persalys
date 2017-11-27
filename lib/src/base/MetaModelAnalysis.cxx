@@ -228,7 +228,7 @@ Sample MetaModelAnalysis::getEffectiveInputSample() const
 
   // if the physical model has stochastic variables: we do not take into account the deterministic variables
   Indices inputIndices;
-  for (UnsignedInteger i = 0; i < designOfExperiment_.getPhysicalModel().getInputs().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < designOfExperiment_.getPhysicalModel().getInputDimension(); ++i)
     if (designOfExperiment_.getPhysicalModel().getInputs()[i].isStochastic())
       inputIndices.add(i);
 
@@ -373,7 +373,7 @@ void MetaModelAnalysis::computeError(const Sample& metaOutSample, const Sample& 
     double quadraticResidual = 0.;
     for (UnsignedInteger j = 0; j < size; ++j)
     {
-      const double diff = metaOutSample[j][i] - outSample[j][i];
+      const double diff = metaOutSample(j, i) - outSample(j, i);
       quadraticResidual += diff * diff;
     }
     // sqrt ( sum[ (ŷ_j/j - y_j)^2 ] ) / n

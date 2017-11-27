@@ -63,8 +63,9 @@ void PhysicalModelDefinitionItem::buildActions()
 
   // add actions
   appendAction(newProbabilisticModel_);
-  appendAction(newModelEvaluation_);
   appendAction(newDesignOfExperiment_);
+  appendSeparator(tr("Analysis"));
+  appendAction(newModelEvaluation_);
 }
 
 
@@ -133,7 +134,7 @@ void PhysicalModelDefinitionItem::update(Observable* source, const String & mess
 void PhysicalModelDefinitionItem::createProbabilisticModel()
 {
   // check
-  if (!physicalModel_.getInputs().getSize())
+  if (!physicalModel_.getInputDimension())
   {
     emit emitErrorMessageRequested(tr("The physical model must have inputs."));
     return;
@@ -162,7 +163,7 @@ void PhysicalModelDefinitionItem::createNewModelEvaluation()
 void PhysicalModelDefinitionItem::createNewDesignOfExperiment()
 {
   // check
-  if (!physicalModel_.getInputs().getSize())
+  if (!physicalModel_.getInputDimension())
   {
     emit emitErrorMessageRequested(tr("The physical model must have inputs."));
     return;

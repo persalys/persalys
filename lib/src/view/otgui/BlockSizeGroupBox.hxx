@@ -22,7 +22,8 @@
 #define OTGUI_BLOCKSIZEGROUPBOX_HXX
 
 #include "otgui/UIntSpinBox.hxx"
-#include "openturns/OTtypes.hxx"
+
+#include <openturns/OTtypes.hxx>
 
 #include <QGroupBox>
 

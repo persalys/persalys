@@ -128,75 +128,66 @@ void SimulationReliabilityAnalysis::setBlockSize(const UnsignedInteger size)
 }
 
 
-void SimulationReliabilityAnalysis::run()
+void SimulationReliabilityAnalysis::initialize()
 {
-  isRunning_ = true;
-  try
+  AnalysisImplementation::initialize();
+  timeCriteria_ = TimeCriteria();
+  result_ = SimulationReliabilityResult();
+}
+
+
+void SimulationReliabilityAnalysis::launch()
+{
+  // initialization
+  RandomGenerator::SetSeed(getSeed());
+
+  Description outputName(1);
+  outputName[0] = getLimitState().getOutputName();
+
+  // get function
+  Function function(getPhysicalModel().getRestrictedFunction(outputName));
+  function.enableHistory();
+  function.clearHistory();
+
+  // create OT::Event
+  Event event(RandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
+  event.setDescription(outputName);
+
+  // create OT::Simulation
+  SimulationInterface algo = getSimulationAlgorithm(event);
+
+  // set algo parameters
+  UnsignedInteger maximumOuterSampling = (UnsignedInteger)std::numeric_limits<int>::max();
+  if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
   {
-    // clear result
-    initialize();
-    timeCriteria_ = TimeCriteria();
-    result_ = SimulationReliabilityResult();
-
-    // initialization
-    RandomGenerator::SetSeed(getSeed());
-
-    Description outputName(1);
-    outputName[0] = getLimitState().getOutputName();
-
-    // get function
-    Function function(getPhysicalModel().getRestrictedFunction(outputName));
-    function.enableHistory();
-    function.clearHistory();
-
-    // create OT::Event
-    Event event(RandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
-    event.setDescription(outputName);
-
-    // create OT::Simulation
-    SimulationInterface algo = getSimulationAlgorithm(event);
-
-    // set algo parameters
-    UnsignedInteger maximumOuterSampling = (UnsignedInteger)std::numeric_limits<int>::max();
-    if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
-    {
-      algo.setConvergenceStrategy(Compact(getMaximumCalls())); // TODO: propose in wizard the convergence sample's size?
-      maximumOuterSampling = static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize()));
-    }
-    algo.setMaximumOuterSampling(maximumOuterSampling);
-    algo.setMaximumCoefficientOfVariation(getMaximumCoefficientOfVariation());
-    algo.setBlockSize(getBlockSize());
-
-    timeCriteria_.setStartTime(clock());
-    timeCriteria_.setMaxElapsedTime(getMaximumElapsedTime());
-    algo.setStopCallback(&Stop, &timeCriteria_);
-    AnalysisStruct analysisStruc(this, algo);
-    algo.setProgressCallback(&UpdateProgressValue, &analysisStruc);
-
-    // run algo
-    algo.run();
-
-    // set results
-    // get convergence graph at level 0.95
-    const Graph graph = algo.drawProbabilityConvergence();
-    result_ = SimulationReliabilityResult(algo.getResult(),
-                                          function.getHistoryOutput().getSample(),
-                                          graph.getDrawables()[0].getData(),
-                                          graph.getDrawables()[1].getData(),
-                                          graph.getDrawables()[2].getData());
-
-    result_.elapsedTime_ = (Scalar) timeCriteria_.elapsedTime_ / CLOCKS_PER_SEC;
-
-    function.disableHistory();
-
-    notify("analysisFinished");
+    algo.setConvergenceStrategy(Compact(getMaximumCalls())); // TODO: propose in wizard the convergence sample's size?
+    maximumOuterSampling = static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize()));
   }
-  catch (std::exception & ex)
-  {
-    errorMessage_ = ex.what();
-    notify("analysisBadlyFinished");
-  }
-  isRunning_ = false;
+  algo.setMaximumOuterSampling(maximumOuterSampling);
+  algo.setMaximumCoefficientOfVariation(getMaximumCoefficientOfVariation());
+  algo.setBlockSize(getBlockSize());
+
+  timeCriteria_.setStartTime(clock());
+  timeCriteria_.setMaxElapsedTime(getMaximumElapsedTime());
+  algo.setStopCallback(&Stop, &timeCriteria_);
+  AnalysisStruct analysisStruc(this, algo);
+  algo.setProgressCallback(&UpdateProgressValue, &analysisStruc);
+
+  // run algo
+  algo.run();
+
+  // set results
+  // get convergence graph at level 0.95
+  const Graph graph = algo.drawProbabilityConvergence();
+  result_ = SimulationReliabilityResult(algo.getResult(),
+                                        function.getHistoryOutput().getSample(),
+                                        graph.getDrawables()[0].getData(),
+                                        graph.getDrawables()[1].getData(),
+                                        graph.getDrawables()[2].getData());
+
+  result_.elapsedTime_ = (Scalar) timeCriteria_.elapsedTime_ / CLOCKS_PER_SEC;
+
+  function.disableHistory();
 }
 
 
@@ -232,7 +223,7 @@ String SimulationReliabilityAnalysis::getPythonScript() const
 }
 
 
-bool SimulationReliabilityAnalysis::analysisLaunched() const
+bool SimulationReliabilityAnalysis::hasValidResult() const
 {
   return getResult().getSimulationResult().getOuterSampling() != 0;
 }
