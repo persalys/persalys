@@ -193,7 +193,7 @@ void PhysicalModelDiagramItem::requestReliabilityCreation()
   LimitState limitState;
   for (UnsignedInteger i = 0; i < getParentOTStudyItem()->getOTStudy().getLimitStates().getSize(); ++i)
   {
-    if (getParentOTStudyItem()->getOTStudy().getLimitStates()[i].getPhysicalModel().getImplementation().get() == physicalModel_.getImplementation().get())
+    if (getParentOTStudyItem()->getOTStudy().getLimitStates()[i].getPhysicalModel() == physicalModel_)
     {
       limitState = getParentOTStudyItem()->getOTStudy().getLimitStates()[i];
       break;
@@ -300,9 +300,10 @@ void PhysicalModelDiagramItem::appendProbabilisticModelItem()
 void PhysicalModelDiagramItem::appendAnalysisItem(Analysis& analysis)
 {
   // if reliability analysis: limit state item takes care of adding an item for the analysis
-  if (dynamic_cast<ReliabilityAnalysis*>(analysis.getImplementation().get()))
+  ReliabilityAnalysis * analysis_ptr = dynamic_cast<ReliabilityAnalysis*>(analysis.getImplementation().get());
+  if (analysis_ptr)
   {
-    LimitState limitState(dynamic_cast<ReliabilityAnalysis*>(analysis.getImplementation().get())->getLimitState());
+    LimitState limitState(analysis_ptr->getLimitState());
     LimitStateItem * lsItem = dynamic_cast<LimitStateItem*>(limitState.getImplementation().get()->getObserver("LimitState"));
     if (!lsItem)
     {
