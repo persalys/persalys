@@ -65,7 +65,7 @@ public:
 protected:
   virtual void initialize();
   virtual void launch();
-  void initializeParameters(const InputCollection & inputs);
+  void initializeParameters();
 
 private:
   OT::Description inputNames_;

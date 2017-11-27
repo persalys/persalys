@@ -48,7 +48,7 @@ ModelEvaluation::ModelEvaluation(const String& name, const PhysicalModel& physic
   , inputValues_()
   , designOfExperiment_(name, physicalModel)
 {
-  initializeParameters(physicalModel.getInputs());
+  initializeParameters();
   setInterestVariables(getPhysicalModel().getSelectedOutputsNames());
 }
 
@@ -69,20 +69,22 @@ ModelEvaluation::ModelEvaluation(const String& name,
 /* Virtual constructor */
 ModelEvaluation* ModelEvaluation::clone() const
 {
-  return new ModelEvaluation(*this);
+  ModelEvaluation * newAnalysis = new ModelEvaluation(*this);
+  newAnalysis->designOfExperiment_ = designOfExperiment_.getImplementation()->clone();
+  return newAnalysis;
 }
 
 
-void ModelEvaluation::initializeParameters(const InputCollection& inputs)
+void ModelEvaluation::initializeParameters()
 {
   inputValues_.clear();
   inputNames_ = getPhysicalModel().getInputNames();
 
-  UnsignedInteger inputSize = inputs.getSize();
+  const UnsignedInteger inputSize = inputNames_.getSize();
   inputValues_ = Point(inputSize);
 
   for (UnsignedInteger i = 0; i < inputSize; ++i)
-    inputValues_[i] = inputs[i].getValue();
+    inputValues_[i] = getPhysicalModel().getInputs()[i].getValue();
 }
 
 
@@ -91,7 +93,7 @@ void ModelEvaluation::updateParameters()
   Description inputNames(inputNames_);
   Point values(inputValues_);
 
-  initializeParameters(getPhysicalModel().getInputs());
+  initializeParameters();
 
   for (UnsignedInteger i = 0; i < inputNames.getSize(); ++i)
   {
