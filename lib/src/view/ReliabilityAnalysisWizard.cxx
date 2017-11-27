@@ -28,7 +28,7 @@ using namespace OT;
 namespace OTGUI
 {
 
-ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard, QWidget* parent)
+ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget* parent)
   : AnalysisWizard(analysis, parent)
   , limitStateList_()
   , introPage_(0)
@@ -37,13 +37,19 @@ ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(OTguiItem* item, const Anal
   , formPage_(0)
 {
   const LimitState limitState = dynamic_cast<ReliabilityAnalysis*>(analysis_.getImplementation().get())->getLimitState();
+
   if (isGeneralWizard)
   {
-    for (UnsignedInteger i = 0; i < item->getParentOTStudyItem()->getOTStudy().getLimitStates().getSize(); ++i)
+    if (Observer * obs = limitState.getImplementation().get()->getObserver("OTStudy"))
     {
-      const LimitState limitState_i = item->getParentOTStudyItem()->getOTStudy().getLimitStates()[i];
-      if (limitState_i.getPhysicalModel().getImplementation().get() == limitState.getPhysicalModel().getImplementation().get())
-        limitStateList_.append(limitState_i);
+      OTStudyImplementation * study = dynamic_cast<OTStudyImplementation*>(obs);
+      Q_ASSERT(study);
+      for (UnsignedInteger i = 0; i < study->getLimitStates().getSize(); ++i)
+      {
+        const LimitState limitState_i = study->getLimitStates()[i];
+        if (limitState_i.getPhysicalModel() == limitState.getPhysicalModel())
+          limitStateList_.append(limitState_i);
+      }
     }
   }
   else

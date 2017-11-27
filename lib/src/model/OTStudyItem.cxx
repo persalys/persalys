@@ -251,7 +251,7 @@ bool OTStudyItem::saveOTStudy(QString fileName)
   if (fileName.isEmpty())
   {
     qDebug() << "OTStudyItem::saveOTStudy : file name empty\n";
-    return true;
+    return false;
   }
 
   if (!fileName.endsWith(".xml"))
@@ -271,8 +271,6 @@ bool OTStudyItem::saveOTStudy(QString fileName)
   QApplication::setOverrideCursor(Qt::WaitCursor);
   otStudy_.save(fileName.toUtf8().constData());
   QApplication::restoreOverrideCursor();
-
-  emit recentFilesListChanged(fileName);
 
   // update QSettings
   QSettings settings;
@@ -344,37 +342,38 @@ void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
 void OTStudyItem::addLimitStateItem(LimitState & limitState)
 {
   // search PhysicalModelDiagram observer
-  PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(limitState.getPhysicalModel().getImplementation().get()->getObserver("PhysicalModelDiagram"));
-  if (!pmItem)
+  if (PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(limitState.getPhysicalModel().getImplementation().get()->getObserver("PhysicalModelDiagram")))
+  {
+    // append item for limitState
+    pmItem->appendLimitStateItem(limitState);
+  }
+  else
   {
     qDebug() << "In OTStudyItem::addLimitStateItem: No item added for the limit state named " << limitState.getName().data() << "\n"
              << "No physical model matches the name " << limitState.getPhysicalModel().getName().data() << "\n";
-    return;
   }
-
-  // append item for limitState
-  pmItem->appendLimitStateItem(limitState);
 }
 
 
 void OTStudyItem::addAnalysisItem(Analysis & analysis)
 {
-  if (dynamic_cast<PhysicalModelAnalysis*>(analysis.getImplementation().get()))
+  if (PhysicalModelAnalysis * pmAnalysis = dynamic_cast<PhysicalModelAnalysis*>(analysis.getImplementation().get()))
   {
-    PhysicalModel model(dynamic_cast<PhysicalModelAnalysis*>(analysis.getImplementation().get())->getPhysicalModel());
+    PhysicalModel model(pmAnalysis->getPhysicalModel());
     // search PhysicalModelDiagram observer
-    PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(model.getImplementation().get()->getObserver("PhysicalModelDiagram"));
-    if (!pmItem)
+    if (PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(model.getImplementation().get()->getObserver("PhysicalModelDiagram")))
+    {
+      // append item for analysis
+      pmItem->appendAnalysisItem(analysis);
+    }
+    else
     {
       qDebug() << "In OTStudyItem::addAnalysisItem: No item added for the analysis named " << analysis.getName().data() << ". Physical model item not found.\n";
-      return;
     }
-    // append item for analysis
-    pmItem->appendAnalysisItem(analysis);
   }
-  else if (dynamic_cast<DesignOfExperimentAnalysis*>(analysis.getImplementation().get()))
+  else if (DesignOfExperimentAnalysis * dmAnalysis = dynamic_cast<DesignOfExperimentAnalysis*>(analysis.getImplementation().get()))
   {
-    DesignOfExperiment design(dynamic_cast<DesignOfExperimentAnalysis*>(analysis.getImplementation().get())->getDesignOfExperiment());
+    DesignOfExperiment design(dmAnalysis->getDesignOfExperiment());
     // search DesignOfExperiment observer
     if (design.hasPhysicalModel())
     {
@@ -414,8 +413,7 @@ QVariant OTStudyItem::data(int role) const
     else
       return QIcon();
   }
-  else
-    return OTguiItem::data(role);
+  return OTguiItem::data(role);
 }
 
 

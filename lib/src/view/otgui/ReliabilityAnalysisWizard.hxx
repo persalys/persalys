@@ -25,7 +25,6 @@
 #include "otgui/IntroReliabilityPage.hxx"
 #include "otgui/SimulationReliabilityPage.hxx"
 #include "otgui/ApproximationReliabilityPage.hxx"
-#include "otgui/OTguiItem.hxx"
 
 namespace OTGUI
 {
@@ -36,7 +35,7 @@ class OTGUI_API ReliabilityAnalysisWizard : public AnalysisWizard
 public:
   enum {Page_Intro, Page_SimuMethod, Page_ApproxMethod, Page_FORM};
 
-  ReliabilityAnalysisWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard = false, QWidget* parent = 0);
+  ReliabilityAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard = false, QWidget* parent = 0);
 
   virtual int nextId() const;
   virtual bool validateCurrentPage();

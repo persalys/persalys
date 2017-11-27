@@ -53,12 +53,14 @@ using namespace OT;
 namespace OTGUI
 {
 
-ProbabilisticModelWindow::ProbabilisticModelWindow(const OTStudy& otStudy, ProbabilisticModelItem * item, QWidget * parent)
+ProbabilisticModelWindow::ProbabilisticModelWindow(ProbabilisticModelItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
-  , otStudy_(otStudy)
+  , otStudy_(0)
   , physicalModel_(item->getPhysicalModel())
   , paramEditor_(0)
 {
+  otStudy_ = item->getParentOTStudyItem()->getOTStudy();
+
   connect(item, SIGNAL(stochasticInputListChanged()), this, SLOT(updateProbabilisticModel()));
   connect(item, SIGNAL(inputListCorrelationChanged()), this, SIGNAL(updateCorrelationTableData()));
   connect(item, SIGNAL(inputListDefinitionChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));

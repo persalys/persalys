@@ -62,7 +62,7 @@ public slots:
   void modifyDesignOfExperiment(DesignOfExperimentDefinitionItem* item);
   void modifyAnalysis(AnalysisItem* item);
 
-  // export/save/close otstudy
+  // import/export/save/open/close otstudy
   void importPythonScript();
   void exportPythonScript();
   void saveCurrent();
@@ -74,15 +74,12 @@ public slots:
   bool closeCurrent();
   bool closeAll();
 signals:
-  void showWindow(OTguiSubWindow*);
   void recentFilesListChanged(const QString& recentFileName);
   void analysisInProgressStatusChanged(bool analysisInProgress);
   void commandExecutionRequested(const QString& command);
 
 protected:
   void updateView(OTguiSubWindow * window);
-//   AnalysisWizard * getWizard(const Analysis& analysis, const bool isGeneralWizard = false);
-//   OTguiSubWindow * getAnalysisResultWindow(AnalysisItem* item);
 
 private:
   MainWidget * mainWidget_;

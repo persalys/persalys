@@ -20,53 +20,58 @@
  */
 #include "otgui/OTguiMdiArea.hxx"
 
-#include "otgui/OTguiSubWindow.hxx"
-
 #include <QDebug>
 
 namespace OTGUI
 {
 
-OTguiMdiArea::OTguiMdiArea()
-  : QMdiArea()
+OTguiMdiArea::OTguiMdiArea(QWidget *parent)
+  : QMdiArea(parent)
+  , welcomeWindow_(0)
 {
 }
 
 
-void OTguiMdiArea::showSubWindow(OTguiSubWindow * win)
+void OTguiMdiArea::addWelcomeWindow(WelcomeWindow * win)
+{
+  welcomeWindow_ = win;
+  QMdiArea::addSubWindow(win);
+  win->showMaximized();
+}
+
+
+void OTguiMdiArea::addSubWindow(OTguiSubWindow * win)
 {
   if (!win)
     return;
-  if (!subWindowList().count())
-    emit mdiAreaEmpty(false);
-  addSubWindow(win);
-  win->showMaximized();
+
+  // close the welcome window
+  if (welcomeWindow_)
+    welcomeWindow_->close();
+
+  // add subwindow and show it
+  QMdiArea::addSubWindow(win);
+  win->widget()->showMaximized();
+
+  // connections
+  connect(win, SIGNAL(showWindowRequested()), this, SLOT(changeActiveSubWindow()));
   connect(win, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
   connect(win, SIGNAL(removeWindowRequested()), this, SLOT(removeSubWindow()));
 }
 
 
-void OTguiMdiArea::showSubWindow(QStandardItem * item)
+void OTguiMdiArea::changeActiveSubWindow()
 {
-  if (!item)
-    return;
-  for (int i = 0; i < subWindowList().size(); ++i)
+  OTguiSubWindow * win = qobject_cast<OTguiSubWindow*>(sender());
+
+  if (!win)
   {
-    OTguiSubWindow * win = static_cast<OTguiSubWindow*>(subWindowList().at(i));
-    Q_ASSERT(win);
-    Q_ASSERT(win->getItem());
-    if (win->getItem()->data(Qt::UserRole).toString() == "OTStudy")
-    {
-      win->close();
-    }
-    if (win->getItem() == item)
-    {
-      Q_ASSERT(win->widget());
-      win->widget()->showMaximized();
-      setActiveSubWindow(win);
-      emit errorMessageChanged(win->getErrorMessage());
-    }
+    qDebug() << "OTguiMdiArea::changeActiveSubWindow : win NULL\n";
+    return;
   }
+  win->widget()->showMaximized();
+  setActiveSubWindow(win);
+  emit errorMessageChanged(win->getErrorMessage());
 }
 
 
@@ -76,21 +81,11 @@ void OTguiMdiArea::removeSubWindow(OTguiSubWindow* win)
   QMdiArea::removeSubWindow(win);
   win->deleteLater();
 
-  if (!subWindowList().count())
-    emit mdiAreaEmpty(true);
-}
-
-
-void OTguiMdiArea::removeSubWindow(QStandardItem* item)
-{
-  for (int i = 0; i < subWindowList().size(); ++i)
+  // if no more subwindows: open the welcome window
+  if (subWindowList().count() < 2 && welcomeWindow_)
   {
-    OTguiSubWindow * win = static_cast<OTguiSubWindow*>(subWindowList().at(i));
-    if (win->getItem() == item)
-    {
-      removeSubWindow(win);
-      return;
-    }
+    welcomeWindow_->widget()->showMaximized();
+    setActiveSubWindow(welcomeWindow_);
   }
 }
 

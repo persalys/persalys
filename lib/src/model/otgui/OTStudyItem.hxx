@@ -77,7 +77,6 @@ signals:
   void otStudyCloseRequested(OTStudyItem* item);
   void newDataModelItemCreated(DataModelDiagramItem*);
   void newPhysicalModelItemCreated(PhysicalModelDiagramItem*);
-  void recentFilesListChanged(const QString & recentFileName);
 
 protected:
   void buildActions();

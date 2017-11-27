@@ -319,7 +319,7 @@ void AnalysisItem::update(Observable* source, const String& message)
   else if (message == "analysisBadlyFinished")
   {
     // emit signal to the StudyTreeView to create a window
-    emit analysisBadlyFinished(this);
+    emit analysisFinished(this);
   }
   else if (message == "informationMessageUpdated")
   {

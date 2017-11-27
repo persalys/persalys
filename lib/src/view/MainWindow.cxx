@@ -47,7 +47,7 @@ namespace OTGUI
 
 MainWindow::MainWindow()
   : QMainWindow()
-  , mainWidget_(new MainWidget(this))
+  , manager_(0)
   , pythonConsole_(new PyConsole_Console(this))
 {
   setWindowTitle("OTGui");
@@ -70,7 +70,12 @@ void MainWindow::buildInterface()
   QSplitter * mainSplitter = new QSplitter(Qt::Vertical);
 
   // Main widget
-  mainSplitter->addWidget(mainWidget_);
+  MainWidget * mainWidget = new MainWidget(this);
+  mainSplitter->addWidget(mainWidget);
+
+  // set manager_
+  manager_ = new StudyManager(mainWidget, this);
+  connect(manager_, SIGNAL(commandExecutionRequested(QString)), this, SLOT(executePythonCommand(QString)));
 
   // Python Console
   pythonConsole_->getInterp()->decrRef();
@@ -84,15 +89,16 @@ void MainWindow::buildInterface()
 
   setCentralWidget(mainSplitter);
 
+  // get actions
+  OTguiActions * actions = mainWidget->getActions();
+  connect(actions->exitAction(), SIGNAL(triggered()), this, SLOT(close()));
+
   // menu bar
-  OTguiActions * actions = mainWidget_->getActions();
   OTguiMenuBar * menuBar = new OTguiMenuBar(actions);
   connect(pythonConsoleDock, SIGNAL(visibilityChanged(bool)), menuBar, SIGNAL(pythonConsoleVisibilityChanged(bool)));
   connect(menuBar, SIGNAL(showHidePythonConsole(bool)), pythonConsoleDock, SLOT(setVisible(bool)));
-  connect(menuBar, SIGNAL(openOTStudy(QString)), mainWidget_->getStudyTree(), SLOT(openOTStudy(QString)));
-  connect(actions->importPyAction(), SIGNAL(triggered()), this, SLOT(importPython()));
-  connect(actions->exitAction(), SIGNAL(triggered()), this, SLOT(exitApplication()));
-  connect(mainWidget_->getStudyTree(), SIGNAL(recentFilesListChanged(QString)), menuBar, SLOT(updateRecentFilesList(QString)));
+  connect(menuBar, SIGNAL(openOTStudy(QString)), manager_, SLOT(openOTStudy(QString)));
+  connect(manager_, SIGNAL(recentFilesListChanged(QString)), menuBar, SLOT(updateRecentFilesList(QString)));
   setMenuBar(menuBar);
 
   // tool bar
@@ -101,65 +107,23 @@ void MainWindow::buildInterface()
 
   // status bar
   OTguiStatusBar * statusBar = new OTguiStatusBar;
-  connect(mainWidget_->getMdiArea(), SIGNAL(errorMessageChanged(QString)), statusBar, SLOT(showErrorMessage(QString)));
+  connect(mainWidget->getMdiArea(), SIGNAL(errorMessageChanged(QString)), statusBar, SLOT(showErrorMessage(QString)));
   setStatusBar(statusBar);
 }
 
 
-void MainWindow::importPython()
+void MainWindow::executePythonCommand(const QString& command)
 {
-  if (mainWidget_->getStudyTree()->model()->rowCount())
-  {
-    int ret = QMessageBox::warning(this,
-                                   tr("Warning"),
-                                   tr("Cannot import a Python script when other studies are opened.\nDo you want to continue and close the other studies?"),
-                                   QMessageBox::Cancel | QMessageBox::Ok,
-                                   QMessageBox::Ok);
-    if (ret == QMessageBox::Ok)
-    {
-      bool allStudiesClosed = mainWidget_->getStudyTree()->closeAllOTStudies();
-      if (!allStudiesClosed)
-        return;
-    }
-    else
-      return;
-  }
-
-  QSettings settings;
-  QString currentDir = settings.value("currentDir").toString();
-  if (currentDir.isEmpty())
-    currentDir = QDir::homePath();
-  const QString fileName = QFileDialog::getOpenFileName(this,
-                           tr("Import Python..."),
-                           currentDir,
-                           tr("Python source files (*.py)"));
-
-  if (!fileName.isEmpty())
-  {
-    QFile file(fileName);
-    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
-
-    // check
-    if (!file.open(QFile::ReadOnly))
-    {
-      QMessageBox::warning(this,
-                           tr("Warning"),
-                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
-    }
-    // load
-    {
-      QApplication::setOverrideCursor(Qt::WaitCursor);
-      const QString command("execfile(\"" + fileName + "\")");
-      pythonConsole_->execAndWait(command);
-      QApplication::restoreOverrideCursor();
-    }
-  }
+  // execute command in the Python console
+  QApplication::setOverrideCursor(Qt::WaitCursor);
+  pythonConsole_->execAndWait(command);
+  QApplication::restoreOverrideCursor();
 }
 
 
 void MainWindow::closeEvent(QCloseEvent * event)
 {
-  int notCanceled = mainWidget_->getStudyTree()->closeAllOTStudies();
+  const int notCanceled = manager_->closeAll();
 
   if (notCanceled)
   {
@@ -170,13 +134,5 @@ void MainWindow::closeEvent(QCloseEvent * event)
   {
     event->ignore();
   }
-}
-
-
-void MainWindow::exitApplication()
-{
-  int ret = mainWidget_->getStudyTree()->closeAllOTStudies();
-  if (ret)
-    close();
 }
 }

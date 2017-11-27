@@ -20,8 +20,6 @@
  */
 #include "otgui/MainWidget.hxx"
 
-#include "otgui/WelcomeWindow.hxx"
-
 #include <QSplitter>
 #include <QVBoxLayout>
 
@@ -31,8 +29,8 @@ namespace OTGUI
 MainWidget::MainWidget(QWidget* parent)
   : QWidget(parent)
   , studyTree_(new StudyTreeView(this))
-  , mdiArea_(new OTguiMdiArea())
-  , graphSettingDockWidget_(0)
+  , mdiArea_(new OTguiMdiArea(this))
+  , graphSettingDockWidget_(new QDockWidget(tr("Graph setting"), this))
   , actions_(new OTguiActions(this))
 {
   buildInterface();
@@ -46,10 +44,11 @@ void MainWidget::buildInterface()
 
   // left side of the mainSplitter
   QSplitter * leftSideSplitter = new QSplitter(Qt::Vertical);
+  // - study tree
   leftSideSplitter->addWidget(studyTree_);
   leftSideSplitter->setStretchFactor(0, 8);
 
-  graphSettingDockWidget_ = new QDockWidget(tr("Graph setting"));
+  // - dock widget for graph setting
   graphSettingDockWidget_->setFeatures(QDockWidget::NoDockWidgetFeatures);
   leftSideSplitter->addWidget(graphSettingDockWidget_);
   graphSettingDockWidget_->close();
@@ -59,40 +58,16 @@ void MainWidget::buildInterface()
   mainSplitter->setStretchFactor(0, 0);
 
   // right side of the mainSplitter
-  QSplitter * rightSideSplitter = new QSplitter(Qt::Vertical);
-
-  // welcome page
-  WelcomeWindow * welcomeWindow = new WelcomeWindow;
-  rightSideSplitter->addWidget(welcomeWindow);
-  connect(welcomeWindow, SIGNAL(createNewOTStudy()), studyTree_, SLOT(createNewOTStudy()));
-  connect(welcomeWindow, SIGNAL(openOTStudy()), studyTree_, SLOT(openOTStudy()));
-  connect(welcomeWindow, SIGNAL(importPython()), actions_->importPyAction(), SIGNAL(triggered()));
-  rightSideSplitter->setStretchFactor(0, 5);
-
-  // MdiArea
-  connect(studyTree_, SIGNAL(showWindow(OTguiSubWindow *)), mdiArea_, SLOT(showSubWindow(OTguiSubWindow *)));
-  connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), mdiArea_, SLOT(showSubWindow(QStandardItem *)));
-  connect(studyTree_, SIGNAL(removeSubWindow(QStandardItem *)), mdiArea_, SLOT(removeSubWindow(QStandardItem *)));
-  rightSideSplitter->addWidget(mdiArea_);
-  mdiArea_->hide();
-  rightSideSplitter->setStretchFactor(1, 4);
-
-  connect(mdiArea_, SIGNAL(mdiAreaEmpty(bool)), welcomeWindow, SLOT(setVisible(bool)));
-  connect(mdiArea_, SIGNAL(mdiAreaEmpty(bool)), mdiArea_, SLOT(setHidden(bool)));
-
-  mainSplitter->addWidget(rightSideSplitter);
+  // - welcome page
+  WelcomeWindow * welcomeWindow = new WelcomeWindow(actions_, this);
+  // - MdiArea
+  mdiArea_->addWelcomeWindow(welcomeWindow);
+  mainSplitter->addWidget(mdiArea_);
   mainSplitter->setStretchFactor(1, 3);
 
   QVBoxLayout *layout = new QVBoxLayout;
   layout->addWidget(mainSplitter);
   setLayout(layout);
-
-  connect(actions_->newAction(), SIGNAL(triggered()), studyTree_, SLOT(createNewOTStudy()));
-  connect(actions_->openAction(), SIGNAL(triggered()), studyTree_, SLOT(openOTStudy()));
-  connect(actions_->saveAction(), SIGNAL(triggered()), studyTree_, SLOT(saveCurrentOTStudy()));
-  connect(actions_->saveAsAction(), SIGNAL(triggered()), studyTree_, SLOT(saveAsCurrentOTStudy()));
-  connect(actions_->closeAction(), SIGNAL(triggered()), studyTree_, SLOT(closeCurrentOTStudy()));
-  connect(studyTree_, SIGNAL(analysisInProgressStatusChanged(bool)), actions_, SLOT(updateActionsAvailability(bool)));
 }
 
 
