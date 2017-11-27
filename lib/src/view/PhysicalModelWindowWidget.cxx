@@ -288,7 +288,14 @@ void PhysicalModelWindowWidget::evaluateOutputs()
 
   // evaluate
   ModelEvaluation eval("anEval", physicalModel_);
-  eval.run();
+  try
+  {
+    eval.run();
+  }
+  catch (std::exception& ex)
+  {
+    // do nothing
+  }
 
   // get result
   Sample outputSample(eval.getDesignOfExperiment().getOutputSample());
