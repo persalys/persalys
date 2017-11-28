@@ -54,7 +54,9 @@ SRCAnalysis::SRCAnalysis(const String & name, const PhysicalModel & physicalMode
 /* Virtual constructor */
 SRCAnalysis* SRCAnalysis::clone() const
 {
-  return new SRCAnalysis(*this);
+  SRCAnalysis * newAnalysis = new SRCAnalysis(*this);
+  newAnalysis->designOfExperiment_ = designOfExperiment_.getImplementation()->clone();
+  return newAnalysis;
 }
 
 
