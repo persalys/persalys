@@ -36,7 +36,7 @@ public:
   virtual void update(Observable* source, const OT::String& message);
 
   void fill();
-  void appendAnalysisItem(Analysis& analysis);
+  void appendItem(Analysis& analysis);
 
 protected:
   void buildActions();
@@ -47,7 +47,7 @@ public slots:
 signals:
   // signals for StudyTreeview
   void modelDefinitionWindowRequested(DataModelDefinitionItem*);
-  void newAnalysisItemCreated(AnalysisItem*);
+  void analysisItemCreated(AnalysisItem*);
   void dataAnalysisRequested();
   void inferenceRequested();
   void copulaInferenceRequested();
@@ -61,8 +61,8 @@ signals:
   void metaModelValidityChanged(bool);
 
 private:
-  QAction * defineDataModel_;
-  QAction * removeDataModel_;
+  QAction * defineAction_;
+  QAction * removeAction_;
 };
 }
 #endif

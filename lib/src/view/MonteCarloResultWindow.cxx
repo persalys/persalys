@@ -55,7 +55,7 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
     analysisStopCriteriaMessage_ = tr("Maximum elapsed time reached");
   if (designOfExperiment_.getOutputSample().getSize() == analysis.getMaximumCalls())
     analysisStopCriteriaMessage_ = tr("Maximum calls reached");
-  if (!analysis.getErrorMessage().empty())
+  if (!analysis.getWarningMessage().empty())
     analysisStopCriteriaMessage_ = tr("An error has occured during the execution of the analysis");
 
   // if not one of the previous criteria

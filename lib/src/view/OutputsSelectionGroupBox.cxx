@@ -44,6 +44,8 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(QWidget* parent)
 
 OutputsSelectionGroupBox::OutputsSelectionGroupBox(const Description& outputsNames, const Description& interestVariables, QWidget* parent)
   : QGroupBox(tr("Outputs to analyse"), parent)
+  , outputsListWidget_(0)
+  , outputsComboBox_(0)
 {
   QVBoxLayout * outputLayout = new QVBoxLayout(this);
 

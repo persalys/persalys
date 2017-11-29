@@ -38,7 +38,7 @@ public:
   Analysis getAnalysis() const;
   void updateAnalysis(const Analysis & analysis);
 
-  void appendAnalysisItem(Analysis& analysis);
+  void appendItem(Analysis& analysis);
 
   virtual void update(Observable * source, const OT::String & message);
   void fill();
@@ -48,27 +48,27 @@ protected:
 
 public slots:
   void appendEvaluationItem();
-  void createNewMetaModel();
+  void createMetaModel();
   void modifyAnalysis();
-  void createNewEvaluation();
+  void createEvaluation();
   void removeAnalysis();
 
 signals:
   void modifyAnalysisRequested(DesignOfExperimentDefinitionItem*);
   void DOEEvaluationRequested(const Analysis&, const bool isGeneralWizard = false);
   void updateEvaluationWindowRequested(AnalysisItem*);
-  void newAnalysisItemCreated(AnalysisItem*);
+  void analysisItemCreated(AnalysisItem*);
 
   void numberDesignEvaluationChanged(bool);
   void designEvaluationAppended();
 
 private:
   Analysis analysis_;
-  QAction * exportData_;
-  QAction * newMetaModel_;
-  QAction * modifyAnalysis_;
-  QAction * evaluateDesignOfExperiment_;
-  QAction * removeAnalysis_;
+  QAction * exportAction_;
+  QAction * newMetaModelAction_;
+  QAction * modifyAction_;
+  QAction * evaluateAction_;
+  QAction * removeAction_;
 };
 }
 #endif

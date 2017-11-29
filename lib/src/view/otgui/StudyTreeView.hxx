@@ -39,57 +39,19 @@ class OTGUI_API StudyTreeView : public QTreeView
 public:
   StudyTreeView(QWidget * parent = 0);
 
+  OTguiItem * getCurrentItem() const;
+
   virtual void mousePressEvent(QMouseEvent*);
 
 public slots:
-  void setAnalysisInProgress(bool);
-  void showErrorMessage(QString);
   void onCustomContextMenu(const QPoint& point);
   void selectedItemChanged(const QModelIndex& currentIndex, const QModelIndex& previousIndex);
 
-  // create objects
-  void createNewOTStudy();
-  void createNewAnalysis(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard = false);
-  void createNewDesignOfExperimentEvaluation(const Analysis& analysis, const bool isGeneralWizard = false);
-
-  // create windows
-  void createNewOTStudyWindow(OTStudyItem* item);
-  void createNewDataModelDiagramWindow(DataModelDiagramItem*);
-  void createNewDataModelWindow(DataModelDefinitionItem* item, const bool createConnections = true);
-  void createNewPhysicalModelDiagramWindow(PhysicalModelDiagramItem* item);
-  void createNewPhysicalModelWindow(PhysicalModelDefinitionItem* item);
-  void createNewProbabilisticModelWindow(ProbabilisticModelItem* item);
-  void createNewDesignOfExperimentWindow(DesignOfExperimentDefinitionItem* item, const bool createConnections = true);
-  void createNewLimitStateWindow(LimitStateItem* item);
-  void createNewAnalysisWindow(AnalysisItem* item);
-  void createAnalysisResultWindow(AnalysisItem* item);
-  void createAnalysisWindow(AnalysisItem* item);
-
-  // modify objects
-  void modifyDesignOfExperiment(DesignOfExperimentDefinitionItem* item);
-  void modifyDesignOfExperimentEvaluationWindow(AnalysisItem* item);
-  void modifyAnalysis(AnalysisItem* item);
   void modifyStudySubItemsExpansion(OTStudyItem* item);
 
-  // export/save/close otstudy
-  void exportOTStudy();
-  void saveCurrentOTStudy();
-  void saveAsCurrentOTStudy();
-  bool saveOTStudy(OTStudyItem* item);
-  bool saveAsOTStudy(OTStudyItem* item);
-  void openOTStudy(const QString& fileName = "");
-  bool closeOTStudy(OTStudyItem* item);
-  bool closeCurrentOTStudy();
-  bool closeAllOTStudies();
 signals:
-  void showWindow(OTguiSubWindow*);
-  void itemSelected(QStandardItem*);
-  void removeSubWindow(QStandardItem*);
-  void recentFilesListChanged(const QString& recentFileName);
-  void analysisInProgressStatusChanged(bool analysisInProgress);
-
-protected:
-  AnalysisWizard * getWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard = false);
+  void studyCreated(OTStudyItem*);
+  void itemSelectionChanged(QStandardItem*);
 
 private:
   StudyTreeViewModel * treeViewModel_;

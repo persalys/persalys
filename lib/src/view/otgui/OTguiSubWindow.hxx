@@ -48,6 +48,7 @@ public slots:
   void setTemporaryErrorMessage(QString message);
   void reInitErrorMessage(QTimeLine::State);
 signals:
+  void showWindowRequested();
   void removeWindowRequested();
   void errorMessageChanged(QString);
   void graphWindowActivated(QWidget*);

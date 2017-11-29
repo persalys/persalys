@@ -59,7 +59,9 @@ SobolAnalysis::SobolAnalysis(const String& name, const PhysicalModel& physicalMo
 /* Virtual constructor */
 SobolAnalysis* SobolAnalysis::clone() const
 {
-  return new SobolAnalysis(*this);
+  SobolAnalysis * newAnalysis = new SobolAnalysis(*this);
+  newAnalysis->designOfExperiment_ = designOfExperiment_.getImplementation()->clone();
+  return newAnalysis;
 }
 
 

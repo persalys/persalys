@@ -35,14 +35,14 @@ MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis& analysis, const
   , introPage_(0)
   , krigingPage_(0)
   , functionalChaosPage_(0)
+  , validationPage_(0)
 {
   const DesignOfExperiment doe = dynamic_cast<DesignOfExperimentAnalysis*>(analysis_.getImplementation().get())->getDesignOfExperiment();
 
   // set list of design of experiments items
   QList < DesignOfExperimentDefinitionItem* > doeList;
-  if (isGeneralWizard)
+  if (isGeneralWizard && doe.hasPhysicalModel())
   {
-    Q_ASSERT(doe.hasPhysicalModel());
     PhysicalModel model(doe.getPhysicalModel());
 
     PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(model.getImplementation().get()->getObserver("PhysicalModelDiagram"));
@@ -52,16 +52,16 @@ MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis& analysis, const
     Q_ASSERT(listIndexes.size() == 1);
 
     QStandardItem * doeTitleItem = pmItem->model()->itemFromIndex(listIndexes[0]);
-    Q_ASSERT(doeTitleItem);
+
     for (int i = 0; i < doeTitleItem->rowCount(); ++i)
     {
       QStandardItem * doeItem = doeTitleItem->child(i);
-      Q_ASSERT(doeItem);
+
       if (doeItem->data(Qt::UserRole).toString().contains("DesignOfExperiment"))
       {
         DesignOfExperimentDefinitionItem * doeEvalItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeItem);
-        Q_ASSERT(doeEvalItem);
-        if (doeEvalItem->getAnalysis().hasValidResult())
+
+        if (doeEvalItem && doeEvalItem->getAnalysis().hasValidResult())
         {
           const DesignOfExperimentEvaluation * analysis_ptr = dynamic_cast<const DesignOfExperimentEvaluation*>(doeEvalItem->getAnalysis().getImplementation().get());
           Q_ASSERT(analysis_ptr);

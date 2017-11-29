@@ -29,20 +29,20 @@
 namespace OTGUI
 {
 
-WelcomeWindow::WelcomeWindow()
-  : QWidget()
+WelcomeWindow::WelcomeWindow(const OTguiActions* actions, QWidget * parent)
+  : QMdiSubWindow(parent)
 {
-  buildInterface();
-}
+  setWindowFlags(Qt::FramelessWindowHint);
 
+  QWidget * mainWidget = new QWidget;
+  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
 
-void WelcomeWindow::buildInterface()
-{
-  QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  // text
   QLabel * textLabel = new QLabel(tr("To get started, select one action by pressing the corresponding button below."));
   textLabel->setStyleSheet("font: bold;");
   mainLayout->addWidget(textLabel , 0, Qt::AlignCenter);
 
+  // buttons
   QHBoxLayout * hlayout = new QHBoxLayout;
   hlayout->addStretch();
   QGridLayout * layout = new QGridLayout;
@@ -50,19 +50,19 @@ void WelcomeWindow::buildInterface()
   DiagramPushButton * button = new DiagramPushButton(tr("New study"));
   button->setIcon(QIcon(":/images/document-new22x22.png"));
   button->setStatusTip(tr("Create a new OTStudy"));
-  connect(button, SIGNAL(clicked(bool)), this, SIGNAL(createNewOTStudy()));
+  connect(button, SIGNAL(clicked(bool)), actions->newAction(), SIGNAL(triggered()));
   layout->addWidget(button, 0, 0);
 
   button = new DiagramPushButton(tr("Open study"));
   button->setIcon(QIcon(":/images/document-open22x22.png"));
   button->setStatusTip(tr("Open an existing OTStudy"));
-  connect(button, SIGNAL(clicked(bool)), this, SIGNAL(openOTStudy()));
+  connect(button, SIGNAL(clicked(bool)), actions->openAction(), SIGNAL(triggered()));
   layout->addWidget(button, 1, 0);
 
   button = new DiagramPushButton(tr("Import Python script"));
   button->setIcon(QIcon(":/images/document-import22x22.png"));
   button->setStatusTip(tr("Import a Python Script"));
-  connect(button, SIGNAL(clicked(bool)), this, SIGNAL(importPython()));
+  connect(button, SIGNAL(clicked(bool)), actions->importPyAction(), SIGNAL(triggered()));
   layout->addWidget(button, 2, 0);
 
   layout->setRowStretch(3, 1);
@@ -84,5 +84,7 @@ void WelcomeWindow::buildInterface()
   imageLabel->setPixmap(imagePixmap);
 
   mainLayout->addWidget(imageLabel, 0, Qt::AlignCenter);
+
+  setWidget(mainWidget);
 }
 }

@@ -54,9 +54,9 @@ AnalysisItem::AnalysisItem(const Analysis & analysis)
   : OTguiItem(QString::fromUtf8(analysis.getName().c_str()), analysis.getImplementation()->getClassName().c_str())
   , Observer("Analysis")
   , analysis_(analysis)
-  , addMetaModel_(0)
-  , modifyAnalysis_(0)
-  , removeAnalysis_(0)
+  , convertAction_(0)
+  , modifyAction_(0)
+  , removeAction_(0)
 {
   analysis_.addObserver(this);
 
@@ -73,21 +73,21 @@ void AnalysisItem::buildActions()
       analysisType != "CopulaInferenceAnalysis" &&
       analysisType != "ImportanceSamplingAnalysis") // there is no wizard associated with these analyses <=> impossible to modify them
   {
-    modifyAnalysis_ = new QAction(QIcon(":/images/run-build.png"), tr("Modify"), this);
-    modifyAnalysis_->setStatusTip(tr("Modify the analysis"));
-    connect(modifyAnalysis_, SIGNAL(triggered()), this, SLOT(modifyAnalysis()));
+    modifyAction_ = new QAction(QIcon(":/images/run-build.png"), tr("Modify"), this);
+    modifyAction_->setStatusTip(tr("Modify the analysis"));
+    connect(modifyAction_, SIGNAL(triggered()), this, SLOT(modifyAnalysis()));
 
-    appendAction(modifyAnalysis_);
+    appendAction(modifyAction_);
   }
   if (analysisType == "FunctionalChaosAnalysis" ||
       analysisType == "KrigingAnalysis")
   {
-    addMetaModel_ = new QAction(tr("Convert metamodel into physical model"), this);
-    addMetaModel_->setStatusTip(tr("Add the metamodel in the study tree"));
-    connect(addMetaModel_, SIGNAL(triggered()), this, SLOT(addMetaModelItem()));
-    appendAction(addMetaModel_);
+    convertAction_ = new QAction(tr("Convert metamodel into physical model"), this);
+    convertAction_->setStatusTip(tr("Add the metamodel in the study tree"));
+    connect(convertAction_, SIGNAL(triggered()), this, SLOT(appendMetaModelItem()));
+    appendAction(convertAction_);
     if (!analysis_.getImplementation()->hasValidResult())
-      addMetaModel_->setEnabled(false);
+      convertAction_->setEnabled(false);
   }
 
   // no remove action for these analyses
@@ -97,11 +97,11 @@ void AnalysisItem::buildActions()
   appendSeparator();
 
   // remove analysis action
-  removeAnalysis_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
-  removeAnalysis_->setStatusTip(tr("Remove the analysis"));
-  connect(removeAnalysis_, SIGNAL(triggered()), this, SLOT(removeAnalysis()));
+  removeAction_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
+  removeAction_->setStatusTip(tr("Remove the analysis"));
+  connect(removeAction_, SIGNAL(triggered()), this, SLOT(removeAnalysis()));
 
-  appendAction(removeAnalysis_);
+  appendAction(removeAction_);
 }
 
 
@@ -156,9 +156,9 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
   // update the implementation of the analysis stored in OTStudy
   getParentOTStudyItem()->getOTStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
 
-  // the analysis has not result: disable addMetaModel_ action
-  if (!analysis_.hasValidResult())
-    addMetaModel_->setEnabled(false);
+  // the analysis has not result: disable convertAction_ action
+  if (convertAction_ && !analysis_.hasValidResult())
+    convertAction_->setEnabled(false);
 }
 
 
@@ -253,17 +253,17 @@ void AnalysisItem::modifyAnalysis()
 }
 
 
-void AnalysisItem::addMetaModelItem()
+void AnalysisItem::appendMetaModelItem()
 {
   FunctionalChaosAnalysis * chaos = dynamic_cast<FunctionalChaosAnalysis*>(analysis_.getImplementation().get());
   KrigingAnalysis * kriging = dynamic_cast<KrigingAnalysis*>(analysis_.getImplementation().get());
   if (chaos)
   {
-    getParentOTStudyItem()->addMetaModelItem(chaos->getResult().getMetaModel());
+    getParentOTStudyItem()->appendMetaModelItem(chaos->getResult().getMetaModel());
   }
   else if (kriging)
   {
-    getParentOTStudyItem()->addMetaModelItem(kriging->getResult().getMetaModel());
+    getParentOTStudyItem()->appendMetaModelItem(kriging->getResult().getMetaModel());
   }
 }
 
@@ -310,16 +310,16 @@ void AnalysisItem::update(Observable* source, const String& message)
   if (message == "analysisFinished")
   {
     // emit signal to the StudyTreeView to create a window
-    emit analysisFinished(this);
+    emit analysisFinished(this, false);
 
-    // if MetaModelAnalysis : enable addMetaModel_ action
-    if (addMetaModel_)
-      addMetaModel_->setEnabled(true);
+    // if MetaModelAnalysis : enable convertAction_ action
+    if (convertAction_)
+      convertAction_->setEnabled(true);
   }
   else if (message == "analysisBadlyFinished")
   {
     // emit signal to the StudyTreeView to create a window
-    emit analysisBadlyFinished(this);
+    emit analysisFinished(this, false);
   }
   else if (message == "informationMessageUpdated")
   {

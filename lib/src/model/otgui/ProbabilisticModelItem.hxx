@@ -39,9 +39,9 @@ protected:
   bool physicalModelValid();
 
 public slots:
-  void createNewLimitState();
-  void createNewCentralTendency();
-  void createNewSensitivityAnalysis();
+  void createLimitState();
+  void createCentralTendency();
+  void createSensitivityAnalysis();
 signals:
   void designOfExperimentRequested();
   void stochasticInputListChanged();

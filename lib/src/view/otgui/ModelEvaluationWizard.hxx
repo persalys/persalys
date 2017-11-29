@@ -41,10 +41,6 @@ public:
 protected:
   void buildInterface();
 
-public slots:
-  void inputValueChanged(double value);
-  void setInterestVariables(QStringList);
-
 private:
   QTableWidget * table_;
   OutputsSelectionGroupBox * outputsGroupBox_;

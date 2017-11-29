@@ -52,7 +52,9 @@ DesignOfExperimentEvaluation::DesignOfExperimentEvaluation(const String& name, c
 /* Virtual constructor */
 DesignOfExperimentEvaluation* DesignOfExperimentEvaluation::clone() const
 {
-  return new DesignOfExperimentEvaluation(*this);
+  DesignOfExperimentEvaluation * newAnalysis = new DesignOfExperimentEvaluation(*this);
+  newAnalysis->designOfExperiment_ = designOfExperiment_.getImplementation()->clone();
+  return newAnalysis;
 }
 
 

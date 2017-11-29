@@ -44,6 +44,8 @@ QWidget* SpinBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewIt
       DoubleSpinBox * editor = new DoubleSpinBox(parent);
       editor->setFrame(false);
       editor->setDecimals(15);
+      // fix transparency of the spinbox in DeterministicDesignPage
+      editor->setStyleSheet("background-color: white;");
       return editor;
     }
     case SpinBoxDelegate::correlation:

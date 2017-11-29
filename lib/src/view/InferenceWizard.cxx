@@ -40,10 +40,13 @@ namespace OTGUI
 
 InferenceWizard::InferenceWizard(const Analysis& analysis, QWidget* parent)
   : AnalysisWizard(analysis, parent)
+  , currentVarName_("")
   , inference_()
   , interestVar_()
+  , distFactoriesForEachInterestVar_()
   , errorMessageLabel_(0)
   , pageValidity_(true)
+  , varTableModel_(0)
 {
   initialize();
 

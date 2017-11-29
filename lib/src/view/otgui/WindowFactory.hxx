@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItem, observer of data models
+ *  @brief Window factory
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,39 +18,24 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_DATAMODELDEFINITIONITEM_HXX
-#define OTGUI_DATAMODELDEFINITIONITEM_HXX
+#ifndef OTGUI_WINDOWFACTORY_HXX
+#define OTGUI_WINDOWFACTORY_HXX
 
-#include "otgui/DesignOfExperimentItem.hxx"
+#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/AnalysisWizard.hxx"
+#include "otgui/PhysicalModelDefinitionItem.hxx"
+#include "otgui/AnalysisItem.hxx"
+
+#include <QWidget>
 
 namespace OTGUI
 {
-class OTGUI_API DataModelDefinitionItem : public DesignOfExperimentItem
+class OTGUI_API WindowFactory
 {
-  Q_OBJECT
-
 public:
-  DataModelDefinitionItem(const DesignOfExperiment & designOfExperiment);
-
-  virtual void update(Observable * source, const OT::String & message);
-
-protected:
-  void buildActions();
-  bool designOfExperimentValid();
-
-public slots:
-  void createDataAnalysis();
-  void createInferenceAnalysis();
-  void createCopulaInferenceAnalysis();
-  void createMetaModel();
-signals:
-  void variablesChanged();
-
-private:
-  QAction * newDataAnalysis_;
-  QAction * newInferenceAnalysis_;
-  QAction * newCopulaInferenceAnalysis_;
-  QAction * newMetaModel_;
+  static OTguiSubWindow * GetPhysicalModelWindow(PhysicalModelDefinitionItem* item, QWidget * parent = 0);
+  static AnalysisWizard * GetAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget * parent = 0);
+  static OTguiSubWindow * GetAnalysisWindow(AnalysisItem* item, QWidget * parent = 0);
 };
 }
 #endif

@@ -51,7 +51,7 @@ Qt::ItemFlags  ParametersTableModel::flags(const QModelIndex& index) const
 }
 
 
-QVariant  ParametersTableModel::data(const QModelIndex& index, int role) const
+QVariant ParametersTableModel::data(const QModelIndex& index, int role) const
 {
   if (!index.isValid())
     return QVariant();
@@ -89,6 +89,7 @@ Point  ParametersTableModel::getValues() const
 
 ParametersDefinitionWizard::ParametersDefinitionWizard(const Description& names, const Point& values, const QStringList& labels, QWidget* parent)
   : QWizard(parent)
+  , tableModel_(0)
 {
   setWindowTitle(tr("Parameter definition"));
   setButtonText(QWizard::FinishButton, tr("Finish"));

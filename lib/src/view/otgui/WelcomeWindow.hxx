@@ -21,27 +21,17 @@
 #ifndef OTGUI_WELCOMEWINDOW_HXX
 #define OTGUI_WELCOMEWINDOW_HXX
 
-#include "otgui/OTGuiprivate.hxx"
-#include <QWidget>
+#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/OTguiActions.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API WelcomeWindow : public QWidget
+class OTGUI_API WelcomeWindow : public QMdiSubWindow
 {
   Q_OBJECT
 
 public:
-  WelcomeWindow();
-
-  void buildInterface();
-
-public slots:
-signals:
-  void createNewOTStudy();
-  void openOTStudy();
-  void importPython();
-
-private:
+  WelcomeWindow(const OTguiActions* actions, QWidget * parent = 0);
 };
 }
 #endif

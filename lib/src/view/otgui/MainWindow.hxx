@@ -21,7 +21,7 @@
 #ifndef OTGUI_MAINWINDOW_HXX
 #define OTGUI_MAINWINDOW_HXX
 
-#include "otgui/MainWidget.hxx"
+#include "otgui/StudyManager.hxx"
 
 #include <QMainWindow>
 #include <QCloseEvent>
@@ -37,18 +37,15 @@ class OTGUI_API MainWindow : public QMainWindow
 public:
   MainWindow();
 
-public slots:
-  void exitApplication();
-
 protected:
   void buildInterface();
 
 private slots:
-  void importPython();
+  void executePythonCommand(const QString&);
   virtual void closeEvent(QCloseEvent * event);
 
 private:
-  MainWidget * mainWidget_;
+  StudyManager * manager_;
   PyConsole_Console * pythonConsole_;
 };
 }

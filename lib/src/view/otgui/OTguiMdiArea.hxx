@@ -21,7 +21,7 @@
 #ifndef OTGUI_OTGUIMDIAREA_HXX
 #define OTGUI_OTGUIMDIAREA_HXX
 
-#include "OTguiSubWindow.hxx"
+#include "WelcomeWindow.hxx"
 
 #include <QMdiArea>
 #include <QStandardItem>
@@ -33,17 +33,20 @@ class OTGUI_API OTguiMdiArea : public QMdiArea
   Q_OBJECT
 
 public:
-  OTguiMdiArea();
+  OTguiMdiArea(QWidget *parent = 0);
+
+  void addWelcomeWindow(WelcomeWindow * win);
 
 public slots:
-  void showSubWindow(OTguiSubWindow * win);
-  void showSubWindow(QStandardItem * item);
+  void addSubWindow(OTguiSubWindow * win);
+  void changeActiveSubWindow();
   void removeSubWindow(OTguiSubWindow * win);
-  void removeSubWindow(QStandardItem * item);
   void removeSubWindow();
 signals:
-  void mdiAreaEmpty(bool);
   void errorMessageChanged(QString);
+
+private:
+  QMdiSubWindow * welcomeWindow_;
 };
 }
 #endif

@@ -61,7 +61,9 @@ MonteCarloAnalysis::MonteCarloAnalysis(const String& name, const PhysicalModel& 
 /* Virtual constructor */
 MonteCarloAnalysis* MonteCarloAnalysis::clone() const
 {
-  return new MonteCarloAnalysis(*this);
+  MonteCarloAnalysis * newAnalysis = new MonteCarloAnalysis(*this);
+  newAnalysis->designOfExperiment_ = designOfExperiment_.getImplementation()->clone();
+  return newAnalysis;
 }
 
 

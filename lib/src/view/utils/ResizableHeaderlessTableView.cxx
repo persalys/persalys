@@ -159,7 +159,7 @@ bool ResizableHeaderlessTableView::eventFilter(QObject *obj, QEvent *event)
         const int delta = e->pos().x() - mouse_pos_.x();
         if (column_index() < (int)minimumSectionsSizes_.getSize() && column_index() >= 0)
         {
-          if (columnWidth(column_index()) + delta < minimumSectionsSizes_[column_index()])
+          if (columnWidth(column_index()) + delta < (int)minimumSectionsSizes_[column_index()])
             return false;
         }
         setColumnWidth(column_index(), columnWidth(column_index()) + delta);

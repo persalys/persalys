@@ -111,7 +111,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   doeEvaluationProxy->setWidget(doeEvaluationButton);
   scene->addItem(doeEvaluationProxy);
   connect(doeEvaluationButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SLOT(requestDesignOfExperimentEvaluation()));
-  connect(physicalModelDiagramItem, SIGNAL(designOfExperimentNumberValidityChanged(bool)), doeEvaluationButton, SLOT(setEnabled(bool)));
+  connect(physicalModelDiagramItem, SIGNAL(doeNumberValidityChanged(bool)), doeEvaluationButton, SLOT(setEnabled(bool)));
   boxWidth = std::max(boxWidth, doeEvaluationButton->width());
   boxHeight = std::max(boxHeight, doeEvaluationButton->height());
 
@@ -158,7 +158,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   QGraphicsProxyWidget * metamodelProxy = new QGraphicsProxyWidget;
   metamodelProxy->setWidget(metamodelButton);
   scene->addItem(metamodelProxy);
-  connect(physicalModelDiagramItem, SIGNAL(designOfExperimentEvaluationNumberValidityChanged(bool)), metamodelButton, SLOT(setEnabled(bool)));
+  connect(physicalModelDiagramItem, SIGNAL(doeEvaluationNumberValidityChanged(bool)), metamodelButton, SLOT(setEnabled(bool)));
   connect(metamodelButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SLOT(requestMetaModelCreation()));
   boxWidth = std::max(boxWidth, metamodelButton->width());
   boxHeight = std::max(boxHeight, metamodelButton->height());

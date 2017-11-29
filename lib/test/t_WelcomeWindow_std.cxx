@@ -1,4 +1,4 @@
-#include "otgui/WelcomeWindow.hxx"
+#include "otgui/MainWidget.hxx"
 
 #include <QtTest/QtTest>
 
@@ -10,7 +10,7 @@ class TestGui : public QObject
 private slots:
   void testGui()
   {
-    WelcomeWindow window;
+    MainWidget window;
     QTest::keyClicks(&window, "hello world");
   }
 };

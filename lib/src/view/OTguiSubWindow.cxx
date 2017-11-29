@@ -33,7 +33,10 @@ OTguiSubWindow::OTguiSubWindow(OTguiItem * item, QWidget * parent)
   , item_(item)
 {
   setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
+
+  // connections: signal for mdiArea
   connect(item, SIGNAL(removeWindowRequested()), this, SIGNAL(removeWindowRequested()));
+  connect(item, SIGNAL(showWindowRequested()), this, SIGNAL(showWindowRequested()));
 }
 
 
@@ -57,7 +60,7 @@ QString OTguiSubWindow::getErrorMessage() const
 
 void OTguiSubWindow::setErrorMessage(QString message)
 {
-  message = QString("%1%2%3").arg("<font color=red>").arg(message).arg("</font>");
+  message = QString("<font color=red>%1</font>").arg(message);
   errorMessage_ = message;
   if (errorMessageLabel_)
     errorMessageLabel_->setText(message);
@@ -68,7 +71,7 @@ void OTguiSubWindow::setErrorMessage(QString message)
 
 void OTguiSubWindow::setTemporaryErrorMessage(QString message)
 {
-  message = QString("%1%2%3").arg("<font color=red>").arg(message).arg("</font>");
+  message = QString("<font color=red>%1</font>").arg(message);
   errorMessage_ = message;
   if (errorMessageLabel_)
     errorMessageLabel_->setText(message);

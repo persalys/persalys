@@ -207,6 +207,7 @@ bool DesignOfExperimentEvaluationWizard::validateCurrentPage()
   DesignOfExperimentEvaluation * analysis_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(doeItem->getAnalysis().getImplementation().get());
   Q_ASSERT(analysis_ptr);
 
+  analysis_ptr->setDesignOfExperiment(analysis_ptr->getDesignOfExperiment()); // initialize result
   analysis_ptr->setBlockSize(blockSizeGroupBox_->getBlockSizeValue());
   analysis_ptr->setInterestVariables(QtOT::StringListToDescription(outputsSelectionGroupBox_->getSelectedOutputsNames()));
 
