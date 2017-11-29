@@ -39,10 +39,10 @@ protected:
   bool designOfExperimentValid();
 
 public slots:
-  void createNewDataAnalysis();
-  void createNewInferenceAnalysis();
-  void createNewCopulaInferenceAnalysis();
-  void createNewMetaModel();
+  void createDataAnalysis();
+  void createInferenceAnalysis();
+  void createCopulaInferenceAnalysis();
+  void createMetaModel();
 signals:
   void variablesChanged();
 

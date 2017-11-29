@@ -36,13 +36,13 @@ public:
 
   virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-  void addOTStudyItem(const OTStudy & otStudy);
+  void appendItem(const OTStudy & otStudy);
 
   virtual void update(Observable * source, const OT::String & message);
 
 signals:
-  void newOTStudyCreated(OTStudyItem*);
-  void otStudySubItemsAdded(OTStudyItem*);
+  void studyCreated(OTStudyItem*);
+  void studySubItemsAdded(OTStudyItem*);
 
 public:
   static const int DefaultSignificantDigits;

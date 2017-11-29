@@ -31,8 +31,8 @@ namespace OTGUI
 
 DataModelDiagramItem::DataModelDiagramItem(const DesignOfExperiment& designOfExperiment)
   : DesignOfExperimentItem(designOfExperiment, "DataModelDiagram")
-  , defineDataModel_(0)
-  , removeDataModel_(0)
+  , defineAction_(0)
+  , removeAction_(0)
 {
   buildActions();
 }
@@ -41,19 +41,19 @@ DataModelDiagramItem::DataModelDiagramItem(const DesignOfExperiment& designOfExp
 void DataModelDiagramItem::buildActions()
 {
   // define data model action
-  defineDataModel_ = new QAction(tr("Define the model"), this);
-  defineDataModel_->setStatusTip(tr("Define the data model"));
-  connect(defineDataModel_, SIGNAL(triggered(bool)), this, SLOT(appendDataModelItem()));
+  defineAction_ = new QAction(tr("Define the model"), this);
+  defineAction_->setStatusTip(tr("Define the data model"));
+  connect(defineAction_, SIGNAL(triggered(bool)), this, SLOT(appendDataModelItem()));
 
   // remove data model
-  removeDataModel_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
-  removeDataModel_->setStatusTip(tr("Remove the data model"));
-  connect(removeDataModel_, SIGNAL(triggered()), this, SLOT(removeDesignOfExperiment()));
+  removeAction_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
+  removeAction_->setStatusTip(tr("Remove the data model"));
+  connect(removeAction_, SIGNAL(triggered()), this, SLOT(removeDesignOfExperiment()));
 
   // add actions
-  appendAction(defineDataModel_);
+  appendAction(defineAction_);
   appendSeparator();
-  appendAction(removeDataModel_);
+  appendAction(removeAction_);
 }
 
 
@@ -106,10 +106,10 @@ void DataModelDiagramItem::appendDataModelItem()
   DataModelDefinitionItem * dmItem = new DataModelDefinitionItem(getDesignOfExperiment());
 
   // connections
-  connect(this, SIGNAL(dataAnalysisRequested()), dmItem, SLOT(createNewDataAnalysis()));
-  connect(this, SIGNAL(inferenceRequested()), dmItem, SLOT(createNewInferenceAnalysis()));
-  connect(this, SIGNAL(copulaInferenceRequested()), dmItem, SLOT(createNewCopulaInferenceAnalysis()));
-  connect(this, SIGNAL(metaModelRequested()), dmItem, SLOT(createNewMetaModel()));
+  connect(this, SIGNAL(dataAnalysisRequested()), dmItem, SLOT(createDataAnalysis()));
+  connect(this, SIGNAL(inferenceRequested()), dmItem, SLOT(createInferenceAnalysis()));
+  connect(this, SIGNAL(copulaInferenceRequested()), dmItem, SLOT(createCopulaInferenceAnalysis()));
+  connect(this, SIGNAL(metaModelRequested()), dmItem, SLOT(createMetaModel()));
 
   // append item
   appendRow(dmItem);
@@ -118,11 +118,11 @@ void DataModelDiagramItem::appendDataModelItem()
   emit modelDefinitionWindowRequested(dmItem);
 
   // disable the definition action
-  defineDataModel_->setDisabled(true);
+  defineAction_->setDisabled(true);
 }
 
 
-void DataModelDiagramItem::appendAnalysisItem(Analysis& analysis)
+void DataModelDiagramItem::appendItem(Analysis& analysis)
 {
   // new item
   AnalysisItem * newItem = new AnalysisItem(analysis);
@@ -140,7 +140,7 @@ void DataModelDiagramItem::appendAnalysisItem(Analysis& analysis)
   appendRow(newItem);
 
   // emit signal to StudyTreeView to create a window
-  emit newAnalysisItemCreated(newItem);
+  emit analysisItemCreated(newItem);
 }
 
 

@@ -50,63 +50,63 @@ OTStudyItem::OTStudyItem(const OTStudy& otStudy)
   update(0, "fileNameChanged");
 
   buildActions();
-  connect(this, SIGNAL(otStudyStatusChanged()), this, SLOT(updateIcon()));
+  connect(this, SIGNAL(statusChanged()), this, SLOT(updateIcon()));
 }
 
 
 void OTStudyItem::buildActions()
 {
   // new model actions
-  newSymbolicPhysicalModel_ = new QAction(tr("Symbolic model"), this);
-  connect(newSymbolicPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewSymbolicPhysicalModel()));
+  newSymbolicModel_ = new QAction(tr("Symbolic model"), this);
+  connect(newSymbolicModel_, SIGNAL(triggered()), this, SLOT(createSymbolicModel()));
 
-  newPythonPhysicalModel_ = new QAction(tr("Python model"), this);
-  connect(newPythonPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewPythonPhysicalModel()));
+  newPythonModel_ = new QAction(tr("Python model"), this);
+  connect(newPythonModel_, SIGNAL(triggered()), this, SLOT(createPythonModel()));
 
 #ifdef OTGUI_HAVE_YACS
-  newYACSPhysicalModel_ = new QAction(tr("YACS model"), this);
-  connect(newYACSPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewYACSPhysicalModel()));
+  newYACSModel_ = new QAction(tr("YACS model"), this);
+  connect(newYACSModel_, SIGNAL(triggered()), this, SLOT(createYACSModel()));
 #endif
 #ifdef OTGUI_HAVE_OTFMI
-  newFMIPhysicalModel_ = new QAction(tr("FMI model"), this);
-  connect(newFMIPhysicalModel_, SIGNAL(triggered()), this, SLOT(createNewFMIPhysicalModel()));
+  newFMIModel_ = new QAction(tr("FMI model"), this);
+  connect(newFMIModel_, SIGNAL(triggered()), this, SLOT(createFMIModel()));
 #endif
 
   newDataModel_ = new QAction(tr("Data model"), this);
-  connect(newDataModel_, SIGNAL(triggered()), this, SLOT(createNewDataModel()));
+  connect(newDataModel_, SIGNAL(triggered()), this, SLOT(createDataModel()));
 
   // export action
-  exportOTStudy_ = new QAction(QIcon(":/images/document-export.png"), tr("Export Python"), this);
-  connect(exportOTStudy_, SIGNAL(triggered()), this, SIGNAL(otStudyExportRequested()));
+  exportAction_ = new QAction(QIcon(":/images/document-export.png"), tr("Export Python"), this);
+  connect(exportAction_, SIGNAL(triggered()), this, SIGNAL(exportRequested()));
 
   // save  action
-  saveOTStudy_ = new QAction(QIcon(":/images/document-save.png"), tr("Save"), this);
-  connect(saveOTStudy_, SIGNAL(triggered()), this, SLOT(saveOTStudy()));
+  saveAction_ = new QAction(QIcon(":/images/document-save.png"), tr("Save"), this);
+  connect(saveAction_, SIGNAL(triggered()), this, SLOT(emitSave()));
 
   // save as  action
-  saveAsOTStudy_ = new QAction(QIcon(":/images/document-save-as.png"), tr("Save As..."), this);
-  connect(saveAsOTStudy_, SIGNAL(triggered()), this, SLOT(saveAsOTStudy()));
+  saveAsAction_ = new QAction(QIcon(":/images/document-save-as.png"), tr("Save As..."), this);
+  connect(saveAsAction_, SIGNAL(triggered()), this, SLOT(emitSaveAs()));
 
   // close action
-  closeOTStudy_ = new QAction(QIcon(":/images/window-close.png"), tr("Close"), this);
-  connect(closeOTStudy_, SIGNAL(triggered()), this, SLOT(closeOTStudy()));
+  closeAction_ = new QAction(QIcon(":/images/window-close.png"), tr("Close"), this);
+  connect(closeAction_, SIGNAL(triggered()), this, SLOT(emitClose()));
 
   // add actions
   appendSeparator(tr("Model"));
-  appendAction(newSymbolicPhysicalModel_);
-  appendAction(newPythonPhysicalModel_);
+  appendAction(newSymbolicModel_);
+  appendAction(newPythonModel_);
 #ifdef OTGUI_HAVE_YACS
-  appendAction(newYACSPhysicalModel_);
+  appendAction(newYACSModel_);
 #endif
 #ifdef OTGUI_HAVE_OTFMI
-  appendAction(newFMIPhysicalModel_);
+  appendAction(newFMIModel_);
 #endif
   appendAction(newDataModel_);
   appendSeparator();
-  appendAction(exportOTStudy_);
-  appendAction(saveOTStudy_);
+  appendAction(exportAction_);
+  appendAction(saveAction_);
   appendSeparator();
-  appendAction(closeOTStudy_);
+  appendAction(closeAction_);
 }
 
 
@@ -115,22 +115,22 @@ void OTStudyItem::update(Observable * source, const String & message)
   if (message == "addDataModel")
   {
     DesignOfExperiment addedDataModel = otStudy_.getDataModels()[otStudy_.getDataModels().getSize() - 1];
-    addDataModelItem(addedDataModel);
+    appendItem(addedDataModel);
   }
   else if (message == "addPhysicalModel")
   {
     PhysicalModel addedPhysicalModel = otStudy_.getPhysicalModels()[otStudy_.getPhysicalModels().getSize() - 1];
-    addPhysicalModelItem(addedPhysicalModel);
+    appendItem(addedPhysicalModel);
   }
   else if (message == "addLimitState")
   {
     LimitState addedLimitState = otStudy_.getLimitStates()[otStudy_.getLimitStates().getSize() - 1];
-    addLimitStateItem(addedLimitState);
+    appendItem(addedLimitState);
   }
   else if (message == "addAnalysis")
   {
     Analysis addedAnalysis = otStudy_.getAnalyses()[otStudy_.getAnalyses().getSize() - 1];
-    addAnalysisItem(addedAnalysis);
+    appendItem(addedAnalysis);
   }
   else if (message == "otStudyRemoved")
   {
@@ -146,7 +146,7 @@ void OTStudyItem::update(Observable * source, const String & message)
     // emit signal to change the updateIcon
     // do NOT call directly updateIcon because is not 'thread safe'
     // (some notifications are emitted when the analyses are running)
-    emit otStudyStatusChanged();
+    emit statusChanged();
   }
   else
   {
@@ -161,47 +161,49 @@ void OTStudyItem::updateIcon()
 }
 
 
-void OTStudyItem::createNewSymbolicPhysicalModel()
+void OTStudyItem::createSymbolicModel()
 {
-  SymbolicPhysicalModel * newPhysicalModel = new SymbolicPhysicalModel(otStudy_.getAvailablePhysicalModelName());
-  otStudy_.add(newPhysicalModel);
+  SymbolicPhysicalModel * newModel = new SymbolicPhysicalModel(otStudy_.getAvailablePhysicalModelName());
+  otStudy_.add(newModel);
 }
 
 
-void OTStudyItem::createNewPythonPhysicalModel()
+void OTStudyItem::createPythonModel()
 {
-  PythonPhysicalModel * newPhysicalModel = new PythonPhysicalModel(otStudy_.getAvailablePhysicalModelName());
-  otStudy_.add(newPhysicalModel);
+  PythonPhysicalModel * newModel = new PythonPhysicalModel(otStudy_.getAvailablePhysicalModelName());
+  otStudy_.add(newModel);
 }
 
 
 #ifdef OTGUI_HAVE_YACS
-void OTStudyItem::createNewYACSPhysicalModel()
+void OTStudyItem::createYACSModel()
 {
-  YACSPhysicalModel * newPhysicalModel = new YACSPhysicalModel(otStudy_.getAvailablePhysicalModelName());
-  otStudy_.add(newPhysicalModel);
+  YACSPhysicalModel * newModel = new YACSPhysicalModel(otStudy_.getAvailablePhysicalModelName());
+  otStudy_.add(newModel);
 }
 #endif
 
 
 #ifdef OTGUI_HAVE_OTFMI
-void OTStudyItem::createNewFMIPhysicalModel()
+void OTStudyItem::createFMIModel()
 {
-  FMIPhysicalModel newPhysicalModel(otStudy_.getAvailablePhysicalModelName());
-  otStudy_.add(newPhysicalModel);
+  FMIPhysicalModel newModel(otStudy_.getAvailablePhysicalModelName());
+  otStudy_.add(newModel);
 }
 #endif
 
 
-void OTStudyItem::createNewDataModel()
+void OTStudyItem::createDataModel()
 {
   DesignOfExperiment newDataModel(DataModel(otStudy_.getAvailableDataModelName()));
   otStudy_.add(newDataModel);
 }
 
 
-void OTStudyItem::exportOTStudy(QString fileName)
+void OTStudyItem::exportPythonScript(const QString& filename)
 {
+  QString fileName = filename;
+
   if (fileName.isEmpty())
   {
     qDebug() << "OTStudyItem::exportStudy : file name empty\n";
@@ -234,20 +236,22 @@ void OTStudyItem::exportOTStudy(QString fileName)
 }
 
 
-void OTStudyItem::saveOTStudy()
+void OTStudyItem::emitSave()
 {
-  emit otStudySaveRequested(this);
+  emit saveRequested(this);
 }
 
 
-void OTStudyItem::saveAsOTStudy()
+void OTStudyItem::emitSaveAs()
 {
-  emit otStudySaveAsRequested(this);
+  emit saveAsRequested(this);
 }
 
 
-bool OTStudyItem::saveOTStudy(QString fileName)
+bool OTStudyItem::save(const QString& filename)
 {
+  QString fileName = filename;
+
   if (fileName.isEmpty())
   {
     qDebug() << "OTStudyItem::saveOTStudy : file name empty\n";
@@ -280,13 +284,13 @@ bool OTStudyItem::saveOTStudy(QString fileName)
 }
 
 
-void OTStudyItem::closeOTStudy()
+void OTStudyItem::emitClose()
 {
-  emit otStudyCloseRequested(this);
+  emit closeRequested(this);
 }
 
 
-void OTStudyItem::addDataModelItem(DesignOfExperiment & dataModel)
+void OTStudyItem::appendItem(DesignOfExperiment & dataModel)
 {
   OTguiItem * item = getTitleItemNamed(tr("Data models"), "DataModelsTitle");
 
@@ -297,18 +301,18 @@ void OTStudyItem::addDataModelItem(DesignOfExperiment & dataModel)
   }
 
   // new Data model item
-  DataModelDiagramItem * newDataModelItem = new DataModelDiagramItem(dataModel);
-  item->appendRow(newDataModelItem);
+  DataModelDiagramItem * newItem = new DataModelDiagramItem(dataModel);
+  item->appendRow(newItem);
 
   // signal for StudyTreeView to create the window
-  emit newDataModelItemCreated(newDataModelItem);
+  emit dataModelItemCreated(newItem);
 
   // Add sub items
-  newDataModelItem->fill();
+  newItem->fill();
 }
 
 
-void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
+void OTStudyItem::appendItem(PhysicalModel & physicalModel)
 {
   const QString title = (physicalModel.getImplementation()->getClassName() == "MetaModel") ? tr("Metamodels") : tr("Physical models");
   const QString titleType = (physicalModel.getImplementation()->getClassName() == "MetaModel") ? "MetaModelsTitle" : "PhysicalModelsTitle";
@@ -317,45 +321,45 @@ void OTStudyItem::addPhysicalModelItem(PhysicalModel & physicalModel)
   // context menu actions
   if (!item->getActions().size())
   {
-    item->appendAction(newSymbolicPhysicalModel_);
-    item->appendAction(newPythonPhysicalModel_);
+    item->appendAction(newSymbolicModel_);
+    item->appendAction(newPythonModel_);
 #ifdef OTGUI_HAVE_YACS
-    item->appendAction(newYACSPhysicalModel_);
+    item->appendAction(newYACSModel_);
 #endif
 #ifdef OTGUI_HAVE_OTFMI
-    item->appendAction(newFMIPhysicalModel_);
+    item->appendAction(newFMIModel_);
 #endif
   }
 
   // new Physical model item
-  PhysicalModelDiagramItem * newPhysicalModelItem = new PhysicalModelDiagramItem(physicalModel);
-  item->appendRow(newPhysicalModelItem);
+  PhysicalModelDiagramItem * newModelItem = new PhysicalModelDiagramItem(physicalModel);
+  item->appendRow(newModelItem);
 
   // signal for StudyTreeView to create the window
-  emit newPhysicalModelItemCreated(newPhysicalModelItem);
+  emit physicalModelItemCreated(newModelItem);
 
   // Add sub items
-  newPhysicalModelItem->fill();
+  newModelItem->fill();
 }
 
 
-void OTStudyItem::addLimitStateItem(LimitState & limitState)
+void OTStudyItem::appendItem(LimitState & limitState)
 {
   // search PhysicalModelDiagram observer
   if (PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(limitState.getPhysicalModel().getImplementation().get()->getObserver("PhysicalModelDiagram")))
   {
     // append item for limitState
-    pmItem->appendLimitStateItem(limitState);
+    pmItem->appendItem(limitState);
   }
   else
   {
-    qDebug() << "In OTStudyItem::addLimitStateItem: No item added for the limit state named " << limitState.getName().data() << "\n"
+    qDebug() << "In OTStudyItem::appendItem: No item added for the limit state named " << limitState.getName().data() << "\n"
              << "No physical model matches the name " << limitState.getPhysicalModel().getName().data() << "\n";
   }
 }
 
 
-void OTStudyItem::addAnalysisItem(Analysis & analysis)
+void OTStudyItem::appendItem(Analysis & analysis)
 {
   if (PhysicalModelAnalysis * pmAnalysis = dynamic_cast<PhysicalModelAnalysis*>(analysis.getImplementation().get()))
   {
@@ -364,11 +368,11 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis)
     if (PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(model.getImplementation().get()->getObserver("PhysicalModelDiagram")))
     {
       // append item for analysis
-      pmItem->appendAnalysisItem(analysis);
+      pmItem->appendItem(analysis);
     }
     else
     {
-      qDebug() << "In OTStudyItem::addAnalysisItem: No item added for the analysis named " << analysis.getName().data() << ". Physical model item not found.\n";
+      qDebug() << "In OTStudyItem::appendItem: No item added for the analysis named " << analysis.getName().data() << ". Physical model item not found.\n";
     }
   }
   else if (DesignOfExperimentAnalysis * dmAnalysis = dynamic_cast<DesignOfExperimentAnalysis*>(analysis.getImplementation().get()))
@@ -380,22 +384,22 @@ void OTStudyItem::addAnalysisItem(Analysis & analysis)
       DesignOfExperimentDefinitionItem * doeItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(design.getImplementation().get()->getObserver("DesignOfExperimentDefinition"));
       Q_ASSERT(doeItem);
       // append item for analysis
-      doeItem->appendAnalysisItem(analysis);
+      doeItem->appendItem(analysis);
     }
     else
     {
       DataModelDiagramItem * doeItem = dynamic_cast<DataModelDiagramItem*>(design.getImplementation().get()->getObserver("DataModelDiagram"));
       Q_ASSERT(doeItem);
       // append item for analysis
-      doeItem->appendAnalysisItem(analysis);
+      doeItem->appendItem(analysis);
     }
   }
   else
-    qDebug() << "In OTStudyItem::addAnalysisItem: No item added for the analysis named " << analysis.getName().data() << "\n";
+    qDebug() << "In OTStudyItem::appendItem: No item added for the analysis named " << analysis.getName().data() << "\n";
 }
 
 
-void OTStudyItem::addMetaModelItem(PhysicalModel metaModel)
+void OTStudyItem::appendMetaModelItem(PhysicalModel metaModel)
 {
   const String availableName = otStudy_.getAvailablePhysicalModelName(metaModel.getName());
   metaModel.setName(availableName);

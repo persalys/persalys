@@ -43,20 +43,20 @@ LimitStateItem::LimitStateItem(const LimitState & limitState)
 void LimitStateItem::buildActions()
 {
   // new threshold exceedance action
-  newThresholdExceedance_ = new QAction(tr("Threshold exceedance"), this);
-  newThresholdExceedance_->setStatusTip(tr("Create a new threshold exceedance"));
-  connect(newThresholdExceedance_, SIGNAL(triggered()), this, SLOT(createNewThresholdExceedance()));
+  newThresholdExceedanceAction_ = new QAction(tr("Threshold exceedance"), this);
+  newThresholdExceedanceAction_->setStatusTip(tr("Create a new threshold exceedance"));
+  connect(newThresholdExceedanceAction_, SIGNAL(triggered()), this, SLOT(createThresholdExceedance()));
 
   // remove limit state action
-  removeLimitState_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
-  removeLimitState_->setStatusTip(tr("Remove the limit state"));
-  connect(removeLimitState_, SIGNAL(triggered()), this, SLOT(removeLimitState()));
+  removeAction_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
+  removeAction_->setStatusTip(tr("Remove the limit state"));
+  connect(removeAction_, SIGNAL(triggered()), this, SLOT(removeLimitState()));
 
   // add actions
   appendSeparator(tr("Analysis"));
-  appendAction(newThresholdExceedance_);
+  appendAction(newThresholdExceedanceAction_);
   appendSeparator();
-  appendAction(removeLimitState_);
+  appendAction(removeAction_);
 }
 
 
@@ -102,7 +102,7 @@ void LimitStateItem::update(Observable* source, const String & message)
 }
 
 
-void LimitStateItem::appendAnalysisItem(Analysis& analysis)
+void LimitStateItem::appendItem(Analysis& analysis)
 {
   // new item
   AnalysisItem * newItem = new AnalysisItem(analysis);
@@ -118,11 +118,11 @@ void LimitStateItem::appendAnalysisItem(Analysis& analysis)
   appendRow(newItem);
 
   // emit signal to StudyTreeView to create a window
-  emit newAnalysisItemCreated(newItem);
+  emit analysisItemCreated(newItem);
 }
 
 
-void LimitStateItem::createNewThresholdExceedance()
+void LimitStateItem::createThresholdExceedance()
 {
   // check
   if (!limitState_.getPhysicalModel().isValid())

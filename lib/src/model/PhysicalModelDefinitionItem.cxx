@@ -54,12 +54,12 @@ void PhysicalModelDefinitionItem::buildActions()
   // new design of experiments action
   newDesignOfExperiment_ = new QAction(QIcon(":/images/designOfExperiment.png"), tr("Design of experiments"), this);
   newDesignOfExperiment_->setStatusTip(tr("Create a new design of experiments"));
-  connect(newDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(createNewDesignOfExperiment()));
+  connect(newDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(createDesignOfExperiment()));
 
   // new analysis actions
   newModelEvaluation_ = new QAction(QIcon(":/images/modelEvaluation.png"), tr("Evaluation"), this);
   newModelEvaluation_->setStatusTip(tr("Create a new model evaluation"));
-  connect(newModelEvaluation_, SIGNAL(triggered()), this, SLOT(createNewModelEvaluation()));
+  connect(newModelEvaluation_, SIGNAL(triggered()), this, SLOT(createModelEvaluation()));
 
   // add actions
   appendAction(newProbabilisticModel_);
@@ -144,7 +144,7 @@ void PhysicalModelDefinitionItem::createProbabilisticModel()
 }
 
 
-void PhysicalModelDefinitionItem::createNewModelEvaluation()
+void PhysicalModelDefinitionItem::createModelEvaluation()
 {
   // check
   if (!physicalModel_.isValid())
@@ -160,7 +160,7 @@ void PhysicalModelDefinitionItem::createNewModelEvaluation()
 }
 
 
-void PhysicalModelDefinitionItem::createNewDesignOfExperiment()
+void PhysicalModelDefinitionItem::createDesignOfExperiment()
 {
   // check
   if (!physicalModel_.getInputDimension())

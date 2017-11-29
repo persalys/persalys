@@ -40,8 +40,8 @@ public:
   virtual void update(Observable * source, const OT::String & message);
 
   void fill();
-  void appendAnalysisItem(Analysis& analysis);
-  void appendLimitStateItem(const LimitState& limitState);
+  void appendItem(Analysis& analysis);
+  void appendItem(const LimitState& limitState);
 
 public slots:
   void appendPhysicalModelItem();
@@ -62,8 +62,8 @@ signals:
   void probabilisticModelValidityChanged(bool);
   void dependencyValidityChanged(bool);
   void limitStateNumberValidityChanged(bool);
-  void designOfExperimentNumberValidityChanged(bool);
-  void designOfExperimentEvaluationNumberValidityChanged(bool);
+  void doeNumberValidityChanged(bool);
+  void doeEvaluationNumberValidityChanged(bool);
 
   // signals for StudyTreeview
   void evaluationModelRequested();
@@ -75,10 +75,10 @@ signals:
   void designOfExperimentEvaluationRequested(const Analysis&, const bool isGeneralWizard = false);
 
   void modelDefinitionWindowRequested(PhysicalModelDefinitionItem*);
-  void newProbabilisticModelItemCreated(ProbabilisticModelItem*);
-  void newDOEAnalysisItemCreated(DesignOfExperimentDefinitionItem*);
-  void newAnalysisItemCreated(AnalysisItem*);
-  void newLimitStateCreated(LimitStateItem*);
+  void probabilisticModelItemCreated(ProbabilisticModelItem*);
+  void doeAnalysisItemCreated(DesignOfExperimentDefinitionItem*);
+  void analysisItemCreated(AnalysisItem*);
+  void limitStateCreated(LimitStateItem*);
 
   void changeCurrentItemRequested(QModelIndex);
 
@@ -86,8 +86,8 @@ protected:
   void buildActions();
 
 private:
-  QAction * definePhysicalModel_;
-  QAction * removePhysicalModel_;
+  QAction * defineAction_;
+  QAction * removeAction_;
   int limitStateCounter_;
   OT::Indices doeCounter_;
 };

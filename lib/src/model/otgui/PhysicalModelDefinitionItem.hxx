@@ -37,8 +37,8 @@ public:
 
 public slots:
   void createProbabilisticModel();
-  void createNewDesignOfExperiment();
-  void createNewModelEvaluation();
+  void createDesignOfExperiment();
+  void createModelEvaluation();
   void updateProbaActionAvailability();
 signals:
   void probabilisticModelRequested(PhysicalModelItem*);

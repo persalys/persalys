@@ -50,7 +50,7 @@ public slots:
   void modifyStudySubItemsExpansion(OTStudyItem* item);
 
 signals:
-  void newOTStudyCreated(OTStudyItem*);
+  void studyCreated(OTStudyItem*);
   void itemSelectionChanged(QStandardItem*);
 
 private:

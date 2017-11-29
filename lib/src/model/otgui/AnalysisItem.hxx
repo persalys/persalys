@@ -51,11 +51,10 @@ public slots:
   void updateAnalysis(const Analysis & analysis);
   void stopAnalysis();
   void modifyAnalysis();
-  void addMetaModelItem();
+  void appendMetaModelItem();
   void removeAnalysis();
 signals:
-  void analysisFinished(AnalysisItem*);
-  void analysisBadlyFinished(AnalysisItem*);
+  void analysisFinished(AnalysisItem*, bool);
   void analysisRemoved(QStandardItem*);
   void messageChanged(QString);
   void progressValueChanged(int);
@@ -64,9 +63,9 @@ signals:
 
 private:
   Analysis analysis_;
-  QAction * addMetaModel_;
-  QAction * modifyAnalysis_;
-  QAction * removeAnalysis_;
+  QAction * convertAction_;
+  QAction * modifyAction_;
+  QAction * removeAction_;
 };
 }
 #endif

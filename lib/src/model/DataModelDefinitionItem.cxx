@@ -51,19 +51,19 @@ void DataModelDefinitionItem::buildActions()
   // new data analyses
   newDataAnalysis_ = new QAction(tr("Data analysis"), this);
   newDataAnalysis_->setStatusTip(tr("Analyse the data sample"));
-  connect(newDataAnalysis_, SIGNAL(triggered()), this, SLOT(createNewDataAnalysis()));
+  connect(newDataAnalysis_, SIGNAL(triggered()), this, SLOT(createDataAnalysis()));
 
   newInferenceAnalysis_ = new QAction(tr("Inference"), this);
   newInferenceAnalysis_->setStatusTip(tr("Inference"));
-  connect(newInferenceAnalysis_, SIGNAL(triggered()), this, SLOT(createNewInferenceAnalysis()));
+  connect(newInferenceAnalysis_, SIGNAL(triggered()), this, SLOT(createInferenceAnalysis()));
 
   newCopulaInferenceAnalysis_ = new QAction(tr("Dependencies inference"), this);
   newCopulaInferenceAnalysis_->setStatusTip(tr("Dependencies inference"));
-  connect(newCopulaInferenceAnalysis_, SIGNAL(triggered()), this, SLOT(createNewCopulaInferenceAnalysis()));
+  connect(newCopulaInferenceAnalysis_, SIGNAL(triggered()), this, SLOT(createCopulaInferenceAnalysis()));
 
   newMetaModel_ = new QAction(tr("Metamodel"), this);
   newMetaModel_->setStatusTip(tr("Create a new metamodel"));
-  connect(newMetaModel_, SIGNAL(triggered()), this, SLOT(createNewMetaModel()));
+  connect(newMetaModel_, SIGNAL(triggered()), this, SLOT(createMetaModel()));
 
   // add actions
   appendSeparator(tr("Analysis"));
@@ -101,7 +101,7 @@ bool DataModelDefinitionItem::designOfExperimentValid()
 }
 
 
-void DataModelDefinitionItem::createNewDataAnalysis()
+void DataModelDefinitionItem::createDataAnalysis()
 {
   // check
   if (!designOfExperimentValid())
@@ -113,7 +113,7 @@ void DataModelDefinitionItem::createNewDataAnalysis()
 }
 
 
-void DataModelDefinitionItem::createNewInferenceAnalysis()
+void DataModelDefinitionItem::createInferenceAnalysis()
 {
   // check
   if (!designOfExperimentValid())
@@ -126,7 +126,7 @@ void DataModelDefinitionItem::createNewInferenceAnalysis()
 }
 
 
-void DataModelDefinitionItem::createNewCopulaInferenceAnalysis()
+void DataModelDefinitionItem::createCopulaInferenceAnalysis()
 {
   // check
   if (!designOfExperimentValid())
@@ -144,7 +144,7 @@ void DataModelDefinitionItem::createNewCopulaInferenceAnalysis()
 }
 
 
-void DataModelDefinitionItem::createNewMetaModel()
+void DataModelDefinitionItem::createMetaModel()
 {
   // check
   if (!designOfExperiment_.getOutputSample().getSize())

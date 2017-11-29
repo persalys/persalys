@@ -88,8 +88,8 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   // set model
   OTStudy::SetInstanceObserver(treeViewModel_);
   setModel(treeViewModel_);
-  connect(treeViewModel_, SIGNAL(newOTStudyCreated(OTStudyItem*)), this, SIGNAL(newOTStudyCreated(OTStudyItem*)));
-  connect(treeViewModel_, SIGNAL(otStudySubItemsAdded(OTStudyItem*)), this, SLOT(modifyStudySubItemsExpansion(OTStudyItem*)));
+  connect(treeViewModel_, SIGNAL(studyCreated(OTStudyItem*)), this, SIGNAL(studyCreated(OTStudyItem*)));
+  connect(treeViewModel_, SIGNAL(studySubItemsAdded(OTStudyItem*)), this, SLOT(modifyStudySubItemsExpansion(OTStudyItem*)));
 
   // forbid the user to define not valid item's name
 #if QT_VERSION >= 0x050000

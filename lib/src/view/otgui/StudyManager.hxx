@@ -42,21 +42,20 @@ public slots:
   void showErrorMessage(QString);
 
   // create objects
-  void createNewOTStudy();
+  void createOTStudy();
   void openAnalysisWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard = false);
   void openDesignOfExperimentEvaluationWizard(const Analysis& analysis, const bool isGeneralWizard = false);
 
   // create windows
-  void createNewOTStudyWindow(OTStudyItem* item);
-  void createNewDataModelDiagramWindow(DataModelDiagramItem*);
-  void createNewDataModelWindow(DataModelDefinitionItem* item);
-  void createNewPhysicalModelDiagramWindow(PhysicalModelDiagramItem* item);
-  void createNewPhysicalModelWindow(PhysicalModelDefinitionItem* item);
-  void createNewProbabilisticModelWindow(ProbabilisticModelItem* item);
-  void createNewDesignOfExperimentWindow(DesignOfExperimentDefinitionItem* item, const bool createConnections = true);
-  void createNewLimitStateWindow(LimitStateItem* item);
-  void createNewAnalysisWindow(AnalysisItem* item);
-  void createAnalysisWindow(AnalysisItem* item);
+  void createOTStudyWindow(OTStudyItem* item);
+  void createDataModelDiagramWindow(DataModelDiagramItem*);
+  void createDataModelWindow(DataModelDefinitionItem* item);
+  void createPhysicalModelDiagramWindow(PhysicalModelDiagramItem* item);
+  void createPhysicalModelWindow(PhysicalModelDefinitionItem* item);
+  void createProbabilisticModelWindow(ProbabilisticModelItem* item);
+  void createDesignOfExperimentWindow(DesignOfExperimentDefinitionItem* item, const bool createConnections = true);
+  void createLimitStateWindow(LimitStateItem* item);
+  void createAnalysisWindow(AnalysisItem* item, const bool createConnections = true);
 
   // modify objects
   void modifyDesignOfExperiment(DesignOfExperimentDefinitionItem* item);

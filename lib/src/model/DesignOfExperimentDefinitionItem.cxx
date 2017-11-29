@@ -35,9 +35,9 @@ DesignOfExperimentDefinitionItem::DesignOfExperimentDefinitionItem(const Analysi
   : OTguiItem(QString::fromUtf8(analysis.getName().c_str()), "DesignOfExperimentDefinitionItem")
   , Observer("DesignOfExperimentDefinition")
   , analysis_(analysis)
-  , newMetaModel_(0)
-  , modifyAnalysis_(0)
-  , removeAnalysis_(0)
+  , newMetaModelAction_(0)
+  , modifyAction_(0)
+  , removeAction_(0)
 {
   analysis_.addObserver(this);
 
@@ -64,39 +64,39 @@ void DesignOfExperimentDefinitionItem::setData(const QVariant & value, int role)
 
 void DesignOfExperimentDefinitionItem::buildActions()
 {
-  modifyAnalysis_ = new QAction(QIcon(":/images/run-build.png"), tr("Modify"), this);
-  modifyAnalysis_->setStatusTip(tr("Modify the analysis"));
-  connect(modifyAnalysis_, SIGNAL(triggered()), this, SLOT(modifyAnalysis()));
+  modifyAction_ = new QAction(QIcon(":/images/run-build.png"), tr("Modify"), this);
+  modifyAction_->setStatusTip(tr("Modify the analysis"));
+  connect(modifyAction_, SIGNAL(triggered()), this, SLOT(modifyAnalysis()));
 
-  appendAction(modifyAnalysis_);
+  appendAction(modifyAction_);
 
-  exportData_ = new QAction(QIcon(":/images/document-export.png"), tr("Export data"), this);
-  exportData_->setStatusTip(tr("Export the data in a file"));
-  connect(exportData_, SIGNAL(triggered()), this, SIGNAL(dataExportRequested()));
-  appendAction(exportData_);
+  exportAction_ = new QAction(QIcon(":/images/document-export.png"), tr("Export data"), this);
+  exportAction_->setStatusTip(tr("Export the data in a file"));
+  connect(exportAction_, SIGNAL(triggered()), this, SIGNAL(dataExportRequested()));
+  appendAction(exportAction_);
 
   appendSeparator(tr("Analysis"));
 
   // evaluate design of experiments action
-  evaluateDesignOfExperiment_ = new QAction(QIcon(":/images/system-run.png"), tr("Evaluate"), this);
-  evaluateDesignOfExperiment_->setStatusTip(tr("Evaluate the design of experiments"));
-  connect(evaluateDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(createNewEvaluation()));
+  evaluateAction_ = new QAction(QIcon(":/images/system-run.png"), tr("Evaluate"), this);
+  evaluateAction_->setStatusTip(tr("Evaluate the design of experiments"));
+  connect(evaluateAction_, SIGNAL(triggered()), this, SLOT(createEvaluation()));
 
-  appendAction(evaluateDesignOfExperiment_);
+  appendAction(evaluateAction_);
 
   // new metamodel action
-  newMetaModel_ = new QAction(QIcon(":/images/metaModel.png"), tr("Metamodel"), this);
-  newMetaModel_->setStatusTip(tr("Create a new metamodel"));
-  connect(newMetaModel_, SIGNAL(triggered()), this, SLOT(createNewMetaModel()));
+  newMetaModelAction_ = new QAction(QIcon(":/images/metaModel.png"), tr("Metamodel"), this);
+  newMetaModelAction_->setStatusTip(tr("Create a new metamodel"));
+  connect(newMetaModelAction_, SIGNAL(triggered()), this, SLOT(createMetaModel()));
 
   appendSeparator();
 
   // remove analysis action
-  removeAnalysis_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
-  removeAnalysis_->setStatusTip(tr("Remove the analysis"));
-  connect(removeAnalysis_, SIGNAL(triggered()), this, SLOT(removeAnalysis()));
+  removeAction_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
+  removeAction_->setStatusTip(tr("Remove the analysis"));
+  connect(removeAction_, SIGNAL(triggered()), this, SLOT(removeAnalysis()));
 
-  appendAction(removeAnalysis_);
+  appendAction(removeAction_);
 }
 
 
@@ -162,7 +162,7 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
   evaluationItem->setData(font, Qt::FontRole);
   evaluationItem->setEditable(false);
   evaluationItem->appendSeparator(tr("Analysis"));
-  evaluationItem->appendAction(newMetaModel_);
+  evaluationItem->appendAction(newMetaModelAction_);
 
   // connections
   // - signal for the PhysicalModelDiagramItem
@@ -176,14 +176,14 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
   insertRow(0, evaluationItem);
 
   // emit signal to StudyTreeView to create a window
-  emit newAnalysisItemCreated(evaluationItem);
+  emit analysisItemCreated(evaluationItem);
 
   // disable the evaluation action
-  evaluateDesignOfExperiment_->setDisabled(true);
+  evaluateAction_->setDisabled(true);
 }
 
 
-void DesignOfExperimentDefinitionItem::appendAnalysisItem(Analysis& analysis)
+void DesignOfExperimentDefinitionItem::appendItem(Analysis& analysis)
 {
   // new item
   AnalysisItem * newItem = new AnalysisItem(analysis);
@@ -201,7 +201,7 @@ void DesignOfExperimentDefinitionItem::appendAnalysisItem(Analysis& analysis)
   appendRow(newItem);
 
   // emit signal to StudyTreeView to create a window
-  emit newAnalysisItemCreated(newItem);
+  emit analysisItemCreated(newItem);
 }
 
 
@@ -218,7 +218,7 @@ void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
   analysis_.getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
   analysis_.getImplementation().get()->removeObserver("OTStudy");
 
-  evaluateDesignOfExperiment_->setEnabled(true);
+  evaluateAction_->setEnabled(true);
   // remove last observer
   analysis_.getImplementation().get()->removeObserver(this);
 
@@ -232,7 +232,7 @@ void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
 }
 
 
-void DesignOfExperimentDefinitionItem::createNewEvaluation()
+void DesignOfExperimentDefinitionItem::createEvaluation()
 {
   // check
   if (!getOriginalInputSample().getSize())
@@ -267,7 +267,7 @@ void DesignOfExperimentDefinitionItem::removeAnalysis()
 }
 
 
-void DesignOfExperimentDefinitionItem::createNewMetaModel()
+void DesignOfExperimentDefinitionItem::createMetaModel()
 {
   // check
   if (!getAnalysis().hasValidResult())

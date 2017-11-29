@@ -36,66 +36,65 @@ public:
 
   void update(Observable * source, const OT::String & message);
 
-  void addDataModelItem(DesignOfExperiment & dataModel);
-  void addPhysicalModelItem(PhysicalModel & physicalModel);
-  void addLimitStateItem(LimitState & limitState);
-  void addAnalysisItem(Analysis & analysis);
+  void appendItem(DesignOfExperiment & dataModel);
+  void appendItem(PhysicalModel & physicalModel);
+  void appendItem(LimitState & limitState);
+  void appendItem(Analysis & analysis);
 
   virtual QVariant data(int role) const;
   void setData(const QVariant & value, int role);
   OTStudy getOTStudy() const;
 
-  void exportOTStudy(QString fileName);
+  void exportPythonScript(const QString& fileName);
 
 protected slots:
   virtual void requestRemove();
 
 public slots:
   void updateIcon();
-  void createNewSymbolicPhysicalModel();
-  void createNewPythonPhysicalModel();
+  void createSymbolicModel();
+  void createPythonModel();
 #ifdef OTGUI_HAVE_YACS
-  void createNewYACSPhysicalModel();
+  void createYACSModel();
 #endif
 #ifdef OTGUI_HAVE_OTFMI
-  void createNewFMIPhysicalModel();
+  void createFMIModel();
 #endif
-  void createNewDataModel();
-  void saveOTStudy();
-  void saveAsOTStudy();
-  bool saveOTStudy(QString);
-  void closeOTStudy();
-  void addMetaModelItem(PhysicalModel metaModel);
+  void createDataModel();
+  void emitSave();
+  void emitSaveAs();
+  bool save(const QString&);
+  void emitClose();
+  void appendMetaModelItem(PhysicalModel metaModel);
 signals:
-  void otStudyStatusChanged();
-  void otStudyExportRequested();
-  void otStudyExportRequested(OTStudyItem* item);
-  void otStudySaveRequested();
-  void otStudySaveAsRequested();
-  void otStudySaveRequested(OTStudyItem* item);
-  void otStudySaveAsRequested(OTStudyItem* item);
-  void otStudyCloseRequested(OTStudyItem* item);
-  void newDataModelItemCreated(DataModelDiagramItem*);
-  void newPhysicalModelItemCreated(PhysicalModelDiagramItem*);
+  void statusChanged();
+  void exportRequested();
+  void saveRequested();
+  void saveAsRequested();
+  void saveRequested(OTStudyItem* item);
+  void saveAsRequested(OTStudyItem* item);
+  void closeRequested(OTStudyItem* item);
+  void dataModelItemCreated(DataModelDiagramItem*);
+  void physicalModelItemCreated(PhysicalModelDiagramItem*);
 
 protected:
   void buildActions();
 
 private:
   OTStudy otStudy_;
-  QAction * newSymbolicPhysicalModel_;
-  QAction * newPythonPhysicalModel_;
+  QAction * newSymbolicModel_;
+  QAction * newPythonModel_;
 #ifdef OTGUI_HAVE_YACS
-  QAction * newYACSPhysicalModel_;
+  QAction * newYACSModel_;
 #endif
 #ifdef OTGUI_HAVE_OTFMI
-  QAction * newFMIPhysicalModel_;
+  QAction * newFMIModel_;
 #endif
   QAction * newDataModel_;
-  QAction * exportOTStudy_;
-  QAction * saveOTStudy_;
-  QAction * saveAsOTStudy_;
-  QAction * closeOTStudy_;
+  QAction * exportAction_;
+  QAction * saveAction_;
+  QAction * saveAsAction_;
+  QAction * closeAction_;
 };
 }
 #endif

@@ -50,9 +50,9 @@ StudyManager::StudyManager(MainWidget * mainWidget, QObject * parent)
   , mainWidget_(mainWidget)
   , analysisInProgress_(false)
 {
-  connect(mainWidget_->getStudyTree(), SIGNAL(newOTStudyCreated(OTStudyItem*)), this, SLOT(createNewOTStudyWindow(OTStudyItem*)));
+  connect(mainWidget_->getStudyTree(), SIGNAL(studyCreated(OTStudyItem*)), this, SLOT(createOTStudyWindow(OTStudyItem*)));
 
-  connect(mainWidget_->getActions()->newAction(), SIGNAL(triggered()), this, SLOT(createNewOTStudy()));
+  connect(mainWidget_->getActions()->newAction(), SIGNAL(triggered()), this, SLOT(createOTStudy()));
   connect(mainWidget_->getActions()->openAction(), SIGNAL(triggered()), this, SLOT(open()));
   connect(mainWidget_->getActions()->saveAction(), SIGNAL(triggered()), this, SLOT(saveCurrent()));
   connect(mainWidget_->getActions()->saveAsAction(), SIGNAL(triggered()), this, SLOT(saveAsCurrent()));
@@ -87,7 +87,7 @@ void StudyManager::updateView(OTguiSubWindow * window)
 }
 
 
-void StudyManager::createNewOTStudy()
+void StudyManager::createOTStudy()
 {
   // create a new study with an available name
   OTStudy otstudy(OTStudy::GetAvailableName());
@@ -122,19 +122,19 @@ void StudyManager::openAnalysisWizard(OTguiItem* item, const Analysis& analysis,
 }
 
 
-void StudyManager::createNewOTStudyWindow(OTStudyItem* item)
+void StudyManager::createOTStudyWindow(OTStudyItem* item)
 {
   if (!item)
     return;
 
   // connections
   connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
-  connect(item, SIGNAL(newDataModelItemCreated(DataModelDiagramItem*)), this, SLOT(createNewDataModelDiagramWindow(DataModelDiagramItem*)));
-  connect(item, SIGNAL(newPhysicalModelItemCreated(PhysicalModelDiagramItem*)), this, SLOT(createNewPhysicalModelDiagramWindow(PhysicalModelDiagramItem*)));
-  connect(item, SIGNAL(otStudyExportRequested()), this, SLOT(exportPythonScript()));
-  connect(item, SIGNAL(otStudySaveRequested(OTStudyItem*)), this, SLOT(save(OTStudyItem*)));
-  connect(item, SIGNAL(otStudySaveAsRequested(OTStudyItem*)), this, SLOT(saveAs(OTStudyItem*)));
-  connect(item, SIGNAL(otStudyCloseRequested(OTStudyItem*)), this, SLOT(close(OTStudyItem*)));
+  connect(item, SIGNAL(dataModelItemCreated(DataModelDiagramItem*)), this, SLOT(createDataModelDiagramWindow(DataModelDiagramItem*)));
+  connect(item, SIGNAL(physicalModelItemCreated(PhysicalModelDiagramItem*)), this, SLOT(createPhysicalModelDiagramWindow(PhysicalModelDiagramItem*)));
+  connect(item, SIGNAL(exportRequested()), this, SLOT(exportPythonScript()));
+  connect(item, SIGNAL(saveRequested(OTStudyItem*)), this, SLOT(save(OTStudyItem*)));
+  connect(item, SIGNAL(saveAsRequested(OTStudyItem*)), this, SLOT(saveAs(OTStudyItem*)));
+  connect(item, SIGNAL(closeRequested(OTStudyItem*)), this, SLOT(close(OTStudyItem*)));
 
   // window
   OTStudyWindow * window = new OTStudyWindow(item, mainWidget_);
@@ -143,7 +143,7 @@ void StudyManager::createNewOTStudyWindow(OTStudyItem* item)
 }
 
 
-void StudyManager::createNewDataModelDiagramWindow(DataModelDiagramItem* item)
+void StudyManager::createDataModelDiagramWindow(DataModelDiagramItem* item)
 {
   if (!item)
     return;
@@ -151,8 +151,8 @@ void StudyManager::createNewDataModelDiagramWindow(DataModelDiagramItem* item)
   // connections
   connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(changeCurrentItemRequested(QModelIndex)), mainWidget_->getStudyTree(), SLOT(setCurrentIndex(QModelIndex)));
-  connect(item, SIGNAL(modelDefinitionWindowRequested(DataModelDefinitionItem*)), this, SLOT(createNewDataModelWindow(DataModelDefinitionItem*)));
-  connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
+  connect(item, SIGNAL(modelDefinitionWindowRequested(DataModelDefinitionItem*)), this, SLOT(createDataModelWindow(DataModelDefinitionItem*)));
+  connect(item, SIGNAL(analysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
   connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis, bool)), this, SLOT(openAnalysisWizard(OTguiItem*, Analysis, bool)));
 
   // window
@@ -162,7 +162,7 @@ void StudyManager::createNewDataModelDiagramWindow(DataModelDiagramItem* item)
 }
 
 
-void StudyManager::createNewDataModelWindow(DataModelDefinitionItem* item)
+void StudyManager::createDataModelWindow(DataModelDefinitionItem* item)
 {
   if (!item)
     return;
@@ -178,7 +178,7 @@ void StudyManager::createNewDataModelWindow(DataModelDefinitionItem* item)
 }
 
 
-void StudyManager::createNewPhysicalModelDiagramWindow(PhysicalModelDiagramItem* item)
+void StudyManager::createPhysicalModelDiagramWindow(PhysicalModelDiagramItem* item)
 {
   if (!item)
     return;
@@ -186,12 +186,12 @@ void StudyManager::createNewPhysicalModelDiagramWindow(PhysicalModelDiagramItem*
   // connections
   connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(changeCurrentItemRequested(QModelIndex)), mainWidget_->getStudyTree(), SLOT(setCurrentIndex(QModelIndex)));
-  connect(item, SIGNAL(modelDefinitionWindowRequested(PhysicalModelDefinitionItem*)), this, SLOT(createNewPhysicalModelWindow(PhysicalModelDefinitionItem*)));
-  connect(item, SIGNAL(newProbabilisticModelItemCreated(ProbabilisticModelItem*)), this, SLOT(createNewProbabilisticModelWindow(ProbabilisticModelItem*)));
-  connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
-  connect(item, SIGNAL(newLimitStateCreated(LimitStateItem*)), this, SLOT(createNewLimitStateWindow(LimitStateItem*)));
+  connect(item, SIGNAL(modelDefinitionWindowRequested(PhysicalModelDefinitionItem*)), this, SLOT(createPhysicalModelWindow(PhysicalModelDefinitionItem*)));
+  connect(item, SIGNAL(probabilisticModelItemCreated(ProbabilisticModelItem*)), this, SLOT(createProbabilisticModelWindow(ProbabilisticModelItem*)));
+  connect(item, SIGNAL(analysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
+  connect(item, SIGNAL(limitStateCreated(LimitStateItem*)), this, SLOT(createLimitStateWindow(LimitStateItem*)));
   connect(item, SIGNAL(designOfExperimentEvaluationRequested(Analysis, bool)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis, bool)));
-  connect(item, SIGNAL(newDOEAnalysisItemCreated(DesignOfExperimentDefinitionItem*)), this, SLOT(createNewDesignOfExperimentWindow(DesignOfExperimentDefinitionItem*)));
+  connect(item, SIGNAL(doeAnalysisItemCreated(DesignOfExperimentDefinitionItem*)), this, SLOT(createDesignOfExperimentWindow(DesignOfExperimentDefinitionItem*)));
   connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis, bool)), this, SLOT(openAnalysisWizard(OTguiItem*, Analysis, bool)));
 
   // window
@@ -201,7 +201,7 @@ void StudyManager::createNewPhysicalModelDiagramWindow(PhysicalModelDiagramItem*
 }
 
 
-void StudyManager::createNewPhysicalModelWindow(PhysicalModelDefinitionItem* item)
+void StudyManager::createPhysicalModelWindow(PhysicalModelDefinitionItem* item)
 {
   if (!item)
     return;
@@ -217,7 +217,7 @@ void StudyManager::createNewPhysicalModelWindow(PhysicalModelDefinitionItem* ite
 }
 
 
-void StudyManager::createNewProbabilisticModelWindow(ProbabilisticModelItem* item)
+void StudyManager::createProbabilisticModelWindow(ProbabilisticModelItem* item)
 {
   if (!item || !item->getParentOTStudyItem())
     return;
@@ -233,7 +233,7 @@ void StudyManager::createNewProbabilisticModelWindow(ProbabilisticModelItem* ite
 }
 
 
-void StudyManager::createNewLimitStateWindow(LimitStateItem* item)
+void StudyManager::createLimitStateWindow(LimitStateItem* item)
 {
   if (!item)
     return;
@@ -241,7 +241,7 @@ void StudyManager::createNewLimitStateWindow(LimitStateItem* item)
   // connections
   connect(item, SIGNAL(analysisRequested(OTguiItem*, const Analysis&)), this, SLOT(openAnalysisWizard(OTguiItem*, const Analysis&)));
   connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
-  connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
+  connect(item, SIGNAL(analysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
 
   // window
   LimitStateWindow * window = new LimitStateWindow(item, mainWidget_);
@@ -250,7 +250,7 @@ void StudyManager::createNewLimitStateWindow(LimitStateItem* item)
 }
 
 
-void StudyManager::createNewDesignOfExperimentWindow(DesignOfExperimentDefinitionItem* item, const bool createConnections)
+void StudyManager::createDesignOfExperimentWindow(DesignOfExperimentDefinitionItem* item, const bool createConnections)
 {
   if (!item)
     return;
@@ -262,7 +262,7 @@ void StudyManager::createNewDesignOfExperimentWindow(DesignOfExperimentDefinitio
   {
     connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
     connect(item, SIGNAL(modifyAnalysisRequested(DesignOfExperimentDefinitionItem*)), this, SLOT(modifyDesignOfExperiment(DesignOfExperimentDefinitionItem*)));
-    connect(item, SIGNAL(newAnalysisItemCreated(AnalysisItem*)), this, SLOT(createNewAnalysisWindow(AnalysisItem*)));
+    connect(item, SIGNAL(analysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
     connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis)), this, SLOT(openAnalysisWizard(OTguiItem*, Analysis)));
     connect(item, SIGNAL(DOEEvaluationRequested(Analysis)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis)));
     connect(item, SIGNAL(updateEvaluationWindowRequested(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
@@ -275,27 +275,20 @@ void StudyManager::createNewDesignOfExperimentWindow(DesignOfExperimentDefinitio
 }
 
 
-void StudyManager::createNewAnalysisWindow(AnalysisItem * item)
+void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createConnections)
 {
   if (!item)
     return;
 
-  // connections
-  connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
-  connect(item, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
-  connect(item, SIGNAL(analysisFinished(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
-  connect(item, SIGNAL(modifyAnalysisRequested(AnalysisItem*)), this, SLOT(modifyAnalysis(AnalysisItem*)));
-  connect(item, SIGNAL(modifyDesignOfExperimentEvaluation(Analysis, bool)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis, bool)));
-
-  // window
-  createAnalysisWindow(item);
-}
-
-
-void StudyManager::createAnalysisWindow(AnalysisItem* item)
-{
-  if (!item)
-    return;
+  if (createConnections)
+  {
+    // connections
+    connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
+    connect(item, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
+    connect(item, SIGNAL(analysisFinished(AnalysisItem*, bool)), this, SLOT(createAnalysisWindow(AnalysisItem*, bool)));
+    connect(item, SIGNAL(modifyAnalysisRequested(AnalysisItem*)), this, SLOT(modifyAnalysis(AnalysisItem*)));
+    connect(item, SIGNAL(modifyDesignOfExperimentEvaluation(Analysis, bool)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis, bool)));
+  }
 
   // do removeSubWindow if the analysis run method has been launched from a Python script
   item->emitRemoveWindowRequested();
@@ -345,7 +338,7 @@ void StudyManager::modifyDesignOfExperiment(DesignOfExperimentDefinitionItem* it
   if (wizard && wizard->exec())
   {
     item->updateAnalysis(wizard->getAnalysis());
-    createNewDesignOfExperimentWindow(item, false);
+    createDesignOfExperimentWindow(item, false);
     delete wizard;
   }
 }
@@ -361,7 +354,7 @@ void StudyManager::modifyAnalysis(AnalysisItem* item)
   if (wizard && wizard->exec())
   {
     item->updateAnalysis(wizard->getAnalysis());
-    createAnalysisWindow(item);
+    createAnalysisWindow(item, false);
     delete wizard;
   }
 }
@@ -437,7 +430,7 @@ void StudyManager::exportPythonScript()
                            tr("Python source files (*.py)"));
 
   if (!fileName.isEmpty())
-    item->exportOTStudy(fileName);
+    item->exportPythonScript(fileName);
 }
 
 
@@ -508,7 +501,7 @@ bool StudyManager::saveAs(OTStudyItem* studyItem)
                            currentDir + QDir::separator() + studyItem->data(Qt::DisplayRole).toString(),
                            tr("XML files (*.xml)"));
 
-  const bool ret = studyItem->saveOTStudy(fileName);
+  const bool ret = studyItem->save(fileName);
   if (ret)
     emit recentFilesListChanged(fileName);
   return ret;

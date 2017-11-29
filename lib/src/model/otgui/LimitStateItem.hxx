@@ -39,24 +39,24 @@ public:
 
   virtual void update(Observable * source, const OT::String & message);
 
-  void appendAnalysisItem(Analysis& analysis);
+  void appendItem(Analysis& analysis);
 
 protected:
   void buildActions();
 
 public slots:
-  void createNewThresholdExceedance();
+  void createThresholdExceedance();
   void removeLimitState();
 signals:
   void outputListChanged();
   void operatorChanged();
   void thresholdChanged();
-  void newAnalysisItemCreated(AnalysisItem*);
+  void analysisItemCreated(AnalysisItem*);
 
 private:
   LimitState limitState_;
-  QAction * newThresholdExceedance_;
-  QAction * removeLimitState_;
+  QAction * newThresholdExceedanceAction_;
+  QAction * removeAction_;
 };
 }
 #endif

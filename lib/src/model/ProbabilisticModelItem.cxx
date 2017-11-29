@@ -53,16 +53,16 @@ void ProbabilisticModelItem::buildActions()
   // new limit state action
   newLimitState_ = new QAction(QIcon(":/images/limitstate.png"), tr("Limit state"), this);
   newLimitState_->setStatusTip(tr("Create a new limit state"));
-  connect(newLimitState_, SIGNAL(triggered()), this, SLOT(createNewLimitState()));
+  connect(newLimitState_, SIGNAL(triggered()), this, SLOT(createLimitState()));
 
   // new analysis action
   newCentralTendency_ = new QAction(QIcon(":/images/centralTendency.png"), tr("Central tendency"), this);
   newCentralTendency_->setStatusTip(tr("Create a new central tendency"));
-  connect(newCentralTendency_, SIGNAL(triggered()), this, SLOT(createNewCentralTendency()));
+  connect(newCentralTendency_, SIGNAL(triggered()), this, SLOT(createCentralTendency()));
 
   newSensitivityAnalysis_ = new QAction(QIcon(":/images/sensitivity.png"), tr("Sensitivity"), this);
   newSensitivityAnalysis_->setStatusTip(tr("Create a new sensitivity analysis"));
-  connect(newSensitivityAnalysis_, SIGNAL(triggered()), this, SLOT(createNewSensitivityAnalysis()));
+  connect(newSensitivityAnalysis_, SIGNAL(triggered()), this, SLOT(createSensitivityAnalysis()));
 
   // add actions
   appendAction(newDesignOfExperiment_);
@@ -112,7 +112,7 @@ bool ProbabilisticModelItem::physicalModelValid()
 }
 
 
-void ProbabilisticModelItem::createNewLimitState()
+void ProbabilisticModelItem::createLimitState()
 {
   // check
   if (!physicalModelValid())
@@ -124,7 +124,7 @@ void ProbabilisticModelItem::createNewLimitState()
 }
 
 
-void ProbabilisticModelItem::createNewCentralTendency()
+void ProbabilisticModelItem::createCentralTendency()
 {
   // check
   if (!physicalModelValid())
@@ -137,7 +137,7 @@ void ProbabilisticModelItem::createNewCentralTendency()
 }
 
 
-void ProbabilisticModelItem::createNewSensitivityAnalysis()
+void ProbabilisticModelItem::createSensitivityAnalysis()
 {
   // check
   if (!physicalModelValid())

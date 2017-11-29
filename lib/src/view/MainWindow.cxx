@@ -97,7 +97,7 @@ void MainWindow::buildInterface()
   OTguiMenuBar * menuBar = new OTguiMenuBar(actions);
   connect(pythonConsoleDock, SIGNAL(visibilityChanged(bool)), menuBar, SIGNAL(pythonConsoleVisibilityChanged(bool)));
   connect(menuBar, SIGNAL(showHidePythonConsole(bool)), pythonConsoleDock, SLOT(setVisible(bool)));
-  connect(menuBar, SIGNAL(openOTStudy(QString)), manager_, SLOT(openOTStudy(QString)));
+  connect(menuBar, SIGNAL(openOTStudy(QString)), manager_, SLOT(open(QString)));
   connect(manager_, SIGNAL(recentFilesListChanged(QString)), menuBar, SLOT(updateRecentFilesList(QString)));
   setMenuBar(menuBar);
 
