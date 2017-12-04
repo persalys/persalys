@@ -24,6 +24,7 @@
 #include "otgui/SpinBoxDelegate.hxx"
 
 #include <QGroupBox>
+#include <QVBoxLayout>
 #include <QScrollBar>
 
 using namespace OT;
@@ -32,12 +33,10 @@ namespace OTGUI
 {
 
 DeterministicDesignPage::DeterministicDesignPage(QWidget* parent)
-  : QWizardPage(parent)
-  , groupBoxLayout_(0)
+  : OTguiWizardPage(parent)
   , tableView_(0)
   , tableModel_(0)
   , DOESizeLabel_(0)
-  , errorMessageLabel_(0)
 {
   buildInterface();
 }
@@ -49,24 +48,28 @@ void DeterministicDesignPage::buildInterface()
 
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 
+  // DOE size
+  QWidget * aWidget = new QWidget;
+  QGridLayout * sizeLayout = new QGridLayout(aWidget);
+  QLabel * sizeLabel = new QLabel(tr("Size of the design of experiments:") + " ");
+  sizeLayout->addWidget(sizeLabel, 0, 0);
+  DOESizeLabel_ = new QLabel;
+  sizeLayout->addWidget(DOESizeLabel_, 0, 1);
+  sizeLayout->setColumnStretch(1, 1);
+  sizeLayout->setSizeConstraint(QLayout::SetFixedSize);
+  pageLayout->addWidget(aWidget);
+
+  // table
   QGroupBox * groupBox = new QGroupBox(tr("Define a grid"));
-  groupBoxLayout_ = new QVBoxLayout(groupBox);
+  QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
 
   tableView_ = new ResizableHeaderlessTableView;
   tableView_->setEditTriggers(QTableView::AllEditTriggers);
   tableView_->horizontalHeader()->hide();
+  groupBoxLayout->addWidget(tableView_);
+  groupBoxLayout->setSizeConstraint(QLayout::SetMaximumSize);
 
   pageLayout->addWidget(groupBox);
-
-  // DOE size
-  QWidget * aWidget = new QWidget;
-  QHBoxLayout * sizeLayout = new QHBoxLayout(aWidget);
-  QLabel * sizeLabel = new QLabel(tr("Size of the design of experiments:") + " ");
-  sizeLayout->addWidget(sizeLabel);
-  DOESizeLabel_ = new QLabel;
-  sizeLayout->addWidget(DOESizeLabel_);
-  sizeLayout->addStretch();
-  pageLayout->addWidget(aWidget, 0, Qt::AlignBottom);
 
   // error message
   errorMessageLabel_ = new QLabel;
@@ -98,7 +101,7 @@ void DeterministicDesignPage::initialize(const Analysis& analysis)
 
   // fill table
   tableModel_ = new ExperimentTableModel(doe, this);
-  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setText(QString)));
+  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
   tableView_->setModel(tableModel_);
 
   const QStringList items = QStringList() << tr("Levels") << tr("Delta");
@@ -113,14 +116,10 @@ void DeterministicDesignPage::initialize(const Analysis& analysis)
 
   // resize table
   tableView_->resizeWithOptimalWidth();
-  if (tableView_->model()->rowCount() < 15) // if too many variables: no fixed height + use scrollbar
+  // if too many variables: no fixed height + use scrollbar
+  if (tableView_->model()->rowCount() < 15)
   {
     tableView_->resizeWithOptimalHeight();
-    groupBoxLayout_->addWidget(tableView_, 0, Qt::AlignTop);
-  }
-  else
-  {
-    groupBoxLayout_->addWidget(tableView_);
   }
 
   // set DOE size label

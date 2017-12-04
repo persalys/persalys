@@ -23,15 +23,12 @@
 
 #include "otgui/Analysis.hxx"
 #include "otgui/ResizableHeaderlessTableView.hxx"
+#include "otgui/OTguiWizardPage.hxx"
 #include "otgui/ExperimentTableModel.hxx"
-
-#include <QWizardPage>
-#include <QLabel>
-#include <QVBoxLayout>
 
 namespace OTGUI
 {
-class OTGUI_API DeterministicDesignPage : public QWizardPage
+class OTGUI_API DeterministicDesignPage : public OTguiWizardPage
 {
   Q_OBJECT
 
@@ -46,11 +43,9 @@ protected:
   virtual void resizeEvent(QResizeEvent * event);
 
 private:
-  QVBoxLayout * groupBoxLayout_;
   ResizableHeaderlessTableView * tableView_;
   ExperimentTableModel * tableModel_;
   QLabel * DOESizeLabel_;
-  QLabel * errorMessageLabel_;
 };
 }
 #endif

@@ -101,6 +101,9 @@ QVariant ExperimentTableModel::headerData(int section, Qt::Orientation orientati
 
 QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
 {
+  if (!index.isValid())
+    return QVariant();
+
   // header
   if (index.row() == 0)
   {
@@ -180,8 +183,6 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
 
 bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
-  emit errorMessageChanged("");
-
   // header
   if (index.row() == 0)
   {
@@ -206,7 +207,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
       }
       catch (std::exception & ex)
       {
-        emit errorMessageChanged(QString("<font color=red>%1</font>").arg(ex.what()));
+        emit errorMessageChanged(ex.what());
       }
       emit dataChanged(this->index(1, 5), this->index(rowCount() - 1, 5));
     }
@@ -234,7 +235,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
         }
         catch (std::exception & ex)
         {
-          emit errorMessageChanged(QString("<font color=red>%1</font>").arg(ex.what()));
+          emit errorMessageChanged(ex.what());
         }
       }
       // doe defined with deltas
@@ -253,7 +254,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
         }
         catch (std::exception & ex)
         {
-          emit errorMessageChanged(QString("<font color=red>%1</font>").arg(ex.what()));
+          emit errorMessageChanged(ex.what());
         }
       }
       firstColumnChecked_ = !designOfExperiment_.getLevels().contains(1);
@@ -281,7 +282,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           }
           catch (std::exception & ex)
           {
-            emit errorMessageChanged(QString("<font color=red>%1</font>").arg(ex.what()));
+            emit errorMessageChanged(ex.what());
           }
           break;
         }
@@ -289,7 +290,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
         {
           if (value.toDouble() >= designOfExperiment_.getUpperBounds()[indexInput])
           {
-            emit errorMessageChanged(QString("<font color=red>%1</font>").arg(tr("The lower bound must be inferior to the upper bound")));
+            emit errorMessageChanged(tr("The lower bound must be inferior to the upper bound"));
             return false;
           }
           Point lowerBounds = designOfExperiment_.getLowerBounds();
@@ -302,7 +303,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           }
           catch (std::exception & ex)
           {
-            emit errorMessageChanged(QString("<font color=red>%1</font>").arg(ex.what()));
+            emit errorMessageChanged(ex.what());
           }
           break;
         }
@@ -310,7 +311,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
         {
           if (value.toDouble() <= designOfExperiment_.getLowerBounds()[indexInput])
           {
-            emit errorMessageChanged(QString("<font color=red>%1</font>").arg(tr("The upper bound must be superior to the lower bound")));
+            emit errorMessageChanged(tr("The upper bound must be superior to the lower bound"));
             return false;
           }
           Point upperBounds = designOfExperiment_.getUpperBounds();
@@ -323,7 +324,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           }
           catch (std::exception & ex)
           {
-            emit errorMessageChanged(QString("<font color=red>%1</font>").arg(ex.what()));
+            emit errorMessageChanged(ex.what());
           }
           break;
         }
@@ -344,7 +345,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
             }
             catch (std::exception & ex)
             {
-              emit errorMessageChanged(QString("<font color=red>%1</font>").arg(ex.what()));
+              emit errorMessageChanged(ex.what());
             }
             break;
           }
@@ -363,12 +364,12 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
               }
               catch (std::exception & ex)
               {
-                emit errorMessageChanged(QString("<font color=red>%1</font>").arg(ex.what()));
+                emit errorMessageChanged(ex.what());
               }
             }
             else
             {
-              emit errorMessageChanged(QString("<font color=red>%1</font>").arg(tr("Delta must be inferior to the upper bound - the lower bound")));
+              emit errorMessageChanged(tr("Delta must be inferior to the upper bound - the lower bound"));
               return false;
             }
             break;
