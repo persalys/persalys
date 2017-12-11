@@ -59,7 +59,7 @@ void Parameters::add(const String& name, const UnsignedInteger& value)
 
 void Parameters::add(const String& name, const Point& values)
 {
-  add(name, GetOTPointStr(values));
+  add(name, GetOTPointStr(values, ";"));
 }
 
 
@@ -75,14 +75,14 @@ std::pair<String, String> Parameters::operator[](const UnsignedInteger index) co
 }
 
 
-String Parameters::GetOTPointStr(const Point& values)
+String Parameters::GetOTPointStr(const Point& values, const String& separator)
 {
   String valuesStr = "[";
   for (UnsignedInteger i = 0; i < values.getSize(); ++i)
   {
     valuesStr += OSS() << values[i];
     if (i < values.getSize() - 1)
-      valuesStr += "; ";
+      valuesStr += separator + " ";
   }
   valuesStr += "]";
   return valuesStr;
@@ -100,5 +100,31 @@ String Parameters::GetOTDescriptionStr(const Description& values)
   }
   valuesStr += "]";
   return valuesStr;
+}
+
+
+Description Parameters::GetOTIntervalDescription(const Interval& interval)
+{
+  Description resu(interval.getDimension());
+
+  for (UnsignedInteger i = 0; i < interval.getDimension(); ++i)
+  {
+    String intervalStr_i;
+
+    intervalStr_i += (interval.getFiniteLowerBound()[i] ? "[" : "]");
+    if (interval.getFiniteLowerBound()[i])
+      intervalStr_i += OSS() << interval.getLowerBound()[i];
+    else
+      intervalStr_i += "-∞";
+    intervalStr_i += ", ";
+    if (interval.getFiniteUpperBound()[i])
+      intervalStr_i += OSS() << interval.getUpperBound()[i];
+    else
+      intervalStr_i += "+∞";
+    intervalStr_i += (interval.getFiniteUpperBound()[i] ? "]" : "[");
+
+    resu[i] = intervalStr_i;
+  }
+  return resu;
 }
 }
