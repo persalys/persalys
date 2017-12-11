@@ -44,7 +44,16 @@ public:
                            Type plotType = NoType,
                            QWidget * parent = 0);
 
+  GraphConfigurationWidget(PlotWidget * plotWidget,
+                           QStringList inputNames = QStringList(),
+                           QStringList outputNames = QStringList(),
+                           Type plotType = NoType,
+                           QWidget * parent = 0);
+
   int getCurrentPlotIndex() const;
+
+protected:
+  void buildInterface();
 
 public slots:
   void updateLineEdits();
@@ -63,6 +72,8 @@ private:
   QVector<PlotWidget *> plotWidgets_;
   Type plotType_;
   int currentPlotIndex_;
+  QStringList inputNames_;
+  QStringList outputNames_;
   QCheckBox * rankCheckBox_;
   QButtonGroup * pdf_cdfGroup_;
   QComboBox * xAxisComboBox_;

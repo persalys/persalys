@@ -47,6 +47,8 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   , plotWidgets_(plotWidgets)
   , plotType_(plotType)
   , currentPlotIndex_(0)
+  , inputNames_(inputNames)
+  , outputNames_(outputNames)
   , rankCheckBox_(0)
   , pdf_cdfGroup_(0)
   , xAxisComboBox_(0)
@@ -58,6 +60,39 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   , ylabelLineEdit_(0)
   , ymin_(0)
   , ymax_(0)
+{
+  buildInterface();
+}
+
+
+GraphConfigurationWidget::GraphConfigurationWidget(PlotWidget * plotWidget,
+    QStringList inputNames,
+    QStringList outputNames,
+    GraphConfigurationWidget::Type plotType,
+    QWidget * parent)
+  : QWidget(parent)
+  , plotWidgets_(1, plotWidget)
+  , plotType_(plotType)
+  , currentPlotIndex_(0)
+  , inputNames_(inputNames)
+  , outputNames_(outputNames)
+  , rankCheckBox_(0)
+  , pdf_cdfGroup_(0)
+  , xAxisComboBox_(0)
+  , yAxisComboBox_(0)
+  , titleLineEdit_(0)
+  , xlabelLineEdit_(0)
+  , xmin_(0)
+  , xmax_(0)
+  , ylabelLineEdit_(0)
+  , ymin_(0)
+  , ymax_(0)
+{
+  buildInterface();
+}
+
+
+void GraphConfigurationWidget::buildInterface()
 {
   for (int i = 0; i < plotWidgets_.size(); ++i)
     connect(plotWidgets_[i], SIGNAL(plotChanged()), this, SLOT(updateLineEdits()));
@@ -90,11 +125,11 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
 
     xAxisComboBox_ = new QComboBox;
 
-    for (int i = 0; i < inputNames.size(); ++i)
-      xAxisComboBox_->addItem(inputNames[i], true);
+    for (int i = 0; i < inputNames_.size(); ++i)
+      xAxisComboBox_->addItem(inputNames_[i], true);
 
-    for (int i = 0; i < outputNames.size(); ++i)
-      xAxisComboBox_->addItem(outputNames[i], false);
+    for (int i = 0; i < outputNames_.size(); ++i)
+      xAxisComboBox_->addItem(outputNames_[i], false);
 
     mainGridLayout->addWidget(xAxisComboBox_, rowGrid, 1, 1, 1);
     if (plotType_ != GraphConfigurationWidget::Kendall)
