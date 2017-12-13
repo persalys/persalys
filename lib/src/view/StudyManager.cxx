@@ -302,9 +302,11 @@ void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createCon
     try
     {
       window = WindowFactory::GetAnalysisWindow(item, mainWidget_);
+      updateView(window);
     }
     catch (std::exception& ex)
     {
+      qDebug() << "Error when building the analysis window : "<< ex.what();
       message = tr("Impossible to create a result window");
     }
   }
@@ -315,16 +317,11 @@ void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createCon
   if (!window)
   {
     AnalysisWindow * analysisWindow = new AnalysisWindow(item, analysisInProgress_, mainWidget_);
-    connect(this, SIGNAL(analysisInProgressStatusChanged(bool)), analysisWindow, SLOT(updateRunButtonAvailability(bool)));
     if (!message.isEmpty())
-    {
-      analysisWindow->setMessage(message);
-      window->setErrorMessage(message);
-    }
-    window = analysisWindow;
+      analysisWindow->setErrorMessage(message);
+    connect(this, SIGNAL(analysisInProgressStatusChanged(bool)), analysisWindow, SLOT(updateRunButtonAvailability(bool)));
+    updateView(analysisWindow);
   }
-
-  updateView(window);
 }
 
 
