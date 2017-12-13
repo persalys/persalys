@@ -65,6 +65,9 @@ public slots:
   void truncationParametersStateChanged();
   void reInitCorrelationErrorMessage(QTimeLine::State);
   void openWizardToChooseInferenceResult(const QModelIndex&);
+#ifdef OTGUI_HAVE_OTMORRIS
+  void openWizardToChooseScreeningResult();
+#endif
 signals:
   void updateCorrelationTableData();
 
