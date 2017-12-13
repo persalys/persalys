@@ -3,26 +3,6 @@
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationAnalysis::setOutputs
-"Output variables accessor.
-
-Parameters
-----------
-outputs : sequence of :class:`~otguibase.Output`
-    The output variables"
-
-// ----------------------------------------------------------------------
-
-%feature("docstring") OTGUI::SimulationAnalysis::getOutputs
-"Output variables accessor.
-
-Returns
--------
-outputs : sequence of :class:`~otguibase.Output`
-    The output variables"
-
-// ----------------------------------------------------------------------
-
 %feature("docstring") OTGUI::SimulationAnalysis::setSeed
 "Seed accessor.
 
@@ -43,23 +23,13 @@ seed : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationAnalysis::generateInputSample
-"Input sample accessor.
+%feature("docstring") OTGUI::SimulationAnalysis::getFailedInputSample
+"Failed input sample accessor.
 
 Returns
 -------
 sample : :py:class:`openturns.Sample`
-    Input sample"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::SimulationAnalysis::getOutputNames
-"Output variable names accessor.
-
-Returns
--------
-sample : :py:class:`openturns.Description`
-    Output variable names"
+    Sample with the failed input values"
 
 // ----------------------------------------------------------------------
 

@@ -4,7 +4,9 @@
 #include "otgui/MorrisAnalysis.hxx"
 %}
 
+%include MorrisAnalysis_doc.i
 
+%ignore OTGUI::MorrisAnalysis::updateParameters;
 
 %include otgui/MorrisAnalysis.hxx
 namespace OTGUI {

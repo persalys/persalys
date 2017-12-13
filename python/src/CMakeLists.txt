@@ -3,6 +3,7 @@ include ( ${SWIG_USE_FILE} )
 
 include_directories ( ${OPENTURNS_SWIG_INCLUDE_DIRS} )
 add_definitions( ${OPENTURNS_SWIG_DEFINITIONS} )
+include_directories ( ${OTMORRIS_INCLUDE_DIR}/otmorris/swig )
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 include_directories ( ${PYTHON_INCLUDE_DIRS} )
 
@@ -105,8 +106,8 @@ ot_add_python_module (otguibase otguibase_module.i
                       SobolAnalysis.i SobolAnalysis_doc.i.in
                       SRCResult.i SRCResult_doc.i.in
                       SRCAnalysis.i SRCAnalysis_doc.i.in
-                      MorrisResult.i
-                      MorrisAnalysis.i
+                      MorrisResult.i MorrisResult_doc.i.in
+                      MorrisAnalysis.i MorrisAnalysis_doc.i.in
                       ReliabilityAnalysis.i ReliabilityAnalysis_doc.i.in
                       SimulationReliabilityAnalysis.i SimulationReliabilityAnalysis_doc.i.in
                       SimulationReliabilityResult.i SimulationReliabilityResult_doc.i.in
