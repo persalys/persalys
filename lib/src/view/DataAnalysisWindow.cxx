@@ -416,9 +416,7 @@ void DataAnalysisWindow::addBoxPlotTab()
     boxPlotWidgetLayout->addWidget(plot);
 
     // Graph Setting
-    QVector<PlotWidget*> listBoxPlotWidgets;
-    listBoxPlotWidgets.append(plot);
-    GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(listBoxPlotWidgets,
+    GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plot,
         QStringList(),
         QStringList(),
         GraphConfigurationWidget::NoType,

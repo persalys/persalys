@@ -203,7 +203,6 @@ QWidget* SimulationReliabilityResultWindow::getHistogramTab()
   QString outputName(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
 
   // plot histogram
-  QVector<PlotWidget*> listHistogram;
   PlotWidget * plot = new PlotWidget(tr("histogram"));
   plot->plotHistogram(result_.getOutputSample(), 2, 0, tr("%1 distribution").arg(outputName));
 
@@ -220,10 +219,9 @@ QWidget* SimulationReliabilityResultWindow::getHistogramTab()
   plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
   plot->setTitle(tr("%1 output distribution").arg(outputName));
 
-  listHistogram.append(plot);
   plotWidgetLayout->addWidget(plot);
 
-  GraphConfigurationWidget * histogramSettingWidget = new GraphConfigurationWidget(listHistogram,
+  GraphConfigurationWidget * histogramSettingWidget = new GraphConfigurationWidget(plot,
       QStringList(),
       QStringList(),
       GraphConfigurationWidget::NoType,
@@ -242,7 +240,6 @@ QWidget* SimulationReliabilityResultWindow::getConvergenceTab()
   // do not use a simple QWidget here otherwise it is not possible to resize the window
   ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
 
-  QVector<PlotWidget*> listConvergenceGraph;
   PlotWidget * plot = new PlotWidget(tr("convergence"));
   // plot pf convergence
   plot->plotCurve(result_.getConvergenceSample(), QPen(Qt::red), QwtPlotCurve::Lines, 0, tr("Probability estimate"));
@@ -264,10 +261,9 @@ QWidget* SimulationReliabilityResultWindow::getConvergenceTab()
 #endif
   plot->setAxisScaleEngine(QwtPlot::xBottom, scaleEngin);
 
-  listConvergenceGraph.append(plot);
   stackedWidget->addWidget(plot);
 
-  GraphConfigurationWidget * convergenceGraphSettingWidget = new GraphConfigurationWidget(listConvergenceGraph,
+  GraphConfigurationWidget * convergenceGraphSettingWidget = new GraphConfigurationWidget(plot,
       QStringList(),
       QStringList(),
       GraphConfigurationWidget::NoType,

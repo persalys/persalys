@@ -23,8 +23,6 @@
 
 #include "otgui/ResultWindow.hxx"
 #include "otgui/InferenceResult.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/InferenceResultWidget.hxx"
 
 namespace OTGUI

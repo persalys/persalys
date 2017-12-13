@@ -93,9 +93,7 @@ MetaModelValidationWidget::MetaModelValidationWidget(const MetaModelValidationRe
     mainWidgetLayout->addWidget(plot);
 
     // GraphConfigurationWidget
-    QVector<PlotWidget*> listPlot;
-    listPlot.append(plot);
-    GraphConfigurationWidget * graphSettingWidget = new GraphConfigurationWidget(listPlot,
+    GraphConfigurationWidget * graphSettingWidget = new GraphConfigurationWidget(plot,
                                                                                 QStringList(),
                                                                                 QStringList(),
                                                                                 GraphConfigurationWidget::NoType,
