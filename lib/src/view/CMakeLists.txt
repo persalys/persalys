@@ -101,6 +101,7 @@ if (OTMORRIS_FOUND)
   ot_add_source_file ( ScreeningAnalysisWizard.cxx )
   ot_add_source_file ( MorrisResultWidget.cxx )
   ot_add_source_file ( MorrisResultWindow.cxx )
+  ot_add_source_file ( ScreeningResultWizard.cxx )
 endif ()
 
 ot_install_header_file ( MainWindow.hxx )
@@ -198,6 +199,7 @@ if (OTMORRIS_FOUND)
   ot_install_header_file ( ScreeningAnalysisWizard.hxx )
   ot_install_header_file ( MorrisResultWidget.hxx )
   ot_install_header_file ( MorrisResultWindow.hxx )
+  ot_install_header_file ( ScreeningResultWizard.hxx )
 endif ()
 
 qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
@@ -296,6 +298,7 @@ if (OTMORRIS_FOUND)
   qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/ScreeningAnalysisWizard.hxx)
   qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MorrisResultWidget.hxx)
   qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MorrisResultWindow.hxx)
+  qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/ScreeningResultWizard.hxx)
 endif ()
 
 set(RESOURCES ${CMAKE_SOURCE_DIR}/gui.qrc)
