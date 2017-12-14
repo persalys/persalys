@@ -109,6 +109,7 @@ mod-config: mod-check-compiler
 	  -DCMAKE_TOOLCHAIN_FILE=toolchain-$(TARGET).cmake \
 	  -DCMAKE_VERBOSE_MAKEFILE=$(VERBOSE) \
 	  -DOpenTURNS_DIR=$(OT_PREFIX)/lib/cmake/openturns \
+	  -DOTMORRIS_DIR=$(OTMORRIS_PREFIX)/lib/cmake/otmorris \
 	  -DPYTHON_INCLUDE_DIR=$(MINGW_PREFIX)/$(TARGET)/include/python$(PYBASEVER_NODOT) \
 	  -DPYTHON_INCLUDE_DIR2=$(MINGW_PREFIX)/$(TARGET)/include/python$(PYBASEVER_NODOT) \
 	  -DPYTHON_LIBRARY=$(MINGW_PREFIX)/$(TARGET)/lib/libpython$(PYBASEVER_NODOT).dll.a \
@@ -144,6 +145,8 @@ ifeq ($(DEBUG_OT),n)
 	$(TARGET)-strip --strip-unneeded $(MOD_PREFIX)/Lib/site-packages/*/*.pyd
 	$(TARGET)-strip $(MOD_PREFIX)/bin/*.exe
 endif
+	# otmorris
+	cp $(OTMORRIS_PREFIX)/bin/libotmorris.dll $(MOD_PREFIX)/bin
 	# boost libs
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/libboost_regex-mt.dll $(MOD_PREFIX)/bin
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/libboost_system-mt.dll $(MOD_PREFIX)/bin

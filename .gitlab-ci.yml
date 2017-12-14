@@ -2,9 +2,18 @@ linux:
   script:
     - if test -d /tmp/ot-linux-install; then cp -r /tmp/ot-linux-install .; else ./utils/build_ot.sh && cp -r ./ot-linux-install /tmp/ot-linux-install; fi
     - if test -d /tmp/pv-linux-install; then cp -r /tmp/pv-linux-install .; else ./utils/build_pv.sh && cp -r ./pv-linux-install /tmp/pv-linux-install; fi
+    - git clone https://github.com/openturns/otmorris.git
+    - pushd otmorris
+    - cmake -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_CXX_FLAGS="-Wall"
+        -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so
+        -DOpenTURNS_DIR=$PWD/../ot-linux-install/lib/cmake/openturns
+        -DUSE_SPHINX=OFF .
+    - make install -j8
+    - popd
     - cmake -DCMAKE_INSTALL_PREFIX=$PWD/install -DCMAKE_CXX_FLAGS="-Wall"
         -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2.7.so
         -DOpenTURNS_DIR=$PWD/ot-linux-install/lib/cmake/openturns -DUSE_SALOME=OFF -DQWT_LIBRARY=/usr/lib/libqwt-qt5.so
+        -DOTMORRIS_DIR=$PWD/otmorris/install/lib/cmake/otmorris
         -DParaView_DIR=$PWD/pv-linux-install/lib/cmake/paraview
         -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" .
     - make install -j8
@@ -28,8 +37,12 @@ mingw:
     - if test -d /tmp/ot-mingw-install; then mkdir -p ../../build-i686-w64-mingw32 && cp -r /tmp/ot-mingw-install ../../build-i686-w64-mingw32/install; else make ot-install JOBS=4 && cp -r ../../build-i686-w64-mingw32/install /tmp/ot-mingw-install; fi
     - popd
     - popd
+    - git clone https://github.com/openturns/otmorris.git
+    - pushd otmorris/distro/windows
+    - make mod-install OT_PREFIX=$PWD/../../../openturns/build-i686-w64-mingw32/install JOBS=8
+    - popd
     - pushd distro/windows
-    - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install JOBS=8
+    - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install OTMORRIS_PREFIX=$PWD/../../otmorris/build-i686-w64-mingw32/install JOBS=8
   except:
     - master
     - tags
@@ -48,8 +61,12 @@ mingw-qt4:
     - if test -d /tmp/ot-mingw-install; then mkdir -p ../../build-i686-w64-mingw32 && cp -r /tmp/ot-mingw-install ../../build-i686-w64-mingw32/install; else make ot-install JOBS=4 && cp -r ../../build-i686-w64-mingw32/install /tmp/ot-mingw-install; fi
     - popd
     - popd
+    - git clone https://github.com/openturns/otmorris.git
+    - pushd otmorris/distro/windows
+    - make mod-install OT_PREFIX=$PWD/../../../openturns/build-i686-w64-mingw32/install JOBS=8
+    - popd
     - pushd distro/windows
-    - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install JOBS=8 USE_QT5=OFF
+    - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install OTMORRIS_PREFIX=$PWD/../../otmorris/build-i686-w64-mingw32/install JOBS=8 USE_QT5=OFF
   except:
     - master
     - tags
@@ -67,6 +84,10 @@ mingw-tag:
     - popd
     - make ot-install JOBS=4
     - popd
+    - popd
+    - git clone https://github.com/openturns/otmorris.git
+    - pushd otmorris/distro/windows
+    - make mod-install OT_PREFIX=$PWD/../../../openturns/build-i686-w64-mingw32/install OTMORRIS_PREFIX=$PWD/../../otmorris/build-i686-w64-mingw32/install JOBS=8
     - popd
     - pushd distro/windows
     - make OT_PREFIX=$PWD/../../openturns/build-i686-w64-mingw32/install JOBS=8
