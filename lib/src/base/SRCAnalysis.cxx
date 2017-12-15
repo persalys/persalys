@@ -133,7 +133,7 @@ void SRCAnalysis::launch()
   result_ = SRCResult(indices, getInterestVariables());
 
   // add warning if the model does not have an independent copula
-  if (!getPhysicalModel().getComposedDistribution().hasIndependentCopula())
+  if (!getPhysicalModel().getComposedCopula().hasIndependentCopula())
   {
     LOGWARN("The model does not have an independent copula, the result of the sensitivity analysis could be false.");
     warningMessage_ = "The model does not have an independent copula, the result of the sensitivity analysis could be false.";

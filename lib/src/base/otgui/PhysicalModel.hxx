@@ -94,8 +94,8 @@ public:
   OT::Function getRestrictedFunction() const;
   OT::Function getRestrictedFunction(const OT::Description & outputNames) const;
 
-  OT::Copula getCopula() const;
-  void setCopula(const OT::Copula & copula);
+  OT::ComposedCopula getComposedCopula() const;
+  void setCopula(const OT::Description& inputNames, const OT::Copula & copula);
 
   bool isValid() const;
 

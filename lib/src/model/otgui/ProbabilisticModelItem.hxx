@@ -46,6 +46,7 @@ signals:
   void designOfExperimentRequested();
   void stochasticInputListChanged();
   void inputListCorrelationChanged();
+  void copulaChanged();
 
 private:
   QAction * newDesignOfExperiment_;

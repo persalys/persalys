@@ -31,7 +31,7 @@ model1 = otguibase.SymbolicPhysicalModel('model1', [x1, x2, x3], [fake_var, y0, 
                                          formula_fake_var, formula_y0, formula_y0, formula_y1])
 R = ot.CorrelationMatrix(2)
 R[0, 1] = 0.25
-model1.setCopula(ot.NormalCopula(R))
+model1.setCopula(['x1', 'x2'], ot.NormalCopula(R))
 myStudy.add(model1)
 
 # model 2 ##

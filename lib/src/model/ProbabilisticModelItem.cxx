@@ -83,9 +83,12 @@ void ProbabilisticModelItem::update(Observable* source, const String & message)
      )
   {
     emit stochasticInputListChanged();
-    emit inputListCorrelationChanged();
   }
-  if (message == "inputValueChanged")
+  else if (message == "copulaChanged")
+  {
+    emit copulaChanged();
+  }
+  else if (message == "inputValueChanged")
   {
     emit inputListDefinitionChanged();
   }
@@ -144,9 +147,9 @@ void ProbabilisticModelItem::createSensitivityAnalysis()
     return;
 
   // check if the model has an independent copula
-  if (!physicalModel_.getComposedDistribution().hasIndependentCopula())
+  if (!physicalModel_.getComposedCopula().hasIndependentCopula())
   {
-    emit emitErrorMessageRequested(tr("The model must have an independent copula to compute a sensitivity analysis but inputs are correlated."));
+    emit emitErrorMessageRequested(tr("The model must have an independent copula to compute a sensitivity analysis but inputs are dependent."));
     return;
   }
 

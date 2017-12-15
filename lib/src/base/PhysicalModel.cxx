@@ -326,15 +326,15 @@ Function PhysicalModel::getRestrictedFunction(const Description & outputNames) c
 }
 
 
-Copula PhysicalModel::getCopula() const
+ComposedCopula PhysicalModel::getComposedCopula() const
 {
-  return getImplementation()->getCopula();
+  return getImplementation()->getComposedCopula();
 }
 
 
-void PhysicalModel::setCopula(const Copula & copula)
+void PhysicalModel::setCopula(const Description &inputNames, const Copula &copula)
 {
-  getImplementation()->setCopula(copula);
+  getImplementation()->setCopula(inputNames, copula);
 }
 
 
