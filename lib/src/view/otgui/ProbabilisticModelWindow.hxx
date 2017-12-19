@@ -72,9 +72,7 @@ signals:
   void updateCorrelationTableData();
 
 private:
-  OTStudy otStudy_;
   PhysicalModel physicalModel_;
-  int currentIndexTab_;
   QTableView * inputTableView_;
   InputTableProbabilisticModel * inputTableModel_;
   QStackedWidget * rightSideOfSplitterStackedWidget_;
