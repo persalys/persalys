@@ -95,6 +95,7 @@ ot_add_source_file ( CopulaParametersTabWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWindow.cxx )
 ot_add_source_file ( WidgetBoundToDockWidget.cxx )
+ot_add_source_file ( MarginalsWidget.cxx )
 if (OTMORRIS_FOUND)
   ot_add_source_file ( IntroScreeningPage.cxx )
   ot_add_source_file ( MorrisPage.cxx )
@@ -192,6 +193,7 @@ ot_install_header_file ( CopulaInferenceResultWidget.hxx )
 ot_install_header_file ( CopulaInferenceResultWindow.hxx )
 ot_install_header_file ( CopulaParametersTabWidget.hxx )
 ot_install_header_file ( WidgetBoundToDockWidget.hxx )
+ot_install_header_file ( MarginalsWidget.hxx )
 
 if (OTMORRIS_FOUND)
   ot_install_header_file ( IntroScreeningPage.hxx )
@@ -283,6 +285,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/CopulaInferenceResultWindow.hxx
                                   otgui/CopulaParametersTabWidget.hxx
                                   otgui/WidgetBoundToDockWidget.hxx
+                                  otgui/MarginalsWidget.hxx
                                   )
 
 
