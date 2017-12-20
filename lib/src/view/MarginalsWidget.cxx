@@ -29,8 +29,11 @@
 #include "otgui/TranslationManager.hxx"
 #include "otgui/CheckableHeaderView.hxx"
 #include "otgui/InferenceResultWizard.hxx"
-#include "otgui/ScreeningResultWizard.hxx"
 #include "otgui/OTStudyItem.hxx"
+
+#ifdef OTGUI_HAVE_OTMORRIS
+#include "otgui/ScreeningResultWizard.hxx"
+#endif
 
 #include <openturns/Normal.hxx>
 #include <openturns/TruncatedDistribution.hxx>
