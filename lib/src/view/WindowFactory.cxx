@@ -43,6 +43,10 @@
 #include "otgui/KrigingResultWindow.hxx"
 #include "otgui/InferenceResultWindow.hxx"
 #include "otgui/CopulaInferenceResultWindow.hxx"
+#ifdef OTGUI_HAVE_OTMORRIS
+#include "otgui/ScreeningAnalysisWizard.hxx"
+#include "otgui/MorrisResultWindow.hxx"
+#endif
 
 #include "otgui/InferenceWizard.hxx"
 #include "otgui/DesignOfExperimentWizard.hxx"
@@ -104,6 +108,12 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
   {
     wizard = new ModelEvaluationWizard(analysis, parent);
   }
+#ifdef OTGUI_HAVE_OTMORRIS
+  else if (analysisType == "MorrisAnalysis")
+  {
+    wizard = new ScreeningAnalysisWizard(analysis, parent);
+  }
+#endif
   else if (analysisType == "FunctionalChaosAnalysis" ||
            analysisType == "KrigingAnalysis")
   {
@@ -155,6 +165,12 @@ OTguiSubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * p
   {
     resultWindow = new ModelEvaluationResultWindow(item, parent);
   }
+#ifdef OTGUI_HAVE_OTMORRIS
+  else if (analysisType == "MorrisAnalysis")
+  {
+    resultWindow = new MorrisResultWindow(item, parent);
+  }
+#endif
   else if (analysisType == "MonteCarloAnalysis")
   {
     resultWindow = new MonteCarloResultWindow(item, parent);

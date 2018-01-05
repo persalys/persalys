@@ -34,10 +34,14 @@
 #include "otgui/TranslationManager.hxx"
 #include "otgui/CorrelationTableModel.hxx"
 #include "otgui/CheckableHeaderView.hxx"
+#include "otgui/ScreeningResultWizard.hxx"
+
+#include "otgui/MorrisAnalysis.hxx"
 
 #include <openturns/Normal.hxx>
 #include <openturns/TruncatedDistribution.hxx>
 #include <openturns/TruncatedNormal.hxx>
+#include <openturns/Dirac.hxx>
 
 #include <QSplitter>
 #include <QScrollArea>
@@ -81,6 +85,9 @@ void ProbabilisticModelWindow::buildInterface()
 
   QSplitter * horizontalSplitter = new QSplitter;
 
+  QWidget * leftSideWidget = new QWidget;
+  QVBoxLayout * leftSideLayout = new QVBoxLayout(leftSideWidget);
+
   // Inputs table
   inputTableView_ = new QTableView;
   inputTableView_->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -110,7 +117,16 @@ void ProbabilisticModelWindow::buildInterface()
   connect(inputTableModel_, SIGNAL(checked(bool)), inputTableHeaderView, SLOT(setChecked(bool)));
   connect(inputTableModel_, SIGNAL(inferenceResultRequested(const QModelIndex&)), this, SLOT(openWizardToChooseInferenceResult(const QModelIndex&)));
 
-  horizontalSplitter->addWidget(inputTableView_);
+  leftSideLayout->addWidget(inputTableView_);
+
+#ifdef OTGUI_HAVE_OTMORRIS
+  // import Morris result button
+  QPushButton * importButton = new QPushButton(tr("Import Morris result"));
+  connect(importButton, SIGNAL(clicked(bool)), this, SLOT(openWizardToChooseScreeningResult()));
+  leftSideLayout->addWidget(importButton);
+#endif
+
+  horizontalSplitter->addWidget(leftSideWidget);
 
   // Distribution edition
   rightSideOfSplitterStackedWidget_ = new QStackedWidget;
@@ -787,17 +803,64 @@ void ProbabilisticModelWindow::openWizardToChooseInferenceResult(const QModelInd
   }
   else
   {
-    InferenceResultWizard * wizard = new InferenceResultWizard(otStudy_, this);
-    if (wizard->exec())
+    InferenceResultWizard wizard(otStudy_, this);
+    if (wizard.exec())
     {
       // update the input
       const Input input(physicalModel_.getInputs()[inputIndex.row()]);
       physicalModel_.blockNotification("ProbabilisticModel");
-      physicalModel_.setDistribution(input.getName(), wizard->getDistribution());
+      physicalModel_.setDistribution(input.getName(), wizard.getDistribution());
       physicalModel_.setDistributionParametersType(input.getName(), 0);
       physicalModel_.blockNotification();
       updateDistributionWidgets(inputIndex);
     }
   }
 }
+
+
+#ifdef OTGUI_HAVE_OTMORRIS
+void ProbabilisticModelWindow::openWizardToChooseScreeningResult()
+{
+  bool otStudyHasScreeningResults = false;
+  // we need at least one screening analysis result to open the wizard
+  for (UnsignedInteger i = 0; i < otStudy_.getAnalyses().getSize(); ++i)
+  {
+    if (otStudy_.getAnalyses()[i].getImplementation()->getClassName() == "MorrisAnalysis")
+    {
+      if (dynamic_cast<MorrisAnalysis*>(otStudy_.getAnalyses()[i].getImplementation().get())->hasValidResult())
+      {
+        otStudyHasScreeningResults = true;
+        break;
+      }
+    }
+  }
+
+  if (!otStudyHasScreeningResults)
+  {
+    QMessageBox::critical(this, tr("Error"), tr("The current study has not screening analyses results."));
+    return;
+  }
+  else
+  {
+    ScreeningResultWizard wizard(otStudy_, physicalModel_, this);
+    if (wizard.exec())
+    {
+      // update the inputs
+      const Indices selectedInputs(wizard.getInputsSelection());
+      Q_ASSERT(selectedInputs.getSize() == physicalModel_.getInputDimension());
+      physicalModel_.blockNotification("ProbabilisticModel");
+      for (UnsignedInteger i = 0; i < physicalModel_.getInputDimension(); ++i)
+      {
+        const Input input(physicalModel_.getInputs()[i]);
+        if (selectedInputs[i] == 0 && input.isStochastic())
+        {
+          physicalModel_.setDistribution(input.getName(), Dirac(input.getValue()));
+        }
+      }
+      physicalModel_.blockNotification();
+      updateProbabilisticModel();
+    }
+  }
+}
+#endif
 }

@@ -61,6 +61,10 @@ if (USE_OTFMI)
   list (APPEND BASE_SOURCEFILES FMIPhysicalModel.cxx FMUInfo.cxx)
 endif ()
 
+if (OTMORRIS_FOUND)
+  list (APPEND BASE_SOURCEFILES MorrisAnalysis.cxx MorrisResult.cxx)
+endif ()
+
 ot_install_header_file ( DistributionDictionary.hxx )
 ot_install_header_file ( OTTools.hxx )
 ot_install_header_file ( OTguiException.hxx )
@@ -134,6 +138,11 @@ if (USE_OTFMI)
   ot_install_header_file (FMUInfo.hxx)
 endif ()
 
+if (OTMORRIS_FOUND)
+  ot_install_header_file ( MorrisAnalysis.hxx )
+  ot_install_header_file ( MorrisResult.hxx )
+endif ()
+
 if (SalomeYACS_FOUND)
   ot_install_header_file (YACSPhysicalModel.hxx)
   ot_install_header_file (YACSEvaluation.hxx)
@@ -157,6 +166,10 @@ set_target_properties ( otguibase PROPERTIES VERSION ${LIB_VERSION} )
 set_target_properties ( otguibase PROPERTIES SOVERSION ${LIB_SOVERSION} )
 
 target_link_libraries ( otguibase ${OPENTURNS_LIBRARIES} )
+
+if (OTMORRIS_FOUND)
+  target_link_libraries ( otguibase ${OTMORRIS_LIBRARIES} )
+endif ()
 
 if (SalomeYACS_FOUND)
   target_link_libraries ( otguibase YACSevalYFX py2yacsguilib ydfxwidgets)

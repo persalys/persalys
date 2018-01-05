@@ -87,9 +87,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   plot_->setTitle(graphTitle + " " + QString::fromUtf8(outputName.c_str()));
   plotWidgetLayout->addWidget(plot_);
 
-  QVector< PlotWidget* > listPlotWidget;
-  listPlotWidget.append(plot_);
-  GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(listPlotWidget,
+  GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plot_,
       QStringList(),
       QStringList(),
       GraphConfigurationWidget::SensitivityIndices,

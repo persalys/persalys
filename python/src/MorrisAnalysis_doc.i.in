@@ -1,0 +1,103 @@
+%feature("docstring") OTGUI::MorrisAnalysis
+"Morris analysis.
+
+Parameters
+----------
+name : str
+    Name
+physicalModel : :class:`~otguibase.PhysicalModel`
+    Physical model
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+
+Create the model:
+
+>>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
+>>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> G = otguibase.Output('G', 'deviation')
+>>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(_pi*100.0)'])
+
+Create the Morris analysis:
+
+>>> analysis = otguibase.MorrisAnalysis('anAnalysis', myPhysicalModel)
+>>> analysis.setBounds(ot.Interval([100, 60000], [350, 80000]))
+>>> analysis.setLevel(4)
+>>> analysis.run()
+
+Get the result:
+
+>>> result = analysis.getResult()
+>>> meanAbsEE = result.getMeanAbsoluteElementaryEffects()"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MorrisAnalysis::getTrajectoriesNumber
+"Number of trajectories accessor.
+
+Returns
+-------
+number : int
+    Number of trajectories. It is set by default to 10."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MorrisAnalysis::setTrajectoriesNumber
+"Number of trajectories accessor.
+
+Parameters
+----------
+number : positive int
+    Number of trajectories"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MorrisAnalysis::getBounds
+"Bounds of the domain accessor.
+
+Returns
+-------
+bounds : :py:class:`openturns.Interval`
+    Bounds of the domain"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MorrisAnalysis::setBounds
+"Bounds of the domain accessor.
+
+Parameters
+----------
+bounds : :py:class:`openturns.Interval`
+    Bounds of the domain"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MorrisAnalysis::getLevel
+"Level accessor.
+
+Returns
+-------
+number : int
+    Number of levels for a regular grid. It is set by default to 5."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MorrisAnalysis::setLevel
+"Level accessor.
+
+Parameters
+----------
+number : positive int
+    Number of levels for a regular grid"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MorrisAnalysis::getResult
+"Morris result accessor.
+
+Returns
+-------
+result : :class:`~otguibase.MorrisResult`
+    Result"

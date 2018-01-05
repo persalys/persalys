@@ -30,6 +30,20 @@ Model evaluation
 
     ModelEvaluation
 
+.. only:: otmorris
+
+    Screening
+    ---------
+
+    .. currentmodule:: otguibase
+
+    .. autosummary::
+        :toctree: _generated/
+        :template: class.rst_t
+
+        MorrisAnalysis
+        MorrisResult
+
 Probabilistic studies
 ---------------------
 

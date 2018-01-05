@@ -1,5 +1,10 @@
 = 4.0 release (in-progress)
 
+ * Morris
+ * Metamodels validation
+ * Sobol confidence interval
+ * Inference BIC
+ * Monte Carlo analysis failed points management
 
 = 3.0 release (2017-10-12)
 

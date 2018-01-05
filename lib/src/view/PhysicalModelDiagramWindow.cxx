@@ -79,6 +79,22 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   boxWidth = std::max(boxWidth, modelEvaluationButton->width());
   boxHeight = std::max(boxHeight, modelEvaluationButton->height());
 
+  DiagramPushButton * screeningButton = 0;
+  QGraphicsProxyWidget * screeningProxy = 0;
+#ifdef OTGUI_HAVE_OTMORRIS
+  screeningButton = new DiagramPushButton;
+  screeningButton->setText(tr("Screening"));
+  screeningButton->setWhatsThis(tr("One screening method : Morris"));
+  screeningButton->setErrorMessage(tr("Define at least two input variables and an output variable in the model"));
+  screeningProxy = new QGraphicsProxyWidget;
+  screeningProxy->setWidget(screeningButton);
+  scene->addItem(screeningProxy);
+  connect(screeningButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SIGNAL(screeningRequested()));
+  connect(physicalModelDiagramItem, SIGNAL(twoInputsValidityChanged(bool)), screeningButton, SLOT(setEnabled(bool)));
+  boxWidth = std::max(boxWidth, screeningButton->width());
+  boxHeight = std::max(boxHeight, screeningButton->height());
+#endif
+
   DiagramPushButton * doeCreationButton = new DiagramPushButton;
   doeCreationButton->setText(tr("Design of\nexperiments\ncreation"));
   doeCreationButton->setWhatsThis(tr("Create manually a design of experiments or import one"));
@@ -179,6 +195,8 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   // we want that all the buttons have the same dimensions
   modelDefinitionButton->resize(boxWidth, boxHeight);
   modelEvaluationButton->resize(boxWidth, boxHeight);
+  if (screeningButton)
+    screeningButton->resize(boxWidth, boxHeight);
   doeCreationButton->resize(boxWidth, boxHeight);
   probaModelButton->resize(boxWidth, boxHeight);
   doeEvaluationButton->resize(boxWidth, boxHeight);
@@ -192,52 +210,61 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   const int horizontalSpace = 100;
   const int verticalSpace = 20;
 
-  const int line1pos = boxHeight + verticalSpace;
-  const int line2pos = 2 * line1pos;
-  const int line3pos = 3 * line1pos;
-  const int line4pos = 4 * line1pos;
+  const int linePos = boxHeight + verticalSpace;
   const int column1pos = boxWidth + horizontalSpace;
   const int column2pos = 2 * column1pos;
   const int column3pos = 3 * column1pos;
 
   // -- set buttons positions --
-  // column 0
+
+  int lineCounter = 0;
+
+  // line
   modelDefinitionButtonProxy->setPos(0, 0);
-
-  // column 1
   modelEvaluationProxy->setPos(column1pos, 0);
-  doeCreationProxy->setPos(column1pos, line1pos);
-  probaModelProxy->setPos(column1pos, line2pos);
 
-  // column 2
-  doeEvaluationProxy->setPos(column2pos, line1pos);
-  sensitivityProxy->setPos(column2pos, line2pos);
-  centralTendencyProxy->setPos(column2pos, line3pos);
-  limitStateProxy->setPos(column2pos, line4pos);
+  // ++line
+  if (screeningProxy)
+    screeningProxy->setPos(column1pos, ++lineCounter * linePos);
 
-  // column 3
-  metamodelProxy->setPos(column3pos, line1pos);
-  reliabilityProxy->setPos(column3pos, line4pos);
+  // ++line
+  doeCreationProxy->setPos(column1pos, ++lineCounter * linePos);
+  doeEvaluationProxy->setPos(column2pos, lineCounter * linePos);
+  metamodelProxy->setPos(column3pos, lineCounter * linePos);
+
+  // ++line
+  probaModelProxy->setPos(column1pos, ++lineCounter * linePos);
+  sensitivityProxy->setPos(column2pos, lineCounter * linePos);
+
+  // ++line
+  centralTendencyProxy->setPos(column2pos, ++lineCounter * linePos);
+
+  // ++line
+  limitStateProxy->setPos(column2pos, ++lineCounter * linePos);
+  reliabilityProxy->setPos(column3pos, lineCounter * linePos);
 
   // -- arrows positions --
   // arrows start points
   const int buttonMargin = 3;
-  const QPointF modelDefinition_rightPoint(boxWidth + buttonMargin, boxHeight / 2);
-  const QPointF doeCreation_rightPoint(column1pos + boxWidth + buttonMargin, line1pos + boxHeight / 2);
-  const QPointF doeEval_rightPoint(column2pos + boxWidth + buttonMargin, line1pos + boxHeight / 2);
-  const QPointF probaModel_rightPoint(column1pos + boxWidth + buttonMargin, line2pos + boxHeight / 2);
-  const QPointF limitState_rightPoint(column2pos + boxWidth + buttonMargin, line4pos + boxHeight / 2);
+  const QPointF deltaRight(boxWidth + buttonMargin, boxHeight * 0.5);
+
+  const QPointF modelDefinition_rightPoint(deltaRight);
+  const QPointF doeCreation_rightPoint = doeCreationProxy->pos() + deltaRight;
+  const QPointF doeEval_rightPoint = doeEvaluationProxy->pos() + deltaRight;
+  const QPointF probaModel_rightPoint = probaModelProxy->pos() + deltaRight;
+  const QPointF limitState_rightPoint = limitStateProxy->pos() + deltaRight;
 
   // arrows ending points
-  const QPointF modelEval_leftPoint(column1pos, boxHeight / 2);
-  const QPointF doeCreation_leftPoint(column1pos, line1pos + boxHeight / 2);
-  const QPointF probaModel_leftPoint(column1pos, line2pos + boxHeight / 2);
-  const QPointF doeEval_leftPoint(column2pos, line1pos + boxHeight / 2);
-  const QPointF sensitivity_leftPoint(column2pos, line2pos + boxHeight / 2);
-  const QPointF centralTendency_leftPoint(column2pos, line3pos + boxHeight / 2);
-  const QPointF limitState_leftPoint(column2pos, line4pos + boxHeight / 2);
-  const QPointF metamodel_leftPoint(column3pos, line1pos + boxHeight / 2);
-  const QPointF reliability_leftPoint(column3pos, line4pos + boxHeight / 2);
+  const QPointF deltaLeft(0, boxHeight * 0.5);
+  const QPointF modelEval_leftPoint = modelEvaluationProxy->pos() + deltaLeft;
+  const QPointF doeCreation_leftPoint = doeCreationProxy->pos() + deltaLeft;
+  const QPointF probaModel_leftPoint = probaModelProxy->pos() + deltaLeft;
+  const QPointF doeEval_leftPoint = doeEvaluationProxy->pos() + deltaLeft;
+  const QPointF sensitivity_leftPoint = sensitivityProxy->pos() + deltaLeft;
+  const QPointF centralTendency_leftPoint = centralTendencyProxy->pos() + deltaLeft;
+  const QPointF limitState_leftPoint = limitStateProxy->pos() + deltaLeft;
+  const QPointF metamodel_leftPoint = metamodelProxy->pos() + deltaLeft;
+  const QPointF reliability_leftPoint = reliabilityProxy->pos() + deltaLeft;
 
   // -- Arrows --
 
@@ -246,6 +273,16 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
                                          modelEval_leftPoint);
   scene->addItem(modelDef_modelEval);
   connect(modelEvaluationButton, SIGNAL(enabledChanged(bool)), modelDef_modelEval, SLOT(setValidity(bool)));
+
+  if (screeningButton)
+  {
+    // arrow model definition -> screening
+    const QPointF screening_leftPoint = screeningProxy->pos() + deltaLeft;
+    Arrow * modelDef_screening = new Arrow(modelDefinition_rightPoint,
+                                           screening_leftPoint);
+    scene->addItem(modelDef_screening);
+    connect(screeningButton, SIGNAL(enabledChanged(bool)), modelDef_screening, SLOT(setValidity(bool)));
+  }
 
   // arrow model definition -> doe creation
   Arrow * modelDef_doeCreation = new Arrow(modelDefinition_rightPoint,
@@ -305,6 +342,8 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   textArea->setReadOnly(true);
   connect(modelDefinitionButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   connect(modelEvaluationButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
+  if (screeningButton)
+    connect(screeningButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   connect(doeCreationButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   connect(probaModelButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   connect(doeEvaluationButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));

@@ -142,9 +142,7 @@ void InferenceResultWidget::buildInterface()
     qqPlot_ = new PlotWidget(tr("qqPlot"));
     plotWidgetLayout->addWidget(qqPlot_);
     // --- GraphConfigurationWidget
-    QVector<PlotWidget*> listPlot;
-    listPlot.append(qqPlot_);
-    GraphConfigurationWidget * qqPlotSettingWidget = new GraphConfigurationWidget(listPlot,
+    GraphConfigurationWidget * qqPlotSettingWidget = new GraphConfigurationWidget(qqPlot_,
         QStringList(),
         QStringList(),
         GraphConfigurationWidget::NoType,

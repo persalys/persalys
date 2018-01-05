@@ -15,6 +15,7 @@ Dependencies
 - Numpydoc (optional, for doc)
 - otfmi (optional, for FMI support)
 - ParaView >= 5.4.0 (optional, for visualisation)
+- otmorris (optional, for Morris support)
 
 Installation
 ------------
@@ -32,6 +33,7 @@ Compile OTGui::
       -DCMAKE_INSTALL_PREFIX=$PWD/install \
       -DOpenTURNS_DIR=$PWD/../../openturns/build/install/lib/cmake/openturns \
       -DParaView_DIR=$PWD/../../paraview/build/install/lib/cmake/paraview \
+      -DOTMORRIS_DIR=$PWD/../../otmorris/build/install/lib/cmake/otmorris \
       ..
     make install
 

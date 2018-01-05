@@ -11,11 +11,9 @@ if ( MINGW )
   set ( PATH_SEP "\\;" )
 endif ()
 
-
 set ( PYINSTALLCHECK_ENVIRONMENT "AUTOTEST_PATH=${INSTALL_DESTDIR}${EXAMPLE_PATH}"
                                  "OPENTURNS_CONFIG_PATH=${INSTALL_DESTDIR}${SYSCONFIG_PATH}/openturns"
-                                 "LD_LIBRARY_PATH=${OPENTURNS_LIBRARY_DIRS}:${INSTALL_DESTDIR}${OTGUI_LIBRARY_PATH}:$ENV{LD_LIBRARY_PATH}"
-                                 "PYTHONPATH=${OPENTURNS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH}${PATH_SEP}${INSTALL_DESTDIR}${OTGUI_PYTHON_MODULE_PATH}${PATH_SEP}$ENV{PYTHONPATH}"
+                                 "PYTHONPATH=${OPENTURNS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH}${PATH_SEP}${OTMORRIS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH}${PATH_SEP}${INSTALL_DESTDIR}${OTGUI_PYTHON_MODULE_PATH}${PATH_SEP}$ENV{PYTHONPATH}"
                                  ${ADAPT_CHECK_TESTS_EXPONENT}
     )
 
@@ -102,6 +100,9 @@ ot_pyinstallcheck_test (SRCAnalysis_std)
 ot_pyinstallcheck_test (LimitState_std)
 ot_pyinstallcheck_test (InferenceAnalysis_std)
 ot_pyinstallcheck_test (CopulaInferenceAnalysis_std)
+if (OTMORRIS_FOUND)
+ot_pyinstallcheck_test (MorrisAnalysis_std)
+endif ()
 
 ot_pyinstallcheck_test (docstring)
 

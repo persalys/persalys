@@ -87,6 +87,7 @@ void PhysicalModelDiagramItem::update(Observable* source, const String & message
       return;
     }
     emit inputNumberValidityChanged(physicalModel_.getInputDimension());
+    emit twoInputsValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1);
     emit physicalModelValidityChanged(physicalModel_.isValid());
     emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
     emit dependencyValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getComposedDistribution().hasIndependentCopula());
@@ -176,7 +177,7 @@ void PhysicalModelDiagramItem::requestMetaModelCreation()
         // new analysis
         DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysisItem->getAnalysis().getImplementation().get());
         FunctionalChaosAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("metamodel_"), *doeEval);
-        // emit signal to StudyTreeView to open a 'general' wizard (with a list of designs of experiments)
+        // emit signal to StudyManager to open a 'general' wizard (with a list of designs of experiments)
         emit analysisRequested(this, analysis, true);
         return;
       }
@@ -202,7 +203,7 @@ void PhysicalModelDiagramItem::requestReliabilityCreation()
 
   // new analysis
   MonteCarloReliabilityAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("reliability_"), limitState);
-  // emit signal to StudyTreeView to open a 'general' wizard (with a list of limit states)
+  // emit signal to StudyManager to open a 'general' wizard (with a list of limit states)
   emit analysisRequested(this, analysis, true);
 }
 
@@ -232,6 +233,7 @@ void PhysicalModelDiagramItem::fill()
 
   // update diagram (arrow color and button availability)
   emit inputNumberValidityChanged(physicalModel_.getInputDimension());
+  emit twoInputsValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1);
   emit physicalModelValidityChanged(physicalModel_.isValid());
   emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
   emit dependencyValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getComposedDistribution().hasIndependentCopula());
@@ -255,13 +257,16 @@ void PhysicalModelDiagramItem::appendPhysicalModelItem()
   // connections
   connect(pmItem, SIGNAL(probabilisticModelRequested(PhysicalModelItem*)), this, SLOT(appendProbabilisticModelItem()));
   connect(this, SIGNAL(evaluationModelRequested()), pmItem, SLOT(createModelEvaluation()));
+#ifdef OTGUI_HAVE_OTMORRIS
+  connect(this, SIGNAL(screeningRequested()), pmItem, SLOT(createScreening()));
+#endif
   connect(this, SIGNAL(designOfExperimentRequested()), pmItem, SLOT(createDesignOfExperiment()));
   connect(this, SIGNAL(probabilisticModelItemCreated(ProbabilisticModelItem*)), pmItem, SLOT(updateProbaActionAvailability()));
 
   // append item
   appendRow(pmItem);
 
-  // emit signal to the StudyTreeView to create a window
+  // emit signal to the StudyManager to create a window
   emit modelDefinitionWindowRequested(pmItem);
 
   // disable the definition action
@@ -292,7 +297,7 @@ void PhysicalModelDiagramItem::appendProbabilisticModelItem()
   connect(this, SIGNAL(centralTendencyRequested()), probaItem, SLOT(createCentralTendency()));
   connect(this, SIGNAL(sensitivityRequested()), probaItem, SLOT(createSensitivityAnalysis()));
 
-  // emit signal to the StudyTreeView to create a window
+  // emit signal to the StudyManager to create a window
   emit probabilisticModelItemCreated(probaItem);
 }
 
@@ -351,7 +356,7 @@ void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
     // append item
     titleItem->appendRow(newItem);
 
-    // emit signal to StudyTreeView to create a window
+    // emit signal to StudyManager to create a window
     emit doeAnalysisItemCreated(newItem);
 
     // signal for diagram window : update diagram
@@ -401,7 +406,8 @@ void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
   }
   // Sensitivity title
   else if (analysisName == "SobolAnalysis" ||
-           analysisName == "SRCAnalysis")
+           analysisName == "SRCAnalysis" ||
+           analysisName == "MorrisAnalysis")
   {
     titleItem = getTitleItemNamed(tr("Sensitivity"), "SensitivityTitle");
 
@@ -432,7 +438,7 @@ void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
   // append item
   titleItem->appendRow(newItem);
 
-  // emit signal to StudyTreeView to create a window
+  // emit signal to StudyManager to create a window
   emit analysisItemCreated(newItem);
 }
 
@@ -461,7 +467,7 @@ void PhysicalModelDiagramItem::appendItem(const LimitState& limitState)
   // append item
   titleItem->appendRow(newItem);
 
-  // emit signal to StudyTreeView to create a window
+  // emit signal to StudyManager to create a window
   emit limitStateCreated(newItem);
 
   // signal for diagram window : update diagram

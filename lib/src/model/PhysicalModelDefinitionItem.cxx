@@ -21,6 +21,7 @@
 #include "otgui/PhysicalModelDefinitionItem.hxx"
 
 #include "otgui/ModelEvaluation.hxx"
+#include "otgui/MorrisAnalysis.hxx"
 #include "otgui/GridDesignOfExperiment.hxx"
 #include "otgui/OTStudyItem.hxx"
 
@@ -33,6 +34,10 @@ namespace OTGUI
 
 PhysicalModelDefinitionItem::PhysicalModelDefinitionItem(const PhysicalModel & physicalModel)
   : PhysicalModelItem(physicalModel, "PhysicalModelDefinition")
+  , newProbabilisticModel_(0)
+  , newModelEvaluation_(0)
+  , newScreening_(0)
+  , newDesignOfExperiment_(0)
 {
   setData(tr("Definition"), Qt::DisplayRole);
   QFont font;
@@ -61,11 +66,19 @@ void PhysicalModelDefinitionItem::buildActions()
   newModelEvaluation_->setStatusTip(tr("Create a new model evaluation"));
   connect(newModelEvaluation_, SIGNAL(triggered()), this, SLOT(createModelEvaluation()));
 
+#ifdef OTGUI_HAVE_OTMORRIS
+  newScreening_ = new QAction(/*QIcon(":/images/modelEvaluation.png"),*/ tr("Screening"), this);
+  newScreening_->setStatusTip(tr("Create a new screening"));
+  connect(newScreening_, SIGNAL(triggered()), this, SLOT(createScreening()));
+#endif
+
   // add actions
   appendAction(newProbabilisticModel_);
   appendAction(newDesignOfExperiment_);
   appendSeparator(tr("Analysis"));
   appendAction(newModelEvaluation_);
+  if (newScreening_)
+    appendAction(newScreening_);
 }
 
 
@@ -139,7 +152,7 @@ void PhysicalModelDefinitionItem::createProbabilisticModel()
     emit emitErrorMessageRequested(tr("The physical model must have inputs."));
     return;
   }
-  // emit signal to StudyTreeView to create a window
+  // emit signal to StudyManager to create a window
   emit probabilisticModelRequested(this);
 }
 
@@ -154,10 +167,28 @@ void PhysicalModelDefinitionItem::createModelEvaluation()
   }
 
   // new analysis
-  ModelEvaluation evaluation(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("evaluation_"), physicalModel_);
-  // emit signal to StudyTreeView to open a wizard
+  ModelEvaluation evaluation(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("evaluation_").toStdString()), physicalModel_);
+  // emit signal to StudyManager to open a wizard
   emit analysisRequested(this, evaluation);
 }
+
+
+#ifdef OTGUI_HAVE_OTMORRIS
+void PhysicalModelDefinitionItem::createScreening()
+{
+  // check
+  if (!physicalModel_.isValid() || physicalModel_.getInputDimension() < 2)
+  {
+    emit emitErrorMessageRequested(tr("The physical model must have at least two inputs and at least one selected output."));
+    return;
+  }
+
+  // new analysis
+  MorrisAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("screening_").toStdString()), physicalModel_);
+  // emit signal to StudyManager to open a wizard
+  emit analysisRequested(this, analysis);
+}
+#endif
 
 
 void PhysicalModelDefinitionItem::createDesignOfExperiment()
@@ -170,8 +201,8 @@ void PhysicalModelDefinitionItem::createDesignOfExperiment()
   }
 
   // new design
-  GridDesignOfExperiment design(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("design_"), physicalModel_);
-  // emit signal to StudyTreeView to open a wizard
+  GridDesignOfExperiment design(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("design_").toStdString()), physicalModel_);
+  // emit signal to StudyManager to open a wizard
   emit analysisRequested(this, design);
 }
 

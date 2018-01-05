@@ -28,6 +28,10 @@ ot_add_source_file ( CodeModel.cxx)
 ot_add_source_file ( VariablesInferenceTableModel.cxx)
 ot_add_source_file ( CustomStandardItemModel.cxx )
 ot_add_source_file ( TranslationManager.cxx )
+if (OTMORRIS_FOUND)
+  ot_add_source_file ( MorrisTableModel.cxx )
+  ot_add_source_file ( MorrisResultTableModel.cxx )
+endif ()
 
 ot_install_header_file ( SampleTableModel.hxx )
 ot_install_header_file ( InputTableModel.hxx )
@@ -52,6 +56,10 @@ ot_install_header_file ( StudyTreeViewModel.hxx )
 ot_install_header_file ( VariablesInferenceTableModel.hxx )
 ot_install_header_file ( CustomStandardItemModel.hxx )
 ot_install_header_file ( TranslationManager.hxx )
+if (OTMORRIS_FOUND)
+ot_install_header_file ( MorrisTableModel.hxx )
+ot_install_header_file ( MorrisResultTableModel.hxx )
+endif ()
 
 qt5_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
                                     otgui/InputTableProbabilisticModel.hxx
@@ -78,6 +86,11 @@ qt5_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
                                     otgui/VariablesInferenceTableModel.hxx
                                     otgui/CustomStandardItemModel.hxx
                                     otgui/TranslationManager.hxx)
+
+if (OTMORRIS_FOUND)
+  qt5_wrap_cpp (OTGUI_MODEL_MOC_SRCS otgui/MorrisTableModel.hxx)
+  qt5_wrap_cpp (OTGUI_MODEL_MOC_SRCS otgui/MorrisResultTableModel.hxx)
+endif ()
 
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 

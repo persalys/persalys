@@ -6,6 +6,7 @@ option ( LINK_PYTHON_LIBRARY          "Link python modules against python librar
 option ( BUILD_SHARED_LIBS            "Build shared libraries"                                                ON )
 option (USE_SALOME "use salome" ON)
 option (USE_OTFMI "use otfmi" ON)
+option (USE_OTMORRIS "use otmorris" ON)
 option (USE_SPHINX "use sphinx" ON)
 option (USE_QT5 "use Qt5" ON)
 option (USE_COTIRE "Use cotire for unity builds" OFF)
@@ -137,6 +138,14 @@ if (USE_OTFMI)
   endif ()
 endif ()
 
+if (USE_OTMORRIS)
+  find_package (OTMORRIS NO_MODULE)
+  if (OTMORRIS_FOUND)
+    list (APPEND OTGUI_DEFINITIONS -DOTGUI_HAVE_OTMORRIS)
+    include_directories (${OTMORRIS_INCLUDE_DIRS})
+  endif ()
+endif ()
+
 add_definitions (${OTGUI_DEFINITIONS})
 
 set ( OTGUI_LIBRARY_PATH lib${LIB_SUFFIX} )
@@ -215,7 +224,7 @@ foreach ( _var PYTHON_MODULE_PATH LIBRARY_PATH INCLUDE_PATH CONFIG_CMAKE_PATH)
 endforeach ( _var )
 
 # RPATH settings
-set (CMAKE_INSTALL_RPATH ${LIBRARY_PATH})
+set (CMAKE_INSTALL_RPATH ${LIBRARY_PATH} ${OTMORRIS_LIBRARY_DIRS})
 set (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 if(POLICY CMP0042)
   # Set MACOSX_RPATH to ON
@@ -247,26 +256,6 @@ macro ( ot_add_current_dir_to_include_dirs )
   set ( INTERNAL_INCLUDE_DIRS ${inc_dirs} CACHE INTERNAL "List of directories with header files needed for build" )
 endmacro ( ot_add_current_dir_to_include_dirs )
 
-# The tests can't be run if this function is absent
-enable_testing ()
-add_custom_target ( tests COMMENT "Build tests" )
-add_custom_target ( check COMMENT "Run pre-installation tests" )
-add_custom_target ( installcheck COMMENT "Run post-installation tests" )
-
-add_subdirectory ( lib )
-
-add_subdirectory ( translations )
-
-add_dependencies ( check cppcheck )
-
-if (BUILD_GUI)
-  add_subdirectory (main)
-endif ()
-
-if ( PYTHONINTERP_FOUND AND PYTHONLIBS_FOUND AND SWIG_FOUND AND BUILD_SHARED_LIBS )
-  add_subdirectory ( python )
-  add_dependencies ( installcheck pyinstallcheck )
-endif ()
 
 set ( CPACK_PACKAGE_NAME          ${PACKAGE_NAME} )
 set ( CPACK_PACKAGE_VERSION_MAJOR 4              )
@@ -299,7 +288,10 @@ add_custom_target ( uninstall
 set ( OTGUI_LIBRARY                 otgui )
 set ( OTGUI_LIBRARIES ${OPENTURNS_LIBRARIES} )
 list ( APPEND OTGUI_LIBRARIES ${OTGUI_LIBRARY} )
-set ( OTGUI_LIBRARY_DIRS ${OPENTURNS_LIBRARY_DIRS} )
+set ( OTGUI_LIBRARY_DIRS ${OPENTURNS_LIBRARY_DIRS})
+if (OTMORRIS_FOUND)
+  list ( APPEND OTGUI_LIBRARY_DIRS ${OTMORRIS_LIBRARY_DIRS} )
+endif ()
 list ( APPEND OTGUI_LIBRARY_DIRS ${LIBRARY_PATH} )
 set ( OTGUI_INCLUDE_DIR ${OTGUI_INCLUDE_PATH} )
 set ( OTGUI_INCLUDE_DIRS ${OTGUI_INCLUDE_DIR} )
@@ -310,6 +302,28 @@ set ( OTGUI_VERSION_MAJOR ${CPACK_PACKAGE_VERSION_MAJOR} )
 set ( OTGUI_VERSION_MINOR ${CPACK_PACKAGE_VERSION_MINOR} )
 set ( OTGUI_VERSION_PATCH ${CPACK_PACKAGE_VERSION_PATCH} )
 set ( OTGUI_USE_FILE      ${OTGUI_CONFIG_CMAKE_PATH}/UseOTGui.cmake )
+
+# The tests can't be run if this function is absent
+enable_testing ()
+add_custom_target ( tests COMMENT "Build tests" )
+add_custom_target ( check COMMENT "Run pre-installation tests" )
+add_custom_target ( installcheck COMMENT "Run post-installation tests" )
+
+add_subdirectory ( lib )
+
+add_subdirectory ( translations )
+
+add_dependencies ( check cppcheck )
+
+if (BUILD_GUI)
+  add_subdirectory (main)
+endif ()
+
+if ( PYTHONINTERP_FOUND AND PYTHONLIBS_FOUND AND SWIG_FOUND AND BUILD_SHARED_LIBS )
+  add_subdirectory ( python )
+  add_dependencies ( installcheck pyinstallcheck )
+endif ()
+
 
 if (CMAKE_VERSION VERSION_LESS 2.8.8)
   # CMakePackageConfigHelpers is not available
