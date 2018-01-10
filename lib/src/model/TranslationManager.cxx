@@ -24,6 +24,7 @@ namespace OTGUI
 {
 
 boost::bimap< QString, QString > TranslationManager::DistributionsNames_;
+boost::bimap< QString, QString > TranslationManager::CopulasNames_;
 boost::bimap< QString, QString > TranslationManager::DistributionsParametersNames_;
 boost::bimap< QString, QString > TranslationManager::ParametersNames_;
 
@@ -36,20 +37,33 @@ void TranslationManager::InitializeDistributionsNames()
   DistributionsNames_.insert(type("ChiSquare", tr("ChiSquare")));
   DistributionsNames_.insert(type("Exponential", tr("Exponential")));
   DistributionsNames_.insert(type("Gamma", tr("Gamma")));
-  DistributionsNames_.insert(type("Gumbel", tr("Gumbel")));
+  DistributionsNames_.insert(type("Gumbel", "Gumbel"));
   DistributionsNames_.insert(type("InverseNormal", tr("InverseNormal")));
   DistributionsNames_.insert(type("Laplace", tr("Laplace")));
   DistributionsNames_.insert(type("Logistic", tr("Logistic")));
   DistributionsNames_.insert(type("LogNormal", tr("LogNormal")));
   DistributionsNames_.insert(type("LogUniform", tr("LogUniform")));
   DistributionsNames_.insert(type("Normal", tr("Normal")));
-  DistributionsNames_.insert(type("Rayleigh", tr("Rayleigh")));
-  DistributionsNames_.insert(type("Student", tr("Student")));
+  DistributionsNames_.insert(type("Rayleigh", "Rayleigh"));
+  DistributionsNames_.insert(type("Student", "Student"));
   DistributionsNames_.insert(type("Trapezoidal", tr("Trapezoidal")));
   DistributionsNames_.insert(type("Triangular", tr("Triangular")));
   DistributionsNames_.insert(type("Uniform", tr("Uniform")));
-  DistributionsNames_.insert(type("Weibull", tr("Weibull")));
+  DistributionsNames_.insert(type("Weibull", "Weibull"));
 }
+
+
+void TranslationManager::InitializeCopulasNames()
+{
+  // list of all the available copulas
+  CopulasNames_.insert(type("AliMikhailHaq", "Ali-Mikhail-Haq"));
+  CopulasNames_.insert(type("Clayton", "Clayton"));
+  CopulasNames_.insert(type("FarlieGumbelMorgenstern", "Farlie-Gumbel-Morgenstern"));
+  CopulasNames_.insert(type("Frank", "Frank"));
+  CopulasNames_.insert(type("Gumbel", "Gumbel"));
+  CopulasNames_.insert(type("Normal", tr("Normal")));
+}
+
 
 void TranslationManager::InitializeDistributionsParametersNames()
 {
@@ -129,6 +143,20 @@ QString TranslationManager::GetTranslatedDistributionName(const std::string& nam
 }
 
 
+QString TranslationManager::GetTranslatedCopulaName(const std::string& name)
+{
+  if (CopulasNames_.empty())
+    InitializeCopulasNames();
+
+  bimap_type::left_const_iterator left_iter = CopulasNames_.left.find(name.c_str());
+
+  if (left_iter != CopulasNames_.left.end())
+    return left_iter->second;
+
+  return name.c_str();
+}
+
+
 QString TranslationManager::GetTranslatedDistributionParameterName(const std::string& name)
 {
   if (DistributionsParametersNames_.empty())
@@ -171,6 +199,20 @@ std::string TranslationManager::GetDistributionName(const QString& name)
 }
 
 
+std::string TranslationManager::GetCopulaName(const QString& name)
+{
+  if (CopulasNames_.empty())
+    InitializeCopulasNames();
+
+  bimap_type::right_const_iterator right_iter = CopulasNames_.right.find(name);
+
+  if (right_iter != CopulasNames_.right.end())
+    return right_iter->second.toStdString();
+
+  return name.toStdString();
+}
+
+
 /* Get the list of the available distributions */
 QStringList TranslationManager::GetAvailableDistributions()
 {
@@ -181,5 +223,18 @@ QStringList TranslationManager::GetAvailableDistributions()
   for (bimap_type::left_const_iterator left_iter = DistributionsNames_.left.begin(), iend = DistributionsNames_.left.end(); left_iter != iend; ++left_iter)
     distributions << left_iter->second;
   return distributions;
+}
+
+
+/* Get the list of the available copulas */
+QStringList TranslationManager::GetAvailableCopulas()
+{
+  if (CopulasNames_.empty())
+    InitializeCopulasNames();
+
+  QStringList copulas;
+  for (bimap_type::left_const_iterator left_iter = CopulasNames_.left.begin(), iend = CopulasNames_.left.end(); left_iter != iend; ++left_iter)
+    copulas << left_iter->second;
+  return copulas;
 }
 }
