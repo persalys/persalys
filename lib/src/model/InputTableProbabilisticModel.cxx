@@ -46,7 +46,7 @@ int InputTableProbabilisticModel::columnCount(const QModelIndex & parent) const
 
 int InputTableProbabilisticModel::rowCount(const QModelIndex & parent) const
 {
-  return getPhysicalModel().getInputDimension();
+  return physicalModel_.getInputDimension();
 }
 
 
@@ -93,19 +93,6 @@ QVariant InputTableProbabilisticModel::headerData(int section, Qt::Orientation o
 }
 
 
-bool InputTableProbabilisticModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
-{
-  if (role == Qt::CheckStateRole && orientation == Qt::Horizontal)
-  {
-    for (int i = 0; i < rowCount(); ++i)
-      if (data(index(i, 0), role).toInt() != (value.toBool() ? Qt::Checked : Qt::Unchecked))
-        setData(index(i, 0), value.toBool() ? Qt::Checked : Qt::Unchecked, role);
-    emit distributionsChanged();
-  }
-  return QAbstractTableModel::setHeaderData(section, orientation, value, role);
-}
-
-
 QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role) const
 {
   if (!index.isValid())
@@ -114,9 +101,7 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
   if (role == Qt::CheckStateRole && index.column() == 0)
   {
     const Input input(physicalModel_.getInputs()[index.row()]);
-    if (input.isStochastic())
-      return Qt::Checked;
-    return Qt::Unchecked;
+    return input.isStochastic() ? Qt::Checked : Qt::Unchecked;
   }
   else if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
@@ -170,8 +155,8 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
     physicalModel_.setDistributionParametersType(input.getName(), 0);
     physicalModel_.blockNotification();
     emit dataChanged(index, this->index(index.row(), 1));
-    emit correlationToChange();
-    emit checked(rowCount() && physicalModel_.getStochasticInputNames() == physicalModel_.getInputNames());
+    emit headerDataChanged(Qt::Horizontal, 0, 0);
+    emit distributionsChanged();
 
     return true;
   }
@@ -229,12 +214,6 @@ void InputTableProbabilisticModel::updateData()
 {
   beginResetModel();
   endResetModel();
-  emit checked(rowCount() && physicalModel_.getStochasticInputNames() == physicalModel_.getInputNames());
-}
-
-
-PhysicalModel InputTableProbabilisticModel::getPhysicalModel() const
-{
-  return physicalModel_;
+  emit headerDataChanged(Qt::Horizontal, 0, 0);
 }
 }

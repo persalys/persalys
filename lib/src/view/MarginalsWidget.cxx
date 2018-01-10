@@ -97,9 +97,8 @@ void MarginalsWidget::buildInterface()
   // - connections
   connect(inputTableView_, SIGNAL(clicked(QModelIndex)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(distributionChanged(const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
-  connect(inputTableModel_, SIGNAL(correlationToChange()), this, SIGNAL(updateCorrelationTableData()));
+  connect(inputTableModel_, SIGNAL(distributionsChanged()), this, SIGNAL(updateCorrelationTableData()));
   connect(inputTableModel_, SIGNAL(distributionsChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
-  connect(inputTableModel_, SIGNAL(checked(bool)), inputTableHeaderView, SLOT(setChecked(bool)));
   connect(inputTableModel_, SIGNAL(inferenceResultRequested(const QModelIndex&)), this, SLOT(openWizardToChooseInferenceResult(const QModelIndex&)));
 
   leftSideLayout->addWidget(inputTableView_);
@@ -122,14 +121,14 @@ void MarginalsWidget::buildInterface()
   // 2- If the selected variable is deterministic
   QScrollArea * scrollAreaForDeterministic = new QScrollArea;
   scrollAreaForDeterministic->setWidgetResizable(true);
-  QGroupBox * groupBoxParameters = new QGroupBox(tr("Parameters"));
-  QGridLayout * groupBoxParametersLayout = new QGridLayout(groupBoxParameters);
-  groupBoxParametersLayout->addWidget(new QLabel(tr("Value")), 0, 0);
+  QGroupBox * valueGroupBox = new QGroupBox(tr("Parameters"));
+  QGridLayout * valueGroupBoxLayout = new QGridLayout(valueGroupBox);
+  valueGroupBoxLayout->addWidget(new QLabel(tr("Value")), 0, 0);
   valueForDeterministicVariable_ = new ValueLineEdit;
   valueForDeterministicVariable_->setEnabled(false);
-  groupBoxParametersLayout->addWidget(valueForDeterministicVariable_, 0, 1);
-  groupBoxParametersLayout->setRowStretch(1, 1);
-  scrollAreaForDeterministic->setWidget(groupBoxParameters);
+  valueGroupBoxLayout->addWidget(valueForDeterministicVariable_, 0, 1);
+  valueGroupBoxLayout->setSizeConstraint(QLayout::SetMaximumSize);
+  scrollAreaForDeterministic->setWidget(valueGroupBox);
   rightSideOfSplitterStackedWidget_->addWidget(scrollAreaForDeterministic);
 
   // 3- If the selected variable is stochastic
@@ -171,9 +170,8 @@ void MarginalsWidget::buildInterface()
   connect(infoButton, SIGNAL(clicked()), this, SLOT(openUrl()));
   rightFrameLayout->addWidget(infoButton);
 
-  //  parameters
+  // parameters
   parameterLayout_ = new QVBoxLayout;
-  parameterLayout_->addWidget(new QWidget(this));
   rightFrameLayout->addLayout(parameterLayout_);
 
   // truncation parameters
@@ -209,8 +207,6 @@ void MarginalsWidget::buildInterface()
   horizontalSplitter->setStretchFactor(1, 3);
 
   mainLayout->addWidget(horizontalSplitter);
-
-  rightSideOfSplitterStackedWidget_->addWidget(rightScrollArea);
 
   updateProbabilisticModel();
 }

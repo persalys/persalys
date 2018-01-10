@@ -108,8 +108,6 @@ void InferenceWizard::buildInterface()
   CheckableHeaderView * varTableHeaderView = new CheckableHeaderView;
   varTableView->setHorizontalHeader(varTableHeaderView);
   varTableView->verticalHeader()->hide();
-  varTableHeaderView->setChecked(!isVarChecked.contains(false));
-  connect(varTableModel_, SIGNAL(checked(bool)), varTableHeaderView, SLOT(setChecked(bool)));
 
   // - resize table
   int w = varTableView->horizontalHeader()->length();

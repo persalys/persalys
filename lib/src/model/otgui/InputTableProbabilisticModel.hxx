@@ -38,17 +38,13 @@ public:
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
   Qt::ItemFlags flags(const QModelIndex & index) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-  bool setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role);
   QVariant data(const QModelIndex & index, int role) const;
   bool setData(const QModelIndex & index, const QVariant & value, int role);
-  PhysicalModel getPhysicalModel() const;
 
 public slots:
   void updateData();
 signals:
   void distributionChanged(const QModelIndex&);
-  void correlationToChange();
-  void checked(const bool) const;
   void distributionsChanged();
   void inferenceResultRequested(const QModelIndex&);
 
