@@ -20,8 +20,7 @@
  */
 #include "otgui/ProbabilisticModelWindow.hxx"
 
-#include "otgui/CorrelationTableModel.hxx"
-#include "otgui/SpinBoxDelegate.hxx"
+#include "otgui/DependenciesWidget.hxx"
 
 using namespace OT;
 
@@ -30,13 +29,9 @@ namespace OTGUI
 
 ProbabilisticModelWindow::ProbabilisticModelWindow(ProbabilisticModelItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
-  , physicalModel_(item->getPhysicalModel())
   , marginalsWidget_(new MarginalsWidget(item, this))
+  , dependenciesWidget_(new DependenciesWidget(item, this))
 {
-  connect(item, SIGNAL(stochasticInputListChanged()), marginalsWidget_, SLOT(updateProbabilisticModel()));
-  connect(item, SIGNAL(inputListDefinitionChanged()), marginalsWidget_, SLOT(updateCurrentVariableDistributionWidgets()));
-  connect(item, SIGNAL(inputListCorrelationChanged()), this, SIGNAL(updateCorrelationTableData()));
-
   buildInterface();
 }
 
@@ -45,67 +40,20 @@ void ProbabilisticModelWindow::buildInterface()
 {
   setWindowTitle(tr("Probabilistic model"));
 
+  QWidget * mainWidget = new QWidget;
+  QVBoxLayout * mainWidgetLayout = new QVBoxLayout(mainWidget);
+
   QTabWidget * rootTab = new QTabWidget;
 
   // First Tab: marginals
   rootTab->addTab(marginalsWidget_, tr("Marginals"));
 
-  // Second Tab: correlation
-  QWidget * tab = new QWidget;
-  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+  // Second Tab: dependencies
+  rootTab->addTab(dependenciesWidget_, tr("Dependencies"));
+  connect(marginalsWidget_, SIGNAL(updateDependenciesRequested()), dependenciesWidget_, SIGNAL(updateTable()));
 
-  QGroupBox * groupBox = new QGroupBox(tr("Spearman's rank (Gaussian Copula)"));
-  QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
+  mainWidgetLayout->addWidget(rootTab);
 
-  CopyableTableView * correlationTableView = new CopyableTableView;
-  SpinBoxDelegate * correlationDelegate = new SpinBoxDelegate(correlationTableView);
-  correlationDelegate->setSpinBoxType(SpinBoxDelegate::correlation);
-  correlationTableView->setItemDelegate(correlationDelegate);
-  correlationTableView->setEditTriggers(QAbstractItemView::AllEditTriggers);
-
-  CorrelationTableModel * correlationTableModel = new CorrelationTableModel(physicalModel_, correlationTableView);
-  correlationTableView->setModel(correlationTableModel);
-  connect(correlationTableModel, SIGNAL(errorMessageChanged(QString)), this, SLOT(setCorrelationTabErrorMessage(QString)));
-  connect(marginalsWidget_, SIGNAL(updateCorrelationTableData()), correlationTableModel, SLOT(updateData()));
-  connect(this, SIGNAL(updateCorrelationTableData()), correlationTableModel, SLOT(updateData()));
-
-  groupBoxLayout->addWidget(correlationTableView);
-  tabLayout->addWidget(groupBox);
-
-  correlationErrorMessage_ = new QLabel;
-  correlationErrorMessage_->setWordWrap(true);
-  tabLayout->addWidget(correlationErrorMessage_);
-
-  rootTab->addTab(tab, tr("Correlation"));
-
-  setWidget(rootTab);
-}
-
-
-void ProbabilisticModelWindow::setCorrelationTabErrorMessage(const QString & message)
-{
-  correlationErrorMessage_->setText(QString("<font color=red>%1</font>").arg(message));
-  QTimeLine * time = new QTimeLine(7000, this);
-  qtimelineList_.push_back(time);
-  connect(time, SIGNAL(stateChanged(QTimeLine::State)), this, SLOT(reInitCorrelationErrorMessage(QTimeLine::State)));
-  time->start();
-}
-
-
-void ProbabilisticModelWindow::reInitCorrelationErrorMessage(QTimeLine::State state)
-{
-  if (state == QTimeLine::NotRunning)
-  {
-    if (qtimelineList_.isEmpty())
-      return;
-    // remove the the first item of the list
-    qtimelineList_.removeFirst();
-    // if another QTimeLine started before the end of the previous one: do nothing
-    if (qtimelineList_.size())
-      return;
-    // else initialize error message
-    if (correlationErrorMessage_)
-      correlationErrorMessage_->setText("");
-  }
+  setWidget(mainWidget);
 }
 }

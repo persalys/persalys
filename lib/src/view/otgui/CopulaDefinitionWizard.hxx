@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow to define a probabilistic model
+ *  @brief QWizard to define a copula
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,28 +18,41 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_PROBABILISTICMODELWINDOW_HXX
-#define OTGUI_PROBABILISTICMODELWINDOW_HXX
+#ifndef OTGUI_COPULADEFINITIONWIZARD_HXX
+#define OTGUI_COPULADEFINITIONWIZARD_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
-#include "otgui/MarginalsWidget.hxx"
-#include "otgui/DependenciesWidget.hxx"
+#include "otgui/OTguiWizard.hxx"
+
+#include <QLineEdit>
+#include <QButtonGroup>
+#include <QLabel>
 
 namespace OTGUI
 {
-class OTGUI_API ProbabilisticModelWindow : public OTguiSubWindow
+class OTGUI_API CopulaDefinitionWizard : public OTguiWizard
 {
   Q_OBJECT
 
-public :
-  ProbabilisticModelWindow(ProbabilisticModelItem *item, QWidget *parent = 0);
+public:
+  CopulaDefinitionWizard(const PhysicalModel &model, QWidget *parent = 0);
+
+  virtual bool validateCurrentPage();
+
+  OT::Copula getCopula() const;
 
 protected:
   void buildInterface();
 
+public slots:
+  void updateLineEdit(const OT::Description&, const OT::String&);
+
 private:
-  MarginalsWidget * marginalsWidget_;
-  DependenciesWidget * dependenciesWidget_;
+  PhysicalModel physicalModel_;
+  OT::Description copulaVariables_;
+  QLineEdit * varLineEdit_;
+  QButtonGroup * copulaChoice_;
+  QLabel * errorMessageLabel_;
+  bool pageValidity_;
 };
 }
 #endif

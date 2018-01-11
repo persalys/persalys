@@ -28,6 +28,7 @@
 #include "otgui/ValueLineEdit.hxx"
 #include "otgui/TemporaryLabel.hxx"
 #include "otgui/OTStudy.hxx"
+#include "otgui/ResizableStackedWidget.hxx"
 
 #include <QGroupBox>
 #include <QVBoxLayout>
@@ -65,14 +66,14 @@ public slots:
   void openWizardToChooseScreeningResult();
 #endif
 signals:
-  void updateCorrelationTableData();
+  void updateDependenciesRequested();
 
 private:
   OTStudy study_;
   PhysicalModel physicalModel_;
   QTableView * inputTableView_;
   InputTableProbabilisticModel * inputTableModel_;
-  QStackedWidget * rightSideOfSplitterStackedWidget_;
+  ResizableStackedWidget * rightSideOfSplitterStackedWidget_;
   ValueLineEdit * valueForDeterministicVariable_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;

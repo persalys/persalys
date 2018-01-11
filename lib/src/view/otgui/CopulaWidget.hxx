@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow to define a probabilistic model
+ *  @brief QWidget to define copula
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,28 +18,35 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_PROBABILISTICMODELWINDOW_HXX
-#define OTGUI_PROBABILISTICMODELWINDOW_HXX
+#ifndef OTGUI_COPULAWIDGET_HXX
+#define OTGUI_COPULAWIDGET_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
-#include "otgui/MarginalsWidget.hxx"
-#include "otgui/DependenciesWidget.hxx"
+#include "otgui/PhysicalModel.hxx"
+#include "otgui/PlotWidget.hxx"
+#include "otgui/ValueLineEdit.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API ProbabilisticModelWindow : public OTguiSubWindow
+class OTGUI_API CopulaWidget : public QWidget
 {
   Q_OBJECT
 
-public :
-  ProbabilisticModelWindow(ProbabilisticModelItem *item, QWidget *parent = 0);
+public:
+  CopulaWidget(const PhysicalModel &model, const OT::Copula &copula, QWidget *parent = 0);
 
-protected:
-  void buildInterface();
+public slots:
+  void updatePlots();
+  void updateCopulaFromLineEdit();
+  void updateCopulaFromCorrTable(const OT::Copula &copula);
+  void openDocUrl();
 
 private:
-  MarginalsWidget * marginalsWidget_;
-  DependenciesWidget * dependenciesWidget_;
+  PhysicalModel physicalModel_;
+  OT::Copula copula_;
+  QVector<PlotWidget*> listPlot_;
+  ValueLineEdit * paramValueEdit_;
+  TemporaryLabel * errorMessage_;
 };
 }
 #endif

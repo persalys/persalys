@@ -70,7 +70,7 @@ void MarginalsWidget::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
-  QSplitter * horizontalSplitter = new QSplitter;
+  QSplitter * hSplitter = new QSplitter;
 
   QWidget * leftSideWidget = new QWidget;
   QVBoxLayout * leftSideLayout = new QVBoxLayout(leftSideWidget);
@@ -86,8 +86,8 @@ void MarginalsWidget::buildInterface()
 
   // - header view
   CheckableHeaderView * inputTableHeaderView = new CheckableHeaderView;
+  inputTableHeaderView->setStretchLastSection(true);
   inputTableView_->setHorizontalHeader(inputTableHeaderView);
-  inputTableView_->horizontalHeader()->setStretchLastSection(true);
 
   // - delegate for distributions list
   const QStringList items = TranslationManager::GetAvailableDistributions() << tr("Inference result");
@@ -97,7 +97,7 @@ void MarginalsWidget::buildInterface()
   // - connections
   connect(inputTableView_, SIGNAL(clicked(QModelIndex)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(distributionChanged(const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
-  connect(inputTableModel_, SIGNAL(distributionsChanged()), this, SIGNAL(updateCorrelationTableData()));
+  connect(inputTableModel_, SIGNAL(distributionsChanged()), this, SIGNAL(updateDependenciesRequested()));
   connect(inputTableModel_, SIGNAL(distributionsChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
   connect(inputTableModel_, SIGNAL(inferenceResultRequested(const QModelIndex&)), this, SLOT(openWizardToChooseInferenceResult(const QModelIndex&)));
 
@@ -110,10 +110,10 @@ void MarginalsWidget::buildInterface()
   leftSideLayout->addWidget(importButton);
 #endif
 
-  horizontalSplitter->addWidget(leftSideWidget);
+  hSplitter->addWidget(leftSideWidget);
 
   // Distribution edition
-  rightSideOfSplitterStackedWidget_ = new QStackedWidget;
+  rightSideOfSplitterStackedWidget_ = new ResizableStackedWidget;
 
   // 1- If physical model is not valid: use a dummy widget
   rightSideOfSplitterStackedWidget_->addWidget(new QWidget);
@@ -132,6 +132,8 @@ void MarginalsWidget::buildInterface()
   rightSideOfSplitterStackedWidget_->addWidget(scrollAreaForDeterministic);
 
   // 3- If the selected variable is stochastic
+  QWidget * rightWidget = new QWidget;
+  QVBoxLayout * rightWidgetLayout = new QVBoxLayout(rightWidget);
   QScrollArea * rightScrollArea = new QScrollArea;
   rightScrollArea->setWidgetResizable(true);
   QFrame * rightFrame = new QFrame;
@@ -141,7 +143,7 @@ void MarginalsWidget::buildInterface()
   WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
   QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
-  QStackedWidget * plotStackedWidget = new QStackedWidget;
+  ResizableStackedWidget * plotStackedWidget = new ResizableStackedWidget;
   QVector<PlotWidget*> listPlotWidgets;
 
   pdfPlot_ = new PlotWidget(tr("distributionPDF"));
@@ -154,13 +156,13 @@ void MarginalsWidget::buildInterface()
 
   plotWidgetLayout->addWidget(plotStackedWidget);
 
-  GraphConfigurationWidget * pdf_cdfPlotsSettingWidget = new GraphConfigurationWidget(listPlotWidgets,
+  GraphConfigurationWidget * plotsSettingWidget = new GraphConfigurationWidget(listPlotWidgets,
       QStringList(),
       QStringList(),
       GraphConfigurationWidget::PDF,
       this);
-  plotWidget->setDockWidget(pdf_cdfPlotsSettingWidget);
-  connect(pdf_cdfPlotsSettingWidget, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
+  plotWidget->setDockWidget(plotsSettingWidget);
+  connect(plotsSettingWidget, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
   rightFrameLayout->addWidget(plotWidget);
 
   // button to open the OT documentation
@@ -202,11 +204,13 @@ void MarginalsWidget::buildInterface()
   rightFrameLayout->addStretch();
 
   rightScrollArea->setWidget(rightFrame);
-  rightSideOfSplitterStackedWidget_->addWidget(rightScrollArea);
-  horizontalSplitter->addWidget(rightSideOfSplitterStackedWidget_);
-  horizontalSplitter->setStretchFactor(1, 3);
+  rightWidgetLayout->addWidget(rightScrollArea);
+  rightSideOfSplitterStackedWidget_->addWidget(rightWidget);
 
-  mainLayout->addWidget(horizontalSplitter);
+  hSplitter->addWidget(rightSideOfSplitterStackedWidget_);
+  hSplitter->setStretchFactor(1, 3);
+
+  mainLayout->addWidget(hSplitter);
 
   updateProbabilisticModel();
 }
