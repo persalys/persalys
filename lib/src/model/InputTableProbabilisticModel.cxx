@@ -77,7 +77,7 @@ QVariant InputTableProbabilisticModel::headerData(int section, Qt::Orientation o
     switch (section)
     {
       case 0:
-        return tr("Name");
+        return tr("Variable");
       case 1:
         return tr("Distribution");
       default:
