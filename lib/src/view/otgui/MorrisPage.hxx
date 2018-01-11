@@ -22,16 +22,16 @@
 #define OTGUI_MORRISPAGE_HXX
 
 #include "otgui/Analysis.hxx"
-#include "otgui/OTguiWizardPage.hxx"
+#include "otgui/TemporaryLabel.hxx"
 #include "otgui/UIntSpinBox.hxx"
 #include "otgui/MorrisTableModel.hxx"
 
 #include <QTableView>
-#include <QLabel>
+#include <QWizardPage>
 
 namespace OTGUI
 {
-class OTGUI_API MorrisPage : public OTguiWizardPage
+class OTGUI_API MorrisPage : public QWizardPage
 {
   Q_OBJECT
 
@@ -49,8 +49,9 @@ protected:
 private:
   QTableView * tableView_;
   MorrisTableModel * tableModel_;
+  TemporaryLabel * errorMessageLabel_;
 };
-class OTGUI_API MorrisSecondPage : public OTguiWizardPage
+class OTGUI_API MorrisSecondPage : public QWizardPage
 {
   Q_OBJECT
 

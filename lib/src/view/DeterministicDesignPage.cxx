@@ -33,10 +33,11 @@ namespace OTGUI
 {
 
 DeterministicDesignPage::DeterministicDesignPage(QWidget* parent)
-  : OTguiWizardPage(parent)
+  : QWizardPage(parent)
   , tableView_(0)
   , tableModel_(0)
   , DOESizeLabel_(0)
+  , errorMessageLabel_(0)
 {
   buildInterface();
 }
@@ -72,8 +73,7 @@ void DeterministicDesignPage::buildInterface()
   pageLayout->addWidget(groupBox);
 
   // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
+  errorMessageLabel_ = new TemporaryLabel;
   pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
 
   // register field
@@ -101,7 +101,7 @@ void DeterministicDesignPage::initialize(const Analysis& analysis)
 
   // fill table
   tableModel_ = new ExperimentTableModel(doe, this);
-  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
+  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
   tableView_->setModel(tableModel_);
 
   const QStringList items = QStringList() << tr("Levels") << tr("Delta");
