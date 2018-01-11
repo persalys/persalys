@@ -376,7 +376,10 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
       distParamTableModel_->setData(distParamTableModel_->index(5, 0), font, Qt::FontRole);
 
       for (UnsignedInteger i = 0; i < nbParam; ++i)
-        distParamTableModel_->setNotEditableHeaderItem(6 + i, 0, distribution.getParameterDescription()[i].c_str());
+      {
+        const QString param(TranslationManager::GetTranslatedDistributionParameterName(distribution.getParameterDescription()[i]));
+        distParamTableModel_->setNotEditableHeaderItem(6 + i, 0, param);
+      }
     }
 
     // -- set parameters values

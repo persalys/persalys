@@ -69,6 +69,19 @@ void TranslationManager::InitializeDistributionsParametersNames()
 {
   DistributionsParametersNames_.insert(type("mean", tr("mean")));
   DistributionsParametersNames_.insert(type("standard deviation", tr("standard deviation")));
+  DistributionsParametersNames_.insert(type("nu", "ν"));
+  DistributionsParametersNames_.insert(type("alpha", "α"));
+  DistributionsParametersNames_.insert(type("beta", "β"));
+  DistributionsParametersNames_.insert(type("theta", "θ"));
+  DistributionsParametersNames_.insert(type("gamma", "γ"));
+  DistributionsParametersNames_.insert(type("sigma", "σ"));
+  DistributionsParametersNames_.insert(type("lambda", "λ"));
+  DistributionsParametersNames_.insert(type("mu", "μ"));
+  DistributionsParametersNames_.insert(type("sigmaOverMu", "σ/μ"));
+  DistributionsParametersNames_.insert(type("muLog", "μ_Log"));
+  DistributionsParametersNames_.insert(type("sigmaLog", "σ_Log"));
+  DistributionsParametersNames_.insert(type("aLog", "a_Log"));
+  DistributionsParametersNames_.insert(type("bLog", "b_Log"));
 }
 
 
@@ -162,12 +175,18 @@ QString TranslationManager::GetTranslatedDistributionParameterName(const std::st
   if (DistributionsParametersNames_.empty())
     InitializeDistributionsParametersNames();
 
-  bimap_type::left_const_iterator left_iter = DistributionsParametersNames_.left.find(name.c_str());
+  QString paramName = name.c_str();
+  if (paramName == "mean")
+    paramName = "mu";
+  else if (paramName == "standard deviation")
+    paramName = "sigma";
+
+  bimap_type::left_const_iterator left_iter = DistributionsParametersNames_.left.find(paramName);
 
   if (left_iter != DistributionsParametersNames_.left.end())
     return left_iter->second;
 
-  return name.c_str();
+  return paramName;
 }
 
 
