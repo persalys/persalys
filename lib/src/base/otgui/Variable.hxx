@@ -39,6 +39,8 @@ public:
   /** String converter */
   virtual OT::String __repr__() const;
 
+  virtual void setName(const OT::String &name);
+
   double getValue() const;
   void setValue(const double & value);
 
