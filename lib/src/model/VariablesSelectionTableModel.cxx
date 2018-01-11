@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QAbstractTableModel to list the variables of a DOE
+ *  @brief QAbstractTableModel to list and select variables
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,36 +18,36 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/VariablesInferenceTableModel.hxx"
+#include "otgui/VariablesSelectionTableModel.hxx"
 
 using namespace OT;
 
 namespace OTGUI
 {
 
-VariablesInferenceTableModel::VariablesInferenceTableModel(const Description& variablesNames, const Interval::BoolCollection& isVariablesChecked, QObject* parent)
+VariablesSelectionTableModel::VariablesSelectionTableModel(const Description& variablesNames, const Interval::BoolCollection& isVariablesChecked, QObject* parent)
   : QAbstractTableModel(parent)
   , variablesNames_(variablesNames)
   , isVariablesChecked_(isVariablesChecked)
 {
   if (variablesNames_.getSize() != isVariablesChecked_.getSize())
-    throw InvalidArgumentException(HERE) << "VariablesInferenceTableModel: The 2 arguments must have the same dimension";
+    throw InvalidArgumentException(HERE) << "VariablesSelectionTableModel: The 2 arguments must have the same dimension";
 }
 
 
-int VariablesInferenceTableModel::columnCount(const QModelIndex& parent) const
+int VariablesSelectionTableModel::columnCount(const QModelIndex& parent) const
 {
   return 1;
 }
 
 
-int VariablesInferenceTableModel::rowCount(const QModelIndex& parent) const
+int VariablesSelectionTableModel::rowCount(const QModelIndex& parent) const
 {
   return variablesNames_.getSize();
 }
 
 
-Qt::ItemFlags VariablesInferenceTableModel::flags(const QModelIndex& index) const
+Qt::ItemFlags VariablesSelectionTableModel::flags(const QModelIndex& index) const
 {
   if (index.column() == 0)
     return QAbstractTableModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
@@ -55,10 +55,10 @@ Qt::ItemFlags VariablesInferenceTableModel::flags(const QModelIndex& index) cons
 }
 
 
-QVariant VariablesInferenceTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant VariablesSelectionTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (role == Qt::DisplayRole && orientation == Qt::Horizontal && section == 0)
-    return tr("Variable");
+    return tr("Variables");
   else if (role == Qt::ToolTipRole && section == 0 && rowCount())
     return isVariablesChecked_.contains(false) ? tr("Select all") : tr("Unselect all");
 
@@ -66,7 +66,7 @@ QVariant VariablesInferenceTableModel::headerData(int section, Qt::Orientation o
 }
 
 
-QVariant VariablesInferenceTableModel::data(const QModelIndex& index, int role) const
+QVariant VariablesSelectionTableModel::data(const QModelIndex& index, int role) const
 {
   if (!index.isValid())
     return QVariant();
@@ -83,7 +83,7 @@ QVariant VariablesInferenceTableModel::data(const QModelIndex& index, int role) 
 }
 
 
-bool VariablesInferenceTableModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool VariablesSelectionTableModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
   if (!index.isValid())
     return false;

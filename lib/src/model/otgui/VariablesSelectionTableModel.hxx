@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QAbstractTableModel to list the variables of a DOE
+ *  @brief QAbstractTableModel to list and select variables
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,8 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_VARIABLESINFERENCETABLEMODEL_HXX
-#define OTGUI_VARIABLESINFERENCETABLEMODEL_HXX
+#ifndef OTGUI_VARIABLESSELECTIONTABLEMODEL_HXX
+#define OTGUI_VARIABLESSELECTIONTABLEMODEL_HXX
 
 #include "otgui/OTGuiprivate.hxx"
 
@@ -29,12 +29,12 @@
 
 namespace OTGUI
 {
-class OTGUI_API VariablesInferenceTableModel : public QAbstractTableModel
+class OTGUI_API VariablesSelectionTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 
 public:
-  VariablesInferenceTableModel(const OT::Description& variablesNames, const OT::Interval::BoolCollection& isVariablesChecked, QObject* parent = 0);
+  VariablesSelectionTableModel(const OT::Description& variablesNames, const OT::Interval::BoolCollection& isVariablesChecked, QObject* parent = 0);
 
   int columnCount(const QModelIndex& parent = QModelIndex()) const;
   int rowCount(const QModelIndex& parent = QModelIndex()) const;

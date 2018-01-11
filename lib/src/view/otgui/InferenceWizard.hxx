@@ -23,7 +23,7 @@
 
 #include "otgui/AnalysisWizard.hxx"
 #include "otgui/InferenceAnalysis.hxx"
-#include "otgui/VariablesInferenceTableModel.hxx"
+#include "otgui/VariablesSelectionTableModel.hxx"
 
 #include <openturns/FittingTest.hxx>
 
@@ -61,7 +61,7 @@ private:
   std::map<OT::String, OT::FittingTest::DistributionFactoryCollection> distFactoriesForEachInterestVar_;
   QLabel * errorMessageLabel_;
   bool pageValidity_;
-  VariablesInferenceTableModel * varTableModel_;
+  VariablesSelectionTableModel * varTableModel_;
 };
 }
 #endif

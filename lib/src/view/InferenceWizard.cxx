@@ -97,7 +97,7 @@ void InferenceWizard::buildInterface()
   for (UnsignedInteger i = 0; i < varNames.getSize(); ++i)
     isVarChecked[i] = inference_.getInterestVariables().contains(varNames[i]);
 
-  varTableModel_ = new VariablesInferenceTableModel(varNames, isVarChecked, varTableView);
+  varTableModel_ = new VariablesSelectionTableModel(varNames, isVarChecked, varTableView);
   varTableView->setModel(varTableModel_);
 
   connect(varTableView, SIGNAL(clicked(QModelIndex)), varTableView, SLOT(setCurrentIndex(QModelIndex)));
