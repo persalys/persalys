@@ -21,9 +21,11 @@
 #include "otgui/PhysicalModelDefinitionItem.hxx"
 
 #include "otgui/ModelEvaluation.hxx"
-#include "otgui/MorrisAnalysis.hxx"
 #include "otgui/GridDesignOfExperiment.hxx"
 #include "otgui/OTStudyItem.hxx"
+#ifdef OTGUI_HAVE_OTMORRIS
+#include "otgui/MorrisAnalysis.hxx"
+#endif
 
 #include <QDebug>
 
