@@ -27,6 +27,8 @@
 #include <openturns/Combinations.hxx>
 #include <openturns/VisualTest.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/FittingTest.hxx>
+#include <openturns/SpecFunc.hxx>
 
 using namespace OT;
 
@@ -51,14 +53,94 @@ CopulaInferenceAnalysis::CopulaInferenceAnalysis(const String& name, const Desig
   : DesignOfExperimentAnalysis(name, designOfExperiment)
   , distFactoriesForSetVar_()
 {
-  setInterestVariables(designOfExperiment_.getInputSample().getDescription());
+  // find groups of dependent variables
+  Collection<Description> groups = buildDefaultVariablesGroups();
 
-  // by default we test the Normal copula for all the inputs of the DOE
-  DistributionFactoryCollection collectionCopula;
-  collectionCopula.add(NormalCopulaFactory());
-  Description allVariables(getInterestVariables());
-  allVariables.sort();
-  distFactoriesForSetVar_[allVariables] = collectionCopula;
+  // by default we test the Normal copula
+  DistributionFactoryCollection defaultCopula(1, NormalCopulaFactory());
+  for (UnsignedInteger i = 0; i < groups.getSize(); ++i)
+    setDistributionsFactories(groups[i], defaultCopula);
+}
+
+
+/* Constructor with parameters */
+CopulaInferenceAnalysis::CopulaInferenceAnalysis(const String &name, const DesignOfExperiment &designOfExperiment, const Collection<Description> &groups)
+  : DesignOfExperimentAnalysis(name, designOfExperiment)
+  , distFactoriesForSetVar_()
+{
+  // by default we test the Normal copula
+  DistributionFactoryCollection defaultCopula(1, NormalCopulaFactory());
+  for (UnsignedInteger i = 0; i < groups.getSize(); ++i)
+    setDistributionsFactories(groups[i], defaultCopula);
+}
+
+
+Collection<Description> CopulaInferenceAnalysis::buildDefaultVariablesGroups()
+{
+  // Spearman correlation matrix
+  CorrelationMatrix C(designOfExperiment_.getSample().computeSpearmanCorrelation());
+
+  // consider only significantly non-zero correlations
+  const double alpha = 0.05;
+  const double epsilon = Normal().computeQuantile(1 - alpha)[0] / std::sqrt(designOfExperiment_.getSample().getSize() - 1);
+
+  for (UnsignedInteger j = 0; j < designOfExperiment_.getSample().getDimension(); ++j)
+    for (UnsignedInteger i = 0; i < j; ++i)
+      C(i, j) = (std::abs(C(i, j)) > epsilon) ? 1.0 : 0.0;
+
+  // find groups of dependent variables
+  Collection<Description> groups;
+  Collection<Indices> components = ConnectedComponents(C);
+
+  for (UnsignedInteger i = 0; i < components.getSize(); ++i)
+  {
+    if (components[i].getSize() > 1)
+    {
+      Description variables(designOfExperiment_.getSample().getMarginal(components[i]).getDescription());
+      groups.add(variables);
+    }
+  }
+  return groups;
+}
+
+
+// find connected components of a graph defined from its adjacency matrix
+Indices CopulaInferenceAnalysis::FindNeighbours(const UnsignedInteger head, const CorrelationMatrix &matrix, Indices &to_visit, Indices &visited)
+{
+  visited[head] = 1;
+  to_visit.erase(std::remove(to_visit.begin(), to_visit.end(), head), to_visit.end());
+  Indices current_component(1, head);
+  for (UnsignedInteger i = 0; i < to_visit.getSize(); ++i)
+  {
+    // If i is connected to head and has not yet been visited
+    if (matrix(head, to_visit[i]) > 0)
+    {
+      // Add i to the current component
+      Indices component(FindNeighbours(to_visit[i], matrix, to_visit, visited));
+      current_component.add(component);
+    }
+  }
+  return current_component;
+}
+
+
+Collection<Indices> CopulaInferenceAnalysis::ConnectedComponents(const CorrelationMatrix &matrix)
+{
+  UnsignedInteger N = matrix.getDimension();
+  Indices to_visit(N);
+  to_visit.fill();
+  Indices visited(N);
+  Collection<Indices> all_components;
+  for (UnsignedInteger head = 0; head < N; ++head)
+  {
+    if (visited[head] == 0)
+    {
+      Indices component(FindNeighbours(head, matrix, to_visit, visited));
+      std::sort(component.begin(), component.end());
+      all_components.add(component);
+    }
+  }
+  return all_components;
 }
 
 
@@ -85,11 +167,20 @@ CopulaInferenceAnalysis::DistributionFactoryCollection CopulaInferenceAnalysis::
 }
 
 
-void CopulaInferenceAnalysis::setDistributionsFactories(const Description& variablesNames, const DistributionFactoryCollection& distributionsFactories)
+Collection<Description> CopulaInferenceAnalysis::getVariablesGroups()
 {
-  if (!distributionsFactories.getSize())
-    throw InvalidArgumentException(HERE) << "Error: the list of distribution factories is empty";
+  Collection<Description> groups;
+  std::map<Description, DistributionFactoryCollection>::iterator it;
+  for (it = distFactoriesForSetVar_.begin(); it != distFactoriesForSetVar_.end(); ++it)
+  {
+    groups.add(it->first);
+  }
+  return groups;
+}
 
+
+void CopulaInferenceAnalysis::setDistributionsFactories(const Description& variablesNames, const DistributionFactoryCollection& factories)
+{
   for (UnsignedInteger i = 0; i < variablesNames.getSize(); ++i)
     if (!designOfExperiment_.getSample().getDescription().contains(variablesNames[i]))
       throw InvalidArgumentException(HERE) << "Error: the variable name " << variablesNames[i] << " does not match a variable of the model";
@@ -97,13 +188,19 @@ void CopulaInferenceAnalysis::setDistributionsFactories(const Description& varia
   if (variablesNames.getSize() < 2)
     throw InvalidArgumentException(HERE) << "Error: the dependency inference is performed with at least 2 variables";
 
-  for (UnsignedInteger i = 0; i < distributionsFactories.getSize(); ++i)
-    if (distributionsFactories[i].getImplementation()->getClassName().find("Copula") == std::string::npos)
+  for (UnsignedInteger i = 0; i < factories.getSize(); ++i)
+    if (factories[i].getImplementation()->getClassName().find("Copula") == std::string::npos)
       throw InvalidArgumentException(HERE) << "Error: the dependency inference is performed with copulae.";
 
   Description setOfVariables(variablesNames);
   setOfVariables.sort();
-  distFactoriesForSetVar_[setOfVariables] = distributionsFactories;
+
+  // cancel inference for the given set of variables
+  if (!factories.getSize())
+    distFactoriesForSetVar_.erase(setOfVariables);
+  // test all the given factories
+  else
+    distFactoriesForSetVar_[setOfVariables] = factories;
 }
 
 
@@ -141,7 +238,8 @@ void CopulaInferenceAnalysis::launch()
         throw InvalidArgumentException(HERE) << "The variable "  << variablesNames[i] << " is not a variable of the model " << designOfExperiment_.getSample().getDescription();
     }
 
-    const Sample sample(designOfExperiment_.getSample().getMarginal(indices));
+    Sample sample(designOfExperiment_.getSample().getMarginal(indices));
+    sample = sample.rank() / sample.getSize();
 
     Sample splitSample(sample);
     if (sample.getSize() > sizeKendall)
@@ -162,6 +260,10 @@ void CopulaInferenceAnalysis::launch()
         // build distribution
         const Distribution distribution(it->second[i].build(sample));
         inferenceSetResult.testedDistributions_.add(distribution);
+
+        // BIC test
+        const NumericalScalar bicResult = FittingTest::BIC(sample, distribution, distribution.getParameterDimension());
+        inferenceSetResult.bicResults_.add(bicResult);
 
         // get Kendall plot data
         Description description(2);
@@ -190,6 +292,7 @@ void CopulaInferenceAnalysis::launch()
         // set fittingTestResult
         inferenceSetResult.testedDistributions_.add(DistributionDictionary::BuildCopulaFactory(distributionName).build());
         Collection<Sample> kendallPlotDataCollection;
+        inferenceSetResult.bicResults_.add(SpecFunc::MaxScalar);
         inferenceSetResult.kendallPlotData_.add(kendallPlotDataCollection);
         inferenceSetResult.errorMessages_[i] = message;
       }

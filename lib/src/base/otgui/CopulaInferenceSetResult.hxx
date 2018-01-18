@@ -42,6 +42,7 @@ public:
 
   OT::Description getSetOfVariablesNames() const;
   OT::Collection<OT::Distribution> getTestedDistributions() const;
+  OT::Point getBICResults() const;
   OT::PersistentCollection<OT::PersistentCollection<OT::Sample > > getKendallPlotData() const;
   OT::Description getErrorMessages() const;
 
@@ -57,6 +58,7 @@ public:
 protected:
   OT::Description setOfVariablesNames_;
   OT::PersistentCollection< OT::Distribution > testedDistributions_;
+  OT::Point bicResults_;
   OT::PersistentCollection<OT::PersistentCollection<OT::Sample > > kendallPlotData_;
   OT::Description errorMessages_;
 };

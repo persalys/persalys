@@ -40,12 +40,16 @@ public:
 
   /** Constructor with parameters */
   CopulaInferenceAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment);
+  /** Constructor with parameters */
+  CopulaInferenceAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment, const OT::Collection<OT::Description> &groups);
 
   /** Virtual constructor */
   virtual CopulaInferenceAnalysis * clone() const;
 
   DistributionFactoryCollection getDistributionsFactories(const OT::Description& variablesNames) const;
   void setDistributionsFactories(const OT::Description& variablesNames, const DistributionFactoryCollection& distributionsFactories);
+  OT::Collection<OT::Description> buildDefaultVariablesGroups();
+  OT::Collection<OT::Description> getVariablesGroups();
 
   CopulaInferenceResult getResult() const;
 
@@ -64,6 +68,10 @@ public:
 protected:
   virtual void initialize();
   virtual void launch();
+
+private:
+  static OT::Collection<OT::Indices> ConnectedComponents(const OT::CorrelationMatrix &covariance);
+  static OT::Indices FindNeighbours(const OT::UnsignedInteger head, const OT::CorrelationMatrix &covariance, OT::Indices &to_visit, OT::Indices &visited);
 
 private:
   std::map<OT::Description, DistributionFactoryCollection> distFactoriesForSetVar_;
