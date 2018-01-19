@@ -33,12 +33,13 @@ class OTGUI_API DistributionsTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  DistributionsTableModel(const QStringList & distributions, QWidget* parent = 0);
+  DistributionsTableModel(const QStringList &distributions, const QStringList &availableDistributions, QWidget *parent = 0);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
   QVariant data(const QModelIndex & index, int role) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+  QStringList getDistributions() const;
 
 public slots:
   void appendDistribution(const QString & distributionName);
@@ -48,6 +49,7 @@ signals:
 
 private:
   QStringList distributions_;
+  QStringList availableDistributions_;
 };
 }
 #endif

@@ -24,7 +24,12 @@
 #include "otgui/DistributionsTableModel.hxx"
 #include "otgui/TitledComboBox.hxx"
 
+#include <openturns/OTType.hxx>
+
 #include <QTableView>
+#include <QMetaType> // mandatory to specify it to avoid windows compilation problem
+
+Q_DECLARE_METATYPE(OT::Description)
 
 namespace OTGUI
 {
@@ -33,7 +38,7 @@ class OTGUI_API DistributionsForInferenceWidget : public QWidget
   Q_OBJECT
 
 public :
-  DistributionsForInferenceWidget(const QStringList & distributions, QWidget* parent = 0);
+  DistributionsForInferenceWidget(const QStringList & distributions, const OT::Description &variables, QWidget* parent = 0);
 
 protected:
   void buildInterface();
@@ -43,12 +48,14 @@ public slots:
   void addSelectedDistribution(int);
 signals:
   void distributionsListChanged(QStringList);
+  void distributionsListChanged(const OT::Description &variables, const QStringList &dist);
 
 private:
+  OT::Description variables_;
   QStringList distributions_;
-  QTableView * distributionsTableView_;
+  QTableView * tableView_;
   DistributionsTableModel * tableModel_;
-  TitledComboBox * addDistributionCombox_;
+  TitledComboBox * addComboBox_;
 };
 }
 #endif

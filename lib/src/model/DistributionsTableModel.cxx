@@ -25,9 +25,10 @@
 namespace OTGUI
 {
 
-DistributionsTableModel::DistributionsTableModel(const QStringList& distributions, QWidget* parent)
+DistributionsTableModel::DistributionsTableModel(const QStringList &distributions, const QStringList &availableDistributions, QWidget *parent)
   : QAbstractTableModel(parent)
   , distributions_(distributions)
+  , availableDistributions_(availableDistributions)
 {
   distributions_.sort();
 }
@@ -48,7 +49,12 @@ int DistributionsTableModel::columnCount(const QModelIndex& parent) const
 QVariant DistributionsTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (orientation == Qt::Horizontal && role == Qt::DisplayRole && section == 0)
-    return tr("Distributions");
+  {
+    if (availableDistributions_.size() == TranslationManager::GetAvailableDistributions().size())
+      return tr("Distributions");
+    else
+      return tr("Copulas");
+  }
   return QAbstractItemModel::headerData(section, orientation, role);
 }
 
@@ -70,15 +76,14 @@ void DistributionsTableModel::appendDistribution(const QString& distributionName
   int nbRow = 0;
   if (distributionName == tr("All"))
   {
-    const QStringList listDistributions = TranslationManager::GetAvailableDistributions();
-    if (listDistributions.size() == distributions_.size())
+    if (availableDistributions_.size() == distributions_.size())
       return;
-    for (int i = 0; i < listDistributions.size(); ++i)
+    for (int i = 0; i < availableDistributions_.size(); ++i)
     {
-      if (!distributions_.contains(listDistributions[i]))
+      if (!distributions_.contains(availableDistributions_[i]))
       {
         ++nbRow;
-        distributions_ << listDistributions[i];
+        distributions_ << availableDistributions_[i];
       }
     }
     --nbRow;
@@ -100,5 +105,11 @@ void DistributionsTableModel::updateData(const QStringList & distributions)
   beginResetModel();
   distributions_ = distributions;
   endResetModel();
+}
+
+
+QStringList DistributionsTableModel::getDistributions() const
+{
+  return distributions_;
 }
 }
