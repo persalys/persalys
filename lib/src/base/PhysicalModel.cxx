@@ -278,9 +278,9 @@ Description PhysicalModel::getSelectedOutputsNames() const
 }
 
 
-ComposedDistribution PhysicalModel::getComposedDistribution() const
+Distribution PhysicalModel::getDistribution() const
 {
-  return getImplementation()->getComposedDistribution();
+  return getImplementation()->getDistribution();
 }
 
 
@@ -326,9 +326,15 @@ Function PhysicalModel::getRestrictedFunction(const Description & outputNames) c
 }
 
 
-ComposedCopula PhysicalModel::getComposedCopula() const
+Copula PhysicalModel::getCopula() const
 {
-  return getImplementation()->getComposedCopula();
+  return getImplementation()->getCopula();
+}
+
+
+Collection<Copula> PhysicalModel::getCopulaCollection() const
+{
+  return getImplementation()->getCopulaCollection();
 }
 
 

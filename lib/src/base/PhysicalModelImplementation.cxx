@@ -541,9 +541,9 @@ Description PhysicalModelImplementation::getSelectedOutputsNames() const
 }
 
 
-ComposedDistribution PhysicalModelImplementation::getComposedDistribution() const
+Distribution PhysicalModelImplementation::getDistribution() const
 {
-  Description copulaDescription(getComposedCopula().getDescription());
+  Description copulaDescription(composedCopula_.getDescription());
   Indices copulaMarginals;
 
   ComposedDistribution::DistributionCollection marginals;
@@ -559,9 +559,9 @@ ComposedDistribution PhysicalModelImplementation::getComposedDistribution() cons
 
   // we can not build a ComposedDistribution with an empty collection
   if (!marginals.getSize())
-    return ComposedDistribution();
+    return Distribution();
 
-  return ComposedDistribution(marginals, getComposedCopula().getMarginal(copulaMarginals));
+  return ComposedDistribution(marginals, composedCopula_.getMarginal(copulaMarginals));
 }
 
 
@@ -569,7 +569,7 @@ RandomVector PhysicalModelImplementation::getInputRandomVector() const
 {
   if (!hasStochasticInputs())
     throw PhysicalModelNotValidException(HERE) << "Can not use getInputRandomVector on a physical model which has no stochastic inputs.";
-  return RandomVector(getComposedDistribution());
+  return RandomVector(getDistribution());
 }
 
 
@@ -672,9 +672,26 @@ Function PhysicalModelImplementation::getRestrictedFunction(const Description& o
 }
 
 
-ComposedCopula PhysicalModelImplementation::getComposedCopula() const
+Copula PhysicalModelImplementation::getCopula() const
 {
-  return composedCopula_;
+  Description copulaDescription(composedCopula_.getDescription());
+  Indices copulaMarginals;
+
+  for (UnsignedInteger i = 0; i < inputs_.getSize(); ++i)
+  {
+    if (inputs_[i].isStochastic())
+    {
+      const Description::const_iterator it = std::find(copulaDescription.begin(), copulaDescription.end(), inputs_[i].getName());
+      copulaMarginals.add(it - copulaDescription.begin());
+    }
+  }
+  return composedCopula_.getMarginal(copulaMarginals);
+}
+
+
+Collection<Copula> PhysicalModelImplementation::getCopulaCollection() const
+{
+  return composedCopula_.getCopulaCollection();
 }
 
 
@@ -868,7 +885,7 @@ String PhysicalModelImplementation::__repr__() const
   oss << "class=" << getClassName()
       << " inputs=" << getInputs()
       << " outputs=" << getOutputs()
-      << " copula=" << getComposedCopula();
+      << " copula=" << getCopula();
   return oss;
 }
 

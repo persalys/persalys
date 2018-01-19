@@ -166,7 +166,7 @@ void ApproximationReliabilityPage::initialize(const Analysis& analysis)
     return;
 
   inputNames_ = analysis_ptr->getPhysicalModel().getStochasticInputNames();
-  startingPoint_ = analysis_ptr->getPhysicalModel().getComposedDistribution().getMean();
+  startingPoint_ = analysis_ptr->getPhysicalModel().getDistribution().getMean();
   updatePointLineEdit();
 
   const ApproximationAnalysis * approxAnalysis_ptr = dynamic_cast<const ApproximationAnalysis*>(analysis.getImplementation().get());

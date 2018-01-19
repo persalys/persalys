@@ -113,13 +113,12 @@ OrthogonalProductPolynomialFactory::PolynomialFamilyCollection FunctionalChaosAn
   if (polynomialFamilyCollection_.isEmpty())
   {
     // distribution:
-    ComposedDistribution distribution(getDistribution());
+    Distribution distribution(getDistribution());
 
     // adaptiveStrategy
     for (UnsignedInteger i = 0; i < distribution.getDimension(); ++i)
     {
-      const Distribution marginal(distribution.getMarginal(i));
-      const StandardDistributionPolynomialFactory factory(marginal);
+      const StandardDistributionPolynomialFactory factory(distribution.getMarginal(i));
       polynomialFamilyCollection_.add(factory);
     }
   }

@@ -147,7 +147,7 @@ void ProbabilisticModelItem::createSensitivityAnalysis()
     return;
 
   // check if the model has an independent copula
-  if (!physicalModel_.getComposedCopula().hasIndependentCopula())
+  if (!physicalModel_.getCopula().hasIndependentCopula())
   {
     emit emitErrorMessageRequested(tr("The model must have an independent copula to compute a sensitivity analysis but inputs are dependent."));
     return;

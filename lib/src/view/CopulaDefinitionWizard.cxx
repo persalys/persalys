@@ -66,7 +66,7 @@ void CopulaDefinitionWizard::buildInterface()
   tableView->setShowGrid(false);
 
   // - model
-  Collection<Copula> coll(physicalModel_.getComposedCopula().getCopulaCollection());
+  Collection<Copula> coll(physicalModel_.getCopulaCollection());
   Description independentVar;
   for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
   {

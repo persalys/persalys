@@ -63,7 +63,7 @@ public:
   OT::Sample getEffectiveInputSample() const;
   OT::Sample getEffectiveOutputSample() const;
 
-  OT::ComposedDistribution getDistribution();
+  OT::Distribution getDistribution();
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -85,7 +85,7 @@ protected:
   void computeLOOValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample);
 
 protected:
-  OT::ComposedDistribution distribution_;
+  OT::Distribution distribution_;
   bool isDistributionComputed_;
   bool analyticalValidation_;
   bool testSampleValidation_;

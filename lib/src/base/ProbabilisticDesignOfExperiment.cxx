@@ -134,11 +134,11 @@ Sample ProbabilisticDesignOfExperiment::generateInputSample(const UnsignedIntege
   RandomGenerator::SetSeed(getSeed());
 
   if (designName_ == "LHS")
-    sample = LHSExperiment(getPhysicalModel().getComposedDistribution(), size_).generate();
+    sample = LHSExperiment(getPhysicalModel().getDistribution(), size_).generate();
   else if (designName_ == "MONTE_CARLO")
-    sample = MonteCarloExperiment(getPhysicalModel().getComposedDistribution(), size_).generate();
+    sample = MonteCarloExperiment(getPhysicalModel().getDistribution(), size_).generate();
   else if (designName_ == "QUASI_MONTE_CARLO")
-    sample = LowDiscrepancyExperiment(SobolSequence(getPhysicalModel().getStochasticInputNames().getSize()), getPhysicalModel().getComposedDistribution(), size_).generate();
+    sample = LowDiscrepancyExperiment(SobolSequence(getPhysicalModel().getStochasticInputNames().getSize()), getPhysicalModel().getDistribution(), size_).generate();
   else
     throw InvalidArgumentException(HERE) << "Error: generateInputSample design name unknown";
 

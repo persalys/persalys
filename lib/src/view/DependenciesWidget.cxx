@@ -175,7 +175,7 @@ void DependenciesWidget::selectedItemChanged(const QModelIndex &current, const Q
 void DependenciesWidget::openCopulaDefinitionWizard()
 {
   // check
-  Collection<Copula> coll(physicalModel_.getComposedCopula().getCopulaCollection());
+  Collection<Copula> coll(physicalModel_.getCopulaCollection());
   Description independentVar;
   for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
   {

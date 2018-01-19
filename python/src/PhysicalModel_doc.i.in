@@ -16,8 +16,8 @@ OTGUI_PhysicalModel_getPythonScript_doc
 OTGUI_PhysicalModel_setCopula_doc
 %feature("docstring") OTGUI::PhysicalModel::getCopula
 OTGUI_PhysicalModel_getCopula_doc
-%feature("docstring") OTGUI::PhysicalModel::getComposedDistribution
-OTGUI_PhysicalModel_getComposedDistribution_doc
+%feature("docstring") OTGUI::PhysicalModel::getDistribution
+OTGUI_PhysicalModel_getDistribution_doc
 %feature("docstring") OTGUI::PhysicalModel::setInputDescription
 OTGUI_PhysicalModel_setInputDescription_doc
 %feature("docstring") OTGUI::PhysicalModel::setOutputDescription

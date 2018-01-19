@@ -47,7 +47,7 @@ FORMImportanceSamplingAnalysis::FORMImportanceSamplingAnalysis(const String& nam
   : ImportanceSamplingAnalysis(name, limitState)
   , ApproximationAnalysis()
 {
-  setPhysicalStartingPoint(limitState.getPhysicalModel().getComposedDistribution().getMean());
+  setPhysicalStartingPoint(limitState.getPhysicalModel().getDistribution().getMean());
 }
 
 

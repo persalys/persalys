@@ -32,7 +32,7 @@ namespace OTGUI
 DependenciesTableModel::DependenciesTableModel(const PhysicalModel &physicalModel, QObject *parent)
   : QAbstractTableModel(parent)
   , physicalModel_(physicalModel)
-  , copula_(physicalModel.getComposedCopula())
+  , copula_(physicalModel.getCopulaCollection())
 {
 }
 
@@ -45,7 +45,7 @@ int DependenciesTableModel::columnCount(const QModelIndex &parent) const
 
 int DependenciesTableModel::rowCount(const QModelIndex &parent) const
 {
-  return copula_.getDimension() < 2 ? 0 : copula_.getCopulaCollection().getSize();
+  return copula_.getDimension() < 2 ? 0 : physicalModel_.getCopulaCollection().getSize();
 }
 
 
@@ -79,11 +79,11 @@ QVariant DependenciesTableModel::data(const QModelIndex &index, int role) const
     {
       case 0:
       {
-        return copula_.getCopulaCollection()[index.row()].getDescription().__str__().c_str();
+        return physicalModel_.getCopulaCollection()[index.row()].getDescription().__str__().c_str();
       }
       case 1:
       {
-        String copulaName = copula_.getCopulaCollection()[index.row()].getImplementation()->getClassName();
+        String copulaName = physicalModel_.getCopulaCollection()[index.row()].getImplementation()->getClassName();
         copulaName = copulaName.substr(0, copulaName.find("Copula"));
         return TranslationManager::GetTranslatedCopulaName(copulaName);
       }
@@ -107,7 +107,7 @@ void DependenciesTableModel::updateData()
 
 void DependenciesTableModel::updateCopula()
 {
-  Collection<Copula> coll(physicalModel_.getComposedCopula().getCopulaCollection());
+  Collection<Copula> coll(physicalModel_.getCopulaCollection());
   Collection<Copula>::iterator iter = coll.begin();
   while (iter != coll.end())
   {

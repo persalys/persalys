@@ -274,7 +274,7 @@ Sample MetaModelAnalysis::getEffectiveOutputSample() const
 }
 
 
-ComposedDistribution MetaModelAnalysis::getDistribution()
+Distribution MetaModelAnalysis::getDistribution()
 {
   if (!isDistributionComputed_)
   {
@@ -282,7 +282,7 @@ ComposedDistribution MetaModelAnalysis::getDistribution()
     // if the physical model has stochastic variables
     if (designOfExperiment_.hasPhysicalModel() && designOfExperiment_.getPhysicalModel().hasStochasticInputs())
     {
-      distribution_ = designOfExperiment_.getPhysicalModel().getComposedDistribution();
+      distribution_ = designOfExperiment_.getPhysicalModel().getDistribution();
     }
     // use Uniform distributions:
     // if the physical model has only deterministic variables
@@ -345,7 +345,7 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Fu
   // copula
   if (designOfExperiment_.getPhysicalModel().hasStochasticInputs())
   {
-    Collection<Copula> coll(designOfExperiment_.getPhysicalModel().getComposedCopula().getCopulaCollection());
+    Collection<Copula> coll(designOfExperiment_.getPhysicalModel().getCopulaCollection());
     for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
     {
       metaModel.setCopula(coll[i].getDescription(), coll[i]);
