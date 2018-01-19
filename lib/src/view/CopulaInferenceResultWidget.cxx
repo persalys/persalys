@@ -74,18 +74,53 @@ void CopulaInferenceResultWidget::buildInterface()
   distTableView_->horizontalHeader()->hide();
 
   // --- table model
-  distTableModel_ = new CustomStandardItemModel(currentSetResult_.getTestedDistributions().getSize() + 1, 1, distTableView_);
+  distTableModel_ = new CustomStandardItemModel(currentSetResult_.getTestedDistributions().getSize() + 1, 2, distTableView_);
   // --- fill table
+  // BIC values
+  Point bicValues(currentSetResult_.getBICResults());
+  // number of tests
+  const UnsignedInteger nbTests = bicValues.getSize();
+
+  // -- sort indices list
+  Indices indices(nbTests);
+  if (nbTests > 1)
+  {
+    indices.fill();
+    for (int i = (nbTests - 1); i >= 0; --i)
+    {
+      for (int l = 1; l <= i; ++l)
+      {
+        if (bicValues[l - 1] > bicValues[l])
+        {
+          Scalar temp = bicValues[l - 1];
+          bicValues[l - 1] = bicValues[l];
+          bicValues[l] = temp;
+          const UnsignedInteger ind_temp = indices[l - 1];
+          indices[l - 1] = indices[l];
+          indices[l] = ind_temp;
+        }
+      }
+    }
+  }
   // horizontal header
   distTableModel_->setNotEditableHeaderItem(0, 0, tr("Copulas"));
+  distTableModel_->setNotEditableHeaderItem(0, 1, tr("Bayesian\nInformation\nCriterion"));
   // distributions list
-  for (UnsignedInteger i = 0; i < currentSetResult_.getTestedDistributions().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < nbTests; ++i)
   {
-    String distributionName = currentSetResult_.getTestedDistributions()[i].getImplementation()->getClassName();
+    String distributionName = currentSetResult_.getTestedDistributions()[indices[i]].getImplementation()->getClassName();
     distributionName = distributionName.substr(0, distributionName.find("Copula"));
-    distTableModel_->setNotEditableItem(i + 1, 0, TranslationManager::GetTranslatedDistributionName(distributionName));
-    const QVariant aVariant = QVariant::fromValue(currentSetResult_.getTestedDistributions()[i]);
+    distTableModel_->setNotEditableItem(i + 1, 0, TranslationManager::GetTranslatedCopulaName(distributionName));
+    const QVariant aVariant = QVariant::fromValue(currentSetResult_.getTestedDistributions()[indices[i]]);
     distTableModel_->setData(distTableModel_->index(i + 1, 0), aVariant, Qt::UserRole);
+    if (currentSetResult_.getErrorMessages()[indices[i]].empty())
+    {
+      distTableModel_->setNotEditableItem(i + 1, 1, bicValues[i], 6);
+    }
+    else
+    {
+      distTableModel_->setNotEditableItem(i + 1, 1, "-");
+    }
   }
   distTableView_->setModel(distTableModel_);
   distTableModel_->setData(distTableModel_->index(0 + 1, 0), true, Qt::CheckStateRole);
@@ -102,14 +137,14 @@ void CopulaInferenceResultWidget::buildInterface()
 
   // -- for each copula, display PDF-CDF/parameters
   ResizableStackedWidget * paramStackWidget = new ResizableStackedWidget;
-  for (UnsignedInteger i = 0; i < currentSetResult_.getTestedDistributions().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < nbTests; ++i)
   {
     // if valid copula
-    if (currentSetResult_.getErrorMessages()[i].empty())
+    if (currentSetResult_.getErrorMessages()[indices[i]].empty())
     {
-      CopulaParametersTabWidget * paramWidget = new CopulaParametersTabWidget(currentSetResult_.getTestedDistributions()[i],
+      CopulaParametersTabWidget * paramWidget = new CopulaParametersTabWidget(currentSetResult_.getTestedDistributions()[indices[i]],
           sample_,
-          currentSetResult_.getKendallPlotData()[i],
+          currentSetResult_.getKendallPlotData()[indices[i]],
           this);
       paramStackWidget->addWidget(paramWidget);
     }
@@ -127,7 +162,7 @@ void CopulaInferenceResultWidget::buildInterface()
       paramWidget->addTab(aWidget, tr("Kendall plot"));
       paramWidget->setTabEnabled(1, false);
       // Parameters tab
-      const QString message = QString("<font color=red>%1</font>").arg(QString::fromUtf8(currentSetResult_.getErrorMessages()[i].c_str()));
+      const QString message = QString("<font color=red>%1</font>").arg(QString::fromUtf8(currentSetResult_.getErrorMessages()[indices[i]].c_str()));
       aWidget = new QWidget;
       QVBoxLayout * aWidgetLayout = new QVBoxLayout(aWidget);
       QLabel * errorMessageLabel = new QLabel(message);
@@ -135,6 +170,7 @@ void CopulaInferenceResultWidget::buildInterface()
       aWidgetLayout->addWidget(errorMessageLabel);
       aWidgetLayout->addStretch();
       paramWidget->addTab(aWidget, tr("Parameters"));
+      paramWidget->setCurrentIndex(2);
 
       paramStackWidget->addWidget(paramWidget);
     }
