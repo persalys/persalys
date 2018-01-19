@@ -140,7 +140,8 @@ void DataModelDefinitionItem::createCopulaInferenceAnalysis()
 
   // new analysis
   CopulaInferenceAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("DependenciesInference_"), designOfExperiment_);
-  getParentOTStudyItem()->getOTStudy().add(analysis);
+  // emit signal to StudyTreeView to open a wizard
+  emit analysisRequested(this, analysis);
 }
 
 
