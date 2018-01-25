@@ -116,9 +116,10 @@ void CheckableHeaderView::mousePressEvent(QMouseEvent* event)
       modelSignalBlocked_ = true;
       for (int i = 0; i < model()->rowCount(); ++i)
       {
-        if (model()->data(model()->index(i, 0), Qt::CheckStateRole).toInt() != (isChecked_ ? Qt::Checked : Qt::Unchecked))
+        if ((model()->data(model()->index(i, 0), Qt::CheckStateRole).toInt() != (isChecked_ ? Qt::Checked : Qt::Unchecked)) &&
+             model()->flags(model()->index(i, 0)) & Qt::ItemIsEnabled)
         {
-          model()->setData(model()->index(i, 0), isChecked_ ? Qt::Checked : Qt::Unchecked, Qt::CheckStateRole);
+            model()->setData(model()->index(i, 0), isChecked_ ? Qt::Checked : Qt::Unchecked, Qt::CheckStateRole);
         }
       }
       modelSignalBlocked_ = false;
@@ -138,7 +139,8 @@ void CheckableHeaderView::updateCheckState(const Qt::Orientation orientation)
   bool checkState = true;
   for (int i = 0; i < model()->rowCount(); ++i)
   {
-    checkState = checkState && (model()->data(model()->index(i, 0), Qt::CheckStateRole).toInt() == Qt::Checked);
+    if (model()->flags(model()->index(i, 0)) & Qt::ItemIsEnabled)
+      checkState = checkState && (model()->data(model()->index(i, 0), Qt::CheckStateRole).toInt() == Qt::Checked);
   }
   if (isEnabled() && isChecked_ != checkState)
   {
