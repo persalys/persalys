@@ -50,7 +50,7 @@ void ProbabilisticModelWindow::buildInterface()
 
   // Second Tab: dependencies
   rootTab->addTab(dependenciesWidget_, tr("Dependencies"));
-  connect(marginalsWidget_, SIGNAL(updateDependenciesRequested()), dependenciesWidget_, SIGNAL(updateTable()));
+  connect(marginalsWidget_, SIGNAL(updateDependenciesRequested()), dependenciesWidget_, SLOT(updateWidgets()));
 
   mainWidgetLayout->addWidget(rootTab);
 

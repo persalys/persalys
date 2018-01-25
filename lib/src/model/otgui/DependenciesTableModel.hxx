@@ -26,11 +26,11 @@
 #include <QAbstractTableModel>
 #include <QMetaType> // mandatory to specify it to avoid windows compilation problem
 
-Q_DECLARE_METATYPE(OT::ComposedCopula)
+Q_DECLARE_METATYPE(OT::Copula)
 
 namespace OTGUI
 {
-class DependenciesTableModel : public QAbstractTableModel
+class OTGUI_API DependenciesTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 
@@ -39,17 +39,18 @@ public:
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
+  Qt::ItemFlags flags(const QModelIndex & index) const;
   QVariant headerData(int section,
                       Qt::Orientation orientation,
                       int role = Qt::DisplayRole) const;
   QVariant data(const QModelIndex &index, int role) const;
+  bool setData(const QModelIndex & index, const QVariant & value, int role);
 
 public slots:
   void updateData();
   void removeLine(const QModelIndex &index);
-  void addLine(const OT::Copula& copula);
 signals:
-  void dataUpdated(const OT::ComposedCopula &copula);
+  void dataUpdated(const int index, const OT::Copula &copula);
 
 protected:
   void updateCopula();

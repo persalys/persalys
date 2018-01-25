@@ -23,11 +23,11 @@
 
 #include "otgui/ProbabilisticModelItem.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
+#include "otgui/VariablesSelectionTableModel.hxx"
+#include "otgui/DependenciesTableModel.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QTableView>
-#include <QMetaType> // mandatory to specify it to avoid windows compilation problem
-
-Q_DECLARE_METATYPE(OT::Copula)
 
 namespace OTGUI
 {
@@ -39,24 +39,26 @@ public:
   DependenciesWidget(ProbabilisticModelItem *item, QWidget *parent = 0);
 
 public slots:
-  void removeCopula();
-  void updateCopulaWidgets(const OT::ComposedCopula &copula);
+  void updateWidgets();
+  void updateCopulaWidget(const int index, const OT::Copula &copula);
   void selectedItemChanged(const QModelIndex &current, const QModelIndex &previous);
-  void openCopulaDefinitionWizard();
+  void removeCopula();
+  void addCopula();
 signals:
-  void addTableLine(const OT::Copula &copula);
-  void updateTable();
   void removeTableLine(const QModelIndex &index);
 
 protected:
   void buildInterface();
-  void updatePlots();
+  void updateVariablesList();
 
 private:
   PhysicalModel physicalModel_;
+  VariablesSelectionTableModel * varTableModel_;
   ResizableStackedWidget * rightSideOfSplitterStackedWidget_;
   ResizableStackedWidget * copulaStackedWidget_;
   QTableView * tableView_;
+  DependenciesTableModel * tableModel_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif
