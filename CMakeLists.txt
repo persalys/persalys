@@ -60,8 +60,10 @@ macro (otgui_add_library name)
 endmacro ()
 
 find_package (OpenTURNS 1.10 NO_MODULE REQUIRED)
+message (STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (${OPENTURNS_VERSION_STRING})")
 include ( ${OPENTURNS_USE_FILE} )
 set ( OTGUI_DEFINITIONS ${OPENTURNS_DEFINITIONS} )
+
 if (NOT BUILD_SHARED_LIBS)
   list ( APPEND OTGUI_DEFINITIONS "-DOTGUI_STATIC" )
 endif ()
@@ -182,8 +184,8 @@ if (BUILD_PYTHON)
   endif ()
 
   if (PYTHONINTERP_FOUND)
-    if (DEFINED SITE_PACKAGE)
-      set (OTGUI_PYTHON_MODULE_PATH ${SITE_PACKAGE})
+    if (DEFINED PYTHON_SITE_PACKAGES)
+      set (OTGUI_PYTHON_MODULE_PATH ${PYTHON_SITE_PACKAGES})
 
     else ()
       execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print(sysconfig.get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}'))"
