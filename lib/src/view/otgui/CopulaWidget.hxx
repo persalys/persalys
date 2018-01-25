@@ -24,7 +24,9 @@
 #include "otgui/PhysicalModel.hxx"
 #include "otgui/PlotWidget.hxx"
 #include "otgui/ValueLineEdit.hxx"
-#include "otgui/TemporaryLabel.hxx"
+
+#include <QGroupBox>
+#include <QVBoxLayout>
 
 namespace OTGUI
 {
@@ -34,19 +36,26 @@ class OTGUI_API CopulaWidget : public QWidget
 
 public:
   CopulaWidget(const PhysicalModel &model, const OT::Copula &copula, QWidget *parent = 0);
+  void setCopula(const OT::Copula &copula);
 
 public slots:
-  void updatePlots();
   void updateCopulaFromLineEdit();
   void updateCopulaFromCorrTable(const OT::Copula &copula);
   void openDocUrl();
+signals:
+  void emitErrorMessage(const QString &message);
+
+protected:
+  void updatePlots();
+  void updateParameters();
 
 private:
   PhysicalModel physicalModel_;
   OT::Copula copula_;
-  QVector<PlotWidget*> listPlot_;
+  QVBoxLayout * parameterLayout_;
+  QGroupBox * paramEditor_;
   ValueLineEdit * paramValueEdit_;
-  TemporaryLabel * errorMessage_;
+  QVector<PlotWidget*> listPlot_;
 };
 }
 #endif

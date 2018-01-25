@@ -29,10 +29,8 @@
 #include "otgui/CorrelationTableModel.hxx"
 #include "otgui/SpinBoxDelegate.hxx"
 
-#include <QVBoxLayout>
 #include <QSplitter>
 #include <QToolButton>
-#include <QGroupBox>
 #include <QScrollArea>
 #include <QDesktopServices>
 #include <QUrl> // for qt4
@@ -46,9 +44,10 @@ CopulaWidget::CopulaWidget(const PhysicalModel &model, const Copula &copula, QWi
   : QWidget(parent)
   , physicalModel_(model)
   , copula_(copula)
-  , listPlot_()
+  , parameterLayout_(0)
+  , paramEditor_(0)
   , paramValueEdit_(0)
-  , errorMessage_(0)
+  , listPlot_()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
@@ -111,58 +110,16 @@ CopulaWidget::CopulaWidget(const PhysicalModel &model, const Copula &copula, QWi
 
   vSplitter->addWidget(plotWidget);
 
+  //  parameters
   QWidget * subWidget = new QWidget;
-  QVBoxLayout * subWidgetLayout = new QVBoxLayout(subWidget);
+  parameterLayout_ = new QVBoxLayout(subWidget);
 
   // button to open the OT documentation
   QToolButton * infoButton = new QToolButton;
   infoButton->setIcon(QIcon(":/images/documentinfo.png"));
   infoButton->setToolTip(tr("Open the OpenTURNS documentation"));
   connect(infoButton, SIGNAL(clicked()), this, SLOT(openDocUrl()));
-  subWidgetLayout->addWidget(infoButton);
-
-  //  parameters
-  QGroupBox * groupBox = new QGroupBox;
-  QGridLayout * groupBoxLayout = new QGridLayout(groupBox);
-
-  errorMessage_ = new TemporaryLabel;
-
-  // ---- if Normal copula : show spearman correlation table
-  if (copula_.getImplementation()->getClassName() == "NormalCopula")
-  {
-    groupBox->setTitle(tr("Spearman's rank"));
-
-    // correlation table view
-    CopyableTableView * corrTableView = new CopyableTableView;
-    corrTableView->setEditTriggers(QAbstractItemView::AllEditTriggers);
-
-    SpinBoxDelegate * corrDelegate = new SpinBoxDelegate(corrTableView);
-    corrDelegate->setSpinBoxType(SpinBoxDelegate::correlation);
-    corrTableView->setItemDelegate(corrDelegate);
-
-    CorrelationTableModel * corrTableModel = new CorrelationTableModel(physicalModel_, copula_, corrTableView);
-    corrTableView->setModel(corrTableModel);
-    groupBoxLayout->addWidget(corrTableView, 0, 0);
-    connect(corrTableModel, SIGNAL(dataUpdated(OT::Copula)), this, SLOT(updateCopulaFromCorrTable(OT::Copula)));
-    connect(corrTableModel, SIGNAL(errorMessageChanged(QString)), errorMessage_, SLOT(setTemporaryErrorMessage(QString)));
-
-    corrTableView->resizeColumnsToContents();
-  }
-  // ---- if NOT Normal copula : show the copula parameter value
-  else
-  {
-    groupBox->setTitle(tr("Parameter"));
-    String parameterName(copula_.getParameterDescription()[0]);
-    QLabel * paramValueLabel_ = new QLabel(TranslationManager::GetTranslatedDistributionParameterName(parameterName));
-    groupBoxLayout->addWidget(paramValueLabel_, 0, 0);
-
-    paramValueEdit_ = new ValueLineEdit(copula_.getParameter()[0]);
-    connect(paramValueEdit_, SIGNAL(editingFinished()), this, SLOT(updateCopulaFromLineEdit()));
-    groupBoxLayout->addWidget(paramValueEdit_, 0, 1);
-  }
-
-  subWidgetLayout->addWidget(groupBox);
-  subWidgetLayout->addWidget(errorMessage_);
+  parameterLayout_->addWidget(infoButton);
 
   vSplitter->addWidget(subWidget);
   vSplitter->setStretchFactor(0, 5);
@@ -172,6 +129,59 @@ CopulaWidget::CopulaWidget(const PhysicalModel &model, const Copula &copula, QWi
   rightScrollArea->setWidget(rightFrame);
 
   mainLayout->addWidget(rightScrollArea);
+  updateParameters();
+}
+
+
+void CopulaWidget::updateParameters()
+{
+  // update parameters widgets
+  if (paramEditor_)
+  {
+    parameterLayout_->removeWidget(paramEditor_);
+    paramEditor_->disconnect();
+    paramEditor_->deleteLater();
+    paramEditor_ = 0;
+  }
+
+  //  parameters
+  paramEditor_ = new QGroupBox;
+  QGridLayout * groupBoxLayout = new QGridLayout(paramEditor_);
+
+  // ---- if Normal copula : show spearman correlation table
+  if (copula_.getImplementation()->getClassName() == "NormalCopula")
+  {
+    paramEditor_->setTitle(tr("Spearman's rank"));
+
+    // correlation table view
+    CopyableTableView * corrTableView = new CopyableTableView(paramEditor_);
+    corrTableView->setEditTriggers(QAbstractItemView::AllEditTriggers);
+
+    SpinBoxDelegate * corrDelegate = new SpinBoxDelegate(paramEditor_);
+    corrDelegate->setSpinBoxType(SpinBoxDelegate::correlation);
+    corrTableView->setItemDelegate(corrDelegate);
+
+    CorrelationTableModel * corrTableModel = new CorrelationTableModel(physicalModel_, copula_, paramEditor_);
+    corrTableView->setModel(corrTableModel);
+    groupBoxLayout->addWidget(corrTableView, 0, 0);
+    connect(corrTableModel, SIGNAL(dataUpdated(OT::Copula)), this, SLOT(updateCopulaFromCorrTable(OT::Copula)));
+    connect(corrTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(emitErrorMessage(QString)));
+
+    corrTableView->resizeColumnsToContents();
+  }
+  // ---- if NOT Normal copula : show the copula parameter value
+  else
+  {
+    paramEditor_->setTitle(tr("Parameter"));
+    String parameterName(copula_.getParameterDescription()[0]);
+    QLabel * paramValueLabel_ = new QLabel(TranslationManager::GetTranslatedDistributionParameterName(parameterName));
+    groupBoxLayout->addWidget(paramValueLabel_, 0, 0);
+
+    paramValueEdit_ = new ValueLineEdit(copula_.getParameter()[0], paramEditor_);
+    connect(paramValueEdit_, SIGNAL(editingFinished()), this, SLOT(updateCopulaFromLineEdit()));
+    groupBoxLayout->addWidget(paramValueEdit_, 0, 1);
+  }
+  parameterLayout_->insertWidget(1, paramEditor_);
 }
 
 
@@ -204,13 +214,21 @@ void CopulaWidget::updatePlots()
 }
 
 
+void CopulaWidget::setCopula(const Copula &copula)
+{
+  Q_ASSERT(copula.getDimension() == copula.getDimension());
+  copula_ = copula;
+  updateParameters();
+  updatePlots();
+}
+
+
 void CopulaWidget::updateCopulaFromLineEdit()
 {
   // store the description because the method setParameter overwrite the description
   const Description copulaDescription(copula_.getDescription());
 
   const double oldValue = copula_.getParameter()[0];
-  errorMessage_->setText("");
   try
   {
     double value = paramValueEdit_->value();
@@ -224,7 +242,7 @@ void CopulaWidget::updateCopulaFromLineEdit()
   }
   catch (std::exception &ex)
   {
-    errorMessage_->setTemporaryErrorMessage(ex.what());
+    emit emitErrorMessage(ex.what());
     paramValueEdit_->setValue(oldValue);
   }
   copula_.setDescription(copulaDescription);
