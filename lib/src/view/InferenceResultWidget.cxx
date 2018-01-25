@@ -102,6 +102,8 @@ void InferenceResultWidget::buildInterface()
   distParamTableModel_ = new CustomStandardItemModel(4, 2, distParamTableView_);
   distParamTableView_->setModel(distParamTableModel_);
 
+  pdfPlot_ = new PlotWidget(tr("distributionPDF"));
+
   // -- pdf/cdf qqPlot
   if (displayPDF_QQPlot_)
   {
@@ -113,7 +115,6 @@ void InferenceResultWidget::buildInterface()
     ResizableStackedWidget * pdf_cdfStackedWidget = new ResizableStackedWidget;
 
     // --- pdf
-    pdfPlot_ = new PlotWidget(tr("distributionPDF"));
     pdf_cdfStackedWidget->addWidget(pdfPlot_);
     // --- cdf
     cdfPlot_ = new PlotWidget(tr("distributionCDF"));
@@ -173,6 +174,7 @@ void InferenceResultWidget::buildInterface()
     analysisErrorMessageLabel_ = new QLabel;
     analysisErrorMessageLabel_->setWordWrap(true);
     paramGroupBoxLayout->addWidget(analysisErrorMessageLabel_);
+    paramGroupBoxLayout->addWidget(pdfPlot_);
     paramGroupBoxLayout->addStretch();
     distTabListWidgetLayout->setSizeConstraint(QLayout::SetFixedSize);
     distTabListWidgetLayout->addWidget(paramGroupBox, 1);
@@ -310,7 +312,7 @@ void InferenceResultWidget::updateRadioButtonsDistributionTable(QModelIndex curr
 void InferenceResultWidget::updateParametersTable(QModelIndex current)
 {
   // check
-  if (!(distTableModel_ && distParamTableModel_ && distParamTableView_ && analysisErrorMessageLabel_))
+  if (!(distTableModel_ && distParamTableModel_ && distParamTableView_ && analysisErrorMessageLabel_ && pdfPlot_))
     return;
   if (current.row() < 2)
     return;
@@ -421,17 +423,18 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
 void InferenceResultWidget::updateGraphs(QModelIndex current)
 {
   // check
-  if (!(current.isValid() && distTableModel_ && currentFittingTestResult_.getValues().getSize()))
-    return;
-  if (!(pdfPlot_ && cdfPlot_ && qqPlot_))
+  if (!(current.isValid() && distTableModel_ && currentFittingTestResult_.getValues().getSize() && pdfPlot_))
     return;
   if (current.row() < 2)
     return;
 
   // reset
   pdfPlot_->clear();
-  cdfPlot_->clear();
-  qqPlot_->clear();
+  if (cdfPlot_ && qqPlot_)
+  {
+    cdfPlot_->clear();
+    qqPlot_->clear();
+  }
 
   // update
   const QVariant variant = distTableModel_->data(distTableModel_->index(current.row(), 0), Qt::UserRole);
@@ -439,8 +442,11 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
 
   const bool isInferredDistribution = currentFittingTestResult_.getErrorMessages()[resultIndex].empty();
 
-  tabWidget_->setTabEnabled(0, isInferredDistribution);
-  tabWidget_->setTabEnabled(1, isInferredDistribution);
+  if (tabWidget_)
+  {
+    tabWidget_->setTabEnabled(0, isInferredDistribution);
+    tabWidget_->setTabEnabled(1, isInferredDistribution);
+  }
 
   if (!isInferredDistribution)
     return;
@@ -449,10 +455,14 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
   const Distribution distribution = currentFittingTestResult_.getTestedDistributions()[resultIndex];
   const QString distName = TranslationManager::GetTranslatedDistributionName(distribution.getImplementation()->getName());
 
-  // -- pdf
+  // update pdf
   pdfPlot_->plotHistogram(currentFittingTestResult_.getValues());
   pdfPlot_->plotPDFCurve(distribution);
   pdfPlot_->setTitle(tr("PDF") + " " + distName);
+
+  // update cdf / qqplot
+  if (!(cdfPlot_ && qqPlot_))
+    return;
 
   // -- cdf
   cdfPlot_->plotHistogram(currentFittingTestResult_.getValues(), 1);
@@ -503,19 +513,11 @@ bool InferenceResultWidget::isSelectedDistributionValid() const
   // loop begins at 2 because the two first rows are the table titles
   QModelIndex selectedDistributionIndex;
   for (int i = 2; i < distTableModel_->rowCount(); ++i)
-  {
     if (distTableModel_->data(distTableModel_->index(i, 0), Qt::CheckStateRole).toBool())
-    {
-      const QVariant variant = distTableModel_->data(distTableModel_->index(i, 0), Qt::UserRole);
-      const int resultIndex = variant.value<int>();
-      Description testResultDescription = currentFittingTestResult_.getKolmogorovTestResults()[resultIndex].getDescription();
+      selectedDistributionIndex = distTableModel_->index(i, 1);
 
-      if (!testResultDescription.getSize())
-        return false;
+  Q_ASSERT(selectedDistributionIndex.isValid());
 
-      return testResultDescription[0].find("Error") == std::string::npos;
-    }
-  }
-  return false;
+  return distTableModel_->data(selectedDistributionIndex) != "-";
 }
 }
