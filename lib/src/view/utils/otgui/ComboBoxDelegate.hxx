@@ -21,8 +21,9 @@
 #ifndef OTGUI_COMBOBOXDELEGATE_HXX
 #define OTGUI_COMBOBOXDELEGATE_HXX
 
-#include <QItemDelegate>
 #include "otgui/OTGuiprivate.hxx"
+
+#include <QItemDelegate>
 
 namespace OTGUI
 {
@@ -31,7 +32,8 @@ class OTGUI_API ComboBoxDelegate : public QItemDelegate
   Q_OBJECT
 
 public:
-  ComboBoxDelegate(QStringList items, QPair<int, int> cell = QPair<int, int>(), QObject * parent = 0);
+  ComboBoxDelegate(QObject * parent = 0);
+  ComboBoxDelegate(QPair<int, int> cell, QObject * parent = 0);
 
   QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
   void setEditorData(QWidget * editor, const QModelIndex & index) const;
@@ -42,7 +44,6 @@ public slots:
   void emitCommitData();
 
 private:
-  QStringList items_;
   QPair<int, int> cell_;
 };
 }

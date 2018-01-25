@@ -104,9 +104,10 @@ void DeterministicDesignPage::initialize(const Analysis& analysis)
   connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
   tableView_->setModel(tableModel_);
 
-  const QStringList items = QStringList() << tr("Levels") << tr("Delta");
   const QPair<int, int> cellWithComboBox(0, 5);
-  tableView_->setItemDelegateForColumn(5, new ComboBoxDelegate(items, cellWithComboBox, tableView_));
+  ComboBoxDelegate * delegate = new ComboBoxDelegate(cellWithComboBox, tableView_);
+  tableView_->setItemDelegateForColumn(5, delegate);
+  tableView_->setItemDelegateForRow(0, delegate);
   tableView_->openPersistentEditor(tableModel_->index(0, 5));
 
   SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate(tableView_);

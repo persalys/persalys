@@ -44,9 +44,15 @@ public:
 };
 
 
-ComboBoxDelegate::ComboBoxDelegate(QStringList items, QPair<int, int> cell, QObject * parent)
+ComboBoxDelegate::ComboBoxDelegate(QObject * parent)
   : QItemDelegate(parent)
-  , items_(items)
+  , cell_()
+{
+}
+
+
+ComboBoxDelegate::ComboBoxDelegate(QPair<int, int> cell, QObject * parent)
+  : QItemDelegate(parent)
   , cell_(cell)
 {
 }
@@ -59,16 +65,10 @@ QWidget *ComboBoxDelegate::createEditor(QWidget * parent, const QStyleOptionView
       return QItemDelegate::createEditor(parent, option, index);
 
   CustomComboBox * editor = new CustomComboBox(parent);
-  // for probabilisticModelWindow:
-  if (cell_ == QPair<int, int>())
-  {
-    QStandardItemModel * model = new QStandardItemModel(1, 1, editor);
-    QStandardItem * firstItem = new QStandardItem;
-    firstItem->setEnabled(false);
-    model->setItem(0, 0, firstItem);
-    editor->setModel(model);
-  }
-  editor->addItems(items_);
+  const QStringList items(index.model()->data(index, Qt::UserRole + 1).toStringList());
+  editor->addItems(items);
+  editor->setEnabled(items.size() > 0);
+
   connect(editor, SIGNAL(activated(QString)), this, SLOT(emitCommitData()));
   return editor;
 }
@@ -81,6 +81,10 @@ void ComboBoxDelegate::setEditorData(QWidget * editor, const QModelIndex & index
       return QItemDelegate::setEditorData(editor, index);
 
   QComboBox * comboBox = static_cast<QComboBox*>(editor);
+  const QStringList items(index.model()->data(index, Qt::UserRole + 1).toStringList());
+  comboBox->clear();
+  comboBox->addItems(items);
+  comboBox->setEnabled(items.size() > 0);
   comboBox->setCurrentIndex(comboBox->findText(index.model()->data(index, Qt::DisplayRole).toString()));
   comboBox->setEnabled(comboBox->currentIndex() != -1);
 }

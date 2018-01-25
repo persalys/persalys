@@ -128,6 +128,12 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
         return QVariant();
     }
   }
+  else if (role == Qt::UserRole + 1)
+  {
+    const Input input(physicalModel_.getInputs()[index.row()]);
+    const String distributionName = input.getDistribution().getImplementation()->getClassName();
+    return distributionName == "Dirac" ? QStringList() : TranslationManager::GetAvailableDistributions() << tr("Inference result");
+  }
   return QVariant();
 }
 

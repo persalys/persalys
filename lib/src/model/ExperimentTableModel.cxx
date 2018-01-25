@@ -130,6 +130,11 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
           return QVariant();
       }
     }
+    // combobox content
+    else if (role == Qt::UserRole + 1)
+    {
+      return QStringList() << tr("Levels") << tr("Delta");
+    }
     else if (role == Qt::CheckStateRole && index.column() == 0)
     {
       return firstColumnChecked_ ? Qt::Checked : Qt::Unchecked;

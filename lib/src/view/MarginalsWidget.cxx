@@ -90,8 +90,7 @@ void MarginalsWidget::buildInterface()
   inputTableView_->setHorizontalHeader(inputTableHeaderView);
 
   // - delegate for distributions list
-  const QStringList items = TranslationManager::GetAvailableDistributions() << tr("Inference result");
-  ComboBoxDelegate * delegate = new ComboBoxDelegate(items, QPair<int, int>(), inputTableView_);
+  ComboBoxDelegate * delegate = new ComboBoxDelegate(inputTableView_);
   inputTableView_->setItemDelegateForColumn(1, delegate);
 
   // - connections
@@ -197,10 +196,6 @@ void MarginalsWidget::buildInterface()
   connect(upperBoundLineEdit_, SIGNAL(editingFinished()), this, SLOT(truncationParametersChanged()));
 
   rightFrameLayout->addWidget(truncationParamGroupBox_);
-
-  // QLabel for temporary error message
-  errorMessageLabel_ = new TemporaryLabel;
-  rightFrameLayout->addWidget(errorMessageLabel_);
   rightFrameLayout->addStretch();
 
   rightScrollArea->setWidget(rightFrame);
@@ -210,7 +205,11 @@ void MarginalsWidget::buildInterface()
   hSplitter->addWidget(rightSideOfSplitterStackedWidget_);
   hSplitter->setStretchFactor(1, 3);
 
-  mainLayout->addWidget(hSplitter);
+  mainLayout->addWidget(hSplitter, 1);
+
+  // QLabel for temporary error message
+  errorMessageLabel_ = new TemporaryLabel;
+  mainLayout->addWidget(errorMessageLabel_, 0);
 
   updateProbabilisticModel();
 }
