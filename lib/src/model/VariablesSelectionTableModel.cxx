@@ -28,9 +28,10 @@ namespace OTGUI
 VariablesSelectionTableModel::VariablesSelectionTableModel(const Description& variablesNames, const Interval::BoolCollection& isVariablesChecked, QObject* parent)
   : QAbstractTableModel(parent)
   , variablesNames_(variablesNames)
-  , isVariablesChecked_(isVariablesChecked)
+  , isVariableChecked_(isVariablesChecked)
+  , isVariableEnabled_(variablesNames.getSize(), true)
 {
-  if (variablesNames_.getSize() != isVariablesChecked_.getSize())
+  if (variablesNames_.getSize() != isVariableChecked_.getSize())
     throw InvalidArgumentException(HERE) << "VariablesSelectionTableModel: The 2 arguments must have the same dimension";
 }
 
@@ -49,18 +50,31 @@ int VariablesSelectionTableModel::rowCount(const QModelIndex& parent) const
 
 Qt::ItemFlags VariablesSelectionTableModel::flags(const QModelIndex& index) const
 {
+  Qt::ItemFlags result = QAbstractTableModel::flags(index);
   if (index.column() == 0)
-    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
-  return QAbstractTableModel::flags(index);
+    result |= Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
+  if (!isVariableEnabled_[index.row()])
+    result &= ~Qt::ItemIsEnabled;
+  return result;
 }
 
 
 QVariant VariablesSelectionTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (role == Qt::DisplayRole && orientation == Qt::Horizontal && section == 0)
+  {
     return tr("Variables");
+  }
   else if (role == Qt::ToolTipRole && section == 0 && rowCount())
-    return isVariablesChecked_.contains(false) ? tr("Select all") : tr("Unselect all");
+  {
+    bool allChecked = true;
+    for (UnsignedInteger i = 0; i < isVariableChecked_.getSize(); ++i)
+    {
+      if (isVariableEnabled_[i])
+        allChecked = allChecked && isVariableChecked_[i];
+    }
+    return allChecked ? tr("Unselect all") : tr("Select all");
+  }
 
   return QAbstractTableModel::headerData(section, orientation, role);
 }
@@ -73,7 +87,7 @@ QVariant VariablesSelectionTableModel::data(const QModelIndex& index, int role) 
 
   if (role == Qt::CheckStateRole && index.column() == 0)
   {
-    return (isVariablesChecked_[index.row()] ? Qt::Checked : Qt::Unchecked);
+    return (isVariableChecked_[index.row()] ? Qt::Checked : Qt::Unchecked);
   }
   else if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
@@ -90,10 +104,10 @@ bool VariablesSelectionTableModel::setData(const QModelIndex& index, const QVari
 
   if (role == Qt::CheckStateRole && index.column() == 0)
   {
-    isVariablesChecked_[index.row()] = ((value.toInt() == Qt::Checked) ? true : false);
+    isVariableChecked_[index.row()] = ((value.toInt() == Qt::Checked) ? true : false);
     Description checkedVariables;
-    for (UnsignedInteger i = 0; i < isVariablesChecked_.getSize(); ++i)
-      if (isVariablesChecked_[i])
+    for (UnsignedInteger i = 0; i < isVariableChecked_.getSize(); ++i)
+      if (isVariableChecked_[i])
         checkedVariables.add(variablesNames_[i]);
     emit dataChanged(index, this->index(index.row(), 1));
     emit headerDataChanged(Qt::Horizontal, 0, 0);
@@ -101,5 +115,27 @@ bool VariablesSelectionTableModel::setData(const QModelIndex& index, const QVari
     return true;
   }
   return false;
+}
+
+
+Description VariablesSelectionTableModel::getSelectedVariables() const
+{
+  Description selectedVariables;
+  for (UnsignedInteger i = 0; i < isVariableChecked_.getSize(); ++i)
+    if (isVariableChecked_[i])
+      selectedVariables.add(variablesNames_[i]);
+  return selectedVariables;
+}
+
+
+void VariablesSelectionTableModel::updateData(const Description &variablesNames, const OT::Interval::BoolCollection &isVariablesEnabled)
+{
+  Q_ASSERT(isVariablesEnabled.getSize() == variablesNames_.getSize());
+  beginResetModel();
+  variablesNames_ = variablesNames;
+  isVariableChecked_ = Interval::BoolCollection(variablesNames_.getSize(), false);
+  isVariableEnabled_ = isVariablesEnabled;
+  endResetModel();
+  emit headerDataChanged(Qt::Horizontal, 0, 0);
 }
 }

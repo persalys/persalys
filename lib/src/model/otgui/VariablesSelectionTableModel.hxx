@@ -42,6 +42,8 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
   QVariant data(const QModelIndex& index, int role) const;
   bool setData(const QModelIndex& index, const QVariant & value, int role);
+  OT::Description getSelectedVariables() const;
+  void updateData(const OT::Description& variablesNames, const OT::Interval::BoolCollection &isVariablesEnabled);
 
 public slots:
 signals:
@@ -49,7 +51,8 @@ signals:
 
 private:
   OT::Description variablesNames_;
-  OT::Interval::BoolCollection isVariablesChecked_;
+  OT::Interval::BoolCollection isVariableChecked_;
+  OT::Interval::BoolCollection isVariableEnabled_;
 };
 }
 #endif
