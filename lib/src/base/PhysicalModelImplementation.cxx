@@ -308,10 +308,12 @@ void PhysicalModelImplementation::updateCopula()
     }
   }
 
-  // remove copulas
-  for (std::set<UnsignedInteger>::iterator it = indicesToRemove.begin(); it != indicesToRemove.end(); ++it)
+  // new collection of copulas
+  Collection<Copula> newColl;
+  for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
   {
-    coll.erase(std::remove(coll.begin(), coll.end(), composedCopula_.getCopulaCollection()[*it]), coll.end());
+    if (indicesToRemove.find(i) == indicesToRemove.end())
+      newColl.add(coll[i]);
   }
 
   // get independent inputs
@@ -329,13 +331,13 @@ void PhysicalModelImplementation::updateCopula()
   {
     IndependentCopula indpCop(independentVar.getSize());
     indpCop.setDescription(independentVar);
-    coll.add(indpCop);
+    newColl.add(indpCop);
   }
 
   // update composedCopula_
-  if (coll.getSize())
+  if (newColl.getSize())
   {
-    composedCopula_.setCopulaCollection(coll);
+    composedCopula_.setCopulaCollection(newColl);
   }
   else
   {
@@ -685,7 +687,7 @@ Copula PhysicalModelImplementation::getCopula() const
       copulaMarginals.add(it - copulaDescription.begin());
     }
   }
-  return composedCopula_.getMarginal(copulaMarginals);
+  return copulaMarginals.getSize() > 0 ? composedCopula_.getMarginal(copulaMarginals) : Copula(composedCopula_);
 }
 
 
@@ -728,24 +730,45 @@ void PhysicalModelImplementation::setCopula(const Description &inputNames, const
     }
   }
 
-  // remove copulas
-  for (std::set<UnsignedInteger>::iterator it = indicesToRemove.begin(); it != indicesToRemove.end(); ++it)
+  // new collection of copulas
+  Collection<Copula> newColl;
+  if ((indicesToRemove.size() == 1 && copula.getImplementation()->getClassName() != "IndependentCopula") ||
+       indicesToRemove.size() == 0)
   {
-    coll.erase(std::remove(coll.begin(), coll.end(), composedCopula_.getCopulaCollection()[*it]), coll.end());
+    newColl = coll;
+  }
+  else
+  {
+    for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
+    {
+      if (indicesToRemove.find(i) == indicesToRemove.end())
+        newColl.add(coll[i]);
+    }
   }
 
-  // add new copula
+  // update copulas collection
   if (copula.getImplementation()->getClassName() != "IndependentCopula")
   {
     Copula newCopula(copula);
     newCopula.setDescription(inputNames);
-    coll.add(newCopula);
+    if (indicesToRemove.size() != 1)
+    {
+      // add copula
+      newColl.add(newCopula);
+    }
+    else
+    {
+      // replace copula
+      // do not : erase copula_i then add newCopula
+      // do like this only for the copulas definition window behavior
+      newColl[*indicesToRemove.begin()] = newCopula;
+    }
   }
 
   // update composedCopula_
-  if (coll.getSize())
+  if (newColl.getSize())
   {
-    composedCopula_.setCopulaCollection(coll);
+    composedCopula_.setCopulaCollection(newColl);
   }
   else
   {
