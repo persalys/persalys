@@ -21,7 +21,6 @@
 #include "otgui/DependenciesWidget.hxx"
 
 #include "otgui/CopulaWidget.hxx"
-#include "otgui/CopulaDefinitionWizard.hxx"
 #include "otgui/DependenciesTableModel.hxx"
 #include "otgui/TranslationManager.hxx"
 #include "otgui/ComboBoxDelegate.hxx"
