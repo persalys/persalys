@@ -25,6 +25,8 @@
 #include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 
+#include <openturns/Copula.hxx>
+
 namespace OTGUI
 {
 class OTGUI_API CopulaInferenceResultWidget : public QWidget
@@ -34,10 +36,11 @@ class OTGUI_API CopulaInferenceResultWidget : public QWidget
 public:
   CopulaInferenceResultWidget(const CopulaInferenceSetResult& currentSetResult,
                               const OT::Sample& sample,
-                              const bool displayPDF = true,
+                              const bool displaySetting = true,
                               QWidget* parent = 0);
 
-//   TODO: OT::Distribution getDistribution() const;
+  OT::Copula getCopula() const;
+  bool isSelectedCopulaValid() const;
 
 protected:
   void buildInterface();
@@ -51,7 +54,7 @@ signals:
 private:
   CopulaInferenceSetResult currentSetResult_;
   OT::Sample sample_;
-  bool displayPDF_;
+  bool displaySetting_;
   ResizableTableViewWithoutScrollBar * distTableView_;
   CustomStandardItemModel * distTableModel_;
 };

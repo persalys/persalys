@@ -38,6 +38,7 @@ public:
   CopulaParametersTabWidget(const OT::Distribution& distribution,
                             const OT::Sample& sample,
                             const DataSample::SampleCollection& kendallPlotData,
+                            const bool displaySetting = true,
                             QWidget* parent = 0);
 
 protected:
@@ -47,6 +48,7 @@ private:
   OT::Distribution distribution_;
   OT::Sample sample_;
   OT::PersistentCollection<OT::Sample> kendallPlotData_;
+  bool displaySetting_;
   QLabel * analysisErrorMessageLabel_;
 };
 }

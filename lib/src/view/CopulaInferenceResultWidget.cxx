@@ -38,12 +38,12 @@ namespace OTGUI
 
 CopulaInferenceResultWidget::CopulaInferenceResultWidget(const CopulaInferenceSetResult& currentSetResult,
     const Sample& sample,
-    const bool displayPDF,
+    const bool displaySetting,
     QWidget* parent)
   : QWidget(parent)
   , currentSetResult_(currentSetResult)
   , sample_(sample)
-  , displayPDF_(displayPDF)
+  , displaySetting_(displaySetting)
   , distTableView_(0)
   , distTableModel_(0)
 {
@@ -69,7 +69,7 @@ void CopulaInferenceResultWidget::buildInterface()
   distTableView_ = new ResizableTableViewWithoutScrollBar;
   RadioButtonDelegate * delegate = new RadioButtonDelegate(1, distTableView_);
   distTableView_->setItemDelegateForColumn(0, delegate);
-  distTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
+  distTableView_->setSelectionMode(QAbstractItemView::NoSelection);
   distTableView_->verticalHeader()->hide();
   distTableView_->horizontalHeader()->hide();
 
@@ -111,8 +111,10 @@ void CopulaInferenceResultWidget::buildInterface()
     String distributionName = currentSetResult_.getTestedDistributions()[indices[i]].getImplementation()->getClassName();
     distributionName = distributionName.substr(0, distributionName.find("Copula"));
     distTableModel_->setNotEditableItem(i + 1, 0, TranslationManager::GetTranslatedCopulaName(distributionName));
+
     const QVariant aVariant = QVariant::fromValue(currentSetResult_.getTestedDistributions()[indices[i]]);
     distTableModel_->setData(distTableModel_->index(i + 1, 0), aVariant, Qt::UserRole);
+
     if (currentSetResult_.getErrorMessages()[indices[i]].empty())
     {
       distTableModel_->setNotEditableItem(i + 1, 1, bicValues[i], 6);
@@ -145,6 +147,7 @@ void CopulaInferenceResultWidget::buildInterface()
       CopulaParametersTabWidget * paramWidget = new CopulaParametersTabWidget(currentSetResult_.getTestedDistributions()[indices[i]],
           sample_,
           currentSetResult_.getKendallPlotData()[indices[i]],
+          displaySetting_,
           this);
       paramStackWidget->addWidget(paramWidget);
     }
@@ -211,5 +214,45 @@ void CopulaInferenceResultWidget::updateParametersTable(const QModelIndex& curre
     return;
 
   emit distributionChanged(current.row() - 1);
+}
+
+
+Copula CopulaInferenceResultWidget::getCopula() const
+{
+  // check
+  Q_ASSERT(distTableModel_ && distTableView_);
+
+  // get current distribution
+  // loop begins at 1 because the two first rows are the table titles
+  QModelIndex selectedDistributionIndex;
+  for (int i = 1; i < distTableModel_->rowCount(); ++i)
+    if (distTableModel_->data(distTableModel_->index(i, 0), Qt::CheckStateRole).toBool())
+      selectedDistributionIndex = distTableModel_->index(i, 0);
+
+  Q_ASSERT(selectedDistributionIndex.isValid());
+
+  const QVariant variant = distTableModel_->data(selectedDistributionIndex, Qt::UserRole);
+  if (variant.canConvert<Distribution>())
+    return variant.value<Distribution>();
+
+  return Copula();
+}
+
+
+bool CopulaInferenceResultWidget::isSelectedCopulaValid() const
+{
+  // check
+  Q_ASSERT(distTableModel_ && distTableView_);
+
+  // get current distribution
+  // loop begins at 1 because the two first rows are the table titles
+  QModelIndex selectedDistributionIndex;
+  for (int i = 1; i < distTableModel_->rowCount(); ++i)
+    if (distTableModel_->data(distTableModel_->index(i, 0), Qt::CheckStateRole).toBool())
+      selectedDistributionIndex = distTableModel_->index(i, 1);
+
+  Q_ASSERT(selectedDistributionIndex.isValid());
+
+  return distTableModel_->data(selectedDistributionIndex) != "-";
 }
 }
