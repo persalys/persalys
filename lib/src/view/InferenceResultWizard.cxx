@@ -44,6 +44,7 @@ InferenceResultWizard::InferenceResultWizard(const OTStudy& otStudy, QWidget* pa
   , errorMessageLabel_(0)
 {
   buildInterface();
+  resize(1000, 600);
 }
 
 
@@ -52,12 +53,15 @@ void InferenceResultWizard::buildInterface()
   setWindowTitle(tr("Inference analyses results"));
 
   QWizardPage * page = new QWizardPage(this);
-  QGridLayout * mainLayout = new QGridLayout(page);
+  QVBoxLayout * mainLayout = new QVBoxLayout(page);
+
+  QWidget * topWidget = new QWidget;
+  QGridLayout * topWidgetLayout = new QGridLayout(topWidget);
 
   // choose InferenceAnalysis
   inferenceResultsComboBox_ = new QComboBox;
-  mainLayout->addWidget(new QLabel(tr("Inference analysis")), 0, 0);
-  mainLayout->addWidget(inferenceResultsComboBox_ , 0, 1);
+  topWidgetLayout->addWidget(new QLabel(tr("Inference analysis")), 0, 0);
+  topWidgetLayout->addWidget(inferenceResultsComboBox_ , 0, 1);
 
   for (UnsignedInteger i = 0; i < otStudy_.getAnalyses().getSize(); ++i)
     if (otStudy_.getAnalyses()[i].getImplementation()->getClassName() == "InferenceAnalysis")
@@ -66,18 +70,20 @@ void InferenceResultWizard::buildInterface()
 
   // choose variable
   variablesComboBox_ = new QComboBox;
-  mainLayout->addWidget(new QLabel(tr("Variable")), 1, 0);
-  mainLayout->addWidget(variablesComboBox_, 1, 1);
+  topWidgetLayout->addWidget(new QLabel(tr("Variable")), 1, 0);
+  topWidgetLayout->addWidget(variablesComboBox_, 1, 1);
+
+  mainLayout->addWidget(topWidget);
 
   // widget with tables
   inferenceResultWidget_ = new InferenceResultWidget(false, this);
-  mainLayout->addWidget(inferenceResultWidget_, 2, 0, 1, 2);
+  mainLayout->addWidget(inferenceResultWidget_);
   connect(inferenceResultWidget_, SIGNAL(currentDistributionChanged()), this, SLOT(clearErrorMessage()));
 
   // error message
   errorMessageLabel_ = new QLabel;
   errorMessageLabel_->setWordWrap(true);
-  mainLayout->addWidget(errorMessageLabel_, 3, 0, 1, 2);
+  mainLayout->addWidget(errorMessageLabel_);
 
   // update tables
   connect(variablesComboBox_, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateInferenceResultWidget(QString)));
