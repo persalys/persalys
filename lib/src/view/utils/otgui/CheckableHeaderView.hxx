@@ -44,10 +44,11 @@ protected:
   virtual void mousePressEvent(QMouseEvent *event);
 
 public slots:
-  void setChecked(bool checked);
+  void updateCheckState(const Qt::Orientation = Qt::Horizontal);
 
 private:
   bool isChecked_;
+  bool modelSignalBlocked_;
 };
 }
 #endif

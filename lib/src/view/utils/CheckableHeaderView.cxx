@@ -26,6 +26,7 @@ namespace OTGUI
 CheckableHeaderView::CheckableHeaderView(QWidget* parent)
   : QHeaderView(Qt::Horizontal, parent)
   , isChecked_(false)
+  , modelSignalBlocked_(false)
 {
 #if QT_VERSION >= 0x050000
   setSectionsClickable(true);
@@ -38,6 +39,8 @@ CheckableHeaderView::CheckableHeaderView(QWidget* parent)
 void CheckableHeaderView::setModel(QAbstractItemModel* model)
 {
   QHeaderView::setModel(model);
+  connect(model, SIGNAL(headerDataChanged(Qt::Orientation, int, int)), this, SLOT(updateCheckState(Qt::Orientation)));
+  updateCheckState();
   // we need to define a minimum section size
   // to avoid that the text takes place under the indicator when resizing the section 0
   setMinimumSectionSize(getMinimumSectionSize());
@@ -109,7 +112,17 @@ void CheckableHeaderView::mousePressEvent(QMouseEvent* event)
     {
       isChecked_ = !isChecked_;
       updateSection(0);
-      model()->setHeaderData(0, Qt::Horizontal, isChecked_, Qt::CheckStateRole);
+      // update model Qt::CheckStateRole
+      modelSignalBlocked_ = true;
+      for (int i = 0; i < model()->rowCount(); ++i)
+      {
+        if ((model()->data(model()->index(i, 0), Qt::CheckStateRole).toInt() != (isChecked_ ? Qt::Checked : Qt::Unchecked)) &&
+             model()->flags(model()->index(i, 0)) & Qt::ItemIsEnabled)
+        {
+            model()->setData(model()->index(i, 0), isChecked_ ? Qt::Checked : Qt::Unchecked, Qt::CheckStateRole);
+        }
+      }
+      modelSignalBlocked_ = false;
       return;
     }
   }
@@ -118,11 +131,20 @@ void CheckableHeaderView::mousePressEvent(QMouseEvent* event)
 }
 
 
-void CheckableHeaderView::setChecked(bool checked)
+void CheckableHeaderView::updateCheckState(const Qt::Orientation orientation)
 {
-  if (isEnabled() && isChecked_ != checked)
+  if (orientation == Qt::Vertical || modelSignalBlocked_)
+    return;
+
+  bool checkState = true;
+  for (int i = 0; i < model()->rowCount(); ++i)
   {
-    isChecked_ = checked;
+    if (model()->flags(model()->index(i, 0)) & Qt::ItemIsEnabled)
+      checkState = checkState && (model()->data(model()->index(i, 0), Qt::CheckStateRole).toInt() == Qt::Checked);
+  }
+  if (isEnabled() && isChecked_ != checkState)
+  {
+    isChecked_ = !isChecked_;
     updateSection(0);
   }
 }

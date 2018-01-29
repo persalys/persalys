@@ -21,10 +21,10 @@ inputs = [E, F, L, I]
 outputs = [y]
 formulas = ['F*L^3/(3*E*I)']
 myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', inputs, outputs, formulas)
-correlationMatrix = ot.CorrelationMatrix(4)
-correlationMatrix[2, 3] = -0.2
-copula = ot.NormalCopula(ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(correlationMatrix))
-myPhysicalModel.setCopula(copula)
+R = ot.CorrelationMatrix(2)
+R[0, 1] = -0.2
+copula = ot.NormalCopula(ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(R))
+myPhysicalModel.setCopula(['L', 'I'], copula)
 myStudy.add(myPhysicalModel)
 limitState1 = otguibase.LimitState('limitState1', myPhysicalModel, 'y', ot.Greater(), 30)
 myStudy.add(limitState1)

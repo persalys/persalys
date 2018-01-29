@@ -22,21 +22,8 @@
 #define OTGUI_PROBABILISTICMODELWINDOW_HXX
 
 #include "otgui/OTguiSubWindow.hxx"
-#include "otgui/ProbabilisticModelItem.hxx"
-#include "otgui/PlotWidget.hxx"
-#include "otgui/InputTableProbabilisticModel.hxx"
-#include "otgui/CopyableTableView.hxx"
-#include "otgui/CollapsibleGroupBox.hxx"
-#include "otgui/ValueLineEdit.hxx"
-#include "otgui/OTStudy.hxx"
-
-#include <QGroupBox>
-#include <QVBoxLayout>
-#include <QTableView>
-#include <QComboBox>
-#include <QCheckBox>
-#include <QLabel>
-#include <QStackedWidget>
+#include "otgui/MarginalsWidget.hxx"
+#include "otgui/DependenciesWidget.hxx"
 
 namespace OTGUI
 {
@@ -45,53 +32,14 @@ class OTGUI_API ProbabilisticModelWindow : public OTguiSubWindow
   Q_OBJECT
 
 public :
-  ProbabilisticModelWindow(ProbabilisticModelItem * item, QWidget * parent = 0);
+  ProbabilisticModelWindow(ProbabilisticModelItem *item, QWidget *parent = 0);
 
 protected:
   void buildInterface();
-  void updatePlots();
-
-public slots:
-  void openUrl();
-  void updateDistributionWidgets(const QModelIndex & index);
-  void updateCurrentVariableDistributionWidgets();
-  void updateDistributionParametersWidgets(const QModelIndex & index);
-  void updateTruncationParametersWidgets(const QModelIndex & index);
-  void updateProbabilisticModel();
-  void setCorrelationTabErrorMessage(const QString &);
-  void distributionParametersChanged();
-  void typeDistributionParametersChanged(int);
-  void truncationParametersChanged();
-  void truncationParametersStateChanged();
-  void reInitCorrelationErrorMessage(QTimeLine::State);
-  void openWizardToChooseInferenceResult(const QModelIndex&);
-#ifdef OTGUI_HAVE_OTMORRIS
-  void openWizardToChooseScreeningResult();
-#endif
-signals:
-  void updateCorrelationTableData();
 
 private:
-  OTStudy otStudy_;
-  PhysicalModel physicalModel_;
-  int currentIndexTab_;
-  QTableView * inputTableView_;
-  InputTableProbabilisticModel * inputTableModel_;
-  QStackedWidget * rightSideOfSplitterStackedWidget_;
-  ValueLineEdit * valueForDeterministicVariable_;
-  PlotWidget * pdfPlot_;
-  PlotWidget * cdfPlot_;
-  QGroupBox * paramEditor_;
-  QVBoxLayout * parameterLayout_;
-  QLabel * parameterValuesLabel_[5];
-  ValueLineEdit * parameterValuesEdit_[5];
-  CollapsibleGroupBox * truncationParamGroupBox_;
-  QCheckBox * lowerBoundCheckBox_;
-  QCheckBox * upperBoundCheckBox_;
-  ValueLineEdit * lowerBoundLineEdit_;
-  ValueLineEdit * upperBoundLineEdit_;
-  QLabel * correlationErrorMessage_;
-  QList<QTimeLine*> qtimelineList_;
+  MarginalsWidget * marginalsWidget_;
+  DependenciesWidget * dependenciesWidget_;
 };
 }
 #endif

@@ -41,7 +41,7 @@ public:
   static const QColor DefaultHistogramColor;
 
   /// constructor
-  PlotWidget(const QString plotTypeName = "", const bool isIndicesPlot = false, QWidget * parent = 0);
+  PlotWidget(const QString &plotTypeName = "", const bool disableZoom = false, QWidget *parent = 0);
 
   /// plot a curve
   void plotCurve(QVector<QPointF> points, const QPen pen = QPen(Qt::black, 2),

@@ -25,8 +25,9 @@ ot_add_source_file ( OTStudyItem.cxx )
 ot_add_source_file ( AnalysisItem.cxx )
 ot_add_source_file ( StudyTreeViewModel.cxx )
 ot_add_source_file ( CodeModel.cxx)
-ot_add_source_file ( VariablesInferenceTableModel.cxx)
+ot_add_source_file ( VariablesSelectionTableModel.cxx)
 ot_add_source_file ( CustomStandardItemModel.cxx )
+ot_add_source_file ( DependenciesTableModel.cxx )
 ot_add_source_file ( TranslationManager.cxx )
 if (OTMORRIS_FOUND)
   ot_add_source_file ( MorrisTableModel.cxx )
@@ -53,8 +54,9 @@ ot_install_header_file ( ProbabilisticModelItem.hxx )
 ot_install_header_file ( PhysicalModelItem.hxx )
 ot_install_header_file ( OTStudyItem.hxx )
 ot_install_header_file ( StudyTreeViewModel.hxx )
-ot_install_header_file ( VariablesInferenceTableModel.hxx )
+ot_install_header_file ( VariablesSelectionTableModel.hxx )
 ot_install_header_file ( CustomStandardItemModel.hxx )
+ot_install_header_file ( DependenciesTableModel.hxx )
 ot_install_header_file ( TranslationManager.hxx )
 if (OTMORRIS_FOUND)
 ot_install_header_file ( MorrisTableModel.hxx )
@@ -83,8 +85,9 @@ qt5_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
                                     otgui/PhysicalModelItem.hxx
                                     otgui/OTStudyItem.hxx
                                     otgui/CodeModel.hxx
-                                    otgui/VariablesInferenceTableModel.hxx
+                                    otgui/VariablesSelectionTableModel.hxx
                                     otgui/CustomStandardItemModel.hxx
+                                    otgui/DependenciesTableModel.hxx
                                     otgui/TranslationManager.hxx)
 
 if (OTMORRIS_FOUND)

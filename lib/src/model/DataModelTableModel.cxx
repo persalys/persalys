@@ -170,6 +170,10 @@ QVariant DataModelTableModel::data(const QModelIndex & index, int role) const
         return tr("Disable");
     }
 
+    // combobox content
+    else if (role == Qt::UserRole + 1)
+      return QStringList() << tr("Input") << tr("Output") << tr("Disable");
+
     // alignment
     else if (role == Qt::TextAlignmentRole)
       return Qt::AlignCenter;

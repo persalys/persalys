@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItem, observer of a probabilistic model
+ *  @brief QWidget to define copula
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,41 +18,44 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_PROBABILISTICMODELITEM_HXX
-#define OTGUI_PROBABILISTICMODELITEM_HXX
+#ifndef OTGUI_COPULAWIDGET_HXX
+#define OTGUI_COPULAWIDGET_HXX
 
-#include "otgui/PhysicalModelItem.hxx"
+#include "otgui/PhysicalModel.hxx"
+#include "otgui/PlotWidget.hxx"
+#include "otgui/ValueLineEdit.hxx"
+
+#include <QGroupBox>
+#include <QVBoxLayout>
 
 namespace OTGUI
 {
-class OTGUI_API ProbabilisticModelItem : public PhysicalModelItem
+class OTGUI_API CopulaWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  ProbabilisticModelItem(const PhysicalModel & physicalModel);
-
-  virtual void update(Observable * source, const OT::String & message);
-
-protected:
-  void buildActions();
-  bool physicalModelValid();
+  CopulaWidget(const PhysicalModel &model, const OT::Copula &copula, QWidget *parent = 0);
+  void setCopula(const OT::Copula &copula);
 
 public slots:
-  void createLimitState();
-  void createCentralTendency();
-  void createSensitivityAnalysis();
+  void updateCopulaFromLineEdit();
+  void updateCopulaFromCorrTable(const OT::Copula &copula);
+  void openDocUrl();
 signals:
-  void designOfExperimentRequested();
-  void stochasticInputListChanged();
-  void inputListCorrelationChanged();
-  void copulaChanged();
+  void emitErrorMessage(const QString &message);
+
+protected:
+  void updatePlots();
+  void updateParameters();
 
 private:
-  QAction * newDesignOfExperiment_;
-  QAction * newLimitState_;
-  QAction * newCentralTendency_;
-  QAction * newSensitivityAnalysis_;
+  PhysicalModel physicalModel_;
+  OT::Copula copula_;
+  QVBoxLayout * parameterLayout_;
+  QGroupBox * paramEditor_;
+  ValueLineEdit * paramValueEdit_;
+  QVector<PlotWidget*> listPlot_;
 };
 }
 #endif

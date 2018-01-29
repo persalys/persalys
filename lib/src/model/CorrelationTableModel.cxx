@@ -31,22 +31,23 @@ using namespace OT;
 namespace OTGUI
 {
 
-CorrelationTableModel::CorrelationTableModel(const PhysicalModel & physicalModel, QObject * parent)
+CorrelationTableModel::CorrelationTableModel(const PhysicalModel &model, const OT::Copula &copula, QObject *parent)
   : QAbstractTableModel(parent)
-  , physicalModel_(physicalModel)
+  , physicalModel_(model)
+  , copula_(copula)
 {
 }
 
 
 int CorrelationTableModel::columnCount(const QModelIndex & parent) const
 {
-  return getPhysicalModel().getStochasticInputNames().getSize();
+  return copula_.getDimension();
 }
 
 
 int CorrelationTableModel::rowCount(const QModelIndex & parent) const
 {
-  return getPhysicalModel().getStochasticInputNames().getSize();
+  return copula_.getDimension();
 }
 
 
@@ -62,7 +63,7 @@ Qt::ItemFlags CorrelationTableModel::flags(const QModelIndex & index) const
 QVariant CorrelationTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (role == Qt::DisplayRole)
-    return QString::fromUtf8(getPhysicalModel().getStochasticInputNames()[section].c_str());
+    return QString::fromUtf8(copula_.getDescription()[section].c_str());
 
   return QVariant();
 }
@@ -74,7 +75,7 @@ QVariant CorrelationTableModel::data(const QModelIndex & index, int role) const
     return QVariant();
 
   if (role == Qt::DisplayRole || role == Qt::EditRole)
-    return QString::number(physicalModel_.getCopula().getSpearmanCorrelation()(index.row(), index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
+    return QString::number(copula_.getSpearmanCorrelation()(index.row(), index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
 
   else if (role == Qt::BackgroundRole && index.row() >= index.column())
     return QBrush(Qt::lightGray);
@@ -93,7 +94,7 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
     if (value.toDouble() < -1. || value.toDouble() > 1.)
       return false;
 
-    CorrelationMatrix correlation(physicalModel_.getCopula().getSpearmanCorrelation());
+    CorrelationMatrix correlation(copula_.getSpearmanCorrelation());
     if (value.toDouble() == correlation(index.row(), index.column()))
       return true;
 
@@ -102,16 +103,22 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
     emit errorMessageChanged("");
     try
     {
-      physicalModel_.setCopula(NormalCopula(NormalCopula::GetCorrelationFromSpearmanCorrelation(correlation)));
+      physicalModel_.blockNotification("ProbabilisticModel");
+      const Description oldDescription = copula_.getDescription();
+      copula_ = NormalCopula(NormalCopula::GetCorrelationFromSpearmanCorrelation(correlation));
+      copula_.setDescription(oldDescription);
+      physicalModel_.setCopula(oldDescription, copula_);
       emit dataChanged(index, index);
+      emit dataUpdated(copula_);
       return true;
     }
     catch (std::exception & ex)
     {
-      QString input1 = QString::fromUtf8(getPhysicalModel().getStochasticInputNames()[index.row()].c_str());
-      QString input2 = QString::fromUtf8(getPhysicalModel().getStochasticInputNames()[index.column()].c_str());
-      emit errorMessageChanged(tr("The correlation between %1 and %2 can not be equal to '%3'. %4").arg(input1).arg(input2).arg(value.toString()).arg(ex.what()));
+      QString input1 = QString::fromUtf8(copula_.getDescription()[index.row()].c_str());
+      QString input2 = QString::fromUtf8(copula_.getDescription()[index.column()].c_str());
+      emit errorMessageChanged(tr("The correlation between %1 and %2 can not be equal to '%3'.\n %4").arg(input1).arg(input2).arg(value.toString()).arg(ex.what()));
     }
+    physicalModel_.blockNotification("");
   }
   return false;
 }
@@ -121,11 +128,5 @@ void CorrelationTableModel::updateData()
 {
   beginResetModel();
   endResetModel();
-}
-
-
-PhysicalModel CorrelationTableModel::getPhysicalModel() const
-{
-  return physicalModel_;
 }
 }

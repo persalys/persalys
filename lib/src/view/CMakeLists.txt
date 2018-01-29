@@ -15,7 +15,6 @@ ot_add_source_file ( OTguiMenuBar.cxx )
 ot_add_source_file ( OTguiStatusBar.cxx )
 ot_add_source_file ( OTguiSubWindow.cxx )
 ot_add_source_file ( OTguiWizard.cxx )
-ot_add_source_file ( OTguiWizardPage.cxx )
 ot_add_source_file ( StudyManager.cxx )
 ot_add_source_file ( WindowFactory.cxx )
 ot_add_source_file ( PhysicalModelDiagramWindow.cxx )
@@ -95,6 +94,9 @@ ot_add_source_file ( CopulaParametersTabWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWindow.cxx )
 ot_add_source_file ( WidgetBoundToDockWidget.cxx )
+ot_add_source_file ( MarginalsWidget.cxx )
+ot_add_source_file ( DependenciesWidget.cxx )
+ot_add_source_file ( CopulaWidget.cxx )
 if (OTMORRIS_FOUND)
   ot_add_source_file ( IntroScreeningPage.cxx )
   ot_add_source_file ( MorrisPage.cxx )
@@ -111,7 +113,6 @@ ot_install_header_file ( OTguiToolBar.hxx )
 ot_install_header_file ( OTguiMenuBar.hxx )
 ot_install_header_file ( OTguiStatusBar.hxx )
 ot_install_header_file ( OTguiWizard.hxx )
-ot_install_header_file ( OTguiWizardPage.hxx )
 ot_install_header_file ( StudyManager.hxx )
 ot_install_header_file ( WindowFactory.hxx )
 ot_install_header_file ( AnalysisWizard.hxx )
@@ -192,6 +193,9 @@ ot_install_header_file ( CopulaInferenceResultWidget.hxx )
 ot_install_header_file ( CopulaInferenceResultWindow.hxx )
 ot_install_header_file ( CopulaParametersTabWidget.hxx )
 ot_install_header_file ( WidgetBoundToDockWidget.hxx )
+ot_install_header_file ( MarginalsWidget.hxx )
+ot_install_header_file ( DependenciesWidget.hxx )
+ot_install_header_file ( CopulaWidget.hxx )
 
 if (OTMORRIS_FOUND)
   ot_install_header_file ( IntroScreeningPage.hxx )
@@ -210,7 +214,6 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/OTguiStatusBar.hxx
                                   otgui/OTguiSubWindow.hxx
                                   otgui/OTguiWizard.hxx
-                                  otgui/OTguiWizardPage.hxx
                                   otgui/OTguiMdiArea.hxx
                                   otgui/StudyManager.hxx
                                   otgui/WelcomeWindow.hxx
@@ -283,6 +286,9 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/CopulaInferenceResultWindow.hxx
                                   otgui/CopulaParametersTabWidget.hxx
                                   otgui/WidgetBoundToDockWidget.hxx
+                                  otgui/MarginalsWidget.hxx
+                                  otgui/DependenciesWidget.hxx
+                                  otgui/CopulaWidget.hxx
                                   )
 
 

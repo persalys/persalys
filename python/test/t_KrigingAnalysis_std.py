@@ -27,7 +27,7 @@ myStudy.add(model)
 # Design of Experiment ##
 aDesign = otguibase.FixedDesignOfExperiment('design', model)
 validationInputSample = ot.LHSExperiment(
-    model.getComposedDistribution(), 10).generate()
+    model.getDistribution(), 10).generate()
 inputSample = ot.Sample(validationInputSample)
 inputSample.stack(ot.Sample(10, [0.5]))
 aDesign.setOriginalInputSample(inputSample)

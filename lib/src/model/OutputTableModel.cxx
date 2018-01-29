@@ -74,20 +74,6 @@ QVariant OutputTableModel::headerData(int section, Qt::Orientation orientation, 
 }
 
 
-bool OutputTableModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
-{
-  if (role == Qt::CheckStateRole && orientation == Qt::Horizontal)
-  {
-    for (int i = 0; i < rowCount(); ++i)
-      if (data(index(i, 0), role).toInt() != (value.toBool() ? Qt::Checked : Qt::Unchecked))
-        setData(index(i, 0), value.toBool() ? Qt::Checked : Qt::Unchecked, role);
-    emit selectedOutputsChanged();
-  }
-
-  return QAbstractTableModel::setHeaderData(section, orientation, value, role);
-}
-
-
 QVariant OutputTableModel::data(const QModelIndex & index, int role) const
 {
   if (!index.isValid())
@@ -95,9 +81,7 @@ QVariant OutputTableModel::data(const QModelIndex & index, int role) const
 
   if (role == Qt::CheckStateRole && index.column() == 0)
   {
-    if (physicalModel_.getOutputs()[index.row()].isSelected())
-      return Qt::Checked;
-    return Qt::Unchecked;
+    return physicalModel_.getOutputs()[index.row()].isSelected() ? Qt::Checked : Qt::Unchecked;
   }
   else if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
@@ -140,9 +124,7 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
     physicalModel_.selectOutput(output.getName(), value.toBool());
     physicalModel_.blockNotification();
     emit dataChanged(index, this->index(index.row(), 1));
-    emit selectedOutputsChanged();
-    bool allChecked = physicalModel_.getOutputDimension() == physicalModel_.getSelectedOutputsNames().getSize();
-    emit checked(allChecked);
+    emit headerDataChanged(Qt::Horizontal, 0, 0);
 
     return true;
   }
@@ -221,7 +203,7 @@ void OutputTableModel::updateData()
 {
   beginResetModel();
   endResetModel();
-  emit checked(physicalModel_.getOutputDimension() == physicalModel_.getSelectedOutputsNames().getSize());
+  emit headerDataChanged(Qt::Horizontal, 0, 0);
 }
 
 
@@ -239,7 +221,7 @@ void OutputTableModel::addLine()
   insertRow(lastIndex.row());
 
   endInsertRows();
-  emit checked(physicalModel_.getOutputDimension() == physicalModel_.getSelectedOutputsNames().getSize());
+  emit headerDataChanged(Qt::Horizontal, 0, 0);
 }
 
 
@@ -251,7 +233,6 @@ void OutputTableModel::removeLine(const QModelIndex & index)
   physicalModel_.removeOutput(physicalModel_.getOutputs()[index.row()].getName());
   physicalModel_.blockNotification();
   endRemoveRows();
-  bool allChecked = physicalModel_.getOutputDimension() == physicalModel_.getSelectedOutputsNames().getSize();
-  emit checked(allChecked && physicalModel_.getOutputDimension());
+  emit headerDataChanged(Qt::Horizontal, 0, 0);
 }
 }

@@ -50,6 +50,14 @@ String Variable::__repr__() const
 }
 
 
+void Variable::setName(const String &name)
+{
+  if (name.empty()|| name.find_first_not_of(" \t\n\v\f\r") == name.npos)
+    throw InvalidArgumentException(HERE) << "The variable name can not be empty";
+  PersistentObject::setName(name);
+}
+
+
 double Variable::getValue() const
 {
   return value_;

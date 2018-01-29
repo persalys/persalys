@@ -43,13 +43,13 @@ srcResult = src.getResult()
 
 
 # Create the Spearman correlation matrix of the input random vector
-RS = ot.CorrelationMatrix(4)
-RS[2, 3] = -0.2
+RS = ot.CorrelationMatrix(2)
+RS[0, 1] = -0.2
 # Evaluate the correlation matrix of the Normal copula from RS
 R = ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(RS)
 # Create the Normal copula parametrized by R
 copula = ot.NormalCopula(R)
-model.setCopula(copula)
+model.setCopula(['L', 'I'], copula)
 
 # Design of Experiment - Parametric analysis ##
 aDesign = otguibase.GridDesignOfExperiment('aDesign', model)

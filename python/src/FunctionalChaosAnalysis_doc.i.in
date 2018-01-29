@@ -26,7 +26,7 @@ Create the model:
 Create the design of experiments:
 
 >>> aDesign = otguibase.FixedDesignOfExperiment('aDesign', myPhysicalModel)
->>> inputSample = ot.LHSExperiment(myPhysicalModel.getComposedDistribution(), 250).generate()
+>>> inputSample = ot.LHSExperiment(myPhysicalModel.getDistribution(), 250).generate()
 >>> aDesign.setOriginalInputSample(inputSample)
 >>> aDesign.run()
 

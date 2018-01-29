@@ -123,15 +123,11 @@ void PhysicalModelWindowWidget::buildInterface()
 
   // table header view
   CheckableHeaderView * outputTableHeaderView = new CheckableHeaderView;
+  outputTableHeaderView->setStretchLastSection(true);
   outputTableView_->setHorizontalHeader(outputTableHeaderView);
-  outputTableView_->horizontalHeader()->setStretchLastSection(true);
-  const UnsignedInteger nbOutputs = physicalModel_.getOutputDimension();
-  const bool allChecked = (nbOutputs && (nbOutputs == physicalModel_.getSelectedOutputsNames().getSize()));
-  outputTableHeaderView->setChecked(allChecked);
 
   // connections
   connect(outputTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
-  connect(outputTableModel, SIGNAL(checked(bool)), outputTableHeaderView, SLOT(setChecked(bool)));
   connect(this, SIGNAL(updateOutputTableData()), outputTableModel, SLOT(updateData()));
 
   outputsLayout->addWidget(outputTableView_);

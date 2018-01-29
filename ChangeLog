@@ -5,6 +5,7 @@
  * Sobol confidence interval
  * Inference BIC
  * Monte Carlo analysis failed points management
+ * Copula definition
 
 = 3.0 release (2017-10-12)
 

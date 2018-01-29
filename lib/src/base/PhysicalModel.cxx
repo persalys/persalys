@@ -278,9 +278,9 @@ Description PhysicalModel::getSelectedOutputsNames() const
 }
 
 
-ComposedDistribution PhysicalModel::getComposedDistribution() const
+Distribution PhysicalModel::getDistribution() const
 {
-  return getImplementation()->getComposedDistribution();
+  return getImplementation()->getDistribution();
 }
 
 
@@ -332,9 +332,15 @@ Copula PhysicalModel::getCopula() const
 }
 
 
-void PhysicalModel::setCopula(const Copula & copula)
+Collection<Copula> PhysicalModel::getCopulaCollection() const
 {
-  getImplementation()->setCopula(copula);
+  return getImplementation()->getCopulaCollection();
+}
+
+
+void PhysicalModel::setCopula(const Description &inputNames, const Copula &copula)
+{
+  getImplementation()->setCopula(inputNames, copula);
 }
 
 

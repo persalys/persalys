@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Base class for wizard pages of otgui
+ *  @brief QLabel with temporary message
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,34 +18,32 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/OTguiWizardPage.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 namespace OTGUI
 {
 
-OTguiWizardPage::OTguiWizardPage(QWidget * parent)
-  : QWizardPage(parent)
-  , errorMessageLabel_(0)
+TemporaryLabel::TemporaryLabel(QWidget *parent)
+  : QLabel(parent)
   , qtimelineList_()
 {
+  setWordWrap(true);
 }
 
 
-void OTguiWizardPage::setTemporaryErrorMessage(const QString& message)
+void TemporaryLabel::setTemporaryErrorMessage(const QString& message)
 {
-  if (errorMessageLabel_)
+  if (message.isEmpty())
     return;
-
-  errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(message));
-
-  QTimeLine * time = new QTimeLine(4000, this);
+  setText(QString("<font color=red>%1</font>").arg(message));
+  QTimeLine * time = new QTimeLine(7000, this);
   qtimelineList_.push_back(time);
   connect(time, SIGNAL(stateChanged(QTimeLine::State)), this, SLOT(reInitErrorMessage(QTimeLine::State)));
   time->start();
 }
 
 
-void OTguiWizardPage::reInitErrorMessage(QTimeLine::State state)
+void TemporaryLabel::reInitErrorMessage(QTimeLine::State state)
 {
   if (state == QTimeLine::NotRunning)
   {
@@ -56,8 +54,7 @@ void OTguiWizardPage::reInitErrorMessage(QTimeLine::State state)
     if (qtimelineList_.size())
       return;
     // else initialize error message
-    if (errorMessageLabel_)
-      errorMessageLabel_->setText("");
+    setText("");
   }
 }
 }

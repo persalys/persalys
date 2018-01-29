@@ -45,7 +45,7 @@ FORMAnalysis::FORMAnalysis(const String& name, const LimitState& limitState)
   : ReliabilityAnalysis(name, limitState)
   , ApproximationAnalysis()
 {
-  setPhysicalStartingPoint(limitState.getPhysicalModel().getComposedDistribution().getMean());
+  setPhysicalStartingPoint(limitState.getPhysicalModel().getDistribution().getMean());
 }
 
 

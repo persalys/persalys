@@ -20,12 +20,15 @@
  */
 #include "otgui/PhysicalModelImplementation.hxx"
 
+#include "otgui/OTTools.hxx"
+
 #include <openturns/NonCenteredFiniteDifferenceGradient.hxx>
 #include <openturns/CenteredFiniteDifferenceHessian.hxx>
 #include <openturns/NormalCopula.hxx>
 #include <openturns/TruncatedDistribution.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/ParametricFunction.hxx>
+#include <openturns/IndependentCopula.hxx>
 
 using namespace OT;
 
@@ -39,8 +42,14 @@ static Factory<PersistentCollection<Output> > Factory_PersistentCollectionOutput
 PhysicalModelImplementation::PhysicalModelImplementation(const String & name)
   : PersistentObject()
   , Observable()
+  , inputs_()
+  , outputs_()
+  , composedCopula_()
+  , finiteDifferenceSteps_()
 {
   setName(name);
+  // by default a ComposedCopula contain an IndependentCopula with the description "X0"
+  composedCopula_.setDescription(Description(1, ""));
 }
 
 
@@ -50,16 +59,15 @@ PhysicalModelImplementation::PhysicalModelImplementation(const String & name,
     const OutputCollection & outputs)
   : PersistentObject()
   , Observable()
-  , inputs_(inputs)
-  , outputs_(outputs)
+  , inputs_()
+  , outputs_()
+  , composedCopula_()
+  , finiteDifferenceSteps_()
 {
   setName(name);
 
-  // set copula
-  updateCopula();
-
-  // set finite difference step
-  updateFiniteDifferenceSteps();
+  setInputs(inputs);
+  setOutputs(outputs);
 }
 
 
@@ -123,24 +131,49 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
     throw InvalidArgumentException(HERE) << "Two inputs can not have the same name.";
 
   inputs_ = inputs;
+
+  // update composedCopula_
+  composedCopula_ = ComposedCopula();
+  // by default a ComposedCopula contain an IndependentCopula with the description "X0"
+  composedCopula_.setDescription(Description(1, ""));
+
   inputsChanged();
 }
 
 
-void PhysicalModelImplementation::setInputName(const OT::String & inputName, const OT::String & newName)
+void PhysicalModelImplementation::setInputName(const String & inputName, const String & newName)
 {
   if (inputName == newName)
     return;
 
-  std::set<String> inputNames;
-  inputNames.insert(newName);
-  for (UnsignedInteger i = 0; i < inputs_.getSize(); ++i)
-    if (inputs_[i].getName() != inputName)
-      inputNames.insert(inputs_[i].getName());
-  if (inputNames.size() != inputs_.getSize())
-    throw InvalidArgumentException(HERE) << "The proposed name " << newName << " is not valid. Two inputs can not have the same name.";
+  if (hasInputNamed(newName))
+    throw InvalidArgumentException(HERE) << "The physical model already contains an input named " << newName;
 
-  getInputByName(inputName).setName(newName);
+  Input& input = getInputByName(inputName);
+  input.setName(newName);
+
+  // update composedCopula_ description
+  if (input.isStochastic())
+  {
+    Collection<Copula> coll(composedCopula_.getCopulaCollection());
+    for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
+    {
+      Description copulaDescription(coll[i].getDescription());
+      for (UnsignedInteger j = 0; j < copulaDescription.getSize(); ++j)
+      {
+        if (copulaDescription[j] == inputName)
+        {
+          copulaDescription[j] = newName;
+          Copula copula(coll[i]);
+          copula.setDescription(copulaDescription);
+          coll[i] = copula;
+        }
+      }
+    }
+    composedCopula_.setCopulaCollection(coll);
+    notify("copulaChanged");
+  }
+
   notify("inputNameChanged");
 }
 
@@ -163,20 +196,19 @@ void PhysicalModelImplementation::setInputValue(const String & inputName, const 
 
 void PhysicalModelImplementation::setDistribution(const String & inputName, const Distribution & distribution)
 {
-  bool inputOldStateIsStochastic = getInputByName(inputName).isStochastic();
+  if (distribution.getDimension() > 1)
+    throw InvalidArgumentException(HERE) << "A distribution of dimension 1 is requested";
 
   getInputByName(inputName).setDistribution(distribution);
 
-  // update copula if need
-  if ((!inputOldStateIsStochastic && distribution.getImplementation()->getClassName() != "Dirac") ||
-      (inputOldStateIsStochastic && distribution.getImplementation()->getClassName() == "Dirac"))
-    updateCopula();
+  // update copula
+  updateCopula();
 
   notify("inputDistributionChanged");
 }
 
 
-void PhysicalModelImplementation::setDistributionParametersType(const OT::String & inputName, const OT::UnsignedInteger & distributionParametersType)
+void PhysicalModelImplementation::setDistributionParametersType(const String & inputName, const UnsignedInteger & distributionParametersType)
 {
   getInputByName(inputName).setDistributionParametersType(distributionParametersType);
 }
@@ -189,18 +221,7 @@ void PhysicalModelImplementation::addInput(const Input & input)
 
   inputs_.add(input);
 
-  // update copula
-  if (input.isStochastic())
-    updateCopula();
-
-  // reset outputs values
-  for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
-    getOutputByName(getOutputs()[i].getName()).setHasBeenComputed(false);
-
-  // update finite difference step
-  updateFiniteDifferenceSteps();
-
-  notify("inputNumberChanged");
+  inputsChanged();
 }
 
 
@@ -217,28 +238,17 @@ void PhysicalModelImplementation::setFiniteDifferenceStep(const String& inputNam
 
 void PhysicalModelImplementation::removeInput(const String & inputName)
 {
-  if (hasInputNamed(inputName))
+  for (UnsignedInteger i = 0; i < inputs_.getSize(); ++i)
   {
-    for (UnsignedInteger i = 0; i < inputs_.getSize(); ++i)
+    if (inputs_[i].getName() == inputName)
     {
-      if (inputs_[i].getName() == inputName)
-      {
-        bool inputIsStochastic = inputs_[i].isStochastic();
-        inputs_.erase(inputs_.begin() + i);
-        if (inputIsStochastic)
-          updateCopula();
-        for (UnsignedInteger j = 0; j < getOutputDimension(); ++j)
-          getOutputByName(getOutputs()[j].getName()).setHasBeenComputed(false);
-
-        notify("inputNumberChanged");
-        break;
-      }
+      inputs_.erase(inputs_.begin() + i);
+      inputsChanged();
+      return;
     }
-    // update finite difference step
-    updateFiniteDifferenceSteps();
   }
-  else
-    throw InvalidArgumentException(HERE) << "The given input name " << inputName << " does not correspond to an input of the physical model.\n";
+
+  throw InvalidArgumentException(HERE) << "The given input name " << inputName << " does not correspond to an input of the physical model.\n";
 }
 
 
@@ -267,39 +277,76 @@ void PhysicalModelImplementation::inputsChanged()
 
 void PhysicalModelImplementation::updateCopula()
 {
-  Description stochasticInputNames = getStochasticInputNames();
-  if (!stochasticInputNames.getSize())
-  {
-    copula_ = Copula();
-    notify("copulaChanged");
-    return;
-  }
+  const Description stochasticInput(getStochasticInputNames());
 
-  CorrelationMatrix newSpearmanCorrelation(stochasticInputNames.getSize());
-  if (newSpearmanCorrelation.getDimension() > 1)
+  Collection<Copula> coll(composedCopula_.getCopulaCollection());
+  std::set<UnsignedInteger> indicesToRemove;
+
+  // remove IndependentCopula
+  // get dependent inputs
+  Description dependentVar;
+  for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
   {
-    Description oldStochasticInputNames(copula_.getDescription());
-    UnsignedInteger size = oldStochasticInputNames.getSize();
-    CorrelationMatrix oldSpearmanCorrelation(copula_.getSpearmanCorrelation());
-    for (UnsignedInteger row = 0; row < size; ++row)
-      for (UnsignedInteger col = row + 1; col < size; ++col)
+    if (coll[i].getImplementation()->getClassName() == "IndependentCopula")
+    {
+      indicesToRemove.insert(i);
+    }
+    else
+    {
+      bool copulaOk = true;
+      for (UnsignedInteger j = 0; j < coll[i].getDescription().getSize(); ++j)
       {
-        Collection<String>::iterator it1;
-        it1 = std::find(stochasticInputNames.begin(), stochasticInputNames.end(), oldStochasticInputNames[row]);
-        Collection<String>::iterator it2;
-        it2 = std::find(stochasticInputNames.begin(), stochasticInputNames.end(), oldStochasticInputNames[col]);
-        if (it1 != stochasticInputNames.end() &&  it2 != stochasticInputNames.end())
+        if (!stochasticInput.contains(coll[i].getDescription()[j]))
         {
-          const UnsignedInteger newRow = it1 - stochasticInputNames.begin();
-          const UnsignedInteger newCol = it2 - stochasticInputNames.begin();
-          newSpearmanCorrelation(newRow, newCol) = oldSpearmanCorrelation(row, col);
-          newSpearmanCorrelation(newCol, newRow) = oldSpearmanCorrelation(row, col);
+          indicesToRemove.insert(i);
+          copulaOk = false;
+          break;
         }
       }
+      if (copulaOk)
+        dependentVar.add(coll[i].getDescription());
+    }
   }
 
-  CorrelationMatrix correlationMatrix(NormalCopula::GetCorrelationFromSpearmanCorrelation(newSpearmanCorrelation));
-  setCopula(NormalCopula(correlationMatrix));
+  // new collection of copulas
+  Collection<Copula> newColl;
+  for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
+  {
+    if (indicesToRemove.find(i) == indicesToRemove.end())
+      newColl.add(coll[i]);
+  }
+
+  // get independent inputs
+  Description independentVar;
+  if (dependentVar.getSize() != stochasticInput.getSize())
+  {
+    for (UnsignedInteger i = 0; i < stochasticInput.getSize(); ++i)
+    {
+      if (!dependentVar.contains(stochasticInput[i]))
+        independentVar.add(stochasticInput[i]);
+    }
+  }
+  // add independent copula
+  if (independentVar.getSize())
+  {
+    IndependentCopula indpCop(independentVar.getSize());
+    indpCop.setDescription(independentVar);
+    newColl.add(indpCop);
+  }
+
+  // update composedCopula_
+  if (newColl.getSize())
+  {
+    composedCopula_.setCopulaCollection(newColl);
+  }
+  else
+  {
+    composedCopula_ = ComposedCopula();
+    // by default a ComposedCopula contain an IndependentCopula with the description "X0"
+    composedCopula_.setDescription(Description(1, ""));
+  }
+
+  notify("copulaChanged");
 }
 
 
@@ -399,18 +446,13 @@ void PhysicalModelImplementation::setOutputs(const OutputCollection & outputs)
 }
 
 
-void PhysicalModelImplementation::setOutputName(const OT::String & outputName, const OT::String & newName)
+void PhysicalModelImplementation::setOutputName(const String & outputName, const String & newName)
 {
   if (outputName == newName)
     return;
 
-  std::set<String> outputNames;
-  outputNames.insert(newName);
-  for (UnsignedInteger i = 0; i < outputs_.getSize(); ++i)
-    if (outputs_[i].getName() != outputName)
-      outputNames.insert(outputs_[i].getName());
-  if (outputNames.size() != outputs_.getSize())
-    throw InvalidArgumentException(HERE) << "The proposed name " << newName << " is not valid. Two outputs can not have the same name.";
+  if (hasOutputNamed(newName))
+    throw InvalidArgumentException(HERE) << "The physical model already contains an output named " << newName;
 
   getOutputByName(outputName).setName(newName);
   notify("outputNameChanged");
@@ -501,15 +543,27 @@ Description PhysicalModelImplementation::getSelectedOutputsNames() const
 }
 
 
-ComposedDistribution PhysicalModelImplementation::getComposedDistribution() const
+Distribution PhysicalModelImplementation::getDistribution() const
 {
-  ComposedDistribution::DistributionCollection marginales;
+  Description copulaDescription(composedCopula_.getDescription());
+  Indices copulaMarginals;
+
+  ComposedDistribution::DistributionCollection marginals;
   for (UnsignedInteger i = 0; i < inputs_.getSize(); ++i)
+  {
     if (inputs_[i].isStochastic())
-      marginales.add(inputs_[i].getDistribution());
-  if (marginales.getSize())
-    return ComposedDistribution(marginales, getCopula());
-  return ComposedDistribution(); // we can not build a ComposedDistribution with an empty collection
+    {
+      marginals.add(inputs_[i].getDistribution());
+      const Description::const_iterator it = std::find(copulaDescription.begin(), copulaDescription.end(), inputs_[i].getName());
+      copulaMarginals.add(it - copulaDescription.begin());
+    }
+  }
+
+  // we can not build a ComposedDistribution with an empty collection
+  if (!marginals.getSize())
+    return Distribution();
+
+  return ComposedDistribution(marginals, composedCopula_.getMarginal(copulaMarginals));
 }
 
 
@@ -517,7 +571,7 @@ RandomVector PhysicalModelImplementation::getInputRandomVector() const
 {
   if (!hasStochasticInputs())
     throw PhysicalModelNotValidException(HERE) << "Can not use getInputRandomVector on a physical model which has no stochastic inputs.";
-  return RandomVector(getComposedDistribution());
+  return RandomVector(getDistribution());
 }
 
 
@@ -525,6 +579,7 @@ RandomVector PhysicalModelImplementation::getOutputRandomVector(const Descriptio
 {
   return RandomVector(getRestrictedFunction(outputNames), getInputRandomVector());
 }
+
 
 Function PhysicalModelImplementation::generateFunction(const Description & outputNames) const
 {
@@ -621,17 +676,108 @@ Function PhysicalModelImplementation::getRestrictedFunction(const Description& o
 
 Copula PhysicalModelImplementation::getCopula() const
 {
-  return copula_;
+  Description copulaDescription(composedCopula_.getDescription());
+  Indices copulaMarginals;
+
+  for (UnsignedInteger i = 0; i < inputs_.getSize(); ++i)
+  {
+    if (inputs_[i].isStochastic())
+    {
+      const Description::const_iterator it = std::find(copulaDescription.begin(), copulaDescription.end(), inputs_[i].getName());
+      copulaMarginals.add(it - copulaDescription.begin());
+    }
+  }
+  return copulaMarginals.getSize() > 0 ? composedCopula_.getMarginal(copulaMarginals) : Copula(composedCopula_);
 }
 
 
-void PhysicalModelImplementation::setCopula(const Copula & copula)
+Collection<Copula> PhysicalModelImplementation::getCopulaCollection() const
 {
-  if (copula.getDimension() != getStochasticInputNames().getSize())
-    throw InvalidArgumentException(HERE) << "The given copula must have a dimension equal to the number of stochastic inputs.\n";
+  return composedCopula_.getCopulaCollection();
+}
 
-  copula_ = copula;
-  copula_.setDescription(getStochasticInputNames());
+
+void PhysicalModelImplementation::setCopula(const Description &inputNames, const Copula &copula)
+{
+  // - check
+  // inputNames and copula must have the same dimension
+  if (copula.getDimension() != inputNames.getSize())
+    throw InvalidArgumentException(HERE) << "The copula must have a dimension equal to the inputs list.\n";
+
+  // error if the input is not in the model or if it is deterministic
+  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++i)
+  {
+    if (!getInputByName(inputNames[i]).isStochastic())
+      throw InvalidArgumentException(HERE) << "The input " << inputNames[i] << " is not stochastic";
+  }
+
+  Collection<Copula> coll(composedCopula_.getCopulaCollection());
+  std::set<UnsignedInteger> indicesToRemove;
+
+  // remove copula if its description contains an input name of the list
+  for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
+  {
+    if (coll[i].getImplementation()->getClassName() != "IndependentCopula")
+    {
+      for (UnsignedInteger j = 0; j < inputNames.getSize(); ++j)
+      {
+        if (coll[i].getDescription().contains(inputNames[j]))
+        {
+          indicesToRemove.insert(i);
+          break;
+        }
+      }
+    }
+  }
+
+  // new collection of copulas
+  Collection<Copula> newColl;
+  if ((indicesToRemove.size() == 1 && copula.getImplementation()->getClassName() != "IndependentCopula") ||
+       indicesToRemove.size() == 0)
+  {
+    newColl = coll;
+  }
+  else
+  {
+    for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
+    {
+      if (indicesToRemove.find(i) == indicesToRemove.end())
+        newColl.add(coll[i]);
+    }
+  }
+
+  // update copulas collection
+  if (copula.getImplementation()->getClassName() != "IndependentCopula")
+  {
+    Copula newCopula(copula);
+    newCopula.setDescription(inputNames);
+    if (indicesToRemove.size() != 1)
+    {
+      // add copula
+      newColl.add(newCopula);
+    }
+    else
+    {
+      // replace copula
+      // do not : erase copula_i then add newCopula
+      // do like this only for the copulas definition window behavior
+      newColl[*indicesToRemove.begin()] = newCopula;
+    }
+  }
+
+  // update composedCopula_
+  if (newColl.getSize())
+  {
+    composedCopula_.setCopulaCollection(newColl);
+  }
+  else
+  {
+    composedCopula_ = ComposedCopula();
+    // by default a ComposedCopula contain an IndependentCopula with the description "X0"
+    composedCopula_.setDescription(Description(1, ""));
+  }
+  updateCopula();
+
   notify("copulaChanged");
 }
 
@@ -715,34 +861,43 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
 
 String PhysicalModelImplementation::getCopulaPythonScript() const
 {
-  String result;
-
-  CorrelationMatrix correlationMatrix(getCopula().getCorrelation());
-
   OSS oss;
   oss.setPrecision(12);
 
-  oss << "correlationMatrix = ot.CorrelationMatrix(" << correlationMatrix.getNbRows() << ")\n";
+  for (UnsignedInteger i = 0; i < composedCopula_.getCopulaCollection().getSize(); ++i)
+  {
+    Copula composedCopula_i = composedCopula_.getCopulaCollection()[i];
 
-  bool hasCorrelation = false;
-  for (UnsignedInteger i = 0; i < correlationMatrix.getNbRows(); ++i)
-    for (UnsignedInteger j = i + 1; j < correlationMatrix.getNbRows(); ++j)
-      if (correlationMatrix(i, j) != 0.0)
+    if (composedCopula_i.getImplementation()->getClassName() == "NormalCopula")
+    {
+      CorrelationMatrix correlationMatrix(composedCopula_i.getCorrelation());
+
+      oss << "R = ot.CorrelationMatrix(" << correlationMatrix.getNbRows() << ")\n";
+
+      for (UnsignedInteger i = 0; i < correlationMatrix.getNbRows(); ++i)
       {
-        hasCorrelation = true;
-        oss << "correlationMatrix[" << i << ", " << j << "] = " << correlationMatrix(i, j) << "\n";
+        for (UnsignedInteger j = i + 1; j < correlationMatrix.getNbRows(); ++j)
+        {
+          if (correlationMatrix(i, j) != 0.0)
+          {
+            oss << "R[" << i << ", " << j << "] = " << correlationMatrix(i, j) << "\n";
+          }
+        }
       }
+      oss << "copula = ot.NormalCopula(ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(R))\n";
+      oss << getName() << ".setCopula(" << Parameters::GetOTDescriptionStr(composedCopula_i.getDescription()) << ", copula)\n";
+    }
+    else
+    {
+      if (composedCopula_i.getImplementation()->getClassName() != "IndependentCopula")
+      {
+        oss << getName() << ".setCopula(" << Parameters::GetOTDescriptionStr(composedCopula_i.getDescription()) << ", ";
+        oss << "ot." << composedCopula_i.getImplementation()->getClassName() << "(" << composedCopula_i.getParameter()[0] << "))\n";
+      }
+    }
+  }
 
-  // if there is no correlation: write nothing
-  if (!hasCorrelation)
-    return result;
-
-  // else:
-  result += oss.str();
-  result += "copula = ot.NormalCopula(ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(correlationMatrix))\n";
-  result += getName() + ".setCopula(copula)\n";
-
-  return result;
+  return oss;
 }
 
 
@@ -764,7 +919,7 @@ void PhysicalModelImplementation::save(Advocate & adv) const
   PersistentObject::save(adv);
   adv.saveAttribute("inputs_", inputs_);
   adv.saveAttribute("outputs_", outputs_);
-  adv.saveAttribute("copula_", copula_);
+  adv.saveAttribute("composedCopula_", composedCopula_);
 }
 
 
@@ -774,7 +929,8 @@ void PhysicalModelImplementation::load(Advocate & adv)
   PersistentObject::load(adv);
   adv.loadAttribute("inputs_", inputs_);
   adv.loadAttribute("outputs_", outputs_);
-  adv.loadAttribute("copula_", copula_);
+  adv.loadAttribute("composedCopula_", composedCopula_);
+  updateCopula();
 }
 
 

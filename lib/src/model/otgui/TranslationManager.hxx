@@ -41,17 +41,22 @@ public:
 #endif
 
   static QString GetTranslatedDistributionName(const std::string& name);
+  static QString GetTranslatedCopulaName(const std::string& name);
   static QString GetTranslatedDistributionParameterName(const std::string& name);
   static std::string GetDistributionName(const QString& name);
+  static std::string GetCopulaName(const QString& name);
   static QStringList GetAvailableDistributions();
+  static QStringList GetAvailableCopulas();
   static QString GetTranslatedParameterName(const std::string& name);
 
 private:
   static void InitializeDistributionsNames();
+  static void InitializeCopulasNames();
   static void InitializeDistributionsParametersNames();
   static void InitializeParametersNames();
 #ifndef Q_MOC_RUN
   static bimap_type DistributionsNames_;
+  static bimap_type CopulasNames_;
   static bimap_type DistributionsParametersNames_;
   static bimap_type ParametersNames_;
 #endif

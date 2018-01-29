@@ -47,7 +47,7 @@ print('outs=', aDesign3.getDesignOfExperiment().getOutputSample())
 
 # Design of Experiment ##
 aDesign4 = otguibase.FixedDesignOfExperiment('aDesign_4', model)
-inputSample = ot.LHSExperiment(model.getComposedDistribution(), 10).generate()
+inputSample = ot.LHSExperiment(model.getDistribution(), 10).generate()
 inputSample.stack(ot.Sample(10, [0.5]))
 aDesign4.setOriginalInputSample(inputSample)
 anOTStudy.add(aDesign4)

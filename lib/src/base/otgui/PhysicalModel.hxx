@@ -84,7 +84,7 @@ public:
   bool hasOutputNamed(const OT::String & outputName) const;
   OT::Description getSelectedOutputsNames() const;
 
-  OT::ComposedDistribution getComposedDistribution() const;
+  OT::Distribution getDistribution() const;
   OT::RandomVector getInputRandomVector() const;
   OT::RandomVector getOutputRandomVector(const OT::Description & outputNames) const;
 
@@ -95,7 +95,8 @@ public:
   OT::Function getRestrictedFunction(const OT::Description & outputNames) const;
 
   OT::Copula getCopula() const;
-  void setCopula(const OT::Copula & copula);
+  OT::Collection<OT::Copula> getCopulaCollection() const;
+  void setCopula(const OT::Description& inputNames, const OT::Copula & copula);
 
   bool isValid() const;
 

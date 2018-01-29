@@ -111,7 +111,7 @@ void ProbabilisticDesignPage::initialize(const Analysis& analysis)
     return;
 
   // check the independence of the copula
-  const bool independentCopula = doe_ptr->getPhysicalModel().getComposedDistribution().hasIndependentCopula();
+  const bool independentCopula = doe_ptr->getPhysicalModel().getCopula().hasIndependentCopula();
   if (!independentCopula)
   {
     designsGroup_->button(ProbabilisticDesignPage::LHS)->setEnabled(false);

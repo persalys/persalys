@@ -111,8 +111,7 @@ void DataModelWindow::buildInterface()
   dataTableView_ = new ExportableTableView(groupBox);
   dataTableView_->setSortingEnabled(true);
   dataTableView_->setEditTriggers(QTableView::SelectedClicked);
-  const QStringList comboBoxItems = QStringList() << tr("Input") << tr("Output") << tr("Disable");
-  dataTableView_->setItemDelegateForRow(1, new ComboBoxDelegate(comboBoxItems, QPair<int, int>(), dataTableView_));
+  dataTableView_->setItemDelegateForRow(1, new ComboBoxDelegate(dataTableView_));
 
   // - table model
   dataTableModel_ = new DataModelTableModel(dataModel_, dataTableView_);

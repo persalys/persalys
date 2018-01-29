@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to define Morris analysis
+ *  @brief QWidget to define dependencies
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,63 +18,47 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_MORRISPAGE_HXX
-#define OTGUI_MORRISPAGE_HXX
+#ifndef OTGUI_DEPENDENCIESWIDGET_HXX
+#define OTGUI_DEPENDENCIESWIDGET_HXX
 
-#include "otgui/Analysis.hxx"
+#include "otgui/ProbabilisticModelItem.hxx"
+#include "otgui/ResizableStackedWidget.hxx"
+#include "otgui/VariablesSelectionTableModel.hxx"
+#include "otgui/DependenciesTableModel.hxx"
 #include "otgui/TemporaryLabel.hxx"
-#include "otgui/UIntSpinBox.hxx"
-#include "otgui/MorrisTableModel.hxx"
 
 #include <QTableView>
-#include <QWizardPage>
 
 namespace OTGUI
 {
-class OTGUI_API MorrisPage : public QWizardPage
+class OTGUI_API DependenciesWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  MorrisPage(QWidget* parent = 0);
+  DependenciesWidget(ProbabilisticModelItem *item, QWidget *parent = 0);
 
-  void initialize(const Analysis& analysis);
-  MorrisAnalysis getAnalysis() const;
-
-  virtual int nextId() const;
+public slots:
+  void updateWidgets();
+  void updateCopulaWidget(const int index, const OT::Copula &copula);
+  void selectedItemChanged(const QModelIndex &current, const QModelIndex &previous);
+  void removeCopula();
+  void addCopula();
+signals:
+  void removeTableLine(const QModelIndex &index);
 
 protected:
   void buildInterface();
+  void updateVariablesList();
 
 private:
+  PhysicalModel physicalModel_;
+  VariablesSelectionTableModel * varTableModel_;
+  ResizableStackedWidget * rightSideOfSplitterStackedWidget_;
+  ResizableStackedWidget * copulaStackedWidget_;
   QTableView * tableView_;
-  MorrisTableModel * tableModel_;
+  DependenciesTableModel * tableModel_;
   TemporaryLabel * errorMessageLabel_;
-};
-class OTGUI_API MorrisSecondPage : public QWizardPage
-{
-  Q_OBJECT
-
-public:
-  MorrisSecondPage(QWidget* parent = 0);
-
-  void initialize(const Analysis& analysis);
-  int getTrajectoriesNumber() const;
-  int getLevel() const;
-  int getSeed() const;
-
-protected:
-  void buildInterface();
-
-protected slots:
-  void updateNbSimuLabel();
-
-private:
-  OT::UnsignedInteger nbInputs_;
-  UIntSpinBox * trajNbSpinbox_;
-  UIntSpinBox * levelSpinbox_;
-  QSpinBox * seedSpinbox_;
-  QLabel * nbSimuLabel_;
 };
 }
 #endif

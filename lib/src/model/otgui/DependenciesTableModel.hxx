@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QAbstractTableModel to list the inputs
+ *  @brief QAbstractTableModel to list dependencies
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,38 +18,46 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_INPUTTABLEPROBABILISTICMODEL_HXX
-#define OTGUI_INPUTTABLEPROBABILISTICMODEL_HXX
+#ifndef OTGUI_DEPENDENCIESTABLEMODEL_HXX
+#define OTGUI_DEPENDENCIESTABLEMODEL_HXX
 
 #include "otgui/PhysicalModel.hxx"
 
 #include <QAbstractTableModel>
+#include <QMetaType> // mandatory to specify it to avoid windows compilation problem
+
+Q_DECLARE_METATYPE(OT::Copula)
 
 namespace OTGUI
 {
-class OTGUI_API InputTableProbabilisticModel : public QAbstractTableModel
+class OTGUI_API DependenciesTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 
 public:
-  InputTableProbabilisticModel(const PhysicalModel & physicalModel, QObject * parent = 0);
+  DependenciesTableModel(const PhysicalModel &physicalModel, QObject *parent = 0);
 
-  int columnCount(const QModelIndex & parent = QModelIndex()) const;
-  int rowCount(const QModelIndex & parent = QModelIndex()) const;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const;
+  int columnCount(const QModelIndex &parent = QModelIndex()) const;
   Qt::ItemFlags flags(const QModelIndex & index) const;
-  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-  QVariant data(const QModelIndex & index, int role) const;
+  QVariant headerData(int section,
+                      Qt::Orientation orientation,
+                      int role = Qt::DisplayRole) const;
+  QVariant data(const QModelIndex &index, int role) const;
   bool setData(const QModelIndex & index, const QVariant & value, int role);
 
 public slots:
   void updateData();
+  void removeLine(const QModelIndex &index);
 signals:
-  void distributionChanged(const QModelIndex&);
-  void distributionsChanged();
-  void inferenceResultRequested(const QModelIndex&);
+  void dataUpdated(const int index, const OT::Copula &copula);
+
+protected:
+  void updateCopula();
 
 private:
   PhysicalModel physicalModel_;
+  OT::ComposedCopula copula_;
 };
 }
 #endif

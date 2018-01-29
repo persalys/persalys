@@ -23,12 +23,14 @@
 
 #include "otgui/Analysis.hxx"
 #include "otgui/ResizableHeaderlessTableView.hxx"
-#include "otgui/OTguiWizardPage.hxx"
+#include "otgui/TemporaryLabel.hxx"
 #include "otgui/ExperimentTableModel.hxx"
+
+#include <QWizardPage>
 
 namespace OTGUI
 {
-class OTGUI_API DeterministicDesignPage : public OTguiWizardPage
+class OTGUI_API DeterministicDesignPage : public QWizardPage
 {
   Q_OBJECT
 
@@ -46,6 +48,7 @@ private:
   ResizableHeaderlessTableView * tableView_;
   ExperimentTableModel * tableModel_;
   QLabel * DOESizeLabel_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif

@@ -204,9 +204,9 @@ void AnalysisItem::modifyAnalysis()
       if (analysisType == "SobolAnalysis" || analysisType == "SRCAnalysis")
       {
         // must have an independent copula
-        if (!pmAnalysis_ptr->getPhysicalModel().getComposedDistribution().hasIndependentCopula())
+        if (!pmAnalysis_ptr->getPhysicalModel().getCopula().hasIndependentCopula())
         {
-          emit emitErrorMessageRequested(tr("The model must have an independent copula to compute a sensitivity analysis but here the inputs are correlated."));
+          emit emitErrorMessageRequested(tr("The model must have an independent copula to compute a sensitivity analysis but here inputs are dependent."));
           return;
         }
       }

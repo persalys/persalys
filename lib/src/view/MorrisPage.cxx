@@ -35,9 +35,10 @@ namespace OTGUI
 
 // First Morris page
 MorrisPage::MorrisPage(QWidget* parent)
-  : OTguiWizardPage(parent)
+  : QWizardPage(parent)
   , tableView_(0)
   , tableModel_(0)
+  , errorMessageLabel_(0)
 {
   buildInterface();
 }
@@ -61,8 +62,7 @@ void MorrisPage::buildInterface()
   pageLayout->addWidget(groupBox);
 
   // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
+  errorMessageLabel_ = new TemporaryLabel;
   pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
 }
 
@@ -76,7 +76,7 @@ void MorrisPage::initialize(const Analysis& analysis)
 
   // table
   tableModel_ = new MorrisTableModel(*analysis_ptr, tableView_);
-  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
+  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
   tableView_->setModel(tableModel_);
 
   // SpinBoxDelegate for editable the cells
@@ -111,7 +111,7 @@ int MorrisPage::nextId() const
 
 // Second Morris page
 MorrisSecondPage::MorrisSecondPage(QWidget* parent)
-  : OTguiWizardPage(parent)
+  : QWizardPage(parent)
   , nbInputs_(0)
   , trajNbSpinbox_(0)
   , levelSpinbox_(0)

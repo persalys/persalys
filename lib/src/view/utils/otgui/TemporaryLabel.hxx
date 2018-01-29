@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Base class for wizard pages of otgui
+ *  @brief QLabel with temporary message
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,30 +18,27 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_OTGUIWIZARDPAGE_HXX
-#define OTGUI_OTGUIWIZARDPAGE_HXX
+#ifndef OTGUI_TEMPORARYLABEL_HXX
+#define OTGUI_TEMPORARYLABEL_HXX
 
 #include "otgui/OTGuiprivate.hxx"
 
-#include <QWizardPage>
 #include <QLabel>
 #include <QTimeLine>
 
 namespace OTGUI
 {
-class OTGUI_API OTguiWizardPage : public QWizardPage
+class OTGUI_API TemporaryLabel : public QLabel
 {
   Q_OBJECT
 
 public:
-  OTguiWizardPage(QWidget * parent = 0);
+  TemporaryLabel(QWidget *parent = 0);
 
 public slots:
   void setTemporaryErrorMessage(const QString& message);
   void reInitErrorMessage(QTimeLine::State);
 
-protected:
-  QLabel * errorMessageLabel_;
 private:
   QList<QTimeLine*> qtimelineList_;
 };

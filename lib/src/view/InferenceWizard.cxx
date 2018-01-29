@@ -97,7 +97,7 @@ void InferenceWizard::buildInterface()
   for (UnsignedInteger i = 0; i < varNames.getSize(); ++i)
     isVarChecked[i] = inference_.getInterestVariables().contains(varNames[i]);
 
-  varTableModel_ = new VariablesInferenceTableModel(varNames, isVarChecked, varTableView);
+  varTableModel_ = new VariablesSelectionTableModel(varNames, isVarChecked, varTableView);
   varTableView->setModel(varTableModel_);
 
   connect(varTableView, SIGNAL(clicked(QModelIndex)), varTableView, SLOT(setCurrentIndex(QModelIndex)));
@@ -108,8 +108,6 @@ void InferenceWizard::buildInterface()
   CheckableHeaderView * varTableHeaderView = new CheckableHeaderView;
   varTableView->setHorizontalHeader(varTableHeaderView);
   varTableView->verticalHeader()->hide();
-  varTableHeaderView->setChecked(!isVarChecked.contains(false));
-  connect(varTableModel_, SIGNAL(checked(bool)), varTableHeaderView, SLOT(setChecked(bool)));
 
   // - resize table
   int w = varTableView->horizontalHeader()->length();

@@ -115,7 +115,7 @@ OTGUI_PhysicalModel_setCopula_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getComposedDistribution_doc
+%define OTGUI_PhysicalModel_getDistribution_doc
 "Copula accessor.
 
 Parameters
@@ -123,8 +123,8 @@ Parameters
 Distribution : :py:class:`openturns.ComposedDistribution`
     The composed distribution"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getComposedDistribution
-OTGUI_PhysicalModel_getComposedDistribution_doc
+%feature("docstring") OTGUI::PhysicalModelImplementation::getDistribution
+OTGUI_PhysicalModel_getDistribution_doc
 
 // ---------------------------------------------------------------------
 

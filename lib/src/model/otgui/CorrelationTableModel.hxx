@@ -32,7 +32,7 @@ class OTGUI_API CorrelationTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  CorrelationTableModel(const PhysicalModel & physicalModel, QObject * parent = 0);
+  CorrelationTableModel(const PhysicalModel &model, const OT::Copula &copula, QObject *parent = 0);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
@@ -40,15 +40,16 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
   QVariant data(const QModelIndex & index, int role) const;
   bool setData(const QModelIndex & index, const QVariant & value, int role);
-  PhysicalModel getPhysicalModel() const;
 
 public slots:
   void updateData();
 signals:
   void errorMessageChanged(const QString & errorMessage);
+  void dataUpdated(const OT::Copula &copula);
 
 private:
   PhysicalModel physicalModel_;
+  OT::Copula copula_;
 };
 }
 #endif
