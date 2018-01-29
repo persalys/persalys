@@ -45,12 +45,14 @@ public:
                       int role = Qt::DisplayRole) const;
   QVariant data(const QModelIndex &index, int role) const;
   bool setData(const QModelIndex & index, const QVariant & value, int role);
+  OT::Description getGroup(const QModelIndex & index) const;
 
 public slots:
   void updateData();
   void removeLine(const QModelIndex &index);
 signals:
   void dataUpdated(const int index, const OT::Copula &copula);
+  void inferenceResultRequested(const QModelIndex&);
 
 protected:
   void updateCopula();

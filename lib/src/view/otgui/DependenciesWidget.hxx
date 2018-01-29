@@ -26,6 +26,7 @@
 #include "otgui/VariablesSelectionTableModel.hxx"
 #include "otgui/DependenciesTableModel.hxx"
 #include "otgui/TemporaryLabel.hxx"
+#include "otgui/OTStudy.hxx"
 
 #include <QTableView>
 
@@ -44,6 +45,7 @@ public slots:
   void selectedItemChanged(const QModelIndex &current, const QModelIndex &previous);
   void removeCopula();
   void addCopula();
+  void openWizardToChooseInferenceResult(const QModelIndex&);
 signals:
   void removeTableLine(const QModelIndex &index);
 
@@ -52,6 +54,7 @@ protected:
   void updateVariablesList();
 
 private:
+  OTStudy study_;
   PhysicalModel physicalModel_;
   VariablesSelectionTableModel * varTableModel_;
   ResizableStackedWidget * rightSideOfSplitterStackedWidget_;

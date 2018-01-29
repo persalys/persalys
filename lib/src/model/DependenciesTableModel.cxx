@@ -107,7 +107,10 @@ QVariant DependenciesTableModel::data(const QModelIndex &index, int role) const
     }
   }
   else if (role == Qt::UserRole + 1)
-    return copula_.getCopulaCollection()[index.row()].getDescription().getSize() > 2 ? QStringList() << tr("Normal") : TranslationManager::GetAvailableCopulas();
+  {
+    const UnsignedInteger groupSize = copula_.getCopulaCollection()[index.row()].getDescription().getSize();
+    return (groupSize > 2 ? QStringList() << tr("Normal") : TranslationManager::GetAvailableCopulas()) << tr("Inference result");
+  }
 
   return QVariant();
 }
@@ -155,6 +158,14 @@ bool DependenciesTableModel::setData(const QModelIndex & index, const QVariant &
 
   const QString newName = value.toString();
 
+  if (newName == tr("Inference result"))
+  {
+    emit inferenceResultRequested(index);
+    updateCopula();
+    emit dataChanged(index, this->index(index.row(), 1));
+    return true;
+  }
+
   String copulaName = copula_.getCopulaCollection()[index.row()].getImplementation()->getClassName();
   copulaName = copulaName.substr(0, copulaName.find("Copula"));
   if (newName == TranslationManager::GetTranslatedCopulaName(copulaName))
@@ -189,5 +200,11 @@ void DependenciesTableModel::removeLine(const QModelIndex &index)
   physicalModel_.blockNotification();
   updateCopula();
   endRemoveRows();
+}
+
+
+Description DependenciesTableModel::getGroup(const QModelIndex & index) const
+{
+  return copula_.getCopulaCollection()[index.row()].getDescription();
 }
 }
