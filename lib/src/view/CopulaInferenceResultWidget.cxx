@@ -86,22 +86,11 @@ void CopulaInferenceResultWidget::buildInterface()
   if (nbTests > 1)
   {
     indices.fill();
-    for (int i = (nbTests - 1); i >= 0; --i)
-    {
-      for (int l = 1; l <= i; ++l)
-      {
-        if (bicValues[l - 1] > bicValues[l])
-        {
-          Scalar temp = bicValues[l - 1];
-          bicValues[l - 1] = bicValues[l];
-          bicValues[l] = temp;
-          const UnsignedInteger ind_temp = indices[l - 1];
-          indices[l - 1] = indices[l];
-          indices[l] = ind_temp;
-        }
-      }
-    }
+    std::sort(std::begin(indices),
+              std::end(indices),
+              [&](UnsignedInteger i1, UnsignedInteger i2) {return bicValues[i1] < bicValues[i2];});
   }
+
   // horizontal header
   distTableModel_->setNotEditableHeaderItem(0, 0, tr("Copulas"));
   distTableModel_->setNotEditableHeaderItem(0, 1, tr("Bayesian\nInformation\nCriterion"));
@@ -117,7 +106,7 @@ void CopulaInferenceResultWidget::buildInterface()
 
     if (currentSetResult_.getErrorMessages()[indices[i]].empty())
     {
-      distTableModel_->setNotEditableItem(i + 1, 1, bicValues[i], 6);
+      distTableModel_->setNotEditableItem(i + 1, 1, bicValues[indices[i]], 6);
     }
     else
     {

@@ -219,21 +219,9 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
   if (nbTests > 1)
   {
     indices.fill();
-    for (int i = (nbTests - 1); i >= 0; --i)
-    {
-      for (int l = 1; l <= i; ++l)
-      {
-        if (bicValues[l - 1] > bicValues[l])
-        {
-          Scalar temp = bicValues[l - 1];
-          bicValues[l - 1] = bicValues[l];
-          bicValues[l] = temp;
-          const UnsignedInteger ind_temp = indices[l - 1];
-          indices[l - 1] = indices[l];
-          indices[l] = ind_temp;
-        }
-      }
-    }
+    std::sort(std::begin(indices),
+              std::end(indices),
+              [&](UnsignedInteger i1, UnsignedInteger i2) {return bicValues[i1] < bicValues[i2];});
   }
 
   // -- fill table
@@ -245,7 +233,7 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
     distTableModel_->setData(distTableModel_->index(cellRow, 0), (int)indices[i], Qt::UserRole);
     if (currentFittingTestResult_.getErrorMessages()[indices[i]].empty())
     {
-      distTableModel_->setNotEditableItem(cellRow, 1, bicValues[i], 3);
+      distTableModel_->setNotEditableItem(cellRow, 1, bicValues[indices[i]], 3);
       distTableModel_->setNotEditableItem(cellRow, 2, currentFittingTestResult_.getKolmogorovTestResults()[indices[i]].getPValue(), 3);
       // if accepted
       if (currentFittingTestResult_.getKolmogorovTestResults()[indices[i]].getBinaryQualityMeasure())
