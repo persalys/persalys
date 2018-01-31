@@ -85,7 +85,6 @@ void CopulaInferenceResultWizard::buildInterface()
     tableView_->setModel(tableModel);
     for (UnsignedInteger i = 0; i < variables_.getSize(); ++i)
     {
-      tableModel->setData(tableModel->index(0, i) , variables_[i].c_str());
       tableModel->setData(tableModel->index(0, i) , QtOT::DescriptionToStringList(variables_), Qt::UserRole + 1);
     }
     // - delegate
@@ -206,8 +205,13 @@ void CopulaInferenceResultWizard::updateVariablesTable(const QString &text)
     return;
 
   const QStringList variablesNames(text.split(QRegExp("\\W+"), QString::SkipEmptyParts));
+  QStringList variablesNamesCopy(variablesNames);
+  variablesNamesCopy.sort();
+  QStringList variablesList(QtOT::DescriptionToStringList(variables_));
+  variablesList.sort();
   for (UnsignedInteger i = 0; i < variables_.getSize(); ++i)
   {
+    tableView_->model()->setData(tableView_->model()->index(0, i), variablesNames != variablesList ? variables_[i].c_str() : variablesNames[i]);
     tableView_->model()->setHeaderData(i, Qt::Horizontal, variablesNames[i]);
   }
 }

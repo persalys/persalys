@@ -181,8 +181,9 @@ Collection<Description> CopulaInferenceAnalysis::getVariablesGroups()
 
 void CopulaInferenceAnalysis::setDistributionsFactories(const Description& variablesNames, const DistributionFactoryCollection& factories)
 {
+  const Description allVars(designOfExperiment_.getSample().getDescription());
   for (UnsignedInteger i = 0; i < variablesNames.getSize(); ++i)
-    if (!designOfExperiment_.getSample().getDescription().contains(variablesNames[i]))
+    if (!allVars.contains(variablesNames[i]))
       throw InvalidArgumentException(HERE) << "Error: the variable name " << variablesNames[i] << " does not match a variable of the model";
 
   if (variablesNames.getSize() < 2)
@@ -192,8 +193,16 @@ void CopulaInferenceAnalysis::setDistributionsFactories(const Description& varia
     if (factories[i].getImplementation()->getClassName().find("Copula") == std::string::npos)
       throw InvalidArgumentException(HERE) << "Error: the dependency inference is performed with copulae.";
 
-  Description setOfVariables(variablesNames);
-  setOfVariables.sort();
+  // keep same order as in the sample description
+  Indices indices;
+  for (UnsignedInteger i = 0; i < variablesNames.getSize(); ++i)
+  {
+    const Description::const_iterator it = std::find(allVars.begin(), allVars.end(), variablesNames[i]);
+    indices.add(it - allVars.begin());
+  }
+  std::sort(indices.begin(), indices.end());
+
+  const Description setOfVariables(designOfExperiment_.getSample().getMarginal(indices).getDescription());
 
   // cancel inference for the given set of variables
   if (!factories.getSize())
