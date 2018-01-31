@@ -600,6 +600,7 @@ void PlotWidget::plotContour(const Distribution& distribution, const bool isPdf)
   QwtScaleWidget * rightAxis = axisWidget(QwtPlot::yRight);
   rightAxis->setTitle(tr("Density"));
   rightAxis->setColorBarEnabled(true);
+  rightAxis->setScaleDraw(new CustomScaleDraw);
 
   // - color map
   colorMap = new QwtLinearColorMap(Qt::darkCyan, Qt::darkRed);
