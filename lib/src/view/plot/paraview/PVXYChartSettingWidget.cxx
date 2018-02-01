@@ -190,7 +190,7 @@ void PVXYChartSettingWidget::buildInterface()
     {
       reprNames << pvViewWidget_->getRepresentationLabels(i)[0];
     }
-    reprListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", reprNames, reprNames, this);
+    reprListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", reprNames, this);
     connect(reprListWidget_, SIGNAL(checkedItemsChanged(QStringList)), this, SLOT(setRepresentationToDisplay()));
     reprComboBox->setModel(reprListWidget_->model());
     reprComboBox->setView(reprListWidget_);

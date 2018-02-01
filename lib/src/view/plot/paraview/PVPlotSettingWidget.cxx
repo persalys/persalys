@@ -89,7 +89,7 @@ void PVPlotSettingWidget::buildInterface()
 
   // combobox to select the variables to display
   NoWheelEventComboBox * varComboBox = new NoWheelEventComboBox;
-  ListWidgetWithCheckBox * varListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", names, names, this);
+  ListWidgetWithCheckBox * varListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", names, this);
   connect(varListWidget, SIGNAL(checkedItemsChanged(QStringList)), pvViewWidget_, SLOT(setAxisToShow(QStringList)));
   varComboBox->setModel(varListWidget->model());
   varComboBox->setView(varListWidget);
