@@ -269,7 +269,7 @@ void SobolAnalysis::launch()
   Sample totalIndices(0, nbInputs);
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
-    if (!(allFirstOrderIndices[i].getSize() * allTotalIndices[i].getSize()))
+    if (!(allFirstOrderIndices[i].getSize() && allTotalIndices[i].getSize()))
       throw InvalidValueException(HERE) << "No result. Try to increase the block size and/or the maximum calls.";
     firstOrderIndices.add(allFirstOrderIndices[i][allFirstOrderIndices[i].getSize() - 1]);
     totalIndices.add(allTotalIndices[i][allTotalIndices[i].getSize() - 1]);

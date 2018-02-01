@@ -46,7 +46,7 @@ DataSample::DataSample(const Sample & inSample, const Sample & outSample)
   , listXMin_()
   , listXMax_()
 {
-  if (getInputSample().getSize() * getOutputSample().getSize())
+  if (getInputSample().getSize() && getOutputSample().getSize())
     if (getInputSample().getSize() != getOutputSample().getSize())
       throw InvalidDimensionException(HERE) << "The input sample and the output sample must have the same size";
 }
