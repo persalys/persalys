@@ -29,7 +29,7 @@ using namespace OT;
 namespace OTGUI
 {
 
-ResultWindow::ResultWindow(AnalysisItem * item, QWidget * parent)
+ResultWindow::ResultWindow(OTguiItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
   , parametersWidget_(0)
 {

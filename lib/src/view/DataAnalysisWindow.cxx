@@ -55,7 +55,7 @@ using namespace OT;
 namespace OTGUI
 {
 
-DataAnalysisWindow::DataAnalysisWindow(AnalysisItem * item, QWidget * parent)
+DataAnalysisWindow::DataAnalysisWindow(OTguiItem * item, QWidget * parent)
   : ResultWindow(item, parent)
   , designOfExperiment_()
   , result_()
