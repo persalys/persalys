@@ -68,7 +68,7 @@ QVariant OutputTableModel::headerData(int section, Qt::Orientation orientation, 
   else if (role == Qt::ToolTipRole && section == 0 && rowCount())
   {
     const bool allChecked = physicalModel_.getOutputDimension() == physicalModel_.getSelectedOutputsNames().getSize();
-    return allChecked ? tr("Unselect all") : tr("Select all");
+    return allChecked ? tr("Deselect all") : tr("Select all");
   }
   return QAbstractTableModel::headerData(section, orientation, role);
 }

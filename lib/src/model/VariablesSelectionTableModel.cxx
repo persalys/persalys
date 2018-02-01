@@ -73,7 +73,7 @@ QVariant VariablesSelectionTableModel::headerData(int section, Qt::Orientation o
       if (isVariableEnabled_[i])
         allChecked = allChecked && isVariableChecked_[i];
     }
-    return allChecked ? tr("Unselect all") : tr("Select all");
+    return allChecked ? tr("Deselect all") : tr("Select all");
   }
 
   return QAbstractTableModel::headerData(section, orientation, role);
