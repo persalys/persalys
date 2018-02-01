@@ -133,7 +133,7 @@ void CheckableHeaderView::mousePressEvent(QMouseEvent* event)
 
 void CheckableHeaderView::updateCheckState(const Qt::Orientation orientation)
 {
-  if (orientation == Qt::Vertical || modelSignalBlocked_)
+  if (orientation == Qt::Vertical || modelSignalBlocked_ || !model())
     return;
 
   bool checkState = true;
