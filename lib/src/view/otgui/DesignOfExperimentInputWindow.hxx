@@ -21,12 +21,12 @@
 #ifndef OTGUI_DESIGNOFEXPERIMENTINPUTWINDOW_HXX
 #define OTGUI_DESIGNOFEXPERIMENTINPUTWINDOW_HXX
 
-#include "OTguiSubWindow.hxx"
+#include "otgui/DataAnalysisWindow.hxx"
 #include "otgui/DesignOfExperimentDefinitionItem.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API DesignOfExperimentInputWindow : public OTguiSubWindow
+class OTGUI_API DesignOfExperimentInputWindow : public DataAnalysisWindow
 {
   Q_OBJECT
 
@@ -34,10 +34,7 @@ public:
   DesignOfExperimentInputWindow(DesignOfExperimentDefinitionItem * item, QWidget * parent = 0);
 
 protected:
-  void buildInterface();
-
-private:
-  OT::Sample originalInputSample_;
+  virtual void fillTabWidget();
 };
 }
 #endif

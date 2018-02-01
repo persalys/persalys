@@ -20,56 +20,43 @@
  */
 #include "otgui/DesignOfExperimentInputWindow.hxx"
 
-#include "otgui/SampleTableModel.hxx"
-#include "otgui/ExportableTableView.hxx"
-#include "otgui/ParametersWidget.hxx"
-
-#include <QVBoxLayout>
-#include <QSortFilterProxyModel>
-
-using namespace OT;
-
 namespace OTGUI
 {
 
 DesignOfExperimentInputWindow::DesignOfExperimentInputWindow(DesignOfExperimentDefinitionItem * item, QWidget * parent)
-  : OTguiSubWindow(item, parent)
-  , originalInputSample_(item->getOriginalInputSample())
+  : DataAnalysisWindow(item, parent)
 {
+  designOfExperiment_.setInputSample(item->getOriginalInputSample());
+
+  // parameters widget
+  setParameters(item->getAnalysis(), tr("Design of experiments creation parameters"));
+
+  setWindowTitle(tr("Design of experiments"));
+
   buildInterface();
 }
 
 
-void DesignOfExperimentInputWindow::buildInterface()
+void DesignOfExperimentInputWindow::fillTabWidget()
 {
-  setWindowTitle(tr("Design of experiments"));
+  variablesGroupBox_->setVisible(false);
 
-  QWidget * mainWidget = new QWidget;
-  QVBoxLayout * mainWidgetLayout = new QVBoxLayout(mainWidget);
+#ifdef OTGUI_HAVE_PARAVIEW
+  addParaviewWidgetsTabs();
+#else
+  // tab: Table --------------------------------
+  addTableTab();
+  if (designOfExperiment_.getSample().getDimension() > 1 && designOfExperiment_.getSample().getSize() > 1)
+  {
+    // tab: plot C
+    addPlotMatrixTab();
+    // tab: scatter plots
+    addScatterPlotsTab();
+  }
+#endif
 
-  // parameters
-  QStringList namesList;
-  namesList << tr("Sample size");
-  QStringList valuesList;
-  valuesList << QString::number(originalInputSample_.getSize());
-
-  ParametersWidget * table = new ParametersWidget("", namesList, valuesList, true, true);
-  mainWidgetLayout->addWidget(table);
-
-  // sample table
-  ExportableTableView * tableView = new ExportableTableView;
-  connect(getItem(), SIGNAL(dataExportRequested()), tableView, SLOT(exportData()));
-  tableView->setSortingEnabled(true);
-
-  SampleTableModel * tableModel = new SampleTableModel(originalInputSample_, tableView);
-  QSortFilterProxyModel * proxyModel = new QSortFilterProxyModel(tableView);
-  proxyModel->setSourceModel(tableModel);
-  proxyModel->setSortRole(Qt::UserRole);
-
-  tableView->setModel(proxyModel);
-  tableView->sortByColumn(0, Qt::AscendingOrder);
-  mainWidgetLayout->addWidget(tableView, 1);
-
-  setWidget(mainWidget);
+  // tab: Parameters --------------------------------
+  if (parametersWidget_)
+    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 }
 }
