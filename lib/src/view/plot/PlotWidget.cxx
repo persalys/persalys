@@ -2,7 +2,7 @@
 /**
  *  @brief QwtPlot for all the graphics of the interface
  *
- *  Copyright 2015-2017 EDF-Phimeca
+ *  Copyright 2015-2018 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -24,6 +24,7 @@
 #include "otgui/CustomScaleDraw.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/ContourData.hxx"
+#include "otgui/UIntSpinBox.hxx"
 
 #include <QMenu>
 #include <QFileDialog>
@@ -31,6 +32,10 @@
 #include <QSettings>
 #include <QMessageBox>
 #include <QApplication>
+#include <QWizard>
+#include <QGroupBox>
+#include <QGridLayout>
+#include <QLabel>
 
 #include <qwt_plot_layout.h>
 #include <qwt_plot_panner.h>
@@ -136,13 +141,44 @@ void PlotWidget::contextMenu(const QPoint & pos)
 
 void PlotWidget::exportPlot()
 {
+  // wizard to choose image size
+  QWizard sizeSelectionWizard(this);
+  sizeSelectionWizard.setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
+  sizeSelectionWizard.setButtonText(QWizard::CancelButton, tr("Cancel"));
+  sizeSelectionWizard.setButtonText(QWizard::FinishButton, tr("OK"));
+  sizeSelectionWizard.setOption(QWizard::NoDefaultButton, true);
+  sizeSelectionWizard.setOption(QWizard::NoBackButtonOnStartPage, true);
+  QWizardPage * page = new QWizardPage;
+  QVBoxLayout * pageLayout = new QVBoxLayout(page);
+  QGroupBox * groupBox = new QGroupBox(tr("Size"));
+  QGridLayout * groupBoxLayout = new QGridLayout(groupBox);
+  groupBoxLayout->addWidget(new QLabel(tr("Image resolution")), 0, 0);
+  UIntSpinBox * spinBoxW = new UIntSpinBox;
+  spinBoxW->setSingleStep(100);
+  spinBoxW->setValue(512);
+  groupBoxLayout->addWidget(spinBoxW, 0, 1);
+  groupBoxLayout->addWidget(new QLabel("x"), 0, 2, Qt::AlignHCenter);
+  UIntSpinBox * spinBoxH = new UIntSpinBox;
+  spinBoxH->setSingleStep(100);
+  spinBoxH->setValue(512);
+  groupBoxLayout->addWidget(spinBoxH, 0, 3);
+  pageLayout->addWidget(groupBox);
+  sizeSelectionWizard.addPage(page);
+
+  // get image size
+  if (!sizeSelectionWizard.exec())
+    return;
+  const int imageWidth = spinBoxW->value();
+  const int imageHeight = spinBoxH->value();
+
+  // save image
   QSettings settings;
   QString currentDir = settings.value("currentDir").toString();
   if (currentDir.isEmpty())
     currentDir = QDir::homePath();
   QString fileName = QFileDialog::getSaveFileName(this, tr("Export plot"),
                      currentDir + QDir::separator() + plotTypeName_,
-                     tr("Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff *.svg *.pdf *.ps)"));
+                     tr("PNG (*.png);; JPEG (*.jpg *.jpeg);; BMP (*.bmp);; PPM (*.ppm);; XBM (*.xbm);; XPM (*.xpm);; TIFF (*.tiff);; SVG (*.svg);; PDF (*.pdf);; PS (*.ps)"));
 
   if (!fileName.isEmpty())
   {
@@ -154,11 +190,10 @@ void PlotWidget::exportPlot()
       fileName += ".png";
       format = QString("png");
     }
-    int size = 512;
     if (format == "ps" || format == "pdf" || format == "svg")
     {
       QwtPlotRenderer * renderer = new QwtPlotRenderer();
-      renderer->renderDocument(this, fileName, QSizeF(size, size));
+      renderer->renderDocument(this, fileName, QSizeF(imageWidth, imageHeight));
     }
     else
     {
@@ -166,7 +201,7 @@ void PlotWidget::exportPlot()
       // but renderDocument doesn't emit error message...
       if (QImageWriter::supportedImageFormats().indexOf(format.toLatin1()) >= 0)
       {
-        QPixmap pixmap(size, size);
+        QPixmap pixmap(imageWidth, imageHeight);
         pixmap.fill();
         QwtPlotRenderer renderer;
 

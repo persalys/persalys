@@ -396,12 +396,12 @@ Début : %2.</translation>
         <translation>Copules testées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="106"/>
+        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="95"/>
         <source>Copulas</source>
         <translation>Copules</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="107"/>
+        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="96"/>
         <source>Bayesian
 Information
 Criterion</source>
@@ -410,17 +410,17 @@ d&apos;information
 bayésien (BIC)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="161"/>
+        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="150"/>
         <source>PDF/CDF</source>
         <translation>PDF/CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="165"/>
+        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="154"/>
         <source>Kendall plot</source>
         <translation>Graphique de Kendall</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="175"/>
+        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="164"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -466,22 +466,22 @@ bayésien (BIC)</translation>
         <translation>Groupe de variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="180"/>
+        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="179"/>
         <source>The result does not contain infered copula of dimension equal to %1</source>
         <translation>Le résultat ne contient pas de copule inférée de dimension %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="247"/>
+        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="251"/>
         <source>No copulas with a dimension of %1 in this result</source>
         <translation>Aucune copule de dimension %1 dans le résultat</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="252"/>
+        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="256"/>
         <source>The selected copula is not valid.</source>
         <translation>La copule sélectionnée n&apos;est pas valide.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="272"/>
+        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="276"/>
         <source>Invalid list %1. The elements must be single-use.</source>
         <translation>Liste %1 invalide. Les éléments doivent être unique.</translation>
     </message>
@@ -2015,52 +2015,69 @@ métamodèle</translation>
     <name>OTGUI::GraphConfigurationWidget</name>
     <message>
         <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="110"/>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="183"/>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="211"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="196"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="224"/>
         <source>Title</source>
         <translation>Titre</translation>
     </message>
     <message>
         <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="123"/>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="206"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="219"/>
         <source>X-axis</source>
         <translation>Axe X</translation>
     </message>
     <message>
         <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="140"/>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="234"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="247"/>
         <source>Y-axis</source>
         <translation>Axe Y</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="153"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="154"/>
         <source>Ranks</source>
         <translation>Espace des rangs</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="164"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="165"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="168"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="169"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="190"/>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="218"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="178"/>
+        <source>X-axis labels
+orientation</source>
+        <translation>Orientation des
+étiquettes de l&apos;axe X</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="180"/>
+        <source>Horizontal</source>
+        <translation>Horizontale</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="180"/>
+        <source>Vertical</source>
+        <translation>Verticale</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="203"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="231"/>
         <source>Min</source>
         <translation>Min</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="197"/>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="225"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="210"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="238"/>
         <source>Max</source>
         <translation>Max</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="241"/>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="254"/>
         <source>Export</source>
         <translation>Exporter</translation>
     </message>
@@ -2160,7 +2177,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/InferenceResultWidget.cxx" line="154"/>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="474"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="462"/>
         <source>Q-Q Plot</source>
         <translation>Diagramme Q-Q</translation>
     </message>
@@ -2190,7 +2207,7 @@ bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/InferenceResultWidget.cxx" line="203"/>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="282"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="270"/>
         <source>Kolmogorov-Smirnov</source>
         <translation>Kolmogorov-Smirnov</translation>
     </message>
@@ -2205,67 +2222,67 @@ bayésien (BIC)</translation>
         <translation>Acceptation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="253"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="241"/>
         <source>yes</source>
         <translation>oui</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="257"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="245"/>
         <source>no</source>
         <translation>non</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="264"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="252"/>
         <source>failed</source>
         <translation>échoué</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="353"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="341"/>
         <source>Moments</source>
         <translation>Moments</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="357"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="345"/>
         <source>Mean</source>
         <translation>Moyenne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="358"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="346"/>
         <source>Standard deviation</source>
         <translation>Écart type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="359"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="347"/>
         <source>Skewness</source>
         <translation>Asymétrie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="360"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="348"/>
         <source>Kurtosis</source>
         <translation>Aplatissement</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="376"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="364"/>
         <source>Native parameters</source>
         <translation>Paramètres natifs</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="461"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="449"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="470"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="458"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="475"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="463"/>
         <source>Data quantiles</source>
         <translation>Quantiles des données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="476"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="464"/>
         <source>%1 theoretical quantiles</source>
         <translation>Quantiles théoriques de %1</translation>
     </message>
@@ -2391,13 +2408,13 @@ bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="90"/>
-        <source>Unselect all</source>
-        <translation>Tout désélectionner</translation>
+        <source>Select all</source>
+        <translation>Tout sélectionner</translation>
     </message>
     <message>
         <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="90"/>
-        <source>Select all</source>
-        <translation>Tout sélectionner</translation>
+        <source>Deselect all</source>
+        <translation>Tout désélectionner</translation>
     </message>
     <message>
         <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="135"/>
@@ -2861,6 +2878,19 @@ bayésien (BIC)</translation>
         <location filename="../lib/src/view/LimitStateWindow.cxx" line="112"/>
         <source>The output name is not valid.</source>
         <translation>Le nom de la sortie n&apos;est pas valide.</translation>
+    </message>
+</context>
+<context>
+    <name>OTGUI::ListWidgetWithCheckBox</name>
+    <message>
+        <location filename="../lib/src/view/utils/ListWidgetWithCheckBox.cxx" line="107"/>
+        <source>Deselect all</source>
+        <translation>Tout désélectionner</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/utils/ListWidgetWithCheckBox.cxx" line="107"/>
+        <source>Select all</source>
+        <translation>Tout sélectionner</translation>
     </message>
 </context>
 <context>
@@ -3900,7 +3930,7 @@ ou interaction</translation>
     </message>
     <message>
         <location filename="../lib/src/model/OutputTableModel.cxx" line="71"/>
-        <source>Unselect all</source>
+        <source>Deselect all</source>
         <translation>Tout désélectionner</translation>
     </message>
     <message>
@@ -4681,129 +4711,149 @@ métamodèle</translation>
 <context>
     <name>OTGUI::PlotWidget</name>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="130"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="132"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="143"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="135"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="137"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="182"/>
         <source>Export plot</source>
         <translation>Exporter le graphique</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="145"/>
-        <source>Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff *.svg *.pdf *.ps)</source>
-        <translation>Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff *.svg *.pdf *.ps)</translation>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="147"/>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="177"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="181"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="148"/>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="153"/>
+        <source>Size</source>
+        <translation>Dimension</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="155"/>
+        <source>Image resolution</source>
+        <translation>Résolution de l&apos;image</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="184"/>
+        <source>PNG (*.png);; JPEG (*.jpg *.jpeg);; BMP (*.bmp);; PPM (*.ppm);; XBM (*.xbm);; XPM (*.xpm);; TIFF (*.tiff);; SVG (*.svg);; PDF (*.pdf);; PS (*.ps)</source>
+        <translation>PNG (*.png);; JPEG (*.jpg *.jpeg);; BMP (*.bmp);; PPM (*.ppm);; XBM (*.xbm);; XPM (*.xpm);; TIFF (*.tiff);; SVG (*.svg);; PDF (*.pdf);; PS (*.ps)</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="215"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="219"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="177"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="215"/>
         <source>Impossible to export the plot.</source>
         <translation>Impossible d&apos;exporter le graphique.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="181"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="219"/>
         <source>Format not supported.</source>
         <translation>Format non supporté.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="285"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="323"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="286"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="601"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="324"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="639"/>
         <source>Density</source>
         <translation>Densité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="287"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="304"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="325"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="342"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="302"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="303"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="340"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="341"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="460"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="498"/>
         <source>Index</source>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="461"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="499"/>
         <source>Inputs</source>
         <translation>Entrées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="495"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="533"/>
         <source>First order index</source>
         <translation>Indice du premier ordre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="521"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="559"/>
         <source>Total index</source>
         <translation>Indice total</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="627"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="666"/>
         <source>No effect boundary</source>
         <translation>Limite sans effet</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="635"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="674"/>
         <source>Selecting a value at the scale will move the vertical marker.</source>
         <translation>Sélectionner une valeur sur l&apos;axe changera la position du repère vertical.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="710"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="749"/>
         <source>Deselect the points</source>
         <translation>Désélectionner les points</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="711"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="750"/>
         <source>Select the points</source>
         <translation>Sélectionner les points</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="805"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="811"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="820"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="828"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="843"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="849"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="857"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="863"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="844"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="850"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="859"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="867"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="882"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="888"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="896"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="902"/>
         <source>scatterplot</source>
         <translation>diagrammeDispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="807"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="813"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="824"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="832"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="845"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="851"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="859"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="865"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="846"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="852"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="863"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="871"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="884"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="890"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="898"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="904"/>
         <source>Scatter plot:</source>
         <translation>Diagramme de dispersion :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="807"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="813"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="824"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="832"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="845"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="851"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="859"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="865"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="846"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="852"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="863"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="871"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="884"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="890"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="898"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="904"/>
         <source>vs</source>
         <translation>vs</translation>
     </message>
@@ -6033,7 +6083,7 @@ Des objets ne sont peut être pas ouverts.</translation>
     </message>
     <message>
         <location filename="../lib/src/model/VariablesSelectionTableModel.cxx" line="76"/>
-        <source>Unselect all</source>
+        <source>Deselect all</source>
         <translation>Tout désélectionner</translation>
     </message>
 </context>

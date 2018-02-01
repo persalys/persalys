@@ -2,7 +2,7 @@
 /**
  *  @brief QWidget to configure graphics
  *
- *  Copyright 2015-2017 EDF-Phimeca
+ *  Copyright 2015-2018 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -64,6 +64,7 @@ public slots:
   void updateYLabel();
   void updateXrange();
   void updateYrange();
+  void changeLabelOrientation(int);
   void exportPlot();
 signals:
   void currentPlotChanged(int);

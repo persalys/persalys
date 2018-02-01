@@ -2,7 +2,7 @@
 /**
  *  @brief QWidget to configure paraview plot matrices
  *
- *  Copyright 2015-2017 EDF-Phimeca
+ *  Copyright 2015-2018 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -89,7 +89,7 @@ void PVPlotSettingWidget::buildInterface()
 
   // combobox to select the variables to display
   NoWheelEventComboBox * varComboBox = new NoWheelEventComboBox;
-  ListWidgetWithCheckBox * varListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", names, names, this);
+  ListWidgetWithCheckBox * varListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", names, this);
   connect(varListWidget, SIGNAL(checkedItemsChanged(QStringList)), pvViewWidget_, SLOT(setAxisToShow(QStringList)));
   varComboBox->setModel(varListWidget->model());
   varComboBox->setView(varListWidget);

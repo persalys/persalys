@@ -2,7 +2,7 @@
 /**
  *  @brief Class to define designs of experiments
  *
- *  Copyright 2015-2017 EDF-Phimeca
+ *  Copyright 2015-2018 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -46,7 +46,7 @@ DataSample::DataSample(const Sample & inSample, const Sample & outSample)
   , listXMin_()
   , listXMax_()
 {
-  if (getInputSample().getSize() * getOutputSample().getSize())
+  if (getInputSample().getSize() && getOutputSample().getSize())
     if (getInputSample().getSize() != getOutputSample().getSize())
       throw InvalidDimensionException(HERE) << "The input sample and the output sample must have the same size";
 }

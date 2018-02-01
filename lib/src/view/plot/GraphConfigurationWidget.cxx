@@ -2,7 +2,7 @@
 /**
  *  @brief QWidget to configure graphics
  *
- *  Copyright 2015-2017 EDF-Phimeca
+ *  Copyright 2015-2018 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -148,6 +148,7 @@ void GraphConfigurationWidget::buildInterface()
       connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
   }
 
+  // radio button ranks
   if (plotType_ == GraphConfigurationWidget::Scatter)
   {
     rankCheckBox_ = new QCheckBox(tr("Ranks"));
@@ -170,6 +171,18 @@ void GraphConfigurationWidget::buildInterface()
     mainGridLayout->addWidget(buttonToChoosePDForCDF, rowGrid, 1, 1, 1);
     connect(pdf_cdfGroup_, SIGNAL(buttonClicked(int)), this, SLOT(plotChanged()));
   }
+
+  // label direction
+  if (plotType_ == GraphConfigurationWidget::SensitivityIndices)
+  {
+    label = new QLabel(tr("X-axis labels\norientation"));
+    QComboBox * labelOrientation = new QComboBox;
+    labelOrientation->addItems(QStringList() << tr("Horizontal") << tr("Vertical"));
+    mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+    mainGridLayout->addWidget(labelOrientation, rowGrid, 1, 1, 1);
+    connect(labelOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(changeLabelOrientation(int)));
+  }
+
   //TODO: add Legend?
 //   QwtLegend *legend = new QwtLegend ;
 //   plotWidgets_[currentPlotIndex_]->insertLegend(legend, QwtPlot::BottomLegend);
@@ -445,6 +458,22 @@ void GraphConfigurationWidget::updateYrange()
     updateLineEdits();
     qDebug() << "GraphConfigurationWidget::updateYrange: value not valid\n";
   }
+}
+
+
+void GraphConfigurationWidget::changeLabelOrientation(int index)
+{
+  if (index == 0)
+  {
+    plotWidgets_[currentPlotIndex_]->setAxisLabelAlignment(QwtPlot::xBottom, Qt::AlignBottom);
+    plotWidgets_[currentPlotIndex_]->setAxisLabelRotation(QwtPlot::xBottom, 0);
+  }
+  else
+  {
+    plotWidgets_[currentPlotIndex_]->setAxisLabelAlignment(QwtPlot::xBottom, Qt::AlignLeft);
+    plotWidgets_[currentPlotIndex_]->setAxisLabelRotation(QwtPlot::xBottom, -90);
+  }
+  plotWidgets_[currentPlotIndex_]->replot();
 }
 
 

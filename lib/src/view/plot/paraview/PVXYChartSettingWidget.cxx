@@ -2,7 +2,7 @@
 /**
  *  @brief QWidget to configure XYChart
  *
- *  Copyright 2015-2017 EDF-Phimeca
+ *  Copyright 2015-2018 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -190,7 +190,7 @@ void PVXYChartSettingWidget::buildInterface()
     {
       reprNames << pvViewWidget_->getRepresentationLabels(i)[0];
     }
-    reprListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", reprNames, reprNames, this);
+    reprListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", reprNames, this);
     connect(reprListWidget_, SIGNAL(checkedItemsChanged(QStringList)), this, SLOT(setRepresentationToDisplay()));
     reprComboBox->setModel(reprListWidget_->model());
     reprComboBox->setView(reprListWidget_);

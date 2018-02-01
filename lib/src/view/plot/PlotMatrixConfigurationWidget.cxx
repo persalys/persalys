@@ -2,7 +2,7 @@
 /**
  *  @brief QWidget to configure plot matrices
  *
- *  Copyright 2015-2017 EDF-Phimeca
+ *  Copyright 2015-2018 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -65,7 +65,7 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
 
   // combobox to select the columns to display
   NoWheelEventComboBox * inputsComboBox = new NoWheelEventComboBox;
-  columnsListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select variables") + " --", plotMatrix_->getColumnsNames(), plotMatrix_->getColumnsNames(), this);
+  columnsListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select variables") + " --", plotMatrix_->getColumnsNames(), this);
   connect(columnsListWidget_, SIGNAL(checkedItemsChanged(QStringList)), plotMatrix_, SLOT(setColumnsToDisplay(QStringList)));
   inputsComboBox->setModel(columnsListWidget_->model());
   inputsComboBox->setView(columnsListWidget_);
@@ -77,7 +77,7 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
 
   // combobox to select the rows to display
   NoWheelEventComboBox * outputsComboBox = new NoWheelEventComboBox;
-  rowsListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select variables") + " --", plotMatrix_->getRowsNames(), plotMatrix_->getRowsNames(), this);
+  rowsListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select variables") + " --", plotMatrix_->getRowsNames(), this);
   connect(rowsListWidget_, SIGNAL(checkedItemsChanged(QStringList)), plotMatrix_, SLOT(setRowsToDisplay(QStringList)));
   outputsComboBox->setModel(rowsListWidget_->model());
   outputsComboBox->setView(rowsListWidget_);

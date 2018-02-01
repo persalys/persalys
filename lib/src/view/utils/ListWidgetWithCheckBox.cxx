@@ -1,8 +1,8 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QListWidget where items are checkable
+ *  @brief QListWidget with checkable items
  *
- *  Copyright 2015-2017 EDF-Phimeca
+ *  Copyright 2015-2018 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -19,52 +19,73 @@
  *
  */
 #include "otgui/ListWidgetWithCheckBox.hxx"
+
 #include <QCheckBox>
 
 namespace OTGUI
 {
 
-ListWidgetWithCheckBox::ListWidgetWithCheckBox(QString title, QStringList itemNames, QStringList selectedItemNames, QWidget * parent)
+ListWidgetWithCheckBox::ListWidgetWithCheckBox(const QString &title,
+                                               const QStringList &itemNames,
+                                               QWidget * parent)
   : QListWidget(parent)
+  , title_(title)
+  , itemNames_(itemNames)
+  , checkedItemNames_(itemNames)
+{
+  buildInterface();
+}
+
+
+ListWidgetWithCheckBox::ListWidgetWithCheckBox(const QString &title,
+                                               const QStringList &itemNames,
+                                               const QStringList &selectedItemNames,
+                                               QWidget * parent)
+  : QListWidget(parent)
+  , title_(title)
   , itemNames_(itemNames)
   , checkedItemNames_(selectedItemNames)
+{
+  buildInterface();
+}
+
+
+void ListWidgetWithCheckBox::buildInterface()
 {
   setViewMode(QListWidget::ListMode);
   setSelectionMode(QAbstractItemView::NoSelection);
 
   // first item
-  QListWidgetItem * item = new QListWidgetItem;
-  item->setData(Qt::DisplayRole, title);
-  insertItem(model()->rowCount(), item);
+  QListWidgetItem * item_0 = new QListWidgetItem;
+  item_0->setData(Qt::DisplayRole, title_);
+  item_0->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+  addItem(item_0);
 
-  // other items associated to a checkBox
+  // other items
   for (int i = 0; i < itemNames_.size(); ++i)
   {
-    item = new QListWidgetItem;
+    QListWidgetItem * item = new QListWidgetItem;
+    item->setData(Qt::DisplayRole, itemNames_[i]);
     item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-
-    insertItem(model()->rowCount(), item);
-
-    QCheckBox * box = new QCheckBox(itemNames_[i]);
-    if (selectedItemNames.contains(itemNames_[i]))
-      box->setCheckState(Qt::Checked);
-    setItemWidget(item, box);
-
-    connect(box, SIGNAL(stateChanged(int)), this, SLOT(checkStateChanged(int)));
+    addItem(item);
   }
+  setCheckedNames(checkedItemNames_);
+  connect(this, SIGNAL(itemChanged(QListWidgetItem *)), this, SLOT(updateCheckState(QListWidgetItem *)));
 }
 
 
-void ListWidgetWithCheckBox::setCheckedNames(QStringList selectedItemNames)
+void ListWidgetWithCheckBox::setCheckedNames(const QStringList &selectedItemNames)
 {
   for (int i = 0; i < itemNames_.size(); ++ i)
   {
-    QListWidgetItem * item_i = item(i + 1);// skip first item
-    QWidget * widget_i = itemWidget(item_i);
-    QCheckBox * box = qobject_cast<QCheckBox *>(widget_i);
-    box->setChecked(selectedItemNames.contains(itemNames_[i]));
+    item(i + 1)->setData(Qt::CheckStateRole, selectedItemNames.contains(itemNames_[i]) ? Qt::Checked : Qt::Unchecked);
   }
+  checkedItemNames_ = selectedItemNames;
+  updateTitleItem();
+
+  emit checkedItemsChanged(checkedItemNames_);
 }
+
 
 QStringList ListWidgetWithCheckBox::getCheckedItemNames() const
 {
@@ -77,24 +98,41 @@ QStringList ListWidgetWithCheckBox::getItemNames() const
   return itemNames_;
 }
 
-void ListWidgetWithCheckBox::checkStateChanged(int state)
-{
-  QCheckBox * box = qobject_cast<QCheckBox *>(sender());
 
-  if (state == Qt::Checked)
+void ListWidgetWithCheckBox::updateTitleItem()
+{
+  blockSignals(true);
+  QListWidgetItem * item_0 = item(0);
+  item_0->setData(Qt::CheckStateRole, itemNames_.size() == checkedItemNames_.size() ? Qt::Checked : Qt::Unchecked);
+  item_0->setData(Qt::ToolTipRole, itemNames_.size() == checkedItemNames_.size() ? tr("Deselect all") : tr("Select all"));
+  blockSignals(false);
+}
+
+
+void ListWidgetWithCheckBox::updateCheckState(QListWidgetItem * currentItem)
+{
+  const int row = this->row(currentItem);
+
+  if (row == 0)
   {
-    if (checkedItemNames_.contains(box->text()))
-      return;
-    else
-      checkedItemNames_.append(box->text());
+    setCheckedNames(currentItem->data(Qt::CheckStateRole).toInt() == Qt::Checked ? itemNames_ : QStringList());
   }
   else
   {
-    if (!checkedItemNames_.contains(box->text()))
-      return;
+    if (currentItem->data(Qt::CheckStateRole).toInt() == Qt::Checked)
+    {
+      if (checkedItemNames_.contains(currentItem->data(Qt::DisplayRole).toString()))
+        return;
+      checkedItemNames_.append(currentItem->data(Qt::DisplayRole).toString());
+    }
     else
-      checkedItemNames_.removeAt(checkedItemNames_.indexOf(box->text()));
+    {
+      if (!checkedItemNames_.contains(currentItem->data(Qt::DisplayRole).toString()))
+        return;
+      checkedItemNames_.removeAt(checkedItemNames_.indexOf(currentItem->data(Qt::DisplayRole).toString()));
+    }
+    updateTitleItem();
+    emit checkedItemsChanged(checkedItemNames_);
   }
-  emit checkedItemsChanged(checkedItemNames_);
 }
 }

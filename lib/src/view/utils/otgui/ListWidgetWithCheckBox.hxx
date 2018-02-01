@@ -1,8 +1,8 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QListWidget where items are checkable
+ *  @brief QListWidget with checkable items
  *
- *  Copyright 2015-2017 EDF-Phimeca
+ *  Copyright 2015-2018 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -21,8 +21,9 @@
 #ifndef OTGUI_LISTWIDGETWITHCHECKBOX_HXX
 #define OTGUI_LISTWIDGETWITHCHECKBOX_HXX
 
-#include <QListWidget>
 #include "otgui/OTGuiprivate.hxx"
+
+#include <QListWidget>
 
 namespace OTGUI
 {
@@ -31,19 +32,25 @@ class OTGUI_API ListWidgetWithCheckBox : public QListWidget
   Q_OBJECT
 
 public:
-  ListWidgetWithCheckBox(QString title, QStringList itemNames, QStringList selectedItemNames, QWidget * parent = 0);
+  ListWidgetWithCheckBox(const QString &title, const QStringList &itemNames, QWidget * parent = 0);
+  ListWidgetWithCheckBox(const QString &title, const QStringList &itemNames, const QStringList &selectedItemNames, QWidget * parent = 0);
 
   QStringList getCheckedItemNames() const;
   QStringList getItemNames() const;
 
-  void setCheckedNames(QStringList selectedItemNames);
+  void setCheckedNames(const QStringList &selectedItemNames);
+
+protected:
+  void buildInterface();
+  void updateTitleItem();
 
 public slots:
-  void checkStateChanged(int state);
+  void updateCheckState(QListWidgetItem *);
 signals:
-  void checkedItemsChanged(QStringList itemsNames);
+  void checkedItemsChanged(const QStringList &itemsNames);
 
 private:
+  QString title_;
   QStringList itemNames_;
   QStringList checkedItemNames_;
 };

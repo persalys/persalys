@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow to define a FMI physical model
  *
- *  Copyright 2015-2017 EDF-Phimeca
+ *  Copyright 2015-2018 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -125,7 +125,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   // variability filter
   QStringList variabilityFields;
   variabilityFields << tr("Constant") << tr("Fixed") << tr("Tunable") << tr("Discrete") << tr("Continuous") << tr("Unknown");
-  variabilityField_ = new ListWidgetWithCheckBox(tr("Variability") + QString("     "), variabilityFields, variabilityFields);
+  variabilityField_ = new ListWidgetWithCheckBox(tr("Variability") + QString("     "), variabilityFields);
   NoWheelEventComboBox * variabilityFieldComboBox = new NoWheelEventComboBox;
   variabilityFieldComboBox->setModel(variabilityField_->model());
   variabilityFieldComboBox->setView(variabilityField_);
@@ -135,7 +135,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   // causality filter
   QStringList causalityFields;
   causalityFields << tr("Parameter") << tr("Calculated") << tr("Input") << tr("Output") << tr("Local") << tr("Independent") << tr("Unknown");
-  causalityField_ = new ListWidgetWithCheckBox(tr("Causality") + QString("         "), causalityFields, causalityFields);
+  causalityField_ = new ListWidgetWithCheckBox(tr("Causality") + QString("         "), causalityFields);
   NoWheelEventComboBox * causalityFieldComboBox = new NoWheelEventComboBox;
   causalityFieldComboBox->setModel(causalityField_->model());
   causalityFieldComboBox->setView(causalityField_);
@@ -145,7 +145,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   // I/O filter
   QStringList ioFields;
   ioFields << tr("Disabled") << tr("Input") << tr("Output");
-  ioField_ = new ListWidgetWithCheckBox(tr("I/O") + QString("            "), ioFields, ioFields);
+  ioField_ = new ListWidgetWithCheckBox(tr("I/O") + QString("            "), ioFields);
   NoWheelEventComboBox * ioFieldComboBox = new NoWheelEventComboBox;
   ioFieldComboBox->setModel(ioField_->model());
   ioFieldComboBox->setView(ioField_);

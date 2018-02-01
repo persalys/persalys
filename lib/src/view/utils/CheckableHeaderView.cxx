@@ -2,7 +2,7 @@
 /**
  *  @brief QHeaderView with a checkable first column
  *
- *  Copyright 2015-2017 EDF-Phimeca
+ *  Copyright 2015-2018 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -133,7 +133,7 @@ void CheckableHeaderView::mousePressEvent(QMouseEvent* event)
 
 void CheckableHeaderView::updateCheckState(const Qt::Orientation orientation)
 {
-  if (orientation == Qt::Vertical || modelSignalBlocked_)
+  if (orientation == Qt::Vertical || modelSignalBlocked_ || !model())
     return;
 
   bool checkState = true;

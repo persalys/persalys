@@ -2,7 +2,7 @@
 /**
  *  @brief QAbstractTableModel to list and select variables
  *
- *  Copyright 2015-2017 EDF-Phimeca
+ *  Copyright 2015-2018 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -73,7 +73,7 @@ QVariant VariablesSelectionTableModel::headerData(int section, Qt::Orientation o
       if (isVariableEnabled_[i])
         allChecked = allChecked && isVariableChecked_[i];
     }
-    return allChecked ? tr("Unselect all") : tr("Select all");
+    return allChecked ? tr("Deselect all") : tr("Select all");
   }
 
   return QAbstractTableModel::headerData(section, orientation, role);

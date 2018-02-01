@@ -2,7 +2,7 @@
 /**
  *  @brief QAbstractTableModel to list the inputs
  *
- *  Copyright 2015-2017 EDF-Phimeca
+ *  Copyright 2015-2018 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -87,7 +87,7 @@ QVariant InputTableProbabilisticModel::headerData(int section, Qt::Orientation o
   else if (role == Qt::ToolTipRole && section == 0 && rowCount())
   {
     const bool allChecked = physicalModel_.getStochasticInputNames().getSize() == physicalModel_.getInputDimension();
-    return allChecked ? tr("Unselect all") : tr("Select all");
+    return allChecked ? tr("Deselect all") : tr("Select all");
   }
   return QAbstractTableModel::headerData(section, orientation, role);
 }
