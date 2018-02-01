@@ -64,6 +64,7 @@ public slots:
   void updateYLabel();
   void updateXrange();
   void updateYrange();
+  void changeLabelOrientation(int);
   void exportPlot();
 signals:
   void currentPlotChanged(int);
