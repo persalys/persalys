@@ -4,67 +4,67 @@
 <context>
     <name>OTGUI::AnalysisItem</name>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="76"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="75"/>
         <source>Modify</source>
         <translation>Modifier</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="77"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="76"/>
         <source>Modify the analysis</source>
         <translation>Modifier l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="85"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="84"/>
         <source>Convert metamodel into physical model</source>
         <translation>Convertir le métamodèle en modèle physique</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="86"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="85"/>
         <source>Add the metamodel in the study tree</source>
         <translation>Ajouter le métamodèle dans l&apos;arbre d&apos;étude</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="100"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="99"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="101"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="100"/>
         <source>Remove the analysis</source>
         <translation>Supprimer l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="176"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="175"/>
         <source>Can not modify a running analysis.</source>
         <translation>Impossible de modifier une analyse en cours d&apos;exécution.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="191"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="190"/>
         <source>The physical model must have inputs AND at least one selected output.</source>
         <translation>Le modèle physique doit avoir des entrées ET au moins une sortie sélectionnée.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="200"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="199"/>
         <source>The physical model must have stochastic inputs.</source>
         <translation>Le modèle physique doit avoir des entrées stochastiques.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="209"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="208"/>
         <source>The model must have an independent copula to compute a sensitivity analysis but here inputs are dependent.</source>
         <translation>Le modèle doit avoir une copule indépendante pour réaliser une analyse de sensibilité mais ici les entrées sont dépendantes.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="238"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="237"/>
         <source>The sample is empty.</source>
         <translation>L&apos;échantillon est vide.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="276"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="275"/>
         <source>Can not remove a running analysis.</source>
         <translation>Impossible de supprimer une analyse en cours d&apos;exécution.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="229"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="228"/>
         <source>The sample must not be empty and must contain output values.</source>
         <translation>L&apos;échantillon ne doit pas être vide et doit contenir des valeurs de sortie.</translation>
     </message>
@@ -389,53 +389,6 @@ Début : %2.</translation>
     </message>
 </context>
 <context>
-    <name>OTGUI::CopulaDefinitionWizard</name>
-    <message>
-        <location filename="../lib/src/view/CopulaDefinitionWizard.cxx" line="55"/>
-        <source>Copula definition</source>
-        <translation>Définition de copule</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/CopulaDefinitionWizard.cxx" line="112"/>
-        <source>Copula</source>
-        <translation>Copule</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/CopulaDefinitionWizard.cxx" line="127"/>
-        <location filename="../lib/src/view/CopulaDefinitionWizard.cxx" line="156"/>
-        <location filename="../lib/src/view/CopulaDefinitionWizard.cxx" line="187"/>
-        <location filename="../lib/src/view/CopulaDefinitionWizard.cxx" line="191"/>
-        <location filename="../lib/src/view/CopulaDefinitionWizard.cxx" line="215"/>
-        <source>Normal</source>
-        <translation>Normale</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/CopulaDefinitionWizard.cxx" line="136"/>
-        <source>Bivariate copula</source>
-        <translation>Copule bivariée</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/CopulaDefinitionWizard.cxx" line="140"/>
-        <source>copulaPDF</source>
-        <translation>coupulePDF</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/CopulaDefinitionWizard.cxx" line="145"/>
-        <source>PDF</source>
-        <translation>PDF</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/CopulaDefinitionWizard.cxx" line="145"/>
-        <source>%1 copula</source>
-        <translation>copule %1</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/CopulaDefinitionWizard.cxx" line="199"/>
-        <source>Select at least two variables to define a copula</source>
-        <translation>Sélectionner au moins deux variables pour définir une copule</translation>
-    </message>
-</context>
-<context>
     <name>OTGUI::CopulaInferenceResultWidget</name>
     <message>
         <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="65"/>
@@ -443,22 +396,31 @@ Début : %2.</translation>
         <translation>Copules testées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="80"/>
+        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="106"/>
         <source>Copulas</source>
         <translation>Copules</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="123"/>
+        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="107"/>
+        <source>Bayesian
+Information
+Criterion</source>
+        <translation>Critère
+d&apos;information
+bayésien (BIC)</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="161"/>
         <source>PDF/CDF</source>
         <translation>PDF/CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="127"/>
+        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="165"/>
         <source>Kendall plot</source>
         <translation>Graphique de Kendall</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="137"/>
+        <location filename="../lib/src/view/CopulaInferenceResultWidget.cxx" line="175"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -472,8 +434,8 @@ Début : %2.</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CopulaInferenceResultWindow.cxx" line="55"/>
-        <source>Sets of variables</source>
-        <translation>Séries de variables</translation>
+        <source>Groups of variables</source>
+        <translation>Groupes de variables</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CopulaInferenceResultWindow.cxx" line="92"/>
@@ -482,63 +444,154 @@ Début : %2.</translation>
     </message>
 </context>
 <context>
+    <name>OTGUI::CopulaInferenceResultWizard</name>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="53"/>
+        <source>Inference analyses results</source>
+        <translation>Résultats d&apos;inférences</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="56"/>
+        <source>Define dependency between %1</source>
+        <translation>Définir une dépendance entre %1</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="64"/>
+        <source>Inference analysis</source>
+        <translation>Inférence</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="74"/>
+        <source>Group of variables</source>
+        <translation>Groupe de variables</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="180"/>
+        <source>The result does not contain infered copula of dimension equal to %1</source>
+        <translation>Le résultat ne contient pas de copule inférée de dimension %1</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="247"/>
+        <source>No copulas with a dimension of %1 in this result</source>
+        <translation>Aucune copule de dimension %1 dans le résultat</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="252"/>
+        <source>The selected copula is not valid.</source>
+        <translation>La copule sélectionnée n&apos;est pas valide.</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="272"/>
+        <source>Invalid list %1. The elements must be single-use.</source>
+        <translation>Liste %1 invalide. Les éléments doivent être unique.</translation>
+    </message>
+</context>
+<context>
+    <name>OTGUI::CopulaInferenceWizard</name>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="63"/>
+        <source>Copula inference</source>
+        <translation>Inférence de copule</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="71"/>
+        <source>Firstly, define groups of variables. Then for each group, list copulas to infer from the sample.</source>
+        <translation>Définir d&apos;abord des groupes de variables. Ensuite, pour chaque groupe, lister des copules à inférer à partir de l&apos;échantillon.</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="100"/>
+        <source>Remove the selected group of variables</source>
+        <translation>Supprimer le groupe de variables sélectionné</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="107"/>
+        <source>Add a group of variables</source>
+        <translation>Ajouter un groupe de variables</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="126"/>
+        <source>Groups</source>
+        <translation>Groupes</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="218"/>
+        <source>Define at least a group of two variables</source>
+        <translation>Définir au moins un groupe de deux variables</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="230"/>
+        <source>This group of variables already exists</source>
+        <translation>Ce groupe de variables existe déjà</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="277"/>
+        <source>Define at least a group of variables associated with a list of copulas</source>
+        <translation>Définir au moins un groupe de variables associé à une liste de copules</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="287"/>
+        <source>At least one copula must be tested for the selected group of variables &apos;%1&apos;</source>
+        <translation>Au moins une copule doit être testée pour le groupe de variables &apos;%1&apos;</translation>
+    </message>
+</context>
+<context>
     <name>OTGUI::CopulaParametersTabWidget</name>
     <message>
-        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="95"/>
+        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="97"/>
         <source>copulaPDF</source>
         <translation>coupulePDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="99"/>
+        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="101"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="106"/>
+        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="108"/>
         <source>copulaCDF</source>
         <translation>copuleCDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="108"/>
+        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="110"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="127"/>
+        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="132"/>
         <source>PDF/CDF</source>
         <translation>PDF/CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="148"/>
+        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="153"/>
         <source>kendallPlot</source>
         <translation>graphKendall</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="152"/>
-        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="172"/>
+        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="157"/>
+        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="180"/>
         <source>Kendall plot</source>
         <translation>Graphique de Kendall</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="99"/>
-        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="108"/>
-        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="152"/>
-        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="153"/>
+        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="101"/>
+        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="110"/>
+        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="157"/>
+        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="158"/>
         <source>%1 copula</source>
         <translation>copule %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="155"/>
+        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="160"/>
         <source>Data</source>
         <translation>Données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="188"/>
+        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="196"/>
         <source>Spearman&apos;s rank</source>
         <translation>Rang de Spearman</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="214"/>
+        <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="222"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -616,9 +669,31 @@ Début : %2.</translation>
 <context>
     <name>OTGUI::DataAnalysisResultWindow</name>
     <message>
-        <location filename="../lib/src/view/DataAnalysisResultWindow.cxx" line="41"/>
+        <location filename="../lib/src/view/DataAnalysisResultWindow.cxx" line="47"/>
         <source>Data analysis results</source>
         <translation>Résultats d&apos;analyse de données</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataAnalysisResultWindow.cxx" line="92"/>
+        <source>Parameters</source>
+        <translation>Paramètres</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataAnalysisResultWindow.cxx" line="113"/>
+        <source>Spearman&apos;s matrix estimate</source>
+        <translation>Estimation de la matrice de Spearman</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataAnalysisResultWindow.cxx" line="185"/>
+        <source>Spearman&apos;s
+coefficient</source>
+        <translation>Coefficient de
+Spearman</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataAnalysisResultWindow.cxx" line="198"/>
+        <source>Dependency</source>
+        <translation>Dépendance</translation>
     </message>
 </context>
 <context>
@@ -807,7 +882,7 @@ Début : %2.</translation>
         <translation>Analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="152"/>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="153"/>
         <source>The model must have at least one output.</source>
         <translation>Le modèle doit avoir au moins une sortie.</translation>
     </message>
@@ -1154,37 +1229,53 @@ métamodèle</translation>
         <translation>Copule</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DependenciesTableModel.cxx" line="110"/>
+        <location filename="../lib/src/model/DependenciesTableModel.cxx" line="112"/>
         <source>Normal</source>
         <translation>Normale</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DependenciesTableModel.cxx" line="112"/>
+        <location filename="../lib/src/model/DependenciesTableModel.cxx" line="161"/>
+        <source>Inference result</source>
+        <translation>Résultat d&apos;inférence</translation>
     </message>
 </context>
 <context>
     <name>OTGUI::DependenciesWidget</name>
     <message>
-        <location filename="../lib/src/view/DependenciesWidget.cxx" line="88"/>
+        <location filename="../lib/src/view/DependenciesWidget.cxx" line="91"/>
         <source>Add a group of variables</source>
         <translation>Ajouter un group de variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DependenciesWidget.cxx" line="81"/>
+        <location filename="../lib/src/view/DependenciesWidget.cxx" line="84"/>
         <source>Remove the selected group of variables</source>
         <translation>Supprimer le groupe de variables sélectionné</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DependenciesWidget.cxx" line="129"/>
+        <location filename="../lib/src/view/DependenciesWidget.cxx" line="133"/>
         <source>To define dependency, the model must have at least two independent stochastic variables.</source>
         <translation>Pour définir de la dépendance, le modèle doit avoir au moins deux variables stochastiques indépendantes.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DependenciesWidget.cxx" line="255"/>
+        <location filename="../lib/src/view/DependenciesWidget.cxx" line="259"/>
         <source>Define at least a group of two variables</source>
         <translation>Définir au moins un groupe de deux variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DependenciesWidget.cxx" line="270"/>
+        <location filename="../lib/src/view/DependenciesWidget.cxx" line="274"/>
         <source>The variable %1 is already used to define a copula</source>
         <translation>La variable %1 est déjà utilisée pour définir une copule</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DependenciesWidget.cxx" line="343"/>
+        <source>Error</source>
+        <translation>Erreur</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DependenciesWidget.cxx" line="343"/>
+        <source>The current study has not copula inference analyses results.</source>
+        <translation>L&apos;étude courante n&apos;a aucun résultat d&apos;inférence de copule.</translation>
     </message>
 </context>
 <context>
@@ -1389,19 +1480,19 @@ métamodèle</translation>
 <context>
     <name>OTGUI::DistributionsForInferenceWidget</name>
     <message>
-        <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="52"/>
-        <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="105"/>
-        <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="130"/>
+        <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="66"/>
+        <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="125"/>
+        <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="151"/>
         <source>All</source>
         <translation>Tout</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="73"/>
+        <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="87"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="81"/>
+        <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="96"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
@@ -1409,12 +1500,17 @@ métamodèle</translation>
 <context>
     <name>OTGUI::DistributionsTableModel</name>
     <message>
-        <location filename="../lib/src/model/DistributionsTableModel.cxx" line="51"/>
+        <location filename="../lib/src/model/DistributionsTableModel.cxx" line="54"/>
         <source>Distributions</source>
         <translation>Distributions</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DistributionsTableModel.cxx" line="71"/>
+        <location filename="../lib/src/model/DistributionsTableModel.cxx" line="56"/>
+        <source>Copulas</source>
+        <translation>Copules</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DistributionsTableModel.cxx" line="77"/>
         <source>All</source>
         <translation>Tout</translation>
     </message>
@@ -2043,48 +2139,48 @@ métamodèle</translation>
         <translation>Distributions</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="116"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="105"/>
         <source>distributionPDF</source>
         <translation>distributionPDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="119"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="120"/>
         <source>distributionCDF</source>
         <translation>distributionCDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="135"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="136"/>
         <source>PDF/CDF</source>
         <translation>PDF/CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="142"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="143"/>
         <source>qqPlot</source>
         <translation>diagrammeQQ</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="153"/>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="464"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="154"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="474"/>
         <source>Q-Q Plot</source>
         <translation>Diagramme Q-Q</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="164"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="165"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="170"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="171"/>
         <source>Distribution parameters</source>
         <translation>Paramètres de la distribution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="199"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="201"/>
         <source>Distribution</source>
         <translation>Distribution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="200"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="202"/>
         <source>Bayesian
 Information
 Criterion</source>
@@ -2093,83 +2189,83 @@ d&apos;information
 bayésien (BIC)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="201"/>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="280"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="203"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="282"/>
         <source>Kolmogorov-Smirnov</source>
         <translation>Kolmogorov-Smirnov</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="202"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="204"/>
         <source>p-value</source>
         <translation>p-valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="203"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="205"/>
         <source>Acceptation</source>
         <translation>Acceptation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="251"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="253"/>
         <source>yes</source>
         <translation>oui</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="255"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="257"/>
         <source>no</source>
         <translation>non</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="262"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="264"/>
         <source>failed</source>
         <translation>échoué</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="351"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="353"/>
         <source>Moments</source>
         <translation>Moments</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="355"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="357"/>
         <source>Mean</source>
         <translation>Moyenne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="356"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="358"/>
         <source>Standard deviation</source>
         <translation>Écart type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="357"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="359"/>
         <source>Skewness</source>
         <translation>Asymétrie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="358"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="360"/>
         <source>Kurtosis</source>
         <translation>Aplatissement</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="374"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="376"/>
         <source>Native parameters</source>
         <translation>Paramètres natifs</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="455"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="461"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="460"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="470"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="465"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="475"/>
         <source>Data quantiles</source>
         <translation>Quantiles des données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="466"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="476"/>
         <source>%1 theoretical quantiles</source>
         <translation>Quantiles théoriques de %1</translation>
     </message>
@@ -2205,27 +2301,27 @@ bayésien (BIC)</translation>
 <context>
     <name>OTGUI::InferenceResultWizard</name>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="52"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="53"/>
         <source>Inference analyses results</source>
         <translation>Résultats d&apos;inférences</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="59"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="63"/>
         <source>Inference analysis</source>
         <translation>Inférence</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="69"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="73"/>
         <source>Variable</source>
         <translation>Variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="148"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="154"/>
         <source>The current study has not inference analyses results.</source>
         <translation>L&apos;étude courante n&apos;a aucun résultat d&apos;inférence.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="153"/>
+        <location filename="../lib/src/view/InferenceResultWizard.cxx" line="159"/>
         <source>The selected distribution is not valid.</source>
         <translation>La distribution sélectionnée n&apos;est pas valide.</translation>
     </message>
@@ -2238,22 +2334,27 @@ bayésien (BIC)</translation>
         <translation>Inférence</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="151"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="88"/>
+        <source>Firstly, select variables. Then for each variable, list distributions to infer from the sample.</source>
+        <translation>D&apos;abord sélectionner des variables. Ensuite pour chaque variable, lister des distributions à inférer à partir de l&apos;échantillon.</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="160"/>
         <source>Kolmogorov-Smirnov</source>
         <translation>Kolmogorov-Smirnov</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="153"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="162"/>
         <source>Level</source>
         <translation>Niveau</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="222"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="231"/>
         <source>Select at least one variable</source>
         <translation>Sélectionner au moins une variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="261"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="270"/>
         <source>At least one distribution must be tested for the selected variable &apos;%1&apos;</source>
         <translation>Au moins une distribution doit être testée pour la variable sélectionnée &apos;%1&apos;</translation>
     </message>
@@ -3287,17 +3388,17 @@ ou interaction</translation>
     <message>
         <location filename="../lib/src/model/MorrisResultTableModel.cxx" line="85"/>
         <source>µ*</source>
-        <translation>µ*</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../lib/src/model/MorrisResultTableModel.cxx" line="87"/>
         <source>µ</source>
-        <translation>µ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../lib/src/model/MorrisResultTableModel.cxx" line="89"/>
         <source>σ</source>
-        <translation>σ</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3321,12 +3422,12 @@ ou interaction</translation>
         <location filename="../lib/src/view/MorrisResultWidget.cxx" line="129"/>
         <location filename="../lib/src/view/MorrisResultWidget.cxx" line="185"/>
         <source>µ*</source>
-        <translation>µ*</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../lib/src/view/MorrisResultWidget.cxx" line="130"/>
         <source>σ</source>
-        <translation>σ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../lib/src/view/MorrisResultWidget.cxx" line="140"/>
@@ -3356,17 +3457,17 @@ ou interaction</translation>
     <message>
         <location filename="../lib/src/view/MorrisResultWidget.cxx" line="186"/>
         <source>µ</source>
-        <translation>µ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../lib/src/view/MorrisResultWidget.cxx" line="196"/>
         <source>µ = ± µ*</source>
-        <translation>µ = ± µ*</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../lib/src/view/MorrisResultWidget.cxx" line="199"/>
         <source>µ = ± 0.5 µ*</source>
-        <translation>µ = ± 0.5 µ*</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../lib/src/view/MorrisResultWidget.cxx" line="237"/>

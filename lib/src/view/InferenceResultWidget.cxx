@@ -102,6 +102,8 @@ void InferenceResultWidget::buildInterface()
   distParamTableModel_ = new CustomStandardItemModel(4, 2, distParamTableView_);
   distParamTableView_->setModel(distParamTableModel_);
 
+  pdfPlot_ = new PlotWidget(tr("distributionPDF"));
+
   // -- pdf/cdf qqPlot
   if (displayPDF_QQPlot_)
   {
@@ -113,7 +115,6 @@ void InferenceResultWidget::buildInterface()
     ResizableStackedWidget * pdf_cdfStackedWidget = new ResizableStackedWidget;
 
     // --- pdf
-    pdfPlot_ = new PlotWidget(tr("distributionPDF"));
     pdf_cdfStackedWidget->addWidget(pdfPlot_);
     // --- cdf
     cdfPlot_ = new PlotWidget(tr("distributionCDF"));
@@ -173,6 +174,7 @@ void InferenceResultWidget::buildInterface()
     analysisErrorMessageLabel_ = new QLabel;
     analysisErrorMessageLabel_->setWordWrap(true);
     paramGroupBoxLayout->addWidget(analysisErrorMessageLabel_);
+    paramGroupBoxLayout->addWidget(pdfPlot_);
     paramGroupBoxLayout->addStretch();
     distTabListWidgetLayout->setSizeConstraint(QLayout::SetFixedSize);
     distTabListWidgetLayout->addWidget(paramGroupBox, 1);
@@ -217,21 +219,9 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
   if (nbTests > 1)
   {
     indices.fill();
-    for (int i = (nbTests - 1); i >= 0; --i)
-    {
-      for (int l = 1; l <= i; ++l)
-      {
-        if (bicValues[l - 1] > bicValues[l])
-        {
-          Scalar temp = bicValues[l - 1];
-          bicValues[l - 1] = bicValues[l];
-          bicValues[l] = temp;
-          const UnsignedInteger ind_temp = indices[l - 1];
-          indices[l - 1] = indices[l];
-          indices[l] = ind_temp;
-        }
-      }
-    }
+    std::sort(std::begin(indices),
+              std::end(indices),
+              [&](UnsignedInteger i1, UnsignedInteger i2) {return bicValues[i1] < bicValues[i2];});
   }
 
   // -- fill table
@@ -243,7 +233,7 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
     distTableModel_->setData(distTableModel_->index(cellRow, 0), (int)indices[i], Qt::UserRole);
     if (currentFittingTestResult_.getErrorMessages()[indices[i]].empty())
     {
-      distTableModel_->setNotEditableItem(cellRow, 1, bicValues[i], 3);
+      distTableModel_->setNotEditableItem(cellRow, 1, bicValues[indices[i]], 3);
       distTableModel_->setNotEditableItem(cellRow, 2, currentFittingTestResult_.getKolmogorovTestResults()[indices[i]].getPValue(), 3);
       // if accepted
       if (currentFittingTestResult_.getKolmogorovTestResults()[indices[i]].getBinaryQualityMeasure())
@@ -310,7 +300,7 @@ void InferenceResultWidget::updateRadioButtonsDistributionTable(QModelIndex curr
 void InferenceResultWidget::updateParametersTable(QModelIndex current)
 {
   // check
-  if (!(distTableModel_ && distParamTableModel_ && distParamTableView_ && analysisErrorMessageLabel_))
+  if (!(distTableModel_ && distParamTableModel_ && distParamTableView_ && analysisErrorMessageLabel_ && pdfPlot_))
     return;
   if (current.row() < 2)
     return;
@@ -421,17 +411,18 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
 void InferenceResultWidget::updateGraphs(QModelIndex current)
 {
   // check
-  if (!(current.isValid() && distTableModel_ && currentFittingTestResult_.getValues().getSize()))
-    return;
-  if (!(pdfPlot_ && cdfPlot_ && qqPlot_))
+  if (!(current.isValid() && distTableModel_ && currentFittingTestResult_.getValues().getSize() && pdfPlot_))
     return;
   if (current.row() < 2)
     return;
 
   // reset
   pdfPlot_->clear();
-  cdfPlot_->clear();
-  qqPlot_->clear();
+  if (cdfPlot_ && qqPlot_)
+  {
+    cdfPlot_->clear();
+    qqPlot_->clear();
+  }
 
   // update
   const QVariant variant = distTableModel_->data(distTableModel_->index(current.row(), 0), Qt::UserRole);
@@ -439,8 +430,11 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
 
   const bool isInferredDistribution = currentFittingTestResult_.getErrorMessages()[resultIndex].empty();
 
-  tabWidget_->setTabEnabled(0, isInferredDistribution);
-  tabWidget_->setTabEnabled(1, isInferredDistribution);
+  if (tabWidget_)
+  {
+    tabWidget_->setTabEnabled(0, isInferredDistribution);
+    tabWidget_->setTabEnabled(1, isInferredDistribution);
+  }
 
   if (!isInferredDistribution)
     return;
@@ -449,10 +443,14 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
   const Distribution distribution = currentFittingTestResult_.getTestedDistributions()[resultIndex];
   const QString distName = TranslationManager::GetTranslatedDistributionName(distribution.getImplementation()->getName());
 
-  // -- pdf
+  // update pdf
   pdfPlot_->plotHistogram(currentFittingTestResult_.getValues());
   pdfPlot_->plotPDFCurve(distribution);
   pdfPlot_->setTitle(tr("PDF") + " " + distName);
+
+  // update cdf / qqplot
+  if (!(cdfPlot_ && qqPlot_))
+    return;
 
   // -- cdf
   cdfPlot_->plotHistogram(currentFittingTestResult_.getValues(), 1);
@@ -503,19 +501,11 @@ bool InferenceResultWidget::isSelectedDistributionValid() const
   // loop begins at 2 because the two first rows are the table titles
   QModelIndex selectedDistributionIndex;
   for (int i = 2; i < distTableModel_->rowCount(); ++i)
-  {
     if (distTableModel_->data(distTableModel_->index(i, 0), Qt::CheckStateRole).toBool())
-    {
-      const QVariant variant = distTableModel_->data(distTableModel_->index(i, 0), Qt::UserRole);
-      const int resultIndex = variant.value<int>();
-      Description testResultDescription = currentFittingTestResult_.getKolmogorovTestResults()[resultIndex].getDescription();
+      selectedDistributionIndex = distTableModel_->index(i, 1);
 
-      if (!testResultDescription.getSize())
-        return false;
+  Q_ASSERT(selectedDistributionIndex.isValid());
 
-      return testResultDescription[0].find("Error") == std::string::npos;
-    }
-  }
-  return false;
+  return distTableModel_->data(selectedDistributionIndex) != "-";
 }
 }

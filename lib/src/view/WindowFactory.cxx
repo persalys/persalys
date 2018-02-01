@@ -55,6 +55,7 @@
 #include "otgui/SensitivityAnalysisWizard.hxx"
 #include "otgui/ReliabilityAnalysisWizard.hxx"
 #include "otgui/MetaModelAnalysisWizard.hxx"
+#include "otgui/CopulaInferenceWizard.hxx"
 
 namespace OTGUI
 {
@@ -122,6 +123,10 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
   else if (analysisType == "InferenceAnalysis")
   {
     wizard = new InferenceWizard(analysis, parent);
+  }
+  else if (analysisType == "CopulaInferenceAnalysis")
+  {
+    wizard = new CopulaInferenceWizard(analysis, parent);
   }
   else if (analysisType == "MonteCarloAnalysis" ||
            analysisType == "TaylorExpansionMomentsAnalysis")

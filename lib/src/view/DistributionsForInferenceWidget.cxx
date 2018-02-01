@@ -26,13 +26,20 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
+using namespace OT;
+
 namespace OTGUI
 {
 
-DistributionsForInferenceWidget::DistributionsForInferenceWidget(const QStringList & distributions, QWidget* parent)
+DistributionsForInferenceWidget::DistributionsForInferenceWidget(const QStringList &distributions, const Description &variables, QWidget *parent)
   : QWidget(parent)
+  , variables_(variables)
   , distributions_(distributions)
+  , tableView_(0)
+  , tableModel_(0)
+  , addComboBox_(0)
 {
+  Q_ASSERT(variables_.getSize() > 0);
   buildInterface();
 }
 
@@ -43,7 +50,14 @@ void DistributionsForInferenceWidget::buildInterface()
 
   // list distributions
   QStringList notUsedDistributions;
-  const QStringList allDistributions = TranslationManager::GetAvailableDistributions();
+  QStringList allDistributions;
+  if (variables_.getSize() == 1)
+    allDistributions = TranslationManager::GetAvailableDistributions();
+  else if (variables_.getSize() > 2)
+    allDistributions << TranslationManager::GetTranslatedCopulaName("Normal");
+  else
+    allDistributions = TranslationManager::GetAvailableCopulas();
+
   for (int i = 0; i < allDistributions.size(); ++i)
   {
     if (!distributions_.contains(allDistributions[i]))
@@ -53,35 +67,37 @@ void DistributionsForInferenceWidget::buildInterface()
 
   // distributions table
   // - table view
-  distributionsTableView_ = new QTableView;
-  distributionsTableView_->horizontalHeader()->setStretchLastSection(true);
-  distributionsTableView_->verticalHeader()->hide();
-  distributionsTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
-  distributionsTableView_->setSelectionMode(QAbstractItemView::ExtendedSelection);
-  mainLayout->addWidget(distributionsTableView_);
+  tableView_ = new QTableView;
+  tableView_->horizontalHeader()->setStretchLastSection(true);
+  tableView_->verticalHeader()->hide();
+  tableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
+  tableView_->setSelectionMode(QAbstractItemView::ExtendedSelection);
+  mainLayout->addWidget(tableView_);
 
   // - table model
-  tableModel_ = new DistributionsTableModel(distributions_, distributionsTableView_);
+  tableModel_ = new DistributionsTableModel(distributions_, allDistributions, tableView_);
   connect(tableModel_, SIGNAL(distributionsListChanged(QStringList)), this, SIGNAL(distributionsListChanged(QStringList)));
 
-  distributionsTableView_->setModel(tableModel_);
-  distributionsTableView_->selectRow(0);
+  tableView_->setModel(tableModel_);
+  tableView_->selectRow(0);
 
   // Add button
   QHBoxLayout * buttonsLayout = new QHBoxLayout;
   buttonsLayout->addStretch();
-  addDistributionCombox_ = new TitledComboBox(QIcon(":/images/list-add.png"), tr("Add"));
-  addDistributionCombox_->addItems(notUsedDistributions);
+  addComboBox_ = new TitledComboBox(QIcon(":/images/list-add.png"), tr("Add"));
+  addComboBox_->addItems(notUsedDistributions);
+  addComboBox_->setEnabled(variables_.getSize() <= 2);
 
-  buttonsLayout->addWidget(addDistributionCombox_);
-  connect(addDistributionCombox_, SIGNAL(textActivated(QString)), tableModel_, SLOT(appendDistribution(QString)));
-  connect(addDistributionCombox_, SIGNAL(activated(int)), this, SLOT(addSelectedDistribution(int)));
+  buttonsLayout->addWidget(addComboBox_);
+  connect(addComboBox_, SIGNAL(textActivated(QString)), tableModel_, SLOT(appendDistribution(QString)));
+  connect(addComboBox_, SIGNAL(activated(int)), this, SLOT(addSelectedDistribution(int)));
 
   // Remove button
-  QPushButton * removeDistributionButton = new QPushButton(tr("Remove"));
-  removeDistributionButton->setIcon(QIcon(":/images/list-remove.png"));
-  connect(removeDistributionButton, SIGNAL(pressed()), this, SLOT(removeSelectedDistribution()));
-  buttonsLayout->addWidget(removeDistributionButton);
+  QPushButton * removeButton = new QPushButton(tr("Remove"));
+  removeButton->setIcon(QIcon(":/images/list-remove.png"));
+  removeButton->setEnabled(variables_.getSize() <= 2);
+  connect(removeButton, SIGNAL(pressed()), this, SLOT(removeSelectedDistribution()));
+  buttonsLayout->addWidget(removeButton);
 
   mainLayout->addLayout(buttonsLayout);
 }
@@ -89,45 +105,51 @@ void DistributionsForInferenceWidget::buildInterface()
 
 void DistributionsForInferenceWidget::removeSelectedDistribution()
 {
-  const QModelIndexList indexList = distributionsTableView_->selectionModel()->selectedRows();
+  const QModelIndexList indexList = tableView_->selectionModel()->selectedRows();
 
-  const QStringList allDistributions = TranslationManager::GetAvailableDistributions();
+  QStringList allDistributions;
+  if (variables_.getSize() == 1)
+    allDistributions = TranslationManager::GetAvailableDistributions();
+  else
+    allDistributions = TranslationManager::GetAvailableCopulas();
 
   // update Add button items
-  addDistributionCombox_->removeItem(addDistributionCombox_->count() - 1);
+  addComboBox_->removeItem(addComboBox_->count() - 1);
   for (int i = indexList.size() - 1; i >= 0; --i)
   {
     QString selectedDistribution = tableModel_->data(indexList[i], Qt::DisplayRole).toString();
     if (allDistributions.contains(selectedDistribution))
-      addDistributionCombox_->addItem(selectedDistribution);
+      addComboBox_->addItem(selectedDistribution);
   }
-  addDistributionCombox_->model()->sort(0);
-  addDistributionCombox_->addItem(tr("All"));
+  addComboBox_->model()->sort(0);
+  addComboBox_->addItem(tr("All"));
 
   // update distributions table model
   QStringList distributions;
   for (int i = 0; i < allDistributions.size(); ++i)
-    if (addDistributionCombox_->findText(allDistributions[i]) == -1)
+    if (addComboBox_->findText(allDistributions[i]) == -1)
       distributions << allDistributions[i];
 
   tableModel_->updateData(distributions);
-  distributionsTableView_->selectRow(0);
+  tableView_->selectRow(0);
 
   // emit signal to parent widget
   emit distributionsListChanged(distributions);
+  emit distributionsListChanged(variables_, distributions);
 }
 
 
 void DistributionsForInferenceWidget::addSelectedDistribution(int index)
 {
-  if (index < addDistributionCombox_->count() - 1)
+  if (index < addComboBox_->count() - 1)
   {
-    addDistributionCombox_->removeItem(index);
+    addComboBox_->removeItem(index);
   }
   else
   {
-    addDistributionCombox_->clear();
-    addDistributionCombox_->addItem(tr("All"));
+    addComboBox_->clear();
+    addComboBox_->addItem(tr("All"));
   }
+  emit distributionsListChanged(variables_, tableModel_->getDistributions());
 }
 }

@@ -58,6 +58,12 @@ Collection< Distribution > CopulaInferenceSetResult::getTestedDistributions() co
 }
 
 
+Point CopulaInferenceSetResult::getBICResults() const
+{
+  return bicResults_;
+}
+
+
 PersistentCollection<PersistentCollection<Sample > > CopulaInferenceSetResult::getKendallPlotData() const
 {
   return kendallPlotData_;
@@ -77,6 +83,7 @@ String CopulaInferenceSetResult::__repr__() const
   oss << "class=" << GetClassName()
       << " setOfVariablesNames=" << getSetOfVariablesNames()
       << " testedDistributions=" << getTestedDistributions()
+      << " BIC results=" << getBICResults()
       << " error messages=" << getErrorMessages();
   return oss;
 }
@@ -89,6 +96,7 @@ void CopulaInferenceSetResult::save(Advocate& adv) const
   adv.saveAttribute("setOfVariablesNames_", setOfVariablesNames_);
   adv.saveAttribute("testedDistributions_", testedDistributions_);
   adv.saveAttribute("kendallPlotData_", kendallPlotData_);
+  adv.saveAttribute("bicResults_", bicResults_);
   adv.saveAttribute("errorMessages_", errorMessages_);
 }
 
@@ -100,6 +108,7 @@ void CopulaInferenceSetResult::load(Advocate& adv)
   adv.loadAttribute("setOfVariablesNames_", setOfVariablesNames_);
   adv.loadAttribute("testedDistributions_", testedDistributions_);
   adv.loadAttribute("kendallPlotData_", kendallPlotData_);
+  adv.loadAttribute("bicResults_", bicResults_);
   adv.loadAttribute("errorMessages_", errorMessages_);
 }
 }

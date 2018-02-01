@@ -145,7 +145,7 @@ void CopulaWidget::updateParameters()
   }
 
   //  parameters
-  paramEditor_ = new QGroupBox;
+  paramEditor_ = new QGroupBox(this);
   QGridLayout * groupBoxLayout = new QGridLayout(paramEditor_);
 
   // ---- if Normal copula : show spearman correlation table
@@ -154,14 +154,14 @@ void CopulaWidget::updateParameters()
     paramEditor_->setTitle(tr("Spearman's rank"));
 
     // correlation table view
-    CopyableTableView * corrTableView = new CopyableTableView(paramEditor_);
+    CopyableTableView * corrTableView = new CopyableTableView;
     corrTableView->setEditTriggers(QAbstractItemView::AllEditTriggers);
 
-    SpinBoxDelegate * corrDelegate = new SpinBoxDelegate(paramEditor_);
+    SpinBoxDelegate * corrDelegate = new SpinBoxDelegate(corrTableView);
     corrDelegate->setSpinBoxType(SpinBoxDelegate::correlation);
     corrTableView->setItemDelegate(corrDelegate);
 
-    CorrelationTableModel * corrTableModel = new CorrelationTableModel(physicalModel_, copula_, paramEditor_);
+    CorrelationTableModel * corrTableModel = new CorrelationTableModel(physicalModel_, copula_, corrTableView);
     corrTableView->setModel(corrTableModel);
     groupBoxLayout->addWidget(corrTableView, 0, 0);
     connect(corrTableModel, SIGNAL(dataUpdated(OT::Copula)), this, SLOT(updateCopulaFromCorrTable(OT::Copula)));

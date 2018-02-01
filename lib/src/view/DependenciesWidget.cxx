@@ -26,6 +26,8 @@
 #include "otgui/ComboBoxDelegate.hxx"
 #include "otgui/VariablesSelectionTableModel.hxx"
 #include "otgui/CheckableHeaderView.hxx"
+#include "otgui/CopulaInferenceResultWizard.hxx"
+#include "otgui/OTStudyItem.hxx"
 
 #include <openturns/NormalCopula.hxx>
 
@@ -34,6 +36,7 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QToolButton>
+#include <QMessageBox>
 
 using namespace OT;
 
@@ -42,6 +45,7 @@ namespace OTGUI
 
 DependenciesWidget::DependenciesWidget(ProbabilisticModelItem * item, QWidget *parent)
   : QWidget(parent)
+  , study_(item->getParentOTStudyItem()->getOTStudy())
   , physicalModel_(item->getPhysicalModel())
 {
   connect(item, SIGNAL(copulaChanged()), this, SLOT(updateWidgets()));
@@ -109,6 +113,7 @@ void DependenciesWidget::buildInterface()
 
   connect(this, SIGNAL(removeTableLine(QModelIndex)), tableModel_, SLOT(removeLine(QModelIndex)));
   connect(tableModel_, SIGNAL(dataUpdated(int, OT::Copula)), this, SLOT(updateCopulaWidget(int, OT::Copula)));
+  connect(tableModel_, SIGNAL(inferenceResultRequested(const QModelIndex&)), this, SLOT(openWizardToChooseInferenceResult(const QModelIndex&)));
   connect(tableView_->selectionModel(), SIGNAL(currentRowChanged(QModelIndex, QModelIndex)), this, SLOT(selectedItemChanged(QModelIndex, QModelIndex)));
 
   // - ComboBoxDelegate
@@ -316,5 +321,52 @@ void DependenciesWidget::updateVariablesList()
   for (UnsignedInteger i = 0; i < physicalModel_.getStochasticInputNames().getSize(); ++i)
     varEnabled[i] = independentVars.contains(physicalModel_.getStochasticInputNames()[i]);
   varTableModel_->updateData(physicalModel_.getStochasticInputNames(), varEnabled);
+}
+
+
+void DependenciesWidget::openWizardToChooseInferenceResult(const QModelIndex& inputIndex)
+{
+  bool studyHasInferenceResults = false;
+  // we need at least one copula inference analysis result to open the wizard
+  for (UnsignedInteger i = 0; i < study_.getAnalyses().getSize(); ++i)
+  {
+    if (study_.getAnalyses()[i].getImplementation()->getClassName() == "CopulaInferenceAnalysis"
+        && study_.getAnalyses()[i].hasValidResult())
+    {
+      studyHasInferenceResults = true;
+      break;
+    }
+  }
+  // error message if no inference analyses
+  if (!studyHasInferenceResults)
+  {
+    QMessageBox::critical(this, tr("Error"), tr("The current study has not copula inference analyses results."));
+    return;
+  }
+  // open a wizard to choose a result
+  tableView_->setCurrentIndex(inputIndex);
+  const Description currentGroup(tableModel_->getGroup(tableView_->currentIndex()));
+  CopulaInferenceResultWizard wizard(study_, currentGroup, this);
+  if (wizard.exec())
+  {
+    // get new copula
+    Copula copula(wizard.getCopula());
+    copula.setDescription(currentGroup);
+
+    // update the copula
+    physicalModel_.blockNotification("ProbabilisticModel");
+    physicalModel_.setCopula(currentGroup, copula);
+    physicalModel_.blockNotification();
+
+    // update widget
+    const int currentRow = tableView_->currentIndex().row();
+    updateCopulaWidget(currentRow, copula);
+
+    // update table
+    for (int i = 0; i < tableView_->model()->rowCount(); ++i)
+    {
+      tableView_->openPersistentEditor(tableView_->model()->index(i, 1));
+    }
+  }
 }
 }

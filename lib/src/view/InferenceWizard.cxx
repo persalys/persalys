@@ -82,8 +82,16 @@ void InferenceWizard::buildInterface()
 
   QWizardPage * page = new QWizardPage(this);
   QVBoxLayout * pageLayout = new QVBoxLayout(page);
+
+  QLabel * label = new QLabel;
+  label->setWordWrap(true);
+  label->setText(tr("Firstly, select variables. Then for each variable, list distributions to infer from the sample."));
+  pageLayout->addWidget(label);
+
   QHBoxLayout * splitter = new QHBoxLayout;
 
+  QWidget * leftWidget = new QWidget;
+  QVBoxLayout * leftWidgetLayout = new QVBoxLayout(leftWidget);
   // table view
   QTableView * varTableView = new QTableView;
   varTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -119,7 +127,8 @@ void InferenceWizard::buildInterface()
   varTableView->setFixedWidth(w + x1 + x2);
   varTableView->horizontalHeader()->resizeSection(0, w + x1 + x2);
 
-  splitter->addWidget(varTableView);
+  leftWidgetLayout->addWidget(varTableView);
+  splitter->addWidget(leftWidget);
 
   // list dist
   ResizableStackedWidget * stackWidget = new ResizableStackedWidget;
@@ -136,12 +145,12 @@ void InferenceWizard::buildInterface()
       }
     }
 
-    DistributionsForInferenceWidget * distWidget = new DistributionsForInferenceWidget(dist, this);
+    DistributionsForInferenceWidget * distWidget = new DistributionsForInferenceWidget(dist, Description(1, varNames[i]), this);
     connect(distWidget, SIGNAL(distributionsListChanged(QStringList)), this, SLOT(updateDistListForVar(QStringList)));
 
     stackWidget->addWidget(distWidget);
   }
-  splitter->addWidget(stackWidget);
+  splitter->addWidget(stackWidget, 1);
   connect(this, SIGNAL(currentVarChanged(int)), stackWidget, SLOT(setCurrentIndex(int)));
   connect(this, SIGNAL(currentVarChecked(bool)), stackWidget, SLOT(setEnabled(bool)));
 

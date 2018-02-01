@@ -1,11 +1,9 @@
 class=DataModel name=myDataModel fileName=data2.csv inputColumns=[0,2,3] outputColumns=[] inputNames=[X0,X2,X3] outputNames=[]
-class=CopulaInferenceAnalysis name=analysis designOfExperiment=myDataModel interestVariables=[X0,X2,X3] setOfVariables [X0,X2,X3] distributionFactories=[NormalCopulaFactory] setOfVariables [X0,X3] distributionFactories=[NormalCopulaFactory,GumbelCopulaFactory]
-result= class=CopulaInferenceResult copulaInferenceSetResultCollection=[class=CopulaInferenceSetResult setOfVariablesNames=[X0,X2,X3] testedDistributions=[NormalCopula(R = [[ 1         0.0529305 0.0580361 ]
- [ 0.0529305 1         0.039636  ]
- [ 0.0580361 0.039636  1         ]])] error messages=[],class=CopulaInferenceSetResult setOfVariablesNames=[X0,X3] testedDistributions=[NormalCopula(R = [[ 1         0.0580361 ]
- [ 0.0580361 1         ]]),GumbelCopula(theta = 1.03839)] error messages=[,]]
+class=CopulaInferenceAnalysis name=analysis designOfExperiment=myDataModel interestVariables=[] setOfVariables [X0,X3] distributionFactories=[NormalCopulaFactory,GumbelCopulaFactory]
+result= class=CopulaInferenceResult copulaInferenceSetResultCollection=[class=CopulaInferenceSetResult setOfVariablesNames=[X0,X3] testedDistributions=[NormalCopula(R = [[ 1         0.0580361 ]
+ [ 0.0580361 1         ]]),GumbelCopula(theta = 1.03839)] BIC results=class=Point name=Unnamed dimension=2 values=[9.46314,9.46533] error messages=[,]]
 class=CopulaInferenceSetResult setOfVariablesNames=[X0,X3] testedDistributions=[NormalCopula(R = [[ 1         0.0580361 ]
- [ 0.0580361 1         ]]),GumbelCopula(theta = 1.03839)] error messages=[,]
+ [ 0.0580361 1         ]]),GumbelCopula(theta = 1.03839)] BIC results=class=Point name=Unnamed dimension=2 values=[9.46314,9.46533] error messages=[,]
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -22,9 +20,6 @@ outputNames = []
 myDataModel = otguibase.DataModel('myDataModel', 'data2.csv', inputColumns, outputColumns, inputNames, outputNames)
 myStudy.add(myDataModel)
 analysis = otguibase.CopulaInferenceAnalysis('analysis', myDataModel)
-variablesSet = ['X0', 'X2', 'X3']
-factories = [ot.NormalCopulaFactory()]
-analysis.setDistributionsFactories(variablesSet, factories)
 variablesSet = ['X0', 'X3']
 factories = [ot.NormalCopulaFactory(), ot.GumbelCopulaFactory()]
 analysis.setDistributionsFactories(variablesSet, factories)

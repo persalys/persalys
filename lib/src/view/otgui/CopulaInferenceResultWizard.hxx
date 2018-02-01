@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWidget used in the QWizard for inference
+ *  @brief QWizard to choose a copula inference result
  *
  *  Copyright 2015-2017 EDF-Phimeca
  *
@@ -18,44 +18,45 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_DISTRIBUTIONSINFERENCEWIDGET_HXX
-#define OTGUI_DISTRIBUTIONSINFERENCEWIDGET_HXX
+#ifndef OTGUI_COPULAINFERENCERESULTWIZARD_HXX
+#define OTGUI_COPULAINFERENCERESULTWIZARD_HXX
 
-#include "otgui/DistributionsTableModel.hxx"
-#include "otgui/TitledComboBox.hxx"
+#include "otgui/OTguiWizard.hxx"
+#include "otgui/OTStudy.hxx"
+#include "otgui/TemporaryLabel.hxx"
+#include "otgui/ResizableStackedWidget.hxx"
 
-#include <openturns/OTType.hxx>
-
+#include <QComboBox>
 #include <QTableView>
-#include <QMetaType> // mandatory to specify it to avoid windows compilation problem
-
-Q_DECLARE_METATYPE(OT::Description)
 
 namespace OTGUI
 {
-class OTGUI_API DistributionsForInferenceWidget : public QWidget
+class OTGUI_API CopulaInferenceResultWizard : public OTguiWizard
 {
   Q_OBJECT
 
-public :
-  DistributionsForInferenceWidget(const QStringList & distributions, const OT::Description &variables, QWidget* parent = 0);
+public:
+  CopulaInferenceResultWizard(const OTStudy &otStudy, const OT::Description &variables, QWidget *parent = 0);
+
+  OT::Copula getCopula() const;
+
+  virtual bool validateCurrentPage();
 
 protected:
   void buildInterface();
 
 public slots:
-  void removeSelectedDistribution();
-  void addSelectedDistribution(int);
-signals:
-  void distributionsListChanged(QStringList);
-  void distributionsListChanged(const OT::Description &variables, const QStringList &dist);
+  void updateVariablesComboBox(int);
+  void updateVariablesTable(const QString &text);
 
 private:
+  OTStudy otStudy_;
   OT::Description variables_;
-  QStringList distributions_;
+  QComboBox * inferenceResultsComboBox_;
+  QComboBox * variablesComboBox_;
   QTableView * tableView_;
-  DistributionsTableModel * tableModel_;
-  TitledComboBox * addComboBox_;
+  ResizableStackedWidget * inferenceResultStackWidget_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif
