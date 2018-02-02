@@ -63,6 +63,7 @@ public:
 
   void updateParameters();
 
+  virtual Parameters getParameters() const;
   virtual OT::String getPythonScript() const;
 
   /** String converter */

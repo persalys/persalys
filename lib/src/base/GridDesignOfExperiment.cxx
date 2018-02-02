@@ -234,6 +234,13 @@ void GridDesignOfExperiment::updateParameters()
 
   initializeParameters();
 
+  if (!(values.getSize() == inputNames_.getSize() &&
+        infBounds.getSize() == inputNames_.getSize() &&
+        supBounds.getSize() == inputNames_.getSize() &&
+        levels.getSize() == inputNames_.getSize() &&
+        deltas.getSize() == inputNames_.getSize()))
+    return;
+
   for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++ i)
   {
     const Description::const_iterator it = std::find(inputNames.begin(), inputNames.end(), inputNames_[i]);
@@ -413,6 +420,32 @@ Description GridDesignOfExperiment::getVariableInputNames() const
 }
 
 
+Parameters GridDesignOfExperiment::getParameters() const
+{
+  Parameters param;
+
+  param.add("Design type", "Grid");
+  param.add("Outputs of interest", getInterestVariables().__str__());
+  param.add("Sample size", getOriginalInputSample().getSize());
+
+  OSS bounds;
+  for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++i)
+  {
+    if (levels_[i] > 1)
+      bounds << inputNames_[i] << " : [" << lowerBounds_[i] << ", " << upperBounds_[i] << "] " << "levels" << " = " << levels_[i];
+    else
+      bounds << inputNames_[i] << " : " << values_[i];
+    if (i < inputNames_.getSize() - 1)
+       bounds << "\n";
+  }
+  param.add("Bounds", bounds);
+
+  param.add("Block size", getBlockSize());
+
+  return param;
+}
+
+
 String GridDesignOfExperiment::getPythonScript() const
 {
   OSS oss;
@@ -459,6 +492,7 @@ void GridDesignOfExperiment::save(Advocate & adv) const
   adv.saveAttribute("lowerBounds_", lowerBounds_);
   adv.saveAttribute("upperBounds_", upperBounds_);
   adv.saveAttribute("values_", values_);
+  adv.saveAttribute("inputNames_", inputNames_);
 }
 
 
@@ -471,6 +505,10 @@ void GridDesignOfExperiment::load(Advocate & adv)
   adv.loadAttribute("lowerBounds_", lowerBounds_);
   adv.loadAttribute("upperBounds_", upperBounds_);
   adv.loadAttribute("values_", values_);
-  inputNames_ = getPhysicalModel().getInputNames();
+  adv.loadAttribute("inputNames_", inputNames_);
+  // TODO rm later. avoid crash when opening older xml
+  const Sample inS(originalInputSample_);
+  updateParameters(); // clear originalInputSample_
+  originalInputSample_ = inS;
 }
 }
