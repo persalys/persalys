@@ -187,6 +187,28 @@ Sample ImportedDesignOfExperiment::ImportSample(const String& fileName)
 }
 
 
+Parameters ImportedDesignOfExperiment::getParameters() const
+{
+  Parameters param;
+
+  param.add("Design type", "Imported");
+  param.add("Outputs of interest", getInterestVariables().__str__());
+  param.add("Sample size", getOriginalInputSample().getSize());
+  param.add("File", getFileName());
+  OSS columns;
+  for (UnsignedInteger i = 0; i < getOriginalInputSample().getDimension(); ++i)
+  {
+    columns << getOriginalInputSample().getDescription()[i] << " : " << getInputColumns()[i];
+    if (i < getOriginalInputSample().getDimension() - 1)
+      columns << "\n";
+  }
+  param.add("Columns", columns);
+  param.add("Block size", getBlockSize());
+
+  return param;
+}
+
+
 String ImportedDesignOfExperiment::getPythonScript() const
 {
   OSS oss;
