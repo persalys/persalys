@@ -122,6 +122,10 @@ void MorrisAnalysis::updateParameters()
 
   initializeParameters();
 
+  if (!(lowBounds.getSize() == inputNames_.getSize() &&
+        upBounds.getSize() == inputNames_.getSize()))
+    return;
+
   Point newLowerBounds(inputNames_.getSize());
   Point newUpperBounds(inputNames_.getSize());
 
@@ -257,15 +261,18 @@ Parameters MorrisAnalysis::getParameters() const
   param.add("Number of trajectories", getTrajectoriesNumber());
   param.add("Level", getLevel());
   param.add("Seed", getSeed());
-  String bounds;
-  Description allInputsBoundsStr = Parameters::GetOTIntervalDescription(getBounds());
-  for (UnsignedInteger i = 0; i < getPhysicalModel().getInputNames().getSize(); ++i)
+  if (getBounds().getDimension() == inputNames_.getSize())
   {
-    bounds += getPhysicalModel().getInputNames()[i] + " : " + allInputsBoundsStr[i];
-    if (i < getPhysicalModel().getInputNames().getSize() - 1)
-       bounds += "\n";
+    String bounds;
+    const Description allInputsBoundsStr(Parameters::GetOTIntervalDescription(getBounds()));
+    for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++i)
+    {
+      bounds += inputNames_[i] + " : " + allInputsBoundsStr[i];
+      if (i < inputNames_.getSize() - 1)
+        bounds += "\n";
+    }
+    param.add("Bounds", bounds);
   }
-  param.add("Bounds", bounds);
 
   return param;
 }
@@ -318,6 +325,7 @@ void MorrisAnalysis::save(Advocate & adv) const
   adv.saveAttribute("bounds_", bounds_);
   adv.saveAttribute("level_", level_);
   adv.saveAttribute("result_", result_);
+  adv.saveAttribute("inputNames_", inputNames_);
 }
 
 
@@ -329,6 +337,6 @@ void MorrisAnalysis::load(Advocate & adv)
   adv.loadAttribute("bounds_", bounds_);
   adv.loadAttribute("level_", level_);
   adv.loadAttribute("result_", result_);
-  inputNames_ = getPhysicalModel().getInputNames();
+  adv.loadAttribute("inputNames_", inputNames_);
 }
 }
