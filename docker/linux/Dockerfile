@@ -1,4 +1,3 @@
-
 FROM centos:6
 MAINTAINER jschueller
 
@@ -99,7 +98,6 @@ RUN git clone https://github.com/openturns/otfmi.git
 RUN cd otfmi && python setup.py install
 
 # X11
-RUN yum search xvfb
 RUN yum -y install libX11-devel libXt-devel libXext-devel chrpath libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel xorg-x11-server-Xvfb
 RUN yum -y install mesa-libGL-devel mesa-libEGL-devel mesa-libGLU-devel mesa-libGLw-devel
 RUN yum -y install freetype-devel libjpeg-turbo-devel libxcb-devel xcb-util xcb-util-devel fontconfig-devel xz-devel
