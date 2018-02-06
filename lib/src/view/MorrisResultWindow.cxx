@@ -86,6 +86,8 @@ void MorrisResultWindow::fillTabWidget()
 #endif
   if (parametersWidget_)
     tabWidget_->addTab(parametersWidget_, tr("Parameters"));
+
+  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(updateVariablesListVisibility(int)));
 }
 
 
@@ -100,5 +102,11 @@ void MorrisResultWindow::addEffectsTab()
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), stackWidget, SLOT(setCurrentIndex(int)));
 
   tabWidget_->addTab(stackWidget, tr("Elementary effects"));
+}
+
+
+void MorrisResultWindow::updateVariablesListVisibility(int indexTab)
+{
+  variablesGroupBox_->setVisible(indexTab == 0);
 }
 }

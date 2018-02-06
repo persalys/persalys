@@ -40,6 +40,9 @@ protected:
   virtual void fillTabWidget();
   void addEffectsTab();
 
+public slots:
+  virtual void updateVariablesListVisibility(int indexTab);
+
 private:
   MorrisResult& morrisResult_;
 };
