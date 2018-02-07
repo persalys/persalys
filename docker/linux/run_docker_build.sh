@@ -3,7 +3,7 @@
 set -x -e
 
 uid=$1
-gui=$2
+gid=$2
 
 export MAKEFLAGS="-j8"
 cd /tmp
@@ -83,6 +83,7 @@ for libname in lapack blas xml2
 do
   cp -v /usr/lib64/lib${libname}.so.[0-9] otgui.AppDir/usr/lib
 done
+cp -v /usr/lib64/libssl.so.10 /usr/lib64/libcrypto.so.10 otgui.AppDir/usr/lib
 
 # cp /lib64/libz.so.1 /usr/lib64/libGL.so.1 /lib64/libuuid.so.1 /usr/lib64/libxcb.so.1 /usr/lib64/libglapi.so.0 /lib64/libselinux.so.1 /usr/lib64/libXdamage.so.1 /usr/lib64/libXfixes.so.3  /usr/lib64/libgfortran.so.3 /usr/lib64/libXt.so.6 otgui.AppDir/usr/lib
 # cp /usr/lib64/libX11-xcb.so.1 /usr/lib64/libxcb-glx.so.0 /usr/lib64/libxcb-dri2.so.0 /usr/lib64/libXxf86vm.so.1 /usr/lib64/libdrm.so.2 /lib64/libexpat.so.1 /usr/lib64/libXau.so.6 otgui.AppDir/usr/lib
@@ -96,5 +97,5 @@ appimagetool -v otgui.AppDir
 if test -n "${uid}" -a -n "${gid}"
 then
   sudo cp otgui*.AppImage /tmp/otgui
-  chown ${uid}:${gid} /tmp/otgui/otgui*.AppImage
+  sudo chown ${uid}:${gid} /tmp/otgui/otgui*.AppImage
 fi
