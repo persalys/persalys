@@ -2,6 +2,9 @@
 
 set -x -e
 
+uid=$1
+gui=$2
+
 export MAKEFLAGS="-j8"
 cd /tmp
 
@@ -88,3 +91,10 @@ done
 LD_LIBRARY_PATH=$PWD/otgui.AppDir/usr/lib ldd otgui.AppDir/usr/bin/otgui
 
 appimagetool -v otgui.AppDir
+
+# copy to host with same permission
+if test -n "${uid}" -a -n "${gid}"
+then
+  sudo cp otgui*.AppImage /tmp/otgui
+  chown ${uid}:${gid} /tmp/otgui/otgui*.AppImage
+fi
