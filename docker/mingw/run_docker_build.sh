@@ -2,6 +2,9 @@
 
 set -x -e
 
+uid=$1
+gui=$2
+
 cd /tmp
 
 ARCH=i686
@@ -35,3 +38,10 @@ xvfb-run ctest --output-on-failure --timeout 100 -j8 -E "FMI|WelcomeWindow"
 VERSION=`cat ../otgui/VERSION`
 cp /tmp/otgui/distro/windows/* .
 makensis -DMODULE_PREFIX=${MOD_PREFIX} -DMODULE_VERSION=${VERSION} -DOPENTURNS_VERSION=1.10 -DPYBASEVER=${PYBASEVER} -DPYBASEVER_NODOT=${PYBASEVER_NODOT} -DARCH=${ARCH} installer.nsi
+
+# copy to host with same permission
+if test -n "${uid}" -a -n "${gid}"
+then
+  sudo cp otgui*.exe /tmp/otgui
+  chown ${uid}:${gid} /tmp/otgui/otgui*.exe
+fi

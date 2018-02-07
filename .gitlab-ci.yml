@@ -1,24 +1,21 @@
 linux:
   script:
     - docker build docker/linux -t linux
-    - docker run --volume `pwd`:/tmp/otgui linux sh -c "/tmp/otgui/docker/linux/run_docker_build.sh"
-    - docker cp `docker ps -l -q`:/tmp/build/otgui-x86_64.AppImage .
+    - docker run --rm --volume `pwd`:/tmp/otgui linux sh -c "/tmp/otgui/docker/linux/run_docker_build.sh"
   except:
     - tags
 
 mingw:
   script:
     - docker build docker/mingw -t mingw
-    - docker run --volume `pwd`:/tmp/otgui mingw sh -c "/tmp/otgui/docker/mingw/run_docker_build.sh"
-    - docker cp `docker ps -l -q`:/tmp/build/otgui-4.0dev-py2.7-i686.exe .
+    - docker run --rm --volume `pwd`:/tmp/otgui mingw sh -c "/tmp/otgui/docker/mingw/run_docker_build.sh"
   except:
     - tags
 
 linux-tag:
   script:
     - docker build docker/linux -t linux
-    - docker run --volume `pwd`:/tmp/otgui linux sh -c "/tmp/otgui/docker/linux/run_docker_build.sh"
-    - docker cp `docker ps -l -q`:/tmp/build/otgui-x86_64.AppImage .
+    - docker run --rm --volume `pwd`:/tmp/otgui linux sh -c "/tmp/otgui/docker/linux/run_docker_build.sh `id -u` `id -g`"
   artifacts:
     paths:
       - otgui*.AppImage
@@ -28,8 +25,7 @@ linux-tag:
 mingw-tag:
   script:
     - docker build docker/mingw -t mingw
-    - docker run --volume `pwd`:/tmp/otgui mingw sh -c "/tmp/otgui/docker/mingw/run_docker_build.sh"
-    - docker cp `docker ps -l -q`:/tmp/build/otgui-4.0dev-py2.7-i686.exe .
+    - docker run --rm --volume `pwd`:/tmp/otgui mingw sh -c "/tmp/otgui/docker/mingw/run_docker_build.sh `id -u` `id -g`"
   artifacts:
     paths:
       - otgui*.exe
