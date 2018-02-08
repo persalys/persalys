@@ -3,7 +3,7 @@
 set -x -e
 
 uid=$1
-gui=$2
+gid=$2
 
 cd /tmp
 
@@ -31,7 +31,7 @@ CXXFLAGS="-D_hypot=hypot" ${ARCH}-w64-mingw32-cmake -DUSE_SPHINX=OFF -DUSE_PARAV
 make install
 make tests
 cp ${MINGW_PREFIX}/bin/*.dll ${MOD_PREFIX}/bin
-cp ${MINGW_PREFIX}/lib/qt/plugins/platforms/qwindows.dll ${MOD_PREFIX}/bin
+cp -r ${MINGW_PREFIX}/lib/qt/plugins ${MOD_PREFIX}/lib
 export WINEPATH=${MOD_PREFIX}/bin
 xvfb-run ctest --output-on-failure --timeout 100 -j8 -E "FMI|WelcomeWindow"
 
@@ -43,5 +43,5 @@ makensis -DMODULE_PREFIX=${MOD_PREFIX} -DMODULE_VERSION=${VERSION} -DOPENTURNS_V
 if test -n "${uid}" -a -n "${gid}"
 then
   sudo cp otgui*.exe /tmp/otgui
-  chown ${uid}:${gid} /tmp/otgui/otgui*.exe
+  sudo chown ${uid}:${gid} /tmp/otgui/otgui-${VERSION}*.exe
 fi

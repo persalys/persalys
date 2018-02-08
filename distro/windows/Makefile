@@ -175,7 +175,7 @@ endif
 	# qt libs
 ifeq ($(USE_QT5),ON)
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/Qt5*.dll $(MOD_PREFIX)/bin
-	cp $(MINGW_PREFIX)/$(TARGET)/lib/qt/plugins/platforms/qwindows.dll $(MOD_PREFIX)/bin
+	cp -r $(MINGW_PREFIX)/$(TARGET)/lib/qt/plugins/ $(MOD_PREFIX)/lib
 else
 	cp $(MINGW_PREFIX)/$(TARGET)/bin/Qt*4.dll $(MOD_PREFIX)/bin
 endif
