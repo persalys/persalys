@@ -334,10 +334,13 @@ Section "!${MODULE_NAME} DLL & doc" SEC01
   CopyFiles /SILENT $MODULE_INSTALL_PATH\..\openturns\*.dll $MODULE_INSTALL_PATH
   File /r "${MODULE_PREFIX}\bin\*.*"
   File /r "${MODULE_PREFIX}\Lib\site-packages\${MODULE_NAME_LOWERCASE}base\*.*"
+  SetOutPath "$MODULE_INSTALL_PATH\plugins"
+  File /r "${MODULE_PREFIX}\lib\plugins\"
 
   SetOutPath "$MODULE_INSTALL_PATH"
   File "README.txt"
   File "otgui.ico"
+  File "otgui.vbs"
 
   ;!insertmacro PRINT "Install doc example in $MODULE_INSTALL_PATH\doc\pdf."
   ;SetOutPath "$MODULE_INSTALL_PATH\doc\pdf"
@@ -378,12 +381,13 @@ Section -AdditionalIcons
   !insertmacro PRINT "Create OpenTURNS ${MODULE_NAME_LOWERCASE} menu."
   ; install shortcuts on every accounts
   !insertmacro SET_MENU_CONTEXT
+  SetOutPath "$MODULE_INSTALL_PATH"
 
   CreateDirectory "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}"
   CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\README.lnk" "$MODULE_INSTALL_PATH\README.txt" "" "" 0
   ;CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\Documentation.lnk" "$MODULE_INSTALL_PATH\doc\pdf\${MODULE_NAME}_Documentation.pdf" "" "" 1
   CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\Uninstall.lnk" "$MODULE_INSTALL_PATH\${UNINST_EXE}" "" "" 2
-  CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\otgui.lnk" "$MODULE_INSTALL_PATH\otgui.exe" "" "$MODULE_INSTALL_PATH\otgui.ico" 0
+  CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\otgui.lnk" "$MODULE_INSTALL_PATH\otgui.vbs" "" "$MODULE_INSTALL_PATH\otgui.ico" 3
 SectionEnd
 
 
