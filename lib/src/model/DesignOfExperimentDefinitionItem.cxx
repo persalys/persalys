@@ -148,7 +148,7 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
     {
       AnalysisItem * analysisItem = dynamic_cast<AnalysisItem*>(child(i));
       // emit signal to StudyTreeView to update the window bound to analysisItem
-      emit updateEvaluationWindowRequested(analysisItem);
+      emit updateEvaluationWindowRequested(analysisItem, false);
       return;
     }
   }

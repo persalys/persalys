@@ -56,7 +56,7 @@ public slots:
 signals:
   void modifyAnalysisRequested(DesignOfExperimentDefinitionItem*);
   void DOEEvaluationRequested(const Analysis&, const bool isGeneralWizard = false);
-  void updateEvaluationWindowRequested(AnalysisItem*);
+  void updateEvaluationWindowRequested(AnalysisItem*, const bool createConnections);
   void analysisItemCreated(AnalysisItem*);
 
   void numberDesignEvaluationChanged(bool);
