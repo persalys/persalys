@@ -265,7 +265,7 @@ void StudyManager::createDesignOfExperimentWindow(DesignOfExperimentDefinitionIt
     connect(item, SIGNAL(analysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
     connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis)), this, SLOT(openAnalysisWizard(OTguiItem*, Analysis)));
     connect(item, SIGNAL(DOEEvaluationRequested(Analysis)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis)));
-    connect(item, SIGNAL(updateEvaluationWindowRequested(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
+    connect(item, SIGNAL(updateEvaluationWindowRequested(AnalysisItem*, bool)), this, SLOT(createAnalysisWindow(AnalysisItem*, bool)));
   }
 
   // window

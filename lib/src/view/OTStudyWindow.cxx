@@ -89,7 +89,17 @@ void OTStudyWindow::buildInterface()
   layout->addWidget(textEdit, row, 0);
 
   textEdit = new QLabel;
-  textEdit->setText(tr("- Evaluation\n- Design of experiments\n- Central tendency\n- Sensitivity\n- Reliability\n- Metamodel"));
+  QString text = QString("- %1\n- %2\n- %3\n- %4\n- %5\n- %6")
+                    .arg(tr("Evaluation"))
+                    .arg(tr("Design of experiments"))
+                    .arg(tr("Central tendency"))
+                    .arg(tr("Sensitivity"))
+                    .arg(tr("Reliability"))
+                    .arg(tr("Metamodel"));
+#ifdef OTGUI_HAVE_OTMORRIS
+  text.append(QString("\n- %1").arg(tr("Screening")));
+#endif
+  textEdit->setText(text);
   layout->addWidget(textEdit, row + 1, 0, Qt::AlignHCenter | Qt::AlignTop);
 
   // vertical line

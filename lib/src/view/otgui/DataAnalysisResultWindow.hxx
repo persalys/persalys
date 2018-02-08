@@ -33,7 +33,7 @@ public:
   DataAnalysisResultWindow(AnalysisItem * item, QWidget * parent = 0);
 
 protected:
-  virtual void initialize(AnalysisItem* item);
+  void initialize(AnalysisItem* item);
   virtual void fillTabWidget();
   void addDependencyTab();
 };

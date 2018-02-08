@@ -1405,14 +1405,19 @@ métamodèle</translation>
 <context>
     <name>OTGUI::DesignOfExperimentInputWindow</name>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentInputWindow.cxx" line="45"/>
+        <location filename="../lib/src/view/DesignOfExperimentInputWindow.cxx" line="32"/>
+        <source>Design of experiments creation parameters</source>
+        <translation>Paramètres de création du plan d&apos;expériences</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DesignOfExperimentInputWindow.cxx" line="34"/>
         <source>Design of experiments</source>
         <translation>Plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentInputWindow.cxx" line="52"/>
-        <source>Sample size</source>
-        <translation>Taille de l&apos;échantillon</translation>
+        <location filename="../lib/src/view/DesignOfExperimentInputWindow.cxx" line="60"/>
+        <source>Parameters</source>
+        <translation>Paramètres</translation>
     </message>
 </context>
 <context>
@@ -3731,17 +3736,52 @@ ou interaction</translation>
     </message>
     <message>
         <location filename="../lib/src/view/OTStudyWindow.cxx" line="87"/>
-        <location filename="../lib/src/view/OTStudyWindow.cxx" line="109"/>
+        <location filename="../lib/src/view/OTStudyWindow.cxx" line="119"/>
         <source>Available functionalities :</source>
         <translation>Fonctionnalités disponibles :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTStudyWindow.cxx" line="103"/>
+        <location filename="../lib/src/view/OTStudyWindow.cxx" line="93"/>
+        <source>Evaluation</source>
+        <translation>Évaluation</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTStudyWindow.cxx" line="94"/>
+        <source>Design of experiments</source>
+        <translation>Plan d&apos;expériences</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTStudyWindow.cxx" line="95"/>
+        <source>Central tendency</source>
+        <translation>Tendance centrale</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTStudyWindow.cxx" line="96"/>
+        <source>Sensitivity</source>
+        <translation>Sensibilité</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTStudyWindow.cxx" line="97"/>
+        <source>Reliability</source>
+        <translation>Fiabilité</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTStudyWindow.cxx" line="98"/>
+        <source>Metamodel</source>
+        <translation>Métamodèle</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTStudyWindow.cxx" line="100"/>
+        <source>Screening</source>
+        <translation>Criblage</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTStudyWindow.cxx" line="113"/>
         <source>Data model</source>
         <translation>Modèle de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTStudyWindow.cxx" line="114"/>
+        <location filename="../lib/src/view/OTStudyWindow.cxx" line="124"/>
         <source>- Data analysis
 - Inference
 - Dependencies inference
@@ -3767,22 +3807,7 @@ ou interaction</translation>
         <translation>Créer un modèle physique défini avec un fichier FMU</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTStudyWindow.cxx" line="92"/>
-        <source>- Evaluation
-- Design of experiments
-- Central tendency
-- Sensitivity
-- Reliability
-- Metamodel</source>
-        <translation>- Evaluation
-- Plan d&apos;expériences
-- Tendance centrale
-- Sensibilité
-- Fiabilité
-- Métamodèle</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OTStudyWindow.cxx" line="104"/>
+        <location filename="../lib/src/view/OTStudyWindow.cxx" line="114"/>
         <source>Import a sample to create a model</source>
         <translation>Importer un échantillon de données pour créer un modèle</translation>
     </message>
@@ -4713,7 +4738,7 @@ métamodèle</translation>
     <message>
         <location filename="../lib/src/view/plot/PlotWidget.cxx" line="135"/>
         <location filename="../lib/src/view/plot/PlotWidget.cxx" line="137"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="182"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="179"/>
         <source>Export plot</source>
         <translation>Exporter le graphique</translation>
     </message>
@@ -4738,122 +4763,122 @@ métamodèle</translation>
         <translation>Résolution de l&apos;image</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="184"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="181"/>
         <source>PNG (*.png);; JPEG (*.jpg *.jpeg);; BMP (*.bmp);; PPM (*.ppm);; XBM (*.xbm);; XPM (*.xpm);; TIFF (*.tiff);; SVG (*.svg);; PDF (*.pdf);; PS (*.ps)</source>
         <translation>PNG (*.png);; JPEG (*.jpg *.jpeg);; BMP (*.bmp);; PPM (*.ppm);; XBM (*.xbm);; XPM (*.xpm);; TIFF (*.tiff);; SVG (*.svg);; PDF (*.pdf);; PS (*.ps)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="215"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="219"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="212"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="216"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="215"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="212"/>
         <source>Impossible to export the plot.</source>
         <translation>Impossible d&apos;exporter le graphique.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="219"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="216"/>
         <source>Format not supported.</source>
         <translation>Format non supporté.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="323"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="320"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="324"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="639"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="321"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="636"/>
         <source>Density</source>
         <translation>Densité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="325"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="342"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="322"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="339"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="340"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="341"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="337"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="338"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="498"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="495"/>
         <source>Index</source>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="499"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="496"/>
         <source>Inputs</source>
         <translation>Entrées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="533"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="530"/>
         <source>First order index</source>
         <translation>Indice du premier ordre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="559"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="556"/>
         <source>Total index</source>
         <translation>Indice total</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="666"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="663"/>
         <source>No effect boundary</source>
         <translation>Limite sans effet</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="674"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="671"/>
         <source>Selecting a value at the scale will move the vertical marker.</source>
         <translation>Sélectionner une valeur sur l&apos;axe changera la position du repère vertical.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="749"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="746"/>
         <source>Deselect the points</source>
         <translation>Désélectionner les points</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="750"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="747"/>
         <source>Select the points</source>
         <translation>Sélectionner les points</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="844"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="850"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="859"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="867"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="882"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="888"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="896"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="902"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="841"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="847"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="856"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="864"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="879"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="885"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="893"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="899"/>
         <source>scatterplot</source>
         <translation>diagrammeDispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="846"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="852"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="863"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="871"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="884"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="890"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="898"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="904"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="843"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="849"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="860"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="868"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="881"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="887"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="895"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="901"/>
         <source>Scatter plot:</source>
         <translation>Diagramme de dispersion :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="846"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="852"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="863"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="871"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="884"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="890"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="898"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="904"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="843"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="849"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="860"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="868"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="881"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="887"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="895"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="901"/>
         <source>vs</source>
         <translation>vs</translation>
     </message>

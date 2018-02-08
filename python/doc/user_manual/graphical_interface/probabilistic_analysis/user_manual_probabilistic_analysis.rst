@@ -2,7 +2,9 @@
 User manual - Probabilistic analyses
 ====================================
 
-1- Probabilistic study
+.. _probaModel:
+
+1- Probabilistic model
 ======================
 
 In order to perform probabilistic analysis, the user needs first to build a
@@ -507,7 +509,7 @@ The results window gathers 6 tabs:
       - The axis title, expected to be a string;
       - The minimum bound of the axis, expected to be a floating point;
       - The maximum bound of the axis, expected to be a floating point;
-      - A log scale (the chackbutton is available only if the values of the axis are positive).
+      - A log scale (the checkbutton is available only if the values of the axis are positive).
     The **Plot style** tab enables to define:
       - the plot color;
       - the marker style (Cross, Circle, Diamond, Square, Plus);

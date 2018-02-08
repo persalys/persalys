@@ -38,10 +38,9 @@ class OTGUI_API DataAnalysisWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  DataAnalysisWindow(AnalysisItem * item, QWidget * parent = 0);
+  DataAnalysisWindow(OTguiItem * item, QWidget * parent = 0);
 
 protected:
-  virtual void initialize(AnalysisItem * item) = 0;
   void initializeVariablesNames();
   void buildInterface();
   virtual void fillListWidget();
