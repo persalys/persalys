@@ -275,7 +275,7 @@ bool CopulaInferenceWizard::validateCurrentPage()
   if (!tableModel_->rowCount())
   {
     const QString errorMessage = tr("Define at least a group of variables associated with a list of copulas");
-    errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
+    errorMessageLabel_->setTemporaryErrorMessage(errorMessage);
     return false;
   }
   // check there are at least a copula to test for each group of variables
@@ -285,7 +285,7 @@ bool CopulaInferenceWizard::validateCurrentPage()
     if (!it->second.getSize())
     {
       const QString errorMessage = tr("At least one copula must be tested for the selected group of variables '%1'").arg(it->first.__str__().c_str());
-      errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
+      errorMessageLabel_->setTemporaryErrorMessage(errorMessage);
       return false;
     }
   }
