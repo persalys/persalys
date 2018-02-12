@@ -109,7 +109,7 @@ Parameters FORMImportanceSamplingAnalysis::getParameters() const
   param.add("Design point (standard space)", getStandardSpaceDesignPoint());
   param.add("Maximum coefficient of variation", getMaximumCoefficientOfVariation());
   String time = "- (s)";
-  if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
+  if (getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
     time = (OSS() << getMaximumElapsedTime()).str() + "(s)";
   param.add("Maximum elapsed time", time);
   String maxCalls = "-";
