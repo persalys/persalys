@@ -118,8 +118,13 @@ void MarginalsWidget::buildInterface()
   rightSideOfSplitterStackedWidget_->addWidget(new QWidget);
 
   // 2- If the selected variable is deterministic
-  QScrollArea * scrollAreaForDeterministic = new QScrollArea;
-  scrollAreaForDeterministic->setWidgetResizable(true);
+  QWidget * rightWidget = new QWidget;
+  QVBoxLayout * rightWidgetLayout = new QVBoxLayout(rightWidget);
+  QScrollArea * rightScrollArea = new QScrollArea;
+  rightScrollArea->setWidgetResizable(true);
+  QFrame * rightFrame = new QFrame;
+  QVBoxLayout * rightFrameLayout = new QVBoxLayout(rightFrame);
+
   QGroupBox * valueGroupBox = new QGroupBox(tr("Parameters"));
   QGridLayout * valueGroupBoxLayout = new QGridLayout(valueGroupBox);
   valueGroupBoxLayout->addWidget(new QLabel(tr("Value")), 0, 0);
@@ -127,16 +132,19 @@ void MarginalsWidget::buildInterface()
   valueForDeterministicVariable_->setEnabled(false);
   valueGroupBoxLayout->addWidget(valueForDeterministicVariable_, 0, 1);
   valueGroupBoxLayout->setSizeConstraint(QLayout::SetMaximumSize);
-  scrollAreaForDeterministic->setWidget(valueGroupBox);
-  rightSideOfSplitterStackedWidget_->addWidget(scrollAreaForDeterministic);
+
+  rightFrameLayout->addWidget(valueGroupBox, 0, Qt::AlignTop);
+  rightScrollArea->setWidget(rightFrame);
+  rightWidgetLayout->addWidget(rightScrollArea);
+  rightSideOfSplitterStackedWidget_->addWidget(rightWidget);
 
   // 3- If the selected variable is stochastic
-  QWidget * rightWidget = new QWidget;
-  QVBoxLayout * rightWidgetLayout = new QVBoxLayout(rightWidget);
-  QScrollArea * rightScrollArea = new QScrollArea;
+  rightWidget = new QWidget;
+  rightWidgetLayout = new QVBoxLayout(rightWidget);
+  rightScrollArea = new QScrollArea;
   rightScrollArea->setWidgetResizable(true);
-  QFrame * rightFrame = new QFrame;
-  QVBoxLayout * rightFrameLayout = new QVBoxLayout(rightFrame);
+  rightFrame = new QFrame;
+  rightFrameLayout = new QVBoxLayout(rightFrame);
 
   //  PDF and CDF graphs
   WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
