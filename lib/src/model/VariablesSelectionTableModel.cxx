@@ -130,7 +130,7 @@ Description VariablesSelectionTableModel::getSelectedVariables() const
 
 void VariablesSelectionTableModel::updateData(const Description &variablesNames, const OT::Interval::BoolCollection &isVariablesEnabled)
 {
-  Q_ASSERT(isVariablesEnabled.getSize() == variablesNames_.getSize());
+  Q_ASSERT(isVariablesEnabled.getSize() == variablesNames.getSize());
   beginResetModel();
   variablesNames_ = variablesNames;
   isVariableChecked_ = Interval::BoolCollection(variablesNames_.getSize(), false);

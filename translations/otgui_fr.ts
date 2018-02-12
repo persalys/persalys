@@ -539,7 +539,7 @@ bayésien (BIC)</translation>
     <message>
         <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="97"/>
         <source>copulaPDF</source>
-        <translation>coupulePDF</translation>
+        <translation>copulePDF</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CopulaParametersTabWidget.cxx" line="101"/>
@@ -601,7 +601,7 @@ bayésien (BIC)</translation>
     <message>
         <location filename="../lib/src/view/CopulaWidget.cxx" line="80"/>
         <source>copulaPDF</source>
-        <translation>coupulePDF</translation>
+        <translation>copulePDF</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CopulaWidget.cxx" line="82"/>
@@ -2940,64 +2940,64 @@ bayésien (BIC)</translation>
         <translation>Importer un résultat de Morris</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="123"/>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="341"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="128"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="349"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="125"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="130"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="148"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="156"/>
         <source>distributionPDF</source>
         <translation>distributionPDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="152"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="160"/>
         <source>distributionCDF</source>
         <translation>distributionCDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="170"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="178"/>
         <source>Open the OpenTURNS documentation</source>
         <translation>Ouvrir la documentation OpenTURNS</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="180"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="188"/>
         <source>Truncation parameters</source>
         <translation>Paramètres de troncature</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="183"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="191"/>
         <source>Lower bound</source>
         <translation>Borne inférieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="185"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="193"/>
         <source>Upper bound</source>
         <translation>Borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="345"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="353"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="688"/>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="723"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="696"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="731"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="688"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="696"/>
         <source>The current study has not inference analyses results.</source>
         <translation>L&apos;étude courante n&apos;a aucun résultat d&apos;inférence.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="723"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="731"/>
         <source>The current study has not screening analyses results.</source>
         <translation>L&apos;étude courante n&apos;a aucun résultat de criblage.</translation>
     </message>
@@ -3545,7 +3545,7 @@ ou interaction</translation>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MorrisResultWindow.cxx" line="102"/>
+        <location filename="../lib/src/view/MorrisResultWindow.cxx" line="104"/>
         <source>Elementary effects</source>
         <translation>Effets élémentaires</translation>
     </message>

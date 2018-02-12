@@ -320,7 +320,7 @@ Parameters SobolAnalysis::getParameters() const
   param.add("Outputs of interest", getInterestVariables().__str__());
   param.add("Maximum coefficient of variation", getMaximumCoefficientOfVariation());
   String time = "- (s)";
-  if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
+  if (getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
     time = (OSS() << getMaximumElapsedTime()).str() + "(s)";
   param.add("Maximum elapsed time", time);
   String maxCalls = "-";
