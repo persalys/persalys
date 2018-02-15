@@ -35,7 +35,7 @@
 
 #include <qwt_legend.h>
 
-#include <boost/algorithm/minmax_element.hpp>
+#include <algorithm>
 
 using namespace OT;
 
@@ -65,15 +65,15 @@ void MorrisResultWidget::buildInterface()
   const UnsignedInteger nbInVar = result_.getMeanElementaryEffects(outpuIndex_).getSize();
 
   Point a = result_.getMeanAbsoluteElementaryEffects(outpuIndex_);
-  std::pair<Collection<Scalar>::iterator, Collection<Scalar>::iterator> p = boost::minmax_element(a.begin(), a.end());
+  std::pair<Collection<Scalar>::iterator, Collection<Scalar>::iterator> p = std::minmax_element(a.begin(), a.end());
   const Scalar maxMeanStarEffect = (*p.second);
 
   a = result_.getMeanElementaryEffects(outpuIndex_);
-  p = boost::minmax_element(a.begin(), a.end());
+  p = std::minmax_element(a.begin(), a.end());
   const Scalar maxMeanEffect = (*p.second);
 
   a = result_.getStandardDeviationElementaryEffects(outpuIndex_);
-  p = boost::minmax_element(a.begin(), a.end());
+  p = std::minmax_element(a.begin(), a.end());
   const Scalar maxStdEffect = (*p.second);
 
   const Scalar noEffectBoundary = result_.getNoEffectBoundary(outpuIndex_);

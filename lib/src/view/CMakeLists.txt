@@ -321,6 +321,7 @@ include_directories (${INTERNAL_INCLUDE_DIRS})
 include_directories (${PYTHON_INCLUDE_DIRS})
 
 otgui_add_library (otguiview ${SOURCEFILES} ${OTGUI_VIEW_MOC_SRCS} ${OTGUI_RESOURCES_RCC})
+target_compile_features (otguiview PRIVATE cxx_lambdas)
 
 if ( BUILD_SHARED_LIBS )
   set_target_properties ( otguiview PROPERTIES COMPILE_DEFINITIONS "OTGUI_DLL_EXPORTS" )

@@ -21,7 +21,7 @@
 #include "otgui/WithStopCriteriaAnalysis.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
-#include <boost/chrono.hpp>
+#include <chrono>
 
 using namespace OT;
 
@@ -92,8 +92,8 @@ void WithStopCriteriaAnalysis::setMaximumElapsedTime(const UnsignedInteger secon
 
 Scalar WithStopCriteriaAnalysis::TimeCriteria::Now()
 {
-  boost::chrono::time_point<boost::chrono::system_clock> now = boost::chrono::system_clock::now();
-  return 1e-3 * boost::chrono::duration_cast<boost::chrono::milliseconds>(now.time_since_epoch()).count();
+  std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+  return 1e-3 * std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
 }
 
 

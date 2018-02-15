@@ -1,4 +1,4 @@
-cmake_minimum_required ( VERSION 2.8 )
+cmake_minimum_required (VERSION 3.1)
 
 option ( BUILD_PYTHON                 "Build the python module for the library"                               ON )
 option ( BUILD_GUI                    "Build the GUI"                                                         ON )
@@ -68,7 +68,7 @@ if (NOT BUILD_SHARED_LIBS)
   list ( APPEND OTGUI_DEFINITIONS "-DOTGUI_STATIC" )
 endif ()
 
-find_package (Boost COMPONENTS regex filesystem chrono REQUIRED)
+find_package (Boost COMPONENTS regex filesystem REQUIRED)
 include_directories (${Boost_INCLUDE_DIRS})
 
 find_package (PythonInterp)
