@@ -27,6 +27,7 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QSplitter>
+#include <QCheckBox>
 
 using namespace OT;
 
@@ -59,7 +60,8 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem
 
   horizontalSplitter->addWidget(codeView);
 
-  // right side: tables
+  // right side:
+  // - tables
   QWidget * rightSideWidget = new QWidget;
   QVBoxLayout * vBoxLayout = new QVBoxLayout(rightSideWidget);
 
@@ -69,6 +71,14 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem
   connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(updateOutputTableData()));
   vBoxLayout->addWidget(tablesWidget);
 
+  // - parallelize
+  QCheckBox * checkBox = new QCheckBox(tr("Enable multiprocessing"));
+  checkBox->setChecked(physicalModel_.isParallel() ? Qt::Checked : Qt::Unchecked);
+  checkBox->setToolTip(tr("Warning: the parallelization operation must be significantly faster than the code execution"));
+  connect(checkBox, SIGNAL(stateChanged(int)), this, SLOT(parallelizationRequested(int)));
+  vBoxLayout->addWidget(checkBox);
+
+  // - error message label
   errorMessageLabel_ = new QLabel;
   errorMessageLabel_->setWordWrap(true);
   vBoxLayout->addWidget(errorMessageLabel_);
@@ -77,5 +87,11 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem
 
   ////////////////
   setWidget(horizontalSplitter);
+}
+
+
+void PythonPhysicalModelWindow::parallelizationRequested(int state)
+{
+  physicalModel_.setParallel(state == Qt::Checked);
 }
 }
