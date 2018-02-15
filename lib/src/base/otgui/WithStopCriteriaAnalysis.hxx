@@ -52,28 +52,37 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  struct TimeCriteria
+  class TimeCriteria
   {
+  public:
     TimeCriteria() : startTime_(0.), maxElapsedTime_(0.), stopRequested_(false) {};
     virtual ~TimeCriteria() {};
 
-    clock_t startTime_;
-    clock_t elapsedTime_;
-    clock_t maxElapsedTime_;
-    bool stopRequested_;
-
-    void setStartTime(const clock_t startTime)
+    void setStartTime(const OT::Scalar startTime)
     {
       startTime_ = startTime;
     }
-    void setMaxElapsedTime(const int seconds)
+    void setMaxElapsedTime(const OT::Scalar seconds)
     {
-      maxElapsedTime_ = seconds * CLOCKS_PER_SEC;
+      maxElapsedTime_ = seconds;
     }
     void stop()
     {
       stopRequested_ = true;
     }
+    OT::Scalar getElapsedTime() const { return elapsedTime_; }
+    bool askStop() const
+    {
+      elapsedTime_ = Now() - startTime_;
+      return stopRequested_ || (elapsedTime_ > maxElapsedTime_);
+    }
+    /** System time in seconds */
+    static OT::Scalar Now();
+  private:
+    OT::Scalar startTime_;
+    mutable OT::Scalar elapsedTime_;
+    OT::Scalar maxElapsedTime_;
+    bool stopRequested_;
   };
   /** Stop callback */
   static OT::Bool Stop(void * p);

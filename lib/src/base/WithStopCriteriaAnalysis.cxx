@@ -21,6 +21,7 @@
 #include "otgui/WithStopCriteriaAnalysis.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
+#include <boost/chrono.hpp>
 
 using namespace OT;
 
@@ -44,11 +45,7 @@ WithStopCriteriaAnalysis::~WithStopCriteriaAnalysis()
 bool WithStopCriteriaAnalysis::Stop(void * p)
 {
   TimeCriteria * arg = (TimeCriteria*)p;
-  arg->elapsedTime_ = clock() - arg->startTime_;
-  // stop algorithm when the elapsed time is superior to the max elapsed time
-  if (arg->stopRequested_ || (arg->elapsedTime_ > arg->maxElapsedTime_))
-    return true;
-  return false;
+  return arg->askStop();
 }
 
 
@@ -90,6 +87,13 @@ void WithStopCriteriaAnalysis::setMaximumElapsedTime(const UnsignedInteger secon
   if (seconds < 1)
     throw InvalidValueException(HERE) << "The maximum elapsed time must be superior to 0 second";
   maximumElapsedTime_ = seconds;
+}
+
+
+Scalar WithStopCriteriaAnalysis::TimeCriteria::Now()
+{
+  boost::chrono::time_point<boost::chrono::system_clock> now = boost::chrono::system_clock::now();
+  return 1e-3 * boost::chrono::duration_cast<boost::chrono::milliseconds>(now.time_since_epoch()).count();
 }
 
 

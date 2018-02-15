@@ -125,15 +125,15 @@ void MonteCarloAnalysis::launch()
   const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
 
   Scalar coefficientOfVariation = -1.0;
-  clock_t elapsedTime = 0;
-  const clock_t startTime = clock();
+  Scalar elapsedTime = 0.0;
+  const Scalar startTime = TimeCriteria::Now();
   UnsignedInteger outerSampling = 0;
 
   // We loop if there remains some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
   while (!stopRequested_
           && (outerSampling < maximumOuterSampling)
           && (coefficientOfVariation == -1.0 || coefficientOfVariation > getMaximumCoefficientOfVariation())
-          && (static_cast<UnsignedInteger>(elapsedTime) < getMaximumElapsedTime() * CLOCKS_PER_SEC))
+          && (elapsedTime < getMaximumElapsedTime()))
   {
     // progress
     if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
@@ -145,7 +145,7 @@ void MonteCarloAnalysis::launch()
     OSS oss;
     oss << "Number of iterations = " << outputSample.getSize() << "\n";
     oss << "Coefficient of variation = " << coefficientOfVariation << "\n";
-    oss << "Elapsed time = " << (float) elapsedTime / CLOCKS_PER_SEC << " s\n";
+    oss << "Elapsed time = " << elapsedTime << " s\n";
     informationMessage_ = oss;
     notify("informationMessageUpdated");
 
@@ -225,7 +225,7 @@ void MonteCarloAnalysis::launch()
       }
       coefficientOfVariation = coefOfVar;
     }
-    elapsedTime = clock() - startTime;
+    elapsedTime = TimeCriteria::Now() - startTime;
     ++outerSampling;
   }
 
@@ -245,7 +245,7 @@ void MonteCarloAnalysis::launch()
 
   // set result
   result_ = dataAnalysis.getResult();
-  result_.elapsedTime_ = (float) elapsedTime / CLOCKS_PER_SEC;
+  result_.elapsedTime_ = elapsedTime;
 }
 
 
