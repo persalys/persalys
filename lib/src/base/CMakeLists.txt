@@ -151,6 +151,7 @@ endif ()
 
 
 otgui_add_library (otguibase ${BASE_SOURCEFILES})
+target_compile_features (otguibase PRIVATE cxx_lambdas)
 
 if ( BUILD_SHARED_LIBS )
   set_target_properties ( otguibase PROPERTIES COMPILE_DEFINITIONS "OTGUI_DLL_EXPORTS" )

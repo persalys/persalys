@@ -26,7 +26,7 @@
 #include <otmorris/Morris.hxx>
 #include <otmorris/MorrisExperimentGrid.hxx>
 
-#include <boost/algorithm/minmax_element.hpp>
+#include <algorithm>
 
 using namespace OT;
 using namespace OTMORRIS;
@@ -226,7 +226,7 @@ void MorrisAnalysis::launch()
   {
     // no effect boundary
     Point a = result_.getMeanAbsoluteElementaryEffects(i);
-    std::pair<Collection<Scalar>::iterator, Collection<Scalar>::iterator> p = boost::minmax_element(a.begin(), a.end());
+    std::pair<Collection<Scalar>::iterator, Collection<Scalar>::iterator> p = std::minmax_element(a.begin(), a.end());
     const Scalar minMeanAbsoluteEffect = (*p.first);
     const Scalar maxMeanAbsoluteEffect = (*p.second);
     result_.noEffectBoundary_[i] = (minMeanAbsoluteEffect + maxMeanAbsoluteEffect) * 0.5;

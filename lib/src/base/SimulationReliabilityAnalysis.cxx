@@ -88,7 +88,7 @@ void SimulationReliabilityAnalysis::UpdateProgressValue(double percent, void * d
   OSS oss;
   oss << "Number of iterations = " << analysisStruct->simulation_.getResult().getOuterSampling() << "\n";
   oss << "Coefficient of variation = " << analysisStruct->simulation_.getResult().getCoefficientOfVariation() << "\n";
-  oss << "Elapsed time = " << (Scalar) analysisStruct->analysis_->timeCriteria_.elapsedTime_ / CLOCKS_PER_SEC << " s\n";
+  oss << "Elapsed time = " << analysisStruct->analysis_->timeCriteria_.getElapsedTime() << " s\n";
   analysisStruct->analysis_->informationMessage_ = oss;
   analysisStruct->analysis_->notify("informationMessageUpdated");
 }
@@ -167,7 +167,7 @@ void SimulationReliabilityAnalysis::launch()
   algo.setMaximumCoefficientOfVariation(getMaximumCoefficientOfVariation());
   algo.setBlockSize(getBlockSize());
 
-  timeCriteria_.setStartTime(clock());
+  timeCriteria_.setStartTime(TimeCriteria::Now());
   timeCriteria_.setMaxElapsedTime(getMaximumElapsedTime());
   algo.setStopCallback(&Stop, &timeCriteria_);
   AnalysisStruct analysisStruc(this, algo);
@@ -185,7 +185,7 @@ void SimulationReliabilityAnalysis::launch()
                                         graph.getDrawables()[1].getData(),
                                         graph.getDrawables()[2].getData());
 
-  result_.elapsedTime_ = (Scalar) timeCriteria_.elapsedTime_ / CLOCKS_PER_SEC;
+  result_.elapsedTime_ = timeCriteria_.getElapsedTime();
 
   function.disableHistory();
 }

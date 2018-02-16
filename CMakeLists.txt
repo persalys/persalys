@@ -1,4 +1,4 @@
-cmake_minimum_required ( VERSION 2.8 )
+cmake_minimum_required (VERSION 3.1)
 
 option ( BUILD_PYTHON                 "Build the python module for the library"                               ON )
 option ( BUILD_GUI                    "Build the GUI"                                                         ON )

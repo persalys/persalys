@@ -122,8 +122,8 @@ void SobolAnalysis::launch()
   const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : (modulo / (2 + nbInputs));
 
   Scalar coefficientOfVariation = -1.0;
-  clock_t elapsedTime = 0;
-  const clock_t startTime = clock();
+  Scalar elapsedTime = 0.0;
+  const Scalar startTime = TimeCriteria::Now();
   UnsignedInteger outerSampling = 0;
 
   Sample inputDesign;
@@ -144,7 +144,7 @@ void SobolAnalysis::launch()
   while (!stopRequested_
           && (outerSampling < maximumOuterSampling)
           && ((coefficientOfVariation == -1.0) || (coefficientOfVariation > getMaximumCoefficientOfVariation()))
-          &&  (static_cast<UnsignedInteger>(elapsedTime) < getMaximumElapsedTime() * CLOCKS_PER_SEC))
+          && (elapsedTime) < getMaximumElapsedTime())
   {
     // progress
     if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
@@ -209,7 +209,7 @@ void SobolAnalysis::launch()
       OSS oss;
       oss << "Number of evaluations = " << inputDesign.getSize() << "\n";
       oss << "Coefficient of variation = " << coefficientOfVariation << "\n";
-      oss << "Elapsed time = " << (float) elapsedTime / CLOCKS_PER_SEC << " s\n";
+      oss << "Elapsed time = " << elapsedTime << " s\n";
       informationMessage_ = oss;
       notify("informationMessageUpdated");
 
@@ -259,7 +259,7 @@ void SobolAnalysis::launch()
       coefficientOfVariation = coefOfVar;
     }
     // - update time and number of iterations
-    elapsedTime = clock() - startTime;
+    elapsedTime = TimeCriteria::Now() - startTime;
     ++outerSampling;
   }
 
@@ -294,7 +294,7 @@ void SobolAnalysis::launch()
   result_.firstOrderIndicesInterval_ = foIntervals;
   result_.totalIndicesInterval_ = toIntervals;
   result_.callsNumber_ = X1.getSize() * (2 + nbInputs);
-  result_.elapsedTime_ = (float) elapsedTime / CLOCKS_PER_SEC;
+  result_.elapsedTime_ = elapsedTime;
   result_.coefficientOfVariation_ = coefficientOfVariation;
 
   // add warning if the model does not have an independent copula
