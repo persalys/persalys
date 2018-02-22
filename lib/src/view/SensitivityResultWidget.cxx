@@ -218,6 +218,7 @@ void SensitivityResultWidget::updateIndicesPlot(int, Qt::SortOrder)
   {
     sortedInputNames[i] = proxyModel_->data(proxyModel_->index(i, 0)).toString().toStdString();
     sortedFirstOrderIndices[i] = proxyModel_->data(proxyModel_->index(i, 1)).toDouble();
+    // Sobol result
     if (proxyModel_->columnCount() == 5)
     {
       sortedFOIntervalLowerBounds.add(proxyModel_->data(proxyModel_->index(i, 2), Qt::UserRole + 1).toDouble());
@@ -225,6 +226,11 @@ void SensitivityResultWidget::updateIndicesPlot(int, Qt::SortOrder)
       sortedTotalIndices.add(proxyModel_->data(proxyModel_->index(i, 3)).toDouble());
       sortedTOIntervalLowerBounds.add(proxyModel_->data(proxyModel_->index(i, 4), Qt::UserRole + 1).toDouble());
       sortedTOIntervalUpperBounds.add(proxyModel_->data(proxyModel_->index(i, 4), Qt::UserRole + 2).toDouble());
+    }
+    // Functional chaos result
+    else if (proxyModel_->columnCount() == 3)
+    {
+      sortedTotalIndices.add(proxyModel_->data(proxyModel_->index(i, 2)).toDouble());
     }
   }
 
