@@ -146,6 +146,10 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert(type("Grid", tr("Grid")));
   ParametersNames_.insert(type("File", tr("File")));
   ParametersNames_.insert(type("Imported", tr("Imported")));
+  ParametersNames_.insert(type("Analytical", tr("Analytical")));
+  ParametersNames_.insert(type("Test sample", tr("Test sample")));
+  ParametersNames_.insert(type("K-Fold", tr("K-Fold")));
+  ParametersNames_.insert(type("Leave-one-out", tr("Leave-one-out")));
 }
 
 
