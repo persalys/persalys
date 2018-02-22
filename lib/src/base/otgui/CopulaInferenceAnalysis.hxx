@@ -70,6 +70,7 @@ protected:
   virtual void launch();
 
 private:
+  OT::Description getSortedVariablesNames(const OT::Description& variablesNames) const;
   static OT::Collection<OT::Indices> ConnectedComponents(const OT::CorrelationMatrix &covariance);
   static OT::Indices FindNeighbours(const OT::UnsignedInteger head, const OT::CorrelationMatrix &covariance, OT::Indices &to_visit, OT::Indices &visited);
 
