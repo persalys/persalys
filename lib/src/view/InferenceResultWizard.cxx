@@ -127,9 +127,9 @@ void InferenceResultWizard::updateInferenceResultWidget(QString variableName)
   if (inferenceResultsComboBox_->count())
   {
     const int analysisIndex = inferenceResultsComboBox_->itemData(inferenceResultsComboBox_->currentIndex()).toInt();
-    InferenceResult result(dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
+    InferenceAnalysis * analysis = dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[analysisIndex].getImplementation().get());
 
-    inferenceResultWidget_->updateDistributionTable(result, variableName);
+    inferenceResultWidget_->updateDistributionTable(analysis->getLevel(), analysis->getResult(), variableName);
   }
 }
 

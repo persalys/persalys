@@ -69,6 +69,8 @@ void TranslationManager::InitializeDistributionsParametersNames()
 {
   DistributionsParametersNames_.insert(type("mean", tr("mean")));
   DistributionsParametersNames_.insert(type("standard deviation", tr("standard deviation")));
+  DistributionsParametersNames_.insert(type("mean_0", "μ"));
+  DistributionsParametersNames_.insert(type("standard_deviation_0", "σ"));
   DistributionsParametersNames_.insert(type("nu", "ν"));
   DistributionsParametersNames_.insert(type("alpha", "α"));
   DistributionsParametersNames_.insert(type("beta", "β"));

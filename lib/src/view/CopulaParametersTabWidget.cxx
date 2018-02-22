@@ -35,6 +35,9 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
+#include <QToolButton>
+#include <QDesktopServices>
+#include <QUrl> // for qt4
 
 using namespace OT;
 
@@ -67,7 +70,7 @@ void CopulaParametersTabWidget::buildInterface()
   // get distribution name
   String distributionName = distribution_.getImplementation()->getClassName();
   distributionName = distributionName.substr(0, distributionName.find("Copula"));
-  const QString distName = TranslationManager::GetTranslatedDistributionName(distributionName);
+  const QString distName = TranslationManager::GetTranslatedCopulaName(distributionName);
 
   const QPen pen(Qt::blue, 2);
 
@@ -98,7 +101,7 @@ void CopulaParametersTabWidget::buildInterface()
         //  use rank of the Sample to have the points in [0, 1]*[0, 1]
         pdfPlot->plotCurve(sampleRanks.getMarginal(marginals), pen, QwtPlotCurve::Dots);
         pdfPlot->plotContour(distribution_.getMarginal(marginals));
-        pdfPlot->setTitle(tr("PDF") + " " + tr("%1 copula").arg(distName));
+        pdfPlot->setTitle(tr("PDF") + ": " + distName);
         pdfPlot->setAxisTitle(QwtPlot::xBottom, variablesNames[i]);
         pdfPlot->setAxisTitle(QwtPlot::yLeft, variablesNames[j]);
         pdf_StackedWidget->addWidget(pdfPlot);
@@ -107,7 +110,7 @@ void CopulaParametersTabWidget::buildInterface()
         // cdf
         PlotWidget * cdfPlot = new PlotWidget(tr("copulaCDF"));
         cdfPlot->plotContour(distribution_.getMarginal(marginals), false);
-        cdfPlot->setTitle(tr("CDF") + " " + tr("%1 copula").arg(distName));
+        cdfPlot->setTitle(tr("CDF") + ": " + distName);
         cdfPlot->setAxisTitle(QwtPlot::xBottom, variablesNames[i]);
         cdfPlot->setAxisTitle(QwtPlot::yLeft, variablesNames[j]);
         pdf_StackedWidget->addWidget(cdfPlot);
@@ -154,7 +157,7 @@ void CopulaParametersTabWidget::buildInterface()
 
     kendallPlot->plotCurve(kendallPlotData_[i], pen);
     kendallPlot->plotCurve(dataDiagonal);
-    kendallPlot->setTitle(tr("Kendall plot") + ": " + tr("%1 copula").arg(distName));
+    kendallPlot->setTitle(tr("Kendall plot") + ": " + distName);
     kendallPlot->setAxisTitle(QwtPlot::xBottom, tr("%1 copula").arg(distName));
     const QString pairNames = QString::fromUtf8(kendallPlotData_[i].getDescription()[0].c_str());
     kendallPlot->setAxisTitle(QwtPlot::yLeft, tr("Data") + " " + pairNames);
@@ -218,7 +221,32 @@ void CopulaParametersTabWidget::buildInterface()
 
   // add tab
   paramGroupBoxLayout->addWidget(distParamTableView);
+
+  // button to open the OT documentation
+  QToolButton * infoButton = new QToolButton;
+  infoButton->setIcon(QIcon(":/images/documentinfo.png"));
+  infoButton->setToolTip(tr("Open the OpenTURNS documentation"));
+  connect(infoButton, SIGNAL(clicked()), this, SLOT(openUrl()));
+  paramGroupBoxLayout->addWidget(infoButton);
+
   paramGroupBoxLayout->addStretch();
   addTab(paramWidget, tr("Parameters"));
+}
+
+
+void CopulaParametersTabWidget::openUrl()
+{
+  const String distName = distribution_.getImplementation()->getClassName();
+
+  // open url
+  const QString link = "http://openturns.github.io/openturns/master/user_manual/_generated/openturns." + QString(distName.c_str()) + ".html";
+  QDesktopServices::openUrl(QUrl(link));
+}
+
+
+void CopulaParametersTabWidget::setCurrentIndexWithoutSignal(int index)
+{
+  SignalBlocker(this);
+  setCurrentIndex(index);
 }
 }

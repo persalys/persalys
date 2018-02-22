@@ -33,10 +33,13 @@ namespace OTGUI
 
 InferenceResultWindow::InferenceResultWindow(AnalysisItem* item, QWidget * parent)
   : ResultWindow(item, parent)
-  , result_(dynamic_cast<InferenceAnalysis*>(item->getAnalysis().getImplementation().get())->getResult())
+  , level_(0)
+  , result_()
 {
-  // parameters widget
-  setParameters(item->getAnalysis(), tr("Inference analysis parameters"));
+  InferenceAnalysis * analysis = dynamic_cast<InferenceAnalysis*>(item->getAnalysis().getImplementation().get());
+  Q_ASSERT(analysis);
+  level_ = analysis->getLevel();
+  result_ = analysis->getResult();
 
   buildInterface();
 }
@@ -44,7 +47,7 @@ InferenceResultWindow::InferenceResultWindow(AnalysisItem* item, QWidget * paren
 
 void InferenceResultWindow::buildInterface()
 {
-  setWindowTitle(tr("Inference analysis results"));
+  setWindowTitle(tr("Marginals inference results"));
 
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
@@ -70,7 +73,6 @@ void InferenceResultWindow::buildInterface()
   inferenceResultWidget_ = new InferenceResultWidget(true, this);
 
   tabWidget->addTab(inferenceResultWidget_, tr("Summary"));
-  tabWidget->addTab(parametersWidget_, tr("Parameters"));
 
   listVariables->setCurrentRow(0);
 
@@ -86,6 +88,6 @@ void InferenceResultWindow::updateInferenceResultWidget(QString variableName)
   if (!inferenceResultWidget_ || variableName.isEmpty())
     return;
 
-  inferenceResultWidget_->updateDistributionTable(result_, variableName);
+  inferenceResultWidget_->updateDistributionTable(level_, result_, variableName);
 }
 }

@@ -50,6 +50,7 @@ public slots:
   void updateParametersTable(const QModelIndex& = QModelIndex());
 signals:
   void distributionChanged(int);
+  void currentTabChanged(int);
 
 private:
   CopulaInferenceSetResult currentSetResult_;

@@ -32,6 +32,8 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QHeaderView>
+#include <QDesktopServices>
+#include <QUrl> // for qt4
 
 using namespace OT;
 
@@ -47,6 +49,7 @@ InferenceResultWidget::InferenceResultWidget(const bool displayPDF_QQPlot, QWidg
   , distTableModel_(0)
   , distParamTableView_(0)
   , distParamTableModel_(0)
+  , infoButton_(0)
   , analysisErrorMessageLabel_(0)
   , pdfPlot_(0)
   , cdfPlot_(0)
@@ -157,6 +160,12 @@ void InferenceResultWidget::buildInterface()
     QWidget * paramWidget = new QWidget;
     QVBoxLayout * paramGroupBoxLayout = new QVBoxLayout(paramWidget);
     paramGroupBoxLayout->addWidget(distParamTableView_);
+    // button to open the OT documentation
+    infoButton_ = new QToolButton;
+    infoButton_->setIcon(QIcon(":/images/documentinfo.png"));
+    infoButton_->setToolTip(tr("Open the OpenTURNS documentation"));
+    connect(infoButton_, SIGNAL(clicked()), this, SLOT(openUrl()));
+    paramGroupBoxLayout->addWidget(infoButton_);
     analysisErrorMessageLabel_ = new QLabel;
     analysisErrorMessageLabel_->setWordWrap(true);
     paramGroupBoxLayout->addWidget(analysisErrorMessageLabel_);
@@ -185,7 +194,7 @@ void InferenceResultWidget::buildInterface()
 }
 
 
-void InferenceResultWidget::updateDistributionTable(const InferenceResult& result, const QString& variableName)
+void InferenceResultWidget::updateDistributionTable(const double level, const InferenceResult& result, const QString& variableName)
 {
   // check
   if (!(distTableModel_ && distTableView_))
@@ -200,9 +209,10 @@ void InferenceResultWidget::updateDistributionTable(const InferenceResult& resul
   // horizontal header
   distTableModel_->setNotEditableHeaderItem(0, 0, tr("Distribution"));
   distTableModel_->setNotEditableHeaderItem(0, 1, tr("Bayesian\nInformation\nCriterion"));
+  distTableModel_->setData(distTableModel_->index(0, 1), tr("Lower BIC value is better"), Qt::ToolTipRole);
   distTableModel_->setNotEditableHeaderItem(0, 2, tr("Kolmogorov-Smirnov"));
   distTableModel_->setNotEditableHeaderItem(1, 2, tr("p-value"));
-  distTableModel_->setNotEditableHeaderItem(1, 3, tr("Acceptation"));
+  distTableModel_->setNotEditableHeaderItem(1, 3, tr("Acceptation") + "\n(" + QString::number(level) + ")");
   distTableView_->setSpan(0, 0, 2, 1);
   distTableView_->setSpan(0, 1, 2, 1);
 
@@ -323,6 +333,8 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
       analysisErrorMessageLabel_->setText(message);
       analysisErrorMessageLabel_->show();
       distParamTableView_->hide();
+      if (infoButton_)
+        infoButton_->hide();
       return;
     }
   }
@@ -330,72 +342,68 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
   // if the distribution is valid
   analysisErrorMessageLabel_->hide();
   distParamTableView_->show();
+  if (infoButton_)
+    infoButton_->show();
 
   distParamTableModel_->setColumnCount(2);
 
-  // used font for titles
+  // fill table
+  // -- used font for titles
   QFont font;
   font.setBold(true);
 
-  // headers
-  distParamTableModel_->setNotEditableItem(0, 0, tr("Moments"));
-  distParamTableView_->setSpan(0, 0, 1, 2);
-  distParamTableModel_->setData(distParamTableModel_->index(0, 0), font, Qt::FontRole);
+  Distribution distribution;
+  int row = -1;
 
-  distParamTableModel_->setNotEditableHeaderItem(1, 0, tr("Mean"));
-  distParamTableModel_->setNotEditableHeaderItem(2, 0, tr("Standard deviation"));
-  distParamTableModel_->setNotEditableHeaderItem(3, 0, tr("Skewness"));
-  distParamTableModel_->setNotEditableHeaderItem(4, 0, tr("Kurtosis"));
-
-  // fill table
   if (current.isValid())
   {
     // -- get distribution
     const QVariant variant = distTableModel_->data(distTableModel_->index(current.row(), 0), Qt::UserRole);
-    Distribution distribution = currentFittingTestResult_.getTestedDistributions()[variant.value<int>()];
-    const String distClassName = distribution.getImplementation()->getClassName();
-    // number of parameters
-    // for Student : display only nu (mean and std already displayed)
-    const UnsignedInteger nbParam = distClassName == "Student" ? 1 : distribution.getParameterDescription().getSize();
+    distribution = currentFittingTestResult_.getTestedDistributions()[variant.value<int>()];
 
-    // -- set titles
-    if (distClassName != "Normal") // mean and std already displayed for the Normal distribution
+    // -- set parameters
+    distParamTableModel_->setNotEditableItem(++row, 0, tr("Parameters"));
+    distParamTableView_->setSpan(row, 0, 1, 2);
+    distParamTableModel_->setData(distParamTableModel_->index(row, 0), font, Qt::FontRole);
+
+    for (UnsignedInteger i = 0; i < distribution.getParameterDescription().getSize(); ++i)
     {
-      distParamTableModel_->setNotEditableItem(5, 0, tr("Native parameters"));
-      distParamTableView_->setSpan(5, 0, 1, 2);
-      distParamTableModel_->setData(distParamTableModel_->index(5, 0), font, Qt::FontRole);
-
-      for (UnsignedInteger i = 0; i < nbParam; ++i)
-      {
-        const QString param(TranslationManager::GetTranslatedDistributionParameterName(distribution.getParameterDescription()[i]));
-        distParamTableModel_->setNotEditableHeaderItem(6 + i, 0, param);
-      }
+      const QString param(TranslationManager::GetTranslatedDistributionParameterName(distribution.getParameterDescription()[i]));
+      distParamTableModel_->setNotEditableHeaderItem(++row, 0, param);
+      distParamTableModel_->setNotEditableItem(row, 1, distribution.getParameter()[i]);
     }
+  }
+  distParamTableModel_->setNotEditableItem(++row, 0, tr("Moments"));
+  distParamTableView_->setSpan(row, 0, 1, 2);
+  distParamTableModel_->setData(distParamTableModel_->index(row, 0), font, Qt::FontRole);
 
-    // -- set parameters values
-    distParamTableModel_->setNotEditableItem(1, 1, distribution.getMean()[0]);
-    distParamTableModel_->setNotEditableItem(2, 1, distribution.getStandardDeviation()[0]);
+  distParamTableModel_->setNotEditableHeaderItem(++row, 0, tr("Mean"));
+  distParamTableModel_->setNotEditableHeaderItem(++row, 0, tr("Standard deviation"));
+  distParamTableModel_->setNotEditableHeaderItem(++row, 0, tr("Skewness"));
+  distParamTableModel_->setNotEditableHeaderItem(++row, 0, tr("Kurtosis"));
+
+  if (current.isValid())
+  {
+    row = distribution.getParameterDescription().getSize() + 1;
+
+    // -- set moments
+    distParamTableModel_->setNotEditableItem(++row, 1, distribution.getMean()[0]);
+    distParamTableModel_->setNotEditableItem(++row, 1, distribution.getStandardDeviation()[0]);
     try
     {
-      distParamTableModel_->setNotEditableItem(3, 1, distribution.getSkewness()[0]);
+      distParamTableModel_->setNotEditableItem(++row, 1, distribution.getSkewness()[0]);
     }
     catch (std::exception & ex)
     {
-      distParamTableModel_->setNotEditableItem(3, 1, "-");
+      distParamTableModel_->setNotEditableItem(++row, 1, "-");
     }
     try
     {
-      distParamTableModel_->setNotEditableItem(4, 1, distribution.getKurtosis()[0]);
+      distParamTableModel_->setNotEditableItem(++row, 1, distribution.getKurtosis()[0]);
     }
     catch (std::exception & ex)
     {
-      distParamTableModel_->setNotEditableItem(4, 1, "-");
-    }
-
-    if (distClassName != "Normal") // mean and std already displayed for the Normal distribution
-    {
-      for (UnsignedInteger i = 0; i < nbParam; ++i)
-        distParamTableModel_->setNotEditableItem(6 + i, 1, distribution.getParameter()[i]);
+      distParamTableModel_->setNotEditableItem(++row, 1, "-");
     }
   }
   else
@@ -446,7 +454,7 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
   // update pdf
   pdfPlot_->plotHistogram(currentFittingTestResult_.getValues());
   pdfPlot_->plotPDFCurve(distribution);
-  pdfPlot_->setTitle(tr("PDF") + " " + distName);
+  pdfPlot_->setTitle(tr("PDF") + ": " + distName);
 
   // update cdf / qqplot
   if (!(cdfPlot_ && qqPlot_))
@@ -455,11 +463,11 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
   // -- cdf
   cdfPlot_->plotHistogram(currentFittingTestResult_.getValues(), 1);
   cdfPlot_->plotCDFCurve(distribution);
-  cdfPlot_->setTitle(tr("CDF") + " " + distName);
+  cdfPlot_->setTitle(tr("CDF") + ": " + distName);
 
   // -- qq plot
   Graph qqPlotGraph(VisualTest::DrawQQplot(currentFittingTestResult_.getValues(), distribution));
-  qqPlot_->setTitle(tr("Q-Q Plot") + " " + distName);
+  qqPlot_->setTitle(tr("Q-Q Plot") + ": " + distName);
   qqPlot_->setAxisTitle(QwtPlot::yLeft, tr("Data quantiles"));
   qqPlot_->setAxisTitle(QwtPlot::xBottom, tr("%1 theoretical quantiles").arg(distName));
   qqPlot_->plotCurve(qqPlotGraph.getDrawable(1).getData(), QPen(Qt::blue, 5), QwtPlotCurve::Dots);
@@ -507,5 +515,19 @@ bool InferenceResultWidget::isSelectedDistributionValid() const
   Q_ASSERT(selectedDistributionIndex.isValid());
 
   return distTableModel_->data(selectedDistributionIndex) != "-";
+}
+
+
+void InferenceResultWidget::openUrl()
+{
+  // check
+  if (!(distTableModel_ && distTableView_))
+    return;
+
+  const String distName = getDistribution().getImplementation()->getClassName();
+
+  // open url
+  const QString link = "http://openturns.github.io/openturns/master/user_manual/_generated/openturns." + QString(distName.c_str()) + ".html";
+  QDesktopServices::openUrl(QUrl(link));
 }
 }

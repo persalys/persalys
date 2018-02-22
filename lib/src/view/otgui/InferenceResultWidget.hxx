@@ -28,6 +28,7 @@
 
 #include <QTabWidget>
 #include <QLabel>
+#include <QToolButton>
 
 Q_DECLARE_METATYPE(OT::Distribution)
 
@@ -47,10 +48,11 @@ protected:
   void buildInterface();
 
 public slots:
-  void updateDistributionTable(const InferenceResult& result, const QString& variableName);
+  void updateDistributionTable(const double level, const InferenceResult& result, const QString& variableName);
   void updateRadioButtonsDistributionTable(QModelIndex);
   void updateParametersTable(QModelIndex = QModelIndex());
   void updateGraphs(QModelIndex = QModelIndex());
+  void openUrl();
 signals:
   void currentDistributionChanged();
 
@@ -62,6 +64,7 @@ private:
   CustomStandardItemModel * distTableModel_;
   ResizableTableViewWithoutScrollBar * distParamTableView_;
   CustomStandardItemModel * distParamTableModel_;
+  QToolButton * infoButton_;
   QLabel * analysisErrorMessageLabel_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
