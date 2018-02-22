@@ -139,6 +139,11 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert(type("Percentage", tr("Percentage")));
   ParametersNames_.insert(type("Bootstrap size", tr("Bootstrap size")));
   ParametersNames_.insert(type("Bootstrap confidence level", tr("Bootstrap confidence level")));
+  ParametersNames_.insert(type("Bounds", tr("Bounds")));
+  ParametersNames_.insert(type("Design type", tr("Design type")));
+  ParametersNames_.insert(type("Grid", tr("Grid")));
+  ParametersNames_.insert(type("File", tr("File")));
+  ParametersNames_.insert(type("Imported", tr("Imported")));
 }
 
 

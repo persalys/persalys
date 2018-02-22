@@ -176,7 +176,8 @@ void PhysicalModelDiagramItem::requestMetaModelCreation()
       {
         // new analysis
         DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysisItem->getAnalysis().getImplementation().get());
-        FunctionalChaosAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("metamodel_"), *doeEval);
+        const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("metamodel_").toStdString()));
+        FunctionalChaosAnalysis analysis(analysisName, *doeEval);
         // emit signal to StudyManager to open a 'general' wizard (with a list of designs of experiments)
         emit analysisRequested(this, analysis, true);
         return;
@@ -202,7 +203,8 @@ void PhysicalModelDiagramItem::requestReliabilityCreation()
   }
 
   // new analysis
-  MonteCarloReliabilityAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("reliability_"), limitState);
+  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("reliability_").toStdString()));
+  MonteCarloReliabilityAnalysis analysis(analysisName, limitState);
   // emit signal to StudyManager to open a 'general' wizard (with a list of limit states)
   emit analysisRequested(this, analysis, true);
 }

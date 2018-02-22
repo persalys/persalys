@@ -134,7 +134,8 @@ void ProbabilisticModelItem::createCentralTendency()
     return;
 
   // new analysis
-  MonteCarloAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("centralTendency_"), physicalModel_);
+  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("centralTendency_").toStdString()));
+  MonteCarloAnalysis analysis(analysisName, physicalModel_);
   // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);
 }
@@ -154,7 +155,8 @@ void ProbabilisticModelItem::createSensitivityAnalysis()
   }
 
   // new analysis
-  SobolAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("sensitivity_"), physicalModel_);
+  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("sensitivity_").toStdString()));
+  SobolAnalysis analysis(analysisName, physicalModel_);
   // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);
 }

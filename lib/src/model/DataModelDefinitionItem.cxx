@@ -53,12 +53,12 @@ void DataModelDefinitionItem::buildActions()
   newDataAnalysis_->setStatusTip(tr("Analyse the data sample"));
   connect(newDataAnalysis_, SIGNAL(triggered()), this, SLOT(createDataAnalysis()));
 
-  newInferenceAnalysis_ = new QAction(tr("Inference"), this);
-  newInferenceAnalysis_->setStatusTip(tr("Inference"));
+  newInferenceAnalysis_ = new QAction(tr("Marginals inference"), this);
+  newInferenceAnalysis_->setStatusTip(tr("Marginals inference"));
   connect(newInferenceAnalysis_, SIGNAL(triggered()), this, SLOT(createInferenceAnalysis()));
 
-  newCopulaInferenceAnalysis_ = new QAction(tr("Dependencies inference"), this);
-  newCopulaInferenceAnalysis_->setStatusTip(tr("Dependencies inference"));
+  newCopulaInferenceAnalysis_ = new QAction(tr("Dependence inference"), this);
+  newCopulaInferenceAnalysis_->setStatusTip(tr("Dependence inference"));
   connect(newCopulaInferenceAnalysis_, SIGNAL(triggered()), this, SLOT(createCopulaInferenceAnalysis()));
 
   newMetaModel_ = new QAction(tr("Metamodel"), this);
@@ -108,7 +108,8 @@ void DataModelDefinitionItem::createDataAnalysis()
     return;
 
   // new analysis
-  DataAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("DataAnalysis_"), designOfExperiment_);
+  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("dataAnalysis_").toStdString()));
+  DataAnalysis analysis(analysisName, designOfExperiment_);
   getParentOTStudyItem()->getOTStudy().add(analysis);
 }
 
@@ -120,7 +121,8 @@ void DataModelDefinitionItem::createInferenceAnalysis()
     return;
 
   // new analysis
-  InferenceAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("inference_"), designOfExperiment_);
+  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("marginalsInference_").toStdString()));
+  InferenceAnalysis analysis(analysisName, designOfExperiment_);
   // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);
 }
@@ -139,7 +141,8 @@ void DataModelDefinitionItem::createCopulaInferenceAnalysis()
   }
 
   // new analysis
-  CopulaInferenceAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("DependenciesInference_"), designOfExperiment_);
+  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("dependenceInference_").toStdString()));
+  CopulaInferenceAnalysis analysis(analysisName, designOfExperiment_);
   // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);
 }
@@ -155,7 +158,8 @@ void DataModelDefinitionItem::createMetaModel()
   }
 
   // new analysis
-  FunctionalChaosAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("metaModel_"), designOfExperiment_);
+  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("metaModel_").toStdString()));
+  FunctionalChaosAnalysis analysis(analysisName, designOfExperiment_);
   // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);
 }

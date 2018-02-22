@@ -121,7 +121,12 @@ void OTStudyWindow::buildInterface()
   layout->addWidget(textEdit, row, 2);
 
   textEdit = new QLabel;
-  textEdit->setText(tr("- Data analysis\n- Inference\n- Dependencies inference\n- Metamodel"));
+  text = QString("- %1\n- %2\n- %3\n- %4")
+                    .arg(tr("Data analysis"))
+                    .arg(tr("Marginals inference"))
+                    .arg(tr("Dependence inference"))
+                    .arg(tr("Metamodel"));
+  textEdit->setText(text);
   layout->addWidget(textEdit, row + 1, 2, Qt::AlignHCenter | Qt::AlignTop);
 
   // set widget
