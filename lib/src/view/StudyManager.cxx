@@ -398,7 +398,7 @@ void StudyManager::importPythonScript()
     }
     else
     {
-      const QString command("execfile(\"" + fileName + "\")");
+      const QString command("exec(open(u\"" + fileName + "\").read())");
       emit commandExecutionRequested(command);
     }
   }
