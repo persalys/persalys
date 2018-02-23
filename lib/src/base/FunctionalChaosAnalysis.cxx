@@ -187,7 +187,7 @@ void FunctionalChaosAnalysis::launch()
   }
   catch (std::exception & ex)
   {
-    warningMessage_ = OSS() << "Impossible to compute Sobol indices and moments.\n" << ex.what() << "\nTry to increase the size of the design of experiments.";
+    warningMessage_ = OSS() << "Error when computing Sobol indices and moments.\n" << ex.what() << "\nTry to increase the size of the design of experiments.\n";
   }
 
   // validation
