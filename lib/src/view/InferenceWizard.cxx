@@ -176,7 +176,7 @@ void InferenceWizard::buildInterface()
   varTableView->selectRow(0);
 
   // error message
-  errorMessageLabel_ = new QLabel;
+  errorMessageLabel_ = new TemporaryLabel;
   errorMessageLabel_->setWordWrap(true);
   pageLayout->addWidget(errorMessageLabel_);
 
@@ -198,8 +198,6 @@ void InferenceWizard::selectedVarChanged(QModelIndex current, QModelIndex /*prev
 
 void InferenceWizard::updateDistListForVar(QStringList dist)
 {
-  errorMessageLabel_->setText("");
-
   FittingTest::DistributionFactoryCollection distCollection;
   for (int i = 0; i < dist.size(); ++i)
   {
@@ -220,7 +218,6 @@ void InferenceWizard::updateDistListForVar(QStringList dist)
 
 void InferenceWizard::updateInterestVar(Description interestVar, String varName)
 {
-  errorMessageLabel_->setText("");
   pageValidity_ = true;
 
   interestVar_ = interestVar;
@@ -228,8 +225,7 @@ void InferenceWizard::updateInterestVar(Description interestVar, String varName)
   if (!interestVar.getSize())
   {
     pageValidity_ = false;
-    const QString errorMessage = tr("Select at least one variable");
-    errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
+    errorMessageLabel_->setTemporaryErrorMessage(tr("Select at least one variable"));
   }
 
   emit currentVarChecked(interestVar.contains(varName));
@@ -249,12 +245,12 @@ void InferenceWizard::levelChanged(double level)
 }
 
 
-bool InferenceWizard::validateCurrentPage()
+Analysis InferenceWizard::getAnalysis() const
 {
-  if (!pageValidity_)
-    return false;
-
-  inference_.setInterestVariables(interestVar_);
+  // get the doe
+  DesignOfExperiment doe = dynamic_cast<const DesignOfExperimentAnalysis*>(analysis_.getImplementation().get())->getDesignOfExperiment();
+  InferenceAnalysis newAnalysis(analysis_.getName(), doe);
+  newAnalysis.setInterestVariables(interestVar_);
 
   for (UnsignedInteger i = 0; i < interestVar_.getSize(); ++i)
   {
@@ -263,17 +259,32 @@ bool InferenceWizard::validateCurrentPage()
       FittingTest::DistributionFactoryCollection factoryCollection(distFactoriesForEachInterestVar_.find(interestVar_[i])->second);
       if (factoryCollection.getSize())
       {
-        inference_.setDistributionsFactories(interestVar_[i], factoryCollection);
+        newAnalysis.setDistributionsFactories(interestVar_[i], factoryCollection);
       }
-      else
+    }
+  }
+  return newAnalysis;
+}
+
+
+bool InferenceWizard::validateCurrentPage()
+{
+  if (!pageValidity_)
+    return false;
+
+  for (UnsignedInteger i = 0; i < interestVar_.getSize(); ++i)
+  {
+    if (distFactoriesForEachInterestVar_.find(interestVar_[i]) != distFactoriesForEachInterestVar_.end())
+    {
+      FittingTest::DistributionFactoryCollection factoryCollection(distFactoriesForEachInterestVar_.find(interestVar_[i])->second);
+      if (!factoryCollection.getSize())
       {
         const QString errorMessage = tr("At least one distribution must be tested for the selected variable '%1'").arg(interestVar_[i].c_str());
-        errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
+        errorMessageLabel_->setTemporaryErrorMessage(errorMessage);
         return false;
       }
     }
   }
-  analysis_ = inference_;
 
   return QWizard::validateCurrentPage();
 }

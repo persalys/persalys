@@ -284,7 +284,8 @@ void DesignOfExperimentDefinitionItem::createMetaModel()
   }
 
   // new analysis
-  FunctionalChaosAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("metaModel_"), getAnalysis());
+  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("metaModel_").toStdString()));
+  FunctionalChaosAnalysis analysis(analysisName, getAnalysis());
   // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);
 }

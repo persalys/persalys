@@ -142,7 +142,8 @@ void LimitStateItem::createThresholdExceedance()
   }
 
   // new analysis
-  MonteCarloReliabilityAnalysis analysis(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName("reliability_"), limitState_);
+  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("reliability_").toStdString()));
+  MonteCarloReliabilityAnalysis analysis(analysisName, limitState_);
   // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);
 }

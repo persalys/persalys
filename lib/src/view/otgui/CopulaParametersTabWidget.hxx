@@ -44,6 +44,10 @@ public:
 protected:
   void buildInterface();
 
+public slots:
+  void openUrl();
+  void setCurrentIndexWithoutSignal(int);
+
 private:
   OT::Distribution distribution_;
   OT::Sample sample_;

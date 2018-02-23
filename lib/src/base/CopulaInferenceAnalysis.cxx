@@ -153,12 +153,8 @@ CopulaInferenceAnalysis* CopulaInferenceAnalysis::clone() const
 
 CopulaInferenceAnalysis::DistributionFactoryCollection CopulaInferenceAnalysis::getDistributionsFactories(const Description& variablesNames) const
 {
-  for (UnsignedInteger i = 0; i < variablesNames.getSize(); ++i)
-    if (!designOfExperiment_.getSample().getDescription().contains(variablesNames[i]))
-      throw InvalidArgumentException(HERE) << "Error: the variable name " << variablesNames[i] << " does not match a variable of the model";
+  const Description setOfVariables(getSortedVariablesNames(variablesNames));
 
-  Description setOfVariables(variablesNames);
-  setOfVariables.sort();
   std::map<Description, DistributionFactoryCollection>::const_iterator it(distFactoriesForSetVar_.find(setOfVariables));
   if (it == distFactoriesForSetVar_.end())
     throw InvalidArgumentException(HERE) << "Error: no distribution factories set for the set of variables " << variablesNames;
@@ -181,17 +177,30 @@ Collection<Description> CopulaInferenceAnalysis::getVariablesGroups()
 
 void CopulaInferenceAnalysis::setDistributionsFactories(const Description& variablesNames, const DistributionFactoryCollection& factories)
 {
-  const Description allVars(designOfExperiment_.getSample().getDescription());
-  for (UnsignedInteger i = 0; i < variablesNames.getSize(); ++i)
-    if (!allVars.contains(variablesNames[i]))
-      throw InvalidArgumentException(HERE) << "Error: the variable name " << variablesNames[i] << " does not match a variable of the model";
-
   if (variablesNames.getSize() < 2)
     throw InvalidArgumentException(HERE) << "Error: the dependency inference is performed with at least 2 variables";
 
   for (UnsignedInteger i = 0; i < factories.getSize(); ++i)
     if (factories[i].getImplementation()->getClassName().find("Copula") == std::string::npos)
       throw InvalidArgumentException(HERE) << "Error: the dependency inference is performed with copulae.";
+
+  const Description setOfVariables(getSortedVariablesNames(variablesNames));
+
+  // cancel inference for the given set of variables
+  if (!factories.getSize())
+    distFactoriesForSetVar_.erase(setOfVariables);
+  // test all the given factories
+  else
+    distFactoriesForSetVar_[setOfVariables] = factories;
+}
+
+
+Description CopulaInferenceAnalysis::getSortedVariablesNames(const Description& variablesNames) const
+{
+  const Description allVars(designOfExperiment_.getSample().getDescription());
+  for (UnsignedInteger i = 0; i < variablesNames.getSize(); ++i)
+    if (!allVars.contains(variablesNames[i]))
+      throw InvalidArgumentException(HERE) << "Error: the variable name " << variablesNames[i] << " does not match a variable of the model";
 
   // keep same order as in the sample description
   Indices indices;
@@ -202,14 +211,7 @@ void CopulaInferenceAnalysis::setDistributionsFactories(const Description& varia
   }
   std::sort(indices.begin(), indices.end());
 
-  const Description setOfVariables(designOfExperiment_.getSample().getMarginal(indices).getDescription());
-
-  // cancel inference for the given set of variables
-  if (!factories.getSize())
-    distFactoriesForSetVar_.erase(setOfVariables);
-  // test all the given factories
-  else
-    distFactoriesForSetVar_[setOfVariables] = factories;
+  return designOfExperiment_.getSample().getMarginal(indices).getDescription();
 }
 
 

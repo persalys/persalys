@@ -80,7 +80,7 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
   boxHeight = std::max(boxHeight, dataAnalysisButton->height());
 
   DiagramPushButton * inferenceButton = new DiagramPushButton;
-  inferenceButton->setText(tr("Inference\nanalysis"));
+  inferenceButton->setText(tr("Marginals\ninference"));
   inferenceButton->setWhatsThis(tr("Make an inference analysis for variables with given distributions"));
   inferenceButton->setErrorMessage(tr("Define at least a variable"));
   QGraphicsProxyWidget * inferenceProxy = new QGraphicsProxyWidget;
@@ -92,8 +92,8 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
   boxHeight = std::max(boxHeight, inferenceButton->height());
 
   DiagramPushButton * copulaInferenceButton = new DiagramPushButton;
-  copulaInferenceButton->setText(tr("Dependencies\ninference"));
-  copulaInferenceButton->setWhatsThis(tr("Test the dependencies of the input variables with the Normal copula"));
+  copulaInferenceButton->setText(tr("Dependence\ninference"));
+  copulaInferenceButton->setWhatsThis(tr("Test the dependence of the input variables"));
   copulaInferenceButton->setErrorMessage(tr("Define at least two input variables"));
   QGraphicsProxyWidget * copulaInferenceProxy = new QGraphicsProxyWidget;
   copulaInferenceProxy->setWidget(copulaInferenceButton);

@@ -24,11 +24,11 @@
 #include "otgui/AnalysisWizard.hxx"
 #include "otgui/InferenceAnalysis.hxx"
 #include "otgui/VariablesSelectionTableModel.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <openturns/FittingTest.hxx>
 
 #include <QModelIndex>
-#include <QLabel>
 
 namespace OTGUI
 {
@@ -39,6 +39,7 @@ class OTGUI_API InferenceWizard : public AnalysisWizard
 public :
   InferenceWizard(const Analysis& analysis, QWidget* parent = 0);
 
+  virtual Analysis getAnalysis() const;
   virtual bool validateCurrentPage();
 
 protected:
@@ -59,7 +60,7 @@ private:
   InferenceAnalysis inference_;
   OT::Description interestVar_;
   std::map<OT::String, OT::FittingTest::DistributionFactoryCollection> distFactoriesForEachInterestVar_;
-  QLabel * errorMessageLabel_;
+  TemporaryLabel * errorMessageLabel_;
   bool pageValidity_;
   VariablesSelectionTableModel * varTableModel_;
 };

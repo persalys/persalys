@@ -109,7 +109,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 
   DiagramPushButton * probaModelButton = new DiagramPushButton;
   probaModelButton->setText(tr("Probabilistic\nmodel\ndefinition"));
-  probaModelButton->setWhatsThis(tr("Define the stochastic input variables and the dependencies"));
+  probaModelButton->setWhatsThis(tr("Define the stochastic input variables and the dependence"));
   probaModelButton->setErrorMessage(tr("Define at least an input variable"));
   QGraphicsProxyWidget * probaModelProxy = new QGraphicsProxyWidget;
   probaModelProxy->setWidget(probaModelButton);

@@ -290,7 +290,7 @@ void DataAnalysisWindow::addSummaryTab()
     probaSpinBox_->setSingleStep(0.01);
     quantLayout->addWidget(probaSpinBox_, 0, 1);
     // Quantile
-    label = new QLabel(tr("Quantile"));
+    label = new QLabel(tr("Empirical quantile"));
     label->setStyleSheet("font: bold;");
     quantLayout->addWidget(label, 1, 0);
     quantileSpinBox_ = new DoubleSpinBox;

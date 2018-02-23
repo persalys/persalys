@@ -25,6 +25,7 @@
 #include "otgui/MetaModelValidationWidget.hxx"
 #include "otgui/ParametersTableView.hxx"
 #include "otgui/QtTools.hxx"
+#include "otgui/TranslationManager.hxx"
 
 #include <openturns/OTBase.hxx>
 #include <openturns/RandomGenerator.hxx>
@@ -201,7 +202,7 @@ void KrigingResultWindow::buildInterface()
       }
       tabLayout->addWidget(plotStackedWidget);
 
-      validationTabWidget->addTab(plotStackedWidget, result_.getValidations()[i].getName().c_str());
+      validationTabWidget->addTab(plotStackedWidget, TranslationManager::GetTranslatedParameterName(result_.getValidations()[i].getName()));
     }
     tabWidget->addTab(validationTabWidget, tr("Validation"));
   }

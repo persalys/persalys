@@ -41,6 +41,7 @@ public slots:
   void updateInferenceResultWidget(QString);
 
 private:
+  double level_;
   InferenceResult result_;
   InferenceResultWidget * inferenceResultWidget_;
 };

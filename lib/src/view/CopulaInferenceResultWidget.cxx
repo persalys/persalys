@@ -62,7 +62,7 @@ void CopulaInferenceResultWidget::buildInterface()
   QHBoxLayout * distTabListWidgetLayout = new QHBoxLayout(distTabListWidget);
 
   // -- copulas table
-  QGroupBox * distGroupBox = new QGroupBox(tr("Tested copulas"));
+  QGroupBox * distGroupBox = new QGroupBox(tr("Copulas"));
   QVBoxLayout * distGroupBoxLayout = new QVBoxLayout(distGroupBox);
 
   // --- table view
@@ -94,6 +94,8 @@ void CopulaInferenceResultWidget::buildInterface()
   // horizontal header
   distTableModel_->setNotEditableHeaderItem(0, 0, tr("Copulas"));
   distTableModel_->setNotEditableHeaderItem(0, 1, tr("Bayesian\nInformation\nCriterion"));
+  distTableModel_->setData(distTableModel_->index(0, 1), tr("Lower BIC value is better"), Qt::ToolTipRole);
+
   // distributions list
   for (UnsignedInteger i = 0; i < nbTests; ++i)
   {
@@ -138,6 +140,8 @@ void CopulaInferenceResultWidget::buildInterface()
           currentSetResult_.getKendallPlotData()[indices[i]],
           displaySetting_,
           this);
+      connect(paramWidget, SIGNAL(currentChanged(int)), this, SIGNAL(currentTabChanged(int)));
+      connect(this, SIGNAL(currentTabChanged(int)), paramWidget, SLOT(setCurrentIndexWithoutSignal(int)));
       paramStackWidget->addWidget(paramWidget);
     }
     // if not valid copula

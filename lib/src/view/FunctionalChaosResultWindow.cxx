@@ -26,6 +26,7 @@
 #include "otgui/MetaModelValidationWidget.hxx"
 #include "otgui/SensitivityResultWidget.hxx"
 #include "otgui/QtTools.hxx"
+#include "otgui/TranslationManager.hxx"
 
 #include <openturns/SpecFunc.hxx>
 #include <openturns/RandomGenerator.hxx>
@@ -303,7 +304,7 @@ void FunctionalChaosResultWindow::buildInterface()
       }
       tabLayout->addWidget(plotStackedWidget);
 
-      validationTabWidget->addTab(plotStackedWidget, result_.getValidations()[i].getName().c_str());
+      validationTabWidget->addTab(plotStackedWidget, TranslationManager::GetTranslatedParameterName(result_.getValidations()[i].getName()));
     }
 
     tabWidget->addTab(validationTabWidget, tr("Validation"));

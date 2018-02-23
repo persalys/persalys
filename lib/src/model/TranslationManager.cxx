@@ -69,6 +69,8 @@ void TranslationManager::InitializeDistributionsParametersNames()
 {
   DistributionsParametersNames_.insert(type("mean", tr("mean")));
   DistributionsParametersNames_.insert(type("standard deviation", tr("standard deviation")));
+  DistributionsParametersNames_.insert(type("mean_0", "μ"));
+  DistributionsParametersNames_.insert(type("standard_deviation_0", "σ"));
   DistributionsParametersNames_.insert(type("nu", "ν"));
   DistributionsParametersNames_.insert(type("alpha", "α"));
   DistributionsParametersNames_.insert(type("beta", "β"));
@@ -139,6 +141,15 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert(type("Percentage", tr("Percentage")));
   ParametersNames_.insert(type("Bootstrap size", tr("Bootstrap size")));
   ParametersNames_.insert(type("Bootstrap confidence level", tr("Bootstrap confidence level")));
+  ParametersNames_.insert(type("Bounds", tr("Bounds")));
+  ParametersNames_.insert(type("Design type", tr("Design type")));
+  ParametersNames_.insert(type("Grid", tr("Grid")));
+  ParametersNames_.insert(type("File", tr("File")));
+  ParametersNames_.insert(type("Imported", tr("Imported")));
+  ParametersNames_.insert(type("Analytical", tr("Analytical")));
+  ParametersNames_.insert(type("Test sample", tr("Test sample")));
+  ParametersNames_.insert(type("K-Fold", tr("K-Fold")));
+  ParametersNames_.insert(type("Leave-one-out", tr("Leave-one-out")));
 }
 
 
