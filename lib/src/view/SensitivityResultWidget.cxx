@@ -119,6 +119,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
     // first order index
     indicesTableModel->setNotEditableItem(j, ++col, firstIndices[j]);
     indicesTableModel->setData(indicesTableModel->index(j, col), true, Qt::UserRole);
+    indicesTableModel->setData(indicesTableModel->index(j, col), firstIndices[j], Qt::UserRole + 1);
 
     // confidence interval
     if (firstIndicesIntervals.getDimension() == inputNames.getSize())
@@ -126,8 +127,8 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
       const Interval foInterval(firstIndicesIntervals.getLowerBound()[j], firstIndicesIntervals.getUpperBound()[j]);
       indicesTableModel->setNotEditableItem(j, ++col, foInterval.__str__().c_str());
       indicesTableModel->setData(indicesTableModel->index(j, col), false, Qt::UserRole);
-      indicesTableModel->setData(indicesTableModel->index(j, col), foInterval.getLowerBound()[0], Qt::UserRole + 1);
-      indicesTableModel->setData(indicesTableModel->index(j, col), foInterval.getUpperBound()[0], Qt::UserRole + 2);
+      indicesTableModel->setData(indicesTableModel->index(j, col), foInterval.getLowerBound()[0], Qt::UserRole + 2);
+      indicesTableModel->setData(indicesTableModel->index(j, col), foInterval.getUpperBound()[0], Qt::UserRole + 3);
     }
 
     if (totalIndices.getSize())
@@ -135,6 +136,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
       // total index
       indicesTableModel->setNotEditableItem(j, ++col, totalIndices[j]);
       indicesTableModel->setData(indicesTableModel->index(j, col), true, Qt::UserRole);
+      indicesTableModel->setData(indicesTableModel->index(j, col), totalIndices[j], Qt::UserRole + 1);
       if (totalIndices[j] < firstIndices[j])
       {
         indicesTableModel->setData(indicesTableModel->index(j, col), tr("Warning: The total index is inferior to the first order index."), Qt::ToolTipRole);
@@ -147,8 +149,8 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
         const Interval toInterval(totalIndicesIntervals.getLowerBound()[j], totalIndicesIntervals.getUpperBound()[j]);
         indicesTableModel->setNotEditableItem(j, ++col, toInterval.__str__().c_str());
         indicesTableModel->setData(indicesTableModel->index(j, col), false, Qt::UserRole);
-        indicesTableModel->setData(indicesTableModel->index(j, col), toInterval.getLowerBound()[0], Qt::UserRole + 1);
-        indicesTableModel->setData(indicesTableModel->index(j, col), toInterval.getUpperBound()[0], Qt::UserRole + 2);
+        indicesTableModel->setData(indicesTableModel->index(j, col), toInterval.getLowerBound()[0], Qt::UserRole + 2);
+        indicesTableModel->setData(indicesTableModel->index(j, col), toInterval.getUpperBound()[0], Qt::UserRole + 3);
       }
 
       // compute interactions for the ith output
@@ -157,6 +159,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   }
   proxyModel_ = new IndicesProxyModel(tableView);
   proxyModel_->setSourceModel(indicesTableModel);
+  proxyModel_->setSortRole(Qt::UserRole + 1);
   tableView->setModel(proxyModel_);
   subWidgetLayout->addWidget(tableView);
 
@@ -217,20 +220,20 @@ void SensitivityResultWidget::updateIndicesPlot(int, Qt::SortOrder)
   for (UnsignedInteger i = 0; i < nbInputs; ++i)
   {
     sortedInputNames[i] = proxyModel_->data(proxyModel_->index(i, 0)).toString().toStdString();
-    sortedFirstOrderIndices[i] = proxyModel_->data(proxyModel_->index(i, 1)).toDouble();
+    sortedFirstOrderIndices[i] = proxyModel_->data(proxyModel_->index(i, 1), Qt::UserRole + 1).toDouble();
     // Sobol result
     if (proxyModel_->columnCount() == 5)
     {
-      sortedFOIntervalLowerBounds.add(proxyModel_->data(proxyModel_->index(i, 2), Qt::UserRole + 1).toDouble());
-      sortedFOIntervalUpperBounds.add(proxyModel_->data(proxyModel_->index(i, 2), Qt::UserRole + 2).toDouble());
-      sortedTotalIndices.add(proxyModel_->data(proxyModel_->index(i, 3)).toDouble());
-      sortedTOIntervalLowerBounds.add(proxyModel_->data(proxyModel_->index(i, 4), Qt::UserRole + 1).toDouble());
-      sortedTOIntervalUpperBounds.add(proxyModel_->data(proxyModel_->index(i, 4), Qt::UserRole + 2).toDouble());
+      sortedFOIntervalLowerBounds.add(proxyModel_->data(proxyModel_->index(i, 2), Qt::UserRole + 2).toDouble());
+      sortedFOIntervalUpperBounds.add(proxyModel_->data(proxyModel_->index(i, 2), Qt::UserRole + 3).toDouble());
+      sortedTotalIndices.add(proxyModel_->data(proxyModel_->index(i, 3), Qt::UserRole + 1).toDouble());
+      sortedTOIntervalLowerBounds.add(proxyModel_->data(proxyModel_->index(i, 4), Qt::UserRole + 2).toDouble());
+      sortedTOIntervalUpperBounds.add(proxyModel_->data(proxyModel_->index(i, 4), Qt::UserRole + 3).toDouble());
     }
     // Functional chaos result
     else if (proxyModel_->columnCount() == 3)
     {
-      sortedTotalIndices.add(proxyModel_->data(proxyModel_->index(i, 2)).toDouble());
+      sortedTotalIndices.add(proxyModel_->data(proxyModel_->index(i, 2), Qt::UserRole + 1).toDouble());
     }
   }
 
