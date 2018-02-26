@@ -875,7 +875,7 @@ Spearman</translation>
     <message>
         <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="144"/>
         <source>dependenceInference_</source>
-        <translation>inférenceDependance_</translation>
+        <translation>inferenceDependance_</translation>
     </message>
     <message>
         <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="156"/>
@@ -917,12 +917,12 @@ Spearman</translation>
     <message>
         <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="111"/>
         <source>dataAnalysis_</source>
-        <translation>analyseDonnées_</translation>
+        <translation>analyseDonnees_</translation>
     </message>
     <message>
         <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="124"/>
         <source>marginalsInference_</source>
-        <translation>inférenceMarginales_</translation>
+        <translation>inferenceMarginales_</translation>
     </message>
     <message>
         <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="139"/>
@@ -932,7 +932,7 @@ Spearman</translation>
     <message>
         <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="161"/>
         <source>metaModel_</source>
-        <translation>métamodèle_</translation>
+        <translation>metamodele_</translation>
     </message>
 </context>
 <context>
@@ -1381,7 +1381,7 @@ métamodèle</translation>
     <message>
         <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="287"/>
         <source>metaModel_</source>
-        <translation>métamodèle_</translation>
+        <translation>metamodele_</translation>
     </message>
     <message>
         <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="141"/>
@@ -2394,12 +2394,12 @@ bayésien (BIC)</translation>
         <translation>Niveau</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="231"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="228"/>
         <source>Select at least one variable</source>
         <translation>Sélectionner au moins une variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="270"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="282"/>
         <source>At least one distribution must be tested for the selected variable &apos;%1&apos;</source>
         <translation>Au moins une distribution doit être testée pour la variable sélectionnée &apos;%1&apos;</translation>
     </message>
@@ -2852,7 +2852,7 @@ bayésien (BIC)</translation>
     <message>
         <location filename="../lib/src/model/LimitStateItem.cxx" line="145"/>
         <source>reliability_</source>
-        <translation>fiabilité_</translation>
+        <translation>fiabilite_</translation>
     </message>
     <message>
         <location filename="../lib/src/model/LimitStateItem.cxx" line="157"/>
@@ -4260,7 +4260,7 @@ ou interaction</translation>
     <message>
         <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="172"/>
         <source>evaluation_</source>
-        <translation>évaluation_</translation>
+        <translation>evaluation_</translation>
     </message>
     <message>
         <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="185"/>
@@ -4309,7 +4309,7 @@ ou interaction</translation>
     <message>
         <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="179"/>
         <source>metamodel_</source>
-        <translation>métamodèle_</translation>
+        <translation>metamodele_</translation>
     </message>
     <message>
         <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="189"/>
@@ -4321,7 +4321,7 @@ ou interaction</translation>
     <message>
         <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="206"/>
         <source>reliability_</source>
-        <translation>fiabilité_</translation>
+        <translation>fiabilite_</translation>
     </message>
     <message>
         <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="218"/>
@@ -5060,7 +5060,7 @@ métamodèle</translation>
     <message>
         <location filename="../lib/src/model/ProbabilisticModelItem.cxx" line="158"/>
         <source>sensitivity_</source>
-        <translation>sensibilité_</translation>
+        <translation>sensibilite_</translation>
     </message>
 </context>
 <context>
@@ -5265,17 +5265,17 @@ de l&apos;indice total</translation>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="140"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="142"/>
         <source>Warning: The total index is inferior to the first order index.</source>
         <translation>Attention : L&apos;indice total est inférieur à l&apos;indice du premier ordre.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="181"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="184"/>
         <source>Interactions</source>
         <translation>Interactions</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="190"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="193"/>
         <source>Warning: The sum of the second order indices is not in the range [0, 1].</source>
         <translation>Attention : La somme des indices du second ordre n&apos;est pas comprise dans l&apos;intervalle [0, 1].</translation>
     </message>

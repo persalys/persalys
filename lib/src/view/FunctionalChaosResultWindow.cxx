@@ -239,18 +239,6 @@ void FunctionalChaosResultWindow::buildInterface()
     sobolScrollArea->setWidget(widget);
     tabWidget->addTab(sobolScrollArea, tr("Sobol indices"));
   }
-  else
-  {
-    if (!errorMessage_.isEmpty())
-    {
-      QWidget * indicesWidget = new QWidget;
-      QVBoxLayout * indicesWidgetLayout = new QVBoxLayout(indicesWidget);
-      QLabel * errorLabel = new QLabel(errorMessage_);
-      indicesWidgetLayout->addWidget(errorLabel);
-      indicesWidgetLayout->addStretch();
-      tabWidget->addTab(indicesWidget, tr("Sobol indices"));
-    }
-  }
 
   // fourth tab : VALIDATION --------------------------------
   if (result_.getValidations().size())
@@ -310,7 +298,18 @@ void FunctionalChaosResultWindow::buildInterface()
     tabWidget->addTab(validationTabWidget, tr("Validation"));
   }
 
-  // fourth/fifth tab : PARAMETERS --------------------------------
+  // tab : ERRORS --------------------------------
+  if (!errorMessage_.isEmpty())
+  {
+    QWidget * indicesWidget = new QWidget;
+    QVBoxLayout * indicesWidgetLayout = new QVBoxLayout(indicesWidget);
+    QLabel * errorLabel = new QLabel(errorMessage_);
+    indicesWidgetLayout->addWidget(errorLabel);
+    indicesWidgetLayout->addStretch();
+    tabWidget->addTab(indicesWidget, tr("Error"));
+  }
+
+  // tab : PARAMETERS --------------------------------
   if (parametersWidget_)
     tabWidget->addTab(parametersWidget_, tr("Parameters"));
 
