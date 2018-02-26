@@ -69,7 +69,7 @@ void PhysicalModelDefinitionItem::buildActions()
   connect(newModelEvaluation_, SIGNAL(triggered()), this, SLOT(createModelEvaluation()));
 
 #ifdef OTGUI_HAVE_OTMORRIS
-  newScreening_ = new QAction(/*QIcon(":/images/modelEvaluation.png"),*/ tr("Screening"), this);
+  newScreening_ = new QAction(QIcon(":/images/sensitivity.png"), tr("Screening"), this);
   newScreening_->setStatusTip(tr("Create a new screening"));
   connect(newScreening_, SIGNAL(triggered()), this, SLOT(createScreening()));
 #endif
