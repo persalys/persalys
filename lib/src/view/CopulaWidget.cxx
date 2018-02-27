@@ -121,6 +121,8 @@ CopulaWidget::CopulaWidget(const PhysicalModel &model, const Copula &copula, QWi
   connect(infoButton, SIGNAL(clicked()), this, SLOT(openDocUrl()));
   parameterLayout_->addWidget(infoButton);
 
+  parameterLayout_->addStretch(1);
+
   vSplitter->addWidget(subWidget);
   vSplitter->setStretchFactor(0, 5);
   vSplitter->setStretchFactor(1, 2);

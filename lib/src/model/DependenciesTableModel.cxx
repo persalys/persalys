@@ -184,6 +184,7 @@ bool DependenciesTableModel::setData(const QModelIndex & index, const QVariant &
   physicalModel_.setCopula(vars, copula);
   physicalModel_.blockNotification();
   updateCopula();
+  copula.setDescription(vars);
   emit dataUpdated(index.row(), copula);
 
   return true;
