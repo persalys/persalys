@@ -2023,22 +2023,26 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="240"/>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="251"/>
         <source>Sobol indices</source>
         <translation>Indices de Sobol</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="301"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="289"/>
         <source>Q2</source>
         <translation>Q2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="310"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="298"/>
         <source>Validation</source>
         <translation>Validation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="315"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="309"/>
+        <source>Error</source>
+        <translation>Erreur</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="314"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -4340,7 +4344,8 @@ ou interaction</translation>
     </message>
     <message>
         <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="403"/>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="419"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="418"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="432"/>
         <source>New analysis</source>
         <translation>Nouvelle analyse</translation>
     </message>
@@ -4366,27 +4371,37 @@ ou interaction</translation>
         <translation>Créer une nouvelle analyse en tendance centrale</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="414"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="413"/>
         <source>Sensitivity</source>
         <translation>Sensibilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="420"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="419"/>
         <source>Create a new sensitivity analysis</source>
         <translation>Créer une nouvelle analyse de sensibilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="451"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="427"/>
+        <source>Screening</source>
+        <translation>Criblage</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="433"/>
+        <source>Create a new screening analysis</source>
+        <translation>Créer un nouveau criblage</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="464"/>
         <source>Reliability</source>
         <translation>Fiabilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="456"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="469"/>
         <source>New limit state</source>
         <translation>Nouvel état limite</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="457"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="470"/>
         <source>Create a new limit state</source>
         <translation>Créer un nouvel état limite</translation>
     </message>

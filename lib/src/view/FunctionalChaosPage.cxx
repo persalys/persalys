@@ -130,17 +130,20 @@ bool FunctionalChaosPage::validatePage()
 {
   errorMessageLabel_->setText("");
 
-  const UnsignedInteger degree = chaosDegreeSpinbox_->value();
-  const UnsignedInteger n = degree + inputSampleDimension_;
-  // compute binomial coefficient
-  const UnsignedInteger minimumSize = SpecFunc::BinomialCoefficient(n, degree);
-  if (inputSampleSize_ < minimumSize)
+  if (!sparseCheckBox_->isChecked())
   {
-    const QString errorMessage = tr("Design of experiments size too small : %1. It must be superior or equal to C(degree+nbInputs, degree) = %2")
-                                 .arg(inputSampleSize_)
-                                 .arg(minimumSize);
-    errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
-    return false;
+    const UnsignedInteger degree = chaosDegreeSpinbox_->value();
+    const UnsignedInteger n = degree + inputSampleDimension_;
+    // compute binomial coefficient
+    const UnsignedInteger minimumSize = SpecFunc::BinomialCoefficient(n, degree);
+    if (inputSampleSize_ < minimumSize)
+    {
+      const QString errorMessage = tr("Design of experiments size too small : %1. It must be superior or equal to C(degree+nbInputs, degree) = %2")
+                                  .arg(inputSampleSize_)
+                                  .arg(minimumSize);
+      errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
+      return false;
+    }
   }
   return QWizardPage::validatePage();
 }

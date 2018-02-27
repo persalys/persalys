@@ -118,6 +118,8 @@ QVariant OTguiItem::data(int role) const
         return QIcon(":/images/centralTendency.png");
       else if (QStandardItem::data(Qt::UserRole).toString() == "SensitivityTitle")
         return QIcon(":/images/sensitivity.png");
+      else if (QStandardItem::data(Qt::UserRole).toString() == "ScreeningTitle")
+        return QIcon(":/images/sensitivity.png");
       else if (QStandardItem::data(Qt::UserRole).toString() == "ReliabilityTitle")
         return QIcon(":/images/limitstate.png");
     }

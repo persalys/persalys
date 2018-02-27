@@ -408,8 +408,7 @@ void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
   }
   // Sensitivity title
   else if (analysisName == "SobolAnalysis" ||
-           analysisName == "SRCAnalysis" ||
-           analysisName == "MorrisAnalysis")
+           analysisName == "SRCAnalysis")
   {
     titleItem = getTitleItemNamed(tr("Sensitivity"), "SensitivityTitle");
 
@@ -420,6 +419,20 @@ void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
       newSensitivityAnalysis->setStatusTip(tr("Create a new sensitivity analysis"));
       connect(newSensitivityAnalysis, SIGNAL(triggered()), this, SIGNAL(sensitivityRequested()));
       titleItem->appendAction(newSensitivityAnalysis);
+    }
+  }
+  // Screening title
+  else if (analysisName == "MorrisAnalysis")
+  {
+    titleItem = getTitleItemNamed(tr("Screening"), "ScreeningTitle");
+
+    if (!titleItem->getActions().size())
+    {
+      // context menu actions
+      QAction * newScreeningAnalysis = new QAction(QIcon(":/images/sensitivity.png"), tr("New analysis"), this);
+      newScreeningAnalysis->setStatusTip(tr("Create a new screening analysis"));
+      connect(newScreeningAnalysis, SIGNAL(triggered()), this, SIGNAL(screeningRequested()));
+      titleItem->appendAction(newScreeningAnalysis);
     }
   }
   ///
