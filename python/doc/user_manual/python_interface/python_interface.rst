@@ -98,6 +98,7 @@ Reliability analysis
     FORMImportanceSamplingAnalysis
     ImportanceSamplingAnalysis
     FORMAnalysis
+    SORMAnalysis
     SimulationReliabilityResult
 
 Design of experiments
