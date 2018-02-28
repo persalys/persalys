@@ -176,7 +176,12 @@ if (SalomeYACS_FOUND)
   target_link_libraries ( otguibase YACSevalYFX py2yacsguilib ydfxwidgets)
 endif ()
 
-target_link_libraries (otguibase ${PYTHON_LIBRARIES})
+if (LINK_PYTHON_LIBRARY)
+  target_link_libraries (otguibase ${PYTHON_LIBRARIES})
+endif ()
+if (MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 8)
+  target_compile_definitions (otguibase PRIVATE -DMS_WIN64)
+endif ()
 target_link_libraries (otguibase ${Boost_LIBRARIES})
 
 install ( TARGETS otguibase

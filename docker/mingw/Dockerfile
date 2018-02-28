@@ -17,8 +17,8 @@ RUN yaourt -S --noconfirm mingw-w64-jsoncpp mingw-w64-pugixml mingw-w64-hdf5 min
 RUN yaourt -S --noconfirm mingw-w64-paraview
 RUN rm -rf ${HOME}/.wine*
 
-ENV ARCH i686
-ENV WINEARCH win32
+ENV ARCH x86_64
+ENV WINEARCH win64
 ENV WINEPATH /usr/${ARCH}-w64-mingw32/bin
 ENV PYTHONHOME /usr/${ARCH}-w64-mingw32/
 ENV PYTHONPATH /usr/${ARCH}-w64-mingw32/lib/python27

@@ -7,12 +7,12 @@ gid=$2
 
 cd /tmp
 
-ARCH=i686
+ARCH=x86_64
 PYBASEVER=2.7
 PYBASEVER_NODOT=${PYBASEVER:0:1}${PYBASEVER:2:2}
 MINGW_PREFIX=/usr/${ARCH}-w64-mingw32/
 
-export WINEARCH=win32
+export WINEARCH=win64
 export WINEPATH=${MINGW_PREFIX}/bin
 rm -rf ${HOME}/.wine*
 
