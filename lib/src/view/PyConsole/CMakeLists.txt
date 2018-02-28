@@ -37,6 +37,10 @@ set_target_properties (otguipyconsole PROPERTIES SOVERSION ${LIB_SOVERSION})
 include_directories (${PYTHON_INCLUDE_DIRS})
 target_link_libraries (otguipyconsole ${QT_LIBRARIES})
 target_link_libraries (otguipyconsole ${PYTHON_LIBRARIES})
+if (MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 8)
+  target_compile_definitions (otguipyconsole PRIVATE -DMS_WIN64)
+endif ()
+
 target_link_libraries (otguipyconsole otguipyinterp)
 
 install ( TARGETS otguipyconsole

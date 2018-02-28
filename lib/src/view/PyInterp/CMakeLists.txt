@@ -36,6 +36,9 @@ set_target_properties (otguipyinterp PROPERTIES SOVERSION ${LIB_SOVERSION})
 include_directories (${PYTHON_INCLUDE_DIRS})
 target_link_libraries (otguipyinterp ${QT_LIBRARIES})
 target_link_libraries (otguipyinterp ${PYTHON_LIBRARIES})
+if (MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 8)
+  target_compile_definitions (otguipyinterp PRIVATE -DMS_WIN64)
+endif ()
 
 install ( TARGETS otguipyinterp
   RUNTIME DESTINATION bin
