@@ -37,7 +37,7 @@ cp ${MINGW_PREFIX}/bin/*.dll ${MOD_PREFIX}/bin
 cp -r ${MINGW_PREFIX}/lib/qt/plugins ${MOD_PREFIX}/lib
 export WINEPATH=${MOD_PREFIX}/bin
 ${ARCH}-w64-mingw32-wine wineboot
-xvfb-run ctest --output-on-failure --timeout 100 -j8 -E "FMI|WelcomeWindow"
+xvfb-run ctest --output-on-failure --timeout 100 -j8 -E FMI
 VERSION=`cat ../otgui/VERSION`
 cp /tmp/otgui/distro/windows/* .
 makensis -DMODULE_PREFIX=${MOD_PREFIX} -DMODULE_VERSION=${VERSION} -DOPENTURNS_VERSION=1.10 -DPYBASEVER=${PYBASEVER} -DPYBASEVER_NODOT=${PYBASEVER_NODOT} -DARCH=${ARCH} installer.nsi
