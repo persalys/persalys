@@ -1,4 +1,3 @@
-
 include_directories (${INTERNAL_INCLUDE_DIRS})
 include_directories (${PYTHON_INCLUDE_DIRS})
 
@@ -176,9 +175,7 @@ if (SalomeYACS_FOUND)
   target_link_libraries ( otguibase YACSevalYFX py2yacsguilib ydfxwidgets)
 endif ()
 
-if (LINK_PYTHON_LIBRARY)
-  target_link_libraries (otguibase ${PYTHON_LIBRARIES})
-endif ()
+target_link_libraries (otguibase ${PYTHON_LIBRARIES})
 if (MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 8)
   target_compile_definitions (otguibase PRIVATE -DMS_WIN64)
 endif ()
