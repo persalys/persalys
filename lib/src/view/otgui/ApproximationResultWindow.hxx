@@ -23,10 +23,6 @@
 
 #include "otgui/ResultWindow.hxx"
 
-#include <openturns/FORMResult.hxx>
-
-#include <QTabWidget>
-
 namespace OTGUI
 {
 class OTGUI_API ApproximationResultWindow : public ResultWindow
@@ -35,13 +31,6 @@ class OTGUI_API ApproximationResultWindow : public ResultWindow
 
 public:
   ApproximationResultWindow(AnalysisItem * item, QWidget * parent = 0);
-
-protected:
-  void buildInterface();
-
-private:
-  OT::FORMResult result_;
-  QTabWidget * tabWidget_;
 };
 }
 #endif

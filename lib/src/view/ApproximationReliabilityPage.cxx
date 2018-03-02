@@ -21,6 +21,7 @@
 #include "otgui/ApproximationReliabilityPage.hxx"
 
 #include "otgui/FORMAnalysis.hxx"
+#include "otgui/SORMAnalysis.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/ParametersDefinitionWizard.hxx"
 #include "otgui/QtTools.hxx"
@@ -43,6 +44,7 @@ namespace OTGUI
 
 ApproximationReliabilityPage::ApproximationReliabilityPage(QWidget* parent)
   : QWizardPage(parent)
+  , method_(ApproximationReliabilityPage::FORM)
   , inputNames_()
   , startingPoint_()
   , pointLineEdit_(0)
@@ -174,6 +176,13 @@ void ApproximationReliabilityPage::initialize(const Analysis& analysis)
   if (!approxAnalysis_ptr)
     return;
 
+  if (dynamic_cast<const FORMAnalysis*>(analysis_ptr))
+    method_ = ApproximationReliabilityPage::FORM;
+  else if (dynamic_cast<const SORMAnalysis*>(analysis_ptr))
+    method_ = ApproximationReliabilityPage::SORM;
+  else
+    return;
+
   OptimizationAlgorithm solver = approxAnalysis_ptr->getOptimizationAlgorithm();
 
   // if solver.getStartingPoint is valid, we use it
@@ -250,11 +259,26 @@ OptimizationAlgorithm ApproximationReliabilityPage::getOptimizationAlgorithm() c
 
 Analysis ApproximationReliabilityPage::getAnalysis(const String& name, const LimitState& limitState) const
 {
-  FORMAnalysis analysis(name, limitState);
-  analysis.setOptimizationAlgorithm(getOptimizationAlgorithm());
-  analysis.setPhysicalStartingPoint(startingPoint_);
+  if (method_ == ApproximationReliabilityPage::FORM)
+  {
+    FORMAnalysis analysis(name, limitState);
+    analysis.setOptimizationAlgorithm(getOptimizationAlgorithm());
+    analysis.setPhysicalStartingPoint(startingPoint_);
+    return analysis;
+  }
+  else
+  {
+    SORMAnalysis analysis(name, limitState);
+    analysis.setOptimizationAlgorithm(getOptimizationAlgorithm());
+    analysis.setPhysicalStartingPoint(startingPoint_);
+    return analysis;
+  }
+}
 
-  return analysis;
+
+void ApproximationReliabilityPage::updateMethod(int id)
+{
+  method_ = Method(id);
 }
 
 

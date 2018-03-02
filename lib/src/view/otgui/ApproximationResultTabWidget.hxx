@@ -22,8 +22,10 @@
 #define OTGUI_APPROXIMATIONRESULTTABWIDGET_HXX
 
 #include "otgui/ReliabilityAnalysis.hxx"
+#include "otgui/ApproximationReliabilityPage.hxx"
 
 #include <openturns/FORMResult.hxx>
+#include <openturns/SORMResult.hxx>
 
 #include <QTabWidget>
 
@@ -37,12 +39,18 @@ public:
   ApproximationResultTabWidget(const OT::FORMResult& result,
                                const ReliabilityAnalysis& analysis,
                                QWidget* parent = 0);
+  ApproximationResultTabWidget(const OT::SORMResult& result,
+                               const ReliabilityAnalysis& analysis,
+                               QWidget* parent = 0);
 
 protected:
   void buildInterface();
 
 private:
-  OT::FORMResult result_;
+  ApproximationReliabilityPage::Method method_;
+  OT::FORMResult formResult_;
+  OT::SORMResult sormResult_;
+  OT::AnalyticalResult result_;
   QWidget * parametersWidget_;
   OT::UnsignedInteger maximumIterationNumber_;
 };

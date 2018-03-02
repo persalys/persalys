@@ -79,6 +79,7 @@ void ReliabilityAnalysisWizard::buildInterface()
   approximationPage_ = new ApproximationReliabilityPage(this);
   approximationPage_->initialize(analysis_);
   setPage(Page_ApproxMethod, approximationPage_);
+  connect(introPage_, SIGNAL(methodChanged(int)), approximationPage_, SLOT(updateMethod(int)));
 
   // third page: FORM page
   formPage_ = new ApproximationReliabilityPage(this);

@@ -39,7 +39,7 @@ class OTGUI_API ApproximationReliabilityPage : public QWizardPage
   Q_OBJECT
 
 public:
-  enum Method {FORM = 3};
+  enum Method {FORM = 3, SORM = 4};
   enum OptimAlgo {AbdoRackwitzAlgo, CobylaAlgo, SQPAlgo};
 
   ApproximationReliabilityPage(QWidget* parent = 0);
@@ -56,9 +56,11 @@ protected:
   void updatePointLineEdit();
 
 public slots:
+  void updateMethod(int);
   void openPointDefinitionWizard();
 
 private:
+  Method method_;
   OT::Description inputNames_;
   OT::Point startingPoint_;
   QLineEdit * pointLineEdit_;

@@ -140,7 +140,8 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
   }
   else if (analysisType == "MonteCarloReliabilityAnalysis" ||
            analysisType == "FORMImportanceSamplingAnalysis" ||
-           analysisType == "FORMAnalysis")
+           analysisType == "FORMAnalysis" ||
+           analysisType == "SORMAnalysis")
   {
     wizard = new ReliabilityAnalysisWizard(analysis, isGeneralWizard, parent);
   }
@@ -198,7 +199,8 @@ OTguiSubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * p
   {
     resultWindow = new SimulationReliabilityResultWindow(item, parent);
   }
-  else if (analysisType == "FORMAnalysis")
+  else if (analysisType == "FORMAnalysis" ||
+           analysisType == "SORMAnalysis")
   {
     resultWindow = new ApproximationResultWindow(item, parent);
   }

@@ -82,7 +82,7 @@ IntroReliabilityPage::IntroReliabilityPage(QWidget * parent)
   buttonToChooseMethod->setStyleSheet(styleText.str().c_str());
 
   // Approximation method
-  QLabel * approxLabel = new QLabel(tr("Approximation method"));
+  QLabel * approxLabel = new QLabel(tr("Approximation methods"));
   approxLabel->setStyleSheet("font: bold;");
   methodLayout->addWidget(approxLabel);
 
@@ -90,6 +90,12 @@ IntroReliabilityPage::IntroReliabilityPage(QWidget * parent)
   buttonToChooseMethod = new QRadioButton(tr("First Order Reliability Method (FORM)"));
   buttonToChooseMethod->setChecked(true);
   methodGroup_->addButton(buttonToChooseMethod, ApproximationReliabilityPage::FORM);
+  methodLayout->addWidget(buttonToChooseMethod);
+  buttonToChooseMethod->setStyleSheet(styleText.str().c_str());
+
+  // - SORM
+  buttonToChooseMethod = new QRadioButton(tr("Second Order Reliability Method (SORM)"));
+  methodGroup_->addButton(buttonToChooseMethod, ApproximationReliabilityPage::SORM);
   methodLayout->addWidget(buttonToChooseMethod);
   buttonToChooseMethod->setStyleSheet(styleText.str().c_str());
 
@@ -118,6 +124,8 @@ void IntroReliabilityPage::initialize(const Analysis& analysis, QList<LimitState
     methodGroup_->button(SimulationReliabilityPage::FORM_IS)->click();
   else if (analysisName == "FORMAnalysis")
     methodGroup_->button(ApproximationReliabilityPage::FORM)->click();
+  else if (analysisName == "SORMAnalysis")
+    methodGroup_->button(ApproximationReliabilityPage::SORM)->click();
 }
 
 
@@ -129,6 +137,7 @@ int IntroReliabilityPage::nextId() const
     case SimulationReliabilityPage::FORM_IS:
       return ReliabilityAnalysisWizard::Page_SimuMethod;
     case ApproximationReliabilityPage::FORM:
+    case ApproximationReliabilityPage::SORM:
       return ReliabilityAnalysisWizard::Page_ApproxMethod;
     default:
       return -1;
