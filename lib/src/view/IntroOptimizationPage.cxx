@@ -68,7 +68,8 @@ IntroOptimizationPage::IntroOptimizationPage(QWidget* parent)
 
   for (UnsignedInteger i = 0; i < OptimizationAnalysis::GetSolverNames().getSize(); ++i)
   {
-    QRadioButton * methodRadioButton = new QRadioButton(OptimizationAnalysis::GetSolverNames()[i].c_str());
+    QRadioButton * methodRadioButton = new QRadioButton;
+    methodRadioButton->setText(OptimizationAnalysis::GetSolverNames()[i].c_str());
     optimAlgoGroupLayout->addWidget(methodRadioButton);
     methodGroup_->addButton(methodRadioButton, i);
   }
@@ -135,7 +136,8 @@ void IntroOptimizationPage::openUrl()
 
 String IntroOptimizationPage::getSolverName() const
 {
-  return methodGroup_->checkedButton()->text().toStdString();
+  const int id = methodGroup_->checkedId();
+  return OptimizationAnalysis::GetSolverNames()[id];
 }
 
 
