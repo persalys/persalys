@@ -22,10 +22,12 @@
 
 #include "otgui/ApproximationResultTabWidget.hxx"
 #include "otgui/FORMAnalysis.hxx"
+#include "otgui/SORMAnalysis.hxx"
 
 #include <QSplitter>
 #include <QVBoxLayout>
 #include <QDebug>
+#include <QTabWidget>
 
 using namespace OT;
 
@@ -34,31 +36,33 @@ namespace OTGUI
 
 ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget * parent)
   : ResultWindow(item, parent)
-  , result_()
 {
+  QString outputName;
+  ApproximationResultTabWidget * tabWidget = 0;
+
+  // get analysis pointer
+  FORMAnalysis * formAnalysis_ptr = dynamic_cast<FORMAnalysis*>(item->getAnalysis().getImplementation().get());
+  SORMAnalysis * sormAnalysis_ptr = dynamic_cast<SORMAnalysis*>(item->getAnalysis().getImplementation().get());
+
   // FORM result widget
-  if (dynamic_cast<const FORMAnalysis*>(item->getAnalysis().getImplementation().get()))
+  if (formAnalysis_ptr)
   {
-    FORMAnalysis analysis = *dynamic_cast<const FORMAnalysis*>(item->getAnalysis().getImplementation().get());
-    result_ = analysis.getResult();
-    tabWidget_ = new ApproximationResultTabWidget(result_, analysis, this);
+    outputName = QString::fromUtf8(formAnalysis_ptr->getLimitState().getOutputName().c_str());
+    tabWidget = new ApproximationResultTabWidget(formAnalysis_ptr->getResult(), *formAnalysis_ptr, this);
+  }
+  // SORM result widget
+  else if (sormAnalysis_ptr)
+  {
+    outputName = QString::fromUtf8(sormAnalysis_ptr->getLimitState().getOutputName().c_str());
+    tabWidget = new ApproximationResultTabWidget(sormAnalysis_ptr->getResult(), *sormAnalysis_ptr, this);
   }
   else
   {
-    qDebug() << "In ApproximationResultWindow: the given analysis is not a FORMAnalysis";
+    qDebug() << "In ApproximationResultWindow: the given analysis is not a FORMAnalysis or a SORMAnalysis";
     throw std::exception();
   }
 
-  buildInterface();
-}
-
-
-void ApproximationResultWindow::buildInterface()
-{
   setWindowTitle(tr("Threshold exceedance results"));
-
-  // get output info
-  QString outputName(QString::fromUtf8(result_.getLimitStateVariable().getFunction().getOutputDescription()[0].c_str()));
 
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
@@ -75,9 +79,9 @@ void ApproximationResultWindow::buildInterface()
   mainWidget->addWidget(outputsGroupBox);
   mainWidget->setStretchFactor(0, 1);
 
-  if (tabWidget_)
+  if (tabWidget)
   {
-    mainWidget->addWidget(tabWidget_);
+    mainWidget->addWidget(tabWidget);
     mainWidget->setStretchFactor(1, 10);
   }
   setWidget(mainWidget);

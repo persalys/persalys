@@ -21,10 +21,12 @@
 #include "otgui/ApproximationResultTabWidget.hxx"
 
 #include "otgui/FORMAnalysis.hxx"
+#include "otgui/SORMAnalysis.hxx"
 #include "otgui/FORMImportanceSamplingAnalysis.hxx"
 #include "otgui/ParametersTableView.hxx"
 #include "otgui/ParametersWidget.hxx"
 #include "otgui/PieChartView.hxx"
+#include "otgui/TranslationManager.hxx"
 
 #include <QVBoxLayout>
 #include <QScrollArea>
@@ -41,6 +43,9 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& res
     const ReliabilityAnalysis& analysis,
     QWidget* parent)
   : QTabWidget(parent)
+  , method_(ApproximationReliabilityPage::FORM)
+  , formResult_(result)
+  , sormResult_()
   , result_(result)
   , parametersWidget_(0)
   , maximumIterationNumber_(0)
@@ -82,6 +87,41 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& res
 }
 
 
+ApproximationResultTabWidget::ApproximationResultTabWidget(const SORMResult& result,
+    const ReliabilityAnalysis& analysis,
+    QWidget* parent)
+  : QTabWidget(parent)
+  , method_(ApproximationReliabilityPage::SORM)
+  , formResult_()
+  , sormResult_(result)
+  , result_(result)
+  , parametersWidget_(0)
+  , maximumIterationNumber_(0)
+{
+  // analysis parameters
+  Parameters analysisParameters;
+
+  const SORMAnalysis * sormAnalysis(dynamic_cast<const SORMAnalysis*>(&analysis));
+  if (sormAnalysis)
+  {
+    // Maximum iteration number : to add a warning if needed
+    maximumIterationNumber_ = sormAnalysis->getOptimizationAlgorithm().getMaximumIterationNumber();
+
+    // analysis parameters
+    analysisParameters = analysis.getParameters();
+  }
+  // set parameters widget
+  if (analysisParameters.getSize())
+  {
+    parametersWidget_ = new QWidget;
+    QGridLayout * parametersWidgetLayout = new QGridLayout(parametersWidget_);
+    parametersWidgetLayout->addWidget(new ParametersWidget(tr("Threshold exceedance parameters"), analysisParameters));
+  }
+
+  buildInterface();
+}
+
+
 void ApproximationResultTabWidget::buildInterface()
 {
   setWindowTitle(tr("Threshold exceedance results"));
@@ -94,17 +134,72 @@ void ApproximationResultTabWidget::buildInterface()
   scrollArea->setWidgetResizable(true);
   tabLayout->setSizeConstraint(QLayout::SetFixedSize);
 
-  // failure probability table
   QStringList namesList;
-  namesList << tr("Failure probability")
-            << tr("Hasofer reliability index");
-
   QStringList valuesList;
-  valuesList << QString::number(result_.getEventProbability())
-             << QString::number(result_.getHasoferReliabilityIndex());
 
-  ParametersWidget * parametersTable = new ParametersWidget(tr("Failure probability"), namesList, valuesList, true, true);
-  tabLayout->addWidget(parametersTable);
+  // FORM
+  if (method_ == ApproximationReliabilityPage::FORM)
+  {
+    // failure probability table
+    namesList << tr("Failure probability")
+              << tr("Hasofer reliability index");
+
+    valuesList << QString::number(formResult_.getEventProbability())
+              << QString::number(result_.getHasoferReliabilityIndex());
+
+    ParametersWidget * parametersTable = new ParametersWidget(tr("Failure probability"), namesList, valuesList, true, true);
+    tabLayout->addWidget(parametersTable);
+  }
+  // SORM
+  else
+  {
+    QGroupBox * groupBox = new QGroupBox(tr("Failure probability"));
+    QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
+
+    // evaluate the event probability FORM
+    // in the standard space all marginals of the standard distribution are identical
+    Scalar eventProba = sormResult_.getLimitStateVariable().getImplementation()->getAntecedent()->getDistribution().getStandardDistribution().getMarginal(0).computeCDF(Point(1, -sormResult_.getHasoferReliabilityIndex()));
+    if (sormResult_.getIsStandardPointOriginInFailureSpace())
+    {
+      // isStandardPointOriginInFailureSpace is true: unusual case
+      eventProba = 1.0 - eventProba;
+    }
+
+    // failure probability table
+    namesList << tr("Failure probability (FORM)")
+              << tr("Reliability index");
+    valuesList << QString::number(eventProba)
+               << QString::number(result_.getHasoferReliabilityIndex());
+
+    ParametersWidget * parametersTable = new ParametersWidget(tr("Hasofer's formula"), namesList, valuesList, true, true);
+    groupBoxLayout->addWidget(parametersTable);
+
+    // failure probability table
+    namesList[0] = tr("Failure probability");
+
+    valuesList[0] = QString::number(sormResult_.getEventProbabilityBreitung());
+    valuesList[1] = QString::number(sormResult_.getGeneralisedReliabilityIndexBreitung());
+
+    parametersTable = new ParametersWidget(tr("Breitung's formula"), namesList, valuesList, true, true);
+    groupBoxLayout->addWidget(parametersTable);
+
+    // failure probability table
+    valuesList[0] = QString::number(sormResult_.getEventProbabilityHohenBichler());
+    valuesList[1] = QString::number(sormResult_.getGeneralisedReliabilityIndexHohenBichler());
+
+    parametersTable = new ParametersWidget(tr("Hohen Bichler's formula"), namesList, valuesList, true, true);
+    groupBoxLayout->addWidget(parametersTable);
+
+    // failure probability table
+    valuesList[0] = QString::number(sormResult_.getEventProbabilityTvedt());
+    valuesList[1] = QString::number(sormResult_.getGeneralisedReliabilityIndexTvedt());
+
+    parametersTable = new ParametersWidget(tr("Tvedt's formula"), namesList, valuesList, true, true);
+    groupBoxLayout->addWidget(parametersTable);
+
+    groupBoxLayout->addStretch();
+    tabLayout->addWidget(groupBox);
+  }
 
   // optimization result table
   QGroupBox * groupBox = new QGroupBox(tr("Optimization result"));
@@ -216,7 +311,9 @@ void ApproximationResultTabWidget::buildInterface()
   try
   {
     // compute sensitivities
-    AnalyticalResult::Sensitivity eventProbaSensitivity(result_.getEventProbabilitySensitivity());
+    AnalyticalResult::Sensitivity eventProbaSensitivity;
+    if (method_ == ApproximationReliabilityPage::FORM)
+      eventProbaSensitivity = formResult_.getEventProbabilitySensitivity();
     AnalyticalResult::Sensitivity hasoferIndexSensitivity(result_.getHasoferReliabilityIndexSensitivity());
 
     // if the computation of sensitivities has succeeded
@@ -230,14 +327,15 @@ void ApproximationResultTabWidget::buildInterface()
     resultsTable->horizontalHeader()->hide();
     resultsTable->verticalHeader()->hide();
 
-    resultsTableModel = new CustomStandardItemModel(inDimension + 2, 4, resultsTable);
+    resultsTableModel = new CustomStandardItemModel(inDimension + 2, 3, resultsTable);
     resultsTable->setModel(resultsTableModel);
 
     // horizontal header
     resultsTableModel->setNotEditableHeaderItem(0, 0, tr("Variable"));
     resultsTableModel->setNotEditableHeaderItem(0, 1, tr("Distribution parameters"));
-    resultsTableModel->setNotEditableHeaderItem(0, 2, tr("Failure probability"));
-    resultsTableModel->setNotEditableHeaderItem(0, 3, tr("Reliability index"));
+    resultsTableModel->setNotEditableHeaderItem(0, 2, tr("Reliability index"));
+    if (method_ == ApproximationReliabilityPage::FORM)
+      resultsTableModel->setNotEditableHeaderItem(0, 3, tr("Failure probability"));
 
     // set values
     int row = 1;
@@ -247,7 +345,9 @@ void ApproximationResultTabWidget::buildInterface()
       const int varRow = row;
       resultsTableModel->setNotEditableItem(row, 0, inDescription[i].c_str());
 
-      PointWithDescription pfSensitivity(eventProbaSensitivity[i]);
+      PointWithDescription pfSensitivity;
+      if (method_ == ApproximationReliabilityPage::FORM)
+        pfSensitivity = eventProbaSensitivity[i];
       const PointWithDescription betaSensitivity(hasoferIndexSensitivity[i]);
 
       for (UnsignedInteger j = 0; j < betaSensitivity.getDimension(); ++j)
@@ -256,15 +356,15 @@ void ApproximationResultTabWidget::buildInterface()
         // distribution parameter name
         String parameterName = betaSensitivity.getDescription()[j];
         parameterName = parameterName.substr(0, betaSensitivity.getDescription()[j].find("_marginal"));
-        parameterName = parameterName.substr(0, betaSensitivity.getDescription()[j].find("_0"));
-        resultsTableModel->setNotEditableItem(row, ++col, QString::fromUtf8(parameterName.c_str()));
+        QString paramName = TranslationManager::GetTranslatedDistributionParameterName(parameterName);
+        resultsTableModel->setNotEditableItem(row, ++col, paramName);
+
+        // sensitivity value beta
+        resultsTableModel->setNotEditableItem(row, ++col, betaSensitivity[j]);
 
         // sensitivity value pf
         if (pfSensitivity.getSize())
           resultsTableModel->setNotEditableItem(row, ++col, pfSensitivity[j]);
-
-        // sensitivity value beta
-        resultsTableModel->setNotEditableItem(row, ++col, betaSensitivity[j]);
 
         ++row;
       }

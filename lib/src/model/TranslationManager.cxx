@@ -84,6 +84,8 @@ void TranslationManager::InitializeDistributionsParametersNames()
   DistributionsParametersNames_.insert(type("sigmaLog", "σ_Log"));
   DistributionsParametersNames_.insert(type("aLog", "a_Log"));
   DistributionsParametersNames_.insert(type("bLog", "b_Log"));
+  DistributionsParametersNames_.insert(type("lowerBound", tr("lower bound")));
+  DistributionsParametersNames_.insert(type("upperBound", tr("upper bound")));
 }
 
 

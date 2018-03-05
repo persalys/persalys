@@ -1,0 +1,46 @@
+%feature("docstring") OTGUI::SORMAnalysis
+"SORM analysis.
+
+Parameters
+----------
+name : str
+    Name
+limitState : :class:`~otguibase.LimitState`
+    Limit state
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+
+Create the model:
+
+>>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
+>>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> G = otguibase.Output('G', 'deviation')
+>>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(_pi*100.0)'])
+
+Create the limit state:
+
+>>> limitState = otguibase.LimitState('ls1', myPhysicalModel, 'G', ot.Less(), 0.)
+
+Process a reliability analysis using the SORM method:
+
+>>> analysis = otguibase.SORMAnalysis('myAnalysis', limitState)
+>>> analysis.run()
+
+Get the result:
+
+>>> result = analysis.getResult()
+>>> pf = result.getEventProbabilityBreitung()
+>>> designPoint = result.getStandardSpaceDesignPoint()"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SORMAnalysis::getResult
+"Result accessor.
+
+Returns
+-------
+result : :py:class:`openturns.SORMResult`
+    Result"
