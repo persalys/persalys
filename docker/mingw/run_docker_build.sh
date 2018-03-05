@@ -22,7 +22,7 @@ export MAKEFLAGS="-j8"
 
 mkdir -p build && cd build
 MOD_PREFIX=$PWD/install
-CXXFLAGS="-D_hypot=hypot" ${ARCH}-w64-mingw32-cmake -DUSE_SPHINX=OFF -DUSE_PARAVIEW=OFF \
+CXXFLAGS="-D_hypot=hypot" ${ARCH}-w64-mingw32-cmake -DUSE_SPHINX=OFF -DUSE_SALOME=OFF \
   -DCMAKE_INSTALL_PREFIX=${MOD_PREFIX} \
   -DPYTHON_INCLUDE_DIR=/usr/${ARCH}-w64-mingw32/include/python${PYBASEVER_NODOT} \
   -DPYTHON_LIBRARY=/usr/${ARCH}-w64-mingw32/lib/libpython${PYBASEVER_NODOT}.dll.a \
