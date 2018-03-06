@@ -127,8 +127,8 @@ void OptimizationAnalysis::initializeParameters()
 
     if (!inputs[i].isStochastic())
     {
-      lowerBounds[i] = 0.9;
-      upperBounds[i] = 1.1;
+      lowerBounds[i] = -0.1;
+      upperBounds[i] = 0.1;
       if (startingPoint_[i] != 0)
       {
         lowerBounds[i] = 0.9 * startingPoint_[i];
@@ -161,12 +161,16 @@ void OptimizationAnalysis::updateParameters()
   const Point startingPoint(startingPoint_);
   const Point lowerBounds(bounds_.getLowerBound());
   const Point upperBounds(bounds_.getUpperBound());
+  const Interval::BoolCollection finiteLowerBounds(bounds_.getFiniteLowerBound());
+  const Interval::BoolCollection finiteUpperBounds(bounds_.getFiniteUpperBound());
   const Description variableInputs(variableInputs_);
 
   initializeParameters();
 
   Point newLowerBounds(inputNames_.getSize());
   Point newUpperBounds(inputNames_.getSize());
+  Interval::BoolCollection newFiniteLowerBounds(inputNames_.getSize());
+  Interval::BoolCollection newFiniteUpperBounds(inputNames_.getSize());
 
   for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++ i)
   {
@@ -176,12 +180,16 @@ void OptimizationAnalysis::updateParameters()
       startingPoint_[i] = startingPoint[it - inputNames.begin()];
       newLowerBounds[i] = lowerBounds[it - inputNames.begin()];
       newUpperBounds[i] = upperBounds[it - inputNames.begin()];
+      newFiniteLowerBounds[i] = finiteLowerBounds[it - inputNames.begin()];
+      newFiniteUpperBounds[i] = finiteUpperBounds[it - inputNames.begin()];
       if (!variableInputs.contains(inputNames_[i]))
         variableInputs_.erase(std::remove(variableInputs_.begin(), variableInputs_.end(), inputNames_[i]), variableInputs_.end());
     }
   }
   bounds_.setLowerBound(newLowerBounds);
   bounds_.setUpperBound(newUpperBounds);
+  bounds_.setFiniteLowerBound(newFiniteLowerBounds);
+  bounds_.setFiniteUpperBound(newFiniteUpperBounds);
 }
 
 

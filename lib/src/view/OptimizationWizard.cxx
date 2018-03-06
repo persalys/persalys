@@ -44,20 +44,16 @@ void OptimizationWizard::buildInterface()
 {
   setWindowTitle(tr("Optimization"));
 
-  // get analysis
-  OptimizationAnalysis optim = *dynamic_cast<OptimizationAnalysis*>(analysis_.getImplementation().get());
-  optim.updateParameters();
-
   // -- intro page
   introPage_ = new IntroOptimizationPage(this);
   introPage_->initialize(analysis_);
   setPage(0, introPage_);
 
+  // -- second page
+
   // starting point - inputs bounds
   QWizardPage * page = new QWizardPage(this);
   QVBoxLayout * pageLayout = new QVBoxLayout(page);
-
-  PhysicalModel model(dynamic_cast<const PhysicalModelAnalysis*>(analysis_.getImplementation().get())->getPhysicalModel());
 
   QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
   groupBoxLayout_ = new QVBoxLayout(inputsBox);
@@ -65,6 +61,7 @@ void OptimizationWizard::buildInterface()
   tableView_ = new ResizableHeaderlessTableView;
   tableView_->horizontalHeader()->hide();
 
+  OptimizationAnalysis optim = *dynamic_cast<OptimizationAnalysis*>(analysis_.getImplementation().get());
   tableModel_ = new OptimizationTableModel(optim);
   tableView_->setModel(tableModel_);
 
@@ -84,7 +81,7 @@ void OptimizationWizard::buildInterface()
 
   setPage(1, page);
 
-  // -- second page
+  // -- third page
 
   // algo parameter
   page = new QWizardPage(this);
