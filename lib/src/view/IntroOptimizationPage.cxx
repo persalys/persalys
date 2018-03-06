@@ -56,7 +56,7 @@ IntroOptimizationPage::IntroOptimizationPage(QWidget* parent)
   {
     QToolButton * infoButton = new QToolButton;
     infoButton->setIcon(QIcon(":/images/documentinfo.png"));
-    infoButton->setToolTip(tr("Open the NLopt documentation"));
+    infoButton->setToolTip(tr("Open the OpenTURNS documentation"));
     connect(infoButton, SIGNAL(clicked()), this, SLOT(openUrl()));
     pageLayout->addWidget(infoButton);
   }
@@ -129,7 +129,7 @@ Description IntroOptimizationPage::getInterestVariables() const
 void IntroOptimizationPage::openUrl()
 {
   // open url
-  const QString link = "https://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/";
+  const QString link = "http://openturns.github.io/openturns/master/user_manual/optimization.html";
   QDesktopServices::openUrl(QUrl(link));
 }
 
