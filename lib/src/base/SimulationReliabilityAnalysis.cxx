@@ -121,9 +121,9 @@ UnsignedInteger SimulationReliabilityAnalysis::getBlockSize() const
 void SimulationReliabilityAnalysis::setBlockSize(const UnsignedInteger size)
 {
   if (size < 1)
-    throw InvalidValueException(HERE) << "The block size must be superior to 0";
+    throw InvalidValueException(HERE) << "The block size must be greater than 0";
   if (size > getMaximumCalls())
-    throw InvalidValueException(HERE) << "The block size can not be superior to the maximum calls " << getMaximumCalls();
+    throw InvalidValueException(HERE) << "The block size can not be greater than the maximum calls " << getMaximumCalls();
   blockSize_ = size;
 }
 

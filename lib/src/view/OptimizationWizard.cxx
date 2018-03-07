@@ -233,7 +233,7 @@ bool OptimizationWizard::validateCurrentPage()
     Interval varBounds(lowerB, upperB, finiteLowerB, finiteUpperB);
     if (varBounds.isEmpty())
     {
-      errorMessageLabel_->setTemporaryErrorMessage(tr("The lower bounds must be inferior to the upper bounds"));
+      errorMessageLabel_->setTemporaryErrorMessage(tr("The lower bounds must be lesser than the upper bounds"));
       return false;
     }
     if (!varBounds.contains(variableInputsValues))

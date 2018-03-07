@@ -185,7 +185,7 @@ bool SobolPage::validatePage()
       errorMessage = tr("The maximum time must not be null");
     if (stopCriteriaGroupBox_->isMaxCallsRequired())
       if (stopCriteriaGroupBox_->getMaximumCalls() < (blockSizeGroupBox_->getBlockSizeValue()*numberStochasticVariables_))
-        errorMessage = tr("The maximum calls can not be inferior to: block_size*(number_of_inputs + 2)");
+        errorMessage = tr("The maximum calls can not be lesser than: block_size*(number_of_inputs + 2)");
   }
 
   errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));

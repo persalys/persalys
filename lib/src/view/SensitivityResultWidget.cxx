@@ -139,7 +139,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
       indicesTableModel->setData(indicesTableModel->index(j, col), totalIndices[j], Qt::UserRole + 1);
       if (totalIndices[j] < firstIndices[j])
       {
-        indicesTableModel->setData(indicesTableModel->index(j, col), tr("Warning: The total index is inferior to the first order index."), Qt::ToolTipRole);
+        indicesTableModel->setData(indicesTableModel->index(j, col), tr("Warning: The total index is lesser than the first order index."), Qt::ToolTipRole);
         indicesTableModel->setData(indicesTableModel->index(j, col), QIcon(":/images/task-attention.png"), Qt::DecorationRole);
       }
 

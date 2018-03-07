@@ -88,7 +88,7 @@ double MonteCarloAnalysis::getLevelConfidenceInterval() const
 void MonteCarloAnalysis::setLevelConfidenceInterval(const double levelConfidenceInterval)
 {
   if (levelConfidenceInterval < 0. || levelConfidenceInterval >= 1.)
-    throw InvalidArgumentException(HERE) << "MonteCarloAnalysis::setLevelConfidenceInterval : the level of the confidence interval must be superior or equal to 0. and inferior to 1.";
+    throw InvalidArgumentException(HERE) << "MonteCarloAnalysis::setLevelConfidenceInterval : the level of the confidence interval must be greater or equal to 0. and lesser than 1.";
   levelConfidenceInterval_ = levelConfidenceInterval;
 }
 
@@ -105,7 +105,7 @@ void MonteCarloAnalysis::launch()
   // check
   if (getMaximumCalls() < getBlockSize())
     throw InvalidValueException(HERE) << "The maximum calls number (" << getMaximumCalls()
-                                      << ") can not be inferior to the block size (" << getBlockSize() << ")";
+                                      << ") can not be lesser than the block size (" << getBlockSize() << ")";
   if (!getPhysicalModel().getRestrictedFunction(getInterestVariables()).getOutputDescription().getSize())
     throw InvalidDimensionException(HERE) << "The outputs to be analysed "
                                           << getInterestVariables() << " are not outputs of the model "

@@ -247,7 +247,7 @@ void OptimizationAnalysis::launch()
   // check bounds
   Interval bounds(lowerB, upperB, finiteLowerB, finiteUpperB);
   if (bounds.isEmpty())
-    throw InvalidArgumentException(HERE) << "The lower bounds must be inferior to the upper bounds";
+    throw InvalidArgumentException(HERE) << "The lower bounds must be lesser than the upper bounds";
 
   // set objective
   Function objective = getPhysicalModel().getFunction(getInterestVariables());

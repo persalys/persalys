@@ -138,7 +138,7 @@ bool FunctionalChaosPage::validatePage()
     const UnsignedInteger minimumSize = SpecFunc::BinomialCoefficient(n, degree);
     if (inputSampleSize_ < minimumSize)
     {
-      const QString errorMessage = tr("Design of experiments size too small : %1. It must be superior or equal to C(degree+nbInputs, degree) = %2")
+      const QString errorMessage = tr("Design of experiments size too small : %1. It must be greater or equal to C(degree+nbInputs, degree) = %2")
                                   .arg(inputSampleSize_)
                                   .arg(minimumSize);
       errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));

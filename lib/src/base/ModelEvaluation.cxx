@@ -135,7 +135,7 @@ Point ModelEvaluation::getInputValues() const
 void ModelEvaluation::setInputValue(const UnsignedInteger index, const double value)
 {
   if (index >= inputValues_.getSize())
-    throw InvalidArgumentException(HERE) << "Wrong index value. Must be inferior to " << inputValues_.getSize();
+    throw InvalidArgumentException(HERE) << "Wrong index value. Must be lesser than " << inputValues_.getSize();
 
   inputValues_[index] = value;
 }

@@ -1454,7 +1454,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="198"/>
-        <source>The block size must be inferior or equal to the size of the input sample</source>
+        <source>The block size must be lesser or equal to the size of the input sample</source>
         <translation>La taille de bloc doit être inférieure ou égale à la taille de l&apos;échantillon d&apos;entrée</translation>
     </message>
 </context>
@@ -1619,17 +1619,17 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/model/ExperimentTableModel.cxx" line="298"/>
-        <source>The lower bound must be inferior to the upper bound</source>
+        <source>The lower bound must be lesser than the upper bound</source>
         <translation>La borne inférieure doit être inférieure à la borne supérieure</translation>
     </message>
     <message>
         <location filename="../lib/src/model/ExperimentTableModel.cxx" line="319"/>
-        <source>The upper bound must be superior to the lower bound</source>
+        <source>The upper bound must be greater than the lower bound</source>
         <translation>La borne supérieure doit être supérieure à la borne inférieure</translation>
     </message>
     <message>
         <location filename="../lib/src/model/ExperimentTableModel.cxx" line="377"/>
-        <source>Delta must be inferior to the upper bound - the lower bound</source>
+        <source>Delta must be lesser than the upper bound - the lower bound</source>
         <translation>L&apos;incrément doit être inférieur à la borne supérieure - la borne inférieure</translation>
     </message>
 </context>
@@ -1957,7 +1957,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="141"/>
-        <source>Design of experiments size too small : %1. It must be superior or equal to C(degree+nbInputs, degree) = %2</source>
+        <source>Design of experiments size too small : %1. It must be greater or equal to C(degree+nbInputs, degree) = %2</source>
         <translation>La taille du plan d&apos;expériences est trop petite : %1. Elle doit être supérieure ou égale à C(degree+nbInputs, degree) = %2</translation>
     </message>
 </context>
@@ -2203,8 +2203,8 @@ orientation</source>
     </message>
     <message>
         <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="168"/>
-        <source>The file contains a sample with a dimension inferior to the number of inputs of the physical model:</source>
-        <translation>Le fichier contient un échantillon de dimension inférieure au nombre d&apos;entrée du modèle physique :</translation>
+        <source>The file contains a sample with a dimension lesser than the number of inputs of the physical model:</source>
+        <translation>Le fichier contient un échantillon de dimension inférieure au nombre d&apos;entrées du modèle physique :</translation>
     </message>
     <message>
         <location filename="../lib/src/view/ImportDesignOfExperimentPage.cxx" line="237"/>
@@ -3430,7 +3430,7 @@ extremum</translation>
     </message>
     <message>
         <location filename="../lib/src/view/MonteCarloPage.cxx" line="162"/>
-        <source>The maximum calls can not be inferior to the block size</source>
+        <source>The maximum calls can not be lesser than the block size</source>
         <translation>Le nombre d&apos;appels ne peut pas être inférieur à la taille de bloc</translation>
     </message>
 </context>
@@ -3701,12 +3701,12 @@ ou interaction</translation>
     </message>
     <message>
         <location filename="../lib/src/model/MorrisTableModel.cxx" line="127"/>
-        <source>The lower bound must be inferior to the upper bound</source>
+        <source>The lower bound must be lesser than the upper bound</source>
         <translation>La borne inférieure doit être inférieure à la borne supérieure</translation>
     </message>
     <message>
         <location filename="../lib/src/model/MorrisTableModel.cxx" line="150"/>
-        <source>The upper bound must be superior to the lower bound</source>
+        <source>The upper bound must be greater than the lower bound</source>
         <translation>La borne supérieure doit être supérieure à la borne inférieure</translation>
     </message>
 </context>
@@ -4170,22 +4170,22 @@ ou interaction</translation>
     </message>
     <message>
         <location filename="../lib/src/model/OptimizationTableModel.cxx" line="229"/>
-        <source>Input %1 : The starting value must be inferior to the upper bound</source>
+        <source>Input %1 : The starting value must be lesser than the upper bound</source>
         <translation>Entrée %1 : La valeur de départ doit être inférieure à la borne supérieure</translation>
     </message>
     <message>
         <location filename="../lib/src/model/OptimizationTableModel.cxx" line="234"/>
-        <source>Input %1 : The starting value must be superior to the lower bound</source>
+        <source>Input %1 : The starting value must be greater than the lower bound</source>
         <translation>Entrée %1 : La valeur de départ doit être supérieure à la borne inférieure</translation>
     </message>
     <message>
         <location filename="../lib/src/model/OptimizationTableModel.cxx" line="247"/>
-        <source>Input %1 : The lower bound must be inferior to the upper bound</source>
+        <source>Input %1 : The lower bound must be lesser than the upper bound</source>
         <translation>Entrée %1 : La borne inférieure doit être inférieure à la borne supérieure</translation>
     </message>
     <message>
         <location filename="../lib/src/model/OptimizationTableModel.cxx" line="265"/>
-        <source>Input %1 : The upper bound must be superior to the lower bound</source>
+        <source>Input %1 : The upper bound must be greater than the lower bound</source>
         <translation>Entrée %1 : La borne supérieure doit être supérieure à la borne inférieure</translation>
     </message>
 </context>
@@ -4233,7 +4233,7 @@ ou interaction</translation>
     </message>
     <message>
         <location filename="../lib/src/view/OptimizationWizard.cxx" line="236"/>
-        <source>The lower bounds must be inferior to the upper bounds</source>
+        <source>The lower bounds must be lesser than the upper bounds</source>
         <translation>Les bornes inférieures doivent être inférieures aux bornes supérieures</translation>
     </message>
     <message>
@@ -5613,7 +5613,7 @@ de l&apos;indice total</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="142"/>
-        <source>Warning: The total index is inferior to the first order index.</source>
+        <source>Warning: The total index is lesser than the first order index.</source>
         <translation>Attention : L&apos;indice total est inférieur à l&apos;indice du premier ordre.</translation>
     </message>
     <message>
@@ -5661,7 +5661,7 @@ de l&apos;indice total</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SimulationReliabilityPage.cxx" line="176"/>
-        <source>The maximum calls can not be inferior to the block size</source>
+        <source>The maximum calls can not be lesser than the block size</source>
         <translation>Le nombre d&apos;appels ne peut pas être inférieur à la taille de bloc</translation>
     </message>
 </context>
@@ -5870,8 +5870,8 @@ de l&apos;indice total</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SobolPage.cxx" line="188"/>
-        <source>The maximum calls can not be inferior to: block_size*(number_of_inputs + 2)</source>
-        <translation>Le nombre d&apos;appels ne peut pas être inférieur à : taille_bloc*(nombre_entrées + 2) </translation>
+        <source>The maximum calls can not be lesser than: block_size*(number_of_inputs + 2)</source>
+        <translation>Le nombre d&apos;appels ne peut pas être inférieur à : taille_bloc*(nombre_entrées + 2)</translation>
     </message>
 </context>
 <context>

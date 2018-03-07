@@ -226,12 +226,12 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
           return false;
         if (value.toDouble() >= analysis_.getBounds().getUpperBound()[inputIndex])
         {
-          emit errorMessageChanged(tr("Input %1 : The starting value must be inferior to the upper bound").arg(currentInputName));
+          emit errorMessageChanged(tr("Input %1 : The starting value must be lesser than the upper bound").arg(currentInputName));
           return false;
         }
         if (value.toDouble() <= analysis_.getBounds().getLowerBound()[inputIndex])
         {
-          emit errorMessageChanged(tr("Input %1 : The starting value must be superior to the lower bound").arg(currentInputName));
+          emit errorMessageChanged(tr("Input %1 : The starting value must be greater than the lower bound").arg(currentInputName));
           return false;
         }
         values[inputIndex] = value.toDouble();
@@ -244,7 +244,7 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
       {
         if (value.toDouble() >= analysis_.getBounds().getUpperBound()[inputIndex])
         {
-          emit errorMessageChanged(tr("Input %1 : The lower bound must be inferior to the upper bound").arg(currentInputName));
+          emit errorMessageChanged(tr("Input %1 : The lower bound must be lesser than the upper bound").arg(currentInputName));
           return false;
         }
         Point lowerBounds = analysis_.getBounds().getLowerBound();
@@ -262,7 +262,7 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
       {
         if (value.toDouble() <= analysis_.getBounds().getLowerBound()[inputIndex])
         {
-          emit errorMessageChanged(tr("Input %1 : The upper bound must be superior to the lower bound").arg(currentInputName));
+          emit errorMessageChanged(tr("Input %1 : The upper bound must be greater than the lower bound").arg(currentInputName));
           return false;
         }
         Point upperBounds = analysis_.getBounds().getUpperBound();

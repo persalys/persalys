@@ -141,7 +141,7 @@ void MetaModelAnalysis::setLeaveOneOutValidation(const bool validation)
 void MetaModelAnalysis::setTestSampleValidationPercentageOfPoints(const UnsignedInteger percentage)
 {
   if (percentage == 0 || percentage >= 100)
-    throw InvalidArgumentException(HERE) << "The percentage must be superior to 0 and inferior to 100";
+    throw InvalidArgumentException(HERE) << "The percentage must be greater than 0 and lesser than 100";
   percentageTestSample_ = percentage;
 }
 
@@ -180,7 +180,7 @@ UnsignedInteger MetaModelAnalysis::getTestSampleValidationSeed() const
 void MetaModelAnalysis::setKFoldValidationNumberOfFolds(const UnsignedInteger nbFolds)
 {
   if (nbFolds_ < 2)
-    throw InvalidArgumentException(HERE) << "The number of folds must be superior to 1 ";
+    throw InvalidArgumentException(HERE) << "The number of folds must be greater than 1 ";
   nbFolds_ = nbFolds;
 }
 

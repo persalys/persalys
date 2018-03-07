@@ -382,7 +382,7 @@ void GridDesignOfExperiment::setDeltas(const Point & deltas)
 
   for (UnsignedInteger i = 0; i < deltas.getSize(); ++i)
     if (deltas[i] < 0.)
-      throw InvalidArgumentException(HERE) << "GridDesignOfExperiment::setDeltas : All the deltas must be superior or equal to 0.";
+      throw InvalidArgumentException(HERE) << "GridDesignOfExperiment::setDeltas : All the deltas must be greater or equal to 0.";
 
   Indices levels(getPhysicalModel().getInputDimension());
   for (UnsignedInteger i = 0; i < deltas.getSize(); ++i)

@@ -159,7 +159,7 @@ void FunctionalChaosAnalysis::launch()
     if (size < minimumSize)
       throw InvalidArgumentException(HERE) << "Design of experiments size too small : "
                                             << size
-                                            << ". It must be superior or equal to C(degree+nbInputs, degree) = "
+                                            << ". It must be greater or equal to C(degree+nbInputs, degree) = "
                                             << minimumSize << ")\n";
   }
 
