@@ -215,6 +215,7 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
   if (role == Qt::EditRole)
   {
     const int inputIndex = index.row() - 1;
+    const QString currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex].c_str();
 
     switch (index.column())
     {
@@ -223,6 +224,16 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
         Point values = analysis_.getStartingPoint();
         if (values[inputIndex] == value.toDouble())
           return false;
+        if (value.toDouble() >= analysis_.getBounds().getUpperBound()[inputIndex])
+        {
+          emit errorMessageChanged(tr("Input %1 : The starting value must be inferior to the upper bound").arg(currentInputName));
+          return false;
+        }
+        if (value.toDouble() <= analysis_.getBounds().getLowerBound()[inputIndex])
+        {
+          emit errorMessageChanged(tr("Input %1 : The starting value must be superior to the lower bound").arg(currentInputName));
+          return false;
+        }
         values[inputIndex] = value.toDouble();
 
         analysis_.setStartingPoint(values);
@@ -233,7 +244,7 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
       {
         if (value.toDouble() >= analysis_.getBounds().getUpperBound()[inputIndex])
         {
-          emit errorMessageChanged(QString("<font color=red>%1</font>").arg(tr("The lower bound must be inferior to the upper bound")));
+          emit errorMessageChanged(tr("Input %1 : The lower bound must be inferior to the upper bound").arg(currentInputName));
           return false;
         }
         Point lowerBounds = analysis_.getBounds().getLowerBound();
@@ -251,7 +262,7 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
       {
         if (value.toDouble() <= analysis_.getBounds().getLowerBound()[inputIndex])
         {
-          emit errorMessageChanged(QString("<font color=red>%1</font>").arg(tr("The upper bound must be superior to the lower bound")));
+          emit errorMessageChanged(tr("Input %1 : The upper bound must be superior to the lower bound").arg(currentInputName));
           return false;
         }
         Point upperBounds = analysis_.getBounds().getUpperBound();

@@ -125,16 +125,14 @@ void OptimizationResultWindow::buildInterface()
   QGroupBox * groupBox = new QGroupBox(tr("Optimization result"));
   QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
   QStringList namesList;
-  namesList << tr("Iterations number")
-            << tr("Calls number")
+  namesList << tr("Number of function evaluations")
             << tr("Absolute error")
             << tr("Relative error")
             << tr("Residual error")
             << tr("Constraint error");
 
   QStringList valuesList;
-  valuesList << QString::number(result_.getIterationNumber())
-             << QString::number(result_.getProblem().getObjective().getCallsNumber())
+  valuesList << QString::number(result_.getProblem().getObjective().getCallsNumber())
              << QString::number(result_.getAbsoluteError())
              << QString::number(result_.getRelativeError())
              << QString::number(result_.getResidualError())
@@ -165,7 +163,7 @@ void OptimizationResultWindow::buildInterface()
 
   plot->setTitle(tr("Optimal value convergence graph"));
   plot->setAxisTitle(QwtPlot::yLeft, tr("Optimal value"));
-  plot->setAxisTitle(QwtPlot::xBottom, tr("Iteration"));
+  plot->setAxisTitle(QwtPlot::xBottom, tr("Number of evaluations"));
 
   GraphConfigurationWidget * graphSettingWidget1 = new GraphConfigurationWidget(listPlotWidget1,
       QStringList(),
@@ -189,7 +187,7 @@ void OptimizationResultWindow::buildInterface()
 
   plot->setTitle(tr("Error convergence graph"));
   plot->setAxisTitle(QwtPlot::yLeft, tr("Error"));
-  plot->setAxisTitle(QwtPlot::xBottom, tr("Iteration"));
+  plot->setAxisTitle(QwtPlot::xBottom, tr("Number of evaluations"));
   plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
 
   listPlotWidget2.append(plot);

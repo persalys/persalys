@@ -55,9 +55,9 @@ public:
   OT::Point getStartingPoint() const;
   void setStartingPoint(const OT::Point & startingPoint);
 
-  /** Maximum iterations number accessor */
-  void setMaximumIterationNumber(const OT::UnsignedInteger maximumIterationNumber);
-  OT::UnsignedInteger getMaximumIterationNumber() const;
+  /** Maximum evaluations number accessor */
+  void setMaximumEvaluationNumber(const OT::UnsignedInteger maximumEvaluationNumber);
+  OT::UnsignedInteger getMaximumEvaluationNumber() const;
 
   /** Maximum absolute error accessor */
   OT::Scalar getMaximumAbsoluteError() const;
@@ -111,7 +111,7 @@ private:
   OT::Bool isMinimization_;
   OT::Point startingPoint_;
   /** Number of outermost iterations (in case of nested iterations) */
-  OT::UnsignedInteger maximumIterationNumber_;
+  OT::UnsignedInteger maximumEvaluationNumber_;
   OT::Scalar maximumAbsoluteError_;    /**< Value of ||x_n - x_{n-1}|| */
   OT::Scalar maximumRelativeError_;    /**< Value of ||x_n - x_{n-1}|| / ||x_n|| */
   OT::Scalar maximumResidualError_;    /**< Value of ||objectiveFunction(x_n) - objectiveFunction(x_{n-1})|| */

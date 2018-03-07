@@ -58,7 +58,7 @@ OptimizationAnalysis::OptimizationAnalysis()
   , solverName_("Cobyla")
   , isMinimization_(true)
   , startingPoint_()
-  , maximumIterationNumber_(ResourceMap::GetAsUnsignedInteger("OptimizationAlgorithm-DefaultMaximumIteration"))
+  , maximumEvaluationNumber_(ResourceMap::GetAsUnsignedInteger("OptimizationAlgorithm-DefaultMaximumIteration"))
   , maximumAbsoluteError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumAbsoluteError"))
   , maximumRelativeError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumRelativeError"))
   , maximumResidualError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumResidualError"))
@@ -78,7 +78,7 @@ OptimizationAnalysis::OptimizationAnalysis(const String& name,
   , solverName_(algorithmName)
   , isMinimization_(true)
   , startingPoint_()
-  , maximumIterationNumber_(ResourceMap::GetAsUnsignedInteger("OptimizationAlgorithm-DefaultMaximumIteration"))
+  , maximumEvaluationNumber_(ResourceMap::GetAsUnsignedInteger("OptimizationAlgorithm-DefaultMaximumIteration"))
   , maximumAbsoluteError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumAbsoluteError"))
   , maximumRelativeError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumRelativeError"))
   , maximumResidualError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumResidualError"))
@@ -148,6 +148,10 @@ void OptimizationAnalysis::initializeParameters()
         upperBounds[i] = distribution.getRange().getUpperBound()[0];
       else
         upperBounds[i] = distribution.computeQuantile(0.95)[0];
+
+      // check if the interval contains the starting point
+      if (!Interval(lowerBounds[i], upperBounds[i]).contains(Point(1, startingPoint_[i])))
+        startingPoint_[i] = (upperBounds[i] + lowerBounds[i]) * 0.5;
     }
   }
   bounds_.setLowerBound(lowerBounds);
@@ -202,17 +206,28 @@ void OptimizationAnalysis::initialize()
 
 void OptimizationAnalysis::launch()
 {
+  const UnsignedInteger nbInputs = getPhysicalModel().getInputDimension();
+  // check
   if (getInterestVariables().getSize() != 1)
     throw InvalidArgumentException(HERE) << "Specify one variable to optimize";
   if (startingPoint_.getDimension() != getPhysicalModel().getInputs().getSize())
     throw InvalidArgumentException(HERE) << "Invalid starting point";
+  if (!variableInputs_.getSize())
+    throw InvalidArgumentException(HERE) << "No variable to optimize";
+  for (UnsignedInteger i = 0; i < variableInputs_.getSize(); ++i)
+  {
+    if (!getPhysicalModel().hasInputNamed(variableInputs_[i]))
+      throw InvalidArgumentException(HERE) << "The physical model does not contain an input variable named " << variableInputs_[i];
+  }
 
-  const UnsignedInteger nbInputs = getPhysicalModel().getInputNames().getSize();
-
-  // get objective
+  // get bounds and fixed inputs values
   Indices fixedInputsIndices;
   Point fixedInputsValues;
   Point variableInputsValues;
+  Point lowerB;
+  Point upperB;
+  Interval::BoolCollection finiteLowerB;
+  Interval::BoolCollection finiteUpperB;
   for (UnsignedInteger i = 0; i < nbInputs; ++i)
   {
     if (!variableInputs_.contains(getPhysicalModel().getInputNames()[i]))
@@ -221,44 +236,34 @@ void OptimizationAnalysis::launch()
       fixedInputsValues.add(startingPoint_[i]);
     }
     else
+    {
       variableInputsValues.add(startingPoint_[i]);
+      lowerB.add(getBounds().getLowerBound()[i]);
+      upperB.add(getBounds().getUpperBound()[i]);
+      finiteLowerB.add(getBounds().getFiniteLowerBound()[i]);
+      finiteUpperB.add(getBounds().getFiniteUpperBound()[i]);
+    }
   }
+  // check bounds
+  Interval bounds(lowerB, upperB, finiteLowerB, finiteUpperB);
+  if (bounds.isEmpty())
+    throw InvalidArgumentException(HERE) << "The lower bounds must be inferior to the upper bounds";
 
+  // set objective
   Function objective = getPhysicalModel().getFunction(getInterestVariables());
   if (fixedInputsIndices.getSize())
     objective = ParametricFunction(objective, fixedInputsIndices, fixedInputsValues);
 
   // set OptimizationProblem
-  OptimizationProblem problem(objective);
+  OptimizationProblem problem(objective, Function(), Function(), bounds);
   problem.setMinimization(isMinimization_);
-
-  Interval bounds(getBounds());
-  if (fixedInputsIndices.getSize())
-  {
-    Point lowerB(getBounds().getDimension() - fixedInputsIndices.getSize());
-    Point upperB(getBounds().getDimension() - fixedInputsIndices.getSize());
-    Interval::BoolCollection finiteLowerB(getBounds().getDimension() - fixedInputsIndices.getSize());
-    Interval::BoolCollection finiteUpperB(getBounds().getDimension() - fixedInputsIndices.getSize());
-    for (UnsignedInteger i = 0; i < nbInputs; ++i)
-    {
-      if (variableInputs_.contains(getPhysicalModel().getInputNames()[i]))
-      {
-        lowerB[i] = getBounds().getLowerBound()[i];
-        upperB[i] = getBounds().getUpperBound()[i];
-        finiteLowerB[i] = getBounds().getFiniteLowerBound()[i];
-        finiteUpperB[i] = getBounds().getFiniteUpperBound()[i];
-      }
-    }
-    bounds = Interval(lowerB, upperB, finiteLowerB, finiteUpperB);
-  }
-  problem.setBounds(bounds);
 
   // build solver
   OptimizationAlgorithm solver(OptimizationAlgorithm::Build(solverName_));
   solver.setProblem(problem);
   solver.setStartingPoint(variableInputsValues);
-
-  solver.setMaximumIterationNumber(getMaximumIterationNumber());
+  solver.getImplementation().get()->setMaximumEvaluationNumber(getMaximumEvaluationNumber()); // TODO with future OT : remove it
+  solver.setMaximumIterationNumber(getMaximumEvaluationNumber());
   solver.setMaximumAbsoluteError(getMaximumAbsoluteError());
   solver.setMaximumRelativeError(getMaximumRelativeError());
   solver.setMaximumResidualError(getMaximumResidualError());
@@ -324,16 +329,16 @@ void OptimizationAnalysis::setStartingPoint(const Point & startingPoint)
 
 
 /* Maximum iterations number accessor */
-UnsignedInteger OptimizationAnalysis::getMaximumIterationNumber() const
+UnsignedInteger OptimizationAnalysis::getMaximumEvaluationNumber() const
 {
-  return maximumIterationNumber_;
+  return maximumEvaluationNumber_;
 }
 
 
 /* Maximum iterations number accessor */
-void OptimizationAnalysis::setMaximumIterationNumber(const UnsignedInteger maximumIterationNumber)
+void OptimizationAnalysis::setMaximumEvaluationNumber(const UnsignedInteger maximumEvaluationNumber)
 {
-  maximumIterationNumber_ = maximumIterationNumber;
+  maximumEvaluationNumber_ = maximumEvaluationNumber;
 }
 
 
@@ -425,7 +430,7 @@ Parameters OptimizationAnalysis::getParameters() const
   param.add("Output of interest", getInterestVariables().__str__());
   param.add("Solver", getSolverName());
   param.add("Optimization type", getMinimization() ? "Minimization" : "Maximization");
-  param.add("Maximum iterations number", getMaximumIterationNumber());
+  param.add("Maximum number of function evaluations", getMaximumEvaluationNumber());
   param.add("Maximum absolute error", getMaximumAbsoluteError());
   param.add("Maximum relative error", getMaximumRelativeError());
   param.add("Maximum residual error", getMaximumResidualError());
@@ -435,15 +440,15 @@ Parameters OptimizationAnalysis::getParameters() const
   Description fixedInputs;
   Description varInputs;
   Point startingPoint;
-  for (UnsignedInteger i = 0; i < getPhysicalModel().getInputNames().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++i)
   {
-    if (!variableInputs_.contains(getPhysicalModel().getInputNames()[i]))
+    if (!variableInputs_.contains(inputNames_[i]))
     {
-      fixedInputs.add(OSS() << getPhysicalModel().getInputNames()[i] << " : " << startingPoint_[i]);
+      fixedInputs.add(OSS() << inputNames_[i] << " : " << startingPoint_[i]);
     }
     else
     {
-      varInputs.add(getPhysicalModel().getInputNames()[i] + " : " + allInputsBoundsStr[i]);
+      varInputs.add(inputNames_[i] + " : " + allInputsBoundsStr[i]);
       startingPoint.add(startingPoint_[i]);
     }
   }
@@ -480,7 +485,7 @@ String OptimizationAnalysis::getPythonScript() const
   oss << getName() << ".setStartingPoint(" << getStartingPoint().__str__() << ")\n";
   oss << getName() << ".setVariableInputs(" << Parameters::GetOTDescriptionStr(getVariableInputs()) << ")\n";
 
-  oss << getName() << ".setMaximumIterationNumber(" << getMaximumIterationNumber() << ")\n";
+  oss << getName() << ".setMaximumEvaluationNumber(" << getMaximumEvaluationNumber() << ")\n";
   oss << getName() << ".setMaximumAbsoluteError(" << getMaximumAbsoluteError() << ")\n";
   oss << getName() << ".setMaximumRelativeError(" << getMaximumRelativeError() << ")\n";
   oss << getName() << ".setMaximumResidualError(" << getMaximumResidualError() << ")\n";
@@ -506,7 +511,7 @@ String OptimizationAnalysis::__repr__() const
       << " algorithmName=" << getSolverName()
       << " isMinimization=" << getMinimization()
       << " starting point=" << getStartingPoint()
-      << " maximumIterationNumber=" << getMaximumIterationNumber()
+      << " maximumEvaluationNumber=" << getMaximumEvaluationNumber()
       << " maximumAbsoluteError=" << getMaximumAbsoluteError()
       << " maximumRelativeError=" << getMaximumRelativeError()
       << " maximumResidualError=" << getMaximumResidualError()
@@ -521,10 +526,11 @@ String OptimizationAnalysis::__repr__() const
 void OptimizationAnalysis::save(Advocate & adv) const
 {
   PhysicalModelAnalysis::save(adv);
+  adv.saveAttribute("inputNames_", inputNames_);
   adv.saveAttribute("solverName_", solverName_);
   adv.saveAttribute("isMinimization_", isMinimization_);
   adv.saveAttribute("startingPoint_", startingPoint_);
-  adv.saveAttribute("maximumIterationNumber_", maximumIterationNumber_);
+  adv.saveAttribute("maximumEvaluationNumber_", maximumEvaluationNumber_);
   adv.saveAttribute("maximumAbsoluteError_", maximumAbsoluteError_);
   adv.saveAttribute("maximumRelativeError_", maximumRelativeError_);
   adv.saveAttribute("maximumResidualError_", maximumResidualError_);
@@ -539,10 +545,11 @@ void OptimizationAnalysis::save(Advocate & adv) const
 void OptimizationAnalysis::load(Advocate & adv)
 {
   PhysicalModelAnalysis::load(adv);
+  adv.loadAttribute("inputNames_", inputNames_);
   adv.loadAttribute("solverName_", solverName_);
   adv.loadAttribute("isMinimization_", isMinimization_);
   adv.loadAttribute("startingPoint_", startingPoint_);
-  adv.loadAttribute("maximumIterationNumber_", maximumIterationNumber_);
+  adv.loadAttribute("maximumEvaluationNumber_", maximumEvaluationNumber_);
   adv.loadAttribute("maximumAbsoluteError_", maximumAbsoluteError_);
   adv.loadAttribute("maximumRelativeError_", maximumRelativeError_);
   adv.loadAttribute("maximumResidualError_", maximumResidualError_);
@@ -550,6 +557,5 @@ void OptimizationAnalysis::load(Advocate & adv)
   adv.loadAttribute("bounds_", bounds_);
   adv.loadAttribute("variableInputs_", variableInputs_);
   adv.loadAttribute("result_", result_);
-  inputNames_ = getPhysicalModel().getInputNames();
 }
 }

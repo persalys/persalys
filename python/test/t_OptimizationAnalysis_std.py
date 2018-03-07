@@ -26,7 +26,7 @@ analysis.setStartingPoint([0.5, 0.5])
 interval = ot.Interval([-5, 0], [5, 0])
 analysis.setBounds(interval)
 analysis.setVariableInputs(['X0'])
-analysis.setMaximumIterationNumber(150);
+analysis.setMaximumEvaluationNumber(150);
 analysis.setMaximumAbsoluteError(1e-6);
 analysis.setMaximumRelativeError(1e-6);
 analysis.setMaximumResidualError(1e-6);
@@ -40,7 +40,7 @@ result = analysis.getResult()
 print("result=", result)
 print("x=", result.getOptimalPoint())
 print("y=", result.getOptimalValue())
-otguibase.OTStudy.Add(myStudy)
+
 # script
 script = myStudy.getPythonScript()
 print(script)

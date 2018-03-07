@@ -78,6 +78,11 @@ void OptimizationWizard::buildInterface()
   }
 
   pageLayout->addWidget(inputsBox);
+  pageLayout->addStretch();
+
+  errorMessageLabel_ = new TemporaryLabel;
+  pageLayout->addWidget(errorMessageLabel_);
+  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
 
   setPage(1, page);
 
@@ -103,13 +108,13 @@ void OptimizationWizard::buildInterface()
   QGridLayout * stopCriteriaGroupBoxLayout = new QGridLayout(stopCriteriaGroupBox);
 
   // max number iterations
-  QLabel * label = new QLabel(tr("Number of iterations"));
+  QLabel * label = new QLabel(tr("Number of function evaluations"));
   stopCriteriaGroupBoxLayout->addWidget(label, 0, 0);
-  iterationsSpinBox_ = new UIntSpinBox;
-  label->setBuddy(iterationsSpinBox_);
-  iterationsSpinBox_->setRange(1, 2e9);
-  iterationsSpinBox_->setSingleStep(5);
-  stopCriteriaGroupBoxLayout->addWidget(iterationsSpinBox_, 0, 1);
+  evaluationSpinBox_ = new UIntSpinBox;
+  label->setBuddy(evaluationSpinBox_);
+  evaluationSpinBox_->setRange(1, 2e9);
+  evaluationSpinBox_->setSingleStep(5);
+  stopCriteriaGroupBoxLayout->addWidget(evaluationSpinBox_, 0, 1);
 
   // Absolute error
   label = new QLabel(tr("Absolute error"));
@@ -161,7 +166,7 @@ void OptimizationWizard::initialize(const Analysis& analysis)
     return;
 
   pbTypeComboBox_->setCurrentIndex(analysis_ptr->getMinimization() ? 0 : 1);
-  iterationsSpinBox_->setValue(analysis_ptr->getMaximumIterationNumber());
+  evaluationSpinBox_->setValue(analysis_ptr->getMaximumEvaluationNumber());
   absoluteErrSpinBox_->setValue(analysis_ptr->getMaximumAbsoluteError());
   relativeErrSpinBox_->setValue(analysis_ptr->getMaximumRelativeError());
   residualErrSpinBox_->setValue(analysis_ptr->getMaximumResidualError());
@@ -173,11 +178,11 @@ int OptimizationWizard::nextId() const
 {
   switch (currentId())
   {
-    case 0:
+    case 0: // method
       return 1;
-    case 1:
+    case 1: // starting point - bounds
       return 2;
-    default:
+    default: // optim parameters
       return -1;
   }
 }
@@ -192,7 +197,7 @@ Analysis OptimizationWizard::getAnalysis() const
 
   optim.setSolverName(introPage_->getSolverName());
   optim.setMinimization(pbTypeComboBox_->currentIndex() == 0 ? true : false);
-  optim.setMaximumIterationNumber(iterationsSpinBox_->value());
+  optim.setMaximumEvaluationNumber(evaluationSpinBox_->value());
   optim.setMaximumAbsoluteError(absoluteErrSpinBox_->value());
   optim.setMaximumRelativeError(relativeErrSpinBox_->value());
   optim.setMaximumResidualError(residualErrSpinBox_->value());
@@ -201,6 +206,43 @@ Analysis OptimizationWizard::getAnalysis() const
   optim.setInterestVariables(introPage_->getInterestVariables());
 
   return optim;
+}
+
+
+bool OptimizationWizard::validateCurrentPage()
+{
+  if (currentId() == 1)
+  {
+    Point variableInputsValues;
+    Point lowerB;
+    Point upperB;
+    Interval::BoolCollection finiteLowerB;
+    Interval::BoolCollection finiteUpperB;
+    Interval bounds(tableModel_->getAnalysis().getBounds());
+    for (UnsignedInteger i = 0; i < tableModel_->getAnalysis().getPhysicalModel().getInputDimension(); ++i)
+    {
+      if (tableModel_->getAnalysis().getVariableInputs().contains(tableModel_->getAnalysis().getPhysicalModel().getInputNames()[i]))
+      {
+        variableInputsValues.add(tableModel_->getAnalysis().getStartingPoint()[i]);
+        lowerB.add(bounds.getLowerBound()[i]);
+        upperB.add(bounds.getUpperBound()[i]);
+        finiteLowerB.add(bounds.getFiniteLowerBound()[i]);
+        finiteUpperB.add(bounds.getFiniteUpperBound()[i]);
+      }
+    }
+    Interval varBounds(lowerB, upperB, finiteLowerB, finiteUpperB);
+    if (varBounds.isEmpty())
+    {
+      errorMessageLabel_->setTemporaryErrorMessage(tr("The lower bounds must be inferior to the upper bounds"));
+      return false;
+    }
+    if (!varBounds.contains(variableInputsValues))
+    {
+      errorMessageLabel_->setTemporaryErrorMessage(tr("The interval must contain the starting point"));
+      return false;
+    }
+  }
+  return true;
 }
 
 

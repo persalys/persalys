@@ -42,6 +42,7 @@ public:
 
   virtual int nextId() const;
   virtual Analysis getAnalysis() const;
+  virtual bool validateCurrentPage();
 
 protected:
   void buildInterface();
@@ -54,11 +55,12 @@ private:
   ResizableHeaderlessTableView * tableView_;
   OptimizationTableModel * tableModel_;
   QComboBox * pbTypeComboBox_;
-  UIntSpinBox * iterationsSpinBox_;
+  UIntSpinBox * evaluationSpinBox_;
   LogDoubleSpinBox * absoluteErrSpinBox_;
   LogDoubleSpinBox * relativeErrSpinBox_;
   LogDoubleSpinBox * residualErrSpinBox_;
   LogDoubleSpinBox * constraintErrSpinBox_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif

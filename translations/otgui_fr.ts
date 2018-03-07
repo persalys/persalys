@@ -2592,16 +2592,16 @@ bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/IntroOptimizationPage.cxx" line="59"/>
-        <source>Open the NLopt documentation</source>
-        <translation>Ouvrir la documentation de NLopt</translation>
+        <source>Open the OpenTURNS documentation</source>
+        <translation>Ouvrir la documentation OpenTURNS</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/IntroOptimizationPage.cxx" line="76"/>
+        <location filename="../lib/src/view/IntroOptimizationPage.cxx" line="77"/>
         <source>Method</source>
         <translation>Méthode</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/IntroOptimizationPage.cxx" line="148"/>
+        <location filename="../lib/src/view/IntroOptimizationPage.cxx" line="150"/>
         <source>Only one output must be selected</source>
         <translation>Seulement une sortie doit être sélectionnée</translation>
     </message>
@@ -4070,78 +4070,73 @@ ou interaction</translation>
     </message>
     <message>
         <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="128"/>
-        <source>Iterations number</source>
-        <translation>Nombre d&apos;itérations</translation>
+        <source>Number of function evaluations</source>
+        <translation>Nombre d&apos;évaluations</translation>
     </message>
     <message>
         <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="129"/>
-        <source>Calls number</source>
-        <translation>Nombre d&apos;appels</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="130"/>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="185"/>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="183"/>
         <source>Absolute error</source>
         <translation>Erreur absolue</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="131"/>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="186"/>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="130"/>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="184"/>
         <source>Relative error</source>
         <translation>Erreur relative</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="132"/>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="187"/>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="131"/>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="185"/>
         <source>Residual error</source>
         <translation>Erreur sur les résidus</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="133"/>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="188"/>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="132"/>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="186"/>
         <source>Constraint error</source>
         <translation>Erreur sur la contrainte</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="150"/>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="148"/>
         <source>Result</source>
         <translation>Résultat</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="166"/>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="164"/>
         <source>Optimal value convergence graph</source>
         <translation>Graphique de convergence de la valeur optimale</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="167"/>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="177"/>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="165"/>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="175"/>
         <source>Optimal value</source>
         <translation>Valeur optimale</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="168"/>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="192"/>
-        <source>Iteration</source>
-        <translation>Itération</translation>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="166"/>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="190"/>
+        <source>Number of evaluations</source>
+        <translation>Nombre d&apos;évaluations</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="190"/>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="188"/>
         <source>Error convergence graph</source>
         <translation>Graphique de convergence de l&apos;erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="191"/>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="205"/>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="189"/>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="203"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="207"/>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="205"/>
         <source>Convergence</source>
         <translation>Convergence</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="212"/>
+        <location filename="../lib/src/view/OptimizationResultWindow.cxx" line="210"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -4174,14 +4169,24 @@ ou interaction</translation>
         <translation>Borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="236"/>
-        <source>The lower bound must be inferior to the upper bound</source>
-        <translation>La borne inférieure doit être inférieure à la borne supérieure</translation>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="229"/>
+        <source>Input %1 : The starting value must be inferior to the upper bound</source>
+        <translation>Entrée %1 : La valeur de départ doit être inférieure à la borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="254"/>
-        <source>The upper bound must be superior to the lower bound</source>
-        <translation>La borne supérieure doit être supérieure à la borne inférieure</translation>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="234"/>
+        <source>Input %1 : The starting value must be superior to the lower bound</source>
+        <translation>Entrée %1 : La valeur de départ doit être supérieure à la borne inférieure</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="247"/>
+        <source>Input %1 : The lower bound must be inferior to the upper bound</source>
+        <translation>Entrée %1 : La borne inférieure doit être inférieure à la borne supérieure</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="265"/>
+        <source>Input %1 : The upper bound must be superior to the lower bound</source>
+        <translation>Entrée %1 : La borne supérieure doit être supérieure à la borne inférieure</translation>
     </message>
 </context>
 <context>
@@ -4192,57 +4197,67 @@ ou interaction</translation>
         <translation>Optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="62"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="58"/>
         <source>Inputs</source>
         <translation>Entrées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="91"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="95"/>
         <source>Parameter</source>
         <translation>Paramètre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="94"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="98"/>
         <source>Problem type</source>
         <translation>Type d&apos;optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="97"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="101"/>
         <source>Minimization</source>
         <translation>Minimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="97"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="101"/>
         <source>Maximization</source>
         <translation>Maximisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="103"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="107"/>
         <source>Stop criteria</source>
         <translation>Critère d&apos;arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="107"/>
-        <source>Number of iterations</source>
-        <translation>Nombre d&apos;itérations</translation>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="111"/>
+        <source>Number of function evaluations</source>
+        <translation>Nombre d&apos;évaluations</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="116"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="236"/>
+        <source>The lower bounds must be inferior to the upper bounds</source>
+        <translation>Les bornes inférieures doivent être inférieures aux bornes supérieures</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="241"/>
+        <source>The interval must contain the starting point</source>
+        <translation>L&apos;interval doit contenir le point de départ</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="120"/>
         <source>Absolute error</source>
         <translation>Erreur absolue</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="124"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="128"/>
         <source>Relative error</source>
         <translation>Erreur relative</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="132"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="136"/>
         <source>Residual error</source>
         <translation>Erreur sur les résidus</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="140"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="144"/>
         <source>Constraint error</source>
         <translation>Erreur sur la contrainte</translation>
     </message>
