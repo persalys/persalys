@@ -42,6 +42,7 @@ public slots:
 #ifdef OTGUI_HAVE_OTMORRIS
   void createScreening();
 #endif
+  void createOptimization();
   void updateProbaActionAvailability();
 signals:
   void probabilisticModelRequested(PhysicalModelItem*);
@@ -58,6 +59,7 @@ private:
   QAction * newProbabilisticModel_;
   QAction * newModelEvaluation_;
   QAction * newScreening_;
+  QAction * newOptimization_;
   QAction * newDesignOfExperiment_;
 };
 }

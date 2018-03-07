@@ -1,0 +1,40 @@
+class=OptimizationAnalysis name=optim physicalModel=aModelPhys algorithmName=Cobyla isMinimization=true starting point=class=Point name=Unnamed dimension=2 values=[0.5,0.5] maximumEvaluationNumber=150 maximumAbsoluteError=1e-06 maximumRelativeError=1e-06 maximumResidualError=1e-06 maximumConstraintError=1e-06 bounds=[[-5, 5],[0, 0]] variable inputs=[X0]
+result= class=OptimizationResult optimal point=class=Point name=Unnamed dimension=1 values=[5] optimal value=class=Point name=Unnamed dimension=1 values=[578] iterationNumber=62 absoluteError=2.28882e-06 relativeError=4.57764e-07 residualError=5.22959e-12 constraintError=0 lagrangeMultipliers=class=Point name=Unnamed dimension=2 values=[0,-1.06581e-14] problem=class=OptimizationProblem implementation=class=OptimizationProblemImplementation objective=class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[X0,y0] evaluationImplementation=class=ParametricEvaluation function=class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[X0,X1,y0] evaluationImplementation=class=SymbolicEvaluation name=Unnamed inputVariablesNames=[X0,X1] outputVariablesNames=[y0] formulas=[3*(X0-5)^2 + 8*(X1+8)^2] gradientImplementation=class=SymbolicGradient name=Unnamed evaluation=class=SymbolicEvaluation name=Unnamed inputVariablesNames=[X0,X1] outputVariablesNames=[y0] formulas=[3*(X0-5)^2 + 8*(X1+8)^2] hessianImplementation=class=SymbolicHessian name=Unnamed evaluation=class=SymbolicEvaluation name=Unnamed inputVariablesNames=[X0,X1] outputVariablesNames=[y0] formulas=[3*(X0-5)^2 + 8*(X1+8)^2] parameters positions=[1] parameters=class=PointWithDescription name=Unnamed dimension=1 description=[X1] values=[0.5] input positions=[0] gradientImplementation=class=ParametricGradient evaluation=class=ParametricEvaluation function=class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[X0,X1,y0] evaluationImplementation=class=SymbolicEvaluation name=Unnamed inputVariablesNames=[X0,X1] outputVariablesNames=[y0] formulas=[3*(X0-5)^2 + 8*(X1+8)^2] gradientImplementation=class=SymbolicGradient name=Unnamed evaluation=class=SymbolicEvaluation name=Unnamed inputVariablesNames=[X0,X1] outputVariablesNames=[y0] formulas=[3*(X0-5)^2 + 8*(X1+8)^2] hessianImplementation=class=SymbolicHessian name=Unnamed evaluation=class=SymbolicEvaluation name=Unnamed inputVariablesNames=[X0,X1] outputVariablesNames=[y0] formulas=[3*(X0-5)^2 + 8*(X1+8)^2] parameters positions=[1] parameters=class=PointWithDescription name=Unnamed dimension=1 description=[X1] values=[0.5] input positions=[0] hessianImplementation=class=ParametricHessian evaluation=class=ParametricEvaluation function=class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[X0,X1,y0] evaluationImplementation=class=SymbolicEvaluation name=Unnamed inputVariablesNames=[X0,X1] outputVariablesNames=[y0] formulas=[3*(X0-5)^2 + 8*(X1+8)^2] gradientImplementation=class=SymbolicGradient name=Unnamed evaluation=class=SymbolicEvaluation name=Unnamed inputVariablesNames=[X0,X1] outputVariablesNames=[y0] formulas=[3*(X0-5)^2 + 8*(X1+8)^2] hessianImplementation=class=SymbolicHessian name=Unnamed evaluation=class=SymbolicEvaluation name=Unnamed inputVariablesNames=[X0,X1] outputVariablesNames=[y0] formulas=[3*(X0-5)^2 + 8*(X1+8)^2] parameters positions=[1] parameters=class=PointWithDescription name=Unnamed dimension=1 description=[X1] values=[0.5] input positions=[0] equality constraint=none inequality constraint=none bounds=class=Interval name=Unnamed dimension=1 lower bound=class=Point name=Unnamed dimension=1 values=[-5] upper bound=class=Point name=Unnamed dimension=1 values=[5] finite lower bound=[1] finite upper bound=[1] minimization=true dimension=1
+x= [5]
+y= [578]
+#!/usr/bin/env python
+# coding: utf-8
+
+from __future__ import print_function
+import openturns as ot
+import otguibase
+
+myStudy = otguibase.OTStudy('myStudy')
+otguibase.OTStudy.Add(myStudy)
+dist_X0 = ot.Normal(1, 1)
+X0 = otguibase.Input('X0', 0, dist_X0, '')
+dist_X1 = ot.Normal(1, 1)
+X1 = otguibase.Input('X1', 0, dist_X1, '')
+fake_Y0 = otguibase.Output('fake_Y0', '')
+fake_Y0.setIsSelected(False)
+Y0 = otguibase.Output('Y0', '')
+inputs = [X0, X1]
+outputs = [fake_Y0, Y0]
+formulas = ['X0', '3*(X0-5)^2 + 8*(X1+8)^2']
+aModelPhys = otguibase.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
+myStudy.add(aModelPhys)
+optim = otguibase.OptimizationAnalysis('optim', aModelPhys, 'Cobyla')
+interestVariables = ['Y0']
+optim.setInterestVariables(interestVariables)
+optim.setMinimization(True)
+bounds = ot.Interval([-5,0], [5,0], [True, True], [True, True])
+optim.setBounds(bounds)
+optim.setStartingPoint([0.5,0.5])
+optim.setVariableInputs(['X0'])
+optim.setMaximumEvaluationNumber(150)
+optim.setMaximumAbsoluteError(1e-06)
+optim.setMaximumRelativeError(1e-06)
+optim.setMaximumResidualError(1e-06)
+optim.setMaximumConstraintError(1e-06)
+myStudy.add(optim)
+

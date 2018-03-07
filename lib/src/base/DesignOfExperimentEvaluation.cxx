@@ -94,7 +94,7 @@ void DesignOfExperimentEvaluation::launch()
 
   if (getBlockSize() > inputSampleSize)
     throw InvalidValueException(HERE) << "The block size (" << getBlockSize()
-                                      << ") can not be superior to the input sample size (" << inputSampleSize << ")";
+                                      << ") can not be greater than the input sample size (" << inputSampleSize << ")";
 
   // input sample
   Sample inputSample = Sample(0, getOriginalInputSample().getDimension());

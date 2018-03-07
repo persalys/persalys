@@ -295,7 +295,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
         {
           if (value.toDouble() >= designOfExperiment_.getUpperBounds()[indexInput])
           {
-            emit errorMessageChanged(tr("The lower bound must be inferior to the upper bound"));
+            emit errorMessageChanged(tr("The lower bound must be lesser than the upper bound"));
             return false;
           }
           Point lowerBounds = designOfExperiment_.getLowerBounds();
@@ -316,7 +316,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
         {
           if (value.toDouble() <= designOfExperiment_.getLowerBounds()[indexInput])
           {
-            emit errorMessageChanged(tr("The upper bound must be superior to the lower bound"));
+            emit errorMessageChanged(tr("The upper bound must be greater than the lower bound"));
             return false;
           }
           Point upperBounds = designOfExperiment_.getUpperBounds();
@@ -374,7 +374,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
             }
             else
             {
-              emit errorMessageChanged(tr("Delta must be inferior to the upper bound - the lower bound"));
+              emit errorMessageChanged(tr("Delta must be lesser than the upper bound - the lower bound"));
               return false;
             }
             break;

@@ -30,6 +30,17 @@ Model evaluation
 
     ModelEvaluation
 
+Optimization
+------------
+
+.. currentmodule:: otguibase
+
+.. autosummary::
+    :toctree: _generated/
+    :template: class.rst_t
+
+    OptimizationAnalysis
+
 .. only:: otmorris
 
     Screening

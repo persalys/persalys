@@ -68,7 +68,7 @@ UnsignedInteger SimulationAnalysis::getBlockSize() const
 void SimulationAnalysis::setBlockSize(const UnsignedInteger size)
 {
   if (size < 1)
-    throw InvalidValueException(HERE) << "The block size must be superior to 0";
+    throw InvalidValueException(HERE) << "The block size must be greater than 0";
 
   blockSize_ = size;
 }

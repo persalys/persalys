@@ -128,7 +128,7 @@ void StudyManager::createOTStudyWindow(OTStudyItem* item)
     return;
 
   // connections
-  connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
+  connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(dataModelItemCreated(DataModelDiagramItem*)), this, SLOT(createDataModelDiagramWindow(DataModelDiagramItem*)));
   connect(item, SIGNAL(physicalModelItemCreated(PhysicalModelDiagramItem*)), this, SLOT(createPhysicalModelDiagramWindow(PhysicalModelDiagramItem*)));
   connect(item, SIGNAL(exportRequested()), this, SLOT(exportPythonScript()));
@@ -149,7 +149,7 @@ void StudyManager::createDataModelDiagramWindow(DataModelDiagramItem* item)
     return;
 
   // connections
-  connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
+  connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(changeCurrentItemRequested(QModelIndex)), mainWidget_->getStudyTree(), SLOT(setCurrentIndex(QModelIndex)));
   connect(item, SIGNAL(modelDefinitionWindowRequested(DataModelDefinitionItem*)), this, SLOT(createDataModelWindow(DataModelDefinitionItem*)));
   connect(item, SIGNAL(analysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
@@ -168,7 +168,7 @@ void StudyManager::createDataModelWindow(DataModelDefinitionItem* item)
     return;
 
   // connections
-  connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
+  connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis)), this, SLOT(openAnalysisWizard(OTguiItem*, Analysis)));
 
   // window
@@ -184,7 +184,7 @@ void StudyManager::createPhysicalModelDiagramWindow(PhysicalModelDiagramItem* it
     return;
 
   // connections
-  connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
+  connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(changeCurrentItemRequested(QModelIndex)), mainWidget_->getStudyTree(), SLOT(setCurrentIndex(QModelIndex)));
   connect(item, SIGNAL(modelDefinitionWindowRequested(PhysicalModelDefinitionItem*)), this, SLOT(createPhysicalModelWindow(PhysicalModelDefinitionItem*)));
   connect(item, SIGNAL(probabilisticModelItemCreated(ProbabilisticModelItem*)), this, SLOT(createProbabilisticModelWindow(ProbabilisticModelItem*)));
@@ -207,7 +207,7 @@ void StudyManager::createPhysicalModelWindow(PhysicalModelDefinitionItem* item)
     return;
 
   // connections
-  connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
+  connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(analysisRequested(OTguiItem*, const Analysis&)), this, SLOT(openAnalysisWizard(OTguiItem*, const Analysis&)));
 
   // window
@@ -223,7 +223,7 @@ void StudyManager::createProbabilisticModelWindow(ProbabilisticModelItem* item)
     return;
 
   // connections
-  connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
+  connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(analysisRequested(OTguiItem*, const Analysis&)), this, SLOT(openAnalysisWizard(OTguiItem*, const Analysis&)));
 
   // window
@@ -240,7 +240,7 @@ void StudyManager::createLimitStateWindow(LimitStateItem* item)
 
   // connections
   connect(item, SIGNAL(analysisRequested(OTguiItem*, const Analysis&)), this, SLOT(openAnalysisWizard(OTguiItem*, const Analysis&)));
-  connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
+  connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(analysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
 
   // window
@@ -260,7 +260,7 @@ void StudyManager::createDesignOfExperimentWindow(DesignOfExperimentDefinitionIt
   // connections
   if (createConnections)
   {
-    connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
+    connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
     connect(item, SIGNAL(modifyAnalysisRequested(DesignOfExperimentDefinitionItem*)), this, SLOT(modifyDesignOfExperiment(DesignOfExperimentDefinitionItem*)));
     connect(item, SIGNAL(analysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
     connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis)), this, SLOT(openAnalysisWizard(OTguiItem*, Analysis)));
@@ -283,7 +283,7 @@ void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createCon
   if (createConnections)
   {
     // connections
-    connect(item, SIGNAL(emitErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
+    connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
     connect(item, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
     connect(item, SIGNAL(analysisFinished(AnalysisItem*, bool)), this, SLOT(createAnalysisWindow(AnalysisItem*, bool)));
     connect(item, SIGNAL(modifyAnalysisRequested(AnalysisItem*)), this, SLOT(modifyAnalysis(AnalysisItem*)));

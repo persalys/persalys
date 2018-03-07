@@ -94,7 +94,7 @@ bool DataModelDefinitionItem::designOfExperimentValid()
 {
   if (!designOfExperiment_.getSample().getSize())
   {
-    emit emitErrorMessageRequested(tr("The sample is empty."));
+    emit showErrorMessageRequested(tr("The sample is empty."));
     return false;
   }
   return true;
@@ -136,7 +136,7 @@ void DataModelDefinitionItem::createCopulaInferenceAnalysis()
 
   if (designOfExperiment_.getInputSample().getDimension() < 2)
   {
-    emit emitErrorMessageRequested(tr("The model must contain at least two inputs."));
+    emit showErrorMessageRequested(tr("The model must contain at least two inputs."));
     return;
   }
 
@@ -153,7 +153,7 @@ void DataModelDefinitionItem::createMetaModel()
   // check
   if (!designOfExperiment_.getOutputSample().getSize())
   {
-    emit emitErrorMessageRequested(tr("The model must have at least one output."));
+    emit showErrorMessageRequested(tr("The model must have at least one output."));
     return;
   }
 

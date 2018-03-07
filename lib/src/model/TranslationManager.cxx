@@ -123,9 +123,14 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert(type("Sample size", tr("Sample size")));
   ParametersNames_.insert(type("Point", tr("Point")));
   ParametersNames_.insert(type("Outputs of interest", tr("Outputs of interest")));
-  ParametersNames_.insert(type("Output of interest", tr("Outputs of interest")));
+  ParametersNames_.insert(type("Output of interest", tr("Output of interest")));
   ParametersNames_.insert(type("Standardized Regression Coefficients", tr("Standardized Regression Coefficients")));
   ParametersNames_.insert(type("Optimization algorithm", tr("Optimization algorithm")));
+  ParametersNames_.insert(type("Optimization type", tr("Optimization type")));
+  ParametersNames_.insert(type("Fixed inputs", tr("Fixed inputs")));
+  ParametersNames_.insert(type("Solver", tr("Solver")));
+  ParametersNames_.insert(type("Analysis", tr("Analysis")));
+  ParametersNames_.insert(type("Starting point", tr("Starting point")));
   ParametersNames_.insert(type("Physical starting point", tr("Physical starting point")));
   ParametersNames_.insert(type("Maximum iterations number", tr("Maximum iterations number")));
   ParametersNames_.insert(type("Maximum absolute error", tr("Maximum absolute error")));

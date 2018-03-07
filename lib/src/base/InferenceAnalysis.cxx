@@ -148,7 +148,7 @@ void InferenceAnalysis::launch()
 {
   // check
   if (!getInterestVariables().getSize())
-    throw InvalidDimensionException(HERE) << "The number of variables to analyse must be superior to 0";
+    throw InvalidDimensionException(HERE) << "The number of variables to analyse must be greater than 0";
 
   std::map<String, DistributionFactoryCollection>::iterator it;
   for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)

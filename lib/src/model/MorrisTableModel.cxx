@@ -124,7 +124,7 @@ bool MorrisTableModel::setData(const QModelIndex & index, const QVariant & value
       {
         if (value.toDouble() >= analysis_.getBounds().getUpperBound()[inIndex])
         {
-          emit errorMessageChanged(tr("The lower bound must be inferior to the upper bound"));
+          emit errorMessageChanged(tr("The lower bound must be lesser than the upper bound"));
           return false;
         }
         Point lowerBounds = analysis_.getBounds().getLowerBound();
@@ -147,7 +147,7 @@ bool MorrisTableModel::setData(const QModelIndex & index, const QVariant & value
       {
         if (value.toDouble() <= analysis_.getBounds().getLowerBound()[inIndex])
         {
-          emit errorMessageChanged(tr("The upper bound must be superior to the lower bound"));
+          emit errorMessageChanged(tr("The upper bound must be greater than the lower bound"));
           return false;
         }
         Point upperBounds = analysis_.getBounds().getUpperBound();

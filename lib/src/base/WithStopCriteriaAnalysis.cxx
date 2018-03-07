@@ -85,7 +85,7 @@ UnsignedInteger WithStopCriteriaAnalysis::getMaximumElapsedTime() const
 void WithStopCriteriaAnalysis::setMaximumElapsedTime(const UnsignedInteger seconds)
 {
   if (seconds < 1)
-    throw InvalidValueException(HERE) << "The maximum elapsed time must be superior to 0 second";
+    throw InvalidValueException(HERE) << "The maximum elapsed time must be greater than 0 second";
   maximumElapsedTime_ = seconds;
 }
 

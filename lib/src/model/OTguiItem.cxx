@@ -122,6 +122,8 @@ QVariant OTguiItem::data(int role) const
         return QIcon(":/images/sensitivity.png");
       else if (QStandardItem::data(Qt::UserRole).toString() == "ReliabilityTitle")
         return QIcon(":/images/limitstate.png");
+      else if (QStandardItem::data(Qt::UserRole).toString() == "OptimizationTitle")
+        return QIcon(":/images/optimize.png");
     }
   }
   return QStandardItem::data(role);

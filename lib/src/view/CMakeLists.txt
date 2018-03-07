@@ -93,6 +93,9 @@ ot_add_source_file ( InferenceResultWidget.cxx )
 ot_add_source_file ( CopulaParametersTabWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWindow.cxx )
+ot_add_source_file ( IntroOptimizationPage.cxx )
+ot_add_source_file ( OptimizationWizard.cxx )
+ot_add_source_file ( OptimizationResultWindow.cxx )
 ot_add_source_file ( WidgetBoundToDockWidget.cxx )
 ot_add_source_file ( MarginalsWidget.cxx )
 ot_add_source_file ( DependenciesWidget.cxx )
@@ -194,6 +197,9 @@ ot_install_header_file ( ControllerWidget.hxx )
 ot_install_header_file ( CopulaInferenceResultWidget.hxx )
 ot_install_header_file ( CopulaInferenceResultWindow.hxx )
 ot_install_header_file ( CopulaParametersTabWidget.hxx )
+ot_install_header_file ( IntroOptimizationPage.hxx )
+ot_install_header_file ( OptimizationWizard.hxx )
+ot_install_header_file ( OptimizationResultWindow.hxx )
 ot_install_header_file ( WidgetBoundToDockWidget.hxx )
 ot_install_header_file ( MarginalsWidget.hxx )
 ot_install_header_file ( DependenciesWidget.hxx )
@@ -289,6 +295,9 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/CopulaInferenceResultWidget.hxx
                                   otgui/CopulaInferenceResultWindow.hxx
                                   otgui/CopulaParametersTabWidget.hxx
+                                  otgui/IntroOptimizationPage.hxx
+                                  otgui/OptimizationWizard.hxx
+                                  otgui/OptimizationResultWindow.hxx
                                   otgui/WidgetBoundToDockWidget.hxx
                                   otgui/MarginalsWidget.hxx
                                   otgui/DependenciesWidget.hxx

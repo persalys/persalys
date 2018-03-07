@@ -107,6 +107,18 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   boxWidth = std::max(boxWidth, doeCreationButton->width());
   boxHeight = std::max(boxHeight, doeCreationButton->height());
 
+  DiagramPushButton * optimizationCreationButton = new DiagramPushButton;
+  optimizationCreationButton->setText(tr("Optimization"));
+  optimizationCreationButton->setWhatsThis(tr("Optimization of the model function"));
+  optimizationCreationButton->setErrorMessage(tr("Define input and output variables in the model"));
+  QGraphicsProxyWidget * optimizationCreationProxy = new QGraphicsProxyWidget;
+  optimizationCreationProxy->setWidget(optimizationCreationButton);
+  scene->addItem(optimizationCreationProxy);
+  connect(optimizationCreationButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SIGNAL(optimizationRequested()));
+  connect(physicalModelDiagramItem, SIGNAL(physicalModelValidityChanged(bool)), optimizationCreationButton, SLOT(setEnabled(bool)));
+  boxWidth = std::max(boxWidth, optimizationCreationButton->width());
+  boxHeight = std::max(boxHeight, optimizationCreationButton->height());
+
   DiagramPushButton * probaModelButton = new DiagramPushButton;
   probaModelButton->setText(tr("Probabilistic\nmodel\ndefinition"));
   probaModelButton->setWhatsThis(tr("Define the stochastic input variables and the dependence"));
@@ -197,6 +209,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   modelEvaluationButton->resize(boxWidth, boxHeight);
   if (screeningButton)
     screeningButton->resize(boxWidth, boxHeight);
+  optimizationCreationButton->resize(boxWidth, boxHeight);
   doeCreationButton->resize(boxWidth, boxHeight);
   probaModelButton->resize(boxWidth, boxHeight);
   doeEvaluationButton->resize(boxWidth, boxHeight);
@@ -228,6 +241,9 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
     screeningProxy->setPos(column1pos, ++lineCounter * linePos);
 
   // ++line
+  optimizationCreationProxy->setPos(column1pos, ++lineCounter * linePos);
+
+  // ++line
   doeCreationProxy->setPos(column1pos, ++lineCounter * linePos);
   doeEvaluationProxy->setPos(column2pos, lineCounter * linePos);
   metamodelProxy->setPos(column3pos, lineCounter * linePos);
@@ -246,6 +262,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   // -- arrows positions --
   // arrows start points
   const int buttonMargin = 3;
+
   const QPointF deltaRight(boxWidth + buttonMargin, boxHeight * 0.5);
 
   const QPointF modelDefinition_rightPoint(deltaRight);
@@ -257,6 +274,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   // arrows ending points
   const QPointF deltaLeft(0, boxHeight * 0.5);
   const QPointF modelEval_leftPoint = modelEvaluationProxy->pos() + deltaLeft;
+  const QPointF optimizationCreation_leftPoint = optimizationCreationProxy->pos() + deltaLeft;
   const QPointF doeCreation_leftPoint = doeCreationProxy->pos() + deltaLeft;
   const QPointF probaModel_leftPoint = probaModelProxy->pos() + deltaLeft;
   const QPointF doeEval_leftPoint = doeEvaluationProxy->pos() + deltaLeft;
@@ -289,6 +307,11 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
       doeCreation_leftPoint);
   scene->addItem(modelDef_doeCreation);
   connect(doeCreationButton, SIGNAL(enabledChanged(bool)), modelDef_doeCreation, SLOT(setValidity(bool)));
+
+  // arrow model definition -> model optimization
+  Arrow * modelDef_optimizationCreation = new Arrow(modelDefinition_rightPoint, optimizationCreation_leftPoint);
+  scene->addItem(modelDef_optimizationCreation);
+  connect(optimizationCreationButton, SIGNAL(enabledChanged(bool)), modelDef_optimizationCreation, SLOT(setValidity(bool)));
 
   // arrow model definition -> proba model definition
   Arrow * modelDef_probaModel = new Arrow(modelDefinition_rightPoint,
@@ -344,6 +367,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   connect(modelEvaluationButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   if (screeningButton)
     connect(screeningButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
+  connect(optimizationCreationButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   connect(doeCreationButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   connect(probaModelButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   connect(doeEvaluationButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));

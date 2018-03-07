@@ -1,0 +1,275 @@
+%feature("docstring") OTGUI::OptimizationAnalysis
+"Optimization of a model.
+
+Parameters
+----------
+name : str
+    Name
+physicalModel : :class:`~otguibase.PhysicalModel`
+    Physical model
+solverName : str
+    Optimization algorithm name (optional). Use :func:`GetSolverNames()` to list available names.
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+
+Create the model:
+
+>>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
+>>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> G = otguibase.Output('G', 'deviation')
+>>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(_pi*100.0)'])
+
+Create the Model evaluation:
+
+>>> analysis = otguibase.OptimizationAnalysis('anAnalysis', myPhysicalModel, 'TNC')
+>>> analysis.setInterestVariables(['G'])
+>>> analysis.run()
+
+Get the result:
+
+>>> result = analysis.getResult()
+>>> x = result.getOptimalPoint()
+>>> y = result.getOptimalValue()"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::getMaximumAbsoluteError
+"Accessor to maximum allowed absolute error.
+
+Returns
+-------
+maximumAbsoluteError : float
+    Maximum allowed absolute error."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::getMaximumConstraintError
+"Accessor to maximum allowed constraint error.
+
+Returns
+-------
+maximumConstraintError : float
+    Maximum allowed constraint error."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::getMaximumEvaluationNumber
+"Accessor to maximum allowed number of evaluations.
+
+Returns
+-------
+N : int
+    Maximum allowed number of evaluations"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::getMaximumRelativeError
+"Accessor to maximum allowed relative error.
+
+Returns
+-------
+maximumRelativeError : float
+    Maximum allowed relative error."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::getMaximumResidualError
+"Accessor to maximum allowed residual error.
+
+Returns
+-------
+maximumResidualError : float
+    Maximum allowed residual error."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::getStartingPoint
+"Accessor to starting point.
+
+Returns
+-------
+startingPoint : :class:`~openturns.Point`
+    Starting point."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::setMaximumAbsoluteError
+"Accessor to maximum allowed absolute error.
+
+Parameters
+----------
+maximumAbsoluteError : float
+    Maximum allowed absolute error."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::setMaximumConstraintError
+"Accessor to maximum allowed constraint error.
+
+Parameters
+----------
+maximumConstraintError : float
+    Maximum allowed constraint error."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::setMaximumEvaluationNumber
+"Accessor to maximum allowed number of evaluations.
+
+Parameters
+----------
+N : int
+    Maximum allowed number of evaluations."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::setMaximumRelativeError
+"Accessor to maximum allowed relative error.
+
+Parameters
+----------
+maximumRelativeError : float
+    Maximum allowed relative error."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::setMaximumResidualError
+"Accessor to maximum allowed residual error.
+
+Parameters
+----------
+maximumResidualError : float
+    Maximum allowed residual error."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::setStartingPoint
+"Accessor to starting point.
+
+Parameters
+----------
+startingPoint : sequence of float
+    Starting point."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::getResult
+"Accessor to optimization result.
+
+Returns
+-------
+result : :class:`~openturns.OptimizationResult`
+    Result class."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::getBounds
+"Accessor to bounds.
+
+Returns
+-------
+bounds : :class:`~openturns.Interval`
+    Problem bounds."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::getMinimization
+"Test whether this is a minimization or maximization problem.
+
+Returns
+-------
+value : bool
+    *True* if this is a minimization problem (default), *False* otherwise."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::setBounds
+"Accessor to bounds.
+
+Parameters
+----------
+bounds : :class:`~openturns.Interval`
+    Problem bounds."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::setMinimization
+"Tell whether this is a minimization or maximization problem.
+
+Parameters
+----------
+minimization : bool
+    *True* if this is a minimization problem, *False* otherwise."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::getSolverName
+"Accessor to solver name
+
+Returns
+-------
+solver : str
+    Solver name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::setSolverName
+"Accessor to solver name
+
+Parameters
+----------
+solver : str
+    Solver name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::getSolverName
+"Accessor to solver name
+
+Returns
+-------
+solver : str
+    Solver name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::setSolverName
+"Accessor to solver name
+
+Parameters
+----------
+solver : str
+    Solver name. Use :func:`GetSolverNames()` to list available names."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::GetSolverNames
+"Accessor to the list of solver names.
+
+Returns
+-------
+names : :class:`~openturns.Description`
+    List of available solver names."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::getVariableInputs
+"Accessor to variable input names
+
+Returns
+-------
+inputs : :class:`~openturns.Description`
+    Variable input names. It is set by default to the list of inputs of the model."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::OptimizationAnalysis::setVariableInputs
+"Accessor to variable input names
+
+Parameters
+----------
+inputs : sequence of str
+    Variable input names. It is set by default to the list of inputs of the model."

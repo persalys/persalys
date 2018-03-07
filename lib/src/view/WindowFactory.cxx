@@ -33,6 +33,7 @@
 #include "otgui/DesignOfExperimentWindow.hxx"
 #include "otgui/DataAnalysisResultWindow.hxx"
 #include "otgui/ModelEvaluationResultWindow.hxx"
+#include "otgui/OptimizationResultWindow.hxx"
 #include "otgui/MonteCarloResultWindow.hxx"
 #include "otgui/TaylorExpansionMomentsResultWindow.hxx"
 #include "otgui/SobolResultWindow.hxx"
@@ -51,6 +52,7 @@
 #include "otgui/InferenceWizard.hxx"
 #include "otgui/DesignOfExperimentWizard.hxx"
 #include "otgui/ModelEvaluationWizard.hxx"
+#include "otgui/OptimizationWizard.hxx"
 #include "otgui/CentralTendencyWizard.hxx"
 #include "otgui/SensitivityAnalysisWizard.hxx"
 #include "otgui/ReliabilityAnalysisWizard.hxx"
@@ -115,6 +117,10 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
     wizard = new ScreeningAnalysisWizard(analysis, parent);
   }
 #endif
+  else if (analysisType == "OptimizationAnalysis")
+  {
+    wizard = new OptimizationWizard(analysis, parent);
+  }
   else if (analysisType == "FunctionalChaosAnalysis" ||
            analysisType == "KrigingAnalysis")
   {
@@ -177,6 +183,10 @@ OTguiSubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * p
     resultWindow = new MorrisResultWindow(item, parent);
   }
 #endif
+  else if (analysisType == "OptimizationAnalysis")
+  {
+    resultWindow = new OptimizationResultWindow(item, parent);
+  }
   else if (analysisType == "MonteCarloAnalysis")
   {
     resultWindow = new MonteCarloResultWindow(item, parent);

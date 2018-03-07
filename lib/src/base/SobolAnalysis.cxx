@@ -105,7 +105,7 @@ void SobolAnalysis::launch()
   // check
   if (getMaximumCalls() < (getBlockSize() * (getPhysicalModel().getStochasticInputNames().getSize() + 2)))
     throw InvalidValueException(HERE) << "The block size (" << getBlockSize()
-                                      << ") can not be superior to: max_calls (" << getMaximumCalls()
+                                      << ") can not be greater than: max_calls (" << getMaximumCalls()
                                       << ") / (number_of_inputs (" << getPhysicalModel().getStochasticInputNames().getSize()
                                       << ") + 2)="
                                       << (getMaximumCalls() / (getPhysicalModel().getStochasticInputNames().getSize() + 2));

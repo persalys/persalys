@@ -69,6 +69,7 @@ signals:
   // signals for StudyManager
   void evaluationModelRequested();
   void screeningRequested();
+  void optimizationRequested();
   void probabilisticModelRequested();
   void centralTendencyRequested();
   void sensitivityRequested();

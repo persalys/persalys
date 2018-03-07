@@ -165,7 +165,7 @@ void ImportDesignOfExperimentPage::setTable(const QString& fileName)
   const Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
 
   if (sample.getDimension() < inputNames.getSize())
-    throw InvalidArgumentException(HERE) << tr("The file contains a sample with a dimension inferior to the number of inputs of the physical model:").toLocal8Bit().data()
+    throw InvalidArgumentException(HERE) << tr("The file contains a sample with a dimension lesser than the number of inputs of the physical model:").toLocal8Bit().data()
                                          << " " << inputNames.getSize();
 
   // set inputs columns indices

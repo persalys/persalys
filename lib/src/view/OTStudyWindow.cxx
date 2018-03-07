@@ -89,8 +89,9 @@ void OTStudyWindow::buildInterface()
   layout->addWidget(textEdit, row, 0);
 
   textEdit = new QLabel;
-  QString text = QString("- %1\n- %2\n- %3\n- %4\n- %5\n- %6")
+  QString text = QString("- %1\n- %2\n- %3\n- %4\n- %5\n- %6\n- %7")
                     .arg(tr("Evaluation"))
+                    .arg(tr("Optimization"))
                     .arg(tr("Design of experiments"))
                     .arg(tr("Central tendency"))
                     .arg(tr("Sensitivity"))

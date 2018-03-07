@@ -138,7 +138,7 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
   // check
   if (!getOriginalInputSample().getSize())
   {
-    emit emitErrorMessageRequested(tr("The input sample is empty."));
+    emit showErrorMessageRequested(tr("The input sample is empty."));
     return;
   }
   // check if there is already an Evaluation item
@@ -237,7 +237,7 @@ void DesignOfExperimentDefinitionItem::createEvaluation()
   // check
   if (!getOriginalInputSample().getSize())
   {
-    emit emitErrorMessageRequested(tr("The input sample is empty."));
+    emit showErrorMessageRequested(tr("The input sample is empty."));
     return;
   }
 
@@ -251,13 +251,13 @@ void DesignOfExperimentDefinitionItem::removeAnalysis()
   // check if the analysis is running
   if (analysis_.isRunning())
   {
-    emit emitErrorMessageRequested(tr("Can not remove a running analysis."));
+    emit showErrorMessageRequested(tr("Can not remove a running analysis."));
     return;
   }
   // check
   if (analysisInProgress_)
   {
-    emit emitErrorMessageRequested(tr("Can not remove a design of experiments when an analysis is running."));
+    emit showErrorMessageRequested(tr("Can not remove a design of experiments when an analysis is running."));
     return;
   }
 
@@ -272,14 +272,14 @@ void DesignOfExperimentDefinitionItem::createMetaModel()
   // check
   if (!getAnalysis().hasValidResult())
   {
-    emit emitErrorMessageRequested(tr("The model must have at least one output. Evaluate the design of experiments"));
+    emit showErrorMessageRequested(tr("The model must have at least one output. Evaluate the design of experiments"));
     return;
   }
   const DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(analysis_.getImplementation().get());
   Q_ASSERT(doeEval);
   if (doeEval->getDesignOfExperiment().getSample().getSize() < 2)
   {
-    emit emitErrorMessageRequested(tr("The design of experiments must contain at least two points."));
+    emit showErrorMessageRequested(tr("The design of experiments must contain at least two points."));
     return;
   }
 
