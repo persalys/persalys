@@ -438,7 +438,7 @@ Parameters OptimizationAnalysis::getParameters() const
 
   Description allInputsBoundsStr = Parameters::GetOTIntervalDescription(getBounds());
   Description fixedInputs;
-  Description varInputs;
+  String varInputs;
   Point startingPoint;
   for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++i)
   {
@@ -448,12 +448,14 @@ Parameters OptimizationAnalysis::getParameters() const
     }
     else
     {
-      varInputs.add(inputNames_[i] + " : " + allInputsBoundsStr[i]);
+      varInputs += inputNames_[i] + " : " + allInputsBoundsStr[i];
       startingPoint.add(startingPoint_[i]);
+      if (startingPoint.getSize() <  variableInputs_.getSize())
+        varInputs += "\n";
     }
   }
   param.add("Starting point", startingPoint);
-  param.add("Bounds", varInputs.__str__());
+  param.add("Bounds", varInputs);
   if (fixedInputs.getSize())
     param.add("Fixed inputs", fixedInputs.__str__());
 
