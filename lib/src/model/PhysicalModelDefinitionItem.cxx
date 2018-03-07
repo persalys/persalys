@@ -157,7 +157,7 @@ void PhysicalModelDefinitionItem::createProbabilisticModel()
   // check
   if (!physicalModel_.getInputDimension())
   {
-    emit emitErrorMessageRequested(tr("The physical model must have inputs."));
+    emit showErrorMessageRequested(tr("The physical model must have inputs."));
     return;
   }
   // emit signal to StudyManager to create a window
@@ -170,7 +170,7 @@ void PhysicalModelDefinitionItem::createModelEvaluation()
   // check
   if (!physicalModel_.isValid())
   {
-    emit emitErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
+    emit showErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
     return;
   }
 
@@ -188,7 +188,7 @@ void PhysicalModelDefinitionItem::createScreening()
   // check
   if (!physicalModel_.isValid() || physicalModel_.getInputDimension() < 2)
   {
-    emit emitErrorMessageRequested(tr("The physical model must have at least two inputs and at least one selected output."));
+    emit showErrorMessageRequested(tr("The physical model must have at least two inputs and at least one selected output."));
     return;
   }
 
@@ -206,7 +206,7 @@ void PhysicalModelDefinitionItem::createOptimization()
   // check
   if (!physicalModel_.isValid())
   {
-    emit emitErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
+    emit showErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
     return;
   }
 
@@ -222,7 +222,7 @@ void PhysicalModelDefinitionItem::createDesignOfExperiment()
   // check
   if (!physicalModel_.getInputDimension())
   {
-    emit emitErrorMessageRequested(tr("The physical model must have inputs."));
+    emit showErrorMessageRequested(tr("The physical model must have inputs."));
     return;
   }
 

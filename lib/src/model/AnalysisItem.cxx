@@ -172,7 +172,7 @@ void AnalysisItem::modifyAnalysis()
   // check if the analysis is running
   if (analysis_.isRunning())
   {
-    emit emitErrorMessageRequested(tr("Can not modify a running analysis."));
+    emit showErrorMessageRequested(tr("Can not modify a running analysis."));
     return;
   }
 
@@ -187,7 +187,7 @@ void AnalysisItem::modifyAnalysis()
     // must have in/outputs
     if (!pmAnalysis_ptr->getPhysicalModel().isValid())
     {
-      emit emitErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
+      emit showErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
       return;
     }
     // if proba analysis
@@ -199,7 +199,7 @@ void AnalysisItem::modifyAnalysis()
       // must have stochastic variables
       if (!pmAnalysis_ptr->getPhysicalModel().hasStochasticInputs())
       {
-        emit emitErrorMessageRequested(tr("The physical model must have stochastic inputs."));
+        emit showErrorMessageRequested(tr("The physical model must have stochastic inputs."));
         return;
       }
       // if sensitivity analysis
@@ -208,7 +208,7 @@ void AnalysisItem::modifyAnalysis()
         // must have an independent copula
         if (!pmAnalysis_ptr->getPhysicalModel().getCopula().hasIndependentCopula())
         {
-          emit emitErrorMessageRequested(tr("The model must have an independent copula to compute a sensitivity analysis but here inputs are dependent."));
+          emit showErrorMessageRequested(tr("The model must have an independent copula to compute a sensitivity analysis but here inputs are dependent."));
           return;
         }
       }
@@ -228,7 +228,7 @@ void AnalysisItem::modifyAnalysis()
       // must have output data
       if (!dmAnalysis_ptr->getDesignOfExperiment().getOutputSample().getSize())
       {
-        emit emitErrorMessageRequested(tr("The sample must not be empty and must contain output values."));
+        emit showErrorMessageRequested(tr("The sample must not be empty and must contain output values."));
         return;
       }
     }
@@ -237,7 +237,7 @@ void AnalysisItem::modifyAnalysis()
     {
       if (!dmAnalysis_ptr->getDesignOfExperiment().getSample().getSize())
       {
-        emit emitErrorMessageRequested(tr("The sample is empty."));
+        emit showErrorMessageRequested(tr("The sample is empty."));
         return;
       }
     }
@@ -275,7 +275,7 @@ void AnalysisItem::removeAnalysis()
   // check if the analysis is running
   if (analysis_.isRunning())
   {
-    emit emitErrorMessageRequested(tr("Can not remove a running analysis."));
+    emit showErrorMessageRequested(tr("Can not remove a running analysis."));
     return;
   }
 

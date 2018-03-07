@@ -103,12 +103,12 @@ bool ProbabilisticModelItem::physicalModelValid()
 {
   if (!physicalModel_.isValid())
   {
-    emit emitErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
+    emit showErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
     return false;
   }
   if (!physicalModel_.hasStochasticInputs())
   {
-    emit emitErrorMessageRequested(tr("The physical model must have stochastic inputs."));
+    emit showErrorMessageRequested(tr("The physical model must have stochastic inputs."));
     return false;
   }
   return true;
@@ -150,7 +150,7 @@ void ProbabilisticModelItem::createSensitivityAnalysis()
   // check if the model has an independent copula
   if (!physicalModel_.getCopula().hasIndependentCopula())
   {
-    emit emitErrorMessageRequested(tr("The model must have an independent copula to compute a sensitivity analysis but inputs are dependent."));
+    emit showErrorMessageRequested(tr("The model must have an independent copula to compute a sensitivity analysis but inputs are dependent."));
     return;
   }
 

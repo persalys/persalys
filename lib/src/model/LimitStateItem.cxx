@@ -127,17 +127,17 @@ void LimitStateItem::createThresholdExceedance()
   // check
   if (!limitState_.getPhysicalModel().isValid())
   {
-    emit emitErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
+    emit showErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
     return;
   }
   if (!limitState_.getPhysicalModel().hasStochasticInputs())
   {
-    emit emitErrorMessageRequested(tr("The physical model must have stochastic inputs."));
+    emit showErrorMessageRequested(tr("The physical model must have stochastic inputs."));
     return;
   }
   if (!limitState_.isValid())
   {
-    emit emitErrorMessageRequested(tr("The limit state is not valid."));
+    emit showErrorMessageRequested(tr("The limit state is not valid."));
     return;
   }
 
@@ -154,7 +154,7 @@ void LimitStateItem::removeLimitState()
   // check
   if (analysisInProgress_)
   {
-    emit emitErrorMessageRequested(tr("Can not remove a limit state when an analysis is running."));
+    emit showErrorMessageRequested(tr("Can not remove a limit state when an analysis is running."));
     return;
   }
   // remove

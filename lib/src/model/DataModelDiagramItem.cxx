@@ -149,7 +149,7 @@ void DataModelDiagramItem::removeDesignOfExperiment()
   // check
   if (analysisInProgress_)
   {
-    emit emitErrorMessageRequested(tr("Can not remove a design of experiments when an analysis is running."));
+    emit showErrorMessageRequested(tr("Can not remove a design of experiments when an analysis is running."));
     return;
   }
   // remove

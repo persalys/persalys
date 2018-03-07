@@ -60,7 +60,7 @@ protected slots:
 signals:
   void showWindowRequested();
   void dataExportRequested();
-  void emitErrorMessageRequested(QString);
+  void showErrorMessageRequested(QString);
   void analysisRequested(OTguiItem*, const Analysis&, const bool isGeneralWizard = false);
   void removeRequested(int);
   void removeWindowRequested();

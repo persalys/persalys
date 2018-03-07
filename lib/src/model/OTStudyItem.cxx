@@ -219,7 +219,7 @@ void OTStudyItem::exportPythonScript(const QString& filename)
   if (!file.open(QFile::WriteOnly))
   {
     qDebug() << "OTStudyItem::exportStudy : cannot open the file " << file.fileName() << "\n";
-    emit emitErrorMessageRequested(tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
+    emit showErrorMessageRequested(tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
     return;
   }
 
@@ -267,7 +267,7 @@ bool OTStudyItem::save(const QString& filename)
   if (!file.open(QFile::WriteOnly))
   {
     qDebug() << "OTStudyItem::saveOTStudy : cannot open the file " << file.fileName() << "\n";
-    emit emitErrorMessageRequested(tr("Cannot save file %1:\n%2").arg(fileName).arg(file.errorString()));
+    emit showErrorMessageRequested(tr("Cannot save file %1:\n%2").arg(fileName).arg(file.errorString()));
     return false;
   }
 
