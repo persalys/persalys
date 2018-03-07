@@ -103,6 +103,7 @@ void PhysicalModelDiagramItem::update(Observable* source, const String & message
       return;
     }
     emit physicalModelValidityChanged(physicalModel_.isValid());
+    emit twoInputsValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1);
     emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
     emit dependencyValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getCopula().hasIndependentCopula());
     emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
@@ -433,6 +434,7 @@ void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
       QAction * newScreeningAnalysis = new QAction(QIcon(":/images/sensitivity.png"), tr("New analysis"), this);
       newScreeningAnalysis->setStatusTip(tr("Create a new screening analysis"));
       connect(newScreeningAnalysis, SIGNAL(triggered()), this, SIGNAL(screeningRequested()));
+      titleItem->appendAction(newScreeningAnalysis);
     }
   }
   // Optimization title
