@@ -171,10 +171,10 @@ void OptimizationAnalysis::updateParameters()
 
   initializeParameters();
 
-  Point newLowerBounds(inputNames_.getSize());
-  Point newUpperBounds(inputNames_.getSize());
-  Interval::BoolCollection newFiniteLowerBounds(inputNames_.getSize());
-  Interval::BoolCollection newFiniteUpperBounds(inputNames_.getSize());
+  Point newLowerBounds(bounds_.getLowerBound());
+  Point newUpperBounds(bounds_.getUpperBound());
+  Interval::BoolCollection newFiniteLowerBounds(bounds_.getFiniteLowerBound());
+  Interval::BoolCollection newFiniteUpperBounds(bounds_.getFiniteUpperBound());
 
   for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++ i)
   {
