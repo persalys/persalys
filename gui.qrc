@@ -3,6 +3,7 @@
         <file>lib/src/view/plot/paraview/ParaViewSources.xml</file>
         <file>translations/otgui_fr.qm</file>
         <file>translations/qt_fr.qm</file>
+        <file>translations/qtbase_fr.qm</file>
         <file>images/OT_icon16x16.png</file>
         <file>images/OT_icon32x32.png</file>
         <file>images/OT_image256x256.png</file>
