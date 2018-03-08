@@ -63,7 +63,18 @@ void ReliabilityAnalysis::run()
   OSS oss;
   oss << "<h3>Limit state</h3>";
   oss << "<p>";
-  oss << getLimitState().__str__();
+  String limiteState = getLimitState().__str__();
+  // write correctly the symbol of the operator
+  size_t start_pos = limiteState.find("<=");
+  if (start_pos != std::string::npos)
+    limiteState.replace(start_pos, 2, "&le;");
+  start_pos = limiteState.find(">=");
+  if (start_pos != std::string::npos)
+    limiteState.replace(start_pos, 2, "&ge;");
+  start_pos = limiteState.find("<");
+  if (start_pos != std::string::npos)
+    limiteState.replace(start_pos, 1, "&lt;");
+  oss << limiteState;
   oss << "</p>";
   modelHtmlDescription_ += oss;
 }
