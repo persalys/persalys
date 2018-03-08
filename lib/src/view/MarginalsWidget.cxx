@@ -170,7 +170,7 @@ void MarginalsWidget::buildInterface()
       this);
   plotWidget->setDockWidget(plotsSettingWidget);
   connect(plotsSettingWidget, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
-  rightFrameLayout->addWidget(plotWidget);
+  rightFrameLayout->addWidget(plotWidget, 1);
 
   // button to open the OT documentation
   QToolButton * infoButton = new QToolButton;
