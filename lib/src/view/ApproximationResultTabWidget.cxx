@@ -79,8 +79,8 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& res
   if (analysisParameters.getSize())
   {
     parametersWidget_ = new QWidget;
-    QGridLayout * parametersWidgetLayout = new QGridLayout(parametersWidget_);
-    parametersWidgetLayout->addWidget(new ParametersWidget(tr("Threshold exceedance parameters"), analysisParameters));
+    QVBoxLayout * parametersWidgetLayout = new QVBoxLayout(parametersWidget_);
+    parametersWidgetLayout->addWidget(new ParametersWidget(tr("Threshold exceedance parameters"), analysisParameters), 0, Qt::AlignTop);
   }
 
   buildInterface();
@@ -114,8 +114,8 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const SORMResult& res
   if (analysisParameters.getSize())
   {
     parametersWidget_ = new QWidget;
-    QGridLayout * parametersWidgetLayout = new QGridLayout(parametersWidget_);
-    parametersWidgetLayout->addWidget(new ParametersWidget(tr("Threshold exceedance parameters"), analysisParameters));
+    QVBoxLayout * parametersWidgetLayout = new QVBoxLayout(parametersWidget_);
+    parametersWidgetLayout->addWidget(new ParametersWidget(tr("Threshold exceedance parameters"), analysisParameters), 0, Qt::AlignTop);
   }
 
   buildInterface();
@@ -132,7 +132,6 @@ void ApproximationResultTabWidget::buildInterface()
 
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  tabLayout->setSizeConstraint(QLayout::SetFixedSize);
 
   QStringList namesList;
   QStringList valuesList;
@@ -148,7 +147,7 @@ void ApproximationResultTabWidget::buildInterface()
               << QString::number(result_.getHasoferReliabilityIndex());
 
     ParametersWidget * parametersTable = new ParametersWidget(tr("Failure probability"), namesList, valuesList, true, true);
-    tabLayout->addWidget(parametersTable);
+    tabLayout->addWidget(parametersTable, 0, Qt::AlignTop);
   }
   // SORM
   else
@@ -198,7 +197,7 @@ void ApproximationResultTabWidget::buildInterface()
     groupBoxLayout->addWidget(parametersTable);
 
     groupBoxLayout->addStretch();
-    tabLayout->addWidget(groupBox);
+    tabLayout->addWidget(groupBox, 0, Qt::AlignTop);
   }
 
   // optimization result table
@@ -230,7 +229,8 @@ void ApproximationResultTabWidget::buildInterface()
   }
   groupBoxLayout->addWidget(table);
 
-  tabLayout->addWidget(groupBox);
+  tabLayout->addWidget(groupBox, 0, Qt::AlignTop);
+  tabLayout->addStretch();
 
   scrollArea->setWidget(tab);
 
@@ -242,7 +242,6 @@ void ApproximationResultTabWidget::buildInterface()
 
   scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  tabLayout->setSizeConstraint(QLayout::SetFixedSize);
 
   groupBox = new QGroupBox(tr("Design point"));
   groupBoxLayout = new QVBoxLayout(groupBox);
@@ -290,7 +289,7 @@ void ApproximationResultTabWidget::buildInterface()
   resultsTable->setSpan(0, 2, 1, 2);
 
   groupBoxLayout->addWidget(resultsTable);
-  tabLayout->addWidget(groupBox);
+  tabLayout->addWidget(groupBox, 0, Qt::AlignTop);
 
   // importance factors
   groupBox = new QGroupBox(tr("Importance factors pie chart"));
@@ -298,7 +297,8 @@ void ApproximationResultTabWidget::buildInterface()
   PieChartView * pieChart = new PieChartView(importanceFactors);
   pieChart->setPlotName(tr("importanceFactors"));
   groupBoxLayout->addWidget(pieChart, 0, Qt::AlignCenter);
-  tabLayout->addWidget(groupBox);
+  tabLayout->addWidget(groupBox, 0, Qt::AlignTop);
+  tabLayout->addStretch();
 
   scrollArea->setWidget(tab);
 
@@ -319,7 +319,6 @@ void ApproximationResultTabWidget::buildInterface()
     // if the computation of sensitivities has succeeded
     scrollArea = new QScrollArea;
     scrollArea->setWidgetResizable(true);
-    tabLayout->setSizeConstraint(QLayout::SetFixedSize);
     groupBox = new QGroupBox(tr("Sensitivities"));
     groupBoxLayout = new QVBoxLayout(groupBox);
 
@@ -375,7 +374,7 @@ void ApproximationResultTabWidget::buildInterface()
     resultsTable->resizeToContents();
 
     groupBoxLayout->addWidget(resultsTable);
-    tabLayout->addWidget(groupBox);
+    tabLayout->addWidget(groupBox, 0, Qt::AlignTop);
 
     scrollArea->setWidget(tab);
 

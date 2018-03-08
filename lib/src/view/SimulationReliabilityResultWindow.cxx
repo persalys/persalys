@@ -122,7 +122,6 @@ QWidget* SimulationReliabilityResultWindow::getSummaryTab()
 
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  tabLayout->setSizeConstraint(QLayout::SetFixedSize);
 
   // stop criteria
   QGroupBox * parametersGroupBox = new QGroupBox(tr("Stop criteria"));
@@ -142,7 +141,7 @@ QWidget* SimulationReliabilityResultWindow::getSummaryTab()
 
   ParametersTableView * parametersTable = new ParametersTableView(namesList, valuesList, true, true);
   parametersGroupBoxLayout->addWidget(parametersTable);
-  tabLayout->addWidget(parametersGroupBox);
+  tabLayout->addWidget(parametersGroupBox, 0, Qt::AlignTop);
 
   // probability estimate table
   QGroupBox * groupBox = new QGroupBox(tr("Failure probability estimate"));
@@ -190,7 +189,8 @@ QWidget* SimulationReliabilityResultWindow::getSummaryTab()
 
   groupBoxLayout->addWidget(resultsTable);
 
-  tabLayout->addWidget(groupBox);
+  tabLayout->addWidget(groupBox, 0, Qt::AlignTop);
+  tabLayout->addStretch();
 
   scrollArea->setWidget(tab);
 

@@ -208,15 +208,13 @@ void DataAnalysisWindow::fillTabWidget()
 
 void DataAnalysisWindow::addSummaryTab()
 {
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
-  QScrollArea * scrollArea = new QScrollArea;
-  scrollArea->setWidgetResizable(true);
-  tabLayout->setSizeConstraint(QLayout::SetFixedSize);
-
   // -- results --
-  QVBoxLayout * vbox = new QVBoxLayout;
 
   // stop criteria
   const QString groupBoxTitle = (analysisStopCriteriaMessage_.isEmpty()) ? tr("") : tr("Stop criteria");
@@ -252,12 +250,11 @@ void DataAnalysisWindow::addSummaryTab()
 
   ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
   parametersGroupBoxLayout->addWidget(table);
-  parametersGroupBoxLayout->addStretch();
-  vbox->addWidget(parametersGroupBox);
+  tabLayout->addWidget(parametersGroupBox, 0, Qt::AlignTop);
 
   // min/max table
   MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(designOfExperiment_, false);
-  vbox->addWidget(minMaxTableGroupBox);
+  tabLayout->addWidget(minMaxTableGroupBox, 0, Qt::AlignTop);
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
 
   if (result_.getMean().getSize())
@@ -277,7 +274,7 @@ void DataAnalysisWindow::addSummaryTab()
                                                                                           isConfidenceIntervalRequired_,
                                                                                           levelConfidenceInterval_,
                                                                                           ind);
-    vbox->addWidget(estimatesGroupBox);
+    tabLayout->addWidget(estimatesGroupBox, 0, Qt::AlignTop);
     connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), estimatesGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
 
     // quantiles
@@ -301,15 +298,15 @@ void DataAnalysisWindow::addSummaryTab()
     label->setBuddy(quantileSpinBox_);
     quantileSpinBox_->setDecimals(8);
     quantLayout->addWidget(quantileSpinBox_, 1, 1);
+    quantLayout->setColumnStretch(1, 1);
 
     connect(probaSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(probaValueChanged(double)));
     connect(quantileSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(quantileValueChanged(double)));
 
-    vbox->addLayout(quantLayout);
+    tabLayout->addLayout(quantLayout);
     updateSpinBoxes();
   }
 
-  tabLayout->addLayout(vbox);
   tabLayout->addStretch();
 
   scrollArea->setWidget(tab);

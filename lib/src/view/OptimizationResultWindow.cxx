@@ -71,7 +71,6 @@ void OptimizationResultWindow::buildInterface()
 
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  tabLayout->setSizeConstraint(QLayout::SetFixedSize);
 
   // optimal value
   QGroupBox * optimGroupBox = new QGroupBox(tr("Optimal point"));
@@ -119,7 +118,7 @@ void OptimizationResultWindow::buildInterface()
   }
 
   optimGroupBoxLayout->addWidget(optimTableView);
-  tabLayout->addWidget(optimGroupBox);
+  tabLayout->addWidget(optimGroupBox, 0, Qt::AlignTop);
 
   // resu
   QGroupBox * groupBox = new QGroupBox(tr("Optimization result"));
@@ -141,7 +140,8 @@ void OptimizationResultWindow::buildInterface()
   ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
 
   groupBoxLayout->addWidget(table);
-  tabLayout->addWidget(groupBox);
+  tabLayout->addWidget(groupBox, 0, Qt::AlignTop);
+  tabLayout->addStretch();
 
   scrollArea->setWidget(tab);
 

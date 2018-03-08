@@ -78,7 +78,7 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
   QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimates"));
   QVBoxLayout * momentsVbox = new QVBoxLayout(momentsGroupBox);
 
-  ResizableStackedWidget * momentsTablesWidget = new ResizableStackedWidget;
+  QStackedWidget * momentsTablesWidget = new QStackedWidget;
   connect(outputsListWidget, SIGNAL(currentRowChanged(int)), momentsTablesWidget, SLOT(setCurrentIndex(int)));
 
   // loop on all the outputs
@@ -114,7 +114,7 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
     momentsTablesWidget->addWidget(momentsEstimationsTable);
   }
   momentsVbox->addWidget(momentsTablesWidget);
-  tabLayout->addWidget(momentsGroupBox);
+  tabLayout->addWidget(momentsGroupBox, 0, Qt::AlignTop);
 
   tabWidget->addTab(tab, tr("Summary"));
 
