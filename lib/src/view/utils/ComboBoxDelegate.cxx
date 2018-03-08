@@ -20,7 +20,8 @@
  */
 #include "otgui/ComboBoxDelegate.hxx"
 
-#include <QComboBox>
+#include <otgui/NoWheelEventComboBox.hxx>
+
 #include <QStandardItemModel>
 #include <QWheelEvent>
 
@@ -47,6 +48,7 @@ public:
 ComboBoxDelegate::ComboBoxDelegate(QObject * parent)
   : QItemDelegate(parent)
   , cell_()
+  , noWheelEvent_(false)
 {
 }
 
@@ -54,7 +56,14 @@ ComboBoxDelegate::ComboBoxDelegate(QObject * parent)
 ComboBoxDelegate::ComboBoxDelegate(QPair<int, int> cell, QObject * parent)
   : QItemDelegate(parent)
   , cell_(cell)
+  , noWheelEvent_(false)
 {
+}
+
+
+void ComboBoxDelegate::setNoWheelEvent(const bool noWheelEvent)
+{
+  noWheelEvent_ = noWheelEvent;
 }
 
 
@@ -64,7 +73,11 @@ QWidget *ComboBoxDelegate::createEditor(QWidget * parent, const QStyleOptionView
     if (index.row() != cell_.first || index.column() != cell_.second)
       return QItemDelegate::createEditor(parent, option, index);
 
-  CustomComboBox * editor = new CustomComboBox(parent);
+  QComboBox * editor;
+  if (noWheelEvent_)
+    editor = new NoWheelEventComboBox(parent);
+  else
+    editor = new CustomComboBox(parent);
   const QStringList items(index.model()->data(index, Qt::UserRole + 1).toStringList());
   editor->addItems(items);
   editor->setEnabled(items.size() > 0);

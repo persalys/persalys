@@ -91,6 +91,7 @@ void MarginalsWidget::buildInterface()
 
   // - delegate for distributions list
   ComboBoxDelegate * delegate = new ComboBoxDelegate(inputTableView_);
+  delegate->setNoWheelEvent(true);
   inputTableView_->setItemDelegateForColumn(1, delegate);
 
   // - connections
