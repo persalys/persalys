@@ -85,6 +85,9 @@ void MorrisPage::initialize(const Analysis& analysis)
   tableView_->setItemDelegateForColumn(2, spinBoxDelegate);
   tableView_->setItemDelegateForColumn(3, spinBoxDelegate);
 
+  // resize to contents
+  tableView_->resizeColumnsToContents();
+
   // if too many variables: no fixed height + use scrollbar
   if (tableModel_->rowCount() < 15)
   {
