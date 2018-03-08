@@ -229,8 +229,10 @@ void PhysicalModelWindowWidget::paintEvent(QPaintEvent * event)
 void PhysicalModelWindowWidget::resizeInputTable()
 {
   const int width = inputTableView_->horizontalHeader()->width();
-  inputTableView_->horizontalHeader()->resizeSection(0, width * 1 / 5);
-  inputTableView_->horizontalHeader()->resizeSection(1, width * 3 / 5);
+  const int minSectionSize = outputTableView_->horizontalHeader()->minimumSectionSize();
+  inputTableView_->horizontalHeader()->resizeSection(0, minSectionSize);
+  inputTableView_->horizontalHeader()->resizeSection(1, width - 2 * minSectionSize);
+  inputTableView_->horizontalHeader()->resizeSection(2, minSectionSize);
 }
 
 
