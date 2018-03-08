@@ -41,6 +41,8 @@ public:
 
   virtual void setInterestVariables(const OT::Description& outputsNames);
 
+  virtual void run();
+
   /** String converter */
   virtual OT::String __repr__() const;
 

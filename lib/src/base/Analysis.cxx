@@ -113,6 +113,12 @@ int Analysis::getProgressValue() const
 }
 
 
+String Analysis::getHtmlDescription() const
+{
+  return getImplementation()->getHtmlDescription();
+}
+
+
 void Analysis::run()
 {
   getImplementation()->run();

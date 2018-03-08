@@ -350,6 +350,12 @@ bool PhysicalModel::isValid() const
 }
 
 
+String PhysicalModel::getHtmlDescription() const
+{
+  return getImplementation()->getHtmlDescription();
+}
+
+
 String PhysicalModel::getPythonScript() const
 {
   return getImplementation()->getPythonScript();

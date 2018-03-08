@@ -45,6 +45,7 @@ public:
   void setCode(const OT::String & code);
   OT::String getCode() const;
 
+  virtual OT::String getHtmlDescription() const;
   OT::String getPythonScript() const;
 
   /** String converter */

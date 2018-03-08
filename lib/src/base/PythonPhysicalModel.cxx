@@ -155,6 +155,35 @@ Function PythonPhysicalModel::generateFunction(const Description &) const
 }
 
 
+String PythonPhysicalModel::getHtmlDescription() const
+{
+  OSS oss;
+  oss << PhysicalModelImplementation::getHtmlDescription();
+
+  oss << "<h3>Outputs</h3><p>";
+  oss << "<table style=\"width:100%\" border=\"1\" cellpadding=\"5\">";
+  oss << "<tr>";
+  oss << "  <th>Name</th>";
+  oss << "  <th>Description</th>";
+  oss << "</tr>";
+  for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
+  {
+    oss << "<tr>";
+    oss << "  <td>" << getOutputNames()[i] << "</td>";
+    const String desc(getOutputs()[i].getDescription());
+    oss << "  <td>" << (desc.empty() ? "-" : desc) << "</td>";
+    oss << "</tr>";
+  }
+  oss << "</table></p>";
+  oss << "<h3>Python code</h3>";
+  oss << "<pre>";
+  oss << getCode();
+  oss << "</pre>";
+
+  return oss;
+}
+
+
 String PythonPhysicalModel::getPythonScript() const
 {
   String result;

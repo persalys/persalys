@@ -62,6 +62,10 @@ ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget
     throw std::exception();
   }
 
+  // tab : model description --------------------------------
+  if (modelDescriptionWidget_)
+    tabWidget->addTab(modelDescriptionWidget_, tr("Model"));
+
   setWindowTitle(tr("Threshold exceedance results"));
 
   // main splitter

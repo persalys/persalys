@@ -175,6 +175,32 @@ Function SymbolicPhysicalModel::generateFunction(const Description & outputNames
 }
 
 
+String SymbolicPhysicalModel::getHtmlDescription() const
+{
+  OSS oss;
+  oss << PhysicalModelImplementation::getHtmlDescription();
+  oss << "<h3>Outputs</h3><p>";
+  oss << "<table style=\"width:100%\" border=\"1\" cellpadding=\"5\">";
+  oss << "<tr>";
+  oss << "  <th>Name</th>";
+  oss << "  <th>Description</th>";
+  oss << "  <th>Formula</th>";
+  oss << "</tr>";
+  for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
+  {
+    oss << "<tr>";
+    oss << "  <td>" << getOutputNames()[i] << "</td>";
+    const String desc(getOutputs()[i].getDescription());
+    oss << "  <td>" << (desc.empty() ? "-" : desc) << "</td>";
+    oss << "  <td>" << getFormulas()[i] << "</td>";
+    oss << "</tr>";
+  }
+  oss << "</table></p>";
+
+  return oss;
+}
+
+
 String SymbolicPhysicalModel::getPythonScript() const
 {
   OSS oss;

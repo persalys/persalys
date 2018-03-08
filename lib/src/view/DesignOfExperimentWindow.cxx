@@ -76,6 +76,10 @@ void DesignOfExperimentWindow::fillTabWidget()
   if (parametersWidget_)
     tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 
+  // tab : model description
+  if (modelDescriptionWidget_)
+    tabWidget_->addTab(modelDescriptionWidget_, tr("Model"));
+
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(updateVariablesListVisibility(int)));
 }
 

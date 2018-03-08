@@ -99,6 +99,10 @@ void ModelEvaluationResultWindow::buildInterface()
 
   tabWidget->addTab(tab, tr("Result"));
 
+  // tab : model description --------------------------------
+  if (modelDescriptionWidget_)
+    tabWidget->addTab(modelDescriptionWidget_, tr("Model"));
+
   setWidget(tabWidget);
 }
 }

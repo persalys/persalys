@@ -57,6 +57,7 @@ public:
 
   OT::Function getFunction() const;
 
+  virtual OT::String getHtmlDescription() const;
   OT::String getPythonScript() const;
 
   OT::String __repr__() const;

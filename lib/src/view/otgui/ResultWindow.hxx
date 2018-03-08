@@ -55,9 +55,12 @@ public:
 
 protected:
   virtual void setParameters(const Analysis& analysis, const QString& title);
+  virtual void setModelDescription(const Analysis& analysis);
+//   QString getModelDescription(const Analysis& analysis);
 
 protected:
   QWidget * parametersWidget_;
+  QWidget * modelDescriptionWidget_;
 };
 }
 #endif

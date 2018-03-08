@@ -788,6 +788,88 @@ bool PhysicalModelImplementation::isValid() const
 }
 
 
+String PhysicalModelImplementation::getHtmlDescription() const
+{
+  OSS oss;
+
+  oss << "<h2><center>Physical model</center></h2>";
+
+  // Deterministic inputs
+  if (getInputDimension() > getStochasticInputNames().getSize())
+  {
+    oss << "<h3>Deterministic inputs</h3><p>";
+    oss << "<table style=\"width:100%\" border=\"1\" cellpadding=\"5\">";
+    oss << "<tr>";
+    oss << "  <th>Name</th>";
+    oss << "  <th>Description</th>";
+    oss << "  <th>Value</th>";
+    oss << "</tr>";
+    for (UnsignedInteger i = 0; i < getInputDimension(); ++i)
+    {
+      if (!getInputs()[i].isStochastic())
+      {
+        oss << "<tr>";
+        oss << "  <td>" << getInputNames()[i] << "</td>";
+        const String desc(getInputs()[i].getDescription());
+        oss << "  <td>" << (desc.empty() ? "-" : desc) << "</td>";
+        oss << "  <td>" << getInputs()[i].getValue() << "</td>";
+        oss << "</tr>";
+      }
+    }
+
+    oss << "</table></p>";
+  }
+
+  // Stochastic inputs
+  if (hasStochasticInputs())
+  {
+    oss << "<h3>Stochastic inputs</h3><p>";
+    oss << "<table style=\"width:100%\" border=\"1\" cellpadding=\"5\">";
+    oss << "<tr>";
+    oss << "  <th>Name</th>";
+    oss << "  <th>Description</th>";
+    oss << "  <th>Distribution</th>";
+    oss << "</tr>";
+    for (UnsignedInteger i = 0; i < getInputDimension(); ++i)
+    {
+      if (getInputs()[i].isStochastic())
+      {
+        oss << "<tr>";
+        oss << "  <td>" << getInputNames()[i] << "</td>";
+        const String desc(getInputs()[i].getDescription());
+        oss << "  <td>" << (desc.empty() ? "-" : desc) << "</td>";
+        oss << "  <td>" << getInputs()[i].getDistribution().__str__() << "</td>";
+        oss << "</tr>";
+      }
+    }
+    oss << "</table></p>";
+  }
+  // copula
+  if (!getCopula().hasIndependentCopula())
+  {
+    oss << "<h3>Dependency</h3><p>";
+    oss << "<table style=\"width:100%\" border=\"1\" cellpadding=\"5\">";
+    oss << "<tr>";
+    oss << "  <th>Group of variables</th>";
+    oss << "  <th>Copula</th>";
+    oss << "</tr>";
+    for (UnsignedInteger i = 0; i < getCopulaCollection().getSize(); ++i)
+    {
+      if (!getCopulaCollection()[i].hasIndependentCopula())
+      {
+        oss << "<tr>";
+        oss << "  <td>" << getCopulaCollection()[i].getDescription() << "</td>";
+        oss << "  <td>" << getCopulaCollection()[i].__str__() << "</td>";
+        oss << "</tr>";
+      }
+    }
+    oss << "</table></p>";
+  }
+
+  return oss;
+}
+
+
 String PhysicalModelImplementation::getPythonScript() const
 {
   throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getPythonScript()";
