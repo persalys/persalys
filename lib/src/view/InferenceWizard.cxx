@@ -162,13 +162,12 @@ void InferenceWizard::buildInterface()
   QLabel * levelLabel = new QLabel(tr("Level"));
   levelLayout->addWidget(levelLabel, 0, 0);
 
-  DoubleSpinBox * levelSpinbox = new DoubleSpinBox;
-  levelSpinbox->setRange(0.0 + 1.e-6, 1. - 1.e-6);
-  levelSpinbox->setSingleStep(0.1);
+  levelSpinbox_ = new DoubleSpinBox;
+  levelSpinbox_->setRange(0.0 + 1.e-6, 1. - 1.e-6);
+  levelSpinbox_->setSingleStep(0.1);
   // display alpha
-  levelSpinbox->setValue(inference_.getLevel());
-  connect(levelSpinbox, SIGNAL(valueChanged(double)), this, SLOT(levelChanged(double)));
-  levelLayout->addWidget(levelSpinbox, 0, 1);
+  levelSpinbox_->setValue(inference_.getLevel());
+  levelLayout->addWidget(levelSpinbox_, 0, 1);
   levelLayout->setColumnStretch(1, 10);
 
   pageLayout->addWidget(ksGroupBox);
@@ -177,7 +176,6 @@ void InferenceWizard::buildInterface()
 
   // error message
   errorMessageLabel_ = new TemporaryLabel;
-  errorMessageLabel_->setWordWrap(true);
   pageLayout->addWidget(errorMessageLabel_);
 
   addPage(page);
@@ -232,25 +230,13 @@ void InferenceWizard::updateInterestVar(Description interestVar, String varName)
 }
 
 
-void InferenceWizard::levelChanged(double level)
-{
-  try
-  {
-    inference_.setLevel(level);
-  }
-  catch (std::exception& ex)
-  {
-    //
-  }
-}
-
-
 Analysis InferenceWizard::getAnalysis() const
 {
   // get the doe
   DesignOfExperiment doe = dynamic_cast<const DesignOfExperimentAnalysis*>(analysis_.getImplementation().get())->getDesignOfExperiment();
   InferenceAnalysis newAnalysis(analysis_.getName(), doe);
   newAnalysis.setInterestVariables(interestVar_);
+  newAnalysis.setLevel(levelSpinbox_->value());
 
   for (UnsignedInteger i = 0; i < interestVar_.getSize(); ++i)
   {
