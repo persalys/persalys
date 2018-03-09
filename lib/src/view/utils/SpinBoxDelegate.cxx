@@ -29,6 +29,15 @@ namespace OTGUI
 SpinBoxDelegate::SpinBoxDelegate(QObject *parent)
   : QStyledItemDelegate(parent)
   , type_(SpinBoxDelegate::noType)
+  , offsetForCheckBox_(false)
+{
+}
+
+
+SpinBoxDelegate::SpinBoxDelegate(const bool offsetForCheckBox, QObject *parent)
+  : QStyledItemDelegate(parent)
+  , type_(SpinBoxDelegate::noType)
+  , offsetForCheckBox_(offsetForCheckBox)
 {
 }
 
@@ -112,7 +121,18 @@ void SpinBoxDelegate::updateEditorGeometry(QWidget * editor, const QStyleOptionV
 {
   if (!editor)
     return;
-  editor->setGeometry(option.rect);
+  if (offsetForCheckBox_)
+  {
+    QStyleOptionButton checkBoxStyleOption;
+    QRect checkBoxRect = editor->style()->subElementRect(QStyle::SE_CheckBoxIndicator, &checkBoxStyleOption);
+    QPoint checkBoxPoint(option.rect.x() + 3 + checkBoxRect.width(), option.rect.y());
+
+    editor->setGeometry(QRect(checkBoxPoint, QSize(option.rect.width() - 3 - checkBoxRect.width(), option.rect.height())));
+  }
+  else
+  {
+    editor->setGeometry(option.rect);
+  }
 }
 
 

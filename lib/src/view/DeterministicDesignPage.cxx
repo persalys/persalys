@@ -66,7 +66,6 @@ void DeterministicDesignPage::buildInterface()
 
   tableView_ = new ResizableHeaderlessTableView;
   tableView_->setEditTriggers(QTableView::AllEditTriggers);
-  tableView_->horizontalHeader()->hide();
   groupBoxLayout->addWidget(tableView_);
   groupBoxLayout->setSizeConstraint(QLayout::SetMaximumSize);
 

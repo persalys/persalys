@@ -34,6 +34,7 @@ public:
   enum spinboxType {noType, doubleValue, correlation, differentiationStep};
 
   SpinBoxDelegate(QObject * parent = 0);
+  SpinBoxDelegate(const bool offsetForCheckBox, QObject * parent = 0);
 
   QWidget * createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
   void setEditorData(QWidget * editor, const QModelIndex & index) const;
@@ -46,6 +47,7 @@ signals:
 
 private:
   spinboxType type_;
+  bool offsetForCheckBox_;
 };
 }
 #endif
