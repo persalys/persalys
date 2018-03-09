@@ -170,8 +170,6 @@ void MorrisAnalysis::setBounds(const Interval & bounds)
     oss << getPhysicalModel().getInputDimension();
     throw InvalidArgumentException(HERE) << oss.str();
   }
-  if (bounds.isEmpty())
-    throw InvalidArgumentException(HERE) << "The interval has to be not empty";
 
   bounds_ = bounds;
 }
@@ -204,6 +202,16 @@ void MorrisAnalysis::launch()
   // check
   if (getPhysicalModel().getInputDimension() < 2)
     throw InvalidDimensionException(HERE) << "The model must contain at least two input variables";
+  if (bounds_.isEmpty())
+    throw InvalidArgumentException(HERE) << "The interval has to be not empty";
+  if (bounds_.getDimension() != getPhysicalModel().getInputDimension())
+  {
+    OSS oss;
+    oss << "The dimension of the interval " << bounds_.getDimension();
+    oss << " has to be equal to the number of inputs of the physical model: ";
+    oss << getPhysicalModel().getInputDimension();
+    throw InvalidArgumentException(HERE) << oss.str();
+  }
 
   // build a Morris experiment
   const UnsignedInteger nbInputs = getPhysicalModel().getInputDimension();

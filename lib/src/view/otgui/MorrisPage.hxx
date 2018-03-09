@@ -42,6 +42,7 @@ public:
   MorrisAnalysis getAnalysis() const;
 
   virtual int nextId() const;
+  virtual bool validatePage();
 
 protected:
   void buildInterface();

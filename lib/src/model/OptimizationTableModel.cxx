@@ -186,6 +186,23 @@ QVariant OptimizationTableModel::data(const QModelIndex & ind, int role) const
         return analysis_.getBounds().getFiniteUpperBound()[inputIndex] ? Qt::Checked : Qt::Unchecked;
     }
   }
+  else if (role == Qt::ForegroundRole && ind.column() == 0)
+  {
+    const int inputIndex = ind.row() - 1;
+    const String currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex];
+    // check bounds
+    if (analysis_.getVariableInputs().contains(currentInputName))
+    {
+      // TODO: next OT version: use getMarginal
+      Interval bounds(Point(1, analysis_.getBounds().getLowerBound()[inputIndex]),
+                      Point(1, analysis_.getBounds().getUpperBound()[inputIndex]),
+                      Interval::BoolCollection(1, analysis_.getBounds().getFiniteLowerBound()[inputIndex]),
+                      Interval::BoolCollection(1, analysis_.getBounds().getFiniteUpperBound()[inputIndex])
+                     );
+      if (bounds.isEmpty() || !bounds.contains(Point(1, analysis_.getStartingPoint()[inputIndex])))
+        return QColor(Qt::red);
+    }
+  }
 
   return QVariant();
 }
@@ -224,29 +241,14 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
         Point values = analysis_.getStartingPoint();
         if (values[inputIndex] == value.toDouble())
           return false;
-        if (value.toDouble() >= analysis_.getBounds().getUpperBound()[inputIndex])
-        {
-          emit errorMessageChanged(tr("Input %1 : The starting value must be lesser than the upper bound").arg(currentInputName));
-          return false;
-        }
-        if (value.toDouble() <= analysis_.getBounds().getLowerBound()[inputIndex])
-        {
-          emit errorMessageChanged(tr("Input %1 : The starting value must be greater than the lower bound").arg(currentInputName));
-          return false;
-        }
-        values[inputIndex] = value.toDouble();
 
+        values[inputIndex] = value.toDouble();
         analysis_.setStartingPoint(values);
 
         break;
       }
       case 3: // lower bounds
       {
-        if (value.toDouble() >= analysis_.getBounds().getUpperBound()[inputIndex])
-        {
-          emit errorMessageChanged(tr("Input %1 : The lower bound must be lesser than the upper bound").arg(currentInputName));
-          return false;
-        }
         Point lowerBounds = analysis_.getBounds().getLowerBound();
         if (lowerBounds[inputIndex] == value.toDouble())
           return false;
@@ -260,11 +262,6 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
       }
       case 4: // upper bounds
       {
-        if (value.toDouble() <= analysis_.getBounds().getLowerBound()[inputIndex])
-        {
-          emit errorMessageChanged(tr("Input %1 : The upper bound must be greater than the lower bound").arg(currentInputName));
-          return false;
-        }
         Point upperBounds = analysis_.getBounds().getUpperBound();
         if (upperBounds[inputIndex] == value.toDouble())
           return false;
@@ -298,7 +295,6 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
           return false;
 
         analysis_.setVariableInputs(variableInputs);
-        emit dataChanged(this->index(index.row(), 3), this->index(index.row(), 4));
 
         break;
       }
@@ -331,6 +327,7 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
       default:
         return false;
     }
+    emit dataChanged(this->index(index.row(), 0), this->index(index.row(), 4));
   }
 
   return true;

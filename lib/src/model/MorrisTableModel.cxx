@@ -105,6 +105,19 @@ QVariant MorrisTableModel::data(const QModelIndex & index, int role) const
         return QVariant();
     }
   }
+  else if (role == Qt::ForegroundRole && index.column() == 0)
+  {
+    const int inIndex = index.row();
+    // check bounds
+    // TODO: next OT version: use getMarginal
+    Interval bounds(Point(1, analysis_.getBounds().getLowerBound()[inIndex]),
+                    Point(1, analysis_.getBounds().getUpperBound()[inIndex]),
+                    Interval::BoolCollection(1, analysis_.getBounds().getFiniteLowerBound()[inIndex]),
+                    Interval::BoolCollection(1, analysis_.getBounds().getFiniteUpperBound()[inIndex])
+                    );
+    if (bounds.isEmpty())
+      return QColor(Qt::red);
+  }
   return QVariant();
 }
 
@@ -122,11 +135,6 @@ bool MorrisTableModel::setData(const QModelIndex & index, const QVariant & value
         return false;
       case 2: // lower bounds
       {
-        if (value.toDouble() >= analysis_.getBounds().getUpperBound()[inIndex])
-        {
-          emit errorMessageChanged(tr("The lower bound must be lesser than the upper bound"));
-          return false;
-        }
         Point lowerBounds = analysis_.getBounds().getLowerBound();
         if (lowerBounds[inIndex] == value.toDouble())
           return false;
@@ -145,11 +153,6 @@ bool MorrisTableModel::setData(const QModelIndex & index, const QVariant & value
       }
       case 3: // upper bounds
       {
-        if (value.toDouble() <= analysis_.getBounds().getLowerBound()[inIndex])
-        {
-          emit errorMessageChanged(tr("The upper bound must be greater than the lower bound"));
-          return false;
-        }
         Point upperBounds = analysis_.getBounds().getUpperBound();
         if (upperBounds[inIndex] == value.toDouble())
           return false;
@@ -169,6 +172,7 @@ bool MorrisTableModel::setData(const QModelIndex & index, const QVariant & value
       default:
         return false;
     }
+    emit dataChanged(this->index(index.row(), 0), this->index(index.row(), 3));
   }
 
   return true;

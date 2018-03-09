@@ -112,6 +112,17 @@ int MorrisPage::nextId() const
 }
 
 
+bool MorrisPage::validatePage()
+{
+  if (tableModel_->getAnalysis().getBounds().isEmpty())
+  {
+    errorMessageLabel_->setTemporaryErrorMessage(tr("The lower bounds must be lesser than the upper bounds"));
+    return false;
+  }
+  return true;
+}
+
+
 // Second Morris page
 MorrisSecondPage::MorrisSecondPage(QWidget* parent)
   : QWizardPage(parent)
