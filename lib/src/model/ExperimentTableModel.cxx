@@ -374,7 +374,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
             }
             else
             {
-              emit errorMessageChanged(tr("Delta must be lesser than the upper bound - the lower bound"));
+              emit errorMessageChanged(tr("Delta must be lesser than (the upper bound - the lower bound)"));
               return false;
             }
             break;

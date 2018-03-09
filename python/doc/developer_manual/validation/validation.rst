@@ -339,28 +339,30 @@ New OTStudy
 
   - item OTStudy_0 appears in the tree view
 
-  - a window with 3(+1) buttons (New symbolic physical model/New Python physical model(+New YACS physical model)/New data model) appears
-
-  .. image:: /developer_manual/validation/otstudyWindow.png
-      :align: center
+  - a 'study' window with 3(+2) buttons appears:
+    - Symbolic model
+    - Python model
+    - YACS model (optional)
+    - FMI model (optional)
+    - Data model
 
 - click Menu->File->New
 
   - item OTStudy_1 appears in the tree view
-
-  - a window with 3(+1) buttons (New symbolic physical model/New Python physical model(+New YACS physical model)/New data model) appears
+    - the item is associated with a 'study' window
 
 - click icon New OTStudy in the Tool bar
 
   - item OTStudy_2 appears in the tree view
-
-  - a window with 3(+1) buttons (New symbolic physical model/New Python physical model(+New YACS physical model)/New data model) appears
+    - the item is associated with a 'study' window
 
 - press keys CTRL + N
 
   - item OTStudy_3 appears in the tree view
+    - the item is associated with a 'study' window
 
-  - a window with 3(+1) buttons (New symbolic physical model/New Python physical model(+New YACS physical model)/New data model) appears
+  .. image:: /developer_manual/validation/otstudyWindow.png
+      :align: center
 
 Rename OTStudy
 ``````````````
@@ -369,12 +371,16 @@ Rename OTStudy
 
   - the item is renamed
 
+- right click on OTStudy_3 item, on the context menu which appears click on Rename, rename OTStudy_2 by myOTStudy2, press enter
+
+  - the item is renamed
+
 Save/open OTStudy
 ````````````````````
 
 - save myOTStudy with Menu->File->save, close with Menu->File->close, reopen with Menu->File->open
 
-- right click on myOTStudy, choose rename, rename myOTStudy by myOTStudy1, save myOTStudy1 with the icon of the tool bar, close with right click + close, reopen with the icon of the tool bar
+- right click on myOTStudy, choose Rename, rename myOTStudy by myOTStudy1, save myOTStudy1 with the icon of the tool bar, close with right click + close, reopen with the icon of the tool bar
 
 - rename myOTStudy1 by myOTStudy2, save myOTStudy2 in pressing CTRL + S, close with right click + close, reopen with press keys CTRL + O
 
@@ -506,16 +512,16 @@ Designs of experiments
 
         - line 2 : change lower bound to 10, press enter
 
-          - error message : 'The lower bound be inferior to the upper bound'
+          - error message : 'The lower bound must be lesser than the upper bound'
 
         - line 2 : change upper bound to 0, press enter
 
-          - error message : 'The upper bound be superior to the lower bound'
+          - error message : 'The upper bound must be greater than the lower bound'
 
         - fifth header item : change combo box item to Delta
         - line 2 : change delta to 15, press enter
 
-          - error message : 'Delta must be inferior to the upper bound - the lower bound'
+          - error message : 'Delta must be lesser than (the upper bound - the lower bound)'
 
         - line 2 : change delta to 0.5, press enter
 
@@ -600,10 +606,10 @@ Designs of experiments
       .. image:: /developer_manual/validation/design_3_Table.png
           :align: center
 
-      - 6 tabs : Min/Max - Table - Cobweb plot - Plot matrix - Scatter plots - Parameters
-      - Min/Max tab :
+      - 7 tabs : Summary - Table - Cobweb plot - Plot matrix - Scatter plots - Parameters - Model
+      - Summary tab :
 
-        - when changing the variable, the Min/Max tab is updated
+        - when changing the variable, the Summary tab is updated
 
       - Plots tabs and Table tab :
 
@@ -622,9 +628,9 @@ Designs of experiments
         .. image:: /developer_manual/validation/DOE_result_model2_one_point.png
             :align: center
 
-        - 3 tabs : Min/Max - Table - Parameters
+        - 3 tabs : Summary - Table - Parameters
 
-        - Min/Max tab :
+        - Summary tab :
 
           - a list view with a variable appears at the left side of the window
 
@@ -639,8 +645,8 @@ Designs of experiments
         .. image:: /developer_manual/validation/DOE_result_model2_two_points.png
             :align: center
 
-        - 3 tabs : Min/Max - Table - Parameters
-        - Min/Max tab :
+        - 3 tabs : Summary - Table - Parameters
+        - Summary tab :
 
           - a list view with a variable appears at the left side of the window
 
@@ -673,6 +679,135 @@ Analyses
           :align: center
 
       - results only for y0 and y1
+
+  - Optimization : item optim
+
+    - First page check the values :
+
+      .. image:: /developer_manual/validation/optimization_wizard_1st_page.png
+          :align: center
+
+      - selected output : y1
+      - method : TNC
+      - continue
+
+    - Second page check the values :
+
+      .. image:: /developer_manual/validation/optimization_wizard_2nd_page.png
+          :align: center
+
+      - x1 and x2 checked
+      - starting point : [0.2, 1.2, 1.]
+      - lower bounds : [0, 0, 0.9]
+      - upper bounds : [10, 10, 1.1]
+      - check table behavior:
+
+        - unselect line : lower and upper bounds columns are disabled
+        - unselect a lower bound : -inf symbol
+        - unselect an upper bound : +inf symbol
+        - if lower > upper bound : variable name in red and can not validate the page
+        - if upper < lower bound : variable name in red and can not validate the page
+        - if starting point not in the interval [lower bound, upper bound] : variable name in red and can not validate the page
+
+    - Third page check the values :
+
+      .. image:: /developer_manual/validation/optimization_wizard_3rd_page.png
+          :align: center
+
+      - Problem type : Minimization
+      - Number of function evaluations : 150
+      - Absolute/Relative/Residual/Constraint error : 1e-6
+
+    - click on the Finish button
+
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
+      - click on the 'Run' button
+
+    - check result window :
+
+      .. image:: /developer_manual/validation/optimization_result.png
+          :align: center
+
+      - left side : 1 variable in the list view
+      - right side, tabs : Result - Convergence - Parameters - Model
+      - Convergence tab : 2 tabs : Optimal value - Error
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+
+  - Morris : aMorris item
+
+    - First page check the values :
+
+      .. image:: /developer_manual/validation/morris_wizard_1st_page.png
+          :align: center
+
+      - selected output : y0
+      - method : Morris
+      - continue
+
+    - Second page check the values :
+
+      .. image:: /developer_manual/validation/morris_wizard_2nd_page.png
+          :align: center
+
+      - 3 lines
+      - lower bounds : [0, 0, 0.9]
+      - upper bounds : [10, 10, 1.1]
+      - check table behavior:
+
+        - if lower > upper bound : variable name in red and can not validate the page
+        - if upper < lower bound : variable name in red and can not validate the page
+
+    - Third page check the values :
+
+      .. image:: /developer_manual/validation/morris_wizard_3rd_page.png
+          :align: center
+
+      - Number of trajectories : 10
+      - Level : 4
+      - Seed : 2
+      - Number of simulations : 40
+      - check page behavior:
+
+        - if Number of trajectories : 11 -> Number of simulations : 44
+
+    - click on the Finish button
+
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
+      - click on the 'Run' button
+
+    - check result window :
+
+      .. image:: /developer_manual/validation/morris_result.png
+          :align: center
+
+      - left side : 1 variable in the list view
+      - right side, tabs : Elementary effects - Table - Cobweb plot - Plot matrix - Scatter plots - Parameters - Model
+      - Elementary effects tab : 2 tabs : Graph (mu*, sigma) - Graph (mu*, mu)
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+      - check the tabs (Table - Cobweb plot - Plot matrix - Scatter plots) are linked :
+        do several selections in a tab and check the selection is the same in the others tabs
+
+      - check Elementary effects tab behavior:
+
+        - selection of points in the graphs (right click + draw rectangle) : a context menu appears with items : De/select the points
+        - click on the x-axis : move the green vertical line
+        - all points at the left of the green line on the graphs correspond to the lines of the table with a cross in the No effect column
+        - the blue points on the graphs correspond to the selected lines of the table
+        - the red points on the graphs correspond to the unselected lines of the table
+
+    - check the reuse of the Morris result by the Probabilistic model :
+
+      - go on the Probabilistic model window of model1, tab 'Marginals'
+      - select the x3 variable
+      - Click on the button Import Morris result below the table
+      - a wizard appears
+
+        .. image:: /developer_manual/validation/morrisResultWizard.png
+            :align: center
+
+      - check the table is read-only
+      - click on Finish
+      - check that x_3 is unselected
 
   - Monte Carlo : MonteCarlo item
 
@@ -708,7 +843,7 @@ Analyses
           :align: center
 
       - left side : 4 variables in the list view
-      - right side, 8 tabs : Summary - PDF/CDF - Box plots - Table - Cobweb plot - Plot matrix - Scatter plots - Parameters
+      - right side, tabs : Summary - PDF/CDF - Box plots - Table - Cobweb plot - Plot matrix - Scatter plots - Parameters - Model
       - when changing the variable, the tabs are updated
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - check the tabs (Table - Cobweb plot - Plot matrix - Scatter plots) are linked :
@@ -722,7 +857,7 @@ Analyses
 
         - Moments estimates table has only 2 columns : Estimate and Value
 
-      - check on the tabs (Table - Cobweb plot - Plot matrix - Scatter plots - Parameters) : the list view is hidden
+      - check on the tabs (Table - Cobweb plot - Plot matrix - Scatter plots - Parameters - Model) : the list view is hidden
       - check tables are well drawn
 
   - Taylor : Taylor item
@@ -784,7 +919,7 @@ Analyses
 
       - left side : 1 variable in the list view
 
-      - right side, 4 tabs : Summary - Histogram - Convergence graph - Parameters
+      - right side, tabs : Summary - Histogram - Convergence graph - Parameters - Model
 
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
 
@@ -845,7 +980,7 @@ Analyses
           :align: center
 
       - left side : 1 variable in the list view
-      - right side, 5 tabs : Summary - Histogram - Convergence graph - FORM results - Parameters
+      - right side, tabs : Summary - Histogram - Convergence graph - FORM results - Parameters- Model
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - FORM results tab :
 
@@ -888,7 +1023,42 @@ Analyses
           :align: center
 
       - left side : 1 variable in the list view
-      - right side, 4 tabs : Summary - Design point - Sensitivities - Parameters
+      - right side, tabs : Summary - Design point - Sensitivities - Parameters - Model
+      - check tables are well drawn
+
+  - SORM : SORM item
+
+    - First page check the values :
+
+      .. image:: /developer_manual/validation/SORM_wizard_1st_page.png
+          :align: center
+
+      - method : FORM
+      - continue
+
+    - Second page check the values :
+
+      .. image:: /developer_manual/validation/FORM_wizard_2nd_page.png
+          :align: center
+
+      - Algorithm : Abdo-Rackwitz
+      - Physical starting point : 5; 5
+      - Number of iterations : 150
+      - Absolute error : 0.001
+      - Relative/Residual/Constraint error : 1e-5
+
+    - click on the Finish button
+
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
+      - click on the 'Run' button
+
+    - check result window :
+
+      .. image:: /developer_manual/validation/SORM_result.png
+          :align: center
+
+      - left side : 1 variable in the list view
+      - right side, tabs : Summary - Design point - Sensitivities - Parameters - Model
       - check tables are well drawn
 
   - Sobol : Sobol item
@@ -897,7 +1067,7 @@ Analyses
 
     - click on the 'Probabilistic model' item
 
-      - click on the 'Correlation' tab of the window which appears
+      - click on the 'Dependence' tab of the window which appears
       - in the cell x1-x2 : write 0, press enter
       - click on the Sobol item, right click on it and choose Modify
 
@@ -933,7 +1103,7 @@ Analyses
           :align: center
 
       - left side : 2 variables in the list view
-      - right side, 3 tabs : Indices - Summary - Parameters
+      - right side, tabs : Indices - Summary - Parameters - Model
       - when changing the variable, the Indices tab is updated
       - when indices plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - Indices tab :
@@ -1033,6 +1203,9 @@ Analyses
 
     - Third page check the values :
 
+      .. image:: /developer_manual/validation/kriging_wizard_3rd_page.png
+          :align: center
+
       - only Analytically/By Leave-one-out method are checked
 
     - click on the Finish button
@@ -1099,6 +1272,9 @@ Analyses
 
     - Third page check the values :
 
+      .. image:: /developer_manual/validation/chaos_1_wizard_3rd_page.png
+          :align: center
+
       - only Analytically is checked
 
     - click on the Finish button
@@ -1112,9 +1288,8 @@ Analyses
           :align: center
 
       - left side : 1 variable in the list view
-      - right side, 4 tabs : MetaModel - Moments - Sobol indices - Parameters
+      - right side, tabs : MetaModel - Summary - Sobol indices - Validation - Parameters
       - Metamodel tab : plot + Relative error table
-      - when changing the variable, the tabs are updated
       - when metamodel plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - check tables are well drawn
 
@@ -1158,13 +1333,16 @@ Analyses
           :align: center
 
       - left side: 2 variables in the list view
-      - right side: 4 tabs MetaModel - Summary - Sobol indices - Parameters
+      - right side: tabs MetaModel - Summary - Sobol indices - Validation - Parameters
       - Metamodel tab : plot + Relative error table
       - when changing the variable, the tabs are updated
       - when metamodel plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - check tables are well drawn
 
   - Data analysis : DataAnalysis item
+
+    - the item is associated with a window with a progress bar and 2 buttons 'Run' and 'Stop'
+    - click on the 'Run' button
 
     - check result window :
 
@@ -1175,7 +1353,7 @@ Analyses
 
         - x_1 the output is the first item of the list
 
-      - right side, 7 tabs : Summary - PDF/CDF - Box plots - Table - Cobweb plot - Plot matrix - Scatter plots
+      - right side, tabs : Summary - PDF/CDF - Box plots - Dependency - Table - Cobweb plot - Plot matrix - Scatter plots
       - when changing the variable, the tabs (Summary - PDF/CDF - Box plots) are updated
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - check the tabs (Table - Cobweb plot - Plot matrix - Scatter plots) are linked :
@@ -1220,14 +1398,14 @@ Analyses
           :align: center
 
       - left side : 2 variables in the list view
-      - right side, 2 tabs : Summary - Parameters
+      - right side, tab : Summary
       - when changing the variable, the tabs are updated
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - the right side of the window contains 2 parts : a distributions list and 3 tabs PDF/CDF - Q-Q Plot - Parameters
       - when selecting a distribution, the tab widget is updated
       - check tables are well drawn
       - select x_0
-      - select ChiSquare/InverseNormal/LogUniform/Student :
+      - select InverseNormal/LogUniform/Student :
 
         - PDF/CDF and Q-Q Plot tabs are disabled
         - the Parameters tab contains an error message
@@ -1237,7 +1415,7 @@ Analyses
 
     - check the reuse of the inference result by the Probabilistic model :
 
-      - go on the Probabilistic model window of model1
+      - go on the Probabilistic model window of model1, tab 'Marginals'
       - select the x3 variable
       - choose Inference result in the combo box of the variable x_3
       - a wizard appears, check its behavior (update of the tables when changing the items selection, etc.)
@@ -1251,18 +1429,63 @@ Analyses
 
   - Copula inference : copulaInference item
 
+    .. image:: /developer_manual/validation/copula_inference_wizard.png
+        :align: center
+
+    - right click on the item 'copulaInference' and choose 'Modify'. Check the wizard behavior :
+
+      - check all / uncheck all
+      - no wheel event on Add button
+      - an uncheck line == right side of the wizard disabled
+      - choose item 'All' in the list of Add button => add all copulas in the list
+      - remove items in the copulas table : use ctrl key (to select items one by one), use shift key (to select adjacent items)
+      - add/remove groups with tha arrows
+      - if there are at least 3 variables in a group : only the Normal copula is proposed
+      - select a variable + empty the copulas list + click on Finish
+
+        - error message 'At least one copula etc.'
+
+      - unselect all
+      - select [x_0,x_3] and add the Normal and Gumbel copulas
+      - select [x_2,x_3] and add all the copulas
+
+    - click on the Finish button
+
+      - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
+      - click on the 'Run' button
+
+
     - check result window :
 
       .. image:: /developer_manual/validation/copula_inference_result.png
           :align: center
 
-      - left side: 2 sets of variables in the list view
+      - left side: 1 set of variables in the list view
       - right side, 1 tab : Summary
-      - when changing the set of variables, the tabs are updated
       - the right side of the window contains 2 parts : a copulas list and 3 tabs : PDF/CDF - Kendall Plot - Parameters
       - when selecting a copula, the tab widget is updated
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - check tables are well drawn
+      - select [x_2,x_3]
+      - select Ali-Mikhail-Haq / Farlie-Gumbel-Morgenstern :
+
+        - PDF/CDF and Kendall Plot tabs are disabled
+        - the Parameters tab contains an error message
+
+        .. image:: /developer_manual/validation/copula_inference_resultError.png
+            :align: center
+
+    - check the reuse of the copula inference result by the Probabilistic model :
+
+      - go on the Probabilistic model window of model1, tab 'Dependence'
+      - choose Inference result in the combo box of the [x1, x2] group
+      - a wizard appears, check its behavior (update of the tables when changing the items selection, etc.)
+
+        .. image:: /developer_manual/validation/copulaInferenceResultWizard.png
+            :align: center
+
+      - choose copulaInference/[x_2, x_3]/Gumbel, click on Finish
+      - check that the copula is Gumbel now
 
 - save the study, close it, reopen it
 
@@ -1335,7 +1558,7 @@ Diagrams
     - click on the '...' button, import the file data.csv
     - the first three columns are inputs and the last one is an output
     - all the buttons are enabled in the diagram
-    - check that 'Dependencies inference' button is enabled only if there are more than one input
+    - check that 'Dependence inference' button is enabled only if there are more than one input
     - check that 'Metamodel creation' button is enabled only if there are at least one output and one input
     - if all the combo boxes are set to 'Disable', all the buttons of the diagram are disabled
 

@@ -28,6 +28,7 @@
 
 #include <openturns/VisualTest.hxx>
 
+#include <QSplitter>
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -66,6 +67,8 @@ void InferenceResultWidget::buildInterface()
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
 
+  QSplitter * splitter = new QSplitter;
+
   QWidget * distTabListWidget = new QWidget;
   QHBoxLayout * distTabListWidgetLayout = new QHBoxLayout(distTabListWidget);
 
@@ -93,6 +96,7 @@ void InferenceResultWidget::buildInterface()
   distGroupBoxLayout->addStretch();
 
   distTabListWidgetLayout->addWidget(distGroupBox);
+  splitter->addWidget(distTabListWidget);
 
   // -- distribution parameters table
   // --- table view
@@ -173,7 +177,7 @@ void InferenceResultWidget::buildInterface()
 
     tabWidget_->addTab(paramWidget, tr("Parameters"));
 
-    distTabListWidgetLayout->addWidget(tabWidget_, 1);
+    splitter->addWidget(tabWidget_);
   }
   else
   {
@@ -185,11 +189,10 @@ void InferenceResultWidget::buildInterface()
     paramGroupBoxLayout->addWidget(analysisErrorMessageLabel_);
     paramGroupBoxLayout->addWidget(pdfPlot_);
     paramGroupBoxLayout->addStretch();
-    distTabListWidgetLayout->setSizeConstraint(QLayout::SetFixedSize);
-    distTabListWidgetLayout->addWidget(paramGroupBox, 1);
+    splitter->addWidget(paramGroupBox);
   }
 
-  scrollArea->setWidget(distTabListWidget);
+  scrollArea->setWidget(splitter);
   mainLayout->addWidget(scrollArea);
 }
 

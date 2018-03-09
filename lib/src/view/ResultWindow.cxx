@@ -59,7 +59,7 @@ void ResultWindow::setParameters(const Analysis& analysis, const QString& title)
 
   parametersWidget_ = new QWidget;
   QVBoxLayout * parametersWidgetLayout = new QVBoxLayout(parametersWidget_);
-  parametersWidgetLayout->addWidget(new ParametersWidget(title, analysisParameters));
+  parametersWidgetLayout->addWidget(new ParametersWidget(title, analysisParameters), 0, Qt::AlignTop);
 }
 
 

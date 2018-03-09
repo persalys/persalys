@@ -41,8 +41,8 @@ myStudy.add(model2)
 
 # model 3 ##
 filename = 'data.csv'
-sample = ot.Normal(3).getSample(200)
-sample.stack(ot.Gumbel().getSample(200))
+cDist = ot.ComposedDistribution([ot.Normal(), ot.Gumbel(), ot.Normal(), ot.Uniform()], ot.ComposedCopula([ot.IndependentCopula(2), ot.GumbelCopula()]))
+sample = cDist.getSample(200)
 sample.exportToCSVFile(filename, ',')
 model3 = otguibase.DataModel(
     'model3', 'data.csv', [0, 2, 3], [1], ['x_0', 'x_2', 'x_3'], ['x_1'])
@@ -186,6 +186,11 @@ form = otguibase.FORMAnalysis('FORM', limitState)
 form.setOptimizationAlgorithm(optimAlgo)
 myStudy.add(form)
 
+# 3-d SORM ##
+sorm = otguibase.SORMAnalysis('SORM', limitState)
+sorm.setOptimizationAlgorithm(optimAlgo)
+myStudy.add(sorm)
+
 # 4- sensitivity ##
 
 # 4-a Sobol ##
@@ -205,14 +210,33 @@ src.setSeed(2)
 src.setInterestVariables(['y0', 'y1'])
 myStudy.add(src)
 
-# 5- data analysis ##
+# 5- optimization ##
+optim = otguibase.OptimizationAnalysis('optim', model1, 'TNC')
+optim.setInterestVariables(['y1'])
+optim.setVariableInputs(['x1', 'x2'])
+optim.setMaximumEvaluationNumber(150);
+optim.setMaximumAbsoluteError(1e-6);
+optim.setMaximumRelativeError(1e-6);
+optim.setMaximumResidualError(1e-6);
+optim.setMaximumConstraintError(1e-6);
+myStudy.add(optim)
 
-# 5-a data analysis ##
+# 6- morris ##
+try:
+  morris = otguibase.MorrisAnalysis('aMorris', model1)
+  morris.setInterestVariables(['y0'])
+  morris.setLevel(4)
+  morris.setTrajectoriesNumber(10)
+  morris.setSeed(2)
+  myStudy.add(morris)
+except:
+  print("No Morris")
+
+# 7- data analysis ##
 dataAnalysis = otguibase.DataAnalysis('DataAnalysis', model3)
-dataAnalysis.run()
 myStudy.add(dataAnalysis)
 
-# 5-b Marginals inference ##
+# 8- Marginals inference ##
 inference = otguibase.InferenceAnalysis('inference', model3)
 inference.setInterestVariables(['x_0', 'x_3'])
 factories = [ot.NormalFactory(), ot.GumbelFactory()]
@@ -220,9 +244,8 @@ inference.setDistributionsFactories('x_3', factories)
 inference.setLevel(0.1)
 myStudy.add(inference)
 
-# 5-c Copula inference ##
+# 9- Copula inference ##
 copulaInference = otguibase.CopulaInferenceAnalysis('copulaInference', model3)
 factories = [ot.NormalCopulaFactory(), ot.GumbelCopulaFactory()]
 copulaInference.setDistributionsFactories(['x_0', 'x_3'], factories)
-copulaInference.run()
 myStudy.add(copulaInference)

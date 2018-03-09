@@ -91,6 +91,7 @@ void MarginalsWidget::buildInterface()
 
   // - delegate for distributions list
   ComboBoxDelegate * delegate = new ComboBoxDelegate(inputTableView_);
+  delegate->setNoWheelEvent(true);
   inputTableView_->setItemDelegateForColumn(1, delegate);
 
   // - connections
@@ -170,7 +171,7 @@ void MarginalsWidget::buildInterface()
       this);
   plotWidget->setDockWidget(plotsSettingWidget);
   connect(plotsSettingWidget, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
-  rightFrameLayout->addWidget(plotWidget);
+  rightFrameLayout->addWidget(plotWidget, 1);
 
   // button to open the OT documentation
   QToolButton * infoButton = new QToolButton;

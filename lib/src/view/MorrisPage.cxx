@@ -85,6 +85,9 @@ void MorrisPage::initialize(const Analysis& analysis)
   tableView_->setItemDelegateForColumn(2, spinBoxDelegate);
   tableView_->setItemDelegateForColumn(3, spinBoxDelegate);
 
+  // resize to contents
+  tableView_->resizeColumnsToContents();
+
   // if too many variables: no fixed height + use scrollbar
   if (tableModel_->rowCount() < 15)
   {
@@ -106,6 +109,17 @@ MorrisAnalysis MorrisPage::getAnalysis() const
 int MorrisPage::nextId() const
 {
   return ScreeningAnalysisWizard::Page_Morris2;
+}
+
+
+bool MorrisPage::validatePage()
+{
+  if (tableModel_->getAnalysis().getBounds().isEmpty())
+  {
+    errorMessageLabel_->setTemporaryErrorMessage(tr("The lower bounds must be lesser than the upper bounds"));
+    return false;
+  }
+  return true;
 }
 
 

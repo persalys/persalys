@@ -27,6 +27,7 @@
 #include "otgui/TranslationManager.hxx"
 
 #include <QScrollArea>
+#include <QSplitter>
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QHeaderView>
@@ -57,6 +58,8 @@ void CopulaInferenceResultWidget::buildInterface()
 
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
+
+  QSplitter * splitter = new QSplitter;
 
   QWidget * distTabListWidget = new QWidget;
   QHBoxLayout * distTabListWidgetLayout = new QHBoxLayout(distTabListWidget);
@@ -127,6 +130,7 @@ void CopulaInferenceResultWidget::buildInterface()
   distGroupBoxLayout->addStretch();
 
   distTabListWidgetLayout->addWidget(distGroupBox);
+  splitter->addWidget(distTabListWidget);
 
   // -- for each copula, display PDF-CDF/parameters
   ResizableStackedWidget * paramStackWidget = new ResizableStackedWidget;
@@ -173,9 +177,9 @@ void CopulaInferenceResultWidget::buildInterface()
   }
   connect(this, SIGNAL(distributionChanged(int)), paramStackWidget, SLOT(setCurrentIndex(int)));
 
-  distTabListWidgetLayout->addWidget(paramStackWidget, 1);
+  splitter->addWidget(paramStackWidget);
 
-  scrollArea->setWidget(distTabListWidget);
+  scrollArea->setWidget(splitter);
   mainLayout->addWidget(scrollArea);
 }
 

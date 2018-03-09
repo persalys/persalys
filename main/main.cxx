@@ -59,6 +59,10 @@ int main(int argc, char *argv[])
   qtTranslator.load("qt_" + QLocale::system().name(), ":/translations");
   app.installTranslator(&qtTranslator);
 
+  QTranslator qtbaseTranslator;
+  qtbaseTranslator.load("qtbase_" + QLocale::system().name(), ":/translations");
+  app.installTranslator(&qtbaseTranslator);
+
   QTranslator appTranslator;
   appTranslator.load("otgui_" + QLocale::system().name(), ":/translations");
   app.installTranslator(&appTranslator);

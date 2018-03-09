@@ -33,6 +33,7 @@ HeaderlessTableView::HeaderlessTableView(QWidget *parent)
 {
   viewport()->setMouseTracking(true);
   viewport()->installEventFilter(this);
+  horizontalHeader()->hide();
 }
 
 

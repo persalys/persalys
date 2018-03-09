@@ -23,6 +23,7 @@
 
 #include "otgui/AnalysisWizard.hxx"
 #include "otgui/OutputsSelectionGroupBox.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QTableWidget>
 #include <QLabel>
@@ -44,7 +45,7 @@ protected:
 private:
   QTableWidget * table_;
   OutputsSelectionGroupBox * outputsGroupBox_;
-  QLabel * errorMessageLabel_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif

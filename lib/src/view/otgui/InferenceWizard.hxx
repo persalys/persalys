@@ -25,10 +25,9 @@
 #include "otgui/InferenceAnalysis.hxx"
 #include "otgui/VariablesSelectionTableModel.hxx"
 #include "otgui/TemporaryLabel.hxx"
+#include "otgui/DoubleSpinBox.hxx"
 
 #include <openturns/FittingTest.hxx>
-
-#include <QModelIndex>
 
 namespace OTGUI
 {
@@ -50,7 +49,6 @@ public slots:
   void selectedVarChanged(QModelIndex, QModelIndex);
   void updateDistListForVar(QStringList);
   void updateInterestVar(OT::Description, OT::String);
-  void levelChanged(double);
 signals:
   void currentVarChanged(int);
   void currentVarChecked(bool);
@@ -60,6 +58,7 @@ private:
   InferenceAnalysis inference_;
   OT::Description interestVar_;
   std::map<OT::String, OT::FittingTest::DistributionFactoryCollection> distFactoriesForEachInterestVar_;
+  DoubleSpinBox * levelSpinbox_;
   TemporaryLabel * errorMessageLabel_;
   bool pageValidity_;
   VariablesSelectionTableModel * varTableModel_;

@@ -118,6 +118,7 @@ void DependenciesWidget::buildInterface()
 
   // - ComboBoxDelegate
   ComboBoxDelegate * delegate = new ComboBoxDelegate(tableView_);
+  delegate->setNoWheelEvent(true);
   tableView_->setItemDelegateForColumn(1, delegate);
 
   leftSideLayout->addWidget(tableView_);

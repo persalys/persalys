@@ -20,7 +20,7 @@
  */
 #include "otgui/OptimizationWizard.hxx"
 
-#include "otgui/DoubleSpinBox.hxx"
+#include "otgui/SpinBoxDelegate.hxx"
 #include "otgui/OptimizationAnalysis.hxx"
 
 #include <QHeaderView>
@@ -59,11 +59,21 @@ void OptimizationWizard::buildInterface()
   groupBoxLayout_ = new QVBoxLayout(inputsBox);
 
   tableView_ = new ResizableHeaderlessTableView;
-  tableView_->horizontalHeader()->hide();
+  tableView_->setEditTriggers(QTableView::AllEditTriggers);
 
   OptimizationAnalysis optim = *dynamic_cast<OptimizationAnalysis*>(analysis_.getImplementation().get());
   tableModel_ = new OptimizationTableModel(optim);
   tableView_->setModel(tableModel_);
+
+  // spinbox delegate column 2
+  SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate(tableView_);
+  spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::doubleValue);
+  tableView_->setItemDelegateForColumn(2, spinBoxDelegate);
+  // spinbox delegate column 3 - 4
+  spinBoxDelegate = new SpinBoxDelegate(true, tableView_);
+  spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::doubleValue);
+  tableView_->setItemDelegateForColumn(3, spinBoxDelegate);
+  tableView_->setItemDelegateForColumn(4, spinBoxDelegate);
 
   // resize table
   tableView_->resizeWithOptimalWidth();

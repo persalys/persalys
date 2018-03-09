@@ -506,9 +506,5 @@ void GridDesignOfExperiment::load(Advocate & adv)
   adv.loadAttribute("upperBounds_", upperBounds_);
   adv.loadAttribute("values_", values_);
   adv.loadAttribute("inputNames_", inputNames_);
-  // TODO rm later. avoid crash when opening older xml
-  const Sample inS(originalInputSample_);
-  updateParameters(); // clear originalInputSample_
-  originalInputSample_ = inS;
 }
 }

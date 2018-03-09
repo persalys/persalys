@@ -38,7 +38,7 @@ ModelEvaluationWizard::ModelEvaluationWizard(const Analysis& analysis, QWidget* 
   : AnalysisWizard(analysis, parent)
   , table_(0)
   , outputsGroupBox_(0)
-  , errorMessageLabel_(new QLabel)
+  , errorMessageLabel_(new TemporaryLabel)
 {
   buildInterface();
 }
@@ -60,7 +60,7 @@ void ModelEvaluationWizard::buildInterface()
 
   // output selection
   outputsGroupBox_ = new OutputsSelectionGroupBox(model.getSelectedOutputsNames(), analysis_ptr->getInterestVariables(), this);
-  pageLayout->addWidget(outputsGroupBox_);
+  pageLayout->addWidget(outputsGroupBox_, 0, Qt::AlignTop);
 
   // table
   const UnsignedInteger nbInputs = model.getInputDimension();
@@ -96,13 +96,22 @@ void ModelEvaluationWizard::buildInterface()
   }
   table_->resizeColumnsToContents();
 
+  // if too many variables: no fixed height + use scrollbar
+  if (table_->model()->rowCount() < 12)
+  {
+    int x1, y1, x2, y2;
+    table_->getContentsMargins(&x1, &y1, &x2, &y2);
+    const int h = table_->verticalHeader()->length() + table_->horizontalHeader()->height();
+    table_->setFixedHeight(h + y1 + y2);
+  }
+
   inputsLayout->addWidget(table_);
-  pageLayout->addWidget(inputsBox);
+  inputsLayout->setSizeConstraint(QLayout::SetMaximumSize);
+  pageLayout->addWidget(inputsBox, 1);
+  pageLayout->addStretch();
 
   /// -- error message
-  errorMessageLabel_->setWordWrap(true);
-  pageLayout->addStretch();
-  pageLayout->addWidget(errorMessageLabel_);
+  pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
 
   addPage(page);
 }
@@ -110,10 +119,9 @@ void ModelEvaluationWizard::buildInterface()
 
 bool ModelEvaluationWizard::validateCurrentPage()
 {
-  errorMessageLabel_->setText("");
   if (!outputsGroupBox_->getSelectedOutputsNames().size())
   {
-    errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(tr("At least one output must be selected")));
+    errorMessageLabel_->setTemporaryErrorMessage(tr("At least one output must be selected"));
     return false;
   }
 

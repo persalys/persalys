@@ -36,6 +36,7 @@
 #include <QGroupBox>
 #include <QHeaderView>
 #include <QScrollArea>
+#include <QSplitter>
 
 using namespace OT;
 
@@ -63,6 +64,25 @@ void OptimizationResultWindow::buildInterface()
 {
   setWindowTitle(tr("Optimization result"));
 
+  // get output info
+  const QString outputName(QString::fromUtf8(result_.getProblem().getObjective().getOutputDescription()[0].c_str()));
+
+  // main splitter
+  QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
+
+  // - list outputs
+  QGroupBox * outputsGroupBox = new QGroupBox(tr("Output"));
+  QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
+
+  OTguiListWidget * outputsListWidget = new OTguiListWidget;
+  outputsListWidget->addItems(QStringList() << outputName);
+  outputsListWidget->setCurrentRow(0);
+  outputsLayoutGroupBox->addWidget(outputsListWidget);
+
+  mainWidget->addWidget(outputsGroupBox);
+  mainWidget->setStretchFactor(0, 1);
+
+  // tab widget
   QTabWidget * tabWidget = new QTabWidget;
 
   // first tab --------------------------------
@@ -71,7 +91,6 @@ void OptimizationResultWindow::buildInterface()
 
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  tabLayout->setSizeConstraint(QLayout::SetFixedSize);
 
   // optimal value
   QGroupBox * optimGroupBox = new QGroupBox(tr("Optimal point"));
@@ -92,7 +111,7 @@ void OptimizationResultWindow::buildInterface()
 
   // output
   optimTableModel->setNotEditableHeaderItem(0, 0, tr("Output"));
-  optimTableModel->setNotEditableItem(0, 1, QString::fromUtf8(result_.getProblem().getObjective().getOutputDescription()[0].c_str()));
+  optimTableModel->setNotEditableItem(0, 1, outputName);
   optimTableModel->setNotEditableItem(0, 2, result_.getOptimalValue()[0]);
 
   // inputs
@@ -119,7 +138,7 @@ void OptimizationResultWindow::buildInterface()
   }
 
   optimGroupBoxLayout->addWidget(optimTableView);
-  tabLayout->addWidget(optimGroupBox);
+  tabLayout->addWidget(optimGroupBox, 0, Qt::AlignTop);
 
   // resu
   QGroupBox * groupBox = new QGroupBox(tr("Optimization result"));
@@ -141,7 +160,8 @@ void OptimizationResultWindow::buildInterface()
   ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
 
   groupBoxLayout->addWidget(table);
-  tabLayout->addWidget(groupBox);
+  tabLayout->addWidget(groupBox, 0, Qt::AlignTop);
+  tabLayout->addStretch();
 
   scrollArea->setWidget(tab);
 
@@ -213,6 +233,9 @@ void OptimizationResultWindow::buildInterface()
   if (modelDescriptionWidget_)
     tabWidget->addTab(modelDescriptionWidget_, tr("Model"));
 
-  setWidget(tabWidget);
+  mainWidget->addWidget(tabWidget);
+  mainWidget->setStretchFactor(1, 10);
+
+  setWidget(mainWidget);
 }
 }

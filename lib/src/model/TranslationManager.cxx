@@ -110,6 +110,9 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert(type("Amplitude", tr("Amplitude")));
   ParametersNames_.insert(type("Trend basis", tr("Trend basis")));
   ParametersNames_.insert(type("Leave-one-out validation", tr("Leave-one-out validation")));
+  ParametersNames_.insert(type("Analytical validation", tr("Analytical validation")));
+  ParametersNames_.insert(type("Test sample validation", tr("Test sample validation")));
+  ParametersNames_.insert(type("KFold validation", tr("KFold validation")));
   ParametersNames_.insert(type("Kriging", tr("Kriging")));
   ParametersNames_.insert(type("yes", tr("yes")));
   ParametersNames_.insert(type("no", tr("no")));
@@ -171,6 +174,8 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert(type("Copula", tr("Copula")));
   ParametersNames_.insert(type("Formula", tr("Formula")));
   ParametersNames_.insert(type("File name", tr("File name")));
+  ParametersNames_.insert(type("Number of trajectories", tr("Number of trajectories")));
+  ParametersNames_.insert(type("Columns", tr("Columns")));
 }
 
 

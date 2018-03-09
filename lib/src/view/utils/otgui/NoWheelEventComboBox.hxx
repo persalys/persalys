@@ -33,6 +33,7 @@ public:
   NoWheelEventComboBox(QWidget * parent = 0)
     : QComboBox(parent)
   {
+    setFocusPolicy(Qt::ClickFocus);
   }
 
 protected:

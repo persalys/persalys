@@ -22,6 +22,7 @@
 
 #include "otgui/FORMAnalysis.hxx"
 #include "otgui/SORMAnalysis.hxx"
+#include "otgui/FORMImportanceSamplingAnalysis.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/ParametersDefinitionWizard.hxx"
 #include "otgui/QtTools.hxx"
@@ -176,12 +177,10 @@ void ApproximationReliabilityPage::initialize(const Analysis& analysis)
   if (!approxAnalysis_ptr)
     return;
 
-  if (dynamic_cast<const FORMAnalysis*>(analysis_ptr))
+  if (dynamic_cast<const FORMAnalysis*>(analysis_ptr) || dynamic_cast<const FORMImportanceSamplingAnalysis*>(analysis_ptr))
     method_ = ApproximationReliabilityPage::FORM;
   else if (dynamic_cast<const SORMAnalysis*>(analysis_ptr))
     method_ = ApproximationReliabilityPage::SORM;
-  else
-    return;
 
   OptimizationAlgorithm solver = approxAnalysis_ptr->getOptimizationAlgorithm();
 

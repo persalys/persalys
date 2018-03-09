@@ -51,8 +51,6 @@ ParametersWidget::ParametersWidget(const QString title,           // table title
   // table view
   ParametersTableView * table = new ParametersTableView(names, values, showGrid, namesHasHeaderType);
   groupBoxLayout->addWidget(table);
-
-  groupBoxLayout->addStretch();
 }
 
 
@@ -78,7 +76,5 @@ ParametersWidget::ParametersWidget(const QString title,                  // tabl
   // table view
   ParametersTableView * table = new ParametersTableView(names, values, false, false);
   groupBoxLayout->addWidget(table);
-
-  groupBoxLayout->addStretch();
 }
 }
