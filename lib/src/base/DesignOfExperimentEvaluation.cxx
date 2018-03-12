@@ -64,6 +64,7 @@ void DesignOfExperimentEvaluation::setName(const String& name)
   PersistentObject::setName(name);
   // the analysis and designOfExperiment_ must have the same name
   designOfExperiment_.getImplementation()->setName(name);
+  notify("nameChanged");
 }
 
 

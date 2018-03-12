@@ -60,6 +60,13 @@ DesignOfExperimentImplementation* DesignOfExperimentImplementation::clone() cons
 }
 
 
+void DesignOfExperimentImplementation::setName(const String & name)
+{
+  PersistentObject::setName(name);
+  notify("nameChanged");
+}
+
+
 Bool DesignOfExperimentImplementation::operator==(const DesignOfExperimentImplementation& other) const
 {
   if (this == &other)

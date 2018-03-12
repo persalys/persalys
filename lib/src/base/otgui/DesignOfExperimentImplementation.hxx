@@ -39,6 +39,8 @@ public:
   /** Virtual constructor */
   virtual DesignOfExperimentImplementation * clone() const;
 
+  virtual void setName(const OT::String & name);
+
   /** Comparison operators */
   OT::Bool operator ==(const DesignOfExperimentImplementation & other) const;
   OT::Bool operator !=(const DesignOfExperimentImplementation & other) const;
