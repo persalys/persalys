@@ -929,7 +929,7 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
             oss << truncatedDistribution.getUpperBound() << ", ot.TruncatedDistribution.UPPER)\n";
         }
         else  // both sides truncation
-          oss << truncatedDistribution.getUpperBound() << ", " << truncatedDistribution.getUpperBound() << ")\n";
+          oss << "ot.Interval(" << truncatedDistribution.getLowerBound() << ", " << truncatedDistribution.getUpperBound() << "))\n";
       }
 
       result += oss.str();
