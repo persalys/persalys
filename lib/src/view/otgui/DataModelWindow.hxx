@@ -27,7 +27,6 @@
 #include "otgui/OTguiSubWindow.hxx"
 
 #include <QLineEdit>
-#include <QToolButton>
 #include <QSortFilterProxyModel>
 
 namespace OTGUI
@@ -63,18 +62,18 @@ public:
 
 protected:
   void buildInterface();
-  void updateTable(const QString& fileName, const bool isReloadAction);
+  void updateTable(const QString& fileName);
 
 public slots:
   void openFileRequested();
   void refreshTable();
-  void updateTableView(const bool isReloadAction = true, const bool useSampleFromFile = true);
+  void updateTableView(const bool useSampleFromFile = true);
 
 private:
   DataModel * dataModel_;
   QLineEdit * filePathLineEdit_;
   QPalette defaultLineEditPalette_;
-  QToolButton * reloadButton_;
+  QLabel * sampleSizeLabel_;
   ExportableTableView * dataTableView_;
   DataModelTableModel * dataTableModel_;
   DataModelProxModel * proxyModel_;
