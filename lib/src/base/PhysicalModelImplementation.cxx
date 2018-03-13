@@ -78,6 +78,13 @@ PhysicalModelImplementation* PhysicalModelImplementation::clone() const
 }
 
 
+void PhysicalModelImplementation::setName(const String & name)
+{
+  PersistentObject::setName(name);
+  notify("nameChanged");
+}
+
+
 Bool PhysicalModelImplementation::operator==(const PhysicalModelImplementation& other) const
 {
   if (this == &other)

@@ -70,6 +70,14 @@ OTStudyImplementation* OTStudyImplementation::clone() const
 }
 
 
+void OTStudyImplementation::setName(const String & name)
+{
+  PersistentObject::setName(name);
+  modified_ = true;
+  notify("statusChanged");
+}
+
+
 void OTStudyImplementation::update(Observable* source, const String& message)
 {
   if (message == "informationMessageUpdated" ||

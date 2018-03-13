@@ -47,6 +47,8 @@ public:
   /** Virtual constructor */
   virtual PhysicalModelImplementation * clone() const;
 
+  virtual void setName(const OT::String & name);
+
   /** Comparison operators */
   OT::Bool operator ==(const PhysicalModelImplementation & other) const;
   OT::Bool operator !=(const PhysicalModelImplementation & other) const;

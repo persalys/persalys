@@ -43,6 +43,8 @@ public:
   /** Virtual constructor */
   virtual OTStudyImplementation * clone() const;
 
+  virtual void setName(const OT::String & name);
+
   // Observer method override
   virtual void update(Observable * source, const OT::String & message);
 

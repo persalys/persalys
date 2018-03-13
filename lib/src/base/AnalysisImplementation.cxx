@@ -71,6 +71,7 @@ AnalysisImplementation* AnalysisImplementation::clone() const
 void AnalysisImplementation::setName(const String& name)
 {
   PersistentObject::setName(name);
+  notify("nameChanged");
 }
 
 
