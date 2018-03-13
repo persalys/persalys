@@ -257,9 +257,16 @@ void OptimizationAnalysis::launch()
   // set OptimizationProblem
   OptimizationProblem problem(objective, Function(), Function(), bounds);
   problem.setMinimization(isMinimization_);
-
   // build solver
   OptimizationAlgorithm solver(OptimizationAlgorithm::Build(solverName_));
+
+  // FIXME: https://github.com/openturns/openturns/pull/703
+  NLopt * nlopt = dynamic_cast<NLopt*>(solver.getImplementation().get());
+  if (nlopt) {
+    NLopt localAlgo("LD_MMA");
+    nlopt->setLocalSolver(localAlgo);
+  }
+
   solver.setProblem(problem);
   solver.setStartingPoint(variableInputsValues);
   solver.getImplementation().get()->setMaximumEvaluationNumber(getMaximumEvaluationNumber()); // TODO with future OT : remove it
