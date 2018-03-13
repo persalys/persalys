@@ -78,8 +78,17 @@ void ImportDesignOfExperimentPage::buildInterface()
   gridLayout->setSpacing(6);
   gridLayout->setContentsMargins(11, 11, 11, 11);
 
+  // DOE size
+  QHBoxLayout * sizeLayout = new QHBoxLayout;
+  QLabel * sizeLabel = new QLabel(tr("Size") + " : ");
+  sizeLayout->addWidget(sizeLabel);
+  DOESizeLabel_ = new QLabel(QString::number(0));
+  sizeLayout->addWidget(DOESizeLabel_);
+  sizeLayout->addStretch();
+  gridLayout->addLayout(sizeLayout, 0, 0);
+
   dataPreviewTableView_ = new ExportableTableView(groupBox);
-  gridLayout->addWidget(dataPreviewTableView_, 0, 0, 1, 1);
+  gridLayout->addWidget(dataPreviewTableView_, 1, 0, 1, 1);
 
   mainGridLayout->addWidget(groupBox, 1, 0, 1, 1);
 
@@ -87,18 +96,6 @@ void ImportDesignOfExperimentPage::buildInterface()
   errorMessageLabel_ = new QLabel;
   errorMessageLabel_->setWordWrap(true);
   mainGridLayout->addWidget(errorMessageLabel_, 2, 0, 1, 1);
-
-  // DOE size
-  QHBoxLayout * sizeLayout = new QHBoxLayout;
-  QLabel * sizeLabel = new QLabel(tr("Size of the design of experiments:") + " ");
-  sizeLayout->addWidget(sizeLabel);
-  DOESizeLabel_ = new QLabel(QString::number(0));
-  sizeLayout->addWidget(DOESizeLabel_);
-  sizeLayout->addStretch();
-  mainGridLayout->addLayout(sizeLayout, 3, 0);
-
-  // register field
-  registerField("ImportedDOESize", DOESizeLabel_, "text", SIGNAL(textChanged()));
 }
 
 
@@ -144,6 +141,9 @@ void ImportDesignOfExperimentPage::setData(const QString& fileName)
   }
   catch (std::exception & ex)
   {
+    dataPreviewTableView_->setModel(0);
+    // DOE size
+    DOESizeLabel_->setText("");
     QString message = tr("Impossible to load the file.") + "\n";
     message = QString("<font color=red>%1%2</font>").arg(message).arg(ex.what());
     errorMessageLabel_->setText(message);
@@ -157,26 +157,14 @@ void ImportDesignOfExperimentPage::setTable(const QString& fileName)
   // set file name
   designOfExperiment_.setFileName(fileName.toLocal8Bit().data());
 
-  // check sample From File
+  // get sample From File
   Sample sample(designOfExperiment_.getSampleFromFile());
-  if (!designOfExperiment_.getInputColumns().check(sample.getDimension()))
-    throw InvalidArgumentException(HERE) << tr("Impossible to load sample marginals").toLocal8Bit().data();
 
+  // get input names
   const Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
 
-  if (sample.getDimension() < inputNames.getSize())
-    throw InvalidArgumentException(HERE) << tr("The file contains a sample with a dimension lesser than the number of inputs of the physical model:").toLocal8Bit().data()
-                                         << " " << inputNames.getSize();
-
-  // set inputs columns indices
+  // get inputs columns indices
   Indices columns(designOfExperiment_.getInputColumns());
-  if (!columns.getSize())
-  {
-    columns = Indices(inputNames.getSize());
-    columns.fill();
-  }
-  // reset input sample
-  designOfExperiment_.setInputColumns(columns);
 
   // set sample description
   Description desc(sample.getDimension());

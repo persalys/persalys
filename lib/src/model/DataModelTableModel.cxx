@@ -38,22 +38,21 @@ DataModelTableModel::DataModelTableModel(DataModel* dataModel, QObject* parent)
 }
 
 
-void DataModelTableModel::updateData(const Sample& data, const bool isReloadAction, const bool useColumns)
+void DataModelTableModel::updateData(const bool useColumns)
 {
   beginResetModel();
-  data_ = data;
-  updatePrivateData(isReloadAction, useColumns);
-  endResetModel();
-}
 
+  // update data_
+  if (useColumns)
+    data_ = dataModel_->getSampleFromFile();
+  else
+    data_ = dataModel_->getSample();
 
-void DataModelTableModel::updatePrivateData(const bool isReloadAction, const bool useColumns)
-{
   // data_ is the sample of dataModel which can be smaller than the sample from the file
   // so we can not use getIn/OutputColumns()
   if (!useColumns)
   {
-    // condition used when opening a data model: we use dataModel.getSample() and not the sample from the file
+    // when opening a data model: we use dataModel.getSample() and not the sample from the file
     // so we can not use getInputColumns and getOutputColumns.
     // In dataModel.getSample(): we put first the input sample, then the output sample
     // so we can retrieve easily the indices
@@ -66,40 +65,30 @@ void DataModelTableModel::updatePrivateData(const bool isReloadAction, const boo
   {
     // data_ is the sample from the file
     // so we can use getIn/OutputColumns()
-    if (isReloadAction)
+    inputColumns_ = dataModel_->getInputColumns();
+    outputColumns_ = dataModel_->getOutputColumns();
+
+    // update data_ description
+    Description dataDescription(data_.getDescription());
+    if (inputColumns_.getSize())
     {
-      inputColumns_ = dataModel_->getInputColumns();
-      outputColumns_ = dataModel_->getOutputColumns();
-      // update data_ description
-      Description dataDescription(data_.getDescription());
-      if (inputColumns_.getSize())
+      if (dataModel_->getInputNames().getSize() == inputColumns_.getSize())
       {
-        if (dataModel_->getInputNames().getSize() == inputColumns_.getSize())
-        {
-          for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++i)
-            dataDescription[inputColumns_[i]] = dataModel_->getInputNames()[i];
-        }
+        for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++i)
+          dataDescription[inputColumns_[i]] = dataModel_->getInputNames()[i];
       }
-      if (outputColumns_.getSize())
-      {
-        if (dataModel_->getOutputNames().getSize() == outputColumns_.getSize())
-        {
-          for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++i)
-            dataDescription[outputColumns_[i]] = dataModel_->getOutputNames()[i];
-        }
-      }
-      data_.setDescription(dataDescription);
     }
-    else
+    if (outputColumns_.getSize())
     {
-      inputColumns_ = Indices(data_.getDimension() > 1 ? data_.getDimension() - 1 : 1);
-      inputColumns_.fill();
-      outputColumns_ = Indices(data_.getDimension() > 1 ? 1 : 0, data_.getDimension() - 1);
-      dataModel_->blockNotification("DataModelDefinition");
-      dataModel_->setColumns(inputColumns_, outputColumns_);
-      dataModel_->blockNotification();
+      if (dataModel_->getOutputNames().getSize() == outputColumns_.getSize())
+      {
+        for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++i)
+          dataDescription[outputColumns_[i]] = dataModel_->getOutputNames()[i];
+      }
     }
+    data_.setDescription(dataDescription);
   }
+  endResetModel();
 }
 
 

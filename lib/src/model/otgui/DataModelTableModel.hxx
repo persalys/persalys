@@ -22,7 +22,6 @@
 #define OTGUI_DATAMODELTABLEMODEL_HXX
 
 #include "otgui/DataModel.hxx"
-#include "otgui/DesignOfExperiment.hxx"
 #include "otgui/SampleTableModel.hxx"
 
 namespace OTGUI
@@ -39,10 +38,7 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
   QVariant data(const QModelIndex & index, int role) const;
   bool setData(const QModelIndex & index, const QVariant & value, int role);
-  void updateData(const OT::Sample& data, const bool isReloadAction = false, const bool useColumns = false);
-
-protected:
-  void updatePrivateData(const bool isReloadAction, const bool useColumns);
+  void updateData(const bool useColumns);
 
 signals:
   void errorMessageChanged(const QString & message);

@@ -101,30 +101,40 @@ void DataModel::setFileName(const String& fileName)
   if (fileName.empty())
     throw InvalidArgumentException(HERE) << "The file name can not be empty";
 
-  if (fileName_ != fileName)
-  {
-    const String oldFileName = fileName_;
-    sampleFromFile_.clear();
-    try
-    {
-      fileName_ = fileName;
-      getSampleFromFile();
-      // reinitialization
-      initialize();
-      inputColumns_ = Indices();
-      outputColumns_ = Indices();
-      inputNames_ = Description();
-      outputNames_ = Description();
-    }
-    catch (std::exception& ex)
-    {
-      fileName_ = oldFileName;
-      throw InvalidArgumentException(HERE) << ex.what();
-    }
-  }
-  else
+  const String oldFileName = fileName_;
+  sampleFromFile_.clear();
+  fileName_ = fileName;
+  try
   {
     getSampleFromFile();
+  }
+  catch (std::exception& ex)
+  {
+    fileName_ = oldFileName;
+    throw InvalidArgumentException(HERE) << ex.what();
+  }
+
+  // set columns and names
+  bool validArg = false;
+  if (fileName_ == oldFileName)
+  {
+    try
+    {
+      setColumns(inputColumns_, outputColumns_, inputNames_, outputNames_);
+      validArg = true;
+    }
+    catch (std::exception)
+    {
+    }
+  }
+  // default values if needed
+  if (!validArg)
+  {
+    const UnsignedInteger dim = sampleFromFile_.getDimension();
+    inputColumns_ = Indices(dim > 1 ? dim - 1 : 1);
+    inputColumns_.fill();
+    outputColumns_ = Indices(dim > 1 ? 1 : 0, dim - 1);
+    setColumns(inputColumns_, outputColumns_);
   }
 }
 

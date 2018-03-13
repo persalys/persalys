@@ -92,27 +92,38 @@ void ImportedDesignOfExperiment::setFileName(const String& fileName)
   if (fileName.empty())
     throw InvalidArgumentException(HERE) << "The file name can not be empty";
 
-  if (fileName_ != fileName)
+  const String oldFileName = fileName_;
+  sampleFromFile_.clear();
+  fileName_ = fileName;
+  try
   {
-    const String oldFileName = fileName_;
+    getSampleFromFile();
+  }
+  catch (std::exception& ex)
+  {
+    fileName_ = oldFileName;
+    throw InvalidArgumentException(HERE) << ex.what();
+  }
+
+  // set columns and names
+  bool validArg = false;
+  if (fileName_ == oldFileName)
+  {
     try
     {
-      sampleFromFile_.clear();
-      fileName_ = fileName;
-      getSampleFromFile();
-      // reinitialization
-      originalInputSample_.clear();
-      initialize();
-      inputColumns_ = Indices();
+      setInputColumns(inputColumns_);
+      validArg = true;
     }
     catch (std::exception)
     {
-      fileName_ = oldFileName;
     }
   }
-  else
+  // default values if needed
+  if (!validArg)
   {
-    getSampleFromFile();
+    inputColumns_ = Indices(getPhysicalModel().getInputDimension());
+    inputColumns_.fill();
+    setInputColumns(inputColumns_);
   }
 }
 
@@ -138,7 +149,7 @@ void ImportedDesignOfExperiment::setInputColumns(const Indices& inputColumns)
 
   inputColumns_ = inputColumns;
 
-  // reinitialize
+  // reset
   originalInputSample_.clear();
   initialize();
 }
@@ -148,7 +159,14 @@ Sample ImportedDesignOfExperiment::getSampleFromFile() const
 {
   if (!sampleFromFile_.getSize())
   {
-    sampleFromFile_ = ImportSample(fileName_);
+    const Sample sampleFromFile(ImportSample(fileName_));
+
+    // check sampleFromFile dimension
+    const Description inputNames = getPhysicalModel().getInputNames();
+    if (sampleFromFile.getDimension() < inputNames.getSize())
+      throw InvalidArgumentException(HERE) << "The file contains a sample with a dimension lesser than the number of inputs of the physical model: "
+                                           << inputNames.getSize();
+    sampleFromFile_ = sampleFromFile;
 
     // check the sample description
     const Description sampleDescription(sampleFromFile_.getDescription());
