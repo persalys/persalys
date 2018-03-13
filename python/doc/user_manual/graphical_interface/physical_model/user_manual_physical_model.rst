@@ -16,9 +16,10 @@ The context menu of the OTStudy or its window provides three types of physical m
 
 The creation of a physical model adds a new element in the study tree below an item named **Physical models**.
 
-Its context menu has two actions:
-  - **Define the model**: Open a new window to define the model
-  - **Remove**: Remove the model from the study
+Its context menu has the following actions:
+  - **Rename**: Rename the model;
+  - **Define the model**: Open a new window to define the model;
+  - **Remove**: Remove the model from the study.
 
 .. image:: /user_manual/graphical_interface/physical_model/physicalModelNameContextMenu.png
     :align: center
@@ -35,9 +36,9 @@ When passing the cursor on each box, an information message appears at the botto
 in order to specify what sort of actions the box proposes. If the box is disabled the message
 indicates why the previous one is not valid.
 
-On the above screenshot, the cursor has been on the **Probabilistic model definition** box.
-The text explains that this box enables to define stochastic input variables and correlation,
-but these actions are possible only if the user has defined at least an input variable in the
+On the above screenshot, the cursor is on the **Probabilistic model definition** box.
+The text explains that this box enables to define stochastic input variables and dependence,
+but these actions are possible only if the user has defined at least one input variable in the
 physical model.
 So, here the only option of the user is to complete the model.
 
@@ -51,7 +52,7 @@ New physical model can be defined through:
 When the definition is requiring, a new item named **Definition** appears in the study tree.
 
 Its context menu proposes these actions:
-  - **Probabilistic model**: Create stochastic input variables and correlation
+  - **Probabilistic model**: Create stochastic input variables and dependence
   - **Evaluation**: Evaluate the model at a point
   - **Design of experiments**: Create a new design of experiments
 

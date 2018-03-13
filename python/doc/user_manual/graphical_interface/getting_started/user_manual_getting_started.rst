@@ -122,6 +122,7 @@ The context menu of study item gathers the same actions as the window:
   - **Data model**: Define a physical model with samples
 
 and the following actions:
-  - **Export Python**: Display a dialog box for choosing the directory to export the study as an OTGui Python script.
-  - **Save**: Save the study
+  - **Rename**: Rename the study;
+  - **Export Python**: Display a dialog box for choosing the directory to export the study as an OTGui Python script;
+  - **Save**: Save the study;
   - **Close**: Close the study. A pop-up dialog window will appear if the study has not been saved.
