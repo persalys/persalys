@@ -242,6 +242,11 @@ bool OptimizationWizard::validateCurrentPage()
         finiteUpperB.add(bounds.getFiniteUpperBound()[i]);
       }
     }
+    if (!variableInputsValues.getSize())
+    {
+      errorMessageLabel_->setTemporaryErrorMessage(tr("At least one variable must vary"));
+      return false;
+    }
     Interval varBounds(lowerB, upperB, finiteLowerB, finiteUpperB);
     if (varBounds.isEmpty())
     {

@@ -213,7 +213,7 @@ void OptimizationAnalysis::launch()
   if (startingPoint_.getDimension() != getPhysicalModel().getInputs().getSize())
     throw InvalidArgumentException(HERE) << "Invalid starting point";
   if (!variableInputs_.getSize())
-    throw InvalidArgumentException(HERE) << "No variable to optimize";
+    throw InvalidArgumentException(HERE) << "At least one variable must vary";
   for (UnsignedInteger i = 0; i < variableInputs_.getSize(); ++i)
   {
     if (!getPhysicalModel().hasInputNamed(variableInputs_[i]))
