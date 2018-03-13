@@ -221,7 +221,9 @@ Analysis OptimizationWizard::getAnalysis() const
 
 bool OptimizationWizard::validateCurrentPage()
 {
-  if (currentId() == 1)
+  if (currentId() == 0)
+    return QWizard::validateCurrentPage();
+  else if (currentId() == 1)
   {
     Point variableInputsValues;
     Point lowerB;
