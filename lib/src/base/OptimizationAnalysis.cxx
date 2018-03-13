@@ -131,8 +131,8 @@ void OptimizationAnalysis::initializeParameters()
       upperBounds[i] = 0.1;
       if (startingPoint_[i] != 0)
       {
-        lowerBounds[i] = 0.9 * startingPoint_[i];
-        upperBounds[i] = 1.1 * startingPoint_[i];
+        lowerBounds[i] = startingPoint_[i] - 0.1 * std::abs(startingPoint_[i]);
+        upperBounds[i] = startingPoint_[i] + 0.1 * std::abs(startingPoint_[i]);
       }
     }
     else
