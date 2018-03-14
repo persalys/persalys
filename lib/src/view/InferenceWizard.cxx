@@ -59,12 +59,20 @@ void InferenceWizard::initialize()
   InferenceAnalysis * analysis_ptr = dynamic_cast<InferenceAnalysis*>(analysis_.getImplementation().get());
   Q_ASSERT(analysis_ptr);
   inference_ = *analysis_ptr;
-  interestVar_ = inference_.getInterestVariables();
 
   const Description doeVarNames(inference_.getDesignOfExperiment().getSample().getDescription());
 
+  // interest variables
+  for (UnsignedInteger i = 0; i < inference_.getInterestVariables().getSize(); ++i)
+  {
+    if (doeVarNames.contains(inference_.getInterestVariables()[i]))
+      interestVar_.add(inference_.getInterestVariables()[i]);
+  }
+
+  // current variable
   currentVarName_ = doeVarNames[0];
 
+  // distributions
   for (UnsignedInteger i = 0; i < doeVarNames.getSize(); ++i)
   {
     const String varName = doeVarNames[i];
@@ -257,6 +265,12 @@ bool InferenceWizard::validateCurrentPage()
 {
   if (!pageValidity_)
     return false;
+
+  if (!interestVar_.getSize())
+  {
+    errorMessageLabel_->setTemporaryErrorMessage(tr("Select at least one variable"));
+    return false;
+  }
 
   for (UnsignedInteger i = 0; i < interestVar_.getSize(); ++i)
   {
