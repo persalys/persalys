@@ -53,27 +53,36 @@ bool HeaderlessTableView::eventFilter(QObject *obj, QEvent *event)
   {
     if (QMouseEvent *e = dynamic_cast<QMouseEvent *>(event))
     {
-      const int col_left = columnAt(e->pos().x() - boundary_width_ / 2);
-      const int col_right = columnAt(e->pos().x() + boundary_width_ / 2);
-      const bool was_on_boundary = column_index_ != -1;
-      if (col_left != col_right)
+      const int currentRow = rowAt(e->pos().y());
+      if (currentRow == 0)
       {
-        if (column_index_ == -1)
+        const int col_left = columnAt(e->pos().x() - boundary_width_ / 2);
+        const int col_right = columnAt(e->pos().x() + boundary_width_ / 2);
+        const bool was_on_boundary = column_index_ != -1;
+        if (col_left != col_right)
         {
-          if (col_left != -1)
+          if (column_index_ == -1)
           {
-            column_index_ = col_left;
+            if (col_left != -1)
+            {
+              column_index_ = col_left;
+            }
           }
+        }
+        else
+        {
+          column_index_ = -1;
+        }
+        const bool is_on_boundary = column_index_ != -1;
+        if (is_on_boundary != was_on_boundary)
+        {
+          entered_column_boundary(is_on_boundary);
         }
       }
       else
       {
         column_index_ = -1;
-      }
-      const bool is_on_boundary = column_index_ != -1;
-      if (is_on_boundary != was_on_boundary)
-      {
-        entered_column_boundary(is_on_boundary);
+        entered_column_boundary(false);
       }
     }
   }
