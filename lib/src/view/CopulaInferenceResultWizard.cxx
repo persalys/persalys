@@ -53,7 +53,7 @@ void CopulaInferenceResultWizard::buildInterface()
   setWindowTitle(tr("Inference analyses results"));
 
   QWizardPage * page = new QWizardPage(this);
-  page->setTitle(tr("Define dependency between %1").arg(QtOT::DescriptionToStringList(variables_).join(", ")));
+  page->setTitle(tr("Define dependence between %1").arg(QtOT::DescriptionToStringList(variables_).join(", ")));
   QVBoxLayout * mainLayout = new QVBoxLayout(page);
 
   QWidget * topWidget = new QWidget;
@@ -189,19 +189,20 @@ void CopulaInferenceResultWizard::updateVariablesComboBox(int currentAnalysis)
     {
       tableView_->show();
       connect(variablesComboBox_, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateVariablesTable(QString)));
+
+      variablesComboBox_->addItems(variablesNames);
+      variablesComboBox_->blockSignals(false);
+      variablesComboBox_->setCurrentIndex(0);
+      inferenceResultStackWidget_->setCurrentIndex(0);
+      updateVariablesTable(variablesComboBox_->currentText());
     }
   }
-  variablesComboBox_->addItems(variablesNames);
-  variablesComboBox_->blockSignals(false);
-  variablesComboBox_->setCurrentIndex(0);
-  inferenceResultStackWidget_->setCurrentIndex(0);
-  updateVariablesTable(variablesComboBox_->currentText());
 }
 
 
 void CopulaInferenceResultWizard::updateVariablesTable(const QString &text)
 {
-  if (!tableView_)
+  if (!tableView_ || text.isEmpty())
     return;
 
   const QStringList variablesNames(text.split(QRegExp("\\W+"), QString::SkipEmptyParts));
@@ -248,7 +249,7 @@ bool CopulaInferenceResultWizard::validateCurrentPage()
   CopulaInferenceResultWidget * widget = dynamic_cast<CopulaInferenceResultWidget*>(inferenceResultStackWidget_->currentWidget());
   if (!widget)
   {
-    errorMessageLabel_->setTemporaryErrorMessage(tr("No copulas with a dimension of %1 in this result").arg(variables_.getSize()));
+    errorMessageLabel_->setTemporaryErrorMessage(tr("No copula with a dimension of %1 in this result").arg(variables_.getSize()));
     return false;
   }
   if (!widget->isSelectedCopulaValid())
