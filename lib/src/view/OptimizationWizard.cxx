@@ -45,7 +45,7 @@ void OptimizationWizard::buildInterface()
   setWindowTitle(tr("Optimization"));
 
   // -- intro page
-  introPage_ = new IntroOptimizationPage(this);
+  introPage_ = new OptimizationIntroPage(this);
   introPage_->initialize(analysis_);
   setPage(0, introPage_);
 

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to define the limit state and the method of reliability analysis
+ *  @brief QWizardPage to define the design of experiments and the method of metamodel analysis
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -18,46 +18,51 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_INTRORELIABILITYPAGE_HXX
-#define OTGUI_INTRORELIABILITYPAGE_HXX
+#ifndef OTGUI_INTROMETAMODELPAGE_HXX
+#define OTGUI_INTROMETAMODELPAGE_HXX
 
-#include "otgui/LimitState.hxx"
+#include "otgui/DesignOfExperiment.hxx"
 #include "otgui/Analysis.hxx"
+#include "otgui/OutputsSelectionGroupBox.hxx"
 
-#include <QComboBox>
 #include <QWizardPage>
 #include <QLabel>
-#include <QButtonGroup>
+#include <QComboBox>
 #include <QStandardItemModel>
-#include <QMetaType> // mandatory to specify it to avoid windows compilation problem
-
-Q_DECLARE_METATYPE(OTGUI::LimitState)
+#include <QButtonGroup>
 
 namespace OTGUI
 {
 
-class OTGUI_API IntroReliabilityPage : public QWizardPage
+class OTGUI_API MetaModelIntroPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  IntroReliabilityPage(QWidget* parent = 0);
+  MetaModelIntroPage(QWidget* parent = 0);
 
   virtual int nextId() const;
 
-  void initialize(const Analysis& analysis, QList<LimitState> limitStatesList);
-  LimitState getLimitState() const;
+  void initialize(const Analysis& analysis, QList<DesignOfExperiment> doesList);
+  DesignOfExperiment getDesignOfExperiment() const;
+  OT::Description getInterestVariables() const;
+
+  virtual bool validatePage();
 
 public slots:
-  void changeLimitStateLabel(int);
+  void updateDesignOfExperiment(int);
+  void updateInterestVariables(QStringList);
 signals:
-  void methodChanged(int);
+  void designOfExperimentChanged(DesignOfExperiment);
 
 private:
-  QComboBox * limitStatesComboBox_;
-  QStandardItemModel * limitStatesComboBoxModel_;
-  QLabel * limitStateLabel_;
+  QComboBox * doesComboBox_;
+  QStandardItemModel * doesComboBoxModel_;
+  QLabel * doeLabel_;
+  OutputsSelectionGroupBox * outputsSelectionGroupBox_;
   QButtonGroup * methodGroup_;
+  QLabel * errorMessageLabel_;
+  OT::Description interestVariables_;
 };
 }
 #endif

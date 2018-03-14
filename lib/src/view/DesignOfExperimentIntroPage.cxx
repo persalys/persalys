@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/IntroDesignOfExperimentPage.hxx"
+#include "otgui/DesignOfExperimentIntroPage.hxx"
 
 #include "otgui/DesignOfExperimentEvaluation.hxx"
 #include "otgui/DesignOfExperimentWizard.hxx"
@@ -32,7 +32,7 @@ using namespace OT;
 namespace OTGUI
 {
 
-IntroDesignOfExperimentPage::IntroDesignOfExperimentPage(QWidget* parent)
+DesignOfExperimentIntroPage::DesignOfExperimentIntroPage(QWidget* parent)
   : QWizardPage(parent)
   , methodGroup_(0)
 {
@@ -47,17 +47,17 @@ IntroDesignOfExperimentPage::IntroDesignOfExperimentPage(QWidget* parent)
 
   // Deterministic
   QRadioButton * deterministicButton = new QRadioButton(tr("Deterministic"));
-  methodGroup_->addButton(deterministicButton, IntroDesignOfExperimentPage::deterministic);
+  methodGroup_->addButton(deterministicButton, DesignOfExperimentIntroPage::deterministic);
   methodLayout->addWidget(deterministicButton);
 
   // Probabilistic
   QRadioButton * probaButton = new QRadioButton(tr("Probabilistic"));
-  methodGroup_->addButton(probaButton, IntroDesignOfExperimentPage::probabilistic);
+  methodGroup_->addButton(probaButton, DesignOfExperimentIntroPage::probabilistic);
   methodLayout->addWidget(probaButton);
 
   // import
   QRadioButton * importButton = new QRadioButton(tr("Import data"));
-  methodGroup_->addButton(importButton, IntroDesignOfExperimentPage::import);
+  methodGroup_->addButton(importButton, DesignOfExperimentIntroPage::import);
   methodLayout->addWidget(importButton);
 
   pageLayout->addWidget(methodBox);
@@ -69,7 +69,7 @@ IntroDesignOfExperimentPage::IntroDesignOfExperimentPage(QWidget* parent)
 }
 
 
-void IntroDesignOfExperimentPage::initialize(const Analysis& analysis)
+void DesignOfExperimentIntroPage::initialize(const Analysis& analysis)
 {
   const DesignOfExperimentEvaluation * analysis_ptr = dynamic_cast<const DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
   if (!analysis_ptr)
@@ -77,35 +77,35 @@ void IntroDesignOfExperimentPage::initialize(const Analysis& analysis)
 
   if (!analysis_ptr->getPhysicalModel().hasStochasticInputs())
   {
-    methodGroup_->button(IntroDesignOfExperimentPage::probabilistic)->setToolTip(tr("The physical model has no stochastic inputs"));
-    methodGroup_->button(IntroDesignOfExperimentPage::probabilistic)->setEnabled(false);
+    methodGroup_->button(DesignOfExperimentIntroPage::probabilistic)->setToolTip(tr("The physical model has no stochastic inputs"));
+    methodGroup_->button(DesignOfExperimentIntroPage::probabilistic)->setEnabled(false);
   }
 
   // method
   const String analysisName = analysis.getImplementation()->getClassName();
 
   if (analysisName == "ProbabilisticDesignOfExperiment")
-    methodGroup_->button(IntroDesignOfExperimentPage::probabilistic)->click();
+    methodGroup_->button(DesignOfExperimentIntroPage::probabilistic)->click();
   else if (analysisName == "ImportedDesignOfExperiment" && analysis_ptr->getPhysicalModel().hasStochasticInputs())
-    methodGroup_->button(IntroDesignOfExperimentPage::import)->click();
+    methodGroup_->button(DesignOfExperimentIntroPage::import)->click();
   else
-    methodGroup_->button(IntroDesignOfExperimentPage::deterministic)->click();
+    methodGroup_->button(DesignOfExperimentIntroPage::deterministic)->click();
 }
 
 
-int IntroDesignOfExperimentPage::nextId() const
+int DesignOfExperimentIntroPage::nextId() const
 {
-  switch (IntroDesignOfExperimentPage::Method(methodGroup_->checkedId()))
+  switch (DesignOfExperimentIntroPage::Method(methodGroup_->checkedId()))
   {
-    case IntroDesignOfExperimentPage::deterministic:
+    case DesignOfExperimentIntroPage::deterministic:
     {
       return DesignOfExperimentWizard::Page_Deterministic;
     }
-    case IntroDesignOfExperimentPage::probabilistic:
+    case DesignOfExperimentIntroPage::probabilistic:
     {
       return DesignOfExperimentWizard::Page_Probabilistic;
     }
-    case IntroDesignOfExperimentPage::import:
+    case DesignOfExperimentIntroPage::import:
     {
       return DesignOfExperimentWizard::Page_Import;
     }

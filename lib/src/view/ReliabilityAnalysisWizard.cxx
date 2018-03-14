@@ -65,7 +65,7 @@ void ReliabilityAnalysisWizard::buildInterface()
   setWindowTitle(tr("Threshold exceedance"));
 
   // First Page: choose the limit state and the method of reliability analysis
-  introPage_ = new IntroReliabilityPage(this);
+  introPage_ = new ReliabilityIntroPage(this);
   introPage_->initialize(analysis_, limitStateList_);
   setPage(Page_Intro, introPage_);
 

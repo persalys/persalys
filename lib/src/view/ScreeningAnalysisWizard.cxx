@@ -40,7 +40,7 @@ void ScreeningAnalysisWizard::buildInterface()
   setWindowTitle(tr("Screening analysis"));
 
   // First Page: choose the method
-  introPage_ = new IntroScreeningPage(this);
+  introPage_ = new ScreeningIntroPage(this);
   introPage_->initialize(analysis_);
   setPage(Page_Intro, introPage_);
 

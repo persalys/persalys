@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to define the method of screening analysis
+ *  @brief QWizardPage to define the method of sensitivity analysis
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -18,8 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_INTROSCREENINGPAGE_HXX
-#define OTGUI_INTROSCREENINGPAGE_HXX
+#ifndef OTGUI_INTROSENSITIVITYPAGE_HXX
+#define OTGUI_INTROSENSITIVITYPAGE_HXX
 
 #include "otgui/Analysis.hxx"
 #include "otgui/OutputsSelectionGroupBox.hxx"
@@ -31,14 +31,14 @@
 namespace OTGUI
 {
 
-class OTGUI_API IntroScreeningPage : public QWizardPage
+class OTGUI_API SensitivityIntroPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  enum Method {Morris};
+  enum Method {Sobol, SRC};
 
-  IntroScreeningPage(QWidget* parent = 0);
+  SensitivityIntroPage(QWidget* parent = 0);
 
   void initialize(const Analysis& analysis);
   OT::Description getInterestVariables() const;
@@ -48,7 +48,7 @@ public:
 
 private:
   OutputsSelectionGroupBox * outputsSelectionGroupBox_;
-//   QButtonGroup * methodGroup_;
+  QButtonGroup * methodGroup_;
   QLabel * errorMessageLabel_;
 };
 }

@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/IntroReliabilityPage.hxx"
+#include "otgui/ReliabilityIntroPage.hxx"
 
 #include "otgui/ReliabilityAnalysisWizard.hxx"
 
@@ -30,7 +30,7 @@ using namespace OT;
 namespace OTGUI
 {
 
-IntroReliabilityPage::IntroReliabilityPage(QWidget * parent)
+ReliabilityIntroPage::ReliabilityIntroPage(QWidget * parent)
   : QWizardPage(parent)
   , limitStatesComboBox_(0)
   , limitStatesComboBoxModel_(0)
@@ -105,7 +105,7 @@ IntroReliabilityPage::IntroReliabilityPage(QWidget * parent)
 }
 
 
-void IntroReliabilityPage::initialize(const Analysis& analysis, QList<LimitState> limitStatesList)
+void ReliabilityIntroPage::initialize(const Analysis& analysis, QList<LimitState> limitStatesList)
 {
   // limit state
   for (int i = 0; i < limitStatesList.count(); ++i)
@@ -129,7 +129,7 @@ void IntroReliabilityPage::initialize(const Analysis& analysis, QList<LimitState
 }
 
 
-int IntroReliabilityPage::nextId() const
+int ReliabilityIntroPage::nextId() const
 {
   switch (methodGroup_->checkedId())
   {
@@ -145,7 +145,7 @@ int IntroReliabilityPage::nextId() const
 }
 
 
-LimitState IntroReliabilityPage::getLimitState() const
+LimitState ReliabilityIntroPage::getLimitState() const
 {
   const int itemRow = limitStatesComboBox_->currentIndex();
   if (itemRow < 0)
@@ -158,7 +158,7 @@ LimitState IntroReliabilityPage::getLimitState() const
 }
 
 
-void IntroReliabilityPage::changeLimitStateLabel(int index)
+void ReliabilityIntroPage::changeLimitStateLabel(int index)
 {
   if (index < 0)
     return;

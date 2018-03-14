@@ -31,14 +31,14 @@
 namespace OTGUI
 {
 
-class OTGUI_API IntroOptimizationPage : public QWizardPage
+class OTGUI_API OptimizationIntroPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
   enum OptimAlgo {AbdoRackwitzAlgo, CobylaAlgo, SQPAlgo, NLoptAlgo};
 
-  IntroOptimizationPage(QWidget* parent = 0);
+  OptimizationIntroPage(QWidget* parent = 0);
 
   void initialize(const Analysis& analysis);
 

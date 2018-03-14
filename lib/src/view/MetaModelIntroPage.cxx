@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/IntroMetaModelPage.hxx"
+#include "otgui/MetaModelIntroPage.hxx"
 
 #include "otgui/MetaModelAnalysisWizard.hxx"
 
@@ -30,7 +30,7 @@ using namespace OT;
 namespace OTGUI
 {
 
-IntroMetaModelPage::IntroMetaModelPage(QWidget* parent)
+MetaModelIntroPage::MetaModelIntroPage(QWidget* parent)
   : QWizardPage(parent)
   , doesComboBox_(0)
   , doesComboBoxModel_(0)
@@ -91,7 +91,7 @@ IntroMetaModelPage::IntroMetaModelPage(QWidget* parent)
 }
 
 
-void IntroMetaModelPage::initialize(const Analysis& analysis, QList< DesignOfExperiment > doesList)
+void MetaModelIntroPage::initialize(const Analysis& analysis, QList< DesignOfExperiment > doesList)
 {
   // design of experiments
   for (int i = 0; i < doesList.count(); ++i)
@@ -116,7 +116,7 @@ void IntroMetaModelPage::initialize(const Analysis& analysis, QList< DesignOfExp
 }
 
 
-int IntroMetaModelPage::nextId() const
+int MetaModelIntroPage::nextId() const
 {
   switch (methodGroup_->checkedId())
   {
@@ -130,7 +130,7 @@ int IntroMetaModelPage::nextId() const
 }
 
 
-DesignOfExperiment IntroMetaModelPage::getDesignOfExperiment() const
+DesignOfExperiment MetaModelIntroPage::getDesignOfExperiment() const
 {
   const int itemRow = doesComboBox_->currentIndex();
   if (itemRow < 0)
@@ -142,7 +142,7 @@ DesignOfExperiment IntroMetaModelPage::getDesignOfExperiment() const
 }
 
 
-Description IntroMetaModelPage::getInterestVariables() const
+Description MetaModelIntroPage::getInterestVariables() const
 {
   const QStringList outputsList = outputsSelectionGroupBox_->getSelectedOutputsNames();
 
@@ -154,7 +154,7 @@ Description IntroMetaModelPage::getInterestVariables() const
 }
 
 
-void IntroMetaModelPage::updateDesignOfExperiment(int index)
+void MetaModelIntroPage::updateDesignOfExperiment(int index)
 {
   if (index < 0)
     return;
@@ -175,7 +175,7 @@ void IntroMetaModelPage::updateDesignOfExperiment(int index)
 }
 
 
-void IntroMetaModelPage::updateInterestVariables(QStringList outputsList)
+void MetaModelIntroPage::updateInterestVariables(QStringList outputsList)
 {
   interestVariables_ = Description(outputsList.size());
   for (int i = 0; i < outputsList.size(); ++i)
@@ -183,7 +183,7 @@ void IntroMetaModelPage::updateInterestVariables(QStringList outputsList)
 }
 
 
-bool IntroMetaModelPage::validatePage()
+bool MetaModelIntroPage::validatePage()
 {
   errorMessageLabel_->setText("");
 

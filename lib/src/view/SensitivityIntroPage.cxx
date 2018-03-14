@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/IntroSensitivityPage.hxx"
+#include "otgui/SensitivityIntroPage.hxx"
 
 #include "otgui/SensitivityAnalysisWizard.hxx"
 #include "otgui/PhysicalModelAnalysis.hxx"
@@ -32,7 +32,7 @@ using namespace OT;
 namespace OTGUI
 {
 
-IntroSensitivityPage::IntroSensitivityPage(QWidget* parent)
+SensitivityIntroPage::SensitivityIntroPage(QWidget* parent)
   : QWizardPage(parent)
   , outputsSelectionGroupBox_(0)
   , methodGroup_(0)
@@ -55,12 +55,12 @@ IntroSensitivityPage::IntroSensitivityPage(QWidget* parent)
   // Sobol
   QRadioButton * buttonToChooseMethodSobol = new QRadioButton(tr("Sobol"));
   buttonToChooseMethodSobol->setChecked(true);
-  methodGroup_->addButton(buttonToChooseMethodSobol, IntroSensitivityPage::Sobol);
+  methodGroup_->addButton(buttonToChooseMethodSobol, SensitivityIntroPage::Sobol);
   methodLayout->addWidget(buttonToChooseMethodSobol);
 
   // SRC
   QRadioButton * buttonToChooseMethodSRC = new QRadioButton(tr("Standard Regression Coefficient (SRC)"));
-  methodGroup_->addButton(buttonToChooseMethodSRC, IntroSensitivityPage::SRC);
+  methodGroup_->addButton(buttonToChooseMethodSRC, SensitivityIntroPage::SRC);
   methodLayout->addWidget(buttonToChooseMethodSRC);
 
   pageLayout->addWidget(methodBox);
@@ -74,7 +74,7 @@ IntroSensitivityPage::IntroSensitivityPage(QWidget* parent)
 }
 
 
-void IntroSensitivityPage::initialize(const Analysis& analysis)
+void SensitivityIntroPage::initialize(const Analysis& analysis)
 {
   if (!dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get()))
     return;
@@ -83,9 +83,9 @@ void IntroSensitivityPage::initialize(const Analysis& analysis)
   const String analysisName = analysis.getImplementation()->getClassName();
 
   if (analysisName == "SobolAnalysis")
-    methodGroup_->button(IntroSensitivityPage::Sobol)->click();
+    methodGroup_->button(SensitivityIntroPage::Sobol)->click();
   else if (analysisName == "SRCAnalysis")
-    methodGroup_->button(IntroSensitivityPage::SRC)->click();
+    methodGroup_->button(SensitivityIntroPage::SRC)->click();
 
   // update outputs list
   PhysicalModel model = dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get())->getPhysicalModel();
@@ -93,24 +93,24 @@ void IntroSensitivityPage::initialize(const Analysis& analysis)
 }
 
 
-int IntroSensitivityPage::nextId() const
+int SensitivityIntroPage::nextId() const
 {
-  if (methodGroup_->checkedId() == IntroSensitivityPage::Sobol)
+  if (methodGroup_->checkedId() == SensitivityIntroPage::Sobol)
     return SensitivityAnalysisWizard::Page_Sobol;
-  else if (methodGroup_->checkedId() == IntroSensitivityPage::SRC)
+  else if (methodGroup_->checkedId() == SensitivityIntroPage::SRC)
     return SensitivityAnalysisWizard::Page_SRC;
 
   return -1;
 }
 
 
-Description IntroSensitivityPage::getInterestVariables() const
+Description SensitivityIntroPage::getInterestVariables() const
 {
   return QtOT::StringListToDescription(outputsSelectionGroupBox_->getSelectedOutputsNames());
 }
 
 
-bool IntroSensitivityPage::validatePage()
+bool SensitivityIntroPage::validatePage()
 {
   errorMessageLabel_->setText("");
 

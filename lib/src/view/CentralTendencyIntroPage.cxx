@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to define the method of sensitivity analysis
+ *  @brief QWizardPage to define the method of central tendency analysis
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -18,11 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/IntroScreeningPage.hxx"
+#include "otgui/CentralTendencyIntroPage.hxx"
 
-#include "otgui/ScreeningAnalysisWizard.hxx"
-#include "otgui/PhysicalModelAnalysis.hxx"
-#include "otgui/QtTools.hxx"
+#include "otgui/CentralTendencyWizard.hxx"
+#include "otgui/TaylorExpansionMomentsAnalysis.hxx"
 
 #include <QVBoxLayout>
 #include <QRadioButton>
@@ -32,13 +31,14 @@ using namespace OT;
 namespace OTGUI
 {
 
-IntroScreeningPage::IntroScreeningPage(QWidget* parent)
+CentralTendencyIntroPage::CentralTendencyIntroPage(QWidget* parent)
   : QWizardPage(parent)
   , outputsSelectionGroupBox_(0)
-//   , methodGroup_(0)
+  , methodGroup_(0)
   , errorMessageLabel_(0)
+  , interestVariables_()
 {
-  setTitle(tr("Screening method"));
+  setTitle(tr("Central tendency methods"));
 
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 
@@ -50,14 +50,19 @@ IntroScreeningPage::IntroScreeningPage(QWidget* parent)
   QGroupBox * methodBox = new QGroupBox(tr("Method"));
   QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
 
-//   methodGroup_ = new QButtonGroup(this);
+  methodGroup_ = new QButtonGroup(this);
+  connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SLOT(updateFinalPage()));
 
-  // Morris
-//   QRadioButton * buttonToChooseMethodSobol = new QRadioButton(tr("Morris"));
-//   buttonToChooseMethodSobol->setChecked(true);
-//   methodGroup_->addButton(buttonToChooseMethodSobol, IntroScreeningPage::Morris);
-//   methodLayout->addWidget(buttonToChooseMethodSobol);
-  methodLayout->addWidget(new QLabel(tr("Morris")));
+  // Chaos
+  QRadioButton * buttonToChooseMethodMC = new QRadioButton(tr("Monte Carlo"));
+  buttonToChooseMethodMC->setChecked(true);
+  methodGroup_->addButton(buttonToChooseMethodMC, CentralTendencyIntroPage::MonteCarlo);
+  methodLayout->addWidget(buttonToChooseMethodMC);
+
+  // Kriging
+  QRadioButton * buttonToChooseMethodTaylor = new QRadioButton(tr("Taylor expansion"));
+  methodGroup_->addButton(buttonToChooseMethodTaylor, CentralTendencyIntroPage::TaylorExpansionMoments);
+  methodLayout->addWidget(buttonToChooseMethodTaylor);
 
   pageLayout->addWidget(methodBox);
 
@@ -70,16 +75,18 @@ IntroScreeningPage::IntroScreeningPage(QWidget* parent)
 }
 
 
-void IntroScreeningPage::initialize(const Analysis& analysis)
+void CentralTendencyIntroPage::initialize(const Analysis& analysis)
 {
   if (!dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get()))
     return;
 
   // method
-//   const String analysisName = analysis.getImplementation()->getClassName();
+  const String analysisName = analysis.getImplementation()->getClassName();
 
-//   if (analysisName == "MorrisAnalysis")
-//     methodGroup_->button(IntroScreeningPage::Morris)->click();
+  if (analysisName == "MonteCarloAnalysis")
+    methodGroup_->button(CentralTendencyIntroPage::MonteCarlo)->click();
+  else if (analysisName == "TaylorExpansionMomentsAnalysis")
+    methodGroup_->button(CentralTendencyIntroPage::TaylorExpansionMoments)->click();
 
   // update outputs list
   PhysicalModel model = dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get())->getPhysicalModel();
@@ -87,20 +94,34 @@ void IntroScreeningPage::initialize(const Analysis& analysis)
 }
 
 
-int IntroScreeningPage::nextId() const
+int CentralTendencyIntroPage::nextId() const
 {
-//   if (methodGroup_->checkedId() == IntroScreeningPage::Morris)
-    return ScreeningAnalysisWizard::Page_Morris;
+  if (methodGroup_->checkedId() == CentralTendencyIntroPage::MonteCarlo)
+    return CentralTendencyWizard::Page_MonteCarlo;
+
+  return -1;
 }
 
 
-Description IntroScreeningPage::getInterestVariables() const
+void CentralTendencyIntroPage::updateFinalPage()
 {
-  return QtOT::StringListToDescription(outputsSelectionGroupBox_->getSelectedOutputsNames());
+  setFinalPage(methodGroup_->checkedId() != CentralTendencyIntroPage::MonteCarlo);
 }
 
 
-bool IntroScreeningPage::validatePage()
+Description CentralTendencyIntroPage::getInterestVariables() const
+{
+  const QStringList outputsList = outputsSelectionGroupBox_->getSelectedOutputsNames();
+
+  Description outputNames(outputsList.size());
+  for (int i = 0; i < outputsList.size(); ++i)
+    outputNames[i] = outputsList[i].toUtf8().constData();
+
+  return outputNames;
+}
+
+
+bool CentralTendencyIntroPage::validatePage()
 {
   errorMessageLabel_->setText("");
 

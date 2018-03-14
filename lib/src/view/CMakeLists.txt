@@ -33,12 +33,12 @@ ot_add_source_file ( OutputsSelectionGroupBox.cxx )
 ot_add_source_file ( ParametersWidget.cxx )
 ot_add_source_file ( ResultWindow.cxx )
 ot_add_source_file ( AnalysisWindow.cxx )
-ot_add_source_file ( IntroDesignOfExperimentPage.cxx )
-ot_add_source_file ( DeterministicDesignPage.cxx )
+ot_add_source_file ( DesignOfExperimentIntroPage.cxx )
+ot_add_source_file ( GridDesignPage.cxx )
 ot_add_source_file ( ProbabilisticDesignPage.cxx )
 ot_add_source_file ( DesignOfExperimentInputWindow.cxx )
 ot_add_source_file ( DesignOfExperimentEvaluationWizard.cxx )
-ot_add_source_file ( ImportDesignOfExperimentPage.cxx )
+ot_add_source_file ( ImportedDesignPage.cxx )
 ot_add_source_file ( PhysicalModelWindowWidget.cxx )
 ot_add_source_file ( SymbolicPhysicalModelWindow.cxx )
 ot_add_source_file ( PythonPhysicalModelWindow.cxx )
@@ -55,7 +55,7 @@ ot_add_source_file ( DesignOfExperimentWindow.cxx )
 ot_add_source_file ( StudyTreeView.cxx )
 ot_add_source_file ( ModelEvaluationWizard.cxx )
 ot_add_source_file ( ModelEvaluationResultWindow.cxx )
-ot_add_source_file ( IntroCentralTendencyPage.cxx )
+ot_add_source_file ( CentralTendencyIntroPage.cxx )
 ot_add_source_file ( MonteCarloPage.cxx )
 ot_add_source_file ( CentralTendencyWizard.cxx )
 ot_add_source_file ( MonteCarloResultWindow.cxx )
@@ -63,12 +63,12 @@ ot_add_source_file ( TaylorExpansionMomentsResultWindow.cxx )
 ot_add_source_file ( SensitivityResultWidget.cxx )
 ot_add_source_file ( SobolResultWindow.cxx )
 ot_add_source_file ( SRCResultWindow.cxx )
-ot_add_source_file ( IntroSensitivityPage.cxx )
+ot_add_source_file ( SensitivityIntroPage.cxx )
 ot_add_source_file ( SobolPage.cxx )
 ot_add_source_file ( SRCPage.cxx )
 ot_add_source_file ( SensitivityAnalysisWizard.cxx )
 ot_add_source_file ( LimitStateWindow.cxx )
-ot_add_source_file ( IntroReliabilityPage.cxx )
+ot_add_source_file ( ReliabilityIntroPage.cxx )
 ot_add_source_file ( SimulationReliabilityPage.cxx )
 ot_add_source_file ( ApproximationReliabilityPage.cxx )
 ot_add_source_file ( ReliabilityAnalysisWizard.cxx )
@@ -77,7 +77,7 @@ ot_add_source_file ( ApproximationResultWindow.cxx )
 ot_add_source_file ( ApproximationResultTabWidget.cxx )
 ot_add_source_file ( StopCriteriaGroupBox.cxx )
 ot_add_source_file ( ParametersDefinitionWizard.cxx )
-ot_add_source_file ( IntroMetaModelPage.cxx )
+ot_add_source_file ( MetaModelIntroPage.cxx )
 ot_add_source_file ( KrigingPage.cxx )
 ot_add_source_file ( FunctionalChaosPage.cxx )
 ot_add_source_file ( MetaModelAnalysisWizard.cxx )
@@ -93,7 +93,7 @@ ot_add_source_file ( InferenceResultWidget.cxx )
 ot_add_source_file ( CopulaParametersTabWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWindow.cxx )
-ot_add_source_file ( IntroOptimizationPage.cxx )
+ot_add_source_file ( OptimizationIntroPage.cxx )
 ot_add_source_file ( OptimizationWizard.cxx )
 ot_add_source_file ( OptimizationResultWindow.cxx )
 ot_add_source_file ( WidgetBoundToDockWidget.cxx )
@@ -103,7 +103,7 @@ ot_add_source_file ( CopulaWidget.cxx )
 ot_add_source_file ( CopulaInferenceWizard.cxx )
 ot_add_source_file ( CopulaInferenceResultWizard.cxx )
 if (OTMORRIS_FOUND)
-  ot_add_source_file ( IntroScreeningPage.cxx )
+  ot_add_source_file ( ScreeningIntroPage.cxx )
   ot_add_source_file ( MorrisPage.cxx )
   ot_add_source_file ( ScreeningAnalysisWizard.cxx )
   ot_add_source_file ( MorrisResultWidget.cxx )
@@ -137,15 +137,15 @@ ot_install_header_file ( DataAnalysisWindow.hxx )
 ot_install_header_file ( DataAnalysisResultWindow.hxx )
 ot_install_header_file ( AnalysisWindow.hxx )
 ot_install_header_file ( ModelEvaluationWizard.hxx )
-ot_install_header_file ( IntroCentralTendencyPage.hxx )
+ot_install_header_file ( CentralTendencyIntroPage.hxx )
 ot_install_header_file ( MonteCarloPage.hxx )
 ot_install_header_file ( CentralTendencyWizard.hxx )
-ot_install_header_file ( IntroSensitivityPage.hxx )
+ot_install_header_file ( SensitivityIntroPage.hxx )
 ot_install_header_file ( SobolPage.hxx )
 ot_install_header_file ( SRCPage.hxx )
 ot_install_header_file ( SensitivityAnalysisWizard.hxx )
 ot_install_header_file ( LimitStateWindow.hxx )
-ot_install_header_file ( IntroReliabilityPage.hxx )
+ot_install_header_file ( ReliabilityIntroPage.hxx )
 ot_install_header_file ( SimulationReliabilityPage.hxx )
 ot_install_header_file ( ApproximationReliabilityPage.hxx )
 ot_install_header_file ( ReliabilityAnalysisWizard.hxx )
@@ -173,15 +173,15 @@ ot_install_header_file ( SimulationReliabilityResultWindow.hxx )
 ot_install_header_file ( ApproximationResultWindow.hxx )
 ot_install_header_file ( ApproximationResultTabWidget.hxx )
 ot_install_header_file ( StudyTreeView.hxx )
-ot_install_header_file ( IntroDesignOfExperimentPage.hxx )
-ot_install_header_file ( DeterministicDesignPage.hxx )
+ot_install_header_file ( DesignOfExperimentIntroPage.hxx )
+ot_install_header_file ( GridDesignPage.hxx )
 ot_install_header_file ( ProbabilisticDesignPage.hxx )
-ot_install_header_file ( ImportDesignOfExperimentPage.hxx )
+ot_install_header_file ( ImportedDesignPage.hxx )
 ot_install_header_file ( DesignOfExperimentInputWindow.hxx )
 ot_install_header_file ( DesignOfExperimentEvaluationWizard.hxx )
 ot_install_header_file ( StopCriteriaGroupBox.hxx )
 ot_install_header_file ( ParametersDefinitionWizard.hxx )
-ot_install_header_file ( IntroMetaModelPage.hxx )
+ot_install_header_file ( MetaModelIntroPage.hxx )
 ot_install_header_file ( KrigingPage.hxx )
 ot_install_header_file ( FunctionalChaosPage.hxx )
 ot_install_header_file ( MetaModelAnalysisWizard.hxx )
@@ -197,7 +197,7 @@ ot_install_header_file ( ControllerWidget.hxx )
 ot_install_header_file ( CopulaInferenceResultWidget.hxx )
 ot_install_header_file ( CopulaInferenceResultWindow.hxx )
 ot_install_header_file ( CopulaParametersTabWidget.hxx )
-ot_install_header_file ( IntroOptimizationPage.hxx )
+ot_install_header_file ( OptimizationIntroPage.hxx )
 ot_install_header_file ( OptimizationWizard.hxx )
 ot_install_header_file ( OptimizationResultWindow.hxx )
 ot_install_header_file ( WidgetBoundToDockWidget.hxx )
@@ -208,7 +208,7 @@ ot_install_header_file ( CopulaInferenceWizard.hxx )
 ot_install_header_file ( CopulaInferenceResultWizard.hxx )
 
 if (OTMORRIS_FOUND)
-  ot_install_header_file ( IntroScreeningPage.hxx )
+  ot_install_header_file ( ScreeningIntroPage.hxx )
   ot_install_header_file ( MorrisPage.hxx )
   ot_install_header_file ( ScreeningAnalysisWizard.hxx )
   ot_install_header_file ( MorrisResultWidget.hxx )
@@ -240,10 +240,10 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/DataAnalysisWindow.hxx
                                   otgui/DataAnalysisResultWindow.hxx
                                   otgui/StudyTreeView.hxx
-                                  otgui/IntroDesignOfExperimentPage.hxx
-                                  otgui/DeterministicDesignPage.hxx
+                                  otgui/DesignOfExperimentIntroPage.hxx
+                                  otgui/GridDesignPage.hxx
                                   otgui/ProbabilisticDesignPage.hxx
-                                  otgui/ImportDesignOfExperimentPage.hxx
+                                  otgui/ImportedDesignPage.hxx
                                   otgui/DesignOfExperimentInputWindow.hxx
                                   otgui/DesignOfExperimentEvaluationWizard.hxx
                                   otgui/PhysicalModelWindowWidget.hxx
@@ -255,7 +255,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/DesignOfExperimentWindow.hxx
                                   otgui/ModelEvaluationWizard.hxx
                                   otgui/ModelEvaluationResultWindow.hxx
-                                  otgui/IntroCentralTendencyPage.hxx
+                                  otgui/CentralTendencyIntroPage.hxx
                                   otgui/MonteCarloPage.hxx
                                   otgui/CentralTendencyWizard.hxx
                                   otgui/MonteCarloResultWindow.hxx
@@ -263,12 +263,12 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/SensitivityResultWidget.hxx
                                   otgui/SobolResultWindow.hxx
                                   otgui/SRCResultWindow.hxx
-                                  otgui/IntroSensitivityPage.hxx
+                                  otgui/SensitivityIntroPage.hxx
                                   otgui/SobolPage.hxx
                                   otgui/SRCPage.hxx
                                   otgui/SensitivityAnalysisWizard.hxx
                                   otgui/LimitStateWindow.hxx
-                                  otgui/IntroReliabilityPage.hxx
+                                  otgui/ReliabilityIntroPage.hxx
                                   otgui/SimulationReliabilityPage.hxx
                                   otgui/ApproximationReliabilityPage.hxx
                                   otgui/ReliabilityAnalysisWizard.hxx
@@ -277,7 +277,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/ApproximationResultWindow.hxx
                                   otgui/StopCriteriaGroupBox.hxx
                                   otgui/ParametersDefinitionWizard.hxx
-                                  otgui/IntroMetaModelPage.hxx
+                                  otgui/MetaModelIntroPage.hxx
                                   otgui/MetaModelValidationPage.hxx
                                   otgui/KrigingPage.hxx
                                   otgui/FunctionalChaosPage.hxx
@@ -295,7 +295,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/CopulaInferenceResultWidget.hxx
                                   otgui/CopulaInferenceResultWindow.hxx
                                   otgui/CopulaParametersTabWidget.hxx
-                                  otgui/IntroOptimizationPage.hxx
+                                  otgui/OptimizationIntroPage.hxx
                                   otgui/OptimizationWizard.hxx
                                   otgui/OptimizationResultWindow.hxx
                                   otgui/WidgetBoundToDockWidget.hxx
@@ -314,7 +314,7 @@ if (USE_OTFMI)
   qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/FMIPhysicalModelWindow.hxx)
 endif ()
 if (OTMORRIS_FOUND)
-  qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/IntroScreeningPage.hxx)
+  qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/ScreeningIntroPage.hxx)
   qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MorrisPage.hxx)
   qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/ScreeningAnalysisWizard.hxx)
   qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MorrisResultWidget.hxx)
