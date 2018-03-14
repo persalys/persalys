@@ -73,19 +73,26 @@ void DataAnalysisResultWindow::fillTabWidget()
     // tab: correlation
     addDependencyTab();
   }
+  bool canUseParaview = false;
 #ifdef OTGUI_HAVE_PARAVIEW
-  addParaviewWidgetsTabs();
-#else
-  // tab: Table --------------------------------
-  addTableTab();
-  if (designOfExperiment_.getSample().getDimension() > 1 && designOfExperiment_.getSample().getSize() > 1)
+  if (OTguiSubWindow::HaveOpenGL32())
   {
-    // tab: plot C
-    addPlotMatrixTab();
-    // tab: scatter plots
-    addScatterPlotsTab();
+    addParaviewWidgetsTabs();
+    canUseParaview = true;
   }
 #endif
+  if (!canUseParaview)
+  {
+    // tab: Table --------------------------------
+    addTableTab();
+    if (designOfExperiment_.getSample().getDimension() > 1 && designOfExperiment_.getSample().getSize() > 1)
+    {
+      // tab: plot C
+      addPlotMatrixTab();
+      // tab: scatter plots
+      addScatterPlotsTab();
+    }
+  }
 
   // tab: Parameters --------------------------------
   if (parametersWidget_)

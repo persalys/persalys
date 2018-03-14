@@ -66,13 +66,21 @@ void DesignOfExperimentWindow::fillTabWidget()
   addSummaryTab();
 
   // -- other tabs
+  bool canUseParaview = false;
 #ifdef OTGUI_HAVE_PARAVIEW
-  addParaviewWidgetsTabs();
-#else
-  addTableTab();
-  addPlotMatrixTab();
-  addScatterPlotsTab();
+  if (OTguiSubWindow::HaveOpenGL32())
+  {
+    addParaviewWidgetsTabs();
+    canUseParaview = true;
+  }
 #endif
+  if (!canUseParaview)
+  {
+    addTableTab();
+    addPlotMatrixTab();
+    addScatterPlotsTab();
+  }
+
   if (parametersWidget_)
     tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 
