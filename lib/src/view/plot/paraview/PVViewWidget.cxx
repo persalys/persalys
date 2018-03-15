@@ -189,7 +189,7 @@ void PVViewWidget::buildTableFrom(const std::vector< std::vector<double> >& valu
 
   // set table_
   const std::size_t nbSamples(valuesByColumn[0].size());
-  for (int i = 0; i < sz; i++)
+  for (std::size_t i = 0; i < sz; i++)
   {
     vtkSmartPointer<vtkDoubleArray> arr(vtkSmartPointer<vtkDoubleArray>::New());
     arr->SetName(columnNames[i].c_str());

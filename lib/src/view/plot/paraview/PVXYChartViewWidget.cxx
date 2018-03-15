@@ -57,9 +57,9 @@ void PVXYChartViewWidget::setData(const std::vector< std::vector<double> >& valu
   PVViewWidget::setData(valuesByColumn, columnNames);
 
   // set axis/title properties
-  for (int cc = 0; cc < columnNames.size(); cc++)
+  for (std::size_t cc = 0; cc < columnNames.size(); cc++)
   {
-    for (int cc2 = 0; cc2 < columnNames.size(); cc2++)
+    for (std::size_t cc2 = 0; cc2 < columnNames.size(); cc2++)
     {
       QPair<QString, QString> varPair(columnNames[cc].c_str(), columnNames[cc2].c_str());
       if (!chartsTitle_.contains(varPair))
