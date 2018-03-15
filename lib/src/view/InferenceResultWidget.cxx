@@ -280,6 +280,7 @@ void InferenceResultWidget::updateDistributionTable(const double level, const In
   // to resize the column 2, even if there is a setSpan(0, 2, 1, 2)
   distTableModel_->setItem(0, 2, new QStandardItem);
   distTableView_->resizeToContents();
+  const int section2Size = distTableView_->horizontalHeader()->sectionSize(2);
   distTableModel_->setNotEditableHeaderItem(0, 2, tr("Kolmogorov-Smirnov"));
   distTableView_->setSpan(0, 2, 1, 2);
   const int subTitlesWidth = distTableView_->horizontalHeader()->sectionSize(1) + distTableView_->horizontalHeader()->sectionSize(2);
@@ -290,6 +291,8 @@ void InferenceResultWidget::updateDistributionTable(const double level, const In
     distTableView_->horizontalHeader()->resizeSection(2, distTableView_->horizontalHeader()->sectionSize(2) + widthCorrection);
     distTableView_->setMinimumWidth(distTableView_->minimumWidth() + widthCorrection);
   }
+  // fix wrong behavior on Windows
+  distTableView_->horizontalHeader()->resizeSection(2, section2Size);
 }
 
 

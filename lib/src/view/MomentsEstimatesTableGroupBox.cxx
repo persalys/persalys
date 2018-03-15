@@ -169,6 +169,8 @@ QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const DataAn
 
   momentsEstimationsTableView->resizeToContents();
 
+  const int section2Size = momentsEstimationsTableView->horizontalHeader()->sectionSize(2);
+
   if (isConfidenceIntervalRequired_)
   {
     momentsEstimationsTable->setNotEditableHeaderItem(0, 2, tr("Confidence interval at") + " " + QString::number(levelConfidenceInterval_ * 100) + "%");
@@ -181,6 +183,9 @@ QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const DataAn
       momentsEstimationsTableView->horizontalHeader()->resizeSection(3, momentsEstimationsTableView->horizontalHeader()->sectionSize(3) + widthCorrection);
       momentsEstimationsTableView->setMinimumWidth(momentsEstimationsTableView->minimumWidth() + widthCorrection);
     }
+
+    // fix wrong behavior on Windows
+    momentsEstimationsTableView->horizontalHeader()->resizeSection(2, section2Size);
   }
 
   return momentsEstimationsTableView;
