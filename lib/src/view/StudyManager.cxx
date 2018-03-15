@@ -30,13 +30,13 @@
 #include "otgui/LimitStateWindow.hxx"
 #include "otgui/DataModelWindow.hxx"
 #include "otgui/AnalysisWindow.hxx"
+#include "otgui/FileTools.hxx"
 
 #include "otgui/DesignOfExperimentEvaluationWizard.hxx"
 
 #include <QFileDialog>
 #include <QApplication>
 #include <QMessageBox>
-#include <QSettings>
 
 #include <iostream>
 
@@ -375,19 +375,15 @@ void StudyManager::importPythonScript()
       return;
   }
 
-  QSettings settings;
-  QString currentDir = settings.value("currentDir").toString();
-  if (currentDir.isEmpty())
-    currentDir = QDir::homePath();
   const QString fileName = QFileDialog::getOpenFileName(mainWidget_,
                            tr("Import Python..."),
-                           currentDir,
+                           FileTools::GetCurrentDir(),
                            tr("Python source files (*.py)"));
 
   if (!fileName.isEmpty())
   {
     QFile file(fileName);
-    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+    FileTools::SetCurrentDir(fileName);
 
     // check
     if (!file.open(QFile::ReadOnly))
@@ -416,14 +412,9 @@ void StudyManager::exportPythonScript()
     return;
   }
 
-  QSettings settings;
-  QString currentDir = settings.value("currentDir").toString();
-  if (currentDir.isEmpty())
-    currentDir = QDir::homePath();
-
   const QString fileName = QFileDialog::getSaveFileName(mainWidget_,
                            tr("Export Python..."),
-                           currentDir + QDir::separator() + item->data(Qt::DisplayRole).toString(),
+                           FileTools::GetCurrentDir() + QDir::separator() + item->data(Qt::DisplayRole).toString(),
                            tr("Python source files (*.py)"));
 
   if (!fileName.isEmpty())
@@ -488,14 +479,9 @@ bool StudyManager::saveAs(OTStudyItem* studyItem)
     return false;
   }
 
-  QSettings settings;
-  QString currentDir = settings.value("currentDir").toString();
-  if (currentDir.isEmpty())
-    currentDir = QDir::homePath();
-
   const QString fileName = QFileDialog::getSaveFileName(mainWidget_,
                            tr("Save OTStudy..."),
-                           currentDir + QDir::separator() + studyItem->data(Qt::DisplayRole).toString(),
+                           FileTools::GetCurrentDir() + QDir::separator() + studyItem->data(Qt::DisplayRole).toString(),
                            tr("XML files (*.xml)"));
 
   const bool ret = studyItem->save(fileName);
@@ -507,20 +493,14 @@ bool StudyManager::saveAs(OTStudyItem* studyItem)
 
 void StudyManager::open(const QString& recentFileName)
 {
-  QSettings settings;
-
   QString fileName = recentFileName;
 
   // if signal from a button (and not open a recent file)
   if (fileName.isEmpty())
   {
-    QString currentDir = settings.value("currentDir").toString();
-    if (currentDir.isEmpty())
-      currentDir = QDir::homePath();
-
     fileName = QFileDialog::getOpenFileName(mainWidget_,
                                             tr("Open an existing OTStudy"),
-                                            currentDir,
+                                            FileTools::GetCurrentDir(),
                                             tr("XML files (*.xml)"));
     if (fileName.isEmpty())
       return;
@@ -554,7 +534,7 @@ void StudyManager::open(const QString& recentFileName)
   QApplication::restoreOverrideCursor();
 
   // update QSettings
-  settings.setValue("currentDir", file.absolutePath());
+  FileTools::SetCurrentDir(fileName);
 }
 
 
