@@ -54,10 +54,13 @@ MainWindow::MainWindow()
   setWindowIcon(QIcon(":/images/OT_icon32x32.png"));
 
 #ifdef OTGUI_HAVE_PARAVIEW
-  new pqParaViewBehaviors(this, this);
-  // UpdateAvailableWriters : to be able to export the data from spread sheets
-  vtkSMProxyManager::GetProxyManager()->GetWriterFactory()->UpdateAvailableWriters();
-  PVServerManagerSingleton::Init(new PVServerManagerInterface);
+  if (OTguiSubWindow::HaveOpenGL32())
+  {
+    new pqParaViewBehaviors(this, this);
+    // UpdateAvailableWriters : to be able to export the data from spread sheets
+    vtkSMProxyManager::GetProxyManager()->GetWriterFactory()->UpdateAvailableWriters();
+    PVServerManagerSingleton::Init(new PVServerManagerInterface);
+  }
 #endif
 
   buildInterface();

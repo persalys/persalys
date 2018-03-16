@@ -23,6 +23,9 @@
 #include <QEventLoop>
 #include <QTimer>
 #include <QTimeLine>
+#include <QOpenGLContext>
+#include <QSurfaceFormat>
+#include <QOpenGLFunctions_3_2_Core>
 
 namespace OTGUI
 {
@@ -43,6 +46,19 @@ OTguiSubWindow::OTguiSubWindow(OTguiItem * item, QWidget * parent)
 OTguiSubWindow::~OTguiSubWindow()
 {
   emit graphWindowDeactivated();
+}
+
+
+bool OTguiSubWindow::HaveOpenGL32()
+{
+  QSurfaceFormat requestedFormat;
+  requestedFormat.setVersion(3, 2);
+  QOpenGLContext context;
+  context.setFormat(requestedFormat);
+  if (!context.create())
+    return false;
+
+  return context.versionFunctions<QOpenGLFunctions_3_2_Core>();
 }
 
 

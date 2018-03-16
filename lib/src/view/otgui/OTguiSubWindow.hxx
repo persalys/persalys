@@ -43,6 +43,8 @@ public:
 
   QString getErrorMessage() const;
 
+  static bool HaveOpenGL32();
+
 public slots:
   void setErrorMessage(QString message);
   void setTemporaryErrorMessage(QString message);

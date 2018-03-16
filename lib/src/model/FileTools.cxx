@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow for the results of data analysis
+ *  @brief File tools
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -18,24 +18,36 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_DATAANALYSISRESULTWINDOW_HXX
-#define OTGUI_DATAANALYSISRESULTWINDOW_HXX
+#include "otgui/FileTools.hxx"
 
-#include "otgui/DataAnalysisWindow.hxx"
+#include <QSettings>
+#include <QDir>
 
 namespace OTGUI
 {
-class OTGUI_API DataAnalysisResultWindow : public DataAnalysisWindow
+
+QString FileTools::GetCurrentDir()
 {
-  Q_OBJECT
-
-public:
-  DataAnalysisResultWindow(AnalysisItem * item, QWidget * parent = 0);
-
-protected:
-  void initialize(AnalysisItem* item);
-  virtual void fillTabWidget();
-  void addDependenceTab();
-};
+  QSettings::setDefaultFormat(QSettings::IniFormat);
+  QSettings settings;
+  QString result = settings.value("currentDir", QDir::homePath()).toString();
+  QDir dir(result);
+  if (!dir.exists())
+  {
+    result = QDir::homePath();
+  }
+  return result;
 }
-#endif
+
+
+void FileTools::SetCurrentDir(const QString &fileName)
+{
+  QFileInfo info(fileName);
+  if (info.exists())
+  {
+    QSettings::setDefaultFormat(QSettings::IniFormat);
+    QSettings settings;
+    settings.setValue("currentDir", info.absolutePath());
+  }
+}
+}

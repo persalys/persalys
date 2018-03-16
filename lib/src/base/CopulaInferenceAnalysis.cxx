@@ -178,11 +178,11 @@ Collection<Description> CopulaInferenceAnalysis::getVariablesGroups()
 void CopulaInferenceAnalysis::setDistributionsFactories(const Description& variablesNames, const DistributionFactoryCollection& factories)
 {
   if (variablesNames.getSize() < 2)
-    throw InvalidArgumentException(HERE) << "Error: the dependency inference is performed with at least 2 variables";
+    throw InvalidArgumentException(HERE) << "Error: the dependence inference is performed with at least 2 variables";
 
   for (UnsignedInteger i = 0; i < factories.getSize(); ++i)
     if (factories[i].getImplementation()->getClassName().find("Copula") == std::string::npos)
-      throw InvalidArgumentException(HERE) << "Error: the dependency inference is performed with copulae.";
+      throw InvalidArgumentException(HERE) << "Error: the dependence inference is performed with copulae.";
 
   const Description setOfVariables(getSortedVariablesNames(variablesNames));
 

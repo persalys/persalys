@@ -78,12 +78,20 @@ void MorrisResultWindow::fillTabWidget()
   addEffectsTab();
 
   // -- graph tabs
+  bool canUseParaview = false;
 #ifdef OTGUI_HAVE_PARAVIEW
-  addParaviewWidgetsTabs();
-#else
-  addTableTab();
-  addScatterPlotsTab();
+  if (OTguiSubWindow::HaveOpenGL32())
+  {
+    addParaviewWidgetsTabs();
+    canUseParaview = true;
+  }
 #endif
+  if (!canUseParaview)
+  {
+    addTableTab();
+    addScatterPlotsTab();
+  }
+
   if (parametersWidget_)
     tabWidget_->addTab(parametersWidget_, tr("Parameters"));
 

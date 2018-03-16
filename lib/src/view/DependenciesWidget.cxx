@@ -131,7 +131,7 @@ void DependenciesWidget::buildInterface()
   // 1- If physical model has not dependent variables: use a dummy widget
   QWidget * dummyWidget = new QWidget;
   QVBoxLayout * dummyWidgetLayout = new QVBoxLayout(dummyWidget);
-  QLabel * messLabel = new QLabel(tr("To define dependency, the model must have at least two independent stochastic variables."));
+  QLabel * messLabel = new QLabel(tr("To define dependence, the model must have at least two independent stochastic variables."));
   messLabel->setWordWrap(true);
   dummyWidgetLayout->addWidget(messLabel);
   dummyWidgetLayout->addStretch();
@@ -341,7 +341,7 @@ void DependenciesWidget::openWizardToChooseInferenceResult(const QModelIndex& in
   // error message if no inference analyses
   if (!studyHasInferenceResults)
   {
-    QMessageBox::critical(this, tr("Error"), tr("The current study has not copula inference analyses results."));
+    QMessageBox::critical(this, tr("Error"), tr("The current study has no dependence inference result."));
     return;
   }
   // open a wizard to choose a result

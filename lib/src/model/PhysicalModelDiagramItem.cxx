@@ -90,7 +90,7 @@ void PhysicalModelDiagramItem::update(Observable* source, const String & message
     emit twoInputsValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1);
     emit physicalModelValidityChanged(physicalModel_.isValid());
     emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
-    emit dependencyValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getCopula().hasIndependentCopula());
+    emit dependenceValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getCopula().hasIndependentCopula());
     emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
     emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
     emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
@@ -105,7 +105,7 @@ void PhysicalModelDiagramItem::update(Observable* source, const String & message
     emit physicalModelValidityChanged(physicalModel_.isValid());
     emit twoInputsValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1);
     emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
-    emit dependencyValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getCopula().hasIndependentCopula());
+    emit dependenceValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getCopula().hasIndependentCopula());
     emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
     emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
     emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
@@ -118,7 +118,7 @@ void PhysicalModelDiagramItem::update(Observable* source, const String & message
   }
   else if (message == "copulaChanged")
   {
-    emit dependencyValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getCopula().hasIndependentCopula());
+    emit dependenceValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getCopula().hasIndependentCopula());
   }
   else if (message == "physicalModelRemoved")
   {
@@ -239,7 +239,7 @@ void PhysicalModelDiagramItem::fill()
   emit twoInputsValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1);
   emit physicalModelValidityChanged(physicalModel_.isValid());
   emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
-  emit dependencyValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getCopula().hasIndependentCopula());
+  emit dependenceValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getCopula().hasIndependentCopula());
   emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
   emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
   emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);

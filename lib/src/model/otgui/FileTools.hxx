@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow for the results of data analysis
+ *  @brief File tools
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -18,24 +18,20 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_DATAANALYSISRESULTWINDOW_HXX
-#define OTGUI_DATAANALYSISRESULTWINDOW_HXX
+#ifndef OTGUI_FILETOOLS_HXX
+#define OTGUI_FILETOOLS_HXX
 
-#include "otgui/DataAnalysisWindow.hxx"
+#include "otgui/OTGuiprivate.hxx"
+
+#include <QString>
 
 namespace OTGUI
 {
-class OTGUI_API DataAnalysisResultWindow : public DataAnalysisWindow
+class OTGUI_API FileTools
 {
-  Q_OBJECT
-
 public:
-  DataAnalysisResultWindow(AnalysisItem * item, QWidget * parent = 0);
-
-protected:
-  void initialize(AnalysisItem* item);
-  virtual void fillTabWidget();
-  void addDependenceTab();
+  static void SetCurrentDir(const QString &fileName);
+  static QString GetCurrentDir();
 };
 }
 #endif

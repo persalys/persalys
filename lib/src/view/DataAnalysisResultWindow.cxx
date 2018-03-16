@@ -71,21 +71,28 @@ void DataAnalysisResultWindow::fillTabWidget()
     // tab: box plots
     addBoxPlotTab();
     // tab: correlation
-    addDependencyTab();
+    addDependenceTab();
   }
+  bool canUseParaview = false;
 #ifdef OTGUI_HAVE_PARAVIEW
-  addParaviewWidgetsTabs();
-#else
-  // tab: Table --------------------------------
-  addTableTab();
-  if (designOfExperiment_.getSample().getDimension() > 1 && designOfExperiment_.getSample().getSize() > 1)
+  if (OTguiSubWindow::HaveOpenGL32())
   {
-    // tab: plot C
-    addPlotMatrixTab();
-    // tab: scatter plots
-    addScatterPlotsTab();
+    addParaviewWidgetsTabs();
+    canUseParaview = true;
   }
 #endif
+  if (!canUseParaview)
+  {
+    // tab: Table --------------------------------
+    addTableTab();
+    if (designOfExperiment_.getSample().getDimension() > 1 && designOfExperiment_.getSample().getSize() > 1)
+    {
+      // tab: plot C
+      addPlotMatrixTab();
+      // tab: scatter plots
+      addScatterPlotsTab();
+    }
+  }
 
   // tab: Parameters --------------------------------
   if (parametersWidget_)
@@ -96,7 +103,7 @@ void DataAnalysisResultWindow::fillTabWidget()
 }
 
 
-void DataAnalysisResultWindow::addDependencyTab()
+void DataAnalysisResultWindow::addDependenceTab()
 {
   // compute correlation
   CorrelationMatrix C(designOfExperiment_.getSample().computeSpearmanCorrelation());
@@ -195,6 +202,6 @@ void DataAnalysisResultWindow::addDependencyTab()
 
   mainLayout->addWidget(gpBox);
 
-  tabWidget_->addTab(mainWidget, tr("Dependency"));
+  tabWidget_->addTab(mainWidget, tr("Dependence"));
 }
 }

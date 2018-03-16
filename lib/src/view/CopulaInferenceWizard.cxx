@@ -44,9 +44,18 @@ CopulaInferenceWizard::CopulaInferenceWizard(const Analysis &analysis, QWidget *
   CopulaInferenceAnalysis * analysis_ptr = dynamic_cast<CopulaInferenceAnalysis*>(analysis_.getImplementation().get());
   Q_ASSERT(analysis_ptr);
 
+  const Description doeVarNames(analysis_ptr->getDesignOfExperiment().getSample().getDescription());
+
   const Collection<Description> groups(analysis_ptr->getVariablesGroups());
   for (UnsignedInteger i = 0; i < groups.getSize(); ++i)
-    distForVars_[groups[i]] = analysis_ptr->getDistributionsFactories(groups[i]);
+  {
+    bool groupIsValid = true;
+    for (UnsignedInteger j = 0; j < groups[i].getSize(); ++j)
+      if (!doeVarNames.contains(groups[i][j]))
+        groupIsValid = false;
+    if (groupIsValid)
+      distForVars_[groups[i]] = analysis_ptr->getDistributionsFactories(groups[i]);
+  }
 
   const Description doeVariables(analysis_ptr->getDesignOfExperiment().getSample().getDescription());
   Interval::BoolCollection selectedVars(doeVariables.getSize());

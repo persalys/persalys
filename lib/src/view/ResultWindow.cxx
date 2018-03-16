@@ -76,7 +76,7 @@ void ResultWindow::setModelDescription(const Analysis& analysis)
   const QStringList beginMarker = QStringList() << "<h3>" << "<center>" << "<th>";
   const QStringList endMarker = QStringList() << "</h3>" << "</center>" << "</th>";
 
-  for (UnsignedInteger i = 0; i < beginMarker.size(); ++i)
+  for (int i = 0; i < beginMarker.size(); ++i)
   {
     int j = 0;
     while ((j = modelString.indexOf(beginMarker[i], j)) != -1)

@@ -20,6 +20,7 @@
  */
 #include "otgui/OTStudyItem.hxx"
 
+#include "otgui/FileTools.hxx"
 #include "otgui/PhysicalModelAnalysis.hxx"
 #include "otgui/DesignOfExperimentAnalysis.hxx"
 #include "otgui/SymbolicPhysicalModel.hxx"
@@ -30,9 +31,9 @@
 #ifdef OTGUI_HAVE_OTFMI
 #include "otgui/FMIPhysicalModel.hxx"
 #endif
+
 #include <QDebug>
 #include <QFileInfo>
-#include <QSettings>
 #include <QApplication>
 
 using namespace OT;
@@ -231,8 +232,7 @@ void OTStudyItem::exportPythonScript(const QString& filename)
   file.close();
 
   // update QSettings
-  QSettings settings;
-  settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+  FileTools::SetCurrentDir(fileName);
 }
 
 
@@ -277,8 +277,7 @@ bool OTStudyItem::save(const QString& filename)
   QApplication::restoreOverrideCursor();
 
   // update QSettings
-  QSettings settings;
-  settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+  FileTools::SetCurrentDir(fileName);
 
   return true;
 }
