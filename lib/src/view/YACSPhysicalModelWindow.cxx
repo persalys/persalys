@@ -23,6 +23,7 @@
 #include "otgui/YACSPhysicalModel.hxx"
 #include "otgui/PhysicalModelWindowWidget.hxx"
 #include "otgui/QtTools.hxx"
+#include "otgui/FileTools.hxx"
 
 #include "Py2YacsDialog.hxx"
 
@@ -85,19 +86,15 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * i
 
 void YACSPhysicalModelWindow::selectImportFileDialogRequested()
 {
-  QSettings settings;
-  QString currentDir = settings.value("currentDir").toString();
-  if (currentDir.isEmpty())
-    currentDir = QDir::homePath();
   QString fileName = QFileDialog::getOpenFileName(this,
                      tr("Data to import..."),
-                     currentDir,
+                     FileTools::GetCurrentDir(),
                      tr("Data files (*.xml);;"));
 
   if (!fileName.isEmpty())
   {
     QFile file(fileName);
-    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+    FileTools::SetCurrentDir(fileName);
 
     // check
     if (!file.open(QFile::ReadOnly))
@@ -126,17 +123,13 @@ void YACSPhysicalModelWindow::selectImportFileDialogRequested()
 
 void YACSPhysicalModelWindow::buildSchemaDialogRequested()
 {
-  QSettings settings;
-  QString currentDir = settings.value("currentDir").toString();
-  if (currentDir.isEmpty())
-    currentDir = QDir::homePath();
-
   Py2YacsDialog yacsDialog;
   if (yacsDialog.exec())
   {
     QString fileName = yacsDialog.getYacsFile();
     QFile file(fileName);
-    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+    FileTools::SetCurrentDir(fileName);
+
     // check
     if (!file.open(QFile::ReadOnly))
     {

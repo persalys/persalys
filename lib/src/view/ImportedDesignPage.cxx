@@ -22,6 +22,7 @@
 
 #include "otgui/HorizontalHeaderViewWithCombobox.hxx"
 #include "otgui/SampleTableModel.hxx"
+#include "otgui/FileTools.hxx"
 
 #include <QScrollBar>
 #include <QGroupBox>
@@ -29,8 +30,6 @@
 #include <QLabel>
 #include <QToolButton>
 #include <QFileDialog>
-#include <QFileInfo>
-#include <QSettings>
 #include <QMessageBox>
 
 using namespace OT;
@@ -101,19 +100,15 @@ void ImportedDesignPage::buildInterface()
 
 void ImportedDesignPage::openFileRequested()
 {
-  QSettings settings;
-  QString currentDir = settings.value("currentDir").toString();
-  if (currentDir.isEmpty())
-    currentDir = QDir::homePath();
   QString fileName = QFileDialog::getOpenFileName(this,
                      tr("Data to import..."),
-                     currentDir,
+                     FileTools::GetCurrentDir(),
                      tr("Data files (*.csv *.txt)"));
 
   if (!fileName.isEmpty())
   {
     QFile file(fileName);
-    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+    FileTools::SetCurrentDir(fileName);
 
     // check
     if (!file.open(QFile::ReadOnly))

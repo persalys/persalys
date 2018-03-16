@@ -23,6 +23,7 @@
 #include "otgui/FMIPhysicalModel.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/QtTools.hxx"
+#include "otgui/FileTools.hxx"
 #include "otgui/ModelEvaluation.hxx"
 #include "otgui/FMUInfo.hxx"
 #include "otgui/ParametersTableView.hxx"
@@ -34,10 +35,8 @@
 #include <QHeaderView>
 #include <QVBoxLayout>
 #include <QPushButton>
-#include <QFileInfo>
 #include <QMessageBox>
 #include <QApplication>
-#include <QSettings>
 #include <QTreeView>
 #include <QGroupBox>
 
@@ -281,18 +280,14 @@ void FMIPhysicalModelWindow::evaluateOutputs()
 
 void FMIPhysicalModelWindow::selectImportFileDialogRequested()
 {
-  QSettings settings;
-  QString currentDir = settings.value("currentDir").toString();
-  if (currentDir.isEmpty())
-    currentDir = QDir::homePath();
   QString fileName = QFileDialog::getOpenFileName(this, tr("Model to import..."),
-                     currentDir,
+                     FileTools::GetCurrentDir(),
                      tr("FMU files (*.fmu);;"));
 
   if (!fileName.isEmpty())
   {
     QFile file(fileName);
-    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+    FileTools::SetCurrentDir(fileName);
 
     // check
     if (!file.open(QFile::ReadOnly))
