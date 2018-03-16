@@ -71,7 +71,7 @@ void DataAnalysisResultWindow::fillTabWidget()
     // tab: box plots
     addBoxPlotTab();
     // tab: correlation
-    addDependencyTab();
+    addDependenceTab();
   }
   bool canUseParaview = false;
 #ifdef OTGUI_HAVE_PARAVIEW
@@ -103,7 +103,7 @@ void DataAnalysisResultWindow::fillTabWidget()
 }
 
 
-void DataAnalysisResultWindow::addDependencyTab()
+void DataAnalysisResultWindow::addDependenceTab()
 {
   // compute correlation
   CorrelationMatrix C(designOfExperiment_.getSample().computeSpearmanCorrelation());
@@ -202,6 +202,6 @@ void DataAnalysisResultWindow::addDependencyTab()
 
   mainLayout->addWidget(gpBox);
 
-  tabWidget_->addTab(mainWidget, tr("Dependency"));
+  tabWidget_->addTab(mainWidget, tr("Dependence"));
 }
 }

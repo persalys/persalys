@@ -854,7 +854,7 @@ String PhysicalModelImplementation::getHtmlDescription() const
   // copula
   if (!getCopula().hasIndependentCopula())
   {
-    oss << "<h3>Dependency</h3><p>";
+    oss << "<h3>Dependence</h3><p>";
     oss << "<table style=\"width:100%\" border=\"1\" cellpadding=\"5\">";
     oss << "<tr>";
     oss << "  <th>Group of variables</th>";

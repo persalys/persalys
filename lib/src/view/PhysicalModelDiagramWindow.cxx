@@ -151,7 +151,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   sensitivityProxy->setWidget(sensitivityButton);
   scene->addItem(sensitivityProxy);
   connect(sensitivityButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SIGNAL(sensitivityRequested()));
-  connect(physicalModelDiagramItem, SIGNAL(dependencyValidityChanged(bool)), sensitivityButton, SLOT(setEnabled(bool)));
+  connect(physicalModelDiagramItem, SIGNAL(dependenceValidityChanged(bool)), sensitivityButton, SLOT(setEnabled(bool)));
   boxWidth = std::max(boxWidth, sensitivityButton->width());
   boxHeight = std::max(boxHeight, sensitivityButton->height());
 

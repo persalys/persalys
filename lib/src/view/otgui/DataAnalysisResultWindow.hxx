@@ -35,7 +35,7 @@ public:
 protected:
   void initialize(AnalysisItem* item);
   virtual void fillTabWidget();
-  void addDependencyTab();
+  void addDependenceTab();
 };
 }
 #endif

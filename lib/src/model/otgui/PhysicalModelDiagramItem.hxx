@@ -61,7 +61,7 @@ signals:
   void outputNumberValidityChanged(bool);
   void physicalModelValidityChanged(bool);
   void probabilisticModelValidityChanged(bool);
-  void dependencyValidityChanged(bool);
+  void dependenceValidityChanged(bool);
   void limitStateNumberValidityChanged(bool);
   void doeNumberValidityChanged(bool);
   void doeEvaluationNumberValidityChanged(bool);

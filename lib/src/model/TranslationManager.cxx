@@ -169,7 +169,7 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert(type("Description", tr("Description")));
   ParametersNames_.insert(type("Value", tr("Value")));
   ParametersNames_.insert(type("Distribution", tr("Distribution")));
-  ParametersNames_.insert(type("Dependency", tr("Dependency")));
+  ParametersNames_.insert(type("Dependence", tr("Dependence")));
   ParametersNames_.insert(type("Group of variables", tr("Group of variables")));
   ParametersNames_.insert(type("Copula", tr("Copula")));
   ParametersNames_.insert(type("Formula", tr("Formula")));
