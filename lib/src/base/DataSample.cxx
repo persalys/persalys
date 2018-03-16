@@ -164,25 +164,22 @@ void DataSample::searchMinMax() const
 
 Sample DataSample::getSample() const
 {
-  if (!sample_.getSize())
+  if (!sample_.getSize() && (getInputSample().getSize() || getOutputSample().getSize()))
   {
-    Sample sample;
-
     if (getInputSample().getSize() == getOutputSample().getSize())
     {
-      sample = getInputSample();
-      sample.stack(getOutputSample());
+      sample_ = getInputSample();
+      sample_.stack(getOutputSample());
     }
     else
     {
       if (getInputSample().getSize() && !getOutputSample().getSize())
-        sample = getInputSample();
+        sample_ = getInputSample();
       else if (!getInputSample().getSize() && getOutputSample().getSize())
-        sample = getOutputSample();
+        sample_ = getOutputSample();
       else // input sample and output sample have different sizes
         throw InvalidDimensionException(HERE) << "The input sample and the output sample must have the same size";
     }
-    sample_ = sample;
   }
   return sample_;
 }

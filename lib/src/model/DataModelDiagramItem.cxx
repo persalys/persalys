@@ -69,7 +69,7 @@ void DataModelDiagramItem::update(Observable* source, const String& message)
     // emit signals to DataModelDiagramWindow
     // to update the diagram (arrow color and button availability)
     emit dataModelValidityChanged(designOfExperiment_.getSample().getSize() > 0);
-    emit dependenciesValidityChanged(designOfExperiment_.getInputSample().getDimension() > 1);
+    emit dependenciesValidityChanged(designOfExperiment_.getSample().getDimension() > 1);
     emit metaModelValidityChanged(designOfExperiment_.getInputSample().getSize() && designOfExperiment_.getOutputSample().getSize());
   }
   else if (message == "designOfExperimentRemoved")
@@ -89,7 +89,7 @@ void DataModelDiagramItem::fill()
 
   // update diagram (arrow color and button availability)
   emit dataModelValidityChanged(designOfExperiment_.getSample().getSize() > 0);
-  emit dependenciesValidityChanged(designOfExperiment_.getInputSample().getDimension() > 1);
+  emit dependenciesValidityChanged(designOfExperiment_.getSample().getDimension() > 1);
   emit metaModelValidityChanged(designOfExperiment_.getInputSample().getSize() && designOfExperiment_.getOutputSample().getSize());
 }
 

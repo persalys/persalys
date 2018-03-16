@@ -134,9 +134,9 @@ void DataModelDefinitionItem::createCopulaInferenceAnalysis()
   if (!designOfExperimentValid())
     return;
 
-  if (designOfExperiment_.getInputSample().getDimension() < 2)
+  if (designOfExperiment_.getSample().getDimension() < 2)
   {
-    emit showErrorMessageRequested(tr("The model must contain at least two inputs."));
+    emit showErrorMessageRequested(tr("The model must contain at least two variables."));
     return;
   }
 
