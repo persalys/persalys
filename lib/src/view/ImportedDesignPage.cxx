@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ImportDesignOfExperimentPage.hxx"
+#include "otgui/ImportedDesignPage.hxx"
 
 #include "otgui/HorizontalHeaderViewWithCombobox.hxx"
 #include "otgui/SampleTableModel.hxx"
@@ -38,7 +38,7 @@ using namespace OT;
 namespace OTGUI
 {
 
-ImportDesignOfExperimentPage::ImportDesignOfExperimentPage(QWidget* parent)
+ImportedDesignPage::ImportedDesignPage(QWidget* parent)
   : QWizardPage(parent)
   , designOfExperiment_()
   , pageValidity_(false)
@@ -51,7 +51,7 @@ ImportDesignOfExperimentPage::ImportDesignOfExperimentPage(QWidget* parent)
 }
 
 
-void ImportDesignOfExperimentPage::buildInterface()
+void ImportedDesignPage::buildInterface()
 {
   setWindowTitle(tr("Import table from file"));
 
@@ -99,7 +99,7 @@ void ImportDesignOfExperimentPage::buildInterface()
 }
 
 
-void ImportDesignOfExperimentPage::openFileRequested()
+void ImportedDesignPage::openFileRequested()
 {
   QSettings settings;
   QString currentDir = settings.value("currentDir").toString();
@@ -130,7 +130,7 @@ void ImportDesignOfExperimentPage::openFileRequested()
 }
 
 
-void ImportDesignOfExperimentPage::setData(const QString& fileName)
+void ImportedDesignPage::setData(const QString& fileName)
 {
   filePathLineEdit_->setText(fileName);
   try
@@ -152,7 +152,7 @@ void ImportDesignOfExperimentPage::setData(const QString& fileName)
 }
 
 
-void ImportDesignOfExperimentPage::setTable(const QString& fileName)
+void ImportedDesignPage::setTable(const QString& fileName)
 {
   // set file name
   designOfExperiment_.setFileName(fileName.toLocal8Bit().data());
@@ -201,7 +201,7 @@ void ImportDesignOfExperimentPage::setTable(const QString& fileName)
 }
 
 
-void ImportDesignOfExperimentPage::columnNameChanged()
+void ImportedDesignPage::columnNameChanged()
 {
   const Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
   // test the unicity of each variable
@@ -246,7 +246,7 @@ void ImportDesignOfExperimentPage::columnNameChanged()
 }
 
 
-void ImportDesignOfExperimentPage::initialize(const Analysis& analysis)
+void ImportedDesignPage::initialize(const Analysis& analysis)
 {
   ImportedDesignOfExperiment * analysis_ptr = dynamic_cast<ImportedDesignOfExperiment*>(analysis.getImplementation().get());
 
@@ -265,13 +265,13 @@ void ImportDesignOfExperimentPage::initialize(const Analysis& analysis)
 }
 
 
-Analysis ImportDesignOfExperimentPage::getAnalysis()
+Analysis ImportedDesignPage::getAnalysis()
 {
   return designOfExperiment_;
 }
 
 
-bool ImportDesignOfExperimentPage::validatePage()
+bool ImportedDesignPage::validatePage()
 {
   return pageValidity_;
 }

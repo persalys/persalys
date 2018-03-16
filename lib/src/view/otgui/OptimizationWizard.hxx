@@ -25,7 +25,7 @@
 #include "otgui/OptimizationTableModel.hxx"
 #include "otgui/LogDoubleSpinBox.hxx"
 #include "otgui/UIntSpinBox.hxx"
-#include "otgui/IntroOptimizationPage.hxx"
+#include "otgui/OptimizationIntroPage.hxx"
 #include "otgui/ResizableHeaderlessTableView.hxx"
 
 #include <QVBoxLayout>
@@ -50,7 +50,7 @@ protected:
   virtual void resizeEvent(QResizeEvent * event);
 
 private:
-  IntroOptimizationPage * introPage_;
+  OptimizationIntroPage * introPage_;
   QVBoxLayout * groupBoxLayout_;
   ResizableHeaderlessTableView * tableView_;
   OptimizationTableModel * tableModel_;

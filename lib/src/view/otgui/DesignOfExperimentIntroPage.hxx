@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to define the method of central tendency analysis
+ *  @brief QWizardPage to define the type of design of experiments
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -18,42 +18,32 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_INTROCENTRALTENDENCYPAGE_HXX
-#define OTGUI_INTROCENTRALTENDENCYPAGE_HXX
+#ifndef OTGUI_INTRODESIGNOFEXPERIMENTPAGE_HXX
+#define OTGUI_INTRODESIGNOFEXPERIMENTPAGE_HXX
 
 #include "otgui/Analysis.hxx"
-#include "otgui/OutputsSelectionGroupBox.hxx"
 
 #include <QWizardPage>
-#include <QLabel>
 #include <QButtonGroup>
 
 namespace OTGUI
 {
 
-class OTGUI_API IntroCentralTendencyPage : public QWizardPage
+class OTGUI_API DesignOfExperimentIntroPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  enum Method {MonteCarlo, TaylorExpansionMoments};
+  enum Method {deterministic, probabilistic, import};
 
-  IntroCentralTendencyPage(QWidget* parent = 0);
-
-  void initialize(const Analysis& analysis);
-  OT::Description getInterestVariables() const;
+  DesignOfExperimentIntroPage(QWidget* parent = 0);
 
   virtual int nextId() const;
-  virtual bool validatePage();
 
-public slots:
-  void updateFinalPage();
+  void initialize(const Analysis& analysis);
 
 private:
-  OutputsSelectionGroupBox * outputsSelectionGroupBox_;
   QButtonGroup * methodGroup_;
-  QLabel * errorMessageLabel_;
-  OT::Description interestVariables_;
 };
 }
 #endif

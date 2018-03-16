@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to define the design of experiments and the method of metamodel analysis
+ *  @brief QWizardPage to define the limit state and the method of reliability analysis
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -18,51 +18,46 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_INTROMETAMODELPAGE_HXX
-#define OTGUI_INTROMETAMODELPAGE_HXX
+#ifndef OTGUI_INTRORELIABILITYPAGE_HXX
+#define OTGUI_INTRORELIABILITYPAGE_HXX
 
-#include "otgui/DesignOfExperiment.hxx"
+#include "otgui/LimitState.hxx"
 #include "otgui/Analysis.hxx"
-#include "otgui/OutputsSelectionGroupBox.hxx"
 
+#include <QComboBox>
 #include <QWizardPage>
 #include <QLabel>
-#include <QComboBox>
-#include <QStandardItemModel>
 #include <QButtonGroup>
+#include <QStandardItemModel>
+#include <QMetaType> // mandatory to specify it to avoid windows compilation problem
+
+Q_DECLARE_METATYPE(OTGUI::LimitState)
 
 namespace OTGUI
 {
 
-class OTGUI_API IntroMetaModelPage : public QWizardPage
+class OTGUI_API ReliabilityIntroPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  IntroMetaModelPage(QWidget* parent = 0);
+  ReliabilityIntroPage(QWidget* parent = 0);
 
   virtual int nextId() const;
 
-  void initialize(const Analysis& analysis, QList<DesignOfExperiment> doesList);
-  DesignOfExperiment getDesignOfExperiment() const;
-  OT::Description getInterestVariables() const;
-
-  virtual bool validatePage();
+  void initialize(const Analysis& analysis, QList<LimitState> limitStatesList);
+  LimitState getLimitState() const;
 
 public slots:
-  void updateDesignOfExperiment(int);
-  void updateInterestVariables(QStringList);
+  void changeLimitStateLabel(int);
 signals:
-  void designOfExperimentChanged(DesignOfExperiment);
+  void methodChanged(int);
 
 private:
-  QComboBox * doesComboBox_;
-  QStandardItemModel * doesComboBoxModel_;
-  QLabel * doeLabel_;
-  OutputsSelectionGroupBox * outputsSelectionGroupBox_;
+  QComboBox * limitStatesComboBox_;
+  QStandardItemModel * limitStatesComboBoxModel_;
+  QLabel * limitStateLabel_;
   QButtonGroup * methodGroup_;
-  QLabel * errorMessageLabel_;
-  OT::Description interestVariables_;
 };
 }
 #endif

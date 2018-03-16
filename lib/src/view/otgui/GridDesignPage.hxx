@@ -30,12 +30,12 @@
 
 namespace OTGUI
 {
-class OTGUI_API DeterministicDesignPage : public QWizardPage
+class OTGUI_API GridDesignPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  DeterministicDesignPage(QWidget *parent = 0);
+  GridDesignPage(QWidget *parent = 0);
 
   void initialize(const Analysis& analysis);
   Analysis getAnalysis();

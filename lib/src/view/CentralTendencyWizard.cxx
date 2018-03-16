@@ -39,7 +39,7 @@ void CentralTendencyWizard::buildInterface()
   setWindowTitle(tr("Central tendency"));
 
   // First Page: choose the method
-  introPage_ = new IntroCentralTendencyPage(this);
+  introPage_ = new CentralTendencyIntroPage(this);
   introPage_->initialize(analysis_);
   setPage(Page_Intro, introPage_);
 

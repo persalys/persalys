@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/IntroOptimizationPage.hxx"
+#include "otgui/OptimizationIntroPage.hxx"
 
 #include "otgui/OptimizationAnalysis.hxx"
 #include "otgui/QtTools.hxx"
@@ -37,7 +37,7 @@ using namespace OT;
 namespace OTGUI
 {
 
-IntroOptimizationPage::IntroOptimizationPage(QWidget* parent)
+OptimizationIntroPage::OptimizationIntroPage(QWidget* parent)
   : QWizardPage(parent)
   , outputsSelectionGroupBox_(0)
   , methodGroup_(0)
@@ -100,7 +100,7 @@ IntroOptimizationPage::IntroOptimizationPage(QWidget* parent)
 }
 
 
-void IntroOptimizationPage::initialize(const Analysis& analysis)
+void OptimizationIntroPage::initialize(const Analysis& analysis)
 {
   const OptimizationAnalysis * analysis_ptr = dynamic_cast<const OptimizationAnalysis*>(analysis.getImplementation().get());
 
@@ -120,13 +120,13 @@ void IntroOptimizationPage::initialize(const Analysis& analysis)
 }
 
 
-Description IntroOptimizationPage::getInterestVariables() const
+Description OptimizationIntroPage::getInterestVariables() const
 {
   return QtOT::StringListToDescription(outputsSelectionGroupBox_->getSelectedOutputsNames());
 }
 
 
-void IntroOptimizationPage::openUrl()
+void OptimizationIntroPage::openUrl()
 {
   // open url
   const QString link = "http://openturns.github.io/openturns/master/user_manual/optimization.html";
@@ -134,14 +134,14 @@ void IntroOptimizationPage::openUrl()
 }
 
 
-String IntroOptimizationPage::getSolverName() const
+String OptimizationIntroPage::getSolverName() const
 {
   const int id = methodGroup_->checkedId();
   return OptimizationAnalysis::GetSolverNames()[id];
 }
 
 
-bool IntroOptimizationPage::validatePage()
+bool OptimizationIntroPage::validatePage()
 {
   errorMessageLabel_->setText("");
 

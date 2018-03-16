@@ -118,8 +118,8 @@ void GridDesignOfExperiment::initializeParameters()
       upperBounds_[i] = 1.1;
       if (values_[i] != 0)
       {
-        lowerBounds_[i] = 0.9 * values_[i];
-        upperBounds_[i] = 1.1 * values_[i];
+        lowerBounds_[i] = values_[i] - 0.1 * std::abs(values_[i]);
+        upperBounds_[i] = values_[i] + 0.1 * std::abs(values_[i]);
       }
     }
     else

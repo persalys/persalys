@@ -22,7 +22,7 @@
 #define OTGUI_METAMODELANALYSISWIZARD_HXX
 
 #include "otgui/AnalysisWizard.hxx"
-#include "otgui/IntroMetaModelPage.hxx"
+#include "otgui/MetaModelIntroPage.hxx"
 #include "otgui/KrigingPage.hxx"
 #include "otgui/FunctionalChaosPage.hxx"
 #include "otgui/MetaModelValidationPage.hxx"
@@ -47,7 +47,7 @@ protected:
 
 private:
   QList<DesignOfExperiment> doeList_;
-  IntroMetaModelPage * introPage_;
+  MetaModelIntroPage * introPage_;
   KrigingPage * krigingPage_;
   FunctionalChaosPage * functionalChaosPage_;
   MetaModelValidationPage * validationPage_;

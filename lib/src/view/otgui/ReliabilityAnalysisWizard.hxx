@@ -22,7 +22,7 @@
 #define OTGUI_RELIABILITYANALYSISWIZARD_HXX
 
 #include "otgui/AnalysisWizard.hxx"
-#include "otgui/IntroReliabilityPage.hxx"
+#include "otgui/ReliabilityIntroPage.hxx"
 #include "otgui/SimulationReliabilityPage.hxx"
 #include "otgui/ApproximationReliabilityPage.hxx"
 
@@ -45,7 +45,7 @@ protected:
 
 private:
   QList<LimitState> limitStateList_;
-  IntroReliabilityPage * introPage_;
+  ReliabilityIntroPage * introPage_;
   SimulationReliabilityPage * simulationPage_;
   ApproximationReliabilityPage * approximationPage_;
   ApproximationReliabilityPage * formPage_;

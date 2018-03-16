@@ -45,7 +45,7 @@ void OptimizationWizard::buildInterface()
   setWindowTitle(tr("Optimization"));
 
   // -- intro page
-  introPage_ = new IntroOptimizationPage(this);
+  introPage_ = new OptimizationIntroPage(this);
   introPage_->initialize(analysis_);
   setPage(0, introPage_);
 
@@ -221,7 +221,9 @@ Analysis OptimizationWizard::getAnalysis() const
 
 bool OptimizationWizard::validateCurrentPage()
 {
-  if (currentId() == 1)
+  if (currentId() == 0)
+    return QWizard::validateCurrentPage();
+  else if (currentId() == 1)
   {
     Point variableInputsValues;
     Point lowerB;
@@ -239,6 +241,11 @@ bool OptimizationWizard::validateCurrentPage()
         finiteLowerB.add(bounds.getFiniteLowerBound()[i]);
         finiteUpperB.add(bounds.getFiniteUpperBound()[i]);
       }
+    }
+    if (!variableInputsValues.getSize())
+    {
+      errorMessageLabel_->setTemporaryErrorMessage(tr("At least one variable must vary"));
+      return false;
     }
     Interval varBounds(lowerB, upperB, finiteLowerB, finiteUpperB);
     if (varBounds.isEmpty())

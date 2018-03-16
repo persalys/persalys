@@ -22,7 +22,7 @@
 #define OTGUI_SENSITIVITYANALYSISWIZARD_HXX
 
 #include "otgui/AnalysisWizard.hxx"
-#include "otgui/IntroSensitivityPage.hxx"
+#include "otgui/SensitivityIntroPage.hxx"
 #include "otgui/SobolPage.hxx"
 #include "otgui/SRCPage.hxx"
 
@@ -45,7 +45,7 @@ protected:
   void buildInterface();
 
 private:
-  IntroSensitivityPage * introPage_;
+  SensitivityIntroPage * introPage_;
   SobolPage * sobolPage_;
   SRCPage * srcPage_;
 };

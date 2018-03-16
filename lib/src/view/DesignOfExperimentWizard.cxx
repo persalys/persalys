@@ -38,11 +38,11 @@ void DesignOfExperimentWizard::buildInterface()
 {
   setWindowTitle(tr("Design of experiments"));
 
-  introPage_ = new IntroDesignOfExperimentPage(this);
+  introPage_ = new DesignOfExperimentIntroPage(this);
   introPage_->initialize(analysis_);
   setPage(Page_Intro, introPage_);
 
-  gridPage_ = new DeterministicDesignPage(this);
+  gridPage_ = new GridDesignPage(this);
   gridPage_->initialize(analysis_);
   setPage(Page_Deterministic, gridPage_);
 
@@ -50,7 +50,7 @@ void DesignOfExperimentWizard::buildInterface()
   probaPage_->initialize(analysis_);
   setPage(Page_Probabilistic, probaPage_);
 
-  importPage_ = new ImportDesignOfExperimentPage(this);
+  importPage_ = new ImportedDesignPage(this);
   importPage_->initialize(analysis_);
   setPage(Page_Import, importPage_);
 

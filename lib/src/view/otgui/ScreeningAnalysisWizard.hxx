@@ -22,7 +22,7 @@
 #define OTGUI_SCREENINGANALYSISWIZARD_HXX
 
 #include "otgui/AnalysisWizard.hxx"
-#include "otgui/IntroScreeningPage.hxx"
+#include "otgui/ScreeningIntroPage.hxx"
 #include "otgui/MorrisPage.hxx"
 
 namespace OTGUI
@@ -44,7 +44,7 @@ protected:
   void buildInterface();
 
 private:
-  IntroScreeningPage * introPage_;
+  ScreeningIntroPage * introPage_;
   MorrisPage * morrisPage_;
   MorrisSecondPage * morrisSecondPage_;
 };

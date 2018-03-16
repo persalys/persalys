@@ -85,7 +85,7 @@ void MetaModelAnalysisWizard::buildInterface()
   setWindowTitle(tr("Metamodel"));
 
   // intro page : doe/ouputs/method
-  introPage_ = new IntroMetaModelPage(this);
+  introPage_ = new MetaModelIntroPage(this);
   setPage(Page_Intro, introPage_);
 
   // chaos page

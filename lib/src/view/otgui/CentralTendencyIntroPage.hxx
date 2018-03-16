@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to import sample to define designs of experiments
+ *  @brief QWizardPage to define the method of central tendency analysis
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -18,46 +18,42 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_IMPORTDESIGNOFEXPERIMENTPAGE_HXX
-#define OTGUI_IMPORTDESIGNOFEXPERIMENTPAGE_HXX
+#ifndef OTGUI_INTROCENTRALTENDENCYPAGE_HXX
+#define OTGUI_INTROCENTRALTENDENCYPAGE_HXX
 
 #include "otgui/Analysis.hxx"
-#include "otgui/ImportedDesignOfExperiment.hxx"
-#include "otgui/ExportableTableView.hxx"
+#include "otgui/OutputsSelectionGroupBox.hxx"
 
 #include <QWizardPage>
 #include <QLabel>
-#include <QLineEdit>
+#include <QButtonGroup>
 
 namespace OTGUI
 {
-class OTGUI_API ImportDesignOfExperimentPage : public QWizardPage
+
+class OTGUI_API CentralTendencyIntroPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  ImportDesignOfExperimentPage(QWidget *parent = 0);
+  enum Method {MonteCarlo, TaylorExpansionMoments};
+
+  CentralTendencyIntroPage(QWidget* parent = 0);
 
   void initialize(const Analysis& analysis);
-  Analysis getAnalysis();
-  bool validatePage();
+  OT::Description getInterestVariables() const;
 
-protected:
-  void buildInterface();
-  virtual void setTable(const QString& fileName);
-  void setData(const QString & fileName);
+  virtual int nextId() const;
+  virtual bool validatePage();
 
 public slots:
-  void openFileRequested();
-  void columnNameChanged();
+  void updateFinalPage();
 
 private:
-  ImportedDesignOfExperiment designOfExperiment_;
-  bool pageValidity_;
-  QLineEdit * filePathLineEdit_;
-  ExportableTableView * dataPreviewTableView_;
-  QLabel * DOESizeLabel_;
+  OutputsSelectionGroupBox * outputsSelectionGroupBox_;
+  QButtonGroup * methodGroup_;
   QLabel * errorMessageLabel_;
+  OT::Description interestVariables_;
 };
 }
 #endif

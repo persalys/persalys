@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DeterministicDesignPage.hxx"
+#include "otgui/GridDesignPage.hxx"
 
 #include "otgui/ComboBoxDelegate.hxx"
 #include "otgui/SpinBoxDelegate.hxx"
@@ -32,7 +32,7 @@ using namespace OT;
 namespace OTGUI
 {
 
-DeterministicDesignPage::DeterministicDesignPage(QWidget* parent)
+GridDesignPage::GridDesignPage(QWidget* parent)
   : QWizardPage(parent)
   , tableView_(0)
   , tableModel_(0)
@@ -43,7 +43,7 @@ DeterministicDesignPage::DeterministicDesignPage(QWidget* parent)
 }
 
 
-void DeterministicDesignPage::buildInterface()
+void GridDesignPage::buildInterface()
 {
   setTitle(tr("Deterministic design of experiments"));
 
@@ -80,7 +80,7 @@ void DeterministicDesignPage::buildInterface()
 }
 
 
-void DeterministicDesignPage::initialize(const Analysis& analysis)
+void GridDesignPage::initialize(const Analysis& analysis)
 {
   // get the analysis
   GridDesignOfExperiment * analysis_ptr = dynamic_cast<GridDesignOfExperiment*>(analysis.getImplementation().get());
@@ -128,7 +128,7 @@ void DeterministicDesignPage::initialize(const Analysis& analysis)
 }
 
 
-void DeterministicDesignPage::resizeEvent(QResizeEvent* event)
+void GridDesignPage::resizeEvent(QResizeEvent* event)
 {
   QWizardPage::resizeEvent(event);
 
@@ -142,7 +142,7 @@ void DeterministicDesignPage::resizeEvent(QResizeEvent* event)
 }
 
 
-Analysis DeterministicDesignPage::getAnalysis()
+Analysis GridDesignPage::getAnalysis()
 {
   Q_ASSERT(tableModel_);
   return tableModel_->getDesignOfExperiment();

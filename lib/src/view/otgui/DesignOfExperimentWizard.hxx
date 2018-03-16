@@ -22,10 +22,10 @@
 #define OTGUI_DESIGNOFEXPERIMENTWIZARD_HXX
 
 #include "otgui/AnalysisWizard.hxx"
-#include "otgui/IntroDesignOfExperimentPage.hxx"
-#include "otgui/DeterministicDesignPage.hxx"
+#include "otgui/DesignOfExperimentIntroPage.hxx"
+#include "otgui/GridDesignPage.hxx"
 #include "otgui/ProbabilisticDesignPage.hxx"
-#include "otgui/ImportDesignOfExperimentPage.hxx"
+#include "otgui/ImportedDesignPage.hxx"
 
 #include <QButtonGroup>
 
@@ -48,10 +48,10 @@ protected:
   void buildInterface();
 
 private:
-  IntroDesignOfExperimentPage * introPage_;
-  DeterministicDesignPage * gridPage_;
+  DesignOfExperimentIntroPage * introPage_;
+  GridDesignPage * gridPage_;
   ProbabilisticDesignPage * probaPage_;
-  ImportDesignOfExperimentPage * importPage_;
+  ImportedDesignPage * importPage_;
 };
 }
 #endif

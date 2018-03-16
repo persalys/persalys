@@ -42,7 +42,7 @@ void SensitivityAnalysisWizard::buildInterface()
   setWindowTitle(tr("Sensitivity analysis"));
 
   // First Page: choose the method
-  introPage_ = new IntroSensitivityPage(this);
+  introPage_ = new SensitivityIntroPage(this);
   introPage_->initialize(analysis_);
   setPage(Page_Intro, introPage_);
 

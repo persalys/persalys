@@ -22,7 +22,7 @@
 #define OTGUI_CENTRALTENDENCYWIZARD_HXX
 
 #include "otgui/AnalysisWizard.hxx"
-#include "otgui/IntroCentralTendencyPage.hxx"
+#include "otgui/CentralTendencyIntroPage.hxx"
 #include "otgui/MonteCarloPage.hxx"
 
 namespace OTGUI
@@ -43,7 +43,7 @@ protected:
   void buildInterface();
 
 private:
-  IntroCentralTendencyPage * introPage_;
+  CentralTendencyIntroPage * introPage_;
   MonteCarloPage * monteCarloPage_;
 };
 }
