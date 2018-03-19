@@ -49,11 +49,12 @@
 ****************************************************************************/
 #include "otgui/PieChartView.hxx"
 
+#include "otgui/FileTools.hxx"
+
 #include <QPainter>
 #include <QDebug>
 #include <QScrollBar>
 #include <QStandardItemModel>
-#include <QSettings>
 #include <QMessageBox>
 #include <QApplication>
 #include <QFileDialog>
@@ -652,18 +653,14 @@ void PieChartView::contextMenu(const QPoint & pos)
 
 void PieChartView::exportPlot()
 {
-  QSettings settings;
-  QString currentDir = settings.value("currentDir").toString();
-  if (currentDir.isEmpty())
-    currentDir = QDir::homePath();
   QString fileName = QFileDialog::getSaveFileName(this, tr("Export plot"),
-                     currentDir + QDir::separator() + plotName_,
+                     FileTools::GetCurrentDir() + QDir::separator() + plotName_,
                      tr("Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)"));
 
   if (!fileName.isEmpty())
   {
     QString format = QFileInfo(fileName).suffix().toLower();
-    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+    FileTools::SetCurrentDir(fileName);
 
     if (format.isEmpty())
     {

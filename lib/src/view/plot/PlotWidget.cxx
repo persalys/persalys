@@ -25,11 +25,11 @@
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/ContourData.hxx"
 #include "otgui/UIntSpinBox.hxx"
+#include "otgui/FileTools.hxx"
 
 #include <QMenu>
 #include <QFileDialog>
 #include <QImageWriter>
-#include <QSettings>
 #include <QMessageBox>
 #include <QApplication>
 #include <QWizard>
@@ -172,18 +172,14 @@ void PlotWidget::exportPlot()
   const int imageHeight = spinBoxH->value();
 
   // save image
-  QSettings settings;
-  QString currentDir = settings.value("currentDir").toString();
-  if (currentDir.isEmpty())
-    currentDir = QDir::homePath();
   QString fileName = QFileDialog::getSaveFileName(this, tr("Export plot"),
-                     currentDir + QDir::separator() + plotTypeName_,
+                     FileTools::GetCurrentDir() + QDir::separator() + plotTypeName_,
                      tr("PNG (*.png);; JPEG (*.jpg *.jpeg);; BMP (*.bmp);; PPM (*.ppm);; XBM (*.xbm);; XPM (*.xpm);; TIFF (*.tiff);; SVG (*.svg);; PDF (*.pdf);; PS (*.ps)"));
 
   if (!fileName.isEmpty())
   {
     QString format = QFileInfo(fileName).suffix().toLower();
-    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+    FileTools::SetCurrentDir(fileName);
 
     if (format == "")
     {

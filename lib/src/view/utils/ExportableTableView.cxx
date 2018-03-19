@@ -22,11 +22,11 @@
 
 #include "otgui/SampleTableModel.hxx"
 #include "otgui/QtTools.hxx"
+#include "otgui/FileTools.hxx"
 
 #include <QFileDialog>
 #include <QMenu>
 #include <QMessageBox>
-#include <QSettings>
 #include <QApplication>
 #include <QSortFilterProxyModel>
 
@@ -55,13 +55,9 @@ void ExportableTableView::contextMenu(const QPoint & pos)
 
 void ExportableTableView::exportData()
 {
-  QSettings settings;
-  QString currentDir = settings.value("currentDir").toString();
-  if (currentDir.isEmpty())
-    currentDir = QDir::homePath();
   QString fileName = QFileDialog::getSaveFileName(this,
                      tr("Export model as..."),
-                     currentDir + QDir::separator() + tr("data"),
+                     FileTools::GetCurrentDir() + QDir::separator() + tr("data"),
                      tr("CSV source files (*.csv)"));
 
   if (!fileName.isEmpty())
@@ -69,7 +65,7 @@ void ExportableTableView::exportData()
     if (!fileName.endsWith(".csv"))
       fileName += ".csv";
 
-    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+    FileTools::SetCurrentDir(fileName);
 
     try
     {

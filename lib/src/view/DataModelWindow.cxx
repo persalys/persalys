@@ -21,6 +21,7 @@
 #include "otgui/DataModelWindow.hxx"
 
 #include "otgui/ComboBoxDelegate.hxx"
+#include "otgui/FileTools.hxx"
 
 #include <QHBoxLayout>
 #include <QHeaderView>
@@ -28,8 +29,6 @@
 #include <QToolButton>
 #include <QGroupBox>
 #include <QFileDialog>
-#include <QFileInfo>
-#include <QSettings>
 #include <QMessageBox>
 
 using namespace OT;
@@ -174,19 +173,15 @@ void DataModelWindow::updateTable(const QString& fileName)
 
 void DataModelWindow::openFileRequested()
 {
-  QSettings settings;
-  QString currentDir = settings.value("currentDir").toString();
-  if (currentDir.isEmpty())
-    currentDir = QDir::homePath();
   const QString fileName = QFileDialog::getOpenFileName(this,
                            tr("Data to import..."),
-                           currentDir,
+                           FileTools::GetCurrentDir(),
                            tr("Data files (*.csv *.txt)"));
 
   if (!fileName.isEmpty())
   {
     QFile file(fileName);
-    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+    FileTools::SetCurrentDir(fileName);
 
     // check
     if (!file.open(QFile::ReadOnly))

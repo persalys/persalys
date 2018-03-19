@@ -21,13 +21,13 @@
 #include "otgui/PlotMatrixWidget.hxx"
 
 #include "otgui/PlotWidget.hxx"
+#include "otgui/FileTools.hxx"
 
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QFileDialog>
 #include <QImageWriter>
 #include <QPainter>
-#include <QSettings>
 #include <QMessageBox>
 #include <QApplication>
 
@@ -294,19 +294,15 @@ void PlotMatrixWidget::setRowsToDisplay(QStringList rows)
 
 void PlotMatrixWidget::exportPlot()
 {
-  QSettings settings;
-  QString currentDir = settings.value("currentDir").toString();
-  if (currentDir.isEmpty())
-    currentDir = QDir::homePath();
   QString fileName = QFileDialog::getSaveFileName(this,
                      tr("Export plot"),
-                     currentDir,
+                     FileTools::GetCurrentDir(),
                      tr("Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)"));
 
   if (!fileName.isEmpty())
   {
     QString format = QFileInfo(fileName).suffix().toLower();
-    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+    FileTools::SetCurrentDir(fileName);
 
     if (format.isEmpty())
     {
