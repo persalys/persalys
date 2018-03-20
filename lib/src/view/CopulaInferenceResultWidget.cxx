@@ -178,6 +178,7 @@ void CopulaInferenceResultWidget::buildInterface()
   connect(this, SIGNAL(distributionChanged(int)), paramStackWidget, SLOT(setCurrentIndex(int)));
 
   splitter->addWidget(paramStackWidget);
+  splitter->setStretchFactor(1, 3);
 
   scrollArea->setWidget(splitter);
   mainLayout->addWidget(scrollArea);
