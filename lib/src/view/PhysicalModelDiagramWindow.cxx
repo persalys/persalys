@@ -193,7 +193,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 
   DiagramPushButton * reliabilityButton = new DiagramPushButton;
   reliabilityButton->setText(tr("Reliability"));
-  reliabilityButton->setWhatsThis(tr("Three methods : Monte Carlo, FORM-Importance Sampling, FORM"));
+  reliabilityButton->setWhatsThis(tr("Four methods : Monte Carlo, FORM-Importance Sampling, FORM, SORM"));
   reliabilityButton->setErrorMessage(tr("Define output variables in the model and at least a limit state"));
   QGraphicsProxyWidget * reliabilityProxy = new QGraphicsProxyWidget;
   reliabilityProxy->setWidget(reliabilityButton);
